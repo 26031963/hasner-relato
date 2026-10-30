@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 21:14:16.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (24.8 MB). Acoes na janela: **374**.
+**Medido em 29/10/2026 21:19:48.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (24.8 MB). Acoes na janela: **373**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -383,4 +383,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:23:45 | Bash | Inspect the two differing files | `cd /home/ronald/saas-hasner && git status --short app/ponto/tests/test_bem_formado_marcos_do_dia.py app/ponto/tests/test_reconciliar_orfas_nucleo.py; ls /home/ronald/wt-orfas-2901-0215/app/ponto/tests/test_bem_formado_marcos_do_dia.py 2>&1 \| tail -1; ls app/ponto/tests/test_bem_formado_marcos_do_dia.py 2>&1` |
 | 09:23:39 | Bash | Merge ORFAS and census against copy | `cd /home/ronald/saas-hasner && git merge --no-ff --no-commit 4a2b7abf 2>&1 \| tail -2; echo "MERGE_HEAD=$(git rev-parse -q --verify MERGE_HEAD)"; git diff --name-only --diff-filter=U; d=0; for f in $(git diff --cached --name-only); do case $f in app/docs/TICKETS.md) continue;; esac; cmp -s "$f" "/home/ronald/wt-orfas-2901-0215/$f" \|\| { echo "DIFERE $f"; d=1; }; done; echo difere=$d` |
 | 09:23:33 | Bash | Check ORFAS pouso preconditions | `cd /home/ronald/saas-hasner && git diff --name-only main 4a2b7abf -- '*/migrations/*'; echo "--py fora do certificado:"; for f in $(git diff --name-only 4a2b7abf main -- '*.py'); do echo "$f"; done; ls logs/crons_em_curso/; bin/trava_teste.sh --quem; date +%H:%M; git log --oneline -1` |
-| 09:18:24 | Bash | Wait for push result | `cd /home/ronald/saas-hasner && until grep -q '^rc=' logs/outbox/push_3.out 2>/dev/null; do /usr/bin/sleep 20; done; tail -4 logs/outbox/push_3.out \| cut -c1-200; git fetch -q; git log --oneline -1 origin/main` |

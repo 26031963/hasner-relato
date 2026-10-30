@@ -1,7 +1,69 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 21:13** · publicado em **29/10/2026 21:14** (UTC-3)
+> Ultima resposta processada: **29/10/2026 21:15** · publicado em **29/10/2026 21:19** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 21:15 · sessao c435b9a9bb3f · o261 · verificador · origem=Code
+
+**A v3 corrige a reprovação da volta 2:** o contrato do carimbo agora inclui o contador e seu esperado. Sem achado bloqueante por inspeção; permanece o achado baixo do seletor da auditoria. (`app/chamados/tests/test_o261_vigia_fio.py:701,706`, pós-diff; `app/core/models.py:286`.)
+
+As referências “pós-diff” usam a numeração resultante do patch fornecido. Execução dos testes, REDs e efeitos em produção: **[nao verificado]**. [nao verificado]
+
+1. **Sítios criados ou tocados — cumprimento do aval**
+
+   - **`disputa_emissao.py` — sem achado na cura.** A guarda exige texto com `strip()`, preserva materialização, autor e via, mantém a consulta ao C6 e acrescenta trilha com antes/depois. Não acrescenta escrita de `validada_em`. (`app/chamados/services/disputa_emissao.py:1641,1643,1655,1659,1661`, pós-diff; `app/docs/CORTES.md:383`.)
+   - **`vigia_fio.py` — sem achado.** O contador lê o par persistido, aplica o mesmo `strip()`, aceita recorte por empresa e restringe-se ao carimbo posterior ao marco. (`app/chamados/services/vigia_fio.py:369,372,381,383,385`, pós-diff.)
+   - **`vigiar_fio_morto.py` — sem achado.** Imprime o contador, inclui medido/esperado no carimbo e conserva os grupos de alarme. (`app/chamados/management/commands/vigiar_fio_morto.py:79,89,172,193,198`, pós-diff.)
+   - **Novo `test_o261_resposta_vazia.py` — sem achado por inspeção.** Cobra vazio, espaços, texto, conteúdo da trilha, repetição sequencial, corte histórico e integração com impressão/carimbo. (`app/chamados/tests/test_o261_resposta_vazia.py:77,89,97,106,124,134,145`, pós-diff.)
+   - **`test_o261_vigia_fio.py` — sem achado remanescente.** As duas igualdades agora conferem a composição nova sem retirar a comparação dos contadores anteriores. (`app/chamados/tests/test_o261_vigia_fio.py:701,706`, pós-diff.)
+
+   A reparação das 263 vivas, reversão/prova e encaminhamento das exportadas são exigências do aval cuja realização permanece **[nao verificado]**; este diff não demonstra essa etapa. (`app/docs/CORTES.md:383`.)
+
+2. **Classes de reprovação**
+
+   - **Segundo juiz — sem achado. Derivação paralela — sem achado.** O escritor mantém `pergunta_viva`; o contador verifica a inconsistência dos campos, sem decidir vitalidade ou via. (`app/chamados/services/disputa_emissao.py:1641`; `app/chamados/services/vigia_fio.py:372`, pós-diff.)
+   - **Segundo escritor fora da porta — sem achado.** Permanecem os dois sítios declarados da função; a auditoria passa pelo escritor único `evento`. (`app/chamados/tests/test_porta_resposta_pergunta.py:68,95`; `app/chamados/services/disputa_emissao.py:1659,1661`, pós-diff; `app/core/observ.py:94`.)
+   - **Relógio fora da borda — sem achado novo.** `_tz.now()` já existia; o contador acrescenta uma constante temporal e o teste novo congela o relógio. (`app/chamados/services/disputa_emissao.py:1638`, cópia; `app/chamados/services/vigia_fio.py:369`; `app/chamados/tests/test_o261_resposta_vazia.py:32`, pós-diff.)
+   - **Ordem de trava — sem achado novo.** O diff não acrescenta bloqueio de negócio; a auditoria usa seu `atomic` existente. (`app/chamados/services/disputa_emissao.py:1659,1661`, pós-diff; `app/core/observ.py:133`.)
+   - **Idempotência sequencial — sem achado.** A pergunta materializada sai de `_abertas`; o teste exige estado igual e uma única linha após duas chamadas. Garantia concorrente: **[nao verificado]**. (`app/chamados/services/disputa_emissao.py:1634`, cópia; `app/chamados/tests/test_o261_resposta_vazia.py:106`, pós-diff.)
+   - **Selo sem mordida — sem achado por inspeção.** Há casos positivos e negativos para a guarda, a trilha e o contador; execução efetiva: **[nao verificado]**. (`app/chamados/tests/test_o261_resposta_vazia.py:77,97,106,134,145`, pós-diff.)
+
+3. **Leitores, contratos e testes existentes** [nao verificado]
+
+   - **Baixa — ação ausente do seletor da auditoria.** `fecho_sem_credor` não integra `ACOES`, usada pelo dropdown. A gravação aceita verbo livre; listagem geral e filtro GET explícito continuam disponíveis. (`app/chamados/services/disputa_emissao.py:1661`, pós-diff; `app/core/models.py:286,296`; `app/core/views.py:705,709,738`; `app/templates/core/log_auditoria.html:25`.)
+   - **Carimbo, painel e saída `VFM|` — sem achado remanescente.** O painel compara genericamente `esperado` contra `censo`; os testes shell usam carimbos sintéticos compatíveis; a linha antiga `VFM|ESPERADO|` permanece baseada no mesmo dicionário. (`bin/fio_estado.py:69,105`; `bin/tests/test_fio_estado.sh:40,93`; `app/chamados/management/commands/vigiar_fio_morto.py:175`, pós-diff.)
+   - **Leitores dos campos — sem achado funcional.** Os leitores de pendência/vitalidade continuam usando o juiz; o teste existente da órfã exige materialização, via e fecho, sem exigir carimbo de resposta. (`app/chamados/models.py:1381,2111`; `app/folha/fora_da_folha.py:66`; `app/chamados/tests/test_b2d_resposta_visivel.py:76,97`.)
+   - **Baixa, preexistente e fora do diff — contrato textual desatualizado.** O teste do par ainda chama carimbo sem texto de “inofensivo” e “legítimo”. Seu detector unidirecional não quebra com a v3, mas essa explicação contraria o aval novo. (`app/chamados/tests/test_contract_par_resposta.py:28,81,113`; `app/docs/CORTES.md:383`.)
+
+4. **Mensagem do commit** [nao verificado]
+
+   **Sem achado funcional contra o que ela descreve.** Os irmãos conferidos só criam o carimbo com texto; ausência pode regravar o valor existente. (`app/chamados/services/disputa_emissao.py:1570`; `app/chamados/services/materializacao.py:511,528,1190`.)
+
+   Duas qualificações: “instante do aval” é precisão não demonstrada por `17:2x`; e “cada fecho deixa UMA linha” descreve o caminho normal, pois `evento` é *best-effort*. O instante exato e a gravação efetiva de cada trilha são **[nao verificado]**. (`app/docs/CORTES.md:383`; `app/chamados/services/vigia_fio.py:369`, pós-diff; `app/core/observ.py:98,105,139`.)
+
+## 29/10 21:14 · sessao f85af26a11ef · - · - · origem=Ronald (tmux)
+
+Sem quebra executável identificada nos testes existentes do escritor: o caso sem credor exige materialização/via/fecho, sem exigir `respondida_em`; os casos que exigem carimbo têm texto. (`app/chamados/tests/test_b2d_resposta_visivel.py:76`; `app/chamados/tests/test_materializar_carimba_respondida.py:62`; `app/chamados/tests/test_materializar_carimba_respondida.py:76`.)
+
+**Baixa, documentação de contrato desatualizada:** o contrato existente ainda declara carimbo sem texto “inofensivo” e “legítimo”, contrário ao novo aval; o detector permanece unidirecional e não falha com a v3. Não é quebra funcional. (`app/chamados/tests/test_contract_par_resposta.py:28`; `app/chamados/tests/test_contract_par_resposta.py:81`; `app/chamados/tests/test_contract_par_resposta.py:113`; `app/docs/CORTES.md:383`.)
+
+**Censo de escritores — sem achado contra a mensagem:** os irmãos de materialização e S128 só criam o carimbo com texto; ausência inclui o campo no `save` mesmo sem atribuir valor novo. A resposta automática recebe texto constante no único chamador localizado. (`app/chamados/services/materializacao.py:511`; `app/chamados/services/materializacao.py:528`; `app/chamados/services/materializacao.py:1190`; `app/chamados/services/disputa_emissao.py:1570`; `app/api/foto_recebida.py:25`; `app/api/foto_recebida.py:48`.)
+
+**Relógio/contrato estrutural — sem achado:** o teste novo congela o relógio e conserva os dois sítios de escrita já declarados; não acrescenta atribuição isolada de texto. (`diff_v3.patch`, `app/chamados/tests/test_o261_resposta_vazia.py:32`; `app/chamados/tests/test_porta_resposta_pergunta.py:68`; `app/chamados/tests/test_contract_par_resposta.py:81`; `app/core/tests/test_selo_teste_sem_relogio.py:34`.)
+
+Execução dos testes e efeitos reais: [nao verificado]. [nao verificado]
+
+## 29/10 21:14 · sessao d9a6926f4fa7 · - · - · origem=Ronald (tmux)
+
+- **Baixa — ação nova ausente do seletor de auditoria.** `fecho_sem_credor` não integra `ACOES`; a tela alimenta o dropdown por essa lista. A gravação aceita verbos livres, e a listagem geral e o filtro GET explícito permanecem disponíveis. (`app/core/models.py:286,296`; `app/core/views.py:705,709,738`; `app/templates/core/log_auditoria.html:25`; ação nova: `app/chamados/services/disputa_emissao.py:1661`, diff.)
+
+- **Outros testes de auditoria e portas — sem achado.** O novo evento continua usando o escritor único; a função conserva seus dois sítios de escrita de pergunta. (`app/core/observ.py:94,134`; `app/core/tests/test_contract_trilha.py:57`; `app/chamados/tests/test_porta_resposta_pergunta.py:66,95`; `app/chamados/services/disputa_emissao.py:1659,1661`, diff.)
+
+- **Contratos dos campos — sem achado.** O teste existente da órfã sem resposta exige materialização, via e fechamento, sem exigir `respondida_em`; os casos existentes de carimbo com texto pertencem ao ramo S128 preservado. (`app/chamados/tests/test_b2d_resposta_visivel.py:76,97`; `app/chamados/tests/test_materializar_carimba_respondida.py:66,81`; `app/chamados/services/disputa_emissao.py:1570`.)
+
+- **Leitores da pergunta — sem achado.** Pendências consultam vitalidade; `.estado` mantém `RESOLVIDA` para a morta materializada; fora da folha considera somente vivas. (`app/chamados/models.py:1381,2111,2113`; `app/chamados/services/aviso_pendencia.py:13`; `app/folha/fora_da_folha.py:66`.)
+
+Execução dos testes e efeitos em produção: **[nao verificado]**. [nao verificado]
 
 ## 29/10 21:13 · sessao 2e2b8e5f00e7 · - · - · origem=Ronald (tmux)
 
@@ -502,91 +564,4 @@ Histórico e API leem conteúdo/autor/data; a visibilidade da nota de sistema na
 
 Incidência em produção, RED/suite executados e pré-requisitos de pouso: **[nao verificado]**. [nao verificado]
 
-## 29/10 18:57 · sessao a948fcf9db10 · - · - · origem=Ronald (tmux)
-
-Não confirmei defeito introduzido nos fechos: o helper conserva retenção → registro da retenção → `encerrar()` → ocorrência; a guarda impede ocorrência quando `encerrar()` recusa (`app/chamados/reconciliador.py:494–502`).
-
-- **Cascata: mudança condicional de contrato.** Agora só incrementa `n_fechados` e escreve ocorrência se `encerrar()` retorna verdadeiro (`app/ponto/services/justificativa.py:385–389`; `app/chamados/reconciliador.py:498–502`). O anexo mostra que antes ignorava o retorno de `encerrar()`. Contraexemplo lógico: retorno `False` sem retenção; antes nota/+1, agora nenhuma nota/+0. Entretanto, a seleção usa `NAO_FECHADOS` (`app/ponto/services/justificativa.py:57`), definido como aberto/em_analise/registrado/resolvido (`app/chamados/catalogo/motor.py:24`, `:32`), exatamente os quatro estados aceitos por `ENCERRAR` (`app/chamados/catalogo/motor.py:114–115`). Alcançabilidade desse retorno falso na cascata real: `[nao verificado]`.
-- **Bloqueio: sem mudança de decisão/estado comprovada.** A seleção, trava e delegação continuam em `app/ponto/services/justificativa.py:70–80`; o diff fornecido já continha a guarda sobre retorno falso de `encerrar()`. O tipo novo é o argumento de `app/ponto/services/justificativa.py:80`.
-- **Atomicidade e travas dos chamadores preservadas.** A materialização abre atomic, trava chamados e depois justificativa (`app/ponto/services/justificativa.py:327–329`, `:114`); aprovação faz o mesmo (`:125–129`) e fecha origem/bloqueio ainda dentro dele (`:202–203`). O helper não abre atomic próprio (`app/chamados/reconciliador.py:494–502`), mas esses dois usos já estão protegidos.
-- **Ordem persistente preservada; avaliação antecipada do texto.** A cascata percorre `pk`, depois fecha origem (`app/ponto/services/justificativa.py:379`, `:393`); o helper registra retenção antes de tentar encerrar e anexa depois (`app/chamados/reconciliador.py:494–502`). O texto agora é avaliado como argumento antes da retenção (`app/ponto/services/justificativa.py:385–388`), inclusive para item retido; `hora_local` apenas localiza/formata o datetime (`app/core/fmt.py:10–15`). Defeito concreto causado por essa antecipação: `[nao verificado]`.
-
-## 29/10 18:57 · sessao 4fb3b0a265b8 · - · - · origem=Ronald (tmux)
-
-Leitores específicos desses tipos: **nenhum leitor persistente na cópia**. `FollowupChamado` não possui campo `tipo`; possui `autor_tipo`, `conteudo`, carimbos, anexos e `evento_chave` (`app/chamados/models.py:1236`, `app/chamados/models.py:1243`, `app/chamados/models.py:1263`). A porta exige `tipo` preenchido, mas não o inclui em `campos` persistidos (`app/chamados/services/nota.py:85`, `app/chamados/services/nota.py:88`).
-
-O único consumidor operacional do argumento `tipo` é a chave de dedup: SHA256 de `chamado_id|tipo|objeto_ref|autor` (`app/chamados/services/nota.py:62`). Esse cálculo só acontece quando `objeto_ref is not None` e o autor é sistema ou há `texto_fixo`/`identico` (`app/chamados/services/nota.py:95`). Sem chave, a porta sempre cria uma linha (`app/chamados/services/nota.py:102`).
-
-**Impacto do delta:** `encerrar_com_retencao` não transmite `objeto_ref`; logo os tipos `retratado`, `bloqueio_liberado_por_justificativa` e `turno_fechado_retroativo`, nesses caminhos, não geram chave nem são persistidos (`app/chamados/reconciliador.py:502`, `app/chamados/services/nota.py:75`, `app/chamados/services/nota.py:95`). A mudança de tipo do bloqueio, isoladamente, não altera dedup ou dados salvos (`app/ponto/services/justificativa.py:79`, `app/chamados/services/nota.py:88`). Existe teste explícito com duas chamadas `tipo='retratado'` sem referência que espera duas linhas, mas execução desse teste: `[nao verificado]` (`app/chamados/tests/test_porta_nota_do_fio.py:179`).
-
-Produtores dos literais na cópia:
-
-- Retratação canônica: `tipo='retratado'` (`app/chamados/reconciliador.py:542`).
-- Bloqueio aprovado: `tipo='bloqueio_liberado_por_justificativa'` (`app/ponto/services/justificativa.py:80`).
-- Cascata retroativa: `tipo='turno_fechado_retroativo'` (`app/ponto/services/justificativa.py:388`).
-- O `retratado` de `bin/censo_folha.py:30` é filtro de **status_local**, não tipo de FollowupChamado (`bin/censo_folha.py:30`).
-
-Consumidores genéricos relevantes leem as notas por conteúdo, autor ou data:
-
-- Histórico consulta todas as notas dos chamados e emite eventos com `conteudo` e autor (`app/chamados/services/historico.py:80`, `app/chamados/services/historico.py:84`).
-- API percorre notas e aplica visibilidade por `autor_tipo`/`conteudo`; nota de sistema só aparece ao colaborador se o conteúdo contiver `justificativa` (`app/api/views.py:62`, `app/api/views.py:1128`, `app/api/views.py:1134`).
-- Modal e fio HTML mostram notas com estilo por `autor_tipo`, texto e data (`app/templates/chamados/partials/modal_fio.html:454`, `app/templates/chamados/partials/modal_fio.html:466`, `app/templates/chamados/fio_colaborador.html:235`, `app/templates/chamados/fio_colaborador.html:247`).
-- Painel calcula quantidade e última nota sem distinguir tipo de evento (`app/chamados/services/painel.py:360`, `app/chamados/services/painel.py:395`).
-- SLA usa última nota `autor_tipo='dp_rh'` e busca aviso por substring `SLA`; não lê tipo de evento (`app/chamados/services/sla.py:17`, `app/chamados/services/sla.py:42`).
-- PDF percorre todas as notas e imprime data, usuário e conteúdo (`app/relatorios/pdf_chamados.py:135`).
-
-Portanto, a supressão da nota quando `encerrar()` retorna `False` pode reduzir contagem e histórico de notas visíveis; a simples troca do argumento `tipo` do bloqueio não altera esses leitores (`app/chamados/reconciliador.py:499`, `app/chamados/services/painel.py:395`, `app/chamados/services/historico.py:84`). Efeito observado em produção: `[nao verificado]`.
-
-## 29/10 18:54 · sessao d40eb65cffec · espera · verificador · origem=Code
-
-**Reprovo esta volta:** a memória ainda pode regredir, e há provas de PID que aceitam processos que não são o produtor declarado. [bin/hook_stop_fila1.py:543](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:543), [bin/hook_stop_fila1.py:478](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:478)
-
-No hook:
-
-1. **A cura da regressão da memória não fecha a concorrência.** Cenário sintético: memória=100; A lê mtime=200 e memória=100; B observa avanço para 300 e grava 300; A termina depois e grava 200. O escritor morre. C observa arquivo parado em 300 e memória=200: libera novamente. O `max` protege apenas o retrato local; falta serialização. Confirmei executando a função com filesystem simulado em memória. [bin/hook_stop_fila1.py:543](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:543), [bin/hook_stop_fila1.py:551](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:551)
-
-2. **Argumento inerte ainda passa quando é valor de opção.** Processo real: `python3 -X produtor_espera.sh -c 'import time; time.sleep(300)'`. Topo: `ESPERANDO: produtor_espera.sh | pid=<PID>`. O primeiro argumento que não começa com `-` é o valor de `-X`; o hook aceita como script e libera, embora o script não esteja executando. Também ocorre com `-W`. Confirmei ambos. [bin/hook_stop_fila1.py:479](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:479)
-
-3. **Temporizador também vira “script”.** Processo `/usr/bin/sleep 300`; topo `ESPERANDO: 300 | pid=<PID>`. A função devolve prova: interpreta a duração como produtor. Confirmei com processo real. A classificação de todo embrulho pelo mesmo algoritmo também permite confundir arquivo consumido por `tail` com programa produtor. [bin/hook_stop_fila1.py:478](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:478)
-
-4. **PID 1 fica fora dos ancestrais.** A função retorna quando encontra pai=1, antes de adicioná-lo. Num host cujo argv inicial seja `/sbin/init`, `ESPERANDO: init | pid=1` passa pelo filtro de ancestral. Confirmei a omissão e a aceitação do programa correspondente ao PID 1 neste ambiente. [bin/hook_stop_fila1.py:455](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:455), [bin/hook_stop_fila1.py:492](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:492)
-
-5. **`argv[0]` forjado é aceito como identidade.** Processo real: `bash -c 'exec -a produtor_espera.sh /usr/bin/sleep 300'`. Topo: `ESPERANDO: produtor_espera.sh | pid=<PID>`. Libera, embora o executável seja `sleep`. Confirmei: o código consulta cmdline, mas não confronta o executável. [bin/hook_stop_fila1.py:477](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:477), [bin/hook_stop_fila1.py:497](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:497)
-
-6. **Caminho absoluto errado passa por sufixo.** Declarar `/tmp/produtor.sh` aceita argv de `/outra/tmp/produtor.sh`. Declarar `../produtor.sh` aceita `/outra/produtor.sh`, porque `lstrip('./')` apaga a referência ao pai. Confirmei ambos diretamente na função. Efeito: prova de outro caminho libera o Stop. [bin/hook_stop_fila1.py:481](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:481)
-
-7. **Lista de interpretadores falha nos dois sentidos.** `python3.12 -c 'import time; time.sleep(300)'` com produtor declarado `python3.12` passa, contornando a exclusão de genéricos. Já `python3.12 /obra/produtor.py`, declarado como `produtor.py`, não casa: o interpretador versionado não é reconhecido. [bin/hook_stop_fila1.py:437](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:437), [bin/hook_stop_fila1.py:487](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:487)
-
-8. **Opções legítimas bloqueiam produtores reais.** `python3 -W ignore /obra/produtor.py` compara `ignore` com `produtor.py`; `bash -O extglob /obra/produtor.sh` compara `extglob`; `timeout 300 /obra/produtor.sh` compara `300`. Mesmo com produtor funcionando, segue o bloqueio. [bin/hook_stop_fila1.py:479](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:479)
-
-9. **Temporário previsível permite escrever no painel fora da porta.** Entrada: `logs/hook_stop_espera.json.<PID-do-hook>.tmp` previamente ligado por symlink ou hardlink ao RELATO ou BACKLOG. O `open(..., 'w')` trunca esse alvo e grava JSON. Isso ocorre depois da prova inicial do RELATO. É um caminho de segundo escritor; dedução estática, sem reprodução em disco. [bin/hook_stop_fila1.py:553](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:553), [bin/hook_stop_fila1.py:717](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:717)
-
-10. **A cura de FIFO tem uma corrida solucionável.** ESPERA é regular no `lstat`; outro processo troca o caminho por FIFO antes do `open`. A abertura pode esperar escritor indefinidamente: não chega à decisão de fila vazia nem ao TETO. Troca por symlink também contorna a verificação anterior. Dedução estática. [bin/hook_stop_fila1.py:540](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:540)
-
-11. **Falha ao consultar arquivo proibido é ignorada.** Entrada: sinal é hardlink da TRILHA; seu `stat` funciona, mas `stat(TRILHA)` lança `EIO`; memória contém mtime anterior e a própria trilha avançou. O erro é descartado, permitindo prova de escrita do hook. Confirmei a aceitação com erro injetado e I/O simulado. Contraria “falha de leitura bloqueia”. [bin/hook_stop_fila1.py:529](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:529)
-
-12. **Falha herdada: UTF-8 inválido libera por exceção.** RELATO com `ESPERANDO: inexistente | pid=999999999` e byte `0xff`, sem afirmação consumada. O checador lê com substituição; o leitor do topo lança `UnicodeDecodeError`, que não é `OSError`. Como PAREI é consultado antes de ESPERANDO, a exceção chega ao `except` externo e libera. Confirmei o fluxo com streams em memória. Pelo diff fornecido, isso já existia no leitor anterior de PAREI. [bin/relato_afirma_com_prova.py:88](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/relato_afirma_com_prova.py:88), [bin/hook_stop_fila1.py:414](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:414), [bin/hook_stop_fila1.py:793](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:793)
-
-No selo:
-
-13. **Conjunção sem mordida nos demais sentidos.** Só há `PID bom + arquivo sem avanço → bloqueia`, logo depois de apagar a memória. Faltam `PID morto + arquivo andando → bloqueia` e `ambos bons → libera`. Uma implementação que ignorasse o PID quando existe arquivo, ou sempre rejeitasse provas duplas, escaparia. [bin/tests/test_hook_esperando_com_prova.sh:140](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/tests/test_hook_esperando_com_prova.sh:140), [bin/tests/test_hook_esperando_com_prova.sh:142](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/tests/test_hook_esperando_com_prova.sh:142)
-
-14. **Falta morder a precedência da prova do RELATO.** Entrada ausente: ESPERANDO com PID válido, junto de `NO AR` sem PROVA. Mover a liberação para antes do checador escaparia do selo novo e do antigo, que não declara ESPERANDO. O código atual mantém a ordem correta. [bin/tests/test_hook_esperando_com_prova.sh:94](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/tests/test_hook_esperando_com_prova.sh:94), [bin/tests/test_relato_prova_no_stop.sh:20](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/tests/test_relato_prova_no_stop.sh:20)
-
-15. **A cura de kill reciclado cobre `_mata`, mas não toda a limpeza.** `P_OUTRO` e `P_INERTE` terminam naturalmente após 300 segundos e continuam em `_pids`. Se o selo demorar mais e houver reutilização, `_fim` manda `kill` ao novo ocupante. É uma intercalação possível pelo código; ocorrência real: [não verificado]. [bin/tests/test_hook_esperando_com_prova.sh:30](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/tests/test_hook_esperando_com_prova.sh:30), [bin/tests/test_hook_esperando_com_prova.sh:56](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/tests/test_hook_esperando_com_prova.sh:56)
-
-| Classe pedida | Resultado |
-|---|---|
-| Segundo juiz que duplica registrado | **nada** encontrado no diff; leitura do topo foi centralizada. [hook:400](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:400) |
-| Segundo escritor fora da porta | Temporário ligado ao painel, achado 9. [hook:554](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:554) |
-| Relógio lido fora da borda | **nada** novo; a prova usa metadata do arquivo. [hook:537](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:537) |
-| Derivação paralela de fonte única | **nada** encontrado na extração do topo. [hook:632](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:632) |
-| Selo/RED sem mordida | Lacunas 13 e 14; a mordida básica existe. [selo:68](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/tests/test_hook_esperando_com_prova.sh:68) |
-| Ordem de trava | Leitura/julgamento/gravação sem exclusão, achado 1. [hook:543](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:543) |
-| Pouso antes do pré-requisito | **nada** no fluxo atual: checador precede ESPERANDO; falta selo combinado. [hook:717](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:717) |
-
-**PAREI, TETO e fila vazia: nada de regressão no fluxo normal examinado**, além dos caminhos excepcionais descritos acima. As chamadas dirigidas com I/O simulado preservaram essas decisões. [hook:632](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:632), [hook:743](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:743), [hook:781](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:781)
-
-Selo completo executado: **[não verificado]**. Identidade Git do snapshot/diff acumulado: **[não verificado]**. O CORTES disponível termina em 384; o registro citado em 389 não está nesta cópia. [app/docs/CORTES.md:384](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/app/docs/CORTES.md:384)
-
-_243 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_246 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
