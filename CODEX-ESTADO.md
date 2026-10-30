@@ -1,7 +1,81 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 17:06** · publicado em **30/10/2026 17:08** (UTC-3)
+> Ultima resposta processada: **30/10/2026 17:13** · publicado em **30/10/2026 17:14** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 17:13 · sessao 786be39f25f8 · - · - · origem=Ronald (tmux)
+
+- `lista()` lê fontes e monta o dicionário; não persiste resultado: `app/escala/services/cadastro_realidade.py:502`, `:513-575`, `:646-652`. As assinaturas hoje são C1–C9; não há C10 no registro nem ramo de fase deslocada na montagem: `app/escala/services/cadastro_realidade.py:36-107`, `:513-575`.
+
+Leitores em produção:
+
+| Leitor | Uso | Fonte |
+|---|---|---|
+| Tela | Chama `lista(empresas={visíveis})` e passa `dados` ao template | `app/escala/views.py:487-495` |
+| PDF | O mesmo `dados`, gerado pela mesma chamada, vai a `pdf_bytes` | `app/escala/views.py:490-494`; renderização `app/escala/services/cadastro_realidade.py:674-723` |
+| Template | Percorre postos, colaboradores e assinaturas; mostra detalhe/dono/ação; C7 tem ações POST adicionais | `app/templates/escala/cadastro_x_realidade.html:21-29` |
+| `fechar_avisos_regua_na_lista` | Chama lista inteira, seleciona C7 e só cancela avisos cujos colaboradores ficaram comprovados | `app/escala/management/commands/fechar_avisos_regua_na_lista.py:26-49` |
+| `fechar_chamados_vinculo_na_lista` | Exige lavra C8, chama lista inteira, seleciona C8 e só cancela comprovados | `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:30-59` |
+| `vigia_fio.censo` | Chama lista uma vez por censo, com empresas visíveis; lê dias com dono lavrado BATIDA/CADASTRO; falha mantém alarme e conta ausência | `app/chamados/services/vigia_fio.py:244-266`; adaptador `app/escala/services/cadastro_realidade.py:655-671` |
+| Placar estrutural R2 | **Referência textual**, não chamada executável de `lista`; `fonte` declara a função como origem | `app/core/placar_estrutural.py:140-149` |
+
+LAVRA C3/C7/C8/C9:
+
+| Assinatura | Campo/chave e leitura | Escritor | Cron declarado |
+|---|---|---|---|
+| C3 | `MetricaSnapshot.detalhe`, chave `previsto_cego`, escopo `frota`; último `data_ref/calculado_em`; formatador `_previsto_cego` | `lavrar_previsto_cego --apply`: `medir` e `update_or_create` | Diariamente 07:33 |
+| | `app/escala/services/previsto_cego.py:58`, `:217-226`; `app/escala/services/cadastro_realidade.py:381-396` | `app/escala/management/commands/lavrar_previsto_cego.py:30-40` | `app/config/crons.py:495-496` |
+| C7 | `MetricaSnapshot.detalhe.por_colab`, chave `termometro_regua`; itens contêm EC, classe, declarado/real, evidência, exemplo e destino | `termometro_regua --avaliar --lavrar` → `regua_na_lista.lavrar` | Diariamente 06:00 |
+| | `app/escala/services/regua_na_lista.py:19-66`; `app/escala/services/cadastro_realidade.py:276-290` | `app/escala/management/commands/termometro_regua.py:41-78`, `:92-95` | `app/config/crons.py:409` |
+| C8 | `MetricaSnapshot.detalhe.por_colab`, chave `vinculo_divergente`; `colabs_em_revisao` ainda compara posto lavrado com posto atual | `detectar_vinculo_divergente --lavrar` → `vinculo_na_lista.lavrar` | Segunda-feira 06:52 |
+| | `app/ponto/services/vinculo_na_lista.py:21`, `:111-153`; `app/escala/services/cadastro_realidade.py:294-302` | `app/ponto/management/commands/detectar_vinculo_divergente.py:35-52` | `app/config/crons.py:578` |
+| C9 | `MetricaSnapshot.detalhe.itens`, chave `par_separado_pelo_teto`; itens incluem data, EC/template do dia e dono do juiz | `lavrar_teto_do_dia --apply` → `teto_na_lista.medir/lavrar` | Diariamente 07:42 |
+| | `app/ponto/services/teto_na_lista.py:25`, `:75-86`, `:110-130`; `app/escala/services/cadastro_realidade.py:306-318` | `app/ponto/management/commands/lavrar_teto_do_dia.py:26-34` | `app/config/crons.py:502-503` |
+
+`MetricaSnapshot` tem campos `chave`, `escopo`, `escopo_id`, `data_ini`, `data_ref`, `numerador`, `denominador`, `valor`, JSON `detalhe` e `calculado_em`; o modelo não declara `db_table`: `app/inteligencia/models.py:81-110`. O timezone Django é `America/Sao_Paulo`: `app/config/settings/base.py:93`. Execução efetiva desses crons e horário do daemon no host: [não verificado].
+
+**Existe dado lavrado de desvio 12x36, mas não o registro diário completo de `fora_de_fase`:**
+
+- `censo_fase_12x36 --lavrar` grava snapshot chave `desvio_de_cadastro_12x36`, escopo `tenant`, `escopo_id=0`, com quantidade de linhas, IDs dos colaboradores em desvio, automáticos/propostas e esperado; **não grava datas dos furos/folgas, EC ou âncora sugerida por linha nesse snapshot**: `app/ponto/management/commands/censo_fase_12x36.py:192-209`.
+- Esse é o escritor existente mais próximo em assunto: mede previsto por vínculo do dia, compara com turnos reais, calcula `furos`, `folga_trab`, proposta de âncora e paridade: `app/ponto/management/commands/censo_fase_12x36.py:102-168`. Seu cron roda diariamente 07:38, `--min-plantoes 6 --lavrar`: `app/config/crons.py:614-615`.
+- O JSON opcional do censo contém EC, segmentos, âncora, contagens, virada e proposta; grava arquivo apenas com `--json`, opção ausente no cron: `app/ponto/management/commands/censo_fase_12x36.py:153-174`; `app/config/crons.py:614-615`.
+- Há também snapshot `fase_conflitante`; responde FOTO versus ANCORA, não vida versus cadastro: `app/escala/services/fase_conflitante.py:11-24`, `:86-102`. Escritor `lavrar_fase_conflitante --apply`, diariamente 07:14: `app/escala/management/commands/lavrar_fase_conflitante.py:28-38`; `app/config/crons.py:479-480`.
+- `fora_de_fase` calcula os dois conjuntos de dias, mas retorna apenas contagens e sugestão; não retorna datas nem `ec_id`, e não grava: `app/escala/services/fase_12x36.py:178-210`.
+- A lavra do esmeril tem A2/A8 por colaborador, porém reduz assinaturas a contagens; snapshot e JSON preservam esse dicionário: `app/ponto/services/esmeril_espelho.py:214-231`, `:296-330`. A lista o lê pelo banco, nunca pelo arquivo: `app/ponto/services/esmeril_espelho.py:334-350`; `app/escala/services/cadastro_realidade.py:575-576`.
+- Conteúdo real dos snapshots existentes no banco nesta instalação: [não verificado].
+
+## 30/10 17:13 · sessao 4db30082a3b2 · - · - · origem=Ronald (tmux)
+
+Padrões aplicáveis, com distinção entre intenção do desenho e execução atual:
+
+- **Single Source of Truth / um juiz por pergunta** e **Single Writer Principle** são o norte explícito; “derivação paralela” é lógica de negócio duplicada proibida. O desenho de uma única sugestão realiza esse padrão, mas hoje as decisões estão duplicadas: `ancora_sugerida` exige piso/ganho e escolhe a melhor paridade, enquanto `fase_sugerida` decide por troca de ritmo, últimos dois plantões e desempate próprio. Referências: `app/docs/GLOSSARIO.md:12`, `app/docs/GLOSSARIO.md:23`, `app/docs/PLANO-PADROES.md:46`, `app/escala/services/fase_12x36.py:67`, `app/escala/services/fase_12x36.py:75`, `app/escala/services/fase_na_tela.py:62`, `app/escala/services/fase_na_tela.py:70`, `app/escala/services/fase_na_tela.py:78`, `app/escala/services/fase_na_tela.py:90`.
+
+- **Bitemporal data / vínculo do dia x vínculo de hoje**: o desenho que escolhe o vínculo responsável pelo dia passado realiza o padrão. `vinculo_do_dia` privilegia `CelulaDia.escala_geradora`; sem geradora usa a vigência. O detector `fora_de_fase` hoje seleciona apenas vínculos ativos e usa aquele vínculo em toda a janela, incluindo os dias passados: esse caminho não faz a escolha por dia. Referências: `app/docs/GLOSSARIO.md:24`, `app/escala/alimentacao.py:196`, `app/escala/alimentacao.py:200`, `app/escala/alimentacao.py:212`, `app/escala/services/fase_12x36.py:106`, `app/escala/services/fase_12x36.py:173`, `app/escala/services/fase_12x36.py:181`.
+
+- **CQRS / projeção de leitura**: lista lendo LAVRA pronta realiza a separação entre cálculo e leitura. C3, C7, C8 e C9 apenas formatam os dados lavrados; C9 conserva dia e dono do juiz. `dias_na_lista` também lê o resultado da lista, sem produzir um segundo retrato do dia. Referências: `app/docs/GLOSSARIO.md:22`, `app/docs/PLANO-PADROES.md:11`, `app/escala/services/cadastro_realidade.py:382`, `app/escala/services/cadastro_realidade.py:393`, `app/escala/services/cadastro_realidade.py:276`, `app/escala/services/cadastro_realidade.py:294`, `app/escala/services/cadastro_realidade.py:306`, `app/escala/services/cadastro_realidade.py:312`, `app/escala/services/cadastro_realidade.py:658`.
+
+- **Célula soberana / fonte única e escritor único**: corrigir o passado pela porta formal de regeneração realiza a exceção expressamente documentada. A porta recalcula usando o cadastro corrigido, altera células geradas, registra DNA anterior, data e contador de regeneração, e grava auditoria; a documentação nomeia essa porta como exceção formal à imutabilidade. Referências: `app/docs/GLOSSARIO.md:11`, `app/ponto/portas/celula.py:44`, `app/ponto/portas/celula.py:46`, `app/ponto/portas/celula.py:100`, `app/ponto/portas/celula.py:243`, `app/ponto/portas/celula.py:259`, `app/ponto/portas/celula.py:299`.
+
+- **Evento em vez de varredura / Transactional Outbox**: LAVRA por cron preserva cálculo fora do request, mas isso não demonstra realização de evento/outbox. O glossário aponta os crons como a varredura existente e declara outbox “a construir”; o plano mantém O-OUTBOX registrado e descreve o contrato ainda por escrever. Referências: `app/docs/GLOSSARIO.md:16`, `app/docs/GLOSSARIO.md:17`, `app/docs/PLANO-PADROES.md:10`, `app/docs/PLANO-PADROES.md:15`.
+
+A lista atual monta os dados cadastrais de apresentação usando o vínculo **vigente hoje**; C9 conserva separadamente o vínculo e template do dia. Referências: `app/escala/services/cadastro_realidade.py:477`, `app/escala/services/cadastro_realidade.py:490`, `app/escala/services/cadastro_realidade.py:494`, `app/escala/services/cadastro_realidade.py:312`.
+
+## 30/10 17:13 · sessao 6402924a7c99 · CODEX-CONTEXTO-DA-CASA · leitura · origem=Code
+
+1) Sim. Recebi instruções apresentadas como AGENTS.md de `/tmp/codex_ctx_medida/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/AGENTS.md`. [nao verificado]
+
+2) Todas as linhas visíveis que começam com `PALAVRA-CODIGO`, literalmente: [nao verificado]
+
+```text
+PALAVRA-CODIGO-1: ARARA-TOPO
+PALAVRA-CODIGO-2: BUGIO-31K
+```
+
+3) Há sinal de truncamento: a última linha visível está incompleta. Ela é, literalmente: [nao verificado]
+
+```text
+linha de enchimento para medir o corte do
+```
 
 ## 30/10 17:06 · sessao 79968c2291fd · SUITE-POR-IMPACTO · verificador · origem=Code
 
@@ -729,181 +803,4 @@ NOVO|O261-NOTURNO_e8c314e0|B|app/chamados/tests/test_noturno_le_o_dia_do_instant
 NOVO|O261-NOTURNO_06d7ad06|A|app/chamados/tests/test_noturno_le_o_dia_do_instante.py:166|Filtro por substring exata deixa escapar campos válidos data!s e data: na formatação.
 NOVO|O261-NOTURNO_06d7ad06|B|app/chamados/tests/test_noturno_le_o_dia_do_instante.py:166|Filtro deixa escapar data!s e data com especificador de formato, permitindo outro produtor de data.
 
-## 30/10 15:03 · sessao ae6de421cf17 · BENCH-CORRECAO · censo · origem=Code
-
-Numeração: **1** LEI-AKITA nos commits; **2** Pauta DP; **3** custo da cerca; **4** guarda morta; **5** R1 sem mordida; **6** composição duplicada; **7** ordem da docstring; **8** veto garantido pela porta de nascimento. Os seis primeiros e sua cura estão registrados em `app/docs/RELATO.md:83–84`; os dois últimos, em `app/docs/RELATO.md:85–87`.
-
-Há uma limitação temporal: o material não permite determinar quando a guarda morta foi acrescentada nem quando a lista da docstring ficou fora de ordem. Nas linhas abaixo, **n/a nesses dois casos significa não imputação conservadora**; inexistência nas árvores anteriores: **[nao verificado]**. A relavratura descrita por A e B em `0ed50cc2` sugere que a guarda veio depois, mas seu hash de introdução é **[nao verificado]**.
-
-Para o item 8, considero a invariante estrutural completa. A consulta acrescentada ao c2 corrige o caminho sequencial, mas a porta continua sem garantir o veto no nascimento/renascimento (`app/docs/RELATO.md:45–49`; `app/chamados/models.py:666–688`).
-
-As classificações positivas têm estes fundamentos, usando as referências históricas citadas nas respostas:
-
-- **4da2943d, item 3:** A, **EM PARTE**: “consulta de exportação duplicada por intervalo vivo” identifica custo adicional, sem localizar toda a cerca antecipada (`app/chamados/reconciliador.py:703,709,749,1436`). B, **VIU**: “C6 também passou a anteceder as recusas” e “esse cenário não mede o custo novo” apontam antecipação e ausência de cobertura do universo de órfãs (`app/chamados/reconciliador.py:394`; `app/ponto/tests/test_selo_chokepoint_escrita.py:239`).
-- **4da2943d, item 5:** B, **EM PARTE**: “R1/R2/R3 […] possuem asserções da mudança” examina o teste, mas não identifica a falta de exigência do renascimento (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:117`).
-- **4da2943d, item 6:** A, **EM PARTE**: “Derivação paralela […] nada na implementação. A lacuna está no selo da janela”; B, **EM PARTE**: “Os helpers delegam a C6, K6 e `janela_atual`”. Ambos abordam a composição, sem apontar suas duas versões nem a divergência sem data (`app/chamados/reconciliador.py:700–703`; `app/chamados/reconciliador.py:711`).
-- **68a38548, item 6:** A, **EM PARTE**: “Nada de fórmula duplicada; há resultado antigo substituindo a consulta atual”; B, **EM PARTE**: “Nenhuma fórmula nova; permanece o defeito de atualização do memo”. Discutem a consulta de competência, mas o defeito apontado é envelhecimento do memo, não duplicação entre consumidores (`app/chamados/reconciliador.py:703`; `app/chamados/reconciliador.py:706`).
-- **13963efb, item 8:** A, **VIU**: “a dispensa do veto não acompanha a decisão de renascer”; identifica o renascimento após mudança de estado entre leitura e trava, sem nova consulta ao veto (`app/chamados/reconciliador.py:798–799,843–848`; `app/chamados/models.py:666–687`). B, **EM PARTE**: “compartilhar o leitor da impressão não garante paridade integral com a emissão”; identifica outro furo de veto, por vínculo ausente, mas não a proteção dentro da porta (`app/ponto/services/furos_vetados.py:26`; `app/chamados/reconciliador.py:845`).
-
-As demais respostas não apontam o defeito específico dos itens ainda imputados; afirmações de correção nas voltas posteriores não recebem crédito retroativo. Os achados novos abaixo são alegações dos revisores, com as linhas que eles citaram; sua procedência individual permanece **[nao verificado]**.
-
-NOTA|O261-C_4da2943d|1|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_4da2943d|2|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_4da2943d|3|existia|A=EM_PARTE|B=VIU
-NOTA|O261-C_4da2943d|4|n/a|A=n/a|B=n/a
-NOTA|O261-C_4da2943d|5|existia|A=NAO_VIU|B=EM_PARTE
-NOTA|O261-C_4da2943d|6|existia|A=EM_PARTE|B=EM_PARTE
-NOTA|O261-C_4da2943d|7|n/a|A=n/a|B=n/a
-NOTA|O261-C_4da2943d|8|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_68a38548|1|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_68a38548|2|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_68a38548|3|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_68a38548|4|n/a|A=n/a|B=n/a
-NOTA|O261-C_68a38548|5|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_68a38548|6|existia|A=EM_PARTE|B=EM_PARTE
-NOTA|O261-C_68a38548|7|n/a|A=n/a|B=n/a
-NOTA|O261-C_68a38548|8|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_0ed50cc2|1|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_0ed50cc2|2|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_0ed50cc2|3|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_0ed50cc2|4|n/a|A=n/a|B=n/a
-NOTA|O261-C_0ed50cc2|5|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_0ed50cc2|6|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_0ed50cc2|7|n/a|A=n/a|B=n/a
-NOTA|O261-C_0ed50cc2|8|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_22c08b8e|1|n/a|A=n/a|B=n/a
-NOTA|O261-C_22c08b8e|2|n/a|A=n/a|B=n/a
-NOTA|O261-C_22c08b8e|3|n/a|A=n/a|B=n/a
-NOTA|O261-C_22c08b8e|4|n/a|A=n/a|B=n/a
-NOTA|O261-C_22c08b8e|5|n/a|A=n/a|B=n/a
-NOTA|O261-C_22c08b8e|6|n/a|A=n/a|B=n/a
-NOTA|O261-C_22c08b8e|7|n/a|A=n/a|B=n/a
-NOTA|O261-C_22c08b8e|8|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_13963efb|1|n/a|A=n/a|B=n/a
-NOTA|O261-C_13963efb|2|n/a|A=n/a|B=n/a
-NOTA|O261-C_13963efb|3|n/a|A=n/a|B=n/a
-NOTA|O261-C_13963efb|4|n/a|A=n/a|B=n/a
-NOTA|O261-C_13963efb|5|n/a|A=n/a|B=n/a
-NOTA|O261-C_13963efb|6|n/a|A=n/a|B=n/a
-NOTA|O261-C_13963efb|7|n/a|A=n/a|B=n/a
-NOTA|O261-C_13963efb|8|existia|A=VIU|B=EM_PARTE
-NOVO|O261-C_4da2943d|A|app/chamados/services/disputa_emissao.py:1634|Segundo laço do S128 contorna a guarda de tranca e carimba pergunta com via que a reabertura por competência não desfaz.
-NOVO|O261-C_4da2943d|A|app/chamados/services/disputa_emissao.py:1659|Segundo laço carimba resposta sem testemunha e a retira do universo do materializador.
-NOVO|O261-C_4da2943d|A|app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:43|Fixture sem corte personalizado não distingue competência da janela de mês civil.
-NOVO|O261-C_4da2943d|A|app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:205|Idempotência compara poucos campos e permite relavratura com alteração de julgado_em.
-NOVO|O261-C_4da2943d|A|app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:92|Casos MORTOS usam somente validada_em e não exercitam tranca nem resposta do colaborador.
-NOVO|O261-C_4da2943d|A|app/chamados/reconciliador.py:1436|Reatar e c2 repetem o SELECT de entrega para a mesma competência.
-NOVO|O261-C_4da2943d|B|app/chamados/services/disputa_emissao.py:1622|S128 alcança disputas de outros dias e competências, podendo carimbar uma irmã exportada apesar da cerca na pergunta de entrada.
-NOVO|O261-C_4da2943d|B|app/chamados/services/disputa_emissao.py:1634|Segundo laço do S128 ignora a proteção da resposta sem testemunha e impede sua materialização posterior.
-NOVO|O261-C_4da2943d|B|app/chamados/services/disputa_emissao.py:1647|Segundo laço vence a guarda de tranca e grava carimbo não abrangido pela reversão de competencia_trancada.
-NOVO|O261-C_4da2943d|B|app/chamados/reconciliador.py:1457|Dois históricos que passam a casar pelo juiz impedem o despacho ao c1 e deixam a pergunta sem tratamento.
-NOVO|O261-C_4da2943d|B|app/chamados/reconciliador.py:1436|Consulta de K6 no reatar é repetida pelo helper do c2 para o mesmo intervalo vivo.
-NOVO|O261-C_4da2943d|B|app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:92|Fixture só mata perguntas por validada_em e não distingue C6 de um segundo juiz baseado nesse campo.
-NOVO|O261-C_4da2943d|B|app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:95|Bateria não chama c2 diretamente e permite implementar o alargamento somente no wrapper.
-NOVO|O261-C_4da2943d|B|app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:66|DNA usa ii/fi enquanto o juiz procura hii/hfi, sem comprovar leitura da lâmpada específica.
-NOVO|O261-C_4da2943d|B|app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:133|R4 exportada, R4b, R5 e R6 preservam comportamento anterior e não constituem RED isolado contra o ancestral.
-NOVO|O261-C_68a38548|A|app/chamados/reconciliador.py:702|Memo de K6 na instância do colaborador atravessa perguntas e pode conservar entrega antiga após exportação ou invalidação.
-NOVO|O261-C_68a38548|A|app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:234|Idempotência integral da chamada direta contradiz a relavratura que renova julgado_em.
-NOVO|O261-C_68a38548|B|app/chamados/reconciliador.py:1451|C7 é consultado antes de datar a pergunta e deixa o HIST escrever em dia trancado quando data_evento é nula.
-NOVO|O261-C_68a38548|B|app/chamados/reconciliador.py:702|Memo de K6 persiste entre perguntas e não acompanha exportação ou invalidação concorrente.
-NOVO|O261-C_68a38548|B|app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:183|R8 sempre fornece data_evento e não cobre a brecha de tranca com data nula.
-NOVO|O261-C_68a38548|B|app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:197|Testes não exercitam mudança de entrega entre consultas na mesma instância. [nao verificado]
-NOVO|O261-C_0ed50cc2|A|app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:264|Comparação integral falha com avanço do relógio; congelamento pode mascarar a relavratura de julgado_em.
-NOVO|O261-C_0ed50cc2|B|app/chamados/reconciliador.py:1452|HIST filtra exclusivamente pelo dia no JSON e descarta chamado cuja célula informa o dia reconhecido por dia_do_fato.
-NOVO|O261-C_0ed50cc2|B|app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:264|Teste exige igualdade integral embora a segunda costura renove julgado_em. [nao verificado]
-NOVO|O261-C_22c08b8e|A|app/chamados/reconciliador.py:765|Reordenamento permite log de veto antes da cerca, contrariando a justificativa de ausência de efeitos colaterais.
-NOVO|O261-C_22c08b8e|B|app/chamados/reconciliador.py:830|Veto de célula passa a chamar o logger em caminho exportado antes encerrado pela cerca antecipada.
-NOVO|O261-C_13963efb|B|app/ponto/services/furos_vetados.py:26|Leitor retorna ausência de veto para vínculo nulo, divergindo da degeneração considerada pela emissão.
-NOVO|O261-C_13963efb|B|app/chamados/reconciliador.py:843|Novo veto também altera nascimento e renascimento dos motivos C1 fora do alcance novo antes declarado.
-NOVO|O261-C_13963efb|B|app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:186|R2b cobre apenas régua suspeita, intervalo e nascimento; não caracteriza C1, degeneração ou renascimento vetado.
-
-## 30/10 15:02 · sessao 661803796d2c · BENCH-CORRECAO · censo · origem=Code
-
-Considerei a existência em `61ae629c` conforme o gabarito fornecido, sem equiparar esse hash à cópia local: nela, `ec=None` ainda retorna `None` (`app/ponto/services/furos_vetados.py:26`). Nas referências ao anexo abaixo, a primeira linha é a que começa com “GABARITO”.
-
-- **s1 — existia; A e B EM PARTE.** A identifica “lacuna de integração de `ec=None`”; B afirma “a fixture mantém vínculo válido; o teste chama somente o juiz”. Ambos discutem cobertura de testes sem vínculo, mas não identificam a quebra das fixtures dos 45 módulos registrada pelo gabarito (`app/chamados/tests/test_o261_veto_na_porta.py:302`, conforme respostas; `gab_O261-VETO-A.txt:2`).
-- **s2 — existia; A e B EM PARTE.** A escreve “Resposta que reabria pode virar nota tardia”; B descreve “veto impede renascimento → resposta vira nota tardia”. Ambos reconhecem a mudança funcional, sem apontar os dois testes que continuam exigindo o comportamento anterior (`app/chamados/services/resposta_tardia.py:45`, conforme respostas; `gab_O261-VETO-A.txt:2`). As expectativas antigas aparecem na cópia em `app/chamados/tests/test_resposta_tardia.py:72` e `app/chamados/tests/test_c2_le_o_protesto_que_cobra.py:71`.
-- **s3 — existia; A e B NÃO VIU.** Nenhuma resposta aponta a falta de inscrição `@bolha`; suas observações sobre juiz novo não identificam esse defeito de registro (`gab_O261-VETO-A.txt:2`; requisito do selo em `app/core/tests/test_selo_mapa_contrato.py:41`).
-- **m1 — existia; A e B VIU.** A diz que a impressão “passa a conter `veto:VETO_DEGENERADA`” e “provoca rejulgamento”; B diz que ela “deixa de satisfazer o salto por impressão igual”. Ambos descrevem também a mudança no passivo e no c2. Isso identifica o mecanismo, mesmo sem reproduzir a quantidade medida (`app/ponto/services/cartorio.py:1013`; `app/ponto/services/cartorio.py:1083`; `app/ponto/services/cartorio.py:1092`; `app/ponto/services/furos_sem_cobranca.py:96`; `gab_O261-VETO-A.txt:3`).
-
-**A correção permanece incompleta para A2-2, A2-3, A2-5 e A2-7:** o anexo apenas os referencia, sem descrever seu conteúdo. Sua correspondência com A/B está [nao verificado]. Não atribuí `n/a`, pois falta do anexo não demonstra inexistência (`gab_O261-VETO-A.txt:4`).
-
-Os registros `NOVO` abaixo identificam achados adicionais aos quatro itens descritos. A exclusão de sobreposição com os itens ausentes de A2 está **[nao verificado]**; os endereços são os citados pelos revisores.
-
-NOTA|O261-VETO-A_61ae629c|s1|existia|A=EM_PARTE|B=EM_PARTE
-NOTA|O261-VETO-A_61ae629c|s2|existia|A=EM_PARTE|B=EM_PARTE
-NOTA|O261-VETO-A_61ae629c|s3|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A_61ae629c|m1|existia|A=VIU|B=VIU
-NOVO|O261-VETO-A_61ae629c|A|app/ponto/management/commands/reconciliar_grade.py:522|Grade reabre diretamente o chamado encerrado devolvido após recusa de renascimento.
-NOVO|O261-VETO-A_61ae629c|A|app/chamados/services/disputa_emissao.py:1606|Callback de resolução reabre automaticamente o pai sem consultar o veto.
-NOVO|O261-VETO-A_61ae629c|A|app/ponto/views.py:291|Entrada bloqueada nasce com contexto sem dia e dispensa a consulta ao juiz do veto.
-NOVO|O261-VETO-A_61ae629c|A|app/ponto/management/commands/processar_alertas_avancados.py:121|Veto novo altera emissão N5 também com vínculo existente e régua suspeita.
-NOVO|O261-VETO-A_61ae629c|A|app/ponto/management/commands/processar_alertas_turno.py:317|Marco crítico continua com alerta e justificativa quando recebe chamado encerrado cujo renascimento foi recusado.
-NOVO|O261-VETO-A_61ae629c|A|app/chamados/views_arquivar.py:75|Reabertura humana não apresenta nem registra autorização específica sobre o veto.
-NOVO|O261-VETO-A_61ae629c|A|app/ponto/services/furos_vetados.py:98|Vigia conta reaberturas humanas permitidas como violações da invariante automática.
-NOVO|O261-VETO-A_61ae629c|A|app/ponto/management/commands/furos_vetados_por_regua.py:32|Agregação inclui None no conjunto e publica um vínculo quando não existe vínculo real.
-NOVO|O261-VETO-A_61ae629c|A|app/chamados/tests/test_o261_veto_na_porta.py:100|Selo AST não acompanha alias transitivo da classe e deixa passar criação fora da porta.
-NOVO|O261-VETO-A_61ae629c|A|app/chamados/tests/test_o261_veto_na_porta.py:168|Selo AST não reconhece criação através de módulo importado por from . import models as m.
-NOVO|O261-VETO-A_61ae629c|A|app/chamados/tests/test_o261_veto_na_porta.py:170|Selo AST não detecta nascimento por construtor seguido de save.
-NOVO|O261-VETO-A_61ae629c|A|app/chamados/tests/test_o261_veto_na_porta.py:168|Selo AST não detecta bulk_create através de alias do manager.
-NOVO|O261-VETO-A_61ae629c|A|app/chamados/tests/test_o261_veto_na_porta.py:143|Selo AST não detecta reabertura por update com status recebido em kwargs.
-NOVO|O261-VETO-A_61ae629c|A|app/chamados/tests/test_o261_veto_na_porta.py:163|Alias de abrir esconde do selo a chamada à porta junto de uma cópia externa do veto.
-NOVO|O261-VETO-A_61ae629c|A|app/chamados/tests/test_o261_veto_na_porta.py:170|Selo não reconhece os reabridores automáticos por instância como escritores.
-NOVO|O261-VETO-A_61ae629c|A|app/chamados/tests/test_o261_veto_na_porta.py:302|Teste sem vínculo exercita apenas o juiz e permite mutante permissivo na integração da porta. [nao verificado]
-NOVO|O261-VETO-A_61ae629c|A|app/chamados/tests/test_o261_veto_na_porta.py:269|Testes não distinguem a exclusão de batida_ausente e intervalo_pendente do universo protegido. [nao verificado]
-NOVO|O261-VETO-A_61ae629c|B|app/ponto/management/commands/reconciliar_grade.py:519|Grade reabre diretamente o chamado encerrado devolvido após recusa de renascimento.
-NOVO|O261-VETO-A_61ae629c|B|app/chamados/services/disputa_emissao.py:1606|Receiver de fechamento aciona callback que reabre automaticamente o pai sem veto.
-NOVO|O261-VETO-A_61ae629c|B|app/ponto/views.py:291|Entrada bloqueada nasce sem dia forte e escapa do veto; contador a separa em sem_dia.
-NOVO|O261-VETO-A_61ae629c|B|app/ponto/management/commands/processar_alertas_turno.py:316|Marco crítico cobra por alerta e justificativa apesar de o chamado permanecer encerrado após o veto.
-NOVO|O261-VETO-A_61ae629c|B|app/chamados/views_arquivar.py:75|Desarquivamento humano reabre sem aviso nem trilha específica do veto.
-NOVO|O261-VETO-A_61ae629c|B|app/ponto/services/furos_vetados.py:98|Contador acusa como violação a exceção humana autorizada.
-NOVO|O261-VETO-A_61ae629c|B|app/ponto/management/commands/processar_alertas_avancados.py:121|Veto novo altera emissão N5 com vínculo válido e régua suspeita.
-NOVO|O261-VETO-A_61ae629c|B|app/ponto/management/commands/furos_vetados_por_regua.py:32|Conjunto de vínculos contendo apenas None produz contagem incorreta de um vínculo.
-NOVO|O261-VETO-A_61ae629c|B|app/chamados/tests/test_o261_veto_na_porta.py:97|Selo AST deixa passar criação através de alias transitivo da classe.
-NOVO|O261-VETO-A_61ae629c|B|app/chamados/tests/test_o261_veto_na_porta.py:168|Selo AST deixa passar criação através de módulo importado por from . import models as m.
-NOVO|O261-VETO-A_61ae629c|B|app/chamados/tests/test_o261_veto_na_porta.py:170|Selo AST deixa passar nascimento por construtor seguido de save.
-NOVO|O261-VETO-A_61ae629c|B|app/chamados/tests/test_o261_veto_na_porta.py:168|Selo AST deixa passar bulk_create através de alias do manager.
-NOVO|O261-VETO-A_61ae629c|B|app/chamados/tests/test_o261_veto_na_porta.py:137|Selo AST deixa passar reabertura por update com status recebido em kwargs.
-NOVO|O261-VETO-A_61ae629c|B|app/chamados/tests/test_o261_veto_na_porta.py:194|Catraca por quantidade permite substituir nome autorizado sem reduzir o passivo.
-NOVO|O261-VETO-A_61ae629c|B|app/chamados/tests/test_o261_veto_na_porta.py:209|Uso de set esconde uma escrita adicional dentro de função já autorizada.
-NOVO|O261-VETO-A_61ae629c|B|app/chamados/tests/test_o261_veto_na_porta.py:302|Teste sem vínculo não exercita integração com a porta e aceita mutante permissivo nessa integração. [nao verificado]
-NOVO|O261-VETO-A_61ae629c|B|app/chamados/tests/test_o261_veto_na_porta.py:295|Teste negativo de criar não tem controle positivo correspondente e aceita recusa permanente de turno_aberto_24h. [nao verificado]
-
-## 30/10 15:02 · sessao fdc65b427f91 · - · - · origem=Ronald (tmux)
-
-Recomendo esta leitura estrita: reconhecer o sintoma, sem identificar o mecanismo específico do gabarito, vale **EM_PARTE**. [não verificado]
-
-| Volta | Item 1 | Item 2 | Item 3 | Item 4 | Item 5 | Item 6 |
-|---|---|---|---|---|---|---|
-| 469d61ba | A/B NAO_VIU | A/B VIU | A/B EM_PARTE | A/B EM_PARTE | A/B EM_PARTE | n/a |
-| 24f1cd69 | A/B NAO_VIU | A/B NAO_VIU | A/B NAO_VIU | A/B NAO_VIU | A/B NAO_VIU | A EM_PARTE; B NAO_VIU |
-| 31b8cec0 | A/B NAO_VIU | A/B NAO_VIU | A/B NAO_VIU | A/B NAO_VIU | A/B NAO_VIU | A/B EM_PARTE |
-| 691508dd | A/B NAO_VIU | A/B NAO_VIU | A/B NAO_VIU | A/B NAO_VIU | A/B NAO_VIU | A/B EM_PARTE |
-| e8c314e0 | A/B NAO_VIU | A/B NAO_VIU | A/B NAO_VIU | A/B NAO_VIU | A/B NAO_VIU | A/B NAO_VIU |
-| 06d7ad06 | A/B NAO_VIU | A/B NAO_VIU | A/B NAO_VIU | A/B NAO_VIU | A/B NAO_VIU | A/B NAO_VIU |
-
-A tabela é julgamento sobre as respostas anexadas; as justificativas positivas seguem abaixo. A existência histórica dos itens depende da consolidação da cronologia. [não verificado]
-
-- **469d61ba, item 2/A — VIU:** “O texto lê `lampadas[].instante`; o plantio continua recompondo marcos e escolhendo o primeiro candidato D/D+1 dentro de um envelope de 90 minutos”, acompanhado do contraexemplo 08:00→07:00. A descreve os dois critérios e uma divergência concreta. (`app/chamados/catalogo/query.py:65`; `app/chamados/juizes.py:305`; `app/chamados/juizes.py:308`, referências da resposta A.)
-
-- **469d61ba, item 2/B — VIU:** “há fontes paralelas preexistentes”; o envelope depende de fallback que “escolhe escala ativa e lê o template”, enquanto o outro caminho usa “vínculo do dia e DNA congelado”. Negar um segundo juiz **novo** não equivale a negar as fontes divergentes existentes. (`app/chamados/catalogo/query.py:59`; `app/chamados/catalogo/query.py:67`; `app/chamados/juizes.py:301`; `app/chamados/juizes.py:1251`; `app/chamados/juizes.py:1256`, referências da resposta B.)
-
-- **469d61ba, item 3/A — EM_PARTE:** “não exercitam intervalos, os seis emissores, telas, identidade persistida ou teto de consultas” e “RED contra o commit anterior: [não verificado]”. Identifica lacunas dos testes, mas não identifica o RED do texto por TypeError nem demonstra o RED histórico incompleto. (`app/chamados/tests/test_noturno_le_o_dia_do_instante.py:65`; `app/chamados/tests/test_noturno_le_o_dia_do_instante.py:96`; `app/chamados/tests/test_noturno_le_o_dia_do_instante.py:110`, referências da resposta A.)
-
-- **469d61ba, item 3/B — EM_PARTE:** “não exercitam os seis emissores, a identidade persistida, os intervalos, `padrao` ou data com hora”; “Suíte Django e RED histórico são [não verificado]”. A ressalva sobre falta de verificação não denuncia, por si, a falha concreta do RED. (`app/chamados/tests/test_noturno_le_o_dia_do_instante.py:36`; `app/chamados/tests/test_noturno_le_o_dia_do_instante.py:60`; `app/chamados/tests/test_noturno_le_o_dia_do_instante.py:110`, referências da resposta B.)
-
-- **469d61ba, item 4/A — EM_PARTE:** “Antes de procurar qualquer conflito, `classe_do_lote` calcula o plantio” e “Esse trabalho acontece por pergunta da fila”. Reconhece o custo por pergunta, sem localizar sua execução nas views da UI nem quantificá-lo. (`app/chamados/services/validacao.py:830`; `app/chamados/services/materializacao.py:266`; `app/chamados/services/materializacao.py:354`, referências da resposta A.)
-
-- **469d61ba, item 4/B — EM_PARTE:** “acrescenta consultas” e “a derivação pode consultar a grade no crivo e novamente na escolha do tipo”. Também não fecha o percurso até as views da UI. (`app/chamados/services/materializacao.py:355`; `app/chamados/services/materializacao.py:266`; `app/chamados/services/validacao.py:830`, referências da resposta B.)
-
-- **469d61ba, item 5/A e B — EM_PARTE:** ambos apontam intervalos sem testes; nenhum descreve o intervalo **diurno mudando de classe no lote**. A: “não exercitam intervalos”. B: “O DNA de teste deixa os intervalos vazios”. (`app/chamados/tests/test_noturno_le_o_dia_do_instante.py:36`; `app/chamados/tests/test_noturno_le_o_dia_do_instante.py:65`, referências das respostas.)
-
-- **24f1cd69, item 6/A — EM_PARTE:** “A propriedade calcula o dia pelo DNA atual”; pergunta existente retorna “sem atualizar `pergunta`”; “uma pergunta antiga cujo texto nomeia D pode ganhar cabeçalho D+1”. Identifica a combinação DNA atual/texto congelado, mas o exemplo é texto antigo, sem identificar regeneração posterior da célula. (`app/chamados/models.py:2172`; `app/chamados/models.py:2062`; `app/chamados/models.py:2084`, referências da resposta A.)
-
-- **31b8cec0, item 6/A e B — EM_PARTE:** ambos reproduzem cabeçalho divergente do texto por contexto ISO com hora. É o mesmo tema de coerência cabeçalho/texto, com mecanismo diferente da regeneração. A: “a igualdade falha e retorna 22/10”. B: “a comparação reconstrói ... não coincide e o cabeçalho retorna 22/10”. (`app/chamados/catalogo/query.py:99`; `app/chamados/models.py:2176`, referências das respostas.)
-
-- **691508dd, item 6/A e B — EM_PARTE:** ambos mostram que adicionar ponto final ao texto D+1 faz o cabeçalho voltar a D. Identificam a incoerência, sem apontar a célula regenerada como causa. A: “O ponto final quebra a igualdade com o produtor e aciona o fallback”. B: “acrescentar apenas `.` faz retornar 21/10”. (`app/chamados/models.py:2178`; `app/templates/chamados/partials/_card_atendimento.html:90`, referências das respostas.)
-
-O N+1 de `p.celula` apontado em 31b8cec0 é achado novo, distinto do custo de `_ts_tipo_do_plantio` no item 4. Não o usaria para dar crédito nesse item. (`app/api/views.py:1043`; `app/api/views.py:1045`; `app/chamados/models.py:2172`, referências das respostas A/B.)
-
-_619 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_622 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
