@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 03:15:15.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (6.5 MB). Acoes na janela: **276**.
+**Medido em 30/10/2026 03:20:43.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (6.6 MB). Acoes na janela: **280**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:20:06 | Bash | Point ESPERANDO at running trava pid | `cd /home/ronald/saas-hasner && sed -i '3s#^ESPERANDO: .*#ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=1258025#' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md` |
+| 03:20:01 | Bash | Inspect children of construtor shell | `pgrep -a -P 1258020 \| cut -c1-200; for c in $(pgrep -P 1258020); do pgrep -a -P $c \| cut -c1-200; done` |
+| 03:19:57 | Bash | Check ESPERANDO pid and live producers | `ps -p 3532079 -o pid= \|\| echo morto; for p in $(pgrep -f "bin/codex_pergunta.sh\|bin/suite.sh"); do c=$(tr '\0' ' ' </proc/$p/cmdline); case "$c" in "bash -c"*\|"timeout"*) ;; *) echo "$p\|${c:0:150}\|$(readlink /proc/$p/cwd)";; esac; done` |
+| 03:19:51 | Bash | Record ORCAMENTO build state in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('> **CONTRATO v2 ORCAMENTO')) L.insert(i+1,'> ORCAMENTO-DE-CONTEXTO CONSTRUIDO em copia /home/ronald/wt-orc-3010-0245 @ 90b3b83d (4 commits sobre 270f75b7; selo novo `bin/tests/test_orcamento_contexto.sh` OK, 14 selos do hook OK, handoff OK com o set ...` |
 | 02:52:50 | Bash | Mark ESPERANDO on Codex verifier pid | `cd /home/ronald/saas-hasner && sed -i '3i ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh \| pid=3532079' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md` |
 | 02:52:45 | Bash | Find running Codex wrapper pid | `for p in $(pgrep -f "bin/codex_pergunta.sh"); do c=$(tr '\0' ' ' </proc/$p/cmdline); case "$c" in "bash -c"*) ;; *) echo "$p\|$c\|$(readlink /proc/$p/cwd)";; esac; done` |
 | 02:43:22 | Bash | Find the bash suite.sh child pid | `for p in $(pgrep -f "saas-hasner/bin/suite.sh --dir /home/ronald/wt-o261c3"); do echo "$p $(tr '\0' ' ' </proc/$p/cmdline \| cut -c1-80)"; done` |
