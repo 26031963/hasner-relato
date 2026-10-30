@@ -1,7 +1,23 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 15:05** · publicado em **30/10/2026 15:10** (UTC-3)
+> Ultima resposta processada: **30/10/2026 15:47** · publicado em **30/10/2026 15:52** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 15:47 · sessao 821fe87eef02 · O261-VETO-A2 · sonda · origem=Code
+
+Não executei a sonda: não localizei `sonda_fsc.py` na cópia. Segue a saída integral fornecida no enunciado. [nao verificado] [nao verificado]
+
+```text
+sonda_leitura: sonda_fsc.py [fe36a5107d6c7951] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+TOTAL=68
+POR_PORTA|pergunta_ao_colab=48
+POR_PORTA|supervisao_sem_push=20
+POR_PORTA|veto_celula=1
+POR_EMPRESA|2=68
+ITENS=69
+FIM-DA-SONDA
+```
 
 ## 30/10 15:05 · sessao be63b35eee76 · BENCH-CORRECAO · censo · origem=Code
 
@@ -1092,12 +1108,4 @@ NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|A|app/escala/services/cadastro_realidade.p
 NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|A|app/escala/services/cadastro_realidade.py:187|C2 deriva competência com corte 21 fixo em vez da autoridade registrada por empresa.
 NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|A|app/chamados/services/vigia_fio.py:259|Primeira célula candidata executa lista inteira, incluindo consultas e percurso de células de C2.
 
-## 30/10 14:55 · sessao f965818c06a5 · - · - · origem=Ronald (tmux)
-
-Concordo: item 4 deve ser `n/a` nas três primeiras voltas, por inferência temporal. Em `68a38548` e `0ed50cc2`, a segunda chamada ainda relavra e renova `julgado_em`, indicando ausência da guarda posteriormente removida. (Referências históricas das respostas: `app/chamados/reconciliador.py:862`, `:871`; `app/chamados/services/fio.py:797–799`.)
-
-`22c08b8e/B` associa a remoção à restrição dos chamadores a perguntas sem destino e ao teste de idempotência pelo cron. (Referências da resposta: `app/chamados/reconciliador.py:860–877`, `:1375–1398`; `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:296–308`.)
-
-Grau: forte em `68a38548` e `0ed50cc2`; indireto em `4da2943d`. O commit exato de introdução da guarda permanece [nao verificado].
-
-_606 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_607 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
