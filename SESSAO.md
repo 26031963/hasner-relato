@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 16:41:14.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (1.2 MB). Acoes na janela: **35**.
+**Medido em 30/10/2026 16:46:45.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (1.3 MB). Acoes na janela: **41**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:44:11 | Bash |  | `cd /home/ronald/saas-hasner/logs/calendario_hoje && until grep -q '^rc=' suite_pouso2.log 2>/dev/null; do /usr/bin/sleep 30; done; grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()\|^rc=" suite_pouso2.log \| tail -8` |
+| 16:44:08 | Bash |  | `cat > /home/ronald/saas-hasner/logs/calendario_hoje/triagem5.txt <<'EOF' TRIAGEM da volta 5 do Codex (verif5.txt), pelo construtor -- vai ANEXA ao opus (CODEX-TRIAGEM-INDEPENDENTE (1)). 1. BLOQUEANTE "rotulo do dia cego nao chega a tela" -- PROCEDE. Conferido: _calendario_grade.html:107 era `{% else %}—{% endif %}` sem title; sem_certidao nao tem ramo. CURA: o fallback passa a ser `<span title="{{ ...` |
+| 16:43:53 | Bash |  | `cd /home/ronald/wt-cal-hoje-3010-1353/app && python3 - <<'EOF' p='templates/colaboradores/partials/_calendario_grade.html' s=open(p).read() a=""" {% else %}—{% endif %} {% if dia.ticket_falta %}""" assert s.count(a)==1 s=s.replace(a,""" {% else %}<span title="{{ dia.status_rotulo }}" style="cursor:help;">—</span>{# CALENDARIO-HOJE (aval 30/10 15:3x): o dia cego diz o motivo da folha #}{% endif %}  ...` |
+| 16:43:41 | Bash |  | `cd /home/ronald/wt-cal-hoje-3010-1353/app && grep -n "render_to_string\\|_calendario_grade\\|def _render\\|client.get" colaboradores/tests/test_calendario_mostra_o_carro.py \| head -12` |
+| 16:43:34 | Bash |  | `cd /home/ronald/wt-cal-pouso-3010-1638/app && sed -n 60,115p templates/colaboradores/partials/_calendario_grade.html; sed -n 1,60p relatorios/furos_pdf.py \| grep -n "sem_certidao\\|previsto\\|falta"` |
+| 16:43:31 | Read |  | `/home/ronald/saas-hasner/logs/calendario_hoje/verif5.txt` |
 | 16:39:28 | Bash |  | `cd /home/ronald/saas-hasner/logs/calendario_hoje && until grep -q '^rc=' verif5.run 2>/dev/null; do /usr/bin/sleep 20; done; tail -2 verif5.run; wc -c verif5.txt` |
 | 16:39:24 | Bash |  | `cd /home/ronald/saas-hasner && L=logs/calendario_hoje && W=/home/ronald/wt-cal-pouso-3010-1638 && git -C $W diff 6c37ad84 HEAD > $L/diff5.txt && git -C $W show HEAD > $L/diff5_delta.txt && grep -n "calendario.py\\|motivos_retencao_celula\\|dias_encerrados" app/docs/LEIS.md app/docs/CORTES.md \| cut -c1-300 > $L/leis5.txt; wc -l $L/leis5.txt; cat > $L/verif5.q <<'EOF' Obra CALENDARIO-HOJE-NAO-E-FAL ...` |
 | 16:39:09 | Bash |  | `cd /home/ronald/saas-hasner && tail -3 logs/calendario_hoje/suite_pouso2.log; bin/trava_teste.sh --quem; docker ps --format '{{.Names}} {{.Status}}' \| grep -v saas_ \| head` |
