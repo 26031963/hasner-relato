@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 22:05:57.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (25.5 MB). Acoes na janela: **366**.
+**Medido em 29/10/2026 22:11:06.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (25.6 MB). Acoes na janela: **371**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:09:42 | Bash | Wait in-turn for O261 push | `cd /home/ronald/saas-hasner/logs && end=$((SECONDS+580)); while [ $SECONDS -lt $end ]; do grep -q '^rc=' o261/push_cura1.log 2>/dev/null && break; /usr/bin/sleep 10; done; date +%H:%M; tail -3 o261/push_cura1.log` |
+| 22:09:37 | Bash | Register CLEAR aval in PROMPTS and CORTES | `cd /home/ronald/saas-hasner && python3 - <<'PY' L=[('app/docs/PROMPTS.md',"\| 29/10 21:5x \| **aval: CLEAR-NO-PROXIMO-MARCO** (no proximo marco fechado: nada em voo, push, handoff, RELATO com PAREI ! CLEAR e parar). Estado: em execucao no marco O261 cura (1). \|"), ('app/docs/CORTES.md',"\| **CLEAR-NO-PROXIMO-MARCO** \| 2026-10-29 21:5x \| em execucao \| pista \| aval Ronald (mesma forma da CLEAR- ...` |
+| 22:09:30 | Bash | Register CLEAR aval; check push | `cd /home/ronald/saas-hasner && python3 - <<'PY' for p,l in (('app/docs/PROMPTS.md','\| 29/10 21:5x \| **aval: CLEAR-NO-PROXIMO-MARCO** (no proximo marco fechado: nada em voo, push, handoff, RELATO com PAREI ! CLEAR e parar). Estado: em execucao no marco O261 cura (1). \|'), ('app/docs/CORTES.md','\| **CLEAR-NO-PROXIMO-MARCO** \| 2026-10-29 21:5x \| em execucao \| pista \| aval Ronald (mesma forma  ...` |
+| 22:09:26 | SendMessage |  | `-` |
+| 22:09:24 | SendMessage |  | `-` |
 | 21:52:55 | Bash | Declare ESPERANDO on pre-push PID and verify hook | `cd /home/ronald/saas-hasner && P=$(ps -eo pid,args \| grep -E '^ *[0-9]+ bash /home/ronald/saas-hasner/bin/pre-push.sh' \| awk '{print $1}' \| head -1); echo "pid=$P"; [ -n "$P" ] && python3 - "$P" <<'PY' import sys p='app/docs/RELATO.md'; s=open(p,encoding='utf-8').read(); i=s.index('\n> ') s=s[:i]+'\nESPERANDO: /home/ronald/saas-hasner/bin/pre-push.sh \| pid=%s\n> (push do marco O261 cura (1) e8 ...` |
 | 21:52:44 | Agent | Build wrapper construtor role | `Construa o papel `construtor` em `bin/codex_pergunta.sh`. E um instrumento do piloto CODEX-CONSTRUTOR-PILOTO (corte Ronald 29/10 21:4x; a linha `\| **CODEX-CONSTRUTOR-PILOTO** \|` em /home/ronald/saas-hasner/app/docs/CORTES.md). O desenho e o CONTRATO v2 que esta no topo de /home/ronald/saas-hasner/app/docs/RELATO.md: a linha que comeca `> **CONTRATO v2` e as 5 linhas do contrato logo abaixo. Siga ...` |
 | 21:52:32 | Agent | Build O261 cura 2 (pai terminal) | `Construa a O261 cura (2): nascimento de pergunta com pai terminal ([nome] (C), cerca de 5.740 perguntas que nasceram com o pai ja terminal). Ela esta na fila 1, logo depois da cura (1) RESPOSTA-VAZIA, que ja esta no ar (e6fee823). Leia o CLAUDE.md INTEIRO (secoes 0, 4, 6 e 7b) e os avais: grep [nome], O261-COMPLEMENTO-[nome] e FIO-MORTO-PELO-RETRATO em /home/ronald/saas-hasner/app/docs/CORTES.md, REL ...` |

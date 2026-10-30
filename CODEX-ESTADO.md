@@ -1,7 +1,136 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 21:57** · publicado em **29/10/2026 22:00** (UTC-3)
+> Ultima resposta processada: **29/10/2026 22:09** · publicado em **29/10/2026 22:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 22:09 · sessao 61d5e68cd5c8 · - · - · origem=Ronald (tmux)
+
+Achado confirmado: novo `any(pergunta_viva(q) for q in qs)` duplica C15, registrado como `fio_vivo` em `app/core/juizes.py:123` e `:241`; autoridade em `app/chamados/juizes.py:1102`. O contrato existente detecta exatamente essa forma: `app/chamados/tests/test_o261_fio_tem_uma_porta.py:99`, `:127`, `:142`. Executei o detector AST real contra o trecho novo em memória: acusou `religar_se_fio_sob_pai_morto`.
+
+Outros pontos encaminhados:
+
+- Admin conserva `ch` antigo: nota e push usam esse objeto mesmo se `PerguntaDisputa.abrir` mudar o pai; base `app/chamados/services/acoes_disputa.py:270`, `:275`.
+- Novo pai manual perde `contexto_json.chamados_orfaos_ids`, necessário para dissolução imediata por entrada sincronizada: nascimento em `app/chamados/services/disputa_emissao.py:920`; leitor em `app/ponto/services/entrada_sincronizada.py:47`.
+- Reparentar muda a âncora de todas as perguntas sem destino, inclusive históricas, enquanto followups ficam no pai anterior: `app/chamados/services/fio.py:117`; novas respostas escrevem no pai atual em `app/chamados/services/disputa_emissao.py:1309`.
+- Não encontrei segundo escritor de `DisputaSupervisao.chamado` pós-nascimento na base; escritores de nascimento em `app/chamados/services/disputa_emissao.py:527`, `:931`, `:1151`.
+- Não classificaria a suíte inteira como sem mordida: os testes positivos de pai terminal verificam mudança ausente na base; os controles de pai vivo/destino vivo passam também sem cura. O teste de idempotência usa motivos diferentes e não demonstra duas entradas iguais, conforme anexo `app/chamados/tests/test_o261_pai_terminal.py:111`.
+
+Censo ampliado de consumidores foi enviado nas mensagens anteriores, com linhas.
+
+## 29/10 22:09 · sessao 6d3f808735cb · - · - · origem=Ronald (tmux)
+
+Achados de escopo e selo:
+
+- **P2 — Escopo de testes diverge do corte.** O corte permite “testes de tela”; o wrapper exige testes **novos**, por nome/caminho. Assim, alteração legítima de teste existente é contada fora, enquanto teste novo sem relação com tela passa. O selo exercita somente teste novo. Referências: `app/docs/CORTES.md:394`; `bin/codex_pergunta.sh:116`; `bin/codex_pergunta.sh:117`; `bin/tests/test_codex_pergunta.sh:100`; `bin/tests/test_codex_pergunta.sh:164`.
+
+- **P2 — Selo não garante o destino efetivo da chamada.** `_estrutura` aceita presença de `-C "$WS"` e proíbe somente algumas grafias de destino vivo. Mantendo esse argumento e acrescentando `-C "$VIVO/app"`, sua verificação continua sem diagnósticos; o teste comportamental também verifica somente presença de argumentos isolados. Confirmei a lacuna estrutural executando exclusivamente a função extraída em memória com essa mutação, sem arquivos. Referências: `bin/tests/test_codex_pergunta.sh:35`; `bin/tests/test_codex_pergunta.sh:39`; `bin/tests/test_codex_pergunta.sh:40`; `bin/tests/test_codex_pergunta.sh:133`; `bin/codex_pergunta.sh:251`. Execução comportamental do mutante: **[nao verificado]**.
+
+- **P2 — Ressalva da 7b ausente.** As proibições gerais de escrita continuam sem exceção para o piloto, embora o wrapper já habilite `workspace-write`; falta a ressalva expressamente exigida pelo contrato v2(a) fornecido. Referências: `CLAUDE.md:578`; `CLAUDE.md:588`; `CLAUDE.md:599`; `bin/codex_pergunta.sh:246`.
+
+- **P2 — Procedimento publicado ainda contradiz v2.** O RELATO continua mandando remover o papel “no mesmo marco”, enquanto v2(j) exige pouso próprio posterior; o descarte publicado usa `checkout .`, sem limpar novos arquivos, divergindo do reset à base + `clean -fdx` do v2(h). Referências: `app/docs/RELATO.md:10`; `app/docs/RELATO.md:12`; `bin/codex_pergunta.sh:39`.
+
+Não trataria `rc=0` com `fora_do_escopo>0` como falha isolada do wrapper: descarte e selos semânticos são responsabilidade expressa do Code. Referências: `app/docs/RELATO.md:10`; `app/docs/RELATO.md:11`; `app/docs/CORTES.md:394`.
+
+## 29/10 22:08 · sessao 06d376475023 · - · - · origem=Ronald (tmux)
+
+Achados e lacunas dos consumidores/selos:
+
+- **Alta — orientação de LIMITE incorreta para construtor.** `bin/codex_pergunta.sh:263` manda seguir por sonnet sem esperar, inclusive no novo papel. `bin/codex_limite_estado.py:157` repete essa instrução global. Contraria a espera do piloto e a proibição de reconstrução pelo Code, também registradas em `app/docs/RELATO.md:10`. O selo só simula LIMITE para leitura (`bin/tests/test_codex_limite.sh:24`); o falso construtor só tem modos ok/escreve/dorme (`bin/tests/test_codex_pergunta.sh:96`).
+
+- **Média — classificação de construtor sem mordida no selo de estado.** As fixtures só incluem papéis antigos e inventado (`bin/tests/test_codex_papel_estado.sh:14`); a asserção aceita o prefixo terminando em sonda (`bin/tests/test_codex_papel_estado.sh:31`). Remover construtor de `PAPEIS` faria o papel cair em outro (`bin/codex_limite_estado.py:78`) sem contrariar essas asserções.
+
+- **Média — ESPERANDO não tem integração testada.** O selo aceita a linha em qualquer posição e qualquer PID numérico (`bin/tests/test_codex_pergunta.sh:160`), sem exigir primeira linha útil, PID do wrapper ou aceitação pelo hook. O consumidor real exige identidade do processo/script (`bin/hook_stop_fila1.py:474`, `bin/hook_stop_fila1.py:521`). Não identifiquei incompatibilidade nominal entre a emissão atual (`bin/codex_pergunta.sh:90`) e esse consumidor; execução integrada [nao verificado].
+
+- **Média — cobertura parcial da preservação e do timeout.** O teste comportamental antigo exercita leitura (`bin/tests/test_codex_pergunta.sh:129`), sem censo/verificador. O teste sonda continua separado (`bin/tests/test_codex_sonda.sh:58`). Timeout cobre gate e exec nos cenários (`bin/tests/test_codex_pergunta.sh:179`, `bin/tests/test_codex_pergunta.sh:187`), sem cenário de todos os slots ocupados ou filho resistente a TERM.
+
+- **Média — ressalva de 7b ainda pendente para o pouso.** Permanecem proibições gerais de escrita e sandbox diferente de read-only em `CLAUDE.md:574`, `CLAUDE.md:578`, `CLAUDE.md:588` e `CLAUDE.md:599`. O contrato v2(a) anexado exige ressalva no pouso; ocorrência desse pouso [nao verificado]. [nao verificado]
+
+Compatibilidade confirmada por leitura: os 12 campos não quebram o parser, que aceita pelo menos nove e conserva os índices antigos (`bin/codex_limite_estado.py:66`). Construtor está no vocabulário (`bin/codex_limite_estado.py:23`); o gerador mantém o leitor único e propaga papel/origem sem enumeração paralela (`bin/gerar_codex_estado.py:41`, `bin/gerar_codex_estado.py:155`, `bin/gerar_codex_estado.py:176`).
+
+Nenhum teste executado, pois criam arquivos temporários (`bin/tests/test_codex_pergunta.sh:68`, `bin/tests/test_codex_papel_estado.sh:7`); resultados de execução [nao verificado].
+
+## 29/10 22:08 · sessao 61d74141d87b · - · - · origem=Ronald (tmux)
+
+Achados sustentados pela base e pelo diff:
+
+1. **Chamado extra na fila / pouso antes do pré-requisito.** O novo trecho de `PerguntaDisputa.abrir` religa qualquer nascimento sem destino antes de saber se a pergunta vive. Cenário: célula com veredito não acusatório, sem marcos pendentes; disputa aberta sob pai resolvido; nenhuma pergunta existente. O helper cria pai aberto, mas C6 declara a pergunta morta. A guarda do chamado só examina módulos de turno, e a fila inclui o novo pai aberto. Base: `app/chamados/juizes.py:1053`, `app/chamados/models.py:848`, `app/chamados/services/painel.py:186`; trecho novo imediatamente antes do `create` hoje em `app/chamados/models.py:2085`.
+
+2. **Segundo juiz registrado.** `religar_se_fio_sob_pai_morto` introduz `any(pergunta_viva(q) for q in qs)`, duplicando a redução C15, cuja autoridade é `fio_vivo`. Registro: `app/core/juizes.py:123`; autoridade: `app/chamados/juizes.py:1102`; consumidor já convertido: `app/chamados/services/disputa_emissao.py:1188`. Ler `VIVOS` em `pai_terminal`, isoladamente, respeita C1: `app/core/juizes.py:100`.
+
+3. **Derivação paralela da chave do pai; pode haver dois pais vivos.** Nascimento canônico fixa módulo `disputa_supervisao`, enquanto os manuais usam `disputa_supervisao_manual` e incluem subcategoria no lookup. O novo helper herda módulo do pai velho e tira subcategoria do lookup. Cenário: disputa aberta com pai manual terminal e outro pai canônico vivo do mesmo colaborador; o helper não encontra o canônico e cria outro manual vivo. Também pode reutilizar pai manual de outro subtipo. Fontes: `app/chamados/services/disputa_emissao.py:504`, `app/chamados/services/disputa_emissao.py:908`, `app/chamados/services/disputa_emissao.py:1128`; ausência de unicidade: `app/chamados/models.py:639`.
+
+4. **Ordem de trava: caminho inverso alcança o helper.** `ChamadoColaborador.abrir` segura Colaborador, renasce chamado existente, ressuscita perguntas e chama `reabrir_sistema`, que passa a travar Disputa. Caminho: `app/chamados/models.py:669` → `:685` → `:770` → `:1098` → `:1188`. O concorrente novo segura Disputa e solicita Colaborador no mesmo gate. Cenário possível com disputa fechada contendo pergunta com destino ressuscitável e outra viva sem destino; um emissor conserva instância aberta obtida antes do fechamento e entra no novo nascimento. Além disso, `select_for_update().select_related('colaborador')` trava ambas as tabelas sem `of=('self',)`, portanto a consulta não expressa a sequência individual prometida pela docstring. Lei: `app/chamados/models.py:646`.
+
+5. **Consumidor do ponteiro não atualizado no admin.** Se `ch.reabrir()` recusa, o gate pode mover `d_fec.chamado` para novo pai. O diff refresca `d_fec`, mas mantém `ch` antigo: justificativa administrativa continua anexada ao pai terminal e push anuncia seu número. Recusas: `app/chamados/models.py:1051`; nota: `app/chamados/services/acoes_disputa.py:269`; push: `:275`. A pergunta administrativa é conversa e nasce sempre: `app/chamados/models.py:2033`.
+
+6. **Idempotência da recusa.** Duas chamadas diretas iguais ao novo `religar_pai_vivo`, com gate devolvendo filho terminal AGRUPADO-EM, produzem duas trilhas `disputa_religar_recusado`; o estado não é curado e o nascimento continua. O comportamento do gate que devolve esse terminal está em `app/chamados/models.py:689`. A duplicação das trilhas decorre do trecho novo do diff; frequência em produção: [nao verificado].
+
+O teste anexado usa sempre célula acusatória e não cobre o achado 1, nem módulos manuais, concorrência ou recusa AGRUPADO. A efetiva execução dos testes/RED: [nao verificado]. [nao verificado]
+
+## 29/10 22:08 · sessao 12b050fdf0bb · - · - · origem=Ronald (tmux)
+
+Achados por inspeção estática; execução real destes cenários [nao verificado].
+
+- **Alta — bypass da exclusão, timeout e protocolo `.rc`.** `CODEX__INTERNO=1` só exige que alguém tenha o lock; não comprova que o processo recebeu o lock do externo. Durante uma chamada ativa, uma segunda chamada interna passa em `flock -n 6`, pula validação de volta, timeout e escrita de `.rc`, e alcança o `codex exec`. Referências: `bin/codex_pergunta.sh:84`, `:85`, `:91`, `:94`, `:98`, `:100`, `:246`. O selo só testa chamada interna com lock livre: `bin/tests/test_codex_pergunta.sh:147`.
+
+- **Alta — sinal prematuro de conclusão por ordem errada de trava.** Volta inválida ou destino inválido gravam `<obra>.rc` antes de tentar o lock. Uma segunda chamada errada com a mesma obra pode produzir `rc=2` enquanto a primeira ainda escreve. Referências: `bin/codex_pergunta.sh:75`, `:85`, `:86`, `:88`. O selo preserva `.rc` apenas no caso lock ocupado com argumentos válidos: `bin/tests/test_codex_pergunta.sh:170`, `:174`, `:176`.
+
+- **Alta — confinamento não valida o diretório efetivamente passado ao Codex.** `_destino_ok` resolve o caminho físico da worktree, mas aceita `app/` por simples `-d`. Uma worktree literal com `app` sendo symlink para outro lugar passa na validação; a chamada usa esse `app` em `-C`. Referências: `bin/codex_pergunta.sh:78`, `:79`, `:81`, `:247`. O selo verifica symlink da raiz, não de `app/`: `bin/tests/test_codex_pergunta.sh:144`. Existência disso no piloto [nao verificado].
+
+- **Alta — lock não é único por worktree.** A identidade da trava depende de `CODEX_LOGD` ou do diretório da cópia do wrapper, enquanto o destino é sempre a mesma worktree literal. Duas chamadas com `LOGD` distintos usam travas e slots distintos sobre o mesmo destino. Referências: `bin/codex_pergunta.sh:42`, `:44`, `:67`, `:74`, `:87`, `:224`, `:230`. Uso real de diretórios distintos [nao verificado].
+
+- **Média — `.rc` não cobre erros de instrumento anteriores ao ramo construtor.** Pergunta ilegível, hash inválido e anexos/sonda ilegíveis terminam antes da inicialização/publicação do `.rc`, podendo deixar arquivo antigo no lugar. Referências: `bin/codex_pergunta.sh:57`, `:58`, `:65`, `:66`, `:74`, `:89`. Também não há tratamento de sinal no externo para garantir publicação em interrupção: `bin/codex_pergunta.sh:84`, `:91`, `:94`; comportamento de interrupção em produção [nao verificado].
+
+- **Média — instrução de LIMITE contradiz o piloto.** O caminho comum de rc75 manda seguir por sonnet mesmo para construtor, embora o contrato fornecido determine esperar e não reconstruir. Referência: `bin/codex_pergunta.sh:263`; contrato anexo, item (g) [nao verificado como arquivo local].
+
+- **Média — base declarada não é vinculada à worktree.** O hash é resolvido em `VIVO`, mas a validação da worktree não compara seu HEAD nem repositório de origem com esse hash. `BASE: $HASH` pode descrever outra árvore; `wt_head` só é registrado no fim. Referências: `bin/codex_pergunta.sh:58`, `:81`, `:134`, `:203`. Divergência real [nao verificado].
+
+- **Média — falta a ressalva da regra 7b exigida pelo contrato v2(a).** A cópia mantém proibições categóricas de escrita pelo Codex. Referências: `CLAUDE.md:565`, `:574`, `:578`, `:588`, `:599`. O corte autoriza exceção circunscrita: `app/docs/CORTES.md:394`.
+
+## 29/10 22:07 · sessao 3140036661a5 · - · - · origem=Ronald (tmux)
+
+Censo dos chamadores de produção, pela cópia base:
+
+| Porta | Chamadores |
+|---|---|
+| `PerguntaDisputa.abrir` | `app/chamados/services/disputa_emissao.py:389` (`gerar_perguntas_disputa`), `:770` (`_criar_pergunta_se_couber`), `:1160` (`criar_disputa_ancora_de_chamado`); `app/chamados/services/declaracao_texto.py:322` (`declarar_hora_colab`), `:611` (`aplicar_declaracao`); `app/chamados/services/acoes_disputa.py:259` (`acao_reabrir_disputa_admin`). |
+| `DisputaSupervisao.reabrir_sistema` | `app/chamados/models.py:1189` (`ressuscitar_perguntas`); `app/chamados/services/relavra_via.py:222`; `app/chamados/services/validacao.py:200`; `app/chamados/services/materializacao.py:631`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:154`. |
+
+Achados:
+
+1. **O nascimento continua após religação recusada.** O gate de chamado pode devolver filho terminal agrupado sob pai vivo, mesmo com `status_local__in=VIVOS` (`app/chamados/models.py:689`, `:695`). O diff detecta isso em `religar_pai_vivo` e retorna `False`, mas o novo bloco de `PerguntaDisputa.abrir` ignora esse retorno e segue ao `create` (inserção antes da linha base `app/chamados/models.py:2085`). Cenário: disputa aberta sob pai terminal agrupado, emissão de novo fato vivo sem destino por `gerar_perguntas_disputa` (`app/chamados/services/disputa_emissao.py:389`). A pergunta nasce viva sob o mesmo terminal; o evento de recusa apenas registra. Duas tentativas idênticas de religação recusada também geram dois `disputa_religar_recusado`, contrariando “1 trilha” (bloco novo no diff).
+
+2. **Chamado a mais antes de determinar o destino final.** `gerar_perguntas_disputa` abre a pergunta (`app/chamados/services/disputa_emissao.py:389`) e somente depois tenta `reatar_pergunta_orfa` (`:404`, `:409`). O reatamento pode criar/reusar chamado do dia (`app/chamados/reconciliador.py:779`) e costurar a pergunta nele (`:819`), ou reconhecer histórico e resolver (`:1433`, `:1439`). O novo gate terá criado pai vivo antes disso; depois da costura, ele sobra vivo sem aquela pergunta ancorada. A possibilidade é demonstrável pelo fluxo; ocorrência concreta em produção: [nao verificado].
+
+3. **Inversão de ordem de trava.** `ChamadoColaborador.abrir` trava Colaborador (`app/chamados/models.py:669`), renasce chamado encerrado (`:685`, `:686`), chama `reabrir` (`:770`), que ressuscita perguntas (`:1098`), que reabre disputa (`:1189`). O novo `reabrir_sistema` pode então chamar a religação, que trava Disputa. Na direção contrária, a emissão trava Disputa primeiro (`app/chamados/services/disputa_emissao.py:467`) e entra no gate que trava Colaborador (`app/chamados/models.py:669`). Cenário: chamado do dia encerrado renasce e ressuscita pergunta destinada nele; sua disputa fechada também tem outra pergunta viva sem destino sob pai terminal. Concorrência com emissão nessa disputa cria C→D versus D→C. Deadlock executado: [nao verificado].
+
+4. **Retorno antecipado não cobre perguntas existentes.** O dedup de identidade devolve `ex` antes do novo guard (`app/chamados/models.py:2061`, `:2084`), podendo inclusive trocar célula e relavrar (`:2071`, `:2081`). Logo uma entrada que reaproveita pergunta viva sem destino sob pai terminal mantém o defeito. Isso é reaproveitamento, não nascimento novo; não deve ser anunciado como falha no caminho de `create`.
+
+## 29/10 22:07 · sessao 3c6958a11cf4 · o261c2 · sonda · origem=Code
+
+```text
+VIGIA viva_sob_pai_terminal (a funcao do pouso): {'perguntas': 807, 'disputas': 73} [nao verificado]
+universo repartido 807 (tem de ser == vigia 807) | disputas 73 | colabs 66
+status do pai: {'resolvido': 752, 'fechado': 55} | todos terminais: True
+ancora (chamado_que_lista) == pai em todas: True
+competencia ABERTA 337 | EXPORTADA 470 em 2 empresa x competencia | sem data_evento 0
+ABERTA por competencia: {'2:10/2026': 205, '3:10/2026': 10, '4:04/2026': 2, '4:05/2026': 52, '2:11/2026': 66, '3:11/2026': 2}
+EXPORTADA por competencia: {'2:09/2026': 446, '3:09/2026': 24}
+DISPUTAS: so aberta 33 | so exportada 22 | mista 18 | com sem-data 0
+por motivo: {'saida_sem_entrada': 236, 'intervalo_saida': 226, 'intervalo_volta': 211, 'orfao_14h': 109, 'batida_fora_escala_grave': 20, 'sem_posto': 3, 'foto_ausente': 2}
+por via_resolucao: {'-': 191, 'completude_turno': 4, 'chamado_encerrado': 316, 'sem_turno_aberto': 287, 'admin_decidiu': 2, 'ausencia_dia': 6, 'celula_absolveu': 1}
+por mes do dia: {'2026-04': 20, '2026-05': 34, '2026-08': 150, '2026-09': 382, '2026-10': 221}
+p#51322: no universo=True viva=True destino=None disputa=4376 aberta=True pai=19611 status_pai=resolvido
+p#34412: no universo=True viva=True destino=None disputa=4376 aberta=True pai=19611 status_pai=resolvido
+FORA (nao e desta cura): vivas com DESTINO terminal 2155
+FORA (de viva_em_disputa_fechada, dono admin): vivas sem destino em disputa FECHADA sob pai terminal 31
+ERROS=0
+FIM-DA-SONDA
+```
+
+Há a linha `ERROS=0`, que informa zero erros. [nao verificado]  
+Universo repartido igual ao vigia: 807 = 807. [nao verificado]  
+A soma fecha no universo: 337 + 470 + 0 = 807. [nao verificado]
 
 ## 29/10 21:57 · sessao e114400beabb · o261c2 · leitura · origem=Code
 
@@ -521,160 +650,4 @@ Execução dos testes e efeitos reais: [nao verificado]. [nao verificado]
 
 Execução dos testes e efeitos em produção: **[nao verificado]**. [nao verificado]
 
-## 29/10 21:13 · sessao 2e2b8e5f00e7 · - · - · origem=Ronald (tmux)
-
-- **Contrato do carimbo — sem achado remanescente.** O v3 atualiza a igualdade integral de `censo` e o conjunto de `esperado` para conter `respondida_sem_resposta`, corrigindo as duas incompatibilidades apontadas na v2. (`app/chamados/tests/test_o261_vigia_fio.py:701,706-709`, diff pós-aplicação.)
-
-- **Leitor do painel — sem achado.** A comparação percorre genericamente todas as chaves de `esperado`; a chave nova divergente aparecerá em `FORA DO ESPERADO`, mesmo sem constar de `gritou`. (`bin/fio_estado.py:69-73,105-108,118-119`.) O ESTADO usa esse leitor e compositor. (`bin/gerar_estado.py:256-260`.)
-
-- **Outros testes do carimbo — sem achado.** O selo shell usa carimbos sintéticos e não exige um conjunto fechado de chaves do comando real; as verificações existentes de caminho, recorte e alarme permanecem compatíveis. (`bin/tests/test_fio_estado.sh:40-47,93-102`; `app/chamados/tests/test_o261_vigia_fio.py:717-750`, cópia.)
-
-- **Saída `VFM|` — sem achado.** A nova linha é adicional; a linha `VFM|ESPERADO|` continua renderizando o mesmo `ESPERADO`, e os grupos de alarme não mudam. (`app/chamados/management/commands/vigiar_fio_morto.py:79-89,168-183`, diff pós-aplicação.)
-
-- **Novo teste do comando — sem achado de isolamento sob settings CI.** Embora use o caminho padrão do comando, CI já redireciona o carimbo para um diretório temporário. (`app/chamados/tests/test_o261_resposta_vazia.py:154-160`, diff; `app/config/settings/ci.py:30-33`; `app/chamados/management/commands/vigiar_fio_morto.py:100-101`, cópia.)
-
-Execução dos testes: **[nao verificado]**. [nao verificado]
-
-## 29/10 21:09 · sessao c7d5d7152cde · o261 · verificador · origem=Code
-
-**Ainda não aprovaria a v2: ela quebra um teste existente do carimbo em duas asserções.** (`app/chamados/tests/test_o261_vigia_fio.py:699,704`.)
-
-“Diff” abaixo indica numeração pós-aplicação; demais referências são da cópia. Execução dos testes e efeitos em produção: **[nao verificado]**. [nao verificado]
-
-1. **Cumprimento do aval**
-
-   **Sem achado no escritor:** a guarda usa texto com `strip()`, conserva materialização, autor e via, e mantém a consulta ao C6. A trilha agora captura o estado anterior e descreve a presença de resposta independentemente de acrescentar um carimbo nesta chamada. (`app/docs/CORTES.md:383`; `app/chamados/services/disputa_emissao.py:1641,1643,1649,1655,1661`, diff.)
-
-   O contador passa a aplicar o mesmo teste Python e recebe o recorte de empresas. **Sem achado nesses ajustes.** A reparação das 263, com reversão/prova e encaminhamento do exportado, permanece **[nao verificado]**. (`app/chamados/services/vigia_fio.py:372,381,383,384`, diff; `app/chamados/management/commands/vigiar_fio_morto.py:172`, diff; `app/docs/CORTES.md:383`.)
-
-2. **Classes de reprovação**
-
-   - **Segundo juiz / derivação paralela — sem achado.** O contador verifica a inconsistência dos campos, usando o mesmo `strip()`; não decide vitalidade, via ou destino da pergunta. (`app/chamados/services/vigia_fio.py:372,384`, diff; `app/chamados/juizes.py:1020`.)
-   - **Segundo escritor fora da porta — sem achado.** A alteração permanece no ato já declarado; a trilha usa `core.observ.evento`. (`app/chamados/tests/test_porta_resposta_pergunta.py:66,68,95`; `app/chamados/services/disputa_emissao.py:1659,1661`, diff; `app/core/observ.py:94`.)
-   - **Relógio fora da borda — sem achado novo.** O `_tz.now()` deste ramo já existia; o contador acrescenta uma constante temporal, sem nova leitura do relógio. (`app/chamados/services/disputa_emissao.py:1638`, cópia; `app/chamados/services/vigia_fio.py:369`, diff; `app/docs/CORTES.md:369`.)
-   - **Ordem de trava — sem achado novo.** O diff não acrescenta trava de negócio; o evento usa o `atomic` da porta de auditoria. (`app/chamados/services/disputa_emissao.py:1659,1661`, diff; `app/core/observ.py:133`.)
-   - **Idempotência sequencial — sem achado.** A segunda chamada encontra a pergunta materializada, fora de `_abertas`; o teste novo também exige estado igual e uma única linha de trilha. (`app/chamados/services/disputa_emissao.py:1634`, cópia; `app/chamados/tests/test_o261_resposta_vazia.py:106`, diff.)
-   - **Selo sem mordida — sem achado nos casos novos por inspeção.** Há asserções para vazio, espaços, texto, conteúdo da trilha e impressão/carimbo do comando. Isso não resolve a incompatibilidade com o selo existente, descrita abaixo. RED e execução efetivos: **[nao verificado]**. (`app/chamados/tests/test_o261_resposta_vazia.py:77,89,97,106,124,145`, diff; `app/chamados/tests/test_o261_vigia_fio.py:699,704`.)
-
-3. **Leitores, contratos e testes existentes** [nao verificado]
-
-   - **Média — contrato do carimbo quebrado.** O comando acrescenta `respondida_sem_resposta` a `reg['censo']`, mas `censo()` continua sem essa chave. Portanto, a igualdade integral exigida pelo teste existente falhará **mesmo quando o contador for zero**. A segunda incompatibilidade é `esperado`: o teste exige exatamente as quatro chaves antigas. É necessário atualizar o contrato e sua prova para a composição nova, preservando a conferência dos contadores. (`app/chamados/management/commands/vigiar_fio_morto.py:193,198`, diff; `app/chamados/services/vigia_fio.py:205,326`, cópia; `app/chamados/tests/test_o261_vigia_fio.py:699,704`.)
-
-   - **Baixa — permanece a ausência da ação no seletor da auditoria.** `fecho_sem_credor` não está em `ACOES`, que alimenta o dropdown. A linha continua acessível pela listagem geral e pelo filtro GET explícito; a gravação admite o verbo livre. (`app/core/models.py:286,296`; `app/core/views.py:705,709,738`; `app/templates/core/log_auditoria.html:23`.)
-
-   - **`bin/fio_estado.py` — sem achado.** O leitor compara genericamente `esperado` com `censo` e publica a divergência com valor medido e esperado. Estar fora de `gritou` não impede a exibição. (`bin/fio_estado.py:69,72,105,118`.)
-
-   - **Leitores da pergunta — sem achado.** O badge exige disputa aberta e pergunta viva; `.estado` conserva `RESOLVIDA` para a pergunta morta materializada; `_fio_do_dia` considera somente perguntas vivas. (`app/chamados/models.py:1381,2111,2113`; `app/folha/fora_da_folha.py:66`.)
-
-4. **Triagem dos descartados**
-
-   - **Marco 17:20 — descarte como bloqueio procede.** É o início conservador da janela `17:2x`: pode contar ocorrências anteriores ao instante efetivo, sem excluir as posteriores. Não demonstra o instante exato do aval; esse instante e a existência de ocorrências nesse intervalo são **[nao verificado]**. (`app/chamados/services/vigia_fio.py:369,381`, diff; `app/docs/CORTES.md:383`.)
-   - **Concorrência — descarte procede no contrato sequencial informado.** A leitura sem bloqueio e o `save` já existiam. A trilha nova também pode duplicar sob concorrência, mas isso não demonstra quebra das duas chamadas sequenciais exigidas. (`app/chamados/services/disputa_emissao.py:1630,1634,1651`, cópia; `:1661`, diff; `app/chamados/tests/test_fio_disputa_resolvido.py:82`.)
-
-## 29/10 21:08 · sessao 1fff0cdcd0a0 · - · - · origem=Ronald (tmux)
-
-- **Baixa — permanece a limitação do filtro da auditoria:** `fecho_sem_credor` não aparece no seletor de ações, pois `ACOES` enumera somente sete verbos e a tela usa essa lista. A gravação aceita o verbo livre; listagem geral e filtro GET continuam alcançando o evento. (`app/core/models.py:286-296`; `app/core/views.py:705,709,738`; `app/templates/core/log_auditoria.html:23-27`.)
-
-- **Trilha v2 — sem achado:** `_antes` captura via e carimbo anteriores; `materializada_em=None` corresponde ao filtro de entrada. A descrição passa a distinguir presença de texto, independentemente de acrescentar carimbo nesta chamada. (`app/chamados/services/disputa_emissao.py:1634-1635`, cópia; `:1643,1649-1656,1661-1668`, diff.)
-
-- **Segundo escritor / juiz / trava / relógio — sem achado novo:** permanecem os dois saves declarados do ato, a consulta a C6 e o relógio já existente; a auditoria usa a porta canônica `evento`, que abre seu próprio `atomic`. (`app/chamados/tests/test_porta_resposta_pergunta.py:66-68,95-103`; `app/chamados/services/disputa_emissao.py:1641,1638`, cópia; `app/core/observ.py:94,133-138`.)
-
-- **Idempotência — descarte da concorrência procede no contrato informado:** leitura sem bloqueio e save já existiam; os testes e a definição da casa exigem duas chamadas sequenciais. A auditoria duplicada sob concorrência é possível, mas sua ocorrência e exigência contratual são **[nao verificado]**. (`app/chamados/services/disputa_emissao.py:1630-1651`, cópia; `app/chamados/tests/test_fio_disputa_resolvido.py:82-89`; `app/chamados/models.py:2124-2128`.)
-
-- **Leitores da pergunta — sem regressão identificada:** o badge exige disputa aberta e C6 vivo; `.estado` continua retornando resolvida para pergunta morta materializada mesmo com `respondida_em=None`. (`app/chamados/models.py:1381-1385,2111-2114`.)
-
-- **Selos do escritor — sem achado por leitura:** os testes novos cobrem vazio, espaços, controle com texto, estado e trilha sequenciais. Execução e RED efetivo: **[nao verificado]**. (`app/chamados/tests/test_o261_resposta_vazia.py:77-130`, diff.)
-
-## 29/10 21:08 · sessao b7b7ed5f0e24 · - · - · origem=Ronald (tmux)
-
-**Média — contrato existente do carimbo quebrado.** O v2 acrescenta a chave `respondida_sem_resposta` em `reg['censo']`, mas deixa `censo()` sem essa chave. O teste existente exige igualdade integral entre ambos e falhará nessa comparação; também exige o dicionário `esperado` antigo, sem a chave nova. Referências: `app/chamados/management/commands/vigiar_fio_morto.py:193,198` (**diff**, conforme hunk `+190`); `app/chamados/services/vigia_fio.py:205,325,326` (**cópia**); `app/chamados/tests/test_o261_vigia_fio.py:699,704-706` (**cópia**). Execução: **[nao verificado]**.
-
-**`bin/fio_estado.py` — sem achado.** O leitor compara genericamente todas as chaves de `esperado` contra `censo` e renderiza as divergências com medição e esperado; portanto exibirá o contador novo quando diferente de zero. O fato de não estar em `gritou` não impede essa exibição. (`bin/fio_estado.py:69-73,105-108,118-119`.)
-
-**Outros contratos do comando — sem achado.** O v2 conserva o recorte sem carimbo e as constantes de alarme, compatíveis com os respectivos testes existentes. (`app/chamados/management/commands/vigiar_fio_morto.py:79-80,177-197`, cópia; `app/chamados/tests/test_o261_vigia_fio.py:647-657,717-750`.)
-
-**Teste shell do leitor — sem achado identificado por inspeção.** Ele usa carimbos sintéticos e verifica a comparação genérica, sem exigir o conjunto completo das chaves produzidas pelo comando. Execução: **[nao verificado]**. (`bin/tests/test_fio_estado.sh:36-51,82-91`.)
-
-## 29/10 21:04 · sessao 17fc8315b18b · o261 · verificador · origem=Code
-
-**Não aprovaria a v1 ainda:** a guarda corrige o carimbo sem texto, mas há falhas na trilha, na idempotência concorrente e no recorte do vigia. (`app/chamados/services/disputa_emissao.py:1652,1660`; `app/chamados/management/commands/vigiar_fio_morto.py:166`, diff.)
-
-Referências marcadas **“diff”** usam a numeração após aplicação; as demais são da cópia. Execução dos testes, comportamento do PostgreSQL real e ocorrência dos cenários em produção: **[nao verificado]**. [nao verificado]
-
-1. **Cumprimento do aval**
-
-   A cura principal está no lugar autorizado: condiciona `respondida_em` ao texto, conserva materialização, autor e via, consulta `pergunta_viva` e mantém o fechamento da disputa por `d.fechar`. Não acrescenta reparação do passivo das 263. **Sem achado nessa delimitação.** (`app/docs/CORTES.md:383`; `app/chamados/services/disputa_emissao.py:1641,1643,1652,1673`, diff.)
-
-   - **Média — trilha pode afirmar um estado falso.** A descrição distingue os casos por `'respondida_em' in _c`, que significa **carimbo acrescentado nesta chamada**, não existência de resposta. Com carimbo anterior preservado, escreve “respondida_em fica nulo”; com texto anterior, pode ainda declarar “sem resposta” enquanto `tem_resposta=True`. `_abertas` não exclui perguntas já respondidas. (`app/chamados/services/disputa_emissao.py:1634,1653,1660,1663`, diff.)
-   - **Média — falta o “antes” da trilha.** O evento registra somente `depois`, embora a regra exija usuário, antes/depois e motivo para ação crítica; `antes` ficará `None`. (`app/chamados/services/disputa_emissao.py:1658,1662`, diff; `app/core/observ.py:94`; `app/docs/LEIS.md:65`.)
-   - **Lacuna de evidência — marco exato.** O código fixa **17:20**, mas o aval fornecido registra **17:2x**. Não é possível certificar esse instante como a fronteira autorizada entre histórico e novas ocorrências. (`app/chamados/services/vigia_fio.py:369`, diff; `app/docs/CORTES.md:383`.) Instante efetivo: **[nao verificado]**.
-
-2. **Classes de reprovação**
-
-   - **Segundo juiz / derivação paralela — Média.** O critério de texto já participa do juiz registrado C6 como `(resposta_colab or '').strip()`. O vigia cria outra implementação, por regex, sem compartilhar o predicado nem demonstrar equivalência. Deve compartilhar o critério de presença de texto; chamar `pergunta_viva` inteira também confundiria vazio com vitalidade. (`app/core/juizes.py:232`; `app/chamados/juizes.py:1005,1020`; `app/chamados/services/vigia_fio.py:375,381`, diff; `CLAUDE.md:20`.)
-   - **Segundo escritor fora da porta — sem achado.** A alteração permanece no ato já declarado de resolução da pergunta; a auditoria nova passa por `core.observ.evento`, sem criação direta de `LogAuditoria`. (`app/chamados/tests/test_porta_resposta_pergunta.py:68,88`; `app/chamados/services/disputa_emissao.py:1657`, diff; `app/core/observ.py:94,134`.)
-   - **Relógio — sem leitura nova identificada.** Permanecem dois `_tz.now()` internos para os carimbos. O complemento de injeção nomeia juiz/grade/cartório/reconciliador/fábrica; não basta, isoladamente, para concluir que esta porta de escrita está proibida de obter o instante. A constante nova delimita observação histórica, sem alterar uma decisão de negócio; sua precisão continua sem prova, conforme acima. (`app/chamados/services/disputa_emissao.py:1561,1638`; `app/docs/CORTES.md:369`; `app/chamados/services/vigia_fio.py:365,369`, diff.)
-   - **Ordem de trava — sem inversão nova identificada.** O ramo não acrescenta trava explícita; `evento` abre um `atomic` para a trilha. Isso deixa a falha de serialização abaixo. (`app/chamados/services/disputa_emissao.py:1630,1656`, diff; `app/core/observ.py:133`.)
-   - **Idempotência concorrente — Média.** Duas execuções podem ler a mesma pergunta aberta antes dos respectivos saves, sobrescrever a materialização e emitir duas linhas. Não há bloqueio da leitura nem atualização condicional; o `atomic` do chamador não reivindica a pergunta. O teste novo cobre apenas chamadas sequenciais. (`app/chamados/services/disputa_emissao.py:1630,1634,1656,1658`, diff; `app/chamados/services/becos.py:41,49`; `app/chamados/tests/test_o261_resposta_vazia.py:97`, diff.)
-
-   **Selos/RED:**
-
-   - **Sem achado de passagem vazia nos casos principais:** restaurar o carimbo indiscriminado contraria `assertIsNone`; retirar a materialização ou o evento contraria as asserções de materialização e contagem. O caso com texto é controle positivo, já atendido pelo código antigo. (`app/chamados/tests/test_o261_resposta_vazia.py:80,84,92,102`, diff; `app/chamados/services/disputa_emissao.py:1648`, cópia.)
-   - **Baixa — cobertura incompleta do escritor:** substituir a guarda por `bool(q.resposta_colab)` deixaria passar resposta só com espaços; os testes do escritor usam apenas `''` e `'07:55'`. O teste com espaços chama somente o contador. (`app/chamados/tests/test_o261_resposta_vazia.py:77,88,115`, diff.)
-   - **Média — integração do vigia sem mordida nova:** retirar do comando a impressão, o carimbo e o alarme novos não afeta o teste acrescentado, que chama diretamente a função contadora. Também faltam asserções sobre fechamento da disputa, via específica e conteúdo da trilha. (`app/chamados/tests/test_o261_resposta_vazia.py:77,97,106`, diff.)
-
-3. **Leitores e contratos**
-
-   - **Média — `--empresa` mistura recorte e frota.** Os contadores existentes recebem `empresas`; o novo é chamado sem recorte e consulta todas as perguntas. Uma infração de outra empresa pode aparecer no resultado selecionado e provocar saída 2 com `--alarme`. (`app/chamados/management/commands/vigiar_fio_morto.py:143,154,161,166,204`, diff; `app/chamados/services/vigia_fio.py:380`, diff.)
-   - **Baixa — ESTADO perde o número e seu esperado.** O contador fica no topo do JSON, fora de `censo` e `ESPERADO`. O leitor compara somente esses dois conjuntos; mostrará o nome em `gritou`, mas não a medição nova nem seu esperado zero. (`app/chamados/management/commands/vigiar_fio_morto.py:86,195,197`, diff; `bin/fio_estado.py:69,82,118`.)
-   - **Baixa — ação ausente no filtro enumerado da auditoria.** `fecho_sem_credor` não entra no dropdown alimentado por `ACOES`. A listagem geral e o filtro GET livre continuam alcançando a linha. (`app/core/models.py:286`; `app/core/views.py:705,738`; `app/templates/core/log_auditoria.html:23`.)
-   - **Gravação da ação e código de saída — sem achado.** O campo admite verbos livres na gravação usada por `evento`; o comando conserva o carimbo antes da saída 2, e o placar já interpreta esse código como alarme. (`app/core/models.py:296`; `app/core/observ.py:134`; `app/chamados/management/commands/vigiar_fio_morto.py:184,204`, diff; `app/core/management/commands/pipeline_placar.py:75,98`.)
-
-4. **Query, schema e PostgreSQL**
-
-   - **`''`, NULL e fronteira inclusiva — sem achado.** `TextField(blank=True, default='')` não declara `null=True`; portanto o ramo `isnull` é redundante. O `*` contempla a string vazia, e `gte` inclui exatamente o marco. (`app/chamados/models.py:1865`; `app/chamados/services/vigia_fio.py:380,381`, diff.)
-   - **Paridade com `strip()` — não demonstrada.** O teste cobre espaços ASCII, mas não tabulações, quebras de linha ou Unicode. A equivalência de `\s` do PostgreSQL com o critério Python, para a configuração real, é **[nao verificado]**; permanece o achado de definição paralela. (`app/chamados/juizes.py:1020`; `app/chamados/tests/test_o261_resposta_vazia.py:115`, diff.)
-   - **“Novas” significa carimbo posterior ao marco.** A query não mede quando o estado ilegal surgiu. Por exemplo, apagar posteriormente o texto de uma resposta cujo carimbo é anterior continuaria fora da contagem; a existência desse caminho em produção é **[nao verificado]**. (`app/chamados/services/vigia_fio.py:380,381`, diff.)
-
-## 29/10 21:03 · sessao e8be9c30180a · - · - · origem=Ronald (tmux)
-
-Achados da parte juiz/vigia:
-
-- **Média — derivação paralela do critério de resposta vazia.** O juiz registrado é `pergunta_viva` (`app/core/juizes.py:232`), cujo corpo exige texto por `(p.resposta_colab or '').strip()` (`app/chamados/juizes.py:1020`). O vigia novo implementa outra definição por regex (`app/chamados/services/vigia_fio.py:381`, pós-diff), contrariando o princípio de contador ler a mesma autoridade (`app/docs/LEIS.md:60`). Deve compartilhar o predicado de texto com o juiz; chamar `pergunta_viva` inteira também seria incorreto, porque vida e vazio são perguntas diferentes (`app/chamados/juizes.py:1005`, `app/chamados/juizes.py:1020`).
-
-- **Média — o marco exato não está provado.** A constante fixa 17:20 (`app/chamados/services/vigia_fio.py:369`, pós-diff), mas o aval registra apenas `17:2x` (`app/docs/CORTES.md:383`). A equivalência entre esse instante e o aval/deploy é **[nao verificado]**. É corte histórico pedido pelo aval, não relógio de negócio por si só; o problema comprovável é a precisão inventada (`app/docs/CORTES.md:383`).
-
-- **Baixa — falta mordida do escritor para resposta só com espaços.** O novo teste do escritor usa apenas `''` e `'07:55'`; remover `.strip()` do guard novo e deixar `bool(q.resposta_colab)` sobreviveria a esses casos (`app/chamados/tests/test_o261_resposta_vazia.py`, anexo, testes `test_sem_texto...` e `test_MORDE_com_texto...`). O teste do vigia com `'   '` não exercita esse escritor (mesmo arquivo, `test_vigia_conta_so_as_novas`). O juiz existente já distingue espaços como vazio (`app/chamados/tests/test_pergunta_viva.py:26`).
-
-Schema/query:
-
-- `resposta_colab` não aceita NULL no schema: `TextField(blank=True, default='')`; logo `isnull=True` é redundante, sem perda funcional por si só (`app/chamados/models.py:1865`).
-- A regex com `*` contempla `''`; a filtragem `respondida_em__gte` exclui carimbo NULL e inclui exatamente o marco (`app/chamados/services/vigia_fio.py:380`, pós-diff).
-- PostgreSQL é o backend declarado (`app/config/settings/prod.py:11`). A equivalência completa entre `strip()` e `\s` do PostgreSQL/locale não está demonstrada pela cópia; diferenças de Unicode/locale e ocorrência em produção ficam **[nao verificado]**. Não há teste de paridade, tabulação, newline, Unicode ou igualdade ao marco no teste novo (anexo, `test_vigia_conta_so_as_novas`).
-- Não achei escritor concreto remanescente que legitimamente gere novo carimbo vazio: irmãos têm guardas por `strip()` (`app/chamados/services/disputa_emissao.py:1219`, `app/chamados/services/disputa_emissao.py:1570`, `app/chamados/services/materializacao.py:511`, `app/chamados/services/materializacao.py:1190`). A prosa antiga que chama carimbo sem texto legítimo não basta para alegar falso alarme novo (`app/chamados/tests/test_contract_par_resposta.py:28`).
-
-Mordida:
-
-- **Sem achado de teste vazio nos três casos de cura/trilha:** o primeiro exige fechamento e ausência do carimbo; o segundo exige fechamento e carimbo; o terceiro exige estado idêntico e uma linha após duas chamadas (anexo `app/chamados/tests/test_o261_resposta_vazia.py`, três testes respectivos).
-- O teste do vigia injeta o estado inválido diretamente: certifica o contador, não deve ser apresentado como prova da cura (mesmo arquivo, `test_vigia_conta_so_as_novas`). [nao verificado]
-- Execução real dos testes e PostgreSQL: **[nao verificado]**. [nao verificado]
-
-## 29/10 21:02 · sessao 27725cac3b86 · - · - · origem=Ronald (tmux)
-
-Linhas do diff abaixo são pós-aplicação; demais referências são da cópia.
-
-- **P2 — trilha contradiz o estado.** A descrição do novo evento decide se havia resposta por `'respondida_em' in _c`, que identifica apenas carimbo recém-escrito. Se `q.resposta_colab='07:55'` e `q.respondida_em` já existe, o ramo preserva ambos e registra **“sem resposta do colaborador, respondida_em fica nulo”**, enquanto `depois.tem_resposta=True`. A entrada é possível porque `_abertas` só exclui materializadas e validadas. Referências: `app/chamados/services/disputa_emissao.py:1634`, `app/chamados/services/disputa_emissao.py:1653` (diff), `app/chamados/services/disputa_emissao.py:1660` (diff).
-
-- **P2 — a garantia nova de uma linha não cobre concorrência.** O ramo lê `_todas`/`_abertas` sem bloqueio ou atualização condicional; duas execuções podem capturar a mesma pergunta aberta, salvar e emitir `fecho_sem_credor` duas vezes. `atomic` dos chamadores não serializa essa leitura; há chamador com `atomic` e nenhuma trava (`fechar_beco`). O novo teste verifica duas chamadas sequenciais apenas. Referências: `app/chamados/services/disputa_emissao.py:1630`, `app/chamados/services/disputa_emissao.py:1634`, `app/chamados/services/disputa_emissao.py:1656` (diff), `app/chamados/services/disputa_emissao.py:1658` (diff), `app/chamados/services/becos.py:41`, `app/chamados/services/becos.py:49`, `app/chamados/tests/test_o261_resposta_vazia.py:97` (diff). Ocorrência concorrente real: **[nao verificado]**.
-
-- **Aval:** a guarda `bool(...strip())` cura a escrita sem texto; mantém `materializada_em`, autor e via, usa o juiz existente `pergunta_viva`, e deixa o fecho da disputa na porta `d.fechar`. O passivo não é alterado por rotina adicionada neste diff. Referências: `app/docs/CORTES.md:383`, `app/chamados/services/disputa_emissao.py:1641`, `app/chamados/services/disputa_emissao.py:1643`, `app/chamados/services/disputa_emissao.py:1652` (diff), `app/chamados/services/disputa_emissao.py:1673` (diff).
-
-- **Segundo escritor de LogAuditoria: sem achado.** O evento entra por `core.observ.evento`, declarado escritor único e implementado por `objects.create`; o ramo novo não escreve o modelo diretamente. Referências: `app/chamados/services/disputa_emissao.py:1657` (diff), `app/core/observ.py:94`, `app/core/observ.py:96`, `app/core/observ.py:134`.
-
-- **Ordem de trava: sem inversão nova identificada; falta serialização descrita acima.** O resolver não acrescenta `select_for_update`; o `evento` abre somente `transaction.atomic` para a criação da trilha. Referências: `app/chamados/services/disputa_emissao.py:1514`, `app/chamados/services/disputa_emissao.py:1630`, `app/core/observ.py:133`.
-
-- **Selos:** não passam integralmente vazios: o caso sem texto exige materialização, autor, via e ausência de carimbo; remover a guarda e voltar ao original viola `assertIsNone`. Remover o evento viola a contagem 1. O caso `MORDE_com_texto` preserva a simetria, mas já seria verde no código anterior, que carimba indiscriminadamente; isso é contraprova útil, não RED da cura. Não há teste novo que exija `d.fechada_em`, via específica, descrição correta da trilha ou concorrência. Referências: `app/chamados/tests/test_o261_resposta_vazia.py:77` (diff), `app/chamados/tests/test_o261_resposta_vazia.py:88` (diff), `app/chamados/tests/test_o261_resposta_vazia.py:97` (diff), `app/chamados/services/disputa_emissao.py:1648` (base). Execução/RED real: **[nao verificado]**.
-
-- **Relógio:** não há leitura nova de `now()` neste ramo; os dois `_tz.now()` já existem no resolver. A regra registrada de injeção nomeia juiz/grade/cartório/reconciliador/fábrica e bordas, então não afirmo automaticamente que este service de escrita viola aquele complemento. Referências: `app/chamados/services/disputa_emissao.py:1561`, `app/chamados/services/disputa_emissao.py:1638`, `app/docs/CORTES.md:369`.
-
-_256 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_263 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
