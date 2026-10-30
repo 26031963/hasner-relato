@@ -1,7 +1,113 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 07:53** · publicado em **30/10/2026 07:58** (UTC-3)
+> Ultima resposta processada: **30/10/2026 08:06** · publicado em **30/10/2026 08:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 08:06 · sessao 329ed3bd6ff8 · O261-NOTURNO · sonda · origem=Code
+
+1. A sonda é **aritmeticamente compatível nos números apresentados**, mas não fornece um total independente por motivo para conferir a cobertura. As somas abaixo são derivadas das categorias informadas. `[nao verificado]`
+
+| Motivo | Instante em outro dia | Mesmo dia | Sem instante | Soma informada | Evidência |
+|---|---:|---:|---:|---:|---|
+| `intervalo_saida` | 903 | 3316 | 3514 | **7733** | [nao verificado] |
+| `intervalo_volta` | 1378 | 3343 | 3623 | **8344** | [nao verificado] |
+| `orfao_14h` | 2516 | 4653 | 6668 | **13837** | [nao verificado] |
+| `saida_sem_entrada` | — | 4983 | 4785 | **9768** | [nao verificado] |
+| Soma das categorias informadas | **4797** | **16295** | **18590** | **39682** | [nao verificado] |
+
+“—” significa que a linha não foi fornecida; zero explícito para `saida_sem_entrada|instante_outro_dia` é `[nao verificado]`.
+
+| Motivo, somente com instante em outro dia | Perguntas | `data_evento==célula=True` | Texto mostra dia da célula=True | Plantio no dia da célula | Plantio no dia do instante | Evidência |
+|---|---:|---:|---:|---:|---:|---|
+| `intervalo_saida` | 903 | 903 | 903 | 9 | 40 | [nao verificado] |
+| `intervalo_volta` | 1378 | 1378 | 1378 | 4 | 77 | [nao verificado] |
+| `orfao_14h` | 2516 | 2516 | 2516 | 13 | 153 | [nao verificado] |
+| Soma | **4797** | **4797** | **4797** | **26** | **270** | [nao verificado] |
+
+| Indicador final | Valor | Evidência |
+|---|---:|---|
+| Plantios amostrados | 270 | [nao verificado] |
+| Com batida real, origem app, a ≤15 min da mesma hora no dia da célula | 39 | [nao verificado] |
+| Colaboradores | 7 | [nao verificado] |
+| `ERROS` | **0** | [nao verificado] |
+
+Os plantios no dia do instante somam `40+77+153=270`, numericamente igual à amostra final. As duas categorias de plantio somam 296; o destino das demais perguntas com instante em outro dia é `[nao verificado]`. A execução e a correção interna da sonda também são `[nao verificado]`.
+
+2. Nos **4797 casos informados**, o texto gravado nomeia **o dia da célula**, e `data_evento` também é esse dia. `[nao verificado]`
+
+| Motivo | Texto do catálogo |
+|---|---|
+| `orfao_14h` | “Confirme o horário da saída no dia {data}” — [perguntas.py:49](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/catalogo/perguntas.py:49) |
+| `intervalo_saida` | “Confirme o horário da saída do intervalo no dia {data}” — [perguntas.py:125](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/catalogo/perguntas.py:125) |
+| `intervalo_volta` | “Confirme o horário da volta do intervalo no dia {data}” — [perguntas.py:133](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/catalogo/perguntas.py:133) |
+
+O código sustenta a diferença entre essas datas pelos seguintes caminhos:
+
+- **DNA:** `montar_lampadas()` grava `instante` em `data+1` quando o turno cruza meia-noite e a hora do marco é menor que `hi`; nos demais casos usa `data`. [gerar_celulas.py:67](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/ponto/management/commands/gerar_celulas.py:67)
+- **Texto pela grade:** o leitor entrega marcos contendo somente `tipo` e `hora`; `_marcos_faltantes()` devolve o dia da grade em `(data_dia, pos, tipo, hora)`. A emissão formata esse `dia` no texto e o passa como `data_evento`. [leitor_celula.py:120](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/escala/services/leitor_celula.py:120), [declaracao_texto.py:120](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/declaracao_texto.py:120), [disputa_emissao.py:812](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/disputa_emissao.py:812), [disputa_emissao.py:777](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/disputa_emissao.py:777)
+- **Declaração direta:** usa o mesmo `dia` no texto e em `data_evento`. [declaracao_texto.py:321](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/declaracao_texto.py:321)
+- **Outros caminhos de emissão:** o genérico substitui `{data}` por `contexto[motivo]['data']`; o dedicado de intervalo formata a data de `marcos_faltantes`. [disputa_emissao.py:317](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/disputa_emissao.py:317), [query.py:58](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/catalogo/query.py:58), [disputa_emissao.py:952](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/disputa_emissao.py:952)
+
+**O plantio parte de `data_evento` e deriva o dia pelo ajuste overnight.** `_ts_tipo_do_plantio()` escolhe `p.data_evento`, com fallback para a data do contexto; combina essa data com a hora respondida e chama `_ajustar_saida_overnight()`. Nos intervalos, a hora pode ser substituída pela hora do marco faltante. [materializacao.py:328](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/materializacao.py:328), [materializacao.py:391](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/materializacao.py:391), [materializacao.py:398](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/materializacao.py:398), [materializacao.py:404](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/materializacao.py:404)
+
+O ajuste consulta os marcos do turno e testa, nessa ordem, **D e D+1**, retornando o primeiro candidato dentro do envelope entre primeiro marco−90 minutos e último marco+90 minutos. Fora desse envelope conserva o instante recebido. Sem marcos, para entrada com `hora_tentativa`, pode recuar para **D−1**. Portanto, não há regra “todo instante em outro dia planta em D+1”. [juizes.py:301](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:301), [juizes.py:305](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:305), [juizes.py:313](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:313)
+
+O registro recebe esse `ts`; o vínculo `pergunta_origem` é anotado tanto para batida nova quanto reutilizada. [materializacao.py:872](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/materializacao.py:872), [materializacao.py:891](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/materializacao.py:891)
+
+3. O consumidor que **recompõe diretamente `data_evento + hora respondida`, sem ajuste overnight**, é `classe_do_lote()`: combina `perg.data_evento` com `d['resp']`, procura batidas apuráveis em **±60 minutos** e retorna B com conflito ou A. [validacao.py:747](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/validacao.py:747), [validacao.py:812](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/validacao.py:812), [validacao.py:817](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/validacao.py:817)
+
+Essa classificação alimenta a seleção de validação em lote, a fila classificada e a classe devolvida pela API. [validacao.py:681](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/validacao.py:681), [validacao.py:868](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/validacao.py:868), [views_mensageria.py:545](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/api/views_mensageria.py:545)
+
+Também há leitores que usam `data_evento` para escolher o marco e comparam **somente HH:MM**, sem construir o instante ajustado:
+
+- `delta_da_resposta()`: usa o marco do chamado ou o fallback da grade, que consulta `marcos_do_dia(data_evento)`, e calcula a distância entre horários. [juizes.py:1247](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:1247), [juizes.py:1256](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:1256), [juizes.py:1299](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:1299), [juizes.py:1316](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:1316)
+- `motivo_implausivel_validacao()`: faz essa seleção de marco e compara a hora; é chamado antes da validação. [juizes.py:1425](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:1425), [validacao.py:367](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/validacao.py:367)
+- `classificar_resposta_validacao()` consome `delta_da_resposta()`; o comando `validar_classe_a` usa essa classificação. [juizes.py:1409](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:1409), [validar_classe_a.py:63](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/management/commands/validar_classe_a.py:63)
+
+Para respostas `hora`, `_slot_esperado()` já delega ao derivador do plantio e recebe o ajuste. [juizes.py:343](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:343)
+
+## 30/10 08:04 · sessao fea8f0a62a04 · - · - · origem=Ronald (tmux)
+
+Leitor que efetivamente recompõe **data_evento + hora respondida sem ajuste**:
+
+- `classe_do_lote()` lê `delta_da_resposta()` em `app/chamados/services/validacao.py:812`; combina `perg.data_evento` com `d['resp']` em `:817-819`; procura batidas apuráveis no intervalo de ±60 minutos (`:747`, `:820-821`); retorna lote B com conflito (`:822`) ou lote A (`:823`). Esse trecho não chama `_ajustar_saida_overnight`.
+- Esse resultado alimenta a fila classificada em `app/chamados/services/validacao.py:868`, a seleção de validação em lote em `:681` e a classe devolvida pela API em `app/api/views_mensageria.py:542-546`.
+
+Leitores de **data_evento para escolher o marco e hora respondida para comparar**, sem construir instante ajustado:
+
+- `_marco_esperado_da_grade()` lê `perg.data_evento` e consulta `marcos_do_dia(d)` (`app/chamados/juizes.py:1247`, `:1256`), selecionando `hii`/`hfi` para intervalo (`:1261-1264`).
+- `delta_da_resposta()` lê a resposta e reduz `data_hora` a HH:MM (`app/chamados/juizes.py:1299-1302`), usa o marco do chamado ou aquele fallback (`:1303-1305`) e compara minutos pela distância circular (`:1316-1337`).
+- `motivo_implausivel_validacao()` segue a mesma seleção de marco e comparação de HH:MM (`app/chamados/juizes.py:1425-1436`); é chamado antes da validação em `app/chamados/services/validacao.py:367-370`.
+- `classificar_resposta_validacao()` usa `delta_da_resposta()` (`app/chamados/juizes.py:1409-1413`); o comando `validar_classe_a` usa essa classificação (`app/chamados/management/commands/validar_classe_a.py:63-67`).
+
+**Não incluir como leitor sem ajuste:** `_slot_esperado()` para resposta do tipo `hora` delega ao próprio `_ts_tipo_do_plantio()` (`app/chamados/juizes.py:343-345`). Para `data_hora`, ele usa a data explicitamente respondida (`:331-338`), não `data_evento`.
+
+## 30/10 08:04 · sessao be7d2a5d50f0 · - · - · origem=Ronald (tmux)
+
+O texto usa o **dia da célula/data_evento**, e o DNA pode registrar o marco em **D+1**: `montar_lampadas` aplica `data + 1 dia` quando o turno cruza meia-noite e a hora do marco é menor que `hi`, gravando esse dia em `instante` (`app/ponto/management/commands/gerar_celulas.py:55`, `:67-69`). `montar_dna` incorpora essas lâmpadas (`app/ponto/management/commands/gerar_celulas.py:94`, `:103`).
+
+| Motivo | Texto canônico |
+|---|---|
+| `orfao_14h` | “Confirme o horário da saída no dia {data}” — `app/chamados/catalogo/perguntas.py:48-50` |
+| `intervalo_saida` | “Confirme o horário da saída do intervalo no dia {data}” — `app/chamados/catalogo/perguntas.py:124-126` |
+| `intervalo_volta` | “Confirme o horário da volta do intervalo no dia {data}” — `app/chamados/catalogo/perguntas.py:132-134` |
+| `saida_sem_entrada` | “Confirme o horário da entrada no dia {data}” — `app/chamados/catalogo/perguntas.py:56-58` |
+
+Cadeia que comprova o dia da célula na formatação:
+
+- O leitor indexa `CelulaDia` por `c.data`, põe esse dia no resultado `data` e entrega os marcos da ata (`app/escala/services/leitor_celula.py:325`, `:337`, `:354-359`). Os marcos carregam apenas `tipo` e `hora`, sem `instante` (`app/escala/services/leitor_celula.py:120`).
+- `_marcos_faltantes` lê esses dias da grade, extrai `tipo/hora` e devolve `(data_dia, pos, tipo, hora)` (`app/chamados/services/declaracao_texto.py:82-89`, `:109`, `:120`).
+- Na complementação da emissão, cada tupla fornece `dia`; esse `dia` é formatado como `%d/%m/%Y` e passado à abertura (`app/chamados/services/disputa_emissao.py:806-813`). A abertura grava esse argumento em `data_evento` (`app/chamados/services/disputa_emissao.py:770-777`).
+- Na declaração direta, o marco casado fornece `dia`; a criação usa esse mesmo dia no texto e em `data_evento` (`app/chamados/services/declaracao_texto.py:296-297`, `:321-323`).
+- Na declaração por proposta, `dia` vem do marco casado e entra na proposta; a criação repete esse dia no texto e em `data_evento` (`app/chamados/services/declaracao_texto.py:576-583`, `:610-612`).
+
+Outros caminhos de formatação na emissão:
+
+- Caminho genérico usa `texto_pergunta_com_data(motivo, disputa.contexto)` (`app/chamados/services/disputa_emissao.py:316-317`); o helper substitui `{data}` por `contexto[motivo]['data']` (`app/chamados/catalogo/query.py:58-64`).
+- Caminho dedicado de intervalo usa `_m['data']`, tanto no texto como no argumento `data_evento` (`app/chamados/services/disputa_emissao.py:950-957`).
+- Agrupamento por episódio formata com o `data_evento` resolvido e passa esse mesmo valor à abertura (`app/chamados/services/disputa_emissao.py:1006-1013`).
+
+A afirmação sobre **quais registros de produção exibiram o dia da célula** depende exclusivamente da sonda fornecida, portanto precisa receber `[nao verificado]`; o código comprova os caminhos de formação acima, sem comprovar a execução histórica de cada registro.
 
 ## 30/10 07:53 · sessao e13c20d27801 · O261-V · sonda · origem=Code
 
@@ -611,73 +717,4 @@ Cuidados para a consolidação:
 - As quatro respostas 07:00 têm batidas retroativas visíveis no horário do encerramento noturno na sonda; vínculo `pergunta_origem` [não verificado]. O ramo que cria `origem='disputa_s84_retro'` está em `app/chamados/services/materializacao.py:871-879`.
 - A regra L-099 determina ESTRUTURA quando o sistema se contradiz dado o cadastro, CADASTRO quando DNA não descreve batidas, BATIDA quando falta/sobra batida: `CLAUDE.md:306-316`.
 
-## 30/10 07:38 · sessao a46ba23aaa09 · - · - · origem=Ronald (tmux)
-
-O ramo `adesao is None` não registra `out['cods']`: incrementa `nunca_bateu`, lavra/carimba e retorna antes da única gravação `out.setdefault('cods', {})[data] = list(cods)` do ramo normal. (`app/ponto/services/cartorio.py:907`, `:946`, `:981`, `:999`, `:1003`, `:1120`)
-
-O efeito depende do chamador:
-
-| Chamador | Efeito da ausência de `cods` |
-|---|---|
-| `processar_cartorio` | **Não impede sempre**. Um único `out` nasce antes do laço e é reutilizado entre colaboradores; a chave é somente `data`. Se colaborador anterior registrou aquela data, a célula `nunca_bateu` passa pelo teste e chama `perguntar_pela_celula`. Se a data ainda não existe no acumulado, não chama. (`app/ponto/management/commands/processar_cartorio.py:43`, `:59`, `:65`; `app/ponto/services/cartorio.py:759`, `:768`, `:769`, `:770`, `:1120`) |
-| `julgar_celula` | Cria `out` novo e passa uma única célula: no ramo sem adesão, `_julgadas` permanece vazio e a fábrica não é chamada. (`app/ponto/services/cartorio.py:1559`, `:1560`, `:759`, `:769`) |
-| `rejulgar_furos_do_vinculo` | Cria `out` novo por invocação: mesma obstrução, caso entre no ramo sem adesão. (`app/escala/regua_defesa.py:691`, `:692`; `app/ponto/services/cartorio.py:1003`, `:759`, `:769`) |
-| `celula_veredito_velho` | Passa `contadores()` novo para cada colaborador: mesma obstrução. (`app/ponto/management/commands/celula_veredito_velho.py:139`, `:144`, `:145`) |
-| `bin/rejulgar_o118_col221.py` | Usa `out` novo e apenas um colaborador: mesma obstrução se esse ramo for alcançado com `APLICAR=True`. (`bin/rejulgar_o118_col221.py:20`, `:23`, `:24`, `:25`) |
-
-`contadores()` não inicializa `cods`; ela nasce sob demanda no ramo normal. (`app/ponto/services/cartorio.py:1477`, `:1478`, `:1490`, `:1120`)
-
-`cluster_espurio` **não recebe nem interpreta os valores dos códigos**: o wrapper usa apenas a existência de qualquer entrada em `_julgadas` para chamar `_cluster(c, hoje)`. Assim, um acumulado anterior também permite essa chamada para colaborador que não registrou códigos próprios. O serviço lê células/ATA do colaborador atual. (`app/ponto/services/cartorio.py:759`, `:763`, `:765`, `:767`; `app/ponto/services/cluster_espurio.py:22`, `:23`, `:26`, `:27`, `:77`)
-
-A releitura pós-emissão **não usa `cods` como gatilho**: dispara pelo aumento de `emitidos` na chamada corrente, cria `_conv` novo, executa novamente o corpo e mescla os códigos encontrados em `out['cods']`. Não há nova chamada à fábrica após essa releitura. No ramo sem adesão, não ocorre emissão no corpo e esse delta não nasce. (`app/ponto/services/cartorio.py:743`, `:798`, `:810`, `:811`, `:812`, `:823`, `:1003`)
-
-Passar pelo teste de data apenas **alcança a fábrica**; não garante pergunta nova. A fábrica ainda verifica `trabalha`, situação ativa, futuro, vencimentos, veredito e deduplicação por motivo. `nunca_bateu` pertence a `VEREDITOS_ACUSAM`, portanto esse veredito, isoladamente, não a veta. (`app/chamados/services/fabrica_da_celula.py:78`, `:80`, `:85`, `:86`, `:101`, `:106`, `:109`; `app/escala/models.py:1735`, `:1736`)
-
-## 30/10 07:38 · sessao e3bb63ac3aef · - · - · origem=Ronald (tmux)
-
-Referências e limites para consolidação:
-
-- **L-099:** ESTRUTURA significa contradição/cálculo errado dado o cadastro; CADASTRO significa DNA que não descreve batidas; BATIDA significa falta/sobra de batida (`CLAUDE.md:306-316`).
-- O juiz efetivo é `app/ponto/management/commands/e6_oraculo.py:53`. A decisão prioriza cadastro sem folga/vínculo (`:90-91`), batida solta declarada pelo realizado (`:96-97`), paridade do conjunto atribuído ao dia (`:98-99`) e presença na lista do MOTOR `dias_cadastro_x_realidade` (`:100`). Os insumos são montados em `:118-155`; batida solta real é conferida em `:158-172`.
-- **A sonda não fornece os insumos completos desse juiz:** sua lista de batidas inclui dias vizinhos, sem atribuição do oráculo ao dia; também faltam `dias_cadastro_x_realidade`, resultado do realizado e flags de cadastro. Portanto dono E6 conclusivo por célula é **[não verificado]**.
-- Observação permitida pelo dado: nas quatro células de col451, DNA cobra entrada às 19h em dias ímpares e a janela mostra entradas próximas de 19h nos dias pares; na 140114, a resposta/batida 17:30 difere do marco 21:30 e as saídas mostradas próximas de 06:30 diferem do marco05:42. Atribuir isso definitivamente a CADASTRO, excluindo BATIDA, não está provado **[não verificado]**.
-- **Dono da contradição “fio morto” é ESTRUTURA**, expressamente documentado em `app/chamados/services/vigia_fio.py:9-14`; isso não identifica automaticamente o dono do furo ou do descompasso de horário. O próprio vigia declara que não deriva o dono L-099 em `:99-101`.
-
-**P50170: cláusula exata não demonstrável.**
-
-`pergunta_viva` delega ao cálculo em `app/chamados/juizes.py:795`. Para P50170, sem validação, sem resposta, via fantasma, materializada e célula `furo`, os únicos retornos `False` anteriores ao ramo de célula acusando compatíveis com os campos fornecidos são:
-
-1. Competência trancada por leitura, `app/chamados/juizes.py:1010-1011`, cujo julgamento exige tranca e ausência de toque humano posterior (`:875-907`).
-2. Marco próprio comprovado aceso na **ATA**, apesar de outro marco acusar, `app/chamados/juizes.py:1050-1052`. `orfao_14h` cobra `S/hf` (`:823-828`), e a prova lê `cel.ata['lampadas'][...]['acesa']` (`:866-872`).
-
-A sonda não inclui tranca/toques nem ATA/`acesa`; o bloco `dna.lampadas` é previsão e não satisfaz essa leitura (`app/chamados/juizes.py:849`, `:866-872`). Assim, escolher entre essas cláusulas é **[não verificado]**.
-
-`fantasma` não pertence a `_ENCERRA_POR_IDENTIDADE` (`app/chamados/juizes.py:1039-1045`). Se nenhum dos dois degraus acima a encerrou, célula `furo` produz `True` imediatamente (`:1054-1057`); sequer chega ao teste final de materialização (`:1082-1083`). A disputa fechada não é consultada como causa de morte nesse corpo (`:1005-1087`).
-
-## 30/10 07:33 · sessao b270d6c7c46f · O261-N · sonda · origem=Code
-
-**A sonda não comprova a premissa de “chamado vivo e nenhuma pergunta”:** o CH#35679 aparece como `resolvido`, a célula apresenta `np=4` e o colaborador tem 12 perguntas; o significado de `np` e a vitalidade dessas perguntas não foram detalhados. [nao verificado] `resolvido` está fora de `VIVOS`, e o censo seleciona somente chamados em `VIVOS`. (`app/chamados/catalogo/motor.py:24–31`; `app/chamados/services/vigia_fio.py:186`.)
-
-1. **Batida e ramo do julgamento.** Não tem batida não retratada segundo o anexo: `vida=0`, `nao_retratadas=0`, `ADESAO=None`. [nao verificado] O código procura a primeira batida da vida com `retratada_em IS NULL` e deriva dela a adesão; sem essa batida, entra em **`if adesao is None`**, não no ramo normal. (`app/ponto/services/cartorio.py:899–907`.)
-
-   Esse ramo lavra `nunca_bateu` sem cobertura integral, carimba a célula e retorna antes do ramo normal. (`app/ponto/services/cartorio.py:971–1004`.) Portanto, esse é o ramo determinado pelos insumos fornecidos; a execução histórica não tem trilha anexada. [nao verificado]
-
-2. **Emissor do chamado e autorização pela regra.** O módulo informado para CH#35679 é `batida_ausente`; seu emissor histórico exato não consta da sonda. [nao verificado] O emissor usado pelo cartório é `detectar_ausencias.Command`, cujo `_abrir_chamado` abre esse módulo em `app/ponto/management/commands/detectar_ausencias.py:688–697`; a ligação do cartório está em `app/ponto/services/cartorio.py:1535` e `:1560–1561`.
-
-   Não se pode atribuir CH#35679 exclusivamente a esse método: existem outros escritores com o mesmo módulo/categoria/subcategoria em `app/ponto/management/commands/reconciliar_grade.py:499–510` e `app/chamados/reconciliador.py:862–872`.
-
-   **Nesse ramo, a regra escrita manda não emitir cobrança de furo:** `HX-CARTORIO-NUNCA-BATEU` declara “Dívida de ADESÃO” e “carimba (registro) e não emite”. (`app/ponto/services/cartorio.py:902–906`.) Além disso, `nunca_bateu` pertence a `VEREDITOS_QUE_VETAM`; o gate devolve `NUNCA_BATEU`, e o emissor retorna antes de abrir. (`app/ponto/marcos.py:119`, `:155–162`; `app/ponto/management/commands/detectar_ausencias.py:625–628`.) O veredito vigente no instante da criação e o caminho efetivamente executado não vieram no anexo. [nao verificado]
-
-3. **Pergunta prevista e impedimento.** A regra da fábrica **admite pergunta para `nunca_bateu`**: exige colaborador ativo, célula de trabalho, data não futura e veredito acusador; `nunca_bateu` integra `VEREDITOS_ACUSAM`. (`app/chamados/services/fabrica_da_celula.py:78–87`; `app/escala/models.py:1735–1736`.) Os motivos concretos dependem da ata, dos marcos vencidos e dos motivos já perguntados. (`app/chamados/services/fabrica_da_celula.py:34–65`, `:101–109`.)
-
-   O responsável seria `perguntar_pela_celula → perguntar → criar_ou_atualizar_disputa / gerar_perguntas_disputa`, com abertura efetiva em `PerguntaDisputa.abrir`. (`app/chamados/services/fabrica_da_celula.py:118–124`, `:143–149`; `app/chamados/services/disputa_emissao.py:389–397`.)
-
-   **A falha de encaminhamento no ramo sem adesão:** ele carimba e retorna sem registrar a data em `out['cods']`; o chamador só chama a fábrica para datas desse mapa. O registro da data ocorre no ramo normal. (`app/ponto/services/cartorio.py:947–1003`, `:759–770`, `:1120`.) Com `out` novo, como em `julgar_celula`, esse ramo não aciona a fábrica. (`app/ponto/services/cartorio.py:1559–1561`.) No lote, porém, `out` é compartilhado entre colaboradores, portanto não cabe afirmar bloqueio absoluto sem conhecer o mapa acumulado. (`app/ponto/management/commands/processar_cartorio.py:43`, `:59–65`.)
-
-   A sonda não traz ata, marcos, motivos, vias ou estados das perguntas; **não permite concluir que falta criar uma pergunta adicional nem identificar o impedimento efetivamente ocorrido nessa célula**. [nao verificado]
-
-4. **Quantidade de colaboradores.** O anexo mostra **um colaborador ativo sem adesão, com chamado histórico `batida_ausente` resolvido**. Não fornece o total da frota nem comprova um chamado atualmente vivo nessa condição. [nao verificado]
-
-   Falta medir os colaboradores ativos distintos sem nenhuma batida não retratada na vida e, dentro desse conjunto, aqueles com chamado de furo em `VIVOS` apontando para célula `nunca_bateu`; para contar emissão contrária à regra no instante em que ocorreu, falta também a trilha da emissão e do veredito naquele instante. [nao verificado] Os predicados correspondentes estão em `app/ponto/services/cartorio.py:899–907`, `app/chamados/catalogo/motor.py:24`, `app/chamados/catalogo/furo_modulos.py:15–16` e `app/ponto/marcos.py:119`.
-
-_374 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_377 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

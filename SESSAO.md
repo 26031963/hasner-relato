@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 08:03:36.** Transcript: `c07bd622-c518-4ee0-9641-ce667785cb73.jsonl` (1.8 MB). Acoes na janela: **57**.
+**Medido em 30/10/2026 08:09:06.** Transcript: `c07bd622-c518-4ee0-9641-ce667785cb73.jsonl` (1.8 MB). Acoes na janela: **58**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:03:33 | Bash | Measure NOTURNO class frota reach via Codex sonda | `cd /home/ronald/saas-hasner && cat > logs/o261/sonda_noturno_frota.py <<'EOF' # Sonda de LEITURA (prod): alcance da classe NOTURNO-LE-O-DIA-DA-CELULA. Nada escreve. import datetime as dt from collections import Counter from django.utils import timezone as tz from chamados.models import PerguntaDisputa from ponto.models import Batida from chamados.catalogo.perguntas import PERGUNTAS if False else N ...` |
 | 07:54:08 | Bash | Write V lei question and NOTURNO class to RELATO | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() i=s.index('\n> ') top=''' > PERGUNTA DE LEI (O261 V, nao trava a fila): dia do CADASTRO sem batida porque o turno real caiu 24 h antes (12x36 deslocado). col451: reais 20->21, 22->23, 24->25, 26->27 (18:5x->06:5x); cadastro 21->22, 23->24, 25->26, 27->28. Remedida SEM os plantios (sombra atomic+raise, ROLLBACK 326/326, ERROS=0, `logs/o261_dono ...` |
 | 07:51:45 | Bash | Wait for and read Codex V3 answer | `cd /home/ronald/saas-hasner && for i in $(seq 1 90); do grep -q "^rc=" logs/o261/codex_classe_v3.run && break; /usr/bin/sleep 10; done; tail -n 1 logs/o261/codex_classe_v3.run; cat logs/o261/codex_classe_v3.txt` |
 | 07:51:40 | Bash | Write VETO census table to RELATO | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() a='> VETO-NA-PORTA (aval 07:4x) registrado no OBRAS; censo (1) no Codex. SUITE-ANTES-DO-OPUS escrita na 7b do CLAUDE.md.' assert s.count(a)==1 t='''> **VETO-NA-PORTA (1) CENSO** (Codex `logs/o261/codex_veto_na_porta.txt` @4f8f7e5a; amostra conferida `furos_vetados.py:26-31`, `detectar_ausencias.py:598-605`, `reconciliar_grade.py:485-496`, `mod ...` |
