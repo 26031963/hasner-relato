@@ -1,7 +1,94 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 19:10** · publicado em **30/10/2026 19:10** (UTC-3)
+> Ultima resposta processada: **30/10/2026 19:15** · publicado em **30/10/2026 19:15** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 19:15 · sessao 507013464189 · E1-BATERIA · red · origem=Code
+
+Criado somente [test_e1_lote2_status_do_dia.py](/home/ronald/codex_ws/red_e54eae6ed8c4_20261030_190743_37155/app/ponto/tests/test_e1_lote2_status_do_dia.py): **20 casos, sendo 15 executáveis e 5 skips de lei**. Sintaxe validada em memória, sem criar bytecode. Suite Django não executada; RED ainda não evidenciado. [nao verificado]
+
+| ID | Status esperado | Retenção esperada | Regra citada |
+|---|---|---|---|
+| S01 | `ok` | Não retém | CLT arts. 58 e 74 §2 |
+| S02 | SKIP — pendente | Pendente | L-039, L-110 |
+| S03 | `previsto` | Não retém | ADR D4; CLAUDE §6 |
+| S04 | `aberto` | Não retém | ADR D4; CLAUDE §6 |
+| S05 | `folga` | Não retém | CLT art. 67; L-024 |
+| S06 | `folga_trabalhada` | Não retém | CLT art. 71 §1; L-024 |
+| S07 | `ausencia` | Não retém | Lei 605/49 art. 6 §§1–2; L-089 |
+| S08 | `falta` | Não retém | L-039; Lei 605/49 art. 6 |
+| S09 | `folga` | Não retém | Lei 605/49 art. 8 |
+| S10 | `folga_trabalhada` | Não retém | Lei 605/49 art. 9 |
+| S11 | `irregular` | Não retém | L-033, L-032; Portaria 671 |
+| S12 | SKIP — pendente | Pendente | ADR D4; L-033 |
+| S13 | `irregular`, acoplamento em SKIP | Pendente | L-084; CLT art. 58 §1 |
+| S14 | SKIP — premissa divergente | Pendente | L-084 |
+| S15 | `ok` | Não retém | CLT art. 59-A; ADR D3 |
+| S16 | `folga` | Não retém | CLT art. 59-A; ADR D3 |
+| S17 | `folga` | Não retém | CLT art. 59-A; L-024 |
+| S18 | SKIP — mapeamento pendente | Não retém o abono; caso suspenso | ADR: decisão humana prevalece; L-039 |
+| S19 | `ok` | Não retém | CLT art. 62; ADR D3 |
+| S20 | `sem_dados` | Não retém | L-112; ADR D3; CLT art. 4 |
+
+Perguntas registradas nos skips:
+
+- **S02:** sem decisão humana, usar `irregular`, `escala_suspeita` ou autorizar exceção à L-039 para `falta`? Qual motivo de retenção?
+- **S12:** após encerrar, entrada única continua `aberto` ou vira `irregular`? Retém por qual motivo?
+- **S13:** atraso registrado gera `irregular` sem retenção, com retenção ou `ok` com desconto apenas na rubrica?
+- **S14:** as pontas diferem **exatamente 180 minutos**. Manter os horários, corrigir o cenário para superar 180 ou alterar expressamente o limite?
+- **S18:** admin resolve como `justificado` com abono: prevalece `ausencia`, `folga` ou uma exceção explícita para `ok`?
+
+## 30/10 19:12 · sessao 1c0187623ab2 · MEDIDA-PROGRAMA · verificador · origem=Code
+
+**O desenho permite chegar a zero sem eliminar todas as derivações do dia:** já há um classificador de produção que escapa do vocabulário proposto, e VALOR continua restrito aos sete arquivos previamente enumerados. (`app/relatorios/furos.py:55`, `app/relatorios/furos.py:69`, `app/ponto/tests/test_s3_placar_exercicio.py:34`, `app/ponto/tests/test_s3_placar_exercicio.py:305`)
+
+**1. Onde a definição verificável falha**
+
+- **Falso negativo concreto: `relatorios/furos.py::classificar_dia`.** Calcula o estado pela presença e quantidade de marcos `missing`, retornando `sem_marcos`, `furo`, `parcial` ou `ok`. Só `ok` pertence ao vocabulário contratado; portanto não alcança duas palavras. A resposta alimenta os dias apresentados e a contagem de furos. O censo anterior já o identifica como “classificar_dia próprio”, classe C. (`app/relatorios/furos.py:63`, `app/relatorios/furos.py:69`, `app/relatorios/furos.py:70`, `app/relatorios/furos.py:72`, `app/relatorios/furos.py:74`, `app/relatorios/furos.py:75`, `app/relatorios/furos.py:160`, `app/relatorios/furos.py:164`, `app/docs/CENSO_NARNIA.md:66`)
+
+- **A indireção não fica necessariamente coberta pela tabela ou função chamada.** `estado_do_dia` escolhe entre `_VER_ESTADO` e o classificador acima, sem produzir os literais procurados. A tabela fica no módulo; o classificador também escapa. Assim, neste caso existente, nenhum elo garante a detecção prometida. (`app/relatorios/furos.py:24`, `app/relatorios/furos.py:45`, `app/relatorios/furos.py:46`, `app/relatorios/furos.py:47`, `app/relatorios/furos.py:52`)
+
+- **Há outros vocabulários paralelos já existentes.** O painel operacional escolhe `geofence/normal/turno_aberto/encerrado/ausente/folga`, publica o status e monta contadores; só `folga` entra no vocabulário contratado. O registro já reconhece esses contadores como derivação própria. (`app/core/services/painel_op.py:155`, `app/core/services/painel_op.py:160`, `app/core/services/painel_op.py:166`, `app/core/services/painel_op.py:169`, `app/core/services/painel_op.py:172`, `app/core/services/painel_op.py:175`, `app/core/services/painel_op.py:190`, `app/core/services/painel_op.py:200`, `app/core/juizes.py:705`)
+
+- **A catraca por função não detecta necessariamente um sítio novo dentro de função declarada.** `api_espelho_v2` já contém decisões separadas para certidão da grade, dia com batidas e dia sem batidas. Todas viram uma identidade `arquivo::funcao`; acrescentar outra decisão ali pode preservar o mesmo conjunto de identidades. (`app/api/views.py:1514`, `app/api/views.py:1570`, `app/api/views.py:1644`, `app/api/views.py:1650`, `app/api/views.py:1653`)
+
+- **Falso positivo do predicado bruto:** `campos_da_frase` produz `folga/falta` sob escolha, mas preenche o **tipo da intenção**, não o status do dia. Deve ser exclusão por homônimo. Sem o `NAO_E_LEITOR` concreto, afirmar que sobreviveria ao filtro final é [nao verificado]. (`app/core/intake.py:219`, `app/core/intake.py:228`, `app/core/intake.py:232`)
+
+- **VALOR mede uma lista fechada, não descobre leitores novos.** Tanto o teste principal quanto o teste “MONTADOR é UM SÓ” percorrem `LEITORES`. Um arquivo novo fora dessa lista não entra automaticamente. (`app/ponto/tests/test_s3_placar_exercicio.py:305`, `app/ponto/tests/test_s3_placar_exercicio.py:346`, `app/ponto/tests/test_s3_placar_exercicio.py:350`)
+
+- **O detector reutilizado tem uma cegueira sintática real:** não atravessa `BoolOp` no caminho de `getattr`; a forma `(getattr(p, 'minutos_extra_50', 0) or 0) / 60` existe na cópia. Isso demonstra uma limitação do detector, embora esteja no montador autorizado e não prove leitor indevido. (`app/ponto/tests/test_s3_placar_exercicio.py:205`, `app/ponto/services/espelho.py:113`, `app/ponto/services/espelho.py:114`, `app/ponto/tests/test_s3_placar_exercicio.py:58`)
+
+**2. O que já responde à mesma pergunta**
+
+Para **derivação própria de dinheiro**, já existem o detector, o universo e a cobrança de zero da S3. O contrato acerta ao propor transferi-los e manter uma implementação compartilhada; criar outro detector duplicaria essa pergunta. (`app/ponto/tests/test_s3_placar_exercicio.py:14`, `app/ponto/tests/test_s3_placar_exercicio.py:183`, `app/ponto/tests/test_s3_placar_exercicio.py:303`)
+
+Para **sítios de tela que respondem por conta própria**, já existem `PENDENTES['tela']`, `fora_de_autoridade('tela')` e sua publicação como `leitores_narnia`. Esse inventário deve ser reutilizado como registro da dívida; ele não equivale ao novo censo AST, pois conta declarações e verifica impressões textuais. (`app/core/juizes.py:656`, `app/core/juizes.py:690`, `app/core/juizes.py:1415`, `bin/placar_code.sh:484`, `bin/placar_code.sh:490`, `app/core/tests/test_contract_juiz_tela.py:34`)
+
+Há ainda uma imprecisão no cruzamento proposto: `_TT6` pergunta **“o colaborador entra na folha (e por que não)?”**, com autoridade `classificar_export`; “status e contagem” é o motivo de uma entrada específica do calendário. Não é o significado geral de `_TT6`. (`app/core/juizes.py:665`, `app/core/juizes.py:678`, `app/core/juizes.py:809`)
+
+**3. Quem define e quem consome os nomes**
+
+| Nome | Definição/escrita atual | Leituras atuais |
+|---|---|---|
+| `ROTULO_STATUS` | Dicionário em `app/colaboradores/services/calendario.py:44`. | Calendário: `app/colaboradores/services/calendario.py:901`; minha escala: `app/escala/views.py:36`, `app/escala/views.py:55`; selos: `app/ponto/tests/test_contract_espelho_sem_emoji.py:220`, `app/colaboradores/tests/test_calendario_um_juiz.py:70`. |
+| `deriva_dinheiro` | Função em `app/ponto/tests/test_s3_placar_exercicio.py:183`. | Critério b: `app/ponto/tests/test_s3_placar_exercicio.py:306`; casos sintéticos: `app/ponto/tests/test_s3_placar_exercicio.py:312`; montador: `app/ponto/tests/test_s3_placar_exercicio.py:346`, `app/ponto/tests/test_s3_placar_exercicio.py:350`. |
+| `LEITORES` | Tupla em `app/ponto/tests/test_s3_placar_exercicio.py:34`. | Critério a: `app/ponto/tests/test_s3_placar_exercicio.py:247`; critério b: `app/ponto/tests/test_s3_placar_exercicio.py:305`; segundo montador: `app/ponto/tests/test_s3_placar_exercicio.py:350`. |
+| `DINHEIRO` / `NAO_E_MOTOR` | `app/ponto/tests/test_s3_placar_exercicio.py:163` e `app/ponto/tests/test_s3_placar_exercicio.py:171`. | Via `getattr`: `app/ponto/tests/test_s3_placar_exercicio.py:203`; via atributo, somente `DINHEIRO`: `app/ponto/tests/test_s3_placar_exercicio.py:213`. |
+| `gerar_estado.py` / ESTADO | `gerar` incorpora os placares e escreve o destino em `bin/gerar_estado.py:346`, `bin/gerar_estado.py:349`. | Entrada CLI: `bin/gerar_estado.py:355`; chamada pelo relato: `bin/relato.sh:38`; ESTADO entra na publicação: `bin/relato.sh:102`, `bin/relato.sh:115`. |
+
+Mover `LEITORES` exige preservar também seus consumidores do critério **a** e do montador; a dependência não está restrita ao critério **b**. (`app/ponto/tests/test_s3_placar_exercicio.py:247`, `app/ponto/tests/test_s3_placar_exercicio.py:350`)
+
+**4. Carga no host e falhas no ESTADO**
+
+- **Importar os módulos atuais diretamente exige Django.** O selo importa `SimpleTestCase`; o calendário importa Django e modelos. A extração AST do vocabulário e a transferência completa do detector evitam essas dependências; o funcionamento da implementação futura é [nao verificado]. (`app/ponto/tests/test_s3_placar_exercicio.py:30`, `app/colaboradores/services/calendario.py:22`, `app/colaboradores/services/calendario.py:28`)
+
+- **Carregar por `spec_from_file_location` não resolve imports do projeto.** O gerador acrescenta `raiz/bin` ao caminho e carrega o placar por arquivo. O próprio placar registra o precedente de `ModuleNotFoundError` ao importar `core` nesse contexto. (`bin/gerar_estado.py:75`, `bin/gerar_estado.py:77`, `bin/gerar_estado.py:198`, `app/core/placar_estrutural.py:457`, `app/core/placar_estrutural.py:462`)
+
+- **Copiar o molde não garante “ESTADO nunca cai”.** `_placar_estrutural` protege carga e chamadas, mas acessa campos obrigatórios durante a formatação fora do `try`. Outros leitores também são importados e chamados sem proteção. O novo bloco precisa abranger importação, leitura e composição; se a geração falhar, o relato aborta o ciclo. (`bin/gerar_estado.py:74`, `bin/gerar_estado.py:86`, `bin/gerar_estado.py:101`, `bin/gerar_estado.py:215`, `bin/gerar_estado.py:260`, `bin/relato.sh:38`)
+
+- **A publicação existente depende de banco e rede.** Antes de gerar o ESTADO, `relato.sh` exige a extração de nomes, que consulta `Colaborador.objects` via Django/container; depois publica com `git push`. “Sem banco/rede” pode descrever o censo isolado, não essa cadeia. (`bin/relato.sh:32`, `bin/relato.sh:38`, `bin/relato_nomes.sh:11`, `bin/relato_nomes.sh:18`, `bin/relato_nomes.sh:22`, `bin/relato.sh:126`)
+
+O timer declara cinco minutos e o serviço aponta a árvore operacional; timer ativo, execução nessa árvore e duração inferior a dois segundos são [nao verificado]. (`bin/hasner-relato.timer:6`, `bin/hasner-relato.service:14`, `bin/hasner-relato.service:15`)
 
 ## 30/10 19:10 · sessao a64a4e6e6de1 · - · - · origem=Ronald (tmux)
 
@@ -503,29 +590,4 @@ O teste guarda uma lavra não vazia, executa `--min-plantoes 100 --lavrar` e exi
 
 Execução Django, RED/GREEN históricos, suíte completa e estado de produção: **[nao verificado]**. [nao verificado]
 
-## 30/10 18:44 · sessao 5dd8e4bbf7a0 · - · - · origem=Ronald (tmux)
-
-Há um achado procedente de **pré-requisito de transição**: a nova leitura aceita lavra antiga como completa, embora ela não contenha os novos campos.
-
-- A base grava `colabs_de_desvio`, `linhas_de_desvio`, `automaticos`, `propostas` e `esperado`, sem `itens`, `linhas`, `criterio` ou `linhas_medidas` (`../d80c98a5dba444e0bdab60764d90ee6a817ed828/app/ponto/management/commands/censo_fase_12x36.py:200`).
-- `ultimo_lavrado` aceita esse detalhe e só retorna `sem_medida=True` quando inexiste snapshot; não verifica seu formato (`app/escala/services/fase_12x36.py:99`).
-- C10 lê `itens` ausente como vazio; o gatilho `fase_invertida` também (`app/escala/services/cadastro_realidade.py:339`; `app/escala/services/propositor.py:491`).
-- Pauta e fila continuam lendo os IDs positivos; a API responde `sem_medida=False`, contador positivo e lista vazia (`app/escala/services/fase_12x36.py:116`; `app/chamados/services/fila_por_causa.py:174`; `app/api/views_mensageria.py:1675`).
-
-**Contraexemplo executado em memória:** usando AST das funções reais e um snapshot sintético no formato da base, com `colabs_de_desvio=[17]`, obtive C10 `{}` e API `{n: 1, sem_medida: False, vinculos: [], criterio: None}`. Não houve acesso a banco nem escrita em arquivo.
-
-Não encontrei exigência documentada de relavra antes da liberação; o mecanismo declarado continua diário às 07:38 (`app/config/crons.py:614`). Os registros do aval autorizam o novo detalhe, sem declarar sua preparação prévia ao pouso (`app/docs/PROMPTS.md:1686`; `app/docs/RELATO.md:5`). Existência desse estado em produção ou relavra já efetuada: **[nao verificado]**.
-
-Isso pede relavra garantida antes de liberar os novos leitores ou tratamento explícito do formato incompleto. Os testes atuais cobrem ausência total de lavra e lavra nova, sem caso de lavra antiga (`app/escala/tests/test_o261_v_fase_na_lista.py:75`; `:198`).
-
-## 30/10 18:44 · sessao 908d403c1dd5 · - · - · origem=Ronald (tmux)
-
-Mapa e achados enviados ao pai. Dois problemas reproduzidos com funções reais extraídas por AST e dependências simuladas em memória, sem banco nem escrita:
-
-1. A CLI continua escolhendo a primeira proposta por colaborador e aplicando sem a guarda de ambiguidade; duas propostas com a mesma assinatura resultaram na aplicação do ec1 (`app/escala/management/commands/propostas_de_escala.py:30`, `:50`; guarda em `app/escala/services/propositor.py:666`).
-
-2. A mediana do horário usa o intervalo min/max dos dias do vínculo, incluindo turnos pertencentes a outro vínculo quando a posse dos dias é descontínua. No contraexemplo, o horário de A mudou de `(480, 960)` para `(960, 0)` (`app/escala/services/propositor.py:526`, filtro em `:152`; autoridade das geradoras em `app/escala/alimentacao.py:237`).
-
-O delta acrescenta a rejeição de `--lavrar --min-plantoes 100` e a chamada adversarial no teste que compara o detalhe anterior; estaticamente a asserção detecta a volta da sobrescrita (`app/ponto/management/commands/censo_fase_12x36.py:74`; `app/escala/tests/test_o261_v_fase_na_lista.py:148`). Execução Django desse teste [nao verificado].
-
-_719 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_721 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
