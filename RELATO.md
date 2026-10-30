@@ -1,7 +1,12 @@
 # RELATO — esteira saas-hasner
 
+PAREI: ! CLEAR | espera Ronald -- o hook pede o clear por um DISPARO VELHO (64%, ciclo anterior): o /clear das 11:5x NAO gravou marco (`logs/sessao/ultimo_clear.json` ainda e o de 07:26 'instalacao'); medida viva 17,6%. NAO /clear agora: suite inteira da copia wt-veto-a2 @ 1c565c8f e duas leituras do Codex RODANDO -- o aviso delas retoma o pouso A. Linha de fila (instrumento): CLEAR-SEM-MARCO.
+
+ESPERANDO: suite inteira da copia wt-veto-a2-3010-1154 @ 1c565c8f | pid=3330139 | arquivo=/home/ronald/saas-hasner/logs/o261/veto_a2/suite1.log
+
 PAREI-RESOLVIDO: ! CLEAR (o /clear veio 11:5x) -- MODO PREPARA-CLEAR (contexto 64% >= 60%). Marco fechado: FIO-MORTO-DONO-NA-LISTA NO AR (2f503709). Nada em voo. Retomar pelo HANDOFF-SESSAO: proximo = VETO-NA-PORTA pouso A na copia wt-veto-a-3010-1003 com o aval VETO-EC-NONE-IMPRESSAO (11:0x); COL309-SETEMBRO (`!` 11:3x, competencia 09 exportada) e O121-A1 logo depois; depois DIA-DA-PERGUNTA-E-O-TURNO.
 
+> **VETO pouso A -- copia `wt-veto-a2-3010-1154` @ 1c565c8f**: 45 modulos de fixture migrados por helper unico `chamados/tests/_vinculo_do_dia.py::dar_vinculo` (AST, logo depois do `Colaborador.objects.create`); nenhum dos 45 tinha 'sem vinculo' como intencao -- os dois que 'afirmavam o antigo' sao de renascer e de cobranca pelo c2, e migram (criterio literal do aval). Recorte 342 OK rc 0 (`logs/o261/veto_a2/recorte1.log`). MEDIDO (Codex --sonda `logs/o261/veto_a2/sonda_resposta.txt`, ERROS=0): celulas sem vinculo de 20/09 em diante (inclui futuras) **3.197**; em competencia EXPORTADA **63** (emp2 09/2026: 52, emp3 09/2026: 11; 9 de ativos); abertas 3.134. Suite inteira + Codex volta final + leitura do caminho da relavratura em curso.
 > DESPACHO VETO-A-RETOMADA (30/10 11:5x): copia NOVA `/home/ronald/wt-veto-a2-3010-1154` (main d2c37edd + cherry-pick 61ae629c/730e19ff/0edc351c -> de8c75e8/b2b5e3d2/160c0ac5; zero arquivo em comum com os 7 commits do main); a copia velha `wt-veto-a-3010-1003` MORRE (base f0d319ba). Itens: triagem dos 46 modulos vermelhos + migracao das fixtures + inversao dos testes de intencao 'sem vinculo' -> opus (construir); medida de quantas das ~2,7k celulas sem vinculo caem em competencia EXPORTADA -> Codex --sonda; verificacao -> Codex volta final + opus.
 
 

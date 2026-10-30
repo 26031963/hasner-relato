@@ -1,7 +1,96 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 10:55** · publicado em **30/10/2026 10:58** (UTC-3)
+> Ultima resposta processada: **30/10/2026 12:03** · publicado em **30/10/2026 12:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 12:03 · sessao 77cd2fb619a1 · - · - · origem=Ronald (tmux)
+
+Migração das fixtures: **sem achado de intenção “sem vínculo/sem escala” mascarada** no censo dos usos de `dar_vinculo`; execução da bateria [nao verificado].
+
+- F4 preservou o caso explícito “sem escala”: `test_MORDE_procedencia_ignora_batida_retratada` cria colaborador sem escala e chama diretamente `procedencia_fina`; não passa pelo helper que adiciona vínculo. `app/chamados/tests/test_selo_f4_fatia4.py:131-139`, `:67-70`.
+- `TrancaSemCadastro` testa a natureza dos avisos de cadastro, não ausência de vínculo; o vínculo novo não elimina o cenário da tranca. `app/chamados/tests/test_tranca_sem_cadastro.py:3-12`, `:39-57`.
+- Os comentários “sem vínculo no fixture” ficaram desatualizados em `app/chamados/tests/test_reabrir_pergunta_a_premissa.py:57` e `app/chamados/tests/test_resposta_tardia.py:66`; os testes continuam explicitamente montando/verificando a premissa/lâmpada, em `:46-65` e `:63-77`, respectivamente.
+- O caso novo sem vínculo usa outro colaborador, não chama `dar_vinculo` e espera `(None, False)` da porta. `app/chamados/tests/test_o261_veto_na_porta.py:395-405`.
+
+**Lacuna de prova nos sítios migrados, preexistente ao diff fornecido:** dois testes prometem nascimento no nome, mas só exercitam construção de contexto: [nao verificado]
+
+1. `app/chamados/tests/test_emissor_nomeia_o_marco.py:88-94`: chama `_ctx_c2`, verifica data e ausência de marcos; não abre chamado.
+2. `app/chamados/tests/test_bug125_cobranca_cega.py:176-185`: simula falha da lavra e verifica o dicionário; não abre chamado.
+
+Contraexemplo concreto para ambos: `_ctx_c2` continua produzindo aquele contexto e o emissor/porta passa a recusar todo nascimento; as asserções permanecem satisfeitas. Não é regressão de vacuidade introduzida pela inserção de `dar_vinculo`, conforme o diff anexo [nao verificado quanto ao histórico além do anexo].
+
+## 30/10 12:03 · sessao b5596fdd5cf4 · - · - · origem=Ronald (tmux)
+
+**A relavratura alcança células de competência exportada ou trancada:** o lote seleciona apenas `empresa` e `data < hoje`, percorre todas as células passadas do colaborador e chama `julgar_colab`; não consulta `ExportacaoDominio` nem tranca nesse recorte. (`app/ponto/management/commands/processar_cartorio.py:49-65`)
+
+O julgamento normal incorpora `motivo_do_veto` na impressão e só pula por impressão igual, carimbo/veredito existentes e ausência de `forcar`; em seguida grava pelas portas `lavrar_veredito` e `carimbar`. Não há guarda por competência nesses trechos. (`app/ponto/services/cartorio.py:1006-1014`, `:1083-1097`, `:1406-1425`)
+
+A guarda concreta do escritor é a decisão administrativa: `veredito_via == 'admin'` preserva o veredito, mas permite atualizar a ata. `lavrar_veredito` e `carimbar` não consultam exportação ou tranca. (`app/ponto/portas/celula.py:647-729`)
+
+**Não confundir com regeneração do DNA:** `regenerar_celulas_vinculo` consulta `_competencias_exportadas`, salvo motivo explícito `apesar_da_lavra`; essa guarda pertence à regeneração, não à relavratura descrita acima. (`app/ponto/portas/celula.py:191-202`; `app/ponto/services/cartorio.py:719-728`)
+
+Há piso para **emissão automática de chamados**, não para gravar o julgamento: `PISO_EMISSAO = '2026-09'`; `_fora_do_piso` considera esse horizonte e `toque`, sem consultar tranca/exportação. (`app/ponto/services/cartorio.py:190`, `:232-246`, `:1319-1327`)
+
+**Cron configurado:** `processar_cartorio --apply`, diariamente às 06:27/06:29/06:31 para empresas 2/3/4, pela expansão de `por_empresa=True` e passo padrão 2. A janela é todo o passado com células existentes, sem piso. Instalação/execução efetiva em produção: [nao verificado]. (`app/config/crons.py:17-18`, `:29-33`, `:597`, `:1785-1794`; `app/ponto/management/commands/processar_cartorio.py:49-65`)
+
+Há também `vigia_de_hora --apply` a cada dez minutos, por empresa, cobrindo candidatas de hoje e certos turnos noturnos de ontem; usa o mesmo `julgar_celula` com teto dos marcos. (`app/config/crons.py:348-349`; `app/ponto/services/vigia_de_hora.py:108-130`)
+
+**Comando de relavratura por competência:** `celula_veredito_velho --mes M --ano A [--empresa N]`. Outros argumentos: `--json`, `--sem-recalculo`, `--aplicar`, `--antes`, `--so-recalculo`; recorta `janela_fechamento` até no máximo ontem. (`app/ponto/management/commands/celula_veredito_velho.py:37-54`, `:75-80`)
+
+Sem `--aplicar`, faz ensaio em transação, incluindo recálculo por padrão, e provoca rollback; `--sem-recalculo` evita esse recálculo. Com `--aplicar`, exige `--antes`, desliga obrigatoriamente o recálculo e chama `julgar_colab(..., apply_=True, forcar=True)`. Não há guarda de exportação/tranca antes dessa relavratura. (`app/ponto/management/commands/celula_veredito_velho.py:90-114`, `:133-159`)
+
+O snapshot `--antes` guarda `pk`, colaborador/data, `veredito`, `veredito_via`, `veredito_em`, `protestos`, `ata`, `julgada_em`, `impressao`; **não inclui** os demais campos que `carimbar` escreve (`ausencia`, `tem_entrada`, `tem_saida`, `insumos_em`), portanto é reversão parcial do estado da célula. (`app/ponto/management/commands/celula_veredito_velho.py:100-114`; `app/ponto/portas/celula.py:721-728`)
+
+**Exceção importante à premissa do impacto:** o ramo `adesao is None` (`nunca_bateu`) monta impressão **sem veto**, portanto a alteração isolada de `motivo_do_veto` não muda necessariamente a impressão de toda célula sem vínculo. A conclusão automática vale para o ramo normal que passa `veto=_veto_do_dia(data)`. (`app/ponto/services/cartorio.py:907`, `:941-943`, `:1083-1088`)
+
+O docstring de `calado()` ainda fala em célula trancada “imutável”, mas seu corpo somente liga o sinal de antirrecursão; não constitui guarda do sweep do cartório. (`app/ponto/services/cartorio.py:58-68`; `app/ponto/management/commands/processar_cartorio.py:49-65`)
+
+## 30/10 12:03 · sessao 2622be1dadf8 · - · - · origem=Ronald (tmux)
+
+Q4 — evidências da cópia, somente leitura:
+
+- O cartório chama `cel.lavrar_veredito(via='cartorio', …, save=False, ata=…)` e depois `carimbar(…, lavrados=_cv)`; portanto a persistência reúne campos da lavra e do carimbo (`app/ponto/services/cartorio.py:1408`, `:1424`; `app/ponto/portas/celula.py:726`).
+- A lavra pode escrever **`veredito`, `veredito_via`, `veredito_em`, `protestos`, `ata`**. Entrada idêntica retorna sem escrita; se o veredito é humano (`veredito_via='admin'`), cartório preserva a decisão e pode atualizar somente a ata (`app/ponto/portas/celula.py:669`, `:671`, `:687`, `:689`).
+- O carimbo escreve **`julgada_em`, `impressao`, `ausencia`, `tem_entrada`, `tem_saida`, `insumos_em`**, além dos campos retornados pela lavra; mesma impressão, mesmos insumos e nenhuma lavra nova não atualizam os relógios (`app/ponto/portas/celula.py:716`, `:721`, `:726`).
+- A relavratura não é regeneração: `dna`, `origem`, `regenerada_em`, `dna_anterior`, `editada_*` não pertencem à união dessas escritas (`app/ponto/services/cartorio.py:719`; implementação `app/ponto/portas/celula.py:695`, `:726`). O `dna_anterior` é histórico da **regeneração do vínculo**, não backup da ata/veredito (`app/escala/models.py:1682`, `:1694`).
+- A ata recebida preserva a chave `precedencia` já existente; demais chaves ausentes na nova ata não são preservadas genericamente (`app/ponto/portas/celula.py:94`, `:660`). O caminho unitário `julgar_celula` também escreve `ata.precedencia` após julgar; isso usa `carimbar_precedencia` (`app/ponto/services/cartorio.py:1563`; `app/ponto/portas/celula.py:732`).
+- Existe `LogAuditoria` com ação **`veredito_celula`**, objeto `CelulaDia`: antes/depois guardam **somente `veredito`, `via`, `protestos`**. Não guardam ata, impressão, ausência, indicadores de batida nem timestamps (`app/ponto/portas/celula.py:657`, `:698`). Logo esse registro permite conhecer a decisão anterior, mas **não é reversão completa da célula** (mesmas referências).
+- A trilha é **best-effort**: sua falha é registrada/engolida e não garante existência de linha de auditoria para toda alteração; existência efetiva de registros em produção **[nao verificado]** (`app/core/observ.py:94`, `:105`, `:133`).
+- A gravação do veredito/ata também emite **`EventoCelula`**, no mesmo `atomic` do save, quando a lavra inclui `veredito` ou `ata`; esse evento tem identificação da célula/colaborador/data e campos de processamento, **sem payload de antes/depois**, portanto não é backup (`app/ponto/portas/celula.py:623`, `:626`, `:634`; `app/escala/models.py:1800`).
+- Há precedente de snapshot manual de células: `bin/snapshot_o118_col221.py` coleta `trabalha`, `origem`, `julgada_em`, `dna`, `ata`, `impressao`, `escala_geradora_id` e chamados, limitado ao colaborador 221 desde 21/09/2026; a reversão descrita repõe ata/julgada_em/impressão, não oferece restauração automática genérica de todo cartório (`bin/snapshot_o118_col221.py:12`, `:15`, `:25`). Arquivo de snapshot realmente existente/executado **[nao verificado]**.
+- Os scripts nomeados `snapshot_relavratura_10_2026.py`/`restore_relavratura_10_2026.py` fotografam/restauram **FechamentoMensal e DiaPago motor**, não CelulaDia; não confundí-los com reversão da ata/impressão (`bin/snapshot_relavratura_10_2026.py:20`, `:28`, `:34`, `:57`; `bin/restore_relavratura_10_2026.py:69`, `:79`, `:85`).
+
+## 30/10 11:59 · sessao 46ece27c3e68 · O261-VETO-A2 · sonda · origem=Code
+
+Não executei a sonda: o script não foi localizado na cópia. Abaixo, transcrição integral do dado fornecido, sem validação em produção. [nao verificado] [nao verificado]
+
+```text
+sonda_leitura: sonda_sem_vinculo_exportada.py [926d4e5e0ed50956] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+HOJE=2026-10-30 INI=2026-09-20 CEL_TOTAL=39418
+SEMVINC|emp=1|comp=2026-10|aberta=21
+SEMVINC|emp=2|comp=2026-09|EXPORTADA=52
+SEMVINC|emp=2|comp=2026-10|aberta=1272
+SEMVINC|emp=2|comp=2026-11|aberta=894
+SEMVINC|emp=2|comp=2026-12|aberta=90
+SEMVINC|emp=2|comp=2027-01|aberta=22
+SEMVINC|emp=3|comp=2026-09|EXPORTADA=11
+SEMVINC|emp=3|comp=2026-10|aberta=206
+SEMVINC|emp=3|comp=2026-11|aberta=475
+SEMVINC|emp=3|comp=2026-12|aberta=110
+SEMVINC|emp=3|comp=2027-01|aberta=44
+SIT|ativo|EXPORTADA=9
+SIT|ativo|aberta=168
+SIT|desligado|EXPORTADA=54
+SIT|desligado|aberta=2966
+EXPORTADA_TOTAL=63
+ERROS=0
+FIM-DA-SONDA
+```
+
+Total de células sem vínculo: **3.197**, pela soma das linhas SEMVINC. [nao verificado]  
+Em competência EXPORTADA: **63** — empresa **2**, **2026-09**: **52**; empresa **3**, **2026-09**: **11**. [nao verificado]  
+**ERROS=0**, conforme o dado fornecido. [nao verificado]
 
 ## 30/10 10:55 · sessao f89de696d0e3 · FIO-MORTO-DONO-NA-LISTA · verificador · origem=Code
 
@@ -540,62 +629,4 @@ Achado de cobertura: `app/chamados/tests/test_o261_vigia_fio.py:606-616` não cr
 
 Os testes têm sinal positivo: universo exige `{self.emp.pk}` (`app/chamados/tests/test_o261_vigia_fio.py:611`); falha exige uma chamada e três dias preservados (`app/chamados/tests/test_o261_vigia_fio.py:592-598`). Execução: [não verificado].
 
-## 30/10 10:22 · sessao 77d199c1f9eb · - · - · origem=Ronald (tmux)
-
-SEM ACHADO.
-
-## 30/10 10:19 · sessao 11eb35b50725 · FIO-MORTO-DONO-NA-LISTA · verificador · origem=Code
-
-**Não aprovaria o diff ainda:** há divergências de universo e contrato entre o censo e a tela, além de repetição da lista quando ela falha (`app/chamados/services/vigia_fio.py:253`; `app/escala/views.py:490`; `app/escala/services/cadastro_realidade.py:588`).
-
-1. **P1 — A frota pode retirar do alarme um dia invisível na tela.** No cron, `empresas=None` chega à lista, significando todas; a tela passa apenas `empresas_visiveis()`, que exclui inativas e empresas de diagnóstico. Portanto, uma C9 dessas empresas pode virar `fio_do_admin` sem estar na lista apresentada ao admin. Ocorrência em produção: **[nao verificado]**. (`app/chamados/management/commands/vigiar_fio_morto.py:148`; `app/chamados/services/vigia_fio.py:253`; `app/escala/services/cadastro_realidade.py:504`; `app/escala/views.py:490`; `app/colaboradores/queries.py:85`.)
-
-2. **P2 — `--empresa` passa objetos onde a lista compara IDs.** O comando monta uma lista de objetos `Empresa`; o vigia a repassa diretamente. A filtragem final da lista compara `empresa_id` inteiro com esses objetos e descarta as linhas. Assim, um dia transferível na frota pode continuar morto no recorte. O próprio helper dos testes passa `[self.emp]`, mas o mock da lista esconde essa incompatibilidade. (`app/chamados/management/commands/vigiar_fio_morto.py:152`; `app/chamados/services/vigia_fio.py:253`; `app/escala/services/cadastro_realidade.py:484`; `app/escala/services/cadastro_realidade.py:588`; `app/chamados/tests/test_o261_vigia_fio.py:112`; `app/chamados/tests/test_o261_vigia_fio.py:560`.)
-
-3. **P2 — Falha da lista multiplica trabalho por dia candidato.** O cache só recebe o resultado depois do sucesso; uma exceção deixa `_na_lista` vazio e o próximo dia executa a lista inteira novamente. Na contraprova sintética em memória, três candidatos produziram três chamadas, três registros e `sem_resposta=3`. O teste novo usa uma única célula, portanto não detecta essa repetição. (`app/chamados/services/vigia_fio.py:251`; `app/chamados/services/vigia_fio.py:263`; `app/chamados/tests/test_o261_vigia_fio.py:584`.)
-
-4. **P2 — O relógio continua fora da borda.** O comando captura `hoje`, chama o censo sem `agora`, o censo consulta `timezone.now()` e o carimbo consulta outro instante. Uma rodada atravessando meia-noite pode combinar referências temporais diferentes. O helper fixa apenas `hoje`, embora declare não ler relógio real. (`app/chamados/management/commands/vigiar_fio_morto.py:158`; `app/chamados/management/commands/vigiar_fio_morto.py:195`; `app/chamados/services/vigia_fio.py:182`; `app/chamados/tests/test_o261_vigia_fio.py:104`.)
-
-5. **P2 — O ESTADO não mostra o passivo transferido.** O carimbo preserva o censo inteiro, mas `fio_estado.ler()` descarta `fio_do_admin`; sua frase publica morto/cobrando/futuro. Pode aparecer “fio morto: 0” sem informar quantos dias passaram ao admin. Não há quebra de parsing demonstrada; há perda de informação na apresentação. (`app/chamados/management/commands/vigiar_fio_morto.py:204`; `bin/fio_estado.py:82`; `bin/fio_estado.py:101`; `bin/gerar_estado.py:261`.)
-
-Sobre **“o dia está na lista”**, o helper não verifica o que a tela efetivamente imprime: aceita qualquer código com `data` e aplica `str(...)[:10]`; o HTML imprime `detalhe` ou ocorrências. Uma assinatura sintética A2 com data oculta é aceita; `25/10/2026` não é normalizado para a chave ISO usada pelo vigia. Entretanto, o produtor atual da C9 escreve ISO e repete a data no detalhe; outro produtor real com esse defeito é **[nao verificado]**. (`app/escala/services/cadastro_realidade.py:667`; `app/templates/escala/cadastro_x_realidade.html:28`; `app/chamados/services/vigia_fio.py:254`; `app/ponto/services/teto_na_lista.py:79`; `app/escala/services/cadastro_realidade.py:314`.)
-
-No sentido inverso, C4/C5 nomeiam até três dias no detalhe, sem campo `data`, e são ignoradas pelo helper. A implementação reconhece atualmente os dias estruturados da C9; elegibilidade de casos C4/C5 pelo dono em produção é **[nao verificado]**. A C9 não recebe novo recorte por `hoje`: lê a última lavra disponível, como a tela. (`app/escala/services/cadastro_realidade.py:142`; `app/escala/services/cadastro_realidade.py:373`; `app/escala/services/cadastro_realidade.py:667`; `app/escala/services/cadastro_realidade.py:306`; `app/ponto/services/teto_na_lista.py:120`.)
-
-O **dono do novo ramo permanece delegado**, sem segunda derivação identificada: `InsumosDoDono.dono()` termina no juiz existente, e somente BATIDA/CADASTRO entram no contador. A ausência posterior na lista devolve o candidato ao caminho de `fio_morto`. (`app/chamados/services/vigia_fio.py:254`; `app/chamados/services/vigia_fio.py:262`; `app/chamados/services/vigia_fio.py:324`; `app/ponto/management/commands/e6_oraculo.py:146`.)
-
-O **custo novo inclui cálculo**: a lista completa executa seus leitores; por colaborador/janela, `InsumosDoDono` lê batidas, monta o oráculo e carrega turnos/cadastro. Se precisar de CXR, pede o espelho, que pode executar o motor, inclusive num intervalo até `hoje`. O cache é local à rodada; `limite` limita amostras de IDs. O cron tem teto de 900 segundos, mas a anotação de 0,9 segundo é anterior à mudança. Custo efetivo atual: **[nao verificado]**. (`app/escala/services/cadastro_realidade.py:513`; `app/chamados/services/vigia_fio.py:242`; `app/ponto/management/commands/e6_oraculo.py:118`; `app/ponto/management/commands/e6_oraculo.py:136`; `app/ponto/services/espelho.py:1231`; `app/ponto/services/espelho.py:1183`; `app/config/crons.py:1650`.)
-
-A exceção externa **mantém o dia no alarme**, mas falhas internas da lista, inclusive C9, retornam lista parcial sem incrementar `fio_do_admin_sem_resposta`. Os testes substituem a lista e usam um `_Ins` que ignora janela, `hoje` e `agora`; a propriedade de soma inclui a chave nova, porém não constrói explicitamente um caso positivo nela. Isso deixa sem cobertura justamente universo, argumentos, custo e falha parcial. (`app/chamados/services/vigia_fio.py:263`; `app/escala/services/cadastro_realidade.py:561`; `app/chamados/tests/test_o261_vigia_fio.py:553`; `app/chamados/tests/test_o261_vigia_fio.py:560`; `app/chamados/tests/test_o261_vigia_fio.py:628`.)
-
-Os demais leitores examinados não demonstram quebra pela chave: alarmes usam campos existentes; `materializar_passivo_validado` incorpora contadores dinamicamente. `fora_da_folha` não lê o censo e, nas mesmas entradas, o dia transferido continua tendo chamado vivo: fica como `chamado`, grupo C, com orientação genérica de resolver o chamado. (`app/chamados/management/commands/vigiar_fio_morto.py:80`; `app/chamados/management/commands/materializar_passivo_validado.py:208`; `app/chamados/services/vigia_fio.py:187`; `app/folha/fora_da_folha.py:53`; `app/folha/fora_da_folha.py:71`; `app/folha/fora_da_folha.py:41`.)
-
-Execução da suíte, RED histórico, impacto nominal em produção e identidade Git `f0d319ba..HEAD`: **[nao verificado]**.
-
-## 30/10 10:17 · sessao 34d0a9b6d129 · - · - · origem=Ronald (tmux)
-
-Achados da lista/universo:
-
-1. **P1 — Frota pode suprimir dia que a tela não mostra.** `censo()` com `empresas=None` chama `lista(..., empresas=None)`, cuja definição admite todas; a tela sempre usa IDs de `empresas_visiveis()`, que exclui empresas inativas e CNPJ de diagnóstico. Portanto o mesmo serviço é usado, mas com universos diferentes: uma C9 dessas empresas pode gerar `fio_do_admin` sem aparecer na tela. Existência desses casos em produção: **[nao verificado]**. Fontes: `app/chamados/services/vigia_fio.py:253`, `app/escala/services/cadastro_realidade.py:502-504`, `app/escala/services/cadastro_realidade.py:588-589`, `app/escala/views.py:490`, `app/colaboradores/queries.py:78-87`.
-
-2. **P1/P2 — `--empresa` quebra a equivalência com a frota.** O comando passa lista de objetos `Empresa`; o novo caminho repassa essa lista para `lista()`, cuja filtragem final compara o inteiro `v['empresa_id']` aos objetos. Toda linha desse recorte é descartada, de modo que `fio_do_admin` fica zero no recorte mesmo quando o mesmo dia poderia sair na frota. Fontes: `app/chamados/management/commands/vigiar_fio_morto.py:148-159`, `app/chamados/services/vigia_fio.py:253`, `app/escala/services/cadastro_realidade.py:484`, `app/escala/services/cadastro_realidade.py:588-589`.
-
-3. **Contrato de dia mais amplo que o da tela.** `dias_na_lista()` aceita qualquer código com `data` e só corta `str(data)[:10]`; HTML e PDF imprimem `detalhe`/`ocorrencias`, não `data`. Uma assinatura que tenha `data` sem nomear o dia no detalhe pode tirar um dia do alarme que a tela não mostra como dia. Isso é demonstrável pelo contrato do helper, porém produtor atual desse formato fora da C9: **[nao verificado]**. A C9 atual é consistente: sua lavra escreve ISO e seu detalhe repete a data. Fontes: `app/escala/services/cadastro_realidade.py:663-668`, `app/templates/escala/cadastro_x_realidade.html:28`, `app/escala/services/cadastro_realidade.py:709-711`, `app/ponto/services/teto_na_lista.py:79`, `app/escala/services/cadastro_realidade.py:312-317`.
-
-4. **Sentido oposto: dias nomeados em C4/C5 não são reconhecidos.** As duas assinaturas mostram até três datas em `detalhe`, sem campo `data`; o helper ignora todas. Assim, hoje ele reconhece efetivamente apenas dias C9, não todos os dias nominalmente apresentados na lista. Caso concreto elegível BATIDA/CADASTRO em produção: **[nao verificado]**. Fontes: `app/escala/services/cadastro_realidade.py:142-143`, `app/escala/services/cadastro_realidade.py:373-376`, `app/escala/services/cadastro_realidade.py:667-668`.
-
-5. **A lista não aplica nova janela à C9.** Ela lê `ultimo_lavrado()` sem `hoje`, sem recortar os itens e sem verificar frescor; a janela de três competências existe no produtor da lavra, não no leitor. Isso é a mesma política da tela, mas chamar `lista(hoje=...)` não garante C9 reconstruída naquele `hoje`. Fontes: `app/escala/services/cadastro_realidade.py:306-318`, `app/ponto/services/teto_na_lista.py:25-36`, `app/ponto/services/teto_na_lista.py:120-130`.
-
-6. **Relógio fora da borda também dentro da lista.** `_jornada_que_mente()` lê `date.today()` e usa competência com 21 fixo; `_afastado_sem_registro(..., hoje)` chama `afastados_hoje()` sem repassar `dia`, que lê `timezone.localdate()`. Portanto repassar `hoje` a `lista()` não fixa toda sua leitura temporal. Esses ramos não produzem `data` e por isso atualmente não alimentam `dias_na_lista`; são custo/inconsistência temporal da chamada completa. Fontes: `app/escala/services/cadastro_realidade.py:186-189`, `app/escala/services/cadastro_realidade.py:350`, `app/colaboradores/services/situacao_exibida.py:37-46`, `app/escala/services/cadastro_realidade.py:667-668`.
-
-7. **Dono permanece delegado.** O novo caminho chama `InsumosDoDono(...).dono(data)`; esse método chama `dono_da_divergencia`, com o motor apenas quando necessário. Não identifiquei juiz paralelo de dono nesse trecho. Fontes: `app/chamados/services/vigia_fio.py:256-262`, `app/ponto/management/commands/e6_oraculo.py:136-155`.
-
-O hash Git da cópia não foi validado: o diretório não contém repositório Git acessível; comparação histórica `f0d319ba..HEAD`: **[nao verificado]**.
-
-## 30/10 10:17 · sessao ab8241ccf0ab · - · - · origem=Ronald (tmux)
-
-Confirmo e retiro o achado “SEM FIO/D”: todo dia transferido tem chamado vivo no universo do censo; a folha lê o mesmo `VIVOS` e retorna `chamado`, grupo C (`app/chamados/services/vigia_fio.py:187`, `app/chamados/services/vigia_fio.py:229`, `app/folha/fora_da_folha.py:53`, `app/folha/fora_da_folha.py:71`, `app/folha/fora_da_folha.py:83`).
-
-A diferença restante é de apresentação: a folha recomenda “resolver o chamado N”, sem apontar Cadastro x Realidade; isso não comprova quebra e merece apenas observação (`app/folha/fora_da_folha.py:41`, `app/folha/fora_da_folha.py:204`, `app/folha/fora_da_folha.py:209`).
-
-_454 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_458 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
