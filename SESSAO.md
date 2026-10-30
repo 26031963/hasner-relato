@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 09:23:45.** Transcript: `c07bd622-c518-4ee0-9641-ce667785cb73.jsonl` (4.2 MB). Acoes na janela: **179**.
+**Medido em 30/10/2026 09:29:09.** Transcript: `c07bd622-c518-4ee0-9641-ce667785cb73.jsonl` (4.3 MB). Acoes na janela: **180**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:27:58 | Bash | Keep waiting for suite verdict | `cd /home/ronald/saas-hasner && for i in $(seq 1 38); do grep -q "^rc=" logs/o261n/suite_80df1b44.log && break; /usr/bin/sleep 15; done; grep -E "^(OK\|FAILED)($\| \()\|^Ran \|^rc=" logs/o261n/suite_80df1b44.log \| tail -3; grep -E "^(FAIL\|ERROR):" logs/o261n/suite_80df1b44.log \| head` |
 | 09:18:23 | Bash | Wait for NOTURNO full suite verdict | `cd /home/ronald/saas-hasner && for i in $(seq 1 38); do grep -q "^rc=" logs/o261n/suite_80df1b44.log && break; /usr/bin/sleep 15; done; grep -E "^(OK\|FAILED)($\| \()\|^Ran \|^rc=" logs/o261n/suite_80df1b44.log \| tail -3; grep -E "^(FAIL\|ERROR):" logs/o261n/suite_80df1b44.log \| head` |
 | 09:18:18 | Bash | Resize VETO lotes in RELATO/BACKLOG; check suite | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read(); i=s.index('\n> ') top=''' > **VETO-CONTAGEM** (aval 09:2x; Codex `logs/o261/codex_veto_contagem.txt`): dos 30 caminhos de nascimento/reabertura do censo, **29 passam pelas portas** (`ChamadoColaborador.abrir` `models.py:730`, `criar` `:834`, `_gravar_estado` `:231`) e **1 escreve por fora** (reverso da migration `0038_a3_registrado_backfill.p ...` |
 | 09:18:01 | Bash | Read VETO count totals | `cd /home/ronald/saas-hasner && grep -n -i "copia de veto\\|escritor a migrar\\|totais\\|Total" logs/o261/codex_veto_contagem.txt \| cut -c1-400 \| tail -12` |
