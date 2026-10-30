@@ -1,6 +1,7 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: codex_pergunta.sh | pid=1374756
+ESPERANDO: trava_teste.sh | pid=1796867
+> **VETO-A-ESCOPO-CADASTRO aplicado (copia @ 3b68a95b)**: o veto do dia mora DENTRO de `reabrir()` (`recusa_da_reabertura` 1a guarda, so encerrado, so sem `humano`); `humano=True` so nos 3 atos humanos nomeados, selo AST + MORDE. Trilha do veto: 'enquanto nada muda' medido (Codex delta item 5). RED `red_reabrir.log` 2F; GREEN 22 OK. Codex delta (`codex_delta.txt`): item 1 (apelido/getattr escapam do selo) MOOT pelo desenho novo; acoes_chamado `transicionar` resolvido->em_analise = ato humano fora do `reabrir` (fila, nao automatico); `acao_reabrir_disputa_admin` ignora o retorno de reabrir (pre-existente, fila); item 6 (vigia no placar) segue fila de instrumento (L-105). Suite inteira @3b68a95b em curso.
 > (suite inteira da copia @ 673ecaf7: Ran 12.779, OK, rc 0 -- `logs/o261/veto_a2/suite2.log`. O ESPERANDO acima e a volta DELTA do Codex; em paralelo, agente sonnet mede no sombra o processar_cartorio velho x novo -- celulas de competencia EXPORTADA que mudam de veredito)
 
 > clear nao dado, seguiu (30/10 12:3x): o /clear ja tinha vindo 11:5x; o disparo era do ciclo anterior (linha CLEAR-SEM-MARCO).

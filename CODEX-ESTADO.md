@@ -1,7 +1,55 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 12:39** · publicado em **30/10/2026 12:40** (UTC-3)
+> Ultima resposta processada: **30/10/2026 12:41** · publicado em **30/10/2026 12:45** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 12:41 · sessao b5030ad3bef7 · O261-VETO-A2 · verificador · origem=Code
+
+1. **Não: o selo não cobre toda reabertura.** Ele reconhece apenas chamadas com a forma `.reabrir(...)`, registra a função e elimina repetições. Acrescentar outra reabertura dentro de função já classificada também passa sem alterar o inventário. (`app/chamados/tests/test_o261_veto_na_porta.py:251`, `:256`, `:275`, `:313`)
+
+   Mutante plausível que escapa:
+
+   ```python
+   def automatico(ch):
+       ressuscitar = ch.reabrir
+       ressuscitar()
+   ```
+
+   A chamada usa `ast.Name`, enquanto o detector exige `ast.Attribute`; `getattr(ch, 'reabrir')()` também escapa. (`app/chamados/tests/test_o261_veto_na_porta.py:256`)
+
+   **Existe caminho real omitido:** a resposta livre aceita `novo_status` e chama `transicionar`; o motor permite `resolvido → em_analise`, chegando a `_gravar_estado` sem passar por `.reabrir`. É uma reabertura humana que falta no censo anunciado como completo. (`app/chamados/services/acoes_chamado.py:287`, `:313`, `:315`; `app/chamados/catalogo/motor.py:102`; `app/chamados/models.py:183`, `:260`)
+
+   Existe ainda chamada indireta por alias: `fechamento.reabrir_periodo` chama `_reabrir_fila`, que reabre chamados internamente. O selo classifica o destino, sem verificar novos chamadores dele. (`app/ponto/services/fechamento.py:1415`; `app/chamados/services/competencia_trancada.py:258`)
+
+2. **As classes precisam destas ressalvas:**
+
+   | Sítio | Conferência |
+   |---|---|
+   | `_renascer_por_premissa_viva` | **sem achado**: consulta o veto antes de reabrir. (`app/chamados/models.py:780`, `:784`) |
+   | `desarquivar_chamado` | **sem achado**: ação da tela com permissão e tratamento da recusa. (`app/chamados/views_arquivar.py:51`, `:70`) |
+   | `competencia_trancada.reabrir` | **Humano na cadeia atual**: POST, permissão e motivo → `reabrir_periodo` → serviço. A função isolada aceita `autor=None` e assume sistema; a classe não garante a origem de futuros chamadores. (`app/ponto/views.py:1523`, `:1525`, `:1536`, `:1544`; `app/ponto/services/fechamento.py:1415`; `app/chamados/services/competencia_trancada.py:239`) |
+   | `acao_reabrir_disputa_admin` | Humano procede: exige administrador, motivo e justificativa. **Há falha no resultado**, descrita abaixo. (`app/chamados/services/acoes_disputa.py:242`, `:245`, `:250`) |
+   | `ponto.views.reabrir_colaborador` | **sem achado**: o objeto reaberto é `FechamentoMensal`. (`app/ponto/views.py:1439`, `:1453`; `app/ponto/services/fechamento.py:1317`) |
+   | `sincronizar_adesao` | Automatismo, mas reabre `sem_previsao_escala`, fora dos cinco módulos vetados. (`app/chamados/services/adesao.py:74`, `:92`; `app/ponto/services/furos_vetados.py:79`) |
+   | `detectar_ausencias.handle` | Esse sítio reabre `ancora_limbo`, também fora do universo. (`app/ponto/management/commands/detectar_ausencias.py:271`, `:301`; `app/ponto/services/furos_vetados.py:79`) |
+   | `resolver_perguntas_por_chamado_resolvido` | **sem achado na classe**: reabertura direta provocada pelo processamento da resposta. (`app/chamados/services/disputa_emissao.py:1598`, `:1606`) |
+   | `reconciliar_grade._emitir_furo` | **sem achado na classe**: pode reabrir diretamente o encerrado devolvido por `abrir`. (`app/ponto/management/commands/reconciliar_grade.py:499`, `:522`) |
+   | `reabrir_orfas_enterradas.handle` | Lote com dry padrão e `--apply`; a classificação não demonstra execução autônoma por cron. (`app/chamados/management/commands/reabrir_orfas_enterradas.py:48`, `:157`, `:161`; `app/config/crons.py:743`) |
+   | `reabrir_chamados_ausencia_aberta.handle` | Também é lote dry/apply e reabre `ausencia_colab`, fora dos cinco módulos. (`app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:19`, `:29`, `:49`; `app/ponto/services/furos_vetados.py:79`) |
+
+   **Falha em `acao_reabrir_disputa_admin`:** abre a disputa, cria pergunta, ignora o retorno de `ch.reabrir()` e anuncia sucesso. Contraexemplo: pai encerrado pelo admin, com dia identificado e sem fato novo; `reabrir()` retorna `False`, deixando disputa aberta com pai encerrado. (`app/chamados/services/acoes_disputa.py:256`, `:259`, `:265`, `:295`; `app/chamados/models.py:1075`, `:1080`, `:1123`, `:1128`) Ocorrência em produção: `[nao verificado]`.
+
+3. **sem achado de quebra de leitor/teste pela chave `via`.** O teste que exige uma linha repete apenas `abrir`, mantendo a mesma chave. Os contadores de recusa por célula absolvida usam outro método, cuja chave permanece intacta. (`app/chamados/tests/test_o261_veto_na_porta.py:430`, `:439`; `app/chamados/models.py:942`; `app/ponto/tests/test_o_outbox_celula.py:348`, `:544`)
+
+   A cardinalidade muda intencionalmente: `abrir` e `criar` recusados para o mesmo objeto/módulo/dia/veto podem produzir duas linhas. A auditoria geral conta essas linhas; não exige unicidade por veto. (`app/chamados/models.py:733`, `:842`, `:923`; `app/core/views.py:705`, `:727`) Resultado da suíte: `[nao verificado]`.
+
+4. **Eu retiraria dois itens da FILA para fechar o contrato declarado de A:**
+
+   - **Item 5 — VETO-TRILHA-CICLO.** O método promete deduplicação “enquanto nada muda”, mas consulta todo o histórico. Contraexemplo: `criar` recusado → correção permite `criar` → mesmo veto retorna → novo `criar` recusado sem nova trilha. A primeira linha histórica suprime o novo ciclo. A chave `via` não cura isso. (`app/chamados/models.py:835`, `:840`, `:910`, `:923`, `:926`)
+
+   - **Item 6 — VETO-VIGIA-NO-PLACAR**, para aceitar A com seu vigia operacional. Contraexemplo: chamado vivo em dia vetado, com célula `cobrado`. O vigia novo encontra esse chamado; o contador ligado ao placar consulta somente células `furo` e pode mostrar zero. Assim, a exceção admitida pelo Strangler pode ficar invisível no placar. (`app/ponto/services/furos_vetados.py:61`, `:95`, `:106`; `bin/placar_code.sh:209`) Existência desse estado em produção: `[nao verificado]`.
+
+   **Item 9 continua pendente de pouso, embora esteja como MEDINDO.** O cron declara `--apply`; o comando percorre células passadas sem filtro de exportação; mudança no veto altera a impressão e pode chegar à lavra. Contraexemplo: célula exportada com impressão antiga, cujo veto agora muda, é rejulgada automaticamente. (`app/config/crons.py:597`; `app/ponto/management/commands/processar_cartorio.py:49`, `:61`; `app/ponto/services/cartorio.py:329`, `:1083`, `:1092`, `:1409`) Quantidade afetada e resultado da medida anunciada: `[nao verificado]`.
 
 ## 30/10 12:39 · sessao 7a382b3d18df · - · - · origem=Ronald (tmux)
 
@@ -589,27 +637,4 @@ Mapa de escritores/leitores:
 
 **Limite dos testes novos:** a matriz exercita BATIDA/CADASTRO/ESTRUTURA e presença/ausência, mas substitui tanto `lista()` como `InsumosDoDono` em `app/chamados/tests/test_o261_vigia_fio.py:541-561`. Ela prova a costura em `app/chamados/tests/test_o261_vigia_fio.py:564-580`; não verifica integração entre snapshot C9, dono exibido e dono consultado no ato. Os testes de erro substituem a função inteira `lista()`, em `app/chamados/tests/test_o261_vigia_fio.py:582-598`; não exercitam falhas internas C9 que a lista captura e registra em `app/escala/services/cadastro_realidade.py:562-567`. Execução de testes/RED/GREEN [não verificado].
 
-## 30/10 10:34 · sessao 711acf904f1b · - · - · origem=Ronald (tmux)
-
-Achado bloqueador: o diff põe `InsumosDoDono` dentro de `censo`, que recebe `agora` e ainda consulta dois relógios sem argumento. O selo existente inclui esse alvo, percorre funções descendentes e proíbe qualquer leitura própria quando existe parâmetro `agora`; portanto o teste `test_um_relogio_por_ato_em_quem_chama_o_leitor` fica vermelho (`app/chamados/services/vigia_fio.py:168`, `:181`, `:182`, `:274`; `app/escala/tests/test_selo_grade_pede_o_instante.py:27`, `:109`, `:114`, `:117`, `:154`). Reproduzido usando exclusivamente o AST real do selo em memória, com `python3 -B`: `[('chamados/services/vigia_fio.py', 'censo', [181, 182])]`.
-
-O algoritmo de dono L-099 é `dono_da_divergencia`: cadastro incompleto → CADASTRO; aberto real ou paridade ímpar → BATIDA; presença no cadastro do motor → CADASTRO; resíduo → ESTRUTURA (`app/ponto/management/commands/e6_oraculo.py:90`). `InsumosDoDono.dono` monta insumos e chama esse mesmo algoritmo, sem clonar suas decisões (`app/ponto/management/commands/e6_oraculo.py:146`). A autoridade é nomeada na lei L-099 (`CLAUDE.md:311`); não encontrei sua entrada em `core/juizes.py` ou `JUIZES.md` [não verificado como prova de ausência].
-
-Mapa de escritores/leitores de dono:
-
-- `InsumosDoDono` recebe colaborador, competência, `hoje` e `agora`; carrega batidas na inicialização, turnos sob demanda e resultado do motor quando necessário (`app/ponto/management/commands/e6_oraculo.py:118`, `:124`, `:130`, `:136`).
-- E6 calcula o dono para seus contadores/CSV (`app/ponto/management/commands/e6_oraculo.py:288`, `:338`, `:339`, `:410`).
-- Pautas calculam pelo mesmo carregador e gravam `it['dono']`; o serviço usa esse campo para escolher destinatários, texto e contagens (`app/ponto/management/commands/pautas_discordantes.py:82`, `:104`; `app/ponto/services/pautas_dos_discordantes.py:135`, `:139`, `:175`, `:183`).
-- C9 calcula o dono no item e persiste a lavra em `MetricaSnapshot`; a lista lê a lavra e usa o dono preservado para coluna e ação (`app/ponto/services/teto_na_lista.py:72`, `:86`, `:113`, `:120`; `app/escala/services/cadastro_realidade.py:595`, `:598`, `:599`).
-- O novo vigia calcula novamente no instante do censo e testa BATIDA/CADASTRO; não lê o dono C9 preservado (`app/chamados/services/vigia_fio.py:274`, `:275`). São duas observações do mesmo algoritmo, com dados potencialmente diferentes; isso não demonstra um juiz duplicado (`app/ponto/services/teto_na_lista.py:86`; `app/chamados/services/vigia_fio.py:275`).
-- C9 com dono ESTRUTURA oferece ação sem URL; sem dono lavrado também não oferece porta de correção (`app/escala/services/cadastro_realidade.py:457`, `:459`). O vigia pode reconhecer o mesmo dia por `data` e recalcular outro dono, pois sua decisão não verifica ação/URL nem dono preservado (`app/chamados/services/vigia_fio.py:259`, `:267`, `:275`).
-
-Relógios fora da borda, preexistentes mas alcançados pela rodada:
-
-- Antes de `_fio_do_admin`, o censo chama a porta do calendário sem repassar `hoje/agora`; essa porta monta contexto, cujo `hoje` vem de outra leitura e cujo prazo de retratação lê outro `now` (`app/chamados/services/vigia_fio.py:307`; `app/colaboradores/services/calendario.py:205`, `:249`, `:333`).
-- `lista(hoje=hoje)` chama C2 sem repassar a referência; C2 usa `date.today()` e corte literal 21 (`app/escala/services/cadastro_realidade.py:518`, `:186`, `:187`). Esse caminho já existia; o diff passa a acioná-lo no censo (`app/chamados/services/vigia_fio.py:259`).
-- O corte literal ignora o corte cadastrado que `janela_fechamento`/`janela_atual` consultam (`app/ponto/janelas.py:36`, `:54`, `:60`). É duplicação preexistente de escolha da janela, não clone de `dono_da_divergencia` (`app/escala/services/cadastro_realidade.py:187`).
-
-Custo: a lista completa roda uma vez, mas percorre C2 mesmo quando somente uma célula morta chegou ao ramo; C2 consulta vínculos ativos e itera células da competência (`app/chamados/services/vigia_fio.py:250`, `:259`; `app/escala/services/cadastro_realidade.py:518`, `:190`, `:195`). O cache novo limita o carregador a colaborador/competência, mas cada `dono(data)` ainda chama cadastro por dia; o carregador de cadastro consulta vínculo e, sem vínculo, mais célula/demissão (`app/chamados/services/vigia_fio.py:272`; `app/ponto/management/commands/e6_oraculo.py:149`; `app/ponto/supra_juiz.py:147`, `:151`, `:152`). Tempo, quantidade total de queries e impacto real em produção: [não verificado].
-
-_466 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_467 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
