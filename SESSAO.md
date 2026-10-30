@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 03:25:50.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (6.7 MB). Acoes na janela: **281**.
+**Medido em 30/10/2026 03:31:06.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (6.8 MB). Acoes na janela: **286**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:29:41 | Bash | Record post-cure remeasure in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('> (C) CONSTRUIDA')) L.insert(i+1,'> (C) REMEDIDA COM A CURA (sombra, `SOMBRA_ARVORE`=copia df863705, sonnet, conferida na saida `logs/o261/sonda_c_saidas_cura.out`; ROLLBACK True, ERROS=0): chamados CRIADOS 0 e RENASCIDOS 0 nas duas competencias; vi ...` |
+| 03:29:30 | Bash | Reconfer post-cure remeasure output | `cd /home/ronald/saas-hasner && grep -E "ROLLBACK\|ERROS\|TOTAL\|ABERTA:\|EXPORTADA:\|criad\|renasc\|destino" logs/o261/sonda_c_saidas_cura.out \| head -14 \| cut -c1-200` |
+| 03:26:08 | Bash | Record (C) build state and new fila line | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') if L[2].startswith('ESPERANDO:'): del L[2] i=next(k for k,l in enumerate(L) if l.startswith('> ESPERADO POR VETO')) L[i+1:i+1]=[ '> (C) CONSTRUIDA em copia wt-o261c3-3010-0232 @ df863705 (so `chamados/reconciliador.py` + teste novo): RED `app/logs/o261/red_c_9ec8cb28.log` FAILED 6/10 rc1 + `red_c_2 ...` |
+| 03:25:56 | Agent | Remeasure (C) per veto in sombra | `Medida na SOMBRA, projeto /home/ronald/saas-hasner. Você só mede: não edita `app/` de nenhuma árvore, não commita e não toca prod. BASE. A sonda `logs/sombra/sonda_c_saidas.py` (saída anterior em `logs/o261/sonda_c_saidas.out`) roda dentro de atomic+raise: - simula o passivo (B); - monta U, as perguntas vivas órfãs; - chama `reatar_pergunta_orfa` com wrappers nas funções reais; - classifica a saíd ...` |
+| 03:25:45 | Agent | Opus final verify O261 (C) | `Obra O261 (C) VIVA-SEM-CHAMADO-DO-DIA, leitura FINAL antes do pouso (CODEX-PRE-VERIFICADOR passo 3; o Codex já fez 3 voltas). Cópia /home/ronald/wt-o261c3-3010-0232, diff `git -C /home/ronald/wt-o261c3-3010-0232 diff 270f75b7 df863705` (arquivos app/chamados/reconciliador.py e app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py). Leis da casa em /home/ronald/saas-hasner/CLAUDE.md, seções 0 e ...` |
 | 03:25:30 | Bash | Check sombra tree override and copy state | `cd /home/ronald/saas-hasner && grep -n "SONDA_ARVORE\\|ARVORE" bin/sombra.sh \| head -8; git -C /home/ronald/wt-o261c3-3010-0232 log --oneline -6; git -C /home/ronald/wt-o261c3-3010-0232 status --porcelain \| head` |
 | 03:20:06 | Bash | Point ESPERANDO at running trava pid | `cd /home/ronald/saas-hasner && sed -i '3s#^ESPERANDO: .*#ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=1258025#' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md` |
 | 03:20:01 | Bash | Inspect children of construtor shell | `pgrep -a -P 1258020 \| cut -c1-200; for c in $(pgrep -P 1258020); do pgrep -a -P $c \| cut -c1-200; done` |
