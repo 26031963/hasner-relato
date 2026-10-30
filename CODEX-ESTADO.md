@@ -1,7 +1,52 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 15:47** · publicado em **30/10/2026 15:52** (UTC-3)
+> Ultima resposta processada: **30/10/2026 16:41** · publicado em **30/10/2026 16:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 16:41 · sessao 4ff79538d4b8 · - · - · origem=Ronald (tmux)
+
+Q1 pode ser respondida por esta árvore de precedência, que cobre as combinações sem listar o produto cartesiano. Assuma dia passado, `eh_trabalho=True`, sem batidas e sem veredito; `sem_previsto` nunca entra em `_em_curso`, logo `futuro=False` nesse caso. (`app/colaboradores/services/calendario.py:714`, `app/colaboradores/services/calendario.py:822`)
+
+| Primeiro fato aplicável | Status da tela | Folha |
+|---|---|---|
+| Faixa de ausência | `falta` se efeito desconta; senão `ausencia` | Pode reter `sem_celula` |
+| Feriado que efetivamente suprimiu o trabalho | `folga` | Pode reter `sem_celula` |
+| Folga humana lançada | `folga` | Pode reter `sem_celula` |
+| Isento | `ok` | Não retém |
+| Régua suspeita | `escala_suspeita` | Pode reter `sem_celula` |
+| Folha respondeu `sem_celula` | `sem_certidao`, rótulo contendo `sem_celula` | Retém `sem_celula` |
+| Sem retenção; cobertura não descontante | `ausencia` | Não retém |
+| Sem retenção; sem cobertura ou cobertura descontante | `falta` | Não retém |
+
+Referências da árvore: ausência `calendario.py:124`; feriado `:127`; folga humana `:131`/`:149`; isento `:137`; régua `:139`; retenção `:141`; cobertura `:148`; rótulo `:899`. A folha isenta Art.62 em `app/folha/export.py:1174` e retém célula passada sem veredito e `trabalha != None` em `:1237`. A folha não consulta ausência, feriado, folga, cobertura ou régua nesse ramo. (`app/folha/export.py:1206`)
+
+Assim, **sim**, há tela `folga`/`ausencia`/`escala_suspeita` com folha `sem_celula`. As diferenças de A2 não constituem por si uma nova reprovação: o achado A1 fornecido exigiu preservar essa precedência; a ordem da régua antes da retenção também consta explicitamente do corpo do commit fornecido. (`app/colaboradores/services/calendario.py:124`, `:139`, `:141`; corpo de `diff5_delta.txt` fornecido, sem numeração `[nao verificado]`)
+
+A cobertura fica depois da retenção, mas normalmente uma ausência coberta já aparece na faixa A2: ambos consultam ausências não rejeitadas e expandem o período. Portanto não afirmaria, sem caso concreto, mudança adicional normal causada por essa ordem. (`app/ponto/precedencia.py:211`, `:317`; `app/ponto/turnos.py:2489`, `:2734`, `:2750`)
+
+**Admissão/demissão:** a folha recorta o universo e pode retornar vazio; no próprio dia da demissão, célula sem veredito não retém. A tela não faz esse recorte contratual: sua guarda verifica vigência do vínculo apenas quando não há célula. Mantido `eh_trabalho=True`, esses dias seguem os mesmos ramos — podendo resultar em `falta`, enquanto a folha nada retém. (`app/folha/export.py:1180`, `:1211`, `:1237`; `app/colaboradores/services/calendario.py:782`, `:785`, `:148`)
+
+**Motivo diferente de `sem_celula`:** sob as premissas consistentes de ausência de veredito, não existe esse caso no juiz atual. O outro motivo é `espelho_<veredito>`, que exige `VEREDITOS_ACUSAM`. O calendário filtra expressamente apenas `sem_celula`. (`app/folha/export.py:1215`, `:1236`; `app/colaboradores/services/calendario.py:727`)
+
+**Q3:** os únicos motivos atualmente possíveis são `relogio`, `turno_aberto_relogio`, `turno_aberto`, `sem_previsto` ou `None`. Hoje aceita qualquer motivo não nulo em `_em_curso`; passado aceita todos exceto `sem_previsto`. Portanto não há passado `previsto` por outro motivo atual além de relógio/turno aberto, e a existência de veredito impede usar `_em_curso` como `futuro`. (`app/ponto/turnos.py:2073`, `:2097`; `app/colaboradores/services/calendario.py:714`, `:822`)
+
+Não executei testes nem consultei banco/log; essas conclusões são estáticas. `[nao verificado]` [nao verificado]
+
+## 30/10 16:41 · sessao 4b8fe8905497 · - · - · origem=Ronald (tmux)
+
+- **Escritor de `status`:** `_classificar` retorna o valor em `app/colaboradores/services/calendario.py:189`; a montagem chama exclusivamente essa porta em `:814` e publica em `:898`. **Escritor de `status_rotulo`:** montagem em `:899-901`.
+- **`retido_folha`:** montagem alimenta em `calendario.py:834`; `_classificar` lê em `:141`. **`_cego_folha`:** inicialização `:721`, preenchimento `:727`, leituras `:834,:899`. **`_em_curso`:** preenchimento `:714-715`, leituras `:822,:900`. **`futuro`:** alimentação `:822`, leituras `:135,:155`. Esses quatro últimos fatos permanecem locais: o dict publicado de dia não os contém (`calendario.py:893-929`). [nao verificado]
+- **Portas curtas:** `status_do_dia` monta contexto e lê o primeiro status (`calendario.py:225-228`); `contar_por_status` monta contexto e conta status (`:236-239`). Não encontrei chamadores de produção fora do módulo; censo negativo não possui linha própria `[nao verificado]`. O registro de `status_do_dia` é `app/core/juizes.py:809`.
+- **Resolver/vigia:** `STATUS_QUE_PEDEM_DECISAO` inclui tanto `falta` quanto `sem_certidao` (`calendario.py:196`); o juiz lê status em `:204-205`, o contexto publica sua resposta em `:945`; a porta curta lê esse campo em `:216`; `vigia_fio` pergunta e classifica decisão pendente em `app/chamados/services/vigia_fio.py:294-300`. A troca específica `falta → sem_certidao` conserva elegibilidade; a troca `falta → previsto` para passado ainda em curso elimina elegibilidade (`calendario.py:196-205,:714-715,:822`).
+- **Templates compartilhados:** contexto chega pelo perfil (`app/colaboradores/views.py:1946,:1962`), drawer (`app/colaboradores/services/drawer.py:121`; `app/templates/colaboradores/partials/_drawer_diagnostico.html:35`) e mapa (`app/relatorios/furos.py:184-188`; `app/templates/relatorios/furos.html:42`). Cor lê `status` em `app/templates/colaboradores/partials/_calendario_grade.html:69-78`; ícone e títulos leem status/rótulo em `:99-106`; Resolver lê campo soberano em `:125`.
+
+**Achado procedente: o novo rótulo cego não chega à tela.** O produtor escreve `"Dia sem julgamento ... sem_celula"` (`calendario.py:899`), porém o template não possui ramo `sem_certidao`: cai no cinza (`_calendario_grade.html:78`) e no travessão sem título (`:107`). A precedência da palavra também ocorre antes dos ícones (`:97-98`). Assim o teste que procura `sem_celula` no dict (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:99-100`) não garante que a tela leia o rótulo.
+
+- **PDF:** `app/relatorios/views.py:1550-1551` extrai os status do calendário; `app/relatorios/furos.py:194-207` os embala nas semanas; `app/relatorios/furos_pdf.py:53-58` traduz estado em cor. `sem_certidao` não existe nos mapas (`furos_pdf.py:11-20`): aparece branco/cinza pelo fallback (`:21,:56-57`), sem rótulo ou motivo.
+- **Mapa de furos:** os cards e contagens continuam saindo de outro dado já existente: `grade_da_celula` (`furos.py:141`), `estado_do_dia` (`:160`), `nfuro` (`:164`) e ordenação (`:190`). O novo status altera o calendário dentro do card, não o universo nem `nfuro` (`:165-188`).
+- **Homônimo sem efeito desta montagem:** `app/templates/escala/minha_escala.html:75,:84` lê `status_rotulo`, mas seu produtor é `app/escala/views.py:49-55`, construído diretamente de `ROTULO_STATUS`.
+- **Rodapé:** a mudança de `falta` para `sem_certidao` retira o dia de `resumo.faltas` (`calendario.py:950`), sem contador `sem_certidao` no resumo (`:948-966`); o template imprime “Sem registro” de `resumo.faltas` (`_calendario_grade.html:145-147`). Efeito concreto omitido da descrição específica do delta fornecido `[nao verificado: corpo do commit só disponível no anexo]`. [nao verificado]
+- **Histórico:** esta cópia não possui repositório Git acessível; comparação base/head por objetos Git não foi possível `[nao verificado]`.
 
 ## 30/10 15:47 · sessao 821fe87eef02 · O261-VETO-A2 · sonda · origem=Code
 
@@ -969,143 +1014,4 @@ NOVO|O261-NOTURNO_e8c314e0|B|app/chamados/tests/test_noturno_le_o_dia_do_instant
 NOVO|O261-NOTURNO_06d7ad06|A|app/chamados/tests/test_noturno_le_o_dia_do_instante.py:166|Detector deixa passar campos data válidos com conversão ou especificador, como {data!s} e {data:}.
 NOVO|O261-NOTURNO_06d7ad06|B|app/chamados/tests/test_noturno_le_o_dia_do_instante.py:166|Detector deixa passar campos data válidos com conversão ou especificador, como {data!s} e {data:%d/%m/%Y}.
 
-## 30/10 14:55 · sessao 676405590b37 · BENCH-CORRECAO · censo · origem=Code
-
-Numeração: **1** LEI-AKITA; **2** Pauta DP; **3** custo da cerca; **4** guarda morta; **5** R1 sem exigir renascimento; **6** composição duplicada; **7** ordem da docstring; **8** emissão apesar do veto da régua. (`app/docs/RELATO.md:83`; `app/docs/RELATO.md:85`; `app/docs/RELATO.md:87`)
-
-Considerei os itens 1, 2, 3, 5 e 6 existentes nas três primeiras voltas por continuidade até a reprovação de `df863705`; confirmação individual das árvores históricas: **[nao verificado]**. Os seis estavam curados em `22c08b8e`. (`app/docs/RELATO.md:81`; `app/docs/RELATO.md:83`; `app/docs/RELATO.md:84`)
-
-Não retroagi a guarda morta: nas respostas de `68a38548` e `0ed50cc2`, a segunda chamada ainda alcança a relavratura, indicando ausência da proteção posteriormente removida. Marquei o item 4 como `n/a` nas primeiras voltas por essa inferência; introdução exata: **[nao verificado]**. (Referências das respostas: `app/chamados/reconciliador.py:862`, `app/chamados/reconciliador.py:871`; `app/chamados/services/fio.py:797`.)
-
-O item 7 pertence à alteração posterior de `3ab94852`. O item 8 já existia com a ampliação do c2 e foi corrigido em `13963efb`; vínculo ausente e corrida entre leituras são achados distintos. (`app/docs/RELATO.md:86`; `app/docs/RELATO.md:87`; `app/chamados/reconciliador.py:807`; `app/chamados/reconciliador.py:852`)
-
-Créditos **VIU/EM_PARTE**, com trechos das respostas e suas referências históricas:
-
-| Volta/revisor | Item/nota | Trecho |
-|---|---|---|
-| 4da2943d/A | 3 — VIU | “Custo novo por pergunta na pilha síncrona; consulta repetida”; “O C6 ainda foi antecipado para antes dos gates baratos”. (`app/chamados/reconciliador.py:1436`; `app/chamados/reconciliador.py:1438`) |
-| 4da2943d/B | 3 — EM_PARTE | “esse cadastro não exercita a nova seleção HIST da órfã”. Aponta a cobertura insuficiente, sem identificar a cerca cara antes dos vetos do c2. (`app/ponto/tests/test_selo_chokepoint_escrita.py:226`; `app/ponto/tests/test_selo_chokepoint_escrita.py:258`) |
-| 4da2943d/B | 5 — EM_PARTE | “R1 exige destino vivo ou recusa”; “Não identifiquei vacuidade equivalente”. Examina a asserção permissiva, sem denunciar que ela dispensa o renascimento. (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:117`) |
-| 68a38548/A | 3 — EM_PARTE | “cenário FICAM cria chamados vivos, sem cobrir o ramo novo com encerrados”. Identifica limite de cobertura, sem apontar o custo da cerca no c2. (`app/ponto/tests/test_selo_chokepoint_escrita.py:164`; `app/ponto/tests/test_selo_chokepoint_escrita.py:364`) |
-
-Os registros `NOVO` transcrevem os achados adicionais apresentados pelos revisores; procedência definitiva e reprodução histórica: **[nao verificado]**.
-
-NOTA|O261-C_4da2943d|1|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_4da2943d|2|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_4da2943d|3|existia|A=VIU|B=EM_PARTE
-NOTA|O261-C_4da2943d|4|n/a|A=n/a|B=n/a
-NOTA|O261-C_4da2943d|5|existia|A=NAO_VIU|B=EM_PARTE
-NOTA|O261-C_4da2943d|6|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_4da2943d|7|n/a|A=n/a|B=n/a
-NOTA|O261-C_4da2943d|8|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_68a38548|1|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_68a38548|2|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_68a38548|3|existia|A=EM_PARTE|B=NAO_VIU
-NOTA|O261-C_68a38548|4|n/a|A=n/a|B=n/a
-NOTA|O261-C_68a38548|5|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_68a38548|6|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_68a38548|7|n/a|A=n/a|B=n/a
-NOTA|O261-C_68a38548|8|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_0ed50cc2|1|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_0ed50cc2|2|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_0ed50cc2|3|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_0ed50cc2|4|n/a|A=n/a|B=n/a
-NOTA|O261-C_0ed50cc2|5|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_0ed50cc2|6|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_0ed50cc2|7|n/a|A=n/a|B=n/a
-NOTA|O261-C_0ed50cc2|8|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_22c08b8e|1|n/a|A=n/a|B=n/a
-NOTA|O261-C_22c08b8e|2|n/a|A=n/a|B=n/a
-NOTA|O261-C_22c08b8e|3|n/a|A=n/a|B=n/a
-NOTA|O261-C_22c08b8e|4|n/a|A=n/a|B=n/a
-NOTA|O261-C_22c08b8e|5|n/a|A=n/a|B=n/a
-NOTA|O261-C_22c08b8e|6|n/a|A=n/a|B=n/a
-NOTA|O261-C_22c08b8e|7|n/a|A=n/a|B=n/a
-NOTA|O261-C_22c08b8e|8|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-C_13963efb|1|n/a|A=n/a|B=n/a
-NOTA|O261-C_13963efb|2|n/a|A=n/a|B=n/a
-NOTA|O261-C_13963efb|3|n/a|A=n/a|B=n/a
-NOTA|O261-C_13963efb|4|n/a|A=n/a|B=n/a
-NOTA|O261-C_13963efb|5|n/a|A=n/a|B=n/a
-NOTA|O261-C_13963efb|6|n/a|A=n/a|B=n/a
-NOTA|O261-C_13963efb|7|n/a|A=n/a|B=n/a
-NOTA|O261-C_13963efb|8|n/a|A=n/a|B=n/a
-NOVO|O261-C_4da2943d|A|app/chamados/services/disputa_emissao.py:1634|HIST ampliado permite carimbar pergunta de dia trancado pelo ramo posterior do S128, que não repete a proteção da tranca.
-NOVO|O261-C_4da2943d|A|app/chamados/services/disputa_emissao.py:1634|Ramo posterior do S128 carimba resposta MORTA sem repetir a proteção de resposta sem batida real, inclusive com pai ausente.
-NOVO|O261-C_4da2943d|B|app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:92|Fixture correlaciona vitalidade com validada_em e não distingue substituir C6 por um juiz desse campo.
-NOVO|O261-C_4da2943d|B|app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:95|Bateria não chama diretamente reemitir_chamado_do_dia e permite implementar a cura apenas no wrapper.
-NOVO|O261-C_4da2943d|B|app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:66|Fixture grava ii/fi enquanto o juiz consome hii/hfi, sem exercitar a lâmpada específica do intervalo.
-NOVO|O261-C_68a38548|A|app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:235|Teste exige igualdade integral após segunda chamada direta, embora a relavratura renove julgado_em. [nao verificado]
-NOVO|O261-C_0ed50cc2|A|app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:264|Teste de idempotência compara todas as colunas apesar da renovação de julgado_em na segunda chamada. [nao verificado]
-NOVO|O261-C_0ed50cc2|B|app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:264|Comparação integral falha com relógio avançando e pode ocultar a relavratura com relógio congelado.
-NOVO|O261-C_22c08b8e|A|app/chamados/reconciliador.py:830|Veto de célula chama logger antes da cerca, contrariando a justificativa de conjunções sem efeito colateral.
-NOVO|O261-C_22c08b8e|B|app/chamados/reconciliador.py:830|Reordenamento permite chamada adicional ao logger antes da cerca, contrariando a justificativa de ausência de efeitos colaterais.
-NOVO|O261-C_13963efb|A|app/ponto/services/furos_vetados.py:26|Vínculo ausente retorna ausência de veto no leitor usado pelo c2, enquanto a emissão impede esse caso.
-NOVO|O261-C_13963efb|A|app/chamados/reconciliador.py:843|Veto acrescentado também muda motivos C1 fora do alcance novo; autorização específica dessa ampliação [nao verificado].
-NOVO|O261-C_13963efb|B|app/chamados/reconciliador.py:798|Dispensa do veto usa leitura anterior à trava; abrir pode reler chamado já encerrado e renascê-lo sem consultar a régua.
-
-## 30/10 14:55 · sessao cf5aace19adf · BENCH-CORRECAO · censo · origem=Code
-
-A existência nas voltas antigas foi reconstruída pelos anexos: a confirmação por histórico Git é **[nao verificado]**. Para ESTADO e SELO nas duas primeiras voltas, adoto **existia** por continuidade do leitor e do teste preexistentes; a confirmação dessas versões é **[nao verificado]** (`bin/fio_estado.py:82`; `app/chamados/tests/test_o261_vigia_fio.py:755`).
-
-**LAVRA-VELHA fica n/a nas três primeiras voltas:** o defeito específico é consumir o dono lavrado sem conferir sua idade (`app/docs/BACKLOG.md:779`). Os anexos anteriores descrevem consulta ao dono atual; a mudança para leitura do dono lavrado está registrada em `app/docs/RELATO.md:8` e implementada em `app/chamados/services/vigia_fio.py:266`.
-
-As evidências para VIU e EM_PARTE são:
-
-| Volta | Item/revisor | Classificação e trecho |
-|---|---|---|
-| d75bd454 | SELO / A | **EM_PARTE:** “possibilidade de datas incoerentes ao atravessar meia-noite”. Discute o relógio do comando, mas não aponta a falta do cenário no selo (`app/chamados/management/commands/vigiar_fio_morto.py:154`, conforme resposta). |
-| 8110a931 | ESTADO / A | **VIU:** “o destino `fio_do_admin` fica fora da projeção e da frase do painel” (`bin/fio_estado.py:82`, `:101`). |
-| 8110a931 | ESTADO / B | **VIU:** “Não mostra os três campos novos” (`bin/fio_estado.py:82`, `:101`). |
-| 8110a931 | SELO / A | **VIU:** “não fabrica travessia da meia-noite” (`app/chamados/tests/test_o261_vigia_fio.py:801`, conforme resposta). |
-| 8110a931 | SELO / B | **EM_PARTE:** “O teste do carimbo chama novamente o censo sem `agora`; não prova propagação do instante”. Aponta insuficiência temporal do teste, sem identificar expressamente o cenário da virada (`app/chamados/tests/test_o261_vigia_fio.py:787`, `:801`, conforme resposta). |
-| c3b91265 | LAVRA-VELHA / A | **EM_PARTE:** “o vigia compara o valor lavrado”. Reconhece a fonte, mas não aponta falta de controle de idade (`app/chamados/services/vigia_fio.py:267`, conforme resposta; leitura na cópia em `:266`). |
-| c3b91265 | ESTADO / B | **VIU:** “não aparecem na seleção do ESTADO” e “lacuna de visibilidade verificável” (`bin/fio_estado.py:82`, `:101`). |
-| c3b91265 | SELO / B | **VIU:** “não força travessia da meia-noite” (`app/chamados/tests/test_o261_vigia_fio.py:793`). |
-
-Nos demais pares classificados como NAO_VIU, não identifiquei passagem que apontasse o defeito específico **[nao verificado]**. Em particular, o achado de A em c3b91265 sobre relógios de C2/C4 trata de outro caminho, sem apontar o selo do carimbo (`app/escala/services/cadastro_realidade.py:186`, `:350`). Os registros NOVO abaixo reproduzem os achados atribuídos às respostas; preservam suas referências históricas, cuja correspondência com cada árvore é **[nao verificado]**.
-
-NOTA|FIO-MORTO-DONO-NA-LISTA_d75bd454|FIO-DO-ADMIN-NO-ESTADO|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|FIO-MORTO-DONO-NA-LISTA_d75bd454|FIO-DO-ADMIN-LAVRA-VELHA|n/a|A=n/a|B=n/a
-NOTA|FIO-MORTO-DONO-NA-LISTA_d75bd454|SELO-CARIMBO-VIRADA|existia|A=EM_PARTE|B=NAO_VIU
-NOTA|FIO-MORTO-DONO-NA-LISTA_3e49c1bc|FIO-DO-ADMIN-NO-ESTADO|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|FIO-MORTO-DONO-NA-LISTA_3e49c1bc|FIO-DO-ADMIN-LAVRA-VELHA|n/a|A=n/a|B=n/a
-NOTA|FIO-MORTO-DONO-NA-LISTA_3e49c1bc|SELO-CARIMBO-VIRADA|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|FIO-MORTO-DONO-NA-LISTA_8110a931|FIO-DO-ADMIN-NO-ESTADO|existia|A=VIU|B=VIU
-NOTA|FIO-MORTO-DONO-NA-LISTA_8110a931|FIO-DO-ADMIN-LAVRA-VELHA|n/a|A=n/a|B=n/a
-NOTA|FIO-MORTO-DONO-NA-LISTA_8110a931|SELO-CARIMBO-VIRADA|existia|A=VIU|B=EM_PARTE
-NOTA|FIO-MORTO-DONO-NA-LISTA_c3b91265|FIO-DO-ADMIN-NO-ESTADO|existia|A=NAO_VIU|B=VIU
-NOTA|FIO-MORTO-DONO-NA-LISTA_c3b91265|FIO-DO-ADMIN-LAVRA-VELHA|existia|A=EM_PARTE|B=NAO_VIU
-NOTA|FIO-MORTO-DONO-NA-LISTA_c3b91265|SELO-CARIMBO-VIRADA|existia|A=NAO_VIU|B=VIU
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|A|app/chamados/services/vigia_fio.py:253|Uma candidata dispara lista inteira e possíveis cálculos do espelho, contrariando a descrição de nenhum recálculo.
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|A|app/chamados/services/vigia_fio.py:260|Falhas não são memorizadas nos caches da lista e do carregador, repetindo trabalho e exceções por célula.
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|A|app/escala/services/cadastro_realidade.py:565|Falha interna de C9 produz lista parcial sem incrementar fio_do_admin_sem_resposta.
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|A|app/chamados/management/commands/vigiar_fio_morto.py:154|Comando, censo e C2 capturam relógios independentes, permitindo datas incoerentes na mesma rodada.
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|A|app/chamados/tests/test_o261_vigia_fio.py:548|Mocks ignoram janela e instante e não exercitam integração real, custo ou exceções internas da lista.
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|B|app/folha/fora_da_folha.py:204|Observação de apresentação: folha recomenda resolver o chamado sem apontar Cadastro x Realidade; quebra não comprovada.
-NOVO|FIO-MORTO-DONO-NA-LISTA_3e49c1bc|A|app/chamados/tests/test_o261_vigia_fio.py:606|Teste não inclui segunda empresa visível fora do recorte e continua passando sem a interseção. [nao verificado]
-NOVO|FIO-MORTO-DONO-NA-LISTA_3e49c1bc|B|app/chamados/tests/test_o261_vigia_fio.py:611|Expectativas do teste também passam sem cruzar empresas visíveis com o recorte solicitado. [nao verificado]
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|A|app/escala/services/cadastro_realidade.py:667|Projeção reconhece somente data estruturada de C9 e omite dias apresentados no detalhe de C4/C5.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|A|app/chamados/services/vigia_fio.py:275|Vigia usa dono atual enquanto a lista mostra dono lavrado, admitindo transferência sem porta humana correspondente na C9.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|A|app/escala/services/cadastro_realidade.py:187|C2 fixa corte de competência em 21 em vez de consultar a autoridade do corte por empresa.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|A|app/chamados/services/vigia_fio.py:181|Defaults independentes do censo e novas leituras em C2, C4 e calendário impedem congelar integralmente a rodada.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|A|app/escala/services/cadastro_realidade.py:565|Exceção interna de C9 e ausência de snapshot não chegam ao contador externo de sem resposta.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|A|app/chamados/tests/test_o261_vigia_fio.py:655|Teste da soma inclui fio_do_admin, mas sua fixture não produz parcela admin positiva. [nao verificado]
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|A|app/chamados/tests/test_o261_vigia_fio.py:560|Teste positivo substitui lista e carregador por mocks, sem demonstrar a costura real. [nao verificado]
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|A|app/chamados/services/vigia_fio.py:250|Primeira candidata aciona lista completa e carregadores podem executar espelhos com trabalho sobreposto entre competências.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|B|app/escala/tests/test_selo_grade_pede_o_instante.py:154|Selo existente de relógio acusa os dois fallbacks do censo e exige resultado vazio.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|B|app/chamados/services/vigia_fio.py:307|Calendário recebe chamada sem instante e C2/C4 releem datas, deixando dependências fora do instante da rodada.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|B|app/chamados/services/vigia_fio.py:267|Lista publica dono lavrado, mas vigia consulta novamente o juiz, usando observações distintas do mesmo dia.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|B|app/escala/services/cadastro_realidade.py:667|Presença exige chave data e exclui dias textuais apresentados por C4/C5.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|B|app/escala/services/cadastro_realidade.py:187|Competência de C2 usa corte 21 fixo, contrariando o corte por empresa registrado.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|B|app/chamados/tests/test_o261_vigia_fio.py:657|Teste da conservação acrescenta fio_do_admin sem fabricar parcela admin positiva. [nao verificado]
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|B|app/chamados/tests/test_o261_vigia_fio.py:560|Matriz positiva usa lista e carregador substituídos, deixando integração real sem cobertura.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|B|app/escala/services/cadastro_realidade.py:565|Lista absorve falhas internas de C9 que não incrementam fio_do_admin_sem_resposta.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|B|app/chamados/services/vigia_fio.py:250|Uma candidata dispara lista completa e possíveis cálculos do motor, ampliando o trabalho além dos dias mortos.
-NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|A|app/escala/services/cadastro_realidade.py:669|Mapa dos dias aceita datas estruturadas de C9 e omite datas mencionadas visualmente por C4/C5.
-NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|A|app/escala/services/cadastro_realidade.py:565|Falha interna de C9 ou snapshot ausente pode deixar contador de sem resposta em zero.
-NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|A|app/escala/services/cadastro_realidade.py:186|C2 e C4 consultam relógios próprios no caminho transitivo do censo, apesar do hoje recebido.
-NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|A|app/escala/services/cadastro_realidade.py:187|C2 deriva competência com corte 21 fixo em vez da autoridade registrada por empresa.
-NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|A|app/chamados/services/vigia_fio.py:259|Primeira célula candidata executa lista inteira, incluindo consultas e percurso de células de C2.
-
-_607 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_609 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
