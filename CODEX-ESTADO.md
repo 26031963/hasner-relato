@@ -1,7 +1,34 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 04:11** · publicado em **30/10/2026 04:14** (UTC-3)
+> Ultima resposta processada: **30/10/2026 05:35** · publicado em **30/10/2026 05:40** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 05:35 · sessao fb2eb8b68907 · ORCAMENTO · verificador · origem=Code
+
+**Ainda reprovo: o novo fallback permite que o TETO engula a expiração do CLEAR e sua válvula continua condicional.** `bin/hook_stop_fila1.py:763`, `bin/hook_stop_fila1.py:893`, `bin/hook_stop_fila1.py:1102`.
+
+1. **[P1 — novo] CLEAR vencido volta a liberar pelo TETO.** Cenário: disparo ativo, `clear_parei_desde` há 31 minutos, marco inalterado, HEAD igual e `blocks=5`; a trava fica ocupada por mais de um segundo ou ocorre uma exceção no orçamento. Ambos os caminhos retornam `None`; o CLEAR é recusado pelo PAREI genérico e o contador chega a 6, liberando por `ALARME teto`. Não saem o `siga` explícito da expiração, o reset nem o `SEGUIU`: quebra v2(b/c). Antes dos 30 minutos, o mesmo fallback pode bloquear uma espera que deveria liberar pelo item 2. `bin/hook_stop_fila1.py:761`, `bin/hook_stop_fila1.py:888`, `bin/hook_stop_fila1.py:953`, `bin/hook_stop_fila1.py:1095`, `bin/hook_stop_fila1.py:1102`.
+
+   **O selo novo aprova essa substituição:** exige `ALLOW ALARME teto`; o caso ocupado nem estabelece `clear_parei_desde`, e o caso de exceção apaga o estado ativo. Portanto, esses casos não provam a precedência de um CLEAR vencido sob falha — classe **selo/RED sem mordida** nesse requisito. `bin/tests/test_orcamento_contexto.sh:395`, `bin/tests/test_orcamento_contexto.sh:404`, `bin/tests/test_orcamento_contexto.sh:414`, `bin/tests/test_orcamento_contexto.sh:420`.
+
+2. **[P1 — novo, dependendo do caminho antigo] Ainda existe laço sem válvula.** Cenário: CLEAR no topo, falha ou trava persistente do orçamento, HEAD estável e `ps` mostrando continuamente `manage.py test` ou `git push`, inclusive de outra sessão. O fallback chega ao caminho antigo, mas esse caminho congela `blocks` e proíbe aplicar o TETO enquanto detectar trabalho. Cada Stop pode devolver `siga: ITEM-VIVO` indefinidamente: a afirmação nova de que “o bloqueio CONTA” não vale nesse estado. `bin/hook_stop_fila1.py:389`, `bin/hook_stop_fila1.py:733`, `bin/hook_stop_fila1.py:889`, `bin/hook_stop_fila1.py:1090`, `bin/hook_stop_fila1.py:1102`.
+
+   Os novos casos de falha persistente usam o `ps` forjado sem trabalho e não exercitam essa combinação; o caso separado de suíte só verifica `PENDENTE` com orçamento funcionando. `bin/tests/test_orcamento_contexto.sh:35`, `bin/tests/test_orcamento_contexto.sh:342`, `bin/tests/test_orcamento_contexto.sh:398`, `bin/tests/test_orcamento_contexto.sh:416`.
+
+3. **[P1 — dependência do acumulado] I/O bloqueante impede alcançar qualquer fallback.** Cenário: `orcamento_estado.json` é um FIFO sem escritor. A abertura para leitura fica esperando enquanto o hook segura a trava do orçamento; não ocorre exceção para `_orcamento_contido` capturar e o TETO não é alcançado. Um FIFO sem leitor em `orcamento.log` também pode prender o próprio registro de `OCUPADO`/`FALHA`. A proteção de arquivo regular foi aplicada à trava, mas não a essas aberturas: quebra a contenção exigida por v2(e)/item 3. `bin/hook_stop_fila1.py:526`, `bin/hook_stop_fila1.py:753`, `bin/hook_stop_fila1.py:777`, `bin/hook_stop_fila1.py:691`, `bin/hook_stop_fila1.py:892`.
+
+4. **[P2 — dependência do acumulado] A hora do marco pode regredir por ordem de trava.** Cenário: A captura hora `t0` para `compact` e é suspenso; B captura `t1 > t0`, obtém a trava e grava `clear`; A retoma, obtém a trava e sobrescreve o marco com `t0`. O histórico conserva o clear de `t1`, mas a base corrente volta para `t0`, antecipando o gatilho de seis horas. É um problema de **relógio antes da seção protegida / ordem de trava**, contra a medida desde o último marco do item 1(b). `bin/marco_de_clear.py:33`, `bin/marco_de_clear.py:43`, `bin/marco_de_clear.py:53`, `bin/marco_de_clear.py:57`, `bin/orcamento_contexto.py:184`, `bin/orcamento_contexto.py:196`.
+
+5. **[P2 — dependência do acumulado] Estado gravado com trilha falha perde o evento definitivamente.** Cenário: o estado é gravável, mas `orcamento.log` é um diretório ou recusa append. `_orc_salva` confirma o estado, `_orc_trilha` engole a falha e a lista de eventos é apagada. Se o evento era `SEGUIU`, o desfecho fica concluído e não será reapendado; o ESTADO subconta porque lê os contadores exclusivamente da trilha. Quebra o item 4, “uma linha por disparo e por desfecho”. O selo cobre a falha inversa, estado não gravável. `bin/hook_stop_fila1.py:715`, `bin/hook_stop_fila1.py:723`, `bin/hook_stop_fila1.py:694`, `bin/hook_stop_fila1.py:725`, `bin/hook_stop_fila1.py:837`, `bin/orcamento_contexto.py:219`, `bin/tests/test_orcamento_contexto.sh:406`.
+
+Nas demais áreas lidas, sem achado adicional:
+
+- **Prova do RELATO, PAREI comum e ESPERANDO:** a prova continua antes do orçamento; o PAREI reutiliza seu juiz; a espera compartilha uma única avaliação por Stop, preservando a prova por avanço de arquivo. `bin/hook_stop_fila1.py:1027`, `bin/hook_stop_fila1.py:916`, `bin/hook_stop_fila1.py:660`, `bin/hook_stop_fila1.py:1049`.
+- **Fila vazia:** há um PREPARA-CLEAR por ciclo; mantendo o topo neutro, o Stop seguinte alcança a liberação por fila vazia. `bin/hook_stop_fila1.py:848`, `bin/hook_stop_fila1.py:876`, `bin/hook_stop_fila1.py:1063`.
+- **Segundo juiz, segundo escritor e derivação paralela:** no recorte lido, a decisão usa o avaliador importado, o marco tem seu escritor próprio e o gerador do ESTADO chama os leitores compartilhados. `bin/hook_stop_fila1.py:772`, `bin/hook_stop_fila1.py:820`, `bin/marco_de_clear.py:57`, `bin/gerar_estado.py:274`.
+- **Falha aberta externa:** o `except` final continua liberando; ele não resolve as esperas bloqueantes do achado 3. `bin/hook_stop_fila1.py:1117`.
+
+Execução integral dos selos, instalação dos matchers no host e ocorrência desses cenários em produção: **[nao verificado]**.
 
 ## 30/10 04:11 · sessao 438094092922 · O261-C · verificador · origem=Code
 
@@ -342,18 +369,4 @@ Por classe:
 | Ordem de trava | **Achado 1**; nenhuma inversão nova de aquisição de lock identificada. `app/chamados/reconciliador.py:1451`, `app/chamados/models.py:666`. |
 | Pouso antes do pré-requisito | **Nada comprovado**. O RELATO registra B no ar; a remedida exigida para C permanece **[não verificado]**. `app/docs/RELATO.md:3`, `app/docs/CORTES.md:399`. |
 
-## 30/10 02:59 · sessao a88b4c09a206 · - · - · origem=Ronald (tmux)
-
-Achado: **regressão latente na ordem do pré-requisito da tranca**. A porta aceita `data_evento=NULL` e deriva o dia do contexto, mas consulta C7 antes de datar a pergunta; C7 retorna `False` quando `data_evento` é `None`. (`app/chamados/reconciliador.py:1424`, `app/chamados/reconciliador.py:1451`, `app/chamados/juizes.py:887`)
-
-Reprodução por fluxo estático: intervalo morto por `validada_em`, contexto apontando para dia trancado, competência não entregue, único `batida_ausente` encerrado do dia. C6 retorna morto; o novo HIST casa intervalo e chama a costura, que data e salva a pergunta. A costura só confere correspondência do dia; a lavra não veta tranca. (`app/chamados/juizes.py:1006`, `app/chamados/reconciliador.py:1463`, `app/chamados/reconciliador.py:1500`, `app/chamados/services/fio.py:788`, `app/chamados/juizes.py:1721`, `app/chamados/veredito_lavrado.py:211`)
-
-**Lacuna no R8:** o cenário comum sempre preenche `data_evento=dia`; assim, o teste cobre a pergunta já datada, sem alcançar o fallback do contexto. O modelo permite `NULL`, e testes antigos exercitam perguntas sem data com contexto datado. (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:94`, `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:183`, `app/chamados/models.py:1856`, `app/chamados/tests/test_reconciliar_pergunta_orfa.py:35`, `app/chamados/tests/test_reconciliar_pergunta_orfa.py:94`)
-
-A lavra não impede a escrita: até exceção do juiz vira `indeterminado`, seguida de atribuição dos campos e retorno à costura que salva. (`app/chamados/veredito_lavrado.py:218`, `app/chamados/veredito_lavrado.py:227`, `app/chamados/services/fio.py:798`)
-
-Ocorrência atual na frota: **[não verificado]**. A documentação local só registra zero perguntas sem data em 03/10. (`app/chamados/services/fio.py:780`)
-
-RED/GREEN executado desta revisão: **[não verificado]**; não executei banco nem comandos de escrita. **[não verificado]** [nao verificado]
-
-_346 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_347 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
