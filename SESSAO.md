@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 02:48:42.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (6.5 MB). Acoes na janela: **274**.
+**Medido em 30/10/2026 02:54:06.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (6.5 MB). Acoes na janela: **276**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:52:50 | Bash | Mark ESPERANDO on Codex verifier pid | `cd /home/ronald/saas-hasner && sed -i '3i ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh \| pid=3532079' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md` |
+| 02:52:45 | Bash | Find running Codex wrapper pid | `for p in $(pgrep -f "bin/codex_pergunta.sh"); do c=$(tr '\0' ' ' </proc/$p/cmdline); case "$c" in "bash -c"*) ;; *) echo "$p\|$c\|$(readlink /proc/$p/cwd)";; esac; done` |
 | 02:43:22 | Bash | Find the bash suite.sh child pid | `for p in $(pgrep -f "saas-hasner/bin/suite.sh --dir /home/ronald/wt-o261c3"); do echo "$p $(tr '\0' ' ' </proc/$p/cmdline \| cut -c1-80)"; done` |
 | 02:43:18 | Bash | Read captured producer | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/be3a61c0-011d-458c-a5a0-e2f78476d660/tasks/bz1m6yhs1.output` |
 | 02:38:41 | Bash | Capture a construtor producer pid and argv | `while :; do for p in $(pgrep -f "bin/codex_pergunta.sh\|bin/suite.sh"); do c=$(tr '\0' ' ' </proc/$p/cmdline 2>/dev/null); case "$c" in "bash -c"*\|*pgrep*\|"") ;; *) echo "$p\|$c\|$(readlink /proc/$p/cwd)"; exit 0;; esac; done; /usr/bin/sleep 5; done` |
