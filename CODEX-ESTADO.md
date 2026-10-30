@@ -1,7 +1,66 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 20:57** · publicado em **29/10/2026 20:58** (UTC-3)
+> Ultima resposta processada: **29/10/2026 21:03** · publicado em **29/10/2026 21:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 21:03 · sessao e8be9c30180a · - · - · origem=Ronald (tmux)
+
+Achados da parte juiz/vigia:
+
+- **Média — derivação paralela do critério de resposta vazia.** O juiz registrado é `pergunta_viva` (`app/core/juizes.py:232`), cujo corpo exige texto por `(p.resposta_colab or '').strip()` (`app/chamados/juizes.py:1020`). O vigia novo implementa outra definição por regex (`app/chamados/services/vigia_fio.py:381`, pós-diff), contrariando o princípio de contador ler a mesma autoridade (`app/docs/LEIS.md:60`). Deve compartilhar o predicado de texto com o juiz; chamar `pergunta_viva` inteira também seria incorreto, porque vida e vazio são perguntas diferentes (`app/chamados/juizes.py:1005`, `app/chamados/juizes.py:1020`).
+
+- **Média — o marco exato não está provado.** A constante fixa 17:20 (`app/chamados/services/vigia_fio.py:369`, pós-diff), mas o aval registra apenas `17:2x` (`app/docs/CORTES.md:383`). A equivalência entre esse instante e o aval/deploy é **[nao verificado]**. É corte histórico pedido pelo aval, não relógio de negócio por si só; o problema comprovável é a precisão inventada (`app/docs/CORTES.md:383`).
+
+- **Baixa — falta mordida do escritor para resposta só com espaços.** O novo teste do escritor usa apenas `''` e `'07:55'`; remover `.strip()` do guard novo e deixar `bool(q.resposta_colab)` sobreviveria a esses casos (`app/chamados/tests/test_o261_resposta_vazia.py`, anexo, testes `test_sem_texto...` e `test_MORDE_com_texto...`). O teste do vigia com `'   '` não exercita esse escritor (mesmo arquivo, `test_vigia_conta_so_as_novas`). O juiz existente já distingue espaços como vazio (`app/chamados/tests/test_pergunta_viva.py:26`).
+
+Schema/query:
+
+- `resposta_colab` não aceita NULL no schema: `TextField(blank=True, default='')`; logo `isnull=True` é redundante, sem perda funcional por si só (`app/chamados/models.py:1865`).
+- A regex com `*` contempla `''`; a filtragem `respondida_em__gte` exclui carimbo NULL e inclui exatamente o marco (`app/chamados/services/vigia_fio.py:380`, pós-diff).
+- PostgreSQL é o backend declarado (`app/config/settings/prod.py:11`). A equivalência completa entre `strip()` e `\s` do PostgreSQL/locale não está demonstrada pela cópia; diferenças de Unicode/locale e ocorrência em produção ficam **[nao verificado]**. Não há teste de paridade, tabulação, newline, Unicode ou igualdade ao marco no teste novo (anexo, `test_vigia_conta_so_as_novas`).
+- Não achei escritor concreto remanescente que legitimamente gere novo carimbo vazio: irmãos têm guardas por `strip()` (`app/chamados/services/disputa_emissao.py:1219`, `app/chamados/services/disputa_emissao.py:1570`, `app/chamados/services/materializacao.py:511`, `app/chamados/services/materializacao.py:1190`). A prosa antiga que chama carimbo sem texto legítimo não basta para alegar falso alarme novo (`app/chamados/tests/test_contract_par_resposta.py:28`).
+
+Mordida:
+
+- **Sem achado de teste vazio nos três casos de cura/trilha:** o primeiro exige fechamento e ausência do carimbo; o segundo exige fechamento e carimbo; o terceiro exige estado idêntico e uma linha após duas chamadas (anexo `app/chamados/tests/test_o261_resposta_vazia.py`, três testes respectivos).
+- O teste do vigia injeta o estado inválido diretamente: certifica o contador, não deve ser apresentado como prova da cura (mesmo arquivo, `test_vigia_conta_so_as_novas`). [nao verificado]
+- Execução real dos testes e PostgreSQL: **[nao verificado]**. [nao verificado]
+
+## 29/10 21:02 · sessao 27725cac3b86 · - · - · origem=Ronald (tmux)
+
+Linhas do diff abaixo são pós-aplicação; demais referências são da cópia.
+
+- **P2 — trilha contradiz o estado.** A descrição do novo evento decide se havia resposta por `'respondida_em' in _c`, que identifica apenas carimbo recém-escrito. Se `q.resposta_colab='07:55'` e `q.respondida_em` já existe, o ramo preserva ambos e registra **“sem resposta do colaborador, respondida_em fica nulo”**, enquanto `depois.tem_resposta=True`. A entrada é possível porque `_abertas` só exclui materializadas e validadas. Referências: `app/chamados/services/disputa_emissao.py:1634`, `app/chamados/services/disputa_emissao.py:1653` (diff), `app/chamados/services/disputa_emissao.py:1660` (diff).
+
+- **P2 — a garantia nova de uma linha não cobre concorrência.** O ramo lê `_todas`/`_abertas` sem bloqueio ou atualização condicional; duas execuções podem capturar a mesma pergunta aberta, salvar e emitir `fecho_sem_credor` duas vezes. `atomic` dos chamadores não serializa essa leitura; há chamador com `atomic` e nenhuma trava (`fechar_beco`). O novo teste verifica duas chamadas sequenciais apenas. Referências: `app/chamados/services/disputa_emissao.py:1630`, `app/chamados/services/disputa_emissao.py:1634`, `app/chamados/services/disputa_emissao.py:1656` (diff), `app/chamados/services/disputa_emissao.py:1658` (diff), `app/chamados/services/becos.py:41`, `app/chamados/services/becos.py:49`, `app/chamados/tests/test_o261_resposta_vazia.py:97` (diff). Ocorrência concorrente real: **[nao verificado]**.
+
+- **Aval:** a guarda `bool(...strip())` cura a escrita sem texto; mantém `materializada_em`, autor e via, usa o juiz existente `pergunta_viva`, e deixa o fecho da disputa na porta `d.fechar`. O passivo não é alterado por rotina adicionada neste diff. Referências: `app/docs/CORTES.md:383`, `app/chamados/services/disputa_emissao.py:1641`, `app/chamados/services/disputa_emissao.py:1643`, `app/chamados/services/disputa_emissao.py:1652` (diff), `app/chamados/services/disputa_emissao.py:1673` (diff).
+
+- **Segundo escritor de LogAuditoria: sem achado.** O evento entra por `core.observ.evento`, declarado escritor único e implementado por `objects.create`; o ramo novo não escreve o modelo diretamente. Referências: `app/chamados/services/disputa_emissao.py:1657` (diff), `app/core/observ.py:94`, `app/core/observ.py:96`, `app/core/observ.py:134`.
+
+- **Ordem de trava: sem inversão nova identificada; falta serialização descrita acima.** O resolver não acrescenta `select_for_update`; o `evento` abre somente `transaction.atomic` para a criação da trilha. Referências: `app/chamados/services/disputa_emissao.py:1514`, `app/chamados/services/disputa_emissao.py:1630`, `app/core/observ.py:133`.
+
+- **Selos:** não passam integralmente vazios: o caso sem texto exige materialização, autor, via e ausência de carimbo; remover a guarda e voltar ao original viola `assertIsNone`. Remover o evento viola a contagem 1. O caso `MORDE_com_texto` preserva a simetria, mas já seria verde no código anterior, que carimba indiscriminadamente; isso é contraprova útil, não RED da cura. Não há teste novo que exija `d.fechada_em`, via específica, descrição correta da trilha ou concorrência. Referências: `app/chamados/tests/test_o261_resposta_vazia.py:77` (diff), `app/chamados/tests/test_o261_resposta_vazia.py:88` (diff), `app/chamados/tests/test_o261_resposta_vazia.py:97` (diff), `app/chamados/services/disputa_emissao.py:1648` (base). Execução/RED real: **[nao verificado]**.
+
+- **Relógio:** não há leitura nova de `now()` neste ramo; os dois `_tz.now()` já existem no resolver. A regra registrada de injeção nomeia juiz/grade/cartório/reconciliador/fábrica e bordas, então não afirmo automaticamente que este service de escrita viola aquele complemento. Referências: `app/chamados/services/disputa_emissao.py:1561`, `app/chamados/services/disputa_emissao.py:1638`, `app/docs/CORTES.md:369`.
+
+## 29/10 21:01 · sessao 32c02b5a9280 · - · - · origem=Ronald (tmux)
+
+Achados:
+
+- **P2 — recorte `--empresa` contaminado pela frota.** O comando entrega `empresas` ao censo e ao contador irmão, mas a nova chamada `respondida_sem_resposta()` não recebe recorte; a nova função consulta todas as perguntas. Assim uma empresa sem infração pode imprimir contagem de outra e sair com código 2. Referências: `app/chamados/management/commands/vigiar_fio_morto.py:142-160`; `diff_v1.patch`, nova linha 166 do comando e novas linhas 372-382 do serviço. A ocorrência concreta em produção é [nao verificado].
+
+- **P2/P3 — contador novo incompleto no contrato do carimbo/ESTADO.** Ele é guardado no topo do JSON, mas permanece fora de `censo`, `ESPERADO`, `ALARMA_SEMPRE` e `ALARMA_EM_0`. O leitor calcula `fora_do_esperado` exclusivamente de `censo` × `esperado` e não extrai a chave nova: `bin/fio_estado.py:69-92`. O ESTADO mostrará o nome em “a rodada ALARMOU” via `gritou`, mas não o valor medido nem seu esperado: `bin/fio_estado.py:101-119`; `bin/gerar_estado.py:260-261`. Portanto não alegar que o alarme fica totalmente oculto.
+
+- **P3 — ação nova ausente no filtro enumerado da auditoria.** `fecho_sem_credor` não consta em `LogAuditoria.ACOES`: `app/core/models.py:286-296`. O dropdown usa essa lista: `app/core/views.py:738`; `app/templates/core/log_auditoria.html:23-27`. A linha continua na listagem geral, e GET manual com `acao=fecho_sem_credor` funciona pelo filtro livre: `app/core/views.py:705-710`. Não há falha de gravação por `choices`: o campo suporta verbos livres de até 64 caracteres, conforme o próprio comentário em `app/core/models.py:296`, e o escritor chama `objects.create` sem `full_clean`: `app/core/observ.py:133-138`.
+
+Sem achado:
+
+- **Código de saída e consumidor do pipeline:** o diff mantém carimbo antes do `SystemExit(2)` (`app/chamados/management/commands/vigiar_fio_morto.py:174-197`, linhas-base), e o placar já trata exit 2 como ALARME: `app/core/management/commands/pipeline_placar.py:75-79,98-99`.
+- **Outros leitores por ações específicas:** histórico consulta apenas transições de Chamado, portanto a ação de PerguntaDisputa não entra por engano: `app/chamados/services/historico.py:44,86-88`; vigia de loop filtra `estado_chamado`: `app/chamados/services/vigia_loop.py:28-32`.
+- **Segundo escritor de LogAuditoria:** a chamada nova usa a casa única `evento`, que efetivamente grava em `app/core/observ.py:94-105,133-138`.
+
+Cobertura insuficiente: os testes existentes verificam os grupos declarados e esperado antigos, não a nova integração (`app/chamados/tests/test_o261_vigia_fio.py:643-657,703-707`); o teste novo do anexo chama só a função contadora, nunca o comando (`app/chamados/tests/test_o261_resposta_vazia.py:106-119`, arquivo novo do diff). Remover do comando a impressão, o carimbo e o alarme novos não é detectado por esse teste novo. Execução dos testes e consumidores externos à cópia: [nao verificado].
 
 ## 29/10 20:57 · sessao 0d415d34eeb7 · o261 · leitura · origem=Code
 
@@ -506,56 +565,4 @@ Não sustento perda do Fix A nesta porta: J já está aprovada quando o bloqueio
 
 Os novos testes de trilha verificam existência, sem repetição/contagem; não demonstram a dedup do escritor nem seu retorno sob falha. (`app/ponto/tests/test_justificativa_encerra_origem.py:516,548-551`; `app/chamados/reconciliador.py:482-485`)
 
-## 29/10 18:37 · sessao ae7a33a452e5 · - · - · origem=Ronald (tmux)
-
-Achado principal: **P1 — fechamento antes da premissa regularizada**, introduzido por `return ch.encerrar()` em `app/ponto/services/justificativa.py:83`.
-
-Contraexemplo permitido pelo código: B aberto, módulo `entrada_bloqueada_turno_aberto`, `contexto_json={'data_turno': D2}`, sem justificativa relacionada, perguntas ou outra cobrança viva de D2; E de D2 sem S; nenhuma `CelulaDia` de D2; aprovar J de D1, tipo `outro`, sem saída. A associação com célula pode legitimamente permanecer nula (`app/chamados/models.py:895`, `app/chamados/models.py:911`).
-
-Antes, `retratar → reconciliar → _gate_premissa_do_fechamento` recusava B: o dia conhecido permanecia com turno aberto, sem exceção por dedup (`app/chamados/models.py:467`, `app/chamados/models.py:495`, `app/chamados/models.py:978`, `app/chamados/catalogo/premissa.py:48`). Depois, retenção retorna `None`, e `encerrar` força B para fechado sem consultar a premissa (`app/ponto/services/justificativa.py:79`, `app/chamados/models.py:1192`). O receiver não corrige este caso: consulta D2, mas cartório retorna sem agir quando não encontra célula (`app/chamados/signals.py:177`, `app/ponto/services/cartorio.py:1547`). Filtro sem dia é anterior; **remoção da guarda é nova**. Ocorrência em produção `[nao verificado]`.
-
-Outras diferenças concretas da troca:
-
-- **P2 — perda da ocorrência que identifica J no bloqueio.** Antes, o conteúdo customizado da chamada antiga chegava à ocorrência `tipo='retratado'`; agora somente a transição de estado é escrita. A unidade anexa a ocorrência em `app/chamados/reconciliador.py:523`; o novo caminho termina em `app/ponto/services/justificativa.py:83`, passando por `app/chamados/models.py:1201`. Contraexemplo: bloqueio aberto sem dia e sem retenção → antes havia ocorrência com “Justificativa #J aprovada”; depois, apenas trilha genérica de estado (`app/chamados/models.py:227`).
-
-- **P2 — enfraquecimento da atomicidade das perguntas sob falha.** Se uma pergunta morta elegível falhar persistentemente no `save`, antes o receiver engolia a primeira falha, mas a chamada explícita de `_retratar` repetia a resolução e propagava a falha, desfazendo aprovação e fecho; agora somente o receiver executa, engole a falha e permite aprovada+fechado com pergunta não materializada (`app/chamados/signals.py:88`, `app/chamados/reconciliador.py:521`, `app/ponto/services/justificativa.py:207`, `app/chamados/services/disputa_emissao.py:1583`). Falha real em produção `[nao verificado]`.
-
-**Não sustento regressão do Fix A nesta porta:** ao chegar ao bloqueio, J já foi aprovada; outra justificativa pendente é barrada pela retenção (`app/ponto/services/justificativa.py:193`, `app/ponto/services/justificativa.py:206`, `app/chamados/reconciliador.py:453`).
-
-**Retorno do escritor:** `registrar_retencao` promete “gravou agora”, mas retorna `True` mesmo se `evento` falhar e devolver `None`; nenhum dos três consumidores usa esse retorno (`app/chamados/reconciliador.py:461`, `app/chamados/reconciliador.py:484`, `app/core/observ.py:139`, `app/ponto/services/justificativa.py:81`, `app/ponto/services/justificativa.py:390`, `app/chamados/reconciliador.py:505`).
-
-## 29/10 18:37 · sessao dd83c7dae16a · grupo1p1 · verificador · origem=Code
-
-- **Classe 3 — `app/api/tests/test_o21_app_diz_o_que_foi_decidido.py:169`**: acrescenta `timezone.now()` ao caso que já lê `_tz.localdate()` na linha 167. São duas leituras, sob o congelamento da linha 39.
-
-- **Classe 3 — `app/ponto/tests/test_piso_nao_sobe_por_batida.py:123`**: acrescenta `timezone.now()` depois de `timezone.localdate()` na linha 122. São duas leituras, sob o congelamento da linha 37.
-
-- **Classe 3 — `app/core/tests/test_espelho_tela_le_a_folha.py:70`**: o caso que chama `_dois_resumos()` na linha 81 executa dois `timezone.now()`, nas linhas 69 e 70, sob o congelamento da linha 39.
-
-- **Classe 3 — `app/core/tests/test_espelho_tela_le_a_folha.py:133`**: este outro caso executa três leituras: duas pelo helper chamado na linha 126, nas linhas 69 e 70, e outra na linha 133; o congelamento está na linha 39.
-
-- **Classe 3 — `app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py:251`**: `test_05` chama `_tela()` e `_cartao()`, que leem `timezone.now()` separadamente nas linhas 187 e 191.
-
-- **Classe 3 — `app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py:378`**: `test_11` lê pelo `_tela()` da linha 377, cujo relógio está na linha 187, e novamente para o cartão na linha 378.
-
-- **Classe 3 — `app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py:391`**: `test_12` lê pelo `_tela()` da linha 390, cujo relógio está na linha 187, e novamente para o cartão na linha 391.
-
-Total por classe: 3 = 7 casos; 5 = 0; 7 = 0; 8 = 0.
-
-## 29/10 18:37 · sessao f88ca1018fe0 · - · - · origem=Ronald (tmux)
-
-Leitura estática; execução dos testes `[nao verificado]`. [nao verificado]
-
-| Teste novo/alterado | Sem a cura correspondente | [nao verificado]
-|---|---|
-| `test_BLOQUEIO_aberto_e_resolvido_FECHAM_pela_porta_sem_trilha_de_dia` | **Morde** a troca `retratar → encerrar`: exige `fechado` e ausência de `fechamento_sem_dia_do_fato`; `reconciliar` produz `resolvido` e não transiciona de `resolvido`. `app/ponto/tests/test_justificativa_encerra_origem.py:486`, `:501`, `:502`; `app/chamados/catalogo/motor.py:111`; `app/ponto/services/justificativa.py:83`. |
-| `test_BLOQUEIO_com_irma_respondida_fica_e_a_retencao_se_diz` | **Já passaria no pai**: o antigo `retratar` já consultava retenção e escrevia a trilha, conforme patch. Protege o novo `encerrar` contra perder a guarda, mas não demonstra cura de defeito introduzido no pai. `app/ponto/tests/test_justificativa_encerra_origem.py:504`, `:515`, `:516`; `app/chamados/reconciliador.py:503`. |
-| `test_TRAVA_inclui_o_bloqueio_RESOLVIDO` | **Falha no pai pelo retorno `None`**, embora o bloqueio resolvido já integrasse o queryset no pai, conforme contexto do patch. Não prova lock nem ordem: remover `select_for_update()` preservando a lista deixa a asserção satisfeita. `app/ponto/tests/test_justificativa_encerra_origem.py:518`, `:526`, `:527`; `app/ponto/services/justificativa.py:112`, `:117`. |
-| `test_CASCATA_retida_grava_a_trilha_da_retencao` | **Falso verde removendo somente a chamada da cascata** em `app/ponto/services/justificativa.py:390`: a fixture faz `ch` ser origem de `j` (`app/ponto/tests/test_justificativa_encerra_origem.py:536`, `:59`). Após a cascata, `encerrar_chamado_de_origem` chama `retratar`, que chama o mesmo escritor; `m.called` e a existência da trilha ficam satisfeitos por esse caminho. `app/ponto/services/justificativa.py:400`, `:42`; `app/chamados/reconciliador.py:503`; `app/ponto/tests/test_justificativa_encerra_origem.py:550`, `:551`. |
-| `test_PORTAS_UM_A_UM_saida_None_dizem_a_recusa` | **Morde as guardas de `None`, mas elas são anteriores ao delta**: exige mensagem contendo `recusada`; sem as guardas, a outra justificativa com `batida_gerada=NULL` desvia para “Saida ja materializada”. `app/ponto/tests/test_justificativa_encerra_origem.py:553`, `:561`, `:577`, `:579`; `app/ponto/services/justificativa.py:183`, `:185`, `:358`, `:360`. |
-| Fixture adicional de `test_LOTE_saida_RECUSADA_pela_porta_desfaz_o_item` | Fortalece teste de **cura anterior** em `app/ponto/views.py:1822`: outra justificativa com saída nula evita que uma exceção acidental em anotação produza rollback e falso verde. `app/ponto/tests/test_justificativa_encerra_origem.py:321`, `:331`, `:335`, `:340`; `app/ponto/views.py:1826`, `:1833`. |
-| `bulk_create` em `test_LOTE_saida_de_OUTRA_justificativa_desfaz_o_item` | Corrige a preparação para medir o lote, mantendo J pendente até o mock; o teste exige que `registrar_batida` seja chamado e que o item volte inteiro. A cura correspondente `_outra is not None → raise` já está fora do delta. `app/ponto/tests/test_justificativa_encerra_origem.py:453`, `:461`, `:469`, `:471`, `:474`; `app/ponto/views.py:1827`. |
-
-Os testes novos não exercitam deduplicação repetida nem retenção por `justificativa_alheia`: as novas verificações de trilha usam apenas `irma_orfa` e `.exists()`, sem contagem ou segunda tentativa. `app/ponto/tests/test_justificativa_encerra_origem.py:516`, `:551`; a dedup reside em `app/chamados/reconciliador.py:473`, `:479`, `:482`.
-
-_235 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_238 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

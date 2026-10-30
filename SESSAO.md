@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 20:58:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (24.6 MB). Acoes na janela: **372**.
+**Medido em 29/10/2026 21:03:18.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (24.6 MB). Acoes na janela: **373**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:01:40 | Bash | Wait in-turn again for JUSTIF push | `cd /home/ronald/saas-hasner/logs && end=$((SECONDS+580)); while [ $SECONDS -lt $end ]; do grep -q '^rc=' justif/push.log 2>/dev/null && break; /usr/bin/sleep 15; done; date +%H:%M; tail -4 justif/push.log` |
 | 20:51:50 | Bash | Wait in-turn for JUSTIF push | `cd /home/ronald/saas-hasner/logs && end=$((SECONDS+580)); while [ $SECONDS -lt $end ]; do grep -q '^rc=' justif/push.log 2>/dev/null && break; /usr/bin/sleep 15; done; date +%H:%M; tail -4 justif/push.log` |
 | 20:51:45 | Agent | Build O261 cures (RESPOSTA-VAZIA first) | `Construa as curas da O261, a proxima obra da ORDEM VIVA (`<!-- ORDEM-VIVA-TOPO: O261 -->` em /home/ronald/saas-hasner/app/docs/BACKLOG.md). Antes de tudo, leia o CLAUDE.md INTEIRO, em especial: - secao 0: LEI-AKITA, a linha com padrao=, RED primeiro; - secao 4: zonas inviolaveis; - secao 7b: CODEX-PRE-VERIFICADOR, MAIS-CODEX, CODEX-SEM-AGENTE-ESPERANDO, AGENTE-NAO-ESPERA, DESPACHO-POR-PAPEL. Os av ...` |
 | 20:51:28 | Bash | Push JUSTIF marco in background | `cd /home/ronald/saas-hasner && bin/push.sh > logs/justif/push.log 2>&1; echo "rc=$?" >> logs/justif/push.log; tail -3 logs/justif/push.log` |
