@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-PAREI: ! CLEAR | espera Ronald -- MODO PREPARA-CLEAR (contexto 64% >= 60%). Marco fechado: FIO-MORTO-DONO-NA-LISTA NO AR (2f503709). Nada em voo. Retomar pelo HANDOFF-SESSAO: proximo = VETO-NA-PORTA pouso A na copia wt-veto-a-3010-1003 com o aval VETO-EC-NONE-IMPRESSAO (11:0x), depois DIA-DA-PERGUNTA-E-O-TURNO.
+PAREI: ! CLEAR | espera Ronald -- MODO PREPARA-CLEAR (contexto 64% >= 60%). Marco fechado: FIO-MORTO-DONO-NA-LISTA NO AR (2f503709). Nada em voo. Retomar pelo HANDOFF-SESSAO: proximo = VETO-NA-PORTA pouso A na copia wt-veto-a-3010-1003 com o aval VETO-EC-NONE-IMPRESSAO (11:0x); COL309-SETEMBRO (`!` 11:3x, competencia 09 exportada) e O121-A1 logo depois; depois DIA-DA-PERGUNTA-E-O-TURNO.
 
 
 
