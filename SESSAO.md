@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 18:38:51.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (4.0 MB). Acoes na janela: **159**.
+**Medido em 30/10/2026 18:44:16.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (4.1 MB). Acoes na janela: **163**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:43:54 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/BACKLOG.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('\| SUITE-POR-IMPACTO \|')) L.insert(i+1,"\| SELOS-DE-HOST-VERMELHOS-NO-MAIN \| linha de fila (medido 30/10 18:0x, os 2 construtores de instrumento + sessao): `test_lei_akita` (ac721607, 2cd634cb ja empurrados), `test_cortes_registrados` (cortes env ...` |
+| 18:43:38 | Bash |  | `cd /home/ronald/wt-codex-ctx-1711 && git log --oneline 6c37ad84..HEAD; git diff --stat 6c37ad84 HEAD \| tail -12; git status --short \| head -5` |
+| 18:43:19 | Bash |  | `cd /home/ronald/saas-hasner && sed -n 95,150p bin/tests/test_lei_akita.sh` |
+| 18:43:17 | Bash |  | `cd /home/ronald/saas-hasner && grep -n "first-parent\\|BASE\\|desde\\|INTRODUZ\\|rev-list\\|git log" bin/tests/test_lei_akita.sh \| head -15` |
 | 18:38:49 | Bash |  | `cd /home/ronald/saas-hasner && S=/home/ronald/wt-suite-impacto-1659/bin/suite_impacto.sh; P=/home/ronald/saas-hasner/logs/suite_impacto/pronto5; (bash $S --gerar-mapa --sha main > logs/suite_impacto/mapa_sessao2.log 2>&1; echo "rc=$?" >> logs/suite_impacto/mapa_sessao2.log; SUITE_IMPACTO_LOGS=$P bash $S --gerar-mapa --sha 270f75b7 > logs/suite_impacto/pronto5_mapa.log 2>&1; echo "rc=$?" >> logs/su ...` |
 | 18:36:07 | Bash |  | `/usr/bin/sleep 45; cd /home/ronald/saas-hasner && echo '{}' \| python3 bin/hook_stop_fila1.py; echo rc=$?` |
 | 18:36:04 | Bash |  | `cd /home/ronald/saas-hasner && grep -n "def _prova_arquivo\\|def _linha_do_topo" -A18 bin/hook_stop_fila1.py \| grep -v '^\s*$' \| head -45` |
