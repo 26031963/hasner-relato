@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 01:12:36.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (4.4 MB). Acoes na janela: **203**.
+**Medido em 30/10/2026 01:18:07.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (4.4 MB). Acoes na janela: **204**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:12:35 | Bash | ESPERANDO on sombra; record pouso wait | `python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO:') L[2]='ESPERANDO: /home/ronald/saas-hasner/bin/sombra.sh \| pid=2003717' L.insert(3,'> POUSO [nome] (B) ESPERA O ENSAIO DE HOJE: suite inteira VERDE na arvore certificada (12.731 OK, rc 0, arvore e34bfdf6 antes=depois, `app/logs/o261/suite_mariaB_e34bfdf6.log` na copia); `bin/sombra.sh --conferir` ...` |
 | 01:12:24 | Bash | Find sombra producer pid | `sleep 3; P=$(pgrep -f '^/bin/bash bin/sombra.sh --refazer\|^bash bin/sombra.sh --refazer' \| head -1); [ -z "$P" ] && P=$(pgrep -f 'sombra.sh --refazer --dump-agora' \| grep -v $$ \| tail -1); for p in $(pgrep -f 'sombra.sh --refazer'); do echo "$p $(tr '\0' ' ' </proc/$p/cmdline \| cut -c1-80)"; done` |
 | 01:12:16 | Bash | Rebuild today's sombra ensaio for deploy gate | `cd /home/ronald/saas-hasner && bin/sombra.sh --refazer --dump-agora > logs/sombra_manual_3010.log 2>&1 && bin/sombra.sh --bloco >> logs/sombra_manual_3010.log 2>&1; echo "rc=$?" >> logs/sombra_manual_3010.log; bin/sombra.sh --conferir >> logs/sombra_manual_3010.log 2>&1; echo "conferir_rc=$?" >> logs/sombra_manual_3010.log` |
 | 01:12:03 | Bash | Check sombra duration and schedule | `cd /home/ronald/saas-hasner && python3 -c "import json;d=json.load(open('app/config/crons_duracao.json'));print({k:v for k,v in d.get('dur_s',{}).items() if 'sombra' in k})"; crontab -l \| grep sombra.sh \| head -2; ls logs/crons_em_curso/ 2>/dev/null \| head; grep -nE '^\s*--refazer\|--dump-agora\|--bloco' bin/sombra.sh \| head -6` |
