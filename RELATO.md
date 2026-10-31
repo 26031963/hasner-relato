@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: trava_teste.sh | pid=1002244
+ESPERANDO: trava_teste.sh | pid=1279498
 > **PUSH-PRESO (01:04):** `bin/push.sh origin main` lancado com 17 commits (8bf7e840..3c52f98f, todos ja no ar). Portoes do topo: regua_tickets estava BLOQUEADO pelo placar da virada do dia (30/10 -> 31/10), curado com `tickets_placar.sh --escrever` (derivado, o pos_push o fecha); os outros 6 verdes. A suite do pre-push entra na fila da trava atras da suite inteira do DISJUNTOR (~15 min) e dos alvos F1C4: sobe em ~30-45 min. Log `logs/push/`.
 > **FILA 01:0x:** F1C4: alvo_final errors=2 (ordem=(2,1)) era FIXTURE -- a 1a subTest lavra a ata da folga e o `criar` recusa o par (porta certa); f81aba65 zera a ata, alvo+suite enfileirados (`logs/o261e/f1c4b_alvo_final2.log`). F5C entregue 01ae542e (Codex FINAL: 2 procedentes curados, 5 para o opus), suite inteira enfileirada (`logs/o261e/f5c_suite_completa_01ae542e.log`). DISJUNTOR: suite FAILED 1 = except-pass novo em core/esteira_vigia.py, devolvido ao construtor. V-FASE B1: construtor rodando mutantes.
 > **DESPACHO V3-DIFF-IMPACTO (01:1x):** DIFF v2 x v3 UMA vez como IMPACTO por rubrica (L-110), frotas 09 e 10 na sombra, pelo `diff_calculador` REAL da copia 2430fcc5 -> sonnet (motivo: DIFF de motor roda na sombra por `bin/sombra.sh`, fora do envelope de leitura do Codex). Nao cruza arquivo com a PISTA STATUS.
