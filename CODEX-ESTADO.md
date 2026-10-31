@@ -1,7 +1,42 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 13:44** · publicado em **31/10/2026 13:48** (UTC-3)
+> Ultima resposta processada: **31/10/2026 13:52** · publicado em **31/10/2026 13:54** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 13:52 · sessao 08f446a69283 · - · - · origem=Ronald (tmux)
+
+Leitura do código e execução isolada de `julgar` em memória confirmaram os seis resultados esperados; o MORDE completo não foi executado porque cria arquivos temporários (`bin/tests/test_lei_akita.sh:128-140`).
+
+| Caso MORDE | Mutante que o caso mata |
+|---|---|
+| Termo inventado (`:116`) | Remover a rejeição de termo ausente do catálogo (`:88-89`). |
+| `n/a (medida)` em negócio (`:117`) | Permitir esse `n/a` com arquivos de negócio ou fazer `negocio()` retornar sempre vazio (`:71-72`, `:83-85`). |
+| Falta de `padrao=` (`:118`) | Retornar `None` quando a expressão regular não encontra o campo (`:79-81`). |
+| `Single Writer Principle` válido (`:119`) | Rejeitar qualquer termo ou inverter a condição do catálogo (`:88-90`); o termo está no catálogo (`app/docs/GLOSSARIO.md:12`). |
+| `n/a (instrumento)` em `bin/tests` (`:120`) | Proibir todo `n/a` ou rejeitar instrumento mesmo fora de negócio (`:83-85`). |
+| `padrao=` mencionado no RED (`:121`) | Usar `ms[0]` em vez de `ms[-1]` (`:79-82`): confirmado em memória, extrai `no texto` e produz falha. |
+| Dois novos ruins e publicado ruim (`:138-146`) | Julgar somente HEAD, retornar universo vazio ou deixar de excluir `origin/main` (`:105-112`). | [nao verificado]
+| Sem `origin/main` (`:147-153`) | Ignorar `returncode` e transformar erro do `rev-list` em stdout vazio (`:93-96`). |
+
+Todas as referências `:linha` acima pertencem a `bin/tests/test_lei_akita.sh`.
+
+Mutantes sobreviventes: retirar `--first-parent`; retirar o piso; permitir `n/a (instrumento)` em negócio; aceitar `n/a` sem qualificador. A fixture tem corte na raiz, história linear e nenhum negativo de instrumento em negócio ou `n/a` genérico (`bin/tests/test_lei_akita.sh:116-121`, `bin/tests/test_lei_akita.sh:133-145`).
+
+Falso verde comprovado: `padrao=a`, `padrao=x` e `padrao=padrao` retornam `None`. O juiz busca substring em todo o texto dos documentos, enquanto o contrato documental delimita termos técnicos, aliases e termos expressamente listados; nenhum MORDE cobre essa diferença (`bin/tests/test_lei_akita.sh:63-69`, `bin/tests/test_lei_akita.sh:88-90`, `app/docs/PLANO-PADROES.md:46-50`).
+
+A correção do rc do Git fecha o erro comum: subprocesso malsucedido aborta antes do marcador final, e o shell acusa ausência de resposta (`bin/tests/test_lei_akita.sh:93-95`, `bin/tests/test_lei_akita.sh:162-167`). Porém, corte ausente retorna antes de validar `origin/main`; `PADRAO_SEM_CORTE` é explicitamente aceito como sucesso e não tem fixture MORDE (`bin/tests/test_lei_akita.sh:97-99`, `bin/tests/test_lei_akita.sh:157-158`, `bin/tests/test_lei_akita.sh:167`).
+
+## 31/10 13:51 · sessao 893cbcb3fe18 · - · - · origem=Ronald (tmux)
+
+1. **A régua chama; pre-push não chama.** `bin/regua.sh:138-145` executa `bash` para cada `tests/test_*.sh` e aborta com `exit 1` se o selo falhar. `bin/pre-push.sh:13-19` declara que esse loop não roda no pre-push e chama explicitamente apenas os selos `lei_protege_sitio` e `achado_por`; o restante do pre-push testa suites de Django (`bin/pre-push.sh:155-195`). A versão antiga também não chama Akita (`app/core/hooks/pre-push.sh:6-89`). O instalador canônico usa `bin/pre-push.sh` (`bin/hooks.sh:9-11`) e produz wrapper que delega a ele (`bin/hooks.sh:51-56`). Hook efetivamente instalado: **[não verificado]**.
+
+2. **Buraco crítico: o selo pode perder justamente o commit novo no fluxo normal.** A cadeia exige ausência de commits locais (`bin/molde_fatia/cadeia.sh:13`), copia a cura (`bin/molde_fatia/cadeia.sh:36-40`) e roda a régua antes de criar o commit (`bin/molde_fatia/cadeia.sh:51`); nesse ponto o Akita julga o HEAD antigo. Depois cria o commit com `msg_commit.txt` (`bin/molde_fatia/cadeia.sh:68`) e chama novamente a régua (`bin/molde_fatia/cadeia.sh:70-82`). Porém a régua retorna “JA VERDE” pelo fingerprint de arquivos Python/HTML e pelo status, antes dos selos de host (`bin/regua.sh:25-35`, `bin/regua.sh:84-94`, `bin/regua.sh:138-145`). Criar o commit não altera esses arquivos: o novo `padrao=Padrao Inventado Do Nada` pode nunca ser julgado. A cadeia aceita o stamp antigo e faz push (`bin/molde_fatia/cadeia.sh:72`, `bin/molde_fatia/cadeia.sh:82-85`); o pre-push não chama Akita (`bin/pre-push.sh:13-19`). Mesmo executar as suites novamente não cobre o juiz Python embutido nesse selo de host (`bin/pre-push.sh:182-195`, `bin/tests/test_lei_akita.sh:58-163`). Reprodução operacional: **[não verificado]**; caminho deduzido diretamente dos chamadores citados.
+
+3. **O cache não identifica o universo de commits.** A régua calcula hash de árvore (`bin/regua.sh:45`), mas seu atalho só compara `FP` e `REGUA_STATUS` (`bin/regua.sh:84-94`). O pre-push compara árvore/fingerprint/status (`bin/pre-push.sh:61-66`), sem comparar mensagens ou `origin/main..HEAD`. Portanto amend apenas da mensagem, commit vazio ou merge de mesma árvore preservam a identidade usada pelo cache e podem conservar o verde anterior sem nova avaliação Akita (`bin/regua.sh:84-94`, `bin/pre-push.sh:61-66`). Isso é particularmente incompatível com um selo cujo universo é obtido de `HEAD` e `origin/main` (`bin/tests/test_lei_akita.sh:105-110`).
+
+4. **Worktree não é escolhido automaticamente pelo local de execução.** O selo fixa `R=${LEI_AKITA_R:-/home/ronald/saas-hasner}` (`bin/tests/test_lei_akita.sh:17`), entrega esse `R` ao Python (`bin/tests/test_lei_akita.sh:164`, `bin/tests/test_lei_akita.sh:169`) e executa Git com `-C repo` (`bin/tests/test_lei_akita.sh:93`, `bin/tests/test_lei_akita.sh:156`). Sem override, executar a cópia numa worktree julga o repositório principal. A régua não fornece `LEI_AKITA_R` ao chamar o selo (`bin/regua.sh:138-140`) e também fixa APP/STAMP no principal (`bin/regua.sh:14-15`). Com `LEI_AKITA_R` explicitamente apontado à worktree, HEAD destacado é compatível com o código: o juiz usa `HEAD`, sem exigir nome de branch (`bin/tests/test_lei_akita.sh:105`).
+
+5. **Efeito do universo novo:** nas execuções efetivas da pasta de selos, a régua passa a receber julgamento apenas dos commits selecionados em `HEAD ^origin/main`, adicionalmente restringidos pelo primeiro pai e pelo piso (`bin/tests/test_lei_akita.sh:97-110`); falhas do selo continuam abortando a régua antes da suite (`bin/regua.sh:138-145`). Isso não transforma o selo em guarda de todo push, porque o pre-push continua sem chamá-lo e a régua pode sair antes do loop (`bin/pre-push.sh:13-19`, `bin/regua.sh:84-94`).
 
 ## 31/10 13:44 · sessao f9f744f07fd0 · REPROVA-E-DESENHO · verificador · origem=Code
 
@@ -602,48 +637,4 @@ A LAPIDE 72 está correta quanto aos termos e à realização principal dos diff
 - O diff de `d8912301` contra o pai altera somente o selo e acrescenta a lápide. Não modifica `julgar`: continua uma única função, chamada pelo universo e pelos casos plantados (`bin/tests/test_lei_akita.sh:73`, `bin/tests/test_lei_akita.sh:104`, `bin/tests/test_lei_akita.sh:118`). Os hashes publicados aparecem em comentários/documentação, sem condição de dispensa (`bin/tests/test_lei_akita.sh:53`, `app/docs/LAPIDES.md:785`, `app/docs/LAPIDES.md:786`).
 - As exigências verificadas já pertencem à L-123: termo conhecido, restrição de `n/a` e conferência humana contra o diff (`app/docs/LEIS.md:144`, `app/docs/PLANO-PADROES.md:53`, `app/docs/PLANO-PADROES.md:58`). Não há novo termo no glossário nem nova lei no diff; o novo universo implementa o aval fornecido e está descrito em `bin/tests/test_lei_akita.sh:51`.
 
-## 31/10 13:34 · sessao 7cfa3b05c897 · GRADE-FOLGA · verificador · origem=Code
-
-A cura liga o `status` à precedência, mas não unifica todo o resultado do calendário. Restam cobertura incompleta do teste e comprovação pendente do pouso v3. (`app/colaboradores/services/calendario.py:803`, `:890`; `app/colaboradores/tests/test_calendario_folga_a_mao_e_da_pessoa.py:55`; `app/ponto/services/cartorio.py:173`.)
-
-1. **Autoridade e caminho restante do calendário.** Sem o argumento, `fatos_do_periodo` carrega as folgas da pessoa, seleciona a válida e escreve `fatos['folga_lancada']`; também decide `faixa` pela precedência. O calendário lê ambos para classificar o dia. (`app/ponto/precedencia.py:281`, `:358`, `:392`, `:408`; `app/colaboradores/services/calendario.py:795`, `:803`.)
-
-   Porém, `eh_trabalho` continua vindo do vínculo **ativo**, alimentado por `_folgas_mes`, e é devolvido sem o ajuste local de `_classificar`. No próprio cenário novo, pode sair `status='folga'` e `eh_trabalho=True`: a célula declara trabalho e o modelo a lê primeiro. (`app/colaboradores/services/calendario.py:772`, `:890`, `:116`; `app/colaboradores/tests/test_calendario_folga_a_mao_e_da_pessoa.py:40`; `app/escala/models.py:1071`.)
-
-   Esse é o caminho restante por foto: sem célula, o fallback considera a data presente na foto como folga, sem distinguir origem. A diferença entre previsão bruta e status final, isoladamente, não demonstra regressão: `resolver_dia_oferecido` também exige um status que peça decisão, excluindo `folga`. (`app/escala/models.py:1073`, `:1252`, `:1280`; `app/colaboradores/services/calendario.py:181`, `:189`.)
-
-   Os contadores acompanham o **status**; badges continuam lendo feriados, rubricas lavradas e chamados. Portanto, não passam todos a consumir `faixa`, nem isso demonstra por si um badge incorreto. (`app/colaboradores/services/calendario.py:937`, `:944`, `:838`, `:845`, `:898`.)
-
-2. **Custo: sem N+1 novo de FolgaDia.** O carregador executa uma consulta antes do laço diário; a seleção acessa campos `_id` já carregados, sem buscar relações. (`app/ponto/precedencia.py:207`, `:281`, `:337`, `:238`.)
-
-   Há duas ressalvas: o legacy recarrega por **segmento**, e o caminho completo já consulta o nome de cada feriado por data. Nenhuma dessas consultas nasce do seletor novo. (`app/escala/utils.py:985`, `:995`, `:770`, `:1119`; `app/ponto/precedencia.py:407`; `app/core/feriados.py:100`.)
-
-3. **O RED tem mordida, mas a cobertura é parcial.** Pelo rastreio do código, a mão presa ao velho muda de `falta` para `folga`; a asserção nova distingue esses resultados. Execução integrada vermelho/verde: **[não verificado]**. (`app/colaboradores/tests/test_calendario_folga_a_mao_e_da_pessoa.py:54`, `:55`; `app/colaboradores/services/calendario.py:116`, `:133`.)
-
-   O controle do calendário velho mede uma exclusão válida, mas fraca: `assertNotEqual(..., 'folga')` também aceita `sem_dados`, `previsto` ou outro status errado, embora a docstring prometa `falta`. Ele já passava com a foto restrita ao ativo. (`app/colaboradores/tests/test_calendario_folga_a_mao_e_da_pessoa.py:10`, `:60`, `:62`; `app/colaboradores/services/calendario.py:593`.)
-
-   **Falta testar o outro defeito citado pela própria cura:** folga de calendário do ativo quando a geradora do dia é outro vínculo. A fixture atual sempre põe o ativo como geradora; também não cobra contadores, badges ou o contrato de `eh_trabalho`. (`app/colaboradores/services/calendario.py:608`; `app/colaboradores/tests/test_calendario_folga_a_mao_e_da_pessoa.py:41`, `:55`, `:62`.)
-
-4. **Triagem da volta 2.** Não encontrei dependência nova que transforme `o_dia_ja_e_folga` ou `_folga_avulsa` em bloqueadores desta lavra: continuam na idempotência/veto da porta; o caminho alterado usa diretamente os helpers novos. (`app/ponto/services/declarar_dia.py:90`; `app/ponto/precedencia.py:501`; `app/escala/utils.py:1115`.)
-
-   A troca de ordem alcança células/órfãs e a leitura da ausência parcial, portanto “nenhum `tipo_dia` mudou” não comprova ausência de efeito nos demais campos. Impacto financeiro adicional ao anexo: **[não verificado]**. (`app/escala/utils.py:1794`, `:1127`, `:1202`.)
-
-5. **Classes estruturais e pouso.** O predicado novo está centralizado e é chamado pela grade e precedência; nesses trechos não aparece novo escritor persistente, relógio ou aquisição de trava. (`app/ponto/precedencia.py:236`, `:358`; `app/escala/utils.py:1115`, `:1124`.) O calendário conserva classificação própria, já reconhecida como migração pendente no registro; não é juiz criado por este diff. (`app/core/juizes.py:169`; `app/colaboradores/services/calendario.py:93`.)
-
-   **Não daria o pouso como comprovado:** a v3 já está declarada, mas exige antes ensaio `--apply` com dias rejulgados, dias que movem minuto e `FORA-DO-HORIZONTE 0`. Esses resultados não constam do material fornecido: **[não verificado]**. Isso é pré-requisito sem comprovação, não prova de que um pouso indevido ocorreu. (`app/ponto/services/cartorio.py:110`, `:173`.)
-
-## 31/10 13:33 · sessao 11088239546e · CLAUDE-MD-RACIONAL · leitura · origem=Code
-
-1. **Não no histórico fornecido.** No commit **`8ce1e8c2`**, o texto removido de `CLAUDE.md` e adicionado a `app/docs/PISTA.md` passa diretamente de (4) para (6), literalmente:
-
-   > escopo, mesmo fora do diff. (6) ALERTA no ESTADO
-
-   Referências: `hist_triagem.txt:148` e `hist_triagem.txt:347`.
-
-2. **Sim, no aval de 30/10 10:3x em `PROMPTS.md`**, consta literalmente:
-
-   > (5) retroativo: NOTURNO (a) 1,5 / (b) 2,3 / (b) parcial 4,6; V-FASE refeita pelo item (2)
-
-   Referência: [app/docs/PROMPTS.md:1671](/home/ronald/codex_ws/a7b66d14d0bcf92e6f71f940cef6b3fdf6063dd7/app/docs/PROMPTS.md:1671). Esse item não aparece nos blocos dos dois arquivos exibidos no commit `8ce1e8c2` (`hist_triagem.txt:137–149` e `hist_triagem.txt:336–348`). **Commit que registrou esse aval em `PROMPTS.md`: [nao verificado]**; o anexo não o identifica.
-
-_1072 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1074 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
