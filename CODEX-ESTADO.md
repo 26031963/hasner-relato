@@ -1,7 +1,87 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 03:40** · publicado em **31/10/2026 03:41** (UTC-3)
+> Ultima resposta processada: **31/10/2026 03:49** · publicado em **31/10/2026 03:52** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 03:49 · sessao 80bb87b1c8db · O261-E-F5C · verificador · origem=Code
+
+1. **Pertença à fila: não localizei leitor residual usando `verbo` como conjunto da fila.** O produtor separa `fila_ids` de `verbo`; o juiz consulta `fila_ids`, e o vigia já lê `alim['fila_ids']`. A folha apenas encaminha a alimentação ao juiz. (`app/chamados/juizes.py:1161`, `app/chamados/juizes.py:1231`, `app/chamados/services/vigia_fio.py:567`, `app/folha/fora_da_folha.py:59`)
+
+   O teste de alimentação usa o produtor real; os dicionários manuais encontrados simulam **a saída da porta**, não `alimentar_portas()`. (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:187`, `app/folha/tests/test_haiku_fora_da_folha.py:101`, `app/folha/tests/test_haiku_fora_da_folha.py:129`, `app/chamados/tests/test_o261e_f5_alcance.py:307`)
+
+2. **`.get(anc)` mistura ausência de chave com `None` legítimo.** Auditoria recebe pilha `registro`, cujo verbo é `None`, e a partição grava esse valor; nesse caso, o antigo `[]` também devolveria `None`. A mudança efetiva é aceitar silenciosamente uma âncora presente em `fila_ids`, mas ausente do mapa, antes um `KeyError`. (`app/chamados/catalogo/natureza.py:44`, `app/chamados/catalogo/natureza.py:63`, `app/chamados/services/verbos.py:52`, `app/chamados/juizes.py:1231`, `app/chamados/juizes.py:1232`)
+
+   O produtor normal inclui a fila no universo vivo e grava cada linha no mapa; ocorrência dessa ausência em produção: **[nao verificado]**. (`app/chamados/services/painel.py:186`, `app/chamados/services/verbos.py:44`)
+
+   O tratamento pelos leitores é:
+
+   - **Juiz:** `{anc: None}` continua sendo porta; se não houver `cobrar` ou `validar`, resulta em fio `chamado`. Para chamados da célula, `None` também passa pelo filtro de visibilidade. (`app/chamados/juizes.py:1183`, `app/chamados/juizes.py:1233`, `app/chamados/juizes.py:1236`)
+   - **Folha:** lê `fio`, sem interpretar `verbos`; nesse caso chega a `chamado`, grupo C e `DESTRAVA['chamado']`. (`app/folha/fora_da_folha.py:70`, `app/folha/fora_da_folha.py:80`, `app/folha/fora_da_folha.py:199`)
+   - **Vigia:** conta a porta, registra papel textual `"None"` e esse valor sozinho não incrementa `alcance_porta_exige_o_admin`. (`app/chamados/services/vigia_fio.py:599`)
+   - **Testes:** aceitam explicitamente `None` na escada e numa porta mockada; esses casos não exercitam uma chave ausente na nova linha `.get(anc)`. (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:247`, `app/folha/tests/test_haiku_fora_da_folha.py:129`)
+
+3. **`DESTRAVA['admin']` cobre os ramos atuais de `validar`.** São dois: módulo em `MODULOS_DO_ADMIN_VALIDAR` — atualmente `gps_fora_geofence` — ou resposta creditada. Auditoria sai antes como `None`; silêncio substitui o verbo não nulo por `arquivado`/`historico`. A frase nova contempla resposta e chamado que o admin valida. (`app/folha/fora_da_folha.py:41`, `app/chamados/catalogo/natureza.py:29`, `app/chamados/catalogo/natureza.py:44`, `app/chamados/catalogo/natureza.py:59`, `app/chamados/services/verbos.py:48`)
+
+   Ressalva: nesse crédito, “respondida” significa `respondida_em is not None`, sem conferir texto; a frase promete acompanhar o que o painel põe em Validar, portanto não contradiz esse comportamento. (`app/chamados/services/raiox.py:137`, `app/folha/fora_da_folha.py:41`)
+
+4. **O teste novo da ficha tem mordida parcial.** [nao verificado]
+
+   - **Tupla literal:** isoladamente, não detecta voltar a `('arquivado', 'historico')`: essa é exatamente a constante atual, e os dois resultados cobrados permanecem iguais. O AST adjacente detectaria essa escrita literal porque proíbe `'historico'`; porém, exigir a presença do nome da constante no módulo não prova que ele governa `dono`. (`app/chamados/services/verbos.py:18`, `app/colaboradores/tests/test_ficha_do_colab.py:109`, `app/colaboradores/tests/test_ficha_do_colab.py:114`, `app/colaboradores/tests/test_ficha_do_colab.py:128`)
+   - **Truncamento `[:1]`:** detecta, pois exige dono `arquivado` para os dois verbos produzidos pelas duas datas. (`app/colaboradores/tests/test_ficha_do_colab.py:109`, `app/colaboradores/tests/test_ficha_do_colab.py:113`, `app/chamados/services/verbos.py:51`)
+   - **Mudança da fonte:** não testa se o consumidor acompanha uma constante alterada. Adicionar/remover membro pode derrubar a igualdade final mesmo com a ficha obedecendo à fonte, pois os estímulos continuam produzindo apenas os dois verbos atuais; reordenar passa pela comparação de conjuntos. (`app/colaboradores/tests/test_ficha_do_colab.py:109`, `app/colaboradores/tests/test_ficha_do_colab.py:114`, `app/chamados/services/verbos.py:51`)
+   - **Relógio solto:** sim, transitivamente. O teste não congela localmente; chama a ficha, que lê `timezone.now()`, e a partição lê outro. `self.hoje` também vem de `localdate()`. O runner só congela se houver `CONGELAR_EM`. (`app/colaboradores/tests/test_ficha_do_colab.py:18`, `app/colaboradores/tests/test_ficha_do_colab.py:30`, `app/colaboradores/tests/test_ficha_do_colab.py:98`, `app/colaboradores/services/ficha.py:117`, `app/chamados/services/verbos.py:35`, `app/core/runner_quarentena.py:94`)
+
+5. **Checklist, restrito ao delta:**
+
+   | Item | Resultado |
+   |---|---|
+   | 2º juiz | A folha delega ao juiz da porta; não reproduz a tradução de verbos. (`app/folha/fora_da_folha.py:59`, `app/folha/fora_da_folha.py:70`) |
+   | 2º escritor fora da porta | A troca para `.get` apenas altera leitura e montagem do retorno. (`app/chamados/juizes.py:1232`, `app/chamados/juizes.py:1237`) |
+   | Relógio fora da borda | Permanece alcançado pelo teste novo, sem freeze local. (`app/colaboradores/tests/test_ficha_do_colab.py:111`, `app/colaboradores/services/ficha.py:117`, `app/chamados/services/verbos.py:35`) |
+   | Derivação paralela de fonte única | A ficha atual usa a constante; o teste comportamental novo não prova essa dependência. (`app/colaboradores/services/ficha.py:160`, `app/colaboradores/tests/test_ficha_do_colab.py:114`) |
+   | Selo sem mordida | Mordida parcial na ficha; os testes de `None` citados não distinguem valor legítimo de chave ausente. (`app/colaboradores/tests/test_ficha_do_colab.py:109`, `app/chamados/tests/test_o261e_f5b_juiz_porta.py:247`, `app/folha/tests/test_haiku_fora_da_folha.py:129`) |
+
+Execução dos testes e efeitos em produção: **[nao verificado]**. [nao verificado]
+
+## 31/10 03:48 · sessao 2ffa2e9478c8 · - · - · origem=Ronald (tmux)
+
+Item 2 — `.get(anc)` tem dois `None` diferentes:
+
+- **Chave presente, valor `None`:** módulos de auditoria recebem pilha `registro`, cujo verbo é `None`; a partição grava esse valor no mapa. O silêncio não o substitui porque exige `v is not None`. [natureza.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/catalogo/natureza.py:44), [natureza.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/catalogo/natureza.py:63), [verbos.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/services/verbos.py:47). O `[]` anterior já devolvia esse `None`. [juizes.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/juizes.py:1232)
+- **Chave ausente:** a alteração passa a esconder alimentação inconsistente, devolvendo o mesmo `None`; anteriormente haveria `KeyError`. O produtor normal deriva a fila de `qs_vivos` e grava todas as linhas na partição; ocorrência de ausência entre consultas ou em produção é [não verificado]. [painel.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/services/painel.py:186), [verbos.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/services/verbos.py:52), [juizes.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/juizes.py:1232)
+
+Os consumidores não rejeitam `None`:
+
+- O juiz conserva `{anc: None}` como porta existente; sem `cobrar` ou `validar`, produz fio `chamado`. `None` também passa pelo filtro de visibilidade, pois não pertence a `FORA_DA_LISTA_PADRAO`. [juizes.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/juizes.py:1183), [juizes.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/juizes.py:1233)
+- A folha lê somente `porta['fio']`: recebe `chamado`, classifica como C e usa `DESTRAVA['chamado']`. [fora_da_folha.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/folha/fora_da_folha.py:68), [fora_da_folha.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/folha/fora_da_folha.py:80), [fora_da_folha.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/folha/fora_da_folha.py:199)
+- O vigia contabiliza a porta, não exige admin por esse valor e imprime papel literal `"None"`; se houver também `validar`/`decidir`, a interseção ainda exige admin. [vigia_fio.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/services/vigia_fio.py:599)
+- O teste F5B cobre apenas a escada isolada com `{1: None}`; o teste da folha injeta porta já pronta com `None` e exige `[555]`. Esses casos não exercitam a nova ausência de chave em `.get(anc)`. [test_o261e_f5b_juiz_porta.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/tests/test_o261e_f5b_juiz_porta.py:243), [test_haiku_fora_da_folha.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/folha/tests/test_haiku_fora_da_folha.py:129)
+
+Item 3 — **O texto novo cobre os dois ramos atuais que resultam em `validar`:** módulo em `MODULOS_DO_ADMIN_VALIDAR` (`gps_fora_geofence`) ou presença no conjunto de respostas creditadas. Auditoria vence antes; pergunta pendente e demais casos resultam em outros verbos. O silêncio substitui qualquer verbo não nulo por `arquivado`/`historico`, retirando-o de `validar`. [fora_da_folha.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/folha/fora_da_folha.py:41), [natureza.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/catalogo/natureza.py:29), [natureza.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/catalogo/natureza.py:44), [verbos.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/services/verbos.py:48)
+
+A ressalva é que “resposta creditada” significa `respondida_em is not None` no crédito, sem verificar texto nesse ponto; a nova frase limita-se ao que o painel põe em Validar. [raiox.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/services/raiox.py:133), [fora_da_folha.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/folha/fora_da_folha.py:41)
+
+## 31/10 03:48 · sessao 388eeedeb856 · - · - · origem=Ronald (tmux)
+
+- **O novo teste não morde a tupla literal atual.** Hoje `FORA_DA_LISTA_PADRAO` é exatamente `('arquivado', 'historico')`; trocar o uso da constante na ficha por essa tupla preserva as duas respostas cobradas pelo teste (`app/chamados/services/verbos.py:13`, `app/chamados/services/verbos.py:18`, `app/colaboradores/services/ficha.py:160`, `app/colaboradores/tests/test_ficha_do_colab.py:109`, `app/colaboradores/tests/test_ficha_do_colab.py:114`).
+
+- **O AST adjacente morde essa escrita literal**, porque proíbe qualquer constante `'historico'`; contudo, exigir que o nome `FORA_DA_LISTA_PADRAO` apareça em algum ponto do módulo não comprova que governa `dono` (`app/colaboradores/tests/test_ficha_do_colab.py:125`, `app/colaboradores/tests/test_ficha_do_colab.py:128`, `app/colaboradores/tests/test_ficha_do_colab.py:129`).
+
+- **O novo teste morde truncar para `FORA_DA_LISTA_PADRAO[:1]`**, pois exige `dono='arquivado'` nos dois casos produzidos pelo silêncio vencido/vigente; o segundo verbo ficaria sem esse dono (`app/colaboradores/tests/test_ficha_do_colab.py:109`, `app/colaboradores/tests/test_ficha_do_colab.py:113`, `app/chamados/services/verbos.py:51`, `app/colaboradores/services/ficha.py:160`).
+
+- **Mudança de conteúdo da constante não é exercitada por mutação.** Os estímulos continuam produzindo somente `HISTORICO` e `ARQUIVADO`; adicionar/remover um membro da constante faz a igualdade final falhar mesmo com a ficha obedecendo à constante. Reordená-la passa, pois a comparação usa conjuntos (`app/chamados/services/verbos.py:51`, `app/colaboradores/tests/test_ficha_do_colab.py:109`, `app/colaboradores/tests/test_ficha_do_colab.py:114`).
+
+- **Há relógio solto transitivo, sem congelamento local:** o teste chama a ficha, que captura `timezone.now()`, e esta chama a partição, que captura outro `timezone.now()`; `self.hoje` vem de `timezone.localdate()` (`app/colaboradores/tests/test_ficha_do_colab.py:30`, `app/colaboradores/tests/test_ficha_do_colab.py:98`, `app/colaboradores/tests/test_ficha_do_colab.py:111`, `app/colaboradores/services/ficha.py:117`, `app/colaboradores/services/ficha.py:155`, `app/chamados/services/verbos.py:35`). O congelamento global depende de `CONGELAR_EM`, e esse arquivo já está na lista de relógios soltos (`app/core/runner_quarentena.py:94`, `app/core/runner_quarentena.py:99`, `app/core/tests/testes_sem_relogio.txt:233`).
+
+## 31/10 03:48 · sessao 052b0de4e58d · - · - · origem=Ronald (tmux)
+
+Item 1: **nenhum leitor residual localizado usando `verbo` como conjunto da fila**. O produtor separa `fila_ids`/`fila_cel`, vindos de `qs_na_fila`, do mapa `verbo`, vindo de `qs_vivos` (`app/chamados/juizes.py:1153`, `app/chamados/juizes.py:1161`).
+
+- O juiz decide pertença por `fila_cel` e `fila_ids`; usa `verbo` apenas para consultar valores e visibilidade (`app/chamados/juizes.py:1227`, `app/chamados/juizes.py:1228`, `app/chamados/juizes.py:1231`, `app/chamados/juizes.py:1232`, `app/chamados/juizes.py:1236`).
+- O vigia **já lê `alim['fila_ids']`**; o teste de pertença no véu consulta esse conjunto (`app/chamados/services/vigia_fio.py:567`, `app/chamados/services/vigia_fio.py:620`).
+- A folha passa a alimentação ao juiz, sem interpretar `verbo` (`app/folha/fora_da_folha.py:54`, `app/folha/fora_da_folha.py:59`).
+- O teste de alimentação usa o produtor real (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:187`).
+- Os dicts manuais localizados são **saídas da porta**, devolvidas por mock do juiz; não simulam `alimentar_portas` (`app/folha/tests/test_haiku_fora_da_folha.py:101`, `app/folha/tests/test_haiku_fora_da_folha.py:106`, `app/folha/tests/test_haiku_fora_da_folha.py:129`, `app/folha/tests/test_haiku_fora_da_folha.py:143`).
 
 ## 31/10 03:40 · sessao 6c4eeff007e0 · O261-E-F5C · verificador · origem=Code
 
@@ -558,157 +638,4 @@ O efeito persiste no carimbo: `reabrir_por_competencia()` só limpa `VIA_COMPETE
 
 Não executei testes ou mutantes; o resultado de execução e a ocorrência desses estados em produção são [não verificado]. [nao verificado]
 
-## 31/10 03:01 · sessao 0b50d4b4a7dc · O261-E-F1-CLASSE-4 · sonda · origem=Code
-
-**(1) tipo_dia_por_trabalha**
-
-| trabalha | ata.tipo_dia | Contagem | Referência |
-|---|---|---:|---|
-| True | 'trabalho' | 46093 | [nao verificado] |
-| False | 'folga' | 22128 | [nao verificado] |
-| True | None | 10409 | [nao verificado] |
-| False | None | 5382 | [nao verificado] |
-| True | 'ausencia' | 2904 | [nao verificado] |
-| False | 'ausencia' | 1609 | [nao verificado] |
-| True | 'falta' | 375 | [nao verificado] |
-| True | 'folga' | 1885 | [nao verificado] |
-| None | 'trabalho' | 52007 | [nao verificado] |
-| False | 'trabalho' | 154 | [nao verificado] |
-| None | 'folga' | 222 | [nao verificado] |
-| None | 'ausencia' | 78 | [nao verificado] |
-| None | None | 66 | [nao verificado] |
-
-**(2) universo_chamados_vivos_com_celula: 2964** [nao verificado]
-
-**(3) divergem**
-
-| Chave (trabalha, tipo_dia, em CALADOS_POR_ISENCAO, modulo) | Contagem | Chamado de exemplo | Referência |
-|---|---:|---:|---|
-| (None, 'trabalho', False, 'ancora_limbo') | 1 | 12982 | [nao verificado] |
-| (True, 'ausencia', False, 'batida_fora_escala_leve') | 1 | 17793 | [nao verificado] |
-| (True, 'ausencia', False, 'colaborador_em_ferias') | 1 | 28767 | [nao verificado] |
-| (True, 'ausencia', False, 'desligamento_revisao') | 10 | 35918 | [nao verificado] |
-| (True, 'ausencia', False, 'disputa_supervisao') | 3 | 20782 | [nao verificado] |
-| (True, 'ausencia', False, 'sem_previsao_escala') | 5 | 35217 | [nao verificado] |
-| (True, 'falta', False, 'desligamento_revisao') | 4 | 35915 | [nao verificado] |
-| (True, 'falta', False, 'disputa_supervisao') | 1 | 15402 | [nao verificado] |
-| (True, 'folga', False, 'desligamento_revisao') | 1 | 16004 | [nao verificado] |
-| (True, 'folga', False, 'sem_previsao_escala') | 1 | 32564 | [nao verificado] |
-| (True, 'folga', True, 'batida_ausente') | 10 | 34867 | [nao verificado] |
-
-## 31/10 02:37 · sessao 6a09fec44f3d · O261-E-F5C · verificador · origem=Code
-
-**FINAL: BLOQUEIA.** O diff mantém divergência entre painel e juiz, promete uma ação que o fio não garante e acrescenta um teste que falha antes das asserções pretendidas (`app/chamados/services/painel.py:188`, `app/chamados/services/painel.py:326`, `app/folha/fora_da_folha.py:43`, `app/chamados/tests/test_o261e_f5b_juiz_porta.py:147`).
-
-1. **Escritores e leitores**
-
-| Valor | Quem escreve | Quem lê |
-|---|---|---|
-| `porta['fila']` | Tupla ordenada produzida pelo juiz em `app/chamados/juizes.py:1226`, devolvida em `app/chamados/juizes.py:1227`. A entrada anterior, `fila_cel`, vem de `alimentar_portas`, em `app/chamados/juizes.py:1148`. | `o_que_segura`, em `app/folha/fora_da_folha.py:196`; teste direto em `app/chamados/tests/test_o261e_f5b_juiz_porta.py:158`; comparações do dict inteiro em `app/chamados/tests/test_o261e_f5b_juiz_porta.py:138`, `app/chamados/tests/test_o261e_f5b_juiz_porta.py:164` e `app/chamados/tests/test_o261e_f5b_juiz_porta.py:182`. |
-| `FORA_DA_LISTA_PADRAO` | Declaração em `app/chamados/services/verbos.py:18`. | Painel em `app/chamados/services/painel.py:327`; juiz em `app/chamados/juizes.py:1226`. |
-| `GRUPOS['C']` | Texto em `app/folha/fora_da_folha.py:36`. | Tooltip via `retrato_folha.ajuda`, em `app/folha/retrato_folha.py:70`; enumeração das chaves em `app/folha/fora_da_folha.py:139`; testes em `app/folha/tests/test_haiku_fora_da_folha.py:123`, `app/folha/tests/test_retrato_folha_quadros.py:1276` e `app/folha/tests/test_retrato_folha_quadros.py:1285`. |
-| `DESTRAVA['chamado']` | Texto em `app/folha/fora_da_folha.py:43`. | Ferramenta em `app/folha/fora_da_folha.py:197`; drawer em `app/folha/retrato_folha.py:1069`; template exibe `r.valor` em `app/templates/folha/_retrato_o_que_fazer.html:37`. Testes em `app/folha/tests/test_haiku_fora_da_folha.py:137`, `app/folha/tests/test_haiku_fora_da_folha.py:483`, `app/folha/tests/test_retrato_folha_dono_sao_tres.py:119` e `app/folha/tests/test_retrato_folha_drawer.py:226`. |
-| `o_que_segura()['dias'][*]['chamado']` | Cópia de `porta['fila']` para lista em `app/folha/fora_da_folha.py:196`, incluída no retorno em `app/folha/fora_da_folha.py:199`. | Asserção do teste novo em `app/folha/tests/test_haiku_fora_da_folha.py:138`. Consumidor externo em produção: **[nao verificado]**. |
-
-O vigia lê `verbos` e `rota`, **não a nova `fila`**. Assim, uma porta com `fila=()` e verbo `historico` continua sendo contada como porta alcançável (`app/chamados/services/vigia_fio.py:596`, `app/chamados/services/vigia_fio.py:598`, `app/chamados/services/vigia_fio.py:601`).
-
-As pautas dos discordantes leem indiretamente o juiz por `_fio_do_dia`, comparando apenas com `FIO_SEM_PORTA`; não consomem os números de `chamado` (`app/ponto/services/pautas_dos_discordantes.py:59`, `app/ponto/services/pautas_dos_discordantes.py:74`, `app/ponto/services/pautas_dos_discordantes.py:76`).
-
-Os dois asserts diretos do dict inteiro foram atualizados. A comparação lote versus individual compara duas respostas atuais; o mock antigo do vigia continua sem `fila`, mas seu consumidor acessa somente `rota/verbos` (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:138`, `app/chamados/tests/test_o261e_f5b_juiz_porta.py:164`, `app/chamados/tests/test_o261e_f5b_juiz_porta.py:182`, `app/chamados/tests/test_o261e_f5_alcance.py:307`, `app/chamados/services/vigia_fio.py:598`).
-
-2. **Painel padrão versus `fila`: não são equivalentes — bloqueia**
-
-O filtro final por verbo usa a mesma constante, mas o universo anterior difere: o juiz começa por `qs_na_fila`, que elimina qualquer silêncio futuro; a lista padrão elimina os verbos `arquivado/historico` depois da partição (`app/chamados/juizes.py:1144`, `app/chamados/services/painel.py:188`, `app/chamados/services/painel.py:326`).
-
-Contraexemplo de código: chamado **da célula**, status `aberto`, módulo `gps_ausente`, silêncio futuro:
-
-- O módulo é auditoria e produz verbo `None`; o silêncio só substitui verbos diferentes de `None` (`app/chamados/catalogo/natureza.py:18`, `app/chamados/catalogo/natureza.py:44`, `app/chamados/catalogo/natureza.py:63`, `app/chamados/services/verbos.py:48`).
-- O painel padrão mostra: `aberto` pertence a `COBRANCA`, e `None` não pertence à constante de exclusão (`app/chamados/catalogo/motor.py:29`, `app/chamados/services/painel.py:314`, `app/chamados/services/painel.py:327`, `app/chamados/services/verbos.py:18`).
-- O juiz exclui antes da partição, pelo silêncio futuro (`app/chamados/services/painel.py:188`, `app/chamados/juizes.py:1144`).
-
-Para os demais resultados possíveis: `validar/cobrar/decidir` sem silêncio entram nos dois; `arquivado` sai nos dois; `historico` sai da lista e da nova `fila`, embora permaneça em `verbos`; `None` sem silêncio futuro entra nos dois, quando o status é de cobrança (`app/chamados/catalogo/natureza.py:57`, `app/chamados/services/verbos.py:48`, `app/chamados/services/painel.py:314`, `app/chamados/services/painel.py:327`, `app/chamados/juizes.py:1218`, `app/chamados/juizes.py:1226`).
-
-No mesmo estado e instante, sem filtros extras/paginação e comparando chamados da célula, `fila` é subconjunto da lista padrão; não há caso inverso nessa composição de filtros. A exclusão de âncoras de outra célula é adicional e intencional (`app/chamados/services/painel.py:188`, `app/chamados/services/painel.py:314`, `app/chamados/services/painel.py:327`, `app/chamados/juizes.py:1217`, `app/chamados/juizes.py:1226`). Ocorrência desses contraexemplos em produção: **[nao verificado]**.
-
-3. **Universalidade das frases**
-
-**`GRUPOS['C']`: compatível com a escada, sem bloqueio isolado.** Nas duas rotas, `chamado` significa que os verbos da porta não contêm `cobrar` nem `validar`. Isso não garante visibilidade na lista padrão (`app/chamados/juizes.py:1175`, `app/chamados/juizes.py:1227`, `app/folha/fora_da_folha.py:36`).
-
-**`DESTRAVA['chamado']`: não universal — bloqueia.** A escada também devolve `chamado` para `None` e `historico`; portanto não garante a ação `decidir` (`app/chamados/juizes.py:1175`, `app/chamados/catalogo/natureza.py:63`, `app/chamados/services/verbos.py:51`, `app/folha/fora_da_folha.py:43`).
-
-Contraexemplo: chamado aberto da célula, silêncio vencido, nenhuma pergunta. Ele passa por `qs_na_fila`, vira `historico`, produz `porta_fila`, fio `chamado` e `fila=()`. A frase manda abrir um chamado da fila ou uma pergunta no app, embora nesse caso não haja nenhum desses alvos visíveis nomeados (`app/chamados/services/painel.py:188`, `app/chamados/services/verbos.py:51`, `app/chamados/juizes.py:1217`, `app/chamados/juizes.py:1226`, `app/folha/fora_da_folha.py:43`).
-
-Na `porta_pergunta`, a existência da pergunta também não obriga o verbo a ser `decidir`: o juiz aceita o verbo da âncora, e a natureza de auditoria pode produzir `None` mesmo com pergunta (`app/chamados/juizes.py:1221`, `app/chamados/juizes.py:1222`, `app/chamados/catalogo/natureza.py:44`, `app/chamados/catalogo/natureza.py:63`).
-
-4. **Drawer: igualdade da frase, incoerência da ação — bloqueia**
-
-Para o mesmo fio, ferramenta e drawer usam literalmente o mesmo `DESTRAVA`; essa parte está coerente (`app/folha/fora_da_folha.py:197`, `app/folha/retrato_folha.py:183`, `app/folha/retrato_folha.py:1069`).
-
-Porém o botão de `chamado` continua **“Validar no fio”**, enquanto a nova frase manda **decidir** e afirma ausência de validar. O botão chega ao template com esse rótulo (`app/folha/retrato_folha.py:977`, `app/folha/retrato_folha.py:1024`, `app/templates/folha/_retrato_o_que_fazer.html:62`, `app/folha/fora_da_folha.py:43`).
-
-O drawer também não recebe o novo dado numérico: o retrato grava fio, datas e outros eixos, e a view lê essa linha gravada; não chama `o_que_segura` nesse fluxo (`app/folha/retrato_folha.py:1177`, `app/folha/retrato_folha.py:1186`, `app/colaboradores/views.py:980`, `app/colaboradores/views.py:984`). Paridade temporal entre retrato e ferramenta em produção: **[nao verificado]**.
-
-5. **Checklist e mordida dos testes** [nao verificado]
-
-| Item | Veredito |
-|---|---|
-| Segundo juiz registrado | Não identificado no diff: a porta já está registrada, a escada permanece nela e a folha lê seu resultado (`app/core/juizes.py:253`, `app/chamados/juizes.py:1175`, `app/folha/fora_da_folha.py:68`). |
-| Segundo escritor fora da porta | Não identificado nas alterações produtivas: os novos valores são retornos de leitura, sem nova persistência (`app/chamados/juizes.py:1227`, `app/folha/fora_da_folha.py:199`). |
-| Relógio fora da borda | Nenhuma leitura nova no diff; a cadeia existente lê instantes internos separados em `qs_na_fila` e `particionar_verbos`. Não sustenta promessa de fotografia temporal única (`app/chamados/services/painel.py:188`, `app/chamados/services/verbos.py:35`, `app/chamados/juizes.py:1153`). |
-| Derivação paralela | A constante é compartilhada, mas isso não unifica os filtros anteriores; permanece a divergência demonstrada para `None` com silêncio futuro (`app/chamados/services/painel.py:188`, `app/chamados/services/painel.py:327`, `app/chamados/juizes.py:1226`). **Bloqueia a equivalência.** |
-| Ordem de trava | Ordem efetivamente executada nesta obra: **[nao verificado]**. |
-| Pouso antes do pré-requisito | Sequência real de suite/verificação/pouso: **[nao verificado]**. A regra exige suite inteira verde antes do opus final (`CLAUDE.md:600`). | [nao verificado]
-
-O teste **`test_MORDE_a_frase...` morde a redação anterior fornecida no diff**: suas substrings proibidas rejeitam “sem pergunta viva” e “chamado N”. Contudo, os dois mocks usam somente `decidir`; não exercitam a porta real, `None`, `historico` ou o botão do drawer. Portanto não demonstram a universalidade da nova frase (`app/folha/tests/test_haiku_fora_da_folha.py:123`, `app/folha/tests/test_haiku_fora_da_folha.py:126`, `app/folha/tests/test_haiku_fora_da_folha.py:133`, `app/folha/tests/test_haiku_fora_da_folha.py:137`).
-
-O teste **`test_MORDE_silenciado...` não oferece RED útil como escrito — bloqueia**: importa `Chamado`, inexistente no módulo; o modelo e o helper usam `ChamadoColaborador`. Isso causa `ImportError` antes dos subtestes, também no pai descrito pelo diff (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:147`, `app/chamados/models.py:21`, `app/chamados/tests/test_o261e_f5b_juiz_porta.py:62`).
-
-Mesmo corrigindo esse import, **2099 continua quebrando na versão curada**: o silêncio futuro elimina o chamado antes da partição; sem pergunta, o juiz retorna `None`, mas o teste indexa `porta['verbos']` (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:150`, `app/chamados/tests/test_o261e_f5b_juiz_porta.py:156`, `app/chamados/services/painel.py:188`, `app/chamados/juizes.py:1223`). O ramo de 2020 poderia distinguir a ausência de `fila` no pai, mas está inacessível pelo erro anterior (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:147`, `app/chamados/tests/test_o261e_f5b_juiz_porta.py:158`).
-
-**RED/GREEN observado por suite Django contra `dc3ba57f` e contra esta obra: [nao verificado].**
-
-## 31/10 02:36 · sessao f790b02d836e · - · - · origem=Ronald (tmux)
-
-**Bloqueia: o teste novo de silenciamento não certifica a cura.** [nao verificado]
-
-- `test_MORDE_silenciado_na_celula_nao_e_numero_da_fila` importa `Chamado`, símbolo inexistente no módulo; o modelo é `ChamadoColaborador`. Portanto termina em `ImportError` antes dos subtestes, tanto na cópia quanto no pai reconstruído pelo diff. Referências: `app/chamados/tests/test_o261e_f5b_juiz_porta.py:147`, `app/chamados/models.py:21`, helper correto em `app/chamados/tests/test_o261e_f5b_juiz_porta.py:62`.
-- Corrigido somente esse import, o caso de 2099 continua errado: `qs_na_fila` exclui o silenciamento futuro antes de alimentar o juiz; sem perguntas, este retorna `None`, e `porta['verbos']` produz `TypeError`. Referências: `app/chamados/services/painel.py:188`, `app/chamados/juizes.py:1144`, `app/chamados/juizes.py:1146`, `app/chamados/juizes.py:1153`, `app/chamados/juizes.py:1223`, `app/chamados/tests/test_o261e_f5b_juiz_porta.py:150`, `app/chamados/tests/test_o261e_f5b_juiz_porta.py:156`.
-- O caso de 2020, depois dessa correção, alcança `porta_fila`, `historico`, `fila=()`, `fio=chamado` na cópia; o pai não devolvia `fila`, de modo que a leitura nova encontra `KeyError`, não comparação comportamental com número indevido. Referências: `app/chamados/juizes.py:1225`, `app/chamados/juizes.py:1227`, `app/chamados/tests/test_o261e_f5b_juiz_porta.py:149`, `app/chamados/tests/test_o261e_f5b_juiz_porta.py:158`; ausência da chave no pai consta do diff anexo `[nao verificado]` quanto ao checkout histórico.
-- O teste novo da frase detecta os textos antigos: `sem pergunta viva`, `nao ha pergunta` e `chamado N` violam suas asserções. Porém a primeira falha textual impede chegar aos mocks naquele código antigo; isso demonstra mordida textual, sem demonstrar por si a correção universal da frase nova. Referências: `app/folha/tests/test_haiku_fora_da_folha.py:123`, `app/folha/tests/test_haiku_fora_da_folha.py:125`, `app/folha/tests/test_haiku_fora_da_folha.py:126`; textos antigos no diff anexo `[nao verificado]` quanto ao checkout histórico.
-
-**Demais itens do checklist:**
-
-- **Segundo juiz registrado: não identifiquei criação pelo diff.** A autoridade já está registrada, a escada continua no juiz e a folha lê sua saída: `app/core/juizes.py:132`, `app/core/juizes.py:253`, `app/chamados/juizes.py:1170`, `app/chamados/juizes.py:1175`, `app/folha/fora_da_folha.py:55`, `app/folha/fora_da_folha.py:68`.
-- **Segundo escritor fora da porta: não identifiquei escrita persistente nova.** As alterações produzem valores de retorno e textos de apresentação: `app/chamados/juizes.py:1227`, `app/folha/fora_da_folha.py:196`, `app/folha/fora_da_folha.py:198`.
-- **Relógio: nenhuma leitura nova introduzida pelo diff.** A cadeia herda leituras independentes em `app/chamados/services/painel.py:188` e `app/chamados/services/verbos.py:35`; o queryset da fila é consumido para células e novamente para a partição em `app/chamados/juizes.py:1146` e `app/chamados/juizes.py:1153`. Logo não há instante único recebido pela borda nessa cadeia; não atribuir sua introdução à F5C.
-- **Fonte única: a constante é compartilhada, mas isso não prova identidade dos universos.** O juiz chega à constante depois do filtro adicional de `qs_na_fila`: `app/chamados/services/verbos.py:18`, `app/chamados/services/painel.py:188`, `app/chamados/services/painel.py:327`, `app/chamados/juizes.py:1226`.
-- **Ordem de trava e pouso antes de pré-requisito: execução desta obra `[nao verificado]`.** A norma exige suite inteira verde antes do opus final (`CLAUDE.md:600`) e impede o Codex de aprovar sozinho o pouso (`CLAUDE.md:599`). A dependência documental é F5B antes de F5, mas a mesma linha traz estado “registrada (depois da F5)”; isso é inconsistência documental, não prova da sequência executada: `app/docs/BACKLOG.md:777`. Sem prova da sequência, não acusar pouso indevido; também não certificá-lo `[nao verificado]`.
-
-Verifiquei o import e os resultados 2020/2099 com AST e execução das funções reais isoladas, em memória, com dependências substituídas. Não rodei Django, suite, banco ou logs; resultados integrados e RED empírico em `dc3ba57f` permanecem `[nao verificado]`.
-
-## 31/10 02:36 · sessao 2c86673a353d · - · - · origem=Ronald (tmux)
-
-Achados para consolidar:
-
-1. **DESTRAVA['chamado'] não é universal — bloqueia.** O juiz devolve `chamado` para qualquer conjunto sem `cobrar` nem `validar`, incluindo `None` e `historico`; não garante `decidir` (`app/chamados/juizes.py:1170`, `app/chamados/juizes.py:1175`, `app/chamados/catalogo/natureza.py:63`, `app/chamados/services/verbos.py:48`). Porém a frase manda abrir “o chamado da fila ou a pergunta viva no app” **e decidir** (`app/folha/fora_da_folha.py:43`). Contraexemplo de código: chamado da célula, aberto, silêncio vencido, sem pergunta: entra em `qs_na_fila`, recebe `historico`, mantém porta/fio `chamado`, mas devolve `fila=()` (`app/chamados/services/painel.py:186`, `app/chamados/services/verbos.py:51`, `app/chamados/juizes.py:1217`, `app/chamados/juizes.py:1226`). Não há chamado visível nem pergunta no app nesse caso; ocorrência em produção [nao verificado].
-
-2. **GRUPOS['C'] é compatível com a escada, nas duas rotas — não bloqueia isoladamente.** “Tem porta aberta” vale quando o juiz retorna dict; fio `chamado` significa ausência de `cobrar` e `validar`, independentemente da rota (`app/folha/fora_da_folha.py:36`, `app/chamados/juizes.py:1175`, `app/chamados/juizes.py:1223`). Isso descreve os verbos; não garante que alguma porta esteja visível na lista padrão (`app/chamados/juizes.py:1226`).
-
-3. **Drawer: frase igual; ação do link incoerente — bloqueia a alegação de coerência completa.** A ferramenta usa `DESTRAVA[_f]` e o drawer lê o mesmo mapa por `FIO_DO_CARTORIO`; portanto a frase para o mesmo fio é literalmente igual (`app/folha/fora_da_folha.py:197`, `app/folha/retrato_folha.py:183`, `app/folha/retrato_folha.py:1069`). Mas o fio `chamado` oferece **“Validar no fio”**, enquanto a nova frase diz **“decidir”** e afirma que o painel não põe a porta em validar (`app/folha/retrato_folha.py:977`, `app/folha/fora_da_folha.py:43`). Esse link é materializado por `portas_da_linha` e renderizado no template (`app/folha/retrato_folha.py:1015`, `app/folha/retrato_folha.py:1024`, `app/templates/folha/_retrato_o_que_fazer.html:60`).
-
-4. **Drawer não recebe o novo dado `chamado`.** Seu retrato grava `dono` derivado do grupo, datas e contagens; não grava números de chamados (`app/folha/retrato_folha.py:1177`, `app/folha/retrato_folha.py:1186`). A view lê a linha gravada e chama `o_que_fazer`/`portas_da_linha`; não chama `o_que_segura` (`app/colaboradores/views.py:980`, `app/colaboradores/views.py:984`). Logo a igualdade demonstrada é de frase para o mesmo fio, não de dados atuais ou números apresentados (`app/folha/fora_da_folha.py:196`, `app/folha/retrato_folha.py:1069`). Coerência temporal em produção [nao verificado].
-
-Censo de escritores/leitores:
-
-| Valor | Escritor | Leitores |
-|---|---|---|
-| `GRUPOS['C']` | `app/folha/fora_da_folha.py:36` | `retrato_folha.ajuda`, pelo mapa fio→letra (`app/folha/retrato_folha.py:70`, `app/folha/retrato_folha.py:177`); chaves de grupos em `fora_da_folha` (`app/folha/fora_da_folha.py:139`); testes (`app/folha/tests/test_haiku_fora_da_folha.py:123`, `app/folha/tests/test_retrato_folha_quadros.py:1276`, `app/folha/tests/test_retrato_folha_quadros.py:1285`). |
-| `DESTRAVA['chamado']` | `app/folha/fora_da_folha.py:43` | `o_que_segura` (`app/folha/fora_da_folha.py:197`), drawer (`app/folha/retrato_folha.py:1069`), template via `retrato_fazer` (`app/templates/folha/_retrato_o_que_fazer.html:33`, `app/templates/folha/_retrato_o_que_fazer.html:37`), testes (`app/folha/tests/test_haiku_fora_da_folha.py:137`, `app/folha/tests/test_haiku_fora_da_folha.py:483`, `app/folha/tests/test_retrato_folha_dono_sao_tres.py:119`, `app/folha/tests/test_retrato_folha_drawer.py:226`). |
-| `o_que_segura()['dias'][*]['chamado']` | Cópia de `porta['fila']` para lista (`app/folha/fora_da_folha.py:196`, `app/folha/fora_da_folha.py:199`) | Teste novo (`app/folha/tests/test_haiku_fora_da_folha.py:138`). Consumidor produtivo externo ou em mensageria [nao verificado]. |
-| `porta['fila']` | `app/chamados/juizes.py:1226`, `app/chamados/juizes.py:1227` | `o_que_segura` (`app/folha/fora_da_folha.py:196`); testes de dict inteiro (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:138`, `app/chamados/tests/test_o261e_f5b_juiz_porta.py:164`, `app/chamados/tests/test_o261e_f5b_juiz_porta.py:182`) e teste novo (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:158`). |
-
-Vigia e pautas continuam leitores **indiretos** da porta: o vigia lê `verbos` e `rota`, sem usar `fila` (`app/chamados/services/vigia_fio.py:596`, `app/chamados/services/vigia_fio.py:598`, `app/chamados/services/vigia_fio.py:601`); pautas dos discordantes leem `_fio_do_dia` e comparam com `FIO_SEM_PORTA`, sem usar o dado `chamado` (`app/ponto/services/pautas_dos_discordantes.py:59`, `app/ponto/services/pautas_dos_discordantes.py:74`).
-
-O teste novo de frase verifica substrings proibidas e dois mocks com verbo `decidir`; não cobre `None`, `historico` nem a porta real e não chama o drawer (`app/folha/tests/test_haiku_fora_da_folha.py:123`, `app/folha/tests/test_haiku_fora_da_folha.py:126`, `app/folha/tests/test_haiku_fora_da_folha.py:133`, `app/folha/tests/test_haiku_fora_da_folha.py:137`). Ele pode reprovar a frase antiga, mas não prova a universalidade da nova (`app/folha/tests/test_haiku_fora_da_folha.py:124`).
-
-_870 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_874 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
