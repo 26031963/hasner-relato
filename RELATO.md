@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: trava_teste.sh | pid=3352348
+ESPERANDO: trava_teste.sh | pid=3430510
 > **DISJUNTOR REPROVADO pelo opus final (02:09):** BLOQUEIA A (bin/disjuntor.py:690-709 `_codex_cmds` perde a forma subshell, 100/200), B (B3 por literal 'LEITURA FINAL', 4/9 escapam; D6 nao procede), C (negacao no RELATO copia comando cru e cria trava no Stop). FILA 1-5 registradas pelo construtor; FILA 6 = pergunta de lei (B4 75% x verificador da propria obra) vem com os textos. Volta ao construtor em copia nova; wt-disjuntor-2308 intacta.
 > **PUSH 01:04 -> origin/main = 3c52f98f, rc=0** (pre-push arsenal OK Ran 12885 + control-plane OK Ran 22); ahead=1 = e147c25f do pos_push, vai no proximo push.
 > **FILA 01:0x:** F1C4: alvo_final errors=2 (ordem=(2,1)) era FIXTURE -- a 1a subTest lavra a ata da folga e o `criar` recusa o par (porta certa); f81aba65 zera a ata, alvo+suite enfileirados (`logs/o261e/f1c4b_alvo_final2.log`). F5C entregue 01ae542e (Codex FINAL: 2 procedentes curados, 5 para o opus), suite inteira enfileirada (`logs/o261e/f5c_suite_completa_01ae542e.log`). DISJUNTOR: suite FAILED 1 = except-pass novo em core/esteira_vigia.py, devolvido ao construtor. V-FASE B1: construtor rodando mutantes.
