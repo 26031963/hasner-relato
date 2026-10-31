@@ -1,7 +1,53 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 13:43** · publicado em **31/10/2026 13:43** (UTC-3)
+> Ultima resposta processada: **31/10/2026 13:44** · publicado em **31/10/2026 13:48** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 13:44 · sessao f9f744f07fd0 · REPROVA-E-DESENHO · verificador · origem=Code
+
+**REPROVADO.** Há caminho que libera uma linha anterior ao disparo e falhas na validação das linhas de liberação (`bin/hook_stop_fila1.py:437`, `bin/disjuntor.py:635`, `bin/disjuntor.py:731`, `bin/disjuntor.py:609`, `bin/disjuntor.py:616`).
+
+1. **A decisão sobre o estado está numa única seção sob trava.** Acumular, fotografar, disparar e liberar acontecem dentro de `_fn`, executada por uma única `_com_estado`; o `flock` envolve o callback e a gravação (`bin/disjuntor.py:244`, `bin/disjuntor.py:259`, `bin/disjuntor.py:693`, `bin/disjuntor.py:744`). Os dois hooks chamam `decide_b3`, sem reconhecedores concorrentes de liberação (`bin/disjuntor.py:1136`, `bin/hook_stop_fila1.py:1044`). A varredura dos transcripts acontece antes da trava, mas a acumulação acontece dentro dela (`bin/disjuntor.py:690`, `bin/disjuntor.py:702`). Não encontrei divergência de regra entre os chamadores; permanecem as falhas de fotografia abaixo (`bin/disjuntor.py:729`, `bin/disjuntor.py:1136`, `bin/hook_stop_fila1.py:1044`).
+
+2. **Sim, uma linha anterior ao disparo pode liberar.**
+
+   **Leitura parcialmente ilegível:** suponha primeira linha neutra e segunda linha com `ERRO-BOBO` já existente. Se a leitura falhar antes da segunda linha, `_bloco_do_topo` devolve a primeira linha; `_topo_consistente` aceita esse resultado como fotografia completa. Restaurar a leitura e executar `touch` permite que a segunda linha antiga libere, pois seu SHA ficou fora da fotografia (`bin/hook_stop_fila1.py:438`, `bin/disjuntor.py:635`, `bin/disjuntor.py:695`, `bin/disjuntor.py:731`, `bin/disjuntor.py:733`). Esse caminho foi reproduzido em memória; o teste existente exige preservar a leitura parcial, mas não testa sua consequência na fotografia do disparo (`bin/tests/test_disjuntor.sh:746`, `bin/tests/test_disjuntor.sh:747`).
+
+   **Janela fotografia → marcação:** um escritor pode colocar a linha depois da fotografia e antes de `disparado=True`. Ela já estará presente quando essa marcação ocorrer, ficará fora da fotografia e poderá satisfazer o mtime, comparado ao relógio capturado antes de toda a operação (`bin/disjuntor.py:689`, `bin/disjuntor.py:694`, `bin/disjuntor.py:712`, `bin/disjuntor.py:733`).
+
+   Com fotografia completa, `touch`, reescrita preservando a linha e mtime igual não vencem o bloqueio por SHA. Ilegibilidade **total** também recebe fotografia tardia, sem liberar naquela observação (`bin/disjuntor.py:724`, `bin/disjuntor.py:726`, `bin/disjuntor.py:731`). Mtime igual é aceito para uma candidata fora da fotografia; isso está explicitamente testado (`bin/disjuntor.py:733`, `bin/tests/test_disjuntor.sh:875`).
+
+3. **Não encontrei evento formal `DISJUNTOR`/`LIBERA` B3 anunciado sem gravação concluída.** O sucesso só é marcado depois de `os.replace`; a publicação depende dele, e uma liberação não gravada volta ao conjunto bloqueado (`bin/disjuntor.py:265`, `bin/disjuntor.py:274`, `bin/disjuntor.py:745`, `bin/disjuntor.py:751`).
+
+   Há uma distinção: `NEGOU DISJUNTOR B3...` pode aparecer sem persistência, porque a negativa daquela chamada continua valendo. Isso não é contado como evento formal de disparo (`bin/disjuntor.py:749`, `bin/disjuntor.py:1136`, `bin/disjuntor.py:1168`, `bin/disjuntor.py:1226`).
+
+4. **A validação ainda aceita entradas indevidas.**
+
+| Entrada | Resultado e causa |
+|---|---|
+| `ERRO-BOBO OBRA-X: ___` | Aceita motivo só com pontuação: `\w` inclui underscore (`bin/disjuntor.py:616`). |
+| Link para arquivo **dentro** da raiz | Aceito: `realpath` resolve o link antes de `_abre`; o `O_NOFOLLOW` recebe o destino resolvido (`bin/disjuntor.py:576`, `bin/disjuntor.py:581`, `bin/orcamento_contexto.py:74`). |
+| `bin/disjuntor.py:1.5` ou `:1xyz` | Aceito validando apenas o prefixo `:1`; falta delimitação do número (`bin/disjuntor.py:77`, `bin/disjuntor.py:609`). |
+| Referência válida seguida de `/etc/passwd:1` | Aceita a linha inteira: a referência externa, sem extensão, é ignorada pela regex (`bin/disjuntor.py:77`, `bin/disjuntor.py:609`, `bin/disjuntor.py:610`). |
+| Referência válida seguida de `bin/disjuntor.py:-9` | A referência negativa também é ignorada, em vez de invalidar a linha (`bin/disjuntor.py:77`, `bin/disjuntor.py:610`). |
+
+Para referências reconhecidas integralmente, caminho absoluto, resolução para fora da raiz, linha zero e linha além do fim são recusados; a última linha sem quebra é contada corretamente (`bin/disjuntor.py:573`, `bin/disjuntor.py:577`, `bin/disjuntor.py:586`, `bin/disjuntor.py:588`).
+
+5. **Mutantes: nenhuma âncora ausente ou repetida entre os 129 declarados; nenhum sobrevivente identificado.** A conferência individual encontrou uma ocorrência de cada âncora, conforme exige o próprio mecanismo (`bin/tests/test_disjuntor.sh:937`; declarações a partir de `bin/tests/test_disjuntor.sh:945`).
+
+   Os 27 mutantes associados a `b3_topo` e os cinco de `b3_atomico` caíram na execução dos respectivos casos em memória, com controles passando; os casos exercitam reconhecimento, validação, trava, mtime e releitura após mudança (`bin/tests/test_disjuntor.sh:682`, `bin/tests/test_disjuntor.sh:728`, `bin/tests/test_disjuntor.sh:853`, `bin/tests/test_disjuntor.sh:875`, `bin/tests/test_disjuntor.sh:884`).
+
+   Para os outros 97, há caso correspondente que os derruba por inspeção estática; **queda integrada desses 97: [nao verificado]**. A suíte shell não foi executada porque cria, modifica e apaga arquivos (`bin/tests/test_disjuntor.sh:39`, `bin/tests/test_disjuntor.sh:51`, `bin/tests/test_disjuntor.sh:930`, `bin/tests/test_disjuntor.sh:939`).
+
+6. **Nenhuma chamada residual encontrada em `bin/` ou `app/`.** As seis funções removidas são `linha_libera_b3`, `libera_b3`, `_topo_shas`, `varrer_b3`, `_topo_e_mtime` e `b3_disparados` — definições no pai em [disjuntor.py:586](/home/ronald/codex_ws/5f3a10ab4813c993574f25bbad16da662abe60c1/bin/disjuntor.py:586), [592](/home/ronald/codex_ws/5f3a10ab4813c993574f25bbad16da662abe60c1/bin/disjuntor.py:592), [638](/home/ronald/codex_ws/5f3a10ab4813c993574f25bbad16da662abe60c1/bin/disjuntor.py:638), [666](/home/ronald/codex_ws/5f3a10ab4813c993574f25bbad16da662abe60c1/bin/disjuntor.py:666), [733](/home/ronald/codex_ws/5f3a10ab4813c993574f25bbad16da662abe60c1/bin/disjuntor.py:733) e [744](/home/ronald/codex_ws/5f3a10ab4813c993574f25bbad16da662abe60c1/bin/disjuntor.py:744). O único resultado textual restante do grep foi a documentação antiga citando `linha_libera_b3`; os chamadores produtivos usam `decide_b3` (`app/docs/RELATO.md:11`, `bin/disjuntor.py:1136`, `bin/hook_stop_fila1.py:1044`).
+
+7. **Outros defeitos/limites:**
+
+   A observação dita consistente não detecta reescrita no mesmo inode, com mesmo tamanho e mtime preservado: a chave compara somente esses três atributos. Portanto, o segundo `stat` não garante que o conteúdo permaneceu igual durante a leitura (`bin/disjuntor.py:627`, `bin/disjuntor.py:635`).
+
+   Os eventos são publicados depois de soltar a trava; duas transições concorrentes podem aparecer em ordem invertida na trilha, embora ambas tenham sido gravadas (`bin/disjuntor.py:277`, `bin/disjuntor.py:744`, `bin/disjuntor.py:747`).
+
+   O contrato no RELATO ficou desatualizado: ainda nomeia a função removida e exige motivo de 20 caracteres, enquanto o novo reconhecedor aceita um caractere de palavra (`app/docs/RELATO.md:11`, `app/docs/RELATO.md:12`, `bin/disjuntor.py:616`).
 
 ## 31/10 13:43 · sessao 01543f2c5b50 · - · - · origem=Ronald (tmux)
 
@@ -600,19 +646,4 @@ A cura liga o `status` à precedência, mas não unifica todo o resultado do cal
 
    Referência: [app/docs/PROMPTS.md:1671](/home/ronald/codex_ws/a7b66d14d0bcf92e6f71f940cef6b3fdf6063dd7/app/docs/PROMPTS.md:1671). Esse item não aparece nos blocos dos dois arquivos exibidos no commit `8ce1e8c2` (`hist_triagem.txt:137–149` e `hist_triagem.txt:336–348`). **Commit que registrou esse aval em `PROMPTS.md`: [nao verificado]**; o anexo não o identifica.
 
-## 31/10 13:32 · sessao 6e629cbc1fa1 · - · - · origem=Ronald (tmux)
-
-Não encontrei bloqueador novo no seletor ou nos builders, nestes pontos:
-
-- **Carga de folgas sem N+1:** uma consulta traz todas as `FolgaDia` da pessoa na janela; o laço usa apenas campos já carregados (`app/ponto/precedencia.py:207-209`). Seletor e predicado são puros e acessam `calendario_origem_id`/`escala_colaborador_id`, sem acessar relações (`app/ponto/precedencia.py:213-240`). A precedência chama o carregador antes do laço diário (`app/ponto/precedencia.py:281-282,337-358`).
-- **Nuance:** o caminho completo ainda consulta nomes de feriado por data: `app/ponto/precedencia.py:407` chama `nome_do_feriado`, que executa `_qs(data,data)` (`app/core/feriados.py:98-102,27-29`). É anterior ao diff fornecido; não decorre da carga de `FolgaDia`.
-- **Builders:** ambos chamam o mesmo carregador e seletor (`app/escala/utils.py:770,1115-1128,1794`). No legacy, a carga acontece por segmento, pois cada segmento chama o builder individual (`app/escala/utils.py:985-995`); portanto não prometer “uma única consulta por calendário inteiro” para esse builder.
-- **Autoridade:** o vínculo do dia continua vindo do juiz registrado (`app/core/juizes.py:1255`; `app/escala/utils.py:969-973,1256-1268`). A precedência consulta esse mesmo juiz (`app/ponto/precedencia.py:351`) e ambos usam o mesmo predicado de elegibilidade da folga (`app/ponto/precedencia.py:358`; `app/escala/utils.py:1124`). Não identifiquei segundo juiz introduzido nesses trechos.
-- **Contrato antigo de `folgas_lancadas`:** não há outro chamador no código passando o argumento; a única ocorrência restante é a assinatura em `app/ponto/precedencia.py:261`. A mudança de valor unitário para lista não deixa chamador antigo demonstrável na cópia.
-- **Fila da volta 2:** `o_dia_ja_e_folga` responde à idempotência da porta, escolhendo o vínculo e consultando sua foto (`app/ponto/services/declarar_dia.py:73-91`). `_folga_avulsa` alimenta veto de lançamento (`app/ponto/precedencia.py:161-166,501-509`). A lavra alterada não chama nenhum deles: usa diretamente os novos helpers (`app/ponto/precedencia.py:281-282,358`; `app/escala/utils.py:1115-1128`). Não encontrei dependência nova que torne esses achados bloqueadores desta cura.
-- **Ordem:** folga agora precede todos os overlays de ausência no builder por turno (`app/escala/utils.py:1794-1797`). Ausência continua cobrindo folga e falta continua sem substituí-la (`app/escala/utils.py:1174-1178`). Há consequência possível sobre dados auxiliares: folga limpa células e órfãs (`app/escala/utils.py:1126-1128`), e ausência parcial mede seu período usando essas células (`app/escala/utils.py:1202`). O anexo já declara diferença não-tipo medida; outras vítimas ou efeito financeiro são [não verificado].
-- **Classes estruturais:** os novos helpers e overlay não escrevem banco nem leem relógio (`app/ponto/precedencia.py:195-240`; `app/escala/utils.py:1103-1128`). Não introduzem ordem de trava nesses trechos. A repetição das leituras de relógio dos builders individuais é preexistente e recebe `ref` explícito no caminho por segmentos (`app/escala/utils.py:658,964,995`), enquanto o builder por turno deriva a data de `agora` recebido (`app/escala/utils.py:1242`).
-
-Execução real, números de consultas em runtime e impacto além do dado anexado: [não verificado].
-
-_1071 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1072 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
