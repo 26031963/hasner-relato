@@ -1,7 +1,11 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 17:42** · publicado em **31/10/2026 17:43** (UTC-3)
+> Ultima resposta processada: **31/10/2026 17:44** · publicado em **31/10/2026 17:48** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 17:44 · sessao 7e00fa505aa6 · TRAVA-COBERTURA · leitura · origem=Code
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
 
 ## 31/10 17:42 · sessao bc4f2203bbdb · - · - · origem=Ronald (tmux)
 
@@ -982,53 +986,4 @@ Execução dos testes Django e dos mutantes completos: **[não verificado]**. [n
 
 9. **MORDE do censo não prova MORDE do novo instrumento.** Os testes existentes verificam distinção entre escrita direta, inferência e entidade desconhecida; são úteis como suporte do resolvedor. O teste “duas entidades distintas no mesmo programa não dispara” ainda pertence ao novo instrumento, cujo registro está como obra futura. (`app/core/tests/test_censo_escritas.py:25`, `app/core/tests/test_censo_escritas.py:80`, `app/core/tests/test_censo_escritas.py:92`, `app/core/tests/test_censo_escritas.py:110`, `app/docs/BACKLOG.md:787`) Nenhum teste foi executado porque os selos existentes podem criar arquivos; fiz somente leitura e uma consulta Python `-B` em memória **[não verificado]** quanto a execução dos selos.
 
-## 31/10 16:38 · sessao 11a4f092d15a · - · - · origem=Ronald (tmux)
-
-1. **Premissa desatualizada no contrato:** a cópia **já extrai `CODEX_OBRA`**. `_codex_cmds()` lê as atribuições anteriores à invocação por `_atribuicoes()` e retorna `obra`; o PreToolUse usa esse valor para negar a volta do verificador pelo B3. `bin/disjuntor.py:1309`, `bin/disjuntor.py:1325`, `bin/disjuntor.py:1335`, `bin/disjuntor.py:1337`, `bin/disjuntor.py:1440`.
-
-2. **Há dois parsers com contratos distintos.**
-
-   - **Comando Bash/CODEX_OBRA:** aceita qualquer valor textual em atribuição reconhecida, remove aspas por `shlex.split()`, mantém a última atribuição repetida e não aplica regex de nome de obra. Ex.: `CODEX_OBRA="O9 (C)"`, `CODEX_OBRA="qualquer nome / ?"` são extraídos literalmente. `bin/disjuntor.py:1309`, `bin/disjuntor.py:1314`, `bin/disjuntor.py:1318`, `bin/disjuntor.py:1337`.
-   - **Ambiente efetivo do wrapper:** `OBRA="${CODEX_OBRA:-}"`, recusando apenas valor vazio; papel deve ser leitura/censo/verificador/sonda. Portanto o wrapper aceita nomes que `_obra_de()` não reconhece. `bin/codex_pergunta.sh:44`, `bin/codex_pergunta.sh:45`, `bin/codex_pergunta.sh:48`.
-   - **Prompt de Agent:** `_obra_de()` reconhece `obra X`, `Obra: X`, markdown em torno do nome, ou `leitura ... da X` com até 80 caracteres antes de `da`, escolhendo a primeira ocorrência válida. `bin/disjuntor.py:104`, `bin/disjuntor.py:105`, `bin/disjuntor.py:504`, `bin/disjuntor.py:514`.
-   - O ID deve ser `[A-Z][A-Z0-9]*(?:-[A-Za-z0-9]+)+` ou `[A-Z]+\d+[A-Z0-9]*`. Assim aceita `PADRAO-DE-CIMA`, `OBRA-x`, `O9`, `A1B`, mas não `Obra-X`, `ABC`, `O9a`, `A1b`. Busca em `re.I` é seguida por validação sensível à caixa. `bin/disjuntor.py:97`, `bin/disjuntor.py:104`, `bin/disjuntor.py:518`, `bin/disjuntor.py:521`.
-   - ID sem hífen preserva cauda `(letra)` ou outro ID com hífen, normalizada para maiúsculas: `O9 (c)` → `O9 (C)`; `O9 NOTURNO-FOO` é identidade completa. ID com hífen ignora essa cauda: `OBRA-X (C)` → `OBRA-X`. `bin/disjuntor.py:99`, `bin/disjuntor.py:518`, `bin/disjuntor.py:526`, `bin/disjuntor.py:529`.
-   - Não há borda direita no token: `obra O9_A` vira `O9`, e `obra OBRA-X_Y` vira `OBRA-X`. É risco de colisão se o instrumento receber esses nomes. `bin/disjuntor.py:97`, `bin/disjuntor.py:103`, `bin/disjuntor.py:104`, `bin/disjuntor.py:515`.
-
-3. **Limites concretos do parser de comando.**
-
-   - `env CODEX_OBRA=OBRA-X CODEX_PAPEL=verificador bin/codex_pergunta.sh h q r` não é reconhecido: a regex permite atribuições **antes** dos prefixos; depois de `env` espera o caminho do wrapper. `bin/disjuntor.py:1243`, `bin/disjuntor.py:1244`, `bin/disjuntor.py:1245`.
-   - `export CODEX_OBRA=OBRA-X; CODEX_PAPEL=verificador bin/codex_pergunta.sh h q r` é reconhecido com `obra=''`: o parser usa só atribuições do mesmo trecho da invocação, sem carregar ambiente anterior. `bin/disjuntor.py:1248`, `bin/disjuntor.py:1292`, `bin/disjuntor.py:1327`, `bin/disjuntor.py:1335`, `bin/disjuntor.py:1337`.
-   - `CODEX_OBRA="$OBRA"` retorna o literal `$OBRA`, sem expansão de variável; o wrapper recebe o valor expandido pelo shell. Isso permite divergência entre a comparação do PreToolUse e a obra efetiva. `bin/disjuntor.py:1314`, `bin/disjuntor.py:1321`, `bin/codex_pergunta.sh:44`.
-   - `bash -c "..."`, `$(...)`, script posterior e `codex exec` direto são resíduos explicitamente declarados pelo próprio código. `bin/disjuntor.py:1240`, `bin/disjuntor.py:1241`.
-   - Hoje esses desvios não contornam **B3 pelo wrapper**, pois todo `PAPEL=verificador` consulta `--b3-parada "$OBRA"` depois de aguardar slot e trava da resposta. O instrumento novo precisa entrar também nessa porta efetiva, ou poderá ser contornado por ambiente/export/env. `bin/codex_pergunta.sh:137`, `bin/codex_pergunta.sh:162`, `bin/codex_pergunta.sh:164`, `bin/codex_pergunta.sh:165`.
-
-4. **Contraexemplos para ação/escopo do contrato.**
-
-   - Estado hipotético PADRAO: entidade `E` disparada, obras dos eventos `{OBRA-X}`; `Agent` construtor com `prompt="construa a obra OBRA-X"` passa hoje pelo ramo B3, que exige `subagent_type=verificador` e leitura final. Falta decisão PADRAO sobre construtor. `bin/disjuntor.py:1451`, `bin/disjuntor.py:1454`, `bin/disjuntor.py:1457`.
-   - Mesmo estado; `Agent` verificador de leitura curta passa pelo B3 porque `_eh_final()` exclui leitura de desenho; o contrato PADRAO não restringe verificador à final. `bin/disjuntor.py:114`, `bin/disjuntor.py:499`, `bin/disjuntor.py:1454`.
-   - Mesmo estado; `export CODEX_OBRA=OBRA-X; CODEX_PAPEL=verificador ...` não oferece obra ao gate do PreToolUse: `_nega_b3()` só é chamado se `c.get('obra')`. Se PADRAO for implementado apenas nesse ponto, deixará passar a obra disparada. `bin/disjuntor.py:1337`, `bin/disjuntor.py:1442`, `bin/disjuntor.py:1443`.
-   - `prompt="Compare obra OBRA-Y antes de construir obra OBRA-X"` resolve `OBRA-Y`; com `{OBRA-X}` disparada deixa passar a execução pretendida de X, com `{OBRA-Y}` disparada pode bloquear por mera referência. A primeira ocorrência manda. `bin/disjuntor.py:504`, `bin/disjuntor.py:510`, `bin/disjuntor.py:514`.
-
-5. **O que quebra ao mudar o parser de nomes.**
-
-   - `_obra_de()` alimenta a identificação dos verificadores finais nos transcripts, o gate de Agent e a classificação do ramo de exceção B3; uma mudança pode alterar tanto contagem quanto bloqueio e NAO_SEI. `bin/disjuntor.py:546`, `bin/disjuntor.py:557`, `bin/disjuntor.py:736`, `bin/disjuntor.py:744`, `bin/disjuntor.py:1415`, `bin/disjuntor.py:1416`, `bin/disjuntor.py:1455`.
-   - `_OBRA_TOK`, `_obra_lida()` e `_identidade()` são compartilhados com `obras_da_linha()`, que valida a identidade no cabeçalho das linhas de liberação B3. Modificar só uma ponta pode contar uma identidade e liberar outra. `bin/disjuntor.py:100`, `bin/disjuntor.py:103`, `bin/disjuntor.py:518`, `bin/disjuntor.py:526`, `bin/disjuntor.py:533`, `bin/disjuntor.py:637`.
-   - Estado e triagem usam a obra como chave literal; trocar normalização pode separar históricos antigos da identidade nova. O Codex mantém a identidade literal de `CODEX_OBRA`, e o Agent aplica `_identidade()`. `bin/disjuntor.py:808`, `bin/disjuntor.py:813`, `bin/disjuntor.py:850`, `bin/disjuntor.py:1013`, `bin/codex_pergunta.sh:199`.
-   - Existem testes dessas diferenças: `O9` versus `O9 (C)`, markdown, caixa da cauda, exclusão de `O9a`, hífen sem cauda, concordância contador/topo, última atribuição e atribuição dentro de outro valor. Não foram executados porque os scripts criam arquivos; só exercitei funções puras com `python3 -B`. `bin/tests/test_disjuntor.sh:686`, `bin/tests/test_disjuntor.sh:688`, `bin/tests/test_disjuntor.sh:696`, `bin/tests/test_disjuntor.sh:697`, `bin/tests/test_disjuntor.sh:698`, `bin/tests/test_disjuntor.sh:699`, `bin/tests/test_disjuntor.sh:743`, `bin/tests/test_disjuntor.sh:1254`, `bin/tests/test_disjuntor.sh:1260`, `bin/tests/test_disjuntor.sh:1261`, `bin/tests/test_disjuntor.sh:1262`, `bin/tests/test_disjuntor.sh:1265`.
-
-6. **Escritores/leitores relacionados ao wrapper e seus campos.**
-
-   | Estado/artefato | Escritor | Leitor |
-   |---|---|---|
-   | `chamadas.log`: hora, obra, papel, hash12, pid, ini, pergunta raspada | `bin/codex_pergunta.sh:88` | `_linhas_chamadas`: `bin/codex_limite_estado.py:49`, `bin/codex_limite_estado.py:55`, `bin/codex_limite_estado.py:63`, `bin/codex_limite_estado.py:65` |
-   | `chamadas.log`: fim, thread_id, rc, duração | `_saida`: `bin/codex_pergunta.sh:56`, `bin/codex_pergunta.sh:59` | `bin/codex_limite_estado.py:66`, `bin/codex_limite_estado.py:67`; últimas chamadas `bin/codex_limite_estado.py:82`; origem Code `bin/codex_limite_estado.py:92` |
-   | `limite.log`: hora, obra, mensagem | `bin/codex_pergunta.sh:188` | `bin/codex_limite_estado.py:33`, `bin/codex_limite_estado.py:34` |
-   | `<resposta>.id`: obra, papel, hash, pid, fim, sha | `bin/codex_pergunta.sh:198`, `bin/codex_pergunta.sh:199`, `bin/codex_pergunta.sh:201` | `_le_id`: `bin/disjuntor.py:753`, `bin/disjuntor.py:756`, `bin/disjuntor.py:760`; `_triagem_sob_trava`: `bin/disjuntor.py:795`, `bin/disjuntor.py:798`, `bin/disjuntor.py:800`, `bin/disjuntor.py:802` |
-   | Trilha de triagem: hora, obra, volta, veredito | `_triagem_sob_trava`: `bin/disjuntor.py:810`, `bin/disjuntor.py:812`, `bin/disjuntor.py:813` | `_triagens`: `bin/disjuntor.py:823`, `bin/disjuntor.py:834`, `bin/disjuntor.py:846`, `bin/disjuntor.py:850` |
-   | `disjuntor_estado.json:b3_triagem_linhas` | `_triagem_sob_trava`: `bin/disjuntor.py:815`; `_triagens`: `bin/disjuntor.py:853` | `_triagens`: `bin/disjuntor.py:829`, `bin/disjuntor.py:843` |
-   | Campos novos PADRAO | Nenhum escritor apresentado nesses caminhos; definição/integração futura [não verificado] | Nenhum leitor apresentado nesses caminhos; definição/integração futura [não verificado] |
-
-   O ESTADO agrega chamadas por `disjuntor.ler()` → `codex_limite_estado.ler_chamadas()` e publica o texto pelo gerador. `bin/disjuntor.py:1611`, `bin/disjuntor.py:1615`, `bin/gerar_estado.py:280`, `bin/gerar_estado.py:281`.
-
-_1163 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1164 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
