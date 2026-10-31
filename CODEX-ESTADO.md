@@ -1,7 +1,195 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 16:54** · publicado em **31/10/2026 16:55** (UTC-3)
+> Ultima resposta processada: **31/10/2026 17:09** · publicado em **31/10/2026 17:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 17:09 · sessao 45436fe12f28 · E4-7-SAIDA-III · verificador · origem=Code
+
+Encontrei três problemas relevantes: **D4 consultado pela data errada no noturno**, **N+1 novo nas linhas encerradas** e **perda do botão “Designar” em cobertura parcial**. As causas estão em `app/core/services/painel_op.py:194`, `app/core/services/painel_op.py:195` e `app/templates/core/_painel_card.html:69`.
+
+Não há casos individuais de produção no material fornecido; incidência e impacto em produção são **[nao verificado]**. Os contraexemplos abaixo são deduções do código, sem execução contra banco **[nao verificado quanto à reprodução]**.
+
+**1. Quem escreve e quem lê**
+
+| Campo/valor | Quem escreve ou fornece | Quem lê |
+|---|---|---|
+| `status`: `normal`, `geofence`, `turno_aberto`, `encerrado`, `None` | O próprio painel escolhe as palavras: presença pelo juiz, alerta geo e comparação com fim previsto; `encerrado` significa entrada encontrada sem turno vivo. `app/core/services/painel_op.py:85`, `app/core/services/painel_op.py:158`, `app/core/services/painel_op.py:168`, `app/core/services/painel_op.py:181`. | Filtro, contadores, agregação e ordenação: `app/core/services/painel_op.py:198`, `app/core/services/painel_op.py:224`, `app/core/services/painel_op.py:273`, `app/core/services/painel_op.py:281`. Card, avatar, badge, indicador aberto e Designar: `app/templates/core/_painel_card.html:6`, `app/templates/core/_painel_card.html:36`, `app/templates/core/_painel_card.html:54`, `app/templates/core/_painel_card.html:67`, `app/templates/core/_painel_card.html:69`. |
+| `previsao`: `folga`, `escala_suspeita`, `previsto`, `None` | `_previsao_de_hoje` traduz `EC.eh_dia_trabalho`; este lê `CelulaDia.trabalha`, com fallback aritmético. `app/core/services/painel_op.py:27`, `app/core/services/painel_op.py:218`, `app/escala/models.py:1066`. | Avatar e fallback do badge; testes novos. `app/templates/core/_painel_card.html:54`, `app/templates/core/_painel_card.html:67`, `app/core/tests/test_e4_7iii_painel_e_presenca.py:95`. |
+| `dia` | Painel inicializa `None`, pergunta encerramento e chama D4. D4 lê a célula; o escritor persistente é a porta de lavra. `app/core/services/painel_op.py:192`, `app/ponto/status_dia.py:171`, `app/ponto/portas/celula.py:705`, `app/ponto/portas/celula.py:709`. | Card lê `rotulo` e `status`; teste também verifica `fonte`. `app/templates/core/_painel_card.html:66`, `app/templates/core/_painel_card.html:67`, `app/core/tests/test_e4_7iii_painel_e_presenca.py:171`. |
+| `contadores` | Quatro somas sobre as linhas **já filtradas**. `app/core/services/painel_op.py:198`, `app/core/services/painel_op.py:223`. | View repassa; stats lê quatro chaves; teste verifica a remoção das antigas. `app/core/views.py:637`, `app/core/views.py:670`, `app/templates/core/_painel_stats.html:32`, `app/core/tests/test_e4_7iii_painel_e_presenca.py:109`. |
+| `statuses` | Lista com quatro opções. `app/core/services/painel_op.py:230`. | View lê e repassa ao contexto. `app/core/views.py:639`, `app/core/views.py:672`. Consumidor final adicional **[nao verificado]**. |
+| `ausentes` do posto | Removido; o dicionário atual não publica essa chave. `app/core/services/painel_op.py:279`. | Card atual usa `em_turno` e `geofence`; teste exige ausência da chave. `app/templates/core/_painel_card.html:12`, `app/core/tests/test_e4_7iii_painel_e_presenca.py:112`. |
+| `bateu_hoje_ids` | `batidas_apuraveis(None)` filtradas pela data; a autoridade exclui retratadas. `app/core/services/painel_op.py:258`, `app/ponto/turnos.py:2845`. | `_teve_ativ`, depois `classificar_cobertura`. `app/core/services/painel_op.py:276`. |
+| `PALAVRAS_DA_PRESENCA` | Constante com as quatro palavras. `app/core/medida_leitor_do_dia.py:272`. | `PALAVRAS_DA_CATEGORIA`, predicado do censo e teste novo. `app/core/medida_leitor_do_dia.py:274`, `app/core/medida_leitor_do_dia.py:367`, `app/core/tests/test_e4_7iii_painel_e_presenca.py:207`. |
+| `NAO_E_LEITOR` | Registro de exclusões; inclui as duas funções do painel. `app/core/medida_leitor_do_dia.py:275`, `app/core/medida_leitor_do_dia.py:302`. | Censo aplica categoria/motivo e procura exclusões mortas; selo verifica categorias e sobreposição. `app/core/medida_leitor_do_dia.py:366`, `app/core/medida_leitor_do_dia.py:403`, `app/core/tests/test_medida_leitor_do_dia.py:73`. |
+| `TETO_NAO_E_LEITOR` | Constante `10`. `app/core/medida_leitor_do_dia.py:309`. | Selo exige igualdade com o tamanho da lista. `app/core/tests/test_medida_leitor_do_dia.py:75`. |
+| `DECLARADOS` | Cinco funções: duas do calendário, API, espelho administrativo e furos. `app/core/medida_leitor_do_dia.py:316`. | Censo calcula novos/sumidos/sítios alterados; selo cobra os resultados. `app/core/medida_leitor_do_dia.py:395`, `app/core/tests/test_medida_leitor_do_dia.py:39`, `app/core/tests/test_medida_leitor_do_dia.py:50`. |
+
+Página, fragmento e lote passam pelo mesmo construtor; grade e lote incluem o mesmo card. `app/core/views.py:607`, `app/core/views.py:632`, `app/core/views.py:679`, `app/templates/core/_painel_grid.html:2`, `app/templates/core/_painel_lote.html:7`.
+
+Fora do diff, testes continuam lendo presença, entrada e âncora: `app/core/tests/test_painel_op_turno_pelo_juiz.py:75`, `app/core/tests/test_painel_op_turno_aberto_ancora.py:49`, `app/core/tests/test_e4_7_painel_entrada_retratada.py:80`.
+
+O publicador do ESTADO carrega **o mesmo medidor**, publica contagem, lista, alarmes e limitações; não calcula outro censo. A S3 também importa seu detector de dinheiro. `bin/leitor_dia_estado.py:32`, `bin/leitor_dia_estado.py:46`, `bin/gerar_estado.py:290`, `app/ponto/tests/test_s3_placar_exercicio.py:38`.
+
+`core/juizes.py` não consome o payload: mantém pendências de contadores, badges e filtros por impressões do código. A obra alterou descrições, sem retirar essas pendências. `app/core/juizes.py:715`, `app/core/juizes.py:727`, `app/core/juizes.py:731`.
+
+**2. Leitores que ainda esperam o contrato antigo**
+
+Nos consumidores atuais rastreados, não encontrei expectativa residual de `status='ausente'`, `status='folga'` ou `p.ausentes`: o badge consulta `previsao`, os stats usam quatro contadores e o JS filtra descoberto/geofence/aberto. `app/templates/core/_painel_card.html:67`, `app/templates/core/_painel_stats.html:32`, `app/templates/core/painel_operacional.html:173`.
+
+**Permanece uma incompatibilidade nas URLs:** ambas as views aceitam `?status=ausente` ou `?status=folga` e passam o valor sem normalização. O serviço elimina todas as linhas por igualdade e depois omite os postos vazios. Favoritos ou integrações reais usando essas URLs são **[nao verificado]**. `app/core/views.py:607`, `app/core/views.py:626`, `app/core/services/painel_op.py:198`, `app/core/services/painel_op.py:269`.
+
+Não identifiquei API consumidora desse construtor. A API do espelho continua com classificação própria, declarada separadamente no medidor; consumidor externo do payload do painel é **[nao verificado]**. `app/core/medida_leitor_do_dia.py:323`.
+
+**3. Classes de reprovação**
+
+- **Segundo julgamento da data do turno:** a nova leitura do D4 usa a data civil da última entrada, enquanto o juiz registrado para pertencimento da batida é `turnos_do_colab`. No turno fechado, o painel também publica essa data civil em `data_turno`. `app/core/services/painel_op.py:194`, `app/core/services/painel_op.py:209`, `app/core/juizes.py:177`.
+
+- **Escolha de vínculo fora da autoridade:** o painel seleciona por `ativa=True`, sem consultar vínculo do dia ou cobertura da data. Isso alimenta previsão, cobertura e fim previsto, embora essas autoridades estejam registradas. É caminho herdado, agora também alimentando o campo novo. `app/core/services/painel_op.py:97`, `app/core/services/painel_op.py:132`, `app/core/services/painel_op.py:218`, `app/core/juizes.py:1255`.
+
+- **Previsão duplicada:** helper e `minha_escala` repetem a tradução True/False/None. Ambos perguntam trabalho à EC; portanto não há segunda aritmética de escala nesse ternário, mas existem duas traduções e escolhas independentes do vínculo. `app/core/services/painel_op.py:34`, `app/escala/views.py:25`, `app/escala/views.py:40`, `app/escala/views.py:54`.
+
+- **Segundo escritor persistente:** não identifiquei novo escritor no caminho alterado. O painel monta dicionários e D4 consulta dados. O `.update(status_dia=...)` novo pertence à fixture, não ao serviço. `app/core/services/painel_op.py:192`, `app/ponto/status_dia.py:171`, `app/core/tests/test_e4_7iii_painel_e_presenca.py:76`.
+
+- **Relógio:** a cadeia nova recebe o mesmo `agora` capturado pelo construtor; não encontrei leitura independente nova nesses chamados. Permanecem relógios do navegador e `date.today()` em `minha_escala`; discrepância por fuso do processo é **[nao verificado]**. `app/core/services/painel_op.py:53`, `app/core/services/painel_op.py:195`, `app/templates/core/painel_operacional.html:155`, `app/templates/core/painel_operacional.html:294`, `app/escala/views.py:26`.
+
+- **N+1 novo, confirmado pela estrutura:** cada linha encerrada chama `dias_encerrados` sem alimentação; quando passa, D4 consulta célula, recarrega turnos e chama novamente `dias_encerrados`. Isso acontece antes do filtro de status. Quantidade e latência reais são **[nao verificado]**. `app/core/services/painel_op.py:193`, `app/core/services/painel_op.py:198`, `app/ponto/turnos.py:2129`, `app/ponto/status_dia.py:171`.
+
+- **Selo de custo não cobre esse ramo:** as fixtures de crescimento criam vínculos sem batidas, portanto não exercitam linhas encerradas. Já existia outro N+1, chamando presença por colaborador, apesar da porta plural disponível. `app/core/tests/test_selo_lotes_painel.py:41`, `app/core/tests/test_selo_lotes_painel.py:95`, `app/core/services/painel_op.py:85`, `app/ponto/turnos.py:2266`.
+
+Os REDs novos cobram as trocas literais `encerrado→ausente`, `encerrado→folga` e `previsto→ok`. Contudo, o medidor não verifica a origem dos campos: só examina certas produções de literais reconhecidos. `app/core/tests/test_e4_7iii_painel_e_presenca.py:211`, `app/core/medida_leitor_do_dia.py:194`, `app/core/medida_leitor_do_dia.py:200`.
+
+Executei o censo somente em memória: **5 = status 5 + valor 0**, sem alarmes. Também mantiveram esse resultado duas alterações exclusivamente em memória: publicar `status` por `{'resultado': 'falta'}['resultado']` e substituir D4 por `{'status': 'falta', 'fonte': 'paralelo'}`. A limitação decorre do tratamento de dicionários/indireção; isso demonstra limite do medidor, não aprovação desses mutantes pela suíte completa. `app/core/medida_leitor_do_dia.py:200`, `app/core/medida_leitor_do_dia.py:335`, `app/core/medida_leitor_do_dia.py:368`, `app/core/medida_leitor_do_dia.py:389`.
+
+**4. Contraexemplos concretos**
+
+Todos abaixo são cenários sintéticos inferidos do código; reprodução executada e ocorrência em produção são **[nao verificado]**.
+
+| Cadastro + batidas + hora | Diferença resultante |
+|---|---|
+| Ativo, 12x36 **19–07**, intervalo **00–01**, âncora 17/09; E17/09 19h, S18/09 00h, E18/09 01h, S18/09 07h; consulta em **18/09 08h**; D4 de 17/09 lavrado `ok`. | Painel pega a E de retorno, consulta encerramento de **18/09** e omite o D4 de **17/09**. A janela consultada termina em 19/09 07h; calendário agrupa o turno em 17/09. `app/core/services/painel_op.py:72`, `app/core/services/painel_op.py:194`, `app/escala/servico_jornada.py:61`, `app/ponto/turnos.py:2102`, `app/colaboradores/services/calendario.py:301`. |
+| Ativo, EC 12x36 **07–19**, início **18/09**, âncora 17/09; sem célula nem batidas; consulta **17/09 09h**. | Painel anuncia `previsto` e conta previsão agora, embora o vínculo ainda não cubra a data. Calendário aplica a guarda de vigência e fica sem previsão. `app/core/services/painel_op.py:34`, `app/core/services/painel_op.py:139`, `app/escala/models.py:1260`, `app/colaboradores/services/calendario.py:766`. |
+| Ativo, **07–19**, única E17/09 07h, sem S; consulta **17/09 23h01**. | Presença expira após fim+4h: painel diz `encerrado`. Calendário ainda lê `t.aberto` e diz `aberto`. Assim, `encerrado` não prova saída registrada. `app/ponto/turnos.py:1987`, `app/ponto/turnos.py:2008`, `app/core/services/painel_op.py:181`, `app/colaboradores/services/calendario.py:811`, `app/colaboradores/services/calendario.py:144`. |
+
+A diferença de âncora noturna não está coberta pelo teste existente: ele termina sem a S final; os testes novos de D4 são diurnos. `app/core/tests/test_painel_op_turno_aberto_ancora.py:41`, `app/core/tests/test_e4_7iii_painel_e_presenca.py:120`, `app/core/tests/test_e4_7iii_painel_e_presenca.py:163`.
+
+**5. O que quebra ou permanece quebrado fora do diff**
+
+- **Designar em cobertura parcial — regressão:** dois previstos 07–19, às09 um presente e outro sem batida. O juiz retorna `parcial`, o painel converte para `coberto` e o botão exige `descoberto`; desaparece a ação para o titular sem presença. `app/ponto/selecao_periodo.py:246`, `app/core/services/painel_op.py:261`, `app/templates/core/_painel_card.html:69`.
+
+- **Designar após saída antecipada:** E07/S08, consulta às09, jornada até19. O titular continua previsto e o posto pode estar descoberto, mas `status='encerrado'` impede o botão por `not c.status`. `app/core/services/painel_op.py:181`, `app/core/services/painel_op.py:217`, `app/templates/core/_painel_card.html:69`.
+
+- **Filtro “Aberto” perde postos com dois abertos:** o template gera `data-tem-aberto="11"`; JS aceita somente `'1'`. `app/templates/core/_painel_card.html:6`, `app/templates/core/painel_operacional.html:178`.
+
+- **Lotes novos escapam do filtro/busca:** a reaplicação só ocorre quando o alvo do swap é `pop-body`; sentinelas de lote substituem a si mesmas. `app/templates/core/painel_operacional.html:161`, `app/templates/core/_painel_lote.html:8`.
+
+- **KPI “sem escala” mistura universos:** denominador conta todos os postos ativos; numeradores vêm do painel filtrado; o residual inclui encerrados e postos fora da empresa selecionada. `app/core/views.py:648`, `app/core/views.py:651`, `app/templates/core/_painel_stats.html:24`.
+
+- **O dashboard ainda deriva ausentes separadamente:** `ausentes_hoje` não é consumidor da chave removida; continua sendo outra classificação por trabalho e ausência de entrada. A TV também mantém atividade por batidas cruas e previsão por hora do template. `app/core/views.py:388`, `app/core/views.py:404`, `app/core/views.py:792`, `app/core/views.py:848`.
+
+- **Selo host inconsistente por construção:** a cópia mínima não inclui `ponto/status_dia.py`, agora obrigatório para carregar o vocabulário. Ela produz indisponibilidade, e depois a expressão aritmética recebe `NB=NAO`. É dedução estática; execução do script **[nao verificado]**. `bin/tests/test_leitor_dia_estado.sh:46`, `app/core/medida_leitor_do_dia.py:162`, `bin/leitor_dia_estado.py:35`, `bin/tests/test_leitor_dia_estado.sh:59`.
+
+A suíte não foi executada: suas fixtures criam registros e arquivos temporários, incompatíveis com a restrição desta verificação. Resultado da suíte e REDs executados são **[nao verificado]**. `app/core/tests/test_e4_7iii_painel_e_presenca.py:45`, `app/core/tests/test_e4_7iii_painel_e_presenca.py:183`.
+
+## 31/10 17:07 · sessao 9ff881fc009d · - · - · origem=Ronald (tmux)
+
+Achados por leitura estática; execução, incidência e impacto em produção: **[nao verificado]**.
+
+1. **P1 — D4 consultado no dia errado após intervalo noturno.** `entradas_hoje` conserva a última E cronológica, inclusive retorno de intervalo; a nova consulta usa `localdate(entrada.timestamp)` como dia. Não pergunta ao juiz o `data_turno` do turno fechado. O próprio campo `data_turno` repete esse fallback quando não existe turno vivo. (`app/core/services/painel_op.py:72-75,193-196,209`; ordenação da fonte: `app/ponto/turnos.py:2852`.)
+
+   Contraexemplo: ativo, 12x36 19–07, intervalo 00–01, âncora 17/09; E17/09 19h, S18/09 00h, E18/09 01h, S18/09 07h; agora 18/09 08h; célula17 lavrada `ok`. O painel escolhe E18/09 01h e consulta encerramento de **18/09**, cuja janela noturna termina em **19/09 07h**; `dia=None`. O calendário agrupa esse turno em **17/09**. Portanto o painel omite o D4 do turno encerrado e apresenta entrada/data ancoradas no retorno do intervalo. É inferência estática, não reprodução executada. (`app/core/services/painel_op.py:155,181-196,207-209`; `app/escala/servico_jornada.py:61-93`; `app/ponto/turnos.py:2102-2105`; `app/colaboradores/services/calendario.py:297-302`.)
+
+   A geometria dessa fixture já aparece no teste de âncora noturna, mas ele termina sem S final; os novos testes D4 usam somente 07–19. (`app/core/tests/test_painel_op_turno_aberto_ancora.py:3-6,33-42`; `app/core/tests/test_e4_7iii_painel_e_presenca.py:120-131,163-172`.)
+
+2. **P1/P2 — N+1 novo por linha encerrada, com recarga duplicada.** Cada linha `encerrado` chama `dias_encerrados` sem células/turnos alimentados. Esse carregador consulta células, vínculos e turnos; se verdadeiro, o painel chama D4, que consulta a célula, recarrega turnos e chama novamente `dias_encerrados`. O custo cresce com o número de linhas encerradas, inclusive antes do filtro de status. Quantidade e latência reais: [nao verificado]. (`app/core/services/painel_op.py:193-199`; `app/ponto/turnos.py:2129-2133`; `app/ponto/status_dia.py:171-176`.)
+
+   Já havia N+1 de presença: `turno_aberto_de` dentro de laço, embora exista `turnos_abertos_de` com carregamento plural. (`app/core/services/painel_op.py:85-86`; `app/ponto/turnos.py:2266-2274`.)
+
+3. **P2 — previsão/cobertura continuam escolhendo vínculo por `ativa=True`, fora da autoridade registrada.** O painel monta um dict de vínculos ativos e usa diretamente esse vínculo em `_previsao_de_hoje`, `_previsto_agora` e no fim da janela. A autoridade cadastrada para vínculo do dia é `vinculo_do_dia`, que respeita geradora e vigência; para cobertura da data, `vinculo_cobre_a_data`. (`app/core/services/painel_op.py:97-102,132-147,152,176-178,218`; `app/core/juizes.py:1255-1256`; `app/escala/alimentacao.py:173-184,237-254`.)
+
+   Contraexemplo: hoje 17/09 09h; ativo com EC 12x36 07–19, `ativa=True`, `data_inicio=18/09`, âncora17; sem célula nem batidas. Painel produz `previsao='previsto'` e `previsto_agora=True`; calendário guarda a vigência, obtém `eh_trabalho=None` e cai em `sem_dados`. Inferência estática: a aritmética da EC não testa `data_inicio`. (`app/core/services/painel_op.py:27-35,132-147`; `app/escala/models.py:1260-1263`; `app/colaboradores/services/calendario.py:766-778,118-143`.)
+
+4. **Discrepância legada concreta: turno expirado sem S.** Ativo, 07–19, única E17/09 07h, agora17/09 23h01. O juiz de presença expira a aberta após fim+4h; painel passa a `encerrado`, embora não haja S. O calendário ainda usa `any(t.aberto)` e pinta `aberto`. O novo D4 pode aparecer nessa linha após o encerramento pelo relógio. Inferência estática; ocorrência real [nao verificado]. (`app/ponto/turnos.py:1987-2011,2097-2105`; `app/core/services/painel_op.py:181-196`; `app/colaboradores/services/calendario.py:144-145,811`.)
+
+5. **Derivação paralela de previsão existe como tradução duplicada, não como nova aritmética de escala.** `_previsao_de_hoje` e `minha_escala` repetem o mesmo ternário True/False/None → previsto/folga/escala_suspeita; ambas delegam trabalho à EC. A duplicação é da tradução e da escolha/alimentação do vínculo. (`app/core/services/painel_op.py:27-35`; `app/escala/views.py:25,40,54`; `app/escala/models.py:1048-1073`.)
+
+6. **Relógio do painel:** a nova cadeia usa um `agora` capturado no construtor e passado ao juiz de presença, ao encerramento e ao D4; não encontrei nova leitura independente nesses caminhos efetivamente chamados. `minha_escala` continua usando `datetime.date.today()`, diferente da data local derivada do instante no painel; discrepância depende do fuso do processo [nao verificado]. (`app/core/services/painel_op.py:53-54,86,195-196`; `app/ponto/status_dia.py:169-170`; `app/ponto/turnos.py:2124-2125,2261-2263`; `app/escala/views.py:26`.)
+
+7. **Segundo escritor:** o construtor publicado não grava D4, célula ou batida; o novo caminho chama leitores. Os testes plantam `status_dia` diretamente por `.update()`, mas isso está no código de teste. Não atribuir ao serviço um segundo escritor por causa da fixture. (`app/core/services/painel_op.py:190-196`; `app/ponto/status_dia.py:171-185`; `app/core/tests/test_e4_7iii_painel_e_presenca.py:75-82`.)
+
+8. **Selos que deixam passar a âncora errada:** o contrato de batida por data permite todo o arquivo `painel_op.py`, com comentário sobre transferência do legado; a nova derivação `_d_enc` fica dentro dessa permissão por arquivo. Os novos testes não incluem turno fechado com retorno de intervalo após meia-noite nem teto de consultas. (`app/ponto/tests/test_contract_no_batida_date.py:32-43`; `app/core/services/painel_op.py:194`; `app/core/tests/test_e4_7iii_painel_e_presenca.py:85-172`.)
+
+## 31/10 17:06 · sessao c60283801c54 · - · - · origem=Ronald (tmux)
+
+Mapa do medidor e dos selos:
+
+- `PALAVRAS_DA_PRESENCA` é definido no módulo e lido por `PALAVRAS_DA_CATEGORIA`, pelo predicado de `censo` e pelo teste novo; contém normal/geofence/turno_aberto/encerrado. O detector, porém, só entrega palavras existentes no vocabulário geral; normal/geofence ficam fora dele por desenho. (`app/core/medida_leitor_do_dia.py:169`, `:194`, `:270-274`, `:367-368`; `app/core/tests/test_e4_7iii_painel_e_presenca.py:207`)
+- `NAO_E_LEITOR` é definido em `app/core/medida_leitor_do_dia.py:275`; as duas novas entradas estão em `:302-307`. `censo` consulta categoria/motivo e calcula exclusões mortas (`:366-370`, `:403`); o selo valida categoria/motivo/tamanho e ausência de sobreposição com DECLARADOS (`app/core/tests/test_medida_leitor_do_dia.py:73-83`).
+- `TETO_NAO_E_LEITOR=10` é definido em `app/core/medida_leitor_do_dia.py:309` e comparado ao tamanho exato da lista em `app/core/tests/test_medida_leitor_do_dia.py:75`.
+- `DECLARADOS` mantém cinco funções: duas do calendário, API do espelho, espelho admin e relatório de furos. É definido em `app/core/medida_leitor_do_dia.py:316-332`; `censo` lê motivos, conta declarados e calcula novos/sumidos/sítios alterados (`:377`, `:395-401`). O selo cobra esses resultados (`app/core/tests/test_medida_leitor_do_dia.py:39-55`, `:69-71`).
+- `bin/leitor_dia_estado.py` carrega o mesmo módulo e chama `censo`, sem detector paralelo (`:25`, `:32-35`). Publica contagem/lista/alarmes/pontos cegos (`:46-69`); `bin/gerar_estado.py` importa `ler`/`linha` (`:290-291`). A S3 importa o detector de dinheiro do mesmo módulo (`app/ponto/tests/test_s3_placar_exercicio.py:38`).
+- `core/juizes.py` mantém painel, badges e filtro como pendências: contadores em `:715-716`, ausentes_hoje em `:717-718`, badge aberto e atributo de filtro em `:727-730`, JS em `:731-732`. A obra atualiza os motivos, não declara esses sítios curados. O juiz de turno é registrado em `:180` e `:683`; status do dia em `:173`; também constam de `app/docs/JUIZES.md:20` e `:74-75`.
+
+Validação executada somente em memória, com `python3 -B`: o censo desta cópia retornou 5 = status 5 + valor 0, sem novos, sumidos, sítios alterados, exclusões mortas ou ilegíveis. Os campos provêm de `app/core/medida_leitor_do_dia.py:389-408`; o resultado de execução não foi gravado em arquivo [nao verificado].
+
+Mordida real e limite:
+
+- Os testes novos realmente plantam `encerrado → ausente`, `encerrado → folga` e `previsto → ok`, exigindo aparecimento em novos e incremento de contagem. (`app/core/tests/test_e4_7iii_painel_e_presenca.py:211-227`)
+- O predicado **não verifica todos os valores de status nem a origem do dia**: considera apenas literais previamente reconhecidos pelo detector; valores dentro de dict não entram, assim como palavras fora do vocabulário. (`app/core/medida_leitor_do_dia.py:194`, `:200-212`, `:368`)
+- Contra-mutações executadas somente em memória mantiveram 5 e todos os alarmes vazios:
+  1. `painel_op.py:174`: `status = 'normal'` substituído por `status = {'resultado': 'falta'}['resultado']`.
+  2. `painel_op.py:196`: chamada ao D4 substituída por `dia = {'status': 'falta', 'fonte': 'paralelo'}`.
+  3. Mesmo sítio substituído por `dia = 'normal' if colab.id else 'geofence'`.
+  
+  Isso prova limite do medidor, não aprovação pela suíte completa; os resultados em memória não possuem arquivo de registro [nao verificado]. A causa está em `app/core/medida_leitor_do_dia.py:194-212`, e a limitação de indireção/templates/vocabulário é publicada em `:334-343`.
+
+Quebra concreta fora do diff:
+
+- O selo do host constrói cópia mínima com leitor, medidor e calendário, mas não copia `app/ponto/status_dia.py`. (`bin/tests/test_leitor_dia_estado.sh:46-50`)
+- O medidor exige esse arquivo para obter o vocabulário antes do censo. (`app/core/medida_leitor_do_dia.py:124`, `:162-163`, `:352`)
+- Portanto a cópia mínima retorna `medido=False`, e `campo` produz `NAO|...`; depois o teste avalia `$((NB + 1))` com NB=NAO sob `set -u`, falhando antes de demonstrar a planta +1. (`bin/leitor_dia_estado.py:35-37`; `bin/tests/test_leitor_dia_estado.sh:13`, `:33-36`, `:50`, `:59`)
+- Essa falha é dedução estática; o script não foi executado porque cria e apaga arquivos temporários. (`bin/tests/test_leitor_dia_estado.sh:46-56`)
+
+## 31/10 17:06 · sessao 41d28737325d · - · - · origem=Ronald (tmux)
+
+Achados prioritários:
+
+1. **Regressão no “Designar” em cobertura parcial.** Com dois colaboradores previstos 07–19, às 09h um tem E07 e o outro não bateu: o ausente recebe `status=None`, `previsto_agora=True`; cobertura retorna `parcial`, mas painel converte para `coberto`, e o botão novo exige `descoberto`. Portanto desaparece o caminho de designação para o segundo titular. Fontes: `app/core/services/painel_op.py:184`, `:217`, `:261`, `:275`; `app/ponto/selecao_periodo.py:244`; `app/templates/core/_painel_card.html:69`. A condição anterior, `status == 'ausente'`, está no diff fornecido [nao verificado quanto a execução].
+
+2. **Encerramento antecipado também impede designação.** Titular 07–19 com E07/S08, às09: recebe `encerrado`; continua previsto, posto pode ficar descoberto, mas `not c.status` é falso. Fontes: `app/core/services/painel_op.py:181`, `:193`, `:217`; `app/templates/core/_painel_card.html:69`.
+
+3. **URLs antigas continuam aceitas e agora esvaziam o painel.** Ambas as views passam `?status=ausente`/`folga` sem validação ao serviço; igualdade com o status novo não encontra ninguém, depois os postos vazios são omitidos. Fontes: `app/core/views.py:607`, `:626`, `:632`; `app/core/services/painel_op.py:198`, `:269`. Existência de favoritos/integração usando essas URLs: [nao verificado].
+
+4. **Selo de N+1 não exercita o ramo novo.** A fixture de 45 colaboradores e os 100 acrescentados possuem vínculos, sem batidas; a comparação de contagem nunca testa colaboradores `encerrado`, cujo ramo chama os dois serviços individualmente. Fontes: `app/core/tests/test_selo_lotes_painel.py:41`, `:95`, `:111`; `app/core/services/painel_op.py:193`.
+
+Mapa dos leitores:
+
+| Campo | Escritor | Leitores encontrados |
+|---|---|---|
+| `status` | Serviço escolhe as quatro palavras ou `None`: `app/core/services/painel_op.py:168`, `:181`, `:188`, `:211` | Filtro/contadores/geofence/ordenação no próprio serviço: `:198`, `:224`, `:273`, `:281`; avatar, badge, aberto e botão: `app/templates/core/_painel_card.html:6`, `:36`, `:54`, `:66`, `:69` |
+| `previsao` | `_previsao_de_hoje`, chamada ao criar linha: `app/core/services/painel_op.py:27`, `:218` | Avatar e fallback textual do badge: `app/templates/core/_painel_card.html:54`, `:66`, `:67` |
+| `dia` | Condição encerrado + juiz + D4: `app/core/services/painel_op.py:192` | Título `rotulo` e texto `status`: `app/templates/core/_painel_card.html:66`, `:67` |
+| `contadores` | Quatro somas: `app/core/services/painel_op.py:223` | View repassa: `app/core/views.py:637`, `:670`; template lê quatro: `app/templates/core/_painel_stats.html:32` |
+| `statuses` | Lista de quatro: `app/core/services/painel_op.py:230` | View lê/repassa: `app/core/views.py:639`, `:672`. Leitor final atual não encontrado [nao verificado] |
+| `ausentes` do posto | Removido no diff; dicionário atual não possui: `app/core/services/painel_op.py:279` | Card atual não pede a chave; cabeçalho usa em_turno/geofence: `app/templates/core/_painel_card.html:12`, `:34`, `:35` |
+| `bateu_hoje_ids` | Apuráveis por data: `app/core/services/painel_op.py:258` | `_teve_ativ`, depois `classificar_cobertura`: `:276`, `:277` |
+
+As duas entradas de produção encontradas são página/fragmento e lote; ambas usam o mesmo serviço. Página repassa linhas, postos, contadores e statuses; lote utiliza postos. Fontes: `app/core/views.py:607`, `:610`, `:632`, `:635`, `:637`, `:639`, `:679`. Os dois templates de grade/lote incluem o mesmo card: `app/templates/core/_painel_grid.html:2`, `app/templates/core/_painel_lote.html:7`. Rotas HTML: `app/core/urls.py:29`, `:30`; consumidor API do serviço não demonstrado [nao verificado].
+
+**Não encontrei leitor atual do painel ainda esperando `ausente`/`folga` em `status` ou `ausentes`** nos consumidores acima: badge passa a consultar `previsao`; filtros JS só conhecem descoberto/geofence/turno_aberto; stats leem as quatro chaves. Fontes: `app/templates/core/_painel_card.html:67`; `app/templates/core/painel_operacional.html:173`; `app/templates/core/_painel_stats.html:32`.
+
+Testes externos ao diff consomem `status=normal`, `encerrado`, `turno_aberto`, `entrada`, `data_turno`, `tempo_turno`, cobertura e chamados; não esperam explicitamente as palavras removidas. Fontes: `app/core/tests/test_painel_op_turno_pelo_juiz.py:75`, `:78`, `:84`; `app/core/tests/test_painel_op_turno_aberto_ancora.py:49`; `app/core/tests/test_e4_7_painel_entrada_retratada.py:80`, `:82`; `app/core/tests/test_painel_previsto_celula.py:55`; `app/core/tests/test_registrado_nao_e_pendencia.py:67`.
+
+Fora do diff, permanecem:
+
+- **Filtro “Aberto” perde posto com dois turnos abertos:** card concatena `11`, JS aceita apenas string `'1'`. Fontes: `app/templates/core/_painel_card.html:6`; `app/templates/core/painel_operacional.html:178`. Registro anterior do mesmo bug: `app/docs/CENSO_NARNIA.md:225`.
+- **Filtros/busca não são reaplicados aos lotes:** handler `afterSwap` só trata alvo `pop-body`; sentinelas substituem `this` por novos cards. Fontes: `app/templates/core/painel_operacional.html:161`; `app/templates/core/_painel_lote.html:8`.
+- **KPI “sem escala” inclui encerrados e ignora empresa no denominador:** total conta todos os postos ativos, enquanto numeradores vêm do serviço filtrado; residual é rotulado sem escala. Fontes: `app/core/views.py:648`, `:651`; `app/templates/core/_painel_stats.html:24`.
+- **TV continua outra derivação:** usa batidas cruas para atividade e previsão por hora do template, sem fase/DNA; não consome o serviço operacional. Fontes: `app/core/views.py:792`, `:848`. Os status TV são `fora`, `normal`, `geofence`, `aberto`, consumidos por JS próprio. Fontes: `app/core/views.py:807`, `:816`, `:828`; `app/templates/core/painel_tv.html:161`, `:177`.
+- **Relógio do cliente permanece em duas funções:** exibição e período default de designação. Fontes: `app/templates/core/painel_operacional.html:155`, `:294`.
+- **Registro vivo ainda declara pendências de derivação no serviço/card/JS:** contadores, KPIs, badges e filtros continuam em `PENDENTES['tela']`. Fontes: `app/core/juizes.py:715`, `:719`, `:727`, `:729`, `:731`.
+
+Não executei testes: os testes relevantes criam registros e os testes do medidor também criam arquivos temporários, incompatíveis com somente leitura. Fontes: `app/core/tests/test_selo_lotes_painel.py:32`, `app/core/tests/test_medida_leitor_do_dia.py:98`. Resultado de execução: [nao verificado].
 
 ## 31/10 16:54 · sessao bab72768ff86 · DISJUNTOR-B1-ESPERA-OCIOSA · leitura · origem=Code
 
@@ -852,116 +1040,4 @@ Complemento concluído.
 
 **Leituras do retorno:** não apareceu consumidor de `lat`, `lng` ou `data_turno` do retorno do painel nos templates/cards/JS ou views que usam o construtor; eles são publicados no dicionário. `data_turno` tem consumidores claros nos dois testes antigos; `lat/lng` ficam sem consumidor encontrado, não certificar “inexistente” universalmente. — publicação em `app/core/services/painel_op.py:190`, `app/core/services/painel_op.py:195`; entrega pelas views em `app/core/views.py:610`, `app/core/views.py:635`; consumidores de teste em `app/core/tests/test_painel_op_turno_aberto_ancora.py:50`, `app/core/tests/test_painel_op_turno_pelo_juiz.py:80`; card usa entrada/ID/geo/status em `app/templates/core/_painel_card.html:64`.
 
-## 31/10 16:25 · sessao db1652df3a91 · - · - · origem=Ronald (tmux)
-
-Revisão estática dos testes; execução contra 7e0fc9bc: **[nao verificado]**.
-
-| Teste novo/alterado | Resultado mental contra 7e0fc9bc |
-|---|---|
-| `test_MORDE_com_as_PONTAS_o_split_SAI_e_reparte_a_HE_DO_DIA` | **Falharia**: a base usava extras das pontas; o caso exige HE100 noturna zero e HE50 noturna 1,5, além dos novos detalhes (`app/ponto/tests/test_s5b_split_noturno_tem_um_dono.py:292`, `:315`, `:322`). |
-| `test_MORDE_dobra_com_EXCEDENTE_nao_soma_HE50` | **Passaria**: dobra/`elif` já existiam e o diff não os altera. É guarda contra mutação `elif`→`if`, não RED desta alteração (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:48`; `app/ponto/calculador/regras.py:779`, `:794`). |
-| CCT diária sem dobra × ponta com dobra | **Falharia**: base produziria parcela noturna positiva; o teste exige zero (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:111`). |
-| CCT diária com dobra × ponta zerada | **Falharia**: base conservaria split zero; teste exige seis horas (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:118`). |
-| Excedente diário × dobra na ponta | **Falharia**: base usaria HE100 da ponta; teste exige HE50 noturna=1 e HE100 noturna=0 (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:125`). |
-| Sem calendário | **Falharia**: teste exige declaração das duas parcelas, ausência nos valores e causa; esse ramo é novo (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:134`; `app/ponto/calculador/regras.py:830`). |
-| Ponta sem extra entra como geometria | **Falharia**: filtro anterior descartava a ponta zerada; teste exige sua presença (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:150`). |
-| Nacional e vigência interna renomeados `GUARDA` | **Passariam**, agora corretamente descritos como guardas (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:217`, `:313`). |
-| Praça externa com vínculo começando em setembro | **Passaria em 7e0fc9bc**, que já resolve CCT diariamente; a fixture corrigida distingue a implementação anterior que consultava `ini` (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:269`, `:284`; `app/ponto/calculador/alimentacao.py:517`). |
-| Vigência começando no meio da janela | **Passaria em 7e0fc9bc** pelo mesmo motivo; é adversarial válido contra a implementação anterior por `ini` (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:320`, `:337`; `app/ponto/calculador/alimentacao.py:517`). |
-| Contador de consultas | O diff não modifica o caminho ORM capturado; não constitui RED da troca do split. Resultado numérico efetivo: **[nao verificado]** (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:360`, `:368`). |
-
-**NAO-BLOQUEIA — o contador mede o custo marginal da porta inteira e não comprova consultas diárias da CCT.** O contexto envolve toda `rubricas_por_dia`; seu `>0` pode continuar verdadeiro após introduzir cache na CCT, pois previsto e intervalo também consultam vínculos por dia sem receber `escalas` (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:360`, `:370`; `app/ponto/calculador/alimentacao.py:528`, `:529`; `app/escala/utils.py:2152`, `:2200`, `:2119`).
-
-O **99 é teto provisório**, explicitamente declarado assim, lido pelo assert superior e pela mensagem. Não é valor medido fornecido; os valores `q2`, `q4` e `por_dia` são locais e impressos pelo teste (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:363`, `:368`, `:369`, `:372`, `:377`, `:379`).
-
-O achado anterior de cobertura foi **resolvido em parte**: há excedente positivo em dobra e HE50 noturna explícitos; continuam ausentes nesses casos novos saída antecipada e mudança dos parâmetros noturnos por praça/vigência (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:48`, `:125`, `:258`, `:289`, `:320`).
-
-**Pouso prematuro não demonstrado.** A documentação disponível diz “nada pousou, v2 intocada” e registra suite, Codex, opus e condições financeiras como pré-requisitos; o backlog mantém troca somente com `!` (`app/docs/RELATO.md:14`; `app/docs/BACKLOG.md:816`; `CLAUDE.md:710`). Cumprimento efetivo para 949baf5c: **[nao verificado]**.
-
-## 31/10 16:25 · sessao da5f3e67fd21 · - · - · origem=Ronald (tmux)
-
-- **NAO-BLOQUEIA — custo segue sem medida fornecida e o teste captura mais que CCT.** `CaptureQueriesContext` envolve toda `rubricas_por_dia`, contando todas as consultas dessa porta (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:360`). A porta também pede previsto e intervalo por dia sem alimentar `escalas=` (`app/ponto/calculador/alimentacao.py:528`), acionando novas consultas de vínculo (`app/escala/utils.py:2152`, `app/escala/utils.py:2200`, `app/escala/utils.py:2120`). Portanto `(q4-q2)/2` é custo marginal da porta nessa fixture; atribuí-lo exclusivamente à CCT excede o que o instrumento separa (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:368`).
-
-- **99 é trava provisória, não medida.** Escritor: constante literal `CUSTO_POR_DIA_MEDIDO = 99`; leitor: `assertLessEqual` e sua mensagem. `q2`, `q4` e `por_dia` são locais do teste, impressos e consumidos pelos dois asserts; não há consumidor produtivo encontrado (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:366`, `:369`, `:370`, `:372`, `:379`). Valor efetivamente medido e latência: **[nao verificado]**.
-
-- **CCT diária: fluxo sem segundo resolvedor identificado.** `_cct_de` chama `get_motor_cct(c,k,...)`; o laço entrega o template do vínculo diário e a data `k` (`app/ponto/calculador/alimentacao.py:403`, `:500`, `:517`). A fábrica lê switch e chama `regua_para`, que usa `vinculo_do_dia_carregado`; este alimenta a mesma juíza `vinculo_do_dia` (`app/core/regua_cct.py:444`, `:458`, `:329`; `app/escala/alimentacao.py:298`, `:301`). Aplicação e vigência são julgadas em `_aplicacao_vigente`, sem derivação disso na porta (`app/core/regua_cct.py:253`, `:261`, `:265`).
-
-- **Escritores/leitores dos parâmetros.** `get_motor_cct` prepara prorrogação, afastamento da hora reduzida e exceção de dobra (`app/core/regua_cct.py:466`, `:470`, `:477`). `get_motor` resolve a dobra padrão pelo ciclo e entrega os argumentos ao construtor (`app/ponto/motor_calculo_v2.py:3607`). `MotorBase` grava atributos e calendário; `MotorIntermitente` substitui seu calendário por vazio (`app/ponto/motor_calculo_v2.py:712`, `:719`, `:737`, `:740`, `:3495`). `cct_do_motor` os transcreve para a dataclass congelada; a porta extrai e entrega a `do_dia` (`app/ponto/calculador/nucleo.py:281`, `:344`, `:347`; `app/ponto/calculador/alimentacao.py:518`, `:534`, `:540`).
-
-- **Intermitente municipal: não dobra pelo caminho examinado.** O dispatch escolhe `MotorIntermitente`, que esvazia o calendário; esse conjunto vazio chega à regra diária (`app/ponto/motor_calculo_v2.py:3563`, `:3495`; `app/ponto/calculador/nucleo.py:350`; `app/ponto/calculador/alimentacao.py:534`). A regra empresta os métodos de `MotorBase`; ausência no conjunto consulta `is_feriado(data)`, sem município, alcançando somente nacional (`app/ponto/calculador/regras.py:290`, `:344`, `:347`; `app/ponto/motor_calculo_v2.py:901`; `app/core/feriados.py:91`). O comportamento histórico do intermitente já está registrado como pendência, não nasce neste diff (`app/core/juizes.py:437`). O teste municipal exige zero; o nacional é explicitamente guarda (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:211`, `:217`).
-
-- **Relógio e escrita fora da porta:** nenhum `now`, `today` ou `localdate` encontrado nos módulos diretamente rastreados de CCT/alimentação/regras/núcleo/motor; a data é argumento explícito (`app/ponto/calculador/alimentacao.py:481`, `:517`; `app/core/regua_cct.py:317`). Nenhum segundo escritor persistente novo identificado no trecho examinado; a lavratura continua pelo serviço existente (`app/ponto/services/fechamento.py:1245`, `:1256`, `:1262`). Censo integral executado dos contratos: **[nao verificado]**.
-
-- **RED contra 7e0:** o contador e o novo teste de vigência começando no meio não são RED do split desta volta: 7e0 já possuía resolução CCT diária segundo o anexo anterior, e o diff949 não a altera; passariam por inspeção, execução **[nao verificado]**. São guardas da resolução diária (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:337`, `:343`; anexo `diff_949b.patch` **[nao verificado: sem numeração local do anexo]**).
-
-- **Pouso:** não há prova fornecida de deploy irregular. O relato da cópia declara a cura anterior sem pouso e sujeita a suite, Codex, opus e gates de dinheiro (`app/docs/RELATO.md:14`); cumprimento real desses requisitos: **[nao verificado]**.
-
-## 31/10 16:24 · sessao 53afcb528e7e · - · - · origem=Ronald (tmux)
-
-**E4-1 — achados**
-
-- **Procedente: o selo AST não prova o “caminho do cron” inteiro.** Varre somente os dois arquivos literais de `SITIOS`, inteiros, sem seguir imports/chamadas; coleta atributos, nomes, aliases, keywords e strings, depois intersecta quatro nomes proibidos. A presença de `fatos_do_dia` é apenas nominal, sem exigir chamada ou uso do retorno. (`app/ponto/tests/test_e4_1_cron_le_o_juiz_nao_a_lavra.py:116`, `:120`, `:136`)
-- **Procedente: há falsos negativos e positivos estruturais.** Não vê helper transitivo, nome montado por concatenação ou `filter(celula__status_dia=...)`/`values('celula__status_dia')`, pois guarda somente o prefixo anterior a `__`; pode reprovar string/docstring inocente exatamente igual a nome proibido. Comentários não entram no AST; código morto entra. (`app/ponto/tests/test_e4_1_cron_le_o_juiz_nao_a_lavra.py:122`, `:130`, `:132`)
-- **O mutante literal descrito é morto pelo AST:** `celula.status_dia` adiciona `status_dia` ao conjunto proibido; os exemplos MORDE verificam detecção, não aplicam mutação ao service. (`app/ponto/tests/test_e4_1_cron_le_o_juiz_nao_a_lavra.py:123`, `:140`, `:144`)
-- **Dúvida forte: o funcional pode sobreviver ao mutante descrito.** A docstring afirma que trocar o teste de faixa pela coluna fecha o primeiro caso, mas `encerrar` ainda atravessa `reconciliar` e o gate da premissa. (`app/ponto/tests/test_e4_1_cron_le_o_juiz_nao_a_lavra.py:15`; `app/chamados/services/feriado_reavaliar.py:47`; `app/chamados/models.py:615`, `:646`, `:699`)
-- O nascimento do chamado dispara o cartório, que lavra ATA; `_lampada_folga` altera somente `status_dia/status_rotulo`, preservando ATA. Com ATA de trabalho e lâmpadas apagadas, `_celula_furada` responde `True`; `premissa_regularizada` retorna `False` **antes** do fallback para `espurios`, e o gate recusa o fechamento do único chamado. Nesse caminho, as asserções de permanecer aberto/folga passam mesmo com a seleção errada do mutante. Execução efetiva do TestCase/mutante: **[nao verificado]**. (`app/chamados/signals.py:164`; `app/ponto/services/cartorio.py:1011`, `:1042`; `app/ponto/tests/test_e4_1_cron_le_o_juiz_nao_a_lavra.py:67`, `:97`; `app/chamados/juizes.py:454`; `app/chamados/models.py:1247`, `:1252`, `:709`)
-- A fixture A escolhe o vínculo novo para 15/10; o antigo encerra em 30/09, e o overlay da grade só percorre vínculos selecionados na janela. Isso sustenta a ATA de trabalho no julgamento unitário que precede `_lampada_folga`; falta asserção explícita da ATA/lâmpadas e da exclusão do chamado em `espurios`. (`app/ponto/tests/test_e4_1_cron_le_o_juiz_nao_a_lavra.py:44`, `:49`, `:88`; `app/escala/utils.py:1254`, `:1261`, `:1548`, `:1785`)
-- **Dúvida de relógio no teste:** E4-1 não congela o tempo; criar o chamado alcança `julgar_celula`, que lê `localdate()` e abandona dias futuros. Antes de 15/10/2026, a preparação da ATA segue outro caminho. As condições temporais de execução do selo fornecidas: **[nao verificado]**. (`app/ponto/tests/test_e4_1_cron_le_o_juiz_nao_a_lavra.py:18`, `:26`, `:30`; `app/chamados/signals.py:180`; `app/ponto/services/cartorio.py:1691`, `:1700`)
-- **Dúvida de pré-requisito:** o RELATO manda E4-1 esperar a cura da grade e a sombra com 0044; a cópia mantém `_aplicar_folgas_foto` sem o descarte por vínculo do dia. A realização da cura/sombra exigida não consta do dado fornecido **[nao verificado]**. O cron continua JUIZ, portanto o diff não o rebaixa prematuramente. (`app/docs/RELATO.md:61`, `:63`; `app/escala/utils.py:1109`, `:1118`; `app/config/crons.py:1983`)
-
-**Escritores/leitores relevantes**
-
-| Campo/valor | Quem escreve | Quem lê |
-|---|---|---|
-| `CelulaDia.status_dia/status_rotulo` | Produção: `_aplicar_status`, chamada por `lavrar_veredito`; fixture injeta com `update`, deliberadamente fora da porta para fabricar divergência. (`app/ponto/portas/celula.py:701`, `:709`; `app/ponto/tests/test_e4_1_cron_le_o_juiz_nao_a_lavra.py:52`, `:67`) | Leitor canônico D4; cartório verifica ausência de lavra; fixture consulta `status_dia`. O cron/service atuais não leem essas colunas. (`app/ponto/status_dia.py:171`, `:181`; `app/ponto/services/cartorio.py:726`; `app/ponto/tests/test_e4_1_cron_le_o_juiz_nao_a_lavra.py:80`; `app/chamados/services/feriado_reavaliar.py:33`) |
-| `faixa`, `era_dia_previsto`, `fatos.folga_lancada` | `fatos_do_dia` delega ao período, que produz os dicionários. (`app/ponto/precedencia.py:195`, `:209`, `:355`) | `espurios` exige previsão conhecida e faixa feriado/folga; teste verifica faixa trabalho e usa demais campos no diagnóstico. (`app/chamados/services/feriado_reavaliar.py:33`; `app/ponto/tests/test_e4_1_cron_le_o_juiz_nao_a_lavra.py:73`, `:94`) |
-| `FolgaDia.escala_colaborador/data/calendario_origem` | Fixture cria calendário antigo ou folga manual no novo; produção materializa calendário, cria manual e reparenta só manual. (`app/ponto/tests/test_e4_1_cron_le_o_juiz_nao_a_lavra.py:88`, `:104`; `app/escala/folgas.py:173`, `:259`, `:405`, `:435`) | Precedência lê por pessoa/data e descarta calendário de vínculo diferente do escolhido; grade lê por vínculo e aplica overlay. (`app/ponto/precedencia.py:236`, `:307`, `:313`; `app/escala/utils.py:1109`, `:1118`) |
-| `Chamado.status_local` | Fixture nasce `aberto`; fechamento real passa por `_gravar_estado`, com save e trilha. (`app/ponto/tests/test_e4_1_cron_le_o_juiz_nao_a_lavra.py:58`; `app/chamados/models.py:618`, `:222`, `:274`) | Universo seleciona `VIVOS`; motor/gates consultam; testes recarregam e exigem aberto/resolvido. (`app/chamados/services/feriado_reavaliar.py:17`; `app/chamados/models.py:637`; `app/ponto/tests/test_e4_1_cron_le_o_juiz_nao_a_lavra.py:96`, `:109`) |
-| `modulo_origem/subcategoria/contexto_json.data_turno` | Fixture cria `batida_ausente/atraso/data_turno`; catálogo declara a chave de data desse módulo. (`app/ponto/tests/test_e4_1_cron_le_o_juiz_nao_a_lavra.py:59`; `app/chamados/catalogo/modulos.py:105`) | Universo/`premissa_morta`; dia vem de `dia_do_fato`, que consulta catálogo e fallback `data_turno`. (`app/chamados/services/feriado_reavaliar.py:17`, `:30`, `:38`; `app/chamados/juizes.py:89`, `:104`, `:109`) |
-| `FATO_FALTA_DESCOBERTA=False` | Coletor `espurios` fornece o fato ao catálogo depois de ler o juiz. (`app/chamados/services/feriado_reavaliar.py:36`, `:38`) | `premissa_morta` delega a `avaliar`; catálogo responde escopo e vida da premissa. (`app/chamados/catalogo/premissa.py:115`, `:127`, `:144`) |
-
-O juiz de precedência já está registrado; o service delega a ele, e o diff E4-1 apenas acrescenta testes. O fechamento usa a porta existente, sem escritor novo de produção nesse trecho. (`app/core/juizes.py:160`; `app/chamados/services/feriado_reavaliar.py:27`, `:47`; `app/ponto/tests/test_e4_1_cron_le_o_juiz_nao_a_lavra.py:1`)
-
-## 31/10 16:24 · sessao d8fb872ec851 · - · - · origem=Ronald (tmux)
-
-E4-6 — conclusões por leitura estática:
-
-- **Procedente: o novo rótulo de trabalho não chega ao HTML.** `minha_escala` produz `_st='previsto'` e publica somente a frase em `dias[].status_rotulo`, sem publicar `_st`/`status` (`app/escala/views.py:54`, `:60`). No template, `status_rotulo` só é lido nos ramos `trabalho is None` e folga; o ramo trabalho imprime exclusivamente horários (`app/templates/escala/minha_escala.html:74`, `:76`, `:78`, `:81`, `:84`). Assim, a troca corrige o contexto Python, mas não altera a apresentação de um dia de trabalho (`app/escala/views.py:54`; `app/templates/escala/minha_escala.html:76`).
-
-- **Procedente: não existe tratamento de `previsto` por palavra, cor ou ícone nessa tela.** As cores usam `dia.data == hoje` e o booleano `dia.trabalho`; o dia de trabalho mostra horários, sem ícone específico nem `title` de previsto (`app/templates/escala/minha_escala.html:63`, `:65`, `:66`, `:76`). Isso não cai em um default de status desconhecido: o status nem participa da decisão visual (`app/templates/escala/minha_escala.html:63`, `:74`). Quebra observada em navegador: **[nao verificado]**.
-
-- **Duas cascas, mesmo comportamento.** O template único estende `base_tpl`, cuja fonte é `app_shell`; esta usa `modo_app` para selecionar `base_app.html`/`base.html` (`app/templates/escala/minha_escala.html:1`; `app/core/context_processors.py:194`, `:205`, `:210`). O processador está instalado em `app/config/settings/base.py:82`. O teste injeta `via_app` e `plataforma_sessao`; `carimbo_app` lê esses campos e `modo_app` o chama (`app/escala/tests/test_e4_6_minha_escala_e_previsao.py:42`; `app/core/utils.py:52`, `:54`, `:67`).
-
-- **Procedente: a prova HTML das cascas não morde o mutante descrito.** O teste das cascas verifica presença do template base, ausência da frase de `ok` e presença do `title` de folga; não exige a frase de previsto nem sua aparência (`app/escala/tests/test_e4_6_minha_escala_e_previsao.py:66`, `:70`, `:72`, `:73`). A frase de `ok` também ficaria invisível no ramo trabalho original, porque esse ramo não lê `status_rotulo` (`app/templates/escala/minha_escala.html:76`). O teste de **contexto**, sim, rejeita `previsto -> ok`, ao exigir o rótulo de previsto nos futuros de trabalho (`app/escala/tests/test_e4_6_minha_escala_e_previsao.py:50`, `:53`, `:56`, `:57`). Execução Django/RED histórico: **[nao verificado]**.
-
-- **Dúvida de enquadramento: a categoria diz futuro, a janela inclui hoje.** A view lê `datetime.date.today()`, percorre `range(14)` a partir de zero e dá `previsto` a todo dia de trabalho, inclusive hoje, independentemente de batidas/turno (`app/escala/views.py:26`, `:38`, `:39`, `:54`). O rótulo reutilizado diz literalmente “Dia futuro, ainda sem batida” (`app/ponto/status_dia.py:39`), enquanto a própria autoridade anterior distingue “Dia ainda nao encerrado, sem batida” (`app/colaboradores/services/calendario.py:46`). O selo testa futuros com `data > HOJE`, deixando hoje fora da exigência de rótulo (`app/escala/tests/test_e4_6_minha_escala_e_previsao.py:52`, `:53`). Como o rótulo de trabalho está invisível no template, impacto humano atual desse erro de contexto: **[nao verificado]**.
-
-- **Relógio: existente na view, congelado apenas nos testes.** A leitura real continua `datetime.date.today()`; o diff não a introduziu nem a levou a um parâmetro (`app/escala/views.py:26`). O teste usa `freeze_time` (`app/escala/tests/test_e4_6_minha_escala_e_previsao.py:20`). A API usa data local de Django, diferente da construção da view; divergência em produção depende do fuso do processo, ausente do dado **[nao verificado]** (`app/api/views.py:926`; `app/config/settings/base.py:93`).
-
-Fontes e consumidores:
-
-| Campo/valor | Quem escreve / fonte | Quem lê |
-|---|---|---|
-| `trabalho` | Retorno de `ec.eh_dia_trabalho(dia)` (`app/escala/views.py:40`); juiz lê `CelulaDia.trabalha` ou cálculo do vínculo (`app/escala/models.py:1069`, `:1072`, `:1073`) | Escolha de marcos e `_st`, contexto (`app/escala/views.py:42`, `:54`, `:57`); cor e conteúdo (`app/templates/escala/minha_escala.html:65`, `:66`, `:74`, `:76`) |
-| `CelulaDia.trabalha` e `dna` | Porta gera/regera a partir de `eh_dia_trabalho_calculado` e `montar_dna` (`app/ponto/portas/celula.py:243`, `:247`, `:260`, `:264`); também restauração/geração diária (`:532`, `:595`, `:612`) | Juízes do vínculo (`app/escala/models.py:1072`, `:1099`) |
-| Horários do dia | `ec.marcos_do_dia` (`app/escala/views.py:43`), que lê DNA e só sem marcos usa template (`app/escala/models.py:1097`, `:1099`, `:1106`, `:1108`) | Contexto (`app/escala/views.py:58`, `:59`), template (`app/templates/escala/minha_escala.html:78`, `:81`) |
-| `_st` | Ternário da view (`app/escala/views.py:54`) | Indexação de `ROTULO_STATUS` (`app/escala/views.py:60`); também medidor AST (`app/core/medida_leitor_do_dia.py:340`) |
-| `ROTULO_STATUS` | Dicionário canônico (`app/ponto/status_dia.py:28`) | Calendário reexporta (`app/colaboradores/services/calendario.py:45`); view importa e indexa (`app/escala/views.py:36`, `:60`); medidor lê AST da autoridade (`app/core/medida_leitor_do_dia.py:124`, `:159`, `:164`); testes comparam (`app/escala/tests/test_e4_6_minha_escala_e_previsao.py:15`, `:56`) |
-| `dias[].status_rotulo` | Somente contexto local da view; não grava `CelulaDia.status_rotulo` (`app/escala/views.py:55`, `:60`, `:64`) | Template, ramos dúvida/folga (`app/templates/escala/minha_escala.html:75`, `:84`); testes de contexto (`app/escala/tests/test_e4_6_minha_escala_e_previsao.py:56`, `:57`, `:64`) |
-| `ancora_ausente` | `tipo_ciclo` e `data_ancora_colaborador` do vínculo (`app/escala/views.py:32`) | Contexto e aviso no template (`app/escala/views.py:68`; `app/templates/escala/minha_escala.html:49`) |
-
-A rota HTML é `config/urls.py:27` + `escala/urls.py:11`, com retorno `render` em `escala/views.py:64`. Não há JS de página nem serialização desse contexto no template (`app/templates/escala/minha_escala.html:1`, `:100`). A API **não é consumidora** da string da view: `/api/escala/v2/` tem implementação independente, retorna `dias` sem `status`/`status_rotulo` (`app/api/urls.py:72`; `app/api/views.py:908`, `:945`, `:956`). A API v1 retorna 410 (`app/api/views.py:878`, `:883`). API v2 chama o mesmo juiz de trabalho, mas usa marcos do **template**, ao contrário da view HTML (`app/api/views.py:934`, `:939`; `app/escala/views.py:43`); autoridade registrada dos marcos do dia é `EscalaColaborador.marcos_do_dia` (`app/core/juizes.py:182`). Divergência concreta em dado de produção: **[nao verificado]**.
-
-Medidor:
-
-- `CATEGORIAS`, `PALAVRAS_DA_PREVISAO`, `NAO_E_LEITOR`, teto e `DECLARADOS` são escritos como constantes no próprio módulo (`app/core/medida_leitor_do_dia.py:259`, `:262`, `:263`, `:285`, `:289`, `:296`). O leitor de produção das exclusões é `censo`, que lê categoria/vocabulário permitido e distribui registros entre `excluidos` e `status` (`app/core/medida_leitor_do_dia.py:348`, `:350`, `:351`, `:353`). Os testes leem categorias/teto/motivos/disjunção (`app/core/tests/test_medida_leitor_do_dia.py:73`) e especificamente a exceção de previsão (`:85`).
-
-- **Procedente: previsão tem predicado lexical; não é exclusão incondicional.** `pal ⊆ PALAVRAS_DA_PREVISAO` decide exclusão; `ok` devolve o item ao status, e `novos` usa diferença contra `DECLARADOS` (`app/core/medida_leitor_do_dia.py:348`, `:349`, `:353`, `:377`). Fiz apenas sondagem Python `-B`, em memória: detector retornou base `['escala_suspeita','folga','previsto']`, mutante `['escala_suspeita','folga','ok']`, três sítios em ambos; o predicado aceita base e rejeita mutante, conforme `app/core/medida_leitor_do_dia.py:229`, `:349`.
-
-- **Limite procedente: o predicado não prova “futuro” nem “pergunta à grade”.** Inspeciona apenas os literais já reconhecidos; não valida data, ausência de batidas ou autoridade consultada (`app/core/medida_leitor_do_dia.py:340`, `:348`). Indireção sem literal, booleanos/relógio e HTML/JS estão explicitamente fora da visão (`app/core/medida_leitor_do_dia.py:317`). Uma exclusão que desapareça vira `exclusoes_mortas`, cobrada pela suíte (`app/core/medida_leitor_do_dia.py:384`; `app/core/tests/test_medida_leitor_do_dia.py:74`).
-
-- Os consumidores externos do resultado são a suíte (`app/core/tests/test_medida_leitor_do_dia.py:29`) e `bin/leitor_dia_estado.py`, que carrega o módulo e chama `censo` (`bin/leitor_dia_estado.py:25`, `:32`, `:35`); `gerar_estado` importa esse leitor (`bin/gerar_estado.py:290`). O selo S3 importa daqui o detector de **valor**, não o predicado de previsão (`app/ponto/tests/test_s3_placar_exercicio.py:38`).
-
-As fixtures E4-6 são escritas por `setUpTestData` e pela sessão do cliente (`app/escala/tests/test_e4_6_minha_escala_e_previsao.py:23`, `:26`, `:27`, `:28`, `:29`, `:30`, `:32`, `:33`, `:36`, `:43`); os leitores verificadores estão nos testes de contexto e render (`:50`, `:59`, `:66`). Não executar esses testes preservou a exigência de nenhum arquivo/banco criado; RED de execução continua **[nao verificado]**.
-
-_1152 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1156 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
