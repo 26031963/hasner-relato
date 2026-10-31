@@ -1,7 +1,48 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 15:10** · publicado em **31/10/2026 15:13** (UTC-3)
+> Ultima resposta processada: **31/10/2026 15:35** · publicado em **31/10/2026 15:35** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 15:35 · sessao 3e6557bd95cb · ODOMETRO-DE-REGRAS · leitura · origem=Code
+
+**(a) Não nos dois selos lidos.** Eles cobrem outras propriedades:
+
+- `test_lei_akita.sh`: presença/contagem da LEI-AKITA, teto de `fallback`, exigência no molde e `padrao=` nos commits; lê o CLAUDE.md do disco. (`bin/tests/test_lei_akita.sh:28`, `bin/tests/test_lei_akita.sh:35`, `bin/tests/test_lei_akita.sh:45`, `bin/tests/test_lei_akita.sh:70`)
+- O arquivo encontrado é `test_claude_md_regras_preservadas.sh`: preserva nomes, ponteiros e blocos literais de PISTA; também lê o disco. Não mede bytes, emendas com alvo vivo ou predicados repetidos. (`bin/tests/test_claude_md_regras_preservadas.sh:55`, `bin/tests/test_claude_md_regras_preservadas.sh:83`)
+- A régua já descobre `test_*.sh` e barra por retorno diferente de zero; isso fornece a chamada, mas não as novas verificações. (`bin/regua.sh:138`, `bin/regua.sh:140`)
+- Não localizei outro selo com essas três cobranças; ausência global não demonstrada por execução. **[nao verificado]**
+
+**(b) Bytes e delimitadores são determinísticos; “alvo de pé” e “mesmo predicado” ainda exigem julgamento.** Medindo os bytes brutos desde o título da 7b, incluindo-o, até antes do título da 8, obtive **22.645 B: VERDE por tamanho**. (`CLAUDE.md:448`, `CLAUDE.md:669`) [nao verificado]
+
+Três exemplos, como classificação de leitura — não veredito de um selo existente:
+
+| Bloco/caso | Cor pela interpretação indicada | Ambiguidade que precisa desaparecer |
+|---|---|---|
+| **AVAL-DE-CRITERIO — “ALTERA a L-009”** | **VERMELHO**, se L-009 resolve para seu bloco PRE-APROVADO x NUNCA PRE-APROVADO, ainda presente. | Essa associação exige consultar o índice: o bloco original não traz `L-009` no cabeçalho. Uma busca literal apenas na 7b poderia dar VERDE indevido. (`CLAUDE.md:467`, `CLAUDE.md:576`, `app/docs/LEIS.md:67`) |
+| **PRE-APROVADO + DEPLOY JA** | **VERMELHO**, interpretando “dinheiro exige `!`” como o mesmo predicado nos dois blocos. | DINHEIRO-EM-COMPETENCIA-ABERTA depois restringe essa exigência. É preciso definir se texto superado ainda conta e distinguir repetição de contradição. (`CLAUDE.md:473`, `CLAUDE.md:591`, `CLAUDE.md:558`, `CLAUDE.md:573`) | [nao verificado]
+| **PROMPT-NAO-SE-REPETE** | **VERDE** quanto a emenda com alvo vivo e duplicação de parada/dinheiro. | “NAO refazer” e “NO MESMO turno” tratam de recepção de prompt; palavras isoladas não identificam predicado de parada. (`CLAUDE.md:602`) | [nao verificado]
+
+Também falta delimitar o universo: PAREI-DE-LEI declara alterar PAREI-SO-LEI, cujo bloco permanece, mas ambos estão **fora da 7b**. Um examinador restrito ao recorte não os alcança. (`CLAUDE.md:72`, `CLAUDE.md:79`, `CLAUDE.md:448`)
+
+**(c) O contrato precisa fechar estes pontos antes da construção:**
+
+- **Quem chama:** definir como o selo recebe o SHA e qual commit a régua usa quando não há push. Hoje o loop não passa argumentos; o hook já calcula `PUSH_SHA`. Definir também posição diante dos atalhos: a régua retorna “JA VERDE” antes dos selos e `SKIP_TESTS=1` encerra o hook na entrada. (`bin/regua.sh:84`, `bin/regua.sh:138`, `bin/pre-push.sh:5`, `bin/pre-push.sh:33`)
+- **Quem espera / placar:** especificar onde aparecem os três números e como uma falha invalida o verde anterior. Hoje a régua descarta a saída dos selos aprovados e, na falha de selo, sai antes de atualizar o carimbo. (`bin/regua.sh:140`, `bin/regua.sh:143`, `bin/regua.sh:196`)
+- **Falha / limite:** definir formalmente início/fim de bloco, identidade/aliases de X, significado de “de pé”, referências versus regras operativas e equivalência dos predicados. A redação atual contém alteração parcial e regra explicitamente remetida à história; presença textual não resolve vigência. Também falta declarar tratamento de falha do `git show`, títulos duplicados e recorte malformado. (`CLAUDE.md:537`, `CLAUDE.md:557`, `CLAUDE.md:576`; tratamento proposto **[nao verificado]**)
+- **Medida:** definir se N conta blocos, pares ou predicados distintos, imprimindo os envolvidos e suas linhas. Nos mutantes, exigir recusa pela causa esperada, usando o mesmo juiz, mais uma base válida que passe. Acrescentaria prova de commit diferente do disco, recorte ausente e fronteira 25.000/25.001 B. O selo de preservação já reutiliza `_julgar`, mas isso não prova o novo odômetro. (`bin/tests/test_claude_md_regras_preservadas.sh:83`, `bin/tests/test_claude_md_regras_preservadas.sh:94`; novos casos **[nao verificado]**)
+- **Quem desliga:** “remover a chamada da régua” precisa ser concretizado, pois a descoberta ocorre por glob. Para pausa, nomear arquivo, consumidor, escopo, retorno durante pausa e condição de reativação; `pausar.sh` registra os campos, mas o selo precisa lê-los. (`bin/regua.sh:138`, `bin/pausar.sh:31`, `bin/pausar.sh:35`, `bin/pausar.sh:39`)
+
+O pouso próprio do instrumento está previsto na L-105; o SHA que comprovará o pouso anterior da CLAUDE-MD-RACIONAL ainda precisa ser identificado. (`CLAUDE.md:623`; pouso da CLAUDE-MD-RACIONAL **[nao verificado]**) [nao verificado]
+
+## 31/10 15:34 · sessao 3c92a2b0ed4d · - · - · origem=Ronald (tmux)
+
+- Nos dois selos examinados, não há odômetro: `test_lei_akita.sh` cobra seção/13 linhas, teto de `fallback`, molde e `padrao=` dos commits; `test_claude_md_regras_preservadas.sh` cobra conjuntos de nomes, ponteiros e hashes de blocos de PISTA. Ambos leem arquivos do disco; o `git show` comentado no segundo descreve geração histórica das referências, não leitura do SHA do push. (`bin/tests/test_lei_akita.sh:28`, `bin/tests/test_lei_akita.sh:35`, `bin/tests/test_lei_akita.sh:45`, `bin/tests/test_lei_akita.sh:70`, `bin/tests/test_claude_md_regras_preservadas.sh:9`, `bin/tests/test_claude_md_regras_preservadas.sh:55`, `bin/tests/test_claude_md_regras_preservadas.sh:83`)
+- A busca em `bin/tests` não localizou cobrança de teto de bytes da 7b, emenda com alvo vivo ou repetição semântica de parada/dinheiro; ausência global é evidência de busca, não prova executada. `[nao verificado]`
+- **Chamada:** o loop real da régua é `tests/test_*.sh`, sem argumento de SHA; o hook determina `PUSH_SHA` na linha 33. Falta definir interface comum (`--sha`/variável), SHA adotado pela régua sem push e política para ausência de SHA/deleção. (`bin/regua.sh:138`, `bin/regua.sh:140`, `bin/pre-push.sh:33`, `bin/pre-push.sh:34`)
+- **Atalhos:** a régua retorna “JA VERDE” antes do loop de selos; o pre-push tem `SKIP_TESTS=1` antes de qualquer cobrança e pula arsenal com carimbo. O contrato precisa posicionar a cobrança antes dos atalhos relevantes ou explicitar seu efeito. (`bin/regua.sh:84`, `bin/regua.sh:93`, `bin/regua.sh:138`, `bin/pre-push.sh:5`, `bin/pre-push.sh:62`, `bin/pre-push.sh:65`)
+- **Espera/placar:** falha de selo faz a régua imprimir vermelho e sair, mas o ramo não grava `REGUA_STATUS=FALHOU`; o carimbo só é gravado depois da suite. Saída verde do selo também é capturada e descartada pelo loop. Para o odômetro aparecer no placar, faltam propagação de medidas e atualização/invalidação do carimbo na falha. (`bin/regua.sh:140`, `bin/regua.sh:143`, `bin/regua.sh:145`, `bin/regua.sh:196`)
+- **Pausa/desliga:** `pausar.sh` exige caminho, dono, motivo e condição de saída; `COBRE` é opcional e quem lê a pausa são os selos. Falta nomear caminho da pausa do odômetro, consumidor, escopo e veredito durante pausa; executar `pausar.sh` sozinho não conecta a pausa à cobrança. (`bin/pausar.sh:31`, `bin/pausar.sh:32`, `bin/pausar.sh:33`, `bin/pausar.sh:34`, `bin/pausar.sh:35`, `bin/pausar.sh:37`)
+- **Remoção:** não existe chamada individual do novo selo na régua para “remover”: ela o descobriria pelo glob. Remover somente uma chamada explícita do hook deixaria a cobrança na régua; o contrato deve definir remoção do arquivo/registro no loop sem allowlist. (`bin/regua.sh:138`, `bin/regua.sh:140`)
 
 ## 31/10 15:10 · sessao f841df73dc38 · LEI-AKITA-UNIVERSO · verificador · origem=Code
 
@@ -580,34 +621,4 @@ Comparei integralmente os dois arquivos com o snapshot do pai disponível. Auten
 
    A execução do selo completo e de seus quatro MORDE fica **[nao verificado]**; o script cria e apaga arquivos temporários, contrariando a restrição desta auditoria. `bin/tests/test_claude_md_regras_preservadas.sh:89–114`.
 
-## 31/10 14:04 · sessao 21b77f1d4341 · - · - · origem=Ronald (tmux)
-
-Achados por inspeção estática; MORDE integral não executado porque cria diretórios e arquivos (`bin/tests/test_lei_akita.sh:180`, `bin/tests/test_lei_akita.sh:181`, `bin/tests/test_lei_akita.sh:184`).
-
-1. **O teste “sem corte” não isola a falta do corte.** `plantar(..., marcador=False)` não cria `origin/main`; essa referência só é criada no outro cenário. O teste aceita qualquer `SystemExit` começando por `PADRAO_ERRO`. Mutante sobrevivente: substituir a rejeição da ausência do corte por `if not corte: corte=['HEAD']`; o teste continuaria passando por erro de `origin/main` na enumeração. Em repositório com `origin/main`, permitiria escolher arbitrariamente `HEAD` como corte. (`bin/tests/test_lei_akita.sh:128`, `bin/tests/test_lei_akita.sh:135`, `bin/tests/test_lei_akita.sh:175`, `bin/tests/test_lei_akita.sh:191`, `bin/tests/test_lei_akita.sh:218`, `bin/tests/test_lei_akita.sh:223`.)
-
-2. **O piso não é testado.** Mutante sobrevivente: remover `*pisos` da chamada de `rev-list`. O único cenário saudável cria o corte na raiz, portanto `pisos=[]`; além disso, a raiz já é ancestral do publicado. Não distingue preservar a não retroatividade de julgá-la incorretamente. (`bin/tests/test_lei_akita.sh:132`, `bin/tests/test_lei_akita.sh:135`, `bin/tests/test_lei_akita.sh:179`, `bin/tests/test_lei_akita.sh:182`, `bin/tests/test_lei_akita.sh:191`.)
-
-3. **O primeiro pai do merge não é comprovado pelo MORDE.** Mutante sobrevivente: usar o segundo pai somente nos merges. Ambos os lados plantados alteram arquivos de negócio; comparar com qualquer pai deixa o merge `n/a (instrumento)` vermelho. Para distinguir os pais, precisa de cenário assimétrico, por exemplo primeiro lado com negócio e raia apenas com documentação. (`bin/tests/test_lei_akita.sh:143`, `bin/tests/test_lei_akita.sh:144`, `bin/tests/test_lei_akita.sh:187`, `bin/tests/test_lei_akita.sh:194`, `bin/tests/test_lei_akita.sh:197`.)
-
-4. **A lista do commit raiz não é testada.** Mutante sobrevivente: substituir o ramo `else git('show',...)` por `else ''`. Nenhuma raiz é julgada no cenário de quatro novos: o corte raiz está atrás de `origin/main`. Com raiz de negócio efetivamente no universo, esse mutante aceitaria `n/a`. (`bin/tests/test_lei_akita.sh:144`, `bin/tests/test_lei_akita.sh:182`, `bin/tests/test_lei_akita.sh:191`, `bin/tests/test_lei_akita.sh:198`.)
-
-5. **Não há cenário saudável de universo vazio.** Mutante sobrevivente: inserir, após a enumeração, `if not hs: raise SystemExit('PADRAO_ERRO vazio')`. Ele bloquearia `HEAD==origin/main`, mas o cenário positivo exige exatamente quatro novos ruins; os outros cenários esperam erros. (`bin/tests/test_lei_akita.sh:135`, `bin/tests/test_lei_akita.sh:198`, `bin/tests/test_lei_akita.sh:200`, `bin/tests/test_lei_akita.sh:205`, `bin/tests/test_lei_akita.sh:212`, `bin/tests/test_lei_akita.sh:220`.)
-
-6. **Fragilidade adicional da lista de caminhos:** a enumeração usa texto sem `-z` e depois `splitlines()`, enquanto negócio depende de `startswith('app/')`. Um caminho que o Git imprima entre aspas pode escapar dessa classificação; renomeação para fora de `app/` também merece caso próprio, pois não há `--no-renames` ou leitura explícita de origem/destino. (`bin/tests/test_lei_akita.sh:92`, `bin/tests/test_lei_akita.sh:144`, `bin/tests/test_lei_akita.sh:145`.) Reprodução com Git real desses dois casos: **[nao verificado]**.
-
-## 31/10 14:02 · sessao 8191a99f63f2 · - · - · origem=Ronald (tmux)
-
-- **A chamada nova fecha o atalho do arsenal.** `bin/pre-push.sh:22` executa o selo antes de `SKIP_ARSENAL=1` (`bin/pre-push.sh:65–69`), enquanto a régua percorre os selos de host apenas depois do retorno antecipado “JA VERDE” (`bin/regua.sh:84–94`, `138–145`). `SKIP_TESTS=1` continua pulando tudo (`bin/pre-push.sh:5`).
-
-- **Pode bloquear push legítimo e julgar outro commit.** A chamada acontece antes de calcular `PUSH_SHA` e reconhecer push só de exclusão (`bin/pre-push.sh:22`, `36–38`). O selo enumera `HEAD` de `R`, independentemente do SHA/ref enviado (`bin/tests/test_lei_akita.sh:17`, `135`). Assim, exclusão de branch ou push de outra ref válida pode ser barrado por commit ruim apenas no HEAD; inversamente, HEAD igual a origin/main deixa vazio o universo desse selo mesmo que a ref empurrada contenha commit ruim (`bin/pre-push.sh:22`, `36`; `bin/tests/test_lei_akita.sh:135–140`). O próprio seletor existente distingue SHA enviado de HEAD e exclusões (`app/core/arvore_do_push.py:8–10`, `19–43`).
-
-- **Raiz fixa agrava clones/worktrees.** O wrapper instalado executa o pre-push da raiz do repositório corrente (`bin/hooks.sh:49–56`), mas a chamada nova aponta para `~/saas-hasner` e o selo usa `/home/ronald/saas-hasner` por padrão (`bin/pre-push.sh:22`; `bin/tests/test_lei_akita.sh:17`). Sem configuração explícita, pode julgar a árvore principal em vez do clone/worktree cujo push disparou o hook (mesmas referências).
-
-- **Chamadores identificados:** pre-push direto (`bin/pre-push.sh:22`); pasta de host pela régua, executando cada `test_*.sh` com Bash e abortando no primeiro vermelho (`bin/regua.sh:138–145`); documentação do molde confirma esse vínculo (`bin/molde_fatia/LEIAME:48–49`). O instalador canônico usa `bin/pre-push.sh` como fonte (`bin/hooks.sh:9–11`); o instalador legado dentro de app também aponta para essa fonte (`app/core/hooks/hooks.sh:9–11`). Hook realmente instalado: [nao verificado].
-
-- **Cache da régua permanece inadequado para selo de histórico:** retorno antecipado compara somente a impressão digital de arquivos Python/HTML (`bin/regua.sh:25–35`, `84–94`), sem comparar mensagens/HEAD/origin/main; portanto uma mudança só no histórico não força o julgamento dos commits pela pasta de host (mesmas referências). A nova chamada cobre esse problema no pre-push comum, antes do atalho do arsenal (`bin/pre-push.sh:22`, `65–69`).
-
-- O pai está disponível em `../4e519aea9b9be16f1ad219c6470d0415bf928e2f`; comparação das versões de `bin/pre-push.sh` mostra apenas as três linhas atuais `20–22`. A identidade Git desse snapshot não foi validada: [nao verificado]. `logs/claude_md_racional/akita_v2.r` não está na árvore disponível: [nao verificado].
-
-_1098 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1100 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
