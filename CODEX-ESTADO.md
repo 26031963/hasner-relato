@@ -1,7 +1,154 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 15:50** · publicado em **31/10/2026 15:51** (UTC-3)
+> Ultima resposta processada: **31/10/2026 15:53** · publicado em **31/10/2026 15:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 15:53 · sessao 099205dd302f · TRAVA-MENOS-FILA · leitura · origem=Code
+
+**(a) O histórico deve nascer dentro de `bin/trava_teste.sh`, em torno da aquisição e da execução.** Instrumentar apenas `suite.sh` perderia régua, pre-push e demais entradas diretas (`bin/regua.sh:165`, `bin/pre-push.sh:142`, `bin/vigia_arvore.sh:83`).
+
+Os pontos são:
+
+- **Pedido:** depois de validar argumentos e imediatamente antes de abrir/esperar o lock; nunca depois do `flock`, pois apagaria a espera (`bin/trava_teste.sh:33`, `bin/trava_teste.sh:35-36`).
+- **Início:** imediatamente após o `flock` conseguir a vez, antes de escrever `.quem` e executar o comando. Assim mede espera pela trava, separada do trabalho protegido (`bin/trava_teste.sh:36-42`).
+- **Fim e rc:** após `"$@"`, capturando `$?` antes de qualquer escrita. Hoje esse comando é a última instrução: acrescentar um append sem preservar o status pode trocar o resultado do teste pelo resultado do histórico (`bin/trava_teste.sh:42`).
+- **Sem vez:** registrar tentativa encerrada com `inicio=null`, fim e `rc=75`, preservando a saída atual. O finalizador precisa cobrir esse caminho e conservar a limpeza de `.quem` somente quando houve aquisição; hoje o `EXIT` é instalado depois do caminho que sai 75 (`bin/trava_teste.sh:36-41`).
+- **Lock do histórico:** usar outro descritor, em escopo curto e com espera limitada; substituir o FD 9 ou manter o lock do histórico durante o run alteraria o dispositivo atual. O FD 9 pertence à trava principal (`bin/trava_teste.sh:35-42`).
+
+**Uma linha final por tentativa serve para histórico concluído; não serve, sozinha, para publicar a fila corrente.** Pedido, início e término precisam de eventos correlacionados ou de estado corrente separado: antes da aquisição ainda não existe início, e antes de terminar não existem fim/rc (`bin/trava_teste.sh:36-42`).
+
+**(b) Chamadores diretos encontrados e identificação disponível:**
+
+| Chamador | O que transmite à trava |
+|---|---|
+| Régua | `ESTEIRA_QUEM=regua` (`bin/regua.sh:165`). |
+| Pre-push | `pre-push`; a função atende arsenal e control-plane, portanto um push pode produzir duas tentativas (`bin/pre-push.sh:142`, `bin/pre-push.sh:186`, `bin/pre-push.sh:198`). |
+| `suite.sh` | Identidade herdada ou `suite` (`bin/suite.sh:96`). |
+| Vigia da árvore | `vigia_arvore`, em dois pontos de execução (`bin/vigia_arvore.sh:83`, `bin/vigia_arvore.sh:131`). |
+| Régua do relógio | `regua_relogio` (`bin/regua_relogio.sh:51`). |
+| Molde das fatias | `fatia`, nos RED/GREEN parciais (`bin/molde_fatia/rodar.sh:40`, `bin/molde_fatia/rodar.sh:46-47`). |
+
+**Todos têm ferramenta nomeável; não têm obra obrigatoriamente identificada.** A trava constrói `quem` como ferramenta mais PID; o molde conhece `__FATIA__`, mas transmite somente `fatia` (`bin/trava_teste.sh:23`, `bin/molde_fatia/rodar.sh:40`, `bin/molde_fatia/rodar.sh:46`).
+
+O “label de `suite.sh`” não resolve: `--only` e `LABELS` são alvos de testes, não identificadores da obra; o parser não oferece argumento de obra (`bin/suite.sh:43-53`, `bin/suite.sh:59`, `bin/suite.sh:102`). Uso padronizado de `SUITE_OBRA` pelos chamadores: [nao verificado].
+
+O instalador de hooks gera delegação a `bin/pre-push.sh`; há também uma cópia em `app/core/hooks/pre-push.sh` que executa Docker diretamente. Qual hook está efetivamente instalado: [nao verificado] (`bin/hooks.sh:51-56`, `app/core/hooks/pre-push.sh:54`, `app/core/hooks/pre-push.sh:82`, `app/core/hooks/pre-push.sh:87`).
+
+**(c) O contrato precisa corrigir estes pontos:**
+
+1. **“Único portão do `juliani_db_test`” excede a cobertura existente.** Calendário e molde de autocura executam suites completas diretamente; isolamento, placar, selo da fatia e vigia Python também executam testes sem passar pela trava (`bin/regua_calendario.sh:41-45`, `bin/molde_autocura/rodar.sh:20-26`, `bin/isolamento.sh:31-33`, `bin/placar_code.sh:122-126`, `bin/molde_fatia/rodar.sh:28-30`, `app/core/esteira_vigia.py:751-760`). `REGUA_DB` muda o banco de teste, enquanto o host padrão continua `juliani_db_test` (`app/config/settings/ci.py:12`, `app/config/settings/ci.py:17`). O selo não garante universalidade: varre `bin/*.sh`, tem exceções por `REGUA_DB` e aceita presença textual da trava no arquivo (`bin/tests/test_trava_teste.sh:40`, `bin/tests/test_trava_teste.sh:59-62`).
+
+2. **“Pedidos sem início” inclui tentativas já encerradas.** Um timeout sai sem executar o comando; contá-lo como pendente produziria fila permanente. É necessário distinguir aguardando, admitido e encerrado sem admissão (`bin/trava_teste.sh:36-42`). Além disso, `rc=75` isolado não prova timeout: o comando protegido também pode devolver 75; o registro precisa indicar se houve aquisição (`bin/trava_teste.sh:38`, `bin/trava_teste.sh:42`).
+
+3. **`--quem` não prova posse nem mede fila.** Ele lê apenas um arquivo lateral; as atualizações acontecem depois da aquisição e no `EXIT`, permitindo divergência entre texto e lock, inclusive após morte abrupta (`bin/trava_teste.sh:28`, `bin/trava_teste.sh:40-41`).
+
+4. **Continuar o run após append falho é coerente com “hist é testemunha”, mas deixa cobertura incompleta.** “Conta FALHA” precisa de canal independente: tentar registrar a falha somente no histórico que falhou pode torná-la invisível. Esse canal não existe na trava atual (`bin/trava_teste.sh:20-42`). O contrato também precisa impedir espera indefinida pelo lock do histórico; o mecanismo proposto ainda está [nao verificado].
+
+5. **A média pode esconder justamente as piores esperas.** Excluir tentativas sem início retira os timeouts; atribuir-lhes zero também falseia a espera. Publicaria média dos admitidos com quantidade de amostras, negados separados e idade dos pendentes, pois o caminho 75 efetivamente esperou e não começou (`bin/trava_teste.sh:36-38`). Janela por pedido/início/fim, fuso, dias civis versus janelas móveis, gatilho por obra versus agregado e fonte da conta da VM não estão definidos no contrato enviado: [nao verificado].
+
+6. **O destino do ESTADO precisa ser corrigido.** O fluxo encontrado gera `$TMP/ESTADO.md` e publica no destino padrão `/home/ronald/hasner-relato`, não em `app/docs/ESTADO.md` (`bin/relato.sh:23`, `bin/relato.sh:38`, `bin/relato.sh:100-102`, `bin/gerar_estado.py:376`). O template atual não contém bloco TRAVA (`bin/gerar_estado.py:295-369`). O novo leitor deve conter falhas de importação, leitura e composição para publicar `nao sei`; sem contenção, erro do gerador encerra o ciclo de publicação (`bin/gerar_estado.py:289-293`, `bin/relato.sh:38`).
+
+7. **A instrumentação precisa preservar o isolamento dos testes da própria trava.** O selo copia o script e altera apenas o caminho do lock; acrescentar histórico com caminho real pode fazer suas execuções sintéticas contaminarem a medida publicada (`bin/tests/test_trava_teste.sh:101-103`, `bin/tests/test_trava_teste.sh:119-137`).
+
+## 31/10 15:53 · sessao 1d030a5d304b · V3-RETOMA · leitura · origem=Code
+
+**Os textos examinados usam a duração diária para as extras e a faixa horária para o trabalho noturno. Não estabelecem expressamente que as extras sejam sempre os últimos minutos trabalhados, nem disciplinam sua distribuição entre vários períodos intradiários.** Essa constatação limita-se aos dispositivos e verbetes abaixo. [CLT, normaalizada-pe.html:300–307, 360–368](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html)
+
+As citações entre aspas são **trechos literais selecionados**; as explicações restantes são paráfrases. As linhas indicam a representação textual dos documentos externos consultados.
+
+**1. CLT: dispositivo, literalidade e situação**
+
+O art. 59, caput e §§ 1º, 2º, 3º, 5º e 6º, consta do texto atualizado; o § 4º está revogado. [normaatualizada-pe.html:300–307](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html)
+
+| Dispositivo | Trecho literal selecionado | Conteúdo, em paráfrase |
+|---|---|---|
+| Art. 59, caput | “A duração diária do trabalho poderá ser acrescida de horas extras” | Refere-se à duração **diária**; prevê até duas extras mediante os instrumentos indicados. [l13467.htm:105](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2017/lei/l13467.htm) |
+| § 1º | “50% (cinquenta por cento)” | Acréscimo mínimo sobre a hora normal. [l13467.htm:107](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2017/lei/l13467.htm) |
+| § 2º | “em um dia” | Permite compensar excesso diário pela diminuição em outro dia, mediante acordo ou convenção coletiva, observados o período máximo anual e o limite de dez horas diárias. [normaatualizada-pe.html:302](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html) |
+| § 3º | “horas extras não compensadas” | Determina seu pagamento na rescisão, segundo a remuneração dessa data. [l13467.htm:111](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2017/lei/l13467.htm) |
+| § 4º | — | **Revogado** pela Lei 13.467/2017. [l13467.htm:113, 987–992](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2017/lei/l13467.htm) |
+| § 5º | “seis meses” | Banco de horas por acordo individual escrito, com compensação nesse prazo máximo. [l13467.htm:115](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2017/lei/l13467.htm) |
+| § 6º | “no mesmo mês” | Compensação por acordo individual tácito ou escrito. [l13467.htm:117](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2017/lei/l13467.htm) |
+
+Os quatro parágrafos solicitados do art. 73 constam do texto atualizado, sem indicação de revogação. [normaatualizada-pe.html:361–368](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html)
+
+| Dispositivo | Trecho literal selecionado | Conteúdo, em paráfrase |
+|---|---|---|
+| Art. 73, § 1º | “30 (trinta) segundos” | Hora noturna computada com 52 minutos e 30 segundos. [normaatualizada-pe.html:361](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html) |
+| § 2º | “Considera-se noturno” | Define o trabalho entre 22h de um dia e 5h do seguinte. [normaatualizada-pe.html:363](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html) |
+| § 4º | “Nos horários mistos” | Aplica as disposições do artigo às horas noturnas dos horários que abrangem períodos diurnos e noturnos. [normaatualizada-pe.html:366](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html) |
+| § 5º — íntegra | “Às prorrogações do trabalho noturno aplica-se o disposto neste capítulo.” | Estende as disposições do capítulo à prorrogação. [normaatualizada-pe.html:368](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html) |
+
+Portanto, **quantificação diária**, **localização no relógio** e **prorrogação noturna** aparecem nesses dispositivos; uma regra expressa de seleção cronológica dos minutos extraordinários não aparece. [normaatualizada-pe.html:300–307, 360–368](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html)
+
+**2. Súmulas e OJs indicadas**
+
+| Verbete | Texto literal relevante | O que o trecho efetivamente disciplina |
+|---|---|---|
+| **Súmula 60, II** | “Cumprida integralmente a jornada no período noturno e prorrogada esta, devido é também o adicional quanto às horas prorrogadas.” | Adicional na prorrogação noturna. Transcrição do verbete em documento oficial: [acordao.do, E-ED-RR-825-88.2010.5.03.0064:171–176](https://consultadocumento.tst.jus.br/consultaDocumento/acordao.do?anoProcInt=2013&dtaPublicacaoStr=28%2F05%2F2021+07%3A00%3A00&nia=7637301&numProcInt=170108). |
+| **Súmula 85, III e IV** | “horas excedentes à jornada normal diária” | Compensação e consequências de sua invalidade, com referências aos módulos diário e semanal. [documento d4a380524f995d9b0bb461bf24733a13:89–91](https://jurisprudencia-backend.tst.jus.br/rest/documentos/d4a380524f995d9b0bb461bf24733a13). |
+| **Súmula 366** | “Se ultrapassado esse limite, será considerada como extra a totalidade do tempo que exceder a jornada normal.” | Variações de registro e tolerância; o trecho não identifica necessariamente o excesso com o final do dia. [documento 8e88a25e9f40b1e5e2199ac0e3dd8c43:147–149](https://jurisprudencia-backend.tst.jus.br/rest/documentos/8e88a25e9f40b1e5e2199ac0e3dd8c43). |
+| **Súmula 437, I** | “sem prejuízo do cômputo da efetiva jornada de labor para efeito de remuneração” | Pagamento relacionado à supressão do intervalo e preservação do cômputo do trabalho efetivo. [documento f22a2b6f90b469ac17ad6ba9b3c9e847:51–54](https://jurisprudencia-backend.tst.jus.br/rest/documentos/f22a2b6f90b469ac17ad6ba9b3c9e847). |
+| **OJ SDI-1 97 — íntegra** | “O adicional noturno integra a base de cálculo das horas extras prestadas no período noturno.” | **Base de cálculo** das extras noturnas. [JURISPRUDÊNCIA CONSOLIDADA_VERSÃO_COMPLETA_28_6_2024.pdf:8318–8320](https://as1.trt3.jus.br/bd-trt3/bitstream/handle/11103/17962/JURISPRUD%C3%8ANCIA%20CONSOLIDADA_VERS%C3%83O_COMPLETA_28_6_2024.pdf?isAllowed=y&sequence=1). |
+| **OJ SDI-1 388** | “após as 5 horas da manhã” | Adicional nas horas posteriores às 5h, em jornada 12×36 que compreenda todo o período noturno. [JURISPRUDÊNCIA CONSOLIDADA_VERSÃO_COMPLETA_28_6_2024.pdf:10520–10528](https://as1.trt3.jus.br/bd-trt3/bitstream/handle/11103/17962/JURISPRUD%C3%8ANCIA%20CONSOLIDADA_VERS%C3%83O_COMPLETA_28_6_2024.pdf?isAllowed=y&sequence=1). |
+
+**Situação dos verbetes:**
+
+- **366 e 437: canceladas.** A Resolução 225/2025 registra, respectivamente nos incisos XV e XXII, cancelamento por perda de eficácia desde 11/11/2017 pela Lei 13.467/2017. Trecho literal comum: “cancelada por perda de eficácia a partir de 11/11/2017”. [2025_res0225.pdf:83–84, 99–100](https://juslaboris.tst.jus.br/bitstream/handle/20.500.12178/251919/2025_res0225.pdf?isAllowed=y&sequence=1)
+- **60, 85, OJ 97 e OJ 388:** constam sem cancelamento na edição oficial de 2024 e não figuram nos cancelamentos da Resolução 225/2025. **Vigência atual em 31/10/2026: [NAO VERIFICADO].** [JURISPRUDÊNCIA CONSOLIDADA_VERSÃO_COMPLETA_28_6_2024.pdf:3007–3014, 3212–3236, 8318–8320, 10520–10528](https://as1.trt3.jus.br/bd-trt3/bitstream/handle/11103/17962/JURISPRUD%C3%8ANCIA%20CONSOLIDADA_VERS%C3%83O_COMPLETA_28_6_2024.pdf?isAllowed=y&sequence=1); [2025_res0225.pdf:51–136](https://juslaboris.tst.jus.br/bitstream/handle/20.500.12178/251919/2025_res0225.pdf?isAllowed=y&sequence=1)
+
+**3. Resposta específica sobre quais minutos são extras**
+
+Nos seis verbetes examinados, **não há comando literal que reserve as extras aos últimos minutos cronológicos do dia**, nem regra específica para atribuir extras noturnas quando a prorrogação ocorre em período anterior ao último. [JURISPRUDÊNCIA CONSOLIDADA_VERSÃO_COMPLETA_28_6_2024.pdf:3007–3014, 3212–3236, 6280–6288, 7293–7312, 8318–8320, 10520–10528](https://as1.trt3.jus.br/bd-trt3/bitstream/handle/11103/17962/JURISPRUD%C3%8ANCIA%20CONSOLIDADA_VERS%C3%83O_COMPLETA_28_6_2024.pdf?isAllowed=y&sequence=1)
+
+A OJ 97 pressupõe horas extras prestadas em período noturno e determina sua composição remuneratória; ela não fornece o critério anterior para escolher esses minutos. A OJ 388, por sua vez, fala em adicional após as 5h sem qualificar essas horas como extraordinárias. **Essa distinção é leitura delimitada dos textos.** [Mesmo PDF:8320, 10526–10528](https://as1.trt3.jus.br/bd-trt3/bitstream/handle/11103/17962/JURISPRUD%C3%8ANCIA%20CONSOLIDADA_VERS%C3%83O_COMPLETA_28_6_2024.pdf?isAllowed=y&sequence=1)
+
+**[NAO VERIFICADO]** Não consegui fundamentar literalmente uma regra geral que imponha: **“extras = últimos minutos trabalhados”**, **“excesso apurado separadamente por período”** ou uma solução específica para o período anterior ao último. Também permanece **[NAO VERIFICADO]** afirmar que inexista qualquer outra Súmula ou OJ do TST sobre essa seleção temporal.
+
+## 31/10 15:52 · sessao 2e56327f1075 · - · - · origem=Ronald (tmux)
+
+O ESTADO publicado nasce em temporário, não em `app/docs/ESTADO.md`: `bin/relato.sh:38` chama o gerador com `$TMP/ESTADO.md`; o gerador escreve o destino recebido em `bin/gerar_estado.py:376`; o publicador envia o temporário ao raspador em `bin/relato.sh:100-102`, com destino padrão `/home/ronald/hasner-relato` (`bin/relato.sh:23`), e o raspador grava em `dest/dst` (`bin/raspar_publico.py:40`). O template atual não contém TRAVA, e suas métricas vêm dos leitores importados em `bin/gerar_estado.py:198-293` e do template em `bin/gerar_estado.py:295-369`.
+
+Lacunas do contrato:
+
+- **Uma linha final por run é insuficiente para fila corrente.** O início só fica conhecido depois de `flock` (`bin/trava_teste.sh:36-40`) e fim/rc depois do comando (`bin/trava_teste.sh:42`); se a linha nascer ao terminar, os pedidos ainda aguardando não aparecem. Se nascer antes, faltam início/fim/rc e são necessárias atualizações ou eventos correlacionados por ID. É consequência do desenho existente; o protocolo adicional está [nao verificado].
+- **Pedidos sem início incluem encerrados.** Timeout sai por `75` antes do comando (`bin/trava_teste.sh:36-38`); o contrato precisa distinguir aguardando, negado e cancelado para não transformar timeout em fila eterna. Cancelamento/sinais não têm protocolo atual além do `EXIT` do detentor (`bin/trava_teste.sh:41`).
+- **`--quem` é testemunho lateral.** Ele somente lê `$TRAVA.quem` ou imprime `livre` (`bin/trava_teste.sh:28`); o arquivo é atualizado depois da aquisição (`bin/trava_teste.sh:40`) e no `EXIT` (`bin/trava_teste.sh:41`). Logo há janelas de divergência entre o arquivo e o lock; o contrato não deve tratar essa leitura como prova suficiente da posse.
+- **A observação não pode segurar a pista indefinidamente.** O lock atual ocupa FD 9 antes da espera e permanece durante o comando (`bin/trava_teste.sh:35-42`); usar FD próprio e espera limitada para o histórico evita substituir FD 9 ou aumentar a ocupação da pista. O prazo e o canal durável de FALHA do histórico estão [nao verificado].
+- **Falha do histórico pode fabricar média boa.** Se append falhar e o run prosseguir, os runs omitidos não aparecem na média; “conta FALHA” precisa de canal independente e de indicação de cobertura incompleta. O mecanismo ainda está [nao verificado]; a trava atual não tem histórico nem contador (`bin/trava_teste.sh:20-42`).
+- **`nao sei` precisa cobrir toda a seção.** O gerador já protege importação, leitura e composição de outro medidor conjuntamente (`bin/gerar_estado.py:287-293`); sem isso, uma exceção do novo leitor impede a geração e `relato.sh` encerra o ciclo (`bin/relato.sh:38`). Arquivo vazio, registros truncados, falha de permissões e ausência de amostras precisam de semântica explícita [nao verificado].
+- **A média tem viés sem universo definido.** Excluir os `75` omite justamente quem esperou e não conseguiu iniciar (`bin/trava_teste.sh:36-38`); incluí-los como espera zero também falseia a medida. Devem aparecer separados como negados, com tempo observado como limite inferior, e pendentes com idade corrente [nao verificado].
+- **“24 h” e “2 dias seguidos” são insuficientes para o gatilho.** O contrato não fixa inclusão por pedido/início/fim, fuso, dias civis versus janelas móveis, mínimo de amostras, agregado global versus por obra nem origem da conta da VM [nao verificado]. Datas com ano/fuso e duração monotônica são recomendáveis; o carimbo atual de `--quem` contém somente dia/mês/hora (`bin/trava_teste.sh:40-41`).
+
+Há precedente útil de observabilidade na sombra: ela mede antes/depois do `flock`, registra inclusive negação (`bin/sombra_trava.sh:27-35`) e conta negados e linhas ilegíveis como problemas (`bin/sombra_trava.sh:55-60`), embora esse formato também não registre a fila enquanto espera (`bin/sombra_trava.sh:28-31`).
+
+O selo atual só verifica serialização e timeout `75`, sem história ou medição de fila (`bin/tests/test_trava_teste.sh:117-137`).
+
+## 31/10 15:52 · sessao ee9b1d9ee7f7 · - · - · origem=Ronald (tmux)
+
+Chamadores diretos encontrados, todos com identidade de ferramenta, sem obra obrigatória:
+
+| Chamador | Identidade transmitida | Evidência |
+|---|---|---|
+| Régua | `ESTEIRA_QUEM=regua` | `bin/regua.sh:165` |
+| Pre-push | `ESTEIRA_QUEM=pre-push`, na função compartilhada pelo arsenal e pelo control-plane | `bin/pre-push.sh:142`, `bin/pre-push.sh:186`, `bin/pre-push.sh:198` |
+| Suite | `ESTEIRA_QUEM` herdado ou `suite` | `bin/suite.sh:96` |
+| Vigia da árvore | `ESTEIRA_QUEM=vigia_arvore`, para suite/reteste e confirmação viva | `bin/vigia_arvore.sh:83`, `bin/vigia_arvore.sh:88`, `bin/vigia_arvore.sh:106`, `bin/vigia_arvore.sh:131` |
+| Régua do relógio | `ESTEIRA_QUEM=regua_relogio` | `bin/regua_relogio.sh:51` |
+| Molde das fatias | `ESTEIRA_QUEM=fatia`, usado nos RED/GREEN parciais | `bin/molde_fatia/rodar.sh:40`, `bin/molde_fatia/rodar.sh:46`, `bin/molde_fatia/rodar.sh:47` |
+
+`QUEM` acrescenta PID à identidade, portanto identifica uma execução da ferramenta, sem identificar necessariamente a obra (`bin/trava_teste.sh:23`). O molde dispõe de `__FATIA__` e bancos específicos, mas envia apenas `fatia` à trava (`bin/molde_fatia/rodar.sh:29`, `bin/molde_fatia/rodar.sh:40`, `bin/molde_fatia/rodar.sh:46`). O parser de `suite.sh` aceita `--dir`, `--only`, `--parallel`, `--espera` e argumentos extras; não oferece argumento de obra (`bin/suite.sh:43`, `bin/suite.sh:46`, `bin/suite.sh:50`, `bin/suite.sh:52`). `LABELS` é lista de apps de teste lida da régua, utilizada como alvo do `manage.py test`, não identificador de obra (`bin/suite.sh:59`, `bin/suite.sh:102`). Não encontrei uso de `SUITE_OBRA` na busca do repositório [nao verificado].
+
+O hook que o instalador gera delega a `bin/pre-push.sh`; a instalação efetiva nesta máquina não foi conferida (`bin/hooks.sh:51`, `bin/hooks.sh:56`; [nao verificado]). Existe uma cópia antiga em `app/core/hooks/pre-push.sh` que executa Docker diretamente, sem passar por `trava_teste.sh`; não há prova de que esteja instalada (`app/core/hooks/pre-push.sh:54`, `app/core/hooks/pre-push.sh:82`, `app/core/hooks/pre-push.sh:87`; [nao verificado]).
+
+A premissa “único portão do juliani_db_test” não é verdadeira para todo executor existente: o CI aponta por default ao mesmo container e apenas varia o nome do banco quando recebe `REGUA_DB` (`app/config/settings/ci.py:12`, `app/config/settings/ci.py:17`).
+
+- `regua_calendario.sh` executa a suite inteira diretamente três vezes, com bancos próprios no container default (`bin/regua_calendario.sh:41`, `bin/regua_calendario.sh:43`, `bin/regua_calendario.sh:44`, `bin/regua_calendario.sh:45`).
+- O molde de autocura executa Docker diretamente e inclui um GREEN completo (`bin/molde_autocura/rodar.sh:20`, `bin/molde_autocura/rodar.sh:25`, `bin/molde_autocura/rodar.sh:26`).
+- Há recortes diretos no isolamento, placar e selo do molde de fatia (`bin/isolamento.sh:31`, `bin/isolamento.sh:33`; `bin/placar_code.sh:121`, `bin/placar_code.sh:125`; `bin/molde_fatia/rodar.sh:28`, `bin/molde_fatia/rodar.sh:30`).
+- O vigia Python também monta e executa Docker diretamente (`app/core/esteira_vigia.py:751`, `app/core/esteira_vigia.py:757`, `app/core/esteira_vigia.py:760`).
+
+O selo não prova cobertura universal: percorre somente `bin/*.sh`, aceita presença textual de `trava_teste.sh` em qualquer parte do código e isenta `REGUA_DB` fora de dois padrões limitados de suite inteira (`bin/tests/test_trava_teste.sh:40`, `bin/tests/test_trava_teste.sh:59`, `bin/tests/test_trava_teste.sh:60`, `bin/tests/test_trava_teste.sh:62`). Seus exercícios da trava usam uma cópia isolada, não o dispositivo global; instrumentação nova não deve contaminar o histórico real com esses runs (`bin/tests/test_trava_teste.sh:101`, `bin/tests/test_trava_teste.sh:103`, `bin/tests/test_trava_teste.sh:119`, `bin/tests/test_trava_teste.sh:134`).
 
 ## 31/10 15:50 · sessao b06ea5b91449 · - · - · origem=Ronald (tmux)
 
@@ -466,71 +613,4 @@ A cobertura de `b3_codex` e dos mutantes é parcial; os resultados de execução
 
 O chamador de produção de `regras.do_dia` é `app/ponto/calculador/alimentacao.py:523`; `rubricas_por_dia` é chamado pela lavratura do fechamento (`app/ponto/services/fechamento.py:1239`, versão `oraculo` em `:1262`) e pelo comando comparador (`app/ponto/management/commands/diff_calculador.py:417`).
 
-## 31/10 14:58 · sessao 95de571d2afe · - · - · origem=Ronald (tmux)
-
-- **BLOQUEIA — CCT diária e split noturno podem usar bases diferentes.** A HE 100 principal agora usa CCT do dia (`app/ponto/calculador/alimentacao.py:514`, `:531`), mas as quantidades usadas no split vêm dos períodos já calculados pelo motor (`app/ponto/calculador/alimentacao.py:92`, `:93`, `:96`; `app/ponto/calculador/regras.py:822`, `:827`, `:834`). O fechamento mantém um motor por fatia (`app/ponto/services/fechamento.py:263`, `:270`). Assim, numa fatia cuja CCT de dobra vence durante o período, um feriado noturno posterior ao vencimento pode ficar com HE100 principal zero e HE100 noturna positiva; ocorrência em produção **[nao verificado]**. Os testes novos não cobrem essa composição: usam períodos falsos com extras zeradas (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:69`; `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:44`) e leem apenas HE100 de feriado (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:80`, `:82`).
-
-- **NAO-BLOQUEIA — quatro testes novos passam sem a cura**, por inspeção estática; execução contra versão anterior **[nao verificado]**: [nao verificado]
-  - `test_a_dobra_continua_paga`: a atribuição de dobra já precedia o `return` removido; verifica somente manutenção dos 6h (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:45`; `app/ponto/calculador/regras.py:780`, `:785`).
-  - `test_MORDE_NACIONAL_dobra_no_intermitente`: o nacional já está no conjunto fornecido ao código antigo (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:120`, `:121`).
-  - `test_MORDE_dia_FORA_da_praca_nao_dobra`: a data antiga consultada era 21/09, anterior aos vínculos iniciados em outubro; sem vínculo, não há praça nem aplicação específica, portanto zero já satisfaz a assertiva (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:72`, `:171`, `:174`, `:183`; `app/core/regua_cct.py:329`, `:330`; `app/core/regua_cct.py:257`).
-  - `test_MORDE_dia_DENTRO_da_vigencia_dobra`: a convenção global já está vigente em 21/09; a leitura antiga já concede dobra ao dia dentro da vigência (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:72`, `:199`, `:200`, `:212`; `app/core/regua_cct.py:261`, `:262`).
-
-- **NAO-BLOQUEIA — cobertura não demonstra os outros parâmetros da CCT diária.** Todos os casos de praça/vigência usam jornadas 07–19 e inspecionam só dobra; mudanças de prorrogação pós-05h e hora reduzida não são verificadas nesses cenários (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:69`, `:80`, `:82`; `app/ponto/calculador/alimentacao.py:515`, `:516`, `:537`). O teste noturno separado injeta explicitamente 360 minutos de HE100, sem testar sua obtenção pelo fechamento (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:41`).
-
-## 31/10 14:58 · sessao 68c67012b951 · - · - · origem=Ronald (tmux)
-
-- **NAO-BLOQUEIA — aumento de consultas por dia.** A porta faz **D chamadas** de `get_motor_cct` por colaborador/janela, sendo D o número de dias presentes em `v.minutos` unido aos bloqueados, filtrados pela janela; não são necessariamente todos os dias do mês. Antes eram **T chamadas**, uma por template distinto, conforme o diff fornecido. Evidências: `app/ponto/calculador/alimentacao.py:472`, `:474`, `:476`, `:477`, `:479`, `:514`, `:400`.
-
-- **Não há cache equivalente no caminho da fábrica.** Cada chamada consulta `ParametroSistema`; com switch ativo, resolve novamente o vínculo e, para empresa CCT, consulta aplicações de convenção. A porta já tem escalas e células, mas não as repassa à fábrica. Evidências: `app/core/regua_cct.py:444`, `:458`, `:329`, `:366`, `:253`; `app/escala/alimentacao.py:284`, `:298`, `:300`, `:43`, `:116`; `app/ponto/calculador/alimentacao.py:426`, `:438`, `:400`.
-
-- **Outros caches não substituem esse trabalho:** `_FONTE_DO_MOTOR` guarda metadados por instância, e os memos do motor guardam previsto/escala certa. Evidências: `app/core/regua_cct.py:488`, `:494`, `:506`; `app/ponto/motor_calculo_v2.py:1170`, `:2223`.
-
-- **Total no fechamento:** `F + O + D` chamadas, com F fatias efetivamente processadas e O igual a uma chamada adicional quando existe processamento de órfãos; antes, `F + O + T`. A parte D só ocorre na lavratura normal/backfill e competência ≥10/2026; `somente_leitura=True` puro não entra nela. Evidências: `app/ponto/services/fechamento.py:263`, `:711`, `:793`, `:1159`, `:1233`, `:1239`. Contagens reais de F/T/D, tempo e impacto em produção: **[nao verificado]**.
-
-- **Chamadores diretos de produção:** fechamento mensal e comando de comparação. O fechamento entrega o resultado à lavratura da versão `oraculo`; o comando compara os resultados quando recebeu insumos da autoridade. Evidências: `app/ponto/services/fechamento.py:1239`, `:1245`, `:1256`, `:1262`; `app/ponto/management/commands/diff_calculador.py:417`, `:424`.
-
-- **Entradas transitivas usuais do fechamento:** botão de recalcular, comando de recalcular, backfill de dias pagos e recálculo por evento. Evidências: `app/ponto/views.py:1253`; `app/ponto/management/commands/recalcular_fechamento.py:118`; `app/ponto/management/commands/lavrar_dias_pagos.py:106`; `app/ponto/services/fechamento.py:1778`.
-
-- **Quem lê o resultado:** `dia_pago.lavrar` substitui campos pelos valores emitidos e registra as recusas; a versão é fornecida pelo fechamento como `oraculo`. Os filtros de exportação examinados continuam lendo `motor`. Evidências: `app/ponto/services/dia_pago.py:320`, `:327`, `:328`, `:329`, `:331`; `app/ponto/services/fechamento.py:1262`; `app/folha/porta_export.py:284`, `:589`.
-
-## 31/10 14:56 · sessao 5d04f0795ca4 · - · - · origem=Ronald (tmux)
-
-Conformidade parcial: o JSON B3 é alterado e persistido sob `flock`, mas a triagem não participa da mesma trava e a porta do wrapper lê somente o estado persistido. `bin/disjuntor.py:236`, `bin/disjuntor.py:252`, `bin/disjuntor.py:273`, `bin/disjuntor.py:784`, `bin/disjuntor.py:940`.
-
-Falhas concretas:
-
-- **Terceira triagem sem decisão intermediária:** três voltas PROCEDENTE são gravadas; chamada seguinte usa papel/obra herdados ou chama wrapper diretamente. A triagem não decide B3, e `b3_parada` não lê a triagem: estado anterior livre produz rc 0 e permite a quarta chamada. `bin/disjuntor.py:788`, `bin/disjuntor.py:791`, `bin/disjuntor.py:940`, `bin/disjuntor.py:956`, `bin/disjuntor.py:1226`, `bin/disjuntor.py:1310`.
-- **Liberação ainda não processada:** obra disparada recebe DESENHO/ERRO-BOBO válido novo; wrapper chamado diretamente continua negando porque a porta não examina RELATO nem executa a decisão. `bin/disjuntor.py:940`, `bin/disjuntor.py:953`; reconhecimento/liberação só em `bin/disjuntor.py:877`.
-- **Opus liberado por erro:** estado corrompido, trava ocupada ou triagem ilegível levantam exceção; `main_pretool` registra FALHA e permite a ferramenta. A porta do wrapper recusa estado ilegível, portanto a falha aberta aqui é especialmente do próximo opus. `bin/disjuntor.py:257`, `bin/disjuntor.py:264`, `bin/disjuntor.py:798`, `bin/disjuntor.py:1323`, `bin/disjuntor.py:1359`.
-- **Classificação do opus contornável por texto:** prompt de leitura final da OBRA-X que também cita “nao e a leitura final” faz `_eh_final` retornar falso; nenhuma consulta B3 ocorre. Obra não reconhecida também pula a consulta. `bin/disjuntor.py:113`, `bin/disjuntor.py:498`, `bin/disjuntor.py:511`, `bin/disjuntor.py:1320`.
-- **Volta temporariamente descartada ressuscita após liberação:** a,b,c PROCEDENTE disparam; a vira DESCARTADO; decisão recalcula `[b,c]`; nova linha válida libera e arquiva só `[b,c]`; a volta a PROCEDENTE e soma com apenas duas novas d,e para disparar novamente. `bin/disjuntor.py:851`, `bin/disjuntor.py:854`, `bin/disjuntor.py:859`, `bin/disjuntor.py:883`.
-- **Mesmo defeito no rearme:** após decidir com a descartada, o rearme arquiva somente listas atuais e pendências PROCEDENTE; a não é arquivada e volta depois. `bin/disjuntor.py:921`, `bin/disjuntor.py:922`, `bin/disjuntor.py:924`. O selo faz D→P depois da liberação, portanto não cobre esse ordenamento. `bin/tests/test_disjuntor.sh:1169`.
-- **Triagem ausente apaga contagem conhecida:** arquivo ausente vira `{}`; próxima decisão substitui a lista conhecida por vazia. Com duas voltas anteriormente contadas e trilha perdida, falta a base para disparar na terceira. `bin/disjuntor.py:800`, `bin/disjuntor.py:854`.
-- **Liberar com trilha ausente permite recontagem:** disparado continua verdadeiro, mas a contagem passa a vazia; liberar arquiva lista vazia; quando a trilha reaparece, antigas voltas voltam a contar. `bin/disjuntor.py:854`, `bin/disjuntor.py:869`, `bin/disjuntor.py:883`.
-- **Linha inválida é silenciosamente ignorada:** uma última linha DESCARTADO truncada mantém PROCEDENTE anterior, possibilitando disparo indevido; linhas PROCEDENTE corrompidas subcontam. `bin/disjuntor.py:798`, `bin/disjuntor.py:803`.
-- **Fonte fora da trava:** duas triagens simultâneas iguais podem ler ausência e acrescentar duas linhas. Isso quebra a idempotência da escrita, mas não duplica sozinho a contagem, pois o leitor deduplica por volta. `bin/disjuntor.py:784`, `bin/disjuntor.py:788`, `bin/disjuntor.py:805`.
-- **Painel imprime zero sem ter lido a trilha:** contadores começam zerados; OSError em `disjuntor.log` é ignorado; saída apresenta `B3=0`, negações e liberações zero. `bin/disjuntor.py:1403`, `bin/disjuntor.py:1435`, `bin/disjuntor.py:1523`, `bin/disjuntor.py:1531`. Estado B3 ilegível preserva “nao sei” para `b3_sem_obra`, mas estado ausente vira zero. `bin/disjuntor.py:295`, `bin/disjuntor.py:1469`.
-
-O Stop também omite o recado B3 quando a decisão levanta exceção; ele não transforma esse erro em recado de estado desconhecido. `bin/hook_stop_fila1.py:1048`, `bin/hook_stop_fila1.py:1056`, `bin/hook_stop_fila1.py:1061`, `bin/hook_stop_fila1.py:1297`.
-
-Não identifiquei escrita do JSON B3 fora da trava; a escrita desprotegida identificada é a fonte `triagem.log`. `bin/disjuntor.py:272`, `bin/disjuntor.py:788`, `bin/disjuntor.py:906`, `bin/disjuntor.py:936`.
-
-## 31/10 14:55 · sessao b3f98c69fbd0 · - · - · origem=Ronald (tmux)
-
-Achados do wrapper e integração, por inspeção:
-
-- **Bloqueio direto usa estado atrasado.** O wrapper chama apenas `b3_parada`, que lê `disparado`, sem consumir triagens nem examinar liberação no RELATO. Três PROCEDENTES sem um `decide_b3` intermediário deixam a chamada direta passar; DESENHO válido sem decisão intermediária deixa a chamada direta negada. (`bin/codex_pergunta.sh:53-54`; `bin/disjuntor.py:940-956`)
-- **Janela entre autorização e execução.** A checagem ocorre antes da preparação e da espera pelo slot. Uma chamada autorizada pode esperar; outra decisão dispara o B3; a primeira finalmente executa Codex sem consultar novamente. (`bin/codex_pergunta.sh:54`; `bin/codex_pergunta.sh:143-164`)
-- **Outro papel pode ser negado pelo parser.** `CODEX_OBRA=O CODEX_PAPEL=verificador CODEX_PAPEL=leitura bin/codex_pergunta.sh h q r` é classificado como verificador, pois `re.search` pega a primeira ocorrência, enquanto o shell usa a última atribuição. Também ocorre com `DUMMY="CODEX_PAPEL=verificador" CODEX_OBRA=O CODEX_PAPEL=leitura ...`. Se O estiver parada, B3 nega leitura. Confirmado executando apenas as funções extraídas da AST em memória. (`bin/disjuntor.py:1226-1230`; `bin/disjuntor.py:1310-1311`)
-- **Algumas formas não varrem antes da porta.** `env CODEX_OBRA=O CODEX_PAPEL=verificador bin/codex_pergunta.sh h q r` produz lista vazia no parser; ambiente herdado também não fornece obra/papel ao parser. Nessas formas, só sobra a consulta ao estado atrasado. (`bin/disjuntor.py:1150-1152`; `bin/disjuntor.py:1217-1231`)
-- **Uma tentativa negada apaga a identidade anterior.** Reutilizar o caminho de resposta numa obra parada remove o `.id` antes de negar, tornando a resposta anterior ainda não triada impossível de triar por esse caminho. (`bin/codex_pergunta.sh:52-54`; `bin/disjuntor.py:776-778`)
-- **Resposta e identidade não têm exclusão mútua por caminho.** Duas chamadas com o mesmo arquivo podem misturar conteúdo e identidade: A verificador termina, B leitura sobrescreve resposta, A calcula SHA do conteúdo de B e grava identidade verificador. A triagem aceita conteúdo de leitura como volta verificador. (`bin/codex_pergunta.sh:163-164`; `bin/codex_pergunta.sh:184-187`; `bin/disjuntor.py:779-783`)
-- **`-nt` não demonstra autoria.** Resposta legítima com o mesmo mtime do cabeçalho não ganha identidade; resposta antiga com mtime futuro pode ganhar nova identidade se a chamada retornar zero sem atualizar a resposta. São cenários condicionais, sem ocorrência de produção demonstrada. (`bin/codex_pergunta.sh:125`; `bin/codex_pergunta.sh:141`; `bin/codex_pergunta.sh:184-190`)
-- **Identidade textual pode ser fabricada.** A triagem verifica presença dos campos, papel e SHA; não consulta um registro confiável de emissão pelo wrapper. Fabricar `.r.id` com SHA correto satisfaz a validação; o próprio selo faz isso. (`bin/disjuntor.py:752-759`; `bin/disjuntor.py:779-783`; `bin/tests/test_disjuntor.sh:1129-1131`)
-
-**Cobertura:** `b3_codex` fabrica os sidecars, faz chamadas simples no parser e só testa `--b3-parada` depois que `_parada` já materializou o estado. Portanto não exercita a porta real do wrapper, os cenários acima nem liberação por chamada direta. Remover `codex_pergunta.sh:54` deixa todos esses casos do selo inalterados; o mutante `porta-sempre-livre` testa somente a implementação Python. (`bin/tests/test_disjuntor.sh:1129-1135`; `bin/tests/test_disjuntor.sh:1158-1159`; `bin/tests/test_disjuntor.sh:1188-1193`; `bin/tests/test_disjuntor.sh:1287-1289`)
-
-Execução do selo e ocorrências em produção: **[nao verificado]**.
-
-_1107 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1111 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
