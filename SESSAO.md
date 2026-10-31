@@ -6,10 +6,20 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 31/10/2026 01:01:57.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (15.3 MB). Acoes na janela: **519**.
+**Medido em 31/10/2026 01:06:41.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (15.5 MB). Acoes na janela: **529**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:06:38 | Bash | Show except-pass failure detail | `cd /home/ronald/saas-hasner; grep -A25 'FAIL: test_sem_except_pass_novo' logs/disjuntor/suite_inteira_f2993d9f.log \| head -30; sed -i "3s/pid=[0-9]*/pid=202280/" app/docs/RELATO.md` |
+| 01:06:35 | Bash | Read DISJUNTOR full suite verdict | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/ba0ornj4d.output; cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; ps -eo pid,etime,args \| grep 'bin/trava_teste.sh' \| grep -v grep \| cut -c1-110` |
+| 01:04:27 | Bash | Record PUSH-PRESO aval and status line | `cd /home/ronald/saas-hasner/app/docs; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys H=sys.argv[1] open('PROMPTS.md','a').write("\| 31/10 %s \| **aval PUSH-PRESO: origin 17 commits atras do que serve em prod (V-FASE no ar desde ~23:4x), mais de 1 h, fora do pre-aprovado de 20 min; subir pela regua agora; trava/hook impedindo = UMA linha no RELATO com o motivo e quando sobe** \| push.sh lancad ...` |
+| 01:04:22 | Bash | Push main via push.sh in background | `cd /home/ronald/saas-hasner && mkdir -p logs/push && L=logs/push/push_$(date +%d%H%M).log && echo $L && bash bin/push.sh origin main > $L 2>&1; echo rc=$? >> $L; tail -15 $L; git fetch -q; echo "ahead=$(git rev-list --count origin/main..HEAD)"` |
+| 01:04:12 | Bash | Rewrite placar and recheck gate | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever 2>&1 \| tail -3; git status --short app/docs/TICKETS.md; git diff --stat; bin/regua_tickets.sh >/dev/null 2>&1; echo regua_tickets rc=$?; git log -3 --format='%h %s' -- app/docs/TICKETS.md` |
+| 01:04:04 | Bash | Show regua_tickets block reason | `cd /home/ronald/saas-hasner && bin/regua_tickets.sh 2>&1 \| tail -25` |
+| 01:03:57 | Bash | Run pre-push top gates before push | `cd /home/ronald/saas-hasner && for c in "bin/regua_tickets.sh" "bin/tickets_rodape.sh --conferir" "bin/tests/test_lei_protege_sitio.sh" "bin/tests/test_achado_por.sh" "bin/index_vs_arvore.sh --conferir" "bin/regua_rotas_mensageria.sh" "python3 bin/gerar_haiku_dentes.py --conferir"; do out=$($c 2>&1); echo "rc=$? $c :: $(echo "$out"\|tail -1\|cut -c1-120)"; done` |
+| 01:03:50 | Bash | Read pre-push gates and trava wait | `cd /home/ronald/saas-hasner && sed -n 1,78p bin/pre-push.sh \| grep -vE '^\s*#' \| head -60; sed -n 125,145p bin/pre-push.sh; grep -n 'ESPERA\\|--espera' bin/trava_teste.sh \| head` |
+| 01:03:46 | Bash | Read push.sh and pre-push trava use | `cd /home/ronald/saas-hasner && cat bin/push.sh \| head -80; grep -nE 'trava_teste\|espera\|exit 75\|status --porcelain\|sujo' bin/pre-push.sh \| head -20` |
+| 01:03:39 | Bash | Measure push backlog and push.sh usage | `cd /home/ronald/saas-hasner && git fetch -q && git rev-list --count origin/main..HEAD && git rev-list --count HEAD..origin/main && git log --oneline origin/main..HEAD \| head -20 && git log --format='%an' origin/main..HEAD \| sort \| uniq -c; sed -n 1,60p bin/push.sh \| grep -nE 'trava\|pre-push\|usage\|--' \| head -20` |
 | 00:56:11 | Bash | Record V-FASE opus verdict and fila rows | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='BACKLOG.md'; L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('\| E1-STATUS-VERMELHOS \|')) rows=[ "\| V-FASE-AS-OF-TRANSFERIDO \| opus 31/10 F1: dono do dia de fase passado le a cobertura pela empresa ATUAL do colab (e6_oraculo.py:164, fase_12x36.py:139,146); colab transferido vira 'nao e fase' sem fato novo;  ...` |
 | 00:56:02 | SendMessage |  | `-` |
 | 00:55:31 | Bash | Point ESPERANDO at DISJUNTOR suite pid | `cd /home/ronald/saas-hasner && sed -i "3s/pid=[0-9]*/pid=187027/" app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md` |
