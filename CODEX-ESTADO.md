@@ -1,7 +1,96 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 16:12** · publicado em **31/10/2026 16:12** (UTC-3)
+> Ultima resposta processada: **31/10/2026 16:16** · publicado em **31/10/2026 16:17** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 16:16 · sessao fb824fd80c4f · ADR-0003 · censo · origem=Code
+
+Leitura estática do código. **O total absoluto de leitores do repositório ficou `[nao verificado]`**: abaixo conto funções comprovadas, com até oito exemplos por campo. `≥8` significa oito leitores comprovados apresentados; `0 localizado` não prova inexistência. Execução em produção, conteúdo efetivamente armazenado no JSON e correspondência do snapshot com o HASH informado: `[nao verificado]`.
+
+Os caminhos são relativos a `app/`. Para reduzir repetição nas tabelas, as referências abreviadas têm estas expansões literais:
+
+| Referência | Arquivo |
+|---|---|
+| `M:linha` | `escala/models.py:linha` |
+| `P:linha` | `ponto/portas/celula.py:linha` |
+| `C:linha` | `ponto/services/cartorio.py:linha` |
+| `G:linha` | `ponto/management/commands/gerar_celulas.py:linha` |
+| `L:linha` | `escala/services/leitor_celula.py:linha` |
+| `J:linha` | `chamados/juizes.py:linha` |
+| `F:linha` | `folha/export.py:linha` |
+| `S:linha` | `ponto/status_dia.py:linha` |
+| `T:linha` | `ponto/turnos.py:linha` |
+| `U:linha` | `escala/utils.py:linha` |
+
+Os nomes abreviados de escritores usados abaixo são:
+
+| Nome | Função e persistência |
+|---|---|
+| **GER** | `gerar_celulas_periodo`: cria e salva células — `P:593`, `P:605`, `P:615`. |
+| **REG** | `regenerar_celulas_vinculo`: cria, limpa previsão fora da vigência ou regrava previsão — `P:231`, `P:247`, `P:259`. |
+| **REV** | `reverter_regeneracao_dia`: restaura DNA anterior e salva — `P:527`, `P:538`. |
+| **LAV** | `lavrar_veredito`: atribui julgamento/status e persiste por `salvar_e_emitir` — `P:709`, `P:743`, `P:760`, `P:775`. |
+| **CAR** | `carimbar`: grava impressão, datas e insumos, incluindo campos preparados por LAV — `P:787`, `P:800`, `P:807`. |
+| **PREC** | `carimbar_precedencia`: grava `ata.precedencia` — `P:811`, `P:819`, `P:822`. |
+| **LOTE** | `carimbar_insumos_em_lote`: atribui insumos e executa `bulk_update` — `P:826`, `P:838`, `P:843`. |
+| **SAVE** | `salvar_e_emitir`: `cel.save(update_fields=campos)`, compartilhado por LAV/CAR/PREC — `P:634`, `P:640`. |
+
+`regenerar_celulas_dia` delega a REG com janela de um dia; não contém outra gravação (`P:474`). A fachada `CelulaDia.lavrar_veredito` delega a LAV (`M:1794`).
+
+Os portões e eventos referenciados nas tabelas significam:
+
+| Código | Fato comprovado |
+|---|---|
+| **PG** | GER pula `origem='editada'`; no passado só preenche DNA nulo; hoje/futuro podem ser regravados. Nenhuma consulta de exportação, tranca, `FechamentoMensal` ou versão nesse corpo — `P:555`, `P:598`, `P:600`, `P:609`. |
+| **PR** | REG e REV consultam `_competencias_exportadas`; `apesar_da_lavra` dispensa essa guarda — `P:196`, `P:199`, `P:238`, `P:520`. A consulta usa `competencia_fechada_para_celula`, que combina TXT vigente com holerite do colaborador em lote publicado — `G:173`, `F:599`, `F:603`. `FechamentoMensal.status` não é esse portão — `G:132`. REG também protege origem humana — `P:226`, `P:251`; REV exige origem gerada e DNA anterior — `P:518`. | [nao verificado]
+| **PJ** | Lavra/carimbo normais: **nenhum portão de competência exportada/trancada ou `FechamentoMensal`** nos escritores — `P:709`, `P:787`, `P:811`. Há idempotência por conteúdo — `P:753`, `P:795`, `P:816`. O cartório compara impressão; `forcar` permite rejulgamento — `C:1157`, `C:1161`. |
+| **PS** | Exclusivamente no command `lavrar_status_competencia`: barra `competencia_entregue` — `ponto/management/commands/lavrar_status_competencia.py:40`; completa somente status nulo com carimbo atual — `C:726`, `C:729`, `C:733`. |
+| **PB** | Backfill de insumos: nenhum portão de competência; seleciona células julgadas e chama LOTE — `ponto/management/commands/backfill_b5_insumos.py:60`, `:72`, `:81`. |
+| **EG** | GER pelo cron 05:50 — `config/crons.py:407`; alterações de vigência/âncora chamam REG — `escala/signals.py:71`, `:117`; alteração de template — `escala/services/cadastro_tipo.py:348`; atualização de folgas — `escala/folgas.py:220`; edição do vínculo — `colaboradores/services/vinculo.py:320`. |
+| **EJ** | Cartório pelo cron 06:27 — `config/crons.py:597`; vigia de hora a cada dez minutos — `config/crons.py:348`; signals de batida save/delete, ausência save/delete e justificativa save — `ponto/signals.py:132`, `:139`, `:144`, `:151`, `:162`; chamado criado/mudança de status — `chamados/signals.py:165`, `:180`. |
+| **EA** | Decisão humana chama `cel.lavrar_veredito(via='admin', …)` — `ponto/services/veredito_celula.py:330`. |
+| **EB** | Backfill de insumos — `ponto/management/commands/backfill_b5_insumos.py:72`, `:81`; lote de status — `ponto/management/commands/lavrar_status_competencia.py:55`. |
+
+Na coluna **FP**, “não” significa que **o valor da coluna não é serializado diretamente no fingerprint**. A definição integral das partes está em `C:333`–`C:390`; influências indiretas por seleção de insumos aparecem depois no grafo.
+
+| Coluna | Escritores de produção | Fonte do valor gravado | Regravação/evento | Portão | Leitores comprovados; contagem | FP |
+|---|---|---|---|---|---|---|
+| `colaborador` | GER `P:593`; REG `P:247`. | `ec.colaborador_id` — `P:247`, `P:594`. | Só criação nos escritores encontrados; alteração posterior `[nao verificado]`. | GER: PG; REG: PR. | **≥8**: `celulas_do_periodo` (`escala/alimentacao.py:42`); `escala_vigente` (`escala/servico_jornada.py:46`); `propostas` (`escala/services/propositor.py:488`); `montar_previa` (`folha/previa.py:51`); `dia_da_frota` (`relatorios/dia_da_frota.py:42`); `lastro.julgar` (`ponto/services/lastro.py:233`); `aplicar_precedencia_na_celula` (`C:1674`); `emitir_evento_celula` (`P:631`). | Não — `C:333`. |
+| `data` | GER `P:594`; REG `P:247`. | Dia iterado na janela solicitada — `P:208`, `P:571`. | Só criação nos escritores encontrados; alteração posterior `[nao verificado]`. | GER: PG; REG: PR. | **≥8**: `celulas_do_periodo` (`escala/alimentacao.py:42`); `escala_vigente` (`escala/servico_jornada.py:46`); `propostas` (`escala/services/propositor.py:488`); `grade_da_celula` (`L:325`); `motivos_retencao_celula` (`F:1188`); `montar_previa` (`folha/previa.py:77`); `orfas_e_isencao_da_ata` (`relatorios/cartao_pela_celula.py:288`); `emitir_evento_celula` (`P:631`). | Não diretamente; seleciona janela/versão — `C:1104`, `C:1148`, `C:947`. |
+| `trabalha` | GER `P:595`, `P:612`; REG `P:231`, `P:247`, `P:260`; REV `P:532`. | Cálculo EC/template — `P:243`, `P:590`; FolgaDia — `M:1257`, `M:1327`; âncora/ciclo — `M:1260`; feriado/praça — `M:1340`, `M:1362`; REV usa `dna_anterior.marcos` — `P:527`, `P:532`. | Sim: EG, regeneração explícita e reversão — `P:260`, `P:532`. | PG/PR conforme escritor. | **≥8**: `dia_sem_trabalho` (`J:408`); `eh_dia_trabalho` (`M:1072`); `grade_da_celula` (`L:345`); `classificar_falta` (`escala/servico_jornada.py:303`); `contexto_do_dia_texto` (`pautas/services.py:410`); `etiquetas_pela_celula` (`ponto/services/flip_auto.py:208`); `_veredito_do_dia` (`ponto/services/dia_do_colab.py:121`); `dia_da_frota` (`relatorios/dia_da_frota.py:47`). | Não — `C:333`. |
+| `origem` | GER/REG gravam `'gerada'` — `P:248`, `P:595`; default — `M:1659`. | Literal/default, não batidas — mesmas linhas. | Escritor posterior de `'editada'` não localizado `[nao verificado]`. | Criação GER: nenhum de competência; REG: PR. | **6**: `CelulaDia.__str__` (`M:1810`); `celulas_contra_o_template.Command.handle` (`escala/management/commands/celulas_contra_o_template.py:74`); GER (`P:598`); REG (`P:226`); REV (`P:518`); `dia_do_colab` (`ponto/services/dia_do_colab.py:90`). | Não — `C:333`. |
+| `escala_geradora` | GER `P:595`, `P:613`; REG `P:248`, `P:260`; REV `P:535`; declaração `SET_NULL` — `M:1661`. | EC fornecida; na reversão, `dna_anterior.vinculo_id` — `P:533`. | Sim: EG/REG/REV; deleção da EC pode nulificar pela relação — `M:1661`. | PG/PR; `SET_NULL`: nenhum portão de competência declarado no campo — `M:1661`. | **7**: `vinculo_do_dia` (`escala/alimentacao.py:238`); `contraprova_piso` (`chamados/management/commands/auditar_invariantes_chamados.py:389`); GER (`P:611`); REG (`P:228`); `regenerar_em_exportada` (`ponto/portas/regen_exportada.py:141`); `turnos_abertos_de` (`T:2316`); `dia_da_frota`, pré-carga utilizada na consulta do vínculo (`relatorios/dia_da_frota.py:35`, `:42`). | Não — `C:333`. |
+| `dna` | GER `P:596`, `P:604`, `P:614`; REG `P:232`, `P:248`, `P:260`; REV `P:530`. | `montar_dna`: template/marcos/pausas/ciclo/jornada/intervalo/extra declarada — `G:76`, `G:81`, `G:95`, `G:119`; condicionado a `trabalha` — `G:79`; REV copia `dna_anterior` — `P:527`. | Sim: EG/REG/REV; GER também enriquece DNA nulo passado — `P:603`. | PG/PR. | **≥8**: `marcos_do_dia` (`M:1099`); `pausas_do_dia` (`M:1162`); `extra_declarada_do_dia` (`M:1206`); `marcos_dna_periodo` (`U:97`); `pausas_de_celulas` (`U:130`); `contexto_do_dia_texto` (`pautas/services.py:406`); `periodos_do_dia` (`ponto/juiz_batida.py:158`); `_julgar_colab_corpo` (`C:998`). | **Sim: somente `dna_versao` e `marcos`** — `C:337`. |
+| `gerada_em` | `auto_now_add`, nos creates GER/REG — `M:1670`, `P:247`, `P:593`. | Relógio na criação — `M:1670`. | Não regravado pelos caminhos encontrados; comportamento declarado — `M:1675`. | Criação GER/REG conforme PG/PR. | **2**: `marcos_do_lote` (`chamados/veredito_lavrado.py:153`); `janelas_reabertas` (`escala/services/fase_12x36.py:190`). | Não — `C:333`. |
+| `regenerada_em` | REG `P:262`; REV `P:536`. | `timezone.now()` — mesmas linhas. | Sim em regeneração alterada/reversão. O ramo de limpeza fora da vigência salva só `trabalha/dna` — `P:231`, `P:233`. | PR. | **7**: `marcos_do_lote` (`chamados/veredito_lavrado.py:153`); `janelas_reabertas` (`escala/services/fase_12x36.py:189`); `houve_fato_novo` (`C:295`); `dia_do_colab` (`ponto/services/dia_do_colab.py:91`); `fila_de_orfas` (`escala/services/regeneracao.py:145`); `_marcar_cobrancas_orfas` (`G:242`); `supra_juiz.Command.handle` (`ponto/management/commands/supra_juiz.py:153`). | Não — `C:333`. |
+| `regeneracoes` | Default `0` — `M:1691`; REG `P:263`; REV `P:537`. | Valor anterior, ou zero, mais um — `P:263`, `P:537`. | Sim em REG/REV; GER não grava contador — `P:615`; limpeza fora da vigência também não — `P:233`. | PR. | **2**: REG (`P:263`); REV (`P:537`). | Não — `C:333`. |
+| `dna_anterior` | REG `P:261`; REV limpa — `P:531`. | DNA imediatamente anterior — `P:259`; na reversão, literal `None` — `P:531`. | Sim: sobrescrito por nova regeneração; apagado na reversão — mesmas linhas. | PR. | **2**: REV (`P:518`, `P:527`); `aplicar_col900.Command.handle` (`ponto/management/commands/aplicar_col900.py:68`). | Não — `C:333`. |
+| `editada_em` | Nenhum escritor de produção localizado `[nao verificado]`; o serviço registra “nenhum declarado hoje” — `escala/services/fase_12x36.py:161`. | `[nao verificado]`. | `[nao verificado]`. | `[nao verificado]`. | **3**: `marcos_do_lote` (`chamados/veredito_lavrado.py:154`); `janelas_reabertas` (`escala/services/fase_12x36.py:190`); `houve_fato_novo` (`C:295`). | Não — `C:333`. |
+| `editada_por` | Nenhum escritor explícito localizado `[nao verificado]`; relação declara `SET_NULL` — `M:1701`. | Escrita humana `[nao verificado]`; nulificação por deleção declarada — `M:1702`. | Deleção do usuário: `SET_NULL` — `M:1702`; demais eventos `[nao verificado]`. | Nenhum no campo — `M:1702`; demais caminhos `[nao verificado]`. | **0 localizado** `[nao verificado]`. | Não — `C:333`. |
+| `julgada_em` | CAR/SAVE — `P:800`, `P:807`, `P:640`. | Argumento `agora` do julgamento — `P:800`. | Sim por EJ quando impressão/insumos/lavra diferem; repetição idêntica retorna sem salvar — `P:795`. | PJ. | **7**: `marcos_do_lote` (`chamados/veredito_lavrado.py:154`); `janelas_reabertas` (`escala/services/fase_12x36.py:189`); CAR (`P:796`); `_julgar_colab_corpo` (`C:1000`); `celula_veredito_velho.Command.handle` (`ponto/management/commands/celula_veredito_velho.py:109`); `backfill_b5_insumos.Command.handle` (`ponto/management/commands/backfill_b5_insumos.py:61`); `vigia_b5_ausencia.medir` (`ponto/management/commands/vigia_b5_ausencia.py:55`). | Não — `C:333`. |
+| `impressao` | CAR/SAVE — `P:801`, `P:807`. | `impressao_insumos` — `C:998`, `C:1148`; composição detalhada abaixo — `C:333`. | Sim por EJ; comparação controla pulo — `C:1157`; `forcar` ignora pulo — `C:1161`. | PJ; versão participa do hash, não é bloqueio — `C:352`. | **3**: CAR (`P:797`); `_julgar_colab_corpo` (`C:1000`, `C:1157`); `celula_veredito_velho.Command.handle` (`ponto/management/commands/celula_veredito_velho.py:110`). | Não é insumo do próprio hash — `C:333`. |
+| `veredito` | LAV, persistido por SAVE/CAR — `P:770`, `P:775`, `P:807`. | Cartório: literal ou `derivar_veredito(codigos)` — `P:658`; códigos vêm da grade, batidas, cobertura, chamados/fio e cadastro — `C:1207`; humano fornece decisão — `P:750`, `ponto/services/veredito_celula.py:330`. | Sim por EJ/EA; cartório preserva decisão admin — `P:738`; idempotência — `P:753`. | PJ; precedência do admin é guarda de decisão, não de competência — `P:738`. | **≥8**: `_trilha_da_recusa` (`chamados/models.py:1148`); `retratar_chamados_absolvidos_por_celula` (`chamados/reconciliador.py:963`); `_absolvido_pela_celula` (`chamados/reconciliador.py:982`); `motivos_a_perguntar` (`chamados/services/fabrica_da_celula.py:86`); `grade_da_celula` (`L:365`); `motivos_retencao_celula` (`F:1215`); `montar_previa` (`folha/previa.py:94`); `dia_da_frota` (`relatorios/dia_da_frota.py:51`). | Não — `C:333`. |
+| `veredito_via` | LAV — `P:771`, `P:775`. | Argumento validado: `cartorio/admin` — `P:720`, `P:771`. | Sim por EJ/EA, respeitando decisão admin — `P:738`. | PJ. | **≥8**: `veredito_que_a_lavra_escreve` (`P:656`); `_status_alvo` (`P:694`); LAV (`P:722`); `_trilha_da_recusa` (`chamados/models.py:1154`); `retratar_chamados_absolvidos_por_celula` (`chamados/reconciliador.py:964`); `_chave_memo_pv` (`J:793`); `_pergunta_viva_calc` (`J:1046`); `contexto_calendario` (`colaboradores/services/calendario.py:513`). | Não — `C:333`. |
+| `veredito_em` | LAV — `P:772`, `P:775`. | `agora or timezone.now()` — `P:772`. | Sim quando muda julgamento/ata; completar só status não move essa data — `P:753`, `P:757`. | PJ; lote de status PS não move o campo — `P:757`. | **4**: `marcos_do_lote` (`chamados/veredito_lavrado.py:153`); `contexto_calendario` (`colaboradores/services/calendario.py:513`); `decisao_do_dia` (`ponto/services/veredito_celula.py:109`); `celula_veredito_velho.Command.handle` (`ponto/management/commands/celula_veredito_velho.py:107`). | Não — `C:333`. |
+| `protestos` | LAV — `P:769`, `P:775`. | Cartório copia códigos atuais — `P:746`, `C:1207`; admin preserva a própria coluna — `P:751`. | Sim por EJ; EA pode salvar a lista preservada — `P:751`, `P:769`. | PJ. | **6**: `motivos_retencao_celula` (`F:1228`); `nao_retem_pela_pausa` (`F:1147`); LAV (`P:722`); `_completar_status` (`C:733`); `julgar_colab` (`C:864`); `celula_veredito_velho.Command.handle` (`ponto/management/commands/celula_veredito_velho.py:108`). | Não — `C:333`. |
+| `ata` | LAV `P:741`, `P:768`; PREC `P:819`; persistência SAVE/CAR — `P:640`, `P:807`. | Grade/DNA/batidas/ausências/relógio — `C:564`, `C:610`, `C:713`; precedência — `C:1674`. LAV preserva `precedencia` anterior — `P:732`. | Sim por EJ; precedência aplicada no julgamento unitário após a lavra — `C:1721`; mesmo veredito com ata diferente também relavra — `P:735`, `P:767`. | PJ; decisão admin não impede atualizar ata — `P:738`, `P:741`. | **≥8**: `dia_sem_trabalho` (`J:407`); `_celula_furada` (`J:442`); `grade_da_celula` (`L:331`); `montar_previa` (`folha/previa.py:83`); `referencia_do_espelho` (`folha/validacao_pdf.py:47`); `periodos_do_dia` (`ponto/juiz_batida.py:157`); LAV (`P:731`); PREC (`P:816`). | Não diretamente — `C:333`; pode influenciar insumos indiretos, conforme grafo. |
+| `ausencia` | CAR `P:802`; LOTE `P:838`, `P:843`; relação `SET_NULL` — `M:1764`. | `ausencia_cobre(..., para='cobranca')` — `C:981`, `C:1106`; backfill — `ponto/management/commands/backfill_b5_insumos.py:72`. | Sim por EJ/EB; deleção também pode nulificar — `M:1765`. | CAR: PJ; LOTE: PB; `SET_NULL`: nenhum declarado no campo — `M:1765`. | **4**: `vigia_b5_ausencia.medir` (`ponto/management/commands/vigia_b5_ausencia.py:75`); CAR (`P:797`); LOTE (`P:835`); `assinaturas_do_colab` (`ponto/services/esmeril_espelho.py:133`). | Não: o hash recebe **status da cobertura consultada**, não esta FK — `C:335`, `C:1106`, `C:1148`. |
+| `tem_entrada` | CAR `P:803`; LOTE `P:839`, `P:843`. | `insumos_da_ata(ata,dna)`: lâmpada externa E/`dna.marcos.hi`; sem lâmpadas consulta `n_orfas` — `C:643`, `C:649`, `C:650`, `C:665`. | Sim por EJ/EB — `C:1578`, `ponto/management/commands/backfill_b5_insumos.py:73`. | PJ/PB. | **3**: `vigia_b5_ausencia.medir` (`ponto/management/commands/vigia_b5_ausencia.py:80`); CAR (`P:798`); LOTE (`P:836`). | Não — `C:333`. |
+| `tem_saida` | CAR `P:803`; LOTE `P:839`, `P:843`. | Mesma função, lâmpada externa S/`dna.marcos.hf` — `C:650`, `C:655`, `C:665`. | Sim por EJ/EB — `C:1578`, `ponto/management/commands/backfill_b5_insumos.py:73`. | PJ/PB. | **3**: `vigia_b5_ausencia.medir` (`ponto/management/commands/vigia_b5_ausencia.py:80`); CAR (`P:798`); LOTE (`P:836`). | Não — `C:333`. |
+| `insumos_em` | CAR `P:804`; LOTE `P:840`, `P:843`. | Argumento `agora`; backfill lê relógio — `P:804`, `ponto/management/commands/backfill_b5_insumos.py:59`. | Sim quando carimbo/insumos diferem; repetição idêntica não grava — `P:795`, `P:835`. | PJ/PB. | **3**: `vigia_b5_ausencia.medir` (`ponto/management/commands/vigia_b5_ausencia.py:71`); CAR (`P:796`); LOTE (`P:835`). | Não — `C:333`. |
+| `status_dia` | `_aplicar_status`, dentro de LAV; SAVE/CAR persistem — `P:705`, `P:743`, `P:760`, `P:773`. | `_status_alvo`: veredito/via + fatos atuais da grade — `P:694`, `P:698`; mapa admin — `S:52`, `S:64`; fatos incluem batidas, previsto/realizado, isenção, parcial e precedência humana — `S:124`, `S:143`. | Sim por EJ/EA; EB completa somente nulo/carimbo atual — `C:726`, `C:733`. | Lavra normal PJ; command PS. | **5**: `status_do_dia_lavrado` (`S:181`); `_completar_status` (`C:726`); `_status_alvo` (`P:697`); `_aplicar_status` (`P:703`); LAV (`P:723`). | Não — `C:333`. |
+| `status_rotulo` | Mesmo escritor/persistência de status — `P:705`, `P:743`, `P:760`, `P:773`. | Regra de status e vocabulário; exceção de rótulo do isento — `S:28`, `S:48`, `S:60`, `S:120`. | Sim por EJ/EA/EB, no mesmo ato do status — `P:705`, `C:733`. | PJ/PS. | **3**: `status_do_dia_lavrado` (`S:182`); `_status_alvo` (`P:697`); `_aplicar_status` (`P:703`). | Não — `C:333`. |
+
+O produtor atual emite nove chaves de topo em `ata_do_dia`; PREC acrescenta a décima, `precedencia` (`C:567`, `C:591`, `P:819`). Há oito chaves possíveis em cada item de `lampadas`, contando as opcionais (`C:501`, `C:540`, `C:424`, `C:620`, `C:714`), e seis dentro de `precedencia` (`C:1675`). Os elementos de `orfas` e `precedencia.suprimidos` são strings, sem subchaves (`C:574`, `ponto/precedencia.py:351`).
+
+Na tabela seguinte, **LAV/CAR** significa a preparação de `ata` por LAV e sua persistência por SAVE ou CAR (`P:768`, `P:775`, `P:807`). **EJ/PJ** mantém exatamente os eventos e portões definidos acima. Todas as chaves têm **FP não diretamente**, pelo corpo de `impressao_insumos` (`C:333`–`C:390`).
+
+| Chave de `ata` | Escritores de produção | Fonte do valor gravado | Regravação/evento | Portão | Leitores comprovados; contagem | FP |
+|---|---|---|---|---|---|---|
+| `tipo_dia` | `ata_do_dia` → LAV/CAR — `C:567`. | `dia.tipo_dia`; overlays FolgaDia/Ausencia/isenção na grade — `U:1109`, `U:1137`, `U:1785`. | Sim, EJ — `C:1557`. | PJ. | **3**: `dia_sem_trabalho` (`J:408`); `grade_da_celula` (`L:344`); `medir_ata_fantasma` (`ponto/management/commands/tripwire_celulas.py:342`). | Não — `C:333`. |
+| `lampadas` | `lampadas_do_dia`/`ata_do_dia` → LAV/CAR — `C:565`; transformações por dispensa/teto — `C:615`, `C:712`. | Match da grade, marcos/DNA, órfãs e sinal de realizado — `C:444`, `C:456`, `C:565`. | Sim, EJ — `C:1557`. | PJ. | **≥8**: `_celulas_da_ata` (`L:93`); `n_ok_lavrado` (`L:81`); `_celula_furada
+
+[truncado em 20000 de 37797 caracteres]
 
 ## 31/10 16:12 · sessao 16cb111707cb · - · - · origem=Ronald (tmux)
 
@@ -781,37 +870,4 @@ Entretanto, **há passagem indevida — PROCEDENTE, BLOQUEIA**:
 - **Painel com zeros sem leitura:** disparos, negações e liberações começam zerados; falha de abertura e linhas não parseadas são ignoradas; a apresentação imprime os zeros. Persiste #15. (`bin/disjuntor.py:1450`, `bin/disjuntor.py:1452`, `bin/disjuntor.py:1460`, `bin/disjuntor.py:1464`, `bin/disjuntor.py:1482`, `bin/disjuntor.py:1582`)
 - **Rc mascarado pelo hook:** a exceção é registrada, mas `main_pretool` retorna zero sem emitir negativa. No wrapper, especificamente, rc não zero de `--b3-parada` é recusado; o falso verde acima chega como rc zero. (`bin/disjuntor.py:1406`, `bin/disjuntor.py:1408`, `bin/disjuntor.py:989`; `bin/codex_pergunta.sh:54`)
 
-## 31/10 15:47 · sessao 0f4e6dd6efbc · - · - · origem=Ronald (tmux)
-
-**#8 e #9: cura parcial; PROCEDENTE, BLOQUEIA na migração de 8609b12c.** O estado antigo não possui `b3_triagem_linhas`; o novo leitor assume zero, aceita trilha ausente como `{}` e recalcula `codex=[]`. Com obra disparada, isso permite liberar arquivando lista vazia; restaurar as mesmas triagens dispara novamente. Uma trilha que perdeu linhas completas também passa nessa primeira leitura sem watermark. (`bin/disjuntor.py:811`, `bin/disjuntor.py:816`, `bin/disjuntor.py:822`, `bin/disjuntor.py:883`, `bin/disjuntor.py:913`, `bin/disjuntor.py:888`)
-
-Reproduzi o primeiro cenário exclusivamente em memória: estado herdado disparado com `[a,b,c]`, fonte ausente e ERRO-BOBO válido resultaram em `{}` e `liberado=[]`; restaurar `[a,b,c]` resultou em nova parada. O selo existente estabelece o watermark por `_xt` antes de retirar/corromper a fonte; não cobre essa migração. (`bin/tests/test_disjuntor.sh:1299`, `bin/tests/test_disjuntor.sh:1313`, `bin/tests/test_disjuntor.sh:1324`)
-
-**VERDE sem leitura: PROCEDENTE, BLOQUEIA.** Mesmo quando `_triagens` devolve `None`, `decide_b3` preserva o cache e somente impede liberações de obras já disparadas. Sem disparo anterior e com cache inferior a três, devolve `{}`; `b3_parada` retorna zero e o wrapper segue para Codex. (`bin/disjuntor.py:860`, `bin/disjuntor.py:882`, `bin/disjuntor.py:888`, `bin/disjuntor.py:898`, `bin/disjuntor.py:989`, `bin/codex_pergunta.sh:54`, `bin/codex_pergunta.sh:166`)
-
-| Campo do estado | Escritor(es) lógico(s) | Leitor(es) |
-|---|---|---|
-| `b1[agente].checado/disparado/motivo` | `b1_do_agente` (`bin/disjuntor.py:481`) | Cache/decisão (`bin/disjuntor.py:476`); disparados (`bin/disjuntor.py:490`) |
-| `b2.ultimo` | `b2_decide` (`bin/disjuntor.py:1134`) | Mesmo (`bin/disjuntor.py:1133`) |
-| `b4_para.desde` | `b4_stop`, incluindo remoção (`bin/disjuntor.py:1155`, `bin/disjuntor.py:1149`) | Mesmo (`bin/disjuntor.py:1157`) |
-| `b4.negou_desde` | `pretool`, incluindo remoção (`bin/disjuntor.py:1379`, `bin/disjuntor.py:1374`) | Mesmo (`bin/disjuntor.py:1373`) |
-| `b3_limiar` | `_migra_limiar` (`bin/disjuntor.py:710`) | Mesmo (`bin/disjuntor.py:699`) |
-| `b3_sem_obra` | `decide_b3` (`bin/disjuntor.py:871`) | `_b3_sem_obra` (`bin/disjuntor.py:1518`) |
-| `b3[obra].reprovados` | Migração, decisão e rearme (`bin/disjuntor.py:709`, `bin/disjuntor.py:877`, `bin/disjuntor.py:914`, `bin/disjuntor.py:959`) | Mesmos (`bin/disjuntor.py:705`, `bin/disjuntor.py:886`, `bin/disjuntor.py:955`) |
-| `b3[obra].disparado` | Decisão e rearme (`bin/disjuntor.py:889`, `bin/disjuntor.py:914`, `bin/disjuntor.py:959`) | Migração/decisão (`bin/disjuntor.py:702`, `bin/disjuntor.py:898`) |
-| `b3[obra].codex` | Decisão e rearme (`bin/disjuntor.py:883`, `bin/disjuntor.py:914`, `bin/disjuntor.py:959`) | Decisão/rearme (`bin/disjuntor.py:887`, `bin/disjuntor.py:955`) |
-| `b3[obra].rearmado` | Migração e rearme (`bin/disjuntor.py:708`, `bin/disjuntor.py:957`) | Decisão (`bin/disjuntor.py:874`, `bin/disjuntor.py:881`) |
-| `b3[obra].liberado` | Decisão (`bin/disjuntor.py:912`) | Decisão (`bin/disjuntor.py:874`, `bin/disjuntor.py:881`) |
-| `b3[obra].consumidas` | Decisão (`bin/disjuntor.py:915`) | Decisão (`bin/disjuntor.py:908`) |
-| `b3[obra].disparado_em/topo_no_disparo` | `_fotografa` (`bin/disjuntor.py:727`, `bin/disjuntor.py:730`) | Migração/fotografia/decisão (`bin/disjuntor.py:703`, `bin/disjuntor.py:728`, `bin/disjuntor.py:903`, `bin/disjuntor.py:910`) |
-| `b3_triagem_linhas` | `_triagens` **e** `triagem` (`bin/disjuntor.py:830`, `bin/disjuntor.py:797`) | Ambos (`bin/disjuntor.py:811`, `bin/disjuntor.py:797`) |
-
-**Há múltiplos escritores lógicos; não há escritor físico adicional identificado nesses caminhos. Não-bloqueia quanto à trava:** todo JSON passa por `_com_estado`, que toma `flock`, grava temporário e substitui o arquivo; migração/fotografia/rearme permanecem nessa trava. (`bin/disjuntor.py:249`, `bin/disjuntor.py:253`, `bin/disjuntor.py:274`, `bin/disjuntor.py:866`, `bin/disjuntor.py:921`, `bin/disjuntor.py:935`, `bin/disjuntor.py:971`)
-
-**Trilha de triagem:** timestamp, obra, volta e veredito têm escritor físico único `triagem`, agora sob a mesma trava. `_triagens` lê os quatro campos; timestamp é apenas separado, sem validação/uso; obra e volta formam o mapa e o último veredito prevalece. `_procedentes`, decisão, rearme e idempotência consomem esse mapa. (`bin/disjuntor.py:786`, `bin/disjuntor.py:794`, `bin/disjuntor.py:800`, `bin/disjuntor.py:813`, `bin/disjuntor.py:826`, `bin/disjuntor.py:829`, `bin/disjuntor.py:836`, `bin/disjuntor.py:883`, `bin/disjuntor.py:958`, `bin/disjuntor.py:790`)
-
-**Sidecar de identidade:** `obra/papel/hash/pid/fim/sha` são escritos pelo wrapper e lidos por `_le_id`/`triagem`; a validação estrutural não comprova autoria, preservando o achado #14. (`bin/codex_pergunta.sh:188`, `bin/disjuntor.py:757`, `bin/disjuntor.py:760`, `bin/disjuntor.py:780`, `bin/disjuntor.py:782`, `bin/disjuntor.py:784`)
-
-**Outros caminhos persistentes:** exceção no PreToolUse libera ferramenta; classificação textual pode pular a guarda Opus; o painel apresenta zeros quando não consegue ler a trilha. (`bin/disjuntor.py:1406`, `bin/disjuntor.py:501`, `bin/disjuntor.py:1367`, `bin/disjuntor.py:1450`, `bin/disjuntor.py:1482`, `bin/disjuntor.py:1578`)
-
-_1122 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1123 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
