@@ -1,7 +1,94 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 21:04** · publicado em **30/10/2026 21:07** (UTC-3)
+> Ultima resposta processada: **30/10/2026 21:12** · publicado em **30/10/2026 21:12** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 21:12 · sessao 2792b753efd0 · O261-E-CELULA-20 · verificador · origem=Code
+
+**1. A extração não altera os contadores de `censo()`**, considerando os mesmos dados e respostas dos leitores. A cadeia preserva a precedência do pai transcrito no diff: decisão → ausência → folga validada → admin. ([vigia_fio.py:194](/home/ronald/codex_ws/6a8c5300a64ff11b7fa84c1584c27615dfe38cd9/app/chamados/services/vigia_fio.py:194))
+
+| Comparação pai × novo | Resultado |
+|---|---|
+| Decisão | Mesmo `resolver_dia_oferecido_na_data(colab, data)`; incrementa o contador, acrescenta `c.pk` a `pendentes` e continua. `app/chamados/services/vigia_fio.py:194`, `app/chamados/services/vigia_fio.py:329` |
+| Ausência | Mesmo `ausencia_cobre(..., para='cobranca')`, teste de não nulo e `status in ABERTAS`; mesmo incremento e `continue`. `app/chamados/services/vigia_fio.py:196`, `app/chamados/services/vigia_fio.py:333` |
+| Folga | Mesmo `any`, estado `VALIDADA` e `_e_aceite_de_folga`; preservados contador, lista `celulas_escala_nao_descreve_o_dia`, limite e `continue`. `app/chamados/services/vigia_fio.py:199`, `app/chamados/services/vigia_fio.py:336` |
+| Admin | Continua sendo o último teste; preservados contador, lista `celulas_fio_do_admin`, limite e `continue`. `app/chamados/services/vigia_fio.py:201`, `app/chamados/services/vigia_fio.py:341` |
+
+Os argumentos são o mesmo colaborador, data e **todas** as perguntas da célula (`ps`). `lambda c=c: _fio_do_admin(c)` captura a célula corrente e mantém a chamada adiada; a falha da lista continua incrementando `fio_do_admin_sem_resposta` uma vez por dia que chega a esse teste. `app/chamados/services/vigia_fio.py:304`, `app/chamados/services/vigia_fio.py:328`, `app/chamados/services/vigia_fio.py:284`, `app/chamados/services/vigia_fio.py:297`.
+
+Permanecem os filtros anteriores, os incrementos de morto, `celulas_do_fio_morto`, `classes_do_fio_morto` e a classificação posterior de `pendentes`; portanto, os contadores derivados também conservam suas entradas. `app/chamados/services/vigia_fio.py:315`, `app/chamados/services/vigia_fio.py:346`, `app/chamados/services/vigia_fio.py:358`, `app/chamados/services/vigia_fio.py:380`.
+
+**2. Não encontrei contraexemplo residual no delta de `(d)`, dentro do contrato declarado.** O teste anterior de véu impede `(d)` com chamado vivo; `not ps` exige ausência de pergunta viva; a nova condição exige colaborador listado **e dia ausente**. `app/chamados/services/vigia_fio.py:497`, `app/chamados/services/vigia_fio.py:557`, `app/chamados/services/vigia_fio.py:569`.
+
+Sem porta e vencidas as leis anteriores:
+
+- Dia listado com BATIDA/CADASTRO sai para `alcance_fio_do_admin`. `app/chamados/services/vigia_fio.py:548`.
+- Dia listado com ESTRUTURA/sem dono, sem pergunta viva, recebe `(e, dia_na_lista_dono_estrutura|nenhum)`. A presença da chave distingue “sem dono” de “dia ausente”. `app/chamados/services/vigia_fio.py:573`, `app/escala/services/cadastro_realidade.py:670`.
+- Sem célula recebe `(e, sem_celula)`; com pergunta viva segue as causas da pergunta. `app/chamados/services/vigia_fio.py:560`, `app/chamados/services/vigia_fio.py:564`, `app/chamados/services/vigia_fio.py:579`.
+
+Nenhum dia do universo some ou duplica no processamento normal: `setdefault((colab, data), ...)` deduplica a identidade; cada chave passa uma vez pelo laço; cada saída incrementa um balde e continua, ou incrementa exatamente um morto e uma causa. `limite` trunca somente a lista. `app/chamados/services/vigia_fio.py:471`, `app/chamados/services/vigia_fio.py:529`, `app/chamados/services/vigia_fio.py:532`, `app/chamados/services/vigia_fio.py:551`, `app/chamados/services/vigia_fio.py:587`.
+
+O teste cobre explicitamente ESTRUTURA, mas falta a asserção correspondente a `dia_na_lista_dono_nenhum`. `app/chamados/tests/test_o261e_f5_alcance.py:174`.
+
+**3. Sim: o mutante que antecipa hoje sobrevive à cobertura do arquivo, por análise estática.** Os outros três possuem asserções que os detectariam. `app/chamados/tests/test_o261e_f5_alcance.py:114`, `app/chamados/tests/test_o261e_f5_alcance.py:141`, `app/chamados/tests/test_o261e_f5_alcance.py:185`, `app/chamados/tests/test_o261e_f5_alcance.py:193`.
+
+| Mutante | Resultado pela leitura dos testes | [nao verificado]
+|---|---|
+| Hoje antes das portas | **Sobrevive:** portas são testadas no dia passado; o caso `hoje=DIA` não cria porta. Falta cruzar hoje com cada porta e conferir o balde. `app/chamados/tests/test_o261e_f5_alcance.py:25`, `:114`, `:121`, `:206` |
+| Remover filtro do app | Detectado pelo negativo fora do app: surgiria uma porta indevida. `app/chamados/tests/test_o261e_f5_alcance.py:185` |
+| Remover exclusão da âncora na fila do véu | Detectado pela resposta vazia: mudaria `(b)` para `(a)`; também quebra o caso fora do app. `app/chamados/tests/test_o261e_f5_alcance.py:141`, `:185`; `app/chamados/services/vigia_fio.py:557` |
+| Contar `alcance_lista_sem_resposta` duas vezes | Detectado pelo `assertEqual(1, ...)` específico; as somas gerais não incluem esse contador. `app/chamados/tests/test_o261e_f5_alcance.py:197`, `:92` |
+
+Execução da suíte, execução dos mutantes e ocorrência desses cenários em produção: **[nao verificado]**. [nao verificado]
+
+## 30/10 21:11 · sessao 4caceba3830f · - · - · origem=Ronald (tmux)
+
+Não encontrei erro residual na correção de (d), considerando o contrato declarado e as fontes da cópia:
+
+- **Sem pergunta viva + colaborador listado + dia fora da lista:** cai em (d). O `elif veu` anterior impede atribuir (d) quando há chamado vivo; `ps` contém somente perguntas vivas. `app/chamados/services/vigia_fio.py:494-498`, `:557-570`.
+- **Dia listado, dono BATIDA/CADASTRO:** sai para `alcance_fio_do_admin`; **ESTRUTURA ou None**, sem pergunta viva, permanece em (e), detalhe `dia_na_lista_dono_estrutura` ou `dia_na_lista_dono_nenhum`. `app/chamados/services/vigia_fio.py:543-553`, `:573-576`. A leitura conserva presença e dono lavrado do dia, sem derivação nova. `app/escala/services/cadastro_realidade.py:655-670`.
+- **Com pergunta viva:** não entra em (d) nem no novo detalhe do dia listado; segue as causas e detalhes da pergunta. **Sem célula:** recebe `(e, sem_celula)`, antes de (d). São precedências expressas no código. `app/chamados/services/vigia_fio.py:560-586`.
+- **Nenhum dia do universo some ou duplica no processamento normal:** o universo é um dicionário por `(colab, data)`; cada chave é percorrida uma vez; as portas, hoje e quatro leis incrementam um balde e continuam; o restante incrementa exatamente um morto e uma causa. O limite trunca apenas a amostra. `app/chamados/services/vigia_fio.py:465-475`, `:529-553`, `:587-592`.
+- **A competência não duplica dias:** as janelas consecutivas têm início no corte e fim no corte menos um do mês seguinte; as datas vêm da mesma janela usada por `fora_da_folha`. `app/ponto/janelas.py:10-21`, `:54-72`; `app/folha/fora_da_folha.py:119-139`, `:168`.
+- **Detalhe literal `outra`:** não identifiquei entrada regular que o alcance. Sem véu, terminal ou âncora ausente, as âncoras têm de estar na fila; se alguma pergunta aparece no app e tem resposta válida, já seria porta; se tem resposta vazia, cai em (b). Pergunta viva nunca tem `validada_em` preenchida. `app/chamados/catalogo/motor.py:19-31`; `app/chamados/juizes.py:1005-1007`; `app/chamados/services/vigia_fio.py:535`, `:557-586`. Estado fora do catálogo ou inconsistência de FK em produção: [nao verificado].
+
+O teste já verifica explicitamente ESTRUTURA contra (d), mas não inclui o ramo `None`/`dia_na_lista_dono_nenhum`. `app/chamados/tests/test_o261e_f5_alcance.py:174-183`.
+
+## 30/10 21:10 · sessao a3d62278a9a7 · - · - · origem=Ronald (tmux)
+
+**Q1: a extração preserva os valores de `censo()` para os mesmos dados e respostas dos leitores.** As quatro condições do pai no diff anexo aparecem na mesma ordem e com os mesmos argumentos no helper: `resolver_dia_oferecido_na_data(colab, data)`; `ausencia_cobre(colab, data, para='cobranca')` seguida do teste `status in ABERTAS`; `any(p.estado == p.VALIDADA and _e_aceite_de_folga(p)...)`; chamada do admin. Cada retorno encerra a cadeia no primeiro resultado verdadeiro. (`app/chamados/services/vigia_fio.py:194`, `:196`, `:199`, `:201`.)
+
+| Item comparado ao pai do diff anexo | Resultado na cópia |
+|---|---|
+| Ponto da extração | Continua depois dos filtros de outro vocabulário, fio vivo e hoje/futuro; esses filtros mantêm seus incrementos e `continue`. (`app/chamados/services/vigia_fio.py:315`, `:320`, `:323`.) |
+| Argumentos | São o mesmo colaborador, a mesma data e a lista completa `ps`, obtida por célula. (`app/chamados/services/vigia_fio.py:304`, `:314`, `:328`.) |
+| Lambda do admin | `lambda c=c: _fio_do_admin(c)` captura a célula corrente e só chama `_fio_do_admin` se as três leis anteriores falharem; não antecipa a consulta da lista. (`app/chamados/services/vigia_fio.py:328`, `:201`.) |
+| Decisão pendente | Incrementa o mesmo contador, acrescenta `c.pk` a `pendentes` e continua. (`app/chamados/services/vigia_fio.py:329`.) |
+| Ausência aberta | Incrementa o mesmo contador e continua. (`app/chamados/services/vigia_fio.py:333`.) |
+| Folga validada | Incrementa o mesmo contador; preserva `len(lista) < limite`, o mesmo `c.pk` e o `continue`. (`app/chamados/services/vigia_fio.py:336`.) |
+| Fio do admin | Incrementa o mesmo contador; preserva `len(lista) < limite`, o mesmo `c.pk` e o `continue`. (`app/chamados/services/vigia_fio.py:341`.) |
+| Falha da lista | Continua armazenada uma vez em `_na_lista`, e cada dia que efetivamente chega ao admin incrementa `fio_do_admin_sem_resposta` uma vez. (`app/chamados/services/vigia_fio.py:284`, `:296`, `:297`.) |
+| Nenhuma lei satisfeita | Cai nos mesmos incrementos de morto, abertura por ausência/presença de perguntas, cobrança e listas. (`app/chamados/services/vigia_fio.py:346`.) |
+| Contadores derivados | `mortos` segue alimentando a classificação; `pendentes` segue alimentando `decisao_do_dia_pendente_com_alvo`, sem mudança nas operações segundo o diff. (`app/chamados/services/vigia_fio.py:358`, `:380`.) |
+
+Os testes antigos contêm verificações para precedência decisão/ausência, BATIDA/CADASTRO contra ESTRUTURA/sem dono, falha da lista uma vez por rodada e a lista da folga validada; a execução deles nesta análise não foi realizada **[nao verificado]**. (`app/chamados/tests/test_o261_vigia_fio.py:531`, `:553`, `:581`, `:626`.)
+
+A equivalência com o pai foi examinada pelo **diff fornecido**, não por checkout ou execução da revisão pai **[nao verificado]**.
+
+## 30/10 21:10 · sessao 295113302444 · - · - · origem=Ronald (tmux)
+
+O mutante **“hoje antes das portas” sobrevive à cobertura deste arquivo por análise estática**: as portas são plantadas em `DIA=01/09`, enquanto `HOJE=25/09`; o único caso que chama `hoje=DIA` não cria porta. Falta cruzar **dia de hoje + porta existente**, conferindo qual balde recebe o dia (`app/chamados/tests/test_o261e_f5_alcance.py:25`, `:26`, `:114`, `:121`, `:206`; ordem atual em `app/chamados/services/vigia_fio.py:532`, `:535`, `:538`).
+
+| Mutante | Resultado estático | Evidência |
+|---|---|---|
+| Mover teto de hoje antes das portas | Sobrevive à cobertura do arquivo; nenhum caso cruza hoje com porta. | `app/chamados/tests/test_o261e_f5_alcance.py:114`, `:121`, `:206` |
+| Remover `p.pk in no_app(cid)` da porta | Morto pelo negativo fora do app: o mutante produz porta e perde a linha esperada em `(e)`. | `app/chamados/services/vigia_fio.py:535`; `app/chamados/tests/test_o261e_f5_alcance.py:185`, `:190`, `:191` |
+| Remover `chamado_que_lista(p) not in fila_pk` do véu | Morto pelo caso de resposta vazia: a âncora `aberto`, sem célula e na fila, passa a compor o véu; `(a)` ganha precedência sobre `(b)`. Também quebra o negativo fora do app, de `(e)` para `(a)`. | `app/chamados/tests/test_o261e_f5_alcance.py:141`, `:142`, `:146`, `:185`, `:191`; `app/chamados/services/vigia_fio.py:557`, `:562`, `:564`; `app/chamados/catalogo/motor.py:24` |
+| Incrementar `alcance_lista_sem_resposta` duas vezes por dia | Morto: teste da lista falhando exige exatamente `1`. | `app/chamados/services/vigia_fio.py:543`, `:546`; `app/chamados/tests/test_o261e_f5_alcance.py:193`, `:197` |
+
+As somas auxiliares não detectam duplicação de `alcance_lista_sem_resposta`, pois esse contador não participa delas; quem detecta é a asserção específica `==1` (`app/chamados/tests/test_o261e_f5_alcance.py:90`, `:92`, `:95`, `:97`, `:197`).
+
+Resultado de execução dos testes/mutantes: **[nao verificado]**. [nao verificado]
 
 ## 30/10 21:04 · sessao 05e1da98864e · O261-E-CELULA-20 · verificador · origem=Code
 
@@ -844,91 +931,4 @@ Leitores diretos de `cobrado` / `VEREDITOS_ACUSAM`, fora de testes e migrations:
 
 A chave de contador `cobrado` em `app/ponto/services/furos_sem_cobranca.py:131` não é leitura de `CelulaDia.veredito`.
 
-## 30/10 19:52 · sessao 941ba3963a4b · - · - · origem=Ronald (tmux)
-
-Q5 — o contador mede **perguntas carimbadas**, uma por retorno verdadeiro de `p.encerrar_fantasma(user)`; não mede chamados nem disputas fechados (`app/chamados/reconciliador.py:1094`, `app/chamados/reconciliador.py:1104`). A porta grava `via_resolucao='fantasma'`, `materializada_em` e autor; retorna `False` quando já estava fantasma e carimbada (`app/chamados/models.py:2435-2442`).
-
-O universo varrido é todo o colaborador: perguntas sem materialização, sem validação, em disputa aberta, com data e motivo `orfao_14h` ou `saida_sem_entrada` (`app/chamados/reconciliador.py:991`, `app/chamados/reconciliador.py:995-1005`, `app/chamados/reconciliador.py:1082`). Para entrar no contador exige `veredito_orfa == ENCERRA`: resposta vazia, luz do próprio marco acesa, C6 vivo, dia passado e encerrado pelo juiz (`app/chamados/reconciliador.py:1033-1043`, `app/chamados/reconciliador.py:1083-1096`).
-
-A `self.respondida` **não é a segunda pergunta**: a fixture lhe dá resposta `'06:55'`, e `veredito_orfa` retorna `None` antes de consultar C6 para resposta não vazia (`app/chamados/tests/test_orfas_nao_morre_na_guarda_da_porta.py:90-93`; `app/chamados/reconciliador.py:1033-1038`). A contagem também é anterior às guardas para fechar a disputa; resposta pendente pode barrar disputa sem desfazer o incremento (`app/chamados/reconciliador.py:1104-1119`).
-
-A mudança é no **estado que chega à varredura**, não na fórmula do contador: base `_decisao_do_fechamento` só consultava motor e premissa (`/home/ronald/codex_ws/e54eae6ed8c46bc652434308bf918485dd3ac23e/app/chamados/models.py:467-472`); cópia acrescenta plano/C6 e retorna `None` diante de viva sem reata (`app/chamados/models.py:601-604`), fazendo `reconciliar()` retornar `False` (`app/chamados/models.py:574-576`).
-
-Há caminho de geração automática **antes das duas perguntas explícitas**: fixture cria batidas E e S antes de `self.muda` e `self.respondida` (`app/chamados/tests/test_orfas_nao_morre_na_guarda_da_porta.py:70-93`); cada batida aciona cartório (`app/ponto/signals.py:131-135`), que chama a fábrica após julgar (`app/ponto/services/cartorio.py:754-772`); a fábrica gera disputa/perguntas (`app/chamados/services/fabrica_da_celula.py:118-124`, `app/chamados/services/fabrica_da_celula.py:143-149`).
-
-Assim, a explicação estática é: o novo gate conserva uma pergunta automática que a base podia eliminar durante o setup, aumentando as candidatas posteriormente carimbadas. A identidade/PK e o motivo exatos da segunda pergunta contada não constam dos anexos: **[nao verificado]**. Não atribuir o `2` à respondida nem a duas disputas fechadas (`app/chamados/reconciliador.py:1033-1034`, `app/chamados/reconciliador.py:1104-1119`).
-
-## 30/10 19:33 · sessao f393335dd52b · O261-V-FASE · verificador · origem=Code
-
-**Achei um ponto funcional procedente: a CLI exige o vínculo “lido na listagem”, mas não o exibe.** O argumento é obrigatório e filtra corretamente a proposta; porém a impressão omite `vinculo_id`. Duas propostas iguais, de vínculos distintos, ficam indistinguíveis para quem precisa informar `--vinculo`. `app/escala/management/commands/propostas_de_escala.py:23`, `:33`, `:39`, `:80`.
-
-**1. Quem escreve e quem lê o vínculo**
-
-- **CLI:** o operador fornece `--vinculo`; o parser recebe, o filtro combina colaborador e vínculo, e aplicar/recusar recebem a proposta selecionada. Falta imprimir o EC na listagem. `app/escala/management/commands/propostas_de_escala.py:23`, `:39`, `:63`, `:68`, `:80`.
-- **Fio:** `proposta_do_fio` fornece `vinculo_id`; os dois formulários escrevem o hidden; `processar_post_fio` lê e repassa nos dois verbos; o recálculo exige correspondência do vínculo. Não encontrei bypass nesse percurso. `app/chamados/services/proposta_no_fio.py:79`, `:109`, `:134`, `:169`; `app/templates/chamados/partials/modal_fio.html:52`, `:59`; `app/chamados/services/fio.py:509`, `:511`, `:514`; `app/escala/services/propositor.py:685`.
-- **Chat:** o preview guarda o vínculo na sessão; o aceite o recupera e filtra junto da assinatura. Sessão antiga sem essa chave passa `''`, que não corresponde ao EC. `app/core/views_ia.py:578`, `:620`, `:650`; `app/escala/services/propositor.py:685`.
-- **Escrita final:** a porta recebe o vínculo da proposta; decisões aceita e recusada também o registram. `app/escala/services/propositor.py:718`, `:766`, `:774`.
-
-Ocorrência desses percursos em produção: **[nao verificado]**.
-
-**2. Imports, código morto e referências antigas**
-
-Não encontrei import local inexistente na análise estática dos `from` absolutos de `app`; execução real e cobertura dos imports relativos: **[nao verificado]**. Os candidatos sem definição estática `ENVELOPE_LOTE_MIN` e `ROTULO_LOTE` existem via `__getattr__`. `app/chamados/services/validacao.py:765`.
-
-Há parâmetros sem leitura nos corpos da cópia:
-
-- `empresas` em `_fase_deslocada`, `_termometro`, `_vinculo_divergente` e `_teto_do_dia`. O filtro efetivo da lista ocorre depois. `app/escala/services/cadastro_realidade.py:335`, `:285`, `:303`, `:315`, `:635`.
-- `dias_bat` e `dias_janela` em `_propor_pausa`; `dias_bat` em `_chamados_que_morreriam`; `hoje` em `_recusadas_recentes`. `app/escala/services/propositor.py:280`, `:617`, `:693`.
-- `hoje` em `linhas_para_a_pauta`. `app/chamados/services/fila_por_causa.py:379`.
-
-A introdução desses resíduos **nesta obra** é **[nao verificado]**. Os parâmetros com `_` de `dono_do_dia` estão explicitamente reservados à decisão de lei aberta. `app/escala/services/fase_12x36.py:78`, `:88`.
-
-Não encontrei teste importando/executando os antigos `fora_de_fase/JANELA_DIAS/PISO/CICLOS` de `fase_12x36`. A referência executável restante a `fora_de_fase` verifica sua ausência; outras são lápides/documentação. `app/escala/tests/test_o261_v_fase_na_lista.py:223`; `app/escala/tests/test_fase_12x36.py:3`; `app/chamados/tests/test_proposta_no_fio.py:186`.
-
-**3. Os testes mordem o chamador?** [nao verificado]
-
-**Sim, no repasse do POST:** exercitam `processar_post_fio` para aplicar e recusar e exigem `vinculo_da_tela='9'`. O render exige os dois hidden. `app/escala/tests/test_o261_v_fase_na_lista.py:434`, `:438`, `:439`; `app/chamados/tests/test_proposta_faixa_na_tela.py:85`, `:91`.
-
-O limite é preciso: o POST substitui os serviços por mocks; o cenário A desaparece/B tem mesma assinatura e seu controle positivo estão no auxiliar `_recalcular`. `app/escala/tests/test_o261_v_fase_na_lista.py:437`, `:418`, `:422`, `:425`.
-
-A CLI é exercitada por `call_command`, mas somente para aplicar sem vínculo. Não verifica a impressão do EC nem a seleção positiva — deixou escapar o achado da listagem. `app/escala/tests/test_o261_v_fase_na_lista.py:444`, `:451`, `:453`.
-
-Os intervalos históricos exatos são **[nao verificado]**, pois a cópia não contém `.git`. Execução da suíte Django: **[nao verificado]**. [nao verificado]
-
-## 30/10 19:32 · sessao 6430dea1929f · - · - · origem=Ronald (tmux)
-
-Achado de limpeza: `empresas` não é lido em `_fase_deslocada(empresas=None)`; o chamador passa esse argumento, mas o corpo apenas lê/formata a lavra. O filtro efetivo por empresa ocorre depois, em `lista()`. Isso não demonstra vazamento de escopo. Origem no intervalo `d80c98a5..2177fa08`: [nao verificado]. `app/escala/services/cadastro_realidade.py:335`, `:337`, `:348`, `:610`, `:635`.
-
-Outros parâmetros sem leitura na cópia, cuja origem histórica é [nao verificado]:
-
-- `_propor_pausa`: `dias_bat`, `dias_janela`. `app/escala/services/propositor.py:280`.
-- `_chamados_que_morreriam`: `dias_bat`. `app/escala/services/propositor.py:617`.
-- `_recusadas_recentes`: `hoje`; corte usa `timezone.now()`. `app/escala/services/propositor.py:693`, `:700`.
-- `_termometro`, `_vinculo_divergente`, `_teto_do_dia`: `empresas`. `app/escala/services/cadastro_realidade.py:285`, `:303`, `:315`.
-- `linhas_para_a_pauta`: `hoje`. `app/chamados/services/fila_por_causa.py:379`.
-
-Os argumentos `_colab_id`, `_dia`, `_ec_do_dia` de `dono_do_dia` são explicitamente reservados à decisão de lei aberta; não classifiquei como resíduo acidental. `app/escala/services/fase_12x36.py:78`, `:81`, `:88`.
-
-Não encontrei import local inexistente na varredura AST dos `from` absolutos locais de `app`; execução real desses imports: [nao verificado]. Os únicos nomes sem definição estática encontrados (`ENVELOPE_LOTE_MIN`, `ROTULO_LOTE`) são fornecidos por `__getattr__`. `app/chamados/services/validacao.py:765`, `:767`, `:769`.
-
-Não encontrei teste executando/importando `fora_de_fase`, `JANELA_DIAS`, `PISO` ou `CICLOS` de `fase_12x36`. A referência executável restante a `fora_de_fase` exige sua ausência; demais ocorrências são comentários/lápides. `app/escala/tests/test_o261_v_fase_na_lista.py:223`, `:226`; `app/escala/tests/test_fase_12x36.py:3`; `app/chamados/tests/test_proposta_no_fio.py:186`.
-
-Todas as funções/constantes de topo de `fase_12x36`, `propositor`, `censo_fase_12x36` e `proposta_no_fio` tiveram referência AST de leitura/importação encontrada; isso não prova alcance em produção. [nao verificado].
-
-## 30/10 19:32 · sessao 92ffc021dfdb · - · - · origem=Ronald (tmux)
-
-Achado procedente: **a CLI exige um vínculo que sua listagem não informa**. `--vinculo` é anunciado como “o vínculo da proposta que você leu na listagem” e obrigatório para decidir (`app/escala/management/commands/propostas_de_escala.py:23`, `:33`), mas o loop imprime somente colaborador, template, âncoras, casamento e chamados; nunca `vinculo_id` (`:80`, `:83`, `:89`, `:93`). Duas propostas iguais exceto pelo vínculo aparecem indistinguíveis. Reprodução somente em memória com a classe `Command` e propostas fictícias confirmou isso; ocorrência concreta em produção [nao verificado].
-
-Fluxo conferido:
-
-- CLI: humano fornece `--vinculo`; parser lê em `propostas_de_escala.py:23`; filtro seleciona por colaborador **e** vínculo em `:39`; aplicação/recusa recebem essa proposta em `:63`, `:68`. Falta o escritor do ID na listagem (`:80`).
-- Fio: `proposta_do_fio` fornece o ID em `app/chamados/services/proposta_no_fio.py:79`; os dois formulários escrevem o hidden em `app/templates/chamados/partials/modal_fio.html:52`, `:59`; POST lê `''` por omissão e repassa em `app/chamados/services/fio.py:509`, `:511`, `:514`; os serviços passam ao recálculo em `proposta_no_fio.py:134`, `:169`; o auxiliar compara o vínculo em `app/escala/services/propositor.py:685`. Não identifiquei bypass nesse caminho.
-- Chat: preview guarda o vínculo em sessão em `app/core/views_ia.py:620`; aceite lê com `''` por omissão em `:650`; helper repassa à seleção por assinatura/vínculo em `:578`. Não identifiquei bypass nesse caminho.
-- Escrita final usa `p['vinculo_id']` na porta em `app/escala/services/propositor.py:766`; decisão aceita e recusada registram o ID em `:774`, `:718`.
-- Caminhos produtivos encontrados são CLI, fio e chat: chamadas diretas em `propostas_de_escala.py:63`, `:68`, `proposta_no_fio.py:147`, `:172`, `views_ia.py:660`; escritor dinâmico declarado em `app/core/intake.py:51`.
-
-Testes relacionados: POST exercita o chamador real nos dois verbos e confere o repasse (`app/escala/tests/test_o261_v_fase_na_lista.py:428`, `:434`, `:439`); render exige dois hidden com o ID (`app/chamados/tests/test_proposta_faixa_na_tela.py:85`, `:91`). Teste CLI cobre ausência de vínculo somente no aplicar (`test_o261_v_fase_na_lista.py:444`, `:451`); não cobre sua impressão na listagem nem seleção positiva do EC (`:448`).
-
-Atribuição exata ao delta histórico [nao verificado]: a cópia disponibilizada não contém `.git`.
-
-_751 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_755 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
