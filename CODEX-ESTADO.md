@@ -1,7 +1,196 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 12:17** · publicado em **31/10/2026 12:17** (UTC-3)
+> Ultima resposta processada: **31/10/2026 12:21** · publicado em **31/10/2026 12:22** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 12:21 · sessao 46797b835cdf · E4-1 · leitura · origem=Code
+
+**Não existe um conjunto `S` que torne a coluna equivalente a P-hoje para todo dia julgado.** A precedência consulta fatos atuais; a lavra combina grade, batidas, isenção e veredito. Inclusive `folga` pode resultar com P-hoje verdadeiro ou falso. `app/ponto/precedencia.py:305`, `app/ponto/status_dia.py:96`, `app/chamados/services/feriado_reavaliar.py:34`.
+
+**1(a) — Todos os retornos de `status_da_lavra`**
+
+Na tabela, aplica-se **a primeira linha satisfeita**. Notação: `B=tem_batida`, `G=tipo_dia`, `M=previsto_min`, `I=isento`, `C=cobertura_parcial`, `V=veredito`, `H=folga_humana`. `R={furo, discordante, cobrado, nunca_bateu, fato_em_ausencia}`; `A=R∪{indefinida}`. `app/ponto/status_dia.py:55`, `app/ponto/status_dia.py:70`.
+
+| Ordem | Combinação de entrada | Status | Ramo |
+|---|---|---|---|
+| 1 | `!B && G=falta` | `falta` | `app/ponto/status_dia.py:96` |
+| 2 | `!B && G=ausencia`, salvo `C && !I && V∈A` | `ausencia` | `app/ponto/status_dia.py:98` |
+| 3 | `V=indefinida && H && B` | `folga_trabalhada` | `app/ponto/status_dia.py:101` |
+| 4 | `V=indefinida && H && !B` | `folga` | `app/ponto/status_dia.py:103` |
+| 5 | `V=indefinida && !H` | `escala_suspeita` | `app/ponto/status_dia.py:104` |
+| 6 | `!B && (G=folga || !M)` | `folga` | `app/ponto/status_dia.py:105` |
+| 7 | `!B && I` | `ok`, rótulo `isento de ponto` | `app/ponto/status_dia.py:108` |
+| 8 | `!B && V=coberta` | `ausencia` | `app/ponto/status_dia.py:110` |
+| 9 | `!B && V∈R` | `irregular` | `app/ponto/status_dia.py:112` |
+| 10 | Demais entradas sem batida | `sem_certidao` | `app/ponto/status_dia.py:114` |
+| 11 | `B && (G=folga || V=fato_sem_previsao)` | `folga_trabalhada` | `app/ponto/status_dia.py:115` |
+| 12 | `B && V∈R` | `irregular` | `app/ponto/status_dia.py:117` |
+| 13 | `B && V∈{concorde,coberta,cobranca_indevida}` | `ok`, rótulo de isento quando `I` | `app/ponto/status_dia.py:119` |
+| 14 | Demais entradas com batida | `sem_certidao` | `app/ponto/status_dia.py:121` |
+
+`aberto`, `previsto` e `sem_dados` pertencem a `ROTULO_STATUS`, mas **não são devolvidos por `status_da_lavra`**. No leitor, `sem_dados` vem da ausência de célula; `aberto/previsto` vêm do relógio; célula sem status pode devolver `previsto` ou `sem_certidao`. `app/ponto/status_dia.py:28`, `app/ponto/status_dia.py:173`, `app/ponto/status_dia.py:177`, `app/ponto/status_dia.py:184`.
+
+A coluna também tem uma segunda regra de entrada: decisão administrativa usa `status_do_admin`: `trabalhou→ok`, `faltou→falta`, `justificado→ausencia`; `_status_alvo` preserva essa autoridade mesmo numa passagem do cartório. `app/ponto/status_dia.py:52`, `app/ponto/portas/celula.py:694`.
+
+**1(b) — Composição dos fatos, da grade e do status**
+
+As tabelas seguintes especificam as combinações por etapas: primeiro `faixa/era_dia_previsto`; depois `tipo_dia/minutos_previstos`; finalmente a primeira linha aplicável de 1(a). Essa é também a composição implementada: precedência monta seus candidatos, a grade aplica overlays, e `fatos_do_status` extrai a entrada da lavra. `app/ponto/precedencia.py:332`, `app/escala/utils.py:1785`, `app/ponto/status_dia.py:146`.
+
+A grade analisada abaixo é a implementação **por turno**, padrão da configuração. A flag efetiva do ambiente é [não verificado]. O dispatcher também admite o legacy; esse merge não propaga `minutos_previstos`, que `fatos_do_status` converte em zero quando ausente. `app/config/settings/base.py:165`, `app/escala/utils.py:2024`, `app/escala/utils.py:1016`, `app/ponto/status_dia.py:146`.
+
+**Como a precedência calcula `era_dia_previsto`:**
+
+| Célula/vínculo | `era_dia_previsto` |
+|---|---|
+| `celula.trabalha=True` | `True`, inclusive sem vínculo válido. `app/ponto/precedencia.py:305`, `app/ponto/precedencia.py:316` |
+| `celula.trabalha=False` | `False`, inclusive sem vínculo válido. `app/ponto/precedencia.py:316` |
+| Célula inexistente ou `trabalha=None`, com vínculo | Resultado de `eh_dia_trabalho_calculado`; exceção resulta em `None`. `app/ponto/precedencia.py:324` |
+| Célula inexistente ou `trabalha=None`, sem vínculo | `None`. `app/ponto/precedencia.py:325` |
+
+A geradora declarada pela célula só vale dentro de sua vigência; fora dela a seleção devolve `None`, sem escolher outro vínculo como reserva. `app/escala/alimentacao.py:239`, `app/escala/alimentacao.py:247`.
+
+**Sem ausência vencedora**, sejam `F=feriado no calendário aplicável`, `T=trabalha_em_feriado do vínculo selecionado`, `L=FolgaDia considerada pela precedência`, `p=era_dia_previsto`:
+
+| Combinação | `faixa` | `era_dia_previsto` | Fonte |
+|---|---|---|---|
+| `F && p=True && T=True`, sem `L` | `trabalho` | `True` | `app/ponto/precedencia.py:330`, `app/ponto/precedencia.py:339` |
+| `F && p=True && T=True`, com `L` | `folga` | `True` | `app/ponto/precedencia.py:330`, `app/ponto/precedencia.py:337` |
+| `F` e qualquer outra combinação de `p/T` | `feriado` | Mantém `p`, inclusive `None` | `app/ponto/precedencia.py:330`, `app/ponto/precedencia.py:335` |
+| Sem feriado candidato; `L` ou `p=False` | `folga` | Mantém `p` | `app/ponto/precedencia.py:337` |
+| Sem feriado candidato nem `L`; `p=True` | `trabalho` | `True` | `app/ponto/precedencia.py:339` |
+| Sem feriado candidato nem `L`; `p=None` | `None` | `None` | `app/ponto/precedencia.py:342` |
+
+Para `L`, a precedência pega a primeira FolgaDia por `pk` de cada data. Se ela tem `calendario_origem` e pertence a outro vínculo, descarta essa linha; não procura uma segunda FolgaDia. A manual não passa por esse descarte de vínculo. `app/ponto/precedencia.py:234`, `app/ponto/precedencia.py:313`.
+
+**Ausências na precedência:**
+
+| Fato | Efeito em `faixa/era_dia_previsto` |
+|---|---|
+| Ausência inteira ou parcial, não rejeitada | Entra pela faixa do tipo, sem testar cobertura parcial; não modifica `era_dia_previsto`. `app/ponto/precedencia.py:227`, `app/ponto/precedencia.py:332`, `app/ponto/precedencia.py:360` |
+| `ferias` | Faixa `ferias`. `app/ponto/precedencia.py:53` |
+| Tipos mapeados como afastamento | Faixa `afastamento`. `app/ponto/precedencia.py:54` |
+| `atestado/atestado_inss` | Faixa `atestado`. `app/ponto/precedencia.py:58` |
+| `folga_compensatoria/feriado_folga` | Faixa `folga`; feriado candidato ainda vence. `app/ponto/precedencia.py:62`, `app/ponto/precedencia.py:46` |
+| `falta` ou outro tipo fora do mapa | Faixa `atestado`, portanto vence feriado/folga. `app/ponto/precedencia.py:76`, `app/ponto/precedencia.py:349` |
+| Mais de uma ausência | Considera todas e escolhe pela precedência `ferias > afastamento > atestado > feriado > folga > trabalho`. `app/ponto/precedencia.py:46`, `app/ponto/precedencia.py:349` |
+
+**Base da grade por turno, antes dos overlays:**
+
+| Combinação | `tipo_dia` | `minutos_previstos` | Fonte |
+|---|---|---|---|
+| Sem vínculo selecionado ou sem tipo de escala | `folga` | `0` | `app/escala/utils.py:1543`, `app/escala/utils.py:1743` |
+| Vínculo não intermitente; `eh_dia_trabalho=False` | `folga` | `0` | `app/escala/utils.py:1548`, `app/escala/utils.py:1743` |
+| Vínculo não intermitente; `eh_dia_trabalho=True` | `trabalho` | Soma dos segmentos previstos `E→S` | `app/escala/utils.py:1550`, `app/escala/utils.py:1578`, `app/escala/utils.py:1749` |
+| Vínculo não intermitente; `eh_dia_trabalho=None` | `trabalho`, `sem_ancora=True` | Mesma soma dos marcos | `app/escala/utils.py:1548`, `app/escala/utils.py:1701`, `app/escala/utils.py:1749` |
+| Intermitente sem batidas disponíveis para convocação | Não monta turno; cai em `folga/0` | `0` | `app/escala/utils.py:1476`, `app/escala/utils.py:1743` |
+| Intermitente com convocação por batidas | Monta o dia na pré-passagem própria | Previsto próprio desse ramo | `app/escala/utils.py:1480`, `app/escala/utils.py:1720` |
+
+Logo, os booleanos enumerados na pergunta não fixam um número de minutos: o ramo comum soma a duração dos segmentos dos marcos encadeados. `app/escala/utils.py:1578`.
+
+**Onde entram feriado e `trabalha_em_feriado` na grade:**
+
+A grade chama:
+
+```python
+if e.eh_dia_trabalho(d, celulas=_cels_gr, folgas=_folgas_gr) is False:
+    continue
+```
+
+`app/escala/utils.py:1548`.
+
+Esse método devolve a célula existente diretamente:
+
+```python
+if cel is not None:
+    return cel.trabalha
+return self.eh_dia_trabalho_calculado(data, folgas=folgas)
+```
+
+`app/escala/models.py:1071`.
+
+Portanto, **havendo célula, a grade não reaplica o feriado nesse gate**. O tratamento está no fallback calculado:
+
+```python
+if base is True and self.feriado_vira_folga(data, escala=escala):
+    return False
+```
+
+`app/escala/models.py:1338`.
+
+O helper recusa a transformação quando `trabalha_em_feriado=True` ou quando o ciclo não pertence a `6x1/5x2/semanal`; depois consulta o feriado pelo lugar do colaborador. `app/escala/models.py:1357`, `app/escala/models.py:32`.
+
+Isso produz, entre outras, estas combinações diretas, antes de overlays:
+
+| Fatos | Precedência | Grade | Status resultante |
+|---|---|---|---|
+| Célula `True`, vínculo válido, feriado, `T=False` | `feriado/True` | `trabalho/M` | Pela tabela 1(a): sem batida e `V∈R` dá `irregular`; isento dá `ok`; com batida, `concorde` dá `ok`. `app/ponto/precedencia.py:330`, `app/escala/models.py:1071`, `app/ponto/status_dia.py:108`, `app/ponto/status_dia.py:112`, `app/ponto/status_dia.py:119` |
+| Mesmos fatos, `T=True` | `trabalho/True` | `trabalho/M` | Mesmos ramos de status; muda P-hoje. `app/ponto/precedencia.py:330`, `app/ponto/status_dia.py:105` |
+| Célula `False`, feriado, qualquer `T` | `feriado/False` | `folga/0` | Sem batida: `folga`; com batida: `folga_trabalhada`; `indefinida` também segue `H=True`. `app/ponto/precedencia.py:330`, `app/escala/utils.py:1548`, `app/ponto/status_dia.py:101`, `app/ponto/status_dia.py:105`, `app/ponto/status_dia.py:115` |
+| Célula `False`, sem feriado/ausência/folga humana | `folga/False` | `folga/0` | Normalmente `folga/folga_trabalhada`; com `indefinida`, `H=False` dá `escala_suspeita`. `app/ponto/precedencia.py:337`, `app/ponto/precedencia.py:191`, `app/ponto/status_dia.py:104` |
+| Sem vínculo, célula `True`, sem feriado | `trabalho/True` | `folga/0` | Sem batida e `nunca_bateu`: `folga`; `indefinida`, sem natureza humana: `escala_suspeita`. `app/ponto/precedencia.py:316`, `app/escala/utils.py:1543`, `app/ponto/status_dia.py:104`, `app/ponto/status_dia.py:105` |
+| Sem vínculo, célula `True`, com feriado | `feriado/True` | `folga/0` | Sem batida: `folga`, inclusive com `indefinida`, pois `H=True`. `app/ponto/precedencia.py:330`, `app/ponto/status_dia.py:103`, `app/ponto/status_dia.py:105` |
+| Sem vínculo, célula inexistente ou `None`, com feriado | `feriado/None` | `folga/0` | Pode resultar `folga`, mas P-hoje pula por previsão `None`. `app/ponto/precedencia.py:325`, `app/ponto/precedencia.py:335`, `app/ponto/status_dia.py:103`, `app/chamados/services/feriado_reavaliar.py:34` |
+
+**Overlays que completam todas essas combinações:**
+
+| Fato adicional | Grade após o overlay | Consequência para o status |
+|---|---|---|
+| FolgaDia manual, cujo vínculo participa da janela | `folga`, apaga células/órfãs; **mantém os minutos anteriormente calculados** | Sem batida: `folga`; com batida: `folga_trabalhada`; `indefinida` consulta a natureza humana. `app/escala/utils.py:1109`, `app/escala/utils.py:1118`, `app/ponto/status_dia.py:101`, `app/ponto/status_dia.py:105`, `app/ponto/status_dia.py:115` |
+| FolgaDia de calendário de **outro vínculo** | Só aplica se esse outro vínculo estiver em `escs_janela_ids`; quando aplica, muda todos os dias correspondentes da grade, sem conferir o vínculo de cada data ou `calendario_origem` | Pode produzir `folga/folga_trabalhada` enquanto a precedência descartou essa FolgaDia. `app/escala/utils.py:1260`, `app/escala/utils.py:1109`, `app/escala/utils.py:1785`, `app/ponto/precedencia.py:313` |
+| Ausência pendente/não aprovada | Não entra no overlay de ausência da grade; a precedência a considera se não rejeitada | Mantém o status derivado da grade anterior, apesar de poder mudar `faixa`. `app/escala/utils.py:1148`, `app/ponto/turnos.py:2487`, `app/ponto/precedencia.py:227` |
+| Ausência aprovada inteira, não `falta` | `ausencia`, mantém minutos, limpa células/órfãs | Sem batida: `ausencia`, inclusive com `indefinida`. Com batida: segue os ramos de veredito de 1(a). `app/escala/utils.py:1180`, `app/escala/utils.py:1195`, `app/ponto/status_dia.py:98`, `app/ponto/status_dia.py:115` |
+| Ausência aprovada parcial | `ausencia`, mantém minutos e células, grava `cobertura_parcial=True` | Sem batida, não isento, `V∈R`: `irregular` se há previsto; `indefinida`: `escala_suspeita` salvo `H`; demais: `ausencia`. Se previsto zero, o ramo 6 pode devolver `folga`. `app/escala/utils.py:1190`, `app/ponto/status_dia.py:98`, `app/ponto/status_dia.py:101`, `app/ponto/status_dia.py:106`, `app/ponto/status_dia.py:112` |
+| Parcial + isento Art.62, sem batida | Continua `ausencia` | `ausencia`, inclusive `nunca_bateu/indefinida`. `app/ponto/status_dia.py:98` |
+| Falta aprovada sobre dia que não está em `folga` | `falta`, mantém minutos, limpa células/órfãs | Sem batida: `falta`, antes de qualquer veredito. `app/escala/utils.py:1170`, `app/escala/utils.py:1173`, `app/ponto/status_dia.py:96` |
+| Falta aprovada sobre `folga` | Mantém `folga` | Pode dar `folga/folga_trabalhada`; a precedência, contudo, considera a falta na faixa `atestado`. `app/escala/utils.py:1170`, `app/ponto/precedencia.py:76`, `app/ponto/status_dia.py:105`, `app/ponto/status_dia.py:115` |
+| Ausência sem nenhum vínculo selecionado na janela | O loop não chama `_marcar_ausencias` | Permanece a classificação base da grade. `app/escala/utils.py:1785` |
+| Isento Art.62 | Overlay posterior a folga/ausência; não muda tipo nem minutos, marca células presumidas como `isencao` | Trabalho sem batida, previsto positivo e sem ramo anterior: `ok`; folga/ausência conservam seus ramos anteriores. `app/escala/utils.py:1790`, `app/escala/utils.py:819`, `app/ponto/status_dia.py:96`, `app/ponto/status_dia.py:108` |
+
+A cobertura parcial é determinada pelo registro: tipo admite horas, período de um dia, `0<minutos<480`. A grade escolhe a ausência aprovada mais recente por `(data,pk)`, enquanto a precedência considera todas as não rejeitadas e ordena por faixa. `app/ponto/turnos.py:2571`, `app/ponto/turnos.py:2734`, `app/ponto/turnos.py:2750`, `app/ponto/precedencia.py:349`.
+
+`B` não significa apenas “existe linha de Batida”: `fatos_do_status` conta células não missing/não isenção, órfãs **ou realizado positivo**. Assim, limpar células por folga/ausência inteira não garante `B=False`. `app/ponto/status_dia.py:143`.
+
+`H` só é consultado quando `V=indefinida`: é verdadeiro para feriado vencedor, FolgaDia vencedora ou subtipo de ausência na faixa folga; mera folga da escala não basta. `app/ponto/status_dia.py:135`, `app/ponto/precedencia.py:187`.
+
+**1(c) — Equivalência e diferenças nos dois sentidos**
+
+Para `batida_ausente` com dia encontrado, P-hoje equivale a:
+
+```text
+era_dia_previsto != None
+e faixa ∈ {feriado, folga}
+```
+
+O catálogo associa qualquer subcategoria desse módulo a `falta_descoberta`; passando esse fato como `False`, a premissa está morta. `app/chamados/services/feriado_reavaliar.py:30`, `app/chamados/services/feriado_reavaliar.py:34`, `app/chamados/catalogo/premissa.py:58`, `app/chamados/catalogo/premissa.py:134`.
+
+**Prova de que não existe `S`:** considere o caminho implementado com célula `trabalha=True`, geradora fora da vigência, sem ausência e sem adesão. A seleção não encontra vínculo, a grade produz `folga/0`, e o ramo sem adesão lavra `nunca_bateu`; o status é `folga`. Sem feriado, a precedência devolve `trabalho/True`, e P-hoje rejeita; com feriado, devolve `feriado/True`, e P-hoje aceita. O mesmo valor `folga` exigiria pertencer e não pertencer a `S`. `app/escala/alimentacao.py:250`, `app/escala/utils.py:1543`, `app/escala/utils.py:1743`, `app/ponto/services/cartorio.py:964`, `app/ponto/services/cartorio.py:1041`, `app/ponto/status_dia.py:105`, `app/ponto/precedencia.py:316`, `app/ponto/precedencia.py:335`.
+
+Como `S` não existe, as diferenças dependem do conjunto escolhido. Para o conjunto de rótulos `S₀={folga,folga_trabalhada}`, esta é a **partição completa dos ramos divergentes**, sempre respeitando os retornos anteriores da tabela 1(a):
+
+| Sentido | Combinação | Resultado |
+|---|---|---|
+| P-hoje aceita, coluna fora de `S₀` | Sem batida, grade `ausencia`, sem a exceção da parcial | `ausencia`. Inclui os subtipos `folga_compensatoria/feriado_folga`, que A2 põe em folga e a grade em ausência. `app/ponto/precedencia.py:62`, `app/escala/utils.py:1180`, `app/ponto/status_dia.py:98` |
+| P-hoje aceita, coluna fora de `S₀` | `indefinida && !H`, sem retorno anterior | `escala_suspeita`. O ramo puro cobre folga de escala; sua produção pelo classificador num julgamento consistente é [não verificado]. `app/ponto/status_dia.py:104`, `app/ponto/tests/test_e3_status_lavrado.py:105` |
+| P-hoje aceita, coluna fora de `S₀` | Sem batida, grade diferente de folga, previsto positivo, veredito diferente de `indefinida`, sem retorno anterior | Isento: `ok`; `coberta`: `ausencia`; `V∈R`: `irregular`; demais: `sem_certidao`. É a divergência do feriado vivo sobre célula `True`, entre outras entradas. `app/ponto/precedencia.py:330`, `app/ponto/status_dia.py:108` |
+| P-hoje aceita, coluna fora de `S₀` | Com batida, grade diferente de folga, `V` diferente de `indefinida/fato_sem_previsao` | `R→irregular`; `concorde/coberta/cobranca_indevida→ok`; demais→`sem_certidao`. `app/ponto/status_dia.py:115` |
+| Coluna em `S₀`, P-hoje rejeita | `indefinida && H`, sem retorno anterior, mas `era_dia_previsto=None` | `folga` ou `folga_trabalhada`; P-hoje pula o dia desconhecido. `app/ponto/status_dia.py:101`, `app/chamados/services/feriado_reavaliar.py:34` |
+| Coluna em `S₀`, P-hoje rejeita | Sem batida, `V!=indefinida`, `G=folga || !M`, sem retorno anterior, e P-hoje falso | `folga`. Abrange falta sobre folga, ausência pendente que vence A2, overlay de outro vínculo, grade sem vínculo e trabalho com previsto zero. `app/ponto/status_dia.py:105`, `app/escala/utils.py:1170`, `app/ponto/precedencia.py:227`, `app/escala/utils.py:1785`, `app/escala/utils.py:1743` |
+| Coluna em `S₀`, P-hoje rejeita | Com batida, `V!=indefinida`, `G=folga || V=fato_sem_previsao`, e P-hoje falso | `folga_trabalhada`. `app/ponto/status_dia.py:115` |
+
+No mesmo estado das fontes, P-hoje verdadeiro com `status_da_lavra=falta` não nasce do pipeline descrito: a grade exige ausência aprovada `tipo=falta`, e essa linha também entra em A2 na faixa `atestado`, que vence feriado/folga. A coluna administrativa ou antiga tem caminhos adicionais, já separados acima. `app/escala/utils.py:1173`, `app/ponto/precedencia.py:227`, `app/ponto/precedencia.py:76`, `app/ponto/portas/celula.py:694`.
+
+**1(d) — Quando a coluna pode ficar desatualizada**
+
+`status_do_dia_lavrado` não compara a coluna com os fatos atuais nem relavra. Quando o relógio permite ler a lavra, devolve `cel.status_dia/status_rotulo` existentes. `app/ponto/status_dia.py:171`, `app/ponto/status_dia.py:181`.
+
+| Escrita | Ordem e condição de desatualização |
+|---|---|
+| **Feriado criado/alterado** | `save/create` agenda somente `reavaliar_dia` em `on_commit`; não relavra antes. Se mudou de data, captura somente a **nova data**. `app/core/views_config.py:58`, `app/core/views_config.py:81`, `app/chamados/signals.py:265` |
+| **Feriado apagado** | A tela executa `delete`; não há `post_delete` de reavaliação, explicitamente porque esse serviço apenas fecha. `app/core/views_config.py:198`, `app/chamados/signals.py:260` |
+| **FolgaDia manual pelas portas** | Lançar/alterar/lote escreve a foto e chama regeneração. A cura depende de o dia ser efetivamente tocado e elegível para julgamento; não é atualização incondicional do status. `app/escala/folgas.py:257`, `app/escala/folgas.py:301`, `app/escala/folgas.py:328`, `app/ponto/portas/celula.py:360` |
+| **Foto de calendário** | Apaga a foto anterior não manual, faz `bulk_create` e chama `relavrar_celulas_da_foto→regenerar_celulas_vinculo`; mesmas condições da re
+
+[truncado em 20000 de 32859 caracteres]
 
 ## 31/10 12:17 · sessao 10cecc7608df · - · - · origem=Ronald (tmux)
 
@@ -1023,32 +1212,4 @@ A ausência parcial é distinção particularmente relevante: o suprajuiz a admi
 
 7. **Não identifiquei novo escritor persistente fora da porta nas alterações descritas:** os emissores somente passaram a consumir o juiz, e os escritores examinados permanecem na porta declarada. O gate existente declara allowlist vazia e censura escrita externa; sua execução nesta auditoria é **[não verificado]**. (`app/ponto/portas/celula.py:44`, `app/ponto/tests/test_chokepoint_celula_gate.py:21`, `app/ponto/tests/test_chokepoint_celula_gate.py:49`)
 
-## 31/10 11:39 · sessao c60552d62fc3 · CODEX-LICOES · verificador · origem=Code
-
-A v2 deixa lacunas de operação, concorrência e medição. Primeiro, a distinção de versão: **o wrapper da cópia é anterior ao anexo**; aceita quatro papéis e monta um cabeçalho menor. O contexto `4435ec64` aparece como pronto, com pouso retido. As referências abaixo são da cópia. (bin/codex_pergunta.sh:48; bin/codex_pergunta.sh:118; app/docs/BACKLOG.md:871)
-
-1. **O gatilho pode chegar antes da correção provada.** A classificação acontece quando o opus reprova, e a reprovação devolve a obra ao ciclo de correção. Publicar a tabela não garante que já exista o commit/RED exigido para ensinar a lição. Falta declarar como o achado fica pendente e como a chamada retoma depois da prova. (CLAUDE.md:598; CLAUDE.md:614) [nao verificado]
-
-2. **Uma `.q` e uma `.r` podem perder a prova da classificação.** A classificação vigente usa **todas** as perguntas, respostas e linhas de triagem, devolvendo os trechos por achado; voltas intermediárias podem conter apenas delta. O contrato precisa vincular a lição à linha dessa classificação e às evidências relevantes, identificando as voltas. (CLAUDE.md:614; CLAUDE.md:618)
-
-3. **Rodar em fundo não assegura sair do caminho crítico.** Todos os papéis disputam o mesmo gate e os mesmos slots; uma lição pode atrasar o próximo verificador. A espera por slot ocorre antes do `timeout`. Se a consolidação chamar outro wrapper mantendo o slot da geração, também pode haver esgotamento circular de slots — comportamento futuro [nao verificado]. Defina quando o slot é liberado e o limite da espera. (bin/codex_pergunta.sh:137; bin/codex_pergunta.sh:150; bin/codex_pergunta.sh:153; bin/codex_pergunta.sh:157)
-
-4. **Existe recusa antes de qualquer rc 75.** O disjuntor pode impedir a chamada no `PreToolUse`: acima do orçamento diário só passa a volta final; acima de 85% semanal exige escada. Isso vale para qualquer papel. O contrato não define o destino da lição/consolidação impedida nesse ponto. (bin/disjuntor.py:897; bin/disjuntor.py:906; bin/disjuntor.py:938; bin/tests/test_disjuntor.sh:489)
-
-5. **A regra de falha está incompleta.** Além de 75, existem uso inválido, falha de cópia, raspagem recusada, timeout e erro genérico. O contrato permanente exige tratamento de erro, timeout e limite. A transcrição deve depender de sucesso integral da chamada, resposta nova e validação; não basta excluir 75 e formato inválido. (bin/codex_pergunta.sh:39; bin/codex_pergunta.sh:99; bin/codex_pergunta.sh:105; bin/codex_pergunta.sh:157; bin/tests/test_codex_limite.sh:36; CLAUDE.md:651)
-
-6. **O limite de 20 tem uma transição contraditória.** Pelo item 3, primeiro pode haver mais de 20 ativas; se a consolidação falhar e “mantém”, permanecem mais de 20, contrariando o selo do item 4. A candidata precisa ficar fora da versão ativa até uma consolidação válida, ou ser recusada preservando a versão anterior com até 20. Trata-se de lacuna do protocolo proposto; implementação [nao verificado].
-
-7. **Append atômico não resolve sozinho a consolidação concorrente.** Uma consolidação pode ler a versão A, outra chamada acrescentar uma lição e, depois, a primeira substituir tudo pelo resultado calculado sobre A. Falta exigir comparação da versão-base antes da substituição, além de definir alocação de IDs únicos e deduplicação do mesmo achado. O protocolo futuro não está demonstrado [nao verificado]; a regra vigente pede escritor canônico com tripwire. (CLAUDE.md:32)
-
-8. **SHA com par no log não prova toda escrita externa.** Regravar externamente uma versão antiga já registrada preserva a condição “SHA possui par”. Além disso, arquivo e log são duas escritas: falta definir recuperação de interrupção entre elas e recusa quando o registro falha. O wrapper atual grava `ini` e continua sem testar o sucesso desse append; esse comportamento não basta para a nova garantia. (CLAUDE.md:32; bin/codex_pergunta.sh:88)
-
-9. **O SHA pode identificar conteúdo diferente do recebido.** Hoje os anexos são raspados, concatenados e cortados em **300.000 bytes**, sem recusa por truncamento. Lições acrescentadas ao fim podem desaparecer; acrescentadas antes podem deslocar a correção provada. Vinte itens também não limitam bytes ou tokens. É necessário congelar uma versão por chamada, definir seu teto e ligar o SHA ao bloco efetivamente enviado. (bin/codex_pergunta.sh:111; bin/codex_pergunta.sh:114; bin/codex_pergunta.sh:115; bin/codex_pergunta.sh:133)
-
-10. **O A/B precisa de uma exceção explícita a “toda chamada leva lições”.** O wrapper atual não oferece seleção do braço; fixa esforço `high`, mas não fixa modelo na invocação nem registra braço/modelo/anexos no `ini`. Também falta congelar as lições durante os pares e separar tarefas de avaliação das obras usadas para ensiná-las. Sem isso, repetição de um achado pode parecer generalização; a medição anterior já registrou sinal de eco. (bin/codex_pergunta.sh:32; bin/codex_pergunta.sh:88; bin/codex_pergunta.sh:157; app/docs/RELATO.md:176)
-
-11. **Há leitores e testes além do wrapper para atualizar.** Os dois novos papéis hoje dão rc 2; liberá-los somente no wrapper faz contagens e tokens virarem `outro`. O SHA deve preservar as posições existentes do log e ganhar leitor próprio. Os selos atuais verificam sandbox, raspagem, procedência e limite; esses verdes não demonstram concorrência, consolidação, transcrição ou desligamento das lições. (bin/codex_pergunta.sh:48; bin/codex_limite_estado.py:23; bin/codex_limite_estado.py:63; bin/codex_limite_estado.py:78; bin/codex_limite_estado.py:194; bin/tests/test_codex_pergunta.sh:2; bin/tests/test_codex_sonda.sh:90; bin/tests/test_codex_limite.sh:31)
-
-A medição proposta também precisa declarar seu alcance: gabarito do opus não cobre a classe **“nenhum viu”**, descoberta depois por suite, produção ou outra pessoa. Essa classe exige cura estrutural e selo; lição não substitui esse fechamento. (CLAUDE.md:623) [nao verificado]
-
-_990 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_991 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
