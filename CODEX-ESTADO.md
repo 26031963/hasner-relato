@@ -1,7 +1,176 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 16:38** · publicado em **31/10/2026 16:39** (UTC-3)
+> Ultima resposta processada: **31/10/2026 16:40** · publicado em **31/10/2026 16:44** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 16:40 · sessao 0449d96ad80d · PADRAO-DE-CIMA · leitura · origem=Code
+
+1. **Parecer geral: há infraestrutura reaproveitável, mas o PADRAO-DE-CIMA ainda precisa de uma decisão própria.** O B3 atual agrupa por **obra**, conta reprovações finais/triagens procedentes e dispara em limiares diferentes dos desenhos por entidade; sua transição não implementa `visto_em`, janela de desenhos ou episódios nomeados. (`bin/disjuntor.py:878`, `bin/disjuntor.py:891`, `bin/disjuntor.py:896`, `bin/disjuntor.py:912`)
+
+   Duas premissas do anexo estão desatualizadas: **o parser já extrai `CODEX_OBRA`**, e **exceções do envelope já negam no ramo B3**. (`bin/disjuntor.py:1337`, `bin/disjuntor.py:1496`)
+
+   Os anexos fornecidos não contêm linhas reais do RELATO nem conteúdo de `disjuntor_estado.json`; todos os cenários abaixo são sintéticos, e sua ocorrência em produção é **[nao verificado]**.
+
+2. **Linha “quem chama”: pontos de entrada existem; falta conectar a nova decisão.**
+
+   O PreToolUse chama `disjuntor.py pretool`; o Stop consulta `julga_b3`; o wrapper consulta diretamente `--b3-parada`, depois de esperar pelo slot e obter a trava da resposta. Esses são os pontos existentes para integrar o instrumento. (`.claude/settings.json:68`, `bin/hook_stop_fila1.py:1048`, `bin/codex_pergunta.sh:156`, `bin/codex_pergunta.sh:162`, `bin/codex_pergunta.sh:165`)
+
+   **Contraexemplo:** entidade `Batida` disparada para `OBRA-A`; chamada feita por `export CODEX_OBRA=OBRA-A; CODEX_PAPEL=verificador bin/codex_pergunta.sh …`. O parser da invocação não recupera a obra exportada no trecho anterior; implementar PADRAO somente no PreToolUse deixaria essa passagem descoberta. O wrapper recebe a obra efetiva e hoje protege apenas pelo B3. Cenário **[nao verificado]**; comportamento fundamentado em `bin/disjuntor.py:1292`, `bin/disjuntor.py:1335`, `bin/disjuntor.py:1443`, `bin/codex_pergunta.sh:44`, `bin/codex_pergunta.sh:165`.
+
+3. **Linha “quem espera” + regra BLOQUEIO: implementação parcial; o alcance atual é menor.**
+
+   `_obra_de()` já identifica obra em prompt, e `_nega()` já emite a negativa de ferramenta. Entretanto, o ramo B3 de Agent exige **verificador e leitura final**: não alcança construtor nem verificador de desenho. (`bin/disjuntor.py:504`, `bin/disjuntor.py:1395`, `bin/disjuntor.py:1454`)
+
+   **Contraexemplo:** estado pretendido `Batida.disparado=true`, obras alcançadas `{OBRA-A}`. `Agent(prompt="Construa a obra OBRA-A")` e verificador com “leitura de desenho da obra OBRA-A” passam pelo filtro B3 atual; uma nova decisão precisa alcançá-los, supondo os demais disjuntores livres. Cenário **[nao verificado]**; filtros em `bin/disjuntor.py:114`, `bin/disjuntor.py:499`, `bin/disjuntor.py:1454`.
+
+   **Limite oposto:** bloquear toda obra do programa alcançaria `OBRA-C`, que nunca produziu evento na entidade, contrariando o escopo declarado. Esse estado e essa associação são **[nao verificado]**; o código atual não fornece agrupamento por entidade, apenas `b3[obra]`. (`bin/disjuntor.py:891`, `bin/disjuntor.py:897`)
+
+4. **Linha FALHA/LIMITE + regra NAO_SEI: não se pode copiar o comportamento do B3 sem restringi-lo.**
+
+   Estado ilegível já levanta erro; `julga_b3()` transforma a exceção em motivo de desconhecimento, e `estado_b3()` devolve `NAO_SEI` para **qualquer obra consultada** quando existe esse motivo. Isso é mais amplo que “somente as obras das entidades disparadas no último estado legível”. (`bin/disjuntor.py:265`, `bin/disjuntor.py:291`, `bin/disjuntor.py:977`, `bin/disjuntor.py:986`)
+
+   **Contraexemplo:** último estado legível alcançava apenas `{OBRA-A}`; o JSON vira `{lixo`; consulta de `OBRA-B` também é recusada pelo B3 atual. Para o novo ramo, seria bloqueio indevido. Cenário **[nao verificado]**; decisão em `bin/disjuntor.py:982`, `bin/disjuntor.py:992`, `bin/disjuntor.py:1046`.
+
+   Falta uma fonte recuperável do **último escopo legível**: os leitores atuais retornam o estado presente ou levantam erro; não recuperam uma fotografia anterior. Guardar essa fotografia apenas dentro do JSON que pode ficar ilegível não resolve a recuperação. (`bin/disjuntor.py:259`, `bin/disjuntor.py:291`)
+
+   RELATO ilegível também exige adaptação: `_topo_consistente()` retorna `None`, mas a decisão B3 apenas impede liberação nesse caso; o motivo explícito de `NAO_SEI` nessa transição vem da triagem ilegível. (`bin/disjuntor.py:681`, `bin/disjuntor.py:884`, `bin/disjuntor.py:925`, `bin/disjuntor.py:964`)
+
+   A garantia de **consumir antes de liberar** já tem molde utilizável: gravação sob trava, confirmação de persistência e cancelamento da liberação quando a escrita falha. (`bin/disjuntor.py:237`, `bin/disjuntor.py:274`, `bin/disjuntor.py:958`)
+
+5. **Linha MEDIDA: painel e ESTADO existem; as medidas novas não.**
+
+   Há escritor de disparos, agregador de trilha e formatador do painel; o gerador de ESTADO importa esse mesmo agregador/formatador. (`bin/disjuntor.py:139`, `bin/disjuntor.py:1546`, `bin/disjuntor.py:1677`, `bin/gerar_estado.py:280`)
+
+   Faltam desenhos por entidade, liberações do novo instrumento e eventos `entidade=None`: o retorno atual expõe medidas B3, e a apresentação enumera IDs fixos. (`bin/disjuntor.py:1615`, `bin/disjuntor.py:1620`, `bin/disjuntor.py:1679`)
+
+   **Contraexemplo:** acrescentar somente `DISJUNTOR PADRAO-DE-CIMA` à trilha permitiria ao agregador contar o ID, mas ele continuaria ausente da enumeração apresentada; dois eventos sem entidade também não apareceriam como tal. Cenário **[nao verificado]**; agregação/apresentação em `bin/disjuntor.py:1578`, `bin/disjuntor.py:1679`.
+
+6. **Linha “quem desliga” + regra DESLIGAMENTO: a chave existe, mas há uma falha na porta do wrapper.**
+
+   `desligado()` consulta `DISJUNTOR_DESLIGADO` por `lexists`; PreToolUse e Stop respeitam essa chave. A guarda também impede ferramentas do Code que nomeiem a chave ou removam o hook por determinadas edições. (`bin/disjuntor.py:144`, `bin/disjuntor.py:152`, `bin/disjuntor.py:1486`, `bin/hook_stop_fila1.py:1039`)
+
+   Porém o wrapper chama `--b3-parada` incondicionalmente para verificador; o caminho CLI → `b3_parada()` → `estado_b3()` não consulta a chave. (`bin/codex_pergunta.sh:164`, `bin/disjuntor.py:1709`, `bin/disjuntor.py:1042`, `bin/disjuntor.py:989`)
+
+   **Contraexemplo:** chave presente, `b3["OBRA-A"].disparado=true`, fontes legíveis. O hook fica desligado, mas o wrapper ainda recusa a chamada. Reutilizar essa porta para PADRAO exige corrigir também o desligamento nela. Cenário **[nao verificado]**; `bin/disjuntor.py:1487`, `bin/disjuntor.py:1043`, `bin/codex_pergunta.sh:165`.
+
+7. **Regra EVENTO: falta o reconhecedor de eventos do RELATO vivo.**
+
+   O B3 atual obtém reprovações de transcripts e triagens; seu reconhecedor de linhas do RELATO serve à **liberação**, aceitando `DESENHO` e `ERRO-BOBO`, não às três formas de evento contratadas. (`bin/disjuntor.py:736`, `bin/disjuntor.py:883`, `bin/disjuntor.py:626`)
+
+   `_topo_consistente()` lê os bytes completos, mas devolve somente as duas primeiras linhas úteis. Reutilizar diretamente sua saída para contar desenhos perderia eventos no restante do RELATO. (`bin/disjuntor.py:662`, `bin/disjuntor.py:679`, `bin/disjuntor.py:686`, `bin/hook_stop_fila1.py:439`)
+
+   **Contraexemplo sintético:** estas duas linhas, no corpo depois do topo, deveriam produzir dois eventos `Batida`, mas não seriam vistas por esse recorte **[nao verificado]**:
+
+   ```text
+   DESENHO OBRA-A: pergunta=x app/ponto/registro_batida.py:152
+   PERGUNTA DE DESENHO OBRA-B: pergunta=y app/ponto/registro_batida.py:157
+   ```
+
+   Os dois sítios são escritas explícitas de `Batida`. (`app/ponto/registro_batida.py:152`, `app/ponto/registro_batida.py:157`)
+
+   Para evitar falsos eventos, o reconhecedor novo precisa distinguir as formas válidas de `~~DESENHO…~~`, `DESENHO <obra>: …` e prosa como `resultado = DESENHO`. Não há esse reconhecedor na decisão atual. (`bin/disjuntor.py:878`, `bin/disjuntor.py:930`)
+
+8. **Regra TEMPO: hash reaproveitável como mecanismo; identidade e janela ainda precisam ser implementadas.**
+
+   `_sha_b3()` calcula SHA da linha com normalização própria do topo; não registra primeira observação. A janela de 24 horas existente no painel usa timestamps da **trilha**, não `visto_em` de desenhos. (`bin/disjuntor.py:571`, `bin/disjuntor.py:1548`, `bin/disjuntor.py:1563`)
+
+   **Contraexemplo de retorno:** evento com `visto_em=T−90000` some e volta em `T`; recriar seu registro com `visto_em=T` faria um evento antigo voltar à janela. É necessário preservar a identidade mesmo fora da janela. Estado sintético **[nao verificado]**; esse histórico não pertence ao estado B3 hoje manipulado. (`bin/disjuntor.py:891`, `bin/disjuntor.py:936`)
+
+   **Contraexemplo de normalização:** acrescentar `RESPONDIDA` à mesma linha muda o hash de `_sha_b3()`. Usá-lo diretamente pode transformar uma atualização do mesmo desenho em segundo evento. (`bin/disjuntor.py:573`) A normalização contratual que impediria essa duplicação não foi especificada **[nao verificado]**.
+
+9. **Regra ENTIDADE: o censo fornece insumos, mas não o resolvedor completo.**
+
+   `varrer_arvore()` expõe `arquivo`, `linha`, `entidade`, `op` e `expr`, com caminhos relativos a `app/`. Não expõe função/intervalo nem flag estruturada `DIRETA`; esses vínculos precisam de adaptação. (`app/core/censo_escritas.py:361`, `app/core/censo_escritas.py:469`, `app/core/censo_escritas.py:489`)
+
+   Não basta aceitar `entidade != None`: o censo também atribui entidades por inferência de campo, relacionamento e nome da variável. (`app/core/censo_escritas.py:387`, `app/core/censo_escritas.py:413`, `app/core/censo_escritas.py:420`, `app/core/censo_escritas.py:424`)
+
+   **Contraexemplo:** `app/ponto/registro_batida.py:254` contém `batida.save(update_fields=list(campos))`; a atribuição por nome não pode ser promovida automaticamente a DIRETA. Agrupá-la com um evento direto de `Batida` pode provocar disparo indevido e impedir o fallback ao programa. Cenário **[nao verificado]**; escrita e inferência em `app/ponto/registro_batida.py:254`, `app/core/censo_escritas.py:424`.
+
+   `modelos()` atende literalmente à busca por nomes de classes, mas inclui qualquer classe de topo com bases, exceto nomes terminados em `QuerySet`/`Manager`. Por exemplo, inclui a exceção `ResolvedoraCruzada(ValueError)`: duas citações poderiam agrupar uma “entidade” que não é modelo Django. (`app/core/censo_escritas.py:89`, `app/core/censo_escritas.py:108`, `app/chamados/models.py:2179`, `app/core/tests/test_censo_escritas.py:264`)
+
+   O fallback BACKLOG → PROGRAMA ainda carece de resolvedor: as relações documentais aparecem como “1o do programa”, “complemento” e “linha da E4”. Uma busca simples por token não cobre essas formas. (`app/docs/BACKLOG.md:771`, `app/docs/BACKLOG.md:773`, `app/docs/BACKLOG.md:774`)
+
+10. **Regra GATILHO: exige contador por entidade e nomeação por associação evento–entidade.**
+
+    O contador atual mede reprovações e voltas Codex por obra; não implementa `>=2 eventos na janela` e `>=1 não nomeado`. (`bin/disjuntor.py:909`, `bin/disjuntor.py:912`)
+
+    **Contraexemplo de redisparo:** `e1` e `e2` são `Batida`, continuam na janela e foram nomeados; chega `e3`, também `Batida`, não nomeado. Um simples marcador permanente “entidade liberada” deixaria passar o terceiro evento; o contrato exige novo disparo. Estado sintético **[nao verificado]**; o mecanismo atual de exclusão é por IDs liberados/rearmados do B3. (`bin/disjuntor.py:898`, `bin/disjuntor.py:905`)
+
+    **Contraexemplo com múltiplas entidades:** `e1` pertence a `{Batida, CelulaDia}`. Liberar `Batida` e escrever um único booleano global `e1.nomeado=true` também nomearia indevidamente sua participação em `CelulaDia`. O registro precisa distinguir essas associações. Proposta e cenário **[nao verificado]**.
+
+    A permanência de um disparo depois de todos os eventos saírem da janela não está definida no anexo; copiar o travamento persistente do B3 escolheria esse comportamento implicitamente. **[nao verificado]**; persistência atual em `bin/disjuntor.py:912`, `bin/disjuntor.py:922`, `bin/disjuntor.py:938`.
+
+11. **Regra LIBERAÇÃO: atomicidade aproveitável; sintaxe e episódio são novos.**
+
+    `linhas_libera_b3()` não reconhece `PADRAO-DE-CIMA <entidade>: classe=… padrao=… armadilha=… obra=…`; aceita somente o desenho B3 ou erro bobo. (`bin/disjuntor.py:626`, `bin/disjuntor.py:639`, `bin/disjuntor.py:650`)
+
+    Há um extrator de vocabulário em `bin/tests/test_lei_akita.sh`, dentro de heredoc Python. Ele consulta GLOSSARIO/PLANO por `git show`, compara termos completos e não oferece uma regra independente para “nome clássico declarado”. (`bin/tests/test_lei_akita.sh:65`, `bin/tests/test_lei_akita.sh:75`, `bin/tests/test_lei_akita.sh:89`, `bin/tests/test_lei_akita.sh:138`) A forma dessa declaração continua **[nao verificado]**.
+
+    **Contraexemplo de liberação insuficiente:** entidade disparada com eventos de `{OBRA-A, OBRA-B}`; aplicar o consumo atual apenas a `b3[OBRA-A]` não nomeia o episódio da entidade nem libera coerentemente as duas obras. O consumo atual pertence a cada obra. Cenário **[nao verificado]**; `bin/disjuntor.py:909`, `bin/disjuntor.py:932`, `bin/disjuntor.py:939`.
+
+    **Contraexemplo de persistência:** se a gravação do consumo falhar, responder “liberado” permitiria reutilizar a mesma linha na chamada seguinte. O B3 já oferece o tratamento correto dessa falha, restaurando a negativa após escrita malsucedida. (`bin/disjuntor.py:958`, `bin/disjuntor.py:960`)
+
+12. **Campos de estado: hoje não há escritores/leitores dos campos novos; há estes donos concretos da infraestrutura existente.**
+
+    | Campo/artefato existente | Quem escreve | Quem lê |
+    |---|---|---|
+    | `disjuntor_estado.json` físico | `_com_estado`, temporário e substituição: `bin/disjuntor.py:237`, `bin/disjuntor.py:271` | `_com_estado` e `ler_estado`: `bin/disjuntor.py:260`, `bin/disjuntor.py:291` |
+    | `b3[obra].reprovados`, `codex`, `disparado` | `decide_b3`: `bin/disjuntor.py:900`, `bin/disjuntor.py:907`, `bin/disjuntor.py:913` | `decide_b3`: `bin/disjuntor.py:909`; resultado por `estado_b3`: `bin/disjuntor.py:989` |
+    | `disparado_em`, `topo_no_disparo` | `_fotografa`: `bin/disjuntor.py:727`, `bin/disjuntor.py:730` | `decide_b3`: `bin/disjuntor.py:927`, `bin/disjuntor.py:934` |
+    | `consumidas`, `liberado` | `decide_b3`: `bin/disjuntor.py:936`, `bin/disjuntor.py:939` | `decide_b3`: `bin/disjuntor.py:898`, `bin/disjuntor.py:932` |
+    | `<resposta>.id`: obra/papel/hash/pid/fim/sha | Wrapper: `bin/codex_pergunta.sh:198` | `_le_id` e triagem: `bin/disjuntor.py:753`, `bin/disjuntor.py:795` |
+    | `triagem.log`; `b3_triagem_linhas` | `_triagem_sob_trava`: `bin/disjuntor.py:812`, `bin/disjuntor.py:815`; contador também atualizado em `bin/disjuntor.py:853` | `_triagens`: `bin/disjuntor.py:823` |
+    | `disjuntor.log` | `trilha`/`dispara`: `bin/disjuntor.py:128`, `bin/disjuntor.py:139` | `ler` → `linha` → ESTADO: `bin/disjuntor.py:1554`, `bin/disjuntor.py:1677`, `bin/gerar_estado.py:280` |
+
+    Para os campos novos, o mapa necessário seria o seguinte; **nomes de estruturas e donos futuros são proposta, sem implementação [nao verificado]**:
+
+    | Novo estado necessário | Escritor proposto | Leitores propostos |
+    |---|---|---|
+    | SHA, `visto_em`, obra e entidades de cada evento | Varredura na decisão única | Janela, agrupamento e painel |
+    | Nomeação por `(SHA, entidade)`/episódio | Transição de liberação | Gatilho e redisparo |
+    | Entidade disparada e obras alcançadas | Transição de disparo/liberação | PreToolUse, wrapper e Stop |
+    | SHA de nomeação consumido | Liberação, antes de autorizar | Próximas liberações |
+    | Último escopo legível recuperável | Persistência da decisão válida | Tratamento restrito de `NAO_SEI` |
+    | Contagens de desenhos, disparos, liberações e `None` | Decisão/registro de transições | Painel e ESTADO |
+
+13. **Parser de CODEX_OBRA: mora hoje em `disjuntor.py`; é diferente do parser de prompts.**
+
+    **Comando Bash:** `_trechos()` separa invocações; `_atribuicoes()` usa `shlex.split()`, remove aspas e conserva a última atribuição; `_codex_cmds()` retorna `obra`. Não aplica a regex de nomes de `_obra_de()`. (`bin/disjuntor.py:1251`, `bin/disjuntor.py:1309`, `bin/disjuntor.py:1325`, `bin/disjuntor.py:1337`)
+
+    **Wrapper:** recebe o valor efetivo de `CODEX_OBRA` e exige apenas que não esteja vazio; assim aceita `obra_teste` e `O9 (C)`, embora o primeiro não seja reconhecido por `_obra_de()`. (`bin/codex_pergunta.sh:44`, `bin/codex_pergunta.sh:45`, `bin/disjuntor.py:97`, `bin/disjuntor.py:521`)
+
+    **Prompt de Agent:** aceita âncoras como `obra X`, `Obra: X`, Markdown e `leitura … da X`; escolhe a primeira ocorrência válida. IDs aceitam formas como `PADRAO-DE-CIMA`, `OBRA-x` e `O261`; IDs sem hífen podem carregar cauda: `O9 (c)` vira `O9 (C)`. Um ID com hífen descarta essa cauda: `OBRA-X (C)` vira `OBRA-X`. (`bin/disjuntor.py:97`, `bin/disjuntor.py:104`, `bin/disjuntor.py:504`, `bin/disjuntor.py:518`, `bin/disjuntor.py:526`)
+
+    Há colisão por ausência de borda direita: `obra OBRA-X_Y` é lida como `OBRA-X`. Também há risco quando um prompt menciona outra obra antes da obra executada. (`bin/disjuntor.py:103`, `bin/disjuntor.py:104`, `bin/disjuntor.py:514`, `bin/tests/test_disjuntor.sh:693`)
+
+    **Limites concretos do parser Bash:**
+
+    | Forma | Resultado atual |
+    |---|---|
+    | `CODEX_OBRA="O9 (C)" CODEX_PAPEL=verificador …` | Extrai `O9 (C)`. (`bin/disjuntor.py:1314`, `bin/disjuntor.py:1337`) |
+    | `env CODEX_OBRA=OBRA-A CODEX_PAPEL=verificador …` | Não reconhece essa disposição: atribuições são previstas antes dos prefixos. (`bin/disjuntor.py:1243`) |
+    | `export CODEX_OBRA=OBRA-A; CODEX_PAPEL=verificador …` | Não transporta a obra entre trechos. (`bin/disjuntor.py:1292`, `bin/disjuntor.py:1335`) |
+    | `CODEX_OBRA="$OBRA" CODEX_PAPEL=verificador …` | Extrai o literal `$OBRA`, sem expansão. (`bin/disjuntor.py:1314`, `bin/disjuntor.py:1321`) |
+
+    Mudar a identidade de obra afeta contagem de transcripts, seleção de Agent, classificação de exceções e reconhecimento de liberação. As chaves persistidas e a triagem usam a obra como texto; uma nova normalização pode separar histórico antigo e chamadas novas. (`bin/disjuntor.py:557`, `bin/disjuntor.py:637`, `bin/disjuntor.py:850`, `bin/disjuntor.py:897`, `bin/disjuntor.py:1416`, `bin/disjuntor.py:1455`)
+
+14. **Regra MORDE: os casos precisam testar a decisão nova, com agrupamento explícito.**
+
+    As escritas abaixo permitem montar casos com entidades distintas sem banco: `registro_batida.py:152` e `:157` escrevem `Batida`; `portas/celula.py:247` escreve `CelulaDia`. (`app/ponto/registro_batida.py:152`, `app/ponto/registro_batida.py:157`, `app/ponto/portas/celula.py:247`)
+
+    Com SHAs distintos, `visto_em=T−60/T−30` e ambos não nomeados, os resultados contratuais esperados seriam estes; execução do instrumento/mutante **[nao verificado]**:
+
+    | Eventos | Programa | Esperado |
+    |---|---|---|
+    | `Batida`, `Batida` | Qualquer | Dispara |
+    | `Batida`, `CelulaDia` | Diferentes | Não dispara |
+    | `Batida`, `CelulaDia` | Mesmo programa | Não dispara |
+    | `None`, `None` | Não resolvido | Mede dois; não agrupa |
+    | Dois `Batida` nomeados + terceiro novo | Qualquer | Redispara |
+
+    O mutante “conta global” deve falhar nos dois casos de entidades distintas; o terceiro caso também detecta uma implementação que soma programa apesar de entidade resolvida. Resultado efetivamente VERMELHO **[nao verificado]**.
+
+    Os selos existentes criam arquivos e mutantes; sua execução não cabe na restrição de somente leitura desta auditoria. (`bin/tests/test_disjuntor.sh:39`, `bin/tests/test_disjuntor.sh:1478`, `bin/tests/test_disjuntor.sh:1487`)
 
 ## 31/10 16:38 · sessao eb6a9f7f9f33 · F1C4-3-EMISSORES · verificador · origem=Code
 
@@ -889,28 +1058,4 @@ O trecho mais próximo de resposta é `v3.r`: “Execução dos testes, execuç�
 
 A volta de entrada da **afirmação na mensagem** do item 8 é **[nao verificado]**: `opus_v11.txt` não identifica seu commit; não há como dizer que surgiu depois de v8. O tema geral L-061 já aparece em `v2.r`, mas isso não data a afirmação acusada. Sem mensagem integral, não transformar essa lacuna em prova de classe (c) por commit posterior. `triagens.txt` vazio não permite classe (b) para nenhum dos dois [nao verificado quanto à numeração dos anexos]. [nao verificado]
 
-## 31/10 16:19 · sessao 664f4c3bfd34 · - · - · origem=Ronald (tmux)
-
-**Achado 2 — (c), dado de produção e mensagem posterior à última chamada.** A fonte local diz literalmente: “ata explicita 'indefinido' divergiria […] Prod 31/10: 0 de 127.784 atas” (`app/docs/BACKLOG.md:806`). Isso sustenta a distinção de universo apontada pelo opus; não prova autonomamente o novo número 158/143.452, que consta somente do dado raspado (`opus_v11.txt`, item 2; linha original [nao verificado]).
-
-- Pergunta pertinente: `v2.q`, aval: “antes, sombra com novos CHAMADOS por emissor; ate 50 pousa” — linha original [nao verificado].
-- Resposta: `v2.r`, item 1: “A sombra com novos CHAMADOS por emissor, e o atendimento ao teto de 50, são [não verificado] no material fornecido.” — linha original [nao verificado].
-- Entrada: o número 0/127.784 vem da obra anterior F1C4-3, segundo a própria identificação “Codex verif4 F1C4-3” (`app/docs/BACKLOG.md:806`). Sua atribuição errada no commit b3bef403 é documentada em v11, depois da última chamada v8; volta anterior exata de introdução da frase [nao verificado].
-
-**Achado 5 — (c), medição não disponível e mudança final não examinada.** A cópia ainda contém o predicado antigo do supra (`app/ponto/supra_juiz.py:443`) e a chamada do cartório sem o insumo novo (`app/ponto/services/cartorio.py:1207`). Portanto não permite reconstituir a sombra final nem a implementação migrada descrita no opus (`opus_v11.txt`, item 5; linha original [nao verificado]).
-
-- Pergunta: `v2.q`, mesmo aval literal de sombra citado acima — linha original [nao verificado].
-- Resposta sobre limite: `v2.r`, item 1, mesma ressalva de medição acima — linha original [nao verificado].
-- Resposta que já percebeu a semântica: `v1.r`, item 1: “tipo ausente, `None` ou vazio não satisfaz `A`” — linha original [nao verificado]. Isso mostra conhecimento da semântica geral, **não descoberta do defeito da migração final**.
-- Entrada: tema sombra presente em v2; semântica de tipo `None` presente em v1; migração e sombra finais documentadas em v11. Volta exata entre esses marcos [nao verificado].
-
-**Achado 6 — (c), suíte/log final.** A regra local exclui expressamente “RED, suite, dado de prod” da falha do Codex (`CLAUDE.md:557`). [nao verificado]
-
-- Pergunta relacionada: `v1.q`, item 5: “selo/RED sem mordida” — linha original [nao verificado].
-- Resposta: `v1.r`, abertura: “Execução de testes/mutantes […] [não verificado]” — linha original [nao verificado]. [nao verificado]
-- Última resposta: `v8.r`, item 3: “execução da suíte Django com as mutações: [não verificado]” — linha original [nao verificado]. [nao verificado]
-- Entrada: o arquivo `v11_green.log` e seus zero bytes aparecem no achado final v11; ocorrência nas voltas anteriores [nao verificado]. A idade do comportamento “suite nao imprime hash” também fica [nao verificado]. [nao verificado]
-
-Não há linha fornecida em `triagens.txt`; portanto nenhum destes três pode receber classe (b) com descarte comprovado — conteúdo da triagem [nao verificado].
-
-_1147 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1148 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
