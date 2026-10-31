@@ -1,7 +1,212 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 22:28** · publicado em **30/10/2026 22:32** (UTC-3)
+> Ultima resposta processada: **30/10/2026 22:36** · publicado em **30/10/2026 22:37** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 22:36 · sessao ce5c5ea4f5f2 · - · - · origem=Ronald (tmux)
+
+Achados do cartório, por leitura estática; execução e contagens reais permanecem [não verificado].
+
+- **A segunda passada pode deixar trabalho pendente e impressão velha.** Um chamado adiado entra em `rejulgar`; na segunda passada, quando `_porm` finalmente o fecha, a célula é novamente enfileirada. O wrapper descarta essa fila e incrementa `rejulgar_descartado`. A impressão foi calculada com o chamado vivo antes do fechamento e é gravada depois; sem emissão nova, a releitura final não roda. Caminho: `app/ponto/services/cartorio.py:1075`, `:1089`, `:1181`, `:1187`, `:1190`, `:1434`, `:1449`, `:751`, `:757`, `:804`. Isso ocorre quando E2 mata a pergunta mas o destino continua vivo até `_porm`; E2 fecha o **pai da disputa**, que pode ser outro chamado (`app/chamados/reconciliador.py:623`, `:632`; `app/chamados/signals.py:32`, `:42`). Número de ocorrências [não verificado].
+
+- **O ciclo `cobranca_indevida` permanece, incluindo `COBRANCA_SEM_FURO`.** O delta só altera o ramo `not cods` de `cobrado`; o suprajuiz continua emitindo `COBRANCA_SEM_FURO` quando o dia completo tem chamado vivo, e `COBRANCA_EM_DIA_SEM_TRABALHO` na folga com chamado vivo. Ambos derivam `cobranca_indevida`, que mantém C6 vivo; E2 exclui vereditos acusatórios. Fontes: `app/ponto/services/cartorio.py:1141`, `:1164`; `app/ponto/supra_juiz.py:418`, `:441`; `app/escala/models.py:1581`, `:1735`; `app/chamados/juizes.py:1054`; `app/chamados/reconciliador.py:598`. O teste específico da porta é `app/colaboradores/tests/test_contract_porta_2ato.py:147`, com exigência terminal em `:158`; vermelho segundo o anexo, execução independente [não verificado].
+
+- **E2 dentro do julgamento tem efeitos além do carimbo e alcance além das células julgadas.** Sua consulta abrange perguntas absolvidas de todo o colaborador; fecha disputas, cujo receiver reconcilia o pai e escreve nota. Tudo isso roda com `_tl.ativo=True`; o julgamento provocado pela mudança do pai é suprimido. A segunda passada só recebe a fila selecionada, sem incorporar automaticamente outros dias alterados por E2. Fontes: `app/ponto/services/cartorio.py:738`, `:744`, `:750`, `:751`; `app/chamados/reconciliador.py:584`, `:632`; `app/chamados/signals.py:41`, `:174`. Ocorrência concreta em produção [não verificado].
+
+- **Não há prova suficiente de terminal com pergunta viva pela relavra posterior.** Para esse caminho, a primeira passada precisa absolver, E2 carimbar e a segunda voltar a acusar. Com insumos e janela iguais, isso não decorre apenas da ordem. A janela efetivamente pode mudar: a segunda passada recebe subconjunto e `_julgar_colab_corpo` deriva a janela dos extremos desse subconjunto (`app/ponto/services/cartorio.py:752`, `:835`, `:861`, `:880`), embora a documentação exija lista inteira justamente para evitar pareamento diferente (`:725`). Contraexemplo concreto [não verificado].
+
+Mapa principal:
+
+| Estado | Escritor | Leitores |
+|---|---|---|
+| `CelulaDia.veredito` | Porta `lavrar_veredito`, `app/ponto/portas/celula.py:647`, atribuição `:692`; cartório chama em `app/ponto/services/cartorio.py:1434` | C6: `app/chamados/juizes.py:1017`, `:1054`; E2: `app/chamados/reconciliador.py:594`; impressão/pulo: `app/ponto/services/cartorio.py:1098` |
+| `materializada_em` / `via_resolucao` neste E2 | Porta existente `app/chamados/reconciliador.py:617`, `:619`, persistência `:620` | C6: `app/chamados/juizes.py:1044`, `:1050`, `:1076`; lavra S2 delega ao juiz em `app/chamados/veredito_lavrado.py:220` |
+
+O novo teste de evento confere terminal e ausência de pergunta viva, mas não confere `rejulgar_descartado`, impressão estável nem segunda chamada sem escrita (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:385`). O selo existente mede queries e callbacks exatos; seus resultados nesta cópia são [não verificado], com limites em `app/ponto/tests/test_selo_chokepoint_escrita.py:157`, `:177`, `:212`.
+
+## 30/10 22:36 · sessao 5581f0c9f9f7 · LAUDO-3010 · leitura · origem=Code
+
+**O achado é uma diferença entre “pergunta viva”, “materialização comprovada” e “porta alcançável pelo admin”. As duas funções nomeadas respondem às duas primeiras coisas; nenhuma verifica integralmente a alcançabilidade exigida pela O261 (A).** (`app/folha/fora_da_folha.py:66`; `app/chamados/services/raiox.py:173`; `app/docs/BACKLOG.md:767`)
+
+Vínculo da cópia com o hash informado/main: **[não verificado]**. Estado persistido da p#34375: **[não verificado]**.
+
+**1. Predicados, insumos, consumidores e registro**
+
+**`o_que_segura(colab, mes, ano)`** devolve os dias retentores com `fio`, `destrava` e chamados; a decisão sobre quem deve agir está em **`_fio_do_dia`**, nesta ordem exata:
+
+| Condição | Resultado |
+|---|---|
+| Existe pergunta viva da célula com `estado == PENDENTE` | `colab` |
+| Senão, existe alguma pergunta viva | `admin` |
+| Senão, existe chamado da célula com status em `VIVOS` | `chamado` |
+| Senão | `nada` |
+
+Sem `celula_id`, `o_que_segura` força `nada`. Portanto, **`admin` exige alguma viva e nenhuma viva pendente**; `colab` significa aguardar o colaborador, não ação imediata de validação pelo admin. (`app/folha/fora_da_folha.py:66`; `app/folha/fora_da_folha.py:67`; `app/folha/fora_da_folha.py:69`; `app/folha/fora_da_folha.py:71`; `app/folha/fora_da_folha.py:204`; `app/folha/fora_da_folha.py:39`)
+
+Os insumos são colaborador, empresa e competência; `classificar_export` informa entrada/motivo; `motivos_retencao_celula(com_dias=True)` fornece os dias; `_alimentar` carrega perguntas pela FK da célula e chamados em `VIVOS`. Não exige que a pergunta esteja ancorada num chamado vivo **da fila**. (`app/folha/fora_da_folha.py:188`; `app/folha/fora_da_folha.py:191`; `app/folha/fora_da_folha.py:93`; `app/folha/fora_da_folha.py:51`; `app/folha/fora_da_folha.py:54`)
+
+A `.viva` delega a **`pergunta_viva`**. Sua precedência atual é:
+
+- Validação ou tranca tornam a pergunta morta; resposta com texto, sem decisão administrativa do dia, mantém viva salvo concordância comprovada com a luz num dia que não acusa. (`app/chamados/models.py:2369`; `app/chamados/juizes.py:1006`; `app/chamados/juizes.py:1010`; `app/chamados/juizes.py:1020`; `app/chamados/juizes.py:1032`)
+- Depois vêm encerramento por identidade, marco materializado aceso e veredito da célula: acusador mantém viva; absolvição sem marcos pendentes mata. (`app/chamados/juizes.py:1039`; `app/chamados/juizes.py:1050`; `app/chamados/juizes.py:1054`)
+- Sem decisão nesses degraus, consulta a classificação de falta na janela viva; sem carimbo vive; com carimbo, devolve o inverso de `_pergunta_materializada_de_fato`; exceção nesse último degrau resulta em morta. (`app/chamados/juizes.py:1066`; `app/chamados/juizes.py:1076`; `app/chamados/juizes.py:1083`)
+
+A `.estado` distingue pendente/respondida por **`respondida_em`**, sem exigir texto nesse rótulo. Assim, pergunta viva com timestamp de resposta e texto vazio pode produzir `fio=admin`; esse caso está documentado no laudo anterior. (`app/chamados/models.py:2207`; `app/docs/RELATO.md:363`)
+
+**`pergunta_sem_acao_possivel(p, marcos=None)`** tem outro predicado, exatamente:
+
+```text
+materializada_em é None                  → False
+com carimbo e veredito_lavrado preenchido → veredito_lavrado == VL_SIM
+com carimbo e veredito vazio              → bool(_pergunta_materializada_de_fato(p))
+exceção no bloco                         → False
+```
+
+O parâmetro `marcos` não é consumido pelo corpo; não há checagem de frescor nele. O retorno `False` significa que esse teste **não comprovou materialização sem ação**, não que exista porta administrativa. (`app/chamados/services/raiox.py:151`; `app/chamados/services/raiox.py:173`; `app/chamados/services/raiox.py:182`; `app/chamados/services/raiox.py:186`)
+
+O fallback usa via/carimbo, data/janela, classificação de falta, tipo de resposta, slot esperado, batidas plantadas e não retratadas, destino encerrado em determinados ramos e completude do turno. Portanto, o destino pode entrar como testemunha indireta, mas não existe requisito geral “âncora viva em `qs_na_fila`”. (`app/chamados/juizes.py:603`; `app/chamados/juizes.py:628`; `app/chamados/juizes.py:674`; `app/chamados/juizes.py:699`; `app/chamados/juizes.py:730`)
+
+**Chamadores de produção, distinguindo função pública e núcleo efetivamente usado:**
+
+| Função | Chamadores diretos |
+|---|---|
+| `o_que_segura` | **0 chamadas estáticas localizadas**; preservada como ferramenta HAIKU de uso humano. (`app/docs/BACKLOG.md:1484`) |
+| `_fio_do_dia` | **3 funções / 3 chamadas**: `fora_da_folha`, `o_que_segura`, `dias_sem_fio`. (`app/folha/fora_da_folha.py:154`; `app/folha/fora_da_folha.py:204`; `app/ponto/services/pautas_dos_discordantes.py:75`) |
+| `pergunta_sem_acao_possivel` | **1 função / 1 chamada**: `montar_chamados_fio`, pelo alias `_sem_acao`. (`app/chamados/services/fio.py:275`; `app/chamados/services/fio.py:280`) |
+
+O núcleo da folha chega à **tela do retrato** por `fora_da_folha → montar_linhas → lavrar_retrato_folha`; também seleciona dias para pautas dos discordantes. O vigia do fio usa outra redução: `fio_do_dia → fio_vivo → any(pergunta_viva(...))`. (`app/folha/retrato_folha.py:1157`; `app/folha/management/commands/lavrar_retrato_folha.py:65`; `app/folha/views_retrato.py:246`; `app/ponto/services/pautas_dos_discordantes.py:75`; `app/chamados/services/vigia_fio.py:164`; `app/chamados/juizes.py:1111`)
+
+O raio-X compõe `tem_pergunta_viva = any(p.viva and not _sem_acao(p))`. Essa flag é consumida pelo **formulário genérico do colaborador**; o “Validar” do modal administrativo tem condições próprias. A montagem é chamada por atendimento do colab, fio administrativo, modal e render parcial. (`app/chamados/services/fio.py:279`; `app/templates/chamados/partials/_card_atendimento.html:203`; `app/templates/chamados/partials/_card_atendimento.html:205`; `app/templates/chamados/partials/modal_fio.html:210`; `app/templates/chamados/partials/modal_fio.html:272`; `app/chamados/views.py:569`; `app/chamados/views.py:677`; `app/chamados/views.py:889`; `app/chamados/services/fio.py:442`)
+
+O irmão SQL **`creditos_perguntas`** também exclui carimbada com `VL_SIM`, mas **não chama** `pergunta_sem_acao_possivel`; alimenta a partição por verbos. Nela, `validar` e `decidir` são os verbos contabilizados como exigência do admin. (`app/chamados/services/raiox.py:133`; `app/chamados/services/verbos.py:31`; `app/chamados/services/verbos.py:19`; `app/chamados/services/verbos.py:24`)
+
+Pela regra, há ainda um teste explícito de ação administrativa no dia: **`resolver_dia_oferecido`** exige último recurso, dia de trabalho, passado e status em `falta/irregular/aberto/sem_certidao`. O calendário grava esse resultado; template e vigia o leem. (`app/colaboradores/services/calendario.py:196`; `app/colaboradores/services/calendario.py:204`; `app/colaboradores/services/calendario.py:945`; `app/templates/colaboradores/partials/_calendario_grade.html:125`; `app/chamados/services/vigia_fio.py:294`)
+
+**Registro:** as duas funções nomeadas não estão individualizadas nos catálogos consultados; estão registrados os componentes `VIVOS`/C1, `pergunta_viva`/C6, `fio_vivo`/C15 e `resolver_dia_oferecido`/TT11. O próprio registro alerta que **chamado vivo não responde se há cobrança/fio**; `JUIZES.md` manda prevalecer o registro vivo. (`app/core/juizes.py:100`; `app/core/juizes.py:233`; `app/core/juizes.py:238`; `app/core/juizes.py:247`; `app/core/juizes.py:684`; `app/docs/JUIZES.md:11`; `app/docs/JUIZES.md:14`)
+
+**2. Onde discordam — e onde apenas deixam de verificar a porta**
+
+Os estados pedidos não bastam para determinar a discordância: é necessário acrescentar **carimbo de materialização e veredito lavrado**. A folha consulta vitalidade; o raio-X consulta esses dois insumos. (`app/folha/fora_da_folha.py:66`; `app/chamados/services/raiox.py:173`)
+
+Inferências abaixo consideram uma única pergunta relevante na célula:
+
+| Combinação | Folha | Raio-X |
+|---|---|---|
+| Viva, respondida, não validada; materializada e `VL_SIM` | `admin` | **Sem ação = True**: discordância direta. (`app/folha/fora_da_folha.py:69`; `app/chamados/services/raiox.py:183`) |
+| Viva, pendente; materializada e `VL_SIM` | `colab` | **Sem ação = True**: divergem sobre continuidade do fio, sem a folha prometer validação imediata. (`app/folha/fora_da_folha.py:67`; `app/chamados/services/raiox.py:183`) |
+| Viva, respondida; sem materialização; âncora terminal ou viva fora da fila | `admin` | **Sem ação = False**; ambos deixam passar esse aspecto, embora falte a alcançabilidade da O261. (`app/folha/fora_da_folha.py:69`; `app/chamados/services/raiox.py:173`; `app/docs/BACKLOG.md:767`) |
+| Morta/validada, sem materialização, sem outro chamado vivo | `nada` | **Sem ação = False**; inverter esse booleano fabricaria uma possibilidade que a vitalidade não reconhece. (`app/chamados/juizes.py:1006`; `app/folha/fora_da_folha.py:73`; `app/chamados/services/raiox.py:173`) |
+| Nenhuma viva; existe chamado `registrado` ou silenciado | `chamado`, com instrução de resolver | A fila não o cobra; `registrado` é vivo, mas não pede ação. (`app/folha/fora_da_folha.py:71`; `app/folha/fora_da_folha.py:41`; `app/chamados/catalogo/motor.py:24`; `app/chamados/services/painel.py:186`) |
+
+**Disputa fechada não elimina automaticamente a porta do admin nesta árvore.** A montagem administrativa inclui perguntas vivas de disputas fechadas; o POST de validação exige vitalidade nesse caso e segue sem reabrir a disputa. (`app/chamados/services/fio.py:213`; `app/chamados/services/fio.py:234`; `app/chamados/services/fio.py:594`; `app/chamados/services/fio.py:603`)
+
+Também não cabe afirmar “âncora terminal = impossível agir em qualquer tela”: o modal administrativo carrega todos os chamados do colaborador, e o POST verifica permissão e correspondência da âncora, sem exigir participação na fila. **Estar acessível manualmente e cumprir o caminho exigido pela O261 são condições distintas.** (`app/chamados/services/fio.py:174`; `app/chamados/services/fio.py:117`; `app/chamados/services/fio.py:557`; `app/chamados/services/fio.py:592`; `app/docs/BACKLOG.md:767`)
+
+Para **p#34375**, não localizei testemunho do estado na árvore **[não verificado]**. Condicionalmente: se viva/respondida e carimbada com `VL_SIM`, reproduz a primeira discordância; se viva sob terminal/fora da fila, reproduz a lacuna de alcançabilidade. O caso documental de **col292, 21/09**, nomeia outras perguntas, **p#34412/p#51322**; não há base para substituir esses identificadores por 34375. (`app/folha/fora_da_folha.py:69`; `app/chamados/services/raiox.py:183`; `app/docs/RELATO.md:359`)
+
+**3. Proximidade da lei e alcance**
+
+**Quanto à forma “consumidor lê o veredito gravado”, o raio-X é mais próximo:** normalmente lê `veredito_lavrado`; porém ainda chama o juiz quando o campo está vazio. A folha delega à vitalidade, cujo caminho pode descer a classificação de falta e julgamento de lastro. (`CLAUDE.md:276`; `app/chamados/services/raiox.py:182`; `app/chamados/services/raiox.py:184`; `app/chamados/juizes.py:1068`; `app/chamados/juizes.py:1083`)
+
+**Quanto à regra completa da O261 — porta viva alcançável — nenhuma das duas basta.** A folha aceita viva sem conferir âncora/fila; o raio-X não verifica sequer vitalidade no próprio corpo. A exigência documental acrescenta chamado vivo em `qs_na_fila` e presença no app. Alcance direto: **`o_que_segura` 0; raio-X 1; núcleo `_fio_do_dia` 3**, conforme os sítios acima. (`app/folha/fora_da_folha.py:66`; `app/chamados/services/raiox.py:173`; `app/docs/BACKLOG.md:767`; `app/docs/BACKLOG.md:1484`; `app/chamados/services/fio.py:280`; `app/folha/fora_da_folha.py:154`; `app/folha/fora_da_folha.py:204`; `app/ponto/services/pautas_dos_discordantes.py:75`)
+
+**4. “T3” da O261 (A), existência e tela**
+
+A identificação literal **“T3 da O261 (A)” não foi localizada nos cinco documentos indicados [não verificado]**. Há três divisões documentais diferentes:
+
+- **O261 original:** FASES 1–3; a terceira é invariante, vigia/contador, caso que morde e passivo. (`app/docs/BACKLOG.md:1259`; `app/docs/TICKETS.md:146`)
+- **O261-COMPLEMENTO-[nome]:** itens **(A) alcançabilidade, (B) materializada sem resposta, (C) pai terminal, (D) vigia e link**. (`app/docs/BACKLOG.md:767`)
+- **Proposta numerada (1)–(4):** o **(3)** pede que reabrir levante o véu; o documento não o chama de T3. (`app/docs/RELATO.md:370`)
+
+**A alcançabilidade de (A) não está implementada no caminho atual do censo:** ele parte de chamados vivos com célula e aceita `fio_vivo` sobre as perguntas da célula, sem exigir a combinação âncora/fila/app. O contador existente aparece no **placar ESTADO, “Fio morto (O261)”**. (`app/chamados/services/vigia_fio.py:186`; `app/chamados/services/vigia_fio.py:270`; `app/chamados/services/vigia_fio.py:286`; `bin/gerar_estado.py:313`; `bin/fio_estado.py:101`)
+
+**A FASE 3 original tem implementação**, com comando e elo do cron; isso não comprova o complemento posterior de alcançabilidade. (`app/chamados/management/commands/vigiar_fio_morto.py:160`; `app/chamados/management/commands/vigiar_fio_morto.py:195`; `app/config/crons.py:1654`; `app/docs/BACKLOG.md:767`)
+
+**O (3) numerado não aparece no corpo atual de `reabrir`:** após as guardas, ele grava o estado e ressuscita perguntas, sem chamada para levantar o véu. (`app/chamados/models.py:1182`; `app/chamados/models.py:1194`)
+
+Na tela administrativa, existe **“O que fazer / O que destrava” no painel do colaborador**, com texto de `DESTRAVA` e botões genéricos. O Raio-X do retrato abre esse painel; as datas são `<span>`, sem link por dia/pergunta. Portanto, o link específico exigido no complemento (D) não é o que esses templates entregam. (`app/templates/colaboradores/partials/painel_colaborador.html:26`; `app/folha/retrato_folha.py:1068`; `app/templates/folha/_retrato_o_que_fazer.html:46`; `app/templates/folha/_retrato_o_que_fazer.html:61`; `app/templates/folha/_retrato_raiox.html:68`; `app/docs/BACKLOG.md:767`)
+
+## 30/10 22:36 · sessao f69ca6868bc3 · - · - · origem=Ronald (tmux)
+
+- **LIMBO: ordem solicitada presente.** `agrupar_furo` chama `_vivas_ancoradas('resolvido')`, reaponta pela porta existente e só depois pede `reconciliar()`; a porta consulta E4-c e a guarda de costura, atribui `chamado_destino`, relavra S2 e salva. O teste exige pergunta viva ancorada no pai vivo e segunda execução sem novo agrupamento. `app/chamados/services/limbo_folgas.py:228-230`; `app/chamados/services/fio.py:821-831`; `app/chamados/tests/test_t34_furo_sob_limbo.py:43-61`.
+
+- **Quem escreve/lê `chamado_destino`:** a porta `reapontar_resolvedora` escreve em `fio.py:828-831`; `PerguntaDisputa.abrir` também escreve no dedup e no nascimento em `models.py:2370-2397`. As atribuições de `models.py:342` e `fio.py:758-762` servem à simulação em memória. A autoridade da âncora retorna destino ou container em `fio.py:97-117`; a montagem do fio carrega os destinos em `fio.py:199-228`. Todos os caminhos citados estão em `app/chamados/`.
+
+- **O199: reaproveita o fechador existente.** No ramo “dia já folga”, carimba a validação, fecha a pergunta e chama `fechar_o_fio_do_dia`; esse fechador percorre as perguntas e pede reconciliação dos chamados, anotando apenas quando fecham. A validação mata a pergunta no primeiro degrau de C6; irmã respondida ainda não validada pode continuar viva antes da leitura do carimbo. `app/chamados/services/validacao.py:261-271`; `app/ponto/services/veredito_celula.py:174-187`; `app/chamados/juizes.py:1006-1007`; `app/chamados/juizes.py:1020-1032`. O teste das quatro irmãs cobra uma folga, chamado resolvido e uma nota. `app/chamados/tests/test_o199_aceite_de_folga_decide_o_dia.py:167-192`.
+
+- **Vermelho reportado e mecanismo confirmado por leitura:** `PortaSegundoAtoTest.test_MORDE_derruba_a_cobranca_viva_do_dia_que_virou_folga` exige que o chamado saia de VIVOS. `app/colaboradores/tests/test_contract_porta_2ato.py:147-160`. O protesto `COBRANCA_EM_DIA_SEM_TRABALHO` depende do chamado vivo; vira `cobranca_indevida`, que continua em `VEREDITOS_ACUSAM`; C6 mantém a pergunta viva e E2 exclui essa célula. O cartório só pede rejulgamento desse ramo quando alguma reconciliação fecha. `app/ponto/supra_juiz.py:441-445`; `app/escala/models.py:1581`; `app/escala/models.py:1735`; `app/chamados/juizes.py:1054-1057`; `app/chamados/reconciliador.py:598`; `app/ponto/services/cartorio.py:1213-1225`. Execução local do teste: **[não verificado]**.
+
+- **Não repetir como vermelhos comprovados os testes HX/B2.d.** A cópia já planta explicitamente o passivo terminal por `update`, em vez de depender de `encerrar()` produzir esse estado. `app/chamados/tests/test_laco_hx_x_bug31.py:37-43`; `app/chamados/tests/test_b2d_resposta_visivel.py:16-22`. Resultado atual dessas suítes, das órfãs e dos tetos de queries: **[não verificado]**.
+
+- **Limite do agrupamento, preexistente no trecho fornecido:** o contexto é salvo antes da reconciliação; se esta não fechar, nova chamada com o mesmo `agrupado_em` retorna antes de tentar novamente. `app/chamados/services/limbo_folgas.py:217-231`. Não encontrei cenário normal novo de recusa da reata com os pais vivos selecionados pelos chamadores; ocorrência em produção: **[não verificado]**. Os chamadores selecionam pai vivo em `app/chamados/services/limbo_folgas.py:243-255` e `app/ponto/management/commands/detectar_ausencias.py:755-756`.
+
+## 30/10 22:34 · sessao f86cff5c627c · - · - · origem=Ronald (tmux)
+
+Não encontrei **“T3 da O261 (A)”** nos cinco documentos indicados; a correspondência exata fica **[não verificado]**. Há divisões diferentes que não devem ser confundidas:
+
+- **O261 original:** usa **FASE 1, FASE 2, FASE 3**. A FASE 3 pede invariante, caso que morde, allowlist zero, hoje fora, contador no placar e passivo pela porta. Não contém divisão (A)..(D). — `app/docs/BACKLOG.md:1259`; `app/docs/TICKETS.md:146`.
+- **O261-COMPLEMENTO-[nome]:** contém **(A)..(D)**. (A) é **alcancabilidade real**: pergunta viva sob chamado vivo em `qs_na_fila`, aparecendo no app; pergunta viva sob chamado terminal conta como fio morto. (B) materializada sem resposta; (C) nascimento com pai terminal; (D) vigia e link do retrato levando à pergunta pelo chamado vivo. — `app/docs/BACKLOG.md:767`; `app/docs/RELATO.md:355`; `app/docs/RELATO.md:359`.
+- **Proposta de quatro curas:** (1) vigia pelo universo `o_que_segura`; (2) resposta vazia; **(3) reabertura levanta o véu**; (4) link por dia. Chamar o terceiro de “T3” seria inferência, pois o documento o chama somente “(3)”. — `app/docs/RELATO.md:370`.
+
+**Existência atual:**
+
+- A **FASE 3 original tem implementação**: `censo` lê chamados vivos e células que acusam; elimina dias com fio vivo, hoje e decisão do dia pendente. O comando executa, imprime e carimba; o cron o agenda. — `app/chamados/services/vigia_fio.py:168`, `app/chamados/services/vigia_fio.py:186`, `app/chamados/services/vigia_fio.py:229`, `app/chamados/services/vigia_fio.py:286`, `app/chamados/services/vigia_fio.py:294`, `app/chamados/management/commands/vigiar_fio_morto.py:160`, `app/chamados/management/commands/vigiar_fio_morto.py:195`, `app/config/crons.py:1654`.
+- Seu lugar visível é o **placar ESTADO**, seção **“Fio morto (O261)”**. — `bin/gerar_estado.py:313`; `bin/fio_estado.py:101`.
+- O **(A) de alcancabilidade não aparece aplicado nesse censo**: ele agrupa perguntas pela FK da célula e aceita `fio_do_dia(ps)`; esse trecho não verifica `qs_na_fila`, âncora viva nem presença no app. — `app/chamados/services/vigia_fio.py:270`, `app/chamados/services/vigia_fio.py:286`. O próprio relatório registra perguntas vivas visíveis no app, sob chamado terminal ausente da fila admin. — `app/docs/RELATO.md:359`.
+- O link atual do **Raio-X do retrato** abre o **painel do colaborador**; as datas do bloco “O que fazer” são apenas `<span>`, sem link por dia/pergunta. — `app/templates/folha/_retrato_raiox.html:68`; `app/templates/folha/_retrato_o_que_fazer.html:43`.
+- O bloco **“O que fazer / O que destrava”** existe no drawer/painel do colaborador, lê a frase genérica `DESTRAVA`, e não interpola um chamado específico nessa frase. — `app/folha/retrato_folha.py:1049`, `app/folha/retrato_folha.py:1057`, `app/folha/retrato_folha.py:1068`; `app/templates/colaboradores/partials/painel_colaborador.html:26`; `app/templates/folha/_retrato_o_que_fazer.html:28`, `app/templates/folha/_retrato_o_que_fazer.html:33`.
+
+## 30/10 22:33 · sessao fc7f73f9089d · - · - · origem=Ronald (tmux)
+
+Achados de `raiox.pergunta_sem_acao_possivel`, somente leitura:
+
+- **Predicado atual:** se `materializada_em is None`, devolve `False`; com carimbo, se `veredito_lavrado` estiver preenchido, devolve exclusivamente `veredito_lavrado == VL_SIM`; sem veredito, executa `_pergunta_materializada_de_fato(p)`; qualquer exceção devolve `False`. `marcos` é recebido, mas não usado. Não verifica staleness, vitalidade, `validada_em`, disputa aberta, status da âncora ou fila. `app/chamados/services/raiox.py:151`, `app/chamados/services/raiox.py:173`, `app/chamados/services/raiox.py:182`, `app/chamados/services/raiox.py:186`.
+- **Insumos do fallback:** via de resolução/carimbo, data e janela viva/classificação de falta; tipo escolha; para hora, slot esperado e batidas plantadas/vivas, destino encerrado e retratação auditada quando não há slot; para texto, turno completo ou retratação auditada. `app/chamados/juizes.py:603`, `app/chamados/juizes.py:628`, `app/chamados/juizes.py:674`, `app/chamados/juizes.py:699`, `app/chamados/juizes.py:730`, `app/chamados/juizes.py:734`.
+- **Um chamador direto de produção / um call site:** `montar_chamados_fio`, alias `_sem_acao`, compõe `ch.tem_pergunta_viva = any(p.viva and not _sem_acao(p, _marcos_s2))`. `app/chamados/services/fio.py:275`, `app/chamados/services/fio.py:279`.
+- **Quatro chamadores de `montar_chamados_fio`:** `meu_atendimento`, `fio_colaborador`, closure `_resp_modal_full` do modal, `contexto_parcial_fio`. `app/chamados/views.py:569`, `app/chamados/views.py:677`, `app/chamados/views.py:889`, `app/chamados/services/fio.py:442`.
+- **O uso efetivo da flag é COLAB:** único consumo de template encontrado é o formulário genérico de hora do `_card_atendimento`, condicionado a chamado aberto/em análise, furo e ausência de `tem_pergunta_viva`. O questionário usa `p.viva` diretamente. `app/templates/chamados/partials/_card_atendimento.html:203`, `app/templates/chamados/partials/_card_atendimento.html:205`, `app/templates/chamados/partials/_card_atendimento.html:77`.
+- **ADMIN não lê essa flag para o Validar:** modal exige disputa + permissão; com resposta, `pendencia_admin` ou `validada_em` mostram estado e retiram o Validar; caso contrário mostra Validar. Disputa fechada só retira Rejeitar/Corrigir. `app/templates/chamados/partials/modal_fio.html:120`, `app/templates/chamados/partials/modal_fio.html:210`, `app/templates/chamados/partials/modal_fio.html:215`, `app/templates/chamados/partials/modal_fio.html:221`, `app/templates/chamados/partials/modal_fio.html:242`, `app/templates/chamados/partials/modal_fio.html:272`, `app/templates/chamados/partials/modal_fio.html:282`.
+- **Âncora terminal/fora da fila ainda pode ter porta manual no modal:** listagem administrativa traz todos os chamados do colaborador; a âncora é destino ou pai sem ler status. Backend exige RBAC, correspondência da âncora e, em disputa fechada, pergunta viva; não exige chamado na fila. Portanto não afirmar “terminal = sem porta em toda tela”. `app/chamados/services/fio.py:174`, `app/chamados/services/fio.py:117`, `app/chamados/services/fio.py:557`, `app/chamados/services/fio.py:560`, `app/chamados/services/fio.py:592`, `app/chamados/services/fio.py:594`, `app/chamados/services/fio.py:599`.
+- **Validar já validada não age:** porta responde `ja_validada`; sem resposta, `sem_resposta`. `app/chamados/services/validacao.py:356`, `app/chamados/services/validacao.py:359`.
+- **Fila não equivale a vivo:** `qs_na_fila` exige `COBRANCA` e exclui silêncio futuro; `registrado` é vivo, mas não cobrança; terminais são resolvido, fechado, cancelado, superado. `app/chamados/services/painel.py:186`, `app/chamados/catalogo/motor.py:24`, `app/chamados/catalogo/motor.py:29`, `app/chamados/catalogo/motor.py:31`.
+- **Não confundir o irmão SQL:** `creditos_perguntas` exclui carimbada + `VL_SIM`, sem chamar `pergunta_sem_acao_possivel`; tem dois chamadores diretos, `fio` e `particionar_verbos`. `app/chamados/services/raiox.py:133`, `app/chamados/services/fio.py:386`, `app/chamados/services/verbos.py:31`.
+- **Registro:** buscas não encontraram os nomes `pergunta_sem_acao_possivel`, `o_que_segura` ou `_pergunta_materializada_de_fato` no registro/mapa. O registro próximo é C6 → `pergunta_viva`, C4 → permissão contextual, C15 → `fio_vivo`. `app/core/juizes.py:236`, `app/core/juizes.py:238`, `app/core/juizes.py:247`; mapa aponta FIO/DISPUTA para `_disputa_do_chamado`, e permissão contextual para `pode_agir_chamado`. `app/docs/JUIZES.md:40`, `app/docs/JUIZES.md:46`. Ausência é resultado de busca [não verificado por referência positiva].
+- **p#34375:** nenhuma ocorrência localizada na árvore; estado persistido do caso [não verificado].
+
+## 30/10 22:33 · sessao 803483fec8e6 · - · - · origem=Ronald (tmux)
+
+`o_que_segura` não devolve booleano “há ação admin”; devolve classificação `fio` e instrução `destrava` para cada dia retentor. O predicado está em `_fio_do_dia`, e a ordem exata é: se alguma pergunta **viva** da célula está `PENDENTE`, `colab`; senão, se existe alguma viva, `admin`; senão, se existe chamado com `status_local∈VIVOS`, `chamado`; senão, `nada`. Sem `celula_id`, o chamador força `nada`. Referências: `app/folha/fora_da_folha.py:59`, `:66`, `:67`, `:69`, `:71`, `:73`, `:204`, `:209`.
+
+Os textos são: `admin` → “validar (ou recusar) a resposta ... na mesa de disputa”; `colab` → esperar resposta e depois validar; `chamado` → “resolver o chamado N”; `nada` → “SEM FIO ... este dia precisa de alguém para olhar”. Referências: `app/folha/fora_da_folha.py:38`–`:42`; para IDs reais do chamado e texto substituído, `:198`–`:210`.
+
+Insumos e fontes:
+
+- Recebe colaborador/mês/ano, obtém empresa e janela, lê `classificar_export` para informar entra/motivo e `_dias_que_retem` para universo dos dias. Referências: `app/folha/fora_da_folha.py:179`, `:188`–`:194`.
+- `_dias_que_retem` delega a `motivos_retencao_celula(..., com_dias=True)`. Referência: `app/folha/fora_da_folha.py:90`–`:94`.
+- Alimentação carrega **todas** as perguntas por célula e chamados com status `VIVOS`, sem filtro de disputa aberta/fechada, âncora viva/terminal, fila, destino ou validação na query. Referência: `app/folha/fora_da_folha.py:46`–`:56`.
+- A pergunta é filtrada por `.viva`, que delega integralmente a `pergunta_viva`; `.estado` traduz validação/materialização/vitalidade/resposta em rótulo. Referências: `app/chamados/models.py:2358`–`:2369`; `:2197`–`:2211`.
+- `validada_em != None` torna a pergunta morta no juiz; portanto pergunta validada não pode produzir `admin`/`colab` nesse caminho. Referência: `app/chamados/juizes.py:1005`–`:1007`.
+- O retentor lê célula soberana: isento retorna vazio; ajusta admissão/demissão; sem célula em dia passado com vínculo retém; veredito acusador retém salvo todos protestos não cobráveis ou isenção de pausa; sem veredito, trabalha definido e dia passado retém. Referências: `app/folha/export.py:1174`, `:1180`–`:1196`, `:1206`–`:1238`.
+
+**Contagem de chamadores estáticos de produção:** `o_que_segura`: **0**; seu juiz efetivo `_fio_do_dia`: **3 funções / 3 chamadas** — `fora_da_folha`, `o_que_segura`, `dias_sem_fio`. Referências dos três: `app/folha/fora_da_folha.py:154`, `:204`; `app/ponto/services/pautas_dos_discordantes.py:75`. A ausência de chamadores de `o_que_segura` resulta da busca global, não tem linha de prova positiva; marcar `[não verificado]` se exigir referência documental estrita.
+
+Cadeias de consumo:
+
+1. `_fio_do_dia` → `fora_da_folha` (`app/folha/fora_da_folha.py:154`) → `montar_linhas` (`app/folha/retrato_folha.py:1157`) → comando `lavrar_retrato_folha` (`app/folha/management/commands/lavrar_retrato_folha.py:65`, `:74`) → tela que lê retratos gravados (`app/folha/views_retrato.py:246`–`:260`), rota `exportar/retrato/` (`app/folha/urls.py:23`). Drawer lê `DESTRAVA` literalmente via `o_que_fazer`, `app/folha/retrato_folha.py:1057`, `:1068`.
+2. `_fio_do_dia` → `dias_sem_fio`, que escolhe células `discordante` e só aceita fio `nada` (`app/ponto/services/pautas_dos_discordantes.py:67`–`:78`) → `Command.apurar` (`app/ponto/management/commands/pautas_discordantes.py:56`, `:68`).
+3. `vigia_fio` **não chama** `_fio_do_dia`: seu `fio_do_dia` delega a `fio_vivo` (`app/chamados/services/vigia_fio.py:155`–`:165`); essa redução é `any(pergunta_viva(p) ...)` (`app/chamados/juizes.py:1102`–`:1111`). A documentação reconhece a mesma autoridade `.viva` do outro leitor (`app/chamados/services/vigia_fio.py:129`–`:137`).
+
+**Discrepância estrutural importante para a matriz:** `VIVOS=('aberto','em_analise','registrado')`, mas o catálogo declara que **`registrado` não pede ação**, não entra na fila/placar; `COBRANCA` contém só aberto/em_análise. Referência: `app/chamados/catalogo/motor.py:24`–`:29`. Assim, sem pergunta viva e com único chamado `registrado`, `_fio_do_dia` classifica `chamado` e oferece “resolver chamado”, embora o catálogo diga ausência de ação devida. Referências: `app/folha/fora_da_folha.py:71`–`:72`, `:41`.
+
+A UI não pode ser confundida com porta viva: junta tanto `chamado` como `ninguem` no dono `admin`; isso é agrupamento explícito, não prova de uma ação endereçável. Referência: `app/folha/retrato_folha.py:189`–`:192`. A regra `dono_da_linha` ainda desvia `ninguem` para `hoje` quando todas as datas são hoje/futuras (`:474`–`:481`).
+
+Nenhum dos nomes `o_que_segura`, `_fio_do_dia` ou `pergunta_sem_acao_possivel` está registrado diretamente nos dois catálogos pesquisados `[não verificado]`. O registro contém suas autoridades componentes: `_C1→VIVOS`, `_C6→pergunta_viva`, `_C15→fio_vivo`. Referências: `app/core/juizes.py:233`, `:238`, `:247`. O texto do registro distingue expressamente **chamado vivo** de **fio vivo**, para evitar autorizar `VIVOS` como resposta a “alguém cobra?”. Referência: `app/core/juizes.py:100`–`:106`. `app/docs/JUIZES.md:51`–`:54` ainda traz o lookup antigo “vivo/cobra = VIVOS/COBRANCA”; o próprio documento manda o registro vivo prevalecer (`:11`–`:15`).
+
+Outra função realmente relevante pela **regra**, independente do nome: `resolver_dia_oferecido(dia, hoje)` exige `pode_ultimo_recurso && eh_trabalho && data<hoje && status∈('falta','irregular','aberto','sem_certidao')`; permissão de quem vê fica no template. Referências: `app/colaboradores/services/calendario.py:196`, `:199`–`:205`. `resolver_dia_oferecido_na_data` monta o calendário pelo mesmo caminho da tela e lê esse campo (`:208`–`:216`). Está registrada `_TT11` em `app/core/juizes.py:684`.
+
+O vigia distingue esse clique real de mero status: `resolver_dia_oferecido_na_data` → `decisao_do_dia_pendente`, com comentário explícito de que `em_analise` sozinho não é ação nomeada (`app/chamados/services/vigia_fio.py:294`–`:300`); separa ausência aberta (`:301`–`:306`), FOLGA_CONTESTA validada (`:307`–`:313`) e fio do admin por presença **e dono BATIDA/CADASTRO** na lista (`:314`–`:318`, `:266`).
+
+Lei exata: “CONSUMIDOR (chamado, pergunta, tela, folha) le a lampada, nunca re-julga”; cron vigia só alarma, nunca juiz. Referências: `CLAUDE.md:275`–`:276`.
 
 ## 30/10 22:28 · sessao 6542be814925 · O261-V-FASE · verificador · origem=Code
 
@@ -315,107 +520,4 @@ Há lacunas nos testes novos, sem evidência de falha atual do código nesses po
 
 A suíte Django não foi executada; execução e resultados completos permanecem **[não verificado]**. [nao verificado]
 
-## 30/10 21:50 · sessao 6bf930cd4c2f · - · - · origem=Ronald (tmux)
-
-- **Um sítio de carregamento** (`lista(...)`, seguido de `dias_na_lista(...)`) e **um sítio do predicado BATIDA/CADASTRO**, ambos em `ListaDoAdmin`; a cadeia compartilhada o chama uma vez em `dono_fora_do_fio`. Referências: `app/chamados/services/vigia_fio.py:198`, `:199`, `:210`, `:263`.
-
-- O command passa **a mesma instância** aos dois censos. O carregador memoriza sucesso ou falha, portanto faz **no máximo uma tentativa por rodada**, somente se necessário; o mesmo `(colab_id, data_iso)` recebe o mesmo resultado de `dia_do_admin`. Referências: `app/chamados/management/commands/vigiar_fio_morto.py:166`, `:167`, `:168`; `app/chamados/services/vigia_fio.py:188`, `:190`, `:204`.
-
-- Essa igualdade vale **para a consulta à lei do admin**, sem garantir igualdade do contador/balde final dos universos: `censo` sai antes se há pergunta viva; `censo_alcance` exige porta na fila ou pergunta acessível pela fila/app antes de consultar a lei. Referências: `app/chamados/services/vigia_fio.py:359`, `:367`, `:556`, `:559`, `:567`.
-
-- Contraexemplo dedutível: dia passado e retido, chamado vivo silenciado, pergunta viva, nenhuma das três leis anteriores aplicável e dia BATIDA na lista. `censo` classifica `fio_vivo`; `censo_alcance`, sem porta, classifica `alcance_fio_do_admin`. O silêncio retira o chamado da fila. Isso é possibilidade do código, sem ocorrência produtiva demonstrada. Referências: `app/chamados/services/vigia_fio.py:359`, `:263`, `:559`, `:567`, `:570`; `app/chamados/services/painel.py:188`. Ocorrência em produção: **[não verificado]**.
-
-- **Sem `lista`**, cada chamada constrói sua própria `ListaDoAdmin`: mesmo algoritmo, caches independentes e até duas tentativas de carregar. Com entradas e fonte estáveis, o predicado coincide; a implementação não garante o mesmo retrato se a lista mudar ou uma chamada falhar e a outra conseguir carregar. Referências: `app/chamados/services/vigia_fio.py:339`, `:550`, `:184`, `:198`, `:201`, `:209`, `:210`.
-
-## 30/10 21:50 · sessao 6a378797b384 · - · - · origem=Ronald (tmux)
-
-Q2 — rastreio:
-
-- O estado nasce em `_sem_resposta=set()`, recebe pares distintos `(colab_id,data_iso)` somente em `dia_do_admin` quando `_dias is None` e é exposto por `len(set)` (`app/chamados/services/vigia_fio.py:185`, `:208`, `:227`).
-- A chave nasce com `0` no dicionário de `censo`; recebe snapshot de `lista.sem_resposta` ao final normal; o command a sobrescreve após os dois censos, incluindo dias exclusivos do alcance (`app/chamados/services/vigia_fio.py:316`, `:425`; `app/chamados/management/commands/vigiar_fio_morto.py:166`–`:169`). No retorno antecipado de `censo`, permanece o zero inicial (`app/chamados/services/vigia_fio.py:323`–`:325`).
-- `linhas(d)` lê a chave e publica `VFM|FIO_DO_ADMIN=...|sem_resposta=...`; o command chama esse leitor e inclui o `d` inteiro em `censo` do carimbo (`app/chamados/services/vigia_fio.py:793`–`:795`; `app/chamados/management/commands/vigiar_fio_morto.py:173`, `:216`).
-- Os testes antigos leem a chave nos cenários sucesso/uma falha/três dias, esperando `0/1/3`; o teste de carimbo lê implicitamente por comparação do dicionário inteiro (`app/chamados/tests/test_o261_vigia_fio.py:571`, `:579`, `:588`, `:780`).
-- O teste novo de falha lê **`lista.sem_resposta`**, não a chave devolvida nem o valor carimbado; usa o mesmo dia nos dois universos (`app/chamados/tests/test_o261e_f5_alcance.py:219`, `:226`).
-- `bin/fio_estado.py` não publica essa chave: projeta campos específicos e compara genericamente apenas os presentes em `esperado`; o command não inclui `fio_do_admin_sem_resposta` em `ESPERADO_DO_CARIMBO` (`bin/fio_estado.py:69`–`:73`, `:82`–`:92`; `app/chamados/management/commands/vigiar_fio_morto.py:87`–`:95`). Portanto aumento só nessa chave não muda o retorno/linha desse leitor com o carimbo produzido atualmente (mesmas referências).
-
-Mudança demonstrável **contra o pai fc9beece do patch fornecido**: se a lista falha, `censo` consulta zero dias e alcance consulta um dia, texto/carimbo passam de `sem_resposta=0` para `1`, pois o command agora copia a união após alcance (`app/chamados/management/commands/vigiar_fio_morto.py:167`–`:169`; anexo do usuário [não verificado] quanto à versão histórica executada). Contra **21b9db38**, falta a versão-base; conclusão exata [não verificado].
-
-Lacuna de selo: remover a atribuição do command em `:169` não é detectado pelo novo teste da falha, que consulta só a propriedade e usa um dia comum, sem dia exclusivo do alcance (`app/chamados/tests/test_o261e_f5_alcance.py:217`–`:227`). O teste antigo que compara carimbo a `censo()` avulso deixa de ser uma identidade universal sob falha com dias exclusivos do alcance (`app/chamados/tests/test_o261_vigia_fio.py:780`; `app/chamados/management/commands/vigiar_fio_morto.py:168`–`:169`).
-
-## 30/10 21:31 · sessao fb6e2bc2df4b · O261-E-CELULA-20 · verificador · origem=Code
-
-**1. Classificação: a retirada dos dois filtros é semanticamente redundante com o juiz atual; não identifiquei mudança de dia decorrente dela.** As causas continuam sendo escolhidas sobre `ps`, já filtrado por vitalidade. ([vigia_fio.py:495](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/services/vigia_fio.py:495), [vigia_fio.py:566](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/services/vigia_fio.py:566))
-
-A cadeia exata é:
-
-- As perguntas vêm de `PerguntaDisputa.objects.filter(celula_id__in=_cels)`: identidade pela FK da célula, sem casamento por `data_evento`. Todas entram em `perg_todas`; somente as aprovadas por `pergunta_viva(p)` entram em `perg`. ([vigia_fio.py:495](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/services/vigia_fio.py:495))
-- `ps = perg.get(c, []) if c else []`. ([vigia_fio.py:531](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/services/vigia_fio.py:531))
-- `pergunta_viva` delega a `_pergunta_viva_calc`, cujo primeiro degrau retorna `False` para `validada_em is not None`. O memo inclui esse campo na chave. Logo, para toda pergunta admitida em `ps`, os termos removidos eram verdadeiros. ([juizes.py:795](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/juizes.py:795), [juizes.py:1006](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/juizes.py:1006), [juizes.py:768](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/juizes.py:768))
-
-O julgamento do dono recebe **`perg_todas`**, preservando a leitura das validadas fora de `ps`. ([vigia_fio.py:549](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/services/vigia_fio.py:549))
-
-**2. Testes: há mordida, mas restam duas lacunas demonstráveis por inspeção.** [nao verificado]
-
-- **Porta antes do teto: cobertura parcial.** O teste novo cria apenas chamado com célula e verifica `porta_fila`. Um mutante com ordem **`porta_fila → teto → porta_pergunta`** passa essa asserção, embora classifique incorretamente uma pergunta alcançável de hoje. Falta repetir o cenário com chamado **sem célula**, pergunta no app e âncora na fila. ([teste:211](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/tests/test_o261e_f5_alcance.py:211), [vigia_fio.py:532](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/services/vigia_fio.py:532))
-- **Dia listado sem dono: morde corretamente.** A assinatura preserva a chave do dia com valor `None`; o helper exige a linha da célula, e a asserção exige exatamente `('e', 'dia_na_lista_dono_nenhum')`. Portanto distingue a atribuição indevida a `(d)`. ([cadastro_realidade.py:669](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/escala/services/cadastro_realidade.py:669), [teste:98](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/tests/test_o261e_f5_alcance.py:98), [teste:217](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/tests/test_o261e_f5_alcance.py:217))
-- **A garantia de `ps` não está protegida pelos dois testes novos:** nenhum cria pergunta. Eles passam se a inclusão em `perg` deixar de consultar o juiz. O contrato AST também não exige essa consulta: procura comparações cruas de carimbo. Falta um negativo com pergunta validada que seria `(b)/(c)` se admitida indevidamente. ([teste:211](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/tests/test_o261e_f5_alcance.py:211), [contrato:288](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/tests/test_contract_leitores_vitalidade.py:288))
-
-**3. Quem escreve e quem lê: nenhum resultado desses consumidores muda sob a equivalência acima.**
-
-| Papel | Caminho confirmado |
-|---|---|
-| Produz o dict | `censo_alcance` acumula total, causas, detalhes e lista. ([vigia_fio.py:588](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/services/vigia_fio.py:588)) |
-| Lê causas para impressão | `linhas_alcance` publica causas e detalhes; o comando imprime suas linhas. ([vigia_fio.py:610](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/services/vigia_fio.py:610), [comando:181](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/management/commands/vigiar_fio_morto.py:181)) |
-| Escreve o carimbo | O comando guarda o dict inteiro em `alcance` e replica o total em `censo`; `_carimbar` serializa e substitui o arquivo. ([comando:211](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/management/commands/vigiar_fio_morto.py:211), [comando:130](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/management/commands/vigiar_fio_morto.py:130)) |
-| Lê o carimbo para ESTADO | `fio_estado` compara `censo` com `esperado`, incluindo o total de alcance; não consulta suas causas. `gerar_estado` consome esse leitor. ([fio_estado.py:69](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/bin/fio_estado.py:69), [gerar_estado.py:260](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/bin/gerar_estado.py:260)) |
-
-O alcance continua fora de `ALARMA_EM_0`; `gritou` é calculado antes de `alc`, usando o censo antigo. ([comando:81](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/management/commands/vigiar_fio_morto.py:81), [comando:163](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/management/commands/vigiar_fio_morto.py:163))
-
-Execução da suíte, sobrevivência empírica dos mutantes e leitores externos à cópia: **[nao verificado]**. [nao verificado]
-
-## 30/10 21:30 · sessao 0d5e0d25562d · - · - · origem=Ronald (tmux)
-
-Os dois casos novos têm mordida, mas a cobertura da ordem das portas é parcial.
-
-- `test_MORDE_porta_vence_o_teto_de_hoje` cria chamado com célula e exige `(porta_fila, teto) == (1, 0)`, portanto distingue teto antes de `porta_fila`. Porém passa com mutante que coloca o teto **entre** `porta_fila` e `porta_pergunta`: o caso não cria pergunta; os casos existentes de pergunta usam `DIA=01/09` e `HOJE=25/09`, portanto também não exercitam pergunta de hoje. (`app/chamados/tests/test_o261e_f5_alcance.py:25`, `:26`, `:84`, `:120`, `:211`; ordem atual em `app/chamados/services/vigia_fio.py:532`, `:535`, `:538`.)
-
-- `test_dia_na_lista_SEM_dono_lavrado_e_outra_e_nao_cadastro` é direto e não vazio: injeta assinatura com data sem dono; `dias_na_lista` guarda a chave com valor `None`; `_causa_do_dia` exige exatamente uma linha da célula; a asserção exige `('e','dia_na_lista_dono_nenhum')`. Mata a condição antiga de `(d)` que verificava só presença do colaborador e ignorava presença do dia. (`app/chamados/tests/test_o261e_f5_alcance.py:163`, `:217`, `:98`; `app/escala/services/cadastro_realidade.py:669`; `app/chamados/services/vigia_fio.py:570`, `:574`.)
-
-A confiança em `ps` não é provada pelos testes F5: `_pergunta` nunca planta `validada_em`; os dois casos novos nem criam perguntas. Um mutante que substitua o filtro `if pergunta_viva(p)` por inclusão incondicional não é distinguido pelas fixtures examinadas. O contrato de vitalidade procura comparações de carimbo via AST; não exige que o consumidor chame o juiz, portanto esse mutante também passa sua condição estrutural. (`app/chamados/tests/test_o261e_f5_alcance.py:75`, `:211`; `app/chamados/services/vigia_fio.py:495`; `app/chamados/tests/test_contract_leitores_vitalidade.py:288`, `:299`.)
-
-`AGORA` é literalmente 15:00 UTC, enquanto o decorator contém `12:00:00` sem `tz_offset`; nenhuma asserção confere a igualdade anunciada pelo comentário. Para as classificações examinadas, os usos são presença de `respondida_em` e silêncio deslocado em três dias; a fila continua consultando `timezone.now()`. (`app/chamados/tests/test_o261e_f5_alcance.py:28`, `:31`, `:73`, `:82`; `app/chamados/services/vigia_fio.py:525`; `app/chamados/services/painel.py:188`.)
-
-Execução dos testes e sobrevivência empírica de mutantes: [não verificado]. [nao verificado]
-
-## 30/10 21:30 · sessao 24bb4feb6c4f · - · - · origem=Ronald (tmux)
-
-O delta não muda o formato do dict nem do carimbo; altera apenas os predicados que escolhem causas `b/c`, e o incremento de total permanece comum a todas as causas (`app/chamados/services/vigia_fio.py:566`, `:568`, `:588`, `:593`).
-
-- **Escritor do dict:** `censo_alcance` inicializa contadores, causas e listas, depois acumula resultado por dia (`app/chamados/services/vigia_fio.py:458`, `:461`, `:588`).
-- **Leitor direto produtivo:** `vigiar_fio_morto.handle` chama `censo_alcance`, passa o resultado a `linhas_alcance` e imprime as linhas (`app/chamados/management/commands/vigiar_fio_morto.py:181`).
-- **Leitor das causas:** `linhas_alcance` lê os cinco contadores e `alcance_e_detalhe`; portanto uma eventual reclassificação mudaria essa saída (`app/chamados/services/vigia_fio.py:610`).
-- **Escritor do carimbo:** o comando grava o dict inteiro em `registro['alcance']` e replica só o total em `registro['censo']['fio_morto_alcance']`; `_carimbar` serializa JSON e substitui o arquivo (`app/chamados/management/commands/vigiar_fio_morto.py:211`, `:213`, `:130`). Só a rodada sem recorte carimba (`app/chamados/management/commands/vigiar_fio_morto.py:200`, `:219`).
-- **Leitor do carimbo:** `bin/fio_estado.py` compara dinamicamente `registro['censo']` contra `registro['esperado']`; o total de alcance participa dessa comparação porque está no esperado. Ele não usa causas/detalhes do bloco `alcance` (`bin/fio_estado.py:69`, `:72`; `app/chamados/management/commands/vigiar_fio_morto.py:94`). `gerar_estado` consome `ler/linha` desse módulo (`bin/gerar_estado.py:260`).
-- **Alarme/saída:** alcance não integra `ALARMA_EM_0`; `gritou` é calculado com o censo antigo antes de obter `alc`. A mera redistribuição entre causas não muda o código de saída (`app/chamados/management/commands/vigiar_fio_morto.py:81`, `:163`, `:181`, `:222`). O cron configura `--alarme --alarme-passivo`, mas usa essas mesmas listas (`app/config/crons.py:1654`).
-- **Testemunhas:** teste F5 verifica esperado, total nos dois lugares do carimbo e linha impressa, sem comparar causas/detalhes completos (`app/chamados/tests/test_o261e_f5_alcance.py:247`). O teste antigo compara o bloco `censo`, incluindo apenas o total de alcance (`app/chamados/tests/test_o261_vigia_fio.py:780`).
-
-Assim, condicionada à equivalência semântica confirmada pelo juiz, nenhum desses leitores muda de resultado; se surgisse diferença entre `b/c/e`, ela apareceria nas linhas de causas e no bloco completo `alcance`, enquanto o painel/alarme continuaria usando o mesmo total (`app/chamados/services/vigia_fio.py:588`, `:610`; `app/chamados/management/commands/vigiar_fio_morto.py:211`; `bin/fio_estado.py:72`). Leitores externos à cópia e comportamento efetivo em produção: [nao verificado].
-
-## 30/10 21:30 · sessao 86e7a786e1b8 · - · - · origem=Ronald (tmux)
-
-Não encontrei mudança de classificação decorrente da retirada de `validada_em` em (b)/(c): ambas iteram exclusivamente `ps`, e toda pergunta de `ps` já passou por `pergunta_viva(p)`; esse juiz devolve `False` imediatamente quando `validada_em is not None`. Assim, nas duas condições antigas o termo removido era sempre verdadeiro. (`app/chamados/services/vigia_fio.py:497`, `app/chamados/services/vigia_fio.py:531`, `app/chamados/juizes.py:1006`)
-
-Cadeia exata:
-
-- O universo nasce dos dias de `fora_da_folha`, por empresa e competência; as células correspondentes são buscadas por colaborador/data. (`app/chamados/services/vigia_fio.py:466`, `app/chamados/services/vigia_fio.py:480`)
-- A query de perguntas usa **FK `celula_id__in=_cels`**, com `select_related('disputa','celula')`; não deriva identidade por `data_evento`. (`app/chamados/services/vigia_fio.py:495`)
-- `perg_todas` recebe todas; `perg` recebe apenas as aprovadas por `pergunta_viva`; `ps = perg.get(c, []) if c else []`. (`app/chamados/services/vigia_fio.py:496`, `app/chamados/services/vigia_fio.py:497`, `app/chamados/services/vigia_fio.py:531`)
-- `pergunta_viva` delega a `_pergunta_viva_calc` em `juizes.py:795`; o primeiro degrau mata a validada em `juizes.py:1006`. O memo inclui `validada_em` na chave, portanto o cache normal não contorna esse degrau após mudança do campo. (`app/chamados/juizes.py:768`, `app/chamados/juizes.py:791`)
-- O dono recebe **`perg_todas`**, necessário para reconhecer folga validada, e não o conjunto vivo `ps`; isso não foi removido. (`app/chamados/services/vigia_fio.py:549`, `app/chamados/services/vigia_fio.py:199`)
-- (b) continua exigindo carimbo de resposta e texto vazio; (c) continua exigindo resposta carimbada e âncora terminal. A âncora vem de `chamado_destino_id`, com fallback para o chamado da disputa. (`app/chamados/services/vigia_fio.py:525`, `app/chamados/services/vigia_fio.py:566`, `app/chamados/services/vigia_fio.py:568`, `app/chamados/services/fio.py:116`)
-
-A alteração resolve uma violação **estrutural** do contrato AST: ele procura comparação crua de `validada_em`/`materializada_em` com `None`, sem provar que o conjunto já foi filtrado. O teste contratual rejeitaria as duas leituras antigas mesmo sendo redundantes semanticamente. (`app/chamados/tests/test_contract_leitores_vitalidade.py:288`, `app/chamados/tests/test_contract_leitores_vitalidade.py:301`)
-
-Nenhuma execução ou mutação realizada nesta exploração; comportamento observado em produção além dos anexos: [não verificado].
-
-_775 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_781 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
