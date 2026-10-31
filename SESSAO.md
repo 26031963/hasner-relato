@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 31/10/2026 07:21:06.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (30.2 MB). Acoes na janela: **808**.
+**Medido em 31/10/2026 07:26:10.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (30.3 MB). Acoes na janela: **808**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:23:22 | Monitor | push then F1C4 suite verdict | `cd /home/ronald/saas-hasner; until grep -q '^rc=' logs/vfase_asof/push_leak.log; do /usr/bin/sleep 20; done; tail -4 logs/vfase_asof/push_leak.log \| cut -c1-200; until grep -q '^rc=' logs/o261e/f1c4c_suite_merge_f3c8e2a8.log; do /usr/bin/sleep 30; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/o261e/f1c4c_suite_merge_f3c8e2a8.log \| tail -3` |
+| 07:23:16 | Bash | Check push and F1C4 suite | `cd /home/ronald/saas-hasner; date +%H:%M; tail -3 logs/vfase_asof/push_leak.log \| cut -c1-200; git fetch -q; git log --oneline -1 origin/main; grep -E '^(OK\|FAILED)\|^Ran \|^rc=' logs/o261e/f1c4c_suite_merge_f3c8e2a8.log \| tail -3; pgrep -f "^docker run --rm --cpuset-cpus 4-7"` |
 | 07:16:03 | Bash | Point wait line at live docker | `cd /home/ronald/saas-hasner && sed -i '3s/pid=[0-9]*$/pid=2403075/' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md; ps -o args= -p 2403075 \| cut -c1-200` |
 | 07:15:57 | Bash | Confirm push result on remote | `cd /home/ronald/saas-hasner; tail -5 logs/vfase_asof/push_leak.log \| cut -c1-200; git fetch -q; git log --oneline -1 origin/main` |
 | 07:15:53 | Bash | Check wait line validity | `cd /home/ronald/saas-hasner; sed -n 3p app/docs/RELATO.md; pgrep -f "^docker run --rm --cpuset-cpus 4-7"; grep -E '^(OK\|FAILED)\|^Ran \|^rc=' logs/vfase_asof/push_leak.log \| tail -3; bin/trava_teste.sh --quem` |
@@ -816,5 +818,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:33:52 | Bash |  | `cd /home/ronald/saas-hasner && git -C /home/ronald/wt-medida-1907 log --oneline -2; git -C /home/ronald/wt-medida-1907 status --short \| head -3; git log --oneline -1; (bin/suite.sh --espera 3600 --dir /home/ronald/wt-medida-1907 > logs/medida_programa/suite.log 2>&1; echo "rc=$?" >> logs/medida_programa/suite.log)` |
 | 19:33:43 | Bash |  | `cd /home/ronald/saas-hasner && grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()\|^rc=" logs/medida_programa/recorte.log \| tail -8 \| cut -c1-200` |
 | 19:26:13 | SendMessage |  | `-` |
-| 19:26:07 | Bash |  | `cd /home/ronald/saas-hasner && grep -E "^FAIL:" logs/o261v/suite2_9772e8fe.log \| cut -c1-200; grep -A20 "^FAIL: test_MORDE_todo_nome_importado" logs/o261v/suite2_9772e8fe.log \| grep -E "AssertionError\|fora_de_fase\|import" \| head -5 \| cut -c1-300` |
-| 19:26:02 | Bash |  | `cd /home/ronald/saas-hasner && grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()\|^rc=" logs/o261v/suite2_9772e8fe.log \| tail -6 \| cut -c1-200` |
