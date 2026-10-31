@@ -82,7 +82,7 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
 | celula/precedencia | 9/0 | 0 | 0 | 0 | 0 | 3 | 2 |
 | turno/marcos | 15/0 | 0 | 0 | 0 | 0 | 3 | 1 |
 | ausencia/ferias | 15/0 | 0 | 0 | 0 | 0 | 6 | 4 |
-| chamado | 17/0 | 0 | 0 | 0 | 0 | 3 | 11 |
+| chamado | 18/0 | 0 | 0 | 0 | 0 | 3 | 11 |
 | feriado/prazo | 6/2 | 13 | 10 | 2 | 1 | 4 | 1 |
 | fechamento | 9/0 | 0 | 0 | 0 | 0 | 5 | 1 |
 | tela | 11/1 | 110 + sitio novo: nao sei (sem varredor) | 68 | 5 | 37 + sitio novo: nao sei (sem varredor) | 0 | 2 |
@@ -169,6 +169,7 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
   - alguma pergunta desta colecao esta viva? -> `chamados/juizes.py::fio_vivo` · registro 0
   - este dia veta o nascimento/reabertura automatica de chamado de turno? -> `ponto/services/furos_vetados.py::motivo_do_veto` · registro 0
   - por onde alguem chega a este dia (porta alcancavel, com o verbo do painel)? -> `chamados/juizes.py::porta_alcancavel_do_dia` · registro 0
+  - a cobranca do dia cala porque a celula lavrada diz que o dia nao e de trabalho? -> `chamados/juizes.py::dia_sem_trabalho` · registro 0
 
 ### feriado/prazo -- fora_de_autoridade('feriado/prazo') = 13
 - pendentes: sem chamar 10 · chama e deriva 2 · nao sei 1 · [pergunta sem juiz declarado (nao ha quem chamar): 1]

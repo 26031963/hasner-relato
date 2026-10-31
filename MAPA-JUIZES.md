@@ -52,6 +52,7 @@ esperam migrar -- a lista so encolhe).
 | o dia e de trabalho para o vinculo? | `escala/models.py::EscalaColaborador.eh_dia_trabalho` |
 | o dia e feriado para o colaborador? | `core/feriados.py::eh_feriado` |
 | qual fato vence o dia (ferias > afastamento > atestado > feriado > folga > trabalho)? | `ponto/precedencia.py::fatos_do_dia` |
+| qual o status do dia (ok, irregular, falta, folga, ausencia...)? | `ponto/status_dia.py::status_do_dia_lavrado` |
 | quantos minutos o dia preve? | `escala/utils.py::minutos_previstos_do_dia` |
 | quantos minutos o dia realizou? | `ponto/turnos.py::realizado_do_dia` |
 | que marco do dia faltou (furo)? | `escala/servico_jornada.py::classificar_falta` |
@@ -90,6 +91,7 @@ esperam migrar -- a lista so encolhe).
 | pergunta | juiz (dono) |
 |---|---|
 | a ausencia do dia suspende, fecha ou levanta a cobranca viva? | `chamados/services/silencio_ausencia.py::reconciliar_por_ausencia` |
+| a cobranca do dia cala porque a celula lavrada diz que o dia nao e de trabalho? | `chamados/juizes.py::dia_sem_trabalho` |
 | a cobranca ficou orfa depois da regeneracao? | `escala/services/regeneracao.py::cobranca_orfa` |
 | a disputa pode fechar? | `chamados/models.py::DisputaSupervisao.pode_fechar` |
 | a fabrica de perguntas alcanca o chamado (e se nao, por que)? | `chamados/services/disputa_emissao.py::motivo_fora_da_fabrica` |
@@ -175,12 +177,12 @@ esperam migrar -- a lista so encolhe).
 |---|---|---|---|
 | `batida` | 4 | 2 | 0 |
 | `turno/marcos` | 15 | 0 | 0 |
-| `celula/precedencia` | 8 | 0 | 0 |
+| `celula/precedencia` | 9 | 0 | 0 |
 | `escala` | 2 | 0 | 0 |
 | `ausencia/ferias` | 15 | 0 | 0 |
-| `chamado` | 16 | 0 | 0 |
+| `chamado` | 18 | 0 | 0 |
 | `fechamento` | 9 | 0 | 0 |
 | `feriado/prazo` | 6 | 2 | 13 |
 | `tela` | 11 | 1 | 110 |
 | `portas` | 1 | 0 | 124 |
-| **total** | **87** | **5** | **247** |
+| **total** | **90** | **5** | **247** |
