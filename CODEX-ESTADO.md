@@ -1,7 +1,150 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 03:01** · publicado em **31/10/2026 03:05** (UTC-3)
+> Ultima resposta processada: **31/10/2026 03:10** · publicado em **31/10/2026 03:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 03:10 · sessao f6d5809d61e6 · O261-E-F1-CLASSE-4 · verificador · origem=Code
+
+**Reprovo o diff:** há fechamento de fatos distintos por dedup, sobrevivência dependente da sequência de eventos, carimbo indevido pela tranca e teste que não distingue a cura de sua reversão. (`app/ponto/services/cartorio.py:1341`, `app/chamados/models.py:709`, `app/chamados/reconciliador.py:611`, `app/chamados/tests/test_e2_pergunta_so_ao_c6.py:63`)
+
+1. **O gate não garante “um vivo”: há contraexemplos com zero e com dois.**
+
+   **Zero depois, um antes:** considere A antigo, `intervalo_pendente`, cobrando intervalo apagado; B novo, `batida_ausente`, cobrando somente S apagada. Ambos sem perguntas ancoradas, num dia abaixo do piso de emissão, sem toque do admin. O código admite essas cobranças separadas por marcos e bloqueia a reemissão automática abaixo do piso. (`app/chamados/catalogo/modulos.py:105`, `app/chamados/catalogo/modulos.py:111`, `app/chamados/models.py:1234`, `app/ponto/services/cartorio.py:1398`, `app/ponto/services/cartorio.py:1460`)
+
+   | Evento | Antes do diff | Depois do diff |
+   |---|---|---|
+   | Fechamento da disputa de B dispara Defesa 1 | B fecha apoiado em A. | B recusa porque ele é o C8. |
+   | Fechamento da disputa de A dispara Defesa 1 | A sozinho recusa. | A fecha apoiado em B. |
+   | Apenas S acende; cartório reconcilia por marco | A continua cobrando intervalo. | B fecha; o intervalo continua apagado, mas ficam zero vivos. |
+
+   A sequência decorre do signal chamando a mesma porta, da troca de `excluir=self` pela proteção do próprio C8 e do fechamento independente quando os marcos do sobrevivente acendem. Abaixo do piso, o cartório não recompõe a cobrança apagada. É um contraexemplo de fluxo; ocorrência em produção: **[não verificado]**. (`app/chamados/signals.py:42`, `app/chamados/models.py:704`, `app/chamados/models.py:709`, `app/chamados/models.py:1236`, `app/ponto/services/cartorio.py:1225`, `app/ponto/services/cartorio.py:1406`)
+
+   **Dois depois, um antes:** A antigo e B novo cobram D; B não tem perguntas; A ancora pergunta viva de D−1, admitida pela costura de jornada noturna. O gate protege B pelo C8 de D. A tenta fechar, mas sua pergunta procura uma resolvedora em D−1, onde não há candidata, e também recusa. Antes, B sem pergunta fechava apoiado em A. (`app/chamados/models.py:369`, `app/chamados/models.py:371`, `app/chamados/models.py:373`, `app/chamados/models.py:709`, `app/chamados/juizes.py:1626`, `app/chamados/juizes.py:1719`)
+
+   A extensão nova não alcança esse caso: o cartório pula A por fio vivo e B por ausência de perguntas. Portanto, proteger o eleito e conseguir transferir as perguntas são pré-requisitos diferentes; o primeiro não garante o segundo. (`app/ponto/services/cartorio.py:1325`, `app/ponto/services/cartorio.py:1326`, `app/chamados/models.py:373`)
+
+2. **`[FIO-DUP-C8]` amplia o fechamento para outro turno e para chamado respondido.**
+
+   O filtro novo de `y` exige apenas outro objeto, estado vivo e módulo em `CALADOS_POR_ISENCAO`; não compara `entrada_timestamp` nem aplica a proteção de resposta usada para `x`. (`app/ponto/services/cartorio.py:1328`, `app/ponto/services/cartorio.py:1341`)
+
+   - **Outro turno do mesmo dia:** passa pela seleção por dia e pelo gate de dedup. A reata também aceita imediatamente datas iguais. Isso contraria a identidade explicitada pelo juiz de turno: dois turnos no mesmo dia são dois fatos. (`app/chamados/juizes.py:1625`, `app/chamados/models.py:709`, `app/chamados/juizes.py:1710`, `app/chamados/juizes.py:1647`)
+   - **Chamado com resposta:** `y` pode fechar mesmo que sua própria passagem pelo laço externo fosse poupada pelo texto do colaborador. A pergunta viva pode ser reapontada para `x`; o efeito demonstrável é fechamento e mudança de âncora, sem prova de perda do texto. (`app/ponto/services/cartorio.py:1328`, `app/ponto/services/cartorio.py:1343`, `app/chamados/models.py:416`, `app/chamados/juizes.py:1020`)
+   - **Outro módulo:** a extensão alcança `batida_ausente`, `turno_aberto` e `intervalo_pendente`. Diferença de módulo, isoladamente, não demonstra erro: já existe teste autorizando dedup entre `batida_ausente` e `turno_aberto`. (`app/chamados/catalogo/furo_modulos.py:15`, `app/chamados/catalogo/modulos.py:235`, `app/chamados/tests/test_fechar3_retorno_do_gate.py:85`)
+
+3. **Há mudança indireta fora de `CALADOS_POR_ISENCAO`, pela retirada da ordenação.**
+
+   A cobertura agora percorre os mais novos primeiro. Considere A antigo, `entrada_bloqueada_turno_aberto`, categoria `turno_aberto`, datado por contexto/célula e com premissa viva; B novo, `batida_ausente`, cujo único marco já acendeu. Ambos passam pelo filtro de premissa da cobertura. Antes, o helper colocava B por último: A fechava apoiado em B, depois B fechava pelo marco. Agora B fecha primeiro e A perde a cobrança de apoio, permanecendo vivo. (`app/ponto/services/cobertura.py:225`, `app/ponto/services/cobertura.py:309`, `app/chamados/catalogo/premissa.py:48`, `app/chamados/models.py:1197`, `app/chamados/models.py:1236`)
+
+   Portanto, “fora de CALADOS nada muda” vale apenas para a comparação isolada do próprio chamado com a resposta do C8; não vale para o estado que ele encontra depois dos outros fechamentos. Existência desse legado datado em produção: **[não verificado]**. (`app/chamados/models.py:707`, `app/chamados/models.py:709`, `app/ponto/services/cobertura.py:317`)
+
+4. **E2 transforma silêncio pela tranca em absolvição pela célula.**
+
+   Com célula não acusadora, marco pendente e marco perguntado apagado, o pré-teste anterior impedia o carimbo. Agora o C6 pode devolver `False` exclusivamente porque o dia está trancado; E2 grava `materializada_em` e `celula_absolveu`, embora a tranca expressamente não constitua absolvição. (`app/chamados/reconciliador.py:584`, `app/chamados/reconciliador.py:611`, `app/chamados/reconciliador.py:615`, `app/chamados/juizes.py:1010`, `app/chamados/juizes.py:1012`)
+
+   O escritor irmão já distingue essas causas e proíbe carimbar pergunta morta pela leitura da tranca. Destrancar só limpa a via `competencia_trancada`; não limpa `celula_absolveu`. O materializador, por sua vez, exige `materializada_em=NULL`. Assim, o carimbo indevido pode sobreviver à reabertura e excluir uma resposta da materialização. (`app/chamados/services/disputa_emissao.py:1549`, `app/chamados/models.py:2541`, `app/chamados/models.py:2534`, `app/chamados/services/materializacao.py:1286`)
+
+   **Resposta à pergunta 4:** no universo atual selecionado por E2, não identifiquei outro delta funcional normal além da tranca. Validação e materialização prévias estão excluídas; marco aceso já passava pelo pré-teste removido; pendência sem marco aceso e sem tranca continua viva no C6. (`app/chamados/reconciliador.py:584`, `app/chamados/juizes.py:1005`, `app/chamados/juizes.py:1032`, `app/chamados/juizes.py:1068`, `app/chamados/juizes.py:1080`)
+
+5. **Os testes mordem parcialmente; a reversão exata da cura E2 permanece indistinguível.** [nao verificado]
+
+   | Mutante | Resultado dedutível pela leitura |
+   |---|---|
+   | Restaurar exatamente o pré-teste removido de E2 | Preserva os dois resultados esperados: saída acesa passa; apagada continua sem carimbo. Os testes não distinguem a reversão. (`app/chamados/tests/test_e2_pergunta_so_ao_c6.py:26`, `app/chamados/tests/test_e2_pergunta_so_ao_c6.py:63`, `app/chamados/juizes.py:1068`) |
+   | Restaurar o teto antigo, sem exceção para marco aceso | Contraria o primeiro teste. Esse é o mutante que o teste distingue. (`app/chamados/tests/test_e2_pergunta_so_ao_c6.py:63`) |
+   | Restaurar `excluir=self` no gate | Contraria a sobrevivência do novo e a trilha exigidas no teste do signal. (`app/ponto/tests/test_fechar3_troca_escala_gate.py:249`, `app/ponto/tests/test_fechar3_troca_escala_gate.py:255`) |
+   | Remover `[FIO-DUP-C8]` | Contraria fechamento e reaponte exigidos no terceiro teste novo. (`app/ponto/tests/test_fechar3_troca_escala_gate.py:313`, `app/ponto/tests/test_fechar3_troca_escala_gate.py:323`) |
+   | Restaurar somente a ordenação, mantendo o gate novo | As expectativas novas não distinguem essa restauração. (`app/chamados/models.py:709`, `app/ponto/tests/test_fechar3_troca_escala_gate.py:251`, `app/ponto/tests/test_fechar3_troca_escala_gate.py:303`) |
+
+   Os testes da extensão usam mesmo módulo, mesmos marcos e perguntas sem resposta. Não cobrem outro turno, resposta escrita nem a sequência temporal de desaparecimento da cobrança. Os testes E2 também omitem `data_evento`, deixando a tranca fora do caso. (`app/ponto/tests/test_fechar3_troca_escala_gate.py:272`, `app/ponto/tests/test_fechar3_troca_escala_gate.py:283`, `app/chamados/tests/test_e2_pergunta_so_ao_c6.py:58`, `app/chamados/juizes.py:887`)
+
+O censo dos chamadores de `.reconciliar()` resulta nos efeitos abaixo; “sem mudança direta” refere-se ao caminho descrito, preservados seus insumos. (`app/chamados/models.py:645`, `app/chamados/models.py:688`, `app/chamados/models.py:699`)
+
+| Leitor/chamador | O que passa a observar |
+|---|---|
+| `app/chamados/signals.py:42` | Pode receber recusa para o novo antes fechável; a nota Defesa 1 depende do retorno. |
+| `app/chamados/services/materializacao.py:539` e `:711` | Uma chamada descarta o retorno; a outra o propaga. O novo gate pode manter o destino vivo. |
+| `app/ponto/management/commands/detectar_ausencias.py:158` e `:816` | LIMBO normalmente não chega ao C8; os fechamentos de cobrança condicionam suas notas ao retorno. |
+| `app/chamados/services/limbo_folgas.py:101` e `:243` | Pai cadastral normalmente permanece igual; filho agrupado sob pai vivo passa antes do C8. (`app/chamados/models.py:699`) |
+| `app/ponto/services/cobertura.py:122` e `:317` | Mudam retorno, recusados/explicados e, pela ordem removida, o apoio disponível aos seguintes. |
+| `app/ponto/services/veredito_celula.py:174` e `:183` | Fecha perguntas antes do lote; decisão administrativa na célula regulariza antes do C8. (`app/chamados/models.py:1230`) |
+| `app/chamados/services/adesao.py:115` e `:150` | Agrupamento vivo e pai cadastral normalmente evitam a comparação alterada. (`app/chamados/models.py:699`, `app/chamados/models.py:1192`) |
+| `app/ponto/services/lastro.py:306` e `:317` | Marco efetivamente satisfeito regulariza antes do C8; pode encerrar o sobrevivente que sustentou outros fechamentos. (`app/chamados/models.py:1236`) |
+| `app/ponto/services/triagem_batida.py:580` e `:588` | Mantém proteção de outro turno aberto e seleção por módulo; recusa do novo gate impede os efeitos posteriores. |
+| `app/ponto/services/ausencia.py:678` | Pode observar outros apoios vivos após a mudança de sequência; o módulo externo entra na guarda pela categoria `ausencia`. (`app/ponto/services/ausencia.py:653`, `app/chamados/models.py:1197`) |
+| `app/chamados/services/feriado_reavaliar.py:47` | Espuriedade reconhecida regulariza antes do C8; nota/trilha continuam condicionadas ao fechamento. (`app/chamados/models.py:1252`) |
+| `app/chamados/services/silencio_ausencia.py:93` | Aprovação e pré-filtro permanecem; se chegar à comparação alterada, a recusa impede o fechamento. |
+| `app/ponto/services/cluster_espurio.py:80` | Classe emitida fora da guarda de furo: sem mudança direta pelo C8. (`app/ponto/services/cluster_espurio.py:89`, `app/chamados/models.py:1192`) |
+| `app/ponto/services/entrada_sincronizada.py:28` | Exige marcos acesos antes da porta; normalmente regulariza antes do C8. (`app/chamados/models.py:1236`) |
+| `app/chamados/management/commands/auditar_chamados_orfaos.py:67` | Pode trocar fechamento/OK por recusa; nota depende do retorno. |
+| `app/colaboradores/management/commands/marcar_feriado_do_posto.py:126` | Premissa espúria reconhecida passa antes do C8; nota e contador dependem do retorno. (`app/chamados/models.py:1252`) |
+| `app/colaboradores/services/pos_vinculo.py:36` | Pais cadastrais normalmente ficam fora da guarda alterada; retorno governa nota/contador. |
+| `app/ponto/management/commands/curar_residuo_bug115.py:151` | Continua subordinado ao gate; nova recusa impede nota e contagem de encerramento. |
+| `app/ponto/management/commands/detectar_intervalo_ausente.py:128` | Premissa específica morta não garante dia regularizado; a proteção do eleito pode mudar fechamento e contador, inclusive no dry-run. |
+| `app/chamados/reconciliador.py:520` | Retenções continuam anteriores ao gate; fechamento, justificativa e resolução das perguntas dependem de sua aprovação. |
+| `app/ponto/services/cartorio.py:1225`, `:1259` e `:1341` | Perde a ordenação e ganha tentativas de fechamento de outros vivos, inclusive os poupados pelo laço externo. |
+
+Quanto aos campos e autoridades pedidos:
+
+- **`status_local`:** a escrita continua em `_gravar_estado`; o diff altera decisões e sequência que chegam ao escritor, com efeitos no signal resolvedor e no rejulgamento do cartório. (`app/chamados/models.py:618`, `app/chamados/models.py:222`, `app/chamados/models.py:279`, `app/chamados/signals.py:76`, `app/chamados/signals.py:165`)
+- **`_f1_dedup`:** mantém escritor e consumidor. A tentativa protegida deixa de preenchê-lo; a trilha continua posterior à aprovação da pergunta viva. (`app/chamados/models.py:717`, `app/chamados/models.py:645`, `app/chamados/models.py:648`, `app/chamados/models.py:654`)
+- **`chamado_destino`:** muda qual sobrevivente recebe a pergunta; a escrita continua pela porta `reapontar_resolvedora`, com `resolvedora_valida` e relavra. (`app/chamados/models.py:371`, `app/chamados/models.py:418`, `app/chamados/services/fio.py:837`, `app/chamados/services/fio.py:845`)
+- **`materializada_em`/`via_resolucao`:** E2 ganha o alcance indevido da tranca; o resolvedor por chamado mantém sua exclusão explícita. (`app/chamados/reconciliador.py:615`, `app/chamados/services/disputa_emissao.py:1551`)
+- **C6/C8:** suas funções não recebem alteração de corpo neste diff; mudam os argumentos ao C8 e os estados que suas consultas encontram. O C6 responde vitalidade, incluindo silêncio pela tranca, não a causa “célula absolveu”. (`app/chamados/models.py:709`, `app/chamados/juizes.py:1625`, `app/chamados/juizes.py:1010`, `app/chamados/reconciliador.py:617`)
+- **Cadastro:** C6 está registrado como `pergunta_viva`; C8 está registrado como `ChamadoColaborador.abrir`, e a documentação confirma essa autoridade. Chamar `cobranca_viva_do_dia` de “C8” não demonstra, por si, conformidade com esse registro. (`app/core/juizes.py:238`, `app/core/juizes.py:240`, `app/docs/JUIZES.md:54`)
+
+Execução das suítes/mutantes, incidência dos contraexemplos em produção e resultado após uma agenda real completa de crons: **[não verificado]**.
+
+## 31/10 03:08 · sessao 51114a07024e · - · - · origem=Ronald (tmux)
+
+Dois contraexemplos condicionais pelo código; ocorrência em produção [não verificado]:
+
+1. **Zero vivos depois, um antes**: A velho `intervalo_pendente` cobra intervalo apagado; B novo `batida_ausente` cobra S apagada; dia abaixo do piso, sem perguntas. Fechar disputa de B: antes B fechava apoiado A; agora B recusa por ser C8. Fechar disputa de A: antes A sozinho recusava; agora A fecha apoiado B. Quando somente S acende, B fecha por premissa regularizada; intervalo continua apagado e nenhuma cobrança renasce abaixo do piso. Referências: `app/chamados/signals.py:42`, `app/chamados/models.py:699`, `app/chamados/models.py:709`, `app/chamados/models.py:1236`, `app/ponto/services/cartorio.py:1398`, `app/ponto/services/cartorio.py:1460`. Precisa explicitar ausência de outros chamados/perguntas e de toque que atravesse piso.
+
+2. **Dois vivos depois, um antes**: A velho e B novo cobram D; B não tem perguntas; A ancora pergunta viva de D−1, costura legítima por turno noturno. Agora B recusa por ser C8; A tenta fechar, mas sua pergunta procura C8 em D−1, sem candidato, e segura A. Antes B fechava apoiado A, restando A. Referências: `app/chamados/models.py:369`, `app/chamados/models.py:375`, `app/chamados/models.py:710`, `app/chamados/juizes.py:1626`, `app/chamados/juizes.py:1719`. Cartório pula A com fio vivo e B sem perguntas: `app/ponto/services/cartorio.py:1325`.
+
+**Módulo externo também pode mudar indiretamente**: retirada da ordenação em cobertura faz B novo com marco já atendido fechar antes de A externo; A perde sua cobrança de apoio. Exemplo externo aceito pelo código: `entrada_bloqueada_turno_aberto`, categoria `turno_aberto`, ligado a D por célula/contexto. Ambos passam o filtro da cobertura. Antes A fechava em B; agora permanece. Referências: `app/ponto/services/cobertura.py:225`, `app/ponto/services/cobertura.py:309`, `app/chamados/catalogo/premissa.py:48`, `app/chamados/models.py:1197`, `app/ponto/views.py:297`. Existência desse legado datado em produção [não verificado].
+
+Mapa completo dos chamadores foi enviado nas mensagens anteriores. `_f1_dedup` mantém escritor e consumidor: preenchimento em `app/chamados/models.py:717`, limpeza/leitura em `app/chamados/models.py:645`, emissão somente após aprovação da pergunta em `app/chamados/models.py:649`. O diff muda quais tentativas chegam ao preenchimento; nenhum escritor adicional de `status_local` foi identificado no diff, que continua chegando a `app/chamados/models.py:227` e `app/chamados/models.py:279`.
+
+## 31/10 03:05 · sessao 4b8ade7fe326 · - · - · origem=Ronald (tmux)
+
+Achado principal: a extensão `[FIO-DUP-C8]` trata todo `y` vivo do lote e em `CALADOS_POR_ISENCAO` como duplicata; não compara `entrada_timestamp`, não exige mesmo módulo nem repete a proteção de `resposta_colab` aplicada a `x`. (app/ponto/services/cartorio.py:1328; app/ponto/services/cartorio.py:1341)
+
+- **Outro turno do mesmo dia:** caminho demonstrável pelo código. `vivos` agrupa pelo dia declarado do chamado, sem chave de turno; C8 escolhe pelo dia e antiguidade, também sem chave de turno. A extensão chama `y.reconciliar()`, cujo gate admite dedup sustentado por `x`. Se houver pergunta viva, `resolvedora_valida` aceita imediatamente quando as datas são iguais; não verifica as entradas distintas. Isso conflita com a identidade registrada em `irmao_vivo_do_turno`: dois turnos no mesmo dia são dois fatos. (app/ponto/services/cartorio.py:85; app/ponto/services/cartorio.py:94; app/chamados/juizes.py:1625; app/chamados/models.py:709; app/chamados/models.py:371; app/chamados/juizes.py:1710; app/chamados/juizes.py:1647)
+
+- **Chamado com resposta:** a proteção de texto só vale para `x`; `y` respondido pode fechar pela extensão. Entretanto, não demonstrar isso como “resposta enterrada”: a pergunta viva pode ser reapontada para `x`, preservando seu texto e sua vitalidade. O efeito comprovável é fechar o chamado respondido e mudar sua âncora, contornando a exclusão explícita do laço externo. (app/ponto/services/cartorio.py:1328; app/ponto/services/cartorio.py:1343; app/chamados/models.py:371; app/chamados/models.py:416; app/chamados/juizes.py:1020)
+
+- **Outro módulo:** alcança `batida_ausente`, `turno_aberto` e `intervalo_pendente`, pela interseção entre a lista do cartório e CALADOS. Só a diferença de módulo não prova fechamento indevido: já há testes autorizando dedup entre `batida_ausente` e `turno_aberto`. (app/chamados/catalogo/furo_modulos.py:15; app/chamados/catalogo/modulos.py:235; app/ponto/services/cartorio.py:1343; app/chamados/tests/test_fechar3_retorno_do_gate.py:85)
+
+**Mordida dos testes, por leitura estática:** [nao verificado]
+
+- Reverter o gate para `excluir=self` contraria a expectativa do novo teste com pergunta do mais novo e signal do E2: ele exige o novo vivo e trilha de fechamento do velho sustentada nele. (app/ponto/tests/test_fechar3_troca_escala_gate.py:242; app/ponto/tests/test_fechar3_troca_escala_gate.py:249; app/ponto/tests/test_fechar3_troca_escala_gate.py:255)
+- Remover a extensão deixa o velho com pergunta viva fora da reconciliação FIO-DUP normal, contrariando a expectativa de fechamento/reaponte do terceiro teste. (app/ponto/services/cartorio.py:1326; app/ponto/tests/test_fechar3_troca_escala_gate.py:313; app/ponto/tests/test_fechar3_troca_escala_gate.py:323)
+- Os testes novos da extensão usam o mesmo módulo, os mesmos marcos e perguntas sem resposta; não exercitam outro turno, outro módulo nem resposta escrita. Retirar filtros ou ampliar indevidamente a extensão nesses eixos pode continuar verde. (app/ponto/tests/test_fechar3_troca_escala_gate.py:272; app/ponto/tests/test_fechar3_troca_escala_gate.py:283; app/ponto/tests/test_fechar3_troca_escala_gate.py:318)
+- Restaurar somente a ordenação pelo helper, mantendo o gate atual, não é distinguido pelas expectativas de resultado: o próprio gate já protege a identidade escolhida pelo C8. (app/chamados/models.py:709; app/ponto/tests/test_fechar3_troca_escala_gate.py:251; app/ponto/tests/test_fechar3_troca_escala_gate.py:303)
+
+Execução dos testes/mutantes e ocorrência desses casos em produção: **[não verificado]**. [nao verificado]
+
+## 31/10 03:05 · sessao 46ca8e8ed8eb · - · - · origem=Ronald (tmux)
+
+**E2 falha ao transformar tranca reversível em `celula_absolveu`.** Para pergunta sem carimbo/validação, célula não acusadora com marco pendente e marco perguntado apagado, o pré-teste removido impedia o carimbo. Agora `dia_da_pergunta_trancado()` faz o C6 devolver `False` antes do teto, e E2 grava `materializada_em` e `VIA_CELULA_ABSOLVEU`. O escritor irmão preserva expressamente a recusa de carimbar por tranca. (app/chamados/reconciliador.py:584, app/chamados/reconciliador.py:611, app/chamados/juizes.py:1010, app/chamados/services/disputa_emissao.py:1549)
+
+O efeito persiste no carimbo: `reabrir_por_competencia()` só limpa `VIA_COMPETENCIA_TRANCADA`; `reabrir_por_resposta()` só limpa `VIAS_SEM_LASTRO`, que não inclui `celula_absolveu`; o materializador exige `materializada_em=NULL`. Assim, uma resposta posteriormente viva pode continuar excluída da seleção de materialização. (app/chamados/models.py:2541, app/chamados/models.py:2534, app/chamados/models.py:2893, app/chamados/services/materializacao.py:1286)
+
+**Os dois testes E2 deixam verde o mutante que desfaz exatamente esta cura.** Reintroduzir `if marcos_pendentes(p.celula) and fato_do_marco_no_espelho(p) is not True: continue` preserva ambos resultados: saída acesa passa pelo pré-teste e C6 mata; saída apagada é preservada por ambos. Eles mordem apenas a guarda mais antiga que retinha qualquer pergunta com marco pendente. Os testes também omitem `data_evento`, portanto não exercitam a tranca. (app/chamados/tests/test_e2_pergunta_so_ao_c6.py:26, app/chamados/tests/test_e2_pergunta_so_ao_c6.py:58, app/chamados/tests/test_e2_pergunta_so_ao_c6.py:63, app/chamados/juizes.py:887, app/chamados/juizes.py:1067)
+
+**Pergunta específica 4:** por inspeção de fluxo, no universo selecionado por E2, não há outro delta normal além da tranca. `validada_em` e `materializada_em` nulos excluem as demais mortes antecipadas do C6; resposta concordante exige marco aceso, que já passava pela guarda antiga; pendente sem marco aceso e sem tranca acaba vivo. (app/chamados/reconciliador.py:584, app/chamados/juizes.py:969, app/chamados/juizes.py:1005, app/chamados/juizes.py:1044, app/chamados/juizes.py:1068)
+
+**Escritores e leitores:**
+
+- `retratar_perguntas_absolvidas_por_celula` muda os carimbos apenas no caso acima; `resolver_perguntas_por_chamado_resolvido` não foi alterado e mantém proteção explícita da tranca no ramo com destino. O fechamento do chamado pode dispará-lo pelo signal. (app/chamados/reconciliador.py:615, app/chamados/services/disputa_emissao.py:1536, app/chamados/services/disputa_emissao.py:1551, app/chamados/signals.py:76)
+- `chamado_destino` continua passando por `reapontar_resolvedora`, que consulta `resolvedora_valida`, protege o fio, grava a FK e relavra o veredito. A reata no gate usa essa porta. O diff pode mudar **qual** chamado chega a essa reata ao mudar o sobrevivente, mas não cria escritor adicional da FK. (app/chamados/services/fio.py:829, app/chamados/services/fio.py:837, app/chamados/services/fio.py:845, app/chamados/models.py:413)
+- O plano do gate procura sobrevivente por pergunta, ainda com `excluir=self`, e exige `resolvedora_valida`. Este juiz aceita mesmo dia e possui exceção para jornada atravessando meia-noite; não distingue dois turnos no mesmo dia quando as datas coincidem. (app/chamados/models.py:367, app/chamados/models.py:371, app/chamados/juizes.py:1710, app/chamados/juizes.py:1719)
+- O C6 não mudou neste diff; mudou sua autoridade sobre a escrita de E2. Seus retornos continuam incluindo “morta pela tranca”, que não significa “célula absolveu”. (app/chamados/juizes.py:1005, app/chamados/reconciliador.py:611)
+
+**Registro:** o C6 registrado é `pergunta_viva`; o C8 registrado é `ChamadoColaborador.abrir`, não `cobranca_viva_do_dia`. A tabela documental confirma “duplicado = abrir”. Portanto a denominação “C8” usada pelo diff para o sobrevivente não coincide com o registro atual. (app/core/juizes.py:238, app/core/juizes.py:240, app/docs/JUIZES.md:54)
+
+Não executei testes ou mutantes; o resultado de execução e a ocorrência desses estados em produção são [não verificado]. [nao verificado]
 
 ## 31/10 03:01 · sessao 0b50d4b4a7dc · O261-E-F1-CLASSE-4 · sonda · origem=Code
 
@@ -597,119 +740,4 @@ Execução dos testes e da mutação: **[não verificado]**. [nao verificado]
 
 - Nos testes conferidos, nenhum exige que o par misto trabalho/com fio/sem fio feche em corpos distintos: o teste do evento verifica fechamento no mesmo evento e ausência de terminal com pergunta viva; o v5 usa um único adiado e verifica ordem das datas; o teste de ressuscita usa um chamado e verifica resultado/contadores, pelo caminho B5.3b. `app/chamados/tests/test_o261e_f1_porta_encerramento.py:358`, `app/chamados/tests/test_o261e_f1_porta_encerramento.py:390`, `app/chamados/tests/test_o261e_f1_codex_v5.py:169`, `app/chamados/tests/test_o261e_f1_codex_v5.py:182`, `app/ponto/tests/test_o261_cobrado_le_o_fio.py:393`, `app/ponto/tests/test_o261_cobrado_le_o_fio.py:416`. Ausência dessa dependência em toda a suíte: [não verificado].
 
-## 31/10 00:52 · sessao 5b464716b57a · - · - · origem=Ronald (tmux)
-
-**3. Sim, por leitura estática a fixture alcança o lote misto e distingue o delta.**
-
-- O velho recebe a pergunta via `objects.create(... chamado_destino=velho, data_evento=DIA)`, sem `celula`; a FK permite nulo. A associação automática à célula pertence a `abrir()`, que a fixture não chama. (`app/ponto/tests/test_fechar3_troca_escala_gate.py:193`, `app/chamados/models.py:2150`, `app/chamados/models.py:2363`)
-- `trabalha=False` faz `classificar_falta()` retornar `(None, None, None)`, mas isso apenas impede o retorno antecipado `True` naquele degrau de C6. Como a pergunta está sem célula e sem materialização, C6 chega a `materializada_em is None` e retorna `True`. Portanto ela está viva mesmo no dia de folga. (`app/escala/servico_jornada.py:303`, `app/chamados/juizes.py:1054`, `app/chamados/juizes.py:1074`, `app/chamados/juizes.py:1080`)
-- `fio_vivo` consulta `pergunta_viva`; `_com_fio` consulta `fio_vivo` nas resolvedoras do chamado. Assim, o velho entra em `_com_fio`, enquanto o novo não recebeu pergunta. (`app/chamados/juizes.py:1115`, `app/ponto/services/cartorio.py:1094`, `app/ponto/tests/test_fechar3_troca_escala_gate.py:194`)
-- O E2 não absolve essa pergunta da fixture: seu filtro exige `celula__isnull=False`. O fechamento do velho pode ocorrer pela exceção de dedup com reata da pergunta ao novo. (`app/chamados/reconciliador.py:588`, `app/chamados/models.py:702`, `app/chamados/models.py:371`, `app/chamados/models.py:418`)
-- Com o delta, ambos vão ao lote adiado e C8 põe o novo por último. Sem a alteração de `_adiar` da volta 1, o novo sem fio seria reconciliado imediatamente sozinho, apoiado no velho; depois o velho ficaria sem irmão e seria recusado pela premissa ainda viva da véspera. As expectativas finais ficariam invertidas: velho vivo e novo resolvido. (`app/ponto/services/cartorio.py:1217`, `app/ponto/services/cartorio.py:1225`, `app/ponto/services/cartorio.py:756`, `app/chamados/juizes.py:1651`, `app/chamados/models.py:702`, `app/chamados/models.py:725`, `app/chamados/juizes.py:424`, `app/ponto/tests/test_fechar3_troca_escala_gate.py:175`)
-
-Resultado efetivo de execução do teste ou da mutação: **[não verificado]**. [nao verificado]
-
-## 31/10 00:46 · sessao 9bae963174b4 · O261-E-F1-CLASSE-4 · verificador · origem=Code
-
-O diff `HEAD × HEAD~1` ficou **[nao verificado]**: `git show HEAD` falhou porque a cópia entregue não contém repositório Git. Abaixo estão conclusões sobre o código atual; atribuí-las à introdução neste commit seria **[nao verificado]**. Ocorrência e quantidade em produção também são **[nao verificado]**. [nao verificado]
-
-1. **Quem escreve e quem lê**
-
-| Campo/valor | Quem escreve | Quem lê |
-|---|---|---|
-| `CelulaDia.trabalha` | Porta da célula: regeneração, reversão e geração (`app/ponto/portas/celula.py:231`, `:260`, `:532`, `:612`). | Juiz `EscalaColaborador.eh_dia_trabalho` (`app/escala/models.py:1072`); cartório (`app/ponto/services/cartorio.py:1156`); premissa dos chamados (`app/chamados/juizes.py:389`); leitor da grade (`app/escala/services/leitor_celula.py:344`). |
-| `dna['marcos']` | Conteúdo produzido por `montar_dna`, somente quando `trabalha is True` (`app/ponto/management/commands/gerar_celulas.py:79`, `:83`, `:100`); persistido pelas operações da porta (`app/ponto/portas/celula.py:260`, `:530`, `:614`). | Juiz dos marcos do vínculo (`app/escala/models.py:1099`); produtor das lâmpadas (`app/ponto/services/cartorio.py:434`); juiz do marco perguntado (`app/chamados/juizes.py:849`). |
-| `ata['lampadas']` | Produzida por `lampadas_do_dia`/`ata_do_dia`; teto aplicado por `_ata_ate_o_teto` (`app/ponto/services/cartorio.py:418`, `:555`, `:703`). Persistência por `lavrar_veredito` e `carimbar` (`app/ponto/portas/celula.py:690`, `:728`). | Lastro: acesos, inexistentes, apagados e pendentes (`app/ponto/services/lastro.py:89`, `:115`, `:128`, `:148`); pergunta (`app/chamados/juizes.py:866`); grade (`app/escala/services/leitor_celula.py:354`); folha (`app/folha/services/sem_furo.py:22`). |
-| Veredito `cobrado` | Escolhido pelo cartório quando há fio que ainda protesta (`app/ponto/services/cartorio.py:1195`); persistido pela porta (`app/ponto/portas/celula.py:692`). | Pertence a `VEREDITOS_ACUSAM` (`app/escala/models.py:1735`); lido pelo C6 (`app/chamados/juizes.py:1056`), E2 (`app/chamados/reconciliador.py:598`), fábrica (`app/chamados/services/fabrica_da_celula.py:86`) e retenção da folha (`app/folha/export.py:1215`). |
-| Pergunta materializada/retratada | Neste caminho, E2 escreve `materializada_em`, autor e `VIA_CELULA_ABSOLVEU` (`app/chamados/reconciliador.py:620`). Há outros escritores efetivos: materializador, emissão, dedup e portas do modelo (`app/chamados/services/materializacao.py:509`; `app/chamados/services/disputa_emissao.py:1562`; `app/chamados/services/fio.py:894`; `app/chamados/models.py:2456`). | C6 lê carimbo, via, resposta e célula (`app/chamados/juizes.py:1020`, `:1044`, `:1050`, `:1080`); `estado` delega a ele (`app/chamados/models.py:2435`). Desfazer carimbo também consulta C6 (`app/chamados/services/relavra_via.py:227`). |
-| Estado de `ChamadoColaborador` | Transições persistem por `_gravar_estado` (`app/chamados/models.py:222`, `:279`); nascimentos têm portas próprias (`app/chamados/models.py:1039`). | Motor decide transições (`app/chamados/models.py:637`); cartório seleciona vivos (`app/ponto/services/cartorio.py:1089`); C8 escolhe cobrança sobrevivente (`app/chamados/juizes.py:1625`); C6 também considera o estado do destino (`app/chamados/models.py:313`). |
-
-O modelo desses caminhos chama-se **`PerguntaDisputa`**, com estado `PENDENTE`; E2 “retrata” pelo carimbo e pela via de resolução (`app/chamados/models.py:2142`, `:2310`; `app/chamados/reconciliador.py:620`).
-
-**Sim, há leitores com critérios diferentes:**
-
-- O cartório exclui do protesto `trabalha=False` ou cobrança com todos os próprios marcos acesos; `dia_sem_trabalho` considera também `trabalha=None` e qualquer `ata.tipo_dia` diferente de trabalho. Os critérios divergem (`app/ponto/services/cartorio.py:1156`; `app/chamados/juizes.py:389`).
-- Os comandos `supra_juiz` e `emitir_furo_retroativo` continuam entregando **todos os chamados vivos** ao classificador, enquanto o cartório entrega `_protestam`. Portanto, a mesma classificação recebe insumos diferentes (`app/ponto/management/commands/supra_juiz.py:207`; `app/ponto/management/commands/emitir_furo_retroativo.py:100`; `app/ponto/services/cartorio.py:1159`).
-- `q_vivas` mantém toda célula provisória como candidata, sem a exceção pelo próprio marco aceso. Isso é uma seleção mais larga, permitida pelo contrato explícito de **continência**, com julgamento posterior; isoladamente, não é defeito (`app/chamados/models.py:2577`, `:2556`).
-- A absolvição de **chamados de turno** ainda exige ausência de qualquer marco pendente; E2 agora individualiza a pergunta. São universos diferentes: dia do chamado versus marco perguntado (`app/chamados/reconciliador.py:983`, `:610`).
-
-2. **Onde o desenho falha ou permanece incompleto**
-
-**A partição entre imediatos e adiados quebra a escolha do sobrevivente C8.** Considere dois `turno_aberto` no dia de folga, com véspera furada: o mais velho tem pergunta viva sob o veredito anterior acusador; o mais novo não tem fio. Esse módulo pertence ao universo lido pelo cartório, e C6 pode manter a pergunta viva pelo veredito anterior (`app/chamados/catalogo/furo_modulos.py:15`; `app/chamados/juizes.py:1054`).
-
-O caminho fica assim:
-
-- `_com_fio` é calculado antes da nova lavra; o velho vai para `_adiar`, o novo para `_porm` (`app/ponto/services/cartorio.py:1094`, `:1214`, `:1222`).
-- Cada subconjunto tem um elemento; o ordenador retorna sem consultar C8. O novo fecha por dedup apoiado no velho ainda vivo (`app/chamados/juizes.py:1645`; `app/chamados/models.py:702`).
-- Depois da lavra e de E2, o velho é tentado sozinho. Para `turno_aberto`, a folga não regulariza diretamente: a premissa consulta a véspera furada. Sem outro vivo, o fechamento é recusado (`app/ponto/services/cartorio.py:753`, `:756`; `app/chamados/models.py:1225`; `app/chamados/juizes.py:424`; `app/chamados/models.py:721`).
-
-**Resultado do caminho: novo fechado, velho vivo**, contrariando C8, que escolhe o mais novo por `-criado_em, -pk`. Ordenar separadamente os subconjuntos não ordena o lote inteiro. Reprodução com banco: **[nao verificado]** (`app/chamados/juizes.py:1627`; `app/ponto/services/cartorio.py:1222`, `:756`).
-
-**Há leitura obsoleta no memo do C6.** A chave não inclui ata nem DNA, embora a decisão dependa deles. Confirmei com funções extraídas em memória: pergunta provisória inicialmente viva; depois, alterando só a ata para acender seu marco, a mesma instância continua retornando `True`, enquanto `_pergunta_viva_calc` retorna `False`. Reprodução integrada com banco: **[nao verificado]** (`app/chamados/juizes.py:767`, `:793`, `:849`, `:866`, `:1068`).
-
-**O relógio não está inteiramente na borda recebida.** `julgar_celula(agora=...)` calcula `hoje` pelo relógio real e compara o fim do turno com outro `now()`, antes de encaminhar o `agora` fornecido. Assim, o instante injetado não governa todas as guardas (`app/ponto/services/cartorio.py:1597`, `:1618`, `:1621`).
-
-**Não constatei segundo escritor persistente novo nesses caminhos.** O cartório continua chamando a porta da célula; a sobreposição de ata em `celula_do_dia_agora` é somente em memória. E2 já é escritor sancionado no censo de `materializada_em`; esse campo possui escritores plurais declarados (`app/ponto/services/cartorio.py:1470`, `:1485`; `app/chamados/juizes.py:382`; `app/core/tests/test_contract_escritores_estado.py:83`).
-
-**Há risco de ordem inversa entre duas travas de chamados.** `reconciliar` trava o próprio chamado; a reata escolhe outro vivo e a porta de costura trava esse destino. Duas transações A→B e B→A podem solicitar as linhas em ordem inversa; não há ordenação conjunta por PK nesse caminho. Deadlock reproduzido: **[nao verificado]** (`app/chamados/models.py:672`, `:371`, `:418`; `app/chamados/services/fio.py:762`).
-
-**Idempotência não é uniforme.** O fechamento sequencial relê o banco e o motor impede novo `RECONCILIAR` sobre resolvido; a recusa de fechamento deduplica a trilha. Porém `reabrir` recusado por premissa regularizada ou admin sem fato novo escreve `reabertura_recusada` novamente em cada chamada: mesmo estado, várias linhas (`app/chamados/models.py:636`, `:378`, `:1335`, `:1341`; `app/chamados/catalogo/motor.py:111`).
-
-**Existe caminho de vai-e-volta por assimetria dia/turno.** O fechamento por dedup aceita outro vivo do **dia**; a reabertura procura irmão do **turno**, exigindo `entrada_timestamp`. O teste dos dois chamados em folga omite essa chave. Com véspera furada e vínculo sem veto, o fechado por sistema pode reabrir sem fato novo e voltar a fechar por dedup; a exigência de fato novo é específica do fechamento administrativo. Reprodução integrada: **[nao verificado]** (`app/chamados/models.py:702`, `:1283`, `:1294`, `:1373`; `app/chamados/juizes.py:1674`; `app/ponto/tests/test_fechar3_troca_escala_gate.py:131`, `:145`).
-
-3. **Chamado legítimo fechado e pergunta provisória sem batida**
-
-**O gate atual permite fechar chamado legítimo em ausência parcial.** A grade mantém `tipo_dia='ausencia'`, marca cobertura parcial e conserva as células faltantes; o classificador reconhece isso como dia de cobrança. Entretanto, `dia_sem_trabalho` responde verdadeiro para esse tipo, e `premissa_regularizada` aceita a resposta **antes de consultar o marco apagado** (`app/escala/utils.py:1180`, `:1190`, `:1195`; `app/ponto/supra_juiz.py:279`; `app/chamados/juizes.py:389`; `app/chamados/models.py:1225`).
-
-Logo, se `reconciliar()` for chamado para esse furo e não houver pergunta viva que retenha o fechamento, ele pode ser resolvido mesmo com marco realmente faltante; a mesma premissa depois impede reabrir. É defeito do gate atual, sem prova de introdução pelo HEAD ou ocorrência no dado de produção: **[nao verificado]** (`app/chamados/models.py:646`, `:649`, `:618`, `:1289`).
-
-**Nos ramos `_adiar`/`_porm`, trabalho verdadeiro com próprio marco apagado ou pendente continua protestando.** `marcos_acesos` não retorna verdadeiro nesse caso, portanto esses conjuntos não o selecionam somente pela mudança examinada (`app/ponto/services/lastro.py:175`, `:179`; `app/ponto/services/cartorio.py:1156`, `:1214`, `:1222`).
-
-**Pergunta provisória cujo próprio marco continua sem batida permanece protegida na nova condição.** Lâmpada `acesa=None`/`False` não prova o fato; C6 e E2 exigem literalmente `is True` para dispensar o teto. E2 ainda consulta `pergunta_viva` antes de carimbar (`app/chamados/juizes.py:869`, `:1068`; `app/chamados/reconciliador.py:610`, `:616`).
-
-4. **Ordem, conjunto reconciliado e testes existentes** [nao verificado]
-
-**Há um teste existente cuja expectativa de caminho precisa mudar:** ele exige `[RECONCILIA] `, mas os chamados de folga agora entram em `_porm`, que registra `[RECONCILIA-MARCO]`. As expectativas de estado e sobrevivente desse fixture continuam pertinentes (`app/ponto/tests/test_fechar3_troca_escala_gate.py:153`, `:154`, `:158`; `app/ponto/services/cartorio.py:1222`, `:1228`).
-
-**Esse teste não cobre a falha da partição:** cria ambos sem perguntas. Falta a variante “velho com fio, novo sem fio”, que percorre os dois subconjuntos e pode preservar o velho; isso pede cobertura adicional e correção da ordem global, não trocar a expectativa para aceitar o sobrevivente errado (`app/ponto/tests/test_fechar3_troca_escala_gate.py:142`; `app/ponto/services/cartorio.py:1214`, `:1222`, `:756`; `app/chamados/juizes.py:1627`).
-
-**O teste da segunda passada continua compatível:** a lista é ordenada por data antes do corpo; seu chamado falso único não provoca consulta C8, pois o ordenador retorna para lote menor que dois (`app/ponto/services/cartorio.py:766`; `app/chamados/tests/test_o261e_f1_codex_v5.py:169`, `:183`; `app/chamados/juizes.py:1645`).
-
-**Os testes antigos de provisória sem batida devem continuar exigindo pergunta viva e nenhum carimbo.** Eles usam justamente o próprio marco `acesa=None, pendente=True`, que não satisfaz a exceção nova (`app/chamados/tests/test_o261_pergunta_viva_teto.py:54`; `app/chamados/tests/test_o261_e2_absolvicao_exige_fato_encerrado.py:27`, `:64`). Resultado da suíte completa: **[nao verificado]**.
-
-## 31/10 00:45 · sessao 6a0aa9eab820 · - · - · origem=Ronald (tmux)
-
-A partição quebra a escolha do sobrevivente C8 no cenário proposto, por leitura do caminho; execução com banco **[não verificado]**.
-
-1. `turno_aberto` pertence a `FURO_MODULES` (`app/chamados/catalogo/furo_modulos.py:15`) e ao universo do gate (`app/chamados/catalogo/modulos.py:237`, `app/chamados/models.py:1187`).
-2. A pergunta do velho pode estar viva com `trabalha=False` e veredito anterior acusador: C6 retorna True pelo veredito, sem consultar `trabalha` (`app/chamados/juizes.py:1054`). `_com_fio` é calculado antes da nova lavra (`app/ponto/services/cartorio.py:1094`).
-3. Na folga, ambos deixam de protestar (`app/ponto/services/cartorio.py:1155`). O velho com fio vai para `_adiar` (`app/ponto/services/cartorio.py:1214`); o novo sem fio vai para `_porm` (`app/ponto/services/cartorio.py:1222`).
-4. Cada subconjunto contém um elemento: `sobrevivente_por_ultimo` retorna sem consultar C8 (`app/chamados/juizes.py:1645`). O novo fecha por dedup, apoiado no velho ainda vivo (`app/chamados/models.py:702`).
-5. A lavra grava o veredito da folga (`app/ponto/services/cartorio.py:1470`); E2 pode então carimbar a pergunta do velho, pois a célula não acusa e não tem pendentes (`app/chamados/reconciliador.py:584`, `app/chamados/reconciliador.py:610`, `app/chamados/juizes.py:1068`).
-6. O laço adiado tenta fechar o velho sozinho (`app/ponto/services/cartorio.py:755`). Para `turno_aberto`, folga não regulariza diretamente a premissa (`app/chamados/models.py:1225`); ela consulta a véspera furada (`app/chamados/juizes.py:424`). Sem outro vivo, o gate recusa (`app/chamados/models.py:702`, `app/chamados/models.py:721`).
-
-**Resultado: novo fechado, velho vivo**, contrariando o C8, que escolhe o mais novo por `-criado_em, -pk` (`app/chamados/juizes.py:1627`). O teste existente de sobrevivência cria ambos sem perguntas e não cobre a partição por fio (`app/ponto/tests/test_fechar3_troca_escala_gate.py:142`).
-
-## 31/10 00:44 · sessao edb37687a75c · - · - · origem=Ronald (tmux)
-
-Achados conferidos, somente por leitura:
-
-- **Chamado legítimo pode fechar por ausência parcial.** A grade conserva `tipo_dia='ausencia'`, `cobertura_parcial=True` e os marcos faltantes em `app/escala/utils.py:1180` e `app/escala/utils.py:1184`; o suprajuiz considera essa combinação dia de cobrança em `app/ponto/supra_juiz.py:274`. Entretanto, `dia_sem_trabalho` responde True para qualquer `ata.tipo_dia != 'trabalho'`, mesmo com `cel.trabalha=True` (`app/chamados/juizes.py:386`). `premissa_regularizada` aceita essa resposta antes de consultar as lâmpadas (`app/chamados/models.py:1220`). Assim, um chamado de furo sem pergunta viva ancorada pode passar pelo gate e ser reconciliado (`app/chamados/models.py:646`, `app/chamados/models.py:649`, `app/chamados/models.py:618`); depois a mesma premissa impede sua reabertura (`app/chamados/models.py:1289`). A ata não conserva `cobertura_parcial` (`app/ponto/services/cartorio.py:557`). Introdução desse defeito no HEAD: [não verificado].
-
-- **Provisória sem a batida continua protegida no novo E2.** O carimbo exige ausência de pendentes ou prova positiva do próprio marco; depois ainda consulta C6 (`app/chamados/reconciliador.py:608`, `app/chamados/reconciliador.py:616`). `fato_do_marco_no_espelho` exige o marco do DNA, lâmpadas correspondentes e todas acesas (`app/chamados/juizes.py:842`, `app/chamados/juizes.py:863`, `app/chamados/juizes.py:869`). Uma lâmpada própria com `acesa=None, pendente=True` não satisfaz isso. Os testes de provisória sem batida seguem coerentes (`app/chamados/tests/test_o261_pergunta_viva_teto.py:52`, `app/chamados/tests/test_o261_e2_absolvicao_exige_fato_encerrado.py:62`).
-
-- **A irmã dos chamados conserva o teto global.** `_absolvido_pela_celula` continua recusando qualquer célula com marcos pendentes (`app/chamados/reconciliador.py:981`). O novo E2 individualiza a pergunta, enquanto essa irmã examina o dia inteiro (`app/chamados/reconciliador.py:608`, `app/chamados/reconciliador.py:983`).
-
-- **Não nasceu escritor novo de estado de chamado nesse caminho.** `_retratar` chama `ch.reconciliar` (`app/chamados/reconciliador.py:524`); `reconciliar` usa o motor e `_gravar_estado` (`app/chamados/models.py:614`). A escrita persistida de `status_local` está em `app/chamados/models.py:222`, e a trilha precede o save no mesmo atomic (`app/chamados/models.py:274`). Os nascimentos são exceções próprias (`app/chamados/models.py:890`, `app/chamados/models.py:1039`).
-
-- **E2 já é escritor sancionado de materialização.** A gravação continua em `app/chamados/reconciliador.py:620`; o censo declara esse arquivo em `app/core/tests/test_contract_escritores_estado.py:83`. Há pluralidade de escritores preexistente; não é correto dizer que todo `materializada_em` tem uma porta única global (`app/core/tests/test_contract_escritores_estado.py:83`).
-
-- **Idempotência sequencial do fechamento:** a segunda chamada relê o banco e o motor recusa novo RECONCILIAR sobre resolvido (`app/chamados/models.py:636`, `app/chamados/catalogo/motor.py:111`). A recusa de fechamento também deduplica trilha (`app/chamados/models.py:378`). **Contraexemplo atual ao contrato “2×, uma linha”**: `reabrir` recusado por admin sem fato novo ou premissa regularizada grava `reabertura_recusada` sem dedup a cada chamada (`app/chamados/models.py:1335`, `app/chamados/models.py:1341`). Introdução no HEAD: [não verificado].
-
-- **Risco estático de ciclo entre duas travas de chamados:** reconciliar trava primeiro o próprio chamado (`app/chamados/models.py:669`), escolhe outro vivo para receber a pergunta (`app/chamados/models.py:371`) e a costura trava esse destino (`app/chamados/services/fio.py:758`, `app/chamados/services/fio.py:837`). C8 aceita o outro excluindo o próprio (`app/chamados/juizes.py:1625`). Duas transações A→B e B→A podem portanto pedir as duas linhas em ordem inversa; reprodução de deadlock: [não verificado]. Os testes atuais conferem trava própria antes do plano e trava do destino isoladamente (`app/chamados/tests/test_o261e_f1_codex_v5.py:25`, `app/chamados/tests/test_o261e_f1_codex_v5.py:65`).
-
-- **SQL com regra global própria:** `q_vivas` ainda usa qualquer lâmpada pendente para manter candidata (`app/chamados/models.py:2575`), enquanto C6 passou a absolver pelo próprio marco (`app/chamados/juizes.py:1068`). Isso amplia candidatos mortos, porém o contrato documentado é continência, com julgamento posterior, e não igualdade (`app/chamados/models.py:2556`). A property `.viva` delega ao C6 (`app/chamados/models.py:2597`).
-
-- **Ordenação:** os adiados passam agora por `sobrevivente_por_ultimo` (`app/ponto/services/cartorio.py:754`); o fechamento imediato também (`app/ponto/services/cartorio.py:1221`). Esse ordenador consulta C8 e põe o sobrevivente por último, preservando a ordem dos demais (`app/chamados/juizes.py:1644`). A segunda passada continua ordenada por data (`app/ponto/services/cartorio.py:766`), como exige o teste existente (`app/chamados/tests/test_o261e_f1_codex_v5.py:164`).
-
-_854 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_858 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
