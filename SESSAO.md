@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 31/10/2026 07:26:10.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (30.3 MB). Acoes na janela: **808**.
+**Medido em 31/10/2026 07:31:06.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (30.4 MB). Acoes na janela: **816**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:30:37 | Bash | Point wait line at the pre-push process | `cd /home/ronald/saas-hasner && ps -p 1498900 -o args= \| cut -c1-80 && sed -i "3s/.*/ESPERANDO: pre-push.sh \| pid=1498900/" app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md` |
+| 07:30:31 | Bash | Read rest of pid proof | `cd /home/ronald/saas-hasner && sed -n 510,540p bin/hook_stop_fila1.py` |
+| 07:30:26 | Bash | Repoint wait pid at live docker | `cd /home/ronald/saas-hasner && P=$(pgrep -f "^docker run --rm --cpuset-cpus 4-7" \| head -1); ps -o etime=,args= -p $P \| cut -c1-120; sed -i "3s/pid=[0-9]*\$/pid=$P/" app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md` |
+| 07:30:19 | Bash | Read pid proof rule | `cd /home/ronald/saas-hasner && grep -n "def _prova_pid" -A14 bin/hook_stop_fila1.py \| head -18` |
+| 07:30:16 | Bash | Read ESPERANDO proof rule | `cd /home/ronald/saas-hasner && sed -n 621,652p bin/hook_stop_fila1.py` |
+| 07:30:10 | Bash | Check live docker and hook wait rule | `cd /home/ronald/saas-hasner; pgrep -f "^docker run --rm --cpuset-cpus 4-7"; tail -2 logs/vfase_asof/push_leak.log \| cut -c1-150; grep -n "ESPERANDO\\|_espera" bin/hook_stop_fila1.py \| head -12` |
+| 07:30:00 | Bash | Update wait pid | `cd /home/ronald/saas-hasner && bin/trava_teste.sh --quem; sed -i '3s/pid=[0-9]*$/pid=3309613/' app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md` |
+| 07:29:55 | Bash | Inspect push control-plane process | `cd /home/ronald/saas-hasner; pgrep -af "docker run --rm --cpuset-cpus 4-7" \| cut -c1-80; ps -eo pid,etime,args \| grep -E "push.sh\|pre-push\|teste_motor" \| grep -v grep \| cut -c1-150` |
+| 07:29:49 | Bash | Read F1C4 suite and push verdicts | `cd /home/ronald/saas-hasner; date +%H:%M; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' logs/o261e/f1c4c_suite_merge_f3c8e2a8.log \| tail -5; tail -4 logs/vfase_asof/push_leak.log \| cut -c1-200; git fetch -q; git log --oneline -1 origin/main` |
 | 07:23:22 | Monitor | push then F1C4 suite verdict | `cd /home/ronald/saas-hasner; until grep -q '^rc=' logs/vfase_asof/push_leak.log; do /usr/bin/sleep 20; done; tail -4 logs/vfase_asof/push_leak.log \| cut -c1-200; until grep -q '^rc=' logs/o261e/f1c4c_suite_merge_f3c8e2a8.log; do /usr/bin/sleep 30; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/o261e/f1c4c_suite_merge_f3c8e2a8.log \| tail -3` |
 | 07:23:16 | Bash | Check push and F1C4 suite | `cd /home/ronald/saas-hasner; date +%H:%M; tail -3 logs/vfase_asof/push_leak.log \| cut -c1-200; git fetch -q; git log --oneline -1 origin/main; grep -E '^(OK\|FAILED)\|^Ran \|^rc=' logs/o261e/f1c4c_suite_merge_f3c8e2a8.log \| tail -3; pgrep -f "^docker run --rm --cpuset-cpus 4-7"` |
 | 07:16:03 | Bash | Point wait line at live docker | `cd /home/ronald/saas-hasner && sed -i '3s/pid=[0-9]*$/pid=2403075/' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md; ps -o args= -p 2403075 \| cut -c1-200` |
@@ -817,4 +826,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:38:29 | Bash |  | `cd /home/ronald/saas-hasner/logs/e1_bateria && wc -l lote1_dp.md lote2_dp.md; cat lote1_dp.md \| cut -c1-400` |
 | 19:33:52 | Bash |  | `cd /home/ronald/saas-hasner && git -C /home/ronald/wt-medida-1907 log --oneline -2; git -C /home/ronald/wt-medida-1907 status --short \| head -3; git log --oneline -1; (bin/suite.sh --espera 3600 --dir /home/ronald/wt-medida-1907 > logs/medida_programa/suite.log 2>&1; echo "rc=$?" >> logs/medida_programa/suite.log)` |
 | 19:33:43 | Bash |  | `cd /home/ronald/saas-hasner && grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()\|^rc=" logs/medida_programa/recorte.log \| tail -8 \| cut -c1-200` |
-| 19:26:13 | SendMessage |  | `-` |

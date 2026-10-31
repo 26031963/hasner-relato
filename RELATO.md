@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: docker | pid=2403075
+ESPERANDO: pre-push.sh | pid=1498900
 > **aval CLEAR-NO-PROXIMO-MARCO recebido (07:1x):** no pouso+push da F1C4: bin/handoff_sessao.sh, topo do RELATO "MARCO FECHADO -- CLEAR AGORA", nenhum agente nem fatia nova ate o /clear; construtor E3 vivo entrega comando+log e termina; 10 min sem /clear = fila normal. (O construtor F1C4-3 nao e nomeado no aval: segue vivo, e a linha do marco o declara.)
 > **aval F1C4-3 + F5C-3 recebido (07:0x):** F1C4-3 (1) trabalha=None = INDETERMINADO, limbo COBRA (help_text escala/models.py:1656, utils.py:722-730, BUG 94, L-022): `chamados/juizes.py::dia_sem_trabalho` se cura na ORIGEM, predicado unico; (2) ata tipo_dia != trabalho = o juiz esta certo (L-061). Sombra antes do pouso: chamados que mudam por clausula dos 2964, exportadas hash igual. Obra F1C4-3 em copia propria sobre a arvore do merge F1C4, pouso DEPOIS do da F1C4 (nao muda a arvore certificada). F5C-3 = (b), ja no ar em a2246c0e: RESPONDIDA, nada a fazer.
 > **SEQUENCIA DECIDIDA (07:0x) | DECIDIDO PELA LEI aval AUSENCIA (1) + SUITE-UMA-VEZ-POR-ARVORE | contestavel:** push 4b675b20 -> veredito da suite F1C4 na arvore do merge f3c8e2a8 -> pouso F1C4 (L-107, cmp contra wt-o261e-f1c4c-0240) -> push -> DISJUNTOR 40612767 -> push -> FIO-ESTADO 2ca77d09 (instrumento; selo re-rodado na arvore do pouso) -> push. DISJUNTOR antes da F1C4 mudaria a arvore que a suite certificou.
