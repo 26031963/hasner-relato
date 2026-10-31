@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 31/10/2026 07:41:28.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (31.4 MB). Acoes na janela: **830**.
+**Medido em 31/10/2026 07:46:51.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (31.4 MB). Acoes na janela: **831**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:43:15 | Bash | Check push progress | `cd /home/ronald/saas-hasner; tail -3 logs/o261e/push_f1c4b.log \| cut -c1-200; ps -p 3727217 >/dev/null && echo vivo` |
 | 07:36:42 | Bash | Point ESPERANDO line at new pre-push pid | `cd /home/ronald/saas-hasner; sleep 3; P=$(pgrep -f "bin/pre-push.sh" \| head -1); echo $P; [ -n "$P" ] && sed -i "3s/.*/ESPERANDO: pre-push.sh \| pid=$P/" app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md` |
 | 07:36:37 | Bash | Push F1C4 marco through the regua | `cd /home/ronald/saas-hasner; ESTEIRA_QUEM=push-f1c4 bin/push.sh > logs/o261e/push_f1c4b.log 2>&1; echo rc=$? >> logs/o261e/push_f1c4b.log` |
 | 07:36:33 | Bash | Commit marco docs with TICKETS rows | `cd /home/ronald/saas-hasner; python3 - <<'P' p='app/docs/RELATO.md'; s=open(p).read().split('\n') assert s[2].startswith('ESPERANDO:') s.insert(3,'> **Push F1C4 RED (07:3x), causa em uma linha:** regua_tickets leu 6 MARCADORES de log entre colchetes no corpo dos commits da raia como fatias; 6 linhas "NOME DE MARCADOR, nao obra" no TICKETS (molde FIO-RESSUSCITA), regua OK 7/7, push de novo.') open( ...` |
