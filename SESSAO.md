@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 31/10/2026 17:54:23.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (88.6 MB). Acoes na janela: **1774**.
+**Medido em 31/10/2026 17:59:55.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (88.6 MB). Acoes na janela: **1779**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:54:42 | Bash | Confirm ESPERANDO pid is alive | `ps -p 2998905 -o pid,etime,args \| tail -1` |
+| 17:54:38 | Bash | Check BACKLOG has PROGRAMAS keys | `cd /home/ronald/saas-hasner; python3 - <<'PY' import re t=open('app/docs/BACKLOG.md',encoding='utf-8').read() i,j=t.find('<!-- OBRAS:INICIO -->'),t.find('<!-- OBRAS:FIM -->') ids={m.group(1) for m in re.finditer(r'^\\|\s*([^\|\s]+)\s*\\|',t[i:j],re.M)} for k in ['PROGRAMA-CELULA-E-O-DIA','PROGRAMA-CELULA-E-O-DIA-DUAS-PISTAS','O261-E-CELULA-20-UM-DONO','E4-CAL-RETIDO-FOLHA-NO-LEITOR','E4-CAL-FALLBA ...` |
+| 17:54:32 | Bash | Read PROGRAMAS and the BACKLOG check | `cd /home/ronald/wt-pdc-v3-170430; sed -n 1110,1130p bin/disjuntor.py; sed -n 320,340p bin/tests/test_padrao_de_cima.sh` |
+| 17:54:29 | Bash | Search for PROGRAMAS reader | `cd /home/ronald/wt-pdc-v3-170430; git grep -n "programas_no_backlog\\|PROGRAMAS" -- bin \| head` |
+| 17:54:22 | Bash | Inspect programas_no_backlog reader | `cd /home/ronald/wt-pdc-v3-170430; grep -n "def programas_no_backlog" -A25 bin/*.py \| head -40` |
 | 17:54:18 | Bash | Fix the time label in RELATO | `cd /home/ronald/saas-hasner; sed -i 's/^- 31\/10 18:0x EMISSORES v14:/- 31\/10 17:5x EMISSORES v14:/' app/docs/RELATO.md; grep -c "17:5x EMISSORES v14" app/docs/RELATO.md` |
 | 17:54:15 | Bash | Check time and RELATO append | `date '+%d/%m %H:%M'; tail -c 200 /home/ronald/saas-hasner/app/docs/RELATO.md` |
 | 17:54:10 | Bash | Append RELATO line and wait for 3 jobs | `cd /home/ronald/saas-hasner; date '+%d/%m %H:%M'; cat >> app/docs/RELATO.md <<'EOF' - 31/10 18:0x EMISSORES v14: suite INTEIRA da arvore mergeada 3885d5f8 Ran 13093 OK rc=0 (logs/f1c4emis/v14/suite_merge.log); opus final lancado (anexos opus_v11, triagem_v12, sombra v13). V3-RETOMA: GREEN Ran 238 OK; Codex verificador v1 lancado (logs/v3per/pv/v1.r). GRADE-v5: baseline main 19 mod OK 87 = as queda ...` |
