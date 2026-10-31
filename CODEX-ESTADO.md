@@ -1,7 +1,83 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 21:12** · publicado em **30/10/2026 21:12** (UTC-3)
+> Ultima resposta processada: **30/10/2026 21:31** · publicado em **30/10/2026 21:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 21:31 · sessao fb6e2bc2df4b · O261-E-CELULA-20 · verificador · origem=Code
+
+**1. Classificação: a retirada dos dois filtros é semanticamente redundante com o juiz atual; não identifiquei mudança de dia decorrente dela.** As causas continuam sendo escolhidas sobre `ps`, já filtrado por vitalidade. ([vigia_fio.py:495](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/services/vigia_fio.py:495), [vigia_fio.py:566](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/services/vigia_fio.py:566))
+
+A cadeia exata é:
+
+- As perguntas vêm de `PerguntaDisputa.objects.filter(celula_id__in=_cels)`: identidade pela FK da célula, sem casamento por `data_evento`. Todas entram em `perg_todas`; somente as aprovadas por `pergunta_viva(p)` entram em `perg`. ([vigia_fio.py:495](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/services/vigia_fio.py:495))
+- `ps = perg.get(c, []) if c else []`. ([vigia_fio.py:531](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/services/vigia_fio.py:531))
+- `pergunta_viva` delega a `_pergunta_viva_calc`, cujo primeiro degrau retorna `False` para `validada_em is not None`. O memo inclui esse campo na chave. Logo, para toda pergunta admitida em `ps`, os termos removidos eram verdadeiros. ([juizes.py:795](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/juizes.py:795), [juizes.py:1006](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/juizes.py:1006), [juizes.py:768](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/juizes.py:768))
+
+O julgamento do dono recebe **`perg_todas`**, preservando a leitura das validadas fora de `ps`. ([vigia_fio.py:549](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/services/vigia_fio.py:549))
+
+**2. Testes: há mordida, mas restam duas lacunas demonstráveis por inspeção.** [nao verificado]
+
+- **Porta antes do teto: cobertura parcial.** O teste novo cria apenas chamado com célula e verifica `porta_fila`. Um mutante com ordem **`porta_fila → teto → porta_pergunta`** passa essa asserção, embora classifique incorretamente uma pergunta alcançável de hoje. Falta repetir o cenário com chamado **sem célula**, pergunta no app e âncora na fila. ([teste:211](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/tests/test_o261e_f5_alcance.py:211), [vigia_fio.py:532](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/services/vigia_fio.py:532))
+- **Dia listado sem dono: morde corretamente.** A assinatura preserva a chave do dia com valor `None`; o helper exige a linha da célula, e a asserção exige exatamente `('e', 'dia_na_lista_dono_nenhum')`. Portanto distingue a atribuição indevida a `(d)`. ([cadastro_realidade.py:669](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/escala/services/cadastro_realidade.py:669), [teste:98](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/tests/test_o261e_f5_alcance.py:98), [teste:217](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/tests/test_o261e_f5_alcance.py:217))
+- **A garantia de `ps` não está protegida pelos dois testes novos:** nenhum cria pergunta. Eles passam se a inclusão em `perg` deixar de consultar o juiz. O contrato AST também não exige essa consulta: procura comparações cruas de carimbo. Falta um negativo com pergunta validada que seria `(b)/(c)` se admitida indevidamente. ([teste:211](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/tests/test_o261e_f5_alcance.py:211), [contrato:288](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/tests/test_contract_leitores_vitalidade.py:288))
+
+**3. Quem escreve e quem lê: nenhum resultado desses consumidores muda sob a equivalência acima.**
+
+| Papel | Caminho confirmado |
+|---|---|
+| Produz o dict | `censo_alcance` acumula total, causas, detalhes e lista. ([vigia_fio.py:588](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/services/vigia_fio.py:588)) |
+| Lê causas para impressão | `linhas_alcance` publica causas e detalhes; o comando imprime suas linhas. ([vigia_fio.py:610](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/services/vigia_fio.py:610), [comando:181](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/management/commands/vigiar_fio_morto.py:181)) |
+| Escreve o carimbo | O comando guarda o dict inteiro em `alcance` e replica o total em `censo`; `_carimbar` serializa e substitui o arquivo. ([comando:211](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/management/commands/vigiar_fio_morto.py:211), [comando:130](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/management/commands/vigiar_fio_morto.py:130)) |
+| Lê o carimbo para ESTADO | `fio_estado` compara `censo` com `esperado`, incluindo o total de alcance; não consulta suas causas. `gerar_estado` consome esse leitor. ([fio_estado.py:69](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/bin/fio_estado.py:69), [gerar_estado.py:260](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/bin/gerar_estado.py:260)) |
+
+O alcance continua fora de `ALARMA_EM_0`; `gritou` é calculado antes de `alc`, usando o censo antigo. ([comando:81](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/management/commands/vigiar_fio_morto.py:81), [comando:163](/home/ronald/codex_ws/64eddfe4b5b344d55139c719de8d5ffbdf1b2b11/app/chamados/management/commands/vigiar_fio_morto.py:163))
+
+Execução da suíte, sobrevivência empírica dos mutantes e leitores externos à cópia: **[nao verificado]**. [nao verificado]
+
+## 30/10 21:30 · sessao 0d5e0d25562d · - · - · origem=Ronald (tmux)
+
+Os dois casos novos têm mordida, mas a cobertura da ordem das portas é parcial.
+
+- `test_MORDE_porta_vence_o_teto_de_hoje` cria chamado com célula e exige `(porta_fila, teto) == (1, 0)`, portanto distingue teto antes de `porta_fila`. Porém passa com mutante que coloca o teto **entre** `porta_fila` e `porta_pergunta`: o caso não cria pergunta; os casos existentes de pergunta usam `DIA=01/09` e `HOJE=25/09`, portanto também não exercitam pergunta de hoje. (`app/chamados/tests/test_o261e_f5_alcance.py:25`, `:26`, `:84`, `:120`, `:211`; ordem atual em `app/chamados/services/vigia_fio.py:532`, `:535`, `:538`.)
+
+- `test_dia_na_lista_SEM_dono_lavrado_e_outra_e_nao_cadastro` é direto e não vazio: injeta assinatura com data sem dono; `dias_na_lista` guarda a chave com valor `None`; `_causa_do_dia` exige exatamente uma linha da célula; a asserção exige `('e','dia_na_lista_dono_nenhum')`. Mata a condição antiga de `(d)` que verificava só presença do colaborador e ignorava presença do dia. (`app/chamados/tests/test_o261e_f5_alcance.py:163`, `:217`, `:98`; `app/escala/services/cadastro_realidade.py:669`; `app/chamados/services/vigia_fio.py:570`, `:574`.)
+
+A confiança em `ps` não é provada pelos testes F5: `_pergunta` nunca planta `validada_em`; os dois casos novos nem criam perguntas. Um mutante que substitua o filtro `if pergunta_viva(p)` por inclusão incondicional não é distinguido pelas fixtures examinadas. O contrato de vitalidade procura comparações de carimbo via AST; não exige que o consumidor chame o juiz, portanto esse mutante também passa sua condição estrutural. (`app/chamados/tests/test_o261e_f5_alcance.py:75`, `:211`; `app/chamados/services/vigia_fio.py:495`; `app/chamados/tests/test_contract_leitores_vitalidade.py:288`, `:299`.)
+
+`AGORA` é literalmente 15:00 UTC, enquanto o decorator contém `12:00:00` sem `tz_offset`; nenhuma asserção confere a igualdade anunciada pelo comentário. Para as classificações examinadas, os usos são presença de `respondida_em` e silêncio deslocado em três dias; a fila continua consultando `timezone.now()`. (`app/chamados/tests/test_o261e_f5_alcance.py:28`, `:31`, `:73`, `:82`; `app/chamados/services/vigia_fio.py:525`; `app/chamados/services/painel.py:188`.)
+
+Execução dos testes e sobrevivência empírica de mutantes: [não verificado]. [nao verificado]
+
+## 30/10 21:30 · sessao 24bb4feb6c4f · - · - · origem=Ronald (tmux)
+
+O delta não muda o formato do dict nem do carimbo; altera apenas os predicados que escolhem causas `b/c`, e o incremento de total permanece comum a todas as causas (`app/chamados/services/vigia_fio.py:566`, `:568`, `:588`, `:593`).
+
+- **Escritor do dict:** `censo_alcance` inicializa contadores, causas e listas, depois acumula resultado por dia (`app/chamados/services/vigia_fio.py:458`, `:461`, `:588`).
+- **Leitor direto produtivo:** `vigiar_fio_morto.handle` chama `censo_alcance`, passa o resultado a `linhas_alcance` e imprime as linhas (`app/chamados/management/commands/vigiar_fio_morto.py:181`).
+- **Leitor das causas:** `linhas_alcance` lê os cinco contadores e `alcance_e_detalhe`; portanto uma eventual reclassificação mudaria essa saída (`app/chamados/services/vigia_fio.py:610`).
+- **Escritor do carimbo:** o comando grava o dict inteiro em `registro['alcance']` e replica só o total em `registro['censo']['fio_morto_alcance']`; `_carimbar` serializa JSON e substitui o arquivo (`app/chamados/management/commands/vigiar_fio_morto.py:211`, `:213`, `:130`). Só a rodada sem recorte carimba (`app/chamados/management/commands/vigiar_fio_morto.py:200`, `:219`).
+- **Leitor do carimbo:** `bin/fio_estado.py` compara dinamicamente `registro['censo']` contra `registro['esperado']`; o total de alcance participa dessa comparação porque está no esperado. Ele não usa causas/detalhes do bloco `alcance` (`bin/fio_estado.py:69`, `:72`; `app/chamados/management/commands/vigiar_fio_morto.py:94`). `gerar_estado` consome `ler/linha` desse módulo (`bin/gerar_estado.py:260`).
+- **Alarme/saída:** alcance não integra `ALARMA_EM_0`; `gritou` é calculado com o censo antigo antes de obter `alc`. A mera redistribuição entre causas não muda o código de saída (`app/chamados/management/commands/vigiar_fio_morto.py:81`, `:163`, `:181`, `:222`). O cron configura `--alarme --alarme-passivo`, mas usa essas mesmas listas (`app/config/crons.py:1654`).
+- **Testemunhas:** teste F5 verifica esperado, total nos dois lugares do carimbo e linha impressa, sem comparar causas/detalhes completos (`app/chamados/tests/test_o261e_f5_alcance.py:247`). O teste antigo compara o bloco `censo`, incluindo apenas o total de alcance (`app/chamados/tests/test_o261_vigia_fio.py:780`).
+
+Assim, condicionada à equivalência semântica confirmada pelo juiz, nenhum desses leitores muda de resultado; se surgisse diferença entre `b/c/e`, ela apareceria nas linhas de causas e no bloco completo `alcance`, enquanto o painel/alarme continuaria usando o mesmo total (`app/chamados/services/vigia_fio.py:588`, `:610`; `app/chamados/management/commands/vigiar_fio_morto.py:211`; `bin/fio_estado.py:72`). Leitores externos à cópia e comportamento efetivo em produção: [nao verificado].
+
+## 30/10 21:30 · sessao 86e7a786e1b8 · - · - · origem=Ronald (tmux)
+
+Não encontrei mudança de classificação decorrente da retirada de `validada_em` em (b)/(c): ambas iteram exclusivamente `ps`, e toda pergunta de `ps` já passou por `pergunta_viva(p)`; esse juiz devolve `False` imediatamente quando `validada_em is not None`. Assim, nas duas condições antigas o termo removido era sempre verdadeiro. (`app/chamados/services/vigia_fio.py:497`, `app/chamados/services/vigia_fio.py:531`, `app/chamados/juizes.py:1006`)
+
+Cadeia exata:
+
+- O universo nasce dos dias de `fora_da_folha`, por empresa e competência; as células correspondentes são buscadas por colaborador/data. (`app/chamados/services/vigia_fio.py:466`, `app/chamados/services/vigia_fio.py:480`)
+- A query de perguntas usa **FK `celula_id__in=_cels`**, com `select_related('disputa','celula')`; não deriva identidade por `data_evento`. (`app/chamados/services/vigia_fio.py:495`)
+- `perg_todas` recebe todas; `perg` recebe apenas as aprovadas por `pergunta_viva`; `ps = perg.get(c, []) if c else []`. (`app/chamados/services/vigia_fio.py:496`, `app/chamados/services/vigia_fio.py:497`, `app/chamados/services/vigia_fio.py:531`)
+- `pergunta_viva` delega a `_pergunta_viva_calc` em `juizes.py:795`; o primeiro degrau mata a validada em `juizes.py:1006`. O memo inclui `validada_em` na chave, portanto o cache normal não contorna esse degrau após mudança do campo. (`app/chamados/juizes.py:768`, `app/chamados/juizes.py:791`)
+- O dono recebe **`perg_todas`**, necessário para reconhecer folga validada, e não o conjunto vivo `ps`; isso não foi removido. (`app/chamados/services/vigia_fio.py:549`, `app/chamados/services/vigia_fio.py:199`)
+- (b) continua exigindo carimbo de resposta e texto vazio; (c) continua exigindo resposta carimbada e âncora terminal. A âncora vem de `chamado_destino_id`, com fallback para o chamado da disputa. (`app/chamados/services/vigia_fio.py:525`, `app/chamados/services/vigia_fio.py:566`, `app/chamados/services/vigia_fio.py:568`, `app/chamados/services/fio.py:116`)
+
+A alteração resolve uma violação **estrutural** do contrato AST: ele procura comparação crua de `validada_em`/`materializada_em` com `None`, sem provar que o conjunto já foi filtrado. O teste contratual rejeitaria as duas leituras antigas mesmo sendo redundantes semanticamente. (`app/chamados/tests/test_contract_leitores_vitalidade.py:288`, `app/chamados/tests/test_contract_leitores_vitalidade.py:301`)
+
+Nenhuma execução ou mutação realizada nesta exploração; comportamento observado em produção além dos anexos: [não verificado].
 
 ## 30/10 21:12 · sessao 2792b753efd0 · O261-E-CELULA-20 · verificador · origem=Code
 
@@ -765,170 +841,4 @@ Nas referências abaixo, **P = `app/ponto/portas/celula.py`**. O save comum de l
    - Receiver direto da pergunta só fecha beco da disputa, `on_commit`, **sem chamada a julgar_celula e sem inserir outbox** (`app/chamados/signals.py:191–202`).
    - Validação pode disparar julgamento pelos fatos materializados (Batida/Ausencia/Justificativa); o `recalcular_por_evento` da validação (`validacao.py:399–401`) é do fechamento financeiro, não fila do cartório.
 
-## 30/10 20:12 · sessao b72efd86392b · - · - · origem=Ronald (tmux)
-
-CCT / item 2(vii)
-
-- **Não entra no hash diretamente nem indiretamente pelo DNA**: `impressao_insumos` só concatena batidas, status da cobertura, chamados, `dna_versao`, `marcos`, veto, teto, versão da regra, encerramento, fio e parcialidade; nenhum campo da CCT aparece (`app/ponto/services/cartorio.py:314-380`). O produtor do DNA não lê CCT: usa `EscalaColaborador`, `TipoEscala`, marcos, jornada, intervalos e extras declaradas (`app/ponto/management/commands/gerar_celulas.py:73-123`).
-- **O argumento `regra` não é a régua CCT**: vem de `versao_para`/`REGRA_VERSOES`, declaração de versão do código do cartório (`app/ponto/services/cartorio.py:100`, `app/ponto/services/cartorio.py:168-187`, `app/ponto/services/cartorio.py:888-891`). Alterar `Empresa.regime_trabalhista`, Sindicato ou AplicacaoConvencao não altera essa versão (`app/ponto/services/cartorio.py:168-187`).
-- A régua efetiva é decidida por `regua_para`: vínculo do dia → praça e ciclo (`app/core/regua_cct.py:328-339`); `Empresa.regime_trabalhista` decide CLT/CCT (`app/core/regua_cct.py:352-366`); `_aplicacao_vigente` busca aplicações ativas da empresa, praça ou empresa inteira, confere vigência do Sindicato, prioriza praça e recusa empate (`app/core/regua_cct.py:253-275`); os valores são extraídos do Sindicato (`app/core/regua_cct.py:374-380`).
-- `get_motor_cct` lê o switch global `ParametroSistema.regua_cct_ativa` e injeta a régua no motor de cálculo; trata-se do caminho do motor/folha (`app/core/regua_cct.py:428-470`). A régua expõe sete campos declarados sem efeito no cálculo e quatro que chegam ao motor (`app/core/regua_cct.py:72-89`).
-
-**Portas que mudam CCT/regime e seus disparos**
-
-| Estado | Porta de produção | Rejulgamento / outbox |
-|---|---|---|
-| Campos/vigência de Sindicato | `form_sindicato`: coleta régua (`app/core/views_config.py:258`, `app/core/views_config.py:268-297`), atualiza e salva (`app/core/views_config.py:303-321`) ou cria (`app/core/views_config.py:323-336`). | Não chama juiz nem emite evento: termina em trilha, atualização de `VinculoSindicatoPraca` e resposta (`app/core/views_config.py:320-343`). |
-| AplicacaoConvencao | `form_aplicacao` chama `cadastrar` ou `desativar` (`app/core/views_config.py:387`, `app/core/views_config.py:402-417`). `semear_aplicacao_convencao.handle` chama as mesmas portas (`app/core/management/commands/semear_aplicacao_convencao.py:105-111`). Escritor: criação/reativação/desativação em `cadastrar` (`app/core/services/aplicacao_convencao.py:101-134`) e desativação em `desativar` (`app/core/services/aplicacao_convencao.py:138-157`). | Não chama juiz nem outbox: salva e registra auditoria, depois retorna (`app/core/services/aplicacao_convencao.py:120-134`, `app/core/services/aplicacao_convencao.py:149-157`). |
-| Empresa.regime_trabalhista | `form_empresa` valida o valor recebido (`app/colaboradores/views.py:485`, `app/colaboradores/views.py:512-515`) e passa às portas `atualizar_empresa` ou `criar_empresa` (`app/colaboradores/views.py:519-540`); escritores genéricos em `app/colaboradores/services/estrutura.py:12-20`. | Não chama juiz nem outbox: as portas só fazem create/setattr/save (`app/colaboradores/services/estrutura.py:12-21`). |
-
-- O admin não é porta alternativa para esses dois estados: regime é readonly (`app/colaboradores/admin.py:19`); AplicacaoConvencao usa `SoLeitura` (`app/core/admin.py:99-102`), que proíbe adicionar, mudar e apagar (`app/core/admin.py:59-66`).
-- Não encontrei receivers de `Empresa`, `Sindicato` ou `AplicacaoConvencao` buscando `sender` em todos os `.py` de `app/`; os signals inspecionados não contêm esses ganchos (`app/core/signals.py:1-48`, `app/colaboradores/signals.py:1-119`, `app/ponto/signals.py:85-165`, `app/chamados/signals.py:155-202`).
-- Não encontrei escritor de produção do switch `regua_cct_ativa` pesquisando o nome e `ParametroSistema` em `app/core/views_config.py`, `app/core/services/` e `app/core/management/commands/`; a tela de parâmetros é somente leitura e recusa POST (`app/core/views_config.py:480-492`). [não verificado fora desse escopo]
-
-**Mecanismo de outbox — distinção essencial**
-
-- O outbox real é `escala.models.EventoCelula`, com `celula_id`, `colaborador_id`, data, criação, processamento, tentativas e erro (`app/escala/models.py:1800-1815`).
-- Ele **não é uma fila de rejulgamento do cartório**: registra a lavra da célula e acorda o consumidor de chamados (`app/escala/models.py:1801-1807`). O consumidor chama `retratar_chamados_absolvidos_por_celula` e `encerrar_orfas_pela_lampada`, não o juiz do cartório (`app/chamados/reconciliador.py:1257-1268`, `app/chamados/reconciliador.py:1295-1306`).
-- A emissão é centralizada em `emitir_evento_celula` (`app/ponto/portas/celula.py:626-631`). `salvar_e_emitir` grava célula e evento no mesmo atomic, somente se os campos lavrados incluem `veredito` ou `ata` (`app/ponto/portas/celula.py:622-642`). A mera gravação de DNA ou dos insumos do carimbo não aciona esse critério (`app/ponto/portas/celula.py:623`, `app/ponto/portas/celula.py:708-728`).
-- O nascimento de chamado de turno ligado à célula também emite esse evento (`app/chamados/models.py:735-744`); há semeadura pela mesma porta (`app/chamados/reconciliador.py:1223-1253`).
-- O consumidor roda a cada minuto (`app/config/crons.py:375`), seleciona pendentes com menos de cinco tentativas (`app/chamados/reconciliador.py:1154`, `app/chamados/reconciliador.py:1191-1200`), mantém pendências por falha/adiamento ou marca processamento (`app/chamados/reconciliador.py:1311-1320`).
-- O rejulgamento reativo dos insumos é **chamada síncrona direta**: `_julgar_dias` chama `cartorio.julgar_celula`, com guarda antirrecursão (`app/ponto/signals.py:85-93`); os receivers de Batida, Ausencia e Justificativa chamam esse helper (`app/ponto/signals.py:131-165`). Mudança/criação de chamado chama diretamente o mesmo juiz (`app/chamados/signals.py:155-180`).
-- A “fila” do comando `processar_cartorio` é um queryset de colaboradores com células passadas, não tabela de pendências (`app/ponto/management/commands/processar_cartorio.py:45-65`); o cron o chama com `--apply`, sem `--forcar` (`app/config/crons.py:597`). O pulo usa igualdade da impressão (`app/ponto/services/cartorio.py:1092-1094`).
-- `out['rejulgar']` também não é outbox: é lista em memória consumida na segunda passada; sobras são descartadas e contadas (`app/ponto/services/cartorio.py:745-753`).
-- Não encontrei modelo próprio `*Outbox*`, `*Pendencia*` ou `*Fila*` de rejulgamento do cartório no censo de classes/modelos e ocorrências `outbox|Outbox|enfileirar|julgar_celula|julgar_colab` em `app/**/*.py`, excluindo migrations e testes; o mecanismo concreto encontrado é o acima (`app/ponto/management/commands/processar_cartorio.py:49-65`, `app/ponto/signals.py:85-93`, `app/escala/models.py:1800-1815`, `app/chamados/reconciliador.py:1295-1306`).
-
-## 30/10 19:54 · sessao 138b78f0be18 · O261-E-CELULA-20 · censo · origem=Code
-
-**O bloqueio nasce da ordem das operações:** F1 exige que a pergunta deixe de ser viva antes de fechar o chamado; nesse caminho, a célula só deixa de acusar depois do fechamento e do rejulgamento. O C6 continua vendo a célula acusadora durante a nova guarda (`app/chamados/models.py:601`; `app/ponto/services/cartorio.py:1163`; `app/ponto/services/cartorio.py:1166`; `app/chamados/juizes.py:1056`).
-
-Uso `B/` para os arquivos da base no diretório `e54eae6ed8c46bc652434308bf918485dd3ac23e`; caminhos sem esse prefixo são da cópia. Nos anexos, numero as linhas desde `Found 29 test(s).`.
-
-**(1) Escritor e leitores de `cobrado`**
-
-O cartório escolhe `_vd='cobrado'` quando, simultaneamente:
-
-- `cods` está vazio;
-- existe chamado vivo naquele dia;
-- algum desses chamados tem pergunta viva entre `perguntas_que_resolvem`. O predicado do fio termina em `pergunta_viva` (`app/ponto/services/cartorio.py:1069`; `app/ponto/services/cartorio.py:1074`; `app/ponto/services/cartorio.py:1122`; `app/ponto/services/cartorio.py:1141`; `app/chamados/juizes.py:1111`).
-
-A escolha entra em `cel.lavrar_veredito`; a atribuição efetiva é `cel.veredito = v` na porta da célula. O cartório persiste pelo `carimbar`. Uma decisão anterior com `veredito_via='admin'` impede essa substituição pelo cartório (`app/ponto/services/cartorio.py:1409`; `app/ponto/portas/celula.py:672`; `app/ponto/portas/celula.py:692`; `app/ponto/services/cartorio.py:1424`; `app/ponto/portas/celula.py:728`).
-
-`VEREDITOS_ACUSAM` contém `furo`, `discordante`, `indefinida`, `cobranca_indevida`, **`cobrado`**, `nunca_bateu` e `fato_em_ausencia`. O C6 retorna `True` ao encontrar esse pertencimento. A saída anterior por marco aceso exige `materializada_em` preenchido (`app/escala/models.py:1735`; `app/chamados/juizes.py:1050`; `app/chamados/juizes.py:1056`).
-
-Censo das leituras diretas do literal ou da constante, fora de testes e migrations: [nao verificado]
-
-| Uso | Arquivo:linha |
-|---|---|
-| C6 e consulta de perguntas vivas | `app/chamados/juizes.py:1002`, `app/chamados/juizes.py:1056`, `app/chamados/models.py:2523`, `app/chamados/models.py:2524` |
-| Absolvição de perguntas e chamados | `app/chamados/reconciliador.py:598`, `app/chamados/reconciliador.py:978` |
-| Emissão, silêncio, resposta tardia e LIMBO | `app/chamados/services/fabrica_da_celula.py:86`, `app/chamados/services/disputa_emissao.py:705`, `app/chamados/services/silencio_ausencia.py:41`, `app/chamados/services/resposta_tardia.py:45`, `app/chamados/services/limbo_folgas.py:194` |
-| Folha e apresentação | `app/folha/export.py:1215`, `app/relatorios/dia_da_frota.py:55`, `app/relatorios/furos.py:25`, `app/colaboradores/services/calendario.py:70` |
-| Vigias | `app/chamados/services/furo_sem_canal.py:35`, `app/chamados/services/vigia_fio.py:182`, `app/folha/services/vigia_pausa.py:155`, `app/ponto/services/vigia_ausencia_veredito.py:41` |
-| Comandos | `app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:36`, `app/chamados/management/commands/disparar_perguntas_competencia.py:86`, `app/colaboradores/management/commands/corrigir_escala_retroativa.py:133`, `app/chamados/management/commands/auditar_invariantes_chamados.py:197`, `:342`, `:1387`, `:1601`, `:1643` |
-
-**(2) Sequência da base**
-
-1. `registrar_batida` cria a batida; o receiver do cartório chama `_julgar_dias`, que chama `julgar_celula` (`B/app/ponto/registro_batida.py:157` → `B/app/ponto/signals.py:132` → `B/app/ponto/signals.py:135` → `B/app/ponto/signals.py:93`).
-
-2. `julgar_celula` chama `julgar_colab`; este executa `_julgar_colab_corpo`. O corpo monta a ata atual, disponibiliza-a no contexto do julgamento e chama `x.reconciliar()` quando os marcos cobrados acenderam (`B/app/ponto/services/cartorio.py:1560` → `B/app/ponto/services/cartorio.py:744` → `B/app/ponto/services/cartorio.py:1148` → `B/app/ponto/services/cartorio.py:1152` → `B/app/ponto/services/cartorio.py:1163`).
-
-3. `reconciliar` consulta motor e premissa. Com a premissa regularizada, chama `_gravar_estado`, que atribui o novo status e salva (`B/app/chamados/models.py:440` → `B/app/chamados/models.py:467` → `B/app/chamados/models.py:470` → `B/app/chamados/models.py:495` → `B/app/chamados/models.py:444` → `B/app/chamados/models.py:192` → `B/app/chamados/models.py:231`).
-
-4. **É após esse save que existe o intervalo “chamado terminal, pergunta ainda viva”.** A célula ainda pode apresentar o veredito acusador anterior, e a pergunta sem materialização não passa pela exceção do marco aceso. O C6 retorna viva antes de chegar ao fallback que examina o destino terminal. O receiver do chamado evita rejulgamento recursivo durante o cartório (`B/app/chamados/models.py:231`; `B/app/chamados/juizes.py:1050`; `B/app/chamados/juizes.py:1056`; `B/app/chamados/juizes.py:1083`; `B/app/chamados/signals.py:174`).
-
-5. O fechamento enfileira a célula para rejulgamento. A primeira lavra ainda pode usar `_vd='cobrado'`, calculado antes do fechamento; a segunda passada relê os vivos. Sem protestos e sem aquela cobrança viva, deriva `concorde` (`B/app/ponto/services/cartorio.py:1142` → `B/app/ponto/services/cartorio.py:1166` → `B/app/ponto/services/cartorio.py:1409` → `B/app/ponto/services/cartorio.py:746` → `B/app/ponto/services/cartorio.py:1069`; `B/app/escala/models.py:1596`).
-
-6. O receiver posterior da batida chama `reconciliar_chamados_colab`. Seu primeiro consumidor de absolvição seleciona células não acusadoras, confirma C6 falso e grava `materializada_em`, autor e `via_resolucao='celula_absolveu'` (`B/app/ponto/signals.py:207` → `B/app/ponto/signals.py:215` → `B/app/chamados/reconciliador.py:1350` → `B/app/chamados/reconciliador.py:598` → `B/app/chamados/reconciliador.py:613` → `B/app/chamados/reconciliador.py:617` → `B/app/chamados/reconciliador.py:619`).
-
-O resultado fornecido confirma um chamado fechado e a pergunta materializada por `celula_absolveu`, célula `concorde`, C6 falso (`anexo debug_base.log:4`; `anexo debug_base.log:5`).
-
-**(3) Dependências que retêm a cópia**
-
-- **Fechamento → pergunta:** `_decisao_do_fechamento` consulta primeiro `_plano_pergunta_viva`. Havendo viva sem reata válida, retorna `None` antes do gate da premissa (`app/chamados/models.py:601`; `app/chamados/models.py:604`; `app/chamados/models.py:605`).
-- **Pergunta → célula:** `_vivas_ancoradas` simula somente o status novo do chamado. Ela não simula a futura lavra da célula. O C6 continua lendo o veredito acusador atual (`app/chamados/models.py:304`; `app/chamados/models.py:310`; `app/chamados/models.py:311`; `app/chamados/juizes.py:1056`).
-- **Marco aceso → materialização prévia:** a luz acesa só encerra a pergunta nesse degrau se ela já tiver `materializada_em`. A pergunta da sonda não tem esse carimbo (`app/chamados/juizes.py:1050`; `anexo debug_cura.log:7`).
-- **Chamado vivo + pergunta viva → `cobrado`:** recusado o fechamento, ambos permanecem no cálculo do fio. Sem protestos, o cartório escolhe `cobrado`, que também acusa (`app/ponto/services/cartorio.py:1074`; `app/ponto/services/cartorio.py:1122`; `app/ponto/services/cartorio.py:1142`; `app/escala/models.py:1736`).
-- **Célula acusadora → ausência de `celula_absolveu`:** o consumidor que grava esse carimbo exclui `VEREDITOS_ACUSAM` (`app/chamados/reconciliador.py:598`).
-
-O pós-estado simulado do destino não rompe essa dependência: o ramo da célula acusadora vem antes do fallback de materialização que considera destino encerrado (`app/chamados/juizes.py:1056`; `app/chamados/juizes.py:1083`; `app/chamados/juizes.py:700`).
-
-Na sonda, a tentativa vê pergunta #1 `saida_sem_entrada`, célula `furo`, e recusa; depois ficam chamado aberto, célula `cobrado` e pergunta viva (`anexo debug_cura.log:4`; `anexo debug_cura.log:5`; `anexo debug_cura.log:7`).
-
-**(4) Os três testes** [nao verificado]
-
-**PORTA-2ATO / MORDE.** O chamado identificado pelo teste é `ch`, módulo `batida_ausente`, subcategoria `marco_furado`, dia `self.seg`; a exigência é sair de `VIVOS` depois da correção (`app/colaboradores/tests/test_contract_porta_2ato.py:150`; `app/colaboradores/tests/test_contract_porta_2ato.py:158`).
-
-A regeneração altera `trabalha` e DNA sem limpar o veredito. O cartório tenta reconciliar cobranças do dia sem trabalho antes de lavrar o novo veredito. Assim, **uma pergunta ancorada que ainda leia célula acusadora pode barrar essa tentativa**, embora o previsto já tenha virado folga (`app/ponto/portas/celula.py:260`; `app/ponto/portas/celula.py:264`; `app/ponto/services/cartorio.py:1188`; `app/ponto/services/cartorio.py:1196`; `app/ponto/services/cartorio.py:1409`; `app/chamados/juizes.py:1056`; `app/chamados/models.py:601`).
-
-A fixture não cria explicitamente a pergunta retentora; existe geração automática pelo save do chamado e pela fábrica. **Qual pergunta efetivamente o segura — PK, motivo e ramo C6 observado — é [nao verificado] nos anexos fornecidos** (`app/colaboradores/tests/test_contract_porta_2ato.py:147`; `app/chamados/signals.py:180`; `app/ponto/services/cartorio.py:770`; `app/chamados/services/fabrica_da_celula.py:124`).
-
-**T34 / furo sob LIMBO.** Quem deixa de fechar é `self.furo`, `batida_ausente`. A pergunta explícita é `p`, motivo `orfao_14h`, tipo `hora`, destino `self.furo`. O próprio teste exige furo resolvido **e essa pergunta viva, sem materialização** (`app/chamados/tests/test_t34_furo_sob_limbo.py:23`; `app/chamados/tests/test_t34_furo_sob_limbo.py:42`; `app/chamados/tests/test_t34_furo_sob_limbo.py:47`; `app/chamados/tests/test_t34_furo_sob_limbo.py:52`; `app/chamados/tests/test_t34_furo_sob_limbo.py:53`).
-
-`agrupar_furo` grava `agrupado_em` antes de reconciliar. A premissa aceita agrupamento sob pai vivo, mas F1 pode recusar pela pergunta antes de consultar essa exceção. O pai LIMBO não integra os módulos de cobrança pesquisados para reata (`app/chamados/services/limbo_folgas.py:219`; `app/chamados/services/limbo_folgas.py:221`; `app/chamados/models.py:644`; `app/chamados/models.py:601`; `app/chamados/models.py:331`; `app/chamados/catalogo/modulos.py:235`).
-
-Sem absolvição anterior, pergunta sem materialização permanece viva; célula acusadora também retorna viva. **Qual desses ramos foi percorrido nessa execução é [nao verificado] nos anexos** (`app/chamados/juizes.py:1056`; `app/chamados/juizes.py:1076`).
-
-**O199 / quatro irmãs.** O chamado é `ch`, módulo `turno_aberto`. As quatro perguntas são `saida_sem_entrada`, respondidas `FOLGA_CONTESTA`, destinadas a `ch`, inicialmente sem validação/materialização (`app/chamados/tests/test_o199_aceite_de_folga_decide_o_dia.py:106`; `app/chamados/tests/test_o199_aceite_de_folga_decide_o_dia.py:121`; `app/chamados/tests/test_o199_aceite_de_folga_decide_o_dia.py:175`).
-
-O primeiro aceite valida somente a pergunta atual antes de declarar folga. O fechamento do fio carimba as irmãs por `fechar_por_admin`, mas essa porta não preenche `validada_em`. As irmãs respondidas e ainda não validadas continuam vivas: o ramo da resposta precede a morte por identidade `admin_decidiu`; `FOLGA_CONTESTA` não oferece hora comparável com a luz (`app/chamados/services/validacao.py:283`; `app/ponto/services/veredito_celula.py:174`; `app/chamados/models.py:2399`; `app/chamados/juizes.py:1020`; `app/chamados/juizes.py:1032`; `app/chamados/juizes.py:1044`; `app/chamados/juizes.py:995`).
-
-São essas irmãs que retêm a tentativa de `reconciliar` do fechamento do fio. Os aceites seguintes encontram folga pronta, validam a pergunta e retornam sem nova tentativa de reconciliar o chamado; por isso a recusa anterior pode permanecer após os quatro aceites (`app/ponto/services/veredito_celula.py:183`; `app/chamados/models.py:601`; `app/chamados/services/validacao.py:261`; `app/chamados/services/validacao.py:270`).
-
-**(5) O significado de `encerradas=2`**
-
-`encerradas` conta **perguntas carimbadas por `encerrar_fantasma()`**, uma por retorno verdadeiro da porta. O incremento ocorre antes das guardas de fechamento da disputa; não conta chamados nem disputas encerrados (`app/chamados/reconciliador.py:1095`; `app/chamados/reconciliador.py:1104`; `app/chamados/reconciliador.py:1106`; `app/chamados/models.py:2438`).
-
-O universo abrange o colaborador inteiro: perguntas sem materialização/validação, com dia, em disputa aberta e com os dois motivos previstos. **O SQL não exige `chamado_destino=NULL`**, apesar do nome `_orfas_abertas` (`app/chamados/reconciliador.py:991`; `app/chamados/reconciliador.py:999`; `app/chamados/reconciliador.py:1082`).
-
-Para contar, a pergunta precisa ter resposta vazia, luz do próprio marco acesa, C6 vivo e dia passado encerrado. Portanto, `self.respondida`, com resposta `06:55`, não é a segunda contada (`app/chamados/reconciliador.py:1033`; `app/chamados/reconciliador.py:1035`; `app/chamados/reconciliador.py:1037`; `app/chamados/reconciliador.py:1041`; `app/chamados/tests/test_orfas_nao_morre_na_guarda_da_porta.py:93`).
-
-A mudança relevante é a retenção anterior pelo novo gate: a base consultava motor e premissa; a cópia recusa primeiro por pergunta viva sem reata. A fixture cria batidas antes das perguntas explícitas, e essas batidas podem gerar perguntas automaticamente pelo cartório/fábrica (`B/app/chamados/models.py:467`; `B/app/chamados/models.py:470`; `app/chamados/models.py:601`; `app/chamados/models.py:604`; `app/chamados/tests/test_orfas_nao_morre_na_guarda_da_porta.py:70`; `app/ponto/signals.py:135`; `app/ponto/services/cartorio.py:770`).
-
-A explicação estática para o aumento é a conservação de uma candidata automática que antes podia ser encerrada/carimbada durante o setup. **A identidade exata da segunda pergunta, e a confirmação dessa trajetória individual, são [nao verificado] pelo dado fornecido.**
-
-## 30/10 19:53 · sessao ade1699d4ba3 · - · - · origem=Ronald (tmux)
-
-Q4 — referências da cópia:
-
-- **PORTA-2ATO / MORDE:** o chamado é `ch`, `modulo_origem='batida_ausente'`, `subcategoria='marco_furado'`, com `data_turno=self.seg`; o teste exige que saia de `VIVOS` após a correção (`app/colaboradores/tests/test_contract_porta_2ato.py:147-160`). A fixture não cria pergunta explicitamente; seu nascimento pode ocorrer no `post_save` do chamado → `julgar_celula` → fábrica (`app/chamados/signals.py:164-180`; `app/ponto/services/cartorio.py:768-770`; `app/chamados/services/fabrica_da_celula.py:112-124`). O motivo/PK exato que o segura não consta nos anexos: **[nao verificado]**.
-  
-  A dependência estática: a regeneração troca `trabalha`/DNA sem limpar o veredito (`app/ponto/portas/celula.py:259-265`); o cartório tenta reconciliar a cobrança em dia sem trabalho antes de lavrar o novo veredito (`app/ponto/services/cartorio.py:1188-1199`, `1406-1425`). O C6 lê o veredito persistido da célula e retorna viva para um veredito acusador (`app/chamados/juizes.py:1053-1057`). Portanto, **se a pergunta ancorada ainda vê `furo`/`cobrado`, ela bloqueia essa tentativa**, mesmo após o DNA virar folga (`app/chamados/models.py:599-608`). Marcos início/E e fim/S correspondem a `saida_sem_entrada` e `orfao_14h`, respectivamente (`app/chamados/services/declaracao_texto.py:43-44`; `app/chamados/services/fabrica_da_celula.py:58-64`).
-
-- **T3.4 / furo sob LIMBO:** quem deixa de fechar é `self.furo`, módulo `batida_ausente`, aberto, dia `self.d`; o pai é `self.pai`, `sem_previsao_escala/folga_nao_definida` (`app/chamados/tests/test_t34_furo_sob_limbo.py:21-25`). A pergunta explícita é `p`, motivo `orfao_14h`, destino `self.furo`, tipo `hora`, aberta sem resposta (`app/chamados/tests/test_t34_furo_sob_limbo.py:41-42`). O próprio contrato exige **furo resolvido com essa pergunta ainda viva e sem materialização** (`app/chamados/tests/test_t34_furo_sob_limbo.py:47-53`).
-  
-  `agrupar_furo` grava `agrupado_em` e depois chama `reconciliar` (`app/chamados/services/limbo_folgas.py:214-222`). A premissa antiga permite fechar agrupado sob pai vivo (`app/chamados/models.py:644`), mas F1 consulta as perguntas antes e pode recusar antes de chegar à premissa (`app/chamados/models.py:599-608`). A pergunta sem materialização continua viva na ausência de absolvição anterior; célula acusadora também a mantém viva (`app/chamados/juizes.py:1054-1057`, `1076-1077`). O pai LIMBO não serve de sobrevivente C8 nessa composição: F1 busca apenas `CALADOS_POR_ISENCAO`, que não inclui `sem_previsao_escala` (`app/chamados/models.py:327-334`; `app/chamados/catalogo/modulos.py:235-241`; `app/chamados/juizes.py:1620-1626`). O ramo C6 efetivamente percorrido nessa execução não está nos anexos: **[nao verificado]**.
-
-- **O199 / quatro irmãs:** quem fica retido é `ch`, `turno_aberto/saida_sem_entrada`, `aberto`, dia informado no contexto (`app/chamados/tests/test_o199_aceite_de_folga_decide_o_dia.py:106-118`). São quatro perguntas de `hora`, motivo `saida_sem_entrada`, todas respondidas `FOLGA_CONTESTA`, apontando para `ch`, inicialmente sem validação/materialização (`app/chamados/tests/test_o199_aceite_de_folga_decide_o_dia.py:120-126`, `175-178`).
-  
-  O primeiro aceite valida somente a pergunta atual antes de declarar folga (`app/chamados/services/validacao.py:282-285`). O fechamento do fio carimba as irmãs por `fechar_por_admin`, que escreve `via_resolucao`/`materializada_em`, sem validar (`app/ponto/services/veredito_celula.py:174-178`; `app/chamados/models.py:2399-2402`). **As irmãs respondidas e ainda não validadas seguem vivas:** no C6, resposta não vazia vem antes da morte por identidade `admin_decidiu` ou por célula absolvida (`app/chamados/juizes.py:1017-1045`, `1053-1065`); `FOLGA_CONTESTA` não fornece HH:MM comparável, logo não satisfaz a concordância com a luz (`app/chamados/juizes.py:983-997`). Elas seguram o `reconciliar` executado pelo fechamento do fio (`app/ponto/services/veredito_celula.py:182-183`; `app/chamados/models.py:599-608`).
-  
-  Os próximos aceites encontram a folga pronta, validam/fecham cada pergunta e retornam sem tentar reconciliar novamente o chamado (`app/chamados/services/validacao.py:261-272`). Assim, todas podem terminar validadas enquanto `ch` conserva a recusa anterior; o teste exige `ch.status_local == 'resolvido'` ao final (`app/chamados/tests/test_o199_aceite_de_folga_decide_o_dia.py:177-184`). O PK da primeira irmã validada e das retentoras em runtime não consta nos anexos: **[nao verificado]**.
-
-## 30/10 19:53 · sessao 956521c1388b · - · - · origem=Ronald (tmux)
-
-Q1/Q2, somente leitura:
-
-- O cartório escolhe `cobrado` quando `cods` está vazio, há chamados em `VIVOS` e pelo menos um desses chamados tem fio vivo; o fio usa `pergunta_viva`. (`app/ponto/services/cartorio.py:1069`, `:1074`, `:1122`, `:1141`, `:1142`; `app/chamados/juizes.py:1111`).
-- O valor chega à porta por `cel.lavrar_veredito(... save=False)`; a porta respeita decisão de admin, atribui `cel.veredito = v`, e `carimbar` persiste junto dos demais campos. (`app/ponto/services/cartorio.py:1409`, `:1424`; `app/ponto/portas/celula.py:672`, `:692`, `:728`).
-- `cobrado` pertence a `VEREDITOS_ACUSAM`; C6 retorna vivo por esse pertencimento. A exceção anterior de marco aceso exige pergunta já materializada. (`app/escala/models.py:1735`; `app/chamados/juizes.py:1050`, `:1056`).
-
-Base disponível em `/home/ronald/codex_ws/e54eae6ed8c46bc652434308bf918485dd3ac23e`; a cadeia abaixo usa os arquivos dessa base:
-
-1. `registrar_batida` cria a batida → receiver do cartório → `_julgar_dias` → `julgar_celula` → `julgar_colab` → `_julgar_colab_corpo`. (`app/ponto/registro_batida.py:157`; `app/ponto/signals.py:132`, `:135`, `:93`; `app/ponto/services/cartorio.py:1560`, `:744`).
-2. O corpo monta a ata nova, publica-a no contexto do julgamento e, com os marcos cobrados acesos, chama `x.reconciliar()`. (`app/ponto/services/cartorio.py:1148`, `:1152`, `:1163`).
-3. Na base, `reconciliar` pede a decisão; o gate da premissa aceita `premissa_regularizada`; `_gravar_estado` atribui o terminal e salva. (`base/app/chamados/models.py:440`, `:470`, `:495`, `:444`, `:192`, `:231`).
-4. **Após esse save e antes da segunda lavra, o chamado já está terminal e a pergunta sem carimbo continua viva pelo veredito anterior acusador.** C6 não possui veto geral por destino terminal antes desse ramo; o receiver do chamado evita julgamento recursivo enquanto o cartório está ativo. (`base/app/chamados/models.py:231`; `app/chamados/juizes.py:1050`, `:1054`, `:1056`; `app/chamados/signals.py:174`).
-5. O fechamento enfileira a célula para nova passada; a segunda passada relê os chamados, agora sem aquele vivo. Sem códigos e sem cobrança, `derivar_veredito([])` produz `concorde`. (`app/ponto/services/cartorio.py:1166`, `:745`, `:746`, `:1069`, `:1409`; `app/escala/models.py:1596`).
-6. O receiver posterior da batida chama `reconciliar_chamados_colab`, que começa por `retratar_perguntas_absolvidas_por_celula`; esse consumidor exclui células acusadoras, confirma C6 falso e grava `materializada_em`, usuário e `celula_absolveu`. (`app/ponto/signals.py:207`, `:215`; `app/chamados/reconciliador.py:1350`, `:598`, `:613`, `:617`, `:619`, `:620`).
-
-Leitores diretos de `cobrado` / `VEREDITOS_ACUSAM`, fora de testes e migrations: [nao verificado]
-
-- C6 e consultas de perguntas: `app/chamados/juizes.py:1002`, `:1056`; `app/chamados/models.py:2523`, `:2524`.
-- Fechamento, emissão e fio: `app/chamados/reconciliador.py:598`, `:978`; `app/chamados/services/fabrica_da_celula.py:86`; `app/chamados/services/silencio_ausencia.py:41`; `app/chamados/services/resposta_tardia.py:45`; `app/chamados/services/limbo_folgas.py:194`; `app/chamados/services/disputa_emissao.py:705`.
-- Folha e apresentação: `app/folha/export.py:1215`; `app/relatorios/dia_da_frota.py:13`, `:55`; `app/relatorios/furos.py:25`, `:46`; `app/colaboradores/services/calendario.py:70`, `:173`.
-- Vigias/comandos: `app/chamados/services/furo_sem_canal.py:35`, `:72`; `app/chamados/services/vigia_fio.py:182`, `:230`; `app/folha/services/vigia_pausa.py:155`, `:157`; `app/ponto/services/vigia_ausencia_veredito.py:41`, `:42`; `app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:36`, `:62`; `app/chamados/management/commands/disparar_perguntas_competencia.py:86`, `:120`; `app/colaboradores/management/commands/corrigir_escala_retroativa.py:133`; `app/chamados/management/commands/auditar_invariantes_chamados.py:197`, `:342`, `:1387`, `:1601`, `:1643`.
-
-A chave de contador `cobrado` em `app/ponto/services/furos_sem_cobranca.py:131` não é leitura de `CelulaDia.veredito`.
-
-_755 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_759 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
