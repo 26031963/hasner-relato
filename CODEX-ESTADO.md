@@ -1,7 +1,92 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 06:43** · publicado em **31/10/2026 06:43** (UTC-3)
+> Ultima resposta processada: **31/10/2026 06:45** · publicado em **31/10/2026 06:48** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 06:45 · sessao 9fffb8394a9e · FIO-ESTADO-LE-O-ALCANCE · verificador · origem=Code
+
+**Há achados no tratamento de falhas e na força do selo. A conjunção de tipos do alcance está correta; o escritor produz o esquema esperado.** (`bin/fio_estado.py:71`, `bin/fio_estado.py:106`, `bin/tests/test_fio_estado.sh:135`, `app/chamados/management/commands/vigiar_fio_morto.py:216`)
+
+**1. Contrato 3, 3’, 4 e 4’.**
+
+Cada condição do 3’:
+
+| Condição | Implementação literal |
+|---|---|
+| `alcance` é dict | Sim. Ausência, `None`, lista, string e booleano são rejeitados. (`bin/fio_estado.py:79`, `bin/fio_estado.py:80`) |
+| `alcance_universo` int > 0 | Sim. Usa `type(v) is int`: rejeita bool, float, string, ausência e `None`; zero e negativos também invalidam. (`bin/fio_estado.py:71`, `bin/fio_estado.py:84`, `bin/fio_estado.py:87`) |
+| `alcance_cego is False` | Sim. `True` dá CEGO; ausência, `None` e inteiro `0` não passam como `False`. (`bin/fio_estado.py:82`, `bin/fio_estado.py:89`) |
+| `esperado` contém `fio_morto_alcance` | Sim, exige presença. **O valor dessa chave pode ser `None`, bool ou outro tipo**: o 3’ exige presença, e o código também. `esperado` inteiro ausente/`None` vira `{}` e falha. (`bin/fio_estado.py:91`, `bin/fio_estado.py:119`, `bin/fio_estado.py:172`) |
+| `censo.fio_morto_alcance` int | Sim. Ausência, `None`, bool, float e string são rejeitados. `censo` ausente/`None` vira `{}`. (`bin/fio_estado.py:71`, `bin/fio_estado.py:93`, `bin/fio_estado.py:118`) |
+| `medido_em` legível | Sim para a validação comum: ausência, `None`, vazio e valor não interpretável impedem a manchete numérica. (`bin/fio_estado.py:123`, `bin/fio_estado.py:125`, `bin/fio_estado.py:134`) |
+| Velho quando idade > `TETO_H`, sem arredondamento prévio | A comparação usa horas cruas; arredonda depois. Há uma ressalva de fuso descrita na resposta 3. (`bin/fio_estado.py:127`, `bin/fio_estado.py:129`, `bin/fio_estado.py:130`) |
+
+Os desvios encontrados:
+
+- **Erro de leitura não vira ILEGIVEL.** JSON quebrado, como `{`, ou `PermissionError` devolvem `medido=False, ilegivel=False`; `linha()` publica **NUNCA MEDIDO**, inclusive dizendo “não há” arquivo existente. Isso contraria “exceção de leitura = ILEGIVEL”. (`bin/fio_estado.py:106`, `bin/fio_estado.py:107`, `bin/fio_estado.py:164`)
+- **“Nunca levanta / gerador não cai” não é garantido:** há `RecursionError` não capturado, detalhado na resposta 3. (`bin/fio_estado.py:105`, `bin/fio_estado.py:106`, `bin/fio_estado.py:111`, `bin/gerar_estado.py:261`)
+- **Ausente permanece descrito como amarelo**, com manchete NUNCA MEDIDO; o diff não estabelece o vermelho literal pedido. (`bin/fio_estado.py:26`, `bin/fio_estado.py:165`, `bin/gerar_estado.py:258`)
+- **4/4’: a troca do contador tem mordida**, pois os casos cruzados exigem 4 e 0 na primeira linha; a garantia do selo contra falhas de data/esquema é incompleta, conforme resposta 5. (`bin/tests/test_fio_estado.sh:140`, `bin/tests/test_fio_estado.sh:141`, `bin/tests/test_fio_estado.sh:145`, `bin/tests/test_fio_estado.sh:146`, `bin/tests/test_fio_estado.sh:173`)
+
+**2. Quem escreve e quem lê.**
+
+O command grava o JSON por `_carimbar`; `censo_alcance` produz o bloco em memória. O gerador consome apenas `ler → linha`. (`app/chamados/management/commands/vigiar_fio_morto.py:114`, `app/chamados/management/commands/vigiar_fio_morto.py:206`, `bin/gerar_estado.py:260`)
+
+| Chave | Escritor: nome, tipo e forma | Leitor |
+|---|---|---|
+| `alcance` | Dict integral retornado pelo serviço. (`app/chamados/services/vigia_fio.py:539`, `app/chamados/management/commands/vigiar_fio_morto.py:218`) | Valida o bloco e extrai campos. (`bin/fio_estado.py:79`, `bin/fio_estado.py:138`) |
+| `alcance.alcance_universo` | `len(dias)`, int. (`app/chamados/services/vigia_fio.py:553`) | Valida e imprime. (`bin/fio_estado.py:85`, `bin/fio_estado.py:173`) |
+| `alcance.alcance_cego` | `not dias`, bool. (`app/chamados/services/vigia_fio.py:554`) | Testa identidade booleana. (`bin/fio_estado.py:82`, `bin/fio_estado.py:89`) |
+| `alcance.alcance_de_hoje_pra_frente` | Int, começa zero e incrementa. (`app/chamados/services/vigia_fio.py:540`, `app/chamados/services/vigia_fio.py:605`) | Extrai e imprime. (`bin/fio_estado.py:150`, `bin/fio_estado.py:175`) |
+| `censo.fio_morto_alcance` | Int do bloco, copiado para `censo`. (`app/chamados/services/vigia_fio.py:650`, `app/chamados/management/commands/vigiar_fio_morto.py:217`) | Valida e usa na manchete. (`bin/fio_estado.py:93`, `bin/fio_estado.py:174`) |
+| `esperado.fio_morto_alcance` | Int `0`, copiado de `ESPERADO_DO_CARIMBO`. (`app/chamados/management/commands/vigiar_fio_morto.py:95`, `app/chamados/management/commands/vigiar_fio_morto.py:211`) | Exige chave e compara valor recebido. (`bin/fio_estado.py:91`, `bin/fio_estado.py:172`, `bin/fio_estado.py:176`) |
+| `alarma_em_0` | Lista de strings; atualmente sem alcance, por desenho declarado. (`app/chamados/management/commands/vigiar_fio_morto.py:82`, `app/chamados/management/commands/vigiar_fio_morto.py:92`, `app/chamados/management/commands/vigiar_fio_morto.py:213`) | Consulta pertença para o aviso. (`bin/fio_estado.py:143`, `bin/fio_estado.py:178`) |
+| `medido_em` | String ISO com offset, derivada do mesmo `agora` usado na rodada. (`app/chamados/management/commands/vigiar_fio_morto.py:162`, `app/chamados/management/commands/vigiar_fio_morto.py:207`) | Interpreta, calcula idade e imprime. (`bin/fio_estado.py:125`, `bin/fio_estado.py:128`, `bin/fio_estado.py:194`) |
+
+**Recorte indevidamente carimbado: sem achado.** `--empresa` transforma `empresas` em lista; somente `empresas is None` permite gravar. O outro ramo declara que não carimbou. (`app/chamados/management/commands/vigiar_fio_morto.py:152`, `app/chamados/management/commands/vigiar_fio_morto.py:156`, `app/chamados/management/commands/vigiar_fio_morto.py:205`, `app/chamados/management/commands/vigiar_fio_morto.py:223`)
+
+**Sempre inválido por incompatibilidade: sem achado.** Os nomes e tipos coincidem; universo vazio produz legitimamente zero/cego e deve ser rejeitado. A frota do serviço já é a de `empresas_visiveis()`. (`app/chamados/services/vigia_fio.py:513`, `app/chamados/services/vigia_fio.py:553`, `app/chamados/services/vigia_fio.py:555`)
+
+O destino pode ser sobrescrito por `VIGIA_FIO_CARIMBO`; o selo confere somente o default literal. A configuração ativa de produção está `[nao verificado]`. (`app/chamados/management/commands/vigiar_fio_morto.py:110`, `bin/tests/test_fio_estado.sh:119`, `bin/tests/test_fio_estado.sh:122`)
+
+**3. Exceções e número na primeira linha.**
+
+**Sim: JSON válido muito aninhado derruba `ler` e a seção do gerador.** Reproduzi em memória com `'[' * 10000 + '0' + ']' * 10000`: o parser levanta `RecursionError`; nenhum dos dois `except` a captura. Com os outros leitores substituídos em memória, `gerar()` também caiu na chamada do fio. (`bin/fio_estado.py:105`, `bin/fio_estado.py:106`, `bin/fio_estado.py:111`, `bin/gerar_estado.py:261`)
+
+**`linha(ler(JSON))` levantar por formas comuns: sem achado.** Formas que provocam `AttributeError`, `TypeError` ou `KeyError` durante a leitura são convertidas em ILEGIVEL antes da composição. (`bin/fio_estado.py:111`, `bin/fio_estado.py:168`)
+
+**Há manchete numérica com carimbo efetivamente velho se o offset diferir do host.** O leitor remove o offset sem converter o instante. Reprodução: `agora=2026-10-31 12:00` local −03 e `medido_em="2026-10-30T11:00:00+00:00"` significam **28 horas**, mas o leitor calcula **25**, aceita e publica `**fio morto: 0**`. A configuração base usa São Paulo. (`bin/fio_estado.py:127`, `bin/fio_estado.py:128`, `bin/fio_estado.py:129`, `bin/fio_estado.py:173`, `app/config/settings/base.py:93`)
+
+Além disso, **a primeira linha inválida contém números diagnósticos**: universo `0`, contagem inválida `'4'` ou limite `26 h`. Portanto “nenhum número na PRIMEIRA linha”, tomado literalmente, não é cumprido; embora esses exemplos não publiquem uma contagem no título `**fio morto: N**`. (`bin/fio_estado.py:88`, `bin/fio_estado.py:94`, `bin/fio_estado.py:137`, `bin/fio_estado.py:181`)
+
+**4. Regra própria do leitor.**
+
+**Sem achado de novo limiar de negócio, filtro temporal do universo ou derivação paralela do alcance.** A manchete usa o contador recebido e compara com o esperado recebido; “hoje pra frente” é apenas impresso, já separado pelo serviço. As exigências de universo e cegueira são as expressamente pedidas pelo 3’. (`bin/fio_estado.py:85`, `bin/fio_estado.py:89`, `bin/fio_estado.py:172`, `bin/fio_estado.py:174`, `app/chamados/services/vigia_fio.py:604`)
+
+A idade continua sendo derivação local; seu descarte do offset tem o problema descrito acima. (`bin/fio_estado.py:127`, `bin/fio_estado.py:128`)
+
+**5. Selo: ausência de sinal e mutantes sobreviventes.**
+
+- **Traceback pode passar como “sem número”.** `manchete()` mistura stderr e perde o status do leitor; `num()` retorna vazio para silêncio, traceback ou formato inesperado. Casos 12, 13, 15 e 16 exigem somente vazio. (`bin/tests/test_fio_estado.sh:19`, `bin/tests/test_fio_estado.sh:135`, `bin/tests/test_fio_estado.sh:136`, `bin/tests/test_fio_estado.sh:163`, `bin/tests/test_fio_estado.sh:166`, `bin/tests/test_fio_estado.sh:173`, `bin/tests/test_fio_estado.sh:183`)
+- **Mutante de crash sobrevivente:** retirar `ValueError` do tratamento da data faz `ontem-de-manha` levantar exceção; o caso 15 continua satisfeito pelo `num()` vazio. (`bin/fio_estado.py:125`, `bin/fio_estado.py:131`, `bin/fio_estado.py:111`, `bin/tests/test_fio_estado.sh:172`, `bin/tests/test_fio_estado.sh:173`)
+- **Mutante de segundo limiar sobrevivente:** trocar a leitura de `esp` por `esp = 0`. Todas as fixtures fixam o esperado **do alcance** em zero; o caso do esperado 7 varia somente o contador antigo. A comparação em memória preservou as saídas das fixtures reconstruídas. (`bin/fio_estado.py:172`, `bin/tests/test_fio_estado.sh:48`, `bin/tests/test_fio_estado.sh:49`, `bin/tests/test_fio_estado.sh:105`)
+- **Mutantes de tipo sobreviventes:** `_inteiro` com `isinstance(v, int)` aceitaria bool; relaxar a identidade de `alcance_cego` poderia aceitar zero/ausência/`None`. Essas entradas não aparecem nas fixtures. (`bin/fio_estado.py:71`, `bin/fio_estado.py:89`, `bin/tests/test_fio_estado.sh:46`, `bin/tests/test_fio_estado.sh:53`, `bin/tests/test_fio_estado.sh:54`)
+- **Caso 19 prova texto, não composição ou tipos:** seus três `grep`s podem continuar verdes com um retorno incompatível de `censo_alcance`. (`bin/tests/test_fio_estado.sh:199`, `bin/tests/test_fio_estado.sh:200`, `bin/tests/test_fio_estado.sh:201`)
+- **Mordida efetiva:** os casos 8/9 detectam a volta geral ao contador antigo; o caso 18 exige rc zero, ausência de traceback e ILEGIVEL para as duas formas testadas. (`bin/tests/test_fio_estado.sh:141`, `bin/tests/test_fio_estado.sh:146`, `bin/tests/test_fio_estado.sh:192`, `bin/tests/test_fio_estado.sh:193`, `bin/tests/test_fio_estado.sh:194`)
+
+Execução integral do selo e confirmação dos logs GREEN/RED/M1–M7: `[nao verificado]`. O shell cria e apaga arquivos, contrariando a restrição desta auditoria; as reproduções foram feitas em memória. (`bin/tests/test_fio_estado.sh:32`, `bin/tests/test_fio_estado.sh:71`, `bin/tests/test_fio_estado.sh:98`)
+
+## 31/10 06:43 · sessao abb14f791384 · - · - · origem=Ronald (tmux)
+
+- **Exceção não contida:** JSON válido com 10.000 arrays aninhados levanta `RecursionError` em `json.load`; os `except` não a capturam. A chamada direta do gerador também não tem proteção. Reproduzido em memória, sem arquivos. `bin/fio_estado.py:105`, `bin/fio_estado.py:106`, `bin/fio_estado.py:111`, `bin/gerar_estado.py:261`.
+
+- **Erro de leitura rotulado incorretamente:** JSON sintaticamente inválido, como `{`, produz `NUNCA MEDIDO`, em vez de `ILEGIVEL`: o tratamento devolve `medido=False, ilegivel=False` e `linha` toma primeiro o ramo de ausência. `bin/fio_estado.py:106`, `bin/fio_estado.py:107`, `bin/fio_estado.py:164`.
+
+- **Manchete numérica com medição inválida:** sem achado quanto ao contador `**fio morto: N**`; a conjunção rejeita ausência, `None`, booleanos nas contagens e data inválida/velha. Entretanto, a primeira linha contém números diagnósticos — universo `0`, censo inválido `'4'`, idade limite `26 h` — se “sem número” for interpretado literalmente como nenhuma ocorrência numérica. `bin/fio_estado.py:71`, `bin/fio_estado.py:80`, `bin/fio_estado.py:88`, `bin/fio_estado.py:94`, `bin/fio_estado.py:134`, `bin/fio_estado.py:137`, `bin/fio_estado.py:181`.
+
+- **`esperado.fio_morto_alcance=None`:** aceita e publica o contador com `esperado None`; isso cumpre literalmente o 3', que exige presença da chave, sem especificar seu tipo/valor. `bin/fio_estado.py:91`, `bin/fio_estado.py:172`, `bin/fio_estado.py:173`.
+
+- **`linha(ler(JSON))` com formas comuns:** sem achado de exceção adicional; erros estruturais relevantes são contidos antes da composição. Valores vazios no topo ou em `censo`/`esperado` são normalizados para `{}`. `bin/fio_estado.py:105`, `bin/fio_estado.py:111`, `bin/fio_estado.py:118`, `bin/fio_estado.py:119`, `bin/fio_estado.py:168`.
 
 ## 31/10 06:43 · sessao 8ae4b7d542a0 · - · - · origem=Ronald (tmux)
 
@@ -631,90 +716,4 @@ Pertinência da porta, com alimentação real e estado estável:
 
 Ressalva de consistência: fila e mapa de verbos são consultas separadas (`app/chamados/juizes.py:1150`, `:1158`), e `alimentacao` fornecida não é revalidada (`:1222`). Se um chamado deixar `VIVOS` entre essas consultas, a fila pode produzir verbo `None` pelo `.get()` (`:1224`), enquanto a mesma situação na porta da pergunta pode lançar `KeyError` pelo índice (`:1228`); ocorrência em produção `[nao verificado]`.
 
-## 31/10 03:37 · sessao fa4f12636b7a · O261-E-F1C4 · verificador · origem=Code
-
-**Não aprovaria o delta:** a nova guarda da ressurreição elimina uma recuperação legítima prevista pelas portas existentes; além disso, protege apenas o chamador cartório, deixando outro caminho capaz de desfazer `celula_absolveu`. São conclusões estáticas; ocorrência em produção [não verificado]. (`app/ponto/services/cartorio.py:1355`; `app/chamados/models.py:1232`; `app/chamados/models.py:1389`; `app/chamados/models.py:1453`)
-
-1. **Tranca: mesma autoridade. Isenção da resposta: regra copiada.**
-
-O E2 chama **a mesma função** `dia_da_pergunta_trancado(p)` usada no trecho indicado do emissor. Essa função determina a competência por `janela_atual`, consulta `periodo_trancado` e considera o toque humano posterior. `periodo_trancado` é a autoridade registrada em `_K7`; o filtro novo não reproduz sua lógica. (`app/chamados/reconciliador.py:579`; `app/chamados/reconciliador.py:617`; `app/chamados/services/disputa_emissao.py:1541`; `app/chamados/services/disputa_emissao.py:1551`; `app/chamados/juizes.py:891`; `app/chamados/juizes.py:907`; `app/core/juizes.py:283`)
-
-Já a isenção do `y` é **uma segunda expressão da mesma regra**: o laço testa texto com `any((p.resposta_colab or '').strip()...)`; a compreensão repete isso para `y`. Não divergem hoje, mas não consultam um predicado compartilhado. Portanto, o comentário “a MESMA isenção” descreve equivalência atual, não unicidade de implementação. (`app/ponto/services/cartorio.py:1328`; `app/ponto/services/cartorio.py:1344`; `app/ponto/services/cartorio.py:1346`)
-
-2. **O novo `_protesta(x)` tem contraexemplo de regressão.**
-
-O problema é a unidade consultada: `_protesta` usa **a célula do dia em julgamento**, enquanto a porta de ressurreição examina **o marco de cada pergunta**. Essas datas podem legitimamente diferir numa jornada que cruza a meia-noite. ([cartorio.py:1156](/home/ronald/codex_ws/7b76efa7d2dcaaa47c339314360f3867852d8dd0/app/ponto/services/cartorio.py:1156); `app/chamados/models.py:1403`; `app/chamados/models.py:1410`; `app/chamados/juizes.py:1719`)
-
-Contraexemplo permitido pelo código:
-
-- Há um `turno_aberto` em D+1, dia de folga, cobrando a véspera D ainda furada. A premissa preserva explicitamente `turno_aberto*` nessa situação: não regulariza automaticamente pela folga e consulta a véspera. (`app/chamados/models.py:1232`; `app/chamados/juizes.py:424`)
-- Sua resolvedora pertence a D, tem o marco apagado, está materializada e validada, sem texto, pela via `completude_turno`. Esse estado é usado pelos próprios testes de ressurreição; o C6 inicialmente a considera morta por `validada_em`. (`app/chamados/tests/test_o261_ressuscita_respeita_o_marco.py:93`; `app/chamados/tests/test_o261_ressuscita_respeita_o_marco.py:104`; `app/chamados/juizes.py:1006`)
-- Sendo o único chamado da cobrança, ele permanece vivo: a premissa segue furada e não há outro sobrevivente para justificar dedup. (`app/chamados/models.py:699`; `app/chamados/models.py:709`; `app/chamados/models.py:728`)
-- Antes da guarda acrescentada, a porta limpava os carimbos dessa pergunta; com a célula de D acusando, ela voltava a viver. Agora `_protesta=False`, porque **D+1 é folga**, e o `continue` impede essa recuperação. ([cartorio.py:1355](/home/ronald/codex_ws/7b76efa7d2dcaaa47c339314360f3867852d8dd0/app/ponto/services/cartorio.py:1355); `app/chamados/models.py:1453`; `app/chamados/juizes.py:1056`)
-
-Logo, “não protesta neste dia” não basta para concluir “nenhuma pergunta deste chamado deve ressuscitar”. O próprio coletor da premissa já distingue o caso da véspera; a guarda nova perde essa distinção. (`app/ponto/services/cartorio.py:1157`; `app/chamados/models.py:1232`; `app/chamados/juizes.py:424`)
-
-O censo direto de produção é:
-
-| Operação | Chamadores |
-|---|---|
-| `ressuscitar_perguntas()` | Cartório, `app/ponto/services/cartorio.py:1365`; `ChamadoColaborador.reabrir`, `app/chamados/models.py:1389`. |
-| `perguntas_a_ressuscitar()` | Comando de reabrir órfãs, para detectar irmãs que voltariam junto: `app/chamados/management/commands/reabrir_orfas_enterradas.py:106`. |
-| Universo compartilhado | Wrapper de leitura e escritor consultam `_universo_da_ressuscitacao`: `app/chamados/models.py:1398`; `app/chamados/models.py:1444`. |
-
-A entrada `reabrir()` recebe pedidos de renascimento, desarquivamento, adesão, disputa administrativa, competência, resposta visível e comandos de reparação; todos podem alcançar a ressurreição quando suas guardas permitem. (`app/chamados/models.py:978`; `app/chamados/views_arquivar.py:68`; `app/chamados/services/adesao.py:92`; `app/chamados/services/acoes_disputa.py:266`; `app/chamados/services/competencia_trancada.py:258`; `app/chamados/services/disputa_emissao.py:1606`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:161`; `app/ponto/management/commands/reconciliar_grade.py:522`; `app/ponto/management/commands/detectar_ausencias.py:301`; `app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:49`)
-
-**Existe caminho residual de apagar o carimbo:** `reabrir → ressuscitar_perguntas`. O universo da porta exige materialização, resposta nula/vazia e marco não comprovadamente aceso; não exclui `celula_absolveu` nem exige C6 viva. A escrita apaga a via e os carimbos. (`app/chamados/models.py:1389`; `app/chamados/models.py:1403`; `app/chamados/models.py:1410`; `app/chamados/models.py:1453`)
-
-Um contraexemplo é um container `disputa_supervisao_manual`, fora do reconhecimento de chamado de furo, com resolvedora sem texto, célula `concorde` definitiva e motivo sem marco próprio. O E2 carimba; uma reabertura aceita apaga; o próximo E2 carimba novamente. A guarda de premissa da reabertura é condicionada a `e_chamado_de_furo`, portanto não cobre todo container. Isso demonstra a possibilidade de vai-e-volta do carimbo; repetição automática na mesma madrugada [não verificado]. (`app/chamados/catalogo/modulos.py:146`; `app/chamados/models.py:1192`; `app/chamados/models.py:1296`; `app/chamados/juizes.py:842`; `app/chamados/juizes.py:1068`; `app/chamados/reconciliador.py:623`; `app/chamados/models.py:1380`; `app/chamados/models.py:1453`)
-
-Os outros desfazedores têm restrições diferentes: `desfazer_carimbo_sem_lastro` exige C6 viva; competência e fantasma restringem a via; resposta restringe a `VIAS_SEM_LASTRO`; devolução de absorção seleciona `ausencia_dia`/`declaracao`. Eles não demonstram esse mesmo ciclo de `celula_absolveu` sob célula definitiva estável. (`app/chamados/services/relavra_via.py:227`; `app/chamados/models.py:2544`; `app/chamados/models.py:2514`; `app/chamados/models.py:2534`; `app/chamados/services/materializacao.py:578`; `app/chamados/services/materializacao.py:628`)
-
-3. **Quem escreve e quem lê.**
-
-`celula_absolveu` é valor de `PerguntaDisputa.via_resolucao`. “Retratada”, nesse percurso, designa uma operação; não é o nome do campo gravado pelo delta. (`app/chamados/models.py:2212`; `app/chamados/models.py:2262`; `app/chamados/reconciliador.py:505`)
-
-| Campo/estado | Quem escreve | Quem lê |
-|---|---|---|
-| Pergunta: `via_resolucao`, `materializada_em`, `materializada_por`, na absolvição | E2 carimba e salva: `app/chamados/reconciliador.py:621`. | C6 e juiz de lastro: `app/chamados/juizes.py:603`, `app/chamados/juizes.py:1044`, `app/chamados/juizes.py:1050`, `app/chamados/juizes.py:1080`; tradução em `estado`: `app/chamados/models.py:2439`. |
-| Pergunta: carimbos desfeitos na ressurreição | A porta limpa `materializada_em`, `validada_em`, `validada_por`, `respondida_em` e `via_resolucao`: `app/chamados/models.py:1453`. | Universo da porta: `app/chamados/models.py:1403`; C6: `app/chamados/juizes.py:1006`, `app/chamados/juizes.py:1020`, `app/chamados/juizes.py:1080`. |
-| Pergunta: `resposta_colab`/`respondida_em` | Escritor da resposta: `app/chamados/services/disputa_emissao.py:1247`; correção limpa resposta/carimbos: `app/chamados/services/disputa_emissao.py:1358`. | Isenções do cartório: `app/ponto/services/cartorio.py:1328`, `app/ponto/services/cartorio.py:1346`; porta de ressurreição: `app/chamados/models.py:1406`; C6: `app/chamados/juizes.py:1020`. |
-| Chamado: `status_local`, `resolvido_em`, `via_encerramento` | Núcleo `_gravar_estado`: `app/chamados/models.py:222`, `app/chamados/models.py:237`, `app/chamados/models.py:279`. `reconciliar` e `reabrir` delegam: `app/chamados/models.py:618`, `app/chamados/models.py:1380`. | Cartório: `app/ponto/services/cartorio.py:1323`, `app/ponto/services/cartorio.py:1342`; signals: `app/chamados/signals.py:33`, `app/chamados/signals.py:81`; auditor: `app/chamados/management/commands/auditar_invariantes_chamados.py:571`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1066`. |
-| Disputa: `fechada_em`, `fechada_por`, `resolucao`, `motivo_fechamento` | E2 pede `fechar`: `app/chamados/reconciliador.py:639`; porta grava: `app/chamados/models.py:1809`; ressurreição pede reabertura: `app/chamados/models.py:1479`, `app/chamados/models.py:2035`. | E2: `app/chamados/reconciliador.py:627`; receiver que tenta fechar o pai: `app/chamados/signals.py:28`; ressurreição: `app/chamados/models.py:1479`. |
-| `out['fio_nao_protesta']` | Incrementado por chamado que alcança a guarda: `app/ponto/services/cartorio.py:1322`, `app/ponto/services/cartorio.py:1362`. | Só a leitura do próprio incremento foi localizada; consumidor específico [não verificado]. `julgar_celula` devolve o dicionário, mas o resumo do comando omite a chave: `app/ponto/services/cartorio.py:1668`; `app/ponto/management/commands/processar_cartorio.py:66`. |
-
-Não há novo escritor de status fora da porta nesse delta: `y.reconciliar()` converge no núcleo existente. O E2 também já está declarado como porta do carimbo de absolvição. Isso **não torna `via_resolucao` um campo de escritor único**: o próprio registro declara essa dívida. (`app/ponto/services/cartorio.py:1348`; `app/chamados/models.py:618`; `app/core/portas.py:306`; `app/core/portas.py:352`)
-
-4. **Checklist das classes de reprovação.**
-
-| Classe | Resultado |
-|---|---|
-| Segundo juiz duplicando juiz registrado | **Não no filtro da tranca:** ambos consultam a mesma função e `_K7`. (`app/chamados/reconciliador.py:617`; `app/chamados/services/disputa_emissao.py:1551`; `app/core/juizes.py:283`) |
-| Segundo escritor fora da porta | **Não acrescentado para status.** Há, porém, política nova em apenas um chamador da ressurreição, enquanto o outro continua apagando o mesmo estado. (`app/chamados/models.py:618`; `app/ponto/services/cartorio.py:1355`; `app/chamados/models.py:1389`) |
-| Relógio fora da borda | **Permanece no sítio tocado:** E2 usa `_tz.now()` internamente; a função não recebe instante. É anterior a este delta, mas contraria a regra fornecida. (`app/chamados/reconciliador.py:551`; `app/chamados/reconciliador.py:621`; `app/docs/CORTES.md:369`) |
-| Derivação paralela de fonte única | **Sim:** isenção de resposta repetida; e `_protesta` usado como critério global de ressurreição perde a distinção da véspera preservada pela premissa. (`app/ponto/services/cartorio.py:1328`; `app/ponto/services/cartorio.py:1346`; `app/ponto/services/cartorio.py:1157`; `app/chamados/models.py:1232`) |
-| Selo/RED sem mordida suficiente | **Cobertura incompleta.** Os casos FIO-DUP citados criam perguntas sem resposta, portanto não exercitam a isenção nova do `y`. A flexibilização do prefixo preserva as verificações de sobrevivente e trilha. (`app/ponto/tests/test_fechar3_troca_escala_gate.py:283`; `app/ponto/tests/test_fechar3_troca_escala_gate.py:298`; `app/ponto/tests/test_fechar3_troca_escala_gate.py:302`; `app/ponto/tests/test_fechar3_troca_escala_gate.py:319`) |
-| Ordem de trava | Inversão nova **não demonstrada**. O fechamento continua pelo `atomic` do gate e pela ordem documentada chamado → pergunta. Ausência de deadlock em execução [não verificado]. (`app/chamados/models.py:614`; `app/chamados/models.py:261`) |
-| Pouso antes do pré-requisito | RED/GREEN, suite e pouso deste hash **[não verificado]**. Os pré-requisitos estão escritos, mas o anexo não comprova seu cumprimento. (`CLAUDE.md:28`; `CLAUDE.md:542`) | [nao verificado]
-
-O teste novo da tranca verifica corretamente **não carimbar**. Ele não prova “destrancar devolve viva”: sua célula é `concorde`, definitiva e com todas as lâmpadas acesas; mesmo sem tranca, o C6 continua considerando essa pergunta morta. (`app/chamados/tests/test_e2_pergunta_so_ao_c6.py:80`; `app/chamados/tests/test_e2_pergunta_so_ao_c6.py:89`; `app/chamados/tests/test_e2_pergunta_so_ao_c6.py:92`; `app/chamados/juizes.py:1068`)
-
-## 31/10 03:34 · sessao 95afd20c65d1 · - · - · origem=Ronald (tmux)
-
-Mapa de campos e portas:
-
-| Estado/campo | Quem escreve | Quem lê |
-|---|---|---|
-| `celula_absolveu` | É valor de `PerguntaDisputa.via_resolucao`, definido em `app/chamados/models.py:2212`; E2 grava junto com `materializada_em` e `materializada_por` em `app/chamados/reconciliador.py:621`–625. | C6 lê via/carimbo em `app/chamados/juizes.py:1015`, `:1044`, `:1050`, `:1080`; lastro consulta `VIAS_SEM_TESTEMUNHA` em `app/chamados/juizes.py:603`, cujo conjunto contém essa via em `app/chamados/models.py:2875`. |
-| Ressuscitação da pergunta | `ressuscitar_perguntas` limpa `materializada_em`, `validada_em`, `validada_por`, `respondida_em` e `via_resolucao` em `app/chamados/models.py:1453`; reabre a disputa em `:1479`. | Universo da própria porta lê materialização, texto e lâmpada em `app/chamados/models.py:1403`; C6 lê os carimbos em `app/chamados/juizes.py:1020`, `:1044`, `:1050`, `:1080`; propriedade `estado` traduz o juiz em `app/chamados/models.py:2432`. |
-| Chamado: `status_local`, `resolvido_em`, `via_encerramento` | Núcleo `_gravar_estado`: status em `app/chamados/models.py:222`, fechamento em `:237`–243 e persistência em `:279`. `reconciliar` delega em `:618`; reabrir delega em `:1380`. | Delta lê status em `app/ponto/services/cartorio.py:1323`, `:1342` e chama a porta em `:1348`. Signals leem em `app/chamados/signals.py:33`, `:70`, `:81`; auditor lê fechamento em `app/chamados/management/commands/auditar_invariantes_chamados.py:571` e via em `:1066`. |
-| Disputa: fechamento | E2 pede fechamento pela porta em `app/chamados/reconciliador.py:639`; porta grava `fechada_em`, `fechada_por`, `resolucao`, `motivo_fechamento` em `app/chamados/models.py:1809`. | Juiz `pode_fechar` em `app/chamados/models.py:1737`; receiver lê fechamento e pede fechamento do chamado-pai em `app/chamados/signals.py:28`–45; ressuscitação lê disputa fechada em `app/chamados/models.py:1479`. |
-| `out['fio_nao_protesta']` | Incremento em `app/ponto/services/cartorio.py:1362`. | A única ocorrência nominal na cópia é o próprio incremento; sem consumidor específico localizado. O resultado completo é devolvido em `app/ponto/services/cartorio.py:1668`, mas o resumo do comando não inclui a chave em `app/ponto/management/commands/processar_cartorio.py:66`–68. |
-
-`retratada` não é campo nem via da pergunta no modelo: as vias declaradas estão em `app/chamados/models.py:2227`–2244. Retratação de chamado é operação `_retratar`, delegando a `reconciliar`, resolução de perguntas e nota em `app/chamados/reconciliador.py:505`–542; deduplicação de pergunta usa `VIA_DUPLICATA` em `app/chamados/services/fio.py:878`–897.
-
-O delta não introduz segundo escritor de status fora da porta: chama `y.reconciliar()` em `app/ponto/services/cartorio.py:1348`, que converge no núcleo em `app/chamados/models.py:618`. E2 também já é porta registrada para o carimbo de absolvição em `app/core/portas.py:306`–310. Contudo, **o campo `via_resolucao` não tem escritor único**: a dívida existente é explicitamente reconhecida em `app/core/portas.py:352`–356; as portas de pergunta autorizadas aparecem em `:388`–395.
-
-Relógio interno nos sítios alcançados: E2 em `app/chamados/reconciliador.py:621`, núcleo de chamado em `app/chamados/models.py:238`, fechamento da disputa em `:1809`; essas leituras não foram acrescentadas por este delta, conforme anexo fornecido [não verificado para execução/produção].
-
-_884 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_886 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
