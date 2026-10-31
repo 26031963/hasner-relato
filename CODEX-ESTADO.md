@@ -1,7 +1,86 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 07:15** · publicado em **31/10/2026 07:15** (UTC-3)
+> Ultima resposta processada: **31/10/2026 07:18** · publicado em **31/10/2026 07:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 07:18 · sessao 35b8de0e7279 · - · - · origem=Ronald (tmux)
+
+Censo dos chamadores diretos fechado:
+
+| Alvo | Chamadores de produção |
+|---|---|
+| `dia_sem_trabalho` | `_celula_furada`, `app/chamados/juizes.py:436`; `premissa_regularizada`, `app/chamados/models.py:1232`, com import local em `:1227`. |
+| `_celula_furada` | Recursão em `app/chamados/juizes.py:439`; `premissa_regularizada` em `app/chamados/models.py:1247`, usando reexport importado de `chamados.juizes` em `:3135-3136`. |
+| `premissa_regularizada` | `transicionar`, `app/chamados/models.py:177`; `_gate_premissa_do_fechamento`, `:699`; `recusa_da_reabertura`, `:1297`. |
+
+As cadeias compartilham estes sufixos:
+
+- Resolução humana → `transicionar` → premissa; somente para `novo_status == 'resolvido'` e chamado de furo. `app/chamados/models.py:175-177`.
+- Fechamento sistêmico → `reconciliar` ou `reconciliaria` → `_decisao_do_fechamento` → `_gate_premissa_do_fechamento` → premissa. `app/chamados/models.py:615`, `:625`, `:646`, `:699`.
+- Reabertura → `reabrir` → `recusa_da_reabertura` → premissa, somente encerrado de furo. `app/chamados/models.py:1338`, `:1296-1298`.
+- Emissor `abrir` → existente encerrado → `_renascer_por_premissa_viva` → `reabrir`. Mesmo recusada a reabertura, devolve o existente com `False`, sem nascimento novo. `app/chamados/models.py:880-883`, `:978`.
+
+Todos os callsites de `reconciliar`/`reconciliaria`, além dos internos acima:
+
+| Arquivo | Função e linhas |
+|---|---|
+| `app/chamados/signals.py` | `disputa_fechada_fecha_chamado_pai:42` — signal `post_save` de Disputa, registrado em `:18`. |
+| `app/chamados/reconciliador.py` | `_retratar:525`; entra por wrapper `retratar:548`, `retratar_chamados_absolvidos_por_celula:959`, `reconciliar_chamados_colab:1373`. |
+| `app/colaboradores/services/pos_vinculo.py` | `fechar_adesao_com_batida:42`; chamado pelo signal Batida `app/ponto/signals.py:234` e por `reconciliar_apos_vinculo:88`. |
+| `app/colaboradores/management/commands/marcar_feriado_do_posto.py` | `_marcar:126`; comando com `handle:32`. |
+| `app/ponto/services/lastro.py` | `fechar:317`; import local e chamada no comando `app/ponto/management/commands/fechar_cobranca_com_lastro.py:52-53`; cron `app/config/crons.py:710`. |
+| `app/ponto/services/cobertura.py` | `designar_cobertura:122`, entrada view `app/ponto/views.py:3038`; `declarar_cobertura_passada:317`, entrada superior [não verificado]. |
+| `app/ponto/services/cartorio.py` | `julgar_colab:766`; `_julgar_colab_corpo:1242,1255,1276,1354,1369`; entrada comando `processar_cartorio.py:65`, cron `app/config/crons.py:597`; entrada signal por `app/ponto/signals.py:93` → `julgar_celula` → `julgar_colab:1671`. |
+| `app/ponto/services/entrada_sincronizada.py` | `resolver_cobranca_da_entrada:31`; entradas `app/api/views.py:805` e `app/api/views_core.py:805`. |
+| `app/ponto/services/cluster_espurio.py` | `reconciliar_colab:80`; import com apelido `_cluster` em `cartorio.py:796`, chamada `:797`; comando `detectar_cluster_espurio.py:46`. |
+| `app/ponto/services/ausencia.py` | `fechar_chamado_da_ausencia:678` ← `fechar_chamados_ausencia_decidida:713` ← signal `app/ponto/signals.py:271` ou comando `fechar_chamados_ausencia.py:44`. |
+| `app/ponto/services/veredito_celula.py` | `fechar_o_fio_do_dia:183` ← `veredito_celula:325` ← view `app/ponto/views.py:3304`; também entradas `app/ponto/services/declarar_dia.py:198` e `app/chamados/services/validacao.py:271`. |
+| `app/ponto/services/triagem_batida.py` | `_autoresolve_f2_f4:597` ← `ramo_registrar_es:741` ← view `app/ponto/views.py:350`. |
+| `app/ponto/management/commands/detectar_ausencias.py` | `handle:158`; `_fechar_por_afastamento:816`, `_fechar_por_cobertura:826`, `_fechar_chamado:837`, chamados pelo `handle:260,351,381,412`; cron `app/config/crons.py:345`. |
+| `app/ponto/management/commands/curar_residuo_bug115.py` | `_ata_sem_furo:151` ← `handle:106`. |
+| `app/ponto/management/commands/detectar_intervalo_ausente.py` | `handle:134`: `reconciliaria` no dry, `reconciliar` no apply; cron usa `--alarme`, `app/config/crons.py:472`. |
+| `app/chamados/services/silencio_ausencia.py` | `reconciliar_por_ausencia:101` ← `reconciliar_colab:127` ← signal `app/ponto/signals.py:269`; também comando `reavaliar_ausencias_lancadas.py:54`. |
+| `app/chamados/services/materializacao.py` | `_materializar_ausencia_de_resposta:539` ← emissor/materializador `app/chamados/services/disputa_emissao.py:1295`; `_reconciliar_destino_e_clones._fecha:711` ← materializadores `:919,1004,1024`. |
+| `app/chamados/services/limbo_folgas.py` | `aceitar_sugestao:101` ← view `app/chamados/views.py:433`; `agrupar_furo:243,246` ← emissor `detectar_ausencias.py:756` ou `agrupar_furos_sob_limbo:291` ← `app/escala/management/commands/apurar_furos_diarios.py:19`. |
+| `app/chamados/services/feriado_reavaliar.py` | `encerrar:47` ← comando `reavaliar_ausencias_feriado.py:32`; cron `app/config/crons.py:589`. |
+| `app/chamados/services/adesao.py` | `sincronizar_adesao:115,150` ← emissor `app/escala/management/commands/apurar_furos_diarios.py:17`; encadeado cron `app/config/crons.py:1449`. |
+| `app/chamados/management/commands/auditar_chamados_orfaos.py` | `handle:67`. |
+
+Todos os callsites externos de `reabrir`/`recusa_da_reabertura`:
+
+- View `app/chamados/views_arquivar.py:70`.
+- `acao_reabrir_disputa_admin`, `app/chamados/services/acoes_disputa.py:266` ← `processar_post_fio`, `app/chamados/services/fio.py:579` ← views `app/chamados/views.py:674,954`.
+- Competência reaberta: view `app/ponto/views.py:1544` → `services/fechamento.py:1415-1416`, import local `reabrir as _reabrir_fila` → `services/competencia_trancada.py:258`.
+- Emissor `sincronizar_adesao`, `app/chamados/services/adesao.py:92`.
+- `resolver_perguntas_por_chamado_resolvido`, `app/chamados/services/disputa_emissao.py:1606` ← signal `post_save Chamado`, `app/chamados/signals.py:75,89-92`; também chamadas explícitas `reconciliador.py:538,1551`, `reconciliar_fantasmas.py:280`, `services/becos.py:49`.
+- Emissores/comandos `app/ponto/management/commands/detectar_ausencias.py:301`, `reconciliar_grade.py:522`, `reabrir_chamados_ausencia_aberta.py:49`.
+- Comando `app/chamados/management/commands/reabrir_orfas_enterradas.py:105` lê recusa; `:161` reabre.
+- Resposta tardia: view `app/chamados/views.py:1050-1053` → `app/chamados/services/resposta_tardia.py:45` → `_renascer_por_premissa_viva`, `models.py:978`.
+
+Os callsites de resolução humana chegam por `app/chamados/services/acoes_chamado.py:70,108,149,222,277,315` ← view `app/chamados/views.py:427,461,464,541,544,547`; por `app/chamados/services/fio.py:717` ← views `:674,954`; e pela view `app/colaboradores/views.py:2068`. O callsite `acoes_chamado.py:233` pede `'em_analise'`, portanto não alcança a consulta da premissa (`models.py:175`). O comando `fechar_chamados_meio_periodo.py:109` usa `ChamadoColaborador.fechar` com destino default `'fechado'` (`models.py:433`), também sem alcançar a premissa.
+
+Efeitos triestado:
+
+- `None` e `False` dão `dia_sem_trabalho=True` para qualquer ata; `True` também dá `True` se `tipo_dia` for truthy e diferente de `'trabalho'`. `app/chamados/juizes.py:400-401`.
+- Na `_celula_furada`, esse `True` troca a leitura das lâmpadas/órfãs atuais pela véspera; devolve o resultado da véspera ou `False` se ela não souber. A recursão não propaga `para='folha'`: usa default `'cobranca'`. `app/chamados/juizes.py:404,436-440,445-458`.
+- Na premissa de chamado que não começa com `turno_aberto`, esse `True` regulariza imediatamente; para `turno_aberto*`, seguem marcos e `_celula_furada`. `app/chamados/models.py:1232-1249`.
+- Premissa regularizada libera o gate humano, permite o sistêmico prosseguir e recusa reabertura; não garante fechamento quando guardas anteriores/posteriores recusam. `app/chamados/models.py:175-193,646-653,1296-1307,1348-1353`.
+
+## 31/10 07:16 · sessao 515bfa0184d7 · - · - · origem=Ronald (tmux)
+
+Complementos ao censo já enviado:
+
+- `bin/censo_folha.py:26` conta limbo por `trabalha__isnull=True`; `bin/censo_folha.py:27` conta dias previstos por `trabalha=True`.
+- `app/folha/export.py:1237` usa `c.trabalha is not None` para distinguir estado conhecido em célula sem veredito; tanto `True` como `False` permitem retenção nesse ramo (`app/folha/export.py:1237-1238`).
+- `app/ponto/portas/celula.py:227` usa `_cel_fv.trabalha is not False` para identificar célula gerada que precisa virar `False`, incluindo `None`, satisfeitas as demais condições (`app/ponto/portas/celula.py:225-233`).
+- `app/ponto/management/commands/gerar_celulas.py:79` usa `trabalha is True` para materializar marcos; `app/ponto/management/commands/gerar_celulas.py:121` repete a guarda para gravar `extra_declarada`.
+- `app/ponto/management/commands/tripwire_celulas.py:30` compara `cel.trabalha == vivo`: pergunta se a célula coincide com o resultado recalculado do vínculo, junto com a igualdade do DNA (`app/ponto/management/commands/tripwire_celulas.py:27-33`).
+
+Não encontrei ocorrência executável de `trabalha == False` na busca da produção; inexistência absoluta de outras formas dinâmicas: **[não verificado]**.
+
+Para o quadro de divergência, convém comparar `dia_sem_trabalho` com **o componente laboral** de `_protesta`: o resultado completo de `_protesta` também depende de `marcos_acesos(x, _ata) is not True` (`app/chamados/juizes.py:401`; `app/ponto/services/cartorio.py:1167`). Assim, quando todos os marcos estão acesos, `_protesta=False` também em dia de trabalho (`app/ponto/services/cartorio.py:1167`).
+
+O teste encontrado para `None` é de integração: cria célula `trabalha=None`, executa `reconciliar_grade` sem mock da premissa e exige chamado fora de `aberto`/`pendente` (`app/ponto/tests/test_a2_marco_morto.py:37-45`). Ele não afirma diretamente o retorno de `_celula_furada` nem cobre sua recursão pela véspera; o fixture é um chamado do módulo canônico do reconciliador (`app/ponto/tests/test_a2_marco_morto.py:32-35`).
 
 ## 31/10 07:15 · sessao 6e231748ca71 · - · - · origem=Ronald (tmux)
 
@@ -681,47 +760,4 @@ A cura separa corretamente **verbo** de **pertencimento à fila**, mas ainda há
    - **“Ninguém está esperando ninguém”** também é excessivo: sem essas duas portas ainda pode haver decisão pendente, ausência aberta ou mesa do admin. (`app/folha/fora_da_folha.py:46`; `app/chamados/juizes.py:1214`; `app/chamados/services/vigia_fio.py:288`, `:291`, `:295`)
    - Restaram descrições antigas: grupo C como “chamado vivo sem pergunta viva” e folha julgando diretamente por `.viva`; o leitor atual recebe o fio da porta. (`app/folha/fora_da_folha.py:10`, `:67`; `app/chamados/services/vigia_fio.py:129`)
 
-## 31/10 03:39 · sessao e426ca6c50df · - · - · origem=Ronald (tmux)
-
-Custo confirmado por leitura estática:
-
-- **Partição global repetida:** cada `alimentar_portas` particiona `qs_vivos()` inteiro, mesmo com lote vazio (`app/chamados/juizes.py:1146`, `:1158`). `censo_alcance` chama `fora_da_folha` por empresa×competência (`app/chamados/services/vigia_fio.py:546`), cada chamada alimenta (`app/folha/fora_da_folha.py:138`), e depois alimenta novamente (`app/chamados/services/vigia_fio.py:565`). São K+1 partições quando há dias retidos, sendo K os pares empresa×competência.
-- **N+1 dentro da alimentação:** carrega apenas `disputa` e `celula` (`app/chamados/juizes.py:1155`), mas C6 acessa `disputa.colaborador` (`:888`) e `colab.empresa` (`:896`). Fora de request, o memo pertence à instância do colaborador (`:919`), podendo repetir também `periodo_trancado` (`:900`; `app/ponto/services/fechamento.py:1438`).
-- **Consultas posteriores:** `_no_app` faz consulta do colaborador e das perguntas por colaborador (`app/chamados/juizes.py:1163`; `app/chamados/services/pergunta_no_app.py:42`). Estas últimas carregam só `disputa`, enquanto C6 acessa `celula` (`app/chamados/juizes.py:757`), introduzindo consultas por pergunta.
-- **Não identifiquei chamador de produção por célula ou request** na busca dos símbolos; caminhos encontrados são vigia, lavrador e pautas. A tela declara ler o retrato gravado (`app/folha/views_retrato.py:8`); lavrador chama por empresa×competência (`app/folha/management/commands/lavrar_retrato_folha.py:54`, `:65`; `app/folha/retrato_folha.py:1157`); pautas alimenta por empresa (`app/ponto/services/pautas_dos_discordantes.py:66`, `:74`). Tempo e contagem observados em produção: `[nao verificado]`.
-
-Textos/docstrings que excedem a garantia:
-
-- **“Consultas por lote, nunca por dia”** (`app/chamados/juizes.py:1130`) não descreve os acessos de C6 e `_no_app` acima.
-- **“Alimentado UMA vez por rodada”** (`app/chamados/services/vigia_fio.py:514`) ignora as alimentações indiretas por empresa×competência (`:549`; `app/folha/fora_da_folha.py:138`).
-- **`DESTRAVA['admin']` promete validar resposta na disputa** (`app/folha/fora_da_folha.py:41`), mas `gps_fora_geofence` recebe `validar` independentemente de pergunta (`app/chamados/catalogo/natureza.py:29`, `:46`, `:59`); chamado desse módulo ligado à célula abre porta e produz fio `admin` (`app/chamados/juizes.py:1223`, `:1175`).
-- **Pergunta sem crédito não garante âncora em `decidir`**, como afirma `app/chamados/juizes.py:1211`: auditoria pode resultar em `None`, geofence em `validar`, outra pergunta creditada em `cobrar`/`validar`, e silêncio em `historico` (`app/chamados/catalogo/natureza.py:44`; `app/chamados/services/verbos.py:47`).
-- **`DESTRAVA['nada']` diz “ninguém está esperando ninguém”** (`app/folha/fora_da_folha.py:46`), embora ausência de porta ainda possa corresponder a decisão pendente, ausência aberta ou mesa do admin (`app/chamados/services/vigia_fio.py:288`, `:609`). O próprio juiz exclui essas outras entradas do conceito de porta (`app/chamados/juizes.py:1214`).
-- **Prosa residual desatualizada:** grupo C ainda é descrito como “chamado vivo sem pergunta viva” (`app/folha/fora_da_folha.py:10`); vigia ainda diz que folha julga via `.viva` (`app/chamados/services/vigia_fio.py:129`), mas o leitor atual lê `porta['fio']` (`app/folha/fora_da_folha.py:67`).
-
-## 31/10 03:38 · sessao df5e7c1b8947 · - · - · origem=Ronald (tmux)
-
-Conclusões dos itens 2 e 4:
-
-- **Sem filtros e no mesmo estado/instante, o motor é igual:** juiz usa `particionar_verbos(qs_vivos())`; painel usa `particionar_verbos(qs_vivos(_base=montar_qs_filtrado(...)))`. Sem filtros, as bases coincidem. `select_related`, `prefetch_related`, ordenação e anotações não acrescentam filtro; a partição remove prefetch e lê colunas. (`app/chamados/juizes.py:1158`; `app/chamados/services/painel.py:96-155,198,228`; `app/chamados/services/verbos.py:34-46`)
-
-- **Filtros podem mudar o verbo do mesmo chamado:** C normal na fila; D urgente vivo; pergunta respondida com destino D e disputa.chamado=C. Global: C=`decidir`, D=`validar`. Com `urgencia=normal`, D sai do universo e o crédito volta para C, que vira `validar`. É consequência dos filtros antes da partição e da preferência pelo destino somente se pertencer ao conjunto recebido. O caso é deduzido do código; ocorrência em produção `[nao verificado]`. (`app/chamados/services/painel.py:117-130,228`; `app/chamados/services/raiox.py:54-56,133-149`; `app/chamados/catalogo/natureza.py:48-64`)
-
-- **Empresas visíveis não filtram a lista padrão nem seu universo de verbos:** servem aos dropdowns. Empresa inativa/de diagnóstico pode entrar no universo global. O vigia, por sua vez, recorta seu universo de dias a empresas visíveis, sem limitar a partição global do juiz. (`app/colaboradores/queries.py:78-87`; `app/chamados/services/painel.py:96-132,436,542`; `app/chamados/services/vigia_fio.py:535-539`; `app/chamados/juizes.py:1158`)
-
-- **O badge normalmente não particiona ao vivo:** devolve `PlacarNavbar.badge_chamados`; só sem lavra usa a partição atual, e em outra exceção devolve a quantidade em `qs_na_fila`. A lavra vem do painel sem filtros e soma apenas `validar`+`decidir`. Portanto igualdade temporal com juiz/painel não é garantida. (`app/core/context_processors.py:68-93,110-114`; `app/core/management/commands/lavrar_badge_navbar.py:39-41,72-74,91-93`; `app/chamados/services/verbos.py:22-27`)
-
-- **Registrado/silêncio:** `registrado` permanece no universo vivo e pode receber crédito, mas sai tanto da porta quanto da lista padrão; silêncio futuro sai da fila, passado entra na fila mas recebe `historico`, depois removido de `fila` e da lista padrão. (`app/chamados/catalogo/motor.py:24-29`; `app/chamados/services/painel.py:155,186-188,314,326-329`; `app/chamados/services/verbos.py:48-51`; `app/chamados/juizes.py:1232`)
-
-- **Verbo `None` não é ausência de porta:** chamado de auditoria aberto/em análise entra na fila, pode aparecer em `fila`, e produz fio `chamado`. Painel mostra `Registro`; resumo transforma `None` em `registro`; badge não o conta como admin. Isso é coerente com a implementação, mas não autoriza tratar todos os verbos de porta como ações. (`app/chamados/catalogo/natureza.py:18-23,44-45,63`; `app/chamados/juizes.py:1224,1232-1234`; `app/chamados/services/painel.py:381-386,472-484`; `app/chamados/services/verbos.py:125-135,22-27`)
-
-- **Item 4:** em estado estável, não encontrei número de `fila` eliminado pelas regras da lista padrão sem filtros. `fila` exige cobrança e remove os mesmos verbos ocultos; painel exige cobrança e remove a mesma constante. Paginação e grupos inicialmente recolhidos podem impedir exibição imediata, sem eliminar o chamado do conjunto. Concorrência entre consultas/requests não tem snapshot garantido. (`app/chamados/juizes.py:1150-1158,1223,1232`; `app/chamados/services/painel.py:314,326-329,340-341,496-497`; `app/templates/chamados/partials/_lista_resumo.html:57-61`)
-
-Falhas de prova/texto:
-
-- O auxiliar de teste do vigia **continua chamando a fila de universo do painel**; seus casos simples não expõem a divergência curada. (`app/chamados/tests/test_o261e_f5_alcance.py:281-299`)
-- Os novos testes do juiz comparam outro chamado ao mesmo motor global, sem exercitar `montar_contexto_painel` nem o badge real. Mordem a regressão para `qs_na_fila`, mas não provam a promessa ampla de tela/badge. (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:87-92,192-224`)
-- A afirmação “pergunta viva que o crédito não vê deixa o verbo da âncora em decidir” é excessiva: auditoria dá `None`; geofence dá `validar`; silêncio passado pode sobrepor `historico`; outras perguntas creditadas à âncora também alteram o verbo. (`app/chamados/juizes.py:1211`; `app/chamados/catalogo/natureza.py:44-51`; `app/chamados/services/verbos.py:48-51`)
-- As docstrings que dizem “mesmo universo do painel e badge” precisam restringir painel sem filtros e distinguir o badge lavrado do fallback vivo. (`app/chamados/juizes.py:1135-1139,1206-1208`; `app/chamados/services/vigia_fio.py:172-173`; `app/core/context_processors.py:68-93`)
-
-_887 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_889 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
