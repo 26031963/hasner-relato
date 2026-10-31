@@ -1,7 +1,21 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 22:20** · publicado em **30/10/2026 22:21** (UTC-3)
+> Ultima resposta processada: **30/10/2026 22:26** · publicado em **30/10/2026 22:26** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 22:26 · sessao 74f5cacdedef · - · - · origem=Ronald (tmux)
+
+Não achei leitor de produção que passe pelo juiz e ignore a fase: os quatro caminhos usam `InsumosDoDono`, cujo `dono()` transmite `fase_deslocada` ao juiz. (`app/ponto/management/commands/e6_oraculo.py:159-176`; `app/ponto/management/commands/pautas_discordantes.py:82,109`; `app/ponto/services/teto_na_lista.py:72,86`; `app/ponto/management/commands/censo_fase_12x36.py:260-262`.)
+
+O comando E6 continua pedindo o motor antecipadamente, mas precisa do espelho para a própria comparação; isso sozinho não demonstra defeito. (`app/ponto/management/commands/e6_oraculo.py:297-309,323`.)
+
+O pré-filtro das pautas transmite a fase, porém ainda omite os demais insumos do dono: um dia par sem vínculo, sem fase, retorna provisoriamente ESTRUTURA e pede motor; se esse motor falhar, descarta o colaborador antes de descobrir CADASTRO. O mesmo vale para turno aberto com contagem par. A omissão parece herdada, mas pertencimento ao delta é [não verificado]. (`app/ponto/management/commands/pautas_discordantes.py:97-106`; `app/ponto/management/commands/e6_oraculo.py:97-109,169-171`.)
+
+A divergência entre C9 e C10 por horários distintos resolve para `None`, e o consumidor mantém o dia no alarme: apenas BATIDA/CADASTRO entram em `fio_do_admin`; os demais seguem para `fio_morto`. (`app/escala/services/cadastro_realidade.py:707-721`; `app/chamados/services/vigia_fio.py:266,314-324`.)
+
+Há uma limitação temporal residual em C9: `_teto_do_dia()` lê a última lavra sem limitar pelo `hoje`, enquanto C10 agora limita. Contra-exemplo: consulta histórica de 29/10 pode combinar C9 de 30/10 com C10 até 29/10. A existência do caminho está comprovada; atribuição ao delta e ocorrência em produção são [não verificado]. (`app/escala/services/cadastro_realidade.py:315-322,335-340`; `app/ponto/services/teto_na_lista.py:120-124`.)
+
+O custo estático inclui uma leitura da lavra por instância de `InsumosDoDono`; C9 instancia por competência e colaborador. O censo injeta seus próprios dias e evita essa leitura. Custo real é [não verificado]. (`app/ponto/management/commands/e6_oraculo.py:132-135,159-164`; `app/ponto/services/teto_na_lista.py:67-72`; `app/ponto/management/commands/censo_fase_12x36.py:260-261`.)
 
 ## 30/10 22:20 · sessao 7af13b19947f · E1-BATERIA · red · origem=Code
 
@@ -422,19 +436,4 @@ Os testes antigos contêm verificações para precedência decisão/ausência, B
 
 A equivalência com o pai foi examinada pelo **diff fornecido**, não por checkout ou execução da revisão pai **[nao verificado]**.
 
-## 30/10 21:10 · sessao 295113302444 · - · - · origem=Ronald (tmux)
-
-O mutante **“hoje antes das portas” sobrevive à cobertura deste arquivo por análise estática**: as portas são plantadas em `DIA=01/09`, enquanto `HOJE=25/09`; o único caso que chama `hoje=DIA` não cria porta. Falta cruzar **dia de hoje + porta existente**, conferindo qual balde recebe o dia (`app/chamados/tests/test_o261e_f5_alcance.py:25`, `:26`, `:114`, `:121`, `:206`; ordem atual em `app/chamados/services/vigia_fio.py:532`, `:535`, `:538`).
-
-| Mutante | Resultado estático | Evidência |
-|---|---|---|
-| Mover teto de hoje antes das portas | Sobrevive à cobertura do arquivo; nenhum caso cruza hoje com porta. | `app/chamados/tests/test_o261e_f5_alcance.py:114`, `:121`, `:206` |
-| Remover `p.pk in no_app(cid)` da porta | Morto pelo negativo fora do app: o mutante produz porta e perde a linha esperada em `(e)`. | `app/chamados/services/vigia_fio.py:535`; `app/chamados/tests/test_o261e_f5_alcance.py:185`, `:190`, `:191` |
-| Remover `chamado_que_lista(p) not in fila_pk` do véu | Morto pelo caso de resposta vazia: a âncora `aberto`, sem célula e na fila, passa a compor o véu; `(a)` ganha precedência sobre `(b)`. Também quebra o negativo fora do app, de `(e)` para `(a)`. | `app/chamados/tests/test_o261e_f5_alcance.py:141`, `:142`, `:146`, `:185`, `:191`; `app/chamados/services/vigia_fio.py:557`, `:562`, `:564`; `app/chamados/catalogo/motor.py:24` |
-| Incrementar `alcance_lista_sem_resposta` duas vezes por dia | Morto: teste da lista falhando exige exatamente `1`. | `app/chamados/services/vigia_fio.py:543`, `:546`; `app/chamados/tests/test_o261e_f5_alcance.py:193`, `:197` |
-
-As somas auxiliares não detectam duplicação de `alcance_lista_sem_resposta`, pois esse contador não participa delas; quem detecta é a asserção específica `==1` (`app/chamados/tests/test_o261e_f5_alcance.py:90`, `:92`, `:95`, `:97`, `:197`).
-
-Resultado de execução dos testes/mutantes: **[nao verificado]**. [nao verificado]
-
-_771 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_772 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
