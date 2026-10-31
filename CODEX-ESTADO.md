@@ -1,7 +1,80 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 14:05** · publicado em **31/10/2026 14:10** (UTC-3)
+> Ultima resposta processada: **31/10/2026 14:29** · publicado em **31/10/2026 14:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 14:29 · sessao b13e3e31e25d · - · - · origem=Ronald (tmux)
+
+Auditoria somente leitura dos itens 1, 2, 4 e 5:
+
+- **Contagem nominal correta:** há limiar 3, isolamento por obra, deduplicação por identidade e arquivo com N achados conta uma identidade; achados da resposta nem são percorridos. A fonte considera apenas o último veredito PROCEDENTE. `bin/disjuntor.py:76`, `bin/disjuntor.py:773`, `bin/disjuntor.py:795`, `bin/disjuntor.py:801`, `bin/disjuntor.py:839`, `bin/disjuntor.py:844`, `bin/disjuntor.py:850`.
+
+- **Defeito certo: DESCARTADO continua contando depois de observado PROCEDENTE.** A fonte é recalculada, mas `r['codex']` recebe apenas união; nenhuma identidade deixa a lista por reclassificação. Cenário: A PROCEDENTE → decisão guarda A; A vira DESCARTADO; B e C PROCEDENTE → decisão dispara com `[A,B,C]`, embora só B e C sejam procedentes. Reprodução feita somente em memória com mocks; o resultado decorre de `bin/disjuntor.py:801`, `bin/disjuntor.py:839`, `bin/disjuntor.py:845`, `bin/disjuntor.py:849`.
+
+- **Defeito certo: rearme não zera as triagens já existentes ainda não observadas.** `rearma_b3` arquiva apenas as listas existentes no JSON e não consulta a triagem. Cenário: obra já existe com lista vazia; D/E/F estão PROCEDENTE no log; rearme retorna sucesso; próxima decisão incorpora D/E/F e dispara imediatamente. Reprodução em memória confirmou. `bin/disjuntor.py:908`, `bin/disjuntor.py:912`, `bin/disjuntor.py:913`, `bin/disjuntor.py:925`, `bin/disjuntor.py:839`.
+
+- **Liberação/rearme dos itens efetivamente observados estão corretos:** movem as identidades para conjuntos de exclusão e limpam ambas as listas. Reclassificar uma identidade já liberada não a ressuscita. `bin/disjuntor.py:842`, `bin/disjuntor.py:874`, `bin/disjuntor.py:876`, `bin/disjuntor.py:912`.
+
+- **Estado da triagem fora da trava:** o check de idempotência e o append não usam flock; a leitura para decidir ocorre antes da trava do JSON. Dois processos podem anexar a mesma triagem duas vezes, embora isso **não** conte duas voltas porque o leitor reduz por identidade. Uma decisão pode usar veredito obsoleto, ou uma liberação deixar de consumir voltas procedentes anexadas entre a leitura e a transição. `bin/disjuntor.py:774`, `bin/disjuntor.py:778`, `bin/disjuntor.py:795`, `bin/disjuntor.py:821`, `bin/disjuntor.py:897`. O JSON B3 é efetivamente escrito sob flock; não encontrei outra gravação desse JSON fora da trava nos arquivos examinados. `bin/disjuntor.py:248`, `bin/disjuntor.py:252`, `bin/disjuntor.py:267`, `bin/disjuntor.py:273`.
+
+- **Identidade insuficientemente vinculada à resposta:** `_le_id` verifica somente cinco campos não vazios; não verifica existência da resposta, conteúdo, hash, mtime, proveniência do wrapper ou correspondência com a chamada. Só o sidecar basta para triagem. `bin/disjuntor.py:752`, `bin/disjuntor.py:755`, `bin/disjuntor.py:759`, `bin/disjuntor.py:768`.
+
+- **Sidecar obsoleto permite triar resposta de outro papel:** o wrapper aceita reutilizar RESPOSTA e só substitui `.id` no sucesso; não invalida identidade anterior no começo nem no erro. Cenário: R.id antigo de verificador; nova chamada `leitura` escreve R e termina com erro; a triagem aceita a resposta nova como verificador antigo. `bin/codex_pergunta.sh:40`, `bin/codex_pergunta.sh:158`, `bin/codex_pergunta.sh:178`, `bin/disjuntor.py:771`.
+
+- **Reutilização/sobrescrita perde ou atribui indevidamente identidade:** duas chamadas bem-sucedidas para o mesmo caminho deixam só o último `.id`, impedindo triagem posterior da anterior; RC0 sem resposta nova, mas com R antigo existente, gera nova identidade para conteúdo antigo; falha ao abrir `.id` para gravar pode preservar identidade anterior e deduplicar a nova chamada como antiga. `bin/codex_pergunta.sh:158`, `bin/codex_pergunta.sh:178`, `bin/codex_pergunta.sh:180`, `bin/disjuntor.py:773`, `bin/disjuntor.py:774`.
+
+- **Colisão estrutural de identidade subconta chamadas:** usa somente hash12 + PID + término com precisão de segundos. Com PID reciclado e mesmo segundo — ou relógio recuado — duas chamadas distintas podem fundir-se; também podem coincidir com identidade já liberada/rearmada e nunca contar. Ocorrência real: [nao verificado]. `bin/codex_pergunta.sh:179`, `bin/disjuntor.py:773`, `bin/disjuntor.py:842`.
+
+- **Fonte ausente ou linhas corrompidas viram ausência de voltas:** log inexistente retorna `{}`; linhas fora do formato são ignoradas, sem representar “não sei”. Se não houver identidades previamente acumuladas, uma decisão permite prosseguir mesmo sem fonte suficiente para concluir zero. `bin/disjuntor.py:788`, `bin/disjuntor.py:790`, `bin/disjuntor.py:794`, `bin/disjuntor.py:801`.
+
+Sobre descartadas anteriores à liberação: elas nunca integraram a contagem e não entram em `liberado`; reclassificá-las depois pode fazê-las contar. Isso é demonstrável no código, mas considerar toda volta anterior automaticamente consumida exige interpretação além de “voltas já liberadas não voltam a contar”. `bin/disjuntor.py:801`, `bin/disjuntor.py:874`, `bin/disjuntor.py:842`.
+
+## 31/10 14:29 · sessao f6faf85cf3dc · - · - · origem=Ronald (tmux)
+
+Achados de bloqueio e leitura, por inspeção da cópia; ocorrência em produção [nao verificado].
+
+1. **Codex pode passar com B3 disparado.** O bloqueio depende exclusivamente da obra e papel extraídos de atribuições literais anteriores ao comando; o wrapper lê o ambiente efetivo e executa sem consultar B3. Cenários que o parser confirmou em memória:
+   - `env CODEX_OBRA=OBRA-C CODEX_PAPEL=verificador bin/codex_pergunta.sh h q r` → nenhuma chamada reconhecida.
+   - `export CODEX_OBRA=OBRA-C CODEX_PAPEL=verificador; bin/codex_pergunta.sh h q r` → papel `?`, obra vazia.
+   - `CODEX_OBRA="$OBRA" CODEX_PAPEL="$PAPEL" ...` → expansão não resolvida.
+   - `bash -c "CODEX_OBRA=OBRA-C CODEX_PAPEL=verificador ..."` → nenhuma chamada reconhecida.
+   - Execução por outro script ou fora do PreToolUse também não encontra guarda dentro do wrapper. Fontes: `bin/disjuntor.py:1120`, `bin/disjuntor.py:1186`, `bin/disjuntor.py:1280`, `bin/codex_pergunta.sh:44`, `bin/codex_pergunta.sh:157`. Alguns limites já são expressamente declarados como resíduos em `bin/disjuntor.py:1117`.
+
+2. **Negação indevida ou ausência de negação por primeira atribuição.** `CODEX_PAPEL=verificador CODEX_PAPEL=leitura` é lido como verificador e negado, embora o wrapper receba leitura; ordem inversa libera verificador. O mesmo ocorre com `CODEX_OBRA=OBRA-C CODEX_OBRA=OBRA-LIVRE` e ordem inversa. Além disso, `OUTRA="CODEX_PAPEL=verificador" CODEX_PAPEL=leitura` é lido como verificador. Fontes: `bin/disjuntor.py:1195`, `bin/disjuntor.py:1196`, `bin/disjuntor.py:1198`, `bin/disjuntor.py:1280`, `bin/codex_pergunta.sh:44`.
+
+3. **Obra com espaços é truncada.** `CODEX_OBRA="O9 (C)" CODEX_PAPEL=verificador ...` vira obra `O9`, embora wrapper preserve `O9 (C)`; pode liberar obra parada `O9 (C)` ou negar indevidamente devido a B3 de `O9`. Essa identidade com cauda é explicitamente suportada pelo leitor de obras do opus. Fontes: `bin/disjuntor.py:1198`, `bin/disjuntor.py:1280`, `bin/disjuntor.py:525`, `bin/codex_pergunta.sh:44`.
+
+4. **Falha de leitura abre ambas as portas.** `decide_b3` lê a triagem antes do estado; `triagem.log` como diretório ou sem permissão levanta, pois só ausência é capturada. Isso libera Codex e opus mesmo se JSON já disser `disparado=true`. Estado JSON inválido, trava ocupada ou falha de abrir a trava também levantam e encontram o mesmo caminho que libera a ferramenta. Fontes: `bin/disjuntor.py:821`, `bin/disjuntor.py:788`, `bin/disjuntor.py:790`, `bin/disjuntor.py:248`, `bin/disjuntor.py:257`, `bin/disjuntor.py:263`, `bin/disjuntor.py:1329`. No Stop, a falha apenas omite o recado B3: `bin/hook_stop_fila1.py:1048`, `bin/hook_stop_fila1.py:1056`.
+
+5. **Opus: reconhecimento textual preexistente deixa passar leitura final.** `LEITURA FINAL REPROVA-E-DESENHO-CODEX` é final mas não identifica obra; `Parecer final da obra REPROVA-E-DESENHO-CODEX` não é reconhecido como final; adicionar ao histórico `nao e a leitura final` invalida o reconhecimento de todo o prompt. Portanto B3 não é consultado nesses casos. Fontes: `bin/disjuntor.py:103`, `bin/disjuntor.py:111`, `bin/disjuntor.py:113`, `bin/disjuntor.py:498`, `bin/disjuntor.py:503`, `bin/disjuntor.py:1290`. Outro `subagent_type` também passa pelo B3, mas isso coincide com a exclusão contratual de outros papéis; classificar uma leitura como verificador apesar de outro tipo seria interpretação [nao verificado]. Fonte: `bin/disjuntor.py:1290`.
+
+6. **Leitura produz zeros/“nenhuma” sem dado.** `ler` inicializa disparos, negativas e liberações em zero, ignora `OSError` das trilhas e `linha` apresenta esses zeros; não consulta obras B3 paradas, apenas `b3_sem_obra`. Se a trilha está ausente/ilegível, pode exibir B3=0 mesmo com estado disparado. Falha de `ler_chamadas` produz `None`, convertido para `{}` e depois “nenhuma”. Fontes: `bin/disjuntor.py:1373`, `bin/disjuntor.py:1405`, `bin/disjuntor.py:1425`, `bin/disjuntor.py:1435`, `bin/disjuntor.py:1476`, `bin/disjuntor.py:1479`, `bin/disjuntor.py:1493`, `bin/disjuntor.py:1501`. Não confundir com estado ilegível para `b3_sem_obra`: esse campo preserva “nao sei”. Fonte: `bin/disjuntor.py:1439`.
+
+7. **Não encontrei escrita do JSON B3 fora da trava.** A única escrita desse JSON está em `_com_estado`, depois do `flock` e antes do fechamento do descritor. A triagem é apendada fora dessa trava e sua fotografia é lida antes de adquiri-la; são problemas distintos. Fontes: `bin/disjuntor.py:252`, `bin/disjuntor.py:270`, `bin/disjuntor.py:287`, `bin/disjuntor.py:778`, `bin/disjuntor.py:821`.
+
+8. **Ressalva explícita de operação:** a chave `DISJUNTOR_DESLIGADO` suspende o PreToolUse e o recado Stop. É uma exceção preexistente declarada, não uma regressão escondida do diff. Fontes: `bin/disjuntor.py:34`, `bin/disjuntor.py:1320`, `bin/hook_stop_fila1.py:1039`.
+
+9. **Janela entre terceira triagem e disparo persistido:** `triagem` só apenda; se DESENHO válido for escrito após a terceira triagem e antes da primeira decisão B3, a decisão dispara, fotografa essa linha como anterior e nega. Pelo contrato literal de disparar ao alcançar três, é atraso de disparo com negação adicional; pelo protocolo preexistente que exige linha posterior ao disparo observado, é comportamento esperado. Fontes: `bin/disjuntor.py:778`, `bin/disjuntor.py:825`, `bin/disjuntor.py:850`, `bin/disjuntor.py:859`, `bin/disjuntor.py:870`, `bin/disjuntor.py:883`.
+
+O caso `b3_codex` usa apenas atribuições literais, obras sem espaços e sidecars fabricados; seus mutantes não exercitam wrapper real, variantes de ambiente, atribuições repetidas, falhas de leitura nem saída de estado sem dados. Fontes: `bin/tests/test_disjuntor.sh:1128`, `bin/tests/test_disjuntor.sh:1133`, `bin/tests/test_disjuntor.sh:1157`, `bin/tests/test_disjuntor.sh:1249`.
+
+## 31/10 14:28 · sessao de83cf872bd2 · - · - · origem=Ronald (tmux)
+
+O selo cobre percursos básicos, mas não fecha os cinco itens; os sete mutantes Codex alteram apenas `disjuntor.py`, e o teste fabrica resposta e identidade sem executar o wrapper. (`bin/tests/test_disjuntor.sh:1128`, `bin/tests/test_disjuntor.sh:1130`, `bin/tests/test_disjuntor.sh:1249`, `bin/tests/test_disjuntor.sh:1260`)
+
+| Item | Cobertura efetiva | Lacuna |
+|---|---|---|
+| 1 — três chamadas distintas da mesma obra | Isolamento entre obras, duas passam/três bloqueiam, repetição da mesma triagem produz uma linha. Mutantes `sem-codex`, `limiar-2` e `por-achado`. (`bin/tests/test_disjuntor.sh:1147`, `bin/tests/test_disjuntor.sh:1150`, `bin/tests/test_disjuntor.sh:1153`, `bin/tests/test_disjuntor.sh:1156`, `bin/tests/test_disjuntor.sh:1249`, `bin/tests/test_disjuntor.sh:1251`, `bin/tests/test_disjuntor.sh:1259`) | Não testa identidade produzida pelo wrapper, reutilização do caminho da resposta, colisões ou chamadas concorrentes; `_rcx` sempre fabrica identidades com pids diferentes e resposta contendo apenas `achado`. (`bin/tests/test_disjuntor.sh:1128`, `bin/tests/test_disjuntor.sh:1130`, `bin/tests/test_disjuntor.sh:1150`, `bin/tests/test_disjuntor.sh:1155`) |
+| 2 — não triada/descartada não conta | Três descartadas iniciais, três não triadas; mutante que conta descartadas. (`bin/tests/test_disjuntor.sh:1140`, `bin/tests/test_disjuntor.sh:1144`, `bin/tests/test_disjuntor.sh:1250`) | Falta `PROCEDENTE → DESCARTADO` antes do disparo: o acumulador apenas acrescenta e não reconcilia a retirada, permitindo disparo com duas procedentes atuais. O único caso de reclassificação ocorre depois da liberação. (`bin/disjuntor.py:839`, `bin/disjuntor.py:845`, `bin/disjuntor.py:849`, `bin/tests/test_disjuntor.sh:1169`) |
+| 3 — bloqueios e liberação | Bloqueia Agent final, Codex verificador e Stop; permite papel leitura; libera com DESENHO. Mutante remove negativa Codex. (`bin/tests/test_disjuntor.sh:1156`, `bin/tests/test_disjuntor.sh:1157`, `bin/tests/test_disjuntor.sh:1158`, `bin/tests/test_disjuntor.sh:1160`, `bin/tests/test_disjuntor.sh:1163`, `bin/tests/test_disjuntor.sh:1252`) | B3 Codex usa apenas comando canônico com variáveis literais; testes de outras sintaxes pertencem ao caso de orçamento `codex`, sem obra parada por B3. Não testa Codex como primeira borda após a terceira triagem: `_parada` já provoca o disparo antes. (`bin/tests/test_disjuntor.sh:1133`, `bin/tests/test_disjuntor.sh:1156`, `bin/tests/test_disjuntor.sh:1157`, `bin/tests/test_disjuntor.sh:562`, `bin/tests/test_disjuntor.sh:569`) |
+| 4 — escritor e identidade | Recusa sidecar ausente, papel leitura e veredito inválido; mutante `sem-sidecar`. (`bin/tests/test_disjuntor.sh:1136`, `bin/tests/test_disjuntor.sh:1137`, `bin/tests/test_disjuntor.sh:1138`, `bin/tests/test_disjuntor.sh:1253`) | Não verifica origem real do sidecar, existência/conteúdo da resposta, escrita exclusiva nem concorrência; a própria fixture fabrica o lastro e `_mutante` copia só arquivos Python. (`bin/tests/test_disjuntor.sh:1129`, `bin/tests/test_disjuntor.sh:1130`, `bin/tests/test_disjuntor.sh:1184`) |
+| 5 — zerar e não ressuscitar | Liberação DESENHO, quarta volta isolada e reclassificação de volta liberada; mutante que deixa toda a lista Codex na liberação. (`bin/tests/test_disjuntor.sh:1163`, `bin/tests/test_disjuntor.sh:1166`, `bin/tests/test_disjuntor.sh:1169`, `bin/tests/test_disjuntor.sh:1258`) | **Rearme de Codex não tem caso que morde.** O rearme antigo usa reprovações Opus; o caso de atomicidade também usa `reprova`. Retirar Codex da união de `rearmado`, mantendo a limpeza imediata, deixaria as voltas voltarem na decisão seguinte sem ser exercitado pelo selo Codex. (`bin/tests/test_disjuntor.sh:398`, `bin/tests/test_disjuntor.sh:1081`, `bin/tests/test_disjuntor.sh:1124`, `bin/tests/test_disjuntor.sh:1172`, `bin/disjuntor.py:912`, `bin/disjuntor.py:913`, `bin/disjuntor.py:842`) |
+
+Os testes antigos acrescentam cobertura compartilhada de ERRO-BOBO, validade do topo, gravação e trava; seus estados são alimentados por reprovações Opus, portanto não substituem casos sobre a triagem Codex concorrente ou seu rearme. (`bin/tests/test_disjuntor.sh:386`, `bin/tests/test_disjuntor.sh:398`, `bin/tests/test_disjuntor.sh:779`, `bin/tests/test_disjuntor.sh:834`, `bin/tests/test_disjuntor.sh:1063`)
+
+Há também falso positivo no próprio selo: `_parada` só procura texto B3, e vários negativos aceitam qualquer saída sem esse texto; uma falha que silencie o bloqueio pode passar nesses pontos. `_passa` verifica ausência de nova FALHA, mas não envolve esses negativos. (`bin/tests/test_disjuntor.sh:98`, `bin/tests/test_disjuntor.sh:100`, `bin/tests/test_disjuntor.sh:1134`, `bin/tests/test_disjuntor.sh:1145`, `bin/tests/test_disjuntor.sh:1148`, `bin/tests/test_disjuntor.sh:1167`, `bin/tests/test_disjuntor.sh:1170`)
+
+Resultado da execução da suíte e mortes efetivamente observadas dos mutantes: [nao verificado]. [nao verificado]
 
 ## 31/10 14:05 · sessao 9f9ab0ecebe5 · LEI-AKITA-UNIVERSO-DO-PUSH · verificador · origem=Code
 
@@ -625,201 +698,4 @@ A frase isolada ficou menos explícita quanto ao objeto mostrado; isso não elim
 
 A PISTA estabelece que os blocos consolidados da 7b prevalecem sobre os textos anteriores nela guardados. (app/docs/PISTA.md:10; app/docs/PISTA.md:11; app/docs/PISTA.md:12)
 
-## 31/10 13:39 · sessao 82f392df9084 · F1C4-3-EMISSORES · verificador · origem=Code
-
-**O texto gravado nunca passa de 500 caracteres; o corpo só fica inteiro quando tem até 500. O corte final `texto[:500]` continua existindo.** (`app/pautas/services.py:182`)
-
-**1. Escritores e leitores**
-
-A escrita física de `Pauta.texto` está em `escrever`; `responder` cria outra Pauta pela mesma porta, herdando a âncora. (`app/pautas/services.py:177–182`; `app/pautas/services.py:189–197`)
-
-Os sítios de produção que alimentam essa escrita são:
-
-| Origem | Chamada |
-|---|---|
-| View de escrita e resposta | `app/pautas/views.py:76,112` |
-| Resposta pelo CLI de suporte | `app/pautas/management/commands/suporte_hasner.py:133` |
-| Pauta semanal | `app/pautas/semanal.py:276` |
-| Dia em aberto: cabeça e filhas | `app/pautas/management/commands/pauta_dia_em_aberto.py:127,139,142` |
-| Pré-fechamento | `app/folha/management/commands/pre_fechamento.py:110` |
-| Aparelhos compartilhados | `app/colaboradores/management/commands/pauta_aparelhos_compartilhados.py:107` |
-| Cobertura | `app/ponto/services/cobertura.py:333` |
-| Documento vencido e férias recusadas | `app/ponto/services/ausencia.py:1039,1229` |
-| Discordantes | `app/ponto/services/pautas_dos_discordantes.py:177` |
-| Afastado que bateu | `app/ponto/services/afastado_avisa.py:74` |
-| Deslogados | `app/ponto/services/pautas_dos_deslogados.py:77` |
-| Autorização de HE | `app/ponto/services/autorizacao_he_periodo.py:244` |
-| Esmeril | `app/ponto/services/pautas_do_esmeril.py:76` |
-| Férias | `app/ferias/management/commands/pautas_de_ferias.py:167` |
-| Cron quebrado | `app/core/services/crons_quebrados.py:71` |
-| Alarme da esteira | `app/core/management/commands/alarme_esteira.py:54` |
-| Alarme da árvore | `app/core/management/commands/alarme_arvore.py:50` |
-| Limbo exportado | `app/chamados/services/fabrica_da_celula.py:185` |
-| Passivo validado: cabeça, filhas e quem saiu | `app/chamados/services/passivo_validado.py:229,233,266` |
-| Resposta tardia | `app/chamados/services/resposta_tardia.py:62` |
-| Competência trancada | `app/chamados/services/competencia_trancada.py:224` |
-| Órfãs enterradas | `app/chamados/management/commands/reabrir_orfas_enterradas.py:197` |
-
-Os leitores que interpretam conteúdo são:
-
-| Leitor | O que procura no texto |
-|---|---|
-| Limbo exportado | Prefixo `LIMBO EM COMPETENCIA EXPORTADA` e, depois, substring exata `[motivo:<m>]` em todo o texto. (`app/chamados/services/fabrica_da_celula.py:180–182`) |
-| Semanal: existência da semana | Prefixo `<marcador> <semana ISO>`. (`app/pautas/semanal.py:195–199`) |
-| Semanal: fechamento da família | Prefixo `<marcador>`. (`app/pautas/semanal.py:226–230`) |
-| Semanal: números iguais | Substring `n=<contadores separados por vírgula>` na pauta anterior. (`app/pautas/semanal.py:245–248`) |
-| Dia em aberto | Prefixo `[DIA EM ABERTO]`. (`app/pautas/management/commands/pauta_dia_em_aberto.py:16,108`) |
-| Férias | Prefixo de `MARCADORES[codigo]`: PA vencido, vencendo ou cadastro. (`app/ferias/management/commands/pautas_de_ferias.py:30–33,149–156`) |
-| Pré-fechamento | Prefixo `[PRE-FECHAMENTO]`; para deduplicar o dia, prefixo incluindo a data de hoje. (`app/folha/management/commands/pre_fechamento.py:29,91–98`) |
-| Competência trancada | Prefixo `[TRANCA]`. (`app/chamados/services/competencia_trancada.py:211`) |
-| Passivo validado | Prefixo `[PASSIVO-VALIDADO] col<id> AAAA-MM`. (`app/chamados/services/passivo_validado.py:44,159–164`) |
-| Passivo validado: quem saiu | Prefixo `[PASSIVO-VALIDADO-FORA] col<id> AAAA-MM`. (`app/chamados/services/passivo_validado.py:48,254–256`) |
-| Órfãs enterradas | Prefixo `[ORFA-ENTERRADA]`. (`app/chamados/management/commands/reabrir_orfas_enterradas.py:32,190–191`) |
-| Alarme da árvore | Prefixo `ARVORE VERMELHA`. (`app/core/management/commands/alarme_arvore.py:11–16`) |
-| Alarme da esteira | Prefixo `ESTEIRA <chave>:`. (`app/core/management/commands/alarme_esteira.py:10–15`) |
-| Cron quebrado | Prefixo `[CRON QUEBRADO] <nome> (empresa <empresa ou ->)`. (`app/core/services/crons_quebrados.py:15,51–54`) |
-| HE em exportada | Prefixo `[HE-AUTORIZADA-EM-EXPORTADA]`. (`app/ponto/services/autorizacao_he_periodo.py:124,240–242`) |
-| Deslogados | Prefixo `[APP-401]`; a identidade restante vem da âncora. (`app/ponto/services/pautas_dos_deslogados.py:26,65–68`) |
-| Afastado que bateu | Prefixo `TEXTO[:40]`. (`app/ponto/services/afastado_avisa.py:62–65`) |
-| Documento vencido | Prefixo `[A4/SEM-DOCUMENTO]`. (`app/ponto/services/ausencia.py:1022–1025`) |
-| Férias recusadas | Prefixo `[A1-FERIAS/AG#<id>]`. (`app/ponto/services/ausencia.py:1212–1215`) |
-| Cobertura a confirmar | Prefixo `[COBERTURA-A-CONFIRMAR]`. (`app/ponto/services/cobertura.py:207,241–243`) |
-| Esmeril | Prefixo `[ESMERIL ` e extração da ação até o primeiro `]`. (`app/ponto/services/pautas_do_esmeril.py:63–65`) |
-| Discordantes | Prefixo `[DISCORDANTE]`; chave formada pelo trecho anterior ao primeiro `:`. (`app/ponto/services/pautas_dos_discordantes.py:37,96–100,165–167`) |
-
-Os demais leitores apresentam ou transportam o conteúdo:
-
-| Leitor | Tratamento |
-|---|---|
-| Endpoint das abas | Serializa integralmente cabeça e respostas. (`app/pautas/views.py:40,47`) |
-| API da mensageria | Serializa integralmente o texto. (`app/api/views_mensageria.py:1324–1328`) |
-| Painel do copiloto | Mostra cabeça e respostas por `textContent`. (`app/templates/core/_copiloto.html:405,424`) |
-| Detalhe do colaborador | Mostra com `truncatechars:180`; aqui o comprimento afeta a apresentação. (`app/templates/colaboradores/detalhe.html:119`) |
-| CLI de suporte | Imprime integralmente cabeça e respostas. (`app/pautas/management/commands/suporte_hasner.py:111,113`) |
-
-A procura por **`[DIA `** ocorre na entrada de `escrever`, para decidir se acrescenta contexto; não é interpretação de uma Pauta persistida. O contexto produzido contém data, pessoa, matrícula, marcos, batidas, acusação e URL. (`app/pautas/services.py:163–169,415–425`)
-
-**Há mudança de resultado na guarda do limbo:** preservar marcador e tags faz a segunda passagem reconhecer motivos que o corte antigo poderia apagar. O contexto completo não participa dessa decisão. A guarda da cobertura também depende de preservar seu prefixo. (`app/chamados/services/fabrica_da_celula.py:180–183`; `app/ponto/services/cobertura.py:241–243`)
-
-As telas e saídas passam a receber mais corpo e menos contexto. Nenhum dos leitores de negócio acima extrai marcos, batidas ou URL do contexto; o limite de 180 no detalhe continua podendo esconder parte do texto. (`app/pautas/views.py:40,47`; `app/templates/core/_copiloto.html:405,424`; `app/templates/colaboradores/detalhe.html:119`)
-
-**2. Resultado exato de `escrever`**
-
-Considere `B = (texto or '').strip()` e **T = comprimento de B**. Se T significar comprimento antes do `strip`, T e C sozinhos não determinam o resultado; uma entrada só de espaços é recusada. (`app/pautas/services.py:163–165`)
-
-Para âncora `dia`, sem `[DIA ` em B, e contexto K de comprimento C:
-
-| Condição | Texto gravado |
-|---|---|
-| `1 ≤ T ≤ 495` e `C > 0` | `B + ' -- ' + K[:496-T]` |
-| `C = 0`, qualquer T | `B[:500]` |
-| `496 ≤ T ≤ 500`, qualquer C | B inteiro, sem contexto |
-| `T > 500`, qualquer C | Primeiros 500 caracteres de B, sem contexto |
-
-Esses casos seguem de `_sobra = 500-T-4`, da condição `_sobra > 0` e do corte final. (`app/pautas/services.py:174–182`)
-
-Quando há contexto anexado, o comprimento é:
-
-`T + 4 + min(C, 496-T) ≤ 500`.
-
-Quando não há, é `min(T,500)`. Portanto, **não ultrapassa 500**; em particular, T=495 permite um único caractere de contexto, T=496 já não permite nenhum e T>500 corta o corpo. (`app/pautas/services.py:174–182`)
-
-Para outra âncora, ou se B já contém `[DIA `, o bloco de contexto é pulado e grava-se `B[:500]`. (`app/pautas/services.py:168,182`)
-
-**3. Quatro testes novos e suas mutações** [nao verificado]
-
-Uma mutação local, na linha 176, derruba os quatro: trocar somente o primeiro `texto` da tupla por **`texto[:500 - len(_ctx) - 4]`**, reintroduzindo o corte antigo do corpo. (`app/pautas/services.py:176`)
-
-| Teste novo | Falha prevista com essa mutação | [nao verificado]
-|---|---|
-| `test_RED_contexto_460_nao_come_a_tag` | Sobram 36 caracteres do corpo: marcador sobrevive, tag completa não. A segunda passada escreve outra pauta; `(p,)` encontra duas. (`app/chamados/tests/test_f1c4_3_emissores.py:274–285`; `app/chamados/services/fabrica_da_celula.py:180–190`) |
-| `test_RED_contexto_480_nao_come_o_marcador` | Sobram 16 caracteres: o marcador completo desaparece. `_pautas()` não encontra nenhuma e `(p,)` falha. (`app/chamados/tests/test_f1c4_3_emissores.py:189–193,278,287–288`; `app/pautas/services.py:176`) |
-| `test_RED_contexto_700_indice_negativo_come_o_corpo` | O corte vira `texto[:-204]`, esvaziando esse corpo; perde-se o marcador e falha o desempacotamento. (`app/chamados/tests/test_f1c4_3_emissores.py:278,290–293`; `app/chamados/services/fabrica_da_celula.py:189–190`) |
-| `test_porta_escrever_corta_o_contexto_e_nunca_o_corpo` | O corpo tem 78 caracteres: n=100 passa; n=460 deixa só 36 e falha o `startswith(corpo + ' -- [DIA x]')`. (`app/chamados/tests/test_f1c4_3_emissores.py:299–307`; `app/pautas/services.py:176`) |
-
-Esses são vereditos derivados do código; execução da suíte Django com as mutações: **[não verificado]**. [nao verificado]
-
-No código atual, os quatro entram no ramo de anexação: usam contexto não vazio e corpo menor que 496. Entretanto, **os três testes de integração passam se a condição da linha 175 virar `if False:`**: eles exigem marcador, tag, tamanho e unicidade, mas não exigem contexto. O teste direto detecta esse desvio pela asserção de prefixo. (`app/pautas/services.py:174–176`; `app/chamados/tests/test_f1c4_3_emissores.py:274–282,299–306`)
-
-Há outras lacunas:
-
-- Os quatro aceitam `_ctx[:7]` no lugar de `_ctx[:_sobra]`: basta anexar `[DIA x]`; nenhum exige o contexto disponível inteiro. (`app/pautas/services.py:176`; `app/chamados/tests/test_f1c4_3_emissores.py:279–280,306–307`)
-- Nenhum cobre C=0, T≥496, corpo contendo `[DIA ` ou T>500; retirar o corte final `[:500]` não derruba esses quatro. (`app/chamados/tests/test_f1c4_3_emissores.py:274,299–301`; `app/pautas/services.py:168,174–182`)
-- O nome “nunca o corpo” excede o contrato demonstrado: o próprio service corta corpos acima de 500. (`app/chamados/tests/test_f1c4_3_emissores.py:295`; `app/pautas/services.py:182`)
-
-**Outros defeitos no delta**
-
-- **A exceção do limbo exportado pode ser contornada pelo lote.** O evento envia à Pauta e retorna sem pergunta, mas o caminho FIO MUDO seleciona chamados vivos sem filtrar `trabalha` ou competência, consulta os motivos da ata e chama `perguntar` diretamente. Para limbo exportado com chamado vivo, motivo faltante e sem pergunta existente, a Pauta não bloqueia esse caminho. O cron está configurado com `--apply`. Ocorrência desses candidatos em produção: **[não verificado]**. (`app/chamados/services/fabrica_da_celula.py:153–157`; `app/chamados/management/commands/disparar_perguntas_competencia.py:155–168,178–224,277–301`; `app/config/crons.py:1464`)
-- **O fallback anunciado para contexto ausente não funciona pelo clique do painel.** O comentário diz que o DP reabre pela âncora, mas `ROTA` só contempla `colab`, `chamado` e `posto`; `dia` termina no aviso de ausência de tela. O URL fica no fim do contexto, justamente a parte agora cortável. A ausência de rota é preexistente, mas a nova estratégia depende dela. (`app/pautas/services.py:173–176,423–425`; `app/templates/core/_copiloto.html:564–574`)
-- **A idempotência nova não protege concorrência localmente:** consulta e criação são separadas, sem trava nessa função, e o modelo não declara unicidade para marcador/âncora. Duas chamadas podem observar ausência antes de escrever. Serialização externa ou duplicação ocorrida: **[não verificado]**. (`app/chamados/services/fabrica_da_celula.py:180–190`; `app/pautas/models.py:123–133`)
-- O comentário junto ao emissor continua dizendo que `escrever` corta o corpo para caber contexto, contradizendo a implementação nova. (`app/chamados/services/fabrica_da_celula.py:187–188`; `app/pautas/services.py:174–176`)
-
-## 31/10 13:37 · sessao 608be0c6532d · CLAUDE-MD-RACIONAL · verificador · origem=Code
-
-1. **Sim, com o mesmo efeito.** Data e obrigação de citar o aval estão em `CLAUDE.md:444-445`. As condições conjuntas — função existente, autoridade única medida, mesmo predicado e universo igual, medidos na sessão — continuam em `CLAUDE.md:460-464`; predicado novo ou duas candidatas exigem pergunta em `CLAUDE.md:453-454`. Correspondem a `41b4d89d:CLAUDE.md:478-486`.
-
-   `app/docs/CORTES.md:64` e `app/docs/CORTES.md:283` continuam encontrando o aval pelo nome e pela data. **A numeração é histórica:** o antigo item 3 corresponde agora ao item 5 de PARADA, identificado pela ponte em `CLAUDE.md:444`.
-
-2. **Não encontrei perda de cláusula, nome, script ou condição nos cortes desta volta.** A preservação aparece nestes pontos:
-
-   | Trecho | Evidência atual |
-   |---|---|
-   | PARADA: RED, script e três sentidos | `CLAUDE.md:442-443` |
-   | RAIAS: fonte do handoff e avais de hoje não cumpridos | `CLAUDE.md:483-484` |
-   | CODEX: apelidos retirados da linha duplicada | `CODEX-SONDA-LEITURA` em `CLAUDE.md:524`; `SUITE-ANTES-DO-OPUS` em `CLAUDE.md:515` e `CLAUDE.md:549` | [nao verificado]
-   | RELATO: mesma pergunta, frase de nascimento e declaração em `JUIZES_DO_PRAZO` | `CLAUDE.md:607`, `CLAUDE.md:624-627` |
-   | PLACAR: exercício, dois zeros, rótulo, mostrar sem fechamento e L-095 | `CLAUDE.md:565-570` |
-   | PONTUALIDADE: ponteiro e regra | `CLAUDE.md:601`, `app/docs/LEIS.md:116` |
-   | DINHEIRO: backup/renome pelo admin | `CLAUDE.md:577` |
-
-3. **Não identifiquei efeito adicional além da precedência dos cinco consolidados.** A exceção está expressamente limitada a eles em `app/docs/PISTA.md:10-12`. O selo extrai os blocos pelas âncoras, deixando o cabeçalho fora dos hashes; verifica nomes, hashes e ponteiros, sem comparar a frase antiga (`bin/tests/test_claude_md_regras_preservadas.sh:43-78`). Nenhuma dependência dessa frase foi encontrada nos leitores examinados; o leitor de `PISTA.md` identificado está em `bin/tests/test_claude_md_regras_preservadas.sh:35`.
-
-4. **Contagem medida com `wc -c`**, incluindo as quebras de linha:
-
-   | Conteúdo | Bytes | Localização |
-   |---|---:|---|
-   | 7b com título, até antes de `## 8.` | **20.995** | `CLAUDE.md:436-628` |
-   | Mesmo trecho sem a linha do título | **20.911** | `CLAUDE.md:437-628` |
-   | Linha do título | **84** | `CLAUDE.md:436` |
-   | Arquivo inteiro | **57.796** | `CLAUDE.md:1-632` |
-
-## 31/10 13:37 · sessao aa15e33c6c46 · - · - · origem=Ronald (tmux)
-
-A escrita física encontrada é `Pauta.objects.create(..., texto=texto[:500])`; a porta normaliza com `strip`, rejeita vazio e corta a 500 no último passo. `responder` passa pela mesma porta. (`app/pautas/services.py:163-182`, `app/pautas/services.py:189-197`)
-
-| Chamador de escrita | Referência |
-|---|---|
-| View escrever | `app/pautas/views.py:76` |
-| View responder → service responder | `app/pautas/views.py:112` |
-| CLI suporte responder → service responder | `app/pautas/management/commands/suporte_hasner.py:133` |
-| Semanal | `app/pautas/semanal.py:276` |
-| Dia em aberto: cabeça/filhas | `app/pautas/management/commands/pauta_dia_em_aberto.py:127`, `:139`, `:142` |
-| Pré-fechamento | `app/folha/management/commands/pre_fechamento.py:110` |
-| Aparelhos compartilhados | `app/colaboradores/management/commands/pauta_aparelhos_compartilhados.py:107` |
-| Cobertura | `app/ponto/services/cobertura.py:333` |
-| Ausência/documento vencido; férias recusadas | `app/ponto/services/ausencia.py:1039`, `:1229` |
-| Discordantes | `app/ponto/services/pautas_dos_discordantes.py:177` |
-| Afastado avisa | `app/ponto/services/afastado_avisa.py:74` |
-| Deslogados | `app/ponto/services/pautas_dos_deslogados.py:77` |
-| HE | `app/ponto/services/autorizacao_he_periodo.py:244` |
-| Esmeril | `app/ponto/services/pautas_do_esmeril.py:76` |
-| Férias | `app/ferias/management/commands/pautas_de_ferias.py:167` |
-| Cron quebrado | `app/core/services/crons_quebrados.py:71` |
-| Alarme esteira; árvore | `app/core/management/commands/alarme_esteira.py:54`, `app/core/management/commands/alarme_arvore.py:50` |
-| Limbo exportado | `app/chamados/services/fabrica_da_celula.py:185` |
-| Passivo validado: cabeça/filhas/quem saiu | `app/chamados/services/passivo_validado.py:229`, `:233`, `:266` |
-| Resposta tardia | `app/chamados/services/resposta_tardia.py:62` |
-| Competência trancada | `app/chamados/services/competencia_trancada.py:224` |
-| Órfãs enterradas | `app/chamados/management/commands/reabrir_orfas_enterradas.py:197` |
-
-Entre os emissores automáticos, fábrica e cobertura usam âncora `dia`; views aceitam a âncora enviada e respostas herdam a âncora original. (`app/chamados/services/fabrica_da_celula.py:185`, `app/ponto/services/cobertura.py:334`, `app/pautas/views.py:80`, `app/pautas/services.py:196`)
-
-O campo declara `max_length=500`; a migration inicial apenas cria o schema. (`app/pautas/models.py:89`, `app/pautas/migrations/0001_initial.py:39`)
-
-Defeitos adicionais:
-
-- **A exceção limbo exportado pode ser contornada pelo lote.** O evento envia à Pauta e retorna sem perguntar, mas o universo FIO MUDO do lote seleciona chamado vivo sem filtrar `trabalha` ou competência, procura motivo pela ata e chama diretamente `perguntar`. Para chamado vivo de limbo exportado com motivo faltante e sem pergunta existente, a Pauta não barra esse caminho. O cron está configurado com `--apply`, e não apenas como vigia. Ocorrência desses candidatos em produção: **[não verificado]**. (`app/chamados/services/fabrica_da_celula.py:153-157`, `app/chamados/management/commands/disparar_perguntas_competencia.py:155-168`, `:178-224`, `:277-301`, `app/config/crons.py:1464-1466`)
-- **Comentário novo contradiz a implementação:** diz que `escrever` corta o fim do corpo para acomodar contexto; agora o contexto cede, preservado o corte global de 500. (`app/chamados/services/fabrica_da_celula.py:187-188`, `app/pautas/services.py:174-182`)
-- A guarda de idempotência faz consulta seguida de criação sem trava local; o modelo não tem unicidade marcador/âncora. Duas chamadas concorrentes podem ambas observar ausência e escrever. Serialização externa ou duplicação ocorrida: **[não verificado]**. (`app/chamados/services/fabrica_da_celula.py:180-190`, `app/pautas/models.py:123-131`)
-
-_1082 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1085 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
