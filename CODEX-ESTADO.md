@@ -1,7 +1,79 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 08:25** · publicado em **31/10/2026 08:25** (UTC-3)
+> Ultima resposta processada: **31/10/2026 08:26** · publicado em **31/10/2026 08:30** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 08:26 · sessao 7e4502ad0cab · F1C4-3 · verificador · origem=Code
+
+**A correção local atende ao aval, mas a obra ainda deixa um leitor que transforma indeterminado em “dia sem trabalho” e um caminho do vigia que usa suspensão de cobrança como motivo de retratação.** (`app/chamados/juizes.py:408`; `app/ponto/supra_juiz.py:441`; `app/ponto/management/commands/reconciliar_grade.py:401`)
+
+**1. Onde falha — e onde está correto**
+
+O novo `dia_sem_trabalho` preserva as duas cláusulas autorizadas: `trabalha is False` ou `ata.tipo_dia` presente e diferente de `trabalho`; `None` sozinho deixou de significar folga, conforme o próprio campo. (`app/chamados/juizes.py:407`; `app/chamados/juizes.py:408`; `app/escala/models.py:1656`)
+
+O ramo novo dos indefinidos **usa corretamente a chave do mapa**: o produtor entrega `(colaborador_id, data)` e o consumidor consulta `(c.pk, _d)`; não há defeito de chave nessa versão. (`app/escala/alimentacao.py:41`; `app/escala/alimentacao.py:42`; `app/ponto/management/commands/reconciliar_grade.py:282`)
+
+A propagação de `para=para` na recursão também está correta: a ausência da véspera passa a ser consultada pelo mesmo efeito solicitado para D. Folha aceita somente aprovada; cobrança aceita não rejeitada. (`app/chamados/juizes.py:426`; `app/chamados/juizes.py:448`; `app/ponto/turnos.py:2487`; `app/ponto/turnos.py:2489`)
+
+**Falha remanescente no vigia:** considere célula `None`, ata de trabalho com lâmpada apagada, ausência pendente no próprio D, vínculo válido e chamado único, sem outras causas de absolvição. O filtro novo deixa `_indef` vazio, mas `_coberto`, usando `para='cobranca'`, ainda põe D em `mortos`; `_lei_cala_no_dia` também cala pela ausência pendente. Esse é um contraexemplo deduzido do fluxo, não uma ocorrência comprovada em produção. (`app/ponto/management/commands/reconciliar_grade.py:266`; `app/ponto/management/commands/reconciliar_grade.py:281`; `app/ponto/management/commands/reconciliar_grade.py:401`; `app/ponto/marcos.py:171`; `app/escala/servico_jornada.py:342`)
+
+Nesse caso, o comando registra `RETRACT` e acrescenta `retracts` antes de chamar a porta; a porta consulta a premissa para **folha**, ignora a pendente e encontra o furo, podendo recusar o fechamento. O comando ignora essa recusa e o vigia continua contando a intenção em `len(retracts)`. Portanto, o filtro novo não elimina esse motivo de divergência persistente. (`app/ponto/management/commands/reconciliar_grade.py:303`; `app/ponto/management/commands/reconciliar_grade.py:304`; `app/ponto/management/commands/reconciliar_grade.py:309`; `app/chamados/models.py:699`; `app/chamados/models.py:1247`; `app/chamados/reconciliador.py:525`; `app/ponto/management/commands/reconciliar_grade.py:337`)
+
+Há ainda uma limitação anterior na recursão: qualquer dia considerado sem trabalho consulta D−1, sem verificar naquele trecho se existe relação com turno noturno; resultado desconhecido da véspera vira `False`. O diff corrige o efeito transmitido, mas não modifica essa seleção de dia. Para `batida_ausente`, o coletor possui absolvição direta por dia sem trabalho antes dessa chamada; chamados `turno_aberto*` são excluídos dessa absolvição direta. (`app/chamados/juizes.py:443`; `app/chamados/juizes.py:448`; `app/chamados/juizes.py:449`; `app/chamados/models.py:1232`; `app/chamados/models.py:1247`)
+
+**2. Quem escreve e quem lê**
+
+| Campo/valor | Escritor ou produtor | Leitor e efeito |
+|---|---|---|
+| `CelulaDia.trabalha` | A porta calcula pela autoridade do vínculo e cria/altera na geração e regeneração; também escreve na reversão. (`app/ponto/portas/celula.py:243`; `app/ponto/portas/celula.py:260`; `app/ponto/portas/celula.py:532`; `app/ponto/portas/celula.py:590`; `app/ponto/portas/celula.py:612`) | `eh_dia_trabalho` devolve o triestado intacto; o predicado alterado compara estritamente com `False`; o reconciliador passa a consultá-lo. (`app/escala/models.py:1072`; `app/chamados/juizes.py:408`; `app/ponto/management/commands/reconciliar_grade.py:282`) |
+| `CelulaDia.ata` | `ata_do_dia` produz `tipo_dia`, lâmpadas e demais fatos; `lavrar_veredito` persiste pela porta. A chave `precedencia` tem operação própria na mesma porta. (`app/ponto/services/cartorio.py:558`; `app/ponto/services/cartorio.py:566`; `app/ponto/portas/celula.py:725`; `app/ponto/portas/celula.py:732`; `app/ponto/portas/celula.py:775`) | `dia_sem_trabalho` lê `tipo_dia`; `_celula_furada` lê lâmpadas e órfãs; `premissa_regularizada` consulta esses julgamentos. (`app/chamados/juizes.py:407`; `app/chamados/juizes.py:454`; `app/chamados/juizes.py:457`; `app/chamados/juizes.py:459`; `app/chamados/models.py:1232`; `app/chamados/models.py:1247`) |
+| Chave de `celulas_do_periodo` | O carregador constrói `(c.colaborador_id, c.data)`. (`app/escala/alimentacao.py:42`) | O comando carrega o mapa, alimenta `vinculo_do_dia` e consulta a mesma tupla no novo filtro. (`app/ponto/management/commands/reconciliar_grade.py:189`; `app/ponto/management/commands/reconciliar_grade.py:196`; `app/ponto/management/commands/reconciliar_grade.py:282`) |
+| `plan` / `RETRACT_INDEFINIDO` | `handle` cria o `Counter`; incrementa `RETRACT_INDEFINIDO` quando todas as datas estão em `mortos` e `_indef` não está vazio. O incremento antecede o gate do catálogo. (`app/ponto/management/commands/reconciliar_grade.py:113`; `app/ponto/management/commands/reconciliar_grade.py:292`; `app/ponto/management/commands/reconciliar_grade.py:294`; `app/ponto/management/commands/reconciliar_grade.py:298`) | A saída imprime o plano; os testes novos procuram a presença/ausência do rótulo. (`app/ponto/management/commands/reconciliar_grade.py:318`; `app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:64`; `app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:74`) |
+| `retracts` | Lista criada no comando; recebe candidatos após `premissa_morta`, antes da execução de `retratar`. (`app/ponto/management/commands/reconciliar_grade.py:113`; `app/ponto/management/commands/reconciliar_grade.py:298`; `app/ponto/management/commands/reconciliar_grade.py:304`) | Alimenta a listagem e `divergencia_grade_cartorio`. O script de placar extrai posteriormente esse contador da saída registrada. (`app/ponto/management/commands/reconciliar_grade.py:324`; `app/ponto/management/commands/reconciliar_grade.py:337`; `bin/placar_code.sh:528`; `bin/placar_code.sh:530`) |
+| `para` | É argumento da consulta: o coletor e o helper têm default `cobranca`; o fechamento exige `folha`; a recursão agora preserva a escolha. (`app/chamados/models.py:1200`; `app/chamados/juizes.py:411`; `app/chamados/models.py:699`; `app/chamados/juizes.py:448`) | `ausencia_cobre` aplica `_pelo_efeito`, separando aprovada de não rejeitada. (`app/ponto/turnos.py:2525`; `app/ponto/turnos.py:2487`; `app/ponto/turnos.py:2489`) |
+
+A projeção da ata do julgamento em curso é uma cópia em memória, distinta da persistência: `celula_do_dia_agora` passa pela projeção e a porta copia a instância antes de sobrepor a ata. As alterações diretas de `trabalha`/`ata` nos testes são alimentação de fixture. (`app/chamados/juizes.py:378`; `app/chamados/juizes.py:394`; `app/ponto/portas/celula.py:678`; `app/ponto/portas/celula.py:680`; `app/chamados/tests/test_f1c4_3_none_cobra.py:83`)
+
+**3. Mordida dos testes** [nao verificado]
+
+| Teste/grupo | Avaliação | [nao verificado]
+|---|---|
+| Dois RED unitários de `None` | **Mordem** voltar a `is not True`: o predicado antigo responde `True`, contrariando ambos. (`app/chamados/tests/test_f1c4_3_none_cobra.py:39`; `app/chamados/tests/test_f1c4_3_none_cobra.py:42`; `app/chamados/juizes.py:405`) |
+| Unitários da cláusula da ata | **Mordem** retirar a cláusula: usam `trabalha=True` com ata de folga/ausência. Não há caso explícito de `tipo_dia='falta'`. (`app/chamados/tests/test_f1c4_3_none_cobra.py:45`) |
+| Unitário de `False` | **Morde isoladamente** retirar `trabalha is False`: usa ata de trabalho e ata sem tipo. (`app/chamados/tests/test_f1c4_3_none_cobra.py:50`) |
+| Unitário de `True` | Controla respostas indevidamente constantes ou que calem um dia de trabalho sem causa. (`app/chamados/tests/test_f1c4_3_none_cobra.py:54`) |
+| RED `_celula_furada(None)` | **Morde** o predicado antigo: ele desviaria para véspera inexistente e retornaria `False`; o novo encontra a lâmpada apagada e retorna `True`. (`app/chamados/tests/test_f1c4_3_none_cobra.py:93`; `app/chamados/juizes.py:437`; `app/chamados/juizes.py:448`; `app/chamados/juizes.py:457`) |
+| Controle `_celula_furada(False, 'folga')` | **Não isola a cláusula `False`**: mesmo removendo-a, a ata de folga mantém o resultado. Essa mordida está nos unitários acima. (`app/chamados/tests/test_f1c4_3_none_cobra.py:97`; `app/chamados/juizes.py:408`) |
+| Controle `_celula_furada(True, 'folga')` | **Morde** retirar a cláusula da ata: sem ela, a lâmpada apagada acusaria furo. (`app/chamados/tests/test_f1c4_3_none_cobra.py:101`; `app/chamados/juizes.py:457`) |
+| RED da premissa em `None` | **Morde** o predicado antigo já na absolvição direta; com o novo, cai na leitura do furo. (`app/chamados/tests/test_f1c4_3_none_cobra.py:105`; `app/chamados/models.py:1232`; `app/chamados/models.py:1247`) |
+| Controle da premissa com ata de folga | **Morde** retirar a cláusula da ata, pois o dia contém lâmpada apagada. (`app/chamados/tests/test_f1c4_3_none_cobra.py:111`; `app/chamados/models.py:1232`; `app/chamados/juizes.py:457`) |
+| RED da véspera para `folha` | **Morde retirar `para=para`**: no ensaio das funções em memória, a mutação troca a resposta de `True` para `False`, pela cobertura da pendente no default `cobranca`. (`app/chamados/tests/test_f1c4_3_none_cobra.py:117`; `app/chamados/tests/test_f1c4_3_none_cobra.py:131`; `app/chamados/juizes.py:448`; `app/ponto/turnos.py:2489`) |
+| Controle da véspera para `cobranca` | Confirma a suspensão pela pendente, mas **sozinho não morde** retirar o argumento: o default já é cobrança. (`app/chamados/tests/test_f1c4_3_none_cobra.py:133`; `app/chamados/juizes.py:411`) |
+| Dois RED do reconciliador | **Pelo fluxo anterior fornecido no diff, ficam vermelhos**: `_indef` incluiria ONTEM, gerando `RETRACT_INDEFINIDO` e divergência 1. Eles exigem ausência desse rótulo e divergência 0. (`app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:61`; `app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:67`; `app/ponto/management/commands/reconciliar_grade.py:294`; `app/ponto/management/commands/reconciliar_grade.py:304`; `app/ponto/management/commands/reconciliar_grade.py:337`) |
+| MORDE do reconciliador com ata de folga | **Morde** zerar todos os indefinidos ou consultar chave errada. **Não prova retratação efetiva**: roda sem apply e verifica contador anterior à porta. (`app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:58`; `app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:72`; `app/ponto/management/commands/reconciliar_grade.py:294`; `app/ponto/management/commands/reconciliar_grade.py:309`) |
+| A2 alterado | **Morde a tentativa indevida**, mesmo se o gate impedir fechar: exige zero chamadas ao `retratar` real envolvido por `wraps`. Verificar somente status vivo seria insuficiente. (`app/ponto/tests/test_a2_marco_morto.py:47`; `app/ponto/tests/test_a2_marco_morto.py:52`; `app/ponto/tests/test_a2_marco_morto.py:54`) |
+
+Os RED do reconciliador não estão vazios por falta de batidas: o chamado põe o colaborador no universo, a fixture fornece vínculo semanal de sete dias e a grade marca o dia como indefinido. (`app/ponto/management/commands/reconciliar_grade.py:95`; `app/ponto/management/commands/reconciliar_grade.py:106`; `app/chamados/tests/_vinculo_do_dia.py:18`; `app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:33`)
+
+A fixture de ausência merece atenção: criar `Ausencia` dispara julgamento síncrono, podendo substituir a ata preparada antes. Neste caso, pendente não dispensa lâmpadas e o overlay usa o efeito folha; faltam asserts após essa criação para explicitar as precondições, mas o código não demonstra um RED falso por ausência de sinal. (`app/chamados/tests/test_f1c4_3_none_cobra.py:129`; `app/ponto/signals.py:143`; `app/ponto/signals.py:93`; `app/ponto/services/cartorio.py:609`; `app/escala/utils.py:1148`)
+
+**Execução integral da suíte Django e execução efetiva na árvore Git antiga: `[nao verificado]`.** [nao verificado]
+
+**4. Leitores de produção restantes fora da fila informada**
+
+**Sim: o caminho mais forte é leitor da célula → supra → retratação.** Sem `tipo_dia` na ata, `trabalha=None` produz `indefinido`; sem previsto lavrado, produz zero. O supra aceita esse tipo como “dia sem trabalho”, porque `SEM_JURISDICAO` exclui apenas `fora_vinculo` e `sem_celula`. (`app/escala/services/leitor_celula.py:344`; `app/escala/services/leitor_celula.py:353`; `app/ponto/supra_juiz.py:46`; `app/ponto/supra_juiz.py:441`)
+
+Esse resultado chega ao ramo que tenta `retratar` com `--executar`, declarado no cron. O gate final pode impedir o fechamento, mas a classificação e a tentativa indevida permanecem. (`app/ponto/management/commands/supra_juiz.py:206`; `app/ponto/management/commands/supra_juiz.py:243`; `app/ponto/management/commands/supra_juiz.py:248`; `app/config/crons.py:580`; `app/chamados/models.py:699`)
+
+Também restam silenciamentos de emissão por `None`, embora nem todos o rotulem explicitamente como folga:
+
+- `processar_alertas_avancados` usa `not eh_dia_trabalho`, pulando `None` antes do caminho de criação/escalonamento de `turno_aberto_24h`. (`app/ponto/management/commands/processar_alertas_avancados.py:49`; `app/ponto/management/commands/processar_alertas_avancados.py:91`; `app/ponto/management/commands/processar_alertas_avancados.py:121`)
+- O cartório exige `is True` para emitir furo total e rejeita `is not True` no leitor de furo parcial, antes de consultar os marcos apagados. (`app/ponto/services/cartorio.py:1459`; `app/ponto/services/cartorio.py:1469`; `app/ponto/services/cartorio.py:1558`; `app/ponto/services/cartorio.py:1574`)
+- `emitir_furo_retroativo` conta `None` como limbo e pula o caminho de emissão. (`app/ponto/management/commands/emitir_furo_retroativo.py:127`; `app/ponto/management/commands/emitir_furo_retroativo.py:142`)
+
+Esses consumidores recebem o triestado preservado pela autoridade; o colapso acontece depois dela. (`app/escala/models.py:1072`)
+
+**Ocorrências, quantidades e fechamentos efetivos desses casos em produção: `[nao verificado]`.**
 
 ## 31/10 08:25 · sessao 8fad8251d37b · - · - · origem=Ronald (tmux)
 
@@ -715,40 +787,4 @@ Para o quadro de divergência, convém comparar `dia_sem_trabalho` com **o compo
 
 O teste encontrado para `None` é de integração: cria célula `trabalha=None`, executa `reconciliar_grade` sem mock da premissa e exige chamado fora de `aberto`/`pendente` (`app/ponto/tests/test_a2_marco_morto.py:37-45`). Ele não afirma diretamente o retorno de `_celula_furada` nem cobre sua recursão pela véspera; o fixture é um chamado do módulo canônico do reconciliador (`app/ponto/tests/test_a2_marco_morto.py:32-35`).
 
-## 31/10 07:15 · sessao 6e231748ca71 · - · - · origem=Ronald (tmux)
-
-**Escritores de `CelulaDia.trabalha`**
-
-| Função | Escrita | Quando grava `None` |
-|---|---|---|
-| `regenerar_celulas_vinculo` | Fora da vigência, escreve `False` em célula gerada pela EC, sem outra EC cobrindo e sem lavra protegida; dentro, calcula `valor`, cria ou atualiza célula gerada. `app/ponto/portas/celula.py:210-247`, `:251-265` | Quando `ec.eh_dia_trabalho_calculado(d)` retorna `None`; esse retorno é passado diretamente ao create/update. `app/ponto/portas/celula.py:243-247`, `:260` |
-| `gerar_celulas_periodo` | Cria com `valor`; atualiza célula gerada de hoje/futuro se valor, geradora ou DNA mudou. Pula editada e preserva `trabalha` do passado. `app/ponto/portas/celula.py:588-615` | Quando o cálculo retorna `None`; criação aceita qualquer data, atualização apenas hoje/futuro. `app/ponto/portas/celula.py:590-612` |
-| `reverter_regeneracao_dia` | Restaura `cel.trabalha = (alvo or {}).get('marcos') is not None`. `app/ponto/portas/celula.py:527-539` | Nunca: a expressão produz booleano. `app/ponto/portas/celula.py:532` |
-
-O command `gerar_celulas` reexporta os dois primeiros escritores; seu `handle` chama `gerar_celulas_periodo`. `app/ponto/management/commands/gerar_celulas.py:13`, `:303-312`. O cron registra `gerar_celulas` às 05:50. `app/config/crons.py:407`.
-
-O campo permite `null=True` e não declara default. `app/escala/models.py:1654-1656`; a migration de criação também permite NULL. `app/escala/migrations/0030_celuladia.py:22`.
-
-**Como o cálculo chega a `None`**
-
-- Âncora válida (`year > 1940`), sem foto do mês, resolve os ciclos 12x36/24x48 em booleano. `app/escala/models.py:1260-1266`.
-- Com foto: data fotografada é `False`; fora da foto, usa a resposta do template; se o template não decide, tenta paridade da folga de referência, retornando `None` quando não encontra referência. `app/escala/models.py:1280-1293`, `:1322-1335`.
-- Sem foto, usa `TipoEscala.eh_dia_trabalho`. `app/escala/models.py:1336-1337`. O template devolve `None` para 12x36/24x48, personalizado sem mapa útil e ciclo sem regra. `app/escala/models.py:824-829`, `:862-868`.
-- A conversão por feriado só altera `base is True`, preservando `None`. `app/escala/models.py:1338-1342`.
-
-**Escritor de `ata['tipo_dia']`**
-
-`cartorio.ata_do_dia` produz a chave copiando `dia.get('tipo_dia')`; não deriva diretamente de `cel.trabalha`. `app/ponto/services/cartorio.py:558-566`. O dia vem de `montar_grade_prevista_periodo`. `app/ponto/services/cartorio.py:905-909`.
-
-A ata é entregue à lavra tanto no ramo nunca bateu como no ramo principal. `app/ponto/services/cartorio.py:981`, `:1012-1013`, `:1518-1520`. O método do modelo delega à porta. `app/escala/models.py:1775-1783`. A porta copia/substitui e persiste a ata inteira, inclusive quando o admin já decidiu o veredito. `app/ponto/portas/celula.py:697-714`, `:724-732`. `carimbar_precedencia` conserva as demais chaves e altera apenas `precedencia`. `app/ponto/portas/celula.py:767-778`.
-
-A derivação anterior à ata é:
-
-- `EscalaColaborador.eh_dia_trabalho` retorna `cel.trabalha` quando existe célula. `app/escala/models.py:1066-1073`.
-- Builder por turno: só `is False` exclui o dia da montagem normal; `None` passa e marca `sem_ancora=True`. `app/escala/utils.py:1541-1549`, `:1701-1702`. Dia montado recebe `'trabalho'`; dia sem montagem recebe `'folga'`. `app/escala/utils.py:1722-1753`. Intermitente tem tratamento próprio: mesmo com previsão `False`, dia com batida pode ser montado como trabalho. `app/escala/utils.py:1720-1722`.
-- Builder legado: `work is False` produz `'folga'`; `None` segue como `'trabalho'` com `sem_ancora=True`. `app/escala/utils.py:725-729`, `:752`. O despacho depende de `GRADE_POR_TURNO`. `app/escala/utils.py:2024-2030`.
-- Foto de folgas pode substituir o tipo por `'folga'`; ausência aprovada pode substituir por `'falta'` ou `'ausencia'`. `app/escala/utils.py:1114-1120`, `:1170-1180`. Esses overlays são aplicados antes da entrega da grade ao cartório. `app/escala/utils.py:1785-1789`.
-
-O fallback do **leitor**, distinto do produtor da ata, usa `'trabalho' if cel.trabalha else 'folga' if cel.trabalha is False else 'indefinido'` quando a ata não oferece tipo. `app/escala/services/leitor_celula.py:344-345`.
-
-_906 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_907 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
