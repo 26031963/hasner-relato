@@ -1,7 +1,103 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 11:33** · publicado em **31/10/2026 11:34** (UTC-3)
+> Ultima resposta processada: **31/10/2026 11:39** · publicado em **31/10/2026 11:39** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 11:39 · sessao c60552d62fc3 · CODEX-LICOES · verificador · origem=Code
+
+A v2 deixa lacunas de operação, concorrência e medição. Primeiro, a distinção de versão: **o wrapper da cópia é anterior ao anexo**; aceita quatro papéis e monta um cabeçalho menor. O contexto `4435ec64` aparece como pronto, com pouso retido. As referências abaixo são da cópia. (bin/codex_pergunta.sh:48; bin/codex_pergunta.sh:118; app/docs/BACKLOG.md:871)
+
+1. **O gatilho pode chegar antes da correção provada.** A classificação acontece quando o opus reprova, e a reprovação devolve a obra ao ciclo de correção. Publicar a tabela não garante que já exista o commit/RED exigido para ensinar a lição. Falta declarar como o achado fica pendente e como a chamada retoma depois da prova. (CLAUDE.md:598; CLAUDE.md:614) [nao verificado]
+
+2. **Uma `.q` e uma `.r` podem perder a prova da classificação.** A classificação vigente usa **todas** as perguntas, respostas e linhas de triagem, devolvendo os trechos por achado; voltas intermediárias podem conter apenas delta. O contrato precisa vincular a lição à linha dessa classificação e às evidências relevantes, identificando as voltas. (CLAUDE.md:614; CLAUDE.md:618)
+
+3. **Rodar em fundo não assegura sair do caminho crítico.** Todos os papéis disputam o mesmo gate e os mesmos slots; uma lição pode atrasar o próximo verificador. A espera por slot ocorre antes do `timeout`. Se a consolidação chamar outro wrapper mantendo o slot da geração, também pode haver esgotamento circular de slots — comportamento futuro [nao verificado]. Defina quando o slot é liberado e o limite da espera. (bin/codex_pergunta.sh:137; bin/codex_pergunta.sh:150; bin/codex_pergunta.sh:153; bin/codex_pergunta.sh:157)
+
+4. **Existe recusa antes de qualquer rc 75.** O disjuntor pode impedir a chamada no `PreToolUse`: acima do orçamento diário só passa a volta final; acima de 85% semanal exige escada. Isso vale para qualquer papel. O contrato não define o destino da lição/consolidação impedida nesse ponto. (bin/disjuntor.py:897; bin/disjuntor.py:906; bin/disjuntor.py:938; bin/tests/test_disjuntor.sh:489)
+
+5. **A regra de falha está incompleta.** Além de 75, existem uso inválido, falha de cópia, raspagem recusada, timeout e erro genérico. O contrato permanente exige tratamento de erro, timeout e limite. A transcrição deve depender de sucesso integral da chamada, resposta nova e validação; não basta excluir 75 e formato inválido. (bin/codex_pergunta.sh:39; bin/codex_pergunta.sh:99; bin/codex_pergunta.sh:105; bin/codex_pergunta.sh:157; bin/tests/test_codex_limite.sh:36; CLAUDE.md:651)
+
+6. **O limite de 20 tem uma transição contraditória.** Pelo item 3, primeiro pode haver mais de 20 ativas; se a consolidação falhar e “mantém”, permanecem mais de 20, contrariando o selo do item 4. A candidata precisa ficar fora da versão ativa até uma consolidação válida, ou ser recusada preservando a versão anterior com até 20. Trata-se de lacuna do protocolo proposto; implementação [nao verificado].
+
+7. **Append atômico não resolve sozinho a consolidação concorrente.** Uma consolidação pode ler a versão A, outra chamada acrescentar uma lição e, depois, a primeira substituir tudo pelo resultado calculado sobre A. Falta exigir comparação da versão-base antes da substituição, além de definir alocação de IDs únicos e deduplicação do mesmo achado. O protocolo futuro não está demonstrado [nao verificado]; a regra vigente pede escritor canônico com tripwire. (CLAUDE.md:32)
+
+8. **SHA com par no log não prova toda escrita externa.** Regravar externamente uma versão antiga já registrada preserva a condição “SHA possui par”. Além disso, arquivo e log são duas escritas: falta definir recuperação de interrupção entre elas e recusa quando o registro falha. O wrapper atual grava `ini` e continua sem testar o sucesso desse append; esse comportamento não basta para a nova garantia. (CLAUDE.md:32; bin/codex_pergunta.sh:88)
+
+9. **O SHA pode identificar conteúdo diferente do recebido.** Hoje os anexos são raspados, concatenados e cortados em **300.000 bytes**, sem recusa por truncamento. Lições acrescentadas ao fim podem desaparecer; acrescentadas antes podem deslocar a correção provada. Vinte itens também não limitam bytes ou tokens. É necessário congelar uma versão por chamada, definir seu teto e ligar o SHA ao bloco efetivamente enviado. (bin/codex_pergunta.sh:111; bin/codex_pergunta.sh:114; bin/codex_pergunta.sh:115; bin/codex_pergunta.sh:133)
+
+10. **O A/B precisa de uma exceção explícita a “toda chamada leva lições”.** O wrapper atual não oferece seleção do braço; fixa esforço `high`, mas não fixa modelo na invocação nem registra braço/modelo/anexos no `ini`. Também falta congelar as lições durante os pares e separar tarefas de avaliação das obras usadas para ensiná-las. Sem isso, repetição de um achado pode parecer generalização; a medição anterior já registrou sinal de eco. (bin/codex_pergunta.sh:32; bin/codex_pergunta.sh:88; bin/codex_pergunta.sh:157; app/docs/RELATO.md:176)
+
+11. **Há leitores e testes além do wrapper para atualizar.** Os dois novos papéis hoje dão rc 2; liberá-los somente no wrapper faz contagens e tokens virarem `outro`. O SHA deve preservar as posições existentes do log e ganhar leitor próprio. Os selos atuais verificam sandbox, raspagem, procedência e limite; esses verdes não demonstram concorrência, consolidação, transcrição ou desligamento das lições. (bin/codex_pergunta.sh:48; bin/codex_limite_estado.py:23; bin/codex_limite_estado.py:63; bin/codex_limite_estado.py:78; bin/codex_limite_estado.py:194; bin/tests/test_codex_pergunta.sh:2; bin/tests/test_codex_sonda.sh:90; bin/tests/test_codex_limite.sh:31)
+
+A medição proposta também precisa declarar seu alcance: gabarito do opus não cobre a classe **“nenhum viu”**, descoberta depois por suite, produção ou outra pessoa. Essa classe exige cura estrutural e selo; lição não substitui esse fechamento. (CLAUDE.md:623) [nao verificado]
+
+## 31/10 11:38 · sessao 1e1616f4e617 · - · - · origem=Ronald (tmux)
+
+Pontos concretos:
+
+- **A cópia não contém o wrapper do anexo.** O local tem whitelist dos quatro papéis em `bin/codex_pergunta.sh:48`, prompt sem referência a AGENTS/BASE/juiz em `bin/codex_pergunta.sh:118`, e termina em `bin/codex_pergunta.sh:177`. Citar linhas do anexo como se fossem dessa cópia daria proveniência falsa. O estado do wrapper instalado no host é [nao verificado].
+
+- **Os novos papéis precisam chegar também aos leitores.** `licao` e `licao-consolidar` são recusados pela whitelist atual (`bin/codex_pergunta.sh:48`); mesmo liberando o escritor, `PAPEIS` mantém só quatro valores (`bin/codex_limite_estado.py:23`), portanto suas contagens e tokens viram `outro` (`bin/codex_limite_estado.py:78`, `bin/codex_limite_estado.py:194`). O teste exige expressamente esse agrupamento para papel desconhecido (`bin/tests/test_codex_papel_estado.sh:32`).
+
+- **Fundo não assegura “fora do caminho crítico”.** Há um gate bloqueante compartilhado e slots comuns a todos os papéis (`bin/codex_pergunta.sh:137`, `bin/codex_pergunta.sh:140`, `bin/codex_pergunta.sh:145`); uma lição ocupa slot até o processo sair (`bin/codex_pergunta.sh:153`). A chamada seguinte pode esperar por esses mesmos locks, e o timeout só começa no `codex exec`, depois da fila (`bin/codex_pergunta.sh:150`, `bin/codex_pergunta.sh:157`). Para consolidação, chamar outro wrapper enquanto mantém o slot também exige avaliar exaustão de slots — implementação futura [nao verificado].
+
+- **O contrato esquece o disjuntor anterior ao wrapper.** Sem `CODEX_VOLTA`, a chamada é classificada como `meio` (`bin/disjuntor.py:861`). Acima do orçamento só `final` passa, qualquer papel (`bin/disjuntor.py:906`); acima de 85% precisa da escada medida (`bin/disjuntor.py:897`). O teste protege ambos os cortes (`bin/tests/test_disjuntor.sh:489`, `bin/tests/test_disjuntor.sh:493`). Tratar apenas rc 75 não define a lição impedida antes de executar.
+
+- **Adicionar SHA em coluna errada quebra leitores; acrescentá-lo preserva posições, mas não traz auditoria automaticamente.** O parser usa posições fixas para chave, `ini`, `fim`, sessão e rc (`bin/codex_limite_estado.py:63`, `bin/codex_limite_estado.py:67`) e descarta qualquer metadado extra do `ini` (`bin/codex_limite_estado.py:65`). O selo atual verifica essas posições, sem SHA de lições (`bin/tests/test_codex_sonda.sh:94`, `bin/tests/test_codex_sonda.sh:95`). É necessário definir esquema e leitor da versão efetivamente anexada.
+
+- **A/B ainda não é reproduzível pelo instrumento atual.** O esforço fica fixado em `high`, mas a invocação não fixa modelo (`bin/codex_pergunta.sh:157`, `bin/codex_pergunta.sh:158`); o `ini` registra pergunta raspada, sem braço, modelo ou hashes dos anexos (`bin/codex_pergunta.sh:88`). Tokens são agregados por papel e obtidos das sessões locais, sem braço/versão de lição (`bin/codex_limite_estado.py:185`, `bin/codex_limite_estado.py:194`, `bin/codex_limite_estado.py:208`). Resultados de recall, precisão e generalização são [nao verificado].
+
+- **Os testes existentes não sustentam o selo novo.** O estrutural cobra forma do wrapper (`bin/tests/test_codex_pergunta.sh:2`), o de sonda cobre raspagem/rc/procedência (`bin/tests/test_codex_sonda.sh:57`, `bin/tests/test_codex_sonda.sh:90`) e o de limite cobre rc 75/contador (`bin/tests/test_codex_limite.sh:31`, `bin/tests/test_codex_limite.sh:40`). A prova real verifica que o Codex não escreve na cópia/viva/tmp; não valida escrita autorizada do wrapper em LICOES (`bin/tests/prova_codex_pergunta_real.sh:24`, `bin/tests/prova_codex_pergunta_real.sh:26`). Esses verdes não provam formato, concorrência, consolidação, vínculo SHA/transcrição ou desligamento do novo contrato.
+
+Não executei testes: os testes de sonda e limite criam arquivos temporários (`bin/tests/test_codex_sonda.sh:12`, `bin/tests/test_codex_limite.sh:9`).
+
+## 31/10 11:38 · sessao 8dfc660db753 · - · - · origem=Ronald (tmux)
+
+Pontos documentais que sustentam a revisão:
+
+- **Gatilho antes da correção comprovada.** A tabela nasce “quando o opus reprova”; a reprovação manda voltar ao ciclo construtor/Codex. Portanto publicar a tabela não garante a existência de commit/RED da correção exigida pelo contrato. Falta declarar pendência e retomada depois da prova, ou adiar a publicação. Inferência de `CLAUDE.md:598-600` e `CLAUDE.md:614-617`. [nao verificado]
+
+- **Dossiê de classificação versus anexo singular.** A classificação canônica exige TODAS as perguntas/respostas e as linhas de triagem, devolvendo os trechos por achado. O contrato oferece `.q` + `.r` sem explicitar qual volta nem ligar a lição ao trecho da tabela; voltas intermediárias podem conter apenas delta. A lição pode perder a demonstração de que o tema estava presente. `CLAUDE.md:614-619`.
+
+- **O gabarito opus não cobre todos os falsos negativos.** Existe a categoria `(d) NENHUM VIU`, descoberta por suite, produção ou outras pessoas; ela exige cura estrutural, registro da invariante e selo. Logo medir apenas obras com achado do opus não estima essa família, e lição não substitui sua cura. `CLAUDE.md:623-629`. [nao verificado]
+
+- **Falhas operacionais incompletas.** O contrato permanente exige erro, timeout e limite, além de responsável pelo desligamento. A v2 fala em formato inválido e rc75, deixando sem conduta explícita timeout e demais falhas durante geração/consolidação. `CLAUDE.md:651-657`.
+
+- **Hash com par em log não prova autoria exclusiva.** A regra pede escritor canônico com tripwire; um conteúdo idêntico ao já registrado pode ser regravado fora do wrapper e manter o mesmo SHA. Assim o selo descrito prova correspondência de conteúdo, não toda escrita externa. Inferência de `CLAUDE.md:32-34`; implementação futura [nao verificado].
+
+- **Dependência declarada realmente está pendente.** `4435ec64` está registrado como pronto, porém com pouso retido porque o wrapper passa a exigir `PERGUNTA:` e há construtores em voo. Não assumir essa interface implantada. `app/docs/BACKLOG.md:871`.
+
+- **A avaliação anterior de contexto já recomenda vigiar eco.** O registro declara resultado neutro, ganho concentrado nos achados do próprio Codex, desempenho 3×4 nos achados opus e tokens 8,86M×6,03M; isso sustenta separar descoberta nova de repetição de lições na avaliação proposta. `app/docs/RELATO.md:176`.
+
+`CLAUDE-MD-ENXUTO` e `CODEX-CONTEXTO-SEM-CONDUTA` não apareceram na busca documental feita; seu conteúdo e estado ficam [nao verificado].
+
+## 31/10 11:35 · sessao 6dee5b2d66fb · CODEX-LICOES-PROBE0G · leitura · origem=Code
+
+1) ZEBRA-07E712A0 [nao verificado]
+
+2) `AGENTS.md` — diretório `/home/ronald/codex_ws/19d2a06fc144d68abf7cd05b67a4d150c49eb776`, fornecido no contexto pelo usuário; carregamento direto do arquivo [nao verificado].
+
+## 31/10 11:35 · sessao 834fefaf8832 · CODEX-CONTEXTO-SEM-CONDUTA · verificador · origem=Code
+
+**O principal problema é que excluir títulos não separa conduta de lei, e colocar o selo na pasta não garante sua execução no push.** (`app/docs/LEIS.md:22`; `bin/pre-push.sh:13–16`)
+
+1. **O selo pode ficar sem chamador no pre-push.** O loop de `bin/tests/test_*.sh` está na régua; o pre-push declara expressamente que não executa esse loop. Precisa haver chamada explícita, conferindo o commit enviado, inclusive quando o arsenal é dispensado por “JÁ VERDE”. (`bin/regua.sh:138–145`; `bin/pre-push.sh:13–16,33–38,62–66`)
+
+2. **INCLUIDAS/EXCLUIDAS, como enumeradas, não cobrem o CLAUDE atual.** Faltam classes para **1, 3, 5, 6b, 7 e 8**. O selo de cobertura prometido começaria vermelho nesta cópia. A seção 6b, particularmente, contém regras de aplicação da CCT e cálculo, portanto sua exclusão não seria mera retirada de conduta. É necessário conferir novamente essa classificação depois da dependência ENXUTO. (`CLAUDE.md:90,194,325,430,460,821`; `CLAUDE.md:433–457`)
+
+3. **Conduta continua entrando pelas próprias fontes incluídas.** A seção 2 manda executar deploy e merge; 4b determina ordem de trabalho. LEIS declara regras como `CONDUTA` e contém construção em cópia e moratória de propostas. Esses textos não precisam reproduzir o título nem o hash das seções excluídas: o detector proposto pode ficar verde apesar deles. (`CLAUDE.md:137,168–176,320–323`; `app/docs/LEIS.md:22,63,138`)
+
+4. **PLANO-PADROES não é integralmente FATO/LEI.** Contém fila, responsáveis e estados; identifica expressamente contexto, alternativas e consequências como **redação do Code a partir do aval e do RELATO**. Se entrar inteiro, volta a compartilhar interpretação do construtor com o verificador, contrariando a separação pretendida. Falta declarar o recorte desse arquivo. (`app/docs/PLANO-PADROES.md:7–13,26,59`; `app/docs/PROMPTS.md:1684`)
+
+5. **Excluir uma seção inteira também pode retirar lei e suas retificações.** A seção 7b contém regras do TXT e condições de aplicação em competência aberta. Há inclusive divergência documental concreta: PLANO-PADROES exige “DIFF antes” pela 7b, enquanto a 7b restringe DIFF antecipado a exportada e troca de motor. O contrato precisa preservar a regra vigente por outra fonte completa; cobertura de títulos não demonstra isso. (`CLAUDE.md:677–693,708–725`; `app/docs/PLANO-PADROES.md:29–32`)
+
+6. **O gerador anexado ainda descreve outro recorte.** Seu `projetar()` inclui **0/4/4a**, não **2/4/4a/4b**; PLANO-PADROES e JUIZES são apenas ponteiros; não há as tuplas INCLUIDAS/EXCLUIDAS. Portanto, o anexo não demonstra implementação deste contrato. Disponibilidade e funcionamento dessa versão na cópia: **[nao verificado]**. A dependência DA-CASA está registrada como aguardando pouso. (`app/docs/BACKLOG.md:871`)
+
+7. **Gerar no disco não basta: o resultado precisa integrar o hash chamado.** O wrapper consome `git archive "$HASH"`, torna a cópia sem escrita e reutiliza o diretório existente sem reconferi-lo. Geração posterior ao commit não chega à chamada. O A/B também precisa identificar cópias distintas e controladas; trocar arquivos sob o mesmo hash compromete essa identidade. (`bin/codex_pergunta.sh:87,91–101,157–158`)
+
+8. **O A/B está menos definido que o protocolo já registrado.** O aval anterior exige **n=2 por braço e chave invertida**; “mesma pergunta” não preserva sozinho esses controles. Também é preciso fixar código, modelo e anexos: o wrapper concatena os anexos e a pergunta, permitindo que a conduta retirada do AGENTS entre novamente no prompt. A medição anterior registra forte variação de tokens entre rodadas. (`app/docs/PROMPTS.md:1686`; `bin/codex_pergunta.sh:103–135`; `app/docs/RELATO.md:176,179`)
+
+9. **O teto segue sem solução de recorte.** Os ~42,7 kB informados excedem 30.000; recusar a escrita protege o limite, mas não produz o contexto novo. O tamanho final e o tempo inferior a um segundo permanecem **[nao verificado]**. Os selos atuais do wrapper verificam forma/sandbox; a prova real existente verifica ausência de escrita, não carregamento do novo contexto. (`bin/tests/test_codex_pergunta.sh:10–33`; `bin/tests/prova_codex_pergunta_real.sh:15–28`)
 
 ## 31/10 11:33 · sessao f7baeb4ed248 · CODEX-LICOES-PROBE0 · leitura · origem=Code
 
@@ -482,120 +578,4 @@ O diff corrige a escolha do **ciclo**, mas ainda pode aplicar a **CCT errada**: 
 
 Execução da suíte Django completa e reprodução na frota: **[não verificado]**. [nao verificado]
 
-## 31/10 11:08 · sessao 7d440cefcf34 · - · - · origem=Ronald (tmux)
-
-Correção do limite: calendário vazio **não veta feriado cadastrado**, pois `eh_feriado` consulta o banco quando a data não está no conjunto. `app/ponto/motor_calculo_v2.py:903`; `app/ponto/motor_calculo_v2.py:905`.
-
-A divergência foi reproduzida somente em memória, extraindo os métodos reais por AST e simulando `is_feriado=False`: motor com calendário vazio e flag `True` → **0 min**; contexto das regras com feriado injetado e flag `True` → **480 min**; contexto com flag anterior do chamador 12x36 (`False`) → **0 min**. O cenário demonstrado exige feriado exclusivamente injetado, ausente no banco. `app/ponto/motor_calculo_v2.py:859`; `app/ponto/motor_calculo_v2.py:901`; `app/ponto/calculador/regras.py:287`; `app/ponto/calculador/regras.py:344`; `app/ponto/calculador/regras.py:347`.
-
-Logo, o achado deve ser apresentado como **inconsistência herdada entre calendários, ativada pelo diff nessa combinação**, sem generalizar para todo feriado intermitente. `app/ponto/calculador/alimentacao.py:507`; `app/ponto/calculador/alimentacao.py:524`; `app/ponto/motor_calculo_v2.py:3495`.
-
-## 31/10 11:08 · sessao 87cd6c692d4f · - · - · origem=Ronald (tmux)
-
-O teste novo **morde a dobra**, mas não cobre os outros três insumos: exige dia presente, rubrica decidida e resultados 0/12 nos dois sentidos; portanto não é vacuidade total. Ambos os períodos são diurnos e a única rubrica assertada é `horas_extras_100_feriado`. `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:87`, `:98`, `:104`, `:111`, `:116`.
-
-A cobertura de família é particularmente insuficiente: os dois templates omitem `tipo_base`, cujo default é `12x36`; com `hora_inicio`, ambos despacham para `Motor12x36ComEscala`, apesar dos ciclos diferentes. `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:66`; `app/escala/models.py:170`; `app/ponto/motor_calculo_v2.py:3571`.
-
-O fixture não cadastra convenção nem troca de vigência; a empresa omite `regime_trabalhista`, cujo default é vazio. Não demonstra o efeito do cache em CCTs diferentes ao longo da janela. `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:54`; `app/colaboradores/models.py:150`.
-
-Não encontrei violação dos selos AST relevantes: executei em memória, usando AST e `unittest` da stdlib, oito métodos estruturais e dois de I4; os dez passaram. Foram os métodos de `app/ponto/tests/test_s5b_porta_unica.py:60`, `:73`, `:80`, `:103`, `:147`, `:182`, `:204`, `:217`, `:393`, `:429`. Isso não equivale à execução da suíte Django. [não verificado]
-
-Os selos existentes continuam exigindo consulta ao juiz do vínculo, argumentos por dia e ausência de query crua no laço. O diff preserva essas formas. `app/ponto/tests/test_s5b_porta_unica.py:182`, `:204`, `:217`; `app/ponto/calculador/alimentacao.py:430`, `:490`, `:520`.
-
-I4 proíbe `getattr` com default nos nomes da CCT e defaults booleanos nas assinaturas; o novo `getattr` consulta `pk`, fora desse conjunto. I7 examina escrita de atributo em objeto motor; o diff só lê `_m` e grava no dicionário local. Não há violação dessas formas. `app/ponto/tests/test_s5b_porta_unica.py:284`, `:317`, `:343`, `:808`; `app/ponto/calculador/alimentacao.py:389`, `:403`.
-
-## 31/10 11:08 · sessao d3fbd053822d · - · - · origem=Ronald (tmux)
-
-1. **CCT ainda não é inteiramente “do dia”.** A fábrica recebe `ini` fixo, mesmo após selecionar `_te_dia`; `regua_para` consulta o vínculo/praça nessa data, e `_aplicacao_vigente` testa a vigência nessa data. Assim, template de outubro pode receber a convenção/praça de setembro. O cache por template também ignora essas dimensões temporais. Referências: `app/ponto/calculador/alimentacao.py:392`, `app/core/regua_cct.py:328`, `app/core/regua_cct.py:330`, `app/core/regua_cct.py:366`, `app/core/regua_cct.py:262`.
-
-2. **Cache conflui templates sem PK.** `_chave = getattr(_te, 'pk', None)` mistura `None`, templates não salvos e dublês sem PK; o primeiro resultado prevalece. Extraí e executei exatamente `_cct_de` por AST, somente em memória, com fábrica stub: `[NS(pk=None, tipo_ciclo='12x36'), NS(pk=None, tipo_ciclo='24x48')]` devolveu o resultado de `12x36` duas vezes e chamou a fábrica uma vez. `[None, NS(pk=None, tipo_ciclo='12x36')]` também confluiu; PKs diferentes `1,2` ficaram separados. Referências: `app/ponto/calculador/alimentacao.py:389`, `app/ponto/calculador/alimentacao.py:390`, `app/ponto/calculador/alimentacao.py:403`, `app/ponto/calculador/alimentacao.py:405`.
-
-3. **Limite da colisão:** não há evidência de dois templates persistidos distintos compartilharem a chave no caminho normal. A lista vem do ORM com `select_related('tipo_escala')`; `EscalaColaborador.tipo_escala` é FK obrigatório; `TipoEscala` é `models.Model` e a aplicação usa PK automático `BigAutoField`. Objetos com mesmo PK e atributos divergentes também confluirão, mas o caminho atual produz esses snapshots divergentes é **[não verificado]**. Referências: `app/ponto/calculador/alimentacao.py:419`, `app/ponto/calculador/alimentacao.py:420`, `app/escala/models.py:874`, `app/escala/models.py:24`, `app/escala/apps.py:5`.
-
-4. **Dias sem vínculo continuam com o template do chamador.** `_te_dia` começa como `te`; só muda quando o juiz retorna vínculo com template. Quando retorna `None`, `_cct_de` recebe o mesmo `te` usado pela implementação anterior, com o mesmo `c, ini`. Portanto o diff não altera logicamente esses dias sob cadastro estável; continua o fallback declarado, inclusive quando a célula nomeia geradora fora de vigência e o juiz recusa o vínculo. Referências: `app/ponto/calculador/alimentacao.py:487`, `app/ponto/calculador/alimentacao.py:491`, `app/ponto/calculador/alimentacao.py:494`, `app/ponto/calculador/alimentacao.py:507`, `app/escala/alimentacao.py:250`.
-
-5. **O novo teste não cobre dia efetivamente sem vínculo nem colisão.** Os dois dias trabalhados estão cobertos pelos vínculos criados e os templates são salvos com PKs diferentes; a janela inclui dias descobertos, mas o resultado falso só contém os dois períodos cobertos. Referências: `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:66`, `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:70`, `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:74`, `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:78`, `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:82`, `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:87`.
-
-6. **Chamadores confirmados:** fechamento passa o template da última fatia; comando de comparação usa `getattr(aut.esc, 'tipo_escala', None)`. Referências: `app/ponto/services/fechamento.py:1229`, `app/ponto/services/fechamento.py:1241`, `app/ponto/management/commands/diff_calculador.py:163`, `app/ponto/management/commands/diff_calculador.py:419`.
-
-## 31/10 11:08 · sessao 7d440cefcf34 · - · - · origem=Ronald (tmux)
-
-Achados confirmados por leitura:
-
-- **Ciclo do dia com CCT da data errada:** `_cct_de` chama `get_motor_cct(c, ini, tipo_escala=_te)`; a praça vem do vínculo de `ini`, e a vigência da convenção também usa `ini`. Portanto pode combinar ciclo do dia com praça/convenção do início da janela. A data fixa já existia, e o diff mantém o defeito ao prometer CCT do dia. `app/ponto/calculador/alimentacao.py:392`; `app/core/regua_cct.py:329`; `app/core/regua_cct.py:330`; `app/core/regua_cct.py:366`; `app/core/regua_cct.py:261`.
-
-- **Regressão concreta possível no intermitente:** para chamador 12x36 e dia de vínculo intermitente, o diff muda `feriado_em_dobra=False` para `True`: a lista de ciclos simples só contém 12x36. Entretanto `MotorIntermitente` zera seu calendário. A alimentação descarta `CCT.feriados` e passa o calendário externo; `do_dia` deixa intermitente seguir e paga a dobra. O resultado pode passar de zero à jornada inteira onde o motor intermitente não reconhece feriados. `app/ponto/calculador/alimentacao.py:507`; `app/ponto/calculador/alimentacao.py:524`; `app/ponto/motor_calculo_v2.py:3537`; `app/ponto/motor_calculo_v2.py:3608`; `app/ponto/motor_calculo_v2.py:3495`; `app/ponto/calculador/regras.py:736`; `app/ponto/calculador/regras.py:775`; `app/ponto/calculador/regras.py:785`.
-
-- **Fonte paralela mantida:** a alimentação fabrica outro motor, enquanto o fechamento já criou o motor efetivo com `fatia_ini` e calendário, calculou a fatia e extraiu seu carimbo. A fronteira documenta leitura do motor que rodou; a releitura por período efetivamente usa `cct.feriados`, diferentemente de `rubricas_por_dia`. `app/ponto/calculador/alimentacao.py:392`; `app/ponto/services/fechamento.py:711`; `app/ponto/services/fechamento.py:713`; `app/ponto/services/fechamento.py:263`; `app/ponto/services/fechamento.py:270`; `app/ponto/calculador/nucleo.py:321`; `app/ponto/calculador/periodo.py:567`; `app/ponto/calculador/periodo.py:830`.
-
-Mapa de autoridade:
-
-- Os atributos fonte são escritos no motor em `app/ponto/motor_calculo_v2.py:712`, `:719`, `:737`, `:740`; os kwargs de CCT são montados em `app/core/regua_cct.py:454`, `:466`, `:470`, `:478`. O leitor `cct_do_motor` os converte em `CCT` em `app/ponto/calculador/nucleo.py:344`.
-- `motivo_nao_julga_pontualidade` lê a tabela por identidade da classe; `None` devolve `None`. A tabela nomeia separadamente motor 12x36 cru e intermitente. `app/ponto/calculador/regras.py:487`; `:494`; `:516`; `:518`.
-- Outro leitor é `chamados/juizes.py::folha_julga_pontualidade`: fabrica motor e pergunta ao mesmo leitor; tem `data or localdate()` preexistente. Essa função não participa do caminho novo. `app/chamados/juizes.py:1530`; `:1545`; `:1551`; `app/ponto/calculador/alimentacao.py:403`.
-- O diff continua delegando vínculo e política às autoridades existentes: vínculo em `app/ponto/calculador/alimentacao.py:430`, dobra na fábrica em `app/ponto/motor_calculo_v2.py:3608`, cuja constante está registrada em `app/core/juizes.py:257`. Não há literal de ciclo novo no helper nem escrita nova de atributo de motor; são cache local e variáveis locais. `app/ponto/calculador/alimentacao.py:387`; `:403`; `:507`.
-- O caminho transitivo `regua_para → vinculo_do_dia_carregado → vinculos_do_dia_carregado` carrega pela data explícita, sem consultar relógio. `app/core/regua_cct.py:329`; `app/escala/alimentacao.py:284`; `:298`; `:300`; `:301`.
-
-## 31/10 10:55 · sessao 9839af8cbf61 · V3-RETOMA · leitura · origem=Code
-
-**Não: o `motor_h` do diff não reproduz a partição final do fechamento.** Para folga, soma todo `periodos_ft`; para HE100 feriado, não preenche a rubrica e lê zero na chave ausente. O fechamento filtra escala certa, separa feriado e devolve o restante a trabalhadas. (`app/ponto/management/commands/diff_calculador.py:245–268`, `:535`; `app/ponto/services/fechamento.py:908–953`).
-
-**(a) Origem das duas colunas**
-
-O resultado v2 vem de `autoridade_do_periodo(c, ini, fim)`. A autoridade usa `apurar_por_fatia` quando há escalas e devolve o resultado em `Autoridade`. (`app/ponto/management/commands/diff_calculador.py:147`; `app/ponto/services/espelho.py:1166–1170`, `:1195`).
-
-| Rubrica | Origem de `motor_h` |
-|---|---|
-| `horas_extras_100_feriado` | **Não há atribuição dessa chave em `m_dia`.** O loop lê `p.minutos_extra_100` para **`horas_extras_100`**, sem separar feriado. Depois, `a = float(mm.get(r) or 0)` transforma a chave ausente em **0**, nas linhas efetivamente comparadas. (`app/ponto/management/commands/diff_calculador.py:245–268`, `:535`) |
-| `horas_folga_trabalhada` | Soma `(p.minutos_trabalhados or 0) / 60` de **todos** os `aut.resultado.periodos_ft` com entrada, agrupados por `_dia_do(p.entrada)` e dentro da janela. (`app/ponto/management/commands/diff_calculador.py:263–268`) |
-
-No lado calculador, a trilha é:
-
-1. Com `--pares-da-autoridade`, chama `insumos_do_calculador(c, aut.resultado, ...)`; essa função chama `segmentos_do_motor`, que lê conjuntamente `periodos` e `periodos_ft`, usa `resultado.dia_da_jornada` e as pontas efetivas dos períodos. (`app/ponto/management/commands/diff_calculador.py:287–313`; `app/ponto/calculador/alimentacao.py:302–305`, `:63–73`; `app/ponto/calculador/nucleo.py:393–400`).
-2. `rubricas_por_dia` soma os pares pelo núcleo; o núcleo acumula `(saida - entrada).total_seconds() / 60` por dia. A alimentação entrega esses minutos a `regras.do_dia`, junto com escala certa, calendário e `folga_e_feriado`. (`app/ponto/calculador/alimentacao.py:437`, `:501–512`; `app/ponto/calculador/nucleo.py:134–155`).
-3. As regras que produzem as duas rubricas são:
-
-| Rubrica | Regra que produz `calculador_h` |
-|---|---|
-| `horas_extras_100_feriado`, no caminho normal | `do_dia` chama `dobra_de_feriado_do_dia`; havendo dobra, escreve `_dobra / 60`. A função devolve todo o trabalhado quando `_feriado_dobra_no_dia(dia)` é verdadeiro; esse método é emprestado de `MotorBase` e exige `feriado_em_dobra` e feriado. (`app/ponto/calculador/regras.py:287–295`, `:344–347`, `:774–785`; `app/ponto/motor_calculo_v2.py:879`) |
-| `horas_extras_100_feriado`, no caminho de folga | Com folga, escala certa e `folga_e_feriado`, escreve `_certa / 60` em HE100 e HE100 feriado. (`app/ponto/calculador/regras.py:646–664`, `:675–683`) |
-| `horas_folga_trabalhada` | `folga_trabalhada_do_dia` divide o trabalhado entre certa e sem escala certa. `do_dia` escreve `_certa / 60` em folga somente quando essa parcela não foi destinada ao feriado. (`app/ponto/calculador/regras.py:386–395`, `:660–690`) |
-
-O comando coloca `_r_dia.valores` em `c_dia`; lê `a` de `m_dia` e `b` de `c_dia`; publica `round(a, 2)` e `round(b, 2)` nas colunas `motor_h` e `calculador_h`. Rubricas presentes em `nao_decide` são puladas. (`app/ponto/management/commands/diff_calculador.py:501`, `:517`, `:527–542`, `:655–658`).
-
-**Condição do comando:** sem `--pares-da-autoridade`, `_ins_porta=None`, `_rub_do_dia={}` e os dias sem `_r_dia` são pulados antes de preencher `c_dia`; portanto essa execução não percorre as regras acima, e a consulta posterior ao calculador ausente também usa zero. (`app/ponto/management/commands/diff_calculador.py:325–337`, `:417–424`, `:469–472`, `:535`).
-
-**(b) Passos do fechamento e reprodução no diff**
-
-O fechamento compõe `periodos` e `periodos_ft` das fatias de vínculo antes de calcular os campos mensais. (`app/ponto/services/fechamento.py:96–97`, `:270–281`).
-
-| Passo do fechamento v2 | Lado motor do diff | Lado calculador v3, pela trilha acima |
-|---|---|---|
-| **1. Base de HE100 feriado:** inicializa `horas_extras_100_feriado` com `round(resultado.horas_extra_100_feriado, 2)`. Essa property soma o subset feriado exclusivamente em `resultado.periodos`. (`app/ponto/services/fechamento.py:898`; `app/ponto/motor_calculo_v2.py:280–282`) | **Não reproduz:** não lê o subset nem preenche a rubrica. (`app/ponto/management/commands/diff_calculador.py:245–268`) | Calcula a dobra do dia e a identifica em campo próprio, em vez de copiar a property v2. (`app/ponto/calculador/regras.py:774–785`) |
-| **2. Escala certa:** parte de todo `periodos_ft` e mantém em `_ft_certa` somente quem passa em `_certa(colab.id, data_local_da_entrada, cache)`. (`app/ponto/services/fechamento.py:903–910`) | **Não reproduz esse filtro final:** soma todos os `periodos_ft`. (`app/ponto/management/commands/diff_calculador.py:263–268`) | **Reproduz a decisão certa/sem certa:** recebe `_certa(c.pk, k, cache)` e divide os minutos nos dois retornos de `folga_trabalhada_do_dia`. (`app/ponto/calculador/alimentacao.py:511`; `app/ponto/calculador/regras.py:395`, `:660–664`) |
-| **3. `feriado_vira_folga`:** somente dentro de `_ft_certa`, resolve o vínculo; se `feriado_vira_folga` for verdadeiro, move para `_ft_feriado`, retira de `_ft_certa` por identidade e acrescenta seus minutos/60 à base de HE100 feriado. (`app/ponto/services/fechamento.py:919–932`) | **Não reproduz:** esses minutos continuam somados como folga; não são transferidos para HE100 feriado. (`app/ponto/management/commands/diff_calculador.py:263–268`) | **Reproduz a transferência**, com a condição recebida `folga_e_feriado`: mantém folga zero e escreve `_certa/60` em HE100 feriado. (`app/ponto/calculador/alimentacao.py:508`; `app/ponto/calculador/regras.py:675–686`) |
-| **4. Folga final:** grava `round(sum(minutos_trabalhados de _ft_certa)/60, 2)`, após retirar os feriados. (`app/ponto/services/fechamento.py:926–934`) | **Não reproduz a seleção:** sua soma continua sendo a totalidade de `periodos_ft`. (`app/ponto/management/commands/diff_calculador.py:263–268`) | Escreve folga apenas no ramo `_certa` que não caiu em `_hora_feriado`. (`app/ponto/calculador/regras.py:680–686`) |
-| **5. Sem escala certa:** calcula o complemento por identidade, excluindo **tanto** `_ft_certa` **quanto** `_ft_feriado`; soma os minutos restantes a `horas_trabalhadas`. (`app/ponto/services/fechamento.py:948–953`) | **Não reproduz:** mantém esses minutos em folga; trabalhadas é somada somente do loop de `periodos`. (`app/ponto/management/commands/diff_calculador.py:247–253`, `:263–268`) | **Reproduz o destino em trabalhadas:** `_sem/60` vai para `horas_trabalhadas`, e folga fica zero. Nesse ramo, HE100 feriado é declarada em `nao_decide`, salvo a exceção `_hora_feriado`; não é afirmada como zero. (`app/ponto/calculador/regras.py:675–711`) |
-
-O juiz de escala certa retorna falso para vínculo `LIMBO` ou assinaturas `A2`/`A8` na competência do dia. O predicado `feriado_vira_folga` exige vínculo que não trabalha em feriado, ciclo permitido e feriado conforme o lugar do colaborador. (`app/escala/services/escala_certa.py:16–51`; `app/escala/models.py:1357–1363`).
-
-**A reprodução v3 não é literalmente idêntica em todos os insumos:** o fechamento consulta escala certa e feriado pela **data local de `p.entrada`**; o calculador usa **`k`, dia da jornada**, e sua alimentação exige adicionalmente `k in _feriados` para `folga_e_feriado`. (`app/ponto/services/fechamento.py:910`, `:922–924`; `app/ponto/calculador/alimentacao.py:63–73`, `:459–460`, `:508–512`).
-
-Há também um bloqueio anterior no próprio motor que pode zerar o período e colapsar suas pontas efetivas; ambos os lados recebem esses efeitos. Isso não executa a partição final acima. (`app/ponto/motor_calculo_v2.py:2396–2399`, `:1409–1421`; `app/ponto/management/commands/diff_calculador.py:263–268`; `app/ponto/calculador/alimentacao.py:73`, `:102–111`).
-
-Os valores mensais assim montados são persistidos por `fechamento.save()` no status aberto, ou por `QuerySet.update`, que inclui explicitamente as duas rubricas. (`app/ponto/services/fechamento.py:1096–1112`, `:1128–1138`).
-
-Mesmo `--periodos-do-fechamento` substitui apenas `aut.resultado`; o somatório posterior continua lendo todos os `periodos_ft`, sem consumir `_ft_certa`, `_ft_feriado` ou `_ft_sem_escala`. (`app/ponto/management/commands/diff_calculador.py:154–162`, `:263–268`).
-
-**(c) Campo feriado existente e omitido pelo diff**
-
-**Sim:**
-
-- `PeriodoCalculo.minutos_extra_100_feriado`, declarado como subset de `minutos_extra_100`. (`app/ponto/motor_calculo_v2.py:168–169`).
-- `ResultadoMes.horas_extra_100_feriado`, que soma esse campo em `self.periodos` e divide por 60; existe também `horas_extra_100_normal`, calculada pela diferença entre HE100 total e feriado. (`app/ponto/motor_calculo_v2.py:278–286`).
-
-Os escritores da dobra preenchem o subset com toda a duração ou todo o trabalhado do dia. O diff lê apenas `minutos_extra_100` para HE100 total e omite o subset feriado. (`app/ponto/motor_calculo_v2.py:2747–2750`, `:3030–3033`, `:3193–3196`, `:3275–3279`; `app/ponto/management/commands/diff_calculador.py:255–256`).
-
-Ler essa property recuperaria a **base** de feriado dos períodos normais; o acréscimo vindo de `_ft_feriado` é calculado separadamente pelo fechamento. (`app/ponto/motor_calculo_v2.py:280–282`; `app/ponto/services/fechamento.py:929–930`).
-
-_966 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_971 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
