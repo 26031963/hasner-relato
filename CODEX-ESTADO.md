@@ -1,7 +1,190 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 19:04** · publicado em **31/10/2026 19:04** (UTC-3)
+> Ultima resposta processada: **31/10/2026 19:04** · publicado em **31/10/2026 19:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 19:04 · sessao 6638e332e36a · GRADE-FOLGA-DO-VINCULO · censo · origem=Code
+
+As referências abreviadas abaixo pertencem a **`obra_qr_triagem.txt`, blocos `logs/grade_folga/…`**. A numeração começa na primeira linha após cada separador `=====` e inclui linhas em branco.
+
+**O item 8 não cabe nas cinco classes propostas:** o Codex viu os dois leitores, mas não há descarte documentado pela triagem. Forçar uma classe apagaria essa diferença. (`censo.r:85–86`; descarte: [nao verificado])
+
+1. **Pré-requisito de ensaio — (c), quanto à comprovação material. O requisito foi visto.**
+
+   **Pergunta:** “pouso antes do pre-requisito” (`v5/pv/v1.q:8`).
+
+   **Resposta:** “**Não daria o pouso como comprovado:** a v3 já está declarada, mas exige antes ensaio `--apply` com dias rejulgados, dias que movem minuto e `FORA-DO-HORIZONTE 0`.” (`v3.r:27`). [nao verificado]
+
+   A triagem registrou: “ensaio --apply v3 (rejulgados, minutos, FORA-DO-HORIZONTE 0) antes do pouso”. Portanto, houve alerta e reconhecimento; a suficiência do ensaio posterior depende da evidência da sombra. (`triagem_v3.txt:5`; `opus_final.txt:2`) [nao verificado]
+
+2. **Reversão, prova de frota e hashes FM/TXT — (c).**
+
+   **Pergunta:** “FechamentoMensal e TXT ficam intactos por construcao ou so no teste?” (`v5/pv/v1.q:5`).
+
+   **Resposta:** “**FechamentoMensal e TXT ficam fora das escritas diretas desse caminho por construção**, com testemunha adicional no teste”, seguida da ressalva: “Isso não constitui imunidade universal”. (`v5/pv/v1.r:46`).
+
+   A resposta também apontou que o teste observava menos que o registro inteiro. Isso é análise do caminho e da fixture; não comprova reversão em `logs/`, execução na frota ou hashes reais da 09. Esses são os artefatos ausentes relatados pelo opus. (`v5/pv/v1.r:48`; `opus_final.txt:3`; comprovação independente: [nao verificado])
+
+3. **`delta_chamados=0` antigo não certifica a alteração posterior — (c).**
+
+   **Pergunta:** “Quem le `ata['tipo_dia']` gravada na CelulaDia, e para que?” (`censo.q:6`).
+
+   **Resposta:** `dia_sem_trabalho` “Retorna verdadeiro se `cel.trabalha is False` **ou** se a ata tem tipo preenchido diferente de `'trabalho'`.” (`censo.r:99`).
+
+   Portanto, o consumidor foi visto; não cabe atribuir ao Codex desconhecimento desse elo. A validade do delta depois de `836c57b7` exige nova comparação material, que não é demonstrada por essa leitura estática. (`censo.r:99`; `opus_final.txt:4`; delta posterior: [nao verificado])
+
+4. **“Sem `--forcar` não rejulga a 09” — (b), alerta conhecido afastado pela decisão posterior.**
+
+   **Pergunta:** “E sem `--forcar` (o cron de prod), em que condicoes um dia de competencia 2026-09 e rejulgado (impressao muda? quais insumos compoem a impressao)?” (`v4_fora/q1.q:5`).
+
+   **Resposta:** “**Sim, pelo componente `cobparcial`, mesmo mantendo `regra:1` e o mesmo `tipo_dia` final.**” E: “O cartório incorpora esse estado como `cobparcial:1:<estado>`, sem filtro por versão.” (`v4_fora/q1.r:48,53`).
+
+   **Triagem e motivo:** “o pouso nao rejulga a 09 (horizonte 2026-10, provado por mutante)”. A decisão tomou o mutante como prova geral apesar do mecanismo anteriormente identificado. As sete células concretas são dado do opus, não reprodução do Codex. (`v5/pv/triagem_v1.txt:3`; `opus_final.txt:5`)
+
+5. **Pauta DP da 09 — (b), explicitamente adiada.**
+
+   **Pergunta:** “Quem gera a Pauta DP da diferenca pago x devido e onde?” (`v5/pv/v1.q:5`).
+
+   **Resposta:** “Não encontrei chamada correspondente no rejulgamento desta cura; a declaração da v3 apenas promete a Pauta.” (`v5/pv/v1.r:50`).
+
+   **Triagem e motivo:** “DECIDIDO PELA LEI (3, Pauta DP nao encadeada)”, invocando “a Pauta DP da 09 e ato proprio, depois”, e destinando a `BACKLOG GRADE-09-PAUTA`. Logo, a lacuna foi apontada e conscientemente adiada. (`v5/pv/triagem_v1.txt:3`)
+
+6. **`_folga_avulsa` mantém outra regra de validade — (b), literalmente FILA.**
+
+   **Pergunta:** “Algum outro sitio decide "esta FolgaDia vale neste dia" com regra diferente da de folga_lancada_vale_no_dia e alimenta a mesma lavra/ata/chamado?” (`v1.q:11`).
+
+   **Resposta:** “o veto consulta **qualquer FolgaDia da pessoa/data**, sem validar proveniência/vínculo”, permitindo que calendário antigo rejeitado pelo predicado ainda impeça lançamento. (`v1.r:109`).
+
+   **Triagem e motivo:** “veto de _folga_avulsa […] -> FILA: respondem "pode lancar?", nao a lavra”. O mesmo destino foi repetido na volta 2. (`triagem_v1.txt:7`; `triagem_v2.txt:5`)
+
+7. **`_folga_do_dia` ignora manual do vínculo antigo — (b), literalmente FILA.**
+
+   **Pergunta:** “Algum outro sitio decide "esta FolgaDia vale neste dia" com regra diferente da de folga_lancada_vale_no_dia e alimenta a mesma lavra/ata/chamado?” (`v1.q:11`).
+
+   **Resposta:** “Uma manual presa ao velho vale pelo predicado proposto, mas não é reconhecida ali. Esse booleano decide o caminho que carimba/fecha a pergunta e o fio.” (`v1.r:107`).
+
+   **Triagem e motivo:** `declarar_dia.o_dia_ja_e_folga` foi enviado à FILA porque responderia “pode lancar?”, “nao a lavra”. Portanto, o Codex apontou inclusive a consequência sobre chamado; a triagem afastou o bloqueio. (`triagem_v1.txt:7`; `triagem_v2.txt:5`)
+
+8. **Leitores com regra velha — sem encaixe estrito nas classes.**
+
+   **Pergunta:** “Que outros sitios do codigo decidem se uma `FolgaDia` vale como folga de um dia”; a pergunta exige listar cada sítio e seu tratamento de calendário e manual de outro vínculo. (`censo.q:5`).
+
+   **Resposta sobre `fase_conflitante`:** “Lê fotos de cada vínculo ativo, sem filtro de origem/vigência por data”. (`censo.r:85`).
+
+   **Resposta sobre `rejulgar_ausencia_em_folga`:** “Seleciona pares pessoa/data por foto da empresa/janela, sem distinguir origem ou vínculo diário.” (`censo.r:86`).
+
+   Assim, **o Codex viu ambos**. Descarte pela triagem: **[nao verificado]**. A situação documentada é “visto no censo, sem destino demonstrado”; classificá-la como (a), (d) ou (e) negaria os trechos acima, e classificá-la como (b) inventaria uma decisão. (`censo.q:5`; `censo.r:85–86`)
+
+9. **Predicado novo sem juiz/corte e completude indevida — (a), quanto à falha estrutural específica.**
+
+   **Pergunta:** “com JUIZES.md anexo. Qual e o juiz unico de "este dia e folga?" e quantos sitios respondem essa pergunta depois do diff?” (`v5/pv/v1.q:3`).
+
+   **Resposta:** “**Um predicado:** `folga_lancada_vale_no_dia`”; “**Um seletor**”; “**Dois sítios consumidores:** precedência e overlay da grade.” (`v5/pv/v1.r:26–28`).
+
+   A resposta apresentou essa centralização sem apontar a falta específica de registro/corte cobrada pelo opus. O tema autoridade/juiz estava expressamente perguntado. Os resíduos 6 e 7, entretanto, já haviam sido vistos e enfileirados; essa parte do item composto não é descoberta nova. (`v5/pv/v1.q:3`; `v5/pv/v1.r:26–28`; `triagem_v2.txt:5`; `opus_final.txt:10`)
+
+   A correspondência da LEI-AKITA ao commit `362c6d8a`: **[nao verificado]**.
+
+10. **`red_aval.log` era verde; RED real em `red0_aval.log` — (c).** [nao verificado]
+
+    **Pergunta:** “Os RED mordem? Que mutante simples […] cada teste novo deixaria passar?” (`v5/pv/v1.q:6`).
+
+    **Resposta:** “A tabela descreve **mordida prevista por inspeção**, não execução de mutantes. Resultado RED/GREEN: **[não verificado]**.” (`v5/pv/v1.r:56`).
+
+    A resposta delimitou a inspeção; não certificou os arquivos de execução. A troca concreta dos rótulos é informação do opus, cuja conferência independente permanece **[nao verificado]**. (`v5/pv/v1.r:56`; `opus_final.txt:11`)
+
+Contagem das atribuições acima:
+
+| Classe | Itens | Total |
+|---|---|---:|
+| **(a)** | 9, na falha estrutural específica | **1** |
+| **(b)** | 4, 5, 6, 7 | **4** |
+| **(c)** | 1, 2, 3, 10, na comprovação material | **4** |
+| **(d)** | Nenhum identificado | **0** |
+| **(e)** | Nenhum item integral identificado | **0** |
+| **Sem encaixe nas definições** | 8: visto, sem descarte demonstrado | **1** |
+
+A exceção que impede fechar os dez nas cinco classes está documentada no próprio censo. (`censo.r:85–86`; descarte correspondente: [nao verificado])
+
+## 31/10 19:04 · sessao ad8bd6de03f7 · PADRAO-DE-CIMA · verificador · origem=Code
+
+**Pré-veredito: REPROVA.** O diff corrige os defeitos originais de fotografia e publicação do escopo, mas ainda há caminhos de dúvida para LIVRE e mortes acidentais aceitas como mordida. **Certeza alta sobre esses fluxos; ocorrência em produção [não verificado].** (`bin/disjuntor.py:1493`, `bin/disjuntor.py:1261`, `bin/tests/test_disjuntor.sh:83`)
+
+Não executei as suítes, pois criam e removem arquivos. Fiz leitura estática e sondas com funções isoladas em memória, sem persistência. Resultado integral dos selos: **[não verificado]**. (`bin/tests/test_disjuntor.sh:39`, `bin/tests/test_disjuntor.sh:41`, `bin/tests/test_padrao_de_cima.sh:29`, `bin/tests/test_padrao_de_cima.sh:30`)
+
+Os itens A–F ficam assim; os graus abaixo são de leitura do código.
+
+| Item | Cura na origem | O que ainda escapa |
+|---|---|---|
+| **A — parcialmente resolvido; alta** | No caminho normal, RELATO ilegível produz `nao_sei` com `duvida=None`; `estado_pdc` recusa as obras não reconhecidas como PARADAS. (`bin/disjuntor.py:1449`, `bin/disjuntor.py:1502`, `bin/disjuntor.py:1505`) | Se a decisão levanta, o fallback retorna **LIVRE fora de `esc['disparadas']`**, ignorando a dúvida e até `obras_com_evento=None`. (`bin/disjuntor.py:1487`, `bin/disjuntor.py:1491`, `bin/disjuntor.py:1493`) |
+| **B — defeito original resolvido; alta** | Cada entidade disparada ganha fotografia normalizada do topo; SHA presente nela não libera nem é consumido. Redisparo reinicia a fotografia. (`bin/disjuntor.py:1390`, `bin/disjuntor.py:1396`, `bin/disjuntor.py:1417`, `bin/disjuntor.py:1430`) | A fotografia representa a observação feita dentro da transição; não há exclusão dos escritores do RELATO nem reobservação antes de publicar, como existe no B3. (`bin/disjuntor.py:1361`, `bin/disjuntor.py:1431`, `bin/disjuntor.py:746`, `app/core/esteira_vigia.py:848`) |
+| **C — corrida original resolvida; alta** | `_pdc_grava_escopo` passou ao anúncio executado antes de fechar a trava do estado. Transições cooperantes deixam de publicar o escopo em ordem invertida. (`bin/disjuntor.py:1439`, `bin/disjuntor.py:293`, `bin/disjuntor.py:296`) | Estado e escopo continuam duas publicações separadas. Falha do escopo mantém o anterior; o fallback não verifica seu frescor. (`bin/disjuntor.py:281`, `bin/disjuntor.py:1465`, `bin/disjuntor.py:1466`, `bin/disjuntor.py:1490`) |
+| **D — parcialmente resolvido; alta** | Exceção propagada por `entidades` marca a obra em dúvida e deixa o evento fora do estado, permitindo nova tentativa. (`bin/disjuntor.py:1376`, `bin/disjuntor.py:1379`, `bin/disjuntor.py:1383`, `bin/disjuntor.py:1451`) | Falhas internas ainda são engolidas: `_so_modelos` continua após erro; `_por_sitio` transforma fonte ilegível em ausência. Isso pode persistir `entidades=[]` ou programa alternativo. Eventos já persistidos — inclusive vazios herdados da v3 — não são reclassificados. (`bin/disjuntor.py:1234`, `bin/disjuntor.py:1261`, `bin/disjuntor.py:1283`, `bin/disjuntor.py:1376`, `bin/disjuntor.py:1384`) |
+| **E — parcialmente resolvido; alta** | O mutante passa a importar `H`; a morte estrutural por `KeyError` foi substituída pela retirada da fotografia. Há sonda para cinco classes de exceção. (`bin/tests/test_disjuntor.sh:1714`, `bin/tests/test_padrao_de_cima.sh:559`, `bin/tests/test_padrao_de_cima.sh:562`, `bin/tests/test_disjuntor.sh:54`) | `_morre` ainda aceita qualquer retorno não zero sem contaminação registrada; não comprova assert do caso. Exceções fora da lista e permissões amplas por prefixo continuam aceitando mortes acidentais. (`bin/tests/test_disjuntor.sh:77`, `bin/tests/test_disjuntor.sh:79`, `bin/tests/test_disjuntor.sh:83`) |
+| **F — lacunas apontadas resolvidas no selo; alta** | Compara o mapa inteiro com o BACKLOG; testa chave plantada, O261 retirada e destino trocado. Exercita cada fonte de vocabulário ausente e os dois mutantes `raise → pass`. (`bin/tests/test_padrao_de_cima.sh:486`, `bin/tests/test_padrao_de_cima.sh:500`, `bin/tests/test_padrao_de_cima.sh:503`, `bin/tests/test_padrao_de_cima.sh:451`, `bin/tests/test_padrao_de_cima.sh:582`) | A guarda do vocabulário já existia; a alteração é de cobertura. `PROGRAMAS` continua cadastro literal independente, reconciliado pelo selo segundo três formas textuais do BACKLOG. (`bin/padrao_vocab.py:46`, `bin/padrao_vocab.py:56`, `bin/disjuntor.py:1111`, `bin/tests/test_padrao_de_cima.sh:475`, `bin/tests/test_padrao_de_cima.sh:483`) |
+
+Quanto a **quem escreve e quem lê**, esta é a cadeia localizada. Certeza alta sobre os consumidores citados; autoria humana concreta e execução em produção **[não verificado]**.
+
+| Campo ou arquivo | Quem escreve | Quem lê |
+|---|---|---|
+| **`logs/sessao/disjuntor_estado.json`** | `_com_estado` lê, modifica e publica por `replace` sob flock. Compartilhado com B1, B3, rearme, triagem e B4. (`bin/disjuntor.py:260`, `bin/disjuntor.py:275`, `bin/disjuntor.py:281`, `bin/disjuntor.py:494`, `bin/disjuntor.py:845`, `bin/disjuntor.py:986`, `bin/disjuntor.py:1059`, `bin/disjuntor.py:1992`) | Transições pela mesma porta; leitores de painel usam `ler_estado`, sem tomar essa trava. (`bin/disjuntor.py:267`, `bin/disjuntor.py:299`, `bin/disjuntor.py:1567`) |
+| **`pdc.eventos[sha]`: `visto_em`, `tipo`, `obra`, `entidades`** | `decide_pdc`, somente para SHA ainda ausente. Falha propagada não insere evento. (`bin/disjuntor.py:1376`, `bin/disjuntor.py:1383`, `bin/disjuntor.py:1384`) | Janela, agrupamento, nomeação e painel. `visto_em` não é renovado na releitura. (`bin/disjuntor.py:1288`, `bin/disjuntor.py:1298`, `bin/disjuntor.py:1422`, `bin/disjuntor.py:1568`) |
+| **`pdc.nomeados`, `libera_vistas`, `disparadas`** | A transição consome SHA, nomeia pares evento/entidade e recalcula disparadas. (`bin/disjuntor.py:1419`, `bin/disjuntor.py:1424`, `bin/disjuntor.py:1428`) | Disparo, proteção contra reutilização, comparação com episódio anterior e painel. (`bin/disjuntor.py:1296`, `bin/disjuntor.py:1302`, `bin/disjuntor.py:1389`, `bin/disjuntor.py:1414`, `bin/disjuntor.py:1576`) |
+| **`pdc.fotos[entidade]`** | A transição cria/reinicia, fotografa os hashes das linhas e remove ao encerrar episódio. (`bin/disjuntor.py:1387`, `bin/disjuntor.py:1390`, `bin/disjuntor.py:1396`, `bin/disjuntor.py:1429`) | A própria decisão bloqueia liberação presente na fotografia. O painel não consome esse campo. (`bin/disjuntor.py:1417`, `bin/disjuntor.py:1567`, `bin/disjuntor.py:1575`) |
+| **`nao_sei` / `duvida`** | Atributos **em memória** de `DecisaoPDC`, preenchidos após a transição. (`bin/disjuntor.py:1341`, `bin/disjuntor.py:1447`, `bin/disjuntor.py:1449`, `bin/disjuntor.py:1451`) | `estado_pdc`; depois `_nega_pdc` e CLI traduzem para recusa. Não são serializados no escopo. (`bin/disjuntor.py:1505`, `bin/disjuntor.py:1523`, `bin/disjuntor.py:1540`, `bin/disjuntor.py:1460`) |
+| **`logs/padrao_de_cima_escopo.json`: `em`, `disparadas`, `obras_com_evento`** | `_pdc_grava_escopo`, chamado ainda sob a trava do estado. (`bin/disjuntor.py:1439`, `bin/disjuntor.py:1460`, `bin/disjuntor.py:1465`) | Fallback de `estado_pdc`; nesse ramo usa apenas `disparadas`, sem validar `em` ou consultar `obras_com_evento`. (`bin/disjuntor.py:1474`, `bin/disjuntor.py:1489`, `bin/disjuntor.py:1493`) |
+| **RELATO: topo e corpo** | Topo manual é reconhecido e preservado por `no_relato`; negativas passam por essa porta. **Também escrevem fora dela** `gerar_cortes` e `deploy_agendado`. (`app/core/esteira_vigia.py:829`, `bin/disjuntor.py:236`, `bin/gerar_cortes.py:136`, `bin/deploy_agendado.sh:44`) | PDC varre corpo e recorta topo; B3 lê topo; Stop lê PAREI/ESPERANDO e verifica prova; handoff e publicação também leem. (`bin/disjuntor.py:1361`, `bin/disjuntor.py:1369`, `bin/disjuntor.py:1375`, `bin/disjuntor.py:677`, `bin/hook_stop_fila1.py:407`, `bin/hook_stop_fila1.py:1176`, `bin/handoff_sessao.sh:92`, `bin/relato.sh:56`) |
+| **Modelos/fontes citadas; `PROGRAMAS`; BACKLOG** | Cadastro de programas é literal no código; o selo altera cópias para testar divergências. (`bin/disjuntor.py:1111`, `bin/tests/test_padrao_de_cima.sh:499`, `bin/tests/test_padrao_de_cima.sh:506`) | Resolvedor lê modelos e fontes; programa só entra sem entidade. BACKLOG é consultado pelo selo, não pelo resolvedor. (`bin/disjuntor.py:1217`, `bin/disjuntor.py:1233`, `bin/disjuntor.py:1259`, `bin/disjuntor.py:1283`, `bin/tests/test_padrao_de_cima.sh:469`) |
+| **GLOSSARIO / PLANO-PADROES** | Esses leitores não os escrevem. Autor efetivo **[não verificado]**. (`bin/disjuntor.py:1331`, `bin/padrao_vocab.py:41`, `bin/padrao_vocab.py:48`) | Ambos alimentam `padrao_vocab.vocabulario`, chamado por PDC e LEI-AKITA. PDC lê disco; LEI-AKITA lê o commit por `git show`. (`bin/disjuntor.py:1334`, `bin/tests/test_lei_akita.sh:77`, `bin/tests/test_lei_akita.sh:89`) |
+| **`disjuntor.log`** | `trilha`; anúncios PDC após gravação válida; negativas do PreToolUse antes da resposta. (`bin/disjuntor.py:135`, `bin/disjuntor.py:1440`, `bin/disjuntor.py:2014`) | `ler`/`linha` apresentam contadores, incluindo PDC. (`bin/disjuntor.py:2085`, `bin/disjuntor.py:2107`, `bin/disjuntor.py:2220`) |
+| **Artefatos dos selos: cópias, fixtures, `sitecustomize.py`, `.exc`** | Scripts criam cópias e mutantes; callback da sonda acrescenta tipo/arquivo/função ao `.exc`. (`bin/tests/test_disjuntor.sh:48`, `bin/tests/test_disjuntor.sh:62`, `bin/tests/test_padrao_de_cima.sh:525`, `bin/tests/test_padrao_de_cima.sh:535`) | `_excecao` lê o `.exc`; casos leem fixtures, estado, escopo e saídas das portas. (`bin/tests/test_disjuntor.sh:77`, `bin/tests/test_padrao_de_cima.sh:124`, `bin/tests/test_padrao_de_cima.sh:155`) |
+
+As configurações `.claude` chamam **caminhos absolutos da árvore viva**, tanto no Stop quanto no PreToolUse. Que executem este hash em produção: **[não verificado]**. (`.claude/settings.json:9`, `.claude/settings.json:68`)
+
+Sobre **NAO SEI sair como LIVRE**, há quatro situações distintas:
+
+1. **Consulta normal: corrigida.** PARADA tem precedência; caso contrário, RELATO ilegível recusa todas, e falha propagada do resolvedor recusa a obra afetada. PreToolUse transforma NAO_SEI em negativa; CLI retorna 4; wrapper recusa qualquer rc não zero. **Alta.** (`bin/disjuntor.py:1449`, `bin/disjuntor.py:1451`, `bin/disjuntor.py:1502`, `bin/disjuntor.py:1526`, `bin/disjuntor.py:1540`, `bin/codex_pergunta.sh:168`)
+
+2. **Fallback por escopo: ainda LIVRE.** Uma decisão com dúvida pode publicar escopo sem a obra em `disparadas`; depois, estado ilegível ou trava ocupada conduz a `return PDC_LIVRE`. Nem `obras_com_evento=None` impede isso. As sondas em memória confirmaram esse retorno para escopo com `None` e para escopo contendo a obra em `obras_com_evento`. **Alta, condicional às falhas indicadas.** (`bin/disjuntor.py:1451`, `bin/disjuntor.py:1461`, `bin/disjuntor.py:265`, `bin/disjuntor.py:1487`, `bin/disjuntor.py:1493`)
+
+3. **Falha interna do resolvedor: dúvida não reconhecida.** Fonte citada ilegível pode retornar `[]`, persistido como evento resolvido; depois não há nova tentativa para aquele SHA. A sonda isolada confirmou `entidades=[]` nessa condição. **Alta.** (`bin/disjuntor.py:1261`, `bin/disjuntor.py:1264`, `bin/disjuntor.py:1285`, `bin/disjuntor.py:1376`, `bin/disjuntor.py:1384`)
+
+4. **Chamadores que não consultam ou não exibem PDC.** Agent sem obra reconhecida pula o gate; wrapper só consulta PDC no papel `verificador`; chave desligada permite explicitamente. Stop não chama PDC. Painel lê o estado persistido e pode mostrar zero disparadas sem representar a dúvida — **não imprime literalmente LIVRE**. **Alta.** (`bin/disjuntor.py:1978`, `bin/codex_pergunta.sh:164`, `bin/disjuntor.py:1534`, `bin/hook_stop_fila1.py:1048`, `bin/hook_stop_fila1.py:1058`, `bin/disjuntor.py:1567`, `bin/disjuntor.py:2220`)
+
+Há ainda um escape condicional no **envelope excepcional do PreToolUse**: `_ramo_pdc` relê RELATO; se a obra não aparecer nessa segunda versão, pode retornar `None` e chegar a “ferramenta liberada”. **Alta sobre o fluxo; concorrência efetiva [não verificado].** (`bin/disjuntor.py:1557`, `bin/disjuntor.py:1561`, `bin/disjuntor.py:2028`, `bin/disjuntor.py:2037`)
+
+Quanto à **foto e TOCTOU**, corpo, topo e fotografia PDC usam os mesmos bytes, obtidos dentro da trava do estado. Redisparo redefine a foto e a recompõe nessa mesma trava; estado anterior à v4 recebe fotografia tardia. **Alta.** (`bin/disjuntor.py:260`, `bin/disjuntor.py:275`, `bin/disjuntor.py:1361`, `bin/disjuntor.py:1369`, `bin/disjuntor.py:1390`, `bin/disjuntor.py:1392`, `bin/disjuntor.py:1396`)
+
+**Existem leituras fora dessa trava:** fallback de `estado_pdc`, envelope excepcional e leitores do Stop. Podem observar outro RELATO, mas não compõem a fotografia interna de `decide_pdc`. **Alta.** (`bin/disjuntor.py:1494`, `bin/disjuntor.py:1557`, `bin/hook_stop_fila1.py:407`, `bin/hook_stop_fila1.py:429`)
+
+A trava do estado também não congela RELATO: o escritor central trava seu diretório, outra trava. Portanto uma escrita após o último `stat` pode deixar a fotografia anterior à publicação do estado. PDC não reobserva; B3 faz uma segunda observação e une as duas. **Alta sobre a diferença; aceitação de linha nessa janela é inferência condicional, ocorrência [não verificado].** (`bin/disjuntor.py:256`, `bin/disjuntor.py:711`, `bin/disjuntor.py:1396`, `bin/disjuntor.py:1431`, `app/core/esteira_vigia.py:844`, `app/core/esteira_vigia.py:848`, `bin/disjuntor.py:746`, `bin/disjuntor.py:748`)
+
+Sobre **a sonda e as três exceções declaradas**:
+
+- **`try/except` no próprio código não esconde, sozinho, uma das cinco classes monitoradas.** O callback está registrado em `RAISE`, antes do tratamento posterior, filtrando pelo arquivo da cópia. **Alta.** (`bin/tests/test_disjuntor.sh:54`, `bin/tests/test_disjuntor.sh:57`, `bin/tests/test_disjuntor.sh:60`, `bin/tests/test_disjuntor.sh:64`)
+- **Outros tipos escapam.** `ValueError`, `RuntimeError`, `OSError`, entre outros, não entram na tupla; retorno não zero com `.exc` vazio é aceito. Contraexemplo estático: `raise ValueError` no começo de `estado_pdc` faz `i14_mesma` falhar no rc esperado, sem contaminação registrada. **Alta pelo fluxo; execução desse mutante [não verificado].** (`bin/tests/test_disjuntor.sh:54`, `bin/tests/test_disjuntor.sh:77`, `bin/tests/test_disjuntor.sh:84`, `bin/disjuntor.py:1481`, `bin/tests/test_padrao_de_cima.sh:150`)
+- **A exceção declarada não precisa ocorrer.** Log vazio é aceito. Se o caso passar, o mutante é corretamente acusado de sobreviver; se falhar por outro motivo não monitorado, pode ser contado como morto sem levantar a declarada. Logo, falta uma obrigação positiva de observar o erro esperado. **Alta.** (`bin/tests/test_disjuntor.sh:77`, `bin/tests/test_disjuntor.sh:79`, `bin/tests/test_disjuntor.sh:84`, `bin/tests/test_disjuntor.sh:1537`)
+
+| Mutante | Exceção perdoada pelo filtro — certeza alta |
+|---|---|
+| `cx8-ausente-sem-falha` | Qualquer `AttributeError` em **qualquer função** de `bin/disjuntor.py`. (`bin/tests/test_disjuntor.sh:1652`) |
+| `B3-ref-fora-da-pergunta` | Qualquer `TypeError` em `linhas_libera_b3`, sem identificar a operação ou linha. (`bin/tests/test_disjuntor.sh:1706`) |
+| `P7-tipo-solto` | Qualquer `AttributeError` em **qualquer função** de `bin/statusline_cota.py`. (`bin/tests/test_disjuntor.sh:1775`) |
+
+**Sim, o prefixo do arquivo inteiro aceita exceção de outro sítio.** O log guarda tipo, arquivo e nome da função; o filtro usa substring fixa, sem identificação da linha. Os autotestes acrescentados não cobrem erro fora dos cinco tipos, ausência da exceção esperada ou mesmo tipo em outro sítio permitido. **Alta.** (`bin/tests/test_disjuntor.sh:62`, `bin/tests/test_disjuntor.sh:79`, `bin/tests/test_disjuntor.sh:1839`, `bin/tests/test_padrao_de_cima.sh:592`)
+
+Por fim, as **oito classes históricas procuradas**:
+
+| Classe | Resultado e grau de certeza |
+|---|---|
+| **Segundo juiz duplicando registrado** | **Não demonstrado no recorte.** PDC reutiliza censo e vocabulário; `_so_modelos` acrescenta filtro de herança ao catálogo amplo. Não localizei reprodução dos juízes de negócio registrados; ausência global **[não verificado]**. (`bin/disjuntor.py:1198`, `bin/disjuntor.py:1217`, `bin/disjuntor.py:1219`, `bin/disjuntor.py:1334`, `app/core/censo_escritas.py:90`, `app/core/juizes.py:156`, `app/core/juizes.py:1255`) |
+| **Segundo escritor fora da porta** | **Presente; alta.** `gerar_cortes` e `deploy_agendado` leem/regravam RELATO sem o flock central; resíduo documentado pelo próprio escritor. (`bin/gerar_cortes.py:117`, `bin/gerar_cortes.py:136`, `bin/deploy_agendado.sh:37`, `bin/deploy_agendado.sh:44`, `app/core/esteira_vigia.py:839`) |
+| **Relógio fora da borda** | **Presente; alta.** Hooks injetam `agora`; CLI deixa decisões lerem `time.time()`. Trilha e triagem também têm relógio próprio. (`bin/disjuntor.py:2007`, `bin/disjuntor.py:1979`, `bin/disjuntor.py:1536`, `bin/disjuntor.py:1354`, `bin/disjuntor.py:904`, `bin/disjuntor.py:140`, `bin/disjuntor.py:840`) |
+| **Leitura dupla com foto diferente** | **Corpo/topo PDC corrigidos; resíduos presentes, alta.** Censo e filtro de herança leem modelos separadamente; painel abre a trilha quatro vezes; fallback relê RELATO. (`bin/disjuntor.py:1369`, `app/core/censo_escritas.py:105`, `bin/disjuntor.py:1233`, `bin/disjuntor.py:2085`, `bin/disjuntor.py:2088`, `bin/disjuntor.py:1557`) |
+| **Selo sem mordida** | **Classe ainda aberta; alta.** Há testes comportamentais e controles, mas o harness aceita mortes não identificadas como assert e exceções perdoáveis por prefixo amplo. (`bin/tests/test_padrao_de_cima.sh:529`, `bin/tests/test_padrao_de_cima.sh:565`, `bin/tests/test_disjuntor.sh:79`, `bin/tests/test_disjuntor.sh:83`) |
+| **Ordem de trava** | **Sem inversão localizada nos percursos examinados; alta local.** Wrapper: slot → resposta → estado; triagem: resposta compartilhada → estado. C corrige publicação do escopo fora da trava. Ausência global de inversão **[não verificado]**. (`bin/codex_pergunta.sh:145`, `bin/codex_pergunta.sh:163`, `bin/codex_pergunta.sh:165`, `bin/codex_pergunta.sh:168`, `bin/disjuntor.py:813`, `bin/disjuntor.py:845`, `bin/disjuntor.py:1439`) |
+| **Fallback** | **Presente e liberador; alta.** Escopo incompleto/antigo pode dar LIVRE; falha interna pode virar entidade vazia. Programa alternativo continua expressamente cadastrado. (`bin/disjuntor.py:1493`, `bin/disjuntor.py:1466`, `bin/disjuntor.py:1261`, `bin/disjuntor.py:1283`) |
+| **argv com dado sensível** | **Superfície presente; conteúdo sensível efetivo [não verificado].** Gates passam `$OBRA`; o valor só é validado como não vazio, sem raspagem. Pergunta e anexos entram no Codex por stdin. (`bin/codex_pergunta.sh:44`, `bin/codex_pergunta.sh:45`, `bin/codex_pergunta.sh:165`, `bin/codex_pergunta.sh:168`, `bin/codex_pergunta.sh:178`) |
 
 ## 31/10 19:04 · sessao 063a033030e1 · - · - · origem=Ronald (tmux)
 
@@ -869,59 +1052,4 @@ Alta certeza por leitura estática; execução dos casos e resultados em produç
 
 - **Derivação paralela:** a regra estreita antiga foi removida do overlay, que delega ao mesmo seletor (`app/escala/utils.py:1115`, `app/escala/utils.py:1124`). A regra ampla segue espalhada nos sítios acima; a própria pendência de status do calendário permanece registrada (`app/core/juizes.py:819`).
 
-## 31/10 18:10 · sessao 86998d0f1cc8 · - · - · origem=Ronald (tmux)
-
-Auditoria estática, sem executar testes nem acessar banco/log. Certeza **alta** = fluxo diretamente lido; **média** = conclusão negativa por busca/caminho; execução real de RED/suite/ensaio = **[não verificado]**. [nao verificado]
-
-1. **Exportada pode mudar na célula/ata, sem trocar DNA por esse caminho — alta.** `processar_cartorio` seleciona todas as células passadas da empresa, sem piso por competência, e repassa `--forcar`: `app/ponto/management/commands/processar_cartorio.py:49`, `:61`, `:65`. O cartório monta a grade viva em `app/ponto/services/cartorio.py:945`; `ata_do_dia` copia `tipo_dia` dessa grade em `:581`; a lavra usa essa ata em `:1571`, `:1573`; salva ata/veredito e carimbos pela porta em `:1593`. O escritor físico da ata é `app/ponto/portas/celula.py:735`, `:767`; `carimbar` reúne campos e chama `salvar_e_emitir` em `:805`, `:807`; save + evento estão no mesmo atomic em `:639`. Não há regeneração de DNA nesse fluxo: campos persistidos estão delimitados em `:773`, `:805`.
-
-2. **Fechamento/TXT intactos: propriedade estrutural deste caminho, com testemunha de teste; não imunidade universal — alta/média.** Cartório grava pelas portas acima; a porta salva `CelulaDia` e cria `EventoCelula`, `app/ponto/portas/celula.py:630`, `:640`. O teste exerce o command real e confere mudança de ata junto à manutenção do hash e TXT, `app/ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:83`, `:99`, `:103`, `:104`, `:106`. Contudo, “só REGEN pode alterar o fechamento” não é verdade universal da árvore: `recalcular_fechamento_mes` admite exportadas e tem escritor canônico direto `FechamentoMensal.objects.filter(...).update(...)`, `app/ponto/services/fechamento.py:469`, `:516`, `:1128`. A trava do `FechamentoMensal.save` só cobre status aprovado e é contornada deliberadamente pelo update canônico, `app/ponto/models.py:492`, `:498`; `app/ponto/services/fechamento.py:1115`.
-
-3. **Pauta DP da cura não está conectada — média/alta.** A promessa está apenas na declaração da v3: `app/ponto/services/cartorio.py:179`. Código real de pago x devido existe em `app/chamados/services/passivo_validado.py::_pauta_da_competencia`, `:148`; monta “pago -> devido” em `:178`, `:192`, grava cabeçalho e filhas pela porta `escrever` em `:229`, `:233`. Chamador vem de outro fluxo, plantio do passivo seguido de REGEN, e só gera essa pauta se mudou o hash, `:427`, `:438`, `:442`, `:443`. REGEN devolve antes/depois, hashes, campos alterados e réguas em `app/ponto/portas/regen_exportada.py:216`; não cria a pauta por si. Logo não se pode afirmar que rejulgar pela v5 automaticamente entrega Pauta DP; entrega dessa diferença específica = **[não verificado]**. Há comentário antigo explicitando que Pauta é ato próprio posterior, `app/ponto/services/cartorio.py:155`.
-
-4. **Portão de versão não sobrevive como seleção de regra/render — alta/média.** Busca de símbolos em todos os `.py` encontrou uso produtivo de `REGRA_VERSOES` e `versao_para` só no cartório: declaração `app/ponto/services/cartorio.py:110`, validação `:181`, leitor puro `:192`, cache `:959`. Versão entra na impressão em `:366`, consumida nos ramos nunca-bateu `:1013` e normal `:1165`; igualdade da impressão pula sem `--forcar`, `:1018`, `:1175`. Portanto há horizonte de relavratura automática, não seleção de regra da grade. `VERSAO_GRADE_FOLGA`, `_ata_abaixo_da_regra_de_folga` e `OsQuatroLeitoresChegamPeloPortaoTest` aparecem apenas em documentação histórica, `app/escala/tests/test_grade_folga_vale_em_toda_competencia.py:7`, `:15`; nenhuma definição/chamada viva encontrada. A afirmação negativa vem de busca, portanto certeza média.
-
-5. **Testes da exportada têm mordida parcial — alta por inspeção, resultado RED [não verificado].** [nao verificado]
-   - `test_MORDE_rejulgado...`, `app/ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:92`, deveria matar a restauração de regra velha no escritor/ata, pois exige folga→trabalho. Sozinho deixa passar mutação que altera fechamento/TXT junto.
-   - `test_o_gravado...`, `:97`, exige a mudança de ata e invariância dos observados. Deixa passar mutante que toca só campos excluídos do hash: `atualizado_em`, `aprovado_em`, `aprovado_por`, `previsto_em`, `derivado_em` etc., `app/ponto/portas/regen_exportada.py:37`, filtrados em `:56`. Não é igualdade da linha inteira.
-   - `_txt`, teste `:79`, compara apenas `(hash_sha256, conteudo, total_linhas, invalidada_em)` do registro antigo. Deixa passar criação de nova exportação vigente e mudança de outros metadados. [nao verificado]
-   - `test_a_testemunha...`, `:108`, exige só igualdade entre ata/grade no dia corrigido e trabalho no velho; mutante que faz ambos responderem folga no dia corrigido passaria essa função isolada, `:113`.
-   - `test_premissa...`, `:86`, não prova correção, só fixture/versão.
-
-6. **Relógio fora do parâmetro injetado já existe — alta, preexistente ao diff.** `julgar_celula(..., agora=None)` recebe relógio em `app/ponto/services/cartorio.py:1700`, mas calcula `hoje = _tz.localdate()` em `:1705` e compara `_tz.now()` com fim do turno em `:1726`; só depois usa o `agora` fornecido em `:1729`. Uma simulação com `agora` histórico cruza dois relógios. No command, relógio está na borda, `app/ponto/management/commands/processar_cartorio.py:38`. `versao_para` é puro e sem relógio, `app/ponto/services/cartorio.py:205`.
-
-7. **Ordem de trava: nenhum lock novo no diff; sem inversão demonstrada — média.** A ordem da casa é Disputa→Colaborador, `app/chamados/models.py:841`; consumidor de eventos declara que não toma esses locks por conta própria, `app/chamados/reconciliador.py:1268`. A porta da célula faz atomic curto save+evento, `app/ponto/portas/celula.py:639`. Concorrência real e deadlock = **[não verificado]**.
-
-8. **Pré-requisitos de pouso continuam sem prova disponível — alta quanto à exigência.** A própria declaração v3 exige ensaio `--apply` na sombra antes do pouso, com dias rejulgados/movimento de minutos/FORA-DO-HORIZONTE, `app/ponto/services/cartorio.py:173`. A regra de pista exige suite inteira verde antes de opus final e proíbe Codex aprovar pouso sozinho, `CLAUDE.md:549`, `:552`. Os anexos concedem mudança de lei; não fornecem execução desses requisitos. RED/GREEN v5, suite v5, ensaio v5, reversão e opus final = **[não verificado]**. RELATO contém números históricos da v4 e referências a logs, mas não equivalem a ensaio v5, `app/docs/RELATO.md:22`, `:32`.
-
-## 31/10 18:08 · sessao 55f75766a99e · - · - · origem=Ronald (tmux)
-
-**Paridade estática das cargas:** não achei contraexemplo determinístico entre lote e corpo antigo para uma fotografia estável e entradas válidas; execução contra banco/histórico integral permanece [nao verificado]. As cargas seguem as mesmas portas e janelas:
-
-- **Células:** `celulas_do_periodo` produz `{(cid,data):cel}`; a casca converte para `{data:cel}`, e o lote faz a mesma conversão por colaborador. Pad comum: `ini−2` até `fim+1`. `app/escala/alimentacao.py:41-46`; `app/ponto/turnos.py:1832-1845`, `1882-1884`, `2951-2955`, `2974-2976`, `3005`.
-- **Candidatos:** casca e lote usam a mesma implementação plural; janela `pad_ini..fim`, geradoras incluídas por `mais`, mesmos filtros e ordenação. O corpo comum reordena por `data_inicio`. `app/escala/alimentacao.py:116-127`, `153-154`; `app/ponto/turnos.py:1885-1886`, `1928`, `2957-2958`.
-- **Ata:** a casca chega a `_escalas_da_ata` por `papel_por_minuto_da_ata`; o lote pré-carrega a mesma função. `app/ponto/turnos.py:1556-1559`, `1590-1591`, `1937`, `2963`.
-- **Batidas:** mesmo filtro de retratadas e mesma janela. A ordenação por colaborador/timestamp é equivalente dentro de um colaborador; não há desempate explícito entre timestamps iguais. `app/ponto/models.py:105`; `app/ponto/turnos.py:1861-1864`, `2871-2879`, `2990-2993`. Divergência concreta causada por esse empate: [nao verificado].
-- **Carimbos:** lote copia antes de `_marca_ecos_flush`, e o corpo comum copia novamente por segmento antes do pareador. `app/ponto/turnos.py:1934`, `1977-1981`, `3004`.
-- **Última batida:** mesmo universo vivo da vida inteira; casca agrega individualmente, lote agrega todos uma vez. `app/ponto/turnos.py:1896-1901`, `2967-2972`.
-- **DNA:** casca consulta preguiçosamente; lote fornece as células completas e faz zero queries nesse provedor. `app/ponto/turnos.py:1907-1911`, `2999-3002`; `app/escala/utils.py:96-107`.
-- **Vínculos de encerramento:** ambas carregam todos os vínculos com `tipo_escala` e executam o mesmo corpo. `app/ponto/turnos.py:2145-2148`, `2164-2165`, `2960-2962`, `3012-3013`.
-
-**Cascas:** as assinaturas/defaults permanecem e a extração preserva estaticamente os carregamentos, formatos documentados e predicados anteriores. `turnos_do_colab` espera células por `data`; `dias_encerrados` espera chaves `(cid,data)`. A incompatibilidade desses dois formatos ao repassar células sem fornecer turnos já existia no corpo anterior apresentado; não foi introduzida pela extração. `app/ponto/turnos.py:1848-1853`, `1913`, `1954`, `2125-2131`, `2145-2148`, `2907-2913`.
-
-**Custo:** há teto constante de queries por janela, não igualdade absoluta para qualquer distribuição de dados: a segunda query dos candidatos e o agregado da última batida são condicionais. O lote também cresce com o número de datas distintas. Não identifiquei provedor novo que consulte por colaborador dentro de `CargaDaJanela`. `app/escala/alimentacao.py:123-127`; `app/ponto/turnos.py:2967-2972`, `2999-3006`; `app/ponto/status_dia.py:188-196`.
-
-**Mordida dos testes:** [nao verificado]
-
-- Custo exige 1/50/500 encerrados, todos com D4 e status `ok`, e igualdade das contagens; retorno ao singular por linha acrescentaria queries. Mordida estática identificada; execução RED real [nao verificado]. `app/core/tests/test_e4_7iii_lote_d4.py:47-61`.
-- Paridade não prova equivalência com 973753a2: o singular atual chama o próprio lote. Uma regressão compartilhada que preserve as fontes passa — por exemplo, trocar o resultado `'previsto'` por `'aberto'` no ramo de relógio. O teste compara as duas formas e exige somente o conjunto de fontes. `app/ponto/status_dia.py:169-170`, `198-201`; `app/core/tests/test_e4_7iii_lote_d4.py:111-122`.
-
-**Contraexemplo painel × calendário, normal e herdado:** use o colaborador da fixture `b`: 12x36 ativo 07–19, âncora 17/09/2026; E às 07h, S às 19h; célula `trabalha=True`, DNA 07–19, sem ata/veredito/status; agora local 20h. Esse cadastro e essas batidas já estão descritos nas fixtures. `app/core/tests/test_e4_7iii_painel_e_presenca.py:50-59`; `app/core/tests/test_e4_7iii_lote_d4.py:64`, `75-81`.
-
-Nesse cenário, o painel marca `encerrado`, passa pelo encerramento do previsto e recebe D4 **`previsto/nao_lavrado`**, pois a data é hoje. `app/core/services/painel_op.py:192-194`, `332-338`; `app/ponto/turnos.py:2113-2122`; `app/ponto/status_dia.py:207-208`.
-
-O calendário recebe células vazias da ata, não preenche `celstat_map`, vê E/S e turno fechado e cai em **`sem_certidao`**. `app/escala/services/leitor_celula.py:146-148`, `330-338`, `354-365`; `app/colaboradores/services/calendario.py:475-496`, `715-726`, `788-815`, `152-154`. Isso é inferência determinística do fluxo; ensaio com banco [nao verificado]. O ramo D4 de hoje já está no corpo antigo fornecido, e calendário/espelho estão fora do delta: diferença herdada, não regressão demonstrada da v3. O antecedente antigo depende do diff fornecido, sem arquivo local histórico: [nao verificado].
-
-No espelho, a view usa `montar_semanas`, cujo status com batidas é `ok`, ou `atencao` se houver inconsistência — ambos distintos de `previsto`; a classificação exata do motor para essa fixture não foi executada. `app/ponto/views.py:183-184`; `app/ponto/services/espelho.py:159-164`, `666-670`.
-
-_1197 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1199 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
