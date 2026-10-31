@@ -1,7 +1,76 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 23:14** · publicado em **30/10/2026 23:14** (UTC-3)
+> Ultima resposta processada: **30/10/2026 23:16** · publicado em **30/10/2026 23:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 23:16 · sessao 8d1c73f2a341 · O261-E-F1 · verificador · origem=Code
+
+**Eu bloquearia o delta pelos achados 1–5.** Os contraexemplos abaixo vêm dos caminhos do código; ocorrência e quantidade em produção, execução da suíte e RED contra `5ff9ec4b`: **[nao verificado]**.
+
+1. **`app/chamados/models.py:212` — guarda sobre coleção velha — bloqueia.**  
+   O plano entrega `_f1_ancoradas` ao núcleo, que reutiliza a lista sem consultar novamente (`app/chamados/models.py:359`, `app/chamados/models.py:218`). Contraexemplo: A começa `cancelar()` e encontra zero perguntas; B reaponta uma pergunta viva para A enquanto A ainda está vivo e confirma; A consome a lista vazia e grava `cancelado`. A costura aceita destino vivo e salva imediatamente (`app/chamados/services/fio.py:750`, `app/chamados/services/fio.py:828`, `app/chamados/services/fio.py:830`); o cancelamento não toma uma trava que coordene essa leitura (`app/chamados/models.py:728`). **Rejulgar os objetos da lista não descobre a pergunta que entrou depois.**
+
+2. **`app/chamados/models.py:279` — escrita antes do pré-requisito/atomicidade — bloqueia.**  
+   A relavra S2 agora persiste antes do `atomic` que salva o chamado (`app/chamados/models.py:286`, `app/chamados/veredito_lavrado.py:231`). Contraexemplo: `reabrir()` sem transação externa recebe chamado fechado não-furo e pergunta cujo slot não é derivável; S2 grava o veredito usando o destino vivo em memória; o `save()` seguinte do chamado falha. Permanecem chamado fechado e lavra calculada para chamado vivo. Essa entrada chama diretamente o núcleo, e o juiz efetivamente lê o estado do destino (`app/chamados/models.py:1362`, `app/chamados/juizes.py:699`, `app/chamados/juizes.py:700`).
+
+3. **`app/chamados/models.py:279` — ordem de trava invertida — bloqueia.**  
+   Há dois caminhos com ordem oposta:
+   - A: `abrir()` mantém transação, renasce o encerrado e chega a **pergunta → chamado** (`app/chamados/models.py:843`, `app/chamados/models.py:862`, `app/chamados/models.py:960`, `app/chamados/models.py:279`, `app/chamados/models.py:291`).
+   - B: `renovar_contexto()` atualiza o chamado; S143 roda inclusive nesse save sem mudança de status e atualiza a pergunta: **chamado → pergunta** (`app/chamados/services/contexto.py:100`, `app/chamados/services/contexto.py:102`, `app/chamados/signals.py:81`, `app/chamados/signals.py:92`, `app/chamados/services/disputa_emissao.py:1583`).
+
+   Contraexemplo: chamado não-furo fechado, pergunta não materializada em disputa aberta, célula absolvida. A segura a pergunta e espera o chamado; B segura o chamado e espera a pergunta. A guarda de reabertura por premissa regularizada é condicionada a chamado de furo (`app/chamados/models.py:1278`); a célula absolvida permite a B ultrapassar C6 (`app/chamados/juizes.py:1064`, `app/chamados/services/disputa_emissao.py:1547`).
+
+4. **`app/chamados/services/limbo_folgas.py:228` — reata antes do fechamento atômico — bloqueia.**  
+   O reaponte acontece antes de entrar na transação de `reconciliar()` (`app/chamados/services/limbo_folgas.py:230`, `app/chamados/models.py:610`), e a porta da costura já salva cada pergunta (`app/chamados/services/fio.py:830`). Contraexemplo: p1 reata; o save de p2 ou do chamado falha. P1 permanece no LIMBO, o furo permanece vivo e a próxima tentativa retorna imediatamente porque `agrupado_em` já foi persistido (`app/chamados/services/limbo_folgas.py:217`, `app/chamados/services/limbo_folgas.py:219`, `app/chamados/services/contexto.py:102`). O contrato declarado exige reata e fechamento no mesmo ato (`app/chamados/models.py:390`).
+
+5. **`app/ponto/services/cartorio.py:758` — consumidor recebe datas fora de ordem — bloqueia.**  
+   Fechamentos imediatos entram em `rejulgar` durante o corpo; os adiados entram depois (`app/ponto/services/cartorio.py:1201`, `app/ponto/services/cartorio.py:759`). Contraexemplo: dia 18 adiado e dia 25 fechado imediatamente produzem `[25/10, 18/10]`. A segunda passada usa primeiro/último como limites: início **24/10**, fim **21/10**, `n_dias=-5` (`app/ponto/services/cartorio.py:846`, `app/ponto/services/cartorio.py:871`, `app/ponto/services/cartorio.py:872`, `app/ponto/services/cartorio.py:889`). A grade percorre `range(dias)` e o cartório pula os dias ausentes, portanto não entrega a relavra pretendida (`app/escala/utils.py:1257`, `app/ponto/services/cartorio.py:1111`).
+
+6. **`app/ponto/services/cartorio.py:755` — fechamento indireto escapa da segunda passada — fila.**  
+   Contraexemplo: o chamado adiado também é pai da disputa. E2 fecha essa disputa; o sinal reconcilia o pai por outra instância (`app/chamados/reconciliador.py:635`, `app/chamados/reconciliador.py:636`, `app/chamados/signals.py:32`, `app/chamados/signals.py:42`). Quando o laço chama `x.reconciliar()`, ele recarrega o estado terminal e retorna falso; `_fech` fica vazio, sem contabilização nem `rejulgar` (`app/chamados/models.py:632`, `app/chamados/models.py:635`, `app/chamados/models.py:613`, `app/ponto/services/cartorio.py:756`). O sinal do cartório também retorna durante esse julgamento, deixando a impressão calculada com o chamado aberto até outra passagem (`app/chamados/signals.py:174`, `app/ponto/services/cartorio.py:1099`, `app/ponto/services/cartorio.py:1459`).
+
+7. **`app/ponto/services/cartorio.py:1108` — cura sem invalidar julgamento anterior — fila.**  
+   A regra mudou em `:1174`, mas `REGRA_VERSOES` continua em 2 e essa versão integra a impressão (`app/ponto/services/cartorio.py:100`, `app/ponto/services/cartorio.py:342`). Contraexemplo: célula já lavrada como `cobrado`, marcos acesos, fio vivo e impressão igual. Sem `forcar`, o fluxo pula **antes** da cura e não chega ao adiamento/E2 (`app/ponto/services/cartorio.py:1108`, `app/ponto/services/cartorio.py:1193`). Relavratura operacional prévia que cubra esses casos: **[nao verificado]**.
+
+8. **`app/chamados/tests/test_o261e_f1_selo_encerramento.py:37` — selo com brecha de mordida, herdada — fila.**  
+   O scanner rejeita constantes `False/None/0`, mas aceita presença sintática de chamada e `raise` (`app/chamados/tests/test_o261e_f1_selo_encerramento.py:39`, `app/chamados/tests/test_o261e_f1_selo_encerramento.py:43`). Contraexemplo confirmado em memória: acrescentar `and []` à condição do tripwire mantém o selo verdadeiro, embora a guarda nunca execute. Isso limita **esse selo**, sem demonstrar vacuidade da suíte comportamental, que também exige recusa efetiva (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:86`).
+
+O mapa de escrita e leitura dos dados de domínio envolvidos é este:
+
+| Campo ou valor | Quem escreve/produz | Quem lê/julga; outros escritores |
+|---|---|---|
+| `status_local`, estado anterior/novo | Núcleo: `app/chamados/models.py:222`, persistência em `:291`. Troca temporária/restauração: `:335`, `:348`. | Cartório `app/ponto/services/cartorio.py:1085`; juiz do destino `app/chamados/juizes.py:700`. Conjuntos oficiais: `app/chamados/catalogo/motor.py:24`, `:30`, `:31`. |
+| `resolvido_em`, `via_encerramento`, `respondido_por` | `app/chamados/models.py:225`, `:238`, `:239`, `:242`, `:243`. | Reabertura `app/chamados/models.py:1272`; painel `app/chamados/services/painel.py:243`, `:252`; detalhe `app/templates/chamados/detalhe.html:56`. |
+| `urgencia`, `urgencia_original`, `atualizado_em` | Ritual `app/chamados/models.py:436`; restauração `:244`; save do núcleo `:223`, `:291`. | O próprio ritual lê em `:445`, `:447`; reabertura recarrega em `:1305`. Outro gate existente, `rebaixar()`, usa o mesmo ritual (`:456`, `:461`). |
+| `_f1_ancoradas` | Plano `app/chamados/models.py:359`; limpezas `:211`, `:400`, `:647`. | Tripwire `app/chamados/models.py:210`; relavra `:270`. É memória; problema no achado 1. |
+| `_f1_dedup`; payload `dia`, `sobrevivente`, `motivo`, `status_local` | `app/chamados/models.py:699`; inicialização `:641`. | Consumo/limpeza `:644`; emissão da trilha `:652`. |
+| `chamado_destino` | Costura `app/chamados/services/fio.py:828`, `:830`. **Também** identidade existente e nascimento em `app/chamados/models.py:2372`, `:2398`. | Âncora `app/chamados/services/fio.py:117`; F1 `app/chamados/models.py:338`; juiz `app/chamados/juizes.py:699`. Os dois arquivos escritores já estão declarados no contrato (`app/core/tests/test_contract_escritores_estado.py:61`). |
+| `data_evento`, `celula`, identidade da pergunta | Nascimento/identidade `app/chamados/models.py:2357`, `:2398`; data pela costura `app/chamados/services/fio.py:819`. | Competência F1 `app/chamados/models.py:341`; C6 `app/chamados/juizes.py:1017`, `:1066`; validade da costura `app/chamados/services/fio.py:821`. |
+| `disputa.chamado`, `disputa.colaborador`, empresa | Construção da disputa em `app/chamados/services/disputa_emissao.py:527`; relações consumidas pela carga em `app/chamados/models.py:325`. | Âncora `app/chamados/services/fio.py:116`; F1 `app/chamados/models.py:339`, `:341`; novo fechamento da folga `app/chamados/services/validacao.py:249`. |
+| `validada_em`, `validada_por` | Validação `app/chamados/services/validacao.py:131`. | Filtro F1 `app/chamados/models.py:323`; C6 `app/chamados/juizes.py:1006`. **Há outros escritores existentes**, inclusive `app/chamados/services/disputa_emissao.py:1575`; estão declarados em `app/core/tests/test_contract_escritores_estado.py:183`. |
+| `respondida_em`, `resposta_colab`, tipo/motivo da pergunta | Resposta `app/chamados/services/disputa_emissao.py:1247`; nascimento `app/chamados/models.py:2398`; materializador também carimba `app/chamados/services/materializacao.py:1192`. | C6 `app/chamados/juizes.py:1020`; derivação do slot `:329`; marco perguntado `:842`. |
+| `materializada_em`, `materializada_por`, `via_resolucao` | E2 `app/chamados/reconciliador.py:617`; porta admin `app/chamados/models.py:2444`; S143 pela porta existente `app/chamados/services/disputa_emissao.py:1562`. | C6 `app/chamados/juizes.py:1044`, `:1050`; idempotência admin `app/chamados/models.py:2435`. São múltiplas portas preexistentes declaradas no contrato (`app/core/tests/test_contract_escritores_estado.py:83`). |
+| `veredito_lavrado`, `julgado_em`, `janela_expira_em` | `lavrar()` em `app/chamados/veredito_lavrado.py:227`; save em `:231`. | Validade do cache em `app/chamados/veredito_lavrado.py:179`, `:182`, `:189`. Backfill também declarado como escritor em `app/core/tests/test_contract_escritores_estado.py:77`. |
+| `contexto_json.agrupado_em`, `defeito_cadastro` | Solicitação `app/chamados/services/limbo_folgas.py:219`; porta `app/chamados/services/contexto.py:99`, `:102`. | Retry `app/chamados/services/limbo_folgas.py:217`; pai vivo `app/chamados/models.py:758`; fechamento `:688`. |
+| `contexto_json.marcos_faltantes`, `dna.marcos`, `ata.lampadas` | Emissor espelha contexto em `app/ponto/services/cartorio.py:1440`; ata produzida em `:1142` e entregue à porta em `:1444`. | Juiz `marcos_acesos`: `app/ponto/services/lastro.py:170`; novo filtro `app/ponto/services/cartorio.py:1174`. |
+| `veredito`, `protestos`, `veredito_via`, `veredito_em`, `ata` da célula | Porta `app/ponto/portas/celula.py:690`. | C6 `app/chamados/juizes.py:1054`; E2 `app/chamados/reconciliador.py:594`; a escolha de `cobrado` está em `app/ponto/services/cartorio.py:1174`. |
+| `impressao`, `julgada_em`, `ausencia`, `tem_entrada/saida`, `insumos_em` | `app/ponto/portas/celula.py:721`. | Pulo por impressão `app/ponto/services/cartorio.py:1108`; produção dos insumos `:1099`, `:1458`. |
+| `_adiados_pela_lampada`, `rejulgar`, contadores e `cods` | `app/ponto/services/cartorio.py:1196`, `:1201`, `:1136`, `:757`. | Consumidos em `app/ponto/services/cartorio.py:745`, `:754`, `:762`; sobra descartada/contada em `:767`. Problemas nos achados 5–6. |
+| `hoje`, `agora`, `apply_`, `forcar`, `registrar` | Entradas do ato `app/ponto/services/cartorio.py:709`; borda unitária `:1595`; decisão do fechamento `app/chamados/models.py:630`. | Teto `app/ponto/services/cartorio.py:1065`; pulo `:1108`; escrita `:1441`; plano/trilha `app/chamados/models.py:645`, `:650`. |
+| `fechada_em/por`, `resolucao`, `motivo_fechamento` da disputa | Porta `app/chamados/models.py:1791`. | E2 `app/chamados/reconciliador.py:635`; sinal do pai `app/chamados/signals.py:28`. |
+| Eventos `estado_chamado`, `fechamento_por_dedup` e notas | Chamadas `app/chamados/models.py:287`, `:652`; escritor da auditoria `app/core/observ.py:134`; nota após fechamento `app/ponto/services/veredito_celula.py:183`. | A própria composição condiciona o dedup à aprovação das guardas (`app/chamados/models.py:645`, `:650`); teste das irmãs confere a nota (`app/chamados/tests/test_o199_aceite_de_folga_decide_o_dia.py:185`). |
+
+Quanto às classes pedidas:
+
+- **Segundo juiz que duplica juiz registrado: nenhum identificado no delta.** Ele chama C6, C15, motor e lastro existentes (`app/chamados/models.py:345`, `app/ponto/services/cartorio.py:1090`, `app/ponto/services/cartorio.py:1174`; registro em `app/core/juizes.py:234`, `:238`, `:247`).
+- **Segundo escritor novo fora da porta: nenhum identificado.** As novas chamadas usam costura, fechamento e lavra existentes; `chamado_destino = self` na relavra é memória, pois o save grava somente os três campos S2 (`app/chamados/models.py:278`, `app/chamados/veredito_lavrado.py:231`). Os escritores adicionais preexistentes estão discriminados na tabela.
+- **Relógio novo lido fora da borda: nenhum identificado no delta.** E2 usa `now()` como carimbo; seu filtro exige célula que não acusa e sem pendências, fazendo C6 retornar antes do ramo temporal (`app/chamados/reconciliador.py:598`, `:607`, `:617`; `app/chamados/juizes.py:1064`).
+- **Derivação paralela de fonte única: nenhum com divergência concreta demonstrada neste delta.** O filtro novo reutiliza `marcos_acesos`; a classificação da competência reutiliza a composição existente (`app/ponto/services/cartorio.py:1174`, `app/chamados/models.py:341`, `app/chamados/services/vigia_fio.py:469`).
+- **Selo/RED sem mordida:** brecha específica no achado 8. O teste do evento cobra fechamento final, mas seu espião observa depois de `_gravar_estado` retornar e não mede literalmente cada escrita intermediária (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:378`, `:383`, `:390`). RED executado sem a cura: **[nao verificado]**.
+- **Ordem de trava:** achado 3.
+- **Pouso antes do pré-requisito:** achados 2 e 4; alcance do acervo no achado 7. Ordem real de deploy/passivo: **[nao verificado]**. [nao verificado]
+
+O lookup também está envelhecido: ainda diz “disputa fecha e SLA: SEM juiz”, enquanto o registro vivo aponta `pode_fechar` e `prazo_estourou`; para esta revisão, valem esses endereços vivos (`app/docs/JUIZES.md:54`, `app/docs/JUIZES.md:14`, `app/core/juizes.py:239`, `app/core/juizes.py:241`).
 
 ## 30/10 23:14 · sessao f4fbc1b704dd · - · - · origem=Ronald (tmux)
 
@@ -549,12 +618,4 @@ O leitor indireto preserva o dono lavrado da C10, mostra esse dono na lista e re
 
 Não achei residual procedente novo nesses caminhos; o pré-filtro ainda omite os demais insumos de cadastro, situação já registrada na triagem fornecida (`app/ponto/management/commands/pautas_discordantes.py:98`; classificação histórica: [nao verificado]). Não executei suíte; aprovação dinâmica [nao verificado].
 
-## 30/10 22:38 · sessao e312cdb2f279 · - · - · origem=Ronald (tmux)
-
-O teste novo morde `lista()` diretamente: importa o chamador, substitui apenas o leitor `fase_12x36.ultimo_lavrado`, chama `lista(hoje=30/10)` e exige que esse leitor receba `30/10` (`app/escala/tests/test_o261_v_fase_na_lista.py:208-214`). O relógio está congelado em `05/11`, portanto usar o dia corrente não satisfaz a expectativa (`app/escala/tests/test_o261_v_fase_na_lista.py:177`).
-
-A cadeia efetiva é `lista()` → `_fase_deslocada(empresas, hoje)` → `ultimo_lavrado(hoje)` (`app/escala/services/cadastro_realidade.py:611`, `:335-340`). O leitor aplica `data_ref__lte=ate` (`app/escala/services/fase_12x36.py:102-105`). Retirar o repasse em qualquer elo produz chamada com `None` e deixa de satisfazer a asserção (`app/escala/tests/test_o261_v_fase_na_lista.py:214`). Execução RED/GREEN: `[nao verificado]`.
-
-Não encontrei outro residual procedente na resolução dos donos da lista: C9 e C10 participam igualmente como donos do juiz; divergência resulta em `None`, independentemente da ordem (`app/escala/services/cadastro_realidade.py:710-721`). Os testes cobrem as duas ordens e o controle de concordância (`app/escala/tests/test_o261_v_fase_na_lista.py:334-343`). O vigia só considera o dia atendido pela lista quando o resultado é `BATIDA` ou `CADASTRO`; `None` mantém o alarme (`app/chamados/services/vigia_fio.py:263-266`).
-
-_802 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_803 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
