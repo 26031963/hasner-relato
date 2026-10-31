@@ -1,7 +1,364 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 16:16** · publicado em **31/10/2026 16:17** (UTC-3)
+> Ultima resposta processada: **31/10/2026 16:22** · publicado em **31/10/2026 16:22** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 16:22 · sessao 2ca4f78aa1d8 · F1C4-3-EMISSORES · censo · origem=Code
+
+**Há seis classificações sustentáveis e dois achados cuja classe fica [nao verificado].** O material não permite concluir “zero falhas do Codex”: falta estabelecer quando os defeitos específicos dos itens 3 e 4 entraram nos hashes examinados. (`opus_v11.txt:4–5`; `v8.q:1–2`.)
+
+Nos anexos colados, conto linhas desde a primeira linha após cada identificador, incluindo linhas vazias. Não atribuo descarte a `triagens.txt`, cujo bloco veio vazio; os registros locais de fila não individualizam os defeitos finais dos itens 3 e 4. (`app/docs/RELATO.md:29`; `app/docs/BACKLOG.md:822`; descarte específico: **[nao verificado]**.)
+
+1. **Corte/backlog divergentes da migração — (c), alteração posterior à última chamada guardada.** (`opus_v11.txt:2`; `v8.q:1`.)
+
+   **Pergunta:** “Ha sitio de producao que ainda responde […] por conta propria […] sem perguntar a chamados/juizes.py::dia_sem_trabalho?” (`v4.q:15–16`.)
+
+   **Resposta:** “a migração está declarada no corte, mas não realizada nesse sítio.” (`v4.r:42`.)
+
+   Codex viu o antecedente — supra com predicado próprio —, mas o achado final é outro: **migrar em `b3bef403` e deixar a documentação anterior**. Não cabe transformar o descarte do antecedente em descarte desse defeito novo. (`v1.r:88`; `opus_v11.txt:2`.)
+
+   **Entrada:** tema supra já na **v1**; corte discutido na **v4**; contradição causada pela migração documentada na **v11**, após a chamada v8. (`v1.r:88`; `v4.r:42`; `opus_v11.txt:1–2`; `v8.q:1`.)
+
+2. **Número atribuído ao universo errado na mensagem — (c), dado de produção/mensagem final.** (`opus_v11.txt:3`; `CLAUDE.md:557`.)
+
+   **Pergunta:** “antes, sombra com novos CHAMADOS por emissor; ate 50 pousa”. (`v2.q:2`.)
+
+   **Resposta:** “A sombra com novos CHAMADOS por emissor, e o atendimento ao teto de 50, são **[não verificado]** no material fornecido.” (`v2.r:1`.)
+
+   A fonte local associa **0/127.784** a ata explícita **`indefinido`**, confirmando a diferença de universo apontada pelo opus. O valor **158/143.452** está sustentado apenas pelo dado raspado fornecido. (`app/docs/BACKLOG.md:806`; `opus_v11.txt:3`.)
+
+   **Entrada:** o número anterior já constava da obra precedente; a frase acusada está documentada na **v11**. Primeira volta em que essa frase foi escrita: **[nao verificado]**. (`app/docs/BACKLOG.md:806`; `opus_v11.txt:1–3`.)
+
+3. **Catraca aceita o nome, mas deixa passar `ata=cel.ata` — classe [nao verificado].**
+
+   **Pergunta:** “Os testes novos mordem a reversao de cada um dos 4 sitios individualmente?”; checklist: “selo/RED sem mordida”. (`v1.q:6–7`.) [nao verificado]
+
+   **Resposta:** “também não exigem estruturalmente delegação ao juiz — um clone equivalente passa nos asserts de retorno.” (`v1.r:105`.)
+
+   Isso comprova que Codex viu **uma fragilidade de delegação nos testes antigos**; não comprova que viu a catraca específica de `com_insumo_dia_sem_trabalho` nem o mutante descrito pelo opus. (`v1.r:105`; `opus_v11.txt:4`.) [nao verificado]
+
+   **Entrada:** tema de proteção estrutural presente na **v1**; primeira volta da catraca específica: **[nao verificado]**. Se já estava num hash examinado, pode caber **(a)**; se nasceu depois da v8, pode caber **(c)**. Não há evidência para escolher nem para atribuir **(b)**. **[nao verificado]**
+
+4. **`_protesta` antecipa o juiz; cláusula inatingível; omissão em `_C18` — classe integral [nao verificado].**
+
+   **Pergunta:** “A pergunta registrada em `_C18` e respondida por outra funcao […] com predicado igual ou diferente?” (`v4.q:14–16`.)
+
+   **Resposta anterior:** “Protesto e espera pelo fim do turno usam `trabalha is not False`.” (`v1.r:87`.)
+
+   Portanto, **o predicado do cartório foi visto**. A cópia também o contém literalmente: `return _cel.trabalha is not False and _acesos(x, _ata) is not True`. (`v1.r:87`; `app/ponto/services/cartorio.py:1204–1205`.)
+
+   A consequência final — cláusula do juiz inatingível após a delegação — não é o mesmo achado que simplesmente listar esse predicado. Quando surgiu essa delegação, e se a omissão específica de `_C18` já estava nos hashes examinados: **[nao verificado]**. (`opus_v11.txt:5`.)
+
+   **Entrada:** sítio/predicado na **v1**; `_C18` entra explicitamente na pergunta da **v4**; primeira volta da combinação final: **[nao verificado]**. (`v1.r:87`; `v4.q:11–16`.)
+
+5. **Sombra só do supra; cartório não medido; efeito com tipo `None` — (c), quanto à medição final.** (`opus_v11.txt:6`; `CLAUDE.md:557`.)
+
+   **Pergunta:** “antes, sombra com novos CHAMADOS por emissor”. (`v2.q:2`.)
+
+   **Resposta:** a sombra e o teto permaneciam “**[não verificado]** no material fornecido”. (`v2.r:1`.)
+
+   A semântica geral de `None` já fora percebida: “tipo ausente, `None` ou vazio não satisfaz `A`”. Isso não demonstra exame da migração final nem cobertura do caminho final do cartório. (`v1.r:7`; `opus_v11.txt:6`.)
+
+   **Entrada:** semântica de tipo ausente/`None` na **v1**; sombra explicitamente exigida na **v2**; medição específica acusada documentada na **v11**. Sua primeira execução e a volta da mudança comportamental: **[nao verificado]**. (`v1.r:7`; `v2.q:2`; `opus_v11.txt:6`.)
+
+6. **`v11_green.log` vazio; suíte sem hash — (c), suíte/log.** (`opus_v11.txt:7`; `CLAUDE.md:557`.) [nao verificado]
+
+   **Pergunta relacionada:** checklist “selo/RED sem mordida”; não há pedido específico de conferência desse log final. (`v1.q:7`; conteúdo anterior de `v11_green.log`: **[nao verificado]**.)
+
+   **Resposta:** “Execução de testes/mutantes, respeito aos tetos após a mudança e incidência por colaborador em produção: **[não verificado]**.” (`v1.r:3`.) [nao verificado]
+
+   **Entrada:** arquivo vazio documentado na **v11**. Quando a suíte passou a não imprimir hash: **[nao verificado]**. (`opus_v11.txt:7`.) [nao verificado]
+
+7. **`c5c43360` sem linha LEI-AKITA — (e), NÃO PERGUNTADO sobre a mensagem.** (`v3.q:1–30`; `opus_v11.txt:8`.)
+
+   **Pergunta mais próxima:** “Aponte tambem qualquer outro defeito no delta que estas perguntas nao cobrem.” Ela não solicita auditoria da mensagem nem da linha LEI-AKITA. (`v3.q:30`.)
+
+   **Resposta:** abre com “Reprovo a volta 3 pelo aval literal”, discutindo a fronteira de competência. Não há trecho específico apontando a ausência da linha na mensagem nos registros fornecidos. (`v3.r:1`; trecho específico: **[nao verificado]**.)
+
+   **Entrada:** fábrica presente desde a **v1**; commit acusado já identificado na **v3**. Portanto, não cabe justificar este item como “commit ainda não escrito”. A ausência efetiva da linha tem como evidência fornecida o relato do opus. (`v1.r:1`; `v3.q:1`; `opus_v11.txt:8`.) [nao verificado]
+
+8. **Mensagem afirma ausência de arquivos em PROTEGE — (e), NÃO PERGUNTADO, com divergência material na evidência.** (`v2.q:1–20`; `v3.q:1–30`; `v4.q:1–21`; `v8.q:1–12`; `opus_v11.txt:9`.)
+
+   **Pergunta mais próxima:** “Leis citadas pelos sitios (grep LEIS/CORTES) e app/docs/JUIZES.md vao anexos.” (`v2.q:20`.)
+
+   **Resposta mais próxima:** “A L-061 exige leitura da célula/ata; ela não demonstra equivalência dos predicados sobreviventes.” Isso discute a lei, sem conferir a afirmação da mensagem contra PROTEGE. (`v2.r:139`.)
+
+   **Ressalva:** nesta cópia, **PROTEGE está vazio nas três leis citadas pelo opus**. Os arquivos aparecem em outra coluna; a documentação distingue expressamente DONO de PROTEGE. Assim, a cópia não confirma essa parte do achado final. (`app/docs/LEIS.md:43–48`; `app/docs/LEIS.md:57`; `app/docs/LEIS.md:81`; `app/docs/LEIS.md:91`; `app/docs/LEIS.md:95`.)
+
+   **Entrada:** primeira volta da afirmação na mensagem: **[nao verificado]**. O resumo não identifica seu commit; não há base para declará-la posterior à v8. (`opus_v11.txt:9`.) [nao verificado]
+
+**Contagem das classificações sustentadas acima** — zeros significam ausência de atribuição comprovada neste censo, não prova de inexistência de falhas. (`CLAUDE.md:554–558`; pendências dos itens 3 e 4: **[nao verificado]**.)
+
+| Classe | Quantidade | Achados |
+|---|---:|---|
+| (a) Não viu com tema presente | 0 comprovados | — |
+| (b) Viu e triagem descartou | 0 comprovados | — |
+| (c) Fora do alcance | 4 | 1, 2, 5, 6 |
+| (e) Não perguntado | 2 | 7, 8 |
+| (d) Nenhum viu | 0 comprovados | — |
+| **Classe [nao verificado]** | **2** | **3, 4** |
+| **Total** | **8** | |
+
+## 31/10 16:20 · sessao 0d61e8d5537d · PADRAO-DE-CIMA · leitura · origem=Code
+
+O ponto decisivo é separar **o B3 desta cópia** do mecanismo futuro: hoje ele dispara com três reprovações, rearma por CLI e não consome linha liberadora; a pergunta no topo apenas cala a cobrança do Stop. O contrato documentado já descreve hash e consumo, mas isso ainda não está nesses caminhos executáveis. A implementação triestado da volta 4 é [nao verificado]. ([bin/disjuntor.py:68](/home/ronald/codex_ws/5693e4622c2055d69d24d99ea57d816f98b001c8/bin/disjuntor.py:68), `bin/disjuntor.py:585`, `bin/disjuntor.py:947`; `bin/hook_stop_fila1.py:1049`; `app/docs/RELATO.md:11–13`.)
+
+**1) As formas existentes não constituem hoje um registro uniforme de eventos.** Os exemplos abaixo têm diferenças relevantes para contar ocorrências e delimitar 24 horas. (`app/docs/RELATO.md:4`, `app/docs/RELATO.md:12`, `app/docs/RELATO.md:141`; `app/docs/RELATO-ARQUIVO.md:983`.)
+
+| Forma observada | Exemplo e localização | O que permite extrair |
+|---|---|---|
+| Modelo literal de linha | `DESENHO <obra>: lei=... pergunta=... <arquivo>:<linha>` — `app/docs/RELATO.md:12` | É **exemplo dentro do contrato**, com placeholders; contá-lo produziria evento fictício. |
+| Reprovação/desenho no topo | `REPROVA-E-DESENHO V3-RETOMA (12:4x, ...)` — `app/docs/RELATO.md:4` | Obra explícita; hora aproximada, sem data própria. Cita motor, alimentação, regras e núcleo, sem entidade única declarada. |
+| Pergunta B3 respondida | `[RESPONDIDA 23:5x...] PERGUNTA DE DESENHO O261-E-F5 (...), 30/10 23:4x` — [RELATO.md:141](/home/ronald/codex_ws/5693e4622c2055d69d24d99ea57d816f98b001c8/app/docs/RELATO.md:141) | Obra e data explícitas; horas aproximadas da resposta e da pergunta são diferentes. Há referências a chamado, célula, folha e funções distintas. |
+| Pergunta histórica com texto intermediário | `PERGUNTA DE DESENHO (nao devolve turno) -- **GEO-SILENCIO-DE-PING...` — `app/docs/RELATO-ARQUIVO.md:983` | Não segue imediatamente `DESENHO <obra>`; não tem hora nem arquivo:linha próprios. Referências aparecem nos itens seguintes, em `:985` e `:987`. |
+| Pergunta respondida e riscada | `~~(pergunta de DESENHO -- ...` — `app/docs/RELATO.md:947` | A data disponível é da resposta. Hora de abertura e identidade normalizada do evento: [nao verificado]. |
+| Classificação de achado/custo | `(DESENHO)`, `= DESENHO`, `DESENHO, NAO DEFEITO` — `app/docs/RELATO.md:1302`, `:1333`, `:4058`; `app/docs/RELATO-ARQUIVO.md:6876`, `:7130` | São menções/classificações em prosa; buscar somente a palavra contaria coisas diferentes de uma linha de evento. |
+| Título de arquitetura | `### O DESENHO DA LINHA (ponto.OcorrenciaHE)` — `app/docs/RELATO-ARQUIVO.md:22802` | Explicita um modelo, mas não uma ocorrência no formato do aval; o título anterior tem data aproximada em `:22783`. |
+
+`23:4x` fornece uma dezena de minutos, não um instante para decidir uma borda estrita de 24 horas. O selo existente transforma `HH:Mx` em `HH:M0`, usa São Paulo e busca ano no `git blame`, mas verifica **títulos de seção**, não timestamps de cada pergunta. (`app/docs/RELATO.md:141`; `bin/tests/test_hora_da_secao_nao_e_futura.sh:21`, `:25`, `:41–49`.)
+
+Também não é seguro herdar sempre a data da seção anterior: o preâmbulo do RELATO contém entradas de 31/10 antes da primeira seção, datada de 30/10; o histórico recebeu blocos no fim e títulos que perderam o cabeçalho original. O mtime é alterado por escritores de máquina e não demonstra a hora individual do DESENHO. (`app/docs/RELATO.md:41`, `:185`; `app/docs/RELATO-ARQUIVO.md:23–30`; `app/core/esteira_vigia.py:879–884`.)
+
+**2) O repo já responde bem sobre sítios de escrita; não oferece, nas fontes examinadas, um resolvedor geral de toda leitura ou escrita para uma entidade única.** O principal componente reaproveitável é [censo_escritas.py:469](/home/ronald/codex_ws/5693e4622c2055d69d24d99ea57d816f98b001c8/app/core/censo_escritas.py:469), cuja saída é `{arquivo, linha, entidade, op, expr}`; as demais fontes têm escopos diferentes. (`app/core/portas.py:9`; `app/core/juizes.py:3`; `app/core/mapa/contrato.py:13`.)
+
+| Fonte existente | Resposta que realmente fornece |
+|---|---|
+| `core/censo_escritas.py` | Varredura AST, sem Django, de construtores e operações ORM; identifica variáveis amarradas ao modelo e `self` na classe. Marca inferências por campo, `update_fields`, relação e nome. (`app/core/censo_escritas.py:3`, `:6–45`, `:401`.) |
+| `core/portas.py::PORTAS` | **Entidade → módulos autorizados a escrever**; não afirma que toda linha do módulo pertence à entidade. (`app/core/portas.py:9`.) |
+| `core/portas.py::FAMILIA_DE` | Entidade → família. `CelulaDia` e `FuroDiario`, por exemplo, compartilham família; isso não os torna uma entidade só. (`app/core/portas.py:40–44`.) |
+| `core/juizes.py::JUIZES` | Pergunta/família → autoridade `arquivo::função`; não é catálogo de modelos lidos. (`app/core/juizes.py:3–14`.) |
+| `core/mapa/contrato.py` | Inscrição de módulo: `@bolha`, entradas, saídas e chamadas; `@bolha` designa família, sem campo estruturado de modelo lido/escrito. (`app/core/mapa/contrato.py:13–25`.) |
+| Censos especializados | Há leitura/escrita por modelo em universos específicos, como Batida; não é cobertura geral de entidades. (`bin/esmeril_batida_censo.py:184–200`, `:234–262`.) |
+| `esmeril_chamado_censo.py::_onde` | Já associa intervalos de linhas a classe/função por AST; resolve o escopo da citação, não a entidade. (`bin/esmeril_chamado_censo.py:76–89`.) |
+
+Um caminho determinístico **proposto, ainda não implementado [nao verificado]**, seria normalizar o caminho relativamente a `app/`, localizar a expressão e sua função por AST, resolver modelos explícitos e consultar os sítios do censo; aceitar entidade única com evidência, preservando a distinção entre atribuição direta e inferência. As bases existentes são `app/core/censo_escritas.py:361`, `:451`, `:469` e `bin/esmeril_chamado_censo.py:76`.
+
+Os casos que impedem escolher automaticamente uma entidade são concretos:
+
+- **Arquivo com várias entidades:** `ponto/portas/celula.py` é porta de `CelulaDia` e `FuroDiario`; fechamento é porta de `FechamentoMensal` e `PeriodoFechado`. Inverter o mapa e escolher a primeira entidade perderia informação. (`app/core/portas.py:111–112`, `:495–496`.)
+- **Origem desconhecida:** parâmetros, `form.save()` e `apps.get_model` podem ficar no balde `entidade=None`; inferência por nome é declarada fraca. (`app/core/censo_escritas.py:38–45`, `:429`.)
+- **Falha confundida com vazio:** erro sintático retorna `[]`; erro de leitura é ignorado na varredura. Esses retornos, isoladamente, não sustentam `LIVRE` num juiz triestado. (`app/core/censo_escritas.py:451–456`, `:485–488`.)
+- **Cadastro AST imperfeito:** `modelos()` aceita classes com base em `models.py`, inclusive a exceção `ResolvedoraCruzada`; também chaveia pelo nome simples da classe. (`app/core/censo_escritas.py:89–111`; `app/core/portas.py:60–65`.)
+- **Nome coloquial versus identidade:** a classe principal é `ChamadoColaborador`; um alias normativo `Chamado → ChamadoColaborador` para este instrumento é [nao verificado]. (`app/chamados/models.py:21`; `app/core/portas.py:58`.)
+- **Referência histórica versus hash atual:** o próprio histórico corrige caminho inexistente e número de linha deslocado; interpretar uma referência antiga diretamente na árvore atual pode apontar outra expressão. (`app/docs/RELATO-ARQUIVO.md:990`.)
+
+**3) `_obra_de` reconhece identidade textual da obra, sem consultar entidade ou programa.** Ele procura âncoras como `obra X`, `Obra: X`, markdown e `leitura ... da X`, valida os tokens e escolhe a primeira ocorrência válida entre essas âncoras. Aceita IDs com hífen ou letras+algarismos; IDs sem hífen podem carregar cauda distintiva, como `O261 (C)`. (`bin/disjuntor.py:78–93`; [bin/disjuntor.py:478](/home/ronald/codex_ws/5693e4622c2055d69d24d99ea57d816f98b001c8/bin/disjuntor.py:478), `:492–503`.)
+
+No **Agent**, o B3 atual chama `_obra_de` somente sobre `tool_input.prompt`, para `subagent_type == 'verificador'` e leitura final; a descrição não é usada nesse reconhecimento. Leitura de desenho é excluída por `_eh_final`. Construtores e verificações sem “final” não entram nessa trava B3. (`bin/disjuntor.py:94–98`, `:473–475`, `:944–954`.)
+
+No **Codex**, o wrapper exige `CODEX_OBRA` e `CODEX_PAPEL` e escreve `OBRA:` no prompt. Porém o parser do PreToolUse extrai apenas papel, volta e anexos: **não extrai `CODEX_OBRA` nem chama `_obra_de` para obter a obra da consulta**. Isso precisará de tratamento próprio para cumprir o anexo. (`bin/codex_pergunta.sh:43–48`, `:118–131`; `bin/disjuntor.py:849–862`, `:938–954`.)
+
+Há vínculos documentais obra→programa: O280 aparece como E3, V3-BATERIA como E1 e O261-E-CELULA-20-UM-DONO como E2 do PROGRAMA-CELULA-E-O-DIA. As formas variam entre `PROGRAMA:`, “esta obra é a E2” e “linha da E4”; parser único dessas relações e herança entre aliases/subobras são [nao verificado]. (`app/docs/BACKLOG.md:1398`, `:1399`, `:782`, `:774`.)
+
+Programa tampouco equivale a uma tabela: o ADR reúne status em `CelulaDia` e valor em `DiaPago`. A prioridade entre agrupar por entidade e por programa precisa ser declarada, senão obras de tabelas diferentes podem acabar no mesmo grupo por programa. (`app/docs/ADR/0002-celula-e-o-dia.md:4–8`; política de prioridade: [nao verificado].)
+
+**4) O anexo deixa decisões necessárias em aberto.** As observações sobre suas omissões abaixo se referem ao texto fornecido no prompt, sem arquivo local com numeração verificável: [nao verificado].
+
+- **Disparo e ação incompletos:** “segunda ocorrência na mesma entidade/programa em 24 h” aparece em MORDE, mas falta como regra operacional explícita. Falta integralmente a linha do aval `PADRAO-DE-CIMA <entidade>: classe=... padrao=... armadilha=... obra=...`, seus campos obrigatórios, validação e autor responsável. [nao verificado]
+- **Universo de eventos:** acrescenta `PERGUNTA DE DESENHO` sem dizer se é alias do marcador ou ocorrência independente; não define exclusão de exemplos, perguntas respondidas, repetições e movimentação para arquivo. Esses formatos existem nos documentos. (`app/docs/RELATO.md:12`, `:141`; `app/docs/RELATO-ARQUIVO.md:23–40`; política: [nao verificado].)
+- **Tempo e agrupamento:** faltam data/ano/fuso, tratamento de `HH:Mx`, timestamp ausente/futuro, vários modelos, aliases, várias referências e prioridade entidade/programa. [nao verificado]
+- **`NAO_SEI = nega`:** não define quais chamadas negar quando a entidade é desconhecida. Negar indiscriminadamente ultrapassaria o escopo “obras daquela entidade” do aval. Além disso, o envelope atual captura exceção e libera; a política nova precisa chegar até ele. (`bin/disjuntor.py:989–990`; escopo novo: [nao verificado].)
+- **Consumo e rearme:** “mesma mecânica de `linha_libera_b3`” remete a código futuro. O texto B3 disponível exige frescor, SHA consumido e transferência para `liberado`; o código atual só transfere para `rearmado` por CLI. Falta definir se PADRAO libera uma chamada ou um episódio, como trata a terceira ocorrência e como evita redisparar imediatamente pelas mesmas duas linhas ainda dentro das 24 h. (`app/docs/RELATO.md:12`; `bin/disjuntor.py:585–595`; política nova: [nao verificado].)
+- **Falha e limite:** não cobre leitura parcial, fonte sintaticamente inválida, JSON corrompido, trava ocupada, prazo/tamanho de varredura e falha ao persistir consumo. O estado atual serializa por flock, mas mantém a decisão mesmo quando a gravação falha; isso exige regra específica para garantir consumo 1x. (`bin/disjuntor.py:219–259`; política nova: [nao verificado].)
+- **Medida:** o painel atual conta disparos pelo primeiro token da regra e negativas globais, sem liberações por entidade; a lista exibida também é fixa. Faltam formato dos eventos novos, denominadores e apresentação de medida ilegível. (`bin/disjuntor.py:1030–1055`, `:1147–1160`; medida nova: [nao verificado].)
+- **Quem desliga:** `pausar.sh` é escritor genérico de arquivo de pausa; não é, por si, integração com o disjuntor. A chave lida hoje é `DISJUNTOR_DESLIGADO`, global e reservada ao Ronald; comandos do Code que a nomeiem são negados. Falta escolher chave global ou específica, cobertura, condição de retorno e autorização de uso de `pausar.sh`. (`bin/pausar.sh:31–47`; `bin/disjuntor.py:128–157`; decisão nova: [nao verificado].)
+
+O MORDE do anexo também precisa distinguir “duas entidades diferentes” de “duas entidades diferentes **dentro do mesmo programa**”: o aval permite agrupamento por programa, mas não estabelece a precedência entre os dois critérios. Resultado esperado desse caso: [nao verificado].
+
+**5) Estes são os escritores e leitores comprovados que delimitam os arquivos candidatos; o estado específico de PADRAO-DE-CIMA ainda é [nao verificado].**
+
+| Arquivo/estado | Quem escreve | Quem lê |
+|---|---|---|
+| `app/docs/RELATO.md`, topo humano | O código reconhece escrita manual e preserva o topo; autoria concreta das linhas: [nao verificado]. (`app/core/esteira_vigia.py:829–840`.) | Stop lê duas primeiras linhas úteis; B3 procura DESENHO e identidade da obra nelas. (`bin/hook_stop_fila1.py:411–444`.) |
+| `RELATO.md`, linhas de máquina | Disjuntor chama `relato_negacao → esteira_vigia.no_relato`, com flock do diretório e temporário único. Outros escritores declarados são Edit manual, gerador de cortes e deploy agendado, fora dessa trava. (`bin/disjuntor.py:209–211`, `:988`; `app/core/esteira_vigia.py:834–840`.) | Stop verifica afirmações sem prova; publicação lê e raspa o documento. (`bin/hook_stop_fila1.py:1171–1183`; `bin/relato.sh:54–56`, `:98–104`.) |
+| `app/docs/RELATO-ARQUIVO.md` | Conduta manda mover material antigo; cabeçalho registra movimentos e append. Escritor automático de rotação: [nao verificado]. (`CLAUDE.md:610–613`; `app/docs/RELATO-ARQUIVO.md:23–40`.) | B3 atual aponta somente para RELATO vivo. Leitura do arquivo por PADRAO-DE-CIMA: [nao verificado]. (`bin/disjuntor.py:57`; `bin/hook_stop_fila1.py:34`, `:430`.) |
+| Fontes de modelos, portas e juízes | São declarações no código; autoria efetiva de cada alteração: [nao verificado]. (`app/core/portas.py:98`; `app/core/juizes.py:156`.) | Censo lê modelos/fontes por AST; mapa lê os registros de portas e juízes. (`app/core/censo_escritas.py:89`, `:469`; `app/core/mapa/contrato.py:157–177`.) |
+| `BACKLOG.md` e ADR 0002 | Registram os vínculos de programa; escritor único dessas relações: [nao verificado]. (`app/docs/BACKLOG.md:782`, `:1398`; `app/docs/ADR/0002-celula-e-o-dia.md:4`.) | Stop lê BACKLOG para fila; resolvedor automático obra→programa: [nao verificado]. (`bin/hook_stop_fila1.py:33`, `:170`.) |
+| `logs/sessao/disjuntor_estado.json` e `.lock` | `_com_estado` lê, trava e grava; varredura B3 e rearme o modificam. **PreToolUse e Stop também escrevem ao varrer B3.** (`bin/disjuntor.py:219–253`, `:559–595`, `:950`; `bin/hook_stop_fila1.py:1050`.) | `ler_estado`, consultas B3 e painel. Consumo por entidade/SHA de PADRAO: [nao verificado]. (`bin/disjuntor.py:265`, `:598`, `:1094`.) |
+| `logs/sessao/disjuntor.log` | `trilha`, disparos, rearme e negativas; falha do append é silenciada. (`bin/disjuntor.py:112–125`, `:590`, `:985`.) | `disjuntor.ler` calcula janela; `linha` formata; gerador do ESTADO chama ambos. (`bin/disjuntor.py:1030`, `:1147`; `bin/gerar_estado.py:278–280`.) |
+| `DISJUNTOR_DESLIGADO` | Ronald, fora do Code, segundo contrato e guarda. (`bin/disjuntor.py:28–31`, `:136–157`.) | PreToolUse e Stop verificam existência antes de agir. (`bin/disjuntor.py:128`, `:980`; `bin/hook_stop_fila1.py:1040`.) |
+| Arquivo escolhido para pausa e `logs/pausas.log` | `pausar.sh` grava dono/motivo/saída, faz rename e registra criação/remoção. (`bin/pausar.sh:24–47`.) | `pausar.sh --ler`; vigia inspeciona nomes específicos de pausa, sem integração automática com um nome novo. (`bin/pausar.sh:19–23`; `app/core/esteira_vigia.py:472–481`.) |
+| `.claude/settings.json` | Autoria efetiva: [nao verificado]; guarda impede retirar o hook pelos caminhos reconhecidos. (`bin/disjuntor.py:148–157`.) | Configura PreToolUse com caminho absoluto do host; ativação efetiva em produção: [nao verificado]. (`.claude/settings.json:62–68`.) |
+| Pergunta/resposta Codex | Escritor da pergunta: [nao verificado]; wrapper monta o prompt e dirige a resposta para `codex exec -o`. (`bin/codex_pergunta.sh:118–135`, `:157`.) | Wrapper lê pergunta/anexos; PreToolUse atual analisa o comando, sem ler a pergunta para resolver obra/entidade. (`bin/codex_pergunta.sh:131–133`; `bin/disjuntor.py:849–862`.) |
+
+## 31/10 16:19 · sessao 4a312e2f06f8 · - · - · origem=Ronald (tmux)
+
+**Achado 7 — recomendo (e), NAO PERGUNTADO.** O commit já estava escrito na volta 3: abertura de `v3.q`, literal, “Obra F1C4-3-EMISSORES volta 3, commit c5c43360”. Portanto, não sustenta a justificativa “commit ainda não escrito”. Nenhuma pergunta fornecida pede auditoria da mensagem ou presença da linha `LEI-AKITA`; nenhuma resposta fornecida acusa sua ausência. A frase genérica “Aponte tambem qualquer outro defeito no delta que estas perguntas nao cobrem” (`v3.q`, fechamento; numeração original [nao verificado]) não explicita esse tema.
+
+O trecho mais próximo de resposta é `v3.r`: “Execução dos testes, execução das mutações e efeitos reais sobre os números de produção: **[nao verificado]**.” Ele não trata da mensagem. **Trecho de resposta sobre a falta da linha: inexistente nos anexos fornecidos** [nao verificado quanto à numeração]. O sítio `fabrica_da_celula.py` participa desde v1; o commit acusado entra documentalmente em v3.q. A regra exige a linha em `CLAUDE.md:62–64`; o selo distingue ausência de linha de validação de seu conteúdo em `bin/tests/test_lei_akita.sh:142–143`. A ausência efetiva no commit só está atestada por `opus_v11.txt`, item 7; mensagem integral e histórico não disponíveis [nao verificado].
+
+**Achado 8 — recomendo (e), com ressalva material.** Nenhuma pergunta fornecida pede conferir a afirmação da mensagem contra a coluna PROTEGE. O mais próximo é `v2.q`, literal: “Leis citadas pelos sitios (grep LEIS/CORTES) e app/docs/JUIZES.md vao anexos.” `v2.r` responde: “A L-061 exige leitura da célula/ata; ela não demonstra equivalência dos predicados sobreviventes.” Isso discute a lei, sem auditar a coluna ou a mensagem. **Trecho de resposta sobre a afirmação “nenhuma lei lista os arquivos em PROTEGE”: inexistente nos anexos fornecidos** [nao verificado quanto à numeração].
+
+**A cópia não confirma a alegação “L-061, L-033, L-050 listam em PROTEGE”.** O cabeçalho põe PROTEGE na quinta coluna (`app/docs/LEIS.md:57`); essa célula está vazia nas três linhas (`app/docs/LEIS.md:81`, `:91`, `:95`). Os arquivos mencionados nessas linhas aparecem na coluna **DONO**, anterior à coluna PROTEGE. Assim, há divergência entre a cópia e o resumo Opus, que deve ser preservada no laudo. O selo efetivamente lê a coluna PROTEGE por nome (`bin/tests/test_lei_protege_sitio.sh:58`), não a coluna DONO.
+
+A volta de entrada da **afirmação na mensagem** do item 8 é **[nao verificado]**: `opus_v11.txt` não identifica seu commit; não há como dizer que surgiu depois de v8. O tema geral L-061 já aparece em `v2.r`, mas isso não data a afirmação acusada. Sem mensagem integral, não transformar essa lacuna em prova de classe (c) por commit posterior. `triagens.txt` vazio não permite classe (b) para nenhum dos dois [nao verificado quanto à numeração dos anexos]. [nao verificado]
+
+## 31/10 16:19 · sessao 664f4c3bfd34 · - · - · origem=Ronald (tmux)
+
+**Achado 2 — (c), dado de produção e mensagem posterior à última chamada.** A fonte local diz literalmente: “ata explicita 'indefinido' divergiria […] Prod 31/10: 0 de 127.784 atas” (`app/docs/BACKLOG.md:806`). Isso sustenta a distinção de universo apontada pelo opus; não prova autonomamente o novo número 158/143.452, que consta somente do dado raspado (`opus_v11.txt`, item 2; linha original [nao verificado]).
+
+- Pergunta pertinente: `v2.q`, aval: “antes, sombra com novos CHAMADOS por emissor; ate 50 pousa” — linha original [nao verificado].
+- Resposta: `v2.r`, item 1: “A sombra com novos CHAMADOS por emissor, e o atendimento ao teto de 50, são [não verificado] no material fornecido.” — linha original [nao verificado].
+- Entrada: o número 0/127.784 vem da obra anterior F1C4-3, segundo a própria identificação “Codex verif4 F1C4-3” (`app/docs/BACKLOG.md:806`). Sua atribuição errada no commit b3bef403 é documentada em v11, depois da última chamada v8; volta anterior exata de introdução da frase [nao verificado].
+
+**Achado 5 — (c), medição não disponível e mudança final não examinada.** A cópia ainda contém o predicado antigo do supra (`app/ponto/supra_juiz.py:443`) e a chamada do cartório sem o insumo novo (`app/ponto/services/cartorio.py:1207`). Portanto não permite reconstituir a sombra final nem a implementação migrada descrita no opus (`opus_v11.txt`, item 5; linha original [nao verificado]).
+
+- Pergunta: `v2.q`, mesmo aval literal de sombra citado acima — linha original [nao verificado].
+- Resposta sobre limite: `v2.r`, item 1, mesma ressalva de medição acima — linha original [nao verificado].
+- Resposta que já percebeu a semântica: `v1.r`, item 1: “tipo ausente, `None` ou vazio não satisfaz `A`” — linha original [nao verificado]. Isso mostra conhecimento da semântica geral, **não descoberta do defeito da migração final**.
+- Entrada: tema sombra presente em v2; semântica de tipo `None` presente em v1; migração e sombra finais documentadas em v11. Volta exata entre esses marcos [nao verificado].
+
+**Achado 6 — (c), suíte/log final.** A regra local exclui expressamente “RED, suite, dado de prod” da falha do Codex (`CLAUDE.md:557`). [nao verificado]
+
+- Pergunta relacionada: `v1.q`, item 5: “selo/RED sem mordida” — linha original [nao verificado].
+- Resposta: `v1.r`, abertura: “Execução de testes/mutantes […] [não verificado]” — linha original [nao verificado]. [nao verificado]
+- Última resposta: `v8.r`, item 3: “execução da suíte Django com as mutações: [não verificado]” — linha original [nao verificado]. [nao verificado]
+- Entrada: o arquivo `v11_green.log` e seus zero bytes aparecem no achado final v11; ocorrência nas voltas anteriores [nao verificado]. A idade do comportamento “suite nao imprime hash” também fica [nao verificado]. [nao verificado]
+
+Não há linha fornecida em `triagens.txt`; portanto nenhum destes três pode receber classe (b) com descarte comprovado — conteúdo da triagem [nao verificado].
+
+## 31/10 16:19 · sessao 3f534d69f56a · - · - · origem=Ronald (tmux)
+
+**Achado 1: (c), defeito documental criado na v11, após a última chamada guardada, v8.** O antecedente “predicado próprio no supra” já era conhecido, mas isso não equivale ao defeito novo “migrou e deixou corte/backlog divergentes”. (`opus_v11.txt`, item 1; `v8.q`, abertura; `v4.r`, item 2.)
+
+- Pergunta pertinente: `v4.q`, item 2: “Ha sitio de producao que ainda responde [...] por conta propria [...] sem perguntar a chamados/juizes.py::dia_sem_trabalho?”
+- Resposta: `v4.r`, item 2: “a migração está declarada no corte, mas não realizada nesse sítio.”
+- Evidência local do antecedente: `app/ponto/supra_juiz.py:443` mantém predicado próprio; `app/docs/BACKLOG.md:806` mantém `SUPRA-DELEGA-DIA-SEM-TRABALHO` aberta.
+- Entrada: tema supra já aparece na **v1**; registro/corte aparece na **v4**; contradição documental causada pela migração pertence à **v11** conforme `opus_v11.txt`, item 1.
+
+**Achado 3: origem exata da catraca e primeira volta são [nao verificado].** A cópia não contém `com_insumo_dia_sem_trabalho`; o sítio final não pode ser confrontado diretamente. O tema genérico “testes exigem delegação?” aparece na **v1**, e Codex apontou explicitamente esse tipo de mutante sobrevivente. (`v1.q`, itens 4–5; `v1.r`, item 4.) [nao verificado]
+
+- Pergunta: `v1.q`, item 4: “Os testes novos mordem a reversao de cada um dos 4 sitios individualmente?” [nao verificado]
+- Resposta: `v1.r`, item 4: “também não exigem estruturalmente delegação ao juiz — um clone equivalente passa nos asserts de retorno.”
+- Isso **não prova que Codex viu o defeito específico** “nome da função aceito com `ata=cel.ata`”. Sua primeira exposição e classificação definitiva dependem de saber quando nasceu a catraca, informação ausente. [nao verificado]
+- Não usar **(b)**: nenhuma linha fornecida de triagem vincula esse mutante ao descarte. [nao verificado]
+
+**Achado 4: o predicado do cartório foi visto; a consequência final de cláusula inatingível não foi apontada nos registros fornecidos.** A classificação única exige separar antecedente de alteração posterior. (`v1.r`, item 3; `v2.r`, item 6; `v3.r`, item 6; `opus_v11.txt`, item 4.)
+
+- Pergunta explícita: `v3.q`, item 6: “QUEM MAIS LE celula com trabalha=None em chamados/ e ponto/ (cartorio, vigias, protesto FURO_SEM_COBRANCA, contadores) [...]?”
+- Resposta explícita: `v3.r`, item 6: “Cartório | `None` passa em `_protesta`”.
+- Pergunta ainda mais direta: `v4.q`, item 2: “Ha sitio de producao que ainda responde [...] por conta propria [...]?”
+- A resposta `v4.r`, item 2, enumera predicados próprios, mas **omite `_protesta`**; no item 1 descreve `_C18` e não registra esse sítio. (`v4.r`, itens 1–2.)
+- O predicado existe na cópia em `app/ponto/services/cartorio.py:1204–1205`: `return _cel.trabalha is not False and _acesos(x, _ata) is not True`.
+- O juiz antigo lê `cel.ata` e começa pela cláusula `cel.trabalha is False`. (`app/chamados/juizes.py:407–408`.)
+- Entrada verificável: sítio/predicado já na **v1**; `_C18` na **v4**. Primeira volta em que a delegação nova tornou a cláusula inatingível: **[nao verificado]**.
+- **(a)** para o predicado inteiro seria incorreto, pois ele foi visto; **(b)** exige descarte documentado que não temos. Para “inatingível após delegação” pode caber **(c)** se a delegação nasceu após v8, mas essa cronologia específica precisa de evidência adicional. [nao verificado]
+
+**Cuidado com triagem local:** `app/docs/RELATO.md:75` diz “2o predicado do supra descartado para fila”, mas refere-se à obra anterior **F1C4-3-NONE-COBRA**, não ao defeito documental da v11 EMISSORES. `app/docs/RELATO.md:29` contém triagem v1 EMISSORES, mas seus rótulos “P2a/P2b” não são identificáveis univocamente na resposta v1 fornecida. Não sustenta atribuição automática a **(b)**. (`app/docs/RELATO.md:29`; `app/docs/RELATO.md:75`.)
+
+## 31/10 16:18 · sessao 14252be083ec · - · - · origem=Ronald (tmux)
+
+**B3 presente × B3 prometido**
+
+- O código desta cópia ainda usa limiar 3, acumula reprovações por agente/obra e libera por `--rearma-b3`, transferindo agentes para `rearmado`; não há consumo de linha nesta implementação (`bin/disjuntor.py:68`, `bin/disjuntor.py:545`, `bin/disjuntor.py:585`, `bin/disjuntor.py:1170`).
+- O topo com `DESENHO` apenas cala o lembrete do Stop; a negativa do PreToolUse continua enquanto a obra estiver disparada (`bin/hook_stop_fila1.py:411`, `bin/hook_stop_fila1.py:1049`, `bin/disjuntor.py:947`).
+- O contrato B3 **documentado** já exige reconhecedor único `linha_libera_b3`, duas linhas úteis do topo, linha posterior ao disparo (`mtime`), hash consumido uma vez e reprovações transferidas para `liberado`; isso está no texto, ainda não neste código (`app/docs/RELATO.md:11`, `app/docs/RELATO.md:12`). A versão triestado v4 mencionada pelo usuário não foi fornecida como código: [nao verificado].
+- O contrato B3 documentado ainda diz “falha aberto”; o envelope real do PreToolUse captura qualquer exceção e libera. Assim, escrever simplesmente “NAO SEI = nega (molde B3 v4)” não descreve a implementação disponível (`app/docs/RELATO.md:13`, `bin/disjuntor.py:989`). No Stop, exceção também retorna `None`, mantendo o caminho anterior (`bin/hook_stop_fila1.py:1035`, `bin/hook_stop_fila1.py:1061`).
+
+**Lacunas/contradições no anexo**
+
+O anexo foi recebido apenas no prompt; referências ao conteúdo dele abaixo são [nao verificado no repo].
+
+1. Falta declarar como **ação normativa** o limiar “segunda DESENHO da mesma entidade/programa em 24 h”; ele aparece apenas em MORDE. Falta integralmente a linha liberadora do aval `PADRAO-DE-CIMA <entidade>: classe=... padrao=... armadilha=... obra=...`, seus campos válidos, quem a escreve e como verifica vínculo com a obra bloqueada. [nao verificado]
+2. Incluir `PERGUNTA DE DESENHO` amplia a forma literal `DESENHO <obra>` do aval; precisa dizer se é alias aceito, ocorrência distinta ou repetição da mesma pergunta. Também faltam deduplicação topo/corpo/arquivo e identidade estável do evento. [nao verificado]
+3. “Com hora nas últimas 24 h” não define data/ano/fuso, `12:4x`, herança do cabeçalho, falta de hora ou instante futuro. “Tabela/modelo (ou PROGRAMA)” não resolve múltiplos modelos, aliases, prioridade entidade versus programa ou ausência de classificação. [nao verificado]
+4. “NAO SEI = nega” precisa especificar **quem** será negado quando a entidade da ocorrência ou da chamada é desconhecida; negar tudo muda o escopo do aval “obras daquela entidade”. O envelope disponível deixa exceções passarem (`bin/disjuntor.py:989`). [nao verificado para a política nova]
+5. “Mesma mecânica do linha_libera_b3” depende de código futuro: o texto B3 disponível especifica frescor, hash e transferência para `liberado`, mas o código só implementa rearme explícito (`app/docs/RELATO.md:12`, `bin/disjuntor.py:585`).
+6. Falta definir se o disparo expira com a janela, fica travado até liberação, se a linha libera uma chamada ou um episódio e como tratar terceira ocorrência. No B3 documentado, a reprovação seguinte dispara novamente (`app/docs/RELATO.md:12`). [nao verificado para PADRAO-DE-CIMA]
+7. Faltam limites de tamanho/tempo de varredura, erro de leitura parcial, estado corrompido, lock ocupado, gravação falhada e concorrência de dois consumidores. O estado atual usa flock e rename, mas permite manter decisão mesmo se a persistência falhar: isso é crítico para “consumir uma vez” (`bin/disjuntor.py:219`, `bin/disjuntor.py:230`, `bin/disjuntor.py:250`, `bin/disjuntor.py:254`).
+8. O painel atual conta disparos pelo primeiro token depois de `DISJUNTOR` — regra, não entidade — e negativas globais; não conta liberações. A lista exibida de regras é fixa. Portanto, a medida anunciada pelo anexo ainda exige contrato de eventos/identidade, esperado e erro de medida (`bin/disjuntor.py:1030`, `bin/disjuntor.py:1050`, `bin/disjuntor.py:1055`, `bin/disjuntor.py:1147`).
+9. “Ronald ou `pausar.sh`” não identifica arquivo de desligamento, cobertura nem condição de religar. O mecanismo atual só lê existência de `DISJUNTOR_DESLIGADO`, reservado ao terminal do Ronald; o Code é impedido até de citar a chave em Bash. `pausar.sh` é escritor genérico: não há integração automática dele com um novo instrumento (`bin/disjuntor.py:128`, `bin/disjuntor.py:144`, `bin/disjuntor.py:979`, `bin/pausar.sh:31`). O vigia só examina os nomes `esteira.pausada` e `esteira.integrando` nessa rotina; não fiscaliza automaticamente qualquer arquivo novo de pausa (`app/core/esteira_vigia.py:472`).
+
+**Escritores/leitores relevantes**
+
+| Arquivo/estado | Quem escreve | Quem lê |
+|---|---|---|
+| `app/docs/RELATO.md` — topo humano | Escrita manual é reconhecida explicitamente; identidade do agente que escreveu cada linha: [nao verificado] (`app/core/esteira_vigia.py:829`, `app/core/esteira_vigia.py:839`). | Stop lê duas linhas úteis, ignorando título e brancos; B3 busca DESENHO e ID nessa janela (`bin/hook_stop_fila1.py:420`, `bin/hook_stop_fila1.py:411`). Leitor novo PADRAO-DE-CIMA: [nao verificado]. |
+| `RELATO.md` — negativas de máquina | `main_pretool → relato_negacao → esteira_vigia.no_relato`; escreve seção ALARMES, preservando topo, com trava no diretório e temporário único (`bin/disjuntor.py:988`, `bin/disjuntor.py:209`, `app/core/esteira_vigia.py:834`, `app/core/esteira_vigia.py:859`). | Stop checa afirmações sem prova por subprocesso (`bin/hook_stop_fila1.py:1172`, `bin/hook_stop_fila1.py:1178`). |
+| `logs/sessao/disjuntor_estado.json` + `.lock` | `_com_estado`; varredura B3 e rearme o modificam (`bin/disjuntor.py:219`, `bin/disjuntor.py:560`, `bin/disjuntor.py:585`). | `ler_estado`, `b3_disparados`; PreToolUse e Stop chamam varredura que também escreve (`bin/disjuntor.py:265`, `bin/disjuntor.py:598`, `bin/disjuntor.py:950`, `bin/hook_stop_fila1.py:1050`). Estado novo de consumo por entidade: [nao verificado]. |
+| `logs/sessao/disjuntor.log` | `trilha`, `dispara`, rearme, `main_pretool`; append, falha de trilha é silenciada (`bin/disjuntor.py:112`, `bin/disjuntor.py:123`, `bin/disjuntor.py:590`, `bin/disjuntor.py:985`). | `disjuntor.ler` calcula 24 h; `linha` formata; `gerar_estado.py` chama ambos (`bin/disjuntor.py:1030`, `bin/disjuntor.py:1147`, `bin/gerar_estado.py:277`). |
+| `DISJUNTOR_DESLIGADO` | Ronald fora do Code, segundo contrato e guarda (`bin/disjuntor.py:28`, `bin/disjuntor.py:136`). | `desligado`, chamado antes de agir no PreToolUse e Stop (`bin/disjuntor.py:128`, `bin/disjuntor.py:980`, `bin/hook_stop_fila1.py:1040`). |
+| Arquivo arbitrário de pausa + `logs/pausas.log` | `pausar.sh` grava QUEM/QUANDO/POR_QUE/SAIDA, rename e trilha; `--soltar` registra e remove (`bin/pausar.sh:24`, `bin/pausar.sh:31`, `bin/pausar.sh:39`). | `pausar.sh --ler`; vigia reconhece dono/saída para dois nomes específicos (`bin/pausar.sh:19`, `app/core/esteira_vigia.py:472`, `app/core/esteira_vigia.py:481`). |
+| `.claude/settings.json` | O molde atribui aplicação à sessão no pouso; autoria efetiva desta cópia: [nao verificado] (`bin/disjuntor_settings.json:2`). | Configura Stop e PreToolUse com caminhos absolutos do host; ativação real em produção: [nao verificado] (`.claude/settings.json:9`, `.claude/settings.json:68`). |
+| Pergunta/resposta do Codex | Escritor da pergunta: [nao verificado]; resposta é destino `-o` do `codex exec` (`bin/codex_pergunta.sh:40`, `bin/codex_pergunta.sh:157`). | Wrapper lê pergunta/anexos e monta prompt (`bin/codex_pergunta.sh:111`, `bin/codex_pergunta.sh:131`). PreToolUse atual não lê a pergunta para extrair obra (`bin/disjuntor.py:849`). |
+
+Detalhe útil para pergunta 3: wrapper exige `CODEX_OBRA` e papel por ambiente, mas `_codex_cmds` atual só extrai papel/volta/anexos; não extrai `CODEX_OBRA`, pergunta nem entidade. Assim B3 atual não usa `_obra_de` em chamada Codex; ele só a usa no Agent verificador final (`bin/codex_pergunta.sh:43`, `bin/disjuntor.py:859`, `bin/disjuntor.py:947`).
+
+## 31/10 16:18 · sessao 2237df423709 · - · - · origem=Ronald (tmux)
+
+Há bases reaproveitáveis para **escritas**, mas elas não entregam uma função geral “arquivo:linha → entidade lida ou escrita”; `varrer_arvore` entrega sítios de escrita, `PORTAS` declara escritores permitidos e `JUIZES` declara autoridades por pergunta/família. (`app/core/censo_escritas.py:469`; `app/core/portas.py:9`; `app/core/juizes.py:3`)
+
+**Fonte principal para arquivo:linha → entidade**
+
+- `app/core/censo_escritas.py` é puro AST/os, sem Django; `varrer_arvore(app_root)` devolve registros `{arquivo, linha, entidade, op, expr}`, com caminhos relativos a `app/`. A operação da linha é identificada por `no.lineno`, portanto o resultado localiza o início da chamada, não todo seu intervalo. (`app/core/censo_escritas.py:1`; `app/core/censo_escritas.py:361`; `app/core/censo_escritas.py:469`; `app/core/censo_escritas.py:489`)
+- Reconhece construtores `Modelo(...)`, operações ORM de criação/alteração/exclusão, `save/delete` de variável ligada ao modelo na função e `self` na classe do modelo. Preserva aliases de importação e amarrações de querysets/`get_object_or_404`. (`app/core/censo_escritas.py:6`; `app/core/censo_escritas.py:261`; `app/core/censo_escritas.py:285`; `app/core/censo_escritas.py:335`; `app/core/censo_escritas.py:364`; `app/core/censo_escritas.py:401`)
+- Já fornece inferências explicitamente marcadas: `[campo]`, `[update_fields]`, `[relacionado]`, `[nome]`. A última é declarada fraca; nome mais longo vence, empate não atribui. Gerente reverso e campo só entram quando identificam um modelo único. (`app/core/censo_escritas.py:15`; `app/core/censo_escritas.py:20`; `app/core/censo_escritas.py:38`; `app/core/censo_escritas.py:151`; `app/core/censo_escritas.py:165`; `app/core/censo_escritas.py:182`)
+- O comando `censo_escritas` já publica `arquivo:linha entidade expressão`, inclusive o balde não atribuível, e declara que só lê arquivo, sem banco. Para o instrumento no host, seria reaproveitável o módulo puro, sem executar `manage.py`. (`app/core/management/commands/censo_escritas.py:1`; `app/core/management/commands/censo_escritas.py:25`; `app/core/management/commands/censo_escritas.py:35`; `app/core/management/commands/censo_escritas.py:39`)
+
+**Outros mapas úteis, com limites**
+
+| Fonte | O que responde / limite |
+|---|---|
+| `core/portas.py::PORTAS` | Entidade → módulos que podem escrever; não prova que toda linha desses módulos pertence àquela entidade. (`app/core/portas.py:9`) |
+| `core/portas.py::FAMILIA_DE` | Entidade → família. Família não pode substituir entidade sem mudar o aval. `CelulaDia` e `FuroDiario` têm a mesma família, por exemplo. (`app/core/portas.py:38`; `app/core/portas.py:44`) |
+| `core/juizes.py::JUIZES` | Família/pergunta → `arquivo::função`/`Classe.método`; diz quem decide, não fornece entidade lida. (`app/core/juizes.py:3`; `app/core/juizes.py:7`; `app/core/juizes.py:156`) |
+| `core/mapa/contrato.py` | Lê docstring de módulo com `@bolha`, `@entra`, `@sai`, `@chama` etc.; `@bolha` é família e não há campo estruturado de modelo lido/escrito. (`app/core/mapa/contrato.py:13`; `app/core/mapa/contrato.py:39`; `app/core/mapa/contrato.py:83`) |
+| `bin/esmeril_chamado_censo.py::_onde` | Já mapeia números de linha para `(classe, função)` por intervalos AST; útil para associar uma citação a função, mas não resolve sua entidade. (`bin/esmeril_chamado_censo.py:76`) |
+| `core/medida_leitor_do_dia.py` | Mede derivação de status/valor com vocabulários e lista de leitores; não é catálogo geral de modelos lidos. (`app/core/medida_leitor_do_dia.py:14`; `app/core/medida_leitor_do_dia.py:32`; `app/core/medida_leitor_do_dia.py:70`) |
+
+**Ambiguidades reais**
+
+- Inverter porta por arquivo pode devolver várias entidades: `ponto/portas/celula.py` escreve `CelulaDia` e `FuroDiario`; `ponto/services/fechamento.py` escreve `FechamentoMensal` e `PeriodoFechado`. Não se pode escolher a primeira. (`app/core/portas.py:111`; `app/core/portas.py:112`; `app/core/portas.py:495`; `app/core/portas.py:496`)
+- `x.save()` com origem desconhecida, parâmetro, `form.save()` e `apps.get_model` podem ficar com `entidade=None`; o contrato do censo exige publicar esse balde. (`app/core/censo_escritas.py:43`; `app/core/censo_escritas.py:429`; `app/core/censo_escritas.py:507`)
+- O AST de `modelos()` aceita qualquer classe de topo com base em `models.py`, não apenas modelo Django. O repo documenta o falso positivo `ResolvedoraCruzada(ValueError)` e o teste que passou a consultar o registro Django para validar `FAMILIA_DE`. Portanto a lista AST sozinha não comprova modelo. (`app/core/censo_escritas.py:108`; `app/core/portas.py:60`; `app/core/tests/test_censo_escritas.py:264`)
+- Modelos são chaveados somente por nome da classe, com `setdefault`; duplicidade de nomes em apps distintas não se distingue pelo resultado desse cadastro. (`app/core/censo_escritas.py:89`; `app/core/censo_escritas.py:111`)
+- Arquivo ilegível e fonte com erro sintático podem virar ausência no censo atual: `varrer_fonte` retorna `[]` em `SyntaxError`; `varrer_arvore` ignora erro de leitura. Para usar como juiz NAO_SEI, seria necessário distinguir erro de “nenhuma escrita encontrada”. (`app/core/censo_escritas.py:451`; `app/core/censo_escritas.py:485`)
+- Inferir por campo ou padrão não prova o modelo. Outro censo do próprio repo declara explicitamente que datas de início/fim não distinguem vínculo de férias/período aquisitivo/ordem, e classifica nominalmente as exceções. (`app/core/censo_pergunta2.py:15`; `app/core/censo_pergunta2.py:42`)
+- “Chamado” do aval não é o nome da classe principal existente: ela é `ChamadoColaborador`; normalização/alias “Chamado → ChamadoColaborador” não está estabelecida nos mapas examinados. (`app/chamados/models.py:21`; `app/core/portas.py:58`; alias: [nao verificado])
+
+**Caminho determinístico proposto**
+
+Usar a citação normalizada relativamente a `app/`, identificar o nó/função por AST, consultar os sítios de `censo_escritas` nessa chamada/função e aceitar somente entidade única sustentada pelo código; conservar marca de inferência. Quando a linha é só leitura, ou função toca vários modelos, ou a citação não bate com a árvore, devolver NAO_SEI em vez de expandir para a família. Esta é proposta, não comportamento implementado. (bases: `app/core/censo_escritas.py:469`; `bin/esmeril_chamado_censo.py:76`; proposta: [nao verificado])
+
+**Ligação obra → PROGRAMA**
+
+Há vínculos documentais concretos, porém textuais e com várias formas:
+
+- `O-PROJECOES` tem `PROGRAMA: complemento STATUS-DO-DIA-NA-CELULA do PROGRAMA-CELULA-E-O-DIA`. (`app/docs/BACKLOG.md:730`)
+- `O280` tem `PROGRAMA: E3 do PROGRAMA-CELULA-E-O-DIA`. (`app/docs/BACKLOG.md:1398`)
+- `V3-BATERIA-DE-CASOS-PELA-REGRA` tem `PROGRAMA: E1 do PROGRAMA-CELULA-E-O-DIA`. (`app/docs/BACKLOG.md:1399`)
+- `O261-E-CELULA-20-UM-DONO` declara em prosa “esta obra é a E2” desse programa. (`app/docs/BACKLOG.md:782`)
+- `E4-CAL-RETIDO-FOLHA-NO-LEITOR` declara “linha da E4 do PROGRAMA...”, enquanto `PROGRAMA-CELULA-E-O-DIA-DUAS-PISTAS` é complemento do programa. (`app/docs/BACKLOG.md:774`; `app/docs/BACKLOG.md:773`)
+- ADR 0002 identifica seu programa, mas também mostra que programa não equivale a uma só tabela: status em `CelulaDia`, valor em `DiaPago`. (`app/docs/ADR/0002-celula-e-o-dia.md:4`; `app/docs/ADR/0002-celula-e-o-dia.md:8`)
+
+Assim, há material para declarar um vínculo explícito e auditável, mas interpretar “complemento”, etapas, programa pai e família como equivalentes seria nova regra. Parser único já implementado de obra→programa/entidade: [nao verificado].
+
+## 31/10 16:18 · sessao 3fb9a544fd51 · - · - · origem=Ronald (tmux)
+
+P1 — formas e limites observados:
+
+| Forma | Evidência | Hora e entidade |
+|---|---|---|
+| Forma literal apenas como **exemplo de contrato**: ``DESENHO <obra>: lei=... pergunta=... <arquivo>:<linha>`` | `app/docs/RELATO.md:12` | Sem hora; placeholders não constituem evento. Excluir contratos/exemplos é necessário para não contar ocorrência fictícia. |
+| Topo real: `REPROVA-E-DESENHO V3-RETOMA (12:4x, ...)` | `app/docs/RELATO.md:4` | Obra explícita, hora aproximada sem data; várias referências (motor, alimentação, regras, núcleo) e `CCT.feriados`, sem entidade única declarada. |
+| `> **[RESPONDIDA 23:5x...] PERGUNTA DE DESENHO O261-E-F5 (...), 30/10 23:4x:**` | `app/docs/RELATO.md:141` | Data/hora aproximada do evento; distinguir hora da resposta `23:5x`, do disparo e do evento `23:4x`. “família chamado” aparece, mas também célula, folha, vigia, referências `fora_da_folha.py:51` e `raiox.py:151`; primeiro arquivo:linha não define entidade por si. |
+| `PERGUNTA DE DESENHO (nao devolve turno) -- **GEO-SILENCIO-DE-PING: ...` | `app/docs/RELATO-ARQUIVO.md:983` | Obra após texto intermediário, sem hora própria nem arquivo:linha na linha; referências de código aparecem nos itens seguintes, por exemplo `ponto/presenca.py:12` em `:985`, `static/pwa.js:404` em `:987`. Timestamp exato [nao verificado]. |
+| Prosa respondida/riscada: `~~(pergunta de DESENHO -- ...` | `app/docs/RELATO.md:947` | Hora disponível é da resposta `26/10 22:1x`, não da abertura; nomes de funções sem localização. Contagem como novo evento exige decisão de contrato [nao verificado]. |
+| Prosa de custo/classificação, não marcador de evento: `(DESENHO)`, `= DESENHO`, `DESENHO, NAO DEFEITO` | `app/docs/RELATO.md:1302`, `:1333`, `:4058`; `app/docs/RELATO-ARQUIVO.md:6876`, `:7130` | Buscar apenas substring `DESENHO` conta classificações, títulos e menções históricas, além de perguntas. |
+| Título de desenho: `### O DESENHO DA LINHA (ponto.OcorrenciaHE)` | `app/docs/RELATO-ARQUIVO.md:22802` | Modelo explícito, mas nenhuma obra/evento no formato avalizado; título pai contém `02/10 03:5x` em `:22783`. |
+
+O selo de hora existente só reconhece `^## DD/MM HH:M[x\d]`, fixa TZ São Paulo, transforma dezena em `HH:M0` e infere ano de `git blame`; ele verifica título futuro, não entrega hora por evento (`bin/tests/test_hora_da_secao_nao_e_futura.sh:21`, `:25`, `:41-49`). Portanto `23:4x` oferece intervalo de dez minutos, sem instante exato para uma borda estrita de 24h (`app/docs/RELATO.md:141`).
+
+Não é seguro herdar sempre o título anterior: a primeira seção do RELATO está em `:185`, datada 30/10, enquanto o preâmbulo contém entradas 31/10 (`app/docs/RELATO.md:41`, `:57`, `:63`). O arquivo histórico é anexado no fim para preservar citações, pode ter `###` que perderam seu `##` original e não é uma sequência temporal simples (`app/docs/RELATO-ARQUIVO.md:23-30`). A dieta inclusive manteve cópias de contratos no vivo para leitores de testes, enquanto a história ficou no arquivo; contar vivo+arquivo sem identidade/deduplicação pode contar representação repetida (`app/docs/RELATO-ARQUIVO.md:34-40`).
+
+P5 — RELATO e arquivo:
+
+- **Topo manual / perguntas DESENHO:** o código documenta “topo escrito a mão” e preserva seus bytes; autoria concreta das linhas observadas [nao verificado] (`app/core/esteira_vigia.py:829-840`). A conduta manda perguntas de desenho ao topo (`CLAUDE.md:458-459`).
+- **RELATO escritor de máquina:** `app/core/esteira_vigia.py::no_relato`, seção `## ALARMES DA ESTEIRA`; flock do diretório, temporário único e `os.replace` (`app/core/esteira_vigia.py:815-840`, `:844-884`). Este escritor altera mtime do documento inteiro; mtime não prova hora de cada DESENHO (`:879-884`).
+- **Outros escritores do RELATO:** gerador de SEUS CORTES lê e regrava inteiro (`bin/gerar_cortes.py:114-136`); deploy agendado insere uma linha e regrava (`bin/deploy_agendado.sh:31-44`). O próprio escritor único declara que estes e o Edit manual não tomam sua trava (`app/core/esteira_vigia.py:839-840`).
+- **Leitor do topo atual:** hook lê só as duas primeiras linhas úteis, pula cabeçalho/brancas, tira crases iniciais; não lê todo corpo para B3 (`bin/hook_stop_fila1.py:420-444`). `_pergunta_b3_escrita` aceita substring `DESENHO` e identidade de obra por `DJ.obras_da_linha` (`:411-417`).
+- **Leitores/prova/publicação:** checador lê RELATO e verifica afirmações fortes com PROVA em janela de seis linhas (`bin/relato_afirma_com_prova.py:33-50`, `:86-99`); wrapper de publicação o invoca e raspa/copia o RELATO para destino público (`bin/relato.sh:54-56`, `:98-104`). Publicador não é escritor do RELATO original nesses trechos.
+- **RELATO-ARQUIVO:** regra exige mover material de mais de três dias no mesmo commit (`CLAUDE.md:610-613`); lei registra isso como conduta sem guarda mecânica (`app/docs/LEIS.md:135`). Cabeçalho documenta cortes manuais por conteúdo, movimento integral e append para preservar linhas (`app/docs/RELATO-ARQUIVO.md:3-14`, `:23-30`, `:42-50`). Escritor automático/estado de rotação [nao verificado].
 
 ## 31/10 16:16 · sessao fb824fd80c4f · ADR-0003 · censo · origem=Code
 
@@ -555,319 +912,4 @@ Motivos declarados:
 - Há relato explícito de containers órfãos ainda testando enquanto `--quem` respondia `livre` após morte do lançador; a existência deles agora `[nao verificado]`. (`app/docs/BACKLOG.md:1421`; `app/docs/RELATO-ARQUIVO.md:1380`)
 
 
-## 31/10 15:53 · sessao 099205dd302f · TRAVA-MENOS-FILA · leitura · origem=Code
-
-**(a) O histórico deve nascer dentro de `bin/trava_teste.sh`, em torno da aquisição e da execução.** Instrumentar apenas `suite.sh` perderia régua, pre-push e demais entradas diretas (`bin/regua.sh:165`, `bin/pre-push.sh:142`, `bin/vigia_arvore.sh:83`).
-
-Os pontos são:
-
-- **Pedido:** depois de validar argumentos e imediatamente antes de abrir/esperar o lock; nunca depois do `flock`, pois apagaria a espera (`bin/trava_teste.sh:33`, `bin/trava_teste.sh:35-36`).
-- **Início:** imediatamente após o `flock` conseguir a vez, antes de escrever `.quem` e executar o comando. Assim mede espera pela trava, separada do trabalho protegido (`bin/trava_teste.sh:36-42`).
-- **Fim e rc:** após `"$@"`, capturando `$?` antes de qualquer escrita. Hoje esse comando é a última instrução: acrescentar um append sem preservar o status pode trocar o resultado do teste pelo resultado do histórico (`bin/trava_teste.sh:42`).
-- **Sem vez:** registrar tentativa encerrada com `inicio=null`, fim e `rc=75`, preservando a saída atual. O finalizador precisa cobrir esse caminho e conservar a limpeza de `.quem` somente quando houve aquisição; hoje o `EXIT` é instalado depois do caminho que sai 75 (`bin/trava_teste.sh:36-41`).
-- **Lock do histórico:** usar outro descritor, em escopo curto e com espera limitada; substituir o FD 9 ou manter o lock do histórico durante o run alteraria o dispositivo atual. O FD 9 pertence à trava principal (`bin/trava_teste.sh:35-42`).
-
-**Uma linha final por tentativa serve para histórico concluído; não serve, sozinha, para publicar a fila corrente.** Pedido, início e término precisam de eventos correlacionados ou de estado corrente separado: antes da aquisição ainda não existe início, e antes de terminar não existem fim/rc (`bin/trava_teste.sh:36-42`).
-
-**(b) Chamadores diretos encontrados e identificação disponível:**
-
-| Chamador | O que transmite à trava |
-|---|---|
-| Régua | `ESTEIRA_QUEM=regua` (`bin/regua.sh:165`). |
-| Pre-push | `pre-push`; a função atende arsenal e control-plane, portanto um push pode produzir duas tentativas (`bin/pre-push.sh:142`, `bin/pre-push.sh:186`, `bin/pre-push.sh:198`). |
-| `suite.sh` | Identidade herdada ou `suite` (`bin/suite.sh:96`). |
-| Vigia da árvore | `vigia_arvore`, em dois pontos de execução (`bin/vigia_arvore.sh:83`, `bin/vigia_arvore.sh:131`). |
-| Régua do relógio | `regua_relogio` (`bin/regua_relogio.sh:51`). |
-| Molde das fatias | `fatia`, nos RED/GREEN parciais (`bin/molde_fatia/rodar.sh:40`, `bin/molde_fatia/rodar.sh:46-47`). |
-
-**Todos têm ferramenta nomeável; não têm obra obrigatoriamente identificada.** A trava constrói `quem` como ferramenta mais PID; o molde conhece `__FATIA__`, mas transmite somente `fatia` (`bin/trava_teste.sh:23`, `bin/molde_fatia/rodar.sh:40`, `bin/molde_fatia/rodar.sh:46`).
-
-O “label de `suite.sh`” não resolve: `--only` e `LABELS` são alvos de testes, não identificadores da obra; o parser não oferece argumento de obra (`bin/suite.sh:43-53`, `bin/suite.sh:59`, `bin/suite.sh:102`). Uso padronizado de `SUITE_OBRA` pelos chamadores: [nao verificado].
-
-O instalador de hooks gera delegação a `bin/pre-push.sh`; há também uma cópia em `app/core/hooks/pre-push.sh` que executa Docker diretamente. Qual hook está efetivamente instalado: [nao verificado] (`bin/hooks.sh:51-56`, `app/core/hooks/pre-push.sh:54`, `app/core/hooks/pre-push.sh:82`, `app/core/hooks/pre-push.sh:87`).
-
-**(c) O contrato precisa corrigir estes pontos:**
-
-1. **“Único portão do `juliani_db_test`” excede a cobertura existente.** Calendário e molde de autocura executam suites completas diretamente; isolamento, placar, selo da fatia e vigia Python também executam testes sem passar pela trava (`bin/regua_calendario.sh:41-45`, `bin/molde_autocura/rodar.sh:20-26`, `bin/isolamento.sh:31-33`, `bin/placar_code.sh:122-126`, `bin/molde_fatia/rodar.sh:28-30`, `app/core/esteira_vigia.py:751-760`). `REGUA_DB` muda o banco de teste, enquanto o host padrão continua `juliani_db_test` (`app/config/settings/ci.py:12`, `app/config/settings/ci.py:17`). O selo não garante universalidade: varre `bin/*.sh`, tem exceções por `REGUA_DB` e aceita presença textual da trava no arquivo (`bin/tests/test_trava_teste.sh:40`, `bin/tests/test_trava_teste.sh:59-62`).
-
-2. **“Pedidos sem início” inclui tentativas já encerradas.** Um timeout sai sem executar o comando; contá-lo como pendente produziria fila permanente. É necessário distinguir aguardando, admitido e encerrado sem admissão (`bin/trava_teste.sh:36-42`). Além disso, `rc=75` isolado não prova timeout: o comando protegido também pode devolver 75; o registro precisa indicar se houve aquisição (`bin/trava_teste.sh:38`, `bin/trava_teste.sh:42`).
-
-3. **`--quem` não prova posse nem mede fila.** Ele lê apenas um arquivo lateral; as atualizações acontecem depois da aquisição e no `EXIT`, permitindo divergência entre texto e lock, inclusive após morte abrupta (`bin/trava_teste.sh:28`, `bin/trava_teste.sh:40-41`).
-
-4. **Continuar o run após append falho é coerente com “hist é testemunha”, mas deixa cobertura incompleta.** “Conta FALHA” precisa de canal independente: tentar registrar a falha somente no histórico que falhou pode torná-la invisível. Esse canal não existe na trava atual (`bin/trava_teste.sh:20-42`). O contrato também precisa impedir espera indefinida pelo lock do histórico; o mecanismo proposto ainda está [nao verificado].
-
-5. **A média pode esconder justamente as piores esperas.** Excluir tentativas sem início retira os timeouts; atribuir-lhes zero também falseia a espera. Publicaria média dos admitidos com quantidade de amostras, negados separados e idade dos pendentes, pois o caminho 75 efetivamente esperou e não começou (`bin/trava_teste.sh:36-38`). Janela por pedido/início/fim, fuso, dias civis versus janelas móveis, gatilho por obra versus agregado e fonte da conta da VM não estão definidos no contrato enviado: [nao verificado].
-
-6. **O destino do ESTADO precisa ser corrigido.** O fluxo encontrado gera `$TMP/ESTADO.md` e publica no destino padrão `/home/ronald/hasner-relato`, não em `app/docs/ESTADO.md` (`bin/relato.sh:23`, `bin/relato.sh:38`, `bin/relato.sh:100-102`, `bin/gerar_estado.py:376`). O template atual não contém bloco TRAVA (`bin/gerar_estado.py:295-369`). O novo leitor deve conter falhas de importação, leitura e composição para publicar `nao sei`; sem contenção, erro do gerador encerra o ciclo de publicação (`bin/gerar_estado.py:289-293`, `bin/relato.sh:38`).
-
-7. **A instrumentação precisa preservar o isolamento dos testes da própria trava.** O selo copia o script e altera apenas o caminho do lock; acrescentar histórico com caminho real pode fazer suas execuções sintéticas contaminarem a medida publicada (`bin/tests/test_trava_teste.sh:101-103`, `bin/tests/test_trava_teste.sh:119-137`).
-
-## 31/10 15:53 · sessao 1d030a5d304b · V3-RETOMA · leitura · origem=Code
-
-**Os textos examinados usam a duração diária para as extras e a faixa horária para o trabalho noturno. Não estabelecem expressamente que as extras sejam sempre os últimos minutos trabalhados, nem disciplinam sua distribuição entre vários períodos intradiários.** Essa constatação limita-se aos dispositivos e verbetes abaixo. [CLT, normaalizada-pe.html:300–307, 360–368](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html)
-
-As citações entre aspas são **trechos literais selecionados**; as explicações restantes são paráfrases. As linhas indicam a representação textual dos documentos externos consultados.
-
-**1. CLT: dispositivo, literalidade e situação**
-
-O art. 59, caput e §§ 1º, 2º, 3º, 5º e 6º, consta do texto atualizado; o § 4º está revogado. [normaatualizada-pe.html:300–307](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html)
-
-| Dispositivo | Trecho literal selecionado | Conteúdo, em paráfrase |
-|---|---|---|
-| Art. 59, caput | “A duração diária do trabalho poderá ser acrescida de horas extras” | Refere-se à duração **diária**; prevê até duas extras mediante os instrumentos indicados. [l13467.htm:105](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2017/lei/l13467.htm) |
-| § 1º | “50% (cinquenta por cento)” | Acréscimo mínimo sobre a hora normal. [l13467.htm:107](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2017/lei/l13467.htm) |
-| § 2º | “em um dia” | Permite compensar excesso diário pela diminuição em outro dia, mediante acordo ou convenção coletiva, observados o período máximo anual e o limite de dez horas diárias. [normaatualizada-pe.html:302](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html) |
-| § 3º | “horas extras não compensadas” | Determina seu pagamento na rescisão, segundo a remuneração dessa data. [l13467.htm:111](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2017/lei/l13467.htm) |
-| § 4º | — | **Revogado** pela Lei 13.467/2017. [l13467.htm:113, 987–992](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2017/lei/l13467.htm) |
-| § 5º | “seis meses” | Banco de horas por acordo individual escrito, com compensação nesse prazo máximo. [l13467.htm:115](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2017/lei/l13467.htm) |
-| § 6º | “no mesmo mês” | Compensação por acordo individual tácito ou escrito. [l13467.htm:117](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2017/lei/l13467.htm) |
-
-Os quatro parágrafos solicitados do art. 73 constam do texto atualizado, sem indicação de revogação. [normaatualizada-pe.html:361–368](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html)
-
-| Dispositivo | Trecho literal selecionado | Conteúdo, em paráfrase |
-|---|---|---|
-| Art. 73, § 1º | “30 (trinta) segundos” | Hora noturna computada com 52 minutos e 30 segundos. [normaatualizada-pe.html:361](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html) |
-| § 2º | “Considera-se noturno” | Define o trabalho entre 22h de um dia e 5h do seguinte. [normaatualizada-pe.html:363](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html) |
-| § 4º | “Nos horários mistos” | Aplica as disposições do artigo às horas noturnas dos horários que abrangem períodos diurnos e noturnos. [normaatualizada-pe.html:366](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html) |
-| § 5º — íntegra | “Às prorrogações do trabalho noturno aplica-se o disposto neste capítulo.” | Estende as disposições do capítulo à prorrogação. [normaatualizada-pe.html:368](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html) |
-
-Portanto, **quantificação diária**, **localização no relógio** e **prorrogação noturna** aparecem nesses dispositivos; uma regra expressa de seleção cronológica dos minutos extraordinários não aparece. [normaatualizada-pe.html:300–307, 360–368](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html)
-
-**2. Súmulas e OJs indicadas**
-
-| Verbete | Texto literal relevante | O que o trecho efetivamente disciplina |
-|---|---|---|
-| **Súmula 60, II** | “Cumprida integralmente a jornada no período noturno e prorrogada esta, devido é também o adicional quanto às horas prorrogadas.” | Adicional na prorrogação noturna. Transcrição do verbete em documento oficial: [acordao.do, E-ED-RR-825-88.2010.5.03.0064:171–176](https://consultadocumento.tst.jus.br/consultaDocumento/acordao.do?anoProcInt=2013&dtaPublicacaoStr=28%2F05%2F2021+07%3A00%3A00&nia=7637301&numProcInt=170108). |
-| **Súmula 85, III e IV** | “horas excedentes à jornada normal diária” | Compensação e consequências de sua invalidade, com referências aos módulos diário e semanal. [documento d4a380524f995d9b0bb461bf24733a13:89–91](https://jurisprudencia-backend.tst.jus.br/rest/documentos/d4a380524f995d9b0bb461bf24733a13). |
-| **Súmula 366** | “Se ultrapassado esse limite, será considerada como extra a totalidade do tempo que exceder a jornada normal.” | Variações de registro e tolerância; o trecho não identifica necessariamente o excesso com o final do dia. [documento 8e88a25e9f40b1e5e2199ac0e3dd8c43:147–149](https://jurisprudencia-backend.tst.jus.br/rest/documentos/8e88a25e9f40b1e5e2199ac0e3dd8c43). |
-| **Súmula 437, I** | “sem prejuízo do cômputo da efetiva jornada de labor para efeito de remuneração” | Pagamento relacionado à supressão do intervalo e preservação do cômputo do trabalho efetivo. [documento f22a2b6f90b469ac17ad6ba9b3c9e847:51–54](https://jurisprudencia-backend.tst.jus.br/rest/documentos/f22a2b6f90b469ac17ad6ba9b3c9e847). |
-| **OJ SDI-1 97 — íntegra** | “O adicional noturno integra a base de cálculo das horas extras prestadas no período noturno.” | **Base de cálculo** das extras noturnas. [JURISPRUDÊNCIA CONSOLIDADA_VERSÃO_COMPLETA_28_6_2024.pdf:8318–8320](https://as1.trt3.jus.br/bd-trt3/bitstream/handle/11103/17962/JURISPRUD%C3%8ANCIA%20CONSOLIDADA_VERS%C3%83O_COMPLETA_28_6_2024.pdf?isAllowed=y&sequence=1). |
-| **OJ SDI-1 388** | “após as 5 horas da manhã” | Adicional nas horas posteriores às 5h, em jornada 12×36 que compreenda todo o período noturno. [JURISPRUDÊNCIA CONSOLIDADA_VERSÃO_COMPLETA_28_6_2024.pdf:10520–10528](https://as1.trt3.jus.br/bd-trt3/bitstream/handle/11103/17962/JURISPRUD%C3%8ANCIA%20CONSOLIDADA_VERS%C3%83O_COMPLETA_28_6_2024.pdf?isAllowed=y&sequence=1). |
-
-**Situação dos verbetes:**
-
-- **366 e 437: canceladas.** A Resolução 225/2025 registra, respectivamente nos incisos XV e XXII, cancelamento por perda de eficácia desde 11/11/2017 pela Lei 13.467/2017. Trecho literal comum: “cancelada por perda de eficácia a partir de 11/11/2017”. [2025_res0225.pdf:83–84, 99–100](https://juslaboris.tst.jus.br/bitstream/handle/20.500.12178/251919/2025_res0225.pdf?isAllowed=y&sequence=1)
-- **60, 85, OJ 97 e OJ 388:** constam sem cancelamento na edição oficial de 2024 e não figuram nos cancelamentos da Resolução 225/2025. **Vigência atual em 31/10/2026: [NAO VERIFICADO].** [JURISPRUDÊNCIA CONSOLIDADA_VERSÃO_COMPLETA_28_6_2024.pdf:3007–3014, 3212–3236, 8318–8320, 10520–10528](https://as1.trt3.jus.br/bd-trt3/bitstream/handle/11103/17962/JURISPRUD%C3%8ANCIA%20CONSOLIDADA_VERS%C3%83O_COMPLETA_28_6_2024.pdf?isAllowed=y&sequence=1); [2025_res0225.pdf:51–136](https://juslaboris.tst.jus.br/bitstream/handle/20.500.12178/251919/2025_res0225.pdf?isAllowed=y&sequence=1)
-
-**3. Resposta específica sobre quais minutos são extras**
-
-Nos seis verbetes examinados, **não há comando literal que reserve as extras aos últimos minutos cronológicos do dia**, nem regra específica para atribuir extras noturnas quando a prorrogação ocorre em período anterior ao último. [JURISPRUDÊNCIA CONSOLIDADA_VERSÃO_COMPLETA_28_6_2024.pdf:3007–3014, 3212–3236, 6280–6288, 7293–7312, 8318–8320, 10520–10528](https://as1.trt3.jus.br/bd-trt3/bitstream/handle/11103/17962/JURISPRUD%C3%8ANCIA%20CONSOLIDADA_VERS%C3%83O_COMPLETA_28_6_2024.pdf?isAllowed=y&sequence=1)
-
-A OJ 97 pressupõe horas extras prestadas em período noturno e determina sua composição remuneratória; ela não fornece o critério anterior para escolher esses minutos. A OJ 388, por sua vez, fala em adicional após as 5h sem qualificar essas horas como extraordinárias. **Essa distinção é leitura delimitada dos textos.** [Mesmo PDF:8320, 10526–10528](https://as1.trt3.jus.br/bd-trt3/bitstream/handle/11103/17962/JURISPRUD%C3%8ANCIA%20CONSOLIDADA_VERS%C3%83O_COMPLETA_28_6_2024.pdf?isAllowed=y&sequence=1)
-
-**[NAO VERIFICADO]** Não consegui fundamentar literalmente uma regra geral que imponha: **“extras = últimos minutos trabalhados”**, **“excesso apurado separadamente por período”** ou uma solução específica para o período anterior ao último. Também permanece **[NAO VERIFICADO]** afirmar que inexista qualquer outra Súmula ou OJ do TST sobre essa seleção temporal.
-
-## 31/10 15:52 · sessao 2e56327f1075 · - · - · origem=Ronald (tmux)
-
-O ESTADO publicado nasce em temporário, não em `app/docs/ESTADO.md`: `bin/relato.sh:38` chama o gerador com `$TMP/ESTADO.md`; o gerador escreve o destino recebido em `bin/gerar_estado.py:376`; o publicador envia o temporário ao raspador em `bin/relato.sh:100-102`, com destino padrão `/home/ronald/hasner-relato` (`bin/relato.sh:23`), e o raspador grava em `dest/dst` (`bin/raspar_publico.py:40`). O template atual não contém TRAVA, e suas métricas vêm dos leitores importados em `bin/gerar_estado.py:198-293` e do template em `bin/gerar_estado.py:295-369`.
-
-Lacunas do contrato:
-
-- **Uma linha final por run é insuficiente para fila corrente.** O início só fica conhecido depois de `flock` (`bin/trava_teste.sh:36-40`) e fim/rc depois do comando (`bin/trava_teste.sh:42`); se a linha nascer ao terminar, os pedidos ainda aguardando não aparecem. Se nascer antes, faltam início/fim/rc e são necessárias atualizações ou eventos correlacionados por ID. É consequência do desenho existente; o protocolo adicional está [nao verificado].
-- **Pedidos sem início incluem encerrados.** Timeout sai por `75` antes do comando (`bin/trava_teste.sh:36-38`); o contrato precisa distinguir aguardando, negado e cancelado para não transformar timeout em fila eterna. Cancelamento/sinais não têm protocolo atual além do `EXIT` do detentor (`bin/trava_teste.sh:41`).
-- **`--quem` é testemunho lateral.** Ele somente lê `$TRAVA.quem` ou imprime `livre` (`bin/trava_teste.sh:28`); o arquivo é atualizado depois da aquisição (`bin/trava_teste.sh:40`) e no `EXIT` (`bin/trava_teste.sh:41`). Logo há janelas de divergência entre o arquivo e o lock; o contrato não deve tratar essa leitura como prova suficiente da posse.
-- **A observação não pode segurar a pista indefinidamente.** O lock atual ocupa FD 9 antes da espera e permanece durante o comando (`bin/trava_teste.sh:35-42`); usar FD próprio e espera limitada para o histórico evita substituir FD 9 ou aumentar a ocupação da pista. O prazo e o canal durável de FALHA do histórico estão [nao verificado].
-- **Falha do histórico pode fabricar média boa.** Se append falhar e o run prosseguir, os runs omitidos não aparecem na média; “conta FALHA” precisa de canal independente e de indicação de cobertura incompleta. O mecanismo ainda está [nao verificado]; a trava atual não tem histórico nem contador (`bin/trava_teste.sh:20-42`).
-- **`nao sei` precisa cobrir toda a seção.** O gerador já protege importação, leitura e composição de outro medidor conjuntamente (`bin/gerar_estado.py:287-293`); sem isso, uma exceção do novo leitor impede a geração e `relato.sh` encerra o ciclo (`bin/relato.sh:38`). Arquivo vazio, registros truncados, falha de permissões e ausência de amostras precisam de semântica explícita [nao verificado].
-- **A média tem viés sem universo definido.** Excluir os `75` omite justamente quem esperou e não conseguiu iniciar (`bin/trava_teste.sh:36-38`); incluí-los como espera zero também falseia a medida. Devem aparecer separados como negados, com tempo observado como limite inferior, e pendentes com idade corrente [nao verificado].
-- **“24 h” e “2 dias seguidos” são insuficientes para o gatilho.** O contrato não fixa inclusão por pedido/início/fim, fuso, dias civis versus janelas móveis, mínimo de amostras, agregado global versus por obra nem origem da conta da VM [nao verificado]. Datas com ano/fuso e duração monotônica são recomendáveis; o carimbo atual de `--quem` contém somente dia/mês/hora (`bin/trava_teste.sh:40-41`).
-
-Há precedente útil de observabilidade na sombra: ela mede antes/depois do `flock`, registra inclusive negação (`bin/sombra_trava.sh:27-35`) e conta negados e linhas ilegíveis como problemas (`bin/sombra_trava.sh:55-60`), embora esse formato também não registre a fila enquanto espera (`bin/sombra_trava.sh:28-31`).
-
-O selo atual só verifica serialização e timeout `75`, sem história ou medição de fila (`bin/tests/test_trava_teste.sh:117-137`).
-
-## 31/10 15:52 · sessao ee9b1d9ee7f7 · - · - · origem=Ronald (tmux)
-
-Chamadores diretos encontrados, todos com identidade de ferramenta, sem obra obrigatória:
-
-| Chamador | Identidade transmitida | Evidência |
-|---|---|---|
-| Régua | `ESTEIRA_QUEM=regua` | `bin/regua.sh:165` |
-| Pre-push | `ESTEIRA_QUEM=pre-push`, na função compartilhada pelo arsenal e pelo control-plane | `bin/pre-push.sh:142`, `bin/pre-push.sh:186`, `bin/pre-push.sh:198` |
-| Suite | `ESTEIRA_QUEM` herdado ou `suite` | `bin/suite.sh:96` |
-| Vigia da árvore | `ESTEIRA_QUEM=vigia_arvore`, para suite/reteste e confirmação viva | `bin/vigia_arvore.sh:83`, `bin/vigia_arvore.sh:88`, `bin/vigia_arvore.sh:106`, `bin/vigia_arvore.sh:131` |
-| Régua do relógio | `ESTEIRA_QUEM=regua_relogio` | `bin/regua_relogio.sh:51` |
-| Molde das fatias | `ESTEIRA_QUEM=fatia`, usado nos RED/GREEN parciais | `bin/molde_fatia/rodar.sh:40`, `bin/molde_fatia/rodar.sh:46`, `bin/molde_fatia/rodar.sh:47` |
-
-`QUEM` acrescenta PID à identidade, portanto identifica uma execução da ferramenta, sem identificar necessariamente a obra (`bin/trava_teste.sh:23`). O molde dispõe de `__FATIA__` e bancos específicos, mas envia apenas `fatia` à trava (`bin/molde_fatia/rodar.sh:29`, `bin/molde_fatia/rodar.sh:40`, `bin/molde_fatia/rodar.sh:46`). O parser de `suite.sh` aceita `--dir`, `--only`, `--parallel`, `--espera` e argumentos extras; não oferece argumento de obra (`bin/suite.sh:43`, `bin/suite.sh:46`, `bin/suite.sh:50`, `bin/suite.sh:52`). `LABELS` é lista de apps de teste lida da régua, utilizada como alvo do `manage.py test`, não identificador de obra (`bin/suite.sh:59`, `bin/suite.sh:102`). Não encontrei uso de `SUITE_OBRA` na busca do repositório [nao verificado].
-
-O hook que o instalador gera delega a `bin/pre-push.sh`; a instalação efetiva nesta máquina não foi conferida (`bin/hooks.sh:51`, `bin/hooks.sh:56`; [nao verificado]). Existe uma cópia antiga em `app/core/hooks/pre-push.sh` que executa Docker diretamente, sem passar por `trava_teste.sh`; não há prova de que esteja instalada (`app/core/hooks/pre-push.sh:54`, `app/core/hooks/pre-push.sh:82`, `app/core/hooks/pre-push.sh:87`; [nao verificado]).
-
-A premissa “único portão do juliani_db_test” não é verdadeira para todo executor existente: o CI aponta por default ao mesmo container e apenas varia o nome do banco quando recebe `REGUA_DB` (`app/config/settings/ci.py:12`, `app/config/settings/ci.py:17`).
-
-- `regua_calendario.sh` executa a suite inteira diretamente três vezes, com bancos próprios no container default (`bin/regua_calendario.sh:41`, `bin/regua_calendario.sh:43`, `bin/regua_calendario.sh:44`, `bin/regua_calendario.sh:45`).
-- O molde de autocura executa Docker diretamente e inclui um GREEN completo (`bin/molde_autocura/rodar.sh:20`, `bin/molde_autocura/rodar.sh:25`, `bin/molde_autocura/rodar.sh:26`).
-- Há recortes diretos no isolamento, placar e selo do molde de fatia (`bin/isolamento.sh:31`, `bin/isolamento.sh:33`; `bin/placar_code.sh:121`, `bin/placar_code.sh:125`; `bin/molde_fatia/rodar.sh:28`, `bin/molde_fatia/rodar.sh:30`).
-- O vigia Python também monta e executa Docker diretamente (`app/core/esteira_vigia.py:751`, `app/core/esteira_vigia.py:757`, `app/core/esteira_vigia.py:760`).
-
-O selo não prova cobertura universal: percorre somente `bin/*.sh`, aceita presença textual de `trava_teste.sh` em qualquer parte do código e isenta `REGUA_DB` fora de dois padrões limitados de suite inteira (`bin/tests/test_trava_teste.sh:40`, `bin/tests/test_trava_teste.sh:59`, `bin/tests/test_trava_teste.sh:60`, `bin/tests/test_trava_teste.sh:62`). Seus exercícios da trava usam uma cópia isolada, não o dispositivo global; instrumentação nova não deve contaminar o histórico real com esses runs (`bin/tests/test_trava_teste.sh:101`, `bin/tests/test_trava_teste.sh:103`, `bin/tests/test_trava_teste.sh:119`, `bin/tests/test_trava_teste.sh:134`).
-
-## 31/10 15:50 · sessao b06ea5b91449 · - · - · origem=Ronald (tmux)
-
-Não localizei fonte primária que formule literalmente a regra “as horas extras são necessariamente os últimos minutos trabalhados cronologicamente”, nem regra específica de imputação quando o excesso ocorre em período anterior ao último. A **inexistência universal** desse verbete permanece **[NAO VERIFICADO]**; não recomendo transformar o resultado negativo da busca em afirmação de inexistência.
-
-Achados úteis para a consolidação:
-
-- **Súmula 264** trata de composição remuneratória, não de seleção temporal dos minutos. Sua reafirmação no **Tema 280**, processo **RR-0000254-24.2023.5.09.0411**, consta de acórdão primário do TST, datado de Brasília, **25/08/2025**, reproduzido no [PDF oficial hospedado pelo TRT3](https://portal.trt3.jus.br/internet/jurisprudencia/incidentes-suscitados-irr-iac-arginc-tst/downloads/acordao-de-merito-tema-280.pdf), **ID acd3354, pág. 7**. Trecho literal curto: “A remuneração das horas extraordinárias é composta do valor da hora normal”. A numeração das linhas não pôde ser obtida: **[NAO VERIFICADO: arquivo:linha]**. O resultado indexado contém o dispositivo integral.
-- **OJ SDI-1 127**: refere-se à subsistência da hora reduzida após a Constituição; não oferece regra de distribuição cronológica. **OJ SDI-1 395**: refere-se à compatibilidade entre hora reduzida e turnos ininterruptos de revezamento; também não seleciona minutos extraordinários. Ambas aparecem no [Livro oficial do TST](https://www.tst.jus.br/documents/10157/63003/Livro-Internet.pdf), em resultados indexados; a OJ395 aparece na página interna **C-97** da edição indexada. Vigência atual e linhas: **[NAO VERIFICADO]**, pois o documento aberto retornou 403.
-- A redação da **OJ388** sobre empregado submetido a jornada **12x36** ajuda a distinguir **prorrogação do período noturno** de **excesso da jornada contratual**: o texto trata de adicional após 5h dentro desse regime, sem identificar tais horas como extras. Essa distinção é uma **inferência do texto**, não transcrição de regra geral. O outro agente deve fornecer o texto e a situação confirmados.
-- As buscas pelos termos “últimos minutos”, “ordem cronológica”, “primeiro período”, “último período” e “dois períodos”, associados a horas extras/noturnas no domínio TST, não produziram enunciado específico. Essa é uma limitação da pesquisa, não prova jurídica de inexistência. **[NAO VERIFICADO]**.
-
-O endereço aparentemente atual do livro é [livrointernet-12-pdf](https://www.tst.jus.br/documents/d/guest/livrointernet-12-pdf), mas também retornou 403. A rede no shell não resolveu DNS; nenhum arquivo foi criado, editado ou apagado.
-
-## 31/10 15:50 · sessao 85b784e75287 · - · - · origem=Ronald (tmux)
-
-Fontes oficiais acessíveis:
-
-- **Livro do TST reproduzido pelo TRT3**, atualizado em 28/06/2024: [JURISPRUDÊNCIA CONSOLIDADA_VERSÃO_COMPLETA_28_6_2024.pdf](https://as1.trt3.jus.br/bd-trt3/bitstream/handle/11103/17962/JURISPRUD%C3%8ANCIA%20CONSOLIDADA_VERS%C3%83O_COMPLETA_28_6_2024.pdf?isAllowed=y&sequence=1). A própria obra informa que incorporou o livro do TST extraído do sítio oficial, linhas146–148. Permite reprodução de qualquer parte com citação da fonte, linhas42–43.
-- **Resolução TST225/2025**: [2025_res0225.pdf](https://juslaboris.tst.jus.br/bitstream/handle/20.500.12178/251919/2025_res0225.pdf?isAllowed=y&sequence=1),141 linhas.
-
-**Súmula60,II**, livro TRT3:3012–3014,página73:
-
-> Cumprida integralmente a jornada no período noturno e prorrogada esta, devido é também o adicional quanto às horas prorrogadas. Exegese do art.73,§5º,da CLT.
-
-ItemI,livro TRT3:3010–3011:
-
-> O adicional noturno, pago com habitualidade, integra o salário do empregado para todos os efeitos.
-
-**Súmula85,III**,livro TRT3:3221–3225,página77:
-
-> O mero não atendimento das exigências legais para a compensação de jornada, inclusive quando encetada mediante acordo tácito, não implica a repetição do pagamento das horas excedentes à jornada normal diária, se não dilatada a jornada máxima semanal, sendo devido apenas o respectivo adicional.
-
-ItemIV,livro TRT3:3226–3230:
-
-> A prestação de horas extras habituais descaracteriza o acordo de compensação de jornada. Nesta hipótese, as horas que ultrapassarem a jornada semanal normal deverão ser pagas como horas extraordinárias e, quanto àquelas destinadas à compensação, deverá ser pago a mais apenas o adicional por trabalho extraordinário.
-
-Inteiro teor dos itensI–VI:3212–3236. Não contém regra que selecione cronologicamente os últimos minutos como extras; trata de compensação de jornada, conforme esse trecho delimitado.
-
-**Súmula366**,livro TRT3:6280–6288,página129:
-
-> Não serão descontadas nem computadas como jornada extraordinária as variações de horário do registro de ponto não excedentes de cinco minutos, observado o limite máximo de dez minutos diários. Se ultrapassado esse limite, será considerada como extra a totalidade do tempo que exceder a jornada normal, pois configurado tempo à disposição do empregador, não importando as atividades desenvolvidas pelo empregado ao longo do tempo residual (troca de uniforme, lanche, higiene pessoal, etc).
-
-**Cancelada**. Resolução225/2025,art.1º,XV,2025_res0225.pdf:83–84:
-
-> XV - Súmula nº366 (cancelada por perda de eficácia a partir de11/11/2017,pela Lei13.467/2017);
-
-**Súmula437,I**,livro TRT3:7296–7300,página147:
-
-> Após a edição da Lei nº8.923/94,a não concessão ou a concessão parcial do intervalo intrajornada mínimo, para repouso e alimentação, a empregados urbanos e rurais, implica o pagamento total do período correspondente, e não apenas daquele suprimido, com acréscimo de, no mínimo,50% sobre o valor da remuneração da hora normal de trabalho (art.71 da CLT),sem prejuízo do cômputo da efetiva jornada de labor para efeito de remuneração.
-
-ItemIV,livro TRT3:7309–7312:
-
-> Ultrapassada habitualmente a jornada de seis horas de trabalho, é devido o gozo do intervalo intrajornada mínimo de uma hora, obrigando o empregador a remunerar o período para descanso e alimentação não usufruído como extra, acrescido do respectivo adicional, na forma prevista no art.71,caput e§4º da CLT.
-
-**Cancelada**. Resolução225/2025,art.1º,XXII,2025_res0225.pdf:99–100:
-
-> XXII - Súmula nº437 (cancelada por perda de eficácia a partir de11/11/2017,pela Lei13.467/2017);
-
-**OJSDI-197**,livro TRT3:8318–8320,página168:
-
-> O adicional noturno integra a base de cálculo das horas extras prestadas no período noturno.
-
-**OJSDI-1388**,livro TRT3:10520–10528,páginas206–207:
-
-> O empregado submetido à jornada de12 horas de trabalho por36 de descanso, que compreenda a totalidade do período noturno, tem direito ao adicional noturno, relativo às horas trabalhadas após as5 horas da manhã.
-
-**Vigência formal:** Súmulas60 e85 e OJs97 e388 constam sem cancelamento na edição oficial de2024 citada. Não estão na relação de cancelamentos da Resolução225/2025,artigos1º–6º,2025_res0225.pdf:51–136. Sua manutenção até31/10/2026 está **[NAO VERIFICADO]**, pois o livro atual do TST localizado em [livrointernet-12-pdf](https://www.tst.jus.br/documents/d/guest/livrointernet-12-pdf) bloqueou a leitura integral com403.
-
-**Resultado delimitado da leitura:** nenhum dos seis verbetes acima afirma literalmente que as horas extras correspondem necessariamente aos últimos minutos trabalhados no dia, nem apresenta algoritmo para distribuir extras noturnas entre vários períodos intradiários; as referências são as linhas de cada verbete acima. A inexistência de qualquer outra Súmula ou OJ do TST com essa regra permanece **[NAO VERIFICADO]**.
-
-## 31/10 15:49 · sessao 004f7cf3dbc6 · - · - · origem=Ronald (tmux)
-
-Fonte primária oficial: [CLT atualizada — Câmara dos Deputados](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html). As linhas abaixo são da representação textual recuperada pela ferramenta web, sem arquivo local criado.
-
-| Dispositivo | Arquivo:linha | Situação registrada |
-|---|---|---|
-| Art. 59, caput | `decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html:300` | Vigente; redação Lei 13.467/2017 |
-| § 1º | mesmo arquivo:301 | Vigente; redação Lei 13.467/2017 |
-| § 2º | mesmo arquivo:302 | Vigente; redação MP 2.164-41/2001 |
-| § 3º | mesmo arquivo:303 | Vigente; redação Lei 13.467/2017 |
-| § 4º | mesmo arquivo:304 | **Revogado pela Lei 13.467/2017** |
-| § 5º | mesmo arquivo:306 | Vigente; incluído Lei 13.467/2017 |
-| § 6º | mesmo arquivo:307 | Vigente; incluído Lei 13.467/2017 |
-| Art. 73, caput | mesmo arquivo:360 | Texto vigente apresentado; redação DL 9.666/1946 |
-| § 1º | mesmo arquivo:361 | Texto vigente apresentado; redação DL 9.666/1946 |
-| § 2º | mesmo arquivo:363 | Texto vigente apresentado; redação DL 9.666/1946 |
-| § 4º | mesmo arquivo:366 | Texto vigente apresentado; redação DL 9.666/1946 |
-| § 5º | mesmo arquivo:368 | Texto vigente apresentado; redação DL 9.666/1946 |
-
-Dois trechos literais centrais, totalizando 25 palavras da página:
-
-- Art. 59, caput: “A duração diária do trabalho poderá ser acrescida de horas extras” — arquivo:300.
-- Art. 73, § 5º: “Às prorrogações do trabalho noturno aplica-se o disposto neste capítulo.” — arquivo:368.
-
-Conteúdo confirmado dos demais dispositivos, em paráfrase:
-
-- Art. 59, § 1º: remuneração da extra pelo menos 50% superior à normal; § 2º: compensação do excesso de um dia pela diminuição em outro, com limites anual e diário; § 3º: extras não compensadas pagas na rescisão; §§ 5º e 6º: compensação semestral por acordo individual escrito e mensal por acordo individual tácito ou escrito. — arquivo:301–307.
-- Art. 73, § 1º: hora noturna de 52 minutos e 30 segundos; § 2º: trabalho entre 22h de um dia e 5h do seguinte; § 4º: aplicação das disposições às horas noturnas nos horários mistos. — arquivo:361,363,366.
-- Os dispositivos consultados **não contêm regra expressa identificando as extras como os últimos minutos cronológicos trabalhados**, nem regra específica para prorrogação situada em período anterior ao último. Essa constatação limita-se ao texto desses artigos. — arquivo:300–307,360–368.
-- Apoio contextual: art. 58 estabelece duração normal diária; art. 71, § 2º exclui os intervalos de descanso da duração do trabalho. — arquivo:285,350.
-
-Limitação operacional: tentativa de recuperação direta pelo shell falhou por resolução DNS; Planalto retornou bloqueio. A Câmara forneceu o texto oficial acessível. Nenhum arquivo foi criado, alterado ou apagado. [NAO VERIFICADO por arquivo:linha; evidenciado apenas pelas saídas das ferramentas]
-
-## 31/10 15:48 · sessao 161e3a1c4479 · REPROVA-E-DESENHO-CODEX · verificador · origem=Code
-
-**REPROVADO — PROCEDENTE, BLOQUEIA.** #8 e #9 continuam parcialmente abertos na atualização do estado antigo; também há caminhos que autorizam Codex sem leitura válida da triagem ou depois de a obra parar. (`bin/disjuntor.py:811`, `bin/disjuntor.py:816`, `bin/disjuntor.py:883`, `bin/disjuntor.py:989`; `bin/codex_pergunta.sh:54`, `bin/codex_pergunta.sh:166`)
-
-“Morde” abaixo significa que o caso distingue estaticamente o comportamento de `8609b12c`. Execução integral do selo: **[não verificado]**; ele cria e remove arquivos. (`bin/tests/test_disjuntor.sh:39`, `bin/tests/test_disjuntor.sh:41`, `bin/tests/test_disjuntor.sh:51`)
-
-| Achado v2 | Está curado? | O selo morde a volta ao comportamento antigo? |
-|---|---|---|
-| **#1** | **Sim, no cenário relatado. Não PROCEDENTE, não-bloqueia.** A porta executa a decisão, incluindo triagens pendentes. (`bin/disjuntor.py:982`) | **Sim.** A quarta chamada passa pelo wrapper sem Stop/PreToolUse intermediário; exige rc 3 e ausência de resposta. Mutante restaura consulta apenas ao estado. (`bin/tests/test_disjuntor.sh:1216`, `bin/tests/test_disjuntor.sh:1224`, `bin/tests/test_disjuntor.sh:1457`) |
-| **#2** | **Sim. Não PROCEDENTE, não-bloqueia.** A mesma decisão lê e aplica a liberação válida. (`bin/disjuntor.py:906`, `bin/disjuntor.py:982`) | **Sim.** Escreve DESENHO após disparar e chama diretamente o wrapper; a base continuaria negando. (`bin/tests/test_disjuntor.sh:1229`, `bin/tests/test_disjuntor.sh:1235`, `bin/tests/test_disjuntor.sh:1458`) |
-| **#3** | **Sim, para os casos relatados. Não PROCEDENTE, não-bloqueia.** `shlex` preserva valores completos e a última atribuição prevalece. (`bin/disjuntor.py:1254`, `bin/disjuntor.py:1261`) | **Sim.** Exercita atribuição repetida, texto dentro de `DUMMY` e `O9 (C)`. (`bin/tests/test_disjuntor.sh:1261`, `bin/tests/test_disjuntor.sh:1262`, `bin/tests/test_disjuntor.sh:1263`, `bin/tests/test_disjuntor.sh:1464`) |
-| **#6** | **Sim, com fonte íntegra. Não PROCEDENTE nesse cenário, não-bloqueia.** Liberação e rearme arquivam todas as identidades triadas, incluindo descartadas. (`bin/disjuntor.py:913`, `bin/disjuntor.py:958`) | **Sim.** Reclassifica antes do reset e depois acrescenta duas novas voltas; a base recontaria a antiga. (`bin/tests/test_disjuntor.sh:1273`, `bin/tests/test_disjuntor.sh:1277`, `bin/tests/test_disjuntor.sh:1281`, `bin/tests/test_disjuntor.sh:1466`) |
-| **#7** | **Sim. Não PROCEDENTE, não-bloqueia.** O rearme alcança obra que só possui triagens. (`bin/disjuntor.py:951`, `bin/disjuntor.py:952`) | **Sim.** Rearma antes de qualquer decisão B3; a base recusaria. (`bin/tests/test_disjuntor.sh:1287`, `bin/tests/test_disjuntor.sh:1291`, `bin/tests/test_disjuntor.sh:1469`) |
-| **#8** | **Parcial. PROCEDENTE, BLOQUEIA.** Ausência só é reconhecida como perda quando o contador novo já é positivo. (`bin/disjuntor.py:811`, `bin/disjuntor.py:816`) | **Sim no percurso novo; falta o estado herdado.** O caso cria o contador pela versão nova antes de retirar a fonte. (`bin/tests/test_disjuntor.sh:1299`, `bin/tests/test_disjuntor.sh:1301`, `bin/tests/test_disjuntor.sh:1470`) |
-| **#9** | **Parcial. PROCEDENTE, BLOQUEIA.** Rejeita corrupção estrutural e truncamento, mas a perda de linhas completas antes do primeiro contador novo passa. (`bin/disjuntor.py:819`, `bin/disjuntor.py:822`, `bin/disjuntor.py:828`) | **Sim para as variantes cobertas; falta a redução na migração.** O teste semeia o contador antes de remover linhas. (`bin/tests/test_disjuntor.sh:1314`, `bin/tests/test_disjuntor.sh:1324`, `bin/tests/test_disjuntor.sh:1326`, `bin/tests/test_disjuntor.sh:1472`) |
-| **#10** | **Sim. Não PROCEDENTE, não-bloqueia.** Leitura, idempotência e append participam da trava do estado. (`bin/disjuntor.py:786`, `bin/disjuntor.py:800`) | **Sim.** Mantém a trava ocupada e exige recusa sem append; depois exige exatamente uma linha. (`bin/tests/test_disjuntor.sh:1344`, `bin/tests/test_disjuntor.sh:1346`, `bin/tests/test_disjuntor.sh:1350`, `bin/tests/test_disjuntor.sh:1475`) |
-| **#12** | **Sim, nos cenários relatados. Não PROCEDENTE, não-bloqueia.** A guarda antecede a remoção; sidecar restante impede a chamada. (`bin/codex_pergunta.sh:54`, `bin/codex_pergunta.sh:165`) | **Sim.** Confere preservação após negativa e recusa quando o sidecar não pode ser removido. (`bin/tests/test_disjuntor.sh:1245`, `bin/tests/test_disjuntor.sh:1246`, `bin/tests/test_disjuntor.sh:1249`, `bin/tests/test_disjuntor.sh:1459`, `bin/tests/test_disjuntor.sh:1463`) |
-
-O resíduo de **#8** é o próprio cenário antigo na atualização: JSON com `codex=[a,b,c]`, obra disparada e sem `b3_triagem_linhas`; a fonte ausente vira `{}`, apaga `codex`, permite liberar arquivando uma lista vazia e deixa as mesmas três voltas dispararem quando a fonte retorna. (`bin/disjuntor.py:811`, `bin/disjuntor.py:816`, `bin/disjuntor.py:883`, `bin/disjuntor.py:913`, `bin/disjuntor.py:888`)
-
-O resíduo de **#9**: nesse estado herdado sem contador, uma fonte reduzida de três para duas linhas completas é aceita e substitui a contagem conhecida sem FALHA. (`bin/disjuntor.py:811`, `bin/disjuntor.py:822`, `bin/disjuntor.py:830`, `bin/disjuntor.py:883`)
-
-Há ainda uma limitação dos negativos do selo: `_xp` procura o recado de bloqueio; sua ausência também pode resultar de falha aberta. Isso afeta os negativos de reset/rearme e parte dos casos de corrupção. (`bin/tests/test_disjuntor.sh:1203`, `bin/tests/test_disjuntor.sh:1277`, `bin/tests/test_disjuntor.sh:1284`, `bin/tests/test_disjuntor.sh:1292`, `bin/tests/test_disjuntor.sh:1315`, `bin/tests/test_disjuntor.sh:1321`)
-
-**(a)** O escritor físico do JSON é `_com_estado`: toma `flock`, chama o mutador e substitui o arquivo ainda sob a trava. As leituras gerais ocorrem nele e em `ler_estado`. (`bin/disjuntor.py:249`, `bin/disjuntor.py:253`, `bin/disjuntor.py:268`, `bin/disjuntor.py:274`, `bin/disjuntor.py:288`, `bin/disjuntor.py:294`)
-
-| Campo | Quem escreve | Quem lê |
-|---|---|---|
-| `b1[agente].checado/disparado/motivo` | `b1_do_agente`. (`bin/disjuntor.py:481`) | Cache e decisão; `b1_disparados` lê `disparado`. (`bin/disjuntor.py:476`, `bin/disjuntor.py:478`, `bin/disjuntor.py:479`, `bin/disjuntor.py:490`) |
-| `b2.ultimo` | `b2_decide`. (`bin/disjuntor.py:1134`) | `b2_decide`. (`bin/disjuntor.py:1133`) |
-| `b4_para.desde` | `b4_stop`, incluindo remoção. (`bin/disjuntor.py:1149`, `bin/disjuntor.py:1155`) | `b4_stop`. (`bin/disjuntor.py:1157`) |
-| `b4.negou_desde` | `pretool`, incluindo remoção. (`bin/disjuntor.py:1374`, `bin/disjuntor.py:1379`) | `pretool`. (`bin/disjuntor.py:1373`, `bin/disjuntor.py:1378`) |
-| `b3_limiar` | `_migra_limiar`. (`bin/disjuntor.py:710`) | `_migra_limiar`. (`bin/disjuntor.py:699`, `bin/disjuntor.py:707`) |
-| `b3_sem_obra` | `decide_b3`. (`bin/disjuntor.py:871`) | Deduplicação e `_b3_sem_obra`. (`bin/disjuntor.py:870`, `bin/disjuntor.py:1518`) |
-| `b3[obra].reprovados` | Migração, decisão e rearme. (`bin/disjuntor.py:709`, `bin/disjuntor.py:877`, `bin/disjuntor.py:914`, `bin/disjuntor.py:959`) | Os mesmos percursos. (`bin/disjuntor.py:705`, `bin/disjuntor.py:886`, `bin/disjuntor.py:912`, `bin/disjuntor.py:957`) |
-| `b3[obra].disparado` | Decisão e rearme. (`bin/disjuntor.py:889`, `bin/disjuntor.py:914`, `bin/disjuntor.py:959`) | Migração e decisão. (`bin/disjuntor.py:702`, `bin/disjuntor.py:888`, `bin/disjuntor.py:898`) |
-| `b3[obra].codex` | Decisão e rearme. (`bin/disjuntor.py:883`, `bin/disjuntor.py:914`, `bin/disjuntor.py:959`) | Decisão e rearme. (`bin/disjuntor.py:887`, `bin/disjuntor.py:913`, `bin/disjuntor.py:955`) |
-| `b3[obra].rearmado` | Migração e rearme. (`bin/disjuntor.py:708`, `bin/disjuntor.py:957`) | Decisão. (`bin/disjuntor.py:874`, `bin/disjuntor.py:881`) |
-| `b3[obra].liberado` | Decisão. (`bin/disjuntor.py:912`) | Decisão. (`bin/disjuntor.py:874`, `bin/disjuntor.py:881`, `bin/disjuntor.py:912`) |
-| `b3[obra].consumidas` | Decisão. (`bin/disjuntor.py:915`) | Decisão. (`bin/disjuntor.py:908`) |
-| `b3[obra].disparado_em` | `_fotografa`. (`bin/disjuntor.py:728`, `bin/disjuntor.py:730`) | Migração, fotografia e liberação. (`bin/disjuntor.py:703`, `bin/disjuntor.py:728`, `bin/disjuntor.py:910`) |
-| `b3[obra].topo_no_disparo` | `_fotografa`. (`bin/disjuntor.py:727`, `bin/disjuntor.py:730`) | Decisão. (`bin/disjuntor.py:903`, `bin/disjuntor.py:908`) |
-| `b3_triagem_linhas` | **`_triagens` e `triagem`.** (`bin/disjuntor.py:830`, `bin/disjuntor.py:797`) | Ambos. (`bin/disjuntor.py:811`, `bin/disjuntor.py:797`) |
-
-Portanto, **há múltiplos escritores lógicos**, inclusive do contador novo; nesses percursos, todos passam pela mesma trava. Escrita fora da trava do JSON: **não PROCEDENTE, não-bloqueia**. (`bin/disjuntor.py:486`, `bin/disjuntor.py:800`, `bin/disjuntor.py:935`, `bin/disjuntor.py:971`, `bin/disjuntor.py:1136`, `bin/disjuntor.py:1162`, `bin/disjuntor.py:1382`)
-
-Na trilha `triagem.log`, os quatro campos têm um escritor: `triagem`, sob essa trava. O leitor é `_triagens`; timestamp é separado, mas não validado nem usado; obra e volta são as chaves, e o último veredito prevalece. Idempotência, decisão e rearme consomem esse mapa. **Escritor fora da trava: não PROCEDENTE, não-bloqueia.** (`bin/disjuntor.py:794`, `bin/disjuntor.py:795`, `bin/disjuntor.py:800`, `bin/disjuntor.py:826`, `bin/disjuntor.py:829`, `bin/disjuntor.py:790`, `bin/disjuntor.py:883`, `bin/disjuntor.py:958`)
-
-O sidecar fornece `obra/papel/hash/pid/fim/sha`: o wrapper escreve; `_le_id` lê; `triagem` verifica papel/SHA e compõe a identidade. A validação continua estrutural, preservando #14 sobre autoria. (`bin/codex_pergunta.sh:188`; `bin/disjuntor.py:757`, `bin/disjuntor.py:760`, `bin/disjuntor.py:780`, `bin/disjuntor.py:782`, `bin/disjuntor.py:784`)
-
-**(b)** A liberação normal exige linha reconhecida, não consumida, fora da fotografia e posterior ao disparo; falha de persistência invalida a liberação. O rearme administrativo explicitamente zera a parada sem DESENHO/ERRO-BOBO. (`bin/disjuntor.py:906`, `bin/disjuntor.py:908`, `bin/disjuntor.py:910`, `bin/disjuntor.py:936`, `bin/disjuntor.py:959`)
-
-Entretanto, **há passagem indevida — PROCEDENTE, BLOQUEIA**:
-
-- **Codex depois de a obra parar:** a guarda ocorre antes da espera por slot. Outra decisão pode parar a obra durante essa espera; a chamada não repete a consulta. (`bin/codex_pergunta.sh:54`, `bin/codex_pergunta.sh:146`, `bin/codex_pergunta.sh:158`, `bin/codex_pergunta.sh:166`)
-- **Opus final com obra parada:** exceção no PreToolUse libera a ferramenta; classificação textual ou obra não reconhecida pode evitar a consulta B3. Persistem #4 e #5. (`bin/disjuntor.py:501`, `bin/disjuntor.py:513`, `bin/disjuntor.py:1367`, `bin/disjuntor.py:1370`, `bin/disjuntor.py:1406`)
-- **Identidade incorreta alimentando a decisão:** chamadas concorrentes compartilham resposta/sidecar sem trava por caminho; `mtime` continua sendo o critério de resposta nova. Persistem #11 e #13. (`bin/codex_pergunta.sh:165`, `bin/codex_pergunta.sh:166`, `bin/codex_pergunta.sh:187`, `bin/codex_pergunta.sh:188`)
-
-**(c) Sim — PROCEDENTE, BLOQUEIA.**
-
-- **Autorização sem ler a triagem:** `_triagens=None` registra FALHA e preserva o cache, mas não torna a porta “não sei”. Sem disparo anterior, com cache vazio ou inferior a três, a decisão retorna livre; `b3_parada` devolve zero e o wrapper prossegue. (`bin/disjuntor.py:861`, `bin/disjuntor.py:864`, `bin/disjuntor.py:882`, `bin/disjuntor.py:898`, `bin/disjuntor.py:989`; `bin/codex_pergunta.sh:54`)
-- **Fonte ausente tomada como vazia:** sem contador novo, ausência vira `{}`, mesmo com contagem herdada conhecida; estado ausente também vira `{}`. (`bin/disjuntor.py:263`, `bin/disjuntor.py:297`, `bin/disjuntor.py:811`, `bin/disjuntor.py:816`)
-- **Painel com zeros sem leitura:** disparos, negações e liberações começam zerados; falha de abertura e linhas não parseadas são ignoradas; a apresentação imprime os zeros. Persiste #15. (`bin/disjuntor.py:1450`, `bin/disjuntor.py:1452`, `bin/disjuntor.py:1460`, `bin/disjuntor.py:1464`, `bin/disjuntor.py:1482`, `bin/disjuntor.py:1582`)
-- **Rc mascarado pelo hook:** a exceção é registrada, mas `main_pretool` retorna zero sem emitir negativa. No wrapper, especificamente, rc não zero de `--b3-parada` é recusado; o falso verde acima chega como rc zero. (`bin/disjuntor.py:1406`, `bin/disjuntor.py:1408`, `bin/disjuntor.py:989`; `bin/codex_pergunta.sh:54`)
-
-_1123 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1131 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
