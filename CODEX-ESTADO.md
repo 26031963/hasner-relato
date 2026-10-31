@@ -1,7 +1,53 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 00:46** · publicado em **31/10/2026 00:51** (UTC-3)
+> Ultima resposta processada: **31/10/2026 00:53** · publicado em **31/10/2026 00:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 00:53 · sessao 5bb56cea7746 · O261-E-F1-CLASSE-4 · verificador · origem=Code
+
+1. **Os dois laços explícitos obedecem ao C8, mas isso não garante a ordem de todos os fechamentos do dia.** O imediato ordena antes de chamar `reconciliar()`; o adiado também. Havendo um não protestante com fio, o delta envia todos os não protestantes juntos para os adiados. (`app/ponto/services/cartorio.py:1217`, `app/ponto/services/cartorio.py:1225`, `app/ponto/services/cartorio.py:756`)
+
+   `sobrevivente_por_ultimo` põe por último o escolhido por `cobranca_viva_do_dia`, que busca o mais novo por `-criado_em, -pk`; preserva a ordem dos demais. (`app/chamados/juizes.py:1627`, `app/chamados/juizes.py:1645`)
+
+   **Sim, existem fechamentos fora dessa ordenação.** Antes do laço adiado, E2 pode fechar uma disputa, cujo signal reconcilia o chamado-pai sem passar pelo ordenador. Além disso, os adiados continuam em `vivos`: o ramo `FIO-DUP` pode reconciliar um deles ainda no primeiro corpo, também sem C8. (`app/ponto/services/cartorio.py:753`, `app/chamados/reconciliador.py:635`, `app/chamados/signals.py:42`, `app/ponto/services/cartorio.py:1329`)
+
+2. **Em trabalho, o delta também desloca o sem fio para o lote adiado**, desde que ambos tenham os próprios marcos acesos: ambos não protestam e basta um deles estar em `_com_fio`. O sem fio deixa de tentar fechar em `_porm` antes da lavra e passa normalmente a tentar depois da lavra/E2, **antes da segunda execução do corpo**; o com fio já seguia esse caminho. (`app/ponto/services/cartorio.py:1155`, `app/ponto/services/cartorio.py:1218`, `app/ponto/services/cartorio.py:1225`, `app/ponto/services/cartorio.py:753`, `app/ponto/services/cartorio.py:766`)
+
+   O delta não acrescenta veto: marcos acesos regularizam a premissa e o gate aceita essa regularização. A tentativa no laço pode ser um no-op se E2/signal já fechou o chamado. A ressalva é o sem fio composto de perguntas duplicatas mortas: ele ainda pode fechar pelo `FIO-DUP` no primeiro corpo; sem perguntas, esse bloco o pula. (`app/chamados/models.py:1229`, `app/chamados/models.py:699`, `app/chamados/signals.py:42`, `app/ponto/services/cartorio.py:1325`, `app/ponto/services/cartorio.py:1329`)
+
+   Nos testes conferidos, não encontrei exigência de que esse par misto feche em etapas distintas: o teste do evento verifica fechamento no mesmo evento; o v5 usa um único adiado e verifica a ordem das datas; o teste de ressuscita verifica resultado e contadores com um chamado. Ausência dessa dependência em toda a suíte: **[não verificado]**. (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:390`, `app/chamados/tests/test_o261e_f1_codex_v5.py:169`, `app/chamados/tests/test_o261e_f1_codex_v5.py:182`, `app/ponto/tests/test_o261_cobrado_le_o_fio.py:409`)
+
+3. **Sim, a fixture produz o velho com fio, inclusive pela leitura de `pergunta_viva`.** Ela cria a pergunta sem informar `celula`, cuja FK aceita nulo. Em folga, `classificar_falta` retorna sem falta; porém C6 continua até `materializada_em is None` e retorna `True`. `fio_vivo` consulta esse C6, exatamente como `_com_fio`. (`app/ponto/tests/test_fechar3_troca_escala_gate.py:194`, `app/chamados/models.py:2150`, `app/escala/servico_jornada.py:303`, `app/chamados/juizes.py:1074`, `app/chamados/juizes.py:1080`, `app/chamados/juizes.py:1115`, `app/ponto/services/cartorio.py:1094`)
+
+   Essa pergunta **não é absolvida pelo E2**, que exige célula associada. Com o delta, o velho tenta primeiro, fecha por dedup e reata a pergunta ao novo. (`app/chamados/reconciliador.py:588`, `app/chamados/juizes.py:1651`, `app/chamados/models.py:702`, `app/chamados/models.py:418`)
+
+   **Pelo contrafactual do delta fornecido, as asserções finais ficam vermelhas sem a alteração de `_adiar`:** o novo sem fio fecharia imediatamente apoiado no velho; depois o velho ficaria sem irmão, com a premissa da véspera ainda viva, e teria o fechamento recusado. (`app/ponto/services/cartorio.py:1225`, `app/ponto/tests/test_fechar3_troca_escala_gate.py:175`, `app/chamados/juizes.py:424`, `app/chamados/models.py:702`, `app/chamados/models.py:725`, `app/ponto/tests/test_fechar3_troca_escala_gate.py:200`)
+
+4. **Sim, por leitura, `[RECONCILIA-MARCO] ` é o caminho nas duas ordens da fixture anterior.** Em `trabalha=False`, nenhum protesta; sem fio, seguem para `_porm`, ordenado pelo C8. O velho fecha por dedup apoiado no novo, produzindo a linha nesse bloco. O B5.3b depende dos códigos de cobrança, cujo insumo agora recebe zero chamados protestantes. (`app/ponto/tests/test_fechar3_troca_escala_gate.py:134`, `app/ponto/tests/test_fechar3_troca_escala_gate.py:137`, `app/ponto/services/cartorio.py:1155`, `app/ponto/services/cartorio.py:1159`, `app/ponto/services/cartorio.py:1225`, `app/ponto/services/cartorio.py:1231`, `app/ponto/services/cartorio.py:1252`, `app/ponto/supra_juiz.py:441`)
+
+Execução dos testes e da mutação: **[não verificado]**. [nao verificado]
+
+## 31/10 00:53 · sessao 7ab06b1c856c · - · - · origem=Ronald (tmux)
+
+- Em trabalho, `marcos_acesos=True` faz ambos não protestarem; havendo um com fio, `_adiar` recebe ambos. O sem fio deixa de tentar `_porm` no primeiro corpo e normalmente tenta fechar após lavra/E2, ainda antes do segundo corpo; o com fio já seguia esse caminho. `app/ponto/services/cartorio.py:1155`, `app/ponto/services/cartorio.py:1217`, `app/ponto/services/cartorio.py:1225`, `app/ponto/services/cartorio.py:744`, `app/ponto/services/cartorio.py:753`, `app/ponto/services/cartorio.py:756`, `app/ponto/services/cartorio.py:766`.
+
+- O delta não acrescenta veto ao fechamento: marcos acesos regularizam a premissa, e o gate aceita a premissa regularizada. A tentativa pode resultar em no-op se E2/signal já fechou o chamado. `app/chamados/models.py:1229`, `app/chamados/models.py:699`, `app/chamados/reconciliador.py:638`, `app/chamados/signals.py:42`, `app/chamados/models.py:615`.
+
+- Ressalva concreta à ordem: adiados continuam em `vivos`; se o sem fio possui somente perguntas `VIA_DUPLICATA`, `FIO-DUP` tenta reconciliá-lo ainda no primeiro corpo, sem C8. Sem perguntas, esse bloco pula o chamado. `app/ponto/services/cartorio.py:1220`, `app/ponto/services/cartorio.py:1321`, `app/ponto/services/cartorio.py:1325`, `app/ponto/services/cartorio.py:1329`.
+
+- Nos testes conferidos, nenhum exige que o par misto trabalho/com fio/sem fio feche em corpos distintos: o teste do evento verifica fechamento no mesmo evento e ausência de terminal com pergunta viva; o v5 usa um único adiado e verifica ordem das datas; o teste de ressuscita usa um chamado e verifica resultado/contadores, pelo caminho B5.3b. `app/chamados/tests/test_o261e_f1_porta_encerramento.py:358`, `app/chamados/tests/test_o261e_f1_porta_encerramento.py:390`, `app/chamados/tests/test_o261e_f1_codex_v5.py:169`, `app/chamados/tests/test_o261e_f1_codex_v5.py:182`, `app/ponto/tests/test_o261_cobrado_le_o_fio.py:393`, `app/ponto/tests/test_o261_cobrado_le_o_fio.py:416`. Ausência dessa dependência em toda a suíte: [não verificado].
+
+## 31/10 00:52 · sessao 5b464716b57a · - · - · origem=Ronald (tmux)
+
+**3. Sim, por leitura estática a fixture alcança o lote misto e distingue o delta.**
+
+- O velho recebe a pergunta via `objects.create(... chamado_destino=velho, data_evento=DIA)`, sem `celula`; a FK permite nulo. A associação automática à célula pertence a `abrir()`, que a fixture não chama. (`app/ponto/tests/test_fechar3_troca_escala_gate.py:193`, `app/chamados/models.py:2150`, `app/chamados/models.py:2363`)
+- `trabalha=False` faz `classificar_falta()` retornar `(None, None, None)`, mas isso apenas impede o retorno antecipado `True` naquele degrau de C6. Como a pergunta está sem célula e sem materialização, C6 chega a `materializada_em is None` e retorna `True`. Portanto ela está viva mesmo no dia de folga. (`app/escala/servico_jornada.py:303`, `app/chamados/juizes.py:1054`, `app/chamados/juizes.py:1074`, `app/chamados/juizes.py:1080`)
+- `fio_vivo` consulta `pergunta_viva`; `_com_fio` consulta `fio_vivo` nas resolvedoras do chamado. Assim, o velho entra em `_com_fio`, enquanto o novo não recebeu pergunta. (`app/chamados/juizes.py:1115`, `app/ponto/services/cartorio.py:1094`, `app/ponto/tests/test_fechar3_troca_escala_gate.py:194`)
+- O E2 não absolve essa pergunta da fixture: seu filtro exige `celula__isnull=False`. O fechamento do velho pode ocorrer pela exceção de dedup com reata da pergunta ao novo. (`app/chamados/reconciliador.py:588`, `app/chamados/models.py:702`, `app/chamados/models.py:371`, `app/chamados/models.py:418`)
+- Com o delta, ambos vão ao lote adiado e C8 põe o novo por último. Sem a alteração de `_adiar` da volta 1, o novo sem fio seria reconciliado imediatamente sozinho, apoiado no velho; depois o velho ficaria sem irmão e seria recusado pela premissa ainda viva da véspera. As expectativas finais ficariam invertidas: velho vivo e novo resolvido. (`app/ponto/services/cartorio.py:1217`, `app/ponto/services/cartorio.py:1225`, `app/ponto/services/cartorio.py:756`, `app/chamados/juizes.py:1651`, `app/chamados/models.py:702`, `app/chamados/models.py:725`, `app/chamados/juizes.py:424`, `app/ponto/tests/test_fechar3_troca_escala_gate.py:175`)
+
+Resultado efetivo de execução do teste ou da mutação: **[não verificado]**. [nao verificado]
 
 ## 31/10 00:46 · sessao 9bae963174b4 · O261-E-F1-CLASSE-4 · verificador · origem=Code
 
@@ -876,97 +922,4 @@ Além disso, várias autorizações são verificadas apenas por stdout vazio, ex
 
 Execução integral dos selos e resultado dos mutantes declarados: **[nao verificado]**; os scripts criam e removem arquivos, incompatíveis com a regra desta revisão. (`bin/tests/test_disjuntor.sh:35`, `bin/tests/test_disjuntor.sh:37`, `bin/tests/test_orcamento_contexto.sh:101`)
 
-## 31/10 00:04 · sessao f3649a18e4f8 · - · - · origem=Ronald (tmux)
-
-Achados para **(e)**, sem executar os selos que criam arquivos:
-
-- **Mutante sobrevivente em 75%:** trocar `pct < B4_NEGA` por `pct <= B4_NEGA` deixa passar agente com exatamente 75%; o caso `b4` injeta 80%, 74,9%, 80% vencido e 90%, sem testar 75%. Confirmei em memória que os resultados dessas entradas permanecem iguais e somente 75% diverge. `bin/disjuntor.py:541`; `bin/tests/test_disjuntor.sh:305`; `bin/tests/test_disjuntor.sh:310`; `bin/tests/test_disjuntor.sh:312`.
-
-- **Mutante sobrevivente em 85% Claude:** trocar `pct >= B4_PARA` por `pct > B4_PARA` impede escada em exatamente 85%; os testes usam 90% para escada por cota e 50% para escada pela palavra. Confirmei em memória igualdade nas entradas usadas e divergência em 85%. `bin/disjuntor.py:526`; `bin/tests/test_disjuntor.sh:312`; `bin/tests/test_disjuntor.sh:331`.
-
-- **Fronteira de dez minutos sem mordida:** trocar `agora - desde <= janela` por `< janela` conserva os resultados testados em nove/onze minutos e muda exatamente dez minutos. O segundo selo testa liberação imediata, onze minutos e clear tardio em vinte minutos. `bin/hook_stop_fila1.py:918`; `bin/tests/test_disjuntor.sh:159`; `bin/tests/test_disjuntor.sh:161`; `bin/tests/test_orcamento_contexto.sh:188`; `bin/tests/test_orcamento_contexto.sh:192`; `bin/tests/test_orcamento_contexto.sh:408`.
-
-- **“Passou” pode ser exceção:** diversas verificações de permissão exigem apenas stdout vazio; `main_pretool` também retorna zero e stdout vazio quando há exceção antes da negativa. Assim esses casos não distinguem autorização normal de falha aberta; para a FINAL, por exemplo, um mutante que levantasse exceção exclusivamente nessa volta continuaria satisfazendo a asserção de stdout. `bin/tests/test_disjuntor.sh:365`; `bin/tests/test_disjuntor.sh:375`; `bin/disjuntor.py:780`.
-
-Os dois primeiros mutantes **não estão entre os declarados**, que testam outras costuras; execução integral e sobrevivência observada no shell ficam **[nao verificado]**. A lista declarada está em `bin/tests/test_disjuntor.sh:471`.
-
-O caso de proteção de `pisos.log` parece morder a retirada **somente dessa proteção**: a primeira avaliação estabelece o mtime, o append o avança e a seguinte passaria a liberar ESPERANDO, contrariando a exigência de stdout não vazio. `bin/tests/test_disjuntor.sh:392`; `bin/tests/test_disjuntor.sh:393`; `bin/hook_stop_fila1.py:590`; `bin/hook_stop_fila1.py:610`; `bin/hook_stop_fila1.py:1187`.
-
-## 31/10 00:03 · sessao c8c99e8e4f0c · - · - · origem=Ronald (tmux)
-
-Achados prioritários, somente por código:
-
-1. **Guarda da chave tem falsos positivos:** `Read` do arquivo da chave é negado como se gravasse; qualquer basename começando por `DISJUNTOR_DESLIG` também; `Bash` de leitura/documentação que apenas cite a substring é negado. A condição não distingue leitura de escrita. `bin/disjuntor.py:117-120`.
-
-2. **A proteção pode ser contornada:** alterações do settings via `Bash` sem citar a chave não são inspecionadas; o teste de remoção do hook só considera `file_path` e `Write/Edit/MultiEdit`. Montar o nome da chave por concatenação também evita a substring literal. `bin/disjuntor.py:116-130`.
-
-3. **ESCADA não impede obra nova pela sessão principal:** ferramentas sem `agent_id`, diferentes de `Agent` e sem `codex_pergunta` saem antes das medições; portanto um `Write/Edit/Bash` da sessão principal pode iniciar nova obra mesmo com cota ≥85%. A restrição fica no recado do Stop. `bin/disjuntor.py:727-731`, `bin/disjuntor.py:744-764`, `bin/disjuntor.py:633-634`.
-
-4. **“Escada” tem semântica mais estreita que palavra em qualquer posição:** só a última mensagem humana elegível começando por `escada` ativa; outra mensagem a encerra. Texto ilegível na cauda é ignorado, podendo fazer uma mensagem anterior continuar valendo. `bin/disjuntor.py:64`, `bin/disjuntor.py:501-529`.
-
-5. **B3 deixa passar o quarto verificador antes da varredura:** PreToolUse só lê estado acumulado; a descoberta dos três REPROVADO ocorre no ramo final de recados do Stop, depois de várias saídas que liberam. `bin/disjuntor.py:429-458`, `bin/disjuntor.py:747-749`, `bin/hook_stop_fila1.py:1004`, `bin/hook_stop_fila1.py:1256`.
-
-6. **B3 depende de grafia e canal exatos:** só meta `agentType=verificador`, primeiro prompt contendo `LEITURA FINAL`, `obra <ID>` conforme regex e `SubagentHandback` com primeira linha REPROVADO. Uma quarta consulta via Codex não passa por essa guarda de `Agent`. `bin/disjuntor.py:71`, `bin/disjuntor.py:408-425`, `bin/disjuntor.py:435-439`, `bin/disjuntor.py:747-749`.
-
-7. **Rearme B3 não dura:** `rearmado` recebe os IDs anteriores, mas a próxima varredura não consulta esse campo e adiciona novamente todos os REPROVADO antigos. `bin/disjuntor.py:443-446`, `bin/disjuntor.py:468-469`.
-
-8. **Acima do orçamento diário, papéis diferentes de `verificador` escapam**, salvo a volta explicitamente marcada `contrato`; papel herdado do ambiente vira `?` no parser. Além disso, Codex >85% com ESCADA retorna `None` antes das restrições diárias, permitindo contrato/meio acima do orçamento. `bin/disjuntor.py:655-662`, `bin/disjuntor.py:696-712`.
-
-9. **Regex de shell produz falsos positivos e negativos:** comentários, `echo` e heredocs contendo o wrapper são tratados como invocações; `CODEX_PAPEL=verificador CODEX_VOLTA=final bash bin/codex_pergunta.sh ...` é interpretado como papel `?`, volta `meio`. Assim FINAL com JUIZES pode ser negada por ANEXO, e volta do meio sem anexo pode escapar ao orçamento. Probes em memória confirmaram as interpretações; a causa está em `bin/disjuntor.py:649-662`, e os efeitos em `bin/disjuntor.py:687-706`.
-
-10. **Codex direto e wrappers diferentes escapam:** só `Bash` contendo `codex_pergunta` é encaminhado ao controle, e `_codex_cmds` reconhece `codex_pergunta.sh`. `bin/disjuntor.py:727-739`, `bin/disjuntor.py:649-662`.
-
-11. **A alegação de falha aberta tem exceções:**
-    - `_mais_novo` engole erros de leitura/stat e devolve `False`; cópia ilegível vira “sem arquivo novo”, podendo disparar B1. `bin/disjuntor.py:305-324`, `bin/disjuntor.py:366-370`.
-    - `.meta.json` ilegível vira `{}`, perdendo a isenção de agente de leitura; se houver cópia citada, B1 continua avaliando. `bin/disjuntor.py:275-281`, `bin/disjuntor.py:329-339`.
-    - Cota JSON `NaN`, com reset futuro, passa na validação numérica e B4 nega com motivo `nan% >=75%`; probe em memória confirmou. `bin/disjuntor.py:485-488`, `bin/disjuntor.py:541-544`.
-    - A negação é emitida **antes** da tentativa de registro no RELATO; falha no registro não desfaz o deny. `bin/disjuntor.py:777-781`, `bin/disjuntor.py:179-180`.
-
-12. **Há travas sem timeout:** o lock do RELATO usa `flock(LOCK_EX)` bloqueante depois de emitir deny; coleta Codex usa `open` comum em `.jsonl`, permitindo FIFO bloquear. O lock de estado, por contraste, tenta por aproximadamente um segundo e então lança exceção capturada pelo topo. `bin/disjuntor.py:171-176`, `bin/disjuntor.py:193-200`, `bin/disjuntor.py:778-781`, `bin/codex_limite_estado.py:139-142`.
-
-13. **Medidas ausentes/ilegíveis normalmente passam:** cota retorna `None`, estado retorna `{}`, transcript humano retorna `None`, transcript B1 ilegível não dispara; exceções anteriores à emissão do deny são capturadas pelo `main_pretool`. Porém falha de gravação de estado pode liberar até um `Agent` cuja cota conhecida manda negar, porque `_com_estado` precede o retorno do motivo. `bin/disjuntor.py:218-224`, `bin/disjuntor.py:333-336`, `bin/disjuntor.py:480-490`, `bin/disjuntor.py:518-519`, `bin/disjuntor.py:757-781`.
-
-14. **Statusline não contém todo formato inesperado:** `rate_limits="x"` ou `seven_day="x"` pode levantar fora do `try`; `context_window="x"` também, em `cw.get`. Ausência de medidas ou falha de atualização preserva a cota anterior, que o leitor aceita até reset sem usar idade/session_id. `bin/statusline_cota.py:28-42`, `bin/disjuntor.py:480-490`.
-
-15. **Exceção/ilegibilidade da sombra libera PreToolUse:** falha ao abrir/consultar a trava equivale a DIFF em curso e todas as regras normais são puladas; a guarda da chave continua anterior. `bin/disjuntor.py:229-246`, `bin/disjuntor.py:730-731`, `bin/disjuntor.py:774-776`.
-
-Nenhuma ocorrência desses cenários em produção foi fornecida: [nao verificado].
-
-## 31/10 00:03 · sessao 16c8e5e66646 · - · - · origem=Ronald (tmux)
-
-Achados consolidados, somente leitura:
-
-- **Piso pode ser de um turno posterior.** `_primeiro_turno` ignora assistente sem `usage` positivo e segue procurando; portanto o primeiro turno ilegível/zerado pode virar piso de outro turno, em vez de “não sei”. Probe em memória confirmou `{usage:{}}` seguido de `input_tokens=123` → piso `123`. `bin/orcamento_contexto.py:265-270`.
-- **Piso ausente no primeiro Stop não é tentado novamente:** `piso_pendente` é removido antes de medir; sem `_tk`, não registra e já consumiu a oportunidade. `bin/hook_stop_fila1.py:866-871`.
-- **Piso não é vinculado à hora/sessão do marco.** O Stop passa apenas `marco['origem']`; o avaliador escolhe o último boundary dessa origem no transcript recebido, sem conferir hora nem `session_id` do marco. Isso permite promover um boundary antigo ao piso mais recente, se o marco global e o transcript não corresponderem. `bin/hook_stop_fila1.py:832-870`; `bin/orcamento_contexto.py:274-286`; o estado global do marco contém `session_id`, mas ele não participa dessa escolha: `bin/orcamento_contexto.py:158-162`.
-
-- **Falha de medida não significa ALLOW do Stop.** `_orcamento_contido` devolve `None` em exceção; o fluxo anterior continua, excluindo `PAREI ! CLEAR` da porta genérica e podendo terminar em `BLOCK`. Assim, estado/escrita quebrados podem trocar um CLEAR que liberaria pelo par válido por bloqueio até o TETO. `bin/hook_stop_fila1.py:977-986`, `bin/hook_stop_fila1.py:1080-1081`, `bin/hook_stop_fila1.py:912-920`, `bin/hook_stop_fila1.py:1205-1260`.
-- **Medida atual ilegível não cancela disparo ou pendência anteriores.** `disparo` ativo continua conduzindo o CLEAR; `pendente` pode reativar o gatilho mesmo quando `avaliar` não dispara agora. `bin/hook_stop_fila1.py:878-948`.
-- **Exceção pode bloquear ESPERANDO:** os cinco novos caminhos protegidos entram numa lista cujo `stat` com `OSError` rejeita a prova inteira, mesmo que o arquivo de produção apresentado seja outro e válido. A espera também captura exceção e devolve “sem prova”. `bin/hook_stop_fila1.py:558-567`, `bin/hook_stop_fila1.py:648-652`, `bin/hook_stop_fila1.py:1187-1191`.
-
-- **B4 não exige o par em todas as saídas.** Sem handoff+COTA, primeiro retorna `siga`, depois `lembrete`; esse lembrete volta ao fluxo normal, que pode liberar por PAREI comum, ESPERANDO, fila vazia, TETO ou B2. Probe em memória confirmou `siga` → `lembrete` sem par. `bin/disjuntor.py:626-635`; `bin/hook_stop_fila1.py:1163-1189`, `bin/hook_stop_fila1.py:1201-1202`, `bin/hook_stop_fila1.py:1240-1253`.
-- **B3 pode não ser atualizado antes do quarto verificador.** A varredura ocorre apenas nos `recados`, depois de todas aquelas saídas antecipadas; o PreToolUse consulta o estado acumulado sem varrer. Três reprovações em transcript ainda não varrido deixam passar outro verificador. `bin/hook_stop_fila1.py:1004`, `bin/hook_stop_fila1.py:1256`; `bin/disjuntor.py:748-749`.
-
-Quanto à pergunta **d**, existem mudanças reais de decisão:
-
-- CLEAR que antes liberava passa a exigir handoff novo e pode ser adiado por lock/agente pendente; um handoff novo também cria outro bloqueio para pedir a linha. `bin/hook_stop_fila1.py:882-911`, `bin/hook_stop_fila1.py:935-941`.
-- `PAREI ! COTA` perde a porta genérica mesmo sem escada ativa ou com disjuntor desligado. `bin/hook_stop_fila1.py:994-995`, `bin/hook_stop_fila1.py:1080-1081`.
-- Novos arquivos deixam de provar ESPERANDO, com a consequência adicional do `stat` acima. `bin/hook_stop_fila1.py:558-569`.
-- B2 acrescenta ALLOW antes do TETO normal alcançar sua liberação. Conta todos os `BLOCK` recentes, inclusive os do orçamento/B4/RELATO, sem conferir se eram realmente `siga` de fila. `bin/disjuntor.py:588-599`; `bin/hook_stop_fila1.py:1156`, `bin/hook_stop_fila1.py:1168`, `bin/hook_stop_fila1.py:1179`, `bin/hook_stop_fila1.py:1250-1253`.
-- O avaliador remove os gatilhos antigos de tempo/deploy e usa apenas tokens adaptativos; a janela de CLEAR fica em dez minutos. O aval desses comportamentos além dos requisitos expressos fornecidos é **[nao verificado]**. `bin/orcamento_contexto.py:56`, `bin/orcamento_contexto.py:225-232`, `bin/orcamento_contexto.py:332-341`.
-
-Mapa para **c**:
-
-| Arquivo | Escritor | Leitores |
-|---|---|---|
-| `orcamento_estado.json` | Mesmo Stop, `_orc_salva`, sem novo escritor direto identificado | Stop; `orcamento_contexto.ler`; `disjuntor.ler` — `bin/hook_stop_fila1.py:722-739`, `bin/hook_stop_fila1.py:816-822`, `bin/orcamento_contexto.py:348-375`, `bin/disjuntor.py:849-852` |
-| `orcamento.log` | `_orc_trilha` do Stop | OC e DJ — `bin/hook_stop_fila1.py:699-709`, `bin/orcamento_contexto.py:359-367`, `bin/disjuntor.py:826-844` |
-| `pisos.log` | Função `registrar_piso`, acionada pelo Stop **e** CLI `--semear-pisos` | `ultimo_piso`/`gatilho_tokens`, DJ, painel — `bin/orcamento_contexto.py:198-232`, `bin/orcamento_contexto.py:291-310`, `bin/orcamento_contexto.py:402-406`, `bin/hook_stop_fila1.py:866-871`, `bin/disjuntor.py:869-871` |
-| `ultimo_clear.json` | `marco_de_clear.py`, sob flock e replace | Próprio escritor conserva clears; OC; Stop por OC — `bin/marco_de_clear.py:37-61`, `bin/orcamento_contexto.py:152-164`, `bin/hook_stop_fila1.py:832` |
-| `HANDOFF-SESSAO.md` | `handoff_sessao.sh` | Novo Stop usa mtime — `bin/handoff_sessao.sh:18`, `bin/hook_stop_fila1.py:748-752` |
-
-`gerar_estado.py` continua leitor do orçamento e acrescenta a leitura do disjuntor; a leitura do orçamento permanece fora do `try` novo e pode derrubar a geração se o JSON tiver formato estrutural inesperado, pois `OC.ler` faz `est.get` depois do bloco de leitura sem validar que seja dicionário. `bin/gerar_estado.py:274-283`; `bin/orcamento_contexto.py:351-368`.
-
-O RELATO tem uma função reutilizada, mas não um único processo escritor: `no_relato` faz read-modify-write com temporário fixo `RELATO.md.novo`, sem lock próprio. O lock novo do disjuntor só serializa quem o respeitar; chamadas preexistentes do vigia e geradores continuam concorrentes. `app/core/esteira_vigia.py:830-847`, `app/core/esteira_vigia.py:1129`, `bin/disjuntor.py:171-176`, `bin/gerar_cortes.py:117-136`.
-
-_837 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_840 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
