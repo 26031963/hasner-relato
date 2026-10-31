@@ -1,7 +1,66 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 10:19** · publicado em **31/10/2026 10:24** (UTC-3)
+> Ultima resposta processada: **31/10/2026 10:40** · publicado em **31/10/2026 10:40** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 10:40 · sessao 275443782328 · - · - · origem=Ronald (tmux)
+
+Mapa de linhagem, somente por inspeção de código.
+
+| Campo | Quem produz/escreve | Quem lê no caminho dos quatro sítios |
+|---|---|---|
+| `cel.trabalha` | Campo triestado: `app/escala/models.py:1654`. Geração/regeneração obtêm `valor` de `eh_dia_trabalho_calculado`: `app/ponto/portas/celula.py:243`, `:590`; escrevem em `:247`, `:260`, `:595`, `:612`. Fora da vigência vira `False`: `:231`; reversão deriva do DNA anterior: `:532`. | Juiz único lê em `app/chamados/juizes.py:408`; os quatro emissores o chamam em `app/chamados/services/fabrica_da_celula.py:80`, `app/chamados/services/materializacao.py:160`, `app/ponto/services/cluster_espurio.py:26`, `app/ponto/management/commands/detectar_intervalo_ausente.py:49`. |
+| `ata.tipo_dia` | Grade normal produz trabalho/folga em `app/escala/utils.py:727`, `:752`; grade por turno em `:1743`, `:1749`; overlays escrevem folga/falta/ausência em `:1118`, `:1174`, `:1180`. Cartório copia para ata em `app/ponto/services/cartorio.py:566`. | Juiz lê em `app/chamados/juizes.py:408`; leitor genérico lê em `app/escala/services/leitor_celula.py:344`; fábrica também o consulta transitivamente em `app/chamados/services/declaracao_texto.py:90`, `:95`. |
+| `ata.sem_ancora` | Grade normal: `work is None` em `app/escala/utils.py:729`, saída em `:752`; grade por turno deriva `eh_dia_trabalho(...) is None` em `:1701`; ramo intermitente deriva falta de âncora de batidas em `:1456`, repassa em `:1514`. Cartório copia/coage em `app/ponto/services/cartorio.py:569`. | Nenhum dos quatro emissores mantém leitura direta após a cura; leitor genérico repassa em `app/escala/services/leitor_celula.py:362`. |
+| `ata.lampadas` | Produtor é `lampadas_do_dia` em `app/ponto/services/cartorio.py:427`, com `append` em `:500`, `:504`, `:506`, `:543`, `:554`; `ata_do_dia` chama-o em `:564` e inclui resultado em `:566`. Dispensa modifica luzes em `:614`; teto temporal modifica em `:711`. | Diretos: `app/chamados/services/materializacao.py:158`, `app/ponto/services/cluster_espurio.py:29`, `app/ponto/management/commands/detectar_intervalo_ausente.py:62`. Fábrica: `app/chamados/services/fabrica_da_celula.py:49` → `app/chamados/services/disputa_emissao.py:827` → `app/chamados/services/declaracao_texto.py:82` → `app/escala/services/leitor_celula.py:93`. |
+
+Os três campos da ata persistem pela mesma porta: `CelulaDia.lavrar_veredito` delega em `app/escala/models.py:1781`; a porta recebe/copia a ata em `app/ponto/portas/celula.py:697`, atribui em `:711` ou `:725` e salva por `salvar_e_emitir` em `:732`, cujo `save` e evento estão no mesmo `atomic` em `:639`. O julgamento em lote usa `save=False` e entrega os campos a `carimbar`: `app/ponto/services/cartorio.py:1520`, `:1535`.
+
+Há atribuições de ata em memória fora da lavra, mas sem nova derivação de lâmpadas: `app/escala/utils.py:1826` copia a célula e chama o mesmo `lampadas_do_dia` em `:1832`; `app/ponto/portas/celula.py:678` também copia para leitura. `carimbar_precedencia` só modifica a chave `precedencia`, preservando o restante: `app/ponto/portas/celula.py:774`.
+
+Cuidado com a equivalência declarada no comentário do diff: `sem_ancora` não é universalmente apenas `trabalha=None`; no ramo intermitente vem de `bool(_locs_i) and _anc_ix is None`: `app/escala/utils.py:1456`.
+
+Outros predicados próprios relevantes:
+
+- `app/chamados/services/declaracao_texto.py:95`: só `tipo_dia == 'trabalho'` tem marcos cobrados; a fábrica chega aqui por `app/chamados/services/fabrica_da_celula.py:49`. Para `trabalha=None` com tipo ausente, juiz libera (`app/chamados/juizes.py:408`), leitor deriva `indefinido` (`app/escala/services/leitor_celula.py:345`) e essa cláusula cala os marcos (`app/chamados/services/declaracao_texto.py:95`).
+- `app/ponto/services/dia_do_colab.py:121`: `not cel.trabalha` descreve dia sem trabalho, incluindo `None`.
+- `app/relatorios/dia_da_frota.py:47`: `not cel.trabalha` conta folga, incluindo `None`.
+- `app/ponto/services/passivo_s84.py:96`: `TRABALHO if cel.trabalha else FOLGA`, incluindo `None` em folga.
+- `app/ponto/marcos.py:155`, `:159`: veto próprio lê `trabalha`/veredito e veta `False`, sem ler `tipo_dia`.
+- `app/ponto/services/flip_auto.py:208`, `:212`: decide folga/âncora com `is False` e `is not True`.
+- Recortes ORM que excluem `None`: `app/chamados/management/commands/disparar_perguntas_competencia.py:76`, `app/chamados/services/fila_por_causa.py:192`, `app/ponto/services/vigia_entrada.py:79`, `:120`, `app/ponto/services/vigia_de_hora.py:21`.
+
+Leitores adicionais dos campos incluem `app/ponto/juiz_batida.py:160`, `app/chamados/juizes.py:457`, `:888`, `:1008`, `app/ponto/services/lastro.py:89`, `app/ponto/worklist.py:22`, `app/folha/previa.py:84`, `app/folha/services/sem_furo.py:22`, `app/pautas/services.py:414`, `app/relatorios/cartao_pela_celula.py:289`; leitores de `sem_ancora` derivado incluem `app/folha/causas.py:96`, `app/relatorios/furos.py:157`, `:218`, `:237`, `app/inteligencia/calculadores.py:48`, `:143`, `app/ponto/services/fechamento.py:1018`, `app/ponto/supra_juiz.py:214`.
+
+## 31/10 10:40 · sessao 98123c160ec5 · - · - · origem=Ronald (tmux)
+
+**Mordida dos testes — previsão estática; execução e RED efetivo [não verificado].** [nao verificado]
+
+| Reversão isolada | Resultado antigo para fixture limbo | Assert que a rejeita |
+|---|---|---|
+| Fábrica | `[]`, pois `None is not True` | `app/chamados/tests/test_f1c4_3_emissores.py:70`; guarda atual `app/chamados/services/fabrica_da_celula.py:80` |
+| Materialização | `False`, pois pula a única célula | `app/chamados/tests/test_f1c4_3_emissores.py:86`; loop/retorno `app/chamados/services/materializacao.py:156`, `:169` |
+| Cluster | `[]`, pois pula a única célula | `app/chamados/tests/test_f1c4_3_emissores.py:101`; loop/retorno `app/ponto/services/cluster_espurio.py:23`, `:34` |
+| Intervalo | `[]`, pois pula a única célula | `app/chamados/tests/test_f1c4_3_emissores.py:117`; loop/retorno `app/ponto/management/commands/detectar_intervalo_ausente.py:46`, `:86` |
+
+A reversão parcial para `dia_sem_trabalho(cel) or ata.get('sem_ancora')` também é rejeitada nos sítios cluster/intervalo: a fixture grava `sem_ancora=True` quando `trabalha=None`, e os asserts exigem o dia retornado. `app/chamados/tests/test_f1c4_3_emissores.py:55`, `:101`, `:117`.
+
+Há controles positivos `True/'trabalho'` nos quatro helpers; os controles de folga usam **None/'folga'**, que a guarda velha já descartava. Logo estes controles não isolam a nova exclusão de **True/'folga'**. `app/chamados/tests/test_f1c4_3_emissores.py:73`, `:76`, `:89`, `:92`, `:104`, `:107`, `:120`, `:123`.
+
+Os novos testes não incluem `False`, tipo ausente/vazio, `True + sem_ancora=True`, nem verificam a chamada ao juiz mediante spy/patch: chamam funções reais e verificam somente resultados. Um clone equivalente do predicado poderia satisfazer esses asserts. `app/chamados/tests/test_f1c4_3_emissores.py:54`, `:64`, `:79`, `:95`, `:110`.
+
+**Escopo real:** fábrica retorna motivos, e só `perguntar_pela_celula` chama o escritor; o teste chama apenas `motivos_a_perguntar`. Materialização testa uma segunda opinião de paridade. Cluster testa detecção, não `reconciliar_colab`. Intervalo já tem emissão aposentada: reconcilia legado e depois executa `continue`. `app/chamados/services/fabrica_da_celula.py:111`, `:146`, `:151`; `app/chamados/services/materializacao.py:128`, `:438`, `:818`; `app/ponto/services/cluster_espurio.py:69`, `:86`; `app/ponto/management/commands/detectar_intervalo_ausente.py:147`, `:154`.
+
+**Imports/query/chokepoint:**
+
+- Os quatro novos imports são internos às funções, não imports novos de módulo; o juiz apenas lê `cel.ata` e `cel.trabalha`, sem ORM nem relógio em seu corpo. `app/chamados/services/fabrica_da_celula.py:78`; `app/chamados/services/materializacao.py:141`; `app/ponto/services/cluster_espurio.py:20`; `app/ponto/management/commands/detectar_intervalo_ausente.py:37`; `app/chamados/juizes.py:407`.
+- Há dependência circular **preexistente** entre `chamados.juizes` e `chamados.models`: juiz importa models no topo; models reexporta juiz e materialização ao final. Os imports locais evitam introduzir a aresta durante definição dos quatro módulos; ausência de erro em execução [não verificado]. `app/chamados/juizes.py:6`; `app/chamados/models.py:3135`, `:3140`.
+- O caminho quente existe: signal síncrono da batida chama julgamento; cartório chama cluster e fábrica. `app/ponto/signals.py:85`, `:93`, `:131`, `:135`; `app/ponto/services/cartorio.py:793`, `:797`, `:798`, `:800`.
+- Embora o juiz não acrescente consulta explícita, a mudança passa células antes puladas para consultas e escritas posteriores: fábrica consulta perguntas e pode gerar perguntas; cluster consulta dedup e abre chamados. Portanto “delta total zero na batida” não está demonstrado. `app/chamados/services/fabrica_da_celula.py:103`, `:111`, `:151`; `app/ponto/services/cluster_espurio.py:56`, `:62`, `:65`, `:86`.
+- O selo existente cobra tetos e quantidade de `on_commit`; tetos dos cenários de batida com furos são 191/241 quando fecham e 134/194 quando ficam. As respectivas fixtures criam `trabalha=True`; não demonstram o custo do novo universo limbo. `app/ponto/tests/test_selo_chokepoint_escrita.py:157`, `:158`, `:163`, `:164`, `:212`, `:218`, `:340`, `:380`.
+- Os novos testes não medem consultas ou imports: o arquivo inteiro contém fixtures e asserts de retorno. O teto após a alteração, custo real de produção e import completo da aplicação estão [não verificado]. `app/chamados/tests/test_f1c4_3_emissores.py:21`, `:123`.
+
+Nenhum comando de teste foi executado e nenhum arquivo foi escrito. [não verificado] [nao verificado]
 
 ## 31/10 10:19 · sessao 026ee072896a · E3-STATUS · censo · origem=Code
 
@@ -587,108 +646,4 @@ Checklist adicional:
 - **Travas:** não há aquisição explícita de trava de linha no D5, em `julgar_colab` ou na lavra; há atomic no save+evento. Ordem/contenda efetiva de locks: [não verificado]. Trechos: `app/ponto/management/commands/lavrar_status_competencia.py:49`, `:55`; `app/ponto/services/cartorio.py:739`, `:776`; `app/ponto/portas/celula.py:639`.
 - **Impressão não inclui o novo fato:** lista de insumos codificados está em `app/ponto/services/cartorio.py:333`, `:339`, `:344`, `:352`, `:362`, `:377`, `:385`; `folga_humana` não participa. Pulo por impressão vem antes do adaptador, e D5 ignora status já preenchido. `app/ponto/services/cartorio.py:1157`, `:1161`, `:726`. A promessa do ADR de proteção pelo mesmo hash merece contestação; ele já admite explicitamente a lacuna de isenção. `app/docs/ADR/0002-celula-e-o-dia.md:59`.
 
-## 31/10 09:03 · sessao 020e958af6b5 · F1C4-3 · verificador · origem=Code
-
-O delta corrige o caso `trabalha=None` sem tipo na ata, mas mantém uma decisão própria no supra e não garante equivalência com `dia_sem_trabalho`. Há um contraexemplo no código: ata explícita com `tipo_dia='indefinido'`. (`app/escala/services/leitor_celula.py:344-345`; `app/chamados/juizes.py:408`; `app/ponto/supra_juiz.py:48,443-447`)
-
-**(1) Escritores, leitores e efeito do delta**
-
-- **`SEM_JURISDICAO`:** uma definição em produção, no supra, e um leitor executável: a condição que emite `COBRANCA_EM_DIA_SEM_TRABALHO`. Acrescentar `'indefinido'` impede esse código quando o dia tem esse valor; os outros requisitos continuam sendo previsto zero, chamado vivo e cobertura `None`. (`app/ponto/supra_juiz.py:48,443-447`)
-- **`tipo_dia='indefinido'`:** o escritor literal é `grade_da_celula`. Primeiro prevalece um `ata.tipo_dia` verdadeiro; sem ele, o leitor traduz `True → trabalho`, `False → folga`, `None → indefinido` e entrega o resultado no dicionário do dia. O delta não muda esse escritor. (`app/escala/services/leitor_celula.py:344-345,359`)
-- **Tipo lavrado:** `ata_do_dia` copia o `tipo_dia` recebido; portanto, escrever o rótulo no resultado do leitor e lavrá-lo na ata são operações distintas. (`app/ponto/services/cartorio.py:558,566`)
-
-Os consumidores do classificador ficam assim:
-
-| Consumidor | Mudança de resposta |
-|---|---|
-| Command `supra_juiz` | Deixa de receber aquela acusação para `indefinido` e, por ela, deixa de chegar à retratação. A escrita continua dependendo das guardas de conversa, cobrança órfã e `--executar`. (`app/ponto/management/commands/supra_juiz.py:206,218,225,239,243-249`) |
-| Cartório, ramo normal | Se receber esse tipo, perde essa causa de reconciliação; outra causa ainda pode reconciliar. (`app/ponto/services/cartorio.py:1169-1179,1268-1276`) |
-| Cartório, ramo “nunca bateu” | Sem efeito nesse ramo: passa `chamados_vivos=0`, incompatível com a condição alterada. (`app/ponto/services/cartorio.py:996-1000`; `app/ponto/supra_juiz.py:444`) |
-| `emitir_furo_retroativo` | A lista pode perder o código, mas a seleção continua exigindo `FURO_SEM_COBRANCA`. (`app/ponto/management/commands/emitir_furo_retroativo.py:99-110`) |
-
-Os leitores genéricos de `tipo_dia` não passam a consultar a tupla: declaração continua pulando dias diferentes de trabalho; worklist continua devolvendo ausência de gap; relatório de furos continua classificando esse dia como folga; inteligência e furos diários continuam excluindo-o; as seleções de valores da folha continuam restritas aos tipos que já aceitavam. (`app/chamados/services/declaracao_texto.py:90-96`; `app/ponto/worklist.py:18-20`; `app/relatorios/furos.py:151-153`; `app/inteligencia/calculadores.py:46-47,141-142`; `app/escala/services/furos_diarios.py:39-40`; `app/folha/export.py:1071-1080`)
-
-**Não retratar não equivale a implementar “limbo cobra”:** o ramo de furo do supra continua exigindo trabalho ou ausência parcial; `'indefinido'` não entra nele por esta mudança. (`app/ponto/supra_juiz.py:281-285`)
-
-**(2) Predicado paralelo e comparação**
-
-Sim, permanece um predicado próprio no supra: `tipo_dia != 'trabalho' and tipo_dia not in SEM_JURISDICAO`. Ele já existia; o delta amplia sua exceção, sem delegar a `dia_sem_trabalho`. (`app/ponto/supra_juiz.py:443`; diff fornecido)
-
-Com `trabalha=None`, dentro da vida do colaborador e satisfeitos os demais requisitos da acusação:
-
-| Ata | `dia_sem_trabalho` | Supra após delta |
-|---|---:|---|
-| Ausente ou sem tipo verdadeiro | `False` | Não acusa |
-| `tipo_dia='trabalho'` | `False` | Não acusa |
-| `tipo_dia='folga'`, `'ausencia'` ou `'falta'` | `True` | Acusa |
-| **`tipo_dia='indefinido'` explícito** | **`True`** | **Não acusa** |
-
-A tabela decorre da prioridade da ata no leitor, do predicado do juiz e da exclusão no supra. **Ocorrência de ata explícita `'indefinido'` em produção: [não verificado].** (`app/escala/services/leitor_celula.py:344-345`; `app/chamados/juizes.py:408`; `app/ponto/supra_juiz.py:48,443-447`)
-
-O problema é que o mesmo rótulo chega ao supra tanto por ausência de decisão quanto por valor explícito da ata; a condição não distingue essas origens. Isso impede afirmar que o delta preserva integralmente as duas cláusulas do aval. (`app/escala/services/leitor_celula.py:344-345,359`; `app/ponto/supra_juiz.py:443`)
-
-Há uma precisão sobre “juiz registrado”: o registro e o lookup apontam `EscalaColaborador.eh_dia_trabalho` para dia de trabalho; `dia_sem_trabalho` é o helper existente usado pelos consumidores de chamados. Não aparece nominalmente como autoridade registrada nesses dois arquivos. (`app/core/juizes.py:158`; `app/docs/JUIZES.md:66-73`; `app/chamados/juizes.py:443`; `app/chamados/models.py:1227-1233`)
-
-**(3) Mordida do RED e mudança do teste antigo** [nao verificado]
-
-**O RED novo morde a reversão da tupla.** Sua entrada satisfaz todos os requisitos restantes: `indefinido`, previsto zero, chamado vivo e cobertura `None`. Retirar `'indefinido'` da tupla faz reaparecer o código proibido pelo `assertNotIn`; o controle de folga continua acusando. O ensaio da função real, com reversão somente em memória, confirmou esse resultado. (`app/ponto/tests/test_f1c4_3_supra_indefinido_nao_retrata.py:17-31`; `app/ponto/supra_juiz.py:443-447`)
-
-Seu alcance, porém, é a classificação de uma string: não passa pela célula, pelo leitor ou pelo executor, nem separa `indefinido` sintético de `indefinido` lavrado. Logo, morde o delta, mas não prova o contrato inteiro. (`app/ponto/tests/test_f1c4_3_supra_indefinido_nao_retrata.py:17-28`)
-
-A mudança antiga inverte uma **caracterização**, como o próprio comentário atual registra. A lei substantiva já diz `None=indeterminado (limbo cobra)`; a classe também afirma que “não sei” não autoriza “sei que não”. Portanto, a expectativa antiga não constitui fundamento para revogar essa lei. (`app/ponto/tests/test_supra_juiz.py:197-200,238-245`; `app/escala/models.py:1656`; `app/docs/LEIS.md:73`; `CLAUDE.md:45-51`)
-
-Execução histórica dos commits RED/GREEN e resultado da suíte completa: **[não verificado]**. [nao verificado]
-
-**(4) Classes de reprovação**
-
-- **Derivação paralela de fonte única: aplica-se.** O supra mantém sua própria resposta e há divergência construível com o juiz existente. A exigência de leitor sem regra própria está expressa. (`app/ponto/supra_juiz.py:443`; `app/chamados/juizes.py:408`; `CLAUDE.md:17-22`)
-- **Segundo juiz:** aplica-se como duplicação da decisão; dizer que o delta *cria* um segundo juiz registrado seria impreciso, pois a condição já existia e o registro nominal é outro. (`app/ponto/supra_juiz.py:443`; `app/core/juizes.py:158`; `CLAUDE.md:281-283`)
-- **RED sem mordida: não para a reversão examinada.** Há mordida, com a limitação de cobertura descrita acima. (`app/ponto/tests/test_f1c4_3_supra_indefinido_nao_retrata.py:17-31`)
-- **Segundo escritor fora da porta e relógio fora da borda:** o delta não acrescenta escrita nem leitura de relógio ao código produtivo; muda a tupla que controla uma acusação, cuja retratação continua encaminhada à porta existente. (`app/ponto/supra_juiz.py:48,443`; `app/ponto/management/commands/supra_juiz.py:222,248-249`)
-- **Ordem de trava e pouso antes do pré-requisito:** violação efetiva **[não verificado]**; o material fornecido não comprova a sequência de validação e pouso. A exigência de RED evidenciado consta da regra. (`CLAUDE.md:28-29`) [nao verificado]
-
-## 31/10 09:03 · sessao 63820f55298b · - · - · origem=Ronald (tmux)
-
-Q1 pode ser respondida integralmente por uma tabela de decisão ordenada, mas a tupla pedida omite `previsto_min`, que também decide a saída. A grade produz trabalho com `min_por_data.get(d, 0)`, enquanto a lavra testa `not previsto_min`; portanto não é correto dizer que os seis campos bastam (`app/escala/utils.py:1749-1753`; `app/ponto/status_dia.py:93-94`).
-
-Use B=tem_batida, P=cobertura_parcial, I=isento, H=folga_humana, N=bool(previsto_min), A={furo,discordante,cobrado,nunca_bateu,fato_em_ausencia}. Primeira linha aplicável vence; `*` significa qualquer valor (`app/ponto/status_dia.py:42-44,83-108`):
-
-| B | tipo | condição adicional | saída |
-|---|---|---|---|
-| 0 | falta | * | falta |
-| 0 | ausencia | não(P e não I e v∈A∪{indefinida}) | ausencia |
-| * | * | v=indefinida,H=1 | B?folga_trabalhada:folga |
-| * | * | v=indefinida,H=0 | escala_suspeita |
-| 0 | * | tipo=folga ou N=0 | folga |
-| 0 | * | I=1 | ok, rótulo isento |
-| 0 | * | v=coberta | ausencia |
-| 0 | * | v∈A | irregular |
-| 0 | * | resto | sem_certidao |
-| 1 | * | tipo=folga ou v=fato_sem_previsao | folga_trabalhada |
-| 1 | * | v∈A | irregular |
-| 1 | * | v∈{concorde,coberta,cobranca_indevida} | ok, rótulo isento se I |
-| 1 | * | resto | sem_certidao |
-
-Isto cobre o domínio da função, inclusive combinações artificiais; alcance de cada célula em produção não é fornecido pelo dado. A produção tem filtros úteis: P nasce apenas no ramo grade `tipo_dia=ausencia`; juiz devolve imediatamente lista vazia para I=1; nunca-bateu força v=nunca_bateu quando não existe cobertura integral; vereditos de admin passam por outra regra na porta (`app/escala/utils.py:1173-1190`; `app/ponto/supra_juiz.py:195-196`; `app/ponto/services/cartorio.py:997,1026-1041`; `app/ponto/portas/celula.py:694-698`).
-
-**Defeito crítico do delta / costura real:** ramo normal inicializa `_vd=None` e só pode trocar para `'cobrado'`; passa este `_vd` como argumento `veredito` de `fatos_do_status`. Essa função só consulta A2 quando o argumento é `'indefinida'`, logo no ramo normal H é sempre False (`app/ponto/services/cartorio.py:1220-1245,1558-1560`; `app/ponto/status_dia.py:121-126`). Depois a porta deriva o veredito efetivo dos códigos e o passa à regra do status (`app/ponto/portas/celula.py:658,698,745-752`). Assim `indefinida` derivada normalmente vem com H falso mesmo se A2 dissesse feriado/folga humana. O veredito efetivo já é calculado em `_tl.vereditos` antes, pela autoridade certa, mas não alimenta fatos_do_status (`app/ponto/services/cartorio.py:1249-1252`). O D5 usa cel.veredito e pode preencher H verdadeiro para o mesmo veredito, causando resultados diferentes entre evento e lote (`app/ponto/services/cartorio.py:735-736`).
-
-`indefinida` não é apenas PREVISTO_COM_DIA_INDEFINIDO: mapa inclui FASE_NAO_DECLARADA_COM_PREVISTO e PARCIAL_SEM_PERIODO (`app/escala/models.py:1579-1599`). O primeiro nasce no ramo sem fato com dia de cobrança e previsto; parcial integra dia_de_cobranca (`app/ponto/supra_juiz.py:279-326`). PARCIAL_SEM_PERIODO nasce com fato em cobertura parcial aprovada sem período; `indefinida` pode portanto ter batida (`app/ponto/supra_juiz.py:348-358`). Sem vínculo válido também acusa indefinida sem previsto, com ou sem fato, desde que os portões pertinentes passem (`app/ponto/supra_juiz.py:367-370,405-407`).
-
-**Divergências adicionais demonstráveis pelo código:**
-
-1. Ausência aprovada de subtipo `folga_compensatoria`/`feriado_folga`: grade chama de `ausencia`, pois todo slug diferente de falta segue o mesmo ramo; A2 classifica ambos como faixa folga (`app/escala/utils.py:1170-1190`; `app/ponto/precedencia.py:60-63`). Sem batida lavra devolve ausencia antes de olhar H/v; calendário força trabalho=False e devolve folga (`app/ponto/status_dia.py:85-90`; `app/colaboradores/services/calendario.py:116-117,134-135`). Com batida calendário dá folga_trabalhada ou aberto, lavra pode dar irregular/ok porque tipo grade é ausencia (`app/colaboradores/services/calendario.py:144-147`; `app/ponto/status_dia.py:102-108`). Aprovação é realmente o filtro da grade para folha, independentemente do efeito ABONA/SUPRIME (`app/ponto/turnos.py:2482-2491,2734-2738`).
-
-2. Feriado que suprime trabalho só é consultado pela nova costura para v=indefinida. Para v diferente, grade pode continuar trabalho, H false e lavra irregular/ok; calendário respeita faixa feriado para qualquer veredito, protegendo folga/folga_trabalhada da sobreposição pelo mapa (`app/ponto/status_dia.py:122-126,93-108`; `app/colaboradores/services/calendario.py:112-115,168-169`). A2 tem exceção trabalha_em_feriado e previsto=True; este caso não é feriado supressor (`app/ponto/precedencia.py:328-336`). Não afirmar todo feriado como desvio.
-
-3. Parcial não isento sem batida e veredito acusador: lavra deliberadamente irregular/escala_suspeita, enquanto calendário retorna ausencia imediatamente para faixa atestado/afastamento/ferias, sem ler P ou veredito (`app/ponto/status_dia.py:85-91,99-100`; `app/colaboradores/services/calendario.py:109-110`). É mudança desejada pela cobrança parcial do juiz, mas quebra alegação de igualdade com calendário/precedência do ADR (`app/ponto/supra_juiz.py:274-283`; `app/docs/ADR/0002-celula-e-o-dia.md:51-57`).
-
-4. Nunca-bateu trabalho previsto sem batida: lavra irregular, calendário mapa diz falta; exceção isento, cobertura e folga podem absorver antes (`app/ponto/status_dia.py:93-101`; `app/colaboradores/services/calendario.py:54-58,109-143,168-173`). Este desvio é pré-delta, mas relevante à matriz e à afirmação ADR, e testes declaram expressamente irregular pela lei (`app/ponto/tests/test_e3_status_lavrado.py:54-60`).
-
-5. `indefinida` em folga só de escala: lavra escala_suspeita, calendário preserva folga/folga_trabalhada quando trabalho=False; mapa não sobrescreve essas palavras (`app/ponto/status_dia.py:88-94`; `app/colaboradores/services/calendario.py:134-147,168-169`). Isso também é escolha declarada na regra, e não prova de equivalência com calendário (`app/ponto/status_dia.py:72-78`).
-
-6. `concorde` sem batida em trabalho previsto e não isento: lavra sem_certidao; calendário não aplica ok sem batida e permanece falta/ausencia conforme cobertura (`app/ponto/status_dia.py:95-101`; `app/colaboradores/services/calendario.py:131-133,161-162`). Pode ocorrer antes da adesão ou por dia justificado/cobertura pendente, dependendo dos gates do juiz; não inventar ocorrência produção (`app/ponto/supra_juiz.py:263,301-303,338-339`; `app/escala/models.py:1595-1596`).
-
-Os novos testes de H testam a função pura com H fornecido e mockam fatos_do_dia diretamente; não cobrem a passagem `_vd=None` → porta deriva indefinida (`app/ponto/tests/test_e3_status_lavrado.py:100-140`). Portanto “morde a costura” no comentário não prova o ramo real (`app/ponto/tests/test_e3_status_lavrado.py:118-120`).
-
-_939 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_941 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
