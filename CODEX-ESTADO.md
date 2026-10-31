@@ -1,7 +1,68 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 20:40** · publicado em **31/10/2026 20:41** (UTC-3)
+> Ultima resposta processada: **31/10/2026 20:47** · publicado em **31/10/2026 20:47** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 20:47 · sessao 57c81f562b71 · - · - · origem=Ronald (tmux)
+
+**A premissa universal da inclinação constante NÃO procede.** Há contraprova histórica em São Paulo, sem prorrogação e sem dupla contagem: o cursor mantém o offset inicial enquanto as bordas de `N` são localizadas novamente. (`app/ponto/motor_calculo_v2.py:100`, `app/ponto/motor_calculo_v2.py:101`, `app/ponto/motor_calculo_v2.py:180`)
+
+Sonda das funções reais extraídas por AST, somente em memória:
+
+| Parâmetro | Valor |
+|---|---|
+| Entrada | 31/12/1913 22:00, offset −03:06 |
+| Saída | 01/01/1914 07:00, offset −03:00 |
+| Pausa | 31/12/1913 23:00 −03:06 → 01/01/1914 06:00 −03:00 |
+| `prorrogacao` | `False` |
+| `N(entrada, saída)` | 414 |
+| Diferença dos prefixos da pausa | **354** |
+| Corpo novo | **360** |
+
+Resultados reproduzidos pelo corpo e pela dependência reais; o teto 414 não elimina os seis minutos excedentes. (`app/ponto/motor_calculo_v2.py:89`, `app/ponto/motor_calculo_v2.py:116`, `app/ponto/motor_calculo_v2.py:180`, `app/ponto/motor_calculo_v2.py:183`, `app/ponto/motor_calculo_v2.py:186`)
+
+A peça começa com offset −03:06; a aritmética horária conserva esse offset. No trecho gerado `04:00−03:06 → 05:00−03:06`, obtive:
+
+| Cursor | `N(entrada, cursor)`, `pr=False` |
+|---|---:|
+| 04:00−03:06 | 360 |
+| 04:30−03:06 | 390 |
+| 04:54−03:06 | 414 |
+| 04:55−03:06 | 414 |
+| 05:00−03:06 | 414 |
+
+Portanto a inclinação passa de 1 para 0 **dentro** do trecho; o algoritmo transforma aumento de 54 minutos em desconto de 60. A borda de 05:00−03:00 ocorre às 04:54 no cursor antigo. (`app/ponto/motor_calculo_v2.py:101`, `app/ponto/motor_calculo_v2.py:180`, `app/ponto/motor_calculo_v2.py:181`, `app/ponto/motor_calculo_v2.py:183`)
+
+**Cuidado na consolidação:** isso prova desigualdade com a diferença de prefixos e com a presença na janela efetiva de `N`. Não prova desigualdade com `_regra` literal: esse oráculo usa relógio de parede sem timezone e declara a premissa “sem horário de verão em 2026”; deve produzir 360 nesse caso histórico. A igualdade literal nessa célula específica é **[nao verificado]**. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:146`, `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:148`)
+
+Nas transições de **horário de verão de ±1 hora**, sondei 2.208 células representativas em 1931, 1950 e 2018, normalizando o minuto real por UTC antes de consultar a hora local: nenhuma divergência encontrada. Isso é amostra, não prova geral. (`app/ponto/motor_calculo_v2.py:79`, `app/ponto/motor_calculo_v2.py:180`)
+
+Casos reproduzidos de 2018 com pausa cobrindo o recorte:
+
+| Recorte São Paulo | `pr=False`: `N`/desconto | `pr=True`: `N`/desconto |
+|---|---:|---:|
+| 03/11 22h → 04/11 07h, avanço | 360 / 360 | 480 / 480 |
+| 17/02 22h → 18/02 07h, retorno | 480 / 480 | 600 / 600 |
+
+A ausência de normalização explícita do cursor **não basta**, por si só, para reprovar essas mudanças de uma hora: a grade continua alinhada às bordas em tempo absoluto nesses casos. (`app/ponto/motor_calculo_v2.py:100`, `app/ponto/motor_calculo_v2.py:104`, `app/ponto/motor_calculo_v2.py:180`)
+
+Os limites continuam protegidos na contraprova histórica: soma não negativa, desconto inferior à duração da peça e ao total. O defeito identificado é a medida de presença, não violação desses limites. (`app/ponto/motor_calculo_v2.py:167`, `app/ponto/motor_calculo_v2.py:180`, `app/ponto/motor_calculo_v2.py:183`, `app/ponto/motor_calculo_v2.py:186`)
+
+**Laço infinito NÃO procede para datetimes válidos e operações sem exceção:** a próxima hora fica estritamente depois de `a`; com `_f > a`, `min(_f, próxima_hora)` também fica depois de `a`. O cursor avança estritamente até a ponta. (`app/ponto/motor_calculo_v2.py:179`, `app/ponto/motor_calculo_v2.py:180`, `app/ponto/motor_calculo_v2.py:184`)
+
+## 31/10 20:46 · sessao d23198846302 · - · - · origem=Ronald (tmux)
+
+- **Mordida confirmada:** execução isolada, somente em memória, passou **21 testes** de função, grades, sobrepostos, contraprovas e mutantes. Extraí AST real; substituí apenas `SimpleTestCase` por `unittest.TestCase` e `make_aware` por `ZoneInfo`. Django não está instalado; suíte Django canônica **[nao verificado]**. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:80`, `:244`, `:272`, `:324`)
+
+- `_limite_por_peca` produz **6 falhas** na grade de peças longas; primeira: 20:30→22:15 seguinte, pausa integral, `pr=True`, **1470 versus 1455**. Grade antiga e sobrepostos produzem zero falhas com esse mutante. Portanto a cobertura nova detecta precisamente a regressão antes invisível. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:225`, `:302`, `:347`)
+
+- **Vacuidade por `subTest` NÃO procede:** o teste mutante instancia `t` e chama seu método diretamente; não executa `t.run()`. Assim `t._outcome` permanece vazio e `subTest` não captura a asserção. A execução confirmou a mordida de `test_MORDE_contraexemplo_da_volta2_com_o_corpo_de_bd95dff7`. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:277`, `:327`, `:358`)
+
+- **Teste dos segundos passa:** desconto **60 + 25/60**. É regressão útil, sem vacuidade, mas o corpo anterior `_limite_por_peca` também satisfaz esse caso normal; a mordida contra ele vem das peças longas. A referência `_regra` inteira usa truncamento de minutos, portanto não certifica frações genericamente. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:119`, `:149`, `:153`, `:302`)
+
+- **Mudança para borda não inteira é detectada:** mutações apenas em memória, mantendo `_regra`, deram na grade longa: **22:01: 69 falhas; 22:30: 117; 05:01: 386; 05:30: 386**. Exemplos: 22:01 resulta 929 contra 930; 05:01 sem prorrogação resulta 421 contra 420. A proteção decorre da referência que declara 22–05; não há asserção estrutural específica exigindo bordas inteiras. (`app/ponto/motor_calculo_v2.py:100`, `:103`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:116`, `:133`, `:159`, `:225`)
+
+- **Relógio solto NÃO procede:** datas constantes e `_aw` combina data/hora, aplicando o fuso; não lê “agora”. A referência declara explicitamente a ausência de horário de verão em sua grade de 2026. Histórico DST e microssegundos não são cobertos por esses testes. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:84`, `:146`, `:169`, `:230`; `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:26`)
 
 ## 31/10 20:40 · sessao d87ee81bfd17 · V3-P5-PRORROGACAO-POR-INTERVALO · verificador · origem=Code
 
@@ -942,71 +1003,4 @@ Censo de campos e v3, somente por leitura:
 
 Testes que usam os campos podem ser agrupados como fixtures e assertions; evidências úteis: `app/folha/tests/test_export_invariante_he.py:27`, `app/folha/tests/test_export_59a.py:14`, `app/folha/tests/test_export_dsr_reflexo.py:25`, `app/folha/tests/test_sm1_monster_export.py:92`, `app/ponto/tests/test_dia_pago_soma.py:231`, `app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:69`, `:74`, `:107`, `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:52`, `:58`, `:62`, `app/ponto/tests/test_v3_periodos_da_celula.py:116`, `:134`, `:170`, `:176`.
 
-## 31/10 19:40 · sessao f9695340e72e · - · - · origem=Ronald (tmux)
-
-Censo complementar dos leitores diretos, somente leitura:
-
-| Sítio e filtro | Universo / ec / calendário de outro vínculo | Chamador e decisão | Testes | [nao verificado]
-|---|---|---|---|
-| `app/escala/alimentacao.py:49` `folgas_do_periodo`; query `:66` | Lista de vínculos fornecida; agrupa datas por `ec_id`; arredonda início/fim para meses inteiros (`:60`). Não escolhe ec do dia nem lê origem: calendário de outro vínculo fica no balde daquele outro vínculo. | Alimenta cálculo do vínculo: `app/ponto/precedencia.py:333`; grade `app/escala/utils.py:1384`; calendário `app/colaboradores/services/calendario.py:606`; painel `app/core/services/painel_op.py:105`; PDF `app/relatorios/pdf_espelho.py:361`; censos `app/ponto/management/commands/censo_fase_12x36.py:176` e `diff_espelho_alimentacao.py:101`. | `app/escala/tests/test_selo_alimentacao_dias.py:73` custo constante e `:96` mês inteiro; contrato lista de vínculos em `app/escala/tests/test_carregadores_contrato.py:6`. |
-| `app/escala/models.py:1212` `defeito_folga_nao_definida`; query `:1220` | Próprio `self` e mês da data. Para 6x1 sem `folga_dia_semana`, ausência de qualquer FD no mês acusa defeito. Não lê origem; outro vínculo não serve. | Plano `app/escala/views_plano_folgas.py:89`; limbo `app/chamados/services/limbo_folgas.py:199`, `:281`; detector `app/ponto/management/commands/detectar_ausencias.py:144`, `:187`; supra juiz `app/ponto/supra_juiz.py:200`; faltas hoje `app/ponto/services/faltas_de_hoje.py:39`; régua `app/escala/regua_defesa.py:145`, `:176`; diagnóstico `app/ponto/services/diagnostico_escala.py:104`. Move defeito/cobrança de cadastro, visibilidade e guardas. | `app/escala/tests/test_t1_ligado_por_padrao.py:34`, `:39`, `:45`, `:55`; `app/escala/tests/test_plano_folgas_filtro.py:53`, `:58`, `:61`. |
-| `app/escala/models.py:1223` `eh_dia_trabalho_calculado`: foto mensal `:1257`, existência no dia `:1281`, anterior `:1327`, posterior `:1330`; ou mapa alimentado `:1251` | Próprio vínculo (`self`); **nenhuma dessas leituras distingue manual/calendário**. Outro vínculo não entra. Foto no dia => `False` (`:1280`); fora da foto usa ciclo se ele sabe (`:1290`), senão paridade da foto mais próxima (`:1322`); sem foto mensal pode usar âncora (`:1260`). | `eh_dia_trabalho` retorna célula se existe e só cai aqui sem célula: `app/escala/models.py:1048`, `:1071`. Geradora/regeneradora chama diretamente em `app/ponto/portas/celula.py:243`, `:590` e grava `trabalha`/DNA (`:244`, `:594`); precedência em `app/ponto/precedencia.py:368`; projeção retroativa `app/colaboradores/management/commands/corrigir_escala_retroativa.py:120`; sentinelas `app/ponto/management/commands/tripwire_celulas.py:27`, `censo_col900.py:115`. Move célula, grade e decisões downstream. | `app/escala/tests/test_foto_vence_ancora.py:34`, `:38`, `:44`, `:52`; `app/escala/tests/test_foto_nao_apaga_o_ciclo.py:50`, `:60`, `:67`, `:73`; continuação da foto parcial em `app/escala/tests/test_o37_foto_parcial.py` [linhas de métodos não verificadas]; alimentação acima. |
-| `app/escala/services/fase_conflitante.py:61` `medir`; query `:74`; derivador `_foto_diz` `:51` | Itera **cada ec ativo** (`:71`) e todas suas FD, sem recorte de data na query. Não seleciona ec por dia/vigência; não lê origem. Foto de outro ec não entra. `_foto_diz` marca data presente como folga e extrapola paridade a partir da mais próxima (`:55`). | `app/escala/management/commands/lavrar_fase_conflitante.py:31` mede e `:35` grava snapshot; cron `app/config/crons.py:479`; API lê snapshot em `app/api/views_mensageria.py:632`, `:643`. Conta conflito com âncora; não altera veredito (`app/escala/services/fase_conflitante.py:80`). | `app/escala/tests/test_fase_conflitante.py:60`, `:72`, `:80`, `:84`, `:88`, `:93`. |
-| `app/escala/folgas.py:83` `divergencia_foto_x_calendario`; query `:101`, origem `:104` | Próprio ec + mês; separa FD manual e calendário; compara com calendário **atual** de `ec` (`:99`), sem exigir que a origem de cada FD seja esse calendário atual. Outro vínculo não entra. Não escolhe ec do dia. | Contador `foto_que_o_calendario_de_hoje_nao_manda` em `app/escala/folgas.py:133`, chamada `:143`; comando `app/escala/management/commands/lavrar_foto_folgas.py:113`, `:167`. `falta` permite lavra; `sobra` impede reconciliar o mês (`:123`, `:168`). | `app/escala/tests/test_foto_folga_continua.py:136` sobra bloqueia; `:158` vazio/contador; `:179` manual preservado. |
-| `app/escala/folgas.py:150` `gerar_foto_folgas`; leitura manuais `:165`, filtro origem `:167`; filtro calendário `:169`/`:171` | Próprio ec + mês; manual preservada; FD com origem não nula é reconciliada com calendário atual. Outro vínculo não entra; ec é argumento. | `app/escala/views.py:414`, `:415`; `app/colaboradores/views.py:245`, `:246`; `app/colaboradores/services/vinculo.py:163`, `:164`; lavra `app/escala/management/commands/lavrar_foto_folgas.py:170`. Cria foto e chama re-lavra `app/escala/folgas.py:192`. | `app/escala/tests/test_gerador_folgas.py:39`, `:47`, `:54`, `:63`; `app/escala/tests/test_torneira_folgas.py:87`; `app/escala/tests/test_foto_folga_continua.py:179`; lista de chamadores é fixada por `:260`. |
-| `app/escala/folgas.py:228` `lancar_folga`; query `:254`/origem `:255` | Próprio ec + dia; calendário no próprio vínculo veta lançamento manual. FD de outro vínculo não é procurada. Ec fornecido pelo chamador. | Plano `app/escala/views_plano_folgas.py:131`; declaração `app/ponto/services/declarar_dia.py:183`; veto precedência em `app/escala/folgas.py:258`, foto `:259`, re-lavra `:261`. | `app/escala/tests/test_torneira_folgas.py:68`; `app/escala/tests/test_bug136_plano_em_lote_relavra.py:114` para veto equivalente no helper; testes da porta declarar com outro agente. |
-| `app/escala/folgas.py:267` `_foto_do_dia`; query `:274`/origem `:275` | Próprio ec + dia; origem não nula veta alteração/remoção; outro vínculo não entra. | `alterar_folga` `app/escala/folgas.py:302` e lote `:334`; alterar chama re-lavra `:303`; lote recusa dias anteriores à competência `:330`, calendário `:335`, re-lavra `:340`. Portas views `app/escala/views_plano_folgas.py:136`, `:185`. | `app/escala/tests/test_bug136_plano_em_lote_relavra.py:68`, `:75`, `:84`, `:93`, `:105`, `:114`, `:124`. |
-| `app/escala/folgas.py:392` `reparentar_folga`; origem `:405`; ocupação destino `:418` | Folga individual; calendário retorna `'calendario'` sem migrar; manual do próprio ec é mantida se cobre o dia (`:408`), senão destino vem de `vinculo_do_dia_carregado` (`:414`). Se destino já tem FD de **qualquer origem**, não migra (`:418`). | `app/escala/folgas.py:459` e comando `app/escala/management/commands/reparentar_folgas.py:34`. Move titularidade e re-lavra só competência corrente em diante (`app/escala/folgas.py:435`, `:441`). | `app/escala/tests/test_folga_segue_a_pessoa.py:53`, `:66`, `:80`, `:92`, `:104`, `:113`. |
-| `app/escala/folgas.py:447` `reparentar_folgas_do_colaborador`; query `:453` | Pessoa inteira, **somente manuais** (`:454`); filtra as cujo vínculo não cobre data (`:457`); destino delegado acima. Calendário outro vínculo excluído. | Signal `app/escala/signals.py:190`, `:191` após mudança do vínculo. Mesmo efeito da porta individual. | `app/escala/tests/test_folga_segue_a_pessoa.py:53`; casos individuais acima. |
-| `app/escala/management/commands/reparentar_folgas.py:22` `handle`; query `:28` | Todas FD manuais, ordenadas por pessoa/data; não requer ec ativo; ignora as cujo ec cobre (`:31`); destino pela porta `:34`. | Entrada management command (`:16`); flag decide dry/apply `:26`; migração/re-lavra pela porta. | Teste específico do command [nao verificado]; porta fixada acima. |
-| `app/escala/views_plano_folgas.py:51` `_grid_ctx`; query `:60` | Vínculos **ativos** da empresa/posto (`:55`), mês pedido; mapa por ec/dia (`:63`). Não escolhe vínculo por dia nem vigência. Não lê origem, outro vínculo não pinta linha deste ec. FD presente tem prioridade sobre previsão (`:70`); sem FD usa `ec.eh_dia_trabalho` (`:76`). | View `plano_folgas` chama em `app/escala/views_plano_folgas.py:46`; URL `app/escala/urls.py:8`. Pinta grid/defeito de cadastro. | `app/escala/tests/test_plano_folgas_filtro.py:53`, `:58`, `:61`, `:64`; `app/escala/tests/test_folga_cadastro.py:26`. |
-| `app/escala/views_plano_folgas.py:98` `plano_folgas_toggle`; query `:112`/origem `:113` | Ec ativo pelo ID do POST (`:109`), dia do POST; calendário próprio gera 409. Não verifica ec do dia; outro vínculo não entra. | URL `app/escala/urls.py:9`; chama lançar/alterar `app/escala/views_plano_folgas.py:131`, `:136`. Veto ou gravação/re-lavra. | `app/escala/tests/test_bug136_plano_em_lote_relavra.py:124`; `app/escala/tests/test_torneira_folgas.py:68`. |
-| `app/ponto/services/diagnostico_escala.py:81` `template_do_vinculo`; query `:102` | Próprio ec + mês; origem ignorada; outro vínculo não conta. **Ec aqui é `atual = vinculos[0]`** (`:182`), não escolhido por cada dia. | `diagnostico_escala` `app/ponto/services/diagnostico_escala.py:193`; sem folga cadastrada gera ação Plano (`:194`); API `app/api/views_mensageria.py:1995`. Diagnóstico/contador. | `app/api/tests/test_diagnostico_template.py:36`, `:45`; teste específico de count FD [nao verificado]. |
-| `app/relatorios/furos.py:78` `escalas_em_limbo`; query `:112` | Cada ec ativo sem fim, colaborador ativo (`:86`), após dois dias sem previsão (`:93`); FD do mês atual e ec próprio. Não lê origem/outro vínculo; ec por queryset, não juiz do dia. | `app/relatorios/views.py:1552`; inclui peça explicativa “sem foto FolgaDia do mes” (`app/relatorios/furos.py:115`) na fila de cadastro. | `app/relatorios/tests/test_selo_ancora_do_vinculo.py:51` fixa diagnóstico da âncora; teste específico origem/FD [nao verificado]. |
-
-Outros auxiliares relevantes da lavra: universo ativo/calendário/mês vem de `app/escala/folgas.py:59`, usando carregador de vínculos em `:78`; `app/escala/management/commands/lavrar_foto_folgas.py:101` mede falta/sobra, e `:144` handle reconsulta antes de gravar (`:167`). Testes em `app/escala/tests/test_foto_folga_continua.py:80`, `:99`, `:125`, `:136`, `:158`, `:199`, `:208`.
-
-Atenção à escolha de ec no diagnóstico: `app/ponto/services/diagnostico_escala.py:49` `_vigente` pega o **primeiro vínculo que cobre a data** usando `vinculo_cobre_a_data` (`:53`), chamado em `:150`; não chama `vinculo_do_dia` nem toma a geradora da célula nessa escolha. Isso afeta previsão diagnóstica em `:152`, não a contagem mensal que usa `vinculos[0]` (`:182`, `:193`).
-
-Não identifiquei uso operacional de reverse `folgas_dia` além da definição em `app/escala/models.py:1554`; ausência total além dos sítios pesquisados [nao verificado].
-
-## 31/10 19:40 · sessao b38a17c024b7 · - · - · origem=Ronald (tmux)
-
-Censo somente por leitura; nenhum teste executado. [nao verificado]
-
-**Alvo: dois chamadores diretos, nenhum em teste ou por alias de import.** A varredura AST de todos os `.py` encontrou somente os dois `Load` abaixo; nenhuma ocorrência semântica como import, atributo, atribuição ou string exata para `getattr`. Os usos do nome em testes são texto explicativo/mensagem, em `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:18` e `:54`.
-
-| Chamador direto | `prorrogacao` | `entrada` / `saida` recebidas pelo alvo | Destino |
-|---|---|---|---|
-| `he_noturna`, `app/ponto/motor_calculo_v2.py:392` | Mesmo argumento `prorrogacao` de `he_noturna`, padrão `True` (`:359`, `:393`) | `inicio_extra` calculado por `_inicio_do_trecho_extra(entrada,fim,total_extra,intervalos)` em `:390`; `fim=saida` em `:385`. Portanto recorte da cauda extra, não necessariamente turno inteiro. | Subtraído de `minutos_extra_not`; dividido proporcionalmente em `not_50/not_100` e retornado (`:394`, `:398`, `:400`, `:401`). |
-| `MotorBase._noturno_dos_intervalos`, `app/ponto/motor_calculo_v2.py:1865` | `self.prorrogacao_noturna_pos5h` (`:1866`) | Encaminha seus próprios parâmetros sem mudar (`:1852`, `:1865`). | Retorna desconto para `calcular_noturnas` (`:923`) ou para o método emprestado pelo calculador (`app/ponto/calculador/regras.py:63`, `:86`). |
-
-**Bool igual não equivale a janela igual.** O alvo encaminha o mesmo bool a cada intervalo, mas recorta cada pedaço e chama `minutos_noturnos` separadamente em `app/ponto/motor_calculo_v2.py:145`. A elegibilidade efetiva da prorrogação depende do início/fim da chamada: `inter_s1_ini=max(inicio,s1_ini)` e condição `inter_s1_ini < 05h` com `fim > 05h`, em `:109-111`. Logo, um intervalo iniciado às 05:30 não herda a elegibilidade de um turno iniciado às 22h. Nenhum dos dois chamadores fornece ao alvo uma janela noturna elegível ou o contexto temporal do turno além do recorte `entrada/saida`; assinatura e encaminhamentos em `:121`, `:392-393`, `:1865-1866`.
-
-**Cadeias de produção para o desconto normal:**
-
-- `MotorBase.calcular_noturnas` calcula o bruto com `self.prorrogacao_noturna_pos5h` e o mesmo par e desconta `_noturno_dos_intervalos(entrada,saida,intervalos)`, em `app/ponto/motor_calculo_v2.py:921-923`. O resultado multiplica pelo fator e retorna (`:924-925`); `_escrever_noturnas` grava `PeriodoCalculo.minutos_noturnos_relogio/legais` (`:941-943`).
-- Há três chamadas de `_escrever_noturnas`: Motor12x36 `:2730`, MotorTurnoPartido `:2834`, MotorComercial `:3185`. Em cada uma, `e/s` vêm de `_janela_do_par(localizar(entrada),localizar(saida))` (`:2697-2698`, `:2824-2825`, `:3149-3150`), e os intervalos são recortados por `_intervalos_na_janela(e,s,intervalos)` (`:2702`, `:2829`, `:3162`).
-- MotorPlantao reutiliza explicitamente o cálculo do Motor12x36 (`:3448-3449`); Motor12x36ComEscala chama `super().calcular_periodo` (`:3460-3461`); MotorTurnoPartidoNoturno herda sem implementação adicional (`:3474-3481`); MotorIntermitente herda Motor12x36 (`:3483`, `:3491-3495`).
-- Os minutos legais são lidos pela property `PeriodoCalculo.horas_noturnas` (`:210-211`) e pela soma mensal `ResultadoMes.horas_noturnas`, que inclui `periodos + periodos_ft` (`:253`, `:271`). MotorTurnoPartido também lê o ganho `legais - relogio` para excedente em régua legal (`:3063-3066`).
-
-**Cadeias do calculador, incluindo apelidos:**
-
-- `_ContextoNoturno` armazena `bool(prorrogacao_pos5h)` (`app/ponto/calculador/regras.py:60-61`) e empresta exatamente `MotorBase._noturno_dos_intervalos` como atributo de classe (`:63`).
-- `noturnas_do_dia` percorre cada par recebido, usa o mesmo bool no bruto e no contexto do desconto (`:80-86`), limita a soma a zero e aplica fator (`:87-89`): bruto por par, desconto efetivamente por intervalo.
-- `regras.do_dia` chama `noturnas_do_dia` na folga trabalhada (`:736-738`) e grava `_vf['horas_noturnas']` (`:739`); no caminho normal chama em `:908-911` e grava `val['horas_noturnas']` (`:912`).
-- `periodo.noturno_no_par` chama `noturnas_do_dia` com um único par inteiro e intervalos julgados; flag `cct.prorrogacao_pos5h` (`app/ponto/calculador/periodo.py:508-510`). Seu chamador lê o par `e/s_` em `:752` e grava `p.minutos_noturnos_relogio/legais` em `:753-754`.
-- Para o split de HE, `regras.py` importa `he_noturna as _he_not` em `:868` e chama esse alias para cada ponta de período em `:886-888`, passando `prorrogacao_pos5h` e intervalos daquela ponta. Soma retornos (`:889-890`) e grava `horas_extras_50_noturna` / `horas_extras_100_noturna` (`:895-898`).
-- A produção V3 obtém os pares dos carimbos `p.efetivo_entrada/saida` (`app/ponto/calculador/alimentacao.py:106`), lê `intervalos_do_motor` (`:127`), monta `he_pontas` (`:135`) e pares/intervalos por dia (`:185-186`); entrega tudo a `regras.do_dia` (`:593-596`). O bool vem da CCT daquele dia (`:572-574`), cujo motor é obtido por `get_motor_cct(c,_k,tipo_escala=_te,...)` (`:448`). `_cct_do_motor` transcreve o flag do motor (`app/ponto/calculador/nucleo.py:347-351`).
-
-**Cadeias de produção para `he_noturna`:**
-
-- `_aplicar_he_noturna` passa `periodo.entrada/saida`, extras 50/100, `self.prorrogacao_noturna_pos5h` e `periodo.intervalos_do_motor`, em `app/ponto/motor_calculo_v2.py:952-956`. Grava `minutos_extra_100_noturna` em `:958` e `minutos_extra_50_noturna` em `:960`; soma mensal lê esses campos em `:290` e `:294`.
-- Os pares gravados em `periodo.entrada/saida` são localizações das pontas originais, em `:2689`, `:2816`, `:3141`; portanto esse caminho usa pontas cruas, enquanto o adicional normal recebe `e/s` efetivos, conforme referências anteriores.
-- Chamadas exatas de `_aplicar_he_noturna`: Motor12x36 por período `:2793`; MotorTurnoPartido na HE diária `:3085` e semanal `:3116`; MotorComercial por período `:3219` e na HE diária mensal `:3337`. Na agregação diária o portador é `periodos_dia[-1]` (`:3021-3025`, `:3269-3273`); na semanal é `pds[-1]` (`:3106-3110`).
-
-**Origem do bool do motor:** explicitamente recebido ou, quando `None`, lido de `prorrogacao_pos5h_legal(tipo_ciclo)` em `app/ponto/motor_calculo_v2.py:708-712`. A função legal retorna `tipo_ciclo != '12x36'` (`app/core/regua_cct.py:182`); a fábrica ativa injeta o valor da régua cadastrada em `:458`, `:466`, e no ramo desligado/CLT usa o ciclo em `:452-457`. O valor cadastrado de qualquer colaborador real é [nao verificado].
-
-**Testes diretos de `he_noturna`, úteis para a cadeia:** `test_s5b_split_noturno_tem_um_dono.py:111-112` percorre bools `True/False` definidos em `:108`, sem intervalos; `:122-123` usa `True`, também sem intervalos. `test_noturno_desconta_intervalo.py:249-250`, `:263-267` usa `True` com intervalos noturnos antes das 05h. O teste P5 monta explicitamente turno 22–07, intervalo 05:30–06:30 e flag `True` (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:40-47`), exige 8h nas rubricas (`:51-54`, `:62-63`) e parte ≤ todo (`:58-59`); é teste da correção desejada, não aprovação do resultado atual descrito em seu docstring (`:4-6`, `:17-24`).
-
-_1221 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1223 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
