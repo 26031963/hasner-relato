@@ -1,7 +1,99 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 12:49** · publicado em **31/10/2026 12:49** (UTC-3)
+> Ultima resposta processada: **31/10/2026 12:54** · publicado em **31/10/2026 12:55** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 12:54 · sessao 491ee7a9f492 · - · - · origem=Ronald (tmux)
+
+Q1 — rastreamento consolidado, somente leitura.
+
+- Os quatro valores passam agora por `_te_dia`, obtido do `tipo_escala` do vínculo julgado para o dia; permanecem o template declarado pelo chamador quando não há vínculo/template conhecido ou a consulta falha (`app/ponto/calculador/alimentacao.py:487`, `:490`, `:494`, `:498`). `_cct_de` fabrica motor pelo template, lê a causa de pontualidade e a CCT e guarda por `template.pk` (`app/ponto/calculador/alimentacao.py:389`, `:392`, `:403`). A fábrica recebe **`ini`, não o dia** (`app/ponto/calculador/alimentacao.py:392`).
+
+| Insumo | Quem escreve/resolve | Leitores v3 |
+|---|---|---|
+| `prorrogacao_pos5h` | `get_motor_cct`: regime CLT com switch desligado usa regra legal por ciclo; ligado usa `regua_para`; `MotorBase` grava atributo, com resolução legal se não recebeu (`app/core/regua_cct.py:454`, `:466`; `app/ponto/motor_calculo_v2.py:708`, `:712`). `cct_do_motor` transcreve (`app/ponto/calculador/nucleo.py:348`); alimentação entrega (`app/ponto/calculador/alimentacao.py:508`, `:530`). | Guardas noturna/HE noturna, janela noturna e split HE (`app/ponto/calculador/regras.py:609`, `:627`, `:714`, `:824`, `:838`); `noturnas_do_dia` usa janela e contexto de intervalos (`:80`, `:85`). API de ensaio `periodo.noturno_no_par` lê a CCT fornecida pelo chamador (`app/ponto/calculador/periodo.py:508`). |
+| `hora_reduzida_afastada` | Fábrica usa cláusula cadastrada, restrita a ciclo 12x36 e trava; desligada prevalece default da fábrica/motor (`app/core/regua_cct.py:470`; `app/ponto/motor_calculo_v2.py:3540`, `:719`). Fronteira transcreve (`app/ponto/calculador/nucleo.py:349`); alimentação entrega (`app/ponto/calculador/alimentacao.py:509`, `:530`). | Guarda e fator das noturnas (`app/ponto/calculador/regras.py:609`, `:715`, `:839`, `:88`); ensaio `periodo.noturno_no_par` (`app/ponto/calculador/periodo.py:509`). |
+| `feriado_em_dobra` | `get_motor` resolve por ciclo fora de `CICLOS_FERIADO_SIMPLES`; `get_motor_cct` pode conceder dobra ao 12x36 por cláusula (`app/ponto/motor_calculo_v2.py:3607`; `app/core/regua_cct.py:477`). Motor grava, fronteira transcreve e alimentação entrega (`app/ponto/motor_calculo_v2.py:737`; `app/ponto/calculador/nucleo.py:351`; `app/ponto/calculador/alimentacao.py:510`, `:524`). | Guarda de calendário/cadastro, dobra e contexto emprestando juiz do motor (`app/ponto/calculador/regras.py:633`, `:775`, `:777`, `:295`, `:347`); ensaio usa `cct` fornecida (`app/ponto/calculador/periodo.py:830`). Existe ainda helper que deriva novamente o mesmo predicado da lista do motor (`app/ponto/calculador/regras.py:298`, `:306`); não encontrei chamador de produção [nao verificado]. |
+| `pontualidade_fora_por_lei` | Tabela `NAO_JULGA_PONTUALIDADE`, chave por identidade da classe; leitor `motivo_nao_julga_pontualidade` (`app/ponto/calculador/regras.py:487`, `:502`, `:518`). Alimentação pergunta sobre o novo motor e entrega a causa (`app/ponto/calculador/alimentacao.py:403`, `:531`). | `do_dia` declara atraso/antecipada e remove pontualidade quando existe causa (`app/ponto/calculador/regras.py:618`). Ensaio recebe `fora_por_lei` do chamador e aplica ao dia (`app/ponto/calculador/periodo.py:540`, `:787`). |
+| `feriados` | **Continua vindo do chamador**: convertido em set e entregue diretamente; `_cct.feriados` não é usado (`app/ponto/calculador/alimentacao.py:407`, `:524`). Fechamento monta pelo município do posto atual do colaborador; espelho faz o mesmo (`app/ponto/services/fechamento.py:621`; `app/ponto/services/espelho.py:146`; `app/core/feriados.py:113`). | Alimentação usa também para `folga_e_feriado` (`app/ponto/calculador/alimentacao.py:523`); regra guarda e calcula dobra (`app/ponto/calculador/regras.py:633`, `:776`), contexto copia (`:294`). Ensaio usa o conjunto da CCT fornecida (`app/ponto/calculador/periodo.py:830`). |
+
+Leitores fora v3:
+
+- Prorrogação: `calcular_noturnas`, split HE e desconto noturno de intervalos (`app/ponto/motor_calculo_v2.py:922`, `:955`, `:1866`). Hora reduzida: propriedade `fator_hora_noturna` (`app/ponto/motor_calculo_v2.py:930`).
+- Dobra: juiz `_feriado_dobra_no_dia` e ramo de alerta (`app/ponto/motor_calculo_v2.py:879`, `:2756`); os quatro ramos de pagamento perguntam ao mesmo juiz (`:2747`, `:3030`, `:3193`, `:3275`).
+- Calendário: `eh_feriado` usa o conjunto injetado e, se a data não consta, cai em `is_feriado(data)` **sem município**, que consulta o juiz nacional (`app/ponto/motor_calculo_v2.py:903`, `:905`, `:41`; `app/core/feriados.py:91`). Outros consumidores são bloqueio de HE, ramos diários e exclusão da soma semanal (`app/ponto/motor_calculo_v2.py:1387`, `:2734`, `:3020`, `:3095`, `:3189`, `:3268`).
+- Carimbo lê os três flags **do motor que calculou**, via `impressao_da_regua`; usado por fechamento, espelho e PDF (`app/core/regua_cct.py:423`; `app/ponto/services/fechamento.py:264`; `app/ponto/services/espelho.py:1185`; `app/relatorios/pdf_espelho.py:435`).
+- Exportação relê a cláusula correlata `feriado_12x36_em_dobra` na **data final da janela**, e usa ciclo/cláusula para suprimir feriado no fechamento inteiro (`app/folha/export.py:359`, `:369`, `:411`; consumidores `:713`, `:978`).
+- Frase de pontualidade da tela pergunta ao mesmo leitor, mas pode usar template passado pelo chamador; sem template resolve vínculo da data; sem data lê relógio e resolve vínculo de hoje; não fornece mapa de células (`app/chamados/juizes.py:1530`, `:1539`, `:1543`, `:1545`, `:1551`).
+
+Divergências concretas de fonte:
+
+1. **Ciclo do dia + CCT do início da janela**: nova fábrica recebe `_te_dia`, mas `ini`; `regua_para` resolve vínculo/praça e aplicação vigente pela data recebida (`app/ponto/calculador/alimentacao.py:392`; `app/core/regua_cct.py:329`, `:330`, `:366`). V2 fechamento e espelho usam `fatia_ini` (`app/ponto/services/fechamento.py:711`; `app/ponto/services/espelho.py:1115`). Cache somente por template não distingue vigência/posto (`app/ponto/calculador/alimentacao.py:389`).
+2. **Calendário do chamador versus calendário efetivo do motor**: alimentação ignora `_cct.feriados` e usa argumento; motor intermitente limpa seu conjunto (`app/ponto/calculador/alimentacao.py:407`, `:524`; `app/ponto/motor_calculo_v2.py:3495`). Isso diverge especialmente no feriado municipal, pois fallback sem município só reconhece nacional (`app/ponto/motor_calculo_v2.py:905`; `app/core/feriados.py:91`).
+3. **Calendário pelo posto atual**, não posto do vínculo do dia: `lugar_do_colab` lê `colaborador.posto` (`app/core/feriados.py:113`); fechamento/espelho usam esse lugar para a janela inteira (`app/ponto/services/fechamento.py:622`; `app/ponto/services/espelho.py:147`).
+4. `periodo.reler` é API de ensaio, recebe CCT e causa únicas do chamador; não resolve dia a dia (`app/ponto/calculador/periodo.py:540`, `:563`, `:581`). Não há evidência de chamador de produção [nao verificado]. `Autoridade.motor` é o motor da última fatia, explicitamente documentado e retornado (`app/ponto/services/espelho.py:1192`, `:1195`); não afirmar que `periodo.reler` o usa em produção [nao verificado].
+
+## 31/10 12:53 · sessao 78d2b4c76dcd · - · - · origem=Ronald (tmux)
+
+Q3: Seja `H` o trabalho efetivo do dia, em horas, com jornada iniciada nesse dia e calendário municipal correto fornecido à v3. O código resulta em:
+
+| Feriado | v3 (`rubricas_por_dia` → `regras.do_dia`) | v2 `MotorIntermitente` |
+|---|---:|---:|
+| Nacional reconhecido no cadastro | `H` | `H` |
+| Municipal aplicável, sem nacional coincidente | `H` | `0` |
+
+Fundamentação:
+
+- A fábrica escolhe `MotorIntermitente` pelo ciclo/base (`app/ponto/motor_calculo_v2.py:3563`); intermitente está fora de `CICLOS_FERIADO_SIMPLES={'12x36'}`, logo `feriado_em_dobra=True` (`app/ponto/motor_calculo_v2.py:3537`, `app/ponto/motor_calculo_v2.py:3607`).
+- O intermitente **só esvazia o conjunto** `self.feriados`; não desativa `feriado_em_dobra` nem sobrescreve `eh_feriado` (`app/ponto/motor_calculo_v2.py:3483`, `app/ponto/motor_calculo_v2.py:3491`).
+- Após o esvaziamento, `MotorBase.eh_feriado` cai em `is_feriado(data)` (`app/ponto/motor_calculo_v2.py:901`), que chama o juiz sem município (`app/ponto/motor_calculo_v2.py:40`); nesse caso, somente nacionais alcançam a pessoa (`app/core/feriados.py:91`). Portanto nacional continua dobrando e municipal desaparece no v2.
+- A implementação herdada de `Motor12x36.calcular_periodo` computa duração efetiva e desconta intervalo (`app/ponto/motor_calculo_v2.py:2697`, `app/ponto/motor_calculo_v2.py:2712`), e escreve toda a duração em `minutos_extra_100_feriado` quando o juiz confirma dobra (`app/ponto/motor_calculo_v2.py:2747`).
+- Na v3, o calendário do chamador não é substituído pelo conjunto zerado do motor intermitente (`app/ponto/calculador/alimentacao.py:407`, `app/ponto/calculador/alimentacao.py:524`). Intermitente segue para trabalho normal mesmo com `dia_de_trabalho=False` (`app/ponto/calculador/regras.py:736`), e recebe a dobra inteira (`app/ponto/calculador/regras.py:775`, `app/ponto/calculador/regras.py:785`). O contexto empresta o mesmo juiz do motor (`app/ponto/calculador/regras.py:290`), mas mantém o calendário injetado (`app/ponto/calculador/regras.py:294`).
+- O registro vivo já denuncia explicitamente a armadilha do nacional intermitente (`app/core/juizes.py:437`). A docstring “sem feriado-100” não descreve o comportamento executável (`app/ponto/motor_calculo_v2.py:3487`).
+
+Sem horas concretas dadas para intermitente, número absoluto pago em produção: **[nao verificado]**.
+
+Q4:
+
+- **Segundo juiz:** o trecho novo delega às autoridades existentes: fábrica (`app/ponto/calculador/alimentacao.py:392`), leitor CCT e lei da família (`app/ponto/calculador/alimentacao.py:403`), vínculo-do-dia (`app/ponto/calculador/alimentacao.py:490`). O juiz do vínculo está registrado (`app/core/juizes.py:1255`); feriado e dobra estão registrados (`app/core/juizes.py:162`, `app/core/juizes.py:262`). Não localizei duplicação nova da decisão nessas linhas.
+- **Segundo escritor persistente, relógio, ordem de travas:** o trecho alterado mantém cache local e argumentos, sem gravação persistente, `now` ou locks (`app/ponto/calculador/alimentacao.py:385`, `app/ponto/calculador/alimentacao.py:392`, `app/ponto/calculador/alimentacao.py:507`). Não há evidência dessas classes no trecho novo.
+- **Selo insuficiente:** a nova classe espiona argumentos e fabrica flags por template (`app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:156`, `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:174`), com períodos apenas diurnos (`app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:166`) e `feriados=set()` (`app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:177`). Não cobre os efeitos noturnos nem dobra de intermitente. Execução RED/GREEN/suite: **[nao verificado]**.
+- **Pouso antes de pré-requisito:** normas pedem RED → fix → GREEN → suite (`CLAUDE.md:348`) e bateria pela regra/propriedades (`CLAUDE.md:52`); sua execução/ordem efetiva é **[nao verificado]**. [nao verificado]
+
+Q5 / fonte temporal incompleta:
+
+O helper novo recebe somente template, chaveia por `pk`, e consulta sempre `ini`, não `k` (`app/ponto/calculador/alimentacao.py:387`, `app/ponto/calculador/alimentacao.py:389`, `app/ponto/calculador/alimentacao.py:392`). Porém a régua determina praça pelo vínculo **na data recebida** (`app/core/regua_cct.py:329`), e CCT vigente por essa data (`app/core/regua_cct.py:261`, `app/core/regua_cct.py:366`).
+
+Contraexemplo estático: dois vínculos na janela com mesmo template 12x36, postos/praças diferentes e aplicações de convenção diferentes; uma concede dobra e outra não. A v3 utiliza a praça e vigência de `ini` para ambos, enquanto o fechamento monta motor com `fatia_ini` (`app/ponto/services/fechamento.py:699`, `app/ponto/services/fechamento.py:711`). A dobra concedida por CCT é aplicada pela fábrica (`app/core/regua_cct.py:477`). A alteração acerta o ciclo, mas não torna toda a CCT “do dia”. Existência desse cadastro em produção: **[nao verificado]**.
+
+## 31/10 12:53 · sessao 5b19c40c12e0 · - · - · origem=Ronald (tmux)
+
+Mutações concretas que, por inspeção estática, sobreviveriam às duas classes; execução efetiva [nao verificado]:
+
+1. **Trocar os dois campos** em `alimentacao.py:508-509`:
+   ```python
+   _cct_pro = None if _cct is None else _cct.hora_reduzida_afastada
+   _cct_hr = None if _cct is None else _cct.prorrogacao_pos5h
+   ```
+   O mock só fornece `(False, False)` e `(True, True)`, tornando os campos indistinguíveis; os asserts exigem justamente esses pares. Os testes herdados só verificam a dobra, usando jornadas diurnas de 07h–19h. Fontes: `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:156`, `:185-195`, `:87-88`, `:98-121`.
+
+2. **Cachear por ciclo em vez de PK**:
+   ```python
+   _chave = getattr(_te, 'tipo_ciclo', None)
+   ```
+   Substitui `app/ponto/calculador/alimentacao.py:389`. As fixtures contêm somente um template de cada ciclo: `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:66-75`, `:143-149`. O defeito apareceria com templates do mesmo ciclo e geometrias/bases diferentes: a fábrica considera `tipo_base` e `hora_inicio`, podendo selecionar `Motor12x36` ou `Motor12x36ComEscala`; a lei da pontualidade distingue essas classes. Fontes: `app/ponto/motor_calculo_v2.py:3561-3572`; `app/ponto/calculador/regras.py:482-497`.
+
+3. **Trocar `ini` por `fim` na consulta da CCT**, em `app/ponto/calculador/alimentacao.py:392`. O mock aceita e ignora `competencia`: `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:158-163`. As fixtures reais cadastram empresa, praça, posto e escalas, sem ativar a régua ou cadastrar convenção: `:59-83`, `:143-149`. No caminho com switch desligado, a fábrica retorna sem consultar a data: `app/core/regua_cct.py:449-457`.
+
+4. **Converter ausência da CCT em valores afirmados**:
+   ```python
+   _cct_pro = False if _cct is None else _cct.prorrogacao_pos5h
+   _cct_hr = False if _cct is None else _cct.hora_reduzida_afastada
+   _fer_dobra = True if _cct is None else _cct.feriado_em_dobra
+   ```
+   Substitui `app/ponto/calculador/alimentacao.py:508-510`. Nenhum desses testes injeta fábrica que levanta ou motor sem cadastro: a fábrica falsa sempre retorna `get_motor(...)`; os testes reais também usam a fábrica normal. Fontes: `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:85-96`, `:158-177`. O contrato de ausência exige `None`, preservado por `cct_do_motor`: `app/ponto/calculador/nucleo.py:327-346`.
+
+**Defeito adicional confirmado pelo caminho do código:** o template já é do dia `k`, mas a praça, vigência e convenção continuam sendo consultadas na data inicial `ini`; o resultado fica cacheado apenas por template. Fontes: `app/ponto/calculador/alimentacao.py:389-405`, `:490-510`. Com switch ativo, `get_motor_cct` passa essa data a `regua_para`, que resolve o vínculo e a praça nessa data e consulta a aplicação vigente também nessa data: `app/core/regua_cct.py:458`, `:328-330`, `:366`. Portanto uma mudança de praça/convenção dentro da janela pode combinar **ciclo de `k` com CCT de `ini`**; corrigir somente a data, mantendo o cache por PK, ainda reutilizaria a primeira convenção quando o mesmo template atravessasse a mudança. Fontes: mesmas linhas. Ocorrência concreta em produção [nao verificado].
 
 ## 31/10 12:49 · sessao 423848803f88 · V3-RETOMA · sonda · origem=Code
 
@@ -664,176 +756,4 @@ Essas consultas mensais/fase não são todas a pergunta de validade da folga lan
 
 O comando de rejulgamento também seleciona qualquer FolgaDia pessoa/data (`app/ponto/management/commands/rejulgar_ausencia_em_folga.py:55-60`), porém o resultado efetivo é delegado a `julgar_celula` (`:69-71`); não impõe por si só a validade final.
 
-## 31/10 12:40 · sessao b8196e590e3e · - · - · origem=Ronald (tmux)
-
-O contrato vai além de mudar a constante: o destravamento por linha escrita e o desvio “erro bobo” não existem na máquina atual. `bin/disjuntor.py:947`, `bin/disjuntor.py:585`.
-
-1. **Linha no RELATO cala o Stop, mas não libera verificador.** O Stop consulta `_pergunta_b3_escrita`; o PreToolUse consulta somente `varrer_b3` e nega enquanto `disparado` estiver ativo. Apenas `rearma_b3` limpa esse estado. `bin/hook_stop_fila1.py:1050`, `bin/disjuntor.py:950`, `bin/disjuntor.py:593`.
-
-2. **O conteúdo exigido não é validado.** O reconhecedor atual aceita qualquer linha que contenha `DESENHO` e a identidade da obra; não exige uma das quatro leis, pergunta sem juiz, `arquivo:linha` ou motivo. Ele considera somente as duas primeiras linhas úteis. `bin/hook_stop_fila1.py:411`, `bin/hook_stop_fila1.py:417`, `bin/hook_stop_fila1.py:420`, `bin/hook_stop_fila1.py:440`.
-
-3. **O Stop não garante pedir isso na primeira reprovação.** A varredura/recado B3 acontece no final do caminho normal; antes existem saídas por B4, orçamento, PAREI, ESPERANDO provado, fila vazia, teto e B2. O teste reconhece explicitamente que o teto pode calar o recado. `bin/hook_stop_fila1.py:1208`, `bin/hook_stop_fila1.py:1219`, `bin/hook_stop_fila1.py:1228`, `bin/hook_stop_fila1.py:1233`, `bin/hook_stop_fila1.py:1247`, `bin/hook_stop_fila1.py:1286`, `bin/hook_stop_fila1.py:1297`, `bin/hook_stop_fila1.py:1302`, `bin/tests/test_disjuntor.sh:330`.
-
-4. **“Erro bobo” não tem transição nem registro.** O estado B3 guarda `reprovados`, `disparado` e `rearmado`; o rearme registra motivo genérico e usuário, sem classificação de liberação. A CLI não autentica Ronald: apenas chama a função com os argumentos. `bin/disjuntor.py:566`, `bin/disjuntor.py:585`, `bin/disjuntor.py:590`, `bin/disjuntor.py:1170`.
-
-5. **A medição prometida não corresponde ao ESTADO atual.** O leitor conta eventos `DISJUNTOR` nas últimas 24 h por identificador (`B3`), sem ler motivo, conteúdo da pergunta ou liberação. `REARMA` não participa dos eventos lidos. A frase é “disparos 24 h”, não “paradas de desenho” nem liberações por erro bobo. `bin/disjuntor.py:1032`, `bin/disjuntor.py:1036`, `bin/disjuntor.py:1054`, `bin/disjuntor.py:1147`, `bin/disjuntor.py:1156`.
-
-6. **O gerador ESTADO delega a esse leitor; não possui outro limiar.** Ele importa `disjuntor.ler/linha` e insere a frase na seção Disjuntores. Alterar apenas a seção visual não criaria a métrica ausente. `bin/gerar_estado.py:277`, `bin/gerar_estado.py:280`, `bin/gerar_estado.py:336`.
-
-7. **Baixar o limiar também alcança reprovações antigas.** O contador persiste IDs por obra, sem janela temporal; a varredura verifica todas as obras guardadas. Obras antigas com uma ou duas reprovações passam a disparar no próximo scan. O log usa `n` real, que pode ser maior que um, e o texto mantém `reprovacoes` no plural. Rearmar zera a contagem da obra, não apaga disparos anteriores do log/ESTADO 24 h. `bin/disjuntor.py:559`, `bin/disjuntor.py:565`, `bin/disjuntor.py:572`, `bin/disjuntor.py:576`, `bin/disjuntor.py:590`, `bin/disjuntor.py:1036`.
-
-8. **Sítios que conservam a regra antiga:** docstring 3ª/4º; comentário do limiar e do reconhecedor FINAL; ação de log “4o verificador”; comentário PreToolUse “3a”; mensagem Stop “4o verificador”. As mensagens parametrizadas passam a dizer “1 reprovacoes”/“falhou 1 vezes”. `bin/disjuntor.py:11`, `bin/disjuntor.py:68`, `bin/disjuntor.py:94`, `bin/disjuntor.py:578`, `bin/disjuntor.py:949`, `bin/disjuntor.py:951`, `bin/hook_stop_fila1.py:1052`.
-
-Referências documentais ao contrato antigo aparecem em `app/docs/CORTES.md:413`, `app/docs/BACKLOG.md:876`, `app/docs/PROMPTS.md:1695`, `app/docs/PROMPTS.md:1700` e `app/docs/PROMPTS.md:1707`; são registros de avais anteriores, cuja relação com o novo corte precisa ficar explícita, sem tratá-los automaticamente como código a substituir. `app/docs/CORTES.md:413`, `app/docs/PROMPTS.md:1707`.
-
-A chave realmente pula os disjuntores no Stop e no PreToolUse; a guarda da própria chave/settings continua ativa mesmo desligada, portanto “desliga tudo” tem essa exceção atual. `bin/hook_stop_fila1.py:1040`, `bin/disjuntor.py:979`.
-
-## 31/10 12:39 · sessao 51f85d210cb4 · - · - · origem=Ronald (tmux)
-
-Achados dos selos, por leitura estática:
-
-- **Trocar só a constante quebra o selo atual.** Duas reprovações finais devem deixar Stop sem B3 e permitir PreToolUse; só a terceira dispara. Isso está codificado em `bin/tests/test_disjuntor.sh:320`, `bin/tests/test_disjuntor.sh:323`, `bin/tests/test_disjuntor.sh:324` e novamente em `bin/tests/test_disjuntor.sh:376`, `bin/tests/test_disjuntor.sh:380`.
-- **Mensagens/log exigem literalmente 3.** Stop exige `3 reprovacoes` e `falhou 3 vezes`; PreToolUse exige `falhou 3 vezes`; trilha exige `3 reprovacoes`. Referências: `bin/tests/test_disjuntor.sh:327`, `bin/tests/test_disjuntor.sh:328`, `bin/tests/test_disjuntor.sh:329`. A descrição do selo ainda promete terceira reprovação/quarto verificador: `bin/tests/test_disjuntor.sh:13`.
-- **Os casos de varredura sem Stop e de falha de gravação continuam semeando três reprovações**, portanto não certificam primeira reprovação: `bin/tests/test_disjuntor.sh:366`, `bin/tests/test_disjuntor.sh:367`, `bin/tests/test_disjuntor.sh:370`. A identidade O9 também só é exercitada com três: `bin/tests/test_disjuntor.sh:384`.
-- **Linha no topo hoje só cala recado do Stop.** `_b3_cala` exige `decision=block` com o `siga` da fila, sem mensagem B3 e sem FALHA; não prova liberar PreToolUse. Referências: `bin/tests/test_disjuntor.sh:335`, `bin/tests/test_disjuntor.sh:337`, `bin/tests/test_disjuntor.sh:339`. As linhas aceitas não contêm lei concreta nem pergunta com arquivo:linha: `bin/tests/test_disjuntor.sh:343`, `bin/tests/test_disjuntor.sh:345`. O teste unitário aceita até `DESENHO OBRA-X (C)`: `bin/tests/test_disjuntor.sh:654`.
-- **O selo atual exige topo entre as primeiras duas linhas úteis**, inclusive separadas por branco; terceira linha não cala. Referências: `bin/tests/test_disjuntor.sh:343`, `bin/tests/test_disjuntor.sh:347`, `bin/tests/test_disjuntor.sh:353`. Mutantes preservam essa política em `bin/tests/test_disjuntor.sh:786`, `bin/tests/test_disjuntor.sh:797`, `bin/tests/test_disjuntor.sh:798`, `bin/tests/test_disjuntor.sh:810`.
-- **Rearme é testado como CLI invocável pelo próprio agente**, com motivo livre `Ronald respondeu o desenho`; a prova é somente liberação imediata e persistência após novo Stop. Referências: `bin/tests/test_disjuntor.sh:363`, `bin/tests/test_disjuntor.sh:364`, `bin/tests/test_disjuntor.sh:365`. O código correspondente só registra `$USER` e motivo, guarda os IDs antigos em `rearmado` e zera o ciclo: `bin/disjuntor.py:590`, `bin/disjuntor.py:592`, `bin/disjuntor.py:593`.
-- **Mudar mensagens exige atualizar mutantes textuais.** Há âncoras literais para `QUAL PADRAO quebra` e `o 4o`: `bin/tests/test_disjuntor.sh:759`, `bin/tests/test_disjuntor.sh:760`. O executor acusa falha quando a âncora desaparece ou deixa de ser única: `bin/tests/test_disjuntor.sh:712`, `bin/tests/test_disjuntor.sh:715`.
-- **Não há cobertura do novo contador de paradas/dispensas por erro bobo nos casos B3 existentes.** O bloco verifica a trilha antiga e somente `b3_sem_obra` na leitura do ESTADO; a outra asserção do leitor cobre negações gerais/RELATO ausente. Referências: `bin/tests/test_disjuntor.sh:329`, `bin/tests/test_disjuntor.sh:388`, `bin/tests/test_disjuntor.sh:391`, `bin/tests/test_disjuntor.sh:626`.
-- **Rodar este selo violaria só leitura:** cria diretório temporário, arquivos e remove árvores. Referências: `bin/tests/test_disjuntor.sh:37`, `bin/tests/test_disjuntor.sh:39`, `bin/tests/test_disjuntor.sh:49`.
-
-## 31/10 12:36 · sessao 0819a0bb99c3 · INTERMITENTE-EM-FERIADO · leitura · origem=Code
-
-**1. Fontes existentes e limites da leitura**
-
-**Texto integral da CLT, do art. 452-A/§6 e da Lei 605/49/art. 9:** sem fonte no repo. Foram encontradas referências a esses dispositivos, sem sua transcrição integral. [nao verificado]
-
-**Conteúdo cadastrado de `Sindicato.obs`:** sem fonte no repo. [nao verificado] O modelo contém apenas a declaração `obs = models.TextField(blank=True)`. (`app/core/models.py:40`)
-
-O repositório aponta onde estaria esse conteúdo:
-
-> “A fundamentacao INTEIRA (clausulas literais + parecer) esta em Sindicato.obs e em core/regua_cct.py”  
-> “A CCT em PDF **nao esta no sistema** […] Enquanto nao tiver, o lastro e o texto em `obs`.”
-
-(`CLAUDE.md:442-443`, `CLAUDE.md:455-456`)
-
-A CCT identificada é “Vigilantes de Londrina/PR”, registro “MTE PR000251/2026”, vigência “01/02/2026-31/01/2028”. (`CLAUDE.md:430-432`)
-
-Existe esta transcrição literal da cláusula 38-d:
-
-> “no regime de 12x36 - ainda que cumprido em horario noturno -, a hora sera considerada normal de 60 (sessenta) minutos, garantido, sempre, o adicional noturno respectivo.”
-
-O trecho trata de hora noturna no 12x36; não menciona feriado ou intermitente. (`app/core/regua_cct.py:127-138`)
-
-**2. O que está escrito sobre intermitente, dobra e §6**
-
-| Fonte | Trecho literal e alcance |
-|---|---|
-| Docstring de `MotorIntermitente` | “Intermitente-horista (Art. 452-A) — sem escala, sem marcos, sem jornada prevista. Apura SOMENTE horas cumpridas do par E/S (+ noturno legal). **Sem HE por estouro de jornada, sem feriado-100 automatico, sem atraso.**” (`app/ponto/motor_calculo_v2.py:3485-3488`) |
-| Comentário do cálculo geral de feriado | “Feriado: Sumula 146 TST paga **TODAS as horas em dobro (nao so excedente)**.” (`app/ponto/motor_calculo_v2.py:2731-2733`) |
-| Docstring da regra compartilhada | “o dia de feriado que dobra poe a jornada **INTEIRA em HE 100** […] e nao so o excedente.” (`app/ponto/calculador/regras.py:330-332`) |
-| Régua CCT: piso declarado para 12x36 | `'feriado_12x36_em_dobra': False, # BUG 91: piso legal = hora simples (Art.59-A par.2)` (`app/core/regua_cct.py:44`) |
-| Régua CCT: exceção cadastrada | “a dobra do feriado no 12x36 so volta por **CLAUSULA CADASTRADA**”; “Fora do 12x36 […] a Sumula 146 e o piso”. (`app/core/regua_cct.py:473-476`) |
-| Comentário do modelo `Sindicato` | “o piso LEGAL do feriado trabalhado em 12x36 e HORA SIMPLES”; “a convencao coletiva PODE ser mais benefica e devolver a dobra; nenhuma das nossas diz isso hoje”. (`app/core/models.py:49-52`) |
-| Comentário do espelho | “100% = descanso trabalhado (Lei 605/49 art.9 + Sum.146 TST) + excedente por CCT.” Em seguida: “Quantidade CRUA: majoracao e' da folha, nunca do ponto.” (`app/relatorios/pdf_espelho.py:764-766`) |
-
-Há **cortes internos em sentidos diferentes**, com a inversão expressamente registrada:
-
-- **13/10, aproximadamente 17h:** “intermitente que trabalha em feriado recebe a dobra (Lei 605 art.9 / Sumula 146 / art.452-A par.6) -- a docstring do MotorIntermitente se corrige para o codigo”. (`app/docs/PROMPTS.md:1204`)
-- **13/10, aproximadamente 18h:** “intermitente em feriado recebe dobra (452-A §6, Lei 605 art.9, Sum.146)”; acrescenta: “**leitura passa pelo DP antes de virar lei**”. (`app/docs/PROMPTS.md:1213`)
-- **14/10, 21:4x:** “**SDF/intermitente em feriado NAO recebe dobra (DP 14/10); o cartao nao afirma pagamento em dobro**”. A própria linha identifica esse corte como inversão da O264. (`app/docs/PROMPTS.md:1231`)
-- **15/10, 11:5x:** “**intermitente segue pela docstring do MotorIntermitente (sem feriado-100 automatico)**”. O registro complementar diz “sem entrada nova no frozenset”. (`app/docs/PROMPTS.md:1239`)
-
-O BACKLOG também registra a inversão:
-
-> “A LEITURA DO DP CHEGOU E INVERTEU ESTA OBRA”; “a docstring do `MotorIntermitente` **nao se corrige**”; a cura dos dois zeros de 12/10 está “**CANCELADA** -- aqueles zeros sao o numero CERTO”.
-
-(`app/docs/BACKLOG.md:1377`; orientação complementar em `app/docs/BACKLOG.md:1390`)
-
-**Art. 452-A, §6:** os registros de 13/10 acima citam o dispositivo para sustentar a dobra, mas não transcrevem seu conteúdo. (`app/docs/PROMPTS.md:1204`, `app/docs/PROMPTS.md:1213`) Para a enumeração literal solicitada — remuneração, férias + 1/3, 13º, RSR e adicionais legais, pagos ao fim de cada período — **sem fonte no repo**. [nao verificado]
-
-**3. Tratamento atual no código**
-
-**Motor v2**
-
-A limpeza está em [app/ponto/motor_calculo_v2.py:3491](/home/ronald/codex_ws/c7ea207a3f1e8ea911a0265b8e88991b4d91c1e4/app/ponto/motor_calculo_v2.py:3491), com estas atribuições:
-
-```python
-super().__init__(*args, **kwargs)
-# neutraliza gatilhos de extra: jornada "infinita" e sem feriados
-self.jornada_minutos = 24 * 60 * 365
-self.feriados = set()
-```
-
-(`app/ponto/motor_calculo_v2.py:3491-3495`)
-
-**As linhas atuais 903–905 não limpam o calendário:** elas consultam o conjunto e depois chamam o fallback. (`app/ponto/motor_calculo_v2.py:901-905`)
-
-| Decisão | Código literal / valor produzido |
-|---|---|
-| Escolha do motor | `if ciclo == 'intermitente' or tipo_base == 'intermitente': cls = MotorIntermitente`. (`app/ponto/motor_calculo_v2.py:3563-3564`) |
-| Flag de dobra pelo ciclo | `CICLOS_FERIADO_SIMPLES = frozenset({'12x36'})`; se o argumento não veio: `feriado_em_dobra = ciclo not in CICLOS_FERIADO_SIMPLES`. Para o ciclo literal `intermitente`, esse ramo produz **`True`**. (`app/ponto/motor_calculo_v2.py:3537`, `:3607-3608`) |
-| Limpeza no intermitente | `self.feriados = set()`: conjunto vazio. (`app/ponto/motor_calculo_v2.py:3495`) |
-| Reconhecimento do feriado | `if data in self.feriados: return True`; caso contrário: `return is_feriado(data)`. O conjunto vazio mantém essa segunda chamada. (`app/ponto/motor_calculo_v2.py:901-905`) |
-| Fallback | `return eh_feriado(data, praca)`; em exceção, `return False`. O argumento `praca` tem padrão `None`. (`app/ponto/motor_calculo_v2.py:30-43`) |
-| Alcance sem município | “SEM MUNICIPIO […] nem municipal nem estadual valem, so o nacional.” (`app/core/feriados.py:91-95`) |
-| Decisão de dobra | `return bool(self.feriado_em_dobra) and self.eh_feriado(dia)`. (`app/ponto/motor_calculo_v2.py:879`) |
-
-`MotorIntermitente` herda de `Motor12x36` e seu corpo contém somente o `__init__` mostrado acima. (`app/ponto/motor_calculo_v2.py:3483-3495`) O `calcular_periodo` herdado decide assim:
-
-- **Sem saída:** marca `turno_aberto = True` e retorna; os campos de extra nascem em zero. (`app/ponto/motor_calculo_v2.py:2689-2693`, `:166-169`)
-- **Com duração positiva e dobra reconhecida:** atribui a duração inteira a `minutos_extra`, `minutos_extra_100` e `minutos_extra_100_feriado`, e marca `hora_extra_100 = True`. (`app/ponto/motor_calculo_v2.py:2747-2754`)
-- **Ramo seguinte:** `elif feriado and duracao > 0 and self.feriado_em_dobra` apenas acrescenta o alerta “PREVISTO na escala — horas SIMPLES”. O helper anterior já usa o mesmo flag e a consulta de feriado. (`app/ponto/motor_calculo_v2.py:2756-2760`, `:879`)
-- **Demais situações:** calcula excedente contra `_jornada_do_dia(e)`; sem previsto, subtrai a própria duração, produzindo **extra zero**. Havendo extra, aplica a tolerância e reparte em até 120 minutos a 50%, com o restante a 100%. (`app/ponto/motor_calculo_v2.py:2773-2792`)
-
-Assim, **o corpo não estabelece “HE100 feriado sempre zero para intermitente”**: o calendário injetado é apagado, mas permanecem o fallback e o flag derivado do ciclo. (`app/ponto/motor_calculo_v2.py:3495`, `:901-905`, `:3537`, `:3607-3608`)
-
-Há teste que injeta `12/06/2026` como feriado e exige `minutos_extra_100 == 0` e `horas_extra == 0`, com as mensagens “Horista nao tem feriado-100 automatico” e “Horista nao tem HE por estouro de jornada”. (`app/ponto/tests/test_intermitente.py:54-68`)
-
-**Calculador em `ponto/calculador/`**
-
-Na alimentação de `regras.do_dia`, o calendário vem diretamente do argumento recebido:
-
-```python
-_feriados = set(feriados or ())
-```
-
-O flag de dobra vem do motor CCT; a identificação de intermitente é atualizada pelo vínculo do dia e enviada separadamente à regra. (`app/ponto/calculador/alimentacao.py:378-396`, `:479-485`, `:509-510`)
-
-| Ramo | Valor produzido |
-|---|---|
-| Folga trabalhada do intermitente | `if _trab <= 0 or intermitente: return 0.0, 0.0`. (`app/ponto/calculador/regras.py:386-388`) |
-| Dia sem trabalho previsto, mas intermitente | Não retorna pelo ramo dos demais regimes; grava `intermitente_segue_como_trabalho = True` e `horas_trabalhadas = trab / 60`. (`app/ponto/calculador/regras.py:736-740`) |
-| Excedente sem previsto | `extra = trab - _limite if previsto_min else 0.0`: **zero** quando não há previsto. (`app/ponto/calculador/regras.py:767-771`) |
-| Regra de feriado | Usa os mesmos métodos `MotorBase._feriado_dobra_no_dia` e `MotorBase.eh_feriado`. Retorna o trabalhado inteiro quando o juiz reconhece dobra; caso contrário, **`0.0`**. (`app/ponto/calculador/regras.py:287-295`, `:344-347`) |
-| Dobra positiva | `horas_extras_100 = _dobra / 60`, `horas_extras_100_feriado = _dobra / 60`, `horas_extras_50 = 0.0`; retorna sem somar o excedente comum. (`app/ponto/calculador/regras.py:774-789`) |
-| Calendário ou flag ausentes | Declara `horas_extras_100` e `horas_extras_100_feriado` em `SEM_ENTRADA`. (`app/ponto/calculador/regras.py:633-638`) |
-
-Na releitura v3 de `periodo.py`, `reler` é descrito como “**LEITURA DE ENSAIO, nao caminho de producao**”. (`app/ponto/calculador/periodo.py:540-545`) Sem previsto, o excesso retorna com os campos numéricos zerados; a dobra é julgada depois, separadamente. (`app/ponto/calculador/periodo.py:367-371`, `:410-413`, `:819-831`) Quando positiva, grava toda a dobra em `minutos_extra`, `minutos_extra_100` e `minutos_extra_100_feriado`, com `minutos_extra_50 = 0.0`; caso contrário, grava os valores do excesso. (`app/ponto/calculador/periodo.py:833-847`)
-
-A integração do fechamento chama `rubricas_por_dia` e grava `versao='oraculo'`; o comentário registra que essas linhas nascem ao lado de `versao='motor'` e que “Nenhum leitor le 'oraculo' hoje”. (`app/ponto/services/fechamento.py:1214-1217`, `:1233-1262`)
-
-O relatório documenta um caso específico como “v2 paga 0 de HE100 feriado […] v3 paga em dobra”, mas o mantém como **pergunta**. Sua referência à limpeza em `903-905` não corresponde às linhas atuais do código. (`app/docs/RELATO.md:12`; `app/ponto/motor_calculo_v2.py:901-905`, `:3493-3495`)
-
-**4. Leis L-NNN, cortes e casos E1**
-
-| Registro | Trecho literal |
-|---|---|
-| **L-085** | “A JORNADA PERTENCE AO DIA DE INICIO, inclusive para domingo, feriado, contagem de semana e DSR”. (`app/docs/LEIS.md:117`) |
-| **L-086** | Texto original: “domingo ou feriado so pagam dobra em dia NAO previsto”. A mesma linha registra: “a clausula de FERIADO do texto esta **REVOGADA** -- feriado previsto DOBRA conforme feriado_em_dobra do ciclo (12x36 nao dobra)”. (`app/docs/LEIS.md:118`) |
-| Corte corretivo de 27/09 | “FERIADO NAO entra na L-086: segue a regra de feriado que ja existe no cadastro do ciclo”. (`app/ponto/motor_calculo_v2.py:862-865`) |
-| **L-095** | Inclui “HE100 feriado” entre os valores lavrados uma vez pelo motor v2. (`app/docs/LEIS.md:113`) |
-| Menção a intermitente na auditoria da **L-091** | “tipo_base ainda escolhe o motor […] 12x36 e intermitente pelo rotulo”. (`app/docs/LEIS.md:174`) |
-| **C05** | Descrito como “lote 1 contra a v2, rubrica extra”, “v3 verde, v2 vermelha”. (`app/docs/RELATO.md:86`) |
-| **C06** | “CCT Vigilantes x prorrogacao noturna”. (`app/docs/BACKLOG.md:782`) |
-| **C16** | “intervalo 30 min batido: suprimido=30 pelo art.71 par.4 pos-2017?”. (`app/docs/BACKLOG.md:782`) |
-| **C17** | “comercial 08-17 sem intervalo”; resposta registrada: “C17 HE 0 intra 60”. (`app/docs/RELATO.md:91`) |
-| Corte **V3-E1-C17** | “L-031+L-032: sem intervalo batido indeniza so o suprimido, HE 0; C17/C16/C06 PENDENTE ate o DP/contador”. (`app/docs/CORTES.md:410`) |
-| Corte **E1-VALIDACAO** | “lote1 todos menos C05/C17 (DP)”. (`app/docs/CORTES.md:411`) |
-| Estado posteriormente relatado | “PENDENTE_DP C05/C06/C16/C17 em skip”. (`app/docs/RELATO.md:82`) |
-
-**Arquivos `docs/E1-*` e texto integral desses quatro casos:** sem fonte no repo. [nao verificado] O relatório referencia `docs/E1-PERGUNTA-AO-DP-CONTADOR.md` expressamente como documento “da copia” e identifica outra cópia de trabalho para o E1. (`app/docs/RELATO.md:88`, `:92`)
-
-**C05, C06, C16 ou C17 como caso específico de intermitente trabalhando em feriado:** sem fonte no repo. [nao verificado]
-
-_1018 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1021 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
