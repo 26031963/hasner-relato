@@ -1,7 +1,147 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 22:57** · publicado em **30/10/2026 22:58** (UTC-3)
+> Ultima resposta processada: **30/10/2026 23:07** · publicado em **30/10/2026 23:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 23:07 · sessao 86789d0f7e2d · DISJUNTOR · verificador · origem=Code
+
+**O encaixe direto quebra principalmente na liberação de CLEAR, nas guardas de trabalho em curso e na identidade da sessão.** A máquina atual ainda usa os gatilhos e a janela antigos. (`bin/hook_stop_fila1.py:827`, `bin/hook_stop_fila1.py:866`, `bin/orcamento_contexto.py:44`)
+
+Os cenários abaixo são contraprovas por leitura do código; ocorrência efetiva em produção: **[não verificado]**.
+
+1. **C1 dispara pela medida errada.** Hoje dispara por **60% da janela OU 6 horas OU três deploys**, não por 150.000 tokens. Cenário: marco recente, nenhum deploy, último assistente principal com 150.000 tokens e janela de 1 milhão → não dispara; Haiku com janela de 200.000 e 120.000 tokens → dispara antes do contratado. (`bin/orcamento_contexto.py:36`, `bin/orcamento_contexto.py:41`, `bin/orcamento_contexto.py:209`, `bin/orcamento_contexto.py:212`)
+
+2. **Libera CLEAR sem handoff novo — ou sem handoff algum.** Stop S1 grava `disparo`; antes de S2 escreve-se somente `PAREI: ! CLEAR` no topo. S2 libera verificando o disparo e o prazo, sem consultar `HANDOFF-SESSAO.md`. Portanto, apenas trocar a mensagem por “SO bin/handoff_sessao.sh” não cria a condição de liberação. (`bin/hook_stop_fila1.py:878`, `bin/hook_stop_fila1.py:827`, `bin/hook_stop_fila1.py:835`)
+
+3. **Continua liberando depois dos dez minutos.** Com disparo ativo, S2 vê CLEAR em t0; S3 em t0+11 minutos ainda libera. O prazo atual é 30 minutos e começa no primeiro Stop que observa o PAREI. (`bin/orcamento_contexto.py:47`, `bin/hook_stop_fila1.py:777`, `bin/hook_stop_fila1.py:829`, `bin/hook_stop_fila1.py:836`)
+
+4. **As guardas ficam depois da liberação de um disparo ativo.** Cenário: S1 dispara sem trabalho em curso; começa uma suite/push; S2 encontra CLEAR e libera antes de consultar trabalho em curso. A avaliação de ESPERANDO/suite/push protege o primeiro disparo, mas não essa liberação posterior. Acrescentar DIFF somente junto dessas guardas repetiria o defeito. (`bin/hook_stop_fila1.py:827`, `bin/hook_stop_fila1.py:850`, `bin/hook_stop_fila1.py:866`)
+
+5. **O sinal novo não cobre automaticamente o DIFF existente.** `diff_janela_he_total.sh` toma `logs/sombra.lock`; seu caminho mostrado não publica `logs/sessao/diff_apply/<obra>`. Cenário: esse DIFF roda, o sinal novo está ausente e chega Stop com gatilho alto → a guarda baseada somente no sinal novo deixa passar o disparo no meio do DIFF. O handoff já consulta a trava efetivamente usada. (`bin/diff_janela_he_total.sh:17`, `bin/diff_janela_he_total.sh:38`, `bin/sombra_trava.sh:16`, `bin/sombra_trava.sh:26`, `bin/handoff_sessao.sh:223`) Escritor e limpeza do novo sinal: **[não verificado]**.
+
+6. **Agente sem entrega não deixa C1 PENDENTE hoje.** Cenário: existe `subagents/agent-X.jsonl` sem entrega, topo sem ESPERANDO e nenhuma suite/push; o avaliador alcança `DISPARO`, porque os adiamentos atuais são ESPERANDO provado, PAREI comum e suite/push. Não há leitura desses JSONL nessa decisão. (`bin/hook_stop_fila1.py:866`, `bin/hook_stop_fila1.py:878`) Formato de “turno final”, escritor desses JSONL e sobrevivência ao `/clear`: **[não verificado]**.
+
+7. **CLEAR de outra sessão pode atender o disparo errado.** Cenário condicional: A dispara; B usa a mesma RAIZ e grava SessionStart `clear`; próximo Stop de A aceita o marco de B, registra ATENDIDO e elimina o disparo de A. O Stop extrai somente `transcript_path`; embora o marco guarde `session_id`, não há comparação com a identidade do Stop. (`bin/hook_stop_fila1.py:1018`, `bin/marco_de_clear.py:20`, `bin/marco_de_clear.py:45`, `bin/hook_stop_fila1.py:802`, `bin/hook_stop_fila1.py:810`, `bin/hook_stop_fila1.py:821`)
+
+8. **Compact encerra e rearma sem `/clear`.** S1 dispara; ocorre SessionStart `compact`; S2 encontra marco novo, registra RESET e apaga o disparo anterior. Assim, conservar a máquina atual permite escapar da cobrança de CLEAR por compact. O painel também passa a mostrar tempo desde compact sob o rótulo “desde o clear”. (`bin/marco_de_clear.py:32`, `bin/marco_de_clear.py:44`, `bin/hook_stop_fila1.py:819`, `bin/hook_stop_fila1.py:821`, `bin/orcamento_contexto.py:245`, `bin/orcamento_contexto.py:265`)
+
+9. **Estado ilegível permite contar novamente o mesmo ciclo.** S1 grava DISPARO; `orcamento_estado.json` fica truncado antes de S2; a medida continua alta. S2 transforma a leitura inválida em `{}` e grava outro DISPARO. O flock serializa acessos, mas não recupera a identidade perdida do disparo. (`bin/hook_stop_fila1.py:779`, `bin/hook_stop_fila1.py:783`, `bin/hook_stop_fila1.py:878`, `bin/hook_stop_fila1.py:880`)
+
+10. **“Caminho de hoje com TETO” não garante saída.** Se o checador do RELATO retorna erro ou excede o timeout, cada Stop bloqueia **antes** de C1 e do contador do TETO. Repetir essa condição prende o encerramento independentemente do tratamento de exceção do disjuntor. (`bin/hook_stop_fila1.py:1007`, `bin/hook_stop_fila1.py:1009`, `bin/hook_stop_fila1.py:1029`, `bin/hook_stop_fila1.py:1034`) Separadamente, SessionStart pode esperar indefinidamente pelo flock do marco: sua aquisição é bloqueante, sem prazo no código. (`bin/marco_de_clear.py:38`, `bin/marco_de_clear.py:40`)
+
+11. **“Trabalho em curso” pode ser de outra obra, ou ficar invisível.** O detector varre `ps` global por texto, sem identidade de obra/sessão. Uma suite alheia mantém C1 PENDENTE e impede a saída pelo TETO; falha de `ps` vira `False`, podendo autorizar o disparo durante trabalho real não observado. (`bin/hook_stop_fila1.py:386`, `bin/hook_stop_fila1.py:392`, `bin/hook_stop_fila1.py:395`, `bin/hook_stop_fila1.py:388`, `bin/hook_stop_fila1.py:869`, `bin/hook_stop_fila1.py:1104`)
+
+12. **O painel atual não entrega as medidas prometidas.**
+    - Soma ATENDIDO/SEGUIU da trilha inteira, sem janela de 24 horas; não conta DISPARO. Um evento antigo continua no total. (`bin/orcamento_contexto.py:235`, `bin/orcamento_contexto.py:239`)
+    - Publica percentual/modelo/janela, sem os tokens e o horário da última observação. Stop barrado pela prova, orçamento desligado ou lock ocupado conserva uma medida anterior, embora o rótulo proposto diga “último Stop”. (`bin/orcamento_contexto.py:255`, `bin/hook_stop_fila1.py:823`, `bin/hook_stop_fila1.py:1034`, `bin/hook_stop_fila1.py:753`, `bin/hook_stop_fila1.py:765`)
+    - Subtrair CLEAR-LIBERA de ATENDIDO mede intervalo entre observações por Stops. Exemplo: primeiro Stop vê PAREI às 12:05, `/clear` às 12:08, próximo Stop às 12:20 → diferença dos eventos dá 15 minutos, não três. ATENDIDO não registra a hora exata do clear; ela está no marco. (`bin/hook_stop_fila1.py:831`, `bin/hook_stop_fila1.py:817`, `bin/hook_stop_fila1.py:694`, `bin/marco_de_clear.py:56`)
+    - O formatador atual não calcula cache diário nem média de espera; `gerar_estado.py` chama esse formatador. O valor de referência “390M” e sua deduplicação não são demonstrados pelo dado fornecido. (`bin/orcamento_contexto.py:265`, `bin/gerar_estado.py:274`) **[não verificado]**
+
+13. **B3 exige uma convenção que o verificador atual não exige.** A instrução pede “id da obra”, sem obrigar `OBRA=<id>`. Cenário permitido: prompt “verifique a obra O261…” e resposta cuja primeira linha é `REPROVADO`; o reconhecimento contratado, condicionado a `OBRA=O261`, perde essa reprovação. (`.claude/agents/verificador.md:3`, `.claude/agents/verificador.md:18`) Payload efetivo de SubagentStop, recuperação do prompt e deduplicação por agente/entrega: **[não verificado]**.
+
+14. **B1/B2/B4 ainda não têm comportamento auditável nesse material.** Não localizei `bin/disjuntor.py`, `bin/statusline_cota.py`, `bin/tests/test_disjuntor.sh` ou `.claude/settings.json`; implementação, instalação e desligamento por `DISJUNTOR=0`: **[não verificado]**. O contrato fornecido não define medida/limiar de B1, regra de B2 ou limiar de B4; sem isso não há como construir um caso numérico de “deveria negar”. **[não verificado]** A redação de frescor de B4 também precisa precisão: comparar literalmente mtime com um `resets_at` futuro classificaria como velha uma amostra recém-gravada antes do reset; payload e comparação efetivos: **[não verificado]**.
+
+Quanto aos donos dos arquivos, a distinção entre código existente e intenção do contrato é esta:
+
+| Arquivo | Quem ESCREVE | Quem LÊ |
+|---|---|---|
+| `logs/sessao/orcamento_estado.json` | Stop, `_orc_salva`, substituição atômica. (`bin/hook_stop_fila1.py:717`) | Stop e leitor do painel. (`bin/hook_stop_fila1.py:779`, `bin/orcamento_contexto.py:228`) |
+| `logs/sessao/orcamento.log` | Stop, `_orc_trilha`. (`bin/hook_stop_fila1.py:693`) | `orcamento_contexto.ler`, chamado por `gerar_estado.py`. (`bin/orcamento_contexto.py:235`, `bin/gerar_estado.py:276`) |
+| `logs/sessao/ultimo_clear.json` | `marco_de_clear.py`; também lê o anterior para conservar clears. (`bin/marco_de_clear.py:50`, `bin/marco_de_clear.py:61`) | `orcamento_contexto.ler_marco`, usado pelo Stop e painel. (`bin/orcamento_contexto.py:145`, `bin/hook_stop_fila1.py:794`, `bin/orcamento_contexto.py:232`) |
+| `app/docs/HANDOFF-SESSAO.md` | `handoff_sessao.sh`. (`bin/handoff_sessao.sh:296`, `bin/handoff_sessao.sh:300`) | O selo exige `cat` em SessionStart clear/compact; configuração instalada **[não verificado]**. (`bin/tests/test_handoff_sessao.sh:69`, `bin/tests/test_handoff_sessao.sh:72`) |
+| `logs/sessao/diff_apply/<obra>` | Não identificado no código inspecionado. **[não verificado]** | Guarda pretendida dos disjuntores. Implementação **[não verificado]**. |
+| `subagents/agent-*.jsonl` | Escritor efetivo **[não verificado]**. | Leitor pretendido de entrega em C1; implementação **[não verificado]**. |
+| `logs/sessao/cota.json` | Contrato atribui à statusLine; implementação **[não verificado]**. | Contrato atribui a B4; implementação **[não verificado]**. |
+| `logs/sessao/disjuntor_estado.json` | Contrato atribui ao disjuntor com flock; implementação **[não verificado]**. | Reavaliação/contadores do disjuntor; implementação **[não verificado]**. |
+| `logs/sessao/disjuntor.log` | Contrato atribui ao disjuntor; implementação **[não verificado]**. | Leitura nova por `gerar_estado.py` **[não verificado]**; a integração atual chama o leitor do ORÇAMENTO. (`bin/gerar_estado.py:274`) |
+
+Há ainda uma exceção que precisa permanecer explícita: após disparar, sem topo CLEAR, a máquina volta ao caminho normal e pode liberar pelo TETO no sexto bloqueio contado, sem handoff. Isso corresponde à válvula existente, mas impede interpretar “PAREI só libera com handoff” como garantia de **toda** liberação do Stop. (`bin/hook_stop_fila1.py:850`, `bin/hook_stop_fila1.py:1097`, `bin/hook_stop_fila1.py:1104`, `bin/hook_stop_fila1.py:1113`)
+
+## 30/10 23:06 · sessao c03f8040050b · - · - · origem=Ronald (tmux)
+
+Achados para consolidar, distinguindo comportamento atual de integração ainda não verificável:
+
+1. **O sinal de DIFF proposto não acompanha ao menos um DIFF atual.** `diff_janela_he_total.sh` adquire a trava da sombra (`bin/diff_janela_he_total.sh:17-18`); o escritor mantém `logs/sombra.lock` por descritor/flock (`bin/sombra_trava.sh:16`, `bin/sombra_trava.sh:26-38`). O handoff lê essa trava (`bin/handoff_sessao.sh:223-233`). Cenário: esse DIFF está rodando, não existe `logs/sessao/diff_apply/<obra>`, chega Stop acima do limiar; uma implementação que só consulta o sinal novo considera ausente a proteção enquanto o DIFF existente continua. Escritor/leitor atuais do novo sinal: **[não verificado]**.
+
+2. **O estado de CLEAR não é isolado por sessão.** Stop extrai apenas `transcript_path` do payload (`bin/hook_stop_fila1.py:1016-1023`); estado e trilha são únicos por RAIZ (`bin/hook_stop_fila1.py:675-676`). `marco_de_clear.py` grava o `session_id`, mas no mesmo arquivo global (`bin/marco_de_clear.py:20`, `bin/marco_de_clear.py:44-61`). Cenário: sessão A dispara; sessão B dá `/clear`; próximo Stop A lê outro `marco_ref` e pode registrar ATENDIDO pelo clear B; compact B produz RESET e rearmamento (`bin/hook_stop_fila1.py:800-821`). Ocorrência real em produção: **[não verificado]**.
+
+3. **O reconhecimento B3 proposto exige um identificador que a instrução atual do verificador não obriga.** A descrição pede “id da obra”, sem exigir a sintaxe `OBRA=<id>` (`.claude/agents/verificador.md:3`); a saída exige primeira linha APROVADO/REPROVADO (`.claude/agents/verificador.md:18`). Cenário permitido pela instrução atual: prompt “verifique a obra O261…” e resposta `REPROVADO`; um contador condicionado a `OBRA=O261` não associa essa reprovação. Payload efetivo de SubagentStop e implementação do contador: **[não verificado]**.
+
+4. **Não há prova da instalação dos novos hooks nesta cópia.** `.claude/settings.json` não foi encontrado; a configuração é local e ignorada pelo Git (`.gitignore:66`; `bin/tests/test_handoff_sessao.sh:15-19`). Esse selo verifica Stop, PreCompact e SessionStart clear/compact (`bin/tests/test_handoff_sessao.sh:49-79`), sem validar PreToolUse, SubagentStop ou statusLine nesse trecho. Instalação real do contrato: **[não verificado]**.
+
+5. **B1/B2/B4 e a contagem B3 não podem receber veredicto de implementação atual.** `bin/disjuntor.py`, `bin/statusline_cota.py` e `bin/tests/test_disjuntor.sh` não foram encontrados na inspeção: **[não verificado]**. O contrato fornecido também não apresenta a medida/limiar de B1, definição operacional de B2 ou limiar de B4: **[não verificado]**. Não atribuir ao harness campos, reentregas ou garantias que o dado não mostrou.
+
+Escritores/leitores dos estados novos:
+
+| Arquivo citado | Escritor/leitor verificável |
+|---|---|
+| `logs/sessao/cota.json` | Statusline escritor; disjuntor leitor somente no contrato; implementação **[não verificado]**. |
+| `logs/sessao/disjuntor_estado.json` | Disjuntor com flock somente no contrato; implementação **[não verificado]**. |
+| `logs/sessao/disjuntor.log` | Disjuntor escritor e `gerar_estado.py` leitor somente no contrato; implementação **[não verificado]**. |
+| `logs/sessao/diff_apply/<obra>` | Contrato não nomeia escritor; leitor/implementação **[não verificado]**. |
+| `subagents/agent-*.jsonl` | Harness escritor e consumidor de “turno final” **[não verificado]**; o dado não inclui exemplar nem definição de entrega. |
+
+Complementos verificáveis: `logs/sessao/ultimo_clear.json` é lido e substituído pelo escritor `marco_de_clear.py` (`bin/marco_de_clear.py:50-61`); `orcamento_estado.json` é escrito pelo Stop (`bin/hook_stop_fila1.py:710-726`); `orcamento.log` recebe os eventos após a gravação do estado (`bin/hook_stop_fila1.py:724-726`).
+
+## 30/10 23:05 · sessao 8e779091d3c1 · - · - · origem=Ronald (tmux)
+
+Achados de C1 e Stop, por inspeção estática:
+
+1. **O gatilho atual mede outra regra.** São 60% da janela **ou** 6 h **ou** três deploys, com expiração de 30 min: `bin/orcamento_contexto.py:44`, `bin/orcamento_contexto.py:209`. Com janela de 1 milhão e 150 mil tokens, idade abaixo de 6 h e menos de três deploys, C1 não dispara; com Haiku de 200 mil e 120 mil tokens, dispara abaixo dos 150 mil contratados: `bin/orcamento_contexto.py:36`, `bin/orcamento_contexto.py:41`, `bin/orcamento_contexto.py:110`.
+
+2. **CLEAR libera sem HANDOFF e por 30 min.** Stop S1 grava `disparo`; S2 encontra `PAREI: ! CLEAR` e libera exclusivamente pela existência do disparo, sem verificar HANDOFF nem a idade dele; S3 aos 11 min ainda libera: `bin/hook_stop_fila1.py:827`, `bin/hook_stop_fila1.py:835`, `bin/hook_stop_fila1.py:836`, `bin/orcamento_contexto.py:47`. O HANDOFF é escrito em `app/docs/HANDOFF-SESSAO.md` por `bin/handoff_sessao.sh:18`; essa exigência não aparece na decisão de liberação: `bin/hook_stop_fila1.py:827`.
+
+3. **As guardas só protegem o primeiro disparo.** ESPERANDO/suite/push são consultados depois do tratamento de `disparo` ativo e CLEAR: `bin/hook_stop_fila1.py:827`, `bin/hook_stop_fila1.py:850`, `bin/hook_stop_fila1.py:866`. Cenário: S1 dispara sem suite; inicia-se suite; S2 com CLEAR libera antes de consultar a suite: `bin/hook_stop_fila1.py:835`. DIFF/apply e entrega de subagents não são consultados na decisão de disparo, cujos únicos adiamentos são ESPERANDO, PAREI comum e suite/push: `bin/hook_stop_fila1.py:866`.
+
+4. **TETO pode liberar o ciclo sem HANDOFF ou CLEAR.** Após S1 disparar, Stops seguintes sem CLEAR caem no caminho normal com lembrete: `bin/hook_stop_fila1.py:850`, `bin/hook_stop_fila1.py:1116`. Mantendo HEAD e sem suite, o contador cresce e libera quando `n > 5`, isto é, no sexto Stop contado; não verifica HANDOFF nessa saída: `bin/hook_stop_fila1.py:1097`, `bin/hook_stop_fila1.py:1104`, `bin/hook_stop_fila1.py:1113`.
+
+5. **Há bloqueio sem TETO anterior ao instrumento.** Se `relato_afirma_com_prova` falha, excede timeout ou retorna não zero, o Stop bloqueia antes de avaliar C1 e antes de incrementar o TETO: `bin/hook_stop_fila1.py:1007`, `bin/hook_stop_fila1.py:1009`, `bin/hook_stop_fila1.py:1029`. Repetir esse estado repete bloqueio indefinidamente; portanto “caminho de hoje com TETO” não garante saída dessa sessão: `bin/hook_stop_fila1.py:1034`.
+
+6. **Processos de outra obra podem manter C1 pendente e desativar TETO.** A detecção examina todos os argumentos de `ps`, sem escopo de obra/sessão, por substring `manage.py test` ou `git push`: `bin/hook_stop_fila1.py:386`, `bin/hook_stop_fila1.py:392`, `bin/hook_stop_fila1.py:395`. Um desses processos alheios causa PENDENTE e impede liberação por TETO enquanto persistir: `bin/hook_stop_fila1.py:869`, `bin/hook_stop_fila1.py:1092`, `bin/hook_stop_fila1.py:1104`. Se `ps` falha, retorna False e pode disparar durante trabalho real não observado: `bin/hook_stop_fila1.py:387`.
+
+7. **Um CLEAR de outra sessão atende e rearma a sessão errada.** O payload Stop usa somente `transcript_path`: `bin/hook_stop_fila1.py:1018`. O marco é global e recebe o `session_id` do escritor: `bin/marco_de_clear.py:20`, `bin/marco_de_clear.py:45`. Cenário: A dispara; B dá `/clear`; o próximo Stop de A encontra nova referência, registra ATENDIDO pelo clear de B e apaga o disparo de A, sem comparar identidades: `bin/hook_stop_fila1.py:802`, `bin/hook_stop_fila1.py:810`, `bin/hook_stop_fila1.py:817`, `bin/hook_stop_fila1.py:821`. Se A continua acima do limiar, ainda pode disparar novamente nessa avaliação: `bin/hook_stop_fila1.py:822`, `bin/hook_stop_fila1.py:878`.
+
+8. **Estado ilegível permite redisparo/contagem duplicada.** `orcamento_estado.json` truncado ou JSON inválido vira `{}`: `bin/hook_stop_fila1.py:779`, `bin/hook_stop_fila1.py:783`. Se S1 já registrou DISPARO, o estado corrompe antes de S2 e a medida continua alta, S2 registra outro DISPARO no mesmo ciclo; flock não recupera a memória perdida: `bin/hook_stop_fila1.py:878`, `bin/hook_stop_fila1.py:880`.
+
+9. **“Contexto no último Stop” pode ser medida antiga.** `ultima_medida` só atualiza dentro da avaliação do orçamento: `bin/hook_stop_fila1.py:822`. Stop bloqueado por prova, orçamento desligado ou lock ocupado não atualiza a medida: `bin/hook_stop_fila1.py:1034`, `bin/hook_stop_fila1.py:753`, `bin/hook_stop_fila1.py:765`. O painel reutiliza essa medida e não mostra seu horário: `bin/orcamento_contexto.py:243`, `bin/orcamento_contexto.py:253`.
+
+10. **Os contadores publicados não são disparos em 24 h nem espera média.** O leitor soma todas as linhas ATENDIDO/SEGUIU da trilha sem corte temporal e publica os totais; não calcula duração: `bin/orcamento_contexto.py:235`, `bin/orcamento_contexto.py:239`, `bin/orcamento_contexto.py:265`. Além disso, “desde o clear” pode usar compact, porque a base é qualquer marco e o rótulo permanece clear: `bin/orcamento_contexto.py:199`, `bin/orcamento_contexto.py:265`.
+
+Escritores/leitores atuais pertinentes:
+
+- `logs/sessao/orcamento_estado.json`: escreve o hook por substituição atômica e lê o próprio hook; `orcamento_contexto.ler` lê para publicação: `bin/hook_stop_fila1.py:717`, `bin/hook_stop_fila1.py:779`, `bin/orcamento_contexto.py:228`.
+- `logs/sessao/orcamento.log`: escreve o hook; `orcamento_contexto.ler` lê; `gerar_estado.py` chama esse leitor: `bin/hook_stop_fila1.py:693`, `bin/orcamento_contexto.py:235`, `bin/gerar_estado.py:274`.
+- `logs/sessao/ultimo_clear.json`: escreve e lê o marco para conservar os últimos clears; lê o avaliador, chamado pelo hook e pelo painel: `bin/marco_de_clear.py:50`, `bin/marco_de_clear.py:61`, `bin/orcamento_contexto.py:145`, `bin/hook_stop_fila1.py:794`.
+- Locks do orçamento e do marco: adquiridos pelos respectivos escritores; o orçamento usa aquisição não bloqueante, o marco usa espera bloqueante: `bin/hook_stop_fila1.py:755`, `bin/hook_stop_fila1.py:759`, `bin/marco_de_clear.py:38`, `bin/marco_de_clear.py:40`.
+
+## 30/10 23:05 · sessao c9d7251a31dd · - · - · origem=Ronald (tmux)
+
+Achados de medição e estado, por cenário hipotético derivado do código:
+
+1. **C1 não tem o gatilho contratado de 150.000 tokens.** Continua com 60% da janela, 6 horas ou 3 marcos (`bin/orcamento_contexto.py:44`, `bin/orcamento_contexto.py:209`). Assim, último assistente principal de 150.000 tokens no modelo de janela 1M, marco recente e nenhum deploy não dispara; 120.000 no Haiku 200k dispara antes de 150.000 (`bin/orcamento_contexto.py:36`, `bin/orcamento_contexto.py:41`). Modelo desconhecido com 200.000 tokens retorna tokens mais “não sei”, mas não percentual: não dispara por contexto (`bin/orcamento_contexto.py:115`, `bin/orcamento_contexto.py:209`).
+
+2. **Janela é de 30 minutos; não 10.** Disparo ativo + `PAREI: ! CLEAR` visto em t0: Stop em t0+11 min ainda libera; o código usa `EXPIRA_CLEAR_MIN=30` e comparação `<= janela` (`bin/orcamento_contexto.py:47`, `bin/hook_stop_fila1.py:777`, `bin/hook_stop_fila1.py:836`). O início também é o primeiro Stop que lê PAREI, e não o disparo nem a escrita da linha (`bin/hook_stop_fila1.py:829`).
+
+3. **O painel não mede os rótulos prometidos.** Ele conta ATENDIDO/SEGUIU da trilha inteira, sem corte de 24h e sem contar DISPARO; apresenta percentual/modelo/janela, sem os tokens da última medida; não calcula média de espera nem cache diário (`bin/orcamento_contexto.py:233`, `bin/orcamento_contexto.py:255`, `bin/orcamento_contexto.py:265`). `gerar_estado.py` usa precisamente esse leitor/formatador (`bin/gerar_estado.py:274`). Cenário: ATENDIDO de ontem segue no contador de hoje; DISPARO atual sem desfecho não aparece como contagem de disparos (`bin/orcamento_contexto.py:239`).
+
+4. **`orcamento.log` não contém os dois horários exatos necessários à média PAREI→/clear.** CLEAR-LIBERA é carimbado pelo Stop que viu PAREI; ATENDIDO só é apendado no Stop que percebe o novo marco, com detalhe sem o horário do clear (`bin/hook_stop_fila1.py:831`, `bin/hook_stop_fila1.py:817`). Cenário: PAREI escrito 12:00, primeiro Stop 12:05, /clear 12:08, próximo Stop 12:20; subtrair os eventos daria 15 minutos, enquanto escrita→clear foi 8. O horário real está em `ultimo_clear.json`, não na linha ATENDIDO (`bin/marco_de_clear.py:44`, `bin/marco_de_clear.py:56`).
+
+5. **“Desde o clear” também significa desde compact.** O escritor grava tanto `clear` como `compact`; o leitor toma sempre `marco['hora']` como base e a frase imprime “desde o clear” (`bin/marco_de_clear.py:32`, `bin/marco_de_clear.py:44`, `bin/orcamento_contexto.py:245`, `bin/orcamento_contexto.py:265`). Cenário: seis horas sem /clear, compact agora; painel apresenta quase zero horas “desde o clear” (`bin/orcamento_contexto.py:247`).
+
+6. **Estado global permite que um clear de outra sessão atenda o disparo.** Marco e estado são únicos por RAIZ (`bin/marco_de_clear.py:20`, `bin/hook_stop_fila1.py:675`); session_id participa da referência, mas o hook não exige igualdade com a sessão do Stop e aceita qualquer clear posterior ao disparo (`bin/orcamento_contexto.py:149`, `bin/hook_stop_fila1.py:802`, `bin/hook_stop_fila1.py:810`). Cenário condicional: A dispara; B grava SessionStart clear na mesma RAIZ; próximo Stop de A registra ATENDIDO e rearma A (`bin/hook_stop_fila1.py:817`, `bin/hook_stop_fila1.py:821`). Existência de sessões concorrentes na produção: [não verificado].
+
+7. **Retenção limitada de clears pode mudar o desfecho.** Escritor conserva só os últimos 20 horários (`bin/marco_de_clear.py:57`). Se um clear em janela é seguido por 20 clears tardios antes do próximo Stop, o primeiro desaparece; o hook passa a escolher um clear tardio e registra SEGUIU (`bin/hook_stop_fila1.py:810`, `bin/hook_stop_fila1.py:813`). Quantidade real de clears: [não verificado].
+
+**Donos dos estados existentes:**
+
+| Arquivo | Escreve | Lê |
+|---|---|---|
+| `logs/sessao/ultimo_clear.json` | `marco_de_clear.py`, leitura+gravação sob seu flock, substituição atômica (`bin/marco_de_clear.py:38`, `bin/marco_de_clear.py:61`) | `orcamento_contexto.ler_marco`, chamado pelo hook e painel (`bin/orcamento_contexto.py:145`, `bin/hook_stop_fila1.py:794`, `bin/orcamento_contexto.py:232`) |
+| `logs/sessao/orcamento_estado.json` | hook, `_orc_salva` por substituição atômica (`bin/hook_stop_fila1.py:708`, `bin/hook_stop_fila1.py:717`) | hook e `orcamento_contexto.ler`, usado pelo painel (`bin/hook_stop_fila1.py:779`, `bin/orcamento_contexto.py:228`, `bin/gerar_estado.py:276`) |
+| `logs/sessao/orcamento.log` | hook, `_orc_trilha` (`bin/hook_stop_fila1.py:687`) | `orcamento_contexto.ler`, usado pelo painel (`bin/orcamento_contexto.py:235`, `bin/gerar_estado.py:276`) |
+| `app/docs/HANDOFF-SESSAO.md` | `handoff_sessao.sh`: corte direto ou `mv` do temporário (`bin/handoff_sessao.sh:296`, `bin/handoff_sessao.sh:300`) | contrato de configuração esperado pelo teste é `cat` em SessionStart clear/compact (`bin/tests/test_handoff_sessao.sh:69`, `bin/tests/test_handoff_sessao.sh:72`); configuração efetivamente instalada: [não verificado] |
+
+`cota.json`, `disjuntor_estado.json`, `disjuntor.log`, `diff_apply/<obra>`, `statusline_cota.py`, `disjuntor.py` e `.claude/settings.json` não foram encontrados nesta cópia por busca de arquivos/referências; donos operantes e acionamento real: [não verificado]. O código atual do painel só conhece a trilha/estado do ORÇAMENTO nessa seção (`bin/gerar_estado.py:271`).
 
 ## 30/10 22:57 · sessao abbc739c1d90 · FIO-ESTADO · verificador · origem=Code
 
@@ -491,86 +631,4 @@ A identificação literal **“T3 da O261 (A)” não foi localizada nos cinco d
 
 Na tela administrativa, existe **“O que fazer / O que destrava” no painel do colaborador**, com texto de `DESTRAVA` e botões genéricos. O Raio-X do retrato abre esse painel; as datas são `<span>`, sem link por dia/pergunta. Portanto, o link específico exigido no complemento (D) não é o que esses templates entregam. (`app/templates/colaboradores/partials/painel_colaborador.html:26`; `app/folha/retrato_folha.py:1068`; `app/templates/folha/_retrato_o_que_fazer.html:46`; `app/templates/folha/_retrato_o_que_fazer.html:61`; `app/templates/folha/_retrato_raiox.html:68`; `app/docs/BACKLOG.md:767`)
 
-## 30/10 22:36 · sessao f69ca6868bc3 · - · - · origem=Ronald (tmux)
-
-- **LIMBO: ordem solicitada presente.** `agrupar_furo` chama `_vivas_ancoradas('resolvido')`, reaponta pela porta existente e só depois pede `reconciliar()`; a porta consulta E4-c e a guarda de costura, atribui `chamado_destino`, relavra S2 e salva. O teste exige pergunta viva ancorada no pai vivo e segunda execução sem novo agrupamento. `app/chamados/services/limbo_folgas.py:228-230`; `app/chamados/services/fio.py:821-831`; `app/chamados/tests/test_t34_furo_sob_limbo.py:43-61`.
-
-- **Quem escreve/lê `chamado_destino`:** a porta `reapontar_resolvedora` escreve em `fio.py:828-831`; `PerguntaDisputa.abrir` também escreve no dedup e no nascimento em `models.py:2370-2397`. As atribuições de `models.py:342` e `fio.py:758-762` servem à simulação em memória. A autoridade da âncora retorna destino ou container em `fio.py:97-117`; a montagem do fio carrega os destinos em `fio.py:199-228`. Todos os caminhos citados estão em `app/chamados/`.
-
-- **O199: reaproveita o fechador existente.** No ramo “dia já folga”, carimba a validação, fecha a pergunta e chama `fechar_o_fio_do_dia`; esse fechador percorre as perguntas e pede reconciliação dos chamados, anotando apenas quando fecham. A validação mata a pergunta no primeiro degrau de C6; irmã respondida ainda não validada pode continuar viva antes da leitura do carimbo. `app/chamados/services/validacao.py:261-271`; `app/ponto/services/veredito_celula.py:174-187`; `app/chamados/juizes.py:1006-1007`; `app/chamados/juizes.py:1020-1032`. O teste das quatro irmãs cobra uma folga, chamado resolvido e uma nota. `app/chamados/tests/test_o199_aceite_de_folga_decide_o_dia.py:167-192`.
-
-- **Vermelho reportado e mecanismo confirmado por leitura:** `PortaSegundoAtoTest.test_MORDE_derruba_a_cobranca_viva_do_dia_que_virou_folga` exige que o chamado saia de VIVOS. `app/colaboradores/tests/test_contract_porta_2ato.py:147-160`. O protesto `COBRANCA_EM_DIA_SEM_TRABALHO` depende do chamado vivo; vira `cobranca_indevida`, que continua em `VEREDITOS_ACUSAM`; C6 mantém a pergunta viva e E2 exclui essa célula. O cartório só pede rejulgamento desse ramo quando alguma reconciliação fecha. `app/ponto/supra_juiz.py:441-445`; `app/escala/models.py:1581`; `app/escala/models.py:1735`; `app/chamados/juizes.py:1054-1057`; `app/chamados/reconciliador.py:598`; `app/ponto/services/cartorio.py:1213-1225`. Execução local do teste: **[não verificado]**.
-
-- **Não repetir como vermelhos comprovados os testes HX/B2.d.** A cópia já planta explicitamente o passivo terminal por `update`, em vez de depender de `encerrar()` produzir esse estado. `app/chamados/tests/test_laco_hx_x_bug31.py:37-43`; `app/chamados/tests/test_b2d_resposta_visivel.py:16-22`. Resultado atual dessas suítes, das órfãs e dos tetos de queries: **[não verificado]**.
-
-- **Limite do agrupamento, preexistente no trecho fornecido:** o contexto é salvo antes da reconciliação; se esta não fechar, nova chamada com o mesmo `agrupado_em` retorna antes de tentar novamente. `app/chamados/services/limbo_folgas.py:217-231`. Não encontrei cenário normal novo de recusa da reata com os pais vivos selecionados pelos chamadores; ocorrência em produção: **[não verificado]**. Os chamadores selecionam pai vivo em `app/chamados/services/limbo_folgas.py:243-255` e `app/ponto/management/commands/detectar_ausencias.py:755-756`.
-
-## 30/10 22:34 · sessao f86cff5c627c · - · - · origem=Ronald (tmux)
-
-Não encontrei **“T3 da O261 (A)”** nos cinco documentos indicados; a correspondência exata fica **[não verificado]**. Há divisões diferentes que não devem ser confundidas:
-
-- **O261 original:** usa **FASE 1, FASE 2, FASE 3**. A FASE 3 pede invariante, caso que morde, allowlist zero, hoje fora, contador no placar e passivo pela porta. Não contém divisão (A)..(D). — `app/docs/BACKLOG.md:1259`; `app/docs/TICKETS.md:146`.
-- **O261-COMPLEMENTO-[nome]:** contém **(A)..(D)**. (A) é **alcancabilidade real**: pergunta viva sob chamado vivo em `qs_na_fila`, aparecendo no app; pergunta viva sob chamado terminal conta como fio morto. (B) materializada sem resposta; (C) nascimento com pai terminal; (D) vigia e link do retrato levando à pergunta pelo chamado vivo. — `app/docs/BACKLOG.md:767`; `app/docs/RELATO.md:355`; `app/docs/RELATO.md:359`.
-- **Proposta de quatro curas:** (1) vigia pelo universo `o_que_segura`; (2) resposta vazia; **(3) reabertura levanta o véu**; (4) link por dia. Chamar o terceiro de “T3” seria inferência, pois o documento o chama somente “(3)”. — `app/docs/RELATO.md:370`.
-
-**Existência atual:**
-
-- A **FASE 3 original tem implementação**: `censo` lê chamados vivos e células que acusam; elimina dias com fio vivo, hoje e decisão do dia pendente. O comando executa, imprime e carimba; o cron o agenda. — `app/chamados/services/vigia_fio.py:168`, `app/chamados/services/vigia_fio.py:186`, `app/chamados/services/vigia_fio.py:229`, `app/chamados/services/vigia_fio.py:286`, `app/chamados/services/vigia_fio.py:294`, `app/chamados/management/commands/vigiar_fio_morto.py:160`, `app/chamados/management/commands/vigiar_fio_morto.py:195`, `app/config/crons.py:1654`.
-- Seu lugar visível é o **placar ESTADO**, seção **“Fio morto (O261)”**. — `bin/gerar_estado.py:313`; `bin/fio_estado.py:101`.
-- O **(A) de alcancabilidade não aparece aplicado nesse censo**: ele agrupa perguntas pela FK da célula e aceita `fio_do_dia(ps)`; esse trecho não verifica `qs_na_fila`, âncora viva nem presença no app. — `app/chamados/services/vigia_fio.py:270`, `app/chamados/services/vigia_fio.py:286`. O próprio relatório registra perguntas vivas visíveis no app, sob chamado terminal ausente da fila admin. — `app/docs/RELATO.md:359`.
-- O link atual do **Raio-X do retrato** abre o **painel do colaborador**; as datas do bloco “O que fazer” são apenas `<span>`, sem link por dia/pergunta. — `app/templates/folha/_retrato_raiox.html:68`; `app/templates/folha/_retrato_o_que_fazer.html:43`.
-- O bloco **“O que fazer / O que destrava”** existe no drawer/painel do colaborador, lê a frase genérica `DESTRAVA`, e não interpola um chamado específico nessa frase. — `app/folha/retrato_folha.py:1049`, `app/folha/retrato_folha.py:1057`, `app/folha/retrato_folha.py:1068`; `app/templates/colaboradores/partials/painel_colaborador.html:26`; `app/templates/folha/_retrato_o_que_fazer.html:28`, `app/templates/folha/_retrato_o_que_fazer.html:33`.
-
-## 30/10 22:33 · sessao fc7f73f9089d · - · - · origem=Ronald (tmux)
-
-Achados de `raiox.pergunta_sem_acao_possivel`, somente leitura:
-
-- **Predicado atual:** se `materializada_em is None`, devolve `False`; com carimbo, se `veredito_lavrado` estiver preenchido, devolve exclusivamente `veredito_lavrado == VL_SIM`; sem veredito, executa `_pergunta_materializada_de_fato(p)`; qualquer exceção devolve `False`. `marcos` é recebido, mas não usado. Não verifica staleness, vitalidade, `validada_em`, disputa aberta, status da âncora ou fila. `app/chamados/services/raiox.py:151`, `app/chamados/services/raiox.py:173`, `app/chamados/services/raiox.py:182`, `app/chamados/services/raiox.py:186`.
-- **Insumos do fallback:** via de resolução/carimbo, data e janela viva/classificação de falta; tipo escolha; para hora, slot esperado e batidas plantadas/vivas, destino encerrado e retratação auditada quando não há slot; para texto, turno completo ou retratação auditada. `app/chamados/juizes.py:603`, `app/chamados/juizes.py:628`, `app/chamados/juizes.py:674`, `app/chamados/juizes.py:699`, `app/chamados/juizes.py:730`, `app/chamados/juizes.py:734`.
-- **Um chamador direto de produção / um call site:** `montar_chamados_fio`, alias `_sem_acao`, compõe `ch.tem_pergunta_viva = any(p.viva and not _sem_acao(p, _marcos_s2))`. `app/chamados/services/fio.py:275`, `app/chamados/services/fio.py:279`.
-- **Quatro chamadores de `montar_chamados_fio`:** `meu_atendimento`, `fio_colaborador`, closure `_resp_modal_full` do modal, `contexto_parcial_fio`. `app/chamados/views.py:569`, `app/chamados/views.py:677`, `app/chamados/views.py:889`, `app/chamados/services/fio.py:442`.
-- **O uso efetivo da flag é COLAB:** único consumo de template encontrado é o formulário genérico de hora do `_card_atendimento`, condicionado a chamado aberto/em análise, furo e ausência de `tem_pergunta_viva`. O questionário usa `p.viva` diretamente. `app/templates/chamados/partials/_card_atendimento.html:203`, `app/templates/chamados/partials/_card_atendimento.html:205`, `app/templates/chamados/partials/_card_atendimento.html:77`.
-- **ADMIN não lê essa flag para o Validar:** modal exige disputa + permissão; com resposta, `pendencia_admin` ou `validada_em` mostram estado e retiram o Validar; caso contrário mostra Validar. Disputa fechada só retira Rejeitar/Corrigir. `app/templates/chamados/partials/modal_fio.html:120`, `app/templates/chamados/partials/modal_fio.html:210`, `app/templates/chamados/partials/modal_fio.html:215`, `app/templates/chamados/partials/modal_fio.html:221`, `app/templates/chamados/partials/modal_fio.html:242`, `app/templates/chamados/partials/modal_fio.html:272`, `app/templates/chamados/partials/modal_fio.html:282`.
-- **Âncora terminal/fora da fila ainda pode ter porta manual no modal:** listagem administrativa traz todos os chamados do colaborador; a âncora é destino ou pai sem ler status. Backend exige RBAC, correspondência da âncora e, em disputa fechada, pergunta viva; não exige chamado na fila. Portanto não afirmar “terminal = sem porta em toda tela”. `app/chamados/services/fio.py:174`, `app/chamados/services/fio.py:117`, `app/chamados/services/fio.py:557`, `app/chamados/services/fio.py:560`, `app/chamados/services/fio.py:592`, `app/chamados/services/fio.py:594`, `app/chamados/services/fio.py:599`.
-- **Validar já validada não age:** porta responde `ja_validada`; sem resposta, `sem_resposta`. `app/chamados/services/validacao.py:356`, `app/chamados/services/validacao.py:359`.
-- **Fila não equivale a vivo:** `qs_na_fila` exige `COBRANCA` e exclui silêncio futuro; `registrado` é vivo, mas não cobrança; terminais são resolvido, fechado, cancelado, superado. `app/chamados/services/painel.py:186`, `app/chamados/catalogo/motor.py:24`, `app/chamados/catalogo/motor.py:29`, `app/chamados/catalogo/motor.py:31`.
-- **Não confundir o irmão SQL:** `creditos_perguntas` exclui carimbada + `VL_SIM`, sem chamar `pergunta_sem_acao_possivel`; tem dois chamadores diretos, `fio` e `particionar_verbos`. `app/chamados/services/raiox.py:133`, `app/chamados/services/fio.py:386`, `app/chamados/services/verbos.py:31`.
-- **Registro:** buscas não encontraram os nomes `pergunta_sem_acao_possivel`, `o_que_segura` ou `_pergunta_materializada_de_fato` no registro/mapa. O registro próximo é C6 → `pergunta_viva`, C4 → permissão contextual, C15 → `fio_vivo`. `app/core/juizes.py:236`, `app/core/juizes.py:238`, `app/core/juizes.py:247`; mapa aponta FIO/DISPUTA para `_disputa_do_chamado`, e permissão contextual para `pode_agir_chamado`. `app/docs/JUIZES.md:40`, `app/docs/JUIZES.md:46`. Ausência é resultado de busca [não verificado por referência positiva].
-- **p#34375:** nenhuma ocorrência localizada na árvore; estado persistido do caso [não verificado].
-
-## 30/10 22:33 · sessao 803483fec8e6 · - · - · origem=Ronald (tmux)
-
-`o_que_segura` não devolve booleano “há ação admin”; devolve classificação `fio` e instrução `destrava` para cada dia retentor. O predicado está em `_fio_do_dia`, e a ordem exata é: se alguma pergunta **viva** da célula está `PENDENTE`, `colab`; senão, se existe alguma viva, `admin`; senão, se existe chamado com `status_local∈VIVOS`, `chamado`; senão, `nada`. Sem `celula_id`, o chamador força `nada`. Referências: `app/folha/fora_da_folha.py:59`, `:66`, `:67`, `:69`, `:71`, `:73`, `:204`, `:209`.
-
-Os textos são: `admin` → “validar (ou recusar) a resposta ... na mesa de disputa”; `colab` → esperar resposta e depois validar; `chamado` → “resolver o chamado N”; `nada` → “SEM FIO ... este dia precisa de alguém para olhar”. Referências: `app/folha/fora_da_folha.py:38`–`:42`; para IDs reais do chamado e texto substituído, `:198`–`:210`.
-
-Insumos e fontes:
-
-- Recebe colaborador/mês/ano, obtém empresa e janela, lê `classificar_export` para informar entra/motivo e `_dias_que_retem` para universo dos dias. Referências: `app/folha/fora_da_folha.py:179`, `:188`–`:194`.
-- `_dias_que_retem` delega a `motivos_retencao_celula(..., com_dias=True)`. Referência: `app/folha/fora_da_folha.py:90`–`:94`.
-- Alimentação carrega **todas** as perguntas por célula e chamados com status `VIVOS`, sem filtro de disputa aberta/fechada, âncora viva/terminal, fila, destino ou validação na query. Referência: `app/folha/fora_da_folha.py:46`–`:56`.
-- A pergunta é filtrada por `.viva`, que delega integralmente a `pergunta_viva`; `.estado` traduz validação/materialização/vitalidade/resposta em rótulo. Referências: `app/chamados/models.py:2358`–`:2369`; `:2197`–`:2211`.
-- `validada_em != None` torna a pergunta morta no juiz; portanto pergunta validada não pode produzir `admin`/`colab` nesse caminho. Referência: `app/chamados/juizes.py:1005`–`:1007`.
-- O retentor lê célula soberana: isento retorna vazio; ajusta admissão/demissão; sem célula em dia passado com vínculo retém; veredito acusador retém salvo todos protestos não cobráveis ou isenção de pausa; sem veredito, trabalha definido e dia passado retém. Referências: `app/folha/export.py:1174`, `:1180`–`:1196`, `:1206`–`:1238`.
-
-**Contagem de chamadores estáticos de produção:** `o_que_segura`: **0**; seu juiz efetivo `_fio_do_dia`: **3 funções / 3 chamadas** — `fora_da_folha`, `o_que_segura`, `dias_sem_fio`. Referências dos três: `app/folha/fora_da_folha.py:154`, `:204`; `app/ponto/services/pautas_dos_discordantes.py:75`. A ausência de chamadores de `o_que_segura` resulta da busca global, não tem linha de prova positiva; marcar `[não verificado]` se exigir referência documental estrita.
-
-Cadeias de consumo:
-
-1. `_fio_do_dia` → `fora_da_folha` (`app/folha/fora_da_folha.py:154`) → `montar_linhas` (`app/folha/retrato_folha.py:1157`) → comando `lavrar_retrato_folha` (`app/folha/management/commands/lavrar_retrato_folha.py:65`, `:74`) → tela que lê retratos gravados (`app/folha/views_retrato.py:246`–`:260`), rota `exportar/retrato/` (`app/folha/urls.py:23`). Drawer lê `DESTRAVA` literalmente via `o_que_fazer`, `app/folha/retrato_folha.py:1057`, `:1068`.
-2. `_fio_do_dia` → `dias_sem_fio`, que escolhe células `discordante` e só aceita fio `nada` (`app/ponto/services/pautas_dos_discordantes.py:67`–`:78`) → `Command.apurar` (`app/ponto/management/commands/pautas_discordantes.py:56`, `:68`).
-3. `vigia_fio` **não chama** `_fio_do_dia`: seu `fio_do_dia` delega a `fio_vivo` (`app/chamados/services/vigia_fio.py:155`–`:165`); essa redução é `any(pergunta_viva(p) ...)` (`app/chamados/juizes.py:1102`–`:1111`). A documentação reconhece a mesma autoridade `.viva` do outro leitor (`app/chamados/services/vigia_fio.py:129`–`:137`).
-
-**Discrepância estrutural importante para a matriz:** `VIVOS=('aberto','em_analise','registrado')`, mas o catálogo declara que **`registrado` não pede ação**, não entra na fila/placar; `COBRANCA` contém só aberto/em_análise. Referência: `app/chamados/catalogo/motor.py:24`–`:29`. Assim, sem pergunta viva e com único chamado `registrado`, `_fio_do_dia` classifica `chamado` e oferece “resolver chamado”, embora o catálogo diga ausência de ação devida. Referências: `app/folha/fora_da_folha.py:71`–`:72`, `:41`.
-
-A UI não pode ser confundida com porta viva: junta tanto `chamado` como `ninguem` no dono `admin`; isso é agrupamento explícito, não prova de uma ação endereçável. Referência: `app/folha/retrato_folha.py:189`–`:192`. A regra `dono_da_linha` ainda desvia `ninguem` para `hoje` quando todas as datas são hoje/futuras (`:474`–`:481`).
-
-Nenhum dos nomes `o_que_segura`, `_fio_do_dia` ou `pergunta_sem_acao_possivel` está registrado diretamente nos dois catálogos pesquisados `[não verificado]`. O registro contém suas autoridades componentes: `_C1→VIVOS`, `_C6→pergunta_viva`, `_C15→fio_vivo`. Referências: `app/core/juizes.py:233`, `:238`, `:247`. O texto do registro distingue expressamente **chamado vivo** de **fio vivo**, para evitar autorizar `VIVOS` como resposta a “alguém cobra?”. Referência: `app/core/juizes.py:100`–`:106`. `app/docs/JUIZES.md:51`–`:54` ainda traz o lookup antigo “vivo/cobra = VIVOS/COBRANCA”; o próprio documento manda o registro vivo prevalecer (`:11`–`:15`).
-
-Outra função realmente relevante pela **regra**, independente do nome: `resolver_dia_oferecido(dia, hoje)` exige `pode_ultimo_recurso && eh_trabalho && data<hoje && status∈('falta','irregular','aberto','sem_certidao')`; permissão de quem vê fica no template. Referências: `app/colaboradores/services/calendario.py:196`, `:199`–`:205`. `resolver_dia_oferecido_na_data` monta o calendário pelo mesmo caminho da tela e lê esse campo (`:208`–`:216`). Está registrada `_TT11` em `app/core/juizes.py:684`.
-
-O vigia distingue esse clique real de mero status: `resolver_dia_oferecido_na_data` → `decisao_do_dia_pendente`, com comentário explícito de que `em_analise` sozinho não é ação nomeada (`app/chamados/services/vigia_fio.py:294`–`:300`); separa ausência aberta (`:301`–`:306`), FOLGA_CONTESTA validada (`:307`–`:313`) e fio do admin por presença **e dono BATIDA/CADASTRO** na lista (`:314`–`:318`, `:266`).
-
-Lei exata: “CONSUMIDOR (chamado, pergunta, tela, folha) le a lampada, nunca re-julga”; cron vigia só alarma, nunca juiz. Referências: `CLAUDE.md:275`–`:276`.
-
-_795 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_799 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
