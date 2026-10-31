@@ -1,7 +1,173 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 22:40** · publicado em **30/10/2026 22:42** (UTC-3)
+> Ultima resposta processada: **30/10/2026 22:57** · publicado em **30/10/2026 22:58** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 22:57 · sessao abbc739c1d90 · FIO-ESTADO · verificador · origem=Code
+
+**O desenho deixa três lacunas centrais: o esperado novo não está demonstrado, o leitor atual ignora `alcance` e não existe `cor` na sua saída.** (`app/chamados/management/commands/vigiar_fio_morto.py:91`; `bin/fio_estado.py:69–92`.) O valor **388** aparece como requisito de teste no contrato; uma medição atual de produção permanece **[não verificado]**.
+
+1. **Quem escreve e quem lê cada campo**
+
+   | Campo do carimbo | Escritor | Leitor atual / leitura pretendida |
+   |---|---|---|
+   | `alcance.alcance_universo`, `alcance.alcance_cego` | No anexo, `censo_alcance` produz; `vigiar_fio_morto` grava `alcance=alc`. (`anexo_f5.txt:200–225`; implementação integral **[não verificado]**.) | O leitor atual ignora ambos; usa `censo.cego`, que pertence ao universo antigo. (`bin/fio_estado.py:69–92`.) |
+   | `alcance.fio_morto_alcance`, `alcance.alcance_a`…`alcance_e` | Mesmo produtor e escritor do anexo. (`anexo_f5.txt:200–225`; classificação completa **[não verificado]**.) | Hoje não são lidos; o contrato pretende usá-los como manchete e partição **[não verificado: leitor proposto não fornecido]**. (`bin/fio_estado.py:86–92`, `:101–104`.) |
+   | `alcance.alcance_porta_fila`, `alcance_porta_pergunta`, `alcance_de_hoje_pra_frente` e os quatro `alcance_<balde>` | Mesmo fluxo do anexo. (`anexo_f5.txt:200–225`; incrementos **[não verificado]**.) | Hoje ignorados; seriam as parcelas da conferência do universo **[não verificado: implementação futura]**. (`bin/fio_estado.py:69–92`.) |
+   | `alcance.alcance_competencias`, `alcance_e_detalhe`, `alcance_dias` | O anexo os inclui no dicionário carimbado. (`anexo_f5.txt:200–225`; preenchimento integral **[não verificado]**.) | Hoje ignorados; o contrato não especifica quais desses campos serão publicados **[não verificado]**. (`bin/fio_estado.py:82–92`.) |
+   | `censo.fio_morto_alcance` | A F5 copia `alc['fio_morto_alcance']` para o censo carimbado. (`anexo_f5.txt:200–225`.) | Hoje só participaria de `fora_do_esperado` **se também existir a chave em `esperado`**; não é exportado como contador próprio. (`bin/fio_estado.py:70–73`, `:82–92`.) |
+   | `esperado.fio_morto_alcance` | **Não há escritor demonstrado para essa chave:** a declaração atual não a contém, e o trecho F5 apenas copia `ESPERADO_DO_CARIMBO`. (`app/chamados/management/commands/vigiar_fio_morto.py:86–91`; `anexo_f5.txt:200–225`.) | A comparação genérica atual a leria automaticamente, caso existisse; a manchete continuaria antiga. (`bin/fio_estado.py:70–73`, `:101–108`.) |
+
+   Portanto, o texto “esperado 0” de `linhas_alcance` não demonstra `esperado.fio_morto_alcance` no JSON **[não verificado: declaração F5 não fornecida]**. O contrato exige esse dado no carimbo; usar `0` como substituto no leitor contrariaria o desenho atual de expectativa transportada pelo escritor. (`bin/fio_estado.py:14–22`, `:70–73`.)
+
+2. **Estados do carimbo e sua apresentação**
+
+   A coluna “contrato” abaixo descreve a especificação fornecida; sua implementação futura está **[não verificado]**. Hoje o JSON não contém `cor`: “amarelo/verde” aparecem como convenções nos comentários e no selo. (`bin/fio_estado.py:67–92`; `bin/tests/test_fio_estado.sh:14`, `:56–60`.)
+
+   | Estado | Código atual | Contrato |
+   |---|---|---|
+   | Ausente, sem permissão ou JSON sintaticamente inválido | `medido=False`, texto **NUNCA MEDIDO**. (`bin/fio_estado.py:63–68`, `:97–100`.) | AMARELO. |
+   | Antigo: sem `alcance` | Publica o contador antigo normalmente; não reconhece “F5 não pousou”. Pode satisfazer o caso chamado verde pelo selo. (`bin/fio_estado.py:101–104`; `bin/tests/test_fio_estado.sh:40–60`.) | Aviso “carimbo sem alcance”; nunca VERDE. |
+   | Novo, íntegro, com universo positivo | Continua publicando `censo.fio_morto`; ignora a partição. Só acusa o contador novo se ele estiver em `esperado`. (`bin/fio_estado.py:70–73`, `:101–108`.) | Manchete de alcance contra esperado lido; VERDE depende das validações. |
+   | Novo, cego ou universo zero/ausente | Ignora a cegueira de alcance; só escreve **CEGO** quando `censo.cego` é verdadeiro. (`bin/fio_estado.py:91`, `:109–111`.) | VERMELHO. |
+   | Partição quebrada ou espelho `censo` divergente | Não há essas conferências. (`bin/fio_estado.py:69–92`.) | VERMELHO. |
+   | Rodada com `--empresa` | Não altera o carimbo: o painel continua lendo a última fotografia de frota, ou fica nunca medido se ela não existir. (`app/chamados/management/commands/vigiar_fio_morto.py:194–212`; `bin/fio_estado.py:62–68`.) | Não constitui um formato novo de carimbo. |
+   | Temporalmente velho | Acima de 26 horas, marca `velho=True` e avisa no texto. Data ausente/inválida deixa idade desconhecida e `velho=False`. (`bin/fio_estado.py:56`, `:74–84`, `:112–117`.) | A precedência entre idade, erro estrutural e cor não foi especificada **[não verificado]**. |
+
+3. **“Nenhum caminho levanta exceção para o ESTADO” não vale hoje**
+
+   A proteção cobre abertura e decodificação, mas não valida os tipos depois disso: JSON `[1]` falha no `.get`; `censo=[1]` falha na comparação; `medido_em=7` causa `TypeError`, enquanto o tratamento captura apenas `ValueError`. (`bin/fio_estado.py:63–80`.)
+
+   Essas exceções chegam à composição do ESTADO porque importação, leitura e formatação do fio são chamadas sem proteção nessa seção. (`bin/gerar_estado.py:260–261`.) O contrato precisa cobrir também estrutura, tipos e composição da linha; tratar apenas JSON ilegível não basta. (`bin/fio_estado.py:69–120`.)
+
+4. **Há consumidores que mudam de comportamento**
+
+   `gerar_estado` consome o dicionário Python por `ler`/`linha`, não o JSON serializado nem uma chave `cor`; a nova manchete chegará ao painel pela alteração de `linha`. Apenas acrescentar `cor` não a publica. (`bin/gerar_estado.py:260–261`, `:313–315`, `:350`.)
+
+   O consumidor explícito do JSON encontrado é o selo, que lê `medido`, `velho` e as chaves de `fora_do_esperado`. Acrescentar campos preserva essa interface; alterar esses campos muda o teste. Consumidores externos à cópia: **[não verificado]**. (`bin/tests/test_fio_estado.sh:51`.)
+
+   Reaproveitar a chave pública `fio_morto` para guardar alcance mudaria sua semântica: hoje ela significa exatamente `censo.fio_morto`. Preservá-la e acrescentar `fio_morto_alcance` mantém a distinção entre os universos. (`bin/fio_estado.py:86`, `:101–104`.)
+
+5. **Há uma ambiguidade entre manchete nova e regressão antiga**
+
+   Mesmo com alcance correto, o leitor atual continua comparando **todas** as expectativas antigas. Assim, alcance conforme e contador antigo divergente ainda produzem `fora_do_esperado`. (`bin/fio_estado.py:70–73`; `app/chamados/management/commands/vigiar_fio_morto.py:86–91`.)
+
+   O contrato manda rotular o antigo como regressão, mas não determina se essa regressão participa da nova `cor` **[não verificado]**. Essa decisão precisa ficar explícita; trocar apenas a manchete preserva um veredito com escopo antigo. (`bin/fio_estado.py:101–108`.)
+
+6. **Conferir a soma pode ser propriedade fixa, sem virar segundo censo**
+
+   Conferir, entre campos já carimbados, `a+b+c+d+e == fio_morto_alcance`, as partes contra o universo e a igualdade dos dois exemplares do contador é validação de integridade. A L-110 nomeia expressamente “partes somam o total” como propriedade fixa. (`CLAUDE.md:45–51`.)
+
+   A fronteira da LEI-AKITA 2 é reconstruir universo ou classificação: percorrer `alcance_dias`, reaplicar datas, decidir causas ou corrigir os contadores seria derivação própria. (`CLAUDE.md:20–22`; `bin/fio_estado.py:29–34`.) Uma soma que fecha também não prova que os dias foram classificados corretamente; o trecho integral dessa classificação não foi fornecido **[não verificado]**.
+
+7. **Onde pode aparecer “VERDE sem medida”** [nao verificado]
+
+   Hoje, estes casos satisfazem o critério `medido=True`, `velho=False`, `fora_do_esperado={}` que o selo chama verde — embora o leitor não emita uma cor propriamente dita. (`bin/tests/test_fio_estado.sh:51–60`.)
+
+   - `{}` ou `null`: tornam-se registro vazio, com `medido=True`, expectativa vazia e idade desconhecida. (`bin/fio_estado.py:65`, `:69–84`.)
+   - `esperado` ausente/vazio: nenhuma comparação ocorre, mesmo havendo contador não zero. (`bin/fio_estado.py:70–73`.)
+   - Carimbo antigo com contadores conformes: nenhuma medida de alcance é exigida. (`bin/fio_estado.py:69–92`.)
+   - Alcance cego ou universo vazio com censo antigo conforme: a cegueira nova é ignorada. (`bin/fio_estado.py:86–92`, `:109–111`.)
+   - `censo.cego=True`: aparece o aviso textual, mas não entra automaticamente em `fora_do_esperado`; o escritor atual não inclui `cego` em `esperado`. (`app/chamados/management/commands/vigiar_fio_morto.py:80–91`; `bin/fio_estado.py:72–73`, `:109–111`.)
+   - Medição sem data válida: `velho=False` não significa que a fotografia seja recente. (`bin/fio_estado.py:74–84`.)
+
+   Há ainda um desencontro possível de destino: o escritor aceita `VIGIA_FIO_CARIMBO`, enquanto o leitor usa caminho fixo; o selo compara somente as constantes. Se houver redirecionamento, o painel pode continuar lendo outra fotografia. Configuração de produção: **[não verificado]**. (`app/chamados/management/commands/vigiar_fio_morto.py:97–107`; `bin/fio_estado.py:55`, `:62`; `bin/tests/test_fio_estado.sh:93–102`.)
+
+8. **O selo atual e a promessa de pre-push não fecham a garantia nova** [nao verificado]
+
+   O selo fabrica somente formato antigo; não consulta `cor`; seu caso cego exige apenas a palavra **CEGO**. Ele pode continuar passando sem provar alcance, vermelho por cegueira ou aviso de formato antigo. (`bin/tests/test_fio_estado.sh:40–51`, `:104–107`.) As provas por mutação dos casos novos estão **[não verificado]**; a regra exige que o selo morda a costura. (`CLAUDE.md:350–355`.)
+
+   Colocar o novo selo em `bin/tests/test_*.sh` o inclui na régua, mas **não garante execução direta no pre-push**: o próprio script declara que esse loop não roda ali. (`bin/regua.sh:138–145`; `bin/pre-push.sh:12–16`.)
+
+9. **O primeiro carimbo novo não basta para apagar o ramo antigo**
+
+   Uma rodada de recorte não substitui o arquivo; o escritor atual ainda produz o formato antigo. Portanto, observar um primeiro carimbo F5 não demonstra que nenhum antigo possa voltar a existir. (`app/chamados/management/commands/vigiar_fio_morto.py:194–212`.) Essa impossibilidade operacional permanece **[não verificado]**; a L-111 exige retirar o sítio quando ele perde o último uso, junto com testes e pendência. (`CLAUDE.md:341–344`.)
+
+## 30/10 22:55 · sessao bfc8fe859b37 · - · - · origem=Ronald (tmux)
+
+- **Soma como propriedade fixa:** `CLAUDE.md:45-51` define expressamente “partes somam o total” como propriedade fixa da L-110. Conferir igualdades entre contadores já carimbados valida integridade; reconstruir universo, classificar dias ou corrigir números seria derivação própria proibida por `CLAUDE.md:20-22`. Há precedente no selo do produtor: `app/chamados/tests/test_o261_vigia_fio.py:647-668`.
+
+- **Selo atual pode continuar verde sem validar alcance:** gera exclusivamente carimbos antigos (`bin/tests/test_fio_estado.sh:40-48`), observa somente `medido`, `velho` e `fora_do_esperado` (`bin/tests/test_fio_estado.sh:51`) e considera casos antigos “VERDE” (`bin/tests/test_fio_estado.sh:56-91`). Acrescentar `cor=AMARELO` sem alterar essas três saídas não faria esses casos falharem (`bin/tests/test_fio_estado.sh:51`).
+
+- **Cegueira atual não prova vermelho:** o caso apenas procura `CEGO` no texto, sem conferir campo `cor` ou veredito (`bin/tests/test_fio_estado.sh:104-107`). O selo exige caso que morda a costura; texto presente sozinho não demonstra a cor exigida (`CLAUDE.md:350-355`).
+
+- **Mutações prometidas:** o arquivo atual encerra declarando sete casos, mas não executa mutações de leitor (`bin/tests/test_fio_estado.sh:109`). A comprovação por mutação dos novos casos permanece **[não verificado]**.
+
+- **L-111:** apagar o ramo antigo exige demonstrar que perdeu seu último uso; primeiro carimbo novo isoladamente não demonstra impossibilidade de carimbo antigo retornar **[não verificado]**. A lei manda retirar sítio sem chamador, testes e pendência no mesmo commit (`CLAUDE.md:341-344`). [nao verificado]
+
+- **Entrada dos selos:** a régua enumera `bin/tests/test_*.sh` (`bin/regua.sh:138`); o pre-push documenta que esse diretório não roda diretamente ali (`bin/pre-push.sh:15`).
+
+## 30/10 22:55 · sessao 70a74bc5d59a · - · - · origem=Ronald (tmux)
+
+- O consumidor de produção encontrado é `gerar_estado`: importa `ler`/`linha`, passa o dicionário inteiro a `linha` e publica o texto resultante. Não consulta `cor`, `alcance` ou contadores diretamente; a mudança de manchete chega ao ESTADO pela alteração de `linha`. (`bin/gerar_estado.py:260-261`, `bin/gerar_estado.py:313-315`, `bin/gerar_estado.py:350`)
+
+- O consumidor do JSON encontrado é o selo atual: consulta somente `medido`, `velho` e as chaves de `fora_do_esperado`; também importa `CARIMBO`. Acrescentar campos preservando esses campos mantém essa interface; renomeá-los/removê-los rompe o selo. (`bin/tests/test_fio_estado.sh:51`, `bin/tests/test_fio_estado.sh:97`)
+
+- O JSON público atual contém `fio_morto=censo.fio_morto`; a linha também lê esse campo. Reutilizar `fio_morto` para conter alcance mudaria sua semântica; acrescentar `fio_morto_alcance` e preservar o antigo evita essa troca. Consumidores externos à cópia: [não verificado]. (`bin/fio_estado.py:86`, `bin/fio_estado.py:101-104`, `bin/fio_estado.py:129`)
+
+- F5 só escrever `esperado.fio_morto_alcance` e `censo.fio_morto_alcance` já faria o leitor atual acrescentar esse desvio a `fora_do_esperado`, porque ele itera todas as expectativas. Isso não muda a manchete, que continua no contador antigo. (`bin/fio_estado.py:69-73`, `bin/fio_estado.py:101-108`)
+
+- O selo antigo só cria carimbos sem `alcance`. Seus casos chamados VERDE verificam `True|False|-`; não verificam `cor`. Portanto acrescentar `cor=AMARELO` para formato antigo pode preservar esses testes, mas o selo continuará chamando esses casos de VERDE sem testar o novo significado. (`bin/tests/test_fio_estado.sh:40-48`, `bin/tests/test_fio_estado.sh:51`, `bin/tests/test_fio_estado.sh:56-60`, `bin/tests/test_fio_estado.sh:82-86`)
+
+- A régua executa automaticamente `bin/tests/test_*.sh`; o pre-push não executa esse loop e declara isso expressamente. Colocar o novo selo em `bin/tests/` garante sua descoberta pela régua, mas não sua execução direta a cada pre-push. O hook instalado real é [não verificado]. (`bin/regua.sh:138-145`, `bin/pre-push.sh:12-19`, `bin/pre-push.sh:61-66`)
+
+- O instalador vigente usa `bin/pre-push.sh` como fonte e gera wrapper que executa esse caminho; a cópia histórica de `app/core/hooks/pre-push.sh` não é o alvo declarado por esse instalador. (`bin/hooks.sh:9-11`, `bin/hooks.sh:51-56`)
+
+## 30/10 22:54 · sessao 9ae75d7ba88f · O261-V-FASE · verificador · origem=Code
+
+**Sem achado procedente no delta examinado:** C9 e C10 passam pelo mesmo mapa dono→porta; BATIDA abre regularização, ESTRUTURA fica sem URL e somente CADASTRO recebe a porta específica da assinatura (`app/escala/services/cadastro_realidade.py:481`, `app/escala/services/cadastro_realidade.py:490`, `app/escala/services/cadastro_realidade.py:518`).
+
+1. **Quem escreve e quem lê**
+
+- **C9:** `lavrar_teto_do_dia` chama medição e persistência; a medição pergunta a `InsumosDoDono.dono()` e grava `dono` no detalhe do snapshot (`app/ponto/management/commands/lavrar_teto_do_dia.py:28`, `app/ponto/management/commands/lavrar_teto_do_dia.py:34`, `app/ponto/services/teto_na_lista.py:86`, `app/ponto/services/teto_na_lista.py:113`). `_teto_do_dia()` lê a lavra e copia esse valor para `dono_do_dia` (`app/escala/services/cadastro_realidade.py:320`, `app/escala/services/cadastro_realidade.py:325`).
+- **C10:** o censo monta `InsumosDoDono` com os dias de fase daquela corrida, pergunta o dono de cada dia e grava `dono_do_dia`; `fase_12x36.lavrar()` persiste o detalhe (`app/ponto/management/commands/censo_fase_12x36.py:260`, `app/ponto/management/commands/censo_fase_12x36.py:262`, `app/ponto/management/commands/censo_fase_12x36.py:272`, `app/escala/services/fase_12x36.py:90`). `_fase_deslocada()` lê a lavra até `hoje` e preserva o dono (`app/escala/services/cadastro_realidade.py:343`, `app/escala/services/cadastro_realidade.py:346`).
+- **Juiz comum:** `InsumosDoDono.dono()` chama `dono_da_divergencia()`; a lista recebe o resultado lavrado de cada assinatura e calcula `acao`/`url` (`app/ponto/management/commands/e6_oraculo.py:166`, `app/ponto/management/commands/e6_oraculo.py:173`, `app/escala/services/cadastro_realidade.py:657`, `app/escala/services/cadastro_realidade.py:661`, `app/escala/services/cadastro_realidade.py:664`).
+- **Tela/PDF:** a view fornece a mesma lista aos dois destinos. O template lê dono, ação e URL; o PDF imprime dono e ação, sem hyperlink da porta (`app/escala/views.py:490`, `app/escala/views.py:492`, `app/escala/views.py:495`, `app/templates/escala/cadastro_x_realidade.html:28`, `app/escala/services/cadastro_realidade.py:794`, `app/escala/services/cadastro_realidade.py:797`).
+- **Vigia:** lê `dono_do_dia` por `dias_na_lista()`, sem consultar o texto do botão. C9/C10 conflitantes resultam em `None`; somente BATIDA/CADASTRO entram em `fio_do_admin`, mantendo ESTRUTURA no alarme (`app/escala/services/cadastro_realidade.py:728`, `app/escala/services/cadastro_realidade.py:731`, `app/escala/services/cadastro_realidade.py:753`, `app/chamados/services/vigia_fio.py:259`, `app/chamados/services/vigia_fio.py:266`, `app/chamados/services/vigia_fio.py:314`).
+
+2. **Mapa, rótulos e leitores antigos**
+
+Não restaram dois mapas nesses caminhos. As diferenças entre C9 e C10 são os destinos de **CADASTRO**: template/vínculo na C9; fio ou “só listado”, conforme `aplicavel`, na C10. BATIDA passa à regularização inclusive antes do piso; ESTRUTURA e dono ausente não recebem porta de cadastro (`app/escala/services/cadastro_realidade.py:478`, `app/escala/services/cadastro_realidade.py:484`, `app/escala/services/cadastro_realidade.py:519`).
+
+O novo rótulo “o do juiz do dia, e6_oraculo…” alimenta `por_assinatura` e aparece no **title do selo superior**. O PDF imprime o dono efetivo do dia — BATIDA/CADASTRO/ESTRUTURA — e não essa frase agregada (`app/escala/services/cadastro_realidade.py:118`, `app/escala/services/cadastro_realidade.py:699`, `app/templates/escala/cadastro_x_realidade.html:19`, `app/escala/services/cadastro_realidade.py:796`).
+
+Não localizei leitor executável dependente dos textos antigos. Os testes C9 encontrados prendem dono e URLs; “Regularizar a saida do dia” permanece no relato histórico (`app/ponto/tests/test_col129_teto_vira_lista.py:215`, `app/ponto/tests/test_col129_teto_vira_lista.py:226`, `app/docs/RELATO.md:151`). A prosa alterada explicita a morte de `fora_de_fase` e a leitura da lavra (`app/chamados/services/proposta_no_fio.py:22`, `app/core/tests/test_selo_performance.py:141`).
+
+3. **Os testes mordem?** [nao verificado]
+
+**Sim, para os dois defeitos visados:** um cria batida extra real, percorre censo→lavra→lista e exige dono BATIDA com URL de regularização; o outro exige identificação do juiz no rótulo agregado (`app/escala/tests/test_o261_v_fase_na_lista.py:193`, `app/escala/tests/test_o261_v_fase_na_lista.py:206`).
+
+A cobertura nova é parcial: não prende ESTRUTURA, dono ausente, BATIDA antes do piso nem renderização do title/PDF; o teste do rótulo aceita uma substring (`app/escala/tests/test_o261_v_fase_na_lista.py:193`, `app/escala/tests/test_o261_v_fase_na_lista.py:209`).
+
+Exercitei em memória 20 combinações de C9/C10, piso e dono, coerentes com o mapa; a comparação isolada reproduziu base→fio e cópia→regularização para C10/BATIDA (`app/escala/services/cadastro_realidade.py:478`, `app/escala/services/cadastro_realidade.py:511`). **Execução dos testes Django e renderização real: [não verificado]**; faltam as dependências neste ambiente.
+
+## 30/10 22:53 · sessao d7a63fdce16d · - · - · origem=Ronald (tmux)
+
+Nenhum defeito concreto encontrado neste recorte.
+
+- Os dois testes novos exercitam comportamento: Batida extra real → censo/lavra → lista → dono BATIDA e URL de regularização; outro verifica a identificação do juiz no rótulo agregado. `app/escala/tests/test_o261_v_fase_na_lista.py:193`, `app/escala/tests/test_o261_v_fase_na_lista.py:206`.
+- Confirmei por execução de AST em memória, usando `python3 -B`, 32 combinações entre base/alvo, C9/C10, quatro donos e piso aplicável/inaplicável: base encaminhava C10 aplicável BATIDA/ESTRUTURA/sem dono ao fio; alvo encaminha BATIDA à regularização, ESTRUTURA/sem dono a nenhuma URL, preservando CADASTRO conforme piso. Código exercitado: `app/escala/services/cadastro_realidade.py:478`, `app/escala/services/cadastro_realidade.py:511`. Não executei a integração Django: `[não verificado]`.
+- Lacunas dos dois testes adicionados: não verificam ESTRUTURA, ausência de dono, BATIDA anterior ao piso, renderização do `title` nem extração do PDF; a asserção do rótulo é somente substring. `app/escala/tests/test_o261_v_fase_na_lista.py:193`, `app/escala/tests/test_o261_v_fase_na_lista.py:209`.
+- O texto novo aparece no `title` do selo agregado, lido de `por_assinatura`; a linha da tela usa dono efetivo. `app/templates/escala/cadastro_x_realidade.html:19`, `app/templates/escala/cadastro_x_realidade.html:28`.
+- O PDF não imprime o rótulo novo agregado: imprime `a['dono']` por dia e `a['acao']`, após a sobreposição do dono lavrado. `app/escala/services/cadastro_realidade.py:660`, `app/escala/services/cadastro_realidade.py:666`, `app/escala/services/cadastro_realidade.py:794`.
+- Não achei leitor/teste do texto antigo exato; única ocorrência restante de “Regularizar a saida do dia” está no relato histórico. `app/docs/RELATO.md:151`. Os testes C9 existentes dependem das URLs e donos, preservados: `app/ponto/tests/test_col129_teto_vira_lista.py:215`, `app/ponto/tests/test_col129_teto_vira_lista.py:226`.
+- A prosa alterada declara a morte de `fora_de_fase` e a leitura da lavra; o parágrafo anterior permanece como explicação histórica de custo. `app/chamados/services/proposta_no_fio.py:15`, `app/chamados/services/proposta_no_fio.py:22`, `app/core/tests/test_selo_performance.py:141`.
+
+## 30/10 22:53 · sessao ba5d8129f418 · - · - · origem=Ronald (tmux)
+
+Não encontrei defeito procedente na cadeia dono→porta examinada; C9 e C10 chamam o mesmo mapa, que só entrega a porta de cadastro para `CADASTRO` (`app/escala/services/cadastro_realidade.py:481`, `:490`, `:518`).
+
+- **C9 escreve:** `medir()` monta `InsumosDoDono` e grava seu resultado em `dono` (`app/ponto/services/teto_na_lista.py:72`, `:86`); `lavrar()` persiste o detalhe em `MetricaSnapshot` (`:110`, `:113`). O comando chama medição e grava somente com `--apply` (`app/ponto/management/commands/lavrar_teto_do_dia.py:28`, `:31`, `:34`).
+- **C10 escreve:** o censo identifica os dias e respectivos vínculos/templates (`app/ponto/management/commands/censo_fase_12x36.py:210`), pergunta pelo dono ao mesmo `InsumosDoDono`, passando os dias de fase desta corrida (`:255`, `:260`, `:262`), e inclui `dono_do_dia` nos itens (`:272`). `fase_12x36.lavrar()` persiste esse detalhe (`app/escala/services/fase_12x36.py:84`, `:90`).
+- **Juiz comum:** `InsumosDoDono.dono()` passa as informações de batida, fase e cadastro para `dono_da_divergencia()` (`app/ponto/management/commands/e6_oraculo.py:166`, `:169`, `:173`, `:176`). A precedência implementada é cadastro inválido, batida fora do turno/contagem ímpar, fase, demais casos (`:97`).
+- **Leitura e composição:** C9 lê o último snapshot (`app/ponto/services/teto_na_lista.py:120`) e copia `dono` para `dono_do_dia` (`app/escala/services/cadastro_realidade.py:318`, `:325`); C10 lê a lavra até `hoje` (`app/escala/services/fase_12x36.py:96`, `:103`; `app/escala/services/cadastro_realidade.py:343`, `:346`). A lista passa o dono de cada dia à ação e sobrepõe o dono genérico da assinatura (`app/escala/services/cadastro_realidade.py:653`, `:657`, `:660`, `:661`, `:664`).
+- **Porta comum:** BATIDA→`Regularizar a batida do dia` + regularização do colaborador; CADASTRO→porta específica recebida; ESTRUTURA→sistema sem URL; ausente→aguardar lavra sem URL (`app/escala/services/cadastro_realidade.py:518`). A porta CADASTRO da C9 é o template do dia ou vínculo (`:481`); da C10 é fio se aplicável, senão só listado (`:490`).
+- **Tela e PDF:** a view entrega a mesma lista para HTML ou PDF (`app/escala/views.py:490`, `:491`, `:495`). O HTML da linha lê dono efetivo, ação e URL (`app/templates/escala/cadastro_x_realidade.html:28`); PDF lê dono efetivo e ação, sem URL (`app/escala/services/cadastro_realidade.py:794`, `:796`, `:797`).
+- **Novo rótulo C10:** a frase “o do juiz do dia…” está na definição (`app/escala/services/cadastro_realidade.py:118`), alimenta `por_assinatura` (`:699`, `:700`) e aparece no `title` do selo superior (`app/templates/escala/cadastro_x_realidade.html:19`). Não aparece como frase no PDF; o PDF usa o dono efetivo da linha (`app/escala/services/cadastro_realidade.py:796`).
+- **Vigia:** `dias_na_lista()` lê `dono_do_dia` da própria lista e resolve conflitos entre C9/C10 sem depender da ordem (`app/escala/services/cadastro_realidade.py:728`, `:731`, `:748`, `:753`). O vigia chama lista e leitor uma vez e aceita exclusivamente BATIDA/CADASTRO (`app/chamados/services/vigia_fio.py:255`, `:259`, `:266`); ESTRUTURA permanece em `fio_morto` (`:314`, `:324`).
+- **Texto antigo:** a busca encontrou “Regularizar a saida do dia” apenas em relato histórico, sem dependência de código identificada nessa busca (`app/docs/RELATO.md:151`). O novo texto vem do helper único (`app/escala/services/cadastro_realidade.py:520`).
+
+Executei, sem importar Django e sem escrita, as funções extraídas por AST numa matriz de 16 casos: C9/C10 × aplicável/não aplicável × BATIDA/CADASTRO/ESTRUTURA/ausente. Os resultados confirmaram o mapa acima (`app/escala/services/cadastro_realidade.py:478`, `:511`); integração com banco/renderização real não executada [não verificado].
 
 ## 30/10 22:40 · sessao bc2cecd364ad · O261-E-CELULA-20 · verificador · origem=Code
 
@@ -407,152 +573,4 @@ O vigia distingue esse clique real de mero status: `resolver_dia_oferecido_na_da
 
 Lei exata: “CONSUMIDOR (chamado, pergunta, tela, folha) le a lampada, nunca re-julga”; cron vigia só alarma, nunca juiz. Referências: `CLAUDE.md:275`–`:276`.
 
-## 30/10 22:28 · sessao 6542be814925 · O261-V-FASE · verificador · origem=Code
-
-**Achei uma lacuna procedente de cobertura: o teste do `hoje` não morde `lista()`.** O repasse está correto na cópia atual. (`app/escala/tests/test_o261_v_fase_na_lista.py:344–349`; `app/escala/services/cadastro_realidade.py:611`)
-
-A cópia está sem `.git`; a comparação efetiva `33bb7451..0b1d91f2` e a atribuição exata de cada mudança ao delta ficam **[não verificado]**.
-
-**1. Quem escreve e quem lê**
-
-- O censo fornece os dias recém-julgados em `dias_de_fase`, pergunta o dono e grava `dono_do_dia` nos itens. O escritor persistente é `fase_12x36.lavrar`. (`app/ponto/management/commands/censo_fase_12x36.py:260–276`; `app/escala/services/fase_12x36.py:84–92`)
-- `InsumosDoDono` recebe esses dias ou lê `ultimo_lavrado(self.hoje)`, filtrando pelo colaborador. `dono()` transforma a presença do dia em `fase_deslocada=True`; o juiz lê esse argumento depois dos ramos de BATIDA. (`app/ponto/management/commands/e6_oraculo.py:135`; `:159–176`; `:103–108`)
-- No pré-filtro das pautas, `_fase = _ins.fase()` alimenta `fase_deslocada`; somente a resposta `ESTRUTURA` provoca `_ins.cxr()`. O julgamento final passa por `_ins.dono()`. (`app/ponto/management/commands/pautas_discordantes.py:96–109`)
-- `DONO_PELO_JUIZ = {'C9', 'C10'}` é lido por `_dono_resolvido`, chamado por `dias_na_lista`; donos divergentes nesse nível devolvem `None`. (`app/escala/services/cadastro_realidade.py:710–721`; `:744`)
-- `lista()` passa seu `hoje` a `_fase_deslocada`, que o repassa a `ultimo_lavrado`; o leitor aplica `data_ref__lte=ate`. (`app/escala/services/cadastro_realidade.py:611`; `:340`; `app/escala/services/fase_12x36.py:103–105`)
-- O censo captura `_agora` uma vez, deriva `_hoje` dele e repassa o mesmo instante ao carregador do dono. (`app/ponto/management/commands/censo_fase_12x36.py:62–64`; `:260`)
-
-**2. Falhas e limites encontrados**
-
-- **C9/C10 divergentes por horário: proteção efetiva.** O contraexemplo C9=`ESTRUTURA`, C10=`CADASTRO` resolve para `None`; o vigia só retira do alarme donos `BATIDA`/`CADASTRO`. Portanto, esse conflito permanece em `fio_morto`. (`app/escala/tests/test_o261_v_fase_na_lista.py:326–335`; `app/chamados/services/vigia_fio.py:266`; `:314–324`)
-- **Resíduo no pré-filtro:** dia par, sem fase e sem vínculo retorna provisoriamente `ESTRUTURA`, porque o pré-filtro não passa `sem_vinculo_no_dia`. Pede motor; se falhar, descarta o colaborador, embora o julgamento completo desse dia fosse `CADASTRO`. O caminho existe; ser introduzido pelo delta é **[não verificado]**. (`app/ponto/management/commands/pautas_discordantes.py:97–106`; `app/ponto/management/commands/e6_oraculo.py:97–98`; `:169–171`)
-- **Resíduo temporal em C9:** uma consulta com `hoje=29/10` pode combinar C10 limitada a 29/10 com C9 lavrada em 30/10, pois C9 continua lendo a última lavra sem corte. Ocorrência em produção e pertencimento ao delta: **[não verificado]**. (`app/escala/services/cadastro_realidade.py:319`; `:340`; `app/ponto/services/teto_na_lista.py:120–124`)
-- **Custo:** a fase é carregada por instância de `InsumosDoDono`, consultando a lavra e percorrendo seus itens; C9 instancia por colaborador/competência. O censo evita essa consulta ao injetar os dias. Impacto real de custo: **[não verificado]**. (`app/ponto/management/commands/e6_oraculo.py:159–164`; `app/ponto/services/teto_na_lista.py:67–72`; `app/ponto/management/commands/censo_fase_12x36.py:260–261`)
-- Não encontrei outro caminho de julgamento ignorando a fase. O comando E6 ainda pede espelho antecipadamente, mas o utiliza para comparar os minutos da tela; isso não demonstra pedido indevido do motor. (`app/ponto/management/commands/e6_oraculo.py:297–309`; `:323`; `:359`)
-
-**3. Os testes mordem o chamador?** [nao verificado]
-
-- **Pautas: sim.** Executa `Command.apurar`, faz `cxr()` explodir e exige a permanência do colaborador como `CADASTRO`. (`app/escala/tests/test_o261_v_fase_na_lista.py:385–396`)
-- **Conflito C9/C10: sim, em `dias_na_lista`.** Testa ambas as ordens e donos concordantes. (`app/escala/tests/test_o261_v_fase_na_lista.py:326–335`)
-- **Relógio: sim, por AST.** O selo inclui `InsumosDoDono` entre os alvos e examina funções chamadoras para detectar leituras adicionais. (`app/escala/tests/test_selo_grade_pede_o_instante.py:27`; `:93–120`; `:154–170`)
-- **C10/hoje: não no chamador `lista()`.** O teste chama diretamente o auxiliar. Confirmei em execução isolada, em memória: retirar apenas `hoje` da chamada de `lista()` mantém esse teste aprovado e permite trazer a lavra posterior no contraexemplo acima. Os testes integrados também congelam o relógio na mesma data de `HOJE`, sem distinguir os dois caminhos. (`app/escala/services/cadastro_realidade.py:611`; `app/escala/tests/test_o261_v_fase_na_lista.py:344–349`; `:37`; `:84–86`; `:177`)
-
-Resultado da suíte Django e impacto em produção: **[não verificado]**. [nao verificado]
-
-## 30/10 22:27 · sessao 7befcc06756a · - · - · origem=Ronald (tmux)
-
-- **C9/C10 divergentes:** a C9 pergunta ao juiz com a lavra disponível (`app/ponto/services/teto_na_lista.py:72`, `:86`); a C10 passa os dias julgados na própria corrida (`app/ponto/management/commands/censo_fase_12x36.py:260`). Lavras em horários diferentes podem divergir; isso tem tratamento explícito: ambos pertencem a `DONO_PELO_JUIZ`, e conflito retorna `None` (`app/escala/services/cadastro_realidade.py:707`, `:718`). O vigia mantém o dia alarmado porque só aceita `BATIDA`/`CADASTRO` (`app/chamados/services/vigia_fio.py:266`). Teste cobre ambas as ordens (`app/escala/tests/test_o261_v_fase_na_lista.py:326`).
-- **Relógio do censo:** `handle` captura `_agora` uma vez, deriva `_hoje` dele e passa esse instante a `InsumosDoDono` (`app/ponto/management/commands/censo_fase_12x36.py:62`, `:63`, `:260`). Não encontrei segunda leitura do relógio nesse `handle`; `_curar` possui relógio próprio, fora da corrida normal `--lavrar` (`:341`).
-- **Custo estático:** cada instância de `InsumosDoDono` sem override faz uma consulta da lavra e percorre todos os seus itens para selecionar um colaborador (`app/ponto/management/commands/e6_oraculo.py:159`). A C9 cria instâncias por colaborador/competência (`app/ponto/services/teto_na_lista.py:67`). Há repetição proporcional ao número de instâncias × tamanho da lavra; impacto e duração em produção [não verificado]. O censo fornece override e evita essa consulta (`app/ponto/management/commands/censo_fase_12x36.py:260`).
-- **Hoje:** `lista` passa `hoje` ao helper C10, e este o repassa a `ultimo_lavrado` (`app/escala/services/cadastro_realidade.py:611`, `:340`). O teste novo chama somente o helper; não prova esse repasse por `lista` (`app/escala/tests/test_o261_v_fase_na_lista.py:344`).
-- **Porta C10:** continua baseada em `aplicavel`, independentemente do novo dono (`app/escala/services/cadastro_realidade.py:490`, `:651`). Não classificaria como defeito: a lei registrada exige precisamente a proposta aceita no fio (`app/escala/tests/test_o261_v_fase_na_lista.py:6`).
-- **Relógio adjacente:** `lavrar_teto_do_dia.handle` lê `localdate`, e `medir` captura outro instante (`app/ponto/management/commands/lavrar_teto_do_dia.py:27`; `app/ponto/services/teto_na_lista.py:49`). Inclusão disso no delta [não verificado].
-
-Não identifiquei falha adicional procedente no recorte C9/C10; comparação efetiva com `33bb7451` [não verificado].
-
-## 30/10 22:26 · sessao c8f5af10b82b · - · - · origem=Ronald (tmux)
-
-Cobertura parcial do chamador:
-
-- **C10/hoje: selo insuficiente.** O teste chama `_fase_deslocada` diretamente e só verifica o repasse a `ultimo_lavrado`; não exerce `lista()` (`app/escala/tests/test_o261_v_fase_na_lista.py:344-349`). Contra-exemplo de mutação: retirar `hoje` da chamada em `app/escala/services/cadastro_realidade.py:611` preserva esse teste. Os testes integrados também usam `lista(hoje=HOJE)` com relógio congelado no mesmo dia, portanto não distinguem o default incorreto (`app/escala/tests/test_o261_v_fase_na_lista.py:37`, `84-86`, `177`). Execução dessa mutação: [não verificado].
-- **Pautas: morde o chamador.** Executa `Command().apurar`, injeta um dia lavrado, faz `InsumosDoDono.cxr` explodir e exige que o colaborador permaneça com dono `CADASTRO` (`app/escala/tests/test_o261_v_fase_na_lista.py:385-396`). Remover a fase do pré-filtro faz o ramo pedir o motor e descartar o colaborador (`app/ponto/management/commands/pautas_discordantes.py:96-106`).
-- **C9/C10 divergentes: morde `dias_na_lista`.** Exercita ambas as ordens com `ESTRUTURA`/`CADASTRO` e exige `None`, além do controle positivo com donos iguais (`app/escala/tests/test_o261_v_fase_na_lista.py:326-335`).
-- **Instante único: selo tem mordida no censo.** `InsumosDoDono` integra os alvos; o selo conta leituras de relógio em funções chamadoras, incluindo funções aninhadas (`app/escala/tests/test_selo_grade_pede_o_instante.py:27`, `93-120`, `154-170`). Executei apenas o analisador AST em memória: original sem achados; `_tz.localdate()` em lugar da derivação de `_agora` acusa linhas 62/63; `agora=_tz.now()` no repasse acusa linhas 62/260 (`app/ponto/management/commands/censo_fase_12x36.py:62-63`, `260`). Nenhum arquivo foi gravado.
-
-A suíte Django e a identificação exata dos testes introduzidos pelo delta permanecem [não verificado]; a cópia não contém `.git`. [nao verificado]
-
-## 30/10 22:26 · sessao 74f5cacdedef · - · - · origem=Ronald (tmux)
-
-Não achei leitor de produção que passe pelo juiz e ignore a fase: os quatro caminhos usam `InsumosDoDono`, cujo `dono()` transmite `fase_deslocada` ao juiz. (`app/ponto/management/commands/e6_oraculo.py:159-176`; `app/ponto/management/commands/pautas_discordantes.py:82,109`; `app/ponto/services/teto_na_lista.py:72,86`; `app/ponto/management/commands/censo_fase_12x36.py:260-262`.)
-
-O comando E6 continua pedindo o motor antecipadamente, mas precisa do espelho para a própria comparação; isso sozinho não demonstra defeito. (`app/ponto/management/commands/e6_oraculo.py:297-309,323`.)
-
-O pré-filtro das pautas transmite a fase, porém ainda omite os demais insumos do dono: um dia par sem vínculo, sem fase, retorna provisoriamente ESTRUTURA e pede motor; se esse motor falhar, descarta o colaborador antes de descobrir CADASTRO. O mesmo vale para turno aberto com contagem par. A omissão parece herdada, mas pertencimento ao delta é [não verificado]. (`app/ponto/management/commands/pautas_discordantes.py:97-106`; `app/ponto/management/commands/e6_oraculo.py:97-109,169-171`.)
-
-A divergência entre C9 e C10 por horários distintos resolve para `None`, e o consumidor mantém o dia no alarme: apenas BATIDA/CADASTRO entram em `fio_do_admin`; os demais seguem para `fio_morto`. (`app/escala/services/cadastro_realidade.py:707-721`; `app/chamados/services/vigia_fio.py:266,314-324`.)
-
-Há uma limitação temporal residual em C9: `_teto_do_dia()` lê a última lavra sem limitar pelo `hoje`, enquanto C10 agora limita. Contra-exemplo: consulta histórica de 29/10 pode combinar C9 de 30/10 com C10 até 29/10. A existência do caminho está comprovada; atribuição ao delta e ocorrência em produção são [não verificado]. (`app/escala/services/cadastro_realidade.py:315-322,335-340`; `app/ponto/services/teto_na_lista.py:120-124`.)
-
-O custo estático inclui uma leitura da lavra por instância de `InsumosDoDono`; C9 instancia por competência e colaborador. O censo injeta seus próprios dias e evita essa leitura. Custo real é [não verificado]. (`app/ponto/management/commands/e6_oraculo.py:132-135,159-164`; `app/ponto/services/teto_na_lista.py:67-72`; `app/ponto/management/commands/censo_fase_12x36.py:260-261`.)
-
-## 30/10 22:20 · sessao 7af13b19947f · E1-BATERIA · red · origem=Code
-
-Criado somente [app/ponto/tests/test_e1_lote3.py](/home/ronald/codex_ws/red_21b9db3852a8_20261030_221425_3149041/app/ponto/tests/test_e1_lote3.py), com 20 casos. Sintaxe e estrutura verificadas sem gerar arquivos auxiliares. Suite Django não executada; RED ainda não medido. [nao verificado]
-
-Valores abaixo em minutos, salvo DSR.
-
-| ID | Esperado | Regra | Origem |
-|---|---|---|---|
-| L01 | Trabalhado 480; atraso/antecipada 0; dia na lista | L-084 | S14 corrigido |
-| L02 | Skip: status não definido | L-084; ADR | S14 corrigido |
-| L03 | `ok` nos sete leitores | CLT 58/74; ADR | S01 ampliado |
-| L04 | `folga` | CLT 67; L-024 | S05 ampliado |
-| L05 | `ausencia` | Lei 605/49 art.6; L-089 | S07 ampliado |
-| L06 | `falta` decidida | L-039; Lei 605/49 art.6 | S08 ampliado |
-| L07 | Início noturno: `ok` | CLT 59-A; L-085; D3 | S15 ampliado |
-| L08 | Cauda no dia seguinte: `folga` | L-085; L-024; D3 | S16 ampliado |
-| L09 | Pré-admissão: `sem_dados` | CLT 4; L-112; D3 | S20 ampliado |
-| L10 | Sem batida, antes da entrada: `previsto` | D4 | S03 ampliado |
-| L11 | Skip: regime 24x48 integral | CLT 58/59/71/73 | Novo |
-| L12 | Skip: 24x48 com saída às 06h | CLT 58/59/71/73 | Novo |
-| L13 | Sábado: trabalhado 240; HE 0 | CLT 58/59/71; L-024 | Novo |
-| L14 | Sábado: trabalhado 300; HE50 60 | CLT 59 §1; 71 §1 | Novo |
-| L15 | Intermitente: trabalhado 180; descontos 0 | CLT 452-A/4 | Novo |
-| L16 | Intermitente sem convocação: trabalho/falta 0 | CLT 452-A | Novo |
-| L17 | Municipal local: trabalhado 480; dobra 480 | Lei 605/49 arts.8/9; Súmula 146 | Novo |
-| L18 | Outra praça: trabalhado 480; dobra/HE 0 | Alcance municipal; Lei 605/49 | Novo |
-| L19 | DSR: 0 semanas mantidas; 1 perdida | Lei 605/49 art.6; L-039 | Novo |
-| L20 | DSR: 1 semana mantida; 0 perdidas | Lei 605/49 arts.1/6; CLT 67 | Novo |
-
-A grade de 44h usa ciclo **semanal**, com cinco jornadas de 8h e sábado de 4h: são seis dias de trabalho.
-
-Perguntas registradas como skips:
-
-- **L02:** qual palavra e retenção correspondem ao cadastro × realidade?
-- **L11/L12:** qual norma autoriza o 24x48 e define intervalo, noturno e HE? As alternativas numéricas estão abertas nas docstrings.
-- **Subtests dos leitores:** qual tradução corresponde aos vocabulários paralelos sem mapa declarado?
-- **L07, subtests específicos:** como consultar o dia histórico em `minha_escala` e no painel, cujas portas não oferecem esse recorte?
-
-## 30/10 22:19 · sessao fee802eca215 · O261-V-FASE · verificador · origem=Code
-
-**Há achados procedentes de integração: a chamada direta das pautas ignora a fase, e a resolução da lista ainda rebaixa C10 apesar de seu dono agora vir do e6.** Há também diferença temporal entre as lavras lidas pelo juiz e pela C10. (`app/ponto/management/commands/pautas_discordantes.py:94`; `app/escala/services/cadastro_realidade.py:708`; `app/ponto/management/commands/e6_oraculo.py:162`; `app/escala/services/cadastro_realidade.py:339`.)
-
-1. **Pautas: falta repassar a fase, mas só acrescentar o argumento não resolve.** O pré-filtro chama `dono_da_divergencia(horas, False)` e pede o motor para qualquer resposta diferente de BATIDA. Se `cxr()` falhar, descarta o colaborador antes da decisão completa por `_ins.dono()`. (`app/ponto/management/commands/pautas_discordantes.py:93-104`.)
-
-   Contraexemplo: único dia discordante, fase lavrada, cadastro válido, nenhuma batida e motor indisponível. O juiz completo devolveria CADASTRO sem motor; o pré-filtro força `cxr()` e produz apuração vazia. Mesmo passando `fase_deslocada=True`, `CADASTRO != BATIDA` continua verdadeiro: é preciso consumir a decisão com os insumos completos e sua economia existente. (`app/ponto/management/commands/e6_oraculo.py:107`; `app/ponto/management/commands/e6_oraculo.py:169-176`; `app/ponto/management/commands/pautas_discordantes.py:94-101`.)
-
-   Em `--apply`, essa ausência pode fechar pauta existente, pois a sincronização fecha as chaves que saíram do alvo. (`app/ponto/management/commands/pautas_discordantes.py:113`; `app/ponto/services/pautas_dos_discordantes.py:165-179`.)
-
-2. **C10 agora é resposta do e6, mas `dias_na_lista` continua privilegiando C9.** O censo grava `dono_do_dia` perguntando ao juiz; entretanto, `DONO_PELO_JUIZ` contém somente C9 e o comentário ainda atribui C10 à função apagada. Isso contradiz o contrato local de que donos divergentes do mesmo nível produzem `None`. (`app/ponto/management/commands/censo_fase_12x36.py:260-274`; `app/escala/services/cadastro_realidade.py:706-719`.)
-
-   Contraexemplos: C9=CADASTRO/C10=BATIDA resulta CADASTRO; C9=ESTRUTURA/C10=CADASTRO resulta ESTRUTURA. O segundo mantém o alarme mesmo diante de outra resposta do mesmo juiz. A combinação ESTRUTURA/CADASTRO é inclusive exigida pelo selo antigo; ocorrência dessas combinações na frota real **[nao verificado]**. (`app/escala/services/cadastro_realidade.py:716-719`; `app/escala/tests/test_o261_v_fase_na_lista.py:326-332`; `app/chamados/services/vigia_fio.py:266`.)
-
-3. **C10 perde o corte temporal recebido pela lista.** O juiz lê `ultimo_lavrado(self.hoje)`; C10 chama `ultimo_lavrado()` sem limite, embora `lista()` receba `hoje` e o vigia o encaminhe. (`app/ponto/management/commands/e6_oraculo.py:162`; `app/escala/services/fase_12x36.py:103-105`; `app/escala/services/cadastro_realidade.py:339`; `app/escala/services/cadastro_realidade.py:610`; `app/chamados/services/vigia_fio.py:259`.)
-
-   Contraexemplo: existem lavras de 30 e 31/10, com conjuntos de dias diferentes. E6 com `--hoje 30/10` usa até 30/10; vigia com `hoje=30/10` pode consumir C10 de 31/10. O caminho de código permite essa divergência; ocorrência real **[nao verificado]**. (`app/ponto/management/commands/e6_oraculo.py:278`; `app/escala/services/fase_12x36.py:103-105`; `app/escala/services/cadastro_realidade.py:339`.)
-
-O mapa de escrita e leitura ficou assim:
-
-| Insumo ou leitor | Quem escreve / quem lê / referência temporal |
-|---|---|
-| `fase_deslocada` | `InsumosDoDono.dono()` monta o booleano pela presença da data em `fase()`; o juiz apenas consome o booleano, sem medir fase. (`app/ponto/management/commands/e6_oraculo.py:107`; `:159-170`.) |
-| `fase()` / `dias_de_fase` | Sem injeção, lê os itens do colaborador na última lavra com `data_ref <= hoje`. O censo injeta os dias desta corrida, dispensando essa leitura. (`app/ponto/management/commands/e6_oraculo.py:135`; `:159-164`; `app/ponto/management/commands/censo_fase_12x36.py:260-261`.) |
-| `dono_do_dia` da lavra | O censo obtém cada dono por `_ins.dono()` e o grava nos itens; `fase_12x36.lavrar()` persiste uma fotografia por dia. (`app/ponto/management/commands/censo_fase_12x36.py:262-276`; `app/escala/services/fase_12x36.py:84-92`.) |
-| E6 / R1 | Usa `HOJE` do argumento ou do instante do ato; consulta o dono pela montagem única. R1 aponta para esse comando. (`app/ponto/management/commands/e6_oraculo.py:266`; `:278`; `:309`; `:359`; `app/core/placar_estrutural.py:115-138`.) |
-| `pautas_discordantes` | A decisão final usa `InsumosDoDono(...hoje...)`; o pré-filtro direto é a lacuna descrita acima. (`app/ponto/management/commands/pautas_discordantes.py:82`; `:94`; `:104`.) |
-| C9 | Na medição, cria insumos por competência do dia, com o `hoje` da medição, e grava o dono. Depois a lista lê a lavra C9 mais recente, sem limite temporal. (`app/ponto/services/teto_na_lista.py:49-50`; `:67-86`; `:120-129`; `app/escala/services/cadastro_realidade.py:319-322`.) |
-| C10 / `dias_na_lista` / vigia | C10 copia o dono já gravado; `dias_na_lista` resolve os donos por colaborador/data; o vigia aceita BATIDA ou CADASTRO desse mapa, sem chamar novamente e6. (`app/escala/services/cadastro_realidade.py:339-342`; `:735-742`; `app/chamados/services/vigia_fio.py:259-266`.) |
-
-**O novo ramo realiza BATIDA antes de fase**, nesta ordem: exceções CADASTRO de cadastro → batida aberta real → contagem ímpar → fase → lista do motor/resíduo. Portanto, “BATIDA primeiro” vale perante o novo ramo, mas não é absoluto. Por exemplo, ímpar + `sem_vinculo_no_dia=True` + fase retorna CADASTRO; fase + contagem par + batida aberta real retorna BATIDA. São regras anteriores explicitamente documentadas, não uma inversão introduzida pelo ramo de fase. (`app/ponto/management/commands/e6_oraculo.py:77-109`.)
-
-**Não encontrei circularidade operacional no censo:** ele injeta os dias recém-julgados, inicializa `_fase` e só depois persiste a fotografia; esse caminho não lê a lavra anterior. `fase_12x36.dono_do_dia` foi apagado com lápide L-111. A arbitragem problemática restante é a prioridade por assinatura em `_dono_resolvido`, não outra medição da fase. (`app/ponto/management/commands/censo_fase_12x36.py:255-276`; `app/ponto/management/commands/e6_oraculo.py:135`; `:160`; `app/escala/services/fase_12x36.py:78-81`; `app/escala/services/cadastro_realidade.py:716-719`.)
-
-O custo adicional da **leitura de fase** é uma query por instância consultada, com cache; com `dias_de_fase`, zero queries de lavra. Isso não significa uma query total por `InsumosDoDono`: há outras cargas de batidas, turnos e cadastro. A seleção é pela fotografia de `hoje`, não pela fotografia histórica de cada dia julgado; o censo mede corrente e anterior. (`app/ponto/management/commands/e6_oraculo.py:135-170`; `app/escala/services/fase_12x36.py:102-105`; `app/ponto/management/commands/censo_fase_12x36.py:83`.)
-
-Os selos novos **têm mordida** na delegação censo→e6, na leitura da lavra e na prioridade da batida ímpar. Não exercem os contraexemplos das pautas nem duas lavras temporais; os selos antigos ainda exigem a hierarquia C9>C10. (`app/escala/tests/test_o261_v_fase_na_lista.py:345-379`; `:319-332`.)
-
-`JUIZES.md` manda prevalecer o código vivo, mas sua tabela não registra e6 nem o censo como autoridades dessas perguntas; ela termina com vínculo e cobertura da data. (`app/docs/JUIZES.md:14-15`; `:74-80`.)
-
-As reproduções foram em memória, com dependências simuladas, sem escrita de arquivos; suite Django e efeitos na base real **[nao verificado]**. [nao verificado]
-
-_789 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_795 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
