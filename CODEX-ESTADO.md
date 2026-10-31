@@ -1,7 +1,61 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 22:26** · publicado em **30/10/2026 22:26** (UTC-3)
+> Ultima resposta processada: **30/10/2026 22:28** · publicado em **30/10/2026 22:32** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 22:28 · sessao 6542be814925 · O261-V-FASE · verificador · origem=Code
+
+**Achei uma lacuna procedente de cobertura: o teste do `hoje` não morde `lista()`.** O repasse está correto na cópia atual. (`app/escala/tests/test_o261_v_fase_na_lista.py:344–349`; `app/escala/services/cadastro_realidade.py:611`)
+
+A cópia está sem `.git`; a comparação efetiva `33bb7451..0b1d91f2` e a atribuição exata de cada mudança ao delta ficam **[não verificado]**.
+
+**1. Quem escreve e quem lê**
+
+- O censo fornece os dias recém-julgados em `dias_de_fase`, pergunta o dono e grava `dono_do_dia` nos itens. O escritor persistente é `fase_12x36.lavrar`. (`app/ponto/management/commands/censo_fase_12x36.py:260–276`; `app/escala/services/fase_12x36.py:84–92`)
+- `InsumosDoDono` recebe esses dias ou lê `ultimo_lavrado(self.hoje)`, filtrando pelo colaborador. `dono()` transforma a presença do dia em `fase_deslocada=True`; o juiz lê esse argumento depois dos ramos de BATIDA. (`app/ponto/management/commands/e6_oraculo.py:135`; `:159–176`; `:103–108`)
+- No pré-filtro das pautas, `_fase = _ins.fase()` alimenta `fase_deslocada`; somente a resposta `ESTRUTURA` provoca `_ins.cxr()`. O julgamento final passa por `_ins.dono()`. (`app/ponto/management/commands/pautas_discordantes.py:96–109`)
+- `DONO_PELO_JUIZ = {'C9', 'C10'}` é lido por `_dono_resolvido`, chamado por `dias_na_lista`; donos divergentes nesse nível devolvem `None`. (`app/escala/services/cadastro_realidade.py:710–721`; `:744`)
+- `lista()` passa seu `hoje` a `_fase_deslocada`, que o repassa a `ultimo_lavrado`; o leitor aplica `data_ref__lte=ate`. (`app/escala/services/cadastro_realidade.py:611`; `:340`; `app/escala/services/fase_12x36.py:103–105`)
+- O censo captura `_agora` uma vez, deriva `_hoje` dele e repassa o mesmo instante ao carregador do dono. (`app/ponto/management/commands/censo_fase_12x36.py:62–64`; `:260`)
+
+**2. Falhas e limites encontrados**
+
+- **C9/C10 divergentes por horário: proteção efetiva.** O contraexemplo C9=`ESTRUTURA`, C10=`CADASTRO` resolve para `None`; o vigia só retira do alarme donos `BATIDA`/`CADASTRO`. Portanto, esse conflito permanece em `fio_morto`. (`app/escala/tests/test_o261_v_fase_na_lista.py:326–335`; `app/chamados/services/vigia_fio.py:266`; `:314–324`)
+- **Resíduo no pré-filtro:** dia par, sem fase e sem vínculo retorna provisoriamente `ESTRUTURA`, porque o pré-filtro não passa `sem_vinculo_no_dia`. Pede motor; se falhar, descarta o colaborador, embora o julgamento completo desse dia fosse `CADASTRO`. O caminho existe; ser introduzido pelo delta é **[não verificado]**. (`app/ponto/management/commands/pautas_discordantes.py:97–106`; `app/ponto/management/commands/e6_oraculo.py:97–98`; `:169–171`)
+- **Resíduo temporal em C9:** uma consulta com `hoje=29/10` pode combinar C10 limitada a 29/10 com C9 lavrada em 30/10, pois C9 continua lendo a última lavra sem corte. Ocorrência em produção e pertencimento ao delta: **[não verificado]**. (`app/escala/services/cadastro_realidade.py:319`; `:340`; `app/ponto/services/teto_na_lista.py:120–124`)
+- **Custo:** a fase é carregada por instância de `InsumosDoDono`, consultando a lavra e percorrendo seus itens; C9 instancia por colaborador/competência. O censo evita essa consulta ao injetar os dias. Impacto real de custo: **[não verificado]**. (`app/ponto/management/commands/e6_oraculo.py:159–164`; `app/ponto/services/teto_na_lista.py:67–72`; `app/ponto/management/commands/censo_fase_12x36.py:260–261`)
+- Não encontrei outro caminho de julgamento ignorando a fase. O comando E6 ainda pede espelho antecipadamente, mas o utiliza para comparar os minutos da tela; isso não demonstra pedido indevido do motor. (`app/ponto/management/commands/e6_oraculo.py:297–309`; `:323`; `:359`)
+
+**3. Os testes mordem o chamador?** [nao verificado]
+
+- **Pautas: sim.** Executa `Command.apurar`, faz `cxr()` explodir e exige a permanência do colaborador como `CADASTRO`. (`app/escala/tests/test_o261_v_fase_na_lista.py:385–396`)
+- **Conflito C9/C10: sim, em `dias_na_lista`.** Testa ambas as ordens e donos concordantes. (`app/escala/tests/test_o261_v_fase_na_lista.py:326–335`)
+- **Relógio: sim, por AST.** O selo inclui `InsumosDoDono` entre os alvos e examina funções chamadoras para detectar leituras adicionais. (`app/escala/tests/test_selo_grade_pede_o_instante.py:27`; `:93–120`; `:154–170`)
+- **C10/hoje: não no chamador `lista()`.** O teste chama diretamente o auxiliar. Confirmei em execução isolada, em memória: retirar apenas `hoje` da chamada de `lista()` mantém esse teste aprovado e permite trazer a lavra posterior no contraexemplo acima. Os testes integrados também congelam o relógio na mesma data de `HOJE`, sem distinguir os dois caminhos. (`app/escala/services/cadastro_realidade.py:611`; `app/escala/tests/test_o261_v_fase_na_lista.py:344–349`; `:37`; `:84–86`; `:177`)
+
+Resultado da suíte Django e impacto em produção: **[não verificado]**. [nao verificado]
+
+## 30/10 22:27 · sessao 7befcc06756a · - · - · origem=Ronald (tmux)
+
+- **C9/C10 divergentes:** a C9 pergunta ao juiz com a lavra disponível (`app/ponto/services/teto_na_lista.py:72`, `:86`); a C10 passa os dias julgados na própria corrida (`app/ponto/management/commands/censo_fase_12x36.py:260`). Lavras em horários diferentes podem divergir; isso tem tratamento explícito: ambos pertencem a `DONO_PELO_JUIZ`, e conflito retorna `None` (`app/escala/services/cadastro_realidade.py:707`, `:718`). O vigia mantém o dia alarmado porque só aceita `BATIDA`/`CADASTRO` (`app/chamados/services/vigia_fio.py:266`). Teste cobre ambas as ordens (`app/escala/tests/test_o261_v_fase_na_lista.py:326`).
+- **Relógio do censo:** `handle` captura `_agora` uma vez, deriva `_hoje` dele e passa esse instante a `InsumosDoDono` (`app/ponto/management/commands/censo_fase_12x36.py:62`, `:63`, `:260`). Não encontrei segunda leitura do relógio nesse `handle`; `_curar` possui relógio próprio, fora da corrida normal `--lavrar` (`:341`).
+- **Custo estático:** cada instância de `InsumosDoDono` sem override faz uma consulta da lavra e percorre todos os seus itens para selecionar um colaborador (`app/ponto/management/commands/e6_oraculo.py:159`). A C9 cria instâncias por colaborador/competência (`app/ponto/services/teto_na_lista.py:67`). Há repetição proporcional ao número de instâncias × tamanho da lavra; impacto e duração em produção [não verificado]. O censo fornece override e evita essa consulta (`app/ponto/management/commands/censo_fase_12x36.py:260`).
+- **Hoje:** `lista` passa `hoje` ao helper C10, e este o repassa a `ultimo_lavrado` (`app/escala/services/cadastro_realidade.py:611`, `:340`). O teste novo chama somente o helper; não prova esse repasse por `lista` (`app/escala/tests/test_o261_v_fase_na_lista.py:344`).
+- **Porta C10:** continua baseada em `aplicavel`, independentemente do novo dono (`app/escala/services/cadastro_realidade.py:490`, `:651`). Não classificaria como defeito: a lei registrada exige precisamente a proposta aceita no fio (`app/escala/tests/test_o261_v_fase_na_lista.py:6`).
+- **Relógio adjacente:** `lavrar_teto_do_dia.handle` lê `localdate`, e `medir` captura outro instante (`app/ponto/management/commands/lavrar_teto_do_dia.py:27`; `app/ponto/services/teto_na_lista.py:49`). Inclusão disso no delta [não verificado].
+
+Não identifiquei falha adicional procedente no recorte C9/C10; comparação efetiva com `33bb7451` [não verificado].
+
+## 30/10 22:26 · sessao c8f5af10b82b · - · - · origem=Ronald (tmux)
+
+Cobertura parcial do chamador:
+
+- **C10/hoje: selo insuficiente.** O teste chama `_fase_deslocada` diretamente e só verifica o repasse a `ultimo_lavrado`; não exerce `lista()` (`app/escala/tests/test_o261_v_fase_na_lista.py:344-349`). Contra-exemplo de mutação: retirar `hoje` da chamada em `app/escala/services/cadastro_realidade.py:611` preserva esse teste. Os testes integrados também usam `lista(hoje=HOJE)` com relógio congelado no mesmo dia, portanto não distinguem o default incorreto (`app/escala/tests/test_o261_v_fase_na_lista.py:37`, `84-86`, `177`). Execução dessa mutação: [não verificado].
+- **Pautas: morde o chamador.** Executa `Command().apurar`, injeta um dia lavrado, faz `InsumosDoDono.cxr` explodir e exige que o colaborador permaneça com dono `CADASTRO` (`app/escala/tests/test_o261_v_fase_na_lista.py:385-396`). Remover a fase do pré-filtro faz o ramo pedir o motor e descartar o colaborador (`app/ponto/management/commands/pautas_discordantes.py:96-106`).
+- **C9/C10 divergentes: morde `dias_na_lista`.** Exercita ambas as ordens com `ESTRUTURA`/`CADASTRO` e exige `None`, além do controle positivo com donos iguais (`app/escala/tests/test_o261_v_fase_na_lista.py:326-335`).
+- **Instante único: selo tem mordida no censo.** `InsumosDoDono` integra os alvos; o selo conta leituras de relógio em funções chamadoras, incluindo funções aninhadas (`app/escala/tests/test_selo_grade_pede_o_instante.py:27`, `93-120`, `154-170`). Executei apenas o analisador AST em memória: original sem achados; `_tz.localdate()` em lugar da derivação de `_agora` acusa linhas 62/63; `agora=_tz.now()` no repasse acusa linhas 62/260 (`app/ponto/management/commands/censo_fase_12x36.py:62-63`, `260`). Nenhum arquivo foi gravado.
+
+A suíte Django e a identificação exata dos testes introduzidos pelo delta permanecem [não verificado]; a cópia não contém `.git`. [nao verificado]
 
 ## 30/10 22:26 · sessao 74f5cacdedef · - · - · origem=Ronald (tmux)
 
@@ -364,76 +418,4 @@ A alteração resolve uma violação **estrutural** do contrato AST: ele procura
 
 Nenhuma execução ou mutação realizada nesta exploração; comportamento observado em produção além dos anexos: [não verificado].
 
-## 30/10 21:12 · sessao 2792b753efd0 · O261-E-CELULA-20 · verificador · origem=Code
-
-**1. A extração não altera os contadores de `censo()`**, considerando os mesmos dados e respostas dos leitores. A cadeia preserva a precedência do pai transcrito no diff: decisão → ausência → folga validada → admin. ([vigia_fio.py:194](/home/ronald/codex_ws/6a8c5300a64ff11b7fa84c1584c27615dfe38cd9/app/chamados/services/vigia_fio.py:194))
-
-| Comparação pai × novo | Resultado |
-|---|---|
-| Decisão | Mesmo `resolver_dia_oferecido_na_data(colab, data)`; incrementa o contador, acrescenta `c.pk` a `pendentes` e continua. `app/chamados/services/vigia_fio.py:194`, `app/chamados/services/vigia_fio.py:329` |
-| Ausência | Mesmo `ausencia_cobre(..., para='cobranca')`, teste de não nulo e `status in ABERTAS`; mesmo incremento e `continue`. `app/chamados/services/vigia_fio.py:196`, `app/chamados/services/vigia_fio.py:333` |
-| Folga | Mesmo `any`, estado `VALIDADA` e `_e_aceite_de_folga`; preservados contador, lista `celulas_escala_nao_descreve_o_dia`, limite e `continue`. `app/chamados/services/vigia_fio.py:199`, `app/chamados/services/vigia_fio.py:336` |
-| Admin | Continua sendo o último teste; preservados contador, lista `celulas_fio_do_admin`, limite e `continue`. `app/chamados/services/vigia_fio.py:201`, `app/chamados/services/vigia_fio.py:341` |
-
-Os argumentos são o mesmo colaborador, data e **todas** as perguntas da célula (`ps`). `lambda c=c: _fio_do_admin(c)` captura a célula corrente e mantém a chamada adiada; a falha da lista continua incrementando `fio_do_admin_sem_resposta` uma vez por dia que chega a esse teste. `app/chamados/services/vigia_fio.py:304`, `app/chamados/services/vigia_fio.py:328`, `app/chamados/services/vigia_fio.py:284`, `app/chamados/services/vigia_fio.py:297`.
-
-Permanecem os filtros anteriores, os incrementos de morto, `celulas_do_fio_morto`, `classes_do_fio_morto` e a classificação posterior de `pendentes`; portanto, os contadores derivados também conservam suas entradas. `app/chamados/services/vigia_fio.py:315`, `app/chamados/services/vigia_fio.py:346`, `app/chamados/services/vigia_fio.py:358`, `app/chamados/services/vigia_fio.py:380`.
-
-**2. Não encontrei contraexemplo residual no delta de `(d)`, dentro do contrato declarado.** O teste anterior de véu impede `(d)` com chamado vivo; `not ps` exige ausência de pergunta viva; a nova condição exige colaborador listado **e dia ausente**. `app/chamados/services/vigia_fio.py:497`, `app/chamados/services/vigia_fio.py:557`, `app/chamados/services/vigia_fio.py:569`.
-
-Sem porta e vencidas as leis anteriores:
-
-- Dia listado com BATIDA/CADASTRO sai para `alcance_fio_do_admin`. `app/chamados/services/vigia_fio.py:548`.
-- Dia listado com ESTRUTURA/sem dono, sem pergunta viva, recebe `(e, dia_na_lista_dono_estrutura|nenhum)`. A presença da chave distingue “sem dono” de “dia ausente”. `app/chamados/services/vigia_fio.py:573`, `app/escala/services/cadastro_realidade.py:670`.
-- Sem célula recebe `(e, sem_celula)`; com pergunta viva segue as causas da pergunta. `app/chamados/services/vigia_fio.py:560`, `app/chamados/services/vigia_fio.py:564`, `app/chamados/services/vigia_fio.py:579`.
-
-Nenhum dia do universo some ou duplica no processamento normal: `setdefault((colab, data), ...)` deduplica a identidade; cada chave passa uma vez pelo laço; cada saída incrementa um balde e continua, ou incrementa exatamente um morto e uma causa. `limite` trunca somente a lista. `app/chamados/services/vigia_fio.py:471`, `app/chamados/services/vigia_fio.py:529`, `app/chamados/services/vigia_fio.py:532`, `app/chamados/services/vigia_fio.py:551`, `app/chamados/services/vigia_fio.py:587`.
-
-O teste cobre explicitamente ESTRUTURA, mas falta a asserção correspondente a `dia_na_lista_dono_nenhum`. `app/chamados/tests/test_o261e_f5_alcance.py:174`.
-
-**3. Sim: o mutante que antecipa hoje sobrevive à cobertura do arquivo, por análise estática.** Os outros três possuem asserções que os detectariam. `app/chamados/tests/test_o261e_f5_alcance.py:114`, `app/chamados/tests/test_o261e_f5_alcance.py:141`, `app/chamados/tests/test_o261e_f5_alcance.py:185`, `app/chamados/tests/test_o261e_f5_alcance.py:193`.
-
-| Mutante | Resultado pela leitura dos testes | [nao verificado]
-|---|---|
-| Hoje antes das portas | **Sobrevive:** portas são testadas no dia passado; o caso `hoje=DIA` não cria porta. Falta cruzar hoje com cada porta e conferir o balde. `app/chamados/tests/test_o261e_f5_alcance.py:25`, `:114`, `:121`, `:206` |
-| Remover filtro do app | Detectado pelo negativo fora do app: surgiria uma porta indevida. `app/chamados/tests/test_o261e_f5_alcance.py:185` |
-| Remover exclusão da âncora na fila do véu | Detectado pela resposta vazia: mudaria `(b)` para `(a)`; também quebra o caso fora do app. `app/chamados/tests/test_o261e_f5_alcance.py:141`, `:185`; `app/chamados/services/vigia_fio.py:557` |
-| Contar `alcance_lista_sem_resposta` duas vezes | Detectado pelo `assertEqual(1, ...)` específico; as somas gerais não incluem esse contador. `app/chamados/tests/test_o261e_f5_alcance.py:197`, `:92` |
-
-Execução da suíte, execução dos mutantes e ocorrência desses cenários em produção: **[nao verificado]**. [nao verificado]
-
-## 30/10 21:11 · sessao 4caceba3830f · - · - · origem=Ronald (tmux)
-
-Não encontrei erro residual na correção de (d), considerando o contrato declarado e as fontes da cópia:
-
-- **Sem pergunta viva + colaborador listado + dia fora da lista:** cai em (d). O `elif veu` anterior impede atribuir (d) quando há chamado vivo; `ps` contém somente perguntas vivas. `app/chamados/services/vigia_fio.py:494-498`, `:557-570`.
-- **Dia listado, dono BATIDA/CADASTRO:** sai para `alcance_fio_do_admin`; **ESTRUTURA ou None**, sem pergunta viva, permanece em (e), detalhe `dia_na_lista_dono_estrutura` ou `dia_na_lista_dono_nenhum`. `app/chamados/services/vigia_fio.py:543-553`, `:573-576`. A leitura conserva presença e dono lavrado do dia, sem derivação nova. `app/escala/services/cadastro_realidade.py:655-670`.
-- **Com pergunta viva:** não entra em (d) nem no novo detalhe do dia listado; segue as causas e detalhes da pergunta. **Sem célula:** recebe `(e, sem_celula)`, antes de (d). São precedências expressas no código. `app/chamados/services/vigia_fio.py:560-586`.
-- **Nenhum dia do universo some ou duplica no processamento normal:** o universo é um dicionário por `(colab, data)`; cada chave é percorrida uma vez; as portas, hoje e quatro leis incrementam um balde e continuam; o restante incrementa exatamente um morto e uma causa. O limite trunca apenas a amostra. `app/chamados/services/vigia_fio.py:465-475`, `:529-553`, `:587-592`.
-- **A competência não duplica dias:** as janelas consecutivas têm início no corte e fim no corte menos um do mês seguinte; as datas vêm da mesma janela usada por `fora_da_folha`. `app/ponto/janelas.py:10-21`, `:54-72`; `app/folha/fora_da_folha.py:119-139`, `:168`.
-- **Detalhe literal `outra`:** não identifiquei entrada regular que o alcance. Sem véu, terminal ou âncora ausente, as âncoras têm de estar na fila; se alguma pergunta aparece no app e tem resposta válida, já seria porta; se tem resposta vazia, cai em (b). Pergunta viva nunca tem `validada_em` preenchida. `app/chamados/catalogo/motor.py:19-31`; `app/chamados/juizes.py:1005-1007`; `app/chamados/services/vigia_fio.py:535`, `:557-586`. Estado fora do catálogo ou inconsistência de FK em produção: [nao verificado].
-
-O teste já verifica explicitamente ESTRUTURA contra (d), mas não inclui o ramo `None`/`dia_na_lista_dono_nenhum`. `app/chamados/tests/test_o261e_f5_alcance.py:174-183`.
-
-## 30/10 21:10 · sessao a3d62278a9a7 · - · - · origem=Ronald (tmux)
-
-**Q1: a extração preserva os valores de `censo()` para os mesmos dados e respostas dos leitores.** As quatro condições do pai no diff anexo aparecem na mesma ordem e com os mesmos argumentos no helper: `resolver_dia_oferecido_na_data(colab, data)`; `ausencia_cobre(colab, data, para='cobranca')` seguida do teste `status in ABERTAS`; `any(p.estado == p.VALIDADA and _e_aceite_de_folga(p)...)`; chamada do admin. Cada retorno encerra a cadeia no primeiro resultado verdadeiro. (`app/chamados/services/vigia_fio.py:194`, `:196`, `:199`, `:201`.)
-
-| Item comparado ao pai do diff anexo | Resultado na cópia |
-|---|---|
-| Ponto da extração | Continua depois dos filtros de outro vocabulário, fio vivo e hoje/futuro; esses filtros mantêm seus incrementos e `continue`. (`app/chamados/services/vigia_fio.py:315`, `:320`, `:323`.) |
-| Argumentos | São o mesmo colaborador, a mesma data e a lista completa `ps`, obtida por célula. (`app/chamados/services/vigia_fio.py:304`, `:314`, `:328`.) |
-| Lambda do admin | `lambda c=c: _fio_do_admin(c)` captura a célula corrente e só chama `_fio_do_admin` se as três leis anteriores falharem; não antecipa a consulta da lista. (`app/chamados/services/vigia_fio.py:328`, `:201`.) |
-| Decisão pendente | Incrementa o mesmo contador, acrescenta `c.pk` a `pendentes` e continua. (`app/chamados/services/vigia_fio.py:329`.) |
-| Ausência aberta | Incrementa o mesmo contador e continua. (`app/chamados/services/vigia_fio.py:333`.) |
-| Folga validada | Incrementa o mesmo contador; preserva `len(lista) < limite`, o mesmo `c.pk` e o `continue`. (`app/chamados/services/vigia_fio.py:336`.) |
-| Fio do admin | Incrementa o mesmo contador; preserva `len(lista) < limite`, o mesmo `c.pk` e o `continue`. (`app/chamados/services/vigia_fio.py:341`.) |
-| Falha da lista | Continua armazenada uma vez em `_na_lista`, e cada dia que efetivamente chega ao admin incrementa `fio_do_admin_sem_resposta` uma vez. (`app/chamados/services/vigia_fio.py:284`, `:296`, `:297`.) |
-| Nenhuma lei satisfeita | Cai nos mesmos incrementos de morto, abertura por ausência/presença de perguntas, cobrança e listas. (`app/chamados/services/vigia_fio.py:346`.) |
-| Contadores derivados | `mortos` segue alimentando a classificação; `pendentes` segue alimentando `decisao_do_dia_pendente_com_alvo`, sem mudança nas operações segundo o diff. (`app/chamados/services/vigia_fio.py:358`, `:380`.) |
-
-Os testes antigos contêm verificações para precedência decisão/ausência, BATIDA/CADASTRO contra ESTRUTURA/sem dono, falha da lista uma vez por rodada e a lista da folga validada; a execução deles nesta análise não foi realizada **[nao verificado]**. (`app/chamados/tests/test_o261_vigia_fio.py:531`, `:553`, `:581`, `:626`.)
-
-A equivalência com o pai foi examinada pelo **diff fornecido**, não por checkout ou execução da revisão pai **[nao verificado]**.
-
-_772 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_775 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
