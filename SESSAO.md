@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 31/10/2026 02:06:06.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (18.1 MB). Acoes na janela: **603**.
+**Medido em 31/10/2026 02:11:09.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (18.2 MB). Acoes na janela: **609**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:09:14 | Bash | Replace stale push line in RELATO | `cd /home/ronald/saas-hasner; sed -i '5s/^> \*\*PUSH-PRESO (01:04):\*\*.*/> **PUSH 01:04 -> origin\/main = 3c52f98f, rc=0** (pre-push arsenal OK Ran 12885 + control-plane OK Ran 22); ahead=1 = e147c25f do pos_push, vai no proximo push./' app/docs/RELATO.md; sed -n 5p app/docs/RELATO.md` |
+| 02:09:08 | Bash | Record DISJUNTOR rejection in RELATO top | `ps -p 258000 >/dev/null && echo waiter-vivo \|\| echo waiter-morto; cd /home/ronald/saas-hasner; date +%H:%M; L="> **DISJUNTOR REPROVADO pelo opus final ($(date +%H:%M)):** BLOQUEIA A (bin/disjuntor.py:690-709 \`_codex_cmds\` perde a forma subshell, 100/200), B (B3 por literal 'LEITURA FINAL', 4/9 escapam; D6 nao procede), C (negacao no RELATO copia comando cru e cria trava no Stop). FILA 1-5 regi ...` |
+| 02:09:00 | SendMessage |  | `-` |
+| 02:08:47 | TaskStop |  | `-` |
+| 02:08:45 | ToolSearch |  | `-` |
+| 02:08:41 | Bash | Confirm DJ merged suite is queued, not running | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; ps -eo pid,args \| grep 'dj-suite-merge\\|wt-disjuntor-2308' \| grep -v grep \| cut -c1-150` |
 | 02:01:04 | Bash | Repoint RELATO line 3 to live suite pid | `cd /home/ronald/saas-hasner; sed -i "3s/pid=[0-9]*/pid=3352348/" app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md; ps -p 3352348 -o pid,args \| cut -c1-120` |
 | 02:01:00 | Bash | Check lock holder and pid in RELATO | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; ps -p 2303911 >/dev/null && echo vivo \|\| echo morto` |
 | 02:00:46 | Bash | Check which copies contain current main | `M=$(git -C /home/ronald/saas-hasner rev-parse HEAD); for w in wt-o261e-f5-2048 wt-o261e-f1c4b-fix-0058 wt-vfase-asof-2342; do cd /home/ronald/$w; git merge-base --is-ancestor $M HEAD && echo "$w contem main" \|\| echo "$w NAO contem main ($(git rev-list --count HEAD..$M) atras)"; done` |
