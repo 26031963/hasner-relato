@@ -101,6 +101,7 @@ esperam migrar -- a lista so encolhe).
 | o chamado esta vivo? | `chamados/catalogo/motor.py::VIVOS` |
 | o prazo (SLA) do chamado estourou? | `chamados/catalogo/motor.py::prazo_estourou` |
 | pode transitar de um estado a outro? | `chamados/catalogo/motor.py::decidir` |
+| por onde alguem chega a este dia (porta alcancavel, com o verbo do painel)? | `chamados/juizes.py::porta_alcancavel_do_dia` |
 | por que o chamado vivo de furo nao tem pergunta no app? | `chamados/services/pergunta_no_app.py::retencao` |
 | qual a competencia do chamado? | `chamados/juizes.py::competencia_do_chamado` |
 | qual o dia do chamado? | `chamados/catalogo/modulos.py::data_do_chamado` |
