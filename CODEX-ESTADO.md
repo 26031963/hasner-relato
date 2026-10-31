@@ -1,7 +1,73 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 09:43** · publicado em **31/10/2026 09:47** (UTC-3)
+> Ultima resposta processada: **31/10/2026 10:17** · publicado em **31/10/2026 10:18** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 10:17 · sessao 2e5aa3a351d1 · - · - · origem=Ronald (tmux)
+
+Questão 2 — caminho verificado, sem execução de testes: [nao verificado]
+
+- **Não é exclusivamente DNA:** `status_da_lavra` é pura, recebe `tipo_dia`, batida, previsto, isenção, veredito e `folga_humana`; `fatos_do_status` extrai `tipo_dia`/minutos/batidas da grade, mas consulta a lei A2 **quando `veredito == 'indefinida'`**. Referências: `app/ponto/status_dia.py:57`, `:122`, `:125`, `:126`, `:130`, `:133`.
+
+- **Ramo direto de feriado na composição dos fatos:** `fatos_do_status → fatos_do_dia → fatos_do_periodo`. A2 busca município do posto e feriados aplicáveis; pergunta `data in feriados`; usa `CelulaDia.trabalha` para o previsto (fallback aritmético se ausente); mantém trabalho quando `feriado and previsto is True and ec.trabalha_em_feriado`; nos demais casos inclui feriado e decide pela precedência. Referências: `app/ponto/precedencia.py:209`, `:239`, `:242`, `:245`, `:299`, `:305`, `:316`, `:322`, `:325`, `:330`, `:335`, `:349`. `folga_humana_ou_feriado` retorna verdadeiro quando a faixa vencedora é `feriado`: `app/ponto/precedencia.py:189`.
+
+- **Efeito no status:** `indefinida + folga_humana` resulta em `folga` sem batida e `folga_trabalhada` com batida; sem esse fato resulta em `escala_suspeita`. Ausência integral e falta sem batida são avaliadas antes. Para veredito diferente de `indefinida`, a consulta A2 não ocorre; `tipo_dia='folga'` produz `folga` ou `folga_trabalhada`. Referências: `app/ponto/status_dia.py:83`, `:85`, `:88`, `:90`, `:91`, `:93`, `:102`.
+
+- **Ramo upstream de feriado na grade:** cartório monta a grade (`app/ponto/services/cartorio.py:931`); o builder pergunta `eh_dia_trabalho` e usa marcos congelados (`app/escala/utils.py:1548`, `:1550`; leitura de DNA em `:84`, `:103`). `eh_dia_trabalho` devolve `cel.trabalha` quando existe célula; **só sem célula** chama cálculo vivo (`app/escala/models.py:1066`, `:1071`, `:1073`). Nesse fallback, `base is True` pode virar folga por feriado (`:1340`): exige vínculo que não trabalha em feriado e ciclo `6x1/5x2/semanal`, e consulta `core.feriados.eh_feriado` pelo município do posto (`:1357`, `:1358`, `:1360`, `:1362`, `:1363`; lista de ciclos em `:32`). A grade escreve `tipo_dia='folga'` ou `'trabalho'`: `app/escala/utils.py:1743`, `:1749`. O dispatcher também tem legacy: `app/escala/utils.py:2026`, `:2029`; legacy pergunta o mesmo método `eh_dia_trabalho`: `:725`.
+
+- **Fonte do calendário de feriados:** consulta `core.models.Feriado`, nacional para todos, estadual pela UF e municipal por UF+município; município vem de `colaborador.posto.municipio`. Sem município, apenas nacional passa pelos predicados. Referências: `app/core/feriados.py:27`, `:29`, `:57`, `:60`, `:62`, `:64`, `:70`, `:82`, `:83`, `:91`, `:95`, `:106`, `:113`, `:114`. A2 também consulta o nome do feriado para o seu resultado: `app/ponto/precedencia.py:364` → `app/core/feriados.py:98`.
+
+- **Porta/admin:** `_status_alvo` prioriza decisão do admin e chama `status_do_admin`, sem avaliar feriado; para cartório chama `status_da_lavra` com os fatos. Referências: `app/ponto/portas/celula.py:693`, `:694`, `:695`, `:698`; mapeamento admin em `app/ponto/status_dia.py:39`, `:51`.
+
+- **Testes que documentam a distinção:** teste puro mostra feriado sobre célula de trabalho vencendo `indefinida` (`app/ponto/tests/test_e3_status_lavrado.py:110`, `:111`); teste de costura assegura A2 chamada para `indefinida`, sem nova chamada para `concorde` (`:134`, `:135`, `:137`, `:138`); integração cria feriado nacional e exige `(indefinida, folga)` (`app/ponto/tests/test_e3_status_indefinida_a2_na_lavra.py:74`, `:76`, `:79`). Testes apenas lidos; resultado de execução [não verificado].
+
+- **Limite relacionado ao hash:** há teste `expectedFailure` que registra que feriado novo não move a impressão, porque não entra diretamente nem pelo DNA congelado: `app/ponto/tests/test_d3_impressao_cobre_insumos.py:201`, `:203`, `:206`.
+
+## 31/10 10:17 · sessao a200f0ac5780 · - · - · origem=Ronald (tmux)
+
+**Q1 — a lista completa da L-084 fica em memória; não encontrei persistência dela em campo/tabela.** Ela é atributo do `@dataclass ResultadoMes`, não modelo ORM; nasce vazia por cálculo e é entregue no resultado. Referências: `app/ponto/motor_calculo_v2.py:218`, `app/ponto/motor_calculo_v2.py:239`, `app/ponto/motor_calculo_v2.py:2221`, `app/ponto/motor_calculo_v2.py:2657`. O comentário e a captura de instâncias no comando de diff explicitam que `recalcular_fechamento_mes` não a persiste: `app/ponto/management/commands/diff_reclassificar_partido.py:169`, `app/ponto/management/commands/diff_reclassificar_partido.py:188`.
+
+Quem escreve na lista do motor:
+
+- `_janela_he` acusa a L-084 do dia, com deduplicação por data e `causa='l084_do_dia'`: `app/ponto/motor_calculo_v2.py:1544`, `app/ponto/motor_calculo_v2.py:1552`, `app/ponto/motor_calculo_v2.py:1560`.
+- `_acusa_cadastro_x_realidade` faz `append` das pontas fora da janela; os chamadores acusam chegada e saída: `app/ponto/motor_calculo_v2.py:1593`, `app/ponto/motor_calculo_v2.py:1608`, `app/ponto/motor_calculo_v2.py:1648`, `app/ponto/motor_calculo_v2.py:1686`.
+- `aplicar_tolerancia` acusa as duas pontas distantes, incluindo o dia do juiz e deltas, e devolve `(0, 0)`: `app/ponto/motor_calculo_v2.py:1926`, `app/ponto/motor_calculo_v2.py:1930`, `app/ponto/motor_calculo_v2.py:1935`, `app/ponto/motor_calculo_v2.py:1943`.
+- O fechamento apenas concatena as listas das fatias no resultado composto: `app/ponto/services/fechamento.py:96`, `app/ponto/services/fechamento.py:278`.
+
+Quem lê hoje:
+
+- O espelho traduz o relato do motor em pendências de HE e expõe um subconjunto das chegadas acima do teto: `app/ponto/services/espelho.py:751`, `app/ponto/services/espelho.py:1263`.
+- `e6_oraculo.Insumos.cxr()` transforma a lista em conjunto de datas; `dono()` passa a pertinência da data ao juiz de dono: `app/ponto/management/commands/e6_oraculo.py:150`, `app/ponto/management/commands/e6_oraculo.py:156`, `app/ponto/management/commands/e6_oraculo.py:178`.
+- Os comandos de diagnóstico/diff contam ou capturam a lista: `app/ponto/management/commands/diff_janela_he.py:70`, `app/ponto/management/commands/diff_reclassificar_partido.py:188`. `pautas_discordantes` também chama `Ins...cxr()`: `app/ponto/management/commands/pautas_discordantes.py:102`.
+
+Há equivalentes **também em memória** no calculador: `Censo.cxr` recebe as acusações de pontualidade (`app/ponto/calculador/periodo.py:286`, `app/ponto/calculador/periodo.py:790`); `Rubricas.detalhe['cadastro_x_realidade']` recebe a lista (`app/ponto/calculador/regras.py:857`). Apesar do JSONField `DiaPago.detalhe` existir (`app/ponto/models.py:378`), o lavrador de `DiaPago` copia apenas `Rubricas.valores` e `Rubricas.nao_decide`, não `Rubricas.detalhe`: `app/ponto/services/dia_pago.py:320`, `app/ponto/services/dia_pago.py:329`, `app/ponto/services/dia_pago.py:339`. Portanto esse caminho não persiste a CxR.
+
+**A tela “Cadastro x Realidade” não é consumidora direta da lista completa do motor.** Sua `lista()` lê assinaturas do esmeril por `ler_lavra()` e combina fontes de cadastro: `app/escala/services/cadastro_realidade.py:560`, `app/escala/services/cadastro_realidade.py:635`, `app/escala/services/cadastro_realidade.py:639`. O esmeril grava outra estrutura em `MetricaSnapshot.detalhe` e lê o snapshot mais recente: `app/ponto/services/esmeril_espelho.py:324`, `app/ponto/services/esmeril_espelho.py:330`, `app/ponto/services/esmeril_espelho.py:345`.
+
+Existem persistências **derivadas**, sem guardar a lista completa: a C9 do teto armazena por item o `dono` obtido de `Ins...dono(d)` (`app/ponto/services/teto_na_lista.py:86`) e grava o documento em `MetricaSnapshot.detalhe` (`app/ponto/services/teto_na_lista.py:113`). Isso conserva classificação do juiz para certos dias, não a lista `dias_cadastro_x_realidade` com todos os relatos.
+
+Cuidado com comentário envelhecido em `app/ponto/calculador/periodo.py:281`: ele diz que o campo de produção carrega “só causas de janela de HE”, mas o código atual também escreve a acusação de `aplicar_tolerancia` e a causa `l084_do_dia`: `app/ponto/motor_calculo_v2.py:1930`, `app/ponto/motor_calculo_v2.py:1561`.
+
+## 31/10 10:17 · sessao ee46650b7bc1 · - · - · origem=Ronald (tmux)
+
+4. A recusa fica no **command** `lavrar_status_competencia`: após contar as células, faz `if competencia_entregue(emp.pk, mes, ano)`, imprime `ENTREGUE` e retorna. Só depois dessa guarda chama `julgar_colab(... completar_status=True)`. Referências: `app/ponto/management/commands/lavrar_status_competencia.py:39`, `:40`, `:41`, `:42`, `:55`.
+
+O predicado é **existe ExportacaoDominio vigente e não invalidada para empresa+mês+ano**: filtra a tripla, passa por `anotar_vigencia` e `so_vigentes`, rejeita o vigente com `invalidada_em` preenchido e retorna booleano; `registro=True` devolve o registro ou `None`. Referência: `app/folha/export.py:569–575`. O vigente é o maior `(gerado_em, pk)` de cada tripla, não simplesmente qualquer exportação existente: `app/folha/models.py:209–225`; `so_vigentes` lê `e_vigente`: `app/folha/models.py:192–200`.
+
+Essa guarda **não está no serviço genérico do cartório**: `julgar_colab` entra em `_julgar_colab_corpo` e trata `completar_status` sem consultar `competencia_entregue` (`app/ponto/services/cartorio.py:739–778`); a própria documentação adverte que uma chamada com janela ampla/`--forcar` alcançaria competência exportada (`app/ponto/services/cartorio.py:756–759`). `julgar_celula` guarda futuro, inexistência e turno ainda aberto e depois chama `julgar_colab`, sem guarda de exportação nessa entrada (`app/ponto/services/cartorio.py:1700–1717`).
+
+O teste específico do bloqueio é `test_D5_competencia_entregue_nao_se_toca`: simula `competencia_entregue=True`, executa o lote com `--apply`, exige `ENTREGUE` e que nenhum `status_dia` tenha sido preenchido (`app/ponto/tests/test_e3_status_lavrado.py:287–294`). Os testes do predicado cobrem sem TXT, vigente, vigente revogado, substituição e empate de carimbo (`app/folha/tests/test_k6_competencia_entregue.py:60–91`). Execução desses testes: [não verificado].
+
+Outros consumidores diretos de `competencia_entregue` encontrados:
+
+- `competencia_fechada_para_celula`: compõe entrega **OU** holerite do colaborador com lote publicado; `app/folha/export.py:598–609`. O gerador lê esse composto em `_competencias_exportadas` e `fonte_da_lavra`: `app/ponto/management/commands/gerar_celulas.py:173`, `:203`.
+- `txt_vigente_x_gravado`: obtém o TXT vigente para comparar com o gravado atual; `app/folha/export.py:636`, `:648–658`.
+- Preview da exportação: mostra quem/quando exportou; `app/folha/views.py:354`, `:360–364`.
+- Ranking HE `_carimbo`: devolve `lavrado` quando todas as empresas representadas foram entregues; `app/folha/services/ranking_he.py:77–91`.
+- `esmeril_espelho.janela`: encerra a busca retroativa na primeira competência entregue; `app/ponto/services/esmeril_espelho.py:55–63`.
+- `marcos_da_competencia`: calcula o marco `exportada`; `app/ponto/services/fechamento.py:1500–1512`.
+- `he_pendente_lavrado.competencias_a_lavrar`: inclui a anterior apenas enquanto não entregue; `app/ponto/services/he_pendente_lavrado.py:220–225`.
+- `vigia_fio.competencia_do_dia_entregue`: converte o dia na competência pela janela da empresa e consulta o predicado, com memo opcional; `app/chamados/services/vigia_fio.py:787–797`. Seus leitores são o censo por dono (`app/chamados/services/vigia_fio.py:769`), a cerca do reconciliador (`app/chamados/reconciliador.py:715–720`), a seleção de perguntas vivas no pós-estado do chamado (`app/chamados/models.py:332–350`) e a guarda da costura para destino terminal (`app/chamados/services/fio.py:765–771`).
 
 ## 31/10 09:43 · sessao 60db60690637 · DISJUNTOR-B3-TOPO · verificador · origem=Code
 
@@ -556,71 +622,4 @@ Conclusões Q3, todas só pelo código; ocorrência nos dados de produção dess
 
 8. **A afirmação documental “mesma pergunta… escrita UMA vez” é mais forte que a implementação:** o predicado permanece no calendário e o helper foi acrescentado; ADR permite leitores congelados até E4, mas isso não elimina a duplicação nem iguala seus insumos. Referências: `app/ponto/precedencia.py:184-185`; `app/colaboradores/services/calendario.py:801-802`; `app/docs/ADR/0002-celula-e-o-dia.md:73-74`.
 
-## 31/10 09:02 · sessao fe1c61ccd0f1 · - · - · origem=Ronald (tmux)
-
-O RED novo morde a reversão: a fixture tem `tipo_dia='indefinido'`, previsto/realizado zero, chamado vivo, cobertura `None`; removendo apenas `'indefinido'` de `SEM_JURISDICAO`, o ramo volta a emitir `COBRANCA_EM_DIA_SEM_TRABALHO`, contrariando `assertNotIn`. O controle `'folga'` continua emitindo nos dois casos. Confirmei executando a função real e alterando a tupla somente em memória, com Python `-B`; não executei a suíte Django. Fontes: `app/ponto/tests/test_f1c4_3_supra_indefinido_nao_retrata.py:17`, `:28`, `:31`; `app/ponto/supra_juiz.py:48`, `:443`.
-
-A alteração antiga muda a expectativa, mas o próprio arquivo identifica a expectativa anterior como “caracterização de 31/08”. A lei da classe já dizia “‘não sei’ nunca vira ‘sei que não’”, e o modelo declara `None=indeterminado (limbo cobra)`. Portanto, há fundamento para corrigir a caracterização; não encontrei lei que mandasse retratar `'indefinido'`. Fontes: `app/ponto/tests/test_supra_juiz.py:197`, `:238`; `app/escala/models.py:1656`; `app/docs/LEIS.md:73`; `CLAUDE.md:45`.
-
-Limite importante do RED: ele testa diretamente a string, sem passar pela leitura da célula nem pelo executor. Não distingue `'indefinido'` produzido pelo fallback de `'indefinido'` explicitamente presente na ata. Fontes: `app/ponto/tests/test_f1c4_3_supra_indefinido_nao_retrata.py:17`, `:20`.
-
-Isso permite um contraexemplo estático: com `trabalha=None` e ata explícita `tipo_dia='indefinido'`, `dia_sem_trabalho` responde `True`, pois a ata tem tipo diferente de trabalho; o supra exclui esse tipo do ramo. A presença desse caso em produção é [não verificado]. Fontes: `app/chamados/juizes.py:407`, `:408`; `app/ponto/supra_juiz.py:48`, `:443`.
-
-Evidência de execução histórica dos commits RED/GREEN, suíte inteira e ordem efetivamente cumprida não consta dos anexos fornecidos: [não verificado]. As exigências documentadas são RED evidenciado, suíte inteira verde antes do opus final e opus antes do pouso. Fontes: `CLAUDE.md:28`, `:595`, `:600`. [nao verificado]
-
-## 31/10 09:01 · sessao 8fa74d6ff054 · - · - · origem=Ronald (tmux)
-
-Censo de produção, fora de `*/tests/`:
-
-- `SEM_JURISDICAO` tem uma definição, `app/ponto/supra_juiz.py:48`, e um leitor executável, o predicado de `classificar_dia` em `app/ponto/supra_juiz.py:443`. O delta só impede que `tipo_dia='indefinido'` produza `COBRANCA_EM_DIA_SEM_TRABALHO`; ainda exige previsto zero, chamado vivo e ausência de cobertura (`app/ponto/supra_juiz.py:443-447`).
-- O escritor literal de `tipo_dia='indefinido'` é `grade_da_celula`: prevalece `ata.get('tipo_dia')`; faltando valor verdadeiro, `trabalha=True → trabalho`, `False → folga`, `None → indefinido`. Escreve o resultado no dicionário do dia (`app/escala/services/leitor_celula.py:344-345`, `app/escala/services/leitor_celula.py:359`). A presença de uma ata sem `tipo_dia` não muda esse fallback (`app/escala/services/leitor_celula.py:331`, `app/escala/services/leitor_celula.py:344`).
-- O próprio supra lê `dia['tipo_dia']` em `app/ponto/supra_juiz.py:199`. Seus demais ramos por natureza do dia não mudam: o furo exige trabalho ou ausência parcial (`app/ponto/supra_juiz.py:281-285`), e outros ramos também exigem trabalho (`app/ponto/supra_juiz.py:258`, `app/ponto/supra_juiz.py:420`, `app/ponto/supra_juiz.py:448`, `app/ponto/supra_juiz.py:463`). Portanto impedir retratação não equivale a começar a emitir cobrança para o `indefinido`.
-
-Consequências para os consumidores do classificador:
-
-| Consumidor | Efeito do delta e evidência |
-|---|---|
-| Command `supra_juiz` | Deixa de receber aquele código no caso indefinido; consequentemente não entra por ele no ramo retratável. Chamada em `app/ponto/management/commands/supra_juiz.py:206`; seleção em `:218`; retratação pela porta `chamados.reconciliador.retratar` em `:222`, `:248`. Execução ainda depende das guardas de conversa (`:225`), cobrança órfã (`:239`) e execução/trava (`:243`). |
-| Cartório, ramo normal | Chama o classificador (`app/ponto/services/cartorio.py:1169`) e reconcilia se recebeu um dos dois códigos (`app/ponto/services/cartorio.py:1268-1276`). A retirada deste código retira essa causa de entrada; outro código continua podendo acionar a reconciliação (`:1268`). |
-| Cartório, ramo nunca bateu | Não muda por este delta: passa `chamados_vivos=0`, tornando inalcançável o ramo alterado (`app/ponto/services/cartorio.py:996-1000`; exigência em `app/ponto/supra_juiz.py:444`). |
-| `emitir_furo_retroativo` | Recebe a lista modificada, mas só age por `FURO_SEM_COBRANCA`; essa seleção não muda (`app/ponto/management/commands/emitir_furo_retroativo.py:99-110`). |
-
-Leitores de `tipo_dia` que continuam com a resposta anterior, porque não consultam `SEM_JURISDICAO`:
-
-- `declaracao_texto` ignora `indefinido` como qualquer dia diferente de trabalho e preserva `ESTADO_LIDO`; o comentário chama explicitamente folga/indefinido de dia conhecido sem marco (`app/chamados/services/declaracao_texto.py:86`, `app/chamados/services/declaracao_texto.py:90-96`).
-- `worklist` devolve `gap=None` e motivo “dia de indefinido pela celula” (`app/ponto/worklist.py:18-20`).
-- O relatório de furos rotula o dia como `'folga'`; as duas consultas auxiliares o excluem (`app/relatorios/furos.py:151-153`, `app/relatorios/furos.py:218`, `app/relatorios/furos.py:237`).
-- Métricas de inteligência excluem o dia (`app/inteligencia/calculadores.py:46-47`, `app/inteligencia/calculadores.py:141-142`); a apuração de furos diários também o exclui (`app/escala/services/furos_diarios.py:39-40`).
-- Exportação de valores inclui apenas trabalho/ausência; `indefinido` segue fora (`app/folha/export.py:1071`, `app/folha/export.py:1075`, `app/folha/export.py:1080`). A causa monetária agrupa previstos somente quando trabalho (`app/folha/causas.py:41`).
-- `disputa_emissao` exige trabalho (`app/chamados/services/disputa_emissao.py:68`); `materializacao` só distingue ausência de célula/fora do vínculo antes de repassar marcos, portanto o delta não a altera (`app/chamados/services/materializacao.py:223`).
-
-Ponto decisivo para a comparação dos juízes: uma ata **explícita** `{'tipo_dia': 'indefinido'}` passa intacta pelo leitor, pois tem precedência sobre `trabalha` (`app/escala/services/leitor_celula.py:344`). O supra agora a exclui do ramo (`app/ponto/supra_juiz.py:48`, `app/ponto/supra_juiz.py:443`), enquanto `chamados.juizes.dia_sem_trabalho` devolve `True` por qualquer `tipo_dia` presente e diferente de trabalho (`app/chamados/juizes.py:408`). Sem `tipo_dia` na ata e com `trabalha=None`, ambos deixam de afirmar dia sem trabalho (`app/chamados/juizes.py:408`, `app/escala/services/leitor_celula.py:345`, `app/ponto/supra_juiz.py:443`). Ocorrência real de ata explícita `indefinido` em produção: [não verificado].
-
-## 31/10 09:01 · sessao aae15ce37be6 · - · - · origem=Ronald (tmux)
-
-- O supra mantém um predicado local de “sem trabalho”: `tipo_dia != 'trabalho' and tipo_dia not in SEM_JURISDICAO`, condicionado ainda a previsto zero, chamado vivo e ausência de cobertura. Ele não consulta `chamados.juizes.dia_sem_trabalho`; o delta acrescenta uma exceção à regra local já existente. (`app/ponto/supra_juiz.py:48`, `app/ponto/supra_juiz.py:443`)
-
-- O juiz real responde **True** somente quando `cel.trabalha is False` ou quando a ata contém `tipo_dia` verdadeiro e diferente de `trabalho`. Portanto `None` sozinho não significa folga. (`app/chamados/juizes.py:398`, `app/chamados/juizes.py:407`, `app/chamados/juizes.py:408`)
-
-- O leitor dá prioridade ao `ata.tipo_dia`; no fallback traduz True→trabalho, False→folga, None→indefinido. Logo preserva a procedência no comportamento, mas não a transporta como distinção explícita entre “indefinido da ata” e “indefinido inferido”. (`app/escala/services/leitor_celula.py:344`, `app/escala/services/leitor_celula.py:345`, `app/escala/services/leitor_celula.py:359`)
-
-Com `trabalha=None` e demais gates do supra satisfeitos:
-
-| Ata | `dia_sem_trabalho` | Supra após delta |
-|---|---:|---|
-| Sem `tipo_dia` ou valor vazio | False | Não acusa: leitor produz indefinido |
-| `trabalho` | False | Não acusa |
-| `folga`, `ausencia`, `falta` | True | Acusa |
-| `indefinido` explicitamente presente | True | Não acusa |
-
-Evidências para todas as células: `app/chamados/juizes.py:408`, `app/escala/services/leitor_celula.py:344`, `app/ponto/supra_juiz.py:48`, `app/ponto/supra_juiz.py:443`. A existência de ata com `tipo_dia='indefinido'` em produção é **[não verificado]**.
-
-- Outra divergência permitida pelas funções: `trabalha=False` com ata `tipo_dia='trabalho'` produz True no juiz, mas o leitor entrega trabalho e o supra não acusa. A existência desse par em produção é **[não verificado]**. (`app/chamados/juizes.py:408`, `app/escala/services/leitor_celula.py:344`, `app/ponto/supra_juiz.py:443`)
-
-- A regra de origem diz expressamente `None=indeterminado (limbo cobra)`; a grade só interrompe como folga quando `work is False`, tratando None como `sem_ancora`. (`app/escala/models.py:1656`, `app/escala/utils.py:725`, `app/escala/utils.py:726`, `app/escala/utils.py:729`)
-
-- **Cuidado com “juiz registrado”:** o registro declara a pergunta “o dia é de trabalho para o vínculo?” em `EscalaColaborador.eh_dia_trabalho`, e o lookup aponta o mesmo endereço; `dia_sem_trabalho` é o helper existente utilizado por `_celula_furada`. Não encontrei o nome `dia_sem_trabalho` no registro ou no lookup; classificá-lo como autoridade nominalmente registrada seria impreciso. (`app/core/juizes.py:158`, `app/docs/JUIZES.md:66`, `app/chamados/juizes.py:443`)
-
-- A regra arquitetural é um juiz por pergunta; o lookup diz que a lei está no contrato 1 e o registro vivo em `core/juizes.py`. A L-061 manda consumir a ata. Assim, o delta corrige o caso None sem ata, mas deixa uma segunda expressão da decisão no supra; dizer que o delta **cria** esse segundo juiz exagera, pois a condição local já existia no diff fornecido. (`CLAUDE.md:281`, `app/docs/JUIZES.md:10`, `app/docs/LEIS.md:95`, `app/ponto/supra_juiz.py:443`)
-
-_935 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_938 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
