@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 31/10/2026 19:42:15.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (95.6 MB). Acoes na janela: **1830**.
+**Medido em 31/10/2026 19:47:51.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (95.6 MB). Acoes na janela: **1828**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1838,5 +1838,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 07:53:00 | Bash | Check push and E3 progress | `cd /home/ronald/saas-hasner; tail -3 logs/o261e/push_f1c4b.log \| cut -c1-150; ps -p 3727217 >/dev/null && echo vivo; grep -E '^(OK\|FAILED)\|^Ran \|^rc=' logs/e3_status_d5.out logs/e3status/green_vizinhos.log 2>/dev/null \| tail -4` |
 | 07:48:56 | Bash | Record F1C4-3 handback, check push | `cd /home/ronald/saas-hasner; date +%H:%M; python3 - <<'P' p='app/docs/RELATO.md'; s=open(p).read().split('\n') s.insert(3,'> **F1C4-3 construida (07:5x):** copia wt-f1c4-3-0708 HEAD 1d01bd90 (cura a30153c7: `chamados/juizes.py::dia_sem_trabalho` `is not True` -> `is False`; test_a2_marco_morto invertido). RED logs/o261e/f1c4_3_red.log FAILED (failures=4) = os 4 RED; vizinhos Ran 3188 so a caracter ...` |
 | 07:48:09 | Bash | Record E3 handback in RELATO, check push | `cd /home/ronald/saas-hasner; date +%H:%M; python3 - <<'P' p='app/docs/RELATO.md'; s=open(p).read().split('\n') s.insert(3,'> **E3-STATUS entregue (07:4x, AGENTE-NAO-ESPERA):** copia wt-e3-status-0712 HEAD 4ea6ffd2 (1 commit sobre e6f55b4d, rebase resolvido em portas/celula.py e cartorio.py); RED 4b675b20 = 14 falhas + 1 erro (logs/e3status/red_4b675b20.log). Em curso: GREEN vizinhos (logs/e3status ...` |
-| 07:47:12 | SendMessage |  | `-` |
-| 07:43:15 | Bash | Check push progress | `cd /home/ronald/saas-hasner; tail -3 logs/o261e/push_f1c4b.log \| cut -c1-200; ps -p 3727217 >/dev/null && echo vivo` |
