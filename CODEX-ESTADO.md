@@ -1,7 +1,57 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 17:09** · publicado em **31/10/2026 17:11** (UTC-3)
+> Ultima resposta processada: **31/10/2026 17:37** · publicado em **31/10/2026 17:37** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 17:37 · sessao fe7ba70ebfc3 · - · - · origem=Ronald (tmux)
+
+A3 e A4 têm cura no caminho pedido: Designar usa `previsto_agora and not status`, sem depender da cobertura; filtro desconhecido vira `todos` antes de recortar linhas. A execução dos testes está [não verificado]. (`app/templates/core/_painel_card.html:69`; `app/core/services/painel_op.py:64`; `app/core/services/painel_op.py:202`)
+
+Mapa de escritores/leitores:
+
+| Campo | Escritor | Leitores |
+|---|---|---|
+| `status` | Ramos `normal/geofence/turno_aberto/encerrado/None`, `painel_op.py:172–200`; publicação `:232` | Filtro `:202`, contadores `:245–248`, agregado geofence `:288`, ordenação `:296`; card `:6`, `:36`, `:54`, `:66–69` |
+| `previsao` | `_previsao_de_hoje`, `painel_op.py:27–35`; publicação `:239` | Avatar e badge, `_painel_card.html:54`, `:66–67`; novos testes `test_e4_7iii_painel_e_presenca.py:95`, `:104` | [nao verificado]
+| `dia` | `None`, depois D4 sob portão, `painel_op.py:212–220`; publicação `:240` | Tooltip, texto do badge, `_painel_card.html:66–67`; testes `test_e4_7iii_painel_e_presenca.py:131`, `:170–172`, `:264–266` | [nao verificado]
+| `data_turno` | Turno vivo, depois mapa do juiz, fallback hoje, `painel_op.py:230` | Testes `test_painel_op_turno_aberto_ancora.py:50`, `test_painel_op_turno_pelo_juiz.py:80`, novo `test_e4_7iii_painel_e_presenca.py:263`; consumidor de produção fora do serviço não identificado [não verificado] | [nao verificado]
+| `filtro_status` | GET página `core/views.py:627`; GET lote `:609`; normalização serviço `painel_op.py:64–65` | Serviço `:202`, `:284`; contexto da página mantém valor bruto `core/views.py:669`; lotes preservam GET em `_qs_sem_offset_pn`, `:580–585` |
+| `statuses` | `painel_op.py:56–61` | Validação `:64`, retorno `:314`; view `core/views.py:639`, contexto `:672`; uso no template atual não identificado [não verificado] |
+| `contadores` | `painel_op.py:244–249` | `core/views.py:637`, `:670`; `_painel_stats.html:32–35`, incluído pela página `painel_operacional.html:122` e fragmento `_painel_fragment.html:2–3` |
+
+Os caminhos de produção que chamam o serviço são a página e o lote; o lote reconstrói o painel inteiro e só fatia os postos depois. (`app/core/views.py:607`; `app/core/views.py:632`; `app/core/views.py:610–615`)
+
+Os `data-*` do card:
+
+- `data-search` recebe posto/empresa; busca lê `dataset.search`. (`app/templates/core/_painel_card.html:3`; `app/templates/core/painel_operacional.html:198`)
+- `data-cobertura`, `data-tem-geofence`, `data-tem-aberto` recebem os agregados/status; filtro JS lê os três. (`app/templates/core/_painel_card.html:4–6`; `app/templates/core/painel_operacional.html:176–182`)
+- Designar publica titular ID/nome, posto ID/nome e empresa ID; JS copia para `estado`. (`app/templates/core/_painel_card.html:69`; `app/templates/core/painel_operacional.html:280–285`)
+- GET de disponíveis envia titular, posto e janela; endpoint lê esses parâmetros. (`app/templates/core/painel_operacional.html:343`; `app/ponto/views.py:3065–3068`)
+- POST envia titular, substituto, posto, escala e janela; view delega à porta `designar_cobertura`. Empresa ID não integra esse POST. (`app/templates/core/painel_operacional.html:410–421`; `app/ponto/views.py:3027–3038`)
+- O botão não transporta `data_turno`; a janela nasce do relógio do navegador. (`app/templates/core/_painel_card.html:69`; `app/templates/core/painel_operacional.html:293–301`)
+
+Resíduos concretos fora do diff:
+
+1. **Filtro URL válido desaparece no refresh:** página aceita `?status=encerrado`, mas `hx-get` periódico inclui apenas `fragment` e empresa; após atualização, o serviço recebe `todos`. (`app/core/views.py:627`; `app/templates/core/painel_operacional.html:147`; `app/core/views.py:627`)
+2. **Dois abertos no mesmo posto somem do filtro Aberto:** template produz `"11"` e JS exige exatamente `"1"`. (`app/templates/core/_painel_card.html:6`; `app/templates/core/painel_operacional.html:178`)
+3. **Lotes chegam fora do filtro/busca ativo:** reaplicação acontece somente quando `afterSwap.target.id === 'pop-body'`; sentinela dos lotes usa `hx-target="this"`. (`app/templates/core/painel_operacional.html:161–166`; `app/templates/core/_painel_lote.html:7–8`)
+4. **Janela de Designar mistura data UTC e hora local:** `toISOString().slice(0,10)` fornece a data e `toTimeString()` a hora. Exemplo deduzido: abrir às 22h de 31/10 em UTC−3 gera início padrão 23h com data UTC 01/11, deslocando um dia; ocorrência real [não verificado]. (`app/templates/core/painel_operacional.html:294–301`)
+5. **Contexto não reflete a normalização A4:** o serviço usa `todos`, enquanto `filtro_status` no contexto e `qs_lotes` continuam com o parâmetro bruto; não há leitor atual identificado que torne isso quebra visual [não verificado]. (`app/core/services/painel_op.py:64–65`; `app/core/views.py:669`; `app/core/views.py:580–585`)
+6. **Selo antigo de crescimento não ganhou encerrados:** fixture de 45 e mais 100 cria colaboradores/escalas, sem batidas; portanto não exercita D4 por linha. (`app/core/tests/test_selo_lotes_painel.py:41–53`; `app/core/tests/test_selo_lotes_painel.py:95–106`)
+
+Instrumentos fora do diff:
+
+- Registro vivo mantém pendências dos quatro contadores, badge de aberto, `data-tem-aberto` e filtro JS; não foram declaradas curadas. (`app/core/juizes.py:715–716`; `:727–732`)
+- `bin/leitor_dia_estado.py` carrega o mesmo medidor e chama `censo`; `bin/gerar_estado.py` usa seu resultado. (`bin/leitor_dia_estado.py:25–35`; `bin/gerar_estado.py:284–291`)
+- `bin/sitios_por_pergunta.py` lê `core/juizes.py` por AST para produzir o inventário. (`bin/sitios_por_pergunta.py:22`; `:32–43`)
+- O esmeril de batida não inclui `painel_op.py` na superfície de apuração, portanto não constitui proteção dessa leitura no painel. (`bin/esmeril_batida_censo.py:79–87`)
+- O tripwire de contagem de pendência inclui o construtor do painel entre os leitores obrigados a usar `qs_na_fila`. (`app/core/tests/test_tripwire_contagem_de_pendencia.py:44–58`)
+
+ALLOWLIST/LOOKUP_ALLOWLIST:
+
+- A primeira controla `.date()` sobre timestamp via visitante AST; novos ofensores e entradas podres têm testes distintos. A retirada de `painel_op.py` é coerente com a troca por `dia_das_batidas`. (`app/ponto/tests/test_contract_no_batida_date.py:43–45`; `:187–217`; `:233–236`; `:247–264`)
+- A segunda controla lookups ORM `timestamp__date`; painel permanece residente para “hoje”, compatível com os lookups geofence/atividade ainda existentes. (`app/ponto/tests/test_contract_no_batida_date.py:126–129`; `:157–175`; `app/core/services/painel_op.py:104`; `:274`)
+- Novos lookups e entradas podres têm asserções próprias; não foi ampliada a exceção do painel no diff fornecido. (`app/ponto/tests/test_contract_no_batida_date.py:238–245`; `:266–278`)
 
 ## 31/10 17:09 · sessao 45436fe12f28 · E4-7-SAIDA-III · verificador · origem=Code
 
@@ -1028,16 +1078,4 @@ Escrita/leitura dos valores:
 
 Na virada20→21, a alimentação conserva o dia do mapa do motor e o núcleo soma pelo terceiro elemento; o filtro de competência e a consulta CCT usam esse mesmo `k` (`app/ponto/calculador/alimentacao.py:70`; `app/ponto/calculador/alimentacao.py:99`; `app/ponto/calculador/nucleo.py:134`; `app/ponto/calculador/nucleo.py:141`; `app/ponto/calculador/alimentacao.py:481`; `app/ponto/calculador/alimentacao.py:517`). A busca inclui a saída do dia21 e o motor filtra pelo dia da jornada (`app/ponto/services/fechamento.py:606`; `app/ponto/services/fechamento.py:610`; `app/ponto/motor_calculo_v2.py:2367`). Regressão adicional nessa classe: [nao verificado].
 
-## 31/10 16:26 · sessao e69e5490d2c0 · - · - · origem=Ronald (tmux)
-
-Complemento concluído.
-
-- **Procedente — escritor produtivo de `Batida.tipo`/`timestamp` fora da porta, anterior ao diff:** `materializar_regularizacao_externa` obtém `alvo = item.batida_alvo` e grava `alvo.tipo`, `alvo.timestamp`, `alvo.save(update_fields=['tipo','timestamp'])`; o FK do alvo aponta expressamente para `ponto.Batida`. Também remove por `alvo.delete()`. — `app/chamados/services/regularizacao_ext.py:127`, `app/chamados/services/regularizacao_ext.py:136`, `app/chamados/services/regularizacao_ext.py:153`, `app/chamados/models.py:3098`.
-- **Caminho alcançável pelas três cascas:** confirmação web chama `confirmar_e_materializar`, assim como as duas APIs; o helper chama o materializador. Não é fixture nem legado desabilitado; ocorrência efetiva em produção **[nao verificado]**. — `app/chamados/views_regularizacao.py:216`, `app/api/views.py:3061`, `app/api/views_core.py:1327`, `app/chamados/services/regularizacao_ext.py:347`; rotas em `app/chamados/urls.py:54`, `app/api/urls.py:91`, `app/api/urls_core.py:16`.
-- **Procedente — gate cego a esse escritor:** rodei somente o censo AST puro, com `python3 -B`, sem carregar Django/banco e sem escrever arquivos. Ele classifica `alvo.delete()` e `alvo.save()` como `entidade=None`; o gate pula entidades não atribuídas. Assim, “nenhum `Batida` atribuído fora da porta” não significa escritor único real. — implementação do censo em `app/core/censo_escritas.py:469`; limitação declarada em `app/core/censo_escritas.py:43`; descarte no gate em `app/ponto/tests/test_chokepoint_batida_gate.py:29`; escritas em `app/chamados/services/regularizacao_ext.py:136`, `app/chamados/services/regularizacao_ext.py:155`.
-- **Outros candidatos revisados não são escritas persistentes:** normalização de timestamp em cópia no pareador e normalização em memória no motor, sem `save` nesses trechos. — `app/ponto/turnos.py:1524`, `app/ponto/motor_calculo_v2.py:409`.
-- **Para `colaborador_id`, latitude, longitude e `retratada_em`:** o rg curto não encontrou outro escritor produtivo persistente fora da porta; exaustividade por alias/indireção **[nao verificado]**. Criação comum permanece `registrar_batida`; `retratada_em` passa por `anotar`/`retratar_batida` e desfazer humano. — `app/ponto/registro_batida.py:152`, `app/ponto/registro_batida.py:157`, `app/ponto/registro_batida.py:252`, `app/ponto/registro_batida.py:274`, `app/ponto/services/retratar_humano.py:207`.
-
-**Leituras do retorno:** não apareceu consumidor de `lat`, `lng` ou `data_turno` do retorno do painel nos templates/cards/JS ou views que usam o construtor; eles são publicados no dicionário. `data_turno` tem consumidores claros nos dois testes antigos; `lat/lng` ficam sem consumidor encontrado, não certificar “inexistente” universalmente. — publicação em `app/core/services/painel_op.py:190`, `app/core/services/painel_op.py:195`; entrega pelas views em `app/core/views.py:610`, `app/core/views.py:635`; consumidores de teste em `app/core/tests/test_painel_op_turno_aberto_ancora.py:50`, `app/core/tests/test_painel_op_turno_pelo_juiz.py:80`; card usa entrada/ID/geo/status em `app/templates/core/_painel_card.html:64`.
-
-_1156 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1157 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
