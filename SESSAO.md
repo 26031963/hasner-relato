@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 31/10/2026 00:45:47.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (15.0 MB). Acoes na janela: **502**.
+**Medido em 31/10/2026 00:51:01.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (15.1 MB). Acoes na janela: **503**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:50:55 | Bash | Read V-FASE full suite verdict | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/bxlddolan.output; cd /home/ronald/saas-hasner; tail -5 logs/vfase_asof/suite_inteira_75d13017.log; bin/trava_teste.sh --quem` |
 | 00:36:39 | Bash | Repoint ESPERANDO to live lock holder | `cd /home/ronald/saas-hasner && ps -p 3304131 -o pid= && sed -i "3s/pid=[0-9]*/pid=3304131/" app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md` |
 | 00:36:35 | Bash | Check ESPERANDO pid and next queue item | `cd /home/ronald/saas-hasner; ps -p 3063089 -o pid=,etime=; bin/trava_teste.sh --quem; grep -n 'O261-E-CELULA-20-UM-DONO' app/docs/BACKLOG.md \| head -3` |
 | 00:36:25 | Bash | Fix skip count in RELATO | `cd /home/ronald/saas-hasner/app/docs; sed -i '6s/so recebem hoje) = 7/so recebem hoje) = 8/' RELATO.md; grep -c 'hoje) = 8' RELATO.md` |

@@ -1,7 +1,75 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 00:45** · publicado em **31/10/2026 00:45** (UTC-3)
+> Ultima resposta processada: **31/10/2026 00:46** · publicado em **31/10/2026 00:51** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 00:46 · sessao 9bae963174b4 · O261-E-F1-CLASSE-4 · verificador · origem=Code
+
+O diff `HEAD × HEAD~1` ficou **[nao verificado]**: `git show HEAD` falhou porque a cópia entregue não contém repositório Git. Abaixo estão conclusões sobre o código atual; atribuí-las à introdução neste commit seria **[nao verificado]**. Ocorrência e quantidade em produção também são **[nao verificado]**. [nao verificado]
+
+1. **Quem escreve e quem lê**
+
+| Campo/valor | Quem escreve | Quem lê |
+|---|---|---|
+| `CelulaDia.trabalha` | Porta da célula: regeneração, reversão e geração (`app/ponto/portas/celula.py:231`, `:260`, `:532`, `:612`). | Juiz `EscalaColaborador.eh_dia_trabalho` (`app/escala/models.py:1072`); cartório (`app/ponto/services/cartorio.py:1156`); premissa dos chamados (`app/chamados/juizes.py:389`); leitor da grade (`app/escala/services/leitor_celula.py:344`). |
+| `dna['marcos']` | Conteúdo produzido por `montar_dna`, somente quando `trabalha is True` (`app/ponto/management/commands/gerar_celulas.py:79`, `:83`, `:100`); persistido pelas operações da porta (`app/ponto/portas/celula.py:260`, `:530`, `:614`). | Juiz dos marcos do vínculo (`app/escala/models.py:1099`); produtor das lâmpadas (`app/ponto/services/cartorio.py:434`); juiz do marco perguntado (`app/chamados/juizes.py:849`). |
+| `ata['lampadas']` | Produzida por `lampadas_do_dia`/`ata_do_dia`; teto aplicado por `_ata_ate_o_teto` (`app/ponto/services/cartorio.py:418`, `:555`, `:703`). Persistência por `lavrar_veredito` e `carimbar` (`app/ponto/portas/celula.py:690`, `:728`). | Lastro: acesos, inexistentes, apagados e pendentes (`app/ponto/services/lastro.py:89`, `:115`, `:128`, `:148`); pergunta (`app/chamados/juizes.py:866`); grade (`app/escala/services/leitor_celula.py:354`); folha (`app/folha/services/sem_furo.py:22`). |
+| Veredito `cobrado` | Escolhido pelo cartório quando há fio que ainda protesta (`app/ponto/services/cartorio.py:1195`); persistido pela porta (`app/ponto/portas/celula.py:692`). | Pertence a `VEREDITOS_ACUSAM` (`app/escala/models.py:1735`); lido pelo C6 (`app/chamados/juizes.py:1056`), E2 (`app/chamados/reconciliador.py:598`), fábrica (`app/chamados/services/fabrica_da_celula.py:86`) e retenção da folha (`app/folha/export.py:1215`). |
+| Pergunta materializada/retratada | Neste caminho, E2 escreve `materializada_em`, autor e `VIA_CELULA_ABSOLVEU` (`app/chamados/reconciliador.py:620`). Há outros escritores efetivos: materializador, emissão, dedup e portas do modelo (`app/chamados/services/materializacao.py:509`; `app/chamados/services/disputa_emissao.py:1562`; `app/chamados/services/fio.py:894`; `app/chamados/models.py:2456`). | C6 lê carimbo, via, resposta e célula (`app/chamados/juizes.py:1020`, `:1044`, `:1050`, `:1080`); `estado` delega a ele (`app/chamados/models.py:2435`). Desfazer carimbo também consulta C6 (`app/chamados/services/relavra_via.py:227`). |
+| Estado de `ChamadoColaborador` | Transições persistem por `_gravar_estado` (`app/chamados/models.py:222`, `:279`); nascimentos têm portas próprias (`app/chamados/models.py:1039`). | Motor decide transições (`app/chamados/models.py:637`); cartório seleciona vivos (`app/ponto/services/cartorio.py:1089`); C8 escolhe cobrança sobrevivente (`app/chamados/juizes.py:1625`); C6 também considera o estado do destino (`app/chamados/models.py:313`). |
+
+O modelo desses caminhos chama-se **`PerguntaDisputa`**, com estado `PENDENTE`; E2 “retrata” pelo carimbo e pela via de resolução (`app/chamados/models.py:2142`, `:2310`; `app/chamados/reconciliador.py:620`).
+
+**Sim, há leitores com critérios diferentes:**
+
+- O cartório exclui do protesto `trabalha=False` ou cobrança com todos os próprios marcos acesos; `dia_sem_trabalho` considera também `trabalha=None` e qualquer `ata.tipo_dia` diferente de trabalho. Os critérios divergem (`app/ponto/services/cartorio.py:1156`; `app/chamados/juizes.py:389`).
+- Os comandos `supra_juiz` e `emitir_furo_retroativo` continuam entregando **todos os chamados vivos** ao classificador, enquanto o cartório entrega `_protestam`. Portanto, a mesma classificação recebe insumos diferentes (`app/ponto/management/commands/supra_juiz.py:207`; `app/ponto/management/commands/emitir_furo_retroativo.py:100`; `app/ponto/services/cartorio.py:1159`).
+- `q_vivas` mantém toda célula provisória como candidata, sem a exceção pelo próprio marco aceso. Isso é uma seleção mais larga, permitida pelo contrato explícito de **continência**, com julgamento posterior; isoladamente, não é defeito (`app/chamados/models.py:2577`, `:2556`).
+- A absolvição de **chamados de turno** ainda exige ausência de qualquer marco pendente; E2 agora individualiza a pergunta. São universos diferentes: dia do chamado versus marco perguntado (`app/chamados/reconciliador.py:983`, `:610`).
+
+2. **Onde o desenho falha ou permanece incompleto**
+
+**A partição entre imediatos e adiados quebra a escolha do sobrevivente C8.** Considere dois `turno_aberto` no dia de folga, com véspera furada: o mais velho tem pergunta viva sob o veredito anterior acusador; o mais novo não tem fio. Esse módulo pertence ao universo lido pelo cartório, e C6 pode manter a pergunta viva pelo veredito anterior (`app/chamados/catalogo/furo_modulos.py:15`; `app/chamados/juizes.py:1054`).
+
+O caminho fica assim:
+
+- `_com_fio` é calculado antes da nova lavra; o velho vai para `_adiar`, o novo para `_porm` (`app/ponto/services/cartorio.py:1094`, `:1214`, `:1222`).
+- Cada subconjunto tem um elemento; o ordenador retorna sem consultar C8. O novo fecha por dedup apoiado no velho ainda vivo (`app/chamados/juizes.py:1645`; `app/chamados/models.py:702`).
+- Depois da lavra e de E2, o velho é tentado sozinho. Para `turno_aberto`, a folga não regulariza diretamente: a premissa consulta a véspera furada. Sem outro vivo, o fechamento é recusado (`app/ponto/services/cartorio.py:753`, `:756`; `app/chamados/models.py:1225`; `app/chamados/juizes.py:424`; `app/chamados/models.py:721`).
+
+**Resultado do caminho: novo fechado, velho vivo**, contrariando C8, que escolhe o mais novo por `-criado_em, -pk`. Ordenar separadamente os subconjuntos não ordena o lote inteiro. Reprodução com banco: **[nao verificado]** (`app/chamados/juizes.py:1627`; `app/ponto/services/cartorio.py:1222`, `:756`).
+
+**Há leitura obsoleta no memo do C6.** A chave não inclui ata nem DNA, embora a decisão dependa deles. Confirmei com funções extraídas em memória: pergunta provisória inicialmente viva; depois, alterando só a ata para acender seu marco, a mesma instância continua retornando `True`, enquanto `_pergunta_viva_calc` retorna `False`. Reprodução integrada com banco: **[nao verificado]** (`app/chamados/juizes.py:767`, `:793`, `:849`, `:866`, `:1068`).
+
+**O relógio não está inteiramente na borda recebida.** `julgar_celula(agora=...)` calcula `hoje` pelo relógio real e compara o fim do turno com outro `now()`, antes de encaminhar o `agora` fornecido. Assim, o instante injetado não governa todas as guardas (`app/ponto/services/cartorio.py:1597`, `:1618`, `:1621`).
+
+**Não constatei segundo escritor persistente novo nesses caminhos.** O cartório continua chamando a porta da célula; a sobreposição de ata em `celula_do_dia_agora` é somente em memória. E2 já é escritor sancionado no censo de `materializada_em`; esse campo possui escritores plurais declarados (`app/ponto/services/cartorio.py:1470`, `:1485`; `app/chamados/juizes.py:382`; `app/core/tests/test_contract_escritores_estado.py:83`).
+
+**Há risco de ordem inversa entre duas travas de chamados.** `reconciliar` trava o próprio chamado; a reata escolhe outro vivo e a porta de costura trava esse destino. Duas transações A→B e B→A podem solicitar as linhas em ordem inversa; não há ordenação conjunta por PK nesse caminho. Deadlock reproduzido: **[nao verificado]** (`app/chamados/models.py:672`, `:371`, `:418`; `app/chamados/services/fio.py:762`).
+
+**Idempotência não é uniforme.** O fechamento sequencial relê o banco e o motor impede novo `RECONCILIAR` sobre resolvido; a recusa de fechamento deduplica a trilha. Porém `reabrir` recusado por premissa regularizada ou admin sem fato novo escreve `reabertura_recusada` novamente em cada chamada: mesmo estado, várias linhas (`app/chamados/models.py:636`, `:378`, `:1335`, `:1341`; `app/chamados/catalogo/motor.py:111`).
+
+**Existe caminho de vai-e-volta por assimetria dia/turno.** O fechamento por dedup aceita outro vivo do **dia**; a reabertura procura irmão do **turno**, exigindo `entrada_timestamp`. O teste dos dois chamados em folga omite essa chave. Com véspera furada e vínculo sem veto, o fechado por sistema pode reabrir sem fato novo e voltar a fechar por dedup; a exigência de fato novo é específica do fechamento administrativo. Reprodução integrada: **[nao verificado]** (`app/chamados/models.py:702`, `:1283`, `:1294`, `:1373`; `app/chamados/juizes.py:1674`; `app/ponto/tests/test_fechar3_troca_escala_gate.py:131`, `:145`).
+
+3. **Chamado legítimo fechado e pergunta provisória sem batida**
+
+**O gate atual permite fechar chamado legítimo em ausência parcial.** A grade mantém `tipo_dia='ausencia'`, marca cobertura parcial e conserva as células faltantes; o classificador reconhece isso como dia de cobrança. Entretanto, `dia_sem_trabalho` responde verdadeiro para esse tipo, e `premissa_regularizada` aceita a resposta **antes de consultar o marco apagado** (`app/escala/utils.py:1180`, `:1190`, `:1195`; `app/ponto/supra_juiz.py:279`; `app/chamados/juizes.py:389`; `app/chamados/models.py:1225`).
+
+Logo, se `reconciliar()` for chamado para esse furo e não houver pergunta viva que retenha o fechamento, ele pode ser resolvido mesmo com marco realmente faltante; a mesma premissa depois impede reabrir. É defeito do gate atual, sem prova de introdução pelo HEAD ou ocorrência no dado de produção: **[nao verificado]** (`app/chamados/models.py:646`, `:649`, `:618`, `:1289`).
+
+**Nos ramos `_adiar`/`_porm`, trabalho verdadeiro com próprio marco apagado ou pendente continua protestando.** `marcos_acesos` não retorna verdadeiro nesse caso, portanto esses conjuntos não o selecionam somente pela mudança examinada (`app/ponto/services/lastro.py:175`, `:179`; `app/ponto/services/cartorio.py:1156`, `:1214`, `:1222`).
+
+**Pergunta provisória cujo próprio marco continua sem batida permanece protegida na nova condição.** Lâmpada `acesa=None`/`False` não prova o fato; C6 e E2 exigem literalmente `is True` para dispensar o teto. E2 ainda consulta `pergunta_viva` antes de carimbar (`app/chamados/juizes.py:869`, `:1068`; `app/chamados/reconciliador.py:610`, `:616`).
+
+4. **Ordem, conjunto reconciliado e testes existentes** [nao verificado]
+
+**Há um teste existente cuja expectativa de caminho precisa mudar:** ele exige `[RECONCILIA] `, mas os chamados de folga agora entram em `_porm`, que registra `[RECONCILIA-MARCO]`. As expectativas de estado e sobrevivente desse fixture continuam pertinentes (`app/ponto/tests/test_fechar3_troca_escala_gate.py:153`, `:154`, `:158`; `app/ponto/services/cartorio.py:1222`, `:1228`).
+
+**Esse teste não cobre a falha da partição:** cria ambos sem perguntas. Falta a variante “velho com fio, novo sem fio”, que percorre os dois subconjuntos e pode preservar o velho; isso pede cobertura adicional e correção da ordem global, não trocar a expectativa para aceitar o sobrevivente errado (`app/ponto/tests/test_fechar3_troca_escala_gate.py:142`; `app/ponto/services/cartorio.py:1214`, `:1222`, `:756`; `app/chamados/juizes.py:1627`).
+
+**O teste da segunda passada continua compatível:** a lista é ordenada por data antes do corpo; seu chamado falso único não provoca consulta C8, pois o ordenador retorna para lote menor que dois (`app/ponto/services/cartorio.py:766`; `app/chamados/tests/test_o261e_f1_codex_v5.py:169`, `:183`; `app/chamados/juizes.py:1645`).
+
+**Os testes antigos de provisória sem batida devem continuar exigindo pergunta viva e nenhum carimbo.** Eles usam justamente o próprio marco `acesa=None, pendente=True`, que não satisfaz a exceção nova (`app/chamados/tests/test_o261_pergunta_viva_teto.py:54`; `app/chamados/tests/test_o261_e2_absolvicao_exige_fato_encerrado.py:27`, `:64`). Resultado da suíte completa: **[nao verificado]**.
 
 ## 31/10 00:45 · sessao 6a0aa9eab820 · - · - · origem=Ronald (tmux)
 
@@ -901,54 +969,4 @@ Mapa para **c**:
 
 O RELATO tem uma função reutilizada, mas não um único processo escritor: `no_relato` faz read-modify-write com temporário fixo `RELATO.md.novo`, sem lock próprio. O lock novo do disjuntor só serializa quem o respeitar; chamadas preexistentes do vigia e geradores continuam concorrentes. `app/core/esteira_vigia.py:830-847`, `app/core/esteira_vigia.py:1129`, `bin/disjuntor.py:171-176`, `bin/gerar_cortes.py:117-136`.
 
-## 31/10 00:03 · sessao 8a469ce71757 · - · - · origem=Ronald (tmux)
-
-Achados concretos para Q2/Q3, só por código:
-
-1. **Os três carimbos não cobrem toda alteração do cadastro.**
-
-- O censo usa a âncora viva do vínculo para recalcular `prev`, não a âncora congelada no DNA: `app/ponto/management/commands/censo_fase_12x36.py:170` e `app/escala/services/propositor.py:218`. Alteração da âncora pelo signal só regenera desde a janela **atual**, não os dias antigos: `app/escala/signals.py:104`, `app/escala/signals.py:114`, `app/escala/signals.py:118`. Além disso, mudança para `None` sai sem regenerar: `app/escala/signals.py:108`. Portanto uma âncora diferente pode alterar o censo de uma competência antiga sem alterar nenhum dos três carimbos nessa competência; o vínculo não tem carimbo próprio, como reconhece `app/escala/signals.py:125`.
-- Há escrita explícita para apagar âncoras por `QuerySet.update`, sem signal: `invalidar_ancoras_incoerentes`, `app/colaboradores/services/vinculo.py:849`, chamado por `app/escala/utils.py:2049`. O chamador maior `executar_vinculo` regenera o vínculo alvo depois, mas a invalidação pode alcançar outros vínculos ativos do colaborador: `app/colaboradores/services/vinculo.py:852`, `app/colaboradores/services/vinculo.py:312`.
-- **Recusa de escala** chama `reverter_para_snapshot`: `app/chamados/services/acoes_chamado.py:141`. A reversão apaga os vínculos novos e restaura tipo, início, fim e ativa por `update`, sem regeneração: `app/colaboradores/services/vinculo.py:864`, `app/colaboradores/services/vinculo.py:874`. Apagar vínculo pode zerar a geradora da célula por `SET_NULL`, sem mover os carimbos: `app/escala/models.py:1660`. Isso altera a autoridade do dia e o universo/segmentos do censo: `app/escala/alimentacao.py:237`, `app/escala/alimentacao.py:253`, `app/ponto/management/commands/censo_fase_12x36.py:156`.
-- **Alteração de template** propaga regeneração apenas para vínculos ativos e desde a competência anterior: `app/escala/services/cadastro_tipo.py:334`, `app/escala/services/cadastro_tipo.py:337`, `app/escala/services/cadastro_tipo.py:348`. Alteração do ciclo de template histórico pode tirar dias/colaborador do universo 12x36, sem carimbo antigo: `app/ponto/management/commands/censo_fase_12x36.py:104`, `app/ponto/management/commands/censo_fase_12x36.py:157`. A geometria viva também alimenta o pareador: `app/ponto/turnos.py:1889`, `app/ponto/turnos.py:1965`.
-- Mesmo a correção pela porta pode deixar o passado sem carimbo: a regeneração pula competências lavradas e células humanas, enquanto o censo lê vínculo e âncora vivos: `app/ponto/portas/celula.py:238`, `app/ponto/portas/celula.py:251`, `app/ponto/management/commands/censo_fase_12x36.py:171`. O comando retroativo ainda admite piso de regeneração posterior ao início corrigido: `app/colaboradores/management/commands/corrigir_escala_retroativa.py:212`, `app/colaboradores/management/commands/corrigir_escala_retroativa.py:225`.
-
-2. **Batida sem célula não gera nenhum dos três carimbos.**
-
-O evento chama o cartório, mas ele retorna se a célula não existe: `app/ponto/signals.py:131`, `app/ponto/services/cartorio.py:1547`. O censo consegue medir esses dias pelo fallback de vigência: `app/escala/alimentacao.py:253`, e lê suas batidas: `app/ponto/management/commands/censo_fase_12x36.py:172`. O novo gatilho consulta exclusivamente células existentes: `app/escala/services/fase_12x36.py:182`. Logo inserir/retratar/apagar batida de uma janela histórica sem células pode mudar a paridade sem reabertura. O exemplo de teste cria a célula antes da batida e não cobre esse caso: `app/escala/tests/test_vfase_dono_as_of.py:54`.
-
-3. **Correção que move batida de data não carimba a origem no evento.**
-
-A regularização externa modifica `timestamp` e salva a instância: `app/chamados/services/regularizacao_ext.py:149`. O receiver calcula somente a nova data e a nova véspera, sem reter a data antiga: `app/ponto/signals.py:108`, `app/ponto/signals.py:131`. Se a batida sair de uma janela antiga para outra distante, o evento não marca a janela de origem; depende da varredura posterior do cartório: `app/ponto/management/commands/processar_cartorio.py:49`. Já `delete` comum chama o cartório com a data original: `app/ponto/signals.py:138`. Não confirmei caminho produtivo que mude `colaborador` da batida; essa generalização seria [nao verificado].
-
-4. **Nascimento/enriquecimento de DNA sem carimbo existe.**
-
-O gerador cria células antigas ou preenche DNA antes nulo sem escrever `julgada_em`, `regenerada_em` ou `editada_em`: `app/ponto/portas/celula.py:592`, `app/ponto/portas/celula.py:603`. O DNA alimenta a geometria real do turno: `app/ponto/turnos.py:1946`, `app/ponto/turnos.py:1973`. O novo gatilho ignora `gerada_em`: `app/escala/services/fase_12x36.py:183`. O leitor de invalidação já existente considera `gerada_em` e `veredito_em` além desses três campos: `app/chamados/veredito_lavrado.py:151`.
-
-5. **Escritores reais dos carimbos.**
-
-| Campo | Escritor |
-|---|---|
-| `julgada_em` | `carimbar`, atribui o `agora` recebido e grava: `app/ponto/portas/celula.py:721`, `app/ponto/portas/celula.py:728`. O cartório chama após julgamento: `app/ponto/services/cartorio.py:999`, `app/ponto/services/cartorio.py:1424`. |
-| `regenerada_em` | Regeneração de vínculo: `app/ponto/portas/celula.py:262`; reversão de regeneração de um dia: `app/ponto/portas/celula.py:536`. Os dois leem relógio diretamente. |
-| `editada_em` | Campo existe: `app/escala/models.py:1700`, mas **não há escritor produtivo** no censo da cópia; o contrato declara explicitamente `SEM_ESCRITOR`: `app/escala/tests/test_d3_guarda_da_linha_celula.py:50`, `app/escala/tests/test_d3_guarda_da_linha_celula.py:69`. Portanto a docstring nova promete um gatilho humano que atualmente não tem produtor: `app/escala/services/fase_12x36.py:160`. |
-
-A regeneração tem mais exceções que a docstring nova reconhece: fora da vigência há um ramo que salva apenas `trabalha`/`dna` (`app/ponto/portas/celula.py:231`); criação salva só `gerada_em` automático (`app/ponto/portas/celula.py:247`); regeneração normal só marca quando DNA/trabalha/geradora diferem (`app/ponto/portas/celula.py:251`). Com `recalculo=True`, os dias tocados geralmente são julgados depois, mas células com veredito humano são excluídas dessa etapa: `app/ponto/portas/celula.py:360`, `app/ponto/portas/celula.py:365`.
-
-6. **Leitores produtivos dos carimbos encontrados por busca.**
-
-- Novo gatilho: todos os três, `app/escala/services/fase_12x36.py:183`.
-- Invalidação da lavra de perguntas: todos os três, mais `gerada_em`/`veredito_em`, `app/chamados/veredito_lavrado.py:153`.
-- Cartório: regenerada/editada para detectar fato no intervalo, `app/ponto/services/cartorio.py:285`; julgada para pular impressão igual, `app/ponto/services/cartorio.py:943`, `app/ponto/services/cartorio.py:1092`.
-- Regeneração/cobrança órfã: `app/escala/services/regeneracao.py:80`, `app/escala/services/regeneracao.py:145`; `app/ponto/management/commands/gerar_celulas.py:242`; `app/ponto/management/commands/supra_juiz.py:152`; `app/chamados/management/commands/materializar_passivo_validado.py:220`.
-- Exibição/diagnóstico: `app/ponto/services/dia_do_colab.py:91`; `app/ponto/management/commands/celula_veredito_velho.py:109`.
-- Universo de backfill/vigia: `app/ponto/management/commands/backfill_b5_insumos.py:61`; `app/ponto/management/commands/vigia_b5_ausencia.py:55`.
-- Auditoria de julgada sem veredito: `app/chamados/management/commands/auditar_invariantes_chamados.py:1593`.
-
-7. **Pré-requisito do cartório ficou de fora da declaração do cron.**
-
-O cron declara explicitamente que não depende do cartório, e só depende de `reconciliar_vinculo`: `app/config/crons.py:617`, `app/config/crons.py:620`; este só declara `detectar_par_relampago`: `app/config/crons.py:470`. O novo gatilho depende de `julgada_em`: `app/escala/services/fase_12x36.py:183`; o batch que atualiza esse campo julga todas as células passadas: `app/ponto/management/commands/processar_cartorio.py:49`, `app/ponto/management/commands/processar_cartorio.py:65`. O horário nominal anterior do cartório (`app/config/crons.py:597`) não prova execução/conclusão nem substitui a dependência.
-
-Signals de batida normais tentam julgar sincronicamente, inclusive exclusão: `app/ponto/signals.py:131`, `app/ponto/signals.py:138`; porém o julgamento é best effort e falha não barra a escrita: `app/ponto/signals.py:85`. Não encontrei bulk produtivo de batidas que justificasse alegar esse caminho como fato; o `bulk_create` identificado está restrito a ensaio: `app/ponto/registro_batida.py:331`.
-
-_836 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_837 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
