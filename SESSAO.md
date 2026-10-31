@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 31/10/2026 20:03:54.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (96.2 MB). Acoes na janela: **1854**.
+**Medido em 31/10/2026 20:09:26.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (96.4 MB). Acoes na janela: **1861**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:08:58 | Bash | Set ESPERANDO to the real V3 chain pid | `cd /home/ronald/saas-hasner; sed -i "3s#.*#ESPERANDO: /home/ronald/saas-hasner/logs/v3per/v3/rodar_v3p5.sh \| pid=3853516#" app/docs/RELATO.md; cd bin; python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
+| 20:08:54 | Bash | Find the real V3 chain pid without self-match | `cd /home/ronald/saas-hasner; ps -eo pid,args \| awk '$2=="bash" && $3 ~ /rodar_v3p5\.sh$/ {print $1}'; ls logs/v3per/v3/` |
+| 20:08:50 | Bash | Point ESPERANDO at the stable V3 chain process | `cd /home/ronald/saas-hasner; P=$(pgrep -f 'bash /home/ronald/saas-hasner/logs/v3per/v3/rodar_v3p5.sh' \| head -1); echo $P; ps -o args= -p $P; sed -i "3s#.*#ESPERANDO: /home/ronald/saas-hasner/logs/v3per/v3/rodar_v3p5.sh \| pid=$P#" app/docs/RELATO.md; cd bin; python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
+| 20:08:38 | Bash | Log TRAVA-COB harvest in RELATO | `cd /home/ronald/saas-hasner; cat >> app/docs/RELATO.md <<'EOF' - TRAVA-COB volta 2 COLHIDA pela sessao: mutante P2/P3/P6 Ran 21 FAILED (failures=10) rc=1 = MORDE; suite core da copia wt-travacob-174015 Ran 1386 OK (skipped=21) rc=0. Censo Codex do DONO-DO-JOB pronto (logs/trava_cob/v3/pv/c1.r). Volta 3 (DONO-DO-JOB) abre no proximo slot (GRADE e PDC v6 ocupam os 2). EOF echo ok` |
+| 20:08:33 | Bash | Read TRAVA-COB chain verdicts | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/bqz1s8ozb.output; cd /home/ronald/saas-hasner; grep -E '^(FAIL\|ERROR):' logs/trava_cob/v2/mutante_P2_P3_P6.txt logs/trava_cob/v2/suite_core_copia.txt \| head; tail -1 logs/trava_cob/v3/pv/c1.run` |
+| 20:04:07 | Bash | Commit the marco docs and refresh ESPERANDO | `cd /home/ronald/saas-hasner; sed -i '3s/pid=[0-9]*/pid=3792545/' app/docs/RELATO.md; date +%H:%M; cat >> app/docs/RELATO.md <<'EOF' - PUSH E4-7 FEITO: rc=0, 76856b51..25069572 no origin (suite tenant Ran 13124 OK skipped=42, expected failures=25; control-plane verde); pos_push fechou o topo do TICKETS em 09992433 (do fabricante, vai no proximo push). EOF git add app/docs/BACKLOG.md app/docs/CORTES ...` |
+| 20:03:56 | Bash | Confirm push landed and see docs to commit | `cd /home/ronald/saas-hasner; git fetch -q origin; git rev-list --count origin/main..main; git log --oneline -2; git status --porcelain \| grep -v '^??' ; ps -o args= -p 3792545 \| cut -c1-60` |
 | 20:03:50 | Bash | Check trava holder and push state | `cd /home/ronald/saas-hasner/bin; ./trava_teste.sh --quem; tail -3 ../logs/push/push_e47b.log \| cut -c1-200; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/b24uz1406.output \| tail -5` |
 | 20:03:34 | Bash | Wait for V3-P5 green, vizinhos and full suite | `cd /home/ronald/saas-hasner; until [ -f logs/v3per/v3/rodar_v3p5.done ]; do /usr/bin/sleep 60; done; for f in green vizinhos full; do echo == $f; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/v3per/v3/$f.log \| tail -3; done` |
 | 20:03:32 | SendMessage |  | `-` |
