@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 31/10/2026 03:52:11.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (23.8 MB). Acoes na janela: **775**.
+**Medido em 31/10/2026 03:57:57.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (23.9 MB). Acoes na janela: **778**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:53:10 | Bash | Record F5C cure 2 and suite waiter in RELATO | `cd /home/ronald/saas-hasner; P=$(pgrep -f 'trava_teste.sh --espera 3600.*wt-o261e-f5-2048' \| head -1); echo $P; python3 - "$P" <<'P' import sys p='app/docs/RELATO.md'; s=open(p).read().split('\n') s[2]=f'ESPERANDO: trava_teste.sh \| pid={sys.argv[1]}' s.insert(4,'> **F5C cura 2 pronta (8fef4d21, 03:5x):** juiz particiona por `qs_vivos` (mesmo universo do painel/badge), fila por `fila_ids`; "arqui ...` |
+| 03:52:44 | Bash | Get suite waiter pid for ESPERANDO | `cd /home/ronald/saas-hasner; sleep 20; pgrep -af 'trava_teste.sh --espera' \| grep -o '^[0-9]* .\{0,60\}' ; grep -o 'wt-[a-z0-9-]*' <(pgrep -af 'trava_teste.sh --espera'); date '+%H:%M'` |
+| 03:52:40 | Bash | Run full suite on F5C copy 8fef4d21 | `cd /home/ronald/saas-hasner && git -C /home/ronald/wt-o261e-f5-2048 status --porcelain \| head -3; git -C /home/ronald/wt-o261e-f5-2048 log --oneline -1; ESTEIRA_QUEM=f5c2-suite bin/suite.sh --dir /home/ronald/wt-o261e-f5-2048 --espera 3600 > logs/o261e/f5c2_suite_completa_8fef4d21.log 2>&1; echo rc=$? >> logs/o261e/f5c2_suite_completa_8fef4d21.log; grep -E '^(OK\|FAILED)($\| \()' logs/o261e/f5c2_ ...` |
 | 03:37:46 | Bash | Record F1C4 Codex result in RELATO | `cd /home/ronald/saas-hasner; python3 - <<'P' p='app/docs/RELATO.md'; s=open(p).read().split('\n') s[2]='ESPERANDO: codex_pergunta.sh \| pid=1876026' s.insert(4,'> **F1C4 7b76efa7: Codex final (03:37) NAO aprova** -- a guarda nova `_protesta(x)` antes de ressuscitar (cartorio.py:1355) le a celula do DIA e perde o caso da vespera (turno_aberto em D+1 folga cobrando D, models.py:1232); e `reabrir()`  ...` |
 | 03:37:40 | Bash | Find live producer for ESPERANDO line | `cd /home/ronald/saas-hasner; pgrep -af 'trava_teste.sh --espera\|codex_pergunta.sh --' \| cut -c1-90; date '+%H:%M'` |
 | 03:37:36 | SendMessage |  | `-` |
