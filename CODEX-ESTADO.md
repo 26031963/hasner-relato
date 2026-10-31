@@ -1,7 +1,159 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 07:21** · publicado em **31/10/2026 07:26** (UTC-3)
+> Ultima resposta processada: **31/10/2026 07:35** · publicado em **31/10/2026 07:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 07:35 · sessao 45b4164c7701 · F1C4-3 · verificador · origem=Code
+
+**Não aprovaria a obra como “predicado único”.** A troca atende ao aval dentro de `dia_sem_trabalho`, mas altera a escolha entre dia e véspera, mantém decisões paralelas em produção e deixa um teste legado afirmando a regra revogada. (`app/chamados/juizes.py:408`, `app/chamados/juizes.py:443`, `app/ponto/services/cartorio.py:1167`, `app/ponto/tests/test_a2_marco_morto.py:38`)
+
+**(a) Escritores, leitores e alcance da mudança**
+
+| Campo | Quem escreve | Quem lê |
+|---|---|---|
+| `CelulaDia.trabalha` | A porta da célula: geração e regeneração recebem `eh_dia_trabalho_calculado`; também existem saneamento fora da vigência e reversão de regeneração. (`app/ponto/portas/celula.py:590`, `:595`, `:243`, `:260`, `:231`, `:532`) | O juiz registrado do vínculo devolve o valor ternário; `dia_sem_trabalho` interpreta esse valor junto da ata; `_protesta` faz sua própria seleção. (`app/escala/models.py:1072`, `app/chamados/juizes.py:408`, `app/ponto/services/cartorio.py:1167`) |
+| `ata['tipo_dia']` | `cartorio.ata_do_dia` copia o tipo produzido pela grade; a porta persiste a ata. (`app/ponto/services/cartorio.py:566`, `app/ponto/portas/celula.py:725`, `:732`) | `dia_sem_trabalho`, leitor da célula e consumidores da grade, inclusive folha. (`app/chamados/juizes.py:408`, `app/escala/services/leitor_celula.py:344`, `app/folha/export.py:1071`) |
+| `ata['lampadas']` | `lampadas_do_dia`, incorporado por `ata_do_dia`; dispensa acende lâmpadas e teto temporal marca pendentes com `acesa=None`. A persistência passa pela mesma porta. (`app/ponto/services/cartorio.py:427`, `:564`, `:617`, `:713`; `app/ponto/portas/celula.py:732`) | `_celula_furada`, lastro por marco, apresentação e folha. (`app/chamados/juizes.py:455`, `app/ponto/services/lastro.py:175`, `app/escala/services/leitor_celula.py:93`, `app/folha/previa.py:84`) |
+
+Há atas projetadas **em memória**, sem constituir escritor persistente adicional: a grade reutiliza `lampadas_do_dia`, e a leitura do julgamento atual recebe uma cópia pela porta. (`app/escala/utils.py:1818`, `:1826`, `:1832`; `app/chamados/juizes.py:394`; `app/ponto/portas/celula.py:678`)
+
+O efeito nas três funções é:
+
+- **`dia_sem_trabalho`:** somente `None` com tipo ausente/vazio ou `'trabalho'` muda de `True` para `False`; a cláusula da ata permanece. Isso corresponde às duas cláusulas literais do aval. (`app/chamados/juizes.py:407`, `:408`)
+- **`_celula_furada`:** nesses casos, deixa de recursar à véspera e passa a consultar as lâmpadas do próprio dia. Portanto, a mudança **não é monotônica no sentido de cobrar mais**. (`app/chamados/juizes.py:443`, `:446`, `:452`, `:455`)
+- **`premissa_regularizada`:** perde o retorno antecipado de dia sem trabalho e passa pelos marcos, pelo furo e eventualmente pelos fallbacks. Justificativa aprovada e decisão administrativa continuam podendo regularizar antes disso. (`app/chamados/models.py:1214`, `:1230`, `:1232`, `:1236`, `:1245`, `:1247`, `:1253`)
+
+**Contraexemplo relevante:** D tem `trabalha=None`, ata de trabalho e todas as lâmpadas acesas; D−1 tem lâmpada apagada, sem cobertura de ausência. Antes, `_celula_furada(D)` consultava D−1 e retornava `True`; depois retorna `False` pelas lâmpadas de D. Para `turno_aberto*`, o coletor deliberadamente não usa o atalho dos demais módulos: chega a essa mudança e pode considerar regularizado um chamado cuja véspera continua furada. É uma consequência estática do código; ocorrência em produção **[nao verificado]**. (`app/chamados/juizes.py:443`, `:446`, `:455`, `:465`; `app/chamados/models.py:1232`, `:1247`)
+
+O aval não explicita retirar a consulta à véspera nesse cenário, e o RED novo não o cobre; já existe teste exigindo que um `turno_aberto` datado na folga continue vivo pela véspera furada, mas usando `trabalha=False`, não `None`. (`app/chamados/tests/test_f1c4_3_none_cobra.py:93`, `:105`; `app/ponto/tests/test_o261e_f1c4_ressuscita_pergunta_ao_c6.py:65`, `:66`, `:75`, `:88`)
+
+Também há um defeito **preexistente** nessa recursão: ela não transmite `para=para`; uma consulta para folha volta ao default cobrança na véspera, onde ausência aberta pode cobrir. Ao evitar a recursão em D=None, o diff também muda qual política de cobertura participa. (`app/chamados/juizes.py:411`, `:424`, `:426`, `:446`)
+
+Os leitores indiretos afetados incluem:
+
+| Porta/leitor | Consequência possível, se os demais requisitos permitirem |
+|---|---|
+| S122 humano | Premissa antes regularizada pode passar a impedir resolução com `ValueError`. (`app/chamados/models.py:175`, `:177`, `:185`) |
+| Fechamento pelo sistema | Pode recusar reconciliação; permanecem as exceções de agrupamento e deduplicação. (`app/chamados/models.py:646`, `:699`, `:709`) |
+| Reabertura | Pode deixar de recusar por premissa regularizada; veto do dia e fechamento administrativo sem fato novo continuam anteriores. (`app/chamados/models.py:1285`, `:1290`, `:1296`) |
+| Emissor que encontra encerrado | `abrir` pede renascimento com os marcos do **novo pedido**; passa por `reabrir`, podendo gravar estado e ressuscitar perguntas. (`app/chamados/models.py:880`, `:882`, `:978`, `:1235`, `:1380`, `:1389`) |
+| Defesa 1 | O fechamento do pai passa pelo mesmo `reconciliar` afetado. (`app/chamados/signals.py:42`) |
+
+Esses efeitos são alcançados pelo coletor comum; não são automaticamente violações do aval. A lacuna é certificá-los apenas com chamadas diretas ao juiz/coletor, sem testar os portões e o caso da véspera. (`app/chamados/tests/test_f1c4_3_none_cobra.py:40`, `:95`, `:109`)
+
+**(b) Mesma pergunta ou perguntas distintas**
+
+**`_protesta` inteiro responde outra pergunta:** “este chamado deve participar como protesto neste julgamento?”. Inclui a satisfação dos marcos específicos, cujo juiz é `marcos_acesos`. Essa parte não equivale a “dia sem trabalho”. (`app/ponto/services/cartorio.py:1167`; `app/ponto/services/lastro.py:153`, `:170`)
+
+**Mas contém uma subpergunta duplicada e divergente:**
+
+```text
+dia_sem_trabalho: trabalha é False OU ata.tipo_dia não trabalho
+_protesta:       trabalha não é False E marcos não comprovadamente acesos
+```
+
+Para `trabalha=True` ou `None`, ata `'folga'` e marco apagado/sem marco: `dia_sem_trabalho=True`, enquanto `_protesta=True`. A dispensa pelo tipo lavrado é reconhecida num sítio e ignorada no outro. (`app/chamados/juizes.py:408`; `app/ponto/services/cartorio.py:1167`; `app/ponto/services/lastro.py:172`, `:179`)
+
+Isso interfere na entrada de `classificar_dia`, na lâmpada `'cobrado'`, no adiamento e na seleção para reconciliação. A divergência **já existia**; o diff alinha o caso None/ata trabalho, mas não realiza a promessa de predicado único. (`app/ponto/services/cartorio.py:1168`, `:1170`, `:1206`, `:1236`, `:1237`, `:1242`)
+
+Outros sítios ainda classificam None como folga/sem trabalho:
+
+- Relatório soma em `folga` e deixa de examinar a acusação. (`app/relatorios/dia_da_frota.py:47`)
+- Frase para admin/IA afirma “Dia sem trabalho previsto: nenhuma marca era esperada”. (`app/ponto/services/dia_do_colab.py:121`)
+- Passivo classifica como `FOLGA`, classe selecionada por `a_retratar`. (`app/ponto/services/passivo_s84.py:96`, `:116`)
+- `reconciliar_grade` mantém a derivação “previsto não sabido = premissa morta”, inclui indefinidos entre mortos e fornece fatos `False` literais antes de tentar retratar; o gate posterior pode recusar. (`app/ponto/management/commands/reconciliar_grade.py:272`, `:275`, `:292`, `:300`; `app/chamados/models.py:699`)
+
+Há também **perguntas legitimamente distintas**: o juiz registrado do vínculo responde o valor ternário da previsão; `dia_sem_trabalho` acrescenta a decisão lavrada na ata; fabricar pergunta ou autorizar plantio exige evidência positiva e não constitui, por si, afirmação de folga. (`app/core/juizes.py:158`; `app/escala/models.py:1072`; `app/chamados/juizes.py:408`; `app/chamados/services/fabrica_da_celula.py:78`; `app/chamados/services/materializacao.py:158`)
+
+Uma tensão adicional é preexistente: a grade pode lavrar `'ausencia'` **parcial**, preservando as células, enquanto `classificar_falta` não cala por ausência parcial. O aval manda manter a cláusula ampla da ata; não atribuo essa divergência à alteração proposta. (`app/escala/utils.py:1180`, `:1190`, `:1195`; `app/escala/servico_jornada.py:313`, `:344`; `app/chamados/juizes.py:408`)
+
+**(c) Teste existente que afirma o comportamento antigo** [nao verificado]
+
+**Sim:** `MarcoMortoTest.test_cobranca_em_dia_indefinido_e_retratada`. O comentário declara literalmente None como “dia sem furo”; a fixture cria `trabalha=None`, e a expectativa exige retratação. Essa especificação precisa ser invertida diante do aval. (`app/ponto/tests/test_a2_marco_morto.py:28`, `:38`, `:40`, `:44`)
+
+Não afirmo que o teste necessariamente falhe agora: ele cria célula sem ata; depois do diff, esse caso alcança o retorno desconhecido e os fallbacks do coletor. Resultado executado **[nao verificado]**. (`app/ponto/tests/test_a2_marco_morto.py:40`; `app/chamados/juizes.py:452`; `app/chamados/models.py:1250`)
+
+**(d) Checklist**
+
+| Classe | Verificação |
+|---|---|
+| Segundo juiz duplicando registrado | Não há função nova no diff. Não basta chamar `dia_sem_trabalho` de clone do juiz ternário do vínculo; a duplicação comprovada está na interpretação paralela usada por `_protesta`. (`app/core/juizes.py:158`; `app/escala/models.py:1072`; `app/chamados/juizes.py:408`; `app/ponto/services/cartorio.py:1167`) |
+| Segundo escritor fora da porta | Não aparece escritor novo de produção; a atualização direta no arquivo novo é fixture. (`app/chamados/juizes.py:407`; `app/chamados/tests/test_f1c4_3_none_cobra.py:83`) |
+| Relógio fora da borda | O predicado alterado não lê relógio; o teste usa tempo congelado. (`app/chamados/juizes.py:407`; `app/chamados/tests/test_f1c4_3_none_cobra.py:59`) |
+| Derivação paralela | Permanece em `_protesta`, nas classificações de None e no retratador de indefinidos descritos acima. (`app/ponto/services/cartorio.py:1167`; `app/ponto/services/passivo_s84.py:96`; `app/ponto/management/commands/reconciliar_grade.py:275`) |
+| RED sem mordida | **O RED novo morde a volta de `is not True`:** os dois asserts diretos exigem `False` onde o predicado antigo retorna `True`. Falta cobertura da véspera e dos portões, não mordida dessa mutação. Execução **[nao verificado]**. (`app/chamados/tests/test_f1c4_3_none_cobra.py:40`, `:43`, `:95`, `:109`; `app/chamados/juizes.py:405`) |
+| Ordem de trava | O diff não altera aquisição de locks; o fechamento atual trava a linha dentro do atomic. Prova concorrente desta obra **[nao verificado]**. (`app/chamados/juizes.py:407`; `app/chamados/models.py:666`, `:672`) |
+| Pouso antes do pré-requisito | Há exigência documental de sombra antes do pouso e vai-e-volta zero. Seu cumprimento não está demonstrado pelo material fornecido **[nao verificado]**. (`app/docs/CORTES.md:409`, `:412`) |
+
+## 31/10 07:33 · sessao d1ff92a88f33 · - · - · origem=Ronald (tmux)
+
+Escritores e fontes:
+
+- `trabalha`: a porta declara dono único e operações em `app/ponto/portas/celula.py:3`, `:66`; geração recebe `eh_dia_trabalho_calculado` e cria/atualiza em `:590`, `:595`, `:612`; regeneração em `:243`, `:247`, `:260`; fora do vínculo vira `False` em `:231`; reversão usa existência de `dna.marcos` em `:532`.
+- `ata.tipo_dia` e `ata.lampadas`: `ata_do_dia` monta ambos em `app/ponto/services/cartorio.py:558`, `:564`, `:566`; produtor comum das lâmpadas em `:427`; ausência/justificativa dispensam acendendo lâmpadas em `:593`, `:611`, `:617`; teto modifica pendentes em `:706`.
+- Persistência da ata: fachada `app/escala/models.py:1775` delega à porta; atribuições e salvamento em `app/ponto/portas/celula.py:697`, `:711`, `:725`, `:732`. `carimbar_precedencia` acrescenta somente chave `precedencia`, `:774`, `:775`, preservada no merge `:703`.
+- Projeções em memória: `app/escala/utils.py:1826` copia célula e põe somente lâmpadas/orfas em `:1827`; `app/ponto/portas/celula.py:667` cria cópia do julgamento atual, ata em `:680`. Não equivalem a novo escritor persistente.
+
+Comparação de perguntas:
+
+- Autoridade registrada “dia de trabalho para o vínculo” é `eh_dia_trabalho`, `app/core/juizes.py:158`; devolve o valor ternário bruto da célula em `app/escala/models.py:1072`. `dia_sem_trabalho` adiciona uma pergunta composta: escala explicitamente folga **ou** ata não trabalho (`app/chamados/juizes.py:408`). Portanto não é simplesmente outra implementação da negação booleana do juiz do vínculo.
+- `_protesta` responde se um chamado contribui para o julgamento atual, incluindo seus **marcos**, `app/ponto/services/cartorio.py:1166`, `:1167`. Função inteira difere de `dia_sem_trabalho`, mas o subpredicado “dia sem trabalho” diverge: `trabalha=True/None`, `ata.tipo_dia='folga'/'ausencia'`, marco apagado → `_protesta=True`, `dia_sem_trabalho=True`. A divergência da cláusula ata é preexistente; o diff alinha o caso `None + ata trabalho`, não elimina as duas definições (`app/chamados/juizes.py:408`; `app/ponto/services/cartorio.py:1167`).
+- Atenção: `'ausencia'` na ata pode indicar cobertura **parcial**, preservando batidas e lâmpadas, `app/escala/utils.py:1180`, `:1190`, `:1195`. `classificar_falta` declara que parcial não cala cobrança em `app/escala/servico_jornada.py:313` e somente retorna sem furo quando ausência não parcial em `:342`, `:344`. A cláusula 2 do aval mantém a supressão ampla; não é falha introduzida por este diff.
+
+Outros consumidores ainda equiparam `None` a folga:
+
+- Relatório soma `folga` e exclui acusações em `app/relatorios/dia_da_frota.py:47`.
+- Frase para admin/IA afirma “Dia sem trabalho previsto: nenhuma marca era esperada” em `app/ponto/services/dia_do_colab.py:121`.
+- Passivo classifica `None=FOLGA` em `app/ponto/services/passivo_s84.py:96`; `a_retratar` seleciona essa classe em `:116`. São classificações do mesmo fato, com efeitos diferentes.
+- Já exigir `True` para fabricar pergunta (`app/chamados/services/fabrica_da_celula.py:78`) ou dar lastro a plantio (`app/chamados/services/materializacao.py:158`) responde elegibilidade/autorização, não prova que `None` seja folga.
+- Leitor da célula preserva indeterminação sem tipo lavrado: `'indefinido'`, `app/escala/services/leitor_celula.py:344`.
+
+Classes leitoras de ata/lâmpadas que não usam necessariamente o juiz alterado:
+
+- Grade/apresentação: `app/escala/services/leitor_celula.py:93`, `:98`, `:344`; worklist: `app/ponto/worklist.py:19`, `:24`.
+- Lastro por marco: `app/ponto/services/lastro.py:89`, `:128`, `:175`; nomeação de cobrança: `app/chamados/reconciliador.py:673`, `:677`.
+- Pergunta/resposta: `app/chamados/juizes.py:885`, `:888`, `:1006`.
+- Geometria/realizado: entrada e contrato ternário em `app/ponto/juiz_batida.py:4`, `:15`.
+- Folha/contadores: `app/folha/previa.py:84`, `:86`; `app/folha/services/sem_furo.py:20`, `:26`; soma por tipo em `app/folha/export.py:1071`, `:1075`, `:1080`.
+- Detectores: `app/ponto/services/cluster_espurio.py:24`, `:27`.
+
+Nenhuma medição de quantidade ou impacto em produção foi demonstrada por essas leituras [nao verificado].
+
+## 31/10 07:33 · sessao c95fcf9aafe2 · - · - · origem=Ronald (tmux)
+
+Achados para consolidação:
+
+1. **A mudança não apenas acrescenta cobrança: pode trocar a célula julgada e até deixar de cobrar.** Em `None` com `ata.tipo_dia='trabalho'` ou ausente, o código antigo entrava no ramo de véspera; o novo consulta as lâmpadas de D. Contraprova estática: D=`None` com lâmpadas acesas; D−1 com lâmpada apagada. Antes `_celula_furada(D)=True`; depois `False`. Para `turno_aberto*`, o coletor não usa o atalho direto de dia sem trabalho e chega justamente nessa mudança; pode regularizar/fechar turno cuja véspera continua furada. Referências: `app/chamados/juizes.py:408`, `:443`, `:446`, `:452`, `:455`, `:465`; `app/chamados/models.py:1232`, `:1247`. Ocorrência em produção: [não verificado].
+
+2. **Há perda preexistente de `para` na recursão.** `_celula_furada(..., para='folha')` recursa à véspera sem transmitir `para`, voltando a `'cobranca'`; nesse modo ausência aberta pode cobrir, segundo comentário e chamada a `ausencia_cobre`. O diff passa a evitar esse caminho em D=None, alterando também qual política de cobertura participa. Referências: `app/chamados/juizes.py:411`, `:424`, `:426`, `:446`. Não é defeito introduzido pela linha, mas precisa entrar no censo do efeito.
+
+3. **Os efeitos alcançam todos estes portões, sem testes novos deles:** [nao verificado]
+   - S122 humano pode passar de fechamento permitido a `ValueError`: `app/chamados/models.py:175`, `:177`, `:185`.
+   - `reconciliar()` e seu dry `reconciliaria()` leem o mesmo gate; premissa viva pode impedir fechamento, com exceções de agrupado/irmão: `app/chamados/models.py:605`, `:615`, `:625`, `:646`, `:699`, `:709`.
+   - `recusa_da_reabertura` deixa de recusar por premissa regularizada; continuam anteriores os vetos e admin sem fato novo: `app/chamados/models.py:1285`, `:1290`, `:1296`.
+   - Emissor encontra encerrado em `abrir`, pede renascimento com **marcos do novo pedido**, passa por `reabrir`; se permitido grava estado e ressuscita perguntas: `app/chamados/models.py:880`, `:881`, `:978`, `:1235`, `:1338`, `:1380`, `:1389`.
+   - Defesa 1 também passa pelo fechamento afetado: `app/chamados/signals.py:42`.
+   - Os testes novos só chamam juiz, `_celula_furada` e coletor diretamente: `app/chamados/tests/test_f1c4_3_none_cobra.py:39`, `:93`, `:105`. Não demonstram efeito nos portões acima nem no turno noturno.
+
+4. **`_protesta`: pergunta composta distinta, mas subpergunta duplicada.** Decide se uma cobrança protesta no julgamento: `_cel.trabalha is not False and _acesos(x, _ata) is not True`. Seu componente de “dia sem trabalho” não lê `ata.tipo_dia`, embora `dia_sem_trabalho` o leia. Exemplo: trabalha=True ou None, ata folga, marco apagado/sem marco → `dia_sem_trabalho=True` e `_protesta=True`. Referências: `app/ponto/services/cartorio.py:1166`, `:1167`; `app/chamados/juizes.py:408`; sem marco dá `marcos_acesos=None`: `app/ponto/services/lastro.py:170`, `:172`.
+   
+   O protesto decide entrada em `classificar_dia`, lâmpada `cobrado`, adiamento e seleção para reconciliação: `app/ponto/services/cartorio.py:1168`, `:1170`, `:1206`, `:1236`, `:1237`, `:1242`. Divergência é preexistente; o diff não realiza a promessa de predicado único. Não confundir a outra metade — “os marcos desta cobrança acenderam?” — com “dia sem trabalho”: aquela é pergunta própria e tem juiz `marcos_acesos`: `app/ponto/services/lastro.py:153`, `:156`.
+
+5. **Teste antigo contraditório encontrado fora do arquivo novo:** `MarcoMortoTest.test_cobranca_em_dia_indefinido_e_retratada` documenta “previsto não sabido = premissa morta” e exige retratação de chamado sobre célula trabalha=None. Referências: `app/ponto/tests/test_a2_marco_morto.py:8`, `:12`, `:28`, `:38`, `:40`, `:44`. Deve mudar especificação/expectativa diante do aval. **Não afirmar que já falha em execução:** a fixture tem ata ausente; agora `_celula_furada` retorna None e o coletor usa os fallbacks. Referências: `app/chamados/juizes.py:452`, `app/chamados/models.py:1250`, `:1253`, `:1258`. Execução: [não verificado].
+
+6. **Teste existente prova a relevância da véspera:** turno aberto de D+1 folga deve continuar vivo cobrando D furada, e a pergunta deve ressuscitar lendo a célula dela; o fixture exige `_celula_furada(D+1)=True`. Referências: `app/ponto/tests/test_o261e_f1c4_ressuscita_pergunta_ao_c6.py:63`, `:65`, `:66`, `:75`, `:88`, `:90`. O novo RED não cobre variante D+1=None.
+
+## 31/10 07:33 · sessao 5293b968580f · - · - · origem=Ronald (tmux)
+
+- **Teste legado incompatível:** `app/ponto/tests/test_a2_marco_morto.py:28` testa `test_cobranca_em_dia_indefinido_e_retratada`; cria célula `trabalha=None` sem ata em `:40` e exige que a cobrança saia de aberta/pendente em `:44-45`. O comentário declara explicitamente “`dia_sem_trabalho` a lê como dia sem furo” em `:37-38`. Precisa inverter expectativa e descrição para cumprir o aval; resultado executado [nao verificado].
+
+- **RED novo morde a volta de `is not True`:** os dois testes diretos esperam `False` para `None/trabalho` e `None/sem tipo` (`app/chamados/tests/test_f1c4_3_none_cobra.py:40`, `:43`); restaurar o predicado antigo retorna `True` nesses casos (`app/chamados/juizes.py:408`). Os outros dois RED cobrem célula com lâmpada apagada e premissa do furo (`app/chamados/tests/test_f1c4_3_none_cobra.py:93-95`, `:105-109`). Execução/mutação real [nao verificado].
+
+- **Derivação paralela adicional:** `reconciliar_grade` ainda pula emissão nos dias `sem_ancora` (`app/ponto/management/commands/reconciliar_grade.py:139-150`), considera esses dias “mortos” (`:268-275`) e afirma fatos `False` literais ao chamar `premissa_morta` (`:290-293`), antes de tentar retratar (`:300-308`). Sua regra textual continua “previsto não sabido = premissa morta” (`:272`). O gate pode recusar o fechamento pelo coletor, pois a retratação chama `reconciliar()` (`app/chamados/reconciliador.py:525`) e este coletor entra na guarda (`app/chamados/models.py:699`); o produtor conserva interpretação contrária ao aval.
+
+- **Registro não autoriza classificar tudo como clone:** o registrado para “dia de trabalho para o vínculo” é `EscalaColaborador.eh_dia_trabalho`, para precedência é `fatos_do_dia` e para furo é `classificar_falta` (`app/core/juizes.py:158-166`). `classificar_falta` explicitamente lê `trabalha is False` como veto de folga (`app/escala/servico_jornada.py:302-304`); `improcedencia_do_dia` distingue `False → improcedente`, `True → falta_real`, `None → ambiguo` (`:539-546`). São perguntas que precisam ser comparadas pela semântica, não pelo nome.
+
+- **Checklist:** nenhum novo escritor de produção, leitura de relógio ou lock aparece no diff fornecido; o `update` do teste é fixture (`app/chamados/tests/test_f1c4_3_none_cobra.py:79-83`) e o relógio do teste está congelado (`:59`). Ordem e execução de travas [nao verificado]. Há portão documental de sombra antes do pouso e de vai-e-volta zero (`app/docs/CORTES.md:409`, `:412`); cumprimento [nao verificado]. A exigência de juiz único consta de `CLAUDE.md:279-283`, e a de não manter derivador paralelo, de `CLAUDE.md:17-22`.
 
 ## 31/10 07:21 · sessao 442855ea90ca · F1C4-3 · censo · origem=Code
 
@@ -733,84 +885,4 @@ A nova classificação observável não tem mordida nesses testes: remover os co
 
 O cabeçalho E2 cita um log de mutação, mas esse comentário não prova a execução dos testes deste delta; o RED histórico citado permanece [nao verificado]. `app/chamados/tests/test_e2_pergunta_so_ao_c6.py:5`.
 
-## 31/10 03:49 · sessao 80bb87b1c8db · O261-E-F5C · verificador · origem=Code
-
-1. **Pertença à fila: não localizei leitor residual usando `verbo` como conjunto da fila.** O produtor separa `fila_ids` de `verbo`; o juiz consulta `fila_ids`, e o vigia já lê `alim['fila_ids']`. A folha apenas encaminha a alimentação ao juiz. (`app/chamados/juizes.py:1161`, `app/chamados/juizes.py:1231`, `app/chamados/services/vigia_fio.py:567`, `app/folha/fora_da_folha.py:59`)
-
-   O teste de alimentação usa o produtor real; os dicionários manuais encontrados simulam **a saída da porta**, não `alimentar_portas()`. (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:187`, `app/folha/tests/test_haiku_fora_da_folha.py:101`, `app/folha/tests/test_haiku_fora_da_folha.py:129`, `app/chamados/tests/test_o261e_f5_alcance.py:307`)
-
-2. **`.get(anc)` mistura ausência de chave com `None` legítimo.** Auditoria recebe pilha `registro`, cujo verbo é `None`, e a partição grava esse valor; nesse caso, o antigo `[]` também devolveria `None`. A mudança efetiva é aceitar silenciosamente uma âncora presente em `fila_ids`, mas ausente do mapa, antes um `KeyError`. (`app/chamados/catalogo/natureza.py:44`, `app/chamados/catalogo/natureza.py:63`, `app/chamados/services/verbos.py:52`, `app/chamados/juizes.py:1231`, `app/chamados/juizes.py:1232`)
-
-   O produtor normal inclui a fila no universo vivo e grava cada linha no mapa; ocorrência dessa ausência em produção: **[nao verificado]**. (`app/chamados/services/painel.py:186`, `app/chamados/services/verbos.py:44`)
-
-   O tratamento pelos leitores é:
-
-   - **Juiz:** `{anc: None}` continua sendo porta; se não houver `cobrar` ou `validar`, resulta em fio `chamado`. Para chamados da célula, `None` também passa pelo filtro de visibilidade. (`app/chamados/juizes.py:1183`, `app/chamados/juizes.py:1233`, `app/chamados/juizes.py:1236`)
-   - **Folha:** lê `fio`, sem interpretar `verbos`; nesse caso chega a `chamado`, grupo C e `DESTRAVA['chamado']`. (`app/folha/fora_da_folha.py:70`, `app/folha/fora_da_folha.py:80`, `app/folha/fora_da_folha.py:199`)
-   - **Vigia:** conta a porta, registra papel textual `"None"` e esse valor sozinho não incrementa `alcance_porta_exige_o_admin`. (`app/chamados/services/vigia_fio.py:599`)
-   - **Testes:** aceitam explicitamente `None` na escada e numa porta mockada; esses casos não exercitam uma chave ausente na nova linha `.get(anc)`. (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:247`, `app/folha/tests/test_haiku_fora_da_folha.py:129`)
-
-3. **`DESTRAVA['admin']` cobre os ramos atuais de `validar`.** São dois: módulo em `MODULOS_DO_ADMIN_VALIDAR` — atualmente `gps_fora_geofence` — ou resposta creditada. Auditoria sai antes como `None`; silêncio substitui o verbo não nulo por `arquivado`/`historico`. A frase nova contempla resposta e chamado que o admin valida. (`app/folha/fora_da_folha.py:41`, `app/chamados/catalogo/natureza.py:29`, `app/chamados/catalogo/natureza.py:44`, `app/chamados/catalogo/natureza.py:59`, `app/chamados/services/verbos.py:48`)
-
-   Ressalva: nesse crédito, “respondida” significa `respondida_em is not None`, sem conferir texto; a frase promete acompanhar o que o painel põe em Validar, portanto não contradiz esse comportamento. (`app/chamados/services/raiox.py:137`, `app/folha/fora_da_folha.py:41`)
-
-4. **O teste novo da ficha tem mordida parcial.** [nao verificado]
-
-   - **Tupla literal:** isoladamente, não detecta voltar a `('arquivado', 'historico')`: essa é exatamente a constante atual, e os dois resultados cobrados permanecem iguais. O AST adjacente detectaria essa escrita literal porque proíbe `'historico'`; porém, exigir a presença do nome da constante no módulo não prova que ele governa `dono`. (`app/chamados/services/verbos.py:18`, `app/colaboradores/tests/test_ficha_do_colab.py:109`, `app/colaboradores/tests/test_ficha_do_colab.py:114`, `app/colaboradores/tests/test_ficha_do_colab.py:128`)
-   - **Truncamento `[:1]`:** detecta, pois exige dono `arquivado` para os dois verbos produzidos pelas duas datas. (`app/colaboradores/tests/test_ficha_do_colab.py:109`, `app/colaboradores/tests/test_ficha_do_colab.py:113`, `app/chamados/services/verbos.py:51`)
-   - **Mudança da fonte:** não testa se o consumidor acompanha uma constante alterada. Adicionar/remover membro pode derrubar a igualdade final mesmo com a ficha obedecendo à fonte, pois os estímulos continuam produzindo apenas os dois verbos atuais; reordenar passa pela comparação de conjuntos. (`app/colaboradores/tests/test_ficha_do_colab.py:109`, `app/colaboradores/tests/test_ficha_do_colab.py:114`, `app/chamados/services/verbos.py:51`)
-   - **Relógio solto:** sim, transitivamente. O teste não congela localmente; chama a ficha, que lê `timezone.now()`, e a partição lê outro. `self.hoje` também vem de `localdate()`. O runner só congela se houver `CONGELAR_EM`. (`app/colaboradores/tests/test_ficha_do_colab.py:18`, `app/colaboradores/tests/test_ficha_do_colab.py:30`, `app/colaboradores/tests/test_ficha_do_colab.py:98`, `app/colaboradores/services/ficha.py:117`, `app/chamados/services/verbos.py:35`, `app/core/runner_quarentena.py:94`)
-
-5. **Checklist, restrito ao delta:**
-
-   | Item | Resultado |
-   |---|---|
-   | 2º juiz | A folha delega ao juiz da porta; não reproduz a tradução de verbos. (`app/folha/fora_da_folha.py:59`, `app/folha/fora_da_folha.py:70`) |
-   | 2º escritor fora da porta | A troca para `.get` apenas altera leitura e montagem do retorno. (`app/chamados/juizes.py:1232`, `app/chamados/juizes.py:1237`) |
-   | Relógio fora da borda | Permanece alcançado pelo teste novo, sem freeze local. (`app/colaboradores/tests/test_ficha_do_colab.py:111`, `app/colaboradores/services/ficha.py:117`, `app/chamados/services/verbos.py:35`) |
-   | Derivação paralela de fonte única | A ficha atual usa a constante; o teste comportamental novo não prova essa dependência. (`app/colaboradores/services/ficha.py:160`, `app/colaboradores/tests/test_ficha_do_colab.py:114`) |
-   | Selo sem mordida | Mordida parcial na ficha; os testes de `None` citados não distinguem valor legítimo de chave ausente. (`app/colaboradores/tests/test_ficha_do_colab.py:109`, `app/chamados/tests/test_o261e_f5b_juiz_porta.py:247`, `app/folha/tests/test_haiku_fora_da_folha.py:129`) |
-
-Execução dos testes e efeitos em produção: **[nao verificado]**. [nao verificado]
-
-## 31/10 03:48 · sessao 2ffa2e9478c8 · - · - · origem=Ronald (tmux)
-
-Item 2 — `.get(anc)` tem dois `None` diferentes:
-
-- **Chave presente, valor `None`:** módulos de auditoria recebem pilha `registro`, cujo verbo é `None`; a partição grava esse valor no mapa. O silêncio não o substitui porque exige `v is not None`. [natureza.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/catalogo/natureza.py:44), [natureza.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/catalogo/natureza.py:63), [verbos.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/services/verbos.py:47). O `[]` anterior já devolvia esse `None`. [juizes.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/juizes.py:1232)
-- **Chave ausente:** a alteração passa a esconder alimentação inconsistente, devolvendo o mesmo `None`; anteriormente haveria `KeyError`. O produtor normal deriva a fila de `qs_vivos` e grava todas as linhas na partição; ocorrência de ausência entre consultas ou em produção é [não verificado]. [painel.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/services/painel.py:186), [verbos.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/services/verbos.py:52), [juizes.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/juizes.py:1232)
-
-Os consumidores não rejeitam `None`:
-
-- O juiz conserva `{anc: None}` como porta existente; sem `cobrar` ou `validar`, produz fio `chamado`. `None` também passa pelo filtro de visibilidade, pois não pertence a `FORA_DA_LISTA_PADRAO`. [juizes.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/juizes.py:1183), [juizes.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/juizes.py:1233)
-- A folha lê somente `porta['fio']`: recebe `chamado`, classifica como C e usa `DESTRAVA['chamado']`. [fora_da_folha.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/folha/fora_da_folha.py:68), [fora_da_folha.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/folha/fora_da_folha.py:80), [fora_da_folha.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/folha/fora_da_folha.py:199)
-- O vigia contabiliza a porta, não exige admin por esse valor e imprime papel literal `"None"`; se houver também `validar`/`decidir`, a interseção ainda exige admin. [vigia_fio.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/services/vigia_fio.py:599)
-- O teste F5B cobre apenas a escada isolada com `{1: None}`; o teste da folha injeta porta já pronta com `None` e exige `[555]`. Esses casos não exercitam a nova ausência de chave em `.get(anc)`. [test_o261e_f5b_juiz_porta.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/tests/test_o261e_f5b_juiz_porta.py:243), [test_haiku_fora_da_folha.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/folha/tests/test_haiku_fora_da_folha.py:129)
-
-Item 3 — **O texto novo cobre os dois ramos atuais que resultam em `validar`:** módulo em `MODULOS_DO_ADMIN_VALIDAR` (`gps_fora_geofence`) ou presença no conjunto de respostas creditadas. Auditoria vence antes; pergunta pendente e demais casos resultam em outros verbos. O silêncio substitui qualquer verbo não nulo por `arquivado`/`historico`, retirando-o de `validar`. [fora_da_folha.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/folha/fora_da_folha.py:41), [natureza.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/catalogo/natureza.py:29), [natureza.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/catalogo/natureza.py:44), [verbos.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/services/verbos.py:48)
-
-A ressalva é que “resposta creditada” significa `respondida_em is not None` no crédito, sem verificar texto nesse ponto; a nova frase limita-se ao que o painel põe em Validar. [raiox.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/chamados/services/raiox.py:133), [fora_da_folha.py](/home/ronald/codex_ws/cc62d1683f6c9fe19793707279321e2bdc7fda15/app/folha/fora_da_folha.py:41)
-
-## 31/10 03:48 · sessao 388eeedeb856 · - · - · origem=Ronald (tmux)
-
-- **O novo teste não morde a tupla literal atual.** Hoje `FORA_DA_LISTA_PADRAO` é exatamente `('arquivado', 'historico')`; trocar o uso da constante na ficha por essa tupla preserva as duas respostas cobradas pelo teste (`app/chamados/services/verbos.py:13`, `app/chamados/services/verbos.py:18`, `app/colaboradores/services/ficha.py:160`, `app/colaboradores/tests/test_ficha_do_colab.py:109`, `app/colaboradores/tests/test_ficha_do_colab.py:114`).
-
-- **O AST adjacente morde essa escrita literal**, porque proíbe qualquer constante `'historico'`; contudo, exigir que o nome `FORA_DA_LISTA_PADRAO` apareça em algum ponto do módulo não comprova que governa `dono` (`app/colaboradores/tests/test_ficha_do_colab.py:125`, `app/colaboradores/tests/test_ficha_do_colab.py:128`, `app/colaboradores/tests/test_ficha_do_colab.py:129`).
-
-- **O novo teste morde truncar para `FORA_DA_LISTA_PADRAO[:1]`**, pois exige `dono='arquivado'` nos dois casos produzidos pelo silêncio vencido/vigente; o segundo verbo ficaria sem esse dono (`app/colaboradores/tests/test_ficha_do_colab.py:109`, `app/colaboradores/tests/test_ficha_do_colab.py:113`, `app/chamados/services/verbos.py:51`, `app/colaboradores/services/ficha.py:160`).
-
-- **Mudança de conteúdo da constante não é exercitada por mutação.** Os estímulos continuam produzindo somente `HISTORICO` e `ARQUIVADO`; adicionar/remover um membro da constante faz a igualdade final falhar mesmo com a ficha obedecendo à constante. Reordená-la passa, pois a comparação usa conjuntos (`app/chamados/services/verbos.py:51`, `app/colaboradores/tests/test_ficha_do_colab.py:109`, `app/colaboradores/tests/test_ficha_do_colab.py:114`).
-
-- **Há relógio solto transitivo, sem congelamento local:** o teste chama a ficha, que captura `timezone.now()`, e esta chama a partição, que captura outro `timezone.now()`; `self.hoje` vem de `timezone.localdate()` (`app/colaboradores/tests/test_ficha_do_colab.py:30`, `app/colaboradores/tests/test_ficha_do_colab.py:98`, `app/colaboradores/tests/test_ficha_do_colab.py:111`, `app/colaboradores/services/ficha.py:117`, `app/colaboradores/services/ficha.py:155`, `app/chamados/services/verbos.py:35`). O congelamento global depende de `CONGELAR_EM`, e esse arquivo já está na lista de relógios soltos (`app/core/runner_quarentena.py:94`, `app/core/runner_quarentena.py:99`, `app/core/tests/testes_sem_relogio.txt:233`).
-
-## 31/10 03:48 · sessao 052b0de4e58d · - · - · origem=Ronald (tmux)
-
-Item 1: **nenhum leitor residual localizado usando `verbo` como conjunto da fila**. O produtor separa `fila_ids`/`fila_cel`, vindos de `qs_na_fila`, do mapa `verbo`, vindo de `qs_vivos` (`app/chamados/juizes.py:1153`, `app/chamados/juizes.py:1161`).
-
-- O juiz decide pertença por `fila_cel` e `fila_ids`; usa `verbo` apenas para consultar valores e visibilidade (`app/chamados/juizes.py:1227`, `app/chamados/juizes.py:1228`, `app/chamados/juizes.py:1231`, `app/chamados/juizes.py:1232`, `app/chamados/juizes.py:1236`).
-- O vigia **já lê `alim['fila_ids']`**; o teste de pertença no véu consulta esse conjunto (`app/chamados/services/vigia_fio.py:567`, `app/chamados/services/vigia_fio.py:620`).
-- A folha passa a alimentação ao juiz, sem interpretar `verbo` (`app/folha/fora_da_folha.py:54`, `app/folha/fora_da_folha.py:59`).
-- O teste de alimentação usa o produtor real (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:187`).
-- Os dicts manuais localizados são **saídas da porta**, devolvidas por mock do juiz; não simulam `alimentar_portas` (`app/folha/tests/test_haiku_fora_da_folha.py:101`, `app/folha/tests/test_haiku_fora_da_folha.py:106`, `app/folha/tests/test_haiku_fora_da_folha.py:129`, `app/folha/tests/test_haiku_fora_da_folha.py:143`).
-
-_890 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_894 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
