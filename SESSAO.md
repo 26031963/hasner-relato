@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 31/10/2026 07:10:19.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (30.2 MB). Acoes na janela: **807**.
+**Medido em 31/10/2026 07:15:51.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (30.2 MB). Acoes na janela: **810**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:15:41 | Bash | Record CLEAR aval | `cd /home/ronald/saas-hasner && date +%H:%M && python3 - <<'P' p='app/docs/RELATO.md'; s=open(p).read().split('\n') s.insert(3,"> **aval CLEAR-NO-PROXIMO-MARCO recebido (07:1x):** no pouso+push da F1C4: bin/handoff_sessao.sh, topo do RELATO \"MARCO FECHADO -- CLEAR AGORA\", nenhum agente nem fatia nova ate o /clear; construtor E3 vivo entrega comando+log e termina; 10 min sem /clear = fila normal.  ...` |
+| 07:13:22 | Bash | Prep DISJUNTOR checks | `cd /home/ronald/saas-hasner; md5sum .claude/settings.json 2>/dev/null; git log --oneline -1 40612767; git diff --stat HEAD...40612767 \| tail -3` |
+| 07:13:16 | Bash | Check push state | `cd /home/ronald/saas-hasner; date +%H:%M; grep -E '^(OK\|FAILED)\|^Ran \|^rc=' logs/vfase_asof/push_leak.log \| tail -3; tail -2 logs/vfase_asof/push_leak.log \| cut -c1-200; bin/trava_teste.sh --quem; pgrep -f "^docker run --rm --cpuset-cpus 4-7" \| head -3` |
 | 07:08:42 | Agent | Build F1C4-3 None-cobra cure | `Voce e o CONSTRUTOR da obra F1C4-3-NONE-COBRA (repo /home/ronald/saas-hasner). LEIA INTEIRO /home/ronald/saas-hasner/CLAUDE.md antes de agir (LEI-AKITA com padrao=, L-107, CODEX-PRE-VERIFICADOR, SUITE-ANTES-DO-OPUS). NUNCA edite /home/ronald/saas-hasner (arvore viva = prod). Sem merge, deploy, push ou RELATO: isso e da sessao principal. AVAL RONALD 31/10 07:0x (literal, escopo do aval e literal):  ...` |
 | 07:08:20 | Bash | Find the 2964 probe | `cd /home/ronald/saas-hasner && grep -rln "2964" logs/o261e logs/codex* 2>/dev/null \| head -5` |
 | 07:08:19 | Bash | Census of dia_sem_trabalho readers | `cd /home/ronald/wt-f1c4-3-0708/app && grep -rn "dia_sem_trabalho" --include=*.py . \| grep -v "/tests/" \| head -20; ls /home/ronald/saas-hasner/logs/o261e/ \| grep -i "2964\\|f1c4.*sonda\\|f1c4_3\\|item3" \| head` |

@@ -1,7 +1,43 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 06:45** · publicado em **31/10/2026 06:48** (UTC-3)
+> Ultima resposta processada: **31/10/2026 07:15** · publicado em **31/10/2026 07:15** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 07:15 · sessao 6e231748ca71 · - · - · origem=Ronald (tmux)
+
+**Escritores de `CelulaDia.trabalha`**
+
+| Função | Escrita | Quando grava `None` |
+|---|---|---|
+| `regenerar_celulas_vinculo` | Fora da vigência, escreve `False` em célula gerada pela EC, sem outra EC cobrindo e sem lavra protegida; dentro, calcula `valor`, cria ou atualiza célula gerada. `app/ponto/portas/celula.py:210-247`, `:251-265` | Quando `ec.eh_dia_trabalho_calculado(d)` retorna `None`; esse retorno é passado diretamente ao create/update. `app/ponto/portas/celula.py:243-247`, `:260` |
+| `gerar_celulas_periodo` | Cria com `valor`; atualiza célula gerada de hoje/futuro se valor, geradora ou DNA mudou. Pula editada e preserva `trabalha` do passado. `app/ponto/portas/celula.py:588-615` | Quando o cálculo retorna `None`; criação aceita qualquer data, atualização apenas hoje/futuro. `app/ponto/portas/celula.py:590-612` |
+| `reverter_regeneracao_dia` | Restaura `cel.trabalha = (alvo or {}).get('marcos') is not None`. `app/ponto/portas/celula.py:527-539` | Nunca: a expressão produz booleano. `app/ponto/portas/celula.py:532` |
+
+O command `gerar_celulas` reexporta os dois primeiros escritores; seu `handle` chama `gerar_celulas_periodo`. `app/ponto/management/commands/gerar_celulas.py:13`, `:303-312`. O cron registra `gerar_celulas` às 05:50. `app/config/crons.py:407`.
+
+O campo permite `null=True` e não declara default. `app/escala/models.py:1654-1656`; a migration de criação também permite NULL. `app/escala/migrations/0030_celuladia.py:22`.
+
+**Como o cálculo chega a `None`**
+
+- Âncora válida (`year > 1940`), sem foto do mês, resolve os ciclos 12x36/24x48 em booleano. `app/escala/models.py:1260-1266`.
+- Com foto: data fotografada é `False`; fora da foto, usa a resposta do template; se o template não decide, tenta paridade da folga de referência, retornando `None` quando não encontra referência. `app/escala/models.py:1280-1293`, `:1322-1335`.
+- Sem foto, usa `TipoEscala.eh_dia_trabalho`. `app/escala/models.py:1336-1337`. O template devolve `None` para 12x36/24x48, personalizado sem mapa útil e ciclo sem regra. `app/escala/models.py:824-829`, `:862-868`.
+- A conversão por feriado só altera `base is True`, preservando `None`. `app/escala/models.py:1338-1342`.
+
+**Escritor de `ata['tipo_dia']`**
+
+`cartorio.ata_do_dia` produz a chave copiando `dia.get('tipo_dia')`; não deriva diretamente de `cel.trabalha`. `app/ponto/services/cartorio.py:558-566`. O dia vem de `montar_grade_prevista_periodo`. `app/ponto/services/cartorio.py:905-909`.
+
+A ata é entregue à lavra tanto no ramo nunca bateu como no ramo principal. `app/ponto/services/cartorio.py:981`, `:1012-1013`, `:1518-1520`. O método do modelo delega à porta. `app/escala/models.py:1775-1783`. A porta copia/substitui e persiste a ata inteira, inclusive quando o admin já decidiu o veredito. `app/ponto/portas/celula.py:697-714`, `:724-732`. `carimbar_precedencia` conserva as demais chaves e altera apenas `precedencia`. `app/ponto/portas/celula.py:767-778`.
+
+A derivação anterior à ata é:
+
+- `EscalaColaborador.eh_dia_trabalho` retorna `cel.trabalha` quando existe célula. `app/escala/models.py:1066-1073`.
+- Builder por turno: só `is False` exclui o dia da montagem normal; `None` passa e marca `sem_ancora=True`. `app/escala/utils.py:1541-1549`, `:1701-1702`. Dia montado recebe `'trabalho'`; dia sem montagem recebe `'folga'`. `app/escala/utils.py:1722-1753`. Intermitente tem tratamento próprio: mesmo com previsão `False`, dia com batida pode ser montado como trabalho. `app/escala/utils.py:1720-1722`.
+- Builder legado: `work is False` produz `'folga'`; `None` segue como `'trabalho'` com `sem_ancora=True`. `app/escala/utils.py:725-729`, `:752`. O despacho depende de `GRADE_POR_TURNO`. `app/escala/utils.py:2024-2030`.
+- Foto de folgas pode substituir o tipo por `'folga'`; ausência aprovada pode substituir por `'falta'` ou `'ausencia'`. `app/escala/utils.py:1114-1120`, `:1170-1180`. Esses overlays são aplicados antes da entrega da grade ao cartório. `app/escala/utils.py:1785-1789`.
+
+O fallback do **leitor**, distinto do produtor da ata, usa `'trabalho' if cel.trabalha else 'folga' if cel.trabalha is False else 'indefinido'` quando a ata não oferece tipo. `app/escala/services/leitor_celula.py:344-345`.
 
 ## 31/10 06:45 · sessao 9fffb8394a9e · FIO-ESTADO-LE-O-ALCANCE · verificador · origem=Code
 
@@ -688,32 +724,4 @@ Falhas de prova/texto:
 - A afirmação “pergunta viva que o crédito não vê deixa o verbo da âncora em decidir” é excessiva: auditoria dá `None`; geofence dá `validar`; silêncio passado pode sobrepor `historico`; outras perguntas creditadas à âncora também alteram o verbo. (`app/chamados/juizes.py:1211`; `app/chamados/catalogo/natureza.py:44-51`; `app/chamados/services/verbos.py:48-51`)
 - As docstrings que dizem “mesmo universo do painel e badge” precisam restringir painel sem filtros e distinguir o badge lavrado do fallback vivo. (`app/chamados/juizes.py:1135-1139,1206-1208`; `app/chamados/services/vigia_fio.py:172-173`; `app/core/context_processors.py:68-93`)
 
-## 31/10 03:38 · sessao c5fa694cf9ae · - · - · origem=Ronald (tmux)
-
-Contrato de `alimentar_portas` — escritor inicial único: `app/chamados/juizes.py:1148` a `:1159`; leitores por chave:
-
-| Chave | Escrita | Leitura direta |
-|---|---|---|
-| `verbo` | `particionar_verbos(qs_vivos())['mapa']`, `juizes.py:1158` | `porta_alcancavel_do_dia`: `.get()` na fila, `:1224`; índice na âncora, `:1228`; filtro do número visível, `:1232` |
-| `fila_ids` | inicializa/adiciona em `juizes.py:1148`, `:1151`; retorna `:1158` | pertinência da âncora, `juizes.py:1227`; `censo_alcance`, `vigia_fio.py:566`, usado para véu em `:619` |
-| `fila_cel` | `juizes.py:1149`, `:1153`, `:1158` | `porta_alcancavel_do_dia`, `juizes.py:1223` |
-| `vivas` | `juizes.py:1154` a `:1158` | porta, `juizes.py:1225`; vigia, `vigia_fio.py:571`, com usos em `:576`, `:595`, `:616` a `:645` |
-| `colab` | `juizes.py:1159` | porta consulta colaborador da célula em `juizes.py:1227` |
-| `no_app` | inicial vazio, `juizes.py:1159`; cache lazy `_no_app`, `:1167` | `_no_app`, `juizes.py:1163`, `:1168`; chamados em porta `:1227` e vigia `vigia_fio.py:580` |
-
-Passadores do contrato, sem acesso direto a suas chaves: `folha/fora_da_folha.py:53`, `:58`, `:138`, `:190`; `ponto/services/pautas_dos_discordantes.py:74`, `:76`; teste de equivalência de lote em `chamados/tests/test_o261e_f5b_juiz_porta.py:187`, `:188`, `:189`. A chamada avulsa do juiz cria alimentação em `chamados/juizes.py:1222`.
-
-Não encontrei leitor atual deste dict tomando as chaves de `verbo` como conjunto da fila: o antigo caso do vigia agora lê `fila_ids` (`app/chamados/services/vigia_fio.py:566`), e a porta usa `fila_ids` (`app/chamados/juizes.py:1227`). Não encontrei dict manual de alimentação em testes; os dicts manuais e mocks são **saída da porta**: `app/folha/tests/test_haiku_fora_da_folha.py:101`, `:129`, `:143`; `app/chamados/tests/test_o261e_f5_alcance.py:306`. O teste do lote usa o alimentador real (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:187`).
-
-Há helper antigo que ainda chama o universo errado e se apresenta como painel: `app/chamados/tests/test_o261e_f5_alcance.py:281` a `:285` particiona `qs_na_fila()`; seus usos estão em `:293`, `:298`. O helper F5B foi corrigido para `qs_vivos()` (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:87` a `:92`). Isso não é leitor de `alimentar_portas`, mas deixa uma referência de teste enganosa.
-
-Pertinência da porta, com alimentação real e estado estável:
-
-- Fila e âncora continuam provenientes de `qs_na_fila`: `fila_cel` e `fila_ids` nascem da mesma iteração (`app/chamados/juizes.py:1150` a `:1153`); a fila lê `fila_cel` (`:1223`), a pergunta exige `anc in fila_ids` (`:1227`). A âncora é destino, com fallback para chamado da disputa (`app/chamados/services/fio.py:116` a `:117`).
-- Estar na fila é condição necessária da âncora, não suficiente da pergunta: ainda exige pergunta viva, resposta não vazia se respondida e presença no app (`app/chamados/juizes.py:1155` a `:1157`, `:1227`). Os testes cobrem resposta vazia e fora do app (`app/chamados/tests/test_o261e_f5_alcance.py:145`, `:194`).
-- Silêncio vigente fica fora da fila; silêncio vencido pode estar nela, pois o predicado exclui somente `silenciado_ate > now` (`app/chamados/services/painel.py:186` a `:188`). O vencido conserva porta, mas perde número em `fila` se o verbo for `historico` (`app/chamados/juizes.py:1232`; teste `app/chamados/tests/test_o261e_f5b_juiz_porta.py:147`).
-- `registrado` está em `VIVOS`, mas não em `COBRANCA`, portanto não entra em `qs_na_fila` (`app/chamados/catalogo/motor.py:24`, `:29`; `app/chamados/services/painel.py:187`), coberto em `app/chamados/tests/test_o261e_f5b_juiz_porta.py:250` a `:257`.
-
-Ressalva de consistência: fila e mapa de verbos são consultas separadas (`app/chamados/juizes.py:1150`, `:1158`), e `alimentacao` fornecida não é revalidada (`:1222`). Se um chamado deixar `VIVOS` entre essas consultas, a fila pode produzir verbo `None` pelo `.get()` (`:1224`), enquanto a mesma situação na porta da pergunta pode lançar `KeyError` pelo índice (`:1228`); ocorrência em produção `[nao verificado]`.
-
-_886 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_887 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
