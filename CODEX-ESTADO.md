@@ -1,7 +1,105 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 09:05** · publicado em **31/10/2026 09:09** (UTC-3)
+> Ultima resposta processada: **31/10/2026 09:27** · publicado em **31/10/2026 09:30** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 09:27 · sessao f29f24b0d110 · DISJUNTOR-B3-TOPO · verificador · origem=Code
+
+**REPROVADO.** Há caminhos que liberam o Stop antes da cobrança B3 e uma colisão entre IDs admitidos pelo próprio contador (`bin/hook_stop_fila1.py:1224`, `bin/hook_stop_fila1.py:1231`, `bin/hook_stop_fila1.py:1298`; `bin/disjuntor.py:483`).
+
+**(1) Onde o desenho falha**
+
+- **ESPERANDO verdadeiro contorna a cobrança.** A ordem relevante é PAREI → ESPERANDO com prova → teto → B2 → B3/recados. Portanto, pergunta ausente ou na terceira linha não é cobrada quando uma saída anterior libera. `_libera()` encerra o processo (`bin/hook_stop_fila1.py:1224`, `:1229`, `:1282`, `:1293`, `:1298`, `:133`).
+- **O selo não exercita essa espera verdadeira.** Os quatro casos novos usam `pid=1`; esse PID está sempre entre os ancestrais e é recusado como prova. Eles chegam à cobrança B3 pelo caminho “ESPERANDO sem prova” (`bin/tests/test_disjuntor.sh:335`, `:337`, `:339`, `:341`; `bin/hook_stop_fila1.py:477`, `:529`).
+- **IDs hifenados semelhantes estão protegidos, mas IDs com cauda não.** A regex rejeita `PRE-OBRA-X` e `OBRA-X-OUTRA` para `OBRA-X`. Contudo, aceita `DESENHO O9 (C)` ou `DESENHO O9 NOTURNO-FOO` como pergunta de `O9`, embora `_obra_de()` produza três identidades distintas. Confirmei esses resultados em memória (`bin/hook_stop_fila1.py:414`–`:415`; `bin/disjuntor.py:81`–`:85`, `:483`–`:484`).
+- **“Duas primeiras úteis” tem uma restrição adicional:** depois da primeira linha capturada, uma linha vazia encerra o bloco. `ESPERANDO`, branco, pergunta resulta em somente uma linha lida; pelo contrato literal de duas linhas úteis, a segunda pergunta deveria contar (`bin/hook_stop_fila1.py:430`–`:436`).
+- **A validação é apenas lexical:** exige a substring maiúscula `DESENHO` e o ID na mesma linha. Aceita `REDESENHO OBRA-X` e `OBRA-X NAO TEM PERGUNTA DE DESENHO`, sem verificar QUAL PADRÃO/POR QUÊ (`bin/hook_stop_fila1.py:415`, `:1048`–`:1050`).
+
+**(2) Quem escreve e quem lê**
+
+| Dado | Escritor | Leitor |
+|---|---|---|
+| Pergunta no topo | O construtor, conforme instrução emitida pelo PreToolUse; no selo, `_topo()` grava a fixture (`bin/disjuntor.py:919`–`:921`; `bin/tests/test_disjuntor.sh:72`). | B3 lê `_bloco_do_topo()` e aplica `_pergunta_b3_escrita()` (`bin/hook_stop_fila1.py:1045`–`:1047`). |
+| Primeira linha ESPERANDO/PAREI | Declaração manual; o teto atual apenas registra/libera, tendo abandonado a escrita automática de PAREI (`bin/hook_stop_fila1.py:1283`–`:1291`). | Ambos usam `_linha_do_topo()`, derivada do mesmo bloco (`bin/hook_stop_fila1.py:407`, `:652`, `:1102`). |
+| Contador B3 | `varrer_b3()` acumula agentes reprovados por obra, deduplica e dispara no limiar; `_com_estado()` persiste em `logs/sessao/disjuntor_estado.json` (`bin/disjuntor.py:54`, `:533`–`:550`, `:242`–`:245`). | Stop e PreToolUse chamam a varredura; `b3_disparados()` consulta o estado (`bin/hook_stop_fila1.py:1046`; `bin/disjuntor.py:918`, `:566`). |
+| Rearme B3 | CLI chama `rearma_b3()`, preserva agentes antigos em `rearmado` e zera contagem/disparo (`bin/disjuntor.py:1138`, `:560`–`:563`). | A varredura ignora esses agentes antigos (`bin/disjuntor.py:535`). |
+
+Escrever a pergunta **cala o recado**, sem rearmar o B3: o quarto verificador continua negado pelo PreToolUse, que decide pela chave da obra sem consultar o topo (`bin/hook_stop_fila1.py:1047`; `bin/disjuntor.py:915`–`:922`).
+
+`_rteto()` restaura outro contador, `logs/hook_stop_fila1.json`; ele não restaura o estado B3 (`bin/tests/test_disjuntor.sh:333`–`:334`; `bin/hook_stop_fila1.py:35`; `bin/disjuntor.py:54`).
+
+**(3) O selo morde cada ramo novo? Não.**
+
+| Comportamento | Cobertura existente |
+|---|---|
+| Aceitar segunda linha | Caso `:335`–`:336`; mutante `:715`. |
+| Rejeitar terceira linha | Caso `:337`–`:338`; mutante `:718`. |
+| Rejeitar `OBRA-X-OUTRA` | Caso `:339`–`:340`; mutante `:716`. |
+| Exigir `DESENHO` | Caso `:341`–`:342`; mutante `:717`. |
+
+Todas as referências dessa tabela são de `bin/tests/test_disjuntor.sh`.
+
+Há mutantes que preservam os resultados desses casos:
+
+- Retirar **somente o lookbehind** da regex aceita `PRE-OBRA-X`; o selo testa apenas a fronteira direita (`bin/hook_stop_fila1.py:414`; `bin/tests/test_disjuntor.sh:339`).
+- Separar os testes em `any(DESENHO)` e `any(id)` aceita `['DESENHO OBRA-Y', 'OBRA-X']`; falta esse caso cruzado (`bin/hook_stop_fila1.py:415`; `bin/tests/test_disjuntor.sh:335`–`:342`).
+- Limitar B3 à última linha lida perde a pergunta válida na primeira linha; todos os positivos novos a colocam na segunda (`bin/hook_stop_fila1.py:1045`; `bin/tests/test_disjuntor.sh:335`–`:342`).
+- Reverter `return out or None` para `return None` perde a leitura parcial após `OSError`. Esse ramo novo não tem cenário nem mutante declarado; também afeta ESPERANDO/PAREI pelo leitor compartilhado (`bin/hook_stop_fila1.py:439`, `:407`; `bin/tests/test_disjuntor.sh:72`, `:715`–`:718`).
+
+Além disso, o positivo exige somente ausência do recado: uma exceção convertida em `FALHA + None` pode satisfazê-lo. Falta conferir a decisão esperada e ausência de falha (`bin/tests/test_disjuntor.sh:336`; `bin/hook_stop_fila1.py:1057`–`:1062`).
+
+Validei funções isoladas em memória. Não executei o selo, pois ele cria, altera e apaga arquivos; sobrevivência no selo completo: **[nao verificado]** (`bin/tests/test_disjuntor.sh:37`–`:49`, `:637`–`:646`).
+
+## 31/10 09:25 · sessao 47865606b8e9 · - · - · origem=Ronald (tmux)
+
+O selo cobre quatro comportamentos: pergunta na 2ª linha, rejeição na 3ª, rejeição de `OBRA-X-OUTRA` e rejeição de prosa sem `DESENHO`; os respectivos mutantes estão declarados. `bin/tests/test_disjuntor.sh:335`, `:337`, `:339`, `:341`, `:715`, `:716`, `:717`, `:718`.
+
+Há lacunas concretas:
+
+- **Fronteira esquerda:** remover somente `(?<![\w-])` mantém os resultados dos quatro casos atuais, mas aceita `DESENHO PREFIXO-OBRA-X`; o teste existente exercita somente a fronteira direita com `OBRA-X-OUTRA`. `bin/hook_stop_fila1.py:414`; `bin/tests/test_disjuntor.sh:339`.
+- **DESENHO e ID na mesma linha:** trocar a expressão por dois `any` independentes mantém os casos atuais, mas aceita `['DESENHO OBRA-Y', 'OBRA-X']`. `bin/hook_stop_fila1.py:415`; `bin/tests/test_disjuntor.sh:335`.
+- **Pergunta na primeira linha:** limitar somente o B3 à última linha do bloco passa pelos quatro exemplos atuais, todos com `ESPERANDO` na primeira, mas perde pergunta na primeira com texto neutro na segunda. `bin/hook_stop_fila1.py:1045`; `bin/tests/test_disjuntor.sh:335`, `:337`, `:339`, `:341`.
+- **OSError após leitura parcial:** voltar `return out or None` para `return None` desfaz um ramo novo sem cenário correspondente; `_topo` sempre escreve arquivo regular completo. A mudança também afeta PAREI e ESPERANDO porque usam `_linha_do_topo`. `bin/hook_stop_fila1.py:439`, `:407`, `:652`, `:1102`; `bin/tests/test_disjuntor.sh:72`.
+- **Exceção confundida com sucesso:** o positivo apenas procura ausência de B3; uma exceção exclusiva do reconhecimento da pergunta vira `FALHA + None` e satisfaz essa asserção. O helper de autorização positiva existe, mas esse caso não o usa. `bin/tests/test_disjuntor.sh:336`, `:91`; `bin/hook_stop_fila1.py:1057`.
+
+Verifiquei os dois primeiros mutantes e o erro parcial executando funções extraídas por AST apenas em memória. Sobrevivência no selo completo: **[nao verificado]**. Executar o selo criaria e apagaria arquivos temporários, contrariando a restrição de leitura. `bin/tests/test_disjuntor.sh:37`, `:39`, `:49`, `:637`, `:646`.
+
+## 31/10 09:25 · sessao 2142652f636b · - · - · origem=Ronald (tmux)
+
+Mapa de produtores e consumidores:
+
+| Dado | Escreve | Lê |
+|---|---|---|
+| Pergunta de DESENHO no topo | O construtor é o produtor exigido pela mensagem do PreToolUse; não é escrita automaticamente por esse ramo (`bin/disjuntor.py:919-922`). No selo, `_topo` escreve o RELATO fictício (`bin/tests/test_disjuntor.sh:72`). | `_bloco_do_topo` abre RELATO e captura até duas linhas (`bin/hook_stop_fila1.py:428-437`); B3 consulta esse bloco e chama `_pergunta_b3_escrita` (`bin/hook_stop_fila1.py:1045-1047`). |
+| Primeira linha: ESPERANDO/PAREI | A declaração do topo é humana; o hook deixou de produzir `PAREI: hook-teto`, conforme comentário do ramo atual (`bin/hook_stop_fila1.py:1283-1291`). | `_linha_do_topo` retorna a primeira linha do mesmo bloco (`bin/hook_stop_fila1.py:407-408`); ESPERANDO lê em `:652-655`; PAREI lê em `:1102-1105`. |
+| Contador B3 | `varrer_b3` coleta agentes reprovados (`bin/disjuntor.py:517-525`), acumula por obra e deduplica por `aid` (`:533-538`), marca disparado no limiar (`:540-548`). `_com_estado` grava o JSON atomicamente (`:242-245`), cujo caminho é `logs/sessao/disjuntor_estado.json` (`:54`). | Stop chama `varrer_b3` (`bin/hook_stop_fila1.py:1046`); PreToolUse também varre antes de decidir (`bin/disjuntor.py:915-918`); `b3_disparados` consulta o estado persistido (`:566-567`). |
+| Rearme | CLI `--rearma-b3` (`bin/disjuntor.py:1138-1141`) chama `rearma_b3`, arquiva os IDs já contados em `rearmado` e zera lista/disparo (`:553-563`). | A próxima varredura ignora IDs rearmados (`bin/disjuntor.py:535-536`). |
+
+A pergunta escrita cala o recado do Stop, mas não rearma o contador nem permite o quarto verificador: o Stop consulta o topo (`bin/hook_stop_fila1.py:1045-1050`), enquanto PreToolUse nega pela presença da chave da obra na varredura, sem consultar RELATO (`bin/disjuntor.py:915-922`).
+
+Identidade da obra:
+
+- No topo, as duas fronteiras `(?<![\w-])` e `(?![\w-])` impedem que `OBRA-X-OUTRA`, `OUTRA-OBRA-X` ou `_OBRA-X` satisfaçam `OBRA-X` (`bin/hook_stop_fila1.py:414-415`).
+- O contador usa a obra extraída como chave exata; a gramática reconhece IDs hifenados inteiros (`bin/disjuntor.py:81-85`, `:470-485`) e PreToolUse usa pertinência exata da chave (`:918`).
+- Há um resíduo fora dessa gramática: `obra OBRA-X_OUTRA` é extraída como `OBRA-X`, porque a regex externa não exige fronteira à direita e o `fullmatch` valida apenas o grupo já capturado (`bin/disjuntor.py:84-85`, `:475`). Reprodução feita em memória, sem importar o módulo inteiro ou escrever arquivos; `_` não integra a gramática declarada de IDs (`:81`). 
+
+Os escritores automáticos de alarmes preservam o topo: `no_relato` insere na seção de alarmes ou antes da primeira seção `##`, e depois grava o arquivo (`app/core/esteira_vigia.py:863-884`). Outros leitores possuem janelas diferentes: handoff percorre até a primeira seção (`bin/handoff_sessao.sh:94-108`); alarme de ociosidade procura `PAREI:` nas primeiras 40 linhas físicas (`bin/alarme_sessao_ociosa.py:119-127`).
+
+## 31/10 09:25 · sessao 9083f468370d · - · - · origem=Ronald (tmux)
+
+1. **A cobrança B3 pode ser pulada no caminho real do Stop.** `main()` libera PAREI em `bin/hook_stop_fila1.py:1224` e ESPERANDO com prova em `bin/hook_stop_fila1.py:1229`; só acrescenta B3 ao recado em `bin/hook_stop_fila1.py:1298`. Portanto pergunta ausente ou na terceira linha não produz cobrança quando ESPERANDO tem prova; teto e B2 também podem liberar antes da varredura (`bin/hook_stop_fila1.py:1282`, `bin/hook_stop_fila1.py:1293`).
+
+2. **O selo não cobre ESPERANDO com prova.** Seus quatro casos usam `pid=1` (`bin/tests/test_disjuntor.sh:335`, `bin/tests/test_disjuntor.sh:337`, `bin/tests/test_disjuntor.sh:339`, `bin/tests/test_disjuntor.sh:341`); PID 1 pertence sempre ao conjunto de ancestrais (`bin/hook_stop_fila1.py:477`) e é recusado (`bin/hook_stop_fila1.py:529`). Logo o cenário central “espera real + pergunta fora das duas linhas” permanece descoberto nesses testes (`bin/hook_stop_fila1.py:1230`, `bin/tests/test_disjuntor.sh:335`).
+
+3. **“Duas primeiras úteis” significa duas linhas contíguas após começar.** Branco ou cabeçalho `# RELATO` depois da primeira linha encerra a leitura (`bin/hook_stop_fila1.py:431`). Assim ESPERANDO, branco, pergunta não aceita a pergunta embora ela seja a segunda não vazia; confirmei com execução apenas em memória das funções extraídas por AST (`bin/hook_stop_fila1.py:430`, `bin/hook_stop_fila1.py:435`). Se o contrato exige contiguidade, essa restrição precisa constar dele [nao verificado].
+
+4. **Prefixo e sufixo semelhantes estão corretamente recusados no helper atual.** As duas fronteiras `(?<![\w-])` e `(?![\w-])` recusam tanto `PRE-OBRA-X` quanto `OBRA-X-OUTRA` para obra `OBRA-X` (`bin/hook_stop_fila1.py:414`). O caso novo do selo testa somente `OBRA-X-OUTRA`, portanto cobre a fronteira à direita; não cobre isoladamente a fronteira à esquerda (`bin/tests/test_disjuntor.sh:339`).
+
+5. **Ainda não se verifica que há pergunta de desenho.** A aceitação exige apenas substring maiúscula `DESENHO` e ID inteiro na mesma linha; aceita, por exemplo, `OBRA-X NAO TEM PERGUNTA DE DESENHO` e `REDESENHO OBRA-X`, confirmado em memória (`bin/hook_stop_fila1.py:415`). A mensagem exige QUAL PADRÃO e POR QUE, mas o predicado não verifica esses elementos (`bin/hook_stop_fila1.py:1048`, `bin/hook_stop_fila1.py:415`).
+
+6. **A leitura parcial preserva somente `OSError`.** Depois de ler uma linha, `OSError` devolve o trecho já obtido (`bin/hook_stop_fila1.py:438`); exceção diferente escapa ao helper e é convertida em ausência de recado pelo invólucro (`bin/hook_stop_fila1.py:1057`, `bin/hook_stop_fila1.py:1062`). O leitor abre UTF-8 sem política de substituição (`bin/hook_stop_fila1.py:428`).
+
+Não executei o selo, pois ele escreve o RELATO de teste e restaura/remove o contador (`bin/tests/test_disjuntor.sh:334`, `bin/tests/test_disjuntor.sh:335`).
 
 ## 31/10 09:05 · sessao b14d140bc3b4 · E3-STATUS · verificador · origem=Code
 
@@ -586,162 +684,4 @@ Cuidados para a matriz:
 - O rollback legacy descarta previsto e cobertura parcial no remapeamento; também é caminho do código, embora a flag de produção seja `[nao verificado]` (`app/escala/utils.py:1016`, `app/escala/utils.py:2026`; `app/config/settings/base.py:165`).
 - Frequências, colaboradores atingidos e ocorrência efetiva em produção: `[nao verificado]`.
 
-## 31/10 08:43 · sessao ea0196bb5f24 · - · - · origem=Ronald (tmux)
-
-Censo somente leitura, com escopo dos nomes usados pelo fluxo do dia. Não executei testes ou acesso a banco; prevalência em produção e configuração de ambiente são `[nao verificado]`. [nao verificado]
-
-**`cobertura_parcial`**
-
-- Escritor da grade do cartório: `app/escala/utils.py:1190`, alimentado pelo juiz `cobre_parte_do_dia`, importado em `app/escala/utils.py:1138` e aplicado em `app/escala/utils.py:1150`.
-- Existe também escritor na reconstrução da grade pela célula: `app/escala/services/leitor_celula.py:394`; usa `ausencia_explica_o_dia_inteiro`, importado em `app/escala/services/leitor_celula.py:388`. A finalidade e os consumidores supra-juiz/retroativo estão declarados em `app/escala/services/leitor_celula.py:375`.
-- Leitores: `app/ponto/supra_juiz.py:243`, aplicado à cobertura integral em `app/ponto/supra_juiz.py:244`, à cobrança em `app/ponto/supra_juiz.py:279` e ao período em `app/ponto/supra_juiz.py:350`; `app/ponto/services/cartorio.py:990`, `app/ponto/services/cartorio.py:1142`, assinatura dos insumos em `app/ponto/services/cartorio.py:998` e `app/ponto/services/cartorio.py:1151`; transporte para a regra nova em `app/ponto/status_dia.py:115`, decisão em `app/ponto/status_dia.py:80`; o próprio escritor reconstruído também lê em `app/escala/services/leitor_celula.py:395`.
-
-**`tipo_dia`**
-
-- Escritores da grade principal: folga `app/escala/utils.py:1743`, trabalho `app/escala/utils.py:1749`, overlay da foto de folga `app/escala/utils.py:1118`, falta aprovada `app/escala/utils.py:1174`, ausência `app/escala/utils.py:1180`.
-- Materialização na ata: `app/ponto/services/cartorio.py:567`; a atribuição da ata à célula é da porta `app/ponto/portas/celula.py:768`, persistida em `app/ponto/portas/celula.py:640`.
-- Reconstrução pelo leitor: base fora de vínculo `app/escala/services/leitor_celula.py:340`, sem célula `app/escala/services/leitor_celula.py:342`, leitura da ata/fallback `app/escala/services/leitor_celula.py:344`, escrita do dia reconstruído `app/escala/services/leitor_celula.py:359`.
-- Leitores diretos de produção: `app/ponto/status_dia.py:112`, regra `app/ponto/status_dia.py:75`, `app/ponto/status_dia.py:80`, `app/ponto/status_dia.py:82`, `app/ponto/status_dia.py:91`; classificador `app/ponto/supra_juiz.py:197`; cartório `app/ponto/services/cartorio.py:567`, `app/ponto/services/cartorio.py:996`; isenção da grade `app/escala/utils.py:850`, overlays `app/escala/utils.py:1170`, `app/escala/utils.py:1198`; reconstrução `app/escala/services/leitor_celula.py:344`, `app/escala/services/leitor_celula.py:384`; folha `app/folha/causas.py:40`, `app/folha/causas.py:41`, `app/folha/causas.py:100`, `app/folha/export.py:1071`, `app/folha/export.py:1075`, `app/folha/export.py:1080`; fechamento `app/ponto/services/fechamento.py:1011`, `app/ponto/services/fechamento.py:1012`, `app/ponto/services/fechamento.py:1015`; DiaPago `app/ponto/services/dia_pago.py:386`, `app/ponto/services/dia_pago.py:393`, `app/ponto/services/dia_pago.py:398`; bordas do realizado `app/ponto/services/bordas_realizado.py:74`; propositor `app/ponto/propositor.py:36`, `app/ponto/propositor.py:210`; worklist `app/ponto/worklist.py:19`; decisão humana `app/ponto/services/veredito_celula.py:221`; espelho `app/ponto/services/espelho.py:690`; simulação `app/ponto/services/simular_dia.py:12`; relatórios `app/relatorios/furos.py:147`, `app/relatorios/furos.py:151`, `app/relatorios/furos.py:218`, `app/relatorios/furos.py:237`; materialização `app/chamados/services/materializacao.py:223`; inteligência `app/inteligencia/calculadores.py:46`, `app/inteligencia/calculadores.py:141`; declaração `app/chamados/services/declaracao_texto.py:90`; classificação de órfã `app/escala/orfa_classe.py:65`; furos diários `app/escala/services/furos_diarios.py:39`; emissão `app/chamados/services/disputa_emissao.py:68`; leitura do tipo da ata por juiz de chamado `app/chamados/juizes.py:401`.
-- `calendario.py` usa outra chave, `tipo_do_dia`, da precedência; não confundir com `tipo_dia` da grade: `app/colaboradores/services/calendario.py:794`.
-
-**`minutos_previstos` do dia**
-
-- Escritores da grade principal: zero de folga `app/escala/utils.py:1743`, previsto de trabalho `app/escala/utils.py:1751`, exceção do intermitente igualando ao realizado `app/escala/utils.py:2010`.
-- Ata: `app/ponto/services/cartorio.py:568`, persistida pela mesma porta referida acima.
-- Reconstrução: base zero `app/escala/services/leitor_celula.py:338`, leitura da ata `app/escala/services/leitor_celula.py:346`, fallback consultando autoridade `app/escala/services/leitor_celula.py:353`, escrita normalizada `app/escala/services/leitor_celula.py:363`.
-- Leitores diretos do campo do dia: `app/ponto/status_dia.py:112`; `app/ponto/supra_juiz.py:198`; `app/ponto/services/cartorio.py:568`; `app/escala/services/leitor_celula.py:346`; `app/folha/causas.py:58`, `app/folha/causas.py:84`; `app/folha/export.py:1072`, `app/folha/export.py:1074`, `app/folha/export.py:1079`; `app/ponto/services/fechamento.py:1016`; `app/ponto/services/dia_pago.py:391`; `app/ponto/services/bordas_realizado.py:76`.
-- Há campos homônimos persistidos em outros modelos: `DiaPago` em `app/ponto/models.py:350` e `FechamentoMensal` em `app/ponto/models.py:432`. Escritores desses campos: `app/ponto/services/dia_pago.py:287`, `app/ponto/services/dia_pago.py:474`, `app/ponto/services/dia_pago.py:480`, `app/ponto/services/dia_pago.py:493`; `app/ponto/services/fechamento.py:1051`, `app/ponto/services/fechamento.py:1062`. Não tratá-los como escritores paralelos da chave da grade; são destinos distintos do dado, conforme `app/ponto/services/dia_pago.py:423` e `app/docs/ADR/0002-celula-e-o-dia.md:8`.
-- Leitores escalares desses homônimos: `app/folha/export.py:1019`, `app/folha/export.py:1024`; `app/folha/porta_export.py:135`, `app/folha/porta_export.py:347`; `app/ponto/services/dia_pago.py:491`; `app/ponto/services/fechamento.py:1149`; `app/relatorios/cartao_pela_celula.py:117`, `app/relatorios/cartao_pela_celula.py:120`, `app/relatorios/cartao_pela_celula.py:172`; a reconstrução de histórico do próprio modelo consulta o juiz em `app/ponto/models.py:879`, acumulando em `app/ponto/models.py:883`.
-
-**Atenção ao rollback da grade**
-
-- O default da cópia é `GRADE_POR_TURNO=True`, mas é sobrescrevível por ambiente: `app/config/settings/base.py:165`; valor efetivo de produção `[nao verificado]`.
-- A alternativa continua alcançável pelo código em `app/escala/utils.py:2029`. Seus escritores de `tipo_dia` são `app/escala/utils.py:727`, `app/escala/utils.py:752`, `app/escala/utils.py:987`, `app/escala/utils.py:1011`, `app/escala/utils.py:1016`.
-- Esse remapeamento não leva `minutos_previstos` nem `cobertura_parcial`: `app/escala/utils.py:1016`; o status normaliza minutos ausentes para zero em `app/ponto/status_dia.py:112`. Portanto uma resposta exaustiva do código precisa citar essa alternativa ou declarar que considera o builder por turno default, nunca assumir configuração de produção.
-
-**Veredito `indefinida`**
-
-- Gerador da palavra: mapa código→veredito `app/escala/models.py:1583`, aplicado por `app/escala/models.py:1597`. Escrita no objeto/persistência é da porta em `app/ponto/portas/celula.py:770` e `app/ponto/portas/celula.py:775`; o método do modelo só delega em `app/escala/models.py:1794`.
-- O ramo normal classifica e lavra pela terceira chamada de fatos em `app/ponto/services/cartorio.py:1556`; D5 pode repetir veredito já existente em `app/ponto/services/cartorio.py:733`. No nunca-bateu, sem cobertura integral a palavra é explicitamente substituída por `nunca_bateu`: `app/ponto/services/cartorio.py:1031`, `app/ponto/services/cartorio.py:1040`.
-- Leitor literal novo afetado pelo delta: `app/ponto/status_dia.py:77`. Outros leitores literais: mapa do calendário `app/colaboradores/services/calendario.py:56`, mapa do relatório de furos `app/relatorios/furos.py:26`, rótulo da frota `app/relatorios/dia_da_frota.py:12`. A constante `INDEFINIDA` em `app/escala/orfa_classe.py:24` é outro domínio, não veredito da célula.
-- Leitores da palavra por `VEREDITOS_ACUSAM`, que a inclui em `app/escala/models.py:1735`: `app/folha/export.py:1215`; `app/chamados/juizes.py:1020`, `app/chamados/juizes.py:1074`; `app/chamados/models.py:2623`, `app/chamados/models.py:2624`; `app/chamados/services/disputa_emissao.py:705`; `app/chamados/services/limbo_folgas.py:194`; `app/chamados/services/resposta_tardia.py:45`; `app/chamados/services/vigia_fio.py:314`, `app/chamados/services/vigia_fio.py:362`; `app/chamados/services/silencio_ausencia.py:41`; `app/chamados/services/fabrica_da_celula.py:86`; `app/chamados/reconciliador.py:598`, `app/chamados/reconciliador.py:982`; `app/folha/services/vigia_pausa.py:155`, `app/folha/services/vigia_pausa.py:157`; `app/ponto/services/vigia_ausencia_veredito.py:41`, `app/ponto/services/vigia_ausencia_veredito.py:42`; `app/relatorios/dia_da_frota.py:55`.
-- O relatório de furos pode descartar o veredito antes do mapa em dias não trabalho: `app/relatorios/furos.py:151`; a frota também trata `not cel.trabalha` antes de contar veredito em `app/relatorios/dia_da_frota.py:47`. Delta não migra esses consumidores.
-
-**Leitores que mudam / não mudam com o delta**
-
-- Muda a saída de `status_da_lavra`, chamada pela porta em `app/ponto/portas/celula.py:698`. Isso se torna observável pelo leitor registrado, `app/ponto/status_dia.py:142`, depois de lavrar a nova palavra; o calendário segue leitura própria em `app/colaboradores/services/calendario.py:512`, conforme congelamento até E4 em `app/docs/ADR/0002-celula-e-o-dia.md:71`.
-- O D5 **não corrige status já lavrado**: retorna imediatamente se não nulo em `app/ponto/services/cartorio.py:726`. A correção depende de relavra normal; o delta não altera o veredito irmão, pois as mudanças fornecidas estão na regra do status, no transporte da parcial e no relógio do comando.
-- Relavra normal também pode pular a célula em dia pela impressão: `app/ponto/services/cartorio.py:1155`, `app/ponto/services/cartorio.py:1159`. Sem mudança de insumo/forçar, não se pode afirmar que status incorretos existentes foram corrigidos `[nao verificado]`.
-
-**Checklist**
-
-- Juiz novo não registrado: não; registro explícito `app/core/juizes.py:169`, `app/core/juizes.py:173`, documentação `app/docs/JUIZES.md:74`.
-- Segundo escritor do status fora da porta: não encontrei; atribuição do status em `app/ponto/portas/celula.py:705`, save central `app/ponto/portas/celula.py:640`. Dois escritores em memória da parcial não significam dois juízes, mas contrariam a leitura literal de “um escritor” se alguém a estender indiscriminadamente a todos os builders: `app/escala/utils.py:1190`, `app/escala/services/leitor_celula.py:394`.
-- Relógio do delta: comando agora lê uma vez e deriva hoje em `app/ponto/management/commands/lavrar_status_competencia.py:43`, `app/ponto/management/commands/lavrar_status_competencia.py:44`. Permanecem fallbacks preexistentes fora de comando: `app/ponto/status_dia.py:131`, `app/ponto/portas/celula.py:772`, e unidade `app/ponto/services/cartorio.py:1684`, `app/ponto/services/cartorio.py:1705`, `app/ponto/services/cartorio.py:1708`. O caminho D5 não passa pelo relógio da porta, porque retorna no ramo status-only em `app/ponto/portas/celula.py:753`–`app/ponto/portas/celula.py:766`.
-- Ordem de trava: delta não acrescenta trava. Save e evento estão no mesmo atomic em `app/ponto/portas/celula.py:639`; ausência global de inversão/deadlock em produção `[nao verificado]`.
-- Pré-requisito: a própria ADR reconhece isenção fora da impressão em `app/docs/ADR/0002-celula-e-o-dia.md:58`, deixando para E2 em `app/docs/ADR/0002-celula-e-o-dia.md:59`; não declarar que cobertura completa dos insumos foi provada. Migração de telas fica E4 em `app/docs/ADR/0002-celula-e-o-dia.md:71`.
-
-## 31/10 08:26 · sessao 7e4502ad0cab · F1C4-3 · verificador · origem=Code
-
-**A correção local atende ao aval, mas a obra ainda deixa um leitor que transforma indeterminado em “dia sem trabalho” e um caminho do vigia que usa suspensão de cobrança como motivo de retratação.** (`app/chamados/juizes.py:408`; `app/ponto/supra_juiz.py:441`; `app/ponto/management/commands/reconciliar_grade.py:401`)
-
-**1. Onde falha — e onde está correto**
-
-O novo `dia_sem_trabalho` preserva as duas cláusulas autorizadas: `trabalha is False` ou `ata.tipo_dia` presente e diferente de `trabalho`; `None` sozinho deixou de significar folga, conforme o próprio campo. (`app/chamados/juizes.py:407`; `app/chamados/juizes.py:408`; `app/escala/models.py:1656`)
-
-O ramo novo dos indefinidos **usa corretamente a chave do mapa**: o produtor entrega `(colaborador_id, data)` e o consumidor consulta `(c.pk, _d)`; não há defeito de chave nessa versão. (`app/escala/alimentacao.py:41`; `app/escala/alimentacao.py:42`; `app/ponto/management/commands/reconciliar_grade.py:282`)
-
-A propagação de `para=para` na recursão também está correta: a ausência da véspera passa a ser consultada pelo mesmo efeito solicitado para D. Folha aceita somente aprovada; cobrança aceita não rejeitada. (`app/chamados/juizes.py:426`; `app/chamados/juizes.py:448`; `app/ponto/turnos.py:2487`; `app/ponto/turnos.py:2489`)
-
-**Falha remanescente no vigia:** considere célula `None`, ata de trabalho com lâmpada apagada, ausência pendente no próprio D, vínculo válido e chamado único, sem outras causas de absolvição. O filtro novo deixa `_indef` vazio, mas `_coberto`, usando `para='cobranca'`, ainda põe D em `mortos`; `_lei_cala_no_dia` também cala pela ausência pendente. Esse é um contraexemplo deduzido do fluxo, não uma ocorrência comprovada em produção. (`app/ponto/management/commands/reconciliar_grade.py:266`; `app/ponto/management/commands/reconciliar_grade.py:281`; `app/ponto/management/commands/reconciliar_grade.py:401`; `app/ponto/marcos.py:171`; `app/escala/servico_jornada.py:342`)
-
-Nesse caso, o comando registra `RETRACT` e acrescenta `retracts` antes de chamar a porta; a porta consulta a premissa para **folha**, ignora a pendente e encontra o furo, podendo recusar o fechamento. O comando ignora essa recusa e o vigia continua contando a intenção em `len(retracts)`. Portanto, o filtro novo não elimina esse motivo de divergência persistente. (`app/ponto/management/commands/reconciliar_grade.py:303`; `app/ponto/management/commands/reconciliar_grade.py:304`; `app/ponto/management/commands/reconciliar_grade.py:309`; `app/chamados/models.py:699`; `app/chamados/models.py:1247`; `app/chamados/reconciliador.py:525`; `app/ponto/management/commands/reconciliar_grade.py:337`)
-
-Há ainda uma limitação anterior na recursão: qualquer dia considerado sem trabalho consulta D−1, sem verificar naquele trecho se existe relação com turno noturno; resultado desconhecido da véspera vira `False`. O diff corrige o efeito transmitido, mas não modifica essa seleção de dia. Para `batida_ausente`, o coletor possui absolvição direta por dia sem trabalho antes dessa chamada; chamados `turno_aberto*` são excluídos dessa absolvição direta. (`app/chamados/juizes.py:443`; `app/chamados/juizes.py:448`; `app/chamados/juizes.py:449`; `app/chamados/models.py:1232`; `app/chamados/models.py:1247`)
-
-**2. Quem escreve e quem lê**
-
-| Campo/valor | Escritor ou produtor | Leitor e efeito |
-|---|---|---|
-| `CelulaDia.trabalha` | A porta calcula pela autoridade do vínculo e cria/altera na geração e regeneração; também escreve na reversão. (`app/ponto/portas/celula.py:243`; `app/ponto/portas/celula.py:260`; `app/ponto/portas/celula.py:532`; `app/ponto/portas/celula.py:590`; `app/ponto/portas/celula.py:612`) | `eh_dia_trabalho` devolve o triestado intacto; o predicado alterado compara estritamente com `False`; o reconciliador passa a consultá-lo. (`app/escala/models.py:1072`; `app/chamados/juizes.py:408`; `app/ponto/management/commands/reconciliar_grade.py:282`) |
-| `CelulaDia.ata` | `ata_do_dia` produz `tipo_dia`, lâmpadas e demais fatos; `lavrar_veredito` persiste pela porta. A chave `precedencia` tem operação própria na mesma porta. (`app/ponto/services/cartorio.py:558`; `app/ponto/services/cartorio.py:566`; `app/ponto/portas/celula.py:725`; `app/ponto/portas/celula.py:732`; `app/ponto/portas/celula.py:775`) | `dia_sem_trabalho` lê `tipo_dia`; `_celula_furada` lê lâmpadas e órfãs; `premissa_regularizada` consulta esses julgamentos. (`app/chamados/juizes.py:407`; `app/chamados/juizes.py:454`; `app/chamados/juizes.py:457`; `app/chamados/juizes.py:459`; `app/chamados/models.py:1232`; `app/chamados/models.py:1247`) |
-| Chave de `celulas_do_periodo` | O carregador constrói `(c.colaborador_id, c.data)`. (`app/escala/alimentacao.py:42`) | O comando carrega o mapa, alimenta `vinculo_do_dia` e consulta a mesma tupla no novo filtro. (`app/ponto/management/commands/reconciliar_grade.py:189`; `app/ponto/management/commands/reconciliar_grade.py:196`; `app/ponto/management/commands/reconciliar_grade.py:282`) |
-| `plan` / `RETRACT_INDEFINIDO` | `handle` cria o `Counter`; incrementa `RETRACT_INDEFINIDO` quando todas as datas estão em `mortos` e `_indef` não está vazio. O incremento antecede o gate do catálogo. (`app/ponto/management/commands/reconciliar_grade.py:113`; `app/ponto/management/commands/reconciliar_grade.py:292`; `app/ponto/management/commands/reconciliar_grade.py:294`; `app/ponto/management/commands/reconciliar_grade.py:298`) | A saída imprime o plano; os testes novos procuram a presença/ausência do rótulo. (`app/ponto/management/commands/reconciliar_grade.py:318`; `app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:64`; `app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:74`) |
-| `retracts` | Lista criada no comando; recebe candidatos após `premissa_morta`, antes da execução de `retratar`. (`app/ponto/management/commands/reconciliar_grade.py:113`; `app/ponto/management/commands/reconciliar_grade.py:298`; `app/ponto/management/commands/reconciliar_grade.py:304`) | Alimenta a listagem e `divergencia_grade_cartorio`. O script de placar extrai posteriormente esse contador da saída registrada. (`app/ponto/management/commands/reconciliar_grade.py:324`; `app/ponto/management/commands/reconciliar_grade.py:337`; `bin/placar_code.sh:528`; `bin/placar_code.sh:530`) |
-| `para` | É argumento da consulta: o coletor e o helper têm default `cobranca`; o fechamento exige `folha`; a recursão agora preserva a escolha. (`app/chamados/models.py:1200`; `app/chamados/juizes.py:411`; `app/chamados/models.py:699`; `app/chamados/juizes.py:448`) | `ausencia_cobre` aplica `_pelo_efeito`, separando aprovada de não rejeitada. (`app/ponto/turnos.py:2525`; `app/ponto/turnos.py:2487`; `app/ponto/turnos.py:2489`) |
-
-A projeção da ata do julgamento em curso é uma cópia em memória, distinta da persistência: `celula_do_dia_agora` passa pela projeção e a porta copia a instância antes de sobrepor a ata. As alterações diretas de `trabalha`/`ata` nos testes são alimentação de fixture. (`app/chamados/juizes.py:378`; `app/chamados/juizes.py:394`; `app/ponto/portas/celula.py:678`; `app/ponto/portas/celula.py:680`; `app/chamados/tests/test_f1c4_3_none_cobra.py:83`)
-
-**3. Mordida dos testes** [nao verificado]
-
-| Teste/grupo | Avaliação | [nao verificado]
-|---|---|
-| Dois RED unitários de `None` | **Mordem** voltar a `is not True`: o predicado antigo responde `True`, contrariando ambos. (`app/chamados/tests/test_f1c4_3_none_cobra.py:39`; `app/chamados/tests/test_f1c4_3_none_cobra.py:42`; `app/chamados/juizes.py:405`) |
-| Unitários da cláusula da ata | **Mordem** retirar a cláusula: usam `trabalha=True` com ata de folga/ausência. Não há caso explícito de `tipo_dia='falta'`. (`app/chamados/tests/test_f1c4_3_none_cobra.py:45`) |
-| Unitário de `False` | **Morde isoladamente** retirar `trabalha is False`: usa ata de trabalho e ata sem tipo. (`app/chamados/tests/test_f1c4_3_none_cobra.py:50`) |
-| Unitário de `True` | Controla respostas indevidamente constantes ou que calem um dia de trabalho sem causa. (`app/chamados/tests/test_f1c4_3_none_cobra.py:54`) |
-| RED `_celula_furada(None)` | **Morde** o predicado antigo: ele desviaria para véspera inexistente e retornaria `False`; o novo encontra a lâmpada apagada e retorna `True`. (`app/chamados/tests/test_f1c4_3_none_cobra.py:93`; `app/chamados/juizes.py:437`; `app/chamados/juizes.py:448`; `app/chamados/juizes.py:457`) |
-| Controle `_celula_furada(False, 'folga')` | **Não isola a cláusula `False`**: mesmo removendo-a, a ata de folga mantém o resultado. Essa mordida está nos unitários acima. (`app/chamados/tests/test_f1c4_3_none_cobra.py:97`; `app/chamados/juizes.py:408`) |
-| Controle `_celula_furada(True, 'folga')` | **Morde** retirar a cláusula da ata: sem ela, a lâmpada apagada acusaria furo. (`app/chamados/tests/test_f1c4_3_none_cobra.py:101`; `app/chamados/juizes.py:457`) |
-| RED da premissa em `None` | **Morde** o predicado antigo já na absolvição direta; com o novo, cai na leitura do furo. (`app/chamados/tests/test_f1c4_3_none_cobra.py:105`; `app/chamados/models.py:1232`; `app/chamados/models.py:1247`) |
-| Controle da premissa com ata de folga | **Morde** retirar a cláusula da ata, pois o dia contém lâmpada apagada. (`app/chamados/tests/test_f1c4_3_none_cobra.py:111`; `app/chamados/models.py:1232`; `app/chamados/juizes.py:457`) |
-| RED da véspera para `folha` | **Morde retirar `para=para`**: no ensaio das funções em memória, a mutação troca a resposta de `True` para `False`, pela cobertura da pendente no default `cobranca`. (`app/chamados/tests/test_f1c4_3_none_cobra.py:117`; `app/chamados/tests/test_f1c4_3_none_cobra.py:131`; `app/chamados/juizes.py:448`; `app/ponto/turnos.py:2489`) |
-| Controle da véspera para `cobranca` | Confirma a suspensão pela pendente, mas **sozinho não morde** retirar o argumento: o default já é cobrança. (`app/chamados/tests/test_f1c4_3_none_cobra.py:133`; `app/chamados/juizes.py:411`) |
-| Dois RED do reconciliador | **Pelo fluxo anterior fornecido no diff, ficam vermelhos**: `_indef` incluiria ONTEM, gerando `RETRACT_INDEFINIDO` e divergência 1. Eles exigem ausência desse rótulo e divergência 0. (`app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:61`; `app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:67`; `app/ponto/management/commands/reconciliar_grade.py:294`; `app/ponto/management/commands/reconciliar_grade.py:304`; `app/ponto/management/commands/reconciliar_grade.py:337`) |
-| MORDE do reconciliador com ata de folga | **Morde** zerar todos os indefinidos ou consultar chave errada. **Não prova retratação efetiva**: roda sem apply e verifica contador anterior à porta. (`app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:58`; `app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:72`; `app/ponto/management/commands/reconciliar_grade.py:294`; `app/ponto/management/commands/reconciliar_grade.py:309`) |
-| A2 alterado | **Morde a tentativa indevida**, mesmo se o gate impedir fechar: exige zero chamadas ao `retratar` real envolvido por `wraps`. Verificar somente status vivo seria insuficiente. (`app/ponto/tests/test_a2_marco_morto.py:47`; `app/ponto/tests/test_a2_marco_morto.py:52`; `app/ponto/tests/test_a2_marco_morto.py:54`) |
-
-Os RED do reconciliador não estão vazios por falta de batidas: o chamado põe o colaborador no universo, a fixture fornece vínculo semanal de sete dias e a grade marca o dia como indefinido. (`app/ponto/management/commands/reconciliar_grade.py:95`; `app/ponto/management/commands/reconciliar_grade.py:106`; `app/chamados/tests/_vinculo_do_dia.py:18`; `app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:33`)
-
-A fixture de ausência merece atenção: criar `Ausencia` dispara julgamento síncrono, podendo substituir a ata preparada antes. Neste caso, pendente não dispensa lâmpadas e o overlay usa o efeito folha; faltam asserts após essa criação para explicitar as precondições, mas o código não demonstra um RED falso por ausência de sinal. (`app/chamados/tests/test_f1c4_3_none_cobra.py:129`; `app/ponto/signals.py:143`; `app/ponto/signals.py:93`; `app/ponto/services/cartorio.py:609`; `app/escala/utils.py:1148`)
-
-**Execução integral da suíte Django e execução efetiva na árvore Git antiga: `[nao verificado]`.** [nao verificado]
-
-**4. Leitores de produção restantes fora da fila informada**
-
-**Sim: o caminho mais forte é leitor da célula → supra → retratação.** Sem `tipo_dia` na ata, `trabalha=None` produz `indefinido`; sem previsto lavrado, produz zero. O supra aceita esse tipo como “dia sem trabalho”, porque `SEM_JURISDICAO` exclui apenas `fora_vinculo` e `sem_celula`. (`app/escala/services/leitor_celula.py:344`; `app/escala/services/leitor_celula.py:353`; `app/ponto/supra_juiz.py:46`; `app/ponto/supra_juiz.py:441`)
-
-Esse resultado chega ao ramo que tenta `retratar` com `--executar`, declarado no cron. O gate final pode impedir o fechamento, mas a classificação e a tentativa indevida permanecem. (`app/ponto/management/commands/supra_juiz.py:206`; `app/ponto/management/commands/supra_juiz.py:243`; `app/ponto/management/commands/supra_juiz.py:248`; `app/config/crons.py:580`; `app/chamados/models.py:699`)
-
-Também restam silenciamentos de emissão por `None`, embora nem todos o rotulem explicitamente como folga:
-
-- `processar_alertas_avancados` usa `not eh_dia_trabalho`, pulando `None` antes do caminho de criação/escalonamento de `turno_aberto_24h`. (`app/ponto/management/commands/processar_alertas_avancados.py:49`; `app/ponto/management/commands/processar_alertas_avancados.py:91`; `app/ponto/management/commands/processar_alertas_avancados.py:121`)
-- O cartório exige `is True` para emitir furo total e rejeita `is not True` no leitor de furo parcial, antes de consultar os marcos apagados. (`app/ponto/services/cartorio.py:1459`; `app/ponto/services/cartorio.py:1469`; `app/ponto/services/cartorio.py:1558`; `app/ponto/services/cartorio.py:1574`)
-- `emitir_furo_retroativo` conta `None` como limbo e pula o caminho de emissão. (`app/ponto/management/commands/emitir_furo_retroativo.py:127`; `app/ponto/management/commands/emitir_furo_retroativo.py:142`)
-
-Esses consumidores recebem o triestado preservado pela autoridade; o colapso acontece depois dela. (`app/escala/models.py:1072`)
-
-**Ocorrências, quantidades e fechamentos efetivos desses casos em produção: `[nao verificado]`.**
-
-## 31/10 08:25 · sessao 8fad8251d37b · - · - · origem=Ronald (tmux)
-
-Correção: o controle `_celula_furada(False,'folga')` **não** morde remover a cláusula `trabalha is False`, pois `ata.tipo_dia='folga'` continua tornando o predicado verdadeiro; os unitários com `False/'trabalho'` e `False/sem tipo` é que isolam essa cláusula. `app/chamados/tests/test_f1c4_3_none_cobra.py:50–52,97–99`; `app/chamados/juizes.py:408`.
-
-Contraexemplo restante do vigia, deduzido do código: célula `None`, ata trabalho apagada, ausência pendente no próprio D, vínculo válido e chamado único sem outras causas de absolvição. `_indef` fica vazio, porém `_coberto(..., para='cobranca')` inclui D em `mortos`; `_lei_cala_no_dia` também cala pela pendente. `app/ponto/management/commands/reconciliar_grade.py:266–267,281–291,401–403`; `app/ponto/marcos.py:166–171`; `app/escala/servico_jornada.py:342–345`.
-
-O plano incrementa `RETRACT` e acrescenta `retracts` antes da porta. A porta pergunta `premissa_regularizada(para='folha')`, que ignora a pendente e vê a lâmpada apagada; sem exceção de pai/irmão, recusa fechar. O retorno `False` de `retratar` é ignorado e o vigia continua contando `len(retracts)=1`. `app/ponto/management/commands/reconciliar_grade.py:303–309,337–342`; `app/chamados/models.py:699,709–724,1232–1249`; `app/chamados/juizes.py:426–427,457–458`; `app/chamados/reconciliador.py:524–526`.
-
-Os novos testes de reconciliar não criam ausência, portanto deixam esse caminho descoberto. `app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:48–58`. Ocorrência e quantidade em produção: `[nao verificado]`.
-
-## 31/10 08:24 · sessao 8fad8251d37b · - · - · origem=Ronald (tmux)
-
-Auditoria estática + AST puro em memória; execução da suíte Django e da árvore Git antiga: `[nao verificado]`. [nao verificado]
-
-| Teste/grupo | Mordida demonstrável pelo código | [nao verificado]
-|---|---|
-| `JuizDiaSemTrabalhoTest` | Os dois RED falham com `trabalha is not True`: `None` retorna `True` em vez de `False`. Os controles de cláusula 2, `False` e `True` distinguem apagar cada cláusula e predicados constantes. `app/chamados/tests/test_f1c4_3_none_cobra.py:38–56`; predicado atual `app/chamados/juizes.py:407–408`. |
-| `_celula_furada(None, ata trabalho apagada)` | Morde a volta do predicado antigo: este recurse para véspera inexistente e termina `False`, quando o teste exige `True`. Atual encontra a lâmpada apagada. `app/chamados/tests/test_f1c4_3_none_cobra.py:93–95`; `app/chamados/juizes.py:443–458`. |
-| Controles `_celula_furada` folga / ata folga | Morderiam remover respectivamente a cláusula `False` e a cláusula da ata: a APAGADA do próprio dia devolveria `True`. Entretanto a véspera não existe: esses dois controles não demonstram seleção correta do dia noturno. `app/chamados/tests/test_f1c4_3_none_cobra.py:97–103`; `app/chamados/juizes.py:443–449`. |
-| `premissa_regularizada(None)` | Morde o predicado antigo já na cláusula de dia sem trabalho; com o novo, sem marcos nomeados, cai em `_celula_furada`, que retorna `True`, e a premissa não regulariza. `app/chamados/tests/test_f1c4_3_none_cobra.py:85–90,105–109`; `app/chamados/models.py:1232–1249`; `app/ponto/services/lastro.py:110–114,170–172`. |
-| Controle premissa ata folga | Morde retirar cláusula 2: com ela regulariza diretamente; sem ela chega à lâmpada apagada e não regulariza. `app/chamados/tests/test_f1c4_3_none_cobra.py:111–115`; `app/chamados/models.py:1232–1249`. |
-| RED `para='folha'` | **Sim, morde a retirada de `para=para`.** AST das funções reais, com alimentação em memória e ausência no contrato de `_pelo_efeito`, produziu atual `folha=True/cobranca=False`; mutação sem keyword `folha=False/cobranca=False`. Teste e recursão: `app/chamados/tests/test_f1c4_3_none_cobra.py:117–131`; `app/chamados/juizes.py:426–427,448`; diferença de efeito: `app/ponto/turnos.py:2487–2490`. |
-| Controle véspera cobrança | Confirma suspensão por pendente em cobrança, mas sozinho não morde retirar `para=para`, pois o default já é cobrança. `app/chamados/tests/test_f1c4_3_none_cobra.py:133–143`; `app/chamados/juizes.py:411,448`. |
-| Dois RED reconciliar (`ata trabalho` e `sem ata`) | **Na árvore anterior descrita pelo diff, deveriam ficar vermelhos**: `_indef=dts&indefinidos` inclui ONTEM, produz `RETRACT_INDEFINIDO=1` e um elemento em `retracts`, portanto divergência 1. Ambos exigem ausência da primeira string e divergência 0. `app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:61–70`; leitores do resultado `app/ponto/management/commands/reconciliar_grade.py:292–304,337–342`. |
-| MORDE ata folga reconciliar | Morde zerar todos os indefinidos, errar a chave para `_d` em vez de `(c.pk,_d)` ou não perguntar ao juiz: desapareceria `RETRACT_INDEFINIDO=1`. Não prova que a porta efetivamente retrataria: roda `apply=False`, e o contador antecede `premissa_morta` e `retratar`. `app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:58,72–74`; `app/ponto/management/commands/reconciliar_grade.py:281–309`. |
-| A2 alterado | O `wraps` e a exigência `call_count=0` mordem retornar ao ramo antigo mesmo se a porta barrar o fechamento; verificar só status vivo não morderia essa tentativa. `app/ponto/tests/test_a2_marco_morto.py:47–55`; `app/ponto/management/commands/reconciliar_grade.py:305–309`. |
-
-Não encontrei ausência de sinal que torne os RED de reconciliar triviais: a fixture dá vínculo semanal de sete dias, cria o chamado antes da célula e põe ONTEM na janela congelada. `app/chamados/tests/_vinculo_do_dia.py:15–26`; `app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:25,37,46,52–58`. `com_chamado` põe o colaborador no universo mesmo sem batidas, e `sem_ancora` preenche `indefinidos`. `app/ponto/management/commands/reconciliar_grade.py:95–106,139–150`. `_lei_cala_no_dia` não cala só por `None`: `classificar_falta` testa `is False`, preserva marcos do vínculo e zero batidas retorna falta. `app/ponto/marcos.py:166–176`; `app/escala/servico_jornada.py:303–304,427–435,457–480`.
-
-**Cuidado real da fixture de ausência:** `Ausencia.objects.create` dispara julgamento síncrono e pode sobrescrever a APAGADA montada antes. `app/chamados/tests/test_f1c4_3_none_cobra.py:126–130`; `app/ponto/signals.py:143–147,85–93`; `app/ponto/services/cartorio.py:938–981`. Neste caso o código conserva o sinal relevante: a grade só aplica cobertura `para='folha'`, pendente não cobre nesse efeito e `dispensar_por_ausencia` não acende lâmpadas para pendente. `app/escala/utils.py:1148`; `app/ponto/turnos.py:2487–2488`; `app/ponto/services/cartorio.py:609–612`. A precedência adicional escreve somente `ata['precedencia']`, não substitui `tipo_dia`. `app/ponto/services/cartorio.py:1629–1638`; `app/ponto/portas/celula.py:771–775`. Ainda faltam asserts explícitos após criar ausência para certificar a lâmpada e as duas respostas de cobertura; ausência desses asserts é lacuna de diagnóstico, não prova de RED falso. `app/chamados/tests/test_f1c4_3_none_cobra.py:129–131`.
-
-_924 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_928 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
