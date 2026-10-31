@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 31/10/2026 05:50:51.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (27.1 MB). Acoes na janela: **787**.
+**Medido em 31/10/2026 05:56:08.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (27.1 MB). Acoes na janela: **785**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -795,5 +795,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:57:03 | Bash |  | `cd /home/ronald/saas-hasner/logs/calendario_hoje && cat > triagem8.txt <<'EOF' TRIAGEM das voltas 5-8 do Codex e da leitura de desenho, pelo construtor -- ANEXA ao opus final (CODEX-TRIAGEM-INDEPENDENTE (1)). Procedentes CURADOS: v5 rotulo do cego nao chegava a grade (5cc57c18); v6 render aceitava literal + sem teto absoluto (41abcd1f); desenho (B) singular assimetrica -> v7 PROVOU que o repasse n ...` |
 | 17:56:48 | Bash |  | `/usr/bin/sleep 5; cd /home/ronald/saas-hasner && bin/trava_teste.sh --quem; tail -2 logs/calendario_hoje/suite_pouso6.log` |
 | 17:56:45 | Bash |  | `cd /home/ronald/wt-cal-hoje-3010-1353 && git status --short && git add app/ponto/tests/test_c1_dias_encerrados.py && git commit -q -F - <<'EOF' CALENDARIO-HOJE Codex volta 8: o selo C1 morde o repasse do dict do FECHAMENTO na porta singular Codex volta 8 (logs/calendario_hoje/verif8.txt), procedente: o selo de propriedade chamava a singular SEM `celulas`, e nao mordia a reintroducao do repasse que ...` |
-| 17:54:34 | Bash |  | `cd /home/ronald/saas-hasner/logs/calendario_hoje && until grep -q '^rc=' green15.log 2>/dev/null; do /usr/bin/sleep 30; done; for f in suite_pouso5 mutante15 green15; do echo == $f; grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()\|^rc=" $f.log \| tail -4; done` |
-| 17:54:30 | Bash |  | `cd /home/ronald/saas-hasner && date +%H:%M && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') novo=[ "> lei: CODEX-CONTEXTO-DA-CASA PRONTO 5 (PERGUNTA, nao trava a fila): o A/B deu EMPATE e nao cumpre nem o 'fica' nem o 'volta magro' -- hash 61ae629c, mesma .q, Sol nas 4 rodadas, n=2 por braco, so o AGENTS.md variando (o brief novo NAO medido): VIU 4 x 4; EM PARTE 4 (com) x 6 ...` |
