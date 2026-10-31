@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 31/10/2026 10:03:32.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (39.1 MB). Acoes na janela: **1020**.
+**Medido em 31/10/2026 10:08:57.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (39.2 MB). Acoes na janela: **1020**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:04:37 | Bash |  | `L=/home/ronald/saas-hasner/logs/o261e/push_fio.log; timeout 580 bash -c "until grep -q '^rc=' $L; do /usr/bin/sleep 10; done"; tail -n 6 $L; cd /home/ronald/saas-hasner; git fetch -q; git log --oneline -3; git log --oneline -1 origin/main; git status --short app/docs; date +%H:%M` |
+| 10:04:20 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 1,12p app/docs/RELATO.md \| cut -c1-900; echo; grep -n "E3-STATUS" app/docs/RELATO.md \| head -5; cat logs/sessao/cota.json 2>/dev/null \| head -c 400; echo; grep -nE "rearma" bin/disjuntor.py \| head -5` |
 | 09:54:23 | Bash |  | `L=/home/ronald/saas-hasner/logs/o261e/push_fio.log; timeout 580 bash -c "until grep -q '^rc=' $L; do /usr/bin/sleep 15; done"; tail -n 5 $L; date +%H:%M` |
 | 09:54:18 | Agent | Opus final DISJUNTOR-B3-TOPO | `Final verification of the obra DISJUNTOR-B3-TOPO (an instrument; it lands in its own pouso). Read only: do not write anywhere, do not run the seal in the live repo (it creates and deletes files). If you need to run something, use the copy /home/ronald/wt-dj-b3topo-0838 (branch dj-b3topo, HEAD 0ccc1afb). Diff of the obra: `git -C /home/ronald/saas-hasner diff 2720c366 0ccc1afb` (bin/disjuntor.py, b ...` |
 | 09:54:04 | Bash |  | `cd /home/ronald/saas-hasner; B=$(git merge-base main 0ccc1afb); echo base=$B; git log --oneline $B..0ccc1afb; git diff --stat $B 0ccc1afb; git diff --stat 9453c4f6 $B -- bin/hook_stop_fila1.py bin/disjuntor.py bin/tests/test_disjuntor.sh` |
@@ -1028,5 +1030,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 22:11:58 | SendMessage |  | `-` |
 | 22:11:51 | SendMessage |  | `-` |
 | 22:11:42 | Bash |  | `cd /home/ronald/saas-hasner && date +%H:%M && python3 - <<'EOF' p='/home/ronald/saas-hasner/app/docs/PROMPTS.md' s=open(p).read().rstrip('\n')+'\n' s+="\| 30/10 22:1x \| **avais (3): (1) O261-E-F1-LAMPADA-COBRADO = SIM: 'cobrado' NAO conta cobranca viva com TODOS os marcos acesos na ata DESTE julgamento (`marcos_acesos(x, _ata_agora)`); ordem no julgamento = lavrar -> E2 (porta existente) -> recon ...` |
-| 22:03:42 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='/home/ronald/saas-hasner/app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('> **F5 fc9beece: opus final REPROVOU**')) L.insert(i,"> **F5 fbad5075: opus 2a leitura REPROVOU** (22:0x): os 9 itens da 1a estao curados ou fora do diff com linha, MAS o selo da costura do command nao morde o mutante declar ...` |
-| 22:03:34 | Bash |  | `cd /home/ronald/saas-hasner && grep -n "^\| RELOGIO-INJETADO" app/docs/BACKLOG.md \| cut -c1-120; python3 - <<'EOF' p='/home/ronald/saas-hasner/app/docs/BACKLOG.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('\| FIO-ESTADO-LE-O-ALCANCE \|')) for n,t in reversed([ ("F5-RELOGIO-DO-EXPORT","sitio da RELOGIO-INJETADO (opus F5 30/10): `fora_da_folha.py:138` nao repass ...` |
