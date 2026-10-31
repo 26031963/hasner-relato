@@ -1,7 +1,52 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 03:25** · publicado em **31/10/2026 03:25** (UTC-3)
+> Ultima resposta processada: **31/10/2026 03:26** · publicado em **31/10/2026 03:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 03:26 · sessao 62aed3dacb80 · FIO-ESTADO-LE-O-ALCANCE · verificador · origem=Code
+
+**O escritor F5 já existe; a manchete e o selo ainda seguem o contador antigo.** O comando grava `censo.fio_morto_alcance` e `alcance`, mas o ESTADO continua imprimindo `fio_morto`. O próprio teste F5 caracteriza **antigo=0 e alcance=1** — portanto os números não são intercambiáveis. (`app/chamados/management/commands/vigiar_fio_morto.py:216-218`; `bin/fio_estado.py:101-104`; `app/chamados/tests/test_o261e_f5_alcance.py:430-434`.)
+
+O anexo não contém uma medição produtiva: valores atuais, último recarimbo e resultado publicado em produção são **[nao verificado]**. [nao verificado]
+
+| Campo | Quem escreve | Quem lê atualmente |
+|---|---|---|
+| `censo.fio_morto_alcance` | `censo_alcance()` inicializa em zero e incrementa os dias sem porta; o comando copia para `censo`. (`app/chamados/services/vigia_fio.py:539`, `:649`; `app/chamados/management/commands/vigiar_fio_morto.py:217`.) | O comparador genérico o consulta **somente se estiver em `esperado`**. Não integra o retorno nominal nem a manchete. (`bin/fio_estado.py:72-92`, `:101-104`.) |
+| `alcance.alcance_cego` | Calculado como `not dias`; persistido no bloco inteiro. (`app/chamados/services/vigia_fio.py:553`; `app/chamados/management/commands/vigiar_fio_morto.py:218`.) | `linhas_alcance()` lê o resultado em memória para a saída do comando; o leitor host ignora esse bloco. (`app/chamados/services/vigia_fio.py:662-664`; `bin/fio_estado.py:69-92`.) |
+| `alcance.alcance_universo` | `len(dias)`, dos dias retidos por empresa visível e competência aberta; persistido em `alcance`. (`app/chamados/services/vigia_fio.py:534-552`; `app/chamados/management/commands/vigiar_fio_morto.py:218`.) | Usado na saída textual do comando, mas ignorado pelo leitor host. (`app/chamados/services/vigia_fio.py:659-662`; `bin/fio_estado.py:69-92`.) |
+| `esperado` | O comando declara os esperados antigos, acrescenta `fio_morto_alcance=0` e grava uma cópia. (`app/chamados/management/commands/vigiar_fio_morto.py:87-95`, `:211`.) | `ler()` compara todas as chaves presentes com `censo`; `linha()` ainda seleciona o esperado antigo para a manchete. (`bin/fio_estado.py:70-73`, `:103`.) |
+| `medido_em` | O relógio é capturado **antes dos censos** e serializado em horário local no carimbo. É instante de início, não de conclusão. (`app/chamados/management/commands/vigiar_fio_morto.py:162-168`, `:207`.) | `ler()` calcula idade; `linha()` mostra data, idade e aviso de velho. (`bin/fio_estado.py:74-84`, `:112-117`.) |
+| `censo.fio_morto` antigo | `censo()` parte dos chamados vivos com célula, inicializa e incrementa o contador; o comando preserva `d` no carimbo. (`app/chamados/services/vigia_fio.py:317`, `:340`, `:417`; `app/chamados/management/commands/vigiar_fio_morto.py:216`.) | Ainda determina a manchete e participa da comparação com `esperado`. O alarme também consulta o contador em memória. (`bin/fio_estado.py:72-73`, `:86`, `:101-104`; `app/chamados/management/commands/vigiar_fio_morto.py:82`, `:170-171`.) |
+
+Os pontos de falha são estes:
+
+1. **Carimbo anterior ao F5 pode parecer bom sem medir alcance.** Sem `alcance` e sem o novo esperado, o leitor aceita o arquivo como `medido=True`, compara apenas as chaves antigas e pode mostrar `fio morto: 0` sem divergências. O selo chama exatamente essa combinação de “VERDE”; não existe uma validação de versão/esquema. (`bin/fio_estado.py:69-92`, `:101-104`; `bin/tests/test_fio_estado.sh:40-47`, `:56-60`.)
+
+2. **Universo vazio produz zero, mas significa cegueira.** O produtor retorna `fio_morto_alcance=0`, `alcance_universo=0` e `alcance_cego=True`. Hoje o host ignora os dois últimos campos; olha somente `censo.cego`, que pertence ao universo antigo. Assim, igualdade `0=0` pode coexistir com ausência de universo de alcance, sem aviso correspondente. (`app/chamados/services/vigia_fio.py:538-555`; `bin/fio_estado.py:72-73`, `:91`, `:109-111`.)
+
+   O contrato precisa também fechar **subchaves ausentes ou incoerentes**: só exigir o bloco `alcance` e rejeitar `alcance_cego=True` não garante que exista `alcance_universo>0`. O escritor fornece ambas; o leitor atual não verifica nenhuma. (`app/chamados/services/vigia_fio.py:552-555`; `bin/fio_estado.py:69-92`.)
+
+3. **Contador ausente/`None` não suprime a manchete numérica.** Se seu esperado existir, `None != 0` aparece em `FORA DO ESPERADO`, mas a manchete continua mostrando o número antigo. Se faltar também `esperado.fio_morto_alcance`, nem essa divergência será calculada. (`bin/fio_estado.py:72-73`, `:101-108`.)
+
+   **`esperado` ausente vira `{}`**, deixando a comparação vazia. Portanto a presença do esperado do novo contador também precisa ser condição de medição válida; ausência não pode virar aprovação por falta de comparação. (`bin/fio_estado.py:70-73`.)
+
+4. **Recorte é protegido pelo escritor, não pelo conteúdo validado pelo leitor.** `--empresa` vira uma lista e só `empresas is None` permite carimbar; recortes declaram “NAO carimbado”. Há teste específico dessa proteção. Portanto o comando atual não produz normalmente um carimbo de recorte nesse destino. (`app/chamados/management/commands/vigiar_fio_morto.py:152-156`, `:205`, `:223-225`; `app/chamados/tests/test_o261_vigia_fio.py:801-814`.)
+
+   Se um arquivo recortado chegar ao caminho por outra origem, o leitor não valida escopo/proveniência e pode publicar seu número como frota. A ocorrência disso em produção é **[nao verificado]**. (`bin/fio_estado.py:63-92`.)
+
+5. **A proteção temporal não cobre data ausente ou inválida.** Nesses casos, a idade fica desconhecida, `velho=False` e a manchete permanece numérica. Não há fallback efetivo para `hoje`. Com data válida antiga, aparece a advertência de velho, mas o número continua na manchete; a idade ainda é arredondada antes da comparação com 26 horas. (`bin/fio_estado.py:74-84`, `:101-117`.)
+
+6. **“Exceção de leitura = ILEGIVEL” não está implementado.** Ausência, erro de abertura/permissão e JSON inválido convergem para `medido=False` e **NUNCA MEDIDO**. JSON de formato errado pode lançar `AttributeError`; `medido_em` não textual pode lançar `TypeError`, pois a captura posterior aceita apenas `ValueError`. Essas falhas podem interromper o gerador antes da publicação. (`bin/fio_estado.py:63-80`, `:97-100`; `bin/gerar_estado.py:260-261`, `:364`.)
+
+   Exceção no produtor antes da gravação também pode deixar o carimbo anterior intacto e ainda dentro das 26 horas. Já uma rodada que apenas **alarma** grava antes de sair: esse caso preserva a medição. (`app/chamados/management/commands/vigiar_fio_morto.py:167-189`, `:205-228`; `bin/fio_estado.py:74-84`.)
+
+7. **O selo atual não prova a mudança proposta.** Suas fixtures não contêm alcance; os casos numéricos verificam `medido`, `velho` e nomes de divergências, sem conferir a manchete. O caso CEGO só procura essa palavra e permite conservar o número. Um mutante que restitua apenas a manchete antiga não seria detectado por essas verificações. (`bin/tests/test_fio_estado.sh:40-51`, `:56-91`, `:104-107`.)
+
+   A fixture decisiva deve ter **antigo=0/alcance=N** e conferir a manchete publicada; o caso inverso distingue o novo resultado da regressão antiga. A primeira divergência já está caracterizada nos testes F5. (`bin/fio_estado.py:101-108`; `app/chamados/tests/test_o261e_f5_alcance.py:430-434`.)
+
+Sobre outro leitor: o ESTADO delega a `ler()`/`linha()`, e os modos JSON e `--linhas` usam o mesmo `ler()`. Não identifiquei outro leitor operacional do arquivo; consumidores externos ou construídos inteiramente por caminhos dinâmicos são **[nao verificado]**. (`bin/gerar_estado.py:260-261`; `bin/fio_estado.py:64-65`, `:123-129`.)
+
+**Existe, porém, uma regra operacional diferente no alarme**, que mede ao vivo e não lê o carimbo: cobra `cego` e passivos antigos, deixando `alcance_cego` e `fio_morto_alcance` fora do alarme. Logo um ESTADO corrigido poderá acusar alcance cego ou passivo enquanto o comando não alarma por esses campos — divergência atualmente explícita e testada. (`app/chamados/management/commands/vigiar_fio_morto.py:81-95`, `:167-171`, `:227-228`; `app/chamados/tests/test_o261e_f5_alcance.py:454-455`.)
 
 ## 31/10 03:25 · sessao c8b173220787 · - · - · origem=Ronald (tmux)
 
@@ -726,36 +771,4 @@ Os testes atuais preservam essa incoerência ao exigir igualdade com o literal, 
 
 - **Ordem de trava/pouso:** nascimento autorizado consta em `app/docs/CORTES.md:400`; suite verde antes do opus é exigida em `CLAUDE.md:600-602`. Execução de RED → cura → GREEN → suite e cumprimento do pouso **[nao verificado]**.
 
-## 31/10 02:28 · sessao 145bbd00c71a · - · - · origem=Ronald (tmux)
-
-Bloqueia: `fila` nova continua podendo nomear chamado invisível ao admin.
-
-- `qs_na_fila` aceita chamado aberto/em análise com `silenciado_ate` passado: `app/chamados/services/painel.py:186`.
-- A partição muda qualquer verbo não nulo desse chamado para `historico`: `app/chamados/services/verbos.py:43`.
-- `fio_pelos_verbos` devolve `chamado` para `historico`: `app/chamados/juizes.py:1175`.
-- `alimentar_portas` inclui esse chamado em `fila_cel`: `app/chamados/juizes.py:1144`.
-- O juiz devolve seu número em `fila`: `app/chamados/juizes.py:1224`.
-- `o_que_segura` escreve “chamado N na fila”: `app/folha/fora_da_folha.py:199`.
-- O painel padrão exclui justamente `historico`: `app/chamados/services/painel.py:322`.
-
-Também bloqueia a afirmação universal das frases: sob uma pergunta viva e pendente, cujo chamado âncora tem silêncio vencido, a rota pode ser `porta_pergunta`, verbo `historico` e fio `chamado`; o app continua mostrando a pergunta, pois não filtra silêncio nem verbo histórico. Logo “nenhuma pede resposta do COLAB” não decorre da garantia do juiz. A pergunta viva sem `respondida_em` é pendente. Fontes: `app/chamados/juizes.py:1216`, `app/chamados/services/pergunta_no_app.py:39`, `app/chamados/models.py:2207`, `app/folha/fora_da_folha.py:36`, `app/folha/fora_da_folha.py:43`.
-
-Outro caso que excede a garantia é chamado de módulo de auditoria gravado aberto: o queryset aceita pelo status, mas a natureza produz verbo `None`; o fio também será `chamado`, embora “decidir” não seja o verbo desse chamado. Fontes: `app/chamados/services/painel.py:187`, `app/chamados/catalogo/natureza.py:18`, `app/chamados/catalogo/natureza.py:44`, `app/chamados/catalogo/natureza.py:63`, `app/chamados/juizes.py:1181`.
-
-Censo da chave `fila`:
-
-| Papel | Local |
-|---|---|
-| Escritor de produção | `app/chamados/juizes.py:1224` |
-| Origem do valor | `app/chamados/juizes.py:1216`, alimentada em `app/chamados/juizes.py:1146` |
-| Leitor de produção | `app/folha/fora_da_folha.py:199`; interpolação em `app/folha/fora_da_folha.py:200` |
-| Teste compara dict inteiro, porta_fila | `app/chamados/tests/test_o261e_f5b_juiz_porta.py:138` |
-| Teste compara dict inteiro, porta_pergunta | `app/chamados/tests/test_o261e_f5b_juiz_porta.py:145` |
-| Teste compara retorno inteiro singular/lote | `app/chamados/tests/test_o261e_f5b_juiz_porta.py:163` |
-| Teste novo injeta `fila` falsa | `app/folha/tests/test_haiku_fora_da_folha.py:125` |
-| Teste novo verifica nomes | `app/folha/tests/test_haiku_fora_da_folha.py:136` |
-| Vigia lê somente `verbos`/`rota` | `app/chamados/services/vigia_fio.py:596` |
-
-As combinações acima são contraexemplos permitidos pelo código; existência delas em produção [nao verificado]. O caminho citado nas docstrings como `chamados/painel.py` corresponde na cópia ao serviço `app/chamados/services/painel.py:196`.
-
-_861 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_862 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
