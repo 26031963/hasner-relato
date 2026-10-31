@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 31/10/2026 10:40:55.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (40.6 MB). Acoes na janela: **1030**.
+**Medido em 31/10/2026 10:46:09.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (40.6 MB). Acoes na janela: **1028**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1038,5 +1038,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 22:50:06 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='/home/ronald/saas-hasner/app/docs/RELATO.md' s=open(p).read() a="Placar R1: no maximo 20 (numero exato pede o comando e6 nas duas arvores, nao rodado)." assert s.count(a)==1 s=s.replace(a,"Placar R1: NAO MEDIDO -- os 20 sao so da comp 11; a lavra traz tambem 138 itens da comp 10 (o censo mede a anterior e a atual) e o R1 e de 10/2026 (`core/placa ...` |
 | 22:47:32 | Bash |  | `cd /home/ronald/saas-hasner && grep -o "corte Ronald: juiz [a-z_]* nasce" app/docs/CORTES.md \| tail -3; date +%H:%M; python3 - <<'EOF' p='/home/ronald/saas-hasner/app/docs/CORTES.md' s=open(p).read().rstrip('\n')+'\n' s+="\| **LAUDO-3010-JUIZ-DA-ACAO-DO-ADMIN** \| 2026-10-30 22:4x \| registrado -- fatia F5b da O261-E-CELULA-20-UM-DONO, depois do pouso da F5 \| negocio \| aval Ronald LAUDO-3010-JU ...` |
 | 22:47:12 | Bash |  | `cd /home/ronald/saas-hasner && grep -n "corte Ronald: juiz .* nasce" app/docs/CORTES.md \| tail -3 \| cut -c1-250; tail -5 app/docs/CORTES.md \| cut -c1-200` |
-| 22:43:17 | Agent | Opus final V-FASE (A) | `LEITURA FINAL (verificador opus) antes do POUSO da obra O261-V-FASE-NA-LISTA. A suite inteira desta MESMA arvore roda em paralelo (/home/ronald/saas-hasner/logs/o261v/suite3_9c9e030e.log); voce nao a espera. Arvore: /home/ronald/wt-vfase2-1811, HEAD 9c9e030e, base 21b9db38 (main). Diff: `git -C /home/ronald/wt-vfase2-1811 diff 21b9db38 HEAD`; commits com RED/LEI-AKITA: `git -C ... log 21b9db38..HE ...` |
-| 22:43:05 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='/home/ronald/saas-hasner/app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k in range(4,len(L)) if L[k].startswith('> **V-FASE RE-CURADA')) L.insert(i,"> **V-FASE (A) CONSTRUIDA -- MEDIDA PUBLICADA ANTES DO POUSO (aval 22:1x)** (`wt-vfase2-1811` @ 9c9e030e sobre 21b9db38; sombra atomic+rollback na arvore 33bb7451, `logs/o261v/sombra_d ...` |
