@@ -1,7 +1,55 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 15:01** · publicado em **31/10/2026 15:02** (UTC-3)
+> Ultima resposta processada: **31/10/2026 15:10** · publicado em **31/10/2026 15:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 15:10 · sessao f841df73dc38 · LEI-AKITA-UNIVERSO · verificador · origem=Code
+
+**a) IMPROCEDENTE — não encontrei leitura de conteúdo julgado no worktree.** CLAUDE, fabricante, molde e vocabulário vêm de `git show ALVO:path`; relatórios vêm de `git grep ALVO`. Os `open` restantes **escrevem fixtures**, e `os.path` apenas compõe seus caminhos. Sem contraexemplo de leitura residual de dados do disco. (`bin/tests/test_lei_akita.sh:22`, `:24`, `:42`, `:73`, `:92`, `:99`, `:194`, `:197`, `:238`, `:239`, `:247`)
+
+**b) PROCEDENTE quanto à falta de isolamento geral; a herança específica do SHA foi corrigida.** A chamada sobrescreve `LEI_AKITA_HEAD`, e MORDE força `ALVO=HEAD`; porém `R` continua vindo do chamador e os subprocessos herdam o restante do ambiente, sem `env=` isolado. (`bin/tests/test_lei_akita.sh:17`, `:71`, `:322`, `:192`, `:232`)
+
+Contraexemplo: exportar `GIT_DIR` apontando outro repositório permite que os comandos sintéticos operem nesse repositório apesar de `git -C <temporário>`. **Não executei esse cenário**, pois envolveria escritas. [não verificado] [nao verificado]
+
+Não encontrei aprovação acidental por MORDE vazio: há verificações de vocabulário, resultados esperados, contagens e sentinela. O caso sincronizado aceita vazio intencionalmente. (`bin/tests/test_lei_akita.sh:185`, `:199`, `:224`, `:264`, `:284`, `:289`, `:301`, `:323`)
+
+**c) PROCEDENTE — o corte ainda depende do HEAD do checkout.** O `git log -S` não recebe `ALVO`; seu resultado determina uma exclusão adicional no `rev-list`. (`bin/tests/test_lei_akita.sh:158`, `:163`, `:167`)
+
+Contraexemplo concreto: histórico linear `O(origin/main) → B(padrão inventado) → T(ALVO) → C(HEAD, primeira inserção do marcador)`. O corte será `C`, seu pai será `T`, e a enumeração será `rev-list T ^O ^T`: **universo vazio**, omitindo `B`. (`bin/tests/test_lei_akita.sh:158`, `:163`, `:167`, `:313`)
+
+Mesmo com HEAD correto, esse piso contradiz o contrato literal `origin/main..<commit>`: o próprio MORDE exige excluir um commit ruim anterior ao corte ainda não publicado. (`bin/tests/test_lei_akita.sh:244`, `:297`, `:299`, `:301`)
+
+**d) PROCEDENTE — existem erros Git silenciados.** `_show` transforma falha em `OSError`, mas `vocabulario` a descarta nos dois documentos. (`bin/tests/test_lei_akita.sh:74`, `:96`, `:106`)
+
+Contraexemplo: ALVO remove ambos os documentos de vocabulário num commit apenas de documentação, com `padrao=n/a (instrumento)`; HEAD os restaura. Os dois `git show ALVO:...` falham, mas `n/a` passa sem consultar o vocabulário, enquanto MORDE consulta o HEAD restaurado. Mantidas as demais condições, existe caminho até `OK`. (`bin/tests/test_lei_akita.sh:71`, `:117`, `:130`, `:132`, `:314`, `:323`, `:326`, `:328`)
+
+Também há sondagens de pai que ignoram qualquer rc, podendo trocar a comparação contra o primeiro pai por `git show` sem diagnóstico. (`bin/tests/test_lei_akita.sh:163`, `:175`, `:177`, `:178`)
+
+**SHA totalmente inexistente, entretanto, não passa silenciosamente**: a enumeração é estrita e a ausência de `PADRAO_FIM` reprova. (`bin/tests/test_lei_akita.sh:152`, `:167`, `:319`)
+
+## 31/10 15:10 · sessao 0bd03fc57462 · - · - · origem=Ronald (tmux)
+
+- **a) IMPROCEDENTE quanto a dados do worktree.** Leituras de conteúdo passam por `git show ALVO:path` (22–24, 73, 92, 99) ou `git grep ALVO` (42, 45). `open` nas linhas 194, 197, 239 e 247 escreve fixtures; `os.path` nas linhas 238–239 compõe caminhos. Referências: `bin/tests/test_lei_akita.sh`.
+
+- **c) PROCEDENTE.** `bin/tests/test_lei_akita.sh:158` procura o corte com `git log` sem `head`/ALVO, portanto parte do HEAD do checkout. O corte contamina `pisos` na linha 163 e a enumeração na linha 167. Contraexemplo: histórico linear `O(origin/main) → B(padrão inventado) → T(ALVO) → C(HEAD, primeira inserção PADRAO-NA-CURA)`. O selo calcula `corte=C`, `pisos=['^T']` e executa `rev-list T ^O ^T`: universo vazio, `PADRAO_JULGADOS 0 de 0` e `PADRAO_FIM` (310–314). Contraprova adicional: HEAD numa história sem marcador causa erro de corte mesmo que ALVO tenha corte e universo válidos (158–160).
+
+- **Contrato do universo: PROCEDENTE independentemente do HEAD.** Mesmo com HEAD=ALVO, `bin/tests/test_lei_akita.sh:163` e `:167` acrescentam exclusão além de `^origin/main`. O próprio MORDE exige excluir commit ruim anterior ao corte (`:244`, `:297`–`:302`). Isso contradiz o universo literal informado pelo usuário, `origin/main..<commit julgado>`.
+
+- **d) PROCEDENTE.** `_show` converte rc!=0 em `OSError` (`bin/tests/test_lei_akita.sh:73`–`:75`), mas `vocabulario` engole esse erro (`:96`–`:97`, `:106`–`:107`). Contraexemplo concreto dedutível: ALVO=T remove ambos os documentos de vocabulário em commit só de `app/docs/`, com `padrao=n/a (instrumento)`; HEAD=U restaura os documentos. Os dois `git show T:app/docs/...` falham; VOCAB fica vazio, mas `n/a` é aceito sem consultar VOCAB (`:130`–`:132`), e o juiz emite FIM (`:314`). O MORDE lê HEAD=U (`:71`) e pode passar. Mantidos CLAUDE/molde/fallback válidos, o selo completo pode retornar OK apesar desses erros Git (`:326`–`:328`).
+
+O repositório real `/home/ronald/saas-hasner` contém o objeto 43ce4ca4; confirmei por leitura que o commit inteiro altera somente `bin/tests/test_lei_akita.sh`. [não verificado por arquivo:linha — evidência obtida em `git show --stat` e `git diff`, sem execução do selo]
+
+## 31/10 15:09 · sessao e739a561fc30 · - · - · origem=Ronald (tmux)
+
+No snapshot auditado:
+
+- **MORDE não herda `LEI_AKITA_HEAD` efetivo:** chamada sobrescreve com SHA inválido em `bin/tests/test_lei_akita.sh:322`; Python usa `HEAD` quando MORDE em `bin/tests/test_lei_akita.sh:71`.
+- **Não existe isolamento geral do ambiente:** `subprocess.run` não recebe `env=` em `bin/tests/test_lei_akita.sh:73`, `:151`, `:192`, `:232`, `:292`. Contraexemplo: `GIT_DIR`/`GIT_WORK_TREE` exportados continuam selecionando o repositório real mesmo com `git -C <temporário>`; os casos sintéticos podem operar fora do temporário. Execução desse contraexemplo não realizada, pois escreveria arquivos. [não verificado]
+- **Não identifiquei aprovação por MORDE vazio:** exige vocabulário essencial (`bin/tests/test_lei_akita.sh:185`), termo commitado (`:199`), divergência dos casos (`:224`), contagens de universo (`:264`, `:284`, `:289`, `:301`) e sentinela sem falhas (`:323`).
+- **Falhas Git são abafadas no vocabulário:** `_show` converte rc não zero em `OSError` (`bin/tests/test_lei_akita.sh:74`); `vocabulario` engole em `:96` e `:106`. Contraexemplo: ALVO sem PLANO-PADROES, mas com GLOSSARIO contendo `juiz unico`; a leitura ausente pode ser ignorada e esse padrão aprovado (`:135`), enquanto MORDE lê o HEAD completo (`:71`, `:117`).
+- **Outros rc ignorados:** sondagens de pai com `estrito=False` em `bin/tests/test_lei_akita.sh:163` e `:175` tratam qualquer falha como ausência de pai; isso altera piso ou comparação sem diagnóstico (`:177`).
+- **SHA completamente inexistente não fica verde:** falhas dos estáticos em `bin/tests/test_lei_akita.sh:35`, `:37`, `:38`, `:52`, `:53`; enumeração estrita em `:152`, `:167`; sentinela obrigatória em `:319`.
+- **Universo adicionalmente restrito:** piso em `bin/tests/test_lei_akita.sh:163` acrescenta exclusão ao `origin/main..<head>` em `:167`; o próprio MORDE exige deixar de fora um commit anterior ao corte ainda não publicado (`:297`–`:302`).
 
 ## 31/10 15:01 · sessao b7922e87983c · E4-D5-PROD · sonda · origem=Code
 
@@ -562,92 +610,4 @@ Achados por inspeção estática; MORDE integral não executado porque cria dire
 
 - O pai está disponível em `../4e519aea9b9be16f1ad219c6470d0415bf928e2f`; comparação das versões de `bin/pre-push.sh` mostra apenas as três linhas atuais `20–22`. A identidade Git desse snapshot não foi validada: [nao verificado]. `logs/claude_md_racional/akita_v2.r` não está na árvore disponível: [nao verificado].
 
-## 31/10 14:02 · sessao f63197d45ae2 · - · - · origem=Ronald (tmux)
-
-As três alterações recuperam o sentido das cláusulas selecionadas. A literalidade é do núcleo operativo, com remoção de Markdown/quebras; não houve restauração integral dos parágrafos antigos. Fontes abaixo.
-
-1. **Moratória L-117**
-   
-   Original, `a7b66d14:CLAUDE.md:644–647`:
-   > **(L-117)** Ate `contratos_estruturais` = **20/20** (juiz `core/contratos_estruturais.py::total()`, hoje 15/20), o Code **nao numera nem propoe lei nova por iniciativa propria**: lei nova so nasce de CORTE LITERAL dele. Caso que parece pedir lei vai ao TOPO do RELATO como PERGUNTA com numeros e a fila SEGUE (PAREI-DE-LEI-NAO-DEVOLVE-TURNO). Ela se extingue sozinha em 20/20.
-
-   Atual, `2f5e38c6:CLAUDE.md:453–457`:
-   > 3. PERGUNTA DE LEI NAO DEVOLVE TURNO. Falta lei, predicado novo de juiz ou duas candidatas: linha `lei: <a que falta>` no TOPO do RELATO COM NUMEROS, e a esteira SEGUE o proximo item da ORDEM VIVA que nao depende dela; a resposta entra quando vier. Ate 20/20 o Code nao numera nem propoe lei nova por iniciativa propria: lei nova so nasce de CORTE LITERAL dele (L-117). Se uma lei do desenho ESCRITA ja responde [...]
-
-   A volta 8 restaura literalmente, sem o negrito/quebra, “nao numera nem propoe lei nova por iniciativa propria: lei nova so nasce de CORTE LITERAL dele”. Recupera a distinção que o pai perdera ao dizer apenas “nao numera nem propoe lei” (`034b0e38:CLAUDE.md:455`). O encaminhamento da pergunta está no próprio item 3 atual. O referente de 20/20 continua identificável no arquivo: juiz e placar em `2f5e38c6:CLAUDE.md:259–263`, término do estrutural em `:271–272`. **Ressalva de literalidade integral:** a redação atual não repete na moratória o nome do contador, o juiz, o antigo estado 15/20 e a frase explícita de autoextinção; “Ate 20/20” preserva o termo final. Não identifiquei estreitamento/alargamento da proibição restaurada nessas fontes.
-
-2. **AUTONOMIA-DE-CODIGO, item 2**
-
-   Original, `a7b66d14:CLAUDE.md:479–482`:
-   > **O Code DECIDE sozinho, registra em UMA linha no RELATO e segue, sem aval**, em quatro coisas: [...] 2. **qual raia ou agente pega qual obra**, e quando uma obra registrada entra como COMPLEMENTO de outra;
-
-   Atual, `2f5e38c6:CLAUDE.md:460–462`:
-   > 5. DECISAO TECNICA E DO CODE, em UMA linha no RELATO, sem aval: [...] qual raia ou agente pega qual obra e quando uma obra registrada entra como COMPLEMENTO de outra; [...]
-
-   Recupera exatamente sujeito e relação: **obra registrada** → **COMPLEMENTO de outra**. O pai dizia “quando achado entra como COMPLEMENTO” (`034b0e38:CLAUDE.md:461–462`), confundindo essa delegação com o destino de achados, que já tem enunciado próprio e permanece na sequência (`2f5e38c6:CLAUDE.md:462`). Sem mudança de alcance identificada.
-
-3. **CODEX-PRE-VERIFICADOR**
-
-   Original, `a7b66d14:CLAUDE.md:507`:
-   > CODEX-PRE-VERIFICADOR e SUITE-ANTES-DO-OPUS: antes de declarar pronto, Codex `CODEX_PAPEL=verificador` (diff + leis dos sitios + classes que ja reprovaram); procedente corrige e repete (>3 voltas sobe); so entao suite INTEIRA verde, depois UM opus final; medida por obra no RELATO. (PISTA.md#codex-pre-verificador) [nao verificado]
-
-   Atual, `2f5e38c6:CLAUDE.md:543–549`:
-   > 5. PRE-VERIFICADOR. (a) TODO construtor, ANTES de declarar pronto, `CODEX_PAPEL=verificador` com: diff do hash da copia; LEIS dos sitios tocados [...] (c) Suite INTEIRA da arvore da obra VERDE, depois UM opus final [...] [nao verificado]
-
-   A cláusula original não restringe a “cura de negocio”; essa restrição aparece no pai (`034b0e38:CLAUDE.md:543`) e é removida na volta 8. “TODO construtor” explicita o alcance geral já contido no comando antigo “antes de declarar pronto”. **Não é reprodução literal do enunciado antigo**, pois “TODO construtor” não constava da linha 507; é restauração semântica do alcance, não ampliação demonstrável por esses textos. O ponteiro `PISTA.md#codex-pre-verificador` permanece em `2f5e38c6:CLAUDE.md:518`.
-
-Não encontrei defeito material adicional nas três substituições acima; eventuais diferenças nas outras partes das consolidações não foram objeto desta subtarefa. [não verificado]
-
-## 31/10 14:02 · sessao e868ae83e323 · - · - · origem=Ronald (tmux)
-
-As remoções desta volta não retiram regra, condição ou ponteiro específico:
-
-- **PARADA E AUTONOMIA:** sai somente `; historia em LAPIDES` (`034b0e38:CLAUDE.md:440`). Continuam os caminhos dos instrumentos (`2f5e38c6:CLAUDE.md:440`), o selo e as seis âncoras `lap-45/46/17/16/11/49` (`2f5e38c6:CLAUDE.md:442-443`).
-- **RAIAS E POUSO:** sai somente `; historia em LAPIDES` (`034b0e38:CLAUDE.md:479`). Continuam os nomes das regras (`2f5e38c6:CLAUDE.md:477-479`), os ponteiros PISTA (`2f5e38c6:CLAUDE.md:481`) e `lap-52/15/53` (`2f5e38c6:CLAUDE.md:482`).
-- **DINHEIRO:** sai somente `; historia em LAPIDES` (`034b0e38:CLAUDE.md:573`). Continuam as referências L-092/L-110 (`2f5e38c6:CLAUDE.md:573`) e `lap-55/59/08/09/10/48/12` (`2f5e38c6:CLAUDE.md:574`).
-- **PLACAR:** sai somente `, resposta a uma pergunta de LEI que eu levantei` (`034b0e38:CLAUDE.md:566`). Essa informação histórica não reaparece literalmente, mas não enuncia condição ou regra. Autor e data permanecem (`2f5e38c6:CLAUDE.md:566`); exercício, dois verdes, preservação da L-095 e `lap-18` permanecem (`2f5e38c6:CLAUDE.md:567-570`).
-
-A obrigação geral de mover história sem apagar, mantendo ponteiro e regra, também permanece (`2f5e38c6:CLAUDE.md:614-615`).
-
-Extração por `LAPIDES\.md#lap-\d+`: **69 ocorrências, 68 destinos únicos**, com sequência integral idêntica em `a7b66d14`, `034b0e38` e `2f5e38c6`; a duplicata é `lap-63` (`2f5e38c6:CLAUDE.md:231` e `2f5e38c6:CLAUDE.md:235`). Nenhum defeito adicional identificado nas remoções examinadas.
-
-## 31/10 14:02 · sessao cebde2888d4a · - · - · origem=Ronald (tmux)
-
-A função real, extraída e executada apenas em memória, produz **55 termos normalizados**, além das duas exceções `n/a`; remove parênteses, asteriscos e crases, converte para minúsculas e normaliza espaços. (`bin/tests/test_lei_akita.sh:61–90`)
-
-Lista exata, agrupada pela origem:
-
-| Origem | Termos normalizados aceitos |
-|---|---|
-| `app/docs/GLOSSARIO.md:11` | single source of truth; aggregate root; celula soberana; fonte unica |
-| `app/docs/GLOSSARIO.md:12` | single writer principle; juiz unico; escritor unico |
-| `app/docs/GLOSSARIO.md:13` | sinal derivado do estado; reconciliacao level-triggered; lampada |
-| `app/docs/GLOSSARIO.md:14` | architectural invariants + fitness functions; contratos estruturais |
-| `app/docs/GLOSSARIO.md:15` | architecture conformance test; selo |
-| `app/docs/GLOSSARIO.md:16` | event-driven architecture; crons virando evento |
-| `app/docs/GLOSSARIO.md:17` | transactional outbox; o-outbox |
-| `app/docs/GLOSSARIO.md:18` | strangler fig pattern; construir ao lado e trocar inteira |
-| `app/docs/GLOSSARIO.md:19` | shadow mode; parallel run; sombra |
-| `app/docs/GLOSSARIO.md:20` | merge queue; comboio; pouso |
-| `app/docs/GLOSSARIO.md:21` | backfill; reprocessing; rejulgar o passivo |
-| `app/docs/GLOSSARIO.md:22` | cqrs com projecoes reconstruiveis; espelho; diapago; fechamento; retrato e pilulas |
-| `app/docs/GLOSSARIO.md:23` | duplicated business logic; logic drift; derivacao paralela |
-| `app/docs/GLOSSARIO.md:24` | bitemporal data; vinculo do dia x vinculo de hoje |
-| `app/docs/GLOSSARIO.md:25` | immutable event log + compensating event; batida so retratada |
-| `app/docs/GLOSSARIO.md:26` | adr; leis; cortes |
-| `app/docs/GLOSSARIO.md:27` | idempotencia pela chave do fato; dedup do fato |
-| `app/docs/PLANO-PADROES.md:46–48` | um juiz por pergunta; single writer; evento em vez de varredura; log imutavel; outbox; bitemporal; projecao reconstruivel; cqrs; fitness function |
-
-`n/a (medida)` e `n/a (instrumento)` são aceitos exatamente nessa grafia quando nenhum caminho classificado como negócio aparece; a classificação é textual: começa com `app/`, não contém `/tests/` e não começa com `app/docs/`. (`bin/tests/test_lei_akita.sh:90–103`)
-
-**Divergência documental:** a implementação acompanha a enumeração restrita do NORTE e as duas primeiras colunas do glossário; porém `CLAUDE.md:68` admite termo existente em qualquer dos dois arquivos, e `PLANO-PADROES.md:53` diz “termo do GLOSSARIO ou deste arquivo”. Pela redação ampla, há falsos vermelhos comprovados: `projection rebuild` e `read model replay` aparecem como padrões conhecidos (`app/docs/PLANO-PADROES.md:33`), `Architecture Decision Record` aparece como padrão conhecido (`app/docs/PLANO-PADROES.md:41`) e no próprio glossário (`app/docs/GLOSSARIO.md:26`), mas todos são recusados. A causa é limitar o plano ao trecho NORTE e remover todo conteúdo entre parênteses antes da extração. (`bin/tests/test_lei_akita.sh:77–87`, `bin/tests/test_lei_akita.sh:104–105`)
-
-**Falsos verdes comprovados na função real:**
-
-- `padrao=Padrao Inventado Do Nada, padrao=juiz unico` retorna aprovação: escolhe somente o último campo, mesmo com duas declarações explícitas de padrão. O MORDE verifica duas linhas, mas não duas declarações na mesma linha. (`bin/tests/test_lei_akita.sh:94–98`, `bin/tests/test_lei_akita.sh:162`)
-- `padrao=juiz unico (Padrao Inventado Do Nada)` retorna aprovação porque todo texto entre parênteses desaparece; o campo completo inexiste na lista documental. (`bin/tests/test_lei_akita.sh:61–63`, `bin/tests/test_lei_akita.sh:104`)
-- `padrao=sinal derivado do estado, reconciliacao level-triggered`, copiando a célula técnica do glossário sem seu comentário parentético, retorna “linha LEI-AKITA sem padrao=”: a regex não consegue consumir vírgula de valor. As duas partes isoladas são aceitas. (`app/docs/GLOSSARIO.md:13`, `bin/tests/test_lei_akita.sh:85`, `bin/tests/test_lei_akita.sh:95–97`)
-
-Não há aceite de substrings como `a` ou `Writer Principle`: a comparação é por pertinência do termo normalizado ao conjunto; os dois exemplos têm MORDE negativo explícito. (`bin/tests/test_lei_akita.sh:104`, `bin/tests/test_lei_akita.sh:160–161`)
-
-_1095 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1098 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
