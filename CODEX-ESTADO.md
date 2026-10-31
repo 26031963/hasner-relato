@@ -1,7 +1,233 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 19:52** · publicado em **31/10/2026 19:53** (UTC-3)
+> Ultima resposta processada: **31/10/2026 19:56** · publicado em **31/10/2026 19:58** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 19:56 · sessao 87c7f078bee3 · TRAVA-COBERTURA · censo · origem=Code
+
+A cobertura é parcial: os runners de suíte em `bin/` passam pela trava, mas há um hook com testes crus em `app/core/hooks/`; o scanner não examina arquivos shell de `app/` (`bin/pre-push.sh:142`, `app/core/hooks/pre-push.sh:54`, `bin/tests/test_trava_teste.sh:130`). A trava identifica o processo dono e rotula seu container, mas não registra a obra (`bin/trava_teste.sh:36`, `bin/trava_teste.sh:101`, `bin/trava_teste.sh:138`).
+
+Censo estático. Execução dos selos, processos vivos, instalação efetiva dos hooks e correspondência Git com o HASH informado: **[não verificado]**.
+
+**1. Onde nasce**
+
+Nas tabelas, “trava direta” significa `bash bin/trava_teste.sh … -- docker run …`. Quando não há `--espera` explícito, vale **3600 segundos** (`bin/trava_teste.sh:35`, `bin/trava_teste.sh:87`). `$TESTE_DOCKER` fornece cpuset, CPUs e memória; os padrões são `4-7`, `4` e `2g` (`bin/recursos.sh:41`, `bin/recursos.sh:61`, `bin/recursos.sh:69`, `bin/recursos.sh:81`).
+
+| Nascimento | Passa por qual porta / chamador | Argumentos relevantes |
+|---|---|---|
+| `bin/suite.sh:97` | Trava direta; `ESTEIRA_QUEM` recebido ou `suite`; repassa `--espera` (`bin/suite.sh:49`, `bin/suite.sh:96`). | `test ${ONLY:-$LABELS}`, CI, `--noinput`, paralelo padrão 4; extras após `--`; árvore viva ou `--dir`; repassa `REGUA_DB` (`bin/suite.sh:43`, `bin/suite.sh:74`, `bin/suite.sh:89`, `bin/suite.sh:102`). |
+| `bin/regua.sh:166` | Trava direta; `regua` (`bin/regua.sh:165`). | `${ONLY:-$LABELS} --settings=config.settings.ci --noinput --parallel 4 $_ORDEM`; monta `$APP` (`bin/regua.sh:167`, `bin/regua.sh:168`). |
+| `bin/pre-push.sh:143` | `_teste_irmao()` → trava direta; `pre-push` (`bin/pre-push.sh:122`, `bin/pre-push.sh:142`). | Duas chamadas: arsenal `$LABELS`, CI, paralelo 4; e `tenants`, `teste_motor`, sem paralelo. Monta `$ARVORE_PUSH/app` (`bin/pre-push.sh:144`, `bin/pre-push.sh:186`, `bin/pre-push.sh:198`). |
+| `bin/placar_code.sh:127` | Trava direta; `placar_code`; `--espera 120` (`bin/placar_code.sh:126`). | DB `test_juliani_placar`; `core.tests.test_bug116_credencial_deixa_trilha.CContratoCredencialSemTrilhaTest`; CI, `--noinput` (`bin/placar_code.sh:128`, `bin/placar_code.sh:130`). |
+| `bin/regua_relogio.sh:52` | Trava direta; `regua_relogio` (`bin/regua_relogio.sh:51`). | `$APPS --settings=cfg_tz --noinput`; `PROBE_TZ`, `PYTHONPATH` e shim montado (`bin/regua_relogio.sh:53`, `bin/regua_relogio.sh:55`). |
+| `bin/regua_calendario.sh:47` | Trava direta; `regua_calendario` (`bin/regua_calendario.sh:46`). | `$LABELS`, `ci_calendario`, paralelo 4; três datas, `RELOGIO_FAKE` e DB `test_juliani_cal$nome` (`bin/regua_calendario.sh:44`, `bin/regua_calendario.sh:48`, `bin/regua_calendario.sh:49`). |
+| `bin/vigia_arvore.sh:84` | Função local `suite()` → trava direta; `vigia_arvore` (`bin/vigia_arvore.sh:77`, `bin/vigia_arvore.sh:83`). | Snapshot, CI; primeiro `$LABELS`, DB `test_juliani_vigia`, paralelo 2; depois `$IDS`, DB `test_juliani_vigia_b`, sem paralelo (`bin/vigia_arvore.sh:85`, `bin/vigia_arvore.sh:88`, `bin/vigia_arvore.sh:106`). |
+| `bin/vigia_arvore.sh:132` | Trava direta; `vigia_arvore` (`bin/vigia_arvore.sh:131`). | `$IDS2` na árvore viva; DB `test_juliani_vigia_viva`; CI, sem paralelo (`bin/vigia_arvore.sh:132`, `bin/vigia_arvore.sh:134`). |
+| `bin/isolamento.sh:34` | `_iso_roda()` → trava direta; `isolamento` (`bin/isolamento.sh:33`). | `$ids`, CI, `--noinput`; snapshot e DB `$db`, chamado com `test_juliani_iso_$fatia` (`bin/isolamento.sh:34`, `bin/isolamento.sh:36`, `bin/isolamento.sh:49`). |
+| `bin/molde_fatia/rodar.sh:31` | Trava direta; `fatia`; `--espera 5400` (`bin/molde_fatia/rodar.sh:30`). | `core.tests.test_selo_mapa_contrato`, CI; DB `test_juliani___FATIA__m`; app da cura (`bin/molde_fatia/rodar.sh:32`, `bin/molde_fatia/rodar.sh:33`). |
+| `bin/molde_fatia/rodar.sh:45` | `teste()` → trava direta; `fatia`; `--espera 5400` (`bin/molde_fatia/rodar.sh:37`, `bin/molde_fatia/rodar.sh:44`). | RED: `__RED__`, DB terminado em `r`; GREEN: `__RED__ __GREEN__ __PACOTE__ --parallel 4`, DB terminado em `g`; CI (`bin/molde_fatia/rodar.sh:52`, `bin/molde_fatia/rodar.sh:54`). |
+| `bin/molde_autocura/rodar.sh:23` | `teste()` → trava direta; `autocura`; `--espera 5400` (`bin/molde_autocura/rodar.sh:18`, `bin/molde_autocura/rodar.sh:22`). | RED `$IDS`, DB `test_juliani_esacred`; GREEN `$LABELS --parallel 4`, DB `test_juliani_esacfull`; CI (`bin/molde_autocura/rodar.sh:27`, `bin/molde_autocura/rodar.sh:30`). |
+| **`app/core/hooks/pre-push.sh:54`** | **Não passa por trava de teste nem por `suite.sh`.** Usa outro flock, `/tmp/regua.lock` (`app/core/hooks/pre-push.sh:32`, `app/core/hooks/pre-push.sh:39`, `app/core/hooks/pre-push.sh:54`). | Arsenal `$LABELS`, CI, paralelo 2, `-e DB_PASSWORD`; depois `tenants`, `teste_motor`; monta árvore viva (`app/core/hooks/pre-push.sh:55`, `app/core/hooks/pre-push.sh:82`, `app/core/hooks/pre-push.sh:87`). |
+
+A função `suite()` do vigia é local àquele arquivo; ela não chama `bin/suite.sh` (`bin/vigia_arvore.sh:77`, `bin/vigia_arvore.sh:83`).
+
+Há ainda estes nascimentos para sonda, ensaio, preparação ou verificação, **fora das duas portas de suíte**: [nao verificado]
+
+| Nascimento | Trabalho / controle |
+|---|---|
+| `bin/sonda_frota.sh:41` | Shell tenant `juliani`, executando `/sonda/sonda.py`; app somente leitura; sem trava de teste no lançamento (`bin/sonda_frota.sh:43`, `bin/sonda_frota.sh:45`). |
+| `bin/sonda_leitura.sh:235` | Shell tenant, `$SETTINGS`, `$REDE`, `$ENVFILE`, `$BANCO`; app somente leitura; sem trava de teste no lançamento (`bin/sonda_leitura.sh:236`, `bin/sonda_leitura.sh:239`). |
+| `bin/sombra.sh:183` | Função `container()`: settings sombra, DB `sombra`, cpuset de teste, `--cpus 1`, app somente leitura e proxies mortos. Os ramos `--refazer`, `--bloco` e `--rodar` tomam **a trava própria da sombra** (`bin/sombra.sh:184`, `bin/sombra.sh:189`, `bin/sombra.sh:438`, `bin/sombra.sh:451`, `bin/sombra.sh:487`). |
+| `bin/simular_folha.sh:48` | Função `container()`, settings sombra e `--cpus 1`; foto/par tomam trava da sombra; comparar também usa essa função (`bin/simular_folha.sh:49`, `bin/simular_folha.sh:67`, `bin/simular_folha.sh:87`, `bin/simular_folha.sh:96`). |
+| `bin/diff_janela_he_total.sh:30` | Toma trava da sombra; executa `diff_janela_he_total --schema=juliani --mes … --ano … --empresas … --piso … --json …` (`bin/diff_janela_he_total.sh:18`, `bin/diff_janela_he_total.sh:38`). |
+| `bin/r5_idempotencia_frota.sh:16` | Executa `/r5/r5_idempotencia_frota.py`, settings sombra; lançamento cru, sem aquisição de trava no preâmbulo (`bin/r5_idempotencia_frota.sh:7`, `bin/r5_idempotencia_frota.sh:24`). |
+| `bin/prova_de_casca.sh:30` | `--network none`, settings saas, imagem obtida de `saas_ui`, `python /prova.py`; lançamento cru (`bin/prova_de_casca.sh:27`, `bin/prova_de_casca.sh:31`, `bin/prova_de_casca.sh:34`). |
+| `bin/esmeril_da_copia.sh:23` | Ruff/Vulture na cópia; lançamento cru (`bin/esmeril_da_copia.sh:24`). |
+| `bin/molde_fatia/rodar.sh:19` | `gerar_diagrama --settings=config.settings.ci`; lançamento cru (`bin/molde_fatia/rodar.sh:19`). |
+| `bin/molde_fatia/rodar.sh:21` | Ruff/Vulture; lançamento cru (`bin/molde_fatia/rodar.sh:21`). |
+| `bin/molde_autocura/rodar.sh:13` | Ruff; lançamento cru (`bin/molde_autocura/rodar.sh:13`). |
+| `bin/db_teste.sh:53` | Banco persistente `juliani_db_test`, `postgres:17-alpine`, `-d`, volume próprio, cpuset e restart `unless-stopped`; sem trava de suíte (`bin/db_teste.sh:21`, `bin/db_teste.sh:23`, `bin/db_teste.sh:53`, `bin/db_teste.sh:56`). |
+| `bin/sombra_db.sh:91` | Banco persistente `sombra_db`, `postgres:17-alpine`, `-d`, volume próprio, cpuset, memória e restart `unless-stopped`; sem trava de suíte (`bin/sombra_db.sh:40`, `bin/sombra_db.sh:45`, `bin/sombra_db.sh:91`, `bin/sombra_db.sh:94`). |
+| `bin/tests/test_inventario_pessoal_no_commit.sh:24` | `_rodar()` executa `inventario_pessoal_dos_modelos.py`, com `$TESTE_DOCKER`; lançamento cru (`bin/tests/test_inventario_pessoal_no_commit.sh:23`, `bin/tests/test_inventario_pessoal_no_commit.sh:28`). |
+| `bin/tests/test_prepush_testa_o_commit.sh:97` e `bin/tests/test_prepush_testa_o_commit.sh:102` | Dois containers verificam staticfiles com/sem montagem auxiliar; crus, sem `$TESTE_DOCKER` nesses comandos (`bin/tests/test_prepush_testa_o_commit.sh:98`, `bin/tests/test_prepush_testa_o_commit.sh:103`). |
+| `bin/tests/test_trava_dono_para_filho.sh:46`, `bin/tests/test_trava_dono_para_filho.sh:60`, `bin/tests/test_trava_dono_para_filho.sh:96` | Alpine pela **cópia isolada** da trava; esperas 5/5/2 segundos; `--init`, cpuset `4-7`, memória `64m`, nomes próprios (`bin/tests/test_trava_dono_para_filho.sh:28`, `bin/tests/test_trava_dono_para_filho.sh:46`, `bin/tests/test_trava_dono_para_filho.sh:96`). |
+| `bin/tests/test_trava_dono_para_filho.sh:91` | Alpine deliberadamente cru e destacado, simulando suíte alheia; `manage.py test` é argumento de `:`, não execução de Django (`bin/tests/test_trava_dono_para_filho.sh:92`). |
+
+O comando Docker reconstituído pela própria trava é o executor genérico dos lançamentos protegidos, não uma suíte adicional (`bin/trava_teste.sh:138`, `bin/trava_teste.sh:151`). Os Docker escritos em fixtures de scanner/documentação são texto gerado, não nascimentos executados por esses fixtures (`bin/tests/test_trava_teste.sh:158`, `bin/tests/test_trava_teste.sh:164`, `bin/tests/test_suite_sh.sh:65`).
+
+Entradas indiretas e hooks:
+
+- Cron horário → `vigia_arvore.sh`; cron da sombra → `sombra.sh --refazer && sombra.sh --bloco` (`app/config/crons.py:277`, `app/config/crons.py:331`, `app/config/crons.py:332`).
+- O instalador corrente produz wrapper Git que faz `exec bash …/bin/pre-push.sh "$@"` (`bin/hooks.sh:10`, `bin/hooks.sh:56`).
+- A fonte alternativa `hooks_fonte.py` ainda lê o hook cru de `app/core/hooks/pre-push.sh`; o outro instalador em `app/` copia `bin/pre-push.sh` (`app/core/hooks/hooks_fonte.py:17`, `app/core/hooks/hooks_fonte.py:23`, `app/core/hooks/hooks.sh:10`, `app/core/hooks/hooks.sh:35`).
+- Em `scripts/`, o drill usa `$DC exec -T web python manage.py shell`; é ensaio fora das duas portas, mas não `compose run` nem `manage.py test` (`scripts/drill_restore.sh:4`, `scripts/drill_restore.sh:6`).
+- Além do recorte pedido, o integrador em `bin/` chega ao runner Python `_rodar_testes()`: trava direta, espera padrão 5400, `ESTEIRA_QUEM=esteira_vigia:<banco>`, recursos comuns, DB informado e CI (`bin/integrador.sh:52`, `app/core/integrador_lote.py:373`, `app/core/esteira_vigia.py:767`, `app/core/esteira_vigia.py:781`, `app/core/esteira_vigia.py:790`).
+- Ocorrências executáveis de `docker compose run`, `docker-compose run` ou `docker exec … manage.py test`: nenhuma encontrada no censo **[não verificado quanto à ausência absoluta]**.
+
+**2. Lançamento, grupo/sessão e dono**
+
+`bin/suite.sh` termina com **`exec env … bash trava_teste.sh …`**: substitui seu processo pelo executor da trava, preservando o PID através dos `exec`; não destaca o job nesse ponto (`bin/suite.sh:96`).
+
+A trava mantém o flock no **FD 9** e lança o comando assim:
+
+```bash
+"$@" 9>&- <&0 &
+[nome]=$!
+wait "$[nome]"
+```
+
+Portanto, o comando é assíncrono, o pai espera por ele e o filho não herda o FD 9 (`bin/trava_teste.sh:96`, `bin/trava_teste.sh:97`, `bin/trava_teste.sh:151`, `bin/trava_teste.sh:153`).
+
+Não há criação explícita de sessão ou grupo nesse lançamento. Em Bash sem job control, o processo lançado herda PGID/SID; o código não garante isolamento por `setsid` nem grava esses identificadores (`bin/suite.sh:96`, `bin/trava_teste.sh:151`). **PGID/SID numéricos e opções efetivas do shell: [não verificado].**
+
+O container não integra a descendência do Bash como um subprocesso comum: a implementação declara que ele pertence ao lado do daemon Docker e usa label para alcançá-lo (`bin/trava_teste.sh:22`, `bin/trava_teste.sh:25`, `bin/trava_teste.sh:144`).
+
+| Registro | Conteúdo / identidade |
+|---|---|
+| `/tmp/juliani_db_test.lock` | Arquivo usado pelo flock; posse mantida pelo FD 9 do processo da trava (`bin/trava_teste.sh:34`, `bin/trava_teste.sh:96`, `bin/trava_teste.sh:97`). |
+| `/tmp/juliani_db_test.lock.quem` | Texto `<ESTEIRA_QUEM ou basename>:<PID> desde <dia/mês hora>`; no EXIT vira `livre desde …` (`bin/trava_teste.sh:36`, `bin/trava_teste.sh:102`, `bin/trava_teste.sh:103`). |
+| Label do container | `hasner.trava.juliani_db_test.lock=<PID>-<starttime>`; o starttime vem do campo 22 de `/proc/<pid>/stat` (`bin/trava_teste.sh:37`, `bin/trava_teste.sh:39`, `bin/trava_teste.sh:45`, `bin/trava_teste.sh:101`, `bin/trava_teste.sh:138`). |
+| Obra, PID do filho, PGID/SID | **Não são persistidos como campos nesse registro.** `[nome]=$!` fica em memória; o identificador persistido usa o PID da trava (`bin/trava_teste.sh:101`, `bin/trava_teste.sh:102`, `bin/trava_teste.sh:152`). |
+
+Assim, o “dono” verificável é **o processo da trava**, com identidade PID+starttime; o nome humano é apenas o chamador informado em `ESTEIRA_QUEM`, sem vínculo obrigatório com uma obra (`bin/trava_teste.sh:36`, `bin/trava_teste.sh:47`, `bin/trava_teste.sh:101`).
+
+Leitores e ações:
+
+- **`--quem`** tenta flock não bloqueante. Presa: lê `.quem`, mas recusa dizer “livre” se o texto estiver vazio/mentiroso. Livre: consulta Docker e pode responder `ORFAO`, `FORA DA TRAVA`, `nao sei` ou `livre` (`bin/trava_teste.sh:60`, `bin/trava_teste.sh:63`, `bin/trava_teste.sh:65`, `bin/trava_teste.sh:71`, `bin/trava_teste.sh:75`, `bin/trava_teste.sh:80`).
+- **Timeout da aquisição** lê `.quem` para informar quem está segurando e retorna 75 (`bin/trava_teste.sh:98`, `bin/trava_teste.sh:99`).
+- **Nova aquisição** lê labels, valida PID+starttime e tenta parar órfãos de dono morto; dono ainda vivo sem flock provoca 75 (`bin/trava_teste.sh:115`, `bin/trava_teste.sh:121`, `bin/trava_teste.sh:126`).
+- **TERM/INT/HUP** consultam a label do próprio dono, tentam parar containers, enviam TERM ao PID direto do filho, esperam e saem 143; não há kill de grupo nesse handler (`bin/trava_teste.sh:141`, `bin/trava_teste.sh:144`, `bin/trava_teste.sh:146`, `bin/trava_teste.sh:150`).
+- **Handoff** consulta somente o flock para publicar LIVRE/TOMADA; não lê `.quem` nem consulta containers nessa seção (`bin/handoff_sessao.sh:223`, `bin/handoff_sessao.sh:230`).
+- **Hook Stop** consulta `ps -eo args` e reconhece `manage.py test`/`git push`; esse caminho não verifica posse da trava (`bin/hook_stop_fila1.py:373`, `bin/hook_stop_fila1.py:386`, `bin/hook_stop_fila1.py:392`, `bin/hook_stop_fila1.py:395`). Para `ESPERANDO`, valida produtor/PID ou avanço de arquivo declarado no painel, por outro mecanismo (`bin/hook_stop_fila1.py:523`, `bin/hook_stop_fila1.py:645`, `bin/hook_stop_fila1.py:677`).
+
+A sombra tem propriedade separada: flock em `logs/sombra.lock`, FD 8 herdável, e log JSONL com `ts`, `quem`, `espera_s`, `ok`, `timeout_s`, `pid`; também não há campo obra nesse registro (`bin/sombra_trava.sh:16`, `bin/sombra_trava.sh:26`, `bin/sombra_trava.sh:30`, `bin/sombra_trava.sh:38`).
+
+**3. Existe recusa de Docker de teste fora da trava?** [nao verificado]
+
+**Não há uma barreira geral demonstrada no código inspecionado.** Há recusa estática pelo selo e defesa posterior dentro da trava; o próprio teste cria um container cru e exige que ele permaneça vivo (`bin/tests/test_trava_teste.sh:145`, `bin/trava_teste.sh:129`, `bin/tests/test_trava_dono_para_filho.sh:91`, `bin/tests/test_trava_dono_para_filho.sh:99`).
+
+- O scanner acusa comandos sem trava e faz a régua falhar antes da suíte; não intercepta o executável Docker (`bin/tests/test_trava_teste.sh:145`, `bin/regua.sh:138`, `bin/regua.sh:140`, `bin/regua.sh:143`).
+- O PreToolUse configurado chama `disjuntor.py pretool`; Bash principal comum sai desse fluxo sem negativa logo na entrada (`.claude/settings.json:68`, `bin/disjuntor.py:1431`, `bin/disjuntor.py:1432`).
+- O wrapper Git apenas delega ao pre-push (`bin/hooks.sh:56`).
+- A label é adicionada somente quando os dois primeiros argumentos recebidos são exatamente `docker run`; não é uma credencial exigida pelo Docker (`bin/trava_teste.sh:109`, `bin/trava_teste.sh:138`).
+- Suíte externa sem label é detectada pelo texto `manage.py test` no comando do container. Quem espera/recusa é **a nova suíte protegida**, não o lançamento externo (`bin/trava_teste.sh:55`, `bin/trava_teste.sh:56`, `bin/trava_teste.sh:111`, `bin/trava_teste.sh:130`).
+
+A lacuna concreta é o hook cru em `app/`, excluído da análise shell do scanner; seu uso efetivo como hook instalado permanece **[não verificado]** (`app/core/hooks/pre-push.sh:54`, `bin/tests/test_trava_teste.sh:130`).
+
+**4. Selos/testes e o que fixam** [nao verificado]
+
+| Selo/teste | Afirmações | [nao verificado]
+|---|---|
+| `bin/tests/test_trava_teste.sh:20` | A trava existe e é executável. |
+| `bin/tests/test_trava_teste.sh:48`, `bin/tests/test_trava_teste.sh:83`, `bin/tests/test_trava_teste.sh:87`, `bin/tests/test_trava_teste.sh:120`, `bin/tests/test_trava_teste.sh:145` | Scanner junta continuações; exige trava no comando/função shell ou na unidade AST Python; acusa infrações. |
+| `bin/tests/test_trava_teste.sh:150`, `bin/tests/test_trava_teste.sh:183` | Scanner deve reconhecer os runners canônicos e acusar exatamente os quatro fixtures indevidos, incluindo `REGUA_DB` sem trava. |
+| `bin/tests/test_trava_teste.sh:202`, `bin/tests/test_trava_teste.sh:207` | Testes dinâmicos usam cópia com lock próprio; isolamento inválido aborta. |
+| `bin/tests/test_trava_teste.sh:218`, `bin/tests/test_trava_teste.sh:225` | Serialização: ordem `A A_fim B`. |
+| `bin/tests/test_trava_teste.sh:231`, `bin/tests/test_trava_teste.sh:236` | Sem vez, retorno 75. |
+| `bin/tests/test_trava_teste.sh:244`, `bin/tests/test_trava_teste.sh:251`, `bin/tests/test_trava_teste.sh:257` | `.quem` dizendo “livre” não pode vencer flock preso; depois de soltar, aceita livre ou suíte externa. |
+| `bin/tests/test_trava_dono_para_filho.sh:46`, `bin/tests/test_trava_dono_para_filho.sh:54`, `bin/tests/test_trava_dono_para_filho.sh:55` | TERM no dono remove seu container e retorna 143. |
+| `bin/tests/test_trava_dono_para_filho.sh:60`, `bin/tests/test_trava_dono_para_filho.sh:66`, `bin/tests/test_trava_dono_para_filho.sh:72` | KILL deixa container reconhecido como `ORFAO` por `--quem`. |
+| `bin/tests/test_trava_dono_para_filho.sh:75`, `bin/tests/test_trava_dono_para_filho.sh:77`, `bin/tests/test_trava_dono_para_filho.sh:80` | Próxima aquisição para órfão, anuncia-o no stderr e executa com sucesso. |
+| `bin/tests/test_trava_dono_para_filho.sh:91`, `bin/tests/test_trava_dono_para_filho.sh:98`, `bin/tests/test_trava_dono_para_filho.sh:99` | Suíte sem label continua viva; nova suíte protegida retorna 75. |
+| `bin/tests/test_suite_sh.sh:37`, `bin/tests/test_suite_sh.sh:42`, `bin/tests/test_suite_sh.sh:51`, `bin/tests/test_suite_sh.sh:55`, `bin/tests/test_suite_sh.sh:57` | Comando canônico chama `suite.sh`; porta contém trava e teste, lê LABELS da régua e não contém `DB_PASSWORD`. |
+| `bin/tests/test_suite_sh.sh:77`, `bin/tests/test_suite_sh.sh:80`, `bin/tests/test_suite_sh.sh:85` | Fixture crua reprova, porta aprova e recorte da documentação não invade prosa. |
+| `app/core/tests/test_pista_ocupada_nao_e_veredito.py:51`, `app/core/tests/test_pista_ocupada_nao_e_veredito.py:60`, `app/core/tests/test_pista_ocupada_nao_e_veredito.py:69` | Runner Python transforma 75 em `PistaOcupada`; usa trava/cpuset e evita senha no argv; OK/FAILED continuam vereditos. |
+| `app/core/tests/test_pista_ocupada_nao_e_veredito.py:73`, `app/core/tests/test_pista_ocupada_nao_e_veredito.py:82` | Ocupação não vira árvore vermelha; quarentena não libera teste sem run. |
+| `bin/tests/test_handoff_sessao.sh:115`, `bin/tests/test_handoff_sessao.sh:116`, `bin/tests/test_handoff_sessao.sh:117` | Handoff consulta flock e inclui locks de teste/sombra. |
+| `bin/tests/test_hook_nao_e_copia.sh:33`, `bin/tests/test_hook_nao_e_copia.sh:36`, `bin/tests/test_hook_nao_e_copia.sh:43` | Hook instalado delega ao pre-push, não carrega suíte/Docker/senha e tem até 12 linhas de código. |
+
+
+
+[truncado em 20000 de 20437 caracteres]
+
+## 31/10 19:54 · sessao 3a1532fe8ade · - · - · origem=Ronald (tmux)
+
+Censo das entradas reais encontradas; `T` abaixo significa chamada direta a `bin/trava_teste.sh`, nunca indireta por `bin/suite.sh`, salvo a própria suíte (`bin/suite.sh:96`). Argumentos comuns `$TESTE_DOCKER` expandem para `--cpuset-cpus $TESTE_CPUSET --cpus $TESTE_CPUS --memory $TESTE_MEM`, padrões `4-7`, `4`, `2g` (`bin/recursos.sh:41`, `bin/recursos.sh:61`, `bin/recursos.sh:69`, `bin/recursos.sh:81`).
+
+| Nascimento | Passagem/dono/espera | Comando e variantes |
+|---|---|---|
+| `bin/suite.sh:97` | `T`, `ESTEIRA_QUEM=${ESTEIRA_QUEM:-suite}`, espera repassada por `--espera` (`bin/suite.sh:49`, `bin/suite.sh:96`) | `manage.py test ${ONLY:-$LABELS} --settings=config.settings.ci --noinput`, paralelo padrão 4, extras após `--`; app vivo ou `--dir`, `REGUA_DB` repassado (`bin/suite.sh:43`, `bin/suite.sh:74`, `bin/suite.sh:89`, `bin/suite.sh:102`). |
+| `bin/regua.sh:166` | `T`, `regua`, espera padrão (`bin/regua.sh:165`) | `${ONLY:-$LABELS}`, CI, `--noinput --parallel 4 $_ORDEM`, app `$APP` (`bin/regua.sh:167`). |
+| `bin/pre-push.sh:143` | Função `_teste_irmao`; `T`, `pre-push`, espera padrão (`bin/pre-push.sh:122`, `bin/pre-push.sh:142`) | Arsenal `$LABELS`, CI, paralelo 4 (`bin/pre-push.sh:186`); control plane `tenants`, `teste_motor`, sem paralelo (`bin/pre-push.sh:198`). App do commit `$ARVORE_PUSH/app` (`bin/pre-push.sh:144`). |
+| `bin/placar_code.sh:127` | `T`, `placar_code`, `--espera 120` (`bin/placar_code.sh:126`) | `REGUA_DB=test_juliani_placar`, `core.tests.test_bug116_credencial_deixa_trilha.CContratoCredencialSemTrilhaTest`, CI e `--noinput` (`bin/placar_code.sh:128`). |
+| `bin/regua_relogio.sh:52` | `T`, `regua_relogio`, espera padrão (`bin/regua_relogio.sh:51`) | `$APPS --settings=cfg_tz --noinput`, shim montado `/var/tmp/probe`, `PROBE_TZ=$TZ_SONDA` (`bin/regua_relogio.sh:53`). |
+| `bin/regua_calendario.sh:47` | `T`, `regua_calendario`, espera padrão (`bin/regua_calendario.sh:46`) | `$LABELS`, `ci_calendario`, paralelo 4; três datas `d20`, `d21`, `d01`, banco `test_juliani_cal$nome` e `RELOGIO_FAKE=$alvo` (`bin/regua_calendario.sh:44`, `bin/regua_calendario.sh:48`). |
+| `bin/vigia_arvore.sh:84` | Função `suite`; `T`, `vigia_arvore`, espera padrão (`bin/vigia_arvore.sh:77`, `bin/vigia_arvore.sh:83`) | CI; primeiro `$LABELS`, DB `test_juliani_vigia`, paralelo 2 (`bin/vigia_arvore.sh:88`); depois `$IDS`, DB `test_juliani_vigia_b`, sem paralelo (`bin/vigia_arvore.sh:106`). Monta snapshot (`bin/vigia_arvore.sh:85`). |
+| `bin/vigia_arvore.sh:132` | `T`, `vigia_arvore`, espera padrão (`bin/vigia_arvore.sh:131`) | Confirma `$IDS2` na árvore viva, DB `test_juliani_vigia_viva`, CI, sem paralelo (`bin/vigia_arvore.sh:132`). |
+| `bin/isolamento.sh:34` | Função `_iso_roda`; `T`, `isolamento`, espera padrão (`bin/isolamento.sh:23`, `bin/isolamento.sh:33`) | `$ids`, CI, DB `$db`, snapshot; chamadas usam `test_juliani_iso_$fatia` (`bin/isolamento.sh:34`, `bin/isolamento.sh:49`, `bin/isolamento.sh:70`). |
+| `bin/molde_fatia/rodar.sh:31` | `T`, `fatia`, `--espera 5400` (`bin/molde_fatia/rodar.sh:30`) | Selo `core.tests.test_selo_mapa_contrato`, CI, DB `test_juliani___FATIA__m`, app da cura (`bin/molde_fatia/rodar.sh:32`). |
+| `bin/molde_fatia/rodar.sh:45` | Função `teste`; `T`, `fatia`, `--espera 5400` (`bin/molde_fatia/rodar.sh:37`, `bin/molde_fatia/rodar.sh:44`) | RED `__RED__`, DB `...r`; GREEN `__RED__ __GREEN__ __PACOTE__ --parallel 4`, DB `...g`; CI (`bin/molde_fatia/rodar.sh:52`, `bin/molde_fatia/rodar.sh:54`). |
+| `bin/molde_autocura/rodar.sh:23` | Função `teste`; `T`, `autocura`, `--espera 5400` (`bin/molde_autocura/rodar.sh:18`, `bin/molde_autocura/rodar.sh:22`) | RED `$IDS`, DB `test_juliani_esacred`; GREEN `$LABELS --parallel 4`, DB `test_juliani_esacfull`; CI (`bin/molde_autocura/rodar.sh:27`, `bin/molde_autocura/rodar.sh:30`). |
+| **`app/core/hooks/pre-push.sh:54`** | **Nenhuma trava de teste/suite**; função `_teste_irmao` roda Docker cru (`app/core/hooks/pre-push.sh:54`) | Arsenal `$LABELS`, CI, paralelo 2, credencial no `-e DB_PASSWORD` (`app/core/hooks/pre-push.sh:82`); `tenants`, `teste_motor` (`app/core/hooks/pre-push.sh:87`). Monta árvore viva (`app/core/hooks/pre-push.sh:55`). |
+
+Sondas, ensaios e verificadores fora de `trava_teste.sh`/`suite.sh`: [nao verificado]
+
+| Nascimento | Trabalho e controle próprio |
+|---|---|
+| `bin/sonda_frota.sh:41` | Shell tenant `juliani` que executa arquivo montado `/sonda/sonda.py`; app só leitura, env da casa, `$TESTE_DOCKER`; sem trava de teste no comando (`bin/sonda_frota.sh:41`). |
+| `bin/sonda_leitura.sh:235` | Shell tenant `juliani`, settings `$SETTINGS`, rede `$REDE`, credencial `$ENVFILE`, `POSTGRES_DB=$BANCO`, código montado só leitura; sem trava de teste (`bin/sonda_leitura.sh:235`). |
+| `bin/sombra.sh:183` | Função `container`, `config.settings.sombra`, `POSTGRES_DB=sombra`, cpuset de teste e `--cpus 1`, proxy morto, app só leitura (`bin/sombra.sh:182`). Ramas `--refazer`, `--bloco`, `--rodar` usam `trancar_sombra`, não trava de suíte (`bin/sombra.sh:438`, `bin/sombra.sh:451`, `bin/sombra.sh:487`). |
+| `bin/simular_folha.sh:48` | Função `container`, sombra, cpuset de teste e `--cpus 1`; foto/par usam `trancar_sombra` (`bin/simular_folha.sh:47`, `bin/simular_folha.sh:67`, `bin/simular_folha.sh:96`). `comparar` também usa essa função (`bin/simular_folha.sh:87`). |
+| `bin/diff_janela_he_total.sh:30` | Ensaio financeiro na sombra; chama `trancar_sombra "diff_janela_he_total $ROTULO"` (`bin/diff_janela_he_total.sh:18`); executa tenant command com mês/ano/empresas/piso/JSON (`bin/diff_janela_he_total.sh:38`). |
+| `bin/r5_idempotencia_frota.sh:16` | Executa `/r5/r5_idempotencia_frota.py` em shell tenant, settings sombra, `$TESTE_DOCKER`; sem chamada a trava de teste/sombra no corpo anterior ao Docker (`bin/r5_idempotencia_frota.sh:7`, `bin/r5_idempotencia_frota.sh:24`). |
+| `bin/prova_de_casca.sh:30` | `--network none`, settings saas, app só leitura e `/prova.py`; imagem obtida do `saas_ui`; sem trava de suíte (`bin/prova_de_casca.sh:27`, `bin/prova_de_casca.sh:30`). |
+| `bin/esmeril_da_copia.sh:23` | Ruff/Vulture na cópia só leitura, `$TESTE_DOCKER`; sem trava de suíte (`bin/esmeril_da_copia.sh:23`). |
+| `bin/molde_fatia/rodar.sh:19` | `gerar_diagrama --settings=config.settings.ci`, app da cura; Docker cru (`bin/molde_fatia/rodar.sh:19`). |
+| `bin/molde_fatia/rodar.sh:21` | Ruff/Vulture; Docker cru (`bin/molde_fatia/rodar.sh:21`). |
+| `bin/molde_autocura/rodar.sh:13` | Ruff; Docker cru (`bin/molde_autocura/rodar.sh:13`). |
+| `bin/db_teste.sh:53` | Nasce persistente `juliani_db_test`, postgres 17 alpine, `-d`, restart `unless-stopped`, volume próprio e cpuset de teste; sem trava de suíte (`bin/db_teste.sh:21`, `bin/db_teste.sh:32`, `bin/db_teste.sh:53`). |
+| `bin/sombra_db.sh:91` | Nasce persistente `sombra_db`, postgres 17 alpine, `-d`, restart `unless-stopped`, memória `$SOMBRA_DB_MEM`, cpuset de teste; sem trava de suíte (`bin/sombra_db.sh:40`, `bin/sombra_db.sh:48`, `bin/sombra_db.sh:91`). |
+
+Os próprios selos também criam containers:
+
+- `bin/tests/test_prepush_testa_o_commit.sh:97` e `bin/tests/test_prepush_testa_o_commit.sh:102`: duas verificações de existência de staticfiles dentro de container, com/sem montagem auxiliar; Docker cru e sem `$TESTE_DOCKER` (`bin/tests/test_prepush_testa_o_commit.sh:97`, `bin/tests/test_prepush_testa_o_commit.sh:102`).
+- `bin/tests/test_inventario_pessoal_no_commit.sh:24`: função `_rodar` executa `inventario_pessoal_dos_modelos.py`, `$TESTE_DOCKER`, sem trava de suíte (`bin/tests/test_inventario_pessoal_no_commit.sh:23`).
+- `bin/tests/test_trava_dono_para_filho.sh:46`, `bin/tests/test_trava_dono_para_filho.sh:60`, `bin/tests/test_trava_dono_para_filho.sh:96`: Alpine através de **cópia isolada** da trava, espera 5/5/2 s; `bin/tests/test_trava_dono_para_filho.sh:91` cria deliberadamente container sem trava/label, `-d`, simulação alheia `sleep 60; : python manage.py test alheia`. Os comandos “manage.py test” aqui são texto em `:`; não executam Django (`bin/tests/test_trava_dono_para_filho.sh:92`, `bin/tests/test_trava_dono_para_filho.sh:97`).
+- `bin/tests/test_trava_teste.sh:160`, `bin/tests/test_suite_sh.sh:68` e demais `printf`/heredoc encontrados são fixtures textuais; não contei como nascimento real (`bin/tests/test_trava_teste.sh:158`, `bin/tests/test_suite_sh.sh:68`).
+
+Entradas indiretas e hooks:
+
+- Cron da suíte: `app/config/crons.py:277` agenda `bin/vigia_arvore.sh` às `5 * * * *`; cron sombra agenda `sombra.sh --refazer && sombra.sh --bloco` (`app/config/crons.py:331`).
+- `.claude/settings.json:9` chama Stop hook; `.claude/settings.json:68` chama `disjuntor.py pretool`; não são chamadas Docker de teste nesses campos (`.claude/settings.json:9`, `.claude/settings.json:68`).
+- O instalador corrente declara `FONTE=$R/bin/pre-push.sh` e grava wrapper `exec bash "$(git rev-parse --show-toplevel)/bin/pre-push.sh" "$@"` (`bin/hooks.sh:10`, `bin/hooks.sh:56`).
+- Há fonte divergente: `app/core/hooks/hooks_fonte.py:17` aponta **a cópia local sem trava**, e `fonte_do_pre_push()` a lê (`app/core/hooks/hooks_fonte.py:20`). Já `app/core/hooks/hooks.sh:10` aponta `bin/pre-push.sh`, copiando-a na instalação (`app/core/hooks/hooks.sh:35`).
+- Em `scripts/`, `drill_restore.sh` faz ensaio via `$DC exec -T web python manage.py shell`, fora das duas portas; não é `compose run` nem `manage.py test` (`scripts/drill_restore.sh:4`, `scripts/drill_restore.sh:6`).
+- Não encontrei execução `docker compose run`, `docker-compose run` ou `docker exec ... manage.py test` no escopo inspecionado [não verificado quanto à exaustividade sem metadados Git]. Versionamento efetivo, hook instalado e processos/containers vivos [não verificado].
+
+## 31/10 19:54 · sessao 8740280619f6 · - · - · origem=Ronald (tmux)
+
+Auditoria estática dos selos e das recusas:
+
+| Selo/teste | O que afirma | [nao verificado]
+|---|---|
+| `bin/tests/test_trava_teste.sh:20` | A trava existe e é executável. |
+| `bin/tests/test_trava_teste.sh:48`, `:83`, `:87`, `:90`, `:125`, `:145` | Scanner junta continuações, descarta comentários/buscas de processo, exige trava no comando shell ou na função chamada; Python exige constante terminando em `trava_teste.sh` na mesma unidade AST. Varre `bin/` e `app/`, exclui diretórios `tests`; **shell somente em `bin/`**. `REGUA_DB` não dá isenção. |
+| `bin/tests/test_trava_teste.sh:150` | Scanner tem de reconhecer suite, régua e pre-push como protegidos; evita universo vazio. |
+| `bin/tests/test_trava_teste.sh:158`, `:183` | Fixtures exigem exatamente quatro infrações: função sem trava, continuação com Docker cru, `REGUA_DB` cru e execução Python sem trava; ignora comentário, busca, docstring e outro command `testar_pwa`. |
+| `bin/tests/test_trava_teste.sh:202`, `:207` | Exercita cópia com lock próprio e aborta antes dos testes dinâmicos se a cópia não estiver isolada. |
+| `bin/tests/test_trava_teste.sh:218`, `:225` | Dois chamadores produzem ordem `A A_fim B`: serialização. |
+| `bin/tests/test_trava_teste.sh:231`, `:236` | Falta de vez termina com rc 75. |
+| `bin/tests/test_trava_teste.sh:244`, `:251`, `:257` | `--quem` não pode anunciar livre com flock preso, mesmo com `.quem` mentiroso; após soltar aceita livre ou suite externa sem rótulo. |
+| `bin/tests/test_trava_dono_para_filho.sh:28`, `:46`, `:54`, `:55` | Cópia com lock próprio; TERM no dono faz container desaparecer e devolve 143. |
+| `bin/tests/test_trava_dono_para_filho.sh:60`, `:66`, `:69`, `:72` | KILL deixa container visível como `ORFAO` no `--quem`. |
+| `bin/tests/test_trava_dono_para_filho.sh:75`, `:77`, `:80`, `:85` | Próxima aquisição para órfão, anuncia `ORFAO` no stderr, roda com rc 0 e depois deixa pista livre. |
+| `bin/tests/test_trava_dono_para_filho.sh:91`, `:96`, `:98`, `:99` | Suite externa sem rótulo permanece viva; nova suite protegida espera e termina 75. |
+| `bin/tests/test_suite_sh.sh:22`, `:32`, `:37`, `:42` | Bloco canônico da seção 3 de `CLAUDE.md` deve chamar `bin/suite.sh`; recorte pela estrutura do bloco. |
+| `bin/tests/test_suite_sh.sh:46`, `:51`, `:53`, `:55`, `:57` | Porta existe, contém trava e `manage.py test`, lê LABELS de `regua.sh` e não contém `DB_PASSWORD`. São verificações textuais. |
+| `bin/tests/test_suite_sh.sh:65`, `:77`, `:80`, `:85` | Fixture crua reprova, fixture pela porta aprova e recorte não invade prosa posterior. |
+| `app/core/tests/test_pista_ocupada_nao_e_veredito.py:51`, `:60`, `:69`, `:73`, `:82` | rc 75 vira `PistaOcupada`, nunca False; runner passa pela trava, com cpuset, sem senha no argv; OK/FAILED continuam vereditos; isolamento não chama ocupação de árvore vermelha; quarentena não solta ninguém sem run. |
+| `bin/tests/test_handoff_sessao.sh:115`, `:116`, `:117` | Handoff usa flock e inclui locks de teste e sombra. |
+| `bin/tests/test_hook_nao_e_copia.sh:21`, `:33`, `:36`, `:43` | Hook instalado deve delegar para `bin/pre-push.sh`, conter até 12 linhas de código e não carregar suite/Docker/senha; fixture compara wrapper e cópia (`:47–51`). |
+
+Os selos de host são executados pela régua antes da suite; o primeiro que falha impede o lançamento (`bin/regua.sh:138`, `:140`, `:143`). Não executei nenhum selo [não verificado: resultado de execução].
+
+**Não há interceptador geral demonstrado que recuse o nascimento de todo Docker de teste fora da trava.** A recusa estática do scanner ocorre na régua (`bin/tests/test_trava_teste.sh:145`, `bin/regua.sh:140`). A defesa runtime recusa **a nova suite que entrou pela trava** quando encontra suite externa sem rótulo (`bin/trava_teste.sh:109`, `:111`, `:129`, `:133`); o teste deliberadamente cria essa suite crua e prova que permanece viva (`bin/tests/test_trava_dono_para_filho.sh:91`, `:99`).
+
+O único PreToolUse declarado chama `disjuntor.py pretool` (`.claude/settings.json:68`); esse fluxo trata B1, agentes e Codex, e libera Bash principal comum já na entrada (`bin/disjuntor.py:1431`, `:1432`, `:1440`, `:1451`, `:1475`). O wrapper de Git gerado apenas delega ao pre-push (`bin/hooks.sh:56`); não envolve o executável Docker.
+
+**Lacuna concreta:** `app/core/hooks/pre-push.sh:54` tem `_teste_irmao()` com Docker cru, chamado para arsenal em `:82` (`--parallel 2`, `:84`) e tenants em `:87` (`teste_motor`, `:88`). O scanner da trava não examina `.sh` de `app/` (`bin/tests/test_trava_teste.sh:130`). A fonte atualmente escolhida pelo instalador é `bin/pre-push.sh` (`bin/hooks.sh:10`), enquanto `app/core/hooks/hooks_fonte.py:17` aponta para a cópia de `app/`; instalação efetiva e versionamento nesta árvore sem `.git` [não verificado].
+
+**Hook Stop:** está configurado em `.claude/settings.json:9`. Ele não consulta o arquivo de proprietário: `_tem_trabalho_em_curso()` executa `ps -eo args` e reconhece substring `manage.py test` ou `git push` (`bin/hook_stop_fila1.py:386`, `:392`, `:395`). Portanto detecta atividade por argv; não valida posse da trava (`bin/hook_stop_fila1.py:373`).
 
 ## 31/10 19:52 · sessao 4bd4d009df1b · PADRAO-DE-CIMA · verificador · origem=Code
 
@@ -778,92 +1004,4 @@ Para 6/7, triagens exatas: `logs/grade_folga/triagem_v1.txt:7` e `logs/grade_fol
 
 A cópia é anterior ao predicado novo: `app/ponto/precedencia.py:195` contém `fatos_do_dia`, e `app/ponto/precedencia.py:236`–238 ainda seleciona uma candidata com `setdefault`. Portanto, as linhas do opus sobre o novo predicado não devem ser apresentadas como verificação direta desta cópia.
 
-## 31/10 19:02 · sessao 010bc3109982 · - · - · origem=Ronald (tmux)
-
-Certeza **alta por leitura estática** nos itens abaixo; execução e ocorrência em produção **[não verificado]**.
-
-- **D cura apenas exceções que chegam ao `except` externo.** `_so_modelos` engole `OSError`, `SyntaxError`, `UnicodeDecodeError` e continua; `_por_sitio` também engole `ValueError`, guarda fonte como `None` e continua. Portanto, fonte/modelo ilegível pode resultar em entidade vazia ou programa alternativo e ser persistido; o evento já persistido não é resolvido novamente. (`bin/disjuntor.py:1233`, `bin/disjuntor.py:1234`, `bin/disjuntor.py:1259`, `bin/disjuntor.py:1261`, `bin/disjuntor.py:1264`, `bin/disjuntor.py:1283`, `bin/disjuntor.py:1376`, `bin/disjuntor.py:1384`)
-
-- **A foto da transição PDC está sob a mesma trava do estado.** `_com_estado` toma flock antes de executar `_fn`; `_fn` lê o RELATO inteiro e recorta o topo desses mesmos bytes. Fotografia e reconhecedor usam a mesma normalização; não existe segunda abertura do RELATO para fazer a foto. (`bin/disjuntor.py:260`, `bin/disjuntor.py:275`, `bin/disjuntor.py:1361`, `bin/disjuntor.py:1369`, `bin/disjuntor.py:1396`, `bin/disjuntor.py:1308`, `bin/disjuntor.py:1314`)
-
-- **Redisparo refaz a foto nessa mesma trava.** Nova disparada redefine `fotos[ent] = None`, fotografa o topo observado e, ao encerrar episódio, apaga a foto. Estado anterior à v4 recebe fotografia tardia. (`bin/disjuntor.py:1390`, `bin/disjuntor.py:1392`, `bin/disjuntor.py:1396`, `bin/disjuntor.py:1429`, `bin/disjuntor.py:1430`)
-
-- **Há leituras externas à trava que podem observar outro RELATO:** fallback de `estado_pdc`, ramo de exceção do PreToolUse, Stop/PAREI/ESPERANDO e checagem da prova do RELATO. Essas leituras não compõem a foto interna de `decide_pdc`. (`bin/disjuntor.py:1494`, `bin/disjuntor.py:1557`, `bin/disjuntor.py:2028`, `bin/hook_stop_fila1.py:407`, `bin/hook_stop_fila1.py:429`, `bin/hook_stop_fila1.py:1176`)
-
-- **Estabilidade observada não equivale a excluir escritores.** PDC usa `disjuntor_estado.json.lock`; `no_relato` usa flock do diretório de RELATO. Um escritor pode atualizar RELATO após o segundo stat e antes da persistência; a transição usa os bytes observados, sem reabrir. (`bin/disjuntor.py:256`, `bin/disjuntor.py:260`, `bin/disjuntor.py:711`, `bin/disjuntor.py:716`, `bin/disjuntor.py:281`, `app/core/esteira_vigia.py:844`, `app/core/esteira_vigia.py:848`)
-
-- **C corrige a inversão concorrente do escopo entre transições cooperantes.** `_pdc_grava_escopo` é chamado no anúncio; `_com_estado` executa anúncio antes de fechar o descritor da trava. Entretanto, falha de publicação apenas registra FALHA e mantém o escopo anterior. (`bin/disjuntor.py:1439`, `bin/disjuntor.py:293`, `bin/disjuntor.py:296`, `bin/disjuntor.py:1466`, `bin/disjuntor.py:1467`)
-
-- **Escritores RELATO fora da porta persistem:** `gerar_cortes` lê e regrava integralmente; `deploy_agendado` faz o mesmo. Não tomam o flock do diretório empregado por `no_relato`. O próprio escritor central documenta esses resíduos. (`bin/gerar_cortes.py:117`, `bin/gerar_cortes.py:136`, `bin/deploy_agendado.sh:37`, `bin/deploy_agendado.sh:44`, `app/core/esteira_vigia.py:839`)
-
-- **Quem escreve/lê topo:** o código reconhece topo escrito à mão, preservado pela inserção de alarmes. Negativas do disjuntor passam por `no_relato`; os leitores incluem PDC/B3, Stop, handoff e publicação. Autoria humana concreta **[não verificado]**. (`app/core/esteira_vigia.py:829`, `app/core/esteira_vigia.py:872`, `bin/disjuntor.py:235`, `bin/disjuntor.py:236`, `bin/disjuntor.py:1361`, `bin/disjuntor.py:677`, `bin/hook_stop_fila1.py:429`, `bin/handoff_sessao.sh:92`, `bin/relato.sh:56`, `bin/relato.sh:104`)
-
-- **`nao_sei`/`duvida` são apenas memória da decisão:** defaults na classe, preenchimento no retorno de `decide_pdc`, leitura por `estado_pdc`. Não são publicados no escopo: este só contém `em`, `disparadas`, `obras_com_evento`. Consequentemente, dúvida não integra o fallback persistido. (`bin/disjuntor.py:1341`, `bin/disjuntor.py:1342`, `bin/disjuntor.py:1449`, `bin/disjuntor.py:1451`, `bin/disjuntor.py:1505`, `bin/disjuntor.py:1460`, `bin/disjuntor.py:1461`, `bin/disjuntor.py:1491`, `bin/disjuntor.py:1493`)
-
-- **Segundo juiz:** reuso confirmado do censo e do juiz de vocabulário; `_so_modelos` acrescenta filtro de herança ao catálogo amplo do censo. Não demonstrada duplicação dos juízes de negócio registrados; ausência absoluta **[não verificado]**. (`bin/disjuntor.py:1198`, `bin/disjuntor.py:1217`, `bin/disjuntor.py:1219`, `bin/disjuntor.py:1266`, `app/core/censo_escritas.py:90`, `app/core/censo_escritas.py:109`, `app/core/juizes.py:156`, `app/core/juizes.py:1255`)
-
-- **Vocabulário tem implementação compartilhada, mas fontes concretas podem divergir:** PDC lê disco da raiz; selo LEI-AKITA lê documentos do commit por `git show`. (`bin/disjuntor.py:1332`, `bin/disjuntor.py:1334`, `bin/tests/test_lei_akita.sh:77`, `bin/tests/test_lei_akita.sh:89`)
-
-- **Relógio fora da borda persiste:** decisões B3/PDC usam `time.time()` quando chamador não injeta `agora`; CLIs chamam sem injeção. Trilha e triagem leem seu próprio `datetime.now()`. (`bin/disjuntor.py:904`, `bin/disjuntor.py:1354`, `bin/disjuntor.py:1073`, `bin/disjuntor.py:1536`, `bin/disjuntor.py:140`, `bin/disjuntor.py:840`)
-
-- **Leitura dupla fora do RELATO persiste:** censo lê models; filtro de subclasses relê os mesmos arquivos, e sítios citados têm uma terceira leitura independente. Mudança concorrente pode misturar catálogo, herança e sítio. Painel abre a trilha quatro vezes para eventos distintos. (`app/core/censo_escritas.py:105`, `bin/disjuntor.py:1233`, `bin/disjuntor.py:1259`, `bin/disjuntor.py:2085`, `bin/disjuntor.py:2088`)
-
-## 31/10 19:01 · sessao f3ba881c7f8d · - · - · origem=Ronald (tmux)
-
-**E: parcialmente resolvido, certeza alta por inspeção.**
-
-- O mutante `B3-foto-parcial-engolida` agora importa `H` antes de usá-lo; elimina o `NameError` acidental específico. O mutante que retirava `if ent not in disp` foi removido e substituído pelos testes da fotografia. (`bin/tests/test_disjuntor.sh:1714`; `bin/tests/test_padrao_de_cima.sh:559`; `bin/tests/test_padrao_de_cima.sh:562`)
-- Capturar uma das cinco exceções no próprio código **não basta para escondê-la**: a sonda registra `RAISE`, independentemente de um `except` posterior, desde que o código esteja dentro da cópia monitorada. (`bin/tests/test_disjuntor.sh:54`; `bin/tests/test_disjuntor.sh:57`; `bin/tests/test_disjuntor.sh:64`)
-- **Exceções de outros tipos escapam da sonda.** A lista contém somente `NameError`, `KeyError`, `AttributeError`, `TypeError`, `IndexError`; `_morre` aceita qualquer retorno não zero se o log não acusar contaminação. Não comprova que houve falha de assert. (`bin/tests/test_disjuntor.sh:54`; `bin/tests/test_disjuntor.sh:77`; `bin/tests/test_disjuntor.sh:83`; `bin/tests/test_padrao_de_cima.sh:43`; `bin/tests/test_padrao_de_cima.sh:65`)
-- **Contraexemplo estático:** inserir `raise ValueError(...)` no começo de `estado_pdc` causa saída não zero do Python; `i14_mesma` exige rc 3 e falha, enquanto a sonda ignora `ValueError`. O harness aceita essa morte como mordida, embora seja acidente de execução. Certeza alta por fluxo; execução desse mutante **[não verificado]**. (`bin/disjuntor.py:1481`; `bin/tests/test_padrao_de_cima.sh:124`; `bin/tests/test_padrao_de_cima.sh:150`; `bin/tests/test_padrao_de_cima.sh:43`; `bin/tests/test_padrao_de_cima.sh:65`)
-
-**As três declarações não exigem que a exceção declarada ocorra.** `_excecao` retorna sucesso com log vazio; havendo log, apenas exclui linhas que contenham o texto declarado com `grep -v -F`. Se o caso passar, `_morre` sempre acusa sobrevivência; se falhar por outro motivo não monitorado, aceita a mordida mesmo sem exceção declarada. Portanto, não existe uma obrigação positiva de observar a exceção esperada. Certeza alta. (`bin/tests/test_disjuntor.sh:77`; `bin/tests/test_disjuntor.sh:79`; `bin/tests/test_disjuntor.sh:84`; `bin/tests/test_disjuntor.sh:1537`)
-
-**Os prefixos perdoam sítios diferentes.** `cx8-ausente-sem-falha` aceita `AttributeError` em qualquer função de `bin/disjuntor.py`; `P7-tipo-solto` aceita qualquer `AttributeError` de `bin/statusline_cota.py`; `B3-ref-fora-da-pergunta` restringe à função `linhas_libera_b3`, mas não à linha ou operação esperada. O log só grava tipo, arquivo e nome da função; o filtro é substring fixa, sem ancoragem. Certeza alta. (`bin/tests/test_disjuntor.sh:62`; `bin/tests/test_disjuntor.sh:79`; `bin/tests/test_disjuntor.sh:1652`; `bin/tests/test_disjuntor.sh:1706`; `bin/tests/test_disjuntor.sh:1775`)
-
-Os autotestes provam, pelo desenho, somente que o erro plantado é detectado e que declaração vazia/errada não o perdoa; não cobrem exceções fora da lista, ausência da exceção esperada ou exceção do mesmo tipo em outro sítio coberto pelo prefixo. Execução **[não verificado]**. (`bin/tests/test_disjuntor.sh:1839`; `bin/tests/test_padrao_de_cima.sh:592`)
-
-**F: resolvido no selo para as lacunas apontadas, certeza alta por inspeção.**
-
-- Agora o selo exige igualdade integral entre `PROGRAMAS` e o mapa extraído das três formas declaradas no BACKLOG; inclui chave plantada, remoção da O261, troca de programa e controle sem mutação. (`bin/tests/test_padrao_de_cima.sh:475`; `bin/tests/test_padrao_de_cima.sh:486`; `bin/tests/test_padrao_de_cima.sh:495`; `bin/tests/test_padrao_de_cima.sh:500`; `bin/tests/test_padrao_de_cima.sh:503`; `bin/tests/test_padrao_de_cima.sh:510`)
-- A guarda de vocabulário já existia; a cura acrescenta casos com cada fonte ausente e mutantes retirando os respectivos `raise VocabIlegivel`. (`bin/padrao_vocab.py:45`; `bin/padrao_vocab.py:55`; `bin/tests/test_padrao_de_cima.sh:451`; `bin/tests/test_padrao_de_cima.sh:454`; `bin/tests/test_padrao_de_cima.sh:582`)
-- Permanece duplicação de **cadastro**, não demonstração de segundo juiz: `PROGRAMAS` continua literal no runtime, com reconciliação feita somente pelo selo. Novas formas textuais de declaração fora das três regex não são reconhecidas automaticamente. (`bin/disjuntor.py:1111`; `bin/tests/test_padrao_de_cima.sh:475`; `bin/tests/test_padrao_de_cima.sh:479`; `bin/tests/test_padrao_de_cima.sh:483`)
-
-As suítes criam, modificam e apagam arquivos; não foram executadas nesta auditoria. Resultado integral dos selos **[não verificado]**. (`bin/tests/test_disjuntor.sh:39`; `bin/tests/test_disjuntor.sh:41`; `bin/tests/test_padrao_de_cima.sh:29`; `bin/tests/test_padrao_de_cima.sh:30`)
-
-## 31/10 19:01 · sessao 85d80daa26c4 · - · - · origem=Ronald (tmux)
-
-**Achados por inspeção estática; certeza alta nos fluxos, ocorrência em produção [não verificado].**
-
-| Tema | Evidência |
-|---|---|
-| **NAO_SEI normal é recusado** | `_nega_pdc` recusa qualquer resultado diferente de LIVRE; CLI retorna 4 para NAO_SEI; wrapper recusa qualquer rc não zero. (`bin/disjuntor.py:1522`, `bin/disjuntor.py:1540`, `bin/codex_pergunta.sh:168`) |
-| **Fallback ainda transforma dúvida em LIVRE** | Se `decide_pdc` levanta por estado ilegível/trava, `estado_pdc` consulta apenas `esc['disparadas']`; fora dessa lista retorna LIVRE, sem consultar `em`, `obras_com_evento`, RELATO ou dúvida. O escopo não persiste `nao_sei`/`duvida`. (`bin/disjuntor.py:1487`, `bin/disjuntor.py:1491`, `bin/disjuntor.py:1493`, `bin/disjuntor.py:1460`) |
-| **Cenário concreto do fallback** | Uma decisão com resolvedor falho pode gravar escopo sem a obra em `disparadas`, embora ela esteja em `obras_com_evento`; depois uma falha na abertura/trava/estado devolve LIVRE para ela. Mesmo com RELATO ilegível, `obras_com_evento=None` não impede esse LIVRE. **Inferência condicional alta.** (`bin/disjuntor.py:1380`, `bin/disjuntor.py:1383`, `bin/disjuntor.py:1439`, `bin/disjuntor.py:1461`, `bin/disjuntor.py:1493`) |
-| **Escopo ainda pode ficar antigo** | Falha na escrita do escopo só registra FALHA; estado já publicado continua válido, escopo anterior permanece. Depois, o fallback não verifica frescor. **Inferência condicional alta.** (`bin/disjuntor.py:281`, `bin/disjuntor.py:293`, `bin/disjuntor.py:1465`, `bin/disjuntor.py:1467`, `bin/disjuntor.py:1490`) |
-| **PreToolUse sem obra reconhecida** | Agent só chama `_nega_pdc` se `_obra_de(prompt)` reconhecer obra; a função pode retornar None. Nesse percurso não se pergunta PDC. (`bin/disjuntor.py:512`, `bin/disjuntor.py:520`, `bin/disjuntor.py:1978`) |
-| **PreToolUse: segunda leitura fora da trava** | No envelope de exceção, `_ramo_pdc` lê novamente RELATO; só devolve obra se arquivo ilegível ou obra presente no texto dessa segunda foto. Se o evento sair entre as fotos, pode retornar None e chegar a “ferramenta liberada”. Não é a fotografia usada para liberar entidade: é a classificação do fallback. **Inferência condicional alta.** (`bin/disjuntor.py:1556`, `bin/disjuntor.py:1561`, `bin/disjuntor.py:2028`, `bin/disjuntor.py:2037`) |
-| **Stop não pergunta PDC** | `_disjuntor_contido` trata B4, B2, `julga_b3`, B1; não chama `estado_pdc`/`decide_pdc`. Portanto não atribui LIVRE a PDC: simplesmente não apresenta a dúvida PDC. (`bin/hook_stop_fila1.py:1043`, `bin/hook_stop_fila1.py:1048`, `bin/hook_stop_fila1.py:1053`, `bin/hook_stop_fila1.py:1058`) |
-| **Painel perde a dúvida** | `_pdc_painel` lê somente estado persistido, conta eventos e disparadas; não lê RELATO nem `DecisaoPDC`. Com estado legível pode mostrar zero disparadas apesar de RELATO ilegível/resolvedor falho. Não apresenta literalmente LIVRE, mas omite NAO_SEI. (`bin/disjuntor.py:1564`, `bin/disjuntor.py:1567`, `bin/disjuntor.py:1575`, `bin/disjuntor.py:2220`) |
-| **Wrapper: papéis e chave** | Gate só para `PAPEL=verificador`; leitura/censo/sonda não consultam PDC. `padrao_parada` devolve zero com chave desligada. (`bin/codex_pergunta.sh:164`, `bin/codex_pergunta.sh:168`, `bin/disjuntor.py:1534`) |
-| **Hooks apontam árvore viva** | Configuração usa caminhos absolutos `/home/ronald/saas-hasner/…`, tanto Stop quanto PreToolUse. Execução do hash auditado em produção [não verificado]. (`.claude/settings.json:9`, `.claude/settings.json:68`) |
-
-**Travas e relógio — certeza alta.**
-
-- Wrapper: gate FIFO → slot → solta gate → resposta exclusiva → estado B3 → estado PDC. Triagem: resposta compartilhada → estado. Não localizei inversão nesses percursos; ausência absoluta em toda árvore [não verificado]. (`bin/codex_pergunta.sh:138`, `bin/codex_pergunta.sh:145`, `bin/codex_pergunta.sh:153`, `bin/codex_pergunta.sh:163`, `bin/codex_pergunta.sh:165`, `bin/codex_pergunta.sh:168`, `bin/disjuntor.py:813`, `bin/disjuntor.py:845`)
-- Trava de estado tenta por aproximadamente um segundo e depois levanta; esse caso chega ao fallback de escopo. (`bin/disjuntor.py:258`, `bin/disjuntor.py:263`, `bin/disjuntor.py:265`, `bin/disjuntor.py:1487`)
-- PreToolUse injeta relógio de borda; CLI `padrao_parada` não injeta, fazendo `decide_pdc` ler relógio internamente. Trilha tem seu próprio relógio. (`bin/disjuntor.py:2007`, `bin/disjuntor.py:1979`, `bin/disjuntor.py:1536`, `bin/disjuntor.py:1354`, `bin/disjuntor.py:140`)
-- Painel abre `disjuntor.log` quatro vezes independentes — NEGOU/FALHA/DISJUNTOR/LIBERA — e pode combinar instantes distintos. (`bin/disjuntor.py:2085`, `bin/disjuntor.py:2088`)
-
-**Escritores/leitores fora do diff — certeza alta.**
-
-- Estado comum: `_com_estado` publica por replace sob flock; `ler_estado` lê sem flock. A leitura ganha arquivo inteiro por replace, sem garantir mesma observação das outras fontes. (`bin/disjuntor.py:260`, `bin/disjuntor.py:275`, `bin/disjuntor.py:281`, `bin/disjuntor.py:299`)
-- Negativas PreToolUse: `trilha('NEGOU')`, resposta deny e depois `relato_negacao`; este chama `esteira_vigia.no_relato`. (`bin/disjuntor.py:2014`, `bin/disjuntor.py:2017`, `bin/disjuntor.py:234`, `bin/disjuntor.py:236`)
-- Escopo: `_anuncia` chama `_pdc_grava_escopo` ainda sob `_com_estado`; consumidor produtivo localizado é fallback de `estado_pdc`. (`bin/disjuntor.py:1439`, `bin/disjuntor.py:293`, `bin/disjuntor.py:1489`)
-- `nao_sei`/`duvida`: atribuídos no objeto retornado; `estado_pdc` consome; painel e Stop não consomem esse objeto. (`bin/disjuntor.py:1447`, `bin/disjuntor.py:1449`, `bin/disjuntor.py:1451`, `bin/disjuntor.py:1505`, `bin/disjuntor.py:1567`, `bin/hook_stop_fila1.py:1048`)
-
-**argv — certeza alta quanto à forma; conteúdo sensível efetivo [não verificado].**
-
-Os gates passam `$OBRA` em argv; `CODEX_OBRA` só exige string não vazia e não recebe raspagem. Pergunta/anexos chegam ao `codex exec` por stdin, via `$CAB`. O ID também entra cru no cabeçalho e nos logs; portanto “só OBRA” limita a superfície, mas não prova ausência de dado sensível se o valor do ambiente estiver contaminado. (`bin/codex_pergunta.sh:44`, `bin/codex_pergunta.sh:45`, `bin/codex_pergunta.sh:88`, `bin/codex_pergunta.sh:121`, `bin/codex_pergunta.sh:165`, `bin/codex_pergunta.sh:168`, `bin/codex_pergunta.sh:178`)
-
-_1211 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1214 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
