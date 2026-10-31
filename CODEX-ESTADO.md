@@ -1,7 +1,85 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 13:52** · publicado em **31/10/2026 13:54** (UTC-3)
+> Ultima resposta processada: **31/10/2026 13:55** · publicado em **31/10/2026 13:59** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 13:55 · sessao 8b0c4c13d6aa · LEI-AKITA-UNIVERSO-DO-PUSH · verificador · origem=Code
+
+**Aval: REPROVADO.** A volta 2 fecha o erro comum de Git virar universo vazio, mas o portão ainda pode deixar passar commits novos sem julgamento: a régua reutiliza verde anterior, o pre-push não chama Akita e os merges perdem parte do universo e dos arquivos. (`bin/tests/test_lei_akita.sh:93–109`; `bin/regua.sh:84–94`; `bin/pre-push.sh:13–19`)
+
+1. **Universo efetivamente julgado**
+
+O código seleciona a cadeia de primeiros pais de `HEAD`, exclui o alcançável por `origin/main` e pelo pai do corte. Portanto, aplica restrições adicionais ao contrato literal `origin/main..HEAD`. (`bin/tests/test_lei_akita.sh:97–105`)
+
+| Situação | Comportamento |
+|---|---|
+| `HEAD == origin/main` | Seleção vazia legítima; imprime zero julgados e termina a etapa PADRAO normalmente. As outras verificações ainda podem reprovar. (`bin/tests/test_lei_akita.sh:105–106,159–167`) |
+| Commits locais à frente, história linear posterior ao corte | Percorre todos os selecionados, lê mensagem e arquivos, chama `julgar`. Commit sem linha `LEI-AKITA:` é contado, mas aceito sem validar padrão. (`bin/tests/test_lei_akita.sh:74–77,105–112`) |
+| Merge de raia, dois pais, à frente | Julga o merge e sua cadeia de primeiros pais; omite os commits exclusivos do segundo pai, inclusive novos posteriores à lei. (`bin/tests/test_lei_akita.sh:100–105`) |
+| `origin/main` ausente ou quebrada | Encontrado o corte, erro de `rev-list` gera `PADRAO_ERRO`; falta o marcador final e o shell reprova. **Exceção:** sem corte, retorna antes de consultar `origin/main` e aceita `PADRAO_SEM_CORTE`. (`bin/tests/test_lei_akita.sh:93–105,157–167`) |
+| Repositório raso | Não verifica completude. O histórico truncado pode mudar o corte aparente e reduzir a enumeração sem erro de Git; também pode fazer a leitura de arquivos tratar a fronteira como raiz. (`bin/tests/test_lei_akita.sh:97–109`) |
+| `HEAD` destacado numa worktree | Com `LEI_AKITA_R` apontando à worktree, funciona sem nome de branch. Sem essa variável, julga `/home/ronald/saas-hasner`, independentemente da cópia executada. (`bin/tests/test_lei_akita.sh:17,93,105,164`) |
+
+A exclusão dos publicados acontece por referência, sem dispensa nominal para os dois hashes; eles ficam documentados na lápide. (`bin/tests/test_lei_akita.sh:105`; `app/docs/LAPIDES.md:781–786`)
+
+2. **Há caminhos de VERDE sem julgamento devido** [nao verificado]
+
+- **Merge:** `--first-parent` omite um commit novo ruim da raia se o merge tiver mensagem aceitável. Além disso, `git show --name-only` sem comparação explícita contra o primeiro pai pode retornar zero arquivos num merge sem conflito; nesse caso, `n/a (instrumento)` passa mesmo quando o pouso introduz código de negócio. Conferi essa diferença com objetos existentes: a chamada usada pelo selo retornou vazio, enquanto a comparação com o primeiro pai listou arquivos de negócio. (`bin/tests/test_lei_akita.sh:83–85,105–110`)
+
+- **Raso:** exercitei a função real com objetos existentes e uma fronteira rasa fornecida por pipe, sem criar arquivos. Com as mesmas revisões, o histórico completo produziu 71 julgados e duas falhas; truncado, produziu um julgado e nenhuma falha. O código não exige histórico completo antes de aceitar esse resultado. (`bin/tests/test_lei_akita.sh:97–113`; padrões ruins documentados em `app/docs/LAPIDES.md:785–786`)
+
+- **Sem corte:** `corte=[]` vira `PADRAO_SEM_CORTE`, explicitamente aceito como sucesso. Não existe distinção entre ausência histórica legítima da regra e impossibilidade de estabelecer o universo exigido pelo portão. (`bin/tests/test_lei_akita.sh:97–99,157–167`)
+
+- **Repositório errado:** executar a cópia da worktree sem `LEI_AKITA_R` pode conferir o principal e deixar o commit da worktree sem julgamento. (`bin/tests/test_lei_akita.sh:17,93,156,164`)
+
+Quanto ao **rc**, a correção funciona no caminho comum: falhas de enumeração, leitura da mensagem ou leitura dos arquivos abortam antes de `PADRAO_FIM`, e o shell acusa a ausência desse marcador. O rc do Python continua descartado, mas esses erros já não viram verde apenas por terem stdout vazio. (`bin/tests/test_lei_akita.sh:93–95,108–109,162–167`)
+
+O `grep -c` sem correspondência retorna zero na saída; seu rc não interrompe o script, que não usa `errexit`. Nesse trecho, isso representa corretamente zero falhas, e não explica os falsos verdes acima. (`bin/tests/test_lei_akita.sh:16,165–167`)
+
+3. **O que os MORDE detectam**
+
+Exercitei os seis casos de `julgar` e as seis mutações abaixo apenas em memória: os originais deram os resultados esperados e cada mutação foi detectada pelo caso indicado. (`bin/tests/test_lei_akita.sh:116–125`)
+
+| Caso | Mutante que faz o caso deixar de satisfazer sua expectativa |
+|---|---|
+| Padrão inventado | Remover a rejeição de termo ausente de `TEXTO`. (`bin/tests/test_lei_akita.sh:88–89,116`) |
+| `n/a (medida)` em negócio | Permitir esse valor mesmo com arquivos de negócio. (`bin/tests/test_lei_akita.sh:83–85,117`) |
+| Sem `padrao=` | Retornar `None` quando não encontrar o campo. (`bin/tests/test_lei_akita.sh:79–81,118`) |
+| `Single Writer Principle` válido | Rejeitar todo termo, inclusive o existente. (`bin/tests/test_lei_akita.sh:88–90,119`; `app/docs/GLOSSARIO.md:12`) |
+| `n/a (instrumento)` em `bin/tests` | Rejeitar instrumento mesmo fora de negócio. (`bin/tests/test_lei_akita.sh:83–85,120`) |
+| `padrao=` mencionado no RED | Trocar `ms[-1]` por `ms[0]`, passando a extrair `no texto`. (`bin/tests/test_lei_akita.sh:79–82,121`) |
+
+Os dois casos de universo têm estas mordidas por construção; execução integral deles **[não verificado]**, pois a fixture cria arquivos e repositório temporário. (`bin/tests/test_lei_akita.sh:128–142`)
+
+| Caso | Mutantes visados |
+|---|---|
+| Publicado ruim e dois novos ruins | Retirar `^origin/main`; retornar universo vazio; julgar somente HEAD. A comparação exige exatamente os dois novos. (`bin/tests/test_lei_akita.sh:138–146`) |
+| Ausência de `origin/main` | Voltar a ignorar rc e transformar o erro de enumeração em lista vazia. (`bin/tests/test_lei_akita.sh:147–153`) |
+
+**Sobrevivem aos MORDE atuais:** retirar `--first-parent`, retirar o piso, liberar `n/a (instrumento)` em negócio e liberar `n/a` sem qualificador. A fixture é linear, tem corte na raiz e os negativos de `n/a` cobrem somente `medida`. (`bin/tests/test_lei_akita.sh:116–121,133–145`)
+
+4. **Chamadores e efeito da mudança**
+
+A pasta de selos de host é executada pela régua, que propaga falha por `exit 1`. Quando efetivamente chamado, Akita passa a excluir os publicados, mas conserva os filtros de primeiro pai e piso. (`bin/regua.sh:138–145`; `bin/tests/test_lei_akita.sh:97–110`)
+
+**O pre-push canônico não chama Akita.** Ele declara que o loop de host não roda ali e chama explicitamente outros selos de push; depois executa as suítes Django. O wrapper gerado delega para esse arquivo. Hook efetivamente instalado **[não verificado]**. (`bin/pre-push.sh:13–19,182–195`; `bin/hooks.sh:51–56`)
+
+Há um caminho normal que perde justamente o commit novo: [nao verificado]
+
+- A cadeia exige ausência de commits locais e roda a régua antes do commit. (`bin/molde_fatia/cadeia.sh:13,51`)
+- Cria o commit e chama novamente a régua. (`bin/molde_fatia/cadeia.sh:68–81`)
+- A régua pode retornar “JA VERDE” comparando apenas arquivos Python/HTML e status, antes dos selos; criar o commit não altera esse conteúdo. (`bin/regua.sh:25–35,84–94,138`)
+- A cadeia aceita o stamp anterior e faz push; Akita não é chamado pelo pre-push. **Logo, um `padrao=Padrao Inventado Do Nada` novo pode sair sem avaliação Akita.** Reprodução operacional completa **[não verificado]**; o caminho está nos chamadores citados. (`bin/molde_fatia/cadeia.sh:72–85`; `bin/pre-push.sh:13–19`)
+
+5. **Outros defeitos**
+
+- **Campo vazio ou fragmento passa:** confirmei em memória que `padrao= `, `padrao=a` e `padrao=Single Writer` retornam sucesso. O código remove espaços e procura substring no documento inteiro; a string vazia também pertence a qualquer texto. Isso excede os termos e aliases autorizados. (`bin/tests/test_lei_akita.sh:63–69,79–89`; `app/docs/PLANO-PADROES.md:46–50`)
+
+- **Só a última linha é julgada:** uma linha inválida pode ser encoberta por outra válida posterior, apesar do comentário declarar “toda linha”. (`bin/tests/test_lei_akita.sh:48,75–79`)
+
+- **“Julgados” superestima a validação:** conta todos os hashes enumerados, inclusive os que `julgar` ignora por ausência de `LEI-AKITA:`. (`bin/tests/test_lei_akita.sh:74–77,105–106,174`)
+
+- **Stamp antigo sobrevive à falha de host:** esse caminho da régua sai com erro sem invalidar o stamp; a cadeia usa `|| true` e consulta apenas `REGUA_STATUS=OK`. Assim, mesmo uma execução vermelha pode ser seguida da aceitação de um stamp anterior. (`bin/regua.sh:138–143`; `bin/molde_fatia/cadeia.sh:70–82`)
 
 ## 31/10 13:52 · sessao 08f446a69283 · - · - · origem=Ronald (tmux)
 
@@ -627,14 +705,4 @@ Não executei o MORDE integral nem mutações em disco, pois ele cria arquivos e
 
 - **Consumidores e contrato:** `LEI_AKITA_R` passa a controlar toda a raiz do selo, inclusive suas verificações iniciais e leitura dos termos; os chamadores encontrados não definem essa variável (`bin/tests/test_lei_akita.sh:17`, `:28`, `:35`, `:45`, `:60`, `:65`; `bin/regua.sh:140`). A régua depende do exit code, não do texto `lei_akita: OK` (`bin/regua.sh:140`). Os marcadores Python continuam internos, interpretados pelo shell do próprio selo: `PADRAO_FALHA`, `PADRAO_FIM`, `PADRAO_SEM_CORTE`, `MORDE_OK`, `MORDE_FALHOU` (`bin/tests/test_lei_akita.sh:145`, `:147`, `:148`, `:151`, `:152`, `:153`, `:156`). A saída pública final continua sendo `lei_akita: OK (...)` ou `lei_akita: N falha(s)` (`bin/tests/test_lei_akita.sh:160`, `:163`).
 
-## 31/10 13:34 · sessao 4f29e9379c5b · - · - · origem=Ronald (tmux)
-
-A LAPIDE 72 está correta quanto aos termos e à realização principal dos diffs históricos, conferidos via `git diff ac721607^1 ac721607` e `git show 2cd634cb`:
-
-- **Event-driven architecture** existe literalmente em `app/docs/GLOSSARIO.md:16`. O diff de `ac721607` move o encerramento para o consumidor de eventos e transforma o cron em vigia: execução atual em `app/chamados/reconciliador.py:1307`, escrita pela porta em `app/chamados/reconciliador.py:1099`, vigia em `app/ponto/management/commands/reconciliar_perguntas_orfas.py:29` e troca para `--alarme` em `app/config/crons.py:1469`. A descrição de `app/docs/LAPIDES.md:785` corresponde.
-- **Architectural Invariants + Fitness Functions** existe literalmente em `app/docs/GLOSSARIO.md:14`. O diff de `2cd634cb` muda `VIZINHO_SOMBRA` e o horário de `pre_fechamento`, ambos 05:15 → 05:25; o estado resultante está em `app/config/crons.py:219` e `app/config/crons.py:387`. A recusa existente permanece em `app/config/crons.py:252`; a alteração faz a configuração satisfazer o invariante. A descrição de `app/docs/LAPIDES.md:786` corresponde.
-- O primeiro commit também realiza fonte única ao extrair `expiracao_da_aberta`, lida por `turno_aberto_vivo` e pelo motivo do dia encerrado; isso não torna falso o padrão principal nomeado na lápide (`app/ponto/turnos.py:1991`, `app/ponto/turnos.py:1997`, `app/ponto/turnos.py:2099`; termo existente em `app/docs/GLOSSARIO.md:11`).
-- O diff de `d8912301` contra o pai altera somente o selo e acrescenta a lápide. Não modifica `julgar`: continua uma única função, chamada pelo universo e pelos casos plantados (`bin/tests/test_lei_akita.sh:73`, `bin/tests/test_lei_akita.sh:104`, `bin/tests/test_lei_akita.sh:118`). Os hashes publicados aparecem em comentários/documentação, sem condição de dispensa (`bin/tests/test_lei_akita.sh:53`, `app/docs/LAPIDES.md:785`, `app/docs/LAPIDES.md:786`).
-- As exigências verificadas já pertencem à L-123: termo conhecido, restrição de `n/a` e conferência humana contra o diff (`app/docs/LEIS.md:144`, `app/docs/PLANO-PADROES.md:53`, `app/docs/PLANO-PADROES.md:58`). Não há novo termo no glossário nem nova lei no diff; o novo universo implementa o aval fornecido e está descrito em `bin/tests/test_lei_akita.sh:51`.
-
-_1074 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1075 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
