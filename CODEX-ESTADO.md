@@ -1,7 +1,136 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 10:41** · publicado em **31/10/2026 10:46** (UTC-3)
+> Ultima resposta processada: **31/10/2026 10:46** · publicado em **31/10/2026 10:51** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 10:46 · sessao f59b24da8285 · F1C4-3-EMISSORES · verificador · origem=Code
+
+As quatro guardas passam a consultar o predicado existente, e os testes novos **mordem as quatro reversões isoladas por inspeção**. Isso ainda não demonstra “limbo cobra” em todos os caminhos: sobrevivem seletores próprios, a fábrica tem filtros posteriores e o intervalo exige DNA que a fixture fornece artificialmente. (`app/chamados/services/fabrica_da_celula.py:80`; `app/chamados/services/materializacao.py:160`; `app/ponto/services/cluster_espurio.py:26`; `app/ponto/management/commands/detectar_intervalo_ausente.py:49`; `app/chamados/tests/test_f1c4_3_emissores.py:58`)
+
+Execução de testes/mutantes, respeito aos tetos após a mudança e incidência por colaborador em produção: **[não verificado]**. [nao verificado]
+
+1) A mudança exata de universo é maior que admitir `None`.
+
+Considere `A = bool(ata.tipo_dia) and ata.tipo_dia != 'trabalho'`, `S = bool(ata.sem_ancora)` e `L = existência de pelo menos uma lâmpada-dicionário`. O juiz exclui `trabalha is False` ou `A`; **tipo ausente, `None` ou vazio não satisfaz `A`**. (`app/chamados/juizes.py:407`; `app/chamados/juizes.py:408`; `app/chamados/services/materializacao.py:158`)
+
+A tabela compara **passagem pela guarda alterada**, mantendo satisfeitos os demais requisitos; “antes” vem do diff fornecido. (`app/chamados/services/fabrica_da_celula.py:80`; `app/chamados/services/materializacao.py:160`; `app/ponto/services/cluster_espurio.py:26`; `app/ponto/management/commands/detectar_intervalo_ausente.py:49`)
+
+| Sítio | Passava antes | Passa agora | Passa a entrar | Deixa de entrar |
+|---|---|---|---|---|
+| Fábrica | `trabalha is True` | `trabalha is not False and not A` | `None` com `not A` | `True` com `A` |
+| Materialização | `True and L` | `trabalha is not False and not A and L` | `None`, `not A`, `L` | `True`, `A`, `L` |
+| Cluster | `True and not S` | `trabalha is not False and not A` | `None/not A`; também `True/not A/S` | `True/A/not S` |
+| Intervalo | `True and not S` | `trabalha is not False and not A` | `None/not A`; também `True/not A/S` | `True/A/not S` |
+
+Para contraexemplos concretos, use:
+
+- `L2`: entrada `08:00` acesa, luz `08:03`; saída `17:00` apagada. (`app/chamados/tests/test_f1c4_3_emissores.py:34`; `app/chamados/tests/test_f1c4_3_emissores.py:35`)
+- `L4`: entrada `08:00` acesa; saída de intervalo `12:00` apagada; retorno `13:00` apagado; saída `17:00` acesa, luz `17:02`. (`app/chamados/tests/test_f1c4_3_emissores.py:34`; `app/chamados/tests/test_f1c4_3_emissores.py:36`; `app/chamados/tests/test_f1c4_3_emissores.py:37`; `app/chamados/tests/test_f1c4_3_emissores.py:38`)
+
+| Sítio | Contraexemplo que entra agora | Resultado esperado pelo teste | [nao verificado]
+|---|---|---|
+| Fábrica | `(None, 'trabalho', True, L2)` | Motivos não vazios, com colaborador ativo, data passada e veredito acusador. (`app/chamados/tests/test_f1c4_3_emissores.py:55`; `app/chamados/tests/test_f1c4_3_emissores.py:60`; `app/chamados/tests/test_f1c4_3_emissores.py:70`) |
+| Materialização | `(None, 'trabalho', True, L2)`, plantio às `17:00` | `True`: o plantio preenche o furo. (`app/chamados/tests/test_f1c4_3_emissores.py:81`; `app/chamados/tests/test_f1c4_3_emissores.py:82`; `app/chamados/tests/test_f1c4_3_emissores.py:86`) |
+| Cluster | `(None, 'trabalho', True, L2)`, órfãs `18:56/18:58` | Dia detectado: duas órfãs próximas e uma lâmpada apagada. (`app/chamados/tests/test_f1c4_3_emissores.py:97`; `app/chamados/tests/test_f1c4_3_emissores.py:101`; `app/ponto/services/cluster_espurio.py:30`) |
+| Intervalo | `(None, 'trabalho', True, L4)`, DNA `08:00–17:00`, pausa `12:00–13:00` | Furos `12:00/13:00`. (`app/chamados/tests/test_f1c4_3_emissores.py:112`; `app/chamados/tests/test_f1c4_3_emissores.py:117`) |
+
+O contraexemplo de **perda de passagem pela guarda** é `(True, 'folga', False, L2)` nos três primeiros e `(True, 'folga', False, L4)` no intervalo: antes passava; agora o juiz exclui. Com órfãs e DNA acima, materialização/cluster/intervalo também perdem o resultado positivo dos respectivos helpers. (`app/chamados/juizes.py:408`; `app/chamados/services/materializacao.py:160`; `app/ponto/services/cluster_espurio.py:26`; `app/ponto/management/commands/detectar_intervalo_ausente.py:49`)
+
+Na fábrica, porém, `True/'folga'` **já podia terminar em `[]` antes**, porque a coleta posterior descarta dias diferentes de `trabalho`. Portanto, perder passagem pela primeira guarda não prova perda de pergunta emitida. (`app/chamados/services/fabrica_da_celula.py:49`; `app/chamados/services/disputa_emissao.py:827`; `app/chamados/services/declaracao_texto.py:95`)
+
+Outros limites concretos:
+
+- `(True, 'trabalho', True, L2/L4)` passa a entrar em cluster/intervalo pela retirada de `sem_ancora`, embora não seja `trabalha=None`. A ocorrência dessa combinação em produção é **[não verificado]**. (`app/ponto/services/cluster_espurio.py:26`; `app/ponto/management/commands/detectar_intervalo_ausente.py:49`)
+- `(None, tipo ausente, True, L2)` passa pela guarda nova, mas a fábrica recebe `tipo_dia='indefinido'` do leitor e continua sem cobrar esses marcos. (`app/chamados/juizes.py:408`; `app/escala/services/leitor_celula.py:344`; `app/chamados/services/declaracao_texto.py:95`)
+- `False` continua excluído, mesmo com ata de trabalho e lâmpadas apagadas. (`app/chamados/juizes.py:408`)
+- O intervalo continua exigindo entrada, saída e pausa no DNA. A fixture cria DNA completo e depois troca `trabalha` para `None`; o produtor normal só preenche marcos quando recebe `True`. Assim, um limbo gerado com `dna.marcos=None` continua sem furo de intervalo retornado. (`app/chamados/tests/test_f1c4_3_emissores.py:58`; `app/chamados/tests/test_f1c4_3_emissores.py:60`; `app/ponto/management/commands/gerar_celulas.py:77`; `app/ponto/management/commands/gerar_celulas.py:79`; `app/ponto/management/commands/detectar_intervalo_ausente.py:60`)
+
+O comentário “`sem_ancora` é o limbo com outro nome” vale para a derivação normal, mas **não universalmente**: no intermitente ele deriva da falta de âncora na sequência de batidas. (`app/escala/utils.py:729`; `app/escala/utils.py:1701`; `app/escala/utils.py:1456`; `app/escala/utils.py:1514`)
+
+2) Quem escreve e quem lê os quatro campos.
+
+| Campo | Produção/escrita |
+|---|---|
+| `cel.trabalha` | Geração/regeneração calculam pela autoridade do vínculo e escrevem dentro da porta: `app/ponto/portas/celula.py:243`, `:247`, `:260`, `:590`, `:595`, `:612`. Fora da vigência escreve `False` em `:231`; reversão reconstrói pelo DNA em `:532`. O campo é triestado: `app/escala/models.py:1654`. |
+| `ata.tipo_dia` | A grade produz trabalho/folga em `app/escala/utils.py:727`, `:752`, `:1743`, `:1749`; overlays escrevem folga/falta/ausência em `:1118`, `:1174`, `:1180`. O cartório copia para a ata em `app/ponto/services/cartorio.py:566`. |
+| `ata.sem_ancora` | Grade normal: `app/escala/utils.py:729`, `:1701`; intermitente: `:1456`, `:1514`; transporte em `:1752`. Cartório copia/coage em `app/ponto/services/cartorio.py:569`. |
+| `ata.lampadas` | Produtor `lampadas_do_dia`: `app/ponto/services/cartorio.py:427`, com montagem em `:539` e `:550`; `ata_do_dia` chama e incorpora em `:564`, `:566`. Dispensa modifica as luzes em `:614`; teto temporal projeta `acesa=None` em `:711`. |
+
+Os três campos da ata persistem pela lavra: método da entidade delega à porta; a porta atribui a ata e salva com emissão do evento no mesmo `atomic`. O cartório também usa `save=False` e entrega os campos lavrados ao carimbo. (`app/escala/models.py:1781`; `app/ponto/portas/celula.py:711`; `app/ponto/portas/celula.py:725`; `app/ponto/portas/celula.py:732`; `app/ponto/portas/celula.py:639`; `app/ponto/services/cartorio.py:1520`; `app/ponto/services/cartorio.py:1535`)
+
+| Campo | Leitores no caminho dos quatro sítios |
+|---|---|
+| `cel.trabalha` | Agora lido pelo juiz, chamado pelos quatro sítios. Também alimenta a autoridade do vínculo e o leitor genérico. (`app/chamados/juizes.py:408`; `app/chamados/services/fabrica_da_celula.py:80`; `app/chamados/services/materializacao.py:160`; `app/ponto/services/cluster_espurio.py:26`; `app/ponto/management/commands/detectar_intervalo_ausente.py:49`; `app/escala/models.py:1072`; `app/escala/services/leitor_celula.py:345`) |
+| `ata.tipo_dia` | Juiz e leitor genérico; na fábrica, também a coleta de marcos faltantes. (`app/chamados/juizes.py:408`; `app/escala/services/leitor_celula.py:344`; `app/chamados/services/declaracao_texto.py:90`; `app/chamados/services/declaracao_texto.py:95`) |
+| `ata.sem_ancora` | Após o diff, nenhum dos quatro mantém esse veto direto; o leitor genérico continua transportando o campo. (`app/ponto/services/cluster_espurio.py:26`; `app/ponto/management/commands/detectar_intervalo_ausente.py:49`; `app/escala/services/leitor_celula.py:362`) |
+| `ata.lampadas` | Direto em materialização, cluster e intervalo. Na fábrica: `motivos_pela_ata → _ata_do_dia → _marcos_faltantes → grade_da_celula → _celulas_da_ata`. (`app/chamados/services/materializacao.py:158`; `app/ponto/services/cluster_espurio.py:29`; `app/ponto/management/commands/detectar_intervalo_ausente.py:62`; `app/chamados/services/fabrica_da_celula.py:49`; `app/chamados/services/disputa_emissao.py:827`; `app/chamados/services/declaracao_texto.py:82`; `app/escala/services/leitor_celula.py:93`) |
+
+Quem mais lê, além desses caminhos:
+
+- **`trabalha`:** precedência, veto de emissão, flip, passivo, descrição do dia, relatório da frota e seletores ORM relacionados abaixo. (`app/ponto/precedencia.py:290`; `app/ponto/marcos.py:155`; `app/ponto/services/flip_auto.py:208`; `app/ponto/services/passivo_s84.py:96`; `app/ponto/services/dia_do_colab.py:121`; `app/relatorios/dia_da_frota.py:47`)
+- **`tipo_dia`:** suprajuiz, worklist, furos diários, propositor, simulação, causas e cálculo/fechamento. (`app/ponto/supra_juiz.py:199`; `app/ponto/worklist.py:19`; `app/escala/services/furos_diarios.py:39`; `app/ponto/propositor.py:36`; `app/ponto/services/simular_dia.py:12`; `app/folha/causas.py:41`; `app/ponto/services/dia_pago.py:386`; `app/ponto/services/fechamento.py:1015`; `app/folha/export.py:1071`)
+- **`sem_ancora`:** suprajuiz, causas da folha, relatórios de furos, indicadores e fechamento. (`app/ponto/supra_juiz.py:214`; `app/folha/causas.py:96`; `app/relatorios/furos.py:157`; `app/relatorios/furos.py:218`; `app/relatorios/furos.py:237`; `app/inteligencia/calculadores.py:48`; `app/inteligencia/calculadores.py:143`; `app/ponto/services/fechamento.py:1018`)
+- **`lampadas`:** demais juízes de chamados, juiz de batida, lastro, reconciliador, vigias, prévia/controle da folha, pautas e cartão. (`app/chamados/juizes.py:457`; `app/chamados/juizes.py:888`; `app/chamados/juizes.py:1008`; `app/ponto/juiz_batida.py:160`; `app/ponto/services/lastro.py:89`; `app/chamados/reconciliador.py:673`; `app/ponto/services/vigia_entrada.py:80`; `app/ponto/services/vigia_pareador_celula.py:78`; `app/folha/previa.py:84`; `app/folha/services/sem_furo.py:22`; `app/pautas/services.py:414`; `app/relatorios/cartao_pela_celula.py:289`)
+
+A atribuição de ata em `escala/utils.py` é uma cópia em memória que reutiliza o mesmo produtor de lâmpadas; `carimbar_precedencia` preserva os campos e altera apenas `precedencia`. Esses pontos não constituem, por si, outro produtor dos quatro valores. (`app/escala/utils.py:1826`; `app/escala/utils.py:1832`; `app/ponto/portas/celula.py:774`)
+
+3) Sim: sobrevivem outros sítios com predicados próprios.
+
+| Sítio | Resposta própria |
+|---|---|
+| `app/chamados/management/commands/disparar_perguntas_competencia.py:76` | Lote seleciona somente `trabalha=True` e chama `motivos_pela_ata` diretamente, sem a guarda modificada de `motivos_a_perguntar`. (`:111`) |
+| `app/ponto/services/vigia_de_hora.py:21` | Vigia seleciona somente `trabalha=True`; limbo fica fora antes do julgamento. |
+| `app/chamados/services/fila_por_causa.py:192` | Constrói dias previstos por `trabalha=True`. |
+| `app/ponto/services/vigia_entrada.py:79`, `:120` | Estatística e leitura do dia restringem a `trabalha=True`. |
+| `app/relatorios/furos.py:151`, `:157`, `:218`, `:237` | Exclui tipos diferentes de trabalho e/ou `sem_ancora`; limbo fica fora da contagem de furos. |
+| `app/inteligencia/calculadores.py:46`, `:48`, `:141`, `:143` | Exige trabalho e separa `sem_ancora` da contagem de furos. |
+| `app/ponto/services/dia_do_colab.py:121` | `not cel.trabalha`: descreve `None` como dia sem trabalho previsto. |
+| `app/relatorios/dia_da_frota.py:47` | `not cel.trabalha`: conta `None` como folga. |
+| `app/ponto/services/passivo_s84.py:96` | `TRABALHO if cel.trabalha else FOLGA`: classifica `None` como folga. |
+| `app/chamados/services/declaracao_texto.py:95`; `app/chamados/services/disputa_emissao.py:68` | Só tipo `trabalho` fornece marcos/data de furo. |
+| `app/ponto/worklist.py:19`; `app/escala/services/furos_diarios.py:39` | Só tipo `trabalho` entra na classificação de gap/furo. |
+| `app/ponto/marcos.py:159`; `app/escala/servico_jornada.py:303` | Veto por `trabalha is False`, sem a mesma cláusula de tipo da ata. |
+| `app/ponto/services/flip_auto.py:208`, `:212` | Folga e ancoragem na véspera decididas por `is False`/`is not True`. |
+| `app/ponto/services/cartorio.py:1167`, `:1664` | Protesto e espera pelo fim do turno usam `trabalha is not False`. |
+| `app/ponto/supra_juiz.py:281`, `:443` | Define dia de cobrança e cobrança em dia sem trabalho com regras próprias. |
+
+Há uma divergência concreta de política: **o suprajuiz considera ausência parcial como dia de cobrança**, enquanto `dia_sem_trabalho` exclui qualquer `tipo_dia='ausencia'`. Essa combinação não exige ata incoerente: o overlay registra ausência parcial e preserva as células. (`app/ponto/supra_juiz.py:281`; `app/chamados/juizes.py:408`; `app/escala/utils.py:1180`; `app/escala/utils.py:1190`; `app/escala/utils.py:1195`)
+
+Isso não torna toda comparação de `tipo_dia` automaticamente um juiz duplicado: o registro separa trabalho **para o vínculo**, precedência, cobertura de ausência e furo. A autoridade registrada do vínculo retorna o triestado; o helper adotado combina esse estado com a ata para excluir cobrança. (`app/core/juizes.py:158`; `app/core/juizes.py:160`; `app/core/juizes.py:164`; `app/core/juizes.py:166`; `app/escala/models.py:1072`; `app/chamados/juizes.py:408`)
+
+4) Os testes mordem as reversões pedidas, com limites. [nao verificado]
+
+| Mutação isolada | Efeito previsto | Assert que morde |
+|---|---|---|
+| Reverter fábrica | Limbo retorna `[]` | `app/chamados/tests/test_f1c4_3_emissores.py:70` |
+| Reverter materialização | Limbo retorna `False` | `app/chamados/tests/test_f1c4_3_emissores.py:86` |
+| Reverter cluster | Limbo retorna `[]` | `app/chamados/tests/test_f1c4_3_emissores.py:101` |
+| Reverter intervalo | Limbo retorna `[]` | `app/chamados/tests/test_f1c4_3_emissores.py:117` |
+| Manter `or ata.get('sem_ancora')` no cluster | Exclui a fixture limbo | `app/chamados/tests/test_f1c4_3_emissores.py:55`, `:101` |
+| Manter essa cláusula no intervalo | Exclui a fixture limbo | `app/chamados/tests/test_f1c4_3_emissores.py:55`, `:117` |
+
+Os controles positivos `True/'trabalho'` demonstram que as fixtures podem produzir resultado. Contudo, os testes novos não cobrem por sítio `False`, tipo ausente/vazio, `True/'folga'`, `True/sem_ancora=True` ou ausência parcial; também não exigem estruturalmente delegação ao juiz — um clone equivalente passa nos asserts de retorno. (`app/chamados/tests/test_f1c4_3_emissores.py:54`; `app/chamados/tests/test_f1c4_3_emissores.py:76`; `app/chamados/tests/test_f1c4_3_emissores.py:92`; `app/chamados/tests/test_f1c4_3_emissores.py:107`; `app/chamados/tests/test_f1c4_3_emissores.py:123`)
+
+Os testes anteriores do juiz cobrem `False`, tipo ausente e `True/'folga'`, mas isso não substitui exercício desses casos em cada consumidor. (`app/chamados/tests/test_f1c4_3_none_cobra.py:42`; `app/chamados/tests/test_f1c4_3_none_cobra.py:45`; `app/chamados/tests/test_f1c4_3_none_cobra.py:50`)
+
+Além disso, os novos testes exercitam **retornos dos helpers**, não nascimento final de chamados: a fábrica só escreve depois; cluster só abre em `reconciliar_colab`; materialização responde uma segunda opinião de paridade; o command de intervalo está com emissão aposentada e apenas reconcilia legado. (`app/chamados/services/fabrica_da_celula.py:151`; `app/ponto/services/cluster_espurio.py:86`; `app/chamados/services/materializacao.py:128`; `app/ponto/management/commands/detectar_intervalo_ausente.py:147`; `app/ponto/management/commands/detectar_intervalo_ausente.py:154`)
+
+5) Checklist das classes de reprovação.
+
+| Classe | Resultado da inspeção |
+|---|---|
+| **Segundo juiz duplicando registrado** | Os quatro sítios delegam ao helper existente; não passam a implementar seu predicado. A classe global permanece aberta pelos sítios próprios listados, especialmente lote/vigia e tratamento de ausência parcial. (`app/chamados/services/fabrica_da_celula.py:80`; `app/chamados/services/materializacao.py:160`; `app/ponto/services/cluster_espurio.py:26`; `app/ponto/management/commands/detectar_intervalo_ausente.py:49`; `app/chamados/management/commands/disparar_perguntas_competencia.py:76`; `app/ponto/supra_juiz.py:281`) |
+| **Segundo escritor fora da porta** | As guardas não escrevem os campos; a persistência encontrada permanece na porta. O `.update()` novo é fixture de teste. Existe selo AST da porta, mas sua execução nesta cópia é **[não verificado]**. (`app/ponto/portas/celula.py:260`; `app/ponto/portas/celula.py:725`; `app/chamados/tests/test_f1c4_3_emissores.py:60`; `app/ponto/tests/test_chokepoint_celula_gate.py:49`) |
+| **Relógio fora da borda** | O juiz novo chamado não lê relógio. Permanecem leituras na fábrica quando faltam parâmetros e no cartório, inclusive `_tz.now()` apesar de aceitar `agora`; são anteriores à troca. (`app/chamados/juizes.py:407`; `app/chamados/services/fabrica_da_celula.py:84`; `app/chamados/services/fabrica_da_celula.py:136`; `app/ponto/services/cartorio.py:1668`; `app/ponto/services/cartorio.py:1671`) |
+| **Derivação paralela de fonte única** | A troca remove quatro derivações locais, mas permanecem os predicados do item 3. Há ainda perda de informação na reversão de regeneração, detalhada abaixo. (`app/chamados/juizes.py:408`; `app/relatorios/dia_da_frota.py:47`; `app/ponto/portas/celula.py:532`) |
+| **Selo/RED sem mordida** | Os casos limbo mordem as reversões solicitadas; falta prova executada e cobertura de delegação, integração e custo no universo novo. (`app/chamados/tests/test_f1c4_3_emissores.py:70`; `:86`; `:101`; `:117`; execução: **[não verificado]**) |
+| **Import circular / query nova na batida** | Os imports adicionados são locais; o corpo do juiz não contém ORM. Já existe ciclo entre `juizes` e `models`; ausência de erro de import em execução é **[não verificado]**. (`app/chamados/services/fabrica_da_celula.py:78`; `app/chamados/services/materializacao.py:141`; `app/ponto/services/cluster_espurio.py:20`; `app/ponto/management/commands/detectar_intervalo_ausente.py:37`; `app/chamados/juizes.py:6`; `app/chamados/models.py:3135`) |
+
+**Achado anterior ao diff na linhagem de escrita:** `reverter_regeneracao_dia` restaura `trabalha` como “DNA tem marcos?”. Mas `montar_dna` produz `marcos=None` tanto para `False` quanto para `None`. Assim, um DNA anterior produzido para limbo pode voltar como `trabalha=False`: a reversão não preserva o triestado. Não é segundo escritor fora da porta; é reconstrução com informação insuficiente dentro dela. (`app/ponto/portas/celula.py:491`; `app/ponto/portas/celula.py:532`; `app/ponto/management/commands/gerar_celulas.py:77`; `app/ponto/management/commands/gerar_celulas.py:79`; `app/ponto/management/commands/gerar_celulas.py:100`)
+
+**Quanto ao teto da batida:** o juiz isolado não adiciona consulta explícita, mas admitir células antes puladas permite alcançar consultas e escritas posteriores. A fábrica consulta perguntas e pode criá-las; cluster consulta deduplicação e pode abrir chamados. Ambos são alcançáveis pelo julgamento síncrono disparado pela batida. Porta
+
+[truncado em 20000 de 20847 caracteres]
 
 ## 31/10 10:41 · sessao 13795f00ab78 · - · - · origem=Ronald (tmux)
 
@@ -622,20 +751,4 @@ O **custo incremental** da nova costura é:
 
 O contrato do ADR exige lote por competência, igualdade da tela com a folha e precedência preservada; os desvios acima impedem considerar essas propriedades demonstradas pela r3. (`app/docs/ADR/0002-celula-e-o-dia.md:24`, `app/docs/ADR/0002-celula-e-o-dia.md:29`, `app/docs/ADR/0002-celula-e-o-dia.md:51`.)
 
-## 31/10 09:04 · sessao a00cb56b707a · - · - · origem=Ronald (tmux)
-
-Censo adicional dos leitores A2, delimitado a acessos de produção aos campos solicitados:
-
-| Campo | Leitores e uso |
-|---|---|
-| `faixa` | Classificação do calendário: `app/colaboradores/services/calendario.py:107`, montagem `:793`; novo helper: `app/ponto/precedencia.py:188`; texto de supressão `:378`; carimbo de ata: `app/ponto/services/cartorio.py:1673`; chamados espúrios: `app/chamados/services/feriado_reavaliar.py:36`; buracos da semana: `app/escala/services/semana_do_posto.py:177`; veto de feriado: `app/ponto/management/commands/detectar_ausencias.py:616`; filtro de previsão: `app/ponto/services/abriu_nao_bateu.py:123`; diagnóstico: `app/ponto/services/dia_do_colab.py:130`. |
-| `tipo_do_dia` | Calendário, inclusive efeito desconta: `app/colaboradores/services/calendario.py:794`, `:798`, `:802`; helper: `app/ponto/precedencia.py:192`; texto de supressão `:378`; ata: `app/ponto/services/cartorio.py:1672`; folha sem furo: `app/folha/services/sem_furo.py:26`; vigias: `app/ponto/services/faltas_de_hoje.py:61`, `app/ponto/services/deslogados.py:166`; palavra do dia: `app/ponto/services/dia_decidido.py:370`; diagnóstico: `app/ponto/services/dia_do_colab.py:86`. |
-| `fatos.folga_lancada` | Calendário: `app/colaboradores/services/calendario.py:801`; helper: `app/ponto/precedencia.py:191`; repouso para aviso de férias CLT §3: `app/ferias/situacao.py:97`. O último consulta os fatos subjacentes mesmo com férias vencendo, conforme a própria regra explica em `app/ferias/situacao.py:82`. |
-
-Os produtores continuam os já indicados: sem jurisdição, A2 escreve `None` em `app/ponto/precedencia.py:344` e `:346`; com vencedor escreve `tipo_do_dia`, `faixa` e booleano `folga_lancada` em `:356`, `:357`, `:365`. O cartório persiste uma projeção `tipo_do_dia/faixa/...` na ata pela porta em `app/ponto/services/cartorio.py:1671`; a porta escreve `ata['precedencia']` em `app/ponto/portas/celula.py:819`.
-
-O espelho transporta o dict A2 para o tradutor da palavra, sem recalcular esses campos: carrega o período em `app/ponto/services/espelho.py:659`, transporta em `:881` e entrega a `dia_decidido.do_dia` em `:351`; o acesso efetivo a `tipo_do_dia` está em `app/ponto/services/dia_decidido.py:370`.
-
-Há dois valores de memória chamados `folga_humana`: o adaptador novo escreve em `app/ponto/status_dia.py:126` e devolve em `:136`, consumido pela regra em `:89`; o calendário escreve sua própria expressão inline em `app/colaboradores/services/calendario.py:801`, consumida em `:116`. Isso identifica as duas derivações sem confundi-las com uma coluna persistente.
-
-_942 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_943 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
