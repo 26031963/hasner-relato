@@ -1,7 +1,79 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 11:22** · publicado em **31/10/2026 11:23** (UTC-3)
+> Ultima resposta processada: **31/10/2026 11:24** · publicado em **31/10/2026 11:28** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 11:24 · sessao f3d5f1a4d064 · V3-RETOMA · verificador · origem=Code
+
+**Parecer estático: correção parcial.** O template passa a ser o do dia, mas a CCT continua consultada em `ini`, com cache apenas por `template.pk`. Com a régua habilitada, pode combinar **ciclo do dia com praça/CCT do início do período**. Isso impede considerar completa a promessa de “quatro insumos do dia” (`app/ponto/calculador/alimentacao.py:383`, `app/ponto/calculador/alimentacao.py:389`, `app/ponto/calculador/alimentacao.py:392`, `app/core/regua_cct.py:458`).
+
+Execução de testes, RED/GREEN, impacto individual em produção e cumprimento dos pré-requisitos do pouso: **[nao verificado]**. [nao verificado]
+
+**1. Quem escreve, quem lê e quais juízes existem**
+
+| Campo/valor | Escritor identificado na cópia | Leitor no caminho examinado |
+|---|---|---|
+| Template: `tipo_ciclo`, `tipo_base` | Serviço de cadastro monta o `TipoEscala` com esses campos (`app/escala/services/cadastro_tipo.py:151`, `app/escala/services/cadastro_tipo.py:174`). | Alimentação lê o template do vínculo; fábrica lê ciclo/base (`app/ponto/calculador/alimentacao.py:492`, `app/core/regua_cct.py:440`, `app/ponto/motor_calculo_v2.py:3561`). |
+| Vínculo: template, posto, início, fim, ativo | Porta de vínculo atualiza ou cria o vínculo (`app/colaboradores/services/vinculo.py:265`, `app/colaboradores/services/vinculo.py:278`). | Juiz lê geradora/vigência e escolhe o vínculo (`app/escala/alimentacao.py:237`, `app/escala/alimentacao.py:250`, `app/escala/alimentacao.py:253`). |
+| Célula: `escala_geradora` e DNA | Porta da célula grava a geradora e o DNA (`app/ponto/portas/celula.py:247`). | `vinculo_do_dia` lê `escala_geradora_id` (`app/escala/alimentacao.py:238`). |
+| Empresa: `regime_trabalhista` | Tela recebe o campo e passa à porta de estrutura; a porta persiste (`app/colaboradores/views.py:512`, `app/colaboradores/views.py:521`, `app/colaboradores/services/estrutura.py:17`). | Régua lê a empresa do colaborador e seu regime (`app/core/regua_cct.py:352`). |
+| Aplicação da CCT: sindicato, empresa, praça, ativo | Porta de aplicação cadastra e desativa (`app/core/services/aplicacao_convencao.py:101`, `app/core/services/aplicacao_convencao.py:120`, `app/core/services/aplicacao_convencao.py:151`). | `_aplicacao_vigente` lê empresa, praça, ativo e sindicato (`app/core/regua_cct.py:253`, `app/core/regua_cct.py:256`). |
+| Vigência e parâmetros cadastrados da CCT | Tela recebe vigência e flags, atribui e salva `Sindicato` (`app/core/views_config.py:268`, `app/core/views_config.py:275`, `app/core/views_config.py:297`, `app/core/views_config.py:307`, `app/core/views_config.py:320`). | Régua verifica vigência e lê parâmetros (`app/core/regua_cct.py:261`, `app/core/regua_cct.py:374`). |
+| Dobra efetiva | Fábrica deriva pelo ciclo; CCT pode conceder dobra ao 12x36; motor guarda o resultado (`app/ponto/motor_calculo_v2.py:3607`, `app/core/regua_cct.py:477`, `app/ponto/motor_calculo_v2.py:737`). | Fronteira `cct_do_motor` → alimentação → regra (`app/ponto/calculador/nucleo.py:351`, `app/ponto/calculador/alimentacao.py:510`, `app/ponto/calculador/alimentacao.py:524`). |
+| Prorrogação efetiva | Régua legal resolve pelo ciclo; fábrica injeta o parâmetro; motor guarda (`app/core/regua_cct.py:182`, `app/core/regua_cct.py:466`, `app/ponto/motor_calculo_v2.py:712`). | Fronteira → alimentação → regra (`app/ponto/calculador/nucleo.py:348`, `app/ponto/calculador/alimentacao.py:508`, `app/ponto/calculador/alimentacao.py:530`). |
+| Hora reduzida afastada | Fábrica restringe a concessão ao 12x36; motor guarda (`app/core/regua_cct.py:470`, `app/ponto/motor_calculo_v2.py:719`). | Fronteira → alimentação → regra (`app/ponto/calculador/nucleo.py:349`, `app/ponto/calculador/alimentacao.py:509`, `app/ponto/calculador/alimentacao.py:530`). |
+| Lei da família | Tabela por identidade da classe declara as famílias isentas; fábrica escolhe a classe (`app/ponto/calculador/regras.py:487`, `app/ponto/motor_calculo_v2.py:3554`). | Leitor único consulta a tabela; diff entrega a causa à regra (`app/ponto/calculador/regras.py:502`, `app/ponto/calculador/regras.py:518`, `app/ponto/calculador/alimentacao.py:403`, `app/ponto/calculador/alimentacao.py:531`). |
+
+O escritor novo é somente o cache local `_cct_por_template`; a saída continua passando por `regras.do_dia`. A persistência das rubricas continua na porta `dia_pago.lavrar` (`app/ponto/calculador/alimentacao.py:403`, `app/ponto/calculador/alimentacao.py:516`, `app/ponto/services/dia_pago.py:320`, `app/ponto/services/dia_pago.py:357`).
+
+**Há juiz de vínculo registrado:** `vinculo_do_dia`, e também o predicado `vinculo_cobre_a_data` (`app/core/juizes.py:1242`, `app/core/juizes.py:1250`). **Há autoridade de CCT na tabela documental:** `regua_para` decide parâmetros e `_aplicacao_vigente` decide aplicação (`app/docs/JUIZES.md:30`).
+
+O diff consulta o juiz do vínculo com `k`; consulta a fábrica de CCT com `ini`. A fábrica, quando habilitada, chama `regua_para`, que resolve novamente vínculo/praça nessa outra data. Portanto, **não copia o critério do juiz; fornece datas diferentes para perguntas que deveriam estar coerentes** (`app/ponto/calculador/alimentacao.py:430`, `app/ponto/calculador/alimentacao.py:490`, `app/ponto/calculador/alimentacao.py:392`, `app/core/regua_cct.py:329`, `app/core/regua_cct.py:458`).
+
+**2. Casos de borda**
+
+| Caso | Resultado da leitura estática |
+|---|---|
+| **Sem vínculo na data** | O juiz pode devolver `None`, mas `_te_dia` conserva o template do chamador. A nova consulta pode afirmar parâmetros de outro dia, em vez de declarar ausência do vínculo (`app/escala/alimentacao.py:253`, `app/ponto/calculador/alimentacao.py:487`, `app/ponto/calculador/alimentacao.py:491`, `app/ponto/calculador/alimentacao.py:507`). Esse reaproveitamento do chamador já estava no caminho; o diff passa a usá-lo também para os quatro insumos. |
+| **Dois vínculos cobrindo a data** | Com célula, manda a geradora válida; sem geradora, o juiz escolhe por `(ativa, data_inicio)`. Não há desempate novo no diff. Continua possível consultar praça/CCT de outro vínculo em `ini` (`app/escala/alimentacao.py:237`, `app/escala/alimentacao.py:247`, `app/escala/alimentacao.py:254`, `app/core/regua_cct.py:329`). |
+| **Vínculo muda no meio da competência** | O template acompanha `k`; praça/CCT continuam em `ini`. Mesmo template em dois vínculos/postos também compartilha a entrada do cache (`app/ponto/calculador/alimentacao.py:389`, `app/ponto/calculador/alimentacao.py:392`, `app/ponto/calculador/alimentacao.py:490`). |
+| **Turno cruza meia-noite** | Não aparece corte civil novo: os segmentos usam `dia_da_jornada`, e a pontualidade ancora os marcos nesse dia, acrescentando o dia seguinte pelo juiz de cruzamento. Turno aberto também chega ao teto como aberto. O teste novo não prova essa borda (`app/ponto/calculador/alimentacao.py:63`, `app/ponto/calculador/alimentacao.py:278`, `app/ponto/calculador/alimentacao.py:287`, `app/ponto/calculador/regras.py:268`, `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:87`). |
+| **Template nulo** | Chamador nulo é corrigido quando existe template no vínculo do dia. Sem nenhum template, a fábrica escolhe geometria `Motor12x36`, mas ciclo desconhecido e dobra verdadeira. `tipo_escala=NULL` no próprio vínculo não é estado regular do modelo (`app/ponto/calculador/alimentacao.py:492`, `app/escala/models.py:874`, `app/ponto/motor_calculo_v2.py:3554`, `app/ponto/motor_calculo_v2.py:3607`). |
+| **CCT fora de vigência** | A vigência é verificada, porém em `ini`. Uma CCT válida em `ini` e expirada em `k` pode continuar aplicada; uma que começa depois de `ini` pode ser ignorada. É falha de data, não ausência de validação (`app/core/regua_cct.py:261`, `app/core/regua_cct.py:366`, `app/ponto/calculador/alimentacao.py:392`). |
+| **Empresa sem regime** | É ramo explícito de piso legal, não exceção nem CCT desconhecida. O piso mantém prorrogação verdadeira e afastamento da hora reduzida falso; a dobra efetiva continua dependendo do ciclo. Não identifiquei falha nova específica desse caso (`app/core/regua_cct.py:39`, `app/core/regua_cct.py:210`, `app/core/regua_cct.py:363`, `app/ponto/motor_calculo_v2.py:3607`). |
+
+Esses efeitos são condicionais ao cadastro e ao caminho percorrido; sua ocorrência individual no dado de produção fornecido é **[nao verificado]**.
+
+**3. Outros sítios com referência diferente do dia**
+
+- **Na própria porta V3:** CCT em `ini`, cache por template (`app/ponto/calculador/alimentacao.py:389`, `app/ponto/calculador/alimentacao.py:392`).
+- **Motores que fornecem períodos à V3:** fechamento e espelho consultam CCT em `fatia_ini`. A fatia é delimitada pela vigência do vínculo; esse recorte não considera fronteiras da CCT dentro do mesmo vínculo (`app/ponto/services/fechamento.py:203`, `app/ponto/services/fechamento.py:711`, `app/ponto/services/espelho.py:1115`).
+- **Motor de órfãos:** consulta na primeira data órfã para o conjunto processado (`app/ponto/services/fechamento.py:793`, `app/ponto/services/fechamento.py:803`).
+- **Relatório do DIFF:** recria motor em `ini`, com template de `aut.esc`; nesse trecho o resultado serve à identificação da classe, não aos parâmetros monetários da porta (`app/ponto/management/commands/diff_calculador.py:163`, `app/ponto/management/commands/diff_calculador.py:345`, `app/ponto/management/commands/diff_calculador.py:348`).
+- **V3 de ensaio:** `periodo.reler` recebe uma única CCT e uma única causa de família para todos os dias. O próprio módulo declara esse caminho como ensaio (`app/ponto/calculador/periodo.py:540`, `app/ponto/calculador/periodo.py:543`, `app/ponto/calculador/periodo.py:787`, `app/ponto/calculador/periodo.py:829`).
+- **Referências do chamador:** espelho escolhe vínculo no fim da janela; fechamento escolhe o último dia respondido pelo juiz. A descrição do patch como “última fatia” está imprecisa perante a implementação atual do fechamento (`app/ponto/services/espelho.py:1069`, `app/ponto/services/fechamento.py:123`, `app/ponto/services/fechamento.py:826`).
+
+**4. O teste morde?** [nao verificado]
+
+**Morde a volta ao template do chamador:** os dois primeiros casos exigem zero no dia 12x36 com chamador nulo/outro ciclo; o terceiro exige 12 horas no dia 24x48 com chamador 12x36. Pela fábrica, reverter essa seleção deve contrariar as três asserções; RED efetivamente executado é **[nao verificado]** (`app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:104`, `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:111`, `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:116`, `app/ponto/motor_calculo_v2.py:3607`).
+
+**Não passa por ausência da resposta:** `_fer` exige o dia, recusa rubrica declarada e retorna um valor que será comparado a zero ou 12. Os dois casos de zero, isoladamente, aceitariam zeragem indiscriminada; o terceiro a reprova (`app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:98`, `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:107`, `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:119`).
+
+**Não sela toda regressão ao “vínculo de hoje”.** Se a regressão ocorrer dentro de `regua_para`, pode permanecer verde: a fixture não declara regime nem cadastra CCT/aplicação/switch. Com switch desligado, a fábrica nem consulta `regua_para`; com regime vazio, a régua retorna piso antes da aplicação (`app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:59`, `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:83`, `app/core/regua_cct.py:449`, `app/core/regua_cct.py:363`).
+
+Também não afirma prorrogação, hora reduzida ou lei da família. Logo, **o defeito `ini` + cache por template pode passar nesse teste** (`app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:104`, `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:119`, `app/ponto/calculador/alimentacao.py:389`, `app/ponto/calculador/alimentacao.py:392`).
+
+**5. Checklist das classes**
+
+| Classe | Aparece no diff? |
+|---|---|
+| **Segundo juiz duplicando registrado** | **Não no helper novo:** ele chama fábrica e leitores existentes. O problema é a data/contexto fornecido (`app/ponto/calculador/alimentacao.py:392`, `app/ponto/calculador/alimentacao.py:403`). |
+| **Segundo escritor fora da porta** | **Não identificado no trecho produtivo:** escreve cache local; a persistência continua pela porta existente (`app/ponto/calculador/alimentacao.py:403`, `app/ponto/services/dia_pago.py:357`). |
+| **Relógio fora da borda** | **Não aparece nos acréscimos:** usam `ini`, `k` e datas explícitas no teste. Isso não torna `ini` a data correta (`app/ponto/calculador/alimentacao.py:392`, `app/ponto/calculador/alimentacao.py:490`, `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:74`). |
+| **Derivação paralela de fonte única** | **Não há fórmula nova copiada.** Há contexto divergente: vínculo/template em `k`, praça/CCT em `ini`, e reaproveitamento do chamador quando o juiz cala (`app/ponto/calculador/alimentacao.py:392`, `app/ponto/calculador/alimentacao.py:487`, `app/core/regua_cct.py:329`). |
+| **Selo/RED sem mordida** | **Cobertura parcial:** morde o ciclo do chamador e ausência de resposta; não morde CCT por data nem os quatro insumos prometidos. Evidência de execução do RED: **[nao verificado]** (`app/ponto/calculador/alimentacao.py:383`, `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:98`, `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:104`). |
+| **Ordem de trava** | **Nenhuma aquisição nova de trava nos acréscimos.** Ordem efetivamente executada na esteira: **[nao verificado]** (`app/ponto/calculador/alimentacao.py:385`, `app/ponto/calculador/alimentacao.py:507`). |
+| **Pouso antes do pré-requisito** | **[nao verificado].** O teste existente não comprova RED, suíte verde ou leitura final. Esses requisitos estão escritos em `CLAUDE.md:28`, `CLAUDE.md:598`, `CLAUDE.md:604`. | [nao verificado]
 
 ## 31/10 11:22 · sessao 5687aea26424 · - · - · origem=Ronald (tmux)
 
@@ -700,25 +772,4 @@ Existem persistências **derivadas**, sem guardar a lista completa: a C9 do teto
 
 Cuidado com comentário envelhecido em `app/ponto/calculador/periodo.py:281`: ele diz que o campo de produção carrega “só causas de janela de HE”, mas o código atual também escreve a acusação de `aplicar_tolerancia` e a causa `l084_do_dia`: `app/ponto/motor_calculo_v2.py:1930`, `app/ponto/motor_calculo_v2.py:1561`.
 
-## 31/10 10:17 · sessao ee46650b7bc1 · - · - · origem=Ronald (tmux)
-
-4. A recusa fica no **command** `lavrar_status_competencia`: após contar as células, faz `if competencia_entregue(emp.pk, mes, ano)`, imprime `ENTREGUE` e retorna. Só depois dessa guarda chama `julgar_colab(... completar_status=True)`. Referências: `app/ponto/management/commands/lavrar_status_competencia.py:39`, `:40`, `:41`, `:42`, `:55`.
-
-O predicado é **existe ExportacaoDominio vigente e não invalidada para empresa+mês+ano**: filtra a tripla, passa por `anotar_vigencia` e `so_vigentes`, rejeita o vigente com `invalidada_em` preenchido e retorna booleano; `registro=True` devolve o registro ou `None`. Referência: `app/folha/export.py:569–575`. O vigente é o maior `(gerado_em, pk)` de cada tripla, não simplesmente qualquer exportação existente: `app/folha/models.py:209–225`; `so_vigentes` lê `e_vigente`: `app/folha/models.py:192–200`.
-
-Essa guarda **não está no serviço genérico do cartório**: `julgar_colab` entra em `_julgar_colab_corpo` e trata `completar_status` sem consultar `competencia_entregue` (`app/ponto/services/cartorio.py:739–778`); a própria documentação adverte que uma chamada com janela ampla/`--forcar` alcançaria competência exportada (`app/ponto/services/cartorio.py:756–759`). `julgar_celula` guarda futuro, inexistência e turno ainda aberto e depois chama `julgar_colab`, sem guarda de exportação nessa entrada (`app/ponto/services/cartorio.py:1700–1717`).
-
-O teste específico do bloqueio é `test_D5_competencia_entregue_nao_se_toca`: simula `competencia_entregue=True`, executa o lote com `--apply`, exige `ENTREGUE` e que nenhum `status_dia` tenha sido preenchido (`app/ponto/tests/test_e3_status_lavrado.py:287–294`). Os testes do predicado cobrem sem TXT, vigente, vigente revogado, substituição e empate de carimbo (`app/folha/tests/test_k6_competencia_entregue.py:60–91`). Execução desses testes: [não verificado].
-
-Outros consumidores diretos de `competencia_entregue` encontrados:
-
-- `competencia_fechada_para_celula`: compõe entrega **OU** holerite do colaborador com lote publicado; `app/folha/export.py:598–609`. O gerador lê esse composto em `_competencias_exportadas` e `fonte_da_lavra`: `app/ponto/management/commands/gerar_celulas.py:173`, `:203`.
-- `txt_vigente_x_gravado`: obtém o TXT vigente para comparar com o gravado atual; `app/folha/export.py:636`, `:648–658`.
-- Preview da exportação: mostra quem/quando exportou; `app/folha/views.py:354`, `:360–364`.
-- Ranking HE `_carimbo`: devolve `lavrado` quando todas as empresas representadas foram entregues; `app/folha/services/ranking_he.py:77–91`.
-- `esmeril_espelho.janela`: encerra a busca retroativa na primeira competência entregue; `app/ponto/services/esmeril_espelho.py:55–63`.
-- `marcos_da_competencia`: calcula o marco `exportada`; `app/ponto/services/fechamento.py:1500–1512`.
-- `he_pendente_lavrado.competencias_a_lavrar`: inclui a anterior apenas enquanto não entregue; `app/ponto/services/he_pendente_lavrado.py:220–225`.
-- `vigia_fio.competencia_do_dia_entregue`: converte o dia na competência pela janela da empresa e consulta o predicado, com memo opcional; `app/chamados/services/vigia_fio.py:787–797`. Seus leitores são o censo por dono (`app/chamados/services/vigia_fio.py:769`), a cerca do reconciliador (`app/chamados/reconciliador.py:715–720`), a seleção de perguntas vivas no pós-estado do chamado (`app/chamados/models.py:332–350`) e a guarda da costura para destino terminal (`app/chamados/services/fio.py:765–771`).
-
-_955 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_956 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
