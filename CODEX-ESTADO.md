@@ -1,7 +1,113 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 14:04** · publicado em **31/10/2026 14:05** (UTC-3)
+> Ultima resposta processada: **31/10/2026 14:05** · publicado em **31/10/2026 14:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 14:05 · sessao 9f9ab0ecebe5 · LEI-AKITA-UNIVERSO-DO-PUSH · verificador · origem=Code
+
+**Aval: VERMELHO.** A volta corrige a travessia das raias e a comparação dos merges, mas ainda permite omitir o julgamento de curas e pode julgar um HEAD diferente do commit enviado. (`bin/tests/test_lei_akita.sh:135`, `bin/tests/test_lei_akita.sh:139`, `bin/tests/test_lei_akita.sh:144`; `bin/pre-push.sh:22`, `bin/pre-push.sh:36`)
+
+Comparei integralmente os dois arquivos com o snapshot do pai disponível. Autenticidade dos SHAs pelo Git: **[nao verificado]**, pois esta cópia não contém `.git`. O MORDE integral não foi executado: ele cria arquivos temporários; executei somente seus 13 casos unitários e contraprovas em memória. (`bin/tests/test_lei_akita.sh:153`, `bin/tests/test_lei_akita.sh:168`, `bin/tests/test_lei_akita.sh:180`, `bin/tests/test_lei_akita.sh:184`)
+
+1. **Universo efetivamente julgado**
+
+   A enumeração corresponde a:
+
+   `ancestrais(HEAD) − ancestrais(origin/main) − ancestrais(primeiro pai do corte)`
+
+   O último desconto só existe quando o corte tem pai. Depois dessa enumeração, somente commits com linha iniciada por `LEI-AKITA:` chegam ao juiz. (`bin/tests/test_lei_akita.sh:127`, `bin/tests/test_lei_akita.sh:132`, `bin/tests/test_lei_akita.sh:135`, `bin/tests/test_lei_akita.sh:139`)
+
+   | Situação | Comportamento |
+   |---|---|
+   | HEAD igual a origin/main | Enumera zero e julga zero. Pode ficar VERDE se as demais verificações passarem; esse vazio é correto para o contrato. (`bin/tests/test_lei_akita.sh:135`, `bin/tests/test_lei_akita.sh:136`, `bin/tests/test_lei_akita.sh:243`) |
+   | Commits locais à frente | Enumera todos os alcançáveis exclusivamente por HEAD, respeitando o piso; pula os sem linha LEI-AKITA. (`bin/tests/test_lei_akita.sh:132`, `bin/tests/test_lei_akita.sh:135`, `bin/tests/test_lei_akita.sh:139`) |
+   | Merge de raia, dois pais | Inclui o merge e os commits exclusivos da raia: saiu `--first-parent`. Cada um passa pelo mesmo filtro de mensagem. (`bin/tests/test_lei_akita.sh:130`, `bin/tests/test_lei_akita.sh:135`, `bin/tests/test_lei_akita.sh:137`) |
+   | origin/main ausente | `rev-list` falha; vira `PADRAO_ERRO` e falta `PADRAO_FIM`, portanto VERMELHO. (`bin/tests/test_lei_akita.sh:121`, `bin/tests/test_lei_akita.sh:135`, `bin/tests/test_lei_akita.sh:237`) |
+   | Repositório raso | Rejeita antes de procurar o corte ou enumerar commits. (`bin/tests/test_lei_akita.sh:125`, `bin/tests/test_lei_akita.sh:126`) |
+   | Corte ausente | Rejeita explicitamente; deixou de interpretar ausência como universo vazio. (`bin/tests/test_lei_akita.sh:127`, `bin/tests/test_lei_akita.sh:128`, `bin/tests/test_lei_akita.sh:129`) |
+
+   “Publicado” significa aqui **alcançável pela referência local `origin/main`**. Não há consulta ao servidor nessa função; referência desatualizada pode fazer julgar história já publicada. Estado real dessa referência: **[nao verificado]**. (`bin/tests/test_lei_akita.sh:118`, `bin/tests/test_lei_akita.sh:135`)
+
+2. **Lista de arquivos**
+
+   | Commit | Lista usada | Aval | [nao verificado]
+   |---|---|---|
+   | Comum | `git diff --name-only h^1 h` | Representa a alteração contra seu pai. (`bin/tests/test_lei_akita.sh:143`, `bin/tests/test_lei_akita.sh:144`) |
+   | Merge | O mesmo diff, contra o primeiro pai | Representa o que o pouso acrescenta à linha receptora, incluindo resoluções; corrige o vazio que `show` podia devolver. (`bin/tests/test_lei_akita.sh:142`, `bin/tests/test_lei_akita.sh:144`) |
+   | Raiz | `git show --name-only --format= h` | Busca os arquivos introduzidos pela raiz. (`bin/tests/test_lei_akita.sh:143`, `bin/tests/test_lei_akita.sh:144`) |
+
+   Para caminhos comuns, a escolha corresponde ao que cada commit traz. Entretanto, a saída é textual, sem `-z`, e é passada por `splitlines()`; negócio depende de o texto começar literalmente com `app/`. Um caminho recebido entre aspas, como `"app/ponto/a\303\247ao.py"`, passa como não negócio e libera `n/a`. A falha do classificador foi reproduzida em memória; reprodução da emissão desse caminho pelo Git real: **[nao verificado]**. (`bin/tests/test_lei_akita.sh:92`, `bin/tests/test_lei_akita.sh:144`, `bin/tests/test_lei_akita.sh:145`)
+
+3. **Vocabulário aceito**
+
+   São **55 termos normalizados**. O selo ignora caixa, normaliza espaços e remove crases, asteriscos e conteúdo entre parênteses. Além deles, aceita exatamente `n/a (medida)` e `n/a (instrumento)` quando não identifica arquivo de negócio. (`bin/tests/test_lei_akita.sh:61`, `bin/tests/test_lei_akita.sh:83`, `bin/tests/test_lei_akita.sh:90`, `bin/tests/test_lei_akita.sh:99`)
+
+   | Fonte | Termos aceitos |
+   |---|---|
+   | `app/docs/GLOSSARIO.md:11` | single source of truth; aggregate root; celula soberana; fonte unica |
+   | `app/docs/GLOSSARIO.md:12` | single writer principle; juiz unico; escritor unico |
+   | `app/docs/GLOSSARIO.md:13` | sinal derivado do estado; reconciliacao level-triggered; lampada |
+   | `app/docs/GLOSSARIO.md:14` | architectural invariants + fitness functions; contratos estruturais |
+   | `app/docs/GLOSSARIO.md:15` | architecture conformance test; selo |
+   | `app/docs/GLOSSARIO.md:16` | event-driven architecture; crons virando evento |
+   | `app/docs/GLOSSARIO.md:17` | transactional outbox; o-outbox |
+   | `app/docs/GLOSSARIO.md:18` | strangler fig pattern; construir ao lado e trocar inteira |
+   | `app/docs/GLOSSARIO.md:19` | shadow mode; parallel run; sombra |
+   | `app/docs/GLOSSARIO.md:20` | merge queue; comboio; pouso |
+   | `app/docs/GLOSSARIO.md:21` | backfill; reprocessing; rejulgar o passivo |
+   | `app/docs/GLOSSARIO.md:22` | cqrs com projecoes reconstruiveis; espelho; diapago; fechamento; retrato e pilulas |
+   | `app/docs/GLOSSARIO.md:23` | duplicated business logic; logic drift; derivacao paralela |
+   | `app/docs/GLOSSARIO.md:24` | bitemporal data; vinculo do dia x vinculo de hoje |
+   | `app/docs/GLOSSARIO.md:25` | immutable event log + compensating event; batida so retratada |
+   | `app/docs/GLOSSARIO.md:26` | adr; leis; cortes |
+   | `app/docs/GLOSSARIO.md:27` | idempotencia pela chave do fato; dedup do fato |
+   | `app/docs/PLANO-PADROES.md:46`, `app/docs/PLANO-PADROES.md:47`, `app/docs/PLANO-PADROES.md:48` — adicionais | um juiz por pergunta; single writer; evento em vez de varredura; log imutavel; outbox; bitemporal; projecao reconstruivel; cqrs; fitness function |
+
+   **Não coincide integralmente com a redação da lei.** A enumeração acompanha o NORTE e as duas primeiras colunas do glossário, mas a CLAUDE admite termo existente nos dois arquivos, e a própria L-123 repete essa redação ampla. (`app/docs/PLANO-PADROES.md:48`, `app/docs/PLANO-PADROES.md:49`, `app/docs/PLANO-PADROES.md:53`; `CLAUDE.md:68`)
+
+   Recusas comprovadas na função real:
+
+   - `Architecture Decision Record`: aparece explicitamente como padrão conhecido e também no glossário; é perdido pela remoção dos parênteses e pela restrição ao NORTE. (`app/docs/PLANO-PADROES.md:41`; `app/docs/GLOSSARIO.md:26`; `bin/tests/test_lei_akita.sh:78`, `bin/tests/test_lei_akita.sh:84`)
+   - `projection rebuild` e `read model replay`: aparecem como padrões conhecidos no plano, mas ficam fora do trecho extraído. (`app/docs/PLANO-PADROES.md:33`; `bin/tests/test_lei_akita.sh:78`, `bin/tests/test_lei_akita.sh:104`)
+
+   No sentido contrário, aceita `padrao=juiz unico (Outro Padrao Totalmente Novo)`: elimina o complemento antes da comparação. Esse valor integral não é um dos termos enumerados. (`bin/tests/test_lei_akita.sh:62`, `bin/tests/test_lei_akita.sh:104`)
+
+4. **Caminhos de VERDE sem o julgamento devido** [nao verificado]
+
+   - **Cura sem linha LEI-AKITA:** é pulada. Uma mensagem contendo somente `cura` e `padrao=Outro Padrao Totalmente Novo` não produz falha. As verificações anteriores cobram a menção no molde, não a presença em cada commit. Isso deixa descoberta a exigência de que nenhuma cura entre sem padrão. (`bin/tests/test_lei_akita.sh:45`, `bin/tests/test_lei_akita.sh:46`, `bin/tests/test_lei_akita.sh:139`; `CLAUDE.md:66`)
+   - **Campo falso ou duplicado:** `xpadrao=juiz unico` é aceito; `padrao=Padrao Inventado Do Nada, padrao=juiz unico` também. A regex não exige fronteira de campo e só usa a última ocorrência. Ambas as contraprovas passaram na função real. (`bin/tests/test_lei_akita.sh:95`, `bin/tests/test_lei_akita.sh:98`)
+   - **Ref enviada diferente de HEAD:** o selo pode julgar universo vazio de HEAD enquanto outra ref enviada contém commit ruim. A seleção do SHA enviado acontece depois do selo. (`bin/tests/test_lei_akita.sh:135`; `bin/pre-push.sh:22`, `bin/pre-push.sh:36`)
+   - **Régua com carimbo:** retorna “JA VERDE” antes de executar a pasta de selos; sua condição compara arquivos Python/HTML, sem identidade das mensagens ou do universo Git. (`bin/regua.sh:33`, `bin/regua.sh:84`, `bin/regua.sh:93`, `bin/regua.sh:138`)
+
+5. **Os MORDE mordem, mas deixam mutantes sobreviver**
+
+   Os 13 casos unitários exercitam a função real e distinguem termo inventado, substring, ausência/vazio, `n/a` em negócio e duas linhas com uma inválida. O cenário Git procura quatro commits ruins, incluindo raia e merge, excluindo o publicado. (`bin/tests/test_lei_akita.sh:153`, `bin/tests/test_lei_akita.sh:168`, `bin/tests/test_lei_akita.sh:187`, `bin/tests/test_lei_akita.sh:200`)
+
+   Mutantes concretos:
+
+   | Mutante | Por que sobrevive |
+   |---|---|
+   | Trocar `_limpo(termo) not in VOCAB` por `_limpo(termo) in {'padrao inventado do nada', 'a', 'writer principle'}` | Passou nos 13 casos executados em memória e aceitou `Outro Padrao Totalmente Novo`. O cenário Git também usa somente aquele inventado literal; os demais controles permanecem iguais. (`bin/tests/test_lei_akita.sh:104`, `bin/tests/test_lei_akita.sh:154`, `bin/tests/test_lei_akita.sh:160`, `bin/tests/test_lei_akita.sh:189`, `bin/tests/test_lei_akita.sh:195`) |
+   | Na ausência do corte, usar `corte=['HEAD']` | O teste “sem corte” também não tem `origin/main`; falharia por essa segunda ausência e passaria, porque aceita qualquer `PADRAO_ERRO`. (`bin/tests/test_lei_akita.sh:128`, `bin/tests/test_lei_akita.sh:135`, `bin/tests/test_lei_akita.sh:191`, `bin/tests/test_lei_akita.sh:218`, `bin/tests/test_lei_akita.sh:223`) |
+   | Remover `*pisos` do `rev-list` | O corte plantado é raiz, logo seu piso já é vazio. Não testa a não retroatividade com corte não raiz. (`bin/tests/test_lei_akita.sh:132`, `bin/tests/test_lei_akita.sh:135`, `bin/tests/test_lei_akita.sh:182`) |
+   | Comparar merges com o segundo pai | Ambos os lados plantados alteram negócio; o merge com `n/a` continuaria vermelho contra qualquer pai. (`bin/tests/test_lei_akita.sh:144`, `bin/tests/test_lei_akita.sh:188`, `bin/tests/test_lei_akita.sh:194`, `bin/tests/test_lei_akita.sh:197`) |
+   | Rejeitar qualquer universo vazio | Não existe caso saudável `HEAD==origin/main`; o cenário principal exige quatro ruins. Esse mutante bloquearia o main sincronizado sem reprovar o MORDE. (`bin/tests/test_lei_akita.sh:135`, `bin/tests/test_lei_akita.sh:200`) |
+
+   Sobrevivência integral desses mutantes com Git real: **[nao verificado]**; além do primeiro teste unitário executado, a conclusão acima é por inspeção dos caminhos. [nao verificado]
+
+6. **Chamadores e bloqueio de push legítimo** [nao verificado]
+
+   A régua executa todos os `bin/tests/test_*.sh` e aborta no primeiro vermelho. A chamada nova no pre-push ocorre antes do atalho do arsenal, fechando o escape “régua já verde” para o push comum de HEAD. `SKIP_TESTS=1` continua desligando tudo. (`bin/regua.sh:138`, `bin/regua.sh:140`, `bin/regua.sh:143`; `bin/pre-push.sh:5`, `bin/pre-push.sh:22`, `bin/pre-push.sh:65`)
+
+   **Sim, pode bloquear push legítimo:** exclusão de branch e envio de outra ref válida passam pelo julgamento de HEAD antes de o hook reconhecer o alvo. Um commit inválido apenas no HEAD basta para barrá-los. O seletor existente já distingue exclusão e SHA enviado, mas é chamado depois. (`bin/pre-push.sh:22`, `bin/pre-push.sh:36`, `bin/pre-push.sh:37`; `app/core/arvore_do_push.py:23`, `app/core/arvore_do_push.py:34`, `app/core/arvore_do_push.py:43`)
+
+   Há também raiz fixa: o wrapper delega ao pre-push do repositório corrente, mas a chamada do selo aponta para `~/saas-hasner`, e o selo usa `/home/ronald/saas-hasner` por padrão. Em clone/worktree, pode avaliar outra árvore. Instalação real do hook: **[nao verificado]**. (`bin/hooks.sh:56`; `bin/pre-push.sh:22`; `bin/tests/test_lei_akita.sh:17`)
+
+7. **Outros defeitos e limites**
+
+   - O vocabulário e as verificações estruturais vêm dos arquivos no disco, enquanto mensagens e caminhos vêm dos commits. Uma alteração documental ainda não commitada pode mudar o vocabulário que aprova o push. (`bin/tests/test_lei_akita.sh:28`, `bin/tests/test_lei_akita.sh:70`, `bin/tests/test_lei_akita.sh:77`, `bin/tests/test_lei_akita.sh:138`)
+   - O preparo dos repositórios MORDE descarta o código de retorno dos comandos Git. Erros de preparação podem ser confundidos com o erro que o caso queria provar; o teste sem corte exemplifica essa falta de isolamento. (`bin/tests/test_lei_akita.sh:176`, `bin/tests/test_lei_akita.sh:178`, `bin/tests/test_lei_akita.sh:218`, `bin/tests/test_lei_akita.sh:224`)
+   - O selo confere nome e classificação de caminhos; não confere se o diff realiza o padrão declarado. Essa obrigação permanece explicitamente com o verificador humano, portanto um VERDE mecânico não a certifica. (`bin/tests/test_lei_akita.sh:104`, `bin/tests/test_lei_akita.sh:145`; `CLAUDE.md:70`; `app/docs/PLANO-PADROES.md:58`)
 
 ## 31/10 14:04 · sessao d089eab7c55b · CLAUDE-MD-RACIONAL · verificador · origem=Code
 
@@ -716,16 +822,4 @@ Defeitos adicionais:
 - **Comentário novo contradiz a implementação:** diz que `escrever` corta o fim do corpo para acomodar contexto; agora o contexto cede, preservado o corte global de 500. (`app/chamados/services/fabrica_da_celula.py:187-188`, `app/pautas/services.py:174-182`)
 - A guarda de idempotência faz consulta seguida de criação sem trava local; o modelo não tem unicidade marcador/âncora. Duas chamadas concorrentes podem ambas observar ausência e escrever. Serialização externa ou duplicação ocorrida: **[não verificado]**. (`app/chamados/services/fabrica_da_celula.py:180-190`, `app/pautas/models.py:123-131`)
 
-## 31/10 13:37 · sessao c6c1828c7027 · - · - · origem=Ronald (tmux)
-
-Não encontrei perda nos cortes **desta volta**:
-
-- **PARADA:** RED e três sentidos continuam em `CLAUDE.md:442-443`, equivalentes a `41b4d89d:CLAUDE.md:76-84`.
-- **RAIAS:** `CLAUDE.md:484` recupera exatamente as condições “não de leitor novo” e “avais de hoje não cumpridos” da base `41b4d89d:CLAUDE.md:611-612`.
-- **CODEX:** eliminou apenas repetição dos apelidos: `CODEX-SONDA-LEITURA` permanece em `CLAUDE.md:524` e `app/docs/PISTA.md:98`; `SUITE-ANTES-DO-OPUS`, em `CLAUDE.md:515`, `CLAUDE.md:549` e `app/docs/PISTA.md:113-114`.
-- **PLACAR:** exercício, duas condições de zero, rótulo, mostrar sem fechamento e manutenção da L-095 permanecem em `CLAUDE.md:565-570`, equivalentes à base `41b4d89d:CLAUDE.md:515-523`.
-- **RELATO:** “mesma pergunta”, declaração em `JUIZES_DO_PRAZO` e frase citando a regra continuam conjuntamente em `CLAUDE.md:607` e `CLAUDE.md:624-627`, equivalentes à base `41b4d89d:CLAUDE.md:658-663`.
-- **PONTUALIDADE:** nesta volta apenas juntou linhas; ponteiro em `CLAUDE.md:601`, conteúdo preservado em `app/docs/LEIS.md:116`, correspondente à base `41b4d89d:CLAUDE.md:593-600`.
-- **DINHEIRO:** responsabilidade do admin pelo backup/renome permanece em `CLAUDE.md:577`, correspondente à base `41b4d89d:CLAUDE.md:535`.
-
-_1081 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1082 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
