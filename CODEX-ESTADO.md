@@ -1,7 +1,201 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 13:55** · publicado em **31/10/2026 13:59** (UTC-3)
+> Ultima resposta processada: **31/10/2026 14:04** · publicado em **31/10/2026 14:05** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 14:04 · sessao d089eab7c55b · CLAUDE-MD-RACIONAL · verificador · origem=Code
+
+**As três correções recuperam o alcance anterior; o PRONTO numérico confere.** A literalidade é do núcleo operativo, não uma reprodução integral dos parágrafos antigos. Fontes comparadas abaixo.
+
+1. **As três cláusulas**
+
+   **(4) Moratória L-117 — mesmo alcance.**
+
+   Antes:
+
+   > Ate `contratos_estruturais` = **20/20** (juiz `core/contratos_estruturais.py::total()`, hoje 15/20), o Code **nao numera nem propoe lei nova por iniciativa propria**: lei nova so nasce de CORTE LITERAL dele.
+
+   `a7b66d14:CLAUDE.md:644–646`.
+
+   Volta 8:
+
+   > Ate 20/20 o Code nao numera nem propoe lei nova por iniciativa propria: lei nova so nasce de CORTE LITERAL dele (L-117).
+
+   `2f5e38c6:CLAUDE.md:455`.
+
+   Foram recuperados tanto **“lei nova por iniciativa propria”** quanto a exceção **“CORTE LITERAL dele”**. O encaminhamento da pergunta com números e continuidade da fila permanece no mesmo item; “Ate 20/20” preserva o término da moratória. O contador e seu juiz continuam identificados no arquivo. `a7b66d14:CLAUDE.md:646–647`; `2f5e38c6:CLAUDE.md:453–457`, `:259–263`.
+
+   **(5) AUTONOMIA-DE-CODIGO, item 2 — mesmo alcance.**
+
+   Antes:
+
+   > **qual raia ou agente pega qual obra**, e quando uma obra registrada entra como COMPLEMENTO de outra;
+
+   `a7b66d14:CLAUDE.md:481–482`.
+
+   Volta 8:
+
+   > qual raia ou agente pega qual obra e quando uma obra registrada entra como COMPLEMENTO de outra;
+
+   `2f5e38c6:CLAUDE.md:461–462`.
+
+   Recupera **obra registrada como complemento de outra**, mantendo decisão do Code, registro em uma linha e dispensa de aval. O destino de achados continua sendo cláusula separada. `a7b66d14:CLAUDE.md:479`, `:487`; `2f5e38c6:CLAUDE.md:460–462`.
+
+   **(7a) CODEX-PRE-VERIFICADOR — mesmo alcance geral.**
+
+   Antes:
+
+   > antes de declarar pronto, Codex `CODEX_PAPEL=verificador` (diff + leis dos sitios + classes que ja reprovaram)
+
+   `a7b66d14:CLAUDE.md:507`.
+
+   Volta 8:
+
+   > PRE-VERIFICADOR. (a) TODO construtor, ANTES de declarar pronto, `CODEX_PAPEL=verificador`
+
+   `2f5e38c6:CLAUDE.md:543`.
+
+   A redação anterior não limitava a obrigação a cura de negócio; o texto apontado por ela também dizia **“O construtor, ANTES de declarar pronto”**. A volta 8 elimina a restrição introduzida pelo pai, sem criar nova categoria de sujeitos. `a7b66d14:CLAUDE.md:507`; `a7b66d14:app/docs/PISTA.md:100–101`; `034b0e38:CLAUDE.md:543`.
+
+2. **Os cortes dos cabeçalhos não retiram regra, condição ou ponteiro exclusivo.**
+
+   - **PLACAR:** saiu somente “resposta a uma pergunta de LEI que eu levantei”. Essa informação histórica não se repete, mas não condicionava a regra. Permanecem autor/data, exercício, dois verdes, L-095 e `lap-18`. `034b0e38:CLAUDE.md:566`; `2f5e38c6:CLAUDE.md:566–570`.
+   - **“historia em LAPIDES”:** saíram apenas essas palavras dos cabeçalhos de PARADA, RAIAS e DINHEIRO. Os ponteiros específicos permanecem respectivamente em `:443`, `:482` e `:574`. `034b0e38:CLAUDE.md:440`, `:479`, `:573`; `2f5e38c6:CLAUDE.md:443`, `:482`, `:574`.
+
+3. **PRONTO conferido em bytes, sem normalizar o texto.**
+
+   | Medida | Resultado |
+   |---|---:|
+   | 7b, do início do título até antes de `## 8.` | **20.955 B ≤ 21.000 B** |
+   | Arquivo inteiro | **57.756 B ≤ 62.000 B** |
+
+   Fontes medidas: `2f5e38c6:CLAUDE.md:436–627` e `2f5e38c6:CLAUDE.md:1–631`.
+
+   Os ponteiros `LAPIDES.md#lap-N` preservam **69 ocorrências e 68 destinos distintos**, com mesmas multiplicidades nas três versões. Do pai à volta 8, também preservam a sequência; frente a `a7b66d14`, houve reordenação. A duplicata é `lap-63`. `a7b66d14:CLAUDE.md:1–672`; `034b0e38:CLAUDE.md:1–631`; `2f5e38c6:CLAUDE.md:1–631`, especialmente `:231`, `:235`.
+
+4. **Outros defeitos**
+
+   Não identifiquei outro defeito material no delta: ele se limita às três correções e aos quatro cortes de cabeçalho examinados, preservando o restante do texto do pai. `034b0e38:CLAUDE.md:440`, `:455`, `:461–462`, `:479`, `:543`, `:566`, `:573`; mesmas posições em `2f5e38c6:CLAUDE.md`.
+
+   A execução do selo completo e de seus quatro MORDE fica **[nao verificado]**; o script cria e apaga arquivos temporários, contrariando a restrição desta auditoria. `bin/tests/test_claude_md_regras_preservadas.sh:89–114`.
+
+## 31/10 14:04 · sessao 21b77f1d4341 · - · - · origem=Ronald (tmux)
+
+Achados por inspeção estática; MORDE integral não executado porque cria diretórios e arquivos (`bin/tests/test_lei_akita.sh:180`, `bin/tests/test_lei_akita.sh:181`, `bin/tests/test_lei_akita.sh:184`).
+
+1. **O teste “sem corte” não isola a falta do corte.** `plantar(..., marcador=False)` não cria `origin/main`; essa referência só é criada no outro cenário. O teste aceita qualquer `SystemExit` começando por `PADRAO_ERRO`. Mutante sobrevivente: substituir a rejeição da ausência do corte por `if not corte: corte=['HEAD']`; o teste continuaria passando por erro de `origin/main` na enumeração. Em repositório com `origin/main`, permitiria escolher arbitrariamente `HEAD` como corte. (`bin/tests/test_lei_akita.sh:128`, `bin/tests/test_lei_akita.sh:135`, `bin/tests/test_lei_akita.sh:175`, `bin/tests/test_lei_akita.sh:191`, `bin/tests/test_lei_akita.sh:218`, `bin/tests/test_lei_akita.sh:223`.)
+
+2. **O piso não é testado.** Mutante sobrevivente: remover `*pisos` da chamada de `rev-list`. O único cenário saudável cria o corte na raiz, portanto `pisos=[]`; além disso, a raiz já é ancestral do publicado. Não distingue preservar a não retroatividade de julgá-la incorretamente. (`bin/tests/test_lei_akita.sh:132`, `bin/tests/test_lei_akita.sh:135`, `bin/tests/test_lei_akita.sh:179`, `bin/tests/test_lei_akita.sh:182`, `bin/tests/test_lei_akita.sh:191`.)
+
+3. **O primeiro pai do merge não é comprovado pelo MORDE.** Mutante sobrevivente: usar o segundo pai somente nos merges. Ambos os lados plantados alteram arquivos de negócio; comparar com qualquer pai deixa o merge `n/a (instrumento)` vermelho. Para distinguir os pais, precisa de cenário assimétrico, por exemplo primeiro lado com negócio e raia apenas com documentação. (`bin/tests/test_lei_akita.sh:143`, `bin/tests/test_lei_akita.sh:144`, `bin/tests/test_lei_akita.sh:187`, `bin/tests/test_lei_akita.sh:194`, `bin/tests/test_lei_akita.sh:197`.)
+
+4. **A lista do commit raiz não é testada.** Mutante sobrevivente: substituir o ramo `else git('show',...)` por `else ''`. Nenhuma raiz é julgada no cenário de quatro novos: o corte raiz está atrás de `origin/main`. Com raiz de negócio efetivamente no universo, esse mutante aceitaria `n/a`. (`bin/tests/test_lei_akita.sh:144`, `bin/tests/test_lei_akita.sh:182`, `bin/tests/test_lei_akita.sh:191`, `bin/tests/test_lei_akita.sh:198`.)
+
+5. **Não há cenário saudável de universo vazio.** Mutante sobrevivente: inserir, após a enumeração, `if not hs: raise SystemExit('PADRAO_ERRO vazio')`. Ele bloquearia `HEAD==origin/main`, mas o cenário positivo exige exatamente quatro novos ruins; os outros cenários esperam erros. (`bin/tests/test_lei_akita.sh:135`, `bin/tests/test_lei_akita.sh:198`, `bin/tests/test_lei_akita.sh:200`, `bin/tests/test_lei_akita.sh:205`, `bin/tests/test_lei_akita.sh:212`, `bin/tests/test_lei_akita.sh:220`.)
+
+6. **Fragilidade adicional da lista de caminhos:** a enumeração usa texto sem `-z` e depois `splitlines()`, enquanto negócio depende de `startswith('app/')`. Um caminho que o Git imprima entre aspas pode escapar dessa classificação; renomeação para fora de `app/` também merece caso próprio, pois não há `--no-renames` ou leitura explícita de origem/destino. (`bin/tests/test_lei_akita.sh:92`, `bin/tests/test_lei_akita.sh:144`, `bin/tests/test_lei_akita.sh:145`.) Reprodução com Git real desses dois casos: **[nao verificado]**.
+
+## 31/10 14:02 · sessao 8191a99f63f2 · - · - · origem=Ronald (tmux)
+
+- **A chamada nova fecha o atalho do arsenal.** `bin/pre-push.sh:22` executa o selo antes de `SKIP_ARSENAL=1` (`bin/pre-push.sh:65–69`), enquanto a régua percorre os selos de host apenas depois do retorno antecipado “JA VERDE” (`bin/regua.sh:84–94`, `138–145`). `SKIP_TESTS=1` continua pulando tudo (`bin/pre-push.sh:5`).
+
+- **Pode bloquear push legítimo e julgar outro commit.** A chamada acontece antes de calcular `PUSH_SHA` e reconhecer push só de exclusão (`bin/pre-push.sh:22`, `36–38`). O selo enumera `HEAD` de `R`, independentemente do SHA/ref enviado (`bin/tests/test_lei_akita.sh:17`, `135`). Assim, exclusão de branch ou push de outra ref válida pode ser barrado por commit ruim apenas no HEAD; inversamente, HEAD igual a origin/main deixa vazio o universo desse selo mesmo que a ref empurrada contenha commit ruim (`bin/pre-push.sh:22`, `36`; `bin/tests/test_lei_akita.sh:135–140`). O próprio seletor existente distingue SHA enviado de HEAD e exclusões (`app/core/arvore_do_push.py:8–10`, `19–43`).
+
+- **Raiz fixa agrava clones/worktrees.** O wrapper instalado executa o pre-push da raiz do repositório corrente (`bin/hooks.sh:49–56`), mas a chamada nova aponta para `~/saas-hasner` e o selo usa `/home/ronald/saas-hasner` por padrão (`bin/pre-push.sh:22`; `bin/tests/test_lei_akita.sh:17`). Sem configuração explícita, pode julgar a árvore principal em vez do clone/worktree cujo push disparou o hook (mesmas referências).
+
+- **Chamadores identificados:** pre-push direto (`bin/pre-push.sh:22`); pasta de host pela régua, executando cada `test_*.sh` com Bash e abortando no primeiro vermelho (`bin/regua.sh:138–145`); documentação do molde confirma esse vínculo (`bin/molde_fatia/LEIAME:48–49`). O instalador canônico usa `bin/pre-push.sh` como fonte (`bin/hooks.sh:9–11`); o instalador legado dentro de app também aponta para essa fonte (`app/core/hooks/hooks.sh:9–11`). Hook realmente instalado: [nao verificado].
+
+- **Cache da régua permanece inadequado para selo de histórico:** retorno antecipado compara somente a impressão digital de arquivos Python/HTML (`bin/regua.sh:25–35`, `84–94`), sem comparar mensagens/HEAD/origin/main; portanto uma mudança só no histórico não força o julgamento dos commits pela pasta de host (mesmas referências). A nova chamada cobre esse problema no pre-push comum, antes do atalho do arsenal (`bin/pre-push.sh:22`, `65–69`).
+
+- O pai está disponível em `../4e519aea9b9be16f1ad219c6470d0415bf928e2f`; comparação das versões de `bin/pre-push.sh` mostra apenas as três linhas atuais `20–22`. A identidade Git desse snapshot não foi validada: [nao verificado]. `logs/claude_md_racional/akita_v2.r` não está na árvore disponível: [nao verificado].
+
+## 31/10 14:02 · sessao f63197d45ae2 · - · - · origem=Ronald (tmux)
+
+As três alterações recuperam o sentido das cláusulas selecionadas. A literalidade é do núcleo operativo, com remoção de Markdown/quebras; não houve restauração integral dos parágrafos antigos. Fontes abaixo.
+
+1. **Moratória L-117**
+   
+   Original, `a7b66d14:CLAUDE.md:644–647`:
+   > **(L-117)** Ate `contratos_estruturais` = **20/20** (juiz `core/contratos_estruturais.py::total()`, hoje 15/20), o Code **nao numera nem propoe lei nova por iniciativa propria**: lei nova so nasce de CORTE LITERAL dele. Caso que parece pedir lei vai ao TOPO do RELATO como PERGUNTA com numeros e a fila SEGUE (PAREI-DE-LEI-NAO-DEVOLVE-TURNO). Ela se extingue sozinha em 20/20.
+
+   Atual, `2f5e38c6:CLAUDE.md:453–457`:
+   > 3. PERGUNTA DE LEI NAO DEVOLVE TURNO. Falta lei, predicado novo de juiz ou duas candidatas: linha `lei: <a que falta>` no TOPO do RELATO COM NUMEROS, e a esteira SEGUE o proximo item da ORDEM VIVA que nao depende dela; a resposta entra quando vier. Ate 20/20 o Code nao numera nem propoe lei nova por iniciativa propria: lei nova so nasce de CORTE LITERAL dele (L-117). Se uma lei do desenho ESCRITA ja responde [...]
+
+   A volta 8 restaura literalmente, sem o negrito/quebra, “nao numera nem propoe lei nova por iniciativa propria: lei nova so nasce de CORTE LITERAL dele”. Recupera a distinção que o pai perdera ao dizer apenas “nao numera nem propoe lei” (`034b0e38:CLAUDE.md:455`). O encaminhamento da pergunta está no próprio item 3 atual. O referente de 20/20 continua identificável no arquivo: juiz e placar em `2f5e38c6:CLAUDE.md:259–263`, término do estrutural em `:271–272`. **Ressalva de literalidade integral:** a redação atual não repete na moratória o nome do contador, o juiz, o antigo estado 15/20 e a frase explícita de autoextinção; “Ate 20/20” preserva o termo final. Não identifiquei estreitamento/alargamento da proibição restaurada nessas fontes.
+
+2. **AUTONOMIA-DE-CODIGO, item 2**
+
+   Original, `a7b66d14:CLAUDE.md:479–482`:
+   > **O Code DECIDE sozinho, registra em UMA linha no RELATO e segue, sem aval**, em quatro coisas: [...] 2. **qual raia ou agente pega qual obra**, e quando uma obra registrada entra como COMPLEMENTO de outra;
+
+   Atual, `2f5e38c6:CLAUDE.md:460–462`:
+   > 5. DECISAO TECNICA E DO CODE, em UMA linha no RELATO, sem aval: [...] qual raia ou agente pega qual obra e quando uma obra registrada entra como COMPLEMENTO de outra; [...]
+
+   Recupera exatamente sujeito e relação: **obra registrada** → **COMPLEMENTO de outra**. O pai dizia “quando achado entra como COMPLEMENTO” (`034b0e38:CLAUDE.md:461–462`), confundindo essa delegação com o destino de achados, que já tem enunciado próprio e permanece na sequência (`2f5e38c6:CLAUDE.md:462`). Sem mudança de alcance identificada.
+
+3. **CODEX-PRE-VERIFICADOR**
+
+   Original, `a7b66d14:CLAUDE.md:507`:
+   > CODEX-PRE-VERIFICADOR e SUITE-ANTES-DO-OPUS: antes de declarar pronto, Codex `CODEX_PAPEL=verificador` (diff + leis dos sitios + classes que ja reprovaram); procedente corrige e repete (>3 voltas sobe); so entao suite INTEIRA verde, depois UM opus final; medida por obra no RELATO. (PISTA.md#codex-pre-verificador) [nao verificado]
+
+   Atual, `2f5e38c6:CLAUDE.md:543–549`:
+   > 5. PRE-VERIFICADOR. (a) TODO construtor, ANTES de declarar pronto, `CODEX_PAPEL=verificador` com: diff do hash da copia; LEIS dos sitios tocados [...] (c) Suite INTEIRA da arvore da obra VERDE, depois UM opus final [...] [nao verificado]
+
+   A cláusula original não restringe a “cura de negocio”; essa restrição aparece no pai (`034b0e38:CLAUDE.md:543`) e é removida na volta 8. “TODO construtor” explicita o alcance geral já contido no comando antigo “antes de declarar pronto”. **Não é reprodução literal do enunciado antigo**, pois “TODO construtor” não constava da linha 507; é restauração semântica do alcance, não ampliação demonstrável por esses textos. O ponteiro `PISTA.md#codex-pre-verificador` permanece em `2f5e38c6:CLAUDE.md:518`.
+
+Não encontrei defeito material adicional nas três substituições acima; eventuais diferenças nas outras partes das consolidações não foram objeto desta subtarefa. [não verificado]
+
+## 31/10 14:02 · sessao e868ae83e323 · - · - · origem=Ronald (tmux)
+
+As remoções desta volta não retiram regra, condição ou ponteiro específico:
+
+- **PARADA E AUTONOMIA:** sai somente `; historia em LAPIDES` (`034b0e38:CLAUDE.md:440`). Continuam os caminhos dos instrumentos (`2f5e38c6:CLAUDE.md:440`), o selo e as seis âncoras `lap-45/46/17/16/11/49` (`2f5e38c6:CLAUDE.md:442-443`).
+- **RAIAS E POUSO:** sai somente `; historia em LAPIDES` (`034b0e38:CLAUDE.md:479`). Continuam os nomes das regras (`2f5e38c6:CLAUDE.md:477-479`), os ponteiros PISTA (`2f5e38c6:CLAUDE.md:481`) e `lap-52/15/53` (`2f5e38c6:CLAUDE.md:482`).
+- **DINHEIRO:** sai somente `; historia em LAPIDES` (`034b0e38:CLAUDE.md:573`). Continuam as referências L-092/L-110 (`2f5e38c6:CLAUDE.md:573`) e `lap-55/59/08/09/10/48/12` (`2f5e38c6:CLAUDE.md:574`).
+- **PLACAR:** sai somente `, resposta a uma pergunta de LEI que eu levantei` (`034b0e38:CLAUDE.md:566`). Essa informação histórica não reaparece literalmente, mas não enuncia condição ou regra. Autor e data permanecem (`2f5e38c6:CLAUDE.md:566`); exercício, dois verdes, preservação da L-095 e `lap-18` permanecem (`2f5e38c6:CLAUDE.md:567-570`).
+
+A obrigação geral de mover história sem apagar, mantendo ponteiro e regra, também permanece (`2f5e38c6:CLAUDE.md:614-615`).
+
+Extração por `LAPIDES\.md#lap-\d+`: **69 ocorrências, 68 destinos únicos**, com sequência integral idêntica em `a7b66d14`, `034b0e38` e `2f5e38c6`; a duplicata é `lap-63` (`2f5e38c6:CLAUDE.md:231` e `2f5e38c6:CLAUDE.md:235`). Nenhum defeito adicional identificado nas remoções examinadas.
+
+## 31/10 14:02 · sessao cebde2888d4a · - · - · origem=Ronald (tmux)
+
+A função real, extraída e executada apenas em memória, produz **55 termos normalizados**, além das duas exceções `n/a`; remove parênteses, asteriscos e crases, converte para minúsculas e normaliza espaços. (`bin/tests/test_lei_akita.sh:61–90`)
+
+Lista exata, agrupada pela origem:
+
+| Origem | Termos normalizados aceitos |
+|---|---|
+| `app/docs/GLOSSARIO.md:11` | single source of truth; aggregate root; celula soberana; fonte unica |
+| `app/docs/GLOSSARIO.md:12` | single writer principle; juiz unico; escritor unico |
+| `app/docs/GLOSSARIO.md:13` | sinal derivado do estado; reconciliacao level-triggered; lampada |
+| `app/docs/GLOSSARIO.md:14` | architectural invariants + fitness functions; contratos estruturais |
+| `app/docs/GLOSSARIO.md:15` | architecture conformance test; selo |
+| `app/docs/GLOSSARIO.md:16` | event-driven architecture; crons virando evento |
+| `app/docs/GLOSSARIO.md:17` | transactional outbox; o-outbox |
+| `app/docs/GLOSSARIO.md:18` | strangler fig pattern; construir ao lado e trocar inteira |
+| `app/docs/GLOSSARIO.md:19` | shadow mode; parallel run; sombra |
+| `app/docs/GLOSSARIO.md:20` | merge queue; comboio; pouso |
+| `app/docs/GLOSSARIO.md:21` | backfill; reprocessing; rejulgar o passivo |
+| `app/docs/GLOSSARIO.md:22` | cqrs com projecoes reconstruiveis; espelho; diapago; fechamento; retrato e pilulas |
+| `app/docs/GLOSSARIO.md:23` | duplicated business logic; logic drift; derivacao paralela |
+| `app/docs/GLOSSARIO.md:24` | bitemporal data; vinculo do dia x vinculo de hoje |
+| `app/docs/GLOSSARIO.md:25` | immutable event log + compensating event; batida so retratada |
+| `app/docs/GLOSSARIO.md:26` | adr; leis; cortes |
+| `app/docs/GLOSSARIO.md:27` | idempotencia pela chave do fato; dedup do fato |
+| `app/docs/PLANO-PADROES.md:46–48` | um juiz por pergunta; single writer; evento em vez de varredura; log imutavel; outbox; bitemporal; projecao reconstruivel; cqrs; fitness function |
+
+`n/a (medida)` e `n/a (instrumento)` são aceitos exatamente nessa grafia quando nenhum caminho classificado como negócio aparece; a classificação é textual: começa com `app/`, não contém `/tests/` e não começa com `app/docs/`. (`bin/tests/test_lei_akita.sh:90–103`)
+
+**Divergência documental:** a implementação acompanha a enumeração restrita do NORTE e as duas primeiras colunas do glossário; porém `CLAUDE.md:68` admite termo existente em qualquer dos dois arquivos, e `PLANO-PADROES.md:53` diz “termo do GLOSSARIO ou deste arquivo”. Pela redação ampla, há falsos vermelhos comprovados: `projection rebuild` e `read model replay` aparecem como padrões conhecidos (`app/docs/PLANO-PADROES.md:33`), `Architecture Decision Record` aparece como padrão conhecido (`app/docs/PLANO-PADROES.md:41`) e no próprio glossário (`app/docs/GLOSSARIO.md:26`), mas todos são recusados. A causa é limitar o plano ao trecho NORTE e remover todo conteúdo entre parênteses antes da extração. (`bin/tests/test_lei_akita.sh:77–87`, `bin/tests/test_lei_akita.sh:104–105`)
+
+**Falsos verdes comprovados na função real:**
+
+- `padrao=Padrao Inventado Do Nada, padrao=juiz unico` retorna aprovação: escolhe somente o último campo, mesmo com duas declarações explícitas de padrão. O MORDE verifica duas linhas, mas não duas declarações na mesma linha. (`bin/tests/test_lei_akita.sh:94–98`, `bin/tests/test_lei_akita.sh:162`)
+- `padrao=juiz unico (Padrao Inventado Do Nada)` retorna aprovação porque todo texto entre parênteses desaparece; o campo completo inexiste na lista documental. (`bin/tests/test_lei_akita.sh:61–63`, `bin/tests/test_lei_akita.sh:104`)
+- `padrao=sinal derivado do estado, reconciliacao level-triggered`, copiando a célula técnica do glossário sem seu comentário parentético, retorna “linha LEI-AKITA sem padrao=”: a regex não consegue consumir vírgula de valor. As duas partes isoladas são aceitas. (`app/docs/GLOSSARIO.md:13`, `bin/tests/test_lei_akita.sh:85`, `bin/tests/test_lei_akita.sh:95–97`)
+
+Não há aceite de substrings como `a` ou `Writer Principle`: a comparação é por pertinência do termo normalizado ao conjunto; os dois exemplos têm MORDE negativo explícito. (`bin/tests/test_lei_akita.sh:104`, `bin/tests/test_lei_akita.sh:160–161`)
 
 ## 31/10 13:55 · sessao 8b0c4c13d6aa · LEI-AKITA-UNIVERSO-DO-PUSH · verificador · origem=Code
 
@@ -534,175 +728,4 @@ Não encontrei perda nos cortes **desta volta**:
 - **PONTUALIDADE:** nesta volta apenas juntou linhas; ponteiro em `CLAUDE.md:601`, conteúdo preservado em `app/docs/LEIS.md:116`, correspondente à base `41b4d89d:CLAUDE.md:593-600`.
 - **DINHEIRO:** responsabilidade do admin pelo backup/renome permanece em `CLAUDE.md:577`, correspondente à base `41b4d89d:CLAUDE.md:535`.
 
-## 31/10 13:37 · sessao 16a8af0f3457 · - · - · origem=Ronald (tmux)
-
-- Os quatro testes novos são `test_RED_contexto_460...`, `test_RED_contexto_480...`, `test_RED_contexto_700...` e `test_porta_escrever...`; os três primeiros delegam ao mesmo helper, e o quarto chama `escrever` diretamente. (`app/chamados/tests/test_f1c4_3_emissores.py:265`, `:284`, `:287`, `:290`, `:295`)
-
-- Uma mutação local que derruba os quatro é, em `app/pautas/services.py:176`, substituir apenas o primeiro argumento `texto` da tupla por `texto[:500 - len(_ctx) - 4]`. Isso reintroduz o corte antigo do corpo, mantendo o novo corte do contexto. (`app/pautas/services.py:174`, `:176`)
-
-| Teste | Efeito dessa mutação | [nao verificado]
-|---|---|
-| Contexto 460 | Guarda somente 36 caracteres do corpo; preserva o marcador, mas mutila a tag completa, fazendo a segunda passada criar outra pauta. O desempacotamento `(p,)` encontra duas. (`app/pautas/services.py:176`; `app/chamados/services/fabrica_da_celula.py:181`, `:182`; `app/chamados/tests/test_f1c4_3_emissores.py:278`) |
-| Contexto 480 | Guarda somente 16 caracteres do corpo; perde o marcador completo, e `_pautas()` não encontra as pautas criadas. (`app/pautas/services.py:176`; `app/chamados/tests/test_f1c4_3_emissores.py:193`, `:278`) |
-| Contexto 700 | O corpo integrado tem 154 caracteres; `texto[:-204]` resulta vazio, perdendo o marcador e fazendo falhar o desempacotamento. (`app/chamados/services/fabrica_da_celula.py:164`, `:189`; `app/chamados/services/declaracao_texto.py:44`; `app/chamados/tests/test_f1c4_3_emissores.py:278`, `:291`) |
-| Porta direta | O corpo tem 78 caracteres; a iteração 100 permanece válida, mas a iteração 460 reduz o corpo a 36 e falha no `startswith` exigido. (`app/chamados/tests/test_f1c4_3_emissores.py:299`, `:300`, `:306`; `app/pautas/services.py:176`) |
-
-- Na execução normal, todos entram no bloco novo: o corpo integrado tem 154 caracteres, portanto `_sobra=342`; o direto tem 78, portanto `_sobra=418`; todos os contextos simulados são não vazios. O literal `'[DIA x] '` tem oito caracteres, então os contextos têm exatamente o comprimento anunciado. (`app/chamados/services/fabrica_da_celula.py:189`; `app/chamados/tests/test_f1c4_3_emissores.py:274`, `:299`, `:301`; `app/pautas/services.py:174`, `:175`)
-
-- Entretanto, os três testes de integração continuam passando se `app/pautas/services.py:175` virar `if False:`: não exigem contexto nem `[DIA ` no resultado; exigem somente marcador, tag, tamanho, unicidade e ausência de perguntas. O teste direto detecta esse bypass. (`app/chamados/tests/test_f1c4_3_emissores.py:278`, `:279`, `:280`, `:281`, `:282`, `:306`)
-
-- Os quatro também aceitam substituir `_ctx[:_sobra]` por `_ctx[:7]`, anexando apenas `[DIA x]`; o teste direto verifica somente esse prefixo, não a extensão correta do contexto. (`app/pautas/services.py:176`; `app/chamados/tests/test_f1c4_3_emissores.py:279`, `:306`)
-
-- Nenhum dos quatro cobre contexto vazio, corpo contendo `[DIA `, `T>=496`, `_sobra<=0` ou corpo maior que 500; retirar o `[:500]` final não os derruba. O nome “nunca o corpo” não vale universalmente: o service continua cortando qualquer corpo acima de 500. (`app/chamados/tests/test_f1c4_3_emissores.py:274`, `:299`, `:300`, `:301`; `app/pautas/services.py:168`, `:174`, `:175`, `:182`)
-
-- As falhas descritas foram derivadas por leitura e simulação isolada de strings; execução efetiva dos testes mutados: [não verificado]. [nao verificado]
-
-## 31/10 13:36 · sessao 9315cc53a28b · LEI-AKITA-UNIVERSO-DO-PUSH · verificador · origem=Code
-
-**O portão ainda tem brechas:** `origin/main` ausente produz verde vazio, e o `pre-push` não chama este selo. (`bin/tests/test_lei_akita.sh:93`, `bin/tests/test_lei_akita.sh:101`, `bin/tests/test_lei_akita.sh:153`; `bin/pre-push.sh:12–19`)
-
-1. **O universo não é literalmente `origin/main..HEAD`.** É esse conjunto limitado à primeira parentalidade e ao piso do corte. (`bin/tests/test_lei_akita.sh:94–101`)
-
-   - **`HEAD == origin/main`:** retorna vazio corretamente; significa ausência de commits pendentes, não prova de julgamento anterior. (`bin/tests/test_lei_akita.sh:101–107`)
-   - **`origin/main` inexistente — falha:** o Git falha, mas o helper descarta status e stderr; stdout vazio vira `[]`, seguido de `PADRAO_FIM`, aceito pelo shell. Portanto cala commits que deveria julgar. (`bin/tests/test_lei_akita.sh:92–107`, `bin/tests/test_lei_akita.sh:143–153`)
-   - **Referência desatualizada:** não há sincronização nessa função. Se estiver atrasada, poderá rejulgar commits já publicados; ela conhece a referência local, não o estado atual do servidor. (`bin/tests/test_lei_akita.sh:92–101`)
-   - **Merge `--no-ff`:** só julga o merge; mensagens defeituosas dos commits da raia ficam fora. Essa política está declarada no comentário, mas difere do range literal completo. (`bin/tests/test_lei_akita.sh:97–104`)
-   - **Outra brecha no merge:** `git show --name-only` pode omitir arquivos incorporados sem conflito; assim, `n/a` pode passar embora o pouso integre negócio. A decisão depende justamente dessa lista. Essa fragilidade já existia antes da mudança de universo. (`bin/tests/test_lei_akita.sh:83–85`, `bin/tests/test_lei_akita.sh:103–104`)
-   - **Corte na raiz:** tratado corretamente: sem pai, `pisos=[]`, evitando revisão inválida. O próprio caso plantado usa essa configuração. (`bin/tests/test_lei_akita.sh:99`, `bin/tests/test_lei_akita.sh:127–130`)
-
-2. **Quem chama e quando.** O chamador operacional encontrado é o glob de `bin/regua.sh`, que executa os selos e decide pelo exit code. Porém seu atalho `JA VERDE` termina antes desse glob e compara arquivos `.py`/`.html`, sem considerar mensagens dos commits ou posição de `origin/main`. (`bin/regua.sh:33–35`, `bin/regua.sh:84–94`, `bin/regua.sh:138–145`)
-
-   **`bin/pre-push.sh` não chama `test_lei_akita.sh`.** Chama individualmente outros dois selos e declara expressamente que o loop de `bin/tests/` não roda ali. (`bin/pre-push.sh:12–19`)
-
-   Há caminhos concretos que deixam o commit novo escapar: o molde roda a régua antes do commit; depois commita e chama novamente sem `--force`, permitindo o atalho sobre o verde anterior; então faz push. O molde de autocura repete a sequência. (`bin/molde_fatia/cadeia.sh:51`, `bin/molde_fatia/cadeia.sh:68–85`; `bin/molde_autocura/cadeia.sh:48`, `bin/molde_autocura/cadeia.sh:65–82`)
-
-   O integrador também roda `regua.sh --force` antes de `_subir`, que cria os commits e depois empurra. (`app/core/integrador_lote.py:375`, `app/core/integrador_lote.py:701`, `app/core/integrador_lote.py:719–739`)
-
-   **Não encontrei chamada automática do selo depois do push nesses fluxos.** O passo explicitamente posterior, `pos_push.sh`, faz fetch e atualiza TICKETS, sem chamar a régua. A brecha encontrada é julgamento pré-commit seguido de ausência no hook. (`bin/push.sh:6–8`; `bin/pos_push.sh:18–39`; `bin/pre-push.sh:12–19`)
-
-   A atualidade efetiva de `origin/main` em cada execução histórica está **[nao verificado]**.
-
-3. **O MORDE cobre uma história linear mínima:** corte-raiz → publicado ruim → novo ruim, exigindo exatamente o hash do novo. As conclusões abaixo são por análise da asserção; executar o caso integral criaria arquivos e repositório temporário. (`bin/tests/test_lei_akita.sh:122–140`)
-
-   | Mutante | Resultado pelo caso plantado |
-   |---|---|
-   | Retirar `^origin/main` | **Morre:** acusa também o publicado. (`bin/tests/test_lei_akita.sh:101`, `bin/tests/test_lei_akita.sh:132–139`) |
-   | Calar `julgar` ou devolver universo vazio | **Morre:** perde o novo obrigatório. (`bin/tests/test_lei_akita.sh:104–106`, `bin/tests/test_lei_akita.sh:139`) |
-   | Aplicar `^corte^` mesmo na raiz | **Morre:** revisão inválida resulta em vazio. (`bin/tests/test_lei_akita.sh:93`, `bin/tests/test_lei_akita.sh:99`, `bin/tests/test_lei_akita.sh:139`) |
-   | Julgar somente `HEAD` | **Sobrevive:** existe apenas um commit novo. (`bin/tests/test_lei_akita.sh:132–139`) |
-   | Remover o piso | **Sobrevive:** o fixture já tem corte-raiz. (`bin/tests/test_lei_akita.sh:99`, `bin/tests/test_lei_akita.sh:129–130`) |
-   | Remover `--first-parent` | **Sobrevive:** não há merge no fixture. (`bin/tests/test_lei_akita.sh:101`, `bin/tests/test_lei_akita.sh:127–136`) |
-   | Continuar ignorando erros Git | **Sobrevive:** não se planta referência ausente nem erro de comando. (`bin/tests/test_lei_akita.sh:125–136`) |
-
-   O juiz compartilhado rejeita o termo inventado quando recebe o commit; a garantia incompleta está na seleção e na execução pelo portão. (`bin/tests/test_lei_akita.sh:88–89`, `bin/tests/test_lei_akita.sh:104`, `bin/tests/test_lei_akita.sh:110–118`)
-
-4. **A LÁPIDE 72 está correta nos termos e na correspondência principal com as curas.** (`app/docs/LAPIDES.md:785–786`)
-
-   **`ac721607`: `Event-driven architecture` existe literalmente.** O encerramento passa pelo consumidor de eventos, enquanto o reconciliador periódico atua como vigia sem escrita; corresponde à descrição da lápide. (`app/docs/GLOSSARIO.md:16`; `app/chamados/reconciliador.py:1304–1309`; `app/ponto/management/commands/reconciliar_perguntas_orfas.py:21–35`; `app/docs/LAPIDES.md:785`)
-
-   **`2cd634cb`: `Architectural Invariants + Fitness Functions` existe literalmente.** A cura move `pre_fechamento` de 05:15 para 05:25 e ajusta o vizinho declarado; preserva a recusa de cron que não cabe, fazendo a configuração satisfazer o invariante existente. (`app/docs/GLOSSARIO.md:14`; `app/config/crons.py:214–219`, `app/config/crons.py:252–258`, `app/config/crons.py:387`; `app/docs/LAPIDES.md:786`)
-
-5. **Não há allowlist dos dois hashes nem juiz novo:** eles aparecem como história; a decisão continua em `julgar`, compartilhada pelo universo e pelo MORDE. As exigências de padrão conhecido e restrição de `n/a` já pertencem à L-123. (`bin/tests/test_lei_akita.sh:53–56`, `bin/tests/test_lei_akita.sh:73–90`, `bin/tests/test_lei_akita.sh:104`, `bin/tests/test_lei_akita.sh:118`; `app/docs/LEIS.md:144`)
-
-   **`LEI_AKITA_R` passa a controlar toda a raiz auditada**, inclusive documentos, código e histórico; o default continua sendo `/home/ronald/saas-hasner`, independentemente do diretório de execução. A régua não define essa variável na chamada. (`bin/tests/test_lei_akita.sh:17`, `bin/tests/test_lei_akita.sh:28–46`, `bin/tests/test_lei_akita.sh:60–65`, `bin/tests/test_lei_akita.sh:143`; `bin/regua.sh:140`)
-
-   **O contrato de saída permanece:** os marcadores Python são consumidos pelo próprio shell; a régua usa o exit code e imprime a saída na falha. O `lei_akita: OK` não informa quantos commits foram julgados, portanto não distingue julgamento efetivo de universo vazio. (`bin/tests/test_lei_akita.sh:145–163`; `bin/regua.sh:140–143`)
-
-## 31/10 13:36 · sessao 9d8875003f72 · - · - · origem=Ronald (tmux)
-
-3. **Não há efeito adicional identificado.** O cabeçalho mantém a precedência de `PISTA.md` e abre exceção expressa somente para CODEX, PARADA E AUTONOMIA, DINHEIRO, RAIAS E POUSO e RELATO consolidados (`app/docs/PISTA.md:8-12`; antes: `e8d0cb0b:app/docs/PISTA.md:8-10`).
-
-Os 17 blocos conferem com os hashes registrados, incluindo suas condições e scripts; a mudança está fora dos blocos ancorados (`app/docs/PISTA.md:16`; `bin/tests/pista_blocos.ref:1-17`; extração em `bin/tests/test_claude_md_regras_preservadas.sh:47-52`).
-
-**Nenhum leitor da frase antiga foi encontrado em `bin/` ou `.claude/`.** O leitor identificado verifica nomes, hashes e ponteiros; não interpreta nem compara a frase de precedência (`bin/tests/test_claude_md_regras_preservadas.sh:43-78`). Os hooks configurados executam outros arquivos (`.claude/settings.json:9`, `:20`, `:29`, `:40`, `:44`, `:53`, `:57`, `:68`).
-
-O selo integral não foi executado porque cria arquivos temporários; os hashes foram conferidos em memória (`bin/tests/test_claude_md_regras_preservadas.sh:89-112`; `bin/tests/pista_blocos.ref:1-17`).
-
-## 31/10 13:36 · sessao 09345b96188f · - · - · origem=Ronald (tmux)
-
-Inventário dos leitores de `Pauta.texto` em produção na cópia:
-
-| Sítio | O que lê/procura |
-|---|---|
-| `app/chamados/services/fabrica_da_celula.py:180-182` | Prefixo `LIMBO EM COMPETENCIA EXPORTADA`; depois substring exata `[motivo:<m>]` em todo texto, para deduplicar motivos. |
-| `app/pautas/semanal.py:199` | Prefixo `<marcador> <semana ISO>`, âncora competência. |
-| `app/pautas/semanal.py:228` | Prefixo do marcador para fechar pautas vivas da família. |
-| `app/pautas/semanal.py:245-248` | Substring `n=<contadores separados por vírgula>` no texto da semana anterior. |
-| `app/pautas/management/commands/pauta_dia_em_aberto.py:108` | Prefixo `[DIA EM ABERTO]`; âncora competência (`:104-108`). |
-| `app/ferias/management/commands/pautas_de_ferias.py:149-156` | Prefixo de `MARCADORES[codigo]`: `[FERIAS/PA-VENCIDO]`, `[FERIAS/PA-VENCENDO]`, `[FERIAS/CADASTRO]` (`:30-33`). |
-| `app/folha/management/commands/pre_fechamento.py:91-98` | Prefixo `[PRE-FECHAMENTO]` e prefixo mais específico com a data de hoje (`:29,93`). |
-| `app/chamados/services/competencia_trancada.py:211` | Prefixo `[TRANCA]`, âncora competência. |
-| `app/chamados/services/passivo_validado.py:159-164` | Prefixo `[PASSIVO-VALIDADO] col<id> AAAA-MM` (`:44`). |
-| `app/chamados/services/passivo_validado.py:254-256` | Prefixo `[PASSIVO-VALIDADO-FORA] col<id> AAAA-MM` (`:48`). |
-| `app/chamados/management/commands/reabrir_orfas_enterradas.py:190-191` | Prefixo `[ORFA-ENTERRADA]` (`:32`). |
-| `app/core/management/commands/alarme_arvore.py:16` | Prefixo `ARVORE VERMELHA` (`:11`). |
-| `app/core/management/commands/alarme_esteira.py:15` | Prefixo `ESTEIRA <chave>:` (`:10`). |
-| `app/core/services/crons_quebrados.py:53-54` | Prefixo `[CRON QUEBRADO] <nome> (empresa <emp ou ->)` (`:15`). |
-| `app/ponto/services/autorizacao_he_periodo.py:240-242` | Prefixo `[HE-AUTORIZADA-EM-EXPORTADA]` (`:124`), cabeças vivas em competência. |
-| `app/ponto/services/pautas_dos_deslogados.py:65-66` | Prefixo `[APP-401]` (`:26`); chave restante vem da âncora, não do texto (`:68`). |
-| `app/ponto/services/afastado_avisa.py:62-65` | Prefixo formado pelos primeiros 40 caracteres de `TEXTO`; âncora colaborador. |
-| `app/ponto/services/ausencia.py:1022-1025` | Prefixo `[A4/SEM-DOCUMENTO]`; âncora colaborador. |
-| `app/ponto/services/ausencia.py:1212-1215` | Prefixo `[A1-FERIAS/AG#<id>]`; âncora colaborador. |
-| `app/ponto/services/cobertura.py:241-243` | Prefixo `[COBERTURA-A-CONFIRMAR]` (`:207`); âncora dia. |
-| `app/ponto/services/pautas_do_esmeril.py:63-65` | Prefixo `[ESMERIL `; extrai a ação até o primeiro `]`; âncora posto. |
-| `app/ponto/services/pautas_dos_discordantes.py:165-167` | Prefixo `[DISCORDANTE]` (`:37`), depois `_chave_do_texto` pega todo o trecho anterior ao primeiro `:` (`:96-100`); âncora competência (`:39`). |
-| `app/pautas/views.py:40,47` | Serializa integralmente cabeça e respostas; sem interpretar conteúdo. |
-| `app/api/views_mensageria.py:1324-1328` | Serializa integralmente texto da pauta na API de mensageria. |
-| `app/templates/core/_copiloto.html:405,424` | Exibe cabeça e respostas por `textContent`; sem interpretar marcador/contexto. |
-| `app/templates/colaboradores/detalhe.html:119` | Exibe texto com `truncatechars:180`: comprimento afeta somente a apresentação. |
-| `app/pautas/management/commands/suporte_hasner.py:111,113` | Imprime integralmente cabeça e respostas no CLI. |
-
-A única busca executável pelo trecho literal `[DIA ` está na **entrada** de `escrever`, para decidir se acrescenta contexto; não é um parser da pauta persistida (`app/pautas/services.py:163-169`). A construção do contexto coloca data/nome/matrícula/marcos/batidas/acusação/URL no corpo, mas não há consumidor de produção encontrado que extraia esses campos de `Pauta.texto`; os consumidores acima apenas os apresentam (`app/pautas/services.py:415-425`; `app/pautas/views.py:40`; `app/templates/core/_copiloto.html:405`; `app/templates/colaboradores/detalhe.html:119`).
-
-A troca pode mudar a deduplicação do limbo porque preserva o prefixo e as tags que o corte anterior podia remover; o leitor busca ambos no corpo inteiro e não depende do contexto (`app/chamados/services/fabrica_da_celula.py:180-182`; `app/pautas/services.py:170-182`). O leitor de cobertura também recebe textos de dia, mas só procura seu prefixo; todos os demais leitores de negócio citados filtram outras âncoras, logo não passam pelo ramo de contexto alterado (`app/ponto/services/cobertura.py:241-243`; `app/pautas/services.py:168`).
-
-Defeito associado: a nova justificativa “o dia o DP reabre pela ancora” não funciona pelo clique do painel: `ROTA` contempla somente `colab`, `chamado` e `posto`; `dia` cai no aviso de que não possui tela própria (`app/pautas/services.py:173`; `app/templates/core/_copiloto.html:564-574`). O URL textual do calendário fica no fim do contexto e pode desaparecer no novo corte; o painel também o renderiza como texto simples, sem link (`app/pautas/services.py:174-176,423-425`; `app/templates/core/_copiloto.html:405`). A ausência de rota é preexistente; a alteração passa a depender dessa rota ao permitir contexto ausente (`app/templates/core/_copiloto.html:564-574`; `app/pautas/services.py:173-176`).
-
-Fora da aplicação de produção, a infraestrutura de sombra inventaria `Pauta.texto` para mascaramento: preserva marcador inicial entre colchetes e calcula hash do restante; não é leitor de negócio (`bin/sombra_regras_pessoais.py:24,29-33,81-84`; `bin/sombra_mascara_pessoal.py:44`).
-
-## 31/10 13:35 · sessao 65da1b509851 · - · - · origem=Ronald (tmux)
-
-Universo e MORDE, somente leitura:
-
-- **Não é literalmente `origin/main..HEAD`**: usa `--first-parent` e exclui ancestrais do pai do corte; commits da segunda parentalidade e anteriores ao piso ficam fora. Isso é explicitamente descrito e implementado em `bin/tests/test_lei_akita.sh:94-101`. Ambos os filtros já existiam no pai; a extração da função e `^origin/main` são a mudança do commit. `bin/tests/test_lei_akita.sh:91-107` [comparação Git executada; diff sem arquivo de evidência].
-- **HEAD igual a origin/main:** universo vazio esperado, sem falhas de padrão; a função retorna `[]` e imprime `PADRAO_FIM`, aceito pelo shell. `bin/tests/test_lei_akita.sh:101-107`, `143-153`.
-- **Origin inexistente:** `rev-list` falha, mas o helper usa apenas stdout e ignora status/stderr; stdout vazio vira `[]`, depois `PADRAO_FIM`. Portanto o selo cala indevidamente o universo. `bin/tests/test_lei_akita.sh:92-93`, `101-107`, `143-153`.
-- **Origin atrasado:** commits já publicados, mas posteriores à referência local, voltam ao julgamento; não há atualização da referência na função. `bin/tests/test_lei_akita.sh:92-101`.
-- **Corte na raiz:** o teste de existência do pai deixa `pisos=[]`, evitando a revisão inválida `^<raiz>^`. O próprio fixture usa corte-raiz. `bin/tests/test_lei_akita.sh:99`, `127-130`.
-- **Merge `--no-ff`:** só a mensagem do merge é julgada, por causa de `--first-parent`. Além disso, `git show --name-only` usa o diff combinado, podendo ocultar código de negócio integrado; `n/a` então pode passar com lista de arquivos só documentais. `bin/tests/test_lei_akita.sh:97-104`, `83-85`. Confirmei em leitura Git: `c7ea207a` mostra só BACKLOG/PROMPTS/RELATO nessa chamada, enquanto o diff contra primeiro pai inclui crons.py, juizes.py, models.py etc. [nao verificado por arquivo:linha para a saída Git]. Essa fragilidade já existe no pai.
-
-**MORDE do universo:** o fixture tem apenas `corte-raiz → publicado ruim → novo ruim`, exigindo exatamente o hash do novo. `bin/tests/test_lei_akita.sh:127-139`.
-
-Por análise do código, ele mata:
-
-- Retirar `^origin/main`: acusa também o publicado. `bin/tests/test_lei_akita.sh:101`, `132-139`.
-- Calar o juiz ou retornar universo vazio: perde o novo esperado. `bin/tests/test_lei_akita.sh:104-106`, `139`.
-- Impor `^corte^` mesmo quando corte é raiz: Git falha, universo fica vazio e diverge do esperado. `bin/tests/test_lei_akita.sh:93`, `99-101`, `129-139`.
-
-Sobrevivem:
-
-- Remover `--first-parent`: fixture é linear. `bin/tests/test_lei_akita.sh:101`, `127-136`.
-- Remover o piso: fixture já tem corte-raiz, portanto `pisos=[]`. `bin/tests/test_lei_akita.sh:99`, `129-130`.
-- Julgar somente HEAD: há só um novo commit. `bin/tests/test_lei_akita.sh:132-139`.
-- Escolher o último corte em vez do primeiro: há só uma ocorrência introduzida. `bin/tests/test_lei_akita.sh:94`, `129`.
-- Ignorar falhas Git: fixture não planta referência ausente nem falhas de comando. `bin/tests/test_lei_akita.sh:125-136`.
-
-Não executei o MORDE integral nem mutações em disco, pois ele cria arquivos e repositório temporário. `bin/tests/test_lei_akita.sh:122-136`.
-
-## 31/10 13:34 · sessao 881fe507cad9 · - · - · origem=Ronald (tmux)
-
-- **O selo não é chamado pelo pre-push.** O hook chama individualmente `test_lei_protege_sitio.sh` e `test_achado_por.sh`, e seu comentário registra que o loop de `bin/tests/` não roda ali; seu arsenal posterior roda testes Django (`bin/pre-push.sh:12`, `:16`, `:19`, `:155`, `:182`, `:194`). A cópia em `app/core/hooks/pre-push.sh` também só chama suas guardas próprias e a suíte (`app/core/hooks/pre-push.sh:7`, `:54`, `:57`, `:87`). O wrapper instalado delega ao `bin/pre-push.sh` (`bin/hooks.sh:56`).
-
-- **Chamador real encontrado: o glob da régua**, que executa cada selo com Bash, consome seu exit code, imprime a saída somente na falha e aborta (`bin/regua.sh:138`, `:140`, `:142`, `:143`). **A régua pode sair antes desse glob** com `JA VERDE`, comparando apenas a impressão de arquivos `.py`/`.html` e status anterior; mensagens de commit e posição de `origin/main` não participam dessa condição (`bin/regua.sh:25`, `:33`, `:84`, `:86`, `:93`). Embora calcule `ARVORE_FP`, o atalho da própria régua não o compara (`bin/regua.sh:45`, `:86`).
-
-- **Falha concreta do fluxo:** o molde roda a régua antes do commit, faz o commit e chama a régua mais duas vezes, todas sem `--force`; essas chamadas posteriores podem atalhar sobre o verde anterior. O push vem depois e seu hook não chama este selo (`bin/molde_fatia/cadeia.sh:51`, `:68`, `:70`, `:81`, `:85`; `bin/pre-push.sh:12`). O molde de autocura tem a mesma sequência (`bin/molde_autocura/cadeia.sh:48`, `:65`, `:67`, `:78`, `:82`).
-
-- **Integrador também pode publicar commit que o selo ainda não viu:** sua suíte chama `bin/regua.sh --force`, porém `_subir` faz os commits depois e em seguida dá push (`app/core/integrador_lote.py:375`, `:691`, `:701`, `:719`, `:739`). Há ainda caminho de empurrar commits locais antes de rodar o lote, protegido somente pelo hook existente (`bin/integrador.sh:36`, `:44`, `:52`).
-
-- **Estado de `origin/main`:** os chamadores acima usam a referência local existente; não há atualização acoplada ao selo, cuja consulta usa diretamente `^origin/main` (`bin/tests/test_lei_akita.sh:93`, `:101`). Sua atualidade efetiva no momento de cada execução histórica: **[nao verificado]**.
-
-- **Não encontrei chamada automática do selo pós-push nos fluxos rastreados.** Nas cadeias todas as chamadas da régua antecedem o push; depois há deploy (`bin/molde_fatia/cadeia.sh:81`, `:85`, `:89`; `bin/molde_autocura/cadeia.sh:78`, `:82`, `:86`). O wrapper `push.sh` chama `pos_push.sh` após sucesso, mas esse script só atualiza `origin`, reescreve derivados de TICKETS e commita TICKETS (`bin/push.sh:6`, `:8`; `bin/pos_push.sh:18`, `:19`, `:20`, `:29`, `:30`). Uma régua posterior pode legitimamente encontrar universo vazio; isso não comprova que o commit foi julgado antes (`bin/tests/test_lei_akita.sh:101`, `:107`, `:148`).
-
-- **Consumidores e contrato:** `LEI_AKITA_R` passa a controlar toda a raiz do selo, inclusive suas verificações iniciais e leitura dos termos; os chamadores encontrados não definem essa variável (`bin/tests/test_lei_akita.sh:17`, `:28`, `:35`, `:45`, `:60`, `:65`; `bin/regua.sh:140`). A régua depende do exit code, não do texto `lei_akita: OK` (`bin/regua.sh:140`). Os marcadores Python continuam internos, interpretados pelo shell do próprio selo: `PADRAO_FALHA`, `PADRAO_FIM`, `PADRAO_SEM_CORTE`, `MORDE_OK`, `MORDE_FALHOU` (`bin/tests/test_lei_akita.sh:145`, `:147`, `:148`, `:151`, `:152`, `:153`, `:156`). A saída pública final continua sendo `lei_akita: OK (...)` ou `lei_akita: N falha(s)` (`bin/tests/test_lei_akita.sh:160`, `:163`).
-
-_1075 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1081 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
