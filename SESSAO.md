@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 31/10/2026 01:33:55.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (17.8 MB). Acoes na janela: **581**.
+**Medido em 31/10/2026 01:39:18.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (17.8 MB). Acoes na janela: **582**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:38:47 | Bash | Queue DISJUNTOR full suite at 621569a1 | `cd /home/ronald/saas-hasner; S=logs/o261e/dj_suite_completa_621569a1.log; ESTEIRA_QUEM=disjuntor-suite bin/suite.sh --dir /home/ronald/wt-disjuntor-2308 --espera 14400 > $S 2>&1; echo rc=$? >> $S; echo "SUITE DJ: $(grep -E '^(OK\|FAILED)($\| \()' $S\|tail -1) $(grep '^Ran' $S\|tail -1) $(tail -1 $S)"; grep -E '^(FAIL\|ERROR):' $S\|head` |
 | 01:29:13 | Bash | Find FIO-ESTADO spec in backlog | `cd /home/ronald/saas-hasner/app/docs; grep -n 'FIO-ESTADO' BACKLOG.md \| head -8` |
 | 01:29:04 | Bash | Read the mutant chain script | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/vfase/mutantes.sh` |
 | 01:29:01 | Bash | Inspect the queued mutant run's parent chain | `cat /home/ronald/saas-hasner/logs/vfase_asof/mutante_editada_em.log; ps -o pid,ppid,args -p $(ps -o ppid= -p 2303911) \| cut -c1-400; P=$(ps -o ppid= -p 2303911); ps -o ppid=,args= -p $P \| cut -c1-600` |
