@@ -1,7 +1,61 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 15:53** · publicado em **31/10/2026 15:56** (UTC-3)
+> Ultima resposta processada: **31/10/2026 16:05** · publicado em **31/10/2026 16:07** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 16:05 · sessao 05d1cebb902a · - · - · origem=Ronald (tmux)
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
+
+## 31/10 16:05 · sessao 31daa219b7c3 · - · - · origem=Ronald (tmux)
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
+
+## 31/10 16:05 · sessao e593285a4f13 · - · - · origem=Ronald (tmux)
+
+O selo faz varredura textual, por arquivo, não por disparo: percorre somente `bin/*.sh`, pula caminhos contendo `test_` e `trava_teste.sh`, remove comentários de linha inteira e linhas contendo `pgrep|pkill|pidof`, exige literal `manage.py test`, e aceita a presença textual de `trava_teste.sh`. (`bin/tests/test_trava_teste.sh:40-63`)
+
+A isenção efetiva é: se o texto contém `REGUA_DB`, pula o arquivo, **exceto** se também contiver `test api chamados` ou o literal `test ${ONLY:-$LABELS}`. Não avalia o valor do banco nem segue variáveis, funções ou cadeias de scripts. (`bin/tests/test_trava_teste.sh:59-62`)
+
+Aplicação aos disparadores conhecidos:
+
+| Chamador | Selo detecta/cobra? | Prova |
+|---|---|---|
+| `bin/pre-push.sh` — ambos os disparos | Sim, por arquivo; aceita string da trava | `bin/pre-push.sh:142`, `:186`, `:198`; critério `bin/tests/test_trava_teste.sh:54-62` |
+| `bin/regua.sh` | Sim; padrão especial impede isenção por `REGUA_DB` | `bin/regua.sh:165-168`; `bin/tests/test_trava_teste.sh:59-62` |
+| `bin/suite.sh` | Sim; mesmo padrão especial | `bin/suite.sh:96-102`; `bin/tests/test_trava_teste.sh:59-62` |
+| `bin/regua_relogio.sh` | Sim; não passa `REGUA_DB` | `bin/regua_relogio.sh:49-55`; `bin/tests/test_trava_teste.sh:54-62` |
+| `bin/vigia_arvore.sh` — ambos os locais | **Não cobra**: encontra literal, mas isenta por `REGUA_DB`; os comandos usam `$1` e `$IDS2`, não os padrões especiais | `bin/vigia_arvore.sh:84-86`, `:132-134`; `bin/tests/test_trava_teste.sh:59-61` |
+| `bin/isolamento.sh` | Não cobra: isento por `REGUA_DB` | `bin/isolamento.sh:31-33`; `bin/tests/test_trava_teste.sh:59-61` |
+| `bin/placar_code.sh` | Não cobra: isento por `REGUA_DB` | `bin/placar_code.sh:123-126`; `bin/tests/test_trava_teste.sh:59-61` |
+| `bin/regua_calendario.sh` | **Não cobra, embora rode LABELS inteiro**: isenção textual por `REGUA_DB`, comando usa `$LABELS` | `bin/regua_calendario.sh:22`, `:44-45`; `bin/tests/test_trava_teste.sh:59-61` |
+| `bin/molde_fatia/rodar.sh:41` | Só grep separado procurando string da trava no arquivo bruto | `bin/tests/test_trava_teste.sh:70-71`; trava presente em `bin/molde_fatia/rodar.sh:40` |
+| `bin/molde_fatia/rodar.sh:30` | **Não detecta o bypass deste disparo**: grep anterior aceita a trava presente na outra função | `bin/molde_fatia/rodar.sh:28-30`, `:40-41`; `bin/tests/test_trava_teste.sh:70-71` |
+| `bin/molde_autocura/rodar.sh` | Não: subdiretório fora do glob, sem verificação específica | disparo `bin/molde_autocura/rodar.sh:20`; glob/verificação específica `bin/tests/test_trava_teste.sh:40`, `:70` |
+| `app/core/hooks/pre-push.sh` — ambos | Não: fora de `bin/*.sh` | `app/core/hooks/pre-push.sh:82`, `:87`; `bin/tests/test_trava_teste.sh:40` |
+| `app/core/esteira_vigia.py::_rodar_testes` | Não: fora de `bin/*.sh` | `app/core/esteira_vigia.py:751-760`; `bin/tests/test_trava_teste.sh:40` |
+| Wrappers que só chamam `suite.sh`/`regua.sh` | Não descobertos diretamente se não contêm `manage.py test`; nenhuma análise transitiva | `bin/tests/test_trava_teste.sh:54`, `:62` |
+
+Além disso, cobra executável da trava, pelo menos dois arquivos aceitos, e testa serialização/rc 75 usando **cópia com lock isolado**; não exercita o lock global nem prova cobertura de todos os chamadores. (`bin/tests/test_trava_teste.sh:20`, `:85`, `:103-110`, `:119-137`)
+
+Motivos declarados:
+
+- Isenção genérica de recortes com banco próprio está escrita no selo: `bin/tests/test_trava_teste.sh:8`, `:27-28`, `:55-61`.
+- Documento nomeia `isolamento.sh`, `placar_code.sh` e `regua_calendario.sh` como sem trava, com `REGUA_DB` próprio, “isenção declarada do selo, porque nao rodam o LABELS inteiro”; também declara não mexer por escopo da obra. **A parte referente ao calendário diverge do código atual**, que deriva LABELS e roda a lista completa três vezes. (`app/docs/RELATO-ARQUIVO.md:38181`; `bin/regua_calendario.sh:22`, `:41-45`)
+- `app/core/hooks/pre-push.sh` declara serialização por **outro lock**, `/tmp/regua.lock`, herdável com `REGUA_TRAVA_HERDADA=1`; não declara autorização específica para ficar fora de `trava_teste.sh`. (`app/core/hooks/pre-push.sh:29-41`; motivo específico `[nao verificado]`)
+- Para `molde_autocura`, o disparo isolado do MAPA em `molde_fatia` e `_rodar_testes`, motivo explícito individual para bypass `[nao verificado]`; os bancos próprios estão no código, mas isso sozinho não declara uma exceção individual. (`bin/molde_autocura/rodar.sh:20`, `:24-26`; `bin/molde_fatia/rodar.sh:28-30`; `app/core/esteira_vigia.py:752`)
+- A regra canônica manda `--only` passar pela trava e diz que `regua.sh`/`bin/pre-push.sh` mantêm chamadas próprias **porque já pegam a trava**, evitando aninhamento. (`CLAUDE.md:174-179`)
+- Não localizei autorização específica de bypass em `app/docs/CORTES.md` ou `app/docs/PISTA.md` `[nao verificado]`; há, em sentido contrário, “uma suite por vez na trava” e “um push só, sem outra suite rodando junto”. (`app/docs/CORTES.md:258`, `:349`)
+
+`--quem`:
+
+- Lê exclusivamente `/tmp/juliani_db_test.lock.quem`; se não estiver não vazio, ou o `cat` falhar, imprime `livre` e sai antes de abrir/consultar `flock`. (`bin/trava_teste.sh:21`, `:28`, `:35-36`)
+- O lock real é adquirido no descritor 9 sobre `/tmp/juliani_db_test.lock`; só depois o script escreve o informativo. O texto contém `ESTEIRA_QUEM` ou basename, PID do wrapper e data; não identidade conferida de container ou processo Django. (`bin/trava_teste.sh:23`, `:35-40`)
+- Pode ler informação anterior entre aquisição e escrita, ou `livre desde...` durante o trap antes de encerrar o wrapper: informativo e lock não são uma leitura atômica. (`bin/trava_teste.sh:35-42`, inferência da ordem)
+- Se o wrapper morrer sem executar o trap, o último detentor pode permanecer no arquivo; ocorrência real nesta árvore `[nao verificado]`. A atualização para `livre` depende do trap EXIT. (`bin/trava_teste.sh:40-41`)
+- Suites sem a trava são invisíveis ao informativo; a própria documentação declara que `livre` nunca garante ausência de suite. (`CLAUDE.md:203-205`; `bin/suite.sh:7-13`)
+- Há relato explícito de containers órfãos ainda testando enquanto `--quem` respondia `livre` após morte do lançador; a existência deles agora `[nao verificado]`. (`app/docs/BACKLOG.md:1421`; `app/docs/RELATO-ARQUIVO.md:1380`)
+
 
 ## 31/10 15:53 · sessao 099205dd302f · TRAVA-MENOS-FILA · leitura · origem=Code
 
@@ -508,109 +562,4 @@ DRY:
 
 **ERROS=0** [nao verificado]
 
-## 31/10 15:00 · sessao e828f50b15de · V3-RETOMA · verificador · origem=Code
-
-**BLOQUEIA — a HE principal e seu split noturno podem usar CCTs de datas diferentes.** A principal recebe a CCT diária, mas o split conserva as extras calculadas pelo motor da fatia (`app/ponto/calculador/alimentacao.py:514`, `:535`; `app/ponto/services/fechamento.py:711`).
-
-1. **BLOQUEIA — HE100 noturna positiva com HE100 total zero.** O fechamento escolhe a CCT em `fatia_ini`; o motor grava a dobra nos períodos; a alimentação copia esses minutos para `he_pontas`, sem reconciliá-los com a nova CCT diária (`app/ponto/services/fechamento.py:711`; `app/ponto/motor_calculo_v2.py:2747`; `app/ponto/calculador/alimentacao.py:92–96`).
-
-   Se a CCT de dobra vencer dentro da mesma fatia, um feriado posterior pode perder a HE100 principal e conservar sua parcela noturna. Contraprova em memória com as funções da cópia: plantão 23h–05h, trabalhado=previsto=360, `feriado_em_dobra=False`, `he_pontas=[(entrada, saída, 0, 360)]` resulta em **HE100=0 e HE100 noturna=6** (`app/ponto/calculador/regras.py:769`, `:775–810`, `:822–834`). Ocorrência em produção: **[nao verificado]**.
-
-   Os testes novos não exercitam essa composição: praça/vigência usam períodos falsos com extras zeradas e verificam somente HE100 de feriado; o teste noturno injeta os 360 minutos diretamente (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:41`, `:69–82`; `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:44–48`).
-
-2. **NAO-BLOQUEIA — aumento de consultas sem cache equivalente nesse caminho.** Agora são **D chamadas de `get_motor_cct` por colaborador/janela**, sendo D os dias com minutos válidos, unidos aos dias bloqueados, dentro da janela. Não são automaticamente todos os dias civis do mês (`app/ponto/calculador/alimentacao.py:472–480`, `:514`). Antes eram **T chamadas**, pelos templates distintos, conforme o trecho removido do anexo (`delta_7e0f.diff`, hunk de `alimentacao.py:382`).
-
-   Assim, com um template e 30 dias visitados, passa de **1 para 30** chamadas nessa porta. No fechamento completo, a contagem passa de **F+O+T para F+O+D**: F motores das fatias e O processamento adicional de órfãos (`app/ponto/services/fechamento.py:263`, `:711`, `:793`, `:1239`). Contagens reais por colaborador/mês e impacto de latência: **[nao verificado]**.
-
-   Cada chamada relê o switch; com ele ativo, recarrega vínculo e, para empresa CCT, consulta aplicações. As escalas/células já disponíveis na porta não são repassadas à fábrica (`app/core/regua_cct.py:444–458`, `:329`, `:366`; `app/escala/alimentacao.py:298–300`; `app/ponto/calculador/alimentacao.py:400`, `:426–438`). `_FONTE_DO_MOTOR` guarda somente metadados por instância; não evita essa resolução (`app/core/regua_cct.py:488–506`).
-
-3. **NAO-BLOQUEIA — quatro testes passariam sem a cura, por inspeção estática:** [nao verificado]
-
-   - `test_a_dobra_continua_paga`: verifica a atribuição que já ocorria antes do retorno removido (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:45–46`; `app/ponto/calculador/regras.py:780–785`).
-   - `test_MORDE_NACIONAL_dobra_no_intermitente`: o nacional já estava no conjunto entregue ao código antigo (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:120–122`).
-   - `test_MORDE_dia_FORA_da_praca_nao_dobra`: o antigo `ini=21/09` antecede ambos os vínculos, iniciados em outubro; sem vínculo, não encontra a aplicação específica da praça e já produz zero (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:72`, `:171–185`; `app/core/regua_cct.py:329–330`, `:256–257`).
-   - `test_MORDE_dia_DENTRO_da_vigencia_dobra`: a convenção da empresa já estava vigente em 21/09; a leitura antiga já concedia a dobra (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:72`, `:199–214`; `app/core/regua_cct.py:261–264`).
-
-   Execução da suíte contra o código anterior: **[nao verificado]**. [nao verificado]
-
-4. **NAO-BLOQUEIA — cobertura incompleta dos demais efeitos.** O caso novo trabalha 360 minutos contra 420 previstos; portanto não protege o `elif` contra soma indevida de HE50 quando houver excedente positivo. Também não cobre saída antecipada, HE50 noturna ou parâmetros noturnos mudando com praça/vigência (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:38`, `:69–82`; `app/ponto/calculador/regras.py:794`, `:831`, `:851–861`; `app/ponto/calculador/alimentacao.py:515–537`).
-
-Os **chamadores de produção** são: `regras.do_dia` ← `rubricas_por_dia`, em `app/ponto/calculador/alimentacao.py:523`; `rubricas_por_dia` ← fechamento, em `app/ponto/services/fechamento.py:1239`, e comparador, em `app/ponto/management/commands/diff_calculador.py:417`. O fechamento entrega os valores à lavratura como versão **`oraculo`**, que substitui os campos correspondentes; os filtros de exportação examinados continuam selecionando `motor` (`app/ponto/services/fechamento.py:1256–1262`; `app/ponto/services/dia_pago.py:320–328`; `app/folha/porta_export.py:284`).
-
-Quanto ao comportamento além dos asserts, retirar o retorno mantém a dobra substituindo o excedente e permite executar **ambos os splits noturnos, adicional noturno, atraso, saída antecipada e detalhes de cadastro incompatível** (`app/ponto/calculador/regras.py:779–861`). A seleção diária altera dobra, prorrogação pós-05h e hora reduzida conforme praça/vigência; a exclusão de pontualidade continua sendo lida da família do motor (`app/ponto/calculador/alimentacao.py:411–412`, `:514–538`; `app/core/regua_cct.py:261–262`, `:329–330`).
-
-O calendário agora é o conjunto devolvido pelo motor: os motores comuns conservam o conjunto recebido; o intermitente o esvazia. **Uma data ausente do conjunto ainda consulta o calendário nacional**, mesmo quando o conjunto não está vazio (`app/ponto/motor_calculo_v2.py:740`, `:901–905`, `:3495`; `app/core/feriados.py:91–95`). Isso não recalcula feriados municipais pela praça histórica do dia: o fechamento continua montando o conjunto pelo posto do colaborador, e `folga_e_feriado` continua usando esse conjunto original (`app/ponto/services/fechamento.py:621–623`; `app/core/feriados.py:113–114`; `app/ponto/calculador/alimentacao.py:530–531`).
-
-## 31/10 14:59 · sessao f17443fe0e70 · REPROVA-E-DESENHO-CODEX · verificador · origem=Code
-
-**REPROVADO: o código cobre o fluxo sequencial básico, mas não fecha o contrato.** Há chamadas que passam sem atualizar o B3, bloqueios indevidos e voltas antigas que reaparecem após reset. (`bin/disjuntor.py:940`, `bin/disjuntor.py:1226`, `bin/disjuntor.py:852`, `bin/disjuntor.py:883`)
-
-Execução do selo e ocorrência dos cenários em produção: **[nao verificado]**. Não executei o selo porque ele cria, altera e apaga arquivos. (`bin/tests/test_disjuntor.sh:39`, `bin/tests/test_disjuntor.sh:41`, `bin/tests/test_disjuntor.sh:51`)
-
-| Item do contrato | Veredito sobre o código |
-|---|---|
-| **1. Três chamadas distintas PROCEDENTES por obra** | **Parcial.** O leitor deduplica por identidade, separa obras e usa limiar três; entretanto, o disparo depende de alguém executar `decide_b3`, e a porta direta do wrapper não executa essa decisão. (`bin/disjuntor.py:783`, `bin/disjuntor.py:805`, `bin/disjuntor.py:859`, `bin/disjuntor.py:940`) |
-| **2. Não triada ou DESCARTADO não conta** | **Cumpre com a fonte íntegra.** Vale o último veredito; somente PROCEDENTES entram na lista recalculada. Falta ou corrupção da fonte tem os defeitos descritos abaixo. (`bin/disjuntor.py:794`, `bin/disjuntor.py:805`, `bin/disjuntor.py:811`, `bin/disjuntor.py:854`) |
-| **3. Negar próximo Opus final e Codex verificador até liberação válida; outros papéis passam** | **Não cumpre integralmente.** Existem as duas guardas e o reconhecedor compartilhado, mas a porta direta consulta estado atrasado, o parser pode negar outro papel e o PreToolUse falha aberto. (`bin/disjuntor.py:625`, `bin/disjuntor.py:940`, `bin/disjuntor.py:1310`, `bin/disjuntor.py:1320`, `bin/disjuntor.py:1359`) |
-| **4. Escritor único; identidade do wrapper; somente verificador** | **Parcial.** Há uma implementação de escrita da triagem e recusa estrutural de identidade ausente, papel diferente e SHA divergente. A escrita não participa da trava do estado, e os campos não comprovam autoria pelo wrapper. (`bin/disjuntor.py:752`, `bin/disjuntor.py:776`, `bin/disjuntor.py:788`) |
-| **5. Liberação/rearme zeram e impedem recontagem das antigas** | **Não cumpre integralmente.** Arquiva as PROCEDENTES atuais; perde a identidade de voltas anteriormente contadas que estejam descartadas ou ausentes da fonte durante o reset. (`bin/disjuntor.py:854`, `bin/disjuntor.py:883`, `bin/disjuntor.py:921`) |
-
-Os caminhos de falha encontrados são estes; os cenários descrevem consequências do código, sem afirmar ocorrência em produção. (`bin/disjuntor.py:770`, `bin/disjuntor.py:814`, `bin/disjuntor.py:940`)
-
-1. **A quarta chamada direta pode passar após três PROCEDENTES.** Três `--triagem` gravam o resultado, mas não disparam o B3. Se a operação seguinte chamar o wrapper diretamente, com ambiente herdado ou por uma forma não reconhecida pelo parser, `--b3-parada` encontra o estado anterior livre e retorna zero. Isso também acontece se o estado estiver ausente, mesmo existindo triagens. (`bin/disjuntor.py:788`, `bin/disjuntor.py:791`, `bin/disjuntor.py:947`, `bin/disjuntor.py:956`; `bin/codex_pergunta.sh:54`)
-
-2. **A chamada direta continua negada após uma linha válida de liberação.** Com a obra disparada, escrever um DESENHO/ERRO-BOBO novo e válido não basta para essa porta: ela não lê o RELATO. Sem `decide_b3` intermediário, o wrapper continua recusando. (`bin/disjuntor.py:877`, `bin/disjuntor.py:940`, `bin/disjuntor.py:953`; `bin/codex_pergunta.sh:54`)
-
-3. **O parser pode negar outro papel ou outra obra.** Com OBRA-X parada, o comando abaixo executaria com papel `leitura`, mas o parser pega a primeira atribuição e o B3 o nega. Uma ocorrência dentro de `DUMMY="CODEX_PAPEL=verificador"` também pode prevalecer. Para `CODEX_OBRA="O9 (C)"`, o parser lê somente `O9`, podendo negar pela obra errada. (`bin/disjuntor.py:1226`, `bin/disjuntor.py:1228`, `bin/disjuntor.py:1310`)
-
-   ```bash
-   CODEX_OBRA=OBRA-X CODEX_PAPEL=verificador CODEX_PAPEL=leitura bin/codex_pergunta.sh h q r
-   ```
-
-4. **O próximo Opus final passa quando a decisão levanta exceção.** Estado corrompido, trava ocupada ou triagem sem permissão de leitura impedem a decisão; `main_pretool` registra FALHA e termina sem negar. O Stop também omite o recado B3 nesse caminho. A porta do wrapper, especificamente para estado ilegível, recusa: são comportamentos diferentes. (`bin/disjuntor.py:257`, `bin/disjuntor.py:264`, `bin/disjuntor.py:798`, `bin/disjuntor.py:1359`, `bin/disjuntor.py:949`; `bin/hook_stop_fila1.py:1056`)
-
-5. **A classificação textual pode pular a guarda do Opus.** Um prompt de leitura final da OBRA-X que inclua a citação antiga “nao e a leitura final” faz `_eh_final` retornar falso. Uma obra não reconhecida também pula a consulta B3. (`bin/disjuntor.py:113`, `bin/disjuntor.py:498`, `bin/disjuntor.py:511`, `bin/disjuntor.py:1320`)
-
-6. **Uma volta já contada pode contar novamente após liberação ou rearme.** Cenário: `a,b,c` PROCEDENTES disparam; `a` vira DESCARTADO; uma decisão recalcula `[b,c]`; a liberação arquiva somente `[b,c]`. Depois, `a` volta a PROCEDENTE e, com apenas duas novas `d,e`, dispara novamente como `[a,d,e]`. O rearme sofre o mesmo problema porque suas pendências também contêm somente PROCEDENTES atuais. (`bin/disjuntor.py:851`, `bin/disjuntor.py:854`, `bin/disjuntor.py:883`, `bin/disjuntor.py:921`)
-
-7. **O rearme não alcança triagens ainda sem registro B3 da obra.** Três PROCEDENTES gravadas antes de qualquer varredura, seguidas de `--rearma-b3`, encontram `r` ausente: o comando recusa o rearme e não arquiva aquelas voltas. Elas podem disparar na primeira decisão posterior. (`bin/disjuntor.py:917`, `bin/disjuntor.py:919`, `bin/disjuntor.py:859`, `bin/disjuntor.py:1551`)
-
-8. **Fonte ausente apaga contagem conhecida e pode permitir recontagem.** Com duas voltas conhecidas, perder `triagem.log` faz a decisão substituir a lista por vazia. Se a obra já estava disparada, liberar durante essa ausência arquiva uma lista vazia; restaurar a trilha permite que as mesmas três voltas antigas disparem novamente. (`bin/disjuntor.py:800`, `bin/disjuntor.py:854`, `bin/disjuntor.py:869`, `bin/disjuntor.py:883`)
-
-9. **Fonte truncada ou corrompida produz contagem silenciosamente errada.** Linhas inválidas são ignoradas. Uma última linha DESCARTADO truncada deixa prevalecer o PROCEDENTE anterior, podendo disparar indevidamente; perder linhas PROCEDENTE subconta. (`bin/disjuntor.py:798`, `bin/disjuntor.py:803`, `bin/disjuntor.py:805`)
-
-10. **A triagem é gravada fora da trava do estado.** Duas triagens iguais concorrentes podem ambas observar ausência e acrescentar duas linhas. Isso quebra a idempotência da escrita, mas **não duplica sozinho a contagem**, porque o leitor deduplica pela identidade. O JSON B3 é gravado sob `flock`; a escrita desprotegida identificada é `triagem.log`. (`bin/disjuntor.py:252`, `bin/disjuntor.py:273`, `bin/disjuntor.py:784`, `bin/disjuntor.py:788`, `bin/disjuntor.py:805`)
-
-11. **Chamadas concorrentes no mesmo caminho podem misturar resposta e identidade.** A termina como verificador; B, papel leitura, sobrescreve o mesmo arquivo; A então calcula o SHA do conteúdo de B e grava seu próprio sidecar. A triagem aceita a resposta de leitura com identidade de verificador. Não há exclusão por caminho envolvendo resposta e sidecar. (`bin/codex_pergunta.sh:163`, `bin/codex_pergunta.sh:184`, `bin/codex_pergunta.sh:186`, `bin/codex_pergunta.sh:187`; `bin/disjuntor.py:779`, `bin/disjuntor.py:781`)
-
-12. **Uma tentativa negada pode destruir a identidade da resposta anterior.** Reutilizar o caminho numa obra parada apaga `.id` antes de consultar B3; a tentativa é negada e a resposta anterior, ainda existente, deixa de ser triável. Além disso, a falha do `rm` não interrompe o script, podendo deixar um sidecar antigo. (`bin/codex_pergunta.sh:27`, `bin/codex_pergunta.sh:52`, `bin/codex_pergunta.sh:54`; `bin/disjuntor.py:776`)
-
-13. **`mtime` não garante que a resposta pertence à chamada.** Uma resposta legítima com `mtime` igual ao cabeçalho não recebe identidade, apesar de rc zero. Condicionalmente, uma resposta antiga com timestamp futuro passa em `-nt` se a execução retornar zero sem substituí-la, recebendo identidade nova. Ocorrência dessas condições: **[nao verificado]**. (`bin/codex_pergunta.sh:125`, `bin/codex_pergunta.sh:141`, `bin/codex_pergunta.sh:184`, `bin/codex_pergunta.sh:190`)
-
-14. **Os campos do sidecar não atestam sua origem.** Fabricar os campos exigidos com SHA correto satisfaz a validação; alterar `papel` de leitura para verificador mantém o SHA da resposta válido. O próprio selo fabrica identidades dessa forma. Portanto, a exigência literal de identidade *gravada pelo wrapper* excede o que a checagem demonstra. (`bin/disjuntor.py:752`, `bin/disjuntor.py:759`, `bin/disjuntor.py:779`, `bin/disjuntor.py:781`; `bin/tests/test_disjuntor.sh:1129`)
-
-15. **A leitura apresenta zeros compatíveis com “verde” sem ter lido a trilha.** `ler` inicia disparos, negações e liberações zerados; ignora `OSError` na trilha; `linha` apresenta `B3=0` e os demais zeros. Estado ausente também resulta em zero para `b3_sem_obra`; estado ilegível, nesse campo específico, preserva “nao sei”. (`bin/disjuntor.py:1403`, `bin/disjuntor.py:1435`, `bin/disjuntor.py:1523`, `bin/disjuntor.py:1531`, `bin/disjuntor.py:295`, `bin/disjuntor.py:1469`)
-
-A cobertura de `b3_codex` e dos mutantes é parcial; os resultados de execução permanecem **[nao verificado]**. (`bin/tests/test_disjuntor.sh:1125`, `bin/tests/test_disjuntor.sh:1272`)
-
-| Item | Casos e mutantes existentes | O que fica sem caso que morde |
-|---|---|---|
-| **1** | Duas passam, terceira dispara; obras separadas; mesma identidade triada cinco vezes. Mutantes `sem-codex`, `limiar-2`, `por-achado`. (`bin/tests/test_disjuntor.sh:1147`, `bin/tests/test_disjuntor.sh:1151`, `bin/tests/test_disjuntor.sh:1156`, `bin/tests/test_disjuntor.sh:1272`, `bin/tests/test_disjuntor.sh:1282`) | Uma chamada real produzindo exatamente uma identidade: as respostas e sidecars são fabricados pelo teste. (`bin/tests/test_disjuntor.sh:1129`) |
-| **2** | DESCARTADO, não triado e PROCEDENTE→DESCARTADO; mutantes `conta-descartado` e `acumula`. (`bin/tests/test_disjuntor.sh:1140`, `bin/tests/test_disjuntor.sh:1144`, `bin/tests/test_disjuntor.sh:1174`, `bin/tests/test_disjuntor.sh:1273`, `bin/tests/test_disjuntor.sh:1284`) | Fonte ausente, truncada ou ilegível. Os negativos usam ausência do recado B3, podendo aceitar uma falha aberta. (`bin/tests/test_disjuntor.sh:1135`, `bin/tests/test_disjuntor.sh:1142`, `bin/tests/test_disjuntor.sh:1180`) |
-| **3** | Negação de Opus/Codex, leitura permitida, Stop e DESENHO liberando; mutantes `volta-nao-nega` e `porta-sempre-livre`. (`bin/tests/test_disjuntor.sh:1157`, `bin/tests/test_disjuntor.sh:1159`, `bin/tests/test_disjuntor.sh:1164`, `bin/tests/test_disjuntor.sh:1275`, `bin/tests/test_disjuntor.sh:1287`) | **A porta real do wrapper.** O teste chama somente Python, depois de `_parada` já materializar o disparo; não testa wrapper como primeira operação após terceira triagem ou após liberação. (`bin/tests/test_disjuntor.sh:1191`, `bin/tests/test_disjuntor.sh:1192`) |
-| **4** | Recusa sem sidecar, outro papel, veredito inválido e SHA divergente; mutantes `sem-sidecar` e `sem-sha`. (`bin/tests/test_disjuntor.sh:1137`, `bin/tests/test_disjuntor.sh:1173`, `bin/tests/test_disjuntor.sh:1276`, `bin/tests/test_disjuntor.sh:1286`) | Produção/autoria da identidade pelo wrapper e concorrência da escrita. Os mutantes copiam apenas `.py`, excluindo o shell. (`bin/tests/test_disjuntor.sh:1129`, `bin/tests/test_disjuntor.sh:1207`) |
-| **5** | Liberação seguida de nova volta isolada; reclassificação depois da liberação; rearme com PROCEDENTES pendentes. Mutantes retiram arquivamento na liberação e pendências no rearme. (`bin/tests/test_disjuntor.sh:1167`, `bin/tests/test_disjuntor.sh:1170`, `bin/tests/test_disjuntor.sh:1184`, `bin/tests/test_disjuntor.sh:1281`, `bin/tests/test_disjuntor.sh:1285`) | Reclassificação **antes** do reset, fonte ausente durante reset e rearme sem registro B3 prévio. (`bin/tests/test_disjuntor.sh:1170`, `bin/tests/test_disjuntor.sh:1183`, `bin/tests/test_disjuntor.sh:1186`) |
-
-**O buraco decisivo do selo é o item 3 na integração com o wrapper:** retirar `codex_pergunta.sh:54` fica fora do percurso exercitado. O item 4 também não tem prova da identidade realmente emitida pelo wrapper, e o item 5 não tem o ordenamento que ressuscita voltas antigas. ERRO-BOBO e validação detalhada do topo têm casos gerais em `b3`/`b3_topo`, mas isso não cobre essas lacunas de integração e reset. (`bin/tests/test_disjuntor.sh:1129`, `bin/tests/test_disjuntor.sh:1192`, `bin/tests/test_disjuntor.sh:1207`, `bin/tests/test_disjuntor.sh:1170`, `bin/tests/test_disjuntor.sh:386`, `bin/tests/test_disjuntor.sh:700`)
-
-## 31/10 14:59 · sessao e59b691f8ed7 · - · - · origem=Ronald (tmux)
-
-- **BLOQUEIA — HE noturna usa CCT de outra data.** O fechamento monta o motor em `fatia_ini` (`app/ponto/services/fechamento.py:711`); esse motor grava a dobra no período (`app/ponto/motor_calculo_v2.py:2747`). A alimentação copia suas HE50/100 (`app/ponto/calculador/alimentacao.py:92`) e as entrega intactas (`app/ponto/calculador/alimentacao.py:535`). Entretanto, os totais passam a usar a CCT diária (`app/ponto/calculador/alimentacao.py:514`), enquanto os splits continuam usando as extras antigas (`app/ponto/calculador/regras.py:822`). Reprodução em memória com funções extraídas por AST: plantão 23h–05h, trabalhado=previsto=360, CCT diária sem dobra, período antigo com 360 minutos de HE100 ⇒ `HE100=0`, `HE100_noturna=6`; os ramos responsáveis estão em `app/ponto/calculador/regras.py:775` e `app/ponto/calculador/regras.py:834`. Ocorrência em produção: **[nao verificado]**.
-
-- **NAO-BLOQUEIA — cobertura incompleta da retirada do `return`.** Além dos três efeitos exercitados, o fluxo agora calcula saída antecipada e publica detalhes de cadastro incompatível (`app/ponto/calculador/regras.py:851`, `app/ponto/calculador/regras.py:858`), além de HE50 noturna (`app/ponto/calculador/regras.py:831`). O cenário novo tem trabalhado=360 e previsto=420 (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:38`), portanto não testa dobra com excedente positivo nem protege a exclusão da HE50 pelo `elif` (`app/ponto/calculador/regras.py:794`).
-
-- **NAO-BLOQUEIA — teste que não morde.** `test_a_dobra_continua_paga` verifica apenas a dobra, já atribuída antes do antigo retorno; passaria sem retirar esse retorno (`app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py:45`; `app/ponto/calculador/regras.py:780`).
-
-O chamador de produção de `regras.do_dia` é `app/ponto/calculador/alimentacao.py:523`; `rubricas_por_dia` é chamado pela lavratura do fechamento (`app/ponto/services/fechamento.py:1239`, versão `oraculo` em `:1262`) e pelo comando comparador (`app/ponto/management/commands/diff_calculador.py:417`).
-
-_1111 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1114 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
