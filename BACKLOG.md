@@ -1554,6 +1554,8 @@
 | V-FASE-FILA-DONO-DEPENDE-DA-JANELA | fila + pergunta de lei (opus item 2): `e6_oraculo.InsumosDoDono.fase()` faz o dono do dia passado depender da janela da lavra no dia em que roda (col451 10/10 volta a ESTRUTURA quando a janela anda); guardar o dono OU declarar a janela como lei (L-099 determinismo) | pergunta no topo do RELATO |
 | V-FASE-FILA-FIO-ADMIN-SEM-PORTA | fila (opus item 3): `vigia_fio._fio_do_admin` conta como do admin um dia C10 antes do piso (`aplicavel` False, sem porta) -- contador diz acao que nao ha; entra junto da F5 (ela passa a ler o juiz porta_alcancavel_do_dia) | registrado |
 | V-FASE-FILA-MIUDOS | fila (opus itens 4-7): proposta_do_fio mostra so a 1a proposta (sequencial); C10 `aplicavel` velho entre a virada e a lavra 07:38; teste do rotulo por substring; descartes do Codex (C9 sem corte por hoje, pre-filtro de pautas com insumos incompletos, JUIZES.md sem o censo_fase como lavra) | registrado |
+| V-FASE-DONO-AS-OF | **cura (aval 30/10 23:4x, opcao (a))**: `e6_oraculo.InsumosDoDono.fase()` le, por dia passado, a lavra MAIS RECENTE que COBRIU aquele dia (as-of, `MetricaSnapshot` por data_ref), nao a ultima lavra; GATILHO: cadastro ou batida do dia mudou depois da lavra -> o dia volta a ser lavrado (corte 07/10 'mudou, muda em tudo'); lavra congelada sem gatilho = proibido. RED: col451 10/10 com `--hoje` depois de 21/11 segue CADASTRO. | construtor aberto 30/10 23:4x | aval 30/10 23:4x | `escala/services/fase_12x36.py::ultimo_lavrado` | 30/10 |
+| V-FASE-FILA-LAVRA-TODAS-AS-COMPS | medida (nao trava): custo do censo_fase_12x36 lavrando todas as comps (opcao (c)); se couber no cron, (c) substitui (a) por aval dele | fila | aval 30/10 23:4x | &mdash; | 30/10 |
 <!-- OBRAS:FIM -->
 
 ## Contagem por portao
