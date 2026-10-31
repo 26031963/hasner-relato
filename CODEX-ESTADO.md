@@ -1,7 +1,45 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 02:37** · publicado em **31/10/2026 02:38** (UTC-3)
+> Ultima resposta processada: **31/10/2026 03:01** · publicado em **31/10/2026 03:05** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 03:01 · sessao 0b50d4b4a7dc · O261-E-F1-CLASSE-4 · sonda · origem=Code
+
+**(1) tipo_dia_por_trabalha**
+
+| trabalha | ata.tipo_dia | Contagem | Referência |
+|---|---|---:|---|
+| True | 'trabalho' | 46093 | [nao verificado] |
+| False | 'folga' | 22128 | [nao verificado] |
+| True | None | 10409 | [nao verificado] |
+| False | None | 5382 | [nao verificado] |
+| True | 'ausencia' | 2904 | [nao verificado] |
+| False | 'ausencia' | 1609 | [nao verificado] |
+| True | 'falta' | 375 | [nao verificado] |
+| True | 'folga' | 1885 | [nao verificado] |
+| None | 'trabalho' | 52007 | [nao verificado] |
+| False | 'trabalho' | 154 | [nao verificado] |
+| None | 'folga' | 222 | [nao verificado] |
+| None | 'ausencia' | 78 | [nao verificado] |
+| None | None | 66 | [nao verificado] |
+
+**(2) universo_chamados_vivos_com_celula: 2964** [nao verificado]
+
+**(3) divergem**
+
+| Chave (trabalha, tipo_dia, em CALADOS_POR_ISENCAO, modulo) | Contagem | Chamado de exemplo | Referência |
+|---|---:|---:|---|
+| (None, 'trabalho', False, 'ancora_limbo') | 1 | 12982 | [nao verificado] |
+| (True, 'ausencia', False, 'batida_fora_escala_leve') | 1 | 17793 | [nao verificado] |
+| (True, 'ausencia', False, 'colaborador_em_ferias') | 1 | 28767 | [nao verificado] |
+| (True, 'ausencia', False, 'desligamento_revisao') | 10 | 35918 | [nao verificado] |
+| (True, 'ausencia', False, 'disputa_supervisao') | 3 | 20782 | [nao verificado] |
+| (True, 'ausencia', False, 'sem_previsao_escala') | 5 | 35217 | [nao verificado] |
+| (True, 'falta', False, 'desligamento_revisao') | 4 | 35915 | [nao verificado] |
+| (True, 'falta', False, 'disputa_supervisao') | 1 | 15402 | [nao verificado] |
+| (True, 'folga', False, 'desligamento_revisao') | 1 | 16004 | [nao verificado] |
+| (True, 'folga', False, 'sem_previsao_escala') | 1 | 32564 | [nao verificado] |
+| (True, 'folga', True, 'batida_ausente') | 10 | 34867 | [nao verificado] |
 
 ## 31/10 02:37 · sessao 6a09fec44f3d · O261-E-F5C · verificador · origem=Code
 
@@ -674,24 +712,4 @@ Achados conferidos, somente por leitura:
 
 - **Ordenação:** os adiados passam agora por `sobrevivente_por_ultimo` (`app/ponto/services/cartorio.py:754`); o fechamento imediato também (`app/ponto/services/cartorio.py:1221`). Esse ordenador consulta C8 e põe o sobrevivente por último, preservando a ordem dos demais (`app/chamados/juizes.py:1644`). A segunda passada continua ordenada por data (`app/ponto/services/cartorio.py:766`), como exige o teste existente (`app/chamados/tests/test_o261e_f1_codex_v5.py:164`).
 
-## 31/10 00:44 · sessao 6a0aa9eab820 · - · - · origem=Ronald (tmux)
-
-Conferências do recorte:
-
-- **Um teste existente precisa mudar de caminho/log:** `test_MORDE_rec_dois_turno_aberto_em_folga_com_vespera_furada_sobrevive_o_mais_novo` exige `[RECONCILIA] ` em `app/ponto/tests/test_fechar3_troca_escala_gate.py:153`. Com `trabalha=False`, `_protesta` devolve False (`app/ponto/services/cartorio.py:1155`), o lote passa por `_porm` (`app/ponto/services/cartorio.py:1222`) e escreve `[RECONCILIA-MARCO]` (`app/ponto/services/cartorio.py:1228`). `_protestam` vazio não gera a cobrança indevida que acionaria `_rec` (`app/ponto/services/cartorio.py:1157`, `app/ponto/services/cartorio.py:1249`). A expectativa de sobrevivência do mais novo continua compatível com `sobrevivente_por_ultimo` (`app/chamados/juizes.py:1648`) e com o gate de dedup (`app/chamados/models.py:702`).
-
-- **O teste de adiados não exige mock novo:** seu lote contém um único chamado falso (`app/chamados/tests/test_o261e_f1_codex_v5.py:169`); `sobrevivente_por_ultimo` devolve lotes com menos de dois elementos antes de consultar ORM (`app/chamados/juizes.py:1645`). A ordenação da segunda passada continua protegida pelo `sorted` (`app/ponto/services/cartorio.py:766`) e pelo teste (`app/chamados/tests/test_o261e_f1_codex_v5.py:183`).
-
-- **Os testes antigos do teto continuam válidos:** exercitam justamente o marco perguntado com `acesa=None, pendente=True` (`app/chamados/tests/test_o261_e2_absolvicao_exige_fato_encerrado.py:27`), que não satisfaz `fato_do_marco_no_espelho` (`app/chamados/juizes.py:869`). Portanto continuam esperando ausência de carimbo (`app/chamados/tests/test_o261_e2_absolvicao_exige_fato_encerrado.py:64`) e pergunta viva (`app/chamados/tests/test_o261_pergunta_viva_teto.py:54`).
-
-- **Leitor que não migrou literalmente, mas tem contrato mais largo:** `q_vivas` mantém a proteção de toda célula provisória, sem a exceção pelo marco aceso (`app/chamados/models.py:2575`). Entretanto seu contrato é prefiltragem generosa por continência; o consumidor deve consultar o juiz para resposta exata (`app/chamados/models.py:2556`, `app/chamados/models.py:2594`). Isso isoladamente não prova divergência indevida.
-
-- **Memo incompleto:** a decisão nova depende de `cel.ata` e `cel.dna` (`app/chamados/juizes.py:1068`, `app/chamados/juizes.py:849`, `app/chamados/juizes.py:866`), mas `_chave_memo_pv` não contém esses campos (`app/chamados/juizes.py:767`). Alterar somente a ata, mantendo o veredito, permite devolver a resposta cacheada (`app/chamados/juizes.py:793`). O teste que promete invalidar por qualquer campo lido não cobre ata/DNA (`app/chamados/tests/test_selo_memo_pergunta_viva.py:117`). Não prova loop persistente: E2 consulta novas instâncias (`app/chamados/reconciliador.py:584`).
-
-- **Vai-e-volta possível por assimetria preexistente:** fechamento por dedup usa outro chamado vivo do **dia** (`app/chamados/models.py:702`); reabertura verifica irmão do **turno** (`app/chamados/models.py:1294`), que exige `entrada_timestamp` (`app/chamados/juizes.py:1674`). O fixture dos dois `turno_aberto` em folga omite essa chave (`app/ponto/tests/test_fechar3_troca_escala_gate.py:145`), mantém a véspera furada (`app/ponto/tests/test_fechar3_troca_escala_gate.py:131`) e fecha o velho por dedup (`app/ponto/tests/test_fechar3_troca_escala_gate.py:154`). A premissa do turno em folga continua consultando a véspera (`app/chamados/models.py:1225`, `app/chamados/juizes.py:424`). Com vínculo sem veto, o velho pode reabrir: exigência de fato novo só vale para encerramento administrativo (`app/chamados/models.py:1282`); caminho permitido grava reabertura (`app/chamados/models.py:1373`). Rejulgamento pode fechá-lo por dedup novamente. Execução com banco: **[não verificado]**.
-
-- **Nomenclatura:** o modelo destes caminhos é `PerguntaDisputa` (`app/chamados/models.py:2142`), com estado `PENDENTE` (`app/chamados/models.py:2310`); a existência de um modelo chamado `PerguntaPendente` não foi encontrada no censo textual da cópia **[não verificado]**.
-
-- **Outra regra de “sem trabalho” já existente:** `dia_sem_trabalho` considera `trabalha is not True` ou ata com tipo diferente de trabalho (`app/chamados/juizes.py:386`), enquanto o predicado novo só dispensa por `trabalha is False` ou marcos acesos (`app/ponto/services/cartorio.py:1155`).
-
-_853 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_854 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
