@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 31/10/2026 03:10:51.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (22.4 MB). Acoes na janela: **737**.
+**Medido em 31/10/2026 03:16:07.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (22.5 MB). Acoes na janela: **738**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:11:45 | Bash | Baseline settings diff and record DJ verdict | `cd /home/ronald/saas-hasner; W=/home/ronald/wt-disjuntor-v2-0209; diff .claude/settings.json $W/.claude/settings.json > logs/disjuntor/settings_vivo_x_copia_0315.diff; echo rc=$?; wc -l logs/disjuntor/settings_vivo_x_copia_0315.diff; grep -c '^<' logs/disjuntor/settings_vivo_x_copia_0315.diff; md5sum .claude/settings.json \| tee logs/disjuntor/settings_vivo.md5; git -C $W diff --stat main 40612767 ...` |
 | 03:04:56 | Bash | Point ESPERANDO at the queued F5C suite pid | `cd /home/ronald/saas-hasner; sed -i "3s/.*/ESPERANDO: trava_teste.sh \| pid=4078298/" app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md` |
 | 03:04:52 | Bash | List trava_teste processes | `pgrep -af trava_teste.sh \| grep -v pgrep \| cut -c1-200` |
 | 03:04:46 | Bash | Read rest of pid proof | `cd /home/ronald/saas-hasner; sed -n 519,545p bin/hook_stop_fila1.py` |
