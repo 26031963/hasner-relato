@@ -1,7 +1,87 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 13:05** · publicado em **31/10/2026 13:06** (UTC-3)
+> Ultima resposta processada: **31/10/2026 13:08** · publicado em **31/10/2026 13:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 13:08 · sessao 0b3b9a70c232 · GRADE-FOLGA · verificador · origem=Code
+
+**Há um bloqueador: o calendário adaptou o formato, mas continua fornecendo um universo de folgas incompatível com a fonte compartilhada.** Isso preserva divergências entre calendário, grade e precedência (`app/colaboradores/services/calendario.py:593`, `app/colaboradores/services/calendario.py:607`; `app/ponto/precedencia.py:207`).
+
+1. **Quem escreve e quem lê o novo formato**
+
+   O carregador produz listas com todas as `FolgaDia` da pessoa, ordenadas por pk; o calendário produz tuplas `(True,)` somente com datas do vínculo ativo (`app/ponto/precedencia.py:207`; `app/colaboradores/services/calendario.py:593`, `app/colaboradores/services/calendario.py:607`).
+
+   | API/formato | Todos os chamadores diretos encontrados em produção |
+   |---|---|
+   | `folgas_lancadas_do_periodo` | `app/ponto/precedencia.py:282`; `app/escala/utils.py:1119` |
+   | `folga_lancada_do_dia` | `app/ponto/precedencia.py:358`; `app/escala/utils.py:1124` |
+   | `folga_lancada_vale_no_dia` | `app/ponto/precedencia.py:218` |
+   | Argumento explícito `folgas_lancadas=` | `app/colaboradores/services/calendario.py:607` |
+
+   Não encontrei chamadas diretas dessas APIs nem outro fornecimento explícito do parâmetro em testes [nao verificado]. Os testes novos exercitam os helpers indiretamente pela grade e por `fatos_do_dia` (`app/escala/tests/test_grade_folga_de_calendario_e_do_vinculo.py:57`, `app/escala/tests/test_grade_folga_de_calendario_e_do_vinculo.py:62`).
+
+   **Os leitores das listas estão corretos:** ambos passam as candidatas ao seletor; este percorre até encontrar uma válida. O `bool(folga_lancada)` da saída ocorre depois da seleção (`app/ponto/precedencia.py:217`, `app/ponto/precedencia.py:358`, `app/ponto/precedencia.py:408`; `app/escala/utils.py:1124`).
+
+   **O erro é a alimentação alternativa do calendário:**
+
+   - `folgas_do_periodo` conserva vínculo e data, mas descarta `calendario_origem_id`; o calendário carrega apenas o vínculo ativo (`app/escala/alimentacao.py:66`; `app/colaboradores/services/calendario.py:593`).
+   - Quando `_cobre`, fornece `(True,)` e impede a carga completa da pessoa; `True` é aceito como folga manual incondicionalmente (`app/colaboradores/services/calendario.py:602`, `app/colaboradores/services/calendario.py:607`; `app/ponto/precedencia.py:281`, `app/ponto/precedencia.py:238`).
+   - **Falso positivo:** o ativo cobre a janela, mas a célula declara outro vínculo como geradora. Uma folga de calendário do ativo passa como manual, embora devesse ser rejeitada contra o vínculo escolhido pela juíza (`app/ponto/precedencia.py:327`, `app/ponto/precedencia.py:351`, `app/ponto/precedencia.py:240`; `app/colaboradores/services/calendario.py:607`).
+   - **Falso negativo:** uma folga manual presa ao vínculo antigo desaparece dessa alimentação, embora o carregador completo a encontre e o predicado a aceite (`app/colaboradores/services/calendario.py:593`; `app/ponto/precedencia.py:207`, `app/ponto/precedencia.py:238`).
+
+   Isso muda a apresentação: `_fatos` alimenta `folga_humana`, que força `trabalho=False` e pode devolver status `folga` (`app/colaboradores/services/calendario.py:792`, `app/colaboradores/services/calendario.py:801`, `app/colaboradores/services/calendario.py:116`, `app/colaboradores/services/calendario.py:134`). A correção deve fornecer as candidatas reais pelo carregador compartilhado, ou deixar `fatos_do_periodo` carregá-las (`app/ponto/precedencia.py:281`).
+
+2. **Duas ou mais FolgaDia: a seleção foi corrigida nos dois builders**
+
+   Não há leitor que selecione simplesmente a primeira candidata bruta nesses caminhos: grade e precedência usam o mesmo seletor, que testa cada candidata até a primeira válida (`app/escala/utils.py:1124`; `app/ponto/precedencia.py:217`, `app/ponto/precedencia.py:358`).
+
+   No builder por turno, o vínculo passado vem do mapa calculado pela juíza; no legacy, o vínculo do segmento também vem dela, e o recorte elimina o dia extra `d0-1` (`app/escala/utils.py:1262`, `app/escala/utils.py:1268`, `app/escala/utils.py:1794`, `app/escala/utils.py:977`, `app/escala/utils.py:999`). Portanto, o descarte do item 3 da triagem se sustenta para esse dia extra; o ramo legacy sem vínculo continua retornando antes do overlay e não foi alterado pelo diff (`app/escala/utils.py:987`).
+
+   A ordem agora é todas as folgas, depois as ausências; o tratamento conserva folga diante de falta aprovada e permite que ausência não falta a sobreponha (`app/escala/utils.py:1794`, `app/escala/utils.py:1797`, `app/escala/utils.py:1178`). A medição desse impacto mencionada na triagem não foi apresentada [nao verificado].
+
+3. **Versão 3 e horizonte**
+
+   `REGRA_VERSOES` é lida pela validação no import e por `versao_para`; este escolhe a maior versão aplicável à competência, sem teto superior (`app/ponto/services/cartorio.py:177`, `app/ponto/services/cartorio.py:201`, `app/ponto/services/cartorio.py:206`).
+
+   | Competência | Versão resultante |
+   |---|---|
+   | Até 2026-08 | `None` |
+   | 2026-09 | `1` |
+   | Desde 2026-10, inclusive futuras | `3` |
+
+   Essas respostas seguem a comparação dos horizontes com a competência derivada da janela da empresa, não do mês civil (`app/ponto/services/cartorio.py:203`, `app/ponto/services/cartorio.py:206`; `app/ponto/janelas.py:60`).
+
+   O chamador de produção de `versao_para` é `_regra_do_dia`, usado nos dois ramos que montam a impressão. A mudança 2→3 altera o hash e permite sair do pulo por impressão igual na próxima execução do cartório (`app/ponto/services/cartorio.py:957`, `app/ponto/services/cartorio.py:1009`, `app/ponto/services/cartorio.py:1161`, `app/ponto/services/cartorio.py:362`, `app/ponto/services/cartorio.py:1167`).
+
+   Os selos da declaração viva foram atualizados. As expectativas restantes de versões 1/2 usam declarações substituídas por `patch` ou valores passados diretamente ao hash; o teste de `nunca_bateu` consulta a versão viva (`app/ponto/tests/test_o219_versao_da_regra.py:76`, `app/ponto/tests/test_o219_versao_da_regra.py:89`, `app/ponto/tests/test_o219_versao_da_regra.py:112`, `app/ponto/tests/test_o219_versao_da_regra.py:136`, `app/ponto/tests/test_o219_versao_da_regra.py:151`, `app/ponto/tests/test_o219_versao_da_regra.py:159`, `app/ponto/tests/test_o219_versao_da_regra.py:166`; `app/ponto/tests/test_selo_b5u_nunca_bateu_ve_ausencia.py:128`).
+
+   **Exportação não é filtro da versão:** qualquer competência exportada desde 2026-10 seria alcançada (`app/ponto/services/cartorio.py:206`). O comentário afirma exportadas somente até 09, mas existência efetiva de exportada alcançada não está demonstrada pelos dados fornecidos [nao verificado] (`app/ponto/services/cartorio.py:172`).
+
+4. **O item 6 da triagem precisa voltar como bloqueador**
+
+   A parte do calendário não responde “pode lançar?”: alimenta a classificação exibida. Logo, sua adaptação não podia parar em `True → (True,)` (`app/colaboradores/services/calendario.py:607`, `app/colaboradores/services/calendario.py:792`, `app/colaboradores/services/calendario.py:799`).
+
+   Os outros dois sítios enfileirados continuam sendo caminhos de porta e não consomem o novo formato: `o_dia_ja_e_folga` consulta o vínculo do dia; `_folga_avulsa` alimenta o veto de lançamento (`app/ponto/services/declarar_dia.py:90`; `app/ponto/precedencia.py:165`, `app/ponto/precedencia.py:501`). Isso não absolve suas regras, mas não demonstra uma regressão de formato causada por este diff nesses dois sítios (`app/ponto/services/declarar_dia.py:70`; `app/ponto/precedencia.py:166`).
+
+5. **Classes de reprovação**
+
+   - **Derivação paralela de fonte única: ocorre no calendário**, pela reconstrução incompleta das candidatas já descrita (`app/colaboradores/services/calendario.py:607`; `app/ponto/precedencia.py:207`).
+   - **Segundo juiz novo:** o predicado foi extraído da precedência e compartilhado; não identifiquei duplicação nova da autoridade registrada nesses trechos (`app/core/juizes.py:160`; `app/ponto/precedencia.py:223`, `app/ponto/precedencia.py:358`; `app/escala/utils.py:1124`).
+   - **Segundo escritor persistente, relógio fora da borda ou ordem nova de travas:** os trechos acrescentados carregam dados e alteram dicionários locais; não acrescentam escrita ORM, leitura de relógio ou aquisição de trava (`app/ponto/precedencia.py:207`; `app/escala/utils.py:1118`, `app/escala/utils.py:1125`).
+   - **Cada teste novo fica vermelho sem a cura? Não.** Por inspeção, quatro das dez execuções herdadas são controles que já passavam: calendário velho no legacy, manual velha por turno e calendário novo nos dois builders. O próprio teste reconhece os dois primeiros; coexistência e manual fora da janela fornecem contraexemplos para ambos (`app/escala/tests/test_grade_folga_de_calendario_e_do_vinculo.py:21`, `:80`, `:85`, `:91`, `:97`, `:102`). Execução efetiva RED/GREEN [nao verificado].
+   - **Pouso antes do pré-requisito:** o ensaio `--apply` é exigido expressamente, mas seus resultados e eventual pouso não foram fornecidos [nao verificado] (`app/ponto/services/cartorio.py:173`, `app/ponto/services/cartorio.py:175`).
+
+## 31/10 13:06 · sessao 5d7fa2e39603 · - · - · origem=Ronald (tmux)
+
+Não encontrei defeito novo nos dois builders quanto à seleção de múltiplas candidatas: o seletor percorre cada candidata até achar a primeira válida; grade e precedência usam esse mesmo seletor (`app/ponto/precedencia.py:217`, `app/ponto/precedencia.py:358`, `app/escala/utils.py:1124`).
+
+- **Legacy / descarte da triagem 3:** o vínculo de cada segmento vem da juíza; `lambda _d: esc` corresponde ao vínculo dos dias preservados. O dia extra `d0-1` é removido pelo recorte (`app/escala/utils.py:972`, `app/escala/utils.py:977`, `app/escala/utils.py:770`, `app/escala/utils.py:995`, `app/escala/utils.py:999`).
+- **Legacy sem vínculo:** retorna diretamente dias como folga e pula o overlay; não chama `montar_grade_prevista(None)`. Isso já existia e não é alterado pelo diff fornecido (`app/escala/utils.py:987`, `app/escala/utils.py:989`, `app/escala/utils.py:991`).
+- **Por turno:** o mapa passado ao overlay é calculado pela mesma juíza; não há escolha paralela do vínculo acrescentada nesta obra (`app/escala/utils.py:1262`, `app/escala/utils.py:1268`, `app/escala/utils.py:1794`).
+- **Ordem dos overlays:** agora todas as folgas precedem todas as ausências, como triagem 2 declara. Ausência não falta vence folga; falta aprovada conserva folga. A ordem está expressa no código; a medição na sombra citada pela triagem não veio como resultados auditáveis (`app/escala/utils.py:1794`, `app/escala/utils.py:1797`, `app/escala/utils.py:1178`) — medição [nao verificado].
+- **RED não vale para cada teste individual:** o próprio arquivo reconhece que calendário velho já passava no legacy e mão velha já passava por turno. O caso calendário do vínculo novo também é controle que já passava pelos caminhos anteriores do diff fornecido (`app/escala/tests/test_grade_folga_de_calendario_e_do_vinculo.py:21`, `app/escala/tests/test_grade_folga_de_calendario_e_do_vinculo.py:80`). Assim, por inspeção, **4/10 execuções herdadas são controles verdes antes da cura**; isso não torna o selo inteiro vazio: coexistência e mão fora da janela têm contraexemplos nos dois builders (`app/escala/tests/test_grade_folga_de_calendario_e_do_vinculo.py:85`, `app/escala/tests/test_grade_folga_de_calendario_e_do_vinculo.py:91`). Execução RED/GREEN/suite [nao verificado].
+- **Juiz duplicado:** a seleção compartilhada extrai o predicado anterior da precedência e ambas as testemunhas o leem; não identifiquei segundo juiz novo nesses trechos (`app/ponto/precedencia.py:223`, `app/ponto/precedencia.py:358`, `app/escala/utils.py:1115`). A autoridade registrada para precedência permanece `fatos_do_dia` (`app/core/juizes.py:160`).
+- **Escrita/relógio/travas:** os novos caminhos carregam FolgaDia e alteram somente o dicionário local da grade; não acrescentam escrita ORM, leitura de relógio ou aquisição de trava (`app/ponto/precedencia.py:207`, `app/escala/utils.py:1118`, `app/escala/utils.py:1125`).
 
 ## 31/10 13:05 · sessao aa849a92299f · CODEX-CUSTO-POR-OBRA · verificador · origem=Code
 
@@ -580,114 +660,4 @@ Achados em modo somente leitura:
 
 Análise estática; não executei o selo, pois ele cria e remove arquivos temporários. (bin/tests/test_disjuntor.sh:37–49)
 
-## 31/10 12:46 · sessao 263a6b853e68 · V3-RETOMA · leitura · origem=Code
-
-**Na regra de dobra, a v2 paga o nacional e perde o municipal; a v3 por `rubricas_por_dia` paga ambos, inclusive com chamador 12x36, porque usa o ciclo do vínculo do dia e preserva o calendário recebido do chamador.** A diferença está no conjunto de feriados efetivamente consultado, não no predicado de dobra, que é compartilhado. (`app/ponto/motor_calculo_v2.py:3495`, `app/ponto/motor_calculo_v2.py:879`, `app/ponto/calculador/alimentacao.py:507`, `app/ponto/calculador/alimentacao.py:524`, `app/ponto/calculador/regras.py:290`.)
-
-Uso **W₂/W₃** para as horas efetivamente apuradas em cada caminho, após seus recortes; registro de batida sozinho não garante esse total, pois há retorno para turno aberto e bloqueio posterior de HE. (`app/ponto/motor_calculo_v2.py:2690`, `app/ponto/motor_calculo_v2.py:2697`, `app/ponto/motor_calculo_v2.py:2712`, `app/ponto/motor_calculo_v2.py:2399`.)
-
-| Caminho, com vínculo do dia intermitente e trabalho apurado positivo | Nacional cadastrado e consultável | Municipal isolado, presente no calendário territorial recebido |
-|---|---|---|
-| **A — v2 por fatia** | **W₂ em HE100 e W₂ no subconjunto feriado.** (`app/ponto/motor_calculo_v2.py:2747`, `app/ponto/motor_calculo_v2.py:2750`.) | **0 de dobra de feriado.** O conjunto é apagado e o fallback sem município não recupera municipal. (`app/ponto/motor_calculo_v2.py:3495`, `app/ponto/motor_calculo_v2.py:905`, `app/core/feriados.py:64`.) |
-| **B — v3; chamador 12x36** | **W₃ em `horas_extras_100` e W₃ em `horas_extras_100_feriado`.** (`app/ponto/calculador/alimentacao.py:494`, `app/ponto/calculador/alimentacao.py:507`, `app/ponto/calculador/regras.py:780`, `app/ponto/calculador/regras.py:785`.) | **W₃ nas mesmas duas rubricas.** (`app/ponto/calculador/alimentacao.py:407`, `app/ponto/calculador/alimentacao.py:524`, `app/ponto/calculador/regras.py:294`, `app/ponto/calculador/regras.py:347`.) |
-| **B — v3; chamador intermitente** | **W₃ nas mesmas duas rubricas.** (`app/ponto/calculador/alimentacao.py:507`, `app/ponto/calculador/regras.py:780`, `app/ponto/calculador/regras.py:785`.) | **W₃ nas mesmas duas rubricas.** (`app/ponto/calculador/alimentacao.py:524`, `app/ponto/calculador/regras.py:347`, `app/ponto/calculador/regras.py:785`.) |
-
-As duas rubricas são total e subconjunto: não se somam para obter outra dobra. Na v2 isso está declarado no campo e na propriedade de soma; no export a parcela normal é calculada subtraindo o subconjunto feriado do total. (`app/ponto/motor_calculo_v2.py:169`, `app/ponto/motor_calculo_v2.py:282`, `app/folha/export.py:409`, `app/folha/export.py:410`.)
-
-**A — por que a v2 chega nisso**
-
-1. O fechamento efetivo está em `app/ponto/services/fechamento.py`: por fatia, toma `esc.tipo_escala`, monta o motor e chama `calcular_mes` com aquele tipo e vínculo. Portanto, nesse caminho, a escolha do motor acompanha a fatia intermitente. (`app/ponto/services/fechamento.py:262`, `app/ponto/services/fechamento.py:263`, `app/ponto/services/fechamento.py:270`, `app/ponto/services/fechamento.py:273`.)
-
-2. O construtor chama `get_motor_cct` com `tipo_escala=esc.tipo_escala` e `feriados=feriados`. O calendário foi carregado territorialmente; concretamente, o lugar usado é `colaborador.posto.municipio`, não uma nova resolução do município por fatia. (`app/ponto/services/fechamento.py:621`, `app/ponto/services/fechamento.py:622`, `app/ponto/services/fechamento.py:709`, `app/ponto/services/fechamento.py:711`, `app/ponto/services/fechamento.py:713`, `app/core/feriados.py:113`, `app/core/feriados.py:114`.)
-
-3. `get_motor` escolhe `MotorIntermitente` prioritariamente quando ciclo **ou** base é intermitente. A política padrão continua sendo `ciclo not in CICLOS_FERIADO_SIMPLES`; esse conjunto contém apenas `'12x36'`. Logo, intermitente recebe `feriado_em_dobra=True`. (`app/ponto/motor_calculo_v2.py:3563`, `app/ponto/motor_calculo_v2.py:3564`, `app/ponto/motor_calculo_v2.py:3537`, `app/ponto/motor_calculo_v2.py:3607`, `app/ponto/motor_calculo_v2.py:3608`.)
-
-4. `MotorIntermitente` herda `Motor12x36` e seu único método próprio é o construtor: aumenta `jornada_minutos` e sobrescreve `self.feriados` com conjunto vazio. Não desliga `feriado_em_dobra`. (`app/ponto/motor_calculo_v2.py:3483`, `app/ponto/motor_calculo_v2.py:3491`, `app/ponto/motor_calculo_v2.py:3494`, `app/ponto/motor_calculo_v2.py:3495`.)
-
-5. `eh_feriado` consulta o conjunto e, se não encontrar a data, chama `is_feriado(data)` **sem município**. Esse wrapper chama o juiz territorial com `None`; nacional alcança todos, municipal exige UF e município correspondentes. Portanto, apagar o conjunto perde o municipal, mas não impede recuperar nacional pelo banco. (`app/ponto/motor_calculo_v2.py:903`, `app/ponto/motor_calculo_v2.py:905`, `app/ponto/motor_calculo_v2.py:30`, `app/ponto/motor_calculo_v2.py:41`, `app/core/feriados.py:60`, `app/core/feriados.py:64`, `app/core/feriados.py:95`.)
-
-6. O predicado real é somente `bool(self.feriado_em_dobra) and self.eh_feriado(dia)`. No `calcular_periodo` herdado, duração positiva e predicado verdadeiro escrevem **toda a duração**, não apenas excedente, em HE100 e HE100 feriado. (`app/ponto/motor_calculo_v2.py:879`, `app/ponto/motor_calculo_v2.py:2747`, `app/ponto/motor_calculo_v2.py:2748`, `app/ponto/motor_calculo_v2.py:2749`, `app/ponto/motor_calculo_v2.py:2750`.)
-
-O comentário “feriado em dia não previsto” não corresponde ao predicado executado: este não consulta previsão. O dia passado pelo cálculo é `e.date()`, e a docstring do helper declara a regra pelo início do plantão. (`app/ponto/motor_calculo_v2.py:2745`, `app/ponto/motor_calculo_v2.py:2747`, `app/ponto/motor_calculo_v2.py:873`, `app/ponto/motor_calculo_v2.py:879`.)
-
-**Zero municipal significa zero de dobra**, não garantia universal de HE100 total zero: o ramo normal pode produzir HE100 por excedente acima de 120 minutos, se houver previsto positivo; sem previsto, usa a própria duração como limite e não gera esse excedente. (`app/ponto/motor_calculo_v2.py:2773`, `app/ponto/motor_calculo_v2.py:2778`, `app/ponto/motor_calculo_v2.py:2791`, `app/ponto/motor_calculo_v2.py:2792`.)
-
-**B — por que as duas variantes da v3 dão o mesmo resultado**
-
-1. `_te_dia` começa com o tipo do chamador, mas o vínculo do dia conhecido o substitui; também substitui `_interm_dia`. Depois, a chamada é `_cct_de(_te_dia)`. Portanto, com o vínculo intermitente resolvido, o chamador 12x36 não fornece a lei do feriado desse dia. (`app/ponto/calculador/alimentacao.py:487`, `app/ponto/calculador/alimentacao.py:490`, `app/ponto/calculador/alimentacao.py:494`, `app/ponto/calculador/alimentacao.py:495`, `app/ponto/calculador/alimentacao.py:507`.)
-
-2. `_cct_de` cria motor pela fábrica da casa, com aquele template; consulta a lei da família e copia os quatro campos pela fronteira `cct_do_motor`. A consulta usa `ini` como competência e cache por template, não `k` como competência diária. (`app/ponto/calculador/alimentacao.py:389`, `app/ponto/calculador/alimentacao.py:392`, `app/ponto/calculador/alimentacao.py:403`, `app/ponto/calculador/alimentacao.py:404`.)
-
-3. Esse motor intermitente tem **flag de dobra verdadeiro e calendário vazio**. A fronteira copia ambos. Entretanto, a alimentação usa apenas `_cct.feriado_em_dobra` para essa decisão; o calendário enviado a `do_dia` é `_feriados`, construído diretamente do argumento `feriados` do chamador. **O vazio de `_cct.feriados` não é utilizado nessa chamada.** (`app/ponto/motor_calculo_v2.py:3495`, `app/ponto/motor_calculo_v2.py:3608`, `app/ponto/calculador/nucleo.py:350`, `app/ponto/calculador/nucleo.py:351`, `app/ponto/calculador/alimentacao.py:407`, `app/ponto/calculador/alimentacao.py:510`, `app/ponto/calculador/alimentacao.py:524`.)
-
-4. `_ContextoFeriado` recebe esse calendário preservado e o flag verdadeiro; empresta exatamente os métodos `MotorBase._feriado_dobra_no_dia` e `MotorBase.eh_feriado`. Assim, o municipal presente no conjunto responde verdadeiro antes de precisar do fallback. (`app/ponto/calculador/regras.py:290`, `app/ponto/calculador/regras.py:291`, `app/ponto/calculador/regras.py:294`, `app/ponto/calculador/regras.py:295`, `app/ponto/motor_calculo_v2.py:903`.)
-
-5. A função de dobra devolve todo o trabalhado positivo; `do_dia` escreve esse total em HE100 e HE100 feriado, zera HE50 e retorna antes do ramo de excedente. Mesmo com `dia_de_trabalho=False`, intermitente segue pelo caminho normal, sem o retorno da folga. (`app/ponto/calculador/regras.py:345`, `app/ponto/calculador/regras.py:347`, `app/ponto/calculador/regras.py:780`, `app/ponto/calculador/regras.py:785`, `app/ponto/calculador/regras.py:786`, `app/ponto/calculador/regras.py:789`, `app/ponto/calculador/regras.py:736`, `app/ponto/calculador/regras.py:738`.)
-
-Se o municipal não vier no conjunto do chamador, a v3 também não o recupera pelo fallback sem município. No fechamento, o mesmo calendário territorial é efetivamente passado à porta v3. (`app/ponto/motor_calculo_v2.py:905`, `app/core/feriados.py:64`, `app/ponto/services/fechamento.py:622`, `app/ponto/services/fechamento.py:1242`.)
-
-**Ressalva para o fechamento completo: “trabalho registrado” não basta**
-
-Após `calcular_periodo`, `calcular_mes` chama `_dia_sem_previsto_fora_da_janela`. Havendo feriado ou folga, empresa na janela de HE, previsto exatamente zero e ausência de autorização, o bloqueio pode zerar trabalho e todas as extras, inclusive feriado; a exceção de folga sem escala certa está no mesmo portão. (`app/ponto/motor_calculo_v2.py:2396`, `app/ponto/motor_calculo_v2.py:2399`, `app/ponto/motor_calculo_v2.py:1386`, `app/ponto/motor_calculo_v2.py:1389`, `app/ponto/motor_calculo_v2.py:1391`, `app/ponto/motor_calculo_v2.py:1394`, `app/ponto/motor_calculo_v2.py:1403`, `app/ponto/motor_calculo_v2.py:1411`.)
-
-Esse bloqueio também colapsa o segmento efetivo; a alimentação v3 descarta o par colapsado e inclui o dia bloqueado com zero minutos. Logo, **nacional pode terminar em zero nos dois caminhos por esse portão**, sem que isso implemente “intermitente não dobra”. (`app/ponto/motor_calculo_v2.py:1420`, `app/ponto/motor_calculo_v2.py:1421`, `app/ponto/calculador/alimentacao.py:102`, `app/ponto/calculador/alimentacao.py:111`, `app/ponto/calculador/alimentacao.py:467`, `app/ponto/calculador/alimentacao.py:469`.)
-
-**Quem escreve e quem lê os cinco insumos**
-
-| Campo | Escritores/resolução na v2 | Leitores na v2 |
-|---|---|---|
-| `feriados` | Fechamento carrega e injeta; base grava `set`; intermitente sobrescreve vazio. (`app/ponto/services/fechamento.py:622`, `app/ponto/services/fechamento.py:713`, `app/ponto/motor_calculo_v2.py:740`, `app/ponto/motor_calculo_v2.py:3495`.) | `eh_feriado` testa pertinência e chama fallback quando ausente. (`app/ponto/motor_calculo_v2.py:903`, `app/ponto/motor_calculo_v2.py:905`.) |
-| `feriado_em_dobra` | Fábrica resolve pelo ciclo; CCT pode conceder `True` ao 12x36; base grava booleano. (`app/ponto/motor_calculo_v2.py:3608`, `app/core/regua_cct.py:477`, `app/core/regua_cct.py:478`, `app/ponto/motor_calculo_v2.py:737`.) | Helper decide; ramo adicional lê para alerta. (`app/ponto/motor_calculo_v2.py:879`, `app/ponto/motor_calculo_v2.py:2756`.) |
-| `prorrogacao_noturna_pos5h` | CCT injeta; sem valor, base consulta `prorrogacao_pos5h_legal` e grava. Essa função responde `tipo_ciclo != '12x36'`. (`app/core/regua_cct.py:454`, `app/core/regua_cct.py:466`, `app/ponto/motor_calculo_v2.py:708`, `app/ponto/motor_calculo_v2.py:712`, `app/core/regua_cct.py:182`.) | Janela noturna, desconto noturno dos intervalos e split de HE noturna. (`app/ponto/motor_calculo_v2.py:922`, `app/ponto/motor_calculo_v2.py:1866`, `app/ponto/motor_calculo_v2.py:955`.) |
-| `hora_reduzida_afastada` | Fábrica tem padrão falso; CCT injeta somente com cláusula, ciclo 12x36 e trava liberada; base grava. (`app/ponto/motor_calculo_v2.py:3540`, `app/core/regua_cct.py:470`, `app/core/regua_cct.py:471`, `app/core/regua_cct.py:472`, `app/ponto/motor_calculo_v2.py:719`.) | `fator_hora_noturna`: `1.0` se afastada, senão fator reduzido. (`app/ponto/motor_calculo_v2.py:930`.) |
-| Lei da família | A declaração está em `NAO_JULGA_PONTUALIDADE`, incluindo a identidade `MotorIntermitente`. (`app/ponto/calculador/regras.py:487`, `app/ponto/calculador/regras.py:494`.) | No cálculo v2 analisado, a ausência de julgamento decorre do método herdado: intermitente herda o cálculo cru; a chamada a `_julgar_pontualidade` pertence à filha `Motor12x36ComEscala`. (`app/ponto/motor_calculo_v2.py:3483`, `app/ponto/motor_calculo_v2.py:2688`, `app/ponto/motor_calculo_v2.py:2794`, `app/ponto/motor_calculo_v2.py:3461`, `app/ponto/motor_calculo_v2.py:3471`.) |
-
-| Campo | Escritores/transporte na v3 | Leitores na v3 |
-|---|---|---|
-| `feriados` | `cct_do_motor` copia o conjunto do motor; **alimentação usa separadamente o argumento do chamador**; `_ContextoFeriado` grava esse conjunto. (`app/ponto/calculador/nucleo.py:350`, `app/ponto/calculador/alimentacao.py:407`, `app/ponto/calculador/alimentacao.py:524`, `app/ponto/calculador/regras.py:294`.) | `do_dia` exige calendário e chama dobra; método emprestado testa pertinência. Já `periodo.reler` usa `cct.feriados`. (`app/ponto/calculador/regras.py:633`, `app/ponto/calculador/regras.py:775`, `app/ponto/motor_calculo_v2.py:903`, `app/ponto/calculador/periodo.py:830`.) |
-| `feriado_em_dobra` | Fronteira copia; alimentação lê e passa; contexto grava. (`app/ponto/calculador/nucleo.py:351`, `app/ponto/calculador/alimentacao.py:510`, `app/ponto/calculador/alimentacao.py:524`, `app/ponto/calculador/regras.py:295`.) | Guarda de entrada, helper emprestado e releitura por período. (`app/ponto/calculador/regras.py:633`, `app/ponto/calculador/regras.py:290`, `app/ponto/motor_calculo_v2.py:879`, `app/ponto/calculador/periodo.py:831`.) |
-| `prorrogacao_noturna_pos5h` | Fronteira renomeia para `prorrogacao_pos5h`; alimentação transporta; contexto noturno regrava o nome esperado pelo método v2. (`app/ponto/calculador/nucleo.py:348`, `app/ponto/calculador/alimentacao.py:508`, `app/ponto/calculador/alimentacao.py:530`, `app/ponto/calculador/regras.py:61`.) | Guarda noturna, cálculo de janela/intervalos, split HE e `periodo.noturno_no_par`. (`app/ponto/calculador/regras.py:609`, `app/ponto/calculador/regras.py:85`, `app/ponto/calculador/regras.py:86`, `app/ponto/calculador/regras.py:824`, `app/ponto/calculador/periodo.py:508`.) |
-| `hora_reduzida_afastada` | Fronteira copia; alimentação lê e passa. (`app/ponto/calculador/nucleo.py:349`, `app/ponto/calculador/alimentacao.py:509`, `app/ponto/calculador/alimentacao.py:530`.) | Guarda de entrada e fator noturno; releitura por período. (`app/ponto/calculador/regras.py:609`, `app/ponto/calculador/regras.py:88`, `app/ponto/calculador/periodo.py:509`.) |
-| Lei da família | Tabela declara a causa; `motivo_nao_julga_pontualidade` lê por `type(motor)` exato; alimentação consulta e passa a causa. (`app/ponto/calculador/regras.py:494`, `app/ponto/calculador/regras.py:518`, `app/ponto/calculador/alimentacao.py:403`, `app/ponto/calculador/alimentacao.py:531`.) | `do_dia` declara atraso/antecipada e descarta pontualidade recebida; releitura também recebe `fora_por_lei`. Há consumidor lateral em `chamados/juizes.py`. (`app/ponto/calculador/regras.py:618`, `app/ponto/calculador/regras.py:620`, `app/ponto/calculador/regras.py:622`, `app/ponto/calculador/periodo.py:787`, `app/chamados/juizes.py:1551`.) |
-
-Os três flags também são lidos pelo carimbo da régua, sem refazer a decisão. (`app/core/regua_cct.py:423`, `app/core/regua_cct.py:424`, `app/core/regua_cct.py:425`.)
-
-Na origem cadastral da CCT, a tela escreve hora reduzida, concessão de dobra 12x36 e prorrogação noturna; a régua lê os campos do sindicato. (`app/core/views_config.py:278`, `app/core/views_config.py:279`, `app/core/views_config.py:297`, `app/core/views_config.py:309`, `app/core/regua_cct.py:374`.)
-
-**Inventário dos sítios que decidem ou materializam a resposta**
-
-| Sítio | Predicado/consequência |
-|---|---|
-| Calendário territorial | Nacional sempre alcança; estadual exige UF; municipal exige UF e município normalizado. Sem município, somente nacional. (`app/core/feriados.py:57`, `app/core/feriados.py:60`, `app/core/feriados.py:62`, `app/core/feriados.py:64`, `app/core/feriados.py:91`.) |
-| Fábrica v2 | Sem override: `ciclo not in {'12x36'}`. (`app/ponto/motor_calculo_v2.py:3537`, `app/ponto/motor_calculo_v2.py:3607`.) |
-| `get_motor_cct` | Switch desligado delega; ligado, ciclo literal 12x36 e cláusula verdadeira concedem flag de dobra por `setdefault`. (`app/core/regua_cct.py:449`, `app/core/regua_cct.py:457`, `app/core/regua_cct.py:477`, `app/core/regua_cct.py:478`.) |
-| `MotorBase._feriado_dobra_no_dia` | `bool(flag) and eh_feriado(dia)`. (`app/ponto/motor_calculo_v2.py:879`.) |
-| `Motor12x36.calcular_periodo` | Duração positiva + helper: duração inteira em HE100 feriado. (`app/ponto/motor_calculo_v2.py:2747`, `app/ponto/motor_calculo_v2.py:2750`.) |
-| Herdeiros/delegadores desse cálculo | Intermitente herda; 12x36 com escala chama `super`; plantão delega explicitamente. Intermitente ainda modifica o calendário. (`app/ponto/motor_calculo_v2.py:3483`, `app/ponto/motor_calculo_v2.py:3495`, `app/ponto/motor_calculo_v2.py:3461`, `app/ponto/motor_calculo_v2.py:3449`.) |
-| TurnoPartido, consolidação diária | Trabalho positivo + helper: total diário no último período, seguido de `continue`. A variante noturna herda sem alteração. (`app/ponto/motor_calculo_v2.py:3030`, `app/ponto/motor_calculo_v2.py:3033`, `app/ponto/motor_calculo_v2.py:3039`, `app/ponto/motor_calculo_v2.py:3474`.) |
-| Comercial por período | Duração positiva + helper: duração inteira em HE100 feriado. (`app/ponto/motor_calculo_v2.py:3193`, `app/ponto/motor_calculo_v2.py:3196`.) |
-| Comercial, consolidação diária | Trabalho positivo + helper: total diário em HE100 feriado e `continue`. (`app/ponto/motor_calculo_v2.py:3275`, `app/ponto/motor_calculo_v2.py:3279`, `app/ponto/motor_calculo_v2.py:3290`.) |
-| `regras.feriado_em_dobra_do_ciclo` | Consulta a mesma constante e retorna “ciclo fora dela”. (`app/ponto/calculador/regras.py:305`, `app/ponto/calculador/regras.py:306`.) |
-| `regras.dobra_de_feriado_do_dia` / `_ContextoFeriado` | Trabalho não positivo → zero; senão todo o trabalho quando o helper emprestado responde verdadeiro. (`app/ponto/calculador/regras.py:290`, `app/ponto/calculador/regras.py:344`, `app/ponto/calculador/regras.py:345`, `app/ponto/calculador/regras.py:347`.) |
-| `alimentacao.rubricas_por_dia` → `regras.do_dia` | Combina flag do template diário com calendário do chamador; dobra positiva substitui HE50/excedente. (`app/ponto/calculador/alimentacao.py:507`, `app/ponto/calculador/alimentacao.py:524`, `app/ponto/calculador/regras.py:775`, `app/ponto/calculador/regras.py:786`, `app/ponto/calculador/regras.py:789`.) |
-| `periodo.reler` | Soma trabalho do dia da jornada e chama dobra com **`cct.feriados`** e `cct.feriado_em_dobra`; dobra positiva é escrita no último período, senão usa excedente. (`app/ponto/calculador/periodo.py:817`, `app/ponto/calculador/periodo.py:830`, `app/ponto/calculador/periodo.py:831`, `app/ponto/calculador/periodo.py:838`, `app/ponto/calculador/periodo.py:841`, `app/ponto/calculador/periodo.py:844`.) |
-| Export | Suprime a parcela feriado se `tipo_ciclo == '12x36' and not feriado_12x36_em_dobra`. Ciclo e cláusula são consultados no fim da janela; é decisão mensal de emissão. (`app/folha/export.py:348`, `app/folha/export.py:359`, `app/folha/export.py:369`, `app/folha/export.py:411`, `app/folha/export.py:412`.) |
-| Bloqueio posterior de HE | Feriado/folga, empresa na janela, previsto zero e sem autorização podem zerar inclusive dobra já calculada. (`app/ponto/motor_calculo_v2.py:1387`, `app/ponto/motor_calculo_v2.py:1389`, `app/ponto/motor_calculo_v2.py:1391`, `app/ponto/motor_calculo_v2.py:1394`, `app/ponto/motor_calculo_v2.py:1412`.) |
-
-**`periodo.reler` é uma diferença adicional relevante:** alimentado por `cct_do_motor(MotorIntermitente)`, recebe calendário vazio; porta
-
-[truncado em 20000 de 24300 caracteres]
-
-## 31/10 12:46 · sessao f49bbf6a890c · - · - · origem=Ronald (tmux)
-
-Os furos residuais mais fortes são:
-
-1. **A negativa pode “rejuvenescer” uma linha antiga.** O PreToolUse escreve no RELATO depois de negar; o escritor preserva o topo, mas regrava o arquivo. Portanto, um DESENHO válido antigo e nunca consumido pode falhar pela idade na primeira tentativa e passar na seguinte apenas porque a negativa atualizou o `mtime`. Guardar SHA consumido não resolve a primeira utilização dessa linha antiga. É necessário comparar também com o conteúdo observado no disparo. Evidência: `bin/disjuntor.py:161-164`, `bin/disjuntor.py:209-212`, `bin/disjuntor.py:979-988`; escrita efetiva: `app/core/esteira_vigia.py:829-831`, `app/core/esteira_vigia.py:879-884`.
-
-2. **“Só Ronald rearma” não é uma propriedade atual do mecanismo.** A guarda protege a chave e a remoção do hook, mas não `--rearma-b3`; um Bash do principal sem `agent_id` passa imediatamente. A CLI executa o rearme diretamente e usa `USER` apenas para registrar quem chamou. O próprio motivo da negativa ensina esse comando. Assim, o construtor pode contornar integralmente DESENHO/ERRO-BOBO. Evidência: `bin/disjuntor.py:136-156`, `bin/disjuntor.py:924-930`, `bin/disjuntor.py:951-954`, `bin/disjuntor.py:590-594`, `bin/disjuntor.py:1170-1173`.
-
-3. **Centralizar o reconhecedor não centraliza a liberação.** Hoje o Stop reconhece texto apenas para calar o recado; o PreToolUse consulta o disparo e continua negando. A v2 precisa definir uma transição compartilhada, sob a mesma trava do estado, que consuma a linha, mova os reprovados e desarme. Caso o hook apenas chame um reconhecedor que consome SHA, pode consumir a autorização sem desarmar a trava; se ambos implementarem a transição, haverá duas autoridades e possibilidade de consumo duplicado. Evidência do fluxo atual e da trava disponível: `bin/hook_stop_fila1.py:1048-1054`, `bin/disjuntor.py:947-954`, `bin/disjuntor.py:219-247`. O efeito da implementação futura permanece `[não verificado]`.
-
-4. **“Corte novo” não identifica um novo ciclo no estado.** O registro é indexado somente pela obra; o rearme recebe somente obra e motivo. Não há identificação de corte nessas transições, logo a v2 precisa dizer como um corte novo chega ao mecanismo e quais memórias ele encerra — inclusive SHA consumidos. Evidência: `bin/disjuntor.py:566-580`, `bin/disjuntor.py:585-595`, `bin/disjuntor.py:1170-1173`.
-
-_1031 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1033 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
