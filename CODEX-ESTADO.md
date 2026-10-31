@@ -1,7 +1,87 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 04:44** · publicado em **31/10/2026 04:45** (UTC-3)
+> Ultima resposta processada: **31/10/2026 04:46** · publicado em **31/10/2026 04:51** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 04:46 · sessao 512dd43d114e · O261-E-F1-CLASSE-4 · verificador · origem=Code
+
+**Reprovaria o delta4 pelo rollback que apaga efeitos intencionais de `reabrir()`.** A projeção do julgamento também não garante que a lavra ocorrerá depois das escritas que ela autoriza. (`app/chamados/views_arquivar.py:81`; `app/chamados/models.py:1362`; `app/ponto/services/cartorio.py:1376`; `app/ponto/services/cartorio.py:1520`)
+
+Execução dos testes, RED contra a base e incidência em produção: **[nao verificado]**. [nao verificado]
+
+**1. Contraexemplos encontrados**
+
+- **PROCEDENTE — rollback apaga o redirecionamento da recusa.** Chamado encerrado pela tranca, premissa ainda viva, irmão vivo do mesmo turno: `reabrir()` migra resolvedoras para o irmão, escreve nota e trilha de redirecionamento, depois retorna `False`. O novo `set_rollback(True)` desfaz tudo isso junto com o levantamento do véu. Mesmo sem pergunta migrável, a nota de continuidade e a trilha são escritas incondicionalmente nesse ramo e agora desaparecem. Portanto, “recusou” não equivale a “não escreveu nada”. (`app/chamados/models.py:1359`; `app/chamados/models.py:1362`; `app/chamados/models.py:1365`; `app/chamados/models.py:1368`; `app/chamados/models.py:1374`; `app/chamados/views_arquivar.py:81`)
+
+- **PROCEDENTE — ressuscitação pode persistir sem a lavra prevista.** Contraexemplo: célula gravada `concorde`, julgamento atual acusador, pergunta carimbada sem resposta. A projeção permite ressuscitá-la; o `UPDATE` dos carimbos acontece antes da lavra. Depois disso, uma exceção no callback `write`, chamado em `[FIO-RESSUSCITA]`, impede chegar à lavra. `julgar_colab()` tem `finally`, mas não uma transação envolvendo essas duas escritas. O mapa é limpo; a pergunta pode ficar desmarcada sobre a célula antiga, que continua absolvendo. (`app/chamados/models.py:1434`; `app/chamados/models.py:1442`; `app/chamados/models.py:1485`; `app/ponto/services/cartorio.py:746`; `app/ponto/services/cartorio.py:1402`; `app/ponto/services/cartorio.py:1520`; `app/ponto/services/cartorio.py:854`)
+
+  Há também uma chamada de produção entre ressuscitar e lavrar: `_espelhar_marcos()` grava contexto e nota; falha propagada nesse caminho igualmente impede a lavra posterior. Ocorrência dessa falha em produção: **[nao verificado]**. (`app/ponto/services/cartorio.py:1516`; `app/ponto/management/commands/detectar_ausencias.py:558`; `app/ponto/management/commands/detectar_ausencias.py:563`; `app/chamados/services/nota.py:107`)
+
+- **PROCEDENTE — o toque de desarquivar continua invisível para chamado sem `celula_id`.** Contraexemplo: chamado cujo dia vem do contexto, pergunta em competência trancada, mas chamado sem célula ligada. A trilha de desarquivar é escrita, porém o leitor procura exclusivamente chamados ligados às células daquele dia; esse chamado não entra em `chs`. Antecipar a trilha não resolve esse caso. O teste novo liga explicitamente a célula ao chamado. (`app/chamados/juizes.py:102`; `app/chamados/juizes.py:967`; `app/chamados/juizes.py:968`; `app/chamados/juizes.py:972`; `app/chamados/services/arquivo.py:209`; `app/chamados/tests/test_competencia_trancada.py:188`)
+
+- **PROCEDENTE — segundo resgate após retranca pode não produzir novo toque.** Primeiro resgate: véu limpo e primeiro `resgatado_em` preservado. Retrancar avança `fechado_em`; o resgate antigo deixa de proteger o chamado, que pode ser encerrado novamente sem receber novo véu. No segundo clique, `levantar()` retorna sem escrita nem trilha porque o véu está limpo e já existe `resgatado_em`. Na ausência de outro toque posterior à nova tranca, C6 continua calando a pergunta. É lacuna residual do desenho B. (`app/chamados/services/arquivo.py:193`; `app/chamados/services/arquivo.py:196`; `app/chamados/services/arquivo.py:204`; `app/ponto/services/fechamento.py:1383`; `app/chamados/services/competencia_trancada.py:104`; `app/chamados/models.py:1551`; `app/chamados/juizes.py:965`; `app/chamados/juizes.py:1030`)
+
+**2. Quem escreve e quem lê**
+
+| Campo/valor | Quem escreve | Quem lê |
+|---|---|---|
+| `_tl.vereditos[(colab, dia)]` | Cartório calcula pela função da porta e publica a dupla; limpa no `finally`. (`app/ponto/services/cartorio.py:1214`; `app/ponto/services/cartorio.py:857`) | `veredito_deste_julgamento()` → `celula_deste_julgamento()`. (`app/ponto/services/cartorio.py:64`; `app/chamados/juizes.py:394`) |
+| `_tl.atas[(colab, dia)]` | Cartório publica `_ata_agora.ata`; limpa no `finally`. (`app/ponto/services/cartorio.py:1148`; `app/ponto/services/cartorio.py:856`) | `ata_deste_julgamento()` → `celula_deste_julgamento()`. (`app/ponto/services/cartorio.py:55`; `app/chamados/juizes.py:393`) |
+| `veredito/veredito_via` da cópia | `celula_deste_julgamento()` atribui a dupla projetada. No registro persistido, a lavra atribui esses campos. (`app/chamados/juizes.py:402`; `app/ponto/portas/celula.py:710`) | C6 lê veredito e via; o coletor da premissa também recebe a cópia, mas sua leitura de veredito limita-se à via `admin`. (`app/chamados/juizes.py:1038`; `app/chamados/juizes.py:1074`; `app/chamados/models.py:1230`) |
+| `ata` da cópia | Recebe diretamente o dicionário publicado em `_tl.atas`. Na persistência, a lavra escreve ata e `carimbar_precedencia()` acrescenta precedência pela mesma porta. (`app/chamados/juizes.py:400`; `app/ponto/portas/celula.py:708`; `app/ponto/portas/celula.py:759`) | Guarda do marco, C6 via marcos pendentes, coletor da premissa e `_celula_furada()`. (`app/chamados/juizes.py:886`; `app/chamados/juizes.py:1088`; `app/chamados/models.py:1236`; `app/chamados/juizes.py:443`) |
+| `Pergunta._state.fields_cache` | O queryset usa `select_related`; a cópia recebe `_state` e dicionário próprios antes de atribuir `_q.celula`. (`app/chamados/models.py:1424`; `app/chamados/models.py:1430`; `app/chamados/models.py:1431`; `app/chamados/models.py:1434`) | Acesso às relações na avaliação; `_chave_memo_pv()` também consulta explicitamente o cache de `chamado_destino`. (`app/chamados/juizes.py:777`; `app/chamados/juizes.py:778`; `app/chamados/juizes.py:779`) |
+| Log `cobrar_dia_manual` | `cobrar_dia()` → `registrar_log()` → `evento()` → `LogAuditoria.objects.create()`. (`app/chamados/services/cobrar_dia.py:37`; `app/core/auditoria.py:22`; `app/core/observ.py:134`) | `_admin_tocou_o_dia_depois()`: usuário humano, posterior à tranca, colaborador e substring `dia=ISO`. (`app/chamados/juizes.py:965`; `app/chamados/juizes.py:969`) |
+| Log `desarquivar_chamado` | View → `arquivo.levantar()` → `_trilha()` → o mesmo escritor `evento()`. (`app/chamados/views_arquivar.py:73`; `app/chamados/services/arquivo.py:209`; `app/chamados/services/arquivo.py:137`) | O mesmo leitor de toque, restringindo os objetos aos chamados ligados às células do dia. (`app/chamados/juizes.py:968`; `app/chamados/juizes.py:972`) |
+
+`celula_do_dia_agora()` passa efetivamente a devolver também o veredito projetado. Nos dois leitores anteriores encontrados, isso não muda a decisão normal: `_celula_furada()` usa ata/trabalho; `premissa_regularizada()` só distingue a via `admin`, preservada pela projeção. (`app/chamados/juizes.py:378`; `app/chamados/juizes.py:443`; `app/chamados/models.py:1230`; `app/ponto/portas/celula.py:656`)
+
+Na ressuscitação, a mudança funcional é real e coerente com o objetivo A: tanto o guarda do marco quanto C6 recebem a célula da pergunta com ata/veredito em curso. A ressalva é a falta de garantia de lavra posterior demonstrada acima. (`app/chamados/models.py:1434`; `app/chamados/models.py:1436`; `app/chamados/models.py:1442`; `app/ponto/services/cartorio.py:1520`)
+
+**3. Igualdade entre previsão e lavra**
+
+No caminho que chega normalmente à lavra, com os mesmos insumos, **a dupla final coincide**: publicação e lavra recebem `cel`, `via='cartorio'`, `_vd` e `cods`; a lavra chama a mesma função de derivação. Admin é preservado nos dois caminhos. (`app/ponto/services/cartorio.py:1214`; `app/ponto/services/cartorio.py:1520`; `app/ponto/portas/celula.py:698`; `app/ponto/portas/celula.py:656`; `app/ponto/portas/celula.py:692`)
+
+Isso não significa que sempre haja gravação:
+
+- **`apply_=False`:** publica os mapas, mas não entra na lavra. Um callback `write` pode consultá-los durante os relatórios; consumidor de produção que faça essa consulta: **[nao verificado]**. (`app/ponto/services/cartorio.py:1214`; `app/ponto/services/cartorio.py:1463`; `app/ponto/services/cartorio.py:1501`; `app/ponto/services/cartorio.py:1517`)
+- **Sem vivos:** não impede lavrar; a condição final exige apenas `apply_`. (`app/ponto/services/cartorio.py:1517`)
+- **Exceção:** pode ocorrer depois da leitura da previsão e do `UPDATE` da pergunta, antes da lavra, conforme o contraexemplo acima. (`app/ponto/services/cartorio.py:1376`; `app/ponto/services/cartorio.py:1402`; `app/ponto/services/cartorio.py:1520`)
+- **Admin ou repetição idempotente:** a lavra pode preservar a dupla e escrever apenas ata, ou retornar sem escrever. (`app/ponto/portas/celula.py:692`; `app/ponto/portas/celula.py:697`; `app/ponto/portas/celula.py:705`)
+- **`calado`:** somente altera/restaura `_tl.ativo`; não limpa os mapas nem impede diretamente uma chamada explícita ao julgamento. Os signals consultam esse estado para evitar reentrada. (`app/ponto/services/cartorio.py:72`; `app/ponto/services/cartorio.py:77`; `app/chamados/signals.py:174`)
+
+A ata projetada também não é literalmente toda a ata final: a lavra preserva chaves de outra operação, como `precedencia`, enquanto o mapa recebe a ata calculada antes desse merge. Efeito adverso dessa diferença nos leitores desta obra: **[nao verificado]**. (`app/ponto/services/cartorio.py:1148`; `app/ponto/portas/celula.py:94`; `app/ponto/portas/celula.py:684`; `app/ponto/portas/celula.py:686`)
+
+**4. Cópia rasa, vazamento e `save()`**
+
+A troca de FK na pergunta está protegida pela separação explícita de `_state` e `fields_cache`. A simulação retorna IDs; a escrita real acontece por outro queryset, sem salvar `_q` ou sua célula projetada nesses caminhos. (`app/chamados/models.py:1430`; `app/chamados/models.py:1431`; `app/chamados/models.py:1434`; `app/chamados/models.py:1443`; `app/chamados/models.py:1483`; `app/chamados/models.py:1485`)
+
+**DUVIDA — isolamento de objetos mutáveis não é garantido.** A cópia é rasa e a ata projetada é o próprio dicionário do mapa: uma operação como `out.ata['lampadas'].append(...)` alteraria a ata compartilhada; mutação aninhada no DNA compartilhado poderia atingir o original. Não encontrei essas escritas nos consumidores atuais, que percorrem os valores para leitura. (`app/chamados/juizes.py:398`; `app/chamados/juizes.py:400`; `app/chamados/juizes.py:869`; `app/chamados/juizes.py:886`; `app/ponto/services/lastro.py:148`)
+
+A cópia não recebe uma proteção contra persistência: continua sendo uma cópia do model. Um caminho atual que execute `save()` nela: **[nao verificado]**; os consumidores encontrados são o carregador da premissa e a simulação da ressuscitação. (`app/chamados/juizes.py:378`; `app/chamados/models.py:1434`)
+
+**5. Ordem do admin, rollback e cobrança sem escala**
+
+Levantar antes não altera diretamente as guardas de reabertura por `arquivado/resgatado/silenciado`: as guardas consultam veto, decisão administrativa, premissa, agrupamento, irmão e transição, sem ler esses campos do véu. A alteração pretendida atua depois, na ressuscitação que consulta a trilha. (`app/chamados/models.py:1285`; `app/chamados/models.py:1290`; `app/chamados/models.py:1296`; `app/chamados/models.py:1299`; `app/chamados/models.py:1302`; `app/chamados/models.py:1306`; `app/chamados/models.py:1389`)
+
+O rollback abrange as escritas de banco feitas dentro daquele bloco, inclusive levantamento, logs e os efeitos do ramo de redirecionamento. Por isso resolve a compensação do véu, mas introduz a regressão do item 1. Não se deve confundir isso com desfazer atributos Python ou efeitos externos; garantia desses últimos: **[nao verificado]**. (`app/chamados/views_arquivar.py:65`; `app/chamados/views_arquivar.py:81`; `app/chamados/services/arquivo.py:201`; `app/chamados/models.py:1362`)
+
+Em `cobrar_dia`, **sim, fica uma trilha mesmo quando não existe célula**: o log antecede o julgamento, que retorna `None` nesse caso. Não demonstrei violação de contador/selo: o teste existente exige uma linha por toque, explicitamente “não por efeito”. Esse toque poderá ser reconhecido depois se a célula passar a existir, pois o leitor não exige sucesso da cobrança original. (`app/chamados/services/cobrar_dia.py:37`; `app/chamados/services/cobrar_dia.py:40`; `app/ponto/services/cartorio.py:1658`; `app/chamados/tests/test_o44_tranca_nao_barra_o_toque.py:275`; `app/chamados/juizes.py:967`; `app/chamados/juizes.py:969`)
+
+**DUVIDA — trilha obrigatória sobre escritor best-effort.** Ambos os fluxos prosseguem sem confirmar a criação do log; `evento()` pode falhar isoladamente e retornar `None`. Contraexemplo condicional: falha ao inserir a trilha, negócio prossegue, C6 continua enxergando “sem toque”. Ocorrência em produção: **[nao verificado]**. (`app/core/observ.py:105`; `app/core/observ.py:133`; `app/core/observ.py:139`; `app/chamados/services/cobrar_dia.py:39`; `app/chamados/services/arquivo.py:209`; `app/chamados/services/arquivo.py:210`; `app/chamados/juizes.py:1030`)
+
+**DUVIDA — memo anterior ao toque.** Consultar o toque, gravar nova trilha e consultar novamente no mesmo dono de `_tranca_memo` conserva o resultado anterior. A nova ordem não invalida esse cache. Rota HTTP atual que necessariamente execute essa sequência: **[nao verificado]**. (`app/chamados/juizes.py:943`; `app/chamados/juizes.py:947`; `app/chamados/juizes.py:959`; `app/chamados/juizes.py:973`; `app/chamados/services/cobrar_dia.py:37`)
+
+**6. Checklist das classes anteriores**
+
+| Classe | Resultado desta leitura |
+|---|---|
+| Segundo juiz registrado | Não demonstrado: a ressuscitação consulta o C6 registrado; a previsão reutiliza a derivação chamada pela lavra. (`app/core/juizes.py:238`; `app/chamados/models.py:1442`; `app/ponto/portas/celula.py:698`) |
+| Segundo escritor fora da porta | Não demonstrado na persistência nova: a projeção escreve memória; pergunta é atualizada pela porta existente; logs convergem para `evento()`. (`app/chamados/juizes.py:400`; `app/chamados/models.py:1485`; `app/core/observ.py:134`) |
+| Relógio fora da borda | Nova leitura de relógio nos trechos acrescentados: **[nao verificado]**. O helper recebe insumos e deriva a dupla sem relógio; o julgamento já recebe `hoje/agora`. (`app/ponto/portas/celula.py:647`; `app/ponto/services/cartorio.py:749`) |
+| Derivação paralela | Não demonstrada para o veredito de cartório: previsão e lavra chamam a mesma função. (`app/ponto/services/cartorio.py:1214`; `app/ponto/portas/celula.py:698`) |
+| Selo/RED sem mordida | **DUVIDA:** o teste de isolamento não cria pergunta nem exercita a troca de FK/`fields_cache`; verifica atributos da célula. Os testes novos também não cobrem retranca, rollback de redirecionamento ou exceção após ressuscitar. RED executado: **[nao verificado]**. (`app/ponto/tests/test_o261e_f1c4_ressuscita_pergunta_ao_c6.py:185`; `app/ponto/tests/test_o261e_f1c4_ressuscita_pergunta_ao_c6.py:197`; `app/chamados/tests/test_competencia_trancada.py:177`) |
+| Ordem de trava | **DUVIDA:** a nova transação mantém a escrita do chamado desde `levantar`; `abrir()` possui trava da pessoa. Um novo ciclo concreto de deadlock causado por este delta: **[nao verificado]**. (`app/chamados/views_arquivar.py:65`; `app/chamados/services/arquivo.py:208`; `app/chamados/models.py:864`) |
+| Pouso antes do pré-requisito | **PROCEDENTE:** a pergunta pode ser ressuscitada pela previsão antes de a lavra estar garantida; exceção posterior deixa a escrita sem seu fundamento persistido. (`app/ponto/services/cartorio.py:1376`; `app/ponto/services/cartorio.py:1402`; `app/ponto/services/cartorio.py:1520`) |
 
 ## 31/10 04:44 · sessao 9f8804bc43d8 · - · - · origem=Ronald (tmux)
 
@@ -657,49 +737,4 @@ O teste flexibilizado de `[FIO-DUP]` para `[FIO-DUP` continua verificando sobrev
 
 O contador novo é incrementado pelo número de **chamados** que atingiram o guarda, não por perguntas (`app/ponto/services/cartorio.py:1322`, `app/ponto/services/cartorio.py:1362`). Seu único uso nominal encontrado foi a própria leitura/incremento; leitor externo ou selo dedicado: [não verificado].
 
-## 31/10 03:26 · sessao 62aed3dacb80 · FIO-ESTADO-LE-O-ALCANCE · verificador · origem=Code
-
-**O escritor F5 já existe; a manchete e o selo ainda seguem o contador antigo.** O comando grava `censo.fio_morto_alcance` e `alcance`, mas o ESTADO continua imprimindo `fio_morto`. O próprio teste F5 caracteriza **antigo=0 e alcance=1** — portanto os números não são intercambiáveis. (`app/chamados/management/commands/vigiar_fio_morto.py:216-218`; `bin/fio_estado.py:101-104`; `app/chamados/tests/test_o261e_f5_alcance.py:430-434`.)
-
-O anexo não contém uma medição produtiva: valores atuais, último recarimbo e resultado publicado em produção são **[nao verificado]**. [nao verificado]
-
-| Campo | Quem escreve | Quem lê atualmente |
-|---|---|---|
-| `censo.fio_morto_alcance` | `censo_alcance()` inicializa em zero e incrementa os dias sem porta; o comando copia para `censo`. (`app/chamados/services/vigia_fio.py:539`, `:649`; `app/chamados/management/commands/vigiar_fio_morto.py:217`.) | O comparador genérico o consulta **somente se estiver em `esperado`**. Não integra o retorno nominal nem a manchete. (`bin/fio_estado.py:72-92`, `:101-104`.) |
-| `alcance.alcance_cego` | Calculado como `not dias`; persistido no bloco inteiro. (`app/chamados/services/vigia_fio.py:553`; `app/chamados/management/commands/vigiar_fio_morto.py:218`.) | `linhas_alcance()` lê o resultado em memória para a saída do comando; o leitor host ignora esse bloco. (`app/chamados/services/vigia_fio.py:662-664`; `bin/fio_estado.py:69-92`.) |
-| `alcance.alcance_universo` | `len(dias)`, dos dias retidos por empresa visível e competência aberta; persistido em `alcance`. (`app/chamados/services/vigia_fio.py:534-552`; `app/chamados/management/commands/vigiar_fio_morto.py:218`.) | Usado na saída textual do comando, mas ignorado pelo leitor host. (`app/chamados/services/vigia_fio.py:659-662`; `bin/fio_estado.py:69-92`.) |
-| `esperado` | O comando declara os esperados antigos, acrescenta `fio_morto_alcance=0` e grava uma cópia. (`app/chamados/management/commands/vigiar_fio_morto.py:87-95`, `:211`.) | `ler()` compara todas as chaves presentes com `censo`; `linha()` ainda seleciona o esperado antigo para a manchete. (`bin/fio_estado.py:70-73`, `:103`.) |
-| `medido_em` | O relógio é capturado **antes dos censos** e serializado em horário local no carimbo. É instante de início, não de conclusão. (`app/chamados/management/commands/vigiar_fio_morto.py:162-168`, `:207`.) | `ler()` calcula idade; `linha()` mostra data, idade e aviso de velho. (`bin/fio_estado.py:74-84`, `:112-117`.) |
-| `censo.fio_morto` antigo | `censo()` parte dos chamados vivos com célula, inicializa e incrementa o contador; o comando preserva `d` no carimbo. (`app/chamados/services/vigia_fio.py:317`, `:340`, `:417`; `app/chamados/management/commands/vigiar_fio_morto.py:216`.) | Ainda determina a manchete e participa da comparação com `esperado`. O alarme também consulta o contador em memória. (`bin/fio_estado.py:72-73`, `:86`, `:101-104`; `app/chamados/management/commands/vigiar_fio_morto.py:82`, `:170-171`.) |
-
-Os pontos de falha são estes:
-
-1. **Carimbo anterior ao F5 pode parecer bom sem medir alcance.** Sem `alcance` e sem o novo esperado, o leitor aceita o arquivo como `medido=True`, compara apenas as chaves antigas e pode mostrar `fio morto: 0` sem divergências. O selo chama exatamente essa combinação de “VERDE”; não existe uma validação de versão/esquema. (`bin/fio_estado.py:69-92`, `:101-104`; `bin/tests/test_fio_estado.sh:40-47`, `:56-60`.)
-
-2. **Universo vazio produz zero, mas significa cegueira.** O produtor retorna `fio_morto_alcance=0`, `alcance_universo=0` e `alcance_cego=True`. Hoje o host ignora os dois últimos campos; olha somente `censo.cego`, que pertence ao universo antigo. Assim, igualdade `0=0` pode coexistir com ausência de universo de alcance, sem aviso correspondente. (`app/chamados/services/vigia_fio.py:538-555`; `bin/fio_estado.py:72-73`, `:91`, `:109-111`.)
-
-   O contrato precisa também fechar **subchaves ausentes ou incoerentes**: só exigir o bloco `alcance` e rejeitar `alcance_cego=True` não garante que exista `alcance_universo>0`. O escritor fornece ambas; o leitor atual não verifica nenhuma. (`app/chamados/services/vigia_fio.py:552-555`; `bin/fio_estado.py:69-92`.)
-
-3. **Contador ausente/`None` não suprime a manchete numérica.** Se seu esperado existir, `None != 0` aparece em `FORA DO ESPERADO`, mas a manchete continua mostrando o número antigo. Se faltar também `esperado.fio_morto_alcance`, nem essa divergência será calculada. (`bin/fio_estado.py:72-73`, `:101-108`.)
-
-   **`esperado` ausente vira `{}`**, deixando a comparação vazia. Portanto a presença do esperado do novo contador também precisa ser condição de medição válida; ausência não pode virar aprovação por falta de comparação. (`bin/fio_estado.py:70-73`.)
-
-4. **Recorte é protegido pelo escritor, não pelo conteúdo validado pelo leitor.** `--empresa` vira uma lista e só `empresas is None` permite carimbar; recortes declaram “NAO carimbado”. Há teste específico dessa proteção. Portanto o comando atual não produz normalmente um carimbo de recorte nesse destino. (`app/chamados/management/commands/vigiar_fio_morto.py:152-156`, `:205`, `:223-225`; `app/chamados/tests/test_o261_vigia_fio.py:801-814`.)
-
-   Se um arquivo recortado chegar ao caminho por outra origem, o leitor não valida escopo/proveniência e pode publicar seu número como frota. A ocorrência disso em produção é **[nao verificado]**. (`bin/fio_estado.py:63-92`.)
-
-5. **A proteção temporal não cobre data ausente ou inválida.** Nesses casos, a idade fica desconhecida, `velho=False` e a manchete permanece numérica. Não há fallback efetivo para `hoje`. Com data válida antiga, aparece a advertência de velho, mas o número continua na manchete; a idade ainda é arredondada antes da comparação com 26 horas. (`bin/fio_estado.py:74-84`, `:101-117`.)
-
-6. **“Exceção de leitura = ILEGIVEL” não está implementado.** Ausência, erro de abertura/permissão e JSON inválido convergem para `medido=False` e **NUNCA MEDIDO**. JSON de formato errado pode lançar `AttributeError`; `medido_em` não textual pode lançar `TypeError`, pois a captura posterior aceita apenas `ValueError`. Essas falhas podem interromper o gerador antes da publicação. (`bin/fio_estado.py:63-80`, `:97-100`; `bin/gerar_estado.py:260-261`, `:364`.)
-
-   Exceção no produtor antes da gravação também pode deixar o carimbo anterior intacto e ainda dentro das 26 horas. Já uma rodada que apenas **alarma** grava antes de sair: esse caso preserva a medição. (`app/chamados/management/commands/vigiar_fio_morto.py:167-189`, `:205-228`; `bin/fio_estado.py:74-84`.)
-
-7. **O selo atual não prova a mudança proposta.** Suas fixtures não contêm alcance; os casos numéricos verificam `medido`, `velho` e nomes de divergências, sem conferir a manchete. O caso CEGO só procura essa palavra e permite conservar o número. Um mutante que restitua apenas a manchete antiga não seria detectado por essas verificações. (`bin/tests/test_fio_estado.sh:40-51`, `:56-91`, `:104-107`.)
-
-   A fixture decisiva deve ter **antigo=0/alcance=N** e conferir a manchete publicada; o caso inverso distingue o novo resultado da regressão antiga. A primeira divergência já está caracterizada nos testes F5. (`bin/fio_estado.py:101-108`; `app/chamados/tests/test_o261e_f5_alcance.py:430-434`.)
-
-Sobre outro leitor: o ESTADO delega a `ler()`/`linha()`, e os modos JSON e `--linhas` usam o mesmo `ler()`. Não identifiquei outro leitor operacional do arquivo; consumidores externos ou construídos inteiramente por caminhos dinâmicos são **[nao verificado]**. (`bin/gerar_estado.py:260-261`; `bin/fio_estado.py:64-65`, `:123-129`.)
-
-**Existe, porém, uma regra operacional diferente no alarme**, que mede ao vivo e não lê o carimbo: cobra `cego` e passivos antigos, deixando `alcance_cego` e `fio_morto_alcance` fora do alarme. Logo um ESTADO corrigido poderá acusar alcance cego ou passivo enquanto o comando não alarma por esses campos — divergência atualmente explícita e testada. (`app/chamados/management/commands/vigiar_fio_morto.py:81-95`, `:167-171`, `:227-228`; `app/chamados/tests/test_o261e_f5_alcance.py:454-455`.)
-
-_881 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_882 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
