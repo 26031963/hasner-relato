@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 31/10/2026 05:23:58.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (26.8 MB). Acoes na janela: **783**.
+**Medido em 31/10/2026 05:29:11.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (26.8 MB). Acoes na janela: **779**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -789,7 +789,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:36:40 | Bash |  | `cd /home/ronald/saas-hasner/logs/calendario_hoje && until grep -q '^rc=' green12.log 2>/dev/null; do /usr/bin/sleep 30; done; for f in suite_pouso4 green12; do echo == $f; grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()\|^rc=" $f.log \| tail -4; done` |
 | 17:36:35 | Bash |  | `cat > /home/ronald/saas-hasner/logs/o261v/desenho_opus.txt <<'EOF' LEITURA DE DESENHO DO OPUS 30/10 17:4x -- O261-V-FASE-NA-LISTA (resumo fiel do relatorio do verificador) VEREDITO: PERGUNTA DE LEI (item 1: qual predicado lavra -- censo_fase_12x36 (a) x fora_de_fase (b); topo do RELATO). Resto do desenho vale apos a resposta: (2) leitores de cadastro_realidade.lista: tela+PDF (escala/views.py:487- ...` |
 | 17:36:23 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') q=("> lei: O261-V-FASE-QUAL-PREDICADO-LAVRA (PERGUNTA DE LEI, nao trava a fila; leitura de DESENHO do opus 30/10 17:4x sobre o quem-mais-le do Codex `logs/o261v/desenho_qml.txt`, conferido por amostra): a lista Cadastro x Realidade so le LAVRA, e HOJE ninguem lavra os DIAS de fase 12x36 deslocada.  ...` |
-| 17:26:10 | Bash |  | `cd /home/ronald/saas-hasner/logs/calendario_hoje && until grep -q '^rc=' suite_pouso4.log 2>/dev/null; do /usr/bin/sleep 30; done; grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()\|^rc=" suite_pouso4.log \| tail -4; cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/wt-cal-hoje-3010-1353 --only "colaboradores.tests ponto.tests.test_c1_dias_encerrados ponto.tests.test_juiz_dia_enc ...` |
-| 17:26:00 | Bash |  | `cd /home/ronald/wt-cal-hoje-3010-1353/app && python3 - <<'EOF' p='ponto/turnos.py' s=open(p).read() a="_escala_vigente(colaborador, data), data, agora, celulas=celulas)\n" assert s.count(a)==1 s=s.replace(a,"_escala_vigente(colaborador, data), data, agora)\n") open(p,'w').write(s) p='ponto/tests/test_c1_dias_encerrados.py' s=open(p).read() a=''' """Leitura de desenho do opus 30/10 17:2x (B): `dias ...` |
-| 17:25:41 | Bash |  | `cd /home/ronald/wt-cal-pouso-3010-1638/app && sed -n 848,856p ponto/services/cartorio.py; grep -n "^\s*cels = \\|cels\[" ponto/services/cartorio.py \| sed -n 1,8p; sed -n 2126,2134p ponto/turnos.py; grep -n "def vinculo_do_dia" -A25 escala/alimentacao.py \| grep -n "celulas" \| head -5` |
-| 17:25:33 | Bash |  | `cd /home/ronald/wt-cal-pouso-3010-1638/app && sed -n 350,362p ponto/services/fechamento.py; sed -n 1840,1860p ponto/turnos.py; grep -n "def turnos_do_colab" -A12 ponto/turnos.py \| grep -n "celulas"` |
