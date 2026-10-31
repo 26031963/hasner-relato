@@ -1,7 +1,318 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 11:59** · publicado em **31/10/2026 12:01** (UTC-3)
+> Ultima resposta processada: **31/10/2026 12:05** · publicado em **31/10/2026 12:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 12:05 · sessao d17f03a5a5fe · - · - · origem=Ronald (tmux)
+
+Auditoria de `disparar_perguntas_competencia` concluída, só por leitura do código; valores atuais e cobertura efetiva em produção [nao verificado].
+
+| Item | Resultado e referências |
+|---|---|
+| Derivação no comando | Não monta um status completo. Seleciona a coluna `trabalha=True`, lê `VEREDITOS_ACUSAM`, obtém motivos da ata e filtra desligados: `app/chamados/management/commands/disparar_perguntas_competencia.py:76`, `:86`, `:105`, `:111`, `:120`. Fio mudo: chamado vivo sem pergunta viva, motivos da ata, colaborador ativo e fato ainda sem pergunta: `:155`, `:163`, `:167`, `:178`, `:220`. |
+| Derivação transitiva de natureza do dia | `grade_da_celula` deriva `fora_vinculo` combinando admissão/demissão com minutos realizados ou `n_celulas-n_missing`; depois lê `ata.tipo_dia` e, se ausente, traduz `trabalha` em `trabalho/folga/indefinido`: `app/escala/services/leitor_celula.py:332`, `:336`, `:339`, `:344`. `_marcos_faltantes` considera apenas `tipo_dia == 'trabalho'`: `app/chamados/services/declaracao_texto.py:90`, `:95`. |
+| Fallback de furo | Passado sem marcos: `vencidos_no_instante` retorna `None`; sem ata, `motivos_pela_ata` pede `classificar_falta`: `app/chamados/services/fabrica_da_celula.py:28`, `:30`, `:52`, `:55`. Falha de leitura da ata também habilita esse ramo: `app/chamados/services/disputa_emissao.py:825`, `:832`. |
+| Regra de `classificar_falta` | Lê `trabalha=False` e silencia; consulta cobertura da ausência; pede vínculo vigente, turno completo e fim previsto; lê turnos e marcos; compara presença/contagem de E/S para escolher entrada ou saída faltante. Isso é a autoridade de **furo**, não um clone local do status completo: `app/escala/servico_jornada.py:302`, `:340`, `:354`, `:375`, `:391`, `:427`, `:440`, `:447`, `:453`, `:466`, `:469`, `:478`. |
+| Fallbacks de `pergunta_viva` | O fio mudo usa `pergunta_viva` e `_ja_perguntou`; este delega `fio_vivo`: `app/chamados/management/commands/disparar_perguntas_competencia.py:149`, `:163`, `:182`; `app/chamados/services/disputa_emissao.py:1202`; `app/chamados/juizes.py:1142`. C6 prioriza validação, tranca, resposta/admin, marco e veredito; sem conclusão pede `classificar_falta`: `app/chamados/juizes.py:1032`, `:1044`, `:1077`, `:1081`, `:1097`. Também consulta essa autoridade para carimbo sem testemunha e destino encerrado sem slot: `:640`, `:726`. |
+| Autoridade lavrada disponível | A coluna existe: `app/escala/models.py:1784`. O leitor oficial é `status_do_dia_lavrado`, com relógio antes do encerramento e coluna depois: `app/ponto/status_dia.py:157`, `:175`, `:181`. O escritor aplica `status_da_lavra` na porta: `app/ponto/portas/celula.py:686`, `:693`, `:698`, `:705`. Registro vivo: `app/core/juizes.py:173`. |
+| Outras decisões/escritas | Janela via `janela_atual`: comando `:58`. Teto marco + 30min via autoridade: `app/ponto/services/cartorio.py:675`, `:689`. Dedup dos dois universos: comando `:124`, `:181`, `:220`. Desfaz carimbo, abre/agrega disputa e emite perguntas: `app/chamados/services/fabrica_da_celula.py:118`. Agrega motivos/contexto/qtd/ultima_em e abre pai/disputa/trilha: `app/chamados/services/disputa_emissao.py:476`, `:484`, `:504`, `:523`, `:532`. Prazo do pai = agora +20min: `:517`; `app/chamados/catalogo/motor.py:45`, `:48`. Pergunta recém-nascida sem destino pode reatar e reemitir chamado do dia: `app/chamados/services/disputa_emissao.py:404`; `app/chamados/reconciliador.py:734`, `:866`, `:909`. Push silenciado por padrão no comando: `:295`, `:300`. |
+| Escritor/evento existente | Batida e ausência acionam julgamento: `app/ponto/signals.py:131`, `:143`; `_julgar_dias`: `:85`, `:93`; julgamento unitário chama `julgar_colab`: `app/ponto/services/cartorio.py:1715`; este pede perguntas para as células **julgadas nesta passada**: `:809`, `:814`, `:823`, `:825`; fábrica executa o mesmo escritor: `app/chamados/services/fabrica_da_celula.py:143`, `:149`. Vigia de hora também chama esse julgamento: `app/ponto/services/vigia_de_hora.py:122`, `:130`. |
+| Lacuna para virar vigia | O universo célula tem escritor/evento acima. O universo fio mudo percorre chamados independentemente de novo julgamento: comando `:155`. A reabertura ressuscita perguntas existentes, sem chamada ao emissor novo nesse método: `app/chamados/models.py:1380`, `:1389`. Um evento cobrindo integralmente nascimento de pergunta de fio mudo sem novo julgamento [nao verificado]; o próprio comando declara a lacuna em `:9` e `:131`. |
+| Estado atual da troca | `--alarme` já existe, conta alvos e sai 2 se houver: comando `:261`. A configuração ainda usa `--comp-corrente --apply`: `app/config/crons.py:1464`. Portanto, só trocar a configuração ainda depende de cobrir o fio mudo e separar a pergunta “qual status?” da pergunta “qual marco falta?”: comando `:155`; `app/chamados/juizes.py:1073`; `app/ponto/status_dia.py:181`. |
+
+Detalhes importantes para a consolidação:
+
+- `CelulaDia.status_dia` não fornece os motivos ou horários dos marcos; estes vêm das lâmpadas da ata e do DNA: `app/chamados/services/declaracao_texto.py:97`, `:109`; `app/chamados/juizes.py:844`, `:870`, `:887`.
+- Ler status lavrado não elimina decisões de identidade do fato, pergunta viva, prazo e costura: comando `:124`, `:163`, `:220`; `app/chamados/services/disputa_emissao.py:389`, `:404`, `:517`.
+- O caminho de evento já desfaz carimbo sem lastro no julgamento, inclusive de motivos cuja pergunta já existe, limitado a disputa aberta: `app/chamados/services/fabrica_da_celula.py:143`, `:146`; `app/chamados/services/relavra_via.py:223`, `:227`, `:231`. O comando usa `perguntar`, cujo desfazimento mantém o default de reabrir disputa fechada: `app/chamados/services/fabrica_da_celula.py:119`; `app/chamados/services/relavra_via.py:185`, `:248`. Essa diferença impede declarar equivalência total dos dois escritores sem análise adicional dessas populações [nao verificado].
+
+## 31/10 12:05 · sessao c59631f33060 · - · - · origem=Ronald (tmux)
+
+| Pergunta — `reavaliar_ausencias_feriado` | Resultado e evidência |
+|---|---|
+| (1) Deriva status/“tem trabalho” por conta própria? | **O comando não tem regra própria de dia:** chama `universo`, `espurios` e, com `--apply`, `encerrar` (`app/ponto/management/commands/reavaliar_ausencias_feriado.py:23`, `:24`, `:28`, `:32`). **O serviço lê uma autoridade, mas ainda não a coluna lavrada:** `espurios` obtém a data por `dia_do_fato`, pergunta `fatos_do_dia`, ignora `era_dia_previsto is None`, seleciona `faixa in ('feriado','folga')` e entrega `falta_descoberta=False` ao catálogo (`app/chamados/services/feriado_reavaliar.py:30`, `:33`, `:34`, `:36`, `:38`). Essa última tradução é uma decisão sobre a premissa da cobrança, apoiada no resultado do juiz, não uma nova aritmética de escala (`app/chamados/services/feriado_reavaliar.py:37`; `app/chamados/catalogo/premissa.py:58`, `:144`). |
+| Regra efetivamente chamada | `fatos_do_dia` delega ao período de um dia (`app/ponto/precedencia.py:195`, `:209`). O período lê `CelulaDia.trabalha` quando disponível; sem célula, pede `eh_dia_trabalho_calculado` ao vínculo e conserva desconhecimento como `None` (`app/ponto/precedencia.py:316`, `:322`, `:325`, `:327`). Feriado não suprime trabalho quando há previsão e `trabalha_em_feriado=True`; os fatos presentes são ordenados por férias > afastamento > atestado > feriado > folga > trabalho (`app/ponto/precedencia.py:46`, `:330`, `:335`, `:349`). |
+| (2) Autoridade/coluna existente | `CelulaDia.status_dia` e `status_rotulo` existem, são anuláveis e recebem a lavra junto do veredito (`app/escala/models.py:1775`, `:1784`, `:1785`; `app/ponto/portas/celula.py:709`). `status_do_dia_lavrado` lê essas colunas; antes do encerramento responde pelo relógio e explicita ausência de célula/lavra (`app/ponto/status_dia.py:157`, `:171`, `:176`, `:181`, `:184`). Para a pergunta específica “dia sem trabalho”, já há `dia_sem_trabalho(cel)`: `trabalha is False` ou `ata.tipo_dia` presente e diferente de trabalho; `None` não significa folga (`app/chamados/juizes.py:398`, `:403`, `:408`). O lookup identifica precedência e status lavrado separadamente (`app/docs/JUIZES.md:68`, `:74`). |
+| Limite da equivalência | **`status_dia` não é uma codificação bijetiva da `faixa` atualmente consultada:** a regra pode devolver `folga`, `folga_trabalhada`, `ausencia` etc.; `folga_trabalhada` decorre de batida em tipo folga, enquanto a seleção atual exige especificamente faixa feriado/folga e previsão conhecida (`app/ponto/status_dia.py:96`, `:101`, `:106`, `:115`; `app/chamados/services/feriado_reavaliar.py:34`, `:36`). Portanto migrar exige definir o predicado do consumidor; “qualquer status diferente de trabalho” não reproduz a regra demonstrada (`app/ponto/status_dia.py:28`; `app/chamados/services/feriado_reavaliar.py:34`). |
+| (3) Outras decisões e escritas | Universo: somente `batida_ausente` nos estados `VIVOS`, opcionalmente por empresa (`app/chamados/services/feriado_reavaliar.py:14`, `:17`, `:18`). Não há prazo adicional no corpo auditado; o comando é dry-run por padrão e só grava com `--apply` (`app/ponto/management/commands/reavaliar_ausencias_feriado.py:10`, `:28`). Ao fechar, chama `ch.reconciliar`; apenas se a porta aceitar anexa ocorrência `falta_espuria_feriado` e auditoria `reconciliar_feriado` (`app/chamados/services/feriado_reavaliar.py:43`, `:47`, `:49`, `:52`). A porta de reconciliação consulta o motor, a premissa e a guarda de pergunta viva antes de gravar o estado (`app/chamados/models.py:605`, `:615`, `:618`, `:635`, `:646`, `:649`). |
+| Efeitos do fechamento | O estado terminal rebaixa urgência e resolve perguntas pelo mesmo conjunto de receivers usado por outras vias (`app/chamados/signals.py:54`, `:70`, `:72`, `:76`, `:81`, `:92`). Mudança de `status_local` também dispara julgamento da célula do dia, exceto durante julgamento já em curso (`app/chamados/signals.py:165`, `:169`, `:174`, `:180`). |
+| (4) Quem escreveria no lugar do cron? Eventos existentes | **O mesmo `feriado_reavaliar.encerrar` já é escritor pelo evento:** `core.Feriado.post_save` agenda `reavaliar_dia(data)` em `on_commit`; esse caminho percorre `espurios` e `encerrar` (`app/chamados/signals.py:265`, `:274`, `:276`; `app/chamados/services/feriado_reavaliar.py:59`, `:76`, `:82`, `:83`). A regeneração de vínculo também agenda `reavaliar_dias(_tocadas, colaborador_id=...)`, somente se `recalculo` e houver dias tocados (`app/ponto/portas/celula.py:421`, `:431`, `:432`, `:433`). Assim, as mesmas escritas de estado, ocorrência e auditoria já têm essas duas entradas de evento (`app/chamados/services/feriado_reavaliar.py:43`). |
+| Cobertura incompleta para retirar escrita do cron | O evento de regeneração exige `_tocadas` e `recalculo=True`; a frota chama a porta com `recalculo=False` (`app/ponto/portas/celula.py:421`; `app/escala/services/cadastro_tipo.py:348`, `:350`). A reversão grava DNA/trabalha/vínculo e auditoria, sem chamar a reavaliação neste corpo (`app/ponto/portas/celula.py:529`, `:538`, `:541`, `:552`). O comentário documenta ainda dia que passa a ser feriado/folga sem célula mudar, reversão e acervo como alcance remanescente do cron (`app/chamados/signals.py:259`). A suficiência em produção e o contador esperado zero são **[nao verificado]**. |
+
+Dependências para a ordem de troca:
+
+- **Não tratar a troca em `espurios` como mudança isolada do cron:** o coletor `premissa_regularizada`, usado pelos gates de fechamento e reabertura, chama `espurios([self])` quando célula/ata não responde (`app/chamados/models.py:1200`, `:1208`, `:1250`, `:1252`). Retirar o fallback para fatos sem decidir o comportamento de ausência de lavra muda esses gates (`app/chamados/models.py:1253`; `app/ponto/status_dia.py:173`, `:184`).
+- **Garantir lavra anterior à leitura no evento de Feriado:** o receiver atual somente agenda reavaliação; o julgamento provocado pelo fechamento ocorre depois da alteração do chamado (`app/chamados/signals.py:271`, `:275`, `:165`, `:180`). **Inferência de código:** uma futura leitura de coluna nesse receiver pode encontrar a lavra anterior, pois não há ali passo de atualização prévia (`app/chamados/signals.py:266`). Já a regeneração com recálculo julga os dias tocados passados antes de agendar a reavaliação (`app/ponto/portas/celula.py:360`, `:368`, `:372`, `:421`).
+- **Cobrir os caminhos restantes antes do vigia:** regeneração de frota, reversão, alteração sem `_tocadas` e acervo têm as lacunas acima; zero efetivo não é fornecido no dado do usuário **[nao verificado]**. A própria declaração mantém os crons até haver `a_fechar=0` medido (`app/ponto/portas/celula.py:419`).
+- **Um futuro vigia deve contar fechamentos realmente autorizados:** existe `reconciliaria()`, sem escrita nem trilha, que consulta a mesma decisão de `reconciliar()`; contar apenas `len(espurios)` não considera os gates finais (`app/chamados/models.py:621`, `:625`, `:646`, `:649`; `app/ponto/management/commands/reavaliar_ausencias_feriado.py:25`).
+
+## 31/10 12:04 · sessao f9d6ec28df81 · - · - · origem=Ronald (tmux)
+
+Auditoria de `fechar_cobranca_com_lastro` — somente código, sem banco/log; execução em produção [nao verificado].
+
+| Pergunta | Resultado com referências |
+|---|---|
+| Entrada e escrita | O cron está configurado às `:40` com `--apply` (`app/config/crons.py:710`). O command delega para `lastro.fechar(aplicar, tolerancia)` (`app/ponto/management/commands/fechar_cobranca_com_lastro.py:52`). `fechar` mede uma vez, recarrega o status do chamado, exige que continue vivo e chama `reconciliar()`; somente após sucesso grava nota `lastro_encontrado` (`app/ponto/services/lastro.py:300`, `app/ponto/services/lastro.py:310`, `app/ponto/services/lastro.py:317`). |
+| (1) Deriva status geral do dia? | Não há atribuição de `status_dia` nesse caminho; a pergunta principal é se **todos os marcos nomeados pela cobrança têm lastro**, com a autoridade da lâmpada primeiro (`app/ponto/services/lastro.py:250`, `app/ponto/services/lastro.py:264`). Para lâmpada existente, `acesa` fornece lastro; apagada classifica `furo_real` (`app/ponto/services/lastro.py:265`). |
+| (1) Recuo que deriva fato em paralelo | **Sem a lâmpada daquele marco**, o serviço refaz uma avaliação: nenhum turno pareado no dia → `sem_batida`; havendo turnos, exige batida do mesmo tipo a até `tolerancia_min`, padrão 90 minutos; sem candidata → `outro_horario`; com candidata escolhe a mais próxima e concede lastro. Todos os marcos precisam passar (`app/ponto/services/lastro.py:59`, `app/ponto/services/lastro.py:245`, `app/ponto/services/lastro.py:274`, `app/ponto/services/lastro.py:282`, `app/ponto/services/lastro.py:289`). Isso não é status geral, mas é uma segunda derivação de lastro sem certidão. |
+| (2) Autoridade existente para o dia | Existem `CelulaDia.status_dia/status_rotulo`, nulos significando ainda não lavrado (`app/escala/models.py:1775`, `app/escala/models.py:1784`). O leitor `status_do_dia_lavrado` consulta a coluna após o encerramento e responde `aberto/previsto` pelo relógio antes dele (`app/ponto/status_dia.py:157`, `app/ponto/status_dia.py:175`, `app/ponto/status_dia.py:181`). A porta lavra status junto ao veredito (`app/ponto/portas/celula.py:686`, `app/ponto/portas/celula.py:701`, `app/ponto/portas/celula.py:709`). |
+| (2) Autoridade para **esta cobrança**, distinta do status geral | `lastro.marcos_acesos(ch, cel)` já responde `True/False/None` para todos os marcos nomeados, exigindo hora e tipo e lendo a ata; falta de marco/tipo/lâmpada produz `None` (`app/ponto/services/lastro.py:153`, `app/ponto/services/lastro.py:170`). O próprio `julgar` lê as mesmas lâmpadas (`app/ponto/services/lastro.py:82`, `app/ponto/services/lastro.py:265`). **Substituir essa pergunta apenas por `status_dia` perde a identidade dos marcos cobrados:** a cobrança pode ter seu próprio marco resolvido enquanto outro furo do dia permanece (`app/ponto/services/lastro.py:160`). |
+| (2) Autoridades transitivas do gate | `reconciliar()` consulta motor e guarda da premissa, além da guarda de pergunta viva (`app/chamados/models.py:627`, `app/chamados/models.py:637`, `app/chamados/models.py:646`, `app/chamados/models.py:649`). A premissa lê célula atual, decisão admin, `dia_sem_trabalho`, marcos acesos/inexistentes e `_celula_furada` (`app/chamados/models.py:1227`, `app/chamados/models.py:1230`, `app/chamados/models.py:1234`, `app/chamados/models.py:1247`). `dia_sem_trabalho` lê `trabalha is False` ou `ata.tipo_dia != trabalho`, tratando `None` como indeterminado (`app/chamados/juizes.py:398`, `app/chamados/juizes.py:407`). |
+| (3) O que mais decide | Seleciona fila `batida_ausente`, obtém dia pelo juiz `dia_do_fato`, pareia turnos, recusa cobrança sem marcos ou sem tipo, determina se todos os marcos foram satisfeitos e tenta fechamento (`app/ponto/services/lastro.py:209`, `app/ponto/services/lastro.py:216`, `app/ponto/services/lastro.py:245`, `app/ponto/services/lastro.py:250`, `app/ponto/services/lastro.py:291`, `app/ponto/services/lastro.py:317`). Não há prazo de idade nessa decisão: busca desde a menor data da fila, com margem de um dia para batidas (`app/ponto/services/lastro.py:232`). |
+| (3) Efeitos adicionais | O fechamento por `reconciliar` é transação e passa pelo escritor `_gravar_estado` (`app/chamados/models.py:612`, `app/chamados/models.py:618`). Esse escritor altera `status_local`, carimba resolução/via, rebaixa urgência e registra `estado_chamado` (`app/chamados/models.py:222`, `app/chamados/models.py:227`, `app/chamados/models.py:274`). O cron acrescenta nota do fio por `nota.anexar_ocorrencia`, porta que cria `FollowupChamado` (`app/ponto/services/lastro.py:319`, `app/chamados/services/nota.py:75`, `app/chamados/services/nota.py:102`). |
+| (4) Quem já fecha no evento | `Batida.post_save` chama `_julgar_dias`, que chama `cartorio.julgar_celula` para data da batida e véspera (`app/ponto/signals.py:85`, `app/ponto/signals.py:108`, `app/ponto/signals.py:131`). O cartório calcula a ata atual e lê `marcos_acesos`; cobranças sem protesto são reconciliadas (`app/ponto/services/cartorio.py:1182`, `app/ponto/services/cartorio.py:1189`, `app/ponto/services/cartorio.py:1204`, `app/ponto/services/cartorio.py:1275`, `app/ponto/services/cartorio.py:1281`). Com fio vivo, a ordem existente é **lavrar → E2 carimba perguntas absolvidas → reconciliar → segunda lavra** (`app/ponto/services/cartorio.py:776`, `app/ponto/services/cartorio.py:786`, `app/ponto/services/cartorio.py:791`, `app/ponto/services/cartorio.py:797`). |
+| (4) Existe evento persistente? | Sim: `salvar_e_emitir` salva célula e insere `EventoCelula` no mesmo atomic quando ata/veredito entram nos campos lavrados (`app/ponto/portas/celula.py:622`, `app/ponto/portas/celula.py:626`, `app/ponto/portas/celula.py:634`). O consumidor chama a retratação de chamados absolvidos por célula (`app/chamados/reconciliador.py:1261`, `app/chamados/reconciliador.py:1304`). Equivalência de cobertura em produção [nao verificado]. |
+| (4) O que ainda precisa de destino explícito | A nota específica `lastro_encontrado` nasce no cron (`app/ponto/services/lastro.py:319`); o fechamento por marco do cartório não cria essa nota, apenas reconcilia, conta, registra saída e agenda nova lavra (`app/ponto/services/cartorio.py:1281`). Para conservar o efeito, a nota deve acompanhar o evento que efetivamente fecha; implementação correspondente atual [nao verificado]. O recuo sem lâmpada não tem substituição demonstrada apenas por leitura de status (`app/ponto/services/lastro.py:274`). |
+| Vigia já disponível e ressalva | `contador()` já se declara “esperado 0”, mas conta `len(com_lastro)`, **sem perguntar se o gate fecharia** (`app/ponto/services/lastro.py:334`, `app/ponto/services/lastro.py:340`). `fechar` só contabiliza fechamento se `reconciliar()` permitir (`app/ponto/services/lastro.py:317`). Há teste mostrando `com_lastro=1` e `fechados=0` (`app/ponto/tests/test_bug114_fechador_de_dois_dias.py:195`). Para vigia de obrigação de fechamento, há leitor sem escrita `reconciliaria()` (`app/chamados/models.py:621`). |
+
+Dependência para a ordem de troca: o caminho de lastro ainda pode cair em `premissa_regularizada → _celula_furada → feriado_reavaliar.espurios` quando a célula não responde (`app/chamados/models.py:1247`, `app/chamados/models.py:1252`). Portanto, a cura da autoridade de feriado/folga e dos casos sem certidão deve preceder a remoção desse recuo; a ordem global entre os quatro crons depende das demais auditorias [nao verificado].
+
+## 31/10 12:04 · sessao 691e7e577dd7 · - · - · origem=Ronald (tmux)
+
+Leitura estática somente; não executei banco nem testes [nao verificado]. [nao verificado]
+
+**7 — Por que chamado por dia**
+
+- O escritor comum `fabrica_da_celula.perguntar` cria/atualiza a disputa e gera perguntas **por motivo e data**; chama `criar_ou_atualizar_disputa` com `{'data': dia.isoformat()}` e depois `gerar_perguntas_disputa` (`app/chamados/services/fabrica_da_celula.py:120-126`).
+- A disputa agrupa pelo **colaborador com `fechada_em IS NULL`**, agregando motivos e atualizando o contexto; não agrupa por competência (`app/chamados/services/disputa_emissao.py:467-502`).
+- A pergunta nova sem destino, para motivo do grupo DIA, chama `reatar_pergunta_orfa` imediatamente (`app/chamados/services/disputa_emissao.py:398-410`).
+- `reatar_pergunta_orfa` tenta derivação, histórico, lavra `(c1)` e depois `reemitir_chamado_do_dia` `(c2)` (`app/chamados/reconciliador.py:1460-1526`).
+- **A função que abre chamado a partir da pergunta é `reemitir_chamado_do_dia`**. A chave é colaborador + `modulo_origem='batida_ausente'` + `contexto_json__data_turno=str(data_ctx)`; não contém disputa, motivo ou competência (`app/chamados/reconciliador.py:807-811`, `app/chamados/reconciliador.py:866-877`). Vários motivos/perguntas daquele dia convergem nesse chamado; outro dia muda a chave (`app/chamados/reconciliador.py:808`).
+- O outro emissor canônico, `detectar_ausencias.Command._abrir_chamado`, usa a mesma chave de colaborador, módulo e data_turno (`app/ponto/management/commands/detectar_ausencias.py:688-707`). `ChamadoColaborador.abrir` serializa por colaborador e consulta o existente usando o lookup recebido (`app/chamados/models.py:861-865`).
+- Isso explica o mecanismo de um chamado por dia; não prova quais funções produziram os 23 chamados/~320 perguntas da medida anterior [nao verificado].
+
+**2 — Bypasses da fábrica**
+
+1. **Lote de perguntas:** `disparar_perguntas_competencia` seleciona células `trabalha=True` no primeiro caminho (`app/chamados/management/commands/disparar_perguntas_competencia.py:76`); no caminho de **fio mudo**, seleciona chamado vivo com célula na janela, sem filtro de trabalha, e deriva o motivo da ata (`app/chamados/management/commands/disparar_perguntas_competencia.py:155-168`). O escritor chama `fabrica_da_celula.perguntar` **diretamente**, sem `perguntar_pela_celula` nem gate de competência entregue (`app/chamados/management/commands/disparar_perguntas_competencia.py:276-289`). Portanto o fio mudo pode produzir pergunta em limbo exportado se já houver chamado vivo, motivo elegível e nenhuma pergunta com a identidade do fato; existência anterior é barrada em `:220-224` (`app/chamados/management/commands/disparar_perguntas_competencia.py:155-168`, `app/chamados/management/commands/disparar_perguntas_competencia.py:220-224`, `app/chamados/management/commands/disparar_perguntas_competencia.py:288`).
+
+2. **Cartório → detector → pergunta:** o cartório emite diretamente pelo detector, tanto no furo sem cobrança/morta/limbo de hoje quanto no parcial (`app/ponto/services/cartorio.py:1450-1472`, `app/ponto/services/cartorio.py:1492-1507`). O silêncio considera chamado vivo e piso, sem competência entregue (`app/ponto/services/cartorio.py:1430-1438`). O detector abre chamado (`app/ponto/management/commands/detectar_ausencias.py:688-707`) e chama `criar_disputa_a_partir_de_chamados_orfaos` para criar o fio (`app/ponto/management/commands/detectar_ausencias.py:782-796`). Este agrupador cria/complementa perguntas pela ata (`app/chamados/services/disputa_emissao.py:966-981`), passando por `_criar_pergunta_se_couber`, cujos gates são ausência e `_ja_perguntou`, sem competência entregue (`app/chamados/services/disputa_emissao.py:756-779`). O próprio `_ja_perguntou` documenta retirada da guarda exportada e efetivamente só consulta existência/colaborador/fio vivo (`app/chamados/services/disputa_emissao.py:1192-1209`).
+
+   **Cuidado:** não concluir que qualquer `trabalha=None` consegue esse caminho; o cartório exige `ec.eh_dia_trabalho(data) is True` no furo e no auxiliar do parcial (`app/ponto/services/cartorio.py:1459`, `app/ponto/services/cartorio.py:1557-1559`). O supra-juiz costuma classificar `sem_ancora` como `PREVISTO_COM_DIA_INDEFINIDO` (`app/ponto/supra_juiz.py:325-328`) e exclui `sem_ancora` dos ramos `FURO_PARCIAL` (`app/ponto/supra_juiz.py:379-387`, `app/ponto/supra_juiz.py:396-403`).
+
+3. **Pergunta existente → reemissão `(c2)`:** apenas os motivos fora de `MOTIVOS_C1` — os intervalos — recebem o gate `_viva_em_competencia_aberta`; os motivos C1 seguem o caminho anterior, alcançando exportada (`app/chamados/reconciliador.py:781-783`, `app/chamados/reconciliador.py:815-822`, `app/chamados/reconciliador.py:864-877`). Continua condicionado a ativo, piso, isenção, ausência, protesto cobrável, veto da célula/régua e motor (`app/chamados/reconciliador.py:793-865`).
+
+**6 — Leitores e efeitos**
+
+- **Juiz compartilhado:** `dia_sem_trabalho` aceita `None` como indeterminado; só cala por `trabalha is False` ou `ata.tipo_dia` presente diferente de trabalho (`app/chamados/juizes.py:398-408`). `_celula_furada` o lê, e marco apagado ainda acusa `True` (`app/chamados/juizes.py:443-458`). O delta não muda esse juiz (`app/chamados/services/fabrica_da_celula.py:153-160`).
+- **Gate de emissão:** `celula_veta_cobranca` lê trabalha/veredito; `None` não veta, `False` veta, e há lista de vereditos que vetam (`app/ponto/marcos.py:119`, `app/ponto/marcos.py:151-163`). Assim desviar a pergunta para Pauta não cria veto de chamado nesse gate (`app/ponto/marcos.py:155-163`, `app/chamados/services/fabrica_da_celula.py:153-157`).
+- **Cartório:** `None` passa no teste `_protesta` se os marcos não estão todos acesos (`app/ponto/services/cartorio.py:1166-1167`); também entra na espera do fim de turno para julgamento de hoje (`app/ponto/services/cartorio.py:1664-1669`). O cartório mede fio com `fio_vivo` sobre perguntas e entrega `cobrancas_vivas=len(_com_fio)` ao supra-juiz (`app/ponto/services/cartorio.py:1100-1105`, `app/ponto/services/cartorio.py:1169-1172`).
+- **Protestos/veredito:** a falta de cobrança viva alimenta `FURO_SEM_COBRANCA`/`FURO_COM_COBRANCA_MORTA`, mas `sem_ancora` ganha antes o protesto de CADASTRO `PREVISTO_COM_DIA_INDEFINIDO` (`app/ponto/supra_juiz.py:281-339`). Portanto não se pode afirmar que todo limbo desviado virará `FURO_SEM_COBRANCA`; pode continuar em CADASTRO (`app/ponto/supra_juiz.py:325-328`). Na ausência de protestos, o veredito especial `cobrado` depende de `_com_fio`, não de Pauta (`app/ponto/services/cartorio.py:1183-1207`).
+- **Contadores cartório:** a fábrica devolvendo `[]` impede incremento de `perguntas_no_julgamento` (`app/ponto/services/cartorio.py:800-803`, `app/chamados/services/fabrica_da_celula.py:155-157`). Os contadores de emissão/protestos são separados; releitura pós-emissão mede o delta de protestos e usa `_conv` (`app/ponto/services/cartorio.py:839-847`). Pauta não incrementa emissão por esse retorno (`app/ponto/services/cartorio.py:800-803`).
+- **Vigia de fio:** aceita células acusadoras independentemente de trabalha, partindo de chamado vivo (`app/chamados/services/vigia_fio.py:317-362`). Sem pergunta viva, tenta os donos decisão do calendário, ausência aberta, folga validada e ListaDoAdmin; **Pauta não entra nessa cadeia** (`app/chamados/services/vigia_fio.py:289-298`). Se nenhum desses donos responder, incrementa `fio_morto`, `sem_pergunta_nenhuma` e eventualmente `fio_morto_cobrando` (`app/chamados/services/vigia_fio.py:392-421`). Logo Pauta nova pode deixar um dia contado como fio morto se houver chamado vivo/célula acusando e ele não estiver coberto pelos donos existentes; ocorrência real [nao verificado].
+- **Vigia de alcance:** universo vem de `competencias_a_lavrar`/`fora_da_folha`; a porta é `porta_alcancavel_do_dia`, depois os mesmos donos (`app/chamados/services/vigia_fio.py:523-552`, `app/chamados/services/vigia_fio.py:565-567`). Não há integração explícita da Pauta nova nessas fontes (`app/chamados/services/vigia_fio.py:523-552`, `app/chamados/services/vigia_fio.py:289-298`).
+- **Passivo `furos_sem_cobranca`:** filtra janela atual até ontem, `veredito='furo'` e protestos cobráveis, sem exigir trabalha=True (`app/ponto/services/furos_sem_cobranca.py:55-63`). Pula chamado vivo e competência trancada, distribui entre afastado/veto/veto_célula/superação/decisão/pergunta ou supervisão; **não tem porta Pauta/exportada** (`app/ponto/services/furos_sem_cobranca.py:82-108`). A soma exclui apenas as portas declaradas (`app/ponto/services/furos_sem_cobranca.py:30-31`, `app/ponto/services/furos_sem_cobranca.py:109-114`). Dado o recorte de janela atual, não afirmar que conta os dias antigos exportados da medida [nao verificado].
+- **`furos_vetados`:** lê qualquer célula com `veredito='furo'`, sem trabalha=True, e pergunta ao veto de régua; Pauta não participa (`app/ponto/services/furos_vetados.py:61-70`).
+- **Vigias que excluem None:** vigia de hora (`app/ponto/services/vigia_de_hora.py:21-23`), vigia de entrada e seu contador (`app/ponto/services/vigia_entrada.py:78-85`, `app/ponto/services/vigia_entrada.py:120`), previstos de `fila_por_causa` (`app/chamados/services/fila_por_causa.py:192-194`) usam trabalha=True; desviar pergunta de célula None não muda a inclusão nesses universos (`app/ponto/services/vigia_de_hora.py:21`, `app/ponto/services/vigia_entrada.py:79`, `app/chamados/services/fila_por_causa.py:192`).
+- **Reconciliador da grade:** indefinido só entra em mortos se `dia_sem_trabalho` disser que é sem trabalho; não mata pelo None (`app/ponto/management/commands/reconciliar_grade.py:280-283`). Há outro gate de lei para retratação (`app/ponto/management/commands/reconciliar_grade.py:284-291`).
+- **Tripwire de ata folga:** inclui explicitamente False **ou NULL**, e só acusa ata folga com agregação incompatível; não depende de pergunta/Pauta (`app/ponto/management/commands/tripwire_celulas.py:337-350`).
+- **Auditor de invariantes:** há leitores ainda binários: `not c.trabalha` pula None (`app/chamados/management/commands/auditar_invariantes_chamados.py:375-377`); outro caso envia `not _cel4.trabalha` ao contador de célula que não acusa (`app/chamados/management/commands/auditar_invariantes_chamados.py:1433-1445`); o contador de contradição com FolgaDia exige `trabalha is True` (`app/chamados/management/commands/auditar_invariantes_chamados.py:1540-1547`). Não mudam apenas porque nasce Pauta em lugar da pergunta, mas conservam cegueira/semântica binária para None nesses ramos (`app/chamados/management/commands/auditar_invariantes_chamados.py:376`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1443`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1542`).
+- **Outros leitores com semântica problemática anterior:** `dia_do_colab` descreve `not cel.trabalha` como “Dia sem trabalho previsto: nenhuma marca era esperada” (`app/ponto/services/dia_do_colab.py:121-123`); `passivo_s84` classifica `None` como `FOLGA` (`app/ponto/services/passivo_s84.py:94-96`). São defeitos preexistentes, não introduzidos pelo delta (`app/ponto/services/dia_do_colab.py:121`, `app/ponto/services/passivo_s84.py:96`).
+- **Flip/esmeril:** flip só trata False como folga mas exige True na véspera noturna (`app/ponto/services/flip_auto.py:208-213`); esmeril A8 só False e A2/A? de marcos usa truthiness de trabalha, excluindo None (`app/ponto/services/esmeril_espelho.py:71`, `app/ponto/services/esmeril_espelho.py:121-123`). São leitores de célula independentes da nova Pauta (`app/ponto/services/flip_auto.py:208-213`, `app/ponto/services/esmeril_espelho.py:71`).
+
+**Outro defeito relevante**
+
+O desvio é tardio para garantir “sem pergunta no app” no fluxo completo: o detector já pode abrir o chamado e criar as perguntas antes de a fábrica ser chamada, e o lote de fio mudo usa o escritor de baixo diretamente (`app/ponto/services/cartorio.py:1469-1472`, `app/ponto/management/commands/detectar_ausencias.py:782-796`, `app/ponto/services/cartorio.py:800`, `app/chamados/management/commands/disparar_perguntas_competencia.py:288`). A revisão precisa distinguir as condições em que esse caminho é possível para `None` das condições comprovadas para True (`app/ponto/services/cartorio.py:1459`, `app/ponto/services/cartorio.py:1558`, `app/chamados/management/commands/disparar_perguntas_competencia.py:155-168`).
+
+## 31/10 12:03 · sessao 7fde4e301c26 · V3-RETOMA-FILA1 · verificador · origem=Code
+
+**A cura elimina a soma paralela atual do lado v2, mas o teste novo não protege completamente essa propriedade.** A captura reproduz os valores numéricos que a lavratura receberia para persistir, sob os mesmos insumos; isso não prova igualdade com o histórico de produção nem correção pela lei. (`diff_calculador.py:71–83`, DEPOIS; `dia_pago.py:343–358`; `app/docs/LEIS.md:136`.)
+
+Referências abreviadas: `diff_calculador.py` é `app/ponto/management/commands/diff_calculador.py`; `dia_pago.py`, `fechamento.py` e `credito_parcial.py` estão em `app/ponto/services/`; `models.py` é `app/ponto/models.py`. **DEPOIS** indica numeração calculada pelo anexo; as demais referências apontam à cópia ANTES. Execução integral da suíte e números de produção: **[não verificado]**.
+
+**1. Quem escreve e quem lê**
+
+O fechamento monta a chamada motor; `_captar` recebe os argumentos, separa `versao` e encaminha os demais, preservando os objetos, à função original salva em `_ol`. Não chama recursivamente o atributo substituído. (`fechamento.py:1168–1205`; `diff_calculador.py:188–207`, DEPOIS.)
+
+| Argumento recebido | Quem escreve/origina | Quem lê e qual valor produz |
+|---|---|---|
+| `colab`, `mes`, `ano` | Parâmetros e universo do fechamento: `fechamento.py:432`, `:598` | Identificação das linhas e filtro de substituição: `dia_pago.py:343`, `:355`, `:357`; `_captar` usa `colab.pk` como chave: `diff_calculador.py:199–203`, DEPOIS. |
+| `periodos` | Motor por fatia e composição: `fechamento.py:270–281`, `:729–731` | Escreve trabalhadas, noturnas, HE50, HE50 noturna, HE100, HE100 feriado, HE100 noturna, antecipada e intra: `dia_pago.py:173–186`. |
+| `ft_certa` | Classificação por escala certa, retirando os feriados: `fechamento.py:909–910`, `:926–928` | Folga trabalhada, noturnas e intra: `dia_pago.py:223–240`. |
+| `ft_feriado` | Partição pelo vínculo e `feriado_vira_folga`: `fechamento.py:920–928` | HE100, HE100 feriado, noturnas e intra: `dia_pago.py:244–256`. |
+| `ft_sem_escala` | Complemento por identidade das outras partições: `fechamento.py:948–949` | Trabalhadas, noturnas e intra: `dia_pago.py:257–265`. |
+| `orfaos_por_dia` | Apuração dos dias descobertos e soma por calendário: `fechamento.py:766–771`, `:813–817` | Acrescenta trabalhadas: `dia_pago.py:267–270`. |
+| `faltas_por_dia` | Autoridade `minutos_de_falta_por_dia`: `fechamento.py:848–850` | Escreve falta em horas: `dia_pago.py:272–275`. |
+| `atraso_por_dia` | `fechamento.py:966`; agregador em `credito_parcial.py:36–44` | Base do atraso líquido: `dia_pago.py:190–195`. |
+| `credito_por_dia` | `fechamento.py:967`; agregação das ausências parciais pagas em `credito_parcial.py:15–26` | Abate até o atraso daquele dia: `dia_pago.py:191–195`. |
+| `reflexo_dsr`, `banco` | Campos mensais: `fechamento.py:1071–1072` | Linha de ajuste, posteriormente descartada pela captura: `dia_pago.py:348–356`; `diff_calculador.py:80–82`, DEPOIS. |
+| `abono_por_dia`, `previsto_por_dia`, `realizado_por_dia` | Grade e conversor canônico: `fechamento.py:981–982`, `:1028–1029`; `dia_pago.py:384–400` | Escreve os três `minutos_*`, sem converter para horas: `dia_pago.py:286–290`. |
+| `dia_da_jornada` | Mapa composto por mescla: `fechamento.py:295–300`, entregue em `:1185` | `_dia_de` escolhe a data nos quatro laços de períodos: `dia_pago.py:126–132`, `:174`, `:235`, `:245`, `:258`. |
+| `furos_do_motor` | Resultado do motor com teto de encerramento: `fechamento.py:1083–1085`, entregue em `:1194` | Cria inclusive dias sem horas e escreve `furo_apurado`: `dia_pago.py:279–281`, `:344`. O booleano não integra a projeção: `dia_pago.py:34–42`. |
+| `versao='motor'` | Literal do fechamento: `fechamento.py:1195` | `_captar` aceita apenas motor; lavratura identifica e substitui essa versão: `diff_calculador.py:196–198`, DEPOIS; `dia_pago.py:333`, `:357`. |
+| `versao_motor`, `regua_por_dia` | Impressão por fatia e mapa por dia: `fechamento.py:265–269`, `:739–740`, `:1198` | Metadados dos dias e diagnóstico no ajuste: `dia_pago.py:333–345`, `:353–354`; não entram no retorno capturado: `diff_calculador.py:82`, DEPOIS. |
+| `evento_origem` | Neste modo recebe **`backfill`**: `fechamento.py:1205` | Metadado das linhas: `dia_pago.py:333–356`; descartado na projeção: `diff_calculador.py:82`, DEPOIS. |
+
+`versao_dna`, `rubricas` e `do_motor` não são enviados na chamada motor e ficam nos defaults. A chamada oráculo envia `rubricas`, mas `_captar` a transforma em no-op. (`dia_pago.py:139–141`; `fechamento.py:1169–1205`, `:1245–1264`; `diff_calculador.py:197–198`, DEPOIS.)
+
+| Estado intermediário | Quem escreve | Quem lê |
+|---|---|---|
+| Atributo global `ponto.models.DiaPago` | Classe original definida em `models.py:281`; helper salva, substitui e restaura em `finally`: `diff_calculador.py:46`, `:71–75`, DEPOIS | Importação **dentro** da função real: `dia_pago.py:163`; constantes, construção e operações ORM em `:343–358`. |
+| Constantes `TIPO_DIA`/`TIPO_AJUSTE` | Modelo: `models.py:311–312`; copiadas ao substituto: `diff_calculador.py:64–65`, DEPOIS | Lavratura identifica as linhas; extração conserva somente dia com data: `dia_pago.py:343`, `:355`; `diff_calculador.py:80`, DEPOIS. |
+| `self.campos`, `_linhas` | Construtor guarda kwargs; `bulk_create` acrescenta objetos: `diff_calculador.py:59–69`, DEPOIS | Extração em `diff_calculador.py:78–82`, DEPOIS. |
+| Dicionário devolvido por `lavra_sem_gravar` | `{data: {campo: float}}`, limitado a `CAMPOS_DIA`: `diff_calculador.py:76–83`, DEPOIS; lista canônica em `dia_pago.py:34–42` | `_captar` guarda em `_lav_fech[colab.pk]`; o comando recupera `_lv`: `diff_calculador.py:203`, `:246–249`, DEPOIS. |
+| `m_dia` | Copia os dias de `_lv` dentro da janela: `diff_calculador.py:329–334`, DEPOIS | Comparação, totais, divergências e CSV: `diff_calculador.py:527–548`, ANTES. |
+| Atributo global `dia_pago.lavrar` | Salvo, substituído por `_captar` e restaurado: `diff_calculador.py:188`, `:220–225`, DEPOIS | Importação local do fechamento e reutilização do alias para oráculo: `fechamento.py:1168`, `:1245`. |
+| `_res_fech` | Interceptação preexistente de `ResultadoMes.__init__`, guardando a primeira instância por colaborador: `diff_calculador.py:131–135`, ANTES | Pré-requisito para prosseguir à leitura da lavra: `diff_calculador.py:154–162`, ANTES. |
+
+Os novos contadores têm os seguintes escritores e consumidores:
+
+| Contador | Quando incrementa | Quem lê / alcance |
+|---|---|---|
+| `lavra_repetida_no_fechamento` | Outra chamada motor para um `pk` já capturado com sucesso: `diff_calculador.py:199–201`, DEPOIS | Impressão de `dict(T)`: `diff_calculador.py:550`, ANTES. Mede a captura da empresa inteira. |
+| `erro_lavra_do_fechamento` | Exceção dentro da captura; incrementa antes de relançar: `diff_calculador.py:202–206`, DEPOIS | Mesma impressão; o fechamento absorve a exceção: `fechamento.py:1206–1209`. |
+| `sem_lavra_do_fechamento` | Colaborador chegou com resultado, mas não existe entrada em `_lav_fech`: `diff_calculador.py:246–249`, DEPOIS | Mesma impressão; alcança somente os colaboradores selecionados que passaram pelas verificações anteriores: `diff_calculador.py:102–108`, `:145–162`, ANTES. |
+| `dia_da_lavra_fora_da_janela` | Uma chave de dia capturada ficou fora de `ini..fim`: `diff_calculador.py:330–334`, DEPOIS | Mesma impressão. Conta **dias**, não horas, rubricas ou períodos. |
+
+**Outros leitores durante as substituições.** Na pilha síncrona atual da lavratura motor, os auxiliares usados não consultam novamente o modelo; o acesso relevante é o import em `dia_pago.py:163`. O oráculo reutiliza o alias capturado e é ignorado, depois da restauração do modelo. (`dia_pago.py:167–290`; `fechamento.py:1245–1264`; `diff_calculador.py:75`, `:197–198`, DEPOIS.)
+
+Existem outros importadores locais que **poderiam observar o substituto se executassem simultaneamente no mesmo processo**:
+
+- Serviços de retrato, somas, furo, abonos e linhas: `dia_pago.py:442`, `:556`, `:585`, `:637`, `:695`, `:777`, `:852`.
+- Porta de exportação: `app/folha/porta_export.py:71`, `:283`, `:330`.
+- Comandos: `app/ponto/management/commands/lavrar_dias_pagos.py:82`; `app/ponto/management/commands/apurar_furo_da_exportada.py:58`.
+
+A troca não tem isolamento por chamada. Uma chamada concorrente à função real poderia inserir linhas no mesmo `_linhas`; a extração não confere colaborador, competência ou versão. Outro fechamento poderia importar `_captar` e deixar de persistir. **Ocorrência concreta dessa concorrência: [não verificado].** (`diff_calculador.py:60`, `:71–82`, `:220–225`, DEPOIS; `dia_pago.py:163`; `fechamento.py:1168`.)
+
+**2. Classes de reprovação**
+
+| Classe | Resultado da revisão |
+|---|---|
+| **Segundo juiz que duplica juiz registrado** | **Não identificado na cura atual.** O helper delega à lavratura existente; não reimplementa classificação ou agrupamento. A pergunta de data continua em `_dia_de`. (`diff_calculador.py:73`, DEPOIS; `dia_pago.py:109–132`.) |
+| **Segundo escritor fora da porta** | **Não cria outro escritor persistente de `DiaPago`.** Intercepta as operações da própria porta. Entretanto, “comando inteiro somente leitura” continua falso no ramo da auditoria preexistente. (`dia_pago.py:357–358`; `diff_calculador.py:49–69`, DEPOIS; `fechamento.py:551–557`; `app/core/observ.py:133–148`.) |
+| **Relógio lido fora da borda** | **Não acrescenta leitura de relógio.** O instante do teto de furo já é capturado pelo fechamento e repassado ao julgamento. (`diff_calculador.py:25–83`, DEPOIS; `fechamento.py:595`, `:1083–1085`.) |
+| **Derivação paralela de fonte única** | **Remove a existente**, substituindo os laços de soma pela projeção da lavra. Falta proteção suficiente contra sua volta dentro do helper. (`diff_calculador.py:246–268`, ANTES; `:73–83`, `:329–334`, DEPOIS; teste novo `:99–117`.) | [nao verificado]
+| **Selo/RED sem mordida** | **Parcialmente cometido.** Morde reversão integral; não garante ausência de derivação paralela no helper nem exercita a integração de `_captar`. Detalhado abaixo. (`test_diff_calculador_lado_v2_e_a_lavra.py:41–117`, anexo.) |
+| **Ordem de trava** | **Nenhuma inversão nova identificada.** As substituições são restauradas em `finally`; o problema demonstrável é ausência de isolamento do estado global. (`diff_calculador.py:71–75`, `:220–225`, DEPOIS.) |
+| **Pouso antes do pré-requisito** | Os símbolos necessários existem na cópia: `dia_pago.py:34–42`, `:135–163`; `models.py:311–351`. Ordem efetiva de pouso, RED anterior e prova de frota concluída: **[não verificado]**. | [nao verificado]
+
+L-095 sustenta ler a autoridade existente. L-110 permite medir impacto do caminho velho, mas impede transformar essa igualdade em certificação legal do cálculo. (`app/docs/LEIS.md:113`, `:136`.)
+
+**3. Comparabilidade com a lavra motor de produção**
+
+**Sim, para os mesmos insumos, nos campos numéricos das linhas de dia.** A função real monta essas linhas e só depois executa `delete`/`bulk_create`; o substituto captura precisamente esses objetos. Os campos de `DiaPago` são `FloatField`, portanto não há aqui perda por ignorar uma quantização decimal do modelo. (`dia_pago.py:343–358`; `models.py:326–351`; `diff_calculador.py:59–82`, DEPOIS.)
+
+A referência nova passa a incorporar diferenças que o laço anterior omitia ou classificava de outra forma:
+
+| Movimento frente ao ANTES | Origem |
+|---|---|
+| HE100 feriado e os dois splits noturnos | Não eram somados no ANTES; são lidos pela lavra. (`diff_calculador.py:253–268`, ANTES; `dia_pago.py:181–184`.) |
+| FT repartida entre folga, HE100/HE100 feriado e trabalhadas | Partição do fechamento e distribuição da lavra. (`fechamento.py:909–949`; `dia_pago.py:234–265`.) |
+| Noturnas e intra das três partições de FT | `dia_pago.py:223–225`, `:240`, `:251`, `:263`. |
+| Trabalhadas dos órfãos | `fechamento.py:813–817`; `dia_pago.py:267–270`. |
+| Atraso líquido após crédito no próprio dia | `dia_pago.py:190–195`. |
+| Dias adicionais de grade, falta e furo, inclusive sem horas trabalhadas | `dia_pago.py:272–290`. |
+
+Há limites importantes:
+
+- **Não compara com o histórico já persistido.** Reexecuta o fechamento atual; igualdade com linhas reais de produção é **[não verificado]**. O modo `--contra-gravado` consulta `FechamentoMensal`, não o histórico diário de `DiaPago`. (`diff_calculador.py:140`, `:561–585`, ANTES.)
+- **Não devolve a linha inteira:** exclui ajuste, detalhes, furo e metadados. O evento capturado é `backfill`; a escrita normal usa `recalcular_fechamento_mes`. (`diff_calculador.py:80–82`, DEPOIS; `dia_pago.py:333–356`; `fechamento.py:1205`.)
+- **Preserva assimetrias do produto:** a partição FT usa calendário da entrada, enquanto a lavra distribui pelo mapa da jornada; atraso e órfãos também usam calendário. Não são divergências introduzidas pelo helper. (`fechamento.py:909–924`, `:813–817`; `credito_parcial.py:29–43`; `dia_pago.py:128–132`.)
+- **Filtra dias fora da janela**, contabilizando-os separadamente. Logo, não representa a totalidade das linhas que `lavrar` produziria. (`diff_calculador.py:330–334`, DEPOIS.)
+
+Na tabela final, divergência significa **uma combinação colaborador/dia/rubrica com diferença absoluta maior que 0,02 hora**; totais somam os valores, e o CSV arredonda a apresentação para duas casas. Não é contagem de erros legais confirmados. (`diff_calculador.py:527–542`, ANTES; `app/docs/LEIS.md:136`.)
+
+**4. Os testes mantêm a pergunta?** [nao verificado]
+
+| Teste | Resultado | [nao verificado]
+|---|---|
+| `app/ponto/tests/test_dia_da_jornada_e_legivel.py:98–118` | **Perde alcance sobre o agrupamento efetivo do v2.** Continua proibindo `k = algo.date()` dentro de `handle`, mas quem agora escolhe a data está em `dia_pago._dia_de`, fora desse escopo. (`dia_pago.py:126–132`.) |
+| Mesmo arquivo, `:120–132` | Continua encontrando a leitura textual do mapa e os contadores, agora mantidos para diagnóstico. **Não prova que esse mapa determina `m_dia`.** (`diff_calculador.py:211–233`, ANTES; `:329–334`, DEPOIS.) |
+| `app/ponto/tests/test_s5b_porta_unica.py:60–101` | **Mantém a pergunta do lado calculador:** as chamadas reais de `insumos_do_calculador` e `rubricas_por_dia` permanecem; o diff não introduz os pareadores proibidos. (`diff_calculador.py:309–324`, `:417–424`, ANTES.) |
+| `app/ponto/tests/test_chamador_do_calculador_aplica_a_janela.py:61–111` | **Mantém seu alvo:** continua havendo `minutos_do_oraculo(..., pares=_pares)` e chamada da porta aceita pelo detector. A remoção do laço motor não esvazia essa verificação. (`diff_calculador.py:312`, `:414`, ANTES.) |
+
+Isso **não deixa toda a regra de data sem proteção**: há casos específicos da autoridade em `app/ponto/tests/test_o116_lavratura_le_o_dia_do_motor.py:55–101`, incluindo mapa que discorda do calendário. O enfraquecimento apontado é dos selos do comando. 
+
+Quanto ao **teste novo**: [nao verificado]
+
+- **Reversão integral:** seria detectada pela ausência do helper e pela volta dos atributos proibidos no `handle`. (`test_diff_calculador_lado_v2_e_a_lavra.py:42`, `:86`, `:107–117`, anexo.)
+- **Helper passando a somar por conta própria:** **não há garantia de detecção.** A AST só inspeciona `handle`; a outra asserção exige apenas um `ast.Name`, sem exigir chamada ou ligação do retorno com `m_dia`. (`test_diff_calculador_lado_v2_e_a_lavra.py:99–117`, anexo.)
+- Um helper poderia chamar a lavra, preservar a propagação de exceções, descartar a captura e recomputar corretamente os exemplos fixos. As verificações de valores e restauração continuariam satisfeitas. (`test_diff_calculador_lado_v2_e_a_lavra.py:53–93`, anexo.)
+- Nenhum caso comportamental novo executa `Command.handle`, a obtenção dos kwargs reais, as guardas de versão/repetição ou os contadores. (`test_diff_calculador_lado_v2_e_a_lavra.py:41–117`, anexo.)
+
+Para proteger a delegação, falta um caso em que a lavra forneça um valor sentinela diferente de qualquer soma dos períodos, verificando que esse valor chega à comparação; os casos atuais só conferem valores fixos derivados das mesmas entradas. (`test_diff_calculador_lado_v2_e_a_lavra.py:53–76`, anexo.)
+
+**5. Outras falhas e limites**
+
+**A triagem atribui o contador errado aos barrados pela guarda.** A guarda exclui colaboradores antes do laço que cria o `ResultadoMes`; o comando consulta `_res_fech` e dá `continue` antes de consultar `_lav_fech`. Esses colaboradores caem em **`sem_resultado_do_fechamento`**, não em `sem_lavra_do_fechamento`. (`fechamento.py:545–548`, `:598`, `:729`; `diff_calculador.py:154–162`, ANTES; `:246–249`, DEPOIS.)
+
+**A prova da 09 pode ficar sem o universo relevante.** Existe guarda para setembro/2026, e a combinação usada pelo comando — leitura com `lavrar_dias_pagos=True` — ativa o caminho classificado como escrita. Se a empresa estiver exportada, os colaboradores guardados são excluídos. Quais empresas satisfazem isso: **[não verificado]**. (`fechamento.py:36–43`, `:523–548`; `diff_calculador.py:140`, ANTES.)
+
+**Ausência de resposta do calculador ainda pode virar zero.** O comando visita apenas `v.minutos`, mas compara a união dos dias e usa `{}`/zero quando falta `c_dia`. Os novos dias vindos da lavra ampliam esse domínio. Sem `--pares-da-autoridade`, `_rub_do_dia` fica vazio; o comando ainda pode publicar motor contra zero. É preexistente, porém limita a interpretação deste instrumento. (`diff_calculador.py:325–337`, `:417–431`, `:469–472`, `:527–535`, ANTES.)
+
+**A promessa de falhar diante de qualquer novidade no modelo é excessiva.** O construtor aceita quaisquer campos e `filter` aceita quaisquer filtros sem validá-los. Algumas mudanças futuras passariam silenciosamente; nem toda novidade produziria `AttributeError`. (`diff_calculador.py:38–40`, `:55–69`, DEPOIS.)
+
+**Os contadores não tornam falha o resultado do comando.** A exceção da lavra é absorvida pelo fechamento; o comando imprime os contadores e segue produzindo a tabela. Portanto, execução concluída pode conter comparação incompleta. (`fechamento.py:1206–1209`; `diff_calculador.py:550–556`, ANTES.)
+
+## 31/10 12:03 · sessao 64a35c2d3817 · - · - · origem=Ronald (tmux)
+
+4. A composição escolhida reutiliza autoridades registradas: F5=`janela_atual` e K6=`competencia_entregue`; o helper apenas encadeia dia → competência → entrega, sem predicado novo. K6 exige TXT vigente não invalidado. (`app/core/juizes.py:258`, `app/core/juizes.py:287`, `app/chamados/services/vigia_fio.py:775`, `app/folha/export.py:569`)
+
+Existem predicados distintos, explicitamente separados: F6 considera fechamento aprovado/exportado por colaborador; K4 considera tranca viva; K9 considera TXT ou holerite publicado do próprio colaborador. Eles respondem outras perguntas, portanto não justificam substituir K6 neste gate. (`app/core/juizes.py:76`, `app/core/juizes.py:290`, `app/ponto/janelas.py:75`, `app/ponto/services/fechamento.py:1441`, `app/folha/export.py:578`)
+
+A casa já usa “aberta” como “não entregue” nesse contexto: o vigia assim nomeia a composição existente, e o esmeril pergunta “o que ainda está aberto?” lendo K6. Não cabe inventar um novo predicado pela combinação de aprovação, tranca e pagamento. (`app/chamados/services/vigia_fio.py:473`, `app/chamados/services/vigia_fio.py:764`, `app/ponto/services/esmeril_espelho.py:38`, `app/ponto/tests/test_janela_da_lista_le_o_k6.py:6`)
+
+Há também `marco_da_competencia`, cujo rótulo `aberta` significa ausência de todos os marcos; sua docstring o identifica como o que a tela mostra, não como autorização de emissão. (`app/ponto/services/fechamento.py:1486`, `app/ponto/services/fechamento.py:1511`, `app/ponto/services/fechamento.py:1521`)
+
+O antigo `dia_em_competencia_exportada` foi removido; restam lápides, não outra implementação viva desse juiz. (`app/chamados/juizes.py:1665`, `app/core/juizes.py:589`)
+
+5. Mutações previstas pela leitura estática — execução efetiva das mutações: [nao verificado].
+
+| Teste | Mutação de produção que o torna vermelho | [nao verificado]
+|---|---|
+| `test_RED_limbo_em_exportada_nao_pergunta_e_vai_a_pauta_dp` | Remover o gate: a função retorna motivos e segue perguntando; remover só a escrita da pauta faz falhar `len(p)==1`. (`app/chamados/tests/test_f1c4_3_emissores.py:199`, `app/chamados/services/fabrica_da_celula.py:153`) |
+| `test_limbo_em_aberta_pergunta_sem_pauta` | Substituir o resultado da consulta por `True`: retorna `[]` e escreve pauta, contrariando ambas as asserções. (`app/chamados/tests/test_f1c4_3_emissores.py:207`, `app/chamados/services/fabrica_da_celula.py:155`) |
+| `test_MORDE_trabalho_em_exportada_segue_perguntando_sem_pauta` | Alargar `cel.trabalha is None` para `cel.trabalha is not False`: trabalho exportado passa a retornar `[]` e escrever pauta. O teste protege precisamente a exceção que o comentário de produção atribui à O44. (`app/chamados/tests/test_f1c4_3_emissores.py:211`, `app/chamados/services/fabrica_da_celula.py:151`) |
+| `test_RED_limbo_em_exportada_duas_vezes_uma_pauta` | Trocar o cálculo de `novos` por `list(motivos)`: a segunda execução escreve outra pauta, fazendo o total subir para dois. (`app/chamados/tests/test_f1c4_3_emissores.py:216`, `app/chamados/services/fabrica_da_celula.py:177`) |
+
+A fixture tem saída efetivamente apagada, ata de trabalho e veredito `furo`, além de vínculo real vigente; portanto não é simplesmente um cenário vazio. O marco final `S` corresponde a `orfao_14h`. (`app/chamados/tests/test_f1c4_3_emissores.py:45`, `app/chamados/tests/test_f1c4_3_emissores.py:63`, `app/chamados/tests/test_f1c4_3_emissores.py:65`, `app/chamados/tests/_vinculo_do_dia.py:15`, `app/chamados/services/declaracao_texto.py:42`)
+
+A deduplicação é alcançada na segunda execução: o ramo exportado escreve pauta e retorna antes de criar pergunta; assim a existência de uma pergunta nova não esvazia os motivos da segunda passagem. (`app/chamados/services/fabrica_da_celula.py:103`, `app/chamados/services/fabrica_da_celula.py:155`, `app/chamados/tests/test_f1c4_3_emissores.py:218`)
+
+Os testes de aberta e trabalho exportado verificam retorno truthy, mas não verificam nascimento de `PerguntaDisputa`: retirar a chamada a `perguntar`, preservando `return ms`, sobrevive a essas duas verificações. (`app/chamados/tests/test_f1c4_3_emissores.py:207`, `app/chamados/tests/test_f1c4_3_emissores.py:211`, `app/chamados/services/fabrica_da_celula.py:158`)
+
+Os testes também consultam pautas usando o mesmo formato `colab:data` escrito pelo helper, de modo que não testam a compatibilidade com os leitores existentes. Os quatro corpos não exercitam resposta, arquivo, concorrência, TXT invalidado ou retorno `None` do helper de competência. (`app/chamados/tests/test_f1c4_3_emissores.py:192`, `app/chamados/tests/test_f1c4_3_emissores.py:199`, `app/chamados/services/fabrica_da_celula.py:175`)
+
+## 31/10 12:03 · sessao 0cbb7497253a · - · - · origem=Ronald (tmux)
+
+Conclusões da pergunta 3, todas por leitura estática:
+
+- **Quem escreve dia:** a nova `pauta_dp_do_limbo_exportado` escreve pela porta `escrever`, como TI para DP, com âncora `colaborador_id:AAAA-MM-DD` (`app/chamados/services/fabrica_da_celula.py:173-187`). O outro escritor específico é `declarar_cobertura_passada`, que escreve para Supervisão usando a mesma composição de âncora (`app/ponto/services/cobertura.py:234-235`, `:329-337`). A view genérica recebe qualquer âncora válida e chama a mesma porta (`app/pautas/views.py:72-82`); `responder` também cria Pauta com a âncora original (`app/pautas/services.py:184-192`). A criação real é `Pauta.objects.create` dentro de `escrever` (`app/pautas/services.py:152-180`).
+
+- **Formato correto:** o modelo declara dia como `<colab_id>:<AAAA-MM-DD>` (`app/pautas/models.py:33`, `:84-87`); o parser divide no primeiro `:` e usa `int` + `date.fromisoformat` (`app/pautas/services.py:373-379`). A nova composição casa com isso (`app/chamados/services/fabrica_da_celula.py:175`). Busca e compositor também usam esse formato (`app/core/busca.py:179-186`; `app/pautas/views.py:129-136`).
+
+- **Quem lê:** dedup nova (`app/chamados/services/fabrica_da_celula.py:177-179`); `pautas_a_confirmar` na cobertura (`app/ponto/services/cobertura.py:238-243`); parser/rótulo/contexto do dia (`app/pautas/services.py:373-420`); `pautas_do_colab`, filtrando raízes colab ou dia pelo prefixo `<pk>:` (`app/pautas/services.py:423-427`); template detalhe, que mostra estado e texto truncado em 180 caracteres (`app/templates/colaboradores/detalhe.html:113-119`); lista genérica das abas (`app/pautas/services.py:303-323`) e payload com âncora e respostas (`app/pautas/views.py:33-48`); chip genérico por igualdade de tipo e id (`app/pautas/services.py:326-330`). Não encontrei chamada Python a `pautas_do_colab`, apenas definição e template; sua alimentação efetiva permanece [nao verificado].
+
+- **Defeito de navegação existente:** a gaveta só define rotas de `colab`, `chamado` e `posto`; clicar numa Pauta dia marca lida e depois mostra “ainda não tem tela própria”, sem navegar (`app/templates/core/_copiloto.html:564-574`). A âncora nova está correta, mas esse leitor não sabe abrir dia (`app/chamados/services/fabrica_da_celula.py:175`, `app/templates/core/_copiloto.html:570-574`).
+
+- **Respondida:** resposta apenas cria filha com destino invertido; não marca a raiz feita (`app/pautas/services.py:184-192`). Portanto resposta simples mantém a raiz no universo `vivas()` e a dedup continua funcionando, enquanto o texto preserva os marcadores (`app/pautas/models.py:57-64`; `app/chamados/services/fabrica_da_celula.py:177-180`).
+
+- **Arquivada/feita/cancelada:** não há campo “arquivada” no modelo; há `feito_em` e `cancelado_em` (`app/pautas/models.py:89-102`). `vivas()` exclui ambas (`app/pautas/models.py:57-64`). Marcar feita ou cancelar mantém a história, mas a próxima execução, com o mesmo motivo ainda faltando, pode criar outra raiz porque a dedup só consulta vivas (`app/pautas/services.py:239-243`, `:286-289`; `app/chamados/services/fabrica_da_celula.py:177-187`). Portanto não garante “uma vez por dia/motivo” ao longo do histórico; garante enquanto existir uma Pauta viva reconhecível (`app/chamados/services/fabrica_da_celula.py:170-179`).
+
+- **Truncamento não é seguro em geral:** a nova função põe motivos perto do começo e comenta que isso os protege (`app/chamados/services/fabrica_da_celula.py:184-187`), mas `escrever` reserva `500 - len(contexto) - 4` caracteres para a mensagem, sem piso, e depois corta tudo em 500 (`app/pautas/services.py:168-177`). O contexto inclui todas as batidas e lâmpadas apagadas, sem teto de comprimento (`app/pautas/services.py:410-420`). Se o contexto tiver 480 caracteres, restam 16 para a mensagem: nem o prefixo inteiro sobrevive; a próxima dedup por `startswith` não reconhece a Pauta. Essa consequência decorre dos cortes, não foi medida em produção (`app/pautas/services.py:171`, `:177`; `app/chamados/services/fabrica_da_celula.py:164`, `:178`).
+
+- **Concorrência:** consulta e criação não têm uma trava comum nem chave única dia/motivo/marcador; duas execuções podem ler ausência e criar duas Pautas (`app/chamados/services/fabrica_da_celula.py:177-183`). O modelo só tem constraint de destinatário, sem unicidade da âncora ou marcador (`app/pautas/models.py:112-132`). O `atomic` de `escrever` começa depois da leitura de dedup e não resolve esse intervalo (`app/pautas/services.py:152-172`).
+
+Outros escritores de sistema com marcador e dedup:
+
+| Escritor | Dedup |
+|---|---|
+| Esmeril | Vivas, âncora posto, Supervisão, prefixo `[ESMERIL `; chave `(posto, ação)`, diferença de conjuntos abre/fecha (`app/ponto/services/pautas_do_esmeril.py:63-79`). |
+| Deslogados | Vivas, tipo/destino/prefixo; chave colab e diferença de conjuntos (`app/ponto/services/pautas_dos_deslogados.py:63-83`). |
+| Discordantes | Vivas, tipo/destino/prefixo; chave extraída do texto, diferença de conjuntos (`app/ponto/services/pautas_dos_discordantes.py:154-185`). |
+| Passivo validado | Âncora competência + cabeçalho colab/competência + `pai__isnull=True`, **sem limitar a vivas**; história impede nova cabeça (`app/chamados/services/passivo_validado.py:158-166`; outra pauta de recusa repete padrão em `:253-258`). |
+| HE no período | Busca cabeça viva por competência/DP/marcador/raiz; atos seguintes viram filhas (`app/ponto/services/autorizacao_he_periodo.py:236-246`). |
+| Sem documento / férias recusadas | Âncora colab, DP, marcador e `feito_em/cancelado_em` nulos; férias inclui agendamento no marcador (`app/ponto/services/ausencia.py:1022-1028`, `:1211-1218`). |
+| Afastado avisa | Colab, raiz, Supervisão, não feita/cancelada, primeiros 40 caracteres do texto (`app/ponto/services/afastado_avisa.py:62-78`). |
+| Tranca | Competência + `[TRANCA]` + viva (`app/chamados/services/competencia_trancada.py:209-224`). |
+| Reabrir órfãs enterradas | Competência + marcador + viva (`app/chamados/management/commands/reabrir_orfas_enterradas.py:182-198`). |
+| Pauta dia em aberto | Competência + marcador + viva; completar só se cabeça não tiver filha (`app/pautas/management/commands/pauta_dia_em_aberto.py:104-129`). |
+| Pautas de férias | Competência, DP, marcador, viva (`app/ferias/management/commands/pautas_de_ferias.py:149-170`). |
+| Semanal | Tipo competência, departamento, marcador + semana, **inclui feitas e canceladas**; teto de uma por semana (`app/pautas/semanal.py:195-199`, `:238-240`). |
+| Pré-fechamento | Competência, DP, marcador, viva; prefixo inclui data, fecha anteriores/zero (`app/folha/management/commands/pre_fechamento.py:89-111`). |
+| Crons quebrados | Viva para TI, marcador + cron + empresa (`app/core/services/crons_quebrados.py:51-72`). |
+| Alarme árvore | Uma viva para TI com prefixo `ARVORE VERMELHA` (`app/core/management/commands/alarme_arvore.py:11-16`, `:29-37`). |
+| Alarme esteira | Uma viva para TI por prefixo `ESTEIRA <chave>:` (`app/core/management/commands/alarme_esteira.py:10-15`, `:28-40`). |
+| Aparelhos compartilhados | Texto prefixado `APARELHO COMPARTILHADO`, mas **sem consulta de dedup** antes de escrever cada caso (`app/colaboradores/management/commands/pauta_aparelhos_compartilhados.py:95-110`). |
 
 ## 31/10 11:59 · sessao 4fabd3e3aa53 · - · - · origem=Ronald (tmux)
 
@@ -420,211 +731,4 @@ Pontos documentais que sustentam a revisão:
 
 2) `AGENTS.md`, do diretório `/home/ronald/codex_ws/19d2a06fc144d68abf7cd05b67a4d150c49eb776`, fornecido no contexto pelo usuário. [nao verificado]
 
-## 31/10 11:33 · sessao 4db2ad64e94e · CODEX-LICOES · verificador · origem=Code
-
-**A cópia e o anexo fornecido representam estados diferentes.** Na cópia, o wrapper termina sem os blocos de AGENTS, base/diff e julgamento do brief presentes no anexo; o BACKLOG ainda registra o contexto aguardando pouso. As referências abaixo são da cópia. A origem/versionamento do wrapper anexado é [não verificado]. (`bin/codex_pergunta.sh:118`, `bin/codex_pergunta.sh:177`, `app/docs/BACKLOG.md:871`)
-
-1. **Os dois papéis novos hoje nem chegam ao Codex.** `licao` e `licao-consolidar` caem na recusa com rc 2. Além de ampliar o wrapper, é necessário atualizar os leitores: chamadas e tokens desses papéis seriam agrupados em `outro`. (`bin/codex_pergunta.sh:48`, `bin/codex_limite_estado.py:23`, `bin/codex_limite_estado.py:78`, `bin/codex_limite_estado.py:194`)
-
-2. **A pergunta fixa conflita com o cabeçalho existente.** O wrapper exige `arquivo:linha ou [nao verificado]`; a lição proíbe caminho e `:NNN`. Uma lição sustentada por citação seria recusada; usar `[nao verificado]` satisfaria o cabeçalho sem comprovar a lição. É necessária uma regra específica por papel, preservando a exigência nos demais — o selo atual cobra esse cabeçalho. (`bin/codex_pergunta.sh:124`, `bin/tests/test_codex_pergunta.sh:27`)
-
-3. **O material do gatilho está subespecificado.** A classificação vigente recebe **todas** as perguntas/respostas, as linhas de triagem e devolve trechos por achado. O contrato passa “a pergunta .q + a resposta .r”, sem escolher a volta nem exigir a tabela classificada como anexo. Em obra com várias voltas, isso pode ensinar uma conclusão sem sua história ou evidência. Inferência baseada no fluxo existente. (`CLAUDE.md:598`, `CLAUDE.md:614`, `CLAUDE.md:616`, `CLAUDE.md:617`)
-
-4. **“Arquivo na árvore viva” não significa “próxima chamada recebe”.** O wrapper lê um `git archive` do hash e reutiliza a cópia existente; não acompanha alterações posteriores no vivo. Para cumprir o contrato antes do próximo commit, precisa anexar explicitamente uma fotografia do arquivo em `$VIVO`, identificando sua versão. Usar `$WS` entrega conteúdo antigo; usar `$R` depende de onde o wrapper foi executado. (`bin/codex_pergunta.sh:29`, `bin/codex_pergunta.sh:30`, `bin/codex_pergunta.sh:87`, `bin/codex_pergunta.sh:91`; `app/docs/LEIS.md:132`)
-
-5. **Anexar em qualquer papel acrescenta uma dependência de raspagem a todas as chamadas.** Hoje qualquer `--anexo` exige lista de nomes válida e pode encerrar com rc 4 antes do Codex. Os anexos também compartilham um corte silencioso de 300.000 bytes: dependendo da ordem, lições ou evidências podem desaparecer. O contrato precisa definir indisponibilidade, ordem e tratamento do excesso. (`bin/codex_pergunta.sh:104`, `bin/codex_pergunta.sh:105`, `bin/codex_pergunta.sh:111`, `bin/codex_pergunta.sh:115`; `bin/tests/test_codex_sonda.sh:76`)
-
-6. **Rodar em fundo não garante ficar fora do caminho crítico.** Lições disputariam os mesmos seis slots com verificadores e sondas; o slot permanece ocupado até a saída. O timeout só começa depois da espera pelo slot. Portanto, uma lição pode atrasar a próxima chamada necessária à obra, mesmo sem alguém esperar diretamente por ela. (`bin/codex_pergunta.sh:47`, `bin/codex_pergunta.sh:138`, `bin/codex_pergunta.sh:150`, `bin/codex_pergunta.sh:153`, `bin/codex_pergunta.sh:157`)
-
-7. **A consolidação contradiz o teto absoluto.** Contraexemplo: existem 40 linhas, entra a 41ª e a consolidação retorna 75 ou resposta inválida; “mantém” deixa 41 linhas, contrariando o selo. O retorno 75 já é um caminho explícito do wrapper; preservar o teto nesse cenário não está definido. **[não verificado quanto à implementação futura]** (`bin/codex_pergunta.sh:167`, `bin/codex_pergunta.sh:171`)
-
-8. **O lock do append não resolve a substituição concorrente.** Se a consolidação ler uma versão, outra chamada acrescentar uma lição e depois ocorrer a substituição, o acréscimo pode ser perdido. Falta definir lock estável compartilhado entre append, leitura e publicação da consolidação, ou comparação de versão antes da troca. Os `flock` atuais controlam capacidade de execução, não o documento. **[não verificado quanto à implementação futura]** (`bin/codex_pergunta.sh:138`, `bin/codex_pergunta.sh:144`)
-
-9. **A validação e os erros estão incompletos.** A consolidação exige apenas até 40 linhas com CLASSE: não repete a proibição de caminhos nem estabelece mínimo de uma linha. Também falta dizer que só se publica após rc 0, saída válida e `thread_id` presente; hoje o CLI recebe diretamente o destino da resposta, pode terminar com erro/timeout, e o SID ausente é apenas informado. (`bin/codex_pergunta.sh:157`, `bin/codex_pergunta.sh:159`, `bin/codex_pergunta.sh:163`, `bin/codex_pergunta.sh:175`, `bin/codex_pergunta.sh:176`)
-
-10. **O selo proposto não prova “escrita fora do wrapper”.** Documento e log são dois arquivos: falha entre as gravações pode produzir linha legítima sem par. A consolidação também cria novos textos e precisa registrar novos pares. Falta protocolo de recuperação e identidade do achado para impedir duplicação ao republicar a tabela; a identidade atual das chamadas usa obra/hash/pid, sem identificar o achado. Ausência de par comprovaria inconsistência, não sua causa. **[não verificado quanto à implementação futura]** (`bin/codex_pergunta.sh:53`, `bin/codex_pergunta.sh:59`, `bin/codex_limite_estado.py:63`)
-
-11. **“Qualquer papel” reintroduz opinião no verificador.** Lições derivadas dos achados do opus voltariam como contexto das verificações seguintes, inclusive da mesma obra. Isso exige uma exceção explícita à independência atual: pergunta sem hipótese e proibição de achado do opus no brief do verificador. O risco de eco é uma inferência; há registro documental anterior desse sinal, sem comprovação aqui dos resultados brutos. (`CLAUDE.md:579`, `CLAUDE.md:585`, `app/docs/PROMPTS.md:1684`, `app/docs/RELATO.md:176`)
-
-12. **A/B, desligamento e certificação ainda não têm encaixe definido.** O pouso e o protocolo de `CODEX-CONTEXTO-SEM-CONDUTA` são [não verificado]. É preciso congelar as lições entre os braços, garantir sua ausência no braço “sem”, registrar a versão enviada e definir a chave de desligamento. O precedente documentado exige mesma pergunta/hash e controle de posição; os testes atuais cobrem estrutura, raspagem e limite, sem certificar essas novas invariantes. Uma segunda chamada inline para consolidar também quebraria o selo que exige uma única ocorrência de `codex exec`. (`app/docs/RELATO.md:179`, `app/docs/PROMPTS.md:1686`, `bin/tests/test_codex_pergunta.sh:13`, `bin/tests/test_codex_sonda.sh:57`, `bin/tests/test_codex_sonda.sh:87`, `bin/tests/test_codex_limite.sh:31`)
-
-## 31/10 11:33 · sessao 3f91e974b7bb · V3-RETOMA-FILA1 · verificador · origem=Code
-
-O desenho acerta ao substituir a soma manual pela lavra, mas **não garante ausência de escrita nem comparabilidade completa**: há auditoria fora de `lavrar`, filtros diferentes de colaboradores/dias e critérios diferentes de data. (`app/ponto/services/fechamento.py:523–558`; `app/ponto/management/commands/diff_calculador.py:102–108`; `app/ponto/services/dia_pago.py:173–290`)
-
-**(a) Quem escreve e quem lê**
-
-O encadeamento efetivo é: motor produz resultados das fatias → fechamento compõe o `ResultadoMes` e prepara mapas/partições → `lavrar` distribui os valores e constrói `DiaPago` → o captador proposto substituiria a persistência por linhas em memória. (`app/ponto/services/fechamento.py:270–300`; `app/ponto/services/fechamento.py:1169–1205`; `app/ponto/services/dia_pago.py:343–358`)
-
-| Valor/argumento | Quem produz ou escreve | Quem lê e o que escreve na lavra |
-|---|---|---|
-| `colab`, `mes`, `ano` | Laço do fechamento e argumentos do recalculo. (`app/ponto/services/fechamento.py:432–435`, `:598`) | Identificação das linhas e filtro da substituição. (`app/ponto/services/dia_pago.py:343`, `:355–357`) |
-| `ResultadoMes` composto por colaborador | `apurar_por_fatia` cria o composto **antes** de calcular as fatias; concatena listas, soma acumuladores e mescla mapas. O recalculo recebe `_ap.resultado`. (`app/ponto/services/fechamento.py:182`, `:270–300`, `:729–731`) | O DIFF atual captura a primeira instância por `colaborador_id` com `setdefault`; depois troca apenas `aut.resultado`. (`app/ponto/management/commands/diff_calculador.py:131–135`, `:154–162`) |
-| `periodos` | Motor de cada fatia; fechamento concatena mantendo os objetos. (`app/ponto/services/fechamento.py:270–281`) | Trabalhadas, noturnas, HE50, HE50 noturna, HE100, HE100 feriado, HE100 noturna, saída antecipada e intra. (`app/ponto/services/dia_pago.py:173–186`) |
-| `ft_certa`, `ft_feriado`, `ft_sem_escala` | Fechamento parte `resultado.periodos_ft`: escala certa; retira feriados; calcula complemento **por identidade**. (`app/ponto/services/fechamento.py:908–928`, `:948–949`) | Respectivamente: folga; HE100 **e** HE100 feriado; trabalhadas. Todos carregam noturno e intra. (`app/ponto/services/dia_pago.py:223–265`) |
-| `orfaos_por_dia` | Outra execução de motor, `_r_orfa`; fechamento agrupa seus períodos por data local. **Não incorpora esses períodos ao composto.** (`app/ponto/services/fechamento.py:802–818`) | Acrescenta trabalhadas e detalhe `o85_dia_sem_vinculo_min`. (`app/ponto/services/dia_pago.py:267–270`) |
-| `faltas_por_dia` | `minutos_de_falta_por_dia`. (`app/ponto/services/fechamento.py:848–850`) | `horas_falta` e detalhe `falta_min`. (`app/ponto/services/dia_pago.py:272–275`) |
-| `atraso_por_dia`, `credito_por_dia` | `credito_parcial.atraso_por_dia(resultado.periodos)` e `creditos_por_dia`. (`app/ponto/services/fechamento.py:962–968`) | Atraso líquido: `max(atraso − min(atraso, crédito), 0)/60`; detalhe do crédito utilizado. (`app/ponto/services/dia_pago.py:190–195`) |
-| `abono_por_dia`, `previsto_por_dia`, `realizado_por_dia` | Grade do fechamento → `por_dia_da_grade`; abono cobre o previsto não realizado na ausência, realizado tem teto diário. (`app/ponto/services/fechamento.py:981–982`, `:1028–1032`; `app/ponto/services/dia_pago.py:384–400`) | Os três `minutos_*`, **em minutos**, podendo criar dias. (`app/ponto/services/dia_pago.py:286–290`) |
-| `reflexo_dsr`, `banco` | Campos montados no fechamento; banco é zerado quando `sem_movimento`. (`app/ponto/services/fechamento.py:1069–1072`, `:1175–1176`) | Somente `horas_reflexo_dsr` e `saldo_banco_horas` do ajuste. (`app/ponto/services/dia_pago.py:348–356`) |
-| `dia_da_jornada` | Motor escreve/mescla `id(periodo) → data`, incluindo FT; fechamento mescla mapas das fatias. (`app/ponto/motor_calculo_v2.py:1011–1013`, `:2878–2897`; `app/ponto/services/fechamento.py:295–300`) | Lavra consulta por `id(p)`; alimentação v3 também. Sem chave, lavra usa data local; alimentação v3 conta `sem_dia_da_jornada` e descarta o período. (`app/ponto/services/dia_pago.py:126–132`; `app/ponto/calculador/alimentacao.py:63–72`) |
-| `furos_do_motor` | `resultado.datas_falta` passa por `_furos_encerrados`. (`app/ponto/services/fechamento.py:1083–1085`, `:1194`) | Cria dias mesmo sem horas e escreve `furo_apurado`: `None` significa não perguntado; lista vazia significa nenhum furo. (`app/ponto/services/dia_pago.py:279–281`, `:343–345`) |
-| `versao`, `versao_motor`, `regua_por_dia`, `evento_origem` | Chamada motor fornece `'motor'`, impressão da régua, mapa das fatias e `'backfill'` no modo proposto. (`app/ponto/services/fechamento.py:268–269`, `:739–740`, `:1195–1205`) | Metadados comuns; régua diária substitui `versao_motor`, truncado em 32 caracteres; ausência de régua é contada no ajuste. (`app/ponto/services/dia_pago.py:333–356`) |
-| `versao_dna` | As duas chamadas omitem; default `''`. (`app/ponto/services/dia_pago.py:139`; `app/ponto/services/fechamento.py:1169–1205`, `:1245–1264`) | Metadado comum. (`app/ponto/services/dia_pago.py:333–334`) |
-| `rubricas`, `do_motor` | Chamada motor omite ambos; oráculo fornece `_rub_o`, produzido por `rubricas_por_dia`. (`app/ponto/services/fechamento.py:1169–1205`, `:1235–1256`) | Validação de dono de cada campo; substituição dos valores fornecidos, preservando campos declarados `do_motor`; detalhe `calculador_nao_decide`. (`app/ponto/services/dia_pago.py:310–331`) |
-
-Nos objetos capturados, `lavrar` escreve `data`, `tipo`, identificação, rubricas, `detalhe` e proveniência; todas as rubricas começam em zero. O modelo declara essas rubricas como `FloatField`, além dos três campos de minutos. (`app/ponto/services/dia_pago.py:169–170`, `:333–356`; `app/ponto/models.py:325–351`)
-
-O leitor do instrumento deve usar `data`, `tipo` e os campos de `alvo`: hoje `alvo` exclui falta, reflexo de DSR e banco; também não contém os três campos de grade nem os metadados. (`app/ponto/management/commands/diff_calculador.py:78`; `app/ponto/calculador/regras.py:400–435`)
-
-Capturar kwargs não reproduz integralmente um objeto persistido: `lavrado_em` é automático, a PK não é fornecida pela lavra e o ajuste recebe `furo_apurado=None` pelo default do modelo. Esses campos não são necessários para a comparação das rubricas de `alvo`. (`app/ponto/models.py:281`, `:369–380`; `app/ponto/services/dia_pago.py:355–356`; `app/ponto/management/commands/diff_calculador.py:78`)
-
-**(b) Escrita no banco e dependências do modelo**
-
-**Dentro de `lavrar`, a substituição é viável.** O import de `DiaPago` ocorre dentro da função; as únicas operações de persistência são `filter(...).delete()` e `bulk_create(novas)`. Seus auxiliares usados nesse caminho trabalham em memória. (`app/ponto/services/dia_pago.py:50–76`, `:109–132`, `:163`, `:357–358`)
-
-O substituto precisa também ser **construtor chamável**, aceitando os kwargs das linhas de dia e ajuste. Apenas constantes e manager não bastam. `lavrar` não exige `_meta`, `save`, PK, validação ou métodos próprios do modelo nesses caminhos. (`app/ponto/services/dia_pago.py:343–358`)
-
-**A operação inteira, porém, pode escrever fora desse patch.** A combinação proposta ativa a busca das empresas exportadas; a guarda de setembro/2026 pode excluir colaboradores e chamar `evento_kw` antes de qualquer lavra. Esse caminho chega a `LogAuditoria.objects.create()`, sem passar por `DiaPago`. A ocorrência concreta depende de exportações e colaboradores que o dado fornecido não demonstra: **[não verificado]**. (`app/ponto/services/fechamento.py:36–43`, `:523–558`; `app/core/observ.py:133–148`)
-
-Logo, o `finally` que restaura `DiaPago` resolve a duração do patch; **não prova “nenhuma escrita” do recalculo**. (`app/ponto/services/fechamento.py:551–557`; `app/ponto/services/dia_pago.py:163`, `:357–358`)
-
-**(c) Dia, universo e rubricas comparáveis**
-
-Há cinco desencontros materiais:
-
-1. **Colaboradores:** o comando seleciona empresas ativas e IDs com `FechamentoMensal` existente; o recalculo usa `universo_da_competencia`, com seu predicado de situação/demissão, seguido da guarda. Capturar a empresa inteira não torna esses universos iguais. (`app/ponto/management/commands/diff_calculador.py:97–108`; `app/ponto/services/fechamento.py:423–429`, `:538–548`)
-
-2. **Dias da lavra:** períodos, órfãos, faltas, furos e grade podem criar linhas; `lavrar` não recebe nem aplica `ini/fim`. A porta v3 aplica a janela e visita dias do núcleo mais os dias bloqueados publicados pelo motor. (`app/ponto/services/dia_pago.py:135–141`, `:173–290`; `app/ponto/calculador/alimentacao.py:454–462`)
-
-3. **O DIFF ainda estreita a porta v3:** percorre somente `v.minutos`, embora `rubricas_por_dia` possa devolver também dias bloqueados sem segmento. Depois a união dos dias transforma lado ausente em `{}` e rubrica ausente em zero, sem cegueira registrada para dias nunca visitados. (`app/ponto/management/commands/diff_calculador.py:428–431`, `:469–472`, `:517–535`; `app/ponto/calculador/alimentacao.py:454–458`)
-
-4. **O dia não é uniforme:** a lavra agrupa períodos pelo mapa da jornada, mas o fechamento classifica FT pela **data local da entrada**; atraso e órfãos também chegam agrupados pelo calendário. A v3 pergunta vínculo/escala certa pelo dia da jornada. Portanto, compartilhar o resultado não elimina esse desencontro de critério. Casos efetivamente atingidos: **[não verificado]**. (`app/ponto/services/fechamento.py:814–817`, `:909–924`; `app/ponto/services/credito_parcial.py:29–43`; `app/ponto/services/dia_pago.py:174`, `:190–195`; `app/ponto/calculador/alimentacao.py:460–511`)
-
-5. **Compartilhar resultado não compartilha toda a alimentação:** o comando conserva `aut.esc` e `aut.feriados`; o fechamento usa seu vínculo de referência. O espelho pergunta pelo último dia da janela; o fechamento procura do fim para trás até encontrar vínculo. A porta resolve CCT/família antes do laço diário usando o template recebido. Divergência concreta: **[não verificado]**. (`app/ponto/management/commands/diff_calculador.py:151–163`, `:361`, `:417–423`; `app/ponto/services/espelho.py:1069–1070`; `app/ponto/services/fechamento.py:123–129`, `:826–827`; `app/ponto/calculador/alimentacao.py:377–395`)
-
-Além de HE100 feriado e folga, a troca muda potencialmente estas rubricas do lado v2, comparada à soma manual atual:
-
-| Rubrica | Mudança introduzida pela lavra |
-|---|---|
-| `horas_trabalhadas` | Acrescenta FT sem escala certa e órfãos. (`app/ponto/services/dia_pago.py:257–270`) |
-| `horas_extras_100` | Acrescenta o trabalhado de FT feriado, além de preencher seu campo específico. (`app/ponto/services/dia_pago.py:244–251`) |
-| `horas_noturnas` | Passa a carregar o noturno de todos os grupos FT. (`app/ponto/services/dia_pago.py:223–263`) |
-| `horas_intra_indenizada` | Passa a carregar a intra de todos os grupos FT. (`app/ponto/services/dia_pago.py:223–263`) |
-| `horas_atraso` | Usa mapa diário e abate crédito parcial, em vez da soma bruta dos períodos. (`app/ponto/services/dia_pago.py:190–195`; `app/ponto/management/commands/diff_calculador.py:261`) |
-| `horas_extras_50_noturna`, `horas_extras_100_noturna` | Passam a ser preenchidas; a soma manual atual omite ambas. (`app/ponto/services/dia_pago.py:181`, `:184`; `app/ponto/management/commands/diff_calculador.py:253–268`) |
-
-HE50 e saída antecipada dos períodos comuns mantêm a soma aritmética; ainda podem aparecer em uma comparação com universo diferente. (`app/ponto/services/dia_pago.py:180`, `:185`; `app/ponto/management/commands/diff_calculador.py:255`, `:262`, `:527–535`)
-
-**(d) Outras falhas do desenho**
-
-- **Ajuste não é dia:** a lavra sempre cria `tipo='ajuste', data=None`, mesmo sem dias, e seu retorno inclui essa linha. É necessário filtrá-la antes de construir o universo ordenado de datas; captura existente ou retorno positivo não prova dia comparável. (`app/ponto/services/dia_pago.py:346–359`; `app/ponto/management/commands/diff_calculador.py:527`)
-
-- **O erro não chega necessariamente ao comando:** o fechamento absorve exceções da lavra motor, da preparação/lavra oráculo e do bloco externo por colaborador. `erro_lavra_do_fechamento` precisa ser registrado dentro do captador; captura parcial deve ser descartada. Ter `ResultadoMes` capturado não prova lavra concluída. (`app/ponto/services/fechamento.py:1206–1209`, `:1265–1276`; `app/ponto/management/commands/diff_calculador.py:131–135`)
-
-- **Oráculo usa o mesmo nome já importado:** `_lavrar_dia_pago` é importado uma vez e reutilizado na segunda chamada. O wrapper precisa tratar `versao!='motor'` explicitamente; restaurar somente o atributo do módulo não altera esse alias local. A preparação do oráculo continua ocorrendo em outubro em diante, mesmo que sua chamada final vire no-op. (`app/ponto/services/fechamento.py:1168–1169`, `:1233–1264`)
-
-- **É preciso preservar a função real e a identidade dos períodos:** chamar novamente `_dpm.lavrar` após substituí-la causaria recursão; a chamada real deve usar a referência salva. Recriar períodos invalidaria as chaves `id(p)` do mapa. (`app/ponto/management/commands/diff_calculador.py:121`, `:137–142`; `app/ponto/services/fechamento.py:278–300`; `app/ponto/services/dia_pago.py:129`)
-
-- **Exigir apenas `--periodos-do-fechamento` é insuficiente:** sem `--pares-da-autoridade`, `_ins_porta=None`, a porta de rubricas não é chamada e `c_dia` fica vazio; a comparação pode tratar toda a lavra como divergência contra zero. (`app/ponto/management/commands/diff_calculador.py:325–337`, `:417–428`, `:527–535`)
-
-- **A autoridade antiga ainda exclui colaboradores:** mesmo com lavra capturada, o comando chama `autoridade_do_periodo` antes de trocar o resultado; uma falha ali incrementa `erro_motor` e abandona o colaborador. (`app/ponto/management/commands/diff_calculador.py:145–162`)
-
-- **O selo proposto cobre só parte do risco:** períodos sintéticos não exercitam guarda/auditoria, composição por fatias, órfãos, crédito parcial, dias sem segmentos e exceções absorvidas. Esses caminhos existem separadamente no código. (`app/ponto/services/fechamento.py:270–300`, `:545–557`, `:802–818`, `:962–969`, `:1206–1209`; `app/ponto/calculador/alimentacao.py:454–458`)
-
-A indicação “Roda por ATO” está no cadastro do comando; já frota com `sem_lavra=0`, resultados dos re-DIFFs 09/10 e coluna `INSTRUMENTO` próxima de zero não foram demonstrados pelo anexo: **[não verificado]**. A saída atual contém motor, calculador, delta e contagens, sem coluna `INSTRUMENTO`. (`app/config/crons.py:966–970`; `app/ponto/management/commands/diff_calculador.py:550–556`)
-
-## 31/10 11:33 · sessao 1835b36532b4 · - · - · origem=Ronald (tmux)
-
-Achados materiais nas fontes:
-
-1. **As classes declaradas não cobrem o CLAUDE atual.** Ficam sem classe as seções 1, 3, 5, 6b, 7 e 8. O selo de cobertura prometido começaria vermelho; classificar todas como excluídas também não é neutro: 6b contém regras de folha e seleção da CCT. Referências: `CLAUDE.md:90`, `CLAUDE.md:194`, `CLAUDE.md:325`, `CLAUDE.md:430`, `CLAUDE.md:460`, `CLAUDE.md:821`; conteúdo jurídico em `CLAUDE.md:433` e `CLAUDE.md:444`.
-
-2. **“Excluir seções de conduta” não produz “sem conduta”.** As próprias seções incluídas misturam arquitetura com instruções ao executor: seção 2 manda publicar, resolver merge e fazer deploy imediatamente; 4b manda fechar itens, ordena R1/R2 e famílias F1. Referências: `CLAUDE.md:137`, `CLAUDE.md:168`, `CLAUDE.md:174`, `CLAUDE.md:303`, `CLAUDE.md:320`, `CLAUDE.md:323`. A seção 4 também contém aval para editar motor e forma obrigatória de sonda: `CLAUDE.md:242`, `CLAUDE.md:246`. [nao verificado]
-
-3. **LEIS reintroduz a conduta excluída sem reproduzir seus cabeçalhos.** O próprio documento define `CONDUTA` como regra de processo, e suas linhas L-001, L-005, L-117 e L-123 reproduzem mandamentos de construção, fila, propostas e revisão. Um detector de título/hash do recorte original pode ficar verde diante dessas paráfrases. Referências: `app/docs/LEIS.md:22`, `app/docs/LEIS.md:59`, `app/docs/LEIS.md:63`, `app/docs/LEIS.md:138`, `app/docs/LEIS.md:144`.
-
-4. **PLANO-PADROES inteiro viola a premissa de compartilhar somente FATO/LEI.** Há fila, estado de obra e dono; o arquivo identifica expressamente contexto, alternativas e consequências como redação do Code derivada do RELATO. Incluí-lo integralmente compartilha a interpretação do construtor que o desenho quer afastar do verificador. Referências: `app/docs/PLANO-PADROES.md:7`, `app/docs/PLANO-PADROES.md:26`, `app/docs/PLANO-PADROES.md:59`. Também inclui conduta de revisão/commit: `app/docs/PLANO-PADROES.md:53`, `app/docs/PLANO-PADROES.md:56`.
-
-5. **Separar por seção pode remover lei junto da conduta.** Não se pode presumir que 7b só contém comportamento de agente: ali também estão regra do TXT como fotografia e a condição de apply em competência aberta. A correção é decidir recortes de conteúdo e sua autoridade; o título da seção sozinho não define a natureza de tudo que contém. Referências: `CLAUDE.md:683`, `CLAUDE.md:708`. Não afirme perda efetiva sem verificar se a mesma lei completa entra por LEIS.
-
-6. **O vocabulário incluído mantém referências de conduta.** GLOSSARIO liga padrões a construir em cópia, comboio e proibição da LEI-AKITA. É outro caminho de entrada que a blacklist de títulos não mede. Referências: `app/docs/GLOSSARIO.md:18`, `app/docs/GLOSSARIO.md:20`, `app/docs/GLOSSARIO.md:23`.
-
-Medição independente somente em memória: com CLAUDE 2/4/4a/4b da cópia, índice LEIS pelo algoritmo do anexo, MAPA a–h e GLOSSARIO/PLANO/JUIZES inteiros, o subtotal sem moldura/cabeçalho é **42.330 B**. Isso confirma o conflito com 30.000, mas o número não tem arquivo:linha próprio; no texto final, usar o ~42,7k fornecido com `[nao verificado]` ou identificar explicitamente como medição em memória.
-
-## 31/10 11:32 · sessao 3bcf16e165d3 · - · - · origem=Ronald (tmux)
-
-Pontos documentais para a consolidação:
-
-- **A base atual é anterior ao anexo fornecido.** O wrapper da cópia não tem o cabeçalho de contexto nem perguntas fixas: monta somente regras, pergunta e anexos em `bin/codex_pergunta.sh:118-135`. O instrumento CODEX-CONTEXTO-DA-CASA consta como aguardando pouso em `app/docs/BACKLOG.md:871`; o texto anexado pelo usuário corresponde a outro estado [não verificado quanto à origem].
-- **Dependência sem evidência nesta cópia.** CODEX-CONTEXTO-SEM-CONDUTA não apareceu na busca em CLAUDE.md/app/docs; seu pouso e protocolo A/B são [não verificado]. O instrumento documentado é CODEX-CONTEXTO-DA-CASA (`app/docs/BACKLOG.md:871`).
-- **O gatilho precisa preservar a história inteira.** A classificação existente recebe TODOS os `.q`/`.r` e linhas de triagem e devolve os trechos por achado (`CLAUDE.md:614-618`). O contrato fala em “a pergunta .q + a resposta .r” sem definir qual volta; numa obra com várias voltas, anexar apenas um par pode esconder onde o tema apareceu [inferência: `CLAUDE.md:598-600`, `CLAUDE.md:616-618`].
-- **Lições de opus para todo papel ameaçam a independência.** A pista exige pergunta sem hipótese (`CLAUDE.md:579`, `CLAUDE.md:585-589`) e o aval do contexto proíbe achado do opus/hipótese no verificador (`app/docs/PROMPTS.md:1684`). Reenviar a qualquer verificador as lições derivadas dos achados do opus reintroduz esse conteúdo por outra via [inferência: mesmas referências].
-- **A/B necessita braços realmente comparáveis e gabarito separado.** O primeiro ensaio documentado variava só AGENTS.md, tinha mesma `.q`/hash e n=2; registrou viés de posição (`app/docs/RELATO.md:179`). O aval posterior exigiu chave invertida e gabarito do opus (`app/docs/PROMPTS.md:1686`). A re-medida registra ganho concentrado nos itens do próprio Codex e “sinal fraco de eco” (`app/docs/RELATO.md:176`); efeitos das novas lições continuam [não verificado].
-- **L-106 autoriza levar o documento no próximo marco, sem dar publicação imediata ao commit.** A regra determina docs junto do código do marco (`CLAUDE.md:778-780`, `app/docs/LEIS.md:132`). Como o wrapper atual lê `git archive` e reutiliza a cópia do hash (`bin/codex_pergunta.sh:87`, `bin/codex_pergunta.sh:91-101`), lição recém-escrita no vivo só chega antes do commit se houver canal explícito de anexo do vivo; arquivo dentro da cópia não acompanha o vivo [inferência: mesmas referências].
-- **Atualizar só o vocabulário do wrapper deixa a medição incompleta.** Os papéis conhecidos do ESTADO são quatro (`bin/codex_limite_estado.py:23`); papel novo vira `outro` tanto em chamadas (`bin/codex_limite_estado.py:74-78`) quanto em tokens (`bin/codex_limite_estado.py:191-194`).
-- **O prompt fixo de “sem caminho” colide com a evidência exigida pelo wrapper.** Toda afirmação exige arquivo:linha ou `[nao verificado]` (`bin/codex_pergunta.sh:123-124`); uma lição verificada com citação de arquivo seria rejeitada pelo próprio contrato [inferência: referências e contrato do usuário].
-
-## 31/10 11:32 · sessao 545919d7e475 · - · - · origem=Ronald (tmux)
-
-Achados de integração e testes, apenas por leitura: [nao verificado]
-
-- **A cópia e o anexo são versões diferentes.** O wrapper local termina em `bin/codex_pergunta.sh:177`; seu cabeçalho é montado diretamente em `bin/codex_pergunta.sh:118`, sem os blocos de AGENTS/base/juiz do brief presentes no dado fornecido. Não se pode atribuir esses blocos ao hash local. `app/docs/BACKLOG.md:871` ainda descreve o contexto como construção em outra cópia e pouso retido.
-
-- **Os dois papéis novos são recusados antes da chamada:** a whitelist aceita apenas `leitura|censo|verificador|sonda` e sai com rc 2 nos demais casos. `bin/codex_pergunta.sh:48`. Há teste para papel inválido, sem caso de `licao` ou `licao-consolidar`: `bin/tests/test_codex_sonda.sh:99`.
-
-- **Há conflito de formato com o cabeçalho atual:** toda afirmação deve carregar `arquivo:linha ou [nao verificado]`, enquanto a lição exige não conter caminhos. `bin/codex_pergunta.sh:124`. Remover essa regra globalmente quebra o selo estrutural que exige o texto: `bin/tests/test_codex_pergunta.sh:27`.
-
-- **Somente ampliar a whitelist não integra as métricas.** O leitor mantém quatro papéis fixos e agrupa os demais em `outro`, inclusive nos tokens. `bin/codex_limite_estado.py:23`, `bin/codex_limite_estado.py:78`, `bin/codex_limite_estado.py:194`. O selo confirma esse agrupamento: `bin/tests/test_codex_papel_estado.sh:31`.
-
-- **Consolidação pode colidir com o selo de uma única chamada.** O teste exige exatamente uma ocorrência executável de `codex … exec` no wrapper; adicionar uma segunda chamada inline para consolidar torna esse teste vermelho. `bin/tests/test_codex_sonda.sh:87`. Reutilizar o caminho comum evita essa colisão, mas a estratégia do contrato não está implementada. `bin/codex_pergunta.sh:157`.
-
-- **Os testes existentes não certificam a transcrição proposta.** O selo estrutural cobre sandbox, diretório da cópia, teto, slot e cabeçalho; o comportamental cobre raspagem, falha fechada, procedência e papéis inválidos. `bin/tests/test_codex_pergunta.sh:13`, `bin/tests/test_codex_sonda.sh:57`, `bin/tests/test_codex_sonda.sh:90`. Validação `CLASSE`, caminhos, multiline, append concorrente, consolidação, integridade do par hash/thread e desligamento por A/B permanecem **[não verificado]**.
-
-- **O tratamento de rc 75 existe, mas seu teste cobre apenas limite genérico.** O wrapper detecta os eventos e sai antes da captura de SID; o SID é extraído somente depois desse ramo. `bin/codex_pergunta.sh:163`, `bin/codex_pergunta.sh:175`. O selo verifica rc e número de linhas em `limite.log`, sem assegurar “nenhuma lição transcrita”. `bin/tests/test_codex_limite.sh:31`.
-
-- **Background não elimina disputa por capacidade.** Todas as chamadas usam o mesmo gate e slots, mantidos até a saída; a geração de lição pode, portanto, ocupar slot que uma chamada posterior precisa. `bin/codex_pergunta.sh:138`, `bin/codex_pergunta.sh:153`. O timeout começa no `codex`, após a espera pelo slot. `bin/codex_pergunta.sh:157`.
-
-## 31/10 11:32 · sessao 3488c57e5209 · - · - · origem=Ronald (tmux)
-
-Achados materiais:
-
-1. **Pasta de selos não garante execução no pre-push.** O loop `tests/test_*.sh` roda em `bin/regua.sh:138-145`. O próprio pre-push declara que esse loop não roda nele e chama alguns selos explicitamente (`bin/pre-push.sh:13-19`). A suite do arsenal é Django (`bin/pre-push.sh:155-184`). Portanto, só adicionar `test_agents_md_gerado.sh` à pasta deixa push direto sem essa guarda; a chamada deve verificar o commit enviado, cujo archive nasce em `bin/pre-push.sh:33-38`.
-
-2. **O contexto consumido precisa estar commitado no hash, não apenas gerado no disco.** O wrapper extrai `git archive "$HASH"` e torna a cópia sem escrita (`bin/codex_pergunta.sh:91-100`); depois executa Codex nessa cópia (`bin/codex_pergunta.sh:157-158`). Gerar após o commit ou deixar `AGENTS.md` fora dele não atualiza o contexto dessa chamada.
-
-3. **Cópia reutilizada não é conferida.** Se o diretório do hash já existe, o wrapper pula a criação inteira, sem comparar conteúdo com o archive (`bin/codex_pergunta.sh:91-101`). Logo, trocar o gerador não atualiza uma cópia existente do mesmo hash. A/B precisa de cópias isoladas e controle do conteúdo; o wrapper admite base alternativa por `CODEX_WS_BASE` (`bin/codex_pergunta.sh:87`).
-
-4. **“Sem conduta” no AGENTS não impede conduta no prompt.** O wrapper concatena literalmente a pergunta (`bin/codex_pergunta.sh:118-135`) e aceita anexos, cuja transformação é raspagem de nomes/CPF, seguida de concatenação (`bin/codex_pergunta.sh:103-115`). Não há nessa montagem filtro de títulos/hash de conduta. Portanto, um selo só sobre AGENTS não prova ausência de conduta no contexto total recebido.
-
-5. **Selos atuais não provam carregamento nem ausência de conduta no AGENTS.** O selo do wrapper verifica strings de forma, sandbox e `-C` (`bin/tests/test_codex_pergunta.sh:10-29`); sua mutação troca o sandbox (`bin/tests/test_codex_pergunta.sh:30-33`). O selo sonda usa Codex falso que só captura stdin (`bin/tests/test_codex_sonda.sh:21-25`), e a prova real existente mede ausência de escrita, não contexto carregado (`bin/tests/prova_codex_pergunta_real.sh:15-28`). É necessário distinguir “gerado conforme” de “conteúdo efetivamente recebido”.
-
-Não apontaria rc 75 como conflito: ele é classificado depois da execução e devolvido sem regeneração de contexto (`bin/codex_pergunta.sh:163-171`). Tokens não entram em `chamadas.log`, que registra thread, rc e duração (`bin/codex_pergunta.sh:53-60`); a captura JSONL existe (`bin/codex_pergunta.sh:156-158`), mas a apuração do A/B prometido permanece [nao verificado].
-
-## 31/10 11:32 · sessao 314427c48401 · - · - · origem=Ronald (tmux)
-
-Achados de comparabilidade e falhas do contrato:
-
-- **A captura muda mais rubricas que HE100 feriado e folga.** Passam a entrar os splits `horas_extras_50_noturna` e `horas_extras_100_noturna`; `horas_extras_100` recebe FT-feriado; `horas_trabalhadas` recebe FT sem escala e órfãos; noturnas e intra recebem todos os FT; atraso passa a usar crédito parcial. O laço atual não faz essas operações. `app/ponto/management/commands/diff_calculador.py:253-268`; `app/ponto/services/dia_pago.py:178-195`, `:223-270`.
-
-- **Mesmo resultado não garante a mesma classificação do dia.** Fechamento classifica FT com `_certa` e `escala_vigente` na **data local da entrada**; lavra depois distribui pelo mapa `id(periodo) → jornada`. V3 decide escala certa, vínculo e feriado pelo **dia da jornada**. Há duas perguntas de data no caminho v2; incidência no dado de produção: [não verificado]. `app/ponto/services/fechamento.py:909-925`; `app/ponto/services/dia_pago.py:109-132`, `:234-258`; `app/ponto/calculador/alimentacao.py:460-511`.
-
-- **Atraso também conserva calendário no v2.** `atraso_por_dia` usa a data local da entrada, e a lavra desconta o crédito nessa chave. V3 agrupa a pontualidade pelo mapa da jornada e não recebe o mapa de crédito parcial. `app/ponto/services/credito_parcial.py:15-44`; `app/ponto/services/dia_pago.py:190-195`; `app/ponto/calculador/alimentacao.py:227-228`, `:496-519`.
-
-- **Os universos de dias diferem.** A lavra cria dias por períodos, atraso, órfãos, faltas, furos e grade; não contém filtro `ini <= dia <= fim`. V3 produz dias com minutos e ainda dias bloqueados pelo motor, com recorte da janela. `app/ponto/services/dia_pago.py:173-290`; `app/ponto/calculador/alimentacao.py:454-462`.
-
-- **O DIFF descarta parte da resposta da porta v3.** Embora `rubricas_por_dia` inclua dias bloqueados sem segmento, o comando monta `c_dia` iterando somente `v.minutos`, não o retorno inteiro da porta. Assim, pode ignorar uma rubrica efetivamente devolvida; na união posterior, a ausência vira `{}` e então zero. A cegueira é registrada apenas para dias que passaram pelo laço. `app/ponto/management/commands/diff_calculador.py:417-431`, `:469-472`, `:501-535`; `app/ponto/calculador/alimentacao.py:454-458`.
-
-- **A linha de ajuste exige tratamento explícito.** Ela nasce sempre, com `data=None`; guardar todas as linhas em `{dia: campos}` pode incluir `None` no `sorted` da união com datas. Filtrar somente rubricas de `alvo` não remove a linha. `app/ponto/services/dia_pago.py:346-356`; `app/ponto/management/commands/diff_calculador.py:527`.
-
-- **Os universos de colaboradores não são iguais por construção.** O DIFF parte de IDs com `FechamentoMensal` já existente, depois aplica `--colab`/limite. A captura recalcula a empresa pelo `universo_da_competencia`. Também continua chamando `autoridade_do_periodo` e excluindo erros antes de consultar a captura. Portanto, `sem_lavra_do_fechamento == 0` não decorre do código. `app/ponto/management/commands/diff_calculador.py:97-108`, `:140-150`; `app/ponto/services/fechamento.py:538-541`.
-
-- **Mesmo resultado não significa mesmos demais insumos.** O comando troca somente `aut.resultado`, conserva `aut.esc` e `aut.feriados`, e passa esses valores à porta. Fechamento usa `vinculo_de_referencia`; espelho usa vínculo no último dia da janela. A porta resolve CCT/família uma vez em `ini` com esse template e só depois ajusta template por dia. Possível efeito concreto na frota: [não verificado]. `app/ponto/management/commands/diff_calculador.py:151-163`, `:361`, `:417-423`; `app/ponto/services/fechamento.py:823-827`; `app/ponto/services/espelho.py:1069-1070`; `app/ponto/calculador/alimentacao.py:377-395`, `:476-486`.
-
-- **Capturar primeira instância é dependência de ordem.** O hook atual guarda a primeira `ResultadoMes` por colaborador com `setdefault`; não identifica semanticamente o composto. O composto hoje nasce em `apurar_por_fatia` antes das chamadas por fatia, o que sustenta esse comportamento atual. `app/ponto/management/commands/diff_calculador.py:120-138`; `app/ponto/services/fechamento.py:182`, `:270`.
-
-- **As duas lavras usam o mesmo nome local.** A chamada motor importa `_lavrar_dia_pago`, e a chamada oráculo reutiliza esse alias; o captador precisa ignorar versões diferentes de `motor`. Buscar a “real” pelo nome já substituído causaria recursão; a referência original precisa ser guardada antes do patch, como `_ol` hoje. `app/ponto/management/commands/diff_calculador.py:121-142`; `app/ponto/services/fechamento.py:1167-1169`, `:1195`, `:1233-1245`.
-
-- **Falha de lavra não alcança automaticamente o comando.** Fechamento captura a exceção da chamada motor e apenas registra erro; o captador precisa contabilizá-la dentro da própria chamada e só publicar linhas completas após sucesso. Ausência, falha e chamada bem sucedida sem dias precisam permanecer distinguíveis; a lavra sempre devolve ao menos a linha de ajuste. `app/ponto/services/fechamento.py:1206-1209`; `app/ponto/services/dia_pago.py:346-359`.
-
-_978 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_985 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
