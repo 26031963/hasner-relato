@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 23:25:31.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (9.2 MB). Acoes na janela: **349**.
+**Medido em 30/10/2026 23:31:00.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (9.2 MB). Acoes na janela: **351**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:27:05 | Agent | Opus final V-FASE a4482dde | `Leitura FINAL antes do pouso da obra O261-V-FASE-DONO-DO-DIA-DE-FASE (opcao (A), aval Ronald 30/10 22:1x: "e6 le a lavra", o juiz unico `ponto/management/commands/e6_oraculo.py::dono_da_divergencia` passa a ler a lavra do censo de fase 12x36; a medida de dono foi publicada antes do pouso). A obra foi reprovada antes em 9772e8fe e 9c9e030e; a4482dde e a cura do 2o REPROVADO. Copia CONGELADA (nao ed ...` |
+| 23:26:53 | Bash | Publish V-FASE measure and check copy state | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k in range(3,len(L)) if L[k].startswith('> ')) L[i:i]=["> **V-FASE (A) MEDIDA DE DONO PUBLICADA ANTES DO POUSO (aval 22:1x)**. R1 comparado entre a base aa96b93c e a cura a4482dde, por sombra atomic+rollback: **8 dias mudam ESTRUTURA -> CADASTRO, e nada mais move**. Comp 10: col451 (10 ...` |
 | 23:24:34 | SendMessage |  | `-` |
 | 23:24:33 | SendMessage |  | `-` |
 | 23:24:27 | Bash | Register complement in PROMPTS and BACKLOG | `cd /home/ronald/saas-hasner && date '+%H:%M' && python3 - <<'EOF' d='app/docs/' with open(d+'PROMPTS.md','a') as f: f.write("\| 30/10 23:2x \| **aval: COMPLEMENTO ao DISJUNTOR-E-CLEAR-RAPIDO (instrumento, mesmo pouso proprio): B4-CODEX (orcamento do dia = (100-usado)/dias ate o reset; acima do orcamento so a volta FINAL vai ao Codex; >=85% so a ESCADA DE INCENDIO), ANEXO-ENXUTO (volta do meio leva ...` |
