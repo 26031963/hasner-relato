@@ -1,7 +1,83 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 11:10** · publicado em **31/10/2026 11:12** (UTC-3)
+> Ultima resposta processada: **31/10/2026 11:22** · publicado em **31/10/2026 11:23** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 11:22 · sessao 5687aea26424 · - · - · origem=Ronald (tmux)
+
+Achado impeditivo: a cura troca o **template pelo do dia**, mas continua perguntando a **CCT na data inicial da janela** e armazenando a resposta apenas por `template.pk`. Assim, combina ciclo de `k` com praça/CCT de `ini`; mudança de praça, vigência ou convenção dentro da competência permanece descoberta. (`app/ponto/calculador/alimentacao.py:389`, `:392`, `:405`; `app/core/regua_cct.py:329`, `:330`, `:366`.)
+
+Casos:
+
+- **Sem vínculo no dia:** `_te_dia` conserva o template do chamador; `None` do juiz não declara a CCT desconhecida. Pode aplicar ciclo de outro dia. (`app/ponto/calculador/alimentacao.py:487`, `:490`, `:507`; `app/escala/alimentacao.py:253`.)
+- **Dois vínculos:** com célula, geradora válida manda; sem célula, o juiz desempata por `(ativa, data_inicio)`. O diff usa esse juiz; a inconsistência restante é perguntar novamente em `ini` para obter praça/CCT. (`app/escala/alimentacao.py:237`, `:247`, `:250`, `:253`, `:254`; `app/core/regua_cct.py:329`.)
+- **Troca durante competência:** template acompanha o dia; CCT não. Mesmo template usado em dois postos compartilha a mesma entrada no cache. (`app/ponto/calculador/alimentacao.py:389`, `:392`, `:490`, `:494`.)
+- **Cross-meia-noite:** não identifiquei corte civil novo: o dia vem de `dia_da_jornada`, e esse dia chega ao juiz. A pontualidade também ancora nele e usa o juiz de cruzamento. Teste novo só cobre 07–19 no mesmo dia. (`app/ponto/calculador/alimentacao.py:63`, `:68`, `:278`, `:287`, `:490`; `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:84`.)
+- **Template nulo:** parâmetro do chamador nulo é corrigido quando há vínculo do dia. `EscalaColaborador.tipo_escala` não admite `NULL`; ausência real de template no vínculo não é estado regular do modelo. Se nenhum template chega, fábrica usa geometria `Motor12x36`, ciclo desconhecido e dobra verdadeira. (`app/ponto/calculador/alimentacao.py:492`, `:494`; `app/escala/models.py:874`; `app/ponto/motor_calculo_v2.py:3554`, `:3559`, `:3607`.)
+- **CCT fora da vigência:** juiz verifica vigência na data recebida; aqui recebe `ini`. CCT válida em `ini` e expirada em `k` continua aplicada; CCT iniciada depois de `ini` pode ser ignorada durante toda janela. (`app/core/regua_cct.py:261`, `:263`, `:366`, `:371`; `app/ponto/calculador/alimentacao.py:392`.)
+- **Empresa sem regime:** fluxo explícito retorna piso legal; não gera CCT desconhecida nem exceção. Prorrogação legal específica do 12x36 só entra com CLT declarada. (`app/core/regua_cct.py:352`, `:363`, `:364`, `:210`, `:211`.) Com switch desligado, `regua_para` não é consultada. (`app/core/regua_cct.py:449`, `:457`.)
+
+Outros sítios com referência diferente do dia:
+
+- **V3/porta:** `_cct_de(...ini...)`, já descrito. (`app/ponto/calculador/alimentacao.py:392`.)
+- **Relatório DIFF:** fábrica com `ini` e template de `aut.esc`; resultado só identifica a classe no relatório, não alimenta dinheiro. (`app/ponto/management/commands/diff_calculador.py:163`, `:345`, `:348`; porta efetiva `:417`.)
+- **V3 de ensaio:** `periodo.reler` recebe um único `cct` e uma única causa de família para toda releitura; dobra lê esse objeto em todos dias. O módulo declara que não é caminho de produção. (`app/ponto/calculador/periodo.py:540`, `:543`, `:787`, `:829`.)
+- **Motores que fornecem períodos à V3:** fechamento e espelho resolvem em `fatia_ini`. Fatias são por vigência de vínculo, não por fronteiras da CCT; uma troca de CCT dentro do mesmo vínculo não provoca nova fatia nesse código. (`app/ponto/services/fechamento.py:203`, `:205`, `:711`; `app/ponto/services/espelho.py:1115`.) Motor órfão usa primeiro dia órfão. (`app/ponto/services/fechamento.py:793`.)
+- **Referências de janela:** `Autoridade` conserva vínculo do fim; fechamento usa último dia da janela que o juiz responde, não simplesmente última posição da lista. (`app/ponto/services/espelho.py:1069`, `:1070`; `app/ponto/services/fechamento.py:826`, `:123`, `:125`.)
+- **Periféricos, fora da V3:** esmeril escolhe vínculo no fim e CCT no início; TXT escolhe ciclo e cláusula no fim; PDF resolve vínculo no fim. (`app/ponto/services/esmeril_espelho.py:154`, `:161`; `app/folha/export.py:348`, `:369`; `app/relatorios/pdf_espelho.py:303`.)
+
+Execução e impacto real desses casos: [nao verificado].
+
+## 31/10 11:21 · sessao 7f970b2f0d86 · - · - · origem=Ronald (tmux)
+
+- **Mordida contra o defeito específico:** voltar a montar a CCT do `te` do chamador contraria os três testes: `None` e 24x48 dobrariam `dia_a`, e 12x36 zeraria `dia_b`. Fundamentação: `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:104-121`, `app/ponto/motor_calculo_v2.py:3537`, `:3554-3559`, `:3607-3608`; `app/ponto/calculador/regras.py:344-347`, `:775-785`. Trata-se de previsão estática; RED/GREEN executado **[nao verificado]**.
+
+- **Não passa vazio no dia afirmado:** `_fer` exige presença do dia, ausência da rubrica em `nao_decide`, e retorna o valor que precisa ser exatamente 0 ou aproximadamente 12. `rub={}`, dia ausente, rubrica DECLARADA ou chave ausente falham. `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:98-102`, `:107`, `:114`, `:119`.
+
+- **Não protege toda regressão “vínculo de hoje”:** a troca do template do chamador acusa; regressão dentro de `regua_para` para buscar vínculo ativo pode passar. A fixture não declara regime, switch, sindicato ou aplicação; `Empresa.regime_trabalhista` tem default vazio. Sem switch a fábrica sequer chama `regua_para`; com switch e regime vazio ela retorna piso legal antes de aplicação. `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:59-83`; `app/colaboradores/models.py:150-151`; `app/core/regua_cct.py:440-458`, `:353-365`.
+
+- **Cobertura faltante:** nenhum caso de CCT que entra/sai de vigência, praça que muda, vínculos sobrepostos, ausência de vínculo na data trabalhada, template realmente nulo no vínculo, turno noturno ou cruzamento de meia-noite. Os dois turnos fabricados são 07–19, as duas escalas não se sobrepõem e possuem template. Não há asserts de prorrogação, hora reduzida ou lei da família. `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:66-96`, `:104-121`. Assim, o uso de `ini` e cache só por template pode continuar verde: `app/ponto/calculador/alimentacao.py:389-405`.
+
+Checklist:
+
+| Classe | Avaliação |
+|---|---|
+| Segundo juiz | O helper novo chama a fábrica e os leitores existentes, sem copiar critérios de CCT/família; o defeito é alimentar data inadequada e cache incompleto. `app/ponto/calculador/alimentacao.py:387-405`; `app/ponto/calculador/nucleo.py:320-351`; `app/ponto/calculador/regras.py:502-518`. |
+| Segundo escritor fora da porta | Não aparece no trecho produtivo novo: grava cache local e valores locais; os `objects.create` são fixture de `TestCase`. `app/ponto/calculador/alimentacao.py:385-405`, `:507-510`; `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:51-83`. |
+| Relógio fora da borda | Não aparece: chamada recebe `ini`, loop usa `k`; teste fabrica datas explícitas e apenas aplica timezone, sem `now`/`today`. `app/ponto/calculador/alimentacao.py:392`, `:470-510`; `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:26-27`, `:74-75`, `:91`. |
+| Derivação paralela | Não duplica as regras; mantém, porém, seleção híbrida: ciclo do dia com CCT/praça consultadas em `ini`. `app/ponto/calculador/alimentacao.py:392`, `:490-510`; `app/core/regua_cct.py:329-339`, `:366`. |
+| Selo/RED sem mordida | Morde o template do chamador e evita vazio, mas não sela a promessa dos quatro insumos nem CCT por dia. `app/ponto/calculador/alimentacao.py:383-384`; `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py:98-121`. Execução do RED **[nao verificado]**. |
+| Ordem de trava | O diff não acrescenta aquisição de trava nem comandos de suite; ordem efetivamente usada **[nao verificado]**. Trechos novos: `app/ponto/calculador/alimentacao.py:385-405`, `:507-510`; teste `:1-121`. |
+| Pouso antes do pré-requisito | Histórico de RED, suite e opus final **[nao verificado]**. São requisitos escritos em `CLAUDE.md:28-29`, `:598-605`; existência do teste/comentário não comprova sua execução. | [nao verificado]
+
+## 31/10 11:21 · sessao 4ae0642668fc · - · - · origem=Ronald (tmux)
+
+Juízes existentes:
+
+- Vínculo: registro vivo `app/core/juizes.py:1242-1251`; consulta documental `app/docs/JUIZES.md:74-79`; implementação `app/escala/alimentacao.py:196-254`. Geradora prevalece dentro da vigência; sem geradora, escolhe máximo por `(ativa, data_inicio)` entre os que cobrem a data (`app/escala/alimentacao.py:237-254`).
+- CCT: autoridade explicitamente documentada em `app/docs/JUIZES.md:30-34`: `regua_para` decide parâmetros e `_aplicacao_vigente` decide onde se aplica. Não encontrei entrada nominal dessas funções em `app/core/juizes.py` [nao verificado: ausência demonstrada por busca, sem enumeração integral].
+- O diff pergunta aos dois caminhos, mas com datas diferentes: vínculo pelo dia `k` (`app/ponto/calculador/alimentacao.py:490-494`, casca chama juiz em `:430-431`); CCT com **`ini`**, mesmo depois de obter template do dia (`app/ponto/calculador/alimentacao.py:392`). `regua_para` consulta vínculo/praça por essa data recebida (`app/core/regua_cct.py:328-339`), e `_aplicacao_vigente` verifica vigência CCT nela (`app/core/regua_cct.py:261-263`).
+- Cache novo separa somente `template.pk` (`app/ponto/calculador/alimentacao.py:389-405`), portanto não separa mudança de praça/vínculo ou vigência CCT com template igual; o código guarda o primeiro resultado por template e o reutiliza (`app/ponto/calculador/alimentacao.py:390-405`).
+
+Mapa de escritores/leitores:
+
+| Valor | Escritor(es) identificados | Leitura que chega ao diff |
+|---|---|---|
+| Template e `tipo_ciclo` | `salvar_tipo` cria campos canônicos em `app/escala/services/cadastro_tipo.py:151-176` e salva em `:306` | Vínculo do dia fornece `tipo_escala` em `app/ponto/calculador/alimentacao.py:490-496`; fábrica lê ciclo em `app/core/regua_cct.py:440` |
+| Vínculo, template e posto | `executar_vinculo` atualiza/cria em `app/colaboradores/services/vinculo.py:265-284`; campos do modelo em `app/escala/models.py:871-877` | Juiz `app/escala/alimentacao.py:237-254`; alimentação chama em `app/ponto/calculador/alimentacao.py:430-431` |
+| Geradora da célula | Porta da célula grava em `app/ponto/portas/celula.py:248-260`, `:535`, `:595-613` | Juiz lê `escala_geradora_id` em `app/escala/alimentacao.py:237-247` |
+| Empresa/regime | UI em `app/colaboradores/views.py:512-523` e `:531-539`; persistência `app/colaboradores/services/estrutura.py:12-20` | `regua_para`, `app/core/regua_cct.py:352-365`; switch desligado também lê regime em `:452-454` |
+| Aplicação CCT empresa/praça/sindicato/ativo | Porta `app/core/services/aplicacao_convencao.py:101-132`, desativação `:138-155` | `_aplicacao_vigente`, `app/core/regua_cct.py:253-274` |
+| Vigência CCT e flags cadastrados | UI `app/core/views_config.py:268-297`, atribuição/persistência `:307-335`; campos/defaults `app/core/models.py:38-74` | Vigência em `app/core/regua_cct.py:261-263`; flags em `:374`; fábrica injeta em `:466-478` |
+| Dobra efetiva | `get_motor` deriva pelo ciclo em `app/ponto/motor_calculo_v2.py:3607-3608`; CCT pode conceder dobra em `app/core/regua_cct.py:477-478`; `MotorBase` grava em `app/ponto/motor_calculo_v2.py:737` | Leitor único `app/ponto/calculador/nucleo.py:344-351`; diff lê CCT em `app/ponto/calculador/alimentacao.py:510`, entrega em `:524` |
+| Prorrogação efetiva | Regra legal `app/core/regua_cct.py:153-182`; regime CLT aplica em `:211-212`; fábrica injeta cadastro em `:466`; motor grava em `app/ponto/motor_calculo_v2.py:708-712` | Leitor único `app/ponto/calculador/nucleo.py:348`; diff lê `app/ponto/calculador/alimentacao.py:508`, entrega em `:530` |
+| Hora reduzida afastada | Fábrica limita flag ao 12x36 em `app/core/regua_cct.py:470-472`; motor grava em `app/ponto/motor_calculo_v2.py:719` | Leitor único `app/ponto/calculador/nucleo.py:349`; diff lê `app/ponto/calculador/alimentacao.py:509`, entrega em `:530` |
+| Lei da família para pontualidade | Tabela declarada por identidade de classe `app/ponto/calculador/regras.py:487-498`; fábrica escolhe classe em `app/ponto/motor_calculo_v2.py:3554-3572` | Leitor único `app/ponto/calculador/regras.py:502-518`; diff pergunta em `app/ponto/calculador/alimentacao.py:403`, entrega em `:531` |
+| Cache novo | Escritor local `app/ponto/calculador/alimentacao.py:403-404` | Leitor local `app/ponto/calculador/alimentacao.py:405`, chamado por dia em `:507` |
+
+CCT fora de vigência é descartada pelo juiz (`app/core/regua_cct.py:261-263`); sem aplicação ou empate retorna piso com fonte explícita (`app/core/regua_cct.py:366-373`). Empresa sem regime retorna piso com fonte explícita (`app/core/regua_cct.py:363-365`); esse piso mantém prorrogação `True`, hora reduzida afastada `False`, dobra cadastrada 12x36 `False` (`app/core/regua_cct.py:39-44`), mas o ciclo da fábrica ainda decide dobra efetiva (`app/ponto/motor_calculo_v2.py:3607-3608`).
+
+O diff não introduz persistência de cadastro: grava dicionário local e lê motor pela fronteira existente (`app/ponto/calculador/alimentacao.py:385-405`). Escritas reais de produção, valores efetivos do switch e cadastros presentes no banco: [nao verificado].
 
 ## 31/10 11:10 · sessao 500b0beb443e · V3-RETOMA · verificador · origem=Code
 
@@ -645,105 +721,4 @@ Outros consumidores diretos de `competencia_entregue` encontrados:
 - `he_pendente_lavrado.competencias_a_lavrar`: inclui a anterior apenas enquanto não entregue; `app/ponto/services/he_pendente_lavrado.py:220–225`.
 - `vigia_fio.competencia_do_dia_entregue`: converte o dia na competência pela janela da empresa e consulta o predicado, com memo opcional; `app/chamados/services/vigia_fio.py:787–797`. Seus leitores são o censo por dono (`app/chamados/services/vigia_fio.py:769`), a cerca do reconciliador (`app/chamados/reconciliador.py:715–720`), a seleção de perguntas vivas no pós-estado do chamado (`app/chamados/models.py:332–350`) e a guarda da costura para destino terminal (`app/chamados/services/fio.py:765–771`).
 
-## 31/10 09:43 · sessao 60db60690637 · DISJUNTOR-B3-TOPO · verificador · origem=Code
-
-O delta corrige os exemplos procedentes da triagem, mas **não garante equivalência entre a identificação no contador e no topo**: os reconhecedores continuam diferentes (`bin/disjuntor.py:84`, `bin/disjuntor.py:475`, `bin/disjuntor.py:494`).
-
-1. **Resposta aos procedentes**
-
-| Procedente | Resultado no código atual |
-|---|---|
-| Branco depois da primeira linha encerrava o bloco | **Resolvido:** branco agora apenas avança; não encerra (`bin/hook_stop_fila1.py:433`). |
-| `O9 (C)` e `O9 NOTURNO-FOO` calavam B3 de `O9` | **Resolvido nesses exemplos:** cada token incorpora sua cauda pela `_identidade`; a comparação exige pertinência exata ao conjunto (`bin/disjuntor.py:488`, `bin/disjuntor.py:505`, `bin/hook_stop_fila1.py:417`). |
-| Falta de caso para lookbehind | **Coberto:** testa `PRE-OBRA-X` e `PRE_OBRA-X`; há mutante retirando lookbehind (`bin/tests/test_disjuntor.sh:349`, `bin/tests/test_disjuntor.sh:648`, `bin/tests/test_disjuntor.sh:779`). |
-| Falta de caso para DESENHO e ID em linhas cruzadas | **Coberto:** cenário cruzado e mutante correspondente (`bin/tests/test_disjuntor.sh:351`, `bin/tests/test_disjuntor.sh:781`). |
-| Falta de positivo na primeira linha | **Coberto:** pergunta na linha 1; mutante restringe a leitura à linha 2 (`bin/tests/test_disjuntor.sh:345`, `bin/tests/test_disjuntor.sh:782`). |
-| Falta de cobertura para leitura parcial após `OSError` | **Coberto:** preserva o trecho lido, verifica também `_linha_do_topo` e testa erro antes de qualquer linha; há mutante (`bin/hook_stop_fila1.py:443`, `bin/tests/test_disjuntor.sh:665`, `bin/tests/test_disjuntor.sh:788`). |
-| Positivo aceitava apenas ausência do recado | **Resolvido no selo:** exige JSON com `decision=block`, motivo iniciado por `siga: `, ausência do recado e nenhuma nova `FALHA`; há mutante que lança exceção (`bin/tests/test_disjuntor.sh:337`, `bin/tests/test_disjuntor.sh:791`). |
-
-2. **Onde a identidade ainda falha**
-
-**A composição usa a mesma função; o reconhecimento não é equivalente.** O contador chama `_identidade` em `bin/disjuntor.py:482`; o topo chama em `bin/disjuntor.py:506`. Entretanto, o contador aceita markdown com `_`, enquanto o lookbehind do topo impede um ID imediatamente precedido por `_` (`bin/disjuntor.py:84`, `bin/disjuntor.py:494`).
-
-Contraexemplos confirmados em memória:
-
-| Entrada | Contador | Topo |
-|---|---|---|
-| Prompt `Leitura final da obra _OBRA-X_`; pergunta `PERGUNTA DE DESENHO _OBRA-X_` | Produz `OBRA-X` | Produz conjunto vazio; **cobra pergunta já escrita nessa forma** (`bin/disjuntor.py:84`, `bin/disjuntor.py:494`, `bin/hook_stop_fila1.py:417`). |
-| Prompt `obra O9a`; pergunta `DESENHO O9a`, para contador disparado de `O9` | Rejeita `O9a`: captura com `re.I`, depois reprova no `fullmatch` | Extrai `O9`; **cala seu recado** (`bin/disjuntor.py:84`, `bin/disjuntor.py:475`, `bin/disjuntor.py:494`, `bin/hook_stop_fila1.py:417`). |
-
-Portanto, compartilhar `_identidade` não demonstra a promessa de “mesmas bordas”: há tanto rejeição indevida quanto aceitação divergente (`bin/disjuntor.py:491`, `bin/disjuntor.py:494`). Ocorrência desses exemplos em produção: **[nao verificado]**.
-
-3. **Quem escreve, quem lê e a primeira linha**
-
-Nos caminhos auditados, o construtor recebe a instrução de escrever a pergunta; o PreToolUse apenas emite essa instrução, e o Stop consulta o topo (`bin/disjuntor.py:941`, `bin/hook_stop_fila1.py:1049`). A escrita efetiva pelo construtor em produção é **[nao verificado]**.
-
-O contador recebe a identidade de `_obra_de`, acumula por chave de obra e persiste pelo `_com_estado` em `logs/sessao/disjuntor_estado.json`; Stop e PreToolUse chamam a varredura (`bin/disjuntor.py:54`, `bin/disjuntor.py:521`, `bin/disjuntor.py:556`, `bin/disjuntor.py:244`, `bin/hook_stop_fila1.py:1050`, `bin/disjuntor.py:940`).
-
-**O delta não muda qual primeira linha é devolvida para um mesmo conteúdo:** `_linha_do_topo` continua retornando `b[0]`; pular brancos passa a encontrar a segunda linha útil, preservando a primeira capturada (`bin/hook_stop_fila1.py:407`, `bin/hook_stop_fila1.py:433`, `bin/hook_stop_fila1.py:439`). O ramo atual do teto libera sem escrever PAREI no RELATO (`bin/hook_stop_fila1.py:1287`, `bin/hook_stop_fila1.py:1295`).
-
-**No selo há reescrita de arquivos de fixture**, inclusive colocando a pergunta na primeira linha: `_topo` sobrescreve o RELATO de teste; o cenário com branco também o sobrescreve diretamente (`bin/tests/test_disjuntor.sh:72`, `bin/tests/test_disjuntor.sh:345`, `bin/tests/test_disjuntor.sh:347`).
-
-Os leitores diretos são:
-
-| Função lida | Chamadores |
-|---|---|
-| `_bloco_do_topo` | `_linha_do_topo`; `_disjuntor_contido`, para recados B3 (`bin/hook_stop_fila1.py:407`, `bin/hook_stop_fila1.py:1049`). |
-| `_linha_do_topo` | `_esperando_com_prova`; `_orcamento_travado`; `_orcamento_contido`, na recuperação de erro; `_disjuntor_contido`, para B4; `_parei_do_em_curso` (`bin/hook_stop_fila1.py:656`, `bin/hook_stop_fila1.py:909`, `bin/hook_stop_fila1.py:1026`, `bin/hook_stop_fila1.py:1045`, `bin/hook_stop_fila1.py:1106`). |
-
-4. **Casos, mutantes e lacunas**
-
-Os procedentes têm casos e mutantes correspondentes, conforme a tabela acima; branco e cauda estão ligados aos mutantes específicos em `bin/tests/test_disjuntor.sh:783`, `bin/tests/test_disjuntor.sh:789` e `bin/tests/test_disjuntor.sh:790`.
-
-Executei em memória o corpo Python de `b3_topo`: a base passa; os mutantes declarados `sem-lookbehind`, `parcial-vira-none`, `sem-cauda` e `regex-paralela` caem, respectivamente, nos casos 7, 10, 2 e 3 (`bin/tests/test_disjuntor.sh:648`, `bin/tests/test_disjuntor.sh:666`, `bin/tests/test_disjuntor.sh:643`, `bin/tests/test_disjuntor.sh:644`). A queda dos demais no selo integral é **[nao verificado]**.
-
-**Nem todo ramo novo está protegido.** Mutar `_identidade` de `if cauda and '-' not in oid` para `if cauda` faz `obra OBRA-X (C)` virar `OBRA-X (C)`, contrariando o comportamento atual; mesmo assim, `b3_topo` passa em memória porque falta o caso de ID hifenado com cauda válida (`bin/disjuntor.py:488`, `bin/tests/test_disjuntor.sh:642`). Sobrevivência ao selo completo: **[nao verificado]**.
-
-Também falta caso para normalização de cauda minúscula: remover `.upper()` não é distinguido pelos exemplos de cauda usados, todos já maiúsculos (`bin/disjuntor.py:488`, `bin/tests/test_disjuntor.sh:384`, `bin/tests/test_disjuntor.sh:642`, `bin/tests/test_disjuntor.sh:645`). Sobrevivência ao selo completo: **[nao verificado]**.
-
-Não executei o selo integral: ele cria, altera e remove arquivos, contrariando a restrição desta verificação (`bin/tests/test_disjuntor.sh:37`, `bin/tests/test_disjuntor.sh:49`, `bin/tests/test_disjuntor.sh:697`, `bin/tests/test_disjuntor.sh:706`).
-
-## 31/10 09:42 · sessao fbd435b3bfa8 · E3-STATUS · verificador · origem=Code
-
-**1. Sim: o delta resolve o achado A por inspeção do código.** O cartório obtém `_par_da_lavra` pela função da própria porta e passa seu veredito efetivo a `fatos_do_status`. Assim, `indefinida` derivada dos códigos ativa a consulta A2 que antes era omitida. (`app/ponto/services/cartorio.py:1252`, `app/ponto/services/cartorio.py:1564`; `app/ponto/status_dia.py:122`, `app/ponto/status_dia.py:126`.)
-
-**2. Quem produz, quem lê e igualdade com a lavra:**
-
-| Chamador | Quem produz o argumento | É o veredito gravado/preservado? |
-|---|---|---|
-| Lavra normal | `classificar_dia` produz os códigos; o cartório define `_vd`; **`veredito_que_a_lavra_escreve`** resolve o par efetivo, incluindo preservação de decisão admin. (`app/ponto/services/cartorio.py:1207`, `app/ponto/services/cartorio.py:1220`, `app/ponto/services/cartorio.py:1245`, `app/ponto/services/cartorio.py:1252`; `app/ponto/portas/celula.py:655`.) | **Sim, no fluxo sequencial inspecionado:** o adaptador recebe `_par_da_lavra[0]`; a porta usa novamente a mesma função com `_vd/cods`. (`app/ponto/services/cartorio.py:1559`, `app/ponto/services/cartorio.py:1564`; `app/ponto/portas/celula.py:745`.) |
-| Nunca-bateu | `classificar_dia` → `derivar_veredito`; o cartório substitui por `nunca_bateu` quando falta cobertura integral. (`app/ponto/services/cartorio.py:1026`, `app/ponto/services/cartorio.py:1031`, `app/ponto/services/cartorio.py:1041`.) | **Sim para célula sem decisão admin:** `_vd_nb` alimenta ambos. **Com admin, pode diferir:** o adaptador recebe `_vd_nb`, mas a porta preserva `cel.veredito` e calcula o status humano, ignorando esses fatos. (`app/ponto/services/cartorio.py:1042`, `app/ponto/services/cartorio.py:1047`; `app/ponto/portas/celula.py:739`, `app/ponto/portas/celula.py:694`.) |
-| `_completar_status` | Lê **`cel.veredito`**, escrito pela lavra anterior; passa-o à porta e ao adaptador. (`app/ponto/services/cartorio.py:733`, `app/ponto/services/cartorio.py:735`; `app/ponto/portas/celula.py:770`.) | **Sim:** seus chamadores exigem veredito preenchido para fornecer um dia elegível, evitando derivação alternativa por valor vazio. (`app/ponto/services/cartorio.py:1000`, `app/ponto/services/cartorio.py:1002`, `app/ponto/services/cartorio.py:1157`, `app/ponto/services/cartorio.py:1159`.) |
-
-O **leitor do argumento do adaptador** é `fatos_do_status`: usa-o para decidir consultar A2 e não o inclui no dicionário retornado. O **leitor que decide o status** é `status_da_lavra`, chamado pela porta com seu próprio `v` efetivo; esse mesmo `v` é atribuído à célula. Não identifiquei, nesses fluxos sequenciais, status decidido com outro veredito; a ressalva admin acima muda o argumento do adaptador, mas seus fatos são ignorados. (`app/ponto/status_dia.py:122`, `app/ponto/status_dia.py:133`; `app/ponto/portas/celula.py:694`, `app/ponto/portas/celula.py:698`, `app/ponto/portas/celula.py:752`, `app/ponto/portas/celula.py:770`.)
-
-**3. O teste novo morde a reversão, por análise estática, e atravessa a implementação real.** Chama `julgar_colab(... apply_=True, forcar=True)` e relê a célula persistida; usa o classificador real e a porta real. Há congelamento do relógio, sem mock dessas funções no teste. (`app/ponto/tests/test_e3_status_indefinida_a2_na_lavra.py:29`, `app/ponto/tests/test_e3_status_indefinida_a2_na_lavra.py:65`, `app/ponto/tests/test_e3_status_indefinida_a2_na_lavra.py:66`; `app/ponto/services/cartorio.py:767`; `app/escala/models.py:1794`.)
-
-Os dois RED exigem `PREVISTO_COM_DIA_INDEFINIDO` e `('indefinida', 'folga')`. Com esses códigos, `_vd=None`; reverter a linha para `_vd` deixa `folga_humana=False`, enquanto a porta continua derivando `indefinida`. A regra então retorna `escala_suspeita`, contrariando ambos RED; o controle permanece compatível. (`app/ponto/tests/test_e3_status_indefinida_a2_na_lavra.py:78`, `app/ponto/tests/test_e3_status_indefinida_a2_na_lavra.py:79`, `app/ponto/tests/test_e3_status_indefinida_a2_na_lavra.py:86`, `app/ponto/tests/test_e3_status_indefinida_a2_na_lavra.py:87`, `app/ponto/tests/test_e3_status_indefinida_a2_na_lavra.py:72`; `app/ponto/services/cartorio.py:1220`, `app/ponto/services/cartorio.py:1221`; `app/escala/models.py:1583`; `app/ponto/status_dia.py:121`, `app/ponto/status_dia.py:91`.)
-
-**4. Nenhuma das cinco classes aparece como defeito novo deste delta:**
-
-| Classe | Avaliação |
-|---|---|
-| Segundo juiz | Reutiliza a autoridade da lavra e consulta A2 pelo adaptador existente; A2 está registrada. (`app/ponto/services/cartorio.py:1252`; `app/ponto/portas/celula.py:745`; `app/ponto/status_dia.py:126`; `app/core/juizes.py:161`.) |
-| Segundo escritor fora da porta | Guarda apenas o par local/transitório; veredito e status continuam escritos na porta. (`app/ponto/services/cartorio.py:1252`, `app/ponto/services/cartorio.py:1253`; `app/ponto/portas/celula.py:705`, `app/ponto/portas/celula.py:770`.) |
-| Relógio fora da borda | Os trechos alterados não acrescentam leitura do relógio; a lavra recebe `agora`. (`app/ponto/services/cartorio.py:1252`, `app/ponto/services/cartorio.py:1559`, `app/ponto/services/cartorio.py:1564`.) |
-| Derivação paralela | Calcular novamente pela **mesma função** mantém uma autoridade; o delta não copia a regra de derivação. (`app/ponto/services/cartorio.py:1252`; `app/ponto/portas/celula.py:745`.) |
-| Selo/RED sem mordida | O selo AST continua aceitando qualquer `fatos_do_status=f`; o teste novo cobre semanticamente a reversão específica. (`app/ponto/tests/test_selo_veredito_so_pela_porta.py:287`; `app/ponto/tests/test_e3_status_indefinida_a2_na_lavra.py:79`, `app/ponto/tests/test_e3_status_indefinida_a2_na_lavra.py:87`.) |
-
-Execução GREEN, execução do mutante, efeitos concorrentes, ocorrência/quantidade em produção e confirmação independente do hash Git: **[não verificado]**.
-
-## 31/10 09:42 · sessao 2d7c58b7082a · - · - · origem=Ronald (tmux)
-
-As duas rotas chamam `_identidade`: contador em `bin/disjuntor.py:482`; topo em `bin/disjuntor.py:506`; composição em `bin/disjuntor.py:488`. Porém, isso não torna os reconhecedores equivalentes: o contador aceita `_` como markdown e usa `re.I`, seguido de `fullmatch`; o topo usa lookbehind sem `re.I` (`bin/disjuntor.py:84`, `bin/disjuntor.py:475`, `bin/disjuntor.py:494`).
-
-Contraexemplos confirmados com Python `-B`, somente funções puras:
-
-- `_obra_de('Leitura final da obra _OBRA-X_') == 'OBRA-X'`, mas `obras_da_linha('PERGUNTA DE DESENHO _OBRA-X_') == set()`; a pergunta é rejeitada. O `_` é permitido no contador e proibido imediatamente antes do ID no topo (`bin/disjuntor.py:84`, `bin/disjuntor.py:494`, `bin/hook_stop_fila1.py:417`).
-- `_obra_de('obra O9a') is None`, enquanto `obras_da_linha('DESENHO O9a') == {'O9'}`; a pergunta cala B3 de `O9`. O contador captura `O9a` com `re.I` e rejeita no `fullmatch`; o topo captura somente `O9`, sem borda direita (`bin/disjuntor.py:84`, `bin/disjuntor.py:475`, `bin/disjuntor.py:494`).
-
-Não encontrei identidade válida emitida pelo contador cujo texto cru, sem markdown/contexto adicional, não faça roundtrip pelo topo; demonstração exaustiva: [nao verificado].
-
-Mutante plausível: remover `.upper()` de `_identidade`. O selo usa somente caudas já maiúsculas, `(C)` e `NOTURNO-FOO`; portanto não verifica a normalização de `(c)` nem de sufixo minúsculo (`bin/disjuntor.py:488`, `bin/tests/test_disjuntor.sh:384`, `bin/tests/test_disjuntor.sh:642`, `bin/tests/test_disjuntor.sh:645`). Hoje `P('O9 (C)', ['DESENHO O9 (c)'])` é verdadeiro e esse mutante o tornaria falso; sobrevivência no selo completo: [nao verificado].
-
-_952 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_955 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
