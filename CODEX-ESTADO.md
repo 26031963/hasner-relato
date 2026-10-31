@@ -1,7 +1,148 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 16:40** · publicado em **31/10/2026 16:44** (UTC-3)
+> Ultima resposta processada: **31/10/2026 16:54** · publicado em **31/10/2026 16:55** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 16:54 · sessao bab72768ff86 · DISJUNTOR-B1-ESPERA-OCIOSA · leitura · origem=Code
+
+**O v1 tem dois problemas centrais: E2 continuaria sem detectar um Bash único já esperando, e seu critério confundiria trabalho legítimo sem escrita com ócio.** A medição só ocorre no PreToolUse do próprio agente; o Stop apenas consulta disparos gravados. O medidor não consulta o processo em execução (`bin/disjuntor.py:413`, `bin/disjuntor.py:478`, `bin/disjuntor.py:1435`, `bin/hook_stop_fila1.py:1053`).
+
+Os contraexemplos abaixo são cenários construídos para avaliar o contrato; sua ocorrência em produção é **[nao verificado]**. Resultado de execução dos testes: **[nao verificado]**; o script cria, altera e apaga arquivos, contrariando a restrição desta análise (`bin/tests/test_disjuntor.sh:39`, `bin/tests/test_disjuntor.sh:50`).
+
+**Respostas diretas**
+
+- **O payload real de PreToolUse de subagente traz `agent_id`? [nao verificado].** O código o lê em `bin/disjuntor.py:1429` e também o usa na identificação da negativa em `bin/disjuntor.py:216`. O teste fabrica esse campo; isso comprova a expectativa do código, não o envio pelo harness (`bin/tests/test_disjuntor.sh:242`, `bin/tests/test_disjuntor.sh:85`).
+- **Uma suite em primeiro plano, sem `sleep`, seria considerada ociosa pelo E2? Sim, quando medida**, se o agente não for isento, tiver idade suficiente, cópia citada e nenhum arquivo recente. O medidor não distingue suite, RED, ruff, git ou espera (`bin/disjuntor.py:418`, `bin/disjuntor.py:425`, `bin/disjuntor.py:450`, `bin/disjuntor.py:454`).
+- **Isso não significa disparar durante o Bash no minuto 10.** Sem outra chamada do agente, não há nova medição; os 60 segundos são intervalo mínimo entre medições solicitadas, não um agendamento (`bin/disjuntor.py:478`, `bin/disjuntor.py:480`, `bin/disjuntor.py:1436`). O Stop não supre essa ausência (`bin/hook_stop_fila1.py:1053`).
+
+**Confronto por cláusula**
+
+| Cláusula do contrato | Suporte atual e o que falta | Contraexemplo ou consequência concreta |
+|---|---|---|
+| Cabeçalho: aval, instrumento e pouso posterior | Aval específico e ordem efetiva de pouso: **[nao verificado]**. O código continua declarando B1 com 15 minutos e consumo de tokens (`bin/disjuntor.py:7`, `bin/disjuntor.py:68`, `bin/disjuntor.py:452`). | O cabeçalho não estabelece uma decisão classificatória; a divergência verificável está nos critérios seguintes (`bin/disjuntor.py:450`). |
+| **E1 — sleep, laços, follow e timeout** | Não há ramo E1 no PreToolUse atual. Bash comum de agente passa apenas pela medição genérica B1, sem classificação dessas esperas (`bin/disjuntor.py:1426`, `bin/disjuntor.py:1435`, `bin/disjuntor.py:1440`). Falta reconhecimento, negativa específica, instrução comando+log e emissão `B1-ESPERA`. | **FN atual:** agente jovem executando `until grep -q rc= x.log; do sleep 60; done` passa pelo B1 por idade insuficiente (`bin/disjuntor.py:450`). **FP do texto proposto:** `while false; do sleep 60; done` contém laço com sleep, mas executa zero iterações; a precisão da futura regex é **[nao verificado]**. |
+| **E1 — leitura de log “EM CURSO”** | O código atual não examina caminho, conteúdo `^rc=` ou mtime do log para decidir sobre Bash (`bin/disjuntor.py:1430`, `bin/disjuntor.py:1435`). | **FP do contrato:** `tail -n 40 /tmp/wt-A/red.out` logo após RED concluído, sem `rc=` e com mtime recente. O runner RED grava saída, mas não acrescenta esse marcador (`bin/molde_autocura/rodar.sh:18`, `bin/molde_autocura/rodar.sh:24`). A própria suite também termina diretamente no processo de teste (`bin/suite.sh:96`). |
+| **E1 — só subagente; principal fora** | Há leitura de `agent_id`; Bash comum sem ele retorna antes de I/O. A negativa e a exceção para Handback já têm molde B1 (`bin/disjuntor.py:1429`, `bin/disjuntor.py:1431`, `bin/disjuntor.py:1435`, `bin/disjuntor.py:1395`). | **FN condicionado:** se o harness omitir `agent_id`, `sleep 600` de subagente será tratado como Bash sem agente. O envio real desse campo é **[nao verificado]** (`bin/disjuntor.py:1431`). |
+| **E2 — 15→10 minutos; retirar tokens** | As duas mudanças faltam: constante ainda 15 e `tokens <= 0` ainda impede disparo (`bin/disjuntor.py:68`, `bin/disjuntor.py:452`). | **FP do contrato:** agente `general-purpose`, vivo há 12 minutos, cópia `/tmp/wt-A` citada, arquivos antigos, pede `git -C /tmp/wt-A diff` ou inicia a suite. E2 nega pelo estado, sem avaliar o trabalho solicitado; o molde atual aplica a negativa a qualquer ferramenta exceto Handback (`bin/disjuntor.py:1435`). |
+| **E2 — “vivo” e “arquivo novo”** | “Vivo” deriva do menor timestamp legível do transcript; “novo” significa arquivo regular com mtime recente, inclusive arquivo antigo modificado. Não mede criação nem execução produtiva (`bin/disjuntor.py:405`, `bin/disjuntor.py:441`, `bin/disjuntor.py:450`). | **FN:** agente esperando, mas um arquivo da cópia recebe atualização periódica: a medição encontra mtime recente e libera. Não exige que a atualização venha do agente ou represente avanço (`bin/disjuntor.py:405`, `bin/disjuntor.py:458`). |
+| **E2 — PreToolUse nega; Stop pede TaskStop** | Existe, mas Stop só considera disparos já gravados e IDs reconhecidos como agentes async sem entrega; não mede novamente nem encerra o agente (`bin/disjuntor.py:489`, `bin/disjuntor.py:376`, `bin/hook_stop_fila1.py:1053`). O recado ocorre no caminho final do Stop, depois de possíveis saídas antecipadas (`bin/hook_stop_fila1.py:1207`, `bin/hook_stop_fila1.py:1297`, `bin/hook_stop_fila1.py:1300`). | **FN:** agente entra em Bash antes do limiar e permanece esperando sem nova ferramenta; não nasce disparo para o Stop consultar (`bin/disjuntor.py:1435`, `bin/hook_stop_fila1.py:1054`). |
+| **QUEM CHAMA — mesmos hooks** | A configuração aponta para os dois comandos descritos (`.claude/settings.json:9`, `.claude/settings.json:68`). Porém são caminhos absolutos em `/home/ronald/saas-hasner`, externos à cópia auditada; identidade com os arquivos realmente executados é **[nao verificado]**. | Manter os mesmos chamadores, sem acrescentar medição ao Stop, preserva o FN do Bash único (`bin/hook_stop_fila1.py:1054`). |
+| **QUEM ESPERA — síncrono, memória 1/min** | Decisão e cache existem; não há medição periódica independente. Há também espera limitada por contenção da trava do estado (`bin/disjuntor.py:251`, `bin/disjuntor.py:256`, `bin/disjuntor.py:478`). | **FN concreto sem sleep aparente:** `bash bin/suite.sh --only "ponto core"` pode ficar em `flock` por até 3600 segundos. A espera está dentro do script chamado (`bin/suite.sh:96`, `bin/trava_teste.sh:22`, `bin/trava_teste.sh:36`). |
+| **FALHA — ilegível não dispara; painel `nao_sei`** | Meta/transcript/cópia ilegíveis podem produzir motivo “nao sei” sem disparo. Não existe contador B1 `nao_sei` no estado nem publicação desse motivo no painel (`bin/disjuntor.py:417`, `bin/disjuntor.py:424`, `bin/disjuntor.py:457`, `bin/disjuntor.py:481`, `bin/disjuntor.py:1615`). Parser específico E1 ainda falta (`bin/disjuntor.py:1426`). | **FN assumido pela política:** espera com meta ilegível passa (`bin/disjuntor.py:417`). **Ressalva:** disparo já gravado retorna antes de reler meta/transcript/cópia; portanto “ilegível = não dispara” não libera um B1 anteriormente disparado (`bin/disjuntor.py:476`). |
+| **LIMITE — script próprio invisível ao E1; E2 pega em 10 minutos** | A segunda promessa não decorre dos chamadores atuais: B1 só mede no PreToolUse do agente (`bin/disjuntor.py:1436`). | **FN:** `bash x.sh`, cujo conteúdo seja `sleep 3600`, iniciado antes do limiar e sem chamada posterior. Mesmo retirar tokens não cria a medição ausente (`bin/disjuntor.py:478`, `bin/hook_stop_fila1.py:1054`). |
+| **DIFF/apply suspende E2; E1 não** | PreToolUse suspende B1 quando `sombra.lock` está tomado ou ilegível; mera existência do arquivo não basta (`bin/disjuntor.py:307`, `bin/disjuntor.py:318`, `bin/disjuntor.py:1435`). Falta E1 independente dessa guarda. O Stop não verifica DIFF antes do recado B1 (`bin/hook_stop_fila1.py:1053`). | **FP/interrupção indevida possível:** B1 dispara; depois começa DIFF com lock tomado; Stop ainda pede TaskStop, pois consulta o disparo persistido sem essa guarda (`bin/disjuntor.py:476`, `bin/hook_stop_fila1.py:1054`). |
+| **MEDIDA — disparos, negações, `nao_sei`, enumeração** | Leitor já agrega disparos pelo identificador, mas enumeração não inclui `B1-ESPERA`; negações são agregadas, sem separação por regra; falta `nao_sei` B1. Janela é móvel de 24 horas, não dia civil (`bin/disjuntor.py:1548`, `bin/disjuntor.py:1570`, `bin/disjuntor.py:1579`, `bin/disjuntor.py:1679`). | Se surgisse uma linha `DISJUNTOR B1-ESPERA ...`, o leitor a contaria, mas a enumeração atual não a exibiria. O painel também não conta uma espera que nunca foi medida (`bin/disjuntor.py:1579`, `bin/disjuntor.py:1679`, `bin/disjuntor.py:1436`). |
+| **QUEM DESLIGA — chave global do Ronald** | A chave é respeitada por PreToolUse e Stop; a proteção da própria chave ocorre antes do desligamento (`bin/disjuntor.py:144`, `bin/disjuntor.py:1486`, `bin/hook_stop_fila1.py:1039`). | **FP existente sobre git legítimo:** `git log --all --oneline --grep=DISJUNTOR_DESLIGADO` é negado por simplesmente mencionar a chave, inclusive com os disjuntores desligados (`bin/disjuntor.py:160`, `bin/disjuntor.py:1486`). |
+
+**Os quatro trabalhos legítimos pedidos**
+
+Considere agente `general-purpose` com cópia citada e sem mtime recente. Esses comandos não precisam produzir arquivo novo na cópia; E2 não contém um discriminador que os separe de espera (`bin/disjuntor.py:418`, `bin/disjuntor.py:454`, `bin/disjuntor.py:1435`).
+
+| Trabalho | Comando/forma concreta e evidência |
+|---|---|
+| Suite `--only` em primeiro plano | `bash bin/suite.sh --dir /tmp/wt-A --only "ponto core" --espera 1`. Opções suportadas; execução por `exec` e Docker sem `-d`, com bytecode desativado (`bin/suite.sh:46`, `bin/suite.sh:96`, `bin/suite.sh:99`). |
+| Docker do RED | A chamada `teste $T/orig/app test_juliani_esacred $T/red.out $IDS` executa Docker em primeiro plano e grava log fora de `orig/app` (`bin/molde_autocura/rodar.sh:20`, `bin/molde_autocura/rodar.sh:24`). |
+| Ruff | `docker run --rm -v /tmp/wt-A/app:/app:ro -w /app saas-hasner-core:latest ruff check . --no-cache`, seguindo a forma existente com montagem somente leitura e cache desativado (`bin/molde_autocura/rodar.sh:13`). |
+| Git | `git -C /tmp/wt-A diff`. B1 não examina o comando antes de negar. O exemplo usa `general-purpose`: `verificador` e os demais tipos de `SO_LEITURA` são isentos no medidor atual (`bin/disjuntor.py:91`, `bin/disjuntor.py:418`, `bin/disjuntor.py:1435`). |
+
+**Os cinco MORDE**
+
+| Item | Situação atual e lacuna |
+|---|---|
+| **1 — until/sleep negado; mutante sem E1 vermelho** | Falta ramo e caso E1. Os casos B1 atuais são `b1_nega`, `b1_nao_nega`, `b1_recado`; mutantes diretos cobram mtime e Handback (`bin/tests/test_disjuntor.sh:1468`, `bin/tests/test_disjuntor.sh:1577`). Um agente jovem com o laço passa hoje (`bin/disjuntor.py:450`). |
+| **2 — sleep 5 e principal sleep 600 passam** | Principal sem `agent_id` já passa. Entretanto agente com B1 disparado tem até `sleep 5`, ruff ou git negados. O contrato precisa delimitar que o controle positivo de E1 usa E2 não disparado (`bin/disjuntor.py:1431`, `bin/disjuntor.py:1435`). |
+| **3 — sem tokens por 10 minutos dispara; mutante vermelho** | Hoje ausência de tokens impede disparo. A fixture injeta 510 tokens no último turno; falta caso específico e mutante da condição (`bin/disjuntor.py:452`, `bin/tests/test_disjuntor.sh:237`, `bin/tests/test_disjuntor.sh:1577`). O teste ainda exige que agente com 10 minutos passe (`bin/tests/test_disjuntor.sh:258`). |
+| **4 — arquivo recente não dispara** | Já existe controle com arquivo de três minutos (`bin/tests/test_disjuntor.sh:254`). Mas, após `disparado=true`, arquivo novo não rearma: o retorno antecede a medição. É contraexemplo ao item se escrito sem restringir o estado inicial (`bin/disjuntor.py:476`). |
+| **5 — log com rc final não negado** | Falta caso específico E1 (`bin/tests/test_disjuntor.sh:1468`). O texto precisa resolver precedência com `tail -f` e distinguir rc da execução atual: log ativo contendo `rc=0` de execução anterior escaparia da heurística proposta; ocorrência em produção **[nao verificado]**. |
+
+**Quem escreve e quem lê o estado**
+
+Os caminhos são `logs/sessao/disjuntor_estado.json` e `logs/sessao/disjuntor.log` (`bin/disjuntor.py:61`). No JSON, a gravação física passa por `_com_estado`, com flock, temporário e substituição; `ler_estado` faz a leitura direta (`bin/disjuntor.py:237`, `bin/disjuntor.py:260`, `bin/disjuntor.py:271`, `bin/disjuntor.py:291`).
+
+| Campo | Quem escreve | Quem lê |
+|---|---|---|
+| `b1[agent_id]` | `b1_do_agente` cria/atualiza a entrada, via `_com_estado` (`bin/disjuntor.py:474`, `bin/disjuntor.py:481`, `bin/disjuntor.py:486`). | O próprio `b1_do_agente`; `b1_disparados` percorre as entradas (`bin/disjuntor.py:475`, `bin/disjuntor.py:490`). |
+| `.checado` | `b1_do_agente`, com `agora` após medir (`bin/disjuntor.py:481`). | Mesmo método, para intervalo de 60 segundos (`bin/disjuntor.py:478`). |
+| `.disparado` | `b1_do_agente`, com `bool(med['disparo'])` (`bin/disjuntor.py:481`). | Mesmo método e `b1_disparados`; este último alimenta o Stop (`bin/disjuntor.py:476`, `bin/disjuntor.py:490`, `bin/hook_stop_fila1.py:1054`). |
+| `.motivo` | `b1_do_agente`, a partir do medidor (`bin/disjuntor.py:481`). | Retorno do disparo/cache e composição da negativa PreToolUse (`bin/disjuntor.py:477`, `bin/disjuntor.py:479`, `bin/disjuntor.py:1438`). |
+| `tokens`, `copias`, contador `nao_sei` | Tokens/cópias são resultados transitórios do medidor; não são campos persistidos em B1. “Nao sei” pode ficar apenas no texto de `.motivo`; não há contador correspondente nessa gravação (`bin/disjuntor.py:417`, `bin/disjuntor.py:460`, `bin/disjuntor.py:481`). | O painel não lê esses motivos B1 para contá-los (`bin/disjuntor.py:1615`). |
+
+No log, **o escritor físico é `trilha`**, que acrescenta carimbo, evento e detalhe achatado/truncado em 300 caracteres (`bin/disjuntor.py:128`).
+
+| Registro/campo do log | Quem produz | Quem lê |
+|---|---|---|
+| Carimbo e evento | `trilha` (`bin/disjuntor.py:133`). | `ler`, que separa tokens e interpreta o instante (`bin/disjuntor.py:1559`, `bin/disjuntor.py:1563`). |
+| `DISJUNTOR B1 <id>: medida \| ação` | `b1_do_agente` → `dispara` → `trilha` (`bin/disjuntor.py:483`, `bin/disjuntor.py:139`). | `ler` conta pelo quarto token, `B1`; não usa o ID para a contagem (`bin/disjuntor.py:1579`). |
+| `DISJUNTOR B1-ESPERA ...` | Falta produtor no ramo atual de PreToolUse (`bin/disjuntor.py:1426`). | O leitor genérico comporta o identificador; falta inclusão na enumeração de `linha` (`bin/disjuntor.py:1579`, `bin/disjuntor.py:1679`). |
+| `NEGOU` e motivo | `main_pretool`, antes da resposta deny (`bin/disjuntor.py:1489`). | `ler` incrementa total agregado de negativas (`bin/disjuntor.py:1570`). |
+| `FALHA` | Falhas de persistência, PreToolUse e registro no RELATO; Stop também chama `DJ.trilha` (`bin/disjuntor.py:281`, `bin/disjuntor.py:232`, `bin/disjuntor.py:1506`, `bin/hook_stop_fila1.py:1061`). | `ler` conta especificamente `relato_negacao` como negativa sem RELATO; isso não constitui contador de medições B1 desconhecidas (`bin/disjuntor.py:1572`). |
+| `ALVO`, hash e comando | `relato_negacao` (`bin/disjuntor.py:211`). | Não integra os eventos lidos pelo painel (`bin/disjuntor.py:1554`). |
+
+O publicador do ESTADO chama `disjuntor.ler/linha`; **o Stop decide seu recado B1 pelo JSON, não pelo log** (`bin/gerar_estado.py:280`, `bin/hook_stop_fila1.py:1054`).
+
+## 31/10 16:52 · sessao 6de02a40a9c1 · - · - · origem=Ronald (tmux)
+
+- **`agent_id` real no payload de subagente: [nao verificado].** O código espera esse campo em `pretool`, lendo `payload.get('agent_id')`; sem ele, um Bash comum sai antes de qualquer I/O (`bin/disjuntor.py:1429–1432`). A evidência disponível é sintética: `_pl` fabrica JSON com `agent_id` (`bin/tests/test_disjuntor.sh:242`), e `_pre` entrega o JSON ao hook (`bin/tests/test_disjuntor.sh:85`). Não há prova local de uma captura real do harness [nao verificado]. O campo também identifica o agente na trilha do RELATO (`bin/disjuntor.py:216`).
+
+- **E2 como escrito confundiria suite produtiva com ociosidade quando medido.** `medir_b1` conhece tipo do agente, texto do transcript, timestamps, tokens e mtime de arquivos; não examina comando em execução nem distingue trabalho CPU/DB de espera (`bin/disjuntor.py:413–461`). O tipo `general-purpose` não é isento; isentos são `verificador`, `Explore`, `Plan`, `claude-code-guide`, `statusline-setup` (`bin/disjuntor.py:90–91`, `bin/disjuntor.py:418–419`). Remover o requisito de tokens e usar janela de 10 min classificaria como disparada uma suite em primeiro plano de agente com cópia citada e sem escrita nessa cópia em 10 min; a duração real de qualquer suite do dado é [nao verificado].
+
+- **Mas não dispararia automaticamente no minuto 10 de UM Bash já em execução.** `b1_do_agente` só é chamado pelo PreToolUse daquele agente (`bin/disjuntor.py:1435–1436`). Os 60 s são cache de medição sob demanda, sem agendador (`bin/disjuntor.py:478–481`). O Stop não mede: lê `b1_disparados` e cruza com agentes de fundo ainda sem entrega (`bin/hook_stop_fila1.py:1053–1054`; `bin/disjuntor.py:489–490`). Portanto, Bash único iniciado antes do limiar, sem chamadas posteriores, pode continuar além de 10 min sem novo disparo; remover tokens não fecha esse buraco (`bin/disjuntor.py:1435–1436`, `bin/hook_stop_fila1.py:1054`).
+
+- **Contra-exemplo concreto, sem executar:** estado de transcript com `agentType=general-purpose`, primeiro timestamp há 20 min, cópia absoluta `/tmp/wt-a` citada, arquivos sem mtime recente, último turno assistente há 11 min, e ferramenta Bash `bash bin/suite.sh --dir /tmp/wt-a --only "ponto core"` ainda rodando. Hoje, em medição aos 20 min, falta token nos últimos 15 min pode livrar; com E2 e medição, a ausência de arquivos dispara, mesmo se a suite estiver calculando (`bin/disjuntor.py:425–453`, `bin/disjuntor.py:454–461`). A sintaxe `--dir`/`--only` é suportada (`bin/suite.sh:46–47`); a execução final é foreground `docker run ... python manage.py test` com `PYTHONDONTWRITEBYTECODE=1` (`bin/suite.sh:96–103`). Se nenhuma ferramenta nova for chamada, não há medição aos 20 min (`bin/disjuntor.py:1435–1436`).
+
+- **Outro FN concreto de espera sem `sleep`:** a mesma chamada `bash bin/suite.sh --only "ponto core"` pode aguardar a trava. Suite sempre chama `trava_teste.sh` inclusive com `--only` (`bin/suite.sh:91–96`); a trava faz `flock -w "$ESPERA"` com default 3600 s (`bin/trava_teste.sh:22`, `bin/trava_teste.sh:35–38`). Isso escapa de regex que olha apenas o Bash externo e dos padrões E1 descritos; E2 não o captura no meio de um único Bash pelo motivo acima (`bin/disjuntor.py:1435–1436`, `bin/hook_stop_fila1.py:1054`).
+
+- **“Vivo” hoje não consulta processo:** deriva da menor data de qualquer linha JSON com timestamp; JSON quebrado e timestamp inválido são pulados (`bin/disjuntor.py:430–451`). **“Arquivo novo” inclui arquivo antigo modificado:** basta qualquer arquivo regular com `mtime >= janela`, fora dos diretórios ignorados (`bin/disjuntor.py:402–406`). **Disparo é persistente:** `disparado=true` retorna sem reavaliar, mesmo que apareça arquivo posterior (`bin/disjuntor.py:476–477`).
+
+## 31/10 16:52 · sessao 7ba21874f2bc · - · - · origem=Ronald (tmux)
+
+Auditoria estática; não executei testes, pois o script cria árvore temporária, escreve fixtures e apaga arquivos no EXIT (`bin/tests/test_disjuntor.sh:39-55`). Resultado real da suíte: [nao verificado].
+
+- Os testes atuais certificam **15 minutos e tokens positivos**: fixture sempre injeta 510 tokens (`bin/tests/test_disjuntor.sh:227-239`), a negativa exige texto “15 min” (`bin/tests/test_disjuntor.sh:245-250`), e agente com exatamente 10 minutos deve passar (`bin/tests/test_disjuntor.sh:258-259`). Reduzir para 10 minutos exige atualizar essa expectativa.
+- Já existem controles para arquivo recente, verificador, DIFF, sessão principal e ilegibilidade (`bin/tests/test_disjuntor.sh:252-270`), além de pedido de TaskStop e retirada do pedido após killed (`bin/tests/test_disjuntor.sh:272-280`).
+- Os cinco MORDE novos não estão implementados como casos E1/E2: os casos B1 continuam `b1_nega`, `b1_nao_nega`, `b1_recado` (`bin/tests/test_disjuntor.sh:1468`). Os mutantes diretos de B1 removem mtime ou exceção de Handback (`bin/tests/test_disjuntor.sh:1577-1578`), e os outros testam cópia/meta ilegíveis (`bin/tests/test_disjuntor.sh:1731-1735`).
+
+Contraexemplos concretos, condicionados ao estado sintético E2: `general-purpose`, vivo há 12 minutos, `/tmp/wt-A` citada, nenhum arquivo recente. Ocorrência desse estado em produção: [nao verificado].
+
+1. `bash bin/suite.sh --dir /tmp/wt-A --only "ponto core" --espera 1`: opções legítimas documentadas (`bin/suite.sh:24-27`), execução foreground por `exec`/docker sem `-d`, com `PYTHONDONTWRITEBYTECODE=1` (`bin/suite.sh:96-103`). E2 não distingue esse trabalho de espera, pois seu molde mede apenas idade/tokens/mtime (`bin/disjuntor.py:428-461`).
+2. RED foreground: o molde executa docker contra a árvore anterior e grava `red.out` fora de `orig/app` (`bin/molde_autocura/rodar.sh:18-24`). É trabalho útil sem necessidade de escrever na árvore examinada.
+3. Ruff: `docker run ... -v /tmp/wt-A/app:/app:ro ... sh -c "ruff check . --output-format concise --no-cache"` segue execução existente, read-only e sem cache (`bin/molde_autocura/rodar.sh:13`).
+4. `git -C /tmp/wt-A diff`: a negativa de B1 não examina o comando, logo também alcança leitura legítima de git (`bin/disjuntor.py:1428-1439`). Para verificador há isenção explícita, portanto usar `general-purpose` neste contraexemplo (`bin/disjuntor.py:418-419`).
+
+E1 também confunde “sem `^rc=`” com “em curso”: `tail -n 40 /tmp/wt-A/red.out`, logo após RED concluído, satisfaz a heurística proposta, embora o runner RED não grave `rc=` (`bin/molde_autocura/rodar.sh:18-24`). `suite.sh` termina diretamente no comando de teste, também sem acrescentar marcador (`bin/suite.sh:96-103`). O protocolo documental verifica veredito, `Ran` e rc **do processo**, sem impor `rc=` no arquivo (`CLAUDE.md:191-195`). Um log ainda ativo contendo `rc=0` de execução anterior constitui o falso negativo inverso; estado hipotético, [nao verificado].
+
+O `agent_id` dos testes é **fabricado pelo teste**, não prova de payload real do harness: `_pl` imprime o JSON com esse campo (`bin/tests/test_disjuntor.sh:242`); o hook de teste apenas encaminha esse JSON ao stdin (`bin/tests/test_disjuntor.sh:85-86`).
+
+## 31/10 16:52 · sessao 2b38ef829f7c · - · - · origem=Ronald (tmux)
+
+Mapa de estado e integração, apenas por inspeção de código:
+
+| Campo/arquivo | Quem escreve | Quem lê | Semântica e lacuna |
+|---|---|---|---|
+| `disjuntor_estado.json` | `_com_estado`: carrega JSON, executa transição, grava temporário e `os.replace`, sob `flock` (`bin/disjuntor.py:237`, `:247`, `:260`, `:268`, `:271`). | `_com_estado` e `ler_estado` (`bin/disjuntor.py:260`, `:291`). | JSON ilegível levanta; ausência vira `{}`; falha de gravação preserva a decisão já calculada e gera `FALHA` (`bin/disjuntor.py:262`, `:265`, `:281`, `:296`). |
+| `b1` | `b1_do_agente`, via `est.setdefault('b1', {})` (`bin/disjuntor.py:473`). | Próprio `b1_do_agente` e `b1_disparados` (`bin/disjuntor.py:475`, `:489`). | Chaveado somente por `agent_id`, não por sessão (`bin/disjuntor.py:475`, `:481`). |
+| `b1[agent_id].checado` | `b1_do_agente` grava `agora` ao medir (`bin/disjuntor.py:481`). | Mesmo método compara idade com `B1_REAVALIA_S=60` (`bin/disjuntor.py:69`, `:478`). | É intervalo mínimo entre chamadas; não é timer/autonomia de reavaliação (`bin/disjuntor.py:478`, `:1436`). |
+| `b1[agent_id].disparado` | `bool(med['disparo'])` (`bin/disjuntor.py:481`). | `b1_do_agente` e `b1_disparados` (`bin/disjuntor.py:476`, `:490`). | Disparo fica latched: retorna antes de medir novamente; arquivo novo posterior não o desarma (`bin/disjuntor.py:476`, `:480`). |
+| `b1[agent_id].motivo` | Copiado de `medir_b1` (`bin/disjuntor.py:481`). | Retorno de disparo/cache e mensagem de negativa (`bin/disjuntor.py:477`, `:479`, `:1438`). | `nao sei` existe como texto do motivo; não há contador B1 `nao_sei` no estado gravado (`bin/disjuntor.py:417`, `:424`, `:457`, `:481`). |
+| `disjuntor.log`: carimbo, evento, detalhe | Escritor físico `trilha`: append com carimbo local, detalhe achatado e truncado em 300 caracteres (`bin/disjuntor.py:128`). | `ler` divide tokens, interpreta carimbo/evento (`bin/disjuntor.py:1554`, `:1559`, `:1563`). | Trilha ilegível torna disparos/negações/liberações `None`; arquivo ausente conta zero (`bin/disjuntor.py:1584`, `:1590`). |
+| Evento `DISJUNTOR B1 <id>: medida \| ação` | `b1_do_agente` chama `dispara`, que chama `trilha` (`bin/disjuntor.py:483`, `:139`). | `ler` agrupa pelo quarto token, portanto por `B1`; `linha` renderiza enumeração fixa (`bin/disjuntor.py:1578`, `:1677`). | Sem ramo/escritor `B1-ESPERA`; enumeração atual não o inclui (`bin/disjuntor.py:483`, `:1679`). |
+| Evento `NEGOU` | `main_pretool` antes de emitir resposta deny (`bin/disjuntor.py:1489`). | `ler` incrementa total agregado `negou` (`bin/disjuntor.py:1570`). | Não agrupa negações por regra/agente (`bin/disjuntor.py:1570`). |
+| Eventos `FALHA`, `ALVO` | Falhas de estado/PreToolUse/RELATO e `relato_negacao`; Stop também chama `DJ.trilha('FALHA', ...)` (`bin/disjuntor.py:212`, `:232`, `:281`, `:1506`; `bin/hook_stop_fila1.py:1061`). | Painel lê `FALHA` para contar apenas `relato_negacao`; ignora `ALVO` (`bin/disjuntor.py:1554`, `:1572`). | Falha de medição B1 representada somente por motivo `nao sei` não vira essa contagem (`bin/disjuntor.py:417`, `:481`, `:1572`). |
+
+`tokens` e `copias` são retornados por `medir_b1` quando dispara, mas não são persistidos como campos B1; persistem apenas `checado`, `disparado`, `motivo` (`bin/disjuntor.py:460`, `:481`).
+
+Integração:
+
+- `.claude/settings.json` liga `Stop` a `/home/ronald/saas-hasner/bin/hook_stop_fila1.py` e `PreToolUse` a `/home/ronald/saas-hasner/bin/disjuntor.py pretool`, com matcher vazio (`.claude/settings.json:3`, `:9`, `:62`, `:68`). Esses caminhos são absolutos e externos à cópia auditada; equivalência com arquivos atualmente executados em produção é **[nao verificado]**.
+- PreToolUse lê `payload.agent_id` em `bin/disjuntor.py:1429`; ausência permite saída imediata para Bash comum (`bin/disjuntor.py:1431`). A cópia prova que o código espera esse campo; não prova que o harness realmente o envia **[nao verificado]**.
+- B1 mede exclusivamente quando PreToolUse de agente chama `b1_do_agente`; `SubagentHandback` é excluído e DIFF suspende esse ramo (`bin/disjuntor.py:1435`).
+- Stop **não mede B1**: lê `b1_disparados`, cruza com `agentes_sem_entrega` e apenas compõe texto `TaskStop` (`bin/hook_stop_fila1.py:1053`). `agentes_sem_entrega` reconhece só agentes lançados async e notificações de fim no transcript principal (`bin/disjuntor.py:366`, `:376`).
+- Stop lê apenas `transcript_path` do payload; não distingue por `agent_id` (`bin/hook_stop_fila1.py:1184`). O recado B1 só é acrescentado no caminho final que imprime `decision:block`; saídas antecipadas podem evitá-lo (`bin/hook_stop_fila1.py:1207`, `:1297`, `:1300`).
+- Consequência para E2: remover tokens e mudar 15→10 **não detecta um Bash já rodando sem nova chamada**. A memória de 60 s não agenda medidas; Stop não as produz (`bin/disjuntor.py:478`, `:1436`; `bin/hook_stop_fila1.py:1054`).
+- DIFF usa tentativa de `flock` compartilhado em `logs/sombra.lock`; lock ocupado ou ilegível suspende, arquivo inexistente não suspende (`bin/disjuntor.py:307`). Porém Stop não consulta essa guarda antes de pedir TaskStop de B1 já disparado: estado latched anterior + lock adquirido depois ainda gera pedido (`bin/hook_stop_fila1.py:1039`, `:1054`).
+- Chave: `desligado` testa `lexists` (`bin/disjuntor.py:144`); PreToolUse chama guarda da chave antes de respeitar desligamento (`bin/disjuntor.py:1486`); Stop respeita desligamento (`bin/hook_stop_fila1.py:1039`). Comandos Bash que apenas mencionam `DISJUNTOR_DESLIG` também são negados, inclusive leitura/git legítimos (`bin/disjuntor.py:160`).
+- Painel: `gerar_estado.py` chama `disjuntor.ler/linha` (`bin/gerar_estado.py:279`); `ler` conta janela móvel de 86.400 s, não dia civil (`bin/disjuntor.py:1548`); `linha` enumera B1/B2/B3/B4/B4-CODEX/ANEXO-ENXUTO (`bin/disjuntor.py:1679`).
+- Hook Stop consulta `stat` desses arquivos para impedir que atualizações do próprio painel contem como prova de espera; não lê o conteúdo nessa função (`bin/hook_stop_fila1.py:585`, `:590`, `:598`).
 
 ## 31/10 16:40 · sessao 0449d96ad80d · PADRAO-DE-CIMA · leitura · origem=Code
 
@@ -823,239 +964,4 @@ Medidor:
 
 As fixtures E4-6 são escritas por `setUpTestData` e pela sessão do cliente (`app/escala/tests/test_e4_6_minha_escala_e_previsao.py:23`, `:26`, `:27`, `:28`, `:29`, `:30`, `:32`, `:33`, `:36`, `:43`); os leitores verificadores estão nos testes de contexto e render (`:50`, `:59`, `:66`). Não executar esses testes preservou a exigência de nenhum arquivo/banco criado; RED de execução continua **[nao verificado]**.
 
-## 31/10 16:23 · sessao e69e5490d2c0 · - · - · origem=Ronald (tmux)
-
-**E4-7: troca de universo correta no recorte alterado, com uma promessa documental maior que a cura.** `entradas_hoje` passa pela autoridade `batidas_apuraveis`; `bateu_hoje_ids` continua consulta independente e crua, embora a docstring nova os associe. — `app/core/services/painel_op.py:51`, `app/core/services/painel_op.py:239`, `app/core/tests/test_e4_7_painel_entrada_retratada.py:3`.
-
-**Achados**
-
-- **Procedente — atividade crua sobrevive.** `_cids_pn` também consulta `Batida` diretamente, mas contém `retratada_em__isnull=True`; `bateu_hoje_ids` não contém esse filtro, admite qualquer tipo e alimenta `_teve_ativ`/`classificar_cobertura`. O selo novo só afirma `entrada`, `entrada_id` e status de linha; não verifica essa atividade. — `app/core/services/painel_op.py:60`, `app/core/services/painel_op.py:239`, `app/core/services/painel_op.py:258`, `app/core/tests/test_e4_7_painel_entrada_retratada.py:78`.
-- **Limite desse achado:** não concluir que a atividade retratada muda a cobertura visível atual. O juiz usa atividade somente para distinguir `encerrado` de `inativo` quando previsto/presente são zero; o painel converte os dois em `encerrado`. — `app/ponto/selecao_periodo.py:237`, `app/core/services/painel_op.py:242`, `app/core/services/painel_op.py:259`.
-- **Procedente — “mesmo universo do juiz” exige precisão.** A marca de retratação coincide, mas as janelas não: entrada do painel usa 24h móveis sem teto; o juiz de turno carrega as três datas locais `hoje-2..hoje`. — `app/core/services/painel_op.py:46`, `app/core/services/painel_op.py:53`, `app/ponto/turnos.py:2186`, `app/ponto/turnos.py:2190`.
-- **Não aparece alteração adicional do universo no trecho substituído:** `ini` continua `timestamp >= agora−24h`; `colab=None` não restringe colaboradores; `fim=None` não acrescenta teto; o chamador mantém `tipo='E'`, `select_related('colaborador')`; a ordenação por `timestamp` vem do helper e o dict mantém a última entrada por colaborador. A única condição acrescentada é `retratada_em IS NULL`. — `app/core/services/painel_op.py:46`, `app/core/services/painel_op.py:51`, `app/ponto/turnos.py:2844`.
-- **Procedente, anterior ao diff — nome/comentário mentem sobre a duração:** `_14h_atras` e comentário “janela 14h” usam efetivamente `timedelta(hours=24)`. — `app/core/services/painel_op.py:45`.
-- **Derivação paralela existente continua:** o painel escolhe `normal/geofence/turno_aberto/encerrado/ausente/folga`; o medidor mantém explicitamente esse sítio nos declarados, com quatro palavras medidas. A alteração E4-7 não remove essa dívida nem cria nova regra de classificação. — `app/core/services/painel_op.py:148`, `app/core/services/painel_op.py:169`, `app/core/medida_leitor_do_dia.py:312`.
-- **Relógio:** o construtor lê `timezone.now()` uma vez e passa `agora` ao juiz; o helper novo não lê relógio. O `timezone.now()` do teste está sob `freeze_time`. Não há nova leitura solta introduzida por E4-7. — `app/core/services/painel_op.py:32`, `app/core/services/painel_op.py:65`, `app/ponto/turnos.py:2844`, `app/core/tests/test_e4_7_painel_entrada_retratada.py:32`, `app/core/tests/test_e4_7_painel_entrada_retratada.py:56`.
-
-**Escritores → leitores relevantes**
-
-| Campo/valor | Quem escreve | Quem lê |
-|---|---|---|
-| `Batida.colaborador/timestamp/tipo` e coordenadas | criação pela porta `registrar_batida`; geo sanitizado antes do `create`; fábrica por `semear`, guardada como ensaio | helper filtra retratação/data; painel seleciona E e chaveia por colaborador |
-| | `app/ponto/registro_batida.py:94`, `app/ponto/registro_batida.py:105`, `app/ponto/registro_batida.py:152`, `app/ponto/registro_batida.py:157`, `app/ponto/registro_batida.py:331` | `app/ponto/turnos.py:2844`, `app/core/services/painel_op.py:51` |
-| `tipo` de batida existente | `flip_tipo → anotar`; porta permite esse campo | `.filter(tipo='E')` decide entrada candidata |
-| | `app/ponto/services/flip_batida.py:25`, `app/ponto/registro_batida.py:203`, `app/ponto/registro_batida.py:252` | `app/core/services/painel_op.py:53` |
-| `retratada_em` | `retratar_batida → anotar`; desfazer escreve `None` pela mesma porta; fixture nova escreve cru por `update` | `batidas_apuraveis`, candidatos e carregador do juiz |
-| | `app/ponto/registro_batida.py:267`, `app/ponto/services/retratar_humano.py:207`, `app/core/tests/test_e4_7_painel_entrada_retratada.py:56` | `app/ponto/turnos.py:2845`, `app/core/services/painel_op.py:61`, `app/ponto/turnos.py:2192` |
-| `entradas_hoje` | dict local da última E apurável por colaborador | carga de pings e variável `entrada` por linha |
-| | `app/core/services/painel_op.py:51` | `app/core/services/painel_op.py:102`, `app/core/services/painel_op.py:143` |
-| `entrada` → status | entrada presente sem turno vivo produz `encerrado`; ausência de entrada com trabalho produz `ausente` | filtro de status, contadores, agrupamento por posto, ausentes e ordenação dos colaboradores |
-| | `app/core/services/painel_op.py:169` | `app/core/services/painel_op.py:179`, `app/core/services/painel_op.py:202`, `app/core/services/painel_op.py:232`, `app/core/services/painel_op.py:254`, `app/core/services/painel_op.py:263` |
-| `entrada`, `entrada_id`, `data_turno`, `lat/lng` | valores da entrada selecionada; `data_turno` prefere turno vivo | entrada/hora e ID geo consumidos pelo card; consumidores de `data_turno` encontrados nos testes; consumidor de `lat/lng` desse retorno **[nao verificado]** | [nao verificado]
-| | `app/core/services/painel_op.py:188` | `app/templates/core/_painel_card.html:64`, `app/templates/core/_painel_card.html:68`, `app/core/tests/test_painel_op_turno_aberto_ancora.py:50`, `app/core/tests/test_painel_op_turno_pelo_juiz.py:80` |
-| `presenca_geo` | `classificar_presenca_turno(entrada, pings)`; pings carregados apenas para entradas selecionadas | classe/caption da bolinha geo |
-| | `app/core/services/painel_op.py:102`, `app/core/services/painel_op.py:183`, `app/ponto/presenca.py:50` | `app/templates/core/_painel_card.html:68` |
-| status/agregados/postos | construtor | view inicial, fragmento e lote; card pinta estado, botão de substituição e cobertura; stats pinta contadores; JS filtra atributos do card |
-| | `app/core/services/painel_op.py:185`, `app/core/services/painel_op.py:202`, `app/core/services/painel_op.py:261` | `app/core/views.py:607`, `app/core/views.py:632`, `app/core/views.py:679`, `app/templates/core/_painel_card.html:2`, `app/templates/core/_painel_card.html:48`, `app/templates/core/_painel_card.html:72`, `app/templates/core/_painel_stats.html:32`, `app/templates/core/painel_operacional.html:177` |
-
-O ID da entrada selecionada também vira URL HTMX de detalhe geo; a view reabre `Batida` por PK e tipo E e chama `resumo_presenca_turno`. — `app/templates/core/_painel_card.html:69`, `app/ponto/urls.py:79`, `app/ponto/views.py:3236`, `app/ponto/presenca.py:108`.
-
-Página e lotes usam o mesmo card: página inclui `_painel_grid`, grid inclui `_painel_card`; lote inclui `_painel_card`; fragmento inclui grid e stats. — `app/templates/core/painel_operacional.html:152`, `app/templates/core/_painel_grid.html:1`, `app/templates/core/_painel_lote.html:7`, `app/templates/core/_painel_fragment.html:1`.
-
-**Mordida estática E4-7**
-
-Repor a consulta crua faz A selecionar sua única entrada retratada e viola `entrada is None`/`entrada_id is None`; C seleciona a retratada mais recente (07:30) e viola a comparação com 07:00. Uma “cura” que zere todas as entradas viola B, cujo status deve continuar `encerrado` e cuja entrada deve continuar 07:00. Essa é conclusão do fluxo do código; execução/RED observado **[nao verificado]**. — `app/core/tests/test_e4_7_painel_entrada_retratada.py:64`, `app/core/tests/test_e4_7_painel_entrada_retratada.py:66`, `app/core/tests/test_e4_7_painel_entrada_retratada.py:69`, `app/core/tests/test_e4_7_painel_entrada_retratada.py:78`, `app/core/services/painel_op.py:169`.
-
-O diff de produção deste sítio só muda leitura; as escritas cruas novas são montagem de fixture e retratação de teste, não uma nova porta produtiva. — `app/core/services/painel_op.py:50`, `app/core/tests/test_e4_7_painel_entrada_retratada.py:35`, `app/core/tests/test_e4_7_painel_entrada_retratada.py:56`.
-
-## 31/10 16:22 · sessao 2ca4f78aa1d8 · F1C4-3-EMISSORES · censo · origem=Code
-
-**Há seis classificações sustentáveis e dois achados cuja classe fica [nao verificado].** O material não permite concluir “zero falhas do Codex”: falta estabelecer quando os defeitos específicos dos itens 3 e 4 entraram nos hashes examinados. (`opus_v11.txt:4–5`; `v8.q:1–2`.)
-
-Nos anexos colados, conto linhas desde a primeira linha após cada identificador, incluindo linhas vazias. Não atribuo descarte a `triagens.txt`, cujo bloco veio vazio; os registros locais de fila não individualizam os defeitos finais dos itens 3 e 4. (`app/docs/RELATO.md:29`; `app/docs/BACKLOG.md:822`; descarte específico: **[nao verificado]**.)
-
-1. **Corte/backlog divergentes da migração — (c), alteração posterior à última chamada guardada.** (`opus_v11.txt:2`; `v8.q:1`.)
-
-   **Pergunta:** “Ha sitio de producao que ainda responde […] por conta propria […] sem perguntar a chamados/juizes.py::dia_sem_trabalho?” (`v4.q:15–16`.)
-
-   **Resposta:** “a migração está declarada no corte, mas não realizada nesse sítio.” (`v4.r:42`.)
-
-   Codex viu o antecedente — supra com predicado próprio —, mas o achado final é outro: **migrar em `b3bef403` e deixar a documentação anterior**. Não cabe transformar o descarte do antecedente em descarte desse defeito novo. (`v1.r:88`; `opus_v11.txt:2`.)
-
-   **Entrada:** tema supra já na **v1**; corte discutido na **v4**; contradição causada pela migração documentada na **v11**, após a chamada v8. (`v1.r:88`; `v4.r:42`; `opus_v11.txt:1–2`; `v8.q:1`.)
-
-2. **Número atribuído ao universo errado na mensagem — (c), dado de produção/mensagem final.** (`opus_v11.txt:3`; `CLAUDE.md:557`.)
-
-   **Pergunta:** “antes, sombra com novos CHAMADOS por emissor; ate 50 pousa”. (`v2.q:2`.)
-
-   **Resposta:** “A sombra com novos CHAMADOS por emissor, e o atendimento ao teto de 50, são **[não verificado]** no material fornecido.” (`v2.r:1`.)
-
-   A fonte local associa **0/127.784** a ata explícita **`indefinido`**, confirmando a diferença de universo apontada pelo opus. O valor **158/143.452** está sustentado apenas pelo dado raspado fornecido. (`app/docs/BACKLOG.md:806`; `opus_v11.txt:3`.)
-
-   **Entrada:** o número anterior já constava da obra precedente; a frase acusada está documentada na **v11**. Primeira volta em que essa frase foi escrita: **[nao verificado]**. (`app/docs/BACKLOG.md:806`; `opus_v11.txt:1–3`.)
-
-3. **Catraca aceita o nome, mas deixa passar `ata=cel.ata` — classe [nao verificado].**
-
-   **Pergunta:** “Os testes novos mordem a reversao de cada um dos 4 sitios individualmente?”; checklist: “selo/RED sem mordida”. (`v1.q:6–7`.) [nao verificado]
-
-   **Resposta:** “também não exigem estruturalmente delegação ao juiz — um clone equivalente passa nos asserts de retorno.” (`v1.r:105`.)
-
-   Isso comprova que Codex viu **uma fragilidade de delegação nos testes antigos**; não comprova que viu a catraca específica de `com_insumo_dia_sem_trabalho` nem o mutante descrito pelo opus. (`v1.r:105`; `opus_v11.txt:4`.) [nao verificado]
-
-   **Entrada:** tema de proteção estrutural presente na **v1**; primeira volta da catraca específica: **[nao verificado]**. Se já estava num hash examinado, pode caber **(a)**; se nasceu depois da v8, pode caber **(c)**. Não há evidência para escolher nem para atribuir **(b)**. **[nao verificado]**
-
-4. **`_protesta` antecipa o juiz; cláusula inatingível; omissão em `_C18` — classe integral [nao verificado].**
-
-   **Pergunta:** “A pergunta registrada em `_C18` e respondida por outra funcao […] com predicado igual ou diferente?” (`v4.q:14–16`.)
-
-   **Resposta anterior:** “Protesto e espera pelo fim do turno usam `trabalha is not False`.” (`v1.r:87`.)
-
-   Portanto, **o predicado do cartório foi visto**. A cópia também o contém literalmente: `return _cel.trabalha is not False and _acesos(x, _ata) is not True`. (`v1.r:87`; `app/ponto/services/cartorio.py:1204–1205`.)
-
-   A consequência final — cláusula do juiz inatingível após a delegação — não é o mesmo achado que simplesmente listar esse predicado. Quando surgiu essa delegação, e se a omissão específica de `_C18` já estava nos hashes examinados: **[nao verificado]**. (`opus_v11.txt:5`.)
-
-   **Entrada:** sítio/predicado na **v1**; `_C18` entra explicitamente na pergunta da **v4**; primeira volta da combinação final: **[nao verificado]**. (`v1.r:87`; `v4.q:11–16`.)
-
-5. **Sombra só do supra; cartório não medido; efeito com tipo `None` — (c), quanto à medição final.** (`opus_v11.txt:6`; `CLAUDE.md:557`.)
-
-   **Pergunta:** “antes, sombra com novos CHAMADOS por emissor”. (`v2.q:2`.)
-
-   **Resposta:** a sombra e o teto permaneciam “**[não verificado]** no material fornecido”. (`v2.r:1`.)
-
-   A semântica geral de `None` já fora percebida: “tipo ausente, `None` ou vazio não satisfaz `A`”. Isso não demonstra exame da migração final nem cobertura do caminho final do cartório. (`v1.r:7`; `opus_v11.txt:6`.)
-
-   **Entrada:** semântica de tipo ausente/`None` na **v1**; sombra explicitamente exigida na **v2**; medição específica acusada documentada na **v11**. Sua primeira execução e a volta da mudança comportamental: **[nao verificado]**. (`v1.r:7`; `v2.q:2`; `opus_v11.txt:6`.)
-
-6. **`v11_green.log` vazio; suíte sem hash — (c), suíte/log.** (`opus_v11.txt:7`; `CLAUDE.md:557`.) [nao verificado]
-
-   **Pergunta relacionada:** checklist “selo/RED sem mordida”; não há pedido específico de conferência desse log final. (`v1.q:7`; conteúdo anterior de `v11_green.log`: **[nao verificado]**.)
-
-   **Resposta:** “Execução de testes/mutantes, respeito aos tetos após a mudança e incidência por colaborador em produção: **[não verificado]**.” (`v1.r:3`.) [nao verificado]
-
-   **Entrada:** arquivo vazio documentado na **v11**. Quando a suíte passou a não imprimir hash: **[nao verificado]**. (`opus_v11.txt:7`.) [nao verificado]
-
-7. **`c5c43360` sem linha LEI-AKITA — (e), NÃO PERGUNTADO sobre a mensagem.** (`v3.q:1–30`; `opus_v11.txt:8`.)
-
-   **Pergunta mais próxima:** “Aponte tambem qualquer outro defeito no delta que estas perguntas nao cobrem.” Ela não solicita auditoria da mensagem nem da linha LEI-AKITA. (`v3.q:30`.)
-
-   **Resposta:** abre com “Reprovo a volta 3 pelo aval literal”, discutindo a fronteira de competência. Não há trecho específico apontando a ausência da linha na mensagem nos registros fornecidos. (`v3.r:1`; trecho específico: **[nao verificado]**.)
-
-   **Entrada:** fábrica presente desde a **v1**; commit acusado já identificado na **v3**. Portanto, não cabe justificar este item como “commit ainda não escrito”. A ausência efetiva da linha tem como evidência fornecida o relato do opus. (`v1.r:1`; `v3.q:1`; `opus_v11.txt:8`.) [nao verificado]
-
-8. **Mensagem afirma ausência de arquivos em PROTEGE — (e), NÃO PERGUNTADO, com divergência material na evidência.** (`v2.q:1–20`; `v3.q:1–30`; `v4.q:1–21`; `v8.q:1–12`; `opus_v11.txt:9`.)
-
-   **Pergunta mais próxima:** “Leis citadas pelos sitios (grep LEIS/CORTES) e app/docs/JUIZES.md vao anexos.” (`v2.q:20`.)
-
-   **Resposta mais próxima:** “A L-061 exige leitura da célula/ata; ela não demonstra equivalência dos predicados sobreviventes.” Isso discute a lei, sem conferir a afirmação da mensagem contra PROTEGE. (`v2.r:139`.)
-
-   **Ressalva:** nesta cópia, **PROTEGE está vazio nas três leis citadas pelo opus**. Os arquivos aparecem em outra coluna; a documentação distingue expressamente DONO de PROTEGE. Assim, a cópia não confirma essa parte do achado final. (`app/docs/LEIS.md:43–48`; `app/docs/LEIS.md:57`; `app/docs/LEIS.md:81`; `app/docs/LEIS.md:91`; `app/docs/LEIS.md:95`.)
-
-   **Entrada:** primeira volta da afirmação na mensagem: **[nao verificado]**. O resumo não identifica seu commit; não há base para declará-la posterior à v8. (`opus_v11.txt:9`.) [nao verificado]
-
-**Contagem das classificações sustentadas acima** — zeros significam ausência de atribuição comprovada neste censo, não prova de inexistência de falhas. (`CLAUDE.md:554–558`; pendências dos itens 3 e 4: **[nao verificado]**.)
-
-| Classe | Quantidade | Achados |
-|---|---:|---|
-| (a) Não viu com tema presente | 0 comprovados | — |
-| (b) Viu e triagem descartou | 0 comprovados | — |
-| (c) Fora do alcance | 4 | 1, 2, 5, 6 |
-| (e) Não perguntado | 2 | 7, 8 |
-| (d) Nenhum viu | 0 comprovados | — |
-| **Classe [nao verificado]** | **2** | **3, 4** |
-| **Total** | **8** | |
-
-## 31/10 16:20 · sessao 0d61e8d5537d · PADRAO-DE-CIMA · leitura · origem=Code
-
-O ponto decisivo é separar **o B3 desta cópia** do mecanismo futuro: hoje ele dispara com três reprovações, rearma por CLI e não consome linha liberadora; a pergunta no topo apenas cala a cobrança do Stop. O contrato documentado já descreve hash e consumo, mas isso ainda não está nesses caminhos executáveis. A implementação triestado da volta 4 é [nao verificado]. ([bin/disjuntor.py:68](/home/ronald/codex_ws/5693e4622c2055d69d24d99ea57d816f98b001c8/bin/disjuntor.py:68), `bin/disjuntor.py:585`, `bin/disjuntor.py:947`; `bin/hook_stop_fila1.py:1049`; `app/docs/RELATO.md:11–13`.)
-
-**1) As formas existentes não constituem hoje um registro uniforme de eventos.** Os exemplos abaixo têm diferenças relevantes para contar ocorrências e delimitar 24 horas. (`app/docs/RELATO.md:4`, `app/docs/RELATO.md:12`, `app/docs/RELATO.md:141`; `app/docs/RELATO-ARQUIVO.md:983`.)
-
-| Forma observada | Exemplo e localização | O que permite extrair |
-|---|---|---|
-| Modelo literal de linha | `DESENHO <obra>: lei=... pergunta=... <arquivo>:<linha>` — `app/docs/RELATO.md:12` | É **exemplo dentro do contrato**, com placeholders; contá-lo produziria evento fictício. |
-| Reprovação/desenho no topo | `REPROVA-E-DESENHO V3-RETOMA (12:4x, ...)` — `app/docs/RELATO.md:4` | Obra explícita; hora aproximada, sem data própria. Cita motor, alimentação, regras e núcleo, sem entidade única declarada. |
-| Pergunta B3 respondida | `[RESPONDIDA 23:5x...] PERGUNTA DE DESENHO O261-E-F5 (...), 30/10 23:4x` — [RELATO.md:141](/home/ronald/codex_ws/5693e4622c2055d69d24d99ea57d816f98b001c8/app/docs/RELATO.md:141) | Obra e data explícitas; horas aproximadas da resposta e da pergunta são diferentes. Há referências a chamado, célula, folha e funções distintas. |
-| Pergunta histórica com texto intermediário | `PERGUNTA DE DESENHO (nao devolve turno) -- **GEO-SILENCIO-DE-PING...` — `app/docs/RELATO-ARQUIVO.md:983` | Não segue imediatamente `DESENHO <obra>`; não tem hora nem arquivo:linha próprios. Referências aparecem nos itens seguintes, em `:985` e `:987`. |
-| Pergunta respondida e riscada | `~~(pergunta de DESENHO -- ...` — `app/docs/RELATO.md:947` | A data disponível é da resposta. Hora de abertura e identidade normalizada do evento: [nao verificado]. |
-| Classificação de achado/custo | `(DESENHO)`, `= DESENHO`, `DESENHO, NAO DEFEITO` — `app/docs/RELATO.md:1302`, `:1333`, `:4058`; `app/docs/RELATO-ARQUIVO.md:6876`, `:7130` | São menções/classificações em prosa; buscar somente a palavra contaria coisas diferentes de uma linha de evento. |
-| Título de arquitetura | `### O DESENHO DA LINHA (ponto.OcorrenciaHE)` — `app/docs/RELATO-ARQUIVO.md:22802` | Explicita um modelo, mas não uma ocorrência no formato do aval; o título anterior tem data aproximada em `:22783`. |
-
-`23:4x` fornece uma dezena de minutos, não um instante para decidir uma borda estrita de 24 horas. O selo existente transforma `HH:Mx` em `HH:M0`, usa São Paulo e busca ano no `git blame`, mas verifica **títulos de seção**, não timestamps de cada pergunta. (`app/docs/RELATO.md:141`; `bin/tests/test_hora_da_secao_nao_e_futura.sh:21`, `:25`, `:41–49`.)
-
-Também não é seguro herdar sempre a data da seção anterior: o preâmbulo do RELATO contém entradas de 31/10 antes da primeira seção, datada de 30/10; o histórico recebeu blocos no fim e títulos que perderam o cabeçalho original. O mtime é alterado por escritores de máquina e não demonstra a hora individual do DESENHO. (`app/docs/RELATO.md:41`, `:185`; `app/docs/RELATO-ARQUIVO.md:23–30`; `app/core/esteira_vigia.py:879–884`.)
-
-**2) O repo já responde bem sobre sítios de escrita; não oferece, nas fontes examinadas, um resolvedor geral de toda leitura ou escrita para uma entidade única.** O principal componente reaproveitável é [censo_escritas.py:469](/home/ronald/codex_ws/5693e4622c2055d69d24d99ea57d816f98b001c8/app/core/censo_escritas.py:469), cuja saída é `{arquivo, linha, entidade, op, expr}`; as demais fontes têm escopos diferentes. (`app/core/portas.py:9`; `app/core/juizes.py:3`; `app/core/mapa/contrato.py:13`.)
-
-| Fonte existente | Resposta que realmente fornece |
-|---|---|
-| `core/censo_escritas.py` | Varredura AST, sem Django, de construtores e operações ORM; identifica variáveis amarradas ao modelo e `self` na classe. Marca inferências por campo, `update_fields`, relação e nome. (`app/core/censo_escritas.py:3`, `:6–45`, `:401`.) |
-| `core/portas.py::PORTAS` | **Entidade → módulos autorizados a escrever**; não afirma que toda linha do módulo pertence à entidade. (`app/core/portas.py:9`.) |
-| `core/portas.py::FAMILIA_DE` | Entidade → família. `CelulaDia` e `FuroDiario`, por exemplo, compartilham família; isso não os torna uma entidade só. (`app/core/portas.py:40–44`.) |
-| `core/juizes.py::JUIZES` | Pergunta/família → autoridade `arquivo::função`; não é catálogo de modelos lidos. (`app/core/juizes.py:3–14`.) |
-| `core/mapa/contrato.py` | Inscrição de módulo: `@bolha`, entradas, saídas e chamadas; `@bolha` designa família, sem campo estruturado de modelo lido/escrito. (`app/core/mapa/contrato.py:13–25`.) |
-| Censos especializados | Há leitura/escrita por modelo em universos específicos, como Batida; não é cobertura geral de entidades. (`bin/esmeril_batida_censo.py:184–200`, `:234–262`.) |
-| `esmeril_chamado_censo.py::_onde` | Já associa intervalos de linhas a classe/função por AST; resolve o escopo da citação, não a entidade. (`bin/esmeril_chamado_censo.py:76–89`.) |
-
-Um caminho determinístico **proposto, ainda não implementado [nao verificado]**, seria normalizar o caminho relativamente a `app/`, localizar a expressão e sua função por AST, resolver modelos explícitos e consultar os sítios do censo; aceitar entidade única com evidência, preservando a distinção entre atribuição direta e inferência. As bases existentes são `app/core/censo_escritas.py:361`, `:451`, `:469` e `bin/esmeril_chamado_censo.py:76`.
-
-Os casos que impedem escolher automaticamente uma entidade são concretos:
-
-- **Arquivo com várias entidades:** `ponto/portas/celula.py` é porta de `CelulaDia` e `FuroDiario`; fechamento é porta de `FechamentoMensal` e `PeriodoFechado`. Inverter o mapa e escolher a primeira entidade perderia informação. (`app/core/portas.py:111–112`, `:495–496`.)
-- **Origem desconhecida:** parâmetros, `form.save()` e `apps.get_model` podem ficar no balde `entidade=None`; inferência por nome é declarada fraca. (`app/core/censo_escritas.py:38–45`, `:429`.)
-- **Falha confundida com vazio:** erro sintático retorna `[]`; erro de leitura é ignorado na varredura. Esses retornos, isoladamente, não sustentam `LIVRE` num juiz triestado. (`app/core/censo_escritas.py:451–456`, `:485–488`.)
-- **Cadastro AST imperfeito:** `modelos()` aceita classes com base em `models.py`, inclusive a exceção `ResolvedoraCruzada`; também chaveia pelo nome simples da classe. (`app/core/censo_escritas.py:89–111`; `app/core/portas.py:60–65`.)
-- **Nome coloquial versus identidade:** a classe principal é `ChamadoColaborador`; um alias normativo `Chamado → ChamadoColaborador` para este instrumento é [nao verificado]. (`app/chamados/models.py:21`; `app/core/portas.py:58`.)
-- **Referência histórica versus hash atual:** o próprio histórico corrige caminho inexistente e número de linha deslocado; interpretar uma referência antiga diretamente na árvore atual pode apontar outra expressão. (`app/docs/RELATO-ARQUIVO.md:990`.)
-
-**3) `_obra_de` reconhece identidade textual da obra, sem consultar entidade ou programa.** Ele procura âncoras como `obra X`, `Obra: X`, markdown e `leitura ... da X`, valida os tokens e escolhe a primeira ocorrência válida entre essas âncoras. Aceita IDs com hífen ou letras+algarismos; IDs sem hífen podem carregar cauda distintiva, como `O261 (C)`. (`bin/disjuntor.py:78–93`; [bin/disjuntor.py:478](/home/ronald/codex_ws/5693e4622c2055d69d24d99ea57d816f98b001c8/bin/disjuntor.py:478), `:492–503`.)
-
-No **Agent**, o B3 atual chama `_obra_de` somente sobre `tool_input.prompt`, para `subagent_type == 'verificador'` e leitura final; a descrição não é usada nesse reconhecimento. Leitura de desenho é excluída por `_eh_final`. Construtores e verificações sem “final” não entram nessa trava B3. (`bin/disjuntor.py:94–98`, `:473–475`, `:944–954`.)
-
-No **Codex**, o wrapper exige `CODEX_OBRA` e `CODEX_PAPEL` e escreve `OBRA:` no prompt. Porém o parser do PreToolUse extrai apenas papel, volta e anexos: **não extrai `CODEX_OBRA` nem chama `_obra_de` para obter a obra da consulta**. Isso precisará de tratamento próprio para cumprir o anexo. (`bin/codex_pergunta.sh:43–48`, `:118–131`; `bin/disjuntor.py:849–862`, `:938–954`.)
-
-Há vínculos documentais obra→programa: O280 aparece como E3, V3-BATERIA como E1 e O261-E-CELULA-20-UM-DONO como E2 do PROGRAMA-CELULA-E-O-DIA. As formas variam entre `PROGRAMA:`, “esta obra é a E2” e “linha da E4”; parser único dessas relações e herança entre aliases/subobras são [nao verificado]. (`app/docs/BACKLOG.md:1398`, `:1399`, `:782`, `:774`.)
-
-Programa tampouco equivale a uma tabela: o ADR reúne status em `CelulaDia` e valor em `DiaPago`. A prioridade entre agrupar por entidade e por programa precisa ser declarada, senão obras de tabelas diferentes podem acabar no mesmo grupo por programa. (`app/docs/ADR/0002-celula-e-o-dia.md:4–8`; política de prioridade: [nao verificado].)
-
-**4) O anexo deixa decisões necessárias em aberto.** As observações sobre suas omissões abaixo se referem ao texto fornecido no prompt, sem arquivo local com numeração verificável: [nao verificado].
-
-- **Disparo e ação incompletos:** “segunda ocorrência na mesma entidade/programa em 24 h” aparece em MORDE, mas falta como regra operacional explícita. Falta integralmente a linha do aval `PADRAO-DE-CIMA <entidade>: classe=... padrao=... armadilha=... obra=...`, seus campos obrigatórios, validação e autor responsável. [nao verificado]
-- **Universo de eventos:** acrescenta `PERGUNTA DE DESENHO` sem dizer se é alias do marcador ou ocorrência independente; não define exclusão de exemplos, perguntas respondidas, repetições e movimentação para arquivo. Esses formatos existem nos documentos. (`app/docs/RELATO.md:12`, `:141`; `app/docs/RELATO-ARQUIVO.md:23–40`; política: [nao verificado].)
-- **Tempo e agrupamento:** faltam data/ano/fuso, tratamento de `HH:Mx`, timestamp ausente/futuro, vários modelos, aliases, várias referências e prioridade entidade/programa. [nao verificado]
-- **`NAO_SEI = nega`:** não define quais chamadas negar quando a entidade é desconhecida. Negar indiscriminadamente ultrapassaria o escopo “obras daquela entidade” do aval. Além disso, o envelope atual captura exceção e libera; a política nova precisa chegar até ele. (`bin/disjuntor.py:989–990`; escopo novo: [nao verificado].)
-- **Consumo e rearme:** “mesma mecânica de `linha_libera_b3`” remete a código futuro. O texto B3 disponível exige frescor, SHA consumido e transferência para `liberado`; o código atual só transfere para `rearmado` por CLI. Falta definir se PADRAO libera uma chamada ou um episódio, como trata a terceira ocorrência e como evita redisparar imediatamente pelas mesmas duas linhas ainda dentro das 24 h. (`app/docs/RELATO.md:12`; `bin/disjuntor.py:585–595`; política nova: [nao verificado].)
-- **Falha e limite:** não cobre leitura parcial, fonte sintaticamente inválida, JSON corrompido, trava ocupada, prazo/tamanho de varredura e falha ao persistir consumo. O estado atual serializa por flock, mas mantém a decisão mesmo quando a gravação falha; isso exige regra específica para garantir consumo 1x. (`bin/disjuntor.py:219–259`; política nova: [nao verificado].)
-- **Medida:** o painel atual conta disparos pelo primeiro token da regra e negativas globais, sem liberações por entidade; a lista exibida também é fixa. Faltam formato dos eventos novos, denominadores e apresentação de medida ilegível. (`bin/disjuntor.py:1030–1055`, `:1147–1160`; medida nova: [nao verificado].)
-- **Quem desliga:** `pausar.sh` é escritor genérico de arquivo de pausa; não é, por si, integração com o disjuntor. A chave lida hoje é `DISJUNTOR_DESLIGADO`, global e reservada ao Ronald; comandos do Code que a nomeiem são negados. Falta escolher chave global ou específica, cobertura, condição de retorno e autorização de uso de `pausar.sh`. (`bin/pausar.sh:31–47`; `bin/disjuntor.py:128–157`; decisão nova: [nao verificado].)
-
-O MORDE do anexo também precisa distinguir “duas entidades diferentes” de “duas entidades diferentes **dentro do mesmo programa**”: o aval permite agrupamento por programa, mas não estabelece a precedência entre os dois critérios. Resultado esperado desse caso: [nao verificado].
-
-**5) Estes são os escritores e leitores comprovados que delimitam os arquivos candidatos; o estado específico de PADRAO-DE-CIMA ainda é [nao verificado].**
-
-| Arquivo/estado | Quem escreve | Quem lê |
-|---|---|---|
-| `app/docs/RELATO.md`, topo humano | O código reconhece escrita manual e preserva o topo; autoria concreta das linhas: [nao verificado]. (`app/core/esteira_vigia.py:829–840`.) | Stop lê duas primeiras linhas úteis; B3 procura DESENHO e identidade da obra nelas. (`bin/hook_stop_fila1.py:411–444`.) |
-| `RELATO.md`, linhas de máquina | Disjuntor chama `relato_negacao → esteira_vigia.no_relato`, com flock do diretório e temporário único. Outros escritores declarados são Edit manual, gerador de cortes e deploy agendado, fora dessa trava. (`bin/disjuntor.py:209–211`, `:988`; `app/core/esteira_vigia.py:834–840`.) | Stop verifica afirmações sem prova; publicação lê e raspa o documento. (`bin/hook_stop_fila1.py:1171–1183`; `bin/relato.sh:54–56`, `:98–104`.) |
-| `app/docs/RELATO-ARQUIVO.md` | Conduta manda mover material antigo; cabeçalho registra movimentos e append. Escritor automático de rotação: [nao verificado]. (`CLAUDE.md:610–613`; `app/docs/RELATO-ARQUIVO.md:23–40`.) | B3 atual aponta somente para RELATO vivo. Leitura do arquivo por PADRAO-DE-CIMA: [nao verificado]. (`bin/disjuntor.py:57`; `bin/hook_stop_fila1.py:34`, `:430`.) |
-| Fontes de modelos, portas e juízes | São declarações no código; autoria efetiva de cada alteração: [nao verificado]. (`app/core/portas.py:98`; `app/core/juizes.py:156`.) | Censo lê modelos/fontes por AST; mapa lê os registros de portas e juízes. (`app/core/censo_escritas.py:89`, `:469`; `app/core/mapa/contrato.py:157–177`.) |
-| `BACKLOG.md` e ADR 0002 | Registram os vínculos de programa; escritor único dessas relações: [nao verificado]. (`app/docs/BACKLOG.md:782`, `:1398`; `app/docs/ADR/0002-celula-e-o-dia.md:4`.) | Stop lê BACKLOG para fila; resolvedor automático obra→programa: [nao verificado]. (`bin/hook_stop_fila1.py:33`, `:170`.) |
-| `logs/sessao/disjuntor_estado.json` e `.lock` | `_com_estado` lê, trava e grava; varredura B3 e rearme o modificam. **PreToolUse e Stop também escrevem ao varrer B3.** (`bin/disjuntor.py:219–253`, `:559–595`, `:950`; `bin/hook_stop_fila1.py:1050`.) | `ler_estado`, consultas B3 e painel. Consumo por entidade/SHA de PADRAO: [nao verificado]. (`bin/disjuntor.py:265`, `:598`, `:1094`.) |
-| `logs/sessao/disjuntor.log` | `trilha`, disparos, rearme e negativas; falha do append é silenciada. (`bin/disjuntor.py:112–125`, `:590`, `:985`.) | `disjuntor.ler` calcula janela; `linha` formata; gerador do ESTADO chama ambos. (`bin/disjuntor.py:1030`, `:1147`; `bin/gerar_estado.py:278–280`.) |
-| `DISJUNTOR_DESLIGADO` | Ronald, fora do Code, segundo contrato e guarda. (`bin/disjuntor.py:28–31`, `:136–157`.) | PreToolUse e Stop verificam existência antes de agir. (`bin/disjuntor.py:128`, `:980`; `bin/hook_stop_fila1.py:1040`.) |
-| Arquivo escolhido para pausa e `logs/pausas.log` | `pausar.sh` grava dono/motivo/saída, faz rename e registra criação/remoção. (`bin/pausar.sh:24–47`.) | `pausar.sh --ler`; vigia inspeciona nomes específicos de pausa, sem integração automática com um nome novo. (`bin/pausar.sh:19–23`; `app/core/esteira_vigia.py:472–481`.) |
-| `.claude/settings.json` | Autoria efetiva: [nao verificado]; guarda impede retirar o hook pelos caminhos reconhecidos. (`bin/disjuntor.py:148–157`.) | Configura PreToolUse com caminho absoluto do host; ativação efetiva em produção: [nao verificado]. (`.claude/settings.json:62–68`.) |
-| Pergunta/resposta Codex | Escritor da pergunta: [nao verificado]; wrapper monta o prompt e dirige a resposta para `codex exec -o`. (`bin/codex_pergunta.sh:118–135`, `:157`.) | Wrapper lê pergunta/anexos; PreToolUse atual analisa o comando, sem ler a pergunta para resolver obra/entidade. (`bin/codex_pergunta.sh:131–133`; `bin/disjuntor.py:849–862`.) |
-
-## 31/10 16:19 · sessao 4a312e2f06f8 · - · - · origem=Ronald (tmux)
-
-**Achado 7 — recomendo (e), NAO PERGUNTADO.** O commit já estava escrito na volta 3: abertura de `v3.q`, literal, “Obra F1C4-3-EMISSORES volta 3, commit c5c43360”. Portanto, não sustenta a justificativa “commit ainda não escrito”. Nenhuma pergunta fornecida pede auditoria da mensagem ou presença da linha `LEI-AKITA`; nenhuma resposta fornecida acusa sua ausência. A frase genérica “Aponte tambem qualquer outro defeito no delta que estas perguntas nao cobrem” (`v3.q`, fechamento; numeração original [nao verificado]) não explicita esse tema.
-
-O trecho mais próximo de resposta é `v3.r`: “Execução dos testes, execução das mutações e efeitos reais sobre os números de produção: **[nao verificado]**.” Ele não trata da mensagem. **Trecho de resposta sobre a falta da linha: inexistente nos anexos fornecidos** [nao verificado quanto à numeração]. O sítio `fabrica_da_celula.py` participa desde v1; o commit acusado entra documentalmente em v3.q. A regra exige a linha em `CLAUDE.md:62–64`; o selo distingue ausência de linha de validação de seu conteúdo em `bin/tests/test_lei_akita.sh:142–143`. A ausência efetiva no commit só está atestada por `opus_v11.txt`, item 7; mensagem integral e histórico não disponíveis [nao verificado].
-
-**Achado 8 — recomendo (e), com ressalva material.** Nenhuma pergunta fornecida pede conferir a afirmação da mensagem contra a coluna PROTEGE. O mais próximo é `v2.q`, literal: “Leis citadas pelos sitios (grep LEIS/CORTES) e app/docs/JUIZES.md vao anexos.” `v2.r` responde: “A L-061 exige leitura da célula/ata; ela não demonstra equivalência dos predicados sobreviventes.” Isso discute a lei, sem auditar a coluna ou a mensagem. **Trecho de resposta sobre a afirmação “nenhuma lei lista os arquivos em PROTEGE”: inexistente nos anexos fornecidos** [nao verificado quanto à numeração].
-
-**A cópia não confirma a alegação “L-061, L-033, L-050 listam em PROTEGE”.** O cabeçalho põe PROTEGE na quinta coluna (`app/docs/LEIS.md:57`); essa célula está vazia nas três linhas (`app/docs/LEIS.md:81`, `:91`, `:95`). Os arquivos mencionados nessas linhas aparecem na coluna **DONO**, anterior à coluna PROTEGE. Assim, há divergência entre a cópia e o resumo Opus, que deve ser preservada no laudo. O selo efetivamente lê a coluna PROTEGE por nome (`bin/tests/test_lei_protege_sitio.sh:58`), não a coluna DONO.
-
-A volta de entrada da **afirmação na mensagem** do item 8 é **[nao verificado]**: `opus_v11.txt` não identifica seu commit; não há como dizer que surgiu depois de v8. O tema geral L-061 já aparece em `v2.r`, mas isso não data a afirmação acusada. Sem mensagem integral, não transformar essa lacuna em prova de classe (c) por commit posterior. `triagens.txt` vazio não permite classe (b) para nenhum dos dois [nao verificado quanto à numeração dos anexos]. [nao verificado]
-
-_1148 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1152 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
