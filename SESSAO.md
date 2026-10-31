@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 31/10/2026 11:12:28.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (42.1 MB). Acoes na janela: **1034**.
+**Medido em 31/10/2026 11:17:42.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (42.3 MB). Acoes na janela: **1033**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:13:57 | Bash |  | `cd /home/ronald/saas-hasner && mkdir -p logs/v3retoma && (ESTEIRA_QUEM=v3retoma bin/suite.sh --dir /home/ronald/wt-v3retoma-1049 --espera 3600 --only "ponto core" > logs/v3retoma/suite_a7088de8.log 2>&1; echo rc=$? >> logs/v3retoma/suite_a7088de8.log) > /dev/null 2>&1 & echo ok` |
+| 11:13:53 | Bash |  | `cd /home/ronald/saas-hasner && date +%H:%M && python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p,encoding='utf-8').read() i=s.index('\n\n**lei: CLAUDE-MD-ENXUTO') q=("\n\n**lei: INTERMITENTE-EM-FERIADO (V3-RETOMA, 11:1x).** 1 colab intermitente convocado em feriado, 2 dias: 12,16 h (09) e 12,15 h (10). v2 paga 0 de HE100 feriado nesses dias (o motor intermitente limpa o calendario injetado, motor_c ...` |
+| 11:13:15 | Bash |  | `cd /home/ronald/saas-hasner && wc -c logs/comboio/suite_f6cf4059.log; grep -cE '^(ERROR\|FAIL):' logs/comboio/suite_f6cf4059.log; date +%H:%M` |
 | 11:03:47 | Bash |  | `cd /home/ronald/saas-hasner && until grep -q '^rc=' logs/comboio/suite_f6cf4059.log; do /usr/bin/sleep 20; done; grep -E '^(OK\|FAILED)($\| \()' logs/comboio/suite_f6cf4059.log \| tail -1; grep '^Ran' logs/comboio/suite_f6cf4059.log \| tail -1; grep '^rc=' logs/comboio/suite_f6cf4059.log; grep -E '^(ERROR\|FAIL):' logs/comboio/suite_f6cf4059.log \| head -20` |
 | 11:03:43 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p,encoding='utf-8').read() i=s.index('ESPERANDO: trava_teste.sh \| pid=3145247'); k=s.index('\n',s.index('\n(espera:)',i)+1) s=s[:i]+("ESPERANDO: trava_teste.sh \| pid=3670442 \| arquivo=logs/comboio/suite_f6cf4059.log\n" "(espera:) POUSO-EM-COMBOIO E3-STATUS + F1C4-3-EMISSORES: copia wt-comboio-e3emis-1103 = main 5579d ...` |
 | 11:03:32 | Bash |  | `cd /home/ronald/saas-hasner && P=$(pgrep -f "trava_teste.sh --espera 3600" \| head -1); echo $P; cat /proc/$P/cmdline \| tr '\0' ' ' \| cut -c1-60; echo; tail -c 150 logs/comboio/suite_f6cf4059.log` |
@@ -1040,7 +1043,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 23:21:12 | SendMessage |  | `-` |
 | 23:21:04 | Bash | Extract assertion messages for F1 failures | `cd /home/ronald/saas-hasner; for t in test_MORDE_a_batida_que_chega test_nenhuma_tupla_literal test_MORDE_o_mmd_commitado; do grep -n "^FAIL: $t" -A40 logs/o261e/f1c_recorte_38c50214.log \| grep -E 'AssertionError\|Error:\|^[0-9]+- [^ ]' \| grep -v 'File "/usr' \| head -6; echo ---; done` |
 | 23:21:00 | Bash | Read F1 recorte verdict | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/b4br0lrm1.output \| head -20; cd /home/ronald/saas-hasner; grep -E "^(FAIL\|ERROR):" logs/o261e/f1c_recorte_38c50214.log \| cut -c1-160` |
-| 23:17:00 | Bash | Record Codex F1 block in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k in range(3,len(L)) if L[k].startswith('> ')) L[i:i]=["> **F1 Codex v5 (delta 5ff9ec4b..38c50214) BLOQUEIA, 5 achados** (`logs/o261e/f1_codex_v5.resp`): colecao velha no cancelar (models.py:212); relavra S2 antes do atomic (models.py:279); ordem de trava invertida entre abrir() e reno ...` |
-| 23:16:55 | SendMessage |  | `-` |
-| 23:16:46 | Bash | Read Codex F1 delta response | `cd /home/ronald/saas-hasner/logs/o261e && cat f1_codex_v5.run; wc -c f1_codex_v5.resp; head -c 6000 f1_codex_v5.resp` |
-| 23:13:15 | Bash | Check trava holder and pending logs | `cd /home/ronald/saas-hasner && bin/trava_teste.sh --quem; ps -p 1080014 -o pid= ; for f in logs/o261e/f1c_recorte_38c50214.log logs/o261v/red2_porta_9c9e030e.log logs/o261e/f1_codex_v5.run; do echo "$f: $(grep -E '^rc=\|^(OK\|FAILED)' $f 2>/dev/null \| tail -1)"; done` |
