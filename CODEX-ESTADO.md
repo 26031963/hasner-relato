@@ -1,7 +1,113 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 07:45** · publicado em **31/10/2026 07:46** (UTC-3)
+> Ultima resposta processada: **31/10/2026 07:48** · publicado em **31/10/2026 07:52** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 07:48 · sessao 81e59f67ca4c · E3-STATUS · verificador · origem=Code
+
+**Reprovaria a obra por incoerência entre status e veredito, atualização incompleta por evento e garantia insuficiente dos selos.** Há contraexemplos no código, independentemente de dados de produção: cobertura parcial pode resultar em `furo/ausencia`; cadastro indefinido pode resultar em `indefinida/folga`; uma execução concorrente do lote pode sobrescrever o status de uma decisão humana. (`app/ponto/status_dia.py:71`, `app/ponto/status_dia.py:73`, `app/ponto/services/cartorio.py:733`, `app/ponto/portas/celula.py:753`.)
+
+Ocorrência e quantidade desses casos em produção: **[não verificado]**. Suíte Django, RED histórico e migrations efetivamente aplicadas: **[não verificado]**. As verificações executadas limitaram-se à leitura e à avaliação de funções AST em memória, sem banco e sem criar arquivos. **[não verificado: não há artefato persistido dessa execução]** [nao verificado]
+
+**1. Achados, causa e gravidade**
+
+| Gravidade | Achado e caminho demonstrável |
+|---|---|
+| **Alta** | **Ausência parcial vira ausência integral no status.** A grade mantém `tipo_dia='ausencia'` e informa separadamente `cobertura_parcial`; o juiz pode acusar o restante como furo. O novo dict descarta essa distinção, e `status_da_lavra` retorna `ausencia` antes de consultar o veredito. Entrada possível: `tipo_dia='ausencia', previsto_min=480, tem_batida=False, veredito='furo'` → status `ausencia`. Contradiz D2 e a própria distinção já existente no juiz. (`app/escala/utils.py:1180`, `app/escala/utils.py:1190`, `app/ponto/supra_juiz.py:279`, `app/escala/models.py:1580`, `app/ponto/status_dia.py:71`, `app/ponto/status_dia.py:103`, `app/docs/ADR/0002-celula-e-o-dia.md:44`.) |
+| **Alta** | **Cadastro indefinido pode virar folga.** O caminho de célula de trabalho sem vínculo válido chega à grade sem previsto e acusa `PREVISTO_COM_DIA_INDEFINIDO`, convertido em `indefinida`. O novo status interpreta `tipo_dia='folga'` ou previsto zero como folga antes de testar `indefinida`. Resultado: `indefinida/folga` no mesmo ato. (`app/ponto/supra_juiz.py:168`, `app/ponto/supra_juiz.py:222`, `app/ponto/supra_juiz.py:405`, `app/escala/models.py:1583`, `app/ponto/status_dia.py:73`, `app/ponto/status_dia.py:77`.) |
+| **Alta** | **FolgaDia pode apagar a evidência de batida.** O overlay limpa `celulas` e `orfas`. Com uma entrada sem saída, o realizado pode ser zero; o novo extrator então conclui `tem_batida=False` e lavra `folga`, embora exista batida. Isso impede `folga_trabalhada` justamente no caso incompleto. (`app/escala/utils.py:1118`, `app/ponto/turnos.py:731`, `app/ponto/turnos.py:736`, `app/escala/utils.py:1998`, `app/ponto/status_dia.py:101`, `app/ponto/status_dia.py:73`.) |
+| **Alta** | **Corrida lote × admin quebra a coerência persistida.** O lote carrega uma instância sem trava. Depois dessa leitura, o admin pode gravar `faltou/admin/falta`; a instância antiga do lote continua com `concorde/cartorio`, calcula `ok` e salva somente status. Resultado possível no banco: `faltou/admin/ok`. O `atomic` protege save+outbox, mas não a leitura e a decisão. (`app/ponto/management/commands/lavrar_status_competencia.py:53`, `app/ponto/services/cartorio.py:733`, `app/ponto/services/veredito_celula.py:330`, `app/ponto/portas/celula.py:753`, `app/ponto/portas/celula.py:760`, `app/ponto/portas/celula.py:639`.) |
+| **Alta** | **Evento de feriado não cobre todas as células afetadas.** O receiver chama a reavaliação de chamados; seu universo contém somente `batida_ausente` vivos. Sem chamado elegível, não há rejulgamento indireto. A remoção do feriado não tem receiver. Status já lavrado pode permanecer velho. (`app/chamados/signals.py:265`, `app/chamados/services/feriado_reavaliar.py:17`, `app/chamados/services/feriado_reavaliar.py:76`, `app/chamados/signals.py:261`.) |
+| **Alta** | **Retirar a ausência não revoga a decisão humana da célula.** O serviço cria ausência aprovada e lavra `admin`; cancelar a ausência a torna rejeitada e dispara o cartório, mas a porta preserva o veredito humano e recompõe o status a partir dele. Assim, `justificado/ausencia` ou `faltou/falta` sobrevivem à retirada da cobertura. Isso demonstra que cancelar a ausência não implementa desfazer a decisão da célula; uma porta explícita de revogação desse veredito é **[não verificado]**. (`app/ponto/services/veredito_celula.py:315`, `app/ponto/services/veredito_celula.py:330`, `app/ponto/views.py:2724`, `app/ponto/signals.py:147`, `app/ponto/portas/celula.py:738`, `app/ponto/portas/celula.py:694`.) |
+| **Média** | **Regeneração não garante relavratura.** O rejulgamento depende de `recalculo`, exclui decisões humanas e absorve falhas. A reversão restaura DNA/trabalho sem relavrar status. O campo novo herda esses caminhos de envelhecimento. (`app/ponto/portas/celula.py:360`, `app/ponto/portas/celula.py:369`, `app/ponto/portas/celula.py:375`, `app/ponto/portas/celula.py:530`, `app/ponto/portas/celula.py:538`.) |
+| **Média** | **A impressão não protege todos os fatos novos do status.** `isento_ponto` é lido na nova lavra, mas não integra a impressão; a própria declaração admite a lacuna. Uma mudança de isenção pode encontrar impressão igual e ser pulada, mantendo status/rótulo antigos. A falha é declarada como dívida da E2, portanto não deve ser apresentada como cobertura completa do hash nesta E3. (`app/ponto/services/cartorio.py:734`, `app/ponto/services/cartorio.py:324`, `app/ponto/services/cartorio.py:1159`, `app/docs/ADR/0002-celula-e-o-dia.md:57`.) |
+
+A proteção contra falta automática existe no caso comum: os vereditos acusadores são mapeados para `irregular`, não `falta`; isso acompanha L-039. Os problemas acima são de perda de fatos ou precedência da regra, não desse mapeamento comum. (`app/ponto/status_dia.py:42`, `app/ponto/status_dia.py:81`, `app/docs/LEIS.md:87`.)
+
+**2. Quem escreve**
+
+Nas referências seguintes, os campos são os de `CelulaDia`; não incluí como escritores persistentes os homônimos de outros objetos nem as cópias usadas durante julgamento. A cópia externa de `ata`, por exemplo, é explicitamente uma cópia em memória. (`app/escala/utils.py:1826`.)
+
+| Campo/valor | Escritores e persistência encontrados |
+|---|---|
+| `status_dia`, `status_rotulo` | `_aplicar_status`, chamado pela lavra; persistência por `salvar_e_emitir`, diretamente ou junto de `carimbar`. (`app/ponto/portas/celula.py:705`, `app/ponto/portas/celula.py:739`, `app/ponto/portas/celula.py:754`, `app/ponto/portas/celula.py:773`, `app/ponto/portas/celula.py:640`, `app/ponto/portas/celula.py:807`.) |
+| `veredito`, `veredito_via`, `veredito_em` | Lavra completa; o método do model apenas delega. (`app/ponto/portas/celula.py:770`, `app/ponto/portas/celula.py:771`, `app/ponto/portas/celula.py:772`, `app/escala/models.py:1795`.) |
+| `protestos` | Lavra completa; cartório substitui pelos códigos recebidos, admin conserva os anteriores. (`app/ponto/portas/celula.py:746`, `app/ponto/portas/celula.py:751`, `app/ponto/portas/celula.py:769`.) |
+| `ata` | `lavrar_veredito` e **também** `carimbar_precedencia`, ambas dentro da porta. Portanto, “só lavrar_veredito escreve ata” seria uma descrição incorreta. (`app/ponto/portas/celula.py:741`, `app/ponto/portas/celula.py:768`, `app/ponto/portas/celula.py:820`, `app/ponto/portas/celula.py:822`.) |
+| `fatos_do_status` | Nasce em `status_dia.fatos_do_status`; cartório o produz nas três chamadas e a porta o expande em `status_da_lavra`. O wrapper do model o repassa. (`app/ponto/status_dia.py:95`, `app/ponto/status_dia.py:103`, `app/ponto/services/cartorio.py:734`, `app/ponto/services/cartorio.py:1045`, `app/ponto/services/cartorio.py:1557`, `app/escala/models.py:1796`, `app/ponto/portas/celula.py:698`.) |
+
+Os chamadores de produção da lavra são o complemento de status, os dois ramos de julgamento do cartório e a decisão humana. (`app/ponto/services/cartorio.py:733`, `app/ponto/services/cartorio.py:1041`, `app/ponto/services/cartorio.py:1556`, `app/ponto/services/veredito_celula.py:330`.)
+
+Os caminhos especiais pedidos no censo ficam assim:
+
+- **Regeneração:** escreve DNA, trabalho, geradora e denúncia; não limpa nem recalcula status nesses saves. O eventual rejulgamento é uma etapa posterior e condicional. (`app/ponto/portas/celula.py:233`, `app/ponto/portas/celula.py:264`, `app/ponto/portas/celula.py:360`.)
+- **Geração comum:** cria células sem preencher os campos julgados; enriquecimento e atualização usam `update_fields` de DNA/trabalho/geradora. (`app/ponto/portas/celula.py:593`, `app/ponto/portas/celula.py:605`, `app/ponto/portas/celula.py:615`.)
+- **`bulk_update` da porta:** grava somente ausência, entrada, saída e instante dos insumos, não os campos examinados aqui. (`app/ponto/portas/celula.py:843`.)
+- **Migrations:** 0036 adiciona protestos/veredito/via/instante; 0037 adiciona ata; 0044 adiciona status/rótulo. Esses `AddField` deixam os valores nulos; não fazem a relavratura de dados. (`app/escala/migrations/0036_b5_celula_veredito.py:13`, `app/escala/migrations/0037_hx_ata_celula.py:13`, `app/escala/migrations/0044_celuladia_status_dia_celuladia_status_rotulo.py:13`.)
+- **Escrita direta nos testes novos:** há `.update(status_dia=None, status_rotulo=None)` nas duas fixtures de backfill. (`app/ponto/tests/test_e3_status_lavrado.py:197`, `app/ponto/tests/test_e3_status_lavrado.py:210`.)
+- **Segundo escritor persistente de produção fora da porta, `save()` integral de CelulaDia, fixture de command ou migration de dados escrevendo esses valores:** nenhum caso concreto foi identificado; completude diante de aliases, SQL construído e dicionários dinâmicos é **[não verificado]**. O selo existente também não consegue certificar essa completude. (`app/ponto/tests/test_selo_veredito_so_pela_porta.py:28`, `app/ponto/tests/test_selo_veredito_so_pela_porta.py:114`, `app/ponto/tests/test_selo_veredito_so_pela_porta.py:173`.)
+
+**3. Quem lê**
+
+O índice abaixo cobre os acessos de produção identificados, incluindo consultas ORM e comandos. **Não certifico como completo o inventário literal de todos os leitores/assertions de testes da árvore: [não verificado].** [nao verificado]
+
+| Campo | Leitores identificados — prefixo `app/` |
+|---|---|
+| `status_dia` | `ponto/portas/celula.py:697`, `:703`, `:723`, `:780`; `ponto/services/cartorio.py:726`; `ponto/status_dia.py:131`, `:132`. |
+| `status_rotulo` | `ponto/portas/celula.py:697`, `:703`; `ponto/status_dia.py:132`. |
+| `veredito_em` | `colaboradores/services/calendario.py:510`; `ponto/services/veredito_celula.py:107`; `chamados/veredito_lavrado.py:153`; `chamados/services/vigia_fio.py:361`; `ponto/management/commands/celula_veredito_velho.py:107`. |
+| `protestos` | `folha/export.py:1147`, `:1228`; `chamados/reconciliador.py:838`; `ponto/services/cartorio.py:733`, `:863`, `:868`; `ponto/portas/celula.py:722`, `:751`, `:753`, `:779`; `ponto/management/commands/celula_veredito_velho.py:108`; `ponto/services/furos_sem_cobranca.py:57`; `escala/services/cadastro_realidade.py:391`. |
+| Dict `fatos_do_status` | Argumento recebido/repassado pelo model e pela porta; `_status_alvo` decide entre admin, ausência de fatos e expansão dos fatos; `status_da_lavra` consome `tipo_dia`, `tem_batida`, `previsto_min`, `isento` e veredito. (`escala/models.py:1788`, `:1796`; `ponto/portas/celula.py:686`, `:694`, `:696`, `:698`, `:739`, `:752`; `ponto/status_dia.py:55`.) |
+
+Leitores de **`veredito`**, agrupados por área:
+
+- **Folha/relatórios/pautas:** `app/folha/export.py:1204`, `:1215`, `:1236`, `:1237`; `app/folha/previa.py:94`; `app/folha/services/vigia_pausa.py:157`; `app/relatorios/dia_da_frota.py:51`, `:54`, `:60`; `app/relatorios/furos.py:160`; `app/pautas/services.py:415`.
+- **Colaboradores:** `app/colaboradores/services/calendario.py:510`; `app/colaboradores/services/pos_vinculo.py:61`; `app/colaboradores/management/commands/corrigir_escala_retroativa.py:123`.
+- **Escala:** `app/escala/services/leitor_celula.py:359`, `:365`; `app/escala/services/propositor.py:472`; `app/escala/services/cadastro_realidade.py:142`, `:313`, `:396`.
+- **Ponto:** `app/ponto/marcos.py:155`; `app/ponto/services/cartorio.py:733`, `:999`, `:1155`; `app/ponto/services/veredito_celula.py:107`; `app/ponto/services/vigia_ausencia_veredito.py:42`, `:56`; `app/ponto/services/diagnostico_escala.py:177`; `app/ponto/services/furos_sem_cobranca.py:61`; `app/ponto/services/furos_vetados.py:61`; `app/ponto/services/pautas_dos_discordantes.py:69`; `app/ponto/portas/celula.py:365`, `:657`, `:697`, `:722`, `:739`, `:753`.
+- **Comandos de ponto:** `app/ponto/management/commands/recusar_ponta_pequena.py:145`; `app/ponto/management/commands/celula_veredito_velho.py:88`, `:106`, `:125`; `app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:58`, `:62`.
+- **Chamados, núcleo:** `app/chamados/reconciliador.py:584`, `:963`, `:982`; `app/chamados/models.py:1148`, `:1152`, `:2622`, `:2623`, `:2624`; `app/chamados/juizes.py:784`, `:1020`, `:1036`, `:1072`, `:1074`.
+- **Serviços de chamados:** `app/chamados/services/fabrica_da_celula.py:86`; `app/chamados/services/silencio_ausencia.py:40`; `app/chamados/services/furo_sem_canal.py:71`; `app/chamados/services/vigia_fio.py:361`; `app/chamados/services/resposta_tardia.py:45`, `:56`; `app/chamados/services/limbo_folgas.py:194`; `app/chamados/services/disputa_emissao.py:705`; `app/chamados/services/adesao.py:32`.
+- **Comandos de chamados:** `app/chamados/management/commands/disparar_perguntas_competencia.py:120`; `app/chamados/management/commands/auditar_invariantes_chamados.py:197`, `:376`, `:1434`, `:1443`, `:1591`, `:1598`, `:1603`, `:1710`, `:1798`.
+- **Fora de `app/`:** `bin/r5_idempotencia_frota.py:56`; projeção SQL de `bin/sombra_incremental.sh:35`.
+
+Leitores de **`ata`**:
+
+- **Folha/relatórios/pautas:** `app/folha/validacao_pdf.py:44`, `:47`; `app/folha/previa.py:83`; `app/folha/services/sem_furo.py:20`, `:22`; `app/relatorios/cartao_pela_celula.py:286`, `:287`; `app/relatorios/dia_da_frota.py:61`; `app/pautas/services.py:414`.
+- **Ponto, núcleo/serviços:** `app/ponto/juiz_batida.py:157`; `app/ponto/worklist.py:22`; `app/ponto/services/lastro.py:89`, `:113`, `:128`, `:149`; `app/ponto/services/vigia_entrada.py:78`, `:80`, `:123`; `app/ponto/services/cartorio.py:320`, `:1184`; `app/ponto/services/dia_do_colab.py:29`; `app/ponto/services/cluster_espurio.py:23`; `app/ponto/services/vigia_pareador_celula.py:69`; `app/ponto/services/esmeril_espelho.py:125`, `:129`; `app/ponto/services/diagnostico_escala.py:156`; `app/ponto/portas/celula.py:731`, `:735`, `:816`, `:818`.
+- **Comandos de ponto:** `app/ponto/management/commands/vigia_b5_ausencia.py:79`; `app/ponto/management/commands/tripwire_celulas.py:258`, `:338`, `:341`; `app/ponto/management/commands/backfill_b5_insumos.py:73`; `app/ponto/management/commands/curar_residuo_bug115.py:45`, `:145`; `app/ponto/management/commands/celula_veredito_velho.py:108`; `app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:61`; `app/ponto/management/commands/detectar_intervalo_ausente.py:46`.
+- **Demais áreas:** `app/escala/services/leitor_celula.py:331`; `app/chamados/reconciliador.py:673`; `app/chamados/models.py:2621`; `app/chamados/juizes.py:400`, `:435`, `:879`, `:999`; `app/chamados/services/materializacao.py:156`; `app/colaboradores/services/feriado_do_posto.py:96`.
+- **Fora de `app/`:** `bin/r5_idempotencia_frota.py:56`; `bin/snapshot_o118_col221.py:18`.
+
+Os templates que usam `dia.status_rotulo` continuam recebendo o dict produzido pelos leitores antigos; isso não constitui migração para a coluna nova. O calendário constrói novamente esse rótulo, e o ADR congela os leitores até E4. (`app/colaboradores/services/calendario.py:884`, `app/templates/colaboradores/partials/_calendario_grade.html:99`, `app/templates/escala/minha_escala.html:75`, `app/docs/ADR/0002-celula-e-o-dia.md:71`.)
+
+**4. Idempotência, trilha e outbox**
+
+| Situação | Resultado do código |
+|---|---|
+| Mesma lavra sequencial, com ata, veredito, via, protestos e status iguais | Retorna `[]`; não salva nem acrescenta evento da porta. (`app/ponto/portas/celula.py:735`, `app/ponto/portas/celula.py:753`, `app/ponto/portas/celula.py:755`.) |
+| Somente status/rótulo muda | Salva esses campos, não move `veredito_em`, registra auditoria no ramo comum e não emite `EventoCelula`. (`app/ponto/portas/celula.py:754`, `:760`, `:762`, `:766`; `app/ponto/portas/celula.py:623`.) |
+| Ata muda, mesmo com mesmo veredito | Entra na lavra completa e move `veredito_em`. (`app/ponto/portas/celula.py:735`, `:753`, `:772`.) |
+| Cartório sobre célula decidida pelo admin | Pode mudar ata/status e retorna antes da auditoria da lavra. **Falha de trilha, média.** (`app/ponto/portas/celula.py:738`, `:743`, `:744`.) |
+| Serviço humano | A porta registra a ação e o serviço registra novamente `veredito_celula`. Portanto, “uma linha total” não vale nesse caminho. **Falha de trilha, média.** (`app/ponto/services/veredito_celula.py:330`, `:334`; `app/ponto/portas/celula.py:777`; `app/core/auditoria.py:22`.) |
+| `save=False` | A auditoria ocorre mesmo sem persistência naquele momento; o save vem depois por `carimbar`. Uma falha entre os atos pode deixar trilha de lavra não persistida. **Média; mecanismo anterior ampliado para status.** (`app/ponto/portas/celula.py:774`, `:777`, `:807`.) |
+| Só rótulo muda | A comparação detecta a mudança, mas a trilha não contém rótulo anterior/novo; pode registrar `ok → ok`. **Média.** (`app/ponto/portas/celula.py:703`, `:722`, `:764`.) |
+
+Além disso, `evento` é best effort: uma escrita concluída não garante sequer uma linha de `LogAuditoria`. (`app/core/observ.py:105`, `app/core/observ.py:133`, `app/core/observ.py:139`.)
+
+O save e o `EventoCelula` são atômicos entre si. Quem acorda o consumidor é a escrita de `veredito` ou `ata`; o consumidor retrata chamados absolvidos e encerra perguntas órfãs pela lâmpada. **Esse outbox é de consumo da célula, não o gatilho que rejulga todos os seus insumos.** Batidas e ausências chegam ao cartório pelos signals. (`app/ponto/portas/celula.py:623`, `:638`, `:639`; `app/chamados/reconciliador.py:1304`, `:1307`; `app/ponto/signals.py:135`, `:147`.)
+
+O teste de idempotência novo verifica que uma segunda execução do cartório não aumenta a contagem existente; não exige “uma linha no primeiro ato”, não cobre o serviço humano e não conta `EventoCelula`. (`app/ponto/tests/test_e3_status_lavrado.py:172`, `:177`, `:182`.)
+
+**5. Command e encerramento do dia**
+
+- **Entregue:** se `competencia_entregue` responde verdadeiro na consulta inicial, o command retorna antes de escrever. Porém não há nova conferência nem serialização com uma entrega concorrente durante o lote; a garantia absoluta “nunca escreve após entrega” não está implementada nesse fluxo. (`app/ponto/management/commands/lavrar_status_competencia.py:40`, `:42`, `:53`, `:55`.)
+- **L-092/L-113:** o bloqueio atende à declaração específica do D5. A justificativa genérica “exportada é intocável pela L-092” precisa reconhecer que L-113 alterou essa lei; isso não transforma, por si só, o backfill desta obra em uma autorização de correção de exportada. (`app/docs/ADR/0002-celula-e-o-dia.md:64`, `app/docs/LEIS.md:148`.)
+- **Rejulgar/emitir/fechar:** no caminho normal de complemento, o corpo desvia antes do julgamento e a função retorna antes da segunda passada/fábrica. Não abre nem reconcilia chamados diretamente. (`app/ponto/services/cartorio.py:1000`, `:1156`, `:776`.)
+- **Condição não checada:** a elegibilidade exige veredito, mas não uma `veredito_via` coerente. Se existir célula com veredito e via nula, a chamada com `via='cartorio'` pode entrar na lavra completa, mover `veredito_em` e emitir outbox. Existência dessas linhas em produção: **[não verificado]**. (`app/ponto/services/cartorio.py:999`, `:1155`, `:733`; `app/ponto/portas/celula.py:753`, `:772`, `:773`.)
+- **Idempotência:** depois de preencher status, o complemento pula a célula. Isso torna a segunda passada estável, mas também faz o lote ignorar status já preenchido e errado ou rótulo faltante; não é um
+
+[truncado em 20000 de 25252 caracteres]
 
 ## 31/10 07:45 · sessao 6507aa010fd3 · - · - · origem=Ronald (tmux)
 
@@ -689,84 +795,4 @@ Há testes Django existentes que conferem a fotografia do censo e o esperado, re
 
 Pergunta 4: **sem achado de novo limiar de negócio, filtro de data do universo ou derivação paralela do alcance.** O leitor compara com `esperado` e imprime o contador e o “hoje pra frente” recebidos; as condições de universo e cegueira são as exigidas pelo 3'. (`bin/fio_estado.py:85`, `bin/fio_estado.py:89`, `bin/fio_estado.py:172`, `bin/fio_estado.py:174`, `bin/fio_estado.py:176`) O recorte temporal de “hoje pra frente” já foi feito no serviço. (`app/chamados/services/vigia_fio.py:604`)
 
-## 31/10 04:46 · sessao 512dd43d114e · O261-E-F1-CLASSE-4 · verificador · origem=Code
-
-**Reprovaria o delta4 pelo rollback que apaga efeitos intencionais de `reabrir()`.** A projeção do julgamento também não garante que a lavra ocorrerá depois das escritas que ela autoriza. (`app/chamados/views_arquivar.py:81`; `app/chamados/models.py:1362`; `app/ponto/services/cartorio.py:1376`; `app/ponto/services/cartorio.py:1520`)
-
-Execução dos testes, RED contra a base e incidência em produção: **[nao verificado]**. [nao verificado]
-
-**1. Contraexemplos encontrados**
-
-- **PROCEDENTE — rollback apaga o redirecionamento da recusa.** Chamado encerrado pela tranca, premissa ainda viva, irmão vivo do mesmo turno: `reabrir()` migra resolvedoras para o irmão, escreve nota e trilha de redirecionamento, depois retorna `False`. O novo `set_rollback(True)` desfaz tudo isso junto com o levantamento do véu. Mesmo sem pergunta migrável, a nota de continuidade e a trilha são escritas incondicionalmente nesse ramo e agora desaparecem. Portanto, “recusou” não equivale a “não escreveu nada”. (`app/chamados/models.py:1359`; `app/chamados/models.py:1362`; `app/chamados/models.py:1365`; `app/chamados/models.py:1368`; `app/chamados/models.py:1374`; `app/chamados/views_arquivar.py:81`)
-
-- **PROCEDENTE — ressuscitação pode persistir sem a lavra prevista.** Contraexemplo: célula gravada `concorde`, julgamento atual acusador, pergunta carimbada sem resposta. A projeção permite ressuscitá-la; o `UPDATE` dos carimbos acontece antes da lavra. Depois disso, uma exceção no callback `write`, chamado em `[FIO-RESSUSCITA]`, impede chegar à lavra. `julgar_colab()` tem `finally`, mas não uma transação envolvendo essas duas escritas. O mapa é limpo; a pergunta pode ficar desmarcada sobre a célula antiga, que continua absolvendo. (`app/chamados/models.py:1434`; `app/chamados/models.py:1442`; `app/chamados/models.py:1485`; `app/ponto/services/cartorio.py:746`; `app/ponto/services/cartorio.py:1402`; `app/ponto/services/cartorio.py:1520`; `app/ponto/services/cartorio.py:854`)
-
-  Há também uma chamada de produção entre ressuscitar e lavrar: `_espelhar_marcos()` grava contexto e nota; falha propagada nesse caminho igualmente impede a lavra posterior. Ocorrência dessa falha em produção: **[nao verificado]**. (`app/ponto/services/cartorio.py:1516`; `app/ponto/management/commands/detectar_ausencias.py:558`; `app/ponto/management/commands/detectar_ausencias.py:563`; `app/chamados/services/nota.py:107`)
-
-- **PROCEDENTE — o toque de desarquivar continua invisível para chamado sem `celula_id`.** Contraexemplo: chamado cujo dia vem do contexto, pergunta em competência trancada, mas chamado sem célula ligada. A trilha de desarquivar é escrita, porém o leitor procura exclusivamente chamados ligados às células daquele dia; esse chamado não entra em `chs`. Antecipar a trilha não resolve esse caso. O teste novo liga explicitamente a célula ao chamado. (`app/chamados/juizes.py:102`; `app/chamados/juizes.py:967`; `app/chamados/juizes.py:968`; `app/chamados/juizes.py:972`; `app/chamados/services/arquivo.py:209`; `app/chamados/tests/test_competencia_trancada.py:188`)
-
-- **PROCEDENTE — segundo resgate após retranca pode não produzir novo toque.** Primeiro resgate: véu limpo e primeiro `resgatado_em` preservado. Retrancar avança `fechado_em`; o resgate antigo deixa de proteger o chamado, que pode ser encerrado novamente sem receber novo véu. No segundo clique, `levantar()` retorna sem escrita nem trilha porque o véu está limpo e já existe `resgatado_em`. Na ausência de outro toque posterior à nova tranca, C6 continua calando a pergunta. É lacuna residual do desenho B. (`app/chamados/services/arquivo.py:193`; `app/chamados/services/arquivo.py:196`; `app/chamados/services/arquivo.py:204`; `app/ponto/services/fechamento.py:1383`; `app/chamados/services/competencia_trancada.py:104`; `app/chamados/models.py:1551`; `app/chamados/juizes.py:965`; `app/chamados/juizes.py:1030`)
-
-**2. Quem escreve e quem lê**
-
-| Campo/valor | Quem escreve | Quem lê |
-|---|---|---|
-| `_tl.vereditos[(colab, dia)]` | Cartório calcula pela função da porta e publica a dupla; limpa no `finally`. (`app/ponto/services/cartorio.py:1214`; `app/ponto/services/cartorio.py:857`) | `veredito_deste_julgamento()` → `celula_deste_julgamento()`. (`app/ponto/services/cartorio.py:64`; `app/chamados/juizes.py:394`) |
-| `_tl.atas[(colab, dia)]` | Cartório publica `_ata_agora.ata`; limpa no `finally`. (`app/ponto/services/cartorio.py:1148`; `app/ponto/services/cartorio.py:856`) | `ata_deste_julgamento()` → `celula_deste_julgamento()`. (`app/ponto/services/cartorio.py:55`; `app/chamados/juizes.py:393`) |
-| `veredito/veredito_via` da cópia | `celula_deste_julgamento()` atribui a dupla projetada. No registro persistido, a lavra atribui esses campos. (`app/chamados/juizes.py:402`; `app/ponto/portas/celula.py:710`) | C6 lê veredito e via; o coletor da premissa também recebe a cópia, mas sua leitura de veredito limita-se à via `admin`. (`app/chamados/juizes.py:1038`; `app/chamados/juizes.py:1074`; `app/chamados/models.py:1230`) |
-| `ata` da cópia | Recebe diretamente o dicionário publicado em `_tl.atas`. Na persistência, a lavra escreve ata e `carimbar_precedencia()` acrescenta precedência pela mesma porta. (`app/chamados/juizes.py:400`; `app/ponto/portas/celula.py:708`; `app/ponto/portas/celula.py:759`) | Guarda do marco, C6 via marcos pendentes, coletor da premissa e `_celula_furada()`. (`app/chamados/juizes.py:886`; `app/chamados/juizes.py:1088`; `app/chamados/models.py:1236`; `app/chamados/juizes.py:443`) |
-| `Pergunta._state.fields_cache` | O queryset usa `select_related`; a cópia recebe `_state` e dicionário próprios antes de atribuir `_q.celula`. (`app/chamados/models.py:1424`; `app/chamados/models.py:1430`; `app/chamados/models.py:1431`; `app/chamados/models.py:1434`) | Acesso às relações na avaliação; `_chave_memo_pv()` também consulta explicitamente o cache de `chamado_destino`. (`app/chamados/juizes.py:777`; `app/chamados/juizes.py:778`; `app/chamados/juizes.py:779`) |
-| Log `cobrar_dia_manual` | `cobrar_dia()` → `registrar_log()` → `evento()` → `LogAuditoria.objects.create()`. (`app/chamados/services/cobrar_dia.py:37`; `app/core/auditoria.py:22`; `app/core/observ.py:134`) | `_admin_tocou_o_dia_depois()`: usuário humano, posterior à tranca, colaborador e substring `dia=ISO`. (`app/chamados/juizes.py:965`; `app/chamados/juizes.py:969`) |
-| Log `desarquivar_chamado` | View → `arquivo.levantar()` → `_trilha()` → o mesmo escritor `evento()`. (`app/chamados/views_arquivar.py:73`; `app/chamados/services/arquivo.py:209`; `app/chamados/services/arquivo.py:137`) | O mesmo leitor de toque, restringindo os objetos aos chamados ligados às células do dia. (`app/chamados/juizes.py:968`; `app/chamados/juizes.py:972`) |
-
-`celula_do_dia_agora()` passa efetivamente a devolver também o veredito projetado. Nos dois leitores anteriores encontrados, isso não muda a decisão normal: `_celula_furada()` usa ata/trabalho; `premissa_regularizada()` só distingue a via `admin`, preservada pela projeção. (`app/chamados/juizes.py:378`; `app/chamados/juizes.py:443`; `app/chamados/models.py:1230`; `app/ponto/portas/celula.py:656`)
-
-Na ressuscitação, a mudança funcional é real e coerente com o objetivo A: tanto o guarda do marco quanto C6 recebem a célula da pergunta com ata/veredito em curso. A ressalva é a falta de garantia de lavra posterior demonstrada acima. (`app/chamados/models.py:1434`; `app/chamados/models.py:1436`; `app/chamados/models.py:1442`; `app/ponto/services/cartorio.py:1520`)
-
-**3. Igualdade entre previsão e lavra**
-
-No caminho que chega normalmente à lavra, com os mesmos insumos, **a dupla final coincide**: publicação e lavra recebem `cel`, `via='cartorio'`, `_vd` e `cods`; a lavra chama a mesma função de derivação. Admin é preservado nos dois caminhos. (`app/ponto/services/cartorio.py:1214`; `app/ponto/services/cartorio.py:1520`; `app/ponto/portas/celula.py:698`; `app/ponto/portas/celula.py:656`; `app/ponto/portas/celula.py:692`)
-
-Isso não significa que sempre haja gravação:
-
-- **`apply_=False`:** publica os mapas, mas não entra na lavra. Um callback `write` pode consultá-los durante os relatórios; consumidor de produção que faça essa consulta: **[nao verificado]**. (`app/ponto/services/cartorio.py:1214`; `app/ponto/services/cartorio.py:1463`; `app/ponto/services/cartorio.py:1501`; `app/ponto/services/cartorio.py:1517`)
-- **Sem vivos:** não impede lavrar; a condição final exige apenas `apply_`. (`app/ponto/services/cartorio.py:1517`)
-- **Exceção:** pode ocorrer depois da leitura da previsão e do `UPDATE` da pergunta, antes da lavra, conforme o contraexemplo acima. (`app/ponto/services/cartorio.py:1376`; `app/ponto/services/cartorio.py:1402`; `app/ponto/services/cartorio.py:1520`)
-- **Admin ou repetição idempotente:** a lavra pode preservar a dupla e escrever apenas ata, ou retornar sem escrever. (`app/ponto/portas/celula.py:692`; `app/ponto/portas/celula.py:697`; `app/ponto/portas/celula.py:705`)
-- **`calado`:** somente altera/restaura `_tl.ativo`; não limpa os mapas nem impede diretamente uma chamada explícita ao julgamento. Os signals consultam esse estado para evitar reentrada. (`app/ponto/services/cartorio.py:72`; `app/ponto/services/cartorio.py:77`; `app/chamados/signals.py:174`)
-
-A ata projetada também não é literalmente toda a ata final: a lavra preserva chaves de outra operação, como `precedencia`, enquanto o mapa recebe a ata calculada antes desse merge. Efeito adverso dessa diferença nos leitores desta obra: **[nao verificado]**. (`app/ponto/services/cartorio.py:1148`; `app/ponto/portas/celula.py:94`; `app/ponto/portas/celula.py:684`; `app/ponto/portas/celula.py:686`)
-
-**4. Cópia rasa, vazamento e `save()`**
-
-A troca de FK na pergunta está protegida pela separação explícita de `_state` e `fields_cache`. A simulação retorna IDs; a escrita real acontece por outro queryset, sem salvar `_q` ou sua célula projetada nesses caminhos. (`app/chamados/models.py:1430`; `app/chamados/models.py:1431`; `app/chamados/models.py:1434`; `app/chamados/models.py:1443`; `app/chamados/models.py:1483`; `app/chamados/models.py:1485`)
-
-**DUVIDA — isolamento de objetos mutáveis não é garantido.** A cópia é rasa e a ata projetada é o próprio dicionário do mapa: uma operação como `out.ata['lampadas'].append(...)` alteraria a ata compartilhada; mutação aninhada no DNA compartilhado poderia atingir o original. Não encontrei essas escritas nos consumidores atuais, que percorrem os valores para leitura. (`app/chamados/juizes.py:398`; `app/chamados/juizes.py:400`; `app/chamados/juizes.py:869`; `app/chamados/juizes.py:886`; `app/ponto/services/lastro.py:148`)
-
-A cópia não recebe uma proteção contra persistência: continua sendo uma cópia do model. Um caminho atual que execute `save()` nela: **[nao verificado]**; os consumidores encontrados são o carregador da premissa e a simulação da ressuscitação. (`app/chamados/juizes.py:378`; `app/chamados/models.py:1434`)
-
-**5. Ordem do admin, rollback e cobrança sem escala**
-
-Levantar antes não altera diretamente as guardas de reabertura por `arquivado/resgatado/silenciado`: as guardas consultam veto, decisão administrativa, premissa, agrupamento, irmão e transição, sem ler esses campos do véu. A alteração pretendida atua depois, na ressuscitação que consulta a trilha. (`app/chamados/models.py:1285`; `app/chamados/models.py:1290`; `app/chamados/models.py:1296`; `app/chamados/models.py:1299`; `app/chamados/models.py:1302`; `app/chamados/models.py:1306`; `app/chamados/models.py:1389`)
-
-O rollback abrange as escritas de banco feitas dentro daquele bloco, inclusive levantamento, logs e os efeitos do ramo de redirecionamento. Por isso resolve a compensação do véu, mas introduz a regressão do item 1. Não se deve confundir isso com desfazer atributos Python ou efeitos externos; garantia desses últimos: **[nao verificado]**. (`app/chamados/views_arquivar.py:65`; `app/chamados/views_arquivar.py:81`; `app/chamados/services/arquivo.py:201`; `app/chamados/models.py:1362`)
-
-Em `cobrar_dia`, **sim, fica uma trilha mesmo quando não existe célula**: o log antecede o julgamento, que retorna `None` nesse caso. Não demonstrei violação de contador/selo: o teste existente exige uma linha por toque, explicitamente “não por efeito”. Esse toque poderá ser reconhecido depois se a célula passar a existir, pois o leitor não exige sucesso da cobrança original. (`app/chamados/services/cobrar_dia.py:37`; `app/chamados/services/cobrar_dia.py:40`; `app/ponto/services/cartorio.py:1658`; `app/chamados/tests/test_o44_tranca_nao_barra_o_toque.py:275`; `app/chamados/juizes.py:967`; `app/chamados/juizes.py:969`)
-
-**DUVIDA — trilha obrigatória sobre escritor best-effort.** Ambos os fluxos prosseguem sem confirmar a criação do log; `evento()` pode falhar isoladamente e retornar `None`. Contraexemplo condicional: falha ao inserir a trilha, negócio prossegue, C6 continua enxergando “sem toque”. Ocorrência em produção: **[nao verificado]**. (`app/core/observ.py:105`; `app/core/observ.py:133`; `app/core/observ.py:139`; `app/chamados/services/cobrar_dia.py:39`; `app/chamados/services/arquivo.py:209`; `app/chamados/services/arquivo.py:210`; `app/chamados/juizes.py:1030`)
-
-**DUVIDA — memo anterior ao toque.** Consultar o toque, gravar nova trilha e consultar novamente no mesmo dono de `_tranca_memo` conserva o resultado anterior. A nova ordem não invalida esse cache. Rota HTTP atual que necessariamente execute essa sequência: **[nao verificado]**. (`app/chamados/juizes.py:943`; `app/chamados/juizes.py:947`; `app/chamados/juizes.py:959`; `app/chamados/juizes.py:973`; `app/chamados/services/cobrar_dia.py:37`)
-
-**6. Checklist das classes anteriores**
-
-| Classe | Resultado desta leitura |
-|---|---|
-| Segundo juiz registrado | Não demonstrado: a ressuscitação consulta o C6 registrado; a previsão reutiliza a derivação chamada pela lavra. (`app/core/juizes.py:238`; `app/chamados/models.py:1442`; `app/ponto/portas/celula.py:698`) |
-| Segundo escritor fora da porta | Não demonstrado na persistência nova: a projeção escreve memória; pergunta é atualizada pela porta existente; logs convergem para `evento()`. (`app/chamados/juizes.py:400`; `app/chamados/models.py:1485`; `app/core/observ.py:134`) |
-| Relógio fora da borda | Nova leitura de relógio nos trechos acrescentados: **[nao verificado]**. O helper recebe insumos e deriva a dupla sem relógio; o julgamento já recebe `hoje/agora`. (`app/ponto/portas/celula.py:647`; `app/ponto/services/cartorio.py:749`) |
-| Derivação paralela | Não demonstrada para o veredito de cartório: previsão e lavra chamam a mesma função. (`app/ponto/services/cartorio.py:1214`; `app/ponto/portas/celula.py:698`) |
-| Selo/RED sem mordida | **DUVIDA:** o teste de isolamento não cria pergunta nem exercita a troca de FK/`fields_cache`; verifica atributos da célula. Os testes novos também não cobrem retranca, rollback de redirecionamento ou exceção após ressuscitar. RED executado: **[nao verificado]**. (`app/ponto/tests/test_o261e_f1c4_ressuscita_pergunta_ao_c6.py:185`; `app/ponto/tests/test_o261e_f1c4_ressuscita_pergunta_ao_c6.py:197`; `app/chamados/tests/test_competencia_trancada.py:177`) |
-| Ordem de trava | **DUVIDA:** a nova transação mantém a escrita do chamado desde `levantar`; `abrir()` possui trava da pessoa. Um novo ciclo concreto de deadlock causado por este delta: **[nao verificado]**. (`app/chamados/views_arquivar.py:65`; `app/chamados/services/arquivo.py:208`; `app/chamados/models.py:864`) |
-| Pouso antes do pré-requisito | **PROCEDENTE:** a pergunta pode ser ressuscitada pela previsão antes de a lavra estar garantida; exceção posterior deixa a escrita sem seu fundamento persistido. (`app/ponto/services/cartorio.py:1376`; `app/ponto/services/cartorio.py:1402`; `app/ponto/services/cartorio.py:1520`) |
-
-_901 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_902 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
