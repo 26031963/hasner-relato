@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 31/10/2026 04:51:00.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (25.6 MB). Acoes na janela: **792**.
+**Medido em 31/10/2026 04:56:24.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (25.6 MB). Acoes na janela: **788**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -798,7 +798,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:58:57 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/PROMPTS.md' s=open(p).read().rstrip('\n')+'\n' s+="\| 30/10 16:5x \| **aval: SUITE-POR-IMPACTO (regra de pista, nenhuma lei de negocio; ALTERA a ordem da SUITE-ANTES-DO-OPUS; nao reordena a fila: constroi em agente ao lado, sem cruzar arquivo com o CALENDARIO, pousa em pouso proprio L-105 depois dele): (1) instrumento com CONTRATO-DE-INS ...` |
 | 16:58:42 | Bash |  | `cd /home/ronald/saas-hasner && docker stop competent_almeida >/dev/null && echo parado; python3 - <<'EOF' import re p='app/docs/PROMPTS.md' s=open(p).read().rstrip('\n')+'\n' s+="\| 30/10 16:5x \| **aval: SUITE-POR-IMPACTO (regra de pista, nenhuma lei de negocio; ALTERA a ordem da SUITE-ANTES-DO-OPUS; nao reordena a fila: constroi em agente ao lado, sem cruzar arquivo com o CALENDARIO, pousa em po ...` |
 | 16:58:35 | Bash |  | `cd /home/ronald/saas-hasner && docker ps --format '{{.Names}} {{.Image}} {{.Status}}' \| grep -v -E "saas_\|sombra_db\|mensageria\|juliani_db_test"; tail -3 app/docs/PROMPTS.md \| cut -c1-400; grep -n "CALENDARIO-HOJE-NAO-E-FALTA" app/docs/BACKLOG.md \| head -3 \| cut -c1-400` |
-| 16:55:00 | Bash |  | `cd /home/ronald/saas-hasner/logs/calendario_hoje && until grep -q '^rc=' verif6.run 2>/dev/null; do /usr/bin/sleep 20; done; tail -1 verif6.run; cat verif6.txt` |
-| 16:54:55 | Bash |  | `cd /home/ronald/saas-hasner && L=logs/calendario_hoje W=/home/ronald/wt-cal-pouso-3010-1638; git -C $W show HEAD > $L/diff6_delta.txt; git -C $W diff 6c37ad84 HEAD > $L/diff6.txt; cat > $L/verif6.q <<'EOF' Obra CALENDARIO-HOJE-NAO-E-FALTA, volta delta. Anexos: diff6_delta.txt (so o ultimo commit, sobre o template da grade), diff6.txt (a obra inteira), triagem5.txt (como o construtor triou a volta  ...` |
-| 16:54:46 | Bash |  | `cd /home/ronald/wt-cal-hoje-3010-1353 && git add app/templates/colaboradores/partials/_calendario_grade.html app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py && git commit -q -F - <<'EOF' CALENDARIO-HOJE Codex volta 5: o rotulo do dia cego chega a GRADE (fallback le status_rotulo) Codex verificador volta 5 (logs/calendario_hoje/verif5.txt), achado bloqueante PROCEDENTE: o produtor escre ...` |
-| 16:53:49 | Bash |  | `cd /home/ronald/wt-cal-hoje-3010-1353 && cp app/templates/colaboradores/partials/_calendario_grade.html /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/grade_curada.html && git show HEAD:app/templates/colaboradores/partials/_calendario_grade.html > app/templates/colaboradores/partials/_calendario_grade.html && cd /home/ronald/saas-hasner && L=logs/cale ...` |
