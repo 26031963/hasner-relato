@@ -1,7 +1,63 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 14:29** · publicado em **31/10/2026 14:31** (UTC-3)
+> Ultima resposta processada: **31/10/2026 14:31** · publicado em **31/10/2026 14:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 14:31 · sessao c7f1ca21315f · REPROVA-E-DESENHO-CODEX · verificador · origem=Code
+
+**REPROVADO: o contrato não está fechado.** Há disparo com volta já DESCARTADA, chamadas que escapam do bloqueio e rearme que pode ressuscitar contagem anterior. (`bin/disjuntor.py:839`, `bin/disjuntor.py:1280`, `bin/disjuntor.py:912`)
+
+A análise abaixo usa o diff fornecido e a cópia dos arquivos. Correspondência da cópia com o commit, ocorrência em produção e resultado da execução do selo/mutantes: **[nao verificado]**. A suíte escreve e apaga arquivos, portanto sua execução contrariaria a restrição de somente leitura. (`bin/tests/test_disjuntor.sh:39`, `bin/tests/test_disjuntor.sh:41`, `bin/tests/test_disjuntor.sh:51`)
+
+| Item | Cumpre? | Evidência |
+|---|---|---|
+| **1. Três chamadas distintas, da mesma obra, PROCEDENTES; N achados = uma volta** | **Parcialmente.** O percurso nominal separa por obra, deduplica identidades e dispara em três. A identidade e sua conservação têm falhas descritas abaixo. | `bin/disjuntor.py:773`, `bin/disjuntor.py:795`, `bin/disjuntor.py:839`, `bin/disjuntor.py:850` |
+| **2. Não triada ou DESCARTADA não conta** | **Não.** O filtro da fonte considera o último veredito, mas a contagem persistida nunca retira uma volta reclassificada como DESCARTADO. | `bin/disjuntor.py:801`, `bin/disjuntor.py:844`, `bin/disjuntor.py:849` |
+| **3. Negar próximo opus final e Codex verificador; liberar pelo mesmo topo; outros papéis passam** | **Parcialmente.** As duas negativas e a liberação compartilhada existem, mas dependem de reconhecimento textual incompleto e falham abertas em exceções. Há também negativa indevida de outro papel. | `bin/disjuntor.py:868`, `bin/disjuntor.py:1280`, `bin/disjuntor.py:1290`, `bin/disjuntor.py:1329` |
+| **4. Escritor único e identidade do wrapper, somente verificador** | **Parcialmente.** A porta `--triagem` recusa ausência de sidecar e papel diferente, mas só confere campos preenchidos; não comprova que a resposta existe nem que aquele sidecar pertence à chamada atual. O append não tem trava. | `bin/disjuntor.py:752`, `bin/disjuntor.py:759`, `bin/disjuntor.py:771`, `bin/disjuntor.py:778`, `bin/disjuntor.py:1515` |
+| **5. Liberação/rearme zeram; voltas liberadas não retornam** | **Parcialmente.** Funciona para identidades já incorporadas ao JSON. O rearme não incorpora triagens pendentes antes de zerar, e a liberação pode usar uma fotografia obsoleta da triagem. | `bin/disjuntor.py:821`, `bin/disjuntor.py:842`, `bin/disjuntor.py:874`, `bin/disjuntor.py:912` |
+
+Os caminhos de falha identificados são estes; os cenários descrevem consequências do código, não ocorrências comprovadas em produção. (`bin/disjuntor.py:762`, `bin/disjuntor.py:804`, `bin/disjuntor.py:1263`)
+
+1. **DESCARTADO continua na contagem: disparo e negação indevidos.** A é PROCEDENTE; uma decisão guarda A. Depois A vira DESCARTADO, e B/C são triadas PROCEDENTES. A decisão seguinte conserva A e acrescenta B/C: dispara com três, embora somente duas continuem PROCEDENTES. `_codex_procedentes` recalcula a fonte corretamente; a falha está na união cumulativa de `r['codex']`. (`bin/disjuntor.py:801`, `bin/disjuntor.py:839`, `bin/disjuntor.py:845`, `bin/disjuntor.py:849`)
+
+2. **Codex verificador passa com a obra parada por diferença entre shell real e parser.** Com B3 de OBRA-C disparado, `env CODEX_OBRA=OBRA-C CODEX_PAPEL=verificador bin/codex_pergunta.sh h q r` não produz chamada reconhecida pelo parser. Também escapam ambiente previamente exportado, valores obtidos por expansão de variáveis e execução dentro de `bash -c` ou outro script. O wrapper lê o ambiente efetivo e executa o Codex sem consultar B3. Parte desses limites já está declarada no código, mas continua incompatível com a garantia absoluta do contrato. (`bin/disjuntor.py:1117`, `bin/disjuntor.py:1120`, `bin/disjuntor.py:1196`, `bin/disjuntor.py:1280`, `bin/codex_pergunta.sh:44`, `bin/codex_pergunta.sh:157`)
+
+3. **O parser pode negar outro papel ou consultar a obra errada.** `CODEX_PAPEL=verificador CODEX_PAPEL=leitura ...` é reconhecido como verificador, embora o wrapper receba leitura; a ordem inversa libera o verificador. O mesmo problema afeta atribuições repetidas de obra. O regex também encontra `CODEX_PAPEL=verificador` dentro do valor de outra variável. Além disso, `CODEX_OBRA="O9 (C)"` vira `O9`: pode liberar a obra parada `O9 (C)` ou negar essa chamada por um B3 de `O9`. A identidade com cauda é suportada pelo reconhecedor do opus. (`bin/disjuntor.py:525`, `bin/disjuntor.py:1196`, `bin/disjuntor.py:1198`, `bin/disjuntor.py:1280`, `bin/codex_pergunta.sh:44`)
+
+4. **Um sidecar basta, mesmo sem resposta; a origem não é comprovada.** Se existir apenas `R.id` com os cinco campos preenchidos e papel verificador, `--triagem R procedente` aceita: não abre R. Um sidecar fabricado ou alterado também passa. Alterar a identidade entre duas triagens permite representar uma única chamada como duas voltas. O leitor do log, por sua vez, aceita qualquer linha com quatro campos e veredito permitido, sem conferir seu lastro. Portanto existe a porta escritora pretendida, mas a exclusividade e a procedência não são garantidas por essas validações. (`bin/disjuntor.py:755`, `bin/disjuntor.py:759`, `bin/disjuntor.py:768`, `bin/disjuntor.py:773`, `bin/disjuntor.py:794`)
+
+5. **Reutilizar o arquivo de resposta perde ou troca o lastro da chamada.** Duas chamadas bem-sucedidas para R deixam somente o último `R.id`; uma triagem atrasada da primeira passa a usar a identidade da segunda. Outro cenário: R tinha sidecar de verificador; uma chamada de papel leitura sobrescreve R e termina com erro; o sidecar anterior permanece, permitindo triar a resposta nova como verificador. Se RC=0 ocorrer sem resposta nova, mas R antigo existir, o wrapper grava identidade nova para o arquivo antigo. Falhar a escrita do sidecar também não invalida previamente a identidade velha. (`bin/codex_pergunta.sh:40`, `bin/codex_pergunta.sh:158`, `bin/codex_pergunta.sh:178`, `bin/codex_pergunta.sh:180`, `bin/disjuntor.py:768`, `bin/disjuntor.py:771`)
+
+6. **A identidade pode fundir chamadas distintas.** Ela usa hash truncado em 12 caracteres, PID e término com precisão de segundos. Se duas chamadas coincidirem nesses campos — por exemplo, PID reciclado com relógio recuado — serão uma única volta; se a chave coincidir com uma liberada/rearmada, a chamada nova será ignorada. Ocorrência dessa colisão em produção: **[nao verificado]**. (`bin/codex_pergunta.sh:179`, `bin/disjuntor.py:773`, `bin/disjuntor.py:795`, `bin/disjuntor.py:842`)
+
+7. **Triagem gravada fora da trava e decisão com fonte obsoleta.** O teste de idempotência e o append não compartilham trava: dois processos podem verificar ausência e anexar duas linhas iguais. **Isso, isoladamente, não conta duas voltas**, pois o leitor reduz por chave e o acumulador verifica pertença. Contudo, `decide_b3` lê as triagens antes de adquirir a trava do JSON: uma reclassificação ou terceira triagem concluída nesse intervalo fica fora da decisão; uma liberação também pode deixar de consumir voltas já PROCEDENTES quando efetivamente grava. (`bin/disjuntor.py:774`, `bin/disjuntor.py:778`, `bin/disjuntor.py:795`, `bin/disjuntor.py:821`, `bin/disjuntor.py:844`, `bin/disjuntor.py:897`)
+
+8. **Rearme bem-sucedido pode redisparar imediatamente com triagens anteriores.** A já está no JSON; B/C/D já estão PROCEDENTES no log, mas ainda não foram varridas. O rearme arquiva somente A e retorna sucesso. Na decisão seguinte B/C/D entram e disparam, sem nenhuma volta nova após o rearme. A função não lê a triagem antes de zerar. (`bin/disjuntor.py:908`, `bin/disjuntor.py:912`, `bin/disjuntor.py:913`, `bin/disjuntor.py:925`, `bin/disjuntor.py:839`)
+
+9. **Erro de leitura pode abrir ambas as portas, inclusive com disparo persistido.** `triagem.log` ilegível ou transformado em diretório levanta antes de consultar o estado; somente `FileNotFoundError` é tratado pelo leitor. JSON inválido, falha ao abrir a trava ou trava ocupada também levantam. O PreToolUse captura a exceção e libera a ferramenta; o Stop captura e omite o recado. Já log ausente retorna vazio, e linhas malformadas são ignoradas: se o JSON ainda não acumulou as voltas, a falta de fonte vira ausência de contagem. (`bin/disjuntor.py:788`, `bin/disjuntor.py:790`, `bin/disjuntor.py:794`, `bin/disjuntor.py:821`, `bin/disjuntor.py:248`, `bin/disjuntor.py:257`, `bin/disjuntor.py:263`, `bin/disjuntor.py:1329`, `bin/hook_stop_fila1.py:1056`)
+
+10. **A leitura final do opus também pode escapar pelo texto do prompt.** `LEITURA FINAL REPROVA-E-DESENHO-CODEX` reconhece “final”, mas não a obra, pois falta uma das âncoras esperadas. `Parecer final da obra REPROVA-E-DESENHO-CODEX` não reconhece “final” pelo vocabulário fechado. Incluir no histórico do prompt a frase `nao e a leitura final` desativa o reconhecimento de todo o prompt. Nessas formas a chamada não consulta B3. São limites preexistentes, mas afetam o item 3 pedido. (`bin/disjuntor.py:103`, `bin/disjuntor.py:111`, `bin/disjuntor.py:113`, `bin/disjuntor.py:500`, `bin/disjuntor.py:511`, `bin/disjuntor.py:1290`)
+
+11. **O ESTADO pode mostrar zeros/“nenhuma” sem ter conseguido ler.** `ler` começa com contadores vazios e ignora `OSError` das trilhas; `linha` imprime B3=0, negativas=0 e liberações=0. Assim, trilha ausente/ilegível pode produzir aparência de normalidade mesmo com obra disparada no JSON; esse painel não lista os B3 ativos. Falha de leitura das chamadas Codex vira `None`, depois `{}`, depois “nenhuma”. O campo `b3_sem_obra`, especificamente, preserva “nao sei” quando o estado é ilegível. (`bin/disjuntor.py:1373`, `bin/disjuntor.py:1405`, `bin/disjuntor.py:1425`, `bin/disjuntor.py:1435`, `bin/disjuntor.py:1439`, `bin/disjuntor.py:1476`, `bin/disjuntor.py:1479`, `bin/disjuntor.py:1493`)
+
+Há ainda uma diferença temporal relevante: a terceira triagem apenas anexa ao log; o disparo acontece na próxima decisão. Um DESENHO escrito entre esses dois momentos entra na fotografia do disparo e não libera. Isso não atende à leitura literal de “dispara quando houver três”; segue, porém, o protocolo existente de exigir linha posterior ao disparo observado. O contrato precisa escolher esse instante para eliminar a ambiguidade. (`bin/disjuntor.py:778`, `bin/disjuntor.py:825`, `bin/disjuntor.py:850`, `bin/disjuntor.py:859`, `bin/disjuntor.py:870`, `bin/disjuntor.py:883`)
+
+**Não há fundamento para acusar escrita do JSON B3 fora da trava:** a gravação e os anúncios acontecem dentro de `_com_estado`, após `flock`. O estado da triagem e sua leitura antecipada são os pontos fora dessa proteção. A liberação/rearme das identidades já observadas também limpa as listas e impede sua reincorporação. (`bin/disjuntor.py:252`, `bin/disjuntor.py:273`, `bin/disjuntor.py:284`, `bin/disjuntor.py:287`, `bin/disjuntor.py:778`, `bin/disjuntor.py:821`, `bin/disjuntor.py:842`, `bin/disjuntor.py:876`, `bin/disjuntor.py:912`)
+
+O selo e seus mutantes têm esta cobertura:
+
+| Item | O que exercitam | O que fica sem caso que morde |
+|---|---|---|
+| **1** | Obras separadas; duas passam/três param; repetir a mesma triagem grava uma linha. Mutantes `sem-codex`, `limiar-2`, `por-achado`. (`bin/tests/test_disjuntor.sh:1147`, `bin/tests/test_disjuntor.sh:1150`, `bin/tests/test_disjuntor.sh:1153`, `bin/tests/test_disjuntor.sh:1156`, `bin/tests/test_disjuntor.sh:1249`, `bin/tests/test_disjuntor.sh:1251`, `bin/tests/test_disjuntor.sh:1259`) | Wrapper real, conservação/colisão da identidade e reutilização da resposta. A fixture escreve somente `achado`; `por-achado` muda a identidade a cada **triagem**, não testa resposta com vários achados. (`bin/tests/test_disjuntor.sh:1129`, `bin/tests/test_disjuntor.sh:1130`, `bin/tests/test_disjuntor.sh:1259`) |
+| **2** | Descartadas desde o início e não triadas; mutante que inclui descartadas. (`bin/tests/test_disjuntor.sh:1140`, `bin/tests/test_disjuntor.sh:1144`, `bin/tests/test_disjuntor.sh:1250`) | **PROCEDENTE → decisão → DESCARTADO antes do disparo.** A reclassificação testada ocorre somente depois da liberação. (`bin/tests/test_disjuntor.sh:1169`) |
+| **3** | Negativa de opus final e Codex, permissão de leitura, recado Stop e liberação DESENHO; mutante remove a negativa Codex. (`bin/tests/test_disjuntor.sh:1156`, `bin/tests/test_disjuntor.sh:1157`, `bin/tests/test_disjuntor.sh:1158`, `bin/tests/test_disjuntor.sh:1160`, `bin/tests/test_disjuntor.sh:1163`, `bin/tests/test_disjuntor.sh:1252`) | Ambiente real, sintaxes alternativas, falsas negativas/positivas do parser e falhas de leitura. Codex tampouco é a primeira borda após a terceira triagem: `_parada` já dispara antes. (`bin/tests/test_disjuntor.sh:1133`, `bin/tests/test_disjuntor.sh:1156`, `bin/tests/test_disjuntor.sh:1157`) |
+| **4** | Recusa sidecar ausente, papel leitura e veredito inválido; mutante `sem-sidecar`. (`bin/tests/test_disjuntor.sh:1136`, `bin/tests/test_disjuntor.sh:1137`, `bin/tests/test_disjuntor.sh:1138`, `bin/tests/test_disjuntor.sh:1253`) | Existência/vínculo da resposta, procedência do sidecar, escritor exclusivo e concorrência. O próprio teste fabrica `.id`; a cópia dos mutantes inclui apenas `bin/*.py`. (`bin/tests/test_disjuntor.sh:1130`, `bin/tests/test_disjuntor.sh:1184`) |
+| **5** | Liberação DESENHO, quarta volta isolada e reclassificação de volta já liberada; mutante deixa `codex` sem limpar na liberação. (`bin/tests/test_disjuntor.sh:1163`, `bin/tests/test_disjuntor.sh:1166`, `bin/tests/test_disjuntor.sh:1169`, `bin/tests/test_disjuntor.sh:1258`) | **Rearme Codex.** Os casos antigos rearmam reprovações opus. Retirar Codex da união de `rearmado`, mantendo a limpeza imediata, não é exercitado pelo caso novo. Também falta rearme com triagens anteriores ainda não varridas. (`bin/tests/test_disjuntor.sh:398`, `bin/tests/test_disjuntor.sh:1081`, `bin/tests/test_disjuntor.sh:1124`, `bin/tests/test_disjuntor.sh:1172`, `bin/disjuntor.py:912`) |
+
+Os testes antigos acrescentam cobertura compartilhada de ERRO-BOBO e de anúncio sob a trava; não substituem os casos ausentes de triagem e rearme Codex. (`bin/tests/test_disjuntor.sh:386`, `bin/tests/test_disjuntor.sh:1063`, `bin/tests/test_disjuntor.sh:1081`)
+
+O próprio selo ainda aceita ausência de sinal como sucesso em vários negativos: `_parada` procura apenas texto B3, sem verificar nova FALHA. Uma exceção que silencie a decisão pode passar nesses pontos, embora `_passa` tenha uma checagem mais forte. Portanto, **o item 5, no ramo de rearme Codex, é o que fica inteiramente sem caso específico que morde; os demais têm cobertura parcial e as lacunas acima.** (`bin/tests/test_disjuntor.sh:98`, `bin/tests/test_disjuntor.sh:1134`, `bin/tests/test_disjuntor.sh:1145`, `bin/tests/test_disjuntor.sh:1148`, `bin/tests/test_disjuntor.sh:1167`, `bin/tests/test_disjuntor.sh:1170`)
 
 ## 31/10 14:29 · sessao b13e3e31e25d · - · - · origem=Ronald (tmux)
 
@@ -675,27 +731,4 @@ Questão 4: a frase isolada não contém toda a AVAL-DE-CRITERIO; é a cláusula
 
 O conjunto atual mantém essa estrutura para competência exportada (`CLAUDE.md:582`; `CLAUDE.md:586`), com exceção de competência não exportada no item 1 (`CLAUDE.md:577`) e referência explícita aos casos em que o `!` segue (`CLAUDE.md:575`). Comparação literal e de escopo com `41b4d89d:CLAUDE.md`: [nao verificado], pois esse conteúdo histórico não foi fornecido nem encontrado como arquivo nesta cópia.
 
-## 31/10 13:42 · sessao d727f053cc5f · - · - · origem=Ronald (tmux)
-
-As 10 linhas removidas têm correspondentes no 7b novo; não identifiquei regra, cláusula, nome, script ou condição desse delta sem lugar. (CLAUDE.md:481; CLAUDE.md:483; CLAUDE.md:518; CLAUDE.md:519; CLAUDE.md:567; CLAUDE.md:568; CLAUDE.md:570; CLAUDE.md:575; CLAUDE.md:576)
-
-| Linha removida, pelo conteúdo | Correspondente atual |
-|---|---|
-| Cinco âncoras RAIAS/POUSO | As cinco permanecem, apenas sem espaços entre parênteses. CLAUDE.md:481 | [nao verificado]
-| Contador de raias, selo no pre-push, fila 2 depois da CELULA-TURNO-FECHA **e** O145, conduta provisória, começo do HANDOFF | Todos permanecem; “DEPOIS” virou “apos”, “e selo” virou “+ selo”. CLAUDE.md:483 | [nao verificado]
-| Quatro primeiras âncoras CODEX | Permanecem concatenadas. CLAUDE.md:518 |
-| Seis demais âncoras CODEX | Permanecem concatenadas. CLAUDE.md:519 |
-| S3 exercício, não caminho; zero com os dois verdes | Preservado; “dois” virou “2”. CLAUDE.md:567 |
-| Corte 23/09 19:2x: sem fechamento mostrar número do motor rotulado; morre “quem CHAMA o motor” | Preservado como “sem fechamento, MOSTRAR rotulado”, com referente “numero de motor” na condição (a). CLAUDE.md:568; CLAUDE.md:570 |
-| L-095 não cede; histórico lap-18 | Ambos preservados na linha consolidada. CLAUDE.md:570 |
-| L-009/L-082: exceção do item 1 apenas para competência corrente; demais situações conservam `!` | A redação inversa “fora do item 1 (competencia CORRENTE) o `!` segue” conserva a delimitação. CLAUDE.md:575 |
-| Paga, vínculo/escala retroativo, atalho; sem critério escrito vale L-009; introdução do DIFF | Situações em CLAUDE.md:575; regra subsidiária e DIFF em CLAUDE.md:576 |
-| DIFF antecipado; backup/renome do TXT por admin | Ambos preservados. CLAUDE.md:576 |
-
-O corte do PLACAR conserva o efeito **na leitura do bloco completo**: “MOSTRAR rotulado” recupera “numero de motor” da condição (a), cujo rótulo continua literalmente `'sem apuracao ainda'`; mantém a condição “sem fechamento”, a morte da pergunta “quem CHAMA o motor” e a ressalva da L-095. (CLAUDE.md:568; CLAUDE.md:570)
-
-A frase isolada ficou menos explícita quanto ao objeto mostrado; isso não elimina o referente no bloco. (CLAUDE.md:568; CLAUDE.md:570)
-
-A PISTA estabelece que os blocos consolidados da 7b prevalecem sobre os textos anteriores nela guardados. (app/docs/PISTA.md:10; app/docs/PISTA.md:11; app/docs/PISTA.md:12)
-
-_1085 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1086 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
