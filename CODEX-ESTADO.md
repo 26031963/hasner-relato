@@ -1,7 +1,11 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 18:26** · publicado em **31/10/2026 18:26** (UTC-3)
+> Ultima resposta processada: **31/10/2026 18:28** · publicado em **31/10/2026 18:32** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 18:28 · sessao fd9f4ba4699d · TRAVA-COBERTURA · verificador · origem=Code
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
 
 ## 31/10 18:26 · sessao 723f7ac8aa19 · - · - · origem=Ronald (tmux)
 
@@ -859,53 +863,4 @@ Certeza **alta por leitura estática**; não rodei os selos porque criam árvore
 - **LEI-AKITA morde lista vazia e inversão do predicado:** exige termos conhecidos, casos positivos e negativos e presença do marcador final (`bin/tests/test_lei_akita.sh:163`, `bin/tests/test_lei_akita.sh:181`, `bin/tests/test_lei_akita.sh:298`, `bin/tests/test_lei_akita.sh:302`). Porém um fallback em `VocabIlegivel` não é exercitado pelos casos: nenhuma fonte é removida; trocar a exceção por vocabulário parcial poderia sobreviver em condições saudáveis (`bin/tests/test_lei_akita.sh:87`, `bin/tests/test_lei_akita.sh:172`).
 - **Não são selos órfãos no código:** a régua percorre `tests/test_*.sh`; LEI-AKITA tem chamada explícita no pre-push (`bin/regua.sh:138`, `bin/pre-push.sh:38`). Execução efetiva em produção: **[não verificado]**.
 
-## 31/10 17:54 · sessao 7bc4e88cb9e1 · - · - · origem=Ronald (tmux)
-
-**Achados certos, por leitura estática e execução em memória de funções da cópia:**
-
-- **Sobra pausa reconstruída pelas pontas no caminho de produção.** `minutos_do_oraculo` recebe os segmentos em `app/ponto/calculador/alimentacao.py:478`; calcula pausa entre fim anterior e próxima entrada em `app/ponto/calculador/nucleo.py:149`; essa pausa alimenta as rubricas em `app/ponto/calculador/alimentacao.py:550`. Para períodos 00–01 + 06–08, executei a função real: 180 minutos trabalhados, **300 minutos de pausa** e envelope 480; esses 300 minutos não vêm de intervalos julgados. Certeza alta; origens: `app/ponto/calculador/nucleo.py:152`, `app/ponto/calculador/nucleo.py:153`.
-
-- **Existe também o ramo completo de reconstrução por batidas cruas.** Quando `pares is None`, o núcleo identifica turnos pelo gap da última batida (`app/ponto/calculador/nucleo.py:188`), pelo vão desde a primeira (`app/ponto/calculador/nucleo.py:215`), aplica cortes próprios (`app/ponto/calculador/nucleo.py:216`), toma a data da primeira (`app/ponto/calculador/nucleo.py:237`), envelope última menos primeira (`app/ponto/calculador/nucleo.py:239`), pareia sequencialmente (`app/ponto/calculador/nucleo.py:245`) e calcula pausas entre pontas (`app/ponto/calculador/nucleo.py:253`). A porta de produção examinada passa lista, portanto esse ramo não é acionado por essa chamada específica (`app/ponto/calculador/alimentacao.py:478`). Certeza alta.
-
-- **O ramo cru ainda decide se um gap pertence ao envelope pelo ponto médio e pelas datas de suas pontas.** `app/ponto/calculador/nucleo.py:180`, `app/ponto/calculador/nucleo.py:183`. Certeza alta.
-
-- **`periodo.py` também volta a calcular pausa/envelope pelos segmentos.** Recorta o período com intervalos julgados (`app/ponto/calculador/periodo.py:304`), chama o núcleo (`app/ponto/calculador/periodo.py:355`) e lê a pausa e o envelope calculados (`app/ponto/calculador/periodo.py:357`, `app/ponto/calculador/periodo.py:358`). Diferentemente do ramo cru, recebe a geometria lavrada; ainda há cálculo da pausa pelos segmentos. Certeza alta.
-
-- **A pausa muda conforme o desconto do motor.** A porta só recorta intervalos quando `intra_descontada > 0` (`app/ponto/calculador/alimentacao.py:134`, `app/ponto/calculador/alimentacao.py:136`). Com intervalo julgado presente e desconto zero, o núcleo recebe um segmento inteiro, portanto não vê a pausa, enquanto `do_dia` recebe os intervalos julgados separadamente (`app/ponto/calculador/alimentacao.py:144`, `app/ponto/calculador/alimentacao.py:550`, `app/ponto/calculador/alimentacao.py:562`). Certeza alta sobre o fluxo.
-
-**Censo AST: morde três grafias, não a classe do defeito.**
-
-Executei as funções AST do próprio teste em memória, sem importar Django: os cinco módulos retornam conjunto vazio. Os seguintes mutantes também retornam conjunto vazio, por limitações explícitas de `app/ponto/tests/test_v3_periodos_da_celula.py:189`, `app/ponto/tests/test_v3_periodos_da_celula.py:195`, `app/ponto/tests/test_v3_periodos_da_celula.py:220`, `app/ponto/tests/test_v3_periodos_da_celula.py:222`:
-
-```python
-vazio = ()
-he(entrada=p.e, saida=p.s, intervalos=vazio)
-```
-
-```python
-e = pts[0][0]
-s = pts[-1][1]
-he(entrada=e, saida=s, intervalos=ivs)
-```
-
-```python
-he(entrada=min(ts), saida=max(ts), intervalos=ivs)
-```
-
-```python
-he(pts[0][0], pts[-1][1], ivs)
-```
-
-A pausa calculada com variável `anterior` também passa; o próprio código existente constitui testemunha desse falso negativo (`app/ponto/calculador/nucleo.py:149`, `app/ponto/calculador/nucleo.py:152`). Além disso, o universo usa `glob('*.py')`, sem recursão (`app/ponto/tests/test_v3_periodos_da_celula.py:235`). Certeza alta.
-
-**Classes do item 7:**
-
-- **Derivação paralela/fonte única:** ocorrência concreta na pausa da produção acima; AST verde apesar dela (`app/ponto/calculador/nucleo.py:152`, `app/ponto/calculador/alimentacao.py:550`, `app/ponto/tests/test_v3_periodos_da_celula.py:220`). Certeza alta.
-- **Fallback:** mantém template/cadastro/folga do chamador quando o juiz não responde ou levanta (`app/ponto/calculador/alimentacao.py:520`, `app/ponto/calculador/alimentacao.py:523`, `app/ponto/calculador/alimentacao.py:531`); ausência de vínculo e exceção também viram `dia_de_trabalho=True` (`app/ponto/calculador/alimentacao.py:470`, `app/ponto/calculador/alimentacao.py:475`). Certeza alta.
-- **Ausência de intervalo vira vazio:** `getattr(..., ()) or ()` em `app/ponto/calculador/alimentacao.py:107`. Não distingue “motor declarou nenhum intervalo” de “campo ausente”. Certeza alta.
-- **Pouso antes do pré-requisito/PAREI:** período sem dia ou sem carimbo apenas incrementa contador e segue (`app/ponto/calculador/alimentacao.py:82`, `app/ponto/calculador/alimentacao.py:87`). Já ausência dos campos de períodos efetivamente levanta `ResultadoSemPeriodos` (`app/ponto/calculador/nucleo.py:393`). A equivalência disso com “período que a célula não guarda” precisa ser estabelecida pelo pai com a fonte da célula; [nao verificado].
-- **Segundo escritor:** em `calculador`, não encontrei escrita de `efetivo_entrada`, `efetivo_saida` ou `intervalos_do_motor`; há escrita de rubricas nos objetos pela releitura (`app/ponto/calculador/periodo.py:743`, `app/ponto/calculador/periodo.py:753`, `app/ponto/calculador/periodo.py:839`). A irregularidade como “fora da porta” depende de seu contrato; [nao verificado].
-- **Relógio fora da borda/ordem de trava:** não encontrei chamadas de relógio atual, transação ou lock nos cinco módulos; as chamadas `localtime` recebem instante explícito (`app/ponto/calculador/alimentacao.py:126`, `app/ponto/calculador/alimentacao.py:281`). Ordem de travas dos chamadores externos: [nao verificado].
-- **Segundo juiz registrado:** a pausa reconstruída está provada, mas seu enquadramento contra pergunta específica registrada em `core/juizes.py` depende da inspeção do registro; [nao verificado].
-
-_1186 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1187 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
