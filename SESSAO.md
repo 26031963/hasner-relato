@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 31/10/2026 02:00:50.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (18.1 MB). Acoes na janela: **601**.
+**Medido em 31/10/2026 02:06:06.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (18.1 MB). Acoes na janela: **603**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:01:04 | Bash | Repoint RELATO line 3 to live suite pid | `cd /home/ronald/saas-hasner; sed -i "3s/pid=[0-9]*/pid=3352348/" app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md; ps -p 3352348 -o pid,args \| cut -c1-120` |
+| 02:01:00 | Bash | Check lock holder and pid in RELATO | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; ps -p 2303911 >/dev/null && echo vivo \|\| echo morto` |
 | 02:00:46 | Bash | Check which copies contain current main | `M=$(git -C /home/ronald/saas-hasner rev-parse HEAD); for w in wt-o261e-f5-2048 wt-o261e-f1c4b-fix-0058 wt-vfase-asof-2342; do cd /home/ronald/$w; git merge-base --is-ancestor $M HEAD && echo "$w contem main" \|\| echo "$w NAO contem main ($(git rev-list --count HEAD..$M) atras)"; done` |
 | 02:00:41 | Agent | Opus final DISJUNTOR | `Verificacao FINAL (opus) da obra DISJUNTOR-E-CLEAR-RAPIDO, instrumento (pouso proprio, L-105), antes do merge+deploy. Copia: /home/ronald/wt-disjuntor-2308 (worktree do repo /home/ronald/saas-hasner). Obra = `git -C /home/ronald/wt-disjuntor-2308 diff 21b9db38 621569a1` (6 commits: a51abf8e 48958eea d800ac1a 55c82d46 f2993d9f 621569a1). Depois disso a copia recebeu um merge do main (a5abf45f) para ...` |
 | 02:00:29 | Bash | Queue DISJUNTOR suite on merged tree | `cd /home/ronald/saas-hasner; S=logs/o261e/dj_suite_completa_a5abf45f.log; ESTEIRA_QUEM=dj-suite-merge bin/suite.sh --dir /home/ronald/wt-disjuntor-2308 --espera 14400 > $S 2>&1; echo rc=$? >> $S; echo "SUITE DJ-M: $(grep -E '^(OK\|FAILED)($\| \()' $S\|tail -1) $(grep '^Ran' $S\|tail -1) $(tail -1 $S)"; grep -E '^(FAIL\|ERROR):' $S\|head` |
