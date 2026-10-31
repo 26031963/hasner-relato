@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: pre-push.sh | pid=3592659
+ESPERANDO: pre-push.sh | pid=3727217
 > **Push F1C4 RED (07:3x), causa em uma linha:** regua_tickets leu 6 MARCADORES de log entre colchetes no corpo dos commits da raia como fatias; 6 linhas "NOME DE MARCADOR, nao obra" no TICKETS (molde FIO-RESSUSCITA), regua OK 7/7, push de novo.
 > **F1C4 NO AR (07:3x):** efb2ad47 = merge --no-ff de f3c8e2a8 (obra 587e5f17 + main 4b675b20); deploy --sem-migrate OK; push de 2e705ad0..efb2ad47 pela regua em curso. Item 3 = obra F1C4-3-NONE-COBRA (construtor vivo, copia wt-f1c4-3-0708), pouso depois.
 > PROVA: HEAD=efb2ad47; logs/o261e/f1c4c_suite_merge_f3c8e2a8.log "Ran 13011" + "OK (skipped=42, expected failures=25)" rc=0; logs/o261e/f1c4c_impacto_merge_f3c8e2a8.out cmp identico ao da cura (166/102/171, VAI_E_VOLTA 0, hash n=26 igual); cmp 31/31; logs/o261e/f1c4_deploy.log "deploy: OK -- migrations em dia, tres cascas reiniciadas juntas, tres rotas provadas." rc=0; /health/ 200.
