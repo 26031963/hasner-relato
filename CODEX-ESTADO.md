@@ -1,7 +1,210 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 23:56** · publicado em **30/10/2026 23:57** (UTC-3)
+> Ultima resposta processada: **31/10/2026 00:02** · publicado em **31/10/2026 00:02** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 00:02 · sessao 3c8dcbe5be29 · V3-E1 · verificador · origem=Code
+
+**(1) O fluxo normal está protegido, mas `SkipTest` ainda tem precedência sobre falhas já coletadas.** (`app/ponto/tests/test_v3_e1_valor.py:148`, `app/ponto/tests/test_v3_e1_valor.py:159`)
+
+- Sem censo, o modo valor falha como `ARNES` antes de imprimir VERDE. Nos adaptadores reais, o censo é registrado depois de `_releitura`. Isso comprova passagem pela chamada; **não exige `censo.relidos > 0`**. (`app/ponto/tests/test_v3_e1_valor.py:170`, `app/ponto/tests/test_v3_e1_valor.py:229`, `app/ponto/tests/test_v3_e1_valor.py:254`, `app/ponto/tests/test_v3_e1_valor.py:187`)
+- Falhas de asserção dentro e fora de `subTest` são coletadas no modo valor; com censo, validado falha e pendente vira skip rotulado. Erros como `ValueError`, `TypeError` e `KeyError` propagam: os coletores só capturam `SkipTest` e `failureException`. (`app/ponto/tests/test_v3_e1_valor.py:148`, `app/ponto/tests/test_v3_e1_valor.py:161`, `app/ponto/tests/test_v3_e1_valor.py:182`)
+- **Brecha residual:** uma asserção falha em `subTest`, é coletada, e depois o caso chama `skipTest`: o skip escapa imediatamente, inclusive para caso validado, sem consultar a coleta. É caminho permitido pelo marcador; os casos explicitamente excluídos de dúvida/status ficam fora do universo de valor. (`app/ponto/tests/test_v3_e1_valor.py:150`, `app/ponto/tests/test_v3_e1_valor.py:159`, `app/ponto/tests/test_v3_e1_valor.py:65`, `app/ponto/tests/test_v3_e1_valor.py:210`)
+- VERDE com **zero períodos relidos** continua possível; não significa ausência da chamada. L16, por exemplo, afirma zeros sem batidas. (`app/ponto/tests/test_v3_e1_valor.py:170`, `app/ponto/tests/test_v3_e1_valor.py:176`, `app/ponto/tests/test_e1_lote3.py:614`, `app/ponto/tests/test_e1_lote3.py:623`)
+
+**(2) A classificação dos nomes recebidos por `subTest(rubrica=...)` está correta; a cesta é incompleta como inventário de tudo que o caso afirma.** Os helpers encaminham as chaves, e a divisão usa pertinência ao conjunto. (`app/ponto/tests/test_e1_lote1_valor_do_dia.py:128`, `app/ponto/tests/test_e1_lote3.py:235`, `app/ponto/tests/test_v3_e1_valor.py:173`)
+
+| Casos | Classificação conferida | Evidência |
+|---|---|---|
+| C01–C20, exceto C06/C16/C19 | Todos os nomes encaminhados estão em v3 | `app/ponto/tests/test_v3_e1_valor.py:58`; helpers em `app/ponto/tests/test_e1_lote1_valor_do_dia.py:125` |
+| C19 | v3: `ft_min,he100_fer,extra`; v2: `ft` | `app/ponto/tests/test_e1_lote1_valor_do_dia.py:539` |
+| L01 | v3: `trab,atraso,antecipada` | `app/ponto/tests/test_e1_lote3.py:364` |
+| L13/L14 | v3: trabalho/HE e pontualidade afirmados; v2: `ft` | `app/ponto/tests/test_e1_lote3.py:570`, `app/ponto/tests/test_e1_lote3.py:588` |
+| L15 | v3: `atraso,antecipada`; v2: `faltas` | `app/ponto/tests/test_e1_lote3.py:609` |
+| L16 | v3: `trab,ft_min,atraso,antecipada`; v2: `faltas,horas_falta` | `app/ponto/tests/test_e1_lote3.py:623` |
+| L17/L18 | v3: trabalho/HE afirmados; v2: `ft` | `app/ponto/tests/test_e1_lote3.py:650`, `app/ponto/tests/test_e1_lote3.py:668` |
+| L19/L20 | v3: `trab`; v2: `semanas_dsr_ok,semanas_dsr_perdido` | `app/ponto/tests/test_e1_lote3.py:692`, `app/ponto/tests/test_e1_lote3.py:714` |
+
+`ft_min` pertence corretamente à v3: o leitor soma `minutos_trabalhados` dos FT, e `reler` percorre normais e FT e reescreve esse campo. (`app/ponto/tests/test_o280_bateria_da_lei.py:174`, `app/ponto/calculador/periodo.py:606`, `app/ponto/calculador/periodo.py:742`)
+
+Ficam **fora da cesta**:
+
+- `fonte_da_regua` em C01/C02/C03/C04/C05/C07/C08/C09 e `regua_excedente` em C05. (`app/ponto/tests/test_e1_lote1_valor_do_dia.py:160`, `app/ponto/tests/test_e1_lote1_valor_do_dia.py:181`, `app/ponto/tests/test_e1_lote1_valor_do_dia.py:205`, `app/ponto/tests/test_e1_lote1_valor_do_dia.py:231`, `app/ponto/tests/test_e1_lote1_valor_do_dia.py:256`, `app/ponto/tests/test_e1_lote1_valor_do_dia.py:257`, `app/ponto/tests/test_e1_lote1_valor_do_dia.py:298`, `app/ponto/tests/test_e1_lote1_valor_do_dia.py:317`, `app/ponto/tests/test_e1_lote1_valor_do_dia.py:345`)
+- A CxR de v2 em L01 e, especialmente, **`trab + ft_min == 180` em L15**. Se essa soma falhar, aborta antes dos subTests seguintes: pode produzir `v3=[] v2=[]`, embora a falha seja preservada como `(fora de subTest)`. (`app/ponto/tests/test_e1_lote3.py:365`, `app/ponto/tests/test_e1_lote3.py:608`, `app/ponto/tests/test_e1_lote3.py:609`, `app/ponto/tests/test_v3_e1_valor.py:163`)
+- Também ficam externas as precondições de previsto em L13, calendário em L17/L18 e sucesso das batidas. (`app/ponto/tests/test_e1_lote3.py:567`, `app/ponto/tests/test_e1_lote3.py:649`, `app/ponto/tests/test_e1_lote3.py:667`, `app/ponto/tests/test_e1_lote3.py:174`)
+
+A cesta indica responsabilidade pelo **nome**, não medição efetiva: não consulta os flags do censo. C19 ainda afirma `extra/he100_fer` sobre somas apenas dos períodos normais, podendo afirmar zero de soma vazia. (`app/ponto/tests/test_v3_e1_valor.py:173`, `app/ponto/calculador/periodo.py:745`, `app/ponto/tests/test_o280_bateria_da_lei.py:166`, `app/ponto/tests/test_o280_bateria_da_lei.py:179`, `app/ponto/tests/test_o280_bateria_da_lei.py:182`)
+
+**(3) O selo morde parcialmente; não comprova todos os caminhos pedidos.** (`app/ponto/tests/test_v3_e1_valor.py:294`, `app/ponto/tests/test_v3_e1_valor.py:306`)
+
+| Caminho | Alcance do selo | Evidência |
+|---|---|---|
+| Validado vermelho | Exige falha, com censo artificial; não verifica mensagem | `app/ponto/tests/test_v3_e1_valor.py:284`, `app/ponto/tests/test_v3_e1_valor.py:296` |
+| Pendente vermelho | Exige skip e verifica prefixo | `app/ponto/tests/test_v3_e1_valor.py:299` |
+| Verde | Exige somente ausência de exceção; não verifica impressão/cesta | `app/ponto/tests/test_v3_e1_valor.py:302` |
+| Sem releitura | Exige falha para caso sem censo | `app/ponto/tests/test_v3_e1_valor.py:303` |
+| `VALIDADOS` sem caso | Guarda implementada, mas sem injeção negativa; com `{}`, o laço é vazio | `app/ponto/tests/test_v3_e1_valor.py:55`, `app/ponto/tests/test_v3_e1_valor.py:310` |
+
+Execução completa da suíte Django e comparação Git com `2258f914`: [não verificado].
+
+## 31/10 00:00 · sessao 2d1b429ee43c · - · - · origem=Ronald (tmux)
+
+A cesta classifica corretamente os nomes que chegam por `subTest(rubrica=...)`: os helpers encaminham cada chave e o marcador divide por pertinência a `RUBRICAS_DA_V3`. (`app/ponto/tests/test_e1_lote1_valor_do_dia.py:125`, `app/ponto/tests/test_e1_lote3.py:233`, `app/ponto/tests/test_v3_e1_valor.py:143`, `app/ponto/tests/test_v3_e1_valor.py:173`)
+
+- Todos os subTests de C01–C05, C07–C15, C17–C18 e C20 são v3; C19 separa `ft_min/he100_fer/extra` em v3 e `ft` em v2. (`app/ponto/tests/test_e1_lote1_valor_do_dia.py:157`, `:179`, `:203`, `:229`, `:254`, `:296`, `:315`, `:342`, `:363`, `:382`, `:402`, `:419`, `:438`, `:457`, `:499`, `:519`, `:539`, `:557`)
+- L01: v3 `trab/atraso/antecipada`; L13: v3 `trab/extra/he50/he100/atraso/antecipada`, v2 `ft`; L14: v3 `trab/extra/he50/he100`, v2 `ft`. (`app/ponto/tests/test_e1_lote3.py:364`, `:570`, `:588`)
+- L15: v3 `atraso/antecipada`, v2 `faltas`; L16: v3 `trab/ft_min/atraso/antecipada`, v2 `faltas/horas_falta`. (`app/ponto/tests/test_e1_lote3.py:609`, `:623`)
+- L17: v3 `trab/he100_fer/he50`, v2 `ft`; L18: v3 `trab/he100_fer/he50/he100/extra`, v2 `ft`; L19/L20: v3 `trab`, v2 `semanas_dsr_ok/semanas_dsr_perdido`. (`app/ponto/tests/test_e1_lote3.py:650`, `:668`, `:692`, `:693`, `:695`, `:714`, `:715`, `:717`)
+- C06/C16 ficam fora do universo de valor, conforme filtro explícito. (`app/ponto/tests/test_v3_e1_valor.py:65`, `:82`)
+
+`ft_min` foi corrigido justificadamente: o leitor soma `minutos_trabalhados` dos FT, e `reler` percorre normais e FT e reescreve esse campo. (`app/ponto/tests/test_o280_bateria_da_lei.py:174`, `app/ponto/calculador/periodo.py:606`, `:742`)
+
+Há afirmações que a cesta **não vê**, pois `_vistas` só recebe nomes na entrada de `subTest`:
+
+- `fonte_da_regua` em C01, C02, C03, C04, C05, C07, C08 e C09; e `regua_excedente` em C05. (`app/ponto/tests/test_e1_lote1_valor_do_dia.py:160`, `:181`, `:205`, `:231`, `:256`, `:257`, `:298`, `:317`, `:345`; coleta em `app/ponto/tests/test_v3_e1_valor.py:143`)
+- CxR de **v2** (`r.dias_cadastro_x_realidade`) em L01; a CxR da v3 é escrita em `censo.cxr`. (`app/ponto/tests/test_e1_lote3.py:365`, `app/ponto/calculador/periodo.py:790`)
+- A afirmação central de L15, `trab + ft_min == 180`, também fica invisível. Se ela falhar, o caso aborta antes dos subTests seguintes, e a cesta pode ficar inteiramente vazia; a falha continua capturada como `(fora de subTest)`. (`app/ponto/tests/test_e1_lote3.py:608`, `:609`, `app/ponto/tests/test_v3_e1_valor.py:161`)
+- As precondições sobre previsto em L13, feriados em L17/L18 e sucesso do registro de cada batida também são externas a subTest. (`app/ponto/tests/test_e1_lote3.py:567`, `:649`, `:667`, `:174`)
+
+A classificação é por **campo de responsabilidade**, não prova de medição efetiva: `not_rel/not_leg` dependem de CCT; atraso/antecipada dependem de marcos, e os períodos sem dia permanecem v2 dentro das somas. O resumo imprime os flags e ressalvas, mas a divisão da cesta não consulta esses flags. (`app/ponto/calculador/periodo.py:745`, `:595`, `:608`, `app/ponto/tests/test_v3_e1_valor.py:121`, `:173`)
+
+C19 tem a limitação declarada corretamente: `extra/he100_fer` somam apenas normais; no caso só FT, os zeros podem ser soma vazia. (`app/ponto/tests/test_o280_bateria_da_lei.py:164`, `:166`, `:179`, `:182`, `app/ponto/tests/test_v3_e1_valor.py:25`)
+
+## 31/10 00:00 · sessao 353e609ef4f8 · - · - · origem=Ronald (tmux)
+
+O selo cobre parcialmente os caminhos pedidos:
+
+- **Validado vermelho:** injeta `Z99` em `VALIDADOS`, cria censo artificial e exige `failureException`; portanto exercita o ramo de falha, embora não confira a mensagem `VALIDADO VERMELHO`. `app/ponto/tests/test_v3_e1_valor.py:284`, `app/ponto/tests/test_v3_e1_valor.py:296`, `app/ponto/tests/test_v3_e1_valor.py:182`.
+- **Pendente vermelho:** exige `SkipTest` e confere o prefixo correspondente; esse ramo tem verificação explícita do resultado. `app/ponto/tests/test_v3_e1_valor.py:299`.
+- **Verde:** chama um caso com censo artificial e asserção verdadeira; verifica somente que não há exceção. Não captura `stderr` nem exige `V3-E1 VERDE`, cesta ou censo; remover a impressão verde não faria esse selo falhar. `app/ponto/tests/test_v3_e1_valor.py:289`, `app/ponto/tests/test_v3_e1_valor.py:302`, `app/ponto/tests/test_v3_e1_valor.py:176`.
+- **Sem releitura:** caso vazio precisa levantar `failureException`; cobre a guarda de ausência de censo, mas não exige a mensagem específica `ARNES`. `app/ponto/tests/test_v3_e1_valor.py:303`, `app/ponto/tests/test_v3_e1_valor.py:170`.
+- **VALIDADOS sem caso:** há guarda funcional com `assertIn(cid, ids)`, mas **não há teste que injete um ID inexistente e prove que essa guarda falha**. Como `VALIDADOS = {}`, o laço atual é vazio; esse caminho não tem selo anti-vacuidade. O mesmo vale para citação vazia. `app/ponto/tests/test_v3_e1_valor.py:55`, `app/ponto/tests/test_v3_e1_valor.py:306`, `app/ponto/tests/test_v3_e1_valor.py:310`.
+
+A suíte do selo também não injeta erro comum nem falha fora de `subTest`, embora esses caminhos existam no marcador; tampouco cobre os ramos de propriedade sem censo/com `_props`. `app/ponto/tests/test_v3_e1_valor.py:294`, `app/ponto/tests/test_v3_e1_valor.py:161`, `app/ponto/tests/test_v3_e1_valor.py:164`, `app/ponto/tests/test_v3_e1_valor.py:315`.
+
+## 30/10 23:58 · sessao 58f8cb44399b · V3-E1 · verificador · origem=Code
+
+**O arnês admite sucesso sem comprovar que a v3 julgou a rubrica.** No modo de valor, basta `_coleta` vazia; nem sequer é obrigatória uma releitura. No modo de propriedades, as asserções dos casos importados podem ser descartadas. ([test_v3_e1_valor.py:146](/home/ronald/codex_ws/2258f914afd6597484901ae7cde3cf91cf6a0ace/app/ponto/tests/test_v3_e1_valor.py:146), [test_v3_e1_valor.py:150](/home/ronald/codex_ws/2258f914afd6597484901ae7cde3cf91cf6a0ace/app/ponto/tests/test_v3_e1_valor.py:150), [test_v3_e1_valor.py:155](/home/ronald/codex_ws/2258f914afd6597484901ae7cde3cf91cf6a0ace/app/ponto/tests/test_v3_e1_valor.py:155))
+
+Abaixo está a análise do código disponível. Identidade/diff do commit e resultado integral da suíte Django: **[nao verificado]**. [nao verificado]
+
+**1) Rubricas, caso a caso**
+
+A coluna “v3 escreve” indica o escritor do campo nos períodos efetivamente relidos. Não comprova cobertura: `reler` deixa passar períodos sem dia, abertos, sem carimbo ou invertidos, e o arnês não exige censo sem ressalvas antes do VERDE. Noturno depende de `cct`; pontualidade depende de `marcos`. (`app/ponto/calculador/periodo.py:609`, `:634`, `:641`, `:645`, `:696`, `:745`; `app/ponto/tests/test_v3_e1_valor.py:155`)
+
+| Caso | Rubricas afirmadas cujo campo a v3 escreve | Herdado do v2 / outra autoridade | Asserção |
+|---|---|---|---|
+| C01 | `trab`, `not_rel`, `not_leg`, `extra`, `he100_fer` | `fonte_da_regua(m)`: motor/porta CCT | `app/ponto/tests/test_e1_lote1_valor_do_dia.py:157`, `:160` |
+| C02 | `trab`, `not_rel`, `not_leg`, `extra` | `fonte_da_regua(m)` | `app/ponto/tests/test_e1_lote1_valor_do_dia.py:179`, `:181` |
+| C03 | `trab`, `not_rel`, `not_leg`, `extra` | `fonte_da_regua(m)` | `app/ponto/tests/test_e1_lote1_valor_do_dia.py:203`, `:205` |
+| C04 | `trab`, `not_rel`, `not_leg`, `extra` | `fonte_da_regua(m)` | `app/ponto/tests/test_e1_lote1_valor_do_dia.py:229`, `:231` |
+| C05 | `trab`, `not_rel`, `not_leg`, `extra` | `fonte_da_regua(m)` e `regua_para(...)[regua_excedente]`; não são saída de `reler` | `app/ponto/tests/test_e1_lote1_valor_do_dia.py:254`, `:256`, `:257` |
+| C06 | Nenhuma: excluído do arnês | Caso original dá skip por pergunta de lei | `app/ponto/tests/test_v3_e1_valor.py:57`; `app/ponto/tests/test_e1_lote1_valor_do_dia.py:274` |
+| C07 | `trab`, `he100_fer` | `fonte_da_regua(m)` | `app/ponto/tests/test_e1_lote1_valor_do_dia.py:296`, `:298` |
+| C08 | `trab`, `he100_fer`, `extra` | `fonte_da_regua(m)` | `app/ponto/tests/test_e1_lote1_valor_do_dia.py:315`, `:317` |
+| C09 | `trab`, `not_rel`, `not_leg`, `intra_descontada`, `extra` | `fonte_da_regua(m)` | `app/ponto/tests/test_e1_lote1_valor_do_dia.py:342`, `:345` |
+| C10 | `trab`, `not_rel`, `not_leg`, `intra_descontada`, `extra`, `he100_fer` | Nenhuma adicional | `app/ponto/tests/test_e1_lote1_valor_do_dia.py:363` |
+| C11 | `trab`, `not_rel`, `not_leg`, `extra` | Nenhuma adicional | `app/ponto/tests/test_e1_lote1_valor_do_dia.py:382` |
+| C12 | `trab`, `he50`, `he100_fer` | Nenhuma adicional | `app/ponto/tests/test_e1_lote1_valor_do_dia.py:402` |
+| C13 | `trab`, `extra`, `he50`, `he100` | Nenhuma adicional | `app/ponto/tests/test_e1_lote1_valor_do_dia.py:419` |
+| C14 | `trab`, `atraso`, `antecipada`, `extra` | Nenhuma adicional | `app/ponto/tests/test_e1_lote1_valor_do_dia.py:438` |
+| C15 | `atraso`, `antecipada`, `extra` | Nenhuma adicional | `app/ponto/tests/test_e1_lote1_valor_do_dia.py:457` |
+| C16 | Nenhuma: excluído do arnês | Caso original dá skip por pergunta de lei | `app/ponto/tests/test_v3_e1_valor.py:57`; `app/ponto/tests/test_e1_lote1_valor_do_dia.py:475` |
+| C17 | `trab`, `intra_descontada`, `intra_indenizada`, `extra`, `he50`, `he100` | Nenhuma adicional | `app/ponto/tests/test_e1_lote1_valor_do_dia.py:499` |
+| C18 | `trab`, `extra`, `he50`, `he100` | Nenhuma adicional | `app/ponto/tests/test_e1_lote1_valor_do_dia.py:519` |
+| C19 | `ft_min`; `extra`/`he100_fer` têm a ressalva abaixo | `ft`: quantidade/classificação dos períodos FT | `app/ponto/tests/test_e1_lote1_valor_do_dia.py:539` |
+| C20 | `trab`, `antecipada`, `atraso`, `extra` | Nenhuma adicional | `app/ponto/tests/test_e1_lote1_valor_do_dia.py:557` |
+| L01 | `trab`, `atraso`, `antecipada` | `r.dias_cadastro_x_realidade`; não consulta `censo.cxr` | `app/ponto/tests/test_e1_lote3.py:364`, `:365` |
+| L13 | `trab`, `extra`, `he50`, `he100`, `atraso`, `antecipada` | `ft`; pertencimento a `previstas_do_periodo` é outra autoridade | `app/ponto/tests/test_e1_lote3.py:567`, `:570` |
+| L14 | `trab`, `extra`, `he50`, `he100` | `ft` | `app/ponto/tests/test_e1_lote3.py:588` |
+| L15 | `trab + ft_min`; `atraso`/`antecipada` recebem zero por exclusão legal | `faltas` | `app/ponto/tests/test_e1_lote3.py:608`, `:609`; `app/ponto/calculador/regras.py:494`; `app/ponto/calculador/periodo.py:464`, `:639`, `:809` |
+| L16 | Sem batidas/períodos, as somas `trab`, `ft_min`, `atraso`, `antecipada` podem ser zero sem escrita alguma | `faltas`, `horas_falta` | `app/ponto/tests/test_e1_lote3.py:614`, `:621`; `app/ponto/tests/test_o280_bateria_da_lei.py:166` |
+| L17 | `trab`, `he100_fer`, `he50` | `ft`; conjunto de feriados é verificado separadamente | `app/ponto/tests/test_e1_lote3.py:649`, `:650` |
+| L18 | `trab`, `he100_fer`, `he50`, `he100`, `extra` | `ft`; conjunto de feriados é verificado separadamente | `app/ponto/tests/test_e1_lote3.py:667`, `:668` |
+| L19 | `trab` | `semanas_dsr_ok`, `semanas_dsr_perdido` | `app/ponto/tests/test_e1_lote3.py:692`, `:693`, `:695` |
+| L20 | `trab` | `semanas_dsr_ok`, `semanas_dsr_perdido` | `app/ponto/tests/test_e1_lote3.py:714`, `:715`, `:717` |
+
+Duas correções importantes à apresentação do próprio arnês:
+
+- **`ft_min` não passa intocado:** `leitura` soma `minutos_trabalhados` dos FT; `reler` percorre também FT e reescreve esse campo. A classificação na docstring do arnês está errada. (`app/ponto/tests/test_o280_bateria_da_lei.py:174`; `app/ponto/calculador/periodo.py:606`, `:742`; `app/ponto/tests/test_v3_e1_valor.py:18`)
+- **C19 não verifica a HE do objeto FT:** `extra` e `he100_fer` de `leitura` somam somente períodos normais. Quando só existe FT, esses zeros vêm de soma vazia, embora `reler` também zere HE nos FT. (`app/ponto/tests/test_o280_bateria_da_lei.py:164`, `:167`, `:179`, `:182`; `app/ponto/calculador/periodo.py:758`, `:767`)
+
+Além disso, `RUBRICAS_DA_V3` é declarada, mas o veredito/log não a consulta; não implementa a separação prometida das duas origens. (`app/ponto/tests/test_v3_e1_valor.py:20`, `:50`, `:155`, `:159`)
+
+**2) Falha perdida e erro convertido em skip**
+
+**Sim, há asserção perdida no modo `propriedade`.** Tanto `subTest` quanto `_caso` capturam `self.failureException`, mas só registram a falha quando `MODO == 'valor'`. Havendo `_censos` e estando `_props` vazio, o caso termina com sucesso, sem fail nem skip. Isso inclui asserções fora de `subTest`. ([test_v3_e1_valor.py:135](/home/ronald/codex_ws/2258f914afd6597484901ae7cde3cf91cf6a0ace/app/ponto/tests/test_v3_e1_valor.py:135), [test_v3_e1_valor.py:146](/home/ronald/codex_ws/2258f914afd6597484901ae7cde3cf91cf6a0ace/app/ponto/tests/test_v3_e1_valor.py:146), [test_v3_e1_valor.py:149](/home/ronald/codex_ws/2258f914afd6597484901ae7cde3cf91cf6a0ace/app/ponto/tests/test_v3_e1_valor.py:149))
+
+No modo `valor`, a asserção capturada termina em fail se VALIDADO ou skip se PENDENTE. A lista atual está vazia, portanto nenhuma divergência de valor desses casos bloqueia por validação. (`app/ponto/tests/test_v3_e1_valor.py:47`, `:137`, `:148`, `:162`)
+
+**Não há, nesses dois métodos, conversão de exceção comum em skip.** Exceções diferentes de `self.failureException` e `SkipTest` propagam; `SkipTest` é relançado. (`app/ponto/tests/test_v3_e1_valor.py:131`, `:143`)
+
+Há ainda VERDE de valor sem releitura: `_caso` aceita coleta vazia, imprime `sem releitura` e retorna. O MORDE exercita explicitamente um caso vazio bem-sucedido. (`app/ponto/tests/test_v3_e1_valor.py:155`, `:276`)
+
+**3) As propriedades conseguem ficar vermelhas, mas têm pontos cegos distintos**
+
+As mutações abaixo são exemplos derivados do fluxo, não alterações aplicadas aos arquivos. (`app/ponto/tests/test_v3_e1_valor.py:171`)
+
+| Propriedade | Como pode ficar vermelha | Mutação em `reler` que ela não detecta |
+|---|---|---|
+| **P-SOMA** | Escrever `he50 = x.extra_50_min + 1` quebra `extra == he50 + he100`; a falha entra em `_props` e bloqueia. (`app/ponto/calculador/periodo.py:846`; `app/ponto/tests/test_v3_e1_valor.py:102`, `:153`) | Zerar conjuntamente `extra`, `he50`, `he100` e `he100_fer`: os valores podem estar errados, mas preservam as duas relações verificadas. (`app/ponto/tests/test_v3_e1_valor.py:98`, `:105`) |
+| **P-IDEM** | Trocar a atribuição de `minutos_trabalhados` por `+=` muda o segundo estado observado. (`app/ponto/calculador/periodo.py:742`; `app/ponto/tests/test_v3_e1_valor.py:172`) | Fixar `minutos_trabalhados = 123.0`: erro estável passa. Também passaria incrementar `resultado.dias_falta`, pois esse atributo não integra o snapshot nem o Censo. (`app/ponto/tests/test_v3_e1_valor.py:172`; `app/ponto/tests/test_o280_bateria_da_lei.py:4325`, `:4350`) |
+| **P-PREV** | Pode falhar se a régua externa observada mudar entre os snapshots, por exemplo por uma mutação que altere o cadastro consultado. (`app/ponto/tests/test_v3_e1_valor.py:176`; `app/ponto/calculador/periodo.py:518`) | Usar internamente `dataclasses.replace(regua_de(dia), previsto_min=0)` no lugar da régua recebida: o cálculo usa outro previsto, mas a comparação externa continua consultando o mesmo cadastro. (`app/ponto/calculador/periodo.py:614`, `:819`; `app/ponto/tests/test_v3_e1_valor.py:177`) |
+
+P-IDEM observa rubricas arredondadas a duas casas e compara primeira v3 contra segunda v3; não valida correção contra um oráculo. P-PREV não compara a régua efetivamente utilizada dentro de `reler`. (`app/ponto/tests/test_o280_bateria_da_lei.py:4354`; `app/ponto/tests/test_v3_e1_valor.py:172`, `:177`)
+
+No lote 3, P-PREV só compara dias que receberam snapshot antes de `_bater`; em L16 não há `_bater`, logo nenhuma igualdade dessa propriedade é cobrada. Só P-SOMA tem MORDE dedicado neste arquivo, usando objetos artificiais. (`app/ponto/tests/test_v3_e1_valor.py:215`, `:236`, `:287`; `app/ponto/tests/test_e1_lote3.py:621`)
+
+**4) Escritores e leitores**
+
+| Atributo observado | Escritores | Leitores |
+|---|---|---|
+| `minutos_extra`, `_50`, `_100`, `_100_feriado` | V2 escreve excesso/dobra; v3 zera os pares julgados e escreve o portador do dia. (`app/ponto/motor_calculo_v2.py:3031`, `:3078`; `app/ponto/calculador/periodo.py:758`, `:838`, `:845`) | Arnês: P-SOMA, `leitura`, snapshot. Produção: propriedades mensais, `dia_pago`, espelho e fechamento. (`app/ponto/tests/test_v3_e1_valor.py:98`; `app/ponto/tests/test_o280_bateria_da_lei.py:179`, `:4328`; `app/ponto/motor_calculo_v2.py:274`; `app/ponto/services/dia_pago.py:180`; `app/ponto/services/espelho.py:112`; `app/ponto/services/fechamento.py:894`) |
+| `minutos_extra_50_noturna`, `_100_noturna` | V2, em `_aplicar_he_noturna`; v3 não os reescreve. (`app/ponto/motor_calculo_v2.py:952`, `:958`, `:960`; `app/ponto/calculador/periodo.py:101`) | **Não entram no arnês**, inclusive no snapshot P-IDEM. Produção os lê nas propriedades mensais, `dia_pago` e fechamento. (`app/ponto/tests/test_v3_e1_valor.py:98`; `app/ponto/tests/test_o280_bateria_da_lei.py:4325`; `app/ponto/motor_calculo_v2.py:288`; `app/ponto/services/dia_pago.py:181`; `app/ponto/services/fechamento.py:896`) |
+| `minutos_atraso`, `minutos_saida_antecipada` | V2 escreve; v3 zera quando recebe `marcos` e escreve o portador. (`app/ponto/motor_calculo_v2.py:2157`, `:2164`; `app/ponto/calculador/periodo.py:639`, `:809`) | `leitura`, snapshot; produção: propriedades mensais, espelho e fechamento. (`app/ponto/tests/test_o280_bateria_da_lei.py:183`, `:4329`; `app/ponto/motor_calculo_v2.py:297`, `:301`; `app/ponto/services/espelho.py:115`; `app/ponto/services/fechamento.py:969`) |
+| `minutos_trabalhados`, `intra_descontada`, `minutos_intrajornada_indenizada` | V2 origina; v3 substitui nos pares relidos, inclusive FT. (`app/ponto/motor_calculo_v2.py:2713`, `:2722`, `:2723`; `app/ponto/calculador/periodo.py:742`) | `leitura`, snapshot, propriedades mensais e `dia_pago`. (`app/ponto/tests/test_o280_bateria_da_lei.py:173`, `:4326`; `app/ponto/motor_calculo_v2.py:245`, `:249`; `app/ponto/services/dia_pago.py:178`, `:186`) |
+| `minutos_noturnos_relogio`, `minutos_noturnos_legais` | V2 origina; v3 substitui com `cct` nos pares relidos. (`app/ponto/motor_calculo_v2.py:941`; `app/ponto/calculador/periodo.py:745`, `:752`) | `leitura` e snapshot; produção soma o legal nas propriedades mensais e em `dia_pago`. (`app/ponto/tests/test_o280_bateria_da_lei.py:177`, `:4327`; `app/ponto/motor_calculo_v2.py:271`; `app/ponto/services/dia_pago.py:179`) |
+| `minutos_fora_janela` | V2 escreve; v3 lê para o teto e só zera na cópia duplicada. (`app/ponto/motor_calculo_v2.py:2725`; `app/ponto/calculador/periodo.py:184`, `:736`, `:786`) | `leitura`, snapshot e alimentação do calculador. (`app/ponto/tests/test_o280_bateria_da_lei.py:185`, `:4327`; `app/ponto/calculador/alimentacao.py:83`) |
+| Listas normal/FT, pontas e `turno_aberto` | V2 constrói/classifica a geometria; v3 a percorre. (`app/ponto/motor_calculo_v2.py:160`, `:1778`, `:2430`; `app/ponto/calculador/periodo.py:606`, `:644`) | `leitura` conta períodos/abertos; snapshot registra pontas e cesta FT. (`app/ponto/tests/test_o280_bateria_da_lei.py:170`, `:4345`, `:4348`) |
+| `hora_extra_100` | V2 escreve; v3 redefine como falso e liga na dobra. (`app/ponto/motor_calculo_v2.py:3034`, `:3084`; `app/ponto/calculador/periodo.py:772`, `:842`) | Snapshot P-IDEM. (`app/ponto/tests/test_o280_bateria_da_lei.py:4353`) |
+| Faltas, abonos, horas de falta, CxR do resultado e semanas DSR | V2 escreve; não são reescritos por `reler`. (`app/ponto/motor_calculo_v2.py:2549`, `:2556`, `:2558`, `:2657`, `:3375`, `:3400`, `:3417`; `app/ponto/calculador/periodo.py:540`) | `leitura` e asserções diretas dos lotes. (`app/ponto/tests/test_o280_bateria_da_lei.py:186`; `app/ponto/tests/test_e1_lote3.py:365`, `:693`, `:715`) |
+
+`estado_dos_periodos` **é uma função de teste**, não um atributo de produção. Ela constrói um multiset ordenado com pontas, cesta FT, aberto, booleano HE100 e 12 rubricas; não observa todo o `ResultadoMes`. (`app/ponto/tests/test_o280_bateria_da_lei.py:4325`, `:4333`, `:4344`)
+
+Para **todos os campos do Censo**, o escritor funcional é `reler`, com uma instância nova por chamada:
+
+| Campos | Escrita em `app/ponto/calculador/periodo.py` |
+|---|---|
+| `cct_medida`, `pontualidade_medida` | `:592`, `:604` |
+| `sem_dia`, `abertos`, `sem_carimbo` | `:610`, `:642`, `:646` |
+| `efetivo_invertido`, `invertidos` | `:697`, `:698` |
+| `par_duplicado`, `duplicados` | `:734`, `:735` |
+| `periodos_noturno`, `relidos`, `dias_ft` | `:754`, `:774`, `:776` |
+| `dias_sem_pontualidade_por_lei`, `cxr` | `:789`, `:790` |
+| `dias_sem_pontualidade_por_par_nao_lido`, `atraso_em_dia_so_ft`, `dias_pontualidade` | `:804`, `:807`, `:812` |
+| `dias`, `dias_sem_previsto_com_trabalho`, `dias_feriado_dobra` | `:815`, `:821`, `:843` |
+
+O arnês imprime seis campos do Censo e compara **todos** via `dataclasses.asdict` em P-IDEM. Não exige flags verdadeiras nem contadores de ressalva zerados para aceitar o valor. (`app/ponto/tests/test_v3_e1_valor.py:110`, `:155`, `:172`)
+
+**Não há leitor de produção identificado de `reler`.** O contrato o declara ensaio; os chamadores encontrados são o arnês e a bateria de testes. Os leitores produtivos dos atributos acima não demonstram integração da v3. ([periodo.py:543](/home/ronald/codex_ws/2258f914afd6597484901ae7cde3cf91cf6a0ace/app/ponto/calculador/periodo.py:543), `app/ponto/tests/test_v3_e1_valor.py:83`, `:88`; `app/ponto/tests/test_o280_bateria_da_lei.py:3307`, `:3310`, `:4375`, `:4382`)
+
+**5) C17 versus limite acrescido do intervalo**
+
+C17 afirma `trab=540`, `intra_indenizada=60`, `extra=he50=60` para COM 08–17 sem pausa. Com os mesmos números, a fórmula atual dá `limite=480+min(60,60)=540`, portanto `extra=0`. É uma incompatibilidade de expectativa, inferida diretamente da fórmula. ([test_e1_lote1_valor_do_dia.py:499](/home/ronald/codex_ws/2258f914afd6597484901ae7cde3cf91cf6a0ace/app/ponto/tests/test_e1_lote1_valor_do_dia.py:499), [periodo.py:410](/home/ronald/codex_ws/2258f914afd6597484901ae7cde3cf91cf6a0ace/app/ponto/calculador/periodo.py:410), [periodo.py:414](/home/ronald/codex_ws/2258f914afd6597484901ae7cde3cf91cf6a0ace/app/ponto/calculador/periodo.py:414))
+
+| Comportamento afirmado | Testes | [nao verificado]
+|---|---|
+| Os 60 minutos sem pausa também geram HE no COM 08–17 | **C17**, exigindo intra60 e extra/he50=60. `app/ponto/tests/test_e1_lote1_valor_do_dia.py:499` |
+| Acrescentar o suprimido ao limite do COM | **A6b**, COM 08–22: trab840, intra60, extra300, correspondente a limite540. `app/ponto/tests/test_o280_bateria_da_lei.py:3611`, `:3624` |
+| Fórmula explicitamente testada | **`test_v3_excesso_do_dia_e_PURO_e_a_reparticao_SOMA`**: previsto480/declarado60; trab630/suprimido30 exige limite510/extra120. `app/ponto/tests/test_o280_bateria_da_lei.py:3660`, `:3672` |
+| Mesma regra integrada com pausa parcial | **F7d**: trab630, intra30, extra120. `app/ponto/tests/test_o280_bateria_da_lei.py:3518`, `:3521` |
+| Sem pausa, intra não gera HE correspondente no D12 | **`test_RED_doze_horas_sem_intervalo_NAO_tem_hora_extra`**: 07–19, intra60, extra0. `app/ponto/tests/test_he_intra_dobrada.py:77`, `:83` |
+| Excedente além desse limite continua pago | **`test_MORDE_treze_horas_sem_intervalo_TEM_uma_hora_de_extra`**: 07–20, intra60, extra60. `app/ponto/tests/test_he_intra_dobrada.py:88` |
+| Pausa gozada não aumenta o limite | **`test_MORDE_intervalo_gozado_nao_ganha_folga_no_limite`**: intra0, extra60. `app/ponto/tests/test_he_intra_dobrada.py:95`, `:102` |
+
+O antigo `test_comercial_sem_intra_registrada` também usa 08–17, mas só exige intra positiva: não decide HE60 versus HE0. (`app/ponto/tests/test_motor.py:1041`, `:1045`, `:1049`)
+
+No arnês atual, a divergência de valor de C17 vira **PENDENTE/skip**; já suas identidades e idempotência podem passar com HE zero. (`app/ponto/tests/test_v3_e1_valor.py:47`, `:102`, `:162`, `:172`)
 
 ## 30/10 23:56 · sessao 1b93bacd51ca · - · - · origem=Ronald (tmux)
 
@@ -597,74 +800,4 @@ Achados de medição e estado, por cenário hipotético derivado do código:
 
    Uma rodada de recorte não substitui o arquivo; o escritor atual ainda produz o formato antigo. Portanto, observar um primeiro carimbo F5 não demonstra que nenhum antigo possa voltar a existir. (`app/chamados/management/commands/vigiar_fio_morto.py:194–212`.) Essa impossibilidade operacional permanece **[não verificado]**; a L-111 exige retirar o sítio quando ele perde o último uso, junto com testes e pendência. (`CLAUDE.md:341–344`.)
 
-## 30/10 22:55 · sessao bfc8fe859b37 · - · - · origem=Ronald (tmux)
-
-- **Soma como propriedade fixa:** `CLAUDE.md:45-51` define expressamente “partes somam o total” como propriedade fixa da L-110. Conferir igualdades entre contadores já carimbados valida integridade; reconstruir universo, classificar dias ou corrigir números seria derivação própria proibida por `CLAUDE.md:20-22`. Há precedente no selo do produtor: `app/chamados/tests/test_o261_vigia_fio.py:647-668`.
-
-- **Selo atual pode continuar verde sem validar alcance:** gera exclusivamente carimbos antigos (`bin/tests/test_fio_estado.sh:40-48`), observa somente `medido`, `velho` e `fora_do_esperado` (`bin/tests/test_fio_estado.sh:51`) e considera casos antigos “VERDE” (`bin/tests/test_fio_estado.sh:56-91`). Acrescentar `cor=AMARELO` sem alterar essas três saídas não faria esses casos falharem (`bin/tests/test_fio_estado.sh:51`).
-
-- **Cegueira atual não prova vermelho:** o caso apenas procura `CEGO` no texto, sem conferir campo `cor` ou veredito (`bin/tests/test_fio_estado.sh:104-107`). O selo exige caso que morda a costura; texto presente sozinho não demonstra a cor exigida (`CLAUDE.md:350-355`).
-
-- **Mutações prometidas:** o arquivo atual encerra declarando sete casos, mas não executa mutações de leitor (`bin/tests/test_fio_estado.sh:109`). A comprovação por mutação dos novos casos permanece **[não verificado]**.
-
-- **L-111:** apagar o ramo antigo exige demonstrar que perdeu seu último uso; primeiro carimbo novo isoladamente não demonstra impossibilidade de carimbo antigo retornar **[não verificado]**. A lei manda retirar sítio sem chamador, testes e pendência no mesmo commit (`CLAUDE.md:341-344`). [nao verificado]
-
-- **Entrada dos selos:** a régua enumera `bin/tests/test_*.sh` (`bin/regua.sh:138`); o pre-push documenta que esse diretório não roda diretamente ali (`bin/pre-push.sh:15`).
-
-## 30/10 22:55 · sessao 70a74bc5d59a · - · - · origem=Ronald (tmux)
-
-- O consumidor de produção encontrado é `gerar_estado`: importa `ler`/`linha`, passa o dicionário inteiro a `linha` e publica o texto resultante. Não consulta `cor`, `alcance` ou contadores diretamente; a mudança de manchete chega ao ESTADO pela alteração de `linha`. (`bin/gerar_estado.py:260-261`, `bin/gerar_estado.py:313-315`, `bin/gerar_estado.py:350`)
-
-- O consumidor do JSON encontrado é o selo atual: consulta somente `medido`, `velho` e as chaves de `fora_do_esperado`; também importa `CARIMBO`. Acrescentar campos preservando esses campos mantém essa interface; renomeá-los/removê-los rompe o selo. (`bin/tests/test_fio_estado.sh:51`, `bin/tests/test_fio_estado.sh:97`)
-
-- O JSON público atual contém `fio_morto=censo.fio_morto`; a linha também lê esse campo. Reutilizar `fio_morto` para conter alcance mudaria sua semântica; acrescentar `fio_morto_alcance` e preservar o antigo evita essa troca. Consumidores externos à cópia: [não verificado]. (`bin/fio_estado.py:86`, `bin/fio_estado.py:101-104`, `bin/fio_estado.py:129`)
-
-- F5 só escrever `esperado.fio_morto_alcance` e `censo.fio_morto_alcance` já faria o leitor atual acrescentar esse desvio a `fora_do_esperado`, porque ele itera todas as expectativas. Isso não muda a manchete, que continua no contador antigo. (`bin/fio_estado.py:69-73`, `bin/fio_estado.py:101-108`)
-
-- O selo antigo só cria carimbos sem `alcance`. Seus casos chamados VERDE verificam `True|False|-`; não verificam `cor`. Portanto acrescentar `cor=AMARELO` para formato antigo pode preservar esses testes, mas o selo continuará chamando esses casos de VERDE sem testar o novo significado. (`bin/tests/test_fio_estado.sh:40-48`, `bin/tests/test_fio_estado.sh:51`, `bin/tests/test_fio_estado.sh:56-60`, `bin/tests/test_fio_estado.sh:82-86`)
-
-- A régua executa automaticamente `bin/tests/test_*.sh`; o pre-push não executa esse loop e declara isso expressamente. Colocar o novo selo em `bin/tests/` garante sua descoberta pela régua, mas não sua execução direta a cada pre-push. O hook instalado real é [não verificado]. (`bin/regua.sh:138-145`, `bin/pre-push.sh:12-19`, `bin/pre-push.sh:61-66`)
-
-- O instalador vigente usa `bin/pre-push.sh` como fonte e gera wrapper que executa esse caminho; a cópia histórica de `app/core/hooks/pre-push.sh` não é o alvo declarado por esse instalador. (`bin/hooks.sh:9-11`, `bin/hooks.sh:51-56`)
-
-## 30/10 22:54 · sessao 9ae75d7ba88f · O261-V-FASE · verificador · origem=Code
-
-**Sem achado procedente no delta examinado:** C9 e C10 passam pelo mesmo mapa dono→porta; BATIDA abre regularização, ESTRUTURA fica sem URL e somente CADASTRO recebe a porta específica da assinatura (`app/escala/services/cadastro_realidade.py:481`, `app/escala/services/cadastro_realidade.py:490`, `app/escala/services/cadastro_realidade.py:518`).
-
-1. **Quem escreve e quem lê**
-
-- **C9:** `lavrar_teto_do_dia` chama medição e persistência; a medição pergunta a `InsumosDoDono.dono()` e grava `dono` no detalhe do snapshot (`app/ponto/management/commands/lavrar_teto_do_dia.py:28`, `app/ponto/management/commands/lavrar_teto_do_dia.py:34`, `app/ponto/services/teto_na_lista.py:86`, `app/ponto/services/teto_na_lista.py:113`). `_teto_do_dia()` lê a lavra e copia esse valor para `dono_do_dia` (`app/escala/services/cadastro_realidade.py:320`, `app/escala/services/cadastro_realidade.py:325`).
-- **C10:** o censo monta `InsumosDoDono` com os dias de fase daquela corrida, pergunta o dono de cada dia e grava `dono_do_dia`; `fase_12x36.lavrar()` persiste o detalhe (`app/ponto/management/commands/censo_fase_12x36.py:260`, `app/ponto/management/commands/censo_fase_12x36.py:262`, `app/ponto/management/commands/censo_fase_12x36.py:272`, `app/escala/services/fase_12x36.py:90`). `_fase_deslocada()` lê a lavra até `hoje` e preserva o dono (`app/escala/services/cadastro_realidade.py:343`, `app/escala/services/cadastro_realidade.py:346`).
-- **Juiz comum:** `InsumosDoDono.dono()` chama `dono_da_divergencia()`; a lista recebe o resultado lavrado de cada assinatura e calcula `acao`/`url` (`app/ponto/management/commands/e6_oraculo.py:166`, `app/ponto/management/commands/e6_oraculo.py:173`, `app/escala/services/cadastro_realidade.py:657`, `app/escala/services/cadastro_realidade.py:661`, `app/escala/services/cadastro_realidade.py:664`).
-- **Tela/PDF:** a view fornece a mesma lista aos dois destinos. O template lê dono, ação e URL; o PDF imprime dono e ação, sem hyperlink da porta (`app/escala/views.py:490`, `app/escala/views.py:492`, `app/escala/views.py:495`, `app/templates/escala/cadastro_x_realidade.html:28`, `app/escala/services/cadastro_realidade.py:794`, `app/escala/services/cadastro_realidade.py:797`).
-- **Vigia:** lê `dono_do_dia` por `dias_na_lista()`, sem consultar o texto do botão. C9/C10 conflitantes resultam em `None`; somente BATIDA/CADASTRO entram em `fio_do_admin`, mantendo ESTRUTURA no alarme (`app/escala/services/cadastro_realidade.py:728`, `app/escala/services/cadastro_realidade.py:731`, `app/escala/services/cadastro_realidade.py:753`, `app/chamados/services/vigia_fio.py:259`, `app/chamados/services/vigia_fio.py:266`, `app/chamados/services/vigia_fio.py:314`).
-
-2. **Mapa, rótulos e leitores antigos**
-
-Não restaram dois mapas nesses caminhos. As diferenças entre C9 e C10 são os destinos de **CADASTRO**: template/vínculo na C9; fio ou “só listado”, conforme `aplicavel`, na C10. BATIDA passa à regularização inclusive antes do piso; ESTRUTURA e dono ausente não recebem porta de cadastro (`app/escala/services/cadastro_realidade.py:478`, `app/escala/services/cadastro_realidade.py:484`, `app/escala/services/cadastro_realidade.py:519`).
-
-O novo rótulo “o do juiz do dia, e6_oraculo…” alimenta `por_assinatura` e aparece no **title do selo superior**. O PDF imprime o dono efetivo do dia — BATIDA/CADASTRO/ESTRUTURA — e não essa frase agregada (`app/escala/services/cadastro_realidade.py:118`, `app/escala/services/cadastro_realidade.py:699`, `app/templates/escala/cadastro_x_realidade.html:19`, `app/escala/services/cadastro_realidade.py:796`).
-
-Não localizei leitor executável dependente dos textos antigos. Os testes C9 encontrados prendem dono e URLs; “Regularizar a saida do dia” permanece no relato histórico (`app/ponto/tests/test_col129_teto_vira_lista.py:215`, `app/ponto/tests/test_col129_teto_vira_lista.py:226`, `app/docs/RELATO.md:151`). A prosa alterada explicita a morte de `fora_de_fase` e a leitura da lavra (`app/chamados/services/proposta_no_fio.py:22`, `app/core/tests/test_selo_performance.py:141`).
-
-3. **Os testes mordem?** [nao verificado]
-
-**Sim, para os dois defeitos visados:** um cria batida extra real, percorre censo→lavra→lista e exige dono BATIDA com URL de regularização; o outro exige identificação do juiz no rótulo agregado (`app/escala/tests/test_o261_v_fase_na_lista.py:193`, `app/escala/tests/test_o261_v_fase_na_lista.py:206`).
-
-A cobertura nova é parcial: não prende ESTRUTURA, dono ausente, BATIDA antes do piso nem renderização do title/PDF; o teste do rótulo aceita uma substring (`app/escala/tests/test_o261_v_fase_na_lista.py:193`, `app/escala/tests/test_o261_v_fase_na_lista.py:209`).
-
-Exercitei em memória 20 combinações de C9/C10, piso e dono, coerentes com o mapa; a comparação isolada reproduziu base→fio e cópia→regularização para C10/BATIDA (`app/escala/services/cadastro_realidade.py:478`, `app/escala/services/cadastro_realidade.py:511`). **Execução dos testes Django e renderização real: [não verificado]**; faltam as dependências neste ambiente.
-
-## 30/10 22:53 · sessao d7a63fdce16d · - · - · origem=Ronald (tmux)
-
-Nenhum defeito concreto encontrado neste recorte.
-
-- Os dois testes novos exercitam comportamento: Batida extra real → censo/lavra → lista → dono BATIDA e URL de regularização; outro verifica a identificação do juiz no rótulo agregado. `app/escala/tests/test_o261_v_fase_na_lista.py:193`, `app/escala/tests/test_o261_v_fase_na_lista.py:206`.
-- Confirmei por execução de AST em memória, usando `python3 -B`, 32 combinações entre base/alvo, C9/C10, quatro donos e piso aplicável/inaplicável: base encaminhava C10 aplicável BATIDA/ESTRUTURA/sem dono ao fio; alvo encaminha BATIDA à regularização, ESTRUTURA/sem dono a nenhuma URL, preservando CADASTRO conforme piso. Código exercitado: `app/escala/services/cadastro_realidade.py:478`, `app/escala/services/cadastro_realidade.py:511`. Não executei a integração Django: `[não verificado]`.
-- Lacunas dos dois testes adicionados: não verificam ESTRUTURA, ausência de dono, BATIDA anterior ao piso, renderização do `title` nem extração do PDF; a asserção do rótulo é somente substring. `app/escala/tests/test_o261_v_fase_na_lista.py:193`, `app/escala/tests/test_o261_v_fase_na_lista.py:209`.
-- O texto novo aparece no `title` do selo agregado, lido de `por_assinatura`; a linha da tela usa dono efetivo. `app/templates/escala/cadastro_x_realidade.html:19`, `app/templates/escala/cadastro_x_realidade.html:28`.
-- O PDF não imprime o rótulo novo agregado: imprime `a['dono']` por dia e `a['acao']`, após a sobreposição do dono lavrado. `app/escala/services/cadastro_realidade.py:660`, `app/escala/services/cadastro_realidade.py:666`, `app/escala/services/cadastro_realidade.py:794`.
-- Não achei leitor/teste do texto antigo exato; única ocorrência restante de “Regularizar a saida do dia” está no relato histórico. `app/docs/RELATO.md:151`. Os testes C9 existentes dependem das URLs e donos, preservados: `app/ponto/tests/test_col129_teto_vira_lista.py:215`, `app/ponto/tests/test_col129_teto_vira_lista.py:226`.
-- A prosa alterada declara a morte de `fora_de_fase` e a leitura da lavra; o parágrafo anterior permanece como explicação histórica de custo. `app/chamados/services/proposta_no_fio.py:15`, `app/chamados/services/proposta_no_fio.py:22`, `app/core/tests/test_selo_performance.py:141`.
-
-_810 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_814 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
