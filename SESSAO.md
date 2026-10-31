@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 31/10/2026 06:11:09.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (27.2 MB). Acoes na janela: **774**.
+**Medido em 31/10/2026 06:16:11.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (27.2 MB). Acoes na janela: **760**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -770,17 +770,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:24:10 | Bash |  | `cd /home/ronald/saas-hasner && sed -n 204,260p logs/o261e/f0_censo.txt \| cut -c1-900` |
 | 18:24:08 | Bash |  | `cd /home/ronald/saas-hasner && tail -2 logs/o261e/f0_censo.run; wc -c logs/o261e/f0_censo.txt; grep -n "^\*\*\\|^#" logs/o261e/f0_censo.txt \| head -30` |
 | 18:24:02 | Bash |  | `cd /home/ronald/saas-hasner && tail -15 logs/calendario_hoje/push.log \| cut -c1-250; git fetch -q origin 2>&1 \| tail -1; git log origin/main --oneline -1` |
-| 18:13:59 | Bash |  | `cd /home/ronald/saas-hasner && until grep -q '^rc=' logs/o261e/f0_censo.run 2>/dev/null && grep -q '^rc=' logs/calendario_hoje/push.log 2>/dev/null; do /usr/bin/sleep 30; if grep -q '^rc=' logs/calendario_hoje/push.log 2>/dev/null; then break; fi; done; tail -12 logs/calendario_hoje/push.log \| cut -c1-250` |
-| 18:13:56 | Bash |  | `cd /home/ronald/saas-hasner && mkdir -p logs/o261e && cat > logs/o261e/f0_censo.q <<'EOF' Obra O261-E-CELULA-20-UM-DONO, fatia F0 (DESENHO, sem codigo). Arvore: o hash informado (main). Responda com arquivo:linha, pela REGRA (nao por grep de nome): censo exaustivo, e diga o metodo e o que o metodo nao ve. 1. ESCRITORES do status TERMINAL de `chamados.models.ChamadoColaborador` (e de qualquer outro ...` |
-| 18:13:41 | Bash |  | `cd /home/ronald/saas-hasner && ls bin/push.sh && (bin/push.sh > logs/calendario_hoje/push.log 2>&1; echo "rc=$?" >> logs/calendario_hoje/push.log)` |
-| 18:13:34 | Bash |  | `cd /home/ronald/saas-hasner && bin/handoff_sessao.sh > /dev/null 2>&1; echo h=$?; git status --porcelain \| grep -v "^??"; git add app/docs/BACKLOG.md app/docs/PROMPTS.md app/docs/RELATO.md app/docs/HANDOFF-SESSAO.md && git commit -q -F - <<'EOF' MARCO CALENDARIO-HOJE-NAO-E-FALTA no ar (8c23399a): RELATO do pouso, filas do opus, avais da tarde registrados - RELATO: secao do pouso (prova, medida Co ...` |
-| 18:13:25 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('PAREI-RESOLVIDO: ! CLEAR') L[2]="CALENDARIO-HOJE-NAO-E-FALTA NO AR -- 8c23399a (deploy 18:1x, smoke de prod col566 hoje 'previsto'). Proximo da fila 1: O261-E-CELULA-20-UM-DONO F0 (desenho); V-FASE em construtor ao lado." sec=[ "", "## 30/10 18:1x -- POUSO CALENDARIO-HOJE-NA ...` |
-| 18:12:51 | Bash |  | `mkdir -p /home/ronald/saas-hasner/logs/calendario_hoje && cat > /home/ronald/saas-hasner/logs/calendario_hoje/smoke_prod.py <<'EOF' # CALENDARIO-HOJE smoke em PROD, SO LEITURA (rode pela sonda: bin/sonda_leitura.sh). Nada escreve. # Para os 2 casos do BO (col566, col502): status + rotulo de ontem e hoje pelo calendario no ar, e o motivo da juiza. import datetime from django.utils import timezone f ...` |
-| 18:12:42 | Bash |  | `cd /home/ronald/saas-hasner && head -25 logs/o261/passivo_resposta_vazia.py` |
-| 18:12:39 | Bash |  | `cd /home/ronald/saas-hasner && grep -ln "sonda_leitura\\|connection.set_schema\\|schema_context" logs/o261/*.py logs/*/*.py 2>/dev/null \| head -3; sed -n 1,40p bin/sonda_leitura.sh \| grep -n "schema\\|juliani\\|exec\\|uso\\|Uso" \| head` |
-| 18:12:36 | Bash |  | `cd /home/ronald/saas-hasner && head -30 logs/o261/censo_lampada_duas_arvores.py \| grep -n "import\\|schema\\|tenant\\|^def\\|print" \| head -10` |
-| 18:12:33 | Bash |  | `cd /home/ronald/saas-hasner && grep -n "sonda" bin/codex_pergunta.sh \| head -8; ls logs/o261/*.py 2>/dev/null \| head -3` |
-| 18:12:08 | Bash |  | `cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate > logs/calendario_hoje/deploy.log 2>&1; echo "deploy_rc=$?" >> logs/calendario_hoje/deploy.log; tail -15 logs/calendario_hoje/deploy.log` |
-| 18:12:03 | Bash |  | `cd /home/ronald/saas-hasner && git commit -q -F - <<'EOF' CALENDARIO-HOJE-NAO-E-FALTA POUSA: o dia ainda nao encerrado e 'previsto' pela juiza, e o dia passado sem fim previsto le o juiz da folha Avais Ronald 30/10 13:3x (BO fila 2, bug provado) e 15:3x (juiz unico/SSOT). O calendario decidia 'futuro' pela DATA (`data > hoje`): hoje sem batida virava 'falta' antes do turno (col566 30/10 13:23, tur ...` |
-| 18:11:51 | Bash |  | `cd /home/ronald/saas-hasner && git merge --no-ff --no-commit 38fe9889 2>&1 \| tail -2; git rev-parse -q --verify MERGE_HEAD >/dev/null && echo "MERGE_HEAD presente" \|\| echo "FF!!"; W=/home/ronald/wt-cal-pouso-3010-1638; for f in $(git diff --cached --name-only); do cmp -s $f $W/$f && echo "igual $f" \|\| echo "DIFERE $f"; done` |
-| 18:11:46 | Bash |  | `cd /home/ronald/saas-hasner && git rev-parse --short HEAD && git status --porcelain \| grep -v "^??" ; bin/sombra.sh --conferir 2>&1 \| tail -3; ls logs/crons_em_curso/ 2>/dev/null \| head; pgrep -fa "bin/push.sh\|pos_push" \| grep -v pgrep \| head -2` |
