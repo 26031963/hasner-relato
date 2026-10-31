@@ -1,7 +1,164 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 23:16** · publicado em **30/10/2026 23:20** (UTC-3)
+> Ultima resposta processada: **30/10/2026 23:34** · publicado em **30/10/2026 23:35** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 23:34 · sessao 6f377c5d4b5c · DISJUNTOR · verificador · origem=Code
+
+O desenho precisa corrigir **a fonte do B4, a identificação da volta e a integração do piso com o Stop**. O leitor atual não publica os campos necessários ao orçamento diário, e o avaliador de contexto ainda aplica os três gatilhos do v2 (`bin/codex_limite_estado.py:118`; `bin/orcamento_contexto.py:209`).
+
+Abaixo, distingo defeitos presentes de cenários condicionais de implementação. Para `contrato.txt`, numerei o cabeçalho como linha 1, as cláusulas como linhas 2–6 e o MEDIDO como linha 7.
+
+1. **Item 1 — o texto Bash não basta para determinar papel e volta.**  
+   O wrapper recebe `CODEX_PAPEL` do **ambiente efetivo**; suas linhas de registro não contêm `CODEX_VOLTA` (`bin/codex_pergunta.sh:44`; `bin/codex_pergunta.sh:53`; `bin/codex_pergunta.sh:88`). Cenários:
+
+   - Papel herdado ou `CODEX_PAPEL="$P"` não pode ser resolvido apenas procurando atribuições literais.
+   - FINAL declarada em ambiente herdado, sem atribuição visível no comando, vira `meio` pela regra proposta: **nega uma FINAL legítima** quando o orçamento diário estiver estourado.
+   - Uma busca textual pode aproveitar `CODEX_VOLTA=final` de comentário, string ou outra invocação e **liberar uma chamada do meio**.
+   - Um Bash contendo duas chamadas, uma permitida e outra proibida, exige decisões por invocação; uma única classificação do texto inteiro não resolve essa diferença. O parser e essa integração ainda são **[não verificado]**; a autoridade atual do papel é o ambiente recebido pelo wrapper (`bin/codex_pergunta.sh:44`; `contrato.txt:2`).
+
+2. **Item 3 — a fonte “que o ESTADO já publica” não fornece o orçamento diário.**  
+   `ler_semanal()` devolve somente `plan_type`, `used_percent` e `window_minutes`: descarta `resets_at`, timestamp e histórico. Portanto, consumir sua saída atual resulta sempre em “sem resets_at/sem registro de hoje”; pelo contrato, **libera o meio mesmo quando deveria negar**. É preciso ampliar esse leitor para obter primeiro/último registro do dia e reset correspondente (`bin/codex_limite_estado.py:99`; `bin/codex_limite_estado.py:118`; `contrato.txt:4`).
+
+3. **Item 3 — “último” atualmente significa arquivo com maior mtime.**  
+   O leitor ordena arquivos por mtime, examina apenas quarenta e escolhe a última linha contendo `rate_limits` no primeiro arquivo aproveitável; não compara timestamps das medições. Um arquivo com uso antigo de 10% tocado depois de outro com 86% **abre indevidamente**; o inverso pode **negar inclusive FINAL**, ao aplicar a restrição de 85% sobre dado velho. Um registro relevante no 41º arquivo também fica invisível (`bin/codex_limite_estado.py:105`; `bin/codex_limite_estado.py:110`; `contrato.txt:4`).
+
+4. **Item 3 — faltam regras para reset e precedência.**  
+   No dado anexado, 54−12 = 42 pp, acima dos 13,3 pp/dia e abaixo de 85%: esse caso exige negar meio e preservar FINAL de verificador (`contrato.txt:4`; `contrato.txt:7`). Mas o contrato não fecha estes casos:
+
+   - Reset durante o dia: primeiro registro 90%, último 5% produz −85 pp; a subtração atravessou duas janelas.
+   - Orçamento estourado e uso ≥85%: `escada` de papel `leitura` satisfaz “todo papel”, mas não “papel verificador”, se ambas as restrições forem acumuladas.
+   - Uso ≥85% sem `resets_at`: conflitam “só escada” e “não sei, não nega”.
+
+   Esses resultados precisam de precedência explícita; o leitor atual nem conserva o reset para separar as janelas (`contrato.txt:4`; `bin/codex_limite_estado.py:118`).
+
+5. **Item 3 — ANEXO-ENXUTO por nome textual permite escape e falso bloqueio.**  
+   O wrapper aceita caminhos arbitrários e concatena o conteúdo real. `--anexo "$A"` apontando para `LEIS.md`, ou uma cópia chamada `/tmp/a.txt`, escapa de reconhecimento literal; procurar nomes indiscriminadamente pode negar um comando que apenas os menciona. Também fica indefinido se `escada` pode levar esses anexos: a negativa especifica somente `meio`, mas a explicação diz “só na 1 e na final” (`bin/codex_pergunta.sh:32`; `bin/codex_pergunta.sh:50`; `bin/codex_pergunta.sh:111`; `contrato.txt:4`).
+
+6. **Itens 1/3 — autorização antes da fila não garante limite na execução.**  
+   Se seis chamadas passam a 84%, podem continuar depois de a primeira levar o uso a 85%: o wrapper espera gate/slots e chama o CLI sem revalidar orçamento. O timeout cobre somente o `codex exec`; a espera pelo gate e o laço dos slots não têm prazo global. Assim, o desenho pode **liberar execução já proibida** e deixar chamada aguardando indefinidamente (`bin/codex_pergunta.sh:137`; `bin/codex_pergunta.sh:140`; `bin/codex_pergunta.sh:142`; `bin/codex_pergunta.sh:157`).
+
+7. **Itens 1/2 — “primeiro Stop” mede contexto depois do trabalho, não o piso imediatamente após compactar.**  
+   A medida atual pega o último evento `assistant` e soma entrada mais caches. Um ciclo pode executar muitos turnos de ferramentas antes do primeiro Stop; seu “piso” fica inflado e pode ultrapassar 200 mil, desligando C1 justamente nesse ciclo. O anexo distingue primeiro turno pós-compact ≤107.621 de valores de primeiro Stop maiores; não são a mesma medida (`bin/orcamento_contexto.py:89`; `bin/orcamento_contexto.py:101`; `bin/orcamento_contexto.py:110`; `contrato.txt:7`).
+
+8. **Item 2 — 200 mil não é a janela declarada para todos os modelos.**  
+   O código declara 1 milhão para opus/sonnet/fable e 200 mil para haiku-4-5. Com piso 135.592, a fórmula proposta dispara em 167.796 — aproximadamente 16,8% da janela de 1 milhão. Com piso 865.942, desliga C1, embora o contexto ainda esteja dentro daquela janela. Isso pode ser um teto operacional deliberado, mas não pode ser rotulado como limite da janela do modelo (`bin/orcamento_contexto.py:35`; `bin/orcamento_contexto.py:44`; `contrato.txt:3`; `contrato.txt:7`).
+
+9. **Itens 1/2 — o ciclo atual mistura sessões.**  
+   `ultimo_clear.json` é global por raiz. Guarda `session_id`, mas o Stop extrai apenas `transcript_path` e usa o marco sem casar a sessão. Cenário: A compacta; B faz o próximo Stop; um registrador encaixado nesse fluxo pode gravar tokens de B como piso pós-compact de A. Além disso, um clear seguido de compact antes de qualquer Stop sobrescreve o marco anterior: não haverá medida para “cada ciclo” intermediário (`bin/marco_de_clear.py:20`; `bin/marco_de_clear.py:44`; `bin/marco_de_clear.py:61`; `bin/hook_stop_fila1.py:794`; `bin/hook_stop_fila1.py:1018`).
+
+10. **Itens 1/2 — posição do registro e ausência de piso mudam o comportamento.**  
+    Se `registrar_piso` entrar apenas dentro do orçamento, não verá necessariamente o primeiro Stop: o checador do RELATO pode bloquear e sair antes. E um `return` antecipado por “sem piso” ou “piso ≥ teto” dentro de `avaliar()` desligaria também os gatilhos de seis horas e três deploys, que hoje são independentes. O desligamento precisa atingir somente C1 (`bin/hook_stop_fila1.py:1029`; `bin/hook_stop_fila1.py:1034`; `bin/hook_stop_fila1.py:1037`; `bin/orcamento_contexto.py:209`; `bin/orcamento_contexto.py:212`; `bin/orcamento_contexto.py:214`).
+
+11. **Itens 1/2/3 — uma nova negativa no Stop pode contornar sua válvula de saída.**  
+    Um `block` por B4≥85 ou erro de piso, colocado antes de PAREI/ESPERANDO/TETO e repetido incondicionalmente, pode impedir inclusive a saída para clear e **prender a sessão**. Hoje o orçamento contém exceções e devolve ao caminho comum; o contador só é atualizado depois. Já existe uma exceção à promessa geral de falha aberta: falha persistente do checador do RELATO bloqueia antes do teto (`bin/hook_stop_fila1.py:886`; `bin/hook_stop_fila1.py:1007`; `bin/hook_stop_fila1.py:1029`; `bin/hook_stop_fila1.py:1092`).
+
+    A linha `DISJUNTOR B4-CODEX` também não é uma transição reconhecida pelo Stop atual. Se for colocada acima de um PAREI ou ESPERANDO legítimo, esconde essa declaração, porque o leitor considera somente a primeira linha útil (`bin/hook_stop_fila1.py:400`; `bin/hook_stop_fila1.py:413`; `bin/hook_stop_fila1.py:938`; `contrato.txt:3`).
+
+12. **Itens 1/4 — escritor único não garante piso único nem prova externa.**  
+    Dois Stops concorrentes, ou append seguido de falha antes de persistir “ciclo registrado”, podem duplicar o piso; a operação precisa de identidade do ciclo e serialização. O orçamento atual já serializa leitura/decisão/gravação (`bin/hook_stop_fila1.py:733`; `bin/hook_stop_fila1.py:755`).
+
+    Há ainda um encaixe perigoso: `pisos.log` não está na lista de arquivos proibidos como prova de ESPERANDO. Se seu mtime já foi observado e o próprio Stop apenda um piso antes de conferir a espera, `ESPERANDO: agente-x | arquivo=logs/sessao/pisos.log` pode obter **prova produzida pelo próprio hook** e liberar indevidamente (`bin/hook_stop_fila1.py:556`; `bin/hook_stop_fila1.py:605`; `bin/hook_stop_fila1.py:1051`).
+
+13. **Item 4 — duas linhas não são duas chamadas; “ini” também não prova execução do Codex.**  
+    O contador atual acerta ao contar somente `ini`; contar `ini` e `fim` no placar novo duplica chamadas concluídas. Porém `ini` é escrito antes de archive e raspagem: falhas rc3/rc4 entram como “chamadas ao Codex” sem alcançar o CLI. O rótulo atual mede tentativas iniciadas pelo wrapper, não exclusivamente execuções do modelo (`bin/codex_limite_estado.py:64`; `bin/codex_limite_estado.py:76`; `bin/codex_pergunta.sh:88`; `bin/codex_pergunta.sh:99`; `bin/codex_pergunta.sh:105`; `bin/codex_pergunta.sh:157`).
+
+14. **Item 4 — a junção existente pode perder ou duplicar atribuição de tokens.**  
+    A chave `(obra, hash12, pid)` não inclui identificador único da chamada. Se o PID for reciclado, o último `fim` sobrescreve o anterior; somar tokens por cada `ini` pode atribuir a mesma sessão a duas chamadas. No caminho LIMITE, o wrapper sai antes de extrair `thread_id`, registra `-`, e o mapa exclui essa sessão: eventual consumo anterior ao erro desaparece da atribuição por papel (`bin/codex_limite_estado.py:63`; `bin/codex_limite_estado.py:67`; `bin/codex_limite_estado.py:96`; `bin/codex_pergunta.sh:59`; `bin/codex_pergunta.sh:171`; `bin/codex_pergunta.sh:175`).
+
+    Também há divergência configurável de destino: o wrapper escreve em `CODEX_LOGD`, enquanto o leitor procura `logs/codex/chamadas.log` sob a raiz (`bin/codex_pergunta.sh:51`; `bin/codex_limite_estado.py:22`; `bin/codex_limite_estado.py:52`).
+
+15. **Item 4 — alguns rótulos prometem medidas ainda não demonstradas.**  
+    O leitor chama a apresentação de “uso semanal”, mas aceita qualquer `window_minutes`; uma principal de 300 minutos seria apresentada sob esse título (`bin/codex_limite_estado.py:133`; `bin/codex_limite_estado.py:142`). Para “tokens do dia”, usar o total final de uma sessão que atravessa meia-noite exige definir em qual dia contabilizá-lo; presença e semântica de `total_token_usage` nos registros reais fornecidos são **[não verificado]** (`contrato.txt:5`).
+
+    “Não há fonte estruturada” também não está demonstrado: já existe leitura estruturada de `tool_use/input` dos transcripts Claude. O leitor disponível escolhe somente o transcript mais novo e descarta dimensões necessárias ao placar por modelo/tipo; ele não basta para esse placar, mas sua insuficiência não prova inexistência da fonte (`bin/gerar_sessao.py:33`; `bin/gerar_sessao.py:65`; `bin/gerar_sessao.py:71`).
+
+16. **Item 5 — desligamento precisa existir no processo que decide.**  
+    `ORCAMENTO_CONTEXTO=0` já é lido pelo hook, antes de sua trava. Colocar a variável somente no ambiente de outro comando não altera automaticamente esse ambiente. A implementação de `DISJUNTOR=0`, sua abrangência e a leitura de `cota.json` são **[não verificado]**; a cota conhecida pelo handoff atual vem do último aval textual `COTA-*` em PROMPTS (`bin/hook_stop_fila1.py:741`; `bin/handoff_sessao.sh:207`; `contrato.txt:6`).
+
+Quanto à autoria e leitura dos arquivos:
+
+| Arquivo | Quem escreve | Quem lê |
+|---|---|---|
+| `logs/sessao/pisos.log` | O contrato propõe `orcamento_contexto.registrar_piso`, chamado pelo Stop; implementação **[não verificado]** (`contrato.txt:2`). | Avaliador e ESTADO são consumidores previstos; implementação **[não verificado]** (`contrato.txt:3`; `contrato.txt:5`). |
+| `logs/codex/chamadas.log` | Wrapper: `ini` e `fim` (`bin/codex_pergunta.sh:59`; `bin/codex_pergunta.sh:88`). | `codex_limite_estado`; ESTADO consome esse leitor, e CODEX-ESTADO usa seu mapa de sessões (`bin/codex_limite_estado.py:55`; `bin/gerar_estado.py:269`; `bin/gerar_codex_estado.py:176`). |
+| `~/.codex/sessions/**/*.jsonl` | O wrapper inicia o CLI; o código que efetivamente grava esses arquivos não está demonstrado: **[não verificado]** (`bin/codex_pergunta.sh:157`). | Leitor de limites e gerador de respostas finais (`bin/codex_limite_estado.py:101`; `bin/gerar_codex_estado.py:80`). |
+| `cota.json` | **[não verificado]**. | **[não verificado]**; não confundir com a leitura textual de cota do handoff (`bin/handoff_sessao.sh:207`). |
+| `logs/sessao/ultimo_clear.json` | `marco_de_clear.py`, por substituição atômica (`bin/marco_de_clear.py:61`). | `orcamento_contexto.ler_marco`, também chamado pelo Stop (`bin/orcamento_contexto.py:145`; `bin/hook_stop_fila1.py:794`). |
+| `orcamento_estado.json` e `orcamento.log` | Hook de Stop (`bin/hook_stop_fila1.py:693`; `bin/hook_stop_fila1.py:717`). | `orcamento_contexto.ler`, consumido pelo ESTADO (`bin/orcamento_contexto.py:228`; `bin/orcamento_contexto.py:235`; `bin/gerar_estado.py:274`). |
+
+A instalação real de PreToolUse/statusLine, o conteúdo de `cota.json` e os selos v3 com mutantes permanecem **[não verificado]**. A ausência desses artefatos nesta cópia não prova ausência no host: `logs/` e `.claude/` são ignorados pelo Git (`.gitignore:53`; `.gitignore:66`).
+
+## 30/10 23:32 · sessao 5e2fcac27123 · - · - · origem=Ronald (tmux)
+
+Achados C1/Stop, somente leitura:
+
+1. **O teto 200.000 do v3 não é a janela do código atual.** Os modelos opus/sonnet/fable usam 1.000.000, haiku-4-5 usa 200.000; o gatilho atual é 60% (`bin/orcamento_contexto.py:35`, `bin/orcamento_contexto.py:44`, `bin/orcamento_contexto.py:209`). Piso v3 de 135.592 → gatilho 167.796: em opus isso dispara perto de 16,8% da janela declarada, não de 60%; piso 865.942 do anexo desliga C1 apesar de ainda caber na janela opus de 1M. Os números dos pisos são apenas o dado anexado [não verificado].
+
+2. **“Piso pós-compact” medido no primeiro Stop mede outra coisa.** O leitor pega o último evento assistant e soma input+cache, não o primeiro turno após compact nem o contexto imediatamente após compact (`bin/orcamento_contexto.py:89`, `bin/orcamento_contexto.py:101`, `bin/orcamento_contexto.py:110`). Um ciclo que trabalha muito antes do primeiro Stop ganha piso inflado; se cruzar 200k, v3 desliga C1 justamente nesse ciclo. O próprio dado anexado diferencia primeiro turno ≤107.621 de pisos 119.361/135.592/155.871 [não verificado].
+
+3. **Sessões diferentes podem contaminar o piso.** O marco é um arquivo global por raiz (`bin/marco_de_clear.py:19`, `bin/marco_de_clear.py:20`), embora grave session_id (`bin/marco_de_clear.py:44`). O leitor devolve session_id (`bin/orcamento_contexto.py:149`), mas Stop extrai somente transcript_path e usa o marco sem casar a sessão (`bin/hook_stop_fila1.py:1018`, `bin/hook_stop_fila1.py:794`, `bin/hook_stop_fila1.py:822`). Cenário: A compacta; B chega ao primeiro Stop; registrar piso sobre esse encaixe pode registrar os tokens de B como pós-compact de A.
+
+4. **Adicionar pisos.log abre uma prova falsa de ESPERANDO se não ampliar a proteção.** `_prova_arquivo` não inclui pisos.log na lista de arquivos do próprio hook (`bin/hook_stop_fila1.py:556`). Cenário: `ESPERANDO: agente-x | arquivo=logs/sessao/pisos.log` já teve mtime observado; um novo ciclo apenda piso antes de avaliar espera; o próprio hook produz o avanço, que passa como prova (`bin/hook_stop_fila1.py:605`, `bin/hook_stop_fila1.py:644`) e libera Stop (`bin/hook_stop_fila1.py:1051`). Isso é cenário da implementação proposta, não ocorrência medida.
+
+5. **O primeiro Stop pode nem chegar ao registro de piso.** O checador do RELATO bloqueia e sai antes do orçamento (`bin/hook_stop_fila1.py:1029`, `bin/hook_stop_fila1.py:1034`, `bin/hook_stop_fila1.py:1037`). Se registrar_piso entrar apenas em `_orcamento_travado`, “primeiro Stop” vira primeiro Stop com RELATO aprovado; o trabalho de correção cresce antes da medida.
+
+6. **“Sem piso C1 não liga” precisa preservar os outros gatilhos.** O orçamento atual é OR entre contexto, seis horas e três deploys (`bin/orcamento_contexto.py:209`, `bin/orcamento_contexto.py:212`, `bin/orcamento_contexto.py:214`). Um retorno antecipado de `avaliar` por ausência de piso também desligaria tempo e marcos. Isso é cuidado de integração, pois registrar_piso e pisos.log não existem na cópia [não verificado].
+
+7. **A trava e o teto atuais precisam continuar envolvendo a nova medição.** Orçamento espera no máximo ~1s pelo lock e então cai no caminho comum (`bin/hook_stop_fila1.py:757`, `bin/hook_stop_fila1.py:764`); exceção também cai nesse caminho (`bin/hook_stop_fila1.py:886`). Um novo leitor de piso com `open` comum pode prender em FIFO; o helper existente evita isso com O_NONBLOCK e exige arquivo regular (`bin/orcamento_contexto.py:57`). Um novo bloqueio por erro antes do contador também pode prender indefinidamente: o contador só roda depois (`bin/hook_stop_fila1.py:1092`), e só libera com `n > 5` (`bin/hook_stop_fila1.py:1104`).
+
+8. **O limite geral do Stop já tem exceção sem teto.** Falha persistente de `relato_afirma_com_prova` bloqueia todos os Stops antes de atualizar contador (`bin/hook_stop_fila1.py:1007`, `bin/hook_stop_fila1.py:1029`). Logo “falha aberto como v2” não descreve qualquer falha do Stop inteiro.
+
+9. **Escritor único não basta para evitar piso duplicado.** O orçamento atual serializa ler/decidir/gravar (`bin/hook_stop_fila1.py:755`, `bin/hook_stop_fila1.py:766`) e grava estado antes da trilha (`bin/hook_stop_fila1.py:717`, `bin/hook_stop_fila1.py:725`). Se registrar_piso apendar antes de persistir “ciclo registrado”, uma falha posterior permite reapendar no próximo Stop; se for chamado fora da trava, dois Stops concorrentes podem registrar o mesmo ciclo. Implementação v3 ausente [não verificado].
+
+Autores/leitores relevantes:
+
+- **pisos.log**: v3 propõe `orcamento_contexto.registrar_piso` como escritor, invocado pelo Stop; avaliador e ESTADO seriam leitores. Nenhum desses usos existe na cópia [não verificado].
+- **ultimo_clear.json**: escreve `marco_de_clear.py`, preservando os últimos vinte clear_horas e substituindo atomicamente o arquivo (`bin/marco_de_clear.py:55`, `bin/marco_de_clear.py:57`, `bin/marco_de_clear.py:61`); lê `orcamento_contexto.ler_marco` (`bin/orcamento_contexto.py:145`).
+- **orcamento_estado.json / orcamento.log**: escreve o hook (`bin/hook_stop_fila1.py:710`, `bin/hook_stop_fila1.py:686`); lê `orcamento_contexto.ler` (`bin/orcamento_contexto.py:228`, `bin/orcamento_contexto.py:235`), chamado por gerar_estado (`bin/gerar_estado.py:274`).
+- A ligação real ao harness está fora da cópia: o RELATO informa que `.claude/settings.json` é local e ignorado (`app/docs/RELATO.md:196`); instalação atual [não verificado].
+
+Não executei os selos: eles criam arquivos temporários (`bin/tests/test_orcamento_contexto.sh:29`, `bin/tests/test_orcamento_contexto.sh:38`).
+
+## 30/10 23:32 · sessao 455436574ba9 · - · - · origem=Ronald (tmux)
+
+- **Wiring e `cota.json` sem prova:** não foram localizados na cópia `bin/disjuntor.py`, `bin/statusline_cota.py`, configuração de `PreToolUse`/`statusLine`, `cota.json` ou seus escritores/leitores **[não verificado]**. A ausência na cópia não prova ausência no host: `logs/` e `.claude/` estão ignorados (`.gitignore:53`, `.gitignore:66`). O ESTADO atual chama apenas os leitores do Codex e do orçamento (`bin/gerar_estado.py:267-276`), nas seções “Codex (limite)” e “Orcamento de contexto” (`bin/gerar_estado.py:321-327`). A “cota vigente” do handoff vem do último aval textual `COTA-*` de PROMPTS, não de `cota.json` (`bin/handoff_sessao.sh:207-211`).
+
+- **Texto Bash não determina papel e volta:** o wrapper usa `CODEX_PAPEL` do ambiente efetivo (`bin/codex_pergunta.sh:44-48`); seu registro contém papel, mas nenhuma volta (`bin/codex_pergunta.sh:53-60`, `bin/codex_pergunta.sh:88-89`). Com `CODEX_VOLTA=final` exportado anteriormente e chamada sem atribuição literal, o contrato assume `meio` e pode negar a FINAL. Variáveis, `source`, helpers e múltiplas chamadas no mesmo Bash tornam insuficiente uma decisão baseada apenas em texto; o parser ainda é **[não verificado]**.
+
+- **Falsos positivos e bypass pelo texto:** `echo 'CODEX_VOLTA=final ...bin/codex_pergunta.sh...'` não executa wrapper; `bash helper.sh` pode executá-lo sem mostrar seu nome no comando externo. Duas chamadas, uma `meio` e outra `final`, no mesmo comando Bash exigem decisões diferentes, enquanto a autorização da ferramenta é para o comando inteiro **[não verificado quanto à implementação do hook]**. A autoridade atual do papel continua sendo o ambiente recebido pelo wrapper (`bin/codex_pergunta.sh:44-48`).
+
+- **ANEXO-ENXUTO por nome literal não controla conteúdo:** o wrapper aceita caminhos de anexos e lê seus conteúdos (`bin/codex_pergunta.sh:32-35`, `bin/codex_pergunta.sh:49-50`, `bin/codex_pergunta.sh:111`). `--anexo "$A"` ou uma cópia de `JUIZES.md` chamada `/tmp/a.txt` podem escapar de um detector literal; uma referência textual que não execute pode ser negada indevidamente. A regra de equivalência de caminhos/conteúdos é **[não verificado]**.
+
+- **Corrida entre autorização e execução:** o wrapper espera gate e slots sem revalidar orçamento (`bin/codex_pergunta.sh:137-153`). Se seis chamadas forem autorizadas a 84%, elas podem continuar executando depois de a primeira elevar o consumo a 85%; o wrapper fixo não consulta B4 novamente (`bin/codex_pergunta.sh:156-158`). O timeout começa somente no `codex exec`, não na espera dos slots (`bin/codex_pergunta.sh:140-158`).
+
+- **“Não há fonte estruturada” não foi demonstrado:** há leitor de transcript estruturado, com `tool_use` e `input` (`bin/gerar_sessao.py:45-75`). Ele escolhe somente o transcript mais novo (`bin/gerar_sessao.py:33-35`) e retorna ferramenta, descrição e comando, sem modelo/tipo (`bin/gerar_sessao.py:71-75`). Usar esse painel como “agentes Claude 24 h por modelo/tipo” perderia sessões e dimensões; a disponibilidade do schema real de Agent para completar a métrica é **[não verificado]**.
+
+## 30/10 23:31 · sessao 76df57d6f03c · - · - · origem=Ronald (tmux)
+
+Achados para consolidação:
+
+1. **A fonte “já publicada” não contém os dados do B4 diário.** `ler_semanal()` devolve somente `plan_type`, `used_percent` e `window_minutes`; descarta `resets_at`, timestamp e registros anteriores. Consumir essa saída conforme o contrato produz “não sei” e libera a volta do meio mesmo com orçamento estourado. O primeiro/último registro do dia exige outro leitor ou ampliação deste. (`bin/codex_limite_estado.py:99`, `bin/codex_limite_estado.py:118`)
+
+2. **“Último” é mtime de arquivo, não horário da medição.** Ordena arquivos pelo mtime, limita a 40 e pega a última linha contendo a substring `rate_limits`; não compara timestamps entre eventos. Um arquivo com medição velha que receba escrita posterior pode substituir a medição nova e abrir/fechar indevidamente. Se os 40 primeiros não contiverem sinal, ignora o 41º. (`bin/codex_limite_estado.py:105`, `bin/codex_limite_estado.py:110`)
+
+3. **“Uso semanal” pode ser janela de cinco horas.** A apresentação sempre começa com “uso semanal”, mas aceita qualquer `window_minutes`, inclusive 300, e não valida que `primary` é semanal. Portanto usar `primary` como orçamento semanal exige confirmar a janela do registro. O selo contém exatamente primary 10080 e secondary 300, mas isso não prova universalidade em produção. (`bin/codex_limite_estado.py:133`, `bin/codex_limite_estado.py:142`; `bin/tests/test_codex_papel_estado.sh:21`)
+
+4. **O texto Bash não basta para papel/volta efetivos.** O wrapper recebe papel do ambiente e valida o valor efetivo; `CODEX_VOLTA` não integra seu protocolo nem suas linhas de registro. Um comando com `CODEX_PAPEL="$P"` ou papel herdado não permite deduzi-lo só do texto; `CODEX_VOLTA=final` herdado será classificado como “meio” pela regra proposta e poderá negar uma final legítima. Busca textual também confunde strings citadas, comandos múltiplos e atribuições em outro escopo com a invocação efetiva. (`bin/codex_pergunta.sh:44`, `bin/codex_pergunta.sh:48`, `bin/codex_pergunta.sh:53`, `bin/codex_pergunta.sh:88`)
+
+5. **ANEXO por nome no comando não identifica conteúdo.** O wrapper aceita caminhos quaisquer e concatena o conteúdo; `--anexo "$A"` pode entregar `LEIS.md` sem nome literal visível, e uma cópia com outro nome entrega o mesmo conteúdo. Inversamente uma substring em comentário/pergunta não é argumento `--anexo`. (`bin/codex_pergunta.sh:32`, `bin/codex_pergunta.sh:50`, `bin/codex_pergunta.sh:111`)
+
+6. **Há duas linhas, mas o contador atual não duplica chamadas.** Conta apenas `ini`; contar todas as linhas no placar novo duplicará chamadas concluídas. Porém o rótulo atual conta tentativas que nunca chegaram ao Codex: registra `ini` antes de archive/raspagem, cujas falhas terminam rc3/rc4; o CLI é chamado bem depois. (`bin/codex_limite_estado.py:64`, `bin/codex_limite_estado.py:76`; `bin/codex_pergunta.sh:88`, `bin/codex_pergunta.sh:99`, `bin/codex_pergunta.sh:105`, `bin/codex_pergunta.sh:157`)
+
+7. **Casamento por PID permite reaproveitamento e dupla soma futura.** A chave é `(obra, hash12, pid)` sem hora/identificador de chamada; `fins[chave]` sobrescreve o fim anterior. Duas chamadas com PID reciclado podem receber a mesma sessão final; somar seu total por cada `ini` duplica tokens e atribui o fim errado. (`bin/codex_limite_estado.py:63`, `bin/codex_limite_estado.py:67`, `bin/codex_limite_estado.py:87`)
+
+8. **Sessões com rc LIMITE podem desaparecer da medida por papel.** A saída 75 precede a extração de `thread_id`; a linha `fim` registra `-`, e o mapa de sessões exclui `-`. Uma execução que consumiu tokens antes de falhar por limite fica sem atribuição por essa junção. (`bin/codex_pergunta.sh:59`, `bin/codex_pergunta.sh:171`, `bin/codex_pergunta.sh:175`; `bin/codex_limite_estado.py:96`)
+
+9. **`total_token_usage` não é implementado neste leitor.** As funções atuais só contam inícios, associam fins e extraem limites; não calculam tokens por chamada/dia. A semântica cumulativa, cache, subagentes e presença de `token_count` no dado de produção fornecido são **[não verificado]**. (`bin/codex_limite_estado.py:49`, `bin/codex_limite_estado.py:71`, `bin/codex_limite_estado.py:99`)
+
+10. **Diretório configurável rompe a observação fixa.** O wrapper escreve em `CODEX_LOGD`, enquanto o leitor procura `logs/codex/chamadas.log` sob a raiz. Se configurado outro destino, chamadas reais somem do placar e do casamento por sessão. (`bin/codex_pergunta.sh:51`, `bin/codex_pergunta.sh:60`, `bin/codex_pergunta.sh:89`; `bin/codex_limite_estado.py:22`, `bin/codex_limite_estado.py:52`)
+
+Proveniência: o wrapper escreve `chamadas.log` (`bin/codex_pergunta.sh:59`, `bin/codex_pergunta.sh:88`); `codex_limite_estado.py` lê (`bin/codex_limite_estado.py:55`); `gerar_estado.py` consome esse leitor (`bin/gerar_estado.py:269`); `gerar_codex_estado.py` também o usa para origem/papel (`bin/gerar_codex_estado.py:175`). O wrapper inicia o CLI (`bin/codex_pergunta.sh:157`), mas a implementação do escritor de `~/.codex/sessions` não está demonstrada no material auditado **[não verificado]**; os leitores estão em `bin/codex_limite_estado.py:101` e `bin/gerar_codex_estado.py:80`.
 
 ## 30/10 23:16 · sessao 8d1c73f2a341 · O261-E-F1 · verificador · origem=Code
 
@@ -517,105 +674,4 @@ Resultado da suíte Django e quantidades/ocorrências reais em produção: `[nao
 
    Conferi também: pré-filtro das pautas consulta fase antes de pedir motor; C10 recebe o `hoje` da lista; C9/C10 têm igual autoridade e divergência resulta em `None`, preservando o alarme independentemente da ordem (`app/ponto/management/commands/pautas_discordantes.py:96`; `app/escala/services/cadastro_realidade.py:611`, `:710`, `:721`; `app/chamados/services/vigia_fio.py:266`). Efeitos em produção e resultados históricos além do anexo: **[nao verificado]**.
 
-## 30/10 22:39 · sessao 4f714b67b5f3 · - · - · origem=Ronald (tmux)
-
-Achado principal: `porta_fila → admin` não é leitura do responsável. `qs_na_fila()` filtra `VIVOS/COBRANCA` e silêncio, sem retornar papel (`app/chamados/services/painel.py:186-188`); o censo escreve `admin` diretamente e interrompe antes de examinar perguntas (`app/chamados/services/vigia_fio.py:572-581`).
-
-Contraexemplo verificável por código: chamado `batida_ausente`, aberto, ligado à célula, com pergunta pendente ancorada nele. O censo informa `porta_fila/admin`; o leitor de dono existente informa `colab`, convertido em `cobrar` (`app/chamados/catalogo/natureza.py:41-60`). A própria tela considera `cobrar` trabalho do colaborador e só `validar/decidir` exigem admin (`app/chamados/services/verbos.py:17-24`). Helpers permitem construir exatamente esse estado (`app/chamados/tests/test_o261e_f5_alcance.py:66-82`). Não executei Django/testes: resultado de execução `[nao verificado]`.
-
-Para `porta_pergunta`, a distinção pendente/respondida tem testemunha existente: a API serve `p.estado` e publica `aguarda_admin` quando `RESPONDIDA` (`app/api/views.py:2620-2624`); a propriedade do modelo traduz pergunta viva por `respondida_em` (`app/chamados/models.py:2197-2211`). O censo não consulta essa tradução: repete a decisão por carimbo (`app/chamados/services/vigia_fio.py:579-580`).
-
-`admin` também não identifica a autoridade de validação. O catálogo atribui `batida_ausente` a `colab` (`app/chamados/catalogo/modulos.py:105`), que o guard administrativo mapeia a `supervisao` (`app/chamados/utils.py:27-43`); o guard exige departamento correspondente ou gestor geral (`app/chamados/utils.py:47-72`). A tela aplica esse guard (`app/chamados/views.py:418-421`) e oferece validar (`app/chamados/views.py:483-501`; `app/templates/chamados/partials/_pergunta_card.html:92-97`). O supervisor pode entrar como gestor porque `supervisor_posto` recebe `is_staff=True` e `_is_gestor` aceita staff (`app/core/credenciais.py:132-140`; `app/chamados/views.py:35-38`). A afirmação “supervisor nunca sai de nenhuma porta” não descreve essas autoridades.
-
-Mesmo respondida, a pergunta continua corrigível pelo colaborador: a tela diz “Aguardando a supervisao conferir” e permite responder de novo (`app/templates/chamados/partials/_card_atendimento.html:94-101`, `:154-155`); a porta HTML encaminha `ja_respondida=True` ao core (`app/chamados/views.py:1280-1283`), que grava nova resposta (`app/chamados/services/disputa_emissao.py:1247-1249`). Assim, `admin` pode representar o próximo responsável por validar; não representa sozinho todos que podem agir.
-
-Pluralidade: duas perguntas elegíveis do mesmo dia, uma pendente e outra respondida, produzem literalmente `admin+colaborador` (`app/chamados/services/vigia_fio.py:576-580`). Isso mantém uma linha por dia, porém não garante “um dono”; ocorrência no dado de produção `[nao verificado]`.
-
-Testes novos: [nao verificado]
-
-- O teste fila cria chamado sem pergunta e exige `admin`; não cobre o contraexemplo de fila com pergunta pendente (`app/chamados/tests/test_o261e_f5_alcance.py:291-297`).
-- O teste pergunta respondida exige `admin`, embora sua fixture use `batida_ausente`, cuja autoridade administrativa é supervisão; não consulta guard/tela nem atua com usuário (`app/chamados/tests/test_o261e_f5_alcance.py:66-82`, `:281-289`; `app/chamados/utils.py:27-43`).
-- O teste “supervisor nunca” examina apenas os valores das constantes dos baldes, sem executar censo nem testar as duas rotas de porta (`app/chamados/tests/test_o261e_f5_alcance.py:299-304`). Poderia passar com papel errado em `porta_fila` ou `porta_pergunta`, pois não observa esses resultados (`app/chamados/services/vigia_fio.py:574`, `:579-580`).
-
-## 30/10 22:39 · sessao 913a8ab46598 · - · - · origem=Ronald (tmux)
-
-Os quatro baldes recebem `'admin'` por mapa local; o retorno de `dono_fora_do_fio` é apenas o nome do balde, sem papel/RBAC (`app/chamados/services/vigia_fio.py:256-265`, `:481-482`, `:588-592`).
-
-| Balde | Leitura efetiva | Porta e quem pode agir |
-|---|---|---|
-| `decisao_do_dia_pendente` | `resolver_dia_oferecido_na_data` monta o calendário e lê o predicado; a função declara expressamente que **não verifica `pode_veredito`**, pois é permissão de quem vê (`app/colaboradores/services/calendario.py:199-216`). | O calendário exige `ver_cadastro` e oferece Resolver dia a quem tem `regularizar_batida` (`app/colaboradores/views.py:1935-1957`); template verifica `pode_veredito` (`app/templates/colaboradores/partials/_calendario_grade.html:125-126`); POST exige `regularizar_batida` (`app/ponto/views.py:3302-3306`). Supervisão recebe essa permissão na semeadura padrão (`app/colaboradores/mixins.py:355-362`). |
-| `aguarda_decisao_de_ausencia` | `ausencia_cobre(...para='cobranca')` e status em `ABERTAS` (`app/chamados/services/vigia_fio.py:258-260`). `ABERTAS` reúne **aguardando_documento** e **aguardando_decisao** (`app/ponto/services/ausencia.py:749`). | Documento é devido pelo colaborador, decisão pelo DP (`app/ponto/services/ausencia.py:719-722`). Colaborador autenticado anexa na própria ausência pela API (`app/api/views.py:3125-3144`, `:3153-3156`); anexar passa o estado para decisão (`app/ponto/services/ausencia.py:857-859`). Quem tem `editar_ausencias` também anexa/decide pelo painel (`app/ponto/views.py:2134-2152`, `:2589-2599`), mas aprovar diretamente `aguardando_documento` é transição recusada (`app/ponto/services/ausencia.py:751-753`, `:792-806`). **Há atribuição indistinta de admin a estado cuja próxima obrigação é do colaborador.** |
-| `escala_nao_descreve_o_dia` | Basta alguma pergunta `VALIDADA` com resposta `FOLGA_CONTESTA`; esse ramo **não consulta presença na lista nem uma porta de correção** (`app/chamados/services/vigia_fio.py:261-264`; código da resposta em `app/chamados/services/validacao.py:216-218`). | A função comenta que o dono é CADASTRO (`app/chamados/services/vigia_fio.py:245-246`). Portas de cadastro existentes: wizard exige `editar_escalas` (`app/escala/views_wizard.py:63-65`, `:95-98`) e vínculo exige `editar_cadastro` (`app/colaboradores/views.py:16-20`). Qual delas está realmente oferecida **para cada dia desse balde**: `[nao verificado]`; não é lido no ramo (`app/chamados/services/vigia_fio.py:261-262`). |
-| `fio_do_admin` | Lista é carregada e reduzida a `(colab,data)->dono_do_dia`; predicado só exige dono BATIDA/CADASTRO (`app/chamados/services/vigia_fio.py:168`, `:193-210`; `app/escala/services/cadastro_realidade.py:655-670`). | Lista mostra links `a.url` (`app/templates/escala/cadastro_x_realidade.html:28`); C9/BATIDA aponta regularização e C9/CADASTRO aponta template/vínculo (`app/escala/services/cadastro_realidade.py:445-456`). Regularização é declarada porta da supervisão (`app/escala/services/cadastro_realidade.py:20-22`) e exige `regularizar_batida` (`app/colaboradores/views.py:2948-2958`); wizard exige `editar_escalas`, vínculo `editar_cadastro` (linhas acima). Portanto BATIDA/CADASTRO não equivalem a um perfil exclusivo admin. |
-
-As permissões reais são dinâmicas via `user.get_all_permissions()`, com passe de superuser; os perfis efetivamente autorizados em produção são `[nao verificado]` (`app/colaboradores/mixins.py:322-331`). A semeadura padrão concede `regularizar_batida`, `editar_escalas` e `editar_ausencias` à supervisão (`:355-362`), `editar_ausencias`/`editar_cadastro` ao DP (`:363-370`) e conjunto amplo a TI (`:371-382`). Logo a frase “supervisor nunca sai de nenhuma porta” não é sustentada como exclusão de capacidade: a própria porta C9/BATIDA é apresentada como regularização da supervisão (`app/escala/services/cadastro_realidade.py:20-22`).
-
-## 30/10 22:38 · sessao 97f9cda9c180 · O261-E-CELULA-20 · verificador · origem=Code
-
-**Parecer: REPROVA o delta para fechamento da F1.** Há uma regressão demonstrável na relavra S2, perda de isolamento no E2 e um caminho de segunda passada que deixa a impressão anterior ao fechamento. (`app/chamados/models.py:261`, `:278–288`, `:1774`; `app/ponto/services/cartorio.py:751–759`, `:1187–1191`, `:1449`)
-
-**1. Achados**
-
-- **Cache velho: o ponto comprovado é depois do `save`, não entre gate e núcleo.** O gate guarda as perguntas em `_f1_ancoradas`; durante `self.save()`, S143 busca outras instâncias e pode mudar `materializada_em`, `via_resolucao`, `validada_em` e a lavra S2. Ao retornar, o núcleo relavra os objetos anteriores, sem recarregar. (`app/chamados/models.py:357`, `:261`, `:278–288`; `app/chamados/signals.py:89–92`; `app/chamados/services/disputa_emissao.py:1536–1583`)
-
-  Contraexemplo pelo código: pergunta de escolha ainda sem materialização, com célula que absolve e sem marcos pendentes. C6 permite fechar; S143 carimba e lavra **SIM**; a relavra final usa `materializada_em=None` do snapshot e grava **NÃO**. O novo `julgado_em` pode ainda ficar posterior ao carimbo, impedindo que a comparação de marcos detecte esse envelhecimento. Reprodução em banco e ocorrência no dado fornecido: **[não verificado]**. (`app/chamados/juizes.py:628–629`, `:1054–1065`; `app/chamados/services/disputa_emissao.py:1562–1583`; `app/chamados/veredito_lavrado.py:188–190`, `:219–231`)
-
-- **`atomic(savepoint=False)` remove a recuperação local do fechamento de disputa chamado pelo E2.** E2 captura exceções de `DisputaSupervisao.fechar`; agora, havendo transação externa, uma exceção que atravesse o bloco sem savepoint pode marcar essa transação para rollback, embora E2 continue. É a classe de falha já documentada pelo próprio mecanismo de auditoria. Falha efetivamente provocada nesta cópia: **[não verificado]**. (`app/chamados/reconciliador.py:632–640`; `app/chamados/models.py:1774–1797`; `app/core/observ.py:124–133`)
-
-  Isso **não** demonstra defeito nos dois receivers protegidos: Defesa 1 e S143 conservam seus próprios `atomic()`. (`app/chamados/signals.py:41–46`, `:88–94`)
-
-- **A segunda passada pode consumir o fechamento e descartar a convergência.** Se E2 matar a pergunta, mas não fechar seu chamado-destino — E2 fecha o pai da disputa, que pode ser outro chamado —, `_porm` fecha o destino na segunda passada e reenfileira a célula. O wrapper descarta essa nova fila em `rejulgar_descartado`. A impressão foi calculada antes do fechamento e é gravada depois; sem emissão nova, a releitura final não entra. Quantidade de ocorrências: **[não verificado]**. (`app/chamados/reconciliador.py:623–638`; `app/chamados/signals.py:32–42`; `app/ponto/services/cartorio.py:1089–1094`, `:1187–1191`, `:751–759`, `:804–817`, `:1449–1450`)
-
-- **O ciclo de `cobranca_indevida` permanece.** O corte altera `cobrado` no ramo `not cods`; `COBRANCA_SEM_FURO` e `COBRANCA_EM_DIA_SEM_TRABALHO` continuam dependendo do chamado vivo. Ambos derivam `cobranca_indevida`, que mantém C6 vivo e fica excluída do E2. (`app/ponto/services/cartorio.py:1141–1165`; `app/ponto/supra_juiz.py:418–445`; `app/escala/models.py:1581`, `:1735–1736`; `app/chamados/juizes.py:1054–1057`; `app/chamados/reconciliador.py:598`)
-
-**2. Quem escreve e quem lê**
-
-| Estado | Escrita | Leitura relevante |
-|---|---|---|
-| `CelulaDia.veredito`, incluindo `cobrado` | Porta `lavrar_veredito`; cartório solicita o valor e depois carimba. (`app/ponto/portas/celula.py:678–695`; `app/ponto/services/cartorio.py:1164–1165`, `:1434–1450`) | C6 e seleção do E2. (`app/chamados/juizes.py:1017–1032`, `:1054–1065`; `app/chamados/reconciliador.py:594–599`) |
-| `materializada_em` / `via_resolucao` neste E2 | Escritor existente `retratar_perguntas_absolvidas_por_celula`; o delta acrescenta seu chamador. (`app/chamados/reconciliador.py:617–621`; `app/ponto/services/cartorio.py:749–750`) | C6 e juiz usado pela lavra S2. (`app/chamados/juizes.py:1044–1052`, `:1076–1083`; `app/chamados/veredito_lavrado.py:219–221`) |
-| `chamado_destino` no agrupamento | `agrupar_furo` chama `reapontar_resolvedora`, que consulta E4-c, atribui, relavra e salva. (`app/chamados/services/limbo_folgas.py:228–230`; `app/chamados/services/fio.py:821–831`) | Âncora canônica `chamado_que_lista` e guarda F1. (`app/chamados/services/fio.py:97–117`; `app/chamados/models.py:336–343`) |
-| Outros escritores de `chamado_destino` | `PerguntaDisputa.abrir` também escreve no dedup e no nascimento; portanto a exclusividade da porta não cobre literalmente toda escrita existente. (`app/chamados/models.py:2370–2397`) | Guarda de costura no dedup. (`app/chamados/models.py:2367–2369`) |
-| `status_local` | Transição persistente em `_gravar_estado`; troca temporária para julgar o pós-estado em `_vivas_entre`, restaurada no `finally`. (`app/chamados/models.py:222–261`, `:333–346`) | Motor dos gates, tripwire, juiz de materialização e receivers. (`app/chamados/models.py:215`, `:631`, `:1469`; `app/chamados/juizes.py:699`; `app/chamados/signals.py:70–81`) |
-| `_f1_ancoradas` | Lista escrita pelo plano; limpa no consumo, recusa e dry-run. (`app/chamados/models.py:357`, `:211`, `:398`, `:645`) | Tripwire e relavra S2. (`app/chamados/models.py:210–218`, `:278–288`) |
-| `_f1_dedup` | Premissa prepara o payload; decisão inicializa, consome e limpa. (`app/chamados/models.py:697–701`, `:639–642`) | Decisão emite `fechamento_por_dedup`. (`app/chamados/models.py:648–650`) |
-| `fechamento_recusado` | `_registrar_recusa` solicita; `evento` persiste `LogAuditoria`. (`app/chamados/models.py:372–383`; `app/core/observ.py:134–138`) | A própria porta lê último payload e estados posteriores para deduplicar. (`app/chamados/models.py:378–381`) |
-| `fechamento_por_dedup` | Decisão solicita após a guarda, **antes** de `_gravar_estado`; persistência por `evento`. (`app/chamados/models.py:643–650`, `:612`; `app/core/observ.py:134–138`) | Testes conferem sobrevivente e idempotência. (`app/chamados/tests/test_fechar3_retorno_do_gate.py:109–117`) |
-
-**3. Limites e efeitos que não devem virar acusação sem prova**
-
-- **Não demonstrei nova travessia vivo→terminal com pergunta viva causada pelo delta.** Antes do núcleo, a reata modifica as mesmas instâncias do cache; o receiver de pergunta agenda `on_commit` sob o atomic aberto. Um mutador concorrente nessa janela permanece **[não verificado]**. (`app/chamados/models.py:408–419`, `:608–612`; `app/chamados/services/fio.py:828–831`; `app/chamados/signals.py:191–202`)
-
-- **Há caminho preexistente que conserva terminal com viva:** nascimento de pergunta com destino terminal continua fora da guarda F1; depois, `resolvido→fechado` não passa pela verificação reservada à saída de VIVOS. Não é prova de regressão nova deste delta. (`app/chamados/models.py:2396–2397`, `:392–393`, `:215`, `:1468–1477`; `app/chamados/services/fio.py:748`)
-
-- **E2 dentro do julgamento não faz apenas o carimbo.** Sua consulta abrange o colaborador inteiro; ele pode fechar disputas, reconciliar pais e acrescentar notas. Com `_tl.ativo=True`, o receiver suprime o julgamento provocado por esses fechamentos; a segunda passada recebe apenas `rejulgar`. Dano concreto em outros dias: **[não verificado]**. (`app/chamados/reconciliador.py:584–599`, `:632–638`; `app/chamados/signals.py:41–45`, `:174–175`; `app/ponto/services/cartorio.py:738–752`)
-
-- **A trilha dedup adiada corrige a emissão quando a guarda recusa**, mas ainda não é confirmação posterior ao save: continua dependente da transação concluir corretamente. (`app/chamados/models.py:643–650`, `:608–613`)
-
-- **LIMBO e O199 usam as portas existentes solicitadas:** reata antes da reconciliação no agrupamento; novo pedido a `fechar_o_fio_do_dia` após o aceite da irmã no dia já folga. Resultado executado e impacto em produção: **[não verificado]**. (`app/chamados/services/limbo_folgas.py:228–230`; `app/chamados/services/validacao.py:261–271`)
-
-- **Não há prova adicional de segundo juiz, segundo escritor de materialização, inversão de trava ou mudança de teto temporal.** O filtro novo chama `marcos_acesos`; E2 conserva a guarda de marcos pendentes. Regressão de relógio/ordem de trava: **[não verificado]**. (`app/ponto/services/cartorio.py:1140`, `:1164`, `:1181`; `app/chamados/reconciliador.py:604–614`)
-
-**4. Testes vermelhos e cobertura** [nao verificado]
-
-- **Vermelho relatado no anexo e sustentado pelo mecanismo:** `PortaSegundoAtoTest.test_MORDE_derruba_a_cobranca_viva_do_dia_que_virou_folga`, que exige a saída de VIVOS. Reexecução independente: **[não verificado]**. (`app/colaboradores/tests/test_contract_porta_2ato.py:147–160`; `app/ponto/supra_juiz.py:441–445`)
-
-- **Não confirmo HX/B2.d como vermelhos atuais:** suas fixtures já plantam explicitamente o passivo terminal, sem depender de `encerrar()` fabricá-lo. Resultado atual: **[não verificado]**. (`app/chamados/tests/test_laco_hx_x_bug31.py:37–43`; `app/chamados/tests/test_b2d_resposta_visivel.py:16–22`)
-
-- **Tetos do chokepoint e contagem das órfãs:** resultado atual **[não verificado]**; não há medição fornecida que autorize afirmar novo excesso ou novo total. Os testes do chokepoint exigem fechamento efetivo antes de aceitar a contagem. (`app/ponto/tests/test_selo_chokepoint_escrita.py:157–164`, `:360–368`)
-
-- **O teste novo da lâmpada não prende a convergência:** verifica fechamento e ausência de viva, mas não `rejulgar_descartado`, impressão estável ou segunda chamada sem escrita. O selo AST prende chamada/raise antes da escrita; não verifica a atualidade dos objetos reutilizados na S2. (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:375–390`; `app/chamados/tests/test_o261e_f1_selo_encerramento.py:24–47`)
-
-A exigência de idempotência é “mesmo estado, uma trilha, zero duplicação”; reutilizar o snapshot após os receivers e terminar com impressão anterior ao fechamento deixa essa exigência sem cumprimento demonstrado. (`CLAUDE.md:299–302`; `app/chamados/models.py:278–288`; `app/ponto/services/cartorio.py:757–759`, `:1449–1450`)
-
-## 30/10 22:38 · sessao d814bc670e38 · - · - · origem=Ronald (tmux)
-
-Não encontrei leitor operacional do e6 que omita a fase na cópia atual: e6 usa `InsumosDoDono` e `.dono()` (`app/ponto/management/commands/e6_oraculo.py:309`, `:359`); pautas usam a montagem, incluem fase no pré-filtro e só pedem motor para ESTRUTURA (`app/ponto/management/commands/pautas_discordantes.py:82`, `:96`, `:98`, `:100`, `:109`); teto também usa a montagem (`app/ponto/services/teto_na_lista.py:72`, `:86`); censo injeta os dias do julgamento corrente e grava o resultado do juiz (`app/ponto/management/commands/censo_fase_12x36.py:260`, `:262`, `:273`).
-
-A fase vem de `ultimo_lavrado(self.hoje)`, filtrada pelo colaborador e cacheada (`app/ponto/management/commands/e6_oraculo.py:159`). Ela entra nas duas chamadas finais possíveis ao juiz, inclusive quando o e6 fornece o espelho previamente (`app/ponto/management/commands/e6_oraculo.py:169`, `:173`, `:176`). A precedência efetiva mantém os ramos anteriores de cadastro, depois BATIDA por turno aberto/batida real ou paridade ímpar, depois CADASTRO pela fase (`app/ponto/management/commands/e6_oraculo.py:97`, `:103`, `:105`, `:107`).
-
-O leitor indireto preserva o dono lavrado da C10, mostra esse dono na lista e resolve C9/C10 no mesmo nível; divergência produz `None`, independentemente da ordem (`app/escala/services/cadastro_realidade.py:343`, `:650`, `:710`, `:713`, `:738`). O vigia consulta exatamente `dias_na_lista(lista(hoje=hoje,...))` e só retira do alarme donos BATIDA/CADASTRO (`app/chamados/services/vigia_fio.py:259`, `:266`).
-
-Não achei residual procedente novo nesses caminhos; o pré-filtro ainda omite os demais insumos de cadastro, situação já registrada na triagem fornecida (`app/ponto/management/commands/pautas_discordantes.py:98`; classificação histórica: [nao verificado]). Não executei suíte; aprovação dinâmica [nao verificado].
-
-_803 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_807 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
