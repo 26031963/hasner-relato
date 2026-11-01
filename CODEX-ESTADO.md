@@ -1,7 +1,148 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 12:47** · publicado em **01/11/2026 12:48** (UTC-3)
+> Ultima resposta processada: **01/11/2026 13:03** · publicado em **01/11/2026 13:05** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 13:03 · sessao 8e5e644a35b0 · COBERTURA-PARCIAL-UM-JUIZ · censo · origem=Code
+
+**Classificação: 1 → (c), com alerta estático já feito; 2 → (a); 3 → (a), com existência histórica dos sítios parcialmente não verificada; 4 → (c); 5 → (c); 6 → (e), ressalvada L-092.** As distinções e evidências estão abaixo. (`triagem.md:5730`, `:5741`; r3.r → `app/ponto/services/cartorio.py:208`, `app/ponto/turnos.py:2632`; r1.q:10; r3.q:28)
+
+Numerei as linhas das perguntas a partir da primeira linha de cada anexo. As referências apresentadas como “r1.r → arquivo:linha” são as referências históricas da resposta, não posições da cópia final.
+
+**1. Bump isolado, alcance financeiro e emissão em lote — (c) para a medição final; o risco estático já havia sido visto.**
+
+Pergunta literal:
+
+> “pouso antes do pre-requisito (REGRA_VERSOES (3,'2026-09') rejulga a competencia 09, que esta EXPORTADA).” (`r3.q:31`) [nao verificado]
+
+Resposta literal:
+
+> “O horizonte alcança **toda competência ≥09**, não apenas cinco dias, e invalida impressões inclusive sem mudança de marcos dispensados. Não seleciona uma implementação histórica isolada.”  
+> “**Bloqueia certificar o pouso:** os hashes, o impacto financeiro, a eventual Pauta DP e a reconstrução exigida das projeções não exportadas não estão demonstrados no material fornecido; cumprimento **[nao verificado]**.” (r3.r → `app/ponto/services/cartorio.py:208`, `:380`, `:1192`, `:169`; `app/docs/LEIS.md:142`)
+
+Portanto, **não cabe dizer que o Codex deixou passar o alcance geral do bump**. A falha específica da comparação posterior com `forcar=True`, os 16 colaboradores e os deltas produtivos pertencem à medição posterior às três leituras. A triagem exigiu a comparação e depois registrou a hipótese ainda não provada, mantendo a obra parada. (`triagem.md:11`, `:5730`, `:5741`, `:5744`)
+
+Existência nas árvores lidas:
+
+| Volta | Evidência histórica |
+|---|---|
+| r1 | Impressão e desvio por força já existiam: “`forcar=True` ignora o salto por impressão igual”. A versão 3 ainda nessa árvore: **[nao verificado]**. (r1.r → `app/ponto/services/cartorio.py:1177`) |
+| r2 | Impressão e pulo já existiam; a resposta observou que “a declaração de versões atual não contém uma versão adicional para esta obra”. (r2.r → `app/ponto/services/cartorio.py:1189`, `:111`) |
+| r3 | Versão, horizonte geral e invalidação já estavam presentes e foram apontados expressamente. (r3.r → `app/ponto/services/cartorio.py:111`, `:208`, `:380`, `:1192`) |
+
+A cópia final permite confirmar estaticamente que a versão alimenta a impressão e que `forcar` atravessa os dois testes de igualdade; isso não reproduz a medição. (`app/ponto/services/cartorio.py:1003`, `:1055`, `:1060`, `:1208`, `:1218`)
+
+O próprio achado final limita o contraexemplo sem força à árvore anterior: “Não verifiquei na 113fd774: o v4 rodou na 129bfeaa, antes do c2”. Logo, repetir os mesmos deltas na árvore final permanece **[nao verificado]**. (anexo `opus_final_achados.md`, item 1; `triagem.md:5741`, `:5758`)
+
+**2. Materialização cala parcial sem período; `_celula_furada` não — (a).**
+
+Pergunta literal:
+
+> “compare o predicado novo com os outros sitios que decidem ‘ausencia cobre o dia’”  
+> “Algum responde diferente para o mesmo (ausencia, dia)?” (`r3.q:21`, `:23`)
+
+Resposta literal:
+
+> “O argumento vazio **não é o defeito**: com os dois horários preenchidos, `periodo_da_parcial_no_dia(a, ())` retorna `fora`; faltando um horário, retorna `sem_periodo`.” (r3.r → `app/ponto/turnos.py:2632`, `:2638`, `:2641`)
+
+A resposta identificou o retorno `sem_periodo`, mas apontou como divergência o desempate entre duas ausências; não apontou a cláusula adicional que cala a parcial sem período. Essa diferença aparece na cópia entre o `or (... == 'sem_periodo')` da materialização e a consulta exclusiva à integralidade em `_celula_furada`. (`app/chamados/services/materializacao.py:81`, `app/chamados/juizes.py:447`; r3.r → `app/chamados/services/materializacao.py:74`)
+
+Existência nas árvores lidas:
+
+| Volta | Evidência histórica |
+|---|---|
+| r1 | Ambos os leitores existiam; a materialização ainda foi descrita como cobertura ampla por qualquer ausência não-falta. A cláusula específica `sem_periodo` nessa volta: **[nao verificado]**. (r1.r → `app/chamados/services/materializacao.py:65`, `app/chamados/juizes.py:433`) |
+| r2 | A cobertura ampla foi novamente denunciada. A cláusula específica `sem_periodo` nessa volta: **[nao verificado]**. (r2.r → `app/chamados/services/materializacao.py:55`) |
+| r3 | A lógica de `sem_periodo` já integrava o predicado examinado, e os dois leitores foram citados. A seleção por `any()` ainda seria corrigida depois. (r3.r → `app/ponto/turnos.py:2632`, `app/chamados/services/materializacao.py:74`, `app/chamados/juizes.py:446`; cópia: `app/chamados/services/materializacao.py:66`, `:73`) |
+
+A r2 escreveu literalmente “**Procedem de fato três descartes:**” e incluiu `_coberto_por_ausencia`. Isso comprova que houve contestação de descarte sobre o **antecedente mais amplo**, mas não fornece a linha individualizada da triagem nem identifica o achado final de `sem_periodo` como descartado. Classificação **(b)** para este achado: **[nao verificado]**. (r2.r → `app/chamados/services/materializacao.py:55`; `triagem.md:5730`)
+
+**3. `furos_diarios` e `calculadores` ainda pulam parcial por `tipo_dia` — (a) quanto ao tema perguntado.**
+
+Pergunta literal:
+
+> “Ha algum leitor [...] que segue derivando o dia parcial por regra propria (ex. por Ausencia.minutos, por tipo_dia, por cobre_parte_do_dia) e agora contradiz a grade?” (`r1.q:10`)
+
+Trecho literal relacionado da resposta:
+
+> “Conta não-missing, mas filtra dia `trabalho` em `:141`; parcial rotulada ausência não entra.” (r2.r → `app/inteligencia/calculadores.py:153`, `:141`)
+
+A r2 percebeu um filtro por tipo em `calculadores`, mas o tratou como proteção daquela **contagem de batidas**; não formulou o achado final sobre os leitores que excluem o dia parcial do universo de furos. Os dois filtros finais estão presentes na cópia. (`app/escala/services/furos_diarios.py:39`, `app/inteligencia/calculadores.py:46`; r2.r → `app/inteligencia/calculadores.py:141`, `:153`)
+
+Existência nas árvores lidas:
+
+| Volta | Evidência histórica |
+|---|---|
+| r1 | Os dois sítios exatos do achado final: **[nao verificado]**. |
+| r2 | O arquivo `calculadores.py` e outro filtro por `trabalho` estão comprovados pela resposta; o bloco atualmente em `:46` e o filtro de `furos_diarios.py:39` naquela árvore: **[nao verificado]**. (r2.r → `app/inteligencia/calculadores.py:141`, `:153`) |
+| r3 | A resposta encontrou exclusão semelhante em relatórios, mas a existência histórica dos dois sítios exatos finais continua **[nao verificado]**. (r3.r → `app/relatorios/furos.py:151`, `:218`, `:237`) |
+
+Assim, o tema estava explicitamente perguntado; **atribuir a omissão dos dois blocos exatos a cada uma das três árvores exige evidência histórica que o material não fornece**. (`r1.q:10`; existência desses blocos nas três árvores: **[nao verificado]**)
+
+**4. Falta aprovada deixa de suprimir c2 e permite costura — (c), pela mudança posterior à r3.**
+
+Pergunta literal relacionada:
+
+> “Algum responde diferente para o mesmo (ausencia, dia)?”  
+> “(c) parcial do tipo 'falta'” (`r3.q:23`, `:26`)
+
+Resposta literal:
+
+> “Parcial com período e marco externo apagado: qualquer ausência vencedora veta criação, reabertura e até costura no chamado vivo.” (r3.r → `app/chamados/reconciliador.py:811`, `:825`)
+
+A r3 viu o **veto antigo excessivo**. A v4 trocou esse veto pela composição `_coberto_por_ausencia`; nessa composição, falta retorna falso. O achado final examina o comportamento resultante dessa troca, especialmente no chamado já vivo. (`app/chamados/reconciliador.py:812`, `:825`, `:828`; `app/chamados/services/materializacao.py:81`; `app/ponto/turnos.py:2674`)
+
+Existência nas árvores lidas:
+
+| Volta | Evidência histórica |
+|---|---|
+| r1 | Sítio c2 específico: **[nao verificado]**. |
+| r2 | c2 já existia e “também para ao encontrar ausência”. (r2.r → `app/chamados/reconciliador.py:825`) |
+| r3 | Veto e costura já existiam, mas com o comportamento antigo expressamente denunciado. (r3.r → `app/chamados/reconciliador.py:811`, `:825`) |
+
+A triagem mandou curar os procedentes da r3 e registrou o RED posterior “dos 4 procedentes Codex r3 + c2”; isso não demonstra cobertura do mutante específico de falta aprovada citado pelo Opus. (`triagem.md:5730`, `:5744`; teste desse mutante: **[nao verificado]**) [nao verificado]
+
+**5. Fuso de `deslocamentos_na_cadeia` e descarte de marco sem instante — (c) para os mecanismos finais.**
+
+Pergunta literal:
+
+> “os testes novos em ponto/tests/test_cobparc_marco_no_periodo.py mordem a costura? algum passa com a cura revertida?” (`r3.q:29`)
+
+Resposta literal:
+
+> “A lacuna bloqueante é concreta: teste noturno pula a construção da régua; teste de âncora é diurno e verifica somente `.time()`, não a data.” (r3.r → `app/ponto/tests/test_cobparc_marco_no_periodo.py:43`, `:423`)
+
+O Codex viu lacunas dos testes da **implementação anterior**. A composição `deslocamentos_na_cadeia` e a consulta ao mapa de instantes que agora descarta marcos foram apresentadas como cura da volta 4, posterior à leitura final do Codex. (`app/escala/utils.py:356`, `:366`, `:372`; `app/ponto/services/cartorio.py:1721`, `:1733`; `triagem.md:5730`)
+
+Existência nas árvores lidas:
+
+| Volta | Evidência histórica |
+|---|---|
+| r1 | Existia o antecessor `deslocamentos_dos_marcos`, exercitado indiretamente pelos testes noturnos. (r1.r → `app/ponto/turnos.py:2661`; `app/ponto/tests/test_cobparc_marco_no_periodo.py:64`, `:71`) |
+| r2 | O antecessor continuava sendo usado e foi denunciado pela ordem noturna. A cadeia de nomeação também foi citada. (r2.r → `app/ponto/turnos.py:2661`, `app/ponto/services/cartorio.py:1674`) |
+| r3 | `_marcos_do_furo_parcial` já existia, mas ordenava horas e combinava com D; a nova filtragem por mapa de instantes pertence à cura posterior. (r3.r → `app/ponto/services/cartorio.py:1717`, `:1719`; cópia: `app/ponto/services/cartorio.py:1721`, `:1733`) |
+
+O caso antigo de “marco fora da régua no ramo DNA” foi perguntado e apontado; ele não comprova que o Codex tenha lido o **novo descarte por ausência de instante**. (`r1.q:13`; r1.r → `app/ponto/services/cartorio.py:491`, `:513`; cópia: `app/ponto/services/cartorio.py:1733`)
+
+**6. Auditoria das leis que protegem os sítios — (e) para conferência artigo por artigo; L-092 retorna ao item 1.**
+
+Pergunta literal:
+
+> “Checklist das classes que ja reprovaram obra: 2o juiz [...] 2o escritor [...] relogio [...] derivacao paralela [...] selo/RED [...] ordem de trava; pouso antes do pre-requisito [...]” (`r3.q:28`) [nao verificado]
+
+Resposta literal:
+
+> “A 09 exportada, por si só, não impede rejulgar ata: o aval escrito autoriza isso e exige fechamento intacto com hashes antes/depois e destino da diferença financeira.” (r3.r → `app/ponto/services/cartorio.py:168`, `app/ponto/services/fechamento.py:36`, `:544`)
+
+A r3 recebeu as linhas de leis como anexo, mas o pedido não enumerava a conferência artigo por artigo dessas oito leis. Pediu classes estruturais e explicitamente o problema da competência exportada; este último foi respondido com bloqueio de certificação, conforme item 1. (`r3.q:2`, `:28`, `:31`; r3.r → `app/docs/LEIS.md:142`)
+
+Os cinco arquivos envolvidos já aparecem nas três respostas: cartório, leitor da célula, supra, utils e turnos. Isso comprova os **arquivos/sítios antecedentes**, não a identidade de todos os trechos finais nem sua conformidade integral com cada artigo. (r1.r → `app/ponto/services/cartorio.py:430`, `app/escala/services/leitor_celula.py:120`, `app/ponto/supra_juiz.py:311`, `app/escala/utils.py:1191`, `app/ponto/turnos.py:2661`; r2.r → respectivos `:1204`, `:83`, `:313`, `:1207`, `:2661`; r3.r → respectivos `:1217`, `:91`, `:530`, `:1206`, `:2652`)
+
+O item 6 do Opus tampouco demonstra violações adicionais: ele próprio diz “Nas outras não verifiquei artigo por artigo”. Classificá-las como falhas que “nenhum viu” seria afirmar infrações ainda **[nao verificado]**.
+
+**Não há classe (b) demonstrável para os seis achados exatos com as linhas de triagem fornecidas.** Há relato de descartes na r2, mas falta a linha individualizada exigida para atribuir essa classe; para os procedentes da r3, a triagem determina cura. (r2.r → `app/chamados/services/materializacao.py:55`; `triagem.md:11`, `:5730`)
+
+Uma diferença documental impede transportar a referência final do Opus diretamente para esta cópia: aqui a obra está em `app/docs/BACKLOG.md:755`, ainda com “PAROU”; `:756` é outra obra. A frase posterior sobre “artefato da ata velha” nessa cópia está **[nao verificado]**. (`app/docs/BACKLOG.md:755`, `:756`)
 
 ## 01/11 12:47 · sessao e228828c2fac · GRADE-FOLGA-JUIZ · censo · origem=Code
 
@@ -854,50 +995,4 @@ Essas alterações **não implicam sempre** `falta ↔ folga`: ausência vencedo
 
 [truncado em 20000 de 35641 caracteres]
 
-## 01/11 10:40 · sessao 069db40031e4 · - · - · origem=Ronald (tmux)
-
-Avaliação estática; testes não executados e RED/GREEN observado em execução permanece [não verificado]. [nao verificado]
-
-| Arquivo/teste (linha da definição) | Sem a cura do diff | [nao verificado]
-|---|---|
-| `app/colaboradores/tests/test_calendario_folga_a_mao_e_da_pessoa.py:54` | Morde: main perde folga manual do velho; mudança do carregamento está em `app/colaboradores/services/calendario.py:604`. |
-| Mesmo arquivo `:61` | Já passa main; par de preservação, conforme a própria caracterização `:10`. |
-| Mesmo arquivo `:96` | Morde: foto do ativo confundia calendário dele com manual no dia da geradora velha; fixture `:84`, `:89`, `:98`. |
-| `app/escala/tests/test_grade_folga_de_calendario_e_do_vinculo.py:70` | Morde por turno; já passa legacy, distinção documentada `:21`. |
-| Mesmo arquivo `:75` | Já passa por turno; morde legacy, distinção documentada `:22`. |
-| Mesmo arquivo `:80` | Já passa ambos: calendário do próprio vínculo; fixture/as débeis `:81`, `:82`. |
-| Mesmo arquivo `:85` | Morde ambos pela precedência: calendário inválido de menor pk escondia o válido; caracterização `:16`, asserção `:89`, carregador corrigido `app/ponto/precedencia.py:208`. |
-| Mesmo arquivo `:91` | Morde ambos: manual fora da janela, caso `:92`, `:93`; universo agora pessoal `app/escala/utils.py:1119`. |
-| `app/escala/tests/test_grade_folga_vale_em_toda_competencia.py:69` | Premissa já passa main; só verifica versões `:71`, `:72`. |
-| Mesmo arquivo `:74`, `:79`, `:84` | **Já passam main nos dois builders.** Velho termina em 31/07 (`:47`), janela começa em 13/08 (`:25`, `:66`); main por turno só aplicava overlay dos vínculos da janela, cujo conjunto continua sendo formado em `app/escala/utils.py:1268`. Legacy segmenta pelo vínculo de cada dia em `app/escala/utils.py:975`, `:985`, `:995`. Simulação usa janela de um dia em `app/ponto/services/simular_dia.py:7`. São úteis contra retorno de gating, mas não RED da cura contra este main. |
-| Mesmo arquivo `:90` | Morde ambos: manual do velho fora da janela deve ser aceita; assert `:93`. |
-| `app/ponto/tests/test_grade_folga_juiz_sitios.py:79` | Morde veto antigo; caso/asserts `:80`, `:81`, `:82`. |
-| Mesmo arquivo `:84` | Par já passava main; manual continua vetando `:86`, `:87`. |
-| Mesmo arquivo `:93` | Morde declarador antigo; manual do velho precisa aparecer `:96`, `:97`. |
-| Mesmo arquivo `:99`, `:105` | Pares já passam main; calendário alheio recusado como fato e próprio continua gerido por calendário `:102`, `:109`. |
-| Mesmo arquivo `:125` | Morde universo antigo do comando; espera zero `:129`. |
-| Mesmo arquivo `:131` | Par já passava main; espera um `:135`. |
-| Mesmo arquivo `:159`, `:166` | Já passam main; própria documentação registra que gate e juiz já concordavam `:141`, `:142`, `:143`. |
-| `app/ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:95` | Premissa já passa main `:97`, `:99`. |
-| Mesmo arquivo `:101` | Morde por turno: ata precisa mudar para trabalho `:103`. |
-| Mesmo arquivo `:106` | Morde por turno pela assert adicional da ata `:114`; preservação FM/TXT sozinha não separa cura do main `:115`, `:117`, `:118`, `:119`. |
-| Mesmo arquivo `:121` | Já passa main; protege horizonte e não comprova cura. Assert final `:128`. |
-| Mesmo arquivo `:130` | Morde por turno pela resposta explícita trabalho `:136`; evita igualdade das duas testemunhas erradas. |
-| `app/ponto/tests/test_o219_versao_da_regra.py:67`, `:78` | Mordem retirada do bump: tupla exige v3 `:76`; leitor exige 3 na competência 10 `:89`, `:90`. |
-
-Os casos da primeira bateria de grade são herdados pelos dois builders em `app/escala/tests/test_grade_folga_de_calendario_e_do_vinculo.py:97` e `:102`; os da segunda também, em `app/escala/tests/test_grade_folga_vale_em_toda_competencia.py:98` e `:103`. Os testes do cartório não fixam a flag; default é True em `app/config/settings/base.py:165`; com False, o calendário alheio já era ignorado no main legacy por segmentação `app/escala/utils.py:985`, `:995`.
-
-Na catraca:
-
-- `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:176` morde produção antiga mediante achados fora da allowlist `:178`; `:182` morde `_folga_avulsa` sobrevivente `:187`.
-- Testes `:189`, `:194`, `:200`, `:223`, `:230`, `:236`, `:245`, `:262` são testes do analisador/percurso com fontes sintéticas; passam sem migrar os leitores de produção, e protegem o scanner, conforme cada fonte/assert em `:190`, `:195`, `:201`, `:226`, `:231`, `:238`, `:251`, `:263`. [nao verificado]
-- `:204` e `:215` inspecionam funções novas `:212`, `:220`: main puro falharia por atributo inexistente; mantendo funções novas e restaurando leitores antigos, esses dois ainda passam. A costura de produção é cobrada por `:176` e `:182`.
-- Não executei o teste de percurso, pois cria arquivos temporários em `:256`, `:257`, `:258`, `:259`; execução [não verificado]. [nao verificado]
-
-Em `app/ponto/tests/test_rejulgar_ausencia_em_folga.py:48` só mudou o mock do helper. Os três casos `:58`, `:64`, `:70` recebem universo já mockado `:52` e julgamento mockado `:53`; não verificam esta regra. Transplantar o helper atual ao main deixa a consulta FolgaDia antiga sem mock, podendo produzir erro incidental de acesso a banco; isso não seria RED da regra `:47`, `:48`, `:49`.
-
-Não acusar fixture sem carimbo no teste `sem_forcar`: as batidas são criadas em `app/ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:62`; seu signal chama julgamento em `app/ponto/signals.py:131`, `:135`, `:93`. Depois só a ata é sobreposta em `app/ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:74`. Contudo o teste não afirma explicitamente impressão/carimbo em dia; pulo real exige ambos e veredito em `app/ponto/services/cartorio.py:1176`, `:1180`. Estado concreto da fixture e execução permanecem [não verificado].
-
-Para 3(f), nenhum ato de pouso é comprovado pelos anexos [não verificado]. Os pré-requisitos existem: bump é ato de frota e exige ensaio `--apply` antes do pouso em `app/ponto/services/cartorio.py:173`, `:175`; sombra no main atual, reversão e frota antes do opus em `app/docs/PROMPTS.md:1758`; reconstrução de projeções não exportadas pela porta em `app/docs/LEIS.md:142`. Fase conflitante sai do escopo em `app/docs/PROMPTS.md:1781`; publicação de `eh_trabalho` sai em `:1783`.
-
-_1387 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1388 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
