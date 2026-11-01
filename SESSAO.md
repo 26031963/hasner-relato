@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 17:47:15.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (137.3 MB). Acoes na janela: **683**.
+**Medido em 01/11/2026 17:52:56.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (137.4 MB). Acoes na janela: **690**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:48:40 | Bash | Switch ESPERANDO to suite and self-check | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md';s=open(p).read() old='ESPERANDO: codex_pergunta.sh \| pid=574653 \| arquivo=/home/ronald/saas-hasner/logs/codex/O261-E-F2_20261101_174729_574653.jsonl\n' assert s.count(old)==1 s=s.replace(old,'ESPERANDO: trava_teste.sh \| pid=547496 \| arquivo=/home/ronald/saas-hasner/logs/o261e/f2/suite_chamados_v5.log\n',1) open(p,'w').write( ...` |
+| 17:48:34 | Bash | Check for live suite process and file mtimes | `pgrep -af '^bash .*bin/(suite\|trava_teste)\.sh' \| head; ls -l --time-style=+%T /home/ronald/saas-hasner/logs/o261e/f2/suite_chamados_v5.log /home/ronald/saas-hasner/logs/codex/O261-E-F2_20261101_174729_574653.jsonl; date +%T` |
+| 17:48:28 | Bash | Inspect hook growth check logic | `ls -l --time-style=+%T /home/ronald/saas-hasner/logs/codex/O261-E-F2_20261101_174729_574653.jsonl; ps -p 574653 -o pid,etime; cd /home/ronald/saas-hasner/bin; grep -n 'nao andou' -B12 hook_stop_fila1.py \| head -40` |
+| 17:48:09 | Bash | Recheck ESPERANDO proof after growth | `/usr/bin/sleep 15; cd /home/ronald/saas-hasner/bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
+| 17:47:46 | Bash | Put ESPERANDO on topo and self-check hook proof | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md';s=open(p).read() anc='# RELATO — esteira saas-hasner\n\n' assert s.count(anc)==1 and not s[len(anc):].startswith('ESPERANDO') s=s.replace(anc,anc+'ESPERANDO: codex_pergunta.sh \| pid=574653 \| arquivo=/home/ronald/saas-hasner/logs/codex/O261-E-F2_20261101_174729_574653.jsonl\n',1) open(p,'w').write(s) EOF /usr/bin/sleep 20; ls - ...` |
+| 17:47:40 | Bash | Find growing codex jsonl and chamados suite verdict | `cd /home/ronald/saas-hasner; F=$(ls -t logs/codex/O261-E-F2_*574653*.jsonl 2>/dev/null \| head -1); [ -z "$F" ] && F=$(ls -t logs/codex/*.jsonl \| head -1); echo $F; ls -l $F; tail -1 logs/o261e/f2/suite_chamados_v5.log; grep -E '^(OK\|FAILED)($\| \()' logs/o261e/f2/suite_chamados_v5.log\|tail -1; grep '^Ran' logs/o261e/f2/suite_chamados_v5.log\|tail -1` |
+| 17:47:35 | Bash | Show detected process and newest logs | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/b9c5w2kc8.output; ls -lt /home/ronald/saas-hasner/logs/o261e/f2/ \| head -5; ls -lt /home/ronald/saas-hasner/logs/ \| head -5` |
 | 17:38:17 | TaskStop |  | `-` |
 | 17:38:12 | Bash | Wait for F2 builder's first suite/codex process | `for i in $(seq 1 240); do P=$(pgrep -f '^bash .*bin/(suite\|codex_pergunta)\.sh' \| head -1); [ -n "$P" ] && { ps -o pid,args -p $P; exit 0; }; /usr/bin/sleep 15; done; echo NENHUM` |
 | 17:38:07 | Bash | Log COBPARC park and F2 launch in RELATO | `cd /home/ronald/saas-hasner/app; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys;H=sys.argv[1];p='docs/RELATO.md';s=open(p).read() a=[l for l in s.split('\n') if l.startswith('- ') and 'O261-E-F2 parte 2 (a) ENTREGUE PARADA' in l]; assert len(a)==1 b='- %s COBPARC volta 5 ESTACIONADA 2 (logs/cobparc/v5/ESTACIONADO.md secao "ESTACIONADO 2"): HEAD 6eaf5ccf (arquivo RED escrito, nunca rodado; cur ...` |

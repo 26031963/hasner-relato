@@ -1,7 +1,190 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 16:53** · publicado em **01/11/2026 16:54** (UTC-3)
+> Ultima resposta processada: **01/11/2026 17:51** · publicado em **01/11/2026 17:52** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 17:51 · sessao 06c9e96978f9 · O261-E-F2 · verificador · origem=Code
+
+**A cobertura é parcial:** os quatro testes podem continuar verdes sem a guarda do fecho; o MORDE do ramo não chega ao vigia; e o caso 2 usa um veredito que a porta de produção rejeita. — `app/chamados/services/disputa_emissao.py:1626`; `app/chamados/models.py:2569`; `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:171`; `app/ponto/portas/celula.py:658`.
+
+Esta é uma análise estática da cópia. Execução dos testes, resultados dos logs citados no cabeçalho, suíte completa e correspondência Git com `7af133ad`/`cd623758`: **[não verificado]**.
+
+Para compactar as referências, os caminhos abaixo são relativos a `app/`, salvo `CLAUDE.md`.
+
+**1. O que os quatro testes provam** [nao verificado]
+
+- **T1 — `test_ramo_variante…`:** chama o C6 real, `resolver_perguntas_por_chamado_resolvido` real e `censo_alcance` real. Entretanto, `_fechar` sobrescreve novamente o estado da célula depois da função de produção. — `chamados/tests/test_o261e_f2_ramo_e_i20.py:155`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:163`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:181`.
+  
+  As asserções medem: C6 vivo antes; retorno dos contadores igual a `{0,0}`; `materializada_em` nulo; `via_resolucao` vazia; C6 vivo depois; exatamente uma linha daquela célula; rota `sem_porta`; detalhe `pergunta_viva_sob_chamado_terminal`; universo e dias sem porta iguais a `(2,2)`. **O índice 6 verificado é o detalhe; a causa está no índice 5 e não é verificada.** — `chamados/tests/test_o261e_f2_ramo_e_i20.py:184`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:168`; `chamados/services/vigia_fio.py:585`.
+
+  O contador `perguntas_resolvidas=0` não prova que o ramo sem credor deixou de carimbar: `n_pq` é incrementado no primeiro ramo, com `chamado_destino`; o ramo sem credor não o incrementa. A pergunta da fixture tem destino nulo. — `chamados/services/disputa_emissao.py:1537`, `chamados/services/disputa_emissao.py:1569`, `chamados/services/disputa_emissao.py:1638`, `chamados/services/disputa_emissao.py:1661`; `chamados/tests/test_o261e_f2_ramo_e_i20.py:142`.
+
+- **T2 — `test_MORDE_ramo…`:** chama o fecho real com `pergunta_viva` substituído por `False`; exige que tenha nascido materialização e que `_assert_ramo` lance `AssertionError`. Isso demonstra rejeição do carimbo pela primeira asserção do helper. **Não demonstra uma leitura adversarial do vigia**, porque o helper aborta antes dela. — `chamados/tests/test_o261e_f2_ramo_e_i20.py:193`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:196`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:171`.
+
+- **T3 — `test_caso2_dia_regularizado…`:** chama C6 real, fecho real, vigia real e auditor real por `call_command`. Verifica C6 morto inicialmente; manutenção de `('07:55', None, None)` em texto/respondida/materializada; PK fora da cicatriz; ausência da célula no alcance; totais `(1,1)`; I20 com `VIOL 1`; e presença da representação textual do PK na linha. Não verifica o retorno do fecho nem o código de saída do auditor. — `chamados/tests/test_o261e_f2_ramo_e_i20.py:207`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:202`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:79`.
+
+- **T4 — `test_MORDE_caso2…`:** chama o fecho real, executa uma cópia integral do auditor com o PK acrescentado à cicatriz e depois executa o comando real. Verifica âncora textual única; cópia com `OK 0`; rejeição dessa saída pelo helper que exige `VIOL 1`; e comando real contando novamente a pergunta. O `assertRaises` da cópia é satisfeito pela divergência de flag/total, antes da checagem do PK. — `chamados/tests/test_o261e_f2_ramo_e_i20.py:222`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:204`.
+
+Os helpers também exigem uma única atribuição AST de `_I20_CICATRIZ` e uma única linha I20 reconhecível na saída. — `chamados/tests/test_o261e_f2_ramo_e_i20.py:65`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:72`.
+
+**Mutantes concretos, sem aplicá-los**
+
+| Mutante | Alteração de produção de 1–3 linhas |
+|---|---|
+| **F — desligar guarda do fecho** | Trocar `if pergunta_viva(q):` por `if False:`. — `chamados/services/disputa_emissao.py:1626` |
+| **P — desligar recusa da porta** | Trocar `if viva:` por `if False:`. — `chamados/models.py:2569` |
+| **Z — silenciar I20** | Substituir o queryset passado a `add('I20',…)` por `PD.objects.none()`. — `chamados/management/commands/auditar_invariantes_chamados.py:1101` |
+| **C — remover exclusão da cicatriz** | Remover `.exclude(pk__in=_I20_CICATRIZ)`. — `chamados/management/commands/auditar_invariantes_chamados.py:1103` |
+| **R — remover filtro do instante** | Trocar `PD.objects.filter(respondida_em__isnull=True)` por `PD.objects.all()`, preservando as exclusões. — `chamados/management/commands/auditar_invariantes_chamados.py:1102` |
+
+Veredictos **previstos por leitura estática**, supondo a fixture isolada, PK fora da cicatriz e execução-base verde; execução efetiva: **[não verificado]**. Os pontos de observação são T1/T2/T3/T4 acima. — `chamados/tests/test_o261e_f2_ramo_e_i20.py:181`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:188`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:207`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:222`.
+
+| Mutante | T1 ramo | T2 MORDE ramo | T3 caso 2 | T4 MORDE I20 |
+|---|---:|---:|---:|---:|
+| F | Verde | Verde | Verde | Verde | [nao verificado]
+| P | Verde | Verde | Vermelho | Vermelho | [nao verificado]
+| F + P | Vermelho | Verde | Vermelho | Vermelho | [nao verificado]
+| Z | Verde | Verde | Vermelho | Vermelho | [nao verificado]
+| C | Verde | Verde | Verde | Vermelho | [nao verificado]
+| R | Verde | Verde | Verde | Verde | [nao verificado]
+
+A redundância explica F e P: sem F, a porta aplica provisoriamente o carimbo e `respondida_em`, consulta C6 e desfaz; sem P, T1 continua pulando antes da porta. T3 alcança a porta e denuncia a remoção de sua recusa. — `chamados/services/disputa_emissao.py:1626`; `chamados/models.py:2555`, `chamados/models.py:2565`, `chamados/models.py:2569`; `chamados/tests/test_o261e_f2_ramo_e_i20.py:214`.
+
+R sobrevive porque não existe controle negativo com texto **e** `respondida_em` preenchido; a fixture oferece apenas o caso positivo do meio-estado. Portanto os testes não prendem integralmente o predicado do I20. — `chamados/tests/test_o261e_f2_ramo_e_i20.py:143`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:214`; `chamados/management/commands/auditar_invariantes_chamados.py:1102`.
+
+**2. Quem escreve e quem lê**
+
+| Campo | Escrita de produção | Leituras de produção relevantes |
+|---|---|---|
+| `PerguntaDisputa.resposta_colab` | Resposta pelo core, gravação automática e limpeza na reabertura. — `chamados/services/disputa_emissao.py:1247`, `chamados/services/disputa_emissao.py:1393`, `chamados/services/disputa_emissao.py:1358` | C6, respostas sem veredito, materializador e I20. — `chamados/juizes.py:1047`; `chamados/models.py:1767`; `chamados/services/materializacao.py:763`; `chamados/management/commands/auditar_invariantes_chamados.py:1101` |
+| `PerguntaDisputa.respondida_em` | Escritores do par acima; recuperação pela trilha; `carimbar` quando solicitado e com texto; limpeza na ressuscitação. — `chamados/services/disputa_emissao.py:1408`; `chamados/models.py:2556`, `chamados/models.py:1488` | C6, `.estado`, respostas sem veredito e I20. — `chamados/juizes.py:1047`; `chamados/models.py:2477`, `chamados/models.py:1769`; `chamados/management/commands/auditar_invariantes_chamados.py:1102` |
+| `PerguntaDisputa.materializada_em` | `_escrever_carimbo`, persistido pelas portas `carimbar`, `carimbar_identidade`, `descarimbar` e `descarimbar_em_lote`. — `chamados/models.py:2527`, `chamados/models.py:2533`, `chamados/models.py:2588`, `chamados/models.py:2609`, `chamados/models.py:2619` | C6, seleção do fecho, respostas sem veredito e `.estado`. — `chamados/juizes.py:1071`, `chamados/juizes.py:1077`; `chamados/services/disputa_emissao.py:1620`; `chamados/models.py:1768`, `chamados/models.py:2480` |
+| `PerguntaDisputa.via_resolucao` | Portas do carimbo; `encerrar_por_fato_no_espelho` possui operação explícita que troca apenas a via. — `chamados/models.py:2527`, `chamados/models.py:2629` | C6 e seleção/trilha do fecho. — `chamados/juizes.py:1042`, `chamados/juizes.py:1071`; `chamados/services/disputa_emissao.py:1628` |
+| `CelulaDia.veredito` | `CelulaDia.lavrar_veredito` delega à porta da célula. — `escala/models.py:1787`; `ponto/portas/celula.py:770` | C6 e retenção da folha, que fornece o universo do vigia. — `chamados/juizes.py:1081`; `folha/export.py:1215`; `chamados/services/vigia_fio.py:545` |
+| `CelulaDia.veredito_via` | Mesma porta de lavra. — `ponto/portas/celula.py:771` | C6 distingue decisão do admin; a própria lavra preserva sua precedência. — `chamados/juizes.py:1045`; `ponto/portas/celula.py:738` |
+| `CelulaDia.ata` | Porta de lavra; chave `precedencia` por `carimbar_precedencia`. — `ponto/portas/celula.py:768`, `ponto/portas/celula.py:811` | Fato do marco, concordância com a luz e marcos pendentes usados pelo C6. — `chamados/juizes.py:887`, `chamados/juizes.py:1008`, `chamados/juizes.py:1094` |
+| `DisputaSupervisao.fechada_em` | `fechar`, `reabrir_admin`, `reabrir_sistema`. — `chamados/models.py:1845`, `chamados/models.py:2047`, `chamados/models.py:2071` | Seleção/fechamento do serviço, badge e signal de materialização. — `chamados/services/disputa_emissao.py:1608`, `chamados/services/disputa_emissao.py:1658`; `chamados/models.py:1721`; `chamados/signals.py:130` |
+| `ChamadoColaborador.status_local` | Transições por `_gravar_estado`; nascimento por `abrir`/`criar`. — `chamados/models.py:195`, `chamados/models.py:222`, `chamados/models.py:897`, `chamados/models.py:1046` | Credores do fecho, vigia e signal de rejulgamento da célula. — `chamados/services/disputa_emissao.py:1613`, `chamados/services/disputa_emissao.py:1616`; `chamados/services/vigia_fio.py:569`, `chamados/services/vigia_fio.py:578`; `chamados/signals.py:169` |
+
+Há três distinções importantes na montagem:
+
+- **Meio-estado injetado:** o teste escreve só `resposta_colab` por `QuerySet.update`; o core normal grava texto e instante juntos, e a reabertura limpa ambos. Isso é uma entrada adversarial para o tripwire, mas não prova um caminho atual que a produza. O auditor documenta cicatrizes históricas; ocorrência atual em produção: **[não verificado]**. — `chamados/tests/test_o261e_f2_ramo_e_i20.py:143`; `chamados/services/disputa_emissao.py:1247`, `chamados/services/disputa_emissao.py:1358`; `chamados/management/commands/auditar_invariantes_chamados.py:1089`.
+
+- **Estado exato inválido no caso 2:** `_cenario('ok', ACESA)` acaba gravando `veredito='ok', veredito_via='cartorio'` diretamente. `ok` não pertence a `VEREDITOS_CARTORIO`; a porta lança `ValueError`. A lavra sem códigos produz `concorde`. Portanto esse estado exato **não sai da porta canônica**. — `chamados/tests/test_o261e_f2_ramo_e_i20.py:209`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:152`; `escala/models.py:1719`, `escala/models.py:1596`; `ponto/portas/celula.py:658`.
+
+- **Resultado da célula sobrescrito:** `_fechar` chama produção e depois restaura veredito/ata por `update`, sem passar pela lavra que coordena instante, protestos, status e evento. O vigia mede essa célula imposta pelo teste, sem comprovar o resultado integral deixado pela função de produção. O chamado também nasce já resolvido, sem testar sua transição; não há asserção direta posterior de `status_local` ou `fechada_em`. — `chamados/tests/test_o261e_f2_ramo_e_i20.py:135`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:152`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:157`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:185`; `ponto/portas/celula.py:770`.
+
+**3. Testemunha e universo do auditor**
+
+O `mock.patch` cobre somente `_fechar`. Já terminou durante o `refresh_from_db`, a asserção de materialização e o `assertRaises`. Contudo, `_assert_ramo` encontra o carimbo e falha em sua primeira asserção, antes do C6 real e antes de `censo_alcance`. **Nenhuma leitura do vigia acontece nesse MORDE, sob ou depois do patch.** — `chamados/tests/test_o261e_f2_ramo_e_i20.py:193`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:195`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:171`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:174`.
+
+A cópia textual executa a mesma implementação de `Command.handle`, com os mesmos defaults relevantes: `amostra=5`, `html=False`. O conjunto candidato do I20 é global: perguntas com instante nulo e texto diferente de `''`, sem filtro por empresa, data, disputa ou materialização. **O conjunto final difere intencionalmente pela exclusão adicional de um PK.** `add` conta tudo e limita apenas a amostra. — `chamados/tests/test_o261e_f2_ramo_e_i20.py:90`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:228`; `chamados/management/commands/auditar_invariantes_chamados.py:549`, `chamados/management/commands/auditar_invariantes_chamados.py:559`, `chamados/management/commands/auditar_invariantes_chamados.py:1101`.
+
+A cópia chama `handle` diretamente; o controle chama `call_command`. Logo, a consulta I20 é comparável, mas a cópia não exercita toda a infraestrutura de despacho do comando. — `chamados/tests/test_o261e_f2_ramo_e_i20.py:85`.
+
+**4. Relógio, empresas, PK e formato**
+
+- **Relógio:** há datas literais, `hoje` explícito para o vigia e `freeze_time` na classe. Fecho e lavra leem `now`; I20 não tem predicado temporal. Não há evidência suficiente para acusar um vazamento concreto de relógio. Cobertura efetiva do `setUpTestData` e de todas as dependências pelo decorador: **[não verificado]**. — `chamados/tests/test_o261e_f2_ramo_e_i20.py:43`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:96`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:163`; `chamados/services/disputa_emissao.py:1623`; `ponto/portas/celula.py:772`; `chamados/management/commands/auditar_invariantes_chamados.py:1101`.
+
+- **`empresas_visiveis`: sim, depende.** Passar `[self.emp]` faz interseção com as visíveis; não substitui essa fonte. A empresa criada satisfaz o filtro atual de ativa e CNPJ fora do prefixo ocultado. O carregador da lista repete a interseção. — `chamados/services/vigia_fio.py:535`, `chamados/services/vigia_fio.py:210`; `colaboradores/queries.py:85`; `chamados/tests/test_o261e_f2_ramo_e_i20.py:104`.
+
+- **PK/sequência:** o PK é automático, sem reserva explícita fora da cicatriz. T3 detecta colisão por `assertNotIn`; T4 detecta ao exigir que o comando real conte no final. Assim, colisão pode causar vermelho sem regressão semântica; não produz o verde esperado silenciosamente. — `chamados/tests/test_o261e_f2_ramo_e_i20.py:141`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:215`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:245`; `chamados/management/commands/auditar_invariantes_chamados.py:1098`.
+
+- **Formato:** o offset fixo `68` corresponde ao formato atual. O comando trunca a descrição em 58 caracteres, não a linha nem a amostra de PKs. Linha ausente, duplicada ou `ERR` provoca falha; mudança de layout também pode quebrar o parser. — `chamados/tests/test_o261e_f2_ramo_e_i20.py:69`; `chamados/management/commands/auditar_invariantes_chamados.py:1833`.
+
+- **Identidade fraca:** `assertIn(str(p.pk), ln)` busca substring na linha inteira; não verifica o PK como elemento da amostra e aceita coincidências parciais. — `chamados/tests/test_o261e_f2_ramo_e_i20.py:205`.
+
+**5. Juiz, escritor ou derivação próprios; selos da casa**
+
+Não há predicado novo de vitalidade ou retenção: o teste lê C6, chama o censo real e seleciona sua linha por célula. Os helpers AST e de saída interpretam configuração/protocolo. Há, porém, escrita própria da fixture sobre campos de estado e reposição da célula depois do fecho. — `chamados/tests/test_o261e_f2_ramo_e_i20.py:59`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:69`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:143`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:152`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:163`.
+
+**Não cabe afirmar que os selos estáticos reprovariam esse arquivo:** os censos de escritores e os contratos de par resposta, porta da célula e carimbo excluem testes. As escritas seriam problemáticas como produção, mas essa exclusão impede atribuir-lhes um vermelho automático neste teste. — `core/censo_escritas.py:66`; `chamados/tests/test_contract_par_resposta.py:54`; `ponto/tests/test_selo_veredito_so_pela_porta.py:173`; `chamados/tests/test_o261e_f2_porta_carimbo.py:208`.
+
+A insuficiência sustentada pelas regras da casa é precisa: a mordida denuncia um carimbo, mas não executa a leitura adversarial do vigia; e nenhuma das quatro provas prende isoladamente a guarda do fecho. Isso limita a alegação de proteção da costura, diante da exigência de função real e caso que morde. — `CLAUDE.md:318`; `chamados/tests/test_o261e_f2_ramo_e_i20.py:171`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:198`; `chamados/services/disputa_emissao.py:1626`; `chamados/models.py:2569`.
+
+## 01/11 17:49 · sessao bcdff4d29137 · - · - · origem=Ronald (tmux)
+
+Q3 — **mock fora da testemunha, mas vigia não é alcançado no MORDE**. O patch cobre somente `_fechar` (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:193`); já terminou quando ocorre `refresh_from_db` e a asserção de materialização (`:195`, `:196`). `_assert_ramo` começa recarregando o objeto e exigindo `materializada_em is None` (`:170`, `:171`), condição incompatível com a asserção imediatamente anterior do MORDE (`:196`). Assim, o `assertRaises` é satisfeito em `:171`; não chega ao C6 de `:173`, ao censo de `:174`, nem às suas asserções `:175-179`. O MORDE demonstra que o selo rejeita o carimbo indevido, mas não executa o vigia nesse caminho (`:196-198`).
+
+A cópia do auditor mede **o mesmo universo I20**, com apenas a cicatriz ampliada: copia o módulo inteiro, exige uma ocorrência da âncora e modifica essa ocorrência (`:228-239`); ambos usam `amostra=5`, `html=False` (`:86`, `:90`; `app/chamados/management/commands/auditar_invariantes_chamados.py:549-550`). O I20 real usa todas as `PerguntaDisputa` com `respondida_em` nulo e resposta diferente de `''`, excluindo a tupla; não filtra empresa, dia, estado de disputa ou materialização (`auditar_invariantes_chamados.py:1101-1103`). `add` conta o queryset inteiro e limita somente a amostra (`:559-566`). A via da cópia chama `handle` diretamente, portanto não testa a infraestrutura completa de `call_command`, mas a consulta I20 executada é a mesma (`teste:85-90`).
+
+Q4 — O cenário usa datas fixas e passa `hoje` explicitamente ao censo (`teste:43-47`, `:163`); a classe é decorada com `freeze_time` (`:96`). Há leituras de relógio no fecho e carimbo (`app/chamados/services/disputa_emissao.py:1623`; `app/chamados/models.py:2550`), no auditor (`auditar_invariantes_chamados.py:635`, `:1589`) e na lavra feita por `setUpTestData` (`teste:119`, `:125`; `app/ponto/portas/celula.py:772`). A implementação de freezegun não está na cópia; a cobertura efetiva de `setUpClass/setUpTestData` pelo decorador não foi demonstrada nesta leitura **[não verificado]**. Não há evidência suficiente para acusar concretamente um relógio fora do freeze; o pin disponível é `freezegun==1.5.5` (`app/requirements.txt:43`).
+
+Existe dependência de `empresas_visiveis` mesmo passando `empresas=[self.emp]`: o censo obtém as visíveis e depois faz interseção (`app/chamados/services/vigia_fio.py:535-538`); o carregador da lista repete essa política (`:210-215`). A fixture satisfaz o filtro atual, pois cria empresa ativa e CNPJ fora do prefixo ocultado (`teste:104-105`; `app/colaboradores/queries.py:85-87`).
+
+O pk não é escolhido fora da cicatriz: nasce por `objects.create` (`teste:141-142`). O teste normal detecta colisão e falha explicitamente (`:215`); no MORDE, a chamada final ao comando real também exigirá contagem 1 e falhará se o caso já estiver na cicatriz (`:245`, `:204`). Portanto é dependência de sequência, protegida contra falso verde por falha explícita, mas sem isolamento da sequência no próprio arquivo (`:97-99`, `:141-142`, `:215`). [nao verificado]
+
+O parser corresponde ao formato atual: exige exatamente uma linha I20 (`teste:71-72`); o offset `68` de `:75` coincide com flag de quatro caracteres + espaço, id de quatro + espaço e descrição de 58 (`auditar_invariantes_chamados.py:1835-1836`). A descrição é truncada a 58; a amostra de pks não é truncada nessa formatação (`:1835-1836`). Mudança no layout ou linha `ERR` torna o parser falho por exceção, sem falso verde (`teste:75`). A identificação do pk é apenas substring (`:205`), portanto é mais fraca que validar o elemento da amostra; pode coincidir com outro trecho ou pk maior (`:205`; formato em `auditor:1835-1836`). [nao verificado]
+
+Q5 — Os helpers consultam o C6 real e o censo real; filtram o resultado por `cel.pk`, sem construir um predicado próprio de vitalidade ou retenção (`teste:163-164`, `:169-179`). `_cicatriz_i20` lê o AST e `_linha_i20` interpreta o protocolo de saída; nenhum deles decide o estado de produção (`:59-76`). A cópia mutante constitui a própria implementação do auditor com uma exclusão alterada, acompanhada pela execução real como controle (`:228-245`). [nao verificado]
+
+Há **escritas diretas de fixture fora das portas** em resposta e estado da célula (`teste:143`, `:152-153`), inclusive reposição da ata após o fecho (`:157-158`); isso limita a prova de integração do efeito do fecho sobre a célula. Não equivale automaticamente a escritor novo de produção: o censo exclui `tests/` e arquivos `test_*.py` (`app/core/censo_escritas.py:66-82`), e o selo P13 faz o mesmo (`app/core/tests/test_contract_escritores_estado.py:189-192`). O gate de célula usa esse censo (`app/ponto/tests/test_chokepoint_celula_gate.py:49-53`). Não afirmar que esses selos reprovariam o arquivo por esses updates.
+
+A crítica amparada pela casa é a limitação da mordida: exige-se função real e caso que denuncie a costura rompida (`CLAUDE.md:318-325`), e a testemunha deve ler a autoridade (`CLAUDE.md:20-22`, `:35-38`). A mordida do ramo efetivamente denuncia o carimbo, mas não chega a medir a costura do vigia (`teste:171`, `:174`, `:196-198`). Resultado de execução dos selos/suíte: **[não verificado]**. [nao verificado]
+
+## 01/11 17:49 · sessao 60d6079d4737 · - · - · origem=Ronald (tmux)
+
+Análise estática; resultados reais da suíte e de mutações executadas permanecem **[não verificado]**. [nao verificado]
+
+**Chamadas e asserções**
+
+- **T1, ramo**: chama `resolver_perguntas_por_chamado_resolvido` por `_fechar`; verifica C6 vivo antes, retorno `{0,0}`, ausência de materialização/via, C6 vivo depois, uma linha da célula, rota `sem_porta`, **detalhe** `pergunta_viva_sob_chamado_terminal` e totais `(2,2)`. O índice 6 é detalhe, não causa. Fontes: `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:155`, `:168`, `:181`; estrutura da linha em `app/chamados/services/vigia_fio.py:585`.
+- **T2, MORDE ramo**: chama o mesmo fecho com C6 falso, exige materialização e exige que `_assert_ramo` falhe. **A falha ocorre na primeira asserção, `assertIsNone(materializada_em)`; portanto não executa C6 real nem `censo_alcance` nessa contraprova**. Fontes: teste `:168`, `:188`. [nao verificado]
+- **T3, caso2**: chama C6 real, fecho real, vigia real e comando real por `call_command`. Verifica C6 morto inicialmente, tripla texto/timestamps intacta, PK fora da cicatriz, nenhuma linha do dia, totais `(1,1)`, I20 `VIOL 1` e substring do PK na linha. Não verifica retorno do fecho nem RC do auditor. Fontes: teste `:79`, `:202`, `:207`. [nao verificado]
+- **T4, MORDE I20**: chama fecho real, executa cópia integral do comando com PK adicional na cicatriz e depois comando real. Verifica âncora textual única; cópia `OK 0`; rejeição pelo helper que exige `VIOL 1`; comando real `VIOL 1` e presença textual do PK. Fontes: teste `:222`, `:202`. [nao verificado]
+
+**Matriz de mutantes de produção — inferência estática**
+
+V = passaria; F = falharia, considerando o universo isolado esperado pela fixture. As referências dos efeitos são os testes acima, o fecho em `app/chamados/services/disputa_emissao.py:1624`, a porta em `app/chamados/models.py:2554` e I20 em `app/chamados/management/commands/auditar_invariantes_chamados.py:1098`.
+
+| Mutante concreto | T1 | T2 | T3 | T4 |
+|---|---:|---:|---:|---:|
+| Fecho `:1626`: substituir `if pergunta_viva(q):` por `if False:` | V | V | V | V |
+| Porta `models.py:2569`: substituir `if viva:` por `if False:` | V | V | F | F |
+| Aplicar os dois acima | F | V | F | F |
+| I20 `:1103`: remover `.exclude(pk__in=_I20_CICATRIZ)` | V | V | V | F |
+| I20 `:1103`: acrescentar `.none()` ao queryset | V | V | F | F |
+| I20 `:1102`: remover só `.filter(respondida_em__isnull=True)` | V | V | V | V |
+
+A redundância explica a primeira linha: sem guarda do fecho, `carimbar` aplica `respondida_em`, consulta C6, desfaz e recusa; sem recusa da porta, T1 ainda pula antes. No caso2, aplicar `respondida_em` torna a resposta viva se não houver concordância verificável com a luz. Fontes: `app/chamados/models.py:2555`, `:2565`, `:2569`; `app/chamados/juizes.py:1047`, `:1059`; `app/chamados/services/disputa_emissao.py:1626`.
+
+**Mock e universo**
+
+- O patch termina em teste `:194`; nenhuma leitura posterior permanece mockada. Mas o MORDE ramo tampouco chega ao vigia depois: `_assert_ramo` aborta em `:171`, antes de `:173–174`. Fontes: teste `:193`, `:195`, `:197`. [nao verificado]
+- A cópia I20 executa `Command.handle(amostra=5, html=False)`, usa os mesmos modelos/banco e reproduz todo o módulo; só muda a tupla. Seu universo candidato é o global de perguntas com `respondida_em NULL` e texto diferente de `''`, sem filtro por empresa/data/disputa/materialização. O universo **após a exclusão** muda intencionalmente por um PK. Fontes: teste `:88`, `:228`, `:231`, `:236`; auditor `:552`, `:570`, `:1101`. [nao verificado]
+
+**Relógio, PK e parsing**
+
+- Há freeze na classe e `hoje` explícito para o vigia; o fecho usa `timezone.now` dentro da chamada e I20 não filtra por relógio. Não identifiquei relógio externo determinando I20 nesses trechos; cobertura de toda dependência transitiva é **[não verificado]**. Fontes: teste `:47`, `:96`, `:163`; fecho `:1623`; auditor `:1101`. [nao verificado]
+- Existe dependência de `empresas_visiveis`: `empresas=[self.emp]` é interseção, não substituição. A fixture satisfaz o filtro atual porque cria empresa ativa e CNPJ fora do prefixo de diagnóstico. Fontes: `app/chamados/services/vigia_fio.py:534`, `:210`; teste `:104`; `app/colaboradores/queries.py:78`.
+- Não reserva PK nem reinicia sequência explicitamente; T3 detecta colisão com cicatriz por `assertNotIn`, T4 detecta só ao exigir contagem real final. Isso pode produzir vermelho por identidade histórica, sem regressão semântica. Fontes: teste `:97`, `:141`, `:215`, `:245`; auditor `:1098`. [nao verificado]
+- O parser exige exatamente uma linha I20 e usa offset fixo 68; corresponde ao formato atual. O comando trunca **descrição** a 58, não linha/amostra. Alteração no formato pode quebrar o teste; linha ausente/ERR não passa silenciosamente. Fontes: teste `:56`, `:69`; auditor `:1833`. [nao verificado]
+- A identificação do PK usa substring em toda a linha, não parsing da lista de amostra; pode coincidir parcialmente com outro número. Fontes: teste `:202`; auditor `:1835`. [nao verificado]
+
+## 01/11 17:49 · sessao 61e68756283b · - · - · origem=Ronald (tmux)
+
+Q2 — fontes e limites encontrados:
+
+| Campo | Escritor de produção | Leitor de produção relevante |
+|---|---|---|
+| `PerguntaDisputa.resposta_colab` | `responder_pergunta_disputa_core`, que grava texto e instante juntos (`app/chamados/services/disputa_emissao.py:1247`); `responder_automaticamente`, também em par (`app/chamados/services/disputa_emissao.py:1393`); reabertura limpa ambos (`app/chamados/services/disputa_emissao.py:1358`). | C6 (`app/chamados/juizes.py:1047`), respostas sem veredito (`app/chamados/models.py:1767`), I20 (`app/chamados/management/commands/auditar_invariantes_chamados.py:1101`), materializador (`app/chamados/services/materializacao.py:763`). |
+| `respondida_em` | Os escritores acima; cura pela trilha (`app/chamados/services/disputa_emissao.py:1408`); porta `carimbar`, quando há texto e `resposta` solicitada (`app/chamados/models.py:2556`); ressuscitação limpa por porta de lote, selecionando texto vazio (`app/chamados/models.py:1423`, `app/chamados/models.py:1488`). | C6 (`app/chamados/juizes.py:1047`), `.estado` (`app/chamados/models.py:2477`), `.respondida` (`app/chamados/models.py:2783`), respostas sem veredito (`app/chamados/models.py:1769`), I20 (`app/chamados/management/commands/auditar_invariantes_chamados.py:1102`). |
+| `materializada_em` | Atribuição central em `_escrever_carimbo` (`app/chamados/models.py:2527`), persistida por `carimbar`, `carimbar_identidade`, `descarimbar` e `descarimbar_em_lote` (`app/chamados/models.py:2533`, `app/chamados/models.py:2588`, `app/chamados/models.py:2609`, `app/chamados/models.py:2619`). | C6 (`app/chamados/juizes.py:1071`, `app/chamados/juizes.py:1077`, `app/chamados/juizes.py:1107`), seleção do fecho (`app/chamados/services/disputa_emissao.py:1620`), respostas sem veredito (`app/chamados/models.py:1768`), I9 (`app/chamados/management/commands/auditar_invariantes_chamados.py:953`). |
+| `via_resolucao` | As portas do carimbo acima; exceção explícita que apenas troca a via em `encerrar_por_fato_no_espelho` (`app/chamados/models.py:2629`). | C6 (`app/chamados/juizes.py:1042`, `app/chamados/juizes.py:1071`), PMF (`app/chamados/juizes.py:624`), I9 (`app/chamados/management/commands/auditar_invariantes_chamados.py:954`). |
+| `CelulaDia.veredito`, `veredito_via` | `CelulaDia.lavrar_veredito` delega (`app/escala/models.py:1787`) à porta que escreve ambos e `veredito_em`, status, protestos e evento (`app/ponto/portas/celula.py:709`, `app/ponto/portas/celula.py:770`). | C6 (`app/chamados/juizes.py:1045`, `app/chamados/juizes.py:1081`), retenção da folha (`app/folha/export.py:1215`), vigia pelo universo de `fora_da_folha` (`app/chamados/services/vigia_fio.py:545`). |
+| `CelulaDia.ata` | Mesma porta de lavra (`app/ponto/portas/celula.py:726`, `app/ponto/portas/celula.py:768`); chave `precedencia` pertence a `carimbar_precedencia` (`app/ponto/portas/celula.py:811`). | Luz lida pelo C6 (`app/chamados/juizes.py:1008`); tratamento de marcos pendentes pelo C6 (`app/chamados/juizes.py:1094`). |
+| `DisputaSupervisao.fechada_em` | `fechar` (`app/chamados/models.py:1845`), `reabrir_admin` (`app/chamados/models.py:2047`), `reabrir_sistema` (`app/chamados/models.py:2071`). | Seleção e fechamento do serviço (`app/chamados/services/disputa_emissao.py:1608`, `app/chamados/services/disputa_emissao.py:1658`), badge (`app/chamados/models.py:1721`), signal (`app/chamados/signals.py:28`), API (`app/api/views.py:1008`). |
+| `ChamadoColaborador.status_local` | Transições por `_gravar_estado` (`app/chamados/models.py:195`, `app/chamados/models.py:222`, `app/chamados/models.py:279`); nascimento pelas portas `abrir`/`criar` (`app/chamados/models.py:897`, `app/chamados/models.py:1046`). | Sem-credor (`app/chamados/services/disputa_emissao.py:1613`, `app/chamados/services/disputa_emissao.py:1616`), C6/PMF (`app/chamados/juizes.py:721`), vigia (`app/chamados/services/vigia_fio.py:569`, `app/chamados/services/vigia_fio.py:578`), signal do fecho (`app/chamados/signals.py:81`). |
+
+A fixture introduz deliberadamente texto sem instante por `QuerySet.update(resposta_colab='07:55')`, em vez de usar os escritores do par. Isso não demonstra um caminho atual de produção gerando esse estado; o código do I20 documenta acervo histórico com `respondida_em` nulo, que também não deve ser convertido em fato observado nesta revisão (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:143`; `app/chamados/services/disputa_emissao.py:1247`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1089`).
+
+Achado mais forte: o caso regularizado injeta `veredito='ok'`, `veredito_via='cartorio'` diretamente no banco; a porta real rejeita esse veredito, pois `ok` não pertence a `VEREDITOS_CARTORIO`. O veredito regular sem códigos é `concorde`. Logo, o estado exato da fixture não sai dessa porta de produção (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:208`; `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:152`; `app/ponto/portas/celula.py:658`; `app/escala/models.py:1719`; `app/escala/models.py:1596`).
+
+`_fechar` chama produção e, depois, sobrescreve a célula novamente. A testemunha mede esse estado imposto após o serviço, sem exigir que sobrevivam o veredito, a ata ou os efeitos da relavra real; o update omite `veredito_em`, status, protestos e emissão do evento da porta (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:155`; `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:152`; `app/ponto/portas/celula.py:770`).
+
+O teste também cria o chamado já resolvido e a disputa aberta por ORM, sem provar a travessia pelas portas de estado; tampouco possui assert direto sobre `status_local` ou `fechada_em`, apenas o retorno contado do fecho no teste do ramo (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:135`; `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:139`; `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:185`).
+
+Não dizer que “os selos da casa reprovam este teste”: os selos AST do par resposta/carimbo, da porta de célula e do carimbo excluem diretórios `tests`. As mesmas escritas em um arquivo de produção seriam alcançadas por esses contratos (`app/chamados/tests/test_contract_par_resposta.py:54`; `app/chamados/tests/test_contract_par_resposta.py:81`; `app/ponto/tests/test_selo_veredito_so_pela_porta.py:173`; `app/chamados/tests/test_o261e_f2_porta_carimbo.py:208`).
 
 ## 01/11 16:53 · sessao ee8a3724479c · O261-E-F2 · verificador · origem=Code
 
@@ -728,141 +911,4 @@ Os demais encaminhamentos principais têm apoio, com estes limites:
 
 Há ainda uma limitação importante da aprovação: com texto e `resposta='validar'`, a porta preenche `validada_em` **antes** do C6; seu primeiro degrau então devolve morta. Nesse caminho, a nova consulta não demonstra lastro independente nem pode reprovar pela lei do dia. Isso segue a aplicação do estado completo anunciada pela porta, portanto não o classifico isoladamente como segundo juiz ou pouso indevido. (app/chamados/models.py:2541, app/chamados/models.py:2560, app/chamados/models.py:2565, app/chamados/juizes.py:1033)
 
-## 01/11 15:36 · sessao 6f098fe6ed12 · - · - · origem=Ronald (tmux)
-
-Achado principal: há leitor não migrado com consequência funcional. No fecho sem credor, a recusa mantém texto e `respondida_em=None` (`app/chamados/services/disputa_emissao.py:1638`); a fila exige instante (`app/chamados/juizes.py:1284`), a validação retorna `sem_resposta` (`app/chamados/services/validacao.py:363`) e o fecho da disputa continua bloqueado pelo texto (`app/chamados/models.py:1768`). Incidência em produção: [não verificado].
-
-A porta autoescreve `validada_em` antes de consultar C6 (`app/chamados/models.py:2561`), cujo primeiro ramo devolve morta quando esse campo existe (`app/chamados/juizes.py:1033`). Portanto `resposta='validar'` impede a nova guarda de reprovar por vitalidade, apesar da alegação do comentário de `app/chamados/services/materializacao.py:520`.
-
-Procedência tem consumidores reais no calendário e espelho (`app/colaboradores/services/calendario.py:725`, `app/ponto/services/espelho.py:767`). Zerar `materializada_por` na ressuscitação muda o `quem` lido (`app/ponto/services/procedencia_batida.py:72`); porém `quando` já era nulo antes, e a frase já caía em “sem carimbo de validação” (`app/ponto/services/procedencia_batida.py:90`). Impacto visível adicional: [não verificado].
-
-Mover a lavra para depois de completar resposta/validação não altera diretamente seu julgamento: `lavrar` chama o juiz de lastro (`app/chamados/veredito_lavrado.py:219`), que não consulta esses três campos (`app/chamados/juizes.py:610`). O C6 acrescentado pode carregar caches relacionais antes da lavra (`app/chamados/juizes.py:812`); não encontrei alteração adicional demonstrável do resultado da lavra por essa ordem. [não verificado]
-
-## 01/11 15:36 · sessao bf24d52218f0 · - · - · origem=Ronald (tmux)
-
-Triagens:
-
-- **V2, item 3: motivo não comprovado.** `relavrar` só exige via em `VIAS_DERIVADAS`, sem exigir carimbo (`app/chamados/services/relavra_via.py:116`), e grava nova via em `:123`. O modelo permite via preenchida (`app/chamados/models.py:2298`) e `materializada_em=NULL` (`:2756`); sua `Meta` não declara restrição entre eles (`:2776`). Portanto, “essas vias só existem depois do carimbo” é premissa dos escritores atuais, não garantia da porta. Existência de acervo contrário: **[não verificado]**.
-
-- **Limbo: encaminhamento tem apoio.** A recuperação exige instante testemunhado pela trilha, explicitamente “não inventa hora” (`app/chamados/services/disputa_emissao.py:1400`). A validação recusa ausência de instante (`app/chamados/services/validacao.py:363`), enquanto texto cru bloqueia o fechamento (`app/chamados/models.py:1767`).
-
-- **Relógio: encaminhamento tem apoio, mas a classe continua presente.** O corte define injeção e borda (`app/docs/CORTES.md:369`) e permite complemento da obra dona (`:380`). As portas leem relógio internamente (`app/chamados/models.py:2550`, `:2602`); C6 e lavra também (`app/chamados/juizes.py:539`; `app/chamados/veredito_lavrado.py:228`). Selo executável específico RELOGIO-INJETADO: **[não verificado]**.
-
-- **Concorrência: sete funções chamadoras confirmadas**, com oito sítios (`app/chamados/models.py:2648`; `app/chamados/reconciliador.py:405`, `:618`; `app/chamados/services/disputa_emissao.py:1566`, `:1638`; `app/chamados/services/materializacao.py:523`, `:1166`, `:1313`). A porta não trava nem relê (`app/chamados/models.py:2552`). O diff fornecido substitui escritas das mesmas instâncias; ocorrência de corrida/deadlock: **[não verificado]**.
-
-- **V1, nota 4: justificativa excessiva.** A restauração cobre exceção/recusa do C6 (`app/chamados/models.py:2564`); lavra e `save` ficam depois da guarda (`:2572`). Transação não restaura memória Python. Entretanto, o item foi tratado como nota, e novidade concreta dessa falha no diff permanece **[não verificado]**.
-
-Classes:
-
-- **Relógio fora da borda:** presente nos pontos acima (`app/chamados/models.py:2550`, `:2602`).
-- **Gate C6 sem discriminação nas autovalidações:** `resposta='validar'` preenche `validada_em` antes do julgamento (`app/chamados/models.py:2560`); C6 retorna morta imediatamente por esse campo (`app/chamados/juizes.py:1033`). É limitação concreta da aprovação; classificá-la como violação do mandato exige considerar que o mandato também autoriza aplicar a validação antes do C6 (`app/chamados/models.py:2541`).
-- **Rollback do plantio antes da recusa:** sustentado; a nova `_Reprovada` ocorre dentro do `atomic` (`app/chamados/services/materializacao.py:1109`, `:1166`), com tratamento fora (`:1172`) e recusa posterior (`:1186`).
-- **Segundo juiz ou derivação paralela novos:** não identifiquei nesses caminhos; a porta chama C6 (`app/chamados/models.py:2565`), e a lista de identidade é importada da autoridade existente (`:2524`).
-- **Pouso antes de pré-requisito:** ocorrência operacional **[não verificado]**. [nao verificado]
-
-## 01/11 15:35 · sessao fcc8e849bb7b · - · - · origem=Ronald (tmux)
-
-- Não encontrei segundo juiz introduzido: a porta chama `pergunta_viva`, cuja lei permanece em `_pergunta_viva_calc`; a lavra continua chamando `_pergunta_materializada_de_fato`. (`app/chamados/models.py:2565`; `app/chamados/juizes.py:1032`; `app/chamados/veredito_lavrado.py:219`.)
-
-- Não encontrei pouso da batida antes da aprovação no ramo alterado: `_materializar_uma` executa o plantio e `carimbar` dentro de `atomic`; recusa levanta `_Reprovada` dentro desse bloco e só é capturada depois. (`app/chamados/services/materializacao.py:1109`; `app/chamados/services/materializacao.py:1166`; `app/chamados/services/materializacao.py:1172`.)
-
-- A checagem do C6 fica automaticamente satisfeita quando `resposta='validar'` encontra texto e validação nula: a porta preenche `validada_em` antes de chamar o juiz, e o primeiro degrau retorna morta por esse campo. Isso limita o significado da nova checagem nesses chamadores; o fluxo corresponde à aplicação do estado completo descrita na porta. (`app/chamados/models.py:2556`; `app/chamados/models.py:2561`; `app/chamados/models.py:2565`; `app/chamados/juizes.py:1033`.)
-
-- O ramo granular mudou a ordem da lavra em relação à autovalidação: agora responde/valida antes de lavrar. Não identifiquei diferença de `veredito_lavrado` causada por essa ordem: o juiz da lavra lê carimbo, via, resposta e testemunhas, mas não `respondida_em`/`validada_em`. (`app/chamados/models.py:2556`; `app/chamados/models.py:2572`; `app/chamados/juizes.py:609`; `app/chamados/juizes.py:755`.) A ordem antiga está somente no anexo do usuário. [não verificado: arquivo:linha do anexo]
-
-- Um leitor indireto sensível é `perguntas_absorvidas_por`: identifica a absorção pelo grupo de carimbo que contém o escape. A nova recusa individual pode deixar irmãs mudas sem carimbo enquanto aceita a pergunta com texto autovalidada; o leitor passa a devolver somente o subconjunto carimbado. Não demonstrou inconsistência: a devolução continua restrita às perguntas efetivamente absorvidas. (`app/chamados/services/materializacao.py:509`; `app/chamados/services/materializacao.py:523`; `app/chamados/services/materializacao.py:569`; `app/chamados/services/materializacao.py:573`; `app/chamados/services/materializacao.py:579`.)
-
-- A porta não acrescenta `select_for_update`; a janela entre julgamento e `save` permanece. Não sustento, apenas pelo código, a quantificação “travar muda a ordem de sete chamadores”. (`app/chamados/models.py:2552`; `app/chamados/models.py:2565`; `app/chamados/models.py:2576`; quantificação: [não verificado].)
-
-- Há relógio interno nas duas portas novas, e a lavra também lê seu próprio relógio. A ausência de injeção integral é demonstrável; a execução em produção ou impacto temporal específico não foi verificado. (`app/chamados/models.py:2550`; `app/chamados/models.py:2602`; `app/chamados/veredito_lavrado.py:228`; produção: [não verificado].)
-
-- A restauração só envolve exceção do C6 ou recusa: falha posterior de lavra/`save` deixa a instância alterada em memória; não cabe afirmar que **todo** chamador tem transação que resolve isso, e rollback de banco tampouco restaura a instância Python. (`app/chamados/models.py:2564`; `app/chamados/models.py:2572`; `app/chamados/models.py:2576`; `app/chamados/models.py:2579`.)
-
-## 01/11 15:32 · sessao 2cc3769c9f76 · O261-E-F2 · verificador · origem=Code
-
-**Os selos passam na árvore atual, mas ainda não provam escritor único:** há escritas plausíveis que escapam e leituras que são contadas como escrita. A resolução é superficial e não distingue o objeto receptor das chamadas (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:88`, `app/chamados/tests/test_o261e_f2_porta_carimbo.py:123`).
-
-1. **Escritas que escapam**
-
-   Extraí o detector por AST e executei em memória, sem importar Django. As 11 provas da classe de selo passaram; a árvore retornou seis ocorrências para o carimbo e quatro para a via, com `fora=[]` e nenhuma porta faltante. Resultados efêmeros, sem arquivo de evidência: [nao verificado]. [nao verificado]
-
-   Acrescentei virtualmente uma função escritora a `chamados/reconciliador.py`, sem alterar arquivo. Estas cinco formas escaparam **para cada um dos quatro campos**: `materializada_em`, `materializada_por`, `materializada_por_id` e `via_resolucao`; os dois selos continuaram passando nos 20 mutantes [nao verificado].
-
-   | Forma do mutante — `CAMPO` representa cada campo | Por que escapa |
-   |---|---|
-   | `d = {'CAMPO': None}; alias = d; qs.update(**alias)` | `_resolve` não resolve nomes recursivamente: `app/chamados/tests/test_o261e_f2_porta_carimbo.py:88`. |
-   | `d: dict = {'CAMPO': None}; qs.update(**d)` | `_locais` só coleta `Assign`, não `AnnAssign`: `app/chamados/tests/test_o261e_f2_porta_carimbo.py:70`. |
-   | `d = {'CAMPO': None}; qs.update(**{**d})` | `_chaves_de` ignora expansões internas do dicionário: `app/chamados/tests/test_o261e_f2_porta_carimbo.py:96`. |
-   | `campo = 'CAMPO'; setattr(p, campo, None); p.save()` | `setattr` exige nome literal diretamente no argumento: `app/chamados/tests/test_o261e_f2_porta_carimbo.py:124`. |
-   | `p.__dict__.update({'CAMPO': None}); p.save()` | A chamada é examinada por keywords; o dicionário posicional não entra: `app/chamados/tests/test_o261e_f2_porta_carimbo.py:126`. |
-
-   Há também um mecanismo **declarado na produção** fora desse censo: `materializada_por` usa `on_delete=SET_NULL`, permitindo zerar o autor pela exclusão do usuário. A declaração está em `app/chamados/models.py:2759`; ocorrência ou caminho efetivamente exercido de exclusão de usuário: [nao verificado].
-
-2. **Leituras contadas como escrita**
-
-   Sim, em formas plausíveis. Por exemplo:
-
-   ```python
-   trilha = {'materializada_em': p.materializada_em}
-   evento(antes=dict(**trilha))
-   ```
-
-   O detector acusa `dict(**trilha)` porque `dict` integra `METODOS_DE_ESCRITA`, independentemente do destino do resultado (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:40`, `app/chamados/tests/test_o261e_f2_porta_carimbo.py:130`).
-
-   Também acusa construir `dict(materializada_em=p.materializada_em)`, preencher `trilha.update(materializada_em=...)` ou atribuir `trilha['materializada_em']=...`; nesses exemplos há somente leitura do modelo e montagem de trilha (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:119`, `app/chamados/tests/test_o261e_f2_porta_carimbo.py:128`). Os mutantes confirmaram essas acusações também para autor e via [nao verificado].
-
-   **Não identifiquei falso positivo nas ocorrências retornadas da árvore atual:** elas correspondem às escritas listadas abaixo (`app/chamados/models.py:2529`, `app/chamados/models.py:2625`, `app/chamados/models.py:2635`, `app/chamados/services/relavra_via.py:123`, `app/chamados/services/regularizacao_ext.py:198`).
-
-3. **Exatidão das listas; escritores e leitores da via**
-
-   As listas correspondem aos **sítios explícitos encontrados nesta cópia**. A afirmação universal “nenhum outro escreve” não fica demonstrada pelo selo, pelos escapes da pergunta 1 (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:88`, `app/chamados/tests/test_o261e_f2_porta_carimbo.py:124`).
-
-   | Lista | Escrita efetiva |
-   |---|---|
-   | `PORTA` | `_escrever_carimbo`: instante e autor, `app/chamados/models.py:2529`; `descarimbar_em_lote`: update, `app/chamados/models.py:2625`; `materializar_regularizacao_externa`: homônimo de **RegularizacaoExterna**, `app/chamados/services/regularizacao_ext.py:198`. |
-   | `PORTA_VIA` | `_escrever_carimbo`, `app/chamados/models.py:2531`; `descarimbar_em_lote`, `app/chamados/models.py:2626`; `encerrar_por_fato_no_espelho`, `app/chamados/models.py:2635`; `relavrar`, `app/chamados/services/relavra_via.py:123`. |
-
-   Nenhum escritor **explícito** adicional da via foi identificado [nao verificado]. Os leitores encontrados fora dos quatro sítios de `PORTA_VIA` são:
-
-   | Grupo | Arquivo:linhas |
-   |---|---|
-   | Juízo e memo | `app/chamados/juizes.py:624`, `:635`, `:790`, `:1042`, `:1071`. |
-   | Modelo | `app/chamados/models.py:1838`, `:2489`, `:2552`, `:2644`, `:2656`, `:2673`, `:2680`, `:2712`, `:2714`. |
-   | Serviços de chamados | `app/chamados/services/fio.py:882`; `competencia_trancada.py:244`; `explicador.py:95`; `disputa_emissao.py:1628`; `materializacao.py:423`, `:572`, `:614`, `:1023`; `passivo_validado.py:64`, `:83`, `:140`, `:515`; `fabrica_da_celula.py:104`; `relavra_via.py:153`, `:179`, `:230`; `app/chamados/reconciliador.py:1089`. |
-   | Ponto e tela | `app/ponto/services/cartorio.py:1429`; `app/ponto/services/flip_auto.py:129`; `app/templates/chamados/partials/_card_atendimento.html:186`. |
-   | Commands de chamados | `app/chamados/management/commands/relavrar_via_i6.py:58`; `reabrir_orfas_enterradas.py:67`; `dedup_perguntas_fato.py:74`; `disparar_perguntas_competencia.py:127`; `encerrar_perguntas_com_fato.py:33`; `auditar_invariantes_chamados.py:201`, `:432`, `:541`, `:954`, `:1706`. |
-
-   A descrição “só trocam a via de pergunta já carimbada” depende de premissas dos chamadores: `encerrar_por_fato_no_espelho` não verifica o instante; seu command seleciona materializadas. `relavrar` verifica a via derivada, sem exigir `materializada_em` (`app/chamados/models.py:2633`, `app/chamados/management/commands/encerrar_perguntas_com_fato.py:32`, `app/chamados/services/relavra_via.py:116`).
-
-4. **Docstring de `carimbar_identidade`**
-
-   **Parcialmente correta.** Acertou que resposta por validar pode vencer a via de identidade e que `retratar_duplicata` aceita esse estado (`app/chamados/juizes.py:1047`, `app/chamados/services/fio.py:882`, `app/chamados/services/fio.py:891`).
-
-   Continua incorreta como regra absoluta em “segue viva […] até o admin decidir”: antes da identidade, o C6 devolve **morta** quando a resposta concorda com a luz e o dia não acusa, mesmo sem decisão do admin. Validação e tranca também encerram antes (`app/chamados/models.py:2593`, `app/chamados/juizes.py:1033`, `app/chamados/juizes.py:1037`, `app/chamados/juizes.py:1055`).
-
-   Portanto, a formulação correta seria **“pode continuar viva”**, condicionada aos degraus anteriores; a fila global ainda aplica `pergunta_viva` (`app/chamados/juizes.py:1284`, `app/chamados/juizes.py:1288`).
-
-5. **Justificativas da triagem**
-
-   Os números abaixo identificam itens do anexo fornecido; `triagem_v1.md` não foi localizado na cópia [nao verificado].
-
-   - **#6, relógio — descarte insuficiente.** “Os escritores antigos já faziam” não torna fora do escopo os fallbacks das portas novas. O escopo inclui sítios criados/tocados e leitores/escritores envolvidos (`app/chamados/models.py:2550`, `app/chamados/models.py:2601`, `app/docs/CORTES.md:385`, `CLAUDE.md:559`).
-   - **#3a, concorrência — descarte insuficiente pelo mesmo critério.** Ser anterior explica a origem, mas não exclui automaticamente a porta tocada, que julga e salva a instância recebida sem adquirir trava (`app/chamados/models.py:2552`, `app/chamados/models.py:2576`, `CLAUDE.md:559`). Uma corrida nova introduzida nesta volta: [nao verificado].
-   - **#6, detector “curado” — cura parcial.** Os exemplos específicos foram cobertos, mas aliases, anotações e composição de dicionários continuam fora da resolução (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:70`, `app/chamados/tests/test_o261e_f2_porta_carimbo.py:88`, `app/chamados/tests/test_o261e_f2_porta_carimbo.py:96`).
-   - **#3b, prosa — cura parcial**, pela exceção de concordância descrita na pergunta 4 (`app/chamados/models.py:2593`, `app/chamados/juizes.py:1056`).
-   - **#1/8/9, PERGUNTA — o motivo “não inventa hora” tem apoio.** Existe recuperação com instante testemunhado pela trilha, não com `agora` arbitrário; existência dessa trilha nos casos de produção fornecidos: [nao verificado] (`app/chamados/services/disputa_emissao.py:1399`, `app/chamados/services/disputa_emissao.py:1403`).
-
-6. **Classes que reaparecem**
-
-   | Classe | Resultado |
-   |---|---|
-   | Selo sem mordida | **Sim, cobertura incompleta no delta v2**, apesar das provas positivas adicionadas: resolução superficial e ausência de análise do receptor (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:88`, `:123`). |
-   | Relógio fora da borda | **Presente no diff total**, nos fallbacks novos; C6 e lavra também conservam relógios internos. O corte exige injeção e borda nominal (`app/chamados/models.py:2550`, `:2601`; `app/chamados/juizes.py:539`; `app/chamados/veredito_lavrado.py:228`; `app/docs/CORTES.md:369`). |
-   | Segundo juiz / derivação paralela | Não identificados no caminho novo: a porta chama C6 e reutiliza a lista de identidade (`app/chamados/models.py:2524`, `:2565`). |
-   | Segundo escritor explícito atual fora da porta | Não identificado; os mutantes mostram que o selo não garante sua ausência (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:126`). |
-   | Ordem de trava | A porta nova não adquire trava; mudança de ordem não demonstrada (`app/chamados/models.py:2552`, `:2576`). |
-   | Pouso antes do pré-requisito / RED histórico / suíte inteira | [nao verificado]. | [nao verificado]
-
-   A recusa granular mantém `_Reprovada` dentro do `atomic`, preservando a estrutura de rollback da batida (`app/chamados/services/materializacao.py:1109`, `app/chamados/services/materializacao.py:1166`, `app/chamados/services/materializacao.py:1172`).
-
-_1435 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1439 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
