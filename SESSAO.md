@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 15:02:51.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (133.0 MB). Acoes na janela: **622**.
+**Medido em 01/11/2026 15:08:25.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (133.0 MB). Acoes na janela: **620**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -630,5 +630,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 03:14:31 | Bash | Write design question at RELATO top | `cd /home/ronald/saas-hasner && grep -n '^\| CONTENCAO-QUE-MORDE v2\\|^\| CONTENCAO-QUE-MORDE-V2\\|CONTENCAO-QUE-MORDE v2 \|' app/docs/BACKLOG.md \| head -3; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') linha=("PERGUNTA DE DESENHO: CONTENCAO-QUE-MORDE-V2-P1 \| opus final REPROVOU 02:5x (copia /home/ronald/wt-contencao-v2-002530 @589f00d4, obra parada, as outras seguem) -- " ...` |
 | 03:14:19 | Bash | Read RELATO topo and BACKLOG row | `cd /home/ronald/saas-hasner && sed -n 1,6p app/docs/RELATO.md \| cut -c1-160; grep -n 'CONTENCAO-QUE-MORDE' app/docs/BACKLOG.md \| head -3` |
 | 03:14:13 | Bash | Confirm opus findings at cited lines | `cd /home/ronald/wt-contencao-v2-002530 && grep -n "reservas" bin/disjuntor.py \| head; sed -n 288,297p bin/disjuntor.py; sed -n 2030,2038p bin/disjuntor.py` |
-| 03:04:29 | Bash | Log CONTENCAO handback in RELATO | `cd /home/ronald/saas-hasner && cat >> app/docs/RELATO.md <<'EOF' ### 01/11 02:4x CONTENCAO-QUE-MORDE v2 P1 -- construtor devolveu, opus final aberto - copia /home/ronald/wt-contencao-v2-002530 @589f00d4 (base e0bdbc8e), instrumento. Codex 3 voltas (13+4 procedentes curados; v3 bloqueia com 1 procedente curado em 589f00d4 sem 4a volta -> CODEX 5(d) sobe ao opus). Selos test_disjuntor/test_contrato_ ...` |
-| 03:04:23 | Agent | verificador: CONTENCAO-QUE-MORDE v2 P1 opus final | `Obra: CONTENCAO-QUE-MORDE v2, pouso P1 (INSTRUMENTO, padrao=n/a (instrumento)). Voce e o verificador final (opus) antes do pouso. Somente leitura. Nao viu a construcao: procure o que esta errado. Copia: /home/ronald/wt-contencao-v2-002530 (branch contencao-v2-p1), base e0bdbc8e, HEAD 589f00d4. Diff: `git -C /home/ronald/wt-contencao-v2-002530 diff e0bdbc8e..589f00d4`. Commits: 4c858f1d (P1), 1af63 ...` |
