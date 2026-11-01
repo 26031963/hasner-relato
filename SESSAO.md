@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 09:04:44.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (115.8 MB). Acoes na janela: **530**.
+**Medido em 01/11/2026 09:10:14.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (115.8 MB). Acoes na janela: **527**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -537,6 +537,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:12:45 | Bash | Launch the Codex verificador for GRADE 1093275a | `cd /home/ronald/saas-hasner; D=logs/grade_juiz/pv; cat > $D/v8.q <<'EOF' PAPEL: verificador (pre-verificacao, antes do opus final). Obra GRADE-FOLGA-JUIZ, hash 1093275a (copia), diff contra o main 3e5ea58a anexo (diff_v8.txt), com as linhas de LEIS/CORTES que citam os arquivos tocados (leis_v8.txt) e app/docs/JUIZES.md. Corte do Ronald que a obra realiza (literal): "folga de CALENDARIO (template d ...` |
 | 21:12:31 | Bash | Build the GRADE v8 diff and law excerpts for Codex | `cd /home/ronald/saas-hasner; D=logs/grade_juiz/pv; W=/home/ronald/wt-grade-v5-163638; git -C $W diff 3e5ea58a 1093275a > $D/diff_v8.txt; wc -l $D/diff_v8.txt; git -C $W diff --stat 3e5ea58a 1093275a \| tail -15; for f in precedencia.py declarar_dia.py rejulgar_ausencia_em_folga fase_conflitante juizes.py; do grep -n "$f" app/docs/LEIS.md app/docs/CORTES.md 2>/dev/null \| cut -c1-200 \| head -4; do ...` |
 | 21:12:25 | Bash | Check the Codex wrapper usage and GRADE commits | `cd /home/ronald/saas-hasner; sed -n 1,40p bin/codex_pergunta.sh \| grep -E '^#' \| head -30; ls logs/grade_juiz/pv/; git -C /home/ronald/wt-grade-v5-163638 log --oneline -4` |
-| 21:05:59 | Bash | Record VOLTA-SUPERA-JOB in BACKLOG and PROMPTS | `cd /home/ronald/saas-hasner/app/docs; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys; H=sys.argv[1] p='BACKLOG.md'; s=open(p).read() old="RED: agente parado com job na fila -> segue e termina; docker run fora da trava -> recusado." assert s.count(old)==1 s=s.replace(old, old+f" + VOLTA-SUPERA-JOB (aval 31/10 {H}, sem id novo): o job na trava leva obra+VOLTA; obra abre volta nova -> jobs ainda ...` |
-| 21:05:51 | Bash | Find the TRAVA-COB backlog and prompts rows | `cd /home/ronald/saas-hasner/app/docs; grep -n 'TRAVA-COB' BACKLOG.md \| head; grep -n 'TRAVA-COB-DONO\\|PDC-ESTACIONA' PROMPTS.md \| head -3; tail -3 PROMPTS.md` |
-| 21:05:43 | Bash | Cancel impacto2 and log it | `cd /home/ronald/saas-hasner; ps -o pid,args -g 2271655 \| tail -n +2; git -C /home/ronald/wt-v3p5v2-cura-202909 rev-parse --short HEAD; kill -TERM -2271655; /usr/bin/sleep 2; ps -o pid -g 2271655 \| tail -n +2 \| wc -l; tail -2 logs/v3p5/v2/impacto2_run.log; cd app; echo "- $(date +%H:%M) CANCELA-IMPACTO2: pgid 2271655 (impacto2_v3p5v2.sh -> sombra.sh pid 2271658, na fila do flock de logs/sombra.l ...` |
