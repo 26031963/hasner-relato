@@ -1,7 +1,107 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 23:31** · publicado em **31/10/2026 23:32** (UTC-3)
+> Ultima resposta processada: **31/10/2026 23:48** · publicado em **31/10/2026 23:48** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 23:48 · sessao 35d3d4711061 · DISJUNTOR-TETO-DA-OBRA · leitura · origem=Code
+
+**A premissa central precisa de correção: o B3 não conta todas as voltas de construtor/verificador por obra. Ele mede reprovações finais de agentes e chamadas Codex triadas PROCEDENTE, com limiares separados.** (`bin/disjuntor.py:736`, `bin/disjuntor.py:857`, `bin/disjuntor.py:910`)
+
+1. **Contagens, fontes, escritores e leitores — contrato 1**
+
+   | Medida atual | Fonte e escritor | Quem conta/lê |
+   |---|---|---|
+   | Reprovações finais por obra | Transcripts `subagents/agent-*.jsonl`, metadado `agentType=verificador`, prompt reconhecido como final e `SubagentHandback` iniciado por `REPROVADO`. O código atribui os transcripts ao harness; a implementação desse escritor é **[não verificado]**. | `_reprovacoes_finais` coleta por `agent_id`; `decide_b3` acumula em `b3[obra].reprovados`. (`bin/disjuntor.py:335`, `bin/disjuntor.py:546`, `bin/disjuntor.py:736`, `bin/disjuntor.py:896`) |
+   | Chamadas Codex verificador PROCEDENTES por obra | O wrapper escreve resposta e `<resposta>.id`; `--triagem` escreve `logs/codex/triagem.log`. | `_triagens` lê o último veredito de cada chamada; `decide_b3` recalcula `b3[obra].codex`. Uma chamada com vários achados vale uma volta. (`bin/codex_pergunta.sh:198`, `bin/disjuntor.py:773`, `bin/disjuntor.py:813`, `bin/disjuntor.py:850`, `bin/disjuntor.py:904`) |
+   | Voltas de construtor | Não existe essa medida no B3; a consulta na abertura de `Agent` alcança somente `verificador` com prompt final. | Construtores ficam fora dessa consulta. (`bin/disjuntor.py:1451`, `bin/disjuntor.py:1454`, `bin/disjuntor.py:1457`) |
+
+   O escritor do JSON é `_com_estado`, usado pela decisão, triagem e rearme. Os consumidores da decisão são Stop, PreToolUse para **Agent e Bash/Codex**, e também o wrapper por `--b3-parada`; portanto o contrato 1 omite um chamador existente. (`bin/disjuntor.py:237`, `bin/disjuntor.py:818`, `bin/disjuntor.py:959`, `bin/disjuntor.py:1032`, `bin/hook_stop_fila1.py:1048`, `bin/disjuntor.py:1443`, `bin/disjuntor.py:1457`, `bin/codex_pergunta.sh:165`)
+
+   **Nem tudo zera no rearme:** `reprovados` e `codex` ficam vazios e `disparado=False`, mas os identificadores são preservados em `rearmado`, incluindo todas as chamadas já triadas da obra, qualquer que seja o veredito. A liberação por linha preserva identificadores em `liberado` e hashes em `consumidas`. Sobrevive histórico parcial, não um contador completo de voltas. (`bin/disjuntor.py:1017`, `bin/disjuntor.py:1020`, `bin/disjuntor.py:936`)
+
+   Os limiares atuais são **uma reprovação final OU três chamadas Codex PROCEDENTES**; o número retornado é `max(n, nc)`, não a soma. (`bin/disjuntor.py:76`, `bin/disjuntor.py:77`, `bin/disjuntor.py:912`, `bin/disjuntor.py:924`)
+
+2. **Segundo ERRO-BOBO — contrato 3**
+
+   `linhas_libera_b3` não consulta histórico: aceita `ERRO-BOBO <obra>: <motivo>` com ao menos uma letra ou dígito no motivo. Não existe regra especial para o segundo erro da obra. (`bin/disjuntor.py:626`, `bin/disjuntor.py:650`)
+
+   `decide_b3` verifica se a linha está fora da fotografia do disparo, ainda não foi consumida e tem `mtime` suficiente. **Outro ERRO-BOBO, com hash diferente e atendendo essas condições, libera novamente**; não vira DESENHO obrigatório. Repetir a mesma linha consumida não libera. (`bin/disjuntor.py:930`, `bin/disjuntor.py:932`, `bin/disjuntor.py:934`, `bin/disjuntor.py:938`)
+
+   O teste atual cobre consumo da mesma linha e liberação por ERRO-BOBO; não estabelece uma proibição para o segundo ERRO-BOBO distinto. (`bin/tests/test_disjuntor.sh:382`, `bin/tests/test_disjuntor.sh:386`, `bin/tests/test_disjuntor.sh:1468`)
+
+3. **O que a triagem prova — contrato 3**
+
+   **O sidecar é escrito pelo wrapper**, após sucesso e resposta nova: contém `obra`, `papel`, `hash` do commit consultado, `pid`, `fim` e `sha` da resposta. `--triagem` exige papel `verificador` e confere se o SHA corresponde à resposta. (`bin/codex_pergunta.sh:198`, `bin/disjuntor.py:753`, `bin/disjuntor.py:795`)
+
+   **A linha escrita por `--triagem`** tem quatro campos separados por TAB: `data/hora`, `obra`, `volta`, `veredito`. A identidade efetiva da volta é `hash12@pid@fim@sha12`; os vereditos aceitos são `procedente` e `descartado`. Repetir o mesmo veredito é idempotente; mudar o veredito acrescenta linha e prevalece o último. (`bin/disjuntor.py:79`, `bin/disjuntor.py:802`, `bin/disjuntor.py:808`, `bin/disjuntor.py:813`, `bin/disjuntor.py:850`)
+
+   Isso permite identificar, **por obra e chamada**, uma classificação PROCEDENTE. Não individualiza cada achado nem registra vínculo entre achado, diff seguinte e cura; o SHA confere a resposta, não a correção. (`bin/disjuntor.py:773`, `bin/disjuntor.py:800`, `bin/disjuntor.py:813`)
+
+   Consequentemente, **um PROCEDENTE isolado sem cura não impede hoje o próximo final** pelo B3. O bloqueio Codex exige três PROCEDENTES; mesmo depois disso, uma linha DESENHO válida pode liberar sem comprovação de diff. O teste atual exercita essa liberação apenas escrevendo DESENHO. (`bin/disjuntor.py:912`, `bin/disjuntor.py:930`, `bin/disjuntor.py:938`, `bin/tests/test_disjuntor.sh:1153`, `bin/tests/test_disjuntor.sh:1162`)
+
+4. **ESTADO e medida — contratos 2 e 4**
+
+   O gerador importa `disjuntor.ler/linha` e compõe a seção por essa interface. Hoje `ler` agrega disparos, negativas e liberações em 24 horas; do JSON B3 consulta `b3_sem_obra`. Não publica voltas por obra. (`bin/gerar_estado.py:277`, `bin/gerar_estado.py:280`, `bin/disjuntor.py:1548`, `bin/disjuntor.py:1554`, `bin/disjuntor.py:1620`, `bin/disjuntor.py:1624`, `bin/disjuntor.py:1691`)
+
+   **Lugar natural proposto:** acrescentar a leitura e a apresentação em `disjuntor.ler/linha`, mantendo `gerar_estado` como consumidor. É uma inferência da divisão atual; o contador persistente ainda precisa de definição. (`bin/gerar_estado.py:277`, `bin/gerar_estado.py:281`, `bin/disjuntor.py:1615`)
+
+   Para listar **todas as obras abertas**, falta definir a fonte desse universo: registros B3 nascem de reprovações ou PROCEDENTES, portanto não representam obras abertas sem esses eventos. (`bin/disjuntor.py:897`, `bin/disjuntor.py:902`)
+
+   Os três cenários novos e seus mutantes não constam da suíte atual; a lista existente cobre os mecanismos anteriores de B3, triagem, rearme e concorrência. “Cada um morde” e a contagem real **GRADE-FOLGA-JUIZ = 9** são **[não verificado]**; o anexo fornece somente a expectativa. (`bin/tests/test_disjuntor.sh:1468`, `bin/tests/test_disjuntor.sh:1507`, `bin/tests/test_disjuntor.sh:1587`, `bin/tests/test_disjuntor.sh:1784`)
+
+   Não executei a suíte: ela cria temporários, árvores e arquivos mutantes, incompatíveis com a regra de somente leitura. (`bin/tests/test_disjuntor.sh:39`, `bin/tests/test_disjuntor.sh:1475`)
+
+5. **Correções e limites do contrato, linha por linha**
+
+   | Linha | Avaliação diante da cópia |
+   |---|---|
+   | **1** | **Premissa incompleta:** as fontes já lidas não cobrem todas as voltas, e há também o chamador do wrapper. Guardar o teto dentro de `decide_b3` não faz construtores passarem automaticamente por essa decisão. (`bin/disjuntor.py:736`, `bin/disjuntor.py:857`, `bin/disjuntor.py:1454`, `bin/codex_pergunta.sh:165`) |
+   | **2** | **Comportamento novo:** não há teto de seis voltas, emissão de `PADRAO-DE-CIMA` ou comandos `reabre com N voltas`/`redesenha` nessa interface. A CLI atual oferece triagem, consulta e rearme. (`bin/disjuntor.py:76`, `bin/disjuntor.py:912`, `bin/disjuntor.py:1699`) |
+   | **3** | **Exige mudanças:** segundo ERRO-BOBO ainda libera; não há prova de cura; “B3 do dia” é impreciso, pois decisão e rearme não têm janela diária. Estado ilegível de fato levanta em `_com_estado`, e o juiz transforma a exceção em NAO_SEI, recusado na porta B3. (`bin/disjuntor.py:930`, `bin/disjuntor.py:1003`, `bin/disjuntor.py:265`, `bin/disjuntor.py:981`, `bin/disjuntor.py:1046`) |
+   | **4** | **Critério futuro, sem comprovação atual:** faltam os três cenários novos e o painel por obra; execução e número nove são **[não verificado]**. (`bin/tests/test_disjuntor.sh:1468`, `bin/disjuntor.py:1691`) |
+   | **5** | **Autoridade parcialmente instrumentalizada:** há guarda textual contra o Code citar a chave ou executar `--rearma-b3`; a função de rearme não autentica Ronald, e `USER` serve ao registro. Reabertura por quantidade e redesenho ainda não existem na CLI. (`bin/disjuntor.py:160`, `bin/disjuntor.py:1003`, `bin/disjuntor.py:1026`, `bin/disjuntor.py:1699`) |
+
+   **ID não reconhecido:** um Agent final sem obra reconhecida pula a consulta B3; posteriormente pode aparecer apenas em `b3_sem_obra`. O contrato precisa declarar o tratamento dessa abertura. (`bin/disjuntor.py:1455`, `bin/disjuntor.py:1457`, `bin/disjuntor.py:746`, `bin/disjuntor.py:893`)
+
+   **Concorrência:** a transição B3 é serializada, mas não há reserva de uma volta por obra entre autorização e execução. O wrapper trava por caminho da resposta; por inferência, chamadas da mesma obra com respostas diferentes podem passar antes de chegarem novas triagens. (`bin/disjuntor.py:253`, `bin/disjuntor.py:286`, `bin/codex_pergunta.sh:162`, `bin/codex_pergunta.sh:165`, `bin/codex_pergunta.sh:174`)
+
+   **Desligamento incompleto:** Stop e PreToolUse consultam `DISJUNTOR_DESLIGADO`; a porta B3 do wrapper não consulta. Assim, pela leitura do fluxo, a chave não libera essa porta para obra PARADA/NAO_SEI. Também não há exigência de linha no RELATO para reconhecer o desligamento: basta a existência da chave. (`bin/hook_stop_fila1.py:1039`, `bin/disjuntor.py:1487`, `bin/codex_pergunta.sh:165`, `bin/disjuntor.py:1042`, `bin/disjuntor.py:144`)
+
+   **Retroatividade:** o histórico disponível é parcial, e a porta do wrapper decide sem transcript, usando reprovações de agentes já persistidas. Portanto “obras abertas entram com as voltas que têm” precisa definir alcance, fontes e tratamento de voltas ausentes ou ainda em voo. (`bin/disjuntor.py:736`, `bin/disjuntor.py:898`, `bin/disjuntor.py:1039`)
+
+## 31/10 23:47 · sessao b0d1525dba7e · - · - · origem=Ronald (tmux)
+
+- **Chamadores reais:** Stop chama `julga_b3` em `bin/hook_stop_fila1.py:1048`, acrescentado ao recado em `bin/hook_stop_fila1.py:1300`; PreToolUse chama `estado_b3` via `_nega_b3` (`bin/disjuntor.py:1402`), tanto para `Bash codex_pergunta` (`bin/disjuntor.py:1440`) quanto para `Agent verificador final` (`bin/disjuntor.py:1454`). Existe ainda a porta do wrapper: `bin/codex_pergunta.sh:165` → `b3_parada` → `estado_b3` (`bin/disjuntor.py:1042`) → `julga_b3` → `decide_b3` (`bin/disjuntor.py:980`). Portanto linha 1 omite um chamador existente e restringe incorretamente PreToolUse a Agent. (`bin/disjuntor_settings.json:7` usa matcher vazio.)
+
+- **Não há contagem total de construtor/verificador em B3:** os transcripts produzem exclusivamente reprovações finais por `agent_id` (`bin/disjuntor.py:736`); são exigidos metadado `agentType=verificador`, prompt reconhecido como final e entrega `SubagentHandback` cuja primeira linha começa `REPROVADO` (`bin/disjuntor.py:742`, `bin/disjuntor.py:555`, `bin/disjuntor.py:561`). O harness é identificado no código como escritor dos transcripts (`bin/disjuntor.py:336`); sua implementação não está verificada. A outra fonte são voltas Codex verificador triadas PROCEDENTE, uma por chamada (`bin/disjuntor.py:773`, `bin/disjuntor.py:858`). O retorno usa **max(n, nc)**, não soma (`bin/disjuntor.py:924`).
+
+- **Outras medidas não equivalem a voltas por obra:** o Stop guarda bloqueios por HEAD, teto 5 (`bin/hook_stop_fila1.py:35`, `bin/hook_stop_fila1.py:37`, `bin/hook_stop_fila1.py:1250`, `bin/hook_stop_fila1.py:1277`); o wrapper tem default `CODEX_TETO=6`, mas para execuções simultâneas globais, configurável por env (`bin/codex_pergunta.sh:47`, `bin/codex_pergunta.sh:137`). O painel conta agentes Claude por modelo/tipo em 24h, sem obra (`bin/disjuntor.py:1631`, `bin/disjuntor.py:1646`), e chamadas Codex por papel, incluindo `ini` de chamadas recusadas (`bin/codex_limite_estado.py:71`, `bin/codex_pergunta.sh:88`, `bin/codex_pergunta.sh:165`).
+
+- **ESTADO:** `bin/gerar_estado.py:280` importa `ler/linha` de `disjuntor`; `bin/gerar_estado.py:281` compõe a linha, inserida na seção Disjuntores em `bin/gerar_estado.py:336` e `bin/gerar_estado.py:365`. O leitor atual deriva disparos, negativas e liberações da trilha em janela 24h (`bin/disjuntor.py:1548`, `bin/disjuntor.py:1554`, `bin/disjuntor.py:1568`); do JSON B3 lê apenas `b3_sem_obra` (`bin/disjuntor.py:1624`). Não publica lista ou contagem por obra (`bin/disjuntor.py:1615`, `bin/disjuntor.py:1691`). Lugar natural proposto: ampliar esse `ler/linha`, preservando `gerar_estado` como consumidor; é inferência arquitetural sustentada por `bin/gerar_estado.py:277`.
+
+- **Universo de obras abertas:** o gerador já usa BACKLOG/bloco OBRAS para obras interrompidas (`bin/gerar_estado.py:236`); leitor correspondente abre `app/docs/BACKLOG.md` e recorta `OBRAS:INICIO/FIM` (`bin/interrompidas_estado.py:89`, `bin/interrompidas_estado.py:94`). Esse leitor só enumera interrompidas (`bin/interrompidas_estado.py:106`); o contrato ainda precisa definir a fonte e o critério de todas as abertas. O B3 cria registros apenas a partir de reprovações ou PROCEDENTES (`bin/disjuntor.py:897`, `bin/disjuntor.py:902`).
+
+- **ID ausente:** Agent final sem ID reconhecido **pula a consulta B3**, pois `_nega_b3` só roda se `ob` (`bin/disjuntor.py:1455` e `bin/disjuntor.py:1457`). Depois pode aparecer apenas no agregado `b3_sem_obra` (`bin/disjuntor.py:746`, `bin/disjuntor.py:893`). Reconhecedor exige formato específico e primeira ocorrência válida (`bin/disjuntor.py:97`, `bin/disjuntor.py:104`, `bin/disjuntor.py:514`, `bin/disjuntor.py:521`).
+
+- **Chave desligada não cobre a porta do wrapper:** Stop verifica `desligado` (`bin/hook_stop_fila1.py:1039`), PreToolUse também (`bin/disjuntor.py:1487`), mas wrapper consulta incondicionalmente para papel verificador (`bin/codex_pergunta.sh:164`), e `b3_parada` consulta o juiz sem checar a chave (`bin/disjuntor.py:1042`). Inferência direta: uma obra parada/NAO_SEI continua recusada por essa porta mesmo com a chave existente. O contrato precisa declarar ou corrigir essa divergência.
+
+- **Concorrência:** transição B3 é serializada por flock e gravação atômica (`bin/disjuntor.py:249`, `bin/disjuntor.py:253`, `bin/disjuntor.py:268`, `bin/disjuntor.py:274`); anúncios também ficam sob a trava (`bin/disjuntor.py:284`). O wrapper trava **por caminho da resposta** (`bin/codex_pergunta.sh:162`), verifica B3 (`bin/codex_pergunta.sh:165`) e depois executa Codex (`bin/codex_pergunta.sh:174`). Não há reserva por obra nessa transação; duas respostas diferentes da mesma obra podem ser admitidas antes dos resultados serem triados — inferência desses trechos e da gravação posterior à resposta em `bin/disjuntor.py:802` e `bin/disjuntor.py:813`.
+
+- **“B3 do dia” e autoridade Ronald:** as decisões/rearme não possuem reset por data (`bin/disjuntor.py:896`, `bin/disjuntor.py:1003`); 24h é só a janela do painel (`bin/disjuntor.py:1548`). “Só Ronald” é guarda textual de ferramentas (`bin/disjuntor.py:160`, `bin/disjuntor.py:162`), sem autenticação em `rearma_b3`; `USER` é usado somente no registro (`bin/disjuntor.py:1026`).
+
+## 31/10 23:46 · sessao 13474eb913ba · - · - · origem=Ronald (tmux)
+
+Leitura integral concluída; o teste tem 1.791 linhas e sua execução cria temporários, árvores e cópias mutantes, portanto não o executei sob a regra de somente leitura. (`bin/tests/test_disjuntor.sh:39`, `bin/tests/test_disjuntor.sh:50`, `bin/tests/test_disjuntor.sh:1475`)
+
+- **Linha 1 do contrato — trilha insuficiente para contar toda volta:** os testes distinguem a leitura curta que não conta, a reprovação final que para a obra e a chamada Codex que só conta depois de triada; não equivalem a um contador geral de construtor/verificador. (`bin/tests/test_disjuntor.sh:341`, `bin/tests/test_disjuntor.sh:344`, `bin/tests/test_disjuntor.sh:1144`, `bin/tests/test_disjuntor.sh:1150`)
+- **Linha 2 — teto 6 e sétima negada:** não aparecem entre os casos declarados; há limites diferentes: primeira reprovação final e terceira volta Codex PROCEDENTE. (`bin/tests/test_disjuntor.sh:785`, `bin/tests/test_disjuntor.sh:1153`, `bin/tests/test_disjuntor.sh:1156`, `bin/tests/test_disjuntor.sh:1468`)
+- **Linha 3 — rearme:** os testes exigem que o rearme exclua também triagens PROCEDENTES ainda não varridas, inclusive numa obra sem decisão anterior. Isso comprova reset do B3, não permanência de um teto acumulado. (`bin/tests/test_disjuntor.sh:1181`, `bin/tests/test_disjuntor.sh:1186`, `bin/tests/test_disjuntor.sh:1287`)
+- **Linha 3 — segundo ERRO-BOBO:** existe teste de liberação por ERRO-BOBO e de consumo único da mesma linha; não há cenário de segundo ERRO-BOBO diferente na mesma obra. A forma aceita até uma letra ou um dígito como motivo. (`bin/tests/test_disjuntor.sh:382`, `bin/tests/test_disjuntor.sh:386`, `bin/tests/test_disjuntor.sh:706`, `bin/tests/test_disjuntor.sh:740`, `bin/tests/test_disjuntor.sh:1468`)
+- **Linha 3 — PROCEDENTE sem cura:** o teste atual libera uma obra com três PROCEDENTES apenas escrevendo DESENHO; não produz nem verifica diff de cura nesse caminho. (`bin/tests/test_disjuntor.sh:1156`, `bin/tests/test_disjuntor.sh:1162`, `bin/tests/test_disjuntor.sh:1164`, `bin/tests/test_disjuntor.sh:1165`)
+- **Linha 4 — três mutantes novos:** não constam no inventário atual; os mutantes existentes cobrem limiar Codex 3→2, contagem de DESCARTADO, reset e consumo da mesma linha, entre outros. (`bin/tests/test_disjuntor.sh:1558`, `bin/tests/test_disjuntor.sh:1560`, `bin/tests/test_disjuntor.sh:1597`, `bin/tests/test_disjuntor.sh:1632`, `bin/tests/test_disjuntor.sh:1784`) “Cada um morde” e “GRADE-FOLGA-JUIZ = 9” permanecem **[não verificado]**.
+- **Linha 5 — chave e autorização:** há testes para a chave desligar PreToolUse e Stop, e para negar ao Code comandos com a chave ou `--rearma-b3`. Não há testes de “reabre com N voltas”, “redesenha” ou reversão de commit neste instrumento. (`bin/tests/test_disjuntor.sh:585`, `bin/tests/test_disjuntor.sh:593`, `bin/tests/test_disjuntor.sh:596`, `bin/tests/test_disjuntor.sh:603`, `bin/tests/test_disjuntor.sh:1468`)
+
+Limites úteis para a consolidação: há teste de reprovação final sem obra reconhecida aparecer em `b3_sem_obra`; há testes de transição sob uma trava, anúncio sob a trava, triagem bloqueada por trava ocupada e consulta após obtenção de slot. Isso não constitui teste de reserva atômica de seis admissões concorrentes. (`bin/tests/test_disjuntor.sh:427`, `bin/tests/test_disjuntor.sh:820`, `bin/tests/test_disjuntor.sh:1064`, `bin/tests/test_disjuntor.sh:1347`, `bin/tests/test_disjuntor.sh:1419`, `bin/tests/test_disjuntor.sh:1468`)
 
 ## 31/10 23:31 · sessao 5f457781992f · CLAUDE-MD-NO-RELATO · leitura · origem=Code
 
@@ -579,113 +679,4 @@ Nesta tabela, “não percebe” refere-se **às asserções do caso**, não à 
 
 [truncado em 20000 de 27400 caracteres]
 
-## 31/10 22:25 · sessao 10a894de865c · - · - · origem=Ronald (tmux)
-
-Achados por leitura estática; reprodução dos cenários e resultados dos selos [nao verificado].
-
-1. **Registro ilegível não fecha a porta.** `tf_estado` só exige arquivo existente; lê campos sem validar e regrava `rodando` mesmo com obra/volta ausentes. O job aceita esse sucesso e executa. A leitura da maior volta trata erro como ausência, e sua escrita não tem retorno conferido. (`bin/trava_fila.sh:49`, `bin/trava_fila.sh:95`, `bin/trava_fila.sh:100`, `bin/trava_fila.sh:128`, `bin/trava_fila.sh:129`, `bin/trava_teste.sh:180`)
-
-2. **Mais de um caminho modifica os registros.** `_tf_grava` cria/substitui entradas; `_tf_supera` e `tf_cancela_obra` removem sob fd6; `tf_sai` e a poda de `tf_entradas` removem sem fd6. Eventos têm uma função escritora, mas vários processos a chamam, inclusive fora do lock da fila. (`bin/trava_fila.sh:58`, `bin/trava_fila.sh:67`, `bin/trava_fila.sh:88`, `bin/trava_fila.sh:133`, `bin/trava_fila.sh:160`, `bin/trava_fila.sh:46`)
-
-3. **Falha de trilha vira sucesso.** `tf_evento` responde à falha de append com `echo`; não propaga a falha, e as operações podem continuar sem evento persistido. (`bin/trava_fila.sh:46`, `bin/trava_fila.sh:47`, `bin/trava_fila.sh:120`, `bin/trava_fila.sh:130`, `bin/trava_fila.sh:147`)
-
-4. **Sinais do esperador.** Depois de instalar `_solta`, TERM/INT/HUP param apenas os tails e saem 143; o job destacado continua. Antes disso, inclusive nos 30 segundos aguardando `.pid`, não há esse trap. KILL não executa limpeza; o job foi lançado em outra sessão. INT pode estar herdado como ignorado quando a chamada veio de comando assíncrono; efeito concreto [nao verificado]. (`bin/trava_teste.sh:127`, `bin/trava_teste.sh:128`, `bin/trava_teste.sh:135`, `bin/trava_teste.sh:141`)
-
-5. **KILL no job.** Não escreve `.rc`; o esperador usa 143. Antes da aquisição, um filho `flock` sobrevivente pode continuar esperando/adquirir e sair, mas não executa suite. Depois de lançar container direto, o container pode sobreviver sem fd9; a próxima aquisição procura seu rótulo e para o órfão. Existe janela entre lançar o cliente Docker e ele criar o container: outro job pode consultar pista vazia antes dessa criação; concorrência efetiva nessa janela [nao verificado]. (`bin/trava_teste.sh:147`, `bin/trava_teste.sh:173`, `bin/trava_teste.sh:194`, `bin/trava_teste.sh:201`, `bin/trava_teste.sh:208`, `bin/trava_teste.sh:248`)
-
-6. **Superação e abertura concorrente.** Entrada, abertura e transição para `rodando` disputam o mesmo fd6. Se a abertura ganhar primeiro, entrada velha retorna 3, convertido em 143 pelo job; se a entrada velha ganhar, a abertura subsequente mata/remove sua entrada enquanto `estado=fila`; se a transição para `rodando` ganhar, não é superada. (`bin/trava_fila.sh:109`, `bin/trava_fila.sh:112`, `bin/trava_fila.sh:115`, `bin/trava_fila.sh:126`, `bin/trava_fila.sh:145`, `bin/trava_fila.sh:85`, `bin/trava_teste.sh:168`)
-
-7. **Cancelamento.** Na fila, envia TERM ao grupo se pgid=pid; senão, aos filhos diretos e ao pid. Rodando, envia TERM somente ao dono; no job de teste, `_parar` busca containers por rótulo, tenta `docker stop`, mata/espera filho e sai 143. O comando de cancelamento conta pedidos e retorna sucesso sem comprovar morte; falha de `kill` é ignorada. (`bin/trava_fila.sh:73`, `bin/trava_fila.sh:160`, `bin/trava_fila.sh:165`, `bin/trava_teste.sh:238`)
-
-8. **Sombra não tem a mesma propriedade de vida.** Registra o próprio BASHPID, não destaca job, não instala trap para parar filhos e não chama `tf_sai` no encerramento normal. Cancelamento de entrada `rodando` mata só esse pid; filhos herdando fd8 podem continuar e manter a trava, enquanto a entrada do dono morto é posteriormente podada. (`bin/sombra_trava.sh:6`, `bin/sombra_trava.sh:38`, `bin/sombra_trava.sh:46`, `bin/sombra_trava.sh:63`, `bin/trava_fila.sh:160`, `bin/trava_fila.sh:58`)
-
-9. **PID reutilizado.** Identidade da fila e rótulos compara starttime; o esperador extrai só o número de PID para `tail --pid`, ignorando starttime, podendo prolongar a espera pelo processo reciclado. Há ainda intervalo entre verificar identidade e enviar sinal nas operações da fila. (`bin/trava_fila.sh:34`, `bin/trava_teste.sh:60`, `bin/trava_teste.sh:133`, `bin/trava_teste.sh:142`, `bin/trava_fila.sh:58`, `bin/trava_fila.sh:87`, `bin/trava_fila.sh:160`)
-
-10. **`.rc` ausente/truncado.** Ausente, vazio ou não numérico vira 143; truncamento que ainda deixa dígitos é aceito como outro rc. Não há validação de faixa: conteúdo corrompido `256` passa pela regex e `exit 256` corresponde a 0; experimento [nao verificado]. A escrita normal usa arquivo temporário e `mv`, evitando leitura de prefixo durante publicação normal. (`bin/trava_teste.sh:147`, `bin/trava_teste.sh:148`, `bin/trava_teste.sh:150`, `bin/trava_teste.sh:160`)
-
-11. **Sem `.pid` em 30 segundos.** Esperador sai 1, não cancela o lançamento nem verifica o rc de `setsid`; um job atrasado ou cujo pidfile falhou pode continuar, pois a publicação de `.pid` também não é checada antes de entrar na fila. (`bin/trava_teste.sh:127`, `bin/trava_teste.sh:128`, `bin/trava_teste.sh:131`, `bin/trava_teste.sh:164`, `bin/trava_teste.sh:165`)
-
-12. **Outros caminhos de rc 0 sem término da suite.** A API aceita `docker run -d ... manage.py test`: aguarda o cliente Docker, não o container, e pode devolver 0 com a suite em execução. A próxima aquisição encontra dono morto e pode parar esse container. (`bin/trava_teste.sh:104`, `bin/trava_teste.sh:188`, `bin/trava_teste.sh:235`, `bin/trava_teste.sh:248`, `bin/trava_teste.sh:250`, `bin/trava_teste.sh:201`)
-
-13. **Wrapper permite perder a proteção contra órfão.** `-- bash -c 'docker run ... manage.py test'` não recebe rótulo nem ativa busca de suite sem rótulo, pois o teste exige literalmente primeiros argumentos `docker run`. Após KILL do job, novo wrapper pode executar por cima do container sobrevivente. (`bin/trava_teste.sh:188`, `bin/trava_teste.sh:194`, `bin/trava_teste.sh:248`)
-
-14. **Coleta pode apagar arquivos de job vivo.** O `find -mtime +2 -delete` não consulta identidade, estado ou término; outro esperador pode remover `.pid/.out/.err` de job antigo ainda vivo, prejudicando acompanhamento e futura leitura. (`bin/trava_teste.sh:123`, `bin/trava_teste.sh:128`, `bin/trava_teste.sh:142`, `bin/trava_teste.sh:147`)
-
-15. **Colisões de obra.** O saneamento substitui caracteres e corta em 100 bytes: `A B` e `A_B`, ou nomes com mesmo prefixo de 100 caracteres, viram a mesma obra e podem cancelar/superar uma à outra. `.` e `..` também permanecem permitidos como nome do arquivo de maior volta. (`bin/trava_fila.sh:39`, `bin/trava_fila.sh:85`, `bin/trava_fila.sh:95`, `bin/trava_fila.sh:159`)
-
-16. **Descritores herdados.** `setsid` não fecha fd6/7/8; o job substitui fd9 e o filho fecha apenas fd9. O fd7 da régua externa do integrador pode continuar herdado pelo job/filho. Uma rota concreta dos chamadores de sombra até suite que produza inversão de fd8/fd9 não foi encontrada nesta leitura [nao verificado]. (`bin/trava_teste.sh:127`, `bin/trava_teste.sh:173`, `bin/trava_teste.sh:248`, `bin/integrador.sh:51`)
-
-## 31/10 22:24 · sessao be3b32fd55a2 · - · - · origem=Ronald (tmux)
-
-O selo `test_trava_dono_do_job.sh` tem um defeito anterior à análise de mutantes: `_rc()` usa `wait`, mas é invocado dentro de substituição de comando, em subshell, que não é pai dos processos lançados pelo selo; portanto as comparações positivas com `0`/`143` não recuperam o rc daqueles filhos. Isso afeta (b), (e) e (f), e torna os resultados negativos de (a) menos informativos. A reprodução mínima, sem arquivos, retornou `subshell_wait_rc=-1` e `parent_wait_rc=0` nesta execução; o valor específico em outros Bash é [nao verificado]. (`bin/tests/test_trava_dono_do_job.sh:56`, `:75`, `:90`, `:99`, `:147`, `:170`, `:175`, `:180`)
-
-As mutações abaixo são previsões da leitura, sem mutar arquivos nem rodar selos; “não percebe” refere-se às asserções daquele caso, supondo corrigida a leitura de rc acima. Resultado experimental dos mutantes: [nao verificado].
-
-| Caso | Mutação de produção que a asserção reprova | Mutação que a asserção não percebe |
-|---|---|---|
-| (a) | Retirar o evento `superado` ou a linha `RELATO`. (`bin/trava_fila.sh:89`, `:90`; asserções `bin/tests/test_trava_dono_do_job.sh:85`, `:87`) | Trocar o rc da superação por outro não zero: o caso exige apenas `!=0`, ausência de marcador e trilhas. (`bin/trava_teste.sh:163`; `bin/tests/test_trava_dono_do_job.sh:76`) |
-| (b) | Permitir que `_tf_supera` mate também `estado=rodando`: perde-se `X2_RODANDO_FIM`. (`bin/trava_fila.sh:85`; `bin/tests/test_trava_dono_do_job.sh:91`) | Retirar a exclusão pelo flock pode produzir os dois marcadores e rc zero: o caso não compara ordem de início/fim. Outros casos podem perceber a mudança. (`bin/trava_teste.sh:174`; `bin/tests/test_trava_dono_do_job.sh:89`, `:99`) |
-| (c) | Retirar `exit 3` da recusa permite executar o marcador atrasado. (`bin/trava_fila.sh:115`; `bin/tests/test_trava_dono_do_job.sh:104`, `:107`) | Trocar `3` por outro rc não zero: não confere código exato, evento `recusado` nem ausência de entrada transitória. (`bin/trava_fila.sh:115`; `bin/tests/test_trava_dono_do_job.sh:107`) |
-| (d) | Acrescentar TERM ao job em `_solta`: desaparece a conclusão com rc zero. (`bin/trava_teste.sh:135`; `bin/tests/test_trava_dono_do_job.sh:123`, `:127`) | Substituir `setsid -f bash` por `bash`: o caso mata apenas o PID do esperador, não sua árvore; um filho comum também pode sobreviver a esse sinal individual. A garantia contra TaskStop por árvore não é testada. (`bin/trava_teste.sh:127`; `bin/tests/test_trava_dono_do_job.sh:119`) |
-| (e) | Retirar o TERM do dono rodando deixa o trabalho de 60 segundos vivo além do prazo observado. (`bin/trava_fila.sh:160`; `bin/tests/test_trava_dono_do_job.sh:135`, `:143`) | Gravar motivo/quem constantes ou incorretos: confere quantidade de eventos e texto `cancelados=2`, sem conferir esses campos. (`bin/trava_fila.sh:161`; `bin/tests/test_trava_dono_do_job.sh:150`, `:152`) |
-| (f) | Permitir superação de rodando mata `S2_RODANDO`; retirar a integração com a fila impede a entrada esperada. (`bin/trava_fila.sh:85`; `bin/sombra_trava.sh:40`; `bin/tests/test_trava_dono_do_job.sh:168`, `:175`) | Retirar `exec 8>&-` no caminho de entrada desaparecida: o wrapper do teste imediatamente executa `exit 1`, fechando o descritor de qualquer maneira. Um chamador que tratasse o erro continuando não está coberto. (`bin/sombra_trava.sh:50`; `bin/tests/test_trava_dono_do_job.sh:160`) |
-| (g) | Retirar a chamada a `nega_suite_fora_da_trava`. (`bin/disjuntor.py:1569`; `bin/tests/test_trava_dono_do_job.sh:193`) | Mover a guarda para dentro de `if not desligado()` passa os exemplos: `DISJUNTOR=0` não desliga nada; a chave real é arquivo. Excluir agentes também passa: todos os payloads omitem `agent_id`. (`bin/disjuntor.py:144`, `:146`, `:1570`; `bin/tests/test_trava_dono_do_job.sh:185`, `:192`) |
-| (i) Docker | Retirar o `docker stop` de `_parar` deixa o container vivo após cancelamento. (`bin/trava_teste.sh:242`; `bin/tests/test_trava_dono_para_filho.sh:75`) | Retirar o destacamento preservando um filho normal pode sobreviver ao TERM enviado só ao PID do esperador; o teste não mata a árvore. (`bin/trava_teste.sh:127`; `bin/tests/test_trava_dono_para_filho.sh:68`) |
-| (ii) Docker | Fazer `_quem` ignorar containers rotulados e dizer livre reprova a expectativa `ORFAO`. (`bin/trava_teste.sh:94`; `bin/tests/test_trava_dono_para_filho.sh:97`, `:99`) | Fazer o esperador retornar zero quando falta `.rc`: (ii) executa `wait` mas não confere seu status. (`bin/trava_teste.sh:148`; `bin/tests/test_trava_dono_para_filho.sh:95`) |
-
-A sombra continua com ciclo de vida diferente do prometido para o job: registra o `BASHPID` do chamador, toma fd 8 nesse mesmo processo e exporta herança; não cria esperador destacado, arquivo de rc ou trap para parar container. Cancelar rodando envia TERM apenas ao PID registrado, enquanto os filhos herdam o descritor. (`bin/sombra_trava.sh:38`, `:46`, `:48`, `:63`, `:64`; `bin/trava_fila.sh:160`)
-
-Também não há `tf_sai` no término bem-sucedido da sombra: suas chamadas aparecem apenas em erros de abertura/timeout. A entrada morta será podada na leitura, sem evento `fim`. Pedidos superados ou cancelados antes da aquisição também não chegam à escrita de `sombra_espera.jsonl`. (`bin/sombra_trava.sh:46`, `:54`, `:57`, `:65`; `bin/trava_fila.sh:58`)
-
-Os selos reapontam lock/fila/jobs e sombra para diretórios temporários e conferem que a substituição do lock ocorreu; o hook recebe `HOOK_STOP_RAIZ` próprio. O selo Docker apenas sourceia recursos, sem chamar `teste_envfile`, e cria/remove containers por nomes próprios. (`bin/tests/test_trava_dono_do_job.sh:24`, `:27`, `:29`, `:157`, `:159`, `:186`; `bin/tests/test_trava_dono_para_filho.sh:28`, `:35`, `:38`, `:40`, `:44`, `:45`)
-
-Não cabe afirmar isolamento absoluto: a limpeza de `dono_do_job` mata PID nu vindo dos arquivos, sem conferir starttime, e usa `pkill -f`; PID reciclado pode atingir processo alheio. As consultas Docker são globais, e suites alheias sem rótulo podem interferir nos casos Docker; a trava as espera em vez de matá-las. (`bin/tests/test_trava_dono_do_job.sh:35`, `:38`, `:40`; `bin/trava_teste.sh:68`, `:194`, `:225`, `:230`)
-
-## 31/10 22:24 · sessao 35b88c87e455 · - · - · origem=Ronald (tmux)
-
-Achados do predicado, sem executar suites nem escrever arquivos:
-
-1. **Escapes reproduzidos com o predicado real compilado em memória**:
-
-| Comando de suite | Por que passa | [nao verificado]
-|---|---|
-| `echo inicio` + newline + `docker run --rm img python manage.py test ponto` | Newline é consumido como whitespace; o segmento começa em `echo`. `bin/disjuntor.py:167`, `bin/disjuntor.py:174`. |
-| `if true; then docker run --rm img python manage.py test ponto; fi` | O segmento começa por `then`, que não é prefixo conhecido. `bin/disjuntor.py:157`, `bin/disjuntor.py:197`, `bin/disjuntor.py:216`. |
-| `docker --context default run --rm img python manage.py test ponto` | `run` só é procurado nos índices 1 e 2. `bin/disjuntor.py:216`. |
-| `sudo -u ronald docker run ...` / `env -C /tmp docker run ...` / `stdbuf -o L docker run ...` | O argumento textual da opção interrompe a remoção dos prefixos. `bin/disjuntor.py:199`. |
-| `docker run > out --rm img python manage.py test ponto` | O redirecionamento separa `docker run` dos argumentos da suite. `bin/disjuntor.py:175`. |
-| `docker run --rm img python manage.py --settings=config.settings.ci test ponto` | A regex exige `manage.py` imediatamente seguido de whitespace e `test`. `bin/disjuntor.py:160`. |
-| `D=docker; "$D" run ...`, `eval 'docker run ...'`, `printf x \| xargs docker run ...` | Não resolve expansão, eval nem executores adicionais. `bin/disjuntor.py:188`, `bin/disjuntor.py:207`, `bin/disjuntor.py:216`. |
-
-Também não inspeciona o conteúdo de scripts chamados por `bash arquivo.sh`; só recursa no texto após opção curta contendo `c`. Portanto a camada estática é indispensável e também tem heurísticas próprias, distintas. `bin/disjuntor.py:208`, `bin/tests/test_trava_teste.sh:83`, `bin/tests/test_trava_teste.sh:87`, `bin/tests/test_trava_teste.sh:120`.
-
-2. **Falsos positivos reproduzidos**:
-
-- `bash bin/trava_teste.sh -- bash -c 'docker run --rm img python manage.py test ponto'`: nega apesar de o shell interno executar sob o flock; encontra o `-c` em qualquer posição após `bash`, sem distinguir execução de script de execução por `bash -c`. `bin/disjuntor.py:208`, `bin/disjuntor.py:210`; a trava executa o argumento genérico em `bin/trava_teste.sh:248`.
-- `docker run --rm alpine echo 'python manage.py test ponto'` e `docker run --rm -e NOTE='manage.py test' alpine sleep 30`: nega por procurar a regex em todos os argumentos unidos, sem identificar o programa executado. `bin/disjuntor.py:216`.
-- `printf '%s\n' ';' docker run --rm img python manage.py test` e `grep -F ';' docker run --rm img python manage.py test`: nega embora apenas imprimam/leiam texto; após remover as aspas, trata até o token **citado** `;` como operador. `bin/disjuntor.py:167`, `bin/disjuntor.py:175`.
-- `cat <<'EOF'` com corpo `; docker run --rm img python manage.py test` também é negado: não trata here-doc como dados. `bin/disjuntor.py:174`.
-
-As formas canônicas atuais, com trava em primeiro plano, não são negadas nas chamadas de `suite.sh:96`, `regua.sh:165`, `pre-push.sh:142`; `grep -n "docker run ... manage.py test" arquivo` simples também passa. Isso não constitui prova para todas as combinações de argumentos adicionais. `bin/disjuntor.py:207`, `bin/disjuntor.py:216`.
-
-3. **Ordem**:
-
-`guarda_chave` continua primeiro; a nova guarda vem antes de `desligado()` e de `pretool`, logo alcança a sessão principal e a chave desligada, mas antecipa e pode impedir a avaliação de B1/B3/B4. A ordem relativa dessas guardas antigas permanece em `pretool`; a nova recusa vence antes delas. `bin/disjuntor.py:1568`, `bin/disjuntor.py:1569`, `bin/disjuntor.py:1570`, `bin/disjuntor.py:1513`, `bin/disjuntor.py:1517`, `bin/disjuntor.py:1522`.
-
-A guarda continua sujeita ao fail-open geral: exceção antes da resposta, inclusive falha em `trilha('NEGOU', ...)`, libera fora do ramo B3. `bin/disjuntor.py:1575`, `bin/disjuntor.py:1579`, `bin/disjuntor.py:1589`.
-
-4. **Selo (g): dois furos concretos**:
-
-- Não testa desligamento: repete os casos com a variável `DISJUNTOR=0`, mas `desligado()` consulta exclusivamente a existência do arquivo `DISJUNTOR_DESLIGADO`; a variável não é lida. `bin/tests/test_trava_dono_do_job.sh:192`, `bin/disjuntor.py:64`, `bin/disjuntor.py:144`.
-- Não testa agente: o payload construído nunca leva `agent_id`. `bin/tests/test_trava_dono_do_job.sh:185`.
-
-Mutação que passa despercebida: trocar `bin/disjuntor.py:1569` por `neg = neg or (not desligado() and nega_suite_fora_da_trava(payload))`; os seis casos permanecem com a chave ligada. Outra: aplicar a recusa apenas quando não há `agent_id`. Mutação mínima que deixa vermelho: remover a chamada à nova guarda em `bin/disjuntor.py:1569`, pois os três comandos positivos precisam produzir recusa. `bin/tests/test_trava_dono_do_job.sh:189`, `bin/tests/test_trava_dono_do_job.sh:193`.
-
-5. **Classes / fonte única**:
-
-- A v2 criou uma implementação Python do juiz log+rc que duplica a decisão do shell; não é idêntica: Python retorna `INDEFINIDO` para ausência de OK/FAILED, enquanto shell admite `VAZIO` para `NO TESTS RAN`/`Ran 0 tests`. Ambas aceitam `OK`+rc0 sem exigir uma linha `Ran`, apesar do comentário do shell prometer essa condição. `app/core/esteira_vigia.py:813`, `app/core/esteira_vigia.py:825`, `bin/vigia_veredito.sh:12`, `bin/vigia_veredito.sh:19`, `bin/vigia_veredito.sh:24`. Não achei autoridade registrada de infra para afirmar “duplica juiz **registrado**”; essa qualificação fica [nao verificado].
-- Recursos/envfile continuam derivados de `recursos.sh`; `_recursos_teste` sourceia a fonte, chama `teste_envfile` e lê as flags, sem regravar os valores de CPU/senha. `app/core/esteira_vigia.py:770`, `bin/recursos.sh:81`, `bin/recursos.sh:118`.
-- A escrita concorrente de envfile usa temporário único e rename no mesmo diretório. `bin/recursos.sh:139`, `bin/recursos.sh:143`.
-- Duplicação nova dos relógios/identidades: `_inicio` da trava e `tf_inicio` da biblioteca implementam independentemente a leitura do mesmo campo 22 de `/proc`; a fila chama uma e o job monta identidade com a outra. `bin/trava_teste.sh:49`, `bin/trava_teste.sh:154`, `bin/trava_fila.sh:18`, `bin/sombra_trava.sh:39`. Não é leitura de relógio de negócio; é identidade de processo.
-
-_1286 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1289 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
