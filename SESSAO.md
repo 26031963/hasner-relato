@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 09:15:44.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (115.8 MB). Acoes na janela: **520**.
+**Medido em 01/11/2026 09:20:57.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (115.8 MB). Acoes na janela: **516**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -526,7 +526,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:27:21 | Bash | Publish the EMIS design question at the RELATO top | `cd /home/ronald/saas-hasner/app; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys; H=sys.argv[1] p='docs/RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO:') linha=("DESENHO EMIS-LEITORES-RESTANTES (31/10 %s): lei=juiz unico (BO-INSS caso 4 'abono parcial = cobra o resto', supra_juiz.py:304) " "pergunta=chamados/juizes.py::dia_sem_trabalho dispensa ausencia PARCIAL (38/ ...` |
 | 21:27:12 | Bash | Find related backlog rows | `cd /home/ronald/saas-hasner/app; grep -n '^\| COBERTURA-PARCIAL-UM-JUIZ\\|^\| EMIS-LEITORES-RESTANTES' docs/BACKLOG.md \| cut -c1-300` |
 | 21:27:07 | Bash | Confirm EMIS findings and look at the RELATO top | `cd /home/ronald/saas-hasner/app; grep -n 'cobre parte do dia' ponto/services/cartorio.py \| head -3; sed -n 470,474p ponto/supra_juiz.py; sed -n 556,570p ponto/services/cartorio.py \| grep -n 'parcial' ; grep -n 'JUIZ-PERIODO-DA-PARCIAL' docs/CORTES.md \| head -2; head -8 docs/RELATO.md \| cut -c1-200` |
-| 21:16:47 | Bash | Record the zero result in BACKLOG, PROMPTS and RELATO | `cd /home/ronald/saas-hasner/app; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys; H=sys.argv[1] p='docs/BACKLOG.md'; s=open(p).read() old="\| aval V3-HE-NOTURNA-POR-PECA-MEDE 31/10 20:51: MEDIR antes do `!`" assert s.count(old)==1 s=s.replace(old, f"\| MEDIDO 31/10 {H} (logs/henoturna/impacto_sombra.out, candidata ae5cc03a): ZERO -- comp09 607 colabs, comp10 632, 0 erros, flag True=33 pelo mot ...` |
-| 21:16:39 | Bash | Find the backlog row text | `cd /home/ronald/saas-hasner/app; grep -n 'V3-HE-NOTURNA-POR-PECA' docs/BACKLOG.md \| cut -c1-400` |
-| 21:16:36 | Bash | Record the zero impact result in BACKLOG and RELATO | `cd /home/ronald/saas-hasner/app; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys,re; H=sys.argv[1] p='docs/BACKLOG.md'; s=open(p).read() old="aval V3-HE-NOTURNA-POR-PECA-MEDE 31/10 HH:MM: MEDIR antes do `!`" assert s.count(old)==1, s.count(old) s=s.replace(old, f"MEDIDO 31/10 {H} (logs/henoturna/impacto_sombra.out, candidata ae5cc03a): ZERO -- comp09 607 colabs e comp10 632, 0 erros, flag True ...` |
-| 21:16:23 | Bash | Read the night-overtime impact output | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/be9wrvmq5.output \| head -90` |
