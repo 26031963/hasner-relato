@@ -1,7 +1,116 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 20:41** · publicado em **01/11/2026 20:43** (UTC-3)
+> Ultima resposta processada: **01/11/2026 20:45** · publicado em **01/11/2026 20:48** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 20:45 · sessao 6bee4d54689e · COBERTURA-PARCIAL-UM-JUIZ · verificador · origem=Code
+
+**Pré-verificação: bloqueada.** Há perda dos carimbos no legacy, emissores fora do predicado comum e perda do instante anterior em passadas do mesmo ato. Esses pontos impedem confirmar as intenções 1–3 nos caminhos completos (`app/escala/utils.py:1060`; `app/ponto/services/cluster_espurio.py:88`; `app/chamados/services/disputa_emissao.py:763`; `app/ponto/services/cartorio.py:914`).
+
+A equivalência da cópia com o hash/base informados, a suite Django, o deploy, os hashes reais de produção e a incidência dos contracasos abaixo estão **[nao verificado]**. [nao verificado]
+
+1. **BLOQUEIA — A/F/G: o legacy perde a identificação da ausência parcial e pode dispensar o resto indevidamente.**
+
+   `_marcar_ausencias` escreve `cobertura_parcial` e `periodo_parcial`, mas o legacy remonta o resultado copiando apenas alguns campos: os dois carimbos ficam para trás, enquanto as células `dispensada` sobrevivem. O dispatcher continua oferecendo esse caminho quando a flag está falsa (`app/escala/utils.py:1247`; `app/escala/utils.py:1251`; `app/escala/utils.py:1058`; `app/escala/utils.py:1060`; `app/escala/utils.py:2106`).
+
+   Contracaso: parcial 14–17, E13 ainda apagado e S17 dispensado. No resultado legacy falta `cobertura_parcial`; `dispensar_por_ausencia` interpreta essa ausência de chave como cobertura integral e acende também E13. A ata deixa de carregar os carimbos, `parcial_so_lista` retorna falso e `dia_sem_trabalho` volta a calar o dia inteiro (`app/ponto/services/cartorio.py:719`; `app/ponto/services/cartorio.py:726`; `app/ponto/services/cartorio.py:691`; `app/ponto/services/cartorio.py:368`; `app/chamados/juizes.py:424`).
+
+   Os testes da volta 6 não mordem esse defeito: criam ausências com `minutos=0` e verificam férias, aviso, falta e rótulo da ata, sem testar parcial e preservação dos carimbos nas duas flags (`app/escala/tests/test_cobparc6_ausencia_sem_vinculo.py:55`; `app/escala/tests/test_cobparc6_ausencia_sem_vinculo.py:63`; `app/escala/tests/test_cobparc6_ausencia_sem_vinculo.py:83`; `app/escala/tests/test_cobparc6_ausencia_sem_vinculo.py:99`).
+
+2. **BLOQUEIA — B/D/F: cluster nasce da célula e não lê `parcial_so_lista`.**
+
+   O julgamento chama o reconciliador de cluster depois da lavra. Esse serviço lê a ata, passa por `dia_sem_trabalho`, procura duas órfãs próximas e alguma lâmpada apagada, e abre chamado diretamente. Não consulta o predicado comum (`app/ponto/services/cartorio.py:931`; `app/ponto/services/cluster_espurio.py:23`; `app/ponto/services/cluster_espurio.py:28`; `app/ponto/services/cluster_espurio.py:32`; `app/ponto/services/cluster_espurio.py:88`).
+
+   Contracaso: colaborador ativo, vínculo ativo, ata de ausência parcial sem período, duas órfãs separadas por até 15 minutos e uma lâmpada apagada. A exceção nova faz `dia_sem_trabalho=False`; o cluster pode abrir chamado embora `parcial_so_lista=True`. A guarda global de absolvição não resolve isso: restringe-se a `MODULOS_DE_TURNO` (`app/ponto/services/cluster_espurio.py:77`; `app/ponto/services/cluster_espurio.py:79`; `app/chamados/juizes.py:424`; `app/ponto/services/cartorio.py:370`; `app/chamados/models.py:1061`).
+
+   Isso viola a fronteira literal pedida — parcial sem período nunca vai a chamado — mesmo sendo um chamado de supervisão. Ocorrência nos quatro colaboradores apresentados: **[nao verificado]**.
+
+3. **BLOQUEIA — B: o passivo também pergunta pelos marcos da ata sem aplicar a regra comum.**
+
+   `pergunta_no_app.perguntar` encaminha o passivo para `criar_disputa_a_partir_de_chamados_orfaos`. Essa função abre o pai antes de consultar a ata do dia e complementar os marcos faltantes (`app/chamados/services/pergunta_no_app.py:148`; `app/chamados/services/pergunta_no_app.py:159`; `app/chamados/services/disputa_emissao.py:908`; `app/chamados/services/disputa_emissao.py:974`; `app/chamados/services/disputa_emissao.py:978`).
+
+   A guarda da pergunta usa `_coberto_por_ausencia`, que passou a deixar passar parcial **com período**, sem consultar julgamento anterior ou fato novo. Portanto, um chamado preexistente pode ganhar perguntas para o resto de um dia que `parcial_so_lista` mandaria à lista. Na parcial **sem período**, a pergunta é barrada, mas o pai já pode ter nascido (`app/chamados/services/disputa_emissao.py:763`; `app/chamados/services/disputa_emissao.py:770`; `app/chamados/services/materializacao.py:78`; `app/chamados/services/materializacao.py:81`; `app/ponto/services/cartorio.py:372`).
+
+   A exclusão do homônimo no censo não prova que esse fluxo esteja fora da obrigação: ele efetivamente lê os marcos da célula para criar perguntas (`app/chamados/tests/test_cobparc5_parcial_sem_periodo_so_lista.py:462`; `app/chamados/services/disputa_emissao.py:806`).
+
+4. **BLOQUEIA — C: o instante anterior foi preservado na fábrica, mas não no corpo inteiro nem no c2.**
+
+   | Leitor | Instante efetivamente usado |
+   |---|---|
+   | Primeira passada do corpo | `cel.julgada_em` anterior, antes do carimbo final (`app/ponto/services/cartorio.py:1618`; `app/ponto/services/cartorio.py:1733`). |
+   | Fábrica dentro de `julgar_colab` | Snapshot anterior correto, inclusive quando seu valor é `None` (`app/ponto/services/cartorio.py:888`; `app/ponto/services/cartorio.py:938`; `app/chamados/services/fabrica_da_celula.py:102`). |
+   | Segunda passada forçada | Mesmas instâncias, potencialmente já modificadas por `carimbar`; não recebe o snapshot (`app/ponto/services/cartorio.py:914`; `app/ponto/portas/celula.py:800`). |
+   | Releitura pós-emissão | Também recebe as instâncias já carimbadas (`app/ponto/services/cartorio.py:979`). |
+   | Lote | Último julgamento persistido antes da leitura do lote (`app/chamados/management/commands/disparar_perguntas_competencia.py:120`). |
+   | c2 | Ata e `julgada_em` atuais do banco; pode ser o julgamento deste ato (`app/chamados/reconciliador.py:844`). |
+   | Retroativo | Célula carregada antes do passe; o registro de cobertura, porém, vem do leitor que recalcula — achado 5 (`app/ponto/management/commands/emitir_furo_retroativo.py:69`; `app/ponto/management/commands/emitir_furo_retroativo.py:121`). |
+
+   Quando o carimbo avança para `agora`, o intervalo de fato novo passa a começar nesse próprio ato. Para parcial com período, a segunda leitura pode mudar de “emite” para “só lista”; sem período, continua sempre “só lista” (`app/ponto/portas/celula.py:800`; `app/ponto/services/cartorio.py:370`; `app/ponto/services/cartorio.py:372`).
+
+   Há um contracaso de fluxo: a ausência nova dispensa os marcos de uma cobrança antiga, deixando outro marco de fora ainda apagado. A cobrança antiga com fio é encerrada somente depois da primeira lavra; a segunda passada, que deveria poder cobrar o resto, já lê o carimbo novo. A fábrica conserva o snapshot anterior, mas o c2 volta a consultar o carimbo atual. Assim, fábrica e emissão podem decidir por instantes diferentes dentro do mesmo julgamento (`app/ponto/services/cartorio.py:1396`; `app/ponto/services/cartorio.py:899`; `app/ponto/services/cartorio.py:914`; `app/ponto/services/cartorio.py:938`; `app/chamados/reconciliador.py:845`). Reprodução integrada desse contracaso: **[nao verificado]**.
+
+5. **BLOQUEIA — A/D: o leitor da célula continua derivando cobertura/período em vez de transportar a lâmpada lavrada.**
+
+   A ata agora grava ambos os carimbos, mas `grade_da_celula` não os copia ao construir o dia. Depois consulta novamente a ausência atual e recalcula cobertura e período — inclusive no trecho alterado pelo diff (`app/ponto/services/cartorio.py:691`; `app/ponto/services/cartorio.py:696`; `app/escala/services/leitor_celula.py:370`; `app/escala/services/leitor_celula.py:385`; `app/escala/services/leitor_celula.py:404`; `app/escala/services/leitor_celula.py:409`; `app/escala/services/leitor_celula.py:420`).
+
+   Não é um segundo algoritmo de período: chama o mesmo juiz. É uma **segunda derivação em outro momento**, misturando lâmpadas persistidas com cadastro atual. Ata `sem_periodo` e cadastro já corrigido podem produzir respostas diferentes na fábrica/lote/c2 e no retroativo. A propriedade que compara grade e ata recém-produzidas não testa essa divergência temporal (`app/ponto/services/cartorio.py:346`; `app/escala/services/leitor_celula.py:404`; `app/chamados/tests/test_cobparc5_parcial_sem_periodo_so_lista.py:247`). Incidência real dessa janela: **[nao verificado]**.
+
+6. **FILA — B/D: a mordida dos mutantes AST é real, mas estreita; o universo não está fechado.**
+
+   O censo reconhece as portas enumeradas, resolve `ImportFrom` e trata somente `_abrir_chamado` como chamada de método. Não reconhece emissão genérica por `ChamadoColaborador.abrir`, `PerguntaDisputa.abrir` nem chamada por módulo importado (`app/chamados/tests/test_cobparc5_parcial_sem_periodo_so_lista.py:311`; `app/chamados/tests/test_cobparc5_parcial_sem_periodo_so_lista.py:353`; `app/chamados/tests/test_cobparc5_parcial_sem_periodo_so_lista.py:388`; `app/chamados/tests/test_cobparc5_parcial_sem_periodo_so_lista.py:394`).
+
+   Além disso, qualquer chamada sintática ao predicado absolve a função: não se exige que seu resultado proteja a emissão. `if False: parcial_so_lista(...)` seguido de emissão continua conforme segundo esse algoritmo (`app/chamados/tests/test_cobparc5_parcial_sem_periodo_so_lista.py:390`; `app/chamados/tests/test_cobparc5_parcial_sem_periodo_so_lista.py:403`).
+
+   Os mutantes escritos verificam retirada da chamada, retirada da delegação e novo emissor pela porta conhecida. Isso sustenta essas propriedades sintáticas, não a afirmação universal sobre emissores e fluxo (`app/chamados/tests/test_cobparc5_parcial_sem_periodo_so_lista.py:455`; `app/chamados/tests/test_cobparc5_parcial_sem_periodo_so_lista.py:465`; `app/chamados/tests/test_cobparc5_parcial_sem_periodo_so_lista.py:472`).
+
+   Outras portas exigem fronteira explícita:
+
+   | Caminho | Situação |
+   |---|---|
+   | `detectar_ausencias` | Não lê o predicado; a exceção usa guarda mais restritiva que cala qualquer ausência (`app/chamados/tests/test_cobparc5_parcial_sem_periodo_so_lista.py:334`; `app/ponto/management/commands/detectar_ausencias.py:346`). |
+   | `reconciliar_grade` | Emissão direta omitida; sua guarda cala ausência não-falta, portanto não demonstra vazamento da parcial por essa porta (`app/ponto/management/commands/reconciliar_grade.py:215`; `app/ponto/management/commands/reconciliar_grade.py:391`; `app/ponto/management/commands/reconciliar_grade.py:507`). |
+   | Retroativo de turno aberto | Não lê o predicado, mas cala qualquer ausência antes da abertura (`app/ponto/management/commands/emitir_turno_aberto_retroativo.py:108`; `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:151`). |
+   | Par relâmpago | Abre diretamente; origem é batida/par, exigindo distinguir essa fronteira da emissão pela ata (`app/ponto/management/commands/detectar_par_relampago.py:352`; `app/ponto/management/commands/detectar_par_relampago.py:368`). |
+   | Régua degenerada | Chamado de cadastro; não é cobrança de marco (`app/escala/regua_defesa.py:36`; `app/escala/regua_defesa.py:51`). |
+   | Declaração explícita | Também cria disputa/pergunta pelos marcos; há gesto humano, que precisa ser distinguido da emissão automática (`app/chamados/services/declaracao_texto.py:288`; `app/chamados/services/declaracao_texto.py:310`; `app/chamados/services/declaracao_texto.py:600`). |
+   | Fio/reapontamento | O c2 dispensa a leitura de PSL ao costurar em chamado já vivo; isso é diferente de nascer/renascer (`app/chamados/reconciliador.py:805`; `app/chamados/reconciliador.py:842`). A ressuscitação de perguntas também ocorre antes do portão PSL do corpo (`app/ponto/services/cartorio.py:1536`; `app/ponto/services/cartorio.py:1618`). |
+
+7. **FILA — A/D: ainda há leitores que descartam o resto parcial pelo rótulo `ausencia`.**
+
+   O relatório alterado aceita ausência parcial, mas `furos_diarios` continua pulando todo dia que não seja `trabalho`; os calculadores de preenchimento e marcações fazem o mesmo. Portanto o resto pode aparecer no relatório e faltar no acompanhamento/indicadores (`app/relatorios/furos.py:154`; `app/escala/services/furos_diarios.py:39`; `app/inteligencia/calculadores.py:46`; `app/inteligencia/calculadores.py:141`).
+
+   No acompanhamento persistido, essa seleção também alimenta a remoção de furos cuja premissa desapareceu. Não é apenas diferença visual (`app/escala/services/furos_diarios.py:89`; `app/escala/services/furos_diarios.py:98`).
+
+8. **NOTA — E: a v4 não seleciona dias parciais; invalida impressões de toda a competência 09 em diante.**
+
+   `versao_para` devolve a maior versão cujo horizonte alcança a competência empresarial. Assim, 09 passa de 1 para 4 e 10 passa de 3 para 4; não há filtro por ausência ou por colaborador nominal. A versão entra no hash dos dois ramos do cartório (`app/ponto/services/cartorio.py:111`; `app/ponto/services/cartorio.py:235`; `app/ponto/services/cartorio.py:238`; `app/ponto/services/cartorio.py:443`; `app/ponto/services/cartorio.py:1113`; `app/ponto/services/cartorio.py:1266`).
+
+   Na próxima execução, células passadas com impressão antiga deixam de ser puladas sem `--forcar`. O comando percorre todos os colaboradores com célula passada da empresa, sem filtro de situação. A configuração confirma execução automática por cron `--apply`; disparo imediato pelo deploy está **[nao verificado]** (`app/ponto/management/commands/processar_cartorio.py:49`; `app/ponto/management/commands/processar_cartorio.py:61`; `app/ponto/services/cartorio.py:1272`; `app/config/crons.py:597`).
+
+   O rejulgamento usa **todo o código atual**: pode mover folga/trabalho, ata, protestos, veredito/status, chamados, perguntas e fios além dos dias parciais. O próprio teste cobre folga→trabalho na 09 sem forçar (`app/ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:146`; `app/ponto/services/cartorio.py:899`; `app/ponto/services/cartorio.py:935`; `app/ponto/services/cartorio.py:938`; `app/ponto/services/cartorio.py:1713`).
+
+   Mesmo mantendo o veredito, o hash novo pode avançar `julgada_em`. Fora do diff, isso invalida lavras de perguntas e torna janelas históricas novamente elegíveis no censo de fase 12x36 (`app/ponto/portas/celula.py:796`; `app/ponto/portas/celula.py:800`; `app/chamados/veredito_lavrado.py:151`; `app/chamados/veredito_lavrado.py:187`; `app/escala/services/fase_12x36.py:188`).
+
+   **No percurso de rejulgamento inspecionado**, a porta grava célula/outbox, e o consumidor atua em chamados/perguntas. Há guarda explícita para impedir recalcular o gravado da 09 exportada; o teste verifica FM inteiro e exportações com premissas não vazias. Isso não prova hashes reais nem execução em produção (`app/ponto/portas/celula.py:634`; `app/chamados/reconciliador.py:1310`; `app/ponto/services/fechamento.py:36`; `app/ponto/services/fechamento.py:544`; `app/ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:118`). FM/TXT reais antes/depois: **[nao verificado]**.
+
+9. **NOTA — A: mapa de escrita e leitura dos estados alterados.**
+
+   | Campo/valor | Quem escreve | Quem lê e efeito relevante |
+   |---|---|---|
+   | `dia.cobertura_parcial` | Overlay da grade; também recalculado no leitor da célula (`app/escala/utils.py:1247`; `app/escala/services/leitor_celula.py:409`). | Supra, cartório, status, relatórios e predicado da lista (`app/ponto/supra_juiz.py:268`; `app/ponto/services/cartorio.py:719`; `app/ponto/status_dia.py:158`; `app/relatorios/furos.py:154`; `app/ponto/services/cartorio.py:368`). |
+   | `dia.periodo_parcial` | Overlay pelo juiz de período; novamente derivado no leitor (`app/escala/utils.py:1251`; `app/escala/services/leitor_celula.py:420`). | Supra, impressão e PSL (`app/ponto/supra_juiz.py:381`; `app/ponto/services/cartorio.py:408`; `app/ponto/services/cartorio.py:370`). |
+   | Carimbos correspondentes na ata | `ata_do_dia` copia somente quando há cobertura parcial; persistência pela lavra/carimbo (`app/ponto/services/cartorio.py:691`; `app/ponto/services/cartorio.py:696`; `app/ponto/services/cartorio.py:1713`; `app/ponto/services/cartorio.py:1733`). | Fábrica, lote, c2, `dia_sem_trabalho` e calendário (`app/chamados/services/fabrica_da_celula.py:102`; `app/chamados/management/commands/disparar_perguntas_competencia.py:120`; `app/chamados/reconciliador.py:845`; `app/chamados/juizes.py:424`; `app/colaboradores/services/calendario.py:828`). |
+   | `celula.dispensada` / `lampada.dispensada` | Grade dispensa missing dentro do período; cartório propaga; dispensa integral/justificativa também escreve (`app/escala/utils.py:1262`; `app/ponto/services/cartorio.py:520`; `app/ponto/services/cartorio.py:729`). | Leitor reconstrói marcador; contagens, status e cartório excluem dispensa de batida real (`app/escala/services/leitor_celula.py:127`; `app/escala/services/leitor_celula.py:91`; `app/ponto/status_dia.py:153`; `app/ponto/services/cartorio.py:1288`). |
+   | `missing`, `acesa`, `luz`, `n_missing`, `n_celulas` | Grade altera missing; cartório monta lâmpadas/contagens e pode dispensá-las (`app/escala/utils.py:1263`; `app/ponto/services/cartorio.py:636`; `app/ponto/services/cartorio.py:671`; `app/ponto/services/cartorio.py:685`; `app/ponto/services/cartorio.py:726`). | Supra, lastro, fábrica, cluster e relatórios (`app/ponto/supra_juiz.py:306`; `app/ponto/services/lastro.py:129`; `app/chamados/services/fabrica_da_celula.py:49`; `app/ponto/services/cluster_espurio.py:31`; `app/relatorios/furos.py:154`). |
+   | `n_ok`, `n_casadas` | Derivados da ata pelo leitor; não são novo campo persistente (`app/escala/services/leitor_celula.py:91`; `app/escala/services/leitor_celula.py:97`; `app/escala/services/leitor_celula.py:371`). | Supra prefere o número lavrado; corte de admissão/demissão e diagnóstico também mudam (`app/ponto/supra_juiz.py:229`; `app/ponto/supra_juiz.py:464`; `app/escala/services/leitor_celula.py:343`; `app/ponto/services/bordas_realizado.py:51`). |
+   | `CelulaDia.ata` | Porta `lavrar_veredito`; operação própria para a chave `precedencia` (`app/ponto/portas/celula.py:709`; `app/ponto/portas/celula.py:768`; `app/ponto/portas/celula.py:811`). | Leitor da célula, juízes, lastro, perguntas, calendário e cluster — incluindo os consumidores fora do diff dos achados 2, 3 e 7 (`app/escala/services/leitor_celula.py:342`; `app/chamados/juizes.py:463`; `app/ponto/services/lastro.py:118`; `app/ponto/services/cluster_espurio.py:24`). |
+   | `CelulaDia.julgada_em` | `carimbar`, com guarda de idempotência (`app/ponto/portas/celula.py:796`; `app/ponto/portas/celula.py:800`). | Impressão, PSL e seus emissores; invalidação de perguntas e fase, descritas nos achados 4 e 8 (`app/ponto/services/cartorio.py:1272`; `app/ponto/services/cartorio.py:372`; `app/chamados/veredito_lavrado.py:154`; `app/escala/services/fase_12x36.py:189`). |
+   | `REGRA_VERSOES` / `regra` | Declaração no módulo; validação na carga (`app/ponto/services/cartorio.py:111`; `app/ponto/services/cartorio.py:209`). | `versao_para` → `_regra_do_dia` → impressão dos dois ramos (`app/ponto/services/cartorio.py:238`; `app/ponto/services/cartorio.py:1061`; `app/ponto/services/cartorio.py:1113`; `app/ponto/services/cartorio.py:1266`). |
+   | `julgada_antes` | Snapshot local por data; sentinela diferencia omissão de `None` explícito (`app/ponto/services/cartorio.py:888`; `app/chamados/services/fabrica_da_celula.py:71`). | `perguntar_pela_celula` repassa a `motivos_a_perguntar`; não alcança corpo/c2 (`app/chamados/services/fabrica_da_celula.py:164`; `app/chamados/services/fabrica_da_celula.py:103`). |
+   | `impressao`, `ausencia`, `tem_entrada`, `tem_saida`, `insumos_em` | Continuam juntos em `carimbar`; entrada/saída vêm da ata transitória (`app/ponto/services/cartorio.py:1732`; `app/ponto/portas/celula.py:801`; `app/ponto/portas/celula.py:805`). | Pulo por impressão e leitores da célula; a obra muda a impressão por versão/período/índices dispensados (`app/ponto/services/cartorio.py:1272`; `app/ponto/services/cartorio.py:399`; `app/ponto/services/cartorio.py:443`). |
+   | Veredito, prote
+
+[truncado em 20000 de 30171 caracteres]
 
 ## 01/11 20:41 · sessao 3d0aefa7323b · - · - · origem=Ronald (tmux)
 
@@ -767,24 +876,4 @@ Não há predicado novo de vitalidade ou retenção: o teste lê C6, chama o cen
 
 A insuficiência sustentada pelas regras da casa é precisa: a mordida denuncia um carimbo, mas não executa a leitura adversarial do vigia; e nenhuma das quatro provas prende isoladamente a guarda do fecho. Isso limita a alegação de proteção da costura, diante da exigência de função real e caso que morde. — `CLAUDE.md:318`; `chamados/tests/test_o261e_f2_ramo_e_i20.py:171`, `chamados/tests/test_o261e_f2_ramo_e_i20.py:198`; `chamados/services/disputa_emissao.py:1626`; `chamados/models.py:2569`.
 
-## 01/11 17:49 · sessao bcdff4d29137 · - · - · origem=Ronald (tmux)
-
-Q3 — **mock fora da testemunha, mas vigia não é alcançado no MORDE**. O patch cobre somente `_fechar` (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:193`); já terminou quando ocorre `refresh_from_db` e a asserção de materialização (`:195`, `:196`). `_assert_ramo` começa recarregando o objeto e exigindo `materializada_em is None` (`:170`, `:171`), condição incompatível com a asserção imediatamente anterior do MORDE (`:196`). Assim, o `assertRaises` é satisfeito em `:171`; não chega ao C6 de `:173`, ao censo de `:174`, nem às suas asserções `:175-179`. O MORDE demonstra que o selo rejeita o carimbo indevido, mas não executa o vigia nesse caminho (`:196-198`).
-
-A cópia do auditor mede **o mesmo universo I20**, com apenas a cicatriz ampliada: copia o módulo inteiro, exige uma ocorrência da âncora e modifica essa ocorrência (`:228-239`); ambos usam `amostra=5`, `html=False` (`:86`, `:90`; `app/chamados/management/commands/auditar_invariantes_chamados.py:549-550`). O I20 real usa todas as `PerguntaDisputa` com `respondida_em` nulo e resposta diferente de `''`, excluindo a tupla; não filtra empresa, dia, estado de disputa ou materialização (`auditar_invariantes_chamados.py:1101-1103`). `add` conta o queryset inteiro e limita somente a amostra (`:559-566`). A via da cópia chama `handle` diretamente, portanto não testa a infraestrutura completa de `call_command`, mas a consulta I20 executada é a mesma (`teste:85-90`).
-
-Q4 — O cenário usa datas fixas e passa `hoje` explicitamente ao censo (`teste:43-47`, `:163`); a classe é decorada com `freeze_time` (`:96`). Há leituras de relógio no fecho e carimbo (`app/chamados/services/disputa_emissao.py:1623`; `app/chamados/models.py:2550`), no auditor (`auditar_invariantes_chamados.py:635`, `:1589`) e na lavra feita por `setUpTestData` (`teste:119`, `:125`; `app/ponto/portas/celula.py:772`). A implementação de freezegun não está na cópia; a cobertura efetiva de `setUpClass/setUpTestData` pelo decorador não foi demonstrada nesta leitura **[não verificado]**. Não há evidência suficiente para acusar concretamente um relógio fora do freeze; o pin disponível é `freezegun==1.5.5` (`app/requirements.txt:43`).
-
-Existe dependência de `empresas_visiveis` mesmo passando `empresas=[self.emp]`: o censo obtém as visíveis e depois faz interseção (`app/chamados/services/vigia_fio.py:535-538`); o carregador da lista repete essa política (`:210-215`). A fixture satisfaz o filtro atual, pois cria empresa ativa e CNPJ fora do prefixo ocultado (`teste:104-105`; `app/colaboradores/queries.py:85-87`).
-
-O pk não é escolhido fora da cicatriz: nasce por `objects.create` (`teste:141-142`). O teste normal detecta colisão e falha explicitamente (`:215`); no MORDE, a chamada final ao comando real também exigirá contagem 1 e falhará se o caso já estiver na cicatriz (`:245`, `:204`). Portanto é dependência de sequência, protegida contra falso verde por falha explícita, mas sem isolamento da sequência no próprio arquivo (`:97-99`, `:141-142`, `:215`). [nao verificado]
-
-O parser corresponde ao formato atual: exige exatamente uma linha I20 (`teste:71-72`); o offset `68` de `:75` coincide com flag de quatro caracteres + espaço, id de quatro + espaço e descrição de 58 (`auditar_invariantes_chamados.py:1835-1836`). A descrição é truncada a 58; a amostra de pks não é truncada nessa formatação (`:1835-1836`). Mudança no layout ou linha `ERR` torna o parser falho por exceção, sem falso verde (`teste:75`). A identificação do pk é apenas substring (`:205`), portanto é mais fraca que validar o elemento da amostra; pode coincidir com outro trecho ou pk maior (`:205`; formato em `auditor:1835-1836`). [nao verificado]
-
-Q5 — Os helpers consultam o C6 real e o censo real; filtram o resultado por `cel.pk`, sem construir um predicado próprio de vitalidade ou retenção (`teste:163-164`, `:169-179`). `_cicatriz_i20` lê o AST e `_linha_i20` interpreta o protocolo de saída; nenhum deles decide o estado de produção (`:59-76`). A cópia mutante constitui a própria implementação do auditor com uma exclusão alterada, acompanhada pela execução real como controle (`:228-245`). [nao verificado]
-
-Há **escritas diretas de fixture fora das portas** em resposta e estado da célula (`teste:143`, `:152-153`), inclusive reposição da ata após o fecho (`:157-158`); isso limita a prova de integração do efeito do fecho sobre a célula. Não equivale automaticamente a escritor novo de produção: o censo exclui `tests/` e arquivos `test_*.py` (`app/core/censo_escritas.py:66-82`), e o selo P13 faz o mesmo (`app/core/tests/test_contract_escritores_estado.py:189-192`). O gate de célula usa esse censo (`app/ponto/tests/test_chokepoint_celula_gate.py:49-53`). Não afirmar que esses selos reprovariam o arquivo por esses updates.
-
-A crítica amparada pela casa é a limitação da mordida: exige-se função real e caso que denuncie a costura rompida (`CLAUDE.md:318-325`), e a testemunha deve ler a autoridade (`CLAUDE.md:20-22`, `:35-38`). A mordida do ramo efetivamente denuncia o carimbo, mas não chega a medir a costura do vigia (`teste:171`, `:174`, `:196-198`). Resultado de execução dos selos/suíte: **[não verificado]**. [nao verificado]
-
-_1457 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1458 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
