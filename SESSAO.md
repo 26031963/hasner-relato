@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 20:11:11.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (141.0 MB). Acoes na janela: **828**.
+**Medido em 01/11/2026 20:16:09.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (141.6 MB). Acoes na janela: **829**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:14:08 | Bash | Check suite and sonda progress | `cd /home/ronald/saas-hasner && kill -0 306065 2>/dev/null && echo VIVO; wc -c logs/cobparc/v6/suite_full.log; tail -c 300 logs/cobparc/v6/suite_full.log; echo; grep -cE "^(ERROR\|FAIL):" logs/cobparc/v6/suite_full.log; tail -5 logs/cobparc6_det.out \| cut -c1-200; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
 | 20:03:58 | Bash | Log Codex prep and verify proof | `cd /home/ronald/saas-hasner && H=$(date +%H:%M) && printf -- "- %s COBPARC v6: pergunta da volta Codex FINAL pronta (logs/cobparc/v6/codex/final.q + diff_final.patch a8709a53..c1c6f565 + leis.txt), dispara so com a suite inteira verde.\n" "$H" >> app/docs/RELATO.md; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
 | 20:03:54 | Bash | Wait for full suite verdict | `cd /home/ronald/saas-hasner && while kill -0 306065 2>/dev/null; do /usr/bin/sleep 20; done; grep -E '^(OK\|FAILED)($\| \()' logs/cobparc/v6/suite_full.log \| tail -1; grep -E '^Ran [0-9]+' logs/cobparc/v6/suite_full.log \| tail -1; tail -1 logs/cobparc/v6/suite_full.log; grep -E '^(ERROR\|FAIL):' logs/cobparc/v6/suite_full.log \| head; grep -E "VINTE-E-NOVE\|intacto\|FORA DOS 5\|MOTOR col187\|ATA ...` |
 | 20:03:46 | Bash | Prepare final Codex question for v6 | `cd /home/ronald/saas-hasner && mkdir -p logs/cobparc/v6/codex && D=logs/cobparc/v6/codex && git -C /home/ronald/wt-cobparc5b-184858 diff a8709a53..c1c6f565 > $D/diff_final.patch && wc -l $D/diff_final.patch && { cat logs/cobparc/v5/codex/leis.txt; echo; echo "=== escala/utils.py nas leis ==="; grep -n -E "escala/utils.py\|_marcar_ausencias\|montar_grade_prevista" app/docs/LEIS.md app/docs/CORTES.m ...` |
