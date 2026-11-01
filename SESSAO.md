@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 17:15:58.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (136.1 MB). Acoes na janela: **654**.
+**Medido em 01/11/2026 17:20:58.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (136.2 MB). Acoes na janela: **657**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:18:09 | Bash | Check COBPARC builder producers | `ps -eo pid,etimes,args \| grep -E '^ *[0-9]+ +[0-9]+ bash (bin/\|/home/ronald/saas-hasner/bin/)(suite\|codex_pergunta\|sombra)\.sh' \| head; ls -lt /home/ronald/saas-hasner/logs/cobparc/v5/ \| head` |
+| 17:18:05 | Bash | Record L1 complement aval in docs | `mkdir -p /home/ronald/saas-hasner/logs/e4cal; cat > /home/ronald/saas-hasner/logs/e4cal/AVAL_L1_COMPLEMENTO.md <<'EOF' aval Ronald 01/11 (transcrito literal): E4-CALENDARIO-L1-COMPLEMENTO (corte; emenda ADR 0002 D4 e D5; substitui "D5 c10/c11" da linha da L1; ordem da fila inalterada). LEI: juiz unico, celula soberana, ADR 0003 (celula viva em qualquer competencia), L-092 (protege so o GRAVADO), L ...` |
+| 17:17:43 | Bash | Find L1 lines and ADR 0002 | `cd /home/ronald/saas-hasner/app/docs; grep -n 'E4-CALENDARIO-L1' BACKLOG.md RELATO.md PROMPTS.md \| cut -c1-300 \| head; ls ../../app/docs/adr* adr 2>/dev/null; grep -rln 'ADR 0002\\|0002' --include=*.md . \| head` |
 | 17:14:25 | Bash | Write PAREI laço line and design question at topo | `cd /home/ronald/saas-hasner/app/docs; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys H=sys.argv[1]; p='RELATO.md'; s=open(p).read() old=[l for l in s.split('\n') if l.startswith('ESPERANDO: codex_pergunta.sh \| pid=481686')] assert len(old)==1 new=(f"PAREI: O261-E-F2-LACO \| espera Ronald -- condicao literal do aval DESENHO O261-E-F2 (16:12, \"salvo laco = PAREI\"). " f"SOMBRA {H} (logs/o261e ...` |
 | 17:14:10 | Bash | Read LACO definition in sonda | `cd /home/ronald/saas-hasner; grep -n -i -B2 -A8 'laco' logs/sombra/sonda_f2_reabre.py \| head -60; head -25 logs/sombra/sonda_f2_reabre.py` |
 | 17:14:06 | Bash | Read sonda output | `cd /home/ronald/saas-hasner; pgrep -f 'bin/sombra.sh --rodar sonda_f2' >/dev/null && echo vivo \|\| echo fim; cat logs/o261e_f2_sonda_reabre.out \| tail -60` |
