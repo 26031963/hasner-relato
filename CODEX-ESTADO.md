@@ -1,7 +1,95 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 10:45** · publicado em **01/11/2026 10:45** (UTC-3)
+> Ultima resposta processada: **01/11/2026 10:53** · publicado em **01/11/2026 10:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 10:53 · sessao 377e14165497 · GRADE-FOLGA-JUIZ · verificador · origem=Code
+
+**O delta fecha um parâmetro sem fornecedor encontrado; não muda o retorno dos chamadores encontrados. O teste morde a restauração explícita do parâmetro, mas permite sua volta por `**kwargs`.** (`app/ponto/precedencia.py:259`, `app/ponto/precedencia.py:282`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:181`)
+
+1. **Quem escreve e quem lê os nomes tocados**
+
+   | Nome | Escrita/definição → leitura |
+   |---|---|
+   | `folgas_lancadas`, parâmetro removido | Deixou de existir na assinatura; o nome permanece como variável local. (`app/ponto/precedencia.py:259`, `app/ponto/precedencia.py:282`) |
+   | `folgas_lancadas`, variável local | Única atribuição na função: resultado do carregador; única leitura: `.get(data)`. (`app/ponto/precedencia.py:282`, `app/ponto/precedencia.py:342`) |
+   | `folgas_lancadas_do_periodo` | Lê `FolgaDia` por pessoa e intervalo, ordena por `pk`, monta listas por data; fornece o mapa à atribuição local. (`app/ponto/precedencia.py:194`, `app/ponto/precedencia.py:206`, `app/ponto/precedencia.py:208`, `app/ponto/precedencia.py:282`) |
+   | `celulas_geradoras` | Continua parâmetro independente: carga quando `None`, leitura da célula e fornecimento ao juiz do vínculo. (`app/ponto/precedencia.py:260`, `app/ponto/precedencia.py:315`, `app/ponto/precedencia.py:349`, `app/ponto/precedencia.py:351`) |
+   | `SimpleTestCase` / `TestCase` | Importados; o primeiro passa a ser base da classe nova, o segundo continua base de `_Base`. (`app/ponto/tests/test_grade_folga_juiz_sitios.py:29`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:38`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:174`) |
+   | Classe/método novos, `self`, `inspect`, `fatos_do_periodo` | Classe e método definidos; o método recebe `self`, importa `inspect` e a função, e os lê exclusivamente na asserção da assinatura. (`app/ponto/tests/test_grade_folga_juiz_sitios.py:174`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:178`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:179`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:180`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:181`) |
+
+   Os quatro pontos de chamada de produção omitem `folgas_lancadas`:
+
+   - Casca `fatos_do_dia`: só três posicionais. (`app/ponto/precedencia.py:256`)
+   - Calendário: passa `lugar`, `feriados`, `vinculos`, `folgas_foto`; esta última continua distinta do argumento removido. (`app/colaboradores/services/calendario.py:604`, `app/colaboradores/services/calendario.py:605`, `app/colaboradores/services/calendario.py:606`)
+   - Espelho: importa pelo alias `_fatos_periodo` e passa apenas `feriados` como opcional. (`app/ponto/services/espelho.py:657`, `app/ponto/services/espelho.py:659`)
+   - Folha, `dias_com_furo`: só três posicionais. (`app/folha/services/sem_furo.py:25`)
+
+   Os oito pontos de chamada em testes também omitem o removido: calendário; quatro testes pela célula, dos quais somente um passa `celulas_geradoras`; três testes de vínculo encerrado. (`app/colaboradores/tests/test_calendario_um_juiz.py:176`, `app/ponto/tests/test_precedencia_pela_celula.py:77`, `app/ponto/tests/test_precedencia_pela_celula.py:90`, `app/ponto/tests/test_precedencia_pela_celula.py:106`, `app/ponto/tests/test_precedencia_pela_celula.py:120`, `app/ponto/tests/test_precedencia_pela_celula.py:121`, `app/ponto/tests/test_precedencia_vinculo_encerrado.py:78`, `app/ponto/tests/test_precedencia_vinculo_encerrado.py:86`, `app/ponto/tests/test_precedencia_vinculo_encerrado.py:138`)
+
+   Nenhuma dessas chamadas usa `**kwargs` ou expansão de dict. O command relacionado chama diretamente carregador e seletor, sem chamar `fatos_do_periodo`. (`app/ponto/management/commands/rejulgar_ausencia_em_folga.py:51`, `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:64`, `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:65`) Não encontrei outro chamador em commands, template tags ou dicts; chamadas construídas dinamicamente que escapem ao rastreio estático: **[não verificado]**.
+
+2. **Valor publicado** [nao verificado]
+
+   **Não muda por este delta nos chamadores encontrados, mantendo iguais entradas e fontes.** Todos omitem o argumento; pelo delta fornecido, antes isso acionava a carga por `None`, e agora a mesma carga é incondicional. O mapa segue para seleção diária, inclusão de folga nos fatos presentes e publicação de `tipo_do_dia`, `faixa`, `suprimidos` e `fatos.folga_lancada`. (`app/ponto/precedencia.py:282`, `app/ponto/precedencia.py:342`, `app/ponto/precedencia.py:358`, `app/ponto/precedencia.py:380`, `app/ponto/precedencia.py:398`, `app/ponto/precedencia.py:408`)
+
+   Uma chamada que ainda fornecesse `folgas_lancadas=...`, inclusive `None` ou via dict expandido, passaria a receber `TypeError`; não há essa chamada entre as encontradas. (`app/ponto/precedencia.py:259`, `app/ponto/precedencia.py:260`) Valores efetivos de produção: **[não verificado]**.
+
+3. **Mordida do teste** [nao verificado]
+
+   **Sim:** restaurar qualquer parâmetro explícito chamado `folgas_lancadas` deixa a asserção vermelha, mesmo que o corpo ignore seu valor. **Há escape:** aceitar `**kwargs` e ler `kwargs['folgas_lancadas']`; a assinatura expõe `kwargs`, e o nome procurado continua ausente. O teste não chama a função nem verifica a origem do mapa. (`app/ponto/tests/test_grade_folga_juiz_sitios.py:178`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:181`)
+
+   Executei o método extraído da árvore em memória, com módulos substitutos: assinatura atual **verde**, parâmetro explícito **vermelho**, variante com `**kwargs` **verde**, aceitando e devolvendo o mapa externo. A prova é isolada da aplicação; execução da suíte Django: **[não verificado]**. (`app/ponto/tests/test_grade_folga_juiz_sitios.py:181`)
+
+4. **Classes**
+
+   - **2º juiz / derivação paralela:** o delta fecha a entrada alternativa e mantém o carregador e o seletor existentes. (`app/ponto/precedencia.py:282`, `app/ponto/precedencia.py:358`)
+   - **2º escritor / relógio fora da borda:** não introduzidos pelo delta; a mudança é atribuição local a partir de leitura, sem nova escrita persistente ou consulta ao relógio. (`app/ponto/precedencia.py:206`, `app/ponto/precedencia.py:282`)
+   - **Selo sem mordida:** possui mordida nominal comprovada, mas cobertura incompleta para impedir folgas externas por qualquer argumento. (`app/ponto/tests/test_grade_folga_juiz_sitios.py:181`)
+   - **Função/parâmetro sem chamador:** remove o parâmetro sem fornecedor encontrado; a função continua chamada em produção. (`app/ponto/precedencia.py:259`, `app/ponto/precedencia.py:256`, `app/colaboradores/services/calendario.py:604`, `app/ponto/services/espelho.py:659`, `app/folha/services/sem_furo.py:25`)
+
+## 01/11 10:52 · sessao 072a205776a1 · - · - · origem=Ronald (tmux)
+
+Censo estático: **12 chamadas**, nenhuma fornece `folgas_lancadas` nem usa `**kwargs` nessa chamada:
+
+| Natureza | Arquivo:linha | Argumentos opcionais |
+|---|---|---|
+| Produção, casca diária | `app/ponto/precedencia.py:256` | nenhum |
+| Produção, calendário | `app/colaboradores/services/calendario.py:604` | `lugar`, `feriados`, `vinculos`, `folgas_foto` (`:605–606`) |
+| Produção, espelho; alias `_fatos_periodo` | `app/ponto/services/espelho.py:657`, `:659` | `feriados` |
+| Produção, folha | `app/folha/services/sem_furo.py:25` | nenhum |
+| Teste | `app/colaboradores/tests/test_calendario_um_juiz.py:176` | nenhum |
+| Testes | `app/ponto/tests/test_precedencia_pela_celula.py:77`, `:90`, `:106` | nenhum |
+| Teste | `app/ponto/tests/test_precedencia_pela_celula.py:120` | `celulas_geradoras` em `:121` |
+| Testes | `app/ponto/tests/test_precedencia_vinculo_encerrado.py:78`, `:86`, `:138` | nenhum |
+
+A busca textual integral e AST dos `.py` não encontraram chamador adicional por command, template tag, referência em dict ou `getattr`; chamadas construídas fora da cópia permanecem **[não verificado]**. O command relacionado usa diretamente `folgas_lancadas_do_periodo` e `folga_lancada_do_dia`, sem `fatos_do_periodo` (`app/ponto/management/commands/rejulgar_ausencia_em_folga.py:51`, `:64–65`).
+
+**Valor publicado:** nenhum chamador encontrado muda por este delta: todos omitiam o parâmetro e já seguiam o ramo `None` do diff fornecido, que chama o mesmo carregador agora incondicional em `app/ponto/precedencia.py:282`. A variável local tem sua leitura em `:342`, segue ao juiz em `:358`, entra nos fatos presentes em `:380–381` e no retorno em `:398–408`. É conclusão estática; valores efetivos de produção **[não verificado]**.
+
+A única ocorrência executável do nome/chave literal removido fora dessa variável local é a fiscalização da assinatura no teste novo (`app/ponto/tests/test_grade_folga_juiz_sitios.py:181`).
+
+## 01/11 10:52 · sessao 0aefb91249f8 · - · - · origem=Ronald (tmux)
+
+`folgas_lancadas` tem um único escritor local, a atribuição da carga em `app/ponto/precedencia.py:282`, e um leitor, `.get(data)`, em `app/ponto/precedencia.py:342`. A carga lê `FolgaDia` por colaborador e intervalo, ordena por `pk` e monta `{data: [FolgaDia...]}` (`app/ponto/precedencia.py:204`, `app/ponto/precedencia.py:206`, `app/ponto/precedencia.py:208`).
+
+O fluxo permanece `_folgas_candidatas` → `folga_lancada_do_dia` → predicado existente (`app/ponto/precedencia.py:342`, `app/ponto/precedencia.py:358`, `app/ponto/precedencia.py:217`, `app/ponto/precedencia.py:235`). O resultado participa da faixa `folga`, da ordenação de precedência e da publicação de `tipo_do_dia`, `faixa`, `suprimidos` e `fatos.folga_lancada` (`app/ponto/precedencia.py:380`, `app/ponto/precedencia.py:392`, `app/ponto/precedencia.py:398`, `app/ponto/precedencia.py:408`).
+
+Para os chamadores de produção lidos — calendário, espelho por alias, sem_furo e casca diária — o argumento é omitido; portanto, com mesmas fontes e entradas, a carga que antes ocorria por `None` continua sendo a mesma (`app/colaboradores/services/calendario.py:604`, `app/ponto/services/espelho.py:657`, `app/ponto/services/espelho.py:659`, `app/folha/services/sem_furo.py:25`, `app/ponto/precedencia.py:256`, `app/ponto/precedencia.py:282`; condição anterior: delta fornecido). Mudança efetiva de valores em produção: [não verificado].
+
+O delta fecha uma entrada alternativa e usa o carregador existente; não acrescenta segundo juiz, escritor persistente, relógio ou derivação paralela (`app/ponto/precedencia.py:259`, `app/ponto/precedencia.py:282`, `app/ponto/precedencia.py:412`). A função permanece chamada; a porta removida é o parâmetro (`app/ponto/precedencia.py:256`, `app/ponto/precedencia.py:259`). A frase antiga “o calendario passa True” não corresponde à chamada atual e não serve como prova de chamador vivo (`app/ponto/precedencia.py:229`, `app/colaboradores/services/calendario.py:604`).
+
+## 01/11 10:52 · sessao 1c055287e6b5 · - · - · origem=Ronald (tmux)
+
+O teste morde a volta **explícita** de `folgas_lancadas`: compara esse nome com `inspect.signature(...).parameters`; qualquer parâmetro explícito com esse nome reprova, mesmo sem uso. (app/ponto/tests/test_grade_folga_juiz_sitios.py:181)
+
+Há escape: acrescentar `**kwargs` e recuperar `kwargs.get('folgas_lancadas')`. A assinatura contém `kwargs`, portanto a asserção continua verde e o argumento volta a ser aceito e usado. É limitação direta da asserção exclusivamente nominal; ela não chama a função nem verifica seu retorno/fonte. (app/ponto/tests/test_grade_folga_juiz_sitios.py:178–181)
+
+Demonstração em ASTs executadas somente em memória, usando a assinatura real: atual → verde e `TypeError`; parâmetro explícito → vermelho; `**kwargs` com leitura da chave → verde e devolve o mapa recebido. A execução do teste Django completo permanece [não verificado]. A assinatura atual não possui `**kwargs`. (app/ponto/precedencia.py:259–260)
+
+Mapa dos nomes novos do teste: `SimpleTestCase` entra pelo import e é lido como base da nova classe; `inspect` é importado localmente e lido na asserção; o import local de `fatos_do_periodo` também é lido nela. (app/ponto/tests/test_grade_folga_juiz_sitios.py:29; app/ponto/tests/test_grade_folga_juiz_sitios.py:174; app/ponto/tests/test_grade_folga_juiz_sitios.py:179–181)
+
+Classificação: **selo com mordida limitada**, não selo totalmente inerte; barra a restauração literal, mas não sela a impossibilidade comportamental de receber folgas externas. Atualmente o mapa nasce obrigatoriamente da função interna e depois é lido por dia. (app/ponto/tests/test_grade_folga_juiz_sitios.py:181; app/ponto/precedencia.py:282; app/ponto/precedencia.py:342)
 
 ## 01/11 10:45 · sessao dcd3c2f8c7bb · GRADE-FOLGA-JUIZ · verificador · origem=Code
 
@@ -592,151 +680,4 @@ Os testes que chamam e leem a saída da porta são: [nao verificado]
 - `app/ponto/tests/test_s5b_vinculo_do_dia_efeito.py:112` → leituras em `:126–130`.
 - `app/ponto/tests/test_o280_bateria_da_lei.py:2776` → leituras em `:2780–2781`; chamada em `:2861` → leituras em `:2864–2872`.
 
-## 01/11 04:09 · sessao 1d52753ed6cd · - · - · origem=Ronald (tmux)
-
-Q5 — `segmentos_do_motor`:
-
-- `he_pontas_por_dia` guarda **envelope efetivo do período**, `(e, s, extra50, extra100)`, sem cortar intervalos: lê `efetivo_entrada/saida` em `app/ponto/calculador/alimentacao.py:73`, cria lista para período fechado e acrescenta a tupla quando há HE em `app/ponto/calculador/alimentacao.py:91-96`. Essa inclusão precede inclusive a rejeição de `s <= e`, feita em `app/ponto/calculador/alimentacao.py:102-111`.
-- `pares_por_dia` guarda segmentos cortados **somente quando** `intra_descontada > 0`; com desconto zero, acrescenta o envelope inteiro. Evidência: `app/ponto/calculador/alimentacao.py:115-125`, escrita em `app/ponto/calculador/alimentacao.py:145-146`.
-- Mesmo com desconto positivo, cada intervalo só corta se `_ini < _a <= s`: intervalo começando na entrada efetiva (`_a == e`), começando antes/no cursor já avançado, ou começando depois de `s` é ignorado; o cursor avança ao fim do intervalo aceito. Evidência: `app/ponto/calculador/alimentacao.py:116-125`. Divergência entre minutos cortados e `intra_descontada` apenas incrementa contador; não corrige segmentos: `app/ponto/calculador/alimentacao.py:126-144`.
-- Sem dia, sem carimbo, turno aberto e par invertido/colapsado saem antes desse corte: `app/ponto/calculador/alimentacao.py:68-82`, `app/ponto/calculador/alimentacao.py:97-111`.
-- Um motivo concreto de intervalo existente com desconto zero: 12x36 só desconta da duração quando o envelope supera 360 min (`app/ponto/motor_calculo_v2.py:2754-2763`); comercial só quando supera 240 min (`app/ponto/motor_calculo_v2.py:3214-3219`); turno partido carimba intervalos mas usa duração inteira, sem escrever `intra_descontada` (`app/ponto/motor_calculo_v2.py:2879-2884`). O campo começa em zero: `app/ponto/motor_calculo_v2.py:252`.
-
-Q6 — Comparação atual:
-
-| Rubrica | Motor | Calculador na porta atual |
-|---|---|---|
-| `horas_noturnas` | `calcular_noturnas` subtrai os minutos noturnos dos intervalos, depois aplica fator da hora; independe de `intra_descontada`: `app/ponto/motor_calculo_v2.py:971-980`. Três ramos entregam intervalos ao escritor: `app/ponto/motor_calculo_v2.py:2780`, `app/ponto/motor_calculo_v2.py:2884`, `app/ponto/motor_calculo_v2.py:3235`. | Porta passa `intervalos=()` (`app/ponto/calculador/alimentacao.py:514`); assim a subtração explícita de `noturnas_do_dia` não tira nada (`app/ponto/calculador/regras.py:82-89`). O desconto vem apenas da geometria cortada em `pares_por_dia` (`app/ponto/calculador/alimentacao.py:115-146`). |
-| `horas_extras_50_noturna` | Entrega `periodo.intervalos_do_motor` para `he_noturna`: `app/ponto/motor_calculo_v2.py:1002-1006`; recua pelos minutos trabalhados, pulando pausas (`app/ponto/motor_calculo_v2.py:392-406`), subtrai a parcela noturna dos intervalos e rateia por extra50/total (`app/ponto/motor_calculo_v2.py:440-450`). | Recebe envelope em `he_pontas` (`app/ponto/calculador/alimentacao.py:91-96`), e o mesmo `intervalos=()` da porta (`app/ponto/calculador/alimentacao.py:514`) chega ao split (`app/ponto/calculador/regras.py:823-829`): não pula nem desconta pausas. |
-| `horas_extras_100_noturna` | Mesmo cálculo compartilhado, rateio por extra100/total: `app/ponto/motor_calculo_v2.py:440-450`. | Mesma ausência de intervalos; resultado acumulado e convertido em horas: `app/ponto/calculador/regras.py:823-835`. |
-
-**Exemplos calculados em memória com AST das funções reais**, via `python3 -B`, sem importar Django nem escrever arquivos. As hipóteses são pontas cruas = efetivas, fator 1 e prorrogação habilitada; resultados decorrem de `app/ponto/motor_calculo_v2.py:82-118`, `app/ponto/motor_calculo_v2.py:162-196`, `app/ponto/motor_calculo_v2.py:392-451` e montagem em `app/ponto/calculador/alimentacao.py:115-146`:
-
-| Turno / intervalo | Motor | Calculador |
-|---|---|---|
-| Dia normal **11→00**, pausa **22:30→23:30**, trabalho 720 min, HE50=120 e HE100=120 min | AN=60 min; HE50not=30 min; HE100not=30 min | AN=60 min; HE50not=60 min; HE100not=60 min |
-| Dobra **21→07**, pausa **02→03**, HE100=540 min | AN=480 min; HE100not=480 min | AN=480 min; HE100not=540 min |
-| 12x36 curto **22→03**, pausa **00→01**, `intra_descontada=0` | AN=240 min | AN=300 min, porque o par não é cortado |
-| **22→07**, pausa **04:30→05:30**, `intra_descontada=60` | AN=480 min | AN=390 min: segmento **05:30→07** perde a prorrogação, porque `minutos_noturnos` decide a extensão a partir da entrada de cada segmento (`app/ponto/motor_calculo_v2.py:105-111`; chamadas independentes em `app/ponto/calculador/regras.py:82-86`) |
-
-Além do intervalo, há diferença de pontas no split: motor usa `periodo.entrada/saida` (`app/ponto/motor_calculo_v2.py:1003`), campos documentados como crus (`app/ponto/motor_calculo_v2.py:239-246`); calculador recebe as efetivas (`app/ponto/calculador/alimentacao.py:73`, `app/ponto/calculador/alimentacao.py:96`). Os exemplos acima neutralizam essa outra diferença.
-
-## 01/11 04:08 · sessao 78ee2ae67a93 · - · - · origem=Ronald (tmux)
-
-Censo Q3:
-
-- Escritor produtivo de `PeriodoCalculo.intervalos_do_motor`: `MotorBase._carimbar_segmento`, que copia `intervalos` para tupla; o campo nasce com `()` na dataclass. Os três ramos recortam a lista pela janela antes de carimbar. (`app/ponto/motor_calculo_v2.py:247`, `app/ponto/motor_calculo_v2.py:1822`, `app/ponto/motor_calculo_v2.py:1830`, `app/ponto/motor_calculo_v2.py:2752`, `app/ponto/motor_calculo_v2.py:2879`, `app/ponto/motor_calculo_v2.py:3212`)
-- Leitores produtivos diretos: `_aplicar_he_noturna` entrega o campo a `he_noturna`; `segmentos_do_motor` percorre a lista; `periodo.reler` entrega a lista a `periodo_do_dia` e a `noturno_no_par`. São quatro locais em três funções. (`app/ponto/motor_calculo_v2.py:1006`, `app/ponto/calculador/alimentacao.py:121`, `app/ponto/calculador/periodo.py:741`, `app/ponto/calculador/periodo.py:751`)
-- Leitores diretos em testes: `test_s5b_porta_unica.py:145` e acesso por `hasattr` em `:140-141`; `test_noturno_desconta_intervalo.py:150`; `test_o272_intra_fora_da_janela.py:91`, `:102`, `:118`, todos sob `app/ponto/tests/`. [nao verificado]
-- Escritores de campo homônimo em objetos falsos de testes: `app/ponto/tests/test_s5b_split_noturno_tem_um_dono.py:51`, `app/ponto/tests/test_lote_de_celulas_nao_troca_de_colaborador.py:44`, `app/ponto/tests/test_s5b_vinculo_do_dia_efeito.py:48`.
-- Autoridades registradas: pergunta “o vão entre batidas foi intervalo?” → `ponto/turnos.py::intervalos_do_turno`; pergunta “que períodos e que intervalo teve este dia?” → `ponto/juiz_batida.py::periodos_do_dia`. O registro também distingue a pergunta de valor do PAR → `MotorBase.calcular_periodo`. (`app/core/juizes.py:197`, `app/core/juizes.py:1159`, `app/core/juizes.py:1160`)
-- `JUIZES.md` remete ao registro vivo `core/juizes.py` e lista geometria/turno de modo geral; a entrada nominal para intervalo está no registro Python. (`app/docs/JUIZES.md:11`, `app/docs/JUIZES.md:20`)
-
-Censo Q7:
-
-| Destino | Leitura efetiva e evidências |
-|---|---|
-| Lavratura | `fechamento` chama `rubricas_por_dia`, passa o resultado como `rubricas=` a `lavrar` e escolhe `versao='oraculo'`, apenas desde 10/2026. (`app/ponto/services/fechamento.py:1233`, `:1239`, `:1256`, `:1262`) |
-| Escritor das linhas | `lavrar` percorre `Rubricas.valores`, substitui campos, registra `nao_decide` no detalhe e persiste `DiaPago`. (`app/ponto/services/dia_pago.py:310`, `:320`, `:322`, `:328`, `:329`, `:343`, `:358`) |
-| DIFF | Chama a porta, busca cada dia, lê `detalhe`, `valores` e `nao_decide`, soma e compara com o motor/gravado. (`app/ponto/management/commands/diff_calculador.py:417`, `:469`, `:485`, `:501`, `:517`, `:519`, `:535`, `:547`) |
-| Tela do espelho | Lê `DiaPago` pela versão padrão `motor`; portanto não lê a saída `oraculo` da porta. A consulta é `espelho.py:421`, o padrão/filtro ficam em `dia_pago.py:831`/`:854`, o dicionário em `espelho.py:824`, e a exibição em `templates/ponto/espelho.html:271-278`, todos sob `app/`. |
-| Calendário | Chama `linhas_do_periodo` sem sobrescrever a versão padrão `motor`, e transforma a linha em rubricas. (`app/colaboradores/services/calendario.py:370`, `:784`, `:785`; `app/ponto/services/dia_pago.py:831`, `:854`) |
-| PDF | Lê `dia['rubricas']` montado pelo espelho, portanto também segue a linha `motor`. (`app/relatorios/pdf_espelho.py:906`, `:909`; `app/ponto/services/espelho.py:421`, `:824`; `app/ponto/services/dia_pago.py:831`) |
-| Totais do cartão | Usa `soma_da_competencia` sem mudar `versao='motor'`. (`app/relatorios/cartao_pela_celula.py:143`; `app/ponto/services/dia_pago.py:548`, `:557`) |
-| Extrato parcial | Usa `soma_do_periodo` sem mudar `versao='motor'`. (`app/relatorios/views.py:487`; `app/ponto/services/dia_pago.py:750`, `:782`) |
-| Export TXT | Lê `FechamentoMensal`, chama `eventos_do_fechamento` e emite `fech.horas_noturnas` como adicional noturno; não lê `rubricas_por_dia`. A porta de coerência consulta `DiaPago` versão `motor`. (`app/folha/export.py:698`, `:700`, `:711`, `:436`; `app/folha/porta_export.py:588`, `:589`) |
-
-Testes que chamam e leem resultados da porta: [nao verificado]
-
-- `app/ponto/tests/test_he100_dia_sem_previsto.py:272` → leitura em `:281`, `:286`, `:292`.
-- `app/ponto/tests/test_lote_de_celulas_nao_troca_de_colaborador.py:121` → leitura em `:154`, `:155`.
-- `app/ponto/tests/test_s5b_vinculo_do_dia_efeito.py:112` → leitura em `:126`, `:127`, `:129`, `:130`.
-- `app/ponto/tests/test_o280_bateria_da_lei.py:2776` → leitura em `:2780`, `:2781`; segunda chamada em `:2861` → leitura em `:2864-2872`.
-
-Os testes de ligação/AST inspecionam a existência da função e as chamadas, sem ler sua saída: `app/ponto/tests/test_s5b_porta_unica.py:52`, `:75`, `:210`, `:232`; `app/ponto/tests/test_s5b_troca_ligada.py:43`, `:47`.
-
-## 01/11 04:08 · sessao 082d38a8e46a · - · - · origem=Ronald (tmux)
-
-Censo estático: **40 locais de chamada de `regras.do_dia`: 1 produção + 39 testes**; **8 locais de chamada de `he_noturna`: 2 produção + 6 testes**. As listas abaixo individualizam os locais; não executei testes. [não verificado: execução] [nao verificado]
-
-**`regras.do_dia`: valores padrão**
-
-Quando omitidos, `intervalos=()` e `he_pontas=None`, conforme `app/ponto/calculador/regras.py:572-574`.
-
-| Chamador | `intervalos` | `he_pontas` |
-|---|---|---|
-| `app/ponto/calculador/alimentacao.py:501` | Tupla vazia **explícita**, `app/ponto/calculador/alimentacao.py:514` | `_he_pontas.get(k)`, `app/ponto/calculador/alimentacao.py:513`; mapa vem de `insumos.get('he_pontas_por_dia') or {}`, `app/ponto/calculador/alimentacao.py:444`. `insumos_do_calculador` usa `segmentos_do_motor`, `app/ponto/calculador/alimentacao.py:302`; este monta lista com `(efetivo_entrada, efetivo_saida, minutos_extra_50, minutos_extra_100)`, `app/ponto/calculador/alimentacao.py:73`, `app/ponto/calculador/alimentacao.py:91-96`. |
-| `app/ponto/tests/test_calculador_regras.py:28,35,42,54,69,85,102,116,131,137,206,308` | Omitido → `()` | Omitido → `None` |
-| `app/ponto/tests/test_s5b_regra_pontualidade.py:210,220,230,241,250` | Omitido inclusive nos `**_COMUM`; `_COMUM` não tem esses campos, `app/ponto/tests/test_s5b_regra_pontualidade.py:206-207` | Omitido → `None` |
-| `app/ponto/tests/test_s5b_regra_pontualidade.py:312,321,329,348,364,397,407,415,433,445` | Omitido → `()` | Omitido → `None` |
-| `app/ponto/tests/test_s5b_regra_pontualidade.py:483,534,549,557` | Omitido inclusive nos `**_COMUM`; `_COMUM` não tem esses campos, `app/ponto/tests/test_s5b_regra_pontualidade.py:469-470` | Omitido → `None` |
-| `app/ponto/tests/test_s5b_split_noturno_tem_um_dono.py:209,215,240,281` | Omitido → `()` | Omitido → `None` |
-| `app/ponto/tests/test_s5b_split_noturno_tem_um_dono.py:312` | Omitido → `()` | `[_p1,_p2]`, `app/ponto/tests/test_s5b_split_noturno_tem_um_dono.py:318`; fixtures criadas em `app/ponto/tests/test_s5b_split_noturno_tem_um_dono.py:301-304`: 08–13 com HE50=60; 18–23:30 com HE50=90, HE100=30. |
-| `app/ponto/tests/test_bob_b2_abono_feriado_guarda.py:227` | Encaminha `**kw`, `app/ponto/tests/test_bob_b2_abono_feriado_guarda.py:228`; chamadas fornecem somente `folga_e_feriado`, `app/ponto/tests/test_bob_b2_abono_feriado_guarda.py:231,236`; portanto default `()` | Mesmo encaminhamento, portanto default `None` |
-| `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:61` | `(iv,)`, `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:63`; `iv` é fixture 05:30–06:30 do dia seguinte, `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:56-57` | `[ponta]`, `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:65`; ponta fixture 22–07, HE50=120, HE100=0, `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:60` |
-| `app/ponto/tests/test_v3_dobra_sem_noturna.py:57` | `**kw` contém `intervalos=iv`, `app/ponto/tests/test_v3_dobra_sem_noturna.py:44-46`; `iv` fixture 08/09 02–03, `app/ponto/tests/test_v3_dobra_sem_noturna.py:42` | `**kw`: se `dobra`, `(e,s,0,trab)`, `app/ponto/tests/test_v3_dobra_sem_noturna.py:50-51`; senão excedente `max(trab-previsto,0)`, dividido 120/restante se >10, senão `[]`, `app/ponto/tests/test_v3_dobra_sem_noturna.py:52-54`. |
-
-**`he_noturna`: todos os locais**
-
-| Chamador | Intervalos recebidos / escritor |
-|---|---|
-| `MotorBase._aplicar_he_noturna`, `app/ponto/motor_calculo_v2.py:1002` | Passa `periodo.intervalos_do_motor`, `app/ponto/motor_calculo_v2.py:1006`. Escritor de produção: `_carimbar_segmento`, `app/ponto/motor_calculo_v2.py:1822-1830`. |
-| `regras.do_dia`, alias `_he_not`, `app/ponto/calculador/regras.py:821,828` | Passa argumento `intervalos` recebido por `do_dia`, `app/ponto/calculador/regras.py:829`; em produção chega `()` explícito, `app/ponto/calculador/alimentacao.py:514`; nos testes vale tabela anterior. |
-| `app/ponto/tests/test_s5b_split_noturno_tem_um_dono.py:111` | Omite → `()` padrão, `app/ponto/motor_calculo_v2.py:409`; parâmetros vêm da `GRADE`, `app/ponto/tests/test_s5b_split_noturno_tem_um_dono.py:90-98,107-112`. |
-| `app/ponto/tests/test_s5b_split_noturno_tem_um_dono.py:122` | Omite → `()` padrão; comprehension sobre mesma `GRADE`, `app/ponto/tests/test_s5b_split_noturno_tem_um_dono.py:122-123`. |
-| `app/ponto/tests/test_s5b_split_noturno_tem_um_dono.py:307` | Omite → `()` padrão; duas pontas de fixture `_p1,_p2`, `app/ponto/tests/test_s5b_split_noturno_tem_um_dono.py:301-308`. |
-| `app/ponto/tests/test_noturno_desconta_intervalo.py:249` | Variável local `intervalos`, fixture 23:30–00:30, `app/ponto/tests/test_noturno_desconta_intervalo.py:247-250`. |
-| `app/ponto/tests/test_noturno_desconta_intervalo.py:263` | Omite → `()` padrão, `app/ponto/tests/test_noturno_desconta_intervalo.py:263-264`. |
-| `app/ponto/tests/test_noturno_desconta_intervalo.py:265` | Tupla explícita de fixture 23–23:30, `app/ponto/tests/test_noturno_desconta_intervalo.py:265-267`. |
-
-**Cadeia de origem dos intervalos entregues pelo motor**
-
-- `periodos_de_turnos` escreve `intervalos[e_ts]=intervalos_do_turno(t)`: `app/ponto/adaptador_motor.py:27,44`. `_periodos_via_autoridade` chama esse adaptador e depois `_periodos_pelo_marco`: `app/ponto/motor_calculo_v2.py:509-531`.
-- `_periodos_pelo_marco` consulta `juiz_batida.periodos_do_dia`: `app/ponto/motor_calculo_v2.py:577,616`; pode remover os intervalos do dia e reescrevê-los com pausas julgadas pela ata: `app/ponto/motor_calculo_v2.py:687,689-721`.
-- `calcular_mes` recebe o mapa de `montar_periodos` e entrega a lista pela entrada a `calcular_periodo`: `app/ponto/motor_calculo_v2.py:2342,2446-2447`.
-- Os três ramos de cálculo recortam pela janela efetiva antes de chamar o escritor do campo: `app/ponto/motor_calculo_v2.py:2752-2753,2879-2880,3212-3213`; `_carimbar_segmento` grava a tupla: `app/ponto/motor_calculo_v2.py:1830`.
-- Nos testes que chamam a casca real via `_MotorFalso`, o escritor de fixture é `_PeriodoFalso.__init__`, que grava `tuple(intervalos or ())`: `app/ponto/tests/test_s5b_split_noturno_tem_um_dono.py:42-51`; binding da casca real: `app/ponto/tests/test_s5b_split_noturno_tem_um_dono.py:59`.
-
-## 01/11 03:52 · sessao a060f571054d · V3-DOBRA-SEM-NOTURNA · verificador · origem=Code
-
-**1. Os esperados estão corretos; a cobertura dos mutantes exige uma ressalva em `extra_min`.** O texto exato dos mutantes da volta 1 não foi fornecido: sua identidade literal está [não verificado].
-
-As contas abaixo usam o cadastro explícito do teste: intervalo de 60 minutos, previsto de 480, prorrogação após 05h ligada e hora reduzida preservada (`app/ponto/tests/test_v3_dobra_sem_noturna.py:40`, `app/ponto/tests/test_v3_dobra_sem_noturna.py:46`).
-
-| Caso | Conta pela regra declarada | Esperados |
-|---|---|---|
-| 22h–06h | Trabalho: 480−60=420 min. Art.73 + Súm.60 II: noite 22h–06h menos intervalo =420 min; hora reduzida: 420÷52,5=8 h. A dobra coloca os 420 min em HE100; todos são noturnos. | HE100=HE100-feriado=7 h; HE100-noturna=7 h; noturnas legais=8 h; HE50 e HE50-noturna=0. Corretos (`app/ponto/tests/test_v3_dobra_sem_noturna.py:12`, `:64`, `:74`). |
-| Gêmeo sem dobra, 22h–06h | Mesmo trabalho e mesma noite; 420<480, portanto excedente zero. | Noturnas=8 h; HE100 e HE100-noturna=0. Corretos (`app/ponto/tests/test_v3_dobra_sem_noturna.py:78`, `:81`). |
-| 21h–07h | Trabalho: 600−60=540 min. Excedente: 540−480=60 min. Noite prorrogada: 22h–07h=540, menos intervalo=480 min. Hora reduzida: 480÷52,5=9,142857 h, ou 548,571429 min legais. | HE100=HE100-feriado=9 h; HE50=0; HE100-noturna=8 h; HE50-noturna=0; `extra_min`=60. Gêmeo sem dobra: HE50=1 h. Todos corretos (`app/ponto/tests/test_v3_dobra_sem_noturna.py:88`, `:92`, `:96`, `:99`, `:102`). |
-| Entrada 22h20, marco 22h | Trabalho: 460−60=400 min. L-084: desvios 20 e 0, portanto não recusa os marcos. Tolerância da casa: 20>10, cobra 20 integralmente. L-093: teto 480−400=80, não corta. | Atraso=20÷60 h; antecipada=0. Corretos (`app/ponto/tests/test_v3_dobra_sem_noturna.py:108`, `:111`, `:114`; `app/ponto/motor_calculo_v2.py:1934`, `:1994`, `:1176`). |
-| Saída 05h30, marco 06h | Trabalho: 450−60=390 min. L-084: desvios 0 e 30, portanto julga. Tolerância: 30>10, cobra 30 integralmente. L-093: teto 480−390=90, não corta. | Antecipada=30÷60=0,5 h; atraso=0. Corretos (`app/ponto/tests/test_v3_dobra_sem_noturna.py:119`, `:122`, `:126`; `app/ponto/motor_calculo_v2.py:1934`, `:1996`, `:1176`). |
-
-A Súm.264 aparece no cadastro como **split em horas de relógio**, subconjunto da HE; o fator reduzido é aplicado à rubrica `horas_noturnas`. Por isso 8 h de HE100-noturna e 9,142857 h noturnas legais no caso longo são compatíveis (`app/ponto/motor_calculo_v2.py:342`, `app/ponto/calculador/regras.py:835`, `app/ponto/calculador/regras.py:88`).
-
-Sobre os três reforços:
-
-- **HE100-feriado=9:** detecta um mutante que altere essa parcela no caso com excedente, mantendo eventualmente HE100 total correta (`app/ponto/tests/test_v3_dobra_sem_noturna.py:93`).
-- **`extra_min`=60:** detecta resultado final errado, mas **não mata uma mutação restrita à atribuição do ramo de dobra**: a escrita em `regras.py:787` agora é sobrescrita pela escrita em `regras.py:813`. Esse mutante sobrevive sem alterar a saída observável (`app/ponto/tests/test_v3_dobra_sem_noturna.py:96`; `app/ponto/calculador/regras.py:787`, `:813`).
-- **Antecipada de 30 minutos:** detecta zeramento apenas dessa rubrica na dobra; o gêmeo precisa valer 0,5 h e a dobra precisa igualá-lo (`app/ponto/tests/test_v3_dobra_sem_noturna.py:122`, `:123`).
-
-**2. As triagens estão corretas quanto à origem, mas “preexistente” não basta para justificar enfileiramento pelas regras locais.** `CLAUDE.md:30` determina curar bug comprovado no caminho, sem enfileirar.
-
-- **Tolerância:** comentário corrigido para os 10 minutos efetivamente usados; não altera os esperados de 20 e 30 minutos (`app/ponto/tests/test_v3_dobra_sem_noturna.py:106`; `app/ponto/motor_calculo_v2.py:60`, `:1994`).
-- **Intervalos:** origem preexistente em `alimentacao.py:514`, mas o diff passa a expô-la também no split da dobra. Para o mesmo caso longo, omitindo o intervalo, o recuo de 540 minutos desde 07h chega a 22h e devolve **9 h**, contra **8 h** com o intervalo informado. Portanto, não foi criado pelo diff, mas compromete o resultado desse caminho integrado (`app/ponto/calculador/alimentacao.py:514`; `app/ponto/calculador/regras.py:828`; `app/ponto/motor_calculo_v2.py:395`, `:440`).
-- **Crédito:** a substituição já existia. O crédito é abatido em `dia_pago.py:190`, mas a rubrica do calculador substitui o valor em `:328`; a regra do dia deliberadamente não abate crédito. Após a cura, chega atraso bruto onde antes chegava zero. Origem preexistente; descartá-lo apenas por isso contraria a regra local acima (`app/ponto/services/dia_pago.py:190`, `:328`; `app/ponto/calculador/regras.py:184`, `:855`).
-- **Folga-feriado:** triagem correta. Esse ramo afirma HE100/feriado, declara os splits em `nao_decide` e retorna antes do trecho alterado; não é o mesmo zero afirmado (`app/ponto/calculador/regras.py:682`, `:704`, `:709`, `:735`).
-
-**3. Escritores e leitores depois do diff:**
-
-| Campo | Escrita | Leitura |
-|---|---|---|
-| `horas_saida_antecipada` | Alimentador passa pontualidade; regra aplica tolerância/teto e grava horas em `valores` (`app/ponto/calculador/alimentacao.py:496`, `:518`; `app/ponto/calculador/regras.py:264`, `:271`, `:856`). | Testes (`app/ponto/tests/test_v3_dobra_sem_noturna.py:122`); diagnóstico/comparação (`app/ponto/management/commands/diff_calculador.py:476`, `:501`, `:535`); lavratura recebe as rubricas e substitui o campo do `DiaPago` (`app/ponto/services/fechamento.py:1256`; `app/ponto/services/dia_pago.py:322`, `:328`, `:343`). A apresentação lê a linha lavrada em `app/ponto/services/dia_pago.py:916`. |
-| `detalhe['extra_min']` | Excedente calculado em `regras.py:769`, sujeito à tolerância em `:770`; escrito na dobra em `:787` e novamente em `:813` (`app/ponto/calculador/regras.py:769`, `:787`, `:813`). | Assert direto (`app/ponto/tests/test_v3_dobra_sem_noturna.py:96`); diagnóstico HE50 (`app/ponto/management/commands/diff_calculador.py:497`). **Esse leitor explícito não executa na dobra**, pois exige HE50>0, enquanto a dobra fixa HE50=0 (`app/ponto/management/commands/diff_calculador.py:480`; `app/ponto/calculador/regras.py:786`). O detalhe inteiro ainda pode aparecer na impressão de divergências (`app/ponto/management/commands/diff_calculador.py:546`). |
-
-A lavratura não copia `Rubricas.detalhe`: copia valores e registra nomes das recusas. Logo, `extra_min` não é persistido por esse bloco (`app/ponto/services/dia_pago.py:322`, `:329`).
-
-**4. Não identifiquei outro defeito funcional nas linhas alteradas:** o `elif` preserva a dobra e libera split, noturno e pontualidade. A ressalva nova de cobertura é a atribuição intermediária de `extra_min` mascarada pela escrita posterior (`app/ponto/calculador/regras.py:795`, `:813`, `:820`, `:840`, `:851`).
-
-Execução da suíte, morte dos mutantes originais e impacto em produção: **[não verificado]**. [nao verificado]
-
-_1369 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1373 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
