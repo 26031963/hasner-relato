@@ -1,7 +1,78 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 18:24** · publicado em **01/11/2026 18:25** (UTC-3)
+> Ultima resposta processada: **01/11/2026 18:26** · publicado em **01/11/2026 18:30** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 18:26 · sessao 2e2239d89df6 · O261-E-F2 · verificador · origem=Code
+
+1. **Tratamento dos itens da triagem_v8**
+
+Nas referências abaixo, **T** é [test_o261e_f2_ramo_e_i20.py](/home/ronald/codex_ws/5c2bb8a4370998765c54bbb1926895b27a5ec1bd/app/chamados/tests/test_o261e_f2_ramo_e_i20.py) e **A** é [auditar_invariantes_chamados.py](/home/ronald/codex_ws/5c2bb8a4370998765c54bbb1926895b27a5ec1bd/app/chamados/management/commands/auditar_invariantes_chamados.py); os demais caminhos são relativos a `app/`.
+
+- **Item 1 — seis procedentes da v7:** a resolução individual dos seis é **[nao verificado]**: o anexo não enumera os seis achados. O código atual permite confirmar restauração do juiz, leitura após o mock, comparação exata da amostra I20 e preservação da célula sem reescrita posterior. (`T:216`, `T:221`, `T:245`, `T:168`, `T:170`.)
+
+- **Item 2a — procedente:** o novo cenário distingue as guardas. Sem resposta, a pergunta pode estar viva antes do carimbo e morta depois dele pelo BUG 117; com texto, a porta preenche `respondida_em` e o degrau da resposta decide antes desse BUG. (`chamados/juizes.py:1047`, `chamados/juizes.py:1077`, `chamados/juizes.py:1083`, `chamados/models.py:2556`.) A execução histórica de `mordida_v9_F.log` é **[nao verificado]** nesta revisão.
+
+- **Item 2b — sustentado:** o meio-estado é uma entrada adversarial explícita: o teste escreve somente `resposta_colab`; o escritor normal grava texto e `respondida_em` juntos. (`T:156`, `T:158`, `chamados/services/disputa_emissao.py:1247`, `chamados/services/disputa_emissao.py:1248`.)
+
+- **Item 3 — sustentado com limite de proveniência:** resposta, veredito e lâmpadas vêm da fixture; `_fechar` relê e verifica preservação de veredito, via e lâmpadas. Não verifica preservação de todos os campos da célula ou de toda a ata. (`T:158`, `T:160`, `T:169`, `T:170`.) O cálculo dessas lâmpadas pelo cartório real é **[nao verificado]**.
+
+- **Item 4a — correção parcial:** retirar o incremento do contador por causa viola a soma; retirar o detalhe do ramo viola a asserção específica. Entretanto, a distribuição entre `alcance_a..e` continua sem verificação individual — há mutante sobrevivente descrito no item 4 abaixo. (`chamados/services/vigia_fio.py:651`, `chamados/services/vigia_fio.py:653`, `T:196`, `T:197`.)
+
+- **Item 4b — descarte sustentado para estes cinco testes:** uma restauração em memória inoperante não altera o banco: a porta retorna `False` antes do `save`, o fecho executa `continue` e os leitores seguintes recarregam os dados. (`chamados/models.py:2569`, `chamados/models.py:2576`, `chamados/services/disputa_emissao.py:1638`, `chamados/services/disputa_emissao.py:1655`, `T:183`.)
+
+- **Item 5 — ressalva:** o código contém proteção explícita de relógio e mock, mas a afirmação incondicional de ausência de dependência de ordem deve considerar a possível colisão do PK gerado com a cicatriz fixa. (`T:109`, `T:213`, `T:216`, `T:265`, `A:1098`.)
+
+2. **Caminho exato do C6 no teste da guarda sozinha** [nao verificado]
+
+**Antes do fecho:**
+
+- A pergunta usa `saida_sem_entrada`, resposta vazia, DNA `hi=08:00` e lâmpada E das 08:00 acesa. Esse motivo aponta para E/hi. (`T:236`, `T:147`, `T:61`, `chamados/juizes.py:845`.)
+- O degrau da resposta não entra; o BUG 117 também não entra, pois `materializada_em` está nulo. O veredito `furo` então determina **viva**. (`chamados/juizes.py:1047`, `chamados/juizes.py:1077`, `chamados/juizes.py:1083`, `escala/models.py:1735`.)
+- A guarda do fecho recebe esse resultado e pula a pergunta. (`chamados/services/disputa_emissao.py:1626`.)
+
+**Retirando somente essa guarda:**
+
+- `carimbar` aplica o carimbo em memória; como o texto está vazio, não preenche `respondida_em`. (`chamados/models.py:2555`, `chamados/models.py:2556`.)
+- O C6 é chamado novamente. Agora há carimbo e o fato E/hi está provado pela lâmpada: o BUG 117 retorna **morta antes de chegar ao veredito `furo`**, permitindo o `save`. (`chamados/models.py:2565`, `chamados/juizes.py:887`, `chamados/juizes.py:893`, `chamados/juizes.py:1077`, `chamados/models.py:2576`.)
+
+**O docstring corresponde ao código.** Com texto, a porta preencheria `respondida_em`; o degrau da resposta viria primeiro, e o dia acusador impediria a concordância, mantendo a pergunta viva e provocando recusa. (`T:229`, `chamados/models.py:2558`, `chamados/juizes.py:1059`, `chamados/juizes.py:1029`, `chamados/models.py:2569`.)
+
+3. **Quem escreve e quem lê os campos assertados**
+
+| Campos/resultado | Quem escreve | Quem lê/asserta |
+|---|---|---|
+| `veredito`, `veredito_via`, `ata.lampadas` | O teste fornece os valores à porta; a porta persiste a célula. (`T:160`, `ponto/portas/celula.py:768`, `ponto/portas/celula.py:770`.) | `_fechar` relê o banco e compara os três; C6 lê veredito e lâmpadas. (`T:169`, `T:170`, `chamados/juizes.py:1081`, `chamados/juizes.py:887`.) |
+| `resposta_colab`, `respondida_em` | Fixture injeta o texto; controles escrevem ambos explicitamente. A porta pode preencher `respondida_em` durante o carimbo e restaurá-lo na recusa. (`T:158`, `T:255`, `chamados/models.py:2558`, `chamados/models.py:2583`.) | C6, I20 e a asserção de preservação do caso 2. (`chamados/juizes.py:1047`, `A:1102`, `T:264`.) |
+| `materializada_em`, `via_resolucao` | A pergunta nasce sem carimbo e com via vazia; a porta escreve os campos e desfaz na recusa. (`chamados/models.py:2298`, `chamados/models.py:2529`, `chamados/models.py:2531`, `chamados/models.py:2582`.) | Os três testes do ramo verificam ausência/presença do carimbo e vivacidade; o caso 2 verifica carimbo nulo. (`T:184`, `T:185`, `T:186`, `T:218`, `T:239`, `T:264`.) |
+| `pergunta_viva(...)` | C6 calcula; no MORDE o teste substitui deliberadamente sua resposta durante o fecho. (`chamados/juizes.py:816`, `T:213`.) | Premissas e selo usam o juiz real; o MORDE verifica sua restauração antes das testemunhas. (`T:202`, `T:237`, `T:260`, `T:216`, `T:220`.) |
+| `alcance_universo`, `fio_morto_alcance` | Censo calcula o universo a partir de `fora_da_folha` e incrementa os dias sem porta. (`chamados/services/vigia_fio.py:550`, `chamados/services/vigia_fio.py:553`, `chamados/services/vigia_fio.py:650`.) | Selo do ramo e caso regularizado. (`T:194`, `T:268`.) |
+| `alcance_dias`, incluindo célula, rota, causa e detalhe | `_listar` monta a linha produzida pelo censo. (`chamados/services/vigia_fio.py:589`, `chamados/services/vigia_fio.py:654`.) | Teste filtra pelo `cel.pk`, confere uma linha `sem_porta/e`, confere `sem_porta/c` no MORDE e ausência da linha no caso regularizado. (`T:176`, `T:191`, `T:192`, `T:224`, `T:267`.) |
+| `alcance_a..e` | Censo inicializa e incrementa o contador da causa. (`chamados/services/vigia_fio.py:543`, `chamados/services/vigia_fio.py:651`.) | Teste lê somente a **soma** dos cinco. (`T:196`.) |
+| `alcance_e_detalhe` | Censo incrementa a chave correspondente ao detalhe. (`chamados/services/vigia_fio.py:653`.) | Teste exige somente a chave do ramo igual a 1. (`T:197`.) |
+| I20: `flag`, `total`, `amostra` | Auditor consulta os campos, calcula contagem/amostra e imprime a classificação. (`A:1102`, `A:564`, `A:565`, `A:1834`, `A:1835`.) | Teste captura, interpreta e compara a tupla exata nos dois testes I20. (`T:95`, `T:80`, `T:245`, `T:293`, `T:297`.) | [nao verificado]
+| Exclusão por PK e unicidade da âncora | A cicatriz vem do auditor; o teste lê seu AST e acrescenta o PK somente à cópia mutante. (`A:1098`, `T:73`, `T:282`, `T:283`.) | Caso real exige PK fora da cicatriz; MORDE compara cópia e comando real. (`T:265`, `T:293`, `T:297`.) | [nao verificado]
+
+**Há valores escritos pelo teste consumidos pelos leitores reais:** texto, veredito e lâmpadas. Sua origem está declarada; a lavra pela porta não demonstra que o cartório calculou esses valores a partir de batidas. (`T:156`, `T:158`, `T:160`.) Os resultados `alcance_*` e a saída I20 são obtidos das funções reais, sem preenchimento desses resultados pelo teste. (`T:175`, `T:270`, `T:297`.) [nao verificado]
+
+4. **Mutantes de produção que ficam vivos**
+
+**Sim, por análise estática; sobrevivência executada nesta revisão: [nao verificado].**
+
+- **Contador na causa errada:** substituir, em `chamados/services/vigia_fio.py:651`, `d['alcance_' + causa] += 1` por `d['alcance_a'] += 1`. A soma permanece correta; linha e detalhe continuam usando a causa original. O teste não exige os valores individuais dos contadores. (`chamados/services/vigia_fio.py:653`, `chamados/services/vigia_fio.py:654`, `T:192`, `T:196`, `T:197`.) No MORDE, o helper já falha pela linha `c`, antes da soma. (`T:192`, `T:224`, `T:226`.)
+
+- **Restauração em memória inoperante:** tornar `_desfazer_em_memoria` um no-op. A porta continua recusando sem salvar, e o fecho abandona a instância; estes testes observam dados recarregados. É precisamente a lacuna aceita na triagem 4b. (`chamados/models.py:2579`, `chamados/models.py:2569`, `chamados/services/disputa_emissao.py:1638`, `T:183`, `T:262`.)
+
+- **Autor do carimbo perdido:** trocar a atribuição de `materializada_por_id` por `None`. Os selos verificam instante, via, vivacidade e par resposta/carimbo, mas não o autor; o C6 também não consulta esse autor. (`chamados/models.py:2530`, `T:184`, `T:218`, `T:264`, `chamados/juizes.py:788`, `chamados/juizes.py:1032`.)
+
+5. **Relógio, mock e ordem**
+
+- **Relógio:** a classe congela o tempo; o censo recebe `HOJE` explicitamente e o controle usa timestamp UTC literal. Não identifiquei relógio solto nesses caminhos por leitura. (`T:109`, `T:55`, `T:175`, `T:251`.)
+- **Mock:** está limitado ao `with`, e a identidade da função real é assertada antes das leituras do selo e do vigia. Não há vazamento demonstrado no código. (`T:213`, `T:216`, `T:220`, `T:221`.)
+- **Ordem:** cada teste cria seu cenário, usando `TestCase` e `setUpTestData`; não aparece dependência explícita de dados deixados por outro dos cinco. (`T:110`, `T:112`, `T:201`, `T:212`, `T:236`, `T:259`, `T:276`.) [nao verificado]
+- **Risco condicional de sequência de PK:** o banco gera o PK, mas o teste exige que ele não coincida com IDs históricos fixos. Uma colisão faria o selo falhar por causa da sequência, não do comportamento pretendido; ocorrência efetiva **[nao verificado]**. (`T:154`, `T:265`, `A:1098`, `T:297`.) [nao verificado]
+
+Não executei os testes: o quinto cria arquivo temporário, incompatível com a restrição de somente leitura. (`T:284`, `T:286`.) As contagens históricas de testes verdes/vermelhos dos anexos não foram reproduzidas: **[nao verificado]**. [nao verificado]
 
 ## 01/11 18:24 · sessao dae46ff611b1 · - · - · origem=Ronald (tmux)
 
@@ -811,17 +882,4 @@ O histórico também lê os instantes dinamicamente por `getattr`, e a fotografi
 
 [truncado em 20000 de 32629 caracteres]
 
-## 01/11 16:40 · sessao 30d159e9fd65 · - · - · origem=Ronald (tmux)
-
-Auditoria concluída e enviada com todas as referências executáveis das seis portas e limites do AST. [app/chamados/tests/test_o261e_f2_porta_carimbo.py:373]
-
-Verificação em memória, sem Django ou alterações de arquivos:
-
-- Mutante com chamada direta externa: teste da árvore vermelho; seis testes de fontes sintéticas verdes. [app/chamados/tests/test_o261e_f2_porta_carimbo.py:433] [nao verificado]
-- Mutante usando `getattr(p, '_escrever_' + 'carimbo')`: sete testes novos verdes; scanner de escritores também não o reconhece. [app/chamados/tests/test_o261e_f2_porta_carimbo.py:403] [nao verificado]
-- Mutante sem ofuscação, trocando `VIA_PARIDADE_RECUSADA` por `VIA_ADMIN_DECIDIU`: **oito testes pedidos verdes**; a whitelist valida função e arquivo, sem validar a via usada. [app/chamados/services/materializacao.py:858; app/chamados/tests/test_o261e_f2_porta_carimbo.py:388]
-- Mutante restaurando `alvo.update(...)` no originário: teste novo do censo vermelho pela âncora desaparecida. [app/chamados/models.py:1488; app/core/tests/test_censo_escritas.py:235]
-
-Resultado da suíte Django completa: [nao verificado]. [nao verificado]
-
-_1449 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1450 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
