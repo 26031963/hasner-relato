@@ -1,7 +1,167 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 00:03** · publicado em **01/11/2026 00:04** (UTC-3)
+> Ultima resposta processada: **01/11/2026 00:14** · publicado em **01/11/2026 00:15** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 00:14 · sessao 0398ef9dc32b · - · - · origem=Ronald (tmux)
+
+Leitura concluída só no código. Os casos abaixo são contraexemplos deduzidos do HEAD; ocorrência em produção, salvo o que consta expressamente no dado raspado, é **[não verificado]**.
+
+**Chamadores e fronteira comum**
+
+- O settings aponta PreToolUse sem filtro para `disjuntor.py pretool` e Stop para `hook_stop_fila1.py`; o contrato acerta esses nomes. `.claude/settings.json:3`, `.claude/settings.json:9`, `.claude/settings.json:62`, `.claude/settings.json:68`.
+- PreToolUse só consulta B3 no Bash para wrapper identificado como `papel=verificador` e obra presente; no Agent, só para `subagent_type=verificador`, prompt final e obra reconhecida. O Agent comum/construtor não consulta nem registra volta. `bin/disjuntor.py:1440`, `bin/disjuntor.py:1443`, `bin/disjuntor.py:1451`, `bin/disjuntor.py:1454`, `bin/disjuntor.py:1457`.
+- A porta do wrapper existe depois de adquirir slot e trava da resposta; chama `--b3-parada` para papel verificador. `bin/codex_pergunta.sh:137`, `bin/codex_pergunta.sh:162`, `bin/codex_pergunta.sh:164`.
+- A chave hoje basta por existência, inclusive symlink; PreToolUse a consulta, a porta `b3_parada` não consulta. Nenhum desses dois pontos exige linha no RELATO. `bin/disjuntor.py:144`, `bin/disjuntor.py:1486`, `bin/disjuntor.py:1036`, `bin/disjuntor.py:1042`.
+
+**Item 1 — teto seis/voltas**
+
+(a) O local de encaixe é `decide_b3`, mas o mecanismo atual conta reprovações finais opus e voltas Codex triadas PROCEDENTE; não conta aberturas Agent nem toda chamada Codex. O contrato nomeia o local certo como destino, não como capacidade já existente. `bin/disjuntor.py:878`, `bin/disjuntor.py:896`, `bin/disjuntor.py:902`, `bin/disjuntor.py:910`.
+
+(b) Escritor atual: `_com_estado` grava o JSON inteiro sob flock; `decide_b3` modifica `b3`, `reprovados`, `codex`, `disparado`, `liberado`, `consumidas`, `topo_no_disparo`, `disparado_em`, `b3_sem_obra`; `rearma_b3` modifica `rearmado` e zera listas correntes. Não há `b3[obra].voltas`. `bin/disjuntor.py:237`, `bin/disjuntor.py:271`, `bin/disjuntor.py:891`, `bin/disjuntor.py:936`, `bin/disjuntor.py:939`, `bin/disjuntor.py:1018`.
+
+(c) Sete Agents construtores com obra reconhecida e cota disponível passam: esse ramo não consulta B3 nem incrementa volta. O mesmo vale para sete chamadas Codex sem triagem PROCEDENTE suficiente. Ocorrência real com sete disparos: **[não verificado]**. O teste atual exige que três chamadas não triadas não parem. `bin/disjuntor.py:1451`, `bin/disjuntor.py:1460`, `bin/tests/test_disjuntor.sh:1144`.
+
+(d) Faltam identidade idempotente da abertura, unidade exata de volta entre fontes, reserva entre autorização e execução, significado de N adicional/absoluto na reabertura e alcance da semeadura. A falta de reserva é demonstrável: locks do wrapper são por resposta e sidecar só nasce ao fim rc0; respostas distintas podem autorizar antes que qualquer sidecar apareça. `bin/codex_pergunta.sh:162`, `bin/codex_pergunta.sh:198`. Há CLI atual só de triagem/consulta/rearme, sem reabre/redesenha. `bin/disjuntor.py:1699`.
+
+**Item 2 — segundo ERRO-BOBO**
+
+(a) O sítio certo é `linhas_libera_b3` + consumo em `decide_b3`, mas hoje qualquer ERRO-BOBO novo com motivo alfanumérico pode liberar. `bin/disjuntor.py:626`, `bin/disjuntor.py:650`, `bin/disjuntor.py:930`.
+
+(b) `consumidas` contém apenas hashes das linhas, sem tipo; a linha aceita movimenta todas as reprovações e triagens anteriores para `liberado`. `bin/disjuntor.py:932`, `bin/disjuntor.py:936`, `bin/disjuntor.py:939`.
+
+(c) Primeiro ERRO-BOBO A libera; nova reprovação dispara; segundo ERRO-BOBO B, diferente de A, fora da fotografia e posterior ao disparo, também libera. O código não conta liberações por tipo. Produção: **[não verificado]**. `bin/disjuntor.py:930`, `bin/disjuntor.py:932`, `bin/disjuntor.py:934`, `bin/disjuntor.py:940`.
+
+(d) A migração do histórico só com sha para histórico com tipo não está definida; a trilha possui anúncios com tipo que o painel já conta em janela 24h, mas isso difere de histórico vitalício da obra. `bin/disjuntor.py:939`, `bin/disjuntor.py:1552`, `bin/disjuntor.py:1568`, `bin/disjuntor.py:1574`. Também permanece ambíguo se DESENHO válido libera automaticamente ou exige Ronald: o contrato mantém ambas as formulações **[não verificado]**.
+
+**Item 3 — PROCEDENTE sem cura**
+
+(a) `_procedentes` é fonte certa para identificar procedentes, mas não certifica cura; apenas seleciona IDs das voltas cujo último veredito é procedente. Não consulta git/HEAD/cópia. `bin/disjuntor.py:857`.
+
+(b) Wrapper escreve `.id` com obra/papel/hash/pid/fim/sha da resposta; triagem lê, valida sha da resposta, transforma em identificador `hash12@pid@fim@sha12` e grava `hora,obra,volta,veredito` no log. O caminho da cópia não é preservado nesse log. `bin/codex_pergunta.sh:196`, `bin/codex_pergunta.sh:199`, `bin/disjuntor.py:795`, `bin/disjuntor.py:800`, `bin/disjuntor.py:802`, `bin/disjuntor.py:812`.
+
+(c) Um ou dois PROCEDENTES sem cura ainda permitem opus final: limiar atual Codex é três, independentemente de HEAD posterior. O teste explicitamente pede passagem com dois. Produção: **[não verificado]**. `bin/disjuntor.py:77`, `bin/disjuntor.py:912`, `bin/tests/test_disjuntor.sh:1153`.
+
+(d) O contrato precisa distinguir “HEAD diferente” de “commit de cura posterior”: commit alheio ao achado muda HEAD sem curar; comparação de desigualdade não prova ancestralidade, autoria nem correção. Isso é limite lógico da medida proposta, ocorrência real **[não verificado]**. O identificador atual ainda trunca hash a 12 e perde caminho; resolver identidade/cópia antecede esse item. `bin/disjuntor.py:802`, `bin/disjuntor.py:813`.
+
+**Item 4 — verificador final sem obra**
+
+(a) `_obra_de` é o reconhecedor certo, mas hoje ausência pula a negativa. `bin/disjuntor.py:504`, `bin/disjuntor.py:1455`, `bin/disjuntor.py:1457`.
+
+(b) Após o agente existir, `_reprovacoes_finais` lê meta `agentType=verificador`, prompt e primeira linha do SubagentHandback; `decide_b3` acumula IDs sem obra em `b3_sem_obra`. O painel retorna comprimento acumulado, sem timestamps/janela 24h. `bin/disjuntor.py:546`, `bin/disjuntor.py:561`, `bin/disjuntor.py:736`, `bin/disjuntor.py:892`, `bin/disjuntor.py:1624`.
+
+(c) Agent verificador com “LEITURA FINAL antes do pouso, sem o nome dela” passa a porta quando B4 não nega; depois pode entrar no contador. O fixture atual contém justamente esse prompt e só verifica contagem posterior. Produção: **[não verificado]**. `bin/disjuntor.py:1457`, `bin/tests/test_disjuntor.sh:427`.
+
+(d) Escopo “verificador final” precisa permanecer ligado ao tipo/final ou declarar novo universo; modelo opus não é critério atual. O contrato aceita rótulo como medida, não prova leitura efetiva; prompt com ID formalmente válido mas de obra errada satisfaz o parser. `bin/disjuntor.py:1454`, `bin/disjuntor.py:504`.
+
+**Item 8 — modelo/papel**
+
+(a) **Nenhum mecanismo atual de negativa por model/description/papel.** O ramo Agent lê tipo/prompt e B4; a contagem do modelo é posterior, por meta + primeiro `api-request`. `bin/disjuntor.py:1451`, `bin/disjuntor.py:1460`, `bin/disjuntor.py:1631`.
+
+(b) Transcript/meta são escritos pelo harness segundo o contrato local do leitor; o escritor executável do harness não está nesta cópia **[não verificado]**. O leitor atual usa `params.model` do primeiro api-request e `agentType` da meta. `bin/disjuntor.py:1632`, `bin/disjuntor.py:1641`.
+
+(c) Agent sem `model`, ou opus descrito como contagem, passa se B1/B3/B4 não negarem; fixtures atuais de Agent verificador nem enviam `model`. Produção: **[não verificado]**. `bin/tests/test_disjuntor.sh:322`, `bin/disjuntor.py:1451`.
+
+(d) Lacunas: sintaxe/caixa/acentos dos papéis; campo description versus prompt; vocabulário aliases do modelo; ordem com item1; modelos desconhecidos; definição de “espera de suite”. “Agente mal rotulado custa uma volta” exige contar antes de negar; negar antes custa zero; sem identidade da tentativa, reapresentação pode contar repetidamente. `bin/disjuntor.py:1451`; detalhes de política **[não verificado]**.
+
+**Item 9 — suite inteira verde por árvore/hash** [nao verificado]
+
+(a) **Nenhum gate atual na abertura do opus.** Existe regra textual suite antes do opus, sem leitura de selo no ramo Agent. `CLAUDE.md:557`, `bin/disjuntor.py:1451`.
+
+(b) Writer/reader/schema/local do certificado pretendido não estão nomeados no contrato nem nesse ramo **[não verificado]**; ramo atual só lê B3 e B4. `bin/disjuntor.py:1454`, `bin/disjuntor.py:1460`.
+
+(c) Opus final de obra livre passa sem qualquer suite registrada. Produção: **[não verificado]**. `bin/disjuntor.py:1457`, `bin/disjuntor.py:1475`.
+
+(d) Falta definir “inteira”, origem autêntica do verde, suites necessárias, validade temporal, hash commit versus árvore/estado sujo e relação com cópia citada. Identidade do item3/4 e escritor do selo antecedem gate; gate sem produtor causaria negação permanente **[não verificado]**. A regra textual pede suite inteira da árvore, não fornece formato de prova. `CLAUDE.md:557`. [nao verificado]
+
+**Item 11 — sétimo agente vivo**
+
+(a) **Nenhum teto de seis na porta Agent.** Existe leitor de agentes de fundo sem entrega, mas a porta não o usa. `bin/disjuntor.py:366`, `bin/disjuntor.py:1451`.
+
+(b) `agentes_sem_entrega` lê transcript principal, reconhece strings de lançamento assíncrono e notificações com task-id/status; não é registro de todos agentes vivos nem usa processos. `bin/disjuntor.py:367`, `bin/disjuntor.py:376`.
+
+(c) Sete Agents novos passam enquanto B4/B3/B1 permitem; não há contagem de vivos nesse caminho. Produção: **[não verificado]**. `bin/disjuntor.py:1451`, `bin/disjuntor.py:1475`.
+
+(d) Falta universo (sessão/host; fundo/síncrono; agentes filhos), tratamento de transcript ausente/notification perdida, slot/reserva/liberação e CLI/chave de desligar. O helper só vê o resultado do lançamento depois que ele foi registrado, logo não resolve corrida entre autorizações simultâneas. `bin/disjuntor.py:369`, `bin/disjuntor.py:376`.
+
+**Matriz de escritores/leitores pedidos**
+
+- `disjuntor_estado.json`: escrita física única `_com_estado`, JSON temporário + replace sob flock; leitura `_com_estado`, `ler_estado`; consumidores B1/B3/B4 e painel. Estado ausente é `{}`, diferente de ilegível que levanta — isso conflita com “estado/sidecar ilegível=NAO_SEI” apenas se o contrato pretender incluir ausência de estado já conhecido. `bin/disjuntor.py:237`, `bin/disjuntor.py:262`, `bin/disjuntor.py:291`.
+- `triagem.log`: escritor `--triagem` → `_triagem_sob_trava`; leitor `_triagens` sob trava do estado, consumido por decide/rearme. Perda/truncamento detectados por contador de linhas e presença das voltas conhecidas. `bin/disjuntor.py:804`, `bin/disjuntor.py:812`, `bin/disjuntor.py:823`, `bin/disjuntor.py:1007`.
+- `.id`: wrapper remove anterior antes da chamada e grava novo só rc0 com resposta desta chamada; disjuntor lê para triagem. Portanto não é histórico completo e “durável entre sessões” não significa imutável: reutilizar resposta remove o anterior. `bin/codex_pergunta.sh:171`, `bin/codex_pergunta.sh:198`, `bin/disjuntor.py:753`.
+- Transcripts subagent: escritor harness não disponível **[não verificado]**; leitores locais `_meta`, B1, `_veredito_e_obra`, `_reprovacoes_finais`, cache/modelos do painel. Linhas JSON inválidas são puladas, meta ilegível no leitor de reprovações vira `{}` e agente pode deixar de ser classificado como verificador, sem NAO_SEI nesse percurso. `bin/disjuntor.py:342`, `bin/disjuntor.py:353`, `bin/disjuntor.py:742`, `bin/disjuntor.py:1513`, `bin/disjuntor.py:1631`.
+
+**Ordem que o código exige**
+
+- Antes dos gates 1/3/9/11: identidade da obra/cópia, esquema durável, escritores, idempotência e reserva; os pontos atuais são consulta prévia e sidecar posterior. `bin/disjuntor.py:1451`, `bin/codex_pergunta.sh:198`.
+- Item8 e item1 precisam pousar juntos ou declarar qual negativa consome volta; o custo declarado de rótulo errado não resulta automaticamente da ordem proposta **[não verificado]**.
+- O tratamento comum NAO_SEI precisa preceder extensão dos ramos: exceções hoje falham fechado só no ramo B3 final/verificador; Agent construtor falha aberto. `bin/disjuntor.py:1410`, `bin/disjuntor.py:1496`.
+- Desligamento deve alcançar wrapper antes de depender dele para novos gates; hoje chave libera PreToolUse, mas wrapper continua recusando obra parada. `bin/disjuntor.py:1487`, `bin/codex_pergunta.sh:165`.
+- O selo de testes atual cobre B3 anterior (três PROCEDENTES, consumo por sha, contagem posterior sem obra), não prova os novos contratos; suite não foi executada nesta leitura. `bin/tests/test_disjuntor.sh:1125`, `bin/tests/test_disjuntor.sh:427`, `bin/tests/test_disjuntor.sh:1468`.
+
+## 01/11 00:14 · sessao dc80f0305892 · - · - · origem=Ronald (tmux)
+
+Leitura sem executar testes ou geradores. As constatações abaixo são da cópia; a ocorrência em produção de entradas hipotéticas permanece [não verificado]. [nao verificado]
+
+**Item 5 — B1, job próprio em fundo, sem escrita por 15 min**
+
+- **Sítio atual e nome:** `medir_b1` é o medidor (`bin/disjuntor.py:413`), chamado por `b1_do_agente` (`bin/disjuntor.py:480`), somente quando o próprio agente passa no PreToolUse (`bin/disjuntor.py:1435`). O contrato acerta o B1, mas “PreToolUse Agent/Bash” é estreito: o matcher cobre todas as ferramentas (`.claude/settings.json:64`) e o B1 roda para `agent_id`, exceto `SubagentHandback` (`bin/disjuntor.py:1435`). Stop não mede B1: lê IDs já disparados e ainda sem entrega (`bin/hook_stop_fila1.py:1053`).
+- **Escritor/leitor:** o harness é indicado como escritor dos transcripts e notificações (`bin/disjuntor.py:336`, `bin/disjuntor.py:369`); sua implementação não está nesta cópia [não verificado]. `medir_b1` lê meta/transcript, caminhos citados e mtimes (`bin/disjuntor.py:415`, `bin/disjuntor.py:421`, `bin/disjuntor.py:425`, `bin/disjuntor.py:454`). `b1_do_agente` escreve `b1[id].{checado,disparado,motivo}` via `_com_estado` (`bin/disjuntor.py:481`, `bin/disjuntor.py:486`); `b1_disparados` lê para Stop (`bin/disjuntor.py:489`).
+- **Contraexemplo demonstrável:** tokens zero fazem não-disparo antes de qualquer leitura de arquivos (`bin/disjuntor.py:452`), mesmo que exista Bash em fundo: o medidor não interpreta jobs (`bin/disjuntor.py:428`). Meta/transcript/cópia ilegíveis também não disparam (`bin/disjuntor.py:417`, `bin/disjuntor.py:424`, `bin/disjuntor.py:457`), contrariando o NAO_SEI genérico do v2.
+- **Limite do caso real:** a sonda informa 17 esperas, gaps máximos de 184,5 s e tokens nas mensagens; não informa mtimes nem as chamadas de hook. Não prova uma liberação ou negação concreta do B1 [não verificado]. B1 soma input/output/cache_creation, **não** cache_read (`bin/disjuntor.py:449`); inferir disparo só dos ~2,49 Mtok/h de cache_read seria incorreto (`bin/disjuntor.py:449`).
+- **Lacunas nos cinco campos:** quem chama precisa incluir todas as ferramentas e reconhecer que não há relógio autônomo (`bin/disjuntor.py:1435`); quem espera precisa distinguir impedir próxima ferramenta de matar job (`bin/disjuntor.py:1438`); falha/limite precisa resolver isenções `SO_LEITURA`, ausência de cópia e ownership por caminho citado (`bin/disjuntor.py:91`, `bin/disjuntor.py:425`); medida precisa incluir jobs sem tokens e erro de leitura (`bin/disjuntor.py:452`); desligar hoje só testa existência da chave, sem exigir RELATO (`bin/disjuntor.py:146`).
+
+**Item 6 — contadores fora em duas gerações**
+
+- **Sítio atual:** nenhum mecanismo de sidecar/gerações no gerador ou Stop; `gerar_estado` escreve apenas seu `dst` Markdown (`bin/gerar_estado.py:376`), e Stop extrai apenas `transcript_path` do payload (`bin/hook_stop_fila1.py:1187`). O contrato nomeia corretamente o futuro produtor/leitor, mas não descreve comportamento já existente (`bin/gerar_estado.py:376`, `bin/hook_stop_fila1.py:1034`).
+- **Esperado atual heterogêneo:** raias e interrompidas o expressam em prosa (`bin/gerar_estado.py:222`, `bin/gerar_estado.py:240`); fio compara valores contra mapa vindo do carimbo (`bin/fio_estado.py:123`); leitores do dia têm `esperado_no_fim` (`app/core/medida_leitor_do_dia.py:409`, `bin/leitor_dia_estado.py:46`); placar usa `meta`, inclusive textual (`bin/gerar_estado.py:97`, `bin/gerar_estado.py:104`).
+- **Escritor/leitor:** atualmente não há escritor/leitor de `estado_contadores.json` nos sítios contratados (`bin/gerar_estado.py:376`, `bin/hook_stop_fila1.py:1034`). `_com_estado` é o ponto existente adequado para a história compartilhada: lê/muta/grava sob flock e substituição atômica (`bin/disjuntor.py:237`, `bin/disjuntor.py:253`, `bin/disjuntor.py:268`, `bin/disjuntor.py:274`).
+- **Contraexemplo demonstrável:** PAREI legítimo encerra antes de qualquer cobrança de contadores (`bin/hook_stop_fila1.py:1226`); ESPERANDO com prova também encerra (`bin/hook_stop_fila1.py:1231`). Contadores fora duas vezes não alteram esses ramos porque não são lidos (`bin/hook_stop_fila1.py:1184`). Valores reais dos “≥4 fora hoje” não foram fornecidos [não verificado].
+- **Lacunas:** chamador precisa definir publicação concluída e falha antes de publicar; esperado/valor precisam definir comparação e “sem esperado”; duas gerações precisa definir reinício, sidecar velho, saltos, geração repetida e mudança do conjunto; medida precisa demonstrar histórico e publicação parcial; desligar não possui exigência atual de RELATO (`bin/disjuntor.py:146`). Esses casos não têm tratamento do novo sidecar no código atual (`bin/gerar_estado.py:376`, `bin/hook_stop_fila1.py:1034`).
+
+**Item 12 — cota desconhecida por mais de um Stop**
+
+- **Sítio atual e nome:** `ler_cota` existe (`bin/disjuntor.py:1064`), B4 Stop existe (`bin/disjuntor.py:1202`), mas contar Stops de desconhecido e cobrar FORA não existe nessa transição: cota desconhecida não produz `escada`, e `b4_stop` apaga `b4_para` quando não há escada (`bin/disjuntor.py:1111`, `bin/disjuntor.py:1208`).
+- **Escritor:** `statusline_cota.py` está configurado (`.claude/settings.json:76`); valida os dois números, grava `{seven_day_pct,seven_day_resets_at,hora,contexto_tokens,contexto_pct,session_id}` e troca atomicamente (`bin/statusline_cota.py:45`, `bin/statusline_cota.py:51`, `bin/statusline_cota.py:54`). Sem ambos, não escreve (`bin/statusline_cota.py:47`); erro é silenciado (`bin/statusline_cota.py:55`). Não há escritor manual de “escada N” aqui: só reconhece prefixo `escada`, sem extrair N (`bin/disjuntor.py:87`, `bin/disjuntor.py:1115`).
+- **Leitor:** `ler_cota` lê percentual/reset e ignora hora/session_id (`bin/disjuntor.py:1069`); `escada` e `b4_decide` o usam (`bin/disjuntor.py:1111`, `bin/disjuntor.py:1126`); painel também (`bin/disjuntor.py:1619`). Transição B4 escreve `b4_para.desde` via `_com_estado` (`bin/disjuntor.py:1215`, `bin/disjuntor.py:1222`).
+- **Contraexemplo:** cota ausente/ilegível retorna None (`bin/disjuntor.py:1075`), e Agent passa B4 sem escada (`bin/disjuntor.py:1127`). A sonda relata cota ausente, mas não traz uma chamada e sua decisão: a ocorrência concreta de liberação é [não verificado]. Causa do payload ausente e execução efetiva da statusline também são [não verificado].
+- **Lacunas:** definir N/unidade/intervalo, hora/validade e precedência entre fonte manual e statusline; definir se o Stop seguinte à linha FORA reinicia sequência; definir persistência entre sessões; separar desconhecido de escada real; resolver Stop excepcional que hoje falha aberto (`bin/hook_stop_fila1.py:1305`). Quem desliga hoje é existência de chave (`bin/hook_stop_fila1.py:1039`); RELATO obrigatório é novo (`bin/disjuntor.py:146`).
+
+**Dependências e medidas que afetam a consolidação**
+
+- Antes de item 6 cobrar: contratos estruturados dos medidores → sidecar e geração concluída → histórico sob trava → decisão Stop. As fontes atuais não compartilham esquema (`bin/gerar_estado.py:222`, `bin/fio_estado.py:123`, `app/core/medida_leitor_do_dia.py:409`).
+- Cobranças de 6/12 têm de preceder **todos** os atalhos que liberam; há B4, orçamento, PAREI, ESPERANDO, teto e B2 (`bin/hook_stop_fila1.py:1207`, `bin/hook_stop_fila1.py:1218`, `bin/hook_stop_fila1.py:1226`, `bin/hook_stop_fila1.py:1231`, `bin/hook_stop_fila1.py:1293`, `bin/hook_stop_fila1.py:1295`). Inserir só nos “recados” finais deixa os atalhos passarem (`bin/hook_stop_fila1.py:1300`).
+- Exceções do disjuntor no Stop retornam None (`bin/hook_stop_fila1.py:1059`); exceção geral libera (`bin/hook_stop_fila1.py:1305`). Isso precisa ser conciliado com “nunca verde calado” antes da cobrança (`bin/hook_stop_fila1.py:1305`).
+- `gerar_estado` é chamado depois de `relato_nomes.sh`, cuja falha encerra o publicador (`bin/relato.sh:32`, `bin/relato.sh:38`). Sidecar pode ficar velho se essa dependência falhar; ocorrência real [não verificado].
+- “Custo por modelo 24 h” não é a medida atual: `_agentes_24h` conta agentes por modelo/tipo, usando mtime do meta (`bin/disjuntor.py:1631`, `bin/disjuntor.py:1637`, `bin/disjuntor.py:1647`); cache é soma de cache_read por **dia civil**, não custo nem janela móvel (`bin/disjuntor.py:1512`, `bin/disjuntor.py:1536`, `bin/disjuntor.py:1543`).
+- As suítes atuais têm casos B1/B4 e escada-palavra (`bin/tests/test_disjuntor.sh:1468`); `escada_palavra` explicitamente encerra escada com a mensagem humana seguinte (`bin/tests/test_disjuntor.sh:500`). Resultado de execução atual dos 12 mutantes prometidos é [não verificado].
+
+## 01/11 00:14 · sessao 63ce410ff0b6 · - · - · origem=Ronald (tmux)
+
+**Item 7 — raias velhas**
+
+- **Sítio:** `bin/raias_estado.py::ler`; contrato aponta o ESTADO corretamente como publicador, mas não nomeia chamador/escritor de limpeza. O gerador importa o medidor e publica suas linhas; o medidor somente consulta Git/declarações e retorna dados, sem arquivar ou remover worktrees. `bin/gerar_estado.py:215`, `bin/gerar_estado.py:222`, `bin/raias_estado.py:89`, `bin/raias_estado.py:125`.
+- **Escritor/leitor:** `bin/raia_agente.sh` grava `logs/raias/<raia>.agente` com `RAIA`, `OBRA`, `QUEM`, `DESDE`, `FALTA`; atualiza `FALTA`, registra histórico e remove a declaração no fechamento. `bin/raia_agente.sh:54`, `bin/raia_agente.sh:58`, `bin/raia_agente.sh:66`, `bin/raia_agente.sh:76`, `bin/raia_agente.sh:77`. O único leitor declarado é `raias_estado`, que lê os pares `chave=valor`; `gerar_estado` lê o resultado. `bin/raia_agente.sh:10`, `bin/raias_estado.py:62`, `bin/gerar_estado.py:216`.
+- **Universo incorreto para o dado raspado:** o medidor exclui `.claude/worktrees`, só enumera worktrees e declarações, portanto não alcança branches sem worktree; conta `rev-list main..HEAD`, sem avaliar equivalência de patches por `git cherry`. `bin/raias_estado.py:85`, `bin/raias_estado.py:93`, `bin/raias_estado.py:96`, `bin/raias_estado.py:101`. No dado fornecido, `tmp-ui` tem dois patches não pousados sem worktree; existem entradas B sob `.claude/worktrees`; `wt-comboio` tem `ahead=1`, `plus=0`, idade 451,8 h. As duas primeiras classes escapam e a terceira é contada velha pelo critério atual, embora não tenha patch pendente; ocorrência fornecida, sem arquivo disponível no HEAD [não verificado]. A regra que marca velha usa apenas idade do último commit à frente, sem descontar patch já pousado. `bin/raias_estado.py:103`, `bin/raias_estado.py:123`.
+- **Outro caso estático:** falha de Git retorna `''`, que vira contagem zero; nenhuma declaração e nenhum resultado Git permitem publicar “nenhuma raia viva”. `bin/raias_estado.py:42`, `bin/raias_estado.py:48`, `bin/raias_estado.py:101`, `bin/gerar_estado.py:229`. Ocorrência concreta dessa falha [não verificado].
+- **Lacunas:** falta definir quem chama/espera a limpeza; universo inclui branch sem worktree, detached e `.claude/worktrees`? “velha” continua sendo último commit >6h, nascimento, inatividade ou classe A/B/C da sonda? O mecanismo atual usa >6h do último commit à frente e “agente vivo” significa somente declaração não baixada. `bin/raias_estado.py:20`, `bin/raias_estado.py:39`, `bin/raias_estado.py:103`, `bin/raias_estado.py:123`. Tar sem verificação de sucesso/restauração, preservação de sujeira/A*, exclusão de C, destino da lista B e comprovação de “motivo” continuam sem sítio implementado [não verificado]. A chave do disjuntor não é consultada por esse medidor. `bin/raias_estado.py:89`, `bin/raias_estado.py:135`.
+- **Medida existente não cobre limpeza:** o teste de raias verifica publicação, diferença com/sem declaração e unicidade de acesso a `logs/raias`; seu caso real sintético é uma única worktree um commit à frente. Não prova tar, remoção segura, branches sem worktree ou equivalência de patches. `bin/tests/test_raia_declarada_no_estado.sh:5`, `bin/tests/test_raia_declarada_no_estado.sh:38`, `bin/tests/test_raia_declarada_no_estado.sh:53`, `bin/tests/test_raia_declarada_no_estado.sh:68`.
+
+**Item 10 — contrato exigido no push** [nao verificado]
+
+- **Sítio:** nenhum gate de contrato implementado em `bin/pre-push.sh`; o arquivo faz gates específicos, resolve `PUSH_SHA`, testa a árvore e termina liberando. O nome do ponto de encaixe está correto, a regra é nova. `bin/pre-push.sh:10`, `bin/pre-push.sh:19`, `bin/pre-push.sh:33`, `bin/pre-push.sh:38`, `bin/pre-push.sh:198`, `bin/pre-push.sh:200`.
+- **Chamador efetivo:** `hooks.sh install` escreve `.git/hooks/pre-push` como wrapper delegando para `$(git rev-parse --show-toplevel)/bin/pre-push.sh`; `hooks.sh check` verifica delegação. Instalação real no host desta sonda [não verificado]. `bin/hooks.sh:26`, `bin/hooks.sh:51`, `bin/hooks.sh:56`.
+- **Leitores/escritores adjacentes:** a régua escreve `.regua_stamp` com árvore/status/hora; o pre-push lê esse arquivo e pode pular o arsenal. `bin/regua.sh:196`, `bin/regua.sh:198`, `bin/regua.sh:199`, `bin/pre-push.sh:53`, `bin/pre-push.sh:66`, `bin/pre-push.sh:70`. Nenhum escritor/leitor de contrato exigido está estabelecido por esses sítios [não verificado].
+- **Contraexemplo estático:** um push só de instrumento pode chegar a `OK — push liberado` sem leitura de contrato; além disso, `SKIP_TESTS=1` retorna sucesso antes de todos os gates. Um push concreto dessa classe na produção [não verificado]. `bin/pre-push.sh:5`, `bin/pre-push.sh:200`.
+- **Lacunas nos cinco campos:** falta vínculo determinístico arquivo/commit→obra→contrato, universo de mudanças de “hook/cron/selo de host”, regra para vários instrumentos/obras no mesmo push, qual contrato substitui qual e se deve estar no mesmo commit, no alcance do push ou apenas na árvore. O arquivo já distingue `PUSH_SHA` de HEAD; contrato conferido só no disco pode certificar outra árvore. `bin/pre-push.sh:33`, `bin/pre-push.sh:37`, `bin/pre-push.sh:39`. O destino pedido fica sob `logs/`, ignorado pelo Git; `.claude/` também é ignorada. ` .gitignore:53`, `.gitignore:66`. Quem desliga especificamente o gate e como interage com `SKIP_TESTS` não foi definido; a linha atual libera por variável de ambiente. `bin/pre-push.sh:5`.
+
+**Medida, documentação e dependências**
+
+- Os testes de host são chamados pela régua, antes da suite, no laço `bin/tests/test_*.sh`; o próprio pre-push registra que esse laço não roda ali e pode haver régua “JÁ VERDE”. Logo o gate 10 precisa estar na parte incondicional do push se pretende julgar cada push; colocar apenas um selo no laço da régua não cumpre essa função. `bin/regua.sh:138`, `bin/regua.sh:140`, `bin/pre-push.sh:14`, `bin/pre-push.sh:15`, `bin/pre-push.sh:66`.
+- O teste atual do disjuntor já tem mutantes com controle da cópia íntegra e falha se a costura removida não for detectada. Isso fornece estrutura de medida, sem provar os 12 RED novos nem resultado vermelho/verde desta obra. `bin/tests/test_disjuntor.sh:1474`, `bin/tests/test_disjuntor.sh:1481`, `bin/tests/test_disjuntor.sh:1489`. Execução dos 12 novos [não verificado].
+- `test_hook_parei_so_lei.sh` cobre PAREI técnico/lei, `!` e item só registrado; não há nesses casos a nova regra de contadores/FORA. `bin/tests/test_hook_parei_so_lei.sh:40`, `bin/tests/test_hook_parei_so_lei.sh:48`, `bin/tests/test_hook_parei_so_lei.sh:68`, `bin/tests/test_hook_parei_so_lei.sh:78`.
+- A seção 7b já declara separação do pouso de instrumento e produto, raias velhas esperado zero e contrato de cinco linhas mandado uma vez ao Codex; não equivale ao novo enforcement do push. `CLAUDE.md:512`, `CLAUDE.md:514`, `CLAUDE.md:574`. A revisão de linhas de mecanismo no mesmo commit é coerente com a documentação no marco, cuja regra está em `CLAUDE.md:517`. [nao verificado]
+- A ordem do item 7 depende primeiro de resolver o universo/identidade de “não pousado” e só depois de medir zero/justificar ou remover: o produtor atual não alcança o universo da sonda e confunde ahead com patches pendentes. `bin/raias_estado.py:85`, `bin/raias_estado.py:96`, `bin/raias_estado.py:101`. A ordem do item 10 depende de tornar inequívoco contrato commitado/obra e o alcance `PUSH_SHA` antes de endurecer a recusa; `logs/` é ignorado hoje. `.gitignore:53`, `bin/pre-push.sh:33`. O contrato prevê gate10 apenas no segundo pouso; a proteção dos instrumentos do primeiro pouso pelo gate10 ainda inexistente [não verificado].
 
 ## 01/11 00:03 · sessao 68821586ba49 · V3-P5-B · verificador · origem=Code
 
@@ -800,104 +960,4 @@ Limites adicionais:
 - Falha aberta geral permanece fora do ramo B3; B1 “não sei” nunca dispara, incompatível com supor proteção universal que nunca fica verde silencioso. (`bin/disjuntor.py:414`, `bin/disjuntor.py:1496`)
 - `escada <N>` hoje só aciona escada por prefixo da última mensagem humana e dura até próxima humana; não grava percentual/hora em `cota.json`. (`bin/disjuntor.py:1079`, `bin/disjuntor.py:1108`)
 
-## 31/10 23:48 · sessao 35d3d4711061 · DISJUNTOR-TETO-DA-OBRA · leitura · origem=Code
-
-**A premissa central precisa de correção: o B3 não conta todas as voltas de construtor/verificador por obra. Ele mede reprovações finais de agentes e chamadas Codex triadas PROCEDENTE, com limiares separados.** (`bin/disjuntor.py:736`, `bin/disjuntor.py:857`, `bin/disjuntor.py:910`)
-
-1. **Contagens, fontes, escritores e leitores — contrato 1**
-
-   | Medida atual | Fonte e escritor | Quem conta/lê |
-   |---|---|---|
-   | Reprovações finais por obra | Transcripts `subagents/agent-*.jsonl`, metadado `agentType=verificador`, prompt reconhecido como final e `SubagentHandback` iniciado por `REPROVADO`. O código atribui os transcripts ao harness; a implementação desse escritor é **[não verificado]**. | `_reprovacoes_finais` coleta por `agent_id`; `decide_b3` acumula em `b3[obra].reprovados`. (`bin/disjuntor.py:335`, `bin/disjuntor.py:546`, `bin/disjuntor.py:736`, `bin/disjuntor.py:896`) |
-   | Chamadas Codex verificador PROCEDENTES por obra | O wrapper escreve resposta e `<resposta>.id`; `--triagem` escreve `logs/codex/triagem.log`. | `_triagens` lê o último veredito de cada chamada; `decide_b3` recalcula `b3[obra].codex`. Uma chamada com vários achados vale uma volta. (`bin/codex_pergunta.sh:198`, `bin/disjuntor.py:773`, `bin/disjuntor.py:813`, `bin/disjuntor.py:850`, `bin/disjuntor.py:904`) |
-   | Voltas de construtor | Não existe essa medida no B3; a consulta na abertura de `Agent` alcança somente `verificador` com prompt final. | Construtores ficam fora dessa consulta. (`bin/disjuntor.py:1451`, `bin/disjuntor.py:1454`, `bin/disjuntor.py:1457`) |
-
-   O escritor do JSON é `_com_estado`, usado pela decisão, triagem e rearme. Os consumidores da decisão são Stop, PreToolUse para **Agent e Bash/Codex**, e também o wrapper por `--b3-parada`; portanto o contrato 1 omite um chamador existente. (`bin/disjuntor.py:237`, `bin/disjuntor.py:818`, `bin/disjuntor.py:959`, `bin/disjuntor.py:1032`, `bin/hook_stop_fila1.py:1048`, `bin/disjuntor.py:1443`, `bin/disjuntor.py:1457`, `bin/codex_pergunta.sh:165`)
-
-   **Nem tudo zera no rearme:** `reprovados` e `codex` ficam vazios e `disparado=False`, mas os identificadores são preservados em `rearmado`, incluindo todas as chamadas já triadas da obra, qualquer que seja o veredito. A liberação por linha preserva identificadores em `liberado` e hashes em `consumidas`. Sobrevive histórico parcial, não um contador completo de voltas. (`bin/disjuntor.py:1017`, `bin/disjuntor.py:1020`, `bin/disjuntor.py:936`)
-
-   Os limiares atuais são **uma reprovação final OU três chamadas Codex PROCEDENTES**; o número retornado é `max(n, nc)`, não a soma. (`bin/disjuntor.py:76`, `bin/disjuntor.py:77`, `bin/disjuntor.py:912`, `bin/disjuntor.py:924`)
-
-2. **Segundo ERRO-BOBO — contrato 3**
-
-   `linhas_libera_b3` não consulta histórico: aceita `ERRO-BOBO <obra>: <motivo>` com ao menos uma letra ou dígito no motivo. Não existe regra especial para o segundo erro da obra. (`bin/disjuntor.py:626`, `bin/disjuntor.py:650`)
-
-   `decide_b3` verifica se a linha está fora da fotografia do disparo, ainda não foi consumida e tem `mtime` suficiente. **Outro ERRO-BOBO, com hash diferente e atendendo essas condições, libera novamente**; não vira DESENHO obrigatório. Repetir a mesma linha consumida não libera. (`bin/disjuntor.py:930`, `bin/disjuntor.py:932`, `bin/disjuntor.py:934`, `bin/disjuntor.py:938`)
-
-   O teste atual cobre consumo da mesma linha e liberação por ERRO-BOBO; não estabelece uma proibição para o segundo ERRO-BOBO distinto. (`bin/tests/test_disjuntor.sh:382`, `bin/tests/test_disjuntor.sh:386`, `bin/tests/test_disjuntor.sh:1468`)
-
-3. **O que a triagem prova — contrato 3**
-
-   **O sidecar é escrito pelo wrapper**, após sucesso e resposta nova: contém `obra`, `papel`, `hash` do commit consultado, `pid`, `fim` e `sha` da resposta. `--triagem` exige papel `verificador` e confere se o SHA corresponde à resposta. (`bin/codex_pergunta.sh:198`, `bin/disjuntor.py:753`, `bin/disjuntor.py:795`)
-
-   **A linha escrita por `--triagem`** tem quatro campos separados por TAB: `data/hora`, `obra`, `volta`, `veredito`. A identidade efetiva da volta é `hash12@pid@fim@sha12`; os vereditos aceitos são `procedente` e `descartado`. Repetir o mesmo veredito é idempotente; mudar o veredito acrescenta linha e prevalece o último. (`bin/disjuntor.py:79`, `bin/disjuntor.py:802`, `bin/disjuntor.py:808`, `bin/disjuntor.py:813`, `bin/disjuntor.py:850`)
-
-   Isso permite identificar, **por obra e chamada**, uma classificação PROCEDENTE. Não individualiza cada achado nem registra vínculo entre achado, diff seguinte e cura; o SHA confere a resposta, não a correção. (`bin/disjuntor.py:773`, `bin/disjuntor.py:800`, `bin/disjuntor.py:813`)
-
-   Consequentemente, **um PROCEDENTE isolado sem cura não impede hoje o próximo final** pelo B3. O bloqueio Codex exige três PROCEDENTES; mesmo depois disso, uma linha DESENHO válida pode liberar sem comprovação de diff. O teste atual exercita essa liberação apenas escrevendo DESENHO. (`bin/disjuntor.py:912`, `bin/disjuntor.py:930`, `bin/disjuntor.py:938`, `bin/tests/test_disjuntor.sh:1153`, `bin/tests/test_disjuntor.sh:1162`)
-
-4. **ESTADO e medida — contratos 2 e 4**
-
-   O gerador importa `disjuntor.ler/linha` e compõe a seção por essa interface. Hoje `ler` agrega disparos, negativas e liberações em 24 horas; do JSON B3 consulta `b3_sem_obra`. Não publica voltas por obra. (`bin/gerar_estado.py:277`, `bin/gerar_estado.py:280`, `bin/disjuntor.py:1548`, `bin/disjuntor.py:1554`, `bin/disjuntor.py:1620`, `bin/disjuntor.py:1624`, `bin/disjuntor.py:1691`)
-
-   **Lugar natural proposto:** acrescentar a leitura e a apresentação em `disjuntor.ler/linha`, mantendo `gerar_estado` como consumidor. É uma inferência da divisão atual; o contador persistente ainda precisa de definição. (`bin/gerar_estado.py:277`, `bin/gerar_estado.py:281`, `bin/disjuntor.py:1615`)
-
-   Para listar **todas as obras abertas**, falta definir a fonte desse universo: registros B3 nascem de reprovações ou PROCEDENTES, portanto não representam obras abertas sem esses eventos. (`bin/disjuntor.py:897`, `bin/disjuntor.py:902`)
-
-   Os três cenários novos e seus mutantes não constam da suíte atual; a lista existente cobre os mecanismos anteriores de B3, triagem, rearme e concorrência. “Cada um morde” e a contagem real **GRADE-FOLGA-JUIZ = 9** são **[não verificado]**; o anexo fornece somente a expectativa. (`bin/tests/test_disjuntor.sh:1468`, `bin/tests/test_disjuntor.sh:1507`, `bin/tests/test_disjuntor.sh:1587`, `bin/tests/test_disjuntor.sh:1784`)
-
-   Não executei a suíte: ela cria temporários, árvores e arquivos mutantes, incompatíveis com a regra de somente leitura. (`bin/tests/test_disjuntor.sh:39`, `bin/tests/test_disjuntor.sh:1475`)
-
-5. **Correções e limites do contrato, linha por linha**
-
-   | Linha | Avaliação diante da cópia |
-   |---|---|
-   | **1** | **Premissa incompleta:** as fontes já lidas não cobrem todas as voltas, e há também o chamador do wrapper. Guardar o teto dentro de `decide_b3` não faz construtores passarem automaticamente por essa decisão. (`bin/disjuntor.py:736`, `bin/disjuntor.py:857`, `bin/disjuntor.py:1454`, `bin/codex_pergunta.sh:165`) |
-   | **2** | **Comportamento novo:** não há teto de seis voltas, emissão de `PADRAO-DE-CIMA` ou comandos `reabre com N voltas`/`redesenha` nessa interface. A CLI atual oferece triagem, consulta e rearme. (`bin/disjuntor.py:76`, `bin/disjuntor.py:912`, `bin/disjuntor.py:1699`) |
-   | **3** | **Exige mudanças:** segundo ERRO-BOBO ainda libera; não há prova de cura; “B3 do dia” é impreciso, pois decisão e rearme não têm janela diária. Estado ilegível de fato levanta em `_com_estado`, e o juiz transforma a exceção em NAO_SEI, recusado na porta B3. (`bin/disjuntor.py:930`, `bin/disjuntor.py:1003`, `bin/disjuntor.py:265`, `bin/disjuntor.py:981`, `bin/disjuntor.py:1046`) |
-   | **4** | **Critério futuro, sem comprovação atual:** faltam os três cenários novos e o painel por obra; execução e número nove são **[não verificado]**. (`bin/tests/test_disjuntor.sh:1468`, `bin/disjuntor.py:1691`) |
-   | **5** | **Autoridade parcialmente instrumentalizada:** há guarda textual contra o Code citar a chave ou executar `--rearma-b3`; a função de rearme não autentica Ronald, e `USER` serve ao registro. Reabertura por quantidade e redesenho ainda não existem na CLI. (`bin/disjuntor.py:160`, `bin/disjuntor.py:1003`, `bin/disjuntor.py:1026`, `bin/disjuntor.py:1699`) |
-
-   **ID não reconhecido:** um Agent final sem obra reconhecida pula a consulta B3; posteriormente pode aparecer apenas em `b3_sem_obra`. O contrato precisa declarar o tratamento dessa abertura. (`bin/disjuntor.py:1455`, `bin/disjuntor.py:1457`, `bin/disjuntor.py:746`, `bin/disjuntor.py:893`)
-
-   **Concorrência:** a transição B3 é serializada, mas não há reserva de uma volta por obra entre autorização e execução. O wrapper trava por caminho da resposta; por inferência, chamadas da mesma obra com respostas diferentes podem passar antes de chegarem novas triagens. (`bin/disjuntor.py:253`, `bin/disjuntor.py:286`, `bin/codex_pergunta.sh:162`, `bin/codex_pergunta.sh:165`, `bin/codex_pergunta.sh:174`)
-
-   **Desligamento incompleto:** Stop e PreToolUse consultam `DISJUNTOR_DESLIGADO`; a porta B3 do wrapper não consulta. Assim, pela leitura do fluxo, a chave não libera essa porta para obra PARADA/NAO_SEI. Também não há exigência de linha no RELATO para reconhecer o desligamento: basta a existência da chave. (`bin/hook_stop_fila1.py:1039`, `bin/disjuntor.py:1487`, `bin/codex_pergunta.sh:165`, `bin/disjuntor.py:1042`, `bin/disjuntor.py:144`)
-
-   **Retroatividade:** o histórico disponível é parcial, e a porta do wrapper decide sem transcript, usando reprovações de agentes já persistidas. Portanto “obras abertas entram com as voltas que têm” precisa definir alcance, fontes e tratamento de voltas ausentes ou ainda em voo. (`bin/disjuntor.py:736`, `bin/disjuntor.py:898`, `bin/disjuntor.py:1039`)
-
-## 31/10 23:47 · sessao b0d1525dba7e · - · - · origem=Ronald (tmux)
-
-- **Chamadores reais:** Stop chama `julga_b3` em `bin/hook_stop_fila1.py:1048`, acrescentado ao recado em `bin/hook_stop_fila1.py:1300`; PreToolUse chama `estado_b3` via `_nega_b3` (`bin/disjuntor.py:1402`), tanto para `Bash codex_pergunta` (`bin/disjuntor.py:1440`) quanto para `Agent verificador final` (`bin/disjuntor.py:1454`). Existe ainda a porta do wrapper: `bin/codex_pergunta.sh:165` → `b3_parada` → `estado_b3` (`bin/disjuntor.py:1042`) → `julga_b3` → `decide_b3` (`bin/disjuntor.py:980`). Portanto linha 1 omite um chamador existente e restringe incorretamente PreToolUse a Agent. (`bin/disjuntor_settings.json:7` usa matcher vazio.)
-
-- **Não há contagem total de construtor/verificador em B3:** os transcripts produzem exclusivamente reprovações finais por `agent_id` (`bin/disjuntor.py:736`); são exigidos metadado `agentType=verificador`, prompt reconhecido como final e entrega `SubagentHandback` cuja primeira linha começa `REPROVADO` (`bin/disjuntor.py:742`, `bin/disjuntor.py:555`, `bin/disjuntor.py:561`). O harness é identificado no código como escritor dos transcripts (`bin/disjuntor.py:336`); sua implementação não está verificada. A outra fonte são voltas Codex verificador triadas PROCEDENTE, uma por chamada (`bin/disjuntor.py:773`, `bin/disjuntor.py:858`). O retorno usa **max(n, nc)**, não soma (`bin/disjuntor.py:924`).
-
-- **Outras medidas não equivalem a voltas por obra:** o Stop guarda bloqueios por HEAD, teto 5 (`bin/hook_stop_fila1.py:35`, `bin/hook_stop_fila1.py:37`, `bin/hook_stop_fila1.py:1250`, `bin/hook_stop_fila1.py:1277`); o wrapper tem default `CODEX_TETO=6`, mas para execuções simultâneas globais, configurável por env (`bin/codex_pergunta.sh:47`, `bin/codex_pergunta.sh:137`). O painel conta agentes Claude por modelo/tipo em 24h, sem obra (`bin/disjuntor.py:1631`, `bin/disjuntor.py:1646`), e chamadas Codex por papel, incluindo `ini` de chamadas recusadas (`bin/codex_limite_estado.py:71`, `bin/codex_pergunta.sh:88`, `bin/codex_pergunta.sh:165`).
-
-- **ESTADO:** `bin/gerar_estado.py:280` importa `ler/linha` de `disjuntor`; `bin/gerar_estado.py:281` compõe a linha, inserida na seção Disjuntores em `bin/gerar_estado.py:336` e `bin/gerar_estado.py:365`. O leitor atual deriva disparos, negativas e liberações da trilha em janela 24h (`bin/disjuntor.py:1548`, `bin/disjuntor.py:1554`, `bin/disjuntor.py:1568`); do JSON B3 lê apenas `b3_sem_obra` (`bin/disjuntor.py:1624`). Não publica lista ou contagem por obra (`bin/disjuntor.py:1615`, `bin/disjuntor.py:1691`). Lugar natural proposto: ampliar esse `ler/linha`, preservando `gerar_estado` como consumidor; é inferência arquitetural sustentada por `bin/gerar_estado.py:277`.
-
-- **Universo de obras abertas:** o gerador já usa BACKLOG/bloco OBRAS para obras interrompidas (`bin/gerar_estado.py:236`); leitor correspondente abre `app/docs/BACKLOG.md` e recorta `OBRAS:INICIO/FIM` (`bin/interrompidas_estado.py:89`, `bin/interrompidas_estado.py:94`). Esse leitor só enumera interrompidas (`bin/interrompidas_estado.py:106`); o contrato ainda precisa definir a fonte e o critério de todas as abertas. O B3 cria registros apenas a partir de reprovações ou PROCEDENTES (`bin/disjuntor.py:897`, `bin/disjuntor.py:902`).
-
-- **ID ausente:** Agent final sem ID reconhecido **pula a consulta B3**, pois `_nega_b3` só roda se `ob` (`bin/disjuntor.py:1455` e `bin/disjuntor.py:1457`). Depois pode aparecer apenas no agregado `b3_sem_obra` (`bin/disjuntor.py:746`, `bin/disjuntor.py:893`). Reconhecedor exige formato específico e primeira ocorrência válida (`bin/disjuntor.py:97`, `bin/disjuntor.py:104`, `bin/disjuntor.py:514`, `bin/disjuntor.py:521`).
-
-- **Chave desligada não cobre a porta do wrapper:** Stop verifica `desligado` (`bin/hook_stop_fila1.py:1039`), PreToolUse também (`bin/disjuntor.py:1487`), mas wrapper consulta incondicionalmente para papel verificador (`bin/codex_pergunta.sh:164`), e `b3_parada` consulta o juiz sem checar a chave (`bin/disjuntor.py:1042`). Inferência direta: uma obra parada/NAO_SEI continua recusada por essa porta mesmo com a chave existente. O contrato precisa declarar ou corrigir essa divergência.
-
-- **Concorrência:** transição B3 é serializada por flock e gravação atômica (`bin/disjuntor.py:249`, `bin/disjuntor.py:253`, `bin/disjuntor.py:268`, `bin/disjuntor.py:274`); anúncios também ficam sob a trava (`bin/disjuntor.py:284`). O wrapper trava **por caminho da resposta** (`bin/codex_pergunta.sh:162`), verifica B3 (`bin/codex_pergunta.sh:165`) e depois executa Codex (`bin/codex_pergunta.sh:174`). Não há reserva por obra nessa transação; duas respostas diferentes da mesma obra podem ser admitidas antes dos resultados serem triados — inferência desses trechos e da gravação posterior à resposta em `bin/disjuntor.py:802` e `bin/disjuntor.py:813`.
-
-- **“B3 do dia” e autoridade Ronald:** as decisões/rearme não possuem reset por data (`bin/disjuntor.py:896`, `bin/disjuntor.py:1003`); 24h é só a janela do painel (`bin/disjuntor.py:1548`). “Só Ronald” é guarda textual de ferramentas (`bin/disjuntor.py:160`, `bin/disjuntor.py:162`), sem autenticação em `rearma_b3`; `USER` é usado somente no registro (`bin/disjuntor.py:1026`).
-
-## 31/10 23:46 · sessao 13474eb913ba · - · - · origem=Ronald (tmux)
-
-Leitura integral concluída; o teste tem 1.791 linhas e sua execução cria temporários, árvores e cópias mutantes, portanto não o executei sob a regra de somente leitura. (`bin/tests/test_disjuntor.sh:39`, `bin/tests/test_disjuntor.sh:50`, `bin/tests/test_disjuntor.sh:1475`)
-
-- **Linha 1 do contrato — trilha insuficiente para contar toda volta:** os testes distinguem a leitura curta que não conta, a reprovação final que para a obra e a chamada Codex que só conta depois de triada; não equivalem a um contador geral de construtor/verificador. (`bin/tests/test_disjuntor.sh:341`, `bin/tests/test_disjuntor.sh:344`, `bin/tests/test_disjuntor.sh:1144`, `bin/tests/test_disjuntor.sh:1150`)
-- **Linha 2 — teto 6 e sétima negada:** não aparecem entre os casos declarados; há limites diferentes: primeira reprovação final e terceira volta Codex PROCEDENTE. (`bin/tests/test_disjuntor.sh:785`, `bin/tests/test_disjuntor.sh:1153`, `bin/tests/test_disjuntor.sh:1156`, `bin/tests/test_disjuntor.sh:1468`)
-- **Linha 3 — rearme:** os testes exigem que o rearme exclua também triagens PROCEDENTES ainda não varridas, inclusive numa obra sem decisão anterior. Isso comprova reset do B3, não permanência de um teto acumulado. (`bin/tests/test_disjuntor.sh:1181`, `bin/tests/test_disjuntor.sh:1186`, `bin/tests/test_disjuntor.sh:1287`)
-- **Linha 3 — segundo ERRO-BOBO:** existe teste de liberação por ERRO-BOBO e de consumo único da mesma linha; não há cenário de segundo ERRO-BOBO diferente na mesma obra. A forma aceita até uma letra ou um dígito como motivo. (`bin/tests/test_disjuntor.sh:382`, `bin/tests/test_disjuntor.sh:386`, `bin/tests/test_disjuntor.sh:706`, `bin/tests/test_disjuntor.sh:740`, `bin/tests/test_disjuntor.sh:1468`)
-- **Linha 3 — PROCEDENTE sem cura:** o teste atual libera uma obra com três PROCEDENTES apenas escrevendo DESENHO; não produz nem verifica diff de cura nesse caminho. (`bin/tests/test_disjuntor.sh:1156`, `bin/tests/test_disjuntor.sh:1162`, `bin/tests/test_disjuntor.sh:1164`, `bin/tests/test_disjuntor.sh:1165`)
-- **Linha 4 — três mutantes novos:** não constam no inventário atual; os mutantes existentes cobrem limiar Codex 3→2, contagem de DESCARTADO, reset e consumo da mesma linha, entre outros. (`bin/tests/test_disjuntor.sh:1558`, `bin/tests/test_disjuntor.sh:1560`, `bin/tests/test_disjuntor.sh:1597`, `bin/tests/test_disjuntor.sh:1632`, `bin/tests/test_disjuntor.sh:1784`) “Cada um morde” e “GRADE-FOLGA-JUIZ = 9” permanecem **[não verificado]**.
-- **Linha 5 — chave e autorização:** há testes para a chave desligar PreToolUse e Stop, e para negar ao Code comandos com a chave ou `--rearma-b3`. Não há testes de “reabre com N voltas”, “redesenha” ou reversão de commit neste instrumento. (`bin/tests/test_disjuntor.sh:585`, `bin/tests/test_disjuntor.sh:593`, `bin/tests/test_disjuntor.sh:596`, `bin/tests/test_disjuntor.sh:603`, `bin/tests/test_disjuntor.sh:1468`)
-
-Limites úteis para a consolidação: há teste de reprovação final sem obra reconhecida aparecer em `b3_sem_obra`; há testes de transição sob uma trava, anúncio sob a trava, triagem bloqueada por trava ocupada e consulta após obtenção de slot. Isso não constitui teste de reserva atômica de seis admissões concorrentes. (`bin/tests/test_disjuntor.sh:427`, `bin/tests/test_disjuntor.sh:820`, `bin/tests/test_disjuntor.sh:1064`, `bin/tests/test_disjuntor.sh:1347`, `bin/tests/test_disjuntor.sh:1419`, `bin/tests/test_disjuntor.sh:1468`)
-
-_1306 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1309 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
