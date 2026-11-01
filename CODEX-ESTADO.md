@@ -1,7 +1,99 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 20:57** · publicado em **31/10/2026 20:58** (UTC-3)
+> Ultima resposta processada: **31/10/2026 20:59** · publicado em **31/10/2026 21:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 20:59 · sessao b9fa3134066a · PADRAO-DE-CIMA · verificador · origem=Code
+
+**Veredito: bloqueia.** O fallback ainda pode liberar uma obra usando escopo antigo; o resolvedor pode bloquear sob a trava; e o harness aceita algumas mortes anteriores à decisão como “mordida”. (`bin/disjuntor.py:1488`, `bin/disjuntor.py:1530`, `bin/disjuntor.py:1247`, `bin/tests/_mordida.sh:219`, `bin/tests/_mordida.sh:260`)
+
+A identidade Git da cópia e a sequência dos dois commits ficam **[não verificado]**: não há repositório Git acessível nesta cópia. Não executei os selos completos, pois criam, alteram e apagam arquivos temporários. (`bin/tests/test_padrao_de_cima.sh:29`, `bin/tests/test_padrao_de_cima.sh:39`, `bin/tests/test_disjuntor.sh:39`, `bin/tests/_mordida.sh:152`)
+
+**1. Quem escreve e quem lê os estados**
+
+| Estado | Quem escreve | Quem lê; multiplicidade |
+|---|---|---|
+| `logs/sessao/disjuntor_estado.json` | `_com_estado`: lê, chama o callback e substitui o arquivo sob `flock`. Há escritores lógicos B1, B3, PDC, B2 e B4, todos pela mesma porta física. | `_com_estado`, `ler_estado` e seus consumidores. **Uma porta física no instrumento**, vários produtores lógicos; os selos também escrevem diretamente nas árvores de teste. (`bin/disjuntor.py:244`, `bin/disjuntor.py:275`, `bin/disjuntor.py:281`, `bin/disjuntor.py:494`, `bin/disjuntor.py:986`, `bin/disjuntor.py:1460`, `bin/disjuntor.py:1745`, `bin/disjuntor.py:2029`, `bin/tests/test_padrao_de_cima.sh:556`) |
+| `pdc.eventos[sha]`: `visto_em`, `tipo`, `obra`, `entidades`, `res` | `decide_pdc` cria o evento; na reclassificação altera `entidades/res`, preservando `visto_em`. | Deduplicação/reclassificação, janela, agrupamento, nomeação, histórico do escopo e painel. **Um escritor lógico no instrumento.** (`bin/disjuntor.py:1386`, `bin/disjuntor.py:1397`, `bin/disjuntor.py:1400`, `bin/disjuntor.py:1298`, `bin/disjuntor.py:1308`, `bin/disjuntor.py:1438`, `bin/disjuntor.py:1448`, `bin/disjuntor.py:1600`) |
+| `pdc.nomeados` | `decide_pdc` marca `sha\|entidade` quando consome uma liberação. | `_pdc_disparadas` verifica se resta evento não nomeado. (`bin/disjuntor.py:1440`, `bin/disjuntor.py:1306`, `bin/disjuntor.py:1312`) |
+| `pdc.libera_vistas` | `decide_pdc` registra o hash consumido. | A própria decisão impede reutilização da liberação. (`bin/disjuntor.py:1435`, `bin/disjuntor.py:1430`) |
+| `pdc.fotos` | `decide_pdc` cria a fotografia do topo e remove fotografias de episódios encerrados. | A própria decisão impede liberação por linha anterior ao disparo. (`bin/disjuntor.py:1403`, `bin/disjuntor.py:1412`, `bin/disjuntor.py:1445`, `bin/disjuntor.py:1433`) |
+| `pdc.disparadas` | `decide_pdc` substitui pelo agrupamento recalculado. | Reconhecimento de disparo novo, painel e cópia para o escopo. (`bin/disjuntor.py:1444`, `bin/disjuntor.py:1405`, `bin/disjuntor.py:1413`, `bin/disjuntor.py:1608`, `bin/disjuntor.py:1480`) |
+| `hist`, `lido`, `duvida`, `final`, `liberadas`, `avisos` | A closure `_fn` mantém a fotografia e os resultados desta transição. | `_anuncia` grava escopo/trilha; depois, a construção de `DecisaoPDC` preserva negativas e incertezas. São estados por chamada, compartilhados pelas closures. (`bin/disjuntor.py:1366`, `bin/disjuntor.py:1378`, `bin/disjuntor.py:1392`, `bin/disjuntor.py:1447`, `bin/disjuntor.py:1451`, `bin/disjuntor.py:1462`) |
+| `padrao_de_cima_escopo.json`: `em`, `disparadas`, `obras_com_evento`, `duvida` | `_pdc_grava_escopo`, chamado após gravar o estado, ainda sob sua trava. | `_pdc_escopo_lido` e fallback de `estado_pdc`. **Um escritor no instrumento**, mas gravação independente da gravação do estado. `em` é escrito e não é conferido no fallback. (`bin/disjuntor.py:293`, `bin/disjuntor.py:1456`, `bin/disjuntor.py:1480`, `bin/disjuntor.py:1487`, `bin/disjuntor.py:1496`, `bin/disjuntor.py:1512`) |
+| `RELATO.md` | `relato_negacao` delega a `esteira_vigia.no_relato`, que tranca o diretório e faz substituição atômica. **Há outros escritores reais:** `gerar_cortes` e `deploy_agendado` escrevem diretamente, fora dessa trava. | PDC/B3 usam `_relato_consistente`; o Stop lê o topo; handoff, alarme de ociosidade e publicação também leem o documento. A multiplicidade de escritores já está declarada como resíduo. (`bin/disjuntor.py:236`, `app/core/esteira_vigia.py:848`, `app/core/esteira_vigia.py:884`, `bin/gerar_cortes.py:136`, `bin/deploy_agendado.sh:44`, `bin/disjuntor.py:697`, `bin/hook_stop_fila1.py:429`, `bin/handoff_sessao.sh:92`, `bin/alarme_sessao_ociosa.py:123`, `bin/relato.sh:104`, `app/core/esteira_vigia.py:839`) |
+| Fontes `models.py`, `models/*.py` e arquivos citados; caches do resolvedor | O resolvedor somente lê as fontes; `_prepara` e `_por_sitio` preenchem `nomes`, `modelos`, mapas e `_fontes` por decisão. | `entidades` combina censo, modelos e cadastro `PROGRAMAS`. Autoria das alterações das fontes em produção: **[não verificado]**. (`bin/disjuntor.py:1214`, `bin/disjuntor.py:1235`, `bin/disjuntor.py:1273`, `bin/disjuntor.py:1289`, `app/core/censo_escritas.py:89`) |
+| `payload`, `cru`, `_PDC_LIVRE_NESTA` | `main_pretool` lê stdin, faz o parse e limpa o conjunto; `pretool` acrescenta obra julgada livre. | Classificadores do envelope e `_ramo_pdc`, que dispensa nova negativa para aquela obra. (`bin/disjuntor.py:2038`, `bin/disjuntor.py:2041`, `bin/disjuntor.py:2045`, `bin/disjuntor.py:2018`, `bin/disjuntor.py:1591`) |
+
+O mapa do harness é distinto: seus logs têm deliberadamente vários processos escritores. (`bin/tests/_mordida.sh:142`, `bin/tests/_mordida.sh:46`, `bin/tests/_mordida.sh:106`)
+
+| Estado | Quem escreve | Quem lê; multiplicidade |
+|---|---|---|
+| `sonda_exc/sitecustomize.py` | O `source` do harness gera o arquivo. | Python descendente, pelo `PYTHONPATH` fornecido ao caso. (`bin/tests/_mordida.sh:35`, `bin/tests/_mordida.sh:37`, `bin/tests/_mordida.sh:143`) |
+| `<raiz>.exc` | `_mordida_sondado` trunca; callbacks `RAISE` dos Python acrescentam registros. | Controle procura cinco tipos de erro; comparador verifica exceções declaradas. **Vários escritores.** (`bin/tests/_mordida.sh:139`, `bin/tests/_mordida.sh:106`, `bin/tests/_mordida.sh:176`, `bin/tests/_mordida.sh:222`, `bin/tests/_mordida.sh:252`) |
+| `<raiz>.esc` | Truncador e `sys.excepthook` dos Python. | Comparador de multiplicidade de exceções escapadas. **Vários escritores.** (`bin/tests/_mordida.sh:139`, `bin/tests/_mordida.sh:117`, `bin/tests/_mordida.sh:223`, `bin/tests/_mordida.sh:258`) |
+| `<raiz>.proc` | Truncador; startup escreve `INI`; `atexit` escreve `FIM`; handler escreve `SINAL`. | `abertos` compara conjuntos de PIDs e quantidades. **Vários escritores.** (`bin/tests/_mordida.sh:139`, `bin/tests/_mordida.sh:46`, `bin/tests/_mordida.sh:50`, `bin/tests/_mordida.sh:56`, `bin/tests/_mordida.sh:214`) |
+| `<raiz>.marca` | Truncador e os três coletores Python. O novo trap Bash escreve suas provas em variáveis. | `_mordida_morre` consulta a última marca quando o último comando não é `return`. (`bin/tests/_mordida.sh:139`, `bin/tests/test_disjuntor.sh:776`, `bin/tests/test_disjuntor.sh:947`, `bin/tests/test_disjuntor.sh:1122`, `bin/tests/_mordida.sh:191`) |
+| `base_<caso>.exc/.proc/.esc` | `_mordida_controle` copia cada arquivo somente se ainda não existir. | Mutantes posteriores reutilizam a base pelo **nome do caso**, entre diferentes raízes. (`bin/tests/_mordida.sh:179`, `bin/tests/_mordida.sh:196`, `bin/tests/_mordida.sh:225`, `bin/tests/_mordida.sh:258`, `bin/tests/test_padrao_de_cima.sh:648`) |
+| `<raiz>.orig.d`, `<raiz>.novo` e fonte mutada | `_mordida_muta` remove/recria a fotografia original, aplica substituições e grava os textos novos. | Verificador da declaração de guarda. (`bin/tests/_mordida.sh:152`, `bin/tests/_mordida.sh:159`, `bin/tests/_mordida.sh:167`, `bin/tests/_mordida.sh:168`, `bin/tests/_mordida.sh:246`) |
+| `_MORDIDA_CASO/PID/SEQ/ULT/VAL/MARCAS` | Inicializador e trap `DEBUG`. | Trap e julgamento do último comando. São globais dentro do selo. (`bin/tests/_mordida.sh:124`, `bin/tests/_mordida.sh:125`, `bin/tests/_mordida.sh:140`, `bin/tests/_mordida.sh:187`) |
+| `SELO_EXC_LOG/DIR`, `SELO_ESC_LOG`, `SELO_PROC_LOG`, `MORDIDA_MARCAS`, `PYTHONPATH`, `PYTHONDONTWRITEBYTECODE` | `_mordida_sondado` fornece o ambiente ao caso. | Startup Python, sonda e coletores. `MORDIDA_SEQ` é exportado pelo trap e retirado ao terminar. (`bin/tests/_mordida.sh:41`, `bin/tests/_mordida.sh:126`, `bin/tests/_mordida.sh:142`, `bin/tests/_mordida.sh:145`, `bin/tests/test_disjuntor.sh:776`) |
+| `HOOK_STOP_RAIZ`, `CODEX_SESSIONS_DIR`, `PADRAO_DE_CIMA_BIN` | Selos atribuem os dois primeiros aos subprocessos; o último pode selecionar o código do RED. | Inicialização das raízes, leitor de sessões e seleção de `BIN`. (`bin/tests/test_padrao_de_cima.sh:90`, `bin/tests/test_disjuntor.sh:523`, `bin/tests/test_padrao_de_cima.sh:634`, `bin/disjuntor.py:67`, `bin/hook_stop_fila1.py:30`) |
+| SIGTERM, `atexit`, `sys.excepthook`, monitoramento | `sitecustomize` registra callbacks; instala SIGTERM somente se encontrar default; substitui `sys.excepthook`, guardando o anterior. O handler restaura default e reenvia SIGTERM. | Runtime Python chama esses callbacks. A sonda também escreve `_selo_visto/_selo_assin` nas exceções, lidos pelo monitor e hook. (`bin/tests/_mordida.sh:52`, `bin/tests/_mordida.sh:58`, `bin/tests/_mordida.sh:60`, `bin/tests/_mordida.sh:82`, `bin/tests/_mordida.sh:103`, `bin/tests/_mordida.sh:108`, `bin/tests/_mordida.sh:112`, `bin/tests/_mordida.sh:120`) |
+| `meta.out`, `falhas` | Cada meta sobrescreve a saída; `_falha` incrementa o contador; o meta restaura o contador quando reconhece sua falha esperada. | Meta exige exatamente uma falha e o trecho esperado; conclusão do selo consulta `falhas`. (`bin/tests/_mordida.sh:273`, `bin/tests/_mordida.sh:274`, `bin/tests/test_disjuntor.sh:42`, `bin/tests/test_padrao_de_cima.sh:825`) |
+
+**2. As sete classes**
+
+| Classe | Resultado |
+|---|---|
+| **1. Segundo juiz registrado** | **Não identificado no diff.** As portas PDC continuam delegando a `estado_pdc/decide_pdc`; o vocabulário continua delegado a `padrao_vocab`. JUIZES declara que o registro vivo é `core/juizes.py`. (`bin/disjuntor.py:1509`, `bin/disjuntor.py:1552`, `bin/disjuntor.py:1565`, `bin/disjuntor.py:1344`, `app/docs/JUIZES.md:10`) |
+| **2. Segundo escritor fora da porta** | **Nenhum novo identificado no instrumento.** Existe dívida anterior no RELATO: escritores diretos não compartilham a trava de `no_relato`. **Fila**, porque o diff não cria esses escritores. (`bin/disjuntor.py:236`, `bin/gerar_cortes.py:136`, `bin/deploy_agendado.sh:44`, `app/core/esteira_vigia.py:839`) |
+| **3. Relógio fora da borda** | **O diff não acrescenta leitura de relógio.** `hist` usa o `agora` da decisão. Permanecem leituras internas anteriores em `decide_pdc` e `trilha`; eventual centralização é **fila**, sem regressão temporal nova demonstrada. (`bin/disjuntor.py:1448`, `bin/disjuntor.py:1364`, `bin/disjuntor.py:140`) |
+| **4. Derivação paralela da fonte única** | **Incide no efeito:** o escopo derivado pode ficar antigo e virar prova independente de liberdade quando o estado não se lê. **Bloqueia**, pelo caminho descrito abaixo. (`bin/disjuntor.py:1488`, `bin/disjuntor.py:1496`, `bin/disjuntor.py:1530`) |
+| **5. Selo/RED sem mordida** | **Sim.** Há mortes indevidas aceitas como mordida e falta prova específica da migração de `res=2`. **Bloqueia.** (`bin/tests/_mordida.sh:219`, `bin/tests/_mordida.sh:260`, `bin/tests/test_padrao_de_cima.sh:554`, `bin/tests/test_padrao_de_cima.sh:559`) |
+| **6. Ordem de trava** | **Inversão nova não demonstrada.** O escopo continua gravado sob a trava do estado. Há, porém, nova possibilidade de leitura bloqueante enquanto essa trava está tomada: **bloqueia por espera**, não por inversão comprovada. (`bin/disjuntor.py:293`, `bin/disjuntor.py:1456`, `bin/disjuntor.py:1247`) |
+| **7. Pouso antes do pré-requisito** | **[não verificado]**. O dado não prova sequência de suite, leitura final e pouso destes commits. A exigência está escrita, mas não substitui evidência de execução. (`CLAUDE.md:549`, `CLAUDE.md:553`) | [nao verificado]
+
+**3. Como o harness decide “mordeu”, e onde aceita prova errada**
+
+A decisão implementada exige: rc não zero; último comando aceito como assert ou marca do coletor com sequência correspondente; três arquivos de base existentes; nenhuma quantidade adicional de processos sem fechamento; nenhuma exceção escapada adicional, descontadas as declaradas; e, havendo declaração, trecho único, existente no original, ausente dos textos novos e observado em função/linha correspondentes. (`bin/tests/_mordida.sh:188`, `bin/tests/_mordida.sh:190`, `bin/tests/_mordida.sh:196`, `bin/tests/_mordida.sh:225`, `bin/tests/_mordida.sh:242`, `bin/tests/_mordida.sh:248`, `bin/tests/_mordida.sh:252`, `bin/tests/_mordida.sh:257`, `bin/tests/_mordida.sh:260`)
+
+**Bloqueia — um mutante pode ser aceito sem o módulo sequer executar.** Caminho concreto:
+
+1. Cadastrar mutante que troque `PDC_MINIMO = 2 ` por texto sintaticamente inválido, como `PDC_MINIMO = (`. O mutador verifica âncora, mas não compila o resultado. (`bin/disjuntor.py:1100`, `bin/tests/_mordida.sh:164`, `bin/tests/_mordida.sh:167`)
+2. A compilação falha antes de executar frame da cópia. A sonda só atribui assinatura a exceções observadas em frames da cópia; o hook não registra exceção sem essa assinatura. (`bin/tests/_mordida.sh:75`, `bin/tests/_mordida.sh:79`, `bin/tests/_mordida.sh:115`)
+3. `_pp` retorna erro e `i14_mesma` executa `return 1`, aceito como assert. (`bin/tests/test_padrao_de_cima.sh:90`, `bin/tests/test_padrao_de_cima.sh:116`, `bin/tests/_mordida.sh:190`)
+4. Com `FIM`, `.esc` vazio e declaração vazia, o comparador não exige outra prova e aceita a mordida. O caso detectou falha de compilação, não a retirada da costura pretendida. (`bin/tests/_mordida.sh:49`, `bin/tests/_mordida.sh:219`, `bin/tests/_mordida.sh:234`, `bin/tests/_mordida.sh:260`, `bin/tests/_mordida.sh:265`)
+
+**Bloqueia — `SystemExit` anterior à decisão também passa.** Inserir `raise SystemExit(1)` antes de `d = decide_pdc(...)` faz o mesmo caso executar `return 1`. `atexit` pode registrar `FIM`, enquanto a classificação de escape depende exclusivamente de `sys.excepthook`; não há verificação de saída antecipada em `.exc` quando não existe declaração. (`bin/disjuntor.py:1508`, `bin/disjuntor.py:1509`, `bin/tests/test_padrao_de_cima.sh:116`, `bin/tests/_mordida.sh:49`, `bin/tests/_mordida.sh:114`, `bin/tests/_mordida.sh:234`)
+
+**Bloqueia — qualquer SIGTERM vira “prazo”.** Inserir `os.kill(os.getpid(), 15)` antes da decisão produz `SINAL`; `_pp` falha e o caso retorna `1`. `abertos` exclui esse processo dos sem fechamento, e o aumento de SIGTERM produz somente uma NOTA. Não exige que tenha havido `timeout`, nem confere a origem do sinal. (`bin/disjuntor.py:1509`, `bin/tests/_mordida.sh:55`, `bin/tests/test_padrao_de_cima.sh:90`, `bin/tests/test_padrao_de_cima.sh:116`, `bin/tests/_mordida.sh:219`, `bin/tests/_mordida.sh:228`, `bin/tests/_mordida.sh:265`)
+
+**Bloqueia — a cura do legado `res=2` não tem mordida própria.** A versão `3` existe expressamente para reparar eventos vazios classificados pelo resolvedor `2`; porém, a fixture remove `res`, e a asserção passou a aceitar qualquer versão numérica. Reverter somente a constante para `2` mantém esse teste de legado passando, enquanto eventos reais `entidades=[]/res=2` voltam a ser pulados pela igualdade da versão. (`bin/disjuntor.py:1102`, `bin/disjuntor.py:1387`, `bin/tests/test_padrao_de_cima.sh:554`, `bin/tests/test_padrao_de_cima.sh:559`)
+
+As alterações específicas de **P17** e **`escopo-fail-open`** têm caminhos coerentes de detecção: P17 exige stdout vazio **e nenhuma FALHA nova**, chegando ao `return 35`; OBRA-Z, ausente do escopo e presente apenas no RELATO novo, chega ao `return 6` se a guarda for retirada. Isso não elimina os contraexemplos do harness acima. (`bin/tests/test_disjuntor.sh:100`, `bin/tests/test_disjuntor.sh:103`, `bin/tests/test_disjuntor.sh:583`, `bin/codex_limite_estado.py:156`, `bin/disjuntor.py:2076`, `bin/tests/test_padrao_de_cima.sh:500`, `bin/tests/test_padrao_de_cima.sh:503`, `bin/tests/test_padrao_de_cima.sh:709`)
+
+**4. Outros achados, com classificação**
+
+- **Bloqueia — escopo antigo libera histórico que não conhece.** Existe escopo sem OBRA-A → a decisão registra evento de OBRA-A e salva o estado → salvar o escopo falha, conservando o antigo → a linha sai do RELATO → o estado fica ilegível → fallback aceita escopo antigo mais RELATO neutro e retorna `LIVRE`. O novo histórico só protege quando sua gravação funciona; não existe vínculo de geração conferido entre os dois arquivos. (`bin/disjuntor.py:1397`, `bin/disjuntor.py:281`, `bin/disjuntor.py:1456`, `bin/disjuntor.py:1488`, `bin/disjuntor.py:1496`, `bin/disjuntor.py:1523`, `bin/disjuntor.py:1530`)
+
+- **Bloqueia — FIFO/dispositivo pode prender a decisão sob `flock`.** `_existe` aceita qualquer objeto existente, mas os leitores seguintes usam `open().read()` comum. FIFO sem escritor em `models.py` ou no arquivo citado não levanta imediatamente: pode esperar mantendo a trava do estado. O wrapper chama as guardas antes do `timeout` que envolve o Codex. (`bin/disjuntor.py:1230`, `bin/disjuntor.py:1247`, `bin/disjuntor.py:1273`, `bin/disjuntor.py:275`, `bin/codex_pergunta.sh:165`, `bin/codex_pergunta.sh:168`, `bin/codex_pergunta.sh:177`)
+
+- **Bloqueia — payload cru ignora a chave DESLIGADO.** Com a chave presente, `["Agent", "construir a obra OBRA-C agora"]` levanta antes da consulta à chave e chega à negativa do envelope. Contraria “existindo, nenhum disjuntor age”; o contrato autoriza a chave de desligar. (`bin/disjuntor.py:40`, `bin/disjuntor.py:2044`, `bin/disjuntor.py:2048`, `bin/disjuntor.py:2067`, `bin/disjuntor.py:2074`, `app/docs/CORTES.md:407`)
+
+- **Fila — classificação do cru continua incompleta.** `{"tool_name":"Agent","tool_input":["construir a obra OBRA-C agora"]}` passa pelo teste de objeto externo, falha nos `.get` internos e também faz `_ramo_pdc` devolver `None`, terminando liberado. Uma lista com `"\u0041gent"` igualmente escapa da busca literal por `Agent`. A ocorrência desses formatos no produtor real é **[não verificado]**. (`bin/disjuntor.py:2043`, `bin/disjuntor.py:2005`, `bin/disjuntor.py:1584`, `bin/disjuntor.py:1588`, `bin/disjuntor.py:1590`, `bin/disjuntor.py:2076`)
+
+- **Fila — raiz do RELATO pode divergir da raiz do estado.** `decide_pdc(raiz=X)` usa X para estado/modelos/escopo, mas `_relato_consistente()` usa `hook_stop_fila1.RELATO`, fixado no import pelo ambiente ou localização do módulo. Processo reutilizado com outra raiz pode cruzar fontes; as invocações CLI dos selos evitam isso ao fornecer `HOOK_STOP_RAIZ`. (`bin/disjuntor.py:1365`, `bin/disjuntor.py:1371`, `bin/disjuntor.py:707`, `bin/disjuntor.py:1523`, `bin/hook_stop_fila1.py:30`, `bin/hook_stop_fila1.py:34`, `bin/tests/test_padrao_de_cima.sh:90`)
+
+- **Fila — temporário órfão do escopo.** Depois de `mkstemp`, falhas de escrita ou substituição só geram trilha; falta limpeza do temporário. O escritor do estado já possui essa limpeza. (`bin/disjuntor.py:1484`, `bin/disjuntor.py:1488`, `bin/disjuntor.py:284`)
+
+- **Fila — vermelho por privilégio do executor.** `resolvedor_fonte` presume que `chmod 000` retire acesso. Executor com privilégio suficiente pode continuar lendo e reprovar o controle por ambiente, sem relação com mutante. (`bin/tests/test_padrao_de_cima.sh:534`, `bin/tests/test_padrao_de_cima.sh:537`, `bin/tests/test_padrao_de_cima.sh:570`, `bin/tests/test_padrao_de_cima.sh:573`)
+
+- **Fila — instalação da sonda não tem confirmação positiva.** Depende de `sys.monitoring` e disponibilidade do identificador `4`; stderr é descartado e o controle procura ausência de erros, sem exigir confirmação de monitoramento instalado. Os metas podem denunciar a falha, portanto isso sozinho não prova verde global. (`bin/tests/_mordida.sh:64`, `bin/tests/_mordida.sh:108`, `bin/tests/_mordida.sh:143`, `bin/tests/_mordida.sh:176`, `bin/tests/test_padrao_de_cima.sh:755`)
+
+- **Fila — bases não certific
+
+[truncado em 20000 de 21845 caracteres]
 
 ## 31/10 20:57 · sessao b2d04db14ac0 · V3-P5-PRORROGACAO-POR-INTERVALO · verificador · origem=Code
 
@@ -842,27 +934,4 @@ O fechamento geométrico permite envelope de **26h**, sujeito ao teto do dia e s
 
 O default de prorrogação do motor consulta o cadastro do ciclo; o piso implementado devolve `False` para `12x36`, enquanto CCT pode fornecer outra resposta. Portanto “12x36 sofre o defeito com prorrogação ligada” depende do cadastro; ocorrência produtiva no material dado: **[nao verificado]**. `app/ponto/motor_calculo_v2.py:720`, `app/core/regua_cct.py:166`, `app/core/regua_cct.py:182`
 
-## 31/10 20:04 · sessao d20f92fb7cbe · - · - · origem=Ronald (tmux)
-
-Censo dos três campos, somente pelo código:
-
-| Etapa | Escrita/leitura |
-|---|---|
-| Minutos noturnos do período | `MotorBase._escrever_noturnas` recebe `calcular_noturnas` e escreve `minutos_noturnos_relogio/legais`: `app/ponto/motor_calculo_v2.py:953-955`. Chamadores: 12x36 `:2742`, partido `:2846`, comercial `:3197`. |
-| Minutos de HE noturna | `_aplicar_he_noturna` lê período, extras, flag e intervalos; chama `he_noturna` e escreve os subsets: `app/ponto/motor_calculo_v2.py:964-972`. Chamadores: `:2805`, `:3097`, `:3128`, `:3231`, `:3349`. |
-| Zeros/reinicializações | Bloqueio de período zera os três grupos por `setattr`: `app/ponto/motor_calculo_v2.py:1423-1426`. Partido reinicializa HE noturna `:2887-2888`; comercial `:3273-3274`. |
-| Total mensal | `ResultadoMes.horas_noturnas` soma períodos comuns **e FT**: `app/ponto/motor_calculo_v2.py:283`. `horas_extra_50_noturna/100_noturna` somam só comuns: `:300-306`. Noturna legal também entra na base de HE do partido quando `regua_excedente == 'legais'`: `:3069-3081`. |
-| FechamentoMensal | Campos persistentes: `app/ponto/models.py:413`, `:416`, `:419`. `recalcular_fechamento_mes` atribui, arredondando total em duas casas: `app/ponto/services/fechamento.py:893`, `:896`, `:899`. Persiste aberto com `save` `:1112`; demais status pelo **mesmo módulo e mesmos valores**, `update` `:1128-1137`. Caminho somente leitura entrega objeto/dict sem persistir fechamento: `:1096-1104`. |
-| DiaPago, versão motor | `lavrar` soma noturnas e subsets de cada período: `app/ponto/services/dia_pago.py:179`, `:181`, `:184`; FT leva noturnas `:224`. Campos `CAMPOS_DIA`: `:34-42`; modelos: `app/ponto/models.py:327-332`. Escrita efetiva: `delete`/`bulk_create`, `app/ponto/services/dia_pago.py:357-358`; chamada pelo fechamento com `versao='motor'`: `app/ponto/services/fechamento.py:1169-1195`. |
-| Calculador v3 | `_ContextoNoturno` empresta método do motor `app/ponto/calculador/regras.py:63`; `noturnas_do_dia` soma total e subtrai desconto do motor `:85-89`. `do_dia` escreve `horas_noturnas` no ramo FT `:735-740` e comum `:907-912`. HE por período chama `he_noturna` `:880-888` e escreve os dois subsets `:895-898`. |
-| Alimentação v3 | Fábrica do motor recebe **dia k** e template: `app/ponto/calculador/alimentacao.py:445-460`; flags vêm da CCT `:572-575`; pares, pontas, intervalos e flags chegam a `do_dia` `:582-600`. |
-| Persistência v3 | Fechamento chama calculador e a **mesma** `lavrar`, com `rubricas=` e `versao='oraculo'`: `app/ponto/services/fechamento.py:1233-1264`. `lavrar` substitui campos declarados pelos valores calculados `app/ponto/services/dia_pago.py:320-328`; usa o mesmo `bulk_create` `:358`. Esse caminho não atribui esses valores v3 ao FechamentoMensal (`app/ponto/services/fechamento.py:1245-1264`). |
-| Export TXT | `eventos_do_fechamento` lê `fech.horas_noturnas` em `('adicional_noturno', ...)`: `app/folha/export.py:436`. **Não lê os dois subsets de HE noturna no corpo executável**; emite HE50/100 integrais `:430-432`, explicação da não duplicação `:413-427`. TXT passa cada evento pelo cadastro de rubrica e monta linha: `:711-720`; logo código de rubrica efetivamente cadastrado em produção é [nao verificado]. |
-| Conferência do export | Porta lê soma do DiaPago: `app/folha/porta_export.py:267`, `:332`. Soma agrega todos `CAMPOS`, inclusive três campos auditados: `app/ponto/services/dia_pago.py:548-561`. Consulta de dias da porta fixa `versao='motor'`: `app/folha/porta_export.py:284`, `:589`. |
-| Tela/papel | `rubricas_do_dia` lê noturnas, sem adicionar subsets à HE: `app/ponto/services/dia_pago.py:912-926`. Calendário a chama `app/colaboradores/services/calendario.py:785`; espelho importa `app/ponto/services/espelho.py:419`. Totais de espelho também somam `PeriodoCalculo.horas_noturnas`: `:99`. Cartão lê mesma função de eventos da folha `app/relatorios/cartao_pela_celula.py:90` e soma DiaPago `:142-143`. Relatório por período agrega `CAMPOS_DIA` `app/ponto/services/dia_pago.py:782-787` e apresenta noturnas `app/relatorios/views.py:524`. |
-
-Há porta adicional **existente**, `retratar_exportada`, explicitamente documentada como segunda porta (`app/ponto/services/dia_pago.py:403-425`). Ela mantém rubricas dos dias existentes, mas cria dias ausentes com dinheiro zero (`:469-477`) e ajuste ausente com todos `CAMPOS` zero antes de copiar DSR/banco (`:507-514`). Não recalcula as três rubricas noturnas nessa porta (`:459-481`, `:502-518`).
-
-A ocorrência desses caminhos e os valores gravados na produção não constam no dado raspado fornecido: [nao verificado].
-
-_1234 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1235 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
