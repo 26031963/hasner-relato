@@ -1,7 +1,100 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 01:42** · publicado em **01/11/2026 01:45** (UTC-3)
+> Ultima resposta processada: **01/11/2026 01:55** · publicado em **01/11/2026 01:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 01:55 · sessao da6e67fc3dfd · - · - · origem=Ronald (tmux)
+
+**Cadeia de escrita/leitura**
+
+- `tipo_dia` nasce nos builders: single vínculo em `app/escala/utils.py:727` e `:752`; por turno em `:1751` e `:1757`; legacy recorta segmentos pelo `vinculo_do_dia` em `:972`, `:995` e `:999`, transportando o campo em `:1018`. O overlay curado escreve apenas o dict em memória (`:1126`), após consultar o juiz (`:1124`); ausências podem sobrescrever para `falta`/`ausencia` em `:1182`/`:1188`.
+- O cartório lê a grade em `app/ponto/services/cartorio.py:947`, transporta `tipo_dia` para a ata em `:583`, entrega a ata a `CelulaDia.lavrar_veredito` em `:1059` e `:1580`, e carimba pelo escritor existente em `:1600`.
+- O método do model só delega: `app/escala/models.py:1787`. A porta escreve `cel.ata` em `app/ponto/portas/celula.py:741`/`:768`; `carimbar` salva campos e lavra juntos em `:787`/`:807`; save e outbox compartilham atomic em `:639`. A precedência tem chave própria na mesma ata: preservação em `:732`; escritor `carimbar_precedencia` em `:811`/`:819`, chamado por `app/ponto/services/cartorio.py:1695`.
+- Nenhuma nova ordem de locks foi introduzida pelo diff fornecido; o trecho novo do cartório é declaração de versão e documentação (`app/ponto/services/cartorio.py:111`, `:168`). Prova operacional de ausência de corrida: **[não verificado]**.
+
+**Leitores externos ao diff**
+
+- Ata diretamente: juiz de cobrança `app/chamados/juizes.py:408`; leitor da célula `app/escala/services/leitor_celula.py:332`/`:345`, que publica o campo em `:360`; vigia `app/ponto/management/commands/tripwire_celulas.py:342`.
+- Grade/dict de dia: `app/escala/orfa_classe.py:65`; `app/relatorios/furos.py:147`/`:151`/`:218`/`:237`; `app/chamados/services/materializacao.py:225`; `app/chamados/services/declaracao_texto.py:90`; `app/chamados/services/disputa_emissao.py:68`; `app/escala/services/furos_diarios.py:39`; `app/ponto/status_dia.py:146`; `app/ponto/worklist.py:19`; `app/ponto/propositor.py:36`/`:210`; `app/inteligencia/calculadores.py:46`/`:141`; `app/ponto/services/veredito_celula.py:221`; `app/ponto/services/bordas_realizado.py:74`; `app/ponto/services/simular_dia.py:12`; `app/ponto/services/espelho.py:690`; `app/ponto/supra_juiz.py:222`; `app/folha/causas.py:40`/`:41`/`:100`.
+- Leitores financeiros continuam existindo: `app/ponto/services/dia_pago.py:386`/`:393`/`:398`; `app/ponto/services/fechamento.py:1011`/`:1015`; `app/folha/export.py:1071`/`:1075`/`:1080`. Logo, alterar `tipo_dia` pode alterar resultados de uma futura projeção financeira; não equivale a escrever o gravado pelo cartório (`app/ponto/services/fechamento.py:1112`).
+- Instrumentos adicionais leem o campo em `app/ponto/management/commands/e6_piso_autopsia.py:13` e `app/ponto/management/commands/mapa_divergencia.py:131`/`:143`/`:155`/`:229`. Ocorrências em templates não apareceram no censo textual; completude contra acesso dinâmico: **[não verificado]**.
+
+**REGRA_VERSOES e horizonte**
+
+- Escritor único é a declaração `app/ponto/services/cartorio.py:111`; validação em `:183`; leitor `versao_para` em `:194`/`:212`, usando a competência de `janela_atual` (`:210`).
+- A versão integra a impressão em `:368`; `_regra_do_dia` fornece-a aos dois ramos (`:963`, `:1015`, `:1168`). A v3 alcança competência 10 em diante; 09 conserva v1 e 08 fica sem versão, conforme asserções de `app/ponto/tests/test_o219_versao_da_regra.py:85`.
+- `--forcar` ignora o pulo por impressão igual (`app/ponto/services/cartorio.py:1020`, `:1178`). O comando seleciona **todas as células passadas da empresa**, sem recorte de competência (`app/ponto/management/commands/processar_cartorio.py:49`, `:61`, `:65`). Portanto, com `--forcar`, abaixo do horizonte não significa só 09: qualquer célula passada selecionada pode ser rejulgada.
+- Sem `--forcar`, a 09 não recebe mudança de impressão **por esta v3**, mas células sem carimbo ou com outros insumos alterados continuam elegíveis (`app/ponto/services/cartorio.py:1174`). A frase absoluta “a 09 só se rejulga com --forcar” do teste é mais ampla que o código (`app/ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:122`).
+- Não confirmei falha desse teste: as batidas da fixture (`app/ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:62`) disparam julgamento por signal (`app/ponto/signals.py:131`/`:135`, `:85`/`:93`), podendo inicializar o carimbo antes do update da ata (`app/ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:74`). Execução do teste e mutante: **[não verificado]**.
+
+**Exportada, prerequisitos e “corrigir junto”**
+
+- O caminho examinado reescreve célula/ata, carimbos, status, protestos e emite outbox; não chama o escritor de `FechamentoMensal` ou a porta REGEN (`app/ponto/services/cartorio.py:1578`, `:1600`; `app/ponto/portas/celula.py:787`). A fixture cobra linha inteira de FM e todas as exportações intactas (`app/ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:106`, `:118`, `:119`). Verde real e hashes de produção: **[não verificado]**.
+- O diff fornecido não altera motor nem escritores de vínculo; a chamada nova da grade consulta o juiz e muda memória (`app/escala/utils.py:1115`, `:1124`, `:1126`). Identidade binária com main, sem repositório Git nesta cópia: **[não verificado]**.
+- Ensaio `--apply` na sombra, reversão e impacto **antes do pouso** são prerequisito explícito da própria declaração (`app/ponto/services/cartorio.py:174`/`:175`). Os anexos narram evidência antiga; ensaio da cópia 303970f1, números e reversão: **[não verificado]**.
+- Pauta DP foi corrigida no texto vivo para A0×C=0 (`app/ponto/services/cartorio.py:180`/`:181`); o valor real e hashes TXT não são demonstráveis pelos arquivos examinados: **[não verificado]**.
+- Registro efetivamente conta juiz novo (`app/core/juizes.py:192`) e há corte (`app/docs/CORTES.md:416`). O campo LEI-AKITA da mensagem de entrega/commit não está acessível; sua correção é **[não verificado]**.
+- Resíduos vivos fora da lista nominal pedida: `app/docs/BACKLOG.md:796` e o corte histórico `app/docs/CORTES.md:416` ainda dizem que `fase_conflitante` pergunta ao juiz. A retirada decidida pelo usuário prevalece, mas o BACKLOG precisa acompanhar o novo escopo (`app/ponto/tests/test_grade_folga_juiz_sitios.py:13`).
+
+## 01/11 01:55 · sessao 201524adb215 · - · - · origem=Ronald (tmux)
+
+Catraca implementada, porém **a exclusão do arquivo inteiro `precedencia.py` ainda pode voltar sem teste vermelho**. `test_MORDE_segundo_juiz_dentro_de_precedencia` chama diretamente `achados_da_fonte`; não exerce o percurso `achados`. Em mutação somente em memória, inserir `if rel == 'ponto/precedencia.py': continue` nesse percurso deixou os **11 testes verdes**. Referências: `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:122`, `:130`, `:236`, `:241`. Esse é um bloqueio de mordida, embora o código atual efetivamente varra o arquivo (`:113`, `:115`, `:131`).
+
+Verificação em memória, com AST e `unittest.TestCase` substituindo somente `SimpleTestCase`, sem importar Django, banco ou logs:
+
+| MORDE | Referência | Mutação que o deixou vermelho |
+|---|---|---|
+| filtro pessoa/data | catraca:189 | Desativar reconhecimento de filtro pessoa/data |
+| apelido e manager | catraca:194 | Remover reconhecimento de import com apelido; ou esvaziar `REL` |
+| predicado da origem | catraca:200 | A asserção exige detectar `fd.calendario_origem_id`; regressão específica não executada [não verificado] |
+| cópia literal do predicado | catraca:204 | Desativar `_getattr_literal` |
+| cópia literal do carregador | catraca:215 | Desativar filtro pessoa/data |
+| apelido de módulo | catraca:223 | Remover reconhecimento do modelo no meio da cadeia |
+| origem sem comparação | catraca:230 | Desativar `_getattr_literal` |
+| segundo juiz dentro de precedência | catraca:236 | Excluir precedência de `achados_da_fonte`; **não** excluir do percurso `achados` |
+
+As funções e asserções estão em `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:54`, `:62`, `:95`, `:105`, `:189`, `:194`, `:200`, `:204`, `:215`, `:223`, `:230`, `:236`. Os testes atuais passaram e `achados == ALLOWLIST == 22`; resultado da execução em memória [não verificado por artefato persistido].
+
+A ALLOWLIST está coerente com a retirada de fase: `medir` lê a foto do vínculo ativo, compara foto e âncora e conta divergências; nenhuma chamada ao juiz aparece nesse fluxo. A entrada declara expressamente sua fila própria. `test_os_sitios_curados_nao_voltam` prende apenas comando, declaração e lápide `_folga_avulsa`, sem exigir cura de fase. Referências: `app/escala/services/fase_conflitante.py:71`, `:74`, `:80`, `:83`; `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:142`, `:182`.
+
+Nas entradas inspecionadas, não achei outro juiz pessoa-dia oculto: há fotos por vínculo, contadores mensais e escritores. O gerador continua decidindo o dia pela foto do próprio vínculo, mas isso está explicitamente marcado como incompleto/fila. Referências: `app/escala/alimentacao.py:49`, `:66`; `app/escala/models.py:1212`, `:1220`, `:1280`; `app/escala/views_plano_folgas.py:60`, `:63`, `:70`; `app/ponto/services/diagnostico_escala.py:81`, `:102`; `app/relatorios/furos.py:112`; `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:160`.
+
+C5 permanece fora do juiz e fora da ALLOWLIST: itera toda FolgaDia, verifica cobertura por algum vínculo e acusa célula de trabalho sem distinguir origem. O limite está declarado na catraca como GRADE-FOLGA-C5. Referências: `app/chamados/management/commands/auditar_invariantes_chamados.py:1532`, `:1534`, `:1535`, `:1540`, `:1542`; `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:19`.
+
+Os documentos expressamente pedidos estão coerentes: JUIZES registra fase lendo foto em fila; MAPA-JUIZES/MAPA/core registram o juiz sem atribuir migração a fase; ARQUITETURA só mantém os nós do cron. Referências: `app/docs/JUIZES.md:84`, `:88`, `:90`; `app/docs/MAPA-JUIZES.md:52`; `app/docs/MAPA.md:107`; `app/core/juizes.py:188`, `:192`; `app/docs/ARQUITETURA.mmd:62`, `:112`.
+
+**Sobrou resíduo fora desse conjunto:** BACKLOG ainda afirma `fase_conflitante:74` perguntando ao juiz; CORTES também enumera fase entre os migrados. A linha seguinte do BACKLOG registra o desmembramento, tornando necessário esclarecer o texto anterior. Referências: `app/docs/BACKLOG.md:796`, `:797`; `app/docs/CORTES.md:416`. O docstring dos testes da obra já declara corretamente a retirada; os testes antigos de fase verificam foto/âncora, sem depender dessa cura. Referências: `app/ponto/tests/test_grade_folga_juiz_sitios.py:13`; `app/escala/tests/test_fase_conflitante.py:60`, `:72`, `:93`.
+
+## 01/11 01:54 · sessao 479951fb7264 · - · - · origem=Ronald (tmux)
+
+Censo de `FolgaDia` e feeds do juiz:
+
+| Valor / função | Quem escreve / quem lê |
+|---|---|
+| Modelo | `escala_colaborador` FK CASCADE, `data`, `calendario_origem` FK SET_NULL/nulo: `app/escala/models.py:1553-1559`; unicidade vínculo+data: `:1571`. |
+| Foto do calendário | `gerar_foto_folgas`: lê manuais `app/escala/folgas.py:165-168`, apaga calendário `:169-172`, cria vínculo/data/origem `:173-175`. |
+| Foto manual | `lancar_folga`: consulta/origem `app/escala/folgas.py:254-255`, veto `:258`, get_or_create vínculo/data `:259-260`; `_foto_do_dia`: consulta/origem `:274-275`, delete `:280`, create `:284`, mudança só de tipo `:288-289`. |
+| Reparentamento | `app/escala/folgas.py:405-418` lê origem/vínculo/data/ocupação; único update de vínculo `:435-436`. Seleção em lote `:453-457`; command `app/escala/management/commands/reparentar_folgas.py:28-34` delega à porta. |
+| Carregador da pessoa | `app/ponto/precedencia.py:206-208` lê vínculo pela pessoa e janela, preserva todas por data; juiz `:212-218`; único predicado origem/vínculo `:235-239`. |
+| Foto por vínculo | `app/escala/alimentacao.py:66-70` lê vínculo/data, arredondando ao mês `:60-64`; consumidor gerador `app/escala/models.py:1251-1259`, `:1280-1282`, `:1327-1334`. |
+| Defeito/cadastro | `app/escala/models.py:1220-1221`; divergência calendário/foto/origem `app/escala/folgas.py:101-104`; Plano de Folgas `app/escala/views_plano_folgas.py:60-76`; toggle lê origem para recusa e delega escrita `:112-137`; diagnóstico `app/ponto/services/diagnostico_escala.py:102-104`; limbo `app/relatorios/furos.py:112-115`. |
+| Vigia fase | `app/escala/services/fase_conflitante.py:71-80` lê foto do vínculo ativo, compara `_foto_diz` e `_ancora_diz(ec,d)`; não chama o juiz. |
+| Leitor fora juiz/ALLOWLIST | C5 em `app/chamados/management/commands/auditar_invariantes_chamados.py:1532-1536` itera toda FolgaDia, aceita cobertura por outro vínculo sem distinguir origem; acusa célula de trabalho `:1540-1550`. É segundo derivador já declarado como fila na catraca `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:21-24`. |
+
+Não apareceu escritor direto novo fora de `escala/folgas.py` na busca dos símbolos FolgaDia/managers; o registro da porta permite só esse arquivo: `app/core/portas.py:466`. Exclusão de vínculo/calendário também pode alterar FolgaDia por CASCADE/SET_NULL do modelo, sem mudança desta obra: `app/escala/models.py:1553-1559`.
+
+Feeds entregues ao juiz:
+
+- Precedência: `vinculo_do_dia` em `app/ponto/precedencia.py:350`, aplicado `:357`; completa geradora ausente da lista `:326-330`.
+- Veto: `escala_vigente(colab,d)` em `app/ponto/precedencia.py:505`.
+- Declaração: `_ec_do_dia` → `escala_vigente` em `app/ponto/services/declarar_dia.py:56-58`; juiz `:74-75`; origem restante escolhe frase sobre folga já aceita `:112-118`.
+- Command: `escala_vigente(cid,d)` em `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:64-65`.
+- `escala_vigente` carrega célula e consulta o juiz do vínculo em `app/escala/servico_jornada.py:46-58`; validade da geradora e fallback ficam em `app/escala/alimentacao.py:237-254`.
+- Grade por turno: `vinculo_do_dia` → mapa em `app/escala/utils.py:1262-1269`, overlay `:1794`.
+- Grade legacy: segmenta pelo juiz `app/escala/utils.py:972-982`; chama builder com `e` `:995`; builder passa `lambda _: esc` `:770`; só retém dias do segmento escolhido `:997-1001`. Busca de chamadores de produção de `montar_grade_prevista` achou só esse legacy `:995`.
+- Calendário usa `fatos_do_periodo` sem a antiga foto `{d: True}` em `app/colaboradores/services/calendario.py:617-619`; portanto recebe o mesmo juiz e carregador da pessoa `app/ponto/precedencia.py:281`.
+
+As entradas da ALLOWLIST para foto, cadastro e escritor correspondem ao que os sítios fazem nas linhas acima; gerador é a dívida nominal `GRADE-FOLGA-GERADOR`, enquanto C5 permanece fora da cobertura e nominalmente declarado na própria catraca: `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:174-175`, `:21-24`.
 
 ## 01/11 01:42 · sessao 0c6764fddfce · CONTENCAO-QUE-MORDE-V2 · verificador · origem=Code
 
@@ -823,164 +916,4 @@ Nas fichas, **C/E/F/M/D** significam lacunas em quem chama / quem espera / falha
 
 [truncado em 20000 de 24510 caracteres]
 
-## 01/11 00:14 · sessao 0398ef9dc32b · - · - · origem=Ronald (tmux)
-
-Leitura concluída só no código. Os casos abaixo são contraexemplos deduzidos do HEAD; ocorrência em produção, salvo o que consta expressamente no dado raspado, é **[não verificado]**.
-
-**Chamadores e fronteira comum**
-
-- O settings aponta PreToolUse sem filtro para `disjuntor.py pretool` e Stop para `hook_stop_fila1.py`; o contrato acerta esses nomes. `.claude/settings.json:3`, `.claude/settings.json:9`, `.claude/settings.json:62`, `.claude/settings.json:68`.
-- PreToolUse só consulta B3 no Bash para wrapper identificado como `papel=verificador` e obra presente; no Agent, só para `subagent_type=verificador`, prompt final e obra reconhecida. O Agent comum/construtor não consulta nem registra volta. `bin/disjuntor.py:1440`, `bin/disjuntor.py:1443`, `bin/disjuntor.py:1451`, `bin/disjuntor.py:1454`, `bin/disjuntor.py:1457`.
-- A porta do wrapper existe depois de adquirir slot e trava da resposta; chama `--b3-parada` para papel verificador. `bin/codex_pergunta.sh:137`, `bin/codex_pergunta.sh:162`, `bin/codex_pergunta.sh:164`.
-- A chave hoje basta por existência, inclusive symlink; PreToolUse a consulta, a porta `b3_parada` não consulta. Nenhum desses dois pontos exige linha no RELATO. `bin/disjuntor.py:144`, `bin/disjuntor.py:1486`, `bin/disjuntor.py:1036`, `bin/disjuntor.py:1042`.
-
-**Item 1 — teto seis/voltas**
-
-(a) O local de encaixe é `decide_b3`, mas o mecanismo atual conta reprovações finais opus e voltas Codex triadas PROCEDENTE; não conta aberturas Agent nem toda chamada Codex. O contrato nomeia o local certo como destino, não como capacidade já existente. `bin/disjuntor.py:878`, `bin/disjuntor.py:896`, `bin/disjuntor.py:902`, `bin/disjuntor.py:910`.
-
-(b) Escritor atual: `_com_estado` grava o JSON inteiro sob flock; `decide_b3` modifica `b3`, `reprovados`, `codex`, `disparado`, `liberado`, `consumidas`, `topo_no_disparo`, `disparado_em`, `b3_sem_obra`; `rearma_b3` modifica `rearmado` e zera listas correntes. Não há `b3[obra].voltas`. `bin/disjuntor.py:237`, `bin/disjuntor.py:271`, `bin/disjuntor.py:891`, `bin/disjuntor.py:936`, `bin/disjuntor.py:939`, `bin/disjuntor.py:1018`.
-
-(c) Sete Agents construtores com obra reconhecida e cota disponível passam: esse ramo não consulta B3 nem incrementa volta. O mesmo vale para sete chamadas Codex sem triagem PROCEDENTE suficiente. Ocorrência real com sete disparos: **[não verificado]**. O teste atual exige que três chamadas não triadas não parem. `bin/disjuntor.py:1451`, `bin/disjuntor.py:1460`, `bin/tests/test_disjuntor.sh:1144`.
-
-(d) Faltam identidade idempotente da abertura, unidade exata de volta entre fontes, reserva entre autorização e execução, significado de N adicional/absoluto na reabertura e alcance da semeadura. A falta de reserva é demonstrável: locks do wrapper são por resposta e sidecar só nasce ao fim rc0; respostas distintas podem autorizar antes que qualquer sidecar apareça. `bin/codex_pergunta.sh:162`, `bin/codex_pergunta.sh:198`. Há CLI atual só de triagem/consulta/rearme, sem reabre/redesenha. `bin/disjuntor.py:1699`.
-
-**Item 2 — segundo ERRO-BOBO**
-
-(a) O sítio certo é `linhas_libera_b3` + consumo em `decide_b3`, mas hoje qualquer ERRO-BOBO novo com motivo alfanumérico pode liberar. `bin/disjuntor.py:626`, `bin/disjuntor.py:650`, `bin/disjuntor.py:930`.
-
-(b) `consumidas` contém apenas hashes das linhas, sem tipo; a linha aceita movimenta todas as reprovações e triagens anteriores para `liberado`. `bin/disjuntor.py:932`, `bin/disjuntor.py:936`, `bin/disjuntor.py:939`.
-
-(c) Primeiro ERRO-BOBO A libera; nova reprovação dispara; segundo ERRO-BOBO B, diferente de A, fora da fotografia e posterior ao disparo, também libera. O código não conta liberações por tipo. Produção: **[não verificado]**. `bin/disjuntor.py:930`, `bin/disjuntor.py:932`, `bin/disjuntor.py:934`, `bin/disjuntor.py:940`.
-
-(d) A migração do histórico só com sha para histórico com tipo não está definida; a trilha possui anúncios com tipo que o painel já conta em janela 24h, mas isso difere de histórico vitalício da obra. `bin/disjuntor.py:939`, `bin/disjuntor.py:1552`, `bin/disjuntor.py:1568`, `bin/disjuntor.py:1574`. Também permanece ambíguo se DESENHO válido libera automaticamente ou exige Ronald: o contrato mantém ambas as formulações **[não verificado]**.
-
-**Item 3 — PROCEDENTE sem cura**
-
-(a) `_procedentes` é fonte certa para identificar procedentes, mas não certifica cura; apenas seleciona IDs das voltas cujo último veredito é procedente. Não consulta git/HEAD/cópia. `bin/disjuntor.py:857`.
-
-(b) Wrapper escreve `.id` com obra/papel/hash/pid/fim/sha da resposta; triagem lê, valida sha da resposta, transforma em identificador `hash12@pid@fim@sha12` e grava `hora,obra,volta,veredito` no log. O caminho da cópia não é preservado nesse log. `bin/codex_pergunta.sh:196`, `bin/codex_pergunta.sh:199`, `bin/disjuntor.py:795`, `bin/disjuntor.py:800`, `bin/disjuntor.py:802`, `bin/disjuntor.py:812`.
-
-(c) Um ou dois PROCEDENTES sem cura ainda permitem opus final: limiar atual Codex é três, independentemente de HEAD posterior. O teste explicitamente pede passagem com dois. Produção: **[não verificado]**. `bin/disjuntor.py:77`, `bin/disjuntor.py:912`, `bin/tests/test_disjuntor.sh:1153`.
-
-(d) O contrato precisa distinguir “HEAD diferente” de “commit de cura posterior”: commit alheio ao achado muda HEAD sem curar; comparação de desigualdade não prova ancestralidade, autoria nem correção. Isso é limite lógico da medida proposta, ocorrência real **[não verificado]**. O identificador atual ainda trunca hash a 12 e perde caminho; resolver identidade/cópia antecede esse item. `bin/disjuntor.py:802`, `bin/disjuntor.py:813`.
-
-**Item 4 — verificador final sem obra**
-
-(a) `_obra_de` é o reconhecedor certo, mas hoje ausência pula a negativa. `bin/disjuntor.py:504`, `bin/disjuntor.py:1455`, `bin/disjuntor.py:1457`.
-
-(b) Após o agente existir, `_reprovacoes_finais` lê meta `agentType=verificador`, prompt e primeira linha do SubagentHandback; `decide_b3` acumula IDs sem obra em `b3_sem_obra`. O painel retorna comprimento acumulado, sem timestamps/janela 24h. `bin/disjuntor.py:546`, `bin/disjuntor.py:561`, `bin/disjuntor.py:736`, `bin/disjuntor.py:892`, `bin/disjuntor.py:1624`.
-
-(c) Agent verificador com “LEITURA FINAL antes do pouso, sem o nome dela” passa a porta quando B4 não nega; depois pode entrar no contador. O fixture atual contém justamente esse prompt e só verifica contagem posterior. Produção: **[não verificado]**. `bin/disjuntor.py:1457`, `bin/tests/test_disjuntor.sh:427`.
-
-(d) Escopo “verificador final” precisa permanecer ligado ao tipo/final ou declarar novo universo; modelo opus não é critério atual. O contrato aceita rótulo como medida, não prova leitura efetiva; prompt com ID formalmente válido mas de obra errada satisfaz o parser. `bin/disjuntor.py:1454`, `bin/disjuntor.py:504`.
-
-**Item 8 — modelo/papel**
-
-(a) **Nenhum mecanismo atual de negativa por model/description/papel.** O ramo Agent lê tipo/prompt e B4; a contagem do modelo é posterior, por meta + primeiro `api-request`. `bin/disjuntor.py:1451`, `bin/disjuntor.py:1460`, `bin/disjuntor.py:1631`.
-
-(b) Transcript/meta são escritos pelo harness segundo o contrato local do leitor; o escritor executável do harness não está nesta cópia **[não verificado]**. O leitor atual usa `params.model` do primeiro api-request e `agentType` da meta. `bin/disjuntor.py:1632`, `bin/disjuntor.py:1641`.
-
-(c) Agent sem `model`, ou opus descrito como contagem, passa se B1/B3/B4 não negarem; fixtures atuais de Agent verificador nem enviam `model`. Produção: **[não verificado]**. `bin/tests/test_disjuntor.sh:322`, `bin/disjuntor.py:1451`.
-
-(d) Lacunas: sintaxe/caixa/acentos dos papéis; campo description versus prompt; vocabulário aliases do modelo; ordem com item1; modelos desconhecidos; definição de “espera de suite”. “Agente mal rotulado custa uma volta” exige contar antes de negar; negar antes custa zero; sem identidade da tentativa, reapresentação pode contar repetidamente. `bin/disjuntor.py:1451`; detalhes de política **[não verificado]**.
-
-**Item 9 — suite inteira verde por árvore/hash** [nao verificado]
-
-(a) **Nenhum gate atual na abertura do opus.** Existe regra textual suite antes do opus, sem leitura de selo no ramo Agent. `CLAUDE.md:557`, `bin/disjuntor.py:1451`.
-
-(b) Writer/reader/schema/local do certificado pretendido não estão nomeados no contrato nem nesse ramo **[não verificado]**; ramo atual só lê B3 e B4. `bin/disjuntor.py:1454`, `bin/disjuntor.py:1460`.
-
-(c) Opus final de obra livre passa sem qualquer suite registrada. Produção: **[não verificado]**. `bin/disjuntor.py:1457`, `bin/disjuntor.py:1475`.
-
-(d) Falta definir “inteira”, origem autêntica do verde, suites necessárias, validade temporal, hash commit versus árvore/estado sujo e relação com cópia citada. Identidade do item3/4 e escritor do selo antecedem gate; gate sem produtor causaria negação permanente **[não verificado]**. A regra textual pede suite inteira da árvore, não fornece formato de prova. `CLAUDE.md:557`. [nao verificado]
-
-**Item 11 — sétimo agente vivo**
-
-(a) **Nenhum teto de seis na porta Agent.** Existe leitor de agentes de fundo sem entrega, mas a porta não o usa. `bin/disjuntor.py:366`, `bin/disjuntor.py:1451`.
-
-(b) `agentes_sem_entrega` lê transcript principal, reconhece strings de lançamento assíncrono e notificações com task-id/status; não é registro de todos agentes vivos nem usa processos. `bin/disjuntor.py:367`, `bin/disjuntor.py:376`.
-
-(c) Sete Agents novos passam enquanto B4/B3/B1 permitem; não há contagem de vivos nesse caminho. Produção: **[não verificado]**. `bin/disjuntor.py:1451`, `bin/disjuntor.py:1475`.
-
-(d) Falta universo (sessão/host; fundo/síncrono; agentes filhos), tratamento de transcript ausente/notification perdida, slot/reserva/liberação e CLI/chave de desligar. O helper só vê o resultado do lançamento depois que ele foi registrado, logo não resolve corrida entre autorizações simultâneas. `bin/disjuntor.py:369`, `bin/disjuntor.py:376`.
-
-**Matriz de escritores/leitores pedidos**
-
-- `disjuntor_estado.json`: escrita física única `_com_estado`, JSON temporário + replace sob flock; leitura `_com_estado`, `ler_estado`; consumidores B1/B3/B4 e painel. Estado ausente é `{}`, diferente de ilegível que levanta — isso conflita com “estado/sidecar ilegível=NAO_SEI” apenas se o contrato pretender incluir ausência de estado já conhecido. `bin/disjuntor.py:237`, `bin/disjuntor.py:262`, `bin/disjuntor.py:291`.
-- `triagem.log`: escritor `--triagem` → `_triagem_sob_trava`; leitor `_triagens` sob trava do estado, consumido por decide/rearme. Perda/truncamento detectados por contador de linhas e presença das voltas conhecidas. `bin/disjuntor.py:804`, `bin/disjuntor.py:812`, `bin/disjuntor.py:823`, `bin/disjuntor.py:1007`.
-- `.id`: wrapper remove anterior antes da chamada e grava novo só rc0 com resposta desta chamada; disjuntor lê para triagem. Portanto não é histórico completo e “durável entre sessões” não significa imutável: reutilizar resposta remove o anterior. `bin/codex_pergunta.sh:171`, `bin/codex_pergunta.sh:198`, `bin/disjuntor.py:753`.
-- Transcripts subagent: escritor harness não disponível **[não verificado]**; leitores locais `_meta`, B1, `_veredito_e_obra`, `_reprovacoes_finais`, cache/modelos do painel. Linhas JSON inválidas são puladas, meta ilegível no leitor de reprovações vira `{}` e agente pode deixar de ser classificado como verificador, sem NAO_SEI nesse percurso. `bin/disjuntor.py:342`, `bin/disjuntor.py:353`, `bin/disjuntor.py:742`, `bin/disjuntor.py:1513`, `bin/disjuntor.py:1631`.
-
-**Ordem que o código exige**
-
-- Antes dos gates 1/3/9/11: identidade da obra/cópia, esquema durável, escritores, idempotência e reserva; os pontos atuais são consulta prévia e sidecar posterior. `bin/disjuntor.py:1451`, `bin/codex_pergunta.sh:198`.
-- Item8 e item1 precisam pousar juntos ou declarar qual negativa consome volta; o custo declarado de rótulo errado não resulta automaticamente da ordem proposta **[não verificado]**.
-- O tratamento comum NAO_SEI precisa preceder extensão dos ramos: exceções hoje falham fechado só no ramo B3 final/verificador; Agent construtor falha aberto. `bin/disjuntor.py:1410`, `bin/disjuntor.py:1496`.
-- Desligamento deve alcançar wrapper antes de depender dele para novos gates; hoje chave libera PreToolUse, mas wrapper continua recusando obra parada. `bin/disjuntor.py:1487`, `bin/codex_pergunta.sh:165`.
-- O selo de testes atual cobre B3 anterior (três PROCEDENTES, consumo por sha, contagem posterior sem obra), não prova os novos contratos; suite não foi executada nesta leitura. `bin/tests/test_disjuntor.sh:1125`, `bin/tests/test_disjuntor.sh:427`, `bin/tests/test_disjuntor.sh:1468`.
-
-## 01/11 00:14 · sessao dc80f0305892 · - · - · origem=Ronald (tmux)
-
-Leitura sem executar testes ou geradores. As constatações abaixo são da cópia; a ocorrência em produção de entradas hipotéticas permanece [não verificado]. [nao verificado]
-
-**Item 5 — B1, job próprio em fundo, sem escrita por 15 min**
-
-- **Sítio atual e nome:** `medir_b1` é o medidor (`bin/disjuntor.py:413`), chamado por `b1_do_agente` (`bin/disjuntor.py:480`), somente quando o próprio agente passa no PreToolUse (`bin/disjuntor.py:1435`). O contrato acerta o B1, mas “PreToolUse Agent/Bash” é estreito: o matcher cobre todas as ferramentas (`.claude/settings.json:64`) e o B1 roda para `agent_id`, exceto `SubagentHandback` (`bin/disjuntor.py:1435`). Stop não mede B1: lê IDs já disparados e ainda sem entrega (`bin/hook_stop_fila1.py:1053`).
-- **Escritor/leitor:** o harness é indicado como escritor dos transcripts e notificações (`bin/disjuntor.py:336`, `bin/disjuntor.py:369`); sua implementação não está nesta cópia [não verificado]. `medir_b1` lê meta/transcript, caminhos citados e mtimes (`bin/disjuntor.py:415`, `bin/disjuntor.py:421`, `bin/disjuntor.py:425`, `bin/disjuntor.py:454`). `b1_do_agente` escreve `b1[id].{checado,disparado,motivo}` via `_com_estado` (`bin/disjuntor.py:481`, `bin/disjuntor.py:486`); `b1_disparados` lê para Stop (`bin/disjuntor.py:489`).
-- **Contraexemplo demonstrável:** tokens zero fazem não-disparo antes de qualquer leitura de arquivos (`bin/disjuntor.py:452`), mesmo que exista Bash em fundo: o medidor não interpreta jobs (`bin/disjuntor.py:428`). Meta/transcript/cópia ilegíveis também não disparam (`bin/disjuntor.py:417`, `bin/disjuntor.py:424`, `bin/disjuntor.py:457`), contrariando o NAO_SEI genérico do v2.
-- **Limite do caso real:** a sonda informa 17 esperas, gaps máximos de 184,5 s e tokens nas mensagens; não informa mtimes nem as chamadas de hook. Não prova uma liberação ou negação concreta do B1 [não verificado]. B1 soma input/output/cache_creation, **não** cache_read (`bin/disjuntor.py:449`); inferir disparo só dos ~2,49 Mtok/h de cache_read seria incorreto (`bin/disjuntor.py:449`).
-- **Lacunas nos cinco campos:** quem chama precisa incluir todas as ferramentas e reconhecer que não há relógio autônomo (`bin/disjuntor.py:1435`); quem espera precisa distinguir impedir próxima ferramenta de matar job (`bin/disjuntor.py:1438`); falha/limite precisa resolver isenções `SO_LEITURA`, ausência de cópia e ownership por caminho citado (`bin/disjuntor.py:91`, `bin/disjuntor.py:425`); medida precisa incluir jobs sem tokens e erro de leitura (`bin/disjuntor.py:452`); desligar hoje só testa existência da chave, sem exigir RELATO (`bin/disjuntor.py:146`).
-
-**Item 6 — contadores fora em duas gerações**
-
-- **Sítio atual:** nenhum mecanismo de sidecar/gerações no gerador ou Stop; `gerar_estado` escreve apenas seu `dst` Markdown (`bin/gerar_estado.py:376`), e Stop extrai apenas `transcript_path` do payload (`bin/hook_stop_fila1.py:1187`). O contrato nomeia corretamente o futuro produtor/leitor, mas não descreve comportamento já existente (`bin/gerar_estado.py:376`, `bin/hook_stop_fila1.py:1034`).
-- **Esperado atual heterogêneo:** raias e interrompidas o expressam em prosa (`bin/gerar_estado.py:222`, `bin/gerar_estado.py:240`); fio compara valores contra mapa vindo do carimbo (`bin/fio_estado.py:123`); leitores do dia têm `esperado_no_fim` (`app/core/medida_leitor_do_dia.py:409`, `bin/leitor_dia_estado.py:46`); placar usa `meta`, inclusive textual (`bin/gerar_estado.py:97`, `bin/gerar_estado.py:104`).
-- **Escritor/leitor:** atualmente não há escritor/leitor de `estado_contadores.json` nos sítios contratados (`bin/gerar_estado.py:376`, `bin/hook_stop_fila1.py:1034`). `_com_estado` é o ponto existente adequado para a história compartilhada: lê/muta/grava sob flock e substituição atômica (`bin/disjuntor.py:237`, `bin/disjuntor.py:253`, `bin/disjuntor.py:268`, `bin/disjuntor.py:274`).
-- **Contraexemplo demonstrável:** PAREI legítimo encerra antes de qualquer cobrança de contadores (`bin/hook_stop_fila1.py:1226`); ESPERANDO com prova também encerra (`bin/hook_stop_fila1.py:1231`). Contadores fora duas vezes não alteram esses ramos porque não são lidos (`bin/hook_stop_fila1.py:1184`). Valores reais dos “≥4 fora hoje” não foram fornecidos [não verificado].
-- **Lacunas:** chamador precisa definir publicação concluída e falha antes de publicar; esperado/valor precisam definir comparação e “sem esperado”; duas gerações precisa definir reinício, sidecar velho, saltos, geração repetida e mudança do conjunto; medida precisa demonstrar histórico e publicação parcial; desligar não possui exigência atual de RELATO (`bin/disjuntor.py:146`). Esses casos não têm tratamento do novo sidecar no código atual (`bin/gerar_estado.py:376`, `bin/hook_stop_fila1.py:1034`).
-
-**Item 12 — cota desconhecida por mais de um Stop**
-
-- **Sítio atual e nome:** `ler_cota` existe (`bin/disjuntor.py:1064`), B4 Stop existe (`bin/disjuntor.py:1202`), mas contar Stops de desconhecido e cobrar FORA não existe nessa transição: cota desconhecida não produz `escada`, e `b4_stop` apaga `b4_para` quando não há escada (`bin/disjuntor.py:1111`, `bin/disjuntor.py:1208`).
-- **Escritor:** `statusline_cota.py` está configurado (`.claude/settings.json:76`); valida os dois números, grava `{seven_day_pct,seven_day_resets_at,hora,contexto_tokens,contexto_pct,session_id}` e troca atomicamente (`bin/statusline_cota.py:45`, `bin/statusline_cota.py:51`, `bin/statusline_cota.py:54`). Sem ambos, não escreve (`bin/statusline_cota.py:47`); erro é silenciado (`bin/statusline_cota.py:55`). Não há escritor manual de “escada N” aqui: só reconhece prefixo `escada`, sem extrair N (`bin/disjuntor.py:87`, `bin/disjuntor.py:1115`).
-- **Leitor:** `ler_cota` lê percentual/reset e ignora hora/session_id (`bin/disjuntor.py:1069`); `escada` e `b4_decide` o usam (`bin/disjuntor.py:1111`, `bin/disjuntor.py:1126`); painel também (`bin/disjuntor.py:1619`). Transição B4 escreve `b4_para.desde` via `_com_estado` (`bin/disjuntor.py:1215`, `bin/disjuntor.py:1222`).
-- **Contraexemplo:** cota ausente/ilegível retorna None (`bin/disjuntor.py:1075`), e Agent passa B4 sem escada (`bin/disjuntor.py:1127`). A sonda relata cota ausente, mas não traz uma chamada e sua decisão: a ocorrência concreta de liberação é [não verificado]. Causa do payload ausente e execução efetiva da statusline também são [não verificado].
-- **Lacunas:** definir N/unidade/intervalo, hora/validade e precedência entre fonte manual e statusline; definir se o Stop seguinte à linha FORA reinicia sequência; definir persistência entre sessões; separar desconhecido de escada real; resolver Stop excepcional que hoje falha aberto (`bin/hook_stop_fila1.py:1305`). Quem desliga hoje é existência de chave (`bin/hook_stop_fila1.py:1039`); RELATO obrigatório é novo (`bin/disjuntor.py:146`).
-
-**Dependências e medidas que afetam a consolidação**
-
-- Antes de item 6 cobrar: contratos estruturados dos medidores → sidecar e geração concluída → histórico sob trava → decisão Stop. As fontes atuais não compartilham esquema (`bin/gerar_estado.py:222`, `bin/fio_estado.py:123`, `app/core/medida_leitor_do_dia.py:409`).
-- Cobranças de 6/12 têm de preceder **todos** os atalhos que liberam; há B4, orçamento, PAREI, ESPERANDO, teto e B2 (`bin/hook_stop_fila1.py:1207`, `bin/hook_stop_fila1.py:1218`, `bin/hook_stop_fila1.py:1226`, `bin/hook_stop_fila1.py:1231`, `bin/hook_stop_fila1.py:1293`, `bin/hook_stop_fila1.py:1295`). Inserir só nos “recados” finais deixa os atalhos passarem (`bin/hook_stop_fila1.py:1300`).
-- Exceções do disjuntor no Stop retornam None (`bin/hook_stop_fila1.py:1059`); exceção geral libera (`bin/hook_stop_fila1.py:1305`). Isso precisa ser conciliado com “nunca verde calado” antes da cobrança (`bin/hook_stop_fila1.py:1305`).
-- `gerar_estado` é chamado depois de `relato_nomes.sh`, cuja falha encerra o publicador (`bin/relato.sh:32`, `bin/relato.sh:38`). Sidecar pode ficar velho se essa dependência falhar; ocorrência real [não verificado].
-- “Custo por modelo 24 h” não é a medida atual: `_agentes_24h` conta agentes por modelo/tipo, usando mtime do meta (`bin/disjuntor.py:1631`, `bin/disjuntor.py:1637`, `bin/disjuntor.py:1647`); cache é soma de cache_read por **dia civil**, não custo nem janela móvel (`bin/disjuntor.py:1512`, `bin/disjuntor.py:1536`, `bin/disjuntor.py:1543`).
-- As suítes atuais têm casos B1/B4 e escada-palavra (`bin/tests/test_disjuntor.sh:1468`); `escada_palavra` explicitamente encerra escada com a mensagem humana seguinte (`bin/tests/test_disjuntor.sh:500`). Resultado de execução atual dos 12 mutantes prometidos é [não verificado].
-
-## 01/11 00:14 · sessao 63ce410ff0b6 · - · - · origem=Ronald (tmux)
-
-**Item 7 — raias velhas**
-
-- **Sítio:** `bin/raias_estado.py::ler`; contrato aponta o ESTADO corretamente como publicador, mas não nomeia chamador/escritor de limpeza. O gerador importa o medidor e publica suas linhas; o medidor somente consulta Git/declarações e retorna dados, sem arquivar ou remover worktrees. `bin/gerar_estado.py:215`, `bin/gerar_estado.py:222`, `bin/raias_estado.py:89`, `bin/raias_estado.py:125`.
-- **Escritor/leitor:** `bin/raia_agente.sh` grava `logs/raias/<raia>.agente` com `RAIA`, `OBRA`, `QUEM`, `DESDE`, `FALTA`; atualiza `FALTA`, registra histórico e remove a declaração no fechamento. `bin/raia_agente.sh:54`, `bin/raia_agente.sh:58`, `bin/raia_agente.sh:66`, `bin/raia_agente.sh:76`, `bin/raia_agente.sh:77`. O único leitor declarado é `raias_estado`, que lê os pares `chave=valor`; `gerar_estado` lê o resultado. `bin/raia_agente.sh:10`, `bin/raias_estado.py:62`, `bin/gerar_estado.py:216`.
-- **Universo incorreto para o dado raspado:** o medidor exclui `.claude/worktrees`, só enumera worktrees e declarações, portanto não alcança branches sem worktree; conta `rev-list main..HEAD`, sem avaliar equivalência de patches por `git cherry`. `bin/raias_estado.py:85`, `bin/raias_estado.py:93`, `bin/raias_estado.py:96`, `bin/raias_estado.py:101`. No dado fornecido, `tmp-ui` tem dois patches não pousados sem worktree; existem entradas B sob `.claude/worktrees`; `wt-comboio` tem `ahead=1`, `plus=0`, idade 451,8 h. As duas primeiras classes escapam e a terceira é contada velha pelo critério atual, embora não tenha patch pendente; ocorrência fornecida, sem arquivo disponível no HEAD [não verificado]. A regra que marca velha usa apenas idade do último commit à frente, sem descontar patch já pousado. `bin/raias_estado.py:103`, `bin/raias_estado.py:123`.
-- **Outro caso estático:** falha de Git retorna `''`, que vira contagem zero; nenhuma declaração e nenhum resultado Git permitem publicar “nenhuma raia viva”. `bin/raias_estado.py:42`, `bin/raias_estado.py:48`, `bin/raias_estado.py:101`, `bin/gerar_estado.py:229`. Ocorrência concreta dessa falha [não verificado].
-- **Lacunas:** falta definir quem chama/espera a limpeza; universo inclui branch sem worktree, detached e `.claude/worktrees`? “velha” continua sendo último commit >6h, nascimento, inatividade ou classe A/B/C da sonda? O mecanismo atual usa >6h do último commit à frente e “agente vivo” significa somente declaração não baixada. `bin/raias_estado.py:20`, `bin/raias_estado.py:39`, `bin/raias_estado.py:103`, `bin/raias_estado.py:123`. Tar sem verificação de sucesso/restauração, preservação de sujeira/A*, exclusão de C, destino da lista B e comprovação de “motivo” continuam sem sítio implementado [não verificado]. A chave do disjuntor não é consultada por esse medidor. `bin/raias_estado.py:89`, `bin/raias_estado.py:135`.
-- **Medida existente não cobre limpeza:** o teste de raias verifica publicação, diferença com/sem declaração e unicidade de acesso a `logs/raias`; seu caso real sintético é uma única worktree um commit à frente. Não prova tar, remoção segura, branches sem worktree ou equivalência de patches. `bin/tests/test_raia_declarada_no_estado.sh:5`, `bin/tests/test_raia_declarada_no_estado.sh:38`, `bin/tests/test_raia_declarada_no_estado.sh:53`, `bin/tests/test_raia_declarada_no_estado.sh:68`.
-
-**Item 10 — contrato exigido no push** [nao verificado]
-
-- **Sítio:** nenhum gate de contrato implementado em `bin/pre-push.sh`; o arquivo faz gates específicos, resolve `PUSH_SHA`, testa a árvore e termina liberando. O nome do ponto de encaixe está correto, a regra é nova. `bin/pre-push.sh:10`, `bin/pre-push.sh:19`, `bin/pre-push.sh:33`, `bin/pre-push.sh:38`, `bin/pre-push.sh:198`, `bin/pre-push.sh:200`.
-- **Chamador efetivo:** `hooks.sh install` escreve `.git/hooks/pre-push` como wrapper delegando para `$(git rev-parse --show-toplevel)/bin/pre-push.sh`; `hooks.sh check` verifica delegação. Instalação real no host desta sonda [não verificado]. `bin/hooks.sh:26`, `bin/hooks.sh:51`, `bin/hooks.sh:56`.
-- **Leitores/escritores adjacentes:** a régua escreve `.regua_stamp` com árvore/status/hora; o pre-push lê esse arquivo e pode pular o arsenal. `bin/regua.sh:196`, `bin/regua.sh:198`, `bin/regua.sh:199`, `bin/pre-push.sh:53`, `bin/pre-push.sh:66`, `bin/pre-push.sh:70`. Nenhum escritor/leitor de contrato exigido está estabelecido por esses sítios [não verificado].
-- **Contraexemplo estático:** um push só de instrumento pode chegar a `OK — push liberado` sem leitura de contrato; além disso, `SKIP_TESTS=1` retorna sucesso antes de todos os gates. Um push concreto dessa classe na produção [não verificado]. `bin/pre-push.sh:5`, `bin/pre-push.sh:200`.
-- **Lacunas nos cinco campos:** falta vínculo determinístico arquivo/commit→obra→contrato, universo de mudanças de “hook/cron/selo de host”, regra para vários instrumentos/obras no mesmo push, qual contrato substitui qual e se deve estar no mesmo commit, no alcance do push ou apenas na árvore. O arquivo já distingue `PUSH_SHA` de HEAD; contrato conferido só no disco pode certificar outra árvore. `bin/pre-push.sh:33`, `bin/pre-push.sh:37`, `bin/pre-push.sh:39`. O destino pedido fica sob `logs/`, ignorado pelo Git; `.claude/` também é ignorada. ` .gitignore:53`, `.gitignore:66`. Quem desliga especificamente o gate e como interage com `SKIP_TESTS` não foi definido; a linha atual libera por variável de ambiente. `bin/pre-push.sh:5`.
-
-**Medida, documentação e dependências**
-
-- Os testes de host são chamados pela régua, antes da suite, no laço `bin/tests/test_*.sh`; o próprio pre-push registra que esse laço não roda ali e pode haver régua “JÁ VERDE”. Logo o gate 10 precisa estar na parte incondicional do push se pretende julgar cada push; colocar apenas um selo no laço da régua não cumpre essa função. `bin/regua.sh:138`, `bin/regua.sh:140`, `bin/pre-push.sh:14`, `bin/pre-push.sh:15`, `bin/pre-push.sh:66`.
-- O teste atual do disjuntor já tem mutantes com controle da cópia íntegra e falha se a costura removida não for detectada. Isso fornece estrutura de medida, sem provar os 12 RED novos nem resultado vermelho/verde desta obra. `bin/tests/test_disjuntor.sh:1474`, `bin/tests/test_disjuntor.sh:1481`, `bin/tests/test_disjuntor.sh:1489`. Execução dos 12 novos [não verificado].
-- `test_hook_parei_so_lei.sh` cobre PAREI técnico/lei, `!` e item só registrado; não há nesses casos a nova regra de contadores/FORA. `bin/tests/test_hook_parei_so_lei.sh:40`, `bin/tests/test_hook_parei_so_lei.sh:48`, `bin/tests/test_hook_parei_so_lei.sh:68`, `bin/tests/test_hook_parei_so_lei.sh:78`.
-- A seção 7b já declara separação do pouso de instrumento e produto, raias velhas esperado zero e contrato de cinco linhas mandado uma vez ao Codex; não equivale ao novo enforcement do push. `CLAUDE.md:512`, `CLAUDE.md:514`, `CLAUDE.md:574`. A revisão de linhas de mecanismo no mesmo commit é coerente com a documentação no marco, cuja regra está em `CLAUDE.md:517`. [nao verificado]
-- A ordem do item 7 depende primeiro de resolver o universo/identidade de “não pousado” e só depois de medir zero/justificar ou remover: o produtor atual não alcança o universo da sonda e confunde ahead com patches pendentes. `bin/raias_estado.py:85`, `bin/raias_estado.py:96`, `bin/raias_estado.py:101`. A ordem do item 10 depende de tornar inequívoco contrato commitado/obra e o alcance `PUSH_SHA` antes de endurecer a recusa; `logs/` é ignorado hoje. `.gitignore:53`, `bin/pre-push.sh:33`. O contrato prevê gate10 apenas no segundo pouso; a proteção dos instrumentos do primeiro pouso pelo gate10 ainda inexistente [não verificado].
-
-_1326 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1329 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
