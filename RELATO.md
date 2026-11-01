@@ -5586,3 +5586,8 @@ linha dele** ("inclui a chamado e a pdf") e elas entram no proximo ato.
 - LEN-VIVOS: help do --retratar-indevidas corrigido na copia (f71d570e, `supra_juiz.py::add_arguments`); suite inteira na copia: logs/lenvivos/v2/suite_full3.log (trava pid 3349006). Depois dela: opus final.
 - GRADE-FOLGA-JUIZ volta 9 aberta em wt-grade-v5-163638 (abd37234, contem main 3e5ea58a): cura (a) catraca getattr + MORDE literal, (b) feed fase_conflitante.py:80-82 x vinculo_do_dia + remedir 181/4, (c) JUIZES.md; extras LEI-AKITA juizes novos, Pauta DP comp09 = 0, hash TXT 09. Logs logs/grade_juiz/v9/. Vagas: COBPARC + GRADE = 2 (teto conferido antes; LEN-VIVOS so espera suite/opus).
 - PRE-APROVADO (a): parados 2 esperadores de volta superada (GRADE v8 suite+codex; padrao_de_cima r8/emis c1), obra GRADE e PADRAO-DE-CIMA, log desta linha.
+
+## 23:22 aval B3-LIBERACOES
+- (1) ERRO-BOBO GRADE-FOLGA-JUIZ 22:41 (sha ab7aaa9b) RATIFICADO pelo Ronald; a AUDITORIA de 23:1x (rearma) fica RESPONDIDA: nao rearma.
+- (2) ERRO-BOBO V3-P5 (dele): reprovacao de BASE (pista 38 atras), corpo de `minutos_noturnos_dos_intervalos` aprovado; caminho (b) = copia nova do main, RED sem _aw/he_pontas da pista + suite + impacto comp10 + opus; vaga depois da GRADE v9. Disjuntor nao tem disparo V3-P5 (disjuntor_estado.json), entao nenhuma linha de topo e consumida.
+- (3) ADR-0003 lido inteiro (133 linhas): Estado "vigente como DESENHO; selo e obra futura"; perguntas motivadoras ja RESPONDIDAS 16:2x (:115) -> sem PERGUNTA ADR-0003. Entra no commit de docs do proximo pouso de negocio (L-106).
