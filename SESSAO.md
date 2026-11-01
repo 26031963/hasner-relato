@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 19:45:45.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (140.7 MB). Acoes na janela: **810**.
+**Medido em 01/11/2026 19:51:09.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (140.8 MB). Acoes na janela: **814**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:49:42 | Bash | Recheck suite growth and proof | `cd /home/ronald/saas-hasner && /usr/bin/sleep 30; ls -l logs/cobparc/v6/suite_pce.log; kill -0 3756808 && echo vivo; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
+| 19:49:14 | Bash | Point ESPERANDO at v6 suite and verify | `cd /home/ronald/saas-hasner && sed -i '3s#.*#ESPERANDO: trava_teste.sh \| pid=3756808 \| arquivo=logs/cobparc/v6/suite_pce.log#' app/docs/RELATO.md && H=$(date +%H:%M) && printf -- "- %s COBPARC v6: RED (logs/cobparc/v6/red.log) e GREEN de modulo (green_mod.log) do construtor; suite_pce v6 rodando (pid 3756808) e sonda na sombra lancada.\n" "$H" >> app/docs/RELATO.md && /usr/bin/sleep 25 && cd bin ...` |
+| 19:47:07 | Bash | Wait for a long-running v6 log | `cd /home/ronald/saas-hasner/logs/cobparc/v6 && for i in $(seq 1 29); do n=$(find . -maxdepth 1 -name '*.log' -size +40k -mmin -1 \| head -1); [ -n "$n" ] && { echo "$n"; break; }; /usr/bin/sleep 20; done; ls -lt \| head -6; bash /home/ronald/saas-hasner/bin/trava_teste.sh --quem; date +%H:%M` |
+| 19:46:32 | Bash | Point ESPERANDO at v6 RED run | `cd /home/ronald/saas-hasner && sed -i '3s#.*#ESPERANDO: trava_teste.sh \| pid=3650383 \| arquivo=logs/cobparc/v6/red.log#' app/docs/RELATO.md && /usr/bin/sleep 30 && kill -0 3650383 && echo vivo; ls -l logs/cobparc/v6/red.log; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
 | 19:38:26 | Bash | Log green pce2 and wait for next run | `cd /home/ronald/saas-hasner && H=$(date +%H:%M) && printf -- "- %s COBPARC v5 suite_pce2 sobre b51ce64b VERDE: OK (skipped=11, expected failures=25), Ran 8880 (logs/cobparc/v5/suite_pce2.log) -- arvore superada pela v6, nao certifica pouso.\n" "$H" >> app/docs/RELATO.md; for i in $(seq 1 28); do q=$(bash bin/trava_teste.sh --quem); case "$q" in livre*) /usr/bin/sleep 20;; *) echo "$q"; break;; esa ...` |
 | 19:38:15 | Bash | Read suite_pce2 verdict | `cd /home/ronald/saas-hasner && grep -E '^(OK\|FAILED)($\| \()' logs/cobparc/v5/suite_pce2.log \| tail -1; grep -E '^Ran [0-9]+' logs/cobparc/v5/suite_pce2.log \| tail -1` |
 | 19:38:07 | Bash | Check suite state and new logs | `cd /home/ronald/saas-hasner && kill -0 2587611 2>/dev/null && echo vivo; bash bin/trava_teste.sh --quem; tail -3 logs/cobparc/v5/suite_pce2.log \| cut -c1-200; ls -lt logs/cobparc/v6 logs/cobparc/v5 \| head -8` |

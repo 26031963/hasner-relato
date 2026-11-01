@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: trava_teste.sh | pid=2587611 | arquivo=logs/cobparc/v5/suite_pce2.log
+ESPERANDO: trava_teste.sh | pid=3756808 | arquivo=logs/cobparc/v6/suite_pce.log
 
 aval Ronald 19:37 (logs/cobparc/v6/AVAL_HORIZONTE_09.md): COBPARC5-HORIZONTE-09 RESPONDIDA -- horizonte v4 fica 2026-09; CABE 38 parciais, col643, chamados 82=82, col926 (03/09 dono BATIDA -> Pauta DP); NAO CABE 29 dias col187/col311 ausencia->folga: achar e curar antes do pouso (RED ferias/aviso_home_office sobre folga = ausencia; prop nova); col878: nomear dia e juiz.
 aval Ronald 19:35: REABERTURA-RECUSADA-DEDUP-CANCELA -- construtor encerrado, item volta a fila 1 de tras (ruido de log, nao trava placar nem contrato 20; cota da semana); vaga VAZIA ate a resposta da COBPARC5-HORIZONTE-09; suites da COBPARC seguem; sem vaga util = esperar.
@@ -5845,3 +5845,4 @@ DESPACHO GRADE-FOLGA-JUIZ-a: retirar trecho eh_trabalho (calendario.py:840 da co
 
 - 19:35 PRE-APROVADO (a): construtor REABERTURA-RECUSADA-DEDUP encerrado pelo aval 19:35 (sem commit; copia limpa wt-reabdedup-193311 removida, nenhum log/suite lancado). Vaga vazia.
 - 19:37 PRE-APROVADO (a): encadeador da suite inteira sobre b51ce64b cancelado (volta superada pelo aval 19:37); suite_pce2 segue ate o fim (nao se mata suite). COBPARC v6 devolvida ao construtor.- 19:38 COBPARC v5 suite_pce2 sobre b51ce64b VERDE: OK (skipped=11, expected failures=25), Ran 8880 (logs/cobparc/v5/suite_pce2.log) -- arvore superada pela v6, nao certifica pouso.
+- 19:49 COBPARC v6: RED (logs/cobparc/v6/red.log) e GREEN de modulo (green_mod.log) do construtor; suite_pce v6 rodando (pid 3756808) e sonda na sombra lancada.
