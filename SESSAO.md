@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 13:52:22.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (128.7 MB). Acoes na janela: **505**.
+**Medido em 01/11/2026 13:57:45.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (128.8 MB). Acoes na janela: **510**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:53:37 | Bash | Record SOMBRA-C1D9 closure | `cd /home/ronald/saas-hasner && H=$(date +%H:%M) && python3 - "$H" <<'EOF' import sys,re H=sys.argv[1] p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') i=next(i for i,l in enumerate(L) if l.startswith('\| O261-E-F1C4-SOMBRA-C1D9 \|')) c=L[i].split('\|'); c[3]=f" FECHADA 01/11 {H}: sombra e046540e x c1d9ee7c, mesma lavra de prod (md5 98815755), universo 208 dias com 2+ vivos / 137 ALVO (com fio ...` |
+| 13:53:28 | Bash | Check idempotence line | `cd /home/ronald/saas-hasner/logs/o261e/divida_f1c4 && grep -h "IDEMP\\|r1==r2\\|DIVERG" sombra_c1d9_*.out \| head; grep -c "^CEL CTRL" sombra_c1d9_e046540e.out; awk '/^CEL/ && $0 !~ /r1 (.*) r2 \1$/' sombra_c1d9_c1d9ee7c.out \| head -3` |
+| 13:53:24 | Bash | Check idempotence and summary lines | `cd /home/ronald/saas-hasner/logs/o261e/divida_f1c4 && grep -c "^ALVO" sombra_c1d9_e046540e.out; grep -h "IDEMPOT\\|FIM_SONDA\\|^CEL\\|hash\\|EXPORT" sombra_c1d9_*.out \| sort \| uniq -c \| head -12 \| cut -c1-200; tail -5 sombra_c1d9_c1d9ee7c.out \| cut -c1-200` |
+| 13:53:20 | Bash | Compare SOMBRA-C1D9 pair outputs | `cd /home/ronald/saas-hasner/logs/o261e/divida_f1c4 && wc -l sombra_c1d9_*.out; diff <(grep -v ARVORE sombra_c1d9_e046540e.out) <(grep -v ARVORE sombra_c1d9_c1d9ee7c.out) \| head -30; grep -h "IDEMPOTENTE\\|FIM_SONDA\\|UNIVERSO\\|ALVO\b\\|resumo\\|TOTAL" sombra_c1d9_*.out \| head -12 \| cut -c1-200; grep -h "lavra_de_prod" sombra_rodar_*.log \| cut -c1-200` |
+| 13:53:16 | Bash | Check all pending tasks | `cd /home/ronald/saas-hasner && tail -3 logs/grade_juiz/vb/push_6f583cbc.log; ls -la logs/o261e/f2/ \| tail -3; ls logs/cobparc/v4/det/ logs/o261e/divida_f1c4/; ps -p 2733967 -o etime\|tail -1; date +%H:%M` |
 | 13:48:56 | Bash | Point ESPERANDO at sombra.sh pid and self-check | `cd /home/ronald/saas-hasner && sed -i '3s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/sombra.sh \| pid=2733967#' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md && cd bin && python3 -c " import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
 | 13:48:53 | Bash | Read ESPERANDO validation in hook | `cd /home/ronald/saas-hasner && sed -n 646,720p bin/hook_stop_fila1.py` |
 | 13:48:42 | Bash | Point ESPERANDO at the live runner | `cd /home/ronald/saas-hasner && sed -i '3s/pid=2733952/pid=2733964/' app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md; tail -2 logs/grade_juiz/vb/push_6f583cbc.log` |
