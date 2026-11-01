@@ -1,7 +1,153 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 21:56** · publicado em **31/10/2026 21:57** (UTC-3)
+> Ultima resposta processada: **31/10/2026 21:58** · publicado em **31/10/2026 22:02** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 21:58 · sessao 590560d188d5 · TRAVA-COBERTURA · leitura · origem=Code
+
+**O contrato muda a identidade do dono do trabalho e exige migração dos chamadores, dos recursos e dos selos.** O selo atual exige que matar a chamada mate o container; a proposta exige que ele sobreviva. A sombra, por sua vez, entrega a posse ao chamador por fd 8, sem receber um comando para destacar. (`bin/tests/test_trava_dono_para_filho.sh:54–63`; `bin/sombra_trava.sh:21–39`; `contrato.txt:2`.)
+
+Uso `contrato.txt:1–5` para as cinco cláusulas numeradas do anexo. Os contraexemplos abaixo são sequências condicionais de revisão, não ocorrências medidas em produção; ocorrência real [nao verificado].
+
+**1. O que cada linha encontra hoje e o que muda**
+
+| Linha | Código atual da cópia | Mudança contratada e lacunas |
+|---|---|---|
+| **1 — quem chama** | A trava define `QUEM` como `ESTEIRA_QUEM` ou basename, acrescentando `$$`; aceita somente `--espera`, `--quem` e `--`. A suite faz `exec` para a trava. (`bin/trava_teste.sh:36`; `bin/trava_teste.sh:85–93`; `bin/suite.sh:96`.) | Introduz obra, volta, fallback de identidade e três verbos. A semântica de `--abre-volta` além da assinatura — persistência, monotonicidade e rejeição de pedidos atrasados — não está especificada. (`contrato.txt:1–2`; detalhes [nao verificado].) |
+| **1 — PreToolUse** | `pretool` **já extrai** o comando Bash, mas retorna antes de qualquer fiscalização posterior quando não há `agent_id`, não é `Agent` e não contém `codex_pergunta`. Depois disso não há bloqueio Docker/suite. (`bin/disjuntor.py:1430–1475`.) | A nova fiscalização precisa anteceder esse retorno para alcançar a sessão principal. O matcher já é vazio; ampliar apenas a configuração não resolve. (`bin/disjuntor.py:1431–1432`; `.claude/settings.json:62–68`; `contrato.txt:1,3`.) |
+| **2 — quem espera** | A própria trava segura fd 9, espera `flock`, lança o comando em background sem esse fd e faz `wait`. TERM/INT/HUP acionam `_parar`, que procura container pelo rótulo, solicita parada e sai 143. (`bin/trava_teste.sh:96–103`; `bin/trava_teste.sh:159–171`.) | Separa esperador e job, acrescenta registros, arquivo de rc e superação de jobs ainda em fila. Para sombra, destacar apenas `trancar_sombra` não transfere a continuação: a função atualmente retorna para o restante do script executar. (`contrato.txt:2`; `bin/sombra_trava.sh:21–39`; `bin/sombra.sh:438–461`.) |
+| **3 — falha/limite** | A trava já retorna 75 por timeout, falha de `docker ps`, dono vivo sem posse, falha ao parar órfão e suite sem rótulo persistente. Já compara PID **e starttime** para validar o dono do container. Não usa pidfile nem arquivo de rc. A sombra retorna **1** quando sua espera falha. (`bin/trava_teste.sh:39–56`; `bin/trava_teste.sh:97–99`; `bin/trava_teste.sh:115–149`; `bin/sombra_trava.sh:28–35`.) | Acrescenta validação/poda dos registros, timeout de nascimento e rc persistido. “Sem pidfile = job não nasceu” não é demonstrado por um timeout; o protocolo de nascimento não foi fornecido. Também falta explicitar se a sombra migra seu timeout de 1 para 75. (`contrato.txt:3`; implementação [nao verificado].) |
+| **4 — medida** | A trava de testes escreve `.quem`; a sombra escreve `sombra_espera.jsonl`, com leitor próprio de esperas longas. (`bin/trava_teste.sh:102–103`; `bin/sombra_trava.sh:30–31`; `bin/sombra_trava.sh:42–60`.) | Introduz journal de eventos, listagem e mensagem de RELATO no stderr. Os valores esperados “0” são metas do contrato, sem medição apresentada. Destino da mensagem quando o esperador já morreu [nao verificado]. (`contrato.txt:4`.) |
+| **5 — quem desliga** | Hoje sinais comuns na trava param o filho; a aquisição seguinte também para containers rotulados de donos mortos. A sombra não tem mecanismo equivalente de rótulo e `_parar`. (`bin/trava_teste.sh:120–144`; `bin/trava_teste.sh:159–168`; `bin/sombra_trava.sh:21–39`; `bin/sombra.sh:182–192`.) | Introduz cancelamento por obra. “Job só morre por cancela-obra” precisa ser conciliado com o TERM por superação da linha 2 e com a recuperação de órfãos existente. Commit exato de reversão, drenagem dos jobs destacados e tratamento dos novos arquivos no rollback [nao verificado]. (`contrato.txt:2,5`.) |
+
+O bloqueio novo também precisa definir sua relação com o disjuntor desligado e com exceções: hoje a chave pula `pretool`, e exceções fora de B3 liberam a ferramenta. (`bin/disjuntor.py:1486–1488`; `bin/disjuntor.py:1496–1506`; política futura [nao verificado].)
+
+**2. Quem escreve e quem lê**
+
+| Campo/arquivo | Escritores e leitores atuais | Responsabilidade nova |
+|---|---|---|
+| **`<trava>.fila/`** | Não há acesso a esse registro nos fluxos atuais de aquisição de testes ou sombra. (`bin/trava_teste.sh:85–171`; `bin/sombra_trava.sh:21–39`.) | Job registra identidade/estado; entrada nova consulta e supera; cancelador consulta; `--fila` lista e leitores podam mortos. Nomes dos arquivos, publicação atômica, sincronização e remoção terminal [nao verificado]. (`contrato.txt:1–3`.) |
+| **Arquivo de rc** | O rc vem do `wait`; não há arquivo intermediário. (`bin/trava_teste.sh:169–171`.) | Job escreve, esperador lê e devolve. Caminho, exclusividade por job, publicação atômica e ordenação entre rc, saída final e remoção do registro [nao verificado]. (`contrato.txt:2–3`.) |
+| **`<trava>.fila.jsonl`** | Os fluxos atuais não escrevem esse journal. (`bin/trava_teste.sh:96–171`; `bin/sombra_trava.sh:21–39`.) | Eventos são escritos pelo mecanismo novo; cancelamento inclui quem/motivo. Não há leitor do journal nomeado no contrato — `--fila` não é explicitamente definido como leitor dele. Escritor de cada transição e garantia contra eventos duplicados/perdidos [nao verificado]. (`contrato.txt:4–5`.) |
+| **`.quem`** | Escrito após aquisição e no EXIT. Lido por `_quem` e pela mensagem de timeout. `_quem` consulta primeiro o flock: se estiver preso e o texto disser livre, responde “não sei”. (`bin/trava_teste.sh:59–81`; `bin/trava_teste.sh:98`; `bin/trava_teste.sh:102–103`.) | O contrato não define seu novo escritor/formato. Se ficar com o esperador, o EXIT dele poderá publicar “livre” com job vivo; a defesa atual de `_quem` evita aceitar esse texto enquanto o flock continuar preso. (`contrato.txt:2`; `bin/trava_teste.sh:61–66`; `bin/trava_teste.sh:103`; migração [nao verificado].) |
+| **Rótulo do container** | Chave derivada do **basename da trava**; valor `$$-starttime`. Inserido apenas quando o comando começa por `docker run`. Lido por `_rotulados`, `_quem`, recuperação de órfãos e `_parar`; `_sem_rotulo` procura suites sem rótulo de trava alguma. (`bin/trava_teste.sh:37`; `bin/trava_teste.sh:51–56`; `bin/trava_teste.sh:71–78`; `bin/trava_teste.sh:101`; `bin/trava_teste.sh:109–156`; `bin/trava_teste.sh:162–163`.) | A identidade precisa representar o **job destacado**. Se conservar a identidade do esperador, sua morte fará o dono parecer morto. Para sombra, o vínculo precisa ser criado nos containers hoje sem esse rótulo. (`contrato.txt:2,5`; `bin/trava_teste.sh:47–49`; `bin/sombra.sh:183–191`; implementação [nao verificado].) |
+| **rc e stdout/stderr do chamador** | Saída do filho segue pelos descritores herdados; o processo espera seu rc. (`bin/trava_teste.sh:169–171`.) | O esperador passa a retransmitir. Precisa entregar toda a saída antes de devolver o rc e suportar desaparecimento do consumidor sem matar o job. Esse protocolo [nao verificado]. (`contrato.txt:2`.) |
+
+Os consumidores concretos de saída e rc são:
+
+| Consumidor | Leitura e dependência |
+|---|---|
+| **Suite** | `exec` preserva a interface de processo, saída e rc da trava. (`bin/suite.sh:96–103`.) |
+| **Régua** | Grava log, captura rc, rejeita códigos fora de 0/1 sem carimbo e julga log+rc. (`bin/regua.sh:165–180`.) |
+| **Pre-push** | Captura ambos os fluxos em arquivo, filtra **depois** da chamada e devolve `_rc`; esse trecho não exige retransmissão ao vivo. (`bin/pre-push.sh:142–157`.) |
+| **Vigia da árvore** | Nos três runs, usa arquivo de saída mais rc para decidir publicação. (`bin/vigia_arvore.sh:83–100`; `bin/vigia_arvore.sh:113–119`; `bin/vigia_arvore.sh:132–138`.) |
+| **Régua relógio** | Consome fluxo por `tee`/`grep`, captura `PIPESTATUS[0]` e depois julga log+rc. Latência máxima exigida [nao verificado]. (`bin/regua_relogio.sh:51–62`.) |
+| **Régua calendário** | Captura arquivo e rc por rodada; só compara resultados após veredito válido. (`bin/regua_calendario.sh:46–62`.) |
+| **Isolamento** | Preserva somente 75; para os demais códigos decide pelo último `OK`, podendo perder um 143. (`bin/isolamento.sh:33–38`.) |
+| **Placar** | Extrai contador por `sed \| head -1`, sem usar o rc; ausência vira `nao_medido`. O consumidor pode fechar antes do fim do produtor. (`bin/placar_code.sh:125–133`.) |
+| **Molde fatia** | Distingue 75 e depois consulta `OK` nos arquivos. (`bin/molde_fatia/rodar.sh:30–36`; `bin/molde_fatia/rodar.sh:52–56`.) |
+| **Molde autocura** | Distingue 75 e publica fim para os demais retornos. (`bin/molde_autocura/rodar.sh:22–33`.) |
+| **`_rodar_testes`** | `subprocess.run` espera, grava saída e julga conteúdo+rc; 75 e resultado indefinido viram exceções próprias. (`app/core/esteira_vigia.py:794–809`.) |
+| **Integrador** | Espera a régua; procura, no stdout daquela chamada, o caminho anunciado do log e julga aquele arquivo com o rc. (`app/core/integrador_lote.py:379–392`.) |
+
+Há ainda leitores indiretos que não consultarão automaticamente a fila nova:
+
+- **Posse:** handoff consulta diretamente o flock das duas travas; o disjuntor consulta o flock da sombra; o hook de Stop usa essa decisão para impedir `/clear` durante DIFF/apply. Soltar o fd antes do término altera essas leituras. (`bin/handoff_sessao.sh:223–234`; `bin/disjuntor.py:307–326`; `bin/hook_stop_fila1.py:785–795`.)
+- **Métrica antiga da sombra:** `--esperas-longas` lê `sombra_espera.jsonl`; o placar consome a saída e converte `?` em problema. O journal novo não substitui esse formato sem migração. (`bin/sombra_trava.sh:42–60`; `bin/placar_code.sh:155–160`.)
+- **Atividade durante execução:** o vigia lê conteúdo e mtime de arquivos de saída para classificar atividade e decidir ações. Acumular a saída até o fim pode alterar essas decisões quando o fluxo passar por esses arquivos; uma exigência universal de stdout em tempo real [nao verificado]. (`app/core/esteira_vigia.py:710–723`; `app/core/esteira_vigia.py:1552–1575`.)
+
+**3. Contraexemplos que o texto ainda permite**
+
+| Sequência | Consequência e fundamento |
+|---|---|
+| **Mesma obra, mesma volta:** A entra; B entra com o mesmo N. | A regra só elimina voltas **menores**. Ambos podem executar sequencialmente; não existe deduplicação por igualdade prevista. Se executar duas vezes é indesejado, falta uma regra. (`contrato.txt:2`.) |
+| **Pedido antigo chega atrasado:** B/X/2 entra e varre a fila; depois A/X/1 finalmente se registra. | A varredura passada não encontra A. Sem máximo persistente por obra e validação na admissão, A ainda pode executar. O comportamento de `--abre-volta` necessário para impedir isso [nao verificado]. (`contrato.txt:1–2`.) |
+| **Volta vazia:** A/X/vazia espera; B/X/2 chega. | A é imune à superação por definição. Logo, a proposta não promete limpar todos os pedidos antigos da obra. (`contrato.txt:1–2`.) |
+| **PID reciclado:** A morre; seu PID passa a pertencer a outro processo; um leitor encontra o registro antigo. | Conferir starttime deve podar A, sem sinalizar o novo processo. Porém o texto não define nova validação imediatamente antes de TERM ao PGID: conferir, perder o processo e depois sinalizar ainda deixa uma janela. O código atual valida identidade do dono do container, sem protocolo novo de grupos. (`contrato.txt:2–3`; `bin/trava_teste.sh:39–49`; proteção futura [nao verificado].) |
+| **Esperador morre antes do pidfile:** lançamento foi iniciado, mas registro/pidfile ainda não foi publicado; esperador morre e há nova tentativa. | O primeiro job pode continuar e a segunda tentativa criar outro. Mesmo com esperador vivo, ultrapassar 30 s sem pidfile não prova ausência do job. Falta protocolo para localizar/conciliar nascimento tardio. (`contrato.txt:2–3`; implementação [nao verificado].) | [nao verificado]
+| **Superação no instante do flock:** A consta `fila`; A adquire flock; antes de publicar `rodando`, B decide superá-lo; A inicia Docker. | B pode matar um job já adquirido ou presumir “ainda sem container” quando isso deixou de valer. É necessário ordenar aquisição, estado e autorização de lançamento com a decisão de superação. Hoje há trabalho entre adquirir e lançar, mas nenhum estado de fila. (`contrato.txt:2`; `bin/trava_teste.sh:97–101`; `bin/trava_teste.sh:113–169`; atomicidade futura [nao verificado].) |
+| **Duas travas distintas, basenames distintos:** cada uma protege uma suite no mesmo recurso. | Cada trava consulta seus rótulos; a detecção de suites sem rótulo ignora containers rotulados por **qualquer** trava. As duas podem deixar de enxergar a concorrência entre si. Na cópia normal o caminho é fixo; o cenário exige cópias/reapontamento. (`bin/trava_teste.sh:34–37`; `bin/trava_teste.sh:51–56`; `bin/tests/test_trava_teste.sh:202`.) |
+| **Duas travas distintas, mesmo basename:** caminhos diferentes produzem a mesma chave. | Seus containers passam a compartilhar o espaço de identificação, podendo gerar 75 por dono vivo de outra trava ou recuperação cruzada de órfão. As filas, derivadas dos caminhos completos, continuam distintas. (`bin/trava_teste.sh:37`; `bin/trava_teste.sh:120–133`; `contrato.txt:2`.) |
+| **Ausência transitória de rc:** job está vivo, ainda não publicou rc, e o esperador interpreta ausência como 143. | Produz rc falso e permite ao chamador limpar recursos enquanto o job trabalha. “Sem rc = 143” precisa ser aplicado após constatação de término/morte, não durante polling. Essa ordenação [nao verificado]. (`contrato.txt:2–3`.) | [nao verificado]
+| **143 correto, leitor incorreto:** log já contém `OK`; job é interrompido e o esperador devolve 143. | Isolamento pode devolver sucesso, pois só preserva 75. As cadeias dos moldes também ignoram rc da régua e escolhem o `/tmp/regua_*.log` mais novo, podendo aproveitar resultado alheio. (`bin/isolamento.sh:37–38`; `bin/molde_fatia/cadeia.sh:51–55`; `bin/molde_autocura/cadeia.sh:48–50`.) |
+| **Registro ilegível ou morto sem nova leitura:** gravação interrompida deixa registro ilegível; ou job morre e ninguém consulta depois. | O ilegível manda fechar em 75, sem recuperação definida; a poda de mortos ocorre apenas “na leitura”, sem garantia de quando acontecerá. Limpeza eventual automática [nao verificado]. (`contrato.txt:3`.) |
+| **Cancelamento pede parada, mas Docker falha:** TERM chega; consulta/parada do container falha. | O `_parar` atual ainda sai 143 sem confirmar pista vazia. Portanto 143 não prova que o container terminou; a recuperação seguinte tem verificação mais forte e retorna 75 se o stop falhar. (`bin/trava_teste.sh:159–166`; `bin/trava_teste.sh:129–144`; `contrato.txt:5`.) |
+
+Sobreviver ao esperador, por si só, é o comportamento pretendido; o problema dos cenários acima é sobreviver sem identidade recuperável, sem recursos ou sem consumidor do resultado. (`contrato.txt:2–5`; garantias de recuperação [nao verificado].)
+
+**4. Chamadores que precisam mudar junto**
+
+- **Sombra com fd 8 herdado: quebra se a migração destacar apenas a aquisição.** A variável herdada faz a função retornar imediatamente, sem conferir o descritor. Preservar a variável e perder fd 8 deixa a continuação sem adquirir a trava; remover a herança enquanto o pai segura a trava faz o filho disputar com o pai. (`bin/sombra_trava.sh:22–28`.)
+
+  O par de simulação precisa conservar uma posse e uma identidade ao longo das duas fotos e da comparação: fotos gravam `SOMBRA_TRAVA_ID`; comparação rejeita identidades diferentes. Destacar cada foto com identidade nova também quebra o par. (`bin/simular_folha.sh:76`; `bin/simular_folha.sh:82–85`; `bin/simular_folha.sh:96–101`.)
+
+- **Pre-push: o caminho normal pode manter sua interface, mas a morte do esperador expõe recursos temporários.** O hook apaga o archive no EXIT, enquanto o job monta esse diretório. Se o hook sair enquanto o job ainda espera, o archive pode desaparecer antes do Docker nascer. Relógio e calendário têm o mesmo vínculo entre temporário montado e limpeza no EXIT. (`bin/pre-push.sh:39–40`; `bin/pre-push.sh:144`; `bin/regua_relogio.sh:31–32`; `bin/regua_relogio.sh:54`; `bin/regua_calendario.sh:26–27`; `bin/regua_calendario.sh:48`.)
+
+- **Cron: esperar até o resultado preserva o encadeamento; sobreviver ao shell muda o significado da medição.** O envelope mede fim/rc do comando, remove sua marca no EXIT e publica fim somente em 0/2. A sombra é encadeada por `--refazer && --bloco`: se esse shell morrer durante refazer, o job sobrevivente não executa sozinho a continuação `&& --bloco`. (`bin/cron_run.sh:9–25`; `app/config/crons.py:331–333`.) Cron efetivamente instalado em produção [nao verificado].
+
+- **Integrador e cadeias: vida do teste e posse da árvore precisam continuar coordenadas.** O integrador segura locks externos; `pegar_arvore` usa fd 6/8. Herdá-los pode mantê-los presos depois da morte do chamador; fechá-los pode liberar a árvore enquanto o job ainda a lê. Além disso, a cadeia desfaz arquivos no EXIT e o integrador desfaz aplicações quando recebe `TesteNaoRodou`. (`bin/integrador.sh:32`; `bin/integrador.sh:41–51`; `bin/trava.sh:60–68`; `bin/molde_fatia/cadeia.sh:25–35`; `app/core/integrador_lote.py:653–656`.) Política dos descritores no job destacado [nao verificado].
+
+- **Desligamento da esteira e selos: exigem revisão explícita.** O matador atual sinaliza grupos encontrados pelos detentores do lock da esteira; a nova sessão pode escapar ou continuar descobrível conforme os descritores herdados. O controlador também identifica trabalho pelo grupo. (`app/core/esteira_vigia.py:1026–1044`; `bin/esteira_slots.sh:34–47`; herança futura [nao verificado].) Já o selo de dono contradiz diretamente a sobrevivência proposta, tanto no TERM quanto no KILL; a régua executa esse selo antes da suite. (`bin/tests/test_trava_dono_para_filho.sh:54–80`; `bin/regua.sh:138–143`.)
+
+O selo estático existente continua útil, mas reconhece texto/composição sintática: função Shell contendo `trava_teste.sh` e unidade Python contendo a constante correspondente. Isso não demonstra, sozinho, passagem efetiva pela trava em todos os caminhos; a implementação do novo gate também precisará distinguir execução de mera menção no comando. (`bin/tests/test_trava_teste.sh:83–91`; `bin/tests/test_trava_teste.sh:114–122`; gate futuro [nao verificado].)
+
+## 31/10 21:57 · sessao d596822205ca · F1C4-3-RG-SEM-CELULA-CASO · leitura · origem=Code
+
+**1. O dia entra em `mortos`?**
+
+- **Na cópia atual, não entra por `_indef`.** A ausência da chave faz `_cels_rg_m.get((c.pk, _d))` devolver `None`; o teste de existência falha antes da chamada a `dia_sem_trabalho`. Portanto `_indef` fica vazio para esse chamado de um único dia. Isso não impede entrada pelos outros caminhos abaixo. (`app/ponto/management/commands/reconciliar_grade.py:281-291`)
+- **Quanto ao pai de `9651ef38`: o trecho exato e suas linhas são `[nao verificado]`**, pois a cópia não disponibiliza esse histórico. A documentação local descreve a regra anterior como `sem_ancora → mortos → RETRACT_INDEFINIDO`, e o backlog registra especificamente que o dia sem âncora e sem célula “deixou de ser morto”. Isso sustenta o comportamento anterior descrito, mas não comprova sua atribuição à revisão solicitada. (`app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:4-7`; `app/docs/BACKLOG.md:832`)
+
+**2. Outros caminhos e o retorno de `classificar_falta`**
+
+Há três caminhos além de `_indef`:
+
+- **`avaliado_limpo`:** recebe o dia quando não há `miss`. Porém, no processamento informado, `sem_ancora` adiciona o dia a `indefinidos` e executa `continue` antes dessa avaliação. Logo esse dia não entra por `avaliado_limpo`. (`app/ponto/management/commands/reconciliar_grade.py:139-156`)
+- **`_coberto`:** pode incluir o dia diretamente em `mortos`. Exige vínculo `ec`; sem vínculo devolve `False`. Com vínculo, aceita a ausência selecionada por `ausencia_cobre(..., para='cobranca')` se seu tipo não for `falta`, ou uma substituição do titular naquele posto, sobreposta ao dia, em estado `designada`, `em_curso` ou `concluida`. Não exige `CelulaDia`. (`app/ponto/management/commands/reconciliar_grade.py:266-267`; `app/ponto/management/commands/reconciliar_grade.py:391-410`)
+- **`_lei_cala_no_dia`:** se a lei calar em todas as datas de `dts`, une `dts` a `mortos`. Para um único dia basta essa consulta devolver `True`. O auxiliar testa `classificar_falta(...)[1] is None`; se a chamada lançar exceção, devolve `False`. (`app/ponto/management/commands/reconciliar_grade.py:290-291`; `app/ponto/marcos.py:166-176`)
+
+**Sem `CelulaDia`, `classificar_falta` não tem retorno único.** A consulta devolve `None` e apenas deixa de disparar a guarda de célula com `trabalha is False`; o restante continua. (`app/escala/servico_jornada.py:262-271`; `app/escala/servico_jornada.py:302-304`)
+
+O resultado depende destes insumos:
+
+- **Ausência:** uma ausência que alcance o dia, não rejeitada e que não cubra apenas parte dele faz retornar `(None, None, None)`. Esse caminho não exige vínculo. (`app/escala/servico_jornada.py:340-345`; `app/ponto/turnos.py:2516-2533`; `app/ponto/turnos.py:2583-2600`)
+- **Vínculo/escala:** sem célula, `escala_vigente` consulta os vínculos; `vinculo_do_dia` escolhe entre os que cobrem a data, priorizando `ativa` e `data_inicio`, ou devolve `None`. Ausência de célula não implica ausência de vínculo. (`app/escala/servico_jornada.py:46-58`; `app/escala/alimentacao.py:173-184`; `app/escala/alimentacao.py:253-254`)
+- **Turno completo e teto temporal:** turno noturno completo faz calar. Havendo vínculo e tipo de escala, também cala quando existe fim esperado e `now() < fim_turno(...)`. Nessa chamada, `fim_turno` recebe o tipo, sem `ec`; os marcos vêm do template e são encadeados através da meia-noite. (`app/escala/servico_jornada.py:354-378`; `app/escala/servico_jornada.py:89-93`; `app/escala/servico_jornada.py:68-84`)
+- **Batidas e marcos esperados:** ultrapassadas as guardas, usa os turnos do núcleo. Sem célula, `ec.marcos_do_dia` recorre ao template; esse método do template não decide trabalho/folga. (`app/escala/servico_jornada.py:390-435`; `app/escala/models.py:1094-1108`; `app/escala/models.py:326-345`)
+
+Exemplos condicionais: com universo de batidas vazio e marcos esperados de entrada/saída, retorna `('E', 'saida_sem_entrada', 'ENTROU')`; sem marcos esperados, retorna `('S', 'orfao_14h', 'SAIU')`. Dia completo pode devolver `(None, None, None)`, e falha ao obter o universo do núcleo também faz calar. Portanto **“sem célula” sozinho não prova nem retratação nem manutenção**. (`app/escala/servico_jornada.py:390-402`; `app/escala/servico_jornada.py:440-480`)
+
+**3. Quem consome o resultado**
+
+| Consumidor | Efeito |
+|---|---|
+| `RETRACT_INDEFINIDO` | Incrementa se `dts` não vazio estiver contido em `mortos` e `_indef` não vazio, **antes** de consultar `premissa_morta`. No caso sem célula, esse ramo não incrementa. (`app/ponto/management/commands/reconciliar_grade.py:281-298`) |
+| `RETRACT` e `retracts` | Só incrementa/adiciona depois de `premissa_morta` autorizar. (`app/ponto/management/commands/reconciliar_grade.py:298-304`) |
+| `--apply` | Chama `chamados.reconciliador.retratar`; o conteúdo depende de `_indef`. A chamada ocorre depois da contagem. (`app/ponto/management/commands/reconciliar_grade.py:303-316`) |
+| Stdout | Publica os contadores no `PLANO`, o tamanho de `retracts` e até 40 candidatos. (`app/ponto/management/commands/reconciliar_grade.py:318-325`) |
+| Tripwire | `divergencia_grade_cartorio = len(creates) + len(retracts)`; não soma `RETRACT_INDEFINIDO` separadamente. (`app/ponto/management/commands/reconciliar_grade.py:337-342`) |
+
+O contador representa candidatos: `retratar` pode devolver `False`, e esse retorno não é usado pelo comando para desfazer a contagem. (`app/chamados/reconciliador.py:520-526`; `app/chamados/reconciliador.py:546-548`; `app/ponto/management/commands/reconciliar_grade.py:303-316`)
+
+Leitores/configuração encontrados:
+
+- **Cron:** configuração às `06:20`, empresas `2,3,4`, sem `--apply`; stdout/stderr vão para `logs/reconciliar_grade.log`. (`app/config/crons.py:443`; `app/config/crons.py:32`; `app/config/crons.py:1801-1802`)
+- **Vigia/placar:** extrai o último `divergencia_grade_cartorio` desse log, exige arquivo modificado hoje e publica `divergencia_grade_x_cartorio`. Esse valor não integra o `TOTAL` do Code. (`bin/placar_code.sh:528-532`)
+- **Vigia de execução:** o envelope acompanha o código de saída e aciona `cron_quebrado` nas falhas; não interpreta esses contadores. (`bin/cron_run.sh:11-13`; `bin/cron_run.sh:27-38`)
+- **Selos:** validam o contrato do tripwire, presença/ausência de `RETRACT_INDEFINIDO` e ausência de `--apply` no cron. (`app/ponto/tests/test_reconciliar_grade_sombra.py:71-88`; `app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:61-74`; `app/chamados/tests/test_hx_um_emissor.py:5-9`)
+
+Execução efetiva e valores em produção: `[nao verificado]`.
+
+**4. Testes do caso específico** [nao verificado]
+
+**Não localizei teste que execute esse comando com `sem_ancora=True` e ausência de `CelulaDia` para o dia do chamado.** A lacuna está explicitamente registrada como aberta. (`app/docs/BACKLOG.md:832`)
+
+Os testes próximos cobrem situações diferentes: [nao verificado]
+
+- `test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py` simula grade indefinida, mas sempre cria `CelulaDia(trabalha=None)`. O caso chamado “sem ata” passa `ata=None`; a célula continua existindo. (`app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:28-34`; `app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:55-70`)
+- `test_a2_marco_morto.py` também cria a célula antes de executar com `apply=True` e verificar que `retratar` não foi chamado. (`app/ponto/tests/test_a2_marco_morto.py:46-55`)
+- `test_reconciliar_sem_ancora_visivel.py` só inspeciona o código procurando contador/lista; não monta o cenário. (`app/ponto/tests/test_reconciliar_sem_ancora_visivel.py:11-18`)
+- Em `app/chamados/tests`, o selo do comando verifica os argumentos do cron; o teste de recuperação da data cria célula existente e chama `_cham_dts`, sem exercitar esse julgamento em `handle`. (`app/chamados/tests/test_hx_um_emissor.py:5-9`; `app/chamados/tests/test_c5_emissores.py:39-51`)
 
 ## 31/10 21:56 · sessao 3ff5b8f0a0eb · - · - · origem=Ronald (tmux)
 
@@ -741,142 +887,4 @@ Censo do circuito de estados, somente código local.
 
 Não fiz afirmação de que esta lista seja o censo exaustivo de **todo** leitor de `status_local`/ata/veredito da aplicação; ela é o circuito produtivo diretamente relacionado aos efeitos em questão. A busca encontrou leitores adicionais em relatórios, APIs, calendários, vigias e comandos, cujo comportamento completo não foi inspecionado. [não verificado]
 
-## 31/10 21:31 · sessao f063b36dd0dc · - · - · origem=Ronald (tmux)
-
-Censo documental, somente leitura.
-
-- **Regra geral de leitura da lâmpada:** literal “O CONSUMIDOR LE A LAMPADA, nunca re-julga: chamado, pergunta, tela e folha leem a celula/ata” (`app/docs/LEIS.md:95`); equivalente “CONSUMIDOR (chamado, pergunta, tela, folha) le a lampada, nunca re-julga” (`CLAUDE.md:245`).
-
-- **Corte que nomeia os três alimentadores:** o aval literal inclui “todo leitor de chamados_vivos (disputa_emissao.py:670, supra_juiz.py:163-168, core/juizes.py _C1, cartorio.py:780, commands/supra_juiz.py:182, emitir_furo_retroativo.py:79)” e determina “FASE 2 direto pela CLAUDE.md 4a: cada escritor passa a fechar a pergunta APAGANDO a lampada pela porta da celula, ou se aposenta (L-111); lampada que reacende reabre o fio; os leitores leem a lampada.” As linhas internas citadas pelo documento são históricas, mas o texto literal está em `app/docs/CORTES.md:255`.
-
-- **Separação chamado vivo × cobrança viva:** o registro diz literalmente “`VIVOS` responde so a primeira metade” e explica que ler `VIVOS` para saber se alguém cobra confundia chamado vivo com fio morto (`app/core/juizes.py:100-106`). A pergunta “o chamado esta vivo?” é `_C1` (`app/core/juizes.py:107`), registrada em `chamados/catalogo/motor.py::VIVOS` (`app/core/juizes.py:256`); “alguma pergunta desta colecao esta viva?” é `_C15` (`app/core/juizes.py:123-125`), registrada em `chamados/juizes.py::fio_vivo` (`app/core/juizes.py:270`).
-
-- **Corte F1 específico sobre universo no julgamento:** “o corte das 22:1x vale tambem para 'cobranca_indevida' (COBRANCA_EM_DIA_SEM_TRABALHO e COBRANCA_SEM_FURO): com todos os marcos acesos NESTE julgamento, o chamado nao conta como cobranca viva e o veredito nao le o proprio chamado vivo (4a).” (`app/docs/CORTES.md:405`)
-
-- **Extensão classe 4:** “o veredito nunca le o proprio chamado vivo, cura na origem sem predicado novo nem excecao” e “cobranca_indevida deixa de ler o chamado vivo do proprio dia” (`app/docs/CORTES.md:409`). A versão seguinte amplia: “o veredito nunca le o proprio chamado vivo vale para TODA lampada, inclusive 'cobrado' em dia sem trabalho” (`app/docs/CORTES.md:412`).
-
-- **Universo de `_protesta` expressamente documentado:** “NAO MIGRADO (declarado, BACKLOG CARTORIO-PROTESTA-1A-CLAUSULA)” (`app/core/juizes.py:145`); lê “so a 1a clausula (`trabalha is not False`, alem dos marcos acesos; corte O261-E-F1-CLASSE-4 31/10 00:0x/00:4x)” (`app/core/juizes.py:146`); “com trabalha=False zera chamados_vivos antes de classificar_dia” (`app/core/juizes.py:147`); “a 2a clausula (ata.tipo_dia) seria predicado novo -- pergunta com numeros, nao cura calada” (`app/core/juizes.py:148`). O mesmo consta do anexo/local `app/docs/JUIZES.md:60-62` e do corte `app/docs/CORTES.md:415`.
-
-- **O ramo COBRANCA_EM_DIA_SEM_TRABALHO tem juiz diverso de `_protesta`:** o corte diz literalmente “`trabalha is False` ou `ata.tipo_dia` PREENCHIDO e != trabalho, L-061; `trabalha=None` sem ata de outro tipo COBRA” (`app/docs/CORTES.md:415`). O registro especifica ata **deste julgamento, antes da lavra**, e distingue a pergunta de `eh_dia_trabalho` do vínculo, que responde pelo previsto (`app/core/juizes.py:136-140`). O corte preserva `SEM_JURISDICAO` como guarda anterior e declara o transporte de `trabalha` + `ata` pelo produtor do dict (`app/docs/CORTES.md:415`; `app/core/juizes.py:143-144`).
-
-- **Histórico que alerta contra estreitar `vivos` indiscriminadamente:** o texto explica “no `cartorio.py:907` o MESMO `vivos` decide EMISSAO, logo a cura separa predicados (*ha chamado vivo* x *ha cobranca viva*) e nao estreita `vivos`” (`app/docs/CORTES.md:64`; repetido em `:67`). Trata-se de registro histórico, não evidência da numeração ou da implementação atual (`app/docs/CORTES.md:64`).
-
-- **Declarações de autoridade complementares:** “VIVOS/COBRANCA/TERMINAIS/NAO_FECHADOS, nunca tupla literal, nem em aspas duplas” (`app/docs/JUIZES.md:51-52`) e dia por `catalogo/modulos.py::data_do_chamado`, “nunca .get('data_turno') cru” (`app/docs/JUIZES.md:53-54`).
-
-Não localizei nesses três arquivos uma especificação individual completa de filtros de módulo/status/dia para **cada** comando; a ausência absoluta de outro texto normativo no repositório é **[não verificado]**. O que há documentalmente é a ordem abrangente que nomeia todos os alimentadores (`app/docs/CORTES.md:255`) e a especificação recente e explícita de `_protesta`/`dia_sem_trabalho` (`app/core/juizes.py:136-148`; `app/docs/CORTES.md:415`).
-
-## 31/10 21:18 · sessao f0d8537b15e0 · GRADE-FOLGA-JUIZ · verificador · origem=Code
-
-**Pré-veredito: não liberaria o pouso ainda.** A catraca deixa passar uma cópia literal do predicado que deveria proteger; há também uma diferença de alimentação em `fase_conflitante` que impede afirmar equivalência geral entre os sítios. O ensaio exigido antes do pouso não está demonstrado nos anexos: **[nao verificado]**. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:62`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:75`, `app/ponto/precedencia.py:237`, `app/escala/services/fase_conflitante.py:82`, `app/docs/BACKLOG.md:796`)
-
-As referências abaixo são à cópia indicada pelo usuário como `1093275a`; a identidade Git da cópia é **[nao verificado]**. RED histórico, suíte Django e resultados de produção permanecem **[nao verificado]**.
-
-**1. Quem escreve e quem lê**
-
-O novo juiz está autorizado e registrado: a pergunta é de `folga_lancada_do_dia`; o carregador preserva todas as candidatas, ordenadas por PK, e o seletor consulta um único predicado. (`app/docs/CORTES.md:416`, `app/core/juizes.py:192`, `app/ponto/precedencia.py:194`, `app/ponto/precedencia.py:206`, `app/ponto/precedencia.py:212`)
-
-| Função/campo | Quem produz ou escreve | Quem lê |
-|---|---|---|
-| `FolgaDia.escala_colaborador`, `data`, `calendario_origem` | `gerar_foto_folgas` cria a foto do calendário; preserva manuais e apaga a foto anterior de calendário. | Carregador novo, alimentação mensal, gerador, cadastro e auditor C5. (`app/escala/folgas.py:165`, `app/escala/folgas.py:173`, `app/ponto/precedencia.py:206`, `app/escala/alimentacao.py:66`, `app/escala/models.py:1257`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1532`) |
-| Avulsa: vínculo, data e `tipo` | `lancar_folga` e `_foto_do_dia`; este também altera `tipo` e remove a manual. | Juiz lê vínculo/origem; `tipo` é rótulo informativo, não condição de validade. (`app/escala/folgas.py:254`, `app/escala/folgas.py:259`, `app/escala/folgas.py:274`, `app/escala/folgas.py:284`, `app/escala/folgas.py:288`, `app/escala/models.py:1564`, `app/ponto/precedencia.py:237`) |
-| Reparentamento da avulsa | `reparentar_folga` altera `escala_colaborador`; calendário não é reparentado. | Os mesmos leitores da foto. (`app/escala/folgas.py:405`, `app/escala/folgas.py:434`) |
-| Escrita implícita das FKs | Exclusão do vínculo usa `CASCADE`; exclusão do calendário usa `SET_NULL`. | O predicado interpreta origem nula como avulsa: essa escrita implícita também afeta a classificação. (`app/escala/models.py:1553`, `app/escala/models.py:1557`, `app/ponto/precedencia.py:237`) |
-| `{data: [FolgaDia...]}` | `folgas_lancadas_do_periodo`; somente memória, sem persistência. | `fatos_do_periodo`, veto, declaração, comando de rejulgamento, medidor de fase e overlay da grade. (`app/ponto/precedencia.py:205`, `app/ponto/precedencia.py:281`, `app/ponto/precedencia.py:501`, `app/ponto/services/declarar_dia.py:74`, `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:64`, `app/escala/services/fase_conflitante.py:80`, `app/escala/utils.py:1119`) |
-| Folga selecionada / validade | `folga_lancada_do_dia` retorna a primeira candidata aceita; `folga_lancada_vale_no_dia` decide origem e vínculo. | Os consumidores acima; só o seletor chama diretamente o predicado. (`app/ponto/precedencia.py:216`, `app/ponto/precedencia.py:222`) |
-| `faixa`, `tipo_do_dia`, `era_dia_previsto`, `suprimidos`, `fatos.folga_lancada` | `fatos_do_periodo`; `fatos_do_dia` é sua entrada para um dia. | Calendário, fatos do status e consumidores do juiz, incluindo a coleta de chamados espúrios. (`app/ponto/precedencia.py:256`, `app/ponto/precedencia.py:397`, `app/colaboradores/services/calendario.py:807`, `app/ponto/status_dia.py:139`, `app/chamados/services/feriado_reavaliar.py:33`) |
-| Grade: `tipo_dia`, `celulas`, `orfas` | Builders montam; `_aplicar_folgas_foto` aplica o resultado do juiz; ausência e isenção ainda fazem seus overlays. | Cartório e testemunhas da grade. (`app/escala/utils.py:1124`, `app/escala/utils.py:1794`, `app/escala/utils.py:1797`, `app/ponto/services/cartorio.py:946`, `app/ponto/services/cartorio.py:582`) |
-| Calendário: `status`, `eh_trabalho` | `_classificar` e `trabalho_do_dia`, sobre o mesmo dict, publicados por `contexto_calendario`. | Template, contagens, `status_do_dia`, `contar_por_status` e oferta de “Resolver dia”. (`app/colaboradores/services/calendario.py:818`, `app/colaboradores/services/calendario.py:839`, `app/colaboradores/services/calendario.py:903`, `app/colaboradores/services/calendario.py:202`, `app/colaboradores/services/calendario.py:226`, `app/colaboradores/services/calendario.py:237`, `app/templates/colaboradores/partials/_calendario_grade.html:69`) |
-| `REGRA_VERSOES` | Declaração em código, agora com versão 3. | `versao_para`; a versão entra na impressão dos insumos. (`app/ponto/services/cartorio.py:111`, `app/ponto/services/cartorio.py:193`, `app/ponto/services/cartorio.py:367`) |
-
-Os demais campos do dict do calendário — `ausencia_desconta`, `futuro`, `isento`, `regua_suspeita`, `tem_batida`, `turno_aberto`, `desvio`, `celula`, `celula_trabalha`, `veredito`, `veredito_via`, `cobertura`, `cobertura_desconta` e `retido_folha` — são montados em `contexto_calendario` e consumidos por `_classificar`; o diff não os transforma em campos persistidos. (`app/colaboradores/services/calendario.py:818`, `app/colaboradores/services/calendario.py:122`, `app/colaboradores/services/calendario.py:169`)
-
-Fora do diff, há consumidores relevantes das funções alteradas:
-
-- `o_dia_ja_e_folga` participa do aceite idempotente e da repetição após corrida em validação. (`app/chamados/services/validacao.py:261`, `app/chamados/services/validacao.py:316`)
-- O veto afeta ausência, férias e as portas de folga. (`app/ponto/services/ausencia.py:380`, `app/ferias/models.py:428`, `app/ferias/views.py:253`, `app/escala/folgas.py:258`, `app/escala/folgas.py:283`)
-- O medidor entrega `total`, `vinculos` e detalhes; o comando grava `MetricaSnapshot`, e a API lê o snapshot. (`app/escala/services/fase_conflitante.py:100`, `app/escala/management/commands/lavrar_fase_conflitante.py:35`, `app/api/views_mensageria.py:643`)
-
-**Sim, permanecem leitores com resposta própria.** O C5 aceita toda `FolgaDia` cujo vínculo cubra o dia **ou** para a qual encontre outro vínculo cobrindo; não distingue origem. Calendário velho inválido continua podendo virar “contradição” contra célula de trabalho. Está expressamente declarado como fila `GRADE-FOLGA-C5`. (`app/chamados/management/commands/auditar_invariantes_chamados.py:1530`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1542`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:15`)
-
-Também permanece a foto própria do gerador, discutida no item 6. As consultas de Plano de Folgas, diagnóstico e limbo são por vínculo/mês, portanto sua mera existência não prova segundo juiz da pergunta da pessoa. (`app/escala/models.py:1257`, `app/escala/views_plano_folgas.py:60`, `app/ponto/services/diagnostico_escala.py:102`, `app/relatorios/furos.py:112`)
-
-**2. Antes, depois e contraexemplos**
-
-Considere velho encerrado em 09/10, novo desde 10/10, célula de trabalho de 15/10 pertencente ao novo; sem outra ausência ou feriado prevalecente. Esse é o desenho dos testes nominais. (`app/ponto/tests/test_grade_folga_juiz_sitios.py:46`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:49`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:51`)
-
-| Sítio | Calendário do velho em 15/10: antes → depois | Avulsa no velho em 15/10: antes → depois |
-|---|---|---|
-| `_folga_avulsa` / veto | Encontrava e vetava → não veta por essa folga. | Encontrava e vetava → continua vetando folga/atestado. Férias atravessam folga. (`app/ponto/precedencia.py:161`, `app/ponto/precedencia.py:491`, `app/ponto/precedencia.py:505`) |
-| `_folga_do_dia` / declaração | Não encontrava no vínculo novo → continua não encontrando folga válida. | Não encontrava → encontra; `o_dia_ja_e_folga=True` e recusa “já é folga”. (`app/ponto/services/declarar_dia.py:69`, `app/ponto/services/declarar_dia.py:95`, `app/ponto/services/declarar_dia.py:112`) |
-| `rejulgar_ausencia_em_folga` | Entrava no cruzamento empresa/data → é descartado pelo juiz. | Entrava → continua entrando. Só vira achado se houver ausência aprovada não-falta cobrindo o dia. (`app/ponto/management/commands/rejulgar_ausencia_em_folga.py:24`, `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:56`, `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:64`) |
-| `fase_conflitante.medir` | Foto presa ao velho não entrava na foto do novo → continua não entrando. | Não entrava → passa a entrar, dentro da vigência carregada do novo. (`app/escala/services/fase_conflitante.py:75`, `app/escala/services/fase_conflitante.py:80`) |
-| Precedência | Já descartava calendário alheio, mas só examinava a primeira linha → percorre todas até achar uma válida. | Continua reconhecendo a avulsa da pessoa. (`app/ponto/precedencia.py:201`, `app/ponto/precedencia.py:216`, `app/ponto/precedencia.py:357`) |
-
-Um contraexemplo importante corrigido: calendário inválido com PK menor seguido de calendário válido no mesmo dia. Antes, a primeira candidata escondia a segunda; agora ambas chegam ao seletor. (`app/ponto/precedencia.py:201`, `app/ponto/precedencia.py:206`, `app/escala/tests/test_grade_folga_de_calendario_e_do_vinculo.py:85`)
-
-**Sem vínculo**, o juiz rejeita calendário e aceita avulsa. `o_dia_ja_e_folga` passa a reconhecer essa avulsa, mas `_recusa_do_dia` continua recusando **nova declaração** por “sem vínculo” antes de consultar a folga. Existência do fato e autorização para declarar são perguntas diferentes. (`app/ponto/precedencia.py:235`, `app/ponto/services/declarar_dia.py:95`, `app/ponto/services/declarar_dia.py:109`)
-
-O comando de rejulgamento também pode selecionar essa avulsa sem vínculo, pois usa `escala_vigente(...)=None`; a realização posterior depende de haver célula julgável. O medidor de fase, por sua vez, percorre somente vínculos ativos. (`app/ponto/management/commands/rejulgar_ausencia_em_folga.py:65`, `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:78`, `app/ponto/services/cartorio.py:1722`, `app/escala/services/fase_conflitante.py:72`)
-
-**Na fronteira**, início e fim são inclusivos. Sem geradora, vence o vínculo ativo e de início mais recente entre os que cobrem a data. Com geradora declarada, ela manda enquanto vigente; se estiver fora da vigência, a juíza retorna `None`, sem escolher substituto. Portanto “dia da troca” exige informar a célula geradora, além das datas dos vínculos. (`app/escala/alimentacao.py:182`, `app/escala/alimentacao.py:237`, `app/escala/alimentacao.py:250`, `app/escala/alimentacao.py:254`)
-
-Há uma **ressalva no sítio nominal `fase_conflitante`**: ele entrega ao juiz o `ec` iterado, não o vínculo efetivo do dia. Contraexemplo: velho vigente até 20/10, novo ativo desde 10/10, célula de 15/10 gerada pelo velho, calendário preso ao novo. O medidor aceita essa candidata; a precedência, alimentada com o velho, rejeita. Isso é divergência de alimentação, não cópia do predicado. Para declarar os sítios equivalentes na pergunta do colaborador, precisa fechar esse caso ou explicitar que o contador responde outra pergunta. (`app/escala/services/fase_conflitante.py:80`, `app/escala/services/fase_conflitante.py:82`, `app/ponto/precedencia.py:350`, `app/ponto/precedencia.py:357`, `app/escala/alimentacao.py:247`)
-
-**3. Catraca AST e mordida dos mutantes**
-
-Executei em memória as funções da catraca: o censo atual encontrou **21 chaves, iguais às 21 da allowlist**, e os quatro testes sintéticos passaram. Isso verifica o scanner e suas amostras; execução da suíte Django permanece **[nao verificado]**. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:91`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:110`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:158`)
-
-| Forma sondada em memória | Resultado |
-|---|---|
-| `from escala.models import FolgaDia as FD` | Pega o filtro. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:47`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:62`) |
-| Import direto local dentro da função | Pega; os apelidos são coletados na árvore inteira. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:46`) |
-| `import escala.models as m; m.FolgaDia...` | Escapa: a raiz é `m`, não um apelido reconhecido de `FolgaDia`. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:48`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:62`) |
-| `getattr(fd, 'calendario_origem_id', None)` ou manager via `getattr` | Escapa. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:62`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:77`) |
-| Método `__init__` ou função em arquivo `__init__.py` | Pega, se estiver numa forma reconhecida; não existe exclusão especial desses nomes. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:81`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:97`) |
-| `from .models import FolgaDia as FD` | Pega. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:47`) |
-| `from . import models as m; m.FolgaDia...` | Escapa pelo mesmo motivo do import de módulo. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:48`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:62`) |
-| `Q(...)`, `**kwargs`, teste booleano `not fd.calendario_origem_id`, código de módulo | Escapam às formas examinadas. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:33`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:75`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:81`) |
-
-**O escape decisivo é literal:** copiar `folga_lancada_vale_no_dia` para outro arquivo produziu zero achados na sonda. O predicado verdadeiro usa `getattr`, enquanto a catraca procura comparação de atributo direto com `None`. Além disso, todo `precedencia.py` é excluído: um segundo juiz ali, com outro nome, também não seria barrado por esse censo. (`app/ponto/precedencia.py:235`, `app/ponto/precedencia.py:237`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:77`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:99`)
-
-Os mutantes do **scanner** mordem parcialmente: removendo reconhecimento de apelido, falhou o teste de apelido; removendo comparação de origem, falhou o de origem; removendo emissão de achado de filtro, falharam dois testes. Esses são os comportamentos assertados pelas amostras existentes. O mutante “segundo predicado literal” sobrevive. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:158`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:163`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:169`)
-
-“Só encolhe” significa, mecanicamente, **igualdade entre código atual e allowlist atual**. Não há comparação com uma allowlist anterior: adicionar uma cópia reconhecida e sua autorização no mesmo patch passa nessa igualdade. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:144`)
-
-Os testes comportamentais têm pares úteis para veto, declaração, rejulgamento e fase; porém a execução do RED contra o main indicado e a morte de mutantes desses caminhos são **[nao verificado]**. (`app/ponto/tests/test_grade_folga_juiz_sitios.py:76`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:90`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:122`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:162`)
-
-**4. O portão trata igual ao juiz?**
-
-**Depois de relavrar, os testes cobrem os dois lados corretos:** avulsa velha permite fechar; calendário velho inválido não permite. Ambos passam antes por `julgar_celula(..., forcar=True)`. Não demonstram igualdade incondicional antes da relavra. (`app/ponto/tests/test_grade_folga_juiz_sitios.py:196`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:202`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:209`)
-
-O portão consulta `premissa_regularizada(para='folha')`; esse coletor prioriza célula/ata. No cartório, recebe a projeção deste julgamento; fora dele, lê o gravado. (`app/chamados/models.py:699`, `app/chamados/models.py:1227`, `app/chamados/juizes.py:381`)
-
-Contraexemplos à afirmação “sempre igual”:
-
-- Avulsa válida, mas ata antiga de trabalho com lâmpada apagada: pode continuar recusando fechamento. (`app/chamados/juizes.py:454`, `app/chamados/juizes.py:457`, `app/chamados/models.py:1247`)
-- Calendário velho inválido, mas ata antiga `tipo_dia='folga'`: pode regularizar pela ata. (`app/chamados/juizes.py:408`, `app/chamados/models.py:1232`)
-- Sem célula julgável, a consulta ao juiz ainda exige `era_dia_previsto` conhecido para considerar o chamado espúrio. Avulsa existente, sozinha, não garante fechamento. (`app/chamados/services/feriado_reavaliar.py:33`)
-
-Isso **não prova um segundo juiz de folga no portão**: o contrato distingue cobrança pela célula/ata da pergunta do previsto. O que não procede é vender o par de testes como prova de todos os estados anteriores à relavra. (`app/docs/JUIZES.md:55`, `app/chamados/models.py:1203`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:199`)
-
-**5. As classes de reprovação**
-
-| Classe | Verificação |
-|---|---|
-| Segundo juiz duplicando autoridade registrada | As cópias nominais foram substituídas por chamadas. C5 e gerador permanecem declarados; a catraca permite nascer outra cópia literal. (`app/ponto/precedencia.py:505`, `app/ponto/services/declarar_dia.py:74`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:15`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:128`) |
-| Segundo escritor fora da porta | Não demonstrado como introdução deste diff: `FolgaDia` continua na porta registrada, e ata/veredito/carimbo passam pelas operações existentes da célula. (`app/core/portas.py:466`, `app/ponto/services/cartorio.py:1579`, `app/ponto/services/cartorio.py:1599`, `app/ponto/portas/celula.py:709`) |
-| Relógio fora da borda | Juiz, carregador e overlay novos não leem relógio. Permanecem leituras próprias em `medir` e `julgar_celula`, inclusive `localdate` mesmo recebendo `agora`; não são introduções mostradas pelo diff. (`app/ponto/precedencia.py:194`, `app/escala/utils.py:1103`, `app/escala/services/fase_conflitante.py:68`, `app/ponto/services/cartorio.py:1711`, `app/ponto/services/cartorio.py:1732`) |
-| Derivação paralela de fonte única | Reduzida na grade/calendário; ainda existe no gerador e no C5. (`app/escala/utils.py:1124`, `app/colaboradores/services/calendario.py:820`, `app/escala/models.py:1281`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1532`) |
-| Selo/RED sem mordida | Há mordida nas formas sintéticas, mas o predicado literal escapa; RED histórico e integração: **[nao verificado]**. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:158`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:77`, `app/ponto/precedencia.py:237`) |
-| Ordem de trava | Não há inversão nova demonstrada pelos trechos alterados; o overlay só consulta e altera memória. Persistência de célula/evento mantém o mesmo `atomic`. Concorrência real: **[nao verificado]**. (`app/escala/utils.py:1115`, `app/ponto/portas/celula.py:639`, `app/escala/folgas.py:257`) |
-| Pouso antes do pré-requisito | O pré-requisito é explícito: sombra `--apply` sobre main, reversão e frota antes do opus. Cumprimento: **[nao verificado]**. (`app/docs/BACKLOG.md:796`, `app/ponto/services/cartorio.py:174`) |
-
-Há ainda correção documental devida no mesmo commit: `JUIZES.md` manda acompanhar o registro vivo, mas sua tabela omite o novo juiz. Não procede “juiz novo sem corte”; procede “lookup desatualizado”. (`app/docs/JUIZES.md:14`, `app/docs/JUIZES.md:72`, `app/core/juizes.py:192`, `app/docs/CORTES.md:416`)
-
-**6. Grade, gerador persistente e competência exportada**
-
-Em `escala/utils.py`, a mudança é no **builder da grade**: uma carga da pessoa e aplicação contra o vínculo do dia. Por turno, usa `esc_por_dia`; no legacy, os segmentos vêm da mesma juíza, e o builder individual usa o vínculo daquele segmento. A aplicação escreve somente os dicts `tipo_dia`,
-
-[truncado em 20000 de 23379 caracteres]
-
-_1258 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1260 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
