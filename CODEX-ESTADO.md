@@ -1,7 +1,31 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 23:18** · publicado em **31/10/2026 23:22** (UTC-3)
+> Ultima resposta processada: **31/10/2026 23:31** · publicado em **31/10/2026 23:32** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 23:31 · sessao 5f457781992f · CLAUDE-MD-NO-RELATO · leitura · origem=Code
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
+
+## 31/10 23:30 · sessao 2875aa66955d · - · - · origem=Ronald (tmux)
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
+
+## 31/10 23:30 · sessao 0fca0dcded6b · - · - · origem=Ronald (tmux)
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
+
+## 31/10 23:30 · sessao e067b098e638 · - · - · origem=Ronald (tmux)
+
+- **Lista de pares:** definida por `bin/relato.sh:100-111`; o consumidor é `raspar_publico.main`, que separa `src:dst`, lê a fonte e grava no destino público (`bin/raspar_publico.py:19-40`). O gerador/escritor automático do próprio código dessa lista não foi identificado [não verificado].
+- **Lista do `git add`:** explícita em `bin/relato.sh:115`; o comando escreve o índice do repositório apontado por `DEST`, definido em `bin/relato.sh:23`, após o `cd` de `bin/relato.sh:114`.
+- **Terceira lista obrigatória, omitida no pedido/contrato:** `git commit -- <paths>` enumera novamente os arquivos em `bin/relato.sh:124-125`. Acrescentar CLAUDE apenas ao raspador e ao `git add` deixa o arquivo no índice, fora desse commit (`bin/relato.sh:115`, `bin/relato.sh:124-125`).
+- **Universo do selo:** o próprio selo executa `git ls-files`, escreve a quantidade num temporário e percorre esses caminhos (`bin/tests/test_publicacao_sem_nome.sh:60-67`). Lê o conteúdo **do disco**, não de `HEAD` ou do remoto, e chama `J.achados` (`bin/tests/test_publicacao_sem_nome.sh:67-72`). O contador impresso vem do temporário (`bin/tests/test_publicacao_sem_nome.sh:117-119`). Portanto, um CLAUDE apenas staged pode elevar N para N+1 sem estar no commit público; essa conclusão decorre da combinação acima (`bin/relato.sh:115`, `bin/relato.sh:125`, `bin/tests/test_publicacao_sem_nome.sh:60-72`).
+- **Outro publicador com listas próprias:** `codex_estado.sh` gera/raspa/copia apenas `CODEX-ESTADO.md` (`bin/codex_estado.sh:24-36`) e o enumera no `git add`, no diff e no commit (`bin/codex_estado.sh:79-84`). O relato o chama como etapa separada (`bin/relato.sh:96-97`).
+- **Selos vizinhos:** `test_codex_estado.sh` lê os scripts e verifica isolamento/raspagem temporária (`bin/tests/test_codex_estado.sh:100-113`); `test_codex_estado_evento.sh` verifica chamadas do produtor único e dos nomes (`bin/tests/test_codex_estado_evento.sh:27-30`). Esses trechos não enumeram o universo geral publicado (`bin/tests/test_codex_estado.sh:100-113`, `bin/tests/test_codex_estado_evento.sh:27-30`).
+- **Chamador existente:** o serviço chama `relato.sh` (`bin/hasner-relato.service:14-15`), e o timer declara cinco minutos (`bin/hasner-relato.timer:5-7`); dizer “a cada marco” como descrição exclusiva da frequência omite esse chamador temporal (`bin/hasner-relato.service:15`, `bin/hasner-relato.timer:6`).
+- **Enumeração descritiva:** a `Description` do serviço lista alguns documentos, mas não controla o conteúdo publicado (`bin/hasner-relato.service:10`, `bin/hasner-relato.service:15`).
+- Outro selo/gerador com enumeração geral do repositório público não foi identificado na busca; inexistência absoluta [não verificado].
 
 ## 31/10 23:18 · sessao a99212a31c4e · cobparc · verificador · origem=Code
 
@@ -664,229 +688,4 @@ Mutação que passa despercebida: trocar `bin/disjuntor.py:1569` por `neg = neg 
 - A escrita concorrente de envfile usa temporário único e rename no mesmo diretório. `bin/recursos.sh:139`, `bin/recursos.sh:143`.
 - Duplicação nova dos relógios/identidades: `_inicio` da trava e `tf_inicio` da biblioteca implementam independentemente a leitura do mesmo campo 22 de `/proc`; a fila chama uma e o job monta identidade com a outra. `bin/trava_teste.sh:49`, `bin/trava_teste.sh:154`, `bin/trava_fila.sh:18`, `bin/sombra_trava.sh:39`. Não é leitura de relógio de negócio; é identidade de processo.
 
-## 31/10 22:09 · sessao 5b0dcb328d14 · V3-P5-PRORROGACAO-POR-INTERVALO · verificador · origem=Code
-
-**A cura dos três casos novos procede. O aval irrestrito para “qualquer aware” NÃO procede:** ainda há uma entrada aceita que escolhe o passo de 1 minuto e atravessa uma borda. Ela exige construir o aware incorretamente com `tzinfo=TZ_LOCAL`; seu equivalente UTC funciona corretamente. (`app/ponto/motor_calculo_v2.py:73–79`, `:186–194`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:460–480`)
-
-1. **Cursor, progresso e limites**
-
-   Primeiro, o corpo localiza as pontas, recorta os intervalos ao turno, descarta peças vazias e une sobreposições. Cada união começa com `a = _i`. (`app/ponto/motor_calculo_v2.py:162–178`)
-
-   A cada passagem:
-
-   - Lê a parede de `localizar(a)`, remove fuso, minutos, segundos e microssegundos e soma uma hora. Portanto, busca a próxima hora inteira dessa parede, sem arredondar a duração da pausa. (`app/ponto/motor_calculo_v2.py:186`)
-   - Aplica `TZ_LOCAL.localize(hora_cheia)` e depois `localizar`, obtendo `proxima`. (`app/ponto/motor_calculo_v2.py:187`)
-   - Se `proxima <= a`, substitui por `a + 1 minuto`; caso contrário, preserva o corte, mesmo que faltem apenas segundos. Limita então por `_f`. (`app/ponto/motor_calculo_v2.py:188–190`)
-   - Consulta os dois prefixos da mesma `minutos_noturnos`. Se a diferença superar `1e-9`, soma **toda a duração** de `[a,b]`; depois faz `a = b`. (`app/ponto/motor_calculo_v2.py:191–194`)
-
-   Depois de um passo de 1 minuto, o cursor conserva o `tzinfo` da soma. A passagem seguinte chama novamente `localizar(a)`; isso **não garante normalização quando `a.tzinfo` é o próprio objeto `TZ_LOCAL`**, conforme o contraexemplo do item 2. (`app/ponto/motor_calculo_v2.py:79`, `:186–194`)
-
-   Nas sondas em memória dos corpos da cópia, obtive:
-
-   | Entrada examinada | Resultado atual |
-   |---|---:|
-   | Pausa 04:59:30–05:01, sem prorrogação | 0,5 min |
-   | Mesma pausa, com prorrogação | 1,5 min |
-   | Pausa 21:59:30–22:01, ambas as flags | 1 min |
-   | Naive inexistente de 04/11/2018, 00:00:30–06h, sem prorrogação | 239,5 min |
-   | Mesmo caso, com prorrogação | 299,5 min |
-
-   Os três casos sem prorrogação correspondem às fixtures novas; os valores com prorrogação resultam da consulta aos prefixos com a flag ligada. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:460–480`; `app/ponto/motor_calculo_v2.py:110–116`, `:191–196`)
-
-   No caso naive inexistente, `a` começa como `00:00:30-03`, mas sua parede é relida como `01:00:30-02`; o primeiro corte vira `02:00-02`. Assim, desaparece a sequência anterior de passos mínimos até as 05h. (`app/ponto/motor_calculo_v2.py:78–79`, `:186–190`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:472–480`)
-
-   Também reproduzi **354 minutos em 1914**, **270 na entrada do verão de 2018** e **450 na saída**, conforme as bordas declaradas nos testes. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:389–405`; `app/ponto/motor_calculo_v2.py:186–196`)
-
-   Para a hora ambígua `17/02/2018 23:30:30`, com turno 20h–08h e pausa até 06h, as ocorrências `-02` e `-03` produziram, respectivamente, **389,5 e 329,5 minutos sem prorrogação**, e **449,5 e 389,5 com prorrogação**. A escolha da ocorrência pertence à localização da entrada; o corpo depois trabalha pelos instantes recebidos. (`app/ponto/motor_calculo_v2.py:73–79`, `:100–116`, `:162–196`)
-
-   Quanto às propriedades:
-
-   - **`b <= a` e laço sem progresso: NÃO procedem**, para operações concluídas sem exceção. Dentro do laço, `_f > a`; a guarda garante outro candidato posterior; o `min` continua posterior. O cursor avança estritamente numa representação de precisão finita. (`app/ponto/motor_calculo_v2.py:179`, `:188–194`)
-   - **Resultado negativo ou superior ao total devolvido por `minutos_noturnos(entrada,saida)`: NÃO procedem.** As parcelas somadas são positivas, o minuendo acumula durações positivas e o retorno aplica o teto. (`app/ponto/motor_calculo_v2.py:112–118`, `:176–196`)
-   - **Excesso material sobre a união: NÃO procede.** Cada trecho pertence à união recortada e é percorrido uma vez. **Excesso literal de `float` existe:** a pausa prorrogada de 60 min e 25 s retorna `60.41666666666667`, contra duração direta `60.416666666666664`, diferença aproximada de `7,1e-15` minuto. (`app/ponto/motor_calculo_v2.py:164–194`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:119–125`, `:185`)
-   - Acima de 26h, o teto final pode devolver zero; isso preserva “parte ≤ todo”, sem corrigir o comportamento do minuendo, que está fora deste aval. (`app/ponto/motor_calculo_v2.py:93–95`, `:151–161`, `:196`)
-
-2. **O passo de 1 minuto pode ser escolhido e pode cruzar borda**
-
-   **SIM**, nesta entrada sintética aceita pelo corpo, usando exatamente o `TZ_LOCAL` do módulo: (`app/ponto/motor_calculo_v2.py:28`, `:73–79`, `:162–164`, `:186–190`)
-
-   ```python
-   entrada = TZ_LOCAL.localize(datetime.datetime(2018, 11, 4, 20))
-   saida   = TZ_LOCAL.localize(datetime.datetime(2018, 11, 5, 7))
-   ini = datetime.datetime(2018, 11, 4, 20, 53, 30, tzinfo=TZ_LOCAL)
-   fim = datetime.datetime(2018, 11, 4, 20, 55,  0, tzinfo=TZ_LOCAL)
-   ```
-
-   A atribuição direta de `tzinfo` deixa a pausa com LMT `-03:06`. Seus instantes correspondem a **21:59:30–22:01:00 no offset vigente `-02`**. Como `localizar(a)` recebe o mesmo objeto de fuso, mantém essa parede atrasada; calcula `proxima = 21:00-02`, anterior a `a`, e escolhe o piso. (`app/ponto/motor_calculo_v2.py:79`, `:186–189`)
-
-   | Passo | Instante local vigente | Aumento do prefixo | Duração somada |
-   |---|---|---:|---:|
-   | Primeiro | 21:59:30 → **22:00:30** | 0,5 min | **1 min** |
-   | Segundo | 22:00:30 → 22:01:00 | 0,5 min | 0,5 min |
-   | Total | Pausa com apenas 1 min dentro da janela | 1 min | **1,5 min** |
-
-   Reproduzido com **e sem prorrogação**: a borda das 22h fica no interior do primeiro trecho, e o corpo transforma presença parcial em duração integral. (`app/ponto/motor_calculo_v2.py:103`, `:188–194`)
-
-   Há equivalente nas 05h: turno canônico **04/11/2018 22h → 05/11 07h**; pausa construída com `tzinfo=TZ_LOCAL` em **05/11 03:53:30–03:55**, equivalente a **04:59:30–05:01 no offset `-02`**. O piso alcança **05:00:30** e devolve **1 contra 0,5 minuto**, sem prorrogação. Com prorrogação, os 1,5 minuto são devidos. (`app/ponto/motor_calculo_v2.py:101`, `:186–194`)
-
-   Essa construção de `pytz` é inadequada, mas o corpo não a rejeita. **Ela não demonstra falha na forma UTC aware declarada para o banco:** convertendo os mesmos instantes para UTC antes da chamada, o desconto das 05h volta a 0,5. Ocorrência produtiva dessa construção: **[nao verificado]**. (`CLAUDE.md:218`; `app/ponto/motor_calculo_v2.py:79`, `:162–196`)
-
-3. **Diferenças para os corpos anteriores e chamadores**
-
-   Comparação em memória com os anteriores representados pelos mutantes da cópia, todos os casos abaixo sem prorrogação: (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:408–431`, `:483–508`)
-
-   | Caso | e4ed207c representado | 14a61ef3 representado | Atual |
-   |---|---:|---:|---:|
-   | 04:59:30–05:01 | 0,5 | **1** | 0,5 |
-   | 21:59:30–22:01 | 1 | **1,5** | 1 |
-   | Naive inexistente, 00:00:30–06h | 239,5 | **240** | 239,5 |
-   | Histórico de 1914 | **360** | 354 | 354 |
-   | Entrada/saída do verão, fixtures existentes | 270 / 450 | 270 / 450 | 270 / 450 |
-
-   As entradas e expectativas estão nas fixtures; os cortes distintos estão nos dois mutantes e no corpo atual. Portanto, **identidade geral com e4ed207c NÃO procede**, enquanto os dois casos ordinários com segundos recuperam os valores daquele corpo. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:396–405`, `:426–429`, `:460–480`, `:502–506`; `app/ponto/motor_calculo_v2.py:186–193`)
-
-   **“Aware UTC com segundos não muda chamador” NÃO procede.** Usei entrada `15/10/2026 01:00Z`, saída `10:00Z`, pausa `07:59:30Z–08:01Z`, `pr=False`: são os instantes do primeiro teste novo. O desconto muda de **1 para 0,5 minuto** frente a 14a61ef3. (`app/ponto/motor_calculo_v2.py:79`, `:186–196`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:460–464`, `:503–508`)
-
-   | Leitor, na mesma entrada | 14a representado → atual |
-   |---|---|
-   | `MotorBase._noturno_dos_intervalos` e método emprestado ao contexto | 1 → 0,5 min. (`app/ponto/motor_calculo_v2.py:1915–1916`; `app/ponto/calculador/regras.py:60–63`) |
-   | `calcular_noturnas`, fator 1 | Relógio/legais: 419 → **419,5 min**. (`app/ponto/motor_calculo_v2.py:971–980`) |
-   | `noturnas_do_dia` e `noturno_no_par`, fator 1 | Relógio/legais: 419 → **419,5 min**. (`app/ponto/calculador/regras.py:80–89`; `app/ponto/calculador/periodo.py:508–511`) |
-   | `he_noturna`, HE100 = 538,5 min trabalhados e HE50 = 0 | HE100 noturna: 419 → **419,5 min**. (`app/ponto/motor_calculo_v2.py:392–406`, `:440–451`) |
-
-   A HE por período encaminha essas pontas, intervalos e flag à mesma função e escreve seus retornos divididos por 60. Assim, quando essa ponta recebe os 538,5 minutos em HE100, a rubrica passa de `419/60` para `419,5/60` hora. Execução integral de `do_dia` e impacto produtivo persistido: **[nao verificado]**. (`app/ponto/calculador/regras.py:883–898`)
-
-4. **Expectativa, mordida, `subTest` e relógio**
-
-   **Valor copiado do resultado do motor: NÃO procede.** A expectativa principal é a duração absoluta da interseção da pausa com bordas fornecidas literalmente pelos testes. Compartilha `localizar` para converter as pontas; a chamada a `minutos_noturnos` serve à segunda asserção, de teto, e não calcula `esperado`. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:452–480`)
-
-   **Os três casos mordem `_piso_incondicional`: SIM.** Na execução em memória, atual/mutante deram, respectivamente, **0,5/1**, **1/1,5** e **239,5/240**; cada chamada ao teste sob o mutante levantou a `AssertionError` esperada. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:454–458`, `:460–508`, `:520–522`)
-
-   **O `subTest` do MORDE não esconde a sobrevivência do mutante.** Os testes internos são chamados diretamente dentro de `assertRaises`. Se não levantarem, a falha de `assertRaises` é registrada pelo `subTest` externo no runner. Confirmei substituindo em memória o mutante pelo corpo curado: o runner `unittest` terminou com **três falhas**, uma por nome. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:515–522`)
-
-   **Relógio solto: NÃO procede.** As datas são literais e `_local` apenas constrói/localiza o `datetime`. **Cobertura universal: NÃO procede**, pois os casos novos não exercitam o aware com o objeto base de fuso do item 2. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:377–379`, `:460–480`)
-
-   Executei **21 testes selecionados por AST em memória**, incluindo as classes novas, com sucesso. Isso não equivale à suíte Django canônica, que permanece **[nao verificado]**. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:80–130`, `:244–284`, `:382–522`)
-
-5. **Classes reprovadas e escritores/leitores**
-
-   **Segundo juiz, segundo escritor fora da porta e derivação paralela da janela: NÃO procedem neste delta.** A classificação continua vindo dos prefixos da mesma função; as novas atribuições são locais. **Selo sem mordida e relógio solto também NÃO procedem nos testes novos.** O achado residual é a insuficiência da normalização para uma forma aware aceita, não uma dessas duplicações. (`app/ponto/motor_calculo_v2.py:186–196`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:452–522`; `app/docs/JUIZES.md:29`)
-
-   | Valor | Quem escreve/fornece | Quem lê |
-   |---|---|---|
-   | Fuso | Configuração e inicialização de `TZ_LOCAL`. (`app/config/settings/base.py:93`; `app/ponto/motor_calculo_v2.py:28`) | Conversão, localização do corte e fixtures. (`app/ponto/motor_calculo_v2.py:78–79`, `:187`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:379`) |
-   | Pontas e intervalos | Argumentos dos chamadores; carimbo dos efetivos. (`app/ponto/motor_calculo_v2.py:442–443`, `:1828–1830`, `:1915`) | Recorte/união; releitura por período. (`app/ponto/motor_calculo_v2.py:162–172`; `app/ponto/calculador/periodo.py:752`) |
-   | Prorrogação | Parâmetro/atributo do motor, contexto e CCT. (`app/ponto/motor_calculo_v2.py:758–762`; `app/ponto/calculador/regras.py:60–61`; `app/ponto/calculador/nucleo.py:348`) | Prefixos/teto e delegações. (`app/ponto/motor_calculo_v2.py:191–196`, `:1916`; `app/ponto/calculador/periodo.py:509`) |
-   | `_ent`, `_sai`, `pecas`, `unidas`, `_i`, `_f` | Localização, recorte, ordenação e união. (`app/ponto/motor_calculo_v2.py:162–178`) | Guarda, limite, prefixos e teto. (`app/ponto/motor_calculo_v2.py:179–196`) |
-   | `a` | Início da união e avanço `a = b`. (`app/ponto/motor_calculo_v2.py:178`, `:194`) | Guarda, parede, comparação, piso, prefixo e duração. (`app/ponto/motor_calculo_v2.py:179–193`) |
-   | `hora_cheia`, `proxima`, `b` | Construção da parede, localização, eventual piso e `min`. (`app/ponto/motor_calculo_v2.py:186–190`) | Localização seguinte, guarda, prefixo, soma e avanço. (`app/ponto/motor_calculo_v2.py:187–194`) |
-   | Prefixos e `total` | `minutos_noturnos`; inicialização e acumulação local. (`app/ponto/motor_calculo_v2.py:96–118`, `:176`, `:193`) | Teste de presença e retorno limitado. (`app/ponto/motor_calculo_v2.py:191–196`) |
-   | Desconto retornado | Retorno desta função. (`app/ponto/motor_calculo_v2.py:196`) | Subtrações nos leitores do motor e calculador. (`app/ponto/motor_calculo_v2.py:442–443`, `:973`, `:1915`; `app/ponto/calculador/regras.py:86`) |
-   | Resultados noturnos | Escritores existentes dos períodos e rubricas. (`app/ponto/motor_calculo_v2.py:991–993`; `app/ponto/calculador/regras.py:896–898`, `:912–914`; `app/ponto/calculador/periodo.py:753–754`) | Consumo posterior ou alteração persistida por esta obra: **[nao verificado]**. |
-   | Fixtures, `desc`, bordas, `esperado` | Literais/helper, chamada real e interseção declarada. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:377–379`, `:452–480`) | Asserções de igualdade e teto. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:457–458`) |
-   | Mutante, `nome`, `t` e símbolo substituído | Definição do mutante, lista de métodos, instanciação e `mock.patch`. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:483–520`) | Import/chamada em `_caso`, `getattr` e `assertRaises`. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:453–454`, `:521–522`) |
-
-   **Ordem de trava, execução histórica do RED, pré-requisitos e pouso efetivo: [nao verificado].** [nao verificado]
-
-## 31/10 22:08 · sessao aa7f9ac23376 · - · - · origem=Ronald (tmux)
-
-Achado: **a alegação “o passo de 1 minuto nunca cruza borda” NÃO procede para todo `datetime` aware aceito pelo corpo**. `datetime(..., tzinfo=TZ_LOCAL)` usa diretamente o objeto base `pytz`, com LMT `-03:06`; `astimezone(TZ_LOCAL)` pode devolver o próprio objeto, de modo que `localizar(a)` não normaliza essa entrada. O corpo aceita essa forma sem validação. (`app/ponto/motor_calculo_v2.py:73–79`, `:162–164`, `:186–189`)
-
-Contraexemplo reproduzido em memória:
-
-```python
-ent = TZ_LOCAL.localize(datetime.datetime(2018, 11, 4, 20))
-sai = TZ_LOCAL.localize(datetime.datetime(2018, 11, 5, 7))
-ini = datetime.datetime(2018, 11, 4, 20, 53, 30, tzinfo=TZ_LOCAL)
-fim = datetime.datetime(2018, 11, 4, 20, 55, tzinfo=TZ_LOCAL)
-```
-
-A pausa representa **21:59:30→22:01:00 `-02:00`**, duração 1,5 minuto. O candidato calculado é **21:00 `-02:00`**, anterior a `ini`; o piso leva o cursor a **22:00:30 `-02:00`**, atravessando 22h. O prefixo aumenta 0,5 minuto nesse primeiro passo, mas o corpo soma 1 minuto; acrescenta mais 0,5 no restante. **Resultado 1,5 contra 1 minuto**, tanto com `pr=False` quanto com `pr=True`. (`app/ponto/motor_calculo_v2.py:103`, `:186–194`)
-
-Também reproduzi borda das 05h: entrada canônica **04/11/2018 22h**, saída **05/11/2018 07h**, pausa construída com `tzinfo=TZ_LOCAL` **05/11 03:53:30→03:55**, equivalente a **04:59:30→05:01 `-02:00`**. Candidato **04:00 `-02:00`**, piso até **05:00:30**; **desconto 1 contra 0,5 minuto sem prorrogação**. Com prorrogação, retorna corretamente 1,5 minuto. (`app/ponto/motor_calculo_v2.py:101`, `:186–194`)
-
-Depois do piso, `a = b` mantém o mesmo `tzinfo`; a próxima passagem chama novamente `localizar(a)`, que continua sem normalizar quando os objetos de fuso são idênticos. Portanto, o piso pode ser escolhido repetidamente. (`app/ponto/motor_calculo_v2.py:79`, `:186–194`)
-
-Outra divergência dessa forma aware: entrada/saída canônicas **14/10/2026 22h→15/10 07h**, pausa base-LMT **14/10 23:55→23:56**, equivalente a **15/10 00:01→00:02 `-03:00`**. Ambos os prefixos retornam 120 e o desconto é **0 contra 1 minuto**, com ambas as flags. Aqui a origem é a combinação já existente de `localizar` com `fim.date()` no minuendo, que omite o segmento do dia seguinte quando o fim conserva a data de parede anterior. (`app/ponto/motor_calculo_v2.py:79`, `:97–104`, `:191–196`)
-
-Esses exemplos usam construção inadequada de `pytz`, **fora da forma UTC aware declarada para o banco**. O equivalente UTC canônico do contraexemplo das 05h retorna 0,5 no corpo atual; não demonstram defeito nessa forma produtiva. (`CLAUDE.md:218`; `app/ponto/motor_calculo_v2.py:79`, `:186–196`)
-
-**`b <= a`, laço sem progresso, negativo e excesso material sobre união/todo NÃO procedem para operações válidas e intervalos finitos**: a guarda assegura candidato posterior, o fim também é posterior dentro do laço, cada trecho é percorrido uma vez, só se somam durações positivas e existe teto final. Exceções por limites de `datetime` não são laço infinito. (`app/ponto/motor_calculo_v2.py:164–196`)
-
-Sonda adicional em memória: **44.160 combinações** em torno das transições disponíveis, com entradas UTC aware ou naive, ambas as flags, comparadas à união exata dos segmentos existentes de `minutos_noturnos`: nenhuma divergência encontrada. Isso é amostragem, não prova universal; banco, logs e suíte Django permanecem **[nao verificado]**. As fontes executadas foram os corpos da cópia. (`app/ponto/motor_calculo_v2.py:73–118`, `:162–196`)
-
-## 31/10 22:06 · sessao 06d2750e0795 · - · - · origem=Ronald (tmux)
-
-Há mudança sintética em todos os caminhos citados com pontas e pausa **aware UTC com segundos**. Sonda em memória com os corpos reais extraídos por AST: entrada `2026-10-15 01:00Z`, saída `10:00Z`, pausa `07:59:30Z–08:01Z`, `prorrogacao=False`; equivalem a `22:00–07:00`, pausa `04:59:30–05:01` local. A conversão é a de `app/ponto/motor_calculo_v2.py:73-79`; a fixture corresponde a `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:460-464`.
-
-| Caminho | Mutante de 14a61ef3 | Corpo atual | Evidência |
-|---|---:|---:|---|
-| Desconto | 1 | 0,5 | `app/ponto/motor_calculo_v2.py:186-196`; mutante `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:483-508` |
-| `MotorBase._noturno_dos_intervalos` | 1 | 0,5 | `app/ponto/motor_calculo_v2.py:1915-1916` |
-| `_ContextoNoturno._noturno_dos_intervalos` | 1 | 0,5 | `app/ponto/calculador/regras.py:60-63` |
-| `calcular_noturnas`, fator 1 | `(419,419)` | `(419,5;419,5)` | `app/ponto/motor_calculo_v2.py:971-980` |
-| `noturnas_do_dia`, fator 1 | `(419,419)` | `(419,5;419,5)` | `app/ponto/calculador/regras.py:80-89` |
-| `noturno_no_par`, fator 1 | relógio/legais 419 | relógio/legais 419,5 | `app/ponto/calculador/periodo.py:508-511` |
-| `he_noturna`, HE100=538,5 min e HE50=0 | `(0,419)` | `(0,419,5)` | `app/ponto/motor_calculo_v2.py:440-451` |
-
-O caso HE usa todos os 538,5 minutos trabalhados como extra: `_inicio_do_trecho_extra` recua até a entrada, portanto consulta a mesma janela inteira. O recuo pelo trabalho está em `app/ponto/motor_calculo_v2.py:392-406`; a subtração do desconto está em `:441-443`.
-
-O caminho de **HE por período** importa `he_noturna` em `app/ponto/calculador/regras.py:868`, fornece pontas/intervalos/flag em `:886-888`, soma os retornos em `:889-890` e escreve horas nas rubricas em `:896-898`. Com uma ponta que recebe a jornada inteira em HE100, o mesmo delta chega à rubrica: `419/60 = 6,983333333333333 h` contra `419,5/60 = 6,991666666666666 h`; essa propagação decorre das divisões explícitas em `:896-898`. Execução integral de `do_dia`: **[nao verificado]**.
-
-Escritores e leitores externos relevantes:
-
-| Valor | Quem escreve/fornece | Quem lê |
-|---|---|---|
-| Flag do motor | `MotorBase.__init__`, recebe parâmetro ou consulta regra legal e atribui `self.prorrogacao_noturna_pos5h`: `app/ponto/motor_calculo_v2.py:758-762` | `calcular_noturnas` `:971-973`, delegador `:1915-1916`, casca de HE `:1002-1006` |
-| Flag no contexto | `_ContextoNoturno.__init__`: `app/ponto/calculador/regras.py:60-61` | Método emprestado em `:63`, cujo corpo lê o atributo em `app/ponto/motor_calculo_v2.py:1916` |
-| Flag na CCT | `cct_do_motor` constrói `CCT(prorrogacao_pos5h=bool(motor.prorrogacao_noturna_pos5h))`: `app/ponto/calculador/nucleo.py:344-351` | `noturno_no_par`: `app/ponto/calculador/periodo.py:508-510` |
-| Pontas efetivas/intervalos carimbados | `_carimbar_segmento`: `app/ponto/motor_calculo_v2.py:1828-1830` | Releitura passa `e`, `s_` e `intervalos_do_motor` para `noturno_no_par`: `app/ponto/calculador/periodo.py:752` |
-| Retorno de noturnas do motor | `calcular_noturnas`: `app/ponto/motor_calculo_v2.py:971-975` | `_escrever_noturnas`, que grava `periodo.minutos_noturnos_relogio/legais`: `:991-993` |
-| Retorno de HE do motor | `he_noturna`: `app/ponto/motor_calculo_v2.py:448-451` | `_aplicar_he_noturna`, que grava campos do período: `:1002-1010` |
-| Retorno de noturnas do calculador | `noturnas_do_dia`: `app/ponto/calculador/regras.py:85-89` | Rubrica/detalhes do dia: `:908-914`; encapsulamento em `NoturnoV3`: `app/ponto/calculador/periodo.py:508-511` |
-| `NoturnoV3.relogio_min/legais_min` | Construtor em `app/ponto/calculador/periodo.py:511` | Releitura escreve os campos do período em `:752-754` |
-| HE por período | Acumuladores `_s50/_s100`: `app/ponto/calculador/regras.py:877`, `:889-890` | Rubricas `horas_extras_50_noturna/100_noturna`: `:896-898` |
-
-**“Aware UTC com segundos não muda nenhum chamador” NÃO procede**: a sonda acima demonstra mudança numérica nos leitores reais. Impacto em colaborador, rubrica persistida ou dados produtivos: **[nao verificado]**.
-
-A sonda usou `python3 -B` e AST em memória; Django não está instalado neste ambiente. Não houve acesso a banco/log, import de modelos ou gravação de arquivo. Execução Django canônica e integração completa: **[nao verificado]**.
-
-## 31/10 22:03 · sessao 63fba4a5c37a · - · - · origem=Ronald (tmux)
-
-Inventário, na cópia atual:
-
-| Arquivo | Escritor → leitor | Excluído |
-|---|---|---|
-| `logs/sessao/disjuntor.log` | `trilha`, inclusive `_anuncia` de B3/PDC/rearme → `disjuntor.ler`; `bin/disjuntor.py:135`, `bin/disjuntor.py:975`, `bin/disjuntor.py:1051`, `bin/disjuntor.py:1457`, `bin/disjuntor.py:2168` | Sim; `bin/hook_stop_fila1.py:585`. |
-| `logs/sessao/disjuntor_estado.json` | `_com_estado` → `_com_estado`, `ler_estado`; `bin/disjuntor.py:267`, `bin/disjuntor.py:278`, `bin/disjuntor.py:299` | Sim; `bin/hook_stop_fila1.py:585`. |
-| Seu `.lock` | `_com_estado`: cria/usa `flock`; `bin/disjuntor.py:256`, `bin/disjuntor.py:260` | Sim; `bin/hook_stop_fila1.py:586`. |
-| `logs/padrao_de_cima_escopo.json` | `_anuncia` PDC → `_pdc_grava_escopo`; leitor `_pdc_escopo_lido`/`estado_pdc`; `bin/disjuntor.py:1462`, `bin/disjuntor.py:1512`, `bin/disjuntor.py:1526`, `bin/disjuntor.py:1546` | Sim, pelo dono; `bin/hook_stop_fila1.py:593`. |
-| `logs/sessao/padrao_de_cima_geracao` | `decide_pdc`/`_pdc_geracao_grava` → `_pdc_geracao_lida`/`estado_pdc`; `bin/disjuntor.py:1454`, `bin/disjuntor.py:1487`, `bin/disjuntor.py:1497`, `bin/disjuntor.py:1548` | Sim, pelo dono; `bin/hook_stop_fila1.py:593`. |
-| `logs/sessao/cota.json` | Status line → `ler_cota`; `bin/statusline_cota.py:49`, `bin/statusline_cota.py:54`, `bin/disjuntor.py:1653` | Sim; `bin/hook_stop_fila1.py:586`. |
-| `logs/sessao/pisos.log` | Hook chama `OC.registrar_piso` → `ultimo_piso`, `gatilho_tokens`, `disjuntor.ler`; `bin/hook_stop_fila1.py:911`, `bin/orcamento_contexto.py:198`, `bin/orcamento_contexto.py:210`, `bin/orcamento_contexto.py:227`, `bin/disjuntor.py:2230` | Sim; `bin/hook_stop_fila1.py:585`. |
-| `logs/hook_stop_fila1.log` | `_trilha` → `b2_decide`; `bin/hook_stop_fila1.py:48`, `bin/disjuntor.py:1754`, `bin/disjuntor.py:1761` | Sim; `bin/hook_stop_fila1.py:596`. |
-| `logs/hook_stop_fila1.json` | `_zera_teto`, contador principal → contador principal; `bin/hook_stop_fila1.py:1079`, `bin/hook_stop_fila1.py:1267`, `bin/hook_stop_fila1.py:1288` | Sim; `bin/hook_stop_fila1.py:596`. |
-| `logs/hook_stop_espera.json` e `.lock` | `_prova_arquivo`: memória/trava → a própria função; `bin/hook_stop_fila1.py:615`, `bin/hook_stop_fila1.py:625`, `bin/hook_stop_fila1.py:637` | Sim; `bin/hook_stop_fila1.py:596`. |
-| `logs/sessao/orcamento_estado.json` e `.lock` | Hook: `_orc_salva`, `_orcamento` → `_orcamento_travado`, `OC.ler`, `disjuntor.ler`; `bin/hook_stop_fila1.py:764`, `bin/hook_stop_fila1.py:832`, `bin/hook_stop_fila1.py:856`, `bin/orcamento_contexto.py:357`, `bin/disjuntor.py:2210` | Sim; `bin/hook_stop_fila1.py:596`. |
-| `logs/sessao/orcamento.log` | `_orc_trilha` → `OC.ler`, `disjuntor.ler`; `bin/hook_stop_fila1.py:738`, `bin/orcamento_contexto.py:364`, `bin/disjuntor.py:2169` | Sim; `bin/hook_stop_fila1.py:596`. |
-| `app/docs/RELATO.md` | `relato_negacao` delega a `esteira_vigia.no_relato` → hook e decisão PDC; `bin/disjuntor.py:234`, `bin/disjuntor.py:236`, `app/core/esteira_vigia.py:884`, `bin/hook_stop_fila1.py:429`, `bin/disjuntor.py:1376` | Sim; `bin/hook_stop_fila1.py:596`. |
-| `logs/codex/triagem.log` | `--triagem`, via `_triagem_sob_trava` → `_triagens`; `bin/disjuntor.py:837`, `bin/disjuntor.py:839`, `bin/disjuntor.py:861`, `bin/disjuntor.py:2326` | **Não**; lista completa em `bin/hook_stop_fila1.py:585`, `bin/hook_stop_fila1.py:593`, `bin/hook_stop_fila1.py:596`. |
-| `<resposta>.lock` | `triagem` cria e toma `LOCK_SH`; wrapper também usa a trava; `bin/disjuntor.py:806`, `bin/disjuntor.py:813`, `bin/codex_pergunta.sh:157` | **Não**; `bin/hook_stop_fila1.py:585`, `bin/hook_stop_fila1.py:596`. |
-
-`BACKLOG` também é excluído, embora não haja escrita nele nesses três componentes nos sítios encontrados; sua leitura e exclusão estão em `bin/hook_stop_fila1.py:173`, `bin/hook_stop_fila1.py:596`; ausência absoluta de outro escritor indireto: [nao verificado].
-
-Os temporários também **não estão na lista**: `.disjuntor_estado.*`, `.padrao_de_cima_escopo.*`, `.cota.*`, `.hook_stop_espera.*`, `.orcamento_estado.*`, `.RELATO.*.novo`; criação/substituição em `bin/disjuntor.py:278`, `bin/disjuntor.py:1518`, `bin/statusline_cota.py:49`, `bin/hook_stop_fila1.py:633`, `bin/hook_stop_fila1.py:764`, `app/core/esteira_vigia.py:879`; lista em `bin/hook_stop_fila1.py:596`.
-
-Para temporários, a omissão não demonstra automaticamente uma liberação: cada escrita usa nome/inode novo e depois `os.replace`; a memória exige a mesma chave caminho+dispositivo+inode em duas observações, com mtime crescente; `bin/disjuntor.py:278`, `bin/disjuntor.py:281`, `bin/hook_stop_fila1.py:609`, `bin/hook_stop_fila1.py:629`, `bin/hook_stop_fila1.py:649`. Uma corrida com duas observações durante a escrita não está proibida pela lista; exploração concreta: [nao verificado].
-
-`triagem.log` é o residual estável mais claro: é append no mesmo arquivo e não está excluído, portanto o avanço entre observações satisfaz `_prova_arquivo`; `bin/disjuntor.py:839`, `bin/hook_stop_fila1.py:609`, `bin/hook_stop_fila1.py:649`. Sua escrita requer a operação explícita de triagem e sidecar válido; não há evidência de que seja produzida pelo simples Stop/`--padrao-parada`; `bin/disjuntor.py:822`, `bin/disjuntor.py:827`, `bin/disjuntor.py:2326`. **Fila**, por inventário incompleto; chamar isso de avanço autônomo sem produtor seria [nao verificado].
-
-A trava de `no_relato` é no diretório `app/docs`, sem arquivo `.lock` próprio; diretórios não servem de prova; `app/core/esteira_vigia.py:844`, `app/core/esteira_vigia.py:848`, `bin/hook_stop_fila1.py:581`.
-
-Fragilidades adicionais:
-
-- **Fila:** `_pdc_grava_escopo` e status line podem abandonar temporários quando há exceção após `mkstemp`; seus `except` apenas registram/engolem, sem `unlink`; `bin/disjuntor.py:1518`, `bin/disjuntor.py:1522`, `bin/statusline_cota.py:49`, `bin/statusline_cota.py:55`. Hook, orçamento, estado DJ e `no_relato` possuem limpeza explícita; `bin/hook_stop_fila1.py:638`, `bin/hook_stop_fila1.py:769`, `bin/disjuntor.py:284`, `app/core/esteira_vigia.py:885`.
-- **Fila:** a frase do caso 8b sobre o escopo liberar porque o mtime anda omite que o escopo é substituído atomicamente e a chave inclui inode; regravação normalmente cria primeira observação de nova chave, enquanto a geração é reescrita no lugar; `bin/tests/test_hook_esperando_com_prova.sh:124`, `bin/disjuntor.py:1518`, `bin/disjuntor.py:1521`, `bin/hook_stop_fila1.py:609`, `bin/disjuntor.py:1487`. O teste pode morder a ausência de exclusão pelo **motivo esperado**, sem reproduzir um `ALLOW` no escopo; `bin/tests/test_hook_esperando_com_prova.sh:135`, `bin/tests/test_hook_esperando_com_prova.sh:87`.
-- A escrita da geração ocorre antes do estado, e o escopo é escrito no anúncio sob a mesma trava; a alteração de comentários não muda essa ordem; `bin/disjuntor.py:1454`, `bin/disjuntor.py:1462`, `bin/disjuntor.py:1466`, `bin/disjuntor.py:275`, `bin/disjuntor.py:292`.
-
-_1282 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1286 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
