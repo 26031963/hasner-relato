@@ -1,7 +1,148 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 10:38** · publicado em **01/11/2026 10:40** (UTC-3)
+> Ultima resposta processada: **01/11/2026 10:45** · publicado em **01/11/2026 10:45** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 10:45 · sessao dcd3c2f8c7bb · GRADE-FOLGA-JUIZ · verificador · origem=Code
+
+O `eh_trabalho` publicado preserva a lógica do main no diff fornecido; o `status` pode mudar porque passou a receber as folgas lançadas da pessoa inteira. Há um resíduo fora da ALLOWLIST — C5 — e há testes chamados `MORDE` que já passariam no main. (`app/colaboradores/services/calendario.py:604`, `app/colaboradores/services/calendario.py:772`, `app/colaboradores/services/calendario.py:890`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1532`; `app/escala/tests/test_grade_folga_vale_em_toda_competencia.py:74`)
+
+A comparação com o main abaixo usa o diff integral fornecido. A identidade Git da cópia, execução de RED/GREEN, medidas de produção, reversão e ensaio desta árvore permanecem **[não verificado]**.
+
+1. **Escritores, leitores e contratos tocados**
+
+O contrato novo do carregamento é **`{data: [FolgaDia, ...]}`**, ordenado por `pk`; o retorno público de `fatos_do_periodo` continua sendo **`{data: fatos}`**. A lista de candidatas não é publicada na chave `folga_lancada`: essa chave continua sendo `bool`, ou `None` no ramo sem jurisdição. (`app/ponto/precedencia.py:206`, `app/ponto/precedencia.py:208`, `app/ponto/precedencia.py:386`, `app/ponto/precedencia.py:407`)
+
+| Campo/estrutura | Quem escreve | Quem lê |
+|---|---|---|
+| Candidatas `{data: [FolgaDia]}` | `folgas_lancadas_do_periodo`, consultando pessoa e intervalo e agrupando todas as linhas: `app/ponto/precedencia.py:206`, `app/ponto/precedencia.py:208`. | Precedência: `app/ponto/precedencia.py:341`; grade: `app/escala/utils.py:1124`; veto: `app/ponto/precedencia.py:504`; declaração: `app/ponto/services/declarar_dia.py:74`; comando: `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:64`. |
+| `FolgaDia.data`, vínculo e origem | A porta declarada é `escala/folgas.py`: `app/core/portas.py:466`. Materialização do calendário: `app/escala/folgas.py:173`; manual: `app/escala/folgas.py:259`, `app/escala/folgas.py:284`; reparentamento da FK: `app/escala/folgas.py:435`. | Carregador lê pessoa/data/`pk`: `app/ponto/precedencia.py:206`; predicado lê `calendario_origem_id`, `escala_colaborador_id` e `ec_do_dia.pk`: `app/ponto/precedencia.py:237`, `app/ponto/precedencia.py:239`. Demais leitores constam no item 4. |
+| Resultado `FolgaDia \| None` do juiz | `folga_lancada_do_dia` escolhe a primeira candidata aceita: `app/ponto/precedencia.py:216`. | `fatos_do_periodo`: `app/ponto/precedencia.py:357`; overlay: `app/escala/utils.py:1124`; veto: `app/ponto/precedencia.py:505`; declaração: `app/ponto/services/declarar_dia.py:74`; comando: `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:65`. |
+| `fatos[data]['tipo_do_dia']` | Sem jurisdição, `None`; caso contrário, o tipo do primeiro fato pela precedência: `app/ponto/precedencia.py:386`, `app/ponto/precedencia.py:391`, `app/ponto/precedencia.py:398`. | Calendário: `app/colaboradores/services/calendario.py:796`; tradução da palavra: `app/ponto/services/dia_decidido.py:370`; cartório: `app/ponto/services/cartorio.py:1699`; diagnóstico: `app/ponto/services/dia_do_colab.py:86`; sem-furo: `app/folha/services/sem_furo.py:26`; faltas de hoje: `app/ponto/services/faltas_de_hoje.py:61`; deslogados: `app/ponto/services/deslogados.py:166`; classificador de folga humana: `app/ponto/precedencia.py:191`. |
+| `fatos[data]['faixa']` | `None` ou faixa vencedora: `app/ponto/precedencia.py:386`, `app/ponto/precedencia.py:392`, `app/ponto/precedencia.py:399`. | Calendário: `app/colaboradores/services/calendario.py:795`; folga humana: `app/ponto/precedencia.py:187`; cartório: `app/ponto/services/cartorio.py:1700`; reavaliação de chamados: `app/chamados/services/feriado_reavaliar.py:36`; semana do posto: `app/escala/services/semana_do_posto.py:177`; abriu/não bateu: `app/ponto/services/abriu_nao_bateu.py:123`; detector: `app/ponto/management/commands/detectar_ausencias.py:616`; diagnóstico: `app/ponto/services/dia_do_colab.py:130`. |
+| `fatos[data]['fatos']['folga_lancada']` | `None` ou `bool(folga_lancada)`: `app/ponto/precedencia.py:388`, `app/ponto/precedencia.py:407`. | Os três leitores literais encontrados: `app/ponto/precedencia.py:190`, `app/colaboradores/services/calendario.py:803`, `app/ferias/situacao.py:97`. |
+| `rotulo` | `app/ponto/precedencia.py:386`, `app/ponto/precedencia.py:400`. | Cartório: `app/ponto/services/cartorio.py:1701`; diagnóstico: `app/ponto/services/dia_do_colab.py:85`, `app/ponto/services/dia_do_colab.py:117`. |
+| `suprimidos` | Lista das faixas perdedoras, sem repetição: `app/ponto/precedencia.py:393`, `app/ponto/precedencia.py:401`. | Texto da supressão: `app/ponto/precedencia.py:417`; cartório: `app/ponto/services/cartorio.py:1702`; diagnóstico: `app/ponto/services/dia_do_colab.py:87`. |
+| `era_dia_previsto` | Célula, quando responde; senão cálculo do vínculo; exceção vira `None`: `app/ponto/precedencia.py:364`, `app/ponto/precedencia.py:367`, `app/ponto/precedencia.py:402`. | Reavaliação: `app/chamados/services/feriado_reavaliar.py:34`; cartório: `app/ponto/services/cartorio.py:1703`; diagnóstico: `app/ponto/services/dia_do_colab.py:84`; repouso para férias: `app/ferias/situacao.py:99`. |
+| `fatos.ausencias`, `fatos.feriado` | Tipos de ausência encontrados e feriado encontrado, mesmo que suprimidos: `app/ponto/precedencia.py:403`, `app/ponto/precedencia.py:406`. | Diagnóstico: `app/ponto/services/dia_do_colab.py:88`; repouso lê feriado: `app/ferias/situacao.py:97`. |
+| `fatos.feriado_so_no_pagamento` | Calculado em `app/ponto/precedencia.py:372`, usado internamente em `app/ponto/precedencia.py:377`, publicado em `app/ponto/precedencia.py:408`. | Não achei leitor nominal externo dessa chave na busca pelos `.py` de produção; consumidor dinâmico: **[não verificado]**. |
+| `ata.precedencia` | O cartório seleciona `tipo_do_dia`, `faixa`, `rotulo`, `suprimidos`, `era_dia_previsto` e `texto`: `app/ponto/services/cartorio.py:1698`. A porta grava a chave: `app/ponto/portas/celula.py:819`. | A chave `folga_lancada` **não integra essa seleção persistida**: `app/ponto/services/cartorio.py:1698`. |
+| `dia.tipo_dia`, `dia.celulas`, `dia.orfas` da grade | Builders-base: `app/escala/utils.py:727`, `app/escala/utils.py:752`, `app/escala/utils.py:1751`. Overlay agora escreve `folga`, preserva comprimento com `[None] * n` e limpa órfãs: `app/escala/utils.py:1125`. Ausências posteriores também podem sobrescrever: `app/escala/utils.py:1178`, `app/escala/utils.py:1209`. | Leitores externos detalhados abaixo; transformação para ata em `app/ponto/services/cartorio.py:582`. |
+| `eh_trabalho` diário do calendário | Inicializado em `None`, recebe `ec.eh_dia_trabalho(...)`, exceção retorna a `None`; publicado sem substituição: `app/colaboradores/services/calendario.py:755`, `app/colaboradores/services/calendario.py:772`, `app/colaboradores/services/calendario.py:780`, `app/colaboradores/services/calendario.py:890`. | `_classificar`: `app/colaboradores/services/calendario.py:111`; `resolver_dia_oferecido`: `app/colaboradores/services/calendario.py:189`. |
+| `status` diário do calendário | `_classificar` produz; contexto publica: `app/colaboradores/services/calendario.py:801`, `app/colaboradores/services/calendario.py:885`. | Porta curta: `app/colaboradores/services/calendario.py:213`; contagem: `app/colaboradores/services/calendario.py:224`; oferta de resolver: `app/colaboradores/services/calendario.py:190`; resumo: `app/colaboradores/services/calendario.py:936`; template: `app/templates/colaboradores/partials/_calendario_grade.html:69`. |
+| Conjunto `folgas={(cid,data)}` do comando | Carregador pessoal + juiz + vínculo do dia: `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:62`. | Cruzamento com ausências: `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:67`; pertinência: `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:34`. |
+| Tuplas de ausência `(colaborador_id,tipo,data,data_fim)` | Consulta materializada de aprovadas: `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:56`. | Seleção de pessoas: `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:63`; expansão e cruzamento: `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:28`. |
+| `REGRA_VERSOES` | Declaração acrescenta `(3,'2026-10')`: `app/ponto/services/cartorio.py:111`. | Validação no import: `app/ponto/services/cartorio.py:185`; `versao_para`: `app/ponto/services/cartorio.py:209`, `app/ponto/services/cartorio.py:214`; versão chega à impressão por `app/ponto/services/cartorio.py:965`, `app/ponto/services/cartorio.py:1170`. |
+| Pergunta nova de `JUIZES` e contagens documentais | Registro: `app/core/juizes.py:192`; espelhos: `app/docs/JUIZES.md:84`, `app/docs/MAPA-JUIZES.md:52`, `app/docs/MAPA.md:107`, `app/docs/ARQUITETURA.mmd:318`. | Gerador lê perguntas/quantidades/endereço do registro: `app/core/management/commands/gerar_diagrama.py:344`, `app/core/management/commands/gerar_diagrama.py:347`, `app/core/management/commands/gerar_diagrama.py:752`. |
+
+Os consumidores externos da grade alcançados pelos três campos alterados incluem os seguintes sítios; a persistência continua passando por `ata_do_dia` e `lavrar_veredito`. (`app/ponto/services/cartorio.py:577`, `app/ponto/services/cartorio.py:1582`)
+
+| Chave | Leitores fora do overlay |
+|---|---|
+| `tipo_dia` | `app/escala/orfa_classe.py:65`; `app/escala/services/furos_diarios.py:39`; `app/ponto/status_dia.py:146`; `app/ponto/supra_juiz.py:222`; `app/ponto/worklist.py:19`; `app/ponto/propositor.py:36`; `app/ponto/services/veredito_celula.py:221`; `app/ponto/services/dia_pago.py:386`; `app/ponto/services/espelho.py:690`; `app/ponto/services/simular_dia.py:12`; `app/ponto/services/bordas_realizado.py:74`; `app/ponto/services/fechamento.py:1011`; `app/chamados/services/materializacao.py:225`; `app/chamados/services/declaracao_texto.py:90`; `app/chamados/services/disputa_emissao.py:68`; `app/folha/causas.py:40`; `app/folha/export.py:1071`; `app/relatorios/furos.py:147`; `app/inteligencia/calculadores.py:46`; `app/ponto/management/commands/e6_piso_autopsia.py:13`; `app/ponto/management/commands/mapa_divergencia.py:131`. |
+| `celulas` | `app/escala/services/furos_diarios.py:13`; `app/escala/orfa_classe.py:37`; `app/escala/services/leitor_celula.py:256`; `app/ponto/status_dia.py:143`; `app/ponto/propositor.py:38`; `app/ponto/supra_juiz.py:230`; `app/ponto/services/cartorio.py:582`; `app/ponto/services/espelho.py:696`; `app/ponto/services/simular_dia.py:14`; `app/ponto/services/veredito_celula.py:250`; `app/ponto/turnos.py:2667`; `app/folha/causas.py:24`; `app/relatorios/furos.py:149`; `app/relatorios/pdf_espelho.py:551`; `app/inteligencia/calculadores.py:51`; `app/api/views.py:1506`; `app/colaboradores/services/calendario.py:477`; `app/chamados/services/declaracao_texto.py:97`; `app/ponto/management/commands/detectar_par_relampago.py:141`; `app/ponto/management/commands/reconciliar_grade.py:152`; `app/ponto/management/commands/mapa_divergencia.py:120`; `app/ponto/management/commands/propor_reorganizacao.py:92`. |
+| `orfas` | `app/escala/orfa_classe.py:58`; `app/escala/services/furos_diarios.py:16`; `app/ponto/status_dia.py:145`; `app/ponto/propositor.py:39`; `app/ponto/supra_juiz.py:373`; `app/ponto/services/cartorio.py:583`; `app/ponto/services/simular_dia.py:12`; `app/ponto/services/bordas_realizado.py:49`; `app/ponto/turnos.py:2674`; `app/folha/causas.py:43`; `app/relatorios/pdf_espelho.py:473`; `app/colaboradores/services/calendario.py:459`; `app/ponto/management/commands/detectar_par_relampago.py:140`. |
+
+Depois da lavra, há leitores de `ata.tipo_dia` em `chamados/juizes`, no leitor da célula e no cartão; isso faz a mudança alcançar a premissa da cobrança, além da apresentação da grade. (`app/chamados/juizes.py:408`; `app/escala/services/leitor_celula.py:345`; `app/relatorios/cartao_pela_celula.py:288`)
+
+O parâmetro **`folgas_lancadas` permanece, mas perdeu o último fornecedor encontrado**. Seu contrato efetivo passou de valor único por data para iterável de candidatas por data: o `.get(data)` alimenta diretamente o laço do juiz. Um antigo `{data: True}` ou `{data: FolgaDia}` não atende esse contrato. (`app/ponto/precedencia.py:260`, `app/ponto/precedencia.py:341`, `app/ponto/precedencia.py:216`)
+
+Todos os chamadores encontrados de `fatos_do_periodo`, incluindo o alias, são:
+
+| Produção | Testes | [nao verificado]
+|---|---|
+| `fatos_do_dia`: `app/ponto/precedencia.py:256` | `app/colaboradores/tests/test_calendario_um_juiz.py:176` |
+| Calendário: `app/colaboradores/services/calendario.py:604` | `app/ponto/tests/test_precedencia_pela_celula.py:77`, `app/ponto/tests/test_precedencia_pela_celula.py:90`, `app/ponto/tests/test_precedencia_pela_celula.py:106`, `app/ponto/tests/test_precedencia_pela_celula.py:120` |
+| Espelho, alias `_fatos_periodo`: `app/ponto/services/espelho.py:659` | `app/ponto/tests/test_precedencia_vinculo_encerrado.py:78`, `app/ponto/tests/test_precedencia_vinculo_encerrado.py:86`, `app/ponto/tests/test_precedencia_vinculo_encerrado.py:138` |
+| Sem-furo: `app/folha/services/sem_furo.py:25` | Nenhum desses fornece `folgas_lancadas`; a alimentação explícita do teste em `app/ponto/tests/test_precedencia_pela_celula.py:120` é `celulas_geradoras`. |
+
+Não achei outro fornecedor em busca textual de `folgas_lancadas=` e em varredura AST dos chamadores nos `.py` da cópia. Chamadas por reflexão: **[não verificado]**. A docstring que ainda diz “o calendário passa `True`” está vencida diante da chamada atual. (`app/ponto/precedencia.py:229`; `app/colaboradores/services/calendario.py:604`)
+
+As funções de produção criadas/alteradas têm os seguintes chamadores:
+
+| Função | Chamadores |
+|---|---|
+| `folgas_lancadas_do_periodo` | `app/ponto/precedencia.py:281`, `app/ponto/precedencia.py:501`, `app/escala/utils.py:1119`, `app/ponto/services/declarar_dia.py:74`, `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:64`. |
+| `folga_lancada_do_dia` | `app/ponto/precedencia.py:357`, `app/ponto/precedencia.py:505`, `app/escala/utils.py:1124`, `app/ponto/services/declarar_dia.py:74`, `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:65`. |
+| `folga_lancada_vale_no_dia` | Um chamador de produção: `app/ponto/precedencia.py:217`. |
+| `_aplicar_folgas_foto` | Builder single: `app/escala/utils.py:770`; por turno: `app/escala/utils.py:1794`. |
+| `montar_grade_prevista` | Legacy: `app/escala/utils.py:995`; ele conserva somente os dias do segmento julgado para esse vínculo: `app/escala/utils.py:999`. |
+| `montar_grade_prevista_periodo_por_turno` | Dispatcher: `app/escala/utils.py:2036`; comando direto: `app/ponto/management/commands/detectar_par_relampago.py:136`. |
+| `_folga_do_dia` | `o_dia_ja_e_folga`: `app/ponto/services/declarar_dia.py:95`; recusa: `app/ponto/services/declarar_dia.py:112`. |
+| `o_dia_ja_e_folga` | Aceite/idempotência e tratamento após recusa: **`app/chamados/services/validacao.py:261`, `app/chamados/services/validacao.py:316`**. |
+| `_recusa_do_dia` | `checar_declaracao`: `app/ponto/services/declarar_dia.py:147`. |
+| `veto_de_lancamento` | `app/ferias/views.py:253`; `app/ferias/models.py:428`; `app/escala/folgas.py:258`, `app/escala/folgas.py:283`; `app/ponto/services/ausencia.py:380`; `app/ponto/services/declarar_dia.py:120`. |
+| `contexto_calendario` | `app/colaboradores/views.py:1946`; `app/colaboradores/services/drawer.py:121`; `app/relatorios/furos.py:184`; portas curtas e contagem em `app/colaboradores/services/calendario.py:198`, `app/colaboradores/services/calendario.py:210`, `app/colaboradores/services/calendario.py:221`. |
+| `Command.handle` | Entrada do comando: `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:45`; chamada por nome exercitada em `app/ponto/tests/test_grade_folga_juiz_sitios.py:122`. |
+| `_folga_avulsa`, apagada | Não há definição remanescente; há lápide em `app/ponto/precedencia.py:161` e teste de ausência em `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:187`. |
+
+Na catraca, os dados novos são conjuntos de triplas `(arquivo, função, classe_do_achado)`. `REL`, `CAMPO_ORIGEM` e `JUIZ` alimentam o analisador; `ALLOWLIST` é comparada com os achados reais nos dois sentidos. `_cadeia` escreve os passos, `_getattr_literal` reconhece acesso literal, `_le_a_origem` reconhece leitura de origem, `achados_da_fonte` produz as triplas e `achados` percorre arquivos. Seus leitores são o próprio percurso e os testes. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:28`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:35`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:54`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:62`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:72`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:123`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:176`)
+
+Os testes escrevem fixtures de cadastro, vínculos, células/DNA, folgas, ausências, chamados, batidas, fechamento e exportação; essas escritas estão nos respectivos preparadores e casos, sem escritor novo de produção no diff. (`app/colaboradores/tests/test_calendario_folga_a_mao_e_da_pessoa.py:28`; `app/escala/tests/test_grade_folga_de_calendario_e_do_vinculo.py:41`; `app/escala/tests/test_grade_folga_vale_em_toda_competencia.py:38`; `app/ponto/tests/test_grade_folga_juiz_sitios.py:41`; `app/ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:45`)
+
+2. **`eh_trabalho` e diferenças de `status`**
+
+**Sim: a lógica que publica `eh_trabalho` é a do main, segundo o diff dado.** O vínculo ativo continua sendo carregado no mesmo sítio; `_cels_mes` e `_folgas_mes` continuam alimentando `ec.eh_dia_trabalho`; a guarda de vigência, o tratamento da exceção e a publicação permanecem iguais. O método chamado continua lendo `cel.trabalha` antes do cálculo aritmético. (`app/colaboradores/services/calendario.py:336`, `app/colaboradores/services/calendario.py:395`, `app/colaboradores/services/calendario.py:593`, `app/colaboradores/services/calendario.py:769`, `app/colaboradores/services/calendario.py:772`, `app/colaboradores/services/calendario.py:890`; `app/escala/models.py:1071`)
+
+A linha causal do diff para o calendário é a chamada em **`app/colaboradores/services/calendario.py:604`**: sai a alimentação `{d: True}` do vínculo ativo. O carregador padrão passa a trazer a pessoa inteira, e o juiz examina todas as candidatas contra o vínculo do dia. (`app/ponto/precedencia.py:281`, `app/ponto/precedencia.py:350`, `app/ponto/precedencia.py:357`)
+
+| Situação | Diferença possível em relação ao main |
+|---|---|
+| Manual presa ao vínculo velho, omitida pela foto do ativo | Passa a ser fato de folga; no caso sem batida do teste, `falta → folga`. (`app/colaboradores/tests/test_calendario_folga_a_mao_e_da_pessoa.py:54`) |
+| Calendário do ativo, mas célula gerada pelo velho | Deixa de ser tratado como manual válida; no caso do teste, `folga → falta`. (`app/colaboradores/tests/test_calendario_folga_a_mao_e_da_pessoa.py:96`) |
+| Calendário de outro vínculo, sem candidata válida | Continua inválido; o caso de preservação espera `falta`. (`app/colaboradores/tests/test_calendario_folga_a_mao_e_da_pessoa.py:61`) |
+| Inválida de menor `pk` antes de outra válida | O carregador anterior podia esconder a válida; agora o juiz percorre todas. (`app/ponto/precedencia.py:208`, `app/ponto/precedencia.py:216`; `app/escala/tests/test_grade_folga_de_calendario_e_do_vinculo.py:85`) |
+| Calendário válido do vínculo do dia, ausente da foto do ativo | Agora pode ser encontrado pelo universo da pessoa e aceito pela igualdade de vínculo. (`app/ponto/precedencia.py:206`, `app/ponto/precedencia.py:239`) |
+
+Essas alterações **não implicam sempre** `falta ↔ folga`: ausência vencedora sem batida retorna antes; feriado tem tratamento próprio; turno aberto continua `aberto`; com batida e folga humana, o ramo é `folga_trabalhada`; sem batida, a folga humana força o caminho de folga. (`app/colaboradores/services/calendario.py:109`, `app/colaboradores/services/calendario.py:112`, `app/colaboradores/service
+
+[truncado em 20000 de 35641 caracteres]
+
+## 01/11 10:40 · sessao 069db40031e4 · - · - · origem=Ronald (tmux)
+
+Avaliação estática; testes não executados e RED/GREEN observado em execução permanece [não verificado]. [nao verificado]
+
+| Arquivo/teste (linha da definição) | Sem a cura do diff | [nao verificado]
+|---|---|
+| `app/colaboradores/tests/test_calendario_folga_a_mao_e_da_pessoa.py:54` | Morde: main perde folga manual do velho; mudança do carregamento está em `app/colaboradores/services/calendario.py:604`. |
+| Mesmo arquivo `:61` | Já passa main; par de preservação, conforme a própria caracterização `:10`. |
+| Mesmo arquivo `:96` | Morde: foto do ativo confundia calendário dele com manual no dia da geradora velha; fixture `:84`, `:89`, `:98`. |
+| `app/escala/tests/test_grade_folga_de_calendario_e_do_vinculo.py:70` | Morde por turno; já passa legacy, distinção documentada `:21`. |
+| Mesmo arquivo `:75` | Já passa por turno; morde legacy, distinção documentada `:22`. |
+| Mesmo arquivo `:80` | Já passa ambos: calendário do próprio vínculo; fixture/as débeis `:81`, `:82`. |
+| Mesmo arquivo `:85` | Morde ambos pela precedência: calendário inválido de menor pk escondia o válido; caracterização `:16`, asserção `:89`, carregador corrigido `app/ponto/precedencia.py:208`. |
+| Mesmo arquivo `:91` | Morde ambos: manual fora da janela, caso `:92`, `:93`; universo agora pessoal `app/escala/utils.py:1119`. |
+| `app/escala/tests/test_grade_folga_vale_em_toda_competencia.py:69` | Premissa já passa main; só verifica versões `:71`, `:72`. |
+| Mesmo arquivo `:74`, `:79`, `:84` | **Já passam main nos dois builders.** Velho termina em 31/07 (`:47`), janela começa em 13/08 (`:25`, `:66`); main por turno só aplicava overlay dos vínculos da janela, cujo conjunto continua sendo formado em `app/escala/utils.py:1268`. Legacy segmenta pelo vínculo de cada dia em `app/escala/utils.py:975`, `:985`, `:995`. Simulação usa janela de um dia em `app/ponto/services/simular_dia.py:7`. São úteis contra retorno de gating, mas não RED da cura contra este main. |
+| Mesmo arquivo `:90` | Morde ambos: manual do velho fora da janela deve ser aceita; assert `:93`. |
+| `app/ponto/tests/test_grade_folga_juiz_sitios.py:79` | Morde veto antigo; caso/asserts `:80`, `:81`, `:82`. |
+| Mesmo arquivo `:84` | Par já passava main; manual continua vetando `:86`, `:87`. |
+| Mesmo arquivo `:93` | Morde declarador antigo; manual do velho precisa aparecer `:96`, `:97`. |
+| Mesmo arquivo `:99`, `:105` | Pares já passam main; calendário alheio recusado como fato e próprio continua gerido por calendário `:102`, `:109`. |
+| Mesmo arquivo `:125` | Morde universo antigo do comando; espera zero `:129`. |
+| Mesmo arquivo `:131` | Par já passava main; espera um `:135`. |
+| Mesmo arquivo `:159`, `:166` | Já passam main; própria documentação registra que gate e juiz já concordavam `:141`, `:142`, `:143`. |
+| `app/ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:95` | Premissa já passa main `:97`, `:99`. |
+| Mesmo arquivo `:101` | Morde por turno: ata precisa mudar para trabalho `:103`. |
+| Mesmo arquivo `:106` | Morde por turno pela assert adicional da ata `:114`; preservação FM/TXT sozinha não separa cura do main `:115`, `:117`, `:118`, `:119`. |
+| Mesmo arquivo `:121` | Já passa main; protege horizonte e não comprova cura. Assert final `:128`. |
+| Mesmo arquivo `:130` | Morde por turno pela resposta explícita trabalho `:136`; evita igualdade das duas testemunhas erradas. |
+| `app/ponto/tests/test_o219_versao_da_regra.py:67`, `:78` | Mordem retirada do bump: tupla exige v3 `:76`; leitor exige 3 na competência 10 `:89`, `:90`. |
+
+Os casos da primeira bateria de grade são herdados pelos dois builders em `app/escala/tests/test_grade_folga_de_calendario_e_do_vinculo.py:97` e `:102`; os da segunda também, em `app/escala/tests/test_grade_folga_vale_em_toda_competencia.py:98` e `:103`. Os testes do cartório não fixam a flag; default é True em `app/config/settings/base.py:165`; com False, o calendário alheio já era ignorado no main legacy por segmentação `app/escala/utils.py:985`, `:995`.
+
+Na catraca:
+
+- `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:176` morde produção antiga mediante achados fora da allowlist `:178`; `:182` morde `_folga_avulsa` sobrevivente `:187`.
+- Testes `:189`, `:194`, `:200`, `:223`, `:230`, `:236`, `:245`, `:262` são testes do analisador/percurso com fontes sintéticas; passam sem migrar os leitores de produção, e protegem o scanner, conforme cada fonte/assert em `:190`, `:195`, `:201`, `:226`, `:231`, `:238`, `:251`, `:263`. [nao verificado]
+- `:204` e `:215` inspecionam funções novas `:212`, `:220`: main puro falharia por atributo inexistente; mantendo funções novas e restaurando leitores antigos, esses dois ainda passam. A costura de produção é cobrada por `:176` e `:182`.
+- Não executei o teste de percurso, pois cria arquivos temporários em `:256`, `:257`, `:258`, `:259`; execução [não verificado]. [nao verificado]
+
+Em `app/ponto/tests/test_rejulgar_ausencia_em_folga.py:48` só mudou o mock do helper. Os três casos `:58`, `:64`, `:70` recebem universo já mockado `:52` e julgamento mockado `:53`; não verificam esta regra. Transplantar o helper atual ao main deixa a consulta FolgaDia antiga sem mock, podendo produzir erro incidental de acesso a banco; isso não seria RED da regra `:47`, `:48`, `:49`.
+
+Não acusar fixture sem carimbo no teste `sem_forcar`: as batidas são criadas em `app/ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:62`; seu signal chama julgamento em `app/ponto/signals.py:131`, `:135`, `:93`. Depois só a ata é sobreposta em `app/ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:74`. Contudo o teste não afirma explicitamente impressão/carimbo em dia; pulo real exige ambos e veredito em `app/ponto/services/cartorio.py:1176`, `:1180`. Estado concreto da fixture e execução permanecem [não verificado].
+
+Para 3(f), nenhum ato de pouso é comprovado pelos anexos [não verificado]. Os pré-requisitos existem: bump é ato de frota e exige ensaio `--apply` antes do pouso em `app/ponto/services/cartorio.py:173`, `:175`; sombra no main atual, reversão e frota antes do opus em `app/docs/PROMPTS.md:1758`; reconstrução de projeções não exportadas pela porta em `app/docs/LEIS.md:142`. Fase conflitante sai do escopo em `app/docs/PROMPTS.md:1781`; publicação de `eh_trabalho` sai em `:1783`.
 
 ## 01/11 10:38 · sessao af94c54b7920 · - · - · origem=Ronald (tmux)
 
@@ -598,37 +739,4 @@ A lavratura não copia `Rubricas.detalhe`: copia valores e registra nomes das re
 
 Execução da suíte, morte dos mutantes originais e impacto em produção: **[não verificado]**. [nao verificado]
 
-## 01/11 03:50 · sessao 66a13e78b458 · - · - · origem=Ronald (tmux)
-
-Fluxo após diff, com referências locais:
-
-- `horas_saida_antecipada`: `do_dia` inicializa zero apenas se decidível (`app/ponto/calculador/regras.py:641`); a dobra continua adiante (`:779-795`); `pontualidade_do_dia` aplica tolerância (`:264`), teto (`:271-272`) e soma minutos (`:274`); `do_dia` grava horas em `valores` (`:856`) e minutos no detalhe (`:858`). Sem dados/lei, declara `nao_decide` (`:619-625`); sem `dia`, remove o valor (`:863-868`).
-- Alimentação: organiza pontualidade (`app/ponto/calculador/alimentacao.py:496-500`) e passa `dia`, marcos e pares para `do_dia` (`:501-519`).
-- Leitura para gravar: fechamento monta rubricas (`app/ponto/services/fechamento.py:1239-1244`) e entrega a `lavrar` (`:1245-1264`). A lavratura primeiro carrega antecipada do motor (`app/ponto/services/dia_pago.py:185`), depois lê genericamente `valores` e substitui pelo calculador (`:320-328`), construindo `DiaPago` (`:343-345`). Não há `do_motor` nessa chamada (`app/ponto/services/fechamento.py:1245-1264`).
-- Leitura no diff: imprime antecipada explicitamente (`app/ponto/management/commands/diff_calculador.py:474-479`), põe `valores` em `c_dia` (`:501`) e compara cada rubrica decidida (`:527-542`). Os testes leem antecipada em `app/ponto/tests/test_v3_dobra_sem_noturna.py:114` e `:122-124`.
-- Leitor de apresentação: `rubricas_da_linha` lê `linha.horas_saida_antecipada` (`app/ponto/services/dia_pago.py:916`). Atingimento efetivo dessa versão pelo leitor em produção: [não verificado].
-
-`detalhe['extra_min']`:
-
-- A fórmula é excedente, `trab - limite`, sujeito à tolerância (`app/ponto/calculador/regras.py:767-771`). A dobra escreve o detalhe em `:787`; depois do diff, `:813` escreve novamente **o mesmo valor**. Para o caso longo: 540 − 480 = 60 (`app/ponto/tests/test_v3_dobra_sem_noturna.py:86-96`).
-- Leitor explícito: `app/ponto/management/commands/diff_calculador.py:497`, mas está sob `--abrir-he50` **e HE50 > 0** (`:480`). Como a dobra fixa HE50=0 (`app/ponto/calculador/regras.py:786`), esse leitor explícito **não executa para dobra**.
-- Na dobra, o detalhe inteiro ainda pode ser impresso quando há divergência e `--colab` (`app/ponto/management/commands/diff_calculador.py:543-548`).
-- O teste lê diretamente a chave (`app/ponto/tests/test_v3_dobra_sem_noturna.py:96`). `dia_pago.lavrar` não copia `Rubricas.detalhe`; copia valores e nomes de recusas (`app/ponto/services/dia_pago.py:320-331`).
-
-Nuance dos mutantes: o assert `extra_min == 60` verifica o resultado final, mas **não mata um mutante restrito à atribuição em `regras.py:787`**, porque `:813` a sobrescreve. Se o mutante altera a variável `extra` ou a escrita final, o assert pode mordê-lo; quais eram exatamente os mutantes da volta 1: [não verificado].
-
-## 01/11 03:50 · sessao aca67ccff62d · - · - · origem=Ronald (tmux)
-
-A triagem técnica dos três defeitos está correta quanto à origem:
-
-- **Intervalos:** `alimentacao.py:514` já passa `intervalos=()`. O diff torna o split alcançável na dobra (`regras.py:779`, `regras.py:820`), expondo essa alimentação defeituosa também nesse ramo. No caso longo, sem intervalo informado, o recuo de 540 minutos desde 07:00 chega a 22:00: 540 minutos noturnos = **9 h**. Com intervalo, recua até 21:00; janela 22–07 menos 02–03 = 480 minutos = **8 h** (`motor_calculo_v2.py:378`, `motor_calculo_v2.py:440`, `regras.py:828`). É origem preexistente, embora agora observável na dobra (`app/ponto/calculador/alimentacao.py:514`).
-
-- **Crédito de atraso:** o abatimento ocorre em `dia_pago.py:190`, seguido pela substituição da rubrica em `dia_pago.py:328`; a regra do dia expressamente não abate crédito (`regras.py:184`). Antes, o retorno antigo já entregava atraso zero afirmado; agora entrega atraso bruto, portanto o problema permanece e passa a aparecer com esse valor (`regras.py:641`, `regras.py:855`; retorno antigo: anexo `cura2.diff`). O overwrite não foi criado pelo diff (`app/ponto/services/dia_pago.py:328`).
-
-- **Folga-feriado:** paga HE100 e HE100-feriado em `regras.py:682`, declara os splits em `nao_decide` em `regras.py:704`–`regras.py:711` e retorna antes do ramo alterado (`regras.py:735`). Portanto, não apresenta o mesmo zero afirmado nem é alcançado pela cura (`app/ponto/calculador/regras.py:735`).
-
-Há uma distinção de governança: a regra local manda curar bug comprovado no caminho, mesmo preexistente, e proíbe enfileirá-lo (`CLAUDE.md:30`). Logo, “não foi introduzido pelo diff” é correto; “pode necessariamente ficar para fila” não decorre disso (`CLAUDE.md:30`). Nesta revisão, prevalece a instrução expressa do usuário de somente leitura [não verificado: instrução sem arquivo].
-
-Não identifiquei defeito novo nas linhas alteradas: o `elif` preserva a substituição da HE normal pela dobra e permite executar os blocos independentes de split, noturno e pontualidade (`app/ponto/calculador/regras.py:779`, `app/ponto/calculador/regras.py:795`, `app/ponto/calculador/regras.py:820`, `app/ponto/calculador/regras.py:840`, `app/ponto/calculador/regras.py:851`).
-
-_1367 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1369 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
