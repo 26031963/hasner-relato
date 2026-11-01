@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 08:05:44.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (115.8 MB). Acoes na janela: **618**.
+**Medido em 01/11/2026 08:10:57.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (115.8 MB). Acoes na janela: **613**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -623,8 +623,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:13:23 | Bash | Read the rest of the V3-P5 verificador | `cd /home/ronald/saas-hasner; tail -c 2800 logs/v3p5/pv/v1.r` |
 | 20:13:20 | Bash | Read the V3-P5 Codex verificador answer | `cd /home/ronald/saas-hasner; wc -c logs/v3p5/pv/v1.r; head -c 9000 logs/v3p5/pv/v1.r` |
 | 20:13:16 | Bash | Poll V3 verificador and test chain | `cd /home/ronald/saas-hasner; date +%H:%M; tail -1 logs/v3p5/pv/v1.run; for f in green vizinhos full; do echo "== $f"; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/v3per/v3/$f.log 2>/dev/null \| tail -3; done; bin/trava_teste.sh --quem` |
-| 20:08:58 | Bash | Set ESPERANDO to the real V3 chain pid | `cd /home/ronald/saas-hasner; sed -i "3s#.*#ESPERANDO: /home/ronald/saas-hasner/logs/v3per/v3/rodar_v3p5.sh \| pid=3853516#" app/docs/RELATO.md; cd bin; python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
-| 20:08:54 | Bash | Find the real V3 chain pid without self-match | `cd /home/ronald/saas-hasner; ps -eo pid,args \| awk '$2=="bash" && $3 ~ /rodar_v3p5\.sh$/ {print $1}'; ls logs/v3per/v3/` |
-| 20:08:50 | Bash | Point ESPERANDO at the stable V3 chain process | `cd /home/ronald/saas-hasner; P=$(pgrep -f 'bash /home/ronald/saas-hasner/logs/v3per/v3/rodar_v3p5.sh' \| head -1); echo $P; ps -o args= -p $P; sed -i "3s#.*#ESPERANDO: /home/ronald/saas-hasner/logs/v3per/v3/rodar_v3p5.sh \| pid=$P#" app/docs/RELATO.md; cd bin; python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
-| 20:08:38 | Bash | Log TRAVA-COB harvest in RELATO | `cd /home/ronald/saas-hasner; cat >> app/docs/RELATO.md <<'EOF' - TRAVA-COB volta 2 COLHIDA pela sessao: mutante P2/P3/P6 Ran 21 FAILED (failures=10) rc=1 = MORDE; suite core da copia wt-travacob-174015 Ran 1386 OK (skipped=21) rc=0. Censo Codex do DONO-DO-JOB pronto (logs/trava_cob/v3/pv/c1.r). Volta 3 (DONO-DO-JOB) abre no proximo slot (GRADE e PDC v6 ocupam os 2). EOF echo ok` |
-| 20:08:33 | Bash | Read TRAVA-COB chain verdicts | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/bqz1s8ozb.output; cd /home/ronald/saas-hasner; grep -E '^(FAIL\|ERROR):' logs/trava_cob/v2/mutante_P2_P3_P6.txt logs/trava_cob/v2/suite_core_copia.txt \| head; tail -1 logs/trava_cob/v3/pv/c1.run` |
