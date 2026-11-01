@@ -49,6 +49,7 @@ esperam migrar -- a lista so encolhe).
 
 | pergunta | juiz (dono) |
 |---|---|
+| este dia tem folga lancada que vale para o colaborador? | `ponto/precedencia.py::folga_lancada_do_dia` |
 | o dia e de trabalho para o vinculo? | `escala/models.py::EscalaColaborador.eh_dia_trabalho` |
 | o dia e feriado para o colaborador? | `core/feriados.py::eh_feriado` |
 | qual fato vence o dia (ferias > afastamento > atestado > feriado > folga > trabalho)? | `ponto/precedencia.py::fatos_do_dia` |
@@ -177,7 +178,7 @@ esperam migrar -- a lista so encolhe).
 |---|---|---|---|
 | `batida` | 4 | 2 | 0 |
 | `turno/marcos` | 15 | 0 | 0 |
-| `celula/precedencia` | 9 | 0 | 0 |
+| `celula/precedencia` | 10 | 0 | 0 |
 | `escala` | 2 | 0 | 0 |
 | `ausencia/ferias` | 15 | 0 | 0 |
 | `chamado` | 18 | 0 | 0 |
@@ -185,4 +186,4 @@ esperam migrar -- a lista so encolhe).
 | `feriado/prazo` | 6 | 2 | 13 |
 | `tela` | 11 | 1 | 110 |
 | `portas` | 1 | 0 | 124 |
-| **total** | **90** | **5** | **247** |
+| **total** | **91** | **5** | **247** |

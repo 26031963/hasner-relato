@@ -79,7 +79,7 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
 
 | familia | perguntas juiz/sem | fora_de_autoridade | sem chamar | chama e deriva | nao sei | proibidos | selos |
 |---|---|---|---|---|---|---|---|
-| celula/precedencia | 9/0 | 0 | 0 | 0 | 0 | 3 | 2 |
+| celula/precedencia | 10/0 | 0 | 0 | 0 | 0 | 3 | 2 |
 | turno/marcos | 15/0 | 0 | 0 | 0 | 0 | 3 | 1 |
 | ausencia/ferias | 15/0 | 0 | 0 | 0 | 0 | 6 | 4 |
 | chamado | 18/0 | 0 | 0 | 0 | 0 | 3 | 11 |
@@ -104,6 +104,7 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
   - que marco do dia faltou (furo)? -> `escala/servico_jornada.py::classificar_falta` · registro 0
   - quantos minutos o dia realizou? -> `ponto/turnos.py::realizado_do_dia` · registro 0
   - qual o status do dia (ok, irregular, falta, folga, ausencia...)? -> `ponto/status_dia.py::status_do_dia_lavrado` · registro 0
+  - este dia tem folga lancada que vale para o colaborador? -> `ponto/precedencia.py::folga_lancada_do_dia` · registro 0
 
 ### turno/marcos -- fora_de_autoridade('turno/marcos') = 0
 - pendentes: sem chamar 0 · chama e deriva 0 · nao sei 0
