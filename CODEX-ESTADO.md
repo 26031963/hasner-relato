@@ -1,7 +1,165 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 16:16** · publicado em **01/11/2026 16:16** (UTC-3)
+> Ultima resposta processada: **01/11/2026 16:18** · publicado em **01/11/2026 16:22** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 16:18 · sessao 4f8555cb3c3e · O261-E-F2 · censo · origem=Code
+
+Nos anexos transcritos, conto linhas desde a primeira linha de cada arquivo, incluindo linhas em branco e excluindo o marcador `== anexo ==`.
+
+1. **(a) — Codex não viu, com o tema perguntado.**  
+   **Pergunta:** “selo/RED sem mordida (o selo AST de test_o261e_f2_porta_carimbo.py morde mutante real?)” (`codex_v1.q:25`); reiterada para o diff total (`codex_v3.q:14`).  
+   **Resposta/triagem sobre o bypass por chamadas permitidas:** **nenhum**. As respostas apontaram escapes nas formas de atribuição, outro defeito do selo (`codex_v1.r:150`; `codex_v1.r:152`). O selo permite `_escrever_carimbo`, cuja implementação escreve sem consultar C6; a consulta está em `carimbar` (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:44`; `app/chamados/models.py:2527`; `app/chamados/models.py:2565`).
+
+2. **(b) — Codex viu; a triagem reduziu a nota.**  
+   **Pergunta:** comportamento observável de cada chamador “quando a porta RECUSA”, incluindo o que devolve ou emite (`codex_v1.q:15`; `codex_v1.q:16`; `codex_v1.q:17`).  
+   **Resposta:** para `_materializar_ausencia_de_resposta`, “Ignora o booleano. A ausência já criada/reaberta continua” (`codex_v1.r:93`).  
+   **Triagem/motivo:** “Nota. O Codex mesmo diz que o conjunto segue restrito ao efetivamente carimbado” (`triagem_v3.md:9`). O núcleo — recusa ignorada e redução do conjunto absorvido — foi tratado; a formulação específica “sem trilha/log” não aparece nesse tratamento (`codex_v1.r:93`; `triagem_v3.md:9`).
+
+3. **(b) — Os dois componentes foram vistos e encaminhados à fila.**  
+   **Pergunta:** possibilidade de gravar e reler VIVA; divergência entre memória e banco; ordem de trava (`codex_v1.q:18`; `codex_v1.q:20`; `codex_v1.q:26`).  
+   **Resposta:** “sem reler ou travar a pergunta” e “exceção da lavra ou do `save`, depois da aprovação, fica fora do `try` de reversão” (`codex_v1.r:109`; `codex_v1.r:126`).  
+   **Triagem/motivos:** concorrência anterior ao diff e alegada mudança da ordem de trava de sete chamadores (`triagem_v1.md:9`; `triagem_v2.md:10`). Para memória, a triagem corrigiu “o atomic cobre”, reconheceu que a memória permanece carimbada e encaminhou: “Não é regressão; vai a fila” (`triagem_v3.md:11`).
+
+4. **(b) — Relógio visto e remetido a complemento.**  
+   **Pergunta:** “relogio lido fora da borda” (`codex_v1.q:24`), repetida na volta final (`codex_v3.q:13`).  
+   **Resposta:** “Os novos métodos têm `now()` de fallback”; a injeção integral permanece incompleta (`codex_v1.r:144`).  
+   **Triagem/motivo:** “a leitura do relogio MUDOU DE SITIO, nao nasceu”, encaminhando ao complemento RELOGIO-INJETADO (`triagem_v2.md:9`; confirmado em `triagem_v3.md:12`). O detalhe de `encerrar_fantasma` chamar sem `quando` está no código, mas não foi explicitamente nomeado na resposta citada (`app/chamados/models.py:2648`; `codex_v1.r:144`).
+
+5. **(b) — Visto; descarte agregado, sem motivo individual registrado.**  
+   **Pergunta:** “derivacao paralela de fonte unica” (`codex_v1.q:24`; `codex_v1.q:25`).  
+   **Resposta:** “Permanece a separação já existente entre identidade no C6, no queryset e na lista da relavra”, citando os dois sítios do opus (`codex_v1.r:145`).  
+   **Triagem:** encerra agregadamente “2o juiz, derivacao paralela e 2o escritor explicito: nenhum” (`triagem_v2.md:12`). **Classifico em (b) por esse encerramento agregado; motivo específico da triagem para manter as listas 5×4: [nao verificado].** A preexistência foi registrada pela resposta, não como justificativa individual da triagem (`codex_v1.r:145`; `triagem_v2.md:12`).
+
+6. **(b) — Os três restos foram vistos e deixados para outro pouso.**   [nao verificado]
+   **Pergunta:** “Algum chamador de `fechar_por_competencia_trancada` [...] sobrou?”, além do mandato “L-111 apaga” (`codex_v1.q:27`; `codex_v1.q:7`).  
+   **Resposta:** “Restam referências instrumentais/documentais obsoletas dizendo que a porta existe”, citando exatamente os três arquivos do opus (`codex_v1.r:160`).  
+   **Triagem/motivo:** “INCOMPLETO declarado. E instrumento (`bin/`) e doc, com pouso proprio (RAIAS 5)” (`triagem_v1.md:15`). [nao verificado]
+
+7. **(a) — Codex não viu, com o tema perguntado.**  
+   **Pergunta:** “selo/RED sem mordida”, reiterada para o “diff total” (`codex_v1.q:25`; `codex_v3.q:14`).  
+   **Resposta/triagem sobre a perda da testemunha da classe (f): nenhum.** O teste passa a exigir uma chamada AST a `descarimbar_em_lote` e um `update()` censado diretamente, sem `[relacionado]` (`app/core/tests/test_censo_escritas.py:210`; `app/core/tests/test_censo_escritas.py:214`). É uma lacuna estrutural inspecionável no teste; classificá-la não depende de recuperar uma execução histórica de RED (`app/core/tests/test_censo_escritas.py:202`).
+
+8. **(e) — Não perguntado quanto ao custo da dupla execução.**  
+   **Pergunta mais próxima:** menciona “memo `_pv_memo`”, mas pergunta se a porta grava e a releitura resulta VIVA; não pede avaliação de custo ou quantidade de consultas ao C6 (`codex_v1.q:18`; `codex_v1.q:19`).  
+   **Resposta relacionada:** descreve que `lavrar_sem_turno_aberto` “antes salvava depois do pré-C6”, sem apontar o custo da segunda avaliação (`codex_v1.r:88`).  
+   **Resposta/triagem do achado de custo: nenhum.** Os dois pontos de chamada e a alteração dos campos da chave estão no código (`app/chamados/reconciliador.py:398`; `app/chamados/reconciliador.py:405`; `app/chamados/models.py:2565`; `app/chamados/juizes.py:790`; `app/chamados/juizes.py:791`).
+
+9. **(e) — Não perguntado quanto ao vocabulário do commit/comentário.**   [nao verificado]
+   **Trechos delimitadores:** as perguntas pedem escritores, leitores e classes de defeitos; nenhuma pede auditoria lexical do commit ou da palavra “fallback” em comentários (`codex_v1.q:11`; `codex_v1.q:23`; `codex_v2.q:17`; `codex_v3.q:13`).   [nao verificado]
+   **Resposta/triagem deste achado: nenhum.** O “fallback” mencionado na resposta refere-se ao relógio, outro tema (`codex_v1.r:144`). A ocorrência no comentário está confirmada (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:404`); a ocorrência no corpo original do commit, além do relato do opus, é **[nao verificado]**.
+
+| achado | classe | volta | trecho |
+|---|---|---|---|
+| 1 — chamadores sem selo | **(a)** | v1/v3 | Perguntado “selo/RED sem mordida”; resposta específica: nenhum (`codex_v1.q:25`; `codex_v3.q:14`). |
+| 2 — recusa silenciosa na ausência | **(b)** | v1 → triagem v3 | “Ignora o booleano”; triagem: conjunto restrito ao efetivamente carimbado (`codex_v1.r:93`; `triagem_v3.md:9`). |
+| 3 — trava e memória após erro | **(b)** | v1–v3 | Janela anterior; memória: “Não é regressão; vai a fila” (`triagem_v1.md:9`; `triagem_v3.md:11`). |
+| 4 — relógio nas portas | **(b)** | v1–v3 | “MUDOU DE SITIO, nao nasceu”; complemento RELOGIO-INJETADO (`triagem_v2.md:9`). |
+| 5 — duas listas de identidade | **(b)** | v1 → triagem v2 | Separação registrada; encerramento agregado “nenhum”; motivo individual ausente (`codex_v1.r:145`; `triagem_v2.md:12`). |
+| 6 — restos de L-111 | **(b)** | v1 | “INCOMPLETO declarado”; instrumento/doc com pouso próprio (`triagem_v1.md:15`). | [nao verificado]
+| 7 — testemunha da classe (f) | **(a)** | v1/v3 | Perguntado “selo/RED sem mordida”; resposta específica: nenhum (`codex_v1.q:25`; `codex_v3.q:14`). |
+| 8 — custo de dois C6 | **(e)** | v1, pergunta mais próxima | Memo perguntado quanto à vivacidade, sem pergunta de custo (`codex_v1.q:18`; `codex_v1.q:19`). |
+| 9 — palavra “fallback” | **(e)** | v1–v3 | Perguntas de defeitos técnicos, sem auditoria lexical (`codex_v1.q:23`; `codex_v2.q:17`; `codex_v3.q:13`). |
+
+## 01/11 16:17 · sessao a802cb69c575 · E4-CARGA · verificador · origem=Code
+
+A mudança corrige um repasse entre contratos incompatíveis: `dias_encerrados` recebe `{(colaborador_id, data): célula}`, enquanto `turnos_do_colab` espera `{data: célula}` com pad. O encerramento continua usando o mesmo julgamento puro. (`app/ponto/turnos.py:2130`, `app/ponto/turnos.py:1852`, `app/ponto/turnos.py:1845`, `app/ponto/turnos.py:2153`)
+
+**Não considero demonstrada a conclusão operacional da obra:** existe exigência explícita de “RED + impacto na sombra”; execução desses testes, impacto e sequência efetiva de pouso estão **[não verificado]**. (`app/docs/BACKLOG.md:861`)
+
+**1. Quem produz e quem consome os valores**
+
+| Valor | Quem produz | Quem lê |
+|---|---|---|
+| `dias_encerrados(..., celulas=...)` | Chamador; na ausência, `celulas_do_periodo([pk], ini, fim)`, com chave composta. (`app/ponto/turnos.py:2145`, `app/escala/alimentacao.py:41`) | `_dias_encerrados_puro`: alimenta `vinculo_do_dia` e o julgamento do fim previsto/DNA. (`app/ponto/turnos.py:2170`, `app/ponto/turnos.py:2119`, `app/escala/alimentacao.py:237`) |
+| `turnos_do_colab(..., celulas=...)` | Chamador; na ausência, carrega `[ini−2, fim+1]` e converte para chave `data`. (`app/ponto/turnos.py:1845`, `app/ponto/turnos.py:1882`) | Candidatura das geradoras (`mais`), papel da ata e escolha do vínculo de cada dia. A segmentação recompõe a chave `(pk,data)`. (`app/ponto/turnos.py:1885`, `app/ponto/turnos.py:1937`, `app/ponto/turnos.py:1954`) |
+| Retorno sem motivos | `_dias_encerrados_puro` escreve `{data: (_m is None)}`. (`app/ponto/turnos.py:2172`) | Consumidores booleanos listados abaixo. |
+| Retorno com motivos | O mesmo corpo escreve `{data: motivo ou None}`; `None` significa encerrado. (`app/ponto/turnos.py:2132`, `app/ponto/turnos.py:2172`) | Calendário; no método do lote, leitor de status. (`app/colaboradores/services/calendario.py:701`, `app/ponto/status_dia.py:196`) |
+
+Todos os sítios de produção encontrados que passam `celulas` explicitamente às duas funções, incluindo aliases e argumento posicional:
+
+| Chamada | Forma e janela da alimentação | Muda com o diff? |
+|---|---|---|
+| Cartório → `dias_encerrados` | `{(c.pk,x.data): x}` da lista `cels`; limites `d0=cels[0].data`, `d1=cels[-1].data`. A lista pode ter lacunas. (`app/ponto/services/cartorio.py:919`, `app/ponto/services/cartorio.py:942`) | **Sim**, quando a chamada ocorre: não fornece `turnos`; agora o pareador carrega suas células com pad. (`app/ponto/turnos.py:2154`) |
+| Calendário → `_dias_encerrados` | `_cels_mes`, composta, carregada em `[data_ini,data_fim]`; fornece também os turnos dessa janela. (`app/colaboradores/services/calendario.py:395`, `app/colaboradores/services/calendario.py:699`) | **Não**: `turnos` fornecido evita o ramo alterado. (`app/ponto/turnos.py:2154`) |
+| `dia_encerrado_motivo` → `turnos_do_colab` | Repasse posicional do próprio parâmetro; deveria receber `{data}` cobrindo `[data−2,data+1]`. (`app/ponto/turnos.py:2096`, `app/ponto/turnos.py:1852`, `app/ponto/turnos.py:1845`) | **Não**: esse repasse permanece. (`app/ponto/turnos.py:2096`) |
+| Grade, antes do alinhamento → `_tdc_pre` | Converte `_cels_gr` para `{data}`; carga de `janela_com_pad(_ini_al,ref)`. (`app/escala/utils.py:1258`, `app/escala/utils.py:1260`, `app/escala/utils.py:1532`) | **Não**: chamada direta preservada. (`app/escala/utils.py:1532`) |
+| Grade, depois dos overlays → `turnos_do_colab` | `{data}` do mesmo pad; dentro da montagem, cópias com ata fresca não salva; fora dela, células persistidas. (`app/escala/utils.py:1830`, `app/escala/utils.py:1833`, `app/escala/utils.py:1835`, `app/escala/utils.py:1847`) | **Não**: essa alimentação continua chegando diretamente ao pareador. (`app/escala/utils.py:1847`) |
+| Emissor de turno aberto retroativo → `turnos_do_colab` | `{data}`, carregado em `[ini−2,fim+2]`, portanto um dia além do pad necessário. (`app/ponto/management/commands/emitir_turno_aberto_retroativo.py:86`, `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:88`, `app/ponto/turnos.py:1845`) | **Não**: chamada direta preservada. (`app/ponto/management/commands/emitir_turno_aberto_retroativo.py:88`) |
+
+O repasse singular merece uma ressalva: o fechamento fornece `{data}` recortado pelo pad, mas o vigia fornece `{(pk,data)}` de uma única célula, que atravessa `dia_encerrado` e ainda chega incompatível ao pareador. É uma ocorrência **preexistente, não curada por este diff**. (`app/ponto/services/fechamento.py:354`, `app/ponto/services/fechamento.py:361`, `app/ponto/services/vigia_de_hora.py:57`, `app/ponto/turnos.py:2075`, `app/ponto/turnos.py:2096`)
+
+Os leitores de produção do retorno da **função de módulo** são:
+
+| Leitor | Uso |
+|---|---|
+| Cartório | Bool com default `False`; decide `_em_curso` e alimenta o classificador. (`app/ponto/services/cartorio.py:943`, `app/ponto/services/cartorio.py:1180`, `app/ponto/services/cartorio.py:1253`) |
+| Calendário | Motivos; distingue dia em curso e `sem_previsto`. (`app/colaboradores/services/calendario.py:699`, `app/colaboradores/services/calendario.py:701`, `app/colaboradores/services/calendario.py:709`) |
+| Comando `supra_juiz` | Bool passado ao classificador. (`app/ponto/management/commands/supra_juiz.py:121`, `app/ponto/management/commands/supra_juiz.py:232`) |
+| Emissor de furo retroativo | Bool passado ao classificador. (`app/ponto/management/commands/emitir_furo_retroativo.py:62`, `app/ponto/management/commands/emitir_furo_retroativo.py:108`) |
+| `par_completo_da_janela` | Bool para excluir turnos de dias não encerrados. (`app/ponto/turnos.py:2183`, `app/ponto/turnos.py:2186`) |
+
+O **método homônimo do lote** tem leitores no status, com motivos, e no painel, com bool. Ele chama diretamente `_dias_encerrados_puro`, sem atravessar a linha alterada. (`app/ponto/status_dia.py:196`, `app/core/services/painel_op.py:334`, `app/ponto/turnos.py:3018`)
+
+**2. Contraexemplos, custo e memória**
+
+**Resultado antes correto que passe a errado: [não verificado].** Os novos casos fixam correções nos dois sentidos: X deve encerrar às 08h; Y deve continuar aberto nesse instante. Isso demonstra a expectativa da fixture, não a ausência universal de regressões. (`app/ponto/tests/test_bug_enc_celulas_forma.py:49`, `app/ponto/tests/test_bug_enc_celulas_forma.py:50`)
+
+**O custo muda no cartório:** passa a existir uma consulta adicional de células por chamada efetiva de encerramento, pois o pareador agora recebe `None` e executa `celulas_do_periodo`. `_enc` memoiza o resultado por execução de `_julgar_colab_corpo`, evitando uma carga por dia. (`app/ponto/turnos.py:2154`, `app/ponto/turnos.py:1882`, `app/escala/alimentacao.py:41`, `app/ponto/services/cartorio.py:939`)
+
+As células adicionais do pad também podem acrescentar geradoras e disparar a consulta condicional de `mais`; alterações adicionais nos caminhos preguiçosos e relevância em tempo de produção estão **[não verificado]**. O lote conserva suas cargas e seu acesso direto ao corpo puro. (`app/ponto/turnos.py:1885`, `app/escala/alimentacao.py:123`, `app/ponto/turnos.py:2957`, `app/ponto/turnos.py:3018`)
+
+A ordem do ramo normal do cartório é:
+
+1. Monta a grade; o pareamento final dessa montagem recebe cópias com **ata fresca em memória**. (`app/ponto/services/cartorio.py:963`, `app/escala/utils.py:1835`, `app/escala/utils.py:1847`)
+2. Consulta encerramento sob demanda, por exemplo em `_em_curso`; agora esse pareador recarrega células persistidas. (`app/ponto/services/cartorio.py:1180`, `app/ponto/services/cartorio.py:942`, `app/ponto/turnos.py:1884`)
+3. Depois, no apply, lavra a célula atual com `save=False` e salva por `carimbar`. (`app/ponto/services/cartorio.py:1593`, `app/ponto/services/cartorio.py:1596`, `app/ponto/services/cartorio.py:1616`, `app/ponto/portas/celula.py:807`)
+
+Portanto, **há diferença de estado entre a ata fresca usada pela grade e a persistida usada pelo encerramento**. Entretanto, o cartório passa ao encerramento a lista original `cels`, não as cópias frescas da grade; esse diff não remove a alimentação direta dessas cópias. Divergência efetiva dry-run/apply causada pela mudança: **[não verificado]**. (`app/ponto/services/cartorio.py:942`, `app/escala/utils.py:1846`, `app/escala/utils.py:1847`)
+
+Como `_enc` é preguiçoso, a primeira carga pode ocorrer numa iteração posterior: a ordem demonstrada é “antes da lavra **da célula atual**”, não necessariamente antes de todas as lavras da passagem. (`app/ponto/services/cartorio.py:939`, `app/ponto/services/cartorio.py:1180`, `app/ponto/services/cartorio.py:1596`)
+
+No ramo `nunca_bateu`, a pergunta ocorre **somente dentro de `apply_`**, antes da lavra e do carimbo; o dry-run desse ramo não faz essa pergunta. Essa assimetria já está no chamador. (`app/ponto/services/cartorio.py:1040`, `app/ponto/services/cartorio.py:1063`, `app/ponto/services/cartorio.py:1075`, `app/ponto/services/cartorio.py:1097`)
+
+**3. Os testes mordem?** [nao verificado]
+
+A tabela descreve o que as asserções detectariam; execução dos mutantes e resultados efetivos: **[não verificado]**.
+
+| Teste | Mutante plausível que pega | O que deixa passar | [nao verificado]
+|---|---|---|
+| `test_regra` | Ignorar geradora/intervalo e fechar Y; manter X aberto; retirar `mais` somente do lote. Exige estados e motivos literais. (`app/ponto/tests/test_e4_carga_paridade.py:129`, `app/ponto/tests/test_e4_carga_paridade.py:139`) | Inverter somente o retorno sem motivos; usa `motivos=True`. (`app/ponto/tests/test_e4_carga_paridade.py:107`, `app/ponto/tests/test_e4_carga_paridade.py:115`) |
+| `test_paridade_carga_x_casca_em_fixture_mista` | Divergência exclusiva de um carregador, inclusive perder `mais`, batida ou identidade da saída; compara seis campos, motivos e atribuição das batidas. (`app/ponto/tests/test_e4_carga_paridade.py:55`, `app/ponto/tests/test_e4_carga_paridade.py:122`, `app/ponto/tests/test_e4_carga_paridade.py:148`) | Erro compartilhado pelos corpos puros, mantendo os dois lados iguais. (`app/ponto/turnos.py:1913`, `app/ponto/turnos.py:3009`, `app/ponto/turnos.py:3018`) |
+| `test_MORDE_carga_sem_mais` | Como controle de sensibilidade, exige que a retirada simulada de `mais` alcance a carga e produza divergência em Y. (`app/ponto/tests/test_e4_carga_paridade.py:159`, `app/ponto/tests/test_e4_carga_paridade.py:162`, `app/ponto/tests/test_e4_carga_paridade.py:165`) | **Sozinho, deixa passar produção já sem `mais`**, porque continua exigindo divergência. Quem reprova essa retirada permanente são `test_regra` e `test_paridade`. (`app/ponto/tests/test_e4_carga_paridade.py:143`, `app/ponto/tests/test_e4_carga_paridade.py:148`, `app/ponto/tests/test_e4_carga_paridade.py:165`) |
+| `test_RED_alimentado_igual_a_juiza_e_ao_lote` | Restaurar o repasse antigo da chave composta: constrói essa alimentação e compara com lote e singular. (`app/ponto/tests/test_bug_enc_celulas_forma.py:33`, `app/ponto/tests/test_bug_enc_celulas_forma.py:43`, `app/ponto/tests/test_bug_enc_celulas_forma.py:44`) | Erro compartilhado do julgamento; conversão bool errada; erro exclusivo do ramo com `turnos=` fornecido. (`app/ponto/tests/test_bug_enc_celulas_forma.py:33`, `app/ponto/turnos.py:2154`, `app/ponto/turnos.py:2172`) |
+| `test_RED_regra_do_veredito_do_cartorio` | Repasse antigo ou perda do intervalo de Y; fixa X encerrado e Y aberto às 08h. (`app/ponto/tests/test_bug_enc_celulas_forma.py:49`, `app/ponto/tests/test_bug_enc_celulas_forma.py:50`) | Erros exclusivos de outros instantes, Z ou conversão bool: só consulta X/Y às 08h, com motivos. (`app/ponto/tests/test_bug_enc_celulas_forma.py:33`, `app/ponto/tests/test_bug_enc_celulas_forma.py:49`) |
+
+**O patch alcança o lote:** o construtor faz import local de `escalas_do_periodo_por_colab`; `_lote` é executado dentro do patch, antes dessa resolução e chamada. (`app/ponto/turnos.py:2951`, `app/ponto/turnos.py:2963`, `app/ponto/tests/test_e4_carga_paridade.py:159`)
+
+**A casca fica intacta:** é medida antes do patch e retorna assinaturas e mapas já materializados. Medida dentro dele, também seria mutada, pois a casca singular resolve a função plural pelo global do módulo. (`app/ponto/tests/test_e4_carga_paridade.py:55`, `app/ponto/tests/test_e4_carga_paridade.py:106`, `app/ponto/tests/test_e4_carga_paridade.py:158`, `app/escala/alimentacao.py:154`)
+
+Há lacunas relevantes: não existe célula da fixture fora de D, logo a necessidade de **células no pad** não é testada independentemente; também não há célula fresca não salva, fluxo real do cartório, orçamento de consultas ou assert do modo booleano. (`app/ponto/tests/test_e4_carga_paridade.py:92`, `app/ponto/tests/test_e4_carga_paridade.py:107`, `app/ponto/tests/test_bug_enc_celulas_forma.py:32`, `app/ponto/tests/test_bug_enc_celulas_forma.py:33`)
+
+**Não há dependência direta do relógio real nos testes novos:** datas/instantes são constantes, ambas as classes congelam o relógio e os julgamentos recebem `agora`. (`app/ponto/tests/test_e4_carga_paridade.py:39`, `app/ponto/tests/test_e4_carga_paridade.py:47`, `app/ponto/tests/test_e4_carga_paridade.py:100`, `app/ponto/tests/test_bug_enc_celulas_forma.py:24`, `app/ponto/tests/test_bug_enc_celulas_forma.py:33`)
+
+**4. Classes de reprovação**
+
+| Classe | SIM/NÃO e prova |
+|---|---|
+| **(a) Segundo juiz** | **NÃO introduzido.** Os registrados continuam sendo `turnos_do_colab` e `dia_encerrado`; o carregador delega ao mesmo julgamento puro. (`app/core/juizes.py:196`, `app/core/juizes.py:223`, `app/ponto/turnos.py:2153`, `app/ponto/turnos.py:2170`) |
+| **(b) Segundo escritor fora da porta** | **NÃO introduzido.** A alteração troca alimentação de leitura; lavra e persistência seguem pelas portas existentes. (`app/ponto/turnos.py:2153`, `app/ponto/services/cartorio.py:1596`, `app/ponto/services/cartorio.py:1616`) |
+| **(c) Relógio fora da borda** | **NÃO introduzido; SIM preexistente no sítio.** Os defaults internos de `timezone.now()` permanecem, apesar do corte de injeção. O cartório fornece `agora`. (`app/ponto/turnos.py:2140`, `app/ponto/turnos.py:2094`, `app/docs/CORTES.md:369`, `app/ponto/services/cartorio.py:942`) |
+| **(d) Dois carregadores que podem divergir** | **SIM, preexistentes e mantidos.** Casca e lote carregam separadamente, mas usam os mesmos corpos. O selo novo verifica paridade na fixture; não elimina a duplicidade de composição das cargas. (`app/ponto/turnos.py:1919`, `app/ponto/turnos.py:2957`, `app/ponto/turnos.py:3009`, `app/docs/BACKLOG.md:862`) |
+| **(e) Selo/RED sem mordida** | **NÃO inteiramente vazio:** há gabaritos literais e controle de sensibilidade. **SIM, cobertura incompleta:** bool, pad com células e estado não salvo escapam conforme os testes acima. RED executado: **[não verificado]**. (`app/ponto/tests/test_e4_carga_paridade.py:143`, `app/ponto/tests/test_e4_carga_paridade.py:165`, `app/ponto/tests/test_bug_enc_celulas_forma.py:33`) |
+| **(f) Ordem de trava** | **NÃO alterada pela linha do diff.** Ela apenas remove o argumento de uma leitura. Existe hipótese preexistente de composição Colaborador→Disputa, registrada como não reproduzida; regressão de trava nesta obra: **[não verificado]**. (`app/ponto/turnos.py:2154`, `app/docs/BACKLOG.md:767`) |
+| **(g) Pouso antes do pré-requisito** | **NÃO comprovado; cumprimento [não verificado].** Exige paridade antes da cura, cura depois do pouso E4-7, RED e impacto. A documentação declara E4-7 no ar, mas não comprova aqui a ancestralidade/execução efetiva. (`app/docs/BACKLOG.md:862`, `app/docs/BACKLOG.md:861`, `app/docs/BACKLOG.md:789`) |
+
+**5. Leis dos sítios**
+
+O grep encontra proteção explícita para consumo da célula/ata, teto temporal e jornada pelo dia de início; L-085 nomeia `turnos_do_colab`. O registro de juízes também reserva geometria ao pareador e marcos do dia à autoridade da célula. (`app/docs/LEIS.md:95`, `app/docs/LEIS.md:100`, `app/docs/LEIS.md:117`, `app/docs/JUIZES.md:20`, `app/docs/JUIZES.md:22`)
+
+**Não identifiquei violação nova dessas regras pela linha alterada:** ela mantém a pergunta ao pareador e a conjunção turno vivo/fim previsto, sem criar julgamento por data. (`app/ponto/turnos.py:2154`, `app/ponto/turnos.py:2114`, `app/ponto/turnos.py:2122`)
+
+As ressalvas são a leitura de relógio preexistente diante de `RELOGIO-INJETADO`, a cronologia exigida pela L-110 e os pré-requisitos específicos da obra. O fonte contém casos pela regra; não comprova que foram escritos/executados antes da cura nem fornece o impacto exigido. (`app/docs/CORTES.md:369`, `app/docs/LEIS.md:136`, `app/docs/BACKLOG.md:861`, `app/docs/BACKLOG.md:862`; execução e cronologia **[não verificado]**)
 
 ## 01/11 16:16 · sessao 0144ff325e9e · - · - · origem=Ronald (tmux)
 
@@ -925,188 +1083,4 @@ Esses carimbos, junto com ausência, batida, edição/regeneração e marcos ven
 
 Nenhuma consulta ao banco resolve qual constante a **sonda** instalou em B: isso depende do instrumento executado, ausente do dado fornecido. `[nao verificado]`
 
-## 01/11 14:39 · sessao e24157d16709 · COBPARC-ATA-DEFASADA-09 · censo · origem=Code
-
-O dado separa **código atual × ata gravada** de **efeito adicional da subida de versão**; o registro local reproduz os cinco deltas e relata controle sem a cura COBPARC igual à cura, campo a campo. Isso não identifica, sozinho, o commit causador nem o dono de cada dia. (`app/docs/BACKLOG.md:759–760`; `app/ponto/management/commands/e6_oraculo.py:98–110`)
-
-A correspondência histórica exata **hash → diff**, assim como um censo exaustivo dos commits, fica **[nao verificado]**: esta cópia não disponibiliza o histórico Git. Abaixo, os hashes vêm do anexo e as linhas apontam o comportamento presente na cópia; não atribuo os deltas individuais por coincidência numérica. [nao verificado]
-
-**1. Escritores e leitores**
-
-O caminho se divide: **FechamentoMensal não é calculado somando DiaPago**. O fechamento calcula os valores e entrega os mesmos períodos e mapas à lavratura de DiaPago; a soma de DiaPago existe como leitor separado de conferência. (`app/ponto/services/fechamento.py:877–878, 1028–1032, 1168–1185`; `app/ponto/services/dia_pago.py:548–561`)
-
-| Campo | Quem produz e escreve | Quem lê e onde chega ao fechamento |
-|---|---|---|
-| `dias_previstos` | Não é rubrica de DiaPago: é contagem dos dias da grade cujo `tipo_dia` seja `trabalho` ou `ausencia`. O fechamento escreve `len(_dt_trab)`. (`app/ponto/services/dia_pago.py:99`; `app/ponto/services/fechamento.py:1014–1017, 1052`) | A grade do fechamento lê a célula/ata; `tipo_dia` vem da ata, com alternativa em `cel.trabalha`. (`app/folha/export.py:318–327`; `app/escala/services/leitor_celula.py:345–346`) |
-| `minutos_previstos` | A grade soma segmentos previstos E→S; o cartório copia o resultado para a ata; a porta persiste a ata. (`app/escala/utils.py:1569–1590`; `app/ponto/services/cartorio.py:599–600`; `app/ponto/portas/celula.py:767–775`) | O leitor prefere `ata.minutos_previstos`; sem essa chave consulta `minutos_previstos_do_dia`. O fechamento soma trabalho/ausência; DiaPago recebe o mapa diário. (`app/escala/services/leitor_celula.py:347–354`; `app/ponto/services/fechamento.py:1014–1016, 1051, 1180`; `app/ponto/services/dia_pago.py:286–290`) |
-| `minutos_realizados` | `realizado_dos_turnos` mede os turnos, descontando pausa efetiva ou janela fixa aplicável; a grade publica o resultado e o cartório o copia para a ata. (`app/ponto/turnos.py:705–769`; `app/escala/utils.py:1994–2007`; `app/ponto/services/cartorio.py:601`) | O leitor lê a ata; `por_dia_da_grade` aplica **cap por dia**: `min(realizado, previsto)`, no universo trabalho/ausência. Esse mapa alimenta tanto DiaPago quanto o total mensal. (`app/escala/services/leitor_celula.py:365`; `app/ponto/services/dia_pago.py:385–399`; `app/ponto/services/fechamento.py:1028–1032, 1181`) |
-| `horas_trabalhadas` | O motor escreve `periodo.minutos_trabalhados`; o resultado soma períodos/60. O fechamento acrescenta os minutos sem vínculo e a folga sem escala certa. DiaPago escreve dos mesmos períodos e complementos. (`app/ponto/motor_calculo_v2.py:2773, 295–296`; `app/ponto/services/fechamento.py:877–878, 948–953`; `app/ponto/services/dia_pago.py:178, 262–269`) | A lavra da **ata não fornece esse campo**: a origem monetária é o motor, enquanto os minutos da grade seguem a ata. Os dois chegam separadamente à lavratura. (`app/ponto/services/cartorio.py:599–601`; `app/ponto/services/fechamento.py:1169–1181`) |
-| Intrajornada: `horas_intra_indenizada` | O motor calcula o suprimido e escreve `minutos_intrajornada_indenizada`; o resultado soma períodos normais e de folga/60. (`app/ponto/motor_calculo_v2.py:2755–2772, 363–370`) | O fechamento escreve a propriedade do resultado; DiaPago soma a intra dos períodos normais e dos ramos de folga. (`app/ponto/services/fechamento.py:972`; `app/ponto/services/dia_pago.py:186, 223–225, 234–263`) |
-
-A lavratura de DiaPago materializa as linhas com `bulk_create`; o fechamento persiste por `save()` ou pelo ramo de `update()` dos campos calculados. (`app/ponto/services/dia_pago.py:343–358`; `app/ponto/services/fechamento.py:1105–1112, 1128–1153`)
-
-**2. Mudanças identificáveis e respectivas condições**
-
-Na coluna “dono”, **D** significa aplicar a decisão ordenada do item 4; a condição técnica descrita, sozinha, não fornece os argumentos necessários para escolher um dono. (`app/ponto/management/commands/e6_oraculo.py:53–54, 98–110`)
-
-| Hash(es) do anexo | Condição em que o valor pode mudar com os mesmos dados | Campos e trecho atual | Dono |
-|---|---|---|---|
-| `212971ad` | Folga lançada em parte do mês: fora da foto, o ciclo continua respondendo pela folga semanal. Células já existentes prevalecem; não se pode pressupor regeneração. | Dias/minutos previstos: `app/escala/models.py:1071–1073, 1270–1292`; limite documentado em `app/docs/TICKETS.md:319`. | D |
-| `a5cd3d39` | Foto parcial em 12x36/24x48: fora da foto, usa a paridade da folga mais próxima, em vez de considerar trabalho indiscriminadamente. | Dias/minutos previstos: `app/escala/models.py:1294–1335`. | D |
-| `10832b45` / `a2e903e1`, `96beb803` | Dia com segunda pausa: DNA e sequência da grade passam a carregar todas as pausas, alterando os segmentos previstos e o casamento das batidas. | Previstos e geometria do realizado: `app/escala/models.py:1141–1181`; `app/escala/utils.py:1560–1590`. | D |
-| `fecb9a67` | O juiz de previsto descontava somente a primeira pausa; passa a descontar todas. O comentário documenta 635→550. É um produtor distinto da soma de segmentos da grade. | Previsto consultado pelo motor e pela alternativa do leitor: `app/escala/utils.py:2224–2268`; `app/escala/services/leitor_celula.py:347–354`; associação documental em `app/docs/TICKETS.md:243`. | D |
-| `801253ed` | Ata com várias pausas legíveis: o motor passa a receber todas, preservando os instantes reais das batidas. | Trabalhadas/intra: `app/ponto/motor_calculo_v2.py:694–721`. | D |
-| `107e3bb5` | O papel das batidas muda na própria montagem: o realizado passa a usar a ata dessa montagem, em vez da anterior. Em intermitente, previsto também acompanha o realizado. | Realizados e previsto intermitente: `app/escala/utils.py:1802–1847, 1994–2019`. | D |
-| `14ec97c2` / `825bb46a` | Vínculos concorrentes: a geradora da célula decide o vínculo do dia; geradora ausente ou fora da vigência devolve `None`. | Dias/previstos e cálculo dependente do vínculo: `app/escala/utils.py:1250–1263`; `app/escala/alimentacao.py:237–254`. | **CADASTRO quando sem vínculo**, ramo `e6_oraculo.py:98–99`; demais casos D. |
-| `8ec526f2` | Folga de calendário pertence a outro vínculo: deixa de valer naquele dia; folga manual continua valendo para a pessoa. A alteração de `tipo_dia` repercute no universo contado/somado. | Dias/previstos/realizados: `app/ponto/precedencia.py:222–239`; `app/escala/utils.py:1103–1128`; `app/ponto/services/fechamento.py:1014–1017`; `app/ponto/services/dia_pago.py:385–399`. | D |
-| `879ff834` | Ausência com batidas: passa a incluir realizado coberto, limitado ao previsto; o abono cobre somente o saldo. | Realizados: `app/ponto/services/dia_pago.py:373–399`. | D |
-| `7b8329a1` | Pausa declarada pelas duas luzes da ata: a declaração tem prioridade sobre o casamento guloso, inclusive acima do teto da pausa deduzida. | Geometria que alimenta trabalhadas/realizados/intra: `app/ponto/turnos.py:802–814, 1777–1784, 1805–1824`. | D |
-| `912ab728` | Uma perna da pausa acendeu e a outra sobrou: o ramo passa a aceitar essa forma dentro do teto. | Geometria dos mesmos campos: `app/ponto/turnos.py:1755–1765`. | D |
-| `3d037f1b` | Duas células reivindicam a mesma batida: a reivindicação posterior é recusada. | Geometria dos mesmos campos: `app/ponto/turnos.py:1786–1801`. | D |
-| `ce88575c` | Batida de outro dia próxima ao horário do intervalo: o envelope impede absorvê-la como pausa ou saída do turno anterior. | Geometria dos mesmos campos: `app/ponto/turnos.py:1326–1350`. | D |
-| `c7b8bfdb` | Todas as pausas marcadas estão abaixo do piso: a guarda passa a consultar os intervalos efetivos, permitindo descontar a janela fixa quando aplicável. | Realizados: `app/ponto/turnos.py:742–762`. | D |
-| `185b9af0` / `5d9ec893` / `a5ae5013` | Forma posicional com saída em outro turno e um único vão interior elegível: mede primeira entrada→última saída, menos a pausa. | Realizados: `app/ponto/turnos.py:671–730`. | D |
-| `ed68dfd7` | Entradas recebidas juntas por flush, mas pertencentes a turnos distintos: o teto de 14h impede apagar a entrada seguinte como eco. | Geometria dos mesmos campos: `app/ponto/turnos.py:342–370`. | D |
-| `dbd21fae` | Saída além do teto da jornada: passa a usar o teto do dia; a forma L-084 nas duas pontas conserva o envelope de 26h. | Geometria dos mesmos campos: `app/ponto/turnos.py:1419–1443`. | D |
-| `0728ce98` | Cauda após meia-noite: substituição de períodos passa a remover pelo dia da jornada, preservando a cauda da véspera. | Trabalhadas/intra: `app/ponto/motor_calculo_v2.py:679–688`. | D |
-| `de5b1a61`, `596064b7`, `cfd4ff83`, `8c851906` | Empresa/dia sujeitos à janela HE, pontas fora dos limites e extra declarada: o recorte muda os instantes efetivos; folga trabalhada sai desse recorte. A L-084 é avaliada antes dele. | Trabalhadas/intra: `app/ponto/motor_calculo_v2.py:1478–1544, 1664–1725, 2744–2773`. | D; se o dia estiver em CxR, aplica-se o ramo `e6_oraculo.py:110`, depois das prioridades. |
-| `aad64415` | Pausa total ou parcialmente fora da janela efetiva: somente a interseção é descontada. | Trabalhadas/intra: `app/ponto/motor_calculo_v2.py:1869–1877, 2750–2763`. | D |
-| `871ccd5b` / `2190b3da` / `156aa1a6` | Folga/feriado com previsto zero, sujeito à janela e sem autorização; para folga, exige escala certa. O ramo zera trabalho e intra. | Trabalhadas/intra: `app/ponto/motor_calculo_v2.py:1428–1464`. | D |
-| `39668e22` | O bloqueio anterior também publica o par efetivo colapsado, para o calculador não pagar o segmento bloqueado. | Trabalhadas/intra do calculador: `app/ponto/motor_calculo_v2.py:1465–1471`; `app/ponto/calculador/alimentacao.py:114–123`. | D |
-| `c6c3785b` | Folga trabalhada sem escala certa: a hora entra em trabalhadas, sem o adicional de 100%. | Trabalhadas mensal e diária: `app/ponto/services/fechamento.py:935–953`; `app/ponto/services/dia_pago.py:257–265`. | D |
-| `9592fc83` / `a6b653ad` | Folga trabalhada deixa de perder a intra na lavratura. | Intra diária: `app/ponto/services/dia_pago.py:213–225, 234–263`. | D |
-| `438ad986` | Feriado já separado da folga certa não pode voltar a entrar em “sem escala”; elimina a duplicação de trabalhadas e de intra diária. Também passa a perguntar escala certa na competência do dia. | Trabalhadas; intra de DiaPago: `app/ponto/services/fechamento.py:903–910, 943–953`; `app/ponto/services/dia_pago.py:244–263`. | D |
-
-Há ainda mudanças de **materialização**, sem uma nova fórmula geométrica: `67024c7e` passa a gravar os mapas de previstos/realizados em DiaPago; `38f18bbe` cria o retrato que substitui esses minutos a partir da grade, inclusive zerando dias retirados dela. Atualmente, a guarda interrompe esse retrato para a 09 exportada. (`app/ponto/services/dia_pago.py:88–91, 286–290, 449–462, 479–494`)
-
-Alguns commits do anexo precisam ficar fora da atribuição direta aos cinco deltas: [nao verificado]
-
-| Classe | Limite demonstrável |
-|---|---|
-| O116 / `070c1345` | Muda a distribuição diária pelo mapa `dia_da_jornada`; o comentário registra total mensal invariável no universo medido. (`app/ponto/services/dia_pago.py:109–132, 174, 235–258`) |
-| S5b: `ec22b2f1`, `a80bf914`, `abea49b1`, `5b4e5bb8` / `e8e67d9b` | A substituição por rubricas existe, mas a chamada grava versão `oraculo` somente a partir de 10/2026; não demonstra causa da 09 em versão `motor`. (`app/ponto/services/dia_pago.py:310–328`; `app/ponto/services/fechamento.py:1233–1262`) |
-| O280 exclusivo de `calculador/periodo.py`, incluindo `f6b16a7e` / `ad299e5c` | O módulo declara ausência de leitores de produção; o motor presente ainda conserva o ramo `duracao > 360`. (`app/ponto/calculador/periodo.py:8–20`; `app/ponto/motor_calculo_v2.py:2755–2773`) |
-| `917b8afa` | Altera o pago exibido da folga-feriado pelo detalhe; isso não equivale a escrever `horas_trabalhadas`. (`app/ponto/services/dia_pago.py:252–256, 892–896`) |
-| `32ab503c`, `bcf58258`, `861100a1`, `e15125d2` | Nos trechos correspondentes, escrevem furo ou carimbos, não novas fórmulas dos cinco campos. (`app/ponto/services/dia_pago.py:668–671, 523–541, 340–345, 333–334`) |
-
-A causa nominal de **col211, col638, col749, col900 e col926** continua **[nao verificado]**. O registro contém os totais, mas não a decomposição diária necessária para ligar cada diferença a uma das condições acima. (`app/docs/BACKLOG.md:760`)
-
-**3. Ramos de rejulgamento**
-
-| Situação | Decisão |
-|---|---|
-| Dia com adesão/batidas, impressão igual, julgamento e veredito presentes, diferente de `nunca_bateu` | `_em_dia=True`; sem `forcar`, incrementa `pulados` e não relavra. (`app/ponto/services/cartorio.py:1190–1196`) |
-| Mesmo ramo, mas impressão diferente, carimbo/veredito ausente ou veredito `nunca_bateu` | Não satisfaz o pulo; busca o dia da grade e prossegue no julgamento. (`app/ponto/services/cartorio.py:1187–1199`) |
-| Ramo sem adesão, `nunca_bateu` | Tem teste próprio: julgamento + impressão igual + veredito; sem `forcar`, também pula. (`app/ponto/services/cartorio.py:1030–1038`) |
-| `forcar=True` | Ignora o pulo por impressão, inclusive sem subida de versão. (`app/ponto/services/cartorio.py:774–779, 1194`) |
-
-**Sem subida**, alterações em qualquer parte efetivamente codificada no hash podem provocar rejulgamento: batidas, cobertura, chamados, DNA, veto, teto, fio, cobertura parcial e encerramento do turno. Os minutos calculados e `tipo_dia` da grade não aparecem nesse hash. (`app/ponto/services/cartorio.py:365–421`)
-
-**Só pela subida**, o mecanismo é: `versao_para` escolhe a maior versão cujo horizonte alcance a competência; a versão entra como `regra:N` no hash; o cartório passa esse valor ao teste de impressão. Isso alcança atas que continuariam com hash igual pelos demais insumos. (`app/ponto/services/cartorio.py:223–229, 384–385, 977–980, 1181–1186`)
-
-Na cópia, a declaração é `((1,'2026-09'), (2,'2026-10'), (3,'2026-10'))`: a 09 recebe versão 1. Alterar o horizonte da versão 3 para `'2026-09'` faz a 09 receber 3; **o primeiro número é versão, não empresa**. (`app/ponto/services/cartorio.py:111–113, 223–229`)
-
-Rejulgar a ata não implica escrever o fechamento exportado: a guarda atual da 09 exclui essas empresas da escrita de FechamentoMensal/DiaPago, enquanto a leitura pura permanece permitida. (`app/ponto/services/fechamento.py:27–43, 523–524, 542–559`)
-
-**4. Dono de cada condição**
-
-Para todas as linhas marcadas **D**, esta é a decisão exata, na ordem em que o código executa:
-
-| Primeira condição satisfeita | Dono e ramo |
-|---|---|
-| `folga_nao_definida` ou `sem_vinculo_no_dia` ou `sem_vinculo_em_dia_de_trabalho` | **CADASTRO** — `app/ponto/management/commands/e6_oraculo.py:98–99` |
-| `batida_fora_de_turno` | **BATIDA** — `app/ponto/management/commands/e6_oraculo.py:104–105` |
-| Quantidade ímpar de `horas_do_dia` | **BATIDA** — `app/ponto/management/commands/e6_oraculo.py:106–107` |
-| `fase_deslocada` | **CADASTRO** — `app/ponto/management/commands/e6_oraculo.py:108–109` |
-| `em_cadastro_x_realidade` | **CADASTRO** — `app/ponto/management/commands/e6_oraculo.py:110` |
-| Nenhuma das anteriores | **ESTRUTURA** — `app/ponto/management/commands/e6_oraculo.py:110` |
-
-Portanto, **“mudou por correção de código” não basta para classificar como ESTRUTURA**: o nome do commit e o motivo técnico não são argumentos da função; os insumos são carregados por dia. (`app/ponto/management/commands/e6_oraculo.py:53–54, 168–178`)
-
-O E6 compara minutos realizados — ou, na falta deles, `pago_h×60` —, não classifica diretamente um delta mensal de dias previstos ou de intra. Aplicar seu juiz aos cinco colaboradores exige os dias e os respectivos insumos; os donos nominais permanecem **[nao verificado]**. (`app/ponto/management/commands/e6_oraculo.py:246–252, 361–364`; `app/docs/BACKLOG.md:760`)
-
-## 01/11 14:38 · sessao 9c1230f1a8a5 · - · - · origem=Ronald (tmux)
-
-Consulta proposta, sem executar, para cada par `(cid, d)` = `(222, 2026-10-28)`, `(150, 2026-09-11)`, `(304, 2026-08-31)`, `(476, 2026-08-21)`; valores de produção e snapshots anteriores a A/B continuam `[nao verificado]`.
-
-```python
-from datetime import date, datetime, time, timedelta
-from django.db.models import Q
-from django.utils import timezone
-from colaboradores.models import Colaborador, Empresa
-from escala.models import CelulaDia, EscalaColaborador
-from ponto.models import Ausencia, Batida, Justificativa, TipoAusencia
-from chamados.models import PerguntaDisputa, DisputaSupervisao, ChamadoColaborador
-
-casos = [(222, date(2026,10,28)), (150, date(2026,9,11)),
-         (304, date(2026,8,31)), (476, date(2026,8,21))]
-
-Empresa.objects.filter(pk=3).values("id", "dia_inicio_competencia")
-TipoAusencia.objects.filter(ativo=True).values(
-    "codigo", "parcial", "fim", "bloqueia_ponto", "efeito")
-
-# Para cada cid,d:
-Colaborador.objects.filter(pk=cid, empresa_id=3).values(
-    "id", "empresa_id", "situacao", "isento_ponto")
-
-CelulaDia.objects.filter(colaborador_id=cid, data__range=(d-timedelta(days=1), d)).values(
-    "id", "data", "trabalha", "escala_geradora_id", "dna", "dna_anterior",
-    "julgada_em", "impressao", "veredito", "protestos", "ata",
-    "editada_em", "regenerada_em")
-
-Ausencia.objects.filter(colaborador_id=cid).exclude(status="rejeitada").filter(
-    Q(data=d) | Q(data__lte=d, data_fim__gte=d)
-    | Q(data__lte=d, data_fim__isnull=True, tipo__in=Ausencia.TIPOS_EM_ABERTO)
-).order_by("-data", "-pk").values(
-    "id", "data", "data_fim", "tipo", "status", "minutos", "hora_ini", "hora_fim",
-    "criado_em", "atualizado_em", "aprovada_em")
-
-t0 = timezone.make_aware(datetime.combine(d-timedelta(days=1), time.min))
-t1 = timezone.make_aware(datetime.combine(d+timedelta(days=2), time.min))
-Batida.objects.filter(colaborador_id=cid, timestamp__gte=t0, timestamp__lt=t1).values(
-    "id", "timestamp", "tipo", "is_intervalo", "origem", "aprovada",
-    "retratada_em", "criado_em", "pergunta_origem_id")
-
-Justificativa.objects.filter(colaborador_id=cid, data_turno=d).values(
-    "id", "status", "criado_em", "atualizado_em", "aprovada_em")
-
-PerguntaDisputa.objects.filter(disputa__colaborador_id=cid, data_evento=d).values(
-    "id", "motivo", "celula_id", "disputa_id", "chamado_destino_id",
-    "respondida_em", "validada_em", "materializada_em", "via_resolucao",
-    "disputa__chamado_id", "disputa__fechada_em", "disputa__motivos",
-    "disputa__contexto")
-
-# Sem filtrar data/status: disputa é agregada por colaborador.
-DisputaSupervisao.objects.filter(colaborador_id=cid).values(
-    "id", "chamado_id", "motivos", "contexto", "aberta_em", "fechada_em")
-ChamadoColaborador.objects.filter(colaborador_id=cid).values(
-    "id", "celula_id", "categoria", "subcategoria", "modulo_origem",
-    "status_local", "contexto_json", "criado_em", "atualizado_em")
-```
-
-Referências para o recorte e os campos:
-
-- **Empresa/cadastro:** corte em `app/colaboradores/models.py:46`; situação/isento/empresa em `app/colaboradores/models.py:294` e `:321`. Catálogo lê apenas `TipoAusencia.ativo=True` em `app/ponto/catalogo/ausencias.py:249`; flag parcial integra o catálogo em `:251`, sendo consumida em `:357`.
-- **Ausência vencedora:** filtro e ordenação exatos em `app/ponto/turnos.py:2552`; desempate `-data,-pk` em `:2557`. A grade toma a primeira **aprovada**, enquanto a cobrança toma a primeira **não rejeitada**, pelo filtro de efeito em `:2514` e `:2516`; grade chama `para='folha'` em `app/escala/utils.py:1187`.
-- **Parcial/período:** tipo vigente + um dia + `0 < minutos < 480` em `app/ponto/turnos.py:2595`; período ausente em `:2632`, virada noturna em `:2636`, inclusão das bordas em `:2639`.
-- **Ata/célula:** `trabalha`, geradora e DNA em `app/escala/models.py:1653`, `:1660`, `:1665`; `regenerada_em`, `dna_anterior`, `editada_em` em `:1686`, `:1694`, `:1700`; impressão/julgamento em `:1713`; veredito/protestos/ata em `:1738`, `:1741`, `:1746`. A véspera é relevante ao leitor de faltantes em `app/chamados/services/declaracao_texto.py:81`, que a limita a fim de turno em `:119`.
-- **Batida/fato novo:** os campos estão em `app/ponto/models.py:22`, `:26`, `:40`, `:63`, `:67`, `:79`. O recorte `[d−1, d+2)` e as marcas de criação/retração são exatamente os de `app/ponto/services/cartorio.py:292`; ausência, justificativa e edição/regeneração são verificadas em `:297`, `:301`, `:307`. Não eliminar retratadas desta consulta: o próprio ato de retração pode ser fato novo, conforme `:295`.
-- **Pergunta/disputa/chamado:** campos de pergunta em `app/chamados/models.py:2194`, `:2201`, `:2203`, `:2213`, `:2300`, `:2651`, `:2659`; disputa em `:1651`, `:1656`, `:1660`, `:1664`, `:1671`; chamado em `:32`, `:38`, `:41`, `:44`, `:46`, `:61`.
-
-Para a cadeia do turno, acrescentar a geradora apontada pela célula e os demais vínculos candidatos, sem substituir a geradora por “escala ativa”: a autoridade da geradora está em `app/escala/alimentacao.py:196`; a inclusão explícita de geradoras fora da janela está em `:123`.
-
-```python
-# gid = escala_geradora_id extraído acima.
-EscalaColaborador.objects.filter(colaborador_id=cid).filter(
-    Q(pk=gid)
-    | (Q(data_inicio__lte=d)
-       & (Q(data_fim__isnull=True) | Q(data_fim__gte=d))
-       & (Q(ativa=True) | Q(data_fim__isnull=False)))
-).values()  # Preservar configuração integral do vínculo.
-```
-
-Campos de vigência e template: `app/escala/models.py:874`; filtro de candidatura em `app/escala/alimentacao.py:187`. Para template, consultar `TipoEscala` dos `tipo_escala_id` retornados, incluindo sua cadeia de `template_pai`: a herança é lida em `app/escala/models.py:806`.
-
-A impressão é hash dos insumos, sem guardar a lista reversível deles; o carimbo pode ser sobrescrito ao rejulgar (`app/escala/models.py:1706`). Portanto, afirmar quais dias o **controle B efetivamente pulou** requer os mesmos campos em snapshot anterior a B ou instrumentação por célula; o estado atual sozinho não demonstra esse histórico `[nao verificado]`.
-
-_1425 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1427 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
