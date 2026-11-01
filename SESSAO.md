@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 13:31:07.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (128.4 MB). Acoes na janela: **516**.
+**Medido em 01/11/2026 13:36:03.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (128.4 MB). Acoes na janela: **518**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:33:20 | Bash | Inspect v6 output structure for comparison | `cd /home/ronald/saas-hasner && wc -l logs/cobparc_v6_sem_forcar.out; grep -n "^==\\|^#\\|FORA\\|CHAMADOS\\|F0\\|FM09" logs/cobparc_v6_sem_forcar.out \| head -40 \| cut -c1-200` |
+| 13:33:16 | Bash | Check push, sombra, suite status | `cd /home/ronald/saas-hasner && tail -3 logs/grade_juiz/vb/push_6f583cbc.log; ps -p 1247584 -o etime \| tail -1; tail -3 logs/contencao/v2/p1/v6/suite_3a743cdd.log 2>/dev/null; bin/trava_teste.sh --quem; date +%H:%M` |
 | 13:29:18 | Bash | Keep only pid proof in ESPERANDO | `cd /home/ronald/saas-hasner && sed -i '3s/ \| arquivo=logs\/cobparc_controle.out//' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md` |
 | 13:29:14 | Bash | Point ESPERANDO at the real sombra.sh pid | `cd /home/ronald/saas-hasner && sed -i '3s/pid=1247579/pid=1247584 \| arquivo=logs\/cobparc_controle.out/' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md && sed -n 646,700p bin/hook_stop_fila1.py \| grep -n "cmd\\|comm\\|arquivo" \| head` |
 | 13:29:11 | Bash | Find real sombra.sh pid and hook rule | `pgrep -af "bin/sombra.sh --rodar" \| grep -v pgrep \| cut -c1-150; grep -n "ESPERANDO" /home/ronald/saas-hasner/bin/hook_stop_fila1.py \| head -8` |
