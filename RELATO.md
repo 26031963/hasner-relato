@@ -2,6 +2,7 @@
 
 ESPERANDO: trava_teste.sh | pid=1541357 | arquivo=logs/cobparc/v5/suite_pce.log
 
+aval Ronald 19:18 (transcrito em logs/e4cal/AVAL_L1_DOMINIO.md): E4-CALENDARIO-L1-DOMINIO, complementa COMPLEMENTO/TABELA/REEQ (ordem inalterada): teste separa ALCANCAVEL x IMPOSSIVEL, propriedade 18 (invariancia de precedencia); prop 7 = so "ok sem batida e do isento"; 15 sem_certidao com dono L-099; rotulo de sem_certidao diz a conta; MEDIR 345 folga lavradas que acusam por motivos_retencao_celula.
 aval Ronald 19:03 (transcrito em logs/codex_reserva/AVAL_CODEX_RESERVA.md): CODEX-RESERVA-ATE-O-RESET -- Codex so na volta FINAL de obra da ORDEM VIVA (COBPARC, ISENTO, L1); censo fora da vaga (O261-E-F3) depois do reset ou sonnet com motivo no DESPACHO.
 aval Ronald 18:02 (transcrito em logs/e4cal/AVAL_L1_REEQ.md): E4-CALENDARIO-L1-REEQ, complementa COMPLEMENTO e TABELA (ordem inalterada): PRE-REQUISITO E3-ISENTO-INSUMOS pousa antes da leitura do D4 pela tela; ordem interna do D4; rodape; props 14-17; anti-join SEM-CELULA medido sem cura.
 aval Ronald 17:55 (transcrito em logs/e4cal/AVAL_L1_TABELA.md): E4-CALENDARIO-L1-TABELA, complemento da L1 e do COMPLEMENTO (ordem inalterada): selo exaustivo da lavra (1.408) + tabela do D4, 13 propriedades, RED 9-12 antes da MUDA 2. Entra junto da L1 (vaga 3).

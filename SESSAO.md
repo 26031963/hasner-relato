@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 19:13:25.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (139.4 MB). Acoes na janela: **765**.
+**Medido em 01/11/2026 19:18:56.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (139.4 MB). Acoes na janela: **766**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:18:33 | Bash | Record DOMINIO aval in docs and logs | `cd /home/ronald/saas-hasner && H=$(date +%H:%M) && cat > logs/e4cal/AVAL_L1_DOMINIO.md <<'EOF' aval Ronald 01/11 (literal): E4-CALENDARIO-L1-DOMINIO (complementa COMPLEMENTO, TABELA e REEQ; substitui so o parentese da propriedade 7; ordem da fila inalterada; nenhuma lei nova). FONTE: sonda e4cal3 (cruzamento status x veredito nas 24.0xx celulas lavradas) + auditoria GPT-6, conferida pelo chat. MUD ...` |
 | 19:13:19 | Bash | Check COBPARC progress and ESPERANDO | `cd /home/ronald/saas-hasner && date +%H:%M; bash bin/trava_teste.sh --quem; tail -3 logs/cobparc/v5/suite_pce.log; ls -t --time-style=+%H:%M:%S -l logs/cobparc/v5/ \| head -4; tail -2 logs/cobparc5_det.out 2>/dev/null; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
 | 19:12:11 | Bash | Repoint ESPERANDO to COBPARC suite | `cd /home/ronald/saas-hasner && sed -i '3s#.*#ESPERANDO: trava_teste.sh \| pid=1541357 \| arquivo=logs/cobparc/v5/suite_pce.log#' app/docs/RELATO.md; /usr/bin/sleep 20; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
 | 19:11:46 | Bash | Find COBPARC's next live process | `/usr/bin/sleep 20; cd /home/ronald/saas-hasner && bash bin/trava_teste.sh --quem; cat logs/cobparc/v5/red2.log \| tail -3; ls -t --time-style=+%H:%M:%S -l logs/cobparc/v5/ \| head -3; pgrep -af "codex_pergunta\|sombra.sh\|trava_teste" \| grep -v pgrep \| cut -c1-160` |
