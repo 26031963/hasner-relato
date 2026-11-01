@@ -1,7 +1,89 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 02:21** · publicado em **01/11/2026 02:22** (UTC-3)
+> Ultima resposta processada: **01/11/2026 02:23** · publicado em **01/11/2026 02:28** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 02:23 · sessao 4c92d7457787 · CONTENCAO-QUE-MORDE-V2 · verificador · origem=Code
+
+**Há caminhos que ainda liberam indevidamente; o P1 deve ser bloqueado** (`bin/disjuntor.py:1404`, `bin/disjuntor.py:2079`, `bin/contrato_do_push.py:60`).
+
+A execução integral dos selos fica **[nao verificado]**: eles criam arquivos e cópias, contrariando a restrição desta leitura (`bin/tests/test_disjuntor.sh:39`, `bin/tests/test_contrato_do_push.sh:14`). As conclusões abaixo vêm do código e de reproduções isoladas em memória.
+
+1. **Bloqueia — a revalidação B3 do Codex ainda admite corrida.**  
+   `b3_parada` consulta B3 e reserva em duas transições distintas (`bin/disjuntor.py:1137`, `bin/disjuntor.py:1147`). Entre elas, a terceira triagem PROCEDENTE pode ser gravada sem atualizar `disparado` (`bin/disjuntor.py:879`, `bin/disjuntor.py:888`, `bin/disjuntor.py:890`). A reserva verifica somente os campos `disparado`/`pede_desenho`; não recalcula a triagem, e autoriza outra volta (`bin/disjuntor.py:1404`, `bin/disjuntor.py:1412`). Portanto, o flock serializa as gravações, mas não fecha esse caminho: todos os gates deveriam valer na autorização (`app/docs/contratos/CONTENCAO-QUE-MORDE-V2.txt:10`).
+
+2. **Bloqueia — exceção de estado/flock ainda libera Bash sujeito ao B1.**  
+   Bash com `agent_id` entra em `b1_do_agente`, que usa `_com_estado` (`bin/disjuntor.py:1994`, `bin/disjuntor.py:560`). Estado ilegível ou flock ocupado levantam exceção (`bin/disjuntor.py:302`, `bin/disjuntor.py:295`). O fechamento novo cobre `Agent`; Bash fora do ramo B3 chega a “ferramenta liberada” (`bin/disjuntor.py:2070`, `bin/disjuntor.py:2079`). Isso viola estado ilegível = nega no PreToolUse (`app/docs/contratos/CONTENCAO-QUE-MORDE-V2.txt:4`).
+
+3. **Bloqueia — a cura parcial do B1 ainda perde condições restritivas.**  
+   O delta trata timestamp ilegível do lançamento como job devido, mas `medir_b1` pode voltar a liberar porque os demais timestamps são recentes ou inexistentes (`bin/disjuntor.py:531`, `bin/disjuntor.py:494`). Além disso, uma cópia inacessível pode desaparecer no filtro `isdir`; outra cópia com arquivo recente então libera sem examinar aquela (`bin/disjuntor.py:468`, `bin/disjuntor.py:506`). A prioridade nova para cópia ilegível só alcança cópias que sobreviveram ao filtro e devolveram `None` (`bin/disjuntor.py:498`). Não fecha a exigência de cópia ilegível = dispara (`app/docs/contratos/CONTENCAO-QUE-MORDE-V2.txt:15`).
+
+4. **Bloqueia — árvore ilegível pode ser confundida com ausência do portão no push.**   [nao verificado]
+   `_existe` retorna `False` quando a consulta ao caminho falha, desde que o objeto commit exista; existência do commit não prova legibilidade da árvore (`bin/contrato_do_push.py:27`, `bin/contrato_do_push.py:29`). Num commit que introduz o portão, com árvore ilegível e pai sem portão, todas as consultas podem resultar falsas: o gate pula o commit e retorna 0 (`bin/contrato_do_push.py:57`, `bin/contrato_do_push.py:60`, `bin/contrato_do_push.py:85`). A cura cobre commit inexistente, mas não toda árvore ilegível.
+
+5. **Fila — idempotência termina após 500 autorizações.**  
+   O replay podado funciona enquanto o ID permanece em `autorizados`; a lista descarta entradas antigas, e o gate não consulta `voltas.chaves` para recuperá-las (`bin/disjuntor.py:1485`, `bin/disjuntor.py:1514`, `bin/disjuntor.py:1518`). Depois disso, a mesma chamada pode consumir novamente ou bater no teto. É divergência da idempotência sem prazo do REVISADO, embora o caminho identificado antecipe negação (`app/docs/contratos/CONTENCAO-QUE-MORDE-V2.txt:10`).
+
+Quanto às curas da volta 1, o texto original de cada achado não foi fornecido; a associação exata dos números **#3 e #5** permanece **[nao verificado]**. Os demais números aparecem nos comentários dos casos ou das curas:
+
+| Achado | Avaliação da cura |
+|---|---|
+| #1 | Fecha autorização sem persistência: Agent nega e Codex retorna 4 (`bin/disjuntor.py:1522`, `bin/disjuntor.py:1420`). |
+| #2 | Fecha exceção na abertura de `Agent`; não fecha Bash/B1, conforme achado 2 acima (`bin/disjuntor.py:2070`, `bin/disjuntor.py:2079`). |
+| #3 | A poda agora exige `tool_result` estruturado, não mera ocorrência textual do ID; associação ao número original **[nao verificado]** (`bin/disjuntor.py:1502`, `bin/disjuntor.py:1537`). |
+| #4 | A fotografia dos vivos passou para dentro do callback executado sob flock (`bin/disjuntor.py:1494`, `bin/disjuntor.py:290`, `bin/disjuntor.py:305`). |
+| #5 | Há revalidação do estado B3 sob trava, mas permanece a corrida do achado 1; associação ao número original **[nao verificado]** (`bin/disjuntor.py:1404`, `bin/disjuntor.py:1488`). |
+| #6 | Fecha replay depois da poda dentro da janela de 500 autorizações; residual no achado 5 (`bin/disjuntor.py:1485`, `bin/disjuntor.py:1518`). |
+| #7 | Marca sidecar ilegível como semente parcial e completa a parte Agent quando chega transcript após inicialização pelo wrapper (`bin/disjuntor.py:1357`, `bin/disjuntor.py:1384`). |
+| #9 | `--rearma-b3` recusa `pede_desenho`; `--redesenha` retira o pedido antes de rearmar (`bin/disjuntor.py:1102`, `bin/disjuntor.py:1557`). |
+| #10 | HEAD ilegível nega mesmo sem PROCEDENTE a conferir (`bin/disjuntor.py:1475`). |
+| #11 | Coletor passa a reconhecer tipo **ou** papel verificador na descrição (`bin/disjuntor.py:816`). |
+| #12 parcial | Não fecha os caminhos do achado 3 (`bin/disjuntor.py:468`, `bin/disjuntor.py:494`). |
+| #13 | Fecha o certificado reduzido a árvore/rc: leitor exige também Ran e OK (`bin/disjuntor.py:1271`). |
+| #14 | No modo `<dir>`, falha de `git add` impede emissão do hash; o leitor nega hash ausente (`bin/arvore_hash.sh:33`, `bin/disjuntor.py:1262`). |
+| #15 | Inclui merges, examina o pai de quem remove o portão e retorna 2 para linha malformada; permanece o achado 4 (`bin/contrato_do_push.py:44`, `bin/contrato_do_push.py:50`, `bin/contrato_do_push.py:57`). |
+| #16 | Modelo sem preço aparece como PARCIAL (`bin/disjuntor.py:1588`, `bin/disjuntor.py:2281`). |
+| #17 | A janela usa `agora` recebido pela borda (`bin/disjuntor.py:2193`, `bin/disjuntor.py:2201`). |
+
+**Estado ausente continua diferente de estado ilegível:** ausência inicializa `{}`, sem distinguir primeiro uso de perda posterior do arquivo (`bin/disjuntor.py:299`). Isso perde reservas que só existiam no estado; a recomposição de vivos lê agentes de fundo, enquanto os síncronos dependem das reservas (`bin/disjuntor.py:403`, `bin/disjuntor.py:1505`). Ocorrência de perda em produção e recuperação completa nesse cenário: **[nao verificado]**.
+
+O mapa de escritores e leitores é:
+
+| Campo/arquivo/retorno | Quem escreve | Quem lê; multiplicidade |
+|---|---|---|
+| `est['autorizados']` | `porta_agent` acrescenta e limita a lista; `_com_estado` persiste o JSON (`bin/disjuntor.py:1516`, `bin/disjuntor.py:310`). | `porta_agent` consulta para replay (`bin/disjuntor.py:1485`). Um escritor lógico na produção. |
+| `reserva_volta_codex`, rc 4 | A própria função retorna 4 por exceção ou sucesso não persistido (`bin/disjuntor.py:1419`, `bin/disjuntor.py:1421`). | `b3_parada` repassa; CLI publica; wrapper recusa qualquer não zero (`bin/disjuntor.py:1147`, `bin/disjuntor.py:2314`, `bin/codex_pergunta.sh:168`). O selo exige 4 (`bin/tests/test_disjuntor.sh:1574`). |
+| `out['sem_preco']` | `_custo_24h` acumula turnos por modelo (`bin/disjuntor.py:1588`). | `ler` transporta e `_v2_txt` lê numa cópia do dicionário (`bin/disjuntor.py:2194`, `bin/disjuntor.py:2278`). Um escritor lógico. |
+| `logs/suite_cert/<h>.ok` | Produção: `cert_suite`, chamada pela CLI e por `suite.sh`, escreve temporário e troca o arquivo (`bin/disjuntor.py:1252`, `bin/disjuntor.py:1255`, `bin/disjuntor.py:2299`, `bin/suite.sh:112`). | `_cert_ok`, chamado pela porta final (`bin/disjuntor.py:1265`, `bin/disjuntor.py:1467`). Há escritores adicionais nos testes, diretamente nas fixtures (`bin/tests/test_disjuntor.sh:73`, `bin/tests/test_disjuntor.sh:1691`, `bin/tests/test_disjuntor.sh:1698`). |
+| Modo `<dir>` de `arvore_hash.sh` | Implementação única seleciona diretório, executa add estrito e publica `write-tree` (`bin/arvore_hash.sh:25`, `bin/arvore_hash.sh:33`, `bin/arvore_hash.sh:37`). | `disjuntor.arvore_hash`, duas fotografias da suite e testes (`bin/disjuntor.py:1220`, `bin/suite.sh:100`, `bin/suite.sh:111`, `bin/tests/test_disjuntor.sh:1697`). |
+| `contrato_do_push.py`, rc 2 | `julga`, em vários ramos de erro (`bin/contrato_do_push.py:45`, `bin/contrato_do_push.py:52`, `bin/contrato_do_push.py:59`, `bin/contrato_do_push.py:79`). | `main` repassa; pre-push converte qualquer não zero em recusa; selo exige 2 para linha torta (`bin/contrato_do_push.py:89`, `bin/contrato_do_push.py:96`, `bin/pre-push.sh:10`, `bin/tests/test_contrato_do_push.sh:61`). Um escritor lógico. |
+
+Nos testes novos, a causalidade dos mutantes fica assim; execução integral permanece **[nao verificado]**: [nao verificado]
+
+| Mutante/caso | A costura removida explica o vermelho? |
+|---|---|
+| `v1-replay-podado` | **Sim, por leitura:** sem consultar `autorizados`, replay após seis voltas bate no teto e derruba `i11_persiste`, caso 3 (`bin/tests/test_disjuntor.sh:2081`, `bin/tests/test_disjuntor.sh:1569`). |
+| `v1-reserva-sem-gravar` | **Sim, condicionado à falha real de gravação:** falta a negativa exigida no caso 4 (`bin/tests/test_disjuntor.sh:2082`, `bin/tests/test_disjuntor.sh:1571`). |
+| `v1-codex-sem-gravar` | **Sim, na mesma condição:** retorna 0 em vez de 4 no caso 5 (`bin/tests/test_disjuntor.sh:2083`, `bin/tests/test_disjuntor.sh:1574`). |
+| `v1-rearme-com-desenho` | **Sim:** remove a recusa; caso 11 cobra a mensagem específica, e 12 consulta a parada (`bin/tests/test_disjuntor.sh:2084`, `bin/tests/test_disjuntor.sh:1611`, `bin/tests/test_disjuntor.sh:1612`). |
+| `v1-coletor-so-tipo` | **Sim:** deixa de coletar o general-purpose com papel verificador; há controle positivo para construtor (`bin/tests/test_disjuntor.sh:2085`, `bin/tests/test_disjuntor.sh:1626`, `bin/tests/test_disjuntor.sh:1629`). |
+| `v1-relogio-proprio` | **Sim:** ignora `agora+2 dias`, conservando eventos que deveriam sair da janela (`bin/tests/test_disjuntor.sh:2086`, `bin/tests/test_disjuntor.sh:1669`, `bin/tests/test_disjuntor.sh:1670`). |
+| `v1-sem-preco-some` | **Sim:** mantém custo opus, mas perde PARCIAL; cai no caso 2 (`bin/tests/test_disjuntor.sh:2087`, `bin/tests/test_disjuntor.sh:1643`, `bin/tests/test_disjuntor.sh:1644`). |
+| `v1-cert-sem-ran` | **Sim:** certificado reduzido passa; falta a negativa do caso 13 (`bin/tests/test_disjuntor.sh:2088`, `bin/tests/test_disjuntor.sh:1692`). |
+| `v1-head-ilegivel` | **Sim:** fixture tem certificado e repo sem commit; removida a guarda, falta a negativa do caso 14 (`bin/tests/test_disjuntor.sh:2089`, `bin/tests/test_disjuntor.sh:1696`, `bin/tests/test_disjuntor.sh:1699`). |
+| `v1-hash-parcial` | **Condicional:** remove o add estrito, mas o caso 15 só roda quando `cat` realmente falha (`bin/tests/test_disjuntor.sh:2092`, `bin/tests/test_disjuntor.sh:1702`). |
+| `v1-suite-sem-cert` | **Só prova textual:** remove de fato a chamada, porém cai pelo grep do caso 16; a suite não é executada por esse caso (`bin/tests/test_disjuntor.sh:2093`, `bin/tests/test_disjuntor.sh:1707`). |
+| `sem-merges` | **Sim, por leitura:** omite o merge que adiciona instrumento sem obra; cai no caso 11 (`bin/tests/test_contrato_do_push.sh:89`, `bin/tests/test_contrato_do_push.sh:54`, `bin/tests/test_contrato_do_push.sh:56`). |
+| `tira-portao` | **Sim:** deixa de examinar o pai; a remoção passa e derruba o caso 12 (`bin/tests/test_contrato_do_push.sh:90`, `bin/tests/test_contrato_do_push.sh:59`). |
+| `linha-torta` | **Não prova liberação indevida:** desativa a guarda, mas a entrada de dois campos causa `IndexError` em `c[3]`. O processo continua negando, com rc 1; o caso cai porque exige rc 2 (`bin/tests/test_contrato_do_push.sh:91`, `bin/contrato_do_push.py:48`, `bin/tests/test_contrato_do_push.sh:61`). **Fila.** |
+
+Os casos i9 12–14 exercitam duas cópias, certificado incompleto e HEAD ilegível; 15 é condicional às permissões; 16 é textual; 17 apenas confirma que o fixture sem HEAD ainda produz hash (`bin/tests/test_disjuntor.sh:1688`, `bin/tests/test_disjuntor.sh:1692`, `bin/tests/test_disjuntor.sh:1697`, `bin/tests/test_disjuntor.sh:1699`, `bin/tests/test_disjuntor.sh:1702`, `bin/tests/test_disjuntor.sh:1707`).
+
+**Fila — fragilidade dos selos:** `i11_persiste` pressupõe que chmod555 impede gravação, sem confirmar a condição; o harness aceita qualquer retorno não zero como morte do mutante, sem exigir o subcaso esperado (`bin/tests/test_disjuntor.sh:1570`, `bin/tests/test_disjuntor.sh:1772`). Isso impede afirmar causalidade universal desses dois mutantes de persistência.
+
+Sobre os descartes: não há evidência nova suficiente para promover a guarda lexical, cura exclusiva do final, ABA da suite ou grep de ordem a bloqueadores adicionais; a correspondência com os descartes fornecidos permanece **[nao verificado]**. A cura exclusiva do final e o adiamento do atalho da régua estão expressos no REVISADO (`app/docs/contratos/CONTENCAO-QUE-MORDE-V2.txt:13`, `app/docs/contratos/CONTENCAO-QUE-MORDE-V2.txt:19`). A cópia divergente de `app/core/hooks/pre-push.sh` mantém SKIP antecipado, mas o instalador vigente gera delegação para `bin/pre-push.sh`; qual hook está instalado em produção é **[nao verificado]** (`app/core/hooks/pre-push.sh:5`, `bin/hooks.sh:56`). Os bloqueios B1 acima envolvem estado/flock e cópia ilegível, condições cobertas pelo P1 (`app/docs/contratos/CONTENCAO-QUE-MORDE-V2.txt:4`, `app/docs/contratos/CONTENCAO-QUE-MORDE-V2.txt:15`).
+
+**Veredito final: bloqueia**, pelos caminhos de autorização residual nos achados 1–4 (`bin/disjuntor.py:1404`, `bin/disjuntor.py:2079`, `bin/disjuntor.py:494`, `bin/contrato_do_push.py:60`).
 
 ## 01/11 02:21 · sessao 99fe14057718 · - · - · origem=Ronald (tmux)
 
@@ -807,31 +889,4 @@ Achado **bloqueia — âncora noturna ainda usa data civil errada**. O ramo novo
 - O código protege escrita do fechamento da 09 exportada por guarda existente (`app/ponto/services/fechamento.py:36-42`, `:544-548`). Rejulgar ata da 09 não equivale automaticamente a regravar FechamentoMensal (`app/ponto/services/cartorio.py:1641-1664`). **Não há bloqueio técnico demonstrado só por a 09 estar EXPORTADA**; confirmação do pré-requisito documental do aval fica **[nao verificado]**.
 - O teste da versão morde declaração e janela (`app/ponto/tests/test_o219_versao_da_regra.py:77`, `:87-93`), mas não confirma hashes de FechamentoMensal/Pauta DP; essas garantias permanecem **[nao verificado]**.
 
-## 01/11 00:54 · sessao e754a970d942 · - · - · origem=Ronald (tmux)
-
-**Bloqueia — a fábrica escolhe cobertura diferente da grade quando há duas ausências.** `materializacao._coberto_por_ausencia` usa `any()` sobre **todas** as ausências não rejeitadas, excluindo falta; a grade e `_celula_furada` usam a vencedora por maior `(data, pk)`. Caso: atestado integral antigo + declaração parcial com período mais recente, aprovada, com marco faltante fora do período. A grade conserva o resto cobrável; `_celula_furada` responde `True`; a fábrica retorna cobertura por causa do atestado antigo, impedindo perguntas. Fontes: `app/chamados/services/materializacao.py:74`, `app/ponto/turnos.py:2552`, `app/ponto/turnos.py:2772`, `app/ponto/turnos.py:2784`, `app/escala/utils.py:1149`, `app/escala/utils.py:1191`, `app/chamados/juizes.py:446`, `app/chamados/juizes.py:478`. A propagação ocorre em `app/chamados/services/disputa_emissao.py:763` e `app/chamados/services/pergunta_no_app.py:74`.
-
-**Bloqueia — leitor de cobrança não migrado em c2.** `reconciliador.py` continua vetando qualquer ausência retornada por `ausencia_cobre`, inclusive a parcial com período que deixa marco apagado. Caso: pergunta órfã de um marco externo à parcial, cuja religação precisaria criar, reabrir ou costurar o chamado do dia: c2 retorna `False` pela mera existência da ausência. Fontes: `app/chamados/reconciliador.py:825`, `app/chamados/reconciliador.py:826`; a costura no chamado já vivo também passa por esse veto (`app/chamados/reconciliador.py:811`, `app/chamados/reconciliador.py:809`).
-
-**Bloqueia — noturno com intervalo usa ordem da régua de apresentação como cadeia do turno.** Para turno E19/S02/E03/S07, a régua união escolhe a menor entrada E03 como âncora e produz `[E03,S07,E19,S02]`. `deslocamentos_dos_marcos` encadeia essa ordem e obtém 180/420/1140/1560 minutos; parcial 23–07 abrange [1380,1860], dispensando S02, mas deixando E03 e S07 como faltantes, embora ambos pertençam à madrugada D+1 dentro do período. Fontes: `app/escala/utils.py:1335`, `app/escala/utils.py:1343`, `app/escala/utils.py:1362`, `app/escala/utils.py:1805`, `app/ponto/turnos.py:2652`, `app/ponto/turnos.py:2661`, `app/escala/utils.py:345`, `app/ponto/turnos.py:2636`, `app/escala/utils.py:1209`. O teste noturno usa somente E19/S07, portanto não atravessa essa combinação da régua união com a cadeia (`app/ponto/tests/test_cobparc_marco_no_periodo.py:53`, `app/ponto/tests/test_cobparc_marco_no_periodo.py:62`).
-
-**Bloqueia — âncora do resto noturno perde a data da madrugada.** Mesmo no noturno simples corretamente dispensado, `_marcos_do_furo_parcial` ordena `HH:MM` e combina o primeiro horário com **D**, sem a cadeia temporal. Caso: turno D19–D+1 07, parcial D19–23 dispensa E19, sobra S07; a nova emissão ancora em D07, 24 horas cedo. Fontes: `app/ponto/services/cartorio.py:1717`, `app/ponto/services/cartorio.py:1719`, `app/ponto/services/cartorio.py:1580`, `app/ponto/services/cartorio.py:1584`. Isso soma 1.440 minutos ao atraso, grava `horario_previsto` errado e aparece no push (`app/ponto/management/commands/detectar_ausencias.py:581`, `app/ponto/management/commands/detectar_ausencias.py:702`, `app/ponto/management/commands/detectar_ausencias.py:776`). **O SLA nessa porta usa `agora`, não a âncora** (`app/ponto/management/commands/detectar_ausencias.py:593`, `app/ponto/management/commands/detectar_ausencias.py:597`).
-
-**Fila — falta expõe limite explícito da definição declarada de parcial.** `ausencia_explica_o_dia_inteiro` retorna `False` para qualquer falta, independentemente de minutos; contudo a grade trata falta em ramo próprio, apaga células e órfãs, não grava cobertura parcial, e o supra exclui falta de `dia_de_cobranca`. Logo “juiz retorna False” não equivale universalmente a “grade grava parcial e cobra resto”. Fontes: `app/ponto/turnos.py:2690`, `app/escala/utils.py:1174`, `app/escala/utils.py:1178`, `app/ponto/supra_juiz.py:302`, `app/ponto/supra_juiz.py:304`. O teste preserva deliberadamente `dia_sem_trabalho=True` para falta mesmo com carimbo parcial (`app/chamados/tests/test_emis_ausencia_parcial_cobra.py:50`). O catálogo padrão declara falta não lançável por minutos e a porta valida pelo catálogo vivo; existência de falta parcial concreta em produção: `[nao verificado]` (`app/ponto/catalogo/ausencias.py:88`, `app/ponto/services/ausencia.py:206`).
-
-**Sem defeito no argumento vazio de período.** Com ambos os horários declarados, `periodo_da_parcial_no_dia(a, ())` retorna `fora`; sem um deles, retorna `sem_periodo`, independentemente das batidas. Portanto a comparação exclusiva com `'sem_periodo'` detecta ausência de cadastro e não muda por esvaziar o segundo argumento (`app/ponto/turnos.py:2632`, `app/ponto/turnos.py:2638`, `app/ponto/turnos.py:2641`). Ela não resolve o defeito do `any()` sobre ausências perdedoras (`app/chamados/services/materializacao.py:74`).
-
-| Sítio | Predicado efetivamente lido |
-|---|---|
-| `_coberto_por_ausencia` | Qualquer ausência não falta, não rejeitada, que explique dia inteiro **ou** esteja sem período (`app/chamados/services/materializacao.py:74`). |
-| `disputa_emissao` | Mesmo retorno, por importação e guarda antes de `PerguntaDisputa.abrir` (`app/chamados/services/disputa_emissao.py:8`, `app/chamados/services/disputa_emissao.py:763`, `app/chamados/services/disputa_emissao.py:770`). |
-| `pergunta_no_app.retencao` | Mesmo retorno, para causa `coberto_por_ausencia` (`app/chamados/services/pergunta_no_app.py:60`, `app/chamados/services/pergunta_no_app.py:74`). |
-| `dia_sem_trabalho` | Ata parcial de tipo ausência só cala se `trabalha=False`; outros tipos preenchidos diferentes de trabalho calam (`app/chamados/juizes.py:408`, `app/chamados/juizes.py:424`, `app/chamados/juizes.py:426`). |
-| `_celula_furada` | Primeiro: ausência **vencedora** integral cala; depois lê ata, dia sem trabalho, lâmpadas apagadas e órfãs (`app/chamados/juizes.py:446`, `app/chamados/juizes.py:464`, `app/chamados/juizes.py:478`, `app/chamados/juizes.py:480`). |
-| c2 | Qualquer ausência vencedora cala, sem ler integralidade ou período (`app/chamados/reconciliador.py:825`). |
-
-**Diferença intencional a preservar:** parcial sem período e com lâmpada apagada pode dar `dia_sem_trabalho=False`, `_celula_furada=True`, mas `_coberto_por_ausencia=True`, porque a fábrica bloqueia a pergunta ao colaborador e remete o problema ao cadastro; não são respostas à mesma pergunta operacional (`app/chamados/juizes.py:424`, `app/chamados/juizes.py:478`, `app/chamados/services/materializacao.py:69`, `app/chamados/services/materializacao.py:74`).
-
-**Outro leitor residual, de metadado:** `via_pelo_fato` ainda chama qualquer ausência aprovada de `VIA_AUSENCIA_DIA`, inclusive parcial com resto; esse valor significa “dia resolvido pela ausência”. Isso pode rotular erroneamente a testemunha de uma resolução; morte automática da pergunta por esse caminho, isoladamente, não demonstrada, porque o juiz de pergunta prioriza o veredito acusador da célula (`app/chamados/juizes.py:1381`, `app/chamados/juizes.py:1383`, `app/chamados/models.py:2261`, `app/chamados/juizes.py:1102`, `app/chamados/juizes.py:1104`). Gravidade: **fila**.
-
-_1337 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1338 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
