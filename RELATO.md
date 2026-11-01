@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: trava_teste.sh | pid=1541357 | arquivo=logs/cobparc/v5/suite_pce.log
+ESPERANDO: trava_teste.sh | pid=2587611 | arquivo=logs/cobparc/v5/suite_pce2.log
 
 aval Ronald 19:22 (transcrito em logs/e4cal/AVAL_L1_DOMINIO.md; SUBSTITUI a de 19:18): E4-CALENDARIO-L1-DOMINIO -- alcancavel x impossivel + prop 18; prop 3 = VEREDITOS_ACUSAM inteira salvo isento (cobranca_indevida 0 -> linha lei:); prop 7 so isento; rotulo novo de sem_certidao; prop 19 (status nao contradiz a celula: 10+7+61 medidos, + 5 sem_certidao com batida); REGISTRO folha 346/143/39, 0 preso so por isso.
 aval Ronald 19:03 (transcrito em logs/codex_reserva/AVAL_CODEX_RESERVA.md): CODEX-RESERVA-ATE-O-RESET -- Codex so na volta FINAL de obra da ORDEM VIVA (COBPARC, ISENTO, L1); censo fora da vaga (O261-E-F3) depois do reset ou sonnet com motivo no DESPACHO.
@@ -5838,3 +5838,4 @@ DESPACHO GRADE-FOLGA-JUIZ-a: retirar trecho eh_trabalho (calendario.py:840 da co
 
 - 19:22 PRE-APROVADO (a): sonda E4-DOMINIO-MEDIR v2 cancelada (volta superada pelo aval 19:22, que traz a medida e4cal4). Numero da v1 fica como registro de outro universo: trabalha=False x VEREDITOS_ACUSAM nunca_bateu/cobrado = 2.579 celulas (status_dia folga 297, vazio 2.282), retem 1.251 / 26 colabs; aberta 1.080 / 21 colabs; 1.076 da classe adesao (cartorio.py:1067), 4 fora (1 colab) -- logs/e4cal_folga345.out. Entra no leitor FOLHA da E4 ao lado do 346/143/39 do aval.
 - 19:24 COBPARC v5 suite_pce VERMELHA (Ran 8880, failures=3 errors=1: test_o261e_f1_codex_v5 ordem de data; test_grade_v5_cartorio_rejulga_a_exportada x2; test_cobparc5 PREMISSA supra_juiz) -> devolvida ao construtor para diagnostico/cura na copia; sem pouso.
+- 19:29 COBPARC v5: construtor curou na copia (mods3 43 OK, red3_retro), relancou suite_pce2 (pid 2587611).
