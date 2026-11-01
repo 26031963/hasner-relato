@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 20:48:45.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (142.1 MB). Acoes na janela: **864**.
+**Medido em 01/11/2026 20:54:15.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (142.2 MB). Acoes na janela: **866**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:53:28 | Bash | Wait for agent transcript growth | `J=/home/ronald/.claude/projects/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/subagents/agent-a9ba61aa4d60c4177.jsonl; stat -c %s $J; /usr/bin/sleep 90; stat -c %s $J` |
+| 20:53:17 | Bash | Check construtor progress | `cd /home/ronald/wt-cobparc5b-184858 && git log --oneline -4 && git status --porcelain \| head; ls /home/ronald/saas-hasner/logs/cobparc/v7/ 2>/dev/null; cd /home/ronald/saas-hasner/bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
 | 20:48:01 | Bash | Recheck hook proof | `/usr/bin/sleep 45; cd /home/ronald/saas-hasner/bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
 | 20:47:15 | Bash | Point ESPERANDO at agent transcript | `cd /home/ronald/saas-hasner/app/docs; J=/home/ronald/.claude/projects/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/subagents/agent-a9ba61aa4d60c4177.jsonl; H=$(date +%H:%M); python3 - "$H" "$J" <<'EOF' import sys,re H,J=sys.argv[1:]; p='RELATO.md'; s=open(p).read() lines=s.split('\n'); assert lines[2].startswith('ESPERANDO:') lines[2]=f'ESPERANDO: construtor \| arquivo={J}' s= ...` |
 | 20:47:02 | Bash | Read pid proof rule | `cd /home/ronald/saas-hasner; grep -n "def _prova_pid" -A30 bin/hook_stop_fila1.py \| head -40` |
