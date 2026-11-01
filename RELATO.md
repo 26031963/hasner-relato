@@ -5576,3 +5576,4 @@ linha dele** ("inclui a chamado e a pdf") e elas entram no proximo ato.
 - c71b1038: corpo do motor limpo (1 hunk :137-196, RED certo, oraculo L-110, impacto 09/10 = 0), MAS pouso antes do pre-requisito: teste usa `_aw` da pista V3-RETOMA e he_pontas de 6 campos (main desempacota 4, regras.py:818); pousar levaria a V3-RETOMA-PERIODOS (P4 meio aberto, sem opus) e a base esta 38 commits atras. Laudo logs/v3p5/pv/opus_final.txt.
 - decisao tecnica: caminho (b), refazer a P5 em copia nova do main (teste reescrito sem a pista), RED + suite + impacto de novo; entra na vaga depois da GRADE volta 9. LMT de `localizar` (motor:79) -> fila.
 - desvio meu: abri a copia da P5 sobre a pista em vez do main (a lei "construir em copia do HEAD" do main).
+- 23:0x aval COPIA-DO-HEAD-MECANISMO recebido: entra como complemento da TRAVA-COB volta 4 (sem id, sem vaga propria); e a cura de CLASSE do desvio da V3-P5 (copia nascida da pista). Registrado em BACKLOG/PROMPTS/c3.triagem.
