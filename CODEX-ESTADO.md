@@ -1,7 +1,172 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 01:55** · publicado em **01/11/2026 01:56** (UTC-3)
+> Ultima resposta processada: **01/11/2026 02:00** · publicado em **01/11/2026 02:01** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 02:00 · sessao fcd1a1f10e20 · - · - · origem=Ronald (tmux)
+
+Não localizei novo bloqueio material na cadeia de produção alterada; permanecem duas derivações conhecidas, declaradas como filas: C5 e gerador. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:21`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:160`)
+
+- **Juiz e universo:** o carregador lê todas as FolgaDia da pessoa na janela, preserva todas por data e ordena por pk; o juiz percorre candidatas e aplica um único predicado de origem/vínculo. (`app/ponto/precedencia.py:206`, `app/ponto/precedencia.py:208`, `app/ponto/precedencia.py:216`, `app/ponto/precedencia.py:237`)
+- **Sítios migrados:** veto, declaração e comando perguntam ao juiz; `escala_vigente` entrega o vínculo por `vinculo_do_dia`. (`app/ponto/precedencia.py:505`, `app/ponto/services/declarar_dia.py:74`, `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:65`, `app/escala/servico_jornada.py:57`)
+- **Grade:** por turno passa o mapa julgado do vínculo do dia; legacy segmenta pelo mesmo juiz e conserva somente os dias do segmento. O overlay escreve apenas o dict em memória. (`app/escala/utils.py:1262`, `app/escala/utils.py:1794`, `app/escala/utils.py:972`, `app/escala/utils.py:995`, `app/escala/utils.py:999`, `app/escala/utils.py:1124`)
+- **Calendário:** classificação e `eh_trabalho` publicado leem a mesma função sobre o mesmo dict; não há nova duplicação da regra nessa extração. (`app/colaboradores/services/calendario.py:103`, `app/colaboradores/services/calendario.py:126`, `app/colaboradores/services/calendario.py:839`)
+- **Segundo escritor:** não apareceu no trecho alterado. FolgaDia mantém escritor registrado em `escala/folgas.py`; cartório passa a ata pela lavra existente e carimba pela porta, cujo save/evento compartilham `atomic`. (`app/core/portas.py:466`, `app/ponto/services/cartorio.py:1582`, `app/ponto/services/cartorio.py:1602`, `app/ponto/portas/celula.py:639`, `app/ponto/portas/celula.py:807`)
+- **Relógio:** o comando captura `hoje` na borda e passa a janela; carregador, juiz, predicado e overlay não fazem nova leitura do relógio. (`app/ponto/management/commands/rejulgar_ausencia_em_folga.py:52`, `app/ponto/precedencia.py:194`, `app/ponto/precedencia.py:212`, `app/ponto/precedencia.py:222`, `app/escala/utils.py:1103`)
+- **Ordem de trava:** o delta fornecido não introduz aquisição de trava; a persistência examinada conserva o `atomic` existente. Ausência de corrida operacional: **[não verificado]**. (`app/ponto/portas/celula.py:639`)
+- **C5 continua errado para calendário alheio:** monta pares por cobertura de vínculo, sem consultar origem/juiz, e acusa qualquer célula `trabalha=True` fora de competência exportada. A triagem reconhece corretamente essa classe aberta como GRADE-FOLGA-C5. (`app/chamados/management/commands/auditar_invariantes_chamados.py:1532`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1542`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:21`)
+- **Gerador continua por vínculo:** consome `_datas_folga` do próprio vínculo ou consulta FolgaDia por `escala_colaborador=self`; não vê manual presa a vínculo anterior. Essa dívida está explicitamente marcada GRADE-FOLGA-GERADOR. (`app/escala/models.py:1251`, `app/escala/models.py:1280`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:160`)
+
+Há resíduo documental pequeno: o predicado ainda diz “o calendário passa `True`”, embora o calendário já tenha retirado essa alimentação. Não é escritor/juiz novo nem bloqueio funcional localizado. (`app/ponto/precedencia.py:229`, `app/colaboradores/services/calendario.py:617`)
+
+## 01/11 02:00 · sessao 320c4aa0025c · - · - · origem=Ronald (tmux)
+
+- **A triagem não pode tratar o pré-requisito de ensaio como dispensado.** O cartório exige `--apply`, dias rejulgados, dias que movem minuto e `FORA-DO-HORIZONTE 0` **antes do pouso**; BACKLOG ainda exige `main + reversão + frota antes do opus`. Cumprimento operacional permanece **[não verificado]**; isso não demonstra que o ensaio faltou, mas impede aprovação incondicional. (`app/ponto/services/cartorio.py:174`, `app/docs/BACKLOG.md:796`)
+
+- **FILA de fase é correta pelo aval explícito.** A cópia continua lendo a foto do vínculo ativo e comparando foto×âncora; o desmembramento está registrado e sua imprecisão declarada. (`app/escala/services/fase_conflitante.py:71`, `app/escala/services/fase_conflitante.py:74`, `app/escala/services/fase_conflitante.py:80`, `app/docs/BACKLOG.md:797`)
+
+- **C5 e gerador permanecem abertos na obra inteira, declaradamente.** C5 considera FolgaDia por cobertura e acusa célula de trabalho sem distinguir origem; gerador lê foto do vínculo. São limites expressos da catraca, não curas concluídas. (`app/chamados/management/commands/auditar_invariantes_chamados.py:1532`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1548`, `app/escala/models.py:1251`, `app/escala/models.py:1280`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:17`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:160`)
+
+- **FILA dos documentos é defensável como atualização no marco, mas ainda não concluída.** BACKLOG ainda afirma que fase pergunta ao juiz; a linha seguinte supersede isso. L-106 manda docs no commit do marco. A edição alegadamente existente na principal é **[não verificado]**. CORTES registra o corte original, agora limitado pelo aval fornecido pelo usuário. (`app/docs/BACKLOG.md:796`, `app/docs/BACKLOG.md:797`, `app/docs/LEIS.md:132`, `app/docs/CORTES.md:416`)
+
+- **“Juízes novos” está resolvido pelo corpo dos commits fornecido:** uma autoridade na obra, zero adicionais no delta, compatível com registro e corte. O padrão `juiz unico` existe no vocabulário autorizado. (`app/core/juizes.py:188`, `app/core/juizes.py:192`, `app/docs/CORTES.md:416`, `app/docs/GLOSSARIO.md:12`, `app/docs/PLANO-PADROES.md:49`)
+
+- **Não encontrei nova ordem de travas ou segundo escritor no trecho examinado.** O veto novo apenas carrega e julga; a lavra continua pela porta, com save/evento no `atomic` existente. Ausência de corrida em execução é **[não verificado]**. (`app/ponto/precedencia.py:501`, `app/ponto/precedencia.py:505`, `app/ponto/services/cartorio.py:1582`, `app/ponto/services/cartorio.py:1602`, `app/ponto/portas/celula.py:639`, `app/ponto/portas/celula.py:807`)
+
+- **Limite probatório das linhas LEI-AKITA:** os endereços e leitores batem com o desenho, mas nomear logs de RED não demonstra seus resultados nesta verificação. O RED de allowlist referido no primeiro commit não prova sozinho reconhecimento de `getattr` ou percurso de arquivos; essas mordidas exigem a execução dos mutantes apropriados. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:176`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:204`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:245`; resultados dos logs: **[não verificado]**)
+
+## 01/11 02:00 · sessao 58e0cd444abd · - · - · origem=Ronald (tmux)
+
+A descrição nova está **curada quanto ao alcance do horizonte e de `--forcar`**: a versão é a maior cujo horizonte alcança a competência; o cache alimenta a impressão, e `forcar` desativa o pulo por impressão atual. (`app/ponto/services/cartorio.py:196`, `app/ponto/services/cartorio.py:214`, `app/ponto/services/cartorio.py:963`, `app/ponto/services/cartorio.py:1170`, `app/ponto/services/cartorio.py:1180`)
+
+O comando seleciona células passadas da empresa e repassa a flag. “Toda célula” descreve esse universo padrão: `--limite` pode recortar colaboradores, `--apply` controla persistência, e uma célula sem dia correspondente na grade ainda é pulada. Isso é uma ressalva de precisão, sem regressão concreta demonstrada no dado. (`app/ponto/management/commands/processar_cartorio.py:49`, `app/ponto/management/commands/processar_cartorio.py:56`, `app/ponto/management/commands/processar_cartorio.py:65`, `app/ponto/services/cartorio.py:1183`)
+
+O teste sem `--forcar` **não estabelece explicitamente** carimbo/impressão/veredito antes da chamada. Entretanto, seria errado concluir que a fixture está necessariamente sem carimbo: as batidas criadas acionam o signal, que chama o cartório antes da criação da FolgaDia e da substituição da ata. A premissa depende implicitamente desse caminho. (`app/ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:62`, `app/ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:65`, `app/ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:74`, `app/ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:121`, `app/ponto/signals.py:85`, `app/ponto/signals.py:131`, `app/ponto/services/cartorio.py:1738`)
+
+Execução Django, efetivo carimbo da fixture e resultado dos testes: **[não verificado]**. [nao verificado]
+
+## 01/11 01:57 · sessao 296ef6213d0c · GRADE-FOLGA-JUIZ · verificador · origem=Code
+
+**Não libero o pouso nesta pré-verificação: a cura da varredura está implementada, mas sua regressão ainda passa com todos os testes da catraca verdes.** Reintroduzir, somente em memória, o descarte de `precedencia.py` inteiro em `achados()` manteve os 11 casos verdes: o `MORDE_segundo_juiz_dentro_de_precedencia` exercita diretamente `achados_da_fonte`, sem testar o percurso dos arquivos. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:122`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:236`)
+
+As referências abaixo são relativas a `app/`. Os testes AST foram exercitados em memória, sem banco, logs ou gravação de arquivos; execução dos testes de integração Django: **[não verificado]**. [nao verificado]
+
+**1. Bloqueios anteriores e mordida dos testes** [nao verificado]
+
+| Item | Situação nesta cópia |
+|---|---|
+| **(a) `getattr` e cópia literal** | **Curado.** A catraca reconhece `getattr` literal e a cópia do predicado real é exigida pelo teste. Desativar esse reconhecimento deixou vermelhos os testes de cópia literal e leitura sem comparação. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:54`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:204`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:230`) |
+| **(a) varrer `precedencia.py` fora do juiz** | **Parcialmente curado.** O código atual exclui somente as três funções autorizadas; porém excluir novamente o arquivo inteiro no percurso mantém os testes verdes. Falta a mordida nesse percurso. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:113`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:129`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:241`) |
+| **(c) JUIZES.md** | **Curado.** Registra juiz, carregador, predicado e as duas filas; coincide com o registro vivo. (`docs/JUIZES.md:84`, `core/juizes.py:192`) |
+| **Campo “juízes novos”** | O número correto desta obra é **1**, conforme a nova entrada e o corte. A alteração do campo na mensagem de entrega/commit não está disponível para conferência: **[não verificado]**. (`core/juizes.py:192`, `docs/CORTES.md:416`) |
+| **Pauta DP** | **Corrigida no texto do cartório:** declara A0×C=0 e retira a conclusão de Pauta DP. O BACKLOG também cancela “comp09=8”, mas conserva textos anteriores sobre Pauta DP. Valores efetivos da comparação: **[não verificado]**. (`ponto/services/cartorio.py:180`, `docs/BACKLOG.md:796`, `docs/BACKLOG.md:795`, `docs/BACKLOG.md:860`) |
+| **Integridade FM/TXT** | O teste agora compara a linha inteira de FM e todas as linhas de exportação, além do hash/conteúdo do TXT. Isso corrige a insuficiência da asserção; execução e hashes reais: **[não verificado]**. (`ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:106`, `ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:118`, `ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:119`) |
+
+A mordida da catraca ficou assim:
+
+| `MORDE_` | Resultado da conferência |
+|---|---|
+| `filtro_pessoa_e_data` | Vermelho ao desativar reconhecimento do filtro. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:189`) |
+| `apelido_e_manager_relacionado` | Vermelho removendo apelidos de import ou reconhecimento dos managers relacionados. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:194`) |
+| `predicado_da_origem` | Exige detectar o atributo direto; mutação específica executada: **[não verificado]**. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:200`) |
+| `copia_literal_do_predicado_do_juiz` | Vermelho sem reconhecimento de `getattr`. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:204`) |
+| `copia_literal_do_carregador_do_juiz` | Vermelho desativando reconhecimento do filtro. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:215`) |
+| `apelido_de_modulo` | Vermelho retirando reconhecimento de `FolgaDia` no meio da cadeia. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:223`) |
+| `leitura_da_origem_sem_comparar` | Vermelho sem reconhecimento de `getattr`. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:230`) |
+| `segundo_juiz_dentro_de_precedencia` | Morde exclusão no analisador da fonte; **não morde exclusão no percurso real dos arquivos**. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:236`) |
+
+Não cabe afirmar que cada `MORDE_` de integração ficará vermelho para qualquer reversão: os dois builders já erravam em sentidos diferentes. O próprio teste documenta que calendário alheio mordia o builder por turno, enquanto a manual no vínculo velho mordia o legacy; cada caso precisa ser associado à regressão específica. (`escala/tests/test_grade_folga_de_calendario_e_do_vinculo.py:20`)
+
+Os testes adicionais cobram a retirada do portão na grade, inclusive `simular_dia`, e a relavra da ata da 09 com `--forcar`; suas execuções e mutações nesta cópia permanecem **[não verificado]**. (`escala/tests/test_grade_folga_vale_em_toda_competencia.py:74`, `escala/tests/test_grade_folga_vale_em_toda_competencia.py:79`, `escala/tests/test_grade_folga_vale_em_toda_competencia.py:84`, `ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:101`)
+
+**2. Quem escreve e quem lê**
+
+**FolgaDia e seus campos**
+
+| Valor | Escritores e leitores localizados |
+|---|---|
+| Estrutura | `escala_colaborador` tem CASCADE; `data` identifica o dia; `calendario_origem` é nullable/SET_NULL. Unicidade é vínculo+data, não pessoa+data. (`escala/models.py:1553`, `escala/models.py:1556`, `escala/models.py:1557`, `escala/models.py:1571`) |
+| Foto de calendário | `gerar_foto_folgas` lê manuais, apaga a foto de calendário selecionada e cria vínculo/data/origem. (`escala/folgas.py:165`, `escala/folgas.py:169`, `escala/folgas.py:173`) |
+| Foto manual | `lancar_folga` consulta origem, passa pelo veto e cria por vínculo/data; `_foto_do_dia` consulta, apaga/cria ou altera apenas o tipo informativo. (`escala/folgas.py:254`, `escala/folgas.py:258`, `escala/folgas.py:259`, `escala/folgas.py:274`, `escala/folgas.py:280`, `escala/folgas.py:284`, `escala/folgas.py:289`) |
+| Reparentamento | Lê origem, vínculo, data e ocupação; altera `escala_colaborador` pela porta existente. O comando delega à porta. (`escala/folgas.py:405`, `escala/folgas.py:418`, `escala/folgas.py:435`, `escala/folgas.py:453`, `escala/management/commands/reparentar_folgas.py:28`) |
+| Universo da pessoa | O carregador consulta todos os vínculos da pessoa na janela e preserva todas as candidatas por data; o predicado lê origem e identidade do vínculo. (`ponto/precedencia.py:206`, `ponto/precedencia.py:208`, `ponto/precedencia.py:237`, `ponto/precedencia.py:239`) |
+| Foto por vínculo/gerador | `folgas_do_periodo` carrega vínculo/data; `eh_dia_trabalho_calculado` consome essa foto. (`escala/alimentacao.py:60`, `escala/alimentacao.py:66`, `escala/models.py:1251`, `escala/models.py:1280`, `escala/models.py:1327`) |
+| Cadastro e diagnóstico | Defeito mensal, divergência calendário×foto, Plano de Folgas, toggle, diagnóstico do vínculo e limbo leem a foto por vínculo. (`escala/models.py:1220`, `escala/folgas.py:101`, `escala/views_plano_folgas.py:60`, `escala/views_plano_folgas.py:112`, `ponto/services/diagnostico_escala.py:102`, `relatorios/furos.py:112`) |
+| Vigias | Fase lê a foto do vínculo ativo; C5 itera toda FolgaDia e confronta cobertura/célula. (`escala/services/fase_conflitante.py:74`, `chamados/management/commands/auditar_invariantes_chamados.py:1532`) |
+
+Não localizei novo escritor direto de FolgaDia fora da porta; o registro autoriza `escala/folgas.py`. CASCADE/SET_NULL continuam sendo efeitos dos relacionamentos existentes. (`core/portas.py:466`, `escala/models.py:1554`, `escala/models.py:1558`)
+
+**Vínculo entregue ao juiz em cada sítio**
+
+| Sítio | Feed |
+|---|---|
+| Precedência | `vinculo_do_dia`, com células e vínculos; completa geradoras faltantes antes da escolha. (`ponto/precedencia.py:326`, `ponto/precedencia.py:350`, `ponto/precedencia.py:357`) |
+| Veto de lançamento | `escala_vigente(colab,d)`. (`ponto/precedencia.py:505`) |
+| Declaração | `_ec_do_dia` → `escala_vigente`. (`ponto/services/declarar_dia.py:56`, `ponto/services/declarar_dia.py:74`) |
+| Rejulgar ausência em folga | `escala_vigente(cid,d)`. (`ponto/management/commands/rejulgar_ausencia_em_folga.py:65`) |
+| Grade por turno | Mapa produzido por `vinculo_do_dia`; overlay recebe `esc_por_dia.get`. (`escala/utils.py:1262`, `escala/utils.py:1268`, `escala/utils.py:1794`) |
+| Grade legacy | Segmenta pelo juiz do vínculo; passa o vínculo do segmento ao builder e retém apenas seus dias. O `lambda _: esc` responde nesse recorte. (`escala/utils.py:972`, `escala/utils.py:995`, `escala/utils.py:999`, `escala/utils.py:770`) |
+| Calendário | Chama `fatos_do_periodo` sem a antiga substituição `{d: True}`; usa o carregador da pessoa. (`colaboradores/services/calendario.py:617`, `ponto/precedencia.py:281`) |
+
+`escala_vigente` carrega a célula e delega a `vinculo_do_dia`; a validade da geradora fica na autoridade existente. (`escala/servico_jornada.py:46`, `escala/servico_jornada.py:57`, `escala/alimentacao.py:237`)
+
+**Tipo da grade, ata e célula**
+
+O `tipo_dia` nasce nos builders; o overlay curado só escreve no dict em memória, depois da resposta do juiz. Ausências ainda podem substituir o tipo por `falta`/`ausencia`. (`escala/utils.py:727`, `escala/utils.py:1751`, `escala/utils.py:1124`, `escala/utils.py:1126`, `escala/utils.py:1182`, `escala/utils.py:1188`)
+
+O cartório lê a grade, monta `ata.tipo_dia`, entrega a ata à lavra existente e carimba. A porta grava ata/veredito/status e salva junto com os carimbos; save e evento compartilham `atomic`. A precedência entra como chave da mesma ata pela sua operação existente. (`ponto/services/cartorio.py:947`, `ponto/services/cartorio.py:583`, `ponto/services/cartorio.py:1580`, `ponto/services/cartorio.py:1600`, `ponto/portas/celula.py:768`, `ponto/portas/celula.py:807`, `ponto/portas/celula.py:639`, `ponto/portas/celula.py:819`)
+
+Leitores externos ao diff localizados:
+
+| Origem | Leitores |
+|---|---|
+| Ata/célula | Juiz de cobrança, leitor da célula e tripwire. (`chamados/juizes.py:408`, `escala/services/leitor_celula.py:345`, `ponto/management/commands/tripwire_celulas.py:342`) |
+| Grade — cobrança/ação | Materialização, declaração textual, emissão de disputa, furos diários, supra-juiz, worklist, propositor e veredito humano. (`chamados/services/materializacao.py:225`, `chamados/services/declaracao_texto.py:90`, `chamados/services/disputa_emissao.py:68`, `escala/services/furos_diarios.py:39`, `ponto/supra_juiz.py:222`, `ponto/worklist.py:19`, `ponto/propositor.py:210`, `ponto/services/veredito_celula.py:221`) |
+| Grade — apuração/tela | Status, espelho, simulação, bordas, órfãs, furos e calculadores. (`ponto/status_dia.py:146`, `ponto/services/espelho.py:690`, `ponto/services/simular_dia.py:12`, `ponto/services/bordas_realizado.py:74`, `escala/orfa_classe.py:65`, `relatorios/furos.py:147`, `inteligencia/calculadores.py:141`) |
+| Financeiros | Dia pago, fechamento, causas e exportação. (`ponto/services/dia_pago.py:386`, `ponto/services/fechamento.py:1011`, `folha/causas.py:100`, `folha/export.py:1071`) |
+| Instrumentos | Autópsia e mapa de divergência. (`ponto/management/commands/e6_piso_autopsia.py:13`, `ponto/management/commands/mapa_divergencia.py:131`) |
+
+A completude contra acessos dinâmicos não identificáveis pelo censo textual é **[não verificado]**.
+
+**REGRA_VERSOES:** a declaração escreve a tupla; `versao_para` lê seus horizontes pela competência; `_regra_do_dia` alimenta os dois ramos do cartório; `impressao_insumos` incorpora a versão ao hash. (`ponto/services/cartorio.py:111`, `ponto/services/cartorio.py:194`, `ponto/services/cartorio.py:210`, `ponto/services/cartorio.py:963`, `ponto/services/cartorio.py:1015`, `ponto/services/cartorio.py:1168`, `ponto/services/cartorio.py:368`)
+
+**3. ALLOWLIST e sítios fora dela**
+
+Não encontrei entrada que oculte outro juiz pessoa-dia sob motivo falso: são escritores, fotos por vínculo, perguntas mensais ou escolha de frase sobre resultado já julgado. O gerador é uma exceção relevante, mas está explicitamente marcado como **INCOMPLETO / GRADE-FOLGA-GERADOR**. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:137`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:158`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:160`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:165`)
+
+A entrada de fase é coerente: o arquivo lê a foto do vínculo ativo e compara foto×âncora; a entrada declara sua fila própria. `test_os_sitios_curados_nao_voltam` cobra comando, declaração e ausência de `_folga_avulsa`, sem exigir cura de fase. (`escala/services/fase_conflitante.py:74`, `escala/services/fase_conflitante.py:80`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:142`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:182`)
+
+**Sim, há leitor fora do juiz e fora da ALLOWLIST:** C5 percorre FolgaDia, usa cobertura por vínculo e acusa célula de trabalho sem distinguir origem. É a fila nominal GRADE-FOLGA-C5, expressamente declarada como limite da catraca. (`chamados/management/commands/auditar_invariantes_chamados.py:1532`, `chamados/management/commands/auditar_invariantes_chamados.py:1535`, `chamados/management/commands/auditar_invariantes_chamados.py:1548`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:21`)
+
+**4. Resíduos da retirada de fase**
+
+Nos documentos nominalmente pedidos, não achei afirmação residual de migração: JUIZES declara foto/fila; MAPA-JUIZES, MAPA e `core/juizes.py` registram o juiz; ARQUITETURA mantém o cron de fase. O docstring dos testes da obra declara a retirada, e os testes próprios de fase continuam verificando foto×âncora. (`docs/JUIZES.md:89`, `docs/MAPA-JUIZES.md:52`, `docs/MAPA.md:107`, `core/juizes.py:192`, `docs/ARQUITETURA.mmd:62`, `ponto/tests/test_grade_folga_juiz_sitios.py:13`, `escala/tests/test_fase_conflitante.py:60`)
+
+**Sobrou texto fora desse conjunto:** BACKLOG ainda afirma que `fase_conflitante:74` pergunta ao juiz; CORTES conserva a enumeração original. A linha seguinte do BACKLOG registra o desmembramento. Cabe atualizar o registro vivo e explicitar a supersessão, sem trazer a cura de fase de volta à obra. (`docs/BACKLOG.md:796`, `docs/BACKLOG.md:797`, `docs/CORTES.md:416`)
+
+**5. Classes de reprovação**
+
+| Classe | Veredito |
+|---|---|
+| Segundo juiz | Os sítios curados delegam ao juiz; C5 e gerador permanecem filas declaradas. (`ponto/precedencia.py:505`, `ponto/services/declarar_dia.py:74`, `ponto/management/commands/rejulgar_ausencia_em_folga.py:65`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:21`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:160`) |
+| Segundo escritor | Não aparece novo escritor persistente fora da porta; overlay altera memória e cartório usa a lavra existente. (`escala/utils.py:1126`, `ponto/services/cartorio.py:1580`, `ponto/portas/celula.py:807`) |
+| Relógio fora da borda | O trecho novo do comando lê a data na borda; carregador, predicado e overlay novos não consultam relógio. (`ponto/management/commands/rejulgar_ausencia_em_folga.py:52`, `ponto/precedencia.py:194`, `ponto/precedencia.py:222`, `escala/utils.py:1103`) |
+| Derivação paralela | A grade passa a chamar o juiz; calendário compartilha `trabalho_do_dia` entre classificação e publicação. (`escala/utils.py:1124`, `colaboradores/services/calendario.py:126`, `colaboradores/services/calendario.py:840`) |
+| Selo sem mordida | **Procedente e bloqueante:** exclusão integral de `precedencia.py` no percurso passa verde. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:129`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:236`) |
+| Ordem de trava | Não há nova aquisição de trava no trecho alterado; a persistência continua pelo `atomic` existente. Ausência de corrida em execução: **[não verificado]**. (`ponto/services/cartorio.py:111`, `ponto/portas/celula.py:639`) |
+| Pouso antes do pré-requisito | O próprio cartório exige ensaio `--apply` antes do pouso. Ensaio, reversão e resultado específico de 303970f1: **[não verificado]**. (`ponto/services/cartorio.py:174`) |
+
+**6. Exportada, escala/vínculo, motor e alcance do rejulgamento**
+
+O diff fornecido não introduz escritor de escala/vínculo nem alteração em `motor_calculo_v2.py`; a cura da grade consulta FolgaDia e modifica o resultado em memória. A cadeia examinada do cartório grava célula/ata, carimbos, veredito/status e evento pela porta existente. (`escala/utils.py:1115`, `escala/utils.py:1124`, `escala/utils.py:1126`, `ponto/services/cartorio.py:1580`, `ponto/services/cartorio.py:1600`, `ponto/portas/celula.py:640`)
+
+**Ata/célula da exportada pode mudar, pelo desenho autorizado.** Não há nova escrita direta de FechamentoMensal/TXT nesse caminho; os testes cobram sua integridade completa. A confirmação operacional dessa integridade é **[não verificado]**. (`docs/ADR/0003-celula-tres-naturezas.md:25`, `ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:118`, `ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:119`)
+
+A v3 muda a versão da competência **10 em diante**; 09 permanece na v1 e 08 sem versão. Isso altera a impressão e provoca nova análise das células elegíveis; não constitui portão de escrita. (`ponto/services/cartorio.py:111`, `ponto/services/cartorio.py:212`, `ponto/services/cartorio.py:1168`, `ponto/tests/test_o219_versao_da_regra.py:85`)
+
+Com `--forcar`, o comando ignora o pulo por carimbo atual e seleciona **todas as células passadas da empresa**, inclusive abaixo do horizonte, sem limitar à 09. Sem `--forcar`, a 09 não muda de impressão **por esta v3**, mas células sem carimbo ou com outros insumos alterados continuam elegíveis. A frase “a 09 só se rejulga com --forcar” é ampla demais e deve ser corrigida. (`ponto/management/commands/processar_cartorio.py:49`, `ponto/management/commands/processar_cartorio.py:61`, `ponto/services/cartorio.py:1174`, `ponto/services/cartorio.py:1178`, `ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:122`)
+
+**Bloqueia:** prender com teste a varredura real de `precedencia.py`. **Corrigir junto:** resíduos do BACKLOG e a descrição absoluta de `--forcar`. **Fila:** fase, C5 e gerador. **Não procede:** exigir cura de fase nesta obra, tratar relavra autorizada da ata da 09 como escrita proibida do gravado, ou afirmar que falta o juiz em JUIZES.md. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:129`, `docs/BACKLOG.md:796`, `ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:122`, `docs/BACKLOG.md:797`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:21`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:160`, `docs/ADR/0003-celula-tres-naturezas.md:25`, `docs/JUIZES.md:84`)
 
 ## 01/11 01:55 · sessao da6e67fc3dfd · - · - · origem=Ronald (tmux)
 
@@ -716,204 +881,4 @@ Os outros cinco locais de chamada direta encontrados estão no teste P5: `_f`, c
 | **Derivação paralela de fonte única** | **Não encontrada no corpo produtivo.** A presença noturna é consultada em `minutos_noturnos`; a regra independente está no teste como oráculo. (app/ponto/motor_calculo_v2.py:191; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:151) |
 | **RED sem mordida** | **Não encontrado por inspeção.** O patch alcança o símbolo chamado, e há testemunhas para os cinco mutantes. Execução nesta árvore: **[não verificado]**. (app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:347; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:356; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:359; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:365; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:454; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:531) |
 
-## 01/11 00:24 · sessao 19d5e5096e49 · - · - · origem=Ronald (tmux)
-
-Classificação dos achados da b1, considerando a triagem fornecida:
-
-| Achado | Estado nesta volta | Conferência atual |
-|---|---|---|
-| P1: arredondamento acima da união | **Superado pelo descarte; sem alteração numérica.** A soma continua em `float`; a propriedade permite `1e-9`. | `app/ponto/motor_calculo_v2.py:193`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:201`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:203`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:205` |
-| P2: overflow no limite de datetime | **Superado pelo descarte; possibilidade técnica permanece.** O retorno chama `minutos_noturnos` mesmo sem pausas; essa função incrementa dia sem guarda. | `app/ponto/motor_calculo_v2.py:196`; `app/ponto/motor_calculo_v2.py:104`; `app/ponto/motor_calculo_v2.py:117` |
-| P3: `feriados=set()` não fecha a fixture | **Superado pelo descarte; fallback permanece.** Data ausente consulta `is_feriado`; esta chama o juiz e converte exceção em `False`. A triagem relata GREEN anterior, mas não fornece prova de nova execução nesta árvore. | `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:66`; `app/ponto/motor_calculo_v2.py:953`; `app/ponto/motor_calculo_v2.py:955`; `app/ponto/motor_calculo_v2.py:39`; `app/ponto/motor_calculo_v2.py:43`; nova execução: **[não verificado]** |
-| P4: comentário HE100 em caso HE50 | **Resolvido.** As duas linhas agora dizem HE50, coerente com HE50=2h e HE100=0 do teste. | `app/ponto/motor_calculo_v2.py:145`; `app/ponto/motor_calculo_v2.py:146`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:70`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:71`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:72` |
-
-Demais ressalvas da b1:
-
-- **Alcance da alimentação produtiva segue delimitado:** o caminho diário entrega `intervalos=()`; o adaptador por par entrega as pausas. O delta apenas de comentário não altera isso. (`app/ponto/calculador/alimentacao.py:512`; `app/ponto/calculador/alimentacao.py:514`; `app/ponto/calculador/periodo.py:507`)
-- **Origem das expectativas segue explícita:** o teste declara a regra e reconhece o gatilho por toque em 00–05 e o teto de 26h como escolhas da casa; a aproximação da HE está documentada na própria função. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:14`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:157`; `app/ponto/motor_calculo_v2.py:413`)
-- **Limites do oráculo permanecem:** reutiliza `localizar`, opera minuto inteiro e declara grade sem verão em 2026; segundos e história têm expectativas próprias de interseção. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:160`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:164`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:167`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:410`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:473`)
-- **Import/helper/assinatura/alias permanecem sem defeito identificado:** `_aw` é local, Django é declarado, `do_dia` aceita os argumentos e desempacota quatro campos; os imports dos helpers ocorrem durante a chamada e o contexto empresta o método do motor. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:44`; `app/requirements.txt:13`; `app/ponto/calculador/regras.py:572`; `app/ponto/calculador/regras.py:818`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:105`; `app/ponto/calculador/regras.py:63`; `app/ponto/motor_calculo_v2.py:1915`)
-- **Laço parado segue afastado pela estrutura:** `_f > a`, o próximo candidato avança ou recebe avanço subsidiário, e `a=b`; exceções continuam fora dessa garantia. (`app/ponto/motor_calculo_v2.py:179`; `app/ponto/motor_calculo_v2.py:188`; `app/ponto/motor_calculo_v2.py:190`; `app/ponto/motor_calculo_v2.py:194`)
-- **RED sem mordida não encontrado no teste lido:** patch alcança a função e exige falha do caso; há testemunhas para os cinco mutantes. Isso é evidência estrutural, sem alegar execução nesta árvore. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:347`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:348`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:356`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:359`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:365`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:454`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:531`)
-- **Relógio externo não encontrado no corpo nem teste lidos:** o corpo deriva cortes das entradas e o teste usa datas fixadas. (`app/ponto/motor_calculo_v2.py:162`; `app/ponto/motor_calculo_v2.py:186`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:52`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:187`)
-- **Suíte inteira da árvore 5394309c, produção, ordem de travas e pouso seguem [não verificado].** A triagem apenas relata GREEN de 34 testes da situação anterior; não há execução feita por este explorer. **[não verificado]**
-
-## 01/11 00:23 · sessao c5483f4142a7 · - · - · origem=Ronald (tmux)
-
-Não encontrei essas classes no corpo atual e no teste P5 lidos; **o diff total `e0bdbc8e..5394309c` não pôde ser conferido**, pois a cópia não contém `.git` nem foi fornecido esse diff completo. [não verificado]
-
-| Classe | Resultado e evidência |
-|---|---|
-| Segundo juiz | **Não encontrado no corpo lido**: a janela continua sendo consultada em `minutos_noturnos`; o corpo não repete os limites 22/05 ou o gatilho da prorrogação. (`app/ponto/motor_calculo_v2.py:191`; `app/ponto/motor_calculo_v2.py:196`) A autoridade do valor do par permanece registrada em `app/core/juizes.py:1160`. |
-| Segundo escritor | **Não encontrado no corpo lido**: produz um escalar por `return`; os consumidores usam as atribuições existentes dos campos noturnos e HE noturna. (`app/ponto/motor_calculo_v2.py:196`; `app/ponto/motor_calculo_v2.py:992`; `app/ponto/motor_calculo_v2.py:993`; `app/ponto/motor_calculo_v2.py:1008`; `app/ponto/motor_calculo_v2.py:1010`) |
-| Relógio fora da borda | **Não encontrado no corpo/teste lidos**: o cursor deriva do instante recebido, normalizado no fuso; os testes fixam datas. Não há consulta a “agora” nesses trechos. (`app/ponto/motor_calculo_v2.py:162`; `app/ponto/motor_calculo_v2.py:186`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:52`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:187`) |
-| Derivação paralela de fonte única | **Não encontrada no corpo produtivo lido**: mede presença pela mesma `minutos_noturnos`, unindo intervalos antes da soma. (`app/ponto/motor_calculo_v2.py:164`; `app/ponto/motor_calculo_v2.py:169`; `app/ponto/motor_calculo_v2.py:191`) A regra independente está no teste, como oráculo, e não em outro leitor produtivo. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:151`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:177`) |
-| RED sem mordida | **Não encontrado por inspeção dos caminhos**: os testes substituem o símbolo realmente chamado e exigem falha dos casos ou divergência da grade para cinco mutantes. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:347`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:356`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:359`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:365`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:454`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:531`) Execução nesta árvore: [não verificado]. |
-
-O delta fornecido nesta volta troca somente “HE 100” por “HE 50” em duas linhas de comentário, agora coerentes com o teste central. (`app/ponto/motor_calculo_v2.py:145`; `app/ponto/motor_calculo_v2.py:146`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:70`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:72`)
-
-## 01/11 00:23 · sessao 5e6f299b7c4a · - · - · origem=Ronald (tmux)
-
-O corpo devolve **um único valor**, o desconto noturno em minutos (`float`), produzido por `total = 0.0`, acumulação e teto final; não devolve HE50/HE100 nem minutos legais. (`app/ponto/motor_calculo_v2.py:121`, `:176`, `:193`, `:196`)
-
-| Leitor direto produtivo | Uso do escalar e leitores seguintes |
-|---|---|
-| `he_noturna` | Subtrai o desconto do noturno da cauda extra; reparte o saldo entre HE50/HE100 e devolve o par. (`app/ponto/motor_calculo_v2.py:442`, `:448`, `:450`, `:451`) |
-| `MotorBase._noturno_dos_intervalos` | Encaminha o escalar com a prorrogação cadastrada. (`app/ponto/motor_calculo_v2.py:1915`, `:1916`) |
-
-O wrapper tem dois consumidores: `calcular_noturnas` subtrai o desconto, aplica o fator e retorna relógio/legais; `_escrever_noturnas` grava esses resultados no período. (`app/ponto/motor_calculo_v2.py:973`, `:974`, `:975`, `:991`, `:992`, `:993`)
-
-O outro consumidor usa o mesmo método emprestado por `_ContextoNoturno`; `noturnas_do_dia` subtrai o desconto e retorna relógio/legais. `do_dia` converte legais para horas e registra detalhes; `noturno_no_par` devolve `NoturnoV3`, lido pelo adaptador que preenche os dois campos do período. (`app/ponto/calculador/regras.py:63`, `:86`, `:89`, `:836`, `:840`, `:841`, `:842`; `app/ponto/calculador/periodo.py:507`, `:510`, `:751`, `:752`, `:753`)
-
-O split de HE é lido por `_aplicar_he_noturna`, que preenche os campos do período, e por `do_dia`, que soma os splits e escreve as rubricas diárias em horas. (`app/ponto/motor_calculo_v2.py:1002`, `:1008`, `:1010`; `app/ponto/calculador/regras.py:823`, `:825`, `:826`, `:828`, `:830`)
-
-Na busca textual em `app/**/*.py`, os outros cinco locais de chamada direta são todos no teste P5: helper `_f`, caso com segundos, `_celula` e os dois helpers `_caso`; seus resultados alimentam asserções de valor/propriedades. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:108`, `:142`, `:143`, `:197`, `:199`, `:201`, `:203`, `:205`, `:409`, `:411`, `:472`, `:475`)
-
-Os escritores/leitores posteriores relevantes encontrados são:
-
-- `lavrar` soma os campos dos períodos em horas; pode receber rubricas do calculador conforme a proveniência, constrói `DiaPago` e persiste por `bulk_create`. (`app/ponto/services/dia_pago.py:179`, `:181`, `:184`, `:224`, `:322`, `:327`, `:328`, `:343`, `:358`)
-- `ResultadoMes` soma minutos legais e HE noturna em horas; fechamento arredonda e grava os três campos mensais. (`app/ponto/motor_calculo_v2.py:321`, `:340`, `:344`; `app/ponto/services/fechamento.py:893`, `:896`, `:899`, `:1128`, `:1131`, `:1134`, `:1137`)
-- Apresentação diária lê `DiaPago.horas_noturnas`; exportação lê `FechamentoMensal.horas_noturnas` como adicional noturno. (`app/ponto/services/dia_pago.py:922`; `app/folha/export.py:436`)
-
-**Nenhum leitor muda de valor pelo delta2 fornecido:** a alteração é somente “HE 100” → “HE 50” nos comentários; o retorno executável continua em `:196`. (`app/ponto/motor_calculo_v2.py:145`, `:146`, `:196`; completude histórica do anexo: [não verificado])
-
-As mudanças `0→60`, HE50 noturna `3→2h` e noturnas `9→8h` pertencem à volta1; o mutante preserva o cálculo anterior por peça, e o teste declara o caso e as expectativas atuais. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:57`, `:60`, `:62`, `:72`, `:82`, `:86`, `:94`, `:112`)
-
-O alcance produtivo permanece delimitado: a alimentação diária passa `intervalos=()`, enquanto o adaptador por par fornece intervalos julgados; não se deve atribuir à alimentação diária o mesmo desconto não vazio do RED. (`app/ponto/calculador/alimentacao.py:512`, `:513`, `:514`; `app/ponto/calculador/periodo.py:501`, `:507`)
-
-## 01/11 00:16 · sessao 37fb4120dc78 · CONTENCAO-QUE-MORDE · leitura · origem=Code
-
-A v2 nomeia vários pontos de encaixe corretamente, mas eles ainda executam o contrato anterior: B3 conta reprovações, B1 depende de tokens, e o Stop não cobra gerações de contadores. Os gates de modelo, suite antes do opus, seis Agents vivos e contrato no push não aparecem nas respectivas portas. (`bin/disjuntor.py:449`, `bin/disjuntor.py:912`, `bin/disjuntor.py:1451`, `bin/hook_stop_fila1.py:1184`, `bin/pre-push.sh:200`)
-
-A identificação desta cópia com o HASH informado não pôde ser confirmada por Git: ela não contém `.git`. **[não verificado]** Nos casos abaixo, separo contraexemplo dedutível do código de ocorrência em produção; a sonda fornecida não contém decisões dos hooks suficientes para demonstrar doze ocorrências reais. **[não verificado]**
-
-Para evitar repetir proprietários em cada item, este é o mapa compartilhado de escrita e leitura:
-
-| Estado/campos | Quem escreve | Quem lê |
-|---|---|---|
-| `disjuntor_estado.json` | Escrita física por `_com_estado`, sob flock e substituição de temporário. Ausente começa como `{}`; ilegível levanta. (`bin/disjuntor.py:237`, `bin/disjuntor.py:262`, `bin/disjuntor.py:274`) | `_com_estado` e `ler_estado`; decisões B1/B3/B4 e painel. (`bin/disjuntor.py:260`, `bin/disjuntor.py:291`, `bin/disjuntor.py:1626`) |
-| `b3[obra]` | `decide_b3`: `reprovados`, `codex`, `disparado`, fotografia/instante do disparo, `liberado`, `consumidas`; rearme altera `rearmado` e limpa listas correntes. Não existe `voltas` nesses fluxos. (`bin/disjuntor.py:713`, `bin/disjuntor.py:891`, `bin/disjuntor.py:936`, `bin/disjuntor.py:1018`) | A mesma decisão, chamada pelas portas B3; painel lê liberações pela trilha. (`bin/disjuntor.py:980`, `bin/disjuntor.py:1042`, `bin/disjuntor.py:1574`) |
-| `b3_sem_obra` | `decide_b3` acrescenta IDs dos verificadores finais sem obra encontrados posteriormente nos transcripts. (`bin/disjuntor.py:892`) | Painel conta o comprimento acumulado, sem janela temporal. (`bin/disjuntor.py:1624`) |
-| `b1[id].{checado,disparado,motivo}` | `b1_do_agente`, via `_com_estado`. (`bin/disjuntor.py:481`, `bin/disjuntor.py:486`) | Próximo PreToolUse do agente e Stop, neste último apenas para disparos já gravados. (`bin/disjuntor.py:476`, `bin/hook_stop_fila1.py:1054`) |
-| `b4.negou_desde`, `b4_para.desde` | PreToolUse/B4 Stop, via `_com_estado`. (`bin/disjuntor.py:1465`, `bin/disjuntor.py:1215`) | Transições B4; não há sequência persistida de Stops com cota desconhecida. (`bin/disjuntor.py:1206`, `bin/disjuntor.py:1461`) |
-| `estado_contadores.json` | **Nenhum escritor atual no gerador contratado**: ele termina gravando o Markdown em `dst`. (`bin/gerar_estado.py:376`) | **Nenhum leitor atual no Stop contratado**: o fluxo não consulta esse sidecar. (`bin/hook_stop_fila1.py:1184`, `bin/hook_stop_fila1.py:1300`) |
-| `triagem.log`: hora, obra, volta, veredito | CLI `--triagem` → `_triagem_sob_trava`, sob a trava do estado; atualiza também `b3_triagem_linhas`. (`bin/disjuntor.py:804`, `bin/disjuntor.py:812`, `bin/disjuntor.py:815`) | `_triagens`, consumido por decisão, triagem e rearme; `_procedentes` seleciona as voltas procedentes. (`bin/disjuntor.py:823`, `bin/disjuntor.py:857`, `bin/disjuntor.py:1007`) |
-| `<resposta>.id`: obra, papel, hash, pid, fim, sha | Wrapper remove o anterior e grava outro somente com rc 0 e resposta desta chamada. Reutilizar o caminho substitui o histórico anterior. (`bin/codex_pergunta.sh:171`, `bin/codex_pergunta.sh:198`) | `_le_id` durante triagem; valida campos e SHA da resposta. Não há hoje semeadura geral desses arquivos. (`bin/disjuntor.py:753`, `bin/disjuntor.py:795`, `bin/disjuntor.py:800`) |
-| `cota.json` | Statusline grava percentual/reset, hora, contexto e session_id; sem os dois números válidos não grava. (`bin/statusline_cota.py:45`, `bin/statusline_cota.py:51`) | `ler_cota` decide por percentual/reset; B4 e painel o chamam. Hora/session_id não participam da validade. (`bin/disjuntor.py:1069`, `bin/disjuntor.py:1111`, `bin/disjuntor.py:1619`) |
-| Transcripts/meta de subagent | O leitor atribui a escrita ao harness; implementação desse escritor fora da cópia. (`bin/disjuntor.py:336`, `bin/disjuntor.py:369`) **[não verificado]** | B1 lê meta, tokens, cópias citadas e mtimes; B3 lê tipo, prompt e Handback; painel lê cache e modelo. (`bin/disjuntor.py:415`, `bin/disjuntor.py:449`, `bin/disjuntor.py:546`, `bin/disjuntor.py:742`, `bin/disjuntor.py:1512`, `bin/disjuntor.py:1631`) |
-
-Nas fichas, **C/E/F/M/D** significam lacunas em quem chama / quem espera / falha-limite / medida / quem desliga.
-
-1. **Teto de seis voltas por obra**
-
-   **(a) Sítio:** `decide_b3` é o ponto comum correto, mas hoje mede reprovações finais e PROCEDENTES Codex, não toda abertura de Agent ou chamada de verificador. Construtor não consulta B3. O Stop continua sendo chamador da decisão, embora a v2 o enumere apenas nos itens 6/12. (`bin/disjuntor.py:878`, `bin/disjuntor.py:912`, `bin/disjuntor.py:1454`, `bin/hook_stop_fila1.py:1048`)
-
-   **(b) Estado:** usa B3, transcripts e triagem do mapa; `b3[obra].voltas` e sua semeadura ainda não têm escritor/leitor implementados. O `.id` existente só nasce ao término bem-sucedido, depois da autorização. (`bin/disjuntor.py:891`, `bin/disjuntor.py:936`, `bin/codex_pergunta.sh:198`)
-
-   **(c) Contraexemplo estático:** sete construtores da mesma obra podem passar quando B4 permite: a porta não incrementa nem consulta teto de voltas. Sete chamadas Codex sem PROCEDENTES suficientes também não atingem o B3 atual. Ocorrência real, inclusive a contagem 9 de GRADE-FOLGA-JUIZ: **[não verificado]**. (`bin/disjuntor.py:1451`, `bin/disjuntor.py:1460`, `bin/disjuntor.py:912`)
-
-   **(d) Lacunas:** **C:** consulta da decisão versus registro de abertura; **E:** se N reabre para total absoluto ou concede N adicionais; **F:** identidade/idempotência, soma das fontes, chamadas falhadas e reserva de voo; **M:** a semente não pode presumir `.id` imutável; **D:** as CLIs reabre/redesenha não existem no despacho atual. Locks por resposta e sidecar posterior não reservam uma volta entre respostas distintas. (`bin/codex_pergunta.sh:162`, `bin/codex_pergunta.sh:171`, `bin/codex_pergunta.sh:198`, `bin/disjuntor.py:1699`)
-
-2. **Segundo ERRO-BOBO vira DESENHO**
-
-   **(a) Sítio:** `linhas_libera_b3` reconhece a linha; `decide_b3` a consome. O contrato acerta os sítios, mas o reconhecedor não consulta histórico por tipo. (`bin/disjuntor.py:626`, `bin/disjuntor.py:650`, `bin/disjuntor.py:930`)
-
-   **(b) Estado:** `consumidas` guarda SHA da linha; `liberado` recebe reprovações/triagens anteriores. O tipo aparece no anúncio da trilha, sem acompanhar cada entrada de `consumidas`. (`bin/disjuntor.py:936`, `bin/disjuntor.py:939`, `bin/disjuntor.py:940`)
-
-   **(c) Contraexemplo estático:** ERRO-BOBO A libera; nova reprovação dispara; ERRO-BOBO B, diferente, posterior e fora da fotografia, libera novamente. Não há teste de “segundo por obra” nessa transição. Ocorrência real: **[não verificado]**. (`bin/disjuntor.py:930`, `bin/disjuntor.py:932`, `bin/disjuntor.py:938`)
-
-   **(d) Lacunas:** **C:** o reconhecedor sozinho não possui o histórico; **E:** esclarecer DESENHO automático versus liberação exclusiva de Ronald; **F:** migração dos SHAs antigos sem tipo; **M:** painel de liberações em 24 h não equivale ao histórico vitalício da obra; **D:** hoje uma linha válida do Code libera, enquanto a guarda reserva apenas `--rearma-b3`. (`bin/disjuntor.py:626`, `bin/disjuntor.py:939`, `bin/disjuntor.py:1552`, `bin/disjuntor.py:1568`, `bin/disjuntor.py:162`)
-
-3. **Opus final com PROCEDENTE sem commit de cura** [nao verificado]
-
-   **(a) Sítio:** `_procedentes` identifica os PROCEDENTES corretamente, mas não julga cura, cópia ou HEAD. A porta final só pergunta ao B3 atual. (`bin/disjuntor.py:857`, `bin/disjuntor.py:1457`)
-
-   **(b) Estado:** `.id` contém hash completo; a triagem transforma a identidade em `hash12@pid@fim@sha12`. Seu log não preserva caminho da cópia nem vínculo achado→cura. (`bin/codex_pergunta.sh:199`, `bin/disjuntor.py:802`, `bin/disjuntor.py:813`)
-
-   **(c) Contraexemplo estático atual:** um ou dois PROCEDENTES, sem cura, ainda permitem outro final: o limiar Codex é três. O teste atual exige passagem com dois. (`bin/disjuntor.py:77`, `bin/disjuntor.py:912`, `bin/tests/test_disjuntor.sh:1153`) **Contraexemplo do critério contratado:** HEAD diferente pode ser commit alheio ao achado; desigualdade de hash não demonstra cura. Ocorrência real: **[não verificado]**.
-
-   **(d) Lacunas:** **C:** qual cópia é autoridade; **E:** quais PROCEDENTES permanecem pendentes; **F:** posterioridade/ancestralidade e diferença entre mudança e cura; **M:** prova com commit diferente que não cura; **D:** alcance de rearme/DESENHO sobre esse impedimento. Hoje o rearme retira todas as triagens anteriores da contagem corrente. (`bin/disjuntor.py:802`, `bin/disjuntor.py:1018`)
-
-4. **Verificador final sem obra reconhecida**
-
-   **(a) Sítio:** `_obra_de` é o reconhecedor correto; a porta atual usa ausência de obra para pular a negativa. O wrapper já exige `CODEX_OBRA`, mas somente não vazio. (`bin/disjuntor.py:504`, `bin/disjuntor.py:1457`, `bin/codex_pergunta.sh:45`)
-
-   **(b) Estado:** `b3_sem_obra` é preenchido depois, lendo transcripts de verificadores finais; o painel publica total acumulado, sem timestamps para 24 h. (`bin/disjuntor.py:736`, `bin/disjuntor.py:892`, `bin/disjuntor.py:1624`)
-
-   **(c) Contraexemplo estático:** “LEITURA FINAL antes do pouso, sem o nome dela” passa se B4 permitir. Esse prompt existe no teste, que verifica apenas a contagem posterior. Ocorrência real: **[não verificado]**. (`bin/disjuntor.py:1457`, `bin/tests/test_disjuntor.sh:427`)
-
-   **(d) Lacunas:** **C:** universo continua `subagent_type=verificador` mais final ou passa a incluir outros tipos/modelos; **E:** reconhecimento do rótulo não prova leitura da obra; **F:** primeiro ID reconhecido pode ser de outra obra; **M:** abertura negada versus contagem posterior e janela 24 h; **D:** aplicação da chave a essa nova negativa. O reconhecedor atual toma a primeira ocorrência válida. (`bin/disjuntor.py:94`, `bin/disjuntor.py:504`, `bin/disjuntor.py:1454`, `bin/disjuntor.py:1487`)
-
-5. **B1 com job próprio em fundo e nenhuma escrita por 15 min**
-
-   **(a) Sítio:** `medir_b1` é correto. “PreToolUse Agent/Bash” descreve estreitamente o chamador: o matcher é geral, e B1 age nas ferramentas do agente com `agent_id`, exceto Handback. Stop apenas consulta disparos persistidos. (`.claude/settings.json:64`, `bin/disjuntor.py:1435`, `bin/hook_stop_fila1.py:1054`)
-
-   **(b) Estado:** B1 lê meta/transcript/cópias citadas/mtimes; escreve os campos B1 do mapa. Não interpreta lançamento e conclusão de Bash em fundo. (`bin/disjuntor.py:415`, `bin/disjuntor.py:425`, `bin/disjuntor.py:428`, `bin/disjuntor.py:481`)
-
-   **(c) Contraexemplo estático:** tokens zero causam não-disparo antes de verificar arquivos, mesmo havendo job em fundo. (`bin/disjuntor.py:452`) A sonda das 17 esperas não prova esse caso: não fornece mtimes nem decisões do hook. B1 exclui `cache_read`, mas os retornos informados também têm tokens das categorias que ele soma; portanto “esperou três minutos” não demonstra ausência de tokens para B1. Ocorrência real de liberação/negação: **[não verificado]**. (`bin/disjuntor.py:449`)
-
-   **(d) Lacunas:** **C:** sem próxima ferramenta não há nova medição; **E:** negar ferramenta não encerra o job; **F:** ownership por caminho citado, isenções por tipo e fontes ilegíveis; **M:** job sem tokens, término do job e arquivos escritos por terceiro; **D:** chave hoje basta existir, sem RELATO obrigatório. Meta/cópia ilegível hoje não dispara B1. (`bin/disjuntor.py:1435`, `bin/disjuntor.py:1438`, `bin/disjuntor.py:418`, `bin/disjuntor.py:425`, `bin/disjuntor.py:457`, `bin/disjuntor.py:146`)
-
-6. **Contador fora em duas gerações consecutivas**
-
-   **(a) Sítio:** nenhum mecanismo atual. O contrato nomeia corretamente o futuro produtor `gerar_estado` e leitor Stop, mas o produtor atual só grava Markdown. (`bin/gerar_estado.py:376`, `bin/hook_stop_fila1.py:1184`)
-
-   **(b) Estado:** sidecar e histórico de gerações não têm proprietário implementado. Os esperados atuais são heterogêneos: prosa de raias/interrompidas, mapa do carimbo do fio e esperado ao fim do programa dos leitores. (`bin/gerar_estado.py:222`, `bin/gerar_estado.py:240`, `bin/fio_estado.py:123`, `bin/leitor_dia_estado.py:46`)
-
-   **(c) Contraexemplo estático:** PAREI ou ESPERANDO com prova podem liberar o Stop sem qualquer consulta a contador fora. Os valores dos “≥4 hoje” não vieram discriminados na sonda. Ocorrência real dessa liberação: **[não verificado]**. (`bin/hook_stop_fila1.py:1226`, `bin/hook_stop_fila1.py:1231`)
-
-   **(d) Lacunas:** **C:** quando uma publicação está concluída e o que ocorre se o gerador falha; **E:** reconhecimento de cada FORA e validade da justificativa; **F:** geração repetida, saltos, sidecar velho, reinício, contador desaparecido e “sem esperado”; **M:** duas gerações distintas, atualização parcial e comparação estruturada; **D:** precedência da chave e da linha de desligamento. Hoje o gerador escreve o destino diretamente e a chave só testa existência. (`bin/gerar_estado.py:376`, `bin/disjuntor.py:146`)
-
-7. **Raias velhas, tar e preservação de commits não pousados** [nao verificado]
-
-   **(a) Sítio:** `raias_estado::ler` mede; `gerar_estado` publica. **Nenhum sítio de arquivamento/remoção** nesses fluxos. O contrato nomeia a publicação, mas não o executor da limpeza. (`bin/raias_estado.py:89`, `bin/raias_estado.py:125`, `bin/gerar_estado.py:215`)
-
-   **(b) Estado:** `raia_agente.sh` escreve declarações em `logs/raias/*.agente`; `raias_estado` lê esses campos e Git; o gerador lê seu resultado. (`bin/raia_agente.sh:54`, `bin/raia_agente.sh:66`, `bin/raias_estado.py:62`, `bin/gerar_estado.py:216`)
-
-   **(c) Contraexemplos do dado:** `tmp-ui`, com dois patches pendentes e sem worktree, fica fora do universo Git enumerado; entradas B sob `.claude/worktrees` são excluídas; `wt-comboio`, `ahead=1/plus=0`, pode ser contado velho apesar de patch já pousado. Esses registros são da sonda, sem reprodução no HEAD: **[não verificado]**. O código exclui `.claude/worktrees` e mede `rev-list`, não equivalência por `cherry`. (`bin/raias_estado.py:85`, `bin/raias_estado.py:96`, `bin/raias_estado.py:101`, `bin/raias_estado.py:123`)
-
-   **(d) Lacunas:** **C:** executor e gatilho; **E:** destino da lista ao Ronald; **F:** definição de velha, detached, A* suja, C em uso e sucesso verificável do tar; **M:** universo completo versus contador atual; **D:** chave/reversão do instrumento não restaura worktree já removida. A medição atual define velha por último commit à frente há mais de seis horas. (`bin/raias_estado.py:39`, `bin/raias_estado.py:103`, `bin/raias_estado.py:123`) Política de restauração: **[não verificado]**.
-
-8. **Modelo explícito e papel do Agent**
-
-   **(a) Sítio:** nenhum gate atual; a porta Agent lê tipo/prompt e consulta B3/B4. `model` e `description` não são critérios de autorização ali. (`bin/disjuntor.py:1451`, `bin/disjuntor.py:1460`)
-
-   **(b) Estado:** o painel lê modelo do primeiro `api-request` e tipo da meta, depois do lançamento; conta agentes por modelo/tipo. Não calcula custo por modelo em 24 h. (`bin/disjuntor.py:1631`, `bin/disjuntor.py:1643`, `bin/disjuntor.py:1647`)
-
-   **(c) Contraexemplo estático:** Agent sem `model`, ou opus descrito como contagem, passa quando B1/B3/B4 permitem. Os fixtures de verificador já omitem `model`. Ocorrência real: **[não verificado]**. (`bin/disjuntor.py:1451`, `bin/tests/test_disjuntor.sh:322`)
-
-   **(d) Lacunas:** **C:** campo autoritativo e sintaxe dos papéis; **E:** classificação de espera de suite; **F:** aliases, modelos desconhecidos e descrições com múltiplos papéis; **M:** custo precisa de tokens/preço e janela, além da contagem existente; **D:** alcance da chave sobre a nova porta. O custo aceito “mal rotulado custa uma volta” exige decisão conjunta com item 1: negar antes de registrar custa zero; registrar sem identidade pode cobrar repetição. (`bin/disjuntor.py:1451`, `bin/disjuntor.py:1631`) Regra dessa cobrança: **[não verificado]**.
-
-9. **Opus final somente com suite inteira verde da árvore** [nao verificado]
-
-   **(a) Sítio:** nenhum gate na abertura do Agent. A regra textual existe; o ramo não lê certificado de suite. (`CLAUDE.md:557`, `bin/disjuntor.py:1454`, `bin/disjuntor.py:1460`)
-
-   **(b) Estado:** há prova adjacente: `regua.sh` escreve `.regua_stamp` com árvore/status/hora; pre-push lê. O contrato não estabelece se esse é o certificado do item 9, nem seu vínculo com a cópia da obra. (`bin/regua.sh:196`, `bin/pre-push.sh:53`, `bin/pre-push.sh:66`) Vínculo contratado: **[não verificado]**.
-
-   **(c) Contraexemplo estático:** final de obra livre pode abrir sem suite registrada. Além disso, o atalho da própria régua compara somente impressão de Python/HTML do app e status: mudança só em `bin/` pode retornar “JA VERDE” sem executar os selos novos. Ocorrência real: **[não verificado]**. (`bin/disjuntor.py:1457`, `bin/regua.sh:33`, `bin/regua.sh:86`, `bin/regua.sh:93`, `bin/regua.sh:138`)
-
-   **(d) Lacunas:** **C:** produtor autorizado do certificado; **E:** definição de inteira; **F:** hash de commit versus árvore, sujeira e alteração durante execução; **M:** prova parcial nunca valer como inteira — a régua já distingue `--only`; **D:** exceção/reabertura e chave. Sem produtor acordado, o gate negaria todo final sem certificado. (`bin/arvore_hash.sh:4`, `bin/regua.sh:181`, `bin/disjuntor.py:1487`) Comportamento do novo gate: **[não verificado]**.
-
-10. **Instrumento commitado exige contrato no push** [nao verificado]
-
-    **(a) Sítio:** nenhum gate atual; `bin/pre-push.sh` é o encaixe correto. O instalador gera wrapper em `.git/hooks/pre-push`; instalação efetiva no host: **[não verificado]**. (`bin/pre-push.sh:33`, `bin/pre-push.sh:200`, `bin/hooks.sh:26`, `bin/hooks.sh:51`)
-
-    **(b) Estado:** falta escritor/leitor do vínculo instrumento→obra→contrato. O pre-push já resolve `PUSH_SHA`, que pode diferir do HEAD; conferir contrato apenas no disco certificaria outra árvore. (`bin/pre-push.sh:33`, `bin/pre-push.sh:37`, `bin/pre-push.sh:39`)
-
-    **(c) Contraexemplo estático:** instrumento sem contrato pode atingir “push liberado” se os demais checks passam. `SKIP_TESTS=1` libera antes de todos os gates. Push concreto dessa classe: **[não verificado]**. (`bin/pre-push.sh:5`, `bin/pre-push.sh:200`)
-
-    **(d) Lacunas:** **C:** classificação de instrumento/hook/cron/selo e alcance do push; **E:** relação entre múltiplas obras e contratos substituídos; **F:** existência versus contrato efetivamente commitado — `logs/` é ignorado; **M:** selo obrigatório em cada push, fora do arsenal pulável; **D:** relação de Ronald/chave/reversão com `SKIP_TESTS`. (`.gitignore:53`, `bin/pre-push.sh:14`, `bin/pre-push.sh:66`, `bin/pre-push.sh:159`, `bin/pre-push.sh:5`)
-
-11. **Sétimo agente vivo negado**
-
-    **(a) Sítio:** nenhum teto Agent atual. `agentes_sem_entrega` reconhece agentes assíncronos lançados sem notificação final; a porta Agent não usa esse leitor. (`bin/disjuntor.py:366`, `bin/disjuntor.py:376`, `bin/disjuntor.py:1451`)
-
-    **(b) Estado:** o helper lê o transcript principal e deduplica IDs; não reserva slots nem persiste registro de todos os vivos. O teto de slots do wrapper é de processos Codex, com `CODEX_TETO` configurável, outra medida. (`bin/disjuntor.py:376`, `bin/disjuntor.py:379`, `bin/codex_pergunta.sh:47`, `bin/codex_pergunta.sh:143`)
-
-    **(c) Contraexemplo estático:** sete Agents podem passar se os outros disjuntores permitirem; não há consulta à quantidade de vivos nessa porta. Ocorrência real: **[não verificado]**. (`bin/disjuntor.py:1451`, `bin/disjuntor.py:1475`)
-
-    **(d) Lacunas:** **C:** sessão, host ou árvore de agentes; **E:** fila/recusa e liberação da vaga; **F:** síncronos, filhos, falha de lançamento e notificação perdida; **M:** disputa simultânea pela sexta vag
-
-[truncado em 20000 de 24510 caracteres]
-
-_1329 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1333 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
