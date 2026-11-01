@@ -5682,3 +5682,7 @@ LEI-AKITA: origem=ponto/motor_calculo_v2.py::minutos_noturnos_dos_intervalos (av
 - falta antes do opus final: suite inteira (pid 1108071, logs/grade_juiz/v10/suite.log), amend so da linha LEI-AKITA, ensaio sombra sobre a base nova.
 - 02:07 amend so da linha LEI-AKITA: 16298e59 -> 017d2884, tree 51654eb4 IGUAL (a suite em curso certifica a mesma arvore). Ensaio sombra v10 (A=main 40988459, C=copia) encadeado ao rc= da suite: logs/grade_juiz/v10/ensaio/run.sh -> run.log.
 - 02:17 suite GRADE v10 (arvore 51654eb4): OK (skipped=42, expected failures=25), Ran 13213, rc=0 (logs/grade_juiz/v10/suite.log). Ensaio sombra fase A iniciado 02:17:33.
+
+### 01/11 02:4x CONTENCAO-QUE-MORDE v2 P1 -- construtor devolveu, opus final aberto
+- copia /home/ronald/wt-contencao-v2-002530 @589f00d4 (base e0bdbc8e), instrumento. Codex 3 voltas (13+4 procedentes curados; v3 bloqueia com 1 procedente curado em 589f00d4 sem 4a volta -> CODEX 5(d) sobe ao opus). Selos test_disjuntor/test_contrato_do_push/lei_akita/juiz_novo/lei_protege rc 0; logs logs/contencao/v2/p1/.
+- PERGUNTA DE DESENHO candidata (B): estado ausente = {} perde reservas e deixa 7o sincrono passar o teto 6. O opus final decide se bloqueia ou fila.
