@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 06:50:15.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (115.8 MB). Acoes na janela: **773**.
+**Medido em 01/11/2026 06:55:44.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (115.8 MB). Acoes na janela: **764**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -774,12 +774,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:57:51 | Bash | Find obra ID and verify cited sites in main | `cd /home/ronald/saas-hasner; grep -n "^\| GRADE" app/docs/BACKLOG.md \| cut -c1-160; sed -n 158,166p app/ponto/precedencia.py; sed -n 59,70p app/ponto/services/declarar_dia.py; grep -n "DESENHO \\|ERRO-BOBO" app/docs/RELATO.md \| head` |
 | 18:57:37 | Bash | Read B3 rules | `cd /home/ronald/saas-hasner; sed -n 8,30p bin/disjuntor.py; sed -n 493,535p bin/disjuntor.py` |
 | 18:57:34 | Bash | Save GRADE opus report; check disjuntor B3 | `cd /home/ronald/saas-hasner; mkdir -p logs/grade_folga/v5/opus; cat > logs/grade_folga/v5/opus/final.txt <<'EOF' OPUS FINAL GRADE-v5 sobre 391b74dc (31/10 19:0x): REPROVADO 1 pre-req: cartorio.py:166-180 exige ensaio --apply na sombra ANTES do pouso (dias rejulgados, dias que movem minuto, FORA-DO-HORIZONTE 0); so existe ensaio_v4 (forcar=True, arvore pre-836c57b7, FORA=8, sem minuto/FM). L-113 (L ...` |
-| 18:54:21 | Bash | Refresh ESPERANDO to live trava holder | `cd /home/ronald/saas-hasner; sed -i "3s#^ESPERANDO: .*#ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=2592520#" app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md` |
-| 18:54:15 | Bash | Identify live trava holder | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; for p in $(pgrep -f bin/trava_teste.sh); do echo "$p $(ps -p $p -o etime=,args= \| cut -c1-150)"; done` |
-| 18:54:11 | Bash | See why hook blocks | `cd /home/ronald/saas-hasner; tail -4 logs/hook_stop_fila1.log \| cut -c1-400; ps -p 1522673 -o pid=,args= \| cut -c1-120; pgrep -f bin/trava_teste.sh` |
-| 18:54:06 | Bash | Read ESPERANDO proof logic | `cd /home/ronald/saas-hasner; sed -n 646,700p bin/hook_stop_fila1.py; tail -3 logs/hook*/pisos.log 2>/dev/null \| cut -c1-300; ls logs \| grep -i hook` |
-| 18:54:03 | Bash | Check how hook parses ESPERANDO | `cd /home/ronald/saas-hasner; grep -n "ESPERANDO" bin/hook_stop_fila1.py \| head -20; sed -n 1,4p app/docs/RELATO.md` |
-| 18:53:47 | Bash | Dispatch Codex census for BUG-ENC | `cd /home/ronald/saas-hasner; mkdir -p logs/bug_enc/pv; cat > logs/bug_enc/pv/c1.q <<'EOF' Arvore: a copia da obra E4-7 (hash informado). Perguntas de LEITURA, sem hipotese: 1. Em ponto/turnos.py, liste todas as funcoes que recebem um parametro `celulas` (ou equivalente) e, para cada uma, qual FORMA de chave ela espera (data, (pk,data), outra) e de onde isso se infere (arquivo:linha). Liste TODOS o ...` |
-| 18:53:29 | Bash | Read O261 row and backlog top | `cd /home/ronald/saas-hasner; grep -n "^\| O261-E-CELULA-20-UM-DONO" app/docs/BACKLOG.md \| cut -c1-2500; sed -n 1,30p app/docs/BACKLOG.md \| cut -c1-400` |
-| 18:53:25 | Bash | Read O261 backlog row | `cd /home/ronald/saas-hasner; grep -n "O261-E-CELULA-20-UM-DONO\\|CALENDARIO-HOJE" app/docs/BACKLOG.md \| cut -c1-900 \| head -6` |
-| 18:53:16 | Bash | Check who holds trava and progress | `cd /home/ronald/saas-hasner; date +%H:%M; tail -2 logs/push/pushja_1837.log; tail -c 200 logs/e4_7iii/v4/full.log; echo; ps -o pid,args -p 1522673 \| tail -1 \| cut -c1-200` |
