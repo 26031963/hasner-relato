@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 05:40:44.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (115.8 MB). Acoes na janela: **894**.
+**Medido em 01/11/2026 05:45:58.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (115.8 MB). Acoes na janela: **892**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -902,5 +902,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:47:10 | SendMessage |  | `-` |
 | 17:46:55 | Bash | Cancel queued E4-7 suite; register prompt, backlog, RELATO | `cd /home/ronald/saas-hasner && P=3537765; PP=$(ps -o ppid= -p $P \| tr -d ' '); ps -o pid,args= -p $PP \| cut -c1-120; kill $P $PP 2>/dev/null; /usr/bin/sleep 2; ps -p $P -o pid= \|\| echo morto; mv logs/e4_7iii/v2/suite_inteira.log logs/e4_7iii/v2/suite_inteira_cancelada_lote_d4.log cat >> app/docs/PROMPTS.md <<'EOF' \| 31/10 17:4x \| E4-7-LOTE-D4 \| custo por linha encerrada do D4 nao e lei nova ...` |
 | 17:46:41 | Bash | Check trava state, E4-7 suite status, selo S4 line | `cd /home/ronald/saas-hasner && date +%H:%M; bin/trava_teste.sh --quem; for p in $(pgrep -f 'bin/trava_teste.sh'); do echo "$p $(tr '\0' ' ' < /proc/$p/cmdline 2>/dev/null \| grep -o 'wt-[a-z0-9-]*' \| head -1)"; done; docker ps --format '{{.ID}} {{.RunningFor}} {{.Mounts}}' \| grep -v saas_ \| head; wc -c logs/e4_7iii/v2/suite_inteira.log; sed -n 262p app/core/tests/test_selo_performance.py; tail  ...` |
-| 17:44:22 | TaskStop |  | `-` |
-| 17:44:19 | Bash | Launch E4-7 full suite and log it | `cd /home/ronald/wt-e4-7v2-171100 && git status --porcelain \| head -3; git log --oneline -1; cd /home/ronald/saas-hasner; ( bin/suite.sh --dir /home/ronald/wt-e4-7v2-171100 --espera 14400 > logs/e4_7iii/v2/suite_inteira.log 2>&1; echo rc=$? >> logs/e4_7iii/v2/suite_inteira.log ) >/dev/null 2>&1 & echo "- 17:5x E4-7 v2 Codex verificador v2 (973753a2): 0 procedentes, 3 descartados (D1 turno de 61 h  ...` |
