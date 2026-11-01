@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 15:40:15.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (134.2 MB). Acoes na janela: **630**.
+**Medido em 01/11/2026 15:45:53.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (134.3 MB). Acoes na janela: **632**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:43:21 | Bash | Repoint ESPERANDO to F2 suite v2 | `cd /home/ronald/saas-hasner && sed -i 's#^ESPERANDO: trava_teste.sh \| pid=4156130 \| arquivo=logs/o261e/f2/suite_completa_v1.log#ESPERANDO: trava_teste.sh \| pid=1367783 \| arquivo=logs/o261e/f2/suite_completa_v2.log#' app/docs/RELATO.md; grep -n '^ESPERANDO' app/docs/RELATO.md; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
+| 15:43:17 | Bash | Check F2 suite verdict and builder state | `cd /home/ronald/saas-hasner && date +%H:%M; kill -0 4156130 2>/dev/null && echo suite-viva; grep -E '^(OK\|FAILED)($\| \()' logs/o261e/f2/suite_completa_v1.log \| tail -1; grep -E '^Ran ' logs/o261e/f2/suite_completa_v1.log \| tail -1; bin/trava_teste.sh --quem; ls -lt logs/o261e/f2/ \| head -6; tail -c 1500 /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/a ...` |
 | 15:33:53 | Bash | Check F2 suite progress and hook proof | `cd /home/ronald/saas-hasner && kill -0 4156130 2>/dev/null && echo suite-viva; grep -E '^(OK\|FAILED)($\| \()' logs/o261e/f2/suite_completa_v1.log \| tail -1; grep -E '^Ran ' logs/o261e/f2/suite_completa_v1.log \| tail -1; ls -l logs/o261e/f2/suite_completa_v1.log; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
 | 15:33:49 | Bash | Record ATA09 tree explanation in RELATO and BACKLOG | `H=$(date +%H:%M) && python3 - "$H" <<'EOF' import sys H=sys.argv[1] p='docs/RELATO.md'; s=open(p).read() anc='Sonda disparada 2x pelo agente (out restaurado do log completo, 1 FIM).' assert s.count(anc)==1 s=s.replace(anc, anc+'\n- %s ATA09-ARVORE: o controle (logs/cobparc_controle.out) rodou na copia /home/ronald/wt-cobparc-controle-131141, base 9483bbce (10:00), ANTES do pouso GRADE-FOLGA-JUIZ 6 ...` |
 | 15:33:39 | Bash | Locate RELATO and BACKLOG anchors | `grep -n 'ATA09-DONO FIM' docs/RELATO.md \| head -3; grep -n 'COBPARC-ATA-DEFASADA-09' docs/BACKLOG.md \| head -3` |
