@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 31/10/2026 22:55:50.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (104.7 MB). Acoes na janela: **1801**.
+**Medido em 31/10/2026 23:01:09.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (104.7 MB). Acoes na janela: **1799**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1809,5 +1809,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 11:02:28 | Bash |  | `cd /home/ronald/saas-hasner && grep -n "sonda" bin/codex_pergunta.sh \| head -15; sed -n 1,30p bin/sonda_leitura.sh` |
 | 11:02:26 | Bash |  | `cd /home/ronald/saas-hasner && sed -n 1,40p bin/sonda_leitura.sh \| grep -n "uso\\|Uso\\|usage\\|\$1\\|\$2" \| head` |
 | 11:02:21 | Bash |  | `cd /home/ronald/wt-e3-status-0712 && cat app/escala/migrations/0044_*.py; grep -n "status_dia" app/escala/models.py \| head; cat /home/ronald/saas-hasner/logs/e3status/sonda_tamanho_celuladia.py \| head -30` |
-| 10:58:28 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/BACKLOG.md' s=open(p,encoding='utf-8').read() old="meta < 8k tokens; instrumento, pouso proprio \| aberta \|" assert s.count(old)==1 s=s.replace(old,"meta < 8k tokens; instrumento, pouso proprio \| copia wt-claudemd-1049 0f23c9ce: ~18,8k->18,2k tokens; resto e regra pura (7b 34,6 KB); pergunta (a)/(b) no topo do RELATO 31/10 10:58 \|") o ...` |
-| 10:58:24 | Bash |  | `cd /home/ronald/saas-hasner && date +%H:%M && python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p,encoding='utf-8').read() i=s.index('\n(espera:)'); k=s.index('\n',i+1) q=("\n\n**lei: CLAUDE-MD-ENXUTO meta 8k nao cabe sem mover TEXTO DE REGRA (11:0x).** Construido em copia (wt-claudemd-1049, 0f23c9ce): 17 trechos de historia -> LAPIDES 61-71 (+ adendos 01/03/29/34/35), selo `test_claude_md_regras_pr ...` |

@@ -1,7 +1,90 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 22:44** · publicado em **31/10/2026 22:45** (UTC-3)
+> Ultima resposta processada: **31/10/2026 23:00** · publicado em **31/10/2026 23:01** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 23:00 · sessao 77d1b4ef88aa · O261-E-F1C4-LEN-VIVOS · verificador · origem=Code
+
+**A volta 2 corrige a contagem de sucesso, e o mock morde a regressão indicada.** O incremento agora depende do retorno da porta; a recusa tem contador próprio. (`app/ponto/management/commands/supra_juiz.py:286–290`; `app/ponto/tests/test_lenvivos_retratador_le_a_lavra.py:162–168`)
+
+1) **Quem escreve e quem lê**
+
+- **Escritor das duas chaves:** o command incrementa `CSF_RETRATADO` quando `_retr(...)` retorna verdadeiro e `CSF_RETRATACAO_RECUSADA` no ramo contrário. A porta real retorna `False` em retenção ou reconciliação negada, e `True` após concluir a unidade. (`app/ponto/management/commands/supra_juiz.py:286–290`; `app/chamados/reconciliador.py:520–548`)
+- **Leitor genérico:** o próprio command percorre o `placar` e imprime chave e valor. O cron encaminha stdout/stderr ao log; seu envelope registra duração/exit, sem interpretar essas chaves. (`app/ponto/management/commands/supra_juiz.py:299–300`; `app/config/crons.py:1801–1802`; `bin/cron_run.sh:11–13`)
+- **Leitores nominais encontrados nos testes:** golden exige `CSF_RETRATADO`; lavra sem código proíbe essa chave; teste da recusa proíbe sucesso e exige `CSF_RETRATACAO_RECUSADA`. (`app/ponto/tests/test_lenvivos_retratador_le_a_lavra.py:122,153,167–168`)
+- **Documentos que usam `CSF_RETRATADO`:** condição de medição zero em `app/docs/PROMPTS.md:832,836` e `app/docs/BACKLOG.md:1297`; registro histórico de cinco linhas com valor 1 em `app/docs/BACKLOG.md:1299`; registro histórico de uma linha com valor 1 em `app/docs/RELATO-ARQUIVO.md:17919`. São relatos documentais, não medições atuais verificadas. [não verificado]
+- **A6 não lê nenhuma das duas:** consulta somente `FURO_SEM_COBRANCA` e `COBRANCA_SEM_FURO`. (`app/ponto/management/commands/supra_juiz.py:304–310`)
+
+**Consequência para as medições:** agora “`CSF_RETRATADO=0`” pode coexistir com tentativas recusadas. Portanto, zero sucesso sozinho não demonstra ausência de trabalho residual; os números históricos também não comprovam sucessos sob a semântica corrigida. (`app/ponto/management/commands/supra_juiz.py:286–290`; `app/docs/BACKLOG.md:1299`)
+
+2) **O mock alcança o import e morde? Sim.**
+
+O patch permanece ativo durante `_executa()`. Nesse intervalo, o comando executa `from chamados.reconciliador import retratar as _retr`, capturando o atributo já substituído. A importação local está dentro do laço dos dias, antes do laço dos chamados. (`app/ponto/tests/test_lenvivos_retratador_le_a_lavra.py:162–163`; `app/ponto/management/commands/supra_juiz.py:205,258,260`)
+
+Voltando a `_retr(...); placar['CSF_RETRATADO'] += 1`, falham a proibição de sucesso e a exigência de recusa. O espaço final em `'CSF_RETRATADO '` funciona porque a impressão acrescenta espaços depois da chave. (`app/ponto/tests/test_lenvivos_retratador_le_a_lavra.py:167–168`; `app/ponto/management/commands/supra_juiz.py:300`)
+
+O teste cobre a reação ao retorno `False`; não exercita as causas reais da recusa, pois substitui a porta. Suíte Django completa verde: [não verificado]. (`app/ponto/tests/test_lenvivos_retratador_le_a_lavra.py:162`)
+
+3) **Achados que permanecem e limites novos**
+
+- **Lavra ausente:** runtime preserva o chamado, conta e continua; não aborta. Isso coincide com o teste. Não contesto a interpretação de “PAREI” como condição prévia do construtor, mas a cobertura da medição zero informada não está demonstrada pelos anexos. (`app/ponto/management/commands/supra_juiz.py:247–248`; `app/ponto/tests/test_lenvivos_retratador_le_a_lavra.py:134–140`; cobertura: [não verificado])
+- **A6:** permanece procedente a lacuna observacional; nenhuma chave nova participa do alarme. (`app/ponto/management/commands/supra_juiz.py:305–306`)
+- **Ordem dos crons:** permanece o risco. O executor declara dependência do cartório, porém sua linha é renderizada por horário e executada diretamente, sem espera pelo arquivo do cartório. Ocorrência efetiva em produção: [não verificado]. (`app/config/crons.py:580,1785–1814`; `bin/cron_run.sh:11`)
+- **Limite adicional de cobertura, preexistente:** colaborador sem batidas na janela expandida é pulado **antes** de carregar chamados e lavra. Assim, um vivo desse colaborador não entra na retratação nem em `CSF_SEM_LAVRA`. O contador zero, isoladamente, não constitui censo de todos os vivos. Existência desses casos em produção: [não verificado]. (`app/ponto/management/commands/supra_juiz.py:102–118,165,190,247`)
+- **Derivação paralela remanescente:** o relatório do command continua usando `len(vivos)`; o cartório usa `len(_protestam)`. Essa diferença já não decide a retratação. `emitir_furo_retroativo` também mantém sua classificação com `len(vivos)` para decidir emissão. (`app/ponto/management/commands/supra_juiz.py:223–250`; `app/ponto/services/cartorio.py:1206–1214`; `app/ponto/management/commands/emitir_furo_retroativo.py:99–109,142`)
+
+**No caminho alterado, não identifiquei segundo juiz nem escrita fora da porta:** lê lavra, obtém o código do mapa canônico, aplica as guardas e chama o retratador existente. O selo com mock tem mordida para a regressão solicitada. (`app/ponto/management/commands/supra_juiz.py:49–54,246–290`; `app/chamados/reconciliador.py:546–548`)
+
+A ressalva documental concreta é o `--help`, ainda limitado a `COBRANCA_SEM_FURO`. Já `CLAUDE.md:432` não prova contradição sozinho: mudar o classificador compartilhado ainda pode alterar a lavra pelo cartório e, indiretamente, a retratação. (`app/ponto/management/commands/supra_juiz.py:63`; `app/ponto/services/cartorio.py:1212–1214`; `CLAUDE.md:432`)
+
+## 31/10 22:59 · sessao 220c89f99050 · - · - · origem=Ronald (tmux)
+
+- A correção do retratador está efetiva no código: lê `veredito/protestos` persistidos, exige `cobranca_indevida`, obtém o código do mapa canônico, preserva as guardas de conversa e regeneração e delega a escrita a `chamados.reconciliador.retratar`; só incrementa sucesso se a porta retornar verdadeiro. Não identifiquei escrita direta nem novo julgamento nesse caminho. (`app/ponto/management/commands/supra_juiz.py:165`, `:246`, `:250`, `:258`, `:261`, `:275`, `:286`; `app/escala/models.py:1579`; `app/chamados/reconciliador.py:546`)
+
+- A porta realmente pode recusar: retenção retorna `False`, `ch.reconciliar()` negado retorna `False`, e sucesso retorna `True` depois da unidade atômica. O julgamento de fechamento permanece na autoridade existente do modelo, incluindo premissa e pergunta viva. (`app/chamados/reconciliador.py:520`, `:525`, `:543`; `app/chamados/models.py:615`, `:646`, `:649`)
+
+- **Volta 1, A6: procede.** Só consulta `FURO_SEM_COBRANCA` e `COBRANCA_SEM_FURO`; nenhuma chave nova entra no exit code. Estar fora do aval é interpretação de escopo fornecida pelo usuário, não defeito novo desta alteração. (`app/ponto/management/commands/supra_juiz.py:304`; escopo: [não verificado])
+
+- **Volta 1, cron: risco procede no código.** Existe `depende=('processar_cartorio',)` declarado, mas `linhas()` renderiza horário e execução direta, sem consumir `depende`; o envelope executa imediatamente o comando recebido. A espera por arquivo está no mecanismo distinto dos encadeados. Logo, a declaração não garante que o executor espere a lavra. Ocorrência efetiva em produção: [não verificado]. (`app/config/crons.py:580`, `:1785`, `:1801`, `:1812`; `bin/cron_run.sh:11`; `bin/encadeado.sh:77`)
+
+- **Novo limite identificado, pré-existente:** colaborador sem batidas na janela expandida é pulado antes de carregar chamados e lavra; portanto não entra no executor nem em `CSF_SEM_LAVRA`, mesmo que tenha chamado vivo. Não é estreitamento novo da lista `vivos`, mas significa que o contador não prova ausência de lavra para todos os vivos sem declarar esse denominador. A medição “zero dias” fornecida não revela seu universo; existência de casos omitidos em produção: [não verificado]. (`app/ponto/management/commands/supra_juiz.py:102`, `:110`, `:117`, `:165`, `:190`, `:212`, `:247`)
+
+- **Documentação viva ainda contraditória:** `CLAUDE.md` continua dizendo que mudar `classificar_dia` muda a retratação em produção, e o help do argumento ainda descreve apenas `COBRANCA_SEM_FURO`; o docstring principal corrigido diz que a escrita depende da lavra. (`CLAUDE.md:432`; `app/ponto/management/commands/supra_juiz.py:63`, `:20`, `:246`)
+
+- **Derivação paralela remanescente:** o placar/alarme do command ainda usa `len(vivos)`, enquanto o cartório usa `len(_protestam)`; agora essa divergência não comanda a retratação. `emitir_furo_retroativo` também mantém `len(vivos)` e sua própria chamada ao mesmo classificador, com emissão condicionada a `FURO_SEM_COBRANCA`; é remanescente fora da mudança do retratador, não evidência de um juiz novo introduzido pela volta 2. (`app/ponto/management/commands/supra_juiz.py:223`, `:235`, `:246`; `app/ponto/services/cartorio.py:1206`, `:1212`; `app/ponto/management/commands/emitir_furo_retroativo.py:99`, `:109`, `:142`)
+
+- Ausência de lavra conta e preserva o chamado, sem abortar o command; o teste exige exatamente isso. A leitura do “PAREI” como portão de medição prévia é compatível com esse desenho, mas o código e os anexos não permitem provar que o portão de produção foi satisfeito. (`app/ponto/management/commands/supra_juiz.py:247`; `app/ponto/tests/test_lenvivos_retratador_le_a_lavra.py:134`; medição/portão: [não verificado])
+
+## 31/10 22:59 · sessao e6cac34f08b5 · - · - · origem=Ronald (tmux)
+
+Sim, o teste morde a regressão: força `False`, exige uma chamada, preserva o chamado vivo, proíbe `CSF_RETRATADO ` e exige `CSF_RETRATACAO_RECUSADA` (`app/ponto/tests/test_lenvivos_retratador_le_a_lavra.py:162`, `:164`, `:166`, `:167`, `:168`). A saída imprime espaços depois da chave, portanto a asserção com espaço final encontra um incremento indevido (`app/ponto/management/commands/supra_juiz.py:300`).
+
+O patch alcança `_retr`: a importação local acontece durante `_executa()`, dentro do contexto ativo do patch, e captura o atributo substituído de `chamados.reconciliador` (`app/ponto/management/commands/supra_juiz.py:258`; `app/ponto/tests/test_lenvivos_retratador_le_a_lavra.py:162`, `:163`).
+
+Executei em memória o ramo AST real e um mutante com incremento incondicional: o atual passou nas três verificações equivalentes; o mutante falhou nas duas verificações do placar. Essa demonstração cobre o ramo e a formatação, não a execução Django completa (`app/ponto/management/commands/supra_juiz.py:286`, `:288`, `:290`, `:300`); suíte Django verde: [não verificado].
+
+O teste valida a reação ao contrato `False`; as causas reais ficam substituídas pelo mock (`app/ponto/tests/test_lenvivos_retratador_le_a_lavra.py:162`). A implementação real devolve `False` em retenção ou `reconciliar()` negado e `True` após a unidade, propagados pelo wrapper público (`app/chamados/reconciliador.py:520`, `:523`, `:525`, `:526`, `:543`, `:548`).
+
+## 31/10 22:58 · sessao 602e0d9b8696 · - · - · origem=Ronald (tmux)
+
+Inventário na cópia, incluindo arquivos ocultos:
+
+- **Escreve ambos:** `app/ponto/management/commands/supra_juiz.py:286` testa o retorno da porta; incrementa `CSF_RETRATADO` em `:288` e `CSF_RETRATACAO_RECUSADA` em `:290`.
+- **Lê ambos genericamente:** o próprio command percorre `placar.most_common()` e imprime as chaves/valores (`app/ponto/management/commands/supra_juiz.py:299`, `:300`).
+- **Leitores nominais executáveis encontrados:** testes: golden exige retratado (`app/ponto/tests/test_lenvivos_retratador_le_a_lavra.py:122`); lavra sem código proíbe retratado (`:153`); mock proíbe retratado e exige recusada (`:167`, `:168`). Não localizei parser nominal dessas chaves fora disso; abrangência externa à cópia [não verificado].
+- **A6 não lê nenhuma delas:** a lista `ZERO` contém apenas `FURO_SEM_COBRANCA` e `COBRANCA_SEM_FURO` (`app/ponto/management/commands/supra_juiz.py:305`, `:306`).
+- **Transporte cron:** executor está em `app/config/crons.py:580`; stdout/stderr seguem para log pelo renderizador (`app/config/crons.py:1801`, `:1802`); o envelope registra duração/exit, sem interpretar os contadores (`bin/cron_run.sh:11`, `:13`).
+
+**Docs e medições que consomem `CSF_RETRATADO`:**
+
+- Exigem medição zero como condição para retirar `--executar`: `app/docs/PROMPTS.md:832`, `:836`; `app/docs/BACKLOG.md:1297`.
+- Registram historicamente **cinco linhas de valor 1, não zero**: `app/docs/BACKLOG.md:1299`.
+- Registram historicamente **`CSF_RETRATADO 1`**: `app/docs/RELATO-ARQUIVO.md:17919`.
+- Nenhuma ocorrência documental de `CSF_RETRATACAO_RECUSADA` localizada além da explicação do teste (`app/ponto/tests/test_lenvivos_retratador_le_a_lavra.py:155`).
+
+**Achado documental:** o docstring novo abandonou a classificação do command como decisão de escrita (`app/ponto/management/commands/supra_juiz.py:21`), mas `CLAUDE.md:432` ainda diz que mudar `classificar_dia` muda o retratado em produção; a tabela de cron ainda descreve a retratação pelos códigos (`app/docs/CRONS.md:64`, `:65`). O ramo efetivo agora lê lavra (`app/ponto/management/commands/supra_juiz.py:246`, `:249`, `:250`).
+
+A condição documental “`CSF_RETRATADO` zero” passa a provar somente ausência de retornos verdadeiros, podendo coexistir com recusas; A6 não cobre as recusas (`app/ponto/management/commands/supra_juiz.py:286`, `:290`, `:305`). Quantidades atuais em produção [não verificado].
 
 ## 31/10 22:44 · sessao 36fc57470bf3 · O261-E-F1C4-LEN-VIVOS · verificador · origem=Code
 
@@ -827,97 +910,4 @@ Os testes próximos cobrem situações diferentes: [nao verificado]
 - `test_reconciliar_sem_ancora_visivel.py` só inspeciona o código procurando contador/lista; não monta o cenário. (`app/ponto/tests/test_reconciliar_sem_ancora_visivel.py:11-18`)
 - Em `app/chamados/tests`, o selo do comando verifica os argumentos do cron; o teste de recuperação da data cria célula existente e chama `_cham_dts`, sem exercitar esse julgamento em `handle`. (`app/chamados/tests/test_hx_um_emissor.py:5-9`; `app/chamados/tests/test_c5_emissores.py:39-51`)
 
-## 31/10 21:56 · sessao 3ff5b8f0a0eb · - · - · origem=Ronald (tmux)
-
-Não localizei teste que exercite **`sem_ancora=True` com ausência da chave `(colab, dia)` em `celulas_do_periodo`**. A lacuna está registrada explicitamente como obra aberta em `app/docs/BACKLOG.md:832`: “dia sem ancora e sem celula deixou de ser morto sem caso na bateria”.
-
-Os testes próximos usam **célula existente**: [nao verificado]
-
-- `test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py` simula grade indefinida (`app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:28`–34), mas `_rodar` sempre cria `CelulaDia(trabalha=None, ata=ata)` (`:55`) antes de executar `handle` (`:58`). Os testes cobrem ata de trabalho (`:61`–65), `ata=None` (`:67`–70) e ata de folga (`:72`–74). **“Sem ata” não significa “sem CelulaDia”** (`:55`, `:68`).
-- `test_cobranca_em_dia_indefinido_fica_viva_limbo_cobra` também simula `sem_ancora=True` (`app/ponto/tests/test_a2_marco_morto.py:26`–32), mas cria expressamente `CelulaDia(trabalha=None)` (`:46`). Com `apply=True` (`:50`), verifica que `retratar` nem foi chamado (`:52`) e que o chamado permanece vivo (`:54`–55).
-- `test_plano_declara_sem_ancora` apenas inspeciona o texto do comando e exige `SEM_ANCORA`/`sem_ancora_dias`; não monta um caso com chamado e ausência de célula (`app/ponto/tests/test_reconciliar_sem_ancora_visivel.py:11`–18).
-
-Em `app/chamados/tests`, os casos encontrados ligados ao comando não exercitam esse cenário:
-
-- O teste de `_cham_dts` cria célula com `trabalha=True` e verifica a data recuperada do vínculo do chamado com ela (`app/chamados/tests/test_c5_emissores.py:39`–51).
-- O selo do cron verifica ausência de `--apply`, sem executar o julgamento de dia indefinido (`app/chamados/tests/test_hx_um_emissor.py:5`–9).
-- Os testes das portas chamam auxiliares `_relavrar_orfa` e `_disputa`, não `Command.handle` (`app/chamados/tests/test_porta_chamado_e2.py:62`–72; `app/chamados/tests/test_porta_chamado_e3.py:92`–94).
-
-Há teste de **ausência de célula em outro escopo**: `GateCelulaTest` deixa `d_sem` sem criação correspondente (`app/ponto/tests/test_t31_gate_celula.py:16`–25) e verifica `celula_veta_cobranca(..., d_sem) is None` (`:32`–35). Ele não executa `reconciliar_grade.handle` nem testa `_indef`/`mortos` (`:32`–35).
-
-O comentário dos testes descreve a regra anterior como `sem_ancora -> mortos -> RETRACT_INDEFINIDO` (`app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:4`–7); a correspondência byte a byte com o **pai de `9651ef38`** continua `[nao verificado]`, pois não encontrei histórico Git ou reprodução desse pai na cópia.
-
-## 31/10 21:56 · sessao c686af4f9bc0 · - · - · origem=Ronald (tmux)
-
-Não encontrei a versão histórica nem referência a `9651ef38` na cópia; o conteúdo exato e as linhas do pai de `9651ef38` ficam **[nao verificado]**.
-
-Há duas evidências locais sobre a mudança:
-
-- `app/docs/BACKLOG.md:832`: registra explicitamente **“reconciliar_grade.py:281-282, dia sem ancora e sem celula deixou de ser morto sem caso na bateria”**.
-- `app/ponto/management/commands/reconciliar_grade.py:277`: comentário histórico informa **“Ate aqui `sem_ancora` ia inteiro para `mortos`”**.
-
-Na cópia atual, `_indef` exige célula existente antes de perguntar ao juiz: `app/ponto/management/commands/reconciliar_grade.py:281-282`. Sem chave no mapa, `.get(...)` retorna `None`, o primeiro operando falha e o dia não entra em `_indef`; portanto não entra em `mortos` **por esse caminho** (`app/ponto/management/commands/reconciliar_grade.py:283`).
-
-O teste citado pelo comentário não cobre ausência de célula: `_rodar` sempre cria uma `CelulaDia`, inclusive quando `ata=None` (`app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:55`, `:67-68`).
-
-## 31/10 21:56 · sessao 31b27f047daf · - · - · origem=Ronald (tmux)
-
-Leitores e fluxo do resultado na cópia:
-
-- `RETRACT_INDEFINIDO` incrementa quando todas as datas estão em `mortos` e `_indef` é não vazio, **antes** do veto por `premissa_morta`; portanto pode subir sem gerar `RETRACT`. `RETRACT` e `retracts.append` só acontecem após esse veto. (`app/ponto/management/commands/reconciliar_grade.py:292–304`)
-- Com `--apply`, chama `chamados.reconciliador.retratar`; a mensagem depende de `_indef`. (`app/ponto/management/commands/reconciliar_grade.py:305–316`)
-- O stdout imprime todos os contadores em `PLANO`, o tamanho de `retracts` e até 40 itens da lista. (`app/ponto/management/commands/reconciliar_grade.py:318–325`)
-- O tripwire usa **`len(creates) + len(retracts)`**, não soma diretamente `RETRACT_INDEFINIDO`; imprime também `create`, `retract`, `orfa_dry`, esperado e dono. (`app/ponto/management/commands/reconciliar_grade.py:337–342`)
-- O cron configurado roda às **06:20**, com `--empresa 2,3,4`, sem `--apply`; o log padrão é `reconciliar_grade.log`, com stdout/stderr redirecionados pelo renderizador. (`app/config/crons.py:443`, `app/config/crons.py:32`, `app/config/crons.py:1801–1802`)
-- O leitor do contador é `bin/placar_code.sh`: extrai o último `divergencia_grade_cartorio` do log, exige log modificado hoje e publica `divergencia_grade_x_cartorio`; esse valor não participa do `TOTAL` do Code. (`bin/placar_code.sh:528–532`)
-- O envelope do cron acompanha o **exit code**, não interpreta `RETRACT`/tripwire; registra execução e aciona `cron_quebrado` nas falhas. (`bin/cron_run.sh:11–13`, `bin/cron_run.sh:27–38`)
-- Selos que leem o stdout: `test_reconciliar_grade_sombra` verifica existência e contrato completo do tripwire; `test_f1c4_3_reconciliar_grade_pergunta_ao_juiz` verifica ausência/presença de `RETRACT_INDEFINIDO` e divergência zero. (`app/ponto/tests/test_reconciliar_grade_sombra.py:71–88`, `app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:61–74`)
-- O selo do cron cobra ausência de `--apply`. (`app/chamados/tests/test_hx_um_emissor.py:5–9`)
-
-Execução real do cron, conteúdo de log e valor do contador em produção: `[nao verificado]`.
-
-## 31/10 21:56 · sessao 8dc87397ccfa · - · - · origem=Ronald (tmux)
-
-Leitura concluída sem alterações. Não encontrei `AGENTS.md` no resultado de `rg --files -g AGENTS.md`; instruções externas a esse conjunto [não verificado].
-
-**Chamadores e consumidores de rc/stdout**
-
-| Chamador | Fluxo atual e dependência |
-|---|---|
-| `suite.sh` | Faz `exec env ESTEIRA_QUEM=... bash trava_teste.sh`, herdando stdout/stderr e devolvendo o rc pelo próprio processo: `bin/suite.sh:96`. Não declara obra/volta nesse ponto: `bin/suite.sh:96`. |
-| Régua | Suite escreve em `$LOG`; lê `$?`; só permite 0/1 julgar e devolve outros códigos sem carimbo; juiz lê log+rc: `bin/regua.sh:165`, `bin/regua.sh:170`, `bin/regua.sh:175`, `bin/regua.sh:180`. |
-| Pre-push | Captura stdout/stderr em arquivo; guarda rc verdadeiro; imprime filtro só depois de terminar; devolve `_rc`: `bin/pre-push.sh:142`, `bin/pre-push.sh:145`, `bin/pre-push.sh:146`, `bin/pre-push.sh:157`. Portanto não exige stdout ao vivo nesse trecho. |
-| Vigia da árvore | Captura stdout/stderr em log; lê rc e passa ambos ao juiz nos três runs: `bin/vigia_arvore.sh:83`, `bin/vigia_arvore.sh:86`, `bin/vigia_arvore.sh:99`, `bin/vigia_arvore.sh:113`, `bin/vigia_arvore.sh:132`, `bin/vigia_arvore.sh:137`. |
-| Régua relógio | Pipeline `trava ... 2>&1 | tee ... | grep ...`; captura `PIPESTATUS[0]` e julga log+rc: `bin/regua_relogio.sh:51`, `bin/regua_relogio.sh:56`, `bin/regua_relogio.sh:57`, `bin/regua_relogio.sh:62`. É leitor de fluxo incremental via `tee`/filtro; necessidade operacional de latência específica [não verificado]. |
-| Régua calendário | Cada run escreve log; lê rc; 75 retorna 75; restantes passam pelo juiz: `bin/regua_calendario.sh:46`, `bin/regua_calendario.sh:50`, `bin/regua_calendario.sh:51`, `bin/regua_calendario.sh:56`. |
-| Isolamento | Só preserva 75; para qualquer outro rc decide pelo último `OK` do log: `bin/isolamento.sh:33`, `bin/isolamento.sh:37`, `bin/isolamento.sh:38`. Contraexemplo: log contém `OK`, job morre 143; `_iso_roda` pode devolver 0 e chamador declarar “verdes sem a fatia”: `bin/isolamento.sh:49`, `bin/isolamento.sh:50`. |
-| Placar | `trava ... | sed ... | head -1` dentro de substituição; ignora rc e lê contador; ausente vira `nao_medido`: `bin/placar_code.sh:125`, `bin/placar_code.sh:132`, `bin/placar_code.sh:133`. `head` pode encerrar leitura antes do fim; preservação do job exige relay tolerar consumidor fechado [não verificado quanto à implementação proposta]. |
-| Molde fatia | Chamadas em `bin/molde_fatia/rodar.sh:30` e `bin/molde_fatia/rodar.sh:44`; só distingue 75, depois julga `OK` no arquivo: `bin/molde_fatia/rodar.sh:34`, `bin/molde_fatia/rodar.sh:35`, `bin/molde_fatia/rodar.sh:53`, `bin/molde_fatia/rodar.sh:55`, `bin/molde_fatia/rodar.sh:56`. |
-| Molde autocura | Chamada em `bin/molde_autocura/rodar.sh:22`; só distingue 75; publica fim para outros rc: `bin/molde_autocura/rodar.sh:28`, `bin/molde_autocura/rodar.sh:32`, `bin/molde_autocura/rodar.sh:33`. |
-| `_rodar_testes` | `subprocess.run` espera processo, escreve saída em arquivo e usa rc+conteúdo no juiz: `app/core/esteira_vigia.py:794`, `app/core/esteira_vigia.py:802`, `app/core/esteira_vigia.py:803`, `app/core/esteira_vigia.py:805`, `app/core/esteira_vigia.py:807`. |
-| Integrador | Wrapper herda locks fd7/fd8 e chama Python: `bin/integrador.sh:41`, `bin/integrador.sh:44`, `bin/integrador.sh:51`. `_suite` espera régua, lê rc, busca caminho anunciado no trecho novo de stdout e julga log específico: `app/core/integrador_lote.py:379`, `app/core/integrador_lote.py:380`, `app/core/integrador_lote.py:385`, `app/core/integrador_lote.py:388`, `app/core/integrador_lote.py:390`. Não usa mais “log mais novo”. |
-| Cron | Geração envelopa comando em `cron_run.sh` e redireciona saída para log: `app/config/crons.py:1431`, `app/config/crons.py:1791`. Runner espera `bash -c`, mede duração/rc, grava fim só em 0/2 e alarma outros rc: `bin/cron_run.sh:11`, `bin/cron_run.sh:13`, `bin/cron_run.sh:22`, `bin/cron_run.sh:32`. Régua relógio/calendário no crontab instalado [não verificado]; entrada de vigia existe em `app/config/crons.py:277`. |
-
-**Quebras concretas/condicionais por destaque**
-
-1. **Selo atual quebra diretamente.** Régua executa todos os selos de host antes da suite e aborta se qualquer falhar: `bin/regua.sh:138`, `bin/regua.sh:140`. Selo exige que TERM no PID da chamada mate container e produza rc143: `bin/tests/test_trava_dono_para_filho.sh:54`, `bin/tests/test_trava_dono_para_filho.sh:60`, `bin/tests/test_trava_dono_para_filho.sh:62`. Também exige KILL da chamada deixar ORFAO: `bin/tests/test_trava_dono_para_filho.sh:68`, `bin/tests/test_trava_dono_para_filho.sh:74`, `bin/tests/test_trava_dono_para_filho.sh:77`. Contrato faz esse PID virar esperador cuja morte preserva job; selo precisa mudar junto, ou régua fica vermelha antes de testar.
-
-2. **Recursos temporários seguem pertencendo ao chamador.** Pre-push cria archive e registra `rm -rf` no EXIT: `bin/pre-push.sh:39`, `bin/pre-push.sh:40`; job monta aquele archive: `bin/pre-push.sh:144`. Se esperador morrer antes da aquisição, hook sair pelo rc/sinal e executar EXIT, archive pode sumir antes do `docker run`; execução desse sinal/EXIT específico em produção [não verificado]. Mesmo problema estrutural para calendário com `$TMP/app` (`bin/regua_calendario.sh:26`, `bin/regua_calendario.sh:27`, `bin/regua_calendario.sh:48`), relógio com shim em `$TMP` (`bin/regua_relogio.sh:31`, `bin/regua_relogio.sh:32`, `bin/regua_relogio.sh:54`) e fallback efêmero do vigia (`bin/vigia_arvore.sh:23`, `bin/vigia_arvore.sh:58`, `bin/vigia_arvore.sh:85`).
-
-3. **Locks extras não podem ser herdados sem decisão.** Integrador segura fd7 `/tmp/regua.lock`, fd8 temporário de push e locks da árvore via `trava.sh`: `bin/integrador.sh:32`, `bin/integrador.sh:41`, `bin/integrador.sh:51`; árvore é fd8 e raia fd6: `bin/trava.sh:60`, `bin/trava.sh:64`. Destaque preservando FDs pode manter locks depois do dono morrer; fechando-os pode deixar job lendo árvore já livre para outro escritor. Política do contrato para esses FDs [não verificado].
-
-4. **Restauração da árvore é ligada ao chamador.** Cadeia instala trap EXIT que faz checkout/remove arquivos e recarrega aplicação: `bin/molde_fatia/cadeia.sh:25`, `bin/molde_fatia/cadeia.sh:27`, `bin/molde_fatia/cadeia.sh:29`, `bin/molde_fatia/cadeia.sh:32`, `bin/molde_fatia/cadeia.sh:35`; régua é chamada depois: `bin/molde_fatia/cadeia.sh:51`. Se cadeia sai enquanto teste destacado continua, a árvore montada pode mudar sob o job; proteção contratual [não verificado].
-
-5. **Matador da esteira não alcança nova sessão automaticamente.** Vigia descobre grupos dos detentores do lock e manda TERM/KILL para eles: `app/core/esteira_vigia.py:1026`, `app/core/esteira_vigia.py:1031`, `app/core/esteira_vigia.py:1034`, `app/core/esteira_vigia.py:1037`. Job criado em nova sessão/grupo pode sobreviver a esse desligamento; se herdar o lock, o `fuser` pode descobri-lo também. FDs herdados pelo contrato [não verificado].
-
-6. **Unidade do integrador já permite descendentes sobreviverem ao principal.** `KillMode=process`: `bin/hasner-integrador.service:10`. Portanto `setsid` não resolve por si só protocolo de fim, recursos e locks; serviço instalado [não verificado].
-
-7. **Consumidores antigos ainda aceitam resultado textual sem rc.** Cadeias ignoram rc da régua e escolhem `/tmp/regua_*.log` mais novo, verificando `Ran`/`OK`: `bin/molde_fatia/cadeia.sh:51`, `bin/molde_fatia/cadeia.sh:53`, `bin/molde_fatia/cadeia.sh:54`, `bin/molde_fatia/cadeia.sh:55`; autocura idem `bin/molde_autocura/cadeia.sh:48`, `bin/molde_autocura/cadeia.sh:50`. Rc143 correto do relay não basta para esses leitores.
-
-**Leitores complementares**
-
-- Handoff mede somente `flock`, não `.quem` nem fila: `bin/handoff_sessao.sh:223`, `bin/handoff_sessao.sh:230`. Fila existente com lock momentaneamente livre pode aparecer LIVRE; adaptação prevista [não verificado].
-- Placar lê contador de esperas longas da sombra: `bin/placar_code.sh:155`, `bin/placar_code.sh:158`.
-- Leitor direto externo de `.quem` não foi encontrado; na trava ele é lido em `bin/trava_teste.sh:63`, `bin/trava_teste.sh:80`, `bin/trava_teste.sh:98` e escrito em `bin/trava_teste.sh:102`, `bin/trava_teste.sh:103`. Escritor deve passar ao job para o esperador morto não publicar “livre” enquanto ele roda.
-
-_1274 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1278 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
