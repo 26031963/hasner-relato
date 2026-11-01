@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 03:59:58.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (115.2 MB). Acoes na janela: **1152**.
+**Medido em 01/11/2026 04:05:01.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (115.2 MB). Acoes na janela: **1148**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1158,7 +1158,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:05:43 | Bash | Find horizon definition in ensaio script | `cd /home/ronald/saas-hasner/logs/grade_folga/ensaio_v4 && ls; grep -n -E 'HORIZONTE\|horizonte' *.py *.sh 2>/dev/null \| head -20` |
 | 16:05:39 | Bash | Check prior notes on out-of-horizon changes and grade worktree | `cd /home/ronald/saas-hasner && grep -n -E 'FORA-DO-HORIZONTE\|fora do horizonte' app/docs/RELATO.md \| cut -c1-400 \| head; ls logs/grade_folga/ \| head -40; grep -n -E 'REGRA_VERSOES *=' -A6 /home/ronald/wt-grade*/app/ponto/services/cartorio.py 2>/dev/null \| head -20; ls -d /home/ronald/wt-grade*` |
 | 16:05:30 | Bash | Read GRADE ensaio verdict | `tail -40 /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/bhh69p0mt.output \| cut -c1-300` |
-| 16:03:35 | Bash | Log dispatch line in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('15:58 VAGAS-1555')) L.insert(i,"16:04 DESPACHO TRAVA-COBERTURA: censo dos chamadores de teste sem trava -> Codex (censo, logs/trava_cobertura/censo_v1.q/.r) \| cura -> opus na proxima vaga de instrumento. ODOMETRO estacionado confirmado (worktree li ...` |
-| 16:03:31 | Bash | Wait for Codex census to finish | `until grep -q '^rc=' /home/ronald/saas-hasner/logs/trava_cobertura/censo_v1.run 2>/dev/null; do /usr/bin/sleep 30; done; tail -1 /home/ronald/saas-hasner/logs/trava_cobertura/censo_v1.run` |
-| 16:03:27 | Bash | Dispatch Codex census for TRAVA-COBERTURA | `cd /home/ronald/saas-hasner && mkdir -p logs/trava_cobertura && cat > logs/trava_cobertura/censo_v1.q <<'EOF' Censo dos chamadores que executam testes Django (manage.py test, docker run da imagem de teste, ou equivalente) contra o banco de teste juliani_db_test (host padrao de app/config/settings/ci.py e teste_*), em bin/ e app/ (excluindo app/*/tests/*.py como alvo, mas incluindo scripts e modulo ...` |
-| 16:03:15 | Bash | Check verdicts and lock holder | `cd /home/ronald/saas-hasner && date '+%H:%M'; for f in logs/e4_16/green_v3_e41.log logs/f1c4emis/v11_suite.log logs/grade_folga/ensaio_v4/run.log logs/e4_7/red.log; do echo "== $f"; [ -f $f ] && { grep -E '^(OK\|FAILED)($\| \()' $f \| tail -1; grep '^Ran' $f \| tail -1; grep '^rc=' $f \| tail -1; }; done; bin/trava_teste.sh --quem; sed -n 3p app/docs/RELATO.md \| cut -c1-200; ps -p 3615375 -o pid= ...` |
