@@ -1,7 +1,125 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 21:58** · publicado em **31/10/2026 22:02** (UTC-3)
+> Ultima resposta processada: **31/10/2026 22:06** · publicado em **31/10/2026 22:08** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 22:06 · sessao 06d2750e0795 · - · - · origem=Ronald (tmux)
+
+Há mudança sintética em todos os caminhos citados com pontas e pausa **aware UTC com segundos**. Sonda em memória com os corpos reais extraídos por AST: entrada `2026-10-15 01:00Z`, saída `10:00Z`, pausa `07:59:30Z–08:01Z`, `prorrogacao=False`; equivalem a `22:00–07:00`, pausa `04:59:30–05:01` local. A conversão é a de `app/ponto/motor_calculo_v2.py:73-79`; a fixture corresponde a `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:460-464`.
+
+| Caminho | Mutante de 14a61ef3 | Corpo atual | Evidência |
+|---|---:|---:|---|
+| Desconto | 1 | 0,5 | `app/ponto/motor_calculo_v2.py:186-196`; mutante `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:483-508` |
+| `MotorBase._noturno_dos_intervalos` | 1 | 0,5 | `app/ponto/motor_calculo_v2.py:1915-1916` |
+| `_ContextoNoturno._noturno_dos_intervalos` | 1 | 0,5 | `app/ponto/calculador/regras.py:60-63` |
+| `calcular_noturnas`, fator 1 | `(419,419)` | `(419,5;419,5)` | `app/ponto/motor_calculo_v2.py:971-980` |
+| `noturnas_do_dia`, fator 1 | `(419,419)` | `(419,5;419,5)` | `app/ponto/calculador/regras.py:80-89` |
+| `noturno_no_par`, fator 1 | relógio/legais 419 | relógio/legais 419,5 | `app/ponto/calculador/periodo.py:508-511` |
+| `he_noturna`, HE100=538,5 min e HE50=0 | `(0,419)` | `(0,419,5)` | `app/ponto/motor_calculo_v2.py:440-451` |
+
+O caso HE usa todos os 538,5 minutos trabalhados como extra: `_inicio_do_trecho_extra` recua até a entrada, portanto consulta a mesma janela inteira. O recuo pelo trabalho está em `app/ponto/motor_calculo_v2.py:392-406`; a subtração do desconto está em `:441-443`.
+
+O caminho de **HE por período** importa `he_noturna` em `app/ponto/calculador/regras.py:868`, fornece pontas/intervalos/flag em `:886-888`, soma os retornos em `:889-890` e escreve horas nas rubricas em `:896-898`. Com uma ponta que recebe a jornada inteira em HE100, o mesmo delta chega à rubrica: `419/60 = 6,983333333333333 h` contra `419,5/60 = 6,991666666666666 h`; essa propagação decorre das divisões explícitas em `:896-898`. Execução integral de `do_dia`: **[nao verificado]**.
+
+Escritores e leitores externos relevantes:
+
+| Valor | Quem escreve/fornece | Quem lê |
+|---|---|---|
+| Flag do motor | `MotorBase.__init__`, recebe parâmetro ou consulta regra legal e atribui `self.prorrogacao_noturna_pos5h`: `app/ponto/motor_calculo_v2.py:758-762` | `calcular_noturnas` `:971-973`, delegador `:1915-1916`, casca de HE `:1002-1006` |
+| Flag no contexto | `_ContextoNoturno.__init__`: `app/ponto/calculador/regras.py:60-61` | Método emprestado em `:63`, cujo corpo lê o atributo em `app/ponto/motor_calculo_v2.py:1916` |
+| Flag na CCT | `cct_do_motor` constrói `CCT(prorrogacao_pos5h=bool(motor.prorrogacao_noturna_pos5h))`: `app/ponto/calculador/nucleo.py:344-351` | `noturno_no_par`: `app/ponto/calculador/periodo.py:508-510` |
+| Pontas efetivas/intervalos carimbados | `_carimbar_segmento`: `app/ponto/motor_calculo_v2.py:1828-1830` | Releitura passa `e`, `s_` e `intervalos_do_motor` para `noturno_no_par`: `app/ponto/calculador/periodo.py:752` |
+| Retorno de noturnas do motor | `calcular_noturnas`: `app/ponto/motor_calculo_v2.py:971-975` | `_escrever_noturnas`, que grava `periodo.minutos_noturnos_relogio/legais`: `:991-993` |
+| Retorno de HE do motor | `he_noturna`: `app/ponto/motor_calculo_v2.py:448-451` | `_aplicar_he_noturna`, que grava campos do período: `:1002-1010` |
+| Retorno de noturnas do calculador | `noturnas_do_dia`: `app/ponto/calculador/regras.py:85-89` | Rubrica/detalhes do dia: `:908-914`; encapsulamento em `NoturnoV3`: `app/ponto/calculador/periodo.py:508-511` |
+| `NoturnoV3.relogio_min/legais_min` | Construtor em `app/ponto/calculador/periodo.py:511` | Releitura escreve os campos do período em `:752-754` |
+| HE por período | Acumuladores `_s50/_s100`: `app/ponto/calculador/regras.py:877`, `:889-890` | Rubricas `horas_extras_50_noturna/100_noturna`: `:896-898` |
+
+**“Aware UTC com segundos não muda nenhum chamador” NÃO procede**: a sonda acima demonstra mudança numérica nos leitores reais. Impacto em colaborador, rubrica persistida ou dados produtivos: **[nao verificado]**.
+
+A sonda usou `python3 -B` e AST em memória; Django não está instalado neste ambiente. Não houve acesso a banco/log, import de modelos ou gravação de arquivo. Execução Django canônica e integração completa: **[nao verificado]**.
+
+## 31/10 22:03 · sessao 63fba4a5c37a · - · - · origem=Ronald (tmux)
+
+Inventário, na cópia atual:
+
+| Arquivo | Escritor → leitor | Excluído |
+|---|---|---|
+| `logs/sessao/disjuntor.log` | `trilha`, inclusive `_anuncia` de B3/PDC/rearme → `disjuntor.ler`; `bin/disjuntor.py:135`, `bin/disjuntor.py:975`, `bin/disjuntor.py:1051`, `bin/disjuntor.py:1457`, `bin/disjuntor.py:2168` | Sim; `bin/hook_stop_fila1.py:585`. |
+| `logs/sessao/disjuntor_estado.json` | `_com_estado` → `_com_estado`, `ler_estado`; `bin/disjuntor.py:267`, `bin/disjuntor.py:278`, `bin/disjuntor.py:299` | Sim; `bin/hook_stop_fila1.py:585`. |
+| Seu `.lock` | `_com_estado`: cria/usa `flock`; `bin/disjuntor.py:256`, `bin/disjuntor.py:260` | Sim; `bin/hook_stop_fila1.py:586`. |
+| `logs/padrao_de_cima_escopo.json` | `_anuncia` PDC → `_pdc_grava_escopo`; leitor `_pdc_escopo_lido`/`estado_pdc`; `bin/disjuntor.py:1462`, `bin/disjuntor.py:1512`, `bin/disjuntor.py:1526`, `bin/disjuntor.py:1546` | Sim, pelo dono; `bin/hook_stop_fila1.py:593`. |
+| `logs/sessao/padrao_de_cima_geracao` | `decide_pdc`/`_pdc_geracao_grava` → `_pdc_geracao_lida`/`estado_pdc`; `bin/disjuntor.py:1454`, `bin/disjuntor.py:1487`, `bin/disjuntor.py:1497`, `bin/disjuntor.py:1548` | Sim, pelo dono; `bin/hook_stop_fila1.py:593`. |
+| `logs/sessao/cota.json` | Status line → `ler_cota`; `bin/statusline_cota.py:49`, `bin/statusline_cota.py:54`, `bin/disjuntor.py:1653` | Sim; `bin/hook_stop_fila1.py:586`. |
+| `logs/sessao/pisos.log` | Hook chama `OC.registrar_piso` → `ultimo_piso`, `gatilho_tokens`, `disjuntor.ler`; `bin/hook_stop_fila1.py:911`, `bin/orcamento_contexto.py:198`, `bin/orcamento_contexto.py:210`, `bin/orcamento_contexto.py:227`, `bin/disjuntor.py:2230` | Sim; `bin/hook_stop_fila1.py:585`. |
+| `logs/hook_stop_fila1.log` | `_trilha` → `b2_decide`; `bin/hook_stop_fila1.py:48`, `bin/disjuntor.py:1754`, `bin/disjuntor.py:1761` | Sim; `bin/hook_stop_fila1.py:596`. |
+| `logs/hook_stop_fila1.json` | `_zera_teto`, contador principal → contador principal; `bin/hook_stop_fila1.py:1079`, `bin/hook_stop_fila1.py:1267`, `bin/hook_stop_fila1.py:1288` | Sim; `bin/hook_stop_fila1.py:596`. |
+| `logs/hook_stop_espera.json` e `.lock` | `_prova_arquivo`: memória/trava → a própria função; `bin/hook_stop_fila1.py:615`, `bin/hook_stop_fila1.py:625`, `bin/hook_stop_fila1.py:637` | Sim; `bin/hook_stop_fila1.py:596`. |
+| `logs/sessao/orcamento_estado.json` e `.lock` | Hook: `_orc_salva`, `_orcamento` → `_orcamento_travado`, `OC.ler`, `disjuntor.ler`; `bin/hook_stop_fila1.py:764`, `bin/hook_stop_fila1.py:832`, `bin/hook_stop_fila1.py:856`, `bin/orcamento_contexto.py:357`, `bin/disjuntor.py:2210` | Sim; `bin/hook_stop_fila1.py:596`. |
+| `logs/sessao/orcamento.log` | `_orc_trilha` → `OC.ler`, `disjuntor.ler`; `bin/hook_stop_fila1.py:738`, `bin/orcamento_contexto.py:364`, `bin/disjuntor.py:2169` | Sim; `bin/hook_stop_fila1.py:596`. |
+| `app/docs/RELATO.md` | `relato_negacao` delega a `esteira_vigia.no_relato` → hook e decisão PDC; `bin/disjuntor.py:234`, `bin/disjuntor.py:236`, `app/core/esteira_vigia.py:884`, `bin/hook_stop_fila1.py:429`, `bin/disjuntor.py:1376` | Sim; `bin/hook_stop_fila1.py:596`. |
+| `logs/codex/triagem.log` | `--triagem`, via `_triagem_sob_trava` → `_triagens`; `bin/disjuntor.py:837`, `bin/disjuntor.py:839`, `bin/disjuntor.py:861`, `bin/disjuntor.py:2326` | **Não**; lista completa em `bin/hook_stop_fila1.py:585`, `bin/hook_stop_fila1.py:593`, `bin/hook_stop_fila1.py:596`. |
+| `<resposta>.lock` | `triagem` cria e toma `LOCK_SH`; wrapper também usa a trava; `bin/disjuntor.py:806`, `bin/disjuntor.py:813`, `bin/codex_pergunta.sh:157` | **Não**; `bin/hook_stop_fila1.py:585`, `bin/hook_stop_fila1.py:596`. |
+
+`BACKLOG` também é excluído, embora não haja escrita nele nesses três componentes nos sítios encontrados; sua leitura e exclusão estão em `bin/hook_stop_fila1.py:173`, `bin/hook_stop_fila1.py:596`; ausência absoluta de outro escritor indireto: [nao verificado].
+
+Os temporários também **não estão na lista**: `.disjuntor_estado.*`, `.padrao_de_cima_escopo.*`, `.cota.*`, `.hook_stop_espera.*`, `.orcamento_estado.*`, `.RELATO.*.novo`; criação/substituição em `bin/disjuntor.py:278`, `bin/disjuntor.py:1518`, `bin/statusline_cota.py:49`, `bin/hook_stop_fila1.py:633`, `bin/hook_stop_fila1.py:764`, `app/core/esteira_vigia.py:879`; lista em `bin/hook_stop_fila1.py:596`.
+
+Para temporários, a omissão não demonstra automaticamente uma liberação: cada escrita usa nome/inode novo e depois `os.replace`; a memória exige a mesma chave caminho+dispositivo+inode em duas observações, com mtime crescente; `bin/disjuntor.py:278`, `bin/disjuntor.py:281`, `bin/hook_stop_fila1.py:609`, `bin/hook_stop_fila1.py:629`, `bin/hook_stop_fila1.py:649`. Uma corrida com duas observações durante a escrita não está proibida pela lista; exploração concreta: [nao verificado].
+
+`triagem.log` é o residual estável mais claro: é append no mesmo arquivo e não está excluído, portanto o avanço entre observações satisfaz `_prova_arquivo`; `bin/disjuntor.py:839`, `bin/hook_stop_fila1.py:609`, `bin/hook_stop_fila1.py:649`. Sua escrita requer a operação explícita de triagem e sidecar válido; não há evidência de que seja produzida pelo simples Stop/`--padrao-parada`; `bin/disjuntor.py:822`, `bin/disjuntor.py:827`, `bin/disjuntor.py:2326`. **Fila**, por inventário incompleto; chamar isso de avanço autônomo sem produtor seria [nao verificado].
+
+A trava de `no_relato` é no diretório `app/docs`, sem arquivo `.lock` próprio; diretórios não servem de prova; `app/core/esteira_vigia.py:844`, `app/core/esteira_vigia.py:848`, `bin/hook_stop_fila1.py:581`.
+
+Fragilidades adicionais:
+
+- **Fila:** `_pdc_grava_escopo` e status line podem abandonar temporários quando há exceção após `mkstemp`; seus `except` apenas registram/engolem, sem `unlink`; `bin/disjuntor.py:1518`, `bin/disjuntor.py:1522`, `bin/statusline_cota.py:49`, `bin/statusline_cota.py:55`. Hook, orçamento, estado DJ e `no_relato` possuem limpeza explícita; `bin/hook_stop_fila1.py:638`, `bin/hook_stop_fila1.py:769`, `bin/disjuntor.py:284`, `app/core/esteira_vigia.py:885`.
+- **Fila:** a frase do caso 8b sobre o escopo liberar porque o mtime anda omite que o escopo é substituído atomicamente e a chave inclui inode; regravação normalmente cria primeira observação de nova chave, enquanto a geração é reescrita no lugar; `bin/tests/test_hook_esperando_com_prova.sh:124`, `bin/disjuntor.py:1518`, `bin/disjuntor.py:1521`, `bin/hook_stop_fila1.py:609`, `bin/disjuntor.py:1487`. O teste pode morder a ausência de exclusão pelo **motivo esperado**, sem reproduzir um `ALLOW` no escopo; `bin/tests/test_hook_esperando_com_prova.sh:135`, `bin/tests/test_hook_esperando_com_prova.sh:87`.
+- A escrita da geração ocorre antes do estado, e o escopo é escrito no anúncio sob a mesma trava; a alteração de comentários não muda essa ordem; `bin/disjuntor.py:1454`, `bin/disjuntor.py:1462`, `bin/disjuntor.py:1466`, `bin/disjuntor.py:275`, `bin/disjuntor.py:292`.
+
+## 31/10 22:03 · sessao 9156207494da · - · - · origem=Ronald (tmux)
+
+- O import é tardio e ocorre só depois de o alvo existir e ser regular; `ImportError`, `SyntaxError`, falha de acesso e ausência das constantes entram em `except Exception` e devolvem motivo não vazio, invalidando a prova por arquivo — inclusive quando acompanhada de PID válido. PID sozinho não executa esse trecho. (`bin/hook_stop_fila1.py:576`, `bin/hook_stop_fila1.py:590`, `bin/hook_stop_fila1.py:685`)
+
+- **Fila — memória congelada em falha transitória.** O retorno de erro antecede aquisição da trava, leitura e gravação de `ESPERA`; conserva a observação anterior, contrariando o “sempre” da docstring. Ao recuperar, um avanço ocorrido durante a indisponibilidade pode liberar na primeira leitura recuperada, sem movimento posterior à recuperação. A decisão ainda mede apenas avanço desde a última observação persistida. (`bin/hook_stop_fila1.py:564`, `bin/hook_stop_fila1.py:594`, `bin/hook_stop_fila1.py:615`, `bin/hook_stop_fila1.py:629`, `bin/hook_stop_fila1.py:649`)
+
+- `HOOK_STOP_RAIZ` troca os caminhos de dados; o código importado é procurado no diretório do `__file__` do hook. As duas constantes relativas são combinadas com `RAIZ` do hook, portanto não é preciso existir `disjuntor.py` na árvore de dados alternativa. (`bin/hook_stop_fila1.py:26`, `bin/hook_stop_fila1.py:33`, `bin/hook_stop_fila1.py:591`, `bin/hook_stop_fila1.py:593`, `bin/disjuntor.py:1101`, `bin/disjuntor.py:1104`)
+
+- No fluxo normal de `main`, o disjuntor já foi importado pela passagem B4 antes da prova de espera. O import novo normalmente reutiliza o módulo carregado; `sys.path.insert` não garante recarregar outra versão já presente em `sys.modules` [nao verificado quanto à ocorrência neste host]. (`bin/hook_stop_fila1.py:1046`, `bin/hook_stop_fila1.py:1215`, `bin/hook_stop_fila1.py:1240`)
+
+- O import novo não executa `decide_pdc`: só acessa constantes. Assim, por si, não regrava geração, escopo nem trilha; a transição que os grava continua em `decide_pdc` → `_com_estado` → `_anuncia`. (`bin/hook_stop_fila1.py:592`, `bin/hook_stop_fila1.py:593`, `bin/disjuntor.py:1454`, `bin/disjuntor.py:1457`, `bin/disjuntor.py:1466`)
+
+- Os leitores externos do hook não ganham essa dependência em tempo de importação: handoff pede funções de fila; interrompidas importa três funções de fila; backlog_estado importa o módulo; o disjuntor pede o recorte do topo e `H.RELATO`. O import novo só está no corpo de `_prova_arquivo`. (`bin/handoff_sessao.sh:49`, `bin/handoff_sessao.sh:64`, `bin/handoff_sessao.sh:260`, `bin/handoff_sessao.sh:282`, `bin/interrompidas_estado.py:53`, `bin/backlog_estado.py:20`, `bin/disjuntor.py:689`, `bin/disjuntor.py:703`, `bin/hook_stop_fila1.py:590`)
+
+- Os dois consumidores internos da prova de espera — orçamento e `main` — compartilham `_ESPERA_MEMO`; uma falha fica memorizada durante esse processo e não é reavaliada no segundo consumidor. (`bin/hook_stop_fila1.py:704`, `bin/hook_stop_fila1.py:997`, `bin/hook_stop_fila1.py:1240`)
+
+- **Fila — captura não universal.** `SystemExit`, `KeyboardInterrupt` e encerramento por sinal não são contidos pelos `except Exception` do trecho, de `_esperando_com_prova` nem de `main`; eventual falha dessa natureza não produz necessariamente decisão JSON. Não há `SystemExit` no carregamento normal de `disjuntor.py`; seu `sys.exit(main(...))` está protegido por `__name__ == '__main__'`. (`bin/hook_stop_fila1.py:594`, `bin/hook_stop_fila1.py:690`, `bin/hook_stop_fila1.py:1314`, `bin/disjuntor.py:2342`)
+
+- **Fila — efeitos ambientais do import.** Escrita automática de bytecode, cache existente e configuração `PYTHONDONTWRITEBYTECODE` no host são [nao verificado]. O comando Stop da cópia usa `python3` sem `-B`, e a lista de exclusões não contempla `__pycache__`; não afirmar que houve arquivo `.pyc` escrito sem evidência de ambiente. (`.claude/settings.json:9`, `bin/hook_stop_fila1.py:585`, `bin/hook_stop_fila1.py:596`)
+
+- Quanto às classes 1–4 e 6, o trecho novo consulta as duas autoridades de caminho, não cria novo cálculo de decisão, escritor explícito, leitura de relógio nem aquisição de trava; a aquisição da trava de mtime continua depois da importação. Classe 5 depende da auditoria do teste; classe 7/pouso real é [nao verificado]. (`bin/hook_stop_fila1.py:590`, `bin/hook_stop_fila1.py:593`, `bin/hook_stop_fila1.py:615`)
+
+## 31/10 22:03 · sessao 71cefccbab80 · - · - · origem=Ronald (tmux)
+
+Auditoria estática; resultados de execução dos selos: [nao verificado].
+
+- **8b morde a exclusão dos dois destinos, por motivo específico.** `_espera_bloqueia` exige simultaneamente `block`, `siga: ITEM-VIVO` e `NOPROVA.*arquivo do proprio hook`; bloquear por primeira observação não basta (`bin/tests/test_hook_esperando_com_prova.sh:80-89`, `:128-134`). Contra o ancestral sem as duas exclusões, os dois casos ficam vermelhos por esse critério; excluindo apenas um destino, o caso do outro continua vermelho (`bin/hook_stop_fila1.py:593-608`; anexo do diff).
+
+- **FILA — a narrativa do caso do escopo exagera o que ele demonstra.** O escopo é escrito por `mkstemp` e `os.replace`; a memória identifica o alvo por caminho, dispositivo e inode. Na sequência normal com inode novo, regravar o escopo reinicia a observação daquele alvo e produz `arquivo nao andou`, em vez de liberar o Stop (`bin/disjuntor.py:1518-1521`; `bin/hook_stop_fila1.py:609-610`, `:629-650`). A geração, ao contrário, é truncada e escrita no mesmo arquivo, portanto oferece o avanço de mtime com identidade estável necessário ao bypass anterior (`bin/disjuntor.py:1478-1491`; `bin/hook_stop_fila1.py:609-650`). Reciclagem efetiva de inode nesta cópia: [nao verificado].
+
+- **FILA — 8b não prova dependência das constantes do dono.** Uma cura com os dois caminhos literais atuais passa os mesmos casos: o teste consulta as constantes, mas não as muda e não verifica de onde a implementação obteve os caminhos (`bin/tests/test_hook_esperando_com_prova.sh:128-134`; `bin/disjuntor.py:1101-1104`; `bin/hook_stop_fila1.py:593`). Seria necessário deslocar uma constante na cópia de teste e testar o novo destino para distinguir essas implementações (`bin/tests/test_hook_esperando_com_prova.sh:128-134`).
+
+- **FILA — uma exclusão ampla por diretório também passa 8b e não é confrontada pelo positivo atual.** Os dois novos destinos ficam em `logs`; o arquivo com escritor que deve liberar fica fora da árvore, em `$_tmp/agente.out`. Não há positivo de produtor legítimo dentro de `logs` nesses casos (`bin/tests/test_hook_esperando_com_prova.sh:38`, `:107-114`, `:128-134`; `bin/disjuntor.py:1101-1104`). A cura por diretório precisa preservar o teste de regularidade anterior para manter o motivo esperado nos casos `arquivo=logs` (`bin/hook_stop_fila1.py:578-582`; `bin/tests/test_hook_esperando_com_prova.sh:122-123`).
+
+- **FILA — 8b não confirma que a regravação ocorreu.** `_pdc` descarta stdout/stderr, seus dois retornos não são conferidos e o único controle posterior é `-f`; não se compara mtime, inode ou conteúdo antes/depois. Com a exclusão presente, o caso pode ficar verde mesmo se a segunda chamada falhar ou parar de regravar (`bin/tests/test_hook_esperando_com_prova.sh:127-134`; `bin/hook_stop_fila1.py:598-608`). A mordida preservada é da exclusão, não da reprodução material do movimento alegado (`bin/tests/test_hook_esperando_com_prova.sh:87`, `:134`).
+
+- **Os novos returns 7/8 corrigem duas ausências reais de observação do caso `desligado`.** O return 7 rejeita saída vazia acompanhada de status diferente de zero; o return 8 exige exatamente uma nova ocorrência da mensagem da chave por chamada. Ambos rodam para o payload cru construtor e o verificador (`bin/tests/test_padrao_de_cima.sh:328-334`). O caminho real captura o JSON não objeto, reconhece a chave, chama `trilha('FALHA', ... DISJUNTOR_DESLIGADO...)` e retorna zero (`bin/disjuntor.py:2078-2081`, `:2094-2101`).
+
+- **Contra b3c0f8ec, os novos returns 7/8 devem passar por inspeção:** o delta de `disjuntor.py` fornecido só troca comentários; a implementação da chave que eles observam permanece a mesma (`bin/disjuntor.py:2099-2101`; anexo do diff). Execução contra esse ancestral: [nao verificado].
+
+- **FILA — não há mutante dedicado aos novos returns 7/8.** O mutante `v9-cru-ignora-chave` remove a guarda da chave, levando à negativa e ao return 6 antes das novas verificações; os outros mutantes de `desligado` removem as portas do wrapper. Portanto os novos asserts são úteis, mas sua mordida específica contra crash mudo ou ausência da trilha não está demonstrada pelo catálogo atual (`bin/tests/test_padrao_de_cima.sh:325-334`, `:711-718`, `:816`). O harness sabe reconhecer `return 7` e `return 8` literais como asserts, caso um mutante dedicado os alcance (`bin/tests/_mordida.sh:139-145`, `:214-225`).
+
+- **FILA menor — return 8 não confere literalmente o evento `FALHA`.** Ele conta apenas a substring `DISJUNTOR_DESLIGADO, ferramenta liberada`, embora o comentário diga “1 linha FALHA”; uma troca do rótulo do evento mantendo a mensagem passaria esse assert (`bin/tests/test_padrao_de_cima.sh:329-334`; `bin/disjuntor.py:2100`).
 
 ## 31/10 21:58 · sessao 590560d188d5 · TRAVA-COBERTURA · leitura · origem=Code
 
@@ -655,236 +773,4 @@ Não comprovei, nos fluxos de views/services/signals/models examinados, sequênc
 
 O memo não tem prazo baseado em request no corpo executável: ele fica no atributo da instância e é reutilizado enquanto a chave coincidir; a morte com o request é descrita no comentário, não implementada por um encerramento ou limpeza ali. (`app/chamados/juizes.py:809`, `app/chamados/juizes.py:812`, `app/chamados/juizes.py:824`)
 
-## 31/10 21:46 · sessao 5dca7ee72020 · - · - · origem=Ronald (tmux)
-
-A tupla **não cobre todos os insumos lidos pelo cálculo**: compara apenas os campos declarados em `app/chamados/juizes.py:788-796`; o hit retorna o resultado sem reexecutar os leitores abaixo (`app/chamados/juizes.py:812-816`).
-
-| Insumo fora da chave | Leitura comprovada |
-|---|---|
-| `p.motivo` | Seleciona marco em `fato_do_marco_no_espelho` (`app/chamados/juizes.py:863`), concordância (`:1000`), data contextual do turno (`:362`) e derivação do plantio (`app/chamados/services/materializacao.py:327-329`). |
-| `p.celula.dna.marcos` — entrada, saída e dois pares de pausas | `app/chamados/juizes.py:870-884`, `:1002-1007`; pares declarados em `app/escala/models.py:1620`. |
-| `p.celula.ata.lampadas`: `hora`, `tipo`, `acesa` | `app/chamados/juizes.py:887-893`. |
-| `p.celula.ata.lampadas.luz` | Concordância resposta/batida em `app/chamados/juizes.py:1008-1028`. |
-| `p.celula.ata.lampadas.pendente` | C6 chama `marcos_pendentes` em `app/chamados/juizes.py:1094-1096`; implementação lê `cel.ata.lampadas[*].pendente` em `app/ponto/services/lastro.py:148-150`. |
-| `p.celula.trabalha` | `_celulas_da_pergunta` repassa a mesma célula, mediante identidade e campos carregados (`app/chamados/juizes.py:598-606`); `classificar_falta` lê `trabalha` (`app/escala/servico_jornada.py:302-304`). |
-| Célula/data/colaborador e estado de campos diferidos | Definem se o cálculo recebe `p.celula` ou consulta outra célula: `app/chamados/juizes.py:602-605`; consulta alternativa em `app/escala/servico_jornada.py:267-271`. |
-| Disputa e colaborador, inclusive `empresa_id` e empresa | `dia_da_pergunta_trancado` em `app/chamados/juizes.py:909-921`; colaborador usado em classificação e testemunhas em `:1100-1102`, `:729-731`, `:751`. |
-| Corte de competência `empresa.dia_inicio_competencia` | Janela da tranca em `app/chamados/juizes.py:918`; autoridade lê o campo em `app/ponto/janelas.py:50-51`, `:60-63`. |
-| Tranca viva: existência de `PeriodoFechado`, empresa/mês/ano, `reaberto_em`; data `fechado_em` | `app/ponto/services/fechamento.py:1432-1438`; utilização e toque posterior em `app/chamados/juizes.py:919-928`. |
-| Trilhas humanas posteriores à tranca; existência das células/chamados relacionados | `app/chamados/juizes.py:971-978`: `LogAuditoria.criado_em`, usuário, ação, modelo, objeto e descrição. |
-| Relógio/data atual | `_dentro_da_janela_viva` usa `date.today` e janelas corrente/anterior (`app/chamados/juizes.py:539-565`); classificação compara `timezone.now()` ao fim previsto (`app/escala/servico_jornada.py:375-378`). |
-| Ausências: existência, colaborador, `data`, `data_fim`, `status`, `tipo`, `minutos`; cadastro de tipos parciais | Classificação em `app/escala/servico_jornada.py:340-345`; seleção em `app/ponto/turnos.py:2509-2533`; parcialidade em `:2595-2600`, que consulta `parciais_vigentes`. |
-| Batidas plantadas relacionadas à pergunta: existência, `timestamp`, `retratada_em` | `app/chamados/juizes.py:695-702`; testes de horário em `:258-266`. |
-| Outras batidas: existência, colaborador, tipo, timestamp e retratação | Consulta da testemunha em `app/chamados/juizes.py:225-237`; retratação em `:751-753`; universo de turnos em `app/ponto/turnos.py:1859-1864`. |
-| Trilha de retratação da própria pergunta, inclusive `p.pk` | `app/chamados/juizes.py:275-280`. |
-| `disputa.contexto[motivo].data` e `.hora_tentativa` | Completude do turno em `app/chamados/juizes.py:359-370`; derivação do slot em `app/chamados/services/materializacao.py:329-333`, `:406`. |
-| `chamado_destino.contexto_json.marcos_faltantes`, incluindo motivo/hora/tipo | `app/chamados/juizes.py:498-529`; usado na derivação em `app/chamados/services/materializacao.py:259-261`, `:394-397`. O status do destino já carregado **está** na chave; o JSON não (`app/chamados/juizes.py:794-795`). |
-| Vínculos, geradora da célula, vigência e template de escala | Classificação chama `escala_vigente` (`app/escala/servico_jornada.py:354`), cujo carregador lê geradora/vínculos (`:46-58`); escolha depende de geradora, datas e atividade (`app/escala/alimentacao.py:237-254`). |
-| Marcos congelados ou template quando não há DNA utilizável | `app/escala/servico_jornada.py:427-435`; implementação em `app/escala/models.py:1094-1108`. Overnight usa esses marcos em `app/chamados/juizes.py:300-311`. |
-| Ata/DNA e escalas da janela de turnos | `_turno_tem_saida` chama `turnos_do_colab` (`app/chamados/juizes.py:369-370`); carregamento em `app/ponto/turnos.py:1882-1886`, `:1907-1913`; papel da ata em `:1937`; marcos e pareamento em `:1982-1993`. |
-| Dados adicionais do colaborador e célula, por `grade_da_celula` no cálculo do slot | `_marcos_da_regua` e `_tipo_pelo_marco` chamam a grade (`app/chamados/services/materializacao.py:218-227`, `:267-268`); ela lê `data_admissao`, `data_demissao`, `isento_ponto`, `ata` e `trabalha` (`app/escala/services/leitor_celula.py:321-372`; flag de isenção em `app/core/constants.py:18`). |
-
-Precisões para a consolidação:
-
-- **“Lastro” aqui é módulo, não uma leitura de campo `cel.lastro`**: `marcos_pendentes` lê exclusivamente as lâmpadas da ata (`app/ponto/services/lastro.py:138-150`). “Marcos” são lidos principalmente de `dna['marcos']` e de `ata['lampadas']` (`app/chamados/juizes.py:870`, `:888`).
-- **C6 não consulta automaticamente a ata/veredito em curso do cartório.** O leitor que faz isso é `celula_deste_julgamento`, que consulta os dois mapas (`app/chamados/juizes.py:392-395`); estes vêm de `_tl.atas` e `_tl.vereditos` (`app/ponto/services/cartorio.py:57`, `:66`).
-- Essa projeção faz **cópia rasa da célula**, substitui ata e eventualmente o par de veredito (`app/ponto/portas/celula.py:675-683`). Portanto, distinguir “estado do cartório mudou” de “a mesma `p.celula` passou a refletir esse estado” é necessário; o último não acontece implicitamente nesses leitores (`app/chamados/juizes.py:394-395`; `app/ponto/portas/celula.py:678-683`).
-- A tranca tem **outro memo**, fora de `_pv_memo`: fica no request ou colaborador (`app/chamados/juizes.py:944-948`), guarda resultado da consulta de tranca inclusive `None` (`:920-923`), e guarda apenas o resultado positivo do toque humano (`:965-966`, `:979-980`). Invalidar `_pv_memo` isoladamente não prova nova consulta da tranca (`app/chamados/juizes.py:914-923`).
-
-## 31/10 21:33 · sessao a047dbbf9d5a · O261-E-F1C4-LEN-VIVOS · censo · origem=Code
-
-Há **quatro sítios de chamada, em três arquivos produtivos**: dois no cartório e um em cada comando. As chamadas de relatórios/inteligência usam outro `classificar_dia`. (`app/ponto/services/cartorio.py:1028`, `app/ponto/services/cartorio.py:1212`, `app/ponto/management/commands/supra_juiz.py:206`, `app/ponto/management/commands/emitir_furo_retroativo.py:99`, `app/relatorios/furos.py:55`, `app/inteligencia/calculadores.py:26`)
-
-O censo abaixo descreve a cópia local. Ocorrências, quantidades e efeitos efetivamente observados em produção nesta obra: **[nao verificado]**.
-
-**1) Onde o classificador lê os parâmetros**
-
-O contrato distingue explicitamente `chamados_vivos`/`chamados_total`, relativos ao **chamado**, de `cobrancas_vivas`, relativo ao **fio vivo**. Se `isento_ponto=True`, a função retorna lista vazia antes desses ramos. (`app/ponto/supra_juiz.py:204`, `app/ponto/supra_juiz.py:213`, `app/ponto/supra_juiz.py:220`)
-
-| Parâmetro lido | Código acrescentado | Condições |
-|---|---|---|
-| `chamados_vivos` | `COBRANCA_SEM_FURO` | `tipo_dia == 'trabalho'`, previsto não zero, realizado ≥ previsto, `chamados_vivos` verdadeiro e `todas_casadas`. Esta última condição exige células não vazias e contagem de casadas igual ao tamanho da lista; prefere `n_casadas` lavrado e, sem ele, conta células com hora. (`app/ponto/supra_juiz.py:439`) |
-| `chamados_vivos` | `COBRANCA_EM_DIA_SEM_TRABALHO` | Tipo fora de `SEM_JURISDICAO`, previsto zero, `chamados_vivos` verdadeiro, `cobertura_status is None` e resposta positiva de `_dia_sem_trabalho_pelo_juiz`. (`app/ponto/supra_juiz.py:470`) |
-| `chamados_vivos` | `COBRANCA_EM_DIA_COBERTO` | Cobertura com status exatamente `'aprovada'` e `chamados_vivos` verdadeiro; esse ramo não exige cobertura integral. (`app/ponto/supra_juiz.py:255`, `app/ponto/supra_juiz.py:264`, `app/ponto/supra_juiz.py:501`) |
-
-`SEM_JURISDICAO` contém `fora_vinculo`, `sem_celula` e `indefinido`. O juiz de dia sem trabalho responde `trabalha is False` **ou** `ata.tipo_dia` preenchido e diferente de `'trabalho'`; o classificador recebe esses insumos pelo dicionário, sem fallback quando a chave falta. (`app/ponto/supra_juiz.py:48`, `app/ponto/supra_juiz.py:65`, `app/chamados/juizes.py:398`)
-
-Esses três ramos não exigem `turno_encerrado`; essa guarda pertence aos ramos de furo/fato indicados no código. (`app/ponto/supra_juiz.py:278`, `app/ponto/supra_juiz.py:443`, `app/ponto/supra_juiz.py:470`, `app/ponto/supra_juiz.py:501`)
-
-`chamados_total` é lido **uma vez**, no `elif` que escolhe `FURO_COM_COBRANCA_MORTA`; se falso, o `else` escolhe `FURO_SEM_COBRANCA`. Para alcançar essa escolha, precisam valer todas estas condições: dia de cobrança — trabalho ou ausência parcial —, previsto não zero, realizado zero, nenhuma célula casada, nenhuma batida no dia, nenhuma `cobrancas_vivas`, ausência sem cobrir integralmente o dia e turno encerrado. (`app/ponto/supra_juiz.py:304`, `app/ponto/supra_juiz.py:352`)
-
-Antes de consultar `chamados_total`, o mesmo bloco dá precedência a:
-
-- pré-adoção → `FURO_PRE_ADOCAO`;
-- sem vínculo → `PREVISTO_COM_DIA_INDEFINIDO`;
-- sem âncora e sem fase → `FASE_NAO_DECLARADA_COM_PREVISTO`;
-- régua degenerada → `FURO_COM_REGUA_DEGENERADA`;
-- sem âncora → `PREVISTO_COM_DIA_INDEFINIDO`.  
-  (`app/ponto/supra_juiz.py:326`, `app/ponto/supra_juiz.py:329`, `app/ponto/supra_juiz.py:331`, `app/ponto/supra_juiz.py:340`, `app/ponto/supra_juiz.py:348`)
-
-Se `dia['justificado']` for verdadeiro, o bloco remove os códigos recém-acrescentados cujo nome começa por `FURO_`. Portanto, os dois resultados dependentes de `chamados_total` podem ser removidos antes do retorno. (`app/ponto/supra_juiz.py:363`)
-
-**2–3) Todos os chamadores, seus universos e o consumo dos códigos**
-
-Nos universos abaixo, `VIVOS` significa `aberto`, `em_analise` e **`registrado`**. Não equivale a `COBRANCA`, que contém somente `aberto` e `em_analise`. `FURO_MODULES` contém `batida_ausente`, `turno_aberto`, `intervalo_pendente` e `entrada_bloqueada_turno_aberto`. (`app/chamados/catalogo/motor.py:24`, `app/chamados/catalogo/motor.py:29`, `app/chamados/catalogo/furo_modulos.py:15`)
-
-**Cartório, ramo normal — chamada em `app/ponto/services/cartorio.py:1212`.**
-
-- `lista`: chamados do colaborador em `FURO_MODULES`, **todos os status**, agrupados pelo valor de `data_do_chamado(modulo, contexto)` convertido em string; seleciona a chave do dia da célula. O agrupamento não usa `ch.celula.data`. (`app/ponto/services/cartorio.py:81`, `app/ponto/services/cartorio.py:96`, `app/ponto/services/cartorio.py:104`, `app/ponto/services/cartorio.py:1107`)
-- `vivos`: elementos de `lista` com status em `VIVOS`. `_com_fio`: esses vivos para os quais `fio_vivo(x.perguntas_que_resolvem.all())` responde verdadeiro. (`app/ponto/services/cartorio.py:1136`, `app/ponto/services/cartorio.py:1141`)
-- `_protestam`: vivos para os quais **`cel.trabalha is not False` e `marcos_acesos(x, ata_deste_julgamento) is not True`**. Portanto, `trabalha=None` permanece nesse universo; resultado desconhecido de marcos também permanece. (`app/ponto/services/cartorio.py:1184`, `app/ponto/services/cartorio.py:1206`)
-- Passa **`chamados_vivos=len(_protestam)`**, **`chamados_total=len(lista)`** e **`cobrancas_vivas=len(_com_fio)`**. O filtro `_protesta` não é aplicado a `_com_fio` nessa passagem. (`app/ponto/services/cartorio.py:1212`)
-- Julga as células recebidas; pode pular impressão já julgada e pode recortar o dia pelos marcos vencidos quando opera com teto. (`app/ponto/services/cartorio.py:1105`, `app/ponto/services/cartorio.py:1115`, `app/ponto/services/cartorio.py:1163`, `app/ponto/services/cartorio.py:1177`)
-
-O destino dos resultados é:
-
-| Resultado | O que o cartório faz |
-|---|---|
-| **Todos os códigos** | Guarda em `out['cods']`, conta dia com protesto e, com `apply_`, entrega códigos e ata à lavra da célula. (`app/ponto/services/cartorio.py:1224`, `app/ponto/services/cartorio.py:1448`, `app/ponto/services/cartorio.py:1565`) |
-| `COBRANCA_SEM_FURO`, `COBRANCA_EM_DIA_SEM_TRABALHO` | Além da lavra, com `apply_`, tenta `reconciliar()` nos vivos; contabiliza fechamentos e pede rejulgamento. Aqui chama **`reconciliar` diretamente**, não `retratar`. (`app/ponto/services/cartorio.py:1313`) |
-| `COBRANCA_EM_DIA_COBERTO` | Entra na lavra/derivação de veredito; não tem o executor específico dos dois códigos anteriores. (`app/ponto/services/cartorio.py:1313`, `app/ponto/services/cartorio.py:1565`, `app/escala/models.py:1582`) |
-| `FURO_SEM_COBRANCA`, `FURO_COM_COBRANCA_MORTA` | Podem acionar emissão, com guardas de chamado vivo, horizonte/toque, desligamento, afastamento, vínculo, dia de trabalho conhecido e horário inicial. O código de cobrança morta também procura nomear os marcos apagados. (`app/ponto/services/cartorio.py:1475`, `app/ponto/services/cartorio.py:1483`, `app/ponto/services/cartorio.py:1488`, `app/ponto/services/cartorio.py:1495`, `app/ponto/services/cartorio.py:1500`) |
-| `FURO_PARCIAL` | Conta emissão potencial; com `apply_`, abre chamado se não há vivos ou atualiza os marcos do `batida_ausente` existente, respeitando as guardas mostradas nesse bloco. (`app/ponto/services/cartorio.py:1537`) |
-| `PREVISTO_COM_DIA_INDEFINIDO` | Também pode participar da emissão no caso específico `_limbo_de_hoje`. (`app/ponto/services/cartorio.py:1492`) |
-| Demais códigos | Seguem para contagem/lavra e para o mapa de veredito; não têm outros executores por código nesse corpo. (`app/ponto/services/cartorio.py:1448`, `app/ponto/services/cartorio.py:1488`, `app/ponto/services/cartorio.py:1537`, `app/ponto/services/cartorio.py:1565`) |
-
-Há ainda reconciliação **independente dos códigos** para chamados que não protestam e para marcos inexistentes. Quando necessário, o fluxo adia o fechamento e executa **lavra → E2 → reconciliar → rejulgamento**. (`app/ponto/services/cartorio.py:1281`, `app/ponto/services/cartorio.py:1298`, `app/ponto/services/cartorio.py:780`)
-
-Sem códigos, pode lavrar `cobrado` se houver `_com_fio` que também satisfaça `_protesta`; caso contrário, o mapa vazio produz `concorde`. (`app/ponto/services/cartorio.py:1227`, `app/ponto/services/cartorio.py:1250`, `app/escala/models.py:1594`)
-
-**Cartório, ramo `nunca_bateu` — chamada em `app/ponto/services/cartorio.py:1028`.**
-
-Esse ramo é alcançado quando não existe primeira batida não retratada. Passa **zero literal** para `chamados_vivos`, `chamados_total` e `cobrancas_vivas`; não realiza um censo de chamados para esses argumentos. A chamada ocorre dentro de `if apply_`. (`app/ponto/services/cartorio.py:957`, `app/ponto/services/cartorio.py:965`, `app/ponto/services/cartorio.py:1009`, `app/ponto/services/cartorio.py:1029`)
-
-Deriva o veredito dos códigos retornados; sem cobertura integral, substitui-o por `nunca_bateu`. Lava o resultado com **`codigos=[]`**, mesmo que a classificação tenha retornado códigos, e retorna antes do fluxo normal de emissão. Os três códigos que exigem `chamados_vivos` não podem nascer nessa chamada. (`app/ponto/services/cartorio.py:1033`, `app/ponto/services/cartorio.py:1043`, `app/ponto/services/cartorio.py:1044`, `app/ponto/services/cartorio.py:1070`, `app/ponto/supra_juiz.py:443`, `app/ponto/supra_juiz.py:470`, `app/ponto/supra_juiz.py:501`)
-
-**Comando `supra_juiz` — chamada em `app/ponto/management/commands/supra_juiz.py:206`.**
-
-Seleciona colaboradores ativos da empresa, pula quem não tem batida na janela carregada e julga dias de `grade_da_celula` dentro do intervalo solicitado, corrente ou anterior. (`app/ponto/management/commands/supra_juiz.py:74`, `app/ponto/management/commands/supra_juiz.py:97`, `app/ponto/management/commands/supra_juiz.py:116`, `app/ponto/management/commands/supra_juiz.py:188`)
-
-Busca chamados em `FURO_MODULES`, todos os status, e agrupa pelo catálogo `data_do_chamado`. Passa **`len(vivos)`**, **`len(lista)`** e **`len(_com_fio)`**; não aplica ao contador de vivos o filtro de `trabalha` ou de marcos acesos do cartório. (`app/ponto/management/commands/supra_juiz.py:169`, `app/ponto/management/commands/supra_juiz.py:182`, `app/ponto/management/commands/supra_juiz.py:194`, `app/ponto/management/commands/supra_juiz.py:206`)
-
-- **Todos os códigos** alimentam placar, contagem por colaborador e exemplos. (`app/ponto/management/commands/supra_juiz.py:256`)
-- **`COBRANCA_SEM_FURO` e `COBRANCA_EM_DIA_SEM_TRABALHO`** acionam o executor: percorre todos os `vivos`, preserva conversa respondida e cobrança órfã de regeneração; com `--executar` e trava desligada, chama `retratar`. A trava está em `False`. A chamada ao retratador não garante fechamento, pois a porta ainda pode recusar. (`app/ponto/management/commands/supra_juiz.py:41`, `app/ponto/management/commands/supra_juiz.py:218`, `app/ponto/supra_juiz.py:509`, `app/chamados/reconciliador.py:520`)
-- **`COBRANCA_EM_DIA_COBERTO`** apenas entra nas contagens desse comando. (`app/ponto/management/commands/supra_juiz.py:218`, `app/ponto/management/commands/supra_juiz.py:256`)
-- `--alarme` examina somente `FURO_SEM_COBRANCA` e `COBRANCA_SEM_FURO`, podendo sair com código 2. (`app/ponto/management/commands/supra_juiz.py:268`)
-
-**Comando `emitir_furo_retroativo` — chamada em `app/ponto/management/commands/emitir_furo_retroativo.py:99`.**
-
-Seleciona colaboradores ativos da empresa, exige alguma batida na janela carregada e lê os dias pela célula. Busca chamados em `FURO_MODULES`, todos os status, mas agrupa por **`dia_do_fato(ch, fortes=True)`**: célula primeiro, depois data declarada no catálogo/fallback `data_turno`. (`app/ponto/management/commands/emitir_furo_retroativo.py:51`, `app/ponto/management/commands/emitir_furo_retroativo.py:59`, `app/ponto/management/commands/emitir_furo_retroativo.py:77`, `app/chamados/juizes.py:88`, `app/chamados/juizes.py:104`)
-
-Passa **`len(vivos)`**, **`len(lista)`** e **`len(_com_fio)`**, sem filtro de marcos acesos ou `trabalha` na lista de vivos. (`app/ponto/management/commands/emitir_furo_retroativo.py:92`)
-
-**Consome exclusivamente `FURO_SEM_COBRANCA`. Portanto, ignora todos os três códigos dependentes de `chamados_vivos`.** Também ignora `FURO_COM_COBRANCA_MORTA`, embora `chamados_total` possa fazer o juiz escolhê-lo no lugar do código consumido. (`app/ponto/management/commands/emitir_furo_retroativo.py:109`, `app/ponto/supra_juiz.py:352`)
-
-Para emitir, ainda exige vínculo, `eh_dia_trabalho is True`, horário inicial e `lista` vazia; com `--apply`, chama o emissor canônico `_abrir_chamado`. Não lavra diretamente veredito da célula nessa chamada. (`app/ponto/management/commands/emitir_furo_retroativo.py:118`, `app/ponto/management/commands/emitir_furo_retroativo.py:127`, `app/ponto/management/commands/emitir_furo_retroativo.py:130`, `app/ponto/management/commands/emitir_furo_retroativo.py:136`, `app/ponto/management/commands/emitir_furo_retroativo.py:142`)
-
-**4) Escritores, leitores e textos normativos**
-
-O mapa converte os códigos de furo em `furo`; os códigos `COBRANCA_SEM_FURO`/`COBRANCA_EM_DIA_SEM_TRABALHO` em `cobranca_indevida`; e `COBRANCA_EM_DIA_COBERTO` em `coberta`. Havendo vários códigos, vence o primeiro grupo correspondente no mapa. (`app/escala/models.py:1579`, `app/escala/models.py:1597`)
-
-| Estado/campo | Quem escreve | Quem lê no circuito dos efeitos |
-|---|---|---|
-| `ChamadoColaborador.status_local` | Nascimento por `abrir`; transição por `_gravar_estado`, chamada por `reconciliar`. `RECONCILIAR` leva os estados vivos a `resolvido`, sujeito aos gates. (`app/chamados/models.py:1046`, `app/chamados/models.py:222`, `app/chamados/models.py:605`, `app/chamados/catalogo/motor.py:109`) | Os contadores dos três chamadores; signals de encerramento/rejulgamento; painel/fila; fábrica de disputa. (`app/ponto/services/cartorio.py:1136`, `app/ponto/management/commands/supra_juiz.py:195`, `app/ponto/management/commands/emitir_furo_retroativo.py:93`, `app/chamados/signals.py:68`, `app/chamados/signals.py:155`, `app/chamados/services/painel.py:153`, `app/chamados/services/painel.py:186`, `app/chamados/services/disputa_emissao.py:690`) |
-| `veredito`, `veredito_via`, `veredito_em`, `protestos`, `ata` | `CelulaDia.lavrar_veredito` delega à porta `ponto.portas.celula.lavrar_veredito`; esta atribui os campos. O cartório fornece códigos/ata; a decisão humana usa a mesma porta. (`app/escala/models.py:1787`, `app/ponto/portas/celula.py:709`, `app/ponto/portas/celula.py:768`, `app/ponto/services/cartorio.py:1565`, `app/ponto/services/veredito_celula.py:330`) | Leitor da célula, juiz de pergunta viva, fábrica, reconciliador e retenção da folha. (`app/escala/services/leitor_celula.py:345`, `app/chamados/juizes.py:1073`, `app/chamados/services/fabrica_da_celula.py:78`, `app/chamados/reconciliador.py:949`, `app/folha/export.py:1215`) |
-| `ata.lampadas` / `acesa` | Produzidas do casamento das células por `lampadas_do_dia`, agregadas por `ata_do_dia`; dispensa por ausência/justificativa também pode acender lâmpadas. Persistem pela lavra. **Os códigos não atribuem `acesa` diretamente.** (`app/ponto/services/cartorio.py:429`, `app/ponto/services/cartorio.py:541`, `app/ponto/services/cartorio.py:560`, `app/ponto/services/cartorio.py:611`, `app/ponto/services/cartorio.py:1565`) | `_protesta` via `marcos_acesos`, juiz de pergunta viva, `_celula_furada` e leitor da célula. (`app/ponto/services/cartorio.py:1206`, `app/ponto/services/lastro.py:153`, `app/chamados/juizes.py:1073`, `app/chamados/juizes.py:442`, `app/escala/services/leitor_celula.py:63`) |
-| `status_dia` / `status_rotulo` | A mesma porta de lavra calcula e aplica o status com o veredito dessa lavra. (`app/ponto/portas/celula.py:686`, `app/ponto/portas/celula.py:701`, `app/ponto/portas/celula.py:773`) | A autoridade de leitura do status lavrado é `status_do_dia_lavrado`, registrada na tabela de juízes. (`app/docs/JUIZES.md:81`) |
-| Estado das perguntas alcançadas pelo fechamento | `retratar` chama `reconciliar`, resolve perguntas, pode rejeitar justificativa pendente vinculada e anexa ocorrência; no fluxo adiado do cartório, E2 carimba as perguntas absolvidas após a lavra. (`app/chamados/reconciliador.py:505`, `app/chamados/reconciliador.py:531`, `app/chamados/reconciliador.py:538`, `app/ponto/services/cartorio.py:787`) | `pergunta_viva` e `fio_vivo`; este último realimenta `cobrancas_vivas` nos três chamadores. (`app/chamados/juizes.py:1073`, `app/chamados/juizes.py:1133`, `app/ponto/services/cartorio.py:1141`, `app/ponto/management/commands/supra_juiz.py:198`, `app/ponto/management/commands/emitir_furo_retroativo.py:96`) |
-
-A porta preserva veredito humano diante da lavra do cartório, podendo atualizar ata/status; a lavra humana conserva os protestos existentes. `furo` e `cobranca_indevida` estão em `VEREDITOS_ACUSAM`; `coberta` não está. A folha lê esse conjunto e os protestos para decidir retenção. (`app/ponto/portas/celula.py:737`, `app/ponto/portas/celula.py:751`, `app/escala/models.py:1735`, `app/folha/export.py:1215`)
-
-A tabela acima cobre o circuito rastreado desses efeitos; exaustividade de **todo** leitor genérico desses campos em telas, APIs, relatórios e vigias: **[nao verificado]**.
-
-Há textos normativos relevantes, com alcances distintos:
-
-- **Lei geral:** “O CONSUMIDOR LE A LAMPADA, nunca re-julga: chamado, pergunta, tela e folha leem a celula/ata”. (`app/docs/LEIS.md:95`)
-- **Corte que nomeia os três alimentadores:** “todo leitor de chamados_vivos (disputa_emissao.py:670, supra_juiz.py:163-168, core/juizes.py _C1, cartorio.py:780, commands/supra_juiz.py:182, emitir_furo_retroativo.py:79)” e “os leitores leem a lampada”. A numeração interna dessa citação é histórica. (`app/docs/CORTES.md:255`)
-- **Corte sobre marcos acesos no julgamento:** “com todos os marcos acesos NESTE julgamento, o chamado nao conta como cobranca viva e o veredito nao le o proprio chamado vivo (4a).” (`app/docs/CORTES.md:405`)
-- **Extensão:** “o veredito nunca le o proprio chamado vivo vale para TODA lampada, inclusive 'cobrado' em dia sem trabalho”. (`app/docs/CORTES.md:412`)
-- **Separação das perguntas:** “`VIVOS` responde so a primeira metade”, distinguindo chamado vivo de fio; o registro dá autoridade própria a “alguma pergunta desta colecao esta viva?”. (`app/core/juizes.py:103`, `app/core/juizes.py:125`)
-- **Limite explícito de `_protesta`:** “NAO MIGRADO”; lê “so a 1a clausula (`trabalha is not False`, alem dos marcos acesos”; “com trabalha=False zera chamados_vivos antes de classificar_dia”; a segunda cláusula, `ata.tipo_dia`, “seria predicado novo”. (`app/core/juizes.py:145`, `app/core/juizes.py:146`, `app/core/juizes.py:147`, `app/core/juizes.py:148`)
-- **Vocabulário/dia:** “VIVOS/COBRANCA/TERMINAIS/NAO_FECHADOS, nunca tupla literal” e dia pelo catálogo, “nunca .get('data_turno') cru”. (`app/docs/JUIZES.md:52`, `app/docs/JUIZES.md:53`)
-
-Assim, existe corte abrangente nomeando os três alimentadores e especificação explícita do recorte atual de `_protesta`. Uma especificação documental individual completa de todos os filtros para cada comando: **[nao verificado]**. (`app/docs/CORTES.md:255`, `app/core/juizes.py:145`)
-
-**5) Existe função única compartilhada para esse universo?**
-
-**Não há uma seleção compartilhada que produza o universo completo passado como `chamados_vivos` pelos três arquivos.** Os comandos montam `vivos` próprios; o cartório acrescenta seu `_protesta` local. (`app/ponto/management/commands/supra_juiz.py:173`, `app/ponto/management/commands/supra_juiz.py:195`, `app/ponto/management/commands/emitir_furo_retroativo.py:80`, `app/ponto/management/commands/emitir_furo_retroativo.py:93`, `app/ponto/services/cartorio.py:1206`)
-
-Existem autoridades compartilhadas de alcance parcial:
-
-| Função | Resposta efetiva e reutilização |
-|---|---|
-| `fio_vivo(perguntas)` | Responde se há pergunta viva na coleção recebida. O contrato diz literalmente **“O UNIVERSO e do chamador”**; é usada nos três alimentadores, mas não seleciona chamados do dia. (`app/chamados/juizes.py:1133`, `app/ponto/services/cartorio.py:1141`, `app/ponto/management/commands/supra_juiz.py:198`, `app/ponto/manageme
-
-[truncado em 20000 de 21058 caracteres]
-
-## 31/10 21:32 · sessao 3c83aaaa49cc · - · - · origem=Ronald (tmux)
-
-Censo dos chamadores: quatro sítios produtivos em três arquivos — `app/ponto/services/cartorio.py:1028`, `app/ponto/services/cartorio.py:1212`, `app/ponto/management/commands/supra_juiz.py:206` e `app/ponto/management/commands/emitir_furo_retroativo.py:99`. As chamadas de `app/inteligencia/calculadores.py:60` e `app/relatorios/furos.py:45,222,244` pertencem ao homônimo definido em `app/relatorios/furos.py:55`; a importação de inteligência confirma isso em `app/inteligencia/calculadores.py:26`.
-
-**Comando `supra_juiz`:**
-
-- Universo de colaboradores: empresa pedida, `situacao='ativo'`; pula o colaborador se nenhuma batida no intervalo de timestamps entre início−1 dia e fim+3 dias. Janela de dias pode ser explícita, anterior ou atual. (`app/ponto/management/commands/supra_juiz.py:74-105`)
-- Lê os dias da célula por `grade_da_celula`, restringindo à janela. (`app/ponto/management/commands/supra_juiz.py:116`, `:188-191`)
-- Busca chamados do colaborador em `FURO_MODULES`, **sem filtro de status nessa busca**, agrupa pelo retorno truthy de `data_do_chamado(modulo, contexto)` convertido em string. Não pergunta pela célula do chamado nesse agrupamento. (`app/ponto/management/commands/supra_juiz.py:169-185`)
-- `lista = chs[iso]`; `vivos = status_local in VIVOS`; `_com_fio = vivos` com `fio_vivo(perguntas_que_resolvem)`. Passa `chamados_vivos=len(vivos)`, `chamados_total=len(lista)` e `cobrancas_vivas=len(_com_fio)`. Não restringe essas listas por `celula.trabalha` nem por marcos acesos. (`app/ponto/management/commands/supra_juiz.py:194-208`)
-- Todo código retornado incrementa placar, placar por colaborador e exemplos; todos podem aparecer no relatório. (`app/ponto/management/commands/supra_juiz.py:256-267`, `:275-283`)
-- Só `COBRANCA_SEM_FURO` e `COBRANCA_EM_DIA_SEM_TRABALHO` entram no executor. Para esses códigos percorre **todos os `vivos`**, preserva conversa respondida por `pode_executar_csf` e cobrança órfã de regeneração; com `--executar` e trava desligada chama `chamados.reconciliador.retratar`, usando `motivo_retratacao`. A trava é literalmente `False`. (`app/ponto/management/commands/supra_juiz.py:41`, `:218-255`)
-- `COBRANCA_EM_DIA_COBERTO` só entra nas contagens; não tem executor próprio. (`app/ponto/management/commands/supra_juiz.py:218`, `:256-259`)
-- `--alarme` considera exclusivamente `FURO_SEM_COBRANCA` e `COBRANCA_SEM_FURO`, podendo sair com código 2. (`app/ponto/management/commands/supra_juiz.py:268-274`)
-- O gate `pode_executar_csf` recusa qualquer pergunta respondida tanto em `disputa_origem` quanto em `perguntas_que_resolvem`. (`app/ponto/supra_juiz.py:509-520`)
-
-**Comando `emitir_furo_retroativo`:**
-
-- Janela explícita; colaboradores da empresa ativos; pula quem não tem batida na janela de timestamps início−1 até fim+3. Lê `grade_da_celula`. (`app/ponto/management/commands/emitir_furo_retroativo.py:40-59`)
-- Busca todos os status dos chamados do colaborador em `FURO_MODULES`; agrupa por `dia_do_fato(ch, fortes=True)`, diferentemente do agrupamento direto pelo catálogo do comando anterior. (`app/ponto/management/commands/emitir_furo_retroativo.py:77-84`)
-- `dia_do_fato(..., fortes=True)` prefere `celula.data`; depois a chave declarada no catálogo, com fallback para `contexto.data_turno`; interpreta como data e retorna `None` sem esses degraus. (`app/chamados/juizes.py:78-119`)
-- Para cada dia da janela: `lista`, `vivos=VIVOS`, `_com_fio` por `fio_vivo`; passa os respectivos comprimentos. Sem filtro de marcos acesos nem de `trabalha` na formação de `vivos`. (`app/ponto/management/commands/emitir_furo_retroativo.py:88-108`)
-- **Consome exclusivamente `FURO_SEM_COBRANCA`**; todos os outros códigos são descartados pelo `continue`. Logo ignora os três códigos que dependem diretamente de `chamados_vivos`. (`app/ponto/management/commands/emitir_furo_retroativo.py:109-110`)
-- Encontrando esse código, exige vínculo vigente, `eh_dia_trabalho(data) is True`, primeiro marco presente e `lista` vazia; conta descartes nas categorias correspondentes. Com `--apply` chama `detectar_ausencias.Command._abrir_chamado`; sem a flag apenas imprime. (`app/ponto/management/commands/emitir_furo_retroativo.py:111-146`)
-- `chamados_total` continua relevante: pode fazer o classificador escolher `FURO_COM_COBRANCA_MORTA` em vez de `FURO_SEM_COBRANCA`; o retroativo ignora o primeiro. (`app/ponto/supra_juiz.py:352-362`, `app/ponto/management/commands/emitir_furo_retroativo.py:109-110`)
-- A chamada ao emissor não lavra célula diretamente; `_abrir_chamado` é documentado como criador de chamado com push, e recebe sem `marcos_faltantes` nessa via. (`app/ponto/management/commands/emitir_furo_retroativo.py:142`, `app/ponto/management/commands/detectar_ausencias.py:570-579`)
-
-**Vocabulários comuns:**
-
-- `FURO_MODULES`: `batida_ausente`, `turno_aberto`, `intervalo_pendente`, `entrada_bloqueada_turno_aberto`. (`app/chamados/catalogo/furo_modulos.py:15-16`)
-- `VIVOS`: `aberto`, `em_analise`, `registrado`; `COBRANCA` só `aberto`, `em_analise`. Portanto os contadores descritos incluem `registrado`. (`app/chamados/catalogo/motor.py:24-29`)
-- `data_do_chamado` retorna o valor da chave declarada no catálogo, sem interpretar a data, e devolve `None` sem módulo/chave declarada. (`app/chamados/catalogo/modulos.py:219-225`)
-
-**Questão 5 — distinguir funções existentes da função exata pedida:**
-
-- Não há uma função compartilhada pelos três arquivos para produzir o universo de `chamados_vivos` passado ao classificador: os comandos montam suas próprias listas; o cartório monta `_protestam`. (`app/ponto/management/commands/supra_juiz.py:173-208`, `app/ponto/management/commands/emitir_furo_retroativo.py:80-101`, `app/ponto/services/cartorio.py:1206-1214`)
-- Há `fio_vivo(perguntas)`, compartilhada, mas ela só responde se existe pergunta viva na lista recebida; seu próprio contrato diz literalmente: **“O UNIVERSO e do chamador”**. Não seleciona chamados do dia nem filtra módulo, marcos ou `trabalha`. (`app/chamados/juizes.py:1133-1142`)
-- Há `cobranca_viva_do_dia(colaborador, modulo_origem, dia, excluir=None)`: retorna o chamado VIVOS mais novo dos módulos recebidos que bate com o dia forte; não verifica fio vivo, marcos acesos ou `trabalha`. (`app/chamados/juizes.py:1771-1787`)
-- Essa função é reutilizada por cartório, triagem, entrada sincronizada e gates do modelo, mas **não monta os contadores dos chamadores do classificador**. (`app/ponto/services/cartorio.py:1382`, `app/ponto/services/triagem_batida.py:588-589`, `app/ponto/services/entrada_sincronizada.py:24-28`, `app/chamados/models.py:368`, `:690`)
-- Há ainda `chamados_vivos_do_dia` em `veredito_celula`: une chamados VIVOS por `contexto.data_turno` e por relação com a célula, sem filtro de módulo, fio, marcos ou `trabalha`. Tem um uso direto, dentro de `fechar_o_fio_do_dia`. (`app/ponto/services/veredito_celula.py:136-157`, `:182`)
-- `fechar_o_fio_do_dia` é reutilizada pelo veredito, pela declaração do dia e pela validação; isso não significa reutilização daquele universo na classificação do cartório/comandos. (`app/ponto/services/veredito_celula.py:325`, `app/ponto/services/declarar_dia.py:198`, `app/chamados/services/validacao.py:271`)
-- Outra seleção particular é `_chamados_vivos_do_dia` de cobertura: todos os módulos VIVOS, preferindo célula e depois catálogo, usada só pela própria cobertura. (`app/ponto/services/cobertura.py:218-231`, `:309`)
-
-## 31/10 21:32 · sessao 2fe618724668 · - · - · origem=Ronald (tmux)
-
-Censo do circuito de estados, somente código local.
-
-- **Código → estado:** `_MAPA_VEREDITO` mapeia `FURO_SEM_COBRANCA` e `FURO_COM_COBRANCA_MORTA` para `furo`; `COBRANCA_SEM_FURO` e `COBRANCA_EM_DIA_SEM_TRABALHO` para `cobranca_indevida`; `COBRANCA_EM_DIA_COBERTO` para `coberta`. A ordem do mapa decide a precedência quando há vários códigos; lista vazia vira `concorde`. (`app/escala/models.py:1579-1600`)
-- **Escritor de veredito/protestos/ata:** `CelulaDia.lavrar_veredito` delega à porta `ponto.portas.celula.lavrar_veredito`. A porta atribui `ata`, `protestos`, `veredito`, `veredito_via`, `veredito_em` e salva; o cartório lhe entrega todos os `cods` e a ata da passada. (`app/escala/models.py:1787-1796`; `app/ponto/portas/celula.py:709-775`; `app/ponto/services/cartorio.py:1565-1586`)
-- **Outros chamadores produtivos da mesma porta:** completar status de célula já lavrada; ramo nunca-bateu; julgamento comum do cartório; decisão humana pelo serviço `veredito_celula`. (`app/ponto/services/cartorio.py:734`; `app/ponto/services/cartorio.py:1044`; `app/ponto/services/cartorio.py:1565`; `app/ponto/services/veredito_celula.py:330`)
-- **Admin prevalece:** lavra do cartório preserva o veredito humano, mas pode atualizar ata e status; lavra humana conserva os protestos existentes. (`app/ponto/portas/celula.py:737-751`)
-- **Lâmpadas não são o efeito direto desses códigos:** `lampadas_do_dia` produz `acesa/luz/tipo_real` a partir das células casadas; `ata_do_dia` inclui a lista na ata; dispensa por ausência/justificativa aprovada pode ligar lâmpadas sem luz e marcá-las dispensadas. Os códigos seguem em `protestos`, enquanto lâmpadas seguem na ata entregue à mesma lavra. (`app/ponto/services/cartorio.py:429-443`; `app/ponto/services/cartorio.py:541-568`; `app/ponto/services/cartorio.py:611-624`; `app/ponto/services/cartorio.py:1565`)
-- **Escritor de `status_local` nas retratações:** `reconciliar` consulta a decisão/gates e chama `_gravar_estado`; este atribui `status_local`, ajusta resolução/via/urgência, registra evento e salva. `RECONCILIAR` leva `aberto/em_analise/registrado` a `resolvido`. (`app/chamados/models.py:195-279`; `app/chamados/models.py:605-619`; `app/chamados/catalogo/motor.py:109-117`)
-- **Nascimento de chamado:** a porta `abrir` constrói e cria `ChamadoColaborador` com `status_local=status`; é outro momento de escrita do campo, além das transições. (`app/chamados/models.py:1029`; `app/chamados/models.py:1046`)
-- **Retratação completa:** `retratar → _retratar` testa retenção, chama `ch.reconciliar()`, pode rejeitar justificativa pendente vinculada, resolve perguntas e anexa ocorrência. O cartório, nos códigos CSF/SEM_TRABALHO, chama diretamente `x.reconciliar()`, não a unidade `retratar`. (`app/chamados/reconciliador.py:505-548`; `app/ponto/services/cartorio.py:1313-1325`)
-- **Leitores síncronos de `status_local`:** signals rebaixam urgência e resolvem perguntas quando o chamado está em `ENCERRADOS`; outro signal compara status anterior/atual e chama `cartorio.julgar_celula` quando houve nascimento/mudança, exceto reentrada do próprio julgamento. (`app/chamados/signals.py:68-94`; `app/chamados/signals.py:155-180`)
-- **Leitores de fila:** `qs_vivos` filtra `status_local__in=VIVOS`; `qs_na_fila` acrescenta `COBRANCA` e exclui silêncio futuro. A fábrica também lê `status_local in ENCERRADOS` para recusar chamado já encerrado. (`app/chamados/services/painel.py:153-155`; `app/chamados/services/painel.py:186-188`; `app/chamados/services/disputa_emissao.py:690-692`)
-- **Leitor C6/pergunta viva:** lê a lâmpada do marco perguntado antes do veredito geral; depois considera se `cel.veredito` pertence a `VEREDITOS_ACUSAM`, com ressalva dos marcos pendentes. (`app/chamados/juizes.py:1073-1095`)
-- **Leitor de premissa/furo:** `_celula_furada` consulta `dia_sem_trabalho`, exige chave `lampadas` e lê lâmpadas `acesa is False` e órfãs; `dia_sem_trabalho` lê `cel.trabalha is False` ou `ata.tipo_dia` preenchido diferente de trabalho. (`app/chamados/juizes.py:398-408`; `app/chamados/juizes.py:442-467`)
-- **Leitor por marco:** `lastro.marcos_acesos` usa os marcos cobrados pelo chamado e cada lâmpada da ata; devolve `True`, `False` ou `None`. É usado pelo cartório e pela rede horária, conforme contrato do próprio método. (`app/ponto/services/lastro.py:153-181`)
-- **Leitores emissores:** `fabrica_da_celula` cala quando célula tem veredito fora de `VEREDITOS_ACUSAM`; `disputa_emissao` usa a mesma lista para saber se pergunta encerrada retira chamado da fábrica. (`app/chamados/services/fabrica_da_celula.py:78-89`; `app/chamados/services/disputa_emissao.py:695-706`)
-- **Leitor folha:** `motivos_retencao_celula` lê `VEREDITOS_ACUSAM` e protestos; retém `espelho_<veredito>` salvo protestos todos não cobráveis ou dispensa de pausa. `coberta` fica fora de `VEREDITOS_ACUSAM`, enquanto `furo` e `cobranca_indevida` estão dentro. (`app/folha/export.py:1215-1238`; `app/escala/models.py:1735-1736`)
-- **Leitor/retratador assíncrono:** `_absolvido_pela_celula` aceita célula com veredito preenchido fora de `VEREDITOS_ACUSAM`, sem marcos pendentes; `retratar_chamados_absolvidos_por_celula` percorre chamados VIVOS de módulos de turno e retrata pela unidade canônica. `consumir_eventos_celula` chama esse leitor e encerra órfãs pela lâmpada. (`app/chamados/reconciliador.py:949-986`; `app/chamados/reconciliador.py:1300-1308`)
-- **Evento da lavra:** salvar célula e inserir `EventoCelula` ocorrem no mesmo `atomic` quando campos relevantes mudam. (`app/ponto/portas/celula.py:626-642`)
-- **Leitor que realimenta o juiz:** `grade_da_celula` leva o veredito, contagens lavradas, lâmpadas convertidas em células e insumo de `dia_sem_trabalho` para o dicionário `dia`. (`app/escala/services/leitor_celula.py:63-101`; `app/escala/services/leitor_celula.py:345-370`)
-
-Não fiz afirmação de que esta lista seja o censo exaustivo de **todo** leitor de `status_local`/ata/veredito da aplicação; ela é o circuito produtivo diretamente relacionado aos efeitos em questão. A busca encontrou leitores adicionais em relatórios, APIs, calendários, vigias e comandos, cujo comportamento completo não foi inspecionado. [não verificado]
-
-_1260 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1264 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
