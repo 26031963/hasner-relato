@@ -1,7 +1,82 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 03:42** · publicado em **01/11/2026 03:43** (UTC-3)
+> Ultima resposta processada: **01/11/2026 03:52** · publicado em **01/11/2026 03:54** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 03:52 · sessao a060f571054d · V3-DOBRA-SEM-NOTURNA · verificador · origem=Code
+
+**1. Os esperados estão corretos; a cobertura dos mutantes exige uma ressalva em `extra_min`.** O texto exato dos mutantes da volta 1 não foi fornecido: sua identidade literal está [não verificado].
+
+As contas abaixo usam o cadastro explícito do teste: intervalo de 60 minutos, previsto de 480, prorrogação após 05h ligada e hora reduzida preservada (`app/ponto/tests/test_v3_dobra_sem_noturna.py:40`, `app/ponto/tests/test_v3_dobra_sem_noturna.py:46`).
+
+| Caso | Conta pela regra declarada | Esperados |
+|---|---|---|
+| 22h–06h | Trabalho: 480−60=420 min. Art.73 + Súm.60 II: noite 22h–06h menos intervalo =420 min; hora reduzida: 420÷52,5=8 h. A dobra coloca os 420 min em HE100; todos são noturnos. | HE100=HE100-feriado=7 h; HE100-noturna=7 h; noturnas legais=8 h; HE50 e HE50-noturna=0. Corretos (`app/ponto/tests/test_v3_dobra_sem_noturna.py:12`, `:64`, `:74`). |
+| Gêmeo sem dobra, 22h–06h | Mesmo trabalho e mesma noite; 420<480, portanto excedente zero. | Noturnas=8 h; HE100 e HE100-noturna=0. Corretos (`app/ponto/tests/test_v3_dobra_sem_noturna.py:78`, `:81`). |
+| 21h–07h | Trabalho: 600−60=540 min. Excedente: 540−480=60 min. Noite prorrogada: 22h–07h=540, menos intervalo=480 min. Hora reduzida: 480÷52,5=9,142857 h, ou 548,571429 min legais. | HE100=HE100-feriado=9 h; HE50=0; HE100-noturna=8 h; HE50-noturna=0; `extra_min`=60. Gêmeo sem dobra: HE50=1 h. Todos corretos (`app/ponto/tests/test_v3_dobra_sem_noturna.py:88`, `:92`, `:96`, `:99`, `:102`). |
+| Entrada 22h20, marco 22h | Trabalho: 460−60=400 min. L-084: desvios 20 e 0, portanto não recusa os marcos. Tolerância da casa: 20>10, cobra 20 integralmente. L-093: teto 480−400=80, não corta. | Atraso=20÷60 h; antecipada=0. Corretos (`app/ponto/tests/test_v3_dobra_sem_noturna.py:108`, `:111`, `:114`; `app/ponto/motor_calculo_v2.py:1934`, `:1994`, `:1176`). |
+| Saída 05h30, marco 06h | Trabalho: 450−60=390 min. L-084: desvios 0 e 30, portanto julga. Tolerância: 30>10, cobra 30 integralmente. L-093: teto 480−390=90, não corta. | Antecipada=30÷60=0,5 h; atraso=0. Corretos (`app/ponto/tests/test_v3_dobra_sem_noturna.py:119`, `:122`, `:126`; `app/ponto/motor_calculo_v2.py:1934`, `:1996`, `:1176`). |
+
+A Súm.264 aparece no cadastro como **split em horas de relógio**, subconjunto da HE; o fator reduzido é aplicado à rubrica `horas_noturnas`. Por isso 8 h de HE100-noturna e 9,142857 h noturnas legais no caso longo são compatíveis (`app/ponto/motor_calculo_v2.py:342`, `app/ponto/calculador/regras.py:835`, `app/ponto/calculador/regras.py:88`).
+
+Sobre os três reforços:
+
+- **HE100-feriado=9:** detecta um mutante que altere essa parcela no caso com excedente, mantendo eventualmente HE100 total correta (`app/ponto/tests/test_v3_dobra_sem_noturna.py:93`).
+- **`extra_min`=60:** detecta resultado final errado, mas **não mata uma mutação restrita à atribuição do ramo de dobra**: a escrita em `regras.py:787` agora é sobrescrita pela escrita em `regras.py:813`. Esse mutante sobrevive sem alterar a saída observável (`app/ponto/tests/test_v3_dobra_sem_noturna.py:96`; `app/ponto/calculador/regras.py:787`, `:813`).
+- **Antecipada de 30 minutos:** detecta zeramento apenas dessa rubrica na dobra; o gêmeo precisa valer 0,5 h e a dobra precisa igualá-lo (`app/ponto/tests/test_v3_dobra_sem_noturna.py:122`, `:123`).
+
+**2. As triagens estão corretas quanto à origem, mas “preexistente” não basta para justificar enfileiramento pelas regras locais.** `CLAUDE.md:30` determina curar bug comprovado no caminho, sem enfileirar.
+
+- **Tolerância:** comentário corrigido para os 10 minutos efetivamente usados; não altera os esperados de 20 e 30 minutos (`app/ponto/tests/test_v3_dobra_sem_noturna.py:106`; `app/ponto/motor_calculo_v2.py:60`, `:1994`).
+- **Intervalos:** origem preexistente em `alimentacao.py:514`, mas o diff passa a expô-la também no split da dobra. Para o mesmo caso longo, omitindo o intervalo, o recuo de 540 minutos desde 07h chega a 22h e devolve **9 h**, contra **8 h** com o intervalo informado. Portanto, não foi criado pelo diff, mas compromete o resultado desse caminho integrado (`app/ponto/calculador/alimentacao.py:514`; `app/ponto/calculador/regras.py:828`; `app/ponto/motor_calculo_v2.py:395`, `:440`).
+- **Crédito:** a substituição já existia. O crédito é abatido em `dia_pago.py:190`, mas a rubrica do calculador substitui o valor em `:328`; a regra do dia deliberadamente não abate crédito. Após a cura, chega atraso bruto onde antes chegava zero. Origem preexistente; descartá-lo apenas por isso contraria a regra local acima (`app/ponto/services/dia_pago.py:190`, `:328`; `app/ponto/calculador/regras.py:184`, `:855`).
+- **Folga-feriado:** triagem correta. Esse ramo afirma HE100/feriado, declara os splits em `nao_decide` e retorna antes do trecho alterado; não é o mesmo zero afirmado (`app/ponto/calculador/regras.py:682`, `:704`, `:709`, `:735`).
+
+**3. Escritores e leitores depois do diff:**
+
+| Campo | Escrita | Leitura |
+|---|---|---|
+| `horas_saida_antecipada` | Alimentador passa pontualidade; regra aplica tolerância/teto e grava horas em `valores` (`app/ponto/calculador/alimentacao.py:496`, `:518`; `app/ponto/calculador/regras.py:264`, `:271`, `:856`). | Testes (`app/ponto/tests/test_v3_dobra_sem_noturna.py:122`); diagnóstico/comparação (`app/ponto/management/commands/diff_calculador.py:476`, `:501`, `:535`); lavratura recebe as rubricas e substitui o campo do `DiaPago` (`app/ponto/services/fechamento.py:1256`; `app/ponto/services/dia_pago.py:322`, `:328`, `:343`). A apresentação lê a linha lavrada em `app/ponto/services/dia_pago.py:916`. |
+| `detalhe['extra_min']` | Excedente calculado em `regras.py:769`, sujeito à tolerância em `:770`; escrito na dobra em `:787` e novamente em `:813` (`app/ponto/calculador/regras.py:769`, `:787`, `:813`). | Assert direto (`app/ponto/tests/test_v3_dobra_sem_noturna.py:96`); diagnóstico HE50 (`app/ponto/management/commands/diff_calculador.py:497`). **Esse leitor explícito não executa na dobra**, pois exige HE50>0, enquanto a dobra fixa HE50=0 (`app/ponto/management/commands/diff_calculador.py:480`; `app/ponto/calculador/regras.py:786`). O detalhe inteiro ainda pode aparecer na impressão de divergências (`app/ponto/management/commands/diff_calculador.py:546`). |
+
+A lavratura não copia `Rubricas.detalhe`: copia valores e registra nomes das recusas. Logo, `extra_min` não é persistido por esse bloco (`app/ponto/services/dia_pago.py:322`, `:329`).
+
+**4. Não identifiquei outro defeito funcional nas linhas alteradas:** o `elif` preserva a dobra e libera split, noturno e pontualidade. A ressalva nova de cobertura é a atribuição intermediária de `extra_min` mascarada pela escrita posterior (`app/ponto/calculador/regras.py:795`, `:813`, `:820`, `:840`, `:851`).
+
+Execução da suíte, morte dos mutantes originais e impacto em produção: **[não verificado]**. [nao verificado]
+
+## 01/11 03:50 · sessao 66a13e78b458 · - · - · origem=Ronald (tmux)
+
+Fluxo após diff, com referências locais:
+
+- `horas_saida_antecipada`: `do_dia` inicializa zero apenas se decidível (`app/ponto/calculador/regras.py:641`); a dobra continua adiante (`:779-795`); `pontualidade_do_dia` aplica tolerância (`:264`), teto (`:271-272`) e soma minutos (`:274`); `do_dia` grava horas em `valores` (`:856`) e minutos no detalhe (`:858`). Sem dados/lei, declara `nao_decide` (`:619-625`); sem `dia`, remove o valor (`:863-868`).
+- Alimentação: organiza pontualidade (`app/ponto/calculador/alimentacao.py:496-500`) e passa `dia`, marcos e pares para `do_dia` (`:501-519`).
+- Leitura para gravar: fechamento monta rubricas (`app/ponto/services/fechamento.py:1239-1244`) e entrega a `lavrar` (`:1245-1264`). A lavratura primeiro carrega antecipada do motor (`app/ponto/services/dia_pago.py:185`), depois lê genericamente `valores` e substitui pelo calculador (`:320-328`), construindo `DiaPago` (`:343-345`). Não há `do_motor` nessa chamada (`app/ponto/services/fechamento.py:1245-1264`).
+- Leitura no diff: imprime antecipada explicitamente (`app/ponto/management/commands/diff_calculador.py:474-479`), põe `valores` em `c_dia` (`:501`) e compara cada rubrica decidida (`:527-542`). Os testes leem antecipada em `app/ponto/tests/test_v3_dobra_sem_noturna.py:114` e `:122-124`.
+- Leitor de apresentação: `rubricas_da_linha` lê `linha.horas_saida_antecipada` (`app/ponto/services/dia_pago.py:916`). Atingimento efetivo dessa versão pelo leitor em produção: [não verificado].
+
+`detalhe['extra_min']`:
+
+- A fórmula é excedente, `trab - limite`, sujeito à tolerância (`app/ponto/calculador/regras.py:767-771`). A dobra escreve o detalhe em `:787`; depois do diff, `:813` escreve novamente **o mesmo valor**. Para o caso longo: 540 − 480 = 60 (`app/ponto/tests/test_v3_dobra_sem_noturna.py:86-96`).
+- Leitor explícito: `app/ponto/management/commands/diff_calculador.py:497`, mas está sob `--abrir-he50` **e HE50 > 0** (`:480`). Como a dobra fixa HE50=0 (`app/ponto/calculador/regras.py:786`), esse leitor explícito **não executa para dobra**.
+- Na dobra, o detalhe inteiro ainda pode ser impresso quando há divergência e `--colab` (`app/ponto/management/commands/diff_calculador.py:543-548`).
+- O teste lê diretamente a chave (`app/ponto/tests/test_v3_dobra_sem_noturna.py:96`). `dia_pago.lavrar` não copia `Rubricas.detalhe`; copia valores e nomes de recusas (`app/ponto/services/dia_pago.py:320-331`).
+
+Nuance dos mutantes: o assert `extra_min == 60` verifica o resultado final, mas **não mata um mutante restrito à atribuição em `regras.py:787`**, porque `:813` a sobrescreve. Se o mutante altera a variável `extra` ou a escrita final, o assert pode mordê-lo; quais eram exatamente os mutantes da volta 1: [não verificado].
+
+## 01/11 03:50 · sessao aca67ccff62d · - · - · origem=Ronald (tmux)
+
+A triagem técnica dos três defeitos está correta quanto à origem:
+
+- **Intervalos:** `alimentacao.py:514` já passa `intervalos=()`. O diff torna o split alcançável na dobra (`regras.py:779`, `regras.py:820`), expondo essa alimentação defeituosa também nesse ramo. No caso longo, sem intervalo informado, o recuo de 540 minutos desde 07:00 chega a 22:00: 540 minutos noturnos = **9 h**. Com intervalo, recua até 21:00; janela 22–07 menos 02–03 = 480 minutos = **8 h** (`motor_calculo_v2.py:378`, `motor_calculo_v2.py:440`, `regras.py:828`). É origem preexistente, embora agora observável na dobra (`app/ponto/calculador/alimentacao.py:514`).
+
+- **Crédito de atraso:** o abatimento ocorre em `dia_pago.py:190`, seguido pela substituição da rubrica em `dia_pago.py:328`; a regra do dia expressamente não abate crédito (`regras.py:184`). Antes, o retorno antigo já entregava atraso zero afirmado; agora entrega atraso bruto, portanto o problema permanece e passa a aparecer com esse valor (`regras.py:641`, `regras.py:855`; retorno antigo: anexo `cura2.diff`). O overwrite não foi criado pelo diff (`app/ponto/services/dia_pago.py:328`).
+
+- **Folga-feriado:** paga HE100 e HE100-feriado em `regras.py:682`, declara os splits em `nao_decide` em `regras.py:704`–`regras.py:711` e retorna antes do ramo alterado (`regras.py:735`). Portanto, não apresenta o mesmo zero afirmado nem é alcançado pela cura (`app/ponto/calculador/regras.py:735`).
+
+Há uma distinção de governança: a regra local manda curar bug comprovado no caminho, mesmo preexistente, e proíbe enfileirá-lo (`CLAUDE.md:30`). Logo, “não foi introduzido pelo diff” é correto; “pode necessariamente ficar para fila” não decorre disso (`CLAUDE.md:30`). Nesta revisão, prevalece a instrução expressa do usuário de somente leitura [não verificado: instrução sem arquivo].
+
+Não identifiquei defeito novo nas linhas alteradas: o `elif` preserva a substituição da HE normal pela dobra e permite executar os blocos independentes de split, noturno e pontualidade (`app/ponto/calculador/regras.py:779`, `app/ponto/calculador/regras.py:795`, `app/ponto/calculador/regras.py:820`, `app/ponto/calculador/regras.py:840`, `app/ponto/calculador/regras.py:851`).
 
 ## 01/11 03:42 · sessao 5e70cae2048d · - · - · origem=Ronald (tmux)
 
@@ -694,189 +769,4 @@ O teste sem `--forcar` **não estabelece explicitamente** carimbo/impressão/ver
 
 Execução Django, efetivo carimbo da fixture e resultado dos testes: **[não verificado]**. [nao verificado]
 
-## 01/11 01:57 · sessao 296ef6213d0c · GRADE-FOLGA-JUIZ · verificador · origem=Code
-
-**Não libero o pouso nesta pré-verificação: a cura da varredura está implementada, mas sua regressão ainda passa com todos os testes da catraca verdes.** Reintroduzir, somente em memória, o descarte de `precedencia.py` inteiro em `achados()` manteve os 11 casos verdes: o `MORDE_segundo_juiz_dentro_de_precedencia` exercita diretamente `achados_da_fonte`, sem testar o percurso dos arquivos. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:122`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:236`)
-
-As referências abaixo são relativas a `app/`. Os testes AST foram exercitados em memória, sem banco, logs ou gravação de arquivos; execução dos testes de integração Django: **[não verificado]**. [nao verificado]
-
-**1. Bloqueios anteriores e mordida dos testes** [nao verificado]
-
-| Item | Situação nesta cópia |
-|---|---|
-| **(a) `getattr` e cópia literal** | **Curado.** A catraca reconhece `getattr` literal e a cópia do predicado real é exigida pelo teste. Desativar esse reconhecimento deixou vermelhos os testes de cópia literal e leitura sem comparação. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:54`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:204`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:230`) |
-| **(a) varrer `precedencia.py` fora do juiz** | **Parcialmente curado.** O código atual exclui somente as três funções autorizadas; porém excluir novamente o arquivo inteiro no percurso mantém os testes verdes. Falta a mordida nesse percurso. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:113`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:129`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:241`) |
-| **(c) JUIZES.md** | **Curado.** Registra juiz, carregador, predicado e as duas filas; coincide com o registro vivo. (`docs/JUIZES.md:84`, `core/juizes.py:192`) |
-| **Campo “juízes novos”** | O número correto desta obra é **1**, conforme a nova entrada e o corte. A alteração do campo na mensagem de entrega/commit não está disponível para conferência: **[não verificado]**. (`core/juizes.py:192`, `docs/CORTES.md:416`) |
-| **Pauta DP** | **Corrigida no texto do cartório:** declara A0×C=0 e retira a conclusão de Pauta DP. O BACKLOG também cancela “comp09=8”, mas conserva textos anteriores sobre Pauta DP. Valores efetivos da comparação: **[não verificado]**. (`ponto/services/cartorio.py:180`, `docs/BACKLOG.md:796`, `docs/BACKLOG.md:795`, `docs/BACKLOG.md:860`) |
-| **Integridade FM/TXT** | O teste agora compara a linha inteira de FM e todas as linhas de exportação, além do hash/conteúdo do TXT. Isso corrige a insuficiência da asserção; execução e hashes reais: **[não verificado]**. (`ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:106`, `ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:118`, `ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:119`) |
-
-A mordida da catraca ficou assim:
-
-| `MORDE_` | Resultado da conferência |
-|---|---|
-| `filtro_pessoa_e_data` | Vermelho ao desativar reconhecimento do filtro. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:189`) |
-| `apelido_e_manager_relacionado` | Vermelho removendo apelidos de import ou reconhecimento dos managers relacionados. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:194`) |
-| `predicado_da_origem` | Exige detectar o atributo direto; mutação específica executada: **[não verificado]**. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:200`) |
-| `copia_literal_do_predicado_do_juiz` | Vermelho sem reconhecimento de `getattr`. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:204`) |
-| `copia_literal_do_carregador_do_juiz` | Vermelho desativando reconhecimento do filtro. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:215`) |
-| `apelido_de_modulo` | Vermelho retirando reconhecimento de `FolgaDia` no meio da cadeia. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:223`) |
-| `leitura_da_origem_sem_comparar` | Vermelho sem reconhecimento de `getattr`. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:230`) |
-| `segundo_juiz_dentro_de_precedencia` | Morde exclusão no analisador da fonte; **não morde exclusão no percurso real dos arquivos**. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:236`) |
-
-Não cabe afirmar que cada `MORDE_` de integração ficará vermelho para qualquer reversão: os dois builders já erravam em sentidos diferentes. O próprio teste documenta que calendário alheio mordia o builder por turno, enquanto a manual no vínculo velho mordia o legacy; cada caso precisa ser associado à regressão específica. (`escala/tests/test_grade_folga_de_calendario_e_do_vinculo.py:20`)
-
-Os testes adicionais cobram a retirada do portão na grade, inclusive `simular_dia`, e a relavra da ata da 09 com `--forcar`; suas execuções e mutações nesta cópia permanecem **[não verificado]**. (`escala/tests/test_grade_folga_vale_em_toda_competencia.py:74`, `escala/tests/test_grade_folga_vale_em_toda_competencia.py:79`, `escala/tests/test_grade_folga_vale_em_toda_competencia.py:84`, `ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:101`)
-
-**2. Quem escreve e quem lê**
-
-**FolgaDia e seus campos**
-
-| Valor | Escritores e leitores localizados |
-|---|---|
-| Estrutura | `escala_colaborador` tem CASCADE; `data` identifica o dia; `calendario_origem` é nullable/SET_NULL. Unicidade é vínculo+data, não pessoa+data. (`escala/models.py:1553`, `escala/models.py:1556`, `escala/models.py:1557`, `escala/models.py:1571`) |
-| Foto de calendário | `gerar_foto_folgas` lê manuais, apaga a foto de calendário selecionada e cria vínculo/data/origem. (`escala/folgas.py:165`, `escala/folgas.py:169`, `escala/folgas.py:173`) |
-| Foto manual | `lancar_folga` consulta origem, passa pelo veto e cria por vínculo/data; `_foto_do_dia` consulta, apaga/cria ou altera apenas o tipo informativo. (`escala/folgas.py:254`, `escala/folgas.py:258`, `escala/folgas.py:259`, `escala/folgas.py:274`, `escala/folgas.py:280`, `escala/folgas.py:284`, `escala/folgas.py:289`) |
-| Reparentamento | Lê origem, vínculo, data e ocupação; altera `escala_colaborador` pela porta existente. O comando delega à porta. (`escala/folgas.py:405`, `escala/folgas.py:418`, `escala/folgas.py:435`, `escala/folgas.py:453`, `escala/management/commands/reparentar_folgas.py:28`) |
-| Universo da pessoa | O carregador consulta todos os vínculos da pessoa na janela e preserva todas as candidatas por data; o predicado lê origem e identidade do vínculo. (`ponto/precedencia.py:206`, `ponto/precedencia.py:208`, `ponto/precedencia.py:237`, `ponto/precedencia.py:239`) |
-| Foto por vínculo/gerador | `folgas_do_periodo` carrega vínculo/data; `eh_dia_trabalho_calculado` consome essa foto. (`escala/alimentacao.py:60`, `escala/alimentacao.py:66`, `escala/models.py:1251`, `escala/models.py:1280`, `escala/models.py:1327`) |
-| Cadastro e diagnóstico | Defeito mensal, divergência calendário×foto, Plano de Folgas, toggle, diagnóstico do vínculo e limbo leem a foto por vínculo. (`escala/models.py:1220`, `escala/folgas.py:101`, `escala/views_plano_folgas.py:60`, `escala/views_plano_folgas.py:112`, `ponto/services/diagnostico_escala.py:102`, `relatorios/furos.py:112`) |
-| Vigias | Fase lê a foto do vínculo ativo; C5 itera toda FolgaDia e confronta cobertura/célula. (`escala/services/fase_conflitante.py:74`, `chamados/management/commands/auditar_invariantes_chamados.py:1532`) |
-
-Não localizei novo escritor direto de FolgaDia fora da porta; o registro autoriza `escala/folgas.py`. CASCADE/SET_NULL continuam sendo efeitos dos relacionamentos existentes. (`core/portas.py:466`, `escala/models.py:1554`, `escala/models.py:1558`)
-
-**Vínculo entregue ao juiz em cada sítio**
-
-| Sítio | Feed |
-|---|---|
-| Precedência | `vinculo_do_dia`, com células e vínculos; completa geradoras faltantes antes da escolha. (`ponto/precedencia.py:326`, `ponto/precedencia.py:350`, `ponto/precedencia.py:357`) |
-| Veto de lançamento | `escala_vigente(colab,d)`. (`ponto/precedencia.py:505`) |
-| Declaração | `_ec_do_dia` → `escala_vigente`. (`ponto/services/declarar_dia.py:56`, `ponto/services/declarar_dia.py:74`) |
-| Rejulgar ausência em folga | `escala_vigente(cid,d)`. (`ponto/management/commands/rejulgar_ausencia_em_folga.py:65`) |
-| Grade por turno | Mapa produzido por `vinculo_do_dia`; overlay recebe `esc_por_dia.get`. (`escala/utils.py:1262`, `escala/utils.py:1268`, `escala/utils.py:1794`) |
-| Grade legacy | Segmenta pelo juiz do vínculo; passa o vínculo do segmento ao builder e retém apenas seus dias. O `lambda _: esc` responde nesse recorte. (`escala/utils.py:972`, `escala/utils.py:995`, `escala/utils.py:999`, `escala/utils.py:770`) |
-| Calendário | Chama `fatos_do_periodo` sem a antiga substituição `{d: True}`; usa o carregador da pessoa. (`colaboradores/services/calendario.py:617`, `ponto/precedencia.py:281`) |
-
-`escala_vigente` carrega a célula e delega a `vinculo_do_dia`; a validade da geradora fica na autoridade existente. (`escala/servico_jornada.py:46`, `escala/servico_jornada.py:57`, `escala/alimentacao.py:237`)
-
-**Tipo da grade, ata e célula**
-
-O `tipo_dia` nasce nos builders; o overlay curado só escreve no dict em memória, depois da resposta do juiz. Ausências ainda podem substituir o tipo por `falta`/`ausencia`. (`escala/utils.py:727`, `escala/utils.py:1751`, `escala/utils.py:1124`, `escala/utils.py:1126`, `escala/utils.py:1182`, `escala/utils.py:1188`)
-
-O cartório lê a grade, monta `ata.tipo_dia`, entrega a ata à lavra existente e carimba. A porta grava ata/veredito/status e salva junto com os carimbos; save e evento compartilham `atomic`. A precedência entra como chave da mesma ata pela sua operação existente. (`ponto/services/cartorio.py:947`, `ponto/services/cartorio.py:583`, `ponto/services/cartorio.py:1580`, `ponto/services/cartorio.py:1600`, `ponto/portas/celula.py:768`, `ponto/portas/celula.py:807`, `ponto/portas/celula.py:639`, `ponto/portas/celula.py:819`)
-
-Leitores externos ao diff localizados:
-
-| Origem | Leitores |
-|---|---|
-| Ata/célula | Juiz de cobrança, leitor da célula e tripwire. (`chamados/juizes.py:408`, `escala/services/leitor_celula.py:345`, `ponto/management/commands/tripwire_celulas.py:342`) |
-| Grade — cobrança/ação | Materialização, declaração textual, emissão de disputa, furos diários, supra-juiz, worklist, propositor e veredito humano. (`chamados/services/materializacao.py:225`, `chamados/services/declaracao_texto.py:90`, `chamados/services/disputa_emissao.py:68`, `escala/services/furos_diarios.py:39`, `ponto/supra_juiz.py:222`, `ponto/worklist.py:19`, `ponto/propositor.py:210`, `ponto/services/veredito_celula.py:221`) |
-| Grade — apuração/tela | Status, espelho, simulação, bordas, órfãs, furos e calculadores. (`ponto/status_dia.py:146`, `ponto/services/espelho.py:690`, `ponto/services/simular_dia.py:12`, `ponto/services/bordas_realizado.py:74`, `escala/orfa_classe.py:65`, `relatorios/furos.py:147`, `inteligencia/calculadores.py:141`) |
-| Financeiros | Dia pago, fechamento, causas e exportação. (`ponto/services/dia_pago.py:386`, `ponto/services/fechamento.py:1011`, `folha/causas.py:100`, `folha/export.py:1071`) |
-| Instrumentos | Autópsia e mapa de divergência. (`ponto/management/commands/e6_piso_autopsia.py:13`, `ponto/management/commands/mapa_divergencia.py:131`) |
-
-A completude contra acessos dinâmicos não identificáveis pelo censo textual é **[não verificado]**.
-
-**REGRA_VERSOES:** a declaração escreve a tupla; `versao_para` lê seus horizontes pela competência; `_regra_do_dia` alimenta os dois ramos do cartório; `impressao_insumos` incorpora a versão ao hash. (`ponto/services/cartorio.py:111`, `ponto/services/cartorio.py:194`, `ponto/services/cartorio.py:210`, `ponto/services/cartorio.py:963`, `ponto/services/cartorio.py:1015`, `ponto/services/cartorio.py:1168`, `ponto/services/cartorio.py:368`)
-
-**3. ALLOWLIST e sítios fora dela**
-
-Não encontrei entrada que oculte outro juiz pessoa-dia sob motivo falso: são escritores, fotos por vínculo, perguntas mensais ou escolha de frase sobre resultado já julgado. O gerador é uma exceção relevante, mas está explicitamente marcado como **INCOMPLETO / GRADE-FOLGA-GERADOR**. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:137`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:158`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:160`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:165`)
-
-A entrada de fase é coerente: o arquivo lê a foto do vínculo ativo e compara foto×âncora; a entrada declara sua fila própria. `test_os_sitios_curados_nao_voltam` cobra comando, declaração e ausência de `_folga_avulsa`, sem exigir cura de fase. (`escala/services/fase_conflitante.py:74`, `escala/services/fase_conflitante.py:80`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:142`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:182`)
-
-**Sim, há leitor fora do juiz e fora da ALLOWLIST:** C5 percorre FolgaDia, usa cobertura por vínculo e acusa célula de trabalho sem distinguir origem. É a fila nominal GRADE-FOLGA-C5, expressamente declarada como limite da catraca. (`chamados/management/commands/auditar_invariantes_chamados.py:1532`, `chamados/management/commands/auditar_invariantes_chamados.py:1535`, `chamados/management/commands/auditar_invariantes_chamados.py:1548`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:21`)
-
-**4. Resíduos da retirada de fase**
-
-Nos documentos nominalmente pedidos, não achei afirmação residual de migração: JUIZES declara foto/fila; MAPA-JUIZES, MAPA e `core/juizes.py` registram o juiz; ARQUITETURA mantém o cron de fase. O docstring dos testes da obra declara a retirada, e os testes próprios de fase continuam verificando foto×âncora. (`docs/JUIZES.md:89`, `docs/MAPA-JUIZES.md:52`, `docs/MAPA.md:107`, `core/juizes.py:192`, `docs/ARQUITETURA.mmd:62`, `ponto/tests/test_grade_folga_juiz_sitios.py:13`, `escala/tests/test_fase_conflitante.py:60`)
-
-**Sobrou texto fora desse conjunto:** BACKLOG ainda afirma que `fase_conflitante:74` pergunta ao juiz; CORTES conserva a enumeração original. A linha seguinte do BACKLOG registra o desmembramento. Cabe atualizar o registro vivo e explicitar a supersessão, sem trazer a cura de fase de volta à obra. (`docs/BACKLOG.md:796`, `docs/BACKLOG.md:797`, `docs/CORTES.md:416`)
-
-**5. Classes de reprovação**
-
-| Classe | Veredito |
-|---|---|
-| Segundo juiz | Os sítios curados delegam ao juiz; C5 e gerador permanecem filas declaradas. (`ponto/precedencia.py:505`, `ponto/services/declarar_dia.py:74`, `ponto/management/commands/rejulgar_ausencia_em_folga.py:65`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:21`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:160`) |
-| Segundo escritor | Não aparece novo escritor persistente fora da porta; overlay altera memória e cartório usa a lavra existente. (`escala/utils.py:1126`, `ponto/services/cartorio.py:1580`, `ponto/portas/celula.py:807`) |
-| Relógio fora da borda | O trecho novo do comando lê a data na borda; carregador, predicado e overlay novos não consultam relógio. (`ponto/management/commands/rejulgar_ausencia_em_folga.py:52`, `ponto/precedencia.py:194`, `ponto/precedencia.py:222`, `escala/utils.py:1103`) |
-| Derivação paralela | A grade passa a chamar o juiz; calendário compartilha `trabalho_do_dia` entre classificação e publicação. (`escala/utils.py:1124`, `colaboradores/services/calendario.py:126`, `colaboradores/services/calendario.py:840`) |
-| Selo sem mordida | **Procedente e bloqueante:** exclusão integral de `precedencia.py` no percurso passa verde. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:129`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:236`) |
-| Ordem de trava | Não há nova aquisição de trava no trecho alterado; a persistência continua pelo `atomic` existente. Ausência de corrida em execução: **[não verificado]**. (`ponto/services/cartorio.py:111`, `ponto/portas/celula.py:639`) |
-| Pouso antes do pré-requisito | O próprio cartório exige ensaio `--apply` antes do pouso. Ensaio, reversão e resultado específico de 303970f1: **[não verificado]**. (`ponto/services/cartorio.py:174`) |
-
-**6. Exportada, escala/vínculo, motor e alcance do rejulgamento**
-
-O diff fornecido não introduz escritor de escala/vínculo nem alteração em `motor_calculo_v2.py`; a cura da grade consulta FolgaDia e modifica o resultado em memória. A cadeia examinada do cartório grava célula/ata, carimbos, veredito/status e evento pela porta existente. (`escala/utils.py:1115`, `escala/utils.py:1124`, `escala/utils.py:1126`, `ponto/services/cartorio.py:1580`, `ponto/services/cartorio.py:1600`, `ponto/portas/celula.py:640`)
-
-**Ata/célula da exportada pode mudar, pelo desenho autorizado.** Não há nova escrita direta de FechamentoMensal/TXT nesse caminho; os testes cobram sua integridade completa. A confirmação operacional dessa integridade é **[não verificado]**. (`docs/ADR/0003-celula-tres-naturezas.md:25`, `ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:118`, `ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:119`)
-
-A v3 muda a versão da competência **10 em diante**; 09 permanece na v1 e 08 sem versão. Isso altera a impressão e provoca nova análise das células elegíveis; não constitui portão de escrita. (`ponto/services/cartorio.py:111`, `ponto/services/cartorio.py:212`, `ponto/services/cartorio.py:1168`, `ponto/tests/test_o219_versao_da_regra.py:85`)
-
-Com `--forcar`, o comando ignora o pulo por carimbo atual e seleciona **todas as células passadas da empresa**, inclusive abaixo do horizonte, sem limitar à 09. Sem `--forcar`, a 09 não muda de impressão **por esta v3**, mas células sem carimbo ou com outros insumos alterados continuam elegíveis. A frase “a 09 só se rejulga com --forcar” é ampla demais e deve ser corrigida. (`ponto/management/commands/processar_cartorio.py:49`, `ponto/management/commands/processar_cartorio.py:61`, `ponto/services/cartorio.py:1174`, `ponto/services/cartorio.py:1178`, `ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:122`)
-
-**Bloqueia:** prender com teste a varredura real de `precedencia.py`. **Corrigir junto:** resíduos do BACKLOG e a descrição absoluta de `--forcar`. **Fila:** fase, C5 e gerador. **Não procede:** exigir cura de fase nesta obra, tratar relavra autorizada da ata da 09 como escrita proibida do gravado, ou afirmar que falta o juiz em JUIZES.md. (`ponto/tests/test_catraca_folga_lancada_um_juiz.py:129`, `docs/BACKLOG.md:796`, `ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:122`, `docs/BACKLOG.md:797`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:21`, `ponto/tests/test_catraca_folga_lancada_um_juiz.py:160`, `docs/ADR/0003-celula-tres-naturezas.md:25`, `docs/JUIZES.md:84`)
-
-## 01/11 01:55 · sessao da6e67fc3dfd · - · - · origem=Ronald (tmux)
-
-**Cadeia de escrita/leitura**
-
-- `tipo_dia` nasce nos builders: single vínculo em `app/escala/utils.py:727` e `:752`; por turno em `:1751` e `:1757`; legacy recorta segmentos pelo `vinculo_do_dia` em `:972`, `:995` e `:999`, transportando o campo em `:1018`. O overlay curado escreve apenas o dict em memória (`:1126`), após consultar o juiz (`:1124`); ausências podem sobrescrever para `falta`/`ausencia` em `:1182`/`:1188`.
-- O cartório lê a grade em `app/ponto/services/cartorio.py:947`, transporta `tipo_dia` para a ata em `:583`, entrega a ata a `CelulaDia.lavrar_veredito` em `:1059` e `:1580`, e carimba pelo escritor existente em `:1600`.
-- O método do model só delega: `app/escala/models.py:1787`. A porta escreve `cel.ata` em `app/ponto/portas/celula.py:741`/`:768`; `carimbar` salva campos e lavra juntos em `:787`/`:807`; save e outbox compartilham atomic em `:639`. A precedência tem chave própria na mesma ata: preservação em `:732`; escritor `carimbar_precedencia` em `:811`/`:819`, chamado por `app/ponto/services/cartorio.py:1695`.
-- Nenhuma nova ordem de locks foi introduzida pelo diff fornecido; o trecho novo do cartório é declaração de versão e documentação (`app/ponto/services/cartorio.py:111`, `:168`). Prova operacional de ausência de corrida: **[não verificado]**.
-
-**Leitores externos ao diff**
-
-- Ata diretamente: juiz de cobrança `app/chamados/juizes.py:408`; leitor da célula `app/escala/services/leitor_celula.py:332`/`:345`, que publica o campo em `:360`; vigia `app/ponto/management/commands/tripwire_celulas.py:342`.
-- Grade/dict de dia: `app/escala/orfa_classe.py:65`; `app/relatorios/furos.py:147`/`:151`/`:218`/`:237`; `app/chamados/services/materializacao.py:225`; `app/chamados/services/declaracao_texto.py:90`; `app/chamados/services/disputa_emissao.py:68`; `app/escala/services/furos_diarios.py:39`; `app/ponto/status_dia.py:146`; `app/ponto/worklist.py:19`; `app/ponto/propositor.py:36`/`:210`; `app/inteligencia/calculadores.py:46`/`:141`; `app/ponto/services/veredito_celula.py:221`; `app/ponto/services/bordas_realizado.py:74`; `app/ponto/services/simular_dia.py:12`; `app/ponto/services/espelho.py:690`; `app/ponto/supra_juiz.py:222`; `app/folha/causas.py:40`/`:41`/`:100`.
-- Leitores financeiros continuam existindo: `app/ponto/services/dia_pago.py:386`/`:393`/`:398`; `app/ponto/services/fechamento.py:1011`/`:1015`; `app/folha/export.py:1071`/`:1075`/`:1080`. Logo, alterar `tipo_dia` pode alterar resultados de uma futura projeção financeira; não equivale a escrever o gravado pelo cartório (`app/ponto/services/fechamento.py:1112`).
-- Instrumentos adicionais leem o campo em `app/ponto/management/commands/e6_piso_autopsia.py:13` e `app/ponto/management/commands/mapa_divergencia.py:131`/`:143`/`:155`/`:229`. Ocorrências em templates não apareceram no censo textual; completude contra acesso dinâmico: **[não verificado]**.
-
-**REGRA_VERSOES e horizonte**
-
-- Escritor único é a declaração `app/ponto/services/cartorio.py:111`; validação em `:183`; leitor `versao_para` em `:194`/`:212`, usando a competência de `janela_atual` (`:210`).
-- A versão integra a impressão em `:368`; `_regra_do_dia` fornece-a aos dois ramos (`:963`, `:1015`, `:1168`). A v3 alcança competência 10 em diante; 09 conserva v1 e 08 fica sem versão, conforme asserções de `app/ponto/tests/test_o219_versao_da_regra.py:85`.
-- `--forcar` ignora o pulo por impressão igual (`app/ponto/services/cartorio.py:1020`, `:1178`). O comando seleciona **todas as células passadas da empresa**, sem recorte de competência (`app/ponto/management/commands/processar_cartorio.py:49`, `:61`, `:65`). Portanto, com `--forcar`, abaixo do horizonte não significa só 09: qualquer célula passada selecionada pode ser rejulgada.
-- Sem `--forcar`, a 09 não recebe mudança de impressão **por esta v3**, mas células sem carimbo ou com outros insumos alterados continuam elegíveis (`app/ponto/services/cartorio.py:1174`). A frase absoluta “a 09 só se rejulga com --forcar” do teste é mais ampla que o código (`app/ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:122`).
-- Não confirmei falha desse teste: as batidas da fixture (`app/ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:62`) disparam julgamento por signal (`app/ponto/signals.py:131`/`:135`, `:85`/`:93`), podendo inicializar o carimbo antes do update da ata (`app/ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:74`). Execução do teste e mutante: **[não verificado]**.
-
-**Exportada, prerequisitos e “corrigir junto”**
-
-- O caminho examinado reescreve célula/ata, carimbos, status, protestos e emite outbox; não chama o escritor de `FechamentoMensal` ou a porta REGEN (`app/ponto/services/cartorio.py:1578`, `:1600`; `app/ponto/portas/celula.py:787`). A fixture cobra linha inteira de FM e todas as exportações intactas (`app/ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:106`, `:118`, `:119`). Verde real e hashes de produção: **[não verificado]**.
-- O diff fornecido não altera motor nem escritores de vínculo; a chamada nova da grade consulta o juiz e muda memória (`app/escala/utils.py:1115`, `:1124`, `:1126`). Identidade binária com main, sem repositório Git nesta cópia: **[não verificado]**.
-- Ensaio `--apply` na sombra, reversão e impacto **antes do pouso** são prerequisito explícito da própria declaração (`app/ponto/services/cartorio.py:174`/`:175`). Os anexos narram evidência antiga; ensaio da cópia 303970f1, números e reversão: **[não verificado]**.
-- Pauta DP foi corrigida no texto vivo para A0×C=0 (`app/ponto/services/cartorio.py:180`/`:181`); o valor real e hashes TXT não são demonstráveis pelos arquivos examinados: **[não verificado]**.
-- Registro efetivamente conta juiz novo (`app/core/juizes.py:192`) e há corte (`app/docs/CORTES.md:416`). O campo LEI-AKITA da mensagem de entrega/commit não está acessível; sua correção é **[não verificado]**.
-- Resíduos vivos fora da lista nominal pedida: `app/docs/BACKLOG.md:796` e o corte histórico `app/docs/CORTES.md:416` ainda dizem que `fase_conflitante` pergunta ao juiz. A retirada decidida pelo usuário prevalece, mas o BACKLOG precisa acompanhar o novo escopo (`app/ponto/tests/test_grade_folga_juiz_sitios.py:13`).
-
-## 01/11 01:55 · sessao 201524adb215 · - · - · origem=Ronald (tmux)
-
-Catraca implementada, porém **a exclusão do arquivo inteiro `precedencia.py` ainda pode voltar sem teste vermelho**. `test_MORDE_segundo_juiz_dentro_de_precedencia` chama diretamente `achados_da_fonte`; não exerce o percurso `achados`. Em mutação somente em memória, inserir `if rel == 'ponto/precedencia.py': continue` nesse percurso deixou os **11 testes verdes**. Referências: `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:122`, `:130`, `:236`, `:241`. Esse é um bloqueio de mordida, embora o código atual efetivamente varra o arquivo (`:113`, `:115`, `:131`).
-
-Verificação em memória, com AST e `unittest.TestCase` substituindo somente `SimpleTestCase`, sem importar Django, banco ou logs:
-
-| MORDE | Referência | Mutação que o deixou vermelho |
-|---|---|---|
-| filtro pessoa/data | catraca:189 | Desativar reconhecimento de filtro pessoa/data |
-| apelido e manager | catraca:194 | Remover reconhecimento de import com apelido; ou esvaziar `REL` |
-| predicado da origem | catraca:200 | A asserção exige detectar `fd.calendario_origem_id`; regressão específica não executada [não verificado] |
-| cópia literal do predicado | catraca:204 | Desativar `_getattr_literal` |
-| cópia literal do carregador | catraca:215 | Desativar filtro pessoa/data |
-| apelido de módulo | catraca:223 | Remover reconhecimento do modelo no meio da cadeia |
-| origem sem comparação | catraca:230 | Desativar `_getattr_literal` |
-| segundo juiz dentro de precedência | catraca:236 | Excluir precedência de `achados_da_fonte`; **não** excluir do percurso `achados` |
-
-As funções e asserções estão em `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:54`, `:62`, `:95`, `:105`, `:189`, `:194`, `:200`, `:204`, `:215`, `:223`, `:230`, `:236`. Os testes atuais passaram e `achados == ALLOWLIST == 22`; resultado da execução em memória [não verificado por artefato persistido].
-
-A ALLOWLIST está coerente com a retirada de fase: `medir` lê a foto do vínculo ativo, compara foto e âncora e conta divergências; nenhuma chamada ao juiz aparece nesse fluxo. A entrada declara expressamente sua fila própria. `test_os_sitios_curados_nao_voltam` prende apenas comando, declaração e lápide `_folga_avulsa`, sem exigir cura de fase. Referências: `app/escala/services/fase_conflitante.py:71`, `:74`, `:80`, `:83`; `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:142`, `:182`.
-
-Nas entradas inspecionadas, não achei outro juiz pessoa-dia oculto: há fotos por vínculo, contadores mensais e escritores. O gerador continua decidindo o dia pela foto do próprio vínculo, mas isso está explicitamente marcado como incompleto/fila. Referências: `app/escala/alimentacao.py:49`, `:66`; `app/escala/models.py:1212`, `:1220`, `:1280`; `app/escala/views_plano_folgas.py:60`, `:63`, `:70`; `app/ponto/services/diagnostico_escala.py:81`, `:102`; `app/relatorios/furos.py:112`; `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:160`.
-
-C5 permanece fora do juiz e fora da ALLOWLIST: itera toda FolgaDia, verifica cobertura por algum vínculo e acusa célula de trabalho sem distinguir origem. O limite está declarado na catraca como GRADE-FOLGA-C5. Referências: `app/chamados/management/commands/auditar_invariantes_chamados.py:1532`, `:1534`, `:1535`, `:1540`, `:1542`; `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:19`.
-
-Os documentos expressamente pedidos estão coerentes: JUIZES registra fase lendo foto em fila; MAPA-JUIZES/MAPA/core registram o juiz sem atribuir migração a fase; ARQUITETURA só mantém os nós do cron. Referências: `app/docs/JUIZES.md:84`, `:88`, `:90`; `app/docs/MAPA-JUIZES.md:52`; `app/docs/MAPA.md:107`; `app/core/juizes.py:188`, `:192`; `app/docs/ARQUITETURA.mmd:62`, `:112`.
-
-**Sobrou resíduo fora desse conjunto:** BACKLOG ainda afirma `fase_conflitante:74` perguntando ao juiz; CORTES também enumera fase entre os migrados. A linha seguinte do BACKLOG registra o desmembramento, tornando necessário esclarecer o texto anterior. Referências: `app/docs/BACKLOG.md:796`, `:797`; `app/docs/CORTES.md:416`. O docstring dos testes da obra já declara corretamente a retirada; os testes antigos de fase verificam foto/âncora, sem depender dessa cura. Referências: `app/ponto/tests/test_grade_folga_juiz_sitios.py:13`; `app/escala/tests/test_fase_conflitante.py:60`, `:72`, `:93`.
-
-_1347 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1350 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
