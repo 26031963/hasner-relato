@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 09:35:58.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (115.8 MB). Acoes na janela: **504**.
+**Medido em 01/11/2026 09:40:58.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (115.8 MB). Acoes na janela: **502**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -512,5 +512,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:44:46 | Agent | Construtor O261-E-F1C4-MEMO-C6 | `Voce e o CONSTRUTOR da obra O261-E-F1C4-MEMO-C6 no repo /home/ronald/saas-hasner (Django em app/). Leia /home/ronald/saas-hasner/CLAUDE.md INTEIRO antes de qualquer acao (secoes 0, 3, 6, 7b CODEX e RAIAS sao lei). Linha da obra (app/docs/BACKLOG.md, grep 'O261-E-F1C4-MEMO-C6'): "opus final F1C4 31/10 F5: a chave do memo do C6 (chamados/juizes.py:767-773) nao leva ata nem dna; mudou a ata no mesmo  ...` |
 | 21:44:31 | Bash | Write lei line at RELATO top and fila rows | `cd /home/ronald/saas-hasner/app; grep -o 'separa os predicados[^\|]\{0,200\}' docs/CORTES.md \| head -2; python3 - <<'EOF' import re p='docs/RELATO.md'; L=open(p).read().split('\n') lei='lei: O261-E-F1C4-LEN-VIVOS (31/10 21:5x) -- falta qual universo de chamados o RETRATADOR (commands/supra_juiz.py:206, cron 06:54) passa em chamados_vivos: cortes CLASSE-4/-V2 (CORTES.md:405/409/412, _C18 core/juiz ...` |
 | 21:44:18 | Bash | Verify cited corte and sites | `cd /home/ronald/saas-hasner/app; sed -n '255p' docs/CORTES.md \| cut -c1-600; grep -n 'chamados_vivos' ponto/management/commands/supra_juiz.py \| head -3; grep -n 'O261-E-F1C4-LEN-VIVOS' docs/BACKLOG.md` |
-| 21:36:51 | Bash | Wait for GRADE suite verdict on abd37234 | `cd /home/ronald/saas-hasner/logs; until grep -q '^rc=' grade_juiz/v8/suite_inteira_abd37234.log 2>/dev/null; do /usr/bin/sleep 30; done; L=grade_juiz/v8/suite_inteira_abd37234.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran' $L \| tail -1; grep '^rc=' $L \| tail -1` |
-| 21:36:47 | Bash | Check new GRADE suite log and record in RELATO | `cd /home/ronald/saas-hasner/logs; ls -la grade_juiz/v8/suite_inteira_abd37234.log; tail -2 grade_juiz/v8/suite_inteira_abd37234.log; git -C /home/ronald/wt-grade-v5-163638 log --oneline -2; cd ../app && python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read().rstrip('\n')+'\n- 21:3x GRADE v8: suite 1093275a FAILED 2 (selo_diagrama: juizes celula 9->10 sem regerar ARQUITETURA.mmd/MAPA.md); cura abd372 ...` |
