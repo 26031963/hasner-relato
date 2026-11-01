@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 02:39:14.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (113.8 MB). Acoes na janela: **1374**.
+**Medido em 01/11/2026 02:44:44.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (113.8 MB). Acoes na janela: **1372**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1382,5 +1382,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:47:34 | Bash | Look at b3_v4 parcial case and topo reader | `cd /home/ronald/wt-b3codex-141721 && grep -n "parcial" bin/tests/test_disjuntor.sh \| head; sed -n 415,440p bin/hook_stop_fila1.py` |
 | 14:47:29 | Bash | Inspect topo reading code for mutant | `cd /home/ronald/wt-b3codex-141721 && grep -n "_bloco_do_topo" bin/*.py \| head; grep -n "def _topo_consistente" -A30 bin/disjuntor.py \| head -45` |
 | 14:47:23 | Bash | Check selo and insert DESENHO E4-8 line | `cd /home/ronald/saas-hasner && tail -n 3 logs/reprova_codex/selo_v2b.log; grep FALHA logs/reprova_codex/selo_v2b.log; python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p).read() d=open('logs/e4_8/desenho.txt').read().strip() assert d.startswith('DESENHO E4-8:') and 'DESENHO E4-8:' not in s a='DESENHO E4-6:'; assert s.count('\n'+a)==1 s=s.replace('\n'+a, '\n'+d+' E4: itens 6 e 8 em DESENHO; 4/5/7 seg ...` |
-| 14:44:18 | Bash | Read DESENHO line and rerun selo | `cd /home/ronald/saas-hasner && cat logs/e4_8/desenho.txt \| head -c 1500; echo; grep -n '^DESENHO E4-6:' app/docs/RELATO.md \| head -2; (cd /home/ronald/wt-b3codex-141721 && bash bin/tests/test_disjuntor.sh > /home/ronald/saas-hasner/logs/reprova_codex/selo_v2b.log 2>&1; echo rc=$? >> /home/ronald/saas-hasner/logs/reprova_codex/selo_v2b.log)` |
-| 14:41:35 | Bash | Check if mutant failure is preexisting/flaky | `cd /home/ronald/wt-b3codex-141721 && grep -n -A3 "_mutante B3-foto-parcial-engolida" bin/tests/test_disjuntor.sh; git stash -q && bash bin/tests/test_disjuntor.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/selo_base.log 2>&1; echo base_rc=$?; git stash pop -q; git status --short; grep FALHA /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450- ...` |
