@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 08:42:44.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (115.8 MB). Acoes na janela: **577**.
+**Medido em 01/11/2026 08:48:14.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (115.8 MB). Acoes na janela: **568**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -578,12 +578,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:50:13 | Bash | Log the PDC round 8 green | `echo "- $(date +%H:%M) PDC r8 VERDE: GREEN_disjuntor/pdc/hook_parei/ruff rc=0; REDs harness_velho (50, 9) e casos_head6 (15) vermelhos; P10 NOTA mordida PELO PRAZO. Proximo: commit na copia + Codex pre-verificador -> suite -> opus final -> pouso proprio (instrumento)." >> /home/ronald/saas-hasner/app/docs/RELATO.md` |
 | 20:50:09 | SendMessage |  | `-` |
 | 20:50:01 | Bash | Read the PDC round 8 verdicts | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/b9uhs73yu.output` |
-| 20:44:31 | Bash | Log the PDC round 8 delivery | `echo "- $(date +%H:%M) PDC volta 8 entregue sem commit (wt-pdc-v3-170430, snapshot s8): P7 trecho estreitado, P9 vira mutante simples, P10 mordida PELO PRAZO (SIGTERM anotado, nao contaminacao); runs r8 destacados -> logs/padrao_de_cima/v6/r8/RUNS.done." >> /home/ronald/saas-hasner/app/docs/RELATO.md` |
-| 20:44:26 | Bash | Wait for the PDC round 8 runs and read their verdicts | `cd /home/ronald/saas-hasner/logs/padrao_de_cima/v6/r8; until [ -f RUNS.done ]; do /usr/bin/sleep 30; done; for f in *.log; do echo "== $f $(grep -c FALHA $f) $(tail -1 $f)"; done; grep -h 'FALHA\\|NOTA' GREEN_*.log \| head -20` |
-| 20:43:43 | Bash | Wait for the V3 round 2 impact run | `cd /home/ronald/saas-hasner/logs/v3p5/v2; until [ -f impacto_v3p5v2.done ]; do /usr/bin/sleep 30; done; tail -30 impacto_sombra.out; tail -3 impacto_run.log` |
-| 20:43:39 | Bash | Log the impact relaunch | `echo "- $(date +%H:%M) V3-P5 v2 impacto try1 FALHOU (docker: /app/logs read-only -- copia wt-v3p5v2-cura-202909 sem app/logs e app/media); pontos criados, relancado setsid; done em logs/v3p5/v2/impacto_v3p5v2.done. RED v2 na fila da trava." >> /home/ronald/saas-hasner/app/docs/RELATO.md` |
-| 20:43:33 | Bash | Add the mount points and relaunch the impact run detached | `mkdir /home/ronald/wt-v3p5v2-cura-202909/app/logs /home/ronald/wt-v3p5v2-cura-202909/app/media && cd /home/ronald/saas-hasner && mv logs/v3p5/v2/impacto_v3p5v2.done logs/v3p5/v2/impacto_v3p5v2.done.try1 && mv logs/v3p5/v2/impacto_sombra.out logs/v3p5/v2/impacto_sombra.try1 && setsid nohup bash logs/v3p5/v2/impacto_v3p5v2.sh > logs/v3p5/v2/impacto_v3p5v2.out 2>&1 < /dev/null & disown; echo ok` |
-| 20:43:29 | Bash | Check the cure snapshot for logs and media | `ls /home/ronald/wt-v3p5v2-cura-202909/app \| grep -E '^(logs\|media)$'; cd /home/ronald/wt-v3p5v2-cura-202909 && git log --oneline -1` |
-| 20:43:25 | Bash | Read the impact script and check the mount points | `cd /home/ronald/saas-hasner/logs/v3p5/v2; cat impacto_v3p5v2.sh; ls /home/ronald/wt-v3p5v2-202909/app/ \| grep -E '^(logs\|media)$'` |
-| 20:43:20 | Bash | Read V3 round 2 RED and impact | `cd /home/ronald/saas-hasner/logs/v3p5/v2; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' red.log \| tail -3; tail -25 impacto_sombra.out` |
-| 20:43:16 | Bash | Check V3 round 2 jobs, ESPERANDO and the trava | `cd /home/ronald/saas-hasner; date +%H:%M; ls logs/v3p5/v2/; tail -3 logs/v3p5/v2/*.out 2>/dev/null; cd bin; python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[0])"; ./trava_teste.sh --quem` |
