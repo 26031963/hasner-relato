@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 14:36:29.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (131.6 MB). Acoes na janela: **574**.
+**Medido em 01/11/2026 14:41:32.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (131.6 MB). Acoes na janela: **577**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:36:54 | Bash | Point ESPERANDO at the live Codex run and self-check | `cd /home/ronald/saas-hasner && sed -i '3i ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh \| pid=1541892' app/docs/RELATO.md && cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
+| 14:36:50 | Bash | Record dispatch in RELATO and BACKLOG | `cd /home/ronald/saas-hasner && H=$(date +%H:%M) && python3 - "$H" <<'EOF' import sys,re H=sys.argv[1];p='app/docs/RELATO.md' L=open(p).read().split('\n') idx=max(i for i,l in enumerate(L) if re.match(r'- \d\d:\d\d ',l)) L.insert(idx+1,"- "+H+" DESPACHO COBPARC-DET-NAO-EXPLICA: caminho de codigo dos 4 chamados extras (cura 113fd774 x controle 9483bbce, diff 1892 linhas) -> Codex censo pid 1541892 ( ...` |
+| 14:36:44 | Bash | Dispatch Codex to explain extra chamados from cure code | `cd /home/ronald/saas-hasner && HC=$(git -C /home/ronald/wt-cobparc-222305 rev-parse --short HEAD) && HM=$(git -C /home/ronald/wt-cobparc-controle-131141 rev-parse --short HEAD) && echo cura=$HC controle=$HM && mkdir -p logs/cobparc/v4/det/pq && git diff $HM $HC --stat -- app \| tail -3 && git diff $HM $HC -- app ':!app/docs' > logs/cobparc/v4/det/pq/diff_cura.patch && wc -l logs/cobparc/v4/det/pq/ ...` |
 | 14:36:24 | Bash | Read Ausencia fields and orfao_14h emitters | `sed -n 660,720p ponto/models.py \| grep -E "^\s+\w+ = models\." \| cut -c1-110; grep -n "orfao_14h" -r --include=*.py . \| grep -v tests \| head -8` |
 | 14:36:21 | Bash | Read sonda envelope and find absence model | `cd /home/ronald/saas-hasner && sed -n 1,40p bin/sonda_leitura.sh \| grep -v '^\s*$' \| head -30; grep -n "^class Ausencia\\|^class AusenciaColaborador\\|^class Afastamento" app/*/models.py` |
 | 14:36:16 | Bash | Write PAREI to RELATO top and remove stale ESPERANDO | `cd /home/ronald/saas-hasner && H=$(date +%H:%M) && python3 - "$H" <<'EOF' import sys,re H=sys.argv[1];p='app/docs/RELATO.md' L=open(p).read().split('\n') pl=("PAREI: COBPARC-DET-NAO-EXPLICA \| espera Ronald -- condicao literal do ERRO-BOBO COBPARC ("+H+"): a sonda det (logs/cobparc/v4/det/cura.out x controle.out) NAO explica os chamados extras como efeito da cura pela regra (marco fora do periodo  ...` |
