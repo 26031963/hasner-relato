@@ -1,7 +1,19 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 04:56** · publicado em **01/11/2026 04:56** (UTC-3)
+> Ultima resposta processada: **01/11/2026 04:57** · publicado em **01/11/2026 05:02** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 04:57 · sessao eb235f80a993 · V3-DOBRA-SEM-NOTURNA · verificador · origem=Code
+
+1. **NADA — a prosa corrigida confere no caso declarado de pausa idêntica duplicada.** O caminho da ata pode preservar o período geométrico e acrescentar outro; a coleta repete a pausa, o recuo ignora a repetição e o desconto noturno une intervalos sobrepostos. Referências: `app/ponto/motor_calculo_v2.py:685`, `:688`, `:397`, `:404`, `:169`; `app/ponto/calculador/alimentacao.py:107`.
+
+2. **PROCEDENTE documental — “a MESMA tupla” generaliza além do código.** A porta entrega a coleção agregada do dia; o motor entrega somente os intervalos daquele período. O teste exige três pausas distintas nessa coleção diária. Melhor redação: **“intervalos da mesma fonte, agregados por dia”**. Referências: `app/ponto/calculador/alimentacao.py:107`, `:527`; `app/ponto/motor_calculo_v2.py:1006`; `app/ponto/tests/test_v3_dobra_split_noturno_porta.py:173`.
+
+   **NADA quanto a impacto funcional adicional omitido demonstrado:** os leitores alcançados são os declarados — split da HE e noturnas nos ramos normal e folga. Referências: `app/ponto/calculador/regras.py:828`, `:842`, `:714`.
+
+3. **NADA — novo defeito funcional demonstrado nesta volta.** A pausa idêntica duplicada recebe os tratamentos descritos no docstring; isso sustenta esse caso específico. Referências: `app/ponto/motor_calculo_v2.py:397`, `:404`, `:169`.
+
+**DUVIDA remanescente:** equivalência com pausas distintas em envelopes sobrepostos efetivamente produzidos pelo motor: [nao verificado]. Execução integral Django, logs RED/mutante e ocorrência em produção: [nao verificado].
 
 ## 01/11 04:56 · sessao 98899c1c6f1e · - · - · origem=Ronald (tmux)
 
@@ -684,20 +696,4 @@ Achados para consolidar:
 
 - **Limite de integração:** o teste fornece par inteiro e intervalo explícito; o caminho real entrega `pares=_pares_por_dia` e `intervalos=()` em `app/ponto/calculador/alimentacao.py:512-515`. Já existe comentário explicando que segmentos após 05 podem perder prorrogação por essa forma de alimentação: `app/ponto/calculador/periodo.py:501-505`. O teste prova sua chamada isolada; equivalência com uma lavratura real continua [nao verificado].
 
-## 01/11 03:39 · sessao 2f1486725273 · - · - · origem=Ronald (tmux)
-
-Checklist pela leitura do diff:
-
-- **(a) Segundo juiz: não introduz.** Noturnas já usam funções do motor (`app/ponto/calculador/regras.py:33`, `:63`, `:85`); pontualidade empresta os métodos registrados de `MotorBase` (`:112`–`:115`; registro em `app/core/juizes.py:198`); dobra usa a autoridade existente (`app/core/juizes.py:277`).
-- **(b) Segundo escritor fora da porta: não introduz no diff.** O patch altera o fluxo da mesma montagem de `Rubricas`, permitindo alcançar as atribuições existentes; o retorno continua em `app/ponto/calculador/regras.py:865`. Persistência e leitores foram delegados ao outro explorador. [nao verificado]
-- **(c) Relógio fora da borda: não identificado.** `do_dia` recebe data, pares e parâmetros nos argumentos (`app/ponto/calculador/regras.py:572`). O teste anexo constrói datas fixas; `make_aware` não é leitura do instante atual. A lei está em `app/docs/CORTES.md:369`. Execução do teste [nao verificado].
-- **(d) Derivação paralela: o diff não acrescenta conta.** Reaproveita os blocos existentes e as funções importadas (`app/ponto/calculador/regras.py:815`, `:835`, `:846`).
-- **(e) RED morde, por inspeção.** O `return` antigo (`app/ponto/calculador/regras.py:789`) impede obter os 8 h noturnos, 7 h de HE100 noturna e 20 min de atraso exigidos pelo anexo. O caso com excedente de 60 min também detecta usar `if` em lugar do `elif`: escreveria HE50=1 (`:790`–`:791`). RED/GREEN efetivamente executados [nao verificado]. Há mutantes sobreviventes: escrever sempre zero em `horas_saida_antecipada` (`:851`), ou em `det['extra_min']` (`:808`); o teste novo não exige antecipada positiva nem afirma esse detalhe. [nao verificado: teste disponível apenas no anexo]
-- **(f) Ordem de trava: o patch não introduz transação nem aquisição de lock; altera a continuidade entre atribuições locais** (`app/ponto/calculador/regras.py:779`, `:815`, `:846`, `:865`).
-- **(g) Pouso antes do pré-requisito: não pode ser certificado.** Exige suite inteira verde, depois opus final, sem alteração posterior da árvore certificada (`CLAUDE.md:505`, `:557`–`:561`). Evidências desses atos não foram fornecidas [nao verificado]. [nao verificado]
-
-Sobre pontualidade em feriado com dobra: **não localizei exclusão escrita por esse motivo** nas leis consultadas; a inexistência absoluta é [nao verificado]. As regras escritas aplicáveis são L-084 e L-093 (`app/docs/LEIS.md:116`, `:111`). As isenções explícitas são por classe sem marcos (`app/ponto/calculador/regras.py:487`–`:498`) e por **folga trabalhada** (`:189`–`:192`, `:697`–`:711`), que não equivale automaticamente a feriado trabalhado em dobra.
-
-Os quatro ramos de dobra do motor escrevem HE/alertas, sem zerar pontualidade (`app/ponto/motor_calculo_v2.py:2797`, `:3080`, `:3243`, `:3325`); o comercial segue ao split e à pontualidade depois da decisão de dobra (`:3269`, `:3281`).
-
-_1364 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1365 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
