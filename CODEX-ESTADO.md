@@ -1,7 +1,44 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 04:30** · publicado em **01/11/2026 04:30** (UTC-3)
+> Ultima resposta processada: **01/11/2026 04:32** · publicado em **01/11/2026 04:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 04:32 · sessao 4345dfc785b1 · V3-DOBRA-SEM-NOTURNA · verificador · origem=Code
+
+**1. NADA — não localizei defeito procedente no teste novo.** Ele exige exatamente as três pausas, incluindo `periodos_ft`, e cinco segmentos; perder o segundo período ou o FT viola a asserção. HE zerada não torna a coleta vazia: ela ocorre fora da condição de HE positiva. Referências: anexo `app/ponto/tests/test_v3_dobra_split_noturno_porta.py:157`, `:164`, `:168`, `:170`; anexo `app/ponto/calculador/alimentacao.py:105`, `:107`.
+
+As datas são explícitas. Existe leitura indireta preexistente de `date.today()`, mas os fixtures N6/N12 usam uma pausa fixa, sem variação semanal que altere estes resultados. Referências: `app/ponto/tests/test_o280_bateria_da_lei.py:1186`, `:1200`, `:1086`; anexo `app/ponto/tests/test_v3_dobra_split_noturno_porta.py:44`; `app/ponto/juiz_batida.py:125`, `:128`, `:135`.
+
+**2. PROCEDENTE — existe caminho para envelopes sobrepostos no mesmo dia de jornada.** Portanto, a afirmação de disjunção no docstring novo é incorreta como garantia geral. Referências: anexo `app/ponto/tests/test_v3_dobra_split_noturno_porta.py:139`; `app/ponto/motor_calculo_v2.py:684`, `:688`.
+
+Contraprova sintética, reproduzida com corpos reais das funções em memória:
+
+- DNA de **01/09: 22–07**; célula/DNA de **02/09: 00–07**, pausa **03–04**; batidas de 02/09: **00E, 03S, 04E, 07S**. O pareamento atribui esse turno a **01/09**, pela janela da véspera. Referências: `app/ponto/turnos.py:299`, `:306`; `app/ponto/motor_calculo_v2.py:887`, `:889`.
+- A ata de 02/09 responde **00–07**, com pausa **03–04**. O filtro preserva o período geométrico, pois seu mapa diz 01/09, e acrescenta outro **00–07**. Ambos recebem dia de jornada **01/09**. Referências: `app/ponto/juiz_batida.py:259`, `:260`, `:285`; `app/ponto/motor_calculo_v2.py:685`, `:688`, `:2391`.
+- Com janela de HE desativada, as pontas efetivas permanecem iguais às cruas: os envelopes efetivos também coincidem. Referências: `app/ponto/motor_calculo_v2.py:1680`, `:1722`, `:1828`, `:1829`.
+
+**3. NADA — novo erro funcional demonstrado no diff completo.** A contraprova acima duplica também a mesma pausa: o recuo ignora a repetição e o desconto noturno une intervalos sobrepostos. Ela refuta o descarte por disjunção, mas não demonstra contaminação nova do split por A. Referências: `app/ponto/motor_calculo_v2.py:397`, `:404`, `:169`.
+
+**DUVIDA — equivalência com pausas diferentes em envelopes sobrepostos efetivamente produzidos pelo motor:** [nao verificado]. Execução integral Django da contraprova e da árvore proposta, e ocorrência em produção: [nao verificado].
+
+## 01/11 04:31 · sessao 112211ccb2b1 · - · - · origem=Ronald (tmux)
+
+**PROCEDENTE — existe caminho de períodos sobrepostos do mesmo dia de jornada.** A premissa global de disjunção é falsa: `_periodos_pelo_marco` remove pelo dia do mapa e acrescenta o envelope da célula sem exigir que a entrada pertença a esse dia. Referências: `app/ponto/motor_calculo_v2.py:684`, `:685`, `:688`.
+
+Contraprova sintética reproduzida em memória, somente leitura, com corpos reais extraídos por AST:
+
+- DNA de 01/09: **22–07**; DNA/célula de 02/09: **00–07**, pausa **03–04**.
+- Batidas de 02/09: **00E, 03S, 04E, 07S**.
+- `parear_turnos` gera **00–07 de 02/09 atribuído a 01/09**: a entrada cabe na jornada da véspera. Referências: `app/ponto/turnos.py:299`, `:300`, `:306`.
+- `_dia_do_turno` registra a entrada 00 como pertencente a 01/09. Referências: `app/ponto/motor_calculo_v2.py:884`, `:887`, `:889`.
+- O juiz da célula 02/09 responde **00–07**, pausa **03–04**. Referências: `app/ponto/juiz_batida.py:174`, `:259`, `:260`, `:282`, `:285`.
+- O filtro para 02/09 preserva o período geométrico mapeado para 01/09 e acrescenta uma cópia **00–07**. A execução devolveu **duas tuplas idênticas**, ambas atribuídas a **01/09**. Referências: `app/ponto/motor_calculo_v2.py:684`, `:685`, `:688`, `:722`, `:2391`.
+
+Com janela de HE desativada, efetivos permanecem iguais às pontas cruas e são carimbados nos períodos; portanto os envelopes efetivos também se sobrepõem. Referências: `app/ponto/motor_calculo_v2.py:1680`, `:1681`, `:1722`, `:1723`, `:1828`, `:1829`.
+
+**Limite da prova:** executei corpos reais de `parear_turnos`, `periodos_de_turnos`, `periodos_do_dia`, `montar_lampadas`, `_dia_do_turno` e `_periodos_pelo_marco`; Django não está instalado, então timezone foi substituído por normalização UTC−03 e a entidade CelulaDia teve constantes e método de ordenação extraídos do próprio código. Execução integral de `calcular_mes` no Django: **[nao verificado]**. Ocorrência em produção: **[nao verificado]**. [nao verificado]
+
+**NADA demonstrado como regressão funcional nova de A nessa contraprova:** as cópias têm a mesma pausa; o recuo ignora a duplicata e o desconto noturno une intervalos sobrepostos. Referências: `app/ponto/motor_calculo_v2.py:397`, `:404`, `:169`. Ela refuta a justificativa de disjunção, mas não prova que A altere indevidamente o split nesse caso. Efeito com pausas distintas em envelopes sobrepostos realmente produzidos pelo motor: **[nao verificado]**.
 
 ## 01/11 04:30 · sessao 8f8c0ea15497 · - · - · origem=Ronald (tmux)
 
@@ -787,58 +824,4 @@ O teste de **folga/feriado** é outro caminho: passa `folga_e_feriado`, afirma f
 
 **Não encontrei asserção de `horas_noturnas` ou HE noturna numa execução de `_dobra > 0`.** As asserções encontradas de split usam dia comum; o P5 também executa dia comum e apenas documenta, em comentário, o retorno precoce da dobra. (`app/ponto/tests/test_s5b_split_noturno_tem_um_dono.py:312–320`, `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:25–28`, `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:61–82`)
 
-## 01/11 03:29 · sessao eea9e4aa971d · - · - · origem=Ronald (tmux)
-
-Leitores do resultado de `do_dia` em produção:
-
-- `app/ponto/services/dia_pago.py:61-63`: `_DONOS_DECLARADOS` lê as chaves de `Rubricas.valores` e `nao_decide`; as cinco rubricas pertencem a `CAMPOS_DIA` em `app/ponto/services/dia_pago.py:34-37`.
-- `app/ponto/services/dia_pago.py:320-328`: `lavrar` lê os valores e os copia para a linha do dia; lê `nao_decide` para registrar o detalhe em `app/ponto/services/dia_pago.py:329-331`. A ligação com a saída real da porta está em `app/ponto/services/fechamento.py:1239-1244` e `app/ponto/services/fechamento.py:1256`.
-- `app/ponto/management/commands/diff_calculador.py:476-477`: leitura explícita de saída antecipada e atraso. O comando guarda o mapa de valores em `app/ponto/management/commands/diff_calculador.py:501`, lê as rubricas cegas em `app/ponto/management/commands/diff_calculador.py:517`, soma valores em `app/ponto/management/commands/diff_calculador.py:519-520` e cegueira em `app/ponto/management/commands/diff_calculador.py:525-526`; compara valores somente das rubricas não cegas em `app/ponto/management/commands/diff_calculador.py:527-542`. A seleção inclui todas as rubricas do calculador fora de `NAO_DECIDE`: `app/ponto/management/commands/diff_calculador.py:78`.
-
-Leitores em testes das cinco rubricas: [nao verificado]
-
-- `test_calculador_regras.py`: ausência em `valores` e presença/causa em `nao_decide`: `app/ponto/tests/test_calculador_regras.py:208-219`.
-- `test_s5b_regra_pontualidade.py`: atraso, antecipada e noturnas em `app/ponto/tests/test_s5b_regra_pontualidade.py:211-253`; noturnas de folga em `app/ponto/tests/test_s5b_regra_pontualidade.py:411-412`; atraso/antecipada de folga em `app/ponto/tests/test_s5b_regra_pontualidade.py:400-402`; cobertura de todas as rubricas em `app/ponto/tests/test_s5b_regra_pontualidade.py:436-438` e `app/ponto/tests/test_s5b_regra_pontualidade.py:452-454`; testes do discriminador de pontualidade em `app/ponto/tests/test_s5b_regra_pontualidade.py:485-493`, `app/ponto/tests/test_s5b_regra_pontualidade.py:538-539`, `app/ponto/tests/test_s5b_regra_pontualidade.py:551` e `app/ponto/tests/test_s5b_regra_pontualidade.py:558`.
-- HE noturna ausente/cega em `app/ponto/tests/test_s5b_split_noturno_tem_um_dono.py:288-290`; HE noturna com valor em `app/ponto/tests/test_s5b_split_noturno_tem_um_dono.py:319-320`.
-- HE50 noturna e noturnas do P5 em `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:69-82`.
-- Atraso em `app/ponto/tests/test_lote_de_celulas_nao_troca_de_colaborador.py:154-159`; cegueira de atraso/antecipada em `app/ponto/tests/test_o280_bateria_da_lei.py:2780-2781`.
-
-Testes que chegam ao feriado em dobra: [nao verificado]
-
-1. `test_MORDE_no_do_dia_a_dobra_SUBSTITUI_a_HE50_e_nao_soma`: chamada explícita em `app/ponto/tests/test_s5b_regra_pontualidade.py:312-314`; afirma HE100 de 10h, HE50 zero e detalhe da substituição em `app/ponto/tests/test_s5b_regra_pontualidade.py:315-318`. Não afirma noturnas ou HE noturna nesse caso: `app/ponto/tests/test_s5b_regra_pontualidade.py:309-318`.
-2. `test_MORDE_feriado_em_dobra_x_excedente_dao_METADES_DIFERENTES`: chamada explícita em `app/ponto/tests/test_s5b_split_noturno_tem_um_dono.py:209-214`; afirma HE100 positiva, igualdade da parcela de feriado ao total e distinção do dia normal em `app/ponto/tests/test_s5b_split_noturno_tem_um_dono.py:222-233`. Não afirma noturnas nesse caso: `app/ponto/tests/test_s5b_split_noturno_tem_um_dono.py:207-233`.
-3. Indireto pela porta, `test_C3b_flag_da_CCT_AUSENTE_nao_vira_o_default_do_leitor`: passa feriado em `app/ponto/tests/test_o280_bateria_da_lei.py:2858` e `app/ponto/tests/test_o280_bateria_da_lei.py:2863`, liga a dobra em `app/ponto/tests/test_o280_bateria_da_lei.py:2875-2876` e executa em `app/ponto/tests/test_o280_bateria_da_lei.py:2883`; verifica HE100, parcela de feriado e declaração de ausência de cadastro em `app/ponto/tests/test_o280_bateria_da_lei.py:2887-2902`. Seu retorno lido não inclui noturnas: `app/ponto/tests/test_o280_bateria_da_lei.py:2864-2873`.
-4. Caso relacionado, mas do ramo anterior de folga/feriado: `app/ponto/tests/test_bob_b2_abono_feriado_guarda.py:225-233`; usa `folga_e_feriado=True`, omite `feriado_em_dobra` e afirma folga zero/HE100 feriado 8h. Não é execução do ramo `_dobra > 0`, pois o ramo de folga retorna em `app/ponto/calculador/regras.py:735`.
-
-Não encontrei asserção sobre `horas_noturnas` ou HE noturna **no ramo `_dobra > 0`**. Os testes que afirmam essas rubricas usam calendário vazio: `app/ponto/tests/test_s5b_split_noturno_tem_um_dono.py:315-320` e `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:61-82`. O P5 documenta o retorno precoce do feriado em comentário em `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:25-28`, mas executa dia comum em `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:66`.
-
-## 01/11 03:29 · sessao 7d15870ce6a1 · - · - · origem=Ronald (tmux)
-
-No arquivo `app/ponto/motor_calculo_v2.py`, `_feriado_dobra_no_dia(dia)` é exatamente `bool(self.feriado_em_dobra) and self.eh_feriado(dia)`; não consulta “previsto na escala”, apesar dos comentários antigos em alguns sítios. `eh_feriado` consulta conjunto injetado e fallback `is_feriado`. Referências: `app/ponto/motor_calculo_v2.py:909-929`, `app/ponto/motor_calculo_v2.py:951-955`.
-
-**Há quatro ramos que chamam `_feriado_dobra_no_dia`:**
-
-| Sítio | Dobra | Adicional noturno ordinário | Split HE noturna |
-|---|---|---|---|
-| `Motor12x36.calcular_periodo` | Se duração positiva: `minutos_extra`, `minutos_extra_100`, `minutos_extra_100_feriado = duracao`; `hora_extra_100=True`. `app/ponto/motor_calculo_v2.py:2797-2805` | Calculado antes, por `_escrever_noturnas`, e não alterado pelo ramo. `app/ponto/motor_calculo_v2.py:2780`, `app/ponto/motor_calculo_v2.py:2797-2805` | `_aplicar_he_noturna(periodo)` é executado depois do if/elif/else, inclusive dobra. `app/ponto/motor_calculo_v2.py:2843` |
-| `MotorTurnoPartido.calcular_mes` | HE integral do dia no último período: `minutos_extra`, `minutos_extra_100`, `minutos_extra_100_feriado=trab_dia`; flag verdadeira; `continue`. `app/ponto/motor_calculo_v2.py:3080-3089` | Cada período calcula noturnas antes, em `calcular_periodo`, e o recálculo mensal não as zera. `app/ponto/motor_calculo_v2.py:2884`, `app/ponto/motor_calculo_v2.py:2920-2927` | Mensal zera `minutos_extra_50_noturna` e `minutos_extra_100_noturna`; dobra dá `continue` antes da chamada em `:3135`. Portanto ambos permanecem zero nos `resultado.periodos` desse dia. `app/ponto/motor_calculo_v2.py:2925-2926`, `app/ponto/motor_calculo_v2.py:3089`, `app/ponto/motor_calculo_v2.py:3135`. Caminho semanal também exclui feriados: `app/ponto/motor_calculo_v2.py:3144-3146`. |
-| `MotorComercial.calcular_periodo` | Duração inteira em HE100 e HE100-feriado; flag verdadeira. `app/ponto/motor_calculo_v2.py:3243-3251` | `_escrever_noturnas` antes do ramo; ramo não altera os campos. `app/ponto/motor_calculo_v2.py:3235`, `app/ponto/motor_calculo_v2.py:3243-3251` | Chama `_aplicar_he_noturna` após o ramo. `app/ponto/motor_calculo_v2.py:3269` |
-| `MotorComercial.calcular_mes` | Último período recebe `trab_dia` nas três HE; flag verdadeira; `continue`. `app/ponto/motor_calculo_v2.py:3325-3340` | Mensal zera só extras e seus splits, preservando os campos noturnos ordinários calculados no período. `app/ponto/motor_calculo_v2.py:3304-3313` | O mensal apaga o split calculado individualmente (`:3311-3312`); dobra continua (`:3340`) antes de `_aplicar_he_noturna` (`:3387`). Resultado mensal desses períodos: ambos splits zero. |
-
-**O cálculo ordinário de noturnas e o split são distintos.** `_escrever_noturnas` grava relógio e legais a partir de `calcular_noturnas`; esta calcula janela com `prorrogacao_noturna_pos5h`, desconta intervalos e multiplica pelo fator (1 se hora reduzida afastada; caso contrário `FATOR_HORA_NOTURNA`). Referências: `app/ponto/motor_calculo_v2.py:971-980`, `app/ponto/motor_calculo_v2.py:991-993`.
-
-`_aplicar_he_noturna` passa entrada/saída brutas do período, extras 50/100, prorrogação e intervalos do motor para `he_noturna`, gravando somente resultados não zero. Referências: `app/ponto/motor_calculo_v2.py:1000-1010`. `he_noturna` recua da saída pelo total extra em minutos trabalhados, intersecta janela noturna, desconta intervalos e reparte em proporção de 50/100; não aplica fator de hora reduzida nessa função. Referências: `app/ponto/motor_calculo_v2.py:430-451`.
-
-**Atraso/saída antecipada:** nenhum dos quatro ramos de dobra atribui/zera esses campos: somente escreve HE, flag e alerta; nos mensais o `continue` pula HE diária, depois de a pontualidade já ter sido julgada. Referências: `app/ponto/motor_calculo_v2.py:2797-2805`, `app/ponto/motor_calculo_v2.py:3080-3089`, `app/ponto/motor_calculo_v2.py:3243-3251`, `app/ponto/motor_calculo_v2.py:3325-3340`.
-
-- Comercial chama `_julgar_pontualidade` após o cálculo da HE noturna, inclusive se passou pela dobra: `app/ponto/motor_calculo_v2.py:3269`, `app/ponto/motor_calculo_v2.py:3281`.
-- `Motor12x36ComEscala` chama o cálculo do 12x36 e depois `_julgar_pontualidade`, exceto aberto ou sem escala; não há exceção feriado-dobra: `app/ponto/motor_calculo_v2.py:3510-3521`.
-- Partido julga a Zona 5 antes do laço de HE/dobra, por `aplicar_tolerancia` e grava as duas rubricas: `app/ponto/motor_calculo_v2.py:3012-3023`, `app/ponto/motor_calculo_v2.py:3061-3068`.
-- `_julgar_pontualidade` retorna sem escala/marco; havendo marcos, usa `aplicar_tolerancia` e grava atraso/antecipada. Referências: `app/ponto/motor_calculo_v2.py:2030-2055`, `app/ponto/motor_calculo_v2.py:2205-2214`.
-- Teto mensal geral: ausência inteira zera (`:1080-1093`), dia aberto/nulo zera (`:1144-1157`), previsto inexistente (`None`) deixa como está (`:1158-1160`); caso contrário limita soma a `max(0, previsto - trabalhado_real)` e rateia proporcionalmente (`:1161-1184`). Chamadas: base `:2706`, partido `:3170`, comercial `:3472`, todas em `app/ponto/motor_calculo_v2.py`.
-
-**Ressalva necessária para a frase “motor mantém noturnas”:** os ramos de dobra por si mantêm, mas existe bloqueio independente depois do cálculo do período. Base chama `_dia_sem_previsto_fora_da_janela` em `app/ponto/motor_calculo_v2.py:2446-2449`. Em folga ou feriado, se empresa tem janela, previsto é zero, HE não está autorizada e passam as guardas de escala certa, o método zera trabalhadas, noturnas e HE/splits, além de colapsar segmento. Referências: `app/ponto/motor_calculo_v2.py:1436-1458`, `app/ponto/motor_calculo_v2.py:1461-1471`.
-
-**Leitura mensal:** `horas_noturnas` soma legais de `periodos + periodos_ft`; HE noturna, atraso e antecipada somam só `periodos`, divididos por 60. Referências: `app/ponto/motor_calculo_v2.py:321`, `app/ponto/motor_calculo_v2.py:338-360`. Base classifica cada período em `periodos_ft` ou `periodos` separadamente da dobra: `app/ponto/motor_calculo_v2.py:2456-2482`.
-
-_1360 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1362 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
