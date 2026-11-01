@@ -1,7 +1,64 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 18:14** · publicado em **01/11/2026 18:14** (UTC-3)
+> Ultima resposta processada: **01/11/2026 18:15** · publicado em **01/11/2026 18:19** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 18:15 · sessao 3fb825a7930a · O261-E-F2 · verificador · origem=Code
+
+Análise estática; resultados de execução e medições mencionadas nos logs: **[nao verificado]**. Não executei a suíte: o quarto teste cria e escreve arquivo temporário (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:259`, `:261`, `:262`).
+
+Referências abreviadas, todas relativas à cópia:
+
+- **T** = `app/chamados/tests/test_o261e_f2_ramo_e_i20.py`
+- **E** = `app/chamados/services/disputa_emissao.py`
+- **M** = `app/chamados/models.py`
+- **J** = `app/chamados/juizes.py`
+- **V** = `app/chamados/services/vigia_fio.py`
+- **A** = `app/chamados/management/commands/auditar_invariantes_chamados.py`
+- **P** = `app/ponto/portas/celula.py`
+
+1. **Os seis procedentes foram tratados no código; a confirmação por execução permanece [nao verificado].**
+
+   | Achado da triagem | Avaliação do delta |
+   |---|---|
+   | **1 — causa versus detalhe** | Resolvido: compara conjuntamente rota, causa e detalhe com `['sem_porta', 'e', CAUSA_DO_RAMO]`; a produção escreve exatamente nessa disposição (`T:183`; `V:589`). |
+   | **2 — retorno não prova o ramo** | Resolvido: `_fechar` deixa de verificar o retorno; a prova passa pelo estado persistido da pergunta e pelo vigia (`T:159`, `T:175`, `T:176`, `T:193`). |
+   | **3 — MORDE abortava antes do vigia** | Resolvido: os helpers são separados; o MORDE verifica explicitamente a causa `c` e depois exige que o selo do vigia rejeite esse resultado (`T:171`, `T:179`, `T:212`, `T:214`). |
+   | **4 — `ok` inválido e célula sobrescrita depois** | Resolvido: usa `concorde` pela porta, cuja validação recusa vocabulário inválido; depois do fecho apenas relê e compara a célula, sem restaurá-la (`T:151`, `T:234`, `T:159`, `T:160`, `T:161`; `P:659`). |
+   | **5 — falta de controles negativos do I20** | Resolvido no desenho: cria texto com instante e texto vazio sem instante; ambos coexistem com o caso positivo, cujo total esperado continua exatamente um (`T:226`, `T:230`, `T:244`, `T:220`). |
+   | **6 — PK por substring** | Resolvido: interpreta a amostra com `literal_eval` e exige igualdade com `[p.pk]` (`T:79`, `T:220`). |
+
+2. **Descartado 7: sustenta-se para estes cenários; “mutante equivalente” globalmente não se sustenta.** A guarda consulta a pergunta **antes** do carimbo; a porta aplica carimbo e eventualmente `respondida_em` antes de consultar novamente o C6. É o mesmo juiz com entradas diferentes (`E:1626`; `M:2555`, `M:2558`, `M:2565`).
+
+   Há um contraexemplo estático: pergunta sem resposta, motivo `saida_sem_entrada`, célula `furo` por outro marco, mas E/hi acesa. Sem carimbo, o veredito acusador a mantém viva; com carimbo, a lâmpada própria a mata antes dessa decisão. Retirar somente a guarda permite então gravar o carimbo (`J:845`, `J:893`, `J:1077`, `J:1079`, `J:1083`, `J:1084`; `M:2576`). Execução desse exemplo e ocorrência em produção: **[nao verificado]**.
+
+   **Descartado 8: sustenta-se como entrada adversarial do detector.** O teste declara e injeta o meio-estado; o escritor normal atribui texto e instante e salva ambos juntos; o I20 consulta precisamente texto preenchido com instante nulo (`T:147`, `T:149`; `E:1247`, `E:1248`, `E:1266`; `A:1102`, `A:1103`). Isso prova detecção/preservação da entrada injetada, sem provar sua origem em produção; “B=0 na frota” permanece **[nao verificado]**. [nao verificado]
+
+3. **Origem das escritas e leituras.**
+
+   Nos quatro cenários, o próprio teste escreve `resposta_colab='07:55'`; os instantes nulos e a via vazia vêm da criação com os defaults do modelo. O veredito e as lâmpadas também são entradas escolhidas pelo teste, gravadas pela porta real (`T:145`, `T:149`, `T:151`; `M:2212`, `M:2299`, `M:2756`; `P:768`, `P:770`, `P:771`, `P:775`). [nao verificado]
+
+   A produção escreve carimbo/via em `_escrever_carimbo`, acrescenta `respondida_em` quando aplicável e só persiste após aceitação pelo C6. Na recusa, restaura a instância em memória (`M:2529`, `M:2531`, `M:2558`, `M:2569`, `M:2576`, `M:2582`, `M:2583`).
+
+   | Teste | Campos da pergunta efetivamente verificados | Célula, censo e I20 | [nao verificado]
+   |---|---|---|
+   | **Ramo normal** | Relê o banco: `materializada_em=None`, via vazia e pergunta viva. Não compara diretamente texto nem `respondida_em` (`T:174`, `T:175`, `T:176`, `T:177`). | Confere preservação da célula e linhas/contadores do censo real; não roda I20 (`T:191`, `T:193`, `T:161`, `T:183`, `T:185`). |
+   | **MORDE do ramo** | A produção sob mock escreve o carimbo; o teste relê e exige carimbo existente. O helper rejeita já na primeira asserção: sua comparação de via não é alcançada nessa chamada (`T:201`, `T:205`, `T:206`, `T:208`, `T:175`). | Confere célula preservada, linha real com causa `c` e rejeição pelo selo do vigia; não roda I20 (`T:202`, `T:161`, `T:209`, `T:212`, `T:214`). | [nao verificado]
+   | **Caso 2 normal** | Relê e compara texto, `respondida_em` e `materializada_em`; não compara via (`T:237`, `T:239`). | Confere célula, ausência do dia no censo e contadores; o auditor real produz I20, exigido como `VIOL,1,[pk]` (`T:236`, `T:161`, `T:242`, `T:243`, `T:245`, `T:220`). |
+   | **MORDE do I20** | Relê a pergunta, mas não compara diretamente aqueles quatro campos (`T:253`, `T:254`). | Confere célula; não chama o censo. O teste escreve a cópia alterada do auditor; essa cópia produz `OK,0,[]`, e o auditor original deve produzir `VIOL,1,[pk]` (`T:252`, `T:161`, `T:258`, `T:262`, `T:266`, `T:268`, `T:272`). | [nao verificado]
+
+   As **linhas do censo** são construídas pela produção e apenas filtradas/lidas pelo teste. A **linha I20** vem da consulta, contagem/amostra e formatação do auditor, capturada em `StringIO` (`V:589`, `V:654`; `T:166`, `T:167`; `A:1102`, `A:564`, `A:565`, `A:1835`, `A:1837`; `T:86`, `T:97`). [nao verificado]
+
+   Portanto, há valores escritos pelo teste e depois comparados — sobretudo resposta, veredito e lâmpadas — como **preservação de premissas**. Eles não demonstram que o sistema criou essas premissas; o código agora explicita essa distinção e não reescreve a célula depois do fecho (`T:147`, `T:156`, `T:159`, `T:161`, `T:238`, `T:239`). [nao verificado]
+
+4. **Sim, existem outros sobreviventes por inspeção estática; sobrevivência medida: [nao verificado].**
+
+   - **Eliminar `d['alcance_' + causa] += 1` em `V:651`.** Universo, total de fio morto e linhas permanecem iguais; são os resultados comparados pelos testes. `alcance_c`/`alcance_e` ficariam errados sem uma asserção correspondente (`V:553`, `V:650`, `V:654`; `T:183`, `T:185`, `T:212`, `T:243`). [nao verificado]
+   - **Eliminar somente `_desfazer_em_memoria(antes)` em `M:2570`.** A porta continua retornando `False` antes do `save`, e o fecho continua sem persistir aquela instância. Os testes relêem o banco, deixando invisível o objeto interno sujo em memória; isso viola a restauração prometida pela porta (`M:2571`, `M:2576`, `M:2579`; `E:1638`, `E:1639`; `T:174`, `T:205`, `T:237`, `T:253`). [nao verificado]
+
+5. **Não identifiquei relógio solto, vazamento do mock ou dependência explícita de ordem no desenho destes quatro testes.** A classe congela o tempo, o censo recebe `HOJE` explicitamente e o controle usa instante literal; os `now()` desses caminhos de produção ficam sob o congelamento declarado (`T:100`, `T:166`, `T:226`; `E:1623`; `M:2550`; `P:772`). [nao verificado]
+
+   O mock termina antes das testemunhas, e sua restauração é verificada por identidade. Cada método cria seu cenário, com dados comuns declarados em `setUpTestData`, numa classe `TestCase` (`T:201`, `T:204`, `T:101`, `T:103`, `T:189`, `T:200`, `T:234`, `T:251`). Execução em ordens diferentes e confirmação prática do isolamento: **[nao verificado]**.
 
 ## 01/11 18:14 · sessao 43184c58c13e · - · - · origem=Ronald (tmux)
 
@@ -850,104 +907,4 @@ Nos anexos transcritos, conto linhas desde a primeira linha de cada arquivo, inc
 | 8 — custo de dois C6 | **(e)** | v1, pergunta mais próxima | Memo perguntado quanto à vivacidade, sem pergunta de custo (`codex_v1.q:18`; `codex_v1.q:19`). |
 | 9 — palavra “fallback” | **(e)** | v1–v3 | Perguntas de defeitos técnicos, sem auditoria lexical (`codex_v1.q:23`; `codex_v2.q:17`; `codex_v3.q:13`). |
 
-## 01/11 16:17 · sessao a802cb69c575 · E4-CARGA · verificador · origem=Code
-
-A mudança corrige um repasse entre contratos incompatíveis: `dias_encerrados` recebe `{(colaborador_id, data): célula}`, enquanto `turnos_do_colab` espera `{data: célula}` com pad. O encerramento continua usando o mesmo julgamento puro. (`app/ponto/turnos.py:2130`, `app/ponto/turnos.py:1852`, `app/ponto/turnos.py:1845`, `app/ponto/turnos.py:2153`)
-
-**Não considero demonstrada a conclusão operacional da obra:** existe exigência explícita de “RED + impacto na sombra”; execução desses testes, impacto e sequência efetiva de pouso estão **[não verificado]**. (`app/docs/BACKLOG.md:861`)
-
-**1. Quem produz e quem consome os valores**
-
-| Valor | Quem produz | Quem lê |
-|---|---|---|
-| `dias_encerrados(..., celulas=...)` | Chamador; na ausência, `celulas_do_periodo([pk], ini, fim)`, com chave composta. (`app/ponto/turnos.py:2145`, `app/escala/alimentacao.py:41`) | `_dias_encerrados_puro`: alimenta `vinculo_do_dia` e o julgamento do fim previsto/DNA. (`app/ponto/turnos.py:2170`, `app/ponto/turnos.py:2119`, `app/escala/alimentacao.py:237`) |
-| `turnos_do_colab(..., celulas=...)` | Chamador; na ausência, carrega `[ini−2, fim+1]` e converte para chave `data`. (`app/ponto/turnos.py:1845`, `app/ponto/turnos.py:1882`) | Candidatura das geradoras (`mais`), papel da ata e escolha do vínculo de cada dia. A segmentação recompõe a chave `(pk,data)`. (`app/ponto/turnos.py:1885`, `app/ponto/turnos.py:1937`, `app/ponto/turnos.py:1954`) |
-| Retorno sem motivos | `_dias_encerrados_puro` escreve `{data: (_m is None)}`. (`app/ponto/turnos.py:2172`) | Consumidores booleanos listados abaixo. |
-| Retorno com motivos | O mesmo corpo escreve `{data: motivo ou None}`; `None` significa encerrado. (`app/ponto/turnos.py:2132`, `app/ponto/turnos.py:2172`) | Calendário; no método do lote, leitor de status. (`app/colaboradores/services/calendario.py:701`, `app/ponto/status_dia.py:196`) |
-
-Todos os sítios de produção encontrados que passam `celulas` explicitamente às duas funções, incluindo aliases e argumento posicional:
-
-| Chamada | Forma e janela da alimentação | Muda com o diff? |
-|---|---|---|
-| Cartório → `dias_encerrados` | `{(c.pk,x.data): x}` da lista `cels`; limites `d0=cels[0].data`, `d1=cels[-1].data`. A lista pode ter lacunas. (`app/ponto/services/cartorio.py:919`, `app/ponto/services/cartorio.py:942`) | **Sim**, quando a chamada ocorre: não fornece `turnos`; agora o pareador carrega suas células com pad. (`app/ponto/turnos.py:2154`) |
-| Calendário → `_dias_encerrados` | `_cels_mes`, composta, carregada em `[data_ini,data_fim]`; fornece também os turnos dessa janela. (`app/colaboradores/services/calendario.py:395`, `app/colaboradores/services/calendario.py:699`) | **Não**: `turnos` fornecido evita o ramo alterado. (`app/ponto/turnos.py:2154`) |
-| `dia_encerrado_motivo` → `turnos_do_colab` | Repasse posicional do próprio parâmetro; deveria receber `{data}` cobrindo `[data−2,data+1]`. (`app/ponto/turnos.py:2096`, `app/ponto/turnos.py:1852`, `app/ponto/turnos.py:1845`) | **Não**: esse repasse permanece. (`app/ponto/turnos.py:2096`) |
-| Grade, antes do alinhamento → `_tdc_pre` | Converte `_cels_gr` para `{data}`; carga de `janela_com_pad(_ini_al,ref)`. (`app/escala/utils.py:1258`, `app/escala/utils.py:1260`, `app/escala/utils.py:1532`) | **Não**: chamada direta preservada. (`app/escala/utils.py:1532`) |
-| Grade, depois dos overlays → `turnos_do_colab` | `{data}` do mesmo pad; dentro da montagem, cópias com ata fresca não salva; fora dela, células persistidas. (`app/escala/utils.py:1830`, `app/escala/utils.py:1833`, `app/escala/utils.py:1835`, `app/escala/utils.py:1847`) | **Não**: essa alimentação continua chegando diretamente ao pareador. (`app/escala/utils.py:1847`) |
-| Emissor de turno aberto retroativo → `turnos_do_colab` | `{data}`, carregado em `[ini−2,fim+2]`, portanto um dia além do pad necessário. (`app/ponto/management/commands/emitir_turno_aberto_retroativo.py:86`, `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:88`, `app/ponto/turnos.py:1845`) | **Não**: chamada direta preservada. (`app/ponto/management/commands/emitir_turno_aberto_retroativo.py:88`) |
-
-O repasse singular merece uma ressalva: o fechamento fornece `{data}` recortado pelo pad, mas o vigia fornece `{(pk,data)}` de uma única célula, que atravessa `dia_encerrado` e ainda chega incompatível ao pareador. É uma ocorrência **preexistente, não curada por este diff**. (`app/ponto/services/fechamento.py:354`, `app/ponto/services/fechamento.py:361`, `app/ponto/services/vigia_de_hora.py:57`, `app/ponto/turnos.py:2075`, `app/ponto/turnos.py:2096`)
-
-Os leitores de produção do retorno da **função de módulo** são:
-
-| Leitor | Uso |
-|---|---|
-| Cartório | Bool com default `False`; decide `_em_curso` e alimenta o classificador. (`app/ponto/services/cartorio.py:943`, `app/ponto/services/cartorio.py:1180`, `app/ponto/services/cartorio.py:1253`) |
-| Calendário | Motivos; distingue dia em curso e `sem_previsto`. (`app/colaboradores/services/calendario.py:699`, `app/colaboradores/services/calendario.py:701`, `app/colaboradores/services/calendario.py:709`) |
-| Comando `supra_juiz` | Bool passado ao classificador. (`app/ponto/management/commands/supra_juiz.py:121`, `app/ponto/management/commands/supra_juiz.py:232`) |
-| Emissor de furo retroativo | Bool passado ao classificador. (`app/ponto/management/commands/emitir_furo_retroativo.py:62`, `app/ponto/management/commands/emitir_furo_retroativo.py:108`) |
-| `par_completo_da_janela` | Bool para excluir turnos de dias não encerrados. (`app/ponto/turnos.py:2183`, `app/ponto/turnos.py:2186`) |
-
-O **método homônimo do lote** tem leitores no status, com motivos, e no painel, com bool. Ele chama diretamente `_dias_encerrados_puro`, sem atravessar a linha alterada. (`app/ponto/status_dia.py:196`, `app/core/services/painel_op.py:334`, `app/ponto/turnos.py:3018`)
-
-**2. Contraexemplos, custo e memória**
-
-**Resultado antes correto que passe a errado: [não verificado].** Os novos casos fixam correções nos dois sentidos: X deve encerrar às 08h; Y deve continuar aberto nesse instante. Isso demonstra a expectativa da fixture, não a ausência universal de regressões. (`app/ponto/tests/test_bug_enc_celulas_forma.py:49`, `app/ponto/tests/test_bug_enc_celulas_forma.py:50`)
-
-**O custo muda no cartório:** passa a existir uma consulta adicional de células por chamada efetiva de encerramento, pois o pareador agora recebe `None` e executa `celulas_do_periodo`. `_enc` memoiza o resultado por execução de `_julgar_colab_corpo`, evitando uma carga por dia. (`app/ponto/turnos.py:2154`, `app/ponto/turnos.py:1882`, `app/escala/alimentacao.py:41`, `app/ponto/services/cartorio.py:939`)
-
-As células adicionais do pad também podem acrescentar geradoras e disparar a consulta condicional de `mais`; alterações adicionais nos caminhos preguiçosos e relevância em tempo de produção estão **[não verificado]**. O lote conserva suas cargas e seu acesso direto ao corpo puro. (`app/ponto/turnos.py:1885`, `app/escala/alimentacao.py:123`, `app/ponto/turnos.py:2957`, `app/ponto/turnos.py:3018`)
-
-A ordem do ramo normal do cartório é:
-
-1. Monta a grade; o pareamento final dessa montagem recebe cópias com **ata fresca em memória**. (`app/ponto/services/cartorio.py:963`, `app/escala/utils.py:1835`, `app/escala/utils.py:1847`)
-2. Consulta encerramento sob demanda, por exemplo em `_em_curso`; agora esse pareador recarrega células persistidas. (`app/ponto/services/cartorio.py:1180`, `app/ponto/services/cartorio.py:942`, `app/ponto/turnos.py:1884`)
-3. Depois, no apply, lavra a célula atual com `save=False` e salva por `carimbar`. (`app/ponto/services/cartorio.py:1593`, `app/ponto/services/cartorio.py:1596`, `app/ponto/services/cartorio.py:1616`, `app/ponto/portas/celula.py:807`)
-
-Portanto, **há diferença de estado entre a ata fresca usada pela grade e a persistida usada pelo encerramento**. Entretanto, o cartório passa ao encerramento a lista original `cels`, não as cópias frescas da grade; esse diff não remove a alimentação direta dessas cópias. Divergência efetiva dry-run/apply causada pela mudança: **[não verificado]**. (`app/ponto/services/cartorio.py:942`, `app/escala/utils.py:1846`, `app/escala/utils.py:1847`)
-
-Como `_enc` é preguiçoso, a primeira carga pode ocorrer numa iteração posterior: a ordem demonstrada é “antes da lavra **da célula atual**”, não necessariamente antes de todas as lavras da passagem. (`app/ponto/services/cartorio.py:939`, `app/ponto/services/cartorio.py:1180`, `app/ponto/services/cartorio.py:1596`)
-
-No ramo `nunca_bateu`, a pergunta ocorre **somente dentro de `apply_`**, antes da lavra e do carimbo; o dry-run desse ramo não faz essa pergunta. Essa assimetria já está no chamador. (`app/ponto/services/cartorio.py:1040`, `app/ponto/services/cartorio.py:1063`, `app/ponto/services/cartorio.py:1075`, `app/ponto/services/cartorio.py:1097`)
-
-**3. Os testes mordem?** [nao verificado]
-
-A tabela descreve o que as asserções detectariam; execução dos mutantes e resultados efetivos: **[não verificado]**.
-
-| Teste | Mutante plausível que pega | O que deixa passar | [nao verificado]
-|---|---|---|
-| `test_regra` | Ignorar geradora/intervalo e fechar Y; manter X aberto; retirar `mais` somente do lote. Exige estados e motivos literais. (`app/ponto/tests/test_e4_carga_paridade.py:129`, `app/ponto/tests/test_e4_carga_paridade.py:139`) | Inverter somente o retorno sem motivos; usa `motivos=True`. (`app/ponto/tests/test_e4_carga_paridade.py:107`, `app/ponto/tests/test_e4_carga_paridade.py:115`) |
-| `test_paridade_carga_x_casca_em_fixture_mista` | Divergência exclusiva de um carregador, inclusive perder `mais`, batida ou identidade da saída; compara seis campos, motivos e atribuição das batidas. (`app/ponto/tests/test_e4_carga_paridade.py:55`, `app/ponto/tests/test_e4_carga_paridade.py:122`, `app/ponto/tests/test_e4_carga_paridade.py:148`) | Erro compartilhado pelos corpos puros, mantendo os dois lados iguais. (`app/ponto/turnos.py:1913`, `app/ponto/turnos.py:3009`, `app/ponto/turnos.py:3018`) |
-| `test_MORDE_carga_sem_mais` | Como controle de sensibilidade, exige que a retirada simulada de `mais` alcance a carga e produza divergência em Y. (`app/ponto/tests/test_e4_carga_paridade.py:159`, `app/ponto/tests/test_e4_carga_paridade.py:162`, `app/ponto/tests/test_e4_carga_paridade.py:165`) | **Sozinho, deixa passar produção já sem `mais`**, porque continua exigindo divergência. Quem reprova essa retirada permanente são `test_regra` e `test_paridade`. (`app/ponto/tests/test_e4_carga_paridade.py:143`, `app/ponto/tests/test_e4_carga_paridade.py:148`, `app/ponto/tests/test_e4_carga_paridade.py:165`) |
-| `test_RED_alimentado_igual_a_juiza_e_ao_lote` | Restaurar o repasse antigo da chave composta: constrói essa alimentação e compara com lote e singular. (`app/ponto/tests/test_bug_enc_celulas_forma.py:33`, `app/ponto/tests/test_bug_enc_celulas_forma.py:43`, `app/ponto/tests/test_bug_enc_celulas_forma.py:44`) | Erro compartilhado do julgamento; conversão bool errada; erro exclusivo do ramo com `turnos=` fornecido. (`app/ponto/tests/test_bug_enc_celulas_forma.py:33`, `app/ponto/turnos.py:2154`, `app/ponto/turnos.py:2172`) |
-| `test_RED_regra_do_veredito_do_cartorio` | Repasse antigo ou perda do intervalo de Y; fixa X encerrado e Y aberto às 08h. (`app/ponto/tests/test_bug_enc_celulas_forma.py:49`, `app/ponto/tests/test_bug_enc_celulas_forma.py:50`) | Erros exclusivos de outros instantes, Z ou conversão bool: só consulta X/Y às 08h, com motivos. (`app/ponto/tests/test_bug_enc_celulas_forma.py:33`, `app/ponto/tests/test_bug_enc_celulas_forma.py:49`) |
-
-**O patch alcança o lote:** o construtor faz import local de `escalas_do_periodo_por_colab`; `_lote` é executado dentro do patch, antes dessa resolução e chamada. (`app/ponto/turnos.py:2951`, `app/ponto/turnos.py:2963`, `app/ponto/tests/test_e4_carga_paridade.py:159`)
-
-**A casca fica intacta:** é medida antes do patch e retorna assinaturas e mapas já materializados. Medida dentro dele, também seria mutada, pois a casca singular resolve a função plural pelo global do módulo. (`app/ponto/tests/test_e4_carga_paridade.py:55`, `app/ponto/tests/test_e4_carga_paridade.py:106`, `app/ponto/tests/test_e4_carga_paridade.py:158`, `app/escala/alimentacao.py:154`)
-
-Há lacunas relevantes: não existe célula da fixture fora de D, logo a necessidade de **células no pad** não é testada independentemente; também não há célula fresca não salva, fluxo real do cartório, orçamento de consultas ou assert do modo booleano. (`app/ponto/tests/test_e4_carga_paridade.py:92`, `app/ponto/tests/test_e4_carga_paridade.py:107`, `app/ponto/tests/test_bug_enc_celulas_forma.py:32`, `app/ponto/tests/test_bug_enc_celulas_forma.py:33`)
-
-**Não há dependência direta do relógio real nos testes novos:** datas/instantes são constantes, ambas as classes congelam o relógio e os julgamentos recebem `agora`. (`app/ponto/tests/test_e4_carga_paridade.py:39`, `app/ponto/tests/test_e4_carga_paridade.py:47`, `app/ponto/tests/test_e4_carga_paridade.py:100`, `app/ponto/tests/test_bug_enc_celulas_forma.py:24`, `app/ponto/tests/test_bug_enc_celulas_forma.py:33`)
-
-**4. Classes de reprovação**
-
-| Classe | SIM/NÃO e prova |
-|---|---|
-| **(a) Segundo juiz** | **NÃO introduzido.** Os registrados continuam sendo `turnos_do_colab` e `dia_encerrado`; o carregador delega ao mesmo julgamento puro. (`app/core/juizes.py:196`, `app/core/juizes.py:223`, `app/ponto/turnos.py:2153`, `app/ponto/turnos.py:2170`) |
-| **(b) Segundo escritor fora da porta** | **NÃO introduzido.** A alteração troca alimentação de leitura; lavra e persistência seguem pelas portas existentes. (`app/ponto/turnos.py:2153`, `app/ponto/services/cartorio.py:1596`, `app/ponto/services/cartorio.py:1616`) |
-| **(c) Relógio fora da borda** | **NÃO introduzido; SIM preexistente no sítio.** Os defaults internos de `timezone.now()` permanecem, apesar do corte de injeção. O cartório fornece `agora`. (`app/ponto/turnos.py:2140`, `app/ponto/turnos.py:2094`, `app/docs/CORTES.md:369`, `app/ponto/services/cartorio.py:942`) |
-| **(d) Dois carregadores que podem divergir** | **SIM, preexistentes e mantidos.** Casca e lote carregam separadamente, mas usam os mesmos corpos. O selo novo verifica paridade na fixture; não elimina a duplicidade de composição das cargas. (`app/ponto/turnos.py:1919`, `app/ponto/turnos.py:2957`, `app/ponto/turnos.py:3009`, `app/docs/BACKLOG.md:862`) |
-| **(e) Selo/RED sem mordida** | **NÃO inteiramente vazio:** há gabaritos literais e controle de sensibilidade. **SIM, cobertura incompleta:** bool, pad com células e estado não salvo escapam conforme os testes acima. RED executado: **[não verificado]**. (`app/ponto/tests/test_e4_carga_paridade.py:143`, `app/ponto/tests/test_e4_carga_paridade.py:165`, `app/ponto/tests/test_bug_enc_celulas_forma.py:33`) |
-| **(f) Ordem de trava** | **NÃO alterada pela linha do diff.** Ela apenas remove o argumento de uma leitura. Existe hipótese preexistente de composição Colaborador→Disputa, registrada como não reproduzida; regressão de trava nesta obra: **[não verificado]**. (`app/ponto/turnos.py:2154`, `app/docs/BACKLOG.md:767`) |
-| **(g) Pouso antes do pré-requisito** | **NÃO comprovado; cumprimento [não verificado].** Exige paridade antes da cura, cura depois do pouso E4-7, RED e impacto. A documentação declara E4-7 no ar, mas não comprova aqui a ancestralidade/execução efetiva. (`app/docs/BACKLOG.md:862`, `app/docs/BACKLOG.md:861`, `app/docs/BACKLOG.md:789`) |
-
-**5. Leis dos sítios**
-
-O grep encontra proteção explícita para consumo da célula/ata, teto temporal e jornada pelo dia de início; L-085 nomeia `turnos_do_colab`. O registro de juízes também reserva geometria ao pareador e marcos do dia à autoridade da célula. (`app/docs/LEIS.md:95`, `app/docs/LEIS.md:100`, `app/docs/LEIS.md:117`, `app/docs/JUIZES.md:20`, `app/docs/JUIZES.md:22`)
-
-**Não identifiquei violação nova dessas regras pela linha alterada:** ela mantém a pergunta ao pareador e a conjunção turno vivo/fim previsto, sem criar julgamento por data. (`app/ponto/turnos.py:2154`, `app/ponto/turnos.py:2114`, `app/ponto/turnos.py:2122`)
-
-As ressalvas são a leitura de relógio preexistente diante de `RELOGIO-INJETADO`, a cronologia exigida pela L-110 e os pré-requisitos específicos da obra. O fonte contém casos pela regra; não comprova que foram escritos/executados antes da cura nem fornece o impacto exigido. (`app/docs/CORTES.md:369`, `app/docs/LEIS.md:136`, `app/docs/BACKLOG.md:861`, `app/docs/BACKLOG.md:862`; execução e cronologia **[não verificado]**)
-
-_1445 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1446 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
