@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 02:28:14.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (113.8 MB). Acoes na janela: **1391**.
+**Medido em 01/11/2026 02:33:45.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (113.8 MB). Acoes na janela: **1382**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1392,12 +1392,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:34:24 | Bash | Find wrapper temp file and state path | `cd /home/ronald/wt-b3codex-141721 && sed -n 20,39p bin/codex_pergunta.sh; grep -n 'CAB=\\|mktemp\\|^R=\\|VIVO=' bin/codex_pergunta.sh; grep -n "ESTADO\b\\|^ESTADO\\|disjuntor_estado\\|def _com_estado\\|def _cam\\|TRIAGEM_CODEX =" bin/disjuntor.py \| head` |
 | 14:34:09 | Bash | Check sidecar and wrapper head/tail | `cd /home/ronald/saas-hasner && ls -la logs/reprova_codex/; sed -n 170,183p /home/ronald/wt-b3codex-141721/bin/codex_pergunta.sh; sed -n 40,60p /home/ronald/wt-b3codex-141721/bin/codex_pergunta.sh; sed -n 1505,1530p /home/ronald/wt-b3codex-141721/bin/disjuntor.py` |
 | 14:34:03 | Bash | Inspect wrapper sidecar and selo case | `cd /home/ronald/wt-b3codex-141721 && git log --oneline -3 && git status --short \| head; grep -n 'RESPOSTA\\|\.id\\|CODEX_PAPEL\\|CODEX_OBRA\\|^exit\\|disjuntor' bin/codex_pergunta.sh \| head -60; grep -n "'--triagem'\\|--rearma\\|argv" bin/disjuntor.py \| head; sed -n 1120,1200p bin/tests/test_disjuntor.sh` |
-| 14:33:43 | Bash | Read GRADE builder result and disjuntor B3 code | `cd /home/ronald/saas-hasner && tail -c 3500 /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/a4902e3e2a4a7f01d.output; echo; echo ----; sed -n 740,930p /home/ronald/wt-b3codex-141721/bin/disjuntor.py` |
-| 14:32:11 | Bash | Read Codex verificador result | `cd /home/ronald/saas-hasner && tail -n 3 logs/reprova_codex/v1.run; wc -c logs/reprova_codex/v1.r; cat logs/reprova_codex/v1.r \| cut -c1-600 \| head -90` |
-| 14:32:10 | Agent | E4 item 8 furos builder | `Obra E4-8 (PROGRAMA-CELULA-E-O-DIA, E4 = troca leitor por leitor; LISTA UNICA no app/docs/RELATO.md, item 8: tela `relatorios/furos.py::classificar_dia`). Repo /home/ronald/saas-hasner (Django em app/). LEIA ANTES: /home/ronald/saas-hasner/CLAUDE.md inteiro (secao 0 LEI-AKITA e 7b), app/docs/ADR/0002-celula-e-o-dia.md (D1 status do dia LAVRADO na CelulaDia; D4 UMA funcao do nucleo o devolve), pont ...` |
-| 14:31:54 | Bash | Write DESENHO E4-6 line to RELATO top | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() a='\nDESENHO E4-1:' assert s.count(a)==1 and 'DESENHO E4-6:' not in s lin='\nDESENHO E4-6: lei=ADR 0002 D4 (antes de encerrar o dia o leitor do D4 so devolve aberto/previsto) + corte "vocabulario inalterado" pergunta="dia futuro sem batida: a escala preve trabalho, folga ou cadastro em duvida?" escala/views.py:49 -- sombra 31/10: janela hoje+1 ...` |
-| 14:28:40 | Bash | Point ESPERANDO to live pid only | `cd /home/ronald/saas-hasner && sed -i '3s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=2779739#' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md && kill -0 2779739 && echo vivo` |
-| 14:28:35 | Bash | Read the arquivo proof rule | `cd /home/ronald/saas-hasner && sed -n '/^def _prova_arquivo/,/^def /p' bin/hook_stop_fila1.py \| head -30` |
-| 14:28:28 | Bash | Read hook ESPERANDO proof rule | `cd /home/ronald/saas-hasner && sed -n 645,720p bin/hook_stop_fila1.py` |
-| 14:28:26 | Bash | Check ESPERANDO pid liveness and hook rule | `cd /home/ronald/saas-hasner && kill -0 2779739 && echo vivo; bin/trava_teste.sh --quem; tail -n 2 logs/f1c4emis/suite_v10.log; /bin/grep -n "ESPERANDO" bin/hook_stop_fila1.py \| head` |
-| 14:28:22 | Bash | Read the O261 fila 1 item and RELATO top | `/bin/grep -n "O261-E-CELULA-20-UM-DONO" docs/BACKLOG.md \| cut -c1-1500 \| head -4; sed -n 1,6p docs/RELATO.md \| cut -c1-200` |
