@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 03:16:14.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (114.1 MB). Acoes na janela: **1245**.
+**Medido em 01/11/2026 03:21:44.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (114.1 MB). Acoes na janela: **1236**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1246,12 +1246,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:23:21 | Bash | Read command, prior probe and result | `cat ponto/management/commands/lavrar_status_competencia.py; echo ----; cat ../logs/e4_d5/sonda_prod.py; echo ----; tail -30 ../logs/e4_d5/r.txt` |
 | 15:23:19 | Bash | Locate the command file and prior logs | `find . -name 'lavrar_status_competencia*' -not -path './staticfiles/*'; ls logs/e4_d5/ 2>/dev/null; ls ../logs/e4_d5/ 2>/dev/null` |
 | 15:23:16 | Bash | Read lavrar_status_competencia command | `f=$(grep -rl "lavrar_status_competencia" --include=*.py */management/commands/ \| head -3); echo $f; wc -l $f; sed -n 1,200p $(echo $f \| cut -d' ' -f1)` |
-| 15:18:50 | Bash | Append raia state to handoff | `cat >> docs/HANDOFF-SESSAO.md <<'EOF' ## RAIAS (anexo 15:18, CORRECAO-1516; F1=O261-E, em pe F1C4-3-EMISSORES) - EMISSORES v11 b3bef403 wt-f1c4-3-emis-1016 (logs/f1c4emis/v11_{red,green,sombra}) -> suite,Codex,opus,pouso · B3 v3 builder aa2cb76f wt-b3codex-141721 (logs/reprova_codex/v3_*) · E4-1 wt-e4-16-145508 RED logs/e4_16/red_e41_v2.log -> restaurar orig, cura.py, Codex, suite; E4-6 vale · com ...` |
-| 15:18:39 | Bash | Read handoff file | `sed -n 1,58p docs/HANDOFF-SESSAO.md \| cut -c1-170` |
-| 15:18:34 | Bash | Check handoff covers required items | `grep -nE 'O261\|EMISSORES\|B3\|E4-1\|E4-6\|comboio\|GRADE\|V3' docs/HANDOFF-SESSAO.md \| cut -c1-150` |
-| 15:18:30 | Bash | Generate session handoff | `cd /home/ronald/saas-hasner && bin/handoff_sessao.sh 2>&1 \| tail -5; wc -l app/docs/HANDOFF-SESSAO.md` |
-| 15:17:34 | Bash | Check surviving suites; RELATO line | `pgrep -af "suite.sh --dir" \| cut -c1-160; cd /home/ronald/saas-hasner/app && date +%H:%M && sed -i '4a 15:18 CORRECAO-1516 (2): agentes de espera encerrados (EMISSORES v11 parado; V3 ja tinha saido). Suites seguem na trava (lista acima por pgrep). (3) E4-D5 apply AGORA pela porta do cartorio (lavrar_status_competencia --apply), reversao antes, contagem antes/depois e /health/ durante -- primeiro  ...` |
-| 15:17:30 | TaskStop |  | `-` |
-| 15:17:30 | TaskStop |  | `-` |
-| 15:17:29 | ToolSearch |  | `-` |
-| 15:17:24 | Bash | Record V3 delivery and law question in RELATO | `date +%H:%M && sed -i '3a PERGUNTA DE LEI (V3-RETOMA volta 2, 949baf5c; nao para a fila): dia com MAIS DE UMA ponta, a HE que passa do tamanho da ULTIMA ponta ancora onde? motor v2: extra no ultimo periodo, cortada na entrada dele; cura v3: transborda para as pontas anteriores. Com 1 periodo os dois dao o mesmo numero. E a lei aberta de 02/10 ("no ULTIMO PAR?"): 3 dia-colab em 09/2026 (-8,14 h), 0 ...` |
