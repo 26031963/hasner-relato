@@ -1,7 +1,70 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 02:02** · publicado em **01/11/2026 02:06** (UTC-3)
+> Ultima resposta processada: **01/11/2026 02:21** · publicado em **01/11/2026 02:22** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 02:21 · sessao 99fe14057718 · - · - · origem=Ronald (tmux)
+
+Achados para consolidação, todos por leitura e provas em memória com `python3 -B`, sem criar arquivos:
+
+1. **Bloqueia — a revalidação Codex ainda usa B3 desatualizado.** `b3_parada` decide em uma transição e reserva em outra (`bin/disjuntor.py:1137`, `bin/disjuntor.py:1147`). Entre ambas, a terceira triagem PROCEDENTE pode gravar a trilha e `b3_triagem_linhas`, sem marcar `disparado` (`bin/disjuntor.py:879`, `bin/disjuntor.py:888`, `bin/disjuntor.py:890`). A reserva consulta apenas `disparado`/`pede_desenho`, sem reler/recalcular a triagem, e autoriza (`bin/disjuntor.py:1404`, `bin/disjuntor.py:1412`). Prova em memória com as funções reais produziu `rc=0`, três PROCEDENTES, `disparado=False` e quarta volta reservada. Viola a exigência de passar todos os gates antes da autorização (`app/docs/contratos/CONTENCAO-QUE-MORDE-V2.txt:10`; limiar em `bin/disjuntor.py:77`).
+
+2. **Bloqueia — exceção de estado/flock ainda libera Bash do agente submetido a B1.** O caminho Bash com `agent_id` chama B1 (`bin/disjuntor.py:1994`), que usa `_com_estado` (`bin/disjuntor.py:560`). Estado ilegível e flock ocupado levantam exceção (`bin/disjuntor.py:302`, `bin/disjuntor.py:295`). O fechamento novo cobre `Agent`, mas Bash fora do ramo B3 continua em “ferramenta liberada” (`bin/disjuntor.py:2070`, `bin/disjuntor.py:2079`). Prova em memória produziu `rc=0`, stdout vazio e essa linha FALHA. Contraria estado ilegível = nega PreToolUse (`app/docs/contratos/CONTENCAO-QUE-MORDE-V2.txt:4`). O descarte fornecido de #12 cita transcript ilegível e reconhecimento textual de job/fim, sem cobrir estado/flock [nao verificado: anexo sem arquivo local numerado].
+
+3. **Bloqueia — cura temporal de B1 não chega à decisão final.** `_job_proprio` agora considera timestamp ilegível como job devido (`bin/disjuntor.py:529`, `bin/disjuntor.py:532`), porém `medir_b1` retorna falso se os demais timestamps legíveis forem recentes ou não existirem (`bin/disjuntor.py:494`). Prova em memória: `_job_proprio → bgj1`; `medir_b1 → disparo=False, vivo ha menos de 15 min`, com cópia acessível sem arquivo novo. O resultado contradiz a regra restritiva declarada para esse caminho (`bin/disjuntor.py:451`; `app/docs/contratos/CONTENCAO-QUE-MORDE-V2.txt:15`).
+
+4. **Fila/limite residual — cópias inacessíveis podem desaparecer da medição.** `os.path.isdir` filtra as cópias antes da verificação restritiva; uma cópia citada que não possa ser reconhecida como diretório não chega a `_mais_novo` (`bin/disjuntor.py:468`, `bin/disjuntor.py:498`). Uma segunda cópia acessível com arquivo recente encerra B1 sem disparo (`bin/disjuntor.py:506`). Além disso, `_mais_novo` retorna no primeiro arquivo recente, antes de examinar possíveis trechos ilegíveis da mesma cópia (`bin/disjuntor.py:442`). A precedência restritiva adicionada entre cópias não resolve esses casos (`bin/disjuntor.py:499`). Ocorrência real [nao verificado].
+
+Curas efetivas nos caminhos examinados:
+
+- Agent sem gravação retorna negativa e Codex sem gravação retorna 4 (`bin/disjuntor.py:1522`, `bin/disjuntor.py:1420`).
+- Fotografia de vivos está dentro da transição sob flock (`bin/disjuntor.py:1494`; execução do callback sob trava em `bin/disjuntor.py:290`, `bin/disjuntor.py:305`).
+- Poda exige `tool_result` estruturado, em vez de mera ocorrência textual do ID (`bin/disjuntor.py:1502`, `bin/disjuntor.py:1537`).
+- Replay podado permanece idempotente enquanto o ID estiver nas últimas 500 autorizações; depois disso pode consumir novamente, pois `voltas.chaves` não participa desse teste (`bin/disjuntor.py:1485`, `bin/disjuntor.py:1514`, `bin/disjuntor.py:1518`). Esse residual tende a negar antes, sem caminho novo de liberação demonstrado [nao verificado].
+- `--rearma-b3` recusa `pede_desenho`; `--redesenha` retira o pedido antes de rearmar (`bin/disjuntor.py:1102`, `bin/disjuntor.py:1557`).
+- Coletor aceita tipo verificador ou papel verificador na descrição (`bin/disjuntor.py:816`).
+- Semente marca sidecar ilegível como parcial e completa uma vez a parte Agent semeada sem transcript (`bin/disjuntor.py:1357`, `bin/disjuntor.py:1384`).
+
+**Veredito: bloqueia**, pelos caminhos 1–3 (`bin/disjuntor.py:1404`, `bin/disjuntor.py:2079`, `bin/disjuntor.py:494`).
+
+## 01/11 02:20 · sessao 0c693fff470a · - · - · origem=Ronald (tmux)
+
+- **bloqueia — árvore ilegível ainda pode virar “anterior ao portão”.** `_existe` devolve `False` quando `sha:caminho` falha, desde que o objeto commit exista; não distingue caminho ausente de árvore faltante/corrompida. Se isso ocorrer no commit que introduz o portão e o pai não o contém, `tem` fica falso e o commit é ignorado, chegando a rc 0. Prova em memória com `_git` substituído: árvore faltante + objeto commit presente → `_existe=False`, `julga=(0,[])`. Isso contraria o “não sei” exigido. (`bin/contrato_do_push.py:27`, `bin/contrato_do_push.py:29`, `bin/contrato_do_push.py:57`, `bin/contrato_do_push.py:60`, `bin/contrato_do_push.py:85`; contrato `app/docs/contratos/CONTENCAO-QUE-MORDE-V2.txt:4`.)
+
+- **fila — mutante `linha-torta` é morto por exceção, sem provar liberação indevida.** Desativar a guarda deixa a entrada de dois campos alcançar `c[3]`, causando `IndexError` e rc 1; o caso fica vermelho porque exige rc 2. O mutante remove a validação, mas permanece negando pelo processo que falhou. (`bin/tests/test_contrato_do_push.sh:60`, `bin/tests/test_contrato_do_push.sh:61`, `bin/tests/test_contrato_do_push.sh:91`; `bin/contrato_do_push.py:44`, `bin/contrato_do_push.py:48`.)
+
+- **Mutantes causais por leitura:** `sem-merges` acrescenta `--no-merges`, fazendo desaparecer o único commit que escreve `bin/resolucao.sh` sem obra; o caso falha em `return 11`. `tira-portao` consulta apenas a árvore do próprio commit; a remoção do portão passa, causando `return 12`. A execução real desses repositórios sintéticos é **[nao verificado]**, pois escreveria arquivos. (`bin/tests/test_contrato_do_push.sh:51`, `bin/tests/test_contrato_do_push.sh:54`, `bin/tests/test_contrato_do_push.sh:56`, `bin/tests/test_contrato_do_push.sh:57`, `bin/tests/test_contrato_do_push.sh:59`, `bin/tests/test_contrato_do_push.sh:89`, `bin/tests/test_contrato_do_push.sh:90`.)
+
+- **rc 2 — escritor/leitores:** `julga` escreve o resultado 2 nas falhas de forma, enumeração, pais, árvore, diff e mensagem; `main` o recebe e `sys.exit` o publica. O leitor de produção trata qualquer não-zero como recusa, convertendo para rc 1 antes de `SKIP_TESTS`. O selo exige exatamente 2 na linha torta e apenas não-zero para SHA inexistente. Há um escritor lógico desse código de retorno: `julga`. (`bin/contrato_do_push.py:45`, `bin/contrato_do_push.py:52`, `bin/contrato_do_push.py:56`, `bin/contrato_do_push.py:59`, `bin/contrato_do_push.py:67`, `bin/contrato_do_push.py:73`, `bin/contrato_do_push.py:79`, `bin/contrato_do_push.py:89`, `bin/contrato_do_push.py:96`; `bin/pre-push.sh:10`; `bin/tests/test_contrato_do_push.sh:61`, `bin/tests/test_contrato_do_push.sh:63`.)
+
+## 01/11 02:20 · sessao 115a9ac88b85 · - · - · origem=Ronald (tmux)
+
+Leitura estática concluída; execução dos casos/mutantes permanece [nao verificado], pois criam arquivos (`bin/tests/test_disjuntor.sh:39`, `:51`, `:1761`).
+
+| Mutante | Costura removida e ponto esperado do vermelho |
+|---|---|
+| `v1-replay-podado` | Remove consulta a `autorizados`; depois de seis voltas, replay de `p1` passa a bater no teto, derrubando caso 3 (`bin/tests/test_disjuntor.sh:2081`, `:1567`, `:1569`; `bin/disjuntor.py:1485`, `:1511`). |
+| `v1-reserva-sem-gravar` | Remove checagem positiva de persistência Agent; autorização sem gravar deixa de emitir negativa exigida pelo caso 4 (`bin/tests/test_disjuntor.sh:2082`, `:1571`; `bin/disjuntor.py:1522`). |
+| `v1-codex-sem-gravar` | Remove conversão de sucesso sem gravação para rc 4; caso 5 encontra rc 0 (`bin/tests/test_disjuntor.sh:2083`, `:1572`, `:1574`; `bin/disjuntor.py:1420`). |
+| `v1-rearme-com-desenho` | Remove recusa do rearme; caso 11 perde mensagem específica; caso 12 também consulta parada (`bin/tests/test_disjuntor.sh:2084`, `:1610`, `:1611`, `:1612`; `bin/disjuntor.py:1102`). |
+| `v1-coletor-so-tipo` | Exclui general-purpose cujo papel é verificador; caso 1 de `i4_coletor` deixa de ver B3. Controle construtor consulta autorização positiva (`bin/tests/test_disjuntor.sh:2085`, `:1625`, `:1626`, `:1628`, `:1629`). |
+| `v1-relogio-proprio` | Ignora relógio fornecido; consulta com agora+2 dias conserva os dois eventos, derrubando caso 5 (`bin/tests/test_disjuntor.sh:2086`, `:1668`, `:1669`, `:1670`). |
+| `v1-sem-preco-some` | `continue` descarta turno desconhecido; custo opus continua e falta PARCIAL, derrubando caso 2 (`bin/tests/test_disjuntor.sh:2087`, `:1638`, `:1639`, `:1643`, `:1644`). |
+| `v1-cert-sem-ran` | Desliga exigência conjunta Ran/OK; certificado reduzido é aceito, faltando negativa do caso 13 (`bin/tests/test_disjuntor.sh:2088`, `:1691`, `:1692`). |
+| `v1-head-ilegivel` | Remove recusa de HEAD vazio; fixture é repo sem commit com certificado válido e sem PROCEDENTE, faltando negativa do caso 14 (`bin/tests/test_disjuntor.sh:2089`, `:1695`, `:1698`, `:1699`; `bin/disjuntor.py:1475`). |
+| `v1-hash-parcial` | Troca `git add` estrito por `--ignore-errors`; caso 15 exige falha do hash real, mas somente quando `cat` não consegue ler (`bin/tests/test_disjuntor.sh:2092`, `:1701`, `:1702`, `:1703`). |
+| `v1-suite-sem-cert` | Substitui chamada Python por `true`; cai exclusivamente porque desaparece a string procurada pelo grep do caso 16. A conexão funcional suite→certificado não é exercitada (`bin/tests/test_disjuntor.sh:2093`, `:1707`). |
+
+Os casos i9 novos cobrem: duas cópias (12), cert sem Ran/OK (13), HEAD ilegível (14), hash com arquivo ilegível (15), presença textual do chamador (16) e pré-condição do fixture sem HEAD ainda produzir hash (17). O 17 é montagem do cenário, não verificação de uma negativa (`bin/tests/test_disjuntor.sh:1688`, `:1692`, `:1697`, `:1699`, `:1703`, `:1707`).
+
+Achados de teste: [nao verificado]
+
+- **Fila — dependência de permissões reais:** `i11_persiste` pressupõe que chmod555 impede gravação; não confirma essa condição. Sob usuário que ultrapasse permissões, o próprio controle falha no caso 4 antes de atingir o mutante Codex; execução nesse contexto [nao verificado] (`bin/tests/test_disjuntor.sh:1570`, `:1571`, `:1572`). O harness roda controle separado, mas considera qualquer saída não zero do caso mutante como mordida, sem exigir o subcaso esperado (`bin/tests/test_disjuntor.sh:1764`, `:1772`).
+- **Fila — prova textual da suite:** `v1-suite-sem-cert` remove de fato a chamada, porém o vermelho demonstra alteração textual; não demonstra emissão real do certificado após uma suite inteira (`bin/tests/test_disjuntor.sh:1707`, `:2093`).
+- **Fila — teste condicional de ilegibilidade:** se `cat` ler o arquivo chmod000, caso 15 é pulado. Nesse ambiente o mutante pode sobreviver; o harness o reportaria como falha, e não como sucesso falso (`bin/tests/test_disjuntor.sh:1702`, `:1703`, `:1772`).
+- **Fila — curas sem caso novo correspondente:** os novos testes listados não injetam exceção de `main_pretool`, concorrência entre autorização/B3 ou troca de fotografia de vivos sob flock; seu comportamento em execução fica [nao verificado]. As adições concretas são apenas os casos listados em `bin/tests/test_disjuntor.sh:1750` e os mutantes de `:2081` a `:2093`.
+
+Os controles em cópia agora incluem `suite.sh`, corrigindo a ausência dessa dependência para o grep i9 (`bin/tests/test_disjuntor.sh:1761`, `:1707`); todos os casos novos entram também no laço de controles sem mutação (`bin/tests/test_disjuntor.sh:1790`).
 
 ## 01/11 02:02 · sessao 99fd5c598699 · GRADE-FOLGA-JUIZ · verificador · origem=Code
 
@@ -771,120 +834,4 @@ Achado **bloqueia — âncora noturna ainda usa data civil errada**. O ramo novo
 
 **Outro leitor residual, de metadado:** `via_pelo_fato` ainda chama qualquer ausência aprovada de `VIA_AUSENCIA_DIA`, inclusive parcial com resto; esse valor significa “dia resolvido pela ausência”. Isso pode rotular erroneamente a testemunha de uma resolução; morte automática da pergunta por esse caminho, isoladamente, não demonstrada, porque o juiz de pergunta prioriza o veredito acusador da célula (`app/chamados/juizes.py:1381`, `app/chamados/juizes.py:1383`, `app/chamados/models.py:2261`, `app/chamados/juizes.py:1102`, `app/chamados/juizes.py:1104`). Gravidade: **fila**.
 
-## 01/11 00:47 · sessao 8ff112be9bdd · FASE-CONFLITANTE-VINCULO-DO-DIA · censo · origem=Code
-
-**O contador e a autoridade usam universos diferentes:** `medir` seleciona vínculos por `ativa=True` e os percorre pela janela inteira; a autoridade considera a geradora da célula e a vigência. Isso demonstra diferença de seleção, mas ocorrência e impacto no contador de produção são **[nao verificado]**. Fontes: [fase_conflitante.py:71](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/services/fase_conflitante.py:71), [alimentacao.py:237](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/alimentacao.py:237).
-
-1. **Sítios em `fase_conflitante.py`**
-
-   Há **uma seleção de universo de vínculos**, sem uma escolha individual de “vínculo do dia”:
-
-   | Sítio | Decisão e fonte |
-   |---|---|
-   | [fase_conflitante.py:71](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/services/fase_conflitante.py:71) | Query direta de `EscalaColaborador`: inclui somente `ativa=True`. Não filtra colaborador, início ou fim. |
-   | [fase_conflitante.py:73](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/services/fase_conflitante.py:73), [fase_conflitante.py:78](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/services/fase_conflitante.py:78) | Propagação dessa seleção: cada `ec` é usado para **todos** os dias da janela, sem testar se cobre aquele dia e sem consultar célula ou autoridade. |
-
-   Os demais pontos não escolhem vínculo: a foto vem de query de **todas as `FolgaDia` daquele `ec`**, sem recorte de datas; `_ancora_diz` lê os campos `data_ancora_colaborador` e `tipo_escala.tipo_ciclo`; `_foto_diz` recebe o conjunto de datas. A ausência de foto elimina o vínculo da medição, não declara ausência de vínculo no dia. Fontes: [fase_conflitante.py:74](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/services/fase_conflitante.py:74), [fase_conflitante.py:40](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/services/fase_conflitante.py:40), [fase_conflitante.py:51](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/services/fase_conflitante.py:51).
-
-2. **Autoridade registrada e predicado**
-
-   É `escala/alimentacao.py::vinculo_do_dia`, definida em [alimentacao.py:196](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/alimentacao.py:196), registrada em [juizes.py:1270](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/core/juizes.py:1270) e indicada em [JUIZES.md:85](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/docs/JUIZES.md:85).
-
-   - **Com geradora:** lê `escala_geradora_id` da célula e procura esse vínculo na lista recebida. Se faltar ou estiver fora da vigência, retorna `None`, sem escolher outro. As bordas são inclusivas; nesse ramo não exige vínculo ativo. Fonte: [alimentacao.py:237](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/alimentacao.py:237).
-   - **Sem geradora:** usa `vinculo_cobre_a_data`: início não nulo, `início <= dia`, fim nulo ou `fim >= dia`, e `ativa or data_fim is not None`. Entre os elegíveis, escolhe o máximo por `(ativa, data_inicio)`. Fontes: [alimentacao.py:164](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/alimentacao.py:164), [alimentacao.py:182](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/alimentacao.py:182), [alimentacao.py:253](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/alimentacao.py:253).
-
-   Portanto, encerrado pode responder dentro da vigência; futuro não responde antes do início; inativo sem fim é recusado no fallback, embora possa responder como geradora dentro dos limites declarados. Fontes: [alimentacao.py:182](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/alimentacao.py:182), [alimentacao.py:247](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/alimentacao.py:247).
-
-3. **Comparação e casos de divergência**
-
-   **Não são iguais.** O único seletor do contador exige atividade atual; sua aplicação por dia não verifica vigência nem geradora. A autoridade verifica esses elementos e retorna um vínculo ou `None`. Fontes: [fase_conflitante.py:71](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/services/fase_conflitante.py:71), [fase_conflitante.py:78](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/services/fase_conflitante.py:78), [alimentacao.py:237](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/alimentacao.py:237).
-
-   Há uma contraprova **já escrita como fixture**, do colaborador `E4 C`: vínculo encerrado inativo de **01/09/2026 a 30/09/2026**, ativo desde **01/10/2026**, futuro ativo desde **01/11/2026**, além de inativo sem fim desde agosto. Fonte: [test_e4_vinculo_cobre_a_data.py:24](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_e4_vinculo_cobre_a_data.py:24).
-
-   | Dia da fixture | Autoridade | Universo da query do contador |
-   |---|---|---|
-   | 15/09/2026 | Escolhe o encerrado de setembro. | Exclui o encerrado e inclui os dois ativos, ainda futuros nesse dia. |
-   | 10/10/2026 | Escolhe o ativo iniciado em outubro. | Inclui também o futuro iniciado em novembro. |
-
-   As respostas da autoridade estão afirmadas em [test_e4_vinculo_cobre_a_data.py:54](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_e4_vinculo_cobre_a_data.py:54); a seleção diferente decorre de [fase_conflitante.py:71](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/services/fase_conflitante.py:71).
-
-   Isso comprova **diferença de universo**, não contagem indevida: essa fixture usa 5x2, que `_ancora_diz` não responde. Fontes: [test_e4_vinculo_cobre_a_data.py:22](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_e4_vinculo_cobre_a_data.py:22), [fase_conflitante.py:43](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/services/fase_conflitante.py:43). Caso concreto de produção com colaborador, datas e dia: **[nao verificado]**.
-
-4. **Chamadores, leitores e efeitos**
-
-   | Caminho | Efeito confirmado |
-   |---|---|
-   | Command → `medir` | Chama em [lavrar_fase_conflitante.py:31](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/management/commands/lavrar_fase_conflitante.py:31). Sem `--apply`, imprime; com a flag, escreve `MetricaSnapshot` com total, quantidade de vínculos e detalhe ([linha 32](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/management/commands/lavrar_fase_conflitante.py:32)). |
-   | Cron → command | Declarado às 07:14, com `--apply`, dependente de `reconciliar_vinculo` ([crons.py:479](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/config/crons.py:479)). Instalação/execução em produção: **[nao verificado]**. |
-   | `ultimo_lavrado` → snapshot | Lê o último snapshot; sem medida retorna `total=None` e `sem_medida=True`; com medida acrescenta `medido_em` ([fase_conflitante.py:105](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/services/fase_conflitante.py:105)). |
-   | API → `ultimo_lavrado` | Entrega o resultado em `contadores.fase_conflitante`, como JSON ([views_mensageria.py:632](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/api/views_mensageria.py:632), [linha 643](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/api/views_mensageria.py:643)). |
-   | Mensageria → API | O cliente recebe o JSON inteiro; `saude_da_operacao` o cacheia, mas processa somente `metricas` e devolve apenas essas medidas. **Esse caminho não repassa o contador ao contexto do chat.** Fontes: [core_client.py:108](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/mensageria/nucleo/core_client.py:108), [ferramentas.py:259](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/mensageria/nucleo/ferramentas.py:259), [linha 294](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/mensageria/nucleo/ferramentas.py:294), [linha 380](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/mensageria/nucleo/ferramentas.py:380). |
-
-   Nesses caminhos, as escritas identificadas são **snapshot e cache**. Emissão de chamado, alteração de estado operacional ou retenção de pouso causada por esse contador: **[nao verificado]**. [nao verificado]
-
-5. **Selos e testes existentes** [nao verificado]
-
-   | Referência | O que afirma |
-   |---|---|
-   | [test_fase_conflitante.py:60](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_fase_conflitante.py:60) | Foto nos pares + âncora 20/07: um vínculo acusado, total **≥25**, esperado zero e vínculo na amostra. |
-   | [test_fase_conflitante.py:72](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_fase_conflitante.py:72) | Mesma foto, âncora 21/07: total zero. |
-   | [test_fase_conflitante.py:80](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_fase_conflitante.py:80) | Sem foto: zero. |
-   | [test_fase_conflitante.py:84](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_fase_conflitante.py:84) | Âncora `None`: zero. |
-   | [test_fase_conflitante.py:88](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_fase_conflitante.py:88) | Ciclo 6x1: zero. |
-   | [test_fase_conflitante.py:93](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_fase_conflitante.py:93) | Foto diz folga no dia fotografado e trabalho no seguinte. |
-   | [test_semselo5_ativo_nao_responde_por_dia.py:128](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_semselo5_ativo_nao_responde_por_dia.py:128) | Classifica `medir` em `HOJE`, como cadastro; a catraca cobra ausência de sítios novos/listas velhas, não equivalência com a autoridade ([linha 365](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_semselo5_ativo_nao_responde_por_dia.py:365)). |
-   | [test_api_mensageria_saude.py:106](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/api/tests/test_api_mensageria_saude.py:106) | Cobra nominalmente `fase_conflitante`: sem lavra, `sem_medida=True` e `total=None`. |
-   | [test_api_mensageria_saude.py:79](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/api/tests/test_api_mensageria_saude.py:79) | GET não altera a quantidade de snapshots. |
-
-   Os seis testes do contador usam vínculo ativo iniciado em 01/01/2026 e janela de setembro; não testam troca, encerramento, vínculo futuro ou geradora. Fontes: [test_fase_conflitante.py:30](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_fase_conflitante.py:30), [linha 49](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_fase_conflitante.py:49), [linha 60](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_fase_conflitante.py:60). Resultado de execução dos testes nesta auditoria: **[nao verificado]**.
-
-## 01/11 00:47 · sessao 709103adf3b6 · - · - · origem=Ronald (tmux)
-
-A autoridade registrada é `escala/alimentacao.py::vinculo_do_dia`, definida em `app/escala/alimentacao.py:196`, registrada em `app/core/juizes.py:1262-1271` e documentada em `app/docs/JUIZES.md:84-89`.
-
-- Com geradora: lê `CelulaDia.escala_geradora_id`, procura esse vínculo na lista recebida e devolve `None` se faltar ou se o dia estiver fora da vigência; limites inclusivos. Nesse ramo não exige `ativa=True`, nem exige `data_fim` para vínculo inativo — `app/escala/alimentacao.py:237-252`.
-- Sem geradora: aceita início não nulo e `início <= dia <= fim`, sendo fim nulo ilimitado, e exige `ativa or data_fim is not None`; desempata por `(ativa, data_inicio)` — `app/escala/alimentacao.py:164`, `app/escala/alimentacao.py:182-184`, `app/escala/alimentacao.py:253-254`.
-- Vínculo futuro não responde antes do início; encerrado responde dentro da vigência; inativo sem fim não responde no fallback — `app/escala/alimentacao.py:182-184`, `app/escala/alimentacao.py:250-254`.
-
-Em `fase_conflitante`, há um sítio de seleção do universo: query direta `EscalaColaborador.objects.filter(ativa=True)`; cada vínculo retornado é aplicado a todos os dias da janela, sem verificar início, fim, célula ou juiz — `app/escala/services/fase_conflitante.py:71-80`. `_ancora_diz` lê âncora/ciclo; `_foto_diz` lê datas de folga; nenhum seleciona vínculo — `app/escala/services/fase_conflitante.py:40-58`.
-
-Casos já presentes na cópia, como **fixtures**, não produção:
-
-| Fixture | Datas/dia | Diferença de seleção |
-|---|---|---|
-| `E4 C` | Encerrada inativa 01/09..30/09; ativa desde 01/10; futura ativa desde 01/11; dia 15/09 | Juiz escolhe encerrada; filtro de fase inclui as duas ativas e exclui encerrada — `app/escala/tests/test_e4_vinculo_cobre_a_data.py:24-29`, `app/escala/tests/test_e4_vinculo_cobre_a_data.py:54`, `app/escala/services/fase_conflitante.py:71`. |
-| `E4 C` | Mesmos vínculos; dia 10/10 | Juiz escolhe ativa desde 01/10; filtro inclui também futura desde 01/11 — `app/escala/tests/test_e4_vinculo_cobre_a_data.py:14`, `app/escala/tests/test_e4_vinculo_cobre_a_data.py:26-29`, `app/escala/tests/test_e4_vinculo_cobre_a_data.py:55`, `app/escala/services/fase_conflitante.py:71`. |
-| `Colab EV` | Dia 30/09; velho inativo desde 31/08 até 05/10; novo ativo desde 30/09; célula nomeia velho | Juiz devolve velho; filtro de fase exclui velho e inclui novo — `app/escala/tests/test_escala_vigente_pergunta_a_celula.py:45-55`, `app/escala/tests/test_escala_vigente_pergunta_a_celula.py:88-96`, `app/escala/services/fase_conflitante.py:71`. |
-
-Essas fixtures usam ciclos 5x2 e 6x1, respectivamente; provam diferença de universo pela leitura do código, não um total indevido do contador — `app/escala/tests/test_e4_vinculo_cobre_a_data.py:22-23`, `app/escala/tests/test_escala_vigente_pergunta_a_celula.py:40-42`, `app/escala/services/fase_conflitante.py:43-48`.
-
-Caso de produção com colaborador, datas de vínculo e dia: **[nao verificado]**; o anexo recebido contém somente `JUIZES.md`, sem registros de colaboradores **[nao verificado]**.
-
-## 01/11 00:46 · sessao 2e1e842e5343 · - · - · origem=Ronald (tmux)
-
-**Chamadores e leitores**
-
-- `medir` é importada e chamada pelo command em `app/escala/management/commands/lavrar_fase_conflitante.py:14` e `:31`. Sem `--apply`, só imprime e retorna (`:32-34`); com `--apply`, grava/atualiza exclusivamente o snapshot mostrado no trecho, usando `total` como numerador, `vinculos` como denominador e o dict como detalhe (`:35-38`); depois imprime (`:39-41`).
-- O cron está **declarado** para 07:14, `--apply`, dependente de `reconciliar_vinculo`: `app/config/crons.py:479-480`. Instalação/execução em produção: **[nao verificado]**.
-- `ultimo_lavrado` busca o último `MetricaSnapshot` de `chave=CHAVE`, `escopo='frota'`, por `-data_ref,-calculado_em`; sem snapshot, retorna `total=None, esperado=0, sem_medida=True`; com snapshot, copia detalhe e acrescenta `medido_em`: `app/escala/services/fase_conflitante.py:105-114`.
-- A API importa essa leitora (`app/api/views_mensageria.py:632`), a põe em `saida['contadores']['fase_conflitante']` (`:643`) e devolve JSON (`:647`); rota em `app/api/urls.py:16`.
-- `mensageria/nucleo/core_client.py:108-120` faz GET de `/api/mensageria/saude/` e devolve o JSON inteiro. Entretanto `saude_da_operacao` cacheia esse retorno (`mensageria/nucleo/ferramentas.py:259-262`), percorre **somente `dados['metricas']`** (`:265`) e retorna só `{'saude_da_operacao': medidas}` (`:294`). Portanto, nesse caminho, `contadores.fase_conflitante` **não chega ao contexto do chat**, que recebe `saude_da_operacao` em `:380`.
-- Nos caminhos acima, a escrita ligada ao contador é snapshot (`app/escala/management/commands/lavrar_fase_conflitante.py:35-38`) e cache do payload (`mensageria/nucleo/ferramentas.py:262`); a API só devolve o contador (`app/api/views_mensageria.py:643-647`). Chamado emitido, mudança de estado operacional ou pouso retido **por esse contador**: **[nao verificado]**.
-
-**Testes/selos** [nao verificado]
-
-| Teste | O que efetivamente afirma | [nao verificado]
-|---|---|
-| `app/escala/tests/test_fase_conflitante.py:60` | Foto pares + âncora 20/07 gera 1 vínculo acusado, total ≥25, `esperado=0` e amostra com o vínculo (`:64-70`). |
-| `app/escala/tests/test_fase_conflitante.py:72` | Mesma foto, âncora 21/07: total zero (`:74-78`). |
-| `app/escala/tests/test_fase_conflitante.py:80` | Sem foto: total zero (`:81-82`). |
-| `app/escala/tests/test_fase_conflitante.py:84` | Âncora `None`: total zero (`:85-86`). |
-| `app/escala/tests/test_fase_conflitante.py:88` | Ciclo 6x1: total zero (`:90-91`). |
-| `app/escala/tests/test_fase_conflitante.py:93` | `_foto_diz` devolve `False` no dia fotografado e `True` no seguinte (`:95-97`). |
-| `app/escala/tests/test_semselo5_ativo_nao_responde_por_dia.py:128` | Declara `medir` em **HOJE**, motivo “cadastro: vinculos ativos em fase conflitante” (`:128-129`); o teste cobra ausência de sítios novos/listas velhas (`:365-371`) e motivos/listas disjuntas (`:373-377`). |
-| `app/api/tests/test_api_mensageria_saude.py:106` | Inclui nominalmente `fase_conflitante`: sem lavra, `sem_medida=True` e `total=None` (`:108-112`). |
-| `app/api/tests/test_api_mensageria_saude.py:79` | GET da API não altera a quantidade de snapshots (`:80-83`). |
-
-Os seis testes funcionais usam fixture com `ativa=True`, início fixo em 01/01/2026 (`app/escala/tests/test_fase_conflitante.py:49-51`) e janela de setembro (`:30-31`); os corpos acima não verificam troca de vínculo, vínculo encerrado, futuro ou geradora de célula (`:60-97`). O teste da API que injeta snapshot e confere conteúdo é de **`previsto_cego`**, não de `fase_conflitante` (`app/api/tests/test_api_mensageria_saude.py:114-124`). Resultado de execução destes testes: **[nao verificado]**.
-
-_1334 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1337 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
