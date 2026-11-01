@@ -1,7 +1,103 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 13:46** · publicado em **01/11/2026 13:46** (UTC-3)
+> Ultima resposta processada: **01/11/2026 14:08** · publicado em **01/11/2026 14:08** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 14:08 · sessao 7330d4c01221 · - · - · origem=Ronald (tmux)
+
+Proposta pela **falha residual na cópia final**: **1=a, 2=c, 3=a, 4=b, 5=b, 6=e, 7=b condicionado, 8=b**.
+
+- **1:** a só com ressalva: o Codex viu exatamente a fabricação por CLI/log sintético/Write no `raiz/codex_v1.r` #13. A triagem declarou #13 **curado**, sem descarte. A revisão v2, perguntada sobre curas, confirmou apenas Ran/OK e perdeu o residual. Não usar descarte da guarda lexical #8 como substituto.
+- **2:** c para execução real/prova ponta a ponta. A insuficiência estática do grep e do log sintético já foi vista em v1 e v2; não há descarte explícito dessa parte.
+- **3:** a: derivação paralela estava no checklist; nenhuma resposta apresentada identifica especificamente as duas regex como duplicação. “NENHUM viu” além dos registros fornecidos é [nao verificado].
+- **4:** b inequívoco: v1.r #14b viu ABA; v1_triagem mantém em fila.
+- **5:** b inequívoco: v1.r, v2.r, v3.r e v4/v2.r viram; triagens raiz/v2 e v4/v2 dizem fila.
+- **6:** e para pertinência semântica contrato↔diff e `--no-verify`: perguntas sobre existência/escritores/ordem do gate não explicitam essas garantias adicionais.
+- **7:** v4/v1.r #5 viu literalmente remoção de outra sessão viva. **Falta descarte explícito nas triagens fornecidas.** v4/v3_triagem c3 só corrige `poda_seq` e remete ao aval CONTENCAO-SESSOES. Se exigir rigor literal, nenhuma classe atende integralmente: viu, mas não há linha de descarte. “Coberto pelo aval” consta no opus, não comprova descarte na triagem.
+- **8:** b inequívoco: raiz/v2.r #5 e v3.r #3; raiz/v2_triagem descarta para fila por desenho TTL/teto.
+
+A taxonomia tem duas limitações documentais: não prevê “viu e triagem declarou curado incorretamente” (#1) nem “viu, sem destino explícito desse risco na triagem” (#7). Convém declarar isso para não fabricar evidência.
+
+## 01/11 14:07 · sessao 509803024587 · - · - · origem=Ronald (tmux)
+
+Consolidado enviado com os chamadores e formatos. O ponto decisivo é:
+
+- `dias_encerrados` repassa o mapa composto a `turnos_do_colab`, que reembrulha as chaves e impede a leitura da geradora na segmentação (`app/ponto/turnos.py:2148`, `app/ponto/turnos.py:1954`, `app/ponto/turnos.py:1958`).
+- O papel da ata continua lendo os objetos por `.items()`; a chave composta, sozinha, não o torna invisível (`app/ponto/turnos.py:1629`, `app/ponto/turnos.py:1631`, `app/ponto/turnos.py:1702`, `app/ponto/turnos.py:1729`).
+- Existe teste com células fornecidas e noturno, mas ele não cria batidas e herda um único vínculo; portanto não distingue o defeito de segmentação (`app/ponto/tests/test_c1_dias_encerrados.py:53`, `app/ponto/tests/test_c1_dias_encerrados.py:62`, `app/ponto/tests/test_c1_dias_encerrados.py:66`, `app/ponto/tests/test_juiz_dia_encerrado.py:69`).
+- O caso mínimo proposto pelo coordenador distingue estaticamente `False / turno_aberto_relogio` de `True / None`; execução `[nao verificado]` (`app/ponto/turnos.py:1354`, `app/ponto/turnos.py:1169`, `app/ponto/turnos.py:2114`, `app/ponto/turnos.py:2119`).
+
+## 01/11 14:06 · sessao effa75d5be39 · - · - · origem=Ronald (tmux)
+
+Rastreio de escritores/leitores e registro de juízes:
+
+- **Ata produzida:** `app/ponto/services/cartorio.py:591` monta `tipo_dia`, `lampadas`, `minutos_previstos`, `minutos_realizados`, `sem_ancora`, `orfas`, `n_orfas`, `n_missing`, `n_celulas` (`:596-623`). Ramo principal passa ata e fatos para lavra em `:1594-1601`; ramo sem batida em `:1075-1080`.
+- **Ata/veredito/status gravados:** modelo apenas delega (`app/escala/models.py:1787-1796`). Porta `lavrar_veredito` copia/compara ata (`app/ponto/portas/celula.py:726-736`), escreve ata (`:741`, `:768`), protestos/veredito/via/instante (`:769-773`), aplica status (`:686-705`). Cartório usa `save=False` e depois `carimbar` (`app/ponto/services/cartorio.py:1615-1617`); `carimbar` acrescenta `julgada_em`, impressão, ausência, `tem_entrada/tem_saida`, `insumos_em` e persiste todos os campos lavrados (`app/ponto/portas/celula.py:800-807`), com `save(update_fields=...)` em `:640`.
+- **Outro escritor legítimo da ata:** `carimbar_precedencia` escreve exclusivamente `ata['precedencia']` e salva pela mesma porta (`app/ponto/portas/celula.py:811-822`). Portanto, “lavrar_veredito é o único escritor absoluto de qualquer chave de ata” seria impreciso; é a operação escritora do julgamento (`:709-713`).
+
+**Papel da ata: a alegação da fila precisa ser corrigida.** `papel_por_minuto_da_ata` itera `celulas.items()` (`app/ponto/turnos.py:1629`), chama `periodos_do_dia(cel, te)` (`:1631`), que lê `celula.ata/dna` (`app/ponto/juiz_batida.py:157-160`) e usa `celula.data`, não a chave do mapa, ao reconstruir instantes (`:174-176`). A chave `_d` só armazena/intera baldes (`app/ponto/turnos.py:1702`, `:1729`); os papéis saem indexados por minuto (`:1802-1804`, `:1828`). Logo, mapa com chaves `(cid,data)` viola o contrato declarado `{data:CelulaDia}` (`:1921-1924`), mas **isso isoladamente não torna essa leitura de ata cega**. O pareador consulta o papel em `_papel_da_ata` (`:888-907`, especialmente `.get(_m)` em `:903`), recebe-o em `:1308` e carimba `_papel_ata` em `:1313`.
+
+**Incompatibilidade efetiva com vínculo:** `_turnos_do_colab_puro` transforma o mapa recebido com `{(_cid,_d):_c for _d,_c in celulas.items()}` (`app/ponto/turnos.py:1954`); se `_d` já é `(cid,data)`, forma `(cid,(cid,data))`. `vinculo_do_dia` consulta `(cid,data)` (`app/escala/alimentacao.py:237`), não vê a geradora (`:238`), e usa candidatura por vigência/desempate (`:253-254`) em lugar da geradora da célula (`:247-252`).
+
+**Cartório não está inteiro cego à geradora:** o carregador próprio de cadastro passa todos os vínculos e mapa correto em `app/ponto/services/cartorio.py:931-933`; `cadastro_do_dia` consulta o juiz e `celulas.get((cid,data))` em `app/ponto/supra_juiz.py:160-162`. O caminho afetado pelo repasse a `dias_encerrados` é `_turno_encerrado` (`app/ponto/services/cartorio.py:939-943`), usado em classificação (`:1063`, `:1253`) e em `_em_curso` (`:1180`). Dano concreto ou direção da mudança em produção: `[nao verificado]`.
+
+**Leitores da ata e campos:**
+
+- `periodos_do_dia`: ata, DNA, lâmpadas e órfãs (`app/ponto/juiz_batida.py:157-161`), alimentando papel e pareador pelos pontos acima.
+- `grade_da_celula`: `n_celulas/n_missing/minutos_realizados` (`app/escala/services/leitor_celula.py:332-334`), `tipo_dia/minutos_previstos` (`:345-347`), lâmpadas/marcos/órfãs e contagens (`:355-365`), veredito/id (`:366`) e insumo do juiz `dia_sem_trabalho` (`:367-370`).
+- Folha: prévia (`app/folha/previa.py:83`), validação PDF (`app/folha/validacao_pdf.py:47`), lâmpadas apagadas (`app/folha/services/sem_furo.py:20-22`); cartão relatório (`app/relatorios/cartao_pela_celula.py:286-287`).
+- Cobrança: leitores diretos da ata em `app/chamados/juizes.py:407`, `:442`, `:1008`; materialização em `app/chamados/services/materializacao.py:157`; cartório publica ata do julgamento corrente em `app/ponto/services/cartorio.py:1219`, exposta em `:48-57`, e o leitor C6 projeta essa ata corrente em `app/chamados/juizes.py:392-394`.
+- Status gravado: único leitor funcional localizado é `app/ponto/status_dia.py:203-205`; antes dele, a decisão usa `carga.turnos` e `carga.dias_encerrados` (`:195-201`). Sem célula produz `sem_dados` (`:191-194`); sem status lavrado usa previsto/sem_certidão (`:207-208`).
+- Painel: `_d4_em_lote` cria carga em janela `[hoje−2,hoje]`, escreve `linha['data_turno']`, só pede D4 para dias encerrados e escreve `linha['dia']` (`app/core/services/painel_op.py:327-338`). D4 cria outra carga por data distinta (`app/ponto/status_dia.py:188-189`).
+
+**Juízes vivos cruzados com anexo:**
+
+| Pergunta | Registro vivo | Autoridade |
+|---|---|---|
+| Dia é de trabalho | `app/core/juizes.py:172` | `EscalaColaborador.eh_dia_trabalho` |
+| Minutos previstos | `app/core/juizes.py:173` | `escala/utils.py::minutos_previstos_do_dia` |
+| Precedência | `app/core/juizes.py:174-175` | `ponto/precedencia.py::fatos_do_dia` |
+| Status do dia | `app/core/juizes.py:187` | `status_do_dia_lavrado` |
+| Folga lançada válida | `app/core/juizes.py:192` | `folga_lancada_do_dia` |
+| Turno da batida | `app/core/juizes.py:196` | `turnos_do_colab` |
+| Turno aberto | `app/core/juizes.py:199` | `turno_aberto_de` |
+| Marcos previstos | `app/core/juizes.py:201` | `EC.marcos_do_dia` |
+| Cruza meia-noite | `app/core/juizes.py:204` | `turno_cruza_meia_noite` |
+| Dia encerrado | `app/core/juizes.py:223` | `dia_encerrado` |
+| Par completo | `app/core/juizes.py:228` | `par_completo` |
+| Cobrança cala em dia sem trabalho | `app/core/juizes.py:278` | `chamados/juizes.py::dia_sem_trabalho` |
+| Vínculo do dia/cobre data | `app/core/juizes.py:1275-1276` | `vinculo_do_dia`/`vinculo_cobre_a_data` |
+
+O anexo local confirma geometria (`app/docs/JUIZES.md:20`), dia sem trabalho (`:55`), status (`:82-83`), vínculo/vigência (`:92-95`). O registro vivo acrescenta expressamente `dia_encerrado` (`app/core/juizes.py:223`), ausente da lista resumida de geometria do anexo. “Lavra/fechamento: SEM juiz” no anexo é outro domínio (`app/docs/JUIZES.md:68-71`); a porta escritora da célula não deve ser apresentada como juiz novo de encerramento ou de formato.
+
+## 01/11 14:06 · sessao cf00d4a9f629 · - · - · origem=Ronald (tmux)
+
+Auditoria estática, somente leitura.
+
+| Carga | Casca singular | `CargaDaJanela` | Conclusão |
+|---|---|---|---|
+| Janela | `janela_com_pad`: `ini−2..fim+1` (`app/ponto/turnos.py:1845`); usada em `:1860` | Mesma função em `:2948` | Mesma janela de pad no código (`:1860`, `:2948`). |
+| Células | Sem alimentação, carrega pad e converte tupla→data (`:1882–1884`) | Carrega pad uma vez, agrupa por colaborador/data (`:2951–2955`), converte ao chamar núcleo (`:2996–3005`) | Contrato padrão equivalente; lote faz a conversão necessária (`:3005`). |
+| Candidatos dos turnos | `escalas_do_periodo(colab,pad_ini,fim,mais=geradoras)` (`:1885–1886`) | `escalas_do_periodo_por_colab(ids,pad_ini,fim,mais=geradoras)` (`:2957–2958`) | Mesma porta: singular delega à plural (`app/escala/alimentacao.py:153–154`). |
+| Todos os vínculos para encerramento | Sem filtro de atividade/data, com `tipo_escala` (`app/ponto/turnos.py:2146`) | Mesmo universo em lote (`:2961–2962`) | Sem diferença estática identificada nesse universo (`:2146`, `:2961`). |
+| Batidas | Vivas, `timestamp__date` no pad (`:1861–1864`) | `batidas_apuraveis(None)`, mesmos cortes, agrupadas/ordenadas (`:2990–2994`) | `batidas_apuraveis` impõe `retratada_em IS NULL` (`:2872`); universo equivalente nos cortes mostrados. |
+| Ata | Núcleo recebe `escalas_ata=None` (`:1913`); papel chama `_escalas_da_ata` (`:1591`) | Pré-carrega `_escalas_da_ata(ids)` (`:2963`) e fornece ao núcleo (`:3005`) | Mesma seleção compartilhada (`:1536–1560`). |
+| DNA | Provedor consulta `marcos_dna_periodo` sem células (`:1907–1910`) | Fornece células já carregadas (`:2999–3002`) | Singular pode reler células/DNA; lote reutiliza snapshot (`app/escala/utils.py:96–102`). |
+| Turnos | Cada chamada à casca chama núcleo (`:1913`) | Cache por colaborador (`:2995–3007`) | Lote reutiliza turnos entre encerramento e dia das batidas (`:3012–3018`). |
+
+A candidatura admite vínculos ativos ou encerrados com `data_fim`, sobrepostos à janela (`app/escala/alimentacao.py:116–122`). `mais=` busca os IDs ausentes sem o filtro de vigência/atividade e os coloca no balde do respectivo dono (`:123–127`). Portanto, geradora inativa chega por ambas as cargas; a escolha diária ainda aplica a lei da geradora e sua vigência (`:237–254`). Não identifiquei divergência de universo padrão entre lote e casca nesses pontos (`app/ponto/turnos.py:1885–1886`, `:2957–2958`).
+
+Há duplicação da **implementação da carga**: casca em `app/ponto/turnos.py:1859–1913`, lote em `:2944–3006`; o julgamento é compartilhado em `_turnos_do_colab_puro` (`:1916`) e `_dias_encerrados_puro` (`:2152`). Além disso, sem argumentos alimentados, `dias_encerrados` carrega células de `[ini,fim]` e todos os vínculos (`:2145–2146`), chama a casca com `celulas=None` (`:2148`), e esta carrega novamente células com pad e candidatos (`:1882–1886`); o DNA pode custar outra leitura (`:1910`; `app/escala/utils.py:100–102`).
+
+O painel monta carga de `[hoje−2,hoje]` para descobrir dia da entrada e encerramento (`app/core/services/painel_op.py:327–335`), depois chama D4 (`:336`), que monta outra carga para cada data distinta, agora `[data,data]` (`app/ponto/status_dia.py:188–196`). São janelas intencionalmente distintas no código; equivalência dos turnos entre essas janelas não deve ser presumida (`app/ponto/status_dia.py:176–179`).
+
+**Selo existente e lacuna:** o teste D4 contém noturno e várias pessoas/datas (`app/core/tests/test_e4_7iii_lote_d4.py:67–109`), mas cada pessoa nasce com um vínculo ativo (`app/core/tests/test_e4_7iii_painel_e_presenca.py:54–59`; noturno em `app/core/tests/test_e4_7iii_lote_d4.py:101–108`). Não exercita pessoa com múltiplos vínculos nem geradora inativa nessa fixture (`:67–109`). A “paridade lote/singular” compara `status_dos_dias_lavrados` com `status_do_dia_lavrado` (`:136–147`), e este último já delega ao lote com um par (`app/ponto/status_dia.py:167–170`): não é selo independente de `CargaDaJanela` contra a casca `turnos_do_colab`.
+
+Existe teste alimentando `dias_encerrados` com células de `celulas_do_periodo`, template noturno e DNA divergente (`app/ponto/tests/test_c1_dias_encerrados.py:53–77`); ele não cria batidas nesse teste (`:62–77`) e a pessoa tem somente um vínculo ativo (`app/ponto/tests/test_juiz_dia_encerrado.py:48–70`). Assim, não distingue a perda da geradora durante a montagem dos turnos.
+
+**Correção importante da descrição da fila:** o papel da ata itera os **valores** de `celulas` (`app/ponto/turnos.py:1629–1631`); a chave `_d` apenas indexa `_dias` (`:1702`) e é iterada sem busca por data (`:1729`). Nesse consumidor, trocar chave data por tupla não basta para esconder a célula. A perda demonstrável ocorre ao reencapsular uma chave já composta como `(_cid, (cid,data))` (`:1954`), que não será encontrada por `vinculo_do_dia`, cujo acesso é `.get((colaborador_id,data))` (`app/escala/alimentacao.py:237`). Com mapa errado, fallback passa a escolher por vigência/atividade (`:253–254`) em vez da geradora (`:237–252`).
+
+Execução de testes e consequências em dados de produção: `[nao verificado]`. [nao verificado]
 
 ## 01/11 13:46 · sessao 8911ef9e5156 · O261-E-F2 · censo · origem=Code
 
@@ -937,141 +1033,4 @@ Para author-time futuro, `min(quando, agora)` **muda o contrato literal**: autho
 
 [truncado em 20000 de 23251 caracteres]
 
-## 01/11 11:38 · sessao d0f934b2dfa2 · - · - · origem=Ronald (tmux)
-
-Achado principal confirmado por simulação em memória: a foto antiga permite o 7º Agent. A fotografa 5 vivos; B reserva e lança o sexto; C fotografa 6, poda a reserva B e nega; A finalmente entra, soma sua foto de 5 com reservas vazias e autoriza outro. A foto não é versionada contra as podas concorrentes. Isso contradiz o comentário “nunca a menos”. Reprodução construída, ocorrência em produção [não verificado]. (`bin/disjuntor.py:1561`, `bin/disjuntor.py:1578`, `bin/disjuntor.py:1584`, `bin/disjuntor.py:1586`, `bin/disjuntor.py:1596`)
-
-Q2: não encontrei transcript/subagente/glob/git/processo externo nos callbacks das rotas citadas. Porém “sob a trava só estado” é falso: há triagem, RELATO, arquivos citados pelo desenho, trilha de disparos e outra trava. (`bin/disjuntor.py:930`, `bin/disjuntor.py:1010`, `bin/disjuntor.py:1059`, `bin/disjuntor.py:690`, `bin/disjuntor.py:1217`, `bin/disjuntor.py:1086`, `bin/disjuntor.py:1889`)
-
-- `porta_agent`: `_b3_revalida` e `_cura_falta` leem triagem sob trava; foto, semente e git ficam antes. (`bin/disjuntor.py:1561`, `bin/disjuntor.py:1562`, `bin/disjuntor.py:1563`, `bin/disjuntor.py:1570`, `bin/disjuntor.py:1575`)
-- `b1_do_agente`: medida fora; sob trava escreve disparo na trilha. (`bin/disjuntor.py:569`, `bin/disjuntor.py:578`, `bin/disjuntor.py:145`)
-- `reserva_volta_codex`: semente fora, triagem dentro. (`bin/disjuntor.py:1473`, `bin/disjuntor.py:1476`, `bin/disjuntor.py:983`)
-- `reabre`: somente estado e semente previamente medida no callback. (`bin/disjuntor.py:1663`, `bin/disjuntor.py:1666`)
-- `decide_b3`: RELATO inteiro, triagem, arquivos referenciados, trilha antiga, segunda fotografia do RELATO e anúncios. Nenhum git na validação do desenho. (`bin/disjuntor.py:1010`, `bin/disjuntor.py:1011`, `bin/disjuntor.py:1059`, `bin/disjuntor.py:1065`, `bin/disjuntor.py:1080`, `bin/disjuntor.py:1094`)
-- `pretool`: callbacks B4 leem/gravam estado e escrevem trilha. (`bin/disjuntor.py:2147`, `bin/disjuntor.py:2149`, `bin/disjuntor.py:2153`)
-- Stop: herda os caminhos B3; `b4_stop` abre/testa `logs/sombra.lock` sob a trava do estado; `b2` anuncia disparo sob ela. (`bin/hook_stop_fila1.py:1044`, `bin/hook_stop_fila1.py:1046`, `bin/hook_stop_fila1.py:1048`, `bin/disjuntor.py:1889`, `bin/disjuntor.py:356`, `bin/disjuntor.py:360`, `bin/disjuntor.py:1873`)
-
-Q4, demais janelas:
-
-- B1 pode disparar indevidamente: mede ausência de arquivo recente, agente escreve arquivo antes da trava, callback grava a medida antiga e torna o disparo persistente. Medir depois da escrita retornaria “arquivo novo”. (`bin/disjuntor.py:513`, `bin/disjuntor.py:521`, `bin/disjuntor.py:569`, `bin/disjuntor.py:574`, `bin/disjuntor.py:576`)
-- B1 pode autorizar indevidamente: medida encontra zero tokens; transcript recebe tokens antes da trava; callback grava `False` antigo. (`bin/disjuntor.py:511`, `bin/disjuntor.py:569`, `bin/disjuntor.py:576`)
-- `checado` pode regredir: callback antigo sobrescreve uma medida negativa mais recente sem comparar `checado`. Disparo já gravado por concorrente é preservado. (`bin/disjuntor.py:574`, `bin/disjuntor.py:576`)
-- Cura nova após a fotografia de ancestria nega conservadoramente, mesmo se a cura for ancestral; a triagem é relida sob trava e o hash novo falta no mapa. (`bin/disjuntor.py:1328`, `bin/disjuntor.py:1336`, `bin/disjuntor.py:1347`, `bin/disjuntor.py:1356`, `bin/disjuntor.py:1358`)
-- Semente antiga é usada sem revarrer; ela só inicializa `voltas` ou completa `sem_transcript` uma vez. Material histórico que apareça depois da medição pode ficar fora da semente; ocorrência concreta no harness [não verificado]. (`bin/disjuntor.py:1423`, `bin/disjuntor.py:1438`, `bin/disjuntor.py:1452`, `bin/disjuntor.py:1454`)
-
-Q5:
-
-- Payload **real** de SessionStart com `session_id`: [não verificado]. Há configuração dos comandos e leitura do campo; os payloads do selo são fabricados. (`.claude/settings.json:34`, `.claude/settings.json:44`, `.claude/settings.json:57`, `bin/marco_de_clear.py:44`, `bin/marco_de_clear.py:62`, `bin/tests/test_disjuntor.sh:1817`, `bin/tests/test_disjuntor.sh:1822`)
-- Sessão vazia + clear apaga tudo. Caso de código: clear sem payload em S2 remove reservas síncronas ainda ativas de S1 concorrente, permitindo subcontagem. Mesmo com sessão preenchida, poda remove toda outra sessão sem verificar se continua viva. (`bin/disjuntor.py:1630`, `bin/disjuntor.py:1632`, `bin/disjuntor.py:1633`)
-- Sessão vazia + compact conserva tudo. Caso de código: seis reservas órfãs de outra sessão permanecem e não têm resultados no transcript novo; a porta continua negando por seis vivos. (`bin/disjuntor.py:1634`, `bin/disjuntor.py:1584`, `bin/disjuntor.py:1586`)
-- Quem grava: `porta_agent`; quem remove: poda por resultados em `porta_agent`, ou `poda_reservas`, chamada por `marco_de_clear`. Não apareceu outro apagador de `reservas` em código executável pesquisado em `bin/`, `app/`, `.claude/`. (`bin/disjuntor.py:1596`, `bin/disjuntor.py:1584`, `bin/disjuntor.py:1637`, `bin/marco_de_clear.py:81`, `bin/marco_de_clear.py:31`)
-- `agente` guarda o `agent_id` do chamador; pode ficar vazio para o agente principal. Esse campo não participa da poda, que compara somente sessão. (`bin/disjuntor.py:1596`, `bin/disjuntor.py:1631`)
-- Não há TTL na poda: campo `t` é gravado, mas a seleção usa sessão/origem. (`bin/disjuntor.py:1596`, `bin/disjuntor.py:1630`, `bin/disjuntor.py:1632`)
-
-## 01/11 11:37 · sessao 7b68d8bd016d · - · - · origem=Ronald (tmux)
-
-6. P1
-
-- O regex casa as quatro formas pedidas: `- HH:MM`, `- HH:Mx`, `- **HH:MM`, `- **HH:Mx`; também casa os prefixos de `- 12:30h de trabalho` e `- 08:00-12:00`, pois só proíbe dígito ou `/` imediatamente após o minuto. `- 01/11` não casa. Portanto duração/intervalo podem ser julgados como instante, produzindo falso positivo conforme a referência. `bin/tests/test_hora_da_secao_nao_e_futura.sh:39,61-71`.
-- Minuto exato é respeitado; `x` vira início da dezena. Horas/minutos inválidos são ignorados, embora contem como linhas vistas. `bin/tests/test_hora_da_secao_nao_e_futura.sh:63-67`.
-- A data é inferida pelo dia mais próximo entre ontem/hoje/amanhã; futuro acima de 12h pode ser interpretado como passado, limitação expressamente declarada. Empate exato favorece ontem por ordem do gerador. `bin/tests/test_hora_da_secao_nao_e_futura.sh:35-37,68-69`.
-- Para linha não commitada, o código confia no `author-time` produzido pelo blame e aplica `min(quando, agora)`: funciona se esse tempo for “agora”, como o comentário pressupõe; esse comportamento real do Git não foi medido nesta cópia. `bin/tests/test_hora_da_secao_nao_e_futura.sh:25-26,43-44,50,66`; [não verificado].
-- Para commit com author-time futuro, o juiz compara com agora, **não com o author-time pedido literalmente**: author-time 13h, agora 12h, lista 12h30 ⇒ vermelho; pela referência literal de 13h seria passado. `bin/tests/test_hora_da_secao_nao_e_futura.sh:66-70`.
-- O corte é um instante fixo, 01/11/2026 11h23, aplicado à referência já limitada por agora. Isso implementa corte temporal por author-time; se corresponde ao commit de nascimento não é comprovável pelo anexo sem metadados de commit. `bin/tests/test_hora_da_secao_nao_e_futura.sh:34,38,66-67`; [não verificado].
-
-7. Testes/mutantes [nao verificado]
-
-**Dois mutantes novos sobrevivem por construção:**
-
-- `v4-poda-tudo` troca `if sessao` por `if False`. No teste, clear S2 encontra exclusivamente reservas S1, então apagar tudo dá o resultado esperado; compact S2 encontra exclusivamente reservas S2, então preservar tudo também dá o resultado esperado. Faltam reservas da sessão viva durante clear e reservas estrangeiras durante compact. `bin/tests/test_disjuntor.sh:1813-1824,2242-2244`; `bin/disjuntor.py:1630-1637`. Confirmei a equivalência executando somente a função extraída em memória, com estado em dict e escritor substituído por callback sem arquivo.
-- `v4-ausente-vazio-leitura` faz `ler_estado` retornar `{}`, mas o teste ainda obtém as mesmas negativas pelo `_com_estado` intacto: Agent chega à porta; B1 avança à medida e chega à trava; ambos encontram ausência e levantam o mesmo RuntimeError. O arquivo continua ausente. Portanto o caso não isola a leitura sem trava. `bin/tests/test_disjuntor.sh:1830-1836,2247`; `bin/disjuntor.py:303-304,564-581,1602`.
-
-**Âncoras quebradas, não mortes funcionais:**
-
-- `i3-sem-cura` procura a chamada antiga sem `anc`; a atual contém `, anc`, portanto a âncora tem zero ocorrências. `bin/tests/test_disjuntor.sh:2237`; `bin/disjuntor.py:1575`.
-- `i11-sem-poda` procura `            del res[k]`, agora presente duas vezes, na poda por resultado e na poda SessionStart. `bin/tests/test_disjuntor.sh:2215`; `bin/disjuntor.py:1585,1637`.
-- O executor exige exatamente uma ocorrência e acusa “âncora sumiu”; nesses dois casos o comportamento mutante nem é testado. `bin/tests/test_disjuntor.sh:1897-1904`.
-
-**Ausência de sinal:**
-
-- `_lento` exige somente que outra chamada consiga a trava e que a thread não lance exceção; não exige leitura efetiva, autorização ou resultado B1 esperado. Um ramo que devolva negativa cedo ou deixe de medir pode passar. Os mutantes declarados de mover leitura para dentro da trava exercitam contenção, mas o caso não comprova integralmente a operação útil. `bin/tests/test_disjuntor.sh:1856-1872,2248-2252`.
-- O caso 1b tem verificações positivas de rc para passado e futuro e testa versões comum/negrito com `x`; não testa futuro com minuto exato. `bin/tests/test_hora_da_secao_nao_e_futura.sh:95-108`.
-- A verificação do mutante P1 apenas rejeita rc=1; aceita rc=2/3/etc., permitindo que falha de execução pareça comprovar desligamento do ramo. O mutante concreto gerado é uma substituição válida e única, mas o oráculo deveria exigir rc=0. `bin/tests/test_hora_da_secao_nao_e_futura.sh:112-121`.
-- `v4_poda` usa autorização com stdout vazio **e nenhuma FALHA nova**, melhor que ausência simples de saída; porém não verifica o valor de `agente`, apenas a existência da chave. `bin/tests/test_disjuntor.sh:104-106,1814,1820-1821`.
-
-Não executei as suítes: elas criam/apagam arquivos temporários, contrariando a regra da chamada. `bin/tests/test_disjuntor.sh:39-41,50-52`; `bin/tests/test_hora_da_secao_nao_e_futura.sh:17-19,81-86`.
-
-## 01/11 11:37 · sessao 44283db1341c · - · - · origem=Ronald (tmux)
-
-**Q3 — ausência de `disjuntor_estado.json`:**
-
-| Caminho | Resultado |
-|---|---|
-| PreTool Bash de subagente, transcript válido | `ler_estado` levanta; `pretool` transforma em B1 “não sei = nega” e pede `SubagentHandback` (`bin/disjuntor.py:564`, `:2114-2120`). |
-| Bash subagente sem transcript/id válido | Retorna `False` antes de ler o estado; passa por B1. DIFF/apply também suspende B1 (`bin/disjuntor.py:555-560`, `:2112-2113`). |
-| PreTool Agent | Leitura de B4 captura ausência; depois porta levanta e `main_pretool` nega `PORTA-NAO-SEI`. Exceção anterior também tem fallback que nega Agent (`bin/disjuntor.py:2142-2145`, `:2174-2178`, `:2196-2204`). Final reconhecido pode negar antes via B3 (`:2135-2140`, `:1112-1128`). |
-| Wrapper Codex verificador | `estado_b3` recebe `NAO_SEI`; `b3_parada` retorna 4; wrapper converte em saída 3 antes de executar Codex. Nesse caminho a reserva sequer é chamada (`bin/disjuntor.py:1182-1192`; `bin/codex_pergunta.sh:167-178`). Chave desligada pula a porta (`bin/disjuntor.py:1180-1181`). Outros papéis não passam pelo B3 (`bin/codex_pergunta.sh:167-169`). |
-| `reserva_volta_codex` direta | Captura exceção da trava/leitura; retorna `(4, recusada/não sei)` (`bin/disjuntor.py:1490-1495`). |
-| `--reabre` | `_com_estado` levanta sem catch em `reabre` nem em `main`: traceback/saída Python não zero; não reabre (`bin/disjuntor.py:1663-1671`, `:2428-2430`, `:2449-2450`). |
-| `--triagem` | Se sidecar/resposta já são inválidos, recusa antes; se válidos, ausência vira rc 4 “triagem não gravada”. Cura igualmente rc 4 (`bin/disjuntor.py:891-897`, `:913-916`, `:1387-1390`). |
-| Stop hook | B4/B2 falham e viram `None`, mantendo caminho normal. Em `recados`, B3 gera aviso `NAO_SEI`, mas `b1_disparados` levanta logo depois e **descarta o aviso inteiro**, retornando `None` (`bin/hook_stop_fila1.py:1043-1064`; `bin/disjuntor.py:584-585`). Segue fila, PAREI, espera e teto habituais; não fecha pelo estado ausente (`bin/hook_stop_fila1.py:1205-1227`, `:1284-1304`). |
-| Painel | `_voltas_txt` retorna “não sei”; `_b3_sem_obra` retorna `None`, mostrado “não sei”. Demais medidas de trilhas continuam independentes (`bin/disjuntor.py:1718-1727`, `:2324-2330`, `:2393-2398`). `gerar_estado` chama esse leitor (`bin/gerar_estado.py:279-283`). |
-| `--cert-suite` | Não lê nem depende desse estado; pode certificar normalmente quando log/hashes atendem condições (`bin/disjuntor.py:1273-1301`, `:2424-2427`). |
-| `marco_de_clear.py` | Grava `ultimo_clear.json`; depois poda falha pela ausência, registra FALHA quando consegue e termina rc 0, sem stdout. Não recria o estado (`bin/marco_de_clear.py:60-84`, `:30-37`). |
-
-Nenhuma dessas rotas recria silenciosamente `disjuntor_estado.json`: ausência levanta antes de executar callback e antes do `json.dump/os.replace`; podem criar diretório e `.lock` (`bin/disjuntor.py:289-315`). A aplicação principal continua com ferramentas: sem `agent_id`, fora de Agent/Codex, retorna antes de I/O; `SubagentHandback` é excluído do B1 (`bin/disjuntor.py:2109-2113`). Recuperação automática do arquivo não existe nas rotas auditadas (`bin/disjuntor.py:303-304`, `:338-339`); instalação real pelo Ronald é apenas comentário, sem evidência fornecida [não verificado].
-
-**Q1 — complemento de inventário:**
-
-- Escritor operacional do arquivo de estado: `_com_estado`, `json.dump` + `os.replace`, com trava própria (`bin/disjuntor.py:290-315`). Leitor genérico fora da trava: `ler_estado` (`:332-344`). Há **escritores de fixtures fora da porta**, por exemplo `bin/tests/test_disjuntor.sh:52`, `:362`, `:494`, `:498`, `:836`, `:1439`, `:1453`, `:1470`, `:1476`, `:1480`, `:1774`; não são segundos escritores operacionais.
-- `ultimo_clear.json`: escritor operacional separado `marco_de_clear.main`, com trava própria e leitura do anterior (`bin/marco_de_clear.py:55-78`). Leitor público `orcamento_contexto.ler_marco` (`bin/orcamento_contexto.py:152-164`), usado por `avaliar` (`:329`), painel OC (`:361`) e Stop (`bin/hook_stop_fila1.py:862`). Fixtures também escrevem: `bin/tests/test_orcamento_contexto.sh:84-94`, `:384`, `:473`, `:486`.
-- `.claude/settings.json` apenas conecta SessionStart compact/clear e PreTool (`.claude/settings.json:44`, `:57`, `:68`); não fornece amostra do payload real do harness [não verificado].
-- Para `reservas`, `autorizados`, `b1`, `voltas`, `b4.negou_desde`, a busca em código de `bin/`, `.claude/`, `app/` só encontrou acessos pertinentes em `disjuntor.py` e a asserção de dono do selo (`bin/tests/test_disjuntor.sh:1814`); completude contra acessos indiretos/dinâmicos [não verificado].
-- `reservas[*].agente` é escrito, mas não usado para decidir poda; a poda compara somente `sessao` (`bin/disjuntor.py:1596`, `:1630-1631`).
-
-## 01/11 10:53 · sessao 377e14165497 · GRADE-FOLGA-JUIZ · verificador · origem=Code
-
-**O delta fecha um parâmetro sem fornecedor encontrado; não muda o retorno dos chamadores encontrados. O teste morde a restauração explícita do parâmetro, mas permite sua volta por `**kwargs`.** (`app/ponto/precedencia.py:259`, `app/ponto/precedencia.py:282`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:181`)
-
-1. **Quem escreve e quem lê os nomes tocados**
-
-   | Nome | Escrita/definição → leitura |
-   |---|---|
-   | `folgas_lancadas`, parâmetro removido | Deixou de existir na assinatura; o nome permanece como variável local. (`app/ponto/precedencia.py:259`, `app/ponto/precedencia.py:282`) |
-   | `folgas_lancadas`, variável local | Única atribuição na função: resultado do carregador; única leitura: `.get(data)`. (`app/ponto/precedencia.py:282`, `app/ponto/precedencia.py:342`) |
-   | `folgas_lancadas_do_periodo` | Lê `FolgaDia` por pessoa e intervalo, ordena por `pk`, monta listas por data; fornece o mapa à atribuição local. (`app/ponto/precedencia.py:194`, `app/ponto/precedencia.py:206`, `app/ponto/precedencia.py:208`, `app/ponto/precedencia.py:282`) |
-   | `celulas_geradoras` | Continua parâmetro independente: carga quando `None`, leitura da célula e fornecimento ao juiz do vínculo. (`app/ponto/precedencia.py:260`, `app/ponto/precedencia.py:315`, `app/ponto/precedencia.py:349`, `app/ponto/precedencia.py:351`) |
-   | `SimpleTestCase` / `TestCase` | Importados; o primeiro passa a ser base da classe nova, o segundo continua base de `_Base`. (`app/ponto/tests/test_grade_folga_juiz_sitios.py:29`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:38`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:174`) |
-   | Classe/método novos, `self`, `inspect`, `fatos_do_periodo` | Classe e método definidos; o método recebe `self`, importa `inspect` e a função, e os lê exclusivamente na asserção da assinatura. (`app/ponto/tests/test_grade_folga_juiz_sitios.py:174`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:178`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:179`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:180`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:181`) |
-
-   Os quatro pontos de chamada de produção omitem `folgas_lancadas`:
-
-   - Casca `fatos_do_dia`: só três posicionais. (`app/ponto/precedencia.py:256`)
-   - Calendário: passa `lugar`, `feriados`, `vinculos`, `folgas_foto`; esta última continua distinta do argumento removido. (`app/colaboradores/services/calendario.py:604`, `app/colaboradores/services/calendario.py:605`, `app/colaboradores/services/calendario.py:606`)
-   - Espelho: importa pelo alias `_fatos_periodo` e passa apenas `feriados` como opcional. (`app/ponto/services/espelho.py:657`, `app/ponto/services/espelho.py:659`)
-   - Folha, `dias_com_furo`: só três posicionais. (`app/folha/services/sem_furo.py:25`)
-
-   Os oito pontos de chamada em testes também omitem o removido: calendário; quatro testes pela célula, dos quais somente um passa `celulas_geradoras`; três testes de vínculo encerrado. (`app/colaboradores/tests/test_calendario_um_juiz.py:176`, `app/ponto/tests/test_precedencia_pela_celula.py:77`, `app/ponto/tests/test_precedencia_pela_celula.py:90`, `app/ponto/tests/test_precedencia_pela_celula.py:106`, `app/ponto/tests/test_precedencia_pela_celula.py:120`, `app/ponto/tests/test_precedencia_pela_celula.py:121`, `app/ponto/tests/test_precedencia_vinculo_encerrado.py:78`, `app/ponto/tests/test_precedencia_vinculo_encerrado.py:86`, `app/ponto/tests/test_precedencia_vinculo_encerrado.py:138`)
-
-   Nenhuma dessas chamadas usa `**kwargs` ou expansão de dict. O command relacionado chama diretamente carregador e seletor, sem chamar `fatos_do_periodo`. (`app/ponto/management/commands/rejulgar_ausencia_em_folga.py:51`, `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:64`, `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:65`) Não encontrei outro chamador em commands, template tags ou dicts; chamadas construídas dinamicamente que escapem ao rastreio estático: **[não verificado]**.
-
-2. **Valor publicado** [nao verificado]
-
-   **Não muda por este delta nos chamadores encontrados, mantendo iguais entradas e fontes.** Todos omitem o argumento; pelo delta fornecido, antes isso acionava a carga por `None`, e agora a mesma carga é incondicional. O mapa segue para seleção diária, inclusão de folga nos fatos presentes e publicação de `tipo_do_dia`, `faixa`, `suprimidos` e `fatos.folga_lancada`. (`app/ponto/precedencia.py:282`, `app/ponto/precedencia.py:342`, `app/ponto/precedencia.py:358`, `app/ponto/precedencia.py:380`, `app/ponto/precedencia.py:398`, `app/ponto/precedencia.py:408`)
-
-   Uma chamada que ainda fornecesse `folgas_lancadas=...`, inclusive `None` ou via dict expandido, passaria a receber `TypeError`; não há essa chamada entre as encontradas. (`app/ponto/precedencia.py:259`, `app/ponto/precedencia.py:260`) Valores efetivos de produção: **[não verificado]**.
-
-3. **Mordida do teste** [nao verificado]
-
-   **Sim:** restaurar qualquer parâmetro explícito chamado `folgas_lancadas` deixa a asserção vermelha, mesmo que o corpo ignore seu valor. **Há escape:** aceitar `**kwargs` e ler `kwargs['folgas_lancadas']`; a assinatura expõe `kwargs`, e o nome procurado continua ausente. O teste não chama a função nem verifica a origem do mapa. (`app/ponto/tests/test_grade_folga_juiz_sitios.py:178`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:181`)
-
-   Executei o método extraído da árvore em memória, com módulos substitutos: assinatura atual **verde**, parâmetro explícito **vermelho**, variante com `**kwargs` **verde**, aceitando e devolvendo o mapa externo. A prova é isolada da aplicação; execução da suíte Django: **[não verificado]**. (`app/ponto/tests/test_grade_folga_juiz_sitios.py:181`)
-
-4. **Classes**
-
-   - **2º juiz / derivação paralela:** o delta fecha a entrada alternativa e mantém o carregador e o seletor existentes. (`app/ponto/precedencia.py:282`, `app/ponto/precedencia.py:358`)
-   - **2º escritor / relógio fora da borda:** não introduzidos pelo delta; a mudança é atribuição local a partir de leitura, sem nova escrita persistente ou consulta ao relógio. (`app/ponto/precedencia.py:206`, `app/ponto/precedencia.py:282`)
-   - **Selo sem mordida:** possui mordida nominal comprovada, mas cobertura incompleta para impedir folgas externas por qualquer argumento. (`app/ponto/tests/test_grade_folga_juiz_sitios.py:181`)
-   - **Função/parâmetro sem chamador:** remove o parâmetro sem fornecedor encontrado; a função continua chamada em produção. (`app/ponto/precedencia.py:259`, `app/ponto/precedencia.py:256`, `app/colaboradores/services/calendario.py:604`, `app/ponto/services/espelho.py:659`, `app/folha/services/sem_furo.py:25`)
-
-_1392 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1396 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
