@@ -5729,3 +5729,6 @@ DESPACHO GRADE-FOLGA-JUIZ-a: retirar trecho eh_trabalho (calendario.py:840 da co
 - 10:3x GRADE (a) suite INTEIRA da copia @9ed2a2ff: OK (skipped=42, expected failures=25), Ran 13224, rc=0 (logs/grade_juiz/va/suite.log). Codex v1 verificador relancado com o DESENHO no topo (logs/grade_juiz/va/v1.out).
 - 10:5x GRADE Codex v1 (rc=0, logs/grade_juiz/va/v1.r): 1 procedente (3g, L-111 parametro sem fornecedor -> 2204220e, RED/GREEN provados), 3 descartados com motivo (logs/grade_juiz/va/v1_triagem.md, vai anexo ao opus). Suite inteira da copia @2204220e relancada (logs/grade_juiz/va/suite2.log).
 - 11:0x GRADE Codex v2 (rc=0): 1 procedente (teste do parametro escapa por **kwargs) -- cura apos a suite2 soltar a copia; suite3 no commit novo.
+- 11:1x aval E4-APP-MAPA registrado: BACKLOG E4-APP-MAPA (leitor 4 da E4-CALENDARIO, depois de calendario/espelho/furos), PROMPTS. Entra na ordem atras da E4-CALENDARIO-L1, que espera o pouso da COBPARC.
+- 11:3x GRADE suite2 @2204220e OK Ran 13225 rc=0; procedente v2 curado em d9cb0e42 (RED FAILED(1) com mutante **kwargs, GREEN OK: logs/grade_juiz/va/red_kwargs.log, green_kwargs.log); suite3 @d9cb0e42 em logs/grade_juiz/va/suite3.log.
+- 11:3x GRADE ensaio DINHEIRO na sombra (fase A main x fase C copia @d9cb0e42) lancado: logs/grade_juiz/va/ensaio/run.log; sombra reservada (construtor COBPARC avisado).
