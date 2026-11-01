@@ -1,7 +1,137 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 00:54** · publicado em **01/11/2026 00:57** (UTC-3)
+> Ultima resposta processada: **01/11/2026 00:58** · publicado em **01/11/2026 01:02** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 00:58 · sessao 45f7099e218f · COBERTURA-PARCIAL-UM-JUIZ · verificador · origem=Code
+
+**Parecer: bloqueia.** Há cobrança de marcos cobertos no noturno, âncora com data errada e leitores que ainda calam o resto da parcial. (`app/escala/utils.py:1335`, `app/ponto/services/cartorio.py:1719`, `app/chamados/services/materializacao.py:74`, `app/chamados/reconciliador.py:825`)
+
+Os casos abaixo são contraexemplos do código; ocorrência e quantidade em produção, execução da suíte Django e cumprimento dos atos de pouso ficam **[nao verificado]**. [nao verificado]
+
+**1. Bloqueia — noturno com intervalo dispensa os marcos errados.**
+
+Caso: turno **D19 → D+1 02 → D+1 03 → D+1 07**, parcial **23–07**. A régua escolhe a menor entrada, **03**, e entrega `[E03,S07,E19,S02]`; essa régua chega diretamente à marcação das ausências. (`app/escala/utils.py:1335`, `app/escala/utils.py:1343`, `app/escala/utils.py:1362`, `app/escala/utils.py:1805`)
+
+`deslocamentos_dos_marcos` encadeia essa ordem como se fosse a sequência do turno: produz **180, 420, 1140, 1560** minutos. Portanto, dispensa S02, mas deixa E03 e S07 faltantes, embora ambos pertençam à madrugada coberta. Pela regra do período noturno, os deslocamentos corretos seriam **1140, 1560, 1620, 1860**. (`app/ponto/turnos.py:2652`, `app/ponto/turnos.py:2661`, `app/escala/utils.py:345`, `app/ponto/turnos.py:2636`, `app/escala/utils.py:1209`)
+
+A falha está na alimentação do juiz com a régua de apresentação. O teste noturno fornece diretamente apenas E19/S07 e não exercita essa costura. (`app/ponto/tests/test_cobparc_marco_no_periodo.py:53`, `app/ponto/tests/test_cobparc_marco_no_periodo.py:62`)
+
+**2. Bloqueia — a nova âncora parcial perde a data da madrugada.**
+
+Caso: turno **D19–D+1 07**, parcial **D19–23**, sem batidas. E19 é dispensada; sobra S07. O ramo novo adota a âncora de `_marcos_do_furo_parcial`, mas esse auxiliar ordena `HH:MM` e combina a primeira hora com **D**: resulta **D07**, 24 horas antes do marco devido. (`app/ponto/services/cartorio.py:1578`, `app/ponto/services/cartorio.py:1717`, `app/ponto/services/cartorio.py:1719`)
+
+Isso acrescenta **1.440 minutos** ao atraso e grava/apresenta `horario_previsto` errado no contexto e no push. O SLA dessa porta usa `agora` e janela; não atribuo à âncora alteração direta desse prazo. (`app/ponto/management/commands/detectar_ausencias.py:581`, `app/ponto/management/commands/detectar_ausencias.py:702`, `app/ponto/management/commands/detectar_ausencias.py:776`, `app/ponto/management/commands/detectar_ausencias.py:593`)
+
+**3. Bloqueia — duas ausências fazem materialização e grade escolherem coberturas diferentes.**
+
+Caso: ausência integral antiga e parcial com período mais recente, ambas aprovadas, com marco faltante fora da parcial. O juiz de cobertura escolhe a maior `(data, pk)`; a grade segue essa vencedora e cobra o resto. A materialização usa `any()` sobre todas as ausências não-falta e cala a pergunta pela integral perdedora. (`app/ponto/turnos.py:2552`, `app/ponto/turnos.py:2557`, `app/ponto/turnos.py:2784`, `app/escala/utils.py:1149`, `app/chamados/services/materializacao.py:74`)
+
+`pergunta_no_app` e `disputa_emissao` propagam exatamente esse retorno. Assim, `_celula_furada` pode responder “furada” e a fábrica impedir a pergunta para o mesmo dia. (`app/chamados/services/pergunta_no_app.py:74`, `app/chamados/services/disputa_emissao.py:763`, `app/chamados/juizes.py:446`, `app/chamados/juizes.py:478`)
+
+O argumento vazio **não é o defeito**: com os dois horários preenchidos, `periodo_da_parcial_no_dia(a, ())` retorna `fora`; faltando um horário, retorna `sem_periodo`. Logo, a comparação exclusiva com `sem_periodo` continua detectando ausência de cadastro. (`app/ponto/turnos.py:2632`, `app/ponto/turnos.py:2638`, `app/ponto/turnos.py:2641`)
+
+**4. Bloqueia — ainda há leitores não migrados.**
+
+| Leitor | Caso concreto e resposta divergente |
+|---|---|
+| Reconciliação c2 | Parcial com período e marco externo apagado: qualquer ausência vencedora veta criação, reabertura e até costura no chamado vivo. (`app/chamados/reconciliador.py:811`, `app/chamados/reconciliador.py:825`) |
+| Calendário | Parcial sem batida, com resto cobrado: retorna `ausencia` antes de consultar o veredito; o status lavrado pode ser `irregular`. (`app/colaboradores/services/calendario.py:109`, `app/ponto/status_dia.py:98`, `app/ponto/status_dia.py:112`) |
+| Relatório de furos | O mesmo dia parcial é classificado como `folga` antes de `estado_do_dia`; também desaparece das funções usadas pelo Raio-X. (`app/relatorios/furos.py:151`, `app/relatorios/furos.py:218`, `app/relatorios/furos.py:237`) |
+
+No calendário, isso também exclui o dia do universo de “Resolver dia”, que exige `falta`, `irregular`, `aberto` ou `sem_certidao`. (`app/colaboradores/services/calendario.py:181`)
+
+**5. Bloqueia a equivalência universal declarada — `falta` é uma exceção explícita.**
+
+Pela definição fornecida, toda falta é parcial: `ausencia_explica_o_dia_inteiro` devolve `False` para `tipo='falta'`. Entretanto, a grade apaga suas células e órfãs, não grava o carimbo parcial e o supra exclui falta de `dia_de_cobranca`, declaradamente para evitar cobrança dobrada sobre dia já descontado. (`app/ponto/turnos.py:2690`, `app/escala/utils.py:1174`, `app/escala/utils.py:1178`, `app/ponto/supra_juiz.py:302`)
+
+Portanto, o código não satisfaz literalmente “todo retorno `False` cobra o resto”. Isso tampouco é uma combinação real alterada por `_resto_cobrado`, pois a grade não produz o carimbo nessa falta. O catálogo padrão não aceita falta por minutos; existência de registro excepcional em produção: **[nao verificado]**. (`app/escala/utils.py:1191`, `app/ponto/catalogo/ausencias.py:88`)
+
+**6. Matriz da alteração em `COBRANCA_EM_DIA_COBERTO`.**
+
+Excluído o retorno inicial por isenção, o código anteriormente emitido é retirado exatamente nestas combinações; nenhuma das demais combinações muda por essa condição. (`app/ponto/supra_juiz.py:220`, `app/ponto/supra_juiz.py:530`)
+
+| Insumo | Combinações que retiram o código |
+|---|---|
+| `cobertura_status` | `aprovada` |
+| `tipo_dia` | Qualquer valor formal: o ramo não verifica o tipo |
+| `cobertura_parcial` | Verdadeiro |
+| `periodo_parcial` | `dentro`, `fora`, `nao_sei`; também `None`/ausente ou qualquer valor diferente de `sem_periodo` |
+| `_n_missing` | Maior que zero |
+| `chamados_vivos` | Maior que zero |
+| `cobrancas_vivas` | Tanto zero quanto maior que zero |
+
+Fonte da matriz: `app/ponto/supra_juiz.py:255`, `app/ponto/supra_juiz.py:268`, `app/ponto/supra_juiz.py:306`, `app/ponto/supra_juiz.py:530`.
+
+**Retirar o código não equivale sempre a mudar `coberta` para `cobrado`:**
+
+- Se já havia código de `furo` ou `cobranca_indevida`, ele já vencia `coberta`; o veredito permanece. (`app/escala/models.py:1580`)
+- Se `coberta` estava vencendo códigos de cadastro, discordância ou fato, esses códigos passam a determinar o veredito. (`app/escala/models.py:1582`)
+- Sem código restante, a derivação devolve `concorde`. Somente o cartório substitui esse resultado por `cobrado`, exigindo fio vivo **e protestante**; decisão administrativa continua prevalecendo. (`app/escala/models.py:1595`, `app/ponto/services/cartorio.py:1294`, `app/ponto/portas/celula.py:655`)
+
+**Existe vazio sem `cobrado`.** Contraexemplo puro: ausência parcial, período `fora`, um missing, realizado 240, previsto 480, `sem_ancora=True`, turno encerrado, chamado vivo e nenhuma cobrança com fio. O ramo do fato não emite furo por `sem_ancora`, o novo ramo retira cobertura e o cartório não tem fio para escrever `cobrado`: sobra `concorde`. Ocorrência produtiva desses insumos: **[nao verificado]**. (`app/ponto/supra_juiz.py:392`, `app/ponto/supra_juiz.py:530`, `app/ponto/services/cartorio.py:1294`)
+
+No caso ordinário **encerrado, previsto positivo, sem fato e com fio morto**, não há esse vazio: sai `FURO_COM_COBRANCA_MORTA`. (`app/ponto/supra_juiz.py:313`, `app/ponto/supra_juiz.py:360`)
+
+A retirada não cria, sozinha, acusação de marco coberto quando a grade está correta; porém o contraexemplo noturno do achado 1 produz missing dentro da cobertura e derruba essa premissa. (`app/escala/utils.py:1209`, `app/ponto/supra_juiz.py:530`)
+
+**7. Consumidores de `coberta` e efeito da mudança.**
+
+| Consumidor | Efeito |
+|---|---|
+| Pergunta viva | `coberta` não acusa; `cobrado`, `furo` e demais acusadores mantêm a pergunta, ressalvada sua resolução própria. (`app/escala/models.py:1735`, `app/chamados/juizes.py:1102`) |
+| Retratação | Veredito não acusador permite absolvição; marcos pendentes impedem essa conclusão antecipada. (`app/chamados/reconciliador.py:973`, `app/chamados/reconciliador.py:982`) |
+| Emissão/reabertura | `coberta` integra os vereditos que vetam cobrança; `cobrado` não integra essa lista. (`app/ponto/marcos.py:119`, `app/ponto/marcos.py:154`) |
+| Status lavrado | Sem batida, `coberta` dá ausência; parcial acusadora dá irregular. Com batida, `coberta` dá ok e acusação dá irregular. (`app/ponto/status_dia.py:98`, `app/ponto/status_dia.py:110`, `app/ponto/status_dia.py:117`) |
+| Calendário | O mapa distingue `coberta→ok` e `cobrado→irregular`, mas o retorno antecipado continua escondendo a mudança na ausência sem batida. (`app/colaboradores/services/calendario.py:54`, `app/colaboradores/services/calendario.py:109`) |
+| Folha/retenção | Acusadores passam pelo retentor, com exceções de protestos não cobráveis e furo exclusivamente de pausa; `coberta` fica fora desse ramo. (`app/folha/export.py:1215`, `app/folha/export.py:1235`) |
+| Relatórios | `estado_do_dia` mapeia `coberta→folga` e `cobrado→furo`, mas o dataset pula antes os dias de ausência. Dia da frota distingue os rótulos e seleciona acusadores. (`app/relatorios/furos.py:24`, `app/relatorios/furos.py:151`, `app/relatorios/dia_da_frota.py:10`, `app/relatorios/dia_da_frota.py:54`) |
+
+O executor do comando supra retrata diretamente por `COBRANCA_SEM_FURO` e `COBRANCA_EM_DIA_SEM_TRABALHO`; a consequência de `COBRANCA_EM_DIA_COBERTO` passa pela derivação e pelos consumidores do veredito. (`app/ponto/management/commands/supra_juiz.py:218`, `app/escala/models.py:1582`)
+
+**8. Censo de escritores e leitores, inclusive fora do diff.**
+
+| Campo/valor | Quem escreve | Quem lê |
+|---|---|---|
+| `cobertura_parcial` | Builder consulta integralidade e carimba; leitor da ata também carimba pela cobertura vigente; cartório propaga para a ata. (`app/escala/utils.py:1151`, `app/escala/utils.py:1191`, `app/escala/services/leitor_celula.py:409`, `app/ponto/services/cartorio.py:628`) | Supra; impressão; dispensa integral; contagem de emissão/espelho; status; predicado usado por `dia_sem_trabalho` e declaração textual. (`app/ponto/supra_juiz.py:268`, `app/ponto/services/cartorio.py:345`, `app/ponto/services/cartorio.py:653`, `app/ponto/services/cartorio.py:1547`, `app/ponto/services/cartorio.py:1631`, `app/ponto/status_dia.py:150`, `app/chamados/juizes.py:408`, `app/chamados/services/declaracao_texto.py:98`) |
+| `periodo_parcial` | Builder e leitor da ata chamam o juiz de período. Não é persistido por `ata_do_dia`; é recalculado pelo leitor. (`app/escala/utils.py:1195`, `app/escala/services/leitor_celula.py:412`, `app/ponto/services/cartorio.py:600`) | Dispensa por marco, impressão e ramos do supra. (`app/escala/utils.py:1204`, `app/ponto/services/cartorio.py:345`, `app/ponto/supra_juiz.py:381`, `app/ponto/supra_juiz.py:439`, `app/ponto/supra_juiz.py:530`) |
+| Célula `dispensada` | Grade dispensa missing dentro do período; leitor reconstrói o marcador da lâmpada. (`app/escala/utils.py:1206`, `app/escala/services/leitor_celula.py:127`) | Impressão, propagação à lâmpada, exclusão de batida no cartório/status e ausência de resto no supra. (`app/ponto/services/cartorio.py:346`, `app/ponto/services/cartorio.py:457`, `app/ponto/services/cartorio.py:1217`, `app/ponto/status_dia.py:145`, `app/ponto/supra_juiz.py:311`) |
+| Lâmpada `dispensada` | Propagação da célula; dispensa integral/justificativa no cartório. (`app/ponto/services/cartorio.py:458`, `app/ponto/services/cartorio.py:662`) | Reconstrução da célula e `_n_dispensadas`; juízes de lastro/furo leem o efeito `acesa`, sem exigir luz. (`app/escala/services/leitor_celula.py:68`, `app/escala/services/leitor_celula.py:127`, `app/ponto/services/lastro.py:179`, `app/chamados/juizes.py:478`) |
+| `n_ok_lavrado` / `n_casadas` | Derivados de contagens da ata menos dispensadas; transportados no dia. (`app/escala/services/leitor_celula.py:91`, `app/escala/services/leitor_celula.py:97`, `app/escala/services/leitor_celula.py:369`) | Supra prefere os valores lavrados; contador de bordas usa `n_ok` como prova de batida. (`app/ponto/supra_juiz.py:229`, `app/ponto/supra_juiz.py:464`, `app/ponto/services/bordas_realizado.py:51`) |
+| `_teve_fato` | Variável local derivada de realizado ou contagem positiva. (`app/escala/services/leitor_celula.py:343`) | `_fora`, que decide exclusão antes da admissão e no dia da demissão. (`app/escala/services/leitor_celula.py:347`) |
+| `parcial_na_lista_sem_push` | `_contar_na_lista`, chamado nos dois portões de emissão. (`app/ponto/services/cartorio.py:1673`, `app/ponto/services/cartorio.py:1564`, `app/ponto/services/cartorio.py:1616`) | Incremento e testes; o resumo do comando não imprime essa chave. (`app/ponto/services/cartorio.py:1673`, `app/ponto/tests/test_cobparc_marco_no_periodo.py:451`, `app/ponto/management/commands/processar_cartorio.py:66`) |
+| `_parcial_na_lista_vistos` | `setdefault` e `add`; chave `(colab,data)`. (`app/ponto/services/cartorio.py:1551`, `app/ponto/services/cartorio.py:1670`) | Teste de pertinência; `finally` remove o conjunto da saída. (`app/ponto/services/cartorio.py:1671`, `app/ponto/services/cartorio.py:922`) |
+| Âncora parcial | `_marcos_do_furo_parcial`. (`app/ponto/services/cartorio.py:1719`) | Ambos os ramos de emissão; emissor calcula atraso, contexto e push. (`app/ponto/services/cartorio.py:1580`, `app/ponto/services/cartorio.py:1619`, `app/ponto/management/commands/detectar_ausencias.py:581`, `app/ponto/management/commands/detectar_ausencias.py:702`, `app/ponto/management/commands/detectar_ausencias.py:776`) |
+| `REGRA_VERSOES` | Declaração no cartório. (`app/ponto/services/cartorio.py:111`) | Validação, seleção da maior versão aplicável, impressão e testes de alcance. (`app/ponto/services/cartorio.py:179`, `app/ponto/services/cartorio.py:208`, `app/ponto/services/cartorio.py:380`, `app/ponto/tests/test_o219_versao_da_regra.py:77`) |
+| Código / `coberta` / `cobrado` | Código nasce no supra; mapa deriva `coberta`; cartório propõe `cobrado`; porta decide e persiste. (`app/ponto/supra_juiz.py:532`, `app/escala/models.py:1582`, `app/ponto/services/cartorio.py:1295`, `app/ponto/portas/celula.py:658`, `app/ponto/portas/celula.py:745`) | Consumidores discriminados no achado 7. (`app/chamados/juizes.py:1102`, `app/folha/export.py:1215`, `app/relatorios/furos.py:24`) |
+| Retorno `_coberto_por_ausencia` | Predicado de materialização; reexportado por models e importado por disputa. (`app/chamados/services/materializacao.py:55`, `app/chamados/models.py:3141`, `app/chamados/services/disputa_emissao.py:8`) | Retenção da pergunta no app e guarda antes da abertura da pergunta. (`app/chamados/services/pergunta_no_app.py:74`, `app/chamados/services/disputa_emissao.py:763`) |
+
+**9. Contraexemplos restantes e limites dos testes.** [nao verificado]
+
+- **Todos os marcos dispensados, chamado vivo:** não há furo; o supra puro mantém `COBRANCA_EM_DIA_COBERTO`. No cartório, chamado com marcos nomeados todos acesos deixa de protestar e pode ser fechado pelo fluxo por marco. Isso respeita “cobra o resto”: não sobrou marco. (`app/ponto/supra_juiz.py:311`, `app/ponto/supra_juiz.py:530`, `app/ponto/services/lastro.py:170`, `app/ponto/services/cartorio.py:1250`)
+- **Hoje/VIGIA:** missing futuro sai do dia julgado e vira lâmpada `acesa=None, pendente=True`. Se nenhum missing vencido sobra, o código de cobertura pode aparecer; as guardas de pergunta e retratação impedem tratar a ata provisória como absolvição definitiva. (`app/ponto/services/cartorio.py:737`, `app/ponto/services/cartorio.py:755`, `app/chamados/juizes.py:1115`, `app/chamados/reconciliador.py:984`)
+- **Fila — contagem ainda diverge com VIGIA:** duas dispensadas e duas pendentes, todas sem luz, dão `n_ok_lavrado=2`, mas a recontagem por hora dá zero. Isso também faz `_teve_fato=True`; subtrair apenas dispensadas não garante a igualdade anunciada pelos testes. (`app/escala/services/leitor_celula.py:91`, `app/ponto/supra_juiz.py:83`, `app/escala/services/leitor_celula.py:344`, `app/ponto/tests/test_cobparc_marco_no_periodo.py:370`)
+
+Os testes atravessam grade→ata→supra, julgamento→pergunta viva, edição→impressão→rejulgamento, declaração textual, espelho e duas passadas do contador. (`app/ponto/tests/test_cobparc_marco_no_periodo.py:175`, `app/ponto/tests/test_cobparc_marco_no_periodo.py:304`, `app/ponto/tests/test_cobparc_marco_no_periodo.py:354`, `app/ponto/tests/test_cobparc_marco_no_periodo.py:397`, `app/ponto/tests/test_cobparc_marco_no_periodo.py:426`, `app/ponto/tests/test_cobparc_marco_no_periodo.py:441`)
+
+**Sim, testes passam com cura revertida:** os três controles finais preservam exatamente dia inteiro, parcial sem período e parcial sem resto. O RED de retirada do código distingue a cura; os dois testes de contagem distinguem a subtração das dispensadas. (`app/ponto/tests/test_cobparc_marco_no_periodo.py:476`, `app/ponto/tests/test_cobparc_marco_no_periodo.py:480`, `app/ponto/tests/test_cobparc_marco_no_periodo.py:484`, `app/ponto/tests/test_cobparc_marco_no_periodo.py:473`, `app/ponto/tests/test_cobparc_marco_no_periodo.py:380`, `app/ponto/tests/test_cobparc_marco_no_periodo.py:385`)
+
+A lacuna bloqueante é concreta: teste noturno pula a construção da régua; teste de âncora é diurno e verifica somente `.time()`, não a data. (`app/ponto/tests/test_cobparc_marco_no_periodo.py:43`, `app/ponto/tests/test_cobparc_marco_no_periodo.py:423`)
+
+**10. Checklist estrutural e pouso.** [nao verificado]
+
+| Classe | Conclusão |
+|---|---|
+| Segundo juiz | O novo helper apenas lê o carimbo; não recalcula integralidade. Porém o `any()` da materialização conserva seleção paralela de cobertura, demonstrada no achado 3. (`app/chamados/juizes.py:408`, `app/docs/JUIZES.md:60`, `app/chamados/services/materializacao.py:74`) |
+| Segundo escritor | Os ramos novos reutilizam `_espelhar_marcos`→`renovar_contexto`; ata e veredito continuam pelas portas. Segundo escritor persistente nesses ramos: não demonstrado. (`app/ponto/services/cartorio.py:1639`, `app/ponto/management/commands/detectar_ausencias.py:553`, `app/chamados/services/contexto.py:96`, `app/ponto/services/cartorio.py:1643`) |
+| Relógio fora da borda | **Fila, preexistente:** `julgar_celula` aceita `agora`, mas consulta data e instante reais antes de repassá-lo. Caso: instante injetado diferente do host altera o portão temporal. (`app/ponto/services/cartorio.py:1778`, `app/ponto/services/cartorio.py:1783`, `app/ponto/services/cartorio.py:1804`) |
+| Fonte única | **Bloqueia:** cobertura por `any()` diverge do desempate canônico; cadeia noturna recebe régua inadequada. (`app/chamados/services/materializacao.py:74`, `app/ponto/turnos.py:2784`, `app/escala/utils.py:1335`) |
+| Ordem de trava | Abertura mantém trava do colaborador; atualização de contexto usa sua porta existente. Inversão/deadlock causado pela obra: **[nao verificado]**. (`app/chamados/models.py:861`, `app/chamados/services/contexto.py:96`) |
+| Versão 3 / competência 09 | O horizonte alcança **toda competência ≥09**, não apenas cinco dias, e invalida impressões inclusive sem mudança de marcos dispensados. Não seleciona uma implementação histórica isolada. (`app/ponto/services/cartorio.py:208`, `app/ponto/services/cartorio.py:380`, `app/ponto/services/cartorio.py:1192`) |
+
+A 09 exportada, por si só, não impede rejulgar ata: o aval escrito autoriza isso e exige fechamento intacto com hashes antes/depois e destino da diferença financeira. A guarda existente exclui do recálculo os colaboradores das empresas exportadas da 09. (`a
+
+[truncado em 20000 de 20455 caracteres]
 
 ## 01/11 00:54 · sessao 8e53981aa4d4 · - · - · origem=Ronald (tmux)
 
@@ -922,50 +1052,4 @@ Achado confirmado de alcance da cura, **P1/P2**: dias parciais afetados pela obr
 
 Não há `.git` na cópia: comparação histórica direta dos objetos/commit [nao verificado]; comparação antes/depois acima utiliza o full fornecido pelo usuário. [nao verificado]
 
-## 31/10 23:59 · sessao 3e4869b912cd · - · - · origem=Ronald (tmux)
-
-Achado adicional procedente: **P1 — o leitor da ata continua contando marco dispensado como batida/casamento**, e isso suprime o furo sem batida nos dois comandos que usam `grade_da_celula`. A conta é `n_celulas - n_missing`, sem ler hora, delta ou `dispensada`; viaja como `n_ok`, e o supra prefere esse valor à contagem com hora. O portão do furo exige `n_ok == 0`. (`app/escala/services/leitor_celula.py:83`, `app/escala/services/leitor_celula.py:361`, `app/ponto/supra_juiz.py:229`, `app/ponto/supra_juiz.py:313`)
-
-Contraexemplo: dia 08/12/13/17, adesão anterior, nenhuma batida no dia, parcial 13–17. A ata tem quatro lâmpadas, duas apagadas e duas dispensadas: `n_ok_lavrado=2`. O cartório corrigido conta `n_bat=0` e acusa o resto; os comandos `supra_juiz` e `emitir_furo_retroativo` recebem `n_ok=2`, não entram no portão sem batida e não têm fato para os ramos seguintes. O segundo comando somente emite quando encontra `FURO_SEM_COBRANCA`. (`app/escala/utils.py:1207`, `app/ponto/services/cartorio.py:1204`, `app/escala/services/leitor_celula.py:83`, `app/ponto/management/commands/supra_juiz.py:206`, `app/ponto/management/commands/emitir_furo_retroativo.py:99`, `app/ponto/management/commands/emitir_furo_retroativo.py:109`, `app/ponto/supra_juiz.py:376`)
-
-Outro consumidor da mesma conta trata a dispensa como fato para ultrapassar a fronteira de admissão/demissão: `_teve_fato` usa `_n_ok > 0`, sem hora/delta. Contraexemplo: ata com dispensa e nenhuma batida antes da admissão deixa de virar `fora_vinculo`. (`app/escala/services/leitor_celula.py:335`, `app/escala/services/leitor_celula.py:339`)
-
-Censo de produção das ocorrências de `not …get('missing')` e variantes relevantes:
-
-| Sítio | Lê hora/delta? | Resultado |
-|---|---|---|
-| `app/inteligencia/calculadores.py:153` | Não | Ainda conta não missing como batido; só processa `tipo_dia='trabalho'`, portanto a parcial rotulada ausência não entra (`:141`). |
-| `app/ponto/propositor.py:40` | A seleção não; valida hora depois (`:52`) | Parcial excluída pelo tipo (`:36`); não gera proposta com a dispensa sem hora. |
-| `app/ponto/propositor.py:213` | Delta não nulo | Dispensa possui `delta=None`; excluída. |
-| `app/ponto/management/commands/propor_reorganizacao.py:102` | Hora (`:103`) | Dispensa sem hora excluída. |
-| `app/ponto/supra_juiz.py:89` | Hora (`:90`) | Dispensa sem hora excluída na recontagem; **`n_ok` lavrado contorna essa proteção**, conforme achado acima. |
-| `app/ponto/turnos.py:2675` | Hora | Dispensa excluída. |
-| `app/ponto/services/cartorio.py:478` | Hora | Dispensa excluída das horas reais. |
-| `app/ponto/services/cartorio.py:503` | Hora | Dispensa excluída das horas usadas. |
-| `app/ponto/services/cartorio.py:532` | Não | Estado de lâmpada; acende a dispensada sem inventar luz (`:563`) e propaga marcador (`:565`). |
-| `app/ponto/services/cartorio.py:1205` | Não | Agora exclui explicitamente `dispensada`. |
-| `app/ponto/status_dia.py:144` | Não | Agora exclui `isencao` e `dispensada` (`:145`). |
-| `app/escala/utils.py:812` | Hora | Guarda para preservar hora; ausência de hora vai ao crédito de isenção (`:820`). |
-| `app/escala/utils.py:1958` | Não nessa guarda | Apenas decide se ponta está missing; dispensada impede substituir a ponta. |
-| `app/escala/utils.py:1990` | Hora pertence ao turno e é posterior (`:1991`) | Dispensa sem hora não satisfaz. |
-| `app/chamados/detector_anomalias.py:212` | Hora alvo e tipo real (`:213`) | Usa células recém produzidas por `_match_marcos` (`:210`), sem overlay de dispensa. |
-| `app/chamados/services/declaracao_texto.py:107` | Não | Seleciona faltantes, não conta batidas; além disso ignora ausência parcial por `tipo_dia != trabalho` (`:95`). |
-| `app/ponto/janela_he.py:294` | Não nessa guarda | Seleciona somente missing para pendência de HE, não conta batidas. |
-| `app/ponto/services/veredito_celula.py:251` | Não nessa guarda | Seleciona missing para simulação, não conta batidas. |
-
-Variantes aritméticas: `n_ok_lavrado` e `n_casadas_lavrado` continuam contando dispensa; `_teve_batida_na_ata` também acredita em `n_ok`, porém seu chamador filtra `tipo_dia='trabalho'`, excluindo a ausência parcial. (`app/escala/services/leitor_celula.py:83`, `app/escala/services/leitor_celula.py:89`, `app/ponto/services/bordas_realizado.py:51`, `app/ponto/services/bordas_realizado.py:74`)
-
-Mapa direto de `dispensada`:
-
-- Escritor da célula parcial: grade em `app/escala/utils.py:1207`.
-- Propagadores: célula → lâmpada em `app/ponto/services/cartorio.py:446`; lâmpada → célula em `app/escala/services/leitor_celula.py:119`.
-- Outro escritor é a dispensa integral da ata, que marca `acesa=True`, `luz=None`, `dispensada=motivo`; não é escritor concorrente do overlay parcial da grade. (`app/ponto/services/cartorio.py:649`)
-- Leitores diretos restantes: impressão em `app/ponto/services/cartorio.py:335`; `n_bat` em `app/ponto/services/cartorio.py:1205`; status em `app/ponto/status_dia.py:145`; supressão do furo quando não resta marco em `app/ponto/supra_juiz.py:312`.
-
-`tem_batida` é escrito pelo retorno de `fatos_do_status` e lido por `status_da_lavra` através da porta. Os três chamadores de produção de `fatos_do_status` estão no cartório: completar status, nunca bateu e lavra comum. (`app/ponto/status_dia.py:148`, `app/ponto/portas/celula.py:698`, `app/ponto/services/cartorio.py:765`, `app/ponto/services/cartorio.py:1078`, `app/ponto/services/cartorio.py:1619`) O calendário também possui uma chave homônima, mas a escreve de entradas/saídas próprias; não lê esse retorno. (`app/colaboradores/services/calendario.py:810`)
-
-Os testes novos do cartório não exercitam `grade_da_celula → n_ok_lavrado → classificar_dia`: os casos de ausência sem batida chamam `julgar_colab`; o RED puro de status passa um dicionário direto. Assim não mordem o achado do leitor. (`app/ponto/tests/test_cobparc_marco_no_periodo.py:295`, `app/ponto/tests/test_cobparc_marco_no_periodo.py:308`, `app/ponto/tests/test_cobparc_marco_no_periodo.py:324`, `app/ponto/tests/test_cobparc_marco_no_periodo.py:236`)
-
-Não executei testes nem consultei banco/logs; ocorrência e volume em produção [nao verificado]. `git grep` não pôde ser executado porque a cópia não contém `.git`; usei `rg` sobre os arquivos presentes [nao verificado]. [nao verificado]
-
-_1320 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1321 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
