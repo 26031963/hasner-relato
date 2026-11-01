@@ -1,7 +1,57 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 12:36** · publicado em **01/11/2026 12:37** (UTC-3)
+> Ultima resposta processada: **01/11/2026 12:47** · publicado em **01/11/2026 12:48** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 12:47 · sessao e228828c2fac · GRADE-FOLGA-JUIZ · censo · origem=Code
+
+**B1 → (c); B2 → (c); B3 → (e)**, considerando o achado específico de cada item. As justificativas estão nos trechos abaixo. (`v1.r:3,108,177`; `v1.q:22-24`)
+
+As referências aos anexos contam linhas desde a primeira linha de cada conteúdo, incluindo linhas vazias.
+
+1. **B1 — (c): dependia do RED executado.**
+
+   **Pergunta literal:** “(e) selo ou teste RED que nao morde (passaria tambem sem a cura) -- avalie cada teste novo do diff;” (`v1.q:19`) [nao verificado]
+
+   **Resposta literal:** “A avaliação dos testes abaixo é **estática**; execução e RED observado: **[não verificado]**.” (`v1.r:108`) [nao verificado]
+
+   O Codex avaliou a mordida pelo código, inclusive classificando o teste de calendário `:96` como “**Morde:** calendário do ativo indevido no dia da geradora velha”. Isso não comprova um FAIL executado desse teste nem verifica se o log citado como RED era verde — objetos específicos de B1. (`v1.r:114`; `opus_final_achados.md:2`) [nao verificado]
+
+   **Relação com a triagem:** ela descartou “3 MORDE de toda competencia passam no main” e afirmou que “o RED desta cura contra o main esta em calendario :54/:96”. Portanto, houve descarte de uma crítica vizinha, mas não registro e descarte da divergência de logs apontada em B1. (`v1_triagem.md:4`; `opus_final_achados.md:2`)
+
+2. **B2 — (c): dependia das medições da sombra/produção.**
+
+   **Pergunta literal:** “(f) ordem de trava / pouso antes do pre-requisito;” A pergunta também cobrava: “`status` do dia: em que casos ele difere do main, e por qual linha do diff?” (`v1.q:20`; `v1.q:13`) [nao verificado]
+
+   **Resposta literal:** “A identidade Git da cópia, execução de RED/GREEN, medidas de produção, reversão e ensaio desta árvore permanecem **[não verificado]**.” (`v1.r:3`)
+
+   A divergência entre a declaração documental de zero e as contagens **32/40/8/4** é o achado baseado no ensaio fornecido. A cópia contém a declaração “main x cura = 0 `tipo_dia` diferente e 0 FechamentoMensal da 09 diferente”. (`opus_final_achados.md:3`; `app/ponto/services/cartorio.py:182-183`)
+
+   **Relação com a triagem:** “NAO E ACHADO 2 (status pode mudar falta<->folga): e o efeito pedido [...] vai medido no ensaio DINHEIRO na sombra antes do opus.” Ela descartou a mudança de **status como defeito**, deixando a medição para depois; não descartou as contradições numéricas de B2. As transições fornecidas também não demonstram, por si, alteração de FechamentoMensal. (`v1_triagem.md:6`; `opus_final_achados.md:3`)
+
+3. **B3 — (e): a existência da fila no BACKLOG não foi perguntada.**
+
+   **Pergunta literal:** “Liste todos com arquivo:linha e diga se estao declarados na ALLOWLIST da catraca ponto/tests/test_catraca_folga_lancada_um_juiz.py.” (`v1.q:23-24`)
+
+   **Resposta literal**, na linha do gerador: “**Sim**, pendência GRADE-FOLGA-GERADOR: `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:160`.” (`v1.r:177`)
+
+   O Codex viu o gerador, a ALLOWLIST e o nome da pendência. O achado específico — a fila citada não existir no BACKLOG — exige uma conferência diferente da presença na ALLOWLIST solicitada pela pergunta. A referência permanece na cópia em JUIZES e na catraca. (`v1.q:22-24`; `v1.r:177`; `opus_final_achados.md:4`; `app/docs/JUIZES.md:89`; `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:160-161`)
+
+   **Relação com a triagem:** o descarte referente a fila/ALLOWLIST foi o de **C5 / GRADE-FOLGA-C5**, não o de GRADE-FOLGA-GERADOR. (`v1_triagem.md:3`)
+
+A **volta 2** estava limitada ao delta de remoção do parâmetro: “pre-verificacao, volta 2, so o delta”. Sua conclusão — “não muda o retorno dos chamadores encontrados” — refere-se a esse delta, sem verificar RED, impacto de produção ou existência da fila de B3. (`v2.q:1-2,7`; `v2.r:1`)
+
+## 01/11 12:46 · sessao d59d370773e9 · - · - · origem=Ronald (tmux)
+
+Recomendação: **B1 (c), B2 (c), B3 (e)**, classificando os achados específicos, não temas vizinhos.
+
+- **B1 — (c):** a pergunta pede “selo ou teste RED que nao morde […] avalie cada teste novo do diff” (`v1.q:19`). A resposta limita sua conclusão: “A avaliação dos testes abaixo é **estática**; execução e RED observado: **[não verificado]**.” (`v1.r:108`). A triagem rejeitou a crítica aos três testes de toda competência, não a divergência entre o log citado e o RED executado (`v1_triagem.md:4`; `opus_final_achados.md:2`). A análise estática inclusive considerou que o segundo teste de calendário mordia (`v1.r:114`). [nao verificado]
+
+- **B2 — (c):** a resposta declara “execução de RED/GREEN, medidas de produção, reversão e ensaio desta árvore permanecem **[não verificado]**.” (`v1.r:3`). A pergunta sobre diferenças de `status` era estática (`v1.q:12-13`); a triagem disse literalmente “vai medido no ensaio DINHEIRO na sombra antes do opus” (`v1_triagem.md:6`). Isso não descarta previamente as contagens posteriores nem verifica a declaração documental de zero (`opus_final_achados.md:3`).
+
+- **B3 — (e), com granularidade explícita:** a pergunta foi “Liste todos […] e diga se estao declarados na ALLOWLIST” (`v1.q:22-24`), não se cada fila citada existia no BACKLOG. A resposta viu o gerador e afirmou “**Sim**, pendência GRADE-FOLGA-GERADOR” (`v1.r:177`). Portanto o tema gerador/ALLOWLIST foi visto, mas a existência da fila não foi perguntada; não cabe dizer que ninguém viu o tema nem que a triagem descartou esse achado (`v1.r:177`; `v1_triagem.md:1-8`). **(a)** só seria defensável mediante interpretação ampliada de “tema”, que convém declarar como inferência.
+
+Dupla contagem manual do anexo `v1.r`: **198 linhas físicas**, incluindo vazias; âncoras: ressalvas `:3`, segundo juiz `:98`, pré-requisitos `:103`, avaliação estática `:108`, calendário `:96` na tabela em `:114`, gerador em `:177`, parágrafo final em `:198`.
 
 ## 01/11 12:36 · sessao c9220c28be1f · CONTENCAO-QUE-MORDE-V2 · verificador · origem=Code
 
@@ -850,78 +900,4 @@ Não acusar fixture sem carimbo no teste `sem_forcar`: as batidas são criadas e
 
 Para 3(f), nenhum ato de pouso é comprovado pelos anexos [não verificado]. Os pré-requisitos existem: bump é ato de frota e exige ensaio `--apply` antes do pouso em `app/ponto/services/cartorio.py:173`, `:175`; sombra no main atual, reversão e frota antes do opus em `app/docs/PROMPTS.md:1758`; reconstrução de projeções não exportadas pela porta em `app/docs/LEIS.md:142`. Fase conflitante sai do escopo em `app/docs/PROMPTS.md:1781`; publicação de `eh_trabalho` sai em `:1783`.
 
-## 01/11 10:38 · sessao af94c54b7920 · - · - · origem=Ronald (tmux)
-
-Resultado estático dos sítios delegados; execução dos testes e pré-requisitos de produção: [não verificado]. [nao verificado]
-
-| Função/objeto | Escritor e leitores de produção |
-|---|---|
-| `_aplicar_folgas_foto` | Implementação em `app/escala/utils.py:1103`; chamada pelo builder single em `:770` e pelo builder por turno em `:1794`. O single é chamado pelo legacy em `:995`; o dispatcher escolhe os builders em `:2036` e `:2038`. |
-| Contrato novo do overlay | Recebe pessoa e `esc_do_dia`; carrega pela pessoa em `app/escala/utils.py:1119`, julga em `:1124`, lê comprimento de `celulas` em `:1125`, escreve `tipo_dia`, `celulas`, `orfas` em `:1126`, `:1127`, `:1128`. |
-| `_folga_do_dia` | Implementação delega ao carregador e juiz em `app/ponto/services/declarar_dia.py:73`; leitores locais em `:95` e `:112`. |
-| `o_dia_ja_e_folga` | Implementação em `app/ponto/services/declarar_dia.py:78`; leitores externos em `app/chamados/services/validacao.py:261` e `:316`. |
-| `_recusa_do_dia` | Implementação em `app/ponto/services/declarar_dia.py:98`; leitura por `checar_declaracao` em `:147`; leitura da origem em `:115` escolhe frase após o juiz aceitar a candidata em `:112`. |
-| Universo `folgas` do command | Escrito em `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:62`, carregado em `:64`, julgado em `:65`, acrescentado em `:66`, lido pelo cruzamento em `:67`. O cruzamento lê tuplas das ausências em `:28`, delega expansão ao juiz em `:33` e testa pertinência em `:34`. |
-| `REGRA_VERSOES` | Escrito em `app/ponto/services/cartorio.py:111`; lido pelo validador de import em `:185` e pelo leitor em `:209` e `:214`. |
-| Versão na impressão | `versao_para` chamada em `app/ponto/services/cartorio.py:965`; resultados passam a `impressao_insumos` em `:1017` e `:1170`; a impressão acrescenta `regra:` em `:370`; carimbo controla o pulo em `:1018`–`:1024` e `:1176`–`:1182`. |
-
-Os escritores-base dos três campos da grade são os builders em `app/escala/utils.py:727`, `:752`, `:1751`, `:1757`. O overlay alterado já existia e segue escrevendo o dict transitório em `:1126`; ausência e isenção continuam posteriores à folga em `:771`, `:772`, `:1797`, `:1799`. A tradução para ata ocorre em `app/ponto/services/cartorio.py:585`, `:589`, `:592`; a lavra continua pela porta `lavrar_veredito` em `:1061` e `:1582`.
-
-Leitores diretos dos campos da grade localizados por `rg`, excluindo tests/migrations:
-
-- `tipo_dia`: `app/escala/utils.py:852`, `:1018`, `:1178`; `app/escala/orfa_classe.py:65`; `app/escala/services/furos_diarios.py:39`; `app/ponto/status_dia.py:146`; `app/ponto/supra_juiz.py:222`; `app/ponto/worklist.py:19`; `app/ponto/propositor.py:36`, `:210`; `app/ponto/services/veredito_celula.py:221`; `app/ponto/services/dia_pago.py:386`, `:393`, `:398`; `app/ponto/services/cartorio.py:585`, `:1015`; `app/ponto/services/espelho.py:690`; `app/ponto/services/simular_dia.py:12`; `app/ponto/services/bordas_realizado.py:74`; `app/ponto/services/fechamento.py:1011`; `app/chamados/services/materializacao.py:225`; `app/chamados/services/declaracao_texto.py:90`; `app/chamados/services/disputa_emissao.py:68`; `app/folha/causas.py:40`, `:41`, `:100`; `app/folha/export.py:1071`, `:1075`, `:1080`; `app/relatorios/furos.py:147`, `:151`, `:218`, `:237`; `app/inteligencia/calculadores.py:46`, `:141`; `app/ponto/management/commands/e6_piso_autopsia.py:13`; `app/ponto/management/commands/mapa_divergencia.py:131`, `:143`, `:155`, `:183`, `:188`, `:194`.
-- `celulas`: `app/escala/utils.py:809`, `:1016`, `:1061`, `:1179`, `:1209`, `:1774`, `:1841`, `:1916`; `app/escala/orfa_classe.py:37`; `app/escala/services/furos_diarios.py:13`; `app/escala/services/leitor_celula.py:256`; `app/ponto/status_dia.py:143`; `app/ponto/propositor.py:38`, `:212`; `app/ponto/supra_juiz.py:230`, `:371`, `:439`, `:497`; `app/ponto/services/cartorio.py:582`, `:716`, `:1189`; `app/ponto/services/espelho.py:372`, `:696`; `app/ponto/services/simular_dia.py:14`; `app/ponto/services/veredito_celula.py:250`, `:288`; `app/ponto/turnos.py:2667`; `app/folha/causas.py:24`, `:58`; `app/relatorios/furos.py:149`, `:220`, `:242`; `app/relatorios/pdf_espelho.py:551`; `app/inteligencia/calculadores.py:51`, `:146`; `app/api/views.py:1506`; `app/colaboradores/services/calendario.py:464`, `:477`; `app/chamados/services/declaracao_texto.py:97`; `app/ponto/management/commands/detectar_par_relampago.py:141`; `app/ponto/management/commands/reconciliar_grade.py:152`; `app/ponto/management/commands/mapa_divergencia.py:120`, `:141`, `:174`; `app/ponto/management/commands/propor_reorganizacao.py:92`.
-- `orfas`: `app/escala/utils.py:1085`, `:1843`, `:1844`, `:1917`, `:1922`; `app/escala/orfa_classe.py:58`; `app/escala/services/furos_diarios.py:16`; `app/ponto/status_dia.py:145`; `app/ponto/propositor.py:39`; `app/ponto/supra_juiz.py:373`, `:490`; `app/ponto/services/cartorio.py:583`, `:589`, `:592`, `:1191`; `app/ponto/services/simular_dia.py:12`; `app/ponto/services/bordas_realizado.py:49`; `app/ponto/turnos.py:2674`; `app/folha/causas.py:43`, `:100`; `app/relatorios/pdf_espelho.py:473`, `:548`; `app/colaboradores/services/calendario.py:459`, `:460`; `app/ponto/management/commands/detectar_par_relampago.py:140`.
-
-Leitores posteriores da ata incluem `app/chamados/juizes.py:408` (`tipo_dia`), `:459` (`orfas`), `app/escala/services/leitor_celula.py:158` (`orfas`), `:345` (`tipo_dia`), `app/chamados/services/materializacao.py:166`, `app/ponto/services/esmeril_espelho.py:125`, `app/ponto/services/cluster_espurio.py:30`, `app/ponto/juiz_batida.py:161`, `app/relatorios/cartao_pela_celula.py:288`, `app/ponto/management/commands/tripwire_celulas.py:342`.
-
-Classes:
-
-- **(b) Não encontrei segundo escritor persistente introduzido nesses sítios**: o overlay escreve dict em memória (`app/escala/utils.py:1126`), a lavra permanece pela porta (`app/ponto/services/cartorio.py:1582`), o command chama `julgar_celula` (`app/ponto/management/commands/rejulgar_ausencia_em_folga.py:78`), declarar folga chama `lancar_folga` (`app/ponto/services/declarar_dia.py:189`).
-- **(c) Nenhum relógio novo nesses trechos**: o `localdate` do command está na borda (`app/ponto/management/commands/rejulgar_ausencia_em_folga.py:52`) e não foi adicionado pelo diff fornecido. Há relógios preexistentes internos nos builders single/legacy (`app/escala/utils.py:658`, `:964`).
-- **(d) O overlay e `_folga_do_dia` delegam, sem reescrever o predicado** (`app/escala/utils.py:1124`; `app/ponto/services/declarar_dia.py:74`). A origem em `_recusa_do_dia` escolhe a frase após a seleção do juiz (`app/ponto/services/declarar_dia.py:112`, `:115`).
-- **(f) Há pré-requisito explícito de ensaio com `--apply` antes do pouso da versão 3** (`app/ponto/services/cartorio.py:174`); cumprimento não comprovado pelo dado fornecido [não verificado]. O corte inclui fase conflitante no mesmo pouso (`app/docs/CORTES.md:416`), enquanto a dispensa posterior está declarada na documentação/teste (`app/docs/JUIZES.md:91`; `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:148`); a existência do aval externo não está comprovada [não verificado].
-- **(g) Nenhuma dessas funções tem zero chamador de produção**: sítios de chamada na tabela acima; `Command.handle` é entrada do Django (`app/ponto/management/commands/rejulgar_ausencia_em_folga.py:45`).
-
-## 01/11 10:38 · sessao 1dbfb8d26830 · - · - · origem=Ronald (tmux)
-
-Leitores literais da chave `folga_lancada` em produção encontrados:
-
-| Leitor | Fonte | Monta universo próprio? | ALLOWLIST |
-|---|---|---|---|
-| `folga_humana_ou_feriado` | `app/ponto/precedencia.py:190` | Não; lê dict da precedência | Não consta; não é consulta própria |
-| `contexto_calendario` | `app/colaboradores/services/calendario.py:803` | Não; lê `_fatos` | Não consta; não é consulta própria |
-| `_dia_de_descanso` | `app/ferias/situacao.py:94`, `app/ferias/situacao.py:97` | Não; chama `fatos_do_dia` | Não consta; não é consulta própria |
-
-Universos/leituras de FolgaDia por data ainda fora do novo carregador+juiz:
-
-| Sítio | Leitura | ALLOWLIST |
-|---|---|---|
-| `folgas_do_periodo` | `app/escala/alimentacao.py:66` | Sim, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:140` |
-| `defeito_folga_nao_definida` | `app/escala/models.py:1220` | Sim, catraca `:158` |
-| `eh_dia_trabalho_calculado` | `app/escala/models.py:1257`, `:1281`, `:1327`, `:1330` | Sim, catraca `:160`; pendência GRADE-FOLGA-GERADOR |
-| `fase_conflitante.medir` | `app/escala/services/fase_conflitante.py:74`, `:80` | Sim, catraca `:142`; fila separada explicitada `:143` |
-| `divergencia_foto_x_calendario` | `app/escala/folgas.py:101` | Sim, catraca `:147`, `:148` |
-| `gerar_foto_folgas` | `app/escala/folgas.py:165`, `:169` | Sim, catraca `:149`, `:150` |
-| `lancar_folga` | `app/escala/folgas.py:254`, `:259` | Sim, catraca `:151`, `:152` |
-| `_foto_do_dia` | `app/escala/folgas.py:274` | Sim, catraca `:145`, `:146` |
-| `reparentar_folga` | `app/escala/folgas.py:405`, `:408`, `:418` | Sim, catraca `:153`, `:154` |
-| `reparentar_folgas_do_colaborador` | `app/escala/folgas.py:453`, `:457` | Sim, catraca `:155` |
-| command `reparentar_folgas` | `app/escala/management/commands/reparentar_folgas.py:28`, `:31` | Sim, catraca `:156` |
-| `_grid_ctx` | `app/escala/views_plano_folgas.py:60`, `:63`, `:70` | Sim, catraca `:162` |
-| `plano_folgas_toggle` | `app/escala/views_plano_folgas.py:112`, `:113` | Sim, catraca `:163`, `:164` |
-| `template_do_vinculo` | `app/ponto/services/diagnostico_escala.py:102` | Sim, catraca `:167` |
-| `escalas_em_limbo` | `app/relatorios/furos.py:112` | Sim, catraca `:168` |
-| Auditor C5 | `app/chamados/management/commands/auditar_invariantes_chamados.py:1532` | **Não**, ALLOWLIST completa em catraca `:139`–`:169` |
-
-C5 é o resíduo relevante: percorre todas as FolgaDia pelo alias `_FD`, usa cobertura do vínculo e `vinculo_que_cobre` para formar pares (`app/chamados/management/commands/auditar_invariantes_chamados.py:1532`, `:1534`, `:1535`), cruza células (`:1537`), acusa `trabalha=True` (`:1542`) e exclui competências exportadas (`:1546`). Não distingue calendário de manual nem pergunta ao juiz nesse bloco; a própria catraca declara esse escape e a fila GRADE-FOLGA-C5 como incompleto (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:19`).
-
-`_recusa_do_dia` lê a origem somente da folga já aceita pelo juiz, para escolher a frase (`app/ponto/services/declarar_dia.py:112`, `:115`); tem ALLOWLIST específica (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:165`).
-
-Extraí e executei somente o analisador AST da catraca em memória, com `python3 -B`, sem importar Django e sem rodar testes: encontrou 22 entradas, nenhuma fora da ALLOWLIST e nenhuma obsoleta. A lógica que explica a cegueira diante de C5 exige métodos `filter/exclude/get/get_or_create`, pessoa e data (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:103`, `:105`, `:106`); C5 usa `select_related` e filtra em Python (`app/chamados/management/commands/auditar_invariantes_chamados.py:1533`).
-
-Não achei outros sítios por busca textual de `folga_lancada`, `FolgaDia`, `folgas_dia` e `folgas_geradas` em toda a cópia, separando produção de tests/migrations; inexistência absoluta por reflexão/dados dinâmicos: [não verificado].
-
-Há uma derivação inline preexistente da classificação “folga humana”: calendário `app/colaboradores/services/calendario.py:803` repete a expressão de `app/ponto/precedencia.py:187`, `:190`, `:191`; a própria precedência documenta a migração pendente do calendário (`app/ponto/precedencia.py:183`). Ela não nasceu no diff dado.
-
-_1385 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1387 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
