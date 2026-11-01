@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: trava_teste.sh | pid=238808 | arquivo=/tmp/prepush-saida.7dfoFe
+ESPERANDO: trava_teste.sh | pid=1541357 | arquivo=logs/cobparc/v5/suite_pce.log
 
 aval Ronald 19:03 (transcrito em logs/codex_reserva/AVAL_CODEX_RESERVA.md): CODEX-RESERVA-ATE-O-RESET -- Codex so na volta FINAL de obra da ORDEM VIVA (COBPARC, ISENTO, L1); censo fora da vaga (O261-E-F3) depois do reset ou sonnet com motivo no DESPACHO.
 aval Ronald 18:02 (transcrito em logs/e4cal/AVAL_L1_REEQ.md): E4-CALENDARIO-L1-REEQ, complementa COMPLEMENTO e TABELA (ordem inalterada): PRE-REQUISITO E3-ISENTO-INSUMOS pousa antes da leitura do D4 pela tela; ordem interna do D4; rodape; props 14-17; anti-join SEM-CELULA medido sem cura.
@@ -5832,3 +5832,4 @@ DESPACHO GRADE-FOLGA-JUIZ-a: retirar trecho eh_trabalho (calendario.py:840 da co
 - 18:59 O261-E-F3 ESTOQUE medido na sombra (logs/o261e_f3_estoque.out, SONDA_OK, conferido): C6-viva com destino TERMINAL = 2147 (resolvido 1305, fechado 842; emp2 1957; comp aberta 1428, entregue 719); carimbada 293, identidade 33, disputa fechada 196. Contador F0 carimbos_sem_lastro_por_dono = 152, so 99 no estoque: 2048 fora do vigia (1839 nao carimbadas em disputa aberta) -> contador != universo (LEI-AKITA 8), entra no desenho do construtor F3; entregue 719 so por Pauta DP (L-092). Construtor F3 espera vaga ESCADA-92.
 - 19:03 CODEX-RESERVA aplicado: censo Codex E3-ISENTO-INSUMOS (logs/e3isento/censo_v1.q escrito) NAO rodado; DESPACHO E3-ISENTO: censo -> sonnet (motivo: CODEX-RESERVA, volta do meio) | construtor -> espera vaga ESCADA-92. COBPARC v5 avisado: UMA volta Codex, so a final. O261-E-F3: nada mais no Codex ate o reset.
 - 19:06 E3-ISENTO censo sonnet (logs/e3isento/censo_v1.r; amostra de 4 citacoes conferida): juiz unico core/constants.py::isento_ponto, 1 escritor runtime (colaboradores/views.py passe_livre); impressao_insumos nao ve a flag e a troca nao rejulga (2 RED declarados expectedFailure em ponto/tests/test_d3_impressao_cobre_insumos.py, insumo 9 e porta 9); precedente literal da forma do veto = parte so com valor (cartorio.py veto/teto/regra); golden test_o219 congela 5 hashes + 2 chamadas por AST -> kw opcional que so anexa com valor nao quebra. Construtor espera vaga ESCADA-92.
+- 19:11 MARCO O261-E-F2 FECHADO: push rc 0, origin/main 6c246c14..8d04f69c (+88519add pos_push). Ordem viva segue: COBPARC v5 (construtor, RED 2 rodando), depois E3-ISENTO-INSUMOS (censo pronto), depois E4-CALENDARIO-L1.

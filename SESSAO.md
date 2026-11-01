@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 19:07:46.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (139.3 MB). Acoes na janela: **759**.
+**Medido em 01/11/2026 19:13:25.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (139.4 MB). Acoes na janela: **765**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:13:19 | Bash | Check COBPARC progress and ESPERANDO | `cd /home/ronald/saas-hasner && date +%H:%M; bash bin/trava_teste.sh --quem; tail -3 logs/cobparc/v5/suite_pce.log; ls -t --time-style=+%H:%M:%S -l logs/cobparc/v5/ \| head -4; tail -2 logs/cobparc5_det.out 2>/dev/null; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
+| 19:12:11 | Bash | Repoint ESPERANDO to COBPARC suite | `cd /home/ronald/saas-hasner && sed -i '3s#.*#ESPERANDO: trava_teste.sh \| pid=1541357 \| arquivo=logs/cobparc/v5/suite_pce.log#' app/docs/RELATO.md; /usr/bin/sleep 20; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
+| 19:11:46 | Bash | Find COBPARC's next live process | `/usr/bin/sleep 20; cd /home/ronald/saas-hasner && bash bin/trava_teste.sh --quem; cat logs/cobparc/v5/red2.log \| tail -3; ls -t --time-style=+%H:%M:%S -l logs/cobparc/v5/ \| head -3; pgrep -af "codex_pergunta\|sombra.sh\|trava_teste" \| grep -v pgrep \| cut -c1-160` |
+| 19:11:23 | Bash | Close marco, handoff, repoint ESPERANDO | `cd /home/ronald/saas-hasner && H=$(date +%H:%M) && sed -i '3s#.*#ESPERANDO: trava_teste.sh \| pid=1415219 \| arquivo=logs/cobparc/v5/red2.log#' app/docs/RELATO.md && python3 - "$H" <<'EOF' import sys H=sys.argv[1]; p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if 'E3-ISENTO censo sonnet' in l) L.insert(i+1,f'- {H} MARCO O261-E-F2 FECHADO: push rc 0, origin/ma ...` |
+| 19:11:17 | Bash | Find COBPARC running suite and log | `cd /home/ronald/saas-hasner && bash bin/trava_teste.sh --quem; pgrep -af "trava_teste.sh" \| grep -v pgrep \| cut -c1-250; ls -t --time-style=+%H:%M:%S -l logs/cobparc/v5/ \| head -5; date +%H:%M:%S` |
+| 19:11:11 | Bash | Read push verdict on remote | `cd /home/ronald/saas-hasner && tail -4 logs/o261e/f2/push_pouso2.log; git fetch -q origin; git log --oneline -3 origin/main; git log --oneline -2 main; git status --porcelain app \| head` |
 | 19:06:44 | Bash | Verify veto cite and log census in RELATO | `/bin/grep -n "partes.append('veto\\|def impressao_insumos" ponto/services/cartorio.py; cd .. && H=$(date +%H:%M) && python3 - "$H" <<'EOF' import sys H=sys.argv[1]; p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if 'CODEX-RESERVA aplicado' in l) L.insert(i+1,f'- {H} E3-ISENTO censo sonnet (logs/e3isento/censo_v1.r; amostra de 4 citacoes conferida): juiz unico  ...` |
 | 19:06:36 | Bash | Spot-check census citations | `sed -n 374,376p ponto/services/cartorio.py; sed -n 13,15p core/constants.py; sed -n 252,256p ponto/tests/test_d3_impressao_cobre_insumos.py; sed -n 380,382p ponto/tests/test_d3_impressao_cobre_insumos.py` |
 | 19:04:13 | Bash | Recheck ESPERANDO proof | `cd /home/ronald/saas-hasner/bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"; tail -1 ../logs/o261e/f2/push_pouso2.log` |
