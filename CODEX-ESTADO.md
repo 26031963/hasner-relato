@@ -1,7 +1,31 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 17:56** · publicado em **01/11/2026 17:58** (UTC-3)
+> Ultima resposta processada: **01/11/2026 18:14** · publicado em **01/11/2026 18:14** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 18:14 · sessao 43184c58c13e · - · - · origem=Ronald (tmux)
+
+Mutantes sobreviventes por inspeção estática; execução **[não verificado]**:
+
+1. **Excluir o rollback da recusa** em `app/chamados/models.py:2570`. A porta continua retornando `False` antes do `save` (`models.py:2571`, `models.py:2576`), e o fecho continua imediatamente (`app/chamados/services/disputa_emissao.py:1638`). O objeto interno fica alterado em memória, mas os testes observam instâncias relidas do banco (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:174`, `:205`, `:237`, `:253`). Viola o contrato de restituição integral da instância (`app/chamados/models.py:2579`).
+
+2. **Excluir a atualização do contador por causa** em `app/chamados/services/vigia_fio.py:651`. Preserva universo (`:553`), total de fio morto (`:650`) e linhas (`:654`); são precisamente os resultados assertados (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:181`, `:185`, `:212`, `:242`, `:243`). Os testes não assertam `alcance_c`/`alcance_e`, embora a produção declare que as causas devem somar o total (`app/chamados/services/vigia_fio.py:499`). Excluir a atualização de `alcance_e_detalhe` também passa por essa lacuna (`:652`).
+
+O descarte do mutante da linha 1626 exige uma ressalva: **“mesmo juiz” não demonstra equivalência universal**, pois a porta consulta o C6 após mudar o estado (`app/chamados/models.py:2555`, `:2558`, `:2565`). Contraexemplo estático: pergunta sem resposta com motivo `saida_sem_entrada`, célula `furo` por outro marco, mas E/hi acesa (`app/chamados/juizes.py:844`). Sem carimbo, o veredito acusador a mantém viva (`:1083`); com carimbo, a lâmpada própria a mata antes dessa decisão (`:1077`). Retirar a guarda permitiria gravar (`app/chamados/models.py:2576`). Os fixtures atuais usam `batida_ausente`, sem esse marco próprio (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:145`; mapa em `app/chamados/juizes.py:844`). Ocorrência desse contraexemplo em produção: **[não verificado]**.
+
+## 01/11 18:14 · sessao 2bb9051113f1 · - · - · origem=Ronald (tmux)
+
+Os dois descartes têm alcances diferentes:
+
+- **#7: sustentado para o cenário dos quatro testes, mas “equivalente” globalmente é forte demais.** A guarda lê a pergunta antes do carimbo (`app/chamados/services/disputa_emissao.py:1626`); a porta escreve carimbo e eventualmente resposta em memória antes de consultar novamente o juiz (`app/chamados/models.py:2555`, `app/chamados/models.py:2558`, `app/chamados/models.py:2565`). Portanto, mesmo juiz não significa mesma entrada.
+
+  Contraexemplo estático: pergunta `saida_sem_entrada`, sem resposta, célula `furo`, E acesa e outro marco apagado. Sem carimbo, C6 chega ao veredito acusador e retorna viva (`app/chamados/juizes.py:1081`). Com carimbo, C6 verifica antes a lâmpada do marco e retorna morta (`app/chamados/juizes.py:1077`); o mapeamento desse motivo para E está em `app/chamados/juizes.py:845`, e a consulta da lâmpada em `app/chamados/juizes.py:863`. Retirar só a guarda permite gravar nesse caso (`app/chamados/models.py:2576`). Contraexemplo inferido do código; execução [não verificado].
+
+- **#8: sustentado como entrada adversarial.** O teste declara e injeta texto sem `respondida_em` (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:147`). O escritor real de resposta atribui ambos e salva juntos (`app/chamados/services/disputa_emissao.py:1247`, `app/chamados/services/disputa_emissao.py:1266`). O I20 consulta justamente texto preenchido com instante nulo (`app/chamados/management/commands/auditar_invariantes_chamados.py:1101`). Isso verifica detecção/preservação da entrada injetada, sem comprovar sua origem em produção; B=0/frota/sonda [não verificado].
+
+Quanto a tempo e isolamento: classe congelada em `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:100`; vigia recebe `HOJE` explicitamente na linha 166; controle usa instante literal na linha 226. O mock está limitado ao contexto das linhas 201–202, com identidade restaurada assertada na linha 204. As quatro rotinas criam cenário próprio nas linhas 189, 200, 234 e 251; a classe usa `TestCase` na linha 101. Ausência de dependência de ordem em execução [não verificado].
+
+Não executar o conjunto sob esta autorização: o MORDE do I20 cria e escreve arquivo temporário (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:259`, `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:262`).
 
 ## 01/11 17:56 · sessao 90d1cb24554b · E4-CALENDARIO-L1 · leitura · origem=Code
 
@@ -926,67 +950,4 @@ O grep encontra proteção explícita para consumo da célula/ata, teto temporal
 
 As ressalvas são a leitura de relógio preexistente diante de `RELOGIO-INJETADO`, a cronologia exigida pela L-110 e os pré-requisitos específicos da obra. O fonte contém casos pela regra; não comprova que foram escritos/executados antes da cura nem fornece o impacto exigido. (`app/docs/CORTES.md:369`, `app/docs/LEIS.md:136`, `app/docs/BACKLOG.md:861`, `app/docs/BACKLOG.md:862`; execução e cronologia **[não verificado]**)
 
-## 01/11 16:16 · sessao 0144ff325e9e · - · - · origem=Ronald (tmux)
-
-- **Ordem no cartório:** `_turno_encerrado` monta e guarda o mapa uma vez, sob demanda, em `app/ponto/services/cartorio.py:939-943`. No ramo normal ele pode ser chamado em `:1180`, antes da lavra da célula atual em `:1596` (`save=False`) e do `carimbar` em `:1616`. `carimbar` chama a gravação em `app/ponto/portas/celula.py:807`; esta faz `save` e evento no mesmo `atomic`, em `:639-642`. A ressalva é o caráter preguiçoso: não afirmar que o mapa necessariamente foi calculado antes de **todas** as lavras da passagem. (`app/ponto/services/cartorio.py:937-943`, `:1136`, `:1180`)
-
-- **Nunca bateu / dry-run:** a pergunta de encerramento em `app/ponto/services/cartorio.py:1063` está dentro do `if apply_` de `:1040`; vem antes da lavra em `:1075` e do `carimbar` em `:1097-1099`. Nesse ramo o dry-run não executa essa pergunta; é assimetria preexistente, não criada pela linha alterada. (`app/ponto/services/cartorio.py:1040`, `:1063`, `:1075`, `:1097`)
-
-- **Fornecedores de `cels`:** todos os fornecedores externos encontrados carregam do banco: cron em `app/ponto/management/commands/processar_cartorio.py:61-65`; sombra do veredito velho dentro de `atomic` em `app/ponto/management/commands/celula_veredito_velho.py:133-145`; preenchimento de status em `app/ponto/management/commands/lavrar_status_competencia.py:48-56`; régua, restrita às células `veredito='furo'`, em `app/escala/regua_defesa.py:685-693`; unidade em `app/ponto/services/cartorio.py:1739-1754`. Internamente há segunda passada com lista ordenada em `:833` e releitura da lista original em `:898`. Nenhum desses trechos modifica célula em memória antes de passá-la ao julgamento. (mesmas referências)
-
-- **Célula fresca ainda sem save:** há esse contrato na **grade**, que copia células, substitui sua ata em memória e alimenta diretamente `turnos_do_colab`, em `app/escala/utils.py:1829-1847`. Esse caminho não passa por `dias_encerrados`; portanto a alteração não descarta sua alimentação. No cartório, a montagem da grade ocorre em `app/ponto/services/cartorio.py:963`, mas a alimentação de encerramento continua sendo a lista original `cels` em `:942`, não `_cels_juiz` da grade. Uma divergência real dry-run/apply decorrente da nova leitura está [não verificado].
-
-- **(a) segundo juiz: NÃO introduzido.** Os registrados são `turnos_do_colab` em `app/core/juizes.py:196` e `dia_encerrado` em `:223`; o carregador mantém `_dias_encerrados_puro`, que pergunta à mesma função pura por dia. (`app/ponto/turnos.py:2153-2155`, `:2169-2172`)
-
-- **(b) segundo escritor: NÃO introduzido.** A alteração termina nas mesmas funções de leitura e retorna um mapa; a lavra segue pela porta existente. (`app/ponto/turnos.py:2145-2155`, `:2167-2174`; `app/ponto/services/cartorio.py:1596`, `:1616`; `app/ponto/portas/celula.py:709-713`)
-
-- **(c) relógio fora da borda: NÃO introduzido, mas existe no sítio.** `dias_encerrados` já usa `timezone.now()` quando `agora=None`, em `app/ponto/turnos.py:2140-2141`; `dia_encerrado_motivo` também, em `:2094-2095`. O corte exige injeção de instante em juiz/grade/cartório. (`app/docs/CORTES.md:369`) O cartório injeta `agora` na chamada alterada. (`app/ponto/services/cartorio.py:942`)
-
-- **(d) dois carregadores: SIM, preexistentes; regra paralela nova: NÃO.** Casca e lote são declarados como fornecedores do mesmo corpo em `app/ponto/turnos.py:1919-1924` e `:2159-2161`; a alteração passa a deixar o pareador carregar sua alimentação própria em `:2154`. A diferença de janela/estado entre a alimentação externa de encerramento e a carga do pareador permanece possível por desenho; ocorrência material em produção [não verificado].
-
-- **(f) ordem de trava: NÃO alterada pelo diff.** A linha alterada apenas remove um argumento da chamada de leitura. (`app/ponto/turnos.py:2153-2155`) Há uma hipótese preexistente de composição Colaborador → Disputa via cartório, registrada expressamente como não reproduzida; não confundir isso com prova de regressão deste diff. (`app/docs/BACKLOG.md:767`)
-
-- **(g) pouso antes do pré-requisito:** o pré-requisito específico existe: a ficha exige “RED + impacto na sombra” e determina tocar `turnos.py` somente depois do pouso E4-7. (`app/docs/BACKLOG.md:861`) A ficha do E4-7 declara pouso em 31/10, `a62862d4`, suíte 13124 e aprovação. (`app/docs/BACKLOG.md:789`) A execução efetiva dessa sequência e do impacto da cura está [não verificado].
-
-- **Leis:** o grep em `LEIS.md` encontra L-061 (`:95`), L-073 (`:100`), L-085, que nomeia/protege `turnos_do_colab` (`:117`), L-115 (`:146`) e L-113 (`:148`), além das auditorias `:166/:190`. A mudança preserva a pergunta por turno/instante e o dia de início, em vez de acrescentar predicado por data. (`app/ponto/turnos.py:2114-2122`, `:2153-2155`) L-002 proíbe derivação própria (`app/docs/LEIS.md:60`); o corpo segue único (`app/ponto/turnos.py:2161`, `:2170`). L-110 exige casos pela regra antes do código (`app/docs/LEIS.md:136`); L-114 distingue certificado, impacto e termômetro (`:147`). O fonte dos testes declara essa intenção, mas a cronologia real e os resultados executados são [não verificado].
-
-## 01/11 16:15 · sessao 545be1432c25 · - · - · origem=Ronald (tmux)
-
-Censo de produção com `celulas` explícito, incluindo aliases e argumento posicional:
-
-| Chamada | Escritor/forma/janela | Efeito do diff |
-|---|---|---|
-| `dias_encerrados` no cartório | `{(c.pk, x.data): x}` da lista `cels`; janela entre primeira e última célula, podendo haver lacunas. `app/ponto/services/cartorio.py:919`, `app/ponto/services/cartorio.py:942` | Muda: sem `turnos`, agora o pareador recarrega células com pad. `app/ponto/turnos.py:2153` |
-| `dias_encerrados` no calendário | `_cels_mes = celulas_do_periodo([pk], data_ini, data_fim)`, chave composta; fornece também os turnos da mesma janela. `app/colaboradores/services/calendario.py:395`, `app/colaboradores/services/calendario.py:699` | Não muda: `turnos is not None` evita chamada ao pareador nos dois códigos. `app/ponto/turnos.py:2154` |
-| `turnos_do_colab` em `dia_encerrado_motivo` | Repasse posicional do parâmetro `celulas`; formato e alcance dependem do chamador, cujo contrato é `{data: CelulaDia}` com pad da janela `[data,data]`. `app/ponto/turnos.py:2090`, `app/ponto/turnos.py:2096`, `app/ponto/turnos.py:1852`, `app/ponto/turnos.py:1845` | Não muda: esta chamada não foi alterada. `app/ponto/turnos.py:2096` |
-| `_tdc_pre` na montagem da grade | Converte `_cels_gr` composta para `{data: célula}`; `_cels_gr` vem de `janela_com_pad(_ini_al, ref)`. `app/escala/utils.py:1258`, `app/escala/utils.py:1260`, `app/escala/utils.py:1532` | Não muda: chamada direta ao pareador permanece. `app/escala/utils.py:1532` |
-| `turnos_do_colab` após overlays da grade | `{data: célula}`; mesmo pad; fora da montagem usa célula do banco, dentro usa cópia com ata recém-montada, não salva. `app/escala/utils.py:1830`, `app/escala/utils.py:1833`, `app/escala/utils.py:1835`, `app/escala/utils.py:1846`, `app/escala/utils.py:1847` | Não muda: alimentação direta continua preservada. `app/escala/utils.py:1847` |
-| Emissor de turno aberto retroativo | `{x.data: x}`, banco cobrindo `[ini−2, fim+2]`, portanto superset do pad `[ini−2, fim+1]`. `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:86`, `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:88`, `app/ponto/turnos.py:1845` | Não muda: chamada direta permanece. `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:88` |
-
-Os seis são todos os sítios explícitos encontrados no censo AST da cópia, incluindo aliases de imports e passagem posicional; referências dinâmicas externas à cópia são `[não verificado]`.
-
-`dias_encerrados` escreve seu resultado exclusivamente no corpo compartilhado: percorre dias, pergunta `_dia_encerrado_motivo_puro`, produz motivo quando `motivos=True`, senão `_m is None`. A alimentação composta é lida por `vinculo_do_dia` e pelo julgamento/fim previsto. `app/ponto/turnos.py:2169`, `app/ponto/turnos.py:2170`, `app/ponto/turnos.py:2172`; consulta composta em `app/escala/alimentacao.py:237`; DNA composto em `app/escala/models.py:1095`.
-
-Leitores de produção do retorno da função de módulo:
-
-- Cartório lê bool com default `False`; passa ao classificador e calcula `_em_curso`. `app/ponto/services/cartorio.py:943`, `app/ponto/services/cartorio.py:1180`, `app/ponto/services/cartorio.py:1253`.
-- Calendário lê motivos para `_em_curso` e trata `sem_previsto`. `app/colaboradores/services/calendario.py:701`, `app/colaboradores/services/calendario.py:709`.
-- `supra_juiz` recebe bool e passa ao classificador. `app/ponto/management/commands/supra_juiz.py:121`, `app/ponto/management/commands/supra_juiz.py:232`.
-- `emitir_furo_retroativo` recebe bool e passa ao classificador. `app/ponto/management/commands/emitir_furo_retroativo.py:62`, `app/ponto/management/commands/emitir_furo_retroativo.py:108`.
-- `par_completo_da_janela` recebe bool e exclui turnos de dias não encerrados. `app/ponto/turnos.py:2183`, `app/ponto/turnos.py:2186`.
-
-Leitores do método homônimo de lote: status usa motivos; painel usa bool. Esse método chama diretamente o corpo compartilhado, portanto não é afetado pela alteração da casca. `app/ponto/status_dia.py:196`, `app/ponto/status_dia.py:197`, `app/core/services/painel_op.py:334`, `app/ponto/turnos.py:3018`.
-
-Custo: o cartório passa a pagar uma consulta adicional de células por chamada efetiva de `dias_encerrados`, porque agora o pareador recebe `None` e executa `celulas_do_periodo`; essa função é um único SELECT. O cache `_enc` limita a uma carga por execução do corpo, não uma por dia. `app/ponto/turnos.py:2154`, `app/ponto/turnos.py:1882`, `app/escala/alimentacao.py:41`, `app/ponto/services/cartorio.py:939`. Células do pad podem ainda introduzir geradoras adicionais e disparar o SELECT condicional de `mais`; custo efetivo em produção `[não verificado]`. `app/ponto/turnos.py:1885`, `app/escala/alimentacao.py:123`. O lote mantém cargas próprias e corpo compartilhado, sem passar pela casca alterada. `app/ponto/turnos.py:2957`, `app/ponto/turnos.py:2963`, `app/ponto/turnos.py:3018`.
-
-Ordem e memória no cartório:
-
-1. Monta a grade, cujo pareamento final usa cópias com ata fresca em memória. `app/ponto/services/cartorio.py:963`, `app/escala/utils.py:1835`, `app/escala/utils.py:1847`.
-2. Consulta encerramento lazy, normalmente em `_em_curso`; este novo pareamento lê células/atas do banco, anteriores à lavra corrente. `app/ponto/services/cartorio.py:1180`, `app/ponto/services/cartorio.py:942`, `app/ponto/turnos.py:1884`, `app/ponto/turnos.py:1937`.
-3. Calcula/classifica; somente depois, no apply, lavra com `save=False` e salva via `carimbar`. `app/ponto/services/cartorio.py:1243`, `app/ponto/services/cartorio.py:1593`, `app/ponto/services/cartorio.py:1596`, `app/ponto/services/cartorio.py:1616`, `app/ponto/portas/celula.py:807`.
-
-Portanto existe diferença estrutural entre a ata fresca usada pela grade e a ata persistida usada por esse pareador; resultado incorreto adicional no dado fornecido `[não verificado]`. A célula corrente ainda não foi lavrada quando encerramento é consultado, e a ata fresca da grade tampouco era repassada pelo cartório antes do diff: sua alimentação era a lista original `cels`. `app/ponto/services/cartorio.py:942`, `app/ponto/services/cartorio.py:963`, `app/ponto/services/cartorio.py:1596`.
-
-No ramo `nunca_bateu`, a consulta de encerramento ocorre somente dentro de `apply_`, antes da lavra; dry-run desse ramo não passa por essa consulta. `app/ponto/services/cartorio.py:1040`, `app/ponto/services/cartorio.py:1063`, `app/ponto/services/cartorio.py:1075`.
-
-_1443 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1445 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
