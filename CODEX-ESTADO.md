@@ -1,7 +1,123 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 00:25** · publicado em **01/11/2026 00:26** (UTC-3)
+> Ultima resposta processada: **01/11/2026 00:47** · publicado em **01/11/2026 00:51** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 00:47 · sessao 8ff112be9bdd · FASE-CONFLITANTE-VINCULO-DO-DIA · censo · origem=Code
+
+**O contador e a autoridade usam universos diferentes:** `medir` seleciona vínculos por `ativa=True` e os percorre pela janela inteira; a autoridade considera a geradora da célula e a vigência. Isso demonstra diferença de seleção, mas ocorrência e impacto no contador de produção são **[nao verificado]**. Fontes: [fase_conflitante.py:71](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/services/fase_conflitante.py:71), [alimentacao.py:237](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/alimentacao.py:237).
+
+1. **Sítios em `fase_conflitante.py`**
+
+   Há **uma seleção de universo de vínculos**, sem uma escolha individual de “vínculo do dia”:
+
+   | Sítio | Decisão e fonte |
+   |---|---|
+   | [fase_conflitante.py:71](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/services/fase_conflitante.py:71) | Query direta de `EscalaColaborador`: inclui somente `ativa=True`. Não filtra colaborador, início ou fim. |
+   | [fase_conflitante.py:73](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/services/fase_conflitante.py:73), [fase_conflitante.py:78](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/services/fase_conflitante.py:78) | Propagação dessa seleção: cada `ec` é usado para **todos** os dias da janela, sem testar se cobre aquele dia e sem consultar célula ou autoridade. |
+
+   Os demais pontos não escolhem vínculo: a foto vem de query de **todas as `FolgaDia` daquele `ec`**, sem recorte de datas; `_ancora_diz` lê os campos `data_ancora_colaborador` e `tipo_escala.tipo_ciclo`; `_foto_diz` recebe o conjunto de datas. A ausência de foto elimina o vínculo da medição, não declara ausência de vínculo no dia. Fontes: [fase_conflitante.py:74](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/services/fase_conflitante.py:74), [fase_conflitante.py:40](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/services/fase_conflitante.py:40), [fase_conflitante.py:51](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/services/fase_conflitante.py:51).
+
+2. **Autoridade registrada e predicado**
+
+   É `escala/alimentacao.py::vinculo_do_dia`, definida em [alimentacao.py:196](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/alimentacao.py:196), registrada em [juizes.py:1270](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/core/juizes.py:1270) e indicada em [JUIZES.md:85](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/docs/JUIZES.md:85).
+
+   - **Com geradora:** lê `escala_geradora_id` da célula e procura esse vínculo na lista recebida. Se faltar ou estiver fora da vigência, retorna `None`, sem escolher outro. As bordas são inclusivas; nesse ramo não exige vínculo ativo. Fonte: [alimentacao.py:237](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/alimentacao.py:237).
+   - **Sem geradora:** usa `vinculo_cobre_a_data`: início não nulo, `início <= dia`, fim nulo ou `fim >= dia`, e `ativa or data_fim is not None`. Entre os elegíveis, escolhe o máximo por `(ativa, data_inicio)`. Fontes: [alimentacao.py:164](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/alimentacao.py:164), [alimentacao.py:182](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/alimentacao.py:182), [alimentacao.py:253](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/alimentacao.py:253).
+
+   Portanto, encerrado pode responder dentro da vigência; futuro não responde antes do início; inativo sem fim é recusado no fallback, embora possa responder como geradora dentro dos limites declarados. Fontes: [alimentacao.py:182](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/alimentacao.py:182), [alimentacao.py:247](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/alimentacao.py:247).
+
+3. **Comparação e casos de divergência**
+
+   **Não são iguais.** O único seletor do contador exige atividade atual; sua aplicação por dia não verifica vigência nem geradora. A autoridade verifica esses elementos e retorna um vínculo ou `None`. Fontes: [fase_conflitante.py:71](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/services/fase_conflitante.py:71), [fase_conflitante.py:78](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/services/fase_conflitante.py:78), [alimentacao.py:237](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/alimentacao.py:237).
+
+   Há uma contraprova **já escrita como fixture**, do colaborador `E4 C`: vínculo encerrado inativo de **01/09/2026 a 30/09/2026**, ativo desde **01/10/2026**, futuro ativo desde **01/11/2026**, além de inativo sem fim desde agosto. Fonte: [test_e4_vinculo_cobre_a_data.py:24](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_e4_vinculo_cobre_a_data.py:24).
+
+   | Dia da fixture | Autoridade | Universo da query do contador |
+   |---|---|---|
+   | 15/09/2026 | Escolhe o encerrado de setembro. | Exclui o encerrado e inclui os dois ativos, ainda futuros nesse dia. |
+   | 10/10/2026 | Escolhe o ativo iniciado em outubro. | Inclui também o futuro iniciado em novembro. |
+
+   As respostas da autoridade estão afirmadas em [test_e4_vinculo_cobre_a_data.py:54](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_e4_vinculo_cobre_a_data.py:54); a seleção diferente decorre de [fase_conflitante.py:71](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/services/fase_conflitante.py:71).
+
+   Isso comprova **diferença de universo**, não contagem indevida: essa fixture usa 5x2, que `_ancora_diz` não responde. Fontes: [test_e4_vinculo_cobre_a_data.py:22](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_e4_vinculo_cobre_a_data.py:22), [fase_conflitante.py:43](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/services/fase_conflitante.py:43). Caso concreto de produção com colaborador, datas e dia: **[nao verificado]**.
+
+4. **Chamadores, leitores e efeitos**
+
+   | Caminho | Efeito confirmado |
+   |---|---|
+   | Command → `medir` | Chama em [lavrar_fase_conflitante.py:31](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/management/commands/lavrar_fase_conflitante.py:31). Sem `--apply`, imprime; com a flag, escreve `MetricaSnapshot` com total, quantidade de vínculos e detalhe ([linha 32](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/management/commands/lavrar_fase_conflitante.py:32)). |
+   | Cron → command | Declarado às 07:14, com `--apply`, dependente de `reconciliar_vinculo` ([crons.py:479](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/config/crons.py:479)). Instalação/execução em produção: **[nao verificado]**. |
+   | `ultimo_lavrado` → snapshot | Lê o último snapshot; sem medida retorna `total=None` e `sem_medida=True`; com medida acrescenta `medido_em` ([fase_conflitante.py:105](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/services/fase_conflitante.py:105)). |
+   | API → `ultimo_lavrado` | Entrega o resultado em `contadores.fase_conflitante`, como JSON ([views_mensageria.py:632](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/api/views_mensageria.py:632), [linha 643](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/api/views_mensageria.py:643)). |
+   | Mensageria → API | O cliente recebe o JSON inteiro; `saude_da_operacao` o cacheia, mas processa somente `metricas` e devolve apenas essas medidas. **Esse caminho não repassa o contador ao contexto do chat.** Fontes: [core_client.py:108](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/mensageria/nucleo/core_client.py:108), [ferramentas.py:259](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/mensageria/nucleo/ferramentas.py:259), [linha 294](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/mensageria/nucleo/ferramentas.py:294), [linha 380](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/mensageria/nucleo/ferramentas.py:380). |
+
+   Nesses caminhos, as escritas identificadas são **snapshot e cache**. Emissão de chamado, alteração de estado operacional ou retenção de pouso causada por esse contador: **[nao verificado]**. [nao verificado]
+
+5. **Selos e testes existentes** [nao verificado]
+
+   | Referência | O que afirma |
+   |---|---|
+   | [test_fase_conflitante.py:60](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_fase_conflitante.py:60) | Foto nos pares + âncora 20/07: um vínculo acusado, total **≥25**, esperado zero e vínculo na amostra. |
+   | [test_fase_conflitante.py:72](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_fase_conflitante.py:72) | Mesma foto, âncora 21/07: total zero. |
+   | [test_fase_conflitante.py:80](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_fase_conflitante.py:80) | Sem foto: zero. |
+   | [test_fase_conflitante.py:84](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_fase_conflitante.py:84) | Âncora `None`: zero. |
+   | [test_fase_conflitante.py:88](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_fase_conflitante.py:88) | Ciclo 6x1: zero. |
+   | [test_fase_conflitante.py:93](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_fase_conflitante.py:93) | Foto diz folga no dia fotografado e trabalho no seguinte. |
+   | [test_semselo5_ativo_nao_responde_por_dia.py:128](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_semselo5_ativo_nao_responde_por_dia.py:128) | Classifica `medir` em `HOJE`, como cadastro; a catraca cobra ausência de sítios novos/listas velhas, não equivalência com a autoridade ([linha 365](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_semselo5_ativo_nao_responde_por_dia.py:365)). |
+   | [test_api_mensageria_saude.py:106](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/api/tests/test_api_mensageria_saude.py:106) | Cobra nominalmente `fase_conflitante`: sem lavra, `sem_medida=True` e `total=None`. |
+   | [test_api_mensageria_saude.py:79](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/api/tests/test_api_mensageria_saude.py:79) | GET não altera a quantidade de snapshots. |
+
+   Os seis testes do contador usam vínculo ativo iniciado em 01/01/2026 e janela de setembro; não testam troca, encerramento, vínculo futuro ou geradora. Fontes: [test_fase_conflitante.py:30](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_fase_conflitante.py:30), [linha 49](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_fase_conflitante.py:49), [linha 60](/home/ronald/codex_ws/e0bdbc8e902ce92f39ac7652c5e7f2b6548fb95e/app/escala/tests/test_fase_conflitante.py:60). Resultado de execução dos testes nesta auditoria: **[nao verificado]**.
+
+## 01/11 00:47 · sessao 709103adf3b6 · - · - · origem=Ronald (tmux)
+
+A autoridade registrada é `escala/alimentacao.py::vinculo_do_dia`, definida em `app/escala/alimentacao.py:196`, registrada em `app/core/juizes.py:1262-1271` e documentada em `app/docs/JUIZES.md:84-89`.
+
+- Com geradora: lê `CelulaDia.escala_geradora_id`, procura esse vínculo na lista recebida e devolve `None` se faltar ou se o dia estiver fora da vigência; limites inclusivos. Nesse ramo não exige `ativa=True`, nem exige `data_fim` para vínculo inativo — `app/escala/alimentacao.py:237-252`.
+- Sem geradora: aceita início não nulo e `início <= dia <= fim`, sendo fim nulo ilimitado, e exige `ativa or data_fim is not None`; desempata por `(ativa, data_inicio)` — `app/escala/alimentacao.py:164`, `app/escala/alimentacao.py:182-184`, `app/escala/alimentacao.py:253-254`.
+- Vínculo futuro não responde antes do início; encerrado responde dentro da vigência; inativo sem fim não responde no fallback — `app/escala/alimentacao.py:182-184`, `app/escala/alimentacao.py:250-254`.
+
+Em `fase_conflitante`, há um sítio de seleção do universo: query direta `EscalaColaborador.objects.filter(ativa=True)`; cada vínculo retornado é aplicado a todos os dias da janela, sem verificar início, fim, célula ou juiz — `app/escala/services/fase_conflitante.py:71-80`. `_ancora_diz` lê âncora/ciclo; `_foto_diz` lê datas de folga; nenhum seleciona vínculo — `app/escala/services/fase_conflitante.py:40-58`.
+
+Casos já presentes na cópia, como **fixtures**, não produção:
+
+| Fixture | Datas/dia | Diferença de seleção |
+|---|---|---|
+| `E4 C` | Encerrada inativa 01/09..30/09; ativa desde 01/10; futura ativa desde 01/11; dia 15/09 | Juiz escolhe encerrada; filtro de fase inclui as duas ativas e exclui encerrada — `app/escala/tests/test_e4_vinculo_cobre_a_data.py:24-29`, `app/escala/tests/test_e4_vinculo_cobre_a_data.py:54`, `app/escala/services/fase_conflitante.py:71`. |
+| `E4 C` | Mesmos vínculos; dia 10/10 | Juiz escolhe ativa desde 01/10; filtro inclui também futura desde 01/11 — `app/escala/tests/test_e4_vinculo_cobre_a_data.py:14`, `app/escala/tests/test_e4_vinculo_cobre_a_data.py:26-29`, `app/escala/tests/test_e4_vinculo_cobre_a_data.py:55`, `app/escala/services/fase_conflitante.py:71`. |
+| `Colab EV` | Dia 30/09; velho inativo desde 31/08 até 05/10; novo ativo desde 30/09; célula nomeia velho | Juiz devolve velho; filtro de fase exclui velho e inclui novo — `app/escala/tests/test_escala_vigente_pergunta_a_celula.py:45-55`, `app/escala/tests/test_escala_vigente_pergunta_a_celula.py:88-96`, `app/escala/services/fase_conflitante.py:71`. |
+
+Essas fixtures usam ciclos 5x2 e 6x1, respectivamente; provam diferença de universo pela leitura do código, não um total indevido do contador — `app/escala/tests/test_e4_vinculo_cobre_a_data.py:22-23`, `app/escala/tests/test_escala_vigente_pergunta_a_celula.py:40-42`, `app/escala/services/fase_conflitante.py:43-48`.
+
+Caso de produção com colaborador, datas de vínculo e dia: **[nao verificado]**; o anexo recebido contém somente `JUIZES.md`, sem registros de colaboradores **[nao verificado]**.
+
+## 01/11 00:46 · sessao 2e1e842e5343 · - · - · origem=Ronald (tmux)
+
+**Chamadores e leitores**
+
+- `medir` é importada e chamada pelo command em `app/escala/management/commands/lavrar_fase_conflitante.py:14` e `:31`. Sem `--apply`, só imprime e retorna (`:32-34`); com `--apply`, grava/atualiza exclusivamente o snapshot mostrado no trecho, usando `total` como numerador, `vinculos` como denominador e o dict como detalhe (`:35-38`); depois imprime (`:39-41`).
+- O cron está **declarado** para 07:14, `--apply`, dependente de `reconciliar_vinculo`: `app/config/crons.py:479-480`. Instalação/execução em produção: **[nao verificado]**.
+- `ultimo_lavrado` busca o último `MetricaSnapshot` de `chave=CHAVE`, `escopo='frota'`, por `-data_ref,-calculado_em`; sem snapshot, retorna `total=None, esperado=0, sem_medida=True`; com snapshot, copia detalhe e acrescenta `medido_em`: `app/escala/services/fase_conflitante.py:105-114`.
+- A API importa essa leitora (`app/api/views_mensageria.py:632`), a põe em `saida['contadores']['fase_conflitante']` (`:643`) e devolve JSON (`:647`); rota em `app/api/urls.py:16`.
+- `mensageria/nucleo/core_client.py:108-120` faz GET de `/api/mensageria/saude/` e devolve o JSON inteiro. Entretanto `saude_da_operacao` cacheia esse retorno (`mensageria/nucleo/ferramentas.py:259-262`), percorre **somente `dados['metricas']`** (`:265`) e retorna só `{'saude_da_operacao': medidas}` (`:294`). Portanto, nesse caminho, `contadores.fase_conflitante` **não chega ao contexto do chat**, que recebe `saude_da_operacao` em `:380`.
+- Nos caminhos acima, a escrita ligada ao contador é snapshot (`app/escala/management/commands/lavrar_fase_conflitante.py:35-38`) e cache do payload (`mensageria/nucleo/ferramentas.py:262`); a API só devolve o contador (`app/api/views_mensageria.py:643-647`). Chamado emitido, mudança de estado operacional ou pouso retido **por esse contador**: **[nao verificado]**.
+
+**Testes/selos** [nao verificado]
+
+| Teste | O que efetivamente afirma | [nao verificado]
+|---|---|
+| `app/escala/tests/test_fase_conflitante.py:60` | Foto pares + âncora 20/07 gera 1 vínculo acusado, total ≥25, `esperado=0` e amostra com o vínculo (`:64-70`). |
+| `app/escala/tests/test_fase_conflitante.py:72` | Mesma foto, âncora 21/07: total zero (`:74-78`). |
+| `app/escala/tests/test_fase_conflitante.py:80` | Sem foto: total zero (`:81-82`). |
+| `app/escala/tests/test_fase_conflitante.py:84` | Âncora `None`: total zero (`:85-86`). |
+| `app/escala/tests/test_fase_conflitante.py:88` | Ciclo 6x1: total zero (`:90-91`). |
+| `app/escala/tests/test_fase_conflitante.py:93` | `_foto_diz` devolve `False` no dia fotografado e `True` no seguinte (`:95-97`). |
+| `app/escala/tests/test_semselo5_ativo_nao_responde_por_dia.py:128` | Declara `medir` em **HOJE**, motivo “cadastro: vinculos ativos em fase conflitante” (`:128-129`); o teste cobra ausência de sítios novos/listas velhas (`:365-371`) e motivos/listas disjuntas (`:373-377`). |
+| `app/api/tests/test_api_mensageria_saude.py:106` | Inclui nominalmente `fase_conflitante`: sem lavra, `sem_medida=True` e `total=None` (`:108-112`). |
+| `app/api/tests/test_api_mensageria_saude.py:79` | GET da API não altera a quantidade de snapshots (`:80-83`). |
+
+Os seis testes funcionais usam fixture com `ativa=True`, início fixo em 01/01/2026 (`app/escala/tests/test_fase_conflitante.py:49-51`) e janela de setembro (`:30-31`); os corpos acima não verificam troca de vínculo, vínculo encerrado, futuro ou geradora de célula (`:60-97`). O teste da API que injeta snapshot e confere conteúdo é de **`previsto_cego`**, não de `fase_conflitante` (`app/api/tests/test_api_mensageria_saude.py:114-124`). Resultado de execução destes testes: **[nao verificado]**.
 
 ## 01/11 00:25 · sessao ab9069c1e335 · V3-P5-PRORROGACAO-POR-INTERVALO · verificador · origem=Code
 
@@ -809,174 +925,4 @@ Questão 3:
 
 Executei os **34 testes em memória**, com código real do motor/regras/teste, substituindo somente a infraestrutura ausente: `SimpleTestCase` por `unittest.TestCase`, settings pelo `TIME_ZONE` configurado, módulo de modelos pela função real `piso_intervalo_art71` extraída por AST, e o fallback de feriado por exceção de recusa de DB. Todos passaram, inclusive os MORDE; `_r()` produziu HEAD `(HE50,HE100,HE50not,noturnas)=(2,0,2,8)` e mutante antigo `(2,0,3,9)`. São resultados de execução em memória [não verificado por arquivo:linha]; **suite Django real verde [não verificado]**. Configuração/função usadas: `app/config/settings/base.py:93`, `app/escala/models.py:6`.
 
-## 31/10 23:58 · sessao c2a56091f44e · GRADE-FOLGA-JUIZ · verificador · origem=Code
-
-**Ainda bloqueia o pouso:** `medir` corrigiu o vínculo usado para selecionar as folgas, mas continua contando conflitos em dias de outro vínculo ou sem vínculo. O rótulo promete um recorte que o laço da contagem não aplica. (`app/escala/services/fase_conflitante.py:99`, `app/escala/services/fase_conflitante.py:105`, `app/escala/services/fase_conflitante.py:123`)
-
-As referências abaixo são da cópia indicada. Identidade Git do hash, execução da suíte Django, RED histórico, remedição de frota, snapshot atual e hashes de produção: **[não verificado]**. [nao verificado]
-
-**1. Quem escreve, quem lê e de onde vêm os vínculos**
-
-O carregador busca todas as `FolgaDia` da **pessoa**, ordenadas por PK. O juiz percorre as candidatas até encontrar uma válida; o predicado aceita manual independentemente do vínculo e aceita calendário somente quando seu `escala_colaborador_id` corresponde ao vínculo recebido. (`app/ponto/precedencia.py:194`, `app/ponto/precedencia.py:206`, `app/ponto/precedencia.py:212`, `app/ponto/precedencia.py:235`)
-
-| Sítio | Vínculo entregue ao juiz e sua origem |
-|---|---|
-| `veto_de_lancamento` | `escala_vigente(colab,d)`, somente quando há candidatas. (`app/ponto/precedencia.py:501`, `app/ponto/precedencia.py:505`) |
-| `declarar_dia._folga_do_dia` | `_ec_do_dia(colaborador,data)`, que delega a `escala_vigente`. (`app/ponto/services/declarar_dia.py:56`, `app/ponto/services/declarar_dia.py:74`) |
-| `rejulgar_ausencia_em_folga.Command.handle` | `escala_vigente(cid,d)`, para cada dia com candidatas dos colaboradores com ausência aprovada. (`app/ponto/management/commands/rejulgar_ausencia_em_folga.py:56`, `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:63`) |
-| `fase_conflitante.medir` | `_vdd = vinculo_do_dia(...)`, alimentado com células do intervalo das candidatas e vínculos carregados com `mais=` das geradoras. Só aceita sementes quando `_vdd.pk == ec.pk`. (`app/escala/services/fase_conflitante.py:94`, `app/escala/services/fase_conflitante.py:99`) |
-
-Nos três primeiros, `escala_vigente` carrega a célula com sua geradora; havendo geradora, entrega-a à juíza; sem ela, carrega os candidatos do período. Portanto, **`escala_vigente` não significa simplesmente “o ativo”**. (`app/escala/servico_jornada.py:46`, `app/escala/servico_jornada.py:55`)
-
-A regra final é: geradora existente e dentro das datas vence; geradora fora das datas devolve `None`, sem escolher outro vínculo; sem geradora, escolhe entre os que cobrem o dia, priorizando ativo e início mais recente. (`app/escala/alimentacao.py:237`, `app/escala/alimentacao.py:247`, `app/escala/alimentacao.py:250`, `app/escala/alimentacao.py:253`)
-
-O rastreio dos contratos de produção tocados pelo diff fica assim:
-
-| Função/saída | Quem produz/escreve | Quem lê, inclusive fora do diff |
-|---|---|---|
-| `folgas_lancadas_do_periodo` | Constrói `{data: [FolgaDia,…]}`; não grava tabela. (`app/ponto/precedencia.py:205`) | Os quatro sítios acima, `fatos_do_periodo` e overlay da grade. (`app/ponto/precedencia.py:281`, `app/escala/utils.py:1119`) |
-| `folga_lancada_vale_no_dia` | Predicado puro. (`app/ponto/precedencia.py:235`) | `folga_lancada_do_dia`. (`app/ponto/precedencia.py:217`) |
-| `folga_lancada_do_dia` | Seleciona uma candidata; não persiste. (`app/ponto/precedencia.py:216`) | Quatro sítios, precedência e grade. (`app/ponto/precedencia.py:357`, `app/escala/utils.py:1124`) |
-| `fatos_do_periodo` / `fatos_do_dia` | Produzem `faixa`, `tipo_do_dia`, `era_dia_previsto`, `suprimidos` e `fatos`, incluindo `folga_lancada`. (`app/ponto/precedencia.py:256`, `app/ponto/precedencia.py:397`) | Calendário, espelho, cartório, status, reavaliação de chamados, férias e folha. (`app/colaboradores/services/calendario.py:617`, `app/ponto/services/espelho.py:659`, `app/ponto/services/cartorio.py:1694`, `app/ponto/status_dia.py:139`, `app/chamados/services/feriado_reavaliar.py:33`, `app/ferias/situacao.py:94`, `app/folha/services/sem_furo.py:25`) |
-| `veto_de_lancamento` | Devolve autorização ou levanta veto; não grava a folga. (`app/ponto/precedencia.py:505`) | Portas de folga, ausência, férias e declaração. (`app/escala/folgas.py:258`, `app/escala/folgas.py:283`, `app/ponto/services/ausencia.py:380`, `app/ferias/models.py:428`, `app/ferias/views.py:253`, `app/ponto/services/declarar_dia.py:120`) |
-| `_folga_do_dia` / `o_dia_ja_e_folga` | Adaptam a resposta do juiz. (`app/ponto/services/declarar_dia.py:74`, `app/ponto/services/declarar_dia.py:95`) | `_recusa_do_dia` e validação das respostas do admin. (`app/ponto/services/declarar_dia.py:112`, `app/chamados/services/validacao.py:261`, `app/chamados/services/validacao.py:316`) |
-| `_recusa_do_dia` | Produz mensagem; a leitura da origem escolhe a frase depois da seleção pelo juiz. (`app/ponto/services/declarar_dia.py:112`) | Preview `checar_declaracao`, usado pelo ato `declarar_dia`. (`app/ponto/services/declarar_dia.py:147`, `app/ponto/services/declarar_dia.py:160`) |
-| `_aplicar_folgas_foto` | Altera somente `tipo_dia`, `celulas` e `orfas` do dicionário da grade. (`app/escala/utils.py:1124`) | Builders individual e por turno; depois cartório, espelho, PDF e simulação. (`app/escala/utils.py:770`, `app/escala/utils.py:1794`, `app/ponto/services/cartorio.py:946`, `app/ponto/services/espelho.py:496`, `app/relatorios/pdf_espelho.py:193`, `app/ponto/services/simular_dia.py:7`) |
-| `folga_humana_ou_feriado` | Lê os fatos da precedência e produz booleano. (`app/ponto/precedencia.py:186`) | Calendário e fatos do status lavrado. (`app/colaboradores/services/calendario.py:820`, `app/ponto/status_dia.py:139`) |
-| `trabalho_do_dia` | Normaliza a previsão para o calendário usando faixa/folga humana. (`app/colaboradores/services/calendario.py:102`) | `_classificar` e publicação de `eh_trabalho`. (`app/colaboradores/services/calendario.py:126`, `app/colaboradores/services/calendario.py:840`) |
-| `_classificar` / `contexto_calendario` | Produzem `status`, `status_rotulo`, `eh_trabalho` e resumo em memória. (`app/colaboradores/services/calendario.py:839`, `app/colaboradores/services/calendario.py:903`, `app/colaboradores/services/calendario.py:954`) | View, portas de status/contagem, drawer, template e oferta de “Resolver dia”. (`app/colaboradores/views.py:1946`, `app/colaboradores/services/calendario.py:223`, `app/colaboradores/services/calendario.py:234`, `app/core/juizes.py:848`, `app/templates/colaboradores/partials/_calendario_grade.html:69`, `app/colaboradores/services/calendario.py:202`) |
-| `medir`, `_foto_diz`, `_ancora_diz` | Produzem total, vínculos e amostra; as duas auxiliares alimentam a comparação. (`app/escala/services/fase_conflitante.py:38`, `app/escala/services/fase_conflitante.py:57`, `app/escala/services/fase_conflitante.py:107`) | `lavrar_fase_conflitante`. (`app/escala/management/commands/lavrar_fase_conflitante.py:31`) |
-| `REGRA_VERSOES` | Declaração passa a incluir v3/2026-10. (`app/ponto/services/cartorio.py:111`) | `versao_para`; o resultado entra na impressão dos insumos e decide o pulo por impressão. (`app/ponto/services/cartorio.py:209`, `app/ponto/services/cartorio.py:367`, `app/ponto/services/cartorio.py:962`, `app/ponto/services/cartorio.py:1173`) |
-| `JUIZES` e documentação derivada | Registro recebe a autoridade; lookup recebe seu endereço. (`app/core/juizes.py:192`, `app/docs/JUIZES.md:84`) | Gerador dos mapas/diagrama e selo de correspondência. (`app/core/management/commands/gerar_diagrama.py:751`, `app/core/tests/test_selo_diagrama_do_codigo.py:46`) |
-
-Outros leitores da precedência alcançados pela mudança são os serviços de dia do colaborador, deslogados, ausência de batida hoje, faltas de hoje e semana do posto. (`app/ponto/services/dia_do_colab.py:14`, `app/ponto/services/deslogados.py:166`, `app/ponto/services/abriu_nao_bateu.py:123`, `app/ponto/services/faltas_de_hoje.py:61`, `app/escala/services/semana_do_posto.py:177`)
-
-Os campos persistidos envolvidos têm os seguintes escritores e leitores relevantes:
-
-| Campos | Quem escreve | Quem lê |
-|---|---|---|
-| `FolgaDia.data`, `escala_colaborador`, `calendario_origem`, `tipo` | Materialização do calendário; lançamento/alteração manual; reparentamento. (`app/escala/folgas.py:165`, `app/escala/folgas.py:254`, `app/escala/folgas.py:274`, `app/escala/folgas.py:435`) | Carregador da pessoa e predicado; permanecem leitores por vínculo no gerador/cadastro. `tipo` é rótulo informativo, não critério do juiz novo. (`app/ponto/precedencia.py:206`, `app/ponto/precedencia.py:237`, `app/escala/models.py:1257`, `app/escala/views_plano_folgas.py:60`, `app/escala/models.py:1562`) |
-| `EscalaColaborador.colaborador`, `tipo_escala`, `data_inicio`, `data_fim`, `ativa`, `data_ancora_colaborador`, `trabalha_em_feriado` | Portas de vínculo criam, atualizam, encerram e corrigem trechos. (`app/colaboradores/services/vinculo.py:265`, `app/colaboradores/services/vinculo.py:278`, `app/colaboradores/services/vinculo.py:797`, `app/colaboradores/services/vinculo.py:832`) | Carregadores/juíza, precedência, grade e métrica. (`app/escala/alimentacao.py:116`, `app/escala/alimentacao.py:182`, `app/ponto/precedencia.py:372`, `app/escala/services/fase_conflitante.py:79`, `app/escala/services/fase_conflitante.py:46`) |
-| `CelulaDia.trabalha`, `escala_geradora`, `dna` | Geração, regeneração, lote e reversão pela porta da célula. (`app/ponto/portas/celula.py:243`, `app/ponto/portas/celula.py:530`, `app/ponto/portas/celula.py:592`) | Juíza do vínculo, precedência, calendário e builders. (`app/escala/alimentacao.py:237`, `app/ponto/precedencia.py:348`, `app/colaboradores/services/calendario.py:785`, `app/escala/utils.py:1260`) |
-| `Ausencia.colaborador`, `tipo`, `data`, `data_fim`, `status` | Porta de ausência cria, edita e muda estado. (`app/ponto/services/ausencia.py:341`, `app/ponto/services/ausencia.py:417`, `app/ponto/services/ausencia.py:497`, `app/ponto/services/ausencia.py:808`) | Precedência e comando de rejulgamento; expansão dos dias delegada a `dias_da_ausencia`. (`app/ponto/precedencia.py:273`, `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:56`, `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:33`) |
-| `Empresa.ativa`, `dia_inicio_competencia` | Formulário e portas de estrutura. (`app/colaboradores/views.py:496`, `app/colaboradores/views.py:521`, `app/colaboradores/services/estrutura.py:12`) | Comando seleciona empresas ativas; juiz das janelas lê o corte. (`app/ponto/management/commands/rejulgar_ausencia_em_folga.py:54`, `app/ponto/janelas.py:42`) |
-| `CelulaDia.ata`, veredito/status; impressão/carimbos | Cartório monta a ata; `lavrar_veredito` e `carimbar` persistem pela porta. (`app/ponto/services/cartorio.py:574`, `app/ponto/portas/celula.py:709`, `app/ponto/portas/celula.py:787`) | Folha, apresentação e reconciliação dos chamados. (`app/escala/models.py:1742`, `app/chamados/reconciliador.py:1304`) |
-| `MetricaSnapshot` — numerador, denominador, detalhe, datas | Command de lavratura; `calculado_em` é automático. (`app/escala/management/commands/lavrar_fase_conflitante.py:35`, `app/inteligencia/models.py:96`) | `ultimo_lavrado` e API de saúde. (`app/escala/services/fase_conflitante.py:137`, `app/api/views_mensageria.py:643`) |
-
-No calendário, o dicionário consumido pelo classificador contém também ausência descontável, futuro, isenção, suspeita de régua, batidas, turno aberto, desvio, estado da célula, veredito/via, cobertura e retenção da folha; todos são montados em `contexto_calendario`, e os leitores são `_classificar` e `trabalho_do_dia`. (`app/colaboradores/services/calendario.py:818`, `app/colaboradores/services/calendario.py:122`, `app/colaboradores/services/calendario.py:839`)
-
-Na grade legacy, o `lambda _d: esc` não é um desvio nos dias publicados: o chamador seleciona os vínculos pela juíza, segmenta por vínculo e só retém os dias do segmento. No builder por turno, o overlay recebe diretamente o mapa diário. (`app/escala/utils.py:770`, `app/escala/utils.py:972`, `app/escala/utils.py:976`, `app/escala/utils.py:995`, `app/escala/utils.py:999`, `app/escala/utils.py:1794`)
-
-Esse rastreio identifica os produtores e consumidores acima; exclusividade de todos os escritores e eventuais chamadas dinâmicas de todo o repositório **[não verificado]**.
-
-**2. O que `medir` responde depois do delta**
-
-Há duas etapas diferentes: **seleção das sementes** e **contagem dos dias por paridade**. Só a primeira consulta o vínculo do dia. (`app/escala/services/fase_conflitante.py:91`, `app/escala/services/fase_conflitante.py:99`, `app/escala/services/fase_conflitante.py:105`)
-
-| Situação | Seleção da foto | Contagem posterior |
-|---|---|---|
-| Vínculos sobrepostos | A geradora válida decide; calendário do novo em dia gerado pelo velho não entra na foto do novo. (`app/escala/alimentacao.py:247`, `app/escala/services/fase_conflitante.py:100`) | Havendo outra semente válida do novo, pode contar também o dia do velho. (`app/escala/services/fase_conflitante.py:105`) |
-| Dia sem célula | Usa o vínculo que cobre a data, com prioridade ativo/início recente. (`app/escala/alimentacao.py:253`) | Pode contar o dia sem célula pela fase extrapolada. (`app/escala/services/fase_conflitante.py:63`, `app/escala/services/fase_conflitante.py:107`) |
-| Geradora fora da vigência | Juíza devolve `None`; não entra semente. (`app/escala/alimentacao.py:250`, `app/escala/services/fase_conflitante.py:100`) | O dia ainda pode ser contado a partir de outra semente. (`app/escala/services/fase_conflitante.py:105`) |
-| Dono da célula inativo | Pode ser o vínculo do dia se suas datas o permitem; porém o laço externo só visita ativos. (`app/escala/alimentacao.py:250`, `app/escala/alimentacao.py:252`, `app/escala/services/fase_conflitante.py:79`) | Não ganha linha própria; seu dia pode aparecer no conflito atribuído ao ativo. (`app/escala/services/fase_conflitante.py:100`, `app/escala/services/fase_conflitante.py:113`) |
-| Manual presa ao velho | O juiz aceita; entra na foto do ativo se ele for o vínculo daquele dia. (`app/ponto/precedencia.py:237`, `app/escala/services/fase_conflitante.py:100`) | A fase dessa semente é extrapolada à janela inteira. (`app/escala/services/fase_conflitante.py:63`, `app/escala/services/fase_conflitante.py:105`) |
-| Dia sem vínculo | Não entra semente, mesmo havendo manual aceita pelo predicado. (`app/ponto/precedencia.py:237`, `app/escala/services/fase_conflitante.py:100`) | Pode ser contado depois; o laço não consulta vínculo/vigência. (`app/escala/services/fase_conflitante.py:105`) |
-
-**Contraexemplo:** no desenho do próprio teste parcial — janela 10–20/10, velho gerando 10–14, novo gerando 15–20, calendário do novo nos pares e âncora 20/07 — as sementes aceitas são 16/18/20, mas a conta inclui **11 dias**, começando em 10/10. A extrapolação de paridade e a ausência de filtro no laço explicam os cinco dias alheios. (`app/ponto/tests/test_grade_folga_juiz_sitios.py:195`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:213`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:228`, `app/escala/services/fase_conflitante.py:63`, `app/escala/services/fase_conflitante.py:105`)
-
-O teste parcial passa porque exige apenas um vínculo e seu PK; não exige total nem exclusão dos dias do velho. O teste com todos os dias gerados pelo velho exige efetivamente `0/0`. (`app/ponto/tests/test_grade_folga_juiz_sitios.py:222`, `app/ponto/tests/test_grade_folga_juiz_sitios.py:228`)
-
-O rótulo e `o_que_e` descrevem “folga lançada do dia” aceita com vínculo do dia, mas a conta compara **fase extrapolada de sementes filtradas** com âncora, em toda a janela. Extrapolar fase já era intenção histórica; apresentar isso como resposta diária do juiz e como recorte aos dias do vínculo não corresponde ao laço. (`app/escala/services/fase_conflitante.py:57`, `app/escala/services/fase_conflitante.py:105`, `app/escala/services/fase_conflitante.py:123`, `app/escala/services/fase_conflitante.py:129`, `app/escala/tests/test_fase_conflitante.py:57`)
-
-O snapshot e sua exposição seguem este caminho:
-
-- O command grava `numerador=total`, `denominador=vinculos` e resultado integral em `detalhe`; sem `--apply`, só imprime. (`app/escala/management/commands/lavrar_fase_conflitante.py:31`, `app/escala/management/commands/lavrar_fase_conflitante.py:35`)
-- `ultimo_lavrado` devolve o **detalhe armazenado**, acrescentando `medido_em`; não atualiza rótulo de snapshot antigo. Sem snapshot, devolve `total=None` e `sem_medida=True`. (`app/escala/services/fase_conflitante.py:137`, `app/escala/services/fase_conflitante.py:139`)
-- A API expõe `contadores.fase_conflitante`. Entretanto, `saude_da_operacao` percorre somente `metricas` e devolve a lista construída delas: esse caminho de contexto da IA descarta `contadores`. (`app/api/views_mensageria.py:643`, `mensageria/nucleo/ferramentas.py:259`, `mensageria/nucleo/ferramentas.py:265`, `mensageria/nucleo/ferramentas.py:294`)
-
-**3. Catraca e mordidas**
-
-| Forma | Resultado |
-|---|---|
-| `from … import FolgaDia as FD` | **Pega.** Recolhe `ImportFrom` e `asname`. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:74`) |
-| Import local | **Pega** o mesmo `ImportFrom` dentro de função. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:74`) |
-| `import escala.models as m; m.FolgaDia…` | **Escapa.** A raiz `m` não é reconhecida como modelo. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:75`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:92`) |
-| `getattr(fd, nome_em_variavel)` | **Escapa.** Exige string constante. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:55`) |
-| `hasattr(fd, 'calendario_origem_id')` | **Escapa.** Essa chamada não é reconhecida. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:53`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:61`) |
-| `operator.attrgetter(...)` | **Escapa.** Não corresponde às três formas examinadas. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:61`) |
-| `values` / `values_list` com literal | **Pega** origem; pega filtro quando há pessoa e data. Variável ou `*campos` não é resolvido. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:43`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:95`) |
-| Função em `__init__.py` | **Pega.** O nome do arquivo não é excluído; código em nível de módulo continua fora. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:106`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:124`) |
-| Método `__init__` | **Pega** como `Classe.__init__`. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:108`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:113`) |
-| Import relativo de `FolgaDia` | **Pega.** Não exige módulo absoluto específico. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:75`) |
-| Função aninhada dentro das três funções `JUIZ` | **Escapa.** O `continue` exclui a função e todos os descendentes. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:109`) |
-| Método de classe em `precedencia.py` com nome igual ao juiz | **Pega.** A dispensa exige prefixo vazio. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:109`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:113`) |
-
-Os **sete `MORDE` da catraca mordem os exemplos específicos que anunciam**: filtro pessoa/data; alias/manager; comparação da origem; cópia literal do predicado; cópia literal do carregador; leitura sem comparação; segundo juiz adicional em `precedencia.py`. O teste do alias cobre `from … import … as …`, não alias de módulo. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:183`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:188`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:194`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:198`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:209`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:217`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:223`)
-
-“Só encolhe” **não está garantido historicamente**: o teste exige igualdade entre ach
-
-[truncado em 20000 de 31031 caracteres]
-
-## 31/10 23:55 · sessao 2055a3481e64 · - · - · origem=Ronald (tmux)
-
-Nos quatro sítios, a escolha de vínculo deixou de ser própria: veto usa `escala_vigente(colab,d)` (`app/ponto/precedencia.py:501`); declaração usa `_ec_do_dia` (`app/ponto/services/declarar_dia.py:74`); rejulgamento usa `escala_vigente(cid,d)` (`app/ponto/management/commands/rejulgar_ausencia_em_folga.py:65`). A casca carrega célula e geradora, chama `vinculo_do_dia` com a geradora ou, sem ela, com os candidatos do período (`app/escala/servico_jornada.py:46`, `app/escala/servico_jornada.py:57`, `app/escala/servico_jornada.py:58`). O quarto sítio, métrica, ficou com o outro agente. [não verificado]
-
-O legado da grade **não introduz um segundo feed incorreto nos dias publicados**: ele seleciona pela juíza, agrupa segmentos do mesmo vínculo, chama o builder individual com esse vínculo e só retém dias do segmento; o aquecimento adicional é descartado (`app/escala/utils.py:972`, `app/escala/utils.py:976`, `app/escala/utils.py:995`, `app/escala/utils.py:999`). O `lambda _d: esc` está no builder individual (`app/escala/utils.py:770`); a busca de produção encontrou a chamada desse builder somente no legado (`app/escala/utils.py:995`). O builder por turno alimenta `vinculo_do_dia` com todos os vínculos e células, publica o mapa diário e o passa ao overlay (`app/escala/utils.py:1248`, `app/escala/utils.py:1260`, `app/escala/utils.py:1263`, `app/escala/utils.py:1268`, `app/escala/utils.py:1794`).
-
-O overlay escreve **somente os dicionários da grade**: `tipo_dia='folga'`, `celulas=[None]…`, `orfas=[]` (`app/escala/utils.py:1124`). O cartório consome a grade e leva esses campos para `ata_do_dia` (`app/ponto/services/cartorio.py:946`, `app/ponto/services/cartorio.py:579`). Também chegam aos leitores de espelho, PDF e simulação (`app/ponto/services/espelho.py:496`, `app/relatorios/pdf_espelho.py:193`, `app/ponto/services/simular_dia.py:7`).
-
-O calendário agora deriva `status` e `eh_trabalho` dos mesmos fatos: o helper só troca a previsão por `False` quando vence feriado ou folga humana (`app/colaboradores/services/calendario.py:102`); o dicionário é montado, classificado e publicado nas linhas respectivas (`app/colaboradores/services/calendario.py:818`, `app/colaboradores/services/calendario.py:839`, `app/colaboradores/services/calendario.py:903`). `eh_trabalho` tem consumidor funcional no oferecimento de resolver o dia (`app/colaboradores/services/calendario.py:202`); `status` alimenta resumo e desenho da tela (`app/colaboradores/services/calendario.py:954`, `app/templates/colaboradores/partials/_calendario_grade.html:69`).
-
-Donos de escrita fora do diff, sem pretensão de listar cada chamador do repositório:
-
-| Dado | Escritor/porta e leitores relevantes |
-|---|---|
-| `FolgaDia.data/calendario_origem/escala_colaborador/tipo` | Calendário materializa preservando manuais; lançamento cria manual; alteração remove/troca tipo; reparentamento troca vínculo (`app/escala/folgas.py:165`, `app/escala/folgas.py:254`, `app/escala/folgas.py:274`, `app/escala/folgas.py:435`). Leitor novo é o carregador único (`app/ponto/precedencia.py:206`); gerador e cadastro ainda leem foto por vínculo (`app/escala/models.py:1257`, `app/escala/models.py:1281`, `app/escala/views_plano_folgas.py:60`). |
-| `EscalaColaborador.tipo_escala/ativa/data_inicio/data_fim/data_ancora_colaborador` | Portas de vínculo criam/atualizam, encerram e corrigem trechos (`app/colaboradores/services/vinculo.py:265`, `app/colaboradores/services/vinculo.py:278`, `app/colaboradores/services/vinculo.py:797`, `app/colaboradores/services/vinculo.py:832`, `app/colaboradores/services/vinculo.py:842`). Juíza e carregadores leem vigência/atividade (`app/escala/alimentacao.py:116`, `app/escala/alimentacao.py:182`, `app/escala/alimentacao.py:237`). |
-| `CelulaDia.trabalha/escala_geradora/dna` | Mesmo módulo de porta gera/regenera, gera lote e reverte (`app/ponto/portas/celula.py:243`, `app/ponto/portas/celula.py:592`, `app/ponto/portas/celula.py:530`). Precedência lê célula/vínculo (`app/ponto/precedencia.py:348`); grades carregam pela alimentação (`app/escala/utils.py:1260`). |
-| `Ausencia.tipo/data/data_fim/status` | Porta monta e salva, edita e muda estado (`app/ponto/services/ausencia.py:341`, `app/ponto/services/ausencia.py:417`, `app/ponto/services/ausencia.py:497`, `app/ponto/services/ausencia.py:808`). Precedência e comando leem (`app/ponto/precedencia.py:273`, `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:56`). |
-| `Empresa.ativa/dia_inicio_competencia` | Formulário alimenta portas de estrutura, que criam/atualizam (`app/colaboradores/views.py:496`, `app/colaboradores/views.py:521`, `app/colaboradores/services/estrutura.py:12`). Corte efetivo é lido pelo juiz das janelas (`app/ponto/janelas.py:42`, `app/ponto/janelas.py:60`). |
-| `REGRA_VERSOES`, impressão, ata | Declaração v3 (`app/ponto/services/cartorio.py:111`); `versao_para` escolhe maior horizonte aplicável (`app/ponto/services/cartorio.py:209`); impressão codifica versão (`app/ponto/services/cartorio.py:367`); lavra/carimbo persistem pela porta (`app/ponto/portas/celula.py:767`, `app/ponto/portas/celula.py:800`). |
-| Aceite/recusa de folga | `_folga_do_dia` alimenta consulta e mensagem (`app/ponto/services/declarar_dia.py:95`, `app/ponto/services/declarar_dia.py:112`); validação de respostas usa o booleano para idempotência (`app/chamados/services/validacao.py:261`, `app/chamados/services/validacao.py:316`). Veto também é consumido por lançamento de folgas, criação de ausência e férias (`app/escala/folgas.py:258`, `app/ponto/services/ausencia.py:380`, `app/ferias/models.py:428`). |
-
-**Exportada:** existe escrita possível na célula/ata da competência 09 com `--forcar`: o command alcança todas as células passadas e repassa a flag (`app/ponto/management/commands/processar_cartorio.py:49`, `app/ponto/management/commands/processar_cartorio.py:65`); a flag vence o pulo por impressão (`app/ponto/services/cartorio.py:1173`). A alteração pode produzir `EventoCelula` e efeitos em chamados/perguntas/disputas (`app/ponto/portas/celula.py:622`, `app/ponto/portas/celula.py:634`, `app/chamados/reconciliador.py:1304`). Esse fluxo do cartório não chama lavratura de `DiaPago` ou fechamento; o consumidor mostrado retrata chamados/perguntas/disputas e marca eventos (`app/chamados/reconciliador.py:1304`, `app/chamados/reconciliador.py:1315`). O teste compara fechamento inteiro e todas as exportações antes/depois, incluindo conteúdo TXT; isso é prova programada de fixture, não hash de produção (`app/ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:106`). Hash real do TXT: [não verificado].
-
-Classes reprovadoras:
-
-- **Segundo juiz/derivação paralela:** os sítios alterados delegam ao juiz registrado, cuja criação tem corte literal (`app/core/juizes.py:192`, `app/docs/CORTES.md:416`). Subsistem as filas: gerador usa foto do próprio vínculo (`app/escala/models.py:1281`); C5 monta universo próprio sem distinguir origem de calendário (`app/chamados/management/commands/auditar_invariantes_chamados.py:1532`).
-- **Segundo escritor:** as mudanças da grade/calendário são em memória; persistência indireta continua na porta da célula (`app/escala/utils.py:1124`, `app/colaboradores/services/calendario.py:898`, `app/ponto/portas/celula.py:634`).
-- **Relógio/ordem de trava:** não há relógio ou lock novo nos trechos de julgamento/overlay alterados (`app/ponto/precedencia.py:194`, `app/ponto/precedencia.py:212`, `app/ponto/precedencia.py:222`, `app/escala/utils.py:1114`). O comando lê relógio na borda (`app/ponto/management/commands/rejulgar_ausencia_em_folga.py:52`).
-- **Pouso antes do pré-requisito:** a própria declaração v3 exige ensaio de frota com `--apply` antes do pouso (`app/ponto/services/cartorio.py:174`). Cumprimento/remedição com feed novo: [não verificado].
-- **Motor/escala/vínculo:** o diff integral fornecido não contém alteração em `motor_calculo_v2.py`, modelo/porta de escala ou porta de vínculo. [não verificado — evidência negativa é o anexo do usuário, sem arquivo local numerado].
-
-## 31/10 23:54 · sessao 526f3e56522d · - · - · origem=Ronald (tmux)
-
-`medir` foi **parcialmente curado**: o feed das sementes usa o juiz correto; o universo dos dias contados e o novo rótulo continuam divergindo. (`app/escala/services/fase_conflitante.py:91`, `:99`, `:105`, `:123`)
-
-- Universo externo: somente vínculos `ativa=True`; o dono inativo de uma célula pode ser escolhido por `vinculo_do_dia`, mas nunca ganha sua própria linha na métrica. (`app/escala/services/fase_conflitante.py:79`; `app/escala/alimentacao.py:247`)
-- As sementes são FolgaDia da **pessoa**, recortadas pela vigência do vínculo ativo iterado; somente entram se o vínculo do dia for esse ativo e o juiz aceitar a candidata. Carrega inclusive geradoras fora da query de vigência mediante `mais=`. (`app/escala/services/fase_conflitante.py:91`, `:95`, `:97`, `:100`; `app/ponto/precedencia.py:206`; `app/escala/alimentacao.py:123`)
-- Sobreposição: geradora válida vence; sem célula/geradora, vence vínculo que cobre o dia, priorizando ativo e início mais recente. (`app/escala/alimentacao.py:237`, `:247`, `:250`, `:253`)
-- Geradora fora da vigência: juiz devolve `None`, sem fallback; a candidata não entra nas sementes. (`app/escala/alimentacao.py:250`; `app/escala/services/fase_conflitante.py:100`)
-- Dono inativo cuja vigência cobre o dia: juiz devolve esse dono; candidata desse dia não entra nas sementes do ativo. (`app/escala/alimentacao.py:247`, `:250`, `:252`; `app/escala/services/fase_conflitante.py:100`)
-- Manual presa ao velho: predicado aceita independentemente do vínculo da linha; entra nas sementes do ativo se ele for vínculo daquele dia. Se o dia for do inativo ou não houver vínculo, `medir` descarta a semente apesar de o juiz da folga aceitar a manual. (`app/ponto/precedencia.py:237`; `app/escala/services/fase_conflitante.py:100`)
-- Sem vínculo: não entra semente; **isso não impede o dia de ser contado depois**. (`app/escala/services/fase_conflitante.py:100`, `:105`)
-
-**Contraexemplo executado em memória, com AST real e ORM substituído, sem banco/arquivo:** no próprio desenho do teste parcial — janela 10–20/10, velho gerando 10–14, novo gerando 15–20, calendário do novo nos pares, âncora 20/07 — a métrica aceita sementes somente 16/18/20 e retorna **11 dias**, primeiro 10/10, último 20/10. Conta cinco dias do velho. Variantes com os primeiros cinco dias sem vínculo ou com geradora fora da vigência também retornam 11. Causa: `_foto_diz` extrapola paridade da semente mais próxima e o laço contado não pergunta vínculo do dia nem vigência. (`app/escala/services/fase_conflitante.py:61`, `:63`, `:105`, `:107`, `:117`)
-
-O teste parcial novo passa porque verifica apenas `vinculos == 1` e o pk da amostra; não verifica total nem quais dias foram contados. O caso todos os dias gerados pelo velho retorna zero e é efetivamente coberto. (`app/ponto/tests/test_grade_folga_juiz_sitios.py:222`, `:225`, `:228`, `:231`)
-
-**Rótulo e `o_que_e`:** dizem “folga lançada do dia … nos dias deste vínculo” e “FOTO (`folga_lancada_do_dia` com vínculo do dia)”; a comparação real é **fase extrapolada** de sementes filtradas versus âncora, em toda a janela. Também compara dias sem lançamento, meses sem foto e dias fora da vigência. A extrapolação já era intencional no contador anterior; o defeito é apresentar essa fase como resposta diária do juiz e prometer recorte que o laço não aplica. (`app/escala/services/fase_conflitante.py:57`, `:63`, `:91`, `:105`, `:123`, `:129`; `app/escala/tests/test_fase_conflitante.py:57`, `:67`)
-
-A fila GERADOR está corretamente explicitada: o gerador ainda lê foto por vínculo e usa o teste mensal; a métrica mudou para sementes da pessoa aceitas pelo juiz, sem teste mensal. (`app/escala/services/fase_conflitante.py:22`; `app/escala/models.py:1252`, `:1257`, `:1260`; `app/docs/JUIZES.md:87`)
-
-**Snapshot e leitores:**
-
-- `lavrar_fase_conflitante` chama `medir`; com `--apply` grava `MetricaSnapshot`, numerador = total, denominador = vínculos, `detalhe` = resultado integral; sem flag só imprime. Cron declarado às 07:14 com `--apply`. (`app/escala/management/commands/lavrar_fase_conflitante.py:30`, `:32`, `:35`; `app/config/crons.py:479`)
-- `ultimo_lavrado` escolhe o último snapshot por data/calculado_em e devolve **detalhe gravado**, acrescido de `medido_em`; sem snapshot devolve `sem_medida`, total `None`. Não recompõe rótulo de snapshot antigo. (`app/escala/services/fase_conflitante.py:137`, `:140`, `:141`)
-- API `/api/mensageria/saude/` expõe-o em `contadores.fase_conflitante`. (`app/api/urls.py:16`; `app/api/views_mensageria.py:632`, `:643`, `:647`)
-- A ponte `core_client.saude` recebe esse endpoint, mas `saude_da_operacao` percorre somente `dados['metricas']` e retorna apenas medidas; **descarta `contadores`**, portanto o caminho de contexto do chat não mostra este contador. (`mensageria/nucleo/core_client.py:108`, `:115`; `mensageria/nucleo/ferramentas.py:259`, `:265`, `:294`, `:380`)
-- Remedição de produção/sombra, inclusive substituir o antigo 181/4, e conteúdo real do snapshot atual: **[não verificado]**.
-
-Sugestão de classificação: bloqueio do item (b) do opus **parcialmente curado**; o feed e a explicitação GERADOR foram curados, mas há contraexemplo de universo e rótulo. Remedição exigida pelo laudo permanece **[não verificado]**. (`app/escala/services/fase_conflitante.py:99`, `:105`, `:123`; `opus_final.txt`, anexo dado pelo usuário, item (b) **[não verificado: arquivo não localizado na cópia]**)
-
-_1314 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1317 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
