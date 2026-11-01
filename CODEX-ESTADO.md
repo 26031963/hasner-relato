@@ -1,7 +1,216 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 22:09** · publicado em **31/10/2026 22:13** (UTC-3)
+> Ultima resposta processada: **31/10/2026 22:27** · publicado em **31/10/2026 22:29** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 22:27 · sessao 74e09ba720dc · TRAVA-COBERTURA · verificador · origem=Code
+
+**A volta 3 não fecha o contrato.** Os principais bloqueios são: rc 0 antes do término da suite com `docker run -d`; perda da proteção contra órfãos quando Docker vem envolvido por shell; registro ilegível aceito; ciclo de vida da sombra diferente do prometido; e coleta de rc defeituosa no selo novo. (`bin/trava_teste.sh:188`, `bin/trava_teste.sh:248`, `bin/trava_teste.sh:250`; `bin/trava_fila.sh:128`; `bin/sombra_trava.sh:38`; `bin/tests/test_trava_dono_do_job.sh:56`)
+
+Execução integral dos selos, mutantes, concorrência efetiva e estado de produção: **[nao verificado]**. As mutações abaixo são previsões pela leitura, sem alteração de arquivos.
+
+**1. Quem escreve e quem lê cada estado**
+
+| Estado | Escritores e remoções | Leitores |
+|---|---|---|
+| `<trava>.fila/<pid>-<starttime>` | `_tf_grava` publica por temporário + `mv`; chamado por entrada e mudança de estado. Removem: poda, superação, saída e cancelamento. **Poda e saída não tomam `.fila.lk`.** (`bin/trava_fila.sh:58`, `bin/trava_fila.sh:67`, `bin/trava_fila.sh:88`, `bin/trava_fila.sh:119`, `bin/trava_fila.sh:129`, `bin/trava_fila.sh:133`, `bin/trava_fila.sh:160`) | `_tf_campo`, `tf_entradas`, `tf_estado`, `tf_sai`; listagem e decisões de superação/cancelamento consomem esses leitores. (`bin/trava_fila.sh:49`, `bin/trava_fila.sh:52`, `bin/trava_fila.sh:84`, `bin/trava_fila.sh:127`, `bin/trava_fila.sh:136`, `bin/trava_fila.sh:158`, `bin/trava_fila.sh:170`) |
+| `.fila/voltas/<obra>` | `_tf_abre`, alcançado tanto por `tf_entra` quanto por `--abre-volta`; a gravação não tem falha conferida. (`bin/trava_fila.sh:100`, `bin/trava_fila.sh:117`, `bin/trava_fila.sh:146`) | `_tf_volta_max`, usado na abertura e na admissão. Erro de leitura vira vazio. (`bin/trava_fila.sh:95`, `bin/trava_fila.sh:98`, `bin/trava_fila.sh:111`) |
+| `.fila.jsonl` | Uma função, `tf_evento`, chamada por vários processos e caminhos; `tf_sai` pode chamar fora da trava da fila. Falha de append termina em `echo`, sem impedir a operação. (`bin/trava_fila.sh:41`, `bin/trava_fila.sh:46`, `bin/trava_fila.sh:136`) | Os selos verificam `superado` e quantidade de `cancelado`; não há replay desse arquivo para decidir a fila. (`bin/tests/test_trava_dono_do_job.sh:85`, `bin/tests/test_trava_dono_do_job.sh:150`; `bin/trava_fila.sh:52`) |
+| `.fila.lk` | Entrada, transição, abertura e cancelamento abrem fd 6 com `>>` e disputam `flock`; seu conteúdo não é o estado consultado. (`bin/trava_fila.sh:109`, `bin/trava_fila.sh:121`, `bin/trava_fila.sh:126`, `bin/trava_fila.sh:145`, `bin/trava_fila.sh:156`) | O leitor operacional é o próprio `flock`; `tf_lista` e `tf_sai` não o adquirem. (`bin/trava_fila.sh:133`, `bin/trava_fila.sh:168`) |
+| `$TRAVA.jobs/<id>.pid` | O job publica identidade por `.pid.novo` + `mv`; não confere o sucesso antes de continuar. O esperador remove ao terminar; a coleta por idade também remove. (`bin/trava_teste.sh:123`, `bin/trava_teste.sh:149`, `bin/trava_teste.sh:164`) | Esperador aguarda tamanho positivo e lê identidade; limpeza do selo também lê. (`bin/trava_teste.sh:128`, `bin/trava_teste.sh:133`; `bin/tests/test_trava_dono_do_job.sh:37`) |
+| `.out` / `.err` | Esperador cria/trunca; redirecionamento do lançamento abre novamente; job e descendentes produzem saída. Esperador e coleta por idade removem. (`bin/trava_teste.sh:123`, `bin/trava_teste.sh:125`, `bin/trava_teste.sh:127`, `bin/trava_teste.sh:149`) | Dois `tail`s; caso (d) procura marcador em `.out`. (`bin/trava_teste.sh:142`, `bin/trava_teste.sh:143`; `bin/tests/test_trava_dono_do_job.sh:123`) |
+| `.rc` | `_fim` do job publica por `.rc.novo` + `mv`; esperador e coleta por idade removem. (`bin/trava_teste.sh:123`, `bin/trava_teste.sh:149`, `bin/trava_teste.sh:160`) | Esperador; selo (d); selo Docker (i). (`bin/trava_teste.sh:147`; `bin/tests/test_trava_dono_do_job.sh:127`; `bin/tests/test_trava_dono_para_filho.sh:78`) |
+| `.quem` | Job escreve ocupação e, no EXIT após aquisição, “livre”. O selo antigo escreve uma mentira deliberada na cópia isolada. (`bin/trava_teste.sh:159`, `bin/trava_teste.sh:182`; `bin/tests/test_trava_teste.sh:245`) | `_quem`, depois de consultar o flock, e mensagem de timeout. **Não governa a exclusão.** (`bin/trava_teste.sh:80`, `bin/trava_teste.sh:82`, `bin/trava_teste.sh:175`) |
+| Rótulo `hasner.trava.*` | A trava acrescenta `--label` somente quando os dois primeiros argumentos são literalmente `docker run`; Docker materializa o rótulo. (`bin/trava_teste.sh:50`, `bin/trava_teste.sh:188`, `bin/trava_teste.sh:235`) | `_rotulados`, `_quem`, tratamento de órfão e `_parar`. (`bin/trava_teste.sh:64`, `bin/trava_teste.sh:90`, `bin/trava_teste.sh:194`, `bin/trava_teste.sh:241`) |
+| fd 9, `juliani_db_test.lock` | Job abre e adquire; o filho executado fecha fd 9. O esperador não adquire esse lock. (`bin/trava_teste.sh:120`, `bin/trava_teste.sh:173`, `bin/trava_teste.sh:174`, `bin/trava_teste.sh:248`) | Aquisição operacional; `--quem` consulta o mesmo arquivo usando **fd 8**. (`bin/trava_teste.sh:79`, `bin/trava_teste.sh:80`) |
+| fd 8, `sombra.lock` | `trancar_sombra` abre/adquire no próprio chamador e exporta herança; fecha explicitamente em erros posteriores à abertura. (`bin/sombra_trava.sh:46`, `bin/sombra_trava.sh:48`, `bin/sombra_trava.sh:50`, `bin/sombra_trava.sh:59`, `bin/sombra_trava.sh:64`) | A decisão de herança consulta apenas `SOMBRA_TRAVA_HERDADA`; não comprova o descritor recebido. (`bin/sombra_trava.sh:30`) |
+
+**Há múltiplos escritores/modificadores.** A biblioteca centraliza o formato, mas não todas as modificações sob uma porta serializada: entradas têm diversos removedores; eventos recebem múltiplos produtores; `.out/.err` recebem inicialização e produção; jobs distintos escrevem `.quem`, normalmente serializados pelo flock. `.pid/.rc` têm o job como publicador normal, mas também possuem removedores externos. (`bin/trava_fila.sh:58`, `bin/trava_fila.sh:137`, `bin/trava_teste.sh:123`, `bin/trava_teste.sh:125`, `bin/trava_teste.sh:159`, `bin/trava_teste.sh:164`)
+
+Os códigos têm estes significados concretos:
+
+| Código | Caminhos |
+|---|---|
+| **143** | Esperador sinalizado após instalar `_solta`; job recebe TERM/INT/HUP; volta recusada por `tf_entra`; entrada desaparecida antes de `rodando`; `.rc` ausente/vazio/não numérico; cancelamento normal pelo trap do job. (`bin/trava_teste.sh:139`, `bin/trava_teste.sh:148`, `bin/trava_teste.sh:163`, `bin/trava_teste.sh:168`, `bin/trava_teste.sh:180`, `bin/trava_teste.sh:245`) |
+| **75** | Falha de registro inicial; timeout do flock; Docker não responde; dono rotulado ainda vivo; stop de órfão falha; órfãos persistem; suite sem rótulo não libera a pista. Portanto **não significa exclusivamente timeout** nesta implementação. (`bin/trava_teste.sh:169`, `bin/trava_teste.sh:176`, `bin/trava_teste.sh:196`, `bin/trava_teste.sh:203`, `bin/trava_teste.sh:210`, `bin/trava_teste.sh:221`, `bin/trava_teste.sh:228`) |
+| **3** | `tf_entra` recusa volta antiga; a interface de teste converte para 143, e a sombra para 1. Separadamente, régua usa 3 para raia ocupada ou ordem inválida. Um comando executado que termine 3 também pode ter seu rc retransmitido. (`bin/trava_fila.sh:115`; `bin/trava_teste.sh:168`, `bin/trava_teste.sh:150`; `bin/sombra_trava.sh:43`; `bin/regua.sh:103`, `bin/regua.sh:122`) |
+
+**2. Sinais, concorrência e falhas**
+
+| Caso | Comportamento e rc observado pelo chamador |
+|---|---|
+| TERM/INT no esperador | Depois de instalar o trap: mata os tails, deixa o job e sai **143**. Nos 30 segundos iniciais ainda não há esse trap; INT herdado como ignorado também exige distinguir o ambiente de lançamento. Resultado concreto dessas variantes: [nao verificado]. (`bin/trava_teste.sh:128`, `bin/trava_teste.sh:135`, `bin/trava_teste.sh:141`) |
+| KILL no esperador | Sem limpeza; se já lançado, o job continua na sessão criada por `setsid`. Quem aguarda o esperador vê término por KILL, normalmente **137**; os arquivos ficam para acompanhamento/coleta posterior. (`bin/trava_teste.sh:127`, `bin/trava_teste.sh:149`) |
+| KILL no job antes de publicar `.pid` | Esperador não recebe identidade e sai **1** após sua espera de aproximadamente 30 s. (`bin/trava_teste.sh:128`, `bin/trava_teste.sh:131`, `bin/trava_teste.sh:164`) |
+| KILL depois de `.pid`, antes do flock | Sem EXIT, não publica `.rc`; esperador devolve **143** quando os tails detectarem a morte. Um processo `flock` sobrevivente pode ainda esperar/adquirir e sair; ele não executa a suite. (`bin/trava_teste.sh:147`, `bin/trava_teste.sh:162`, `bin/trava_teste.sh:174`) |
+| KILL depois do flock | Sem `.rc`, esperador devolve **143**. Depois do lançamento, filho/container pode sobreviver sem fd 9; a aquisição seguinte tenta reconhecer e parar o órfão rotulado. (`bin/trava_teste.sh:148`, `bin/trava_teste.sh:194`, `bin/trava_teste.sh:208`, `bin/trava_teste.sh:248`) |
+| Superado esperando flock | Superação envia TERM ao grupo, ou aos filhos diretos e PID; remove entrada e registra `superado`/RELATO. Caminho normal do job: **143**, sem executar comando. A checagem após adquirir o flock também impede executar uma entrada já removida. (`bin/trava_fila.sh:73`, `bin/trava_fila.sh:87`, `bin/trava_fila.sh:89`; `bin/trava_teste.sh:163`, `bin/trava_teste.sh:180`) |
+| `--abre-volta` concorrente com `tf_entra` | Ambos disputam fd 6. Abertura primeiro: velha é recusada, **3 interno → 143 externo**. Entrada primeiro: abertura remove a velha se ainda `fila`. Se `tf_estado(..., rodando)` ganhar antes, ela permanece. Não há essa corrida sem serialização entre esses três caminhos. (`bin/trava_fila.sh:85`, `bin/trava_fila.sh:109`, `bin/trava_fila.sh:126`, `bin/trava_fila.sh:145`) |
+| `--cancela-obra`, rodando e fila | Na fila sinaliza grupo/filhos; rodando sinaliza somente dono. Job de teste executa `_parar` e normalmente publica **143**. **O cancelador retorna 0 contando solicitações, sem aguardar nem comprovar morte; falha de `kill` é ignorada.** (`bin/trava_fila.sh:160`, `bin/trava_fila.sh:165`; `bin/trava_teste.sh:238`) |
+| Reuso de PID | Fila e rótulo comparam starttime. Esperador descarta starttime ao passar somente PID para `tail --pid`, podendo esperar um processo reciclado. Há também intervalo entre validar identidade na enumeração e sinalizar. (`bin/trava_fila.sh:36`, `bin/trava_fila.sh:58`, `bin/trava_fila.sh:87`; `bin/trava_teste.sh:62`, `bin/trava_teste.sh:133`, `bin/trava_teste.sh:142`) |
+| `.rc` ausente/truncado | Ausente, vazio ou não numérico: **143**. Prefixo truncado ainda numérico é aceito. Não há limite 0–255: conteúdo `256` chega a `exit 256`, que resulta em **0**. Publicação normal por rename evita observar uma escrita parcial normal, mas não valida corrupção. (`bin/trava_teste.sh:147`, `bin/trava_teste.sh:150`, `bin/trava_teste.sh:160`) |
+| Job nunca escreve `.pid` em 30 s | Esperador sai **1**, sem cancelar o lançamento. Um job atrasado ou com publicação de pidfile falhada pode continuar e executar depois dessa saída. (`bin/trava_teste.sh:127`, `bin/trava_teste.sh:131`, `bin/trava_teste.sh:164`, `bin/trava_teste.sh:165`) |
+
+Na **sombra**, cancelamento rodando não possui `_parar` equivalente: envia TERM ao chamador registrado, enquanto filhos podem continuar com fd 8 herdado. Tampouco há `tf_sai` no encerramento normal; a entrada morta é posteriormente podada, sem evento `fim`. (`bin/trava_fila.sh:160`, `bin/trava_fila.sh:58`; `bin/sombra_trava.sh:6`, `bin/sombra_trava.sh:38`, `bin/sombra_trava.sh:63`)
+
+**3. Suite sem trava, duas juntas e falso verde** [nao verificado]
+
+- **Rc 0 sem término da suite:** `trava_teste.sh -- docker run -d ... python manage.py test ...` é aceito. A trava aguarda o cliente Docker, que pode terminar 0 depois de lançar o container; não aguarda o veredito da suite. A próxima aquisição pode considerar aquele container órfão e pará-lo. (`bin/trava_teste.sh:104`, `bin/trava_teste.sh:188`, `bin/trava_teste.sh:235`, `bin/trava_teste.sh:250`, `bin/trava_teste.sh:201`)
+- **Sobreposição por wrapper:** `trava_teste.sh -- bash -c 'docker run ... manage.py test ...'` executa inicialmente sob flock, mas não recebe rótulo nem ativa a consulta de suites sem rótulo. Após KILL do job, um container sobrevivente fica fora da trava; outro wrapper pode iniciar uma segunda suite. O mesmo reconhecimento restrito afeta um caminho absoluto para Docker. (`bin/trava_teste.sh:188`, `bin/trava_teste.sh:194`, `bin/trava_teste.sh:248`)
+- **Janela mesmo com Docker direto:** KILL entre lançar o cliente e materializar o container permite que a próxima aquisição consulte uma pista ainda vazia; o cliente antigo pode criar seu container depois. É uma possibilidade pela ordem do código; reprodução concorrente **[nao verificado]**. (`bin/trava_teste.sh:194`, `bin/trava_teste.sh:248`)
+- **Rc 0 fabricado por arquivo inválido:** `.rc=256` passa pela validação exclusivamente numérica. Não é a publicação normal do job, mas é um caminho concreto de aceitação de estado corrompido. (`bin/trava_teste.sh:148`, `bin/trava_teste.sh:150`)
+- **L-074 ainda incompleta no contexto v2:** isolamento e moldes preservam somente a distinção especial de 75 e continuam aceitando `OK` pelo grep, mesmo com processo terminado 143/137. Isso pode produzir “verde” de isolamento ou aceitar GREEN sem término coerente. (`bin/isolamento.sh:37`, `bin/isolamento.sh:38`; `bin/molde_fatia/rodar.sh:34`, `bin/molde_fatia/rodar.sh:55`, `bin/molde_fatia/rodar.sh:56`)
+
+**4. PreToolUse: escapes, falsas recusas e ordem**
+
+| Suite real que escapa | Falha do reconhecimento | [nao verificado]
+|---|---|
+| `echo inicio` seguido de newline e `docker run ... manage.py test` | Newline é consumido como whitespace; o segmento começa em `echo`. (`bin/disjuntor.py:167`, `bin/disjuntor.py:174`) |
+| `if true; then docker run ... manage.py test; fi` | O segmento começa em `then`, sem tratamento da gramática do shell. (`bin/disjuntor.py:197`, `bin/disjuntor.py:216`) |
+| `docker --context default run ... manage.py test` | Procura `run` somente em `resto[1:3]`. (`bin/disjuntor.py:216`) |
+| `sudo -u ronald docker run ...`; `env -C /tmp docker run ...` | Não consome corretamente argumentos textuais das opções dos prefixos. (`bin/disjuntor.py:199`) |
+| `docker run > saida --rm img python manage.py test` | Redirecionamento divide o comando antes dos argumentos identificadores. (`bin/disjuntor.py:175`) |
+| `docker run ... python manage.py --settings=config.settings.ci test ponto` | Exige `manage.py` imediatamente seguido de `test`. (`bin/disjuntor.py:160`) |
+| `D=docker; "$D" run ...`; `eval 'docker run ...'`; `xargs docker run ...` | Não resolve expansão ou esses executores. Scripts chamados também não são abertos por esse predicado. (`bin/disjuntor.py:188`, `bin/disjuntor.py:207`, `bin/disjuntor.py:208`, `bin/disjuntor.py:216`) |
+
+| Comando legítimo recusado | Motivo |
+|---|---|
+| `bash bin/trava_teste.sh -- bash -c 'docker run ... manage.py test'` | Ao ver `bash`, procura `-c` em todos os argumentos, inclusive argumentos do script executado; perde o fato de que a trava envolve a execução. (`bin/disjuntor.py:208`, `bin/disjuntor.py:210`; `bin/trava_teste.sh:248`) |
+| `docker run --rm alpine echo 'python manage.py test'` | Procura o texto no conjunto dos argumentos, sem identificar o programa de teste. (`bin/disjuntor.py:216`) |
+| `docker run --rm -e NOTE='manage.py test' alpine sleep 30` | Mesmo problema: valor de ambiente vira execução presumida. (`bin/disjuntor.py:216`) |
+| `grep -F ';' docker run --rm img python manage.py test` ou `printf '%s\n' ';' docker run ...` | Após retirar aspas, trata o token **citado** `;` como operador e inventa um segmento Docker executável. (`bin/disjuntor.py:167`, `bin/disjuntor.py:175`) |
+| Here-doc contendo `; docker run ... manage.py test` | Não distingue corpo de here-doc de comandos executados. (`bin/disjuntor.py:174`, `bin/disjuntor.py:175`) |
+
+As chamadas canônicas atuais passam: `suite.sh` usa `exec env ... bash trava -- docker run`; régua e pre-push usam `bash trava -- docker run`. Um `grep -n "docker run ... manage.py test" arquivo` simples também passa. Isso não prova todas as combinações possíveis dos argumentos adicionais. (`bin/suite.sh:96`; `bin/regua.sh:165`; `bin/pre-push.sh:142`; `bin/disjuntor.py:207`)
+
+A ordem é **chave → suite → disjuntor existente**. A chave conserva prioridade; a recusa de suite alcança sessão principal e disjuntor desligado. Porém, quando recusa, impede executar B1/B3/B4 naquela chamada; a ordem relativa dessas guardas dentro de `pretool` permanece. (`bin/disjuntor.py:1568`, `bin/disjuntor.py:1569`, `bin/disjuntor.py:1570`, `bin/disjuntor.py:1517`, `bin/disjuntor.py:1522`, `bin/disjuntor.py:1533`)
+
+**5. Mordida dos selos e isolamento**
+
+Antes dos mutantes há um defeito no próprio selo: `_rc()` executa `wait`, mas seus chamadores usam `$(_rc ...)`, portanto o `wait` ocorre num subshell que não é pai dos processos lançados pelo teste. As comparações de rc positivo em **(b), (e), (f)** não recuperam corretamente o resultado desses filhos; a comparação negativa de **(a)** também fica enfraquecida. (`bin/tests/test_trava_dono_do_job.sh:56`, `bin/tests/test_trava_dono_do_job.sh:75`, `bin/tests/test_trava_dono_do_job.sh:90`, `bin/tests/test_trava_dono_do_job.sh:99`, `bin/tests/test_trava_dono_do_job.sh:147`, `bin/tests/test_trava_dono_do_job.sh:175`)
+
+Nesta tabela, “não percebe” refere-se **às asserções do caso**, não à passagem garantida do selo inteiro; para casos afetados, pressupõe corrigir a coleta de rc. Resultado executado dos mutantes: **[nao verificado]**.
+
+| Caso | Mutação mínima que suas asserções reprovam | Mutação que o caso não percebe |
+|---|---|---|
+| **(a)** | Retirar o evento `superado` ou o RELATO. (`bin/trava_fila.sh:89`, `bin/trava_fila.sh:90`; selo: `bin/tests/test_trava_dono_do_job.sh:85`, `bin/tests/test_trava_dono_do_job.sh:87`) | Trocar o rc de superação para outro não zero: só exige não zero. (`bin/trava_teste.sh:163`; selo: `bin/tests/test_trava_dono_do_job.sh:76`) |
+| **(b)** | Remover a condição `estado=fila` da superação, atingindo também quem roda. (`bin/trava_fila.sh:85`; selo: `bin/tests/test_trava_dono_do_job.sh:91`) | Publicar sempre rc 0: este caso só exercita comandos bem-sucedidos. Também não compara horários para provar “a volta 3 rodou depois”. (`bin/trava_teste.sh:160`; selo: `bin/tests/test_trava_dono_do_job.sh:91`, `bin/tests/test_trava_dono_do_job.sh:99`) |
+| **(c)** | Retirar o `exit 3` da recusa: o atrasado pode executar. (`bin/trava_fila.sh:115`; selo: `bin/tests/test_trava_dono_do_job.sh:107`) | Trocar 3 por outro erro: não exige código exato nem evento `recusado`. (`bin/trava_fila.sh:115`; selo: `bin/tests/test_trava_dono_do_job.sh:107`) |
+| **(d)** | Fazer `_solta` sinalizar o job: perde a conclusão com rc 0. (`bin/trava_teste.sh:135`; selo: `bin/tests/test_trava_dono_do_job.sh:127`) | Retirar `setsid -f`, mantendo filho comum: o teste mata somente o PID do esperador, não sua árvore; não prova sobrevivência ao TaskStop descrito no aval. (`bin/trava_teste.sh:127`; selo: `bin/tests/test_trava_dono_do_job.sh:119`) |
+| **(e)** | Retirar TERM do dono rodando: trabalho de 60 s permanece além da espera do selo. (`bin/trava_fila.sh:160`; selo: `bin/tests/test_trava_dono_do_job.sh:135`, `bin/tests/test_trava_dono_do_job.sh:143`) | Gravar motivo/quem incorretos: confere quantidade, não conteúdo desses campos. (`bin/trava_fila.sh:161`; selo: `bin/tests/test_trava_dono_do_job.sh:150`) |
+| **(f)** | Superar também `rodando`: mata `S2_RODANDO`. (`bin/trava_fila.sh:85`; selo: `bin/tests/test_trava_dono_do_job.sh:175`) | Retirar o fechamento de fd 8 quando a entrada desaparece: o wrapper do selo sai imediatamente e fecha o fd de qualquer maneira. (`bin/sombra_trava.sh:50`; selo: `bin/tests/test_trava_dono_do_job.sh:160`) |
+| **(g)** | Retirar `nega_suite_fora_da_trava` de `main_pretool`. (`bin/disjuntor.py:1569`; selo: `bin/tests/test_trava_dono_do_job.sh:193`) | Condicionar a guarda a `not desligado()`, ou excluir agentes. O selo usa `DISJUNTOR=0`, mas a chave real é arquivo; nenhum payload leva `agent
+
+[truncado em 20000 de 27400 caracteres]
+
+## 31/10 22:25 · sessao 10a894de865c · - · - · origem=Ronald (tmux)
+
+Achados por leitura estática; reprodução dos cenários e resultados dos selos [nao verificado].
+
+1. **Registro ilegível não fecha a porta.** `tf_estado` só exige arquivo existente; lê campos sem validar e regrava `rodando` mesmo com obra/volta ausentes. O job aceita esse sucesso e executa. A leitura da maior volta trata erro como ausência, e sua escrita não tem retorno conferido. (`bin/trava_fila.sh:49`, `bin/trava_fila.sh:95`, `bin/trava_fila.sh:100`, `bin/trava_fila.sh:128`, `bin/trava_fila.sh:129`, `bin/trava_teste.sh:180`)
+
+2. **Mais de um caminho modifica os registros.** `_tf_grava` cria/substitui entradas; `_tf_supera` e `tf_cancela_obra` removem sob fd6; `tf_sai` e a poda de `tf_entradas` removem sem fd6. Eventos têm uma função escritora, mas vários processos a chamam, inclusive fora do lock da fila. (`bin/trava_fila.sh:58`, `bin/trava_fila.sh:67`, `bin/trava_fila.sh:88`, `bin/trava_fila.sh:133`, `bin/trava_fila.sh:160`, `bin/trava_fila.sh:46`)
+
+3. **Falha de trilha vira sucesso.** `tf_evento` responde à falha de append com `echo`; não propaga a falha, e as operações podem continuar sem evento persistido. (`bin/trava_fila.sh:46`, `bin/trava_fila.sh:47`, `bin/trava_fila.sh:120`, `bin/trava_fila.sh:130`, `bin/trava_fila.sh:147`)
+
+4. **Sinais do esperador.** Depois de instalar `_solta`, TERM/INT/HUP param apenas os tails e saem 143; o job destacado continua. Antes disso, inclusive nos 30 segundos aguardando `.pid`, não há esse trap. KILL não executa limpeza; o job foi lançado em outra sessão. INT pode estar herdado como ignorado quando a chamada veio de comando assíncrono; efeito concreto [nao verificado]. (`bin/trava_teste.sh:127`, `bin/trava_teste.sh:128`, `bin/trava_teste.sh:135`, `bin/trava_teste.sh:141`)
+
+5. **KILL no job.** Não escreve `.rc`; o esperador usa 143. Antes da aquisição, um filho `flock` sobrevivente pode continuar esperando/adquirir e sair, mas não executa suite. Depois de lançar container direto, o container pode sobreviver sem fd9; a próxima aquisição procura seu rótulo e para o órfão. Existe janela entre lançar o cliente Docker e ele criar o container: outro job pode consultar pista vazia antes dessa criação; concorrência efetiva nessa janela [nao verificado]. (`bin/trava_teste.sh:147`, `bin/trava_teste.sh:173`, `bin/trava_teste.sh:194`, `bin/trava_teste.sh:201`, `bin/trava_teste.sh:208`, `bin/trava_teste.sh:248`)
+
+6. **Superação e abertura concorrente.** Entrada, abertura e transição para `rodando` disputam o mesmo fd6. Se a abertura ganhar primeiro, entrada velha retorna 3, convertido em 143 pelo job; se a entrada velha ganhar, a abertura subsequente mata/remove sua entrada enquanto `estado=fila`; se a transição para `rodando` ganhar, não é superada. (`bin/trava_fila.sh:109`, `bin/trava_fila.sh:112`, `bin/trava_fila.sh:115`, `bin/trava_fila.sh:126`, `bin/trava_fila.sh:145`, `bin/trava_fila.sh:85`, `bin/trava_teste.sh:168`)
+
+7. **Cancelamento.** Na fila, envia TERM ao grupo se pgid=pid; senão, aos filhos diretos e ao pid. Rodando, envia TERM somente ao dono; no job de teste, `_parar` busca containers por rótulo, tenta `docker stop`, mata/espera filho e sai 143. O comando de cancelamento conta pedidos e retorna sucesso sem comprovar morte; falha de `kill` é ignorada. (`bin/trava_fila.sh:73`, `bin/trava_fila.sh:160`, `bin/trava_fila.sh:165`, `bin/trava_teste.sh:238`)
+
+8. **Sombra não tem a mesma propriedade de vida.** Registra o próprio BASHPID, não destaca job, não instala trap para parar filhos e não chama `tf_sai` no encerramento normal. Cancelamento de entrada `rodando` mata só esse pid; filhos herdando fd8 podem continuar e manter a trava, enquanto a entrada do dono morto é posteriormente podada. (`bin/sombra_trava.sh:6`, `bin/sombra_trava.sh:38`, `bin/sombra_trava.sh:46`, `bin/sombra_trava.sh:63`, `bin/trava_fila.sh:160`, `bin/trava_fila.sh:58`)
+
+9. **PID reutilizado.** Identidade da fila e rótulos compara starttime; o esperador extrai só o número de PID para `tail --pid`, ignorando starttime, podendo prolongar a espera pelo processo reciclado. Há ainda intervalo entre verificar identidade e enviar sinal nas operações da fila. (`bin/trava_fila.sh:34`, `bin/trava_teste.sh:60`, `bin/trava_teste.sh:133`, `bin/trava_teste.sh:142`, `bin/trava_fila.sh:58`, `bin/trava_fila.sh:87`, `bin/trava_fila.sh:160`)
+
+10. **`.rc` ausente/truncado.** Ausente, vazio ou não numérico vira 143; truncamento que ainda deixa dígitos é aceito como outro rc. Não há validação de faixa: conteúdo corrompido `256` passa pela regex e `exit 256` corresponde a 0; experimento [nao verificado]. A escrita normal usa arquivo temporário e `mv`, evitando leitura de prefixo durante publicação normal. (`bin/trava_teste.sh:147`, `bin/trava_teste.sh:148`, `bin/trava_teste.sh:150`, `bin/trava_teste.sh:160`)
+
+11. **Sem `.pid` em 30 segundos.** Esperador sai 1, não cancela o lançamento nem verifica o rc de `setsid`; um job atrasado ou cujo pidfile falhou pode continuar, pois a publicação de `.pid` também não é checada antes de entrar na fila. (`bin/trava_teste.sh:127`, `bin/trava_teste.sh:128`, `bin/trava_teste.sh:131`, `bin/trava_teste.sh:164`, `bin/trava_teste.sh:165`)
+
+12. **Outros caminhos de rc 0 sem término da suite.** A API aceita `docker run -d ... manage.py test`: aguarda o cliente Docker, não o container, e pode devolver 0 com a suite em execução. A próxima aquisição encontra dono morto e pode parar esse container. (`bin/trava_teste.sh:104`, `bin/trava_teste.sh:188`, `bin/trava_teste.sh:235`, `bin/trava_teste.sh:248`, `bin/trava_teste.sh:250`, `bin/trava_teste.sh:201`)
+
+13. **Wrapper permite perder a proteção contra órfão.** `-- bash -c 'docker run ... manage.py test'` não recebe rótulo nem ativa busca de suite sem rótulo, pois o teste exige literalmente primeiros argumentos `docker run`. Após KILL do job, novo wrapper pode executar por cima do container sobrevivente. (`bin/trava_teste.sh:188`, `bin/trava_teste.sh:194`, `bin/trava_teste.sh:248`)
+
+14. **Coleta pode apagar arquivos de job vivo.** O `find -mtime +2 -delete` não consulta identidade, estado ou término; outro esperador pode remover `.pid/.out/.err` de job antigo ainda vivo, prejudicando acompanhamento e futura leitura. (`bin/trava_teste.sh:123`, `bin/trava_teste.sh:128`, `bin/trava_teste.sh:142`, `bin/trava_teste.sh:147`)
+
+15. **Colisões de obra.** O saneamento substitui caracteres e corta em 100 bytes: `A B` e `A_B`, ou nomes com mesmo prefixo de 100 caracteres, viram a mesma obra e podem cancelar/superar uma à outra. `.` e `..` também permanecem permitidos como nome do arquivo de maior volta. (`bin/trava_fila.sh:39`, `bin/trava_fila.sh:85`, `bin/trava_fila.sh:95`, `bin/trava_fila.sh:159`)
+
+16. **Descritores herdados.** `setsid` não fecha fd6/7/8; o job substitui fd9 e o filho fecha apenas fd9. O fd7 da régua externa do integrador pode continuar herdado pelo job/filho. Uma rota concreta dos chamadores de sombra até suite que produza inversão de fd8/fd9 não foi encontrada nesta leitura [nao verificado]. (`bin/trava_teste.sh:127`, `bin/trava_teste.sh:173`, `bin/trava_teste.sh:248`, `bin/integrador.sh:51`)
+
+## 31/10 22:24 · sessao be3b32fd55a2 · - · - · origem=Ronald (tmux)
+
+O selo `test_trava_dono_do_job.sh` tem um defeito anterior à análise de mutantes: `_rc()` usa `wait`, mas é invocado dentro de substituição de comando, em subshell, que não é pai dos processos lançados pelo selo; portanto as comparações positivas com `0`/`143` não recuperam o rc daqueles filhos. Isso afeta (b), (e) e (f), e torna os resultados negativos de (a) menos informativos. A reprodução mínima, sem arquivos, retornou `subshell_wait_rc=-1` e `parent_wait_rc=0` nesta execução; o valor específico em outros Bash é [nao verificado]. (`bin/tests/test_trava_dono_do_job.sh:56`, `:75`, `:90`, `:99`, `:147`, `:170`, `:175`, `:180`)
+
+As mutações abaixo são previsões da leitura, sem mutar arquivos nem rodar selos; “não percebe” refere-se às asserções daquele caso, supondo corrigida a leitura de rc acima. Resultado experimental dos mutantes: [nao verificado].
+
+| Caso | Mutação de produção que a asserção reprova | Mutação que a asserção não percebe |
+|---|---|---|
+| (a) | Retirar o evento `superado` ou a linha `RELATO`. (`bin/trava_fila.sh:89`, `:90`; asserções `bin/tests/test_trava_dono_do_job.sh:85`, `:87`) | Trocar o rc da superação por outro não zero: o caso exige apenas `!=0`, ausência de marcador e trilhas. (`bin/trava_teste.sh:163`; `bin/tests/test_trava_dono_do_job.sh:76`) |
+| (b) | Permitir que `_tf_supera` mate também `estado=rodando`: perde-se `X2_RODANDO_FIM`. (`bin/trava_fila.sh:85`; `bin/tests/test_trava_dono_do_job.sh:91`) | Retirar a exclusão pelo flock pode produzir os dois marcadores e rc zero: o caso não compara ordem de início/fim. Outros casos podem perceber a mudança. (`bin/trava_teste.sh:174`; `bin/tests/test_trava_dono_do_job.sh:89`, `:99`) |
+| (c) | Retirar `exit 3` da recusa permite executar o marcador atrasado. (`bin/trava_fila.sh:115`; `bin/tests/test_trava_dono_do_job.sh:104`, `:107`) | Trocar `3` por outro rc não zero: não confere código exato, evento `recusado` nem ausência de entrada transitória. (`bin/trava_fila.sh:115`; `bin/tests/test_trava_dono_do_job.sh:107`) |
+| (d) | Acrescentar TERM ao job em `_solta`: desaparece a conclusão com rc zero. (`bin/trava_teste.sh:135`; `bin/tests/test_trava_dono_do_job.sh:123`, `:127`) | Substituir `setsid -f bash` por `bash`: o caso mata apenas o PID do esperador, não sua árvore; um filho comum também pode sobreviver a esse sinal individual. A garantia contra TaskStop por árvore não é testada. (`bin/trava_teste.sh:127`; `bin/tests/test_trava_dono_do_job.sh:119`) |
+| (e) | Retirar o TERM do dono rodando deixa o trabalho de 60 segundos vivo além do prazo observado. (`bin/trava_fila.sh:160`; `bin/tests/test_trava_dono_do_job.sh:135`, `:143`) | Gravar motivo/quem constantes ou incorretos: confere quantidade de eventos e texto `cancelados=2`, sem conferir esses campos. (`bin/trava_fila.sh:161`; `bin/tests/test_trava_dono_do_job.sh:150`, `:152`) |
+| (f) | Permitir superação de rodando mata `S2_RODANDO`; retirar a integração com a fila impede a entrada esperada. (`bin/trava_fila.sh:85`; `bin/sombra_trava.sh:40`; `bin/tests/test_trava_dono_do_job.sh:168`, `:175`) | Retirar `exec 8>&-` no caminho de entrada desaparecida: o wrapper do teste imediatamente executa `exit 1`, fechando o descritor de qualquer maneira. Um chamador que tratasse o erro continuando não está coberto. (`bin/sombra_trava.sh:50`; `bin/tests/test_trava_dono_do_job.sh:160`) |
+| (g) | Retirar a chamada a `nega_suite_fora_da_trava`. (`bin/disjuntor.py:1569`; `bin/tests/test_trava_dono_do_job.sh:193`) | Mover a guarda para dentro de `if not desligado()` passa os exemplos: `DISJUNTOR=0` não desliga nada; a chave real é arquivo. Excluir agentes também passa: todos os payloads omitem `agent_id`. (`bin/disjuntor.py:144`, `:146`, `:1570`; `bin/tests/test_trava_dono_do_job.sh:185`, `:192`) |
+| (i) Docker | Retirar o `docker stop` de `_parar` deixa o container vivo após cancelamento. (`bin/trava_teste.sh:242`; `bin/tests/test_trava_dono_para_filho.sh:75`) | Retirar o destacamento preservando um filho normal pode sobreviver ao TERM enviado só ao PID do esperador; o teste não mata a árvore. (`bin/trava_teste.sh:127`; `bin/tests/test_trava_dono_para_filho.sh:68`) |
+| (ii) Docker | Fazer `_quem` ignorar containers rotulados e dizer livre reprova a expectativa `ORFAO`. (`bin/trava_teste.sh:94`; `bin/tests/test_trava_dono_para_filho.sh:97`, `:99`) | Fazer o esperador retornar zero quando falta `.rc`: (ii) executa `wait` mas não confere seu status. (`bin/trava_teste.sh:148`; `bin/tests/test_trava_dono_para_filho.sh:95`) |
+
+A sombra continua com ciclo de vida diferente do prometido para o job: registra o `BASHPID` do chamador, toma fd 8 nesse mesmo processo e exporta herança; não cria esperador destacado, arquivo de rc ou trap para parar container. Cancelar rodando envia TERM apenas ao PID registrado, enquanto os filhos herdam o descritor. (`bin/sombra_trava.sh:38`, `:46`, `:48`, `:63`, `:64`; `bin/trava_fila.sh:160`)
+
+Também não há `tf_sai` no término bem-sucedido da sombra: suas chamadas aparecem apenas em erros de abertura/timeout. A entrada morta será podada na leitura, sem evento `fim`. Pedidos superados ou cancelados antes da aquisição também não chegam à escrita de `sombra_espera.jsonl`. (`bin/sombra_trava.sh:46`, `:54`, `:57`, `:65`; `bin/trava_fila.sh:58`)
+
+Os selos reapontam lock/fila/jobs e sombra para diretórios temporários e conferem que a substituição do lock ocorreu; o hook recebe `HOOK_STOP_RAIZ` próprio. O selo Docker apenas sourceia recursos, sem chamar `teste_envfile`, e cria/remove containers por nomes próprios. (`bin/tests/test_trava_dono_do_job.sh:24`, `:27`, `:29`, `:157`, `:159`, `:186`; `bin/tests/test_trava_dono_para_filho.sh:28`, `:35`, `:38`, `:40`, `:44`, `:45`)
+
+Não cabe afirmar isolamento absoluto: a limpeza de `dono_do_job` mata PID nu vindo dos arquivos, sem conferir starttime, e usa `pkill -f`; PID reciclado pode atingir processo alheio. As consultas Docker são globais, e suites alheias sem rótulo podem interferir nos casos Docker; a trava as espera em vez de matá-las. (`bin/tests/test_trava_dono_do_job.sh:35`, `:38`, `:40`; `bin/trava_teste.sh:68`, `:194`, `:225`, `:230`)
+
+## 31/10 22:24 · sessao 35b88c87e455 · - · - · origem=Ronald (tmux)
+
+Achados do predicado, sem executar suites nem escrever arquivos:
+
+1. **Escapes reproduzidos com o predicado real compilado em memória**:
+
+| Comando de suite | Por que passa | [nao verificado]
+|---|---|
+| `echo inicio` + newline + `docker run --rm img python manage.py test ponto` | Newline é consumido como whitespace; o segmento começa em `echo`. `bin/disjuntor.py:167`, `bin/disjuntor.py:174`. |
+| `if true; then docker run --rm img python manage.py test ponto; fi` | O segmento começa por `then`, que não é prefixo conhecido. `bin/disjuntor.py:157`, `bin/disjuntor.py:197`, `bin/disjuntor.py:216`. |
+| `docker --context default run --rm img python manage.py test ponto` | `run` só é procurado nos índices 1 e 2. `bin/disjuntor.py:216`. |
+| `sudo -u ronald docker run ...` / `env -C /tmp docker run ...` / `stdbuf -o L docker run ...` | O argumento textual da opção interrompe a remoção dos prefixos. `bin/disjuntor.py:199`. |
+| `docker run > out --rm img python manage.py test ponto` | O redirecionamento separa `docker run` dos argumentos da suite. `bin/disjuntor.py:175`. |
+| `docker run --rm img python manage.py --settings=config.settings.ci test ponto` | A regex exige `manage.py` imediatamente seguido de whitespace e `test`. `bin/disjuntor.py:160`. |
+| `D=docker; "$D" run ...`, `eval 'docker run ...'`, `printf x \| xargs docker run ...` | Não resolve expansão, eval nem executores adicionais. `bin/disjuntor.py:188`, `bin/disjuntor.py:207`, `bin/disjuntor.py:216`. |
+
+Também não inspeciona o conteúdo de scripts chamados por `bash arquivo.sh`; só recursa no texto após opção curta contendo `c`. Portanto a camada estática é indispensável e também tem heurísticas próprias, distintas. `bin/disjuntor.py:208`, `bin/tests/test_trava_teste.sh:83`, `bin/tests/test_trava_teste.sh:87`, `bin/tests/test_trava_teste.sh:120`.
+
+2. **Falsos positivos reproduzidos**:
+
+- `bash bin/trava_teste.sh -- bash -c 'docker run --rm img python manage.py test ponto'`: nega apesar de o shell interno executar sob o flock; encontra o `-c` em qualquer posição após `bash`, sem distinguir execução de script de execução por `bash -c`. `bin/disjuntor.py:208`, `bin/disjuntor.py:210`; a trava executa o argumento genérico em `bin/trava_teste.sh:248`.
+- `docker run --rm alpine echo 'python manage.py test ponto'` e `docker run --rm -e NOTE='manage.py test' alpine sleep 30`: nega por procurar a regex em todos os argumentos unidos, sem identificar o programa executado. `bin/disjuntor.py:216`.
+- `printf '%s\n' ';' docker run --rm img python manage.py test` e `grep -F ';' docker run --rm img python manage.py test`: nega embora apenas imprimam/leiam texto; após remover as aspas, trata até o token **citado** `;` como operador. `bin/disjuntor.py:167`, `bin/disjuntor.py:175`.
+- `cat <<'EOF'` com corpo `; docker run --rm img python manage.py test` também é negado: não trata here-doc como dados. `bin/disjuntor.py:174`.
+
+As formas canônicas atuais, com trava em primeiro plano, não são negadas nas chamadas de `suite.sh:96`, `regua.sh:165`, `pre-push.sh:142`; `grep -n "docker run ... manage.py test" arquivo` simples também passa. Isso não constitui prova para todas as combinações de argumentos adicionais. `bin/disjuntor.py:207`, `bin/disjuntor.py:216`.
+
+3. **Ordem**:
+
+`guarda_chave` continua primeiro; a nova guarda vem antes de `desligado()` e de `pretool`, logo alcança a sessão principal e a chave desligada, mas antecipa e pode impedir a avaliação de B1/B3/B4. A ordem relativa dessas guardas antigas permanece em `pretool`; a nova recusa vence antes delas. `bin/disjuntor.py:1568`, `bin/disjuntor.py:1569`, `bin/disjuntor.py:1570`, `bin/disjuntor.py:1513`, `bin/disjuntor.py:1517`, `bin/disjuntor.py:1522`.
+
+A guarda continua sujeita ao fail-open geral: exceção antes da resposta, inclusive falha em `trilha('NEGOU', ...)`, libera fora do ramo B3. `bin/disjuntor.py:1575`, `bin/disjuntor.py:1579`, `bin/disjuntor.py:1589`.
+
+4. **Selo (g): dois furos concretos**:
+
+- Não testa desligamento: repete os casos com a variável `DISJUNTOR=0`, mas `desligado()` consulta exclusivamente a existência do arquivo `DISJUNTOR_DESLIGADO`; a variável não é lida. `bin/tests/test_trava_dono_do_job.sh:192`, `bin/disjuntor.py:64`, `bin/disjuntor.py:144`.
+- Não testa agente: o payload construído nunca leva `agent_id`. `bin/tests/test_trava_dono_do_job.sh:185`.
+
+Mutação que passa despercebida: trocar `bin/disjuntor.py:1569` por `neg = neg or (not desligado() and nega_suite_fora_da_trava(payload))`; os seis casos permanecem com a chave ligada. Outra: aplicar a recusa apenas quando não há `agent_id`. Mutação mínima que deixa vermelho: remover a chamada à nova guarda em `bin/disjuntor.py:1569`, pois os três comandos positivos precisam produzir recusa. `bin/tests/test_trava_dono_do_job.sh:189`, `bin/tests/test_trava_dono_do_job.sh:193`.
+
+5. **Classes / fonte única**:
+
+- A v2 criou uma implementação Python do juiz log+rc que duplica a decisão do shell; não é idêntica: Python retorna `INDEFINIDO` para ausência de OK/FAILED, enquanto shell admite `VAZIO` para `NO TESTS RAN`/`Ran 0 tests`. Ambas aceitam `OK`+rc0 sem exigir uma linha `Ran`, apesar do comentário do shell prometer essa condição. `app/core/esteira_vigia.py:813`, `app/core/esteira_vigia.py:825`, `bin/vigia_veredito.sh:12`, `bin/vigia_veredito.sh:19`, `bin/vigia_veredito.sh:24`. Não achei autoridade registrada de infra para afirmar “duplica juiz **registrado**”; essa qualificação fica [nao verificado].
+- Recursos/envfile continuam derivados de `recursos.sh`; `_recursos_teste` sourceia a fonte, chama `teste_envfile` e lê as flags, sem regravar os valores de CPU/senha. `app/core/esteira_vigia.py:770`, `bin/recursos.sh:81`, `bin/recursos.sh:118`.
+- A escrita concorrente de envfile usa temporário único e rename no mesmo diretório. `bin/recursos.sh:139`, `bin/recursos.sh:143`.
+- Duplicação nova dos relógios/identidades: `_inicio` da trava e `tf_inicio` da biblioteca implementam independentemente a leitura do mesmo campo 22 de `/proc`; a fila chama uma e o job monta identidade com a outra. `bin/trava_teste.sh:49`, `bin/trava_teste.sh:154`, `bin/trava_fila.sh:18`, `bin/sombra_trava.sh:39`. Não é leitura de relógio de negócio; é identidade de processo.
 
 ## 31/10 22:09 · sessao 5b0dcb328d14 · V3-P5-PRORROGACAO-POR-INTERVALO · verificador · origem=Code
 
@@ -770,113 +979,4 @@ Os outros candidatos principais não demonstram, por si, esse problema:
 
 O anexo fornecido não comprova uma ocorrência dessas sequências em produção, nem quantidade de memos incorretos: **[nao verificado]**.
 
-## 31/10 21:49 · sessao f4f7b1e2fa91 · - · - · origem=Ronald (tmux)
-
-Achados dos casos/mutantes, por leitura estática; execução dos selos não verificada.
-
-- **Bloqueia — saída antecipada ainda dá falsa mordida.** Inserir `return 1` no começo de `main` deixa `sys.exit(main(...))` na linha original; `i14_mesma` retorna pelo assert, sem chamar a decisão. A verificação de `SystemExit` aceita essa linha original. Também inserir `exit 1` no começo do wrapper passa `bash -n`, derruba `wrapper` no assert e não executa Python da cópia. (`bin/disjuntor.py:2320`, `bin/disjuntor.py:2343`, `bin/tests/test_padrao_de_cima.sh:116`, `bin/tests/test_padrao_de_cima.sh:294`, `bin/tests/_mordida.sh:197`, `bin/tests/_mordida.sh:285`, `bin/tests/_mordida.sh:293`.)
-
-- **Bloqueia — stdout vazio não prova liberação no caso ampliado.** As duas execuções novas de `pretool` ignoram rc. Substituir o corpo de `if chave` por `raise SystemExit(1)` deixa stdout vazio, mantém as portas anteriores funcionando e faz `desligado` terminar com sucesso, apesar da saída antecipada. O mutante declarado verifica somente a volta da negativa. (`bin/tests/test_padrao_de_cima.sh:321`, `bin/tests/test_padrao_de_cima.sh:328`, `bin/tests/test_padrao_de_cima.sh:329`, `bin/tests/test_padrao_de_cima.sh:331`, `bin/tests/test_padrao_de_cima.sh:811`, `bin/disjuntor.py:2099`.)
-
-| Mutante novo | Caminho da mordida / limite |
-|---|---|
-| `v9-resolvedor-v-parado` | V=2 aceita o vazio plantado com res=2; não redispara e o caso retorna16. A extensão passa também contra 5b39ae82: V=3 e a guarda de reclassificação já existiam no diff fornecido. (`bin/tests/test_padrao_de_cima.sh:574`, `bin/tests/test_padrao_de_cima.sh:578`, `bin/tests/test_padrao_de_cima.sh:805`, `bin/disjuntor.py:1105`, `bin/disjuntor.py:1392`.) |
-| `v9-modelos-fifo` | O primeiro FIFO prende `open`; timeout retorna124 e o caso retorna1. Exige a prova de prazo do harness, cujas fragilidades foram enviadas pelo outro explorer. (`bin/tests/test_padrao_de_cima.sh:600`, `bin/tests/test_padrao_de_cima.sh:601`, `bin/tests/test_padrao_de_cima.sh:603`, `bin/tests/test_padrao_de_cima.sh:806`.) |
-| `v9-sitio-fifo` | Primeiro subcaso passa; segundo FIFO prende `open`, timeout retorna124 e o caso retorna2. (`bin/tests/test_padrao_de_cima.sh:604`, `bin/tests/test_padrao_de_cima.sh:605`, `bin/tests/test_padrao_de_cima.sh:607`, `bin/tests/test_padrao_de_cima.sh:808`.) |
-| `v9-escopo-de-outra-geracao` | Sem comparação, escopo antigo omite A; estado corrompido e relato neutro chegam a LIVRE, disparando return4 do caso. Trocar a comparação por `if True` também passa esse caso; a suíte completa o rejeitaria pela exigência de LIVRE em `escopo_duvida`. (`bin/tests/test_padrao_de_cima.sh:620`, `bin/tests/test_padrao_de_cima.sh:621`, `bin/tests/test_padrao_de_cima.sh:810`, `bin/tests/test_padrao_de_cima.sh:513`, `bin/disjuntor.py:1549`, `bin/disjuntor.py:1567`.) |
-| `v9-cru-ignora-chave` | Desativa a guarda; arrays com chave voltam a produzir negativa, disparando return6. Não distingue liberação normal de crash silencioso. (`bin/tests/test_padrao_de_cima.sh:329`, `bin/tests/test_padrao_de_cima.sh:811`, `bin/disjuntor.py:2102`, `bin/disjuntor.py:2111`.) |
-
-- **Fila — precisão dos novos casos.** FIFO só exige rc4 antes de20s, sem demonstrar “no ato”; não cobre troca concorrente regular→FIFO. `escopo_velho` não inspeciona geração, ordem da gravação, falha de geração, recriação/restauração ou concorrência. (`bin/tests/test_padrao_de_cima.sh:601`, `bin/tests/test_padrao_de_cima.sh:607`, `bin/tests/test_padrao_de_cima.sh:612`, `bin/tests/test_padrao_de_cima.sh:621`.)
-
-- **Bloqueia — leitor anterior ainda pode esperar FIFO.** Antes do novo `_abre`, o resolvedor chama `CE.modelos`, que faz `isfile` seguido de `open`; troca concorrente regular→FIFO pode bloquear ali. O FIFO estático do selo não exercita essa janela. (`bin/disjuntor.py:1222`, `bin/disjuntor.py:1224`, `app/core/censo_escritas.py:102`, `app/core/censo_escritas.py:105`, `bin/tests/test_padrao_de_cima.sh:600`.)
-
-- **Fila — metas estreitos.** Sintaxe exercita somente `.py`, deixando novo `bash -n` sem meta; SystemExit exercita somente `raise` plantado direto; SIGTERM exercita somente sinal próprio fora de timeout. Cada meta aceita incremento de uma falha contendo substring, mesmo se houver causas adicionais na mesma mensagem. (`bin/tests/test_padrao_de_cima.sh:831`, `bin/tests/test_padrao_de_cima.sh:833`, `bin/tests/test_padrao_de_cima.sh:836`, `bin/tests/_mordida.sh:197`, `bin/tests/_mordida.sh:335`, `bin/tests/_mordida.sh:336`.)
-
-Classes: classe5 evidenciada acima; classes1/3/4/6 não tiveram violação específica demonstrada nesta leitura — permanecem juiz PDC único, relógio na borda e geração/escopo dentro de `_com_estado`. Pouso antes de pré-requisito é **[não verificado]**; a exigência consta em `CLAUDE.md:549` e `CLAUDE.md:553`, mas os anexos não trazem execução/pouso. (`bin/disjuntor.py:1360`, `bin/disjuntor.py:1369`, `bin/disjuntor.py:1454`, `bin/disjuntor.py:1462`, `bin/disjuntor.py:1466`, `bin/disjuntor.py:1537`.)
-
-## 31/10 21:48 · sessao 5dca7ee72020 · - · - · origem=Ronald (tmux)
-
-Há **cadeia de produção condicional alcançável**, inclusive sem passar por `becos`; ocorrência concreta no dado fornecido: **[nao verificado]**.
-
-Sequência:
-
-1. O cartório avalia o fio dos chamados carregados: `app/ponto/services/cartorio.py:1141`.
-2. Um chamado `x` reconcilia em `:1287`, `:1300` ou `:1321`.
-3. `reconciliar` abre transação e chama `_gravar_estado`: `app/chamados/models.py:614-618`; esta salva o chamado em `:279`.
-4. S143 recebe o save terminal e chama o resolvedor: `app/chamados/signals.py:75-92`.
-5. O resolvedor inclui **todas as disputas abertas do colaborador** em `_cands`: `app/chamados/services/disputa_emissao.py:1621-1623`; no laço final, faz `refresh`, consulta C7 e chama `d.fechar`: `:1672-1679`.
-6. `d.fechar` salva a disputa fechada: `app/chamados/models.py:1846-1850`.
-7. O signal agenda retomada da regularização: `app/chamados/signals.py:97-121`.
-8. Ao commit de `reconciliar`, regularizações confirmadas ainda não materializadas são retomadas: `app/chamados/services/regularizacao_ext.py:218-224`.
-9. Essa porta pode criar batida (`:70-82`), remover (`:131-140`) ou corrigir tipo/timestamp (`:149-155`).
-10. O cartório volta a avaliar `_fio_vivo` em perguntas de **outro chamado `y` ainda vivo**: `app/ponto/services/cartorio.py:1390-1394`. `x` terminal é pulado em `:1391`.
-
-Guardas e limitações:
-
-- A regularização exige `status='confirmada'` (`app/chamados/services/regularizacao_ext.py:51-54`) e **nenhuma disputa aberta do colaborador** (`:58-65`): a disputa fechada precisa ser a última aberta.
-- C7 pode fechar disputa com chamado `y` ainda vivo, desde que suas perguntas estejam mortas: o laço final `app/chamados/services/disputa_emissao.py:1672-1679` não consulta credores; o guarda de credor vivo em `:1628-1633` protege apenas o bloco anterior.
-- `julgar_colab` não envolve o corpo em `atomic`; apenas ativa `_tl.ativo` e executa o corpo (`app/ponto/services/cartorio.py:770-777`). Portanto, no command sem transação externa, o callback pode executar antes de retornar a `:1394`; transação externa em uma invocação específica: **[nao verificado]**.
-- `em_julgamento()` impede reentrada do cartório pelo signal da batida (`app/ponto/signals.py:85-93`); não impede a gravação pelo chokepoint (`app/ponto/registro_batida.py:157-161`).
-
-Testemunha lógica para mudança de insumo efetivamente lido: pergunta de `y`, tipo texto, materializada, não validada, via sem encerramento por identidade, célula sem veredito, dia fora da janela viva. C6 alcança `_pergunta_materializada_de_fato` (`app/chamados/juizes.py:1097-1114`), cujo ramo texto consulta `_turno_tem_saida` (`:754-755`, `:359-370`). Uma regularização que remove a saída pode mudar esse resultado sem mudar qualquer componente da chave (`:788-796`). Essa combinação de registros em produção permanece **[nao verificado]**.
-
-## 31/10 21:48 · sessao 8b45f086c323 · - · - · origem=Ronald (tmux)
-
-Cartório contém reutilização comprovada de `PerguntaDisputa`: `chamados_que_falam_de_batida` carrega perguntas com prefetch e guarda os chamados em listas (`app/ponto/services/cartorio.py:96-107`); o corpo consulta essas perguntas em `:1141` e volta a consultar o mesmo manager em `:1393-1394`, que delega a `pergunta_viva` (`app/chamados/juizes.py:1142`).
-
-A publicação de ata/veredito correntes entre essas consultas (`app/ponto/services/cartorio.py:1188`, `:1259`) não altera `p.celula`: o C6 lê a FK diretamente (`app/chamados/juizes.py:1044`, `:866`), e a alimentação de `classificar_falta` devolve essa mesma FK (`:598-606`). A projeção do julgamento corrente aparece explicitamente na cópia de ressuscitação, com remoção do memo (`app/chamados/models.py:1427-1445`). A lavra da célula do loop ocorre depois da segunda consulta (`app/ponto/services/cartorio.py:1565-1586`).
-
-Há, porém, uma cadeia condicional de produção capaz de mudar batidas entre as duas consultas:
-
-1. Primeiro `_fio_vivo` sobre perguntas prefetched: `app/ponto/services/cartorio.py:1141`.
-2. Um chamado `x` é reconciliado: `:1287`, `:1300` ou `:1321`; a porta usa transação e grava seu estado (`app/chamados/models.py:614-619`, `:279`).
-3. O signal S143 chama o resolver (`app/chamados/signals.py:75-92`).
-4. Esse resolver inclui **todas** as disputas abertas do colaborador em `_cands` (`app/chamados/services/disputa_emissao.py:1621-1623`) e fecha as que passam pelo C7 (`:1672-1679`). As guardas de credores vivos em `:1627-1633` pertencem ao laço anterior de carimbo; não eliminam candidatos do laço final.
-5. Fechar a disputa salva seu estado (`app/chamados/models.py:1846-1850`) e agenda retomada de regularizações no commit (`app/chamados/signals.py:97-121`).
-6. A retomada busca regularizações confirmadas e não materializadas (`app/chamados/services/regularizacao_ext.py:218-224`). A materialização exige nenhuma disputa aberta (`:58-65`) e pode adicionar batidas (`:77`, `:181-185`), removê-las (`:136`) ou corrigi-las (`:153-155`).
-7. Ao sair da transação de `x.reconciliar`, a execução volta ao corpo do cartório (`app/chamados/models.py:614-619`), que depois pode consultar novamente as perguntas prefetched de outro chamado `y` ainda vivo (`app/ponto/services/cartorio.py:1390-1394`). O ramo pula `x` se ele se tornou terminal (`:1391`).
-
-Condições necessárias: o fechamento deve deixar nenhuma disputa aberta; precisa existir regularização confirmada aplicável; outro chamado `y` deve continuar vivo e reter perguntas já avaliadas no prefetch. A existência desses registros em produção é **[nao verificado]**. A cadeia é alcançável pelo código; ocorrência ou divergência efetiva em produção é **[nao verificado]**.
-
-As passadas do cartório reutilizam as células de `cels` (`app/ponto/services/cartorio.py:777`, `:802`, `:867`), mas recarregam os chamados/perguntas a cada entrada no corpo (`:1071`, `:96-97`). Portanto a repetição de passadas não comprova, sozinha, sobrevivência do mesmo `p._pv_memo`; tampouco comprova que a célula do loop seja a mesma instância de `p.celula` (`app/ponto/services/cartorio.py:1105`; `app/chamados/juizes.py:598-606`).
-
-## 31/10 21:48 · sessao 538c525ade29 · - · - · origem=Ronald (tmux)
-
-Achados do harness, por leitura estática; os selos não foram executados. [não verificado]
-
-1. **Bloqueia — saída antecipada ainda vira mordida VERDE.** Trocar `return padrao_parada(argv[1])` por `return 1` faz o caso `i14_mesma` retornar seu assert 1 sem chamar a decisão. O processo fecha normalmente; o `SystemExit` nasce na linha original `sys.exit(main(...))`, ausente do texto novo, e escapa da nova guarda. Referências: `bin/disjuntor.py:2333`, `bin/disjuntor.py:2343`, `bin/tests/test_padrao_de_cima.sh:116`, `bin/tests/_mordida.sh:220`, `bin/tests/_mordida.sh:285`, `bin/tests/_mordida.sh:293`.
-
-2. **Bloqueia — `.sh` que sai antes de executar o instrumento também morde.** Trocar `set -uo pipefail` do wrapper por `exit 1` passa `bash -n`; o caso `wrapper` retorna assert 1 antes de executar qualquer Python do wrapper. `.proc/.exc/.esc` vazios não impedem aprovação: o checker penaliza excesso de processos abertos, nunca exige processo ou execução do código mutado. Referências: `bin/codex_pergunta.sh:27`, `bin/tests/_mordida.sh:197`, `bin/tests/test_padrao_de_cima.sh:289`, `bin/tests/test_padrao_de_cima.sh:294`, `bin/tests/_mordida.sh:262`, `bin/tests/_mordida.sh:327`.
-
-3. **Bloqueia — rc 124 não prova expiração.** Exemplo de mutação em `disjuntor.py:2333`:
-   ```python
-   return __import__('subprocess').call([
-       __import__('sys').executable, '-c',
-       'import os; os.kill(os.getpid(), 15)'
-   ]) and 124
-   ```
-   O filho herda a sonda, registra `SINAL` no grupo do timeout; o pai fecha normalmente e retorna 124 imediatamente pela linha original `sys.exit`. A função grava `PRAZO`; `resolvedor_fifo` retorna assert 1; o checker aceita e anuncia mordida pelo prazo sem que tenham passado 20 segundos. Caminho: `bin/tests/_mordida.sh:63`, `bin/tests/_mordida.sh:133`, `bin/tests/_mordida.sh:135`, `bin/tests/_mordida.sh:254`, `bin/tests/_mordida.sh:266`, `bin/tests/test_padrao_de_cima.sh:601`, `bin/tests/test_padrao_de_cima.sh:603`, `bin/disjuntor.py:2343`. Caminho estático, não executado. [não verificado]
-
-4. **Fila — `SystemExit` capturada também causa VERMELHO.** A sonda registra toda exceção; a nova prova não consulta se `SystemExit` encerrou o processo. Um mutante válido que levante e capture `SystemExit`, depois efetivamente execute a decisão, é recusado como saída cedo. Além disso, `plant` compara texto global, sem distinguir arquivo, posição ou linha original repetida no bloco novo. Referências: `bin/tests/_mordida.sh:115`, `bin/tests/_mordida.sh:284`, `bin/tests/_mordida.sh:285`, `bin/tests/_mordida.sh:293`.
-
-5. **Fila — comparação de contaminação por totais permite compensação.** O controle pode conter um processo sem fechamento e o mutante trocar esse por outro processo abortado; totais iguais passam. Também aceita sinal externo até a quantidade já encontrada no controle. O controle não rejeita essas mortes, apenas rc e cinco tipos de exceção de programação. Referências: `bin/tests/_mordida.sh:205`, `bin/tests/_mordida.sh:206`, `bin/tests/_mordida.sh:255`, `bin/tests/_mordida.sh:262`, `bin/tests/_mordida.sh:264`.
-
-6. **Fila — prazo não impõe limite de encerramento.** A função não usa `--kill-after`; um mutante que ignore SIGTERM pode manter `wait` indefinidamente. Referências: `bin/tests/_mordida.sh:133`, `bin/tests/_mordida.sh:134`.
-
-Mapa dos estados:
-
-| Estado | Escritores | Leitores |
-|---|---|---|
-| `.proc` | Truncamento em `_mordida_sondado`; sonda escreve INI/FIM/SINAL; função `timeout` escreve PRAZO; controle copia baseline. `bin/tests/_mordida.sh:155`, `:55`, `:59`, `:65`, `:135`, `:210` | `abertos`, chamado para mutante e controle. `bin/tests/_mordida.sh:247`, `:261` |
-| `.exc` | Truncamento; callback RAISE; cópia do controle. `bin/tests/_mordida.sh:155`, `:114`, `:209` | Controle procura cinco tipos; `regs` lê eventos do mutante para declarações e SystemExit. `bin/tests/_mordida.sh:206`, `:236`, `:258`, `:285`, `:314` |
-| `.esc` | Truncamento; excepthook; baseline. `bin/tests/_mordida.sh:155`, `:125`, `:211` | Checker conta diferenças e desconta exceções declaradas. `bin/tests/_mordida.sh:259`, `:319`, `:320` |
-| `.novo` | `_mordida_muta` trunca e depois grava os textos novos separados por NUL. `bin/tests/_mordida.sh:169`, `:192` | Guarda de SystemExit e validação das declarações. `bin/tests/_mordida.sh:269`, `:284`, `:310` |
-| `.orig.d` | `_mordida_muta` remove o anterior e grava original do arquivo. `bin/tests/_mordida.sh:169`, `:176`, `:178` | Guarda de SystemExit e declarações; ausência cai para arquivo atual. `bin/tests/_mordida.sh:291`, `:292`, `:308`, `:309` |
-| `_MORDIDA_PROC` | `_mordida_sondado` atribui e depois esvazia, sem restaurar valor anterior. `bin/tests/_mordida.sh:157`, `:162` | Função `timeout`. `bin/tests/_mordida.sh:135` |
-| Função `timeout` | Definição global ao dar source no harness. `bin/tests/_mordida.sh:131`, `bin/tests/test_padrao_de_cima.sh:34`, `bin/tests/test_disjuntor.sh:45` | Casos PDC e disjuntor. `bin/tests/test_padrao_de_cima.sh:601`, `:605`, `bin/tests/test_disjuntor.sh:579`, `:661` |
-
-A função não é exportada para o Bash novo do wrapper; seu `timeout` interno continua binário, sem anotação PRAZO. Referências: `bin/tests/_mordida.sh:131`, `bin/tests/test_padrao_de_cima.sh:289`, `bin/codex_pergunta.sh:177`.
-
-Casos do mesmo processo de selo não suportam paralelismo: compartilham árvore `A`, arquivo `EST`, variáveis globais da sonda, baseline por nome do caso e `meta.out` único. Os loops atuais são sequenciais e duas execuções independentes usam diretórios `mktemp` separados. Referências: `bin/tests/test_padrao_de_cima.sh:29`, `:35`, `:36`, `:39`, `:683`, `bin/tests/test_disjuntor.sh:39`, `bin/tests/_mordida.sh:156`, `:209`, `:335`.
-
-_1266 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1270 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
