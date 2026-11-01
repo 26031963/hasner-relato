@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 08:37:14.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (115.8 MB). Acoes na janela: **580**.
+**Medido em 01/11/2026 08:42:44.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (115.8 MB). Acoes na janela: **577**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -587,6 +587,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:43:25 | Bash | Read the impact script and check the mount points | `cd /home/ronald/saas-hasner/logs/v3p5/v2; cat impacto_v3p5v2.sh; ls /home/ronald/wt-v3p5v2-202909/app/ \| grep -E '^(logs\|media)$'` |
 | 20:43:20 | Bash | Read V3 round 2 RED and impact | `cd /home/ronald/saas-hasner/logs/v3p5/v2; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' red.log \| tail -3; tail -25 impacto_sombra.out` |
 | 20:43:16 | Bash | Check V3 round 2 jobs, ESPERANDO and the trava | `cd /home/ronald/saas-hasner; date +%H:%M; ls logs/v3p5/v2/; tail -3 logs/v3p5/v2/*.out 2>/dev/null; cd bin; python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[0])"; ./trava_teste.sh --quem` |
-| 20:41:24 | Bash | Log the PDC round 7 verdict | `echo "- $(date +%H:%M) PDC r7: GREEN_disjuntor 27->3 FALHA (P7-tipo-solto e P9-novo-fixo pela regra (c), P10-trava-sem-prazo processo sem FIM); GREEN_pdc/hook_parei/ruff rc=0, REDs vermelhos como esperado; volta 8 aberta (r8)." >> /home/ronald/saas-hasner/app/docs/RELATO.md` |
-| 20:41:20 | SendMessage |  | `-` |
-| 20:41:11 | Bash | Read the PDC round 7 verdicts | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/bxvz7wap5.output` |
