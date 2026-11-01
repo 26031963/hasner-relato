@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 14:19:54.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (131.3 MB). Acoes na janela: **557**.
+**Medido em 01/11/2026 14:25:17.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (131.4 MB). Acoes na janela: **561**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:23:29 | Bash | Record postmortem classification in RELATO | `cd /home/ronald/saas-hasner && H=$(date +%H:%M) && python3 - "$H" <<'EOF' import sys,re H=sys.argv[1];p='app/docs/RELATO.md' L=open(p).read().split('\n') idx=max(i for i,l in enumerate(L) if re.match(r'- \d\d:\d\d ',l)) L.insert(idx+1,"- "+H+" POSTMORTEM CONTENCAO-QUE-MORDE-V2 (Codex censo rc=0, logs/contencao/v2/p1/pm/postmortem.r): 8 achados do opus = (a)2* (b)4 (c)1 (d)0 (e)1. Conferido pelo Co ...` |
+| 14:23:21 | Bash | Spot-check postmortem item 1 citation | `cd /home/ronald/saas-hasner/logs/contencao/v2/p1 && sed -n 36,39p codex_v1.r \| cut -c1-300; sed -n 1,3p codex_v1_triagem.txt \| cut -c1-300` |
+| 14:23:18 | Bash | Read Codex postmortem result | `cd /home/ronald/saas-hasner/logs/contencao/v2/p1/pm && tail -2 postmortem.run; wc -l postmortem.r; tail -25 postmortem.r \| cut -c1-400` |
+| 14:23:15 | Bash | Check background states | `cd /home/ronald/saas-hasner && ls logs/cobparc/v4/det/; wc -c logs/cobparc/v4/det/cura.out; tail -3 logs/claudemd/push_6c246c14.log \| cut -c1-200; ls logs/contencao/v2/p1/pm/; ps -p 14048 -o etime=` |
 | 14:18:13 | Bash | Wait for COBPARC cura det to finish | `cd /home/ronald/saas-hasner; until [ -f logs/cobparc/v4/det/rodar.done ]; do /usr/bin/sleep 30; done; grep -E '^DET\|FM09' logs/cobparc/v4/det/cura.out \| cut -c1-260` |
 | 14:18:11 | Bash | Fix typo and check cura run | `cd /home/ronald/saas-hasner && sed -i 's/\| aberta, despois da COBPARC \|/\| aberta, depois da COBPARC \|/' app/docs/BACKLOG.md && grep -c "despois" app/docs/BACKLOG.md; ps -p 14048 -o etime=; wc -c logs/cobparc/v4/det/cura.out` |
 | 14:18:03 | Bash | Write both avals to RELATO top, BACKLOG and PROMPTS | `cd /home/ronald/saas-hasner && H=$(date +%H:%M) && python3 - "$H" <<'EOF' import sys,re H=sys.argv[1] p='app/docs/RELATO.md' L=open(p).read().split('\n') # CONTENCAO pergunta -> respondida for i,l in enumerate(L[:40]): if l.startswith('PERGUNTA DE DESENHO CONTENCAO-QUE-MORDE-V2'): L[i]=("RESPONDIDA por aval Ronald DESENHO CONTENCAO-QUE-MORDE-V2 "+H+" -- estaciona 3a743cdd e devolve a vaga; instrum ...` |
