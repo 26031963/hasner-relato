@@ -1,6 +1,7 @@
 # RELATO — esteira saas-hasner
 
 ESPERANDO: ensaio | pid=1191526 | arquivo=/home/ronald/saas-hasner/logs/gfja_fase_C.out
+DESENHO CONTENCAO-SESSOES-SIMULTANEAS (11:49): lei=escritor unico da reserva pergunta=clear/SessionStart da sessao S2 poda as reservas VIVAS de S1? o aval diz 'sessao anterior', ambiguo com 2 sessoes vivas; + matcher SessionStart startup/resume falta em .claude/settings.json (so compact/clear) e e dele; + ultimo_clear.json 30/10 tem session_id vazio: payload sem session_id = todo Agent PORTA-NAO-SEI -- a obra segue nos 6 procedentes Codex v1
 DESENHO CONTENCAO-QUE-MORDE: lei=escritor unico pergunta=quem encerra a reserva de Agent entre sessoes bin/disjuntor.py:1521 -- RESPONDIDA pelo aval de desenho do Ronald: dono sessao e agente, poda no SessionStart, estado ausente nega
 LIBERADA B3 GRADE-FOLGA-JUIZ 10:36 (desenho, sha ca3acfbd) -- linha consumida
 RESPONDIDA por aval Ronald GRADE-FOLGA-JUIZ=(a) 01/11 09:5x -- DESENHO GRADE-FOLGA-JUIZ: o trecho eh_trabalho=trabalho_do_dia (copia calendario.py:840) SAI; GRADE pousa so com folga_lancada_do_dia; "quem publica o eh_trabalho do dia" vai a E4-CALENDARIO.
@@ -5740,3 +5741,5 @@ DESPACHO GRADE-FOLGA-JUIZ-a: retirar trecho eh_trabalho (calendario.py:840 da co
 - 11:32 GRADE-FOLGA-JUIZ suite3 inteira da copia d9cb0e42: OK (skipped=42, expected failures=25), Ran 13225, rc=0 (logs/grade_juiz/va/suite3.log). Proximo: ensaio sombra A x C, depois opus final (brief logs/grade_juiz/va/opus_final_brief.md).
 - 11:32 COBPARC v4 RED contra HEAD 129bfeaa (copia wt-cobparc-red-103803): FAILED (failures=8), Ran 18, rc=1 (logs/cobparc/v4/red_head_129bfeaa_v2.log) -- os 8 RED dos 4 procedentes Codex r3 + c2 mordem; GREEN na copia: green_iter3.log OK Ran 132. Obra segue PAROU LEI-AKITA 9 (16 colabs fora do aval) esperando Ronald.
 - 11:33 aval COBPARC-DIFF-ISOLADO recebido. DECISAO TECNICA: 'HEAD' = arvore da copia wt-cobparc-222305 (a que pousa), A = REGRA_VERSOES sem (3,'2026-09'), B = com, ambos forcar=True; F0 x A-forcado = ATA-DEFASADA-COMP09. Script logs/sombra/cobparc_v5_bump_forcado.py; roda quando a sombra soltar (ensaio GRADE pid 1191526).
+- 11:47 aval: construtor CONTENCAO P1 v4 (acdf39cac8cf752a4) entrega e termina (AGENTE-NAO-ESPERA); sessao colhe codex_v1.r em shell de fundo, construtor reabre so para procedentes.
+- 11:49 CONTENCAO P1 v4 entregue (copia wt-contencao-v4-111700 @50452ff0): Codex v1 REPROVOU, 6 procedentes (a corrida 7o agente, b B1 checado, c --reabre ausente, d hook_stop _disjuntor_contido, e regex P1, f oraculo trava_curta), 10 descartes com motivo; construtor novo cura (a)-(f) RED->GREEN e lanca Codex v2 destacado. Suite inteira ainda nao.
