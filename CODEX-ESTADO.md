@@ -1,7 +1,105 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 01:40** · publicado em **01/11/2026 01:40** (UTC-3)
+> Ultima resposta processada: **01/11/2026 01:42** · publicado em **01/11/2026 01:45** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 01:42 · sessao 0c6764fddfce · CONTENCAO-QUE-MORDE-V2 · verificador · origem=Code
+
+**Parecer: bloqueia o P1.** Há autorizações sem registro persistido, corridas entre consulta e reserva, semeadura incompleta e certificado que pode liberar sem comprovar a suite (`bin/disjuntor.py:318`, `bin/disjuntor.py:1142`, `bin/disjuntor.py:1372`, `bin/disjuntor.py:1264`). Execução integral dos selos, instalação efetiva dos hooks e ocorrência desses caminhos em produção: **[nao verificado]**.
+
+1. **IDENTIDADE/RESERVA — bloqueia: autoriza mesmo se não conseguir gravar.** `_com_estado` executa a decisão, captura a falha de persistência e retorna o resultado original. As duas portas novas não conferem `gravou`: Agent pode abrir sem reservar vaga/volta; wrapper pode abrir sem consumir volta. A proteção já existente no B3 confere a gravação, mas não foi aplicada às novas autorizações (`bin/disjuntor.py:305`, `bin/disjuntor.py:318`, `bin/disjuntor.py:323`, `bin/disjuntor.py:1488`, `bin/disjuntor.py:1397`, `bin/disjuntor.py:1048`).
+
+2. **FALHA RESTRITIVA — bloqueia: exceção anterior à porta libera Agent não final.** Um estado ilegível pode levantar na leitura de `pretool`, antes de `porta_agent`. O tratamento externo nega somente o ramo B3; para um construtor não final, termina liberando sem verificar modelo, papel, vivos ou voltas (`bin/disjuntor.py:1965`, `bin/disjuntor.py:1992`, `bin/disjuntor.py:1995`, `bin/disjuntor.py:2005`, `bin/disjuntor.py:2015`).
+
+3. **IDENTIDADE/ORDEM DE TRAVA — bloqueia: B3 e autorização não são uma transição.** Agent consulta B3 numa transação e reserva noutra; o wrapper faz o mesmo. Entre ambas, outro processo pode parar a obra, e a reserva posterior não revalida essa parada. Usar o mesmo arquivo de flock em chamadas separadas não fecha essa corrida (`bin/disjuntor.py:1961`, `bin/disjuntor.py:1465`, `bin/disjuntor.py:1488`, `bin/disjuntor.py:1132`, `bin/disjuntor.py:1142`, `bin/disjuntor.py:1387`).
+
+4. **(11) VIVOS — bloqueia: fotografia fora do flock permite subcontagem.** `txt` e `vivos_tx` são lidos antes da trava. Um processo pode fotografar cinco vivos; outro autorizar o sexto; uma transação seguinte podar a reserva desse sexto após seu lançamento. Quando o primeiro processo entra, sua fotografia ainda tem cinco e a reserva já desapareceu: pode autorizar o sétimo (`bin/disjuntor.py:1457`, `bin/disjuntor.py:1461`, `bin/disjuntor.py:1473`, `bin/disjuntor.py:1475`, `bin/disjuntor.py:1476`).
+
+5. **(11) RESERVAS — bloqueia: poda por substring, sem reconhecer o resultado.** Qualquer objeto que contenha a sequência compacta `"tool_use_id":"<id>"` satisfaz a poda, sem exigir `type=tool_result`. Um resultado JSON válido com espaço após `:` não satisfaz a mesma busca. O leitor de lançamentos recupera apenas agentes assíncronos; síncronos anteriores, sem reserva registrada, não entram nessa recuperação (`bin/disjuntor.py:1473`, `bin/disjuntor.py:1474`, `bin/disjuntor.py:403`, `bin/disjuntor.py:413`).
+
+6. **IDENTIDADE — bloqueia: idempotência acaba quando a reserva é podada.** Agent consulta somente `reservas`; acrescenta `tool_use_id` em `voltas.chaves`, mas não consulta essas chaves. Após a poda, repetir a mesma autorização incrementa novamente. A sequência isolada `a, b, a`, com resultado de `a` antes de `b`, termina com três voltas e chaves `[a,b,a]` (`bin/disjuntor.py:1467`, `bin/disjuntor.py:1474`, `bin/disjuntor.py:1484`, `bin/disjuntor.py:1485`).
+
+7. **(1) SEMENTE — bloqueia: inicialização pelo wrapper congela Agent em zero.** Wrapper e `reabre` chamam `_voltas` sem transcript. A semente retorna `agent=0`, parcial; quando um Agent chega depois, o dicionário existente nunca é completado. Assim, seis voltas anteriores da sessão podem ser ignoradas (`bin/disjuntor.py:1388`, `bin/disjuntor.py:1494`, `bin/disjuntor.py:1346`, `bin/disjuntor.py:1357`, `bin/disjuntor.py:1372`).
+
+   **Também bloqueia:** sidecar ilegível é simplesmente pulado, sem marcar semente parcial. A busca cobre somente `logs/`, embora o wrapper aceite resposta em caminho fornecido pelo chamador. Estado ausente vira `{}`, perdendo reservas e identidades que a semeadura não reconstrói (`bin/disjuntor.py:831`, `bin/disjuntor.py:1348`, `bin/disjuntor.py:1350`, `bin/codex_pergunta.sh:40`, `bin/disjuntor.py:299`).
+
+8. **CHAVE / “só Ronald” — bloqueia: guarda apenas lexical.** A condição normal arquivo **e** linha está implementada, RELATO ilegível mantém ligado, e o wrapper consulta a chave. Porém, a exclusividade depende de encontrar nomes/literais no comando: importar `disjuntor` e chamar `reabre(...)` ou `redesenha(...)` passa sem os argumentos `--reabre`/`--redesenha`. Write direto no estado também não é guardado. As funções não verificam autoridade (`bin/disjuntor.py:176`, `bin/disjuntor.py:169`, `bin/disjuntor.py:1130`, `bin/disjuntor.py:190`, `bin/disjuntor.py:194`, `bin/disjuntor.py:201`, `bin/disjuntor.py:1491`, `bin/disjuntor.py:1502`).
+
+9. **(2) SEGUNDO ERRO-BOBO — bloqueia: `--rearma-b3` contorna a exigência de `--redesenha`.** O rearme limpa `disparado` e arquiva as reprovações, preservando `pede_desenho`. Na decisão seguinte, a obra não disparada é ignorada **antes** de consultar esse pedido; volta a LIVRE sem `--redesenha` (`bin/disjuntor.py:1106`, `bin/disjuntor.py:1108`, `bin/disjuntor.py:1002`, `bin/disjuntor.py:1010`).
+
+   **Fila — formato diferente do contratado:** `consumidas` continua sendo lista de SHA, com `consumidas_tipo` em mapa separado. A regra normal lê ambos, mas não grava `{sha,tipo}` como escrito no REVISADO (`app/docs/contratos/CONTENCAO-QUE-MORDE-V2.txt:12`, `bin/disjuntor.py:1023`, `bin/disjuntor.py:1027`, `bin/disjuntor.py:1162`).
+
+10. **(3) CURA — bloqueia: HEAD ausente não nega incondicionalmente.** Falha ao obter HEAD vira `None`, mas sua ausência só é verificada dentro do laço de PROCEDENTES. Com triagem vazia, passa, apesar da ressalva contratual “cópia sem hash = nega” (`bin/disjuntor.py:1448`, `bin/disjuntor.py:1451`, `bin/disjuntor.py:1276`, `bin/disjuntor.py:1280`, `bin/disjuntor.py:1288`, `app/docs/contratos/CONTENCAO-QUE-MORDE-V2.txt:13`).
+
+   **Fila — alcance mais restritivo:** o gate de cura também atinge verificadores finais sonnet/haiku; não verifica modelo, enquanto o item (3) diz “opus final” (`bin/disjuntor.py:1427`, `bin/disjuntor.py:1469`, `app/docs/contratos/CONTENCAO-QUE-MORDE-V2.txt:13`).
+
+11. **(4) UNIVERSO — bloqueia: porta e coletor reconhecem universos diferentes.** A porta aceita `general-purpose` com papel verificador na descrição. O coletor de reprovações continua exigindo `meta.agentType == verificador`; a entrega REPROVADO daquele agente não alimenta B3 (`bin/disjuntor.py:1191`, `bin/disjuntor.py:1427`, `bin/disjuntor.py:815`, `bin/disjuntor.py:821`).
+
+12. **(5) B1 — bloqueia: permanecem caminhos liberais.**
+
+   - Um agente em `SO_LEITURA` passa mesmo quando já foi encontrado job próprio antigo. O REVISADO não concede essa isenção (`bin/disjuntor.py:460`, `bin/disjuntor.py:466`, `app/docs/contratos/CONTENCAO-QUE-MORDE-V2.txt:15`).
+   - Transcript ilegível retorna `disparo=False`; lançamento sem hora legível é ignorado (`bin/disjuntor.py:458`, `bin/disjuntor.py:530`).
+   - Cópias são filtradas por `isdir`: uma cópia inacessível pode desaparecer, deixando outra com arquivo novo liberar a avaliação (`bin/disjuntor.py:468`, `bin/disjuntor.py:505`).
+   - Job e término são reconhecidos por texto livre. Não se exige chamada Bash `run_in_background`, nem `task-notification`, nem estado terminal; qualquer `<status>[a-z]+</status>` correspondente elimina o job (`bin/disjuntor.py:514`, `bin/disjuntor.py:521`, `bin/disjuntor.py:525`).
+
+13. **(9) CERTIFICADO — bloqueia: emissão e leitura não comprovam a suite.** A CLI pública aceita hashes, rc, recorte e log declarados pelo chamador; um log sintético com `Ran` e `OK` emite certificado. A guarda não protege essa emissão nem Write direto no `.ok`. O leitor exige somente hash e `rc=0`, aceitando arquivo sem `Ran` e sem `OK` (`bin/disjuntor.py:2229`, `bin/disjuntor.py:1226`, `bin/disjuntor.py:1234`, `bin/disjuntor.py:1242`, `bin/disjuntor.py:182`, `bin/disjuntor.py:1935`, `bin/disjuntor.py:1264`).
+
+14. **(9) HASH — bloqueia: leitura parcial pode produzir identidade válida.** `git add --ignore-errors` tem o resultado ignorado; o comando seguinte pode emitir árvore apenas com a parte legível. O gate aceita o sucesso final e o hash, permitindo casar certificado de árvore parcial em vez de negar NAO_SEI (`bin/arvore_hash.sh:31`, `bin/arvore_hash.sh:32`, `bin/disjuntor.py:1220`).
+
+   **Fila — corrida durante a suite:** H0 é calculado antes da trava; H1 depois da execução. Sem snapshot da cópia, A→B→A pode certificar A após testar B; a igualdade das duas pontas não demonstra a árvore executada (`bin/suite.sh:100`, `bin/suite.sh:102`, `bin/suite.sh:111`).
+
+15. **(10) PUSH — bloqueia: três exclusões liberam sem julgamento.** [nao verificado]
+
+   - `--no-merges` exclui instrumento introduzido na resolução de merge, sem essa exceção no REVISADO (`bin/contrato_do_push.py:37`, `app/docs/contratos/CONTENCAO-QUE-MORDE-V2.txt:20`).
+   - Um commit novo que remova o próprio portão é tratado como anterior ao portão. Erro de `cat-file` também vira “não existe”, liberando nesse ramo (`bin/contrato_do_push.py:24`, `bin/contrato_do_push.py:41`).
+   - Linha malformada é ignorada; entrada vazia devolve sucesso. O pre-push não verifica falha do `cat`; com `SKIP_TESTS`, pode sair verde após julgamento vazio (`bin/contrato_do_push.py:31`, `bin/contrato_do_push.py:33`, `bin/contrato_do_push.py:55`, `bin/pre-push.sh:7`, `bin/pre-push.sh:11`).
+
+16. **(8) CUSTO — fila: medição incompleta apresentada sem marcar parcial.** Modelo/papel têm os gates previstos, mas `fable`, aceito pela porta, não possui preço e é descartado da soma. Arquivos ilegíveis também são ignorados sem sinalizar custo parcial (`bin/disjuntor.py:1412`, `bin/disjuntor.py:1417`, `bin/disjuntor.py:118`, `bin/disjuntor.py:126`, `bin/disjuntor.py:1529`, `bin/disjuntor.py:1533`).
+
+17. **(4) RELÓGIO — fila: janela lida fora da borda.** `ler` recebe `agora`, mas `_b3_sem_obra` consulta outro `time.time()`, podendo usar janela diferente da medição recebida (`bin/disjuntor.py:2130`, `bin/disjuntor.py:2137`).
+
+**Escritores e leitores solicitados.** A escrita física dos objetos do estado converge para `_com_estado`; há várias funções que os alteram logicamente (`bin/disjuntor.py:305`, `bin/disjuntor.py:310`, `bin/disjuntor.py:311`).
+
+| Campo/arquivo | Quem escreve | Quem lê / multiplicidade |
+|---|---|---|
+| `voltas` | Criação em `bin/disjuntor.py:1373`; semente em `bin/disjuntor.py:1346` | Retorno em `bin/disjuntor.py:1374`; painel em `bin/disjuntor.py:1549` |
+| `voltas.agent` | Semente `bin/disjuntor.py:1365`; autorização `bin/disjuntor.py:1484` | Teto `bin/disjuntor.py:1482`; mensagem `bin/disjuntor.py:1380`; painel `bin/disjuntor.py:1550`. **Dois escritores lógicos.** |
+| `voltas.codex` | Semente `bin/disjuntor.py:1353`; reserva `bin/disjuntor.py:1393` | Teto `bin/disjuntor.py:1391`; mensagem `bin/disjuntor.py:1380`; painel `bin/disjuntor.py:1550`. **Dois escritores lógicos.** |
+| `voltas.extra` | Inicialização `bin/disjuntor.py:1346`; `reabre` em `bin/disjuntor.py:1495` | Tetos `bin/disjuntor.py:1391`, `bin/disjuntor.py:1482`; painel `bin/disjuntor.py:1551` |
+| `voltas.chaves` | Inicialização `bin/disjuntor.py:1346`; Codex `bin/disjuntor.py:1394`; Agent `bin/disjuntor.py:1485` | Codex consulta em `bin/disjuntor.py:1389`; Agent consulta apenas reservas em `bin/disjuntor.py:1467`. **Mais de um escritor.** |
+| `reservas` | Criação `bin/disjuntor.py:1466`; poda `bin/disjuntor.py:1474`; inclusão `bin/disjuntor.py:1486` | Identidade `bin/disjuntor.py:1467`; poda/contagem `bin/disjuntor.py:1473`, `bin/disjuntor.py:1475`. Uma porta escritora. |
+| `consumidas` / tipo | SHA `bin/disjuntor.py:1027`; mapa de tipo `bin/disjuntor.py:1023` | Deduplicação `bin/disjuntor.py:1014`; classificação antiga/nova `bin/disjuntor.py:1162`, `bin/disjuntor.py:1174`. Uma transição escritora. |
+| `pede_desenho` | Liga `bin/disjuntor.py:1019`; remove `bin/disjuntor.py:1505` | Gate `bin/disjuntor.py:1010`. **Dois escritores.** |
+| Triagem `cura=` | `triagem_cura`, em `bin/disjuntor.py:1307`; a triagem comum também escreve no mesmo arquivo em `bin/disjuntor.py:885` | Parser `bin/disjuntor.py:921`; cura `bin/disjuntor.py:1273`; idempotência `bin/disjuntor.py:1299`. B3/rearme também leem a trilha em `bin/disjuntor.py:963`, `bin/disjuntor.py:1095`. **Dois escritores do arquivo.** |
+| `b3_sem_obra` com `t` | Migração `bin/disjuntor.py:1154`; coleta `bin/disjuntor.py:975`; negativa `bin/disjuntor.py:1434` | Deduplicação `bin/disjuntor.py:974`; janela `bin/disjuntor.py:2136`; painel `bin/disjuntor.py:2207`. **Mais de um escritor.** |
+| `logs/suite_cert/<h>.ok` | Emissor `bin/disjuntor.py:1247`, chamado por `bin/suite.sh:112`; selo escreve diretamente em `bin/tests/test_disjuntor.sh:73`, `bin/tests/test_disjuntor.sh:1634` | Leitor operacional `bin/disjuntor.py:1260`, chamado em `bin/disjuntor.py:1444`. **Há escritor adicional explícito no selo; escritor adicional efetivo em prod [nao verificado].** |
+| `DJ_VOLTA_CODEX` | Wrapper `bin/codex_pergunta.sh:166` | Porta `bin/disjuntor.py:1139`, `bin/disjuntor.py:1142` |
+| `app/docs/contratos/<obra>.txt` | Artefato apresentado em `app/docs/contratos/CONTENCAO-QUE-MORDE-V2.txt:1`; selo cria contratos sintéticos em `bin/tests/test_contrato_do_push.sh:20`, `bin/tests/test_contrato_do_push.sh:32` | Gate consulta existência no PUSH_SHA em `bin/contrato_do_push.py:51`, via `bin/contrato_do_push.py:24`. Escritor operacional/autoria externa **[nao verificado]**. |
+
+O ESTADO consome essas medições por `disjuntor.ler/linha`; não é outro escritor desses campos (`bin/gerar_estado.py:280`, `bin/gerar_estado.py:281`).
+
+**Selos e mutantes — achados.**
+
+| Severidade | Mutante/caso | O que realmente acontece |
+|---|---|---|
+| **bloqueia** | `i4-sem-uma-obra`, `bin/tests/test_disjuntor.sh:2025` | O primeiro cenário tem zero obras; remover a guarda leva a `obras[0]`, causa `IndexError` e continua negando. O teste cai pela mensagem diferente antes de chegar ao cenário de duas obras (`bin/tests/test_disjuntor.sh:1621`, `bin/tests/test_disjuntor.sh:1622`, `bin/disjuntor.py:1470`, `bin/disjuntor.py:1996`). |
+| **bloqueia** | `i9-uma-copia`, `bin/tests/test_disjuntor.sh:2033` | Sem cópia, remover a guarda leva a `copias[0]`; novamente há exceção e negativa, sem demonstrar autorização indevida (`bin/tests/test_disjuntor.sh:1640`, `bin/disjuntor.py:1443`, `bin/disjuntor.py:1996`). |
+| **bloqueia** | `b3-codex-porta-sempre-livre`, `bin/tests/test_disjuntor.sh:1790` | Retira rc 3, mas a obra PARADA cai no ramo seguinte e recebe rc 4. Wrapper continua recusando; o caso morre porque exige exatamente 3 (`bin/disjuntor.py:1136`, `bin/tests/test_disjuntor.sh:1250`). |
+| **bloqueia** | `cx8-ausente-sem-falha`, `bin/tests/test_disjuntor.sh:1818` | Permite alcançar `tri.get` com `tri=None`; a exceção vira NAO_SEI e mantém a recusa. O caso exige outro prefixo de negativa (`bin/disjuntor.py:1025`, `bin/disjuntor.py:1069`, `bin/tests/test_disjuntor.sh:1261`, `bin/tests/test_disjuntor.sh:1360`). |
+| **fila** | `B3-duas-travas`, `bin/tests/test_disjuntor.sh:1902` | Acrescenta uma transação vazia; não divide a decisão existente. O teste o mata contando chamadas, sem reproduzir decisão partida (`bin/tests/test_disjuntor.sh:1904`, `bin/tests/test_disjuntor.sh:926`, `bin/tests/test_disjuntor.sh:935`). |
+| **bloqueia** | `i9_cert` | O próprio fixture fabrica certificado sem `OK`, e o caso exige que passe. Testa emissão pela CLI com log sintético; retirar a chamada de certificação de `suite.sh` não é mordido (`bin/tests/test_disjuntor.sh:73`, `bin/tests/test_disjuntor.sh:1631`, `bin/tests/test_disjuntor.sh:1643`, `bin/suite.sh:112`). |
+| **bloqueia** | `i11_vivos` / `i1_voltas` | Repetição de identidade ocorre somente antes da poda; vivos são simulados como reservas. `_ag` já escreve resultado antes da autorização. Não exercitam replay após poda, lançamento real ou disputa concorrente (`bin/tests/test_disjuntor.sh:1552`, `bin/tests/test_disjuntor.sh:1556`, `bin/tests/test_disjuntor.sh:339`, `bin/tests/test_disjuntor.sh:1566`). |
+| **fila** | `test_contrato_do_push.sh::ordem` | Apenas compara primeiras ocorrências por grep; comentário contendo o nome do gate pode satisfazer a procura. Não executa pre-push com SKIP_TESTS (`bin/tests/test_contrato_do_push.sh:48`, `bin/tests/test_contrato_do_push.sh:49`, `bin/tests/test_contrato_do_push.sh:70`). |
+
+Os demais mutantes P1 retiram os ramos declarados: CHAVE, modelo/papéis, tetos, reserva do wrapper, segundo ERRO-BOBO, cura/ancestralidade e condições do emissor de certificado (`bin/tests/test_disjuntor.sh:2003`, `bin/tests/test_disjuntor.sh:2006`, `bin/tests/test_disjuntor.sh:2011`, `bin/tests/test_disjuntor.sh:2014`, `bin/tests/test_disjuntor.sh:2018`, `bin/tests/test_disjuntor.sh:2021`, `bin/tests/test_disjuntor.sh:2027`, `bin/tests/test_disjuntor.sh:2034`). Os cinco mutantes do push alteram as costuras declaradas; o da ordem continua sendo prova textual (`bin/tests/test_contrato_do_push.sh:66`, `bin/tests/test_contrato_do_push.sh:70`).
+
+Há mutantes mortos por ficarem **mais restritivos**, mediante casos positivos: sem poda, sem idempotência, reabre sem adicionar e redesenha sem remover pedido. Isso é verificável, mas não demonstra “liberou quando devia negar” (`bin/tests/test_disjuntor.sh:2012`, `bin/tests/test_disjuntor.sh:2013`, `bin/tests/test_disjuntor.sh:2016`, `bin/tests/test_disjuntor.sh:2020`). O harness aceita qualquer falha do caso como morte do mutante (`bin/tests/test_disjuntor.sh:1705`).
+
+**Bloqueia — faltam mordidas específicas** para persistência da autorização, semeadura retroativa/parcial, idempotência após poda, migração de ERRO-BOBO antigo/ilegível, timestamps/janela, custo 24 h e tratamento restritivo de meta/cópia ilegível no B1. Os casos respectivos cobrem contagem nova, erros novos, universo, modelos/papéis e jobs legíveis; o bloco de mutantes P1 não retira essas outras costuras (`bin/tests/test_disjuntor.sh:1566`, `bin/tests/test_disjuntor.sh:1586`, `bin/tests/test_disjuntor.sh:1621`, `bin/tests/test_disjuntor.sh:1533`, `bin/tests/test_disjuntor.sh:1676`, `bin/tests/test_disjuntor.sh:2003`).
+
+**Checklist da casa:** aplicam-se autorização antes da persistência, separação de decisão/reserva entre travas, universo derivado de duas formas, leitor de certificado com critério mais fraco que o emissor, relógio fora da borda e selos sem a mordida anunciada (`bin/disjuntor.py:318`, `bin/disjuntor.py:1142`, `bin/disjuntor.py:815`, `bin/disjuntor.py:1191`, `bin/disjuntor.py:1242`, `bin/disjuntor.py:1264`, `bin/disjuntor.py:2137`, `bin/tests/test_disjuntor.sh:1902`). B3 continua delegado ao juiz registrado; o defeito está na autorização posterior sem revalidação (`bin/disjuntor.py:1068`, `bin/disjuntor.py:1077`, `bin/disjuntor.py:1465`). Pouso efetivo antes de pré-requisito: **[nao verificado]**.
+
+**Resposta direta à pergunta 5:** em `bin/pre-push.sh`, **sim**, o portão é chamado na linha 10, antes de `SKIP_TESTS` na linha 11; **não há saída normal anterior à chamada nesse arquivo** (`bin/pre-push.sh:7`, `bin/pre-push.sh:10`, `bin/pre-push.sh:11`). A instalação prevista delega para ele (`bin/hooks.sh:56`). Existe cópia divergente com SKIP no início, cuja utilização efetiva é **[nao verificado]** — **fila** (`app/core/hooks/pre-push.sh:5`). Mesmo no arquivo correto, permanecem os caminhos de julgamento vazio e exclusões descritos no achado 15 (`bin/contrato_do_push.py:33`, `bin/contrato_do_push.py:37`, `bin/contrato_do_push.py:41`).
 
 ## 01/11 01:40 · sessao 8e68217c962e · - · - · origem=Ronald (tmux)
 
@@ -885,114 +983,4 @@ Leitura sem executar testes ou geradores. As constatações abaixo são da cópi
 - A seção 7b já declara separação do pouso de instrumento e produto, raias velhas esperado zero e contrato de cinco linhas mandado uma vez ao Codex; não equivale ao novo enforcement do push. `CLAUDE.md:512`, `CLAUDE.md:514`, `CLAUDE.md:574`. A revisão de linhas de mecanismo no mesmo commit é coerente com a documentação no marco, cuja regra está em `CLAUDE.md:517`. [nao verificado]
 - A ordem do item 7 depende primeiro de resolver o universo/identidade de “não pousado” e só depois de medir zero/justificar ou remover: o produtor atual não alcança o universo da sonda e confunde ahead com patches pendentes. `bin/raias_estado.py:85`, `bin/raias_estado.py:96`, `bin/raias_estado.py:101`. A ordem do item 10 depende de tornar inequívoco contrato commitado/obra e o alcance `PUSH_SHA` antes de endurecer a recusa; `logs/` é ignorado hoje. `.gitignore:53`, `bin/pre-push.sh:33`. O contrato prevê gate10 apenas no segundo pouso; a proteção dos instrumentos do primeiro pouso pelo gate10 ainda inexistente [não verificado].
 
-## 01/11 00:03 · sessao 68821586ba49 · V3-P5-B · verificador · origem=Code
-
-**O caso central foi corrigido: desconto da pausa prorrogada de 0 → 60 minutos, HE50 noturna de 3 → 2 horas e noturnas de 9 → 8 horas.** Há ressalvas sobre comparação estrita de `float`, isolamento do teste e alcance na alimentação produtiva. (app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:60; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:86; app/ponto/motor_calculo_v2.py:191; app/ponto/calculador/regras.py:823; app/ponto/calculador/regras.py:840)
-
-**1. Diff e escopo**
-
-O diff anexo do motor tem **1 hunk**, iniciado em `@@ -137,13 +137,63 @@`. Todas as linhas alteradas pertencem ao corpo do `def`, que começa na linha 121 e termina na 196. **Não procede alteração de linha externa ao corpo.** O hunk inclui contexto externo — linhas vazias e o comentário seguinte — sem modificá-lo. (diff.txt:5; [app/ponto/motor_calculo_v2.py:121](/home/ronald/codex_ws/03c8d106ed4e606c62803a85716b1e1a6954632a/app/ponto/motor_calculo_v2.py:121); app/ponto/motor_calculo_v2.py:196; app/ponto/motor_calculo_v2.py:199)
-
-A identidade do histórico e a ordem efetiva dos dois commits não puderam ser conferidas: a cópia disponível não contém `.git`. [não verificado] [nao verificado]
-
-**2. Cálculo novo e propriedades temporais**
-
-O corpo faz, nesta ordem:
-
-- Localiza entrada e saída; localiza e recorta cada pausa ao período. (app/ponto/motor_calculo_v2.py:162; app/ponto/motor_calculo_v2.py:164)
-- Ordena as pausas, descarta recortes vazios/invertidos e une peças sobrepostas ou adjacentes. (app/ponto/motor_calculo_v2.py:166; app/ponto/motor_calculo_v2.py:169)
-- Percorre cada peça unida, cortando na próxima hora cheia **do instante novamente normalizado no fuso local**. Se esse candidato não avançar, usa um minuto de avanço. (app/ponto/motor_calculo_v2.py:179; app/ponto/motor_calculo_v2.py:186; app/ponto/motor_calculo_v2.py:188)
-- Calcula `N(entrada,b) − N(entrada,a)`. Se positivo acima de `1e-9`, soma a duração inteira do trecho, uma vez, independentemente da multiplicidade contada por `N`. (app/ponto/motor_calculo_v2.py:191)
-- Retorna o menor entre essa soma e `N(entrada,saida)`. (app/ponto/motor_calculo_v2.py:196)
-
-**Laço parado ou `b <= a`: não procede**, enquanto as operações de datetime terminarem sem exceção. Dentro do laço, `_f > a`; o candidato é estritamente maior que `a`, inclusive pelo avanço subsidiário; portanto `min(_f,proxima) > a`. Cada iteração avança. (app/ponto/motor_calculo_v2.py:179; app/ponto/motor_calculo_v2.py:188; app/ponto/motor_calculo_v2.py:190; app/ponto/motor_calculo_v2.py:194)
-
-Aware de outro fuso é convertido para o fuso da casa; naive é localizado nesse fuso. Horas ambíguas/inexistentes são entregues a `pytz.localize`, sem política explícita de rejeição no código. O cursor relê o instante normalizado antes do próximo corte. O fuso configurado nesta cópia é São Paulo. (app/ponto/motor_calculo_v2.py:73; app/ponto/motor_calculo_v2.py:186; app/config/settings/base.py:93)
-
-**Não encontrei corte atravessando uma borda 22/05 no interior**, nos casos com segundos, na mudança histórica de offset e na entrada/saída do verão examinados. Os testes delimitam essas janelas explicitamente, incluindo 04:59:30–05:01, cujo desconto é 0,5 minuto. (app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:415; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:420; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:422; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:480)
-
-**Resultado negativo ou superior a `N(entrada,saida)`: não procede.** A soma recebe apenas durações positivas, `N` é não negativo, e o retorno aplica diretamente o teto em `N`. Acima de 26 horas esse teto é zero. (app/ponto/motor_calculo_v2.py:91; app/ponto/motor_calculo_v2.py:94; app/ponto/motor_calculo_v2.py:115; app/ponto/motor_calculo_v2.py:193; app/ponto/motor_calculo_v2.py:196)
-
-**Superior à união: matematicamente não; em comparação estrita de `float`, procede um excesso de arredondamento.** No próprio caso 22:00:30–07:00:15, pausa 05:29:45–06:30:10:
-
-```text
-duração da união = 60.416666666666664 min
-resultado novo  = 60.41666666666667  min
-diferença       = 7.105427357601002e-15 min
-```
-
-Isso decorre da soma separada dos trechos e fica abaixo da tolerância `1e-9` empregada nas propriedades. Portanto **não procede prometer desigualdade estrita contra a duração da união em aritmética binária**. (app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:142; app/ponto/motor_calculo_v2.py:193; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:203)
-
-Também não há garantia de retorno para todos os extremos representáveis de datetime: a chamada final a `N` executa operações sem guarda de overflow. Por exemplo, entrada/saída UTC em 31/12/9999, 15:00–16:00, sem pausas, passa a alcançar esse cálculo e pode lançar `OverflowError`; o corpo antigo simplesmente devolvia zero sem pausas. Isso é exceção, não laço infinito. (app/ponto/motor_calculo_v2.py:196; app/ponto/motor_calculo_v2.py:100; app/ponto/motor_calculo_v2.py:104; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:89)
-
-**3. Teste, assinatura, oráculo e mutantes** [nao verificado]
-
-**Não procede import inexistente no HEAD.** `_aw` está definido no próprio arquivo; os símbolos do motor importados pelo teste existem. Django é dependência declarada. (app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:41; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:44; app/ponto/motor_calculo_v2.py:28; app/ponto/motor_calculo_v2.py:73; app/ponto/motor_calculo_v2.py:82; app/ponto/motor_calculo_v2.py:121; app/requirements.txt:13)
-
-**Não procede incompatibilidade com `do_dia`.** Os argumentos usados pertencem à assinatura; `he_pontas` contém exatamente `(entrada, saída, extra_50_min, extra_100_min)`, os quatro valores desempacotados neste HEAD. (app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:60; [app/ponto/calculador/regras.py:572](/home/ronald/codex_ws/03c8d106ed4e606c62803a85716b1e1a6954632a/app/ponto/calculador/regras.py:572); app/ponto/calculador/regras.py:818)
-
-As expectativas centrais são justificadas pelo cenário declarado: 480−360 = 120 minutos extras; a pausa não é trabalho; com prorrogação e fator 1, os 480 minutos trabalhados são noturnos. **Não procede dizer que todas as expectativas vêm exclusivamente da CLT:** a escolha da cauda trabalhada como HE, o gatilho pelo toque em 00–05 e a proteção de 26 horas são políticas da casa/código, reconhecidas no teste. (app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:14; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:151; app/ponto/motor_calculo_v2.py:93; app/ponto/motor_calculo_v2.py:110; app/ponto/motor_calculo_v2.py:413)
-
-`_regra` não chama `minutos_noturnos`; constrói janela e união por minuto. Entretanto reutiliza `localizar`, trunca minutos e declara que não cobre o relógio de verão daquela grade de 2026. Os casos de segundos/históricos possuem expectativas próprias por interseção de janelas. (app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:160; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:164; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:167; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:410; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:473)
-
-**Não procede patch ineficaz por alias.** Os helpers importam a função durante a chamada. No caminho integrado, `he_noturna` resolve o global do módulo do motor; o método emprestado por `_ContextoNoturno` também resolve esse global. Ambos chegam ao mutante. (app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:105; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:194; app/ponto/calculador/regras.py:63; app/ponto/calculador/regras.py:816; app/ponto/motor_calculo_v2.py:442; app/ponto/motor_calculo_v2.py:1915)
-
-Os cinco mutantes têm testemunhas: peça isolada, diferença crua, limite por peça longa, cursor com offset fixo e piso incondicional com segundos. **Não procede RED sem mordida nesses caminhos.** (app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:356; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:359; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:365; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:454; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:531)
-
-**Relógio solto não procede:** datas e durações são explícitas; não há leitura de “agora” no corpo alterado ou no teste. (app/ponto/motor_calculo_v2.py:162; app/ponto/motor_calculo_v2.py:186; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:52; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:187)
-
-Há uma ressalva de isolamento: **`feriados=set()` não torna o conjunto autoritativo**. A ausência da data aciona fallback ORM; uma exceção é capturada e convertida em `False`. Assim, o “dia comum” não está inteiramente fechado pela fixture. (app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:66; app/ponto/motor_calculo_v2.py:953; app/ponto/motor_calculo_v2.py:39; app/core/feriados.py:95; app/core/feriados.py:29)
-
-Os 34 testes passaram em exercício em memória com substitutos para a infraestrutura Django ausente; isso **não certifica execução Django real nem suíte completa**. [não verificado] [nao verificado]
-
-**4. Antes/depois e chamadores**
-
-Comparação com o corpo antigo preservado no mutante, para datetimes locais aware: (app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:86)
-
-| Forma de entrada | Desconto antigo → novo |
-|---|---:|
-| 22–07, pausa 05:30–06:30, prorrogação ligada | **0 → 60 min** |
-| Mesmo caso, prorrogação desligada | **0 → 0 min** |
-| Pausa 01–02 repetida duas vezes | **120 → 60 min** |
-| Pausa cobrindo todo o recorte 21h–23h do dia seguinte, 26h, prorrogação ligada | **1560 → 1500 min** |
-| Recorte acima de 26h, pausa noturna de uma hora | **60 → 0 min** |
-| Sem pausas, datas ordinárias | **0 → 0 min** |
-
-As mudanças decorrem respectivamente da janela do recorte, união, leitura por presença e teto do todo. (app/ponto/motor_calculo_v2.py:164; app/ponto/motor_calculo_v2.py:191; app/ponto/motor_calculo_v2.py:196; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:282)
-
-Pontas naive com pausa não vazia também mudam o comportamento: o antigo comparava pausas já aware com pontas ainda naive, podendo lançar `TypeError`; o novo localiza as pontas. **Não procede que a mudança seja apenas numérica para todas as formas de entrada.** (app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:91; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:92; app/ponto/motor_calculo_v2.py:162)
-
-Há **dois chamadores diretos produtivos**:
-
-| Chamador | O que recebe antes → depois no caso central |
-|---|---|
-| `MotorBase._noturno_dos_intervalos` | Desconto **0 → 60 min**; seu leitor `calcular_noturnas` passa de **540 → 480 min relógio**, multiplicados pelo fator cadastrado para minutos legais. (app/ponto/motor_calculo_v2.py:1915; app/ponto/motor_calculo_v2.py:971; app/ponto/motor_calculo_v2.py:980) |
-| `he_noturna` | Na cauda 04–07, desconto **0 → 60 min**; com HE50=120 e HE100=0, devolve **(180,0) → (120,0) min**. (app/ponto/motor_calculo_v2.py:440; app/ponto/motor_calculo_v2.py:442; app/ponto/motor_calculo_v2.py:450) |
-
-Os outros cinco pontos diretos estão no teste: `_f`, teste com segundos, `_celula` e os dois `_caso`. Seus resultados seguem as formas acima; os históricos sem prorrogação permanecem **354, 270 e 450 minutos**, e os casos ordinários de borda permanecem **0,5 e 1 minuto**. O caso naive inexistente passa de erro de comparação para **239,5 minutos**. (app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:108; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:142; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:197; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:409; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:472)
-
-**Não procede estender o resultado do RED indistintamente ao calculador produtivo diário:** `alimentacao.py` passa `intervalos=()`, com pares já segmentados; ali o desconto continua zero. O adaptador V3 por par, por sua vez, fornece as pausas julgadas. (app/ponto/calculador/alimentacao.py:121; app/ponto/calculador/alimentacao.py:512; app/ponto/calculador/alimentacao.py:514; app/ponto/calculador/periodo.py:507)
-
-O comentário do motor ainda atribui o caso a HE100; **isso não procede para o teste deste HEAD**, que verifica HE50 e mantém HE100 em zero. (app/ponto/motor_calculo_v2.py:145; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:70)
-
-**5. Escritores, leitores e classes reprovadas**
-
-| Valor | Quem escreve/produz → quem lê, até a gravação |
-|---|---|
-| Fuso | `settings.TIME_ZONE` → `TZ_LOCAL` → localização e cursor. (app/config/settings/base.py:93; app/ponto/motor_calculo_v2.py:28; app/ponto/motor_calculo_v2.py:186) |
-| Pontas e pausas | `registrar_batida` grava timestamps; autoridades produzem períodos/intervalos; o motor recupera timestamps exatos e carimba as pontas e pausas usadas. (app/ponto/registro_batida.py:157; app/ponto/turnos.py:543; app/ponto/motor_calculo_v2.py:609; app/ponto/motor_calculo_v2.py:616; app/ponto/motor_calculo_v2.py:721; app/ponto/motor_calculo_v2.py:1828) |
-| Prorrogação | Cadastro/régua → `get_motor_cct` → atributo de `MotorBase` → wrapper e split da HE. (app/core/models.py:72; app/core/regua_cct.py:153; app/core/regua_cct.py:466; app/ponto/motor_calculo_v2.py:762; app/ponto/motor_calculo_v2.py:1916; app/ponto/motor_calculo_v2.py:1005) |
-| Desconto devolvido | `calcular_noturnas`, `noturnas_do_dia` e `he_noturna` subtraem o escalar. (app/ponto/motor_calculo_v2.py:973; app/ponto/calculador/regras.py:86; app/ponto/motor_calculo_v2.py:442) |
-| Noturnas do período | `_escrever_noturnas` grava minutos relógio/legais; o adaptador V3 também os preenche por par. (app/ponto/motor_calculo_v2.py:991; app/ponto/motor_calculo_v2.py:992; app/ponto/calculador/periodo.py:751) |
-| HE noturna do período | `_aplicar_he_noturna` grava os minutos de HE50/HE100 noturna. (app/ponto/motor_calculo_v2.py:1002; app/ponto/motor_calculo_v2.py:1008; app/ponto/motor_calculo_v2.py:1010) |
-| Gravação diária | `lavrar` soma os três valores ou recebe rubricas do calculador e persiste `DiaPago.horas_noturnas`, `horas_extras_50_noturna`, `horas_extras_100_noturna`. (app/ponto/services/dia_pago.py:179; app/ponto/services/dia_pago.py:322; app/ponto/services/dia_pago.py:358; app/ponto/models.py:327; app/ponto/models.py:329; app/ponto/models.py:332) |
-| Gravação mensal | `ResultadoMes` soma os minutos em horas; fechamento arredonda e grava os três campos correspondentes de `FechamentoMensal`. (app/ponto/motor_calculo_v2.py:321; app/ponto/motor_calculo_v2.py:340; app/ponto/motor_calculo_v2.py:344; app/ponto/services/fechamento.py:893; app/ponto/services/fechamento.py:896; app/ponto/services/fechamento.py:899; app/ponto/services/fechamento.py:1128) |
-| Leitura posterior | Apresentação diária lê `DiaPago`; exportador lê o adicional noturno do fechamento. (app/ponto/services/dia_pago.py:922; app/folha/export.py:436) |
-
-**Segundo juiz e derivação paralela: não procedem no corpo alterado.** Ele consulta o mesmo `minutos_noturnos`, não duplica as constantes 22/05 nem decide novamente o cadastro da prorrogação; a autoridade do cálculo por par permanece registrada no motor. (app/ponto/motor_calculo_v2.py:191; app/ponto/motor_calculo_v2.py:196; app/core/juizes.py:1160)
-
-**Segundo escritor fora da porta: não procede neste diff.** O corpo devolve um escalar; os consumidores continuam usando os escritores existentes. **Relógio fora da borda e RED sem mordida também não procedem**, pelas verificações descritas acima. (app/ponto/motor_calculo_v2.py:196; app/ponto/motor_calculo_v2.py:992; app/ponto/services/dia_pago.py:358; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:347)
-
-Ordem operacional de travas, suíte completa verde, impacto nas competências e pouso após os pré-requisitos: **[não verificado]**. O material fornecido não traz prova operacional deste HEAD; portanto este laudo não certifica esses pré-requisitos. [não verificado] [nao verificado]
-
-_1325 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1326 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
