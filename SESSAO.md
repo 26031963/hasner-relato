@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 16:33:14.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (135.8 MB). Acoes na janela: **668**.
+**Medido em 01/11/2026 16:38:45.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (135.9 MB). Acoes na janela: **672**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:37:09 | Bash | Recheck ESPERANDO proof after file grows | `cd /home/ronald/saas-hasner/bin; /usr/bin/sleep 40; ls -l ../logs/codex/O261-E-F2_20261101_163645_481686.jsonl*; python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
+| 16:37:04 | Bash | Write ESPERANDO line and self-check hook | `cd /home/ronald/saas-hasner/app/docs; L="ESPERANDO: codex_pergunta.sh \| pid=481686 \| arquivo=/home/ronald/saas-hasner/logs/codex/O261-E-F2_20261101_163645_481686.jsonl"; python3 - "$L" <<'EOF' import sys p='RELATO.md'; s=open(p).read(); L=sys.argv[1] lines=s.split('\n') # insert as first non-empty line after title i=0 while i<len(lines) and (lines[i].startswith('#') or not lines[i].strip()): i+= ...` |
+| 16:36:58 | Bash | Find files growing under the codex call | `cd /home/ronald/saas-hasner; find logs ~/codex_ws -newer logs/o261e/f2/codex_v4.q -type f 2>/dev/null \| head; grep -n 'ESPERANDO' app/docs/RELATO.md \| head -3` |
+| 16:36:54 | Bash | Identify builder's background producer | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/btx1ri319.output; ps -eo pid,etimes,args \| grep -E 'bin/(suite\|codex_pergunta\|trava_teste)\.sh' \| grep -v grep \| head; ls -lt /home/ronald/saas-hasner/logs/o261e/f2/ \| head -6; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; date +%H:%M` |
 | 16:23:18 | Bash | Check builder progress and producers | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/btx1ri319.output; ps -eo pid,etimes,args \| grep -E 'bin/(suite\|codex_pergunta)\.sh' \| grep -v grep \| head; ls -lt /home/ronald/saas-hasner/logs/o261e/f2/ \| head -5; git -C /home/ronald/wt-o261e-f2-6f583cbc-140011 status --porcelain \| head; date +%H:%M` |
 | 16:22:04 | Bash | Wait in background for builder's suite or codex process | `for i in $(seq 1 120); do P=$(pgrep -f '^bash .*bin/(suite\|codex_pergunta)\.sh' \| head -1); [ -n "$P" ] && { ps -o pid,args -p $P; exit 0; }; /usr/bin/sleep 15; done; echo NENHUM` |
 | 16:21:52 | Bash | Read codex wrapper usage and E4 sonda header | `cd /home/ronald/saas-hasner; sed -n '1,40p' bin/codex_pergunta.sh \| grep -E '^#' \| head -30; head -30 logs/e4carga/sonda_impacto_bug_enc.py` |
