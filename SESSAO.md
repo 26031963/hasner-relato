@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 08:26:14.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (115.8 MB). Acoes na janela: **595**.
+**Medido em 01/11/2026 08:31:44.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (115.8 MB). Acoes na janela: **592**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -602,6 +602,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:33:25 | Bash | Find the suite.sh pid | `ps -eo pid,args \| awk '$2=="bash" && $3 ~ /suite\.sh$/ {print $1, $0}'` |
 | 20:33:21 | Bash | Find a live producer for ESPERANDO | `ps -eo pid,args \| awk '$1==3853516'; ps -eo pid,args \| grep -E 'f1c4emis\|suite.sh\|v12' \| grep -v grep \| head` |
 | 20:33:17 | Bash | Check the suite, the waiters and ESPERANDO | `cd /home/ronald/saas-hasner; date +%H:%M; ls logs/v3per/v3/rodar_v3p5.done 2>&1; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/v3per/v3/full.log \| tail -3; tail -2 /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/bgvcjugt8.output; cd bin; python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[0])"` |
-| 20:29:18 | Bash | Log the PDC red and the cota overrun | `echo "- $(date +%H:%M) PDC v6 GREEN_disjuntor VERMELHO (27 FALHA, rc=2): regra (d) multiplicidade conta excecao CAPTURADA como causa de morte; volta 7 aberta (cura no _mordida.sh, sem declaracao por mutante). COTA: 3 construtores (GRADE, V3, PDC) -- fura o teto 2 que eu mesmo fixei; PDC e volta curta de instrumento, registrado aqui." >> /home/ronald/saas-hasner/app/docs/RELATO.md` |
-| 20:29:11 | SendMessage |  | `-` |
-| 20:29:01 | Bash | Read the PDC run verdicts | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/b1w8x0aq0.output; tail -5 /home/ronald/saas-hasner/logs/padrao_de_cima/v6/GREEN_disjuntor.log` |
