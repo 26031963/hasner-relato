@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 05:24:14.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (115.8 MB). Acoes na janela: **928**.
+**Medido em 01/11/2026 05:29:44.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (115.8 MB). Acoes na janela: **927**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -937,4 +937,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:30:07 | Bash | Locate EMISSORES pre-verification files | `cd /home/ronald/saas-hasner/logs/f1c4emis; ls pm/ pm/v12/ \| head -40; ls -d /home/ronald/wt-f1c4* ; grep -rl e548d8ca . 2>/dev/null \| head` |
 | 17:30:01 | Bash | Compare base vs cura halves of sombra | `cd /home/ronald/saas-hasner/logs; grep -nE 'UNIVERSO\|COBRANCA\|ROLLBACK\|CLASSE\|rc_\|BASE\|CURA' f1c4emis/v13/sombra.log; cat f1c4emis/v13/sombra.sh; ls -la f1c4emis/ \| grep -i dst; wc -l f1c4emis/*dst* 2>/dev/null` |
 | 17:29:56 | Bash | Read waiter result and sombra tail | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/b9h9hgphj.output; cd /home/ronald/saas-hasner/logs; tail -15 f1c4emis/v13/sombra.log; ls -la f1c4emis/v13/` |
-| 17:24:21 | Bash | Wait for the first of six background runs to finish | `cd /home/ronald/saas-hasner/logs && L="f1c4emis/v13/sombra.log v3per/red.log v3per/green.log grade_folga/v5/isolado_cura_mods.log grade_folga/v5/baseline_main_19mod.log e4_7iii/v2/green.log"; while :; do n=0; for f in $L; do grep -qE '^(rc\|fim_rc)=' $f 2>/dev/null && n=$((n+1)); done; [ $n -ge 1 ] && { for f in $L; do echo "$f: $(grep -E '^(rc\|fim_rc)=' $f 2>/dev/null\|tail -1)"; done; break; }; ...` |
