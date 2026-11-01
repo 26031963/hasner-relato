@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: ensaio | pid=1191526 | arquivo=/home/ronald/saas-hasner/logs/gfja_fase_A.out
+ESPERANDO: ensaio | pid=1191526 | arquivo=/home/ronald/saas-hasner/logs/gfja_fase_C.out
 DESENHO CONTENCAO-QUE-MORDE: lei=escritor unico pergunta=quem encerra a reserva de Agent entre sessoes bin/disjuntor.py:1521 -- RESPONDIDA pelo aval de desenho do Ronald: dono sessao e agente, poda no SessionStart, estado ausente nega
 LIBERADA B3 GRADE-FOLGA-JUIZ 10:36 (desenho, sha ca3acfbd) -- linha consumida
 RESPONDIDA por aval Ronald GRADE-FOLGA-JUIZ=(a) 01/11 09:5x -- DESENHO GRADE-FOLGA-JUIZ: o trecho eh_trabalho=trabalho_do_dia (copia calendario.py:840) SAI; GRADE pousa so com folga_lancada_do_dia; "quem publica o eh_trabalho do dia" vai a E4-CALENDARIO.
