@@ -82,90 +82,15 @@ Dominio: juliani.hasner.com.br. Competencia da folha corre do dia 21 ao 20
 (Empresa.dia_inicio_competencia, default 21) - NAO e mes calendario.
 
 ## 2. INFRA
-VM: saas-hasner-sp, 8 vCPU / 16 GB / 350 GB (resize 22/09; era 4 vCPU). O usuario opera DENTRO
-    dela; nunca prefixar ssh.
-CPUSET - "teste nunca rouba CPU do cliente" (corte Ronald 22/09). Fonte unica: `bin/recursos.sh`.
-    A MAQUINA TEM 4 NUCLEOS FISICOS, NAO 8. AMD EPYC-Genoa, SMT 2 -- "8 vCPU" sao 8 THREADS:
-    core0=cpu0,1  core1=cpu2,3  core2=cpu4,5  core3=cpu6,7. cpuset se escreve em vCPU, entao
-    "prod 0-1" da a producao UM nucleo fisico. (historia: LAPIDES.md#lap-31)
-    vCPU 0-3  PRODUCAO  saas_db saas_core saas_ui saas_caddy mensageria (core0+core1)
-    vCPU 4-7  TESTE     juliani_db_test + sombra_db + TODO `docker run` de suite (core2+core3),
-              --cpuset-cpus 4-7 --cpus 4 --memory 2g = o $TESTE_DOCKER exportado pelo recursos.sh
-    (historia: LAPIDES.md#lap-61)
-    Metade fisica para cada lado, nada ocioso. `bin/recursos.sh --conferir` cobra cgroup vivo +
-    compose; `bin/db_teste.sh` e o nascimento do banco de teste e `bin/sombra_db.sh` o do banco de
-    ENSAIO (os dois FORA do compose, porque `up -d` recria o `saas_db` junto); selos
-    `bin/tests/test_recursos_sourced.sh` (VERMELHO se uma suite voltar para dentro do saas_core, se
-    perder o cpuset ou se o nascimento do sombra_db parar de declarar cpuset/restart/memoria) e
-    `bin/tests/test_ensaio_fora_do_postgres_de_prod.sh` (VERMELHO se `pg_database` do `saas_db` voltar
-    a ter `sombra` ou `juliani_ref_*`).
-    (historia: LAPIDES.md#lap-32)
-Repo: /home/ronald/saas-hasner  ->  github 26031963/hasner-ponto
-Django: /home/ronald/saas-hasner/app  (bind-mount para /app no container; HOST == CONTAINER)
-Containers:
-  saas_core   gunicorn, KERNEL (auth + batida). urlconf enxuto config/urls_core.py
-  saas_ui     gunicorn (gthread, 5 workers x 4 threads, timeout=30), TODAS as
-              telas. config/urls.py. ATENCAO: gthread faz o timeout matar so
-              worker travado, NAO requisicao longa (historia: LAPIDES.md#lap-33) Trabalho longo vai pra job.
-  saas_caddy  roteador 443. /api/ponto/* /api/auth/* /api/me/ /api/regularizacao/*
-              /api/ping-geo/ /api/registrar-fcm/ /health/  -> CORE ; resto -> UI
-  saas_db     postgres 17. banco saas_hasner / usuario saas_user
-  juliani_db_test  postgres 17. banco juliani / usuario juliani  (SO testes)
-  sombra_db   postgres 17, cpuset 4-7, teto 3g. banco LATERAL `sombra` do ensaio (E2) e os
-              `juliani_ref_*` do smoke de porta. Nasce em `bin/sombra_db.sh`, fora do compose; o
-              host dele e LITERAL em config/settings/sombra.py. NUNCA dentro do juliani_db_test:
-              a trava UM-run-por-vez da suite nao disputa com a trava da sombra (logs/sombra.lock)
-  mensageria  stack SEPARADA, fora do docker-compose (compose = db ui core caddy)
-PUBLICAR CODIGO (a unica forma):  cd ~/saas-hasner && bin/deploy.sh
-  (`--sem-migrate` quando a fatia nao tocou modelo). Ele migra ANTES, EXIGE o
-  ensaio de HOJE na sombra (`bin/sombra.sh --conferir`: carimbo de hoje, bloco da
-  manha inteiro sem erro, divergencia 0 — E2), reinicia as tres cascas JUNTAS e
-  prova uma rota em cada uma. Sem ensaio: `bin/deploy.sh --sem-sombra "motivo"`.
-  O ensaio se refaz sozinho num horario **DERIVADO**, nao literal: `config/crons.py::inicio_derivado`
-  calcula o mais tarde que ainda termina antes do vizinho (`VIZINHO_SOMBRA`), com a tolerancia do B6 e
-  nunca antes do piso 04:05. ESTA LINHA NAO GUARDA MAIS NUMERO NENHUM -- nem horario, nem duracao, nem
-  tamanho do bloco --. (historia: LAPIDES.md#lap-34) ONDE SE PERGUNTA CADA UM:
-  horario = `crontab -l | grep sombra.sh` (ou a propria derivacao); duracao = `dur_s['sombra.sh']` em
-  `app/config/crons_duracao.json`, que `bin/crons_duracao.py` escreve do placar e NUNCA se commita (o
-  piso declarado para quem ainda nao tem corrida fica em `config/crons.py::_DUR_DECLARADA`); tamanho do
-  bloco = `SOMBRA_COMANDOS` no `.sombra_stamp`, que o `--bloco` carimba do proprio
-  `manage.py crons sombra`. ENTRE 00:00 E 04:00 O PORTAO E CEGO:
-  `sombra.sh:203` soma +1 a divergencia quando o dump nao e do DIA, e o dump do dia so nasce as 04:00 --
-  entao `--refazer` puro carimba DIVERGE=1 com colunas=0 e migrations=0, e o `--bloco` em cima dele (o bloco inteiro, do tamanho carimbado acima)
-  e trabalho perdido (o refazer seguinte zera SOMBRA_BLOCO). Nessa faixa use `--refazer --dump-agora`.
-  MIGRATE DEPOIS DO DUMP DO DIA DEIXA O PORTAO VERMELHO NO REFAZER SEGUINTE. `sombra.sh` **so COMPARA** `django_migrations` prod x sombra (`q_mig`, linhas ~234-248);
-  ele **nunca migra a sombra**. (historia: LAPIDES.md#lap-35) Cura: `--refazer --dump-agora` + `--bloco`, DEPOIS que o cron da sombra terminar (espera
-  pelo ARQUIVO `logs/crons_em_curso/sombra.sh_-.*`, nunca por pgrep). Quem migra perto das 04:00 ja sai
-  sabendo que deve o ensaio INTEIRO (refazer + bloco), que dura o que a medida acima diz -- nao o que
-  esta linha dissesse.
-  (historia: LAPIDES.md#lap-36)
-
-  TEMPLATE E O CONTRARIO: gravar um `.html` no bind-mount
-  MUDA A TELA NA HORA. Nao ha `cached.Loader` (base.py:74 e `APP_DIRS: True` puro), entao o Django
-  rele o arquivo do disco a cada request. O `.py` NAO entra ate o reload -- e e' essa assimetria que
-  machuca: template novo + urlconf velho = 500. (historia: LAPIDES.md#lap-01) A regra pratica: **arquivo de
-  fatia so vai para a arvore no ato do commit/deploy** -- que ja e a lei do "construir em copia".
-  MERGE DE RAIA CAI E RECARREGA NO MESMO ATO (**L-107**; corte Ronald 30/09 17:4x, e o caso e meu). A linha acima
-  diz "commit/deploy" como se fossem UM momento, e **um merge prova que nao sao**: `git merge` da raia
-  escreve DEZENAS de `.py` na arvore viva de uma vez -- a arvore E o bind-mount --, e o worker segue com
-  o codigo de antes. (historia: LAPIDES.md#lap-02) **A forma**: `git merge --no-ff --no-commit` -> resolver -> commit
-  -> `bin/deploy.sh` SEM nada no meio, ou merge em copia e so entao a arvore. O `--no-ff` nao e enfeite:
-  `--no-commit` SOZINHO faz FAST-FORWARD quando o main nao divergiu da raia (historia: LAPIDES.md#lap-37) -- `MERGE_HEAD` fica vazio, nao nasce commit, e a arvore viva JA ESTA com o codigo novo.
-  Conferir depois de qualquer merge: `git rev-parse -q --verify MERGE_HEAD` vazio = foi ff, e o pouso
-  JA COMECOU -- o deploy vem agora, nao depois do RELATO. Nunca merge e "deploy
-  depois de publicar o RELATO".
-  `docker compose restart core ui` existe mas NAO use como deploy: sem guarda de
-  migration e sem prova de rota, e' o apagao de 09/09 esperando. (Se precisar do
-  nome cru: servico core/ui/db/caddy; "restart saas_core" NAO existe.)
-  BUG 128 (12/09): as 3 cascas rodam com max_requests=0. Nenhum worker recicla
-  por contagem, entao GRAVAR UM .py NAO O POE NO AR -- quem publica e
-  `bin/deploy.sh`, que migra antes e prova as 3 rotas depois. (historia: LAPIDES.md#lap-38) A higiene de memoria
-  que o max_requests pagava virou reload agendado 03:30
-  (`deploy.sh --reload-agendado`, HUP gracioso, declarado em config/crons.py).
-  Selo de host: `bin/selo_reciclagem.sh`. E `docker restart` NAO e recreate:
-  imagem nova ou `command:` novo do compose so entram com `docker compose up -d`.
-Apps Django: api chamados colaboradores comunicados core escala ferias folha holerite
-  inteligencia pautas ponto relatorios tenants  (config = settings). (historia: LAPIDES.md#lap-62) A autoridade de `Empresa` e `colaboradores.models`.
+Detalhe operacional (cpuset, containers, sombra, merge, reciclagem, com as lapides) e LOOKUP: **app/docs/INFRA.md**.
+- VM saas-hasner-sp: 8 vCPU = 4 nucleos fisicos (SMT 2), 16 GB. O usuario opera DENTRO dela; nunca prefixar ssh.
+- CPUSET (corte Ronald 22/09, "teste nunca rouba CPU do cliente"), fonte unica `bin/recursos.sh`: vCPU 0-3 PRODUCAO, vCPU 4-7 TESTE (juliani_db_test, sombra_db e todo `docker run` de suite pelo $TESTE_DOCKER). Selos `test_recursos_sourced.sh`, `test_ensaio_fora_do_postgres_de_prod.sh`.
+- Repo /home/ronald/saas-hasner -> github 26031963/hasner-ponto; Django em app/ (bind-mount /app, HOST == CONTAINER).
+- Cascas: saas_core = KERNEL (auth + batida, config/urls_core.py); saas_ui = todas as telas (gthread, timeout=30: trabalho longo vai pra job); saas_caddy roteia /api/ponto|auth|me|regularizacao|ping-geo|registrar-fcm e /health/ ao core, resto a UI. Bancos: saas_db (prod), juliani_db_test (SO testes), sombra_db (ensaio e juliani_ref_*, NUNCA no saas_db). mensageria fora do compose.
+- PUBLICAR CODIGO = SO `bin/deploy.sh` (`--sem-migrate` sem modelo; `--sem-sombra "motivo"` sem ensaio do dia): migra antes, exige o ensaio de hoje, reinicia as 3 cascas juntas e prova uma rota em cada. `docker compose restart` NAO e deploy; `docker restart` NAO e recreate (imagem/command novos so com `up -d`). max_requests=0 (BUG 128): gravar .py nao o poe no ar; .html muda NA HORA (sem cached.Loader) -> arquivo de fatia so entra na arvore no ato do commit/deploy. Reload gracioso 03:30; selo `bin/selo_reciclagem.sh`.
+- MERGE DE RAIA CAI E RECARREGA NO MESMO ATO (L-107): `git merge --no-ff --no-commit` -> resolver -> commit -> `bin/deploy.sh`, nada no meio. `--no-commit` sozinho faz FAST-FORWARD: `MERGE_HEAD` vazio = o pouso ja comecou, o deploy e agora.
+- SOMBRA: horario DERIVADO (`config/crons.py::inicio_derivado`), nenhum numero escrito aqui. Entre 00:00 e 04:00 o portao e cego: `--refazer --dump-agora`. Migrate depois do dump do dia deixa o portao vermelho: `--refazer --dump-agora` + `--bloco` depois do cron da sombra (espera por ARQUIVO em logs/crons_em_curso, nunca pgrep).
+- Apps Django: api chamados colaboradores comunicados core escala ferias folha holerite inteligencia pautas ponto relatorios tenants. A autoridade de `Empresa` e `colaboradores.models`.
 
 ## 3. TESTES - COMANDO CANONICO
 bash ~/saas-hasner/bin/suite.sh
@@ -246,151 +171,38 @@ UM escritor -- `bin/arvore_do_push.sh --montagem <dir>` --, e `--dir` e quem a c
 - (historia: LAPIDES.md#lap-64)
 
 ## 4b. CRITERIO DE ENCERRAMENTO DO ESTRUTURAL (corte Ronald 13/09)
-7 familias (batida · celula/precedencia · turno/marcos · escala · ausencia/ferias ·
-chamado · folha/export) x 3 contratos (1 JUIZ por pergunta · 1 ESCRITOR por
-entidade · PARAMETRO consumido ou rotulado "sem efeito"), TODOS com allowlist
-ZERO na regua, + 1 global (codigo no ar so por deploy.sh = BUG 128). 7x3+1 = 22.
-MAS O TETO NAO E 22 -- E **20**, e ele se PERGUNTA, nao se digita (L-100, lei Ronald
-03/10 08:13, corte `TETO-20-SEM-FAMILIA-SEM-CADASTRO`): *"o TOTAL desconta familia sem campo
-editavel, e a meta passa a ser 20 de 20"*. A mesma lei de 13/09 que diz "familia sem campo
-editavel nao tem celula" PROIBE as celulas de contrato 3 de `chamado` e de `escala` de
-existirem -- e celula que nao pode existir nunca fica verde, (historia: LAPIDES.md#lap-56) Elas voltam ao teto SOZINHAS no dia que a
-familia ganhar cadastro de verdade. Juiz UNICO do teto:
-`core/contratos_estruturais.py::total()`, que deriva de
-`core/configuracao_efeito.py::familias_com_parametro` (historia: LAPIDES.md#lap-65).
-A matriz e DECLARADA em `app/core/contratos_estruturais.py` e o placar do topo
-do TICKETS le dali (`contratos_estruturais: N/20`), igual a LINHA HAIKU
-(`core/arquitetura_leitura.py`, rotulo "arquitetura: N de 20"). Celula verde e conferida
-pelo selo: a classe de teste tem que EXISTIR e toda lista de excecoes que ela
-declara tem que estar VAZIA -- "allowlist zero" e a linha, nao "o teste passa"
-(contrato de arvore com allowlist passa sempre; so mede a propria allowlist).
-IDEMPOTENCIA E PARTE DO CONTRATO 2 (corte 13/09): toda porta declarada tem
-selo "chamar 2x com a mesma entrada = mesmo estado, 1 linha de trilha, 0
-chamado/pergunta duplicada" -- nao e contrato novo, e o que faz o escritor
-unico valer. Celula "1 escritor por entidade" sem esse selo nao e verde.
-Cada item de E3/E4 e cada sessao S2-S7 fecha marcando celula. **Em 20/20 (o teto de hoje) o
-estrutural acaba, e violacao passa a ser VERMELHO NO COMMIT, nao fatia.**
-
-**L-099 — O ESTRUTURAL SE SEPARA DO DADO** (corte Ronald 02/10 22:5x, numerada 03/10 00:2x; a frase e
-LITERAL): *"O estrutural se separa do dado. Escala errada e batida furada sempre vao existir. O sistema
-tem de ser 100% coerente, deterministico e idempotente com o cadastro que TEM: se aparece errado no
-espelho, esta errado em todo lugar do sistema; se aparece certo, esta certo em todo lugar."*
-(historia: LAPIDES.md#lap-57) O que ela muda na pratica:
-  - toda divergencia tem **UM DONO**: ESTRUTURA (o sistema se contradiz ou calcula errado dado o
-    cadastro), CADASTRO (o DNA nao descreve as batidas) ou BATIDA (falta ou sobra batida). O juiz e
-    `e6_oraculo.py::dono_da_divergencia` e ele **nao inventa autoridade**: paridade do dia pela lei do
-    BUG-144, e a lista `dias_cadastro_x_realidade` do MOTOR;
-  - **so ESTRUTURA e fatia.** CADASTRO e BATIDA vao para a lista do admin pela mesma fonte do Cadastro
-    x Realidade -- **e proibido curar por codigo** divergencia desses dois donos;
-  - o placar vive em `app/core/placar_estrutural.py` (R1..R6 como DADO, com numero, meta e PROVA --
-    **numero sem prova nao conta**), e e o **placar PRINCIPAL do `ESTADO.md`**; o E1-E6 fica abaixo,
-    com o percentual do oraculo **aberto por dono**.
-ORDEM dos seis: R1 e R2 primeiro (redirecionam o trabalho), depois R5, R3, R4, R6.
-PROIBIDO: mudar tolerancia ou tirar caso da lista para o numero cair; fallback; juiz novo.
-
-**RODADA 3 — ORDEM DO F1** (aval Ronald 14/09; cortes da noite de 14/09). META: contratos 22/22 -- hoje **20/20**, mesmo criterio com o teto derivado da L-100 · registros pendentes 0 nas 6 familias · itens 6/6 · escritas fora de porta 0 · toques < 100. F1 S-DINHEIRO, uma familia por vez: **turno** (S7-S13 + G5s + idempotencia + matriz) -> **chamado** (antes de ausencia: "amanhecer sem susto", e a familia que o admin ve na hora; primeiro os sitios que EMITEM/FECHAM chamado -- nasce da celula, morre por lastro, nunca sem dono -- depois tela/placar) -> **ausencia** (primeiro o caminho de ESCRITA do admin: criar -> aprovar -> efeito na celula -> espelho/app; depois leitores e tela; S4-PENDENTE e AUSENCIA-COBRE seguem na linhagem da madrugada de 15/09) -> **fechamento** -> **feriado**. Familia fecha = registro 0 + idempotencia da porta selada + celula da matriz verde + MEDIDO no commit. Depois: F2 S-TELA · F3 contratos · F4-F6 Pautas DP/supervisao (escrever, nao esperar) · F7 toques · F8 placar no teto (20/20 hoje). Bug achado = P7.1, fura a fila. (historia: LAPIDES.md#lap-58)
+Texto integral, historia e a RODADA 3: **app/docs/ESTRUTURAL.md** (lookup).
+- 7 familias x 3 contratos (1 JUIZ por pergunta; 1 ESCRITOR por entidade, com selo de idempotencia "2x = mesmo estado, 1 linha de trilha, 0 duplicata"; PARAMETRO consumido ou rotulado "sem efeito") + 1 global (BUG 128), allowlist ZERO. O teto e **20**, perguntado e nunca digitado (L-100, TETO-20-SEM-FAMILIA-SEM-CADASTRO): juiz unico `core/contratos_estruturais.py::total()`; placar `contratos_estruturais: N/20` e LINHA HAIKU "arquitetura: N de 20". Celula verde = a classe de teste existe E toda lista de excecoes esta VAZIA. **Em 20/20 o estrutural acaba e violacao vira VERMELHO NO COMMIT, nao fatia.**
+- **L-099 — O ESTRUTURAL SE SEPARA DO DADO** (literal): *"O estrutural se separa do dado. Escala errada e batida furada sempre vao existir. O sistema tem de ser 100% coerente, deterministico e idempotente com o cadastro que TEM: se aparece errado no espelho, esta errado em todo lugar do sistema; se aparece certo, esta certo em todo lugar."* Toda divergencia tem UM DONO -- ESTRUTURA, CADASTRO ou BATIDA --, juiz `e6_oraculo.py::dono_da_divergencia` (paridade do dia pela lei do BUG-144, lista `dias_cadastro_x_realidade` do MOTOR). So ESTRUTURA e fatia; CADASTRO e BATIDA vao a lista do admin, e e PROIBIDO cura-los por codigo. Placar `app/core/placar_estrutural.py` (R1..R6 com numero, meta e PROVA; numero sem prova nao conta) e o PRINCIPAL do ESTADO.md; E1-E6 abaixo, aberto por dono. Ordem: R1, R2, R5, R3, R4, R6. PROIBIDO: mudar tolerancia ou tirar caso da lista para o numero cair; fallback; juiz novo.
+- RODADA 3 (14/09; ordem do F1 S-DINHEIRO: turno S7-S13 -> chamado -> ausencia com S4-PENDENTE e AUSENCIA-COBRE -> fechamento -> feriado; depois S-TELA e F4-F6; cada item de E3/E4 e sessao S2-S7 fecha marcando celula): texto no ESTRUTURAL.md.
 
 ## 5. OS JUIZES (um por dominio - nao clonar)
 A TABELA mora em `app/docs/JUIZES.md` -- lookup, saiu daqui na O224 (aval Ronald 10/10 11:0x).
 Topologia detalhada (roteamento, middleware, fluxo app x PWA): ver memoria [[mapa-sistema]].
 
 ## 6. CONDUTAS QUE JA CUSTARAM CARO
-- TETO TEMPORAL em emissor/juiz que julga marco ou celula missing: teto por DATA
-  NAO BASTA (no cross-meia-noite o DIA acaba antes do TURNO). So valem (a) comparar
-  INSTANTE (agora vs marco/janela do turno) ou (b) exigir FATO ENCERRADO (turno
-  fechado, par completo). (b) e mais forte: nao erra por fuso, hora do cron nem
-  virada. (historia: LAPIDES.md#lap-19) Selo ponto/tests/test_contract_teto_temporal.py.
-- LER ANTES DE AFIRMAR. Nunca narrar estado de codigo de memoria: grep/sed/cat ao vivo,
-  depois responder com arquivo:linha. (historia: LAPIDES.md#lap-20)
-- LEI ANTES DO PATCH: antes de montar patch ou prompt, grep do ARQUIVO e da FUNCAO em `LEIS.md`,
-  `DOSSIES.md` e `CORTES.md`; o resultado vai CITADO com o `L-NNN` (corte Ronald 04/10,
-  LEI-PROTEGE-SITIO; a coluna PROTEGE do LEIS.md e o selo `bin/tests/test_lei_protege_sitio.sh`,
-  chamado pelo pre-push, cobram isso no diff). (historia: LAPIDES.md#lap-07)
-- SITIO COM ZERO CHAMADOR DE PRODUCAO AINDA RESPONDE (**L-111**, aval Ronald 05/10 09:0x). Funcao
-  que perdeu o ultimo chamador NAO e divida quitada: ela segue sendo um SEGUNDO juiz da pergunta da
-  familia, esperando leitor novo. Apaga-se no ato (lapide no sitio), os testes que a sustentavam vao
-  com ela e o pendente sai no MESMO commit. (historia: LAPIDES.md#lap-21)
-- CONTRATO DE ENTRADA antes de codar metrica/regra nova, 4 linhas: FONTE (funcao/tabela
-  que JA existe) / UNIDADE / UNIVERSO / EXCLUSOES. Pergunta zero: "de qual fonte
-  existente isso sai?"
-- CODIGO DE NEGOCIO: teste RED evidenciado -> fix -> GREEN -> suite. "Conserta ao vivo"
-  e para infra, nao para negocio.
-- SELO ANTI-VACUIDADE E REGRA, NAO REMENDO. Todo selo novo que usa mock ou afirma
-  algo sobre a SAIDA precisa de um caso que MORDE: um teste que fica VERMELHO se a
-  costura sair do lugar. Sem ele o selo passa por ausencia de sinal e nao prende
-  nada. (historia: LAPIDES.md#lap-22)
-  O caso que morde e' barato -- dois valores diferentes que precisam dar status
-  diferentes (`test_a_costura_MORDE`) ja basta.
-- NAO reconstruir em sonda propria a chamada que o sistema faz. Chamar a FUNCAO REAL
-  (interceptando a escrita). (historia: LAPIDES.md#lap-23)
-- MEIA-CORRECAO E PIOR QUE NENHUMA. Filtro/regra nova exige CENSO DE ESCRITORES fechado
-  antes. Campo de estado com 2 escritores mente mesmo com cada escritor certo.
-- SILENCIAR EXIGE prazo + tripwire + item de fila. (historia: LAPIDES.md#lap-24)
-- GIT: add por PATH, nunca -A. Commit na hora. Push livre; pull/reset/checkout/restore
-  so com tar e proposito. Nunca 2 push simultaneos. Nao commitar sem ok.
-  O PUSH DO FABRICANTE E DELE (24/09): commit que o integrador criou (`[ASSINATURA-EC-P256]`,
-  `TICKETS: ... (lote de N fatia(s))`) ja tem quem o empurre. Empurrar por ele nao adianta nada e
-  (historia: LAPIDES.md#lap-25) Antes
-  de empurrar, `git fetch` e olhar -- se `origin/main..HEAD` so tem commit que nao e seu, nao ha
-  o que fazer. (historia: LAPIDES.md#lap-26)
-- PATCH: ler o arquivo VIVO antes de montar old_str; ancora unica (assert count==1);
-  montar em memoria -> py_compile -> so entao gravar; skip-guard por marcador para
-  ser idempotente. Offsets andam a cada commit: ancorar por grep, nunca por linha.
-- SHELL: docker exec nao roda dentro de shell; python -c nao acha settings.
-  Usar docker cp + manage.py shell --command "exec(open('/tmp/x.py').read())".
-  tenant_command <cmd> --schema=juliani para commands (direto roda no public).
-- Papel/holerite vem em h+min; sonda vem em decimal. 167h31 = 167,51. Converter ANTES
-  de declarar divergencia.
-- FRONT SEM SMOKE NAO SOBE (07/09, BUG 73). Fatia que toca `static/js/`, o service
-  worker ou template BASE (base.html / base_app.html / partial incluido por eles) NAO
-  faz push sem smoke de clique do Ronald nas DUAS cascas: colab bate ponto; admin faz
-  uma acao com modal. Suite verde nao ve tela (historia: LAPIDES.md#lap-27)
-  DESDE 13/09 HA NAVEGADOR (R14, item 18): chromium headless na imagem, e
-  `core/tests/test_smoke_chromium.py` abre a tela do espelho nas DUAS cascas e
-  pergunta ao `getComputedStyle` se o overlay esta visivel, mais console limpo.
-  Ele responde o que regex de markup nao responde: CASCATA. NAO substitui o
-  smoke de clique do Ronald -- nao ve rota, Caddy, CSP nem gesto; e o piso, nao
-  o teto. JS proprio tambem passa por `node --check` na regua
-  (bin/node_check.sh, 11 arquivos; os 85 <script> inline de template seguem em
-  fila, porque `{{ }}` e `{% %}` nao sao JS).
-- TODO SELO DE FRONT RENDERIZA AS DUAS CASCAS (08/09, corte Ronald). `base.html`
-  (admin) e `base_app.html` (colaborador) sao arvores SEPARADAS: `base_app` nao
-  inclui `_copiloto.html`, e o que uma carrega a outra pode nao carregar. (historia: LAPIDES.md#lap-28) Selo de front afirma sobre as DUAS
-  raizes, ou nao afirma nada. Quando renderizar a casca inteira exige request,
-  sessao e permissao, a prova e' o GRAFO DE INCLUDES (fecho transitivo a partir
-  de cada raiz) -- estrutural, sem fixture que apodrece.
-  Selo: core/tests/test_selo_modal_nao_nasce_vazio.py::test_MORDE_as_DUAS_cascas.
+Texto integral com a historia de cada uma: **app/docs/CONDUTAS.md** (lookup).
+- TETO TEMPORAL: emissor/juiz de marco ou celula missing compara INSTANTE ou exige FATO ENCERRADO (turno fechado, par completo); teto por DATA nao basta no cross-meia-noite. Selo ponto/tests/test_contract_teto_temporal.py.
+- LER ANTES DE AFIRMAR: grep/sed/cat ao vivo, resposta com arquivo:linha.
+- LEI ANTES DO PATCH (LEI-PROTEGE-SITIO): grep do arquivo e da funcao em LEIS.md, DOSSIES.md e CORTES.md, citando o L-NNN; selo `bin/tests/test_lei_protege_sitio.sh` no pre-push.
+- SITIO COM ZERO CHAMADOR AINDA RESPONDE (L-111): apaga-se no ato (lapide no sitio), com os testes que o sustentavam e o pendente, no MESMO commit.
+- CONTRATO DE ENTRADA antes de metrica/regra nova: FONTE (que JA existe) / UNIDADE / UNIVERSO / EXCLUSOES.
+- CODIGO DE NEGOCIO: RED evidenciado -> fix -> GREEN -> suite; "conserta ao vivo" e so para infra.
+- SELO ANTI-VACUIDADE: selo com mock ou sobre a SAIDA tem caso que MORDE (`test_a_costura_MORDE`).
+- Sonda chama a FUNCAO REAL (interceptando a escrita), nunca reconstroi a chamada.
+- MEIA-CORRECAO E PIOR QUE NENHUMA: CENSO DE ESCRITORES fechado antes de filtro/regra nova.
+- SILENCIAR EXIGE prazo + tripwire + item de fila.
+- GIT: add por PATH, nunca -A; commit na hora; nunca 2 push simultaneos; pull/reset/checkout/restore so com tar e proposito; nao commitar sem ok. O push do fabricante (`[ASSINATURA-EC-P256]`, `TICKETS: ... lote`) e dele: `git fetch` e olhar antes de empurrar.
+- PATCH: ler o VIVO; ancora unica (assert count==1); montar em memoria -> py_compile -> gravar; skip-guard idempotente; ancorar por grep, nunca por linha.
+- SHELL: docker cp + `manage.py shell --command "exec(open('/tmp/x.py').read())"`; `tenant_command <cmd> --schema=juliani`.
+- Papel/holerite em h+min, sonda em decimal: 167h31 = 167,51. Converter ANTES de declarar divergencia.
+- FRONT SEM SMOKE NAO SOBE (BUG 73): `static/js/`, service worker ou template base (base.html/base_app.html e o que eles incluem) so com smoke de clique do Ronald nas DUAS cascas; `core/tests/test_smoke_chromium.py` e o piso, nao o teto; JS proprio por `bin/node_check.sh`.
+- TODO SELO DE FRONT RENDERIZA AS DUAS CASCAS, ou prova pelo grafo de includes de cada raiz. Selo `core/tests/test_selo_modal_nao_nasce_vazio.py::test_MORDE_as_DUAS_cascas`.
+- Rebuild de imagem: nunca instalar item por item; o custo e o rebuild.
+- ZONA INVIOLAVEL (incidente 27/08): POST em porta HTTP de prod (Client em /responder/, /validar-inline/, /bater/...) E ESCRITA. Smoke de porta so (1) em banco lateral juliani_ref_* DENTRO do sombra_db, nunca saas_hasner; (2) em atomic() com raise; (3) contagem antes/depois na 1a rodada, 1 caso. Client() grava ip=127.0.0.1 no LogAuditoria.
+- BANCO SOMBRA (E2): so `bin/sombra.sh --refazer`, nunca scripts/restore_tenant.sh; SOMBRA-INCREMENTAL por `--incremental`, e `--cobre INI FIM` guarda o DIFF de folha; settings `config.settings.sombra`, container sem rede. SOMBRA-MASCARA-2 apaga a GEO: cron de geo se mede em PROD em dry, nunca na sombra. Dado pessoal: nao exportar.
+- GATE TEMPORAL = CRON + ARQUIVO: espera longa por `bin/deploy_agendado.sh agendar` (conferir com `listar`), nunca sleep do Code; espera curta por arquivo de sinal, nunca `pgrep -f`.
 
-- JANELA DE REBUILD DA IMAGEM — PAGA em 13/09 (R14, item 18 da ordem) (historia: LAPIDES.md#lap-29)
-  NAO instalar item por item: o custo e o rebuild, nao o pacote.
-
-- ZONA INVIOLAVEL (INCIDENTE 27/08, 144 perguntas + 25 batidas fabricadas em prod): script que
-  POSTa em porta HTTP de prod (django.test.Client em /responder/, /validar-inline/, /bater/...)
-  E ESCRITA, nunca "teste". transaction.savepoint() fora de atomic() em autocommit devolve None
-  e o rollback e no-op. Smoke de porta so roda: (1) contra banco LATERAL restaurado do dump
-  (backups/juliani/*.dump -> db juliani_ref_* DENTRO DO `sombra_db`, nunca do saas_db -- O286, 15/10:
-  o `juliani_ref_*` a mao era a outra metade do banco de ensaio no postgres do cliente, e ha selo de
-  host cobrando isso), NUNCA saas_hasner; (2) dentro de atomic() com
-  raise no fim; (3) com contagem no banco ANTES/DEPOIS colada na 1a rodada, 1 caso, provando o
-  rollback. Client() grava ip=127.0.0.1 no LogAuditoria: e a chave de inventario se falhar.
-- BANCO SOMBRA (E2, 13/09): `sombra` e o banco LATERAL oficial de ensaio — copia de
-  prod (dumps do `public` + `juliani`) com CPF/nome mascarados por bijecao e os
-  enderecos de push apagados. So se reconstroi por `bin/sombra.sh --refazer`, que
-  NUNCA chama scripts/restore_tenant.sh (aquele escreve DENTRO de saas_hasner).
-  SOMBRA-INCREMENTAL (20/09): `--refazer --incremental [--dias N | --janela INI FIM]` repoe SO a janela (batida,
-  celula, ausencia, justificativa) por cima da completa do dia, com PROVA (md5 prod x sombra na janela) e cobertura
-  declarada no carimbo; `--conferir` diz completa|incremental e a janela; `--cobre INI FIM` e a guarda -- DIFF de folha
-  sobre janela que nao cobre o periodo medido e PARADO (bin/simular_folha.sh ja chama).
-  Comando contra ela: `config.settings.sombra` (banco literal, saidas desligadas)
-  + container sem rede (proxy morto). A SOMBRA-MASCARA-2 (13/09, `bin/sombra_mascara_pessoal.py`) apaga
-  texto livre, pis, rg, conta e GEOLOCALIZACAO (historia: LAPIDES.md#lap-66), entao todo cron de GEO (vinculo, geofence,
-  cluster) mede ZERO na sombra por construcao. Cron de geo se mede em PROD, pelo command em dry
-  (`--alarme`), nunca pela sombra. Continua sendo dado pessoal; nao exportar daqui.
-- GATE TEMPORAL = CRON/AT + ARQUIVO (LICAO 16/09, corte Ronald). Espera longa ("sobe qui 14:00")
-  NUNCA e processo do Code (sleep/until em segundo plano): morre com a sessao (historia: LAPIDES.md#lap-30) Agendar com `bin/deploy_agendado.sh agendar` (cron de 1 disparo em
-  /etc/cron.d; `at` nao esta instalado), que roda testes -> DIFF -> deploy -> DRY e escreve
-  logs/deploy_agendado/<rotulo>.done + linha no RELATO. Conferir com `bin/deploy_agendado.sh listar`
-  (placar: deploys_agendados). Espera curta tambem e por ARQUIVO de sinal, nunca `pgrep -f`.
 ## 6b. CCT VIGILANTES LONDRINA — regra de folha com lastro juridico (01/09)
 Sindicato #2 (Vigilantes de Londrina/PR), MTE PR000251/2026, vigencia
 01/02/2026-31/01/2028, vinculado a praca Londrina (309 colabs, 202 em 12x36).
