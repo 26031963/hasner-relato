@@ -1,7 +1,122 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 00:58** · publicado em **01/11/2026 01:02** (UTC-3)
+> Ultima resposta processada: **01/11/2026 01:40** · publicado em **01/11/2026 01:40** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 01:40 · sessao 8e68217c962e · - · - · origem=Ronald (tmux)
+
+Complemento do bloco antigo:
+
+- **bloqueia — mutante não abre a porta.** `bin/tests/test_disjuntor.sh:1790`, `b3-codex-porta-sempre-livre`, remove só o retorno 3. A obra PARADA cai depois em `bin/disjuntor.py:1136` e retorna 4; o wrapper continua recusando. O caso mata o mutante porque exige exatamente 3 (`test_disjuntor.sh:1250`). Confirmado em memória.
+
+- **bloqueia — mutante troca negativa por exceção.** `bin/tests/test_disjuntor.sh:1818`, `cx8-ausente-sem-falha`, deixa a execução alcançar `tri.get` com `tri=None` (`bin/disjuntor.py:1025`), causando `AttributeError`. `julga_b3` converte em NAO_SEI (`:1069`), mantendo a recusa. O teste falha em `test_disjuntor.sh:1360` porque `_xp` exige a mensagem “DISJUNTOR B3” (`:1261`), não “B3-NAO-SEI”. Confirmado em memória.
+
+- **fila — mutante não parte a decisão entre travas.** `B3-duas-travas`, `bin/tests/test_disjuntor.sh:1902`, acrescenta uma transação vazia antes da decisão completa. A decisão continua inteira sob uma trava. O selo o mata contando chamadas (`:926`, `:935`), sem simular uma decisão repartida com corrida.
+
+- Os **182 mutantes antigos** de `bin/tests/test_disjuntor.sh:1724` a `:2000` têm âncoras únicas; todos os Python resultantes passam AST e todos os Bash resultantes passam `bash -n`, verificados em memória.
+- Os mutantes antigos da CHAVE retiram efetivamente o que declaram: `:1753`, `:1754`, `:1755`, `:1756`, `:1757`, `:1760`, `:1855`; os casos distinguem essas mudanças em `:616`, `:624`, `:630`, `:649`.
+- Execução integral dos casos antigos: **[nao verificado]**.
+
+## 01/11 01:38 · sessao 4e4238c0d392 · - · - · origem=Ronald (tmux)
+
+Achados de `bin/disjuntor.py`, só leitura; reproduções mencionadas abaixo ocorreram em memória com I/O substituído, sem criar arquivos.
+
+- **bloqueia — autorização sem persistência:** `bin/disjuntor.py:305`, `:313`, `:318`, `:323` deixam a decisão valer quando a gravação falha. `porta_agent` retorna essa autorização em `:1488`; `reserva_volta_codex` em `:1397`, sem conferir `gravou`. A chamada pode abrir sem registrar volta/reserva; chamadas seguintes reutilizam a vaga. B3 antigo confere persistência em `:1046`, mas as portas novas não repetem essa proteção.
+
+- **bloqueia — exceção antes da porta libera Agent não final:** `pretool` lê estado em `bin/disjuntor.py:1965`; se ilegível, a execução pula `porta_agent` (`:1992`–`:1995`). A exceção fecha somente o ramo B3 (`:2005`–`:2014`); outro Agent termina liberado em `:2015`. Basta Agent construtor não final com estado ilegível: não passa pelos gates novos de modelo, papel, vivos ou volta.
+
+- **bloqueia — B3 e autorização separados em duas travas:** Agent consulta B3 em `bin/disjuntor.py:1958`–`:1963`; reserva depois em `:1465`–`:1488`, sem revalidar B3. Wrapper consulta em `:1132`, reserva em `:1142`/`:1397`. Entre as duas transições, outro processo pode parar a obra; o primeiro ainda abre. O mesmo flock existe, mas não cobre a decisão completa.
+
+- **bloqueia — corrida da contagem de vivos:** `txt`/`vivos_tx` são fotografados fora da trava (`bin/disjuntor.py:1455`–`:1463`); outro processo pode podar a reserva de um agente já lançado em `:1473`–`:1474`. Quando o processo com fotografia antiga entra na trava, o agente já não está em reservas e ainda não está na sua fotografia: `:1475` subconta e pode abrir o sétimo. A fotografia precisa corresponder ao estado sob o flock.
+
+- **bloqueia — idempotência some depois da poda:** só `reservas` é consultado em `bin/disjuntor.py:1467`; `voltas.chaves` recebe a identidade em `:1485`, mas não é consultado pelo caminho Agent. Depois de `:1474` apagar a reserva, a mesma chamada incrementa de novo em `:1484`. Reproduzido em memória: `a,b,a`, com resultado de `a` antes de `b`, termina com `agent=3` e `chaves=['a','b','a']`. O teste só repete enquanto a reserva existe (`bin/tests/test_disjuntor.sh:1555`).
+
+- **bloqueia — poda sem reconhecer resultado:** `bin/disjuntor.py:1473` procura uma substring compacta `"tool_use_id":"..."` em todo o transcript, sem verificar objeto `tool_result`. Texto citado pode eliminar reserva; JSON com espaço após `:` não a elimina. O primeiro caso permite subcontagem; o segundo conserva agentes já entregues.
+
+- **bloqueia — semente Agent congelada em zero pelo wrapper/reabre:** `reserva_volta_codex` chama `_voltas(..., None)` em `bin/disjuntor.py:1388`; `reabre`, em `:1494`. `_semente` retorna `agent=0` e parcial quando não recebe transcript (`:1346`, `:1356`–`:1359`). `_voltas` nunca completa a semente existente (`:1372`–`:1374`). Assim, seis Agents anteriores podem ser ignorados se wrapper/reabre inicializar primeiro.
+
+- **bloqueia — sidecar Codex ilegível não declara semente parcial:** `_le_id` devolve `None` em `bin/disjuntor.py:831`–`:833`; `_semente` simplesmente pula em `:1349`–`:1351`. Subconta voltas e não marca parcial, contrariando contrato `app/docs/contratos/CONTENCAO-QUE-MORDE-V2.txt:11`.
+
+- **bloqueia — universo novo e coletor antigo divergem:** `_eh_verificador` admite papel na descrição (`bin/disjuntor.py:1191`); porta e PreToolUse o usam (`:1427`, `:1958`). Mas `_reprovacoes_finais` só coleta `meta.agentType == 'verificador'` (`:815`). Um `general-purpose` rotulado verificador pode entregar REPROVADO sem alimentar o B3. É derivação paralela do universo.
+
+- **bloqueia — “só Ronald” é filtro lexical contornável:** `guarda_chave` bloqueia os literais CLI em `bin/disjuntor.py:192`–`:195`, mas não protege as funções `reabre`/`redesenha` (`:1491`–`:1507`) nem o estado contra Write (`:189`–`:212`). Verificado em memória: `guarda_chave` e `pretool` retornam `None` para Bash `python3 -c 'import sys; sys.path.insert(0,"bin"); import disjuntor; disjuntor.reabre("OBRA-X",3)'`; idem `redesenha`. Write direto em `logs/sessao/disjuntor_estado.json` também é admitido pela guarda. Não localizei segundo escritor operacional já existente fora dessas funções; a porta permite criar esse caminho.
+
+- **bloqueia — HEAD ausente passa sem PROCEDENTE:** `head=None` é tolerado em `bin/disjuntor.py:1447`–`:1451`; só é negado dentro do loop dos PROCEDENTES em `:1276`–`:1281`. Com trilha vazia, retorna livre em `:1288`. A ressalva “cópia sem hash = nega” do contrato `:13` não é incondicional no código. Reproduzido em memória para `_cura_falta` com triagem vazia.
+
+- **fila — formato `consumidas` diverge literalmente:** contrato pede `{sha,tipo}` (`app/docs/contratos/CONTENCAO-QUE-MORDE-V2.txt:12`); implementação mantém lista de sha (`bin/disjuntor.py:1027`) mais mapa paralelo `consumidas_tipo` (`:1023`). A regra normal é implementada pelo leitor `:1162`–`:1174`, mas o formato escrito não é o contratado.
+
+- **fila — relógio fora da borda:** `ler(..., agora)` chama `_b3_sem_obra` em `bin/disjuntor.py:2129`, que usa novo `time.time()` em `:2137`. A janela pode divergir do instante da medição fornecido.
+
+- **fila — custo aceito e omitido:** `fable` é modelo aceito (`bin/disjuntor.py:118`), mas não possui preço em `:126`; `_custo_24h` o descarta em `:1533`–`:1535`. Arquivos ilegíveis são silenciosamente ignorados em `:1529`–`:1530`, podendo produzir custo parcial apresentado como total.
+
+Rastreio dos campos, com escritores múltiplos explicitados:
+
+| Campo | Escritores | Leitores |
+|---|---|---|
+| `voltas`/`agent`/`codex`/`extra`/`chaves` | criação/semente `bin/disjuntor.py:1346`, `:1353`, `:1365`, `:1373`; Codex incrementa `:1393`–`:1394`; Agent `:1484`–`:1485`; reabre `:1495` | `_voltas` `:1372`–`:1374`; Codex `:1389`–`:1392`; Agent `:1482`; mensagem `:1380`; painel `:1549`–`:1553` |
+| `reservas` | cria `bin/disjuntor.py:1466`; poda `:1474`; grava `:1486` | `:1467`, `:1473`, `:1475` |
+| `consumidas` / `consumidas_tipo` | `bin/disjuntor.py:1023`, `:1027` | `:1014`, `_erros_bobos` `:1162`–`:1174` |
+| `pede_desenho` | liga `bin/disjuntor.py:1019`; remove `:1505` | `:1010` |
+| triagem `cura=` | novo escritor `triagem_cura`, `bin/disjuntor.py:1307`–`:1309`; triagem sem cura continua escrevendo no mesmo arquivo em `:885`–`:887` | `_triagens` `:921`–`:926`; `_cura_falta` `:1273`–`:1287`; `triagem_cura` `:1299`–`:1305`; demais consumidores `_triagens` recebem o veredito sem o campo |
+| `b3_sem_obra` com `t` | migração `bin/disjuntor.py:1154`–`:1155`; coletor `:975`; negativa da porta `:1434`–`:1435` | deduplicação `:974`; medição `:2136`–`:2138`; painel `:2207` |
+| `DJ_VOLTA_CODEX` | `bin/codex_pergunta.sh:166` | `bin/disjuntor.py:1139`–`:1142` |
+
+Todos esses objetos do estado são serializados pela mesma escrita física em `bin/disjuntor.py:308`–`:311`, embora várias funções façam mutações lógicas. `consumidas`/tipo têm uma transição escritora; `reservas` uma porta escritora; `pede_desenho`, triagem, `b3_sem_obra` e `voltas` têm mais de uma função escritora nos pontos acima.
+
+CHAVE normal confere arquivo e linha (`bin/disjuntor.py:176`); RELATO ilegível mantém ligado (`:169`–`:171`); wrapper efetivamente consulta (`:1130`). O parâmetro `raiz` da chave vale só para o arquivo: `_chave_no_relato` não recebe raiz (`:164`), e `_topo_consistente` usa o `H.RELATO` global (`:749`–`:759`), podendo medir raiz diferente em chamadas programáticas de `ler(raiz)`; ocorrência em produção [nao verificado].
+
+## 01/11 01:38 · sessao a855cc84a62c · - · - · origem=Ronald (tmux)
+
+Achados para consolidar, todos por leitura; os dois checks de certificado usaram funções em memória com I/O substituído.
+
+- **bloqueia — item 9, certificado forjável:** `bin/disjuntor.py:2229` expõe `--cert-suite`; `:1226–1242` confia no rc, recorte, hashes e log informados pelo chamador. Um log sintético `Ran 1 tests...\nOK` emite certificado sem executar suite. `guarda_chave` não guarda certificados (`:182`); Write/Bash da sessão principal passa pelo retorno de `pretool` em `:1935`. O leitor aceita somente `arvore=<h>` e `rc=0`, sem exigir Ran/OK (`:1264`). Confirmei ambas as funções em memória: certificado de duas linhas passa; log sintético emite certificado.
+
+- **bloqueia — segundo escritor e selo que normaliza certificado inválido:** `bin/tests/test_disjuntor.sh:73` escreve `.ok` diretamente com `Ran=1`, sem OK; `i9_cert` considera esse arquivo verde em `:1631`. O escritor normal é `bin/disjuntor.py:1247`, acionado por `bin/suite.sh:112`; o leitor é `_cert_ok` em `bin/disjuntor.py:1260`, chamado pela porta em `:1468`. Os testes também sobrescrevem certificado em `bin/tests/test_disjuntor.sh:1634` e chamam a CLI usando log inventado em `:1642–1649`. Não há integração de `suite.sh` real nesse caso.
+
+- **bloqueia — item 9, hash parcial pode virar identidade válida:** `bin/arvore_hash.sh:31` ignora erro de `git add --ignore-errors`; `:32` pode terminar com sucesso e emitir hash da parte legível. O gate só testa rc final e sintaxe do hash (`bin/disjuntor.py:1220`). Portanto árvore não integralmente lida pode casar com certificado da árvore parcial, em vez de NAO_SEI. Erros também são ocultados em `bin/arvore_hash.sh:31` e `bin/suite.sh:100`.
+
+- **bloqueia — item 10 exclui merges sem amparo no REVISADO:** `bin/contrato_do_push.py:37` usa `--no-merges`. Uma resolução de merge que acrescente/mude instrumento em `bin/` não é julgada. O contrato `app/docs/contratos/CONTENCAO-QUE-MORDE-V2.txt:20` não exclui merge. O selo só cria commits lineares (`bin/tests/test_contrato_do_push.sh:29–43`).
+
+- **bloqueia — item 10 usa presença do próprio juiz como marcador de era:** `bin/contrato_do_push.py:41` pula qualquer commit cuja árvore não contenha o portão. Um commit novo que apague o arquivo do portão, inclusive junto de outro instrumento, passa pelo ramo de “não retroage”. Além disso, `_existe` colapsa qualquer erro de `cat-file` para ausência (`:24–25`), que nesse ponto libera. O selo cobre commit anterior legítimo, não remoção posterior (`bin/tests/test_contrato_do_push.sh:30`, `:43`).
+
+- **bloqueia — entrada ilegível/malformada pode virar push sem julgamento:** `bin/pre-push.sh:7` não verifica erro do `cat`; `set -e` só aparece em `:79`. Entrada vazia devolve rc 0 pelo loop vazio (`bin/contrato_do_push.py:31`, `:55`); linhas malformadas são silenciosamente ignoradas (`:33–34`). Com SKIP_TESTS, o hook sai 0 em `bin/pre-push.sh:11`.
+
+- **Item 5, bloqueia — allowlist evita B1 novo:** `bin/disjuntor.py:466` libera tipos SO_LEITURA antes de avaliar cópias e job antigo, embora `:460` já tenha encontrado job. Verificador/Explore/Plan com job próprio e cópia parada escapa. O contrato `app/docs/contratos/CONTENCAO-QUE-MORDE-V2.txt:15` não prevê essa exceção.
+
+- **Item 5, bloqueia — cópia ilegível desaparece:** `bin/disjuntor.py:468` filtra caminhos citados por `os.path.isdir`. Se há uma cópia ilegível/inacessível e outra legível com arquivo novo, a primeira some e a segunda libera em `:505–506`. Transcript ilegível também devolve `disparo=False` em `:458–459`; hora ilegível do lançamento é ignorada em `:530–531`.
+
+- **Item 5, bloqueia — fim/job derivados de texto livre:** `bin/disjuntor.py:521` aceita `<task-id>…<status>[a-z]+</status>` em qualquer texto, sem exigir task-notification nem estado terminal; uma citação ou `running` cancela o job. `:525` reconhece job pela frase de saída, sem conferir chamada Bash com `run_in_background`. O selo só fornece frase de saída (`bin/tests/test_disjuntor.sh:1666`) e fim completed; não exercita autenticidade.
+
+- **Resposta direta à pergunta 5:** em `bin/pre-push.sh` a chamada é `:10`, SKIP_TESTS é `:11`, e não há exit anterior. A instalação declarada delega a esse arquivo em `bin/hooks.sh:56`; instalação efetiva [nao verificado]. Existe cópia divergente `app/core/hooks/pre-push.sh:5`, com SKIP_TESTS no início e sem portão; uso efetivo [nao verificado], portanto **fila** para remover ambiguidade.
+
+- **fila — corrida ABA na suite:** H0 é calculado antes de adquirir trava (`bin/suite.sh:100`, trava em `:102`); H1 é calculado em `:111`. A cópia pode ser A em H0, B durante testes, A em H1 e receber certificado A. Não há snapshot ou imobilização da árvore. O escritor satisfaz a igualdade literal antes/depois, mas ela não prova a árvore efetivamente testada.
+
+Escritores/leitores de contratos: contrato versionado presente em `app/docs/contratos/CONTENCAO-QUE-MORDE-V2.txt:1`; o leitor operacional é `bin/contrato_do_push.py:51` via `cat-file` em `:24`. Nenhum escritor operacional de contratos foi encontrado; o selo cria contratos sintéticos por `_commit` (`bin/tests/test_contrato_do_push.sh:20–21`, chamadas `:32`, `:37`). autoria/materialização externa [nao verificado].
+
+## 01/11 01:38 · sessao 8e68217c962e · - · - · origem=Ronald (tmux)
+
+Achados dos selos, por leitura e sondas em memória, sem escrever arquivos:
+
+- **bloqueia — mutante morto por exceção, item 4.** `bin/tests/test_disjuntor.sh:2025` remove a guarda de obra única, mas `i4_universo` começa pelo prompt sem obra (`:1621`): o mutante chega a `obras[0]` em `bin/disjuntor.py:1470`, causa `IndexError` e continua negando via `:1996`. O teste cai porque mudou a mensagem, não porque liberou. O caso de duas obras (`test_disjuntor.sh:1622`), que mostraria liberação indevida, nem é alcançado. `IndexError` confirmado em execução isolada em memória.
+
+- **bloqueia — mutante morto por exceção, item 9.** `bin/tests/test_disjuntor.sh:2033` remove a guarda de cópia. O caso sem cópia (`:1640`) passa a acessar `copias[0]` em `bin/disjuntor.py:1443`; recebe `IndexError` e continua negando em `:1996`. O harness aceita qualquer retorno não zero do caso como mutante morto (`test_disjuntor.sh:1705`). `IndexError` confirmado em memória.
+
+- **bloqueia — certificado artificial aceito pelo próprio selo.** `_arvore` escreve diretamente `arvore=…`, `rc=0`, `Ran=1`, sem `OK`, em `bin/tests/test_disjuntor.sh:73`; `i9_cert` exige autorização com esse arquivo em `:1631`. Isso demonstra aceitação de arquivo que não tem o formato produzido pelo escritor (`bin/disjuntor.py:1243`). O teste da emissão chama a CLI diretamente (`test_disjuntor.sh:1643`), sem exercitar `suite.sh → --cert-suite` (`bin/suite.sh:112`); retirar essa chamada da suite preserva o caso i9.
+
+- **bloqueia — identidade exercitada só enquanto a reserva existe.** `i11_vivos` repete o mesmo ID antes do resultado (`bin/tests/test_disjuntor.sh:1556`), sem obra (`:1552`). Não repete uma autorização da mesma obra após poda. `_ag` gera ID novo e já acrescenta seu resultado antes da autorização (`:335`, `:339`), portanto os testes de voltas não mordem idempotência após poda nem o lançamento real.
+
+- **bloqueia — sincronismo e concorrência não são medidos por i11.** As seis primeiras vagas são apenas reservas sem resultado (`bin/tests/test_disjuntor.sh:1552`); o teste não cria agentes síncronos rodando nem disputa simultânea entre autorizações. Assim, o caso permanece verde se o leitor de agentes lançados retornar sempre vazio, desde que a contagem de reservas permaneça (`bin/disjuntor.py:1475`).
+
+- **bloqueia — cláusulas sem mutante correspondente.** O bloco P1 (`bin/tests/test_disjuntor.sh:2003`) não retira persistência da autorização, semeadura retroativa/parcial, idempotência por `chaves`, migração de ERRO-BOBO antigo/ilegível, timestamps/janela de `b3_sem_obra`, custo 24h nem tratamento restritivo de meta/cópia ilegível no B1. Os respectivos casos limitam-se a contagem nova (`:1566`), ERRO-BOBO novo (`:1586`), universo (`:1621`), modelos/papéis (`:1533`) e três cenários legíveis de job (`:1676`). Retirar essas costuras não é mordido por seus casos P1.
+
+- **fila — ordem do pre-push aferida apenas por texto.** `bin/tests/test_contrato_do_push.sh:48` procura a primeira ocorrência do nome do arquivo, inclusive comentário; `:49` procura o primeiro teste de `SKIP_TESTS`. Não executa o hook. Uma menção anterior em comentário e uma chamada efetiva depois do skip podem passar. O mutante específico `skip-antes` (`:70`) é detectado por esse grep.
+
+Verificação dos mutantes:
+
+- Todos os **32 mutantes P1** de `bin/tests/test_disjuntor.sh:2003` têm âncora única; todas as mutações Python resultantes compilam, conferidas em memória. Os dois problemas de mordida são os `IndexError` descritos acima, não erros de sintaxe.
+- Os demais removem os ramos declarados. `i11-sem-poda`, `i11-nao-idempotente`, `i1-reabre-nada` e `i2-redesenha-nao-tira` são mortos por negar uma autorização esperada, não por liberar algo proibido (`:2012`, `:2013`, `:2016`, `:2020`).
+- Os cinco mutantes do push têm âncoras únicas e removem as costuras declaradas: contrato obrigatório, não retroatividade, exclusão de testes, existência do contrato e posição do skip (`bin/tests/test_contrato_do_push.sh:66`).
+- Execução integral dos selos: **[nao verificado]**, porque criam e apagam arquivos (`test_disjuntor.sh:39`, `test_contrato_do_push.sh:14`).
 
 ## 01/11 00:58 · sessao 45f7099e218f · COBERTURA-PARCIAL-UM-JUIZ · verificador · origem=Code
 
@@ -880,176 +995,4 @@ O comentário do motor ainda atribui o caso a HE100; **isso não procede para o 
 
 Ordem operacional de travas, suíte completa verde, impacto nas competências e pouso após os pré-requisitos: **[não verificado]**. O material fornecido não traz prova operacional deste HEAD; portanto este laudo não certifica esses pré-requisitos. [não verificado] [nao verificado]
 
-## 01/11 00:02 · sessao 5a22aa01608c · cobparc · verificador · origem=Code
-
-**REPROVAR a volta 2.** A exclusão de `dispensada` corrige os dois contadores alterados, mas ainda há caminhos que contam dispensa como batida, preservam julgamento antigo ou impedem a pergunta sobre o marco descoberto. (`app/ponto/services/cartorio.py:1204`; `app/ponto/status_dia.py:143`; `app/escala/services/leitor_celula.py:83`; `app/chamados/services/declaracao_texto.py:95`)
-
-Revisão estática da cópia e dos anexos. Identidade dos objetos Git, execução dos testes, ocorrência e quantidade em produção: **[nao verificado]**. A cópia não disponibilizou repositório Git; o censo abaixo usou `rg` equivalente, sem banco ou logs. **[nao verificado]** [nao verificado]
-
-**1. Quem escreve e quem lê**
-
-| Valor | Escritores e leitores encontrados | Efeito da volta 2 |
-|---|---|---|
-| Célula `dispensada` | A grade escreve a dispensa parcial; cartório propaga para lâmpada; leitor reconstitui na célula. Existe também dispensa integral da ata. (`app/escala/utils.py:1207`; `app/ponto/services/cartorio.py:446`; `app/escala/services/leitor_celula.py:119`; `app/ponto/services/cartorio.py:649`) | O delta muda os leitores `n_bat` e `fatos_do_status`; o marcador continua sem hora/delta. (`app/ponto/services/cartorio.py:1205`; `app/ponto/status_dia.py:145`; `app/escala/utils.py:1207`) |
-| `n_bat` do cartório | Escrito pela soma de células casadas e órfãs; entregue como `batidas_no_dia` ao supra. (`app/ponto/services/cartorio.py:1204`; `app/ponto/services/cartorio.py:1250`) | A dispensa deixa de simular batida; isso muda quais ramos do supra são alcançados. (`app/ponto/supra_juiz.py:313`; `app/ponto/supra_juiz.py:437`) |
-| `tem_batida` do status | `fatos_do_status` escreve o retorno; os chamadores produtivos são completar status, nunca-bateu e lavra comum. A porta entrega os fatos a `status_da_lavra`. (`app/ponto/status_dia.py:148`; `app/ponto/services/cartorio.py:765`; `app/ponto/services/cartorio.py:1078`; `app/ponto/services/cartorio.py:1619`; `app/ponto/portas/celula.py:698`) | Agora exclui dispensa, mantendo órfãs e realizado positivo como evidência. O leitor do status usa o resultado em suas precedências. (`app/ponto/status_dia.py:143`; `app/ponto/status_dia.py:96`) |
-| Retorno de `_cob_parcial_da_impressao` | Produzido pelo helper; consumido somente pelos dois cálculos de impressão do cartório, nos ramos nunca-bateu e normal. (`app/ponto/services/cartorio.py:334`; `app/ponto/services/cartorio.py:1029`; `app/ponto/services/cartorio.py:1180`) | Acrescenta os índices dispensados ao insumo `cob_parcial`; o hash incorpora a string. (`app/ponto/services/cartorio.py:338`; `app/ponto/services/cartorio.py:406`) |
-| `cel.impressao` | Escrita pela porta `carimbar`, chamada pelos dois ramos do cartório. Lida na idempotência da porta, nas duas decisões de pulo e no diagnóstico de veredito velho. (`app/ponto/portas/celula.py:801`; `app/ponto/services/cartorio.py:1096`; `app/ponto/services/cartorio.py:1635`; `app/ponto/portas/celula.py:797`; `app/ponto/services/cartorio.py:1031`; `app/ponto/services/cartorio.py:1189`; `app/ponto/management/commands/celula_veredito_velho.py:110`) | Os leitores continuam comparando igualdade; muda o valor recebido quando há dispensa. (`app/ponto/services/cartorio.py:335`; `app/ponto/services/cartorio.py:1189`) |
-| `_parcial_so_lista` | Derivado uma vez por iteração, lendo cobertura parcial, julgamento anterior e `houve_fato_novo`. Lido pelos dois portões e pelos respectivos contadores. (`app/ponto/services/cartorio.py:1535`; `app/ponto/services/cartorio.py:1550`; `app/ponto/services/cartorio.py:1553`; `app/ponto/services/cartorio.py:1596`; `app/ponto/services/cartorio.py:1599`) | Fecha a abertura sem fato novo nos dois portões. Não governa a ressuscitação anterior nem o espelhamento do vivo. (`app/ponto/services/cartorio.py:1453`; `app/ponto/services/cartorio.py:1611`) |
-| `out['parcial_na_lista_sem_push']` | Criado/incrementado nos dois portões; cada incremento lê o acumulado. O teste lê o resultado; o resumo do command não o imprime. (`app/ponto/services/cartorio.py:1551`; `app/ponto/services/cartorio.py:1597`; `app/ponto/tests/test_cobparc_marco_no_periodo.py:246`; `app/ponto/management/commands/processar_cartorio.py:66`) | `_contou_lista` evita duplicação entre portões **na mesma iteração**, não entre passadas. (`app/ponto/services/cartorio.py:1537`; `app/ponto/services/cartorio.py:828`) |
-
-Os demais leitores diretos de `dispensada` são a impressão e `_parcial_sem_resto`; não encontrei leitor direto em template. (`app/ponto/services/cartorio.py:335`; `app/ponto/supra_juiz.py:312`) O calendário possui uma chave homônima `tem_batida`, construída de seus próprios fatos, sem consumir esse retorno do status. (`app/colaboradores/services/calendario.py:810`)
-
-Para **`marcos_faltantes`**, a cadeia alterada é: ata atual → `lastro.marcos_apagados` → tradução/nomeação → parâmetro do emissor → contexto do chamado. O portão sem batida agora usa essa cadeia também para dia parcial. (`app/ponto/services/cartorio.py:1557`; `app/ponto/services/cartorio.py:1674`; `app/ponto/management/commands/detectar_ausencias.py:704`)
-
-O nascimento grava pelos defaults de `ChamadoColaborador.abrir`; chamado existente usa `_espelhar_marcos`, que compara e escreve pela porta de contexto. Lista vazia/`None` ainda aciona o fallback da entrada prevista. (`app/ponto/management/commands/detectar_ausencias.py:688`; `app/ponto/management/commands/detectar_ausencias.py:704`; `app/ponto/management/commands/detectar_ausencias.py:556`; `app/chamados/services/contexto.py:96`; `app/ponto/management/commands/detectar_ausencias.py:475`)
-
-Leitores fora do delta:
-
-- Marco por motivo/tipo e materialização: `app/chamados/juizes.py:506`; `app/chamados/services/materializacao.py:259`.
-- Lastro/fechamento e texto do supra: `app/ponto/services/lastro.py:75`; `app/ponto/supra_juiz.py:129`.
-- Badges da grade e cobrança órfã por regeneração: `app/escala/utils.py:1039`; `app/escala/services/regeneracao.py:107`; `app/escala/services/regeneracao.py:156`.
-- Geração/correção de contexto e seleção de chamados sem marco: `app/ponto/management/commands/gerar_celulas.py:251`; `app/ponto/management/commands/reconciliar_grade.py:448`; `app/ponto/management/commands/curar_residuo_bug115.py:73`; `app/chamados/management/commands/nomear_marco_por_lampada.py:50`.
-- Emissão de perguntas de intervalo e guarda de abertura: `app/chamados/services/disputa_emissao.py:947`; `app/chamados/models.py:882`.
-
-Esses leitores não são alterados pelo delta fornecido, mas recebem a lista reduzida aos marcos apagados. Há outros produtores pela mesma porta de contexto, além do contexto de nascimento montado pelo reconciliador. (`app/ponto/management/commands/reconciliar_grade.py:473`; `app/chamados/management/commands/nomear_marco_por_lampada.py:109`; `app/chamados/reconciliador.py:677`)
-
-**2. Alcance da impressão**
-
-Mantidos os demais insumos, o helper muda o hash somente quando há **base verdadeira e algum índice dispensado**. Sem dispensa retorna exatamente a base anterior; motivo/slug da dispensa não entra no hash. Portanto, essa adição não provoca rejulgamento dos dias sem marco dispensado. (`app/ponto/services/cartorio.py:334`; `app/ponto/services/cartorio.py:338`; `app/ponto/services/cartorio.py:406`)
-
-**Achado A — P1: a cura não alcança todos os dias cuja regra mudou.** Contraexemplo: marcos 08/12/13/17, batidas 07:58E/12:02S, parcial 12:30–12:45. Nenhum marco é dispensado; o período permanece `fora`. A classificação nova acusa `FURO_PARCIAL`, mas uma célula anteriormente `concorde`, com os mesmos insumos e `forcar=False`, conserva o hash e é pulada. A declaração de versões atual não contém uma versão adicional para esta obra. (`app/escala/utils.py:1204`; `app/ponto/supra_juiz.py:390`; `app/ponto/services/cartorio.py:334`; `app/ponto/services/cartorio.py:1189`; `app/ponto/services/cartorio.py:111`)
-
-O teste de impressão cobre 13–17 → 14–17, com dispensa presente; não cobre essa migração de regra sem dispensa. (`app/ponto/tests/test_cobparc_marco_no_periodo.py:354`)
-
-**3. Portões, chamado vivo e contador**
-
-Nos dois portões, parcial previamente julgada sem fato novo deixa de chamar `_abrir_chamado`; primeiro julgamento ou fato novo permite a tentativa, sujeita aos demais vetos. `houve_fato_novo` lê batidas, ausência, justificativa, edição/regeneração e vencimento de marco. (`app/ponto/services/cartorio.py:1535`; `app/ponto/services/cartorio.py:1553`; `app/ponto/services/cartorio.py:1599`; `app/ponto/services/cartorio.py:283`)
-
-No ramo vivo, `_espelhar_marcos` escreve contexto e nota, sem chamada de push nessa operação. A ressuscitação devolve perguntas à pendência e pode reabrir disputa, antes do bloqueio novo. Não confirmei abertura de `batida_ausente` sem fato novo por esses caminhos; o reemissor c2 também para ao encontrar ausência. (`app/ponto/management/commands/detectar_ausencias.py:553`; `app/chamados/models.py:1488`; `app/chamados/models.py:1516`; `app/chamados/reconciliador.py:825`)
-
-Persistem estes problemas:
-
-- **Achado B — P1: fato novo pode abrir chamado sem gerar a pergunta do marco descoberto.** Contraexemplo: 08/12/13/17, batidas 07:58/12:02, parcial 14–17 e fato novo. O cartório cobra E13, mas `_marcos_faltantes` ignora `tipo_dia='ausencia'`; a fábrica recebe faltantes vazios. O agrupador de chamados nomeados passa pelo mesmo leitor. (`app/ponto/services/cartorio.py:1600`; `app/chamados/services/declaracao_texto.py:95`; `app/chamados/services/fabrica_da_celula.py:49`; `app/chamados/services/disputa_emissao.py:974`)
-
-- **Achado C — P2: chamado vivo sem batida mantém marcos dispensados no contexto.** Contraexemplo: chamado vivo cobra 08/12/13/17; parcial 13–17 dispensa os dois últimos, sem batidas no dia. Com fio vivo, o portão sem batida não acusa; sem fato/batida, também não há `FURO_PARCIAL`. Como 08/12 continuam apagados, o chamado permanece, mas o espelhamento está subordinado a `FURO_PARCIAL`: 13/17 ficam na lista antiga. Essa lista continua sendo fonte da materialização. (`app/ponto/supra_juiz.py:313`; `app/ponto/supra_juiz.py:379`; `app/ponto/services/lastro.py:174`; `app/ponto/services/cartorio.py:1583`; `app/ponto/services/cartorio.py:1611`; `app/chamados/services/materializacao.py:235`)
-
-- **Achado D — P2: o push ainda pode nomear a entrada dispensada.** Contraexemplo: 12x36 07–19, parcial 07–13, nenhuma batida, primeiro julgamento. A lista enviada ao chamado pode conter somente S19, mas `dt_inicio` continua sendo 07h. Para ciclo operacional, o push usa esse instante em “Previsto 07:00” e no atraso. A lista foi corrigida; o aviso ainda aponta o marco coberto. (`app/ponto/services/cartorio.py:1546`; `app/ponto/services/cartorio.py:1557`; `app/ponto/services/cartorio.py:1562`; `app/ponto/management/commands/detectar_ausencias.py:585`; `app/ponto/management/commands/detectar_ausencias.py:776`)
-
-- **Achado E — P2: o contador pode contar um dia duas vezes no mesmo ato.** Contraexemplo: parcial 14–17 já existente, batidas 07:58/12:02 anteriores ao julgamento e chamado legado vivo cobrando somente S17, sem pergunta viva. A cura dispensa S17, mantém E13 apagada e fecha o chamado antigo pela ata atual; o fechamento enfileira rejulgamento. A primeira passada conta lista-sem-push; a segunda usa o mesmo `out`, reinicia `_contou_lista` e conta novamente. O carimbo intermediário faz a segunda consulta usar `(agora, agora]`, sem fato novo. Resultado do fluxo: **2 para um dia**. (`app/chamados/models.py:1236`; `app/chamados/models.py:400`; `app/ponto/services/cartorio.py:1319`; `app/ponto/services/cartorio.py:1596`; `app/ponto/services/cartorio.py:832`; `app/ponto/services/cartorio.py:1537`; `app/ponto/portas/celula.py:800`; `app/ponto/services/cartorio.py:278`)
-
-**4. Censo de “não missing = batida” e variantes**
-
-**Achado F — P1: `n_ok_lavrado` ainda conta dispensa como batida/casamento e cala o furo.** Contraexemplo: 08/12/13/17, adesão anterior, nenhuma batida, parcial 13–17. Ata com quatro lâmpadas e duas missing produz `n_ok=2`; o supra prefere esse número e não entra no portão que exige zero. Os commands `supra_juiz` e `emitir_furo_retroativo` usam essa grade, divergindo do cartório corrigido. (`app/escala/services/leitor_celula.py:83`; `app/escala/services/leitor_celula.py:361`; `app/ponto/supra_juiz.py:229`; `app/ponto/supra_juiz.py:313`; `app/ponto/management/commands/supra_juiz.py:206`; `app/ponto/management/commands/emitir_furo_retroativo.py:99`)
-
-| Sítio | Hora/delta? | Resultado |
-|---|---|---|
-| `app/escala/services/leitor_celula.py:83`, `:89`, `:335` | Não | Contam dispensa em `n_ok`/`n_casadas`; a mesma conta também alimenta `_teve_fato` na fronteira admissão/demissão. |
-| `app/inteligencia/calculadores.py:153` | Não | Conta não-missing, mas filtra dia `trabalho` em `:141`; parcial rotulada ausência não entra. |
-| `app/ponto/propositor.py:40` | Hora depois, em `:52` | Seleção ampla; tipo `trabalho` em `:36` e hora impedem usar a dispensa. |
-| `app/ponto/propositor.py:213` | Delta não nulo | Exclui a dispensa com `delta=None`. |
-| `app/ponto/management/commands/propor_reorganizacao.py:102` | Hora em `:103` | Exclui a dispensa. |
-| `app/ponto/supra_juiz.py:89` | Hora em `:90` | Recontagem exclui dispensa; `n_ok` lavrado contorna essa proteção em `:229`. |
-| `app/ponto/turnos.py:2675` | Hora; delta em `:2678` | Exclui a dispensa. |
-| `app/ponto/services/cartorio.py:478`, `:503` | Hora | Excluem a dispensa das horas reais/usadas. |
-| `app/ponto/services/cartorio.py:532` | Não | Estado de lâmpada: permite acesa sem luz e propaga dispensa em `:563`, `:565`; não é contagem de batida. |
-| `app/ponto/services/cartorio.py:1205` | Não | Agora exclui explicitamente dispensa. |
-| `app/ponto/status_dia.py:144` | Não | Agora exclui isenção e dispensa em `:145`. |
-| `app/escala/utils.py:812` | Hora | Preserva hora real; crédito de isenção segue em `:820`. |
-| `app/escala/utils.py:1958` | Não nessa guarda | Decide substituição de ponta missing; não conta batidas. |
-| `app/escala/utils.py:1990` | Hora em `:1991` | Dispensa sem hora não satisfaz. |
-| `app/chamados/detector_anomalias.py:212` | Hora/tipo em `:213` | Recebe casamento novo de `_match_marcos` em `:210`, antes do overlay de ausência. |
-| `app/chamados/services/declaracao_texto.py:107` | Não | Seleciona faltantes; o filtro de tipo em `:95` causa o achado B. |
-| `app/ponto/janela_he.py:294`; `app/ponto/services/veredito_celula.py:251` | Não nessas guardas | Selecionam missing para pendência/simulação; não contam batidas. |
-| `app/ponto/services/bordas_realizado.py:51` | Confia em `n_ok` | Outro leitor da conta; seu chamador restringe a `trabalho` em `:74`. |
-
-**5. Descartes da triagem**
-
-**Procedem de fato três descartes:**
-
-- **`materializacao._coberto_por_ausencia` — P2.** Existir qualquer ausência não-falta continua bastando para impedir a pergunta. Contraexemplo: parcial 14–17 não explica E13, mas essa guarda bloquearia E13 mesmo após corrigir o filtro do achado B. “Conservador quanto a push” não resolve a ausência de pergunta respondível. (`app/chamados/services/materializacao.py:55`; `app/chamados/services/disputa_emissao.py:763`; `app/chamados/services/pergunta_no_app.py:74`)
-
-- **`classificar_falta` — P2.** Contraexemplo: batidas 07:58E/12:02S e parcial 13–17. A grade dispensa os marcos restantes, mas a contagem E/S contra todos os marcos ainda acusa entrada faltante. Há leitor que transforma esse retorno diretamente em pergunta por `entradas_pendentes`, sem consultar as lâmpadas: portanto, “os marcos sempre vêm das lâmpadas” não vale para todo o repo. (`app/escala/servico_jornada.py:469`; `app/escala/utils.py:1207`; `app/chamados/services/disputa_emissao.py:267`; `app/chamados/services/disputa_emissao.py:389`)
-
-- **Âncora noturna com pausa — P2.** Contraexemplo: E19/S23/E00/S07, parcial 23–07. A menor entrada é E00, deixando a régua E00/S07/E19/S23. O helper encadeia essa ordem e dá S07=420; o período cobre 1380–1860. A dispensa nova deixa S07 missing, embora esteja coberta. A origem da ordem é preexistente, mas a cobrança indevida é herdada pelo escritor novo. (`app/escala/utils.py:1335`; `app/escala/utils.py:1668`; `app/ponto/turnos.py:2661`; `app/ponto/turnos.py:2634`; `app/escala/utils.py:1209`)
-
-Os demais descartes ficam assim:
-
-| Descarte | Conclusão |
-|---|---|
-| `dia=None` | Não procede nos três chamadores produtivos: todos passam `dia`. (`app/ponto/services/cartorio.py:1042`; `:1217`; `:1613`) |
-| `_parcial_sem_resto` com sem-vínculo | Não confirmei contraexemplo no builder: sem vínculo não monta turno e entrega previsto zero. (`app/escala/utils.py:1271`; `:1559`; `:1739`) |
-| Duas parciais | Há desempate explícito por `(data, pk)`, sem composição de períodos. (`app/ponto/turnos.py:2768`) |
-| Justificativa integral | Continua sendo dispensa integral conforme a decisão fornecida; o código dispensa lâmpadas pela marca `justificado`. (`app/ponto/services/cartorio.py:641`; `:649`) |
-| Marco DNA fora da régua | A limitação continua no alinhamento por coluna; não confirmei novo contraexemplo além do declarado. (`app/escala/utils.py:1668`; `:1675`) |
-| Contador ausente do resumo | A ausência no resumo é real; a lista administrativa tem fonte no veredito/protestos. Isso não elimina a duplicação do achado E. (`app/ponto/management/commands/processar_cartorio.py:66`; `app/ponto/services/furos_sem_cobranca.py:3`) |
-| Concorrência sem releitura travada | Não há prova fornecida de corrida concreta desta obra; execução concorrente **[nao verificado]**. A coordenação do corpo permanece sem uma transação abrangente. (`app/ponto/services/cartorio.py:800`) |
-
-**6. Checklist**
-
-| Item | Resultado |
-|---|---|
-| Segundo juiz | A dispensa nova usa o juiz de período registrado, sem outra comparação própria de bordas. Persistem interpretações divergentes em `classificar_falta`, no filtro de tipo e na cobertura ampla. (`app/core/juizes.py:244`; `app/escala/utils.py:1210`; `app/escala/servico_jornada.py:469`; `app/chamados/services/declaracao_texto.py:95`; `app/chamados/services/materializacao.py:66`) |
-| Segundo escritor fora da porta | Não confirmado no delta: lavra/carimbo passam pela porta da célula; espelhamento passa pela porta de contexto. (`app/ponto/services/cartorio.py:1615`; `:1635`; `app/ponto/management/commands/detectar_ausencias.py:558`; `app/chamados/services/contexto.py:100`) |
-| Relógio fora da borda | Os auxiliares novos usam insumos recebidos; encerramento recebe `agora`. Há leitura interna preexistente de `_tz.now()` em `classificar_falta`. (`app/ponto/turnos.py:2634`; `app/ponto/services/cartorio.py:941`; `app/escala/servico_jornada.py:377`) |
-| Derivação paralela de fonte única | Ainda existe contagem aritmética de casamento sem distinguir dispensa, além da contagem crua de E/S. (`app/escala/services/leitor_celula.py:83`; `app/escala/servico_jornada.py:469`) |
-| Selo/RED sem mordida | Os testes novos verificam chamado, não a pergunta respondível; o teste de impressão cobre somente caso com dispensa. Não cobrem `n_ok` lavrado nem a duplicação entre passadas. (`app/ponto/tests/test_cobparc_marco_no_periodo.py:237`; `:252`; `:354`; `app/ponto/services/cartorio.py:832`) RED/GREEN executado: **[nao verificado]**. |
-| Ordem de trava | Nenhuma inversão nova demonstrada; garantia concorrente **[nao verificado]**. A sequência de lavra/E2/reconciliação continua explícita, mas permite a segunda passagem que duplica o contador. (`app/ponto/services/cartorio.py:811`; `:828`) |
-| `JUIZES.md` | **P3: desatualizado.** A tabela diz que ata preenchida diferente de trabalho cala; a função agora excetua ausência parcial. Contraexemplo documental: `trabalha=True`, ata `ausencia`, parcial verdadeira — a função cobra, a descrição manda calar. (`app/docs/JUIZES.md:55`; `app/chamados/juizes.py:411`) |
-
-## 01/11 00:01 · sessao c90b455d9af5 · - · - · origem=Ronald (tmux)
-
-**P2 — contador duplica o mesmo dia na segunda passada.** `_contou_lista` é reiniciado por julgamento (`app/ponto/services/cartorio.py:1537`), enquanto B5.3b repete o corpo com o mesmo `out` (`app/ponto/services/cartorio.py:828-832`).
-
-Contraexemplo: parcial 14–17 já existente, batidas 07:58E/12:02S, julgamento anterior, nenhum fato novo e chamado legado vivo cobrando somente S17, sem pergunta viva. A nova regra dispensa S17; E13 continua apagada. O chamado fecha porque sua premissa lê a ata em curso e encontra S17 acesa (`app/chamados/models.py:1227-1237`); sem pergunta viva, a outra guarda permite (`app/chamados/models.py:400-402`). O fechamento enfileira a célula para rejulgar (`app/ponto/services/cartorio.py:1319-1326`).
-
-A primeira passada incrementa o contador (`app/ponto/services/cartorio.py:1596-1598`) e carimba `julgada_em=agora` (`app/ponto/services/cartorio.py:1635`, `app/ponto/portas/celula.py:800`). Na segunda, o marcador local reinicia e a janela `(agora, agora]` não contém fato novo (`app/ponto/services/cartorio.py:278-298`): incrementa novamente. **Resultado estático: 2 para um dia; execução e ocorrência em produção [nao verificado].**
-
-## 01/11 00:00 · sessao c90b455d9af5 · - · - · origem=Ronald (tmux)
-
-Achados confirmados por leitura:
-
-- **P1/P2 — chamado do parcial sem pergunta respondível.** `_marcos_faltantes` descarta todo dia diferente de `trabalho`, inclusive `ausencia` parcial (`app/chamados/services/declaracao_texto.py:90-96`). A fábrica lê esse resultado e devolve nenhum motivo (`app/chamados/services/fabrica_da_celula.py:48-64`). Contraexemplo: escala 08/12/13/17, batidas 07:58E/12:02S, parcial 14–17, fato novo: E13 permanece apagada e o cartório pode abrir chamado, mas a fábrica lê `[]`. O agrupador de chamados nomeados passa pelo mesmo leitor (`app/chamados/services/disputa_emissao.py:969-979`).
-
-- **P2 — descarte `materializacao._coberto_por_ausencia` é defeito funcional real.** Ele responde cobertura integral pela existência de qualquer ausência não-falta (`app/chamados/services/materializacao.py:55-68`) e bloqueia a criação da pergunta (`app/chamados/services/disputa_emissao.py:763-770`). Mesmo corrigindo o filtro anterior, parcial 14–17 bloquearia a pergunta de E13. A retenção do app declara explicitamente essa causa (`app/chamados/services/pergunta_no_app.py:71-75`). Ser conservador quanto a push não torna correta a supressão da pergunta de marco descoberto.
-
-- **P2 — descarte da âncora noturna reproduz cobrança indevida.** A união escolhe a menor entrada entre todas, incluindo retorno de intervalo (`app/escala/utils.py:1335-1343`), e alinha as células nessa ordem (`app/escala/utils.py:1664-1668`). Turno E19/S23/E00/S07 resulta em ordem E00/S07/E19/S23. O novo helper encadeia essa ordem, atribuindo S07 a 420 minutos (`app/ponto/turnos.py:2651-2661`), embora parcial 23–07 cubra 1380–1860 (`app/ponto/turnos.py:2634-2640`). A dispensa nova deixa S07 missing (`app/escala/utils.py:1204-1210`). A régua preexistia; seu novo consumidor herda o erro.
-
-- **P2 — `classificar_falta` continua divergindo da dispensa.** Conta E/S das batidas contra todos os marcos, sem ler `dispensada` (`app/escala/servico_jornada.py:447-480`). Contraexemplo: batidas E07:58/S12:02 e parcial13–17: grade dispensa os dois marcos restantes, mas a contagem acusa entrada faltante (`app/escala/servico_jornada.py:469-472`). Há caminho que transforma esse retorno diretamente em pergunta: `entradas_pendentes` → `_cf` → `gerar_perguntas_disputa`, sem consultar lâmpadas ou cobertura (`app/chamados/services/disputa_emissao.py:267-274`, `app/chamados/services/disputa_emissao.py:389`). A ocorrência desse contexto em produção é **[nao verificado]**.
-
-- **P3 — JUIZES.md desatualizado.** A tabela diz que `ata.tipo_dia != trabalho` cala cobrança (`app/docs/JUIZES.md:55-57`), mas a função agora excetua ausência parcial (`app/chamados/juizes.py:411-412`). O próprio documento exige atualização no mesmo commit (`app/docs/JUIZES.md:14`).
-
-Esclarecimentos importantes:
-
-- **Não confirmei bypass da lista por c2.** Embora a geração possa chamar `reatar_pergunta_orfa` (`app/chamados/services/disputa_emissao.py:404-409`), c2 retorna antes de emitir quando existe ausência, incluindo parcial (`app/chamados/reconciliador.py:825-827`). A abertura fica depois, em `app/chamados/reconciliador.py:866`.
-- **Retiro a hipótese de novo chamado-pai pela fábrica no parcial comum:** o filtro `tipo_dia != trabalho` impede que ela obtenha motivos (`app/chamados/services/declaracao_texto.py:95-96`, `app/chamados/services/fabrica_da_celula.py:111`).
-- **`dia=None` não procede nos chamadores produtivos de `dispensar_por_ausencia`:** os três passam o dia (`app/ponto/services/cartorio.py:1042`, `app/ponto/services/cartorio.py:1217`, `app/ponto/services/cartorio.py:1613`).
-- **Duas parciais:** há desempate explícito por `(data, pk)`, com sobrescrita, não composição de períodos (`app/ponto/turnos.py:2768-2785`).
-- **Sem vínculo:** builder consulta a autoridade de vínculo (`app/escala/utils.py:1271-1278`); sem vínculo não monta turno e produz previsto zero (`app/escala/utils.py:1559-1561`, `app/escala/utils.py:1739-1761`). Não confirmei contraexemplo real para `_parcial_sem_resto` apagar acusação de cadastro.
-- **Escrita pela porta:** lavra e carimbo continuam nas portas existentes (`app/ponto/services/cartorio.py:1615`, `app/ponto/portas/celula.py:787-807`); nenhuma segunda escrita persistente nova confirmada.
-- **Relógio:** novos auxiliares de período usam dados e instante recebido; o julgamento carrega encerramento com `agora` (`app/ponto/services/cartorio.py:938-942`). A chamada preexistente de relógio interno permanece em `classificar_falta` (`app/escala/servico_jornada.py:375-378`).
-- **RED/GREEN e ordem de trava:** execução, mutação RED, suite e concorrência reais **[nao verificado]**. Os testes da obra verificam apenas existência de chamado `batida_ausente`, não pergunta no app (`app/ponto/tests/test_cobparc_marco_no_periodo.py:237-252`), deixando escapar o primeiro achado.
-
-## 31/10 23:59 · sessao 49461eeffde4 · - · - · origem=Ronald (tmux)
-
-Achado confirmado de alcance da cura, **P1/P2**: dias parciais afetados pela obra podem continuar com o julgamento antigo quando nenhum marco foi dispensado. `_cob_parcial_da_impressao` devolve exatamente `periodo_parcial` quando não existe `dispensada` (`app/ponto/services/cartorio.py:334-338`); o hash codifica essa string em `:406`, e a comparação pula a célula já carimbada em `:1189-1195`. O full fornecido muda `'fora' -> pass` para acusação, sem alterar `REGRA_VERSOES` (`:111`). Contraexemplo: marcos 08/12/13/17, batidas 07:58/12:02, ausência parcial 12:30–12:45. Nenhum marco missing cai no período (`app/escala/utils.py:1204-1211`), período agregado continua `fora`, hash mantém os mesmos campos (`cartorio.py:350-355`, `:406`), mas nova classificação deveria produzir `FURO_PARCIAL` (`app/ponto/supra_juiz.py:390-399`). Se já estava `concorde` com esse hash e `forcar=False`, permanece pulada. Existência desse estado em produção: [nao verificado]. O teste novo só cobre mudança 13–17 para 14–17, com índices dispensados presentes nas duas situações; não cobre migração de regra sem dispensada (`app/ponto/tests/test_cobparc_marco_no_periodo.py:354-361`).
-
-**Impressão: escritores/leitores.**
-
-- Retorno do helper: produzido em `cartorio.py:334-338`; dois consumidores, ambos chamados `impressao_insumos`, no ramo nunca-bateu `:1029-1030` e ramo normal `:1180-1185`. Não há outro consumidor direto encontrado. Hash produzido em `:350-407`.
-- Impressão da célula: único escritor de produção encontrado é a porta `app/ponto/portas/celula.py:801`, salvando em `:805-807`; recebe do cartório `:1096` e `:1635`. Leitores operacionais: idempotência da própria porta `celula.py:797`, `_em_dia_nb` em `cartorio.py:1031` e `_em_dia` em `:1189`. Leitor diagnóstico/snapshot: `app/ponto/management/commands/celula_veredito_velho.py:110`. Modelo declara coluna em `app/escala/models.py:1714`. Esses leitores não mudam no delta fornecido.
-- A mudança do helper só acrescenta sufixo quando **base truthy e há dispensada**; índices ordenados pela posição na lista; motivo/slug não entra no hash (`cartorio.py:334-338`). Sem dispensada não há mudança causada por esse helper; ausência de base também preserva retorno (`:336-337`). Isso exclui rejulgamento em massa por essa adição, mas causa o problema de alcance acima.
-
-**`marcos_faltantes`: caminho alterado e leitores diretos fora do diff.**
-
-- Cartório deriva os marcos da ata atual, não recalcula a cobertura: `_marcos_do_furo_parcial` lê `lastro.marcos_apagados` e nomeia por tradutor único (`cartorio.py:1654-1685`; `app/ponto/services/lastro.py:118-135`). No portão sem batida, novo argumento em `cartorio.py:1557-1563`; no parcial, argumento em `:1600-1602`; chamado vivo espelha em `:1609-1611`.
-- Nascimento grava a lista recebida em `app/ponto/management/commands/detectar_ausencias.py:700-706`; se argumento vazio/None, recua para entrada prevista em `:475-497`. Descrição lê em `:670-679`. Chamado existente vivo atualiza via `_espelhar_marcos` em `:738-739`; este compara e grava através da porta `chamados.services.contexto.renovar_contexto` em `:554-559`; porta efetivamente grava em `app/chamados/services/contexto.py:96-102`.
-- Leitores diretos sem mudança no delta: `app/chamados/juizes.py:506` (marco por motivo/tipo); `app/ponto/services/lastro.py:75` (todos os marcos cobrados, lastro/fechamento); `app/ponto/supra_juiz.py:129` (texto de retratação); `app/escala/utils.py:1039` (badges de chamados por célula); `app/escala/services/regeneracao.py:107` e `:156` (cobrança órfã/relato); `app/ponto/management/commands/gerar_celulas.py:251` (marcar órfã); `app/ponto/management/commands/reconciliar_grade.py:448` (reconstruir contexto); `app/ponto/management/commands/curar_residuo_bug115.py:73` e `app/chamados/management/commands/nomear_marco_por_lampada.py:50` (selecionar sem marco).
-- Leitores indiretos relevantes: materialização consulta `entrada_de_marco` em `app/chamados/services/materializacao.py:259` e usa tipo em `:260-261`; emissão de perguntas de intervalo lê lista em `app/chamados/services/disputa_emissao.py:947-958`. A criação em `app/chamados/models.py:882` entrega os marcos dos defaults para a guarda de abertura.
-- Outros produtores diretos: `app/chamados/reconciliador.py:677-686` monta contexto de nascimento a partir da ata; `app/ponto/management/commands/reconciliar_grade.py:473` renova pela porta e `:518` prepara defaults; `app/chamados/management/commands/nomear_marco_por_lampada.py:109` renova pela porta. Estes não mudam no delta.
-
-**Candidato adicional a verificar no consolidado:** chamado VIVO, dia parcial **sem batida**, contexto antigo cobrando 08/12/13/17, nova ausência 13–17. Correção `n_bat=0` tira o dia de `FURO_PARCIAL`; com cobrança viva, também não entra no furo sem cobrança (`supra_juiz.py:313-316`). Como 08/12 continuam apagados, `marcos_acesos=False` (`lastro.py:174-180`) e chamado permanece vivo. O único espelhamento do contexto no cartório continua subordinado a `FURO_PARCIAL` (`cartorio.py:1583-1611`), deixando 13/17 dispensados no contexto. Precisaria consolidar com E2/perguntas antes de fixar gravidade e efeito sobre novas perguntas; o contexto stale, nesse caminho, é consequência estática da fonte citada.
-
-Não há `.git` na cópia: comparação histórica direta dos objetos/commit [nao verificado]; comparação antes/depois acima utiliza o full fornecido pelo usuário. [nao verificado]
-
-_1321 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1325 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
