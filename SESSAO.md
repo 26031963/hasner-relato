@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 18:19:51.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (137.5 MB). Acoes na janela: **697**.
+**Medido em 01/11/2026 18:25:22.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (137.6 MB). Acoes na janela: **699**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:23:26 | Bash | Repoint ESPERANDO to new suite pid | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md';s=open(p).read() old='ESPERANDO: trava_teste.sh \| pid=783068 \|' assert s.count(old)==1 s=s.replace(old,'ESPERANDO: trava_teste.sh \| pid=2763178 \|',1); open(p,'w').write(s) EOF cd ../bin; python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"; /usr/bin/sleep 25; python3 -c "import hook_stop_fila1 as h;  ...` |
+| 18:23:22 | Bash | Check what the F2 builder is waiting on | `cd /home/ronald/saas-hasner; date +%T; pgrep -af '^bash .*bin/(suite\|trava_teste\|codex_pergunta)\.sh' \| cut -c1-200; ls -lt --time-style=+%T logs/o261e/f2 \| head -6; L=logs/o261e/f2/suite_completa_v5.log; grep -E '^(OK\|FAILED)($\| \()' $L\|tail -1; grep '^Ran' $L\|tail -1` |
 | 18:03:16 | Bash | Check F2 full suite status and proof | `cd /home/ronald/saas-hasner; ps -p 783068 -o pid,etime; L=logs/o261e/f2/suite_completa_v5.log; grep -E '^(OK\|FAILED)($\| \()' $L\|tail -1; grep '^Ran' $L\|tail -1; ls -l --time-style=+%T $L; date +%T; cd bin; python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
 | 18:02:22 | Bash | Mark E3-ISENTO-INSUMOS as L1 prerequisite | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/BACKLOG.md';s=open(p).read() a='Depois do pouso E3, junto da E3-HASH-A2 se o censo pedir \| aberta \|' assert s.count(a)==1 s=s.replace(a,'Depois do pouso E3, junto da E3-HASH-A2 se o censo pedir. PRE-REQUISITO da E4-CALENDARIO-L1 (REEQ 01/11): forma do veto, so isento; DIFF antes \| aberta \|',1) open(p,'w').write(s) EOF echo ok` |
 | 18:02:19 | Bash | Record REEQ aval in logs, PROMPTS, BACKLOG, RELATO | `cd /home/ronald/saas-hasner; H=$(date +%H:%M); cat > logs/e4cal/AVAL_L1_REEQ.md <<'EOF' aval Ronald: E4-CALENDARIO-L1-REEQ (complementa COMPLEMENTO e TABELA, nao substitui; ordem da fila inalterada; nenhuma lei nova). FONTE: logs/e4cal_reeq.r, conferido pelo chat. PRE-REQUISITO: E3-ISENTO-INSUMOS (aval 31/10) pousa antes da leitura do D4 pela tela, na forma do veto (cartorio.py::impressao_insumos) ...` |

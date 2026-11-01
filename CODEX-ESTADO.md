@@ -1,7 +1,47 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 18:15** · publicado em **01/11/2026 18:19** (UTC-3)
+> Ultima resposta processada: **01/11/2026 18:24** · publicado em **01/11/2026 18:25** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 18:24 · sessao dae46ff611b1 · - · - · origem=Ronald (tmux)
+
+- Relógio fixado pela classe em `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:109`; o vigia recebe `hoje=HOJE` explicitamente em `:175`, definido em `:55`; controles usam timestamp UTC literal em `:251`. Não encontrei relógio solto demonstrável nesses pontos; execução [nao verificado].
+- O único patch fica no `with` em `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:213`; a restauração da função real é assertada em `:216`, antes dos leitores em `:220` e `:221`. Vazamento demonstrado: nenhum; execução [nao verificado].
+- Há **risco condicional de dependência da sequência de PKs**: `_cenario` deixa o banco gerar `p.pk` em `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:154`, mas depois exige que ele não esteja na tupla histórica em `:265`. Essa tupla contém IDs fixos em `app/chamados/management/commands/auditar_invariantes_chamados.py:1098`. Outra sequência de execução pode produzir colisão; ocorrência real [nao verificado]. O quinto teste também exige que o comando real conte esse PK, em `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:297`.
+- O teste declara e injeta o meio-estado em `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:156` e `:158`; o escritor normal grava o par texto/carimbo em `app/chamados/services/disputa_emissao.py:1247`. Portanto é entrada adversarial explícita, não resposta produzida pelo core.
+- Veredito e lâmpadas vêm do teste em `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:56` e `:160`; a porta escreve os campos em `app/ponto/portas/celula.py:768`. `_fechar` chama produção, relê o banco e verifica preservação em `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:168`; ele não reescreve o resultado. Isso comprova preservação da premissa, sem comprovar cálculo real das lâmpadas.
+- A classe usa `TestCase` e `setUpTestData` em `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:110`; cada um dos cinco testes cria seu cenário em `:201`, `:212`, `:236`, `:259` e `:276`. Dependência de dados deixados por outro dos cinco testes não aparece no código; comportamento do framework em execução [nao verificado].
+- Não executei os testes: o quinto cria arquivo temporário em `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:284`, incompatível com a auditoria somente leitura. Resultados dos logs anexados [nao verificado].
+
+## 01/11 18:24 · sessao 0c1e939852f1 · - · - · origem=Ronald (tmux)
+
+Auditoria estática, sem executar testes ou mutantes; resultados empíricos dos logs citados: [nao verificado]. [nao verificado]
+
+- **Triagem 2b/3 sustentada com ressalva de proveniência:** o próprio teste injeta `resposta_colab` sem `respondida_em`; os controles também são escritos pelo teste. São entradas declaradas, não resultados produzidos pelo fecho (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:154-160`, `:251-255`). O teste verifica que o meio-estado permanece e que o I20 real o observa (`:264`, `:270-271`). A escrita normal do par pelo “core” não foi localizada nesta subtarefa: [nao verificado].
+
+- **Preservação da célula:** o teste fornece veredito e lâmpadas pela porta (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:160`); a produção escreve `ata`, `veredito`, `veredito_via` em `app/ponto/portas/celula.py:768-773`. `_fechar` consulta novamente o banco e compara exatamente esses insumos; não os reescreve (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:168-171`). São premissas preservadas, não prova de que o cartório calculou corretamente essas premissas (`:160`, `:170-171`).
+
+- **Quem escreve/lê alcance:** `censo_alcance` inicializa os campos em `app/chamados/services/vigia_fio.py:539-543`; calcula `alcance_universo` de `fora_da_folha` em `:548-553`; escreve `alcance_dias` em `:589`, `fio_morto_alcance` em `:650`, `alcance_a..e` em `:651`, `alcance_e_detalhe` em `:652-653`. O teste chama o censo real e filtra pelo identificador da célula (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:175-176`); lê linha, totais, soma e detalhe em `:191-197`, e a causa `c` em `:224`. Nenhum desses resultados é preenchido pelo teste nesses pontos (`:175-197`).
+
+- **Quem escreve/lê I20:** o auditor lê `respondida_em`, `resposta_colab` e `pk` no banco e exclui a cicatriz (`app/chamados/management/commands/auditar_invariantes_chamados.py:1098-1103`); `add` calcula total e amostra (`:559-566`); o auditor calcula flag e imprime (`:1833-1837`). O teste captura saída (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:95-106`), interpreta a linha (`:80-89`) e compara flag/total/amostra (`:245`, `:293`, `:297`). A mordida injeta o `pk` apenas na cópia textual do auditor, explicitamente identificada como mutante (`:280-291`).
+
+- **Triagem 4a parcialmente suficiente:** remover o incremento inteiro em `vigia_fio.py:651` viola a soma exigida pelo teste em `test_o261e_f2_ramo_e_i20.py:196`; remover o detalhe do ramo viola `:197`. Entretanto, o selo não garante que cada contador corresponde à causa da linha (`:192`, `:196-197`). [nao verificado]
+
+- **Mutante vivo concreto, por análise estática:** substituir `d['alcance_' + causa] += 1` por `d['alcance_a'] += 1` em `app/chamados/services/vigia_fio.py:651`. A soma permanece correta, a linha continua com causa `e` e o detalhe permanece correto (`:652-654`); o teste não compara nenhum bucket individual, apenas a soma (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:192-197`). No MORDE, o helper já lança pela linha `c` antes de chegar à soma (`:192`, `:224-226`). A sobrevivência executada deste mutante: [nao verificado].
+
+- **Outro mutante vivo:** omitir em `vigia_fio.py:653` o detalhe `sem_pergunta_viva`, mantendo o detalhe do ramo. O teste exige apenas `alcance_e_detalhe[CAUSA_DO_RAMO] == 1`, sem somar detalhes ou conferir o detalhe do outro dia (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:193-197`). Sobrevivência executada: [nao verificado].
+
+## 01/11 18:24 · sessao 853d16ba45bf · - · - · origem=Ronald (tmux)
+
+- **Triagem 2a / pergunta 2: corresponde ao código.** O cenário cria pergunta `saida_sem_entrada`, sem texto, com DNA `hi=08:00` e lâmpada E acesa; esse motivo corresponde a E/hi. Antes do carimbo, o C6 pula o degrau da resposta, pula o BUG 117 por `materializada_em=None`, e retorna viva porque `furo` acusa. Referências: `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:61`, `:147`, `:236`; `app/chamados/juizes.py:845`, `:1047`, `:1077`, `:1081`; `app/escala/models.py:1735`.
+
+- **Retirando apenas a guarda do fecho:** a porta aplica o carimbo em memória, mantém `respondida_em=None` porque o texto está vazio e chama novamente o C6. Agora o BUG 117 encontra carimbo + fato do marco provado e retorna morta antes de consultar o veredito do dia; a porta grava. Referências: `app/chamados/services/disputa_emissao.py:1626`, `:1638`; `app/chamados/models.py:2529`, `:2555`, `:2556`, `:2565`, `:2576`; `app/chamados/juizes.py:869`, `:887`, `:893`, `:1077`.
+
+- **Com resposta:** a porta preenche `respondida_em` antes de perguntar ao C6. O degrau da resposta precede o BUG 117; dia `furo` impede que `_resposta_concorda_com_a_luz` retorne verdadeiro, conservando a pergunta viva e causando recusa da porta. Referências: `app/chamados/models.py:2556`; `app/chamados/juizes.py:1029`, `:1047`, `:1059`; `app/chamados/models.py:2569`. A execução histórica `mordida_v9_F.log` é **[nao verificado]**.
+
+- **Triagem 4b: descarte sustentado para estes cinco testes.** Tornar `_desfazer_em_memoria` inoperante não grava os campos: a porta continua retornando `False` antes do `save`, o fecho executa `continue`, a avaliação final da disputa consulta novamente suas perguntas e os selos recarregam o banco. Referências: `app/chamados/models.py:2569`, `:2576`, `:2579`, `:1767`, `:1778`; `app/chamados/services/disputa_emissao.py:1638`, `:1655`; `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:169`, `:183`, `:217`, `:262`, `:278`. Sobrevivência desse mutante executada nesta revisão: **[nao verificado]**.
+
+- **Outro mutante vivo dedutível:** substituir `self.materializada_por_id = autor_id` por `None` em `app/chamados/models.py:2530`. Os cinco testes não assertam o autor; suas verificações da pergunta cobrem carimbo temporal, via, vivacidade e o par resposta/carimbo, enquanto a chave e os degraus do C6 não consultam `materializada_por_id`. Referências: `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:184`, `:218`, `:264`; `app/chamados/juizes.py:788`, `:1032`. Sobrevivência por execução: **[nao verificado]**.
 
 ## 01/11 18:15 · sessao 3fb825a7930a · O261-E-F2 · verificador · origem=Code
 
@@ -784,127 +824,4 @@ Verificação em memória, sem Django ou alterações de arquivos:
 
 Resultado da suíte Django completa: [nao verificado]. [nao verificado]
 
-## 01/11 16:39 · sessao 7d4e42e59c6f · - · - · origem=Ronald (tmux)
-
-Q3/Q4b — achados consolidados, somente leitura.
-
-Os dois escritores adicionais de `via_resolucao` são deliberadamente permitidos pelo selo separado `PORTA_VIA`; portanto existem fora das seis portas perguntadas, mas não constituem fuga da allowlist atual. O contrato de exclusividade dos campos `materializada_em`/`materializada_por` é distinto do contrato da via. (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:35`, `:44`, `:51`, `:238`)
-
-| Campo | Escritores persistentes fora das seis portas |
-|---|---|
-| `materializada_em` | Nenhum escritor explícito de `PerguntaDisputa` encontrado nas formas varridas; a atribuição está em `_escrever_carimbo`, e o lote limpa pelo gerente do modelo. (`app/chamados/models.py:2529`, `:2626`) |
-| `materializada_por` | Idem; atribuição de FK por `_id` em `_escrever_carimbo`, limpeza no lote. (`app/chamados/models.py:2530`, `:2627`) |
-| `via_resolucao` | `PerguntaDisputa.encerrar_por_fato_no_espelho`: atribui e salva somente a via; `relavra_via.relavrar`: atribui a nova via, relavra veredito e salva. (`app/chamados/models.py:2636`, `:2637`; `app/chamados/services/relavra_via.py:123`, `:124`, `:125`) |
-| `respondida_em` | `responder_pergunta_disputa_core` atribui `now()` e salva; `reabrir_para_correcao` limpa no `update`; `responder_automaticamente` atribui o instante recebido e salva; `carimbar_resposta_pela_trilha` atribui o instante testemunhado e salva. (`app/chamados/services/disputa_emissao.py:1248`, `:1266`, `:1358`, `:1378`, `:1394`, `:1395`, `:1410`, `:1411`) |
-| `validada_em` | `_carimbar_validacao` atribui `now()` e salva; `devolver_validacao_recusada` limpa; resposta nova limpa validação anterior; reabertura para correção limpa em lote. (`app/chamados/services/validacao.py:131`, `:133`, `:188`, `:190`; `app/chamados/services/disputa_emissao.py:1260`, `:1266`, `:1358`, `:1378`) |
-| `validada_por` | Os mesmos quatro atos de `validada_em`, com autor na validação e `None` nos desfazimentos. (`app/chamados/services/validacao.py:132`, `:133`, `:189`, `:190`; `app/chamados/services/disputa_emissao.py:1261`, `:1266`, `:1358`, `:1378`) |
-| `resposta_colab` | `responder_pergunta_disputa_core` escreve a resposta; `reabrir_para_correcao` escreve `''`; `responder_automaticamente` escreve o texto recebido. (`app/chamados/services/disputa_emissao.py:1247`, `:1266`, `:1358`, `:1378`, `:1393`, `:1395`) |
-
-`ChamadoColaborador.ressuscitar_perguntas` fornece `validada_em=None`, `validada_por=None`, `respondida_em=None` à porta de lote; não executa um segundo `update` próprio desses campos. (`app/chamados/models.py:1488`)
-
-As atribuições `_q.validada_em=None` e `_q.respondida_em=None` são simulação em cópia de memória: o código copia a pergunta, copia `_state` e o cache das relações, aplica `descarimbar(salvar=False)` e consulta o C6. Não persiste essa `_q`. (`app/chamados/models.py:1427`, `:1430`, `:1431`, `:1439`, `:1440`, `:1441`, `:1442`)
-
-Há também comportamento de exclusão de usuário: ambas as FKs de autoria usam `on_delete=SET_NULL`, o que pode zerar autoria fora dessas portas. O próprio varredor declara que não alcança esse mecanismo. (`app/chamados/models.py:2740`, `:2742`, `:2760`, `:2762`; `app/chamados/tests/test_o261e_f2_porta_carimbo.py:113`)
-
-`regularizacao_ext.materializar_regularizacao_externa` escreve campos homônimos em `RegularizacaoExterna`, não em `PerguntaDisputa`; a exceção está explicitada na allowlist. (`app/chamados/services/regularizacao_ext.py:198`, `:199`, `:200`; `app/chamados/tests/test_o261e_f2_porta_carimbo.py:47`, `:49`)
-
-`PerguntaDisputa.abrir` recebe `**campos` e os repassa a `objects.create`, portanto é um canal genérico de criação capaz de receber esses campos; nenhum caller atual fornecendo os campos examinados apareceu na varredura explícita. A impossibilidade de fazê-lo dinamicamente não está provada. (`app/chamados/models.py:2374`, `:2452`, `:2453`; [nao verificado] para ausência universal de argumentos dinâmicos)
-
-Leitores que explicam o efeito dos campos:
-
-| Campo | Leitores e consequência |
-|---|---|
-| `materializada_em` | C6 lê identidade/tranca, fato do marco e lastro; `.estado` distingue validada/materializada; materializador seleciona apenas nulo; raiox exclui materialização com veredito `VL_SIM`; procedência usa a data como alternativa à validação. (`app/chamados/juizes.py:1042`, `:1071`, `:1077`, `:1107`; `app/chamados/models.py:2475`, `:2480`; `app/chamados/services/materializacao.py:1261`; `app/chamados/services/raiox.py:133`; `app/ponto/services/procedencia_batida.py:74`) |
-| `materializada_por` | Foto de reversão do ato, autoria da procedência e rollback em memória da porta. (`app/chamados/services/materializacao.py:618`; `app/ponto/services/procedencia_batida.py:71`, `:72`; `app/chamados/models.py:2552`, `:2581`, `:2582`) |
-| `via_resolucao` | C6 julga identidade/tranca; relavra escolhe somente vias derivadas; materializador reconhece recusa de paridade; template escolhe explicação ao colaborador. (`app/chamados/juizes.py:1042`, `:1071`; `app/chamados/services/relavra_via.py:116`, `:119`; `app/chamados/services/materializacao.py:423`; `app/templates/chamados/partials/_card_atendimento.html:186`) |
-| `respondida_em` | C6 só entra no degrau da resposta se data e texto existem; `.estado` distingue pendente/respondida; validação recusa sem data; fila global exige data; raiox separa respondidas/não respondidas pela coluna; template condiciona apresentação. (`app/chamados/juizes.py:1047`, `:1284`; `app/chamados/models.py:2479`, `:2482`; `app/chamados/services/validacao.py:363`; `app/chamados/services/raiox.py:136`, `:137`, `:138`; `app/templates/chamados/partials/modal_fio.html:212`) |
-| `validada_em` | Primeiro degrau do C6 mata a pergunta; validação evita repetição; materializador exige não nulo; fecho sem credor seleciona só nulo. (`app/chamados/juizes.py:1033`; `app/chamados/services/validacao.py:366`; `app/chamados/services/materializacao.py:1260`; `app/chamados/services/disputa_emissao.py:1620`) |
-| `validada_por` | Foto da validação e reversão, métricas de autoria e procedência da batida. (`app/chamados/services/validacao.py:139`; `app/chamados/services/materializacao.py:616`; `app/chamados/services/painel.py:260`; `app/chamados/services/verbos.py:240`, `:244`; `app/ponto/services/procedencia_batida.py:72`) |
-| `resposta_colab` | C6 exige texto com data e compara com a luz; materializador interpreta a hora e recusa texto vazio; validação classifica a resposta; telas exibem texto; auditoria detecta meio-estado. (`app/chamados/juizes.py:1047`, `:1010`; `app/chamados/services/materializacao.py:264`, `:393`, `:763`; `app/chamados/services/validacao.py:806`; `app/templates/chamados/partials/modal_fio.html:214`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1101`, `:1102`, `:1103`) |
-
-O histórico lê dinamicamente os três instantes por `getattr(p, campo)` e usa o texto da resposta para compor os eventos; a foto de reversão de passivo também lê dinamicamente os campos, sem escrevê-los. (`app/chamados/services/historico.py:99`, `:101`, `:103`, `:105`, `:109`; `app/chamados/services/passivo_validado.py:64`, `:66`, `:83`)
-
-Para Q4b, não encontrei escritor atual que grave `resposta_colab` **preenchida** deixando de atribuir também `respondida_em`: o core atribui o par e salva junto; automático também atribui e salva o par. A limpeza de correção deixa `resposta_colab=''` com data nula, que é outro estado. (`app/chamados/services/disputa_emissao.py:1247`, `:1248`, `:1249`, `:1266`, `:1393`, `:1394`, `:1395`, `:1358`, `:1378`)
-
-A porta automática não valida `instante is not None`, mas o único caller de produção localizado passa `agora=timezone.now()`. Assim, a possibilidade da API interna produzir meio-estado existe se usada com `None`; sua ocorrência nos dados fornecidos e a origem histórica dos registros continuam [nao verificado]. (`app/chamados/services/disputa_emissao.py:1382`, `:1391`, `:1393`, `:1394`; `app/api/foto_recebida.py:42`, `:48`)
-
-A frase da sonda “só dado legado” não é uma conclusão provada pelo anexo: ele não traz resultados, datas de escrita ou trilha dos registros. [nao verificado]
-
-## 01/11 16:39 · sessao 8051cb744c18 · - · - · origem=Ronald (tmux)
-
-4e — A sonda usa funções reais, mas não prova uma execução completa do patch: `carimbar` consulta C6 e salva somente quando morta (`app/chamados/models.py:2565`, `app/chamados/models.py:2576`); `reabrir` usa `recusa_da_reabertura` e executa efeitos reais (`app/chamados/models.py:1338`, `app/chamados/models.py:1380`). A execução/saída `SONDA_OK` não consta do dado apresentado. [nao verificado]
-
-O `atomic` externo com exceção desfaz as escritas da conexão participante; isso é ensaio com rollback, não conexão configurada para somente leitura. A configuração sombra declara apenas `default`, herdado de saas (`app/config/settings/sombra.py:27`, `app/config/settings/saas.py:83`); trilhas usam ORM sem outra conexão (`app/core/observ.py:133`). Ausência absoluta de escritas por qualquer conexão ou dependência transitiva: [nao verificado].
-
-Há escapes concretos do procedimento documentado:
-
-- O comando indicado chama `lavra_de_prod` antes da sonda (`bin/sombra.sh:489`). Essa função cria diretório e arquivos (`bin/sombra.sh:137`, `bin/sombra.sh:144`, `bin/sombra.sh:151`) e lança outro processo que grava `MetricaSnapshot` por dois `update_or_create`, fora do `atomic` da sonda (`bin/sombra.sh:157`, `bin/sombra.sh:160`, `bin/sombra.sh:166`).
-- O wrapper grava a saída no host usando `tee` (`bin/sombra.sh:492`). O app está montado somente para leitura, mas `/sombra` é gravável e logs/media são tmpfs (`bin/sombra.sh:189`).
-- Logging não participa do rollback: exceções do cartório chegam ao logger `ponto` (`app/ponto/services/cartorio.py:1763`), configurado com arquivo (`app/config/settings/saas.py:162`, `app/config/settings/saas.py:181`). `registrar_engolido` também modifica contador em memória e emite logging (`app/core/observ.py:75`, `app/core/observ.py:79`).
-- Até C6 pode engolir exceção e continuar, portanto “qualquer exceção sobe” não descreve todas as funções chamadas (`app/chamados/juizes.py:1104`, `app/chamados/juizes.py:1115`); o reconciliador também captura falhas por chamado (`app/chamados/reconciliador.py:1369`).
-
-A medição de laço cobre `reconciliar_chamados_colab`, que chama os reconciliadores e percorre chamados vivos (`app/chamados/reconciliador.py:1348`, `app/chamados/reconciliador.py:1356`). Não cobre a rodada do consumidor do outbox (`app/chamados/reconciliador.py:1255`) nem os efeitos pendentes em `on_commit` (`app/chamados/signals.py:121`, `app/chamados/signals.py:202`, `app/chamados/signals.py:251`). O outbox encontrado é tabela ORM, não fila externa (`app/ponto/portas/celula.py:626`, `app/ponto/portas/celula.py:631`). Ausência de laço após commit e consumidores: [nao verificado].
-
-Item 5 — O registro vivo aponta C6 para `chamados.juizes.pergunta_viva` (`app/core/juizes.py:266`), e a porta efetivamente o consulta (`app/chamados/models.py:2565`): nenhum segundo juiz é necessário para o patch proposto. A dependência problemática é a promessa de reabrir sem demonstrar que as guardas aceitam o fixture: a porta recusa antes de mudar estado (`app/chamados/models.py:1285`, `app/chamados/models.py:1338`).
-
-Os novos testes de formas são testes sobre strings artificiais (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:445`, `app/chamados/tests/test_o261e_f2_porta_carimbo.py:469`); a fiscalização da produção é o teste que lê a árvore (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:433`). O censo novo lê fonte real, mas exige uma âncora textual específica e sua substituição (`app/core/tests/test_censo_escritas.py:233`, `app/core/tests/test_censo_escritas.py:235`, `app/core/tests/test_censo_escritas.py:244`). Não equivale a prova universal contra mutações de escrita.
-
-## 01/11 16:18 · sessao 4f8555cb3c3e · O261-E-F2 · censo · origem=Code
-
-Nos anexos transcritos, conto linhas desde a primeira linha de cada arquivo, incluindo linhas em branco e excluindo o marcador `== anexo ==`.
-
-1. **(a) — Codex não viu, com o tema perguntado.**  
-   **Pergunta:** “selo/RED sem mordida (o selo AST de test_o261e_f2_porta_carimbo.py morde mutante real?)” (`codex_v1.q:25`); reiterada para o diff total (`codex_v3.q:14`).  
-   **Resposta/triagem sobre o bypass por chamadas permitidas:** **nenhum**. As respostas apontaram escapes nas formas de atribuição, outro defeito do selo (`codex_v1.r:150`; `codex_v1.r:152`). O selo permite `_escrever_carimbo`, cuja implementação escreve sem consultar C6; a consulta está em `carimbar` (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:44`; `app/chamados/models.py:2527`; `app/chamados/models.py:2565`).
-
-2. **(b) — Codex viu; a triagem reduziu a nota.**  
-   **Pergunta:** comportamento observável de cada chamador “quando a porta RECUSA”, incluindo o que devolve ou emite (`codex_v1.q:15`; `codex_v1.q:16`; `codex_v1.q:17`).  
-   **Resposta:** para `_materializar_ausencia_de_resposta`, “Ignora o booleano. A ausência já criada/reaberta continua” (`codex_v1.r:93`).  
-   **Triagem/motivo:** “Nota. O Codex mesmo diz que o conjunto segue restrito ao efetivamente carimbado” (`triagem_v3.md:9`). O núcleo — recusa ignorada e redução do conjunto absorvido — foi tratado; a formulação específica “sem trilha/log” não aparece nesse tratamento (`codex_v1.r:93`; `triagem_v3.md:9`).
-
-3. **(b) — Os dois componentes foram vistos e encaminhados à fila.**  
-   **Pergunta:** possibilidade de gravar e reler VIVA; divergência entre memória e banco; ordem de trava (`codex_v1.q:18`; `codex_v1.q:20`; `codex_v1.q:26`).  
-   **Resposta:** “sem reler ou travar a pergunta” e “exceção da lavra ou do `save`, depois da aprovação, fica fora do `try` de reversão” (`codex_v1.r:109`; `codex_v1.r:126`).  
-   **Triagem/motivos:** concorrência anterior ao diff e alegada mudança da ordem de trava de sete chamadores (`triagem_v1.md:9`; `triagem_v2.md:10`). Para memória, a triagem corrigiu “o atomic cobre”, reconheceu que a memória permanece carimbada e encaminhou: “Não é regressão; vai a fila” (`triagem_v3.md:11`).
-
-4. **(b) — Relógio visto e remetido a complemento.**  
-   **Pergunta:** “relogio lido fora da borda” (`codex_v1.q:24`), repetida na volta final (`codex_v3.q:13`).  
-   **Resposta:** “Os novos métodos têm `now()` de fallback”; a injeção integral permanece incompleta (`codex_v1.r:144`).  
-   **Triagem/motivo:** “a leitura do relogio MUDOU DE SITIO, nao nasceu”, encaminhando ao complemento RELOGIO-INJETADO (`triagem_v2.md:9`; confirmado em `triagem_v3.md:12`). O detalhe de `encerrar_fantasma` chamar sem `quando` está no código, mas não foi explicitamente nomeado na resposta citada (`app/chamados/models.py:2648`; `codex_v1.r:144`).
-
-5. **(b) — Visto; descarte agregado, sem motivo individual registrado.**  
-   **Pergunta:** “derivacao paralela de fonte unica” (`codex_v1.q:24`; `codex_v1.q:25`).  
-   **Resposta:** “Permanece a separação já existente entre identidade no C6, no queryset e na lista da relavra”, citando os dois sítios do opus (`codex_v1.r:145`).  
-   **Triagem:** encerra agregadamente “2o juiz, derivacao paralela e 2o escritor explicito: nenhum” (`triagem_v2.md:12`). **Classifico em (b) por esse encerramento agregado; motivo específico da triagem para manter as listas 5×4: [nao verificado].** A preexistência foi registrada pela resposta, não como justificativa individual da triagem (`codex_v1.r:145`; `triagem_v2.md:12`).
-
-6. **(b) — Os três restos foram vistos e deixados para outro pouso.**   [nao verificado]
-   **Pergunta:** “Algum chamador de `fechar_por_competencia_trancada` [...] sobrou?”, além do mandato “L-111 apaga” (`codex_v1.q:27`; `codex_v1.q:7`).  
-   **Resposta:** “Restam referências instrumentais/documentais obsoletas dizendo que a porta existe”, citando exatamente os três arquivos do opus (`codex_v1.r:160`).  
-   **Triagem/motivo:** “INCOMPLETO declarado. E instrumento (`bin/`) e doc, com pouso proprio (RAIAS 5)” (`triagem_v1.md:15`). [nao verificado]
-
-7. **(a) — Codex não viu, com o tema perguntado.**  
-   **Pergunta:** “selo/RED sem mordida”, reiterada para o “diff total” (`codex_v1.q:25`; `codex_v3.q:14`).  
-   **Resposta/triagem sobre a perda da testemunha da classe (f): nenhum.** O teste passa a exigir uma chamada AST a `descarimbar_em_lote` e um `update()` censado diretamente, sem `[relacionado]` (`app/core/tests/test_censo_escritas.py:210`; `app/core/tests/test_censo_escritas.py:214`). É uma lacuna estrutural inspecionável no teste; classificá-la não depende de recuperar uma execução histórica de RED (`app/core/tests/test_censo_escritas.py:202`).
-
-8. **(e) — Não perguntado quanto ao custo da dupla execução.**  
-   **Pergunta mais próxima:** menciona “memo `_pv_memo`”, mas pergunta se a porta grava e a releitura resulta VIVA; não pede avaliação de custo ou quantidade de consultas ao C6 (`codex_v1.q:18`; `codex_v1.q:19`).  
-   **Resposta relacionada:** descreve que `lavrar_sem_turno_aberto` “antes salvava depois do pré-C6”, sem apontar o custo da segunda avaliação (`codex_v1.r:88`).  
-   **Resposta/triagem do achado de custo: nenhum.** Os dois pontos de chamada e a alteração dos campos da chave estão no código (`app/chamados/reconciliador.py:398`; `app/chamados/reconciliador.py:405`; `app/chamados/models.py:2565`; `app/chamados/juizes.py:790`; `app/chamados/juizes.py:791`).
-
-9. **(e) — Não perguntado quanto ao vocabulário do commit/comentário.**   [nao verificado]
-   **Trechos delimitadores:** as perguntas pedem escritores, leitores e classes de defeitos; nenhuma pede auditoria lexical do commit ou da palavra “fallback” em comentários (`codex_v1.q:11`; `codex_v1.q:23`; `codex_v2.q:17`; `codex_v3.q:13`).   [nao verificado]
-   **Resposta/triagem deste achado: nenhum.** O “fallback” mencionado na resposta refere-se ao relógio, outro tema (`codex_v1.r:144`). A ocorrência no comentário está confirmada (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:404`); a ocorrência no corpo original do commit, além do relato do opus, é **[nao verificado]**.
-
-| achado | classe | volta | trecho |
-|---|---|---|---|
-| 1 — chamadores sem selo | **(a)** | v1/v3 | Perguntado “selo/RED sem mordida”; resposta específica: nenhum (`codex_v1.q:25`; `codex_v3.q:14`). |
-| 2 — recusa silenciosa na ausência | **(b)** | v1 → triagem v3 | “Ignora o booleano”; triagem: conjunto restrito ao efetivamente carimbado (`codex_v1.r:93`; `triagem_v3.md:9`). |
-| 3 — trava e memória após erro | **(b)** | v1–v3 | Janela anterior; memória: “Não é regressão; vai a fila” (`triagem_v1.md:9`; `triagem_v3.md:11`). |
-| 4 — relógio nas portas | **(b)** | v1–v3 | “MUDOU DE SITIO, nao nasceu”; complemento RELOGIO-INJETADO (`triagem_v2.md:9`). |
-| 5 — duas listas de identidade | **(b)** | v1 → triagem v2 | Separação registrada; encerramento agregado “nenhum”; motivo individual ausente (`codex_v1.r:145`; `triagem_v2.md:12`). |
-| 6 — restos de L-111 | **(b)** | v1 | “INCOMPLETO declarado”; instrumento/doc com pouso próprio (`triagem_v1.md:15`). | [nao verificado]
-| 7 — testemunha da classe (f) | **(a)** | v1/v3 | Perguntado “selo/RED sem mordida”; resposta específica: nenhum (`codex_v1.q:25`; `codex_v3.q:14`). |
-| 8 — custo de dois C6 | **(e)** | v1, pergunta mais próxima | Memo perguntado quanto à vivacidade, sem pergunta de custo (`codex_v1.q:18`; `codex_v1.q:19`). |
-| 9 — palavra “fallback” | **(e)** | v1–v3 | Perguntas de defeitos técnicos, sem auditoria lexical (`codex_v1.q:23`; `codex_v2.q:17`; `codex_v3.q:13`). |
-
-_1446 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1449 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: trava_teste.sh | pid=783068 | arquivo=/home/ronald/saas-hasner/logs/o261e/f2/suite_completa_v5.log
+ESPERANDO: trava_teste.sh | pid=2763178 | arquivo=/home/ronald/saas-hasner/logs/o261e/f2/suite_completa_v5.log
 aval Ronald 18:02 (transcrito em logs/e4cal/AVAL_L1_REEQ.md): E4-CALENDARIO-L1-REEQ, complementa COMPLEMENTO e TABELA (ordem inalterada): PRE-REQUISITO E3-ISENTO-INSUMOS pousa antes da leitura do D4 pela tela; ordem interna do D4; rodape; props 14-17; anti-join SEM-CELULA medido sem cura.
 aval Ronald 17:55 (transcrito em logs/e4cal/AVAL_L1_TABELA.md): E4-CALENDARIO-L1-TABELA, complemento da L1 e do COMPLEMENTO (ordem inalterada): selo exaustivo da lavra (1.408) + tabela do D4, 13 propriedades, RED 9-12 antes da MUDA 2. Entra junto da L1 (vaga 3).
 aval Ronald 17:36 (transcrito em logs/o261e/f2/AVAL_VIGIA_II.md): O261-E-F2-VIGIA-NAO-CONTA = (ii) complementada: sem diff de producao; selo do RAMO pela variante (vigia conta) + selo do CASO 2 pelo I20 (meio-estado novo fora de _I20_CICATRIZ, sem credor); proibido mudar universo do vigia, juiz novo, ampliar _I20_CICATRIZ; I20 nao contar = PAREI. F2 volta a vaga na frente (ordem F2 -> COBPARC).
