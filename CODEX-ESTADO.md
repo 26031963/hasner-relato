@@ -1,7 +1,30 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 16:49** · publicado em **01/11/2026 16:49** (UTC-3)
+> Ultima resposta processada: **01/11/2026 16:53** · publicado em **01/11/2026 16:54** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 16:53 · sessao ee8a3724479c · O261-E-F2 · verificador · origem=Code
+
+1. **Sim:** o resultado agregado coincide exatamente com `VIA_DO_CHAMADOR`: admin → `VIA_ADMIN_DECIDIU`; duplicata → `VIA_DUPLICATA`; paridade → `VIA_PARIDADE_RECUSADA`; recusa → `VIA_FATO_OCUPADO`. Os quatro sítios são [models.py:2498](app/chamados/models.py:2498), [fio.py:891](app/chamados/services/fio.py:891), [materializacao.py:858](app/chamados/services/materializacao.py:858) e [materializacao.py:1033](app/chamados/services/materializacao.py:1033); a comparação está em [test_o261e_f2_porta_carimbo.py:482](app/chamados/tests/test_o261e_f2_porta_carimbo.py:482).
+
+   Nenhuma ocorrência nesses três arquivos acrescenta `<indireta>`. O `def` não é `ast.Name`; comentários não entram na AST; docstrings e strings maiores não satisfazem a igualdade exata. Uma string/docstring contendo **somente** `carimbar_identidade` contaria como `<indireta>`. O atributo da chamada direta fica excluído por `diretas`. [test_o261e_f2_porta_carimbo.py:414](app/chamados/tests/test_o261e_f2_porta_carimbo.py:414), [test_o261e_f2_porta_carimbo.py:422](app/chamados/tests/test_o261e_f2_porta_carimbo.py:422).
+
+2. **Existe mutante de duas linhas:** substituir [materializacao.py:858](app/chamados/services/materializacao.py:858) por:
+
+   ```python
+   p.VIA_PARIDADE_RECUSADA = PerguntaDisputa.VIA_ADMIN_DECIDIU
+   p.carimbar_identidade(p.VIA_PARIDADE_RECUSADA, request_user)
+   ```
+
+   O coletor continua enxergando `VIA_PARIDADE_RECUSADA`, pois verifica apenas `via.attr`; não resolve seu receptor nem seu valor. A referência à porta permanece na mesma função declarada, mantendo também o teste dos chamadores verde. [test_o261e_f2_porta_carimbo.py:420](app/chamados/tests/test_o261e_f2_porta_carimbo.py:420), [test_o261e_f2_porta_carimbo.py:443](app/chamados/tests/test_o261e_f2_porta_carimbo.py:443), [test_o261e_f2_porta_carimbo.py:473](app/chamados/tests/test_o261e_f2_porta_carimbo.py:473).
+
+   Entretanto, o argumento passa a valer `'admin_decidiu'`, uma identidade aceita pela porta, que o encaminha à escrita e ao `save`. [models.py:2237](app/chamados/models.py:2237), [relavra_via.py:166](app/chamados/services/relavra_via.py:166), [models.py:2597](app/chamados/models.py:2597), [models.py:2602](app/chamados/models.py:2602), [models.py:2607](app/chamados/models.py:2607).
+
+   Reexecutei os corpos dos dois testes em memória, usando `unittest.TestCase` e sobrepondo a leitura do arquivo pelo mutante: ambos passaram. Runner Django completo: [não verificado]. [test_o261e_f2_porta_carimbo.py:473](app/chamados/tests/test_o261e_f2_porta_carimbo.py:473), [test_o261e_f2_porta_carimbo.py:482](app/chamados/tests/test_o261e_f2_porta_carimbo.py:482).
+
+3. **O teste novo lê somente fonte sintética:** constrói `src`, passa ao coletor AST e compara conjuntos; não consulta campos de banco. O teste da árvore também lê arquivos de fonte. [test_o261e_f2_porta_carimbo.py:499](app/chamados/tests/test_o261e_f2_porta_carimbo.py:499), [test_o261e_f2_porta_carimbo.py:485](app/chamados/tests/test_o261e_f2_porta_carimbo.py:485).
+
+   No diff fornecido, nenhum leitor de produção é alterado: as mudanças ficam no coletor e no teste. O leitor C6 existente consome `via_resolucao` e `materializada_em`; a porta existente escreve esses campos com o autor. [test_o261e_f2_porta_carimbo.py:406](app/chamados/tests/test_o261e_f2_porta_carimbo.py:406), [test_o261e_f2_porta_carimbo.py:499](app/chamados/tests/test_o261e_f2_porta_carimbo.py:499), [juizes.py:1071](app/chamados/juizes.py:1071), [models.py:2527](app/chamados/models.py:2527). Efeito em registros reais: [não verificado].
 
 ## 01/11 16:49 · sessao 4b97a069739e · O261-E-F2 · verificador · origem=Code
 
@@ -842,28 +865,4 @@ Classes:
 
    A recusa granular mantém `_Reprovada` dentro do `atomic`, preservando a estrutura de rollback da batida (`app/chamados/services/materializacao.py:1109`, `app/chamados/services/materializacao.py:1166`, `app/chamados/services/materializacao.py:1172`).
 
-## 01/11 15:30 · sessao ed37d9048a68 · - · - · origem=Ronald (tmux)
-
-As listas correspondem aos sítios de atribuição explícita encontrados, com uma ressalva de escopo: `PORTA` inclui o homônimo `RegularizacaoExterna`, não só `PerguntaDisputa`. Os campos desse outro modelo estão em `app/chamados/models.py:3112`, `:3134`, `:3135`; sua escrita ocorre em `app/chamados/services/regularizacao_ext.py:198`, `:199`, `:200`.
-
-| Lista | Sítio que efetivamente escreve |
-|---|---|
-| PORTA | `_escrever_carimbo`: atribui instante e autor em `app/chamados/models.py:2529`, `:2530`; `descarimbar_em_lote`: update em `:2625`, `:2626`; homônimo acima. |
-| PORTA_VIA | `_escrever_carimbo`, `app/chamados/models.py:2531`; `descarimbar_em_lote`, `:2626`; `encerrar_por_fato_no_espelho`, `:2635`, persistência em `:2636`; `relavrar`, `app/chamados/services/relavra_via.py:123`, persistência em `:125`. |
-
-Não identifiquei atribuição explícita adicional pelos nomes dos campos ou pelos setters dinâmicos examinados; ausência universal de escrita indireta permanece [nao verificado]. `passivo_validado.CAMPOS_REVERSAO` é leitura: lista os campos em `app/chamados/services/passivo_validado.py:64`, e `_reversao_de` usa `getattr` em `:83`, armazenando o snapshot em `:367`.
-
-Há uma escrita indireta condicional que merece separar do censo de atribuições: `materializada_por` usa `on_delete=models.SET_NULL` em `app/chamados/models.py:2759`, `:2761`. Uma exclusão de `User` pode, portanto, zerar o autor pelo coletor do ORM; ocorrência e caminho executável de exclusão neste ambiente são [nao verificado]. O detector não examina essa política: só reconhece alvos de atribuição, `setattr` literal e chamadas selecionadas em `app/chamados/tests/test_o261e_f2_porta_carimbo.py:109`, `:124`, `:126`.
-
-Leitores de `via_resolucao` fora dos quatro sítios de `PORTA_VIA`:
-
-- Juízo e memo: `app/chamados/juizes.py:624`, `:635`, `:790`, `:1042`, `:1071`.
-- Modelo: `app/chamados/models.py:1838`, `:2489`, `:2552`, `:2644`, `:2656`, `:2673`, `:2680`, `:2712`, `:2714`.
-- Serviços: `app/chamados/services/fio.py:882`; `competencia_trancada.py:244`; `explicador.py:95`; `disputa_emissao.py:1628`, `:1643`, `:1646`; `materializacao.py:423`, `:572`, `:614`, `:1023`; `passivo_validado.py:83`, `:140`, `:141`, `:142`, `:515`; `fabrica_da_celula.py:104`; `relavra_via.py:153`, `:179`, `:230`; `app/chamados/reconciliador.py:1089`, `:1100`.
-- Ponto: `app/ponto/services/cartorio.py:1429`; `app/ponto/services/flip_auto.py:129`.
-- Tela: `app/templates/chamados/partials/_card_atendimento.html:186`.
-- Commands, todos sob `app/chamados/management/commands/`: `relavrar_via_i6.py:58`, `:59`, `:62`, `:66`, `:68`, `:88`; `reabrir_orfas_enterradas.py:67`, `:128`, `:141`, `:149`; `dedup_perguntas_fato.py:74`; `disparar_perguntas_competencia.py:127`; `encerrar_perguntas_com_fato.py:33`, `:42`, `:49`, `:66`, `:76`; `auditar_invariantes_chamados.py:201`, `:205`, `:432`, `:541`, `:954`, `:1706`.
-
-A descrição “só trocam a via de pergunta já carimbada” depende dos chamadores: `encerrar_por_fato_no_espelho` não verifica `materializada_em` antes de gravar (`app/chamados/models.py:2633`, `:2635`), mas seu command seleciona materializadas (`app/chamados/management/commands/encerrar_perguntas_com_fato.py:32`). `relavrar` verifica a via derivada, sem verificar instante (`app/chamados/services/relavra_via.py:116`); `relavrar_dia` também filtra pela via, usando a premissa documentada de que ela implica materialização (`:147`, `:153`).
-
-_1434 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1435 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
