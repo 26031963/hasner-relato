@@ -1,7 +1,69 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 02:00** · publicado em **01/11/2026 02:01** (UTC-3)
+> Ultima resposta processada: **01/11/2026 02:02** · publicado em **01/11/2026 02:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 01/11 02:02 · sessao 99fd5c598699 · GRADE-FOLGA-JUIZ · verificador · origem=Code
+
+**Os dois PROCEDENTES estão curados.** O teste novo morde as exclusões de `precedencia.py` pelo percurso, e a descrição de horizonte/`--forcar` corresponde ao código. **Não libero pouso incondicional:** o ensaio exigido antes dele continua **[não verificado]**. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:245`, `app/ponto/services/cartorio.py:178`, `app/ponto/services/cartorio.py:174`)
+
+Referências abaixo são da cópia fornecida como **16298e59**. Exercitei a catraca em memória, substituindo Django por `unittest` e o diretório temporário por arquivos simulados; não executei a integração Django nem consultei banco ou logs: **[não verificado]**.
+
+**1. Cura e mordida**
+
+A execução em memória dos **12 testes da catraca passou**, com **22 achados e 22 entradas na ALLOWLIST**. O teste novo falhou, por asserção, em cada mutante abaixo. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:139`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:176`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:260`)
+
+| Mutante aplicado somente em memória | Teste novo | [nao verificado]
+|---|---|
+| Excluir arquivos chamados `precedencia.py` no filtro de extensão | **RED**. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:128`) |
+| Pular especificamente `ponto/precedencia.py` pelo caminho relativo | **RED**. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:129`) |
+| Podar o diretório `ponto` em `dirs[:]` | **RED**. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:125`) |
+| Fazer `andar` ignorar todas as funções de `ponto/precedencia.py` | **RED**. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:113`) |
+
+Portanto, a lacuna da rodada anterior foi fechada para essas formas de regressão. Isso não transforma a AST em detector universal: `Q`, kwargs dinâmicos, reflexão e código no nível de módulo continuam limites declarados. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:17`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:245`)
+
+**2. Quem escreve e quem lê**
+
+| Valor | Escrita → leitura |
+|---|---|
+| Fonte usada pelo teste novo | O próprio teste escreve uma **fonte sintética literal** em `ponto/precedencia.py` temporário; `achados` percorre e abre esse arquivo, e `achados_da_fonte` analisa a AST. A asserção exige somente `outro/filtro`. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:251`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:130`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:260`) |
+| Fonte real do juiz | **O teste novo não a lê nem executa o juiz.** Os testes anteriores de cópia literal é que usam `inspect.getsource` do predicado e do carregador reais. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:212`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:220`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:251`) |
+| Versão e impressão | `REGRA_VERSOES` declara; `versao_para` escolhe a maior versão aplicável à competência; `_regra_do_dia` fornece o valor aos ramos; `impressao_insumos` incorpora `regra:N`. (`app/ponto/services/cartorio.py:111`, `app/ponto/services/cartorio.py:214`, `app/ponto/services/cartorio.py:963`, `app/ponto/services/cartorio.py:371`) |
+| Ata e carimbos | O cartório monta a ata, chama a lavra existente e entrega os carimbos à porta; a porta salva célula e evento no `atomic` existente. (`app/ponto/services/cartorio.py:1580`, `app/ponto/services/cartorio.py:1602`, `app/ponto/portas/celula.py:639`) |
+
+O texto novo está correto no alcance principal: a v3 altera a impressão da competência **10 em diante**; a 09 mantém versão 1. Sem `--forcar`, uma célula sem carimbo válido ou com impressão divergente continua elegível. (`app/ponto/services/cartorio.py:214`, `app/ponto/tests/test_o219_versao_da_regra.py:85`, `app/ponto/services/cartorio.py:1176`)
+
+“Todas as células passadas” descreve o universo padrão do comando, **com `--apply` para persistir e sem `--limite`**. `forcar` remove o pulo por impressão atual; não elimina outros `continue`, como ausência do dia na grade. É uma ressalva de precisão, sem nova regressão demonstrada. (`app/ponto/management/commands/processar_cartorio.py:27`, `app/ponto/management/commands/processar_cartorio.py:49`, `app/ponto/management/commands/processar_cartorio.py:56`, `app/ponto/services/cartorio.py:1180`, `app/ponto/services/cartorio.py:1183`)
+
+**3. Triagem: algum descarte errado?**
+
+**Sim: o “NÃO PROCEDE” do pré-requisito precisa ser qualificado.** Não há prova de que faltou ensaio; também não há prova disponível de que foi cumprido. Atribuí-lo à sessão principal não dispensa a exigência explícita anterior ao pouso. Os resultados citados em logs, inclusive suficiência do ensaio da v9 para esta entrega, permanecem **[não verificado]**. (`app/ponto/services/cartorio.py:174`, `app/docs/BACKLOG.md:796`)
+
+Os demais encaminhamentos são aceitáveis com estes limites:
+
+- **Documentação:** BACKLOG ainda enumera fase como migrada; a linha seguinte registra o desmembramento. Pode ser corrigido no marco do pouso; não deve virar dívida posterior. A edição alegada na principal é **[não verificado]**. (`app/docs/BACKLOG.md:796`, `app/docs/BACKLOG.md:797`, `app/docs/LEIS.md:132`)
+- **Juízes novos:** o corpo dos commits fornecido resolve a dúvida anterior: **um na obra, zero adicionais no delta**, compatível com registro e corte. (`app/core/juizes.py:192`, `app/docs/CORTES.md:416`)
+- **C5, gerador e fase:** continuam filas declaradas; fase permanece fora desta obra pelo aval informado. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:21`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:160`, `app/docs/BACKLOG.md:797`)
+
+**4. Classes de reprovação**
+
+| Classe | Situação nesta verificação |
+|---|---|
+| Segundo juiz | Os sítios curados delegam; **C5 e gerador continuam abertos**, não curados pela obra. (`app/ponto/precedencia.py:505`, `app/ponto/services/declarar_dia.py:74`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1532`, `app/escala/models.py:1280`) |
+| Segundo escritor fora da porta | Não localizado no trecho alterado: overlay escreve dict; persistência usa a porta existente. (`app/escala/utils.py:1126`, `app/ponto/services/cartorio.py:1582`, `app/ponto/portas/celula.py:807`) |
+| Relógio fora da borda | Não localizado nas funções novas; o comando captura a data na borda. (`app/ponto/management/commands/rejulgar_ausencia_em_folga.py:52`, `app/ponto/precedencia.py:194`, `app/ponto/precedencia.py:222`) |
+| Derivação paralela | Grade pergunta ao juiz; calendário compartilha a função entre classificação e publicação. (`app/escala/utils.py:1124`, `app/colaboradores/services/calendario.py:839`, `app/colaboradores/services/calendario.py:840`) |
+| Selo sem mordida | **Curado para os mutantes exercitados acima.** (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:260`) |
+| Ordem de trava | Nenhuma aquisição nova no delta; ausência de corrida operacional: **[não verificado]**. (`app/ponto/portas/celula.py:639`) |
+| Pouso antes do pré-requisito | Condição permanece expressa; cumprimento: **[não verificado]**. (`app/ponto/services/cartorio.py:174`) |
+
+**5. LEI-AKITA dos commits** [nao verificado]
+
+A linha da **obra/303970f1** corresponde ao desenho: juiz, carregador, predicado, três sítios migrados e leitores indicados existem; `juiz unico` é padrão cadastrado. Resultados dos RED citados: **[não verificado]**. (`app/ponto/precedencia.py:194`, `app/ponto/precedencia.py:212`, `app/ponto/precedencia.py:505`, `app/ponto/services/declarar_dia.py:74`, `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:65`, `app/docs/GLOSSARIO.md:12`)
+
+A linha do **delta/16298e59** é **parcialmente literal**: `achados`, `test_so_encolhe`, zero juízes adicionais e o padrão conferem. Porém, `testemunha=folga_lancada_do_dia` não descreve o que o teste novo lê: ele lê **o resultado de `achados` sobre fonte sintética**, sem chamar essa função do juiz. Cabe corrigir essa descrição na entrega; isso não desfaz a mordida demonstrada. (`app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:177`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:251`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:260`)
+
+**Bloqueia liberação incondicional:** comprovação do pré-requisito operacional ainda **[não verificado]**. **Fila:** C5, gerador e fase; documentação deve acompanhar o marco. **Não procede:** reabrir fase nesta obra, afirmar ausência do juiz em JUIZES.md, ou manter a acusação de catraca sem mordida para os quatro mutantes examinados. (`app/ponto/services/cartorio.py:174`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:21`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:160`, `app/docs/BACKLOG.md:797`, `app/docs/LEIS.md:132`, `app/docs/JUIZES.md:84`, `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:260`)
 
 ## 01/11 02:00 · sessao fcd1a1f10e20 · - · - · origem=Ronald (tmux)
 
@@ -825,60 +887,4 @@ Caso de produção com colaborador, datas de vínculo e dia: **[nao verificado]*
 
 Os seis testes funcionais usam fixture com `ativa=True`, início fixo em 01/01/2026 (`app/escala/tests/test_fase_conflitante.py:49-51`) e janela de setembro (`:30-31`); os corpos acima não verificam troca de vínculo, vínculo encerrado, futuro ou geradora de célula (`:60-97`). O teste da API que injeta snapshot e confere conteúdo é de **`previsto_cego`**, não de `fase_conflitante` (`app/api/tests/test_api_mensageria_saude.py:114-124`). Resultado de execução destes testes: **[nao verificado]**.
 
-## 01/11 00:25 · sessao ab9069c1e335 · V3-P5-PRORROGACAO-POR-INTERVALO · verificador · origem=Code
-
-**O comentário foi corrigido; o delta desta volta não muda valores calculados.** As duas alterações são “HE100” → “HE50”, coerentes com o teste central. (app/ponto/motor_calculo_v2.py:145; app/ponto/motor_calculo_v2.py:146; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:70)
-
-**1. Situação dos achados da b1**
-
-| Achado | Estado em 5394309c |
-|---|---|
-| **P1 — excesso microscópico de `float` sobre a união** | **Superado pelo descarte da triagem; sem cura numérica.** A acumulação continua em `float`, e as propriedades continuam usando tolerância `1e-9`. (app/ponto/motor_calculo_v2.py:193; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:203; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:205) |
-| **P2 — overflow no extremo de datetime** | **Superado pelo descarte da triagem; possibilidade técnica permanece.** O retorno consulta `minutos_noturnos` mesmo sem pausas; essa função continua avançando datas sem guarda de overflow. (app/ponto/motor_calculo_v2.py:196; app/ponto/motor_calculo_v2.py:104; app/ponto/motor_calculo_v2.py:117) |
-| **P3 — `feriados=set()` permite fallback ORM** | **Superado como impeditivo pela triagem; mecanismo permanece.** Data ausente chama `is_feriado`, que consulta o juiz e converte exceções em `False`. (app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:66; app/ponto/motor_calculo_v2.py:953; app/ponto/motor_calculo_v2.py:955; app/ponto/motor_calculo_v2.py:39; app/ponto/motor_calculo_v2.py:43) |
-| **P4 — comentário atribuindo o caso à HE100** | **Resolvido.** Agora diz HE50, como as expectativas HE50=2h, HE100=0 e HE50 noturna=2h. (app/ponto/motor_calculo_v2.py:145; app/ponto/motor_calculo_v2.py:146; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:70; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:72) |
-
-As demais conclusões e ressalvas da b1 permanecem:
-
-- **Caso central corrigido anteriormente, preservado:** desconto esperado de 60 minutos, HE50 noturna de 2h e noturnas de 8h. Isso está nas asserções; execução nesta árvore é **[não verificado]**. (app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:112; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:72; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:82)
-- **Laço parado, resultado negativo ou acima do todo seguem afastados pela estrutura**, ressalvadas exceções: o cursor avança, somente durações positivas entram na soma e o retorno aplica o teto do todo. (app/ponto/motor_calculo_v2.py:179; app/ponto/motor_calculo_v2.py:188; app/ponto/motor_calculo_v2.py:193; app/ponto/motor_calculo_v2.py:196)
-- **Normalização e limites temporais permanecem:** aware converte de fuso; naive usa `localize` sem política explícita para ambiguidade/inexistência; o cursor relê o instante normalizado. Há casos específicos de mudança de offset, verão e segundos. (app/ponto/motor_calculo_v2.py:73; app/ponto/motor_calculo_v2.py:186; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:415; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:420; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:480)
-- **Import, helper, assinatura e alcance do patch seguem sem defeito identificado:** `_aw` é local, Django é declarado, `he_pontas` é desempacotado em quatro campos e o wrapper resolve a função substituída pelos mutantes. (app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:44; app/requirements.txt:13; app/ponto/calculador/regras.py:818; app/ponto/motor_calculo_v2.py:1915)
-- **Limites das expectativas e do oráculo permanecem:** a grade reutiliza `localizar`, trabalha com minutos inteiros e reconhece políticas da casa; os casos históricos e com segundos usam interseções próprias. (app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:157; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:160; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:167; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:410; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:473)
-- **Alcance produtivo continua delimitado:** a alimentação diária passa `intervalos=()`, enquanto o adaptador por par fornece as pausas. (app/ponto/calculador/alimentacao.py:514; app/ponto/calculador/periodo.py:507)
-- **Nova suíte após a correção, suíte completa, impacto produtivo, ordem de travas e pouso:** **[não verificado]**. O GREEN anterior mencionado na triagem não demonstra execução após este delta. **[não verificado]** [nao verificado]
-
-**2. Linhas alteradas fora do corpo**
-
-**Nenhuma no `diff2.txt` fornecido.** As únicas linhas alteradas são os comentários **145 e 146**, dentro da função delimitada por **121–196**. A comparação sintática em memória, revertendo apenas essas duas substituições, resultou em AST idêntica. (diff2.txt:5; app/ponto/motor_calculo_v2.py:121; app/ponto/motor_calculo_v2.py:145; app/ponto/motor_calculo_v2.py:146; app/ponto/motor_calculo_v2.py:196)
-
-A completude histórica do anexo perante os commits não pôde ser conferida: a cópia não contém `.git`. **[não verificado]** [nao verificado]
-
-**3. Escritores, leitores e mudança de valores**
-
-O corpo devolve **um único escalar: desconto noturno em minutos**, produzido pela acumulação em `total` e limitado pelo noturno do recorte. Não devolve diretamente HE50, HE100 ou minutos legais. (app/ponto/motor_calculo_v2.py:176; app/ponto/motor_calculo_v2.py:193; app/ponto/motor_calculo_v2.py:196)
-
-| Caminho | Quem lê e quem escreve o resultado derivado |
-|---|---|
-| **HE noturna** | `he_noturna` subtrai o escalar e reparte o saldo entre HE50/HE100. `_aplicar_he_noturna` grava os campos do período; `regras.do_dia` grava as rubricas em horas. (app/ponto/motor_calculo_v2.py:442; app/ponto/motor_calculo_v2.py:448; app/ponto/motor_calculo_v2.py:450; app/ponto/motor_calculo_v2.py:1008; app/ponto/motor_calculo_v2.py:1010; app/ponto/calculador/regras.py:828; app/ponto/calculador/regras.py:830) |
-| **Noturnas pelo motor** | `_noturno_dos_intervalos` encaminha o escalar; `calcular_noturnas` subtrai e aplica o fator; `_escrever_noturnas` grava relógio/legais no período. (app/ponto/motor_calculo_v2.py:1915; app/ponto/motor_calculo_v2.py:973; app/ponto/motor_calculo_v2.py:974; app/ponto/motor_calculo_v2.py:992; app/ponto/motor_calculo_v2.py:993) |
-| **Noturnas pelo calculador** | `_ContextoNoturno` empresta o mesmo wrapper; `noturnas_do_dia` subtrai o desconto. `do_dia` escreve horas/detalhes; o adaptador por par escreve relógio/legais no período. (app/ponto/calculador/regras.py:63; app/ponto/calculador/regras.py:86; app/ponto/calculador/regras.py:840; app/ponto/calculador/regras.py:841; app/ponto/calculador/periodo.py:507; app/ponto/calculador/periodo.py:752; app/ponto/calculador/periodo.py:753) |
-| **Persistência e apresentação posteriores** | `lavrar` agrega e persiste `DiaPago`; `ResultadoMes` agrega para o fechamento mensal. Apresentação diária e exportação leem esses resultados. (app/ponto/services/dia_pago.py:179; app/ponto/services/dia_pago.py:322; app/ponto/services/dia_pago.py:358; app/ponto/motor_calculo_v2.py:321; app/ponto/motor_calculo_v2.py:340; app/ponto/motor_calculo_v2.py:344; app/ponto/services/fechamento.py:1128; app/ponto/services/dia_pago.py:922; app/folha/export.py:436) |
-
-Os outros cinco locais de chamada direta encontrados estão no teste P5: `_f`, caso com segundos, `_celula` e os dois `_caso`. (app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:108; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:142; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:197; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:409; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:472)
-
-**Nenhum desses leitores muda de valor pelo delta2**, que altera somente comentários. As mudanças numéricas descritas na b1 pertencem à cura anterior, preservada nesta cópia. (diff2.txt:9; diff2.txt:11; app/ponto/motor_calculo_v2.py:145; app/ponto/motor_calculo_v2.py:196)
-
-**4. Classes que já reprovaram obra**
-
-**Não é possível certificar todo o diff `e0bdbc8e..5394309c`: esse diff não foi fornecido e não há histórico Git na cópia. [não verificado]** No corpo P5, consumidores e testes examinados:
-
-| Classe | Resultado delimitado ao que foi lido |
-|---|---|
-| **Segundo juiz** | **Não encontrado.** O corpo consulta a mesma `minutos_noturnos`; a autoridade do valor do par permanece registrada. (app/ponto/motor_calculo_v2.py:191; app/ponto/motor_calculo_v2.py:196; app/core/juizes.py:1160) |
-| **Segundo escritor introduzido pela cura** | **Não encontrado.** O corpo retorna o escalar; os campos derivados passam pelos escritores existentes. (app/ponto/motor_calculo_v2.py:196; app/ponto/motor_calculo_v2.py:992; app/ponto/motor_calculo_v2.py:1008; app/ponto/calculador/periodo.py:752) |
-| **Relógio fora da borda** | **Não encontrado.** O cursor deriva das entradas e os testes fixam datas, sem leitura de “agora” nesses trechos. (app/ponto/motor_calculo_v2.py:162; app/ponto/motor_calculo_v2.py:186; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:52; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:187) |
-| **Derivação paralela de fonte única** | **Não encontrada no corpo produtivo.** A presença noturna é consultada em `minutos_noturnos`; a regra independente está no teste como oráculo. (app/ponto/motor_calculo_v2.py:191; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:151) |
-| **RED sem mordida** | **Não encontrado por inspeção.** O patch alcança o símbolo chamado, e há testemunhas para os cinco mutantes. Execução nesta árvore: **[não verificado]**. (app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:347; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:356; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:359; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:365; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:454; app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:531) |
-
-_1333 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1334 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
