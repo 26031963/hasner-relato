@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: ensaio | pid=1191526 | arquivo=/home/ronald/saas-hasner/logs/gfja_fase_C.out
+ESPERANDO: sombra | pid=666379 | arquivo=/home/ronald/saas-hasner/logs/cobparc/v4/sombra_bump_v5.run
 DESENHO CONTENCAO-SESSOES-SIMULTANEAS (11:49): lei=escritor unico da reserva pergunta=clear/SessionStart da sessao S2 poda as reservas VIVAS de S1? o aval diz 'sessao anterior', ambiguo com 2 sessoes vivas; + matcher SessionStart startup/resume falta em .claude/settings.json (so compact/clear) e e dele; + ultimo_clear.json 30/10 tem session_id vazio: payload sem session_id = todo Agent PORTA-NAO-SEI -- a obra segue nos 6 procedentes Codex v1
 DESENHO CONTENCAO-QUE-MORDE: lei=escritor unico pergunta=quem encerra a reserva de Agent entre sessoes bin/disjuntor.py:1521 -- RESPONDIDA pelo aval de desenho do Ronald: dono sessao e agente, poda no SessionStart, estado ausente nega
 LIBERADA B3 GRADE-FOLGA-JUIZ 10:36 (desenho, sha ca3acfbd) -- linha consumida
@@ -5743,3 +5743,6 @@ DESPACHO GRADE-FOLGA-JUIZ-a: retirar trecho eh_trabalho (calendario.py:840 da co
 - 11:33 aval COBPARC-DIFF-ISOLADO recebido. DECISAO TECNICA: 'HEAD' = arvore da copia wt-cobparc-222305 (a que pousa), A = REGRA_VERSOES sem (3,'2026-09'), B = com, ambos forcar=True; F0 x A-forcado = ATA-DEFASADA-COMP09. Script logs/sombra/cobparc_v5_bump_forcado.py; roda quando a sombra soltar (ensaio GRADE pid 1191526).
 - 11:47 aval: construtor CONTENCAO P1 v4 (acdf39cac8cf752a4) entrega e termina (AGENTE-NAO-ESPERA); sessao colhe codex_v1.r em shell de fundo, construtor reabre so para procedentes.
 - 11:49 CONTENCAO P1 v4 entregue (copia wt-contencao-v4-111700 @50452ff0): Codex v1 REPROVOU, 6 procedentes (a corrida 7o agente, b B1 checado, c --reabre ausente, d hook_stop _disjuntor_contido, e regex P1, f oraculo trava_curta), 10 descartes com motivo; construtor novo cura (a)-(f) RED->GREEN e lanca Codex v2 destacado. Suite inteira ainda nao.
+- 12:06 CONTENCAO P1 v4 curas Codex v1 (a)-(f) na copia wt-contencao-v4-111700 @f9728d1b (6 commits, RED red_v1_{a..f}.log, GREEN green_v1_*.log, 7 mutantes v5 MORDEM, 21 vizinhos rc=0, ruff OK). Em fundo: test_disjuntor inteiro (green_v1_disjuntor_inteiro.log) e Codex v2 (codex_v2.r). Depois: suite inteira, opus final.
+- 12:08 CONTENCAO test_disjuntor.sh inteiro na copia f9728d1b: rc=0, 'todos os mutantes caem, os controles passam', 0 NAO MORDE/FALHOU (logs/contencao/v2/p1/v4/green_v1_disjuntor_inteiro.log). Falta Codex v2.
+- 12:08 GRADE ensaio sombra rc=0 (logs/grade_juiz/va/ensaio/fase_C.txt): comp09 EXPORTADA A x C colabs_mexidos 0, FM_HASH 09 emp1-4 igual C0=C; comp10 10 colabs (emp2 5, emp3 5) dias_previstos +25 minutos_previstos +11104 minutos_realizados +5474 horas_noturnas +6.81; comp11 5 colabs. Reversao reversao_ANTES.jsonl. Proximo: opus final.
