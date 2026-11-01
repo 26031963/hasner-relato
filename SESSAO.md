@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 15:18:50.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (133.2 MB). Acoes na janela: **622**.
+**Medido em 01/11/2026 15:24:16.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (133.2 MB). Acoes na janela: **619**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -629,6 +629,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 03:24:30 | Bash | Read last O261-E pouso and next lines | `cd /home/ronald/saas-hasner && awk '/^## 23:39 POUSO O261-E-F1C4-LEN-VIVOS/{f=1} f{print; n++} n>30{exit}' app/docs/RELATO.md \| cut -c1-400; grep -n '^\| LENVIVOS-A6-ALARME\\|^\| LENVIVOS-SOBRAS' app/docs/BACKLOG.md \| cut -c1-700` |
 | 03:24:23 | Bash | Find O261-E F1 progress | `cd /home/ronald/saas-hasner && ls -la logs/o261e/ \| tail -25; grep -n 'O261-E\\|o261e' app/docs/RELATO.md \| tail -8 \| cut -c1-300; git worktree list \| grep -i o261` |
 | 03:24:19 | Bash | Read O261-E state columns and logs | `cd /home/ronald/saas-hasner && sed -n 814p app/docs/BACKLOG.md \| awk -F' \\\| ' '{for(i=3;i<=NF;i++) print i": "substr($i,1,900)}'; ls logs/ \| grep -i 'o261' \| head` |
-| 03:24:14 | Bash | Read O261-E and CALENDARIO-HOJE rows | `cd /home/ronald/saas-hasner && grep -n '^\| O261-E-CELULA-20-UM-DONO\\|^\| CALENDARIO-HOJE-MINIMO' app/docs/BACKLOG.md \| cut -c1-1200` |
-| 03:24:08 | Bash | Write GRADE design question at topo, check next item | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO: verificador-GRADE-v10') assert L[3].startswith('DESENHO CONTENCAO-QUE-MORDE') g=('DESENHO GRADE-FOLGA-JUIZ: lei=juiz unico pergunta=o eh_trabalho PUBLICADO do dia: quem responde, a celula crua (main calendario.py:785) ou o juiz do dia trabalho_do_dia (copia calend ...` |
-| 03:23:47 | Bash | Confirm eh_trabalho change in copy | `cd /home/ronald/wt-grade-v10-014751/app && sed -n 836,842p colaboradores/services/calendario.py; git diff 40988459..017d2884 -- colaboradores/services/calendario.py \| grep -n 'eh_trabalho' \| head; sed -n 190,204p colaboradores/services/calendario.py` |
