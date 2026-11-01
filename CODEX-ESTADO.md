@@ -1,7 +1,158 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **31/10/2026 22:06** · publicado em **31/10/2026 22:08** (UTC-3)
+> Ultima resposta processada: **31/10/2026 22:09** · publicado em **31/10/2026 22:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 31/10 22:09 · sessao 5b0dcb328d14 · V3-P5-PRORROGACAO-POR-INTERVALO · verificador · origem=Code
+
+**A cura dos três casos novos procede. O aval irrestrito para “qualquer aware” NÃO procede:** ainda há uma entrada aceita que escolhe o passo de 1 minuto e atravessa uma borda. Ela exige construir o aware incorretamente com `tzinfo=TZ_LOCAL`; seu equivalente UTC funciona corretamente. (`app/ponto/motor_calculo_v2.py:73–79`, `:186–194`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:460–480`)
+
+1. **Cursor, progresso e limites**
+
+   Primeiro, o corpo localiza as pontas, recorta os intervalos ao turno, descarta peças vazias e une sobreposições. Cada união começa com `a = _i`. (`app/ponto/motor_calculo_v2.py:162–178`)
+
+   A cada passagem:
+
+   - Lê a parede de `localizar(a)`, remove fuso, minutos, segundos e microssegundos e soma uma hora. Portanto, busca a próxima hora inteira dessa parede, sem arredondar a duração da pausa. (`app/ponto/motor_calculo_v2.py:186`)
+   - Aplica `TZ_LOCAL.localize(hora_cheia)` e depois `localizar`, obtendo `proxima`. (`app/ponto/motor_calculo_v2.py:187`)
+   - Se `proxima <= a`, substitui por `a + 1 minuto`; caso contrário, preserva o corte, mesmo que faltem apenas segundos. Limita então por `_f`. (`app/ponto/motor_calculo_v2.py:188–190`)
+   - Consulta os dois prefixos da mesma `minutos_noturnos`. Se a diferença superar `1e-9`, soma **toda a duração** de `[a,b]`; depois faz `a = b`. (`app/ponto/motor_calculo_v2.py:191–194`)
+
+   Depois de um passo de 1 minuto, o cursor conserva o `tzinfo` da soma. A passagem seguinte chama novamente `localizar(a)`; isso **não garante normalização quando `a.tzinfo` é o próprio objeto `TZ_LOCAL`**, conforme o contraexemplo do item 2. (`app/ponto/motor_calculo_v2.py:79`, `:186–194`)
+
+   Nas sondas em memória dos corpos da cópia, obtive:
+
+   | Entrada examinada | Resultado atual |
+   |---|---:|
+   | Pausa 04:59:30–05:01, sem prorrogação | 0,5 min |
+   | Mesma pausa, com prorrogação | 1,5 min |
+   | Pausa 21:59:30–22:01, ambas as flags | 1 min |
+   | Naive inexistente de 04/11/2018, 00:00:30–06h, sem prorrogação | 239,5 min |
+   | Mesmo caso, com prorrogação | 299,5 min |
+
+   Os três casos sem prorrogação correspondem às fixtures novas; os valores com prorrogação resultam da consulta aos prefixos com a flag ligada. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:460–480`; `app/ponto/motor_calculo_v2.py:110–116`, `:191–196`)
+
+   No caso naive inexistente, `a` começa como `00:00:30-03`, mas sua parede é relida como `01:00:30-02`; o primeiro corte vira `02:00-02`. Assim, desaparece a sequência anterior de passos mínimos até as 05h. (`app/ponto/motor_calculo_v2.py:78–79`, `:186–190`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:472–480`)
+
+   Também reproduzi **354 minutos em 1914**, **270 na entrada do verão de 2018** e **450 na saída**, conforme as bordas declaradas nos testes. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:389–405`; `app/ponto/motor_calculo_v2.py:186–196`)
+
+   Para a hora ambígua `17/02/2018 23:30:30`, com turno 20h–08h e pausa até 06h, as ocorrências `-02` e `-03` produziram, respectivamente, **389,5 e 329,5 minutos sem prorrogação**, e **449,5 e 389,5 com prorrogação**. A escolha da ocorrência pertence à localização da entrada; o corpo depois trabalha pelos instantes recebidos. (`app/ponto/motor_calculo_v2.py:73–79`, `:100–116`, `:162–196`)
+
+   Quanto às propriedades:
+
+   - **`b <= a` e laço sem progresso: NÃO procedem**, para operações concluídas sem exceção. Dentro do laço, `_f > a`; a guarda garante outro candidato posterior; o `min` continua posterior. O cursor avança estritamente numa representação de precisão finita. (`app/ponto/motor_calculo_v2.py:179`, `:188–194`)
+   - **Resultado negativo ou superior ao total devolvido por `minutos_noturnos(entrada,saida)`: NÃO procedem.** As parcelas somadas são positivas, o minuendo acumula durações positivas e o retorno aplica o teto. (`app/ponto/motor_calculo_v2.py:112–118`, `:176–196`)
+   - **Excesso material sobre a união: NÃO procede.** Cada trecho pertence à união recortada e é percorrido uma vez. **Excesso literal de `float` existe:** a pausa prorrogada de 60 min e 25 s retorna `60.41666666666667`, contra duração direta `60.416666666666664`, diferença aproximada de `7,1e-15` minuto. (`app/ponto/motor_calculo_v2.py:164–194`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:119–125`, `:185`)
+   - Acima de 26h, o teto final pode devolver zero; isso preserva “parte ≤ todo”, sem corrigir o comportamento do minuendo, que está fora deste aval. (`app/ponto/motor_calculo_v2.py:93–95`, `:151–161`, `:196`)
+
+2. **O passo de 1 minuto pode ser escolhido e pode cruzar borda**
+
+   **SIM**, nesta entrada sintética aceita pelo corpo, usando exatamente o `TZ_LOCAL` do módulo: (`app/ponto/motor_calculo_v2.py:28`, `:73–79`, `:162–164`, `:186–190`)
+
+   ```python
+   entrada = TZ_LOCAL.localize(datetime.datetime(2018, 11, 4, 20))
+   saida   = TZ_LOCAL.localize(datetime.datetime(2018, 11, 5, 7))
+   ini = datetime.datetime(2018, 11, 4, 20, 53, 30, tzinfo=TZ_LOCAL)
+   fim = datetime.datetime(2018, 11, 4, 20, 55,  0, tzinfo=TZ_LOCAL)
+   ```
+
+   A atribuição direta de `tzinfo` deixa a pausa com LMT `-03:06`. Seus instantes correspondem a **21:59:30–22:01:00 no offset vigente `-02`**. Como `localizar(a)` recebe o mesmo objeto de fuso, mantém essa parede atrasada; calcula `proxima = 21:00-02`, anterior a `a`, e escolhe o piso. (`app/ponto/motor_calculo_v2.py:79`, `:186–189`)
+
+   | Passo | Instante local vigente | Aumento do prefixo | Duração somada |
+   |---|---|---:|---:|
+   | Primeiro | 21:59:30 → **22:00:30** | 0,5 min | **1 min** |
+   | Segundo | 22:00:30 → 22:01:00 | 0,5 min | 0,5 min |
+   | Total | Pausa com apenas 1 min dentro da janela | 1 min | **1,5 min** |
+
+   Reproduzido com **e sem prorrogação**: a borda das 22h fica no interior do primeiro trecho, e o corpo transforma presença parcial em duração integral. (`app/ponto/motor_calculo_v2.py:103`, `:188–194`)
+
+   Há equivalente nas 05h: turno canônico **04/11/2018 22h → 05/11 07h**; pausa construída com `tzinfo=TZ_LOCAL` em **05/11 03:53:30–03:55**, equivalente a **04:59:30–05:01 no offset `-02`**. O piso alcança **05:00:30** e devolve **1 contra 0,5 minuto**, sem prorrogação. Com prorrogação, os 1,5 minuto são devidos. (`app/ponto/motor_calculo_v2.py:101`, `:186–194`)
+
+   Essa construção de `pytz` é inadequada, mas o corpo não a rejeita. **Ela não demonstra falha na forma UTC aware declarada para o banco:** convertendo os mesmos instantes para UTC antes da chamada, o desconto das 05h volta a 0,5. Ocorrência produtiva dessa construção: **[nao verificado]**. (`CLAUDE.md:218`; `app/ponto/motor_calculo_v2.py:79`, `:162–196`)
+
+3. **Diferenças para os corpos anteriores e chamadores**
+
+   Comparação em memória com os anteriores representados pelos mutantes da cópia, todos os casos abaixo sem prorrogação: (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:408–431`, `:483–508`)
+
+   | Caso | e4ed207c representado | 14a61ef3 representado | Atual |
+   |---|---:|---:|---:|
+   | 04:59:30–05:01 | 0,5 | **1** | 0,5 |
+   | 21:59:30–22:01 | 1 | **1,5** | 1 |
+   | Naive inexistente, 00:00:30–06h | 239,5 | **240** | 239,5 |
+   | Histórico de 1914 | **360** | 354 | 354 |
+   | Entrada/saída do verão, fixtures existentes | 270 / 450 | 270 / 450 | 270 / 450 |
+
+   As entradas e expectativas estão nas fixtures; os cortes distintos estão nos dois mutantes e no corpo atual. Portanto, **identidade geral com e4ed207c NÃO procede**, enquanto os dois casos ordinários com segundos recuperam os valores daquele corpo. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:396–405`, `:426–429`, `:460–480`, `:502–506`; `app/ponto/motor_calculo_v2.py:186–193`)
+
+   **“Aware UTC com segundos não muda chamador” NÃO procede.** Usei entrada `15/10/2026 01:00Z`, saída `10:00Z`, pausa `07:59:30Z–08:01Z`, `pr=False`: são os instantes do primeiro teste novo. O desconto muda de **1 para 0,5 minuto** frente a 14a61ef3. (`app/ponto/motor_calculo_v2.py:79`, `:186–196`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:460–464`, `:503–508`)
+
+   | Leitor, na mesma entrada | 14a representado → atual |
+   |---|---|
+   | `MotorBase._noturno_dos_intervalos` e método emprestado ao contexto | 1 → 0,5 min. (`app/ponto/motor_calculo_v2.py:1915–1916`; `app/ponto/calculador/regras.py:60–63`) |
+   | `calcular_noturnas`, fator 1 | Relógio/legais: 419 → **419,5 min**. (`app/ponto/motor_calculo_v2.py:971–980`) |
+   | `noturnas_do_dia` e `noturno_no_par`, fator 1 | Relógio/legais: 419 → **419,5 min**. (`app/ponto/calculador/regras.py:80–89`; `app/ponto/calculador/periodo.py:508–511`) |
+   | `he_noturna`, HE100 = 538,5 min trabalhados e HE50 = 0 | HE100 noturna: 419 → **419,5 min**. (`app/ponto/motor_calculo_v2.py:392–406`, `:440–451`) |
+
+   A HE por período encaminha essas pontas, intervalos e flag à mesma função e escreve seus retornos divididos por 60. Assim, quando essa ponta recebe os 538,5 minutos em HE100, a rubrica passa de `419/60` para `419,5/60` hora. Execução integral de `do_dia` e impacto produtivo persistido: **[nao verificado]**. (`app/ponto/calculador/regras.py:883–898`)
+
+4. **Expectativa, mordida, `subTest` e relógio**
+
+   **Valor copiado do resultado do motor: NÃO procede.** A expectativa principal é a duração absoluta da interseção da pausa com bordas fornecidas literalmente pelos testes. Compartilha `localizar` para converter as pontas; a chamada a `minutos_noturnos` serve à segunda asserção, de teto, e não calcula `esperado`. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:452–480`)
+
+   **Os três casos mordem `_piso_incondicional`: SIM.** Na execução em memória, atual/mutante deram, respectivamente, **0,5/1**, **1/1,5** e **239,5/240**; cada chamada ao teste sob o mutante levantou a `AssertionError` esperada. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:454–458`, `:460–508`, `:520–522`)
+
+   **O `subTest` do MORDE não esconde a sobrevivência do mutante.** Os testes internos são chamados diretamente dentro de `assertRaises`. Se não levantarem, a falha de `assertRaises` é registrada pelo `subTest` externo no runner. Confirmei substituindo em memória o mutante pelo corpo curado: o runner `unittest` terminou com **três falhas**, uma por nome. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:515–522`)
+
+   **Relógio solto: NÃO procede.** As datas são literais e `_local` apenas constrói/localiza o `datetime`. **Cobertura universal: NÃO procede**, pois os casos novos não exercitam o aware com o objeto base de fuso do item 2. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:377–379`, `:460–480`)
+
+   Executei **21 testes selecionados por AST em memória**, incluindo as classes novas, com sucesso. Isso não equivale à suíte Django canônica, que permanece **[nao verificado]**. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:80–130`, `:244–284`, `:382–522`)
+
+5. **Classes reprovadas e escritores/leitores**
+
+   **Segundo juiz, segundo escritor fora da porta e derivação paralela da janela: NÃO procedem neste delta.** A classificação continua vindo dos prefixos da mesma função; as novas atribuições são locais. **Selo sem mordida e relógio solto também NÃO procedem nos testes novos.** O achado residual é a insuficiência da normalização para uma forma aware aceita, não uma dessas duplicações. (`app/ponto/motor_calculo_v2.py:186–196`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:452–522`; `app/docs/JUIZES.md:29`)
+
+   | Valor | Quem escreve/fornece | Quem lê |
+   |---|---|---|
+   | Fuso | Configuração e inicialização de `TZ_LOCAL`. (`app/config/settings/base.py:93`; `app/ponto/motor_calculo_v2.py:28`) | Conversão, localização do corte e fixtures. (`app/ponto/motor_calculo_v2.py:78–79`, `:187`; `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:379`) |
+   | Pontas e intervalos | Argumentos dos chamadores; carimbo dos efetivos. (`app/ponto/motor_calculo_v2.py:442–443`, `:1828–1830`, `:1915`) | Recorte/união; releitura por período. (`app/ponto/motor_calculo_v2.py:162–172`; `app/ponto/calculador/periodo.py:752`) |
+   | Prorrogação | Parâmetro/atributo do motor, contexto e CCT. (`app/ponto/motor_calculo_v2.py:758–762`; `app/ponto/calculador/regras.py:60–61`; `app/ponto/calculador/nucleo.py:348`) | Prefixos/teto e delegações. (`app/ponto/motor_calculo_v2.py:191–196`, `:1916`; `app/ponto/calculador/periodo.py:509`) |
+   | `_ent`, `_sai`, `pecas`, `unidas`, `_i`, `_f` | Localização, recorte, ordenação e união. (`app/ponto/motor_calculo_v2.py:162–178`) | Guarda, limite, prefixos e teto. (`app/ponto/motor_calculo_v2.py:179–196`) |
+   | `a` | Início da união e avanço `a = b`. (`app/ponto/motor_calculo_v2.py:178`, `:194`) | Guarda, parede, comparação, piso, prefixo e duração. (`app/ponto/motor_calculo_v2.py:179–193`) |
+   | `hora_cheia`, `proxima`, `b` | Construção da parede, localização, eventual piso e `min`. (`app/ponto/motor_calculo_v2.py:186–190`) | Localização seguinte, guarda, prefixo, soma e avanço. (`app/ponto/motor_calculo_v2.py:187–194`) |
+   | Prefixos e `total` | `minutos_noturnos`; inicialização e acumulação local. (`app/ponto/motor_calculo_v2.py:96–118`, `:176`, `:193`) | Teste de presença e retorno limitado. (`app/ponto/motor_calculo_v2.py:191–196`) |
+   | Desconto retornado | Retorno desta função. (`app/ponto/motor_calculo_v2.py:196`) | Subtrações nos leitores do motor e calculador. (`app/ponto/motor_calculo_v2.py:442–443`, `:973`, `:1915`; `app/ponto/calculador/regras.py:86`) |
+   | Resultados noturnos | Escritores existentes dos períodos e rubricas. (`app/ponto/motor_calculo_v2.py:991–993`; `app/ponto/calculador/regras.py:896–898`, `:912–914`; `app/ponto/calculador/periodo.py:753–754`) | Consumo posterior ou alteração persistida por esta obra: **[nao verificado]**. |
+   | Fixtures, `desc`, bordas, `esperado` | Literais/helper, chamada real e interseção declarada. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:377–379`, `:452–480`) | Asserções de igualdade e teto. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:457–458`) |
+   | Mutante, `nome`, `t` e símbolo substituído | Definição do mutante, lista de métodos, instanciação e `mock.patch`. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:483–520`) | Import/chamada em `_caso`, `getattr` e `assertRaises`. (`app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:453–454`, `:521–522`) |
+
+   **Ordem de trava, execução histórica do RED, pré-requisitos e pouso efetivo: [nao verificado].** [nao verificado]
+
+## 31/10 22:08 · sessao aa7f9ac23376 · - · - · origem=Ronald (tmux)
+
+Achado: **a alegação “o passo de 1 minuto nunca cruza borda” NÃO procede para todo `datetime` aware aceito pelo corpo**. `datetime(..., tzinfo=TZ_LOCAL)` usa diretamente o objeto base `pytz`, com LMT `-03:06`; `astimezone(TZ_LOCAL)` pode devolver o próprio objeto, de modo que `localizar(a)` não normaliza essa entrada. O corpo aceita essa forma sem validação. (`app/ponto/motor_calculo_v2.py:73–79`, `:162–164`, `:186–189`)
+
+Contraexemplo reproduzido em memória:
+
+```python
+ent = TZ_LOCAL.localize(datetime.datetime(2018, 11, 4, 20))
+sai = TZ_LOCAL.localize(datetime.datetime(2018, 11, 5, 7))
+ini = datetime.datetime(2018, 11, 4, 20, 53, 30, tzinfo=TZ_LOCAL)
+fim = datetime.datetime(2018, 11, 4, 20, 55, tzinfo=TZ_LOCAL)
+```
+
+A pausa representa **21:59:30→22:01:00 `-02:00`**, duração 1,5 minuto. O candidato calculado é **21:00 `-02:00`**, anterior a `ini`; o piso leva o cursor a **22:00:30 `-02:00`**, atravessando 22h. O prefixo aumenta 0,5 minuto nesse primeiro passo, mas o corpo soma 1 minuto; acrescenta mais 0,5 no restante. **Resultado 1,5 contra 1 minuto**, tanto com `pr=False` quanto com `pr=True`. (`app/ponto/motor_calculo_v2.py:103`, `:186–194`)
+
+Também reproduzi borda das 05h: entrada canônica **04/11/2018 22h**, saída **05/11/2018 07h**, pausa construída com `tzinfo=TZ_LOCAL` **05/11 03:53:30→03:55**, equivalente a **04:59:30→05:01 `-02:00`**. Candidato **04:00 `-02:00`**, piso até **05:00:30**; **desconto 1 contra 0,5 minuto sem prorrogação**. Com prorrogação, retorna corretamente 1,5 minuto. (`app/ponto/motor_calculo_v2.py:101`, `:186–194`)
+
+Depois do piso, `a = b` mantém o mesmo `tzinfo`; a próxima passagem chama novamente `localizar(a)`, que continua sem normalizar quando os objetos de fuso são idênticos. Portanto, o piso pode ser escolhido repetidamente. (`app/ponto/motor_calculo_v2.py:79`, `:186–194`)
+
+Outra divergência dessa forma aware: entrada/saída canônicas **14/10/2026 22h→15/10 07h**, pausa base-LMT **14/10 23:55→23:56**, equivalente a **15/10 00:01→00:02 `-03:00`**. Ambos os prefixos retornam 120 e o desconto é **0 contra 1 minuto**, com ambas as flags. Aqui a origem é a combinação já existente de `localizar` com `fim.date()` no minuendo, que omite o segmento do dia seguinte quando o fim conserva a data de parede anterior. (`app/ponto/motor_calculo_v2.py:79`, `:97–104`, `:191–196`)
+
+Esses exemplos usam construção inadequada de `pytz`, **fora da forma UTC aware declarada para o banco**. O equivalente UTC canônico do contraexemplo das 05h retorna 0,5 no corpo atual; não demonstram defeito nessa forma produtiva. (`CLAUDE.md:218`; `app/ponto/motor_calculo_v2.py:79`, `:186–196`)
+
+**`b <= a`, laço sem progresso, negativo e excesso material sobre união/todo NÃO procedem para operações válidas e intervalos finitos**: a guarda assegura candidato posterior, o fim também é posterior dentro do laço, cada trecho é percorrido uma vez, só se somam durações positivas e existe teto final. Exceções por limites de `datetime` não são laço infinito. (`app/ponto/motor_calculo_v2.py:164–196`)
+
+Sonda adicional em memória: **44.160 combinações** em torno das transições disponíveis, com entradas UTC aware ou naive, ambas as flags, comparadas à união exata dos segmentos existentes de `minutos_noturnos`: nenhuma divergência encontrada. Isso é amostragem, não prova universal; banco, logs e suíte Django permanecem **[nao verificado]**. As fontes executadas foram os corpos da cópia. (`app/ponto/motor_calculo_v2.py:73–118`, `:162–196`)
 
 ## 31/10 22:06 · sessao 06d2750e0795 · - · - · origem=Ronald (tmux)
 
@@ -728,49 +879,4 @@ A função não é exportada para o Bash novo do wrapper; seu `timeout` interno 
 
 Casos do mesmo processo de selo não suportam paralelismo: compartilham árvore `A`, arquivo `EST`, variáveis globais da sonda, baseline por nome do caso e `meta.out` único. Os loops atuais são sequenciais e duas execuções independentes usam diretórios `mktemp` separados. Referências: `bin/tests/test_padrao_de_cima.sh:29`, `:35`, `:36`, `:39`, `:683`, `bin/tests/test_disjuntor.sh:39`, `bin/tests/_mordida.sh:156`, `:209`, `:335`.
 
-## 31/10 21:48 · sessao 00c6433b6e74 · - · - · origem=Ronald (tmux)
-
-Achados PDC, por leitura estática:
-
-1. **Bloqueia — leitor de modelos não migrado mantém janela de bloqueio em FIFO.** `_prepara` chama `CE.modelos` antes do novo `_so_modelos` (`bin/disjuntor.py:1222`, `bin/disjuntor.py:1224`). Esse primeiro leitor faz `isfile(c)` e depois `open(c).read()` sem `O_NONBLOCK` (`app/core/censo_escritas.py:102`, `app/core/censo_escritas.py:105`). Se um arquivo regular virar FIFO entre as duas operações, prende dentro da transição que já detém o flock (`bin/disjuntor.py:260`, `bin/disjuntor.py:275`). O novo caso planta FIFO antes da chamada, quando `isfile` já o rejeita; não cobre a troca concorrente (`bin/tests/test_padrao_de_cima.sh:600`, `bin/tests/test_padrao_de_cima.sh:601`). O `_abre` novo protege o segundo leitor e o sítio citado: abre com `O_NONBLOCK|O_NOFOLLOW`, valida `fstat` e recusa não regular (`bin/disjuntor.py:1250`, `bin/disjuntor.py:1277`, `bin/orcamento_contexto.py:74`, `bin/orcamento_contexto.py:76`).
-
-2. **Bloqueia — arquivo novo do próprio instrumento pode provar ESPERANDO.** O disjuntor reescreve `padrao_de_cima_geracao` em toda decisão PDC, mesmo sem alteração de eventos (`bin/disjuntor.py:1454`, `bin/disjuntor.py:1487`, `bin/disjuntor.py:1491`). O consumidor `_prova_arquivo` exclui os arquivos do próprio disjuntor por lista e inode, mas a lista não inclui geração (`bin/hook_stop_fila1.py:585`, `bin/hook_stop_fila1.py:598`). Caminho: topo declara `ESPERANDO: produtor | arquivo=logs/sessao/padrao_de_cima_geracao`; a primeira avaliação memoriza mtime, uma chamada PDC o altera, a seguinte considera a espera provada (`bin/hook_stop_fila1.py:658`, `bin/hook_stop_fila1.py:679`, `bin/hook_stop_fila1.py:620`, `bin/hook_stop_fila1.py:640`, `bin/hook_stop_fila1.py:642`). Isso libera o Stop por atividade do instrumento, sem prova da entrega esperada (`bin/hook_stop_fila1.py:1231`, `bin/hook_stop_fila1.py:1233`). O escopo preexistente também está ausente dessa exclusão (`bin/disjuntor.py:1521`, `bin/hook_stop_fila1.py:585`).
-
-3. **Fila — temporário de escopo vaza na falha posterior à criação.** `_pdc_grava_escopo` cria temporário, serializa e faz `replace`; o `except` apenas registra falha, sem `unlink(tmp)` (`bin/disjuntor.py:1518`, `bin/disjuntor.py:1521`, `bin/disjuntor.py:1522`). O escritor de estado vizinho tem limpeza explícita, portanto o comportamento é inconsistente (`bin/disjuntor.py:283`, `bin/disjuntor.py:286`). Falha de `json.dump`, fechamento ou `replace` deixa `.padrao_de_cima_escopo.*`; ocorrência no ambiente fornecido é [não verificado].
-
-4. **Fila — função com parâmetro `raiz` mistura árvores.** `decide_pdc(raiz)` usa a raiz explícita para resolvedor, geração e estado, mas `_relato_consistente()` ignora esse parâmetro e lê `hook_stop_fila1.RELATO` global (`bin/disjuntor.py:1370`, `bin/disjuntor.py:1372`, `bin/disjuntor.py:1376`, `bin/disjuntor.py:1466`, `bin/disjuntor.py:707`). A CLI normal alinha por ambiente; consumidor Python que fornece outra raiz pode gravar eventos de outra árvore (`bin/disjuntor.py:67`, `bin/disjuntor.py:1360`, `bin/disjuntor.py:1402`). É preexistente, mas está no escopo de leitores da função tocada (`bin/disjuntor.py:1376`).
-
-5. **Fila — escrita da geração tem validação depois da operação destrutiva e não verifica escrita completa.** `O_TRUNC` ocorre antes de validar arquivo regular e o retorno de `os.write` é ignorado (`bin/disjuntor.py:1487`, `bin/disjuntor.py:1489`, `bin/disjuntor.py:1491`). Escrita parcial faz escopo e geração discordarem, causando recusa posterior; não identifiquei liberação indevida por essa falha isolada, porque o fallback compara igualdade e recusa geração vazia (`bin/disjuntor.py:1501`, `bin/disjuntor.py:1549`). Não há `fsync` entre geração, estado e escopo; comportamento após queda do host é [não verificado] (`bin/disjuntor.py:1491`, `bin/disjuntor.py:281`, `bin/disjuntor.py:1521`).
-
-Mapa:
-
-| Estado | Escritores | Leitores e observação |
-|---|---|---|
-| `PDC_GERACAO` | `_pdc_geracao_grava`, invocado no callback PDC sob flock (`bin/disjuntor.py:1454`, `bin/disjuntor.py:1487`). | `_pdc_geracao_lida`, somente no fallback de `estado_pdc` (`bin/disjuntor.py:1499`, `bin/disjuntor.py:1548`); leitor indireto de mtime do Stop não foi migrado (`bin/hook_stop_fila1.py:578`, `bin/hook_stop_fila1.py:585`). |
-| `escopo.geracao` | `_pdc_grava_escopo`, após estado gravado e ainda sob flock (`bin/disjuntor.py:1462`, `bin/disjuntor.py:1514`, `bin/disjuntor.py:292`). | `_pdc_escopo_lido` carrega JSON, `estado_pdc` compara com geração (`bin/disjuntor.py:1529`, `bin/disjuntor.py:1549`). |
-| Arquivo de estado | Porta produtiva `_com_estado`, com arquivo temporário e `replace` (`bin/disjuntor.py:244`, `bin/disjuntor.py:278`, `bin/disjuntor.py:281`). Também fixtures gravam diretamente, sem geração (`bin/tests/test_padrao_de_cima.sh:103`, `bin/tests/test_padrao_de_cima.sh:565`, `bin/tests/test_padrao_de_cima.sh:576`, `bin/tests/test_padrao_de_cima.sh:620`). | `_com_estado` lê para transição, `ler_estado` lê para consultas/painel (`bin/disjuntor.py:267`, `bin/disjuntor.py:302`, `bin/disjuntor.py:1636`). |
-| `pdc.eventos`, `nomeados`, `libera_vistas`, `fotos`, `disparadas` | Callback de `decide_pdc`; não encontrei segundo escritor produtivo no censo textual, mas testes editam diretamente (`bin/disjuntor.py:1385`, `bin/disjuntor.py:1402`, `bin/disjuntor.py:1440`, `bin/disjuntor.py:1445`, `bin/disjuntor.py:1449`, `bin/tests/test_padrao_de_cima.sh:560`, `bin/tests/test_padrao_de_cima.sh:572`). | Decisão, agrupamento, janela e painel (`bin/disjuntor.py:1391`, `bin/disjuntor.py:1304`, `bin/disjuntor.py:1311`, `bin/disjuntor.py:1636`). |
-
-Os demais callbacks de `_com_estado` continuam escritores do **mesmo arquivo**, mas alteram outras chaves e preservam PDC; não precisam incrementar geração quando só muda B1/B3/B4/triagem (`bin/disjuntor.py:481`, `bin/disjuntor.py:831`, `bin/disjuntor.py:908`, `bin/disjuntor.py:1033`, `bin/disjuntor.py:1778`, `bin/disjuntor.py:1792`, `bin/disjuntor.py:2058`, `bin/disjuntor.py:2060`). O painel continua lendo PDC sem geração, mas sua função é apresentar contagem, não liberar ferramenta (`bin/disjuntor.py:1633`, `bin/disjuntor.py:1644`).
-
-A cura de `DISJUNTOR_DESLIGADO` no ramo de exceção está conectada à mesma autoridade `desligado()` usada no caminho normal e no wrapper; não cria juiz concorrente (`bin/disjuntor.py:151`, `bin/disjuntor.py:1600`, `bin/disjuntor.py:2085`, `bin/disjuntor.py:2096`). O caso novo verifica stdout vazio, sem verificar rc ou conteúdo JSON da negativa; qualquer saída antecipada sem stdout também satisfaz essa parte isolada (`bin/tests/test_padrao_de_cima.sh:328`, `bin/tests/test_padrao_de_cima.sh:329`).
-
-## 31/10 21:47 · sessao d420147522b3 · - · - · origem=Ronald (tmux)
-
-Não comprovei, nos fluxos de views/services/signals/models examinados, sequência de produção que altere insumo omitido da chave e volte ao C6 sobre a mesma `PerguntaDisputa` ou mesma `p.celula`; os candidatos abaixo reutilizam objetos somente em leitura, alteram campos da chave ou recarregam as perguntas. (`app/chamados/services/fio.py:222`, `app/chamados/models.py:1420`, `app/chamados/services/validacao.py:359`)
-
-| Fluxo | Sequência e conclusão |
-|---|---|
-| Render do fio/modal | Carrega `p` com `select_related` e `prefetch_related` → guarda as mesmas instâncias em listas → anexa a `ch.perguntas_disputa` → chama `.viva` → passa a lista ao explicador. Este preserva os objetos e chama `p.estado` e depois `fio_vivo(ps)`. Há reutilização real do memo, sem alteração dos insumos do C6 comprovada nesse trecho. (`app/chamados/services/fio.py:222`, `app/chamados/services/fio.py:239`, `app/chamados/services/fio.py:249`, `app/chamados/services/fio.py:279`, `app/chamados/services/fio.py:308`, `app/chamados/services/explicador.py:124`, `app/chamados/services/explicador.py:133`, `app/chamados/services/explicador.py:137`, `app/chamados/models.py:2479`) |
-| Gate de fechamento do chamado | `_plano_pergunta_viva` guarda as perguntas em `self._f1_ancoradas`; `_gravar_estado` recupera a lista e chama `_vivas_entre` novamente. O julgamento temporário muda `status_local` e aponta `p.chamado_destino` para `self`; destino e status do destino estão na chave. (`app/chamados/models.py:362`, `app/chamados/models.py:210`, `app/chamados/models.py:218`, `app/chamados/models.py:339`, `app/chamados/models.py:348`, `app/chamados/juizes.py:794`) |
-| Desarquivar / toque humano | `ch.reabrir()` chama `ressuscitar_perguntas`; depois `arquivo.levantar` salva e grava a trilha do toque; a view chama `ressuscitar_perguntas` novamente. Entretanto, cada chamada cria queryset novo, copia cada `p`, copia `_state.fields_cache`, substitui a célula pela projeção do julgamento e remove `_pv_memo` antes do C6. Não é prova de reutilização do memo anterior. (`app/chamados/views_arquivar.py:70`, `app/chamados/models.py:1389`, `app/chamados/views_arquivar.py:77`, `app/chamados/services/arquivo.py:208`, `app/chamados/services/arquivo.py:209`, `app/chamados/views_arquivar.py:86`, `app/chamados/models.py:1420`, `app/chamados/models.py:1427`, `app/chamados/models.py:1430`, `app/chamados/models.py:1434`, `app/chamados/models.py:1439`) |
-| Responder pelo PWA | C6 sobre `p` → eventual segunda consulta ao C6 **antes** da escrita → core altera resposta, respondida, validação e carimbos da chave → pode criar ausência → retorna sem nova chamada ao C6 sobre o `p` original. As perguntas da absorção são obtidas por novo filtro. (`app/chamados/views.py:1242`, `app/chamados/views.py:1257`, `app/chamados/views.py:1283`, `app/chamados/services/disputa_emissao.py:1247`, `app/chamados/services/disputa_emissao.py:1265`, `app/chamados/services/disputa_emissao.py:1295`, `app/chamados/services/materializacao.py:501`, `app/chamados/services/materializacao.py:509`, `app/chamados/services/disputa_emissao.py:1324`) |
-| Responder pela API | Carrega e julga `p` → chama o mesmo core → devolve resposta HTTP; não volta ao C6 sobre `p`. (`app/api/views.py:2680`, `app/api/views.py:2683`, `app/api/views.py:2695`, `app/api/views.py:2702`) |
-| Resgate pela resposta | Usa o destino já acessível pela pergunta, mas escreve arquivo/silêncio e trilha `resgatar_por_resposta`; essa ação não está entre os três toques humanos reconhecidos pelo C6. (`app/chamados/services/materializacao.py:658`, `app/chamados/services/materializacao.py:665`, `app/chamados/juizes.py:935`) |
-| Validar pergunta | Recebe ID e faz `.get()` de nova instância; carimba validação, materializa e atualiza os carimbos com `refresh_from_db`. Não há consulta posterior ao C6 sobre `perg` nessa função. A cauda consulta `perguntas_vivas_de`, que usa queryset com `order_by`; o signal da pergunta transmite somente `disputa_id` e o serviço de becos recarrega disputa e perguntas. (`app/chamados/services/validacao.py:359`, `app/chamados/services/validacao.py:396`, `app/chamados/services/validacao.py:424`, `app/chamados/services/validacao.py:430`, `app/chamados/services/validacao.py:433`, `app/chamados/services/materializacao.py:1233`, `app/chamados/juizes.py:1130`, `app/chamados/signals.py:195`, `app/chamados/signals.py:201`, `app/chamados/services/becos.py:67`) |
-| Desfazer carimbo sem lastro | Recebe perguntas, mas substitui cada recebida por releitura com `select_for_update`; chama C6 e só depois muda `materializada_em`/`via_resolucao`, presentes na chave. (`app/chamados/services/relavra_via.py:213`, `app/chamados/services/relavra_via.py:221`, `app/chamados/services/relavra_via.py:227`, `app/chamados/services/relavra_via.py:231`, `app/chamados/juizes.py:790`) |
-| Relatório de disputas | Prefetch guarda perguntas/célula/destino e `classificar` chama C6 nas perguntas desse cache; o fluxo apresentado somente monta e ordena resultados. (`app/chamados/relatorios_disputa.py:39`, `app/chamados/relatorios_disputa.py:42`, `app/chamados/relatorios_disputa.py:11`, `app/chamados/relatorios_disputa.py:17`, `app/chamados/relatorios_disputa.py:44`, `app/chamados/relatorios_disputa.py:51`) |
-
-O memo não tem prazo baseado em request no corpo executável: ele fica no atributo da instância e é reutilizado enquanto a chave coincidir; a morte com o request é descrita no comentário, não implementada por um encerramento ou limpeza ali. (`app/chamados/juizes.py:809`, `app/chamados/juizes.py:812`, `app/chamados/juizes.py:824`)
-
-_1264 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1266 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
