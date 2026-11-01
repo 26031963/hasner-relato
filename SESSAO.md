@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 14:52:00.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (132.9 MB). Acoes na janela: **618**.
+**Medido em 01/11/2026 14:57:24.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (133.0 MB). Acoes na janela: **622**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:53:48 | Bash | Point ESPERANDO at the live F2 suite | `cd /home/ronald/saas-hasner && ps -p 2483991 -o pid= && ls -t logs/o261e/f2/*.log \| head -1 && python3 - <<'EOF' import glob,os log=sorted(glob.glob('logs/o261e/f2/*.log'),key=os.path.getmtime)[-1] p='app/docs/RELATO.md'; s=open(p,encoding='utf-8').read() s=s.replace('# RELATO — esteira saas-hasner\n\n',f'# RELATO — esteira saas-hasner\n\nESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \|  ...` |
+| 14:53:44 | Agent | sonda: frota carimbo vivo O261-E-F2 | `Run one read-only probe in the sombra for /home/ronald/saas-hasner and report its numbers. Do NOT edit any file, do NOT touch production, do NOT commit. 1. Another sombra probe may be running (bin/sombra.sh --rodar ... sonda_dono). Wait until the file /home/ronald/saas-hasner/logs/cobparc/ata09/sonda_dono.out ends with the line FIM-DA-SONDA and no `bin/sombra.sh --rodar` process is alive (check wi ...` |
+| 14:53:34 | Bash | Add F2 design question to RELATO top | `cd /home/ronald/saas-hasner && H=$(date +%H:%M) && python3 - "$H" <<'EOF' import sys H=sys.argv[1] p='app/docs/RELATO.md'; s=open(p,encoding='utf-8').read() l=(f'PERGUNTA DE DESENHO O261-E-F2 ({H}; logs/o261e/f2/PERGUNTA.md): DECIDIDO PELA LEI (LEI-AKITA 2, testemunha le o C6) mandato F2 \| contestavel -- ' 'no fecho SEM credor (resolver_perguntas_por_chamado_resolvido, 2o ramo) a pergunta com tex ...` |
+| 14:53:24 | Bash | Read F2 builder question | `cat /home/ronald/saas-hasner/logs/o261e/f2/PERGUNTA.md \| cut -c1-600` |
 | 14:49:22 | Bash | Wait 4 minutes then check agent activity | `/usr/bin/sleep 240; ls -t /home/ronald/saas-hasner/logs/o261e/f2/ \| head -3; ps -eo pid,etime,cmd \| grep -E 'sombra.sh\|manage.py test\|suite.sh' \| grep -v grep \| cut -c1-120` |
 | 14:48:38 | Bash | Wait for sonda rerun and read totals | `while kill -0 2244871 2>/dev/null; do /usr/bin/sleep 5; done; cd /home/ronald/saas-hasner && grep -n '^===\\|^== TOTAL dia' -A0 logs/cobparc/ata09/sonda_dono.out \| head; tail -8 logs/cobparc/ata09/sonda_dono.out` |
 | 14:48:34 | Bash | Look for a live produtor process | `ps -eo pid,etime,cmd \| grep -E 'suite.sh\|sombra.sh\|manage.py test\|codex_pergunta\|docker run' \| grep -v grep \| cut -c1-180; ls -t /home/ronald/saas-hasner/logs/o261e/f2/ \| head -3` |
