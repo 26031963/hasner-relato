@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 18:39:05.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (170.6 MB). Acoes na janela: **538**.
+**Medido em 02/11/2026 18:44:36.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (170.6 MB). Acoes na janela: **539**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:43:18 | Bash | Check r7 suite status | `cd /home/ronald/saas-hasner && ps -p 3178686 -o etime=; grep -E '^Ran \|^(OK\|FAILED)($\| \()' logs/e4cal/r7_suite.log \| tail -2; ls -t logs/e4cal \| head -3` |
 | 18:38:14 | Bash | Wait for suite log mtime to advance | `cd /home/ronald/saas-hasner && a=$(stat -c %Y logs/e4cal/r7_suite.log); for i in $(seq 1 20); do /usr/bin/sleep 15; b=$(stat -c %Y logs/e4cal/r7_suite.log); [ "$b" != "$a" ] && break; done; echo antes=$a depois=$b; tail -1 logs/hook_stop_fila1.log \| cut -c1-150; ps -p 3178686 -o etime=` |
 | 18:38:06 | Bash | Point ESPERANDO at the r7 full suite | `cd /home/ronald/saas-hasner && ls -l /proc/3178686/fd 2>/dev/null \| grep -o 'logs/e4cal/[^ ]*'; sed -i "3s#.*#ESPERANDO: trava_teste.sh \| pid=3178686 \| arquivo=logs/e4cal/r7_suite.log#" app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md` |
 | 18:38:02 | Bash | Check why hook still blocks | `cd /home/ronald/saas-hasner && tail -2 logs/hook_stop_fila1.log \| cut -c1-200; ps -p 2967138 -o etime=; stat -c %y logs/e4cal/r7_red.log; ls -t logs/e4cal \| head -3; pgrep -af trava_teste.sh \| cut -c1-80` |
