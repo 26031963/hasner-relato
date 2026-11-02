@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 08:07:07.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (154.7 MB). Acoes na janela: **449**.
+**Medido em 02/11/2026 08:12:08.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (154.7 MB). Acoes na janela: **451**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:09:07 | Bash | Add ESPERANDO for volta-2 suite | `sed -i '3i ESPERANDO: trava_teste.sh \| pid=2642167' docs/RELATO.md && sed -n 3p docs/RELATO.md` |
+| 08:09:04 | Bash | Find builder suite pid and B3 state | `ps -eo pid,etime,args \| grep -E "trava_teste\|sombra.sh" \| grep -v grep \| cut -c1-120; cd /home/ronald/saas-hasner && grep "COBPARC-FILA-RELOGIO" logs/sessao/disjuntor.log \| tail -1 \| cut -c1-60; sed -n 1,5p app/docs/RELATO.md \| cut -c1-70` |
 | 07:45:04 | Bash | Update BACKLOG and add design question to RELATO | `sed -i 's#construindo 02/11 07:4x na copia /home/ronald/wt-cobparc-justif-074321 (RELOGIO no verificador final; sem arquivo em comum) \|#registrada, fila 1; construtor parado 07:4x (teto 1 ESCADA-92: RELOGIO volta 2 tem a vez); copia vazia /home/ronald/wt-cobparc-justif-074321 \|#' docs/BACKLOG.md && python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') L.insert(2,'PERGUNTA DE DESENHO  ...` |
 | 07:44:56 | Bash | Check whether B3 fired for RELOGIO | `cd /home/ronald/saas-hasner && grep "COBPARC-FILA-RELOGIO" logs/sessao/disjuntor.log \| tail -2 \| cut -c1-80` |
 | 07:44:53 | SendMessage |  | `-` |
