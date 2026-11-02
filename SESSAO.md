@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 17:56:07.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (169.4 MB). Acoes na janela: **524**.
+**Medido em 02/11/2026 18:01:21.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (169.4 MB). Acoes na janela: **527**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:57:34 | Bash | Check that the second full suite is alive and its log is growing | `cd /home/ronald/saas-hasner; /usr/bin/sleep 40; ps -p 763908 -o pid=; ls -la --time-style=+%H:%M:%S logs/e4cal/r6_suite2.log` |
+| 17:56:23 | Bash | Wait for the next long L1 run and point ESPERANDO at it | `cd /home/ronald/saas-hasner; p=""; f=""; for i in $(seq 1 50); do q=$(bin/trava_teste.sh --quem); case "$q" in suite:*) p=${q#suite:}; p=${p%% *}; /usr/bin/sleep 45; if [ -n "$p" ] && ps -p "$p" >/dev/null; then f=$(ls -t logs/e4cal/*.log \| head -1); break; fi;; esac; /usr/bin/sleep 10; done; echo "p=$p f=$f"; [ -n "$f" ] && sed -i "3s#^ESPERANDO: .*#ESPERANDO: trava_teste.sh \| pid=$p \| arquivo ...` |
+| 17:56:09 | Bash | List the two failures in the r6 full suite | `cd /home/ronald/saas-hasner; grep -E '^(FAIL\|ERROR):' logs/e4cal/r6_suite.log` |
 | 17:52:45 | Bash | Keep waiting for the r6 suite verdict | `cd /home/ronald/saas-hasner; for i in $(seq 1 28); do ps -p 3860305 >/dev/null \|\| break; /usr/bin/sleep 20; done; ps -p 3860305 -o pid=; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|rc=' logs/e4cal/r6_suite.log \| tail -3` |
 | 17:43:20 | Bash | Wait for the L1 r6 run's verdict | `cd /home/ronald/saas-hasner; for i in $(seq 1 28); do ps -p 3860305 >/dev/null \|\| break; /usr/bin/sleep 20; done; ps -p 3860305 -o pid=; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|rc=' logs/e4cal/r6_suite.log \| tail -3; ls -la --time-style=+%H:%M:%S logs/e4cal/r6_suite.log` |
 | 17:40:04 | Bash | Check the L1 r6 run and the hook's last entry | `cd /home/ronald/saas-hasner; /usr/bin/sleep 40; ps -p 3860305 -o pid=; ls -la --time-style=+%H:%M:%S logs/e4cal/r6_suite.log; tail -1 logs/hook_stop_fila1.log \| cut -c1-150` |

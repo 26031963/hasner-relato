@@ -1,6 +1,6 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 20:45** · publicado em **02/11/2026 17:56** (UTC-3)
+> Ultima resposta processada: **01/11/2026 20:45** · publicado em **02/11/2026 18:01** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
 
 ## 01/11 20:45 · sessao 6bee4d54689e · COBERTURA-PARCIAL-UM-JUIZ · verificador · origem=Code
@@ -562,7 +562,7 @@ Quanto a tempo e isolamento: classe congelada em `app/chamados/tests/test_o261e_
 
 Não executar o conjunto sob esta autorização: o MORDE do I20 cria e escreve arquivo temporário (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:259`, `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:262`).
 
-## 01/11 17:56 · sessao 90d1cb24554b · E4-CALENDARIO-L1 · leitura · origem=Code
+## 01/11 17:56 -- HISTORICO (mais de 24 h) · sessao 90d1cb24554b · E4-CALENDARIO-L1 · leitura · origem=Code
 
 1) **O problema de desenho, em seis linhas.**
 
