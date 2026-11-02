@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 07:50:59.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (154.7 MB). Acoes na janela: **463**.
+**Medido em 02/11/2026 07:56:15.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (154.7 MB). Acoes na janela: **458**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -468,8 +468,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:00:50 | Bash | Recheck full suite log growth | `cd /home/ronald/saas-hasner && /usr/bin/sleep 45; ls -l logs/cobparc/v6/suite_full.log; kill -0 306065 && echo vivo; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
 | 20:00:16 | Bash | Record pce green and point ESPERANDO at full suite | `cd /home/ronald/saas-hasner && H=$(date +%H:%M) && printf -- "- %s COBPARC v6 suite_pce sobre c1c6f565 VERDE: OK (skipped=11, expected failures=25), Ran 8890, rc=0; suite inteira lancada (pid 306065, logs/cobparc/v6/suite_full.log); sonda cobparc6_det na sombra em curso.\n" "$H" >> app/docs/RELATO.md && sed -i '3s#.*#ESPERANDO: trava_teste.sh \| pid=306065 \| arquivo=logs/cobparc/v6/suite_full.log ...` |
 | 20:00:09 | Bash | Read pce verdict and sonda state | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/bbpzote0n.output \| cut -c1-250; cd /home/ronald/saas-hasner; bash bin/trava_teste.sh --quem; ls -l logs/cobparc/v6/suite_full.log logs/cobparc6_det.out; tail -2 logs/cobparc6_det.out \| cut -c1-200` |
-| 19:54:47 | Bash | Verify ESPERANDO proof | `cd /home/ronald/saas-hasner/bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
-| 19:54:44 | Bash | Wait for v6 pce suite verdict | `cd /home/ronald/saas-hasner && while kill -0 3756808 2>/dev/null; do /usr/bin/sleep 20; done; grep -E '^(OK\|FAILED)($\| \()' logs/cobparc/v6/suite_pce.log \| tail -1; grep -E '^Ran [0-9]+' logs/cobparc/v6/suite_pce.log \| tail -1; tail -1 logs/cobparc/v6/suite_pce.log; grep -E '^(ERROR\|FAIL):' logs/cobparc/v6/suite_pce.log \| head` |
-| 19:54:38 | Bash | Log v6 cure and chain full suite | `cd /home/ronald/saas-hasner && H=$(date +%H:%M) && printf -- "- %s COBPARC v6 c1c6f565 (copia wt-cobparc5b-184858): causa dos 29 dias NO MAIN (88519add escala/utils.py:1796-1797 so chama _marcar_ausencias para vinculo da janela; dia sem vinculo nao pergunta cobertura_ausencia_periodo(para='folha'); legacy idem) -> BUG NO CAMINHO (LEI-AKITA 6). Cura: _marcar_ausencias(colab,...) da PESSOA, 1x por g ...` |
-| 19:54:27 | Bash | Spot-check cause claim in main and copy state | `cd /home/ronald/saas-hasner && git show 88519add:app/escala/utils.py \| grep -n -E "escs_janela_ids\|def _marcar_ausencias\|_marcar_ausencias\(" \| head; cd /home/ronald/wt-cobparc5b-184858 && git log --oneline -2 && git status --porcelain \| head -3` |
-| 19:53:17 | Bash | Check v6 suite state | `cd /home/ronald/saas-hasner && kill -0 3756808 2>/dev/null && echo vivo; tail -c 300 logs/cobparc/v6/suite_pce.log; echo; ls -lt logs/cobparc/v6 \| head -5; date +%H:%M; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
