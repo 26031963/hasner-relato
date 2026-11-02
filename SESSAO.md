@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 10:04:29.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (155.2 MB). Acoes na janela: **414**.
+**Medido em 02/11/2026 10:09:56.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (155.2 MB). Acoes na janela: **408**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -418,9 +418,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 22:13:29 | Bash | Generate final diff for opus verificador | `cd /home/ronald/wt-cobparc5b-184858 && git log --oneline -1 && git diff a8709a53..8f21ec29 > /home/ronald/saas-hasner/logs/cobparc/v7/diff_final.patch && wc -l /home/ronald/saas-hasner/logs/cobparc/v7/diff_final.patch && git diff --stat a8709a53..8f21ec29 \| tail -1; git status --porcelain \| head` |
 | 22:13:23 | Bash | Wait for suite rc line, then show verdict | `cd /home/ronald/saas-hasner; until grep -qE '^rc=' logs/cobparc/v7/suite_full2.log; do /usr/bin/sleep 30; done; grep -E '^(OK\|FAILED)($\| \()' logs/cobparc/v7/suite_full2.log \| tail -1; grep -E '^Ran [0-9]+ tests' logs/cobparc/v7/suite_full2.log \| tail -1; grep -E '^rc=' logs/cobparc/v7/suite_full2.log \| tail -1; grep -E '^(ERROR\|FAIL):' logs/cobparc/v7/suite_full2.log \| head` |
 | 22:13:18 | Bash | Check suite progress and verdict | `cd /home/ronald/saas-hasner; ps -p 3774005 -o pid=,etime= ; wc -c logs/cobparc/v7/suite_full2.log; grep -E '^(OK\|FAILED)($\| \()' logs/cobparc/v7/suite_full2.log \| tail -1; grep -E '^Ran [0-9]+ tests' logs/cobparc/v7/suite_full2.log \| tail -1; grep -E '^rc=' logs/cobparc/v7/suite_full2.log \| tail -1; grep -cE '^(ERROR\|FAIL):' logs/cobparc/v7/suite_full2.log` |
-| 22:07:25 | Bash | Wait for suite log growth and check producer | `cd /home/ronald/saas-hasner; /usr/bin/sleep 90; wc -c logs/cobparc/v7/suite_full2.log; sed -n 3p app/docs/RELATO.md; ps -p 3774005 -o pid=,etime=` |
-| 22:05:20 | Bash | Record incident, memory, repoint ESPERANDO | `cd /home/ronald/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys H=sys.argv[1]; p='app/docs/RELATO.md'; s=open(p).read(); L=s.split('\n'); assert L[2].startswith('ESPERANDO:') L[2]='ESPERANDO: trava_teste.sh \| pid=3774005 \| arquivo=logs/cobparc/v7/suite_full2.log' s='\n'.join(L).rstrip('\n')+f"\n- {H} COBPARC v7 suite inteira sobre 8f21ec29 MORTA, nao vermelha: rc=137 as 21:49, 0 ...` |
-| 22:04:52 | Bash | Relaunch full suite | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; docker ps --format '{{.Names}} {{.Image}} {{.Status}}' \| grep -v -E "saas_(core\|ui\|caddy\|db)" \| head; mv logs/cobparc/v7/suite_full.log logs/cobparc/v7/suite_full_r1_137.log; setsid nohup bash -c 'bash bin/suite.sh --dir /home/ronald/wt-cobparc5b-184858 > logs/cobparc/v7/suite_full2.log 2>&1; echo "rc=$?" >> logs/cobparc/v7/suite_full2.l ...` |
-| 22:04:46 | SendMessage |  | `-` |
-| 22:04:38 | Bash | Container lifecycle events last 50 min | `date; timeout 30 docker events --since 50m --until 1s --format '{{.Time}} {{.Type}} {{.Action}} {{.Actor.Attributes.name}} exit={{.Actor.Attributes.exitCode}} sig={{.Actor.Attributes.signal}}' 2>&1 \| grep -v "exec_" \| grep -E "container (kill\|die\|stop\|oom\|start)" \| head -30` |
-| 22:04:34 | TaskStop |  | `-` |
