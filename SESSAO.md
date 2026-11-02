@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 13:18:03.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (160.9 MB). Acoes na janela: **462**.
+**Medido em 02/11/2026 13:23:17.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (161.0 MB). Acoes na janela: **468**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:23:11 | Bash | See PROMPTS format and BACKLOG rows | `date +%H:%M; tail -3 docs/PROMPTS.md \| cut -c1-300; grep -n "^\| E4-CALENDARIO-L1 \\|^\| E3-ISENTO-INSUMOS " docs/BACKLOG.md \| cut -c1-200` |
+| 13:23:06 | Bash | List remaining julgar_colab callers | `grep -rn "julgar_colab(" --include=*.py . \| grep -v "^./ponto/services/cartorio.py\\|tests/" \| cut -c1-170` |
+| 13:23:03 | Bash | Check out sharing at the other julgar_colab callers | `sed -n 688,696p escala/regua_defesa.py; sed -n 1928,1936p ponto/services/cartorio.py; sed -n 50,58p ponto/management/commands/lavrar_status_competencia.py; grep -rn "julgar_colab(" --include=*.py . \| grep -v "^./ponto/services/cartorio.py\\|tests/" \| wc -l; grep -rln "julgar_colab(" --include=*.py . \| grep tests \| wc -l` |
+| 13:22:57 | Bash | Census of out keys and other cods readers | `grep -n "out\.pop\\|out\.get(\\|out\[\\|out\.setdefault" ponto/services/cartorio.py \| cut -c1-150 \| head -60; echo ---; sed -n 130,160p ponto/management/commands/celula_veredito_velho.py; grep -n "cods" ponto/management/commands/*.py escala/regua_defesa.py \| head` |
+| 13:22:53 | SendMessage |  | `-` |
+| 13:22:47 | ToolSearch |  | `-` |
 | 13:13:59 | Bash | Read the latest mutant result | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/bs90fq1lw.output; date +%H:%M` |
 | 13:13:23 | Bash | Wait in background for the next mutant result | `cd /home/ronald/saas-hasner && m=$(stat -c %Y logs/e4cal/l1_mutantes.log); for i in $(seq 1 120); do /usr/bin/sleep 5; [ "$(stat -c %Y logs/e4cal/l1_mutantes.log)" != "$m" ] && break; done; tail -1 logs/e4cal/l1_mutantes.log \| cut -c1-140` |
 | 13:13:19 | Bash | Check L1 mutant progress | `cd /home/ronald/saas-hasner && date +%H:%M; tail -4 logs/e4cal/l1_mutantes.log \| cut -c1-140; bash bin/trava_teste.sh --quem; cd /home/ronald/wt-e4cal-l1-122941 && git log --oneline -2 && git status --porcelain` |
