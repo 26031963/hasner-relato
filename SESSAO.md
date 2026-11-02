@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 12:12:46.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (158.4 MB). Acoes na janela: **419**.
+**Medido em 02/11/2026 12:18:16.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (158.4 MB). Acoes na janela: **417**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -427,5 +427,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:32:15 | Bash | Refresh the sombra with a fresh dump, run the rehearsal block and check it | `cd /home/ronald/saas-hasner && (bash bin/sombra.sh --refazer --dump-agora > logs/cobparc/v8/sombra_refazer.log 2>&1; echo "rc=$?" >> logs/cobparc/v8/sombra_refazer.log; bash bin/sombra.sh --bloco > logs/cobparc/v8/sombra_bloco.log 2>&1; echo "rc=$?" >> logs/cobparc/v8/sombra_bloco.log; bash bin/sombra.sh --conferir > logs/cobparc/v8/sombra_conferir.log 2>&1; echo "rc=$?" >> logs/cobparc/v8/sombra_ ...` |
 | 00:32:11 | Bash | Log condition (a) result and find the dump-agora usage | `cd /home/ronald/saas-hasner && H=$(date +%H:%M) && printf -- '- %s COBPARC POUSO condicao (a) MEDIDA (sonnet, conferido nos .out): processar_cartorio --apply E2/E3/E4 na sombra (dump 01/11), atomic+raise. F0 a8709a53 x V8 72eb11be: chamados 122=122 (90/27/5), perguntas 635=635, disputas 31=31; PARCIAL-SEM-PERIODO chamados 0 perguntas 0 nas duas; FM09 607 md5=db2bdb6b399b intacto nas duas; 0 Traceb ...` |
 | 00:32:02 | Bash | Confirm the probe numbers in both outputs | `cd /home/ronald/saas-hasner && for r in F0 V8; do echo == $r; grep -c Traceback logs/cobparc8_nascimento_$r.out; grep -v "WARNING\\|INFO" logs/cobparc8_nascimento_$r.out \| grep -i -E "SIG\|FM09\|chamados\|perguntas\|disputas\|parcial\|FIM-DA" \| cut -c1-160 \| head -14; done` |
-| 00:13:21 | Bash | Wait for the probe to progress | `/usr/bin/sleep 110; ls -la /home/ronald/saas-hasner/logs/ \| grep nascimento` |
-| 00:13:16 | Bash | Check probe outputs so far | `cd /home/ronald/saas-hasner && ls -la logs/ \| grep nascimento; ls logs/cobparc/v8/ \| grep nasc; grep -c Traceback logs/cobparc8_nascimento_*.out; tail -15 logs/cobparc8_nascimento_F0.out \| cut -c1-200` |
