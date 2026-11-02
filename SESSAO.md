@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 23:50:59.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (145.3 MB). Acoes na janela: **795**.
+**Medido em 01/11/2026 23:55:59.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (145.3 MB). Acoes na janela: **794**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -804,4 +804,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:06:32 | Bash | Wait for Codex v2 answer | `cd /home/ronald/saas-hasner/logs/contencao/v2/p1/v4; until [ -s codex_v2.r ] && [ -s codex_v2.r.id ]; do /usr/bin/sleep 30; done; cat codex_v2.wrapper.log; head -c 1500 codex_v2.r` |
 | 12:06:31 | Bash | Wait for test_disjuntor full-run verdict | `cd /home/ronald/saas-hasner/logs/contencao/v2/p1/v4; until grep -q '^rc=' green_v1_disjuntor_inteiro.log 2>/dev/null; do /usr/bin/sleep 20; done; tail -3 green_v1_disjuntor_inteiro.log; grep -c 'NAO MORDE\\|FALHOU' green_v1_disjuntor_inteiro.log` |
 | 12:06:01 | SendMessage |  | `-` |
-| 11:53:15 | Bash | Check GRADE ensaio fase C progress | `cd /home/ronald/saas-hasner; date +%T; ls -l --time-style=+%H:%M:%S logs/gfja_fase_C.out \| cut -c30-; kill -0 1191526 && echo ensaio vivo` |
