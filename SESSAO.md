@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 18:11:53.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (169.4 MB). Acoes na janela: **526**.
+**Medido em 02/11/2026 18:17:09.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (169.5 MB). Acoes na janela: **520**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:13:04 | Bash | Read the rc and the copy's commits and status | `cd /home/ronald/saas-hasner; /usr/bin/sleep 15; tail -2 logs/e4cal/r6_suite2.log; cd /home/ronald/wt-e4cal-l1-r2-151020 && git log --oneline -4 && git status --porcelain \| head` |
 | 18:03:18 | Bash | Wait for the second full suite's verdict | `cd /home/ronald/saas-hasner; for i in $(seq 1 29); do ps -p 763908 >/dev/null \|\| break; /usr/bin/sleep 20; done; ps -p 763908 -o pid=; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|rc=' logs/e4cal/r6_suite2.log \| tail -3` |
 | 17:57:34 | Bash | Check that the second full suite is alive and its log is growing | `cd /home/ronald/saas-hasner; /usr/bin/sleep 40; ps -p 763908 -o pid=; ls -la --time-style=+%H:%M:%S logs/e4cal/r6_suite2.log` |
 | 17:56:23 | Bash | Wait for the next long L1 run and point ESPERANDO at it | `cd /home/ronald/saas-hasner; p=""; f=""; for i in $(seq 1 50); do q=$(bin/trava_teste.sh --quem); case "$q" in suite:*) p=${q#suite:}; p=${p%% *}; /usr/bin/sleep 45; if [ -n "$p" ] && ps -p "$p" >/dev/null; then f=$(ls -t logs/e4cal/*.log \| head -1); break; fi;; esac; /usr/bin/sleep 10; done; echo "p=$p f=$f"; [ -n "$f" ] && sed -i "3s#^ESPERANDO: .*#ESPERANDO: trava_teste.sh \| pid=$p \| arquivo ...` |
@@ -529,10 +530,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 06:32:06 | Agent | Verificador final v2 COBPARC-FILA-ROTULO | `Verificacao final v2 (opus final, adversarial, somente leitura) da obra COBPARC-FILA-ROTULO antes do pouso. Projeto Hasner Ponto; leia /home/ronald/saas-hasner/CLAUDE.md (LEI-AKITA, secao 6, 7b CODEX item 5 classes que ja reprovaram obra). Copia: /home/ronald/wt-cobparc-rotulo-053835, base 0ede0ae3. Diff inteiro: `git -C /home/ronald/wt-cobparc-rotulo-053835 diff 0ede0ae3..HEAD` (commits 537341d4  ...` |
 | 06:31:53 | Bash | Drop stale ESPERANDO, confirm copy commits | `sed -i '3{/^ESPERANDO: trava_teste.sh \| pid=4041884/d}' docs/RELATO.md && sed -n 3p docs/RELATO.md \| cut -c1-60; git -C /home/ronald/wt-cobparc-rotulo-053835 log --oneline 0ede0ae3..HEAD; git -C /home/ronald/wt-cobparc-rotulo-053835 status --porcelain \| head -3` |
 | 06:23:17 | Bash | Check builder's suite and sombra state | `ps -p 4041884 >/dev/null && echo SUITE_VIVA \|\| echo SUITE_FIM; ps -eo pid,args \| grep "sombra.sh --rodar" \| grep -v grep \| head -1 \| cut -c1-100` |
-| 06:15:09 | Bash | Declare ESPERANDO on builder suite | `sed -i '2a ESPERANDO: trava_teste.sh \| pid=4041884' docs/RELATO.md && sed -n 3p docs/RELATO.md` |
-| 06:15:06 | Bash | Look for builder's producer process | `ps -eo pid,etime,args \| grep -E "trava_teste.sh\|sombra.sh --rodar" \| grep -v grep \| cut -c1-140` |
-| 06:13:16 | Bash | Look for builder's producer process | `ps -eo pid,etime,args \| grep -E "trava_teste.sh\|sombra.sh --rodar" \| grep -v grep \| cut -c1-140` |
-| 06:12:40 | SendMessage |  | `-` |
-| 06:12:31 | Bash | Write ERRO-BOBO release line for B3 | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') L.insert(2,'ERRO-BOBO COBPARC-FILA-ROTULO: opus final v1 REPROVOU (06:1x) por leitor que nao migrou -- escala/services/furos_diarios.py:14 conta a lampada dispensada em marcos_previstos (FuroDiario, lido por ponto/services/deslogados.py:118 e pos_vinculo.py:79) em vez de ler relatorios/furos.py::marcos_do_jogo; censo ...` |
-| 06:12:21 | Bash | Read B3 rule text | `cd /home/ronald/saas-hasner && sed -n 11,30p bin/disjuntor.py; sed -n 150,170p bin/disjuntor.py` |
-| 06:12:19 | Bash | Check DISJUNTOR B3 semantics | `cd /home/ronald/saas-hasner && grep -n "B3" bin/disjuntor.py \| head -20` |

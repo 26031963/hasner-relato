@@ -1,6 +1,6 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 20:45** · publicado em **02/11/2026 18:01** (UTC-3)
+> Ultima resposta processada: **01/11/2026 20:45** · publicado em **02/11/2026 18:17** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
 
 ## 01/11 20:45 · sessao 6bee4d54689e · COBERTURA-PARCIAL-UM-JUIZ · verificador · origem=Code
@@ -481,7 +481,7 @@ Auditoria estática, sem executar testes ou mutantes; resultados empíricos dos 
 
 - **Outro mutante vivo dedutível:** substituir `self.materializada_por_id = autor_id` por `None` em `app/chamados/models.py:2530`. Os cinco testes não assertam o autor; suas verificações da pergunta cobrem carimbo temporal, via, vivacidade e o par resposta/carimbo, enquanto a chave e os degraus do C6 não consultam `materializada_por_id`. Referências: `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:184`, `:218`, `:264`; `app/chamados/juizes.py:788`, `:1032`. Sobrevivência por execução: **[nao verificado]**.
 
-## 01/11 18:15 · sessao 3fb825a7930a · O261-E-F2 · verificador · origem=Code
+## 01/11 18:15 -- HISTORICO (mais de 24 h) · sessao 3fb825a7930a · O261-E-F2 · verificador · origem=Code
 
 Análise estática; resultados de execução e medições mencionadas nos logs: **[nao verificado]**. Não executei a suíte: o quarto teste cria e escreve arquivo temporário (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:259`, `:261`, `:262`).
 
@@ -538,7 +538,7 @@ Referências abreviadas, todas relativas à cópia:
 
    O mock termina antes das testemunhas, e sua restauração é verificada por identidade. Cada método cria seu cenário, com dados comuns declarados em `setUpTestData`, numa classe `TestCase` (`T:201`, `T:204`, `T:101`, `T:103`, `T:189`, `T:200`, `T:234`, `T:251`). Execução em ordens diferentes e confirmação prática do isolamento: **[nao verificado]**.
 
-## 01/11 18:14 · sessao 43184c58c13e · - · - · origem=Ronald (tmux)
+## 01/11 18:14 -- HISTORICO (mais de 24 h) · sessao 43184c58c13e · - · - · origem=Ronald (tmux)
 
 Mutantes sobreviventes por inspeção estática; execução **[não verificado]**:
 
@@ -548,7 +548,7 @@ Mutantes sobreviventes por inspeção estática; execução **[não verificado]*
 
 O descarte do mutante da linha 1626 exige uma ressalva: **“mesmo juiz” não demonstra equivalência universal**, pois a porta consulta o C6 após mudar o estado (`app/chamados/models.py:2555`, `:2558`, `:2565`). Contraexemplo estático: pergunta sem resposta com motivo `saida_sem_entrada`, célula `furo` por outro marco, mas E/hi acesa (`app/chamados/juizes.py:844`). Sem carimbo, o veredito acusador a mantém viva (`:1083`); com carimbo, a lâmpada própria a mata antes dessa decisão (`:1077`). Retirar a guarda permitiria gravar (`app/chamados/models.py:2576`). Os fixtures atuais usam `batida_ausente`, sem esse marco próprio (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:145`; mapa em `app/chamados/juizes.py:844`). Ocorrência desse contraexemplo em produção: **[não verificado]**.
 
-## 01/11 18:14 · sessao 2bb9051113f1 · - · - · origem=Ronald (tmux)
+## 01/11 18:14 -- HISTORICO (mais de 24 h) · sessao 2bb9051113f1 · - · - · origem=Ronald (tmux)
 
 Os dois descartes têm alcances diferentes:
 
