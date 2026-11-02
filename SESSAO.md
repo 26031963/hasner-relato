@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 00:39:46.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (145.6 MB). Acoes na janela: **757**.
+**Medido em 02/11/2026 00:45:16.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (146.3 MB). Acoes na janela: **759**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:44:44 | Bash | Wait for the sombra check to finish, then show results | `cd /home/ronald/saas-hasner && until grep -q '^rc=' logs/cobparc/v8/sombra_conferir.log 2>/dev/null; do /usr/bin/sleep 30; done; cat logs/cobparc/v8/sombra_bloco.log \| tail -n 8; echo ==; cat logs/cobparc/v8/sombra_conferir.log` |
+| 00:44:39 | Bash | Repoint wait line to the growing results file | `cd /home/ronald/saas-hasner && sed -i '3s#.*#ESPERANDO: sombra.sh \| pid=440460 \| arquivo=logs/sombra/resultado.tsv#' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md && wc -l logs/sombra/resultado.tsv && tail -n 3 logs/sombra/resultado.tsv` |
+| 00:44:33 | Bash | Locate where the block run logs | `cd /home/ronald/saas-hasner && grep -n 'ensaiando\\|LOG_BLOCO\\|log_bloco\\|>>.*bloco' bin/sombra.sh \| head -20; ls -lt logs/sombra 2>/dev/null \| head -5` |
+| 00:44:30 | Bash | Find files the block run is writing | `cd /home/ronald/saas-hasner && find logs -newer logs/cobparc/v8/sombra_bloco.log -type f -mmin -5 2>/dev/null \| head; ls /proc/440460 >/dev/null && echo vivo` |
+| 00:44:26 | Bash | Show RELATO wait line and block log size | `cd /home/ronald/saas-hasner && sed -n 3p app/docs/RELATO.md && ls -la logs/cobparc/v8/sombra_bloco.log && date +%H:%M` |
+| 00:43:23 | Bash | Read the refresh and block logs | `cd /home/ronald/saas-hasner && for f in logs/cobparc/v8/sombra_refazer.log logs/cobparc/v8/sombra_bloco.log; do echo "== $f"; cat $f; done; ps -eo pid,args \| awk '$3=="bin/sombra.sh"'` |
+| 00:43:19 | Bash | Check the sombra refresh progress | `cd /home/ronald/saas-hasner && ps -p 139806 -o pid=; ls -la logs/cobparc/v8/sombra_*.log; tail -3 logs/cobparc/v8/sombra_*.log` |
 | 00:32:46 | Bash | Point ESPERANDO at the sombra refresh and wait | `cd /home/ronald/saas-hasner && sed -i '3s#^ESPERANDO: .*#ESPERANDO: sombra.sh \| pid=139806 \| arquivo=logs/cobparc/v8/sombra_refazer.log#' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md; /usr/bin/sleep 60; ls -la logs/cobparc/v8/sombra_*.log` |
 | 00:32:42 | Bash | Get the exact sombra.sh pid and its log | `pgrep -x -f "bash bin/sombra.sh --refazer --dump-agora" ; ps -eo pid,args \| awk '$2=="bash" && $3=="bin/sombra.sh"' ; cat /home/ronald/saas-hasner/logs/cobparc/v8/sombra_refazer.log` |
 | 00:32:19 | Bash | Find the sombra refresh pid for the ESPERANDO line | `/usr/bin/sleep 20; cd /home/ronald/saas-hasner && ps -eo pid,args \| grep "sombra.sh --refazer" \| grep -v grep \| head -2; ls -la logs/cobparc/v8/sombra_refazer.log` |
@@ -762,8 +769,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:49:35 | Bash | Write final diff and RELATO suite line | `cd /home/ronald/wt-cobparc-222305; MB=$(git merge-base main HEAD); echo $MB; git log --oneline $MB..HEAD \| cat; git diff $MB HEAD > /home/ronald/saas-hasner/logs/cobparc/v4/diff_final_113fd774.diff; wc -l /home/ronald/saas-hasner/logs/cobparc/v4/diff_final_113fd774.diff; git diff --stat $MB HEAD \| cat; cd /home/ronald/saas-hasner; H=$(date +%H:%M); echo "- $H COBPARC suite --dir 113fd774: OK (sk ...` |
 | 12:49:29 | Bash | Inspect COBPARC copy state and logs | `cd /home/ronald/wt-cobparc-222305; git log --oneline -3; git status --porcelain \| head; git diff --stat main...HEAD \| tail -3; ls /home/ronald/saas-hasner/logs/cobparc/v4/ /home/ronald/saas-hasner/logs/cobparc/ \| head -60` |
 | 12:49:25 | Bash | Read COBPARC suite verdict | `cd /home/ronald/saas-hasner; L=logs/cobparc/v4/suite_v4_113fd774.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran' $L \| tail -1; tail -1 $L; grep -E '^(FAIL\|ERROR):' $L \| head` |
-| 12:43:29 | Bash | Relaunch GRADE postmortem with question file | `cd /home/ronald/saas-hasner; D=logs/grade_juiz/va; cat > $D/postmortem.q <<'EOF' Classifique cada achado do anexo opus_final_achados.md quanto as voltas anteriores do Codex desta obra (anexos v1.q/v1.r, v2.q/v2.r) e a triagem v1_triagem.md: (a) o tema estava presente na pergunta e o Codex nao viu; (b) o Codex viu e a triagem descartou (cite a linha da triagem); (c) fora do alcance do Codex (RED ex ...` |
-| 12:43:24 | Bash | Check wrapper pergunta format | `cd /home/ronald/saas-hasner; grep -n 'ilegivel' -B4 bin/codex_pergunta.sh \| head -20; ls logs/grade_juiz/va/*.q logs/grade_juiz/va/*.r 2>&1 \| head` |
-| 12:43:20 | Bash | Read postmortem run output | `cd /home/ronald/saas-hasner; cat logs/grade_juiz/va/postmortem.out; cat logs/grade_juiz/va/postmortem_anexos.txt` |
-| 12:43:19 | Bash | Locate GRADE postmortem output | `cd /home/ronald/saas-hasner; ls -lat logs/grade_juiz/va/ \| head; ls -lat logs/codex* 2>/dev/null \| head -5` |
-| 12:43:16 | Bash | Check suite, GRADE constructor, postmortem status | `cd /home/ronald/saas-hasner; tail -5 logs/cobparc/v4/suite_v4_113fd774.log; tail -c 800 /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/aae2274cf89a9dcf7.output; ls -la logs/grade_juiz/va/postmortem.r 2>&1; ps -p 1302423,2225961 -o pid,etime,cmd --no-headers \| cut -c1-120` |
