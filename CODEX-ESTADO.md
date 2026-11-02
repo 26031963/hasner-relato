@@ -1,7 +1,228 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **02/11/2026 18:21** · publicado em **02/11/2026 18:22** (UTC-3)
+> Ultima resposta processada: **02/11/2026 18:27** · publicado em **02/11/2026 18:27** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 02/11 18:27 · sessao ae4ec323f2f3 · DEPLOY-[nome]-ELO-DA-CORRENTE · leitura · origem=Code
+
+A cópia ainda faz **“teto → aviso → restart”**, e o agendador **não repete automaticamente uma tentativa recusada**. São duas divergências diretas do contrato proposto. (`bin/deploy.sh:274–279`; `bin/deploy_agendado.sh:68–82`)
+
+1. **Quem escreve, lê e quais execuções escapam da marca**
+
+   `cron_run.sh` recebe nome/empresa/comando, cria `${N}_${E}.$$`, grava a data ISO e instala limpeza por `trap EXIT`. O PID é do envelope no host; a marca não identifica o container. (`bin/cron_run.sh:5–11`)
+
+   O leitor operacional é `deploy.sh::em_curso()`: extrai o PID do nome, consulta `/proc/<pid>`, devolve nome/empresa quando encontra o processo e remove a marca quando não encontra. Não lê a data gravada no conteúdo. (`bin/deploy.sh:271–272`)
+
+   Todos os comandos **C e RAW renderizados** passam por `_run()` → `cron_run.sh`; a execução final de cada elo também passa pelo runner. (`app/config/crons.py:1423`; `app/config/crons.py:1431–1434`; `app/config/crons.py:1789–1802`; `bin/encadeado.sh:93`)
+
+   **Há furo comprovado:** `--corrente` é anexado depois do envelope, separado por `;`, e executa `docker exec saas_core ... crons corrente` antes de qualquer marca própria. A espera pelos carimbos também fica fora da marca; o comando final do elo recebe marca somente na linha 93. (`app/config/crons.py:1812–1813`; `bin/encadeado.sh:42`; `bin/encadeado.sh:77–93`)
+
+   Existe ainda agendamento fora desse render: `deploy_agendado.sh` gera uma entrada em `/etc/cron.d` sem runner. A igualdade entre crontab instalado e configuração nesta produção é **[nao verificado]**. (`bin/deploy_agendado.sh:54–56`; mecanismo de comparação em `bin/crons.sh:17–22`)
+
+2. **Como distinguir host de casca**
+
+   Não há campo explícito `host/container/alvos` nos esquemas C, RAW ou ENC. `estagio`, `cwd` e `depende` não fornecem essa classificação. (`app/config/crons.py:29–33`; `app/config/crons.py:53–54`; `app/config/crons.py:102–109`)
+
+   C usa `MANAGE`, definido como `docker exec saas_core`; os elos também lançam seu comando em `saas_core`. Para RAW, é necessário seguir o script chamado. (`app/config/crons.py:21`; `app/config/crons.py:1798`; `bin/encadeado.sh:93`; `app/config/crons.py:1791`)
+
+   **RAW não significa “fora das cascas”:** a sentinela é RAW e executa em `mensageria`; `lavrar_abriu_nao_bateu.sh` coleta logs no host e executa uma etapa em `saas_core`. (`app/config/crons.py:669`; `mensageria/bin/sentinela_diario.sh:14–16`; `bin/lavrar_abriu_nao_bateu.sh:19–24`)
+
+   **A sombra é híbrida:** o script parte do host, executa o ensaio em container separado por `docker run`, mas também chama `docker exec saas_core` para ler a lavra. Portanto, excluir a sombra inteira da proteção exige esclarecer o tratamento dessa fase interna; classificá-la apenas pelo nome ou por RAW deixa essa exposição. (`app/config/crons.py:331–333`; `bin/sombra.sh:138–144`; `bin/sombra.sh:182–191`)
+
+3. **Marca órfã e espera eterna**
+
+   Hoje há duas limpezas: o runner remove sua marca no `EXIT`; o deploy remove marcas cujo PID não existe em `/proc`. A limpeza de órfãs já está dentro da consulta usada pelo deploy, sem cron separado. (`bin/cron_run.sh:10`; `bin/deploy.sh:271–274`)
+
+   A identidade é fraca: o deploy verifica somente a existência do PID, sem conferir início ou comando do processo. Por inferência, um PID reutilizado pode parecer cron vivo; também não há comprovação de que a morte do envelope encerrou todos os seus filhos. (`bin/deploy.sh:272`; `bin/cron_run.sh:9–11`)
+
+   **Desenho proposto:** preservar a limpeza de órfãs confirmadas, fortalecer a identidade e, diante de execução ainda viva ou identidade inconclusiva, atingir um teto e **recusar sem restart**, nomeando o impedimento. Isso evita espera eterna sem transformar idade da marca em autorização para matar trabalho. Implementação desse comportamento: **[nao verificado]**; hoje o teto permite restart. (`bin/deploy.sh:274–279`)
+
+4. **Corrida e ponto para impedir novo elo**
+
+   A corrida permanece aberta: a última consulta está na linha 278 e o restart na 279, sem exclusão compartilhada com o nascimento da marca. Um elo pode alcançar o runner nesse intervalo. (`bin/deploy.sh:278–279`; `bin/encadeado.sh:93`; `bin/cron_run.sh:9–11`)
+
+   Há uma **porta comum para a execução dos elos**: `cron_run.sh`, antes de registrar a marca e lançar o comando. Os C e RAW renderizados também passam ali. A trava existente em `encadeado.sh` é por comando (`/tmp/encadeado_$CMD.lock`), para deduplicar elos; o deploy não participa dela. (`bin/cron_run.sh:9–11`; `app/config/crons.py:1431–1434`; `bin/encadeado.sh:71–75`; `bin/deploy.sh:271–279`)
+
+   **Proposta, sem cron novo:** admissão sincronizada nessa porta; o runner registra a execução sob a mesma exclusão usada pelo deploy. O deploy fecha novas admissões, espera as marcas existentes, reconsulta e mantém a exclusão até concluir o restart ou recusar. Um arquivo consultado sem exclusão atômica conservaria a corrida. Esse protocolo ainda é **[nao verificado]** na cópia. (`bin/cron_run.sh:9–11`; `bin/deploy.sh:271–279`)
+
+   A porta precisa também abranger a descoberta hoje desmarcada em `encadeado.sh:42`. Não convém bloquear globalmente antes da espera pelos gatilhos, pois ela depende dos carimbos das outras empresas. (`bin/encadeado.sh:42`; `bin/encadeado.sh:77–90`)
+
+5. **Outros consumidores e selos**
+
+   No código encontrado, `ESPERA_CRON_S` é lido somente pelo ramo de restart do deploy, com padrão 600 e incrementos de cinco segundos. `deploy_agendado` consome o resultado da esteira, sem ler essa variável. (`bin/deploy.sh:274–278`; `bin/deploy_agendado.sh:73–77`)
+
+   O selo específico atual apenas procura os textos `DEPLOY-ESPERA-CRON` e `crons_em_curso`; não demonstra recusa, filtragem host/casca ou ausência de restart. Ele é consumido pelo placar de código. (`bin/contrato_deploy.sh:47–49`; `bin/placar_code.sh:130–132`)
+
+   Os outros testes preservam contratos distintos: conflitos/URLconfs, janela de autenticação, histórico após provas e ordem/teto dos carimbos encadeados. Esses trechos não exercitam a proteção contra restart com cron vivo. (`bin/tests/test_deploy_recusa_conflito.sh:52–60`; `bin/tests/test_janela_auth.sh:123–144`; `bin/tests/test_orcamento_contexto.sh:263–333`; `bin/tests/test_furo_encadeado_ao_cartorio.sh:24–68`)
+
+   O molde de cadeia exige `deploy: OK` e sai com falha quando não encontra esse resultado; não contém repetição nesse trecho. Resultado de execução dos selos: **[nao verificado]**. (`bin/molde_fatia/cadeia.sh:89–90`)
+
+6. **Furos restantes no contrato**
+
+   **Quem chama/repete:** a promessa “recusa vira nova tentativa pelo agendador” não corresponde à implementação. Ele executa cada esteira uma vez, registra seu `rc`, gera `.done` e remove agenda e cron independentemente desse resultado. O `echo` final ainda pode fazer `rodar` terminar com sucesso após uma esteira falhar. (`contrato.txt:5`, anexo; `bin/deploy_agendado.sh:68–82`)
+
+   **Quem espera:** “todo cron com marca” não cobre a descoberta da corrente; e excluir “cron do host” exige tratar scripts híbridos, inclusive a sombra. (`bin/encadeado.sh:42`; `bin/sombra.sh:138–144`; `mensageria/bin/sentinela_diario.sh:14–16`)
+
+   **Falha/limite:** o contrato exige teto absoluto declarado; o número ainda está delegado ao construtor. Os 764 s do incidente não estabelecem duração máxima. Na fonte, `_espera` conta intervalos de sono, e o vencimento apenas avisa. (`contrato.txt:1` e `contrato.txt:3`, anexo; `bin/deploy.sh:273–279`)
+
+   **Marca obrigatória:** falhas de `mkdir` ou gravação da marca não impedem explicitamente o lançamento do comando. Além disso, o runner usa caminho absoluto e o leitor usa `$RAIZ`; uma execução noutra raiz pode consultar diretórios diferentes. (`bin/cron_run.sh:9–11`; `bin/deploy.sh:45`; `bin/deploy.sh:271`)
+
+   **Medida:** `crons_quebrados` considera a última corrida por nome/empresa, em 26 horas, e qualquer saída diferente de 0/2; não mede “137 no minuto de deploy”. Recuperação posterior pode retirar a morte desse contador. (`app/core/services/crons_quebrados.py:16–17`; `app/core/services/crons_quebrados.py:33–47`)
+
+   O placar contém início/fim/duração/exit, mas o histórico do deploy é gravado após as provas, não no instante do restart. Falta definir a correlação temporal e o tratamento de registros ausentes; o contador atual retorna lista vazia quando não consegue abrir o placar. Valor da medida exigida e eficácia posterior à cura: **[nao verificado]**. (`bin/cron_run.sh:13`; `bin/deploy.sh:279`; `bin/deploy.sh:342–347`; `app/core/services/crons_quebrados.py:29–32`)
+
+   **Quem desliga/modos:** `--reload-agendado` e `--reload-copia` usam HUP e não atravessam essa espera. O contrato deve delimitar a proteção ao restart destrutivo e exigir liberação automática da admissão ao terminar ou recusar, sem flag de bypass. O mutante “avisa e reinicia” precisa reprovar no selo novo; hoje ele corresponde ao comportamento da cópia. (`bin/deploy.sh:54–60`; `bin/deploy.sh:237–279`; `bin/contrato_deploy.sh:47–49`; `contrato.txt:5`, anexo)
+
+## 02/11 18:25 · sessao bf48b9348077 · - · - · origem=Ronald (tmux)
+
+- **Escritor, formato, conteúdo:** `bin/cron_run.sh:5` recebe nome/empresa/comando; `:9` monta `logs/crons_em_curso/${N}_${E}.$$`, com PID do envelope do host; `:10` grava instante ISO e instala `trap ... EXIT`; `:11` executa o comando. A marca não guarda alvo/container nem identidade adicional do processo (`bin/cron_run.sh:7-11`).
+- **Leitor operacional e limpeza:** `bin/deploy.sh:271-272` enumera marcas, extrai o sufixo após o último ponto, considera vivo se `/proc/<pid>` existe, imprime nome/empresa e remove marca cujo PID não existe; `:274-278` usa essa lista para esperar e avisar. O conteúdo ISO da marca não é lido por essa função (`bin/deploy.sh:271-272`). O outro consumidor encontrado é estático: selo procura texto `crons_em_curso` no deploy e runner (`bin/contrato_deploy.sh:47-49`).
+- **Cobertura normal:** tanto RAW quanto C renderizados passam `_run()` (`app/config/crons.py:1789-1802`), que chama runner (`:1423`, `:1431-1434`); os comandos finais dos elos também passam runner (`bin/encadeado.sh:93`). O crontab instalado de produção e sua igualdade com o render atual são **[nao verificado]**; há mecanismo para comparar, não evidência dessa execução (`bin/crons.sh:17-22`).
+- **Furo sem marca comprovado:** o disparo `encadeado.sh --corrente` é anexado **após** o envelope, com `;` (`app/config/crons.py:1812-1813`). Esse caminho chama `docker exec saas_core ... crons corrente` sem runner (`bin/encadeado.sh:37-49`); portanto existe comando de casca da infraestrutura do cron sem marca. A espera de carimbos também fica sem marca e só entra no runner ao lançar efetivamente o elo (`bin/encadeado.sh:71-93`). Não significa que os management commands finais dos elos estejam sem marca (`bin/encadeado.sh:93`).
+- **Fora do render:** `deploy_agendado.sh` escreve uma entrada `/etc/cron.d` que chama diretamente seu modo `rodar`, sem runner (`bin/deploy_agendado.sh:54-56`); este executa `esteira.sh` fornecido pelo chamador (`:68-74`). Quais comandos de casca essas esteiras executam: **[nao verificado]**.
+
+- **Distinção por fonte:** C usa `MANAGE = docker exec saas_core ...` (`app/config/crons.py:21`, `:1798`); ENC lança `docker exec saas_core` (`bin/encadeado.sh:93`). Os esquemas C, RAW e ENC não declaram campo host/container/alvos (`app/config/crons.py:29-33`, `:53-54`, `:102-109`).
+- **RAW não equivale a “fora das cascas”:** sentinela é RAW (`app/config/crons.py:669`) e executa dentro de `mensageria` (`mensageria/bin/sentinela_diario.sh:14-16`); negou_fogo também (`app/config/crons.py:686-687`; `mensageria/bin/negou_fogo_diario.sh:10-11`). `lavrar_abriu_nao_bateu.sh` mistura coleta no host e comando em `saas_core` (`bin/lavrar_abriu_nao_bateu.sh:19-24`).
+- **Sombra é híbrida:** seu agendamento RAW chama script do host (`app/config/crons.py:331-333`), que lança container de ensaio separado por `docker run` (`bin/sombra.sh:182-191`), mas também executa uma fase de leitura de lavra dentro de `saas_core` (`bin/sombra.sh:138-144`). Para distinguir proteção efetiva pela fonte atual, é necessário seguir comando e scripts/fases; não basta RAW/C nem nome (`app/config/crons.py:102-109`, `:1789-1802`; `bin/sombra.sh:138-144`, `:182-191`).
+
+- **Órfã:** limpeza normal é `trap EXIT` do runner (`bin/cron_run.sh:10`); limpeza de PID ausente é feita pelo deploy ao enumerar (`bin/deploy.sh:271-272`). Não há validação de identidade além da existência de `/proc/<pid>` nessa leitura, portanto reutilização de PID pode ser confundida com cron vivo — inferência direta do teste (`bin/deploy.sh:272`).
+- **Tratamento proposto:** preservar a eliminação/ignorância de marca comprovadamente órfã; para marca considerada viva, a recusa com teto absoluto evita espera eterna. Validação mais forte de identidade exigiria desenho adicional: a marca atual só contém data e PID no nome (`bin/cron_run.sh:9-10`); implementação dessa cura **[nao verificado]**.
+
+- **Ponto comum possível:** o runner é o ponto comum antes do lançamento efetivo dos C, RAW e elos (`app/config/crons.py:1431-1434`, `:1789-1802`; `bin/encadeado.sh:93`). Hoje não há coordenação com deploy nessa sequência marca→comando (`bin/cron_run.sh:9-11`; `bin/deploy.sh:271-279`). Um protocolo de exclusão compartilhado runner/deploy pode impedir novo lançamento enquanto deploy drena/reinicia; arquivo consultado sem exclusão atômica manteria a corrida — proposta, **[nao verificado]**.
+- **Limites dessa proposta:** o `flock` atual é por elo (`/tmp/encadeado_$CMD.lock`), serve para deduplicar empresas e não é consultado pelo deploy (`bin/encadeado.sh:71-75`; `bin/deploy.sh:271-279`). Também seria necessário cobrir o `docker exec` de descoberta anterior ao runner (`bin/encadeado.sh:42`).
+
+## 02/11 18:25 · sessao 8161155c5547 · - · - · origem=Ronald (tmux)
+
+**Corrida e ponto de admissão**
+
+- A corrida existe na fonte: deploy lê marcas em `em_curso()`, termina a espera e faz uma última leitura em `bin/deploy.sh:271-278`; o restart seguinte não está protegido por trava (`bin/deploy.sh:279`). Nesse intervalo, um elo pode terminar a espera pelos carimbos e entrar no runner (`bin/encadeado.sh:77-93`).
+- A corrente executa cada elo sequencialmente, mas sem marca própria abrangendo toda a corrente (`bin/encadeado.sh:42`, `bin/encadeado.sh:53-60`). A marca de cada execução nasce apenas ao entrar em `cron_run.sh` (`bin/encadeado.sh:93`, `bin/cron_run.sh:9-11`).
+- A trava existente é `/tmp/encadeado_$CMD.lock`, por comando, para impedir duplicata de elo; deploy não participa dela (`bin/encadeado.sh:71-72`, `bin/deploy.sh:271-279`).
+- Há uma porta comum para **execução dos elos**: `bin/encadeado.sh:93` → `bin/cron_run.sh:9-11`. As linhas C e RAW geradas também usam esse runner (`app/config/crons.py:1423`, `app/config/crons.py:1431-1434`, `app/config/crons.py:1789-1802`).
+- **Proposta, ainda não implementada:** protocolo de admissão nessa porta, antes de criar a marca e lançar o comando; deploy fecha a admissão sob a mesma trava, drena as execuções já marcadas, faz a rechecagem e mantém a admissão fechada até terminar o restart ou recusar. O ponto de inserção é `bin/cron_run.sh:9-11`; o trecho a proteger é `bin/deploy.sh:271-279`. Flag lida sem exclusão mútua não fecha a corrida; eficácia de implementação futura [nao verificado].
+- Não colocar a admissão global antes da espera por gatilho: ali o elo depende de outras empresas chegarem aos carimbos (`bin/encadeado.sh:77-90`). O bloqueio deve atingir o nascimento da execução em `bin/encadeado.sh:93`.
+- Limite dessa porta: o render da corrente já executa `docker exec saas_core` antes do runner (`bin/encadeado.sh:42`); logo “toda atividade dentro da casca passa pelo runner” não é verdade na fonte (`bin/encadeado.sh:42`, `bin/encadeado.sh:93`).
+
+**Furos do contrato comprovados**
+
+- A promessa de “recusa vira nova tentativa pelo deploy_agendado” não corresponde ao script: ele executa a esteira uma vez e registra seu rc (`bin/deploy_agendado.sh:73-77`); depois gera `.done` e remove agenda e cron independentemente desse rc (`bin/deploy_agendado.sh:79-82`). Há ainda risco de o `rodar` acabar com rc 0 pelo `echo` final mesmo após esteira falhar (`bin/deploy_agendado.sh:74`, `bin/deploy_agendado.sh:82`).
+- O molde de cadeia reconhece falha de deploy e sai 1, mas não faz nova tentativa (`bin/molde_fatia/cadeia.sh:89-90`).
+- O cron de higiene usa HUP, não restart, e não passa pela espera de marcas: ramificação `AGENDADO` em `bin/deploy.sh:237-265`; espera apenas no `else`, `bin/deploy.sh:266-279`. As flags que selecionam esse ramo estão em `bin/deploy.sh:54` e `bin/deploy.sh:60`.
+- O selo atual do deploy só procura strings relacionadas à espera e à marca, sem demonstrar recusa no teto ou exclusão da corrida (`bin/contrato_deploy.sh:47-50`).
+- A classificação RAW não significa execução exclusivamente fora das cascas: `lavrar_abriu_nao_bateu.sh` é RAW (`app/config/crons.py:271`), mas sua pipeline executa comando dentro de `saas_core` (`bin/lavrar_abriu_nao_bateu.sh:19-24`). Logo classificar todo RAW como host abriria furo (`app/config/crons.py:271`, `bin/lavrar_abriu_nao_bateu.sh:23-24`).
+- O selo antigo do encadeado usa `CRON_RUN_FAKE=1` (`bin/tests/test_furo_encadeado_ao_cartorio.sh:55`), porém o runner lido não contém ramo para essa variável e executa `bash -c "$CMD"` (`bin/cron_run.sh:5-11`). Esse selo não deve ser tomado como prova de isolamento sem conferência adicional [nao verificado].
+
+## 02/11 18:25 · sessao 6079d3f52882 · - · - · origem=Ronald (tmux)
+
+Achados para consolidação, todos por leitura de fonte; execução dos selos [nao verificado].
+
+1. **`deploy_agendado` não oferece a nova tentativa prometida no contrato.** Executa cada `esteira.sh` uma vez, captura e registra `rc`, segue o laço, copia resultado para `.done`, remove agenda e remove `/etc/cron.d/...`, independentemente do `rc` da fatia. Não há laço de repetição nessa implementação. `bin/deploy_agendado.sh:68-81`. Portanto, “recusa vira nova tentativa pelo deploy_agendado” é um furo concreto do contrato contra a cópia. `bin/deploy_agendado.sh:73-81`.
+
+2. **Consumidor de `ESPERA_CRON_S`: somente o ramo de restart de `deploy.sh` no código encontrado.** Usa default 600, espera em passos de cinco segundos, imprime aviso e reinicia mesmo se o cron permanece vivo. `bin/deploy.sh:274-279`. O agendador não lê essa variável: chama uma esteira e lê seu `rc`. `bin/deploy_agendado.sh:73-77`. Há referências documentais em `app/docs/RELATO.md:3673`, `:3676`, `:3907`, `:4336`; seus relatos de produção adicionais não devem ser usados para ampliar o dado raspado autorizado.
+
+3. **O selo de deploy atual é fraco para este defeito.** `contrato_deploy.sh` apenas exige os textos `DEPLOY-ESPERA-CRON` e `crons_em_curso`; não prova espera, recusa, filtragem host/casca nem ausência de restart com marca viva. `bin/contrato_deploy.sh:47-49`. O mutante “teto e reinicia” já corresponde ao comportamento da cópia. `bin/deploy.sh:274-279`. Esse contrato é consumido pelo placar de código. `bin/placar_code.sh:130-132`.
+
+4. **Outros selos que leem deploy têm contratos diferentes.** `test_deploy_recusa_conflito.sh` cobra chamada à guarda de conflitos e importação dos URLconfs. `bin/tests/test_deploy_recusa_conflito.sh:52-60`. `test_orcamento_contexto.sh` cobra histórico depois das provas, seus modos e que reprovação da prova de casca continua sendo porta; seus mutantes não exercitam cron vivo/restart. `bin/tests/test_orcamento_contexto.sh:263-333`. `test_janela_auth.sh` verifica a chamada da guarda; `bin/tests/test_janela_auth.sh:64-67`. Nenhum desses trechos é prova do novo contrato de cron vivo. `bin/contrato_deploy.sh:47-49`; `bin/tests/test_deploy_recusa_conflito.sh:52-60`; `bin/tests/test_orcamento_contexto.sh:263-333`.
+
+5. **Há modos sem docker restart e sem essa espera.** `--reload-agendado` e `--reload-copia` definem `AGENDADO=1`; esse ramo usa HUP nas três cascas. `bin/deploy.sh:54-60`, `:237-251`. A espera por marca está no `else` do ramo. `bin/deploy.sh:266-279`. Ao especificar “todo pouso”, delimitar o contrato para a operação destrutiva de restart evita confundir HUP com restart. `bin/deploy.sh:237-279`. A configuração instalada do reload é conferida por `selo_reciclagem.sh`; não é verificada aqui no host de produção. `bin/selo_reciclagem.sh:70-75`; situação instalada [nao verificado].
+
+6. **O contador existente não é a medida “rc137 no minuto de deploy”.** `crons_quebrados` considera a última corrida por `(nome, emp)`, nas últimas 26h, dentre as últimas 20 mil linhas, e conta qualquer exit diferente de 0/2. `app/core/services/crons_quebrados.py:16-17`, `:33-47`. O placar chama esse contador. `bin/placar_code.sh:451-455`. Assim, ele pode deixar de contar uma morte após uma recuperação e não correlaciona cron com deploy. `app/core/services/crons_quebrados.py:41-47`.
+
+7. **Fontes para construir a medida existem, mas falta definir a correlação.** O runner registra `nome`, `emp`, `ini`, `fim`, `dur`, `exit`. `bin/cron_run.sh:13`. O histórico de deploy registra hora/head/0 somente depois das provas, não no instante do restart. `bin/deploy.sh:279`, `:342-347`. Definir log de restart, janela temporal, denominador e tratamento de ausência de registro são requisitos ainda não comprovados por um contador implementado; valor atual da medida pedida [nao verificado].
+
+8. **O vigia acusa depois da morte; não preserva o elo.** O runner cria flag/pauta quando RC é diferente de 0/2 e recupera quando volta bem. `bin/cron_run.sh:29-35`. O carimbo de fim só nasce para RC 0/2. `bin/cron_run.sh:22-25`. A guarda nova precisa impedir a morte antes do restart; manter o vigia não satisfaz por si o contrato. `bin/deploy.sh:278-279`; `bin/cron_run.sh:22-35`.
+
+9. **Selos mínimos a cobrar no desenho:** marca viva de casca deve impedir restart e terminar por fim do cron ou recusa; marca de host não deve segurar; órfã não deve travar; nascimento concorrente deve usar a mesma exclusão do restart; mutante “avisa e reinicia” deve reprovar. São critérios propostos a partir dos furos do ramo atual, não testes já existentes. `bin/deploy.sh:271-279`; existência/resultado desses novos selos [nao verificado].
+
+## 02/11 18:24 · sessao b1c5436d1ca9 · E4-CALENDARIO-L1 · verificador · origem=Code
+
+**Veredito: bloqueia.** A leitura direta do D4 entrou, mas a janela mensal pode produzir status diferente da consulta unitária; o template também conserva rótulos próprios. (`app/colaboradores/services/calendario.py:572`; `app/ponto/status_dia.py:249`; `app/ponto/turnos.py:1297`; `app/templates/colaboradores/partials/_calendario_grade.html:103`)
+
+**1. Quem escreve e quem lê — não procede a acusação de novo escritor persistente no diff.**
+
+| Campo/valor | Quem produz/escreve | Quem lê |
+|---|---|---|
+| `CelulaDia.status_dia` | Regra `status_da_lavra`; porta calcula o alvo, atribui e salva junto do veredito. (`app/ponto/status_dia.py:92`; `app/ponto/portas/celula.py:686`; `:705`; `:773`) | D4 lê a coluna; calendário copia a resposta; resumo conta esse status. O cartório também verifica se a coluna já existe. (`app/ponto/status_dia.py:266`; `app/colaboradores/services/calendario.py:653`; `:766`; `app/ponto/services/cartorio.py:882`) |
+| `CelulaDia.status_rotulo` | Mesma porta e mesmo alvo do status. (`app/ponto/portas/celula.py:705`; `:773`) | D4 lê, com fallback para `ROTULO_STATUS`; calendário publica como `status_rotulo`. (`app/ponto/status_dia.py:268`; `app/colaboradores/services/calendario.py:718`) |
+| Resposta transitória `status`/`rotulo` | D4 produz por `_lido` ou pela coluna lavrada; não persiste o andamento. (`app/ponto/status_dia.py:174`; `:260`; `:267`) | Calendário e painel consomem a resposta. (`app/colaboradores/services/calendario.py:653`; `:718`; `app/core/services/painel_op.py:338`) |
+| `ROTULO_EM_CURSO` | Constante do núcleo. (`app/ponto/status_dia.py:61`) | D4 escolhe a frase quando o resultado já é `previsto` e `data <= hoje`; calendário apenas repassa. (`app/ponto/status_dia.py:298`; `app/colaboradores/services/calendario.py:718`) |
+| `faixa` | A2 seleciona o vencedor e monta o dicionário. (`app/ponto/precedencia.py:393`; `:400`) | D4 lê para natureza; calendário fornece os fatos previamente carregados. (`app/ponto/status_dia.py:287`; `app/colaboradores/services/calendario.py:473`; `:572`) |
+| `dia['ausencia']` | Cobertura seleciona a ausência; calendário monta o chip, lendo efeito e catálogo. (`app/ponto/turnos.py:2753`; `:2769`; `app/colaboradores/services/calendario.py:451`; `:663`) | Template dá prioridade ao chip. (`app/templates/colaboradores/partials/_calendario_grade.html:97`) |
+| `CelulaDia.ausencia` | É outro campo: escrito pelas operações `carimbar` e `carimbar_insumos_em_lote`, dentro da porta. (`app/ponto/portas/celula.py:802`; `:838`; `:843`) | Não é a fonte do chip carregado pelo calendário. (`app/colaboradores/services/calendario.py:451`; `:650`) |
+| `sem_fim` | Booleano local do D4; nenhuma persistência. (`app/ponto/status_dia.py:256`) | Ramos de andamento e previsão. (`app/ponto/status_dia.py:262`; `:295`) |
+| `motivo` | Juíza temporal retorna `turno_aberto*`, `sem_previsto`, `relogio` ou `None`; carregador publica por data. (`app/ponto/turnos.py:2114`; `:2117`; `:2121`; `:2122`; `:2166`) | D4 lê e decide andamento/lavra/disponibilidade. (`app/ponto/status_dia.py:253`; `:255`; `:259`; `:266`) |
+
+**2. Leitores restantes — fila; rótulo próprio no calendário — bloqueia.**
+
+- **Bloqueia:** `escala_suspeita` ainda recebe tooltip escrito no template, ignorando `dia.status_rotulo` e usando a régua do vínculo ativo. O D4, por sua vez, devolve o rótulo lavrado. (`app/templates/colaboradores/partials/_calendario_grade.html:103`; `app/colaboradores/services/calendario.py:265`; `:730`; `app/ponto/status_dia.py:268`)
+- **Bloqueia a fidelidade do rótulo:** o rodapé afirma que todo `aberto` “não teve saída”, embora o novo D4 produza `aberto` para par já fechado antes do fim previsto. (`app/templates/colaboradores/partials/_calendario_grade.html:169`; `app/ponto/status_dia.py:262`; `:263`; `app/ponto/tests/test_e4cal_l1_d4_natureza.py:156`)
+- **Fila, já declarada:** espelho, app e furos continuam classificando o dia por regras próprias. (`app/ponto/services/espelho.py:152`; `:183`; `app/api/views.py:1570`; `:1627`; `app/relatorios/furos.py:32`; `:162`; `app/core/medida_leitor_do_dia.py:323`)
+- **Fila:** PDF recebe os dias desse espelho e acrescenta frases próprias de isenção e turno aberto. (`app/relatorios/pdf_espelho.py:592`; `:919`; `:921`; `:958`)
+- **Não procede como duplicação do status diário:** drawer e view chamam o calendário; vigia chama a porta de oferecer resolução; painel guarda a resposta D4. (`app/colaboradores/services/drawer.py:120`; `app/colaboradores/views.py:1945`; `app/chamados/services/vigia_fio.py:280`; `:289`; `app/core/services/painel_op.py:338`)
+- **Não procede como julgamento de dia encerrado:** `escala/views.py` deriva previsão e seu rótulo, papel expressamente declarado. (`app/escala/views.py:49`; `:54`; `:60`; `app/core/medida_leitor_do_dia.py:300`)
+- **Não procede confundir TXT com status diário:** `classificar_export` responde entrada no TXT e consulta retenção por outra autoridade. (`app/folha/export.py:746`; `:942`; `:1212`)
+- **Fila documental:** os ícones ainda citam `calendario.ROTULO_STATUS` em comentários; isso não executa import. (`app/templates/core/_icone_dia_extra.html:6`; `app/templates/core/_icone_dia_previsto.html:6`; `app/templates/core/_icone_dia_folga.html:5`) Nenhum import executável de nome morto apareceu na busca textual; garantia por importação/AST completa: **[nao verificado]**.
+
+**3. Passado, relógio e meia-noite.**
+
+- **Não procede:** passado com `MOTIVO_SEM_PREVISTO` não entra em `sem_fim`; com coluna lavrada, lê a coluna; sem lavra e com batida, retorna `sem_certidao`. Os dois casos possuem testes específicos. (`app/ponto/status_dia.py:256`; `:266`; `:271`; `app/ponto/tests/test_e4cal_l1_d4_natureza.py:410`; `:417`)
+- **Não procede proibir todo `aberto` passado:** ele continua possível quando a própria juíza informa `turno_aberto*`; esse ramo não decide pela data. (`app/ponto/status_dia.py:259`; `app/ponto/turnos.py:2114`)
+- **Não procede nova leitura de relógio no caminho do status:** calendário captura `_agora`, injeta no D4, que deriva `hoje` desse instante e o repassa à juíza. `data <= hoje` escolhe apenas o rótulo de um status já determinado. (`app/colaboradores/services/calendario.py:134`; `:572`; `app/ponto/status_dia.py:231`; `:233`; `:253`; `:298`)
+- **Fila preexistente:** existe outra leitura de relógio no calendário, para permissão de desfazer retratação. Ela não alimenta o D4. (`app/colaboradores/services/calendario.py:221`; `:225`; `:572`)
+- **Não procede teto somente por data no encerramento:** a juíza compara `agora >= fim` e considera turno vivo; o defeito de meia-noite encontrado está na atribuição da órfã conforme a janela, detalhado no item 7. (`app/ponto/turnos.py:2114`; `:2119`; `:2122`; `:1297`)
+
+**4. Classes de reprovação.**
+
+| Classe | Resultado |
+|---|---|
+| Segundo juiz | **Ausente no classificador removido do calendário; presente como fila nos demais leitores declarados.** (`app/colaboradores/services/calendario.py:78`; `app/core/medida_leitor_do_dia.py:323`) |
+| Segundo escritor fora da porta | **Não identificado no diff de produção; não procede.** As atribuições persistentes examinadas continuam na porta. (`app/ponto/portas/celula.py:705`; `:773`) |
+| Relógio fora da borda | **Ausente como introdução no status; presente preexistente para desfazer, fila.** (`app/colaboradores/services/calendario.py:134`; `:221`; `:572`) |
+| Derivação paralela de fonte única | **Presente: bloqueia no rótulo do template; fila nos outros leitores.** (`app/templates/colaboradores/partials/_calendario_grade.html:103`; `app/core/medida_leitor_do_dia.py:323`) |
+| Selo sem mordida suficiente | **Presente, fila:** paridade examina dicionários, sem render; propagação de erro A2 só exercita caminho feliz. (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:202`; `app/colaboradores/tests/test_calendario_um_juiz.py:92`) |
+| Ordem de trava | **[nao verificado]** |
+| Pouso antes do pré-requisito | A exigência está documentada, e a cópia contém a alteração de isenção; sequência efetiva de pouso/apply: **[nao verificado]**. (`app/docs/RELATO.md:19`; `app/ponto/services/cartorio.py:520`) |
+
+**5. Testes apagados e asserções reescritas.** [nao verificado]
+
+- **Fila:** perdeu-se a fixture adversária explícita “lavra absolve enquanto grade/motor acusam”, dos testes apagados. Os novos casos usam `ok` com batidas exatas e `irregular` sem batida; falta acrescentar essa oposição em `CalendarioLeODoD4Test`, alternando somente a coluna lavrada. (`app/colaboradores/tests/test_calendario_ata_decide.py:23`, arquivo apagado no diff fornecido; `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:117`; `:126`)
+- **Não procede perda da regra de isenção:** há cobertura funcional na regra, na porta e na tela, incluindo o rótulo; o teste apagado verificava apenas texto-fonte. (`app/ponto/tests/test_e3_status_lavrado.py:62`; `:220`; `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:148`; `:192`; `app/colaboradores/tests/test_calendario_isencao.py:8`, arquivo apagado no diff)
+- **Não procede vacuidade total do teste retargetado:** ele diferencia efetivamente `ok` de `irregular` e exige `None != ok`. O caso chamado “missing” agora injeta diretamente `irregular`; deixou de provar a antiga relação grade-missing → status, retirada do leitor. (`app/colaboradores/tests/test_t4_lei_status_none_alerta.py:114`; `:123`; `:129`; `:138`; `app/colaboradores/services/calendario.py:366`)
+- **Fila:** falta injetar falha de `fatos_do_periodo` e exigir propagação; `assertNoLogs` no caminho feliz não protege o novo `raise`. (`app/colaboradores/tests/test_calendario_um_juiz.py:92`; `app/colaboradores/services/calendario.py:485`)
+- **Bloqueia:** P14/P16 precisa ganhar o caso do item 7; também falta teste de render que detecte o tooltip próprio. Os testes atuais comparam apenas `status`/`status_rotulo` do contexto. (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:202`; `:211`; `app/templates/colaboradores/partials/_calendario_grade.html:103`)
+
+**6. Baixa feriado/prazo — não procede a reprovação.**
+
+A impressão removida pertencia ao classificador apagado, e o teste nomeado existe: distingue `trabalha_em_feriado=False → folga` de `True → previsto`, com cadastros separados e comparação dos resultados. A2 efetivamente conserva trabalho quando o feriado só afeta pagamento. (`app/core/juizes.py:456`; `app/colaboradores/services/calendario.py:78`; `app/ponto/tests/test_e4cal_l1_d4_natureza.py:323`; `:333`; `:343`; `app/ponto/precedencia.py:373`; `:378`) Execução verde desse teste: **[nao verificado]**.
+
+**7. Contraexemplo além do golden — bloqueia.**
+
+Caso sintético: vínculo 12x36 noturno 19–07, sem intervalo, âncora 08/09/2026; única batida próxima é `S` em 09/09 às 07h; sem células em 07–10/09; existe DNA 19–07 distante, em 02/09; sem ausência ou feriado em 09/09; instante posterior ao encerramento. A alternância faz 09/09 ser folga. (`app/escala/models.py:1260`; `app/ponto/precedencia.py:380`)
+
+| Consulta | Caminho | Resultado |
+|---|---|---|
+| Calendário mensal | DNA distante torna o mapa não vazio; véspera ausente no mapa impede usar o template; órfã fica em 09/09. D4 vê batida e nenhuma lavra. (`app/escala/utils.py:103`; `app/ponto/turnos.py:1297`; `:285`; `app/ponto/status_dia.py:252`; `:271`) | **`sem_certidao`** |
+| D4 unitário de 09/09 | Pad 07–10/09 não contém DNA; mapa vira `None`; template atribui a órfã a 08/09, filtrada fora da consulta. Sem batida em 09/09, natureza responde folga. (`app/ponto/turnos.py:1845`; `:2993`; `:1300`; `:295`; `:1993`; `app/ponto/status_dia.py:291`) | **`folga`** |
+
+A sonda pura do pareador, executada em memória, confirmou as duas atribuições da mesma saída: **09/09 com mapa distante; 08/09 sem mapa**. A integração completa calendário/D4 e ocorrência desse cadastro em produção permanecem **[nao verificado]**. (`app/ponto/turnos.py:1297`; `:1300`; `:1494`)
+
+## 02/11 18:22 · sessao 17d91a766eb9 · - · - · origem=Ronald (tmux)
+
+**Bloqueia — janela muda o status do mesmo dia.** Contraexemplo estático: vínculo 12x36 noturno 19–07, sem intervalo, âncora 08/09; única batida na região: `S` em 09/09 às 07h; nenhuma célula em 07–10/09; célula com DNA 19–07 em 02/09; agora 20/09. A natureza de 09/09 é folga pela alternância (`app/escala/models.py:1260`).
+
+- Calendário mensal: o DNA de 02/09 torna o mapa não vazio; como 08/09 falta nele, `_vespera` retorna `None`; a saída órfã fica em 09/09. D4 recebe `tem_batida=True` e devolve `sem_certidao` (`app/escala/utils.py:103`; `app/ponto/turnos.py:1297`; `app/ponto/turnos.py:285`; `app/ponto/turnos.py:1494`; `app/ponto/status_dia.py:252`; `app/ponto/status_dia.py:271`).
+- D4 unitário de 09/09: pad 07–10/09 sem DNA faz o mapa virar `None`; `_vespera` usa template 19–07; a órfã é atribuída a 08/09 e descartada do resultado unitário. Sem batida em 09/09, D4 lê natureza folga e devolve `folga` (`app/ponto/turnos.py:1845`; `app/ponto/turnos.py:2993`; `app/ponto/turnos.py:1300`; `app/ponto/turnos.py:291`; `app/ponto/turnos.py:1990`; `app/ponto/status_dia.py:291`).
+- É dedução dos ramos da cópia; reprodução executada e ocorrência em produção: **[nao verificado]**.
+
+**Não procede — passado `sem_previsto` virar aberto por data.** O predicado exclui passado; nesse ramo, com lavra lê a coluna, sem lavra e com batida entrega `sem_certidao`. Há testes específicos para ambos (`app/ponto/status_dia.py:256`; `app/ponto/status_dia.py:266`; `app/ponto/status_dia.py:271`; `app/ponto/tests/test_e4cal_l1_d4_natureza.py:410`; `app/ponto/tests/test_e4cal_l1_d4_natureza.py:417`).
+
+**Não procede — nova leitura temporal do status fora da borda.** Calendário captura `_agora`, passa-o ao D4, que obtém `hoje` desse instante e injeta o mesmo instante na juíza. O rótulo `data <= hoje` apenas escolhe a frase depois de `s == 'previsto'` (`app/colaboradores/services/calendario.py:134`; `app/colaboradores/services/calendario.py:572`; `app/ponto/status_dia.py:231`; `app/ponto/status_dia.py:253`; `app/ponto/status_dia.py:298`).
+
+**Fila — segunda leitura de relógio preexistente no calendário.** `_agora_retr = timezone.now()` decide prazo de desfazer; não participa do status nem foi acrescentada pelo diff (`app/colaboradores/services/calendario.py:221`; `app/colaboradores/services/calendario.py:225`).
+
+**Não procede — meia-noite tratada só por data no encerramento.** Marcos são encadeados em instantes, avançando dia quando necessário; a juíza compara `agora >= fim` e prioriza turno aberto vivo (`app/escala/servico_jornada.py:79`; `app/escala/servico_jornada.py:89`; `app/ponto/turnos.py:2114`; `app/ponto/turnos.py:2119`).
+
+**Fila — custo de CPU não medido pelo teto de queries.** Para cada par, D4 recalcula `dias_encerrados` da carga inteira; esse método percorre todos os dias da janela. Com uma carga mensal, há repetição quadrática em dias, embora turnos e consultas estejam memoizados (`app/ponto/status_dia.py:248`; `app/ponto/status_dia.py:253`; `app/ponto/turnos.py:3004`; `app/ponto/turnos.py:2162`).
 
 ## 02/11 18:21 · sessao 4253b846026f · - · - · origem=Ronald (tmux)
 
@@ -408,7 +629,7 @@ A montagem do TXT consome `classificar_export`, constrói `entra_set`, restringe
 - `classificar_export`/retentor continuam lendo estado atual; o juiz `txt_vigente_x_gravado` monta o atual e compara seu hash ao TXT vigente. Logo “entregue” não garante que a leitura atual permaneça igual ao documento entregue. Divergência real neste estoque é `[nao verificado]`. (`app/folha/export.py:635-660`, `746-769`, `942-955`.)
 - Não confundir com `competencia_fechada_para_celula`: outro juiz combina TXT entregue **ou holerite publicado**. (`app/folha/export.py:578-609`.)
 
-## 01/11 18:26 · sessao 2e2239d89df6 · O261-E-F2 · verificador · origem=Code
+## 01/11 18:26 -- HISTORICO (mais de 24 h) · sessao 2e2239d89df6 · O261-E-F2 · verificador · origem=Code
 
 1. **Tratamento dos itens da triagem_v8**
 
@@ -479,7 +700,7 @@ Nas referências abaixo, **T** é [test_o261e_f2_ramo_e_i20.py](/home/ronald/cod
 
 Não executei os testes: o quinto cria arquivo temporário, incompatível com a restrição de somente leitura. (`T:284`, `T:286`.) As contagens históricas de testes verdes/vermelhos dos anexos não foram reproduzidas: **[nao verificado]**. [nao verificado]
 
-## 01/11 18:24 · sessao dae46ff611b1 · - · - · origem=Ronald (tmux)
+## 01/11 18:24 -- HISTORICO (mais de 24 h) · sessao dae46ff611b1 · - · - · origem=Ronald (tmux)
 
 - Relógio fixado pela classe em `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:109`; o vigia recebe `hoje=HOJE` explicitamente em `:175`, definido em `:55`; controles usam timestamp UTC literal em `:251`. Não encontrei relógio solto demonstrável nesses pontos; execução [nao verificado].
 - O único patch fica no `with` em `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:213`; a restauração da função real é assertada em `:216`, antes dos leitores em `:220` e `:221`. Vazamento demonstrado: nenhum; execução [nao verificado].
@@ -489,7 +710,7 @@ Não executei os testes: o quinto cria arquivo temporário, incompatível com a 
 - A classe usa `TestCase` e `setUpTestData` em `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:110`; cada um dos cinco testes cria seu cenário em `:201`, `:212`, `:236`, `:259` e `:276`. Dependência de dados deixados por outro dos cinco testes não aparece no código; comportamento do framework em execução [nao verificado].
 - Não executei os testes: o quinto cria arquivo temporário em `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:284`, incompatível com a auditoria somente leitura. Resultados dos logs anexados [nao verificado].
 
-## 01/11 18:24 · sessao 0c1e939852f1 · - · - · origem=Ronald (tmux)
+## 01/11 18:24 -- HISTORICO (mais de 24 h) · sessao 0c1e939852f1 · - · - · origem=Ronald (tmux)
 
 Auditoria estática, sem executar testes ou mutantes; resultados empíricos dos logs citados: [nao verificado]. [nao verificado]
 
@@ -507,7 +728,7 @@ Auditoria estática, sem executar testes ou mutantes; resultados empíricos dos 
 
 - **Outro mutante vivo:** omitir em `vigia_fio.py:653` o detalhe `sem_pergunta_viva`, mantendo o detalhe do ramo. O teste exige apenas `alcance_e_detalhe[CAUSA_DO_RAMO] == 1`, sem somar detalhes ou conferir o detalhe do outro dia (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:193-197`). Sobrevivência executada: [nao verificado].
 
-## 01/11 18:24 · sessao 853d16ba45bf · - · - · origem=Ronald (tmux)
+## 01/11 18:24 -- HISTORICO (mais de 24 h) · sessao 853d16ba45bf · - · - · origem=Ronald (tmux)
 
 - **Triagem 2a / pergunta 2: corresponde ao código.** O cenário cria pergunta `saida_sem_entrada`, sem texto, com DNA `hi=08:00` e lâmpada E acesa; esse motivo corresponde a E/hi. Antes do carimbo, o C6 pula o degrau da resposta, pula o BUG 117 por `materializada_em=None`, e retorna viva porque `furo` acusa. Referências: `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:61`, `:147`, `:236`; `app/chamados/juizes.py:845`, `:1047`, `:1077`, `:1081`; `app/escala/models.py:1735`.
 
@@ -519,266 +740,4 @@ Auditoria estática, sem executar testes ou mutantes; resultados empíricos dos 
 
 - **Outro mutante vivo dedutível:** substituir `self.materializada_por_id = autor_id` por `None` em `app/chamados/models.py:2530`. Os cinco testes não assertam o autor; suas verificações da pergunta cobrem carimbo temporal, via, vivacidade e o par resposta/carimbo, enquanto a chave e os degraus do C6 não consultam `materializada_por_id`. Referências: `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:184`, `:218`, `:264`; `app/chamados/juizes.py:788`, `:1032`. Sobrevivência por execução: **[nao verificado]**.
 
-## 01/11 18:15 -- HISTORICO (mais de 24 h) · sessao 3fb825a7930a · O261-E-F2 · verificador · origem=Code
-
-Análise estática; resultados de execução e medições mencionadas nos logs: **[nao verificado]**. Não executei a suíte: o quarto teste cria e escreve arquivo temporário (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:259`, `:261`, `:262`).
-
-Referências abreviadas, todas relativas à cópia:
-
-- **T** = `app/chamados/tests/test_o261e_f2_ramo_e_i20.py`
-- **E** = `app/chamados/services/disputa_emissao.py`
-- **M** = `app/chamados/models.py`
-- **J** = `app/chamados/juizes.py`
-- **V** = `app/chamados/services/vigia_fio.py`
-- **A** = `app/chamados/management/commands/auditar_invariantes_chamados.py`
-- **P** = `app/ponto/portas/celula.py`
-
-1. **Os seis procedentes foram tratados no código; a confirmação por execução permanece [nao verificado].**
-
-   | Achado da triagem | Avaliação do delta |
-   |---|---|
-   | **1 — causa versus detalhe** | Resolvido: compara conjuntamente rota, causa e detalhe com `['sem_porta', 'e', CAUSA_DO_RAMO]`; a produção escreve exatamente nessa disposição (`T:183`; `V:589`). |
-   | **2 — retorno não prova o ramo** | Resolvido: `_fechar` deixa de verificar o retorno; a prova passa pelo estado persistido da pergunta e pelo vigia (`T:159`, `T:175`, `T:176`, `T:193`). |
-   | **3 — MORDE abortava antes do vigia** | Resolvido: os helpers são separados; o MORDE verifica explicitamente a causa `c` e depois exige que o selo do vigia rejeite esse resultado (`T:171`, `T:179`, `T:212`, `T:214`). |
-   | **4 — `ok` inválido e célula sobrescrita depois** | Resolvido: usa `concorde` pela porta, cuja validação recusa vocabulário inválido; depois do fecho apenas relê e compara a célula, sem restaurá-la (`T:151`, `T:234`, `T:159`, `T:160`, `T:161`; `P:659`). |
-   | **5 — falta de controles negativos do I20** | Resolvido no desenho: cria texto com instante e texto vazio sem instante; ambos coexistem com o caso positivo, cujo total esperado continua exatamente um (`T:226`, `T:230`, `T:244`, `T:220`). |
-   | **6 — PK por substring** | Resolvido: interpreta a amostra com `literal_eval` e exige igualdade com `[p.pk]` (`T:79`, `T:220`). |
-
-2. **Descartado 7: sustenta-se para estes cenários; “mutante equivalente” globalmente não se sustenta.** A guarda consulta a pergunta **antes** do carimbo; a porta aplica carimbo e eventualmente `respondida_em` antes de consultar novamente o C6. É o mesmo juiz com entradas diferentes (`E:1626`; `M:2555`, `M:2558`, `M:2565`).
-
-   Há um contraexemplo estático: pergunta sem resposta, motivo `saida_sem_entrada`, célula `furo` por outro marco, mas E/hi acesa. Sem carimbo, o veredito acusador a mantém viva; com carimbo, a lâmpada própria a mata antes dessa decisão. Retirar somente a guarda permite então gravar o carimbo (`J:845`, `J:893`, `J:1077`, `J:1079`, `J:1083`, `J:1084`; `M:2576`). Execução desse exemplo e ocorrência em produção: **[nao verificado]**.
-
-   **Descartado 8: sustenta-se como entrada adversarial do detector.** O teste declara e injeta o meio-estado; o escritor normal atribui texto e instante e salva ambos juntos; o I20 consulta precisamente texto preenchido com instante nulo (`T:147`, `T:149`; `E:1247`, `E:1248`, `E:1266`; `A:1102`, `A:1103`). Isso prova detecção/preservação da entrada injetada, sem provar sua origem em produção; “B=0 na frota” permanece **[nao verificado]**. [nao verificado]
-
-3. **Origem das escritas e leituras.**
-
-   Nos quatro cenários, o próprio teste escreve `resposta_colab='07:55'`; os instantes nulos e a via vazia vêm da criação com os defaults do modelo. O veredito e as lâmpadas também são entradas escolhidas pelo teste, gravadas pela porta real (`T:145`, `T:149`, `T:151`; `M:2212`, `M:2299`, `M:2756`; `P:768`, `P:770`, `P:771`, `P:775`). [nao verificado]
-
-   A produção escreve carimbo/via em `_escrever_carimbo`, acrescenta `respondida_em` quando aplicável e só persiste após aceitação pelo C6. Na recusa, restaura a instância em memória (`M:2529`, `M:2531`, `M:2558`, `M:2569`, `M:2576`, `M:2582`, `M:2583`).
-
-   | Teste | Campos da pergunta efetivamente verificados | Célula, censo e I20 | [nao verificado]
-   |---|---|---|
-   | **Ramo normal** | Relê o banco: `materializada_em=None`, via vazia e pergunta viva. Não compara diretamente texto nem `respondida_em` (`T:174`, `T:175`, `T:176`, `T:177`). | Confere preservação da célula e linhas/contadores do censo real; não roda I20 (`T:191`, `T:193`, `T:161`, `T:183`, `T:185`). |
-   | **MORDE do ramo** | A produção sob mock escreve o carimbo; o teste relê e exige carimbo existente. O helper rejeita já na primeira asserção: sua comparação de via não é alcançada nessa chamada (`T:201`, `T:205`, `T:206`, `T:208`, `T:175`). | Confere célula preservada, linha real com causa `c` e rejeição pelo selo do vigia; não roda I20 (`T:202`, `T:161`, `T:209`, `T:212`, `T:214`). | [nao verificado]
-   | **Caso 2 normal** | Relê e compara texto, `respondida_em` e `materializada_em`; não compara via (`T:237`, `T:239`). | Confere célula, ausência do dia no censo e contadores; o auditor real produz I20, exigido como `VIOL,1,[pk]` (`T:236`, `T:161`, `T:242`, `T:243`, `T:245`, `T:220`). |
-   | **MORDE do I20** | Relê a pergunta, mas não compara diretamente aqueles quatro campos (`T:253`, `T:254`). | Confere célula; não chama o censo. O teste escreve a cópia alterada do auditor; essa cópia produz `OK,0,[]`, e o auditor original deve produzir `VIOL,1,[pk]` (`T:252`, `T:161`, `T:258`, `T:262`, `T:266`, `T:268`, `T:272`). | [nao verificado]
-
-   As **linhas do censo** são construídas pela produção e apenas filtradas/lidas pelo teste. A **linha I20** vem da consulta, contagem/amostra e formatação do auditor, capturada em `StringIO` (`V:589`, `V:654`; `T:166`, `T:167`; `A:1102`, `A:564`, `A:565`, `A:1835`, `A:1837`; `T:86`, `T:97`). [nao verificado]
-
-   Portanto, há valores escritos pelo teste e depois comparados — sobretudo resposta, veredito e lâmpadas — como **preservação de premissas**. Eles não demonstram que o sistema criou essas premissas; o código agora explicita essa distinção e não reescreve a célula depois do fecho (`T:147`, `T:156`, `T:159`, `T:161`, `T:238`, `T:239`). [nao verificado]
-
-4. **Sim, existem outros sobreviventes por inspeção estática; sobrevivência medida: [nao verificado].**
-
-   - **Eliminar `d['alcance_' + causa] += 1` em `V:651`.** Universo, total de fio morto e linhas permanecem iguais; são os resultados comparados pelos testes. `alcance_c`/`alcance_e` ficariam errados sem uma asserção correspondente (`V:553`, `V:650`, `V:654`; `T:183`, `T:185`, `T:212`, `T:243`). [nao verificado]
-   - **Eliminar somente `_desfazer_em_memoria(antes)` em `M:2570`.** A porta continua retornando `False` antes do `save`, e o fecho continua sem persistir aquela instância. Os testes relêem o banco, deixando invisível o objeto interno sujo em memória; isso viola a restauração prometida pela porta (`M:2571`, `M:2576`, `M:2579`; `E:1638`, `E:1639`; `T:174`, `T:205`, `T:237`, `T:253`). [nao verificado]
-
-5. **Não identifiquei relógio solto, vazamento do mock ou dependência explícita de ordem no desenho destes quatro testes.** A classe congela o tempo, o censo recebe `HOJE` explicitamente e o controle usa instante literal; os `now()` desses caminhos de produção ficam sob o congelamento declarado (`T:100`, `T:166`, `T:226`; `E:1623`; `M:2550`; `P:772`). [nao verificado]
-
-   O mock termina antes das testemunhas, e sua restauração é verificada por identidade. Cada método cria seu cenário, com dados comuns declarados em `setUpTestData`, numa classe `TestCase` (`T:201`, `T:204`, `T:101`, `T:103`, `T:189`, `T:200`, `T:234`, `T:251`). Execução em ordens diferentes e confirmação prática do isolamento: **[nao verificado]**.
-
-## 01/11 18:14 -- HISTORICO (mais de 24 h) · sessao 43184c58c13e · - · - · origem=Ronald (tmux)
-
-Mutantes sobreviventes por inspeção estática; execução **[não verificado]**:
-
-1. **Excluir o rollback da recusa** em `app/chamados/models.py:2570`. A porta continua retornando `False` antes do `save` (`models.py:2571`, `models.py:2576`), e o fecho continua imediatamente (`app/chamados/services/disputa_emissao.py:1638`). O objeto interno fica alterado em memória, mas os testes observam instâncias relidas do banco (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:174`, `:205`, `:237`, `:253`). Viola o contrato de restituição integral da instância (`app/chamados/models.py:2579`).
-
-2. **Excluir a atualização do contador por causa** em `app/chamados/services/vigia_fio.py:651`. Preserva universo (`:553`), total de fio morto (`:650`) e linhas (`:654`); são precisamente os resultados assertados (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:181`, `:185`, `:212`, `:242`, `:243`). Os testes não assertam `alcance_c`/`alcance_e`, embora a produção declare que as causas devem somar o total (`app/chamados/services/vigia_fio.py:499`). Excluir a atualização de `alcance_e_detalhe` também passa por essa lacuna (`:652`).
-
-O descarte do mutante da linha 1626 exige uma ressalva: **“mesmo juiz” não demonstra equivalência universal**, pois a porta consulta o C6 após mudar o estado (`app/chamados/models.py:2555`, `:2558`, `:2565`). Contraexemplo estático: pergunta sem resposta com motivo `saida_sem_entrada`, célula `furo` por outro marco, mas E/hi acesa (`app/chamados/juizes.py:844`). Sem carimbo, o veredito acusador a mantém viva (`:1083`); com carimbo, a lâmpada própria a mata antes dessa decisão (`:1077`). Retirar a guarda permitiria gravar (`app/chamados/models.py:2576`). Os fixtures atuais usam `batida_ausente`, sem esse marco próprio (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:145`; mapa em `app/chamados/juizes.py:844`). Ocorrência desse contraexemplo em produção: **[não verificado]**.
-
-## 01/11 18:14 -- HISTORICO (mais de 24 h) · sessao 2bb9051113f1 · - · - · origem=Ronald (tmux)
-
-Os dois descartes têm alcances diferentes:
-
-- **#7: sustentado para o cenário dos quatro testes, mas “equivalente” globalmente é forte demais.** A guarda lê a pergunta antes do carimbo (`app/chamados/services/disputa_emissao.py:1626`); a porta escreve carimbo e eventualmente resposta em memória antes de consultar novamente o juiz (`app/chamados/models.py:2555`, `app/chamados/models.py:2558`, `app/chamados/models.py:2565`). Portanto, mesmo juiz não significa mesma entrada.
-
-  Contraexemplo estático: pergunta `saida_sem_entrada`, sem resposta, célula `furo`, E acesa e outro marco apagado. Sem carimbo, C6 chega ao veredito acusador e retorna viva (`app/chamados/juizes.py:1081`). Com carimbo, C6 verifica antes a lâmpada do marco e retorna morta (`app/chamados/juizes.py:1077`); o mapeamento desse motivo para E está em `app/chamados/juizes.py:845`, e a consulta da lâmpada em `app/chamados/juizes.py:863`. Retirar só a guarda permite gravar nesse caso (`app/chamados/models.py:2576`). Contraexemplo inferido do código; execução [não verificado].
-
-- **#8: sustentado como entrada adversarial.** O teste declara e injeta texto sem `respondida_em` (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:147`). O escritor real de resposta atribui ambos e salva juntos (`app/chamados/services/disputa_emissao.py:1247`, `app/chamados/services/disputa_emissao.py:1266`). O I20 consulta justamente texto preenchido com instante nulo (`app/chamados/management/commands/auditar_invariantes_chamados.py:1101`). Isso verifica detecção/preservação da entrada injetada, sem comprovar sua origem em produção; B=0/frota/sonda [não verificado].
-
-Quanto a tempo e isolamento: classe congelada em `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:100`; vigia recebe `HOJE` explicitamente na linha 166; controle usa instante literal na linha 226. O mock está limitado ao contexto das linhas 201–202, com identidade restaurada assertada na linha 204. As quatro rotinas criam cenário próprio nas linhas 189, 200, 234 e 251; a classe usa `TestCase` na linha 101. Ausência de dependência de ordem em execução [não verificado].
-
-Não executar o conjunto sob esta autorização: o MORDE do I20 cria e escreve arquivo temporário (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:259`, `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:262`).
-
-## 01/11 17:56 -- HISTORICO (mais de 24 h) · sessao 90d1cb24554b · E4-CALENDARIO-L1 · leitura · origem=Code
-
-1) **O problema de desenho, em seis linhas.**
-
-- “Status do dia” reúne natureza do dia, andamento do turno, julgamento e disponibilidade de dados no mesmo vocabulário. (`app/ponto/status_dia.py:28`)
-- Há duas regras: o calendário deriva `status`; o D4 combina relógio e coluna persistida. Compartilhar o vocabulário não unifica essas regras. (`app/colaboradores/services/calendario.py:801`; `app/ponto/status_dia.py:196`)
-- A própria palavra `falta` tem contratos diferentes: o calendário pode produzi-la por ausência de batida; L-039 exige falta decidida. (`app/colaboradores/services/calendario.py:133`; `app/docs/LEIS.md:87`)
-- A célula é referência viva em qualquer competência, mas o lote de status congela justamente as entregues. (`app/docs/ADR/0003-celula-tres-naturezas.md:25`; `app/ponto/management/commands/lavrar_status_competencia.py:40`)
-- “Lavrado” identifica a origem da resposta, sem certificar sua atualidade: o D4 lê o status sem conferir a impressão dos insumos. (`app/ponto/status_dia.py:203`)
-- Igualdade entre dois status não certifica frase, ação disponível ou cobrança do marco; esses campos têm outros predicados. (`app/colaboradores/services/calendario.py:886`; `app/colaboradores/services/calendario.py:189`; `app/chamados/juizes.py:1073`)
-
-2) **Quais colunas não encontram explicação suficiente na regra escrita?**
-
-Os quantitativos abaixo são os anexos fornecidos, sem reprodução independente [nao verificado]. A comparação mede impacto; nenhum dos caminhos vira gabarito pelo número de coincidências, conforme L-110. (`app/docs/LEIS.md:136`)
-
-| Coluna ou classe da saída | O que é explicável; o que permanece sem explicação |
-|---|---|
-| `tempo` | Passado não implica encerrado: é necessário ultrapassar o fim previsto e não haver turno vivo. Portanto `tempo` sozinho não explica nem condena `aberto`, `previsto` ou `falta`. (`app/ponto/turnos.py:2113`) O instante e o motivo individual de encerramento não aparecem nos anexos [nao verificado]. |
-| `tela_hoje=falta` × `d4=irregular/ok` | A diferença entre receitas é explícita: a tela admite falta sem decisão; a lavra trata `nunca_bateu` como irregular e admite isento sem batida como `ok`. (`app/colaboradores/services/calendario.py:133`; `app/ponto/status_dia.py:55`; `app/ponto/status_dia.py:108`) **A acepção automática de falta não se sustenta em L-039.** (`app/docs/LEIS.md:87`) Qual dessas condições ocorreu em cada amostra [nao verificado]. |
-| `folga/ausencia` × `previsto`, hoje ou futuro | O D4 consulta o relógio antes da coluna; a tela pode devolver ausência ou feriado antes do ramo temporal. Isso explica mecanicamente a diferença, sem provar erro individual. (`app/ponto/status_dia.py:197`; `app/colaboradores/services/calendario.py:109`) O ADR D4 manda devolver `aberto/previsto` antes do encerramento. (`app/docs/ADR/0002-celula-e-o-dia.md:21`) |
-| Demais diferenças com `fonte=lavrado` | Não há no anexo veredito/via, ata, cobertura parcial, isenção ou impressão por dia; escolher o resultado devido para cada par fica [nao verificado]. Esses insumos mudam a resposta da lavra. (`app/ponto/status_dia.py:96`; `app/ponto/portas/celula.py:694`) |
-| `nulo`, `completaveis`, `fila_cartorio`, `entregue` | O segundo anexo relata **35.432 completáveis, fila zero; 29.950 em entregues** [nao verificado]. Nulo completável é distinto de carimbo antigo no código. (`app/ponto/services/cartorio.py:758`) O bloqueio das entregues tem respaldo no ADR 0002, mas contraria a natureza viva declarada no ADR 0003: **há conflito escrito, não uma explicação normativa única.** (`app/docs/ADR/0002-celula-e-o-dia.md:68`; `app/docs/ADR/0003-celula-tres-naturezas.md:25`) |
-| `sem_dados/sem_celula` | D4 retorna isso antes de consultar natureza ou relógio. (`app/ponto/status_dia.py:191`) Dos 1.230 dias do segundo anexo, 120 estão classificados como vínculo existente e 1.110 como sem vínculo [nao verificado]. Os primeiros são candidatos à quebra de cobertura; os demais não são defeito demonstrado apenas pela situação atual da pessoa. A obrigação escrita é por **dia de vínculo vigente**. (`app/ponto/portas/celula.py:561`) |
-| `rotulo_perdido={'outro':…,'em_curso':…}` | A tela tem frases específicas para andamento e retenção; a lavra também guarda frase própria do isento. (`app/colaboradores/services/calendario.py:886`; `app/ponto/status_dia.py:48`) O significado operacional de `outro` e quais frases ele agrega ficam [nao verificado]. |
-| `resolver_dia={'nasce':27,'some':250}` | O predicado depende de status, trabalho, data e último recurso; este último também depende da pergunta viva respondida. (`app/colaboradores/services/calendario.py:189`; `app/colaboradores/services/calendario.py:571`; `app/colaboradores/services/calendario.py:901`) A transformação usada pela sonda e a legitimidade de cada nascimento/desaparecimento ficam [nao verificado]. |
-| `iguais`, `diferentes`, `ERROS 0`, `SONDA_OK`, `janela_x_dia_dia_a_dia {}` | Os anexos relatam resultados de comparação e execução [nao verificado]. Eles não demonstram conformidade com a regra nem cobertura adversarial; igualdade com o código anterior é impacto, não certificação. (`app/docs/LEIS.md:136`) |
-
-3) **Que perguntas faltaram, e quem escreve/lê os campos?**
-
-A afirmação histórica de que “ninguém perguntou” seria [nao verificado]. O confronto exige estas perguntas:
-
-- **Estamos comparando a mesma pergunta?** Natureza vencedora, cobrança do dia encerrado, turno vivo e pendência de um marco têm contratos distintos. (`app/ponto/precedencia.py:46`; `app/ponto/status_dia.py:158`; `app/ponto/turnos.py:2105`; `app/chamados/juizes.py:1073`)
-- **Qual é o universo obrigatório?** Pessoa atualmente viva, vínculo cobrindo aquela data e célula existente não são equivalentes; o gerador consulta vínculos ativos, enquanto a escolha diária também admite histórico encerrado. (`app/ponto/portas/celula.py:568`; `app/escala/alimentacao.py:177`)
-- **Conhecer um fato humano exige célula?** A precedência pode reconhecer ausência/feriado sem célula, enquanto D4 encerra a leitura em `sem_celula`. (`app/ponto/precedencia.py:375`; `app/ponto/status_dia.py:192`)
-- **“Lavrado” significa atual, completo ou apenas existente?** D4 não confere impressão; D5 considera já lavrado qualquer status não nulo, sem examinar o rótulo. (`app/ponto/status_dia.py:203`; `app/ponto/services/cartorio.py:758`)
-- **Todo insumo capaz de mudar a resposta invalida o julgamento?** O ADR reconhece isenção fora da impressão; a função de impressão não recebe esse campo. (`app/docs/ADR/0002-celula-e-o-dia.md:59`; `app/ponto/services/cartorio.py:356`)
-- **O passado consultado é referência atual ou fotografia entregue?** O ADR 0003 reserva a fotografia ao gravado e declara a célula viva. (`app/docs/ADR/0003-celula-tres-naturezas.md:25`)
-- **A comparação conserva frase, palavra, ação e contagem?** O calendário publica esses componentes separadamente; seu resumo não possui parcelas para `sem_certidao` e `sem_dados`, embora ambos pertençam ao vocabulário. (`app/colaboradores/services/calendario.py:883`; `app/colaboradores/services/calendario.py:935`; `app/ponto/status_dia.py:42`)
-
-Esta é a cadeia de escritores e leitores constatados; completude de um censo global além dos arquivos abertos [nao verificado].
-
-| Campos envolvidos | Quem escreve ou deriva | Quem lê |
-|---|---|---|
-| `trabalha`, `dna`, `escala_geradora` | Geração, regeneração e reversão, declaradas no inventário do ADR; criação concreta pela porta. (`app/docs/ADR/0003-celula-tres-naturezas.md:41`; `app/ponto/portas/celula.py:593`) | Precedência, vínculo diário e encerramento. (`app/ponto/precedencia.py:349`; `app/escala/alimentacao.py:237`; `app/ponto/turnos.py:2164`) |
-| Vigência `data_inicio/data_fim/ativa` | Fechamento por `fechar_vigencia`; demais escritores de início não recenseados aqui [nao verificado]. (`app/colaboradores/services/vinculo.py:561`) | Cobertura diária, geração e seleção do vínculo. (`app/escala/alimentacao.py:182`; `app/ponto/portas/celula.py:588`; `app/escala/alimentacao.py:250`) |
-| Batidas: `timestamp`, `tipo`, origem/retratação | Registro por `registrar_batida`; operações de alteração/retratação no mesmo módulo. (`app/ponto/registro_batida.py:94`; `app/ponto/registro_batida.py:235`; `app/ponto/registro_batida.py:267`) | Calendário pelos turnos; impressão dos insumos. (`app/colaboradores/services/calendario.py:301`; `app/ponto/services/cartorio.py:366`) |
-| Ausência, estado, efeito e cobertura | Criação pelo serviço de ausência; decisão do dia pode criar ausência aprovada. (`app/ponto/services/ausencia.py:130`; `app/ponto/services/veredito_celula.py:315`) | Calendário consulta cobertura para cobrança e folha separadamente; palavra lê cobertura/decisão. (`app/colaboradores/services/calendario.py:582`; `app/colaboradores/services/calendario.py:626`; `app/ponto/services/dia_decidido.py:363`) |
-| `FolgaDia` e origem de calendário/manual | `gerar_foto_folgas` e `lancar_folga`. (`app/escala/folgas.py:150`; `app/escala/folgas.py:228`) | Precedência seleciona a folga válida para o vínculo. (`app/ponto/precedencia.py:358`) |
-| `ata`, `veredito`, `veredito_via`, `protestos`, `veredito_em` | `lavrar_veredito`; preserva a decisão administrativa durante lavra do cartório. (`app/ponto/portas/celula.py:709`; `app/ponto/portas/celula.py:737`) | Calendário, regra do status e C6. (`app/colaboradores/services/calendario.py:510`; `app/ponto/status_dia.py:101`; `app/chamados/juizes.py:1081`) |
-| `impressao`, `julgada_em`, `ausencia`, `tem_entrada/tem_saida`, `insumos_em` | `carimbar`, com fontes/naturezas inventariadas. (`app/ponto/portas/celula.py:787`; `app/docs/ADR/0003-celula-tres-naturezas.md:49`; `app/docs/ADR/0003-celula-tres-naturezas.md:58`) | D5 recebe a distinção entre fatos atuais e fila antiga. (`app/ponto/services/cartorio.py:752`) |
-| `status_dia`, `status_rotulo` persistidos | `_aplicar_status`, dentro de `lavrar_veredito`, pela regra da lavra ou decisão administrativa. (`app/ponto/portas/celula.py:694`; `app/ponto/portas/celula.py:705`) | D4 lê o par; D5 lê a nulidade do status. (`app/ponto/status_dia.py:203`; `app/ponto/services/cartorio.py:758`) |
-| `status`, `status_rotulo`, `resumo` da tela | `_classificar` e montagem do calendário. (`app/colaboradores/services/calendario.py:801`; `app/colaboradores/services/calendario.py:886`; `app/colaboradores/services/calendario.py:935`) | Grade e rodapé; portas curtas de status e contagem. (`app/templates/colaboradores/partials/_calendario_grade.html:69`; `app/templates/colaboradores/partials/_calendario_grade.html:142`; `app/colaboradores/services/calendario.py:204`; `app/colaboradores/services/calendario.py:216`) |
-| Encerramento; retorno D4 `status/rotulo/fonte` | Encerramento derivado por `dias_encerrados`; resposta derivada pelo D4, sem persistir o relógio. (`app/ponto/turnos.py:2125`; `app/ponto/status_dia.py:196`) | Calendário lê motivos; D4 lê célula e motivos. (`app/colaboradores/services/calendario.py:699`; `app/ponto/status_dia.py:191`) |
-| Pergunta: resposta, validação, materialização e via | Resposta em `disputa_emissao`; validação em `validacao`; materializador e portas do modelo também carimbam estados. (`app/chamados/services/disputa_emissao.py:1247`; `app/chamados/services/validacao.py:127`; `app/chamados/services/materializacao.py:509`; `app/chamados/models.py:2485`) | C6 lê esses estados, veredito, fato do marco e pendências; há classificação residual pela jornada. (`app/chamados/juizes.py:1032`; `app/chamados/juizes.py:1094`; `app/chamados/juizes.py:1099`) |
-| `pode_ultimo_recurso`, `resolver_dia_oferecido` | Calendário combina competência, pergunta viva e predicado da ação. (`app/colaboradores/services/calendario.py:901`; `app/colaboradores/services/calendario.py:932`) | Template condiciona o controle pela permissão do usuário. (`app/templates/colaboradores/partials/_calendario_grade.html:125`) |
-| `DiaPago`/rubricas e palavra visual | Dinheiro por `dia_pago.lavrar`, chamado pelo fechamento; palavra por `dia_decidido.do_dia`. (`app/ponto/services/dia_pago.py:135`; `app/ponto/services/fechamento.py:1168`; `app/ponto/services/dia_decidido.py:399`) | Calendário lê dinheiro e publica palavra/cor separadamente do status. (`app/colaboradores/services/calendario.py:370`; `app/colaboradores/services/calendario.py:874`; `app/colaboradores/services/calendario.py:883`) |
-| Contadores/rótulos exclusivos das sondas | Escritores e critérios de `rotulo_perdido`, `nasce/some`, `iguais/diferentes` não apresentados [nao verificado]. | Leitura pelos anexos fornecidos [nao verificado]. |
-
-4) **Propriedades verificáveis por máquina, sem LLM.**
-
-São critérios de detecção derivados dos contratos citados; sua execução nesta cópia e seus resultados ficam [nao verificado].
-
-| Classe de divergência | Propriedade exigível |
-|---|---|
-| **Falta sem decisão** | `status=falta ⇒ decisão descontável válida para o dia`. Casos sintéticos distinguem furo, falta aprovada e abono, sem tomar o caminho antigo como oráculo. (`app/docs/LEIS.md:87`; `app/docs/LEIS.md:136`) |
-| **Precedência/realização** | Casos pela regra cobrem ausência integral/parcial, folga humana, feriado, trabalho em feriado, batida e decisão administrativa; o resultado deve respeitar cada condição, inclusive a exceção parcial. (`app/ponto/precedencia.py:11`; `app/ponto/status_dia.py:96`; `app/ponto/portas/celula.py:694`) |
-| **Relógio/teto** | Com instante fixo, nenhum encerramento antes do fim previsto ou com turno vivo; sem previsto, motivo `sem_previsto`. Testar fronteiras e turnos atravessando meia-noite. (`app/ponto/turnos.py:2113`; `app/docs/LEIS.md:100`) |
-| **Dependência da janela** | Para o mesmo instante e dados, `dias_encerrados(c,I,F)[d] == dia_encerrado(c,d)`; também igualdade entre consulta unitária e lote D4. (`app/ponto/turnos.py:2134`; `app/ponto/status_dia.py:169`) |
-| **Buraco de materialização** | Anti-join: todo `(pessoa,data)` com vínculo diário válido no universo obrigatório deve possuir célula. Segregar “sem vínculo” evita contar ausência legítima de domínio como falha. (`app/ponto/portas/celula.py:561`; `app/escala/alimentacao.py:182`) |
-| **Nulo/completável/fila** | No mesmo universo elegível, `total = já_lavrado + completável + fila`; aplicação repetida é idempotente e completar status preserva veredito, ata e data do veredito. (`app/ponto/services/cartorio.py:752`; `app/ponto/services/cartorio.py:758`; `app/ponto/portas/celula.py:753`) |
-| **Congelamento indevido da referência** | Mantidos insumos e instante, marcar a competência como entregue não pode alterar o resultado da referência viva; a fotografia histórica é outra entidade. Essa propriedade expõe o conflito do lote atual. (`app/docs/ADR/0003-celula-tres-naturezas.md:25`; `app/ponto/management/commands/lavrar_status_competencia.py:40`) |
-| **Lavratura desatualizada** | Após consumir os eventos, impressão persistida deve corresponder aos insumos atuais. Teste metamórfico: alteração que muda julgamento precisa mudar a chave de atualidade ou provocar invalidação explícita; variar isenção detecta a lacuna já declarada. (`app/docs/ADR/0002-celula-e-o-dia.md:16`; `app/docs/ADR/0002-celula-e-o-dia.md:59`) |
-| **Rótulo perdido** | Comparar o par `(status,rótulo)`, incluindo isenção, andamento e retenção; igualdade apenas do status não satisfaz esse contrato. (`app/ponto/status_dia.py:48`; `app/ponto/status_dia.py:205`; `app/colaboradores/services/calendario.py:886`) |
-| **Ação nasce/some** | Verificar `resolver == último_recurso ∧ trabalho ∧ passado ∧ status_pede_decisão`; na migração, comparar a projeção completa sob os mesmos insumos. Para C6, marco satisfeito não pode permanecer cobrado apenas porque outro marco acusa o dia. (`app/colaboradores/services/calendario.py:189`; `app/chamados/juizes.py:1073`) |
-| **Rodapé incompleto** | Histograma exclusivo dos status deve somar `len(dias)` e coincidir entre tela, contagem e resumo; HE fica fora dessa soma porque é selo sobreposto. (`app/colaboradores/services/calendario.py:217`; `app/colaboradores/services/calendario.py:935`; `app/colaboradores/services/calendario.py:940`) |
-| **Dois leitores concordam no erro** | Casos e propriedades independentes pela regra continuam obrigatórios mesmo com divergência zero; comparação entre implementações só mede coerência/impacto. (`app/docs/LEIS.md:136`) |
-
-## 01/11 17:53 -- HISTORICO (mais de 24 h) · sessao 81f096571943 · - · - · origem=Ronald (tmux)
-
-Leitura concluída, sem escrita. Os anexos não trazem perguntas, respostas, atas ou marcos; qualquer explicação individual por C6 continua [nao verificado].
-
-**Fato de desenho útil à consolidação**
-
-`_pergunta_viva_calc` não consome `status_dia`/`status_rotulo`: decide por assinatura, tranca, resposta, veredito/via, via/materialização, fato do marco e provisoriedade da ata; ainda chama `classificar_falta` quando não resolveu pelos degraus anteriores. Portanto “status da tela”, “status lavrado” e “pergunta viva” respondem perguntas distintas, com uma recomputação residual no C6. (`app/chamados/juizes.py:1032–1118`; L-061 em `app/docs/LEIS.md:95`.)
-
-C6 distingue explicitamente **marco perguntado** de **dia inteiro**: uma pergunta materializada morre se a lâmpada daquele marco acendeu, mesmo se outro marco mantém o dia acusando. (`app/chamados/juizes.py:1073–1084`.) Em célula não acusadora, `marcos_pendentes` impede absolvição provisória; o fato do próprio marco pode absolvê-la. (`app/chamados/juizes.py:1085–1096`.)
-
-**Regras escritas relevantes**
-
-- L-002: testemunhas leem a mesma autoridade; derivação própria é divergência estrutural. (`app/docs/LEIS.md:60`.)
-- L-020: DNA do passado congelado, exceção formal pela porta com denúncia. (`app/docs/LEIS.md:71`.)
-- L-039: “falta” significa ausência decidida cujo tipo desconta; não basta furo de batida. (`app/docs/LEIS.md:87`.)
-- L-061: chamado, pergunta, tela e folha leem célula/ata. (`app/docs/LEIS.md:95`.)
-- L-073: data passada sozinha não prova encerramento; comparar instante ou exigir fato encerrado. (`app/docs/LEIS.md:100`.)
-- L-089: atestado só produz efeito em dia previsto para trabalho; o índice registra tensão com classificação em folga. (`app/docs/LEIS.md:121`, `:172`.)
-- L-110: comparação velho × novo mede impacto; regra aplicada a cadastro/batidas e propriedades fixas certificam. (`app/docs/LEIS.md:136`.)
-
-**Perguntas de desenho a explicitar — não é possível afirmar historicamente que “ninguém perguntou” [nao verificado]**
-
-1. “Falta” da tela é a falta decidida de L-039, ou ausência de marcação? Sem cadastro da ausência e seu status no anexo não há gabarito individual. (`app/docs/LEIS.md:87`; `app/chamados/juizes.py:1097–1103`.)
-2. Quando duas projeções concordam em `status`, concordam também em ação oferecida, marco cobrado, frase e informação provisória? O C6 decide por marco e teto, enquanto o mapa declara `resolver_dia_oferecido` como outro predicado. (`app/chamados/juizes.py:1073–1096`; `app/docs/MAPA/calendario-dia-da-tela.md:10–13`.)
-3. A pergunta aponta para a mesma `(colaborador,data)` da célula? O próprio alimentador recusa FK divergente; ausência de célula confiável é `None`, diferente de mapa que afirma inexistência. (`app/chamados/juizes.py:586–606`.)
-4. “Sem pergunta viva” significa fato resolvido ou apenas competência trancada? C6 cala a cobrança por leitura de tranca sem absolver o dia. (`app/chamados/juizes.py:1035–1043`.)
-5. Qual instante e qual estado dos insumos sustentam a comparação? C6 usa janela viva e ata provisória; o anexo não fornece essa identidade completa. (`app/chamados/juizes.py:533–565`, `:1085–1096`; [nao verificado].)
-
-**Inventário dos campos lidos pelo C6 e escritores efetivamente abertos**
-
-| Campo | Escritor observado | Leitor observado |
-|---|---|---|
-| `resposta_colab`, `respondida_em` | resposta do colaborador; automática; carimbo pela trilha | C6, ramo resposta |
-| | `app/chamados/services/disputa_emissao.py:1247–1266`, `:1381–1413` | `app/chamados/juizes.py:1047–1059` |
-| `validada_em`/`validada_por` | `_carimbar_validacao`; resposta nova desfaz; materializador também assina irmãs com texto | C6 encerra antes dos demais degraus |
-| | `app/chamados/services/validacao.py:127–133`; `app/chamados/services/disputa_emissao.py:1250–1266`; `app/chamados/services/materializacao.py:513–532` | `app/chamados/juizes.py:1033–1034` |
-| `materializada_em`, `via_resolucao` | materializador; portas do modelo para admin, tranca e fato; retratação de duplicata | C6 encerra por identidade ou exige testemunha |
-| | `app/chamados/services/materializacao.py:509–532`; `app/chamados/models.py:2485–2541`; `app/chamados/services/fio.py:878–897` | `app/chamados/juizes.py:1042`, `:1066–1079`, `:1107–1118` |
-| `celula`, `data_evento`, `motivo`, `tipo_resposta` | modelo declara identidade/snapshot; censo completo de escritores não realizado [nao verificado] | alimentador, lâmpada do marco e C6 |
-| | `app/chamados/models.py:2193–2207` | `app/chamados/juizes.py:598–606`, `:863–890`, `:1097–1103` |
-| `CelulaDia.veredito`, `veredito_via`, `ata` | modelo delega à porta; ato admin chama `lavrar_veredito`; admin cria ausência aprovada ou materializa batida | C6 e prova do marco |
-| | `app/escala/models.py:1787–1796`; `app/ponto/services/veredito_celula.py:299–330` | `app/chamados/juizes.py:1044–1046`, `:1081–1096`, `:887–893` |
-| `status_dia`, `status_rotulo` | declaração de escritor na porta e nulidade “ainda não lavrado” | D4 declarado; C6 não os lê |
-| | `app/escala/models.py:1775–1785` | `app/escala/models.py:1780`; corpo aberto em `app/chamados/juizes.py:1032–1118` |
-
-**Propriedades mecânicas úteis**
-
-- **Identidade:** toda pergunta usada como prova satisfaz `p.celula.colaborador_id == p.disputa.colaborador_id` e `p.celula.data == p.data_evento`; violações são identidade divergente, não diferença de classificação. (`app/chamados/juizes.py:589–606`.)
-- **Falta sem decisão:** `status == falta ⇒ existe ausência decidida descontável para o dia`; distingue furo de falta sem usar o código antigo como oráculo. (`app/docs/LEIS.md:87`, `:136`.)
-- **Prova do marco:** pergunta materializada, não respondida pelo ramo especial nem retida por assinatura/tranca, com `fato_do_marco_no_espelho(p) is True`, deve estar morta; dia acusador por outro marco não a revive. (`app/chamados/juizes.py:1033–1079`.)
-- **Teto:** célula sem acusação mas com marco pendente não prova encerramento da pergunta sem a lâmpada do próprio marco; executar com relógio fixo permite testar fronteiras antes/depois do vencimento. (`app/chamados/juizes.py:1085–1096`; `app/docs/LEIS.md:100`.)
-- **Par resposta:** `respondida_em != None ⇒ trim(resposta_colab) != ''`; o código já nomeia esse estado ilegal. (`app/chamados/juizes.py:1154–1157`.)
-- **Idempotência:** repetir a mesma decisão não altera estado/carimbo; portas admin e duplicata têm guardas explícitas. (`app/chamados/models.py:2490–2502`; `app/chamados/services/fio.py:882–897`.)
-- **Ação não reduzida a cor:** igualdade de status, isoladamente, não certifica igualdade de `resolver_dia_oferecido` ou de pergunta viva, pois seus predicados têm entradas diferentes. A propriedade verificável é comparar a projeção completa do contrato, sob os mesmos insumos/instante. (`app/docs/MAPA/calendario-dia-da-tela.md:10–13`; `app/chamados/juizes.py:1032–1118`; formulação de propriedade: [nao verificado].)
-
-## 01/11 17:53 -- HISTORICO (mais de 24 h) · sessao c8a34173d33c · - · - · origem=Ronald (tmux)
-
-Fatos e pontos de desenho confirmados:
-
-- ADR 0002 declara status/rotulo na célula, escritor único no mesmo ato do veredito e relógio derivado; leitores permanecem congelados até E4. `app/docs/ADR/0002-celula-e-o-dia.md:8`, `:12`, `:21`, `:73`.
-- Há conflito declarado entre o lote que recusa competência entregue e a natureza viva da célula. A recusa está em `app/ponto/management/commands/lavrar_status_competencia.py:40`; o próprio ADR 0003 registra-a em `app/docs/ADR/0003-celula-tres-naturezas.md:106`, embora declare julgamento vivo em qualquer competência (`:25`) e fotografia somente no gravado (`:27`).
-- A L-092 protege o GRAVADO (`app/docs/LEIS.md:125`); L-113 revoga recusa de recálculo em exportada (`:148`). Não cabe justificar congelamento do status vivo apenas pela L-092. O ADR 0002 ainda manda o lote não tocar entregue (`app/docs/ADR/0002-celula-e-o-dia.md:68`).
-- L-039 define falta como decidida, ausência cujo tipo desconta (`app/docs/LEIS.md:87`). A regra da lavra trata `nunca_bateu/furo/cobrado/...` como irregular (`app/ponto/status_dia.py:54`, `:112`), enquanto falta requer o `tipo_dia='falta'` (`:96`) ou decisão admin `faltou` (`:52`). Para classificar cada par `falta/ok` do anexo seriam necessários decisão humana, isenção, grade e fatos do mesmo julgamento; estes não estão no dado [nao verificado].
-- L-110 exige oráculo pela regra, não igualdade com código anterior; comparação velho/novo mede impacto (`app/docs/LEIS.md:136`). Assim `iguais` não certifica correção e `diferentes` não prova defeito.
-
-D4, com ordem exata:
-
-1. Sem célula → `sem_dados/sem_celula`, antes de relógio ou natureza humana: `app/ponto/status_dia.py:191`.
-2. Motivo de não encerramento diferente de `sem_previsto` → `previsto/relogio` quando motivo é relógio e não há turno com aquela `data_turno`; demais casos `aberto/relogio`: `app/ponto/status_dia.py:196`.
-3. Depois → coluna lavrada e rótulo persistido, com fallback para rótulo canônico: `app/ponto/status_dia.py:203`.
-4. Célula sem status → `previsto/nao_lavrado` se data ≥ hoje, `sem_certidao/nao_lavrado` caso contrário: `app/ponto/status_dia.py:207`.
-
-Logo, `tempo='passado'` não prova encerramento, e “sem janela” segue lavra; o contrato escrito confirma a distinção em `app/ponto/status_dia.py:160`. Os anexos não mostram motivos individuais de encerramento [nao verificado].
-
-Escritores/leitores verificados:
-
-| Campo | Escritor | Leitores verificados |
-|---|---|---|
-| `status_dia`, `status_rotulo` persistidos | `_aplicar_status`, chamado pela porta `lavrar_veredito`; par atribuído junto em `app/ponto/portas/celula.py:701`; save junto do veredito em `:773` | D4 em `app/ponto/status_dia.py:203`; D5 verifica apenas `status_dia` em `app/ponto/services/cartorio.py:758` |
-| Status/rotulo provenientes de decisão humana | `_status_alvo` usa `status_do_admin` quando via/admin prevalece: `app/ponto/portas/celula.py:694`; tabela em `app/ponto/status_dia.py:52` | A própria porta preserva decisão admin durante lavra cartório, podendo atualizar ata/status: `app/ponto/portas/celula.py:737` |
-| Status/rotulo provenientes do cartório | `status_da_lavra` sobre fatos e o mesmo veredito gravado, `app/ponto/portas/celula.py:698`; fatos extraídos em `app/ponto/status_dia.py:143` | D4 conforme acima |
-| `fonte`, `status`, `rotulo` de retorno do D4 | D4, sem gravação: `app/ponto/status_dia.py:192`, `:199`, `:204`, `:208` | Painel `_d4_em_lote`, atribui resposta à linha após confirmar encerramento: `app/core/services/painel_op.py:334` |
-| `impressao`, `julgada_em`, `ausencia`, `tem_entrada`, `tem_saida`, `insumos_em` | `carimbar`, `app/ponto/portas/celula.py:800` | D5 compara julgamento/impressão/veredito em `app/ponto/services/cartorio.py:1032` e `:1190` |
-| `status_completaveis`, `status_fila_cartorio`, `status_ja_lavrado`, `status_completados` | `_completar_status`, `app/ponto/services/cartorio.py:758` | Command imprime em `app/ponto/management/commands/lavrar_status_competencia.py:57` |
-
-Inventário mais amplo, **declarado pelo ADR, não recenseado por mim**: natureza/fonte/escritor de todas as colunas está em `app/docs/ADR/0003-celula-tres-naturezas.md:35`; leitores são pisos de contagem (`:5`) e não lista completa. `status_dia/status_rotulo` estão nas linhas `:56` e `:57`.
-
-Sobre D5:
-
-- D5 considera já lavrado qualquer `status_dia is not None`, sem verificar rótulo ou atualidade: `app/ponto/services/cartorio.py:758`.
-- Nulo com impressão atual é completável; nulo sem fatos atuais é fila cartório: `app/ponto/services/cartorio.py:761`.
-- D5 não rejulga, não altera veredito/ata/data do veredito; passa fatos à mesma porta e só completa status: `app/ponto/services/cartorio.py:752`, `app/ponto/portas/celula.py:753`.
-- DRY com `completaveis` no anexo2 prova contagem desse ramo na execução relatada, não execução futura do command público nem migração já realizada [nao verificado].
-
-Perguntas de desenho e propriedades mecânicas:
-
-- **Status mede qual pergunta?** Há teste que explicita “dia encerrado tem o que cobrar?” e rejeita usar status como natureza conhecida do dia (`app/ponto/tests/test_e4_1_cron_le_o_juiz_nao_a_lavra.py:4`). Propriedade: leitores de natureza/precedência não podem importar D4/status nem filtrar por status; AST pode impor contrato por papel, não por igualdade textual de status.
-- **Ausência de célula é ausência de vínculo, lacuna materializada ou período fora do universo?** D4 responde igual para todos (`app/ponto/status_dia.py:192`). Propriedade: anti-join entre universo de dias esperado definido pela regra de vigência e `CelulaDia`, segregando dias fora de vínculo; uma contagem de sem-célula sem domínio não distingue defeito.
-- **“Lavrado” significa atual?** D4 lê coluna sem comparar impressão (`app/ponto/status_dia.py:203`). Propriedade: após processamento dos eventos, `impressao_gravada == impressao_insumos_atuais` e par status/rotulo corresponde ao julgamento daqueles insumos. Não se pode inferir isso de `fonte='lavrado'`.
-- **Todo insumo que muda resultado muda impressão?** ADR 0002 admite isenção fora da impressão (`app/docs/ADR/0002-celula-e-o-dia.md:59`); função de impressão efetivamente recebe batidas/cob_status/chamados/DNA/veto/teto/regra/fio/cobparcial/enc, sem isento (`app/ponto/services/cartorio.py:356`). Propriedade metamórfica: duas entradas com saída de julgamento diferente exigem fingerprint diferente ou invalidação/evento explícito. Teste pode variar isenção, cobertura, feriado, vínculo etc. sem LLM.
-- **Rótulo é dado semântico?** Modelo aceita ambos nulos independentemente (`app/escala/models.py:1784`); escritor os muda juntos (`app/ponto/portas/celula.py:705`); D4 reconstrói canônico se rótulo ausente (`app/ponto/status_dia.py:205`). Propriedade: par `(status,rotulo)` completo e preservado em leitura/render, incluindo `ok/isento de ponto` (`app/ponto/status_dia.py:48`). Comparar só status não captura perda de mensagem.
-- **Entregue muda elegibilidade de referência viva?** Propriedade: mesmos insumos vivos + mesmo instante dão o mesmo par vivo independentemente do flag entregue; hash do gravado permanece intacto. Base declarada: `app/docs/ADR/0003-celula-tres-naturezas.md:25` e `:27`. O command atual contradiz a primeira metade em `app/ponto/management/commands/lavrar_status_competencia.py:40`.
-- **Migração está completa?** Propriedade contábil por partição: `total = ja_lavrado + completaveis + fila_cartorio` sobre o mesmo universo elegível, com testes de DRY sem escrita, segunda aplicação sem mudança e preservação de veredito/ata/data. Ramos em `app/ponto/services/cartorio.py:758`; testes atuais de idempotência em `app/ponto/tests/test_e3_status_lavrado.py:271`. Não executei testes nem consultei banco [nao verificado].
-
-_1460 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1466 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
