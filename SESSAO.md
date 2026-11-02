@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 16:46:57.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (168.9 MB). Acoes na janela: **546**.
+**Medido em 02/11/2026 16:52:30.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (168.9 MB). Acoes na janela: **547**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:51:41 | Bash | Point ESPERANDO at the L1 r4 baseline run | `cd /home/ronald/saas-hasner/app; sed -i '3s#^ESPERANDO: .*#ESPERANDO: trava_teste.sh \| pid=1002168 \| arquivo=logs/e4cal/r4_base.log#' docs/RELATO.md; sed -n 3p docs/RELATO.md; /usr/bin/sleep 45; ls -la --time-style=+%H:%M:%S /home/ronald/saas-hasner/logs/e4cal/r4_base.log; ps -p 1002168 -o pid=` |
 | 16:46:36 | Bash | Wait for the L1 agent to start a test run | `cd /home/ronald/saas-hasner; for i in $(seq 1 20); do q=$(bin/trava_teste.sh --quem); case "$q" in suite:*) break;; esac; /usr/bin/sleep 25; done; echo "$q"; ps -eo pid,args \| grep -E 'trava_teste\|\.sh /home/ronald/wt' \| grep -v grep \| cut -c1-200; ls -t --time-style=+%H:%M:%S -la logs/e4cal/ \| head -4` |
 | 16:45:19 | Bash | Check whether the L1 agent has started a run | `cd /home/ronald/saas-hasner; /usr/bin/sleep 60; bin/trava_teste.sh --quem; ps -eo pid,args \| grep -E 'mutantes\|trava_teste' \| grep -v grep \| cut -c1-160; ls -t --time-style=+%H:%M:%S -la logs/e4cal/ \| head -3` |
 | 16:45:15 | Bash | Record the measured cause and the contract in RELATO and BACKLOG | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() anc='DESPACHO DEPLOY-[nome]-ELO 16:4x' assert s.count(anc)==1 i=s.index(anc); j=s.index('\n',i) add=''' CONTRATO DEPLOY-[nome]-ELO-DA-CORRENTE (16:5x, instrumento, pouso proprio; constroi quando abrir vaga): CAUSA MEDIDA = (C): logs/cobparc_rotulo/deploy.log:10-11 VIU lavrar_he_pendente_- (ini 06:36:03, logs/encadea ...` |
