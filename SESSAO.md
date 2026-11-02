@@ -6,10 +6,20 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 14:16:16.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (162.8 MB). Acoes na janela: **485**.
+**Medido em 02/11/2026 14:22:00.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (163.7 MB). Acoes na janela: **495**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:18:04 | Bash |  | `date '+%H:%M:%S'; ls -la --time-style=+%T /home/ronald/saas-hasner/logs/isento_h10/vizinhos.log; test -d /proc/4105325 && echo vivo; tail -c 300 /home/ronald/saas-hasner/logs/isento_h10/vizinhos.log` |
+| 14:17:48 | Bash |  | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('MODO-COMUM: CODS-DO-ATO') and L[3].startswith('DESENHO E3-ISENTO') esp='ESPERANDO: trava_teste.sh \| pid=4105325 \| arquivo=/home/ronald/saas-hasner/logs/isento_h10/vizinhos.log' push='CODS-DO-ATO PUSH OK 14:1x: origin/main=97b43098 (pos_push 59d2c35b, logs/cods_ato/push.lo ...` |
+| 14:17:39 | Bash |  | `tr '\0' ' ' < /proc/4105325/cmdline; echo; ls -la /home/ronald/saas-hasner/logs/isento_h10/; ls /home/ronald/saas-hasner/logs/trava_teste* 2>/dev/null` |
+| 14:17:34 | Agent | sonda sombra ISENTO-H10 3/4 | `Obra ISENTO-H10 (repo /home/ronald/saas-hasner, projeto Django em app/). Leia /home/ronald/saas-hasner/CLAUDE.md secoes 0, 2, 6 antes. Papel: SONDA na SOMBRA (motivo sonnet: sonda que escreve na sombra em atomic+raise). Voce NAO edita codigo de producao, NAO edita a arvore viva, NAO commita, NAO roda docker kill/stop/rm, kill nem pkill, NAO roda a suite. O que a cura muda: em app/ponto/services/ca ...` |
+| 14:17:17 | Bash |  | `cd /home/ronald/saas-hasner/logs/e3isento/pouso; grep -n "print" sonda_controle_head.py \| sed -n 8,60p \| cut -c1-180; echo ----; tail -25 sonda_cura_conj.out \| cut -c1-250; grep -n "rodar" ~/saas-hasner/bin/sombra.sh \| head` |
+| 14:17:12 | Bash |  | `cd /home/ronald/saas-hasner/logs/e3isento/pouso; diff sonda_controle_head.py sonda_cura_conj.py; sed -n 60,248p sonda_controle_head.py; head -5 sonda_controle_head.out; tail -40 sonda_cura_conj.out; grep -rn "sombra.sh --rodar" ../../*.sh ~/saas-hasner/bin/sombra.sh 2>/dev/null \| head -5` |
+| 14:17:06 | Bash |  | `cd /home/wt-isento-h10-135733 2>/dev/null \|\| cd /home/ronald/wt-isento-h10-135733; git log --oneline -5; git status --porcelain \| head; ls /home/ronald/saas-hasner/logs/isento_h10/; /home/ronald/saas-hasner/bin/trava_teste.sh --quem` |
+| 14:16:56 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 1,60p logs/e3isento/pouso/sonda_controle_head.py; diff logs/e3isento/pouso/sonda_controle_head.py logs/e3isento/pouso/sonda_cura_conj.py; tail -30 logs/e3isento/pouso/sonda_cura_conj.out` |
+| 14:16:52 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/e3isento/pouso/; wc -l logs/e3isento/pouso/sonda_*.py; tail -30 /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/a5db00ea9607b2f8c.output \| cut -c1-300` |
+| 14:16:46 | Bash |  | `cd /home/ronald/saas-hasner; tr '\0' ' ' < /proc/3946153/cmdline; echo; head -8 app/docs/RELATO.md \| cut -c1-200; cat logs/isento_h10/green_modulo.log` |
 | 14:15:43 | Bash |  | `cd /home/ronald/saas-hasner; ls -la logs/isento_h10/ 2>/dev/null; git worktree list \| grep isento-h10; bin/trava_teste.sh --quem` |
 | 14:07:58 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 28); do grep -q '^rc=' logs/cods_ato/push.log && break; /usr/bin/sleep 20; done; tail -3 logs/cods_ato/push.log` |
 | 14:07:40 | Bash |  | `cd /home/ronald/saas-hasner; tail -c 600 logs/cods_ato/push.log; pgrep -fa "bin/push.sh\|pre-push" \| grep -v pgrep \| head -3; bin/trava_teste.sh --quem` |
