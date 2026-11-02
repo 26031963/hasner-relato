@@ -1,7 +1,99 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **02/11/2026 18:27** · publicado em **02/11/2026 19:00** (UTC-3)
+> Ultima resposta processada: **02/11/2026 19:23** · publicado em **02/11/2026 19:26** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 02/11 19:23 · sessao 94fd4804a524 · E4-CALENDARIO-L1 · verificador · origem=Code
+
+**O delta cura o tooltip diário e dá mordida aos testes, mas não certifica cura integral dos textos na origem: resta um bloqueio no card `escala_suspeita`.** (`app/templates/colaboradores/partials/_calendario_grade.html:103`, `app/templates/colaboradores/partials/_calendario_grade.html:161`; `app/colaboradores/tests/test_e4cal_l1_r7_grade_le_o_rotulo.py:41`)
+
+1. **Item (1), tooltip diário — não procede manter o bloqueio.** Agora lê `dia.status_rotulo`; o calendário apenas repassa o rótulo recebido do D4. A régua do vínculo ativo saiu desse caminho, sem novo classificador no leitor. (`app/templates/colaboradores/partials/_calendario_grade.html:103`; `app/colaboradores/services/calendario.py:573`, `app/colaboradores/services/calendario.py:654`, `app/colaboradores/services/calendario.py:719`)
+
+   **Card `escala_suspeita` — bloqueia a cura integral na origem.** Continua escrevendo “Sem batida em dia previsto” no template. Entretanto, a regra devolve `escala_suspeita` para `indefinida` também **com batida**; há teste explícito desse contrato. O próprio rótulo central conserva “Sem batida”, portanto só trocar o card por essa constante não resolveria a inconsistência: a correção precisa começar no núcleo. Isso demonstra inconsistência no código, sem demonstrar ocorrência em produção. (`app/templates/colaboradores/partials/_calendario_grade.html:161`; `app/ponto/status_dia.py:38`, `app/ponto/status_dia.py:122`; `app/ponto/tests/test_e3_status_lavrado.py:43`, `app/ponto/tests/test_e3_status_lavrado.py:50`)
+
+2. **Item (2), “Abertos” — não procede manter o bloqueio funcional; fila para duplicação textual.** O contador inclui todo status `aberto`; o título agora contempla turno sem saída e dia ainda em andamento com batidas fechadas. Contudo, escreve cópias literais dos dois rótulos: não os lê do núcleo. Não surgiu novo predicado de classificação, mas a origem textual continua duplicada. (`app/colaboradores/services/calendario.py:780`; `app/ponto/status_dia.py:259`, `app/ponto/status_dia.py:263`; `app/templates/colaboradores/partials/_calendario_grade.html:169`)
+
+3. **Quem escreve e quem lê depois do delta:**
+
+   | Objeto | Escritor | Leitor |
+   |---|---|---|
+   | `CelulaDia.status_rotulo` | A porta consulta `status_da_lavra`/`status_do_admin`, atribui e persiste. (`app/ponto/portas/celula.py:693`, `app/ponto/portas/celula.py:705`, `app/ponto/portas/celula.py:773`) | D4 lê a coluna, com fallback ao vocabulário se vazia. (`app/ponto/status_dia.py:268`) |
+   | `dia.status_rotulo` do calendário | Contexto copia `_st['rotulo']`. (`app/colaboradores/services/calendario.py:719`) | Ícones da grade. (`app/templates/colaboradores/partials/_calendario_grade.html:99`, `app/templates/colaboradores/partials/_calendario_grade.html:107`) |
+   | `ROTULO_EM_ANDAMENTO` | Constante do núcleo. (`app/ponto/status_dia.py:56`) | D4 e teste do card; o card contém uma cópia literal. (`app/ponto/status_dia.py:263`; `app/colaboradores/tests/test_e4cal_l1_r7_grade_le_o_rotulo.py:50`; `app/templates/colaboradores/partials/_calendario_grade.html:169`) |
+   | Texto do card `escala_suspeita` | O próprio template. (`app/templates/colaboradores/partials/_calendario_grade.html:161`) | O `title` entregue ao navegador; do contexto, o card lê somente a contagem. (`app/templates/colaboradores/partials/_calendario_grade.html:162`) |
+
+   Existe outro `status_rotulo`, de **previsão**, montado por `escala/views.py`; ele não escreve a coluna persistida. (`app/escala/views.py:54`, `app/escala/views.py:60`; `app/templates/escala/minha_escala.html:75`)
+
+4. **Item (5), testes sem mordida — não procede para os defeitos específicos, por inspeção.** [nao verificado]
+
+   - **Render:** restaurar o tooltip antigo elimina o `title="SENTINELA"` exigido; restaurar “Abertos” antigo elimina `ROTULO_EM_ANDAMENTO` do título. (`app/colaboradores/tests/test_e4cal_l1_r7_grade_le_o_rotulo.py:41`, `app/colaboradores/tests/test_e4cal_l1_r7_grade_le_o_rotulo.py:49`, `app/colaboradores/tests/test_e4cal_l1_r7_grade_le_o_rotulo.py:50`)
+   - **Lavra absolve:** mantém trabalho previsto e nenhuma batida; alterna somente as colunas entre `ok`, `irregular` e `ok` com sentinela. Rejulgar pela grade ou reconstruir o rótulo contraria as asserções. É teste de leitura da coluna, não da escrita pela porta. (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:250`, `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:256`, `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:259`)
+   - **Falha A2:** exige a exceção injetada e o log específico. Retirar apenas o `raise` atual deixa de satisfazer esse contrato. Confere classe, não identidade da exceção. (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:272`, `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:274`, `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:276`; `app/colaboradores/services/calendario.py:486`)
+
+   **Limite:** os testes passam com os textos dos cards ainda escritos no template; não certificam origem única nem detectam o bloqueio descrito acima. O teste geral também procura a sentinela em qualquer lugar do HTML. (`app/colaboradores/tests/test_e4cal_l1_r7_grade_le_o_rotulo.py:35`, `app/colaboradores/tests/test_e4cal_l1_r7_grade_le_o_rotulo.py:41`, `app/colaboradores/tests/test_e4cal_l1_r7_grade_le_o_rotulo.py:49`)
+
+5. **Aquecimento — não procede acusar ocultação de crescimento proporcional de queries.** Continua comparando 0, 1 e 8 dias sem fim na mesma janela de oito dias. Aquecer remove a assimetria inicial de um catálogo global cujo carregamento independe dessa quantidade. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:192`, `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:198`, `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:210`; `app/ponto/catalogo/ausencias.py:249`, `app/ponto/catalogo/ausencias.py:276`)
+
+   Não mede tempo, CPU, primeira chamada fria nem crescimento da janela; “51 × 50” aparece somente no comentário. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:205`, `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:207`)
+
+6. **Remoção de `regua_rotulo` — não procede apontar leitor direto quebrado.** O censo textual encontrou apenas comentários e asserções de ausência; os antigos consumidores usam rótulo recebido ou texto literal. Consumidores externos e chaves construídas dinamicamente: **[não verificado]**. (`app/colaboradores/services/calendario.py:264`; `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:253`, `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:262`; `app/templates/colaboradores/partials/_calendario_grade.html:103`, `app/templates/colaboradores/partials/_calendario_grade.html:161`)
+
+7. **Item 7 — fila; triagem procede pelos anexos, com ressalva.** Ambos mostram a mesma divergência de atribuição do pareador. Porém, o RED do status não é idêntico: base apresenta `folga × folga_trabalhada`; atual, `folga × sem_certidao`. Vínculo dos logs ao commit `f60b7e0b`: **[não verificado]**.
+
+   O mecanismo permanece na origem: mapa não vazio sem a véspera retorna `None`; mapa vazio usa `_bm_all`. A tela fornece carga mensal, enquanto o unitário abre carga diária. A divergência deve ser corrigida no pareador. (`app/ponto/turnos.py:1297`, `app/ponto/turnos.py:1300`; `app/colaboradores/services/calendario.py:573`; `app/ponto/status_dia.py:197`, `app/ponto/status_dia.py:249`)
+
+Execução local dos testes e dos mutantes, GREEN atual e RED contra restaurações: **[não verificado]**. [nao verificado]
+
+## 02/11 19:22 · sessao 63cc0a24b971 · - · - · origem=Ronald (tmux)
+
+- **Item 5 — não procede, quanto aos defeitos específicos.** O render usa sentinelas distintas por status/layout; restaurar o tooltip antigo de `escala_suspeita` falharia no `title="SENTINELA"` exigido. Restaurar o card antigo falharia por ausência de `ROTULO_EM_ANDAMENTO` no título. (`app/colaboradores/tests/test_e4cal_l1_r7_grade_le_o_rotulo.py:29`, `:37`, `:44`; `app/templates/colaboradores/partials/_calendario_grade.html:103`, `:169`.)
+
+- **Lavra — não procede.** A fixture confirma trabalho previsto, nenhuma batida e ausência de absolvição inicial; depois altera somente as colunas lavradas para `ok`, `irregular` e `ok` com sentinela. Exige resultados literais dessas colunas na tela e no D4: um leitor que volte a decidir pela grade ou reconstrua o rótulo falharia. (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:246`, `:250`, `:254`, `:259`; `app/ponto/status_dia.py:266`.)
+
+- **Propagação A2 — não procede.** O teste injeta `Injetada` na função efetivamente importada pelo calendário, exige essa classe de exceção e o log específico; restaurar um `except` que engole a falha falharia. Limite: exige a classe, não identidade do objeto da exceção. (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:269`, `:272`, `:274`, `:276`; `app/colaboradores/services/calendario.py:468`, `:482`.)
+
+- **Limites de cobertura — fila, se a promessa for universal.** O primeiro teste só procura a sentinela em qualquer lugar do HTML; as fixtures não exercitam `ausencia` nem `palavra_dia`, que precedem os ícones de status. Portanto não certifica todo caminho de apresentação. O teste específico de `escala_suspeita` prende a sentinela ao atributo `title`. (`app/colaboradores/tests/test_e4cal_l1_r7_grade_le_o_rotulo.py:22`, `:35`, `:41`; `app/templates/colaboradores/partials/_calendario_grade.html:97`, `:98`.)
+
+- **Aquecimento — não procede como acusação de mascarar crescimento proporcional de consultas.** A janela permanece com oito dias; o teste mede `contexto_calendario` depois de trocar zero, um ou oito DNAs para sem fim, e continua exigindo igualdade. O catálogo tem cache global de 60 segundos e sua carga consulta tipos ativos independentemente dessa quantidade; aquecer torna as medições comparáveis. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:192`, `:198`, `:201`, `:210`; `app/ponto/catalogo/ausencias.py:249`, `:257`, `:275`.)
+
+- **Limite do custo — fila somente para afirmação mais ampla.** O teste mede número de queries com cache aquecido, não tempo, CPU, quantidade de linhas, primeira chamada fria nem crescimento da própria janela. Os números “51 × 50” aparecem em comentário; execução que os confirme não foi fornecida. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:192`, `:205`, `:207`; medição independente: **[não verificado]**.)
+
+Execução local dos testes e dos mutantes: **[não verificado]**. [nao verificado]
+
+## 02/11 19:21 · sessao f2f080b25b73 · - · - · origem=Ronald (tmux)
+
+- **Item 1, tooltip — não procede manter o bloqueio:** o ícone `escala_suspeita` lê diretamente `dia.status_rotulo`; o calendário repassa `_st['rotulo']` do D4, sem compor frase nem consultar régua ativa. (`app/templates/colaboradores/partials/_calendario_grade.html:103`; `app/colaboradores/services/calendario.py:654`; `app/colaboradores/services/calendario.py:719`)
+
+- **Item 2, significado de Abertos — não procede manter o bloqueio funcional:** o contador conta todo `status == 'aberto'`; o D4 distingue turno vivo e dia com batidas fechadas ainda em andamento; o novo `title` menciona ambos. (`app/colaboradores/services/calendario.py:780`; `app/ponto/status_dia.py:259`; `app/ponto/status_dia.py:263`; `app/templates/colaboradores/partials/_calendario_grade.html:169`) **Ressalva de origem:** o template copia literalmente os dois rótulos; não lê `ROTULO_STATUS` nem `ROTULO_EM_ANDAMENTO`. É duplicação editorial, sem novo predicado de classificação. (`app/ponto/status_dia.py:40`; `app/ponto/status_dia.py:56`; `app/templates/colaboradores/partials/_calendario_grade.html:169`)
+
+**Quem escreve e lê:**
+
+| Objeto | Escritor/origem | Leitor |
+|---|---|---|
+| `CelulaDia.status_rotulo` persistido | `_status_alvo` consulta `status_da_lavra`/`status_do_admin`; `_aplicar_status` atribui o campo; `lavrar_veredito` grava pela porta. (`app/ponto/portas/celula.py:693`; `app/ponto/portas/celula.py:705`; `app/ponto/portas/celula.py:773`) | D4 lê coluna, com fallback ao vocabulário quando vazia. (`app/ponto/status_dia.py:266`) |
+| `dia['status_rotulo']` no calendário | Contexto copia o rótulo do D4. (`app/colaboradores/services/calendario.py:719`) | Ícones da grade. (`app/templates/colaboradores/partials/_calendario_grade.html:99`; `app/templates/colaboradores/partials/_calendario_grade.html:107`) |
+| `ROTULO_EM_ANDAMENTO` | Constante no núcleo. (`app/ponto/status_dia.py:56`) | D4 usa no ramo com batida e dia ainda em andamento; teste importa e compara ao título. (`app/ponto/status_dia.py:263`; `app/colaboradores/tests/test_e4cal_l1_r7_grade_le_o_rotulo.py:16`; `app/colaboradores/tests/test_e4cal_l1_r7_grade_le_o_rotulo.py:50`) |
+| Texto do card `escala_suspeita` | Literal do próprio template. (`app/templates/colaboradores/partials/_calendario_grade.html:161`) | Navegador recebe esse `title`; template lê somente a contagem do resumo. (`app/templates/colaboradores/partials/_calendario_grade.html:161`; `app/templates/colaboradores/partials/_calendario_grade.html:162`) |
+
+- **Remoção de `regua_rotulo` — não procede apontar leitor direto quebrado:** censo textual amplo encontrou somente comentário histórico e testes de ausência; nenhuma leitura executável de `regua_rotulo` em template, JS, PDF ou API. Os antigos locais agora leem `status_rotulo` ou texto literal. (`app/colaboradores/services/calendario.py:264`; `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:253`; `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:262`; `app/templates/colaboradores/partials/_calendario_grade.html:103`; `app/templates/colaboradores/partials/_calendario_grade.html:161`) Consumidor externo à cópia ou chave montada dinamicamente: **[não verificado]**.
+
+- **Fila editorial preexistente:** o card `escala_suspeita` ainda afirma “Sem batida em dia previsto”; contudo, `status_da_lavra` retorna esse status para `veredito == 'indefinida'` antes de testar `tem_batida`, portanto a frase não descreve universalmente o domínio do status. (`app/templates/colaboradores/partials/_calendario_grade.html:161`; `app/ponto/status_dia.py:122`; `app/ponto/status_dia.py:126`) A frase já existia no delta fornecido; o delta apenas remove sua interpolação da régua. (`anexo delta.txt`, sem numeração: **[não verificado]** quanto à linhagem em Git)
+
+- **Outro homônimo, fora do calendário:** `escala/views.py` escreve um `status_rotulo` de previsão usando `ROTULO_STATUS`; `minha_escala.html` o lê. Não é escrita da coluna persistida nem novo derivador introduzido no delta do calendário. (`app/escala/views.py:49`; `app/escala/views.py:54`; `app/escala/views.py:60`; `app/templates/escala/minha_escala.html:75`; `app/templates/escala/minha_escala.html:84`)
+
+## 02/11 19:21 · sessao 7a6298e1627e · - · - · origem=Ronald (tmux)
+
+**Item 7 — fila; triagem procede quanto à preexistência da divergência de atribuição, com limite de evidência.** Os anexos atual e base mostram a mesma falha do pareador: `[] != [(2026-09-09, False, True)]`; vínculo da execução ao commit `f60b7e0b` não pôde ser auditado nesta cópia, sem histórico Git disponível. [não verificado]
+
+O mecanismo permanece: `_vespera` decide pelo mapa inteiro ser vazio/não vazio; mapa não vazio sem a véspera retorna `None`, enquanto mapa vazio usa `_bm_all`. Isso permite que DNA de outro dia altere o tratamento da mesma saída. `app/ponto/turnos.py:1297`, `app/ponto/turnos.py:1298`, `app/ponto/turnos.py:1299`, `app/ponto/turnos.py:1300`.
+
+A alimentação também depende da janela: `marcos_dna_periodo` filtra as células entre `ini` e `fim`; `CargaDaJanela` entrega esse mapa convertido para `None` se vazio. `app/escala/utils.py:97`, `app/escala/utils.py:105`, `app/ponto/turnos.py:2993`.
+
+**Não procede chamar o RED de D4 de resultado idêntico.** No anexo base, a diferença é `folga × folga_trabalhada`; no atual, `folga × sem_certidao`. A divergência existe em ambos, mas a palavra exibida mudou. [não verificado — anexos fornecidos]
+
+O resultado atual é coerente com o código: com batida atribuída ao dia encerrado e sem lavra, D4 retorna `sem_certidao`; sem batida, a faixa `folga` retorna `folga`. `app/ponto/status_dia.py:271`, `app/ponto/status_dia.py:273`, `app/ponto/status_dia.py:291`.
+
+A tela usa a carga da janela inteira, enquanto a porta unitária constrói carga `[data,data]`; portanto a paridade continua pendente na origem do pareamento, sem necessidade de criar correção no leitor. `app/colaboradores/services/calendario.py:573`, `app/ponto/status_dia.py:197`, `app/ponto/status_dia.py:249`.
 
 ## 02/11 18:27 · sessao ae4ec323f2f3 · DEPLOY-[nome]-ELO-DA-CORRENTE · leitura · origem=Code
 
@@ -629,115 +721,4 @@ A montagem do TXT consome `classificar_export`, constrói `entra_set`, restringe
 - `classificar_export`/retentor continuam lendo estado atual; o juiz `txt_vigente_x_gravado` monta o atual e compara seu hash ao TXT vigente. Logo “entregue” não garante que a leitura atual permaneça igual ao documento entregue. Divergência real neste estoque é `[nao verificado]`. (`app/folha/export.py:635-660`, `746-769`, `942-955`.)
 - Não confundir com `competencia_fechada_para_celula`: outro juiz combina TXT entregue **ou holerite publicado**. (`app/folha/export.py:578-609`.)
 
-## 01/11 18:26 -- HISTORICO (mais de 24 h) · sessao 2e2239d89df6 · O261-E-F2 · verificador · origem=Code
-
-1. **Tratamento dos itens da triagem_v8**
-
-Nas referências abaixo, **T** é [test_o261e_f2_ramo_e_i20.py](/home/ronald/codex_ws/5c2bb8a4370998765c54bbb1926895b27a5ec1bd/app/chamados/tests/test_o261e_f2_ramo_e_i20.py) e **A** é [auditar_invariantes_chamados.py](/home/ronald/codex_ws/5c2bb8a4370998765c54bbb1926895b27a5ec1bd/app/chamados/management/commands/auditar_invariantes_chamados.py); os demais caminhos são relativos a `app/`.
-
-- **Item 1 — seis procedentes da v7:** a resolução individual dos seis é **[nao verificado]**: o anexo não enumera os seis achados. O código atual permite confirmar restauração do juiz, leitura após o mock, comparação exata da amostra I20 e preservação da célula sem reescrita posterior. (`T:216`, `T:221`, `T:245`, `T:168`, `T:170`.)
-
-- **Item 2a — procedente:** o novo cenário distingue as guardas. Sem resposta, a pergunta pode estar viva antes do carimbo e morta depois dele pelo BUG 117; com texto, a porta preenche `respondida_em` e o degrau da resposta decide antes desse BUG. (`chamados/juizes.py:1047`, `chamados/juizes.py:1077`, `chamados/juizes.py:1083`, `chamados/models.py:2556`.) A execução histórica de `mordida_v9_F.log` é **[nao verificado]** nesta revisão.
-
-- **Item 2b — sustentado:** o meio-estado é uma entrada adversarial explícita: o teste escreve somente `resposta_colab`; o escritor normal grava texto e `respondida_em` juntos. (`T:156`, `T:158`, `chamados/services/disputa_emissao.py:1247`, `chamados/services/disputa_emissao.py:1248`.)
-
-- **Item 3 — sustentado com limite de proveniência:** resposta, veredito e lâmpadas vêm da fixture; `_fechar` relê e verifica preservação de veredito, via e lâmpadas. Não verifica preservação de todos os campos da célula ou de toda a ata. (`T:158`, `T:160`, `T:169`, `T:170`.) O cálculo dessas lâmpadas pelo cartório real é **[nao verificado]**.
-
-- **Item 4a — correção parcial:** retirar o incremento do contador por causa viola a soma; retirar o detalhe do ramo viola a asserção específica. Entretanto, a distribuição entre `alcance_a..e` continua sem verificação individual — há mutante sobrevivente descrito no item 4 abaixo. (`chamados/services/vigia_fio.py:651`, `chamados/services/vigia_fio.py:653`, `T:196`, `T:197`.)
-
-- **Item 4b — descarte sustentado para estes cinco testes:** uma restauração em memória inoperante não altera o banco: a porta retorna `False` antes do `save`, o fecho executa `continue` e os leitores seguintes recarregam os dados. (`chamados/models.py:2569`, `chamados/models.py:2576`, `chamados/services/disputa_emissao.py:1638`, `chamados/services/disputa_emissao.py:1655`, `T:183`.)
-
-- **Item 5 — ressalva:** o código contém proteção explícita de relógio e mock, mas a afirmação incondicional de ausência de dependência de ordem deve considerar a possível colisão do PK gerado com a cicatriz fixa. (`T:109`, `T:213`, `T:216`, `T:265`, `A:1098`.)
-
-2. **Caminho exato do C6 no teste da guarda sozinha** [nao verificado]
-
-**Antes do fecho:**
-
-- A pergunta usa `saida_sem_entrada`, resposta vazia, DNA `hi=08:00` e lâmpada E das 08:00 acesa. Esse motivo aponta para E/hi. (`T:236`, `T:147`, `T:61`, `chamados/juizes.py:845`.)
-- O degrau da resposta não entra; o BUG 117 também não entra, pois `materializada_em` está nulo. O veredito `furo` então determina **viva**. (`chamados/juizes.py:1047`, `chamados/juizes.py:1077`, `chamados/juizes.py:1083`, `escala/models.py:1735`.)
-- A guarda do fecho recebe esse resultado e pula a pergunta. (`chamados/services/disputa_emissao.py:1626`.)
-
-**Retirando somente essa guarda:**
-
-- `carimbar` aplica o carimbo em memória; como o texto está vazio, não preenche `respondida_em`. (`chamados/models.py:2555`, `chamados/models.py:2556`.)
-- O C6 é chamado novamente. Agora há carimbo e o fato E/hi está provado pela lâmpada: o BUG 117 retorna **morta antes de chegar ao veredito `furo`**, permitindo o `save`. (`chamados/models.py:2565`, `chamados/juizes.py:887`, `chamados/juizes.py:893`, `chamados/juizes.py:1077`, `chamados/models.py:2576`.)
-
-**O docstring corresponde ao código.** Com texto, a porta preencheria `respondida_em`; o degrau da resposta viria primeiro, e o dia acusador impediria a concordância, mantendo a pergunta viva e provocando recusa. (`T:229`, `chamados/models.py:2558`, `chamados/juizes.py:1059`, `chamados/juizes.py:1029`, `chamados/models.py:2569`.)
-
-3. **Quem escreve e quem lê os campos assertados**
-
-| Campos/resultado | Quem escreve | Quem lê/asserta |
-|---|---|---|
-| `veredito`, `veredito_via`, `ata.lampadas` | O teste fornece os valores à porta; a porta persiste a célula. (`T:160`, `ponto/portas/celula.py:768`, `ponto/portas/celula.py:770`.) | `_fechar` relê o banco e compara os três; C6 lê veredito e lâmpadas. (`T:169`, `T:170`, `chamados/juizes.py:1081`, `chamados/juizes.py:887`.) |
-| `resposta_colab`, `respondida_em` | Fixture injeta o texto; controles escrevem ambos explicitamente. A porta pode preencher `respondida_em` durante o carimbo e restaurá-lo na recusa. (`T:158`, `T:255`, `chamados/models.py:2558`, `chamados/models.py:2583`.) | C6, I20 e a asserção de preservação do caso 2. (`chamados/juizes.py:1047`, `A:1102`, `T:264`.) |
-| `materializada_em`, `via_resolucao` | A pergunta nasce sem carimbo e com via vazia; a porta escreve os campos e desfaz na recusa. (`chamados/models.py:2298`, `chamados/models.py:2529`, `chamados/models.py:2531`, `chamados/models.py:2582`.) | Os três testes do ramo verificam ausência/presença do carimbo e vivacidade; o caso 2 verifica carimbo nulo. (`T:184`, `T:185`, `T:186`, `T:218`, `T:239`, `T:264`.) |
-| `pergunta_viva(...)` | C6 calcula; no MORDE o teste substitui deliberadamente sua resposta durante o fecho. (`chamados/juizes.py:816`, `T:213`.) | Premissas e selo usam o juiz real; o MORDE verifica sua restauração antes das testemunhas. (`T:202`, `T:237`, `T:260`, `T:216`, `T:220`.) |
-| `alcance_universo`, `fio_morto_alcance` | Censo calcula o universo a partir de `fora_da_folha` e incrementa os dias sem porta. (`chamados/services/vigia_fio.py:550`, `chamados/services/vigia_fio.py:553`, `chamados/services/vigia_fio.py:650`.) | Selo do ramo e caso regularizado. (`T:194`, `T:268`.) |
-| `alcance_dias`, incluindo célula, rota, causa e detalhe | `_listar` monta a linha produzida pelo censo. (`chamados/services/vigia_fio.py:589`, `chamados/services/vigia_fio.py:654`.) | Teste filtra pelo `cel.pk`, confere uma linha `sem_porta/e`, confere `sem_porta/c` no MORDE e ausência da linha no caso regularizado. (`T:176`, `T:191`, `T:192`, `T:224`, `T:267`.) |
-| `alcance_a..e` | Censo inicializa e incrementa o contador da causa. (`chamados/services/vigia_fio.py:543`, `chamados/services/vigia_fio.py:651`.) | Teste lê somente a **soma** dos cinco. (`T:196`.) |
-| `alcance_e_detalhe` | Censo incrementa a chave correspondente ao detalhe. (`chamados/services/vigia_fio.py:653`.) | Teste exige somente a chave do ramo igual a 1. (`T:197`.) |
-| I20: `flag`, `total`, `amostra` | Auditor consulta os campos, calcula contagem/amostra e imprime a classificação. (`A:1102`, `A:564`, `A:565`, `A:1834`, `A:1835`.) | Teste captura, interpreta e compara a tupla exata nos dois testes I20. (`T:95`, `T:80`, `T:245`, `T:293`, `T:297`.) | [nao verificado]
-| Exclusão por PK e unicidade da âncora | A cicatriz vem do auditor; o teste lê seu AST e acrescenta o PK somente à cópia mutante. (`A:1098`, `T:73`, `T:282`, `T:283`.) | Caso real exige PK fora da cicatriz; MORDE compara cópia e comando real. (`T:265`, `T:293`, `T:297`.) | [nao verificado]
-
-**Há valores escritos pelo teste consumidos pelos leitores reais:** texto, veredito e lâmpadas. Sua origem está declarada; a lavra pela porta não demonstra que o cartório calculou esses valores a partir de batidas. (`T:156`, `T:158`, `T:160`.) Os resultados `alcance_*` e a saída I20 são obtidos das funções reais, sem preenchimento desses resultados pelo teste. (`T:175`, `T:270`, `T:297`.) [nao verificado]
-
-4. **Mutantes de produção que ficam vivos**
-
-**Sim, por análise estática; sobrevivência executada nesta revisão: [nao verificado].**
-
-- **Contador na causa errada:** substituir, em `chamados/services/vigia_fio.py:651`, `d['alcance_' + causa] += 1` por `d['alcance_a'] += 1`. A soma permanece correta; linha e detalhe continuam usando a causa original. O teste não exige os valores individuais dos contadores. (`chamados/services/vigia_fio.py:653`, `chamados/services/vigia_fio.py:654`, `T:192`, `T:196`, `T:197`.) No MORDE, o helper já falha pela linha `c`, antes da soma. (`T:192`, `T:224`, `T:226`.)
-
-- **Restauração em memória inoperante:** tornar `_desfazer_em_memoria` um no-op. A porta continua recusando sem salvar, e o fecho abandona a instância; estes testes observam dados recarregados. É precisamente a lacuna aceita na triagem 4b. (`chamados/models.py:2579`, `chamados/models.py:2569`, `chamados/services/disputa_emissao.py:1638`, `T:183`, `T:262`.)
-
-- **Autor do carimbo perdido:** trocar a atribuição de `materializada_por_id` por `None`. Os selos verificam instante, via, vivacidade e par resposta/carimbo, mas não o autor; o C6 também não consulta esse autor. (`chamados/models.py:2530`, `T:184`, `T:218`, `T:264`, `chamados/juizes.py:788`, `chamados/juizes.py:1032`.)
-
-5. **Relógio, mock e ordem**
-
-- **Relógio:** a classe congela o tempo; o censo recebe `HOJE` explicitamente e o controle usa timestamp UTC literal. Não identifiquei relógio solto nesses caminhos por leitura. (`T:109`, `T:55`, `T:175`, `T:251`.)
-- **Mock:** está limitado ao `with`, e a identidade da função real é assertada antes das leituras do selo e do vigia. Não há vazamento demonstrado no código. (`T:213`, `T:216`, `T:220`, `T:221`.)
-- **Ordem:** cada teste cria seu cenário, usando `TestCase` e `setUpTestData`; não aparece dependência explícita de dados deixados por outro dos cinco. (`T:110`, `T:112`, `T:201`, `T:212`, `T:236`, `T:259`, `T:276`.) [nao verificado]
-- **Risco condicional de sequência de PK:** o banco gera o PK, mas o teste exige que ele não coincida com IDs históricos fixos. Uma colisão faria o selo falhar por causa da sequência, não do comportamento pretendido; ocorrência efetiva **[nao verificado]**. (`T:154`, `T:265`, `A:1098`, `T:297`.) [nao verificado]
-
-Não executei os testes: o quinto cria arquivo temporário, incompatível com a restrição de somente leitura. (`T:284`, `T:286`.) As contagens históricas de testes verdes/vermelhos dos anexos não foram reproduzidas: **[nao verificado]**. [nao verificado]
-
-## 01/11 18:24 -- HISTORICO (mais de 24 h) · sessao dae46ff611b1 · - · - · origem=Ronald (tmux)
-
-- Relógio fixado pela classe em `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:109`; o vigia recebe `hoje=HOJE` explicitamente em `:175`, definido em `:55`; controles usam timestamp UTC literal em `:251`. Não encontrei relógio solto demonstrável nesses pontos; execução [nao verificado].
-- O único patch fica no `with` em `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:213`; a restauração da função real é assertada em `:216`, antes dos leitores em `:220` e `:221`. Vazamento demonstrado: nenhum; execução [nao verificado].
-- Há **risco condicional de dependência da sequência de PKs**: `_cenario` deixa o banco gerar `p.pk` em `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:154`, mas depois exige que ele não esteja na tupla histórica em `:265`. Essa tupla contém IDs fixos em `app/chamados/management/commands/auditar_invariantes_chamados.py:1098`. Outra sequência de execução pode produzir colisão; ocorrência real [nao verificado]. O quinto teste também exige que o comando real conte esse PK, em `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:297`.
-- O teste declara e injeta o meio-estado em `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:156` e `:158`; o escritor normal grava o par texto/carimbo em `app/chamados/services/disputa_emissao.py:1247`. Portanto é entrada adversarial explícita, não resposta produzida pelo core.
-- Veredito e lâmpadas vêm do teste em `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:56` e `:160`; a porta escreve os campos em `app/ponto/portas/celula.py:768`. `_fechar` chama produção, relê o banco e verifica preservação em `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:168`; ele não reescreve o resultado. Isso comprova preservação da premissa, sem comprovar cálculo real das lâmpadas.
-- A classe usa `TestCase` e `setUpTestData` em `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:110`; cada um dos cinco testes cria seu cenário em `:201`, `:212`, `:236`, `:259` e `:276`. Dependência de dados deixados por outro dos cinco testes não aparece no código; comportamento do framework em execução [nao verificado].
-- Não executei os testes: o quinto cria arquivo temporário em `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:284`, incompatível com a auditoria somente leitura. Resultados dos logs anexados [nao verificado].
-
-## 01/11 18:24 -- HISTORICO (mais de 24 h) · sessao 0c1e939852f1 · - · - · origem=Ronald (tmux)
-
-Auditoria estática, sem executar testes ou mutantes; resultados empíricos dos logs citados: [nao verificado]. [nao verificado]
-
-- **Triagem 2b/3 sustentada com ressalva de proveniência:** o próprio teste injeta `resposta_colab` sem `respondida_em`; os controles também são escritos pelo teste. São entradas declaradas, não resultados produzidos pelo fecho (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:154-160`, `:251-255`). O teste verifica que o meio-estado permanece e que o I20 real o observa (`:264`, `:270-271`). A escrita normal do par pelo “core” não foi localizada nesta subtarefa: [nao verificado].
-
-- **Preservação da célula:** o teste fornece veredito e lâmpadas pela porta (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:160`); a produção escreve `ata`, `veredito`, `veredito_via` em `app/ponto/portas/celula.py:768-773`. `_fechar` consulta novamente o banco e compara exatamente esses insumos; não os reescreve (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:168-171`). São premissas preservadas, não prova de que o cartório calculou corretamente essas premissas (`:160`, `:170-171`).
-
-- **Quem escreve/lê alcance:** `censo_alcance` inicializa os campos em `app/chamados/services/vigia_fio.py:539-543`; calcula `alcance_universo` de `fora_da_folha` em `:548-553`; escreve `alcance_dias` em `:589`, `fio_morto_alcance` em `:650`, `alcance_a..e` em `:651`, `alcance_e_detalhe` em `:652-653`. O teste chama o censo real e filtra pelo identificador da célula (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:175-176`); lê linha, totais, soma e detalhe em `:191-197`, e a causa `c` em `:224`. Nenhum desses resultados é preenchido pelo teste nesses pontos (`:175-197`).
-
-- **Quem escreve/lê I20:** o auditor lê `respondida_em`, `resposta_colab` e `pk` no banco e exclui a cicatriz (`app/chamados/management/commands/auditar_invariantes_chamados.py:1098-1103`); `add` calcula total e amostra (`:559-566`); o auditor calcula flag e imprime (`:1833-1837`). O teste captura saída (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:95-106`), interpreta a linha (`:80-89`) e compara flag/total/amostra (`:245`, `:293`, `:297`). A mordida injeta o `pk` apenas na cópia textual do auditor, explicitamente identificada como mutante (`:280-291`).
-
-- **Triagem 4a parcialmente suficiente:** remover o incremento inteiro em `vigia_fio.py:651` viola a soma exigida pelo teste em `test_o261e_f2_ramo_e_i20.py:196`; remover o detalhe do ramo viola `:197`. Entretanto, o selo não garante que cada contador corresponde à causa da linha (`:192`, `:196-197`). [nao verificado]
-
-- **Mutante vivo concreto, por análise estática:** substituir `d['alcance_' + causa] += 1` por `d['alcance_a'] += 1` em `app/chamados/services/vigia_fio.py:651`. A soma permanece correta, a linha continua com causa `e` e o detalhe permanece correto (`:652-654`); o teste não compara nenhum bucket individual, apenas a soma (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:192-197`). No MORDE, o helper já lança pela linha `c` antes de chegar à soma (`:192`, `:224-226`). A sobrevivência executada deste mutante: [nao verificado].
-
-- **Outro mutante vivo:** omitir em `vigia_fio.py:653` o detalhe `sem_pergunta_viva`, mantendo o detalhe do ramo. O teste exige apenas `alcance_e_detalhe[CAUSA_DO_RAMO] == 1`, sem somar detalhes ou conferir o detalhe do outro dia (`app/chamados/tests/test_o261e_f2_ramo_e_i20.py:193-197`). Sobrevivência executada: [nao verificado].
-
-## 01/11 18:24 -- HISTORICO (mais de 24 h) · sessao 853d16ba45bf · - · - · origem=Ronald (tmux)
-
-- **Triagem 2a / pergunta 2: corresponde ao código.** O cenário cria pergunta `saida_sem_entrada`, sem texto, com DNA `hi=08:00` e lâmpada E acesa; esse motivo corresponde a E/hi. Antes do carimbo, o C6 pula o degrau da resposta, pula o BUG 117 por `materializada_em=None`, e retorna viva porque `furo` acusa. Referências: `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:61`, `:147`, `:236`; `app/chamados/juizes.py:845`, `:1047`, `:1077`, `:1081`; `app/escala/models.py:1735`.
-
-- **Retirando apenas a guarda do fecho:** a porta aplica o carimbo em memória, mantém `respondida_em=None` porque o texto está vazio e chama novamente o C6. Agora o BUG 117 encontra carimbo + fato do marco provado e retorna morta antes de consultar o veredito do dia; a porta grava. Referências: `app/chamados/services/disputa_emissao.py:1626`, `:1638`; `app/chamados/models.py:2529`, `:2555`, `:2556`, `:2565`, `:2576`; `app/chamados/juizes.py:869`, `:887`, `:893`, `:1077`.
-
-- **Com resposta:** a porta preenche `respondida_em` antes de perguntar ao C6. O degrau da resposta precede o BUG 117; dia `furo` impede que `_resposta_concorda_com_a_luz` retorne verdadeiro, conservando a pergunta viva e causando recusa da porta. Referências: `app/chamados/models.py:2556`; `app/chamados/juizes.py:1029`, `:1047`, `:1059`; `app/chamados/models.py:2569`. A execução histórica `mordida_v9_F.log` é **[nao verificado]**.
-
-- **Triagem 4b: descarte sustentado para estes cinco testes.** Tornar `_desfazer_em_memoria` inoperante não grava os campos: a porta continua retornando `False` antes do `save`, o fecho executa `continue`, a avaliação final da disputa consulta novamente suas perguntas e os selos recarregam o banco. Referências: `app/chamados/models.py:2569`, `:2576`, `:2579`, `:1767`, `:1778`; `app/chamados/services/disputa_emissao.py:1638`, `:1655`; `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:169`, `:183`, `:217`, `:262`, `:278`. Sobrevivência desse mutante executada nesta revisão: **[nao verificado]**.
-
-- **Outro mutante vivo dedutível:** substituir `self.materializada_por_id = autor_id` por `None` em `app/chamados/models.py:2530`. Os cinco testes não assertam o autor; suas verificações da pergunta cobrem carimbo temporal, via, vivacidade e o par resposta/carimbo, enquanto a chave e os degraus do C6 não consultam `materializada_por_id`. Referências: `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:184`, `:218`, `:264`; `app/chamados/juizes.py:788`, `:1032`. Sobrevivência por execução: **[nao verificado]**.
-
-_1466 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1470 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
