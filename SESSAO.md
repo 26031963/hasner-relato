@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 07:25:03.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (154.4 MB). Acoes na janela: **477**.
+**Medido em 02/11/2026 07:30:30.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (154.4 MB). Acoes na janela: **470**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -480,10 +480,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:32:11 | Bash | Read E3-ISENTO census | `cd /home/ronald/saas-hasner && cat logs/e3isento/censo_v1.r \| cut -c1-400` |
 | 19:32:08 | Bash | Gather E3-ISENTO aval and backlog inputs | `cd /home/ronald/saas-hasner && wc -l logs/e3isento/censo_v1.r logs/e4cal/AVAL_L1_REEQ.md; grep -n -i "isento" logs/e4cal/AVAL_L1_REEQ.md \| cut -c1-600; grep -n "E3-ISENTO" app/docs/BACKLOG.md \| cut -c1-500` |
 | 19:31:56 | Bash | Find the HORIZONTE-09 condition and spot-check sonda | `cd /home/ronald/saas-hasner && grep -rn "HORIZONTE-09" app/docs/RELATO.md app/docs/BACKLOG.md logs/cobparc/*.md logs/cobparc/v5/ESTACIONADO.md 2>/dev/null \| cut -c1-400 \| head -8; grep -n -E "FM09\|FORA DOS 5\|ata muda\|A!=B" logs/cobparc5_det.out \| head -20` |
-| 19:30:01 | Bash | Confirm suite_pce2 log grows | `cd /home/ronald/saas-hasner && ls -l logs/cobparc/v5/suite_pce2.log; /usr/bin/sleep 40; ls -l logs/cobparc/v5/suite_pce2.log; kill -0 2587611 && echo vivo; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
-| 19:29:37 | Bash | Point ESPERANDO at suite_pce2 and verify | `cd /home/ronald/saas-hasner && sed -i '3s#.*#ESPERANDO: trava_teste.sh \| pid=2587611 \| arquivo=logs/cobparc/v5/suite_pce2.log#' app/docs/RELATO.md && H=$(date +%H:%M) && printf -- "- %s COBPARC v5: construtor curou na copia (mods3 43 OK, red3_retro), relancou suite_pce2 (pid 2587611).\n" "$H" >> app/docs/RELATO.md && /usr/bin/sleep 20 && cd bin && python3 -c "import hook_stop_fila1 as h; print(h ...` |
-| 19:28:32 | Bash | Wait for construtor's next long suite log | `cd /home/ronald/saas-hasner/logs/cobparc/v5 && touch /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/m0 && for i in $(seq 1 29); do n=$(find . -maxdepth 1 -newer /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/m0 -name 'suite*' -size +20k \| head -1); [ -n "$n" ] && { echo "$n"; break; }; /usr/bin/sleep 20; ...` |
-| 19:27:23 | Bash | Wait for construtor's next test run | `cd /home/ronald/saas-hasner && for i in $(seq 1 28); do q=$(bash bin/trava_teste.sh --quem); case "$q" in livre*) /usr/bin/sleep 20;; *) echo "$q"; break;; esac; done; ls -lt logs/cobparc/v5 \| head -4` |
-| 19:27:13 | Bash | Check run state and newest logs | `cd /home/ronald/saas-hasner && bash bin/trava_teste.sh --quem; ls -lt logs/cobparc/v5 \| head -5; cat logs/cobparc/v5/mods3.log \| tail -5` |
-| 19:26:48 | Bash | Repoint ESPERANDO to new run and verify | `cd /home/ronald/saas-hasner && sed -i '3s#.*#ESPERANDO: trava_teste.sh \| pid=2464883 \| arquivo=logs/cobparc/v5/mods3.log#' app/docs/RELATO.md && cd bin && /usr/bin/sleep 15 && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
-| 19:26:44 | Bash | Identify new run log | `cd /home/ronald/saas-hasner && ls -lt logs/cobparc/v5 \| head -4; ps -o args= -p 2464883 \| cut -c1-300` |
