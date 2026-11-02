@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 15:38:16.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (166.9 MB). Acoes na janela: **547**.
+**Medido em 02/11/2026 15:43:46.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (166.9 MB). Acoes na janela: **546**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:43:24 | Bash |  | `cd /home/ronald/saas-hasner/app; H=$(date +%H:%M \| sed 's/.$/x/'); echo "\| 02/11 $H \| NOREVERSE-UI-NO-CORE-AGORA: ordem de vaga, cura entra agora (L1 commita e para na copia, retoma no pouso); RED sob urls_core, selo morde, suite, opus, pouso+deploy antes da escada; medir vigiar_fio_morto sem carimbo desde 31/10 e batidas com julgamento abortado em engolir \|" >> docs/PROMPTS.md python3 - <<EOF ...` |
+| 15:43:18 | Bash |  | `cd /home/ronald/saas-hasner/app; grep -n -i "fonte unica" docs/GLOSSARIO.md docs/PLANO-PADROES.md \| head -5; tail -3 docs/PROMPTS.md \| cut -c1-200; sed -n 891,892p docs/BACKLOG.md \| cut -c1-200` |
 | 15:33:40 | Bash |  | `cd /home/ronald/saas-hasner; date +%T; tail -n +2 logs/e4cal/r2_mutantes.log \| cut -c1-110` |
 | 15:33:37 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -n 1,60p pautas/tests/test_pauta_do_dia.py; grep -n "urls_core" core/tests/test_rota_pede_sessao.py \| head -5; grep -rn "diagnostico_escala" ponto/tests/*.py \| grep -i "resolve\\|reverse\\|TELA" \| head` |
 | 15:33:33 | Bash |  | `cd /home/ronald/saas-hasner/app; git grep -n "TELA_CALENDARIO\\|calendario/?mes" -- '*/tests/*' \| head; git grep -ln "urls_core" -- '*/tests/*' \| head` |
@@ -554,6 +556,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 04:13:22 | Bash | Take prod reversal snapshot before merge | `cd /home/ronald/saas-hasner && docker cp logs/cobparc/v8/snapshot_reversao_pouso.py saas_core:/tmp/snap_cobparc.py && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/snap_cobparc.py').read())" 2>&1 \| tail -3 && docker cp saas_core:/tmp/reversao_cobparc_pouso.json logs/cobparc/h10/reversao_cobparc_pouso.json && ls -la logs/cobparc/h10/reversa ...` |
 | 04:13:16 | Bash | Compare alarm counts with prior blocos | `cd /home/ronald/saas-hasner/logs; grep -h "bloco 80/80\\|bloco [0-9]*/[0-9]* comandos" cobparc/*/bloco*.log sombra/*.log 2>/dev/null \| tail -5; grep -iE 'falh\|vermelh\|erro' cobparc/h10/bloco_v9b.log \| cut -c1-200` |
 | 04:13:12 | Bash | Read bloco and conferir verdict | `L=/home/ronald/saas-hasner/logs/cobparc/h10/bloco_v9b.log; tail -15 $L; grep -ciE 'falh\|vermelh\|erro' $L` |
-| 03:43:22 | Monitor | sombra bloco+conferir fim (bloco_v9b.log) | `L=/home/ronald/saas-hasner/logs/cobparc/h10/bloco_v9b.log; until grep -q '^conferir_rc=' $L \|\| ! ps -p 1627532 >/dev/null && ! pgrep -x -f 'bash bin/sombra.sh --conferir' >/dev/null && grep -q '^rc=' $L && grep -q '^conferir_rc=' $L; do /usr/bin/sleep 20; done; tail -6 $L` |
-| 03:43:19 | ToolSearch |  | `-` |
-| 03:43:17 | Bash | Check bloco progress | `tail -4 /home/ronald/saas-hasner/logs/cobparc/h10/bloco_v9b.log; ps -p 1627532 -o etime=; date +%H:%M` |
