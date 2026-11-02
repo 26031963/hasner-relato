@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 12:40:17.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (159.5 MB). Acoes na janela: **426**.
+**Medido em 02/11/2026 12:45:46.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (159.5 MB). Acoes na janela: **419**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -429,10 +429,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:34:20 | Bash | Read prior birth-measure run commands | `cd /home/ronald/saas-hasner && cat logs/cobparc/v8/nascimento_run_F0.txt logs/cobparc/v8/nascimento_run_V8.txt \| head -40; ls logs/cobparc/v8/` |
 | 01:34:08 | Bash | Read block and check verdicts | `cd /home/ronald/saas-hasner && tail -n 8 logs/cobparc/v8/sombra_bloco.log; echo ==; cat logs/cobparc/v8/sombra_conferir.log; date +%H:%M` |
 | 00:53:17 | Bash | Check block run progress | `cd /home/ronald/saas-hasner && wc -l logs/sombra/resultado.tsv; tail -n 2 logs/sombra/resultado.tsv; ls /proc/440460 >/dev/null 2>&1 && echo vivo; date +%H:%M` |
-| 00:44:44 | Bash | Wait for the sombra check to finish, then show results | `cd /home/ronald/saas-hasner && until grep -q '^rc=' logs/cobparc/v8/sombra_conferir.log 2>/dev/null; do /usr/bin/sleep 30; done; cat logs/cobparc/v8/sombra_bloco.log \| tail -n 8; echo ==; cat logs/cobparc/v8/sombra_conferir.log` |
-| 00:44:39 | Bash | Repoint wait line to the growing results file | `cd /home/ronald/saas-hasner && sed -i '3s#.*#ESPERANDO: sombra.sh \| pid=440460 \| arquivo=logs/sombra/resultado.tsv#' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md && wc -l logs/sombra/resultado.tsv && tail -n 3 logs/sombra/resultado.tsv` |
-| 00:44:33 | Bash | Locate where the block run logs | `cd /home/ronald/saas-hasner && grep -n 'ensaiando\\|LOG_BLOCO\\|log_bloco\\|>>.*bloco' bin/sombra.sh \| head -20; ls -lt logs/sombra 2>/dev/null \| head -5` |
-| 00:44:30 | Bash | Find files the block run is writing | `cd /home/ronald/saas-hasner && find logs -newer logs/cobparc/v8/sombra_bloco.log -type f -mmin -5 2>/dev/null \| head; ls /proc/440460 >/dev/null && echo vivo` |
-| 00:44:26 | Bash | Show RELATO wait line and block log size | `cd /home/ronald/saas-hasner && sed -n 3p app/docs/RELATO.md && ls -la logs/cobparc/v8/sombra_bloco.log && date +%H:%M` |
-| 00:43:23 | Bash | Read the refresh and block logs | `cd /home/ronald/saas-hasner && for f in logs/cobparc/v8/sombra_refazer.log logs/cobparc/v8/sombra_bloco.log; do echo "== $f"; cat $f; done; ps -eo pid,args \| awk '$3=="bin/sombra.sh"'` |
-| 00:43:19 | Bash | Check the sombra refresh progress | `cd /home/ronald/saas-hasner && ps -p 139806 -o pid=; ls -la logs/cobparc/v8/sombra_*.log; tail -3 logs/cobparc/v8/sombra_*.log` |
