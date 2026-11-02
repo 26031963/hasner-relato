@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 02:58:30.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (148.4 MB). Acoes na janela: **512**.
+**Medido em 02/11/2026 03:04:00.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (148.4 MB). Acoes na janela: **514**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:03:21 | Bash | Wait for suite and atas sondas | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/cobparc/h10/suite_full_v9b.log && grep -q 'FIM-DA-SONDA\\|Traceback' logs/cobparc/h10/atas09_V9.txt 2>/dev/null && break; /usr/bin/sleep 30; done; date +%H:%M; grep -E '^(OK\|FAILED)($\| \()' logs/cobparc/h10/suite_full_v9b.log \| tail -1; grep '^Ran' logs/cobparc/h10/suite_full_v9b.log \| tail -1; grep '^rc=' logs/cobparc ...` |
+| 03:03:17 | Bash | Check suite and atas sonda progress | `cd /home/ronald/saas-hasner && date +%H:%M; ls -la logs/cobparc/h10/atas09_* logs/cobparc/h10/suite_full_v9b.log; tail -c 300 logs/cobparc/h10/suite_full_v9b.log; grep -h "COMP09\\|MUDADAS\\| (" logs/cobparc/h10/atas09_*.txt 2>/dev/null \| head -20` |
 | 02:55:32 | Bash | Fix path in DESENHO line and recheck | `sed -i '4s#; medida atas 09 F0xV9 em curso ponto/services/cartorio.py:427#; medida atas 09 F0xV9 em curso; sitio na copia wt-cobparc5b app/ponto/services/cartorio.py:427#' docs/RELATO.md && cd .. && python3 -c " import sys; sys.path.insert(0,'bin'); import disjuntor L=open('app/docs/RELATO.md').read().split('\n')[2:6] print(disjuntor.linhas_libera_b3('COBERTURA-PARCIAL-UM-JUIZ', L))" \| cut -c1-12 ...` |
 | 02:55:26 | Bash | Check which path form the hook accepts | `cd /home/ronald/saas-hasner && python3 -c " import sys; sys.path.insert(0,'bin'); import disjuntor for t in ['ponto/services/cartorio.py:427','app/ponto/services/cartorio.py:427']: print(t, disjuntor._sitio_existe(t,None))"` |
 | 02:55:21 | Bash | Debug why the DESENHO line is not recognized | `cd /home/ronald/saas-hasner && python3 -c " import sys; sys.path.insert(0,'bin'); import disjuntor ln=open('app/docs/RELATO.md').read().split('\n')[3] print(disjuntor.obras_da_linha(ln.split(':',1)[0])) import re perg=re.search(r'\bpergunta=(.+)$', ln).group(1) print(disjuntor._sitios_validos(perg, None)) print(disjuntor._sitios_validos(re.sub(r'\b(?:lei\|pergunta)=', ' ', ln.split(':', 1)[1]), No ...` |
