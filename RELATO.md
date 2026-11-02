@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: sombra.sh | pid=2504196
+ESPERANDO: sombra.sh | pid=182943
 DESENHO COBERTURA-PARCIAL-UM-JUIZ: lei=juiz unico pergunta=o alcance da regra nova sobre a celula ja julgada tem DUAS portas, versao_para (horizonte) e o disp da impressao que nao passa por ela, e a comp 09 com marco dispensado rejulga na regra 1 sem fato novo; MEDIDO 03:15 pelo cron real F0xV9 no dump 01:34: comp 09 celulas mudadas 0=0 (logs/cobparc/h10/atas09_F0.txt, atas09_V9.txt), opus final de novo sobre o delta; sitio na copia wt-cobparc5b app/ponto/services/cartorio.py:427
 PAREI COBPARC-H10 delta > 0 RESPONDIDA por aval COBPARC-H10-DELTA-1 (02:45): +1 pergunta comp 11 aceito; condicao nova: comp 09 > 0, parcial sem periodo > 0, FM09 mudou ou nascimento em comp aberta > 5 = PAREI.
 PERGUNTA DE DESENHO COBPARC-H10 (B3: opus final v9 REPROVOU 02:45, obra PARADA ate a medida; libera so por aval Ronald): `;disp=` da impressao (ponto/services/cartorio.py::_cob_parcial_da_impressao :427-440, lido em :1153/:1303) NAO passa por versao_para -- celula da 09 com marco dispensado muda de impressao em `regra:1` e REJULGA sem fato novo, contra "comp 09 fica na regra de hoje ate fato novo". Nascimento 09 = 0 medido (V9 0/0/0); ata 09 mudada NAO medida: sonda logs/sombra/sonda_cobparc10_atas09.py F0xV9 no dump 01:34 em curso. =0 libera o BLOQUEIA pelo criterio do opus; >0 = pergunta: gatear `disp` por versao (sai do escopo "so a tupla" do aval) ou aceitar o rejulgamento das N da 09.
