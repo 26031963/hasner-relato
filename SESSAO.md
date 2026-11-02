@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 21:32:00.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (142.3 MB). Acoes na janela: **875**.
+**Medido em 01/11/2026 21:37:27.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (142.4 MB). Acoes na janela: **879**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:36:38 | Bash | Record v7 delivery and repoint ESPERANDO | `cd /home/ronald/saas-hasner/app/docs; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys H=sys.argv[1]; p='RELATO.md'; s=open(p).read(); L=s.split('\n'); assert L[2].startswith('ESPERANDO:') L[2]='ESPERANDO: trava_teste.sh \| pid=1989734 \| arquivo=logs/cobparc/v7/suite_full.log' s='\n'.join(L).rstrip('\n')+f""" - {H} COBPARC v7 construtor entregou HEAD 8f21ec29 (copia limpa): achados 1 b1e3f259, ...` |
+| 21:36:26 | Agent | sonda sombra: COBPARC v7 medidas 5 e 7 | `Papel: SONDA (leitura de frota no banco SOMBRA, escrita so dentro de atomic()+raise). Motivo do modelo: reserva semanal do Codex esgotada (aval CODEX-RESERVA-ATE-O-RESET) e a sonda escreve na sombra em atomic+raise. Projeto /home/ronald/saas-hasner; leia CLAUDE.md (secoes 2, 6: BANCO SOMBRA, ZONA INVIOLAVEL) e app/docs/INFRA.md na parte da sombra. NUNCA rode contra saas_db/prod, nunca edite a arvo ...` |
+| 21:35:51 | Bash | Launch full suite and inspect prior sonda | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; setsid nohup bash -c 'bash bin/suite.sh --dir /home/ronald/wt-cobparc5b-184858 > logs/cobparc/v7/suite_full.log 2>&1; echo "rc=$?" >> logs/cobparc/v7/suite_full.log' >/dev/null 2>&1 < /dev/null & /usr/bin/sleep 15; bin/trava_teste.sh --quem; ls logs/sombra/ \| grep -i cobparc; sed -n 1,40p logs/sombra/sonda_cobparc6_det.py` |
+| 21:33:16 | Bash | Check agent suite progress | `cd /home/ronald/saas-hasner; kill -0 1331760 2>/dev/null && echo VIVO; wc -c logs/cobparc/v7/green_largo.log; grep -cE '^(ERROR\|FAIL):' logs/cobparc/v7/green_largo.log; /usr/bin/sleep 45; wc -c logs/cobparc/v7/green_largo.log` |
 | 21:28:06 | Bash | Let suite log grow | `/usr/bin/sleep 90; wc -c /home/ronald/saas-hasner/logs/cobparc/v7/green_largo.log` |
 | 21:28:04 | Bash | More hook log lines | `cd /home/ronald/saas-hasner; tail -6 logs/hook_stop_fila1.log \| cut -c1-220` |
 | 21:28:01 | Bash | See why hook blocked | `cd /home/ronald/saas-hasner; tail -2 logs/hook_stop_fila1.log \| cut -c1-200; ps -o pid,cmd -p 1331760 \| cut -c1-150` |
