@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 00:17:45.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (145.5 MB). Acoes na janela: **791**.
+**Medido em 02/11/2026 00:23:15.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (145.5 MB). Acoes na janela: **787**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -797,7 +797,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:29:15 | Bash | Wait for CONTENCAO full test and Codex v3 | `cd /home/ronald/saas-hasner; L=logs/contencao/v2/p1/v4; while ! grep -q '^rc=' $L/green_v2_disjuntor_inteiro.log \|\| [ ! -s $L/codex_v3.r ]; do /usr/bin/sleep 30; done; date +%T; tail -3 $L/green_v2_disjuntor_inteiro.log; echo FALHAS=$(grep -cE 'FALHA\|NAO MORDE' $L/green_v2_disjuntor_inteiro.log); wc -c $L/codex_v3.r` |
 | 12:29:08 | Bash | Check CONTENCAO background jobs | `cd /home/ronald/saas-hasner; L=logs/contencao/v2/p1/v4; date +%T; wc -l $L/green_v2_disjuntor_inteiro.log; tail -2 $L/green_v2_disjuntor_inteiro.log; ls -l --time-style=+%T $L/green_v2_disjuntor_inteiro.log $L/codex_v3.* 2>&1 \| cut -c30-; pgrep -f 'test_disjuntor.sh' \| head -3; kill -0 1881637 && echo codex vivo` |
 | 12:23:16 | Bash | Check COBPARC and postmortem progress | `cd /home/ronald/saas-hasner; date +%T; kill -0 666379 2>/dev/null && echo sombra vivo; cat logs/cobparc/v4/sombra_bump_v5.run \| cut -c1-300 \| tail -20; ls -l --time-style=+%T logs/grade_juiz/va/postmortem.* 2>/dev/null` |
-| 12:19:27 | Bash | Launch Codex postmortem classification detached | `cd /home/ronald/saas-hasner; D=logs/grade_juiz/va; cp /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/aacdb31b8db2e0d44.output /dev/null 2>&1; cat > $D/opus_final_achados.md <<'EOF' ACHADOS do opus final GRADE-FOLGA-JUIZ d9cb0e42 (REPROVADO): B1 RED citado na linha LEI-AKITA (logs/grade_juiz/va/dirigidos.log) e VERDE; o RED real e logs/grade_folga/red3.log: ...` |
-| 12:19:17 | Bash | Record GRADE reprovacao at RELATO topo | `cd /home/ronald/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys H=sys.argv[1] p='app/docs/RELATO.md' L=open(p,encoding='utf-8').read().split('\n') assert L[2].startswith('ESPERANDO:') linha=(f"REPROVA-B3 GRADE-FOLGA-JUIZ ({H}): opus final d9cb0e42 REPROVOU por 3 erros bobos (mecanismo do juiz aprovado, suite3 OK Ran 13225): " "(1) RED citado e o dirigidos.log VERDE, e test_MORDE_f ...` |
-| 12:19:05 | Bash | Read the B3 disjuntor contract | `cd /home/ronald/saas-hasner; sed -n 1,40p bin/disjuntor.py; sed -n 626,700p bin/disjuntor.py` |
-| 12:19:02 | Bash | Inspect RELATO topo and GRADE logs | `cd /home/ronald/saas-hasner; sed -n 1,8p app/docs/RELATO.md \| cut -c1-260; ls logs/grade_juiz/va/ \| head -40; grep -n "linhas_libera_b3\\|def .*b3" bin/disjuntor.py \| head` |
