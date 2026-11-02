@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 10:15:16.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (156.0 MB). Acoes na janela: **408**.
+**Medido em 02/11/2026 10:20:45.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (156.1 MB). Acoes na janela: **409**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:20:39 | ToolSearch |  | `-` |
+| 10:20:34 | Bash | Recheck disjuntor log and B3 trigger code | `tail -2 /home/ronald/saas-hasner/logs/sessao/disjuntor.log \| cut -c1-120; grep -n "b3\\|B3" /home/ronald/saas-hasner/bin/disjuntor.py \| head -30` |
+| 10:20:29 | Bash | Confirm finding 1 site and check disjuntor log | `cd /home/ronald/wt-cobparc-relogio-070738/app && sed -n 255,276p chamados/services/disputa_emissao.py; tail -4 /home/ronald/saas-hasner/logs/sessao/disjuntor.log; date '+%H:%M:%S'` |
 | 10:13:48 | Bash | Show diff summary and commits of the obra | `cd /home/ronald/wt-cobparc-relogio-070738 && git diff --stat 15c3a8b5..20f2ebb2 \| tail -3 && git log --oneline 15c3a8b5..20f2ebb2 && date '+%d/%m %H:%M'` |
 | 10:12:43 | Agent | Verificador final v3 COBPARC-FILA-RELOGIO | `LEITURA FINAL (opus final, volta 3) da obra COBPARC-FILA-RELOGIO, projeto Hasner Ponto. Somente leitura. Leia antes /home/ronald/saas-hasner/CLAUDE.md: secao 0 LEI-AKITA, secao 6 e 7b CODEX item 5. Copia: /home/ronald/wt-cobparc-relogio-070738, base 15c3a8b5, HEAD final 20f2ebb2. Diff inteiro: `git -C /home/ronald/wt-cobparc-relogio-070738 diff 15c3a8b5..20f2ebb2`. Commits por `git log 15c3a8b5..2 ...` |
 | 10:12:26 | Bash | Verify suite4 verdict, clean tree, B3 state | `cd /home/ronald/saas-hasner && L=logs/cobparc_relogio/suite4.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran ' $L \| tail -1; cat logs/cobparc_relogio/suite4.rc 2>/dev/null; git -C /home/ronald/wt-cobparc-relogio-070738 log --oneline -1; git -C /home/ronald/wt-cobparc-relogio-070738 status --porcelain \| head -3; sed -i '3{/^ESPERANDO:/d}' app/docs/RELATO.md; grep "COBPARC-FILA-RELO ...` |
@@ -416,5 +419,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 22:21:36 | Bash | Extract triage lines, record green suite | `cd /home/ronald/saas-hasner; H=$(date +%H:%M); sed -n 5856,5859p app/docs/RELATO.md > logs/cobparc/v7/triagem_relato.txt; cat logs/cobparc/v7/triagem_relato.txt \| cut -c1-1500; python3 - "$H" <<'EOF' import sys;H=sys.argv[1];p='app/docs/RELATO.md';s=open(p).read().rstrip('\n') s+=f"\n- {H} COBPARC v7 suite inteira sobre 8f21ec29 VERDE: OK (skipped=42, expected failures=25), Ran 13378, rc=0 (logs/ ...` |
 | 22:21:32 | Bash | Locate materials for opus final | `cd /home/ronald/saas-hasner; ls logs/cobparc/v6/codex/ logs/cobparc/v7/ logs/cobparc/v6/ \| head -60; grep -n 'COBPARC\\|COBERTURA-PARCIAL' app/docs/RELATO.md \| tail -15 \| cut -c1-200` |
 | 22:21:27 | Bash | Read suite verdict | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/bowlqh6uu.output` |
-| 22:18:32 | Bash | Register PARCIAL-NA-PORTA in BACKLOG, PROMPTS, RELATO | `cd /home/ronald/saas-hasner/app/docs; H=$(date +%H:%M); grep -rn 'CENSO-LARGO' BACKLOG.md RELATO.md PROMPTS.md \| head; python3 - "$H" <<'EOF' import sys H=sys.argv[1] p='BACKLOG.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| E4-CALENDARIO-L1 \|')]; assert len(i)==1 row=(f"\| PARCIAL-NA-PORTA \| aval Ronald 01/11 {H} (substitui COBPARC-V7-CENSO-LARGO; nenhuma le ...` |
-| 22:18:21 | Bash | Locate fila entries and prompts format | `cd /home/ronald/saas-hasner/app/docs; grep -n 'COBPARC-V7-CENSO-LARGO\\|E4-CALENDARIO-L1\\|O261-VETO-NA-PORTA' BACKLOG.md \| head -20; tail -5 PROMPTS.md` |
