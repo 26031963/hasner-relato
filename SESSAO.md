@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 06:05:54.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (152.9 MB). Acoes na janela: **519**.
+**Medido em 02/11/2026 06:11:02.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (153.0 MB). Acoes na janela: **521**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:08:18 | Agent | Verificador final COBPARC-FILA-ROTULO | `Verificacao final (opus final, adversarial, somente leitura) da obra COBPARC-FILA-ROTULO antes do pouso. Projeto Hasner Ponto; leia /home/ronald/saas-hasner/CLAUDE.md (LEI-AKITA, secao 6, 7b CODEX item 5 classes que ja reprovaram obra). Copia: /home/ronald/wt-cobparc-rotulo-053835 (branch cobparc-rotulo-053835), base 0ede0ae3. Diff: `git -C /home/ronald/wt-cobparc-rotulo-053835 diff 0ede0ae3..HEAD ...` |
+| 06:08:07 | Bash | Record item (c) design question, check copy state | `git -C /home/ronald/wt-cobparc-rotulo-053835 log --oneline 0ede0ae3..HEAD && git -C /home/ronald/wt-cobparc-rotulo-053835 status --porcelain \| head && python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO: trava_teste.sh \| pid=2635397') L[2]=('PERGUNTA DE DESENHO COBPARC-FILA-ROTULO item (c) (06:0x; so o (c) parado, (a)(b) seguem ao verificador): "p ...` |
 | 05:53:17 | Bash | Check builder suite and sombra progress | `ps -p 2635397 >/dev/null && echo SUITE_VIVA \|\| echo SUITE_FIM; cd /home/ronald/saas-hasner/logs/cobparc_rotulo && for f in green_suite.log; do grep -E '^(OK\|FAILED)($\| \()' $f \| tail -1; grep '^Ran ' $f \| tail -1; done; tail -5 sombra_impacto.log 2>/dev/null \| cut -c1-200` |
 | 05:53:07 | Bash | Declare ESPERANDO on builder's suite | `sed -i '2a ESPERANDO: trava_teste.sh \| pid=2635397' docs/RELATO.md && sed -n 3p docs/RELATO.md` |
 | 05:53:05 | Bash | Find the builder's background producer | `ps -eo pid,etime,args \| grep -E "trava_teste.sh\|sombra.sh --rodar" \| grep -v grep \| cut -c1-200; ls -t /home/ronald/saas-hasner/logs/cobparc_rotulo/ 2>/dev/null \| head` |
