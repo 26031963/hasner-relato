@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: trava_teste.sh | pid=3178686 | arquivo=logs/e4cal/r7_suite.log
+ESPERANDO: codex_pergunta.sh | pid=1680943 | arquivo=logs/codex/E4-CALENDARIO-L1_20261102_192028_1680943.jsonl
 DESENHO E3-ISENTO-INSUMOS: lei=lampada 4a pergunta=quem diz a fabrica QUAIS celulas DESTE colab foram julgadas NESTE ato? hoje e o out['cods'] do LOTE da empresa, chaveado so por data, e a fabrica roda em celula de outro colab nao rejulgada app/ponto/services/cartorio.py:966 app/ponto/services/cartorio.py:977 app/ponto/services/cartorio.py:1380 app/ponto/management/commands/processar_cartorio.py:43
 CODEX VERIFICADOR FINAL L1 18:2x: BLOQUEIA (procedentes conferidos: _calendario_grade.html:103 tooltip escala_suspeita com regua do vinculo ativo calendario.py:265/:730, :169 rotulo 'Abertos'; testes que mordem); item 7 (paridade mensal x unitario, turnos.py:1297) a investigar com RED, sem curar -> volta r7 ao construtor a255846f.
 DESPACHO NOREVERSE-UI-NO-CORE-AGORA 15:4x: construir cura+RED+selo+suite -> opus (copia wt-noreverse-021533) | medir 7 (vigiar_fio_morto sem carimbo 31/10-02/11; batidas abortadas em engolir) -> sonnet (motivo: Codex em reserva so final) | L1 commita e para na copia, retoma no pouso desta cura
