@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 03:42:15.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (149.4 MB). Acoes na janela: **497**.
+**Medido em 02/11/2026 03:47:45.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (149.4 MB). Acoes na janela: **498**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:43:22 | Monitor | sombra bloco+conferir fim (bloco_v9b.log) | `L=/home/ronald/saas-hasner/logs/cobparc/h10/bloco_v9b.log; until grep -q '^conferir_rc=' $L \|\| ! ps -p 1627532 >/dev/null && ! pgrep -x -f 'bash bin/sombra.sh --conferir' >/dev/null && grep -q '^rc=' $L && grep -q '^conferir_rc=' $L; do /usr/bin/sleep 20; done; tail -6 $L` |
+| 03:43:19 | ToolSearch |  | `-` |
+| 03:43:17 | Bash | Check bloco progress | `tail -4 /home/ronald/saas-hasner/logs/cobparc/h10/bloco_v9b.log; ps -p 1627532 -o etime=; date +%H:%M` |
 | 03:33:21 | Bash | Read next fila items | `grep -n "E3-ISENTO-INSUMOS\\|E4-CALENDARIO-L1\\|PARCIAL-NA-PORTA" docs/BACKLOG.md \| cut -c1-400 \| head` |
 | 03:33:17 | Bash | Check bloco progress | `tail -4 /home/ronald/saas-hasner/logs/cobparc/h10/bloco_v9b.log; ps -p 1627532 -o etime=` |
 | 03:23:38 | Bash | Check sombra producer alive and RELATO top | `ps -p 1627532 -o pid,etime,cmd \| cut -c1-150; sed -n 1,5p /home/ronald/saas-hasner/app/docs/RELATO.md \| cut -c1-200` |
@@ -505,5 +508,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:57:40 | Bash | Check builder activity after suite | `cd /home/ronald/saas-hasner && /usr/bin/sleep 60; ls -lt logs/o261e/f2/ \| head -5; tail -c 600 /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/a022e34bb1bd9f4b4.output \| grep -o '"text":"[^"]*' \| tail -2` |
 | 15:53:20 | Bash | Wait for F2 suite v2 verdict | `cd /home/ronald/saas-hasner && while kill -0 1367783 2>/dev/null; do /usr/bin/sleep 15; done; date +%H:%M; grep -E '^(OK\|FAILED)($\| \()' logs/o261e/f2/suite_completa_v2.log \| tail -1; grep -E '^Ran ' logs/o261e/f2/suite_completa_v2.log \| tail -1; tail -3 bin/../logs/trava_teste.hist 2>/dev/null` |
 | 15:53:16 | Bash | Check F2 suite v2 status | `cd /home/ronald/saas-hasner && date +%H:%M; kill -0 1367783 2>/dev/null && echo suite-viva; grep -E '^(OK\|FAILED)($\| \()' logs/o261e/f2/suite_completa_v2.log \| tail -1; grep -E '^Ran ' logs/o261e/f2/suite_completa_v2.log \| tail -1; ls -l logs/o261e/f2/suite_completa_v2.log` |
-| 15:43:21 | Bash | Repoint ESPERANDO to F2 suite v2 | `cd /home/ronald/saas-hasner && sed -i 's#^ESPERANDO: trava_teste.sh \| pid=4156130 \| arquivo=logs/o261e/f2/suite_completa_v1.log#ESPERANDO: trava_teste.sh \| pid=1367783 \| arquivo=logs/o261e/f2/suite_completa_v2.log#' app/docs/RELATO.md; grep -n '^ESPERANDO' app/docs/RELATO.md; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
-| 15:43:17 | Bash | Check F2 suite verdict and builder state | `cd /home/ronald/saas-hasner && date +%H:%M; kill -0 4156130 2>/dev/null && echo suite-viva; grep -E '^(OK\|FAILED)($\| \()' logs/o261e/f2/suite_completa_v1.log \| tail -1; grep -E '^Ran ' logs/o261e/f2/suite_completa_v1.log \| tail -1; bin/trava_teste.sh --quem; ls -lt logs/o261e/f2/ \| head -6; tail -c 1500 /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/a ...` |
