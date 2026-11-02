@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 00:01:14.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (145.3 MB). Acoes na janela: **794**.
+**Medido em 02/11/2026 00:06:44.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (145.3 MB). Acoes na janela: **790**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -800,7 +800,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:08:44 | Bash | Read GRADE ensaio fase C key lines | `cd /home/ronald/saas-hasner; tail -3 logs/grade_juiz/va/ensaio/run.log; grep -E '^FM_DIFF\|FM_DELTA\|FASE_OK\|HASH\|hash\|EXPORT\|REVERS' logs/grade_juiz/va/ensaio/fase_C.txt \| cut -c1-400` |
 | 12:08:40 | Bash | Record disjuntor green in RELATO | `cd /home/ronald/saas-hasner; H=$(date +%H:%M); echo "- $H CONTENCAO test_disjuntor.sh inteiro na copia f9728d1b: rc=0, 'todos os mutantes caem, os controles passam', 0 NAO MORDE/FALHOU (logs/contencao/v2/p1/v4/green_v1_disjuntor_inteiro.log). Falta Codex v2." >> app/docs/RELATO.md` |
 | 12:08:36 | Bash | Read disjuntor full-run verdict | `cd /home/ronald/saas-hasner/logs/contencao/v2/p1/v4; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/b2r8v8pd0.output; grep -c . green_v1_disjuntor_inteiro.log; grep -iE 'mutant\|MORDE' green_v1_disjuntor_inteiro.log \| grep -E 'v4-porta-le-sob-trava\|v4-b1-mede-sob-trava'` |
-| 12:06:36 | Bash | Record CONTENCAO cure delivery in RELATO | `cd /home/ronald/saas-hasner; H=$(date +%H:%M); echo "- $H CONTENCAO P1 v4 curas Codex v1 (a)-(f) na copia wt-contencao-v4-111700 @f9728d1b (6 commits, RED red_v1_{a..f}.log, GREEN green_v1_*.log, 7 mutantes v5 MORDEM, 21 vizinhos rc=0, ruff OK). Em fundo: test_disjuntor inteiro (green_v1_disjuntor_inteiro.log) e Codex v2 (codex_v2.r). Depois: suite inteira, opus final." >> app/docs/RELATO.md` |
-| 12:06:32 | Bash | Wait for Codex v2 answer | `cd /home/ronald/saas-hasner/logs/contencao/v2/p1/v4; until [ -s codex_v2.r ] && [ -s codex_v2.r.id ]; do /usr/bin/sleep 30; done; cat codex_v2.wrapper.log; head -c 1500 codex_v2.r` |
-| 12:06:31 | Bash | Wait for test_disjuntor full-run verdict | `cd /home/ronald/saas-hasner/logs/contencao/v2/p1/v4; until grep -q '^rc=' green_v1_disjuntor_inteiro.log 2>/dev/null; do /usr/bin/sleep 20; done; tail -3 green_v1_disjuntor_inteiro.log; grep -c 'NAO MORDE\\|FALHOU' green_v1_disjuntor_inteiro.log` |
-| 12:06:01 | SendMessage |  | `-` |
