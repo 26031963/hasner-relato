@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 12:07:16.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (158.4 MB). Acoes na janela: **429**.
+**Medido em 02/11/2026 12:12:46.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (158.4 MB). Acoes na janela: **419**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -429,13 +429,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:32:02 | Bash | Confirm the probe numbers in both outputs | `cd /home/ronald/saas-hasner && for r in F0 V8; do echo == $r; grep -c Traceback logs/cobparc8_nascimento_$r.out; grep -v "WARNING\\|INFO" logs/cobparc8_nascimento_$r.out \| grep -i -E "SIG\|FM09\|chamados\|perguntas\|disputas\|parcial\|FIM-DA" \| cut -c1-160 \| head -14; done` |
 | 00:13:21 | Bash | Wait for the probe to progress | `/usr/bin/sleep 110; ls -la /home/ronald/saas-hasner/logs/ \| grep nascimento` |
 | 00:13:16 | Bash | Check probe outputs so far | `cd /home/ronald/saas-hasner && ls -la logs/ \| grep nascimento; ls logs/cobparc/v8/ \| grep nasc; grep -c Traceback logs/cobparc8_nascimento_*.out; tail -15 logs/cobparc8_nascimento_F0.out \| cut -c1-200` |
-| 00:08:41 | Bash | Wait for the sonda agent to progress | `/usr/bin/sleep 90; ls -laL /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/a5fe68d962b0ba6ce.output \| awk '{print $5,$8}'; ls /home/ronald/saas-hasner/logs/ \| grep nascimento` |
-| 00:08:37 | Bash | Confirm the snapshot's field names exist on the models | `for f in veredito veredito_via veredito_em protestos ata julgada_em impressao ausencia tem_entrada tem_saida insumos_em; do grep -c "^ $f = " escala/models.py \| tr '\n' ' '; echo $f; done; grep -n "versao = \\|^class DiaPago" ponto/models.py \| head; grep -n "def periodo_apuracao" ponto/janelas.py` |
-| 00:08:32 | Write |  | `/home/ronald/saas-hasner/logs/cobparc/v8/snapshot_reversao_pouso.py` |
-| 00:08:14 | Bash | Read julgar_colab's census of what it writes | `cd /home/ronald/saas-hasner && sed -n 782,800p app/ponto/services/cartorio.py` |
-| 00:08:13 | Bash | See what processar_cartorio writes, to scope the reversal snapshot | `cd /home/ronald/saas-hasner && grep -n "^CAMPOS" app/ponto/management/commands/aplicar_09_corte_b.py \| head -2; grep -n "\.save(\\|update(" app/ponto/management/commands/processar_cartorio.py \| head; grep -n "def julgar_colab" -A3 app/ponto/services/cartorio.py \| head; grep -n "update_fields\\|\.save(" app/ponto/services/cartorio.py \| head -15` |
-| 00:08:00 | Bash | Read the relavratura snapshot script to reuse for reversal | `cd /home/ronald/saas-hasner && sed -n 1,60p bin/snapshot_relavratura_10_2026.py` |
-| 00:07:58 | Bash | Find existing reversal snapshot tooling and files | `cd /home/ronald/saas-hasner && ls -t logs/ \| grep -i revers \| head -8; ls bin/ \| grep -i -E "revers\|snapshot"` |
-| 00:07:52 | Bash | Point ESPERANDO at the sonda agent and read deploy's sombra gate | `cd /home/ronald/saas-hasner && sed -i '3s#^ESPERANDO: agente SONDA-[nome] \| arquivo=logs/cobparc/v8/nascimento.out$#ESPERANDO: agente a5fe68d962b0ba6ce \| arquivo=/tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/a5fe68d962b0ba6ce.output#' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md; date +%H:%M; grep -n "sombra\\|ensaio\\|dump" bin/deploy.sh \| h ...` |
-| 00:07:45 | Agent | sonda sonnet: nascimento do apply v8 | `Papel: SONDA na sombra (escreve so dentro de atomic() com raise; nada persiste). Motivo de ser sonnet e nao Codex: reserva semanal do Codex esgotada, e a sonda escreve na sombra. Pergunta (condicao do aval de pouso da obra COBERTURA-PARCIAL-UM-JUIZ): quantos ChamadoColaborador, PerguntaDisputa e DisputaSupervisao NASCEM quando o cron real `processar_cartorio --empresa E --apply` roda sobre o banco ...` |
-| 00:07:23 | Bash | Put the ERRO-BOBO aval at the top and log the prompt | `cd /home/ronald/saas-hasner && H=$(date +%H:%M) && D=$(date +%d/%m) && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/aval.txt <<'EOF' ERRO-BOBO COBERTURA-PARCIAL-UM-JUIZ: aval Ronald 02/11 (liberacao explicita dele; substitui qualquer versao anterior; nenhuma lei nova) -- o opus final v8 reprovou so a mensagem do commit f05713f5 (padrao= errado ...` |
