@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 20:04:16.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (172.1 MB). Acoes na janela: **549**.
+**Medido em 02/11/2026 20:09:46.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (172.2 MB). Acoes na janela: **549**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:09:42 | Bash | Assemble Codex verificador question and annexes | `D=/tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/dme; cp $D/resposta.txt $D/v1/contrato_leitura_codex.txt; grep -n 'CONTRATO DEPLOY-[nome]-ELO' -A5 /home/ronald/saas-hasner/app/docs/RELATO.md \| cut -c1-1500 > $D/v1/contrato.txt; grep -n 'DEPLOY-FORA-DA-CORRENTE\\|DEPLOY-[nome]-ELO' /home/ronald/saas-hasner/app/docs/PROMPTS.md /home/ronald/saas-hasner/app ...` |
+| 20:09:27 | Bash | Prepare diff and law excerpts for Codex | `cd /home/ronald/wt-dme-193144 && git log --oneline -2 && git diff --stat d69da038 b1f9d4f1 \| tail -3; D=/tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/dme/v1; mkdir -p $D; git diff d69da038 b1f9d4f1 > $D/diff.txt; cd /home/ronald/saas-hasner/app/docs && grep -n -E 'deploy\.sh\|deploy_agendado\|cron_run\|encadeado\.sh\|placar_code\|contrato_deploy' LE ...` |
 | 20:03:30 | Bash | Repoint ESPERANDO to rerun pid | `cd /home/ronald/saas-hasner && sed -i '3s#^ESPERANDO:.*#ESPERANDO: pasta.sh \| pid=4176832 \| arquivo=logs/dme/pasta_wt-dme-193144.log#' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md` |
 | 20:03:27 | Bash | Check builder liveness | `f=$(readlink -f /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/abbbcd4f0982ce7a5.output); ls -l --time-style=+%H:%M:%S $f \| awk '{print $6}'; ps -ef \| grep -v grep \| grep -E 'wt-dme' \| cut -c1-200 \| head -5; wc -l /home/ronald/saas-hasner/logs/dme/pasta_wt-dme-193144.log` |
 | 20:03:22 | Bash | Compare red selos copy vs HEAD | `cd /home/ronald/saas-hasner/logs/dme && for f in pasta_wt-dme-193144.log pasta_wt-dme-head-194142.log; do echo "== $f"; grep -E '^rc=[^0]' $f \| sort; tail -n1 $f; done; ls -la pasta.fim` |
@@ -557,5 +559,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 08:13:30 | Bash | Write ERRO-BOBO and test the stop hook | `sed -i '3i ERRO-BOBO COBPARC-FILA-RELOGIO: opus final v1 (07:43) reprovou por RED/mutante ausente nas bordas medir/do_dia, reconciliar_perguntas_orfas_colab e gerar_perguntas_disputa (cobertura que faltou no teste, nao lei nem juiz em aberto); volta 2 constroi os testes por laco + mutantes + cura do reabrir (chamados/models.py:1295)' docs/RELATO.md && sed -n 3,5p docs/RELATO.md \| cut -c1-70; cd / ...` |
 | 08:13:20 | Bash | Refresh ESPERANDO pid | `sed -i '3s/pid=2642167/pid=2887370/' docs/RELATO.md && sed -n 3p docs/RELATO.md; ls -t /home/ronald/saas-hasner/logs/cobparc_relogio/ \| head -5` |
 | 08:13:17 | Bash | Check suite still alive | `ps -p 2642167 -o etime= ; ps -eo pid,etime,args \| grep -E "trava_teste\|sombra.sh --rodar" \| grep -v grep \| cut -c1-100` |
-| 08:09:07 | Bash | Add ESPERANDO for volta-2 suite | `sed -i '3i ESPERANDO: trava_teste.sh \| pid=2642167' docs/RELATO.md && sed -n 3p docs/RELATO.md` |
-| 08:09:04 | Bash | Find builder suite pid and B3 state | `ps -eo pid,etime,args \| grep -E "trava_teste\|sombra.sh" \| grep -v grep \| cut -c1-120; cd /home/ronald/saas-hasner && grep "COBPARC-FILA-RELOGIO" logs/sessao/disjuntor.log \| tail -1 \| cut -c1-60; sed -n 1,5p app/docs/RELATO.md \| cut -c1-70` |
