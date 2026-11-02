@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 08:39:25.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (155.0 MB). Acoes na janela: **437**.
+**Medido em 02/11/2026 08:45:00.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (155.0 MB). Acoes na janela: **434**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -444,6 +444,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:46:40 | Agent | construtor: COBPARC volta 7 (bloqueios do Codex final) | `Papel: CONSTRUTOR da obra COBERTURA-PARCIAL-UM-JUIZ (COBPARC), volta 7. Projeto: /home/ronald/saas-hasner (Django em app/). Leia /home/ronald/saas-hasner/CLAUDE.md inteiro antes de qualquer acao (LEI-AKITA, RED primeiro, construir em copia, git add por path, commit por heredoc). COPIA DE TRABALHO (unica arvore que voce edita): /home/ronald/wt-cobparc5b-184858, HEAD 6c263523 (base main a8709a53). N ...` |
 | 20:45:46 | Bash | Spot-check Codex blocking claims | `cd /home/ronald/wt-cobparc5b-184858/app; sed -n 1040,1068p escala/utils.py; echo ----; sed -n 20,35p ponto/services/cluster_espurio.py; sed -n 80,92p ponto/services/cluster_espurio.py; echo ---; sed -n 840,848p chamados/reconciliador.py` |
 | 20:45:34 | Read |  | `/home/ronald/saas-hasner/logs/cobparc/v6/codex/final.r` |
-| 20:40:53 | Bash | Wait up to ~9 min for Codex | `cd /home/ronald/saas-hasner; for i in $(seq 1 28); do kill -0 2711286 2>/dev/null \|\| break; /usr/bin/sleep 20; done; kill -0 2711286 2>/dev/null && echo AINDA_VIVO; tail -3 logs/cobparc/v6/codex/final.run; wc -l logs/cobparc/v6/codex/final.r 2>/dev/null` |
-| 20:40:46 | Bash | Inspect hook decision log | `cd /home/ronald/saas-hasner; tail -5 logs/hook_stop_fila1.log \| cut -c1-300; cat logs/hook_stop_espera.json \| head -c 600` |
-| 20:39:33 | Bash | Measure jsonl growth | `cd /home/ronald/saas-hasner; f=logs/codex/COBERTURA-PARCIAL-UM-JUIZ_20261101_203816_2711286.jsonl; stat -c '%s %y' $f; /usr/bin/sleep 60; stat -c '%s %y' $f; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
