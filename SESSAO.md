@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 08:23:03.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (154.8 MB). Acoes na janela: **439**.
+**Medido em 02/11/2026 08:28:31.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (154.9 MB). Acoes na janela: **440**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:23:21 | Bash | Refresh ESPERANDO to full suite pid | `sed -i '3s/pid=2917749/pid=3074401/' docs/RELATO.md && sed -n 3p docs/RELATO.md` |
+| 08:23:17 | Bash | Check suite pid and builder commits | `ps -eo pid,etime,args \| grep -E "trava_teste" \| grep -v grep \| cut -c1-80; cd /home/ronald/saas-hasner/app && sed -n 3p docs/RELATO.md; git -C /home/ronald/wt-cobparc-relogio-070738 log --oneline -4` |
 | 08:13:41 | Bash | Put ESPERANDO first, ERRO-BOBO second; test hook | `P=$(ps -eo pid,args \| awk '/bin\/trava_teste.sh/ && !/awk/ {print $1; exit}') && python3 - "$P" <<'EOF' import sys p='docs/RELATO.md'; L=open(p).read().split('\n') eb=L[2]; assert eb.startswith('ERRO-BOBO COBPARC-FILA-RELOGIO'); assert L[3].startswith('ESPERANDO:') L[2]='ESPERANDO: trava_teste.sh \| pid=%s'%sys.argv[1]; L[3]=eb open(p,'w').write('\n'.join(L)) EOF sed -n 3,4p docs/RELATO.md \| cut ...` |
 | 08:13:35 | Bash | Check pid and hook ESPERANDO parsing | `ps -p 2887370 -o etime=,args= \| cut -c1-80; ps -eo pid,etime,args \| grep -E "trava_teste" \| grep -v grep \| cut -c1-80; grep -n "ESPERANDO" /home/ronald/saas-hasner/bin/hook_stop_fila1.py \| head -8` |
 | 08:13:30 | Bash | Write ERRO-BOBO and test the stop hook | `sed -i '3i ERRO-BOBO COBPARC-FILA-RELOGIO: opus final v1 (07:43) reprovou por RED/mutante ausente nas bordas medir/do_dia, reconciliar_perguntas_orfas_colab e gerar_perguntas_disputa (cobertura que faltou no teste, nao lei nem juiz em aberto); volta 2 constroi os testes por laco + mutantes + cura do reabrir (chamados/models.py:1295)' docs/RELATO.md && sed -n 3,5p docs/RELATO.md \| cut -c1-70; cd / ...` |
@@ -448,4 +450,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:38:00 | Bash | Launch final Codex volta | `cd /home/ronald/saas-hasner && sed -i '2s/a8709a53\.\.c1c6f565/a8709a53..6c263523/' logs/cobparc/v6/codex/final.q && sed -n 2p logs/cobparc/v6/codex/final.q \| cut -c1-120 && cd /home/ronald/wt-cobparc5b-184858 && cd /home/ronald/saas-hasner && (CODEX_OBRA=COBERTURA-PARCIAL-UM-JUIZ CODEX_PAPEL=verificador setsid nohup bin/codex_pergunta.sh --anexo logs/cobparc/v6/codex/diff_final.patch --anexo log ...` |
 | 20:37:53 | Bash | Check hash references in question | `cd /home/ronald/saas-hasner/logs/cobparc/v6/codex; grep -n "c1c6f565\\|6c263523" final.q \| head; wc -l final.q` |
 | 20:37:48 | Bash | Read suite verdict | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/b1t6vwa29.output; cd /home/ronald/wt-cobparc5b-184858 && git status --porcelain \| head; git log --oneline -1; date +%H:%M` |
-| 20:23:18 | Bash | Check suite progress | `cd /home/ronald/saas-hasner; kill -0 1682366 2>/dev/null && echo VIVO; wc -c logs/cobparc/v6/suite_full2.log; grep -cE '^(ERROR\|FAIL):' logs/cobparc/v6/suite_full2.log; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
