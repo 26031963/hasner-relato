@@ -1,6 +1,6 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **01/11/2026 20:45** · publicado em **01/11/2026 20:48** (UTC-3)
+> Ultima resposta processada: **01/11/2026 20:45** · publicado em **02/11/2026 17:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
 
 ## 01/11 20:45 · sessao 6bee4d54689e · COBERTURA-PARCIAL-UM-JUIZ · verificador · origem=Code
@@ -639,7 +639,7 @@ São critérios de detecção derivados dos contratos citados; sua execução ne
 | **Rodapé incompleto** | Histograma exclusivo dos status deve somar `len(dias)` e coincidir entre tela, contagem e resumo; HE fica fora dessa soma porque é selo sobreposto. (`app/colaboradores/services/calendario.py:217`; `app/colaboradores/services/calendario.py:935`; `app/colaboradores/services/calendario.py:940`) |
 | **Dois leitores concordam no erro** | Casos e propriedades independentes pela regra continuam obrigatórios mesmo com divergência zero; comparação entre implementações só mede coerência/impacto. (`app/docs/LEIS.md:136`) |
 
-## 01/11 17:53 · sessao 81f096571943 · - · - · origem=Ronald (tmux)
+## 01/11 17:53 -- HISTORICO (mais de 24 h) · sessao 81f096571943 · - · - · origem=Ronald (tmux)
 
 Leitura concluída, sem escrita. Os anexos não trazem perguntas, respostas, atas ou marcos; qualquer explicação individual por C6 continua [nao verificado].
 
@@ -694,7 +694,7 @@ C6 distingue explicitamente **marco perguntado** de **dia inteiro**: uma pergunt
 - **Idempotência:** repetir a mesma decisão não altera estado/carimbo; portas admin e duplicata têm guardas explícitas. (`app/chamados/models.py:2490–2502`; `app/chamados/services/fio.py:882–897`.)
 - **Ação não reduzida a cor:** igualdade de status, isoladamente, não certifica igualdade de `resolver_dia_oferecido` ou de pergunta viva, pois seus predicados têm entradas diferentes. A propriedade verificável é comparar a projeção completa do contrato, sob os mesmos insumos/instante. (`app/docs/MAPA/calendario-dia-da-tela.md:10–13`; `app/chamados/juizes.py:1032–1118`; formulação de propriedade: [nao verificado].)
 
-## 01/11 17:53 · sessao c8a34173d33c · - · - · origem=Ronald (tmux)
+## 01/11 17:53 -- HISTORICO (mais de 24 h) · sessao c8a34173d33c · - · - · origem=Ronald (tmux)
 
 Fatos e pontos de desenho confirmados:
 
@@ -743,7 +743,7 @@ Perguntas de desenho e propriedades mecânicas:
 - **Entregue muda elegibilidade de referência viva?** Propriedade: mesmos insumos vivos + mesmo instante dão o mesmo par vivo independentemente do flag entregue; hash do gravado permanece intacto. Base declarada: `app/docs/ADR/0003-celula-tres-naturezas.md:25` e `:27`. O command atual contradiz a primeira metade em `app/ponto/management/commands/lavrar_status_competencia.py:40`.
 - **Migração está completa?** Propriedade contábil por partição: `total = ja_lavrado + completaveis + fila_cartorio` sobre o mesmo universo elegível, com testes de DRY sem escrita, segunda aplicação sem mudança e preservação de veredito/ata/data. Ramos em `app/ponto/services/cartorio.py:758`; testes atuais de idempotência em `app/ponto/tests/test_e3_status_lavrado.py:271`. Não executei testes nem consultei banco [nao verificado].
 
-## 01/11 17:53 · sessao a8a6c2bba5fc · - · - · origem=Ronald (tmux)
+## 01/11 17:53 -- HISTORICO (mais de 24 h) · sessao a8a6c2bba5fc · - · - · origem=Ronald (tmux)
 
 Achados com evidência direta:
 
@@ -777,7 +777,7 @@ Propriedades verificáveis por máquina, como especificações de detecção:
 6. **Imutabilidade/idempotência:** repetir geração mantém célula editada e passado; repetir operação com mesmos insumos não altera conteúdo nem contador de regeneração (`app/ponto/portas/celula.py:19`, `app/ponto/portas/celula.py:598`). Após exportação, comparação não autoriza escrita: L-092 (`app/docs/LEIS.md:125`).
 7. **Referência:** igualdade entre leitores detecta incoerência estrutural, mas não prova valor correto: a referência deve ser regra aplicada a cadastro e batidas, conforme L-110 (`app/docs/LEIS.md:136`). O anexo não contém esses insumos por dia; nenhum dos dois status pode ser eleito gabarito só por sua origem [nao verificado].
 
-## 01/11 17:51 · sessao 06c9e96978f9 · O261-E-F2 · verificador · origem=Code
+## 01/11 17:51 -- HISTORICO (mais de 24 h) · sessao 06c9e96978f9 · O261-E-F2 · verificador · origem=Code
 
 **A cobertura é parcial:** os quatro testes podem continuar verdes sem a guarda do fecho; o MORDE do ramo não chega ao vigia; e o caso 2 usa um veredito que a porta de produção rejeita. — `app/chamados/services/disputa_emissao.py:1626`; `app/chamados/models.py:2569`; `app/chamados/tests/test_o261e_f2_ramo_e_i20.py:171`; `app/ponto/portas/celula.py:658`.
 

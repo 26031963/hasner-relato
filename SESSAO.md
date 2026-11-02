@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 17:51:23.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (169.4 MB). Acoes na janela: **526**.
+**Medido em 02/11/2026 17:56:07.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (169.4 MB). Acoes na janela: **524**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:52:45 | Bash | Keep waiting for the r6 suite verdict | `cd /home/ronald/saas-hasner; for i in $(seq 1 28); do ps -p 3860305 >/dev/null \|\| break; /usr/bin/sleep 20; done; ps -p 3860305 -o pid=; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|rc=' logs/e4cal/r6_suite.log \| tail -3` |
 | 17:43:20 | Bash | Wait for the L1 r6 run's verdict | `cd /home/ronald/saas-hasner; for i in $(seq 1 28); do ps -p 3860305 >/dev/null \|\| break; /usr/bin/sleep 20; done; ps -p 3860305 -o pid=; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|rc=' logs/e4cal/r6_suite.log \| tail -3; ls -la --time-style=+%H:%M:%S logs/e4cal/r6_suite.log` |
 | 17:40:04 | Bash | Check the L1 r6 run and the hook's last entry | `cd /home/ronald/saas-hasner; /usr/bin/sleep 40; ps -p 3860305 -o pid=; ls -la --time-style=+%H:%M:%S logs/e4cal/r6_suite.log; tail -1 logs/hook_stop_fila1.log \| cut -c1-150` |
 | 17:36:06 | Bash | Wait for the next long L1 run and point ESPERANDO at it | `cd /home/ronald/saas-hasner; p=""; for i in $(seq 1 50); do q=$(bin/trava_teste.sh --quem); case "$q" in suite:*) p=${q#suite:}; p=${p%% *}; /usr/bin/sleep 45; if [ -n "$p" ] && ps -p "$p" >/dev/null; then f=$(ls -t logs/e4cal/*.log \| head -1); break; fi;; esac; /usr/bin/sleep 10; done; echo "p=$p f=$f q=$q"; [ -n "$p" ] && ps -p "$p" -o pid= && sed -i "3s#^ESPERANDO: .*#ESPERANDO: trava_teste.sh ...` |
@@ -533,6 +534,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 06:12:19 | Bash | Check DISJUNTOR B3 semantics | `cd /home/ronald/saas-hasner && grep -n "B3" bin/disjuntor.py \| head -20` |
 | 06:08:18 | Agent | Verificador final COBPARC-FILA-ROTULO | `Verificacao final (opus final, adversarial, somente leitura) da obra COBPARC-FILA-ROTULO antes do pouso. Projeto Hasner Ponto; leia /home/ronald/saas-hasner/CLAUDE.md (LEI-AKITA, secao 6, 7b CODEX item 5 classes que ja reprovaram obra). Copia: /home/ronald/wt-cobparc-rotulo-053835 (branch cobparc-rotulo-053835), base 0ede0ae3. Diff: `git -C /home/ronald/wt-cobparc-rotulo-053835 diff 0ede0ae3..HEAD ...` |
 | 06:08:07 | Bash | Record item (c) design question, check copy state | `git -C /home/ronald/wt-cobparc-rotulo-053835 log --oneline 0ede0ae3..HEAD && git -C /home/ronald/wt-cobparc-rotulo-053835 status --porcelain \| head && python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO: trava_teste.sh \| pid=2635397') L[2]=('PERGUNTA DE DESENHO COBPARC-FILA-ROTULO item (c) (06:0x; so o (c) parado, (a)(b) seguem ao verificador): "p ...` |
-| 05:53:17 | Bash | Check builder suite and sombra progress | `ps -p 2635397 >/dev/null && echo SUITE_VIVA \|\| echo SUITE_FIM; cd /home/ronald/saas-hasner/logs/cobparc_rotulo && for f in green_suite.log; do grep -E '^(OK\|FAILED)($\| \()' $f \| tail -1; grep '^Ran ' $f \| tail -1; done; tail -5 sombra_impacto.log 2>/dev/null \| cut -c1-200` |
-| 05:53:07 | Bash | Declare ESPERANDO on builder's suite | `sed -i '2a ESPERANDO: trava_teste.sh \| pid=2635397' docs/RELATO.md && sed -n 3p docs/RELATO.md` |
-| 05:53:05 | Bash | Find the builder's background producer | `ps -eo pid,etime,args \| grep -E "trava_teste.sh\|sombra.sh --rodar" \| grep -v grep \| cut -c1-200; ls -t /home/ronald/saas-hasner/logs/cobparc_rotulo/ 2>/dev/null \| head` |
