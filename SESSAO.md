@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 15:22:38.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (165.9 MB). Acoes na janela: **528**.
+**Medido em 02/11/2026 15:27:51.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (165.9 MB). Acoes na janela: **524**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -534,7 +534,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 03:43:17 | Bash | Check bloco progress | `tail -4 /home/ronald/saas-hasner/logs/cobparc/h10/bloco_v9b.log; ps -p 1627532 -o etime=; date +%H:%M` |
 | 03:33:21 | Bash | Read next fila items | `grep -n "E3-ISENTO-INSUMOS\\|E4-CALENDARIO-L1\\|PARCIAL-NA-PORTA" docs/BACKLOG.md \| cut -c1-400 \| head` |
 | 03:33:17 | Bash | Check bloco progress | `tail -4 /home/ronald/saas-hasner/logs/cobparc/h10/bloco_v9b.log; ps -p 1627532 -o etime=` |
-| 03:23:38 | Bash | Check sombra producer alive and RELATO top | `ps -p 1627532 -o pid,etime,cmd \| cut -c1-150; sed -n 1,5p /home/ronald/saas-hasner/app/docs/RELATO.md \| cut -c1-200` |
-| 03:23:34 | Bash | Check main changes since copy base | `cd /home/ronald/saas-hasner && git diff --name-only a8709a53 HEAD; git merge-base HEAD 3e6bbf52` |
-| 03:23:31 | Bash | Verify copy tree matches certified commit | `cd /home/ronald/wt-cobparc5b-184858 && git log --oneline -1 && git status --porcelain \| head; for f in $(git diff --name-only a8709a53 3e6bbf52); do git show 3e6bbf52:$f \| cmp -s - "$f" && echo "IGUAL $f" \|\| echo "DIFERE $f"; done` |
-| 03:23:26 | Bash | Fix BACKLOG form line, log opus approval | `python3 - <<'EOF' p='docs/BACKLOG.md' s=open(p).read() a="COBPARC ao rebasear vira (4,'2026-09')." assert s.count(a)==1 s=s.replace(a,"COBPARC pousa (4,'2026-10') pelo aval COBPARC-HORIZONTE-10 (02/11).") open(p,'w').write(s) EOF H=$(date +%H:%M); cat >> docs/RELATO.md <<EOF - $H OPUS FINAL v9b (delta 72eb11be..3e6bbf52): APROVADO, nada BLOQUEIA. FORMA curada na hora: BACKLOG GRADE-POS-POUSO dizia ...` |
