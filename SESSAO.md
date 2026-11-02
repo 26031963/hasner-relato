@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 09:21:15.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (155.1 MB). Acoes na janela: **427**.
+**Medido em 02/11/2026 09:26:23.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (155.1 MB). Acoes na janela: **427**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:23:44 | Bash | Declare ESPERANDO for builder's suite | `P=$(ps -eo pid,args \| awk '/bin\/trava_teste.sh/ && !/awk/ {print $1; exit}'); echo P=$P; cd /home/ronald/saas-hasner/app && [ -n "$P" ] && sed -i "3i ESPERANDO: trava_teste.sh \| pid=$P" docs/RELATO.md; sed -n 3,4p docs/RELATO.md \| cut -c1-60` |
 | 09:03:17 | Bash | Check B3 and hook state, running suites | `cd /home/ronald/saas-hasner && grep "COBPARC-FILA-RELOGIO" logs/sessao/disjuntor.log \| tail -1 \| cut -c1-60; echo '{}' \| python3 bin/hook_stop_fila1.py 2>&1 \| cut -c1-200; ps -eo pid,etime,args \| grep -E "trava_teste\|sombra.sh --rodar" \| grep -v grep \| cut -c1-80` |
 | 08:58:54 | Bash | Check whether B3 fired again | `cd /home/ronald/saas-hasner && grep "COBPARC-FILA-RELOGIO" logs/sessao/disjuntor.log \| tail -2 \| cut -c1-60` |
 | 08:58:53 | SendMessage |  | `-` |
@@ -436,4 +437,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:28:01 | Bash | See why hook blocked | `cd /home/ronald/saas-hasner; tail -2 logs/hook_stop_fila1.log \| cut -c1-200; ps -o pid,cmd -p 1331760 \| cut -c1-150` |
 | 21:27:14 | Bash | Repoint ESPERANDO to agent's suite | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read(); L=s.split('\n'); assert L[2].startswith('ESPERANDO:') L[2]='ESPERANDO: trava_teste.sh \| pid=1331760 \| arquivo=logs/cobparc/v7/green_largo.log' open(p,'w').write('\n'.join(L)) EOF /usr/bin/sleep 40; wc -c /home/ronald/saas-hasner/logs/cobparc/v7/green_largo.log` |
 | 21:27:09 | Bash | Check what the agent waits on | `cd /home/ronald/wt-cobparc5b-184858 && git log --oneline -2; git status --porcelain \| head; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; ls -t /home/ronald/saas-hasner/logs/cobparc/v7/ \| head -3` |
-| 21:23:17 | Bash | Check construtor progress | `cd /home/ronald/wt-cobparc5b-184858 && git log --oneline -3; git status --porcelain \| head; ls /home/ronald/saas-hasner/logs/cobparc/v7/ \| tr '\n' ' '; /usr/bin/sleep 45; stat -c %s /home/ronald/.claude/projects/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/subagents/agent-a9ba61aa4d60c4177.jsonl` |
