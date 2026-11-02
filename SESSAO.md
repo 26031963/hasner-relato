@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 06:31:05.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (153.1 MB). Acoes na janela: **527**.
+**Medido em 02/11/2026 06:36:18.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (153.2 MB). Acoes na janela: **529**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:32:06 | Agent | Verificador final v2 COBPARC-FILA-ROTULO | `Verificacao final v2 (opus final, adversarial, somente leitura) da obra COBPARC-FILA-ROTULO antes do pouso. Projeto Hasner Ponto; leia /home/ronald/saas-hasner/CLAUDE.md (LEI-AKITA, secao 6, 7b CODEX item 5 classes que ja reprovaram obra). Copia: /home/ronald/wt-cobparc-rotulo-053835, base 0ede0ae3. Diff inteiro: `git -C /home/ronald/wt-cobparc-rotulo-053835 diff 0ede0ae3..HEAD` (commits 537341d4  ...` |
+| 06:31:53 | Bash | Drop stale ESPERANDO, confirm copy commits | `sed -i '3{/^ESPERANDO: trava_teste.sh \| pid=4041884/d}' docs/RELATO.md && sed -n 3p docs/RELATO.md \| cut -c1-60; git -C /home/ronald/wt-cobparc-rotulo-053835 log --oneline 0ede0ae3..HEAD; git -C /home/ronald/wt-cobparc-rotulo-053835 status --porcelain \| head -3` |
 | 06:23:17 | Bash | Check builder's suite and sombra state | `ps -p 4041884 >/dev/null && echo SUITE_VIVA \|\| echo SUITE_FIM; ps -eo pid,args \| grep "sombra.sh --rodar" \| grep -v grep \| head -1 \| cut -c1-100` |
 | 06:15:09 | Bash | Declare ESPERANDO on builder suite | `sed -i '2a ESPERANDO: trava_teste.sh \| pid=4041884' docs/RELATO.md && sed -n 3p docs/RELATO.md` |
 | 06:15:06 | Bash | Look for builder's producer process | `ps -eo pid,etime,args \| grep -E "trava_teste.sh\|sombra.sh --rodar" \| grep -v grep \| cut -c1-140` |
