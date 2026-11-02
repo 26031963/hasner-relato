@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 10:35:59.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (156.4 MB). Acoes na janela: **411**.
+**Medido em 02/11/2026 10:41:15.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (156.4 MB). Acoes na janela: **410**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:40:21 | Bash | Remove stale ESPERANDO line | `python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') if L[2].startswith('ESPERANDO: trava_teste.sh'): del L[2] open(p,'w').write('\n'.join(L)) EOF sed -n 3p docs/RELATO.md \| cut -c1-40` |
+| 10:39:21 | Bash | Add ESPERANDO for new lock holder if alive | `ps -o pid=,args= -p 3526590 \| cut -c1-60 && cd /home/ronald/saas-hasner/app && python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('ERRO-BOBO COBPARC-FILA-RELOGIO') L.insert(2,'ESPERANDO: trava_teste.sh \| pid=3526590') open(p,'w').write('\n'.join(L)) EOF sed -n 3p /home/ronald/saas-hasner/app/docs/RELATO.md` |
+| 10:37:21 | Bash | Remove stale ESPERANDO line | `python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') if L[2].startswith('ESPERANDO: trava_teste.sh'): del L[2] open(p,'w').write('\n'.join(L)) EOF sed -n 3p docs/RELATO.md \| cut -c1-40` |
+| 10:36:26 | Bash | Add ESPERANDO for live lock holder | `python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('ERRO-BOBO COBPARC-FILA-RELOGIO') L.insert(2,'ESPERANDO: trava_teste.sh \| pid=3338112') open(p,'w').write('\n'.join(L)) EOF sed -n 3p docs/RELATO.md` |
+| 10:36:23 | Bash | Check current lock holder alive | `ps -o pid=,etime=,args= -p 3338112 \| cut -c1-80` |
 | 10:35:01 | Bash | Remove stale ESPERANDO line | `python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO: trava_teste.sh') del L[2] open(p,'w').write('\n'.join(L)) EOF sed -n 3p docs/RELATO.md \| cut -c1-60` |
 | 10:34:34 | Bash | Strip extra field from ESPERANDO line | `python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO: trava_teste.sh \| pid=3199069') L[2]='ESPERANDO: trava_teste.sh \| pid=3199069' open(p,'w').write('\n'.join(L)) EOF sed -n 3p docs/RELATO.md; ps -o etime= -p 3199069` |
 | 10:34:30 | Bash | Tail stop hook trail | `tail -4 /home/ronald/saas-hasner/logs/hook_stop_fila1.log \| cut -c1-250` |
@@ -415,9 +420,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 22:43:29 | Bash | Read ORDEM VIVA header | `cd /home/ronald/saas-hasner/app/docs; sed -n 690,712p BACKLOG.md \| cut -c1-400` |
 | 22:43:23 | Bash | Read candidate fila 1 items | `cd /home/ronald/saas-hasner/app/docs; for n in 1652 1657 1658 1660 1606 1612 1615; do sed -n ${n}p BACKLOG.md \| cut -c1-700; echo; done` |
 | 22:43:19 | Bash | List open fila 1 items | `cd /home/ronald/saas-hasner/app/docs; awk -F'\|' 'NF>6 && $4 ~ /fila 1\|aberta\|registrada/ && $4 !~ /FECHADA\|NO AR\|NAO CONSTRUIR\|SEM construir\|depois do pouso COBPARC/ {print NR": "$2" :: "substr($4,1,160)}' BACKLOG.md \| tail -40` |
-| 22:39:19 | Bash | Register fila rows and write PAREI line | `cd /home/ronald/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys;H=sys.argv[1] p='app/docs/BACKLOG.md';L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| PARCIAL-NA-PORTA \|')];assert len(i)==1 rows=[ f"\| COBPARC-FILA-ROTULO \| opus final COBPARC v7 achado 4 (LEI-AKITA 8): inteligencia/calculadores.py preenchimento_marcos/espelho contam lampada dispensad ...` |
-| 22:39:05 | Bash | How the hook finds the top line | `cd /home/ronald/saas-hasner; grep -n 'def _linha_do_topo' -A25 bin/hook_stop_fila1.py \| head -35` |
-| 22:38:59 | Bash | Read hook bang logic | `cd /home/ronald/saas-hasner; sed -n 60,80p bin/hook_stop_fila1.py; sed -n 1095,1135p bin/hook_stop_fila1.py` |
-| 22:38:57 | Bash | How the hook reads the bang line | `cd /home/ronald/saas-hasner; grep -n '_SO_BANG\\|def _topo\\|startswith(.!' bin/hook_stop_fila1.py \| head -20` |
-| 22:38:48 | Bash | Put measured numbers into the design question | `cd /home/ronald/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys;H=sys.argv[1];p='app/docs/RELATO.md';s=open(p).read() old="Cura candidata pela lampada 4a: o leitor transporta `justificado` da ata (o consumidor le a lampada), ou a frota prova universo 0 -- medida em curso. " assert s.count(old)==1 new=(f"MEDIDO {H} na sombra pela funcao real (supra_juiz dry, F0 a8709a53 x B 8f21ec2 ...` |
-| 22:38:31 | Bash | Conferir saidas da sonda | `cd /home/ronald/saas-hasner; for s in F0 B; do f=logs/cobparc7_achados12_$s.out; echo "== $f"; grep -c Traceback $f; grep -E 'FIM-DA-SONDA\|md5=\|FURO\|fora_vinculo' $f \| head -8 \| cut -c1-200; done` |
