@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 14:38:31.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (163.8 MB). Acoes na janela: **494**.
+**Medido em 02/11/2026 14:44:08.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (163.9 MB). Acoes na janela: **499**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:43:23 | Bash |  | `while test -d /proc/956394; do /usr/bin/sleep 20; done; grep -E '^(OK\|FAILED)($\| \()' /home/ronald/saas-hasner/logs/isento_h10/suite.log \| tail -1; grep -E '^Ran' /home/ronald/saas-hasner/logs/isento_h10/suite.log \| tail -1; tail -3 /home/ronald/saas-hasner/logs/isento_h10/suite.log` |
+| 14:43:18 | Bash |  | `date +%T; test -d /proc/956394 && echo vivo; grep -E '^(OK\|FAILED)($\| \()' /home/ronald/saas-hasner/logs/isento_h10/suite.log \| tail -1; grep -E '^Ran' /home/ronald/saas-hasner/logs/isento_h10/suite.log \| tail -1; tail -c 200 /home/ronald/saas-hasner/logs/isento_h10/suite.log` |
+| 14:38:46 | Bash |  | `cd /home/ronald/wt-isento-h10-135733/app; git grep -n "impressao_insumos(" -- '*.py' \| grep -v "/tests/"` |
+| 14:38:42 | Bash |  | `cd /home/ronald/wt-isento-h10-135733; git diff 97b43098..870dff12 -- app/ponto/services/cartorio.py app/docs/ADR` |
+| 14:38:39 | Bash |  | `cd /home/ronald/wt-isento-h10-135733; git diff 97b43098..870dff12 --stat; git diff 97b43098..870dff12 > /home/ronald/saas-hasner/logs/isento_h10/delta.diff; git diff 59de6666..870dff12 > /home/ronald/saas-hasner/logs/isento_h10/delta_h10.diff; wc -l /home/ronald/saas-hasner/logs/isento_h10/delta*.diff; git status --porcelain \| head` |
+| 14:38:30 | Bash |  | `tr '\0' ' ' < /proc/956394/cmdline \| cut -c1-60; echo; cd /home/ronald/saas-hasner/app/docs && sed -i '3s#.*#ESPERANDO: trava_teste.sh \| pid=956394 \| arquivo=/home/ronald/saas-hasner/logs/isento_h10/suite.log#' RELATO.md && sed -n 3p RELATO.md; grep -E '^Ran' /home/ronald/saas-hasner/logs/isento_h10/vizinhos.log \| tail -1` |
 | 14:38:26 | Bash |  | `date +%T; test -d /proc/4105325 && echo vivo; ls -la --time-style=+%T /home/ronald/saas-hasner/logs/isento_h10/; grep -E '^(OK\|FAILED)($\| \()' /home/ronald/saas-hasner/logs/isento_h10/vizinhos.log \| tail -1; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; sed -n 3p /home/ronald/saas-hasner/app/docs/RELATO.md` |
 | 14:38:13 | Bash |  | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('CODS-DO-ATO PUSH OK')][0] L.insert(i+1,"ISENTO-H10 R1/R2/R3/R4 14:4x: RED 5/18 no HEAD (logs/isento_h10/red.log); mutante sem o portao versao_para morde 5/18 (mutante.log); sombra HEAD x cura (logs/isento_h10/impacto/RESULTADO*.txt, 128.785 celulas, 15 ...` |
 | 14:38:05 | Bash |  | `cd /home/ronald/wt-isento-h10-135733/app; sed -n 125,140p ponto/services/cartorio.py; grep -n "def versao_para" -A25 ponto/services/cartorio.py \| head -35` |
@@ -503,4 +509,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 02:44:37 | Bash | Check whether cob_parcial in impressao is version-gated | `cd /home/ronald/wt-cobparc5b-184858/app && grep -n "def impressao_insumos" -A60 ponto/services/cartorio.py \| grep -n "versao\\|cob_parcial\\|regra\\|disp" \| head -30; sed -n 420,445p ponto/services/cartorio.py` |
 | 02:44:30 | Bash | Inspect form-finding lines in copy | `cd /home/ronald/wt-cobparc5b-184858/app && git status --short \| head; sed -n 215,240p ponto/services/cartorio.py; echo ----; sed -n 40,50p ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py; sed -n 138,158p ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py; echo ----; sed -n 72,95p ponto/tests/test_o219_versao_da_regra.py; grep -rn "alcanca_a_09_e_a_10" --include=*.py --include=*.m ...` |
 | 02:44:16 | Bash | Find source of the 38 parciais number | `cd /home/ronald/saas-hasner && grep -rn "38" logs/cobparc/v8/r2/nascimento_V8.txt logs/cobparc/v8/r2/nascimento_F0.txt logs/cobparc/h10/nascimento_V9.txt \| head; cat logs/cobparc/h10/nascimento_V9.txt \| head -40` |
-| 02:44:03 | Bash | Show RELATO top and tail | `cd /home/ronald/saas-hasner && H=$(date +%H:%M); echo $H; sed -n 1,8p app/docs/RELATO.md \| cut -c1-220; tail -5 app/docs/RELATO.md \| cut -c1-200` |
