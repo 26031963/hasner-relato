@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 10:25:59.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (156.1 MB). Acoes na janela: **406**.
+**Medido em 02/11/2026 10:30:59.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (156.1 MB). Acoes na janela: **403**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -413,6 +413,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 22:31:34 | Bash | Files the F3 censo points at | `cd /home/ronald/saas-hasner/logs/o261e/f3; ls; grep -oE '[a-z_]+/[a-z_/]+\.py' censo_v1.r \| sort \| uniq -c \| sort -rn \| head -25; tail -40 censo_v1.r \| cut -c1-300` |
 | 22:31:28 | Bash | Read rest of CELULA-20 row | `cd /home/ronald/saas-hasner/app/docs; sed -n 825p BACKLOG.md \| cut -c1200-5000; ls /home/ronald/saas-hasner/logs \| grep -i 'celula20\\|celula-20\\|o261e'` |
 | 22:31:17 | Bash | Read next fila items | `cd /home/ronald/saas-hasner/app/docs; grep -n '^\| O261-E-CELULA-20-UM-DONO\\|^\| O261-E-F3' BACKLOG.md \| cut -c1-1200; grep -n 'ORDEM VIVA' BACKLOG.md \| head -5` |
-| 22:30:57 | Bash | Read B3 description and release format | `cd /home/ronald/saas-hasner; sed -n 8,30p bin/disjuntor.py; grep -n 'DESENHO\\|ERRO-BOBO' bin/disjuntor.py \| head -30` |
-| 22:30:54 | Bash | Read disjuntor B3 mechanics and RELATO top | `cd /home/ronald/saas-hasner; grep -n 'B3\\|def ' bin/disjuntor.py \| head -40; sed -n 1,12p app/docs/RELATO.md \| cut -c1-300` |
-| 22:30:48 | Bash | Conferir achado 1 do opus no codigo da copia | `cd /home/ronald/wt-cobparc5b-184858/app; sed -n 55,100p escala/services/leitor_celula.py; echo ----; sed -n 335,350p escala/services/leitor_celula.py; echo ----; sed -n 735,756p ponto/services/cartorio.py; echo ----; sed -n 305,320p ponto/supra_juiz.py; sed -n 365,375p ponto/supra_juiz.py` |
