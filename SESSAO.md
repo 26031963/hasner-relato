@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 12:01:47.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (158.4 MB). Acoes na janela: **432**.
+**Medido em 02/11/2026 12:07:16.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (158.4 MB). Acoes na janela: **429**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -439,6 +439,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:07:52 | Bash | Point ESPERANDO at the sonda agent and read deploy's sombra gate | `cd /home/ronald/saas-hasner && sed -i '3s#^ESPERANDO: agente SONDA-[nome] \| arquivo=logs/cobparc/v8/nascimento.out$#ESPERANDO: agente a5fe68d962b0ba6ce \| arquivo=/tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/a5fe68d962b0ba6ce.output#' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md; date +%H:%M; grep -n "sombra\\|ensaio\\|dump" bin/deploy.sh \| h ...` |
 | 00:07:45 | Agent | sonda sonnet: nascimento do apply v8 | `Papel: SONDA na sombra (escreve so dentro de atomic() com raise; nada persiste). Motivo de ser sonnet e nao Codex: reserva semanal do Codex esgotada, e a sonda escreve na sombra. Pergunta (condicao do aval de pouso da obra COBERTURA-PARCIAL-UM-JUIZ): quantos ChamadoColaborador, PerguntaDisputa e DisputaSupervisao NASCEM quando o cron real `processar_cartorio --empresa E --apply` roda sobre o banco ...` |
 | 00:07:23 | Bash | Put the ERRO-BOBO aval at the top and log the prompt | `cd /home/ronald/saas-hasner && H=$(date +%H:%M) && D=$(date +%d/%m) && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/aval.txt <<'EOF' ERRO-BOBO COBERTURA-PARCIAL-UM-JUIZ: aval Ronald 02/11 (liberacao explicita dele; substitui qualquer versao anterior; nenhuma lei nova) -- o opus final v8 reprovou so a mensagem do commit f05713f5 (padrao= errado ...` |
-| 00:07:05 | Bash | Read processar_cartorio args, cron entry and v6 birth-count code | `cd /home/ronald/saas-hasner && ls app/ponto/management/commands/ \| grep -i cartorio; grep -n "add_argument" app/ponto/management/commands/processar_cartorio.py \| head; grep -n "processar_cartorio" app/config/crons.py \| head -3; sed -n 100,150p logs/sombra/sonda_cobparc6_det.py` |
-| 00:06:57 | Bash | Read the v6 nascimento sonda to reuse its mold | `cd /home/ronald/saas-hasner && sed -n 1,25p logs/sombra/sonda_cobparc6_det.py; grep -n "processar_cartorio\\|call_command\\|Chamado\\|Pergunta" logs/sombra/sonda_cobparc6_det.py \| head -30; ls -t logs/ \| grep -i "cobparc6_det\\|cobparc5_det" \| head` |
-| 00:06:44 | Bash | Find existing COBPARC sondas that measure what is born | `cd /home/ronald/saas-hasner && ls -t logs/sombra/ \| grep -i cobparc \| head; grep -l -i "nasc\\|ChamadoColaborador.objects" logs/sombra/sonda_cobparc*.py; grep -n -i "COBPARC-ALCANCE" app/docs/*.md logs/cobparc/*/AVAL* 2>/dev/null \| head -5` |
