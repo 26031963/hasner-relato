@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 15:32:49.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (166.8 MB). Acoes na janela: **543**.
+**Medido em 02/11/2026 15:38:16.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (166.9 MB). Acoes na janela: **547**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:33:40 | Bash |  | `cd /home/ronald/saas-hasner; date +%T; tail -n +2 logs/e4cal/r2_mutantes.log \| cut -c1-110` |
+| 15:33:37 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -n 1,60p pautas/tests/test_pauta_do_dia.py; grep -n "urls_core" core/tests/test_rota_pede_sessao.py \| head -5; grep -rn "diagnostico_escala" ponto/tests/*.py \| grep -i "resolve\\|reverse\\|TELA" \| head` |
+| 15:33:33 | Bash |  | `cd /home/ronald/saas-hasner/app; git grep -n "TELA_CALENDARIO\\|calendario/?mes" -- '*/tests/*' \| head; git grep -ln "urls_core" -- '*/tests/*' \| head` |
+| 15:33:30 | Bash |  | `cd /home/ronald/saas-hasner; W=/home/ronald/wt-noreverse-$(date +%d%H%M); git worktree add --detach $W HEAD 2>&1 \| tail -1; git -C $W log --oneline -1; mkdir -p $W/app/logs $W/app/media; echo $W` |
+| 15:33:24 | Bash |  | `cd /home/ronald/saas-hasner; git worktree list \| head -40; git worktree list \| wc -l` |
+| 15:33:20 | Bash |  | `cd /home/ronald/saas-hasner; date +%T; cat logs/e4cal/r2_mutantes.log \| cut -c1-160; ls /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/e4cal/r2/mutantes.fim 2>/dev/null` |
 | 15:32:26 | Bash |  | `cd /home/ronald/saas-hasner; timeout 120 bash -c 'until [ $(stat -c %Y logs/e4cal/r2_mutantes.log) -gt $(date -d 15:31:47 +%s) ]; do /usr/bin/sleep 5; done'; date +%T; tail -2 logs/e4cal/r2_mutantes.log` |
 | 15:32:23 | Bash |  | `cd /home/ronald/saas-hasner; date +%T; ls -l --time-style=+%H:%M:%S logs/e4cal/r2_mutantes.log; tail -2 logs/e4cal/r2_mutantes.log` |
 | 15:32:18 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/e4cal/r2/mutantes_r2.sh \| head -60` |
@@ -551,5 +557,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 03:43:22 | Monitor | sombra bloco+conferir fim (bloco_v9b.log) | `L=/home/ronald/saas-hasner/logs/cobparc/h10/bloco_v9b.log; until grep -q '^conferir_rc=' $L \|\| ! ps -p 1627532 >/dev/null && ! pgrep -x -f 'bash bin/sombra.sh --conferir' >/dev/null && grep -q '^rc=' $L && grep -q '^conferir_rc=' $L; do /usr/bin/sleep 20; done; tail -6 $L` |
 | 03:43:19 | ToolSearch |  | `-` |
 | 03:43:17 | Bash | Check bloco progress | `tail -4 /home/ronald/saas-hasner/logs/cobparc/h10/bloco_v9b.log; ps -p 1627532 -o etime=; date +%H:%M` |
-| 03:33:21 | Bash | Read next fila items | `grep -n "E3-ISENTO-INSUMOS\\|E4-CALENDARIO-L1\\|PARCIAL-NA-PORTA" docs/BACKLOG.md \| cut -c1-400 \| head` |
-| 03:33:17 | Bash | Check bloco progress | `tail -4 /home/ronald/saas-hasner/logs/cobparc/h10/bloco_v9b.log; ps -p 1627532 -o etime=` |
