@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 10:57:29.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (157.8 MB). Acoes na janela: **437**.
+**Medido em 02/11/2026 11:02:55.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (157.8 MB). Acoes na janela: **432**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -442,8 +442,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 23:03:17 | Agent | sonda sonnet: remede achados 1-2 v8 | `Papel: SONDA (leitura na sombra). Motivo de ser sonnet e nao Codex: a volta Codex desta obra esta reservada ate o reset semanal (CODEX-RESERVA-ATE-O-RESET). Objetivo: rodar a MESMA sonda que ja rodou em duas arvores (F0 e B da v7), agora sobre a arvore v8 da obra COBERTURA-PARCIAL-UM-JUIZ, e devolver os numeros. Nao escrever codigo, nao curar, nao editar a sonda. [nome]: 1. `cd /home/ronald/saas-h ...` |
 | 23:02:59 | Bash | Find how sombra.sh runs a sonda against a given tree | `cd /home/ronald/saas-hasner && grep -n "\-\-rodar\\|\-\-arvore\\|\-\-dir" bin/sombra.sh \| head -15; ls logs/cobparc/v7/f0 \| head` |
 | 23:02:55 | Bash | Read how the v7 B-tree sonda was run | `cat /home/ronald/saas-hasner/logs/cobparc/v7/run_b.txt \| head -30` |
-| 23:02:53 | Bash | Look at the v7 sonda header and outputs | `head -40 /home/ronald/saas-hasner/logs/sombra/sonda_cobparc7_achados12.py; head -5 /home/ronald/saas-hasner/logs/cobparc7_achados12_B.out; ls /home/ronald/saas-hasner/logs/cobparc/v7/` |
-| 23:02:49 | Bash | Run full suite on the v8 copy in background | `bash ~/saas-hasner/bin/suite.sh --dir /home/ronald/wt-cobparc5b-184858 > /home/ronald/saas-hasner/logs/cobparc/v8/suite_full.log 2>&1; echo "rc=$?" >> /home/ronald/saas-hasner/logs/cobparc/v8/suite_full.log; grep -E '^(OK\|FAILED)($\| \()' /home/ronald/saas-hasner/logs/cobparc/v8/suite_full.log \| tail -1; grep '^Ran ' /home/ronald/saas-hasner/logs/cobparc/v8/suite_full.log \| tail -1; tail -1 /ho ...` |
-| 23:02:43 | Bash | Ruff the two files and commit in the copy | `cd /home/ronald/wt-cobparc5b-184858 && (cd app && ruff check --config ruff.toml escala/services/leitor_celula.py ponto/tests/test_cobparc8_leitor_transporta_justificado.py 2>&1 \| tail -2; rm -rf .ruff_cache) ; git add app/escala/services/leitor_celula.py app/ponto/tests/test_cobparc8_leitor_transporta_justificado.py && git commit -q -F - <<'EOF' [COBERTURA-PARCIAL-UM-JUIZ] v8 higiene: selo import ...` |
-| 23:02:37 | Bash | Make test import the constant and rename _n_ok in the copy | `cd /home/ronald/wt-cobparc5b-184858/app && python3 - <<'EOF' import re p='ponto/tests/test_cobparc8_leitor_transporta_justificado.py' s=open(p).read() a=" from escala.services.leitor_celula import n_ok_lavrado\n self._cenario_justificado()" assert s.count(a)==1 s=s.replace(a," from escala.services.leitor_celula import n_ok_lavrado\n from ponto.services.cartorio import DISPENSA_POR_JUSTIFICATIVA\n  ...` |
-| 23:02:31 | Bash | Check copy commits, run verdict and sites to tidy | `cd /home/ronald/wt-cobparc5b-184858 && git log --oneline -3 && git status --porcelain \| head; tail -3 /home/ronald/saas-hasner/logs/cobparc/v8/green_largo.log; bash ~/saas-hasner/bin/trava_teste.sh --quem; grep -n "_n_ok\b\\|_n_ok " app/escala/services/leitor_celula.py \| head; sed -n 85,100p app/ponto/tests/test_cobparc8_leitor_transporta_justificado.py` |
