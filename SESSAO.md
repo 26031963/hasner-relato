@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 14:01:09.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (162.7 MB). Acoes na janela: **508**.
+**Medido em 02/11/2026 14:06:13.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (162.7 MB). Acoes na janela: **506**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -516,5 +516,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 02:10:00 | Bash | Find test assertions about version 4 horizon | `cd /home/ronald/wt-cobparc5b-184858/app && git grep -n "2026-09'\\|(4, \\|regra:4\\|versao_para" -- ponto/tests/test_o219_versao_da_regra.py ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py escala/tests/test_grade_folga_vale_em_toda_competencia.py chamados/tests/test_o44_tranca_nao_barra_o_toque.py \| head -40; git grep -ln "regra:4\\|REGRA_VERSOES\[-1\]\\|versao_para" -- '*tests*' \| hea ...` |
 | 02:09:56 | Bash | Find tests and docs tied to the v4 horizon | `cd /home/ronald/wt-cobparc5b-184858/app && grep -rln "2026-09\\|REGRA_VERSOES\\|regra:4" --include=*.py . \| xargs grep -ln "REGRA_VERSOES\\|regra:4\\|versao_para" \| head -30; sed -n 190,229p ponto/services/cartorio.py` |
 | 02:09:50 | Bash | Read REGRA_VERSOES in the copy | `cd /home/ronald/wt-cobparc5b-184858 && git log --oneline -1 && git status --porcelain \| head && grep -n "REGRA_VERSOES" -A30 app/ponto/services/cartorio.py \| head -60` |
-| 02:03:56 | Bash | Publish the PAREI line at the top of RELATO | `cd /home/ronald/saas-hasner && H=$(date +%H:%M) && L="! PAREI: COBPARC-POUSO condicao (b) \| espera Ronald -- dump 01:34 de hoje, sonda atomic+raise, F0 x V8: chamados 12 -> 39 (+15 Ausencia comp 09 EXPORTADA, +11 disputa_supervisao_manual, +1 disputa), perguntas 224 -> 280 (+56 todas comp 09), disputas 8 -> 20; PARCIAL-SEM-PERIODO 0/0; FM09 607 md5=db2bdb6b399b intacto nos dois. A medida (a) de 2 ...` |
-| 02:03:43 | Bash | Read RELATO top and how avais are generated | `cd /home/ronald/saas-hasner && sed -n 1,8p app/docs/RELATO.md \| cut -c1-200; grep -n 'RELATO\\|topo' bin/gerar_avais.py \| head -8` |
