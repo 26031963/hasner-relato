@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 13:45:31.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (162.3 MB). Acoes na janela: **492**.
+**Medido em 02/11/2026 13:50:51.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (162.3 MB). Acoes na janela: **491**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -501,4 +501,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 02:03:56 | Bash | Publish the PAREI line at the top of RELATO | `cd /home/ronald/saas-hasner && H=$(date +%H:%M) && L="! PAREI: COBPARC-POUSO condicao (b) \| espera Ronald -- dump 01:34 de hoje, sonda atomic+raise, F0 x V8: chamados 12 -> 39 (+15 Ausencia comp 09 EXPORTADA, +11 disputa_supervisao_manual, +1 disputa), perguntas 224 -> 280 (+56 todas comp 09), disputas 8 -> 20; PARCIAL-SEM-PERIODO 0/0; FM09 607 md5=db2bdb6b399b intacto nos dois. A medida (a) de 2 ...` |
 | 02:03:43 | Bash | Read RELATO top and how avais are generated | `cd /home/ronald/saas-hasner && sed -n 1,8p app/docs/RELATO.md \| cut -c1-200; grep -n 'RELATO\\|topo' bin/gerar_avais.py \| head -8` |
 | 02:00:20 | Bash | Keep waiting for the V8 measure | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/cobparc/v8/r2/nascimento_V8.txt 2>/dev/null && break; /usr/bin/sleep 30; done; date +%H:%M; grep -v WARNING logs/cobparc/v8/r2/nascimento_V8.txt \| tail -n 25` |
-| 01:50:46 | Bash | Wait up to ~10 min for the V8 measure | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/cobparc/v8/r2/nascimento_V8.txt 2>/dev/null && break; /usr/bin/sleep 30; done; date +%H:%M; grep -v WARNING logs/cobparc/v8/r2/nascimento_V8.txt 2>/dev/null \| tail -n 25` |
