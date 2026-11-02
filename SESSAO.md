@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 12:51:26.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (159.7 MB). Acoes na janela: **432**.
+**Medido em 02/11/2026 12:56:51.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (159.7 MB). Acoes na janela: **431**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -441,4 +441,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:34:33 | Bash | Read sombra.sh usage header | `cd /home/ronald/saas-hasner && sed -n 1,60p bin/sombra.sh \| grep -n -i 'refazer\\|dump-agora\\|carimbo\\|--rodar\\|uso'` |
 | 01:34:20 | Bash | Read prior birth-measure run commands | `cd /home/ronald/saas-hasner && cat logs/cobparc/v8/nascimento_run_F0.txt logs/cobparc/v8/nascimento_run_V8.txt \| head -40; ls logs/cobparc/v8/` |
 | 01:34:08 | Bash | Read block and check verdicts | `cd /home/ronald/saas-hasner && tail -n 8 logs/cobparc/v8/sombra_bloco.log; echo ==; cat logs/cobparc/v8/sombra_conferir.log; date +%H:%M` |
-| 00:53:17 | Bash | Check block run progress | `cd /home/ronald/saas-hasner && wc -l logs/sombra/resultado.tsv; tail -n 2 logs/sombra/resultado.tsv; ls /proc/440460 >/dev/null 2>&1 && echo vivo; date +%H:%M` |
