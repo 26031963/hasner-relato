@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 17:30:22.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (169.3 MB). Acoes na janela: **540**.
+**Medido em 02/11/2026 17:35:34.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (169.3 MB). Acoes na janela: **528**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -538,15 +538,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 05:38:24 | Bash | List COBPARC-FILA rows | `grep -n "^\| COBPARC-FILA" docs/BACKLOG.md \| cut -c1-700` |
 | 05:38:19 | Bash | Record E3 PERGUNTA, read PARCIAL-NA-PORTA row | `python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO: trava_teste.sh') L[2]=('PERGUNTA `!` E3-ISENTO-INSUMOS (05:38; obra PARADA, esteira segue): cura pronta na copia wt-e3isento-052051 (RED 8b64493f, cura c56dc01b; ' 'suite ponto+escala OK Ran 5710), mas a forma do veto SEM horizonte rejulga 1.482 celulas de 15 isentos e MOVE 868 status None->ok/fol ...` |
 | 05:38:09 | Bash | Find next fila items in BACKLOG | `date +%H:%M && grep -n "E4-CALENDARIO-L1\\|PARCIAL-NA-PORTA\\|E3-ISENTO-INSUMOS" docs/BACKLOG.md \| cut -c1-400` |
-| 05:33:40 | Bash | Confirm suite still running and ESPERANDO line | `ps -p 1402963 >/dev/null && echo SUITE_VIVA \|\| echo SUITE_FIM; sed -n 3p /home/ronald/saas-hasner/app/docs/RELATO.md` |
-| 05:33:26 | SendMessage |  | `-` |
-| 05:33:21 | ToolSearch |  | `-` |
-| 05:33:18 | Bash | Check E3 suite and builder state | `cd /home/ronald/saas-hasner && date +%H:%M; ps -p 1402963 >/dev/null && echo SUITE_VIVA \|\| echo SUITE_FIM; grep -E '^(OK\|FAILED)($\| \()' logs/e3isento/suite_ponto_escala_c56dc01b.log \| tail -1; grep '^Ran ' logs/e3isento/suite_ponto_escala_c56dc01b.log \| tail -1; tail -c 600 /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/a7dbc1e3e239f0a4a.output \| t ...` |
-| 05:32:01 | Bash | Declare pid-only ESPERANDO (log is buffered) | `sed -i '3s#^ESPERANDO: trava_teste.sh \| pid=1402963 \| arquivo=.*#ESPERANDO: trava_teste.sh \| pid=1402963#' docs/RELATO.md && sed -n 3p docs/RELATO.md` |
-| 05:31:57 | Bash | Diagnose hook rejection of ESPERANDO | `cd /home/ronald/saas-hasner && ps -p 1402963 -o pid,args \| cut -c1-80; ls -l --time-style=+%T logs/e3isento/suite_ponto_escala_c56dc01b.log; cat logs/hook_stop_espera.json 2>/dev/null \| head -c 400; echo; sed -n 447,470p bin/hook_stop_fila1.py` |
-| 05:31:45 | Bash | Declare ESPERANDO on builder's suite | `sed -i '2a ESPERANDO: trava_teste.sh \| pid=1402963 \| arquivo=/home/ronald/saas-hasner/logs/e3isento/suite_ponto_escala_c56dc01b.log' docs/RELATO.md && sed -n 3p docs/RELATO.md` |
-| 05:31:40 | Bash | Drop stale ESPERANDO, look for new producer | `sed -i '3{/^ESPERANDO: sombra.sh \| pid=1398594/d}' docs/RELATO.md && sed -n 3p docs/RELATO.md \| cut -c1-80; ps -eo pid,etime,args \| grep -E "sombra.sh\|suite.sh\|manage.py test" \| grep -v grep \| cut -c1-150` |
-| 05:31:35 | Bash | Read E3 impact measurement result | `cd /home/ronald/saas-hasner && tail -40 logs/e3isento/medida_impacto.out \| cut -c1-220` |
-| 05:31:32 | Bash | Check why hook rejected ESPERANDO | `cd /home/ronald/saas-hasner && ps -p 1398594 -o pid,args \| cut -c1-120; ls -l --time-style=+%T logs/e3isento/medida_impacto.out; grep -n "ESPERANDO\\|mtime\\|arquivo" bin/hook_stop_fila1.py \| head -30` |
-| 05:31:24 | Bash | Declare proven ESPERANDO on E3 sombra run | `python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') assert not L[2].startswith('ESPERANDO') L.insert(2,'ESPERANDO: sombra.sh \| pid=1398594 \| arquivo=/home/ronald/saas-hasner/logs/e3isento/medida_impacto.out') open(p,'w').write('\n'.join(L)) EOF sed -n 3p docs/RELATO.md` |
-| 05:31:21 | Bash | Find the builder's background producer | `ps -eo pid,etime,args \| grep -E "sombra.sh\|suite.sh" \| grep -v grep \| cut -c1-180; ls -t /home/ronald/saas-hasner/logs/e3isento/ 2>/dev/null \| head -5` |
