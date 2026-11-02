@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 16:00:07.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (167.2 MB). Acoes na janela: **564**.
+**Medido em 02/11/2026 16:05:30.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (167.2 MB). Acoes na janela: **568**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:03:29 | Bash |  | `cd /home/ronald/saas-hasner; timeout 590 bash -c 'until ! ps -p 1657393 >/dev/null; do /usr/bin/sleep 10; done'; date +%T; grep -E '^(OK\|FAILED)($\| \()\|^Ran' logs/noreverse/suite.log \| tail -2; tail -2 logs/noreverse/suite.log` |
+| 16:03:18 | Bash |  | `cd /home/ronald/saas-hasner; date +%T; ps -p 1657393 -o pid=; grep -E '^(OK\|FAILED)($\| \()\|^Ran' logs/noreverse/suite.log \| tail -2; tail -c 200 logs/noreverse/suite.log` |
+| 16:00:38 | Bash |  | `cd /home/ronald/saas-hasner; /usr/bin/sleep 30; ps -p 1657393 -o pid=; ls -l --time-style=+%T logs/noreverse/suite.log; date +%T` |
+| 16:00:09 | Bash |  | `cd /home/ronald/saas-hasner; ps -o cmd= -p 1657393 \| grep -o 'wt-[a-z0-9-]*' \| head -1; sed -i '3s#.*#ESPERANDO: trava_teste.sh \| pid=1657393 \| arquivo=logs/noreverse/suite.log#' app/docs/RELATO.md; /usr/bin/sleep 20; ls -l --time-style=+%T logs/noreverse/suite.log` |
 | 16:00:05 | Bash |  | `cd /home/ronald/saas-hasner; ps -p 316967 -o pid=; date +%T; tail -2 logs/e4cal/r2_mutantes.log \| cut -c1-100; bin/trava_teste.sh --quem; ls -l --time-style=+%T logs/noreverse/suite.log` |
 | 15:53:55 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '3s#.*#ESPERANDO: mutantes_r2.sh \| pid=316967 \| arquivo=logs/e4cal/r2_mutantes.log#' app/docs/RELATO.md; ps -p 316967 -o pid=; timeout 100 bash -c 'a=$(stat -c %Y logs/e4cal/r2_mutantes.log); until [ $(stat -c %Y logs/e4cal/r2_mutantes.log) -gt $a ]; do /usr/bin/sleep 3; done'; tail -1 logs/e4cal/r2_mutantes.log \| cut -c1-90` |
 | 15:53:50 | Bash |  | `cd /home/ronald/saas-hasner; ps -o cmd= -p 1410294 \| grep -o 'wt-[a-z0-9-]*' \| head -1; ls -lt --time-style=+%T logs/noreverse/ \| head -3; ls -lt --time-style=+%T /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/e4cal/r2/ \| head -3` |
