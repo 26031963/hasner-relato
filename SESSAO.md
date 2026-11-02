@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 17:03:20.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (169.0 MB). Acoes na janela: **551**.
+**Medido em 02/11/2026 17:08:39.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (169.1 MB). Acoes na janela: **552**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:04:30 | Bash | Wait for the L1 agent's next run | `cd /home/ronald/saas-hasner; for i in $(seq 1 22); do q=$(bin/trava_teste.sh --quem); case "$q" in suite:*) break;; esac; /usr/bin/sleep 25; done; echo "$q"; ls -t --time-style=+%H:%M:%S -la logs/e4cal/ \| head -3; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|rc=' logs/e4cal/r5_red.log \| tail -3` |
+| 17:04:26 | Bash | List scheduled deploys and re-point ESPERANDO | `cd /home/ronald/saas-hasner; bin/deploy_agendado.sh listar 2>&1 \| tail -8; sed -i '3s#^ESPERANDO: .*#ESPERANDO: trava_teste.sh \| pid=1731645 \| arquivo=logs/e4cal/r5_red.log#' app/docs/RELATO.md; ps -p 1731645 -o pid=; sed -n 3p app/docs/RELATO.md` |
+| 17:04:23 | Bash | Record the aval in RELATO, PROMPTS and BACKLOG | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') i=[n for n,l in enumerate(L) if l.startswith('lei: E4-CALENDARIO-L1')] assert len(i)==1; i=i[0] L[i]='RESPONDIDA por aval L1-SEM-PREVISTO-PASSADO 17:0x (DECIDIDO PELA LEI 8c23399a/ADR 0002: lavrado manda, sem lavra = sem_certidao, nunca aberto; copia @cb59db69 ja responde assim, so o teste do D10 vir ...` |
+| 17:04:14 | Bash | Locate the lei line and the PROMPTS format | `cd /home/ronald/saas-hasner/app; grep -n '^lei: E4-CALENDARIO-L1' docs/RELATO.md \| cut -c1-80; tail -2 docs/PROMPTS.md \| cut -c1-200; date +%H:%M` |
+| 17:04:13 | SendMessage |  | `-` |
+| 17:04:00 | Bash | Read the copy's status_dos_dias_lavrados | `cd /home/ronald/wt-e4cal-l1-r2-151020/app; sed -n 195,264p ponto/status_dia.py` |
 | 16:56:24 | Bash | Wait for the L1 agent's next test run | `cd /home/ronald/saas-hasner; for i in $(seq 1 22); do q=$(bin/trava_teste.sh --quem); case "$q" in suite:*) break;; esac; /usr/bin/sleep 25; done; echo "$q"; ls -t --time-style=+%H:%M:%S -la logs/e4cal/ \| head -3` |
 | 16:53:25 | Bash | Wait for the L1 r4 baseline run to finish | `cd /home/ronald/saas-hasner; for i in $(seq 1 22); do ps -p 1002168 >/dev/null \|\| break; /usr/bin/sleep 25; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|rc=' logs/e4cal/r4_base.log \| tail -3; bin/trava_teste.sh --quem; ls -t logs/e4cal/ \| head -3` |
 | 16:53:20 | Bash | Check the state of the L1 r4 runs | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; ls -t --time-style=+%H:%M:%S -la logs/e4cal/ \| head -4; for f in $(ls -t logs/e4cal/r4_*.log \| head -2); do echo "== $f"; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|rc=' $f \| tail -3; done` |
@@ -556,8 +562,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 05:13:26 | Bash | Update ESPERANDO to new sombra pid | `sed -i '3s#.*#ESPERANDO: sombra.sh \| pid=182943#' docs/RELATO.md && sed -n 3p docs/RELATO.md; tail -3 /home/ronald/saas-hasner/logs/crons_em_curso/* 2>/dev/null \| tail -5` |
 | 05:13:22 | Bash | See F3 agent's latest activity | `ps -eo pid,etime,args \| grep -E "sombra.sh --rodar\|o261e" \| grep -v grep \| cut -c1-140; grep -o '"text":"[^"]\{0,400\}' /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/aacb558edeb012e8a.output \| tail -4` |
 | 05:13:17 | Bash | Check sombra producers and F3 log | `ps -p 2504196,722169 -o pid,etime,args \| cut -c1-100; ls -la --time-style=+%H:%M /home/ronald/saas-hasner/logs/o261e/f3/ \| tail -4; date +%H:%M` |
-| 05:06:51 | Bash | Declare wait on F3 sombra probe | `sed -i '3i ESPERANDO: sombra.sh \| pid=2504196' docs/RELATO.md && sed -n 3p docs/RELATO.md` |
-| 05:06:48 | Bash | Find F3 background producer | `ps -eo pid,etime,args \| grep -E "sombra\|estoque\|o261e" \| grep -v grep \| cut -c1-160; ls -la --time-style=+%H:%M /home/ronald/saas-hasner/logs/o261e/f3/ \| tail -4` |
-| 05:06:42 | Bash | Record push, drop ESPERANDO, run handoff | `H=$(date +%H:%M) && sed -i '3d' docs/RELATO.md && printf -- '- %s PUSH 8d04f69c..51342997 OK (logs/cobparc/h10/push2.log, rc=0, pre-push liberado; pos_push 0ede0ae3). MARCO COBPARC-H10 FECHADO. Proximo: O261-E-F3 (construtor na copia, aguardando a medida de estoque dele).\n' "$H" >> docs/RELATO.md && sed -n 3p docs/RELATO.md \| cut -c1-80 && cd .. && bash bin/handoff_sessao.sh 2>&1 \| tail -3` |
-| 05:06:36 | Bash | Compare local and remote heads | `cd /home/ronald/saas-hasner && git rev-parse --short origin/main; git rev-parse --short HEAD; git log --oneline -2` |
-| 05:06:32 | Bash | Read push verdict from the remote | `cd /home/ronald/saas-hasner && tail -6 logs/cobparc/h10/push2.log \| cut -c1-200; git fetch -q origin && git rev-parse --short origin/main HEAD; git status --porcelain \| grep -v '^??'` |
