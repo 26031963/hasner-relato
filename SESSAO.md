@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 20:41:47.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (173.4 MB). Acoes na janela: **575**.
+**Medido em 02/11/2026 20:47:17.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (173.4 MB). Acoes na janela: **577**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:42:37 | Bash | Wait again for sombra run | `cd /home/ronald/saas-hasner && for i in $(seq 56); do ps -p 1741839 >/dev/null \|\| break; /usr/bin/sleep 10; done; ps -p 1741839 >/dev/null && echo AINDA-VIVA; tail -25 logs/e4cal/r8_d5_sombra.out \| cut -c1-300` |
+| 20:42:33 | Bash | Inspect sombra process tree and builder | `cd /home/ronald/saas-hasner && pstree -p 1741839 \| head; uptime; tail -c 800 /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/a255846f06c4a61fc.output \| tr '\\' '\n' \| tail -5 \| cut -c1-200` |
 | 20:33:29 | Bash | Wait in foreground for sombra run | `cd /home/ronald/saas-hasner && for i in $(seq 54); do ps -p 1741839 >/dev/null \|\| break; /usr/bin/sleep 10; done; ps -p 1741839 >/dev/null && echo AINDA-VIVA; tail -25 logs/e4cal/r8_d5_sombra.out` |
 | 20:33:18 | Bash | Check sombra run and builder outputs | `cd /home/ronald/saas-hasner && ps -p 1741839 >/dev/null && echo sombra-viva; tail -15 logs/e4cal/r8_d5_sombra.out; ls -lt logs/e4cal \| head -5` |
 | 20:28:39 | Bash | Wait for sombra dry run to finish | `cd /home/ronald/saas-hasner && while ps -p 1741839 >/dev/null; do /usr/bin/sleep 10; done; cat logs/e4cal/r8_d5_sombra.out \| tail -30` |

@@ -1,6 +1,6 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **02/11/2026 20:13** · publicado em **02/11/2026 20:41** (UTC-3)
+> Ultima resposta processada: **02/11/2026 20:13** · publicado em **02/11/2026 20:47** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
 
 ## 02/11 20:13 · sessao 3d6058ec1077 · DEPLOY-[nome]-ELO-DA-CORRENTE · verificador · origem=Code
@@ -633,7 +633,7 @@ A sonda pura do pareador, executada em memória, confirmou as duas atribuições
 
 - **Ordem de trava / pouso antes de pré-requisito: [nao verificado].** O desenho descreve D5 em `app/docs/ADR/0002-celula-e-o-dia.md:69-71` e permite migração E4 um leitor por pouso em `:75-77`; isso não prova execução de backfill, suite, trava ou pouso. RED anterior à cura e GREEN dos bytes auditados: [nao verificado].
 
-## 01/11 20:45 · sessao 6bee4d54689e · COBERTURA-PARCIAL-UM-JUIZ · verificador · origem=Code
+## 01/11 20:45 -- HISTORICO (mais de 24 h) · sessao 6bee4d54689e · COBERTURA-PARCIAL-UM-JUIZ · verificador · origem=Code
 
 **Pré-verificação: bloqueada.** Há perda dos carimbos no legacy, emissores fora do predicado comum e perda do instante anterior em passadas do mesmo ato. Esses pontos impedem confirmar as intenções 1–3 nos caminhos completos (`app/escala/utils.py:1060`; `app/ponto/services/cluster_espurio.py:88`; `app/chamados/services/disputa_emissao.py:763`; `app/ponto/services/cartorio.py:914`).
 
