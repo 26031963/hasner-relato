@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 09:43:00.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (155.2 MB). Acoes na janela: **419**.
+**Medido em 02/11/2026 09:48:16.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (155.2 MB). Acoes na janela: **419**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:43:17 | Bash | Check current suite process | `ps -p 3644011 -o etime=; P=$(ps -eo pid,args \| awk '/bin\/trava_teste.sh/ && !/awk/ {print $1; exit}'); echo P=$P; ls -t /home/ronald/saas-hasner/logs/cobparc_relogio/ \| head -3` |
 | 09:33:20 | Bash | Refresh ESPERANDO pid | `sed -i '3s/pid=3065259/pid=3644011/' docs/RELATO.md && sed -n 3p docs/RELATO.md` |
 | 09:33:17 | Bash | Check suite pid and builder commits | `ps -p 3065259 -o etime=; P=$(ps -eo pid,args \| awk '/bin\/trava_teste.sh/ && !/awk/ {print $1; exit}'); echo P=$P; git -C /home/ronald/wt-cobparc-relogio-070738 log --oneline -3` |
 | 09:23:44 | Bash | Declare ESPERANDO for builder's suite | `P=$(ps -eo pid,args \| awk '/bin\/trava_teste.sh/ && !/awk/ {print $1; exit}'); echo P=$P; cd /home/ronald/saas-hasner/app && [ -n "$P" ] && sed -i "3i ESPERANDO: trava_teste.sh \| pid=$P" docs/RELATO.md; sed -n 3,4p docs/RELATO.md \| cut -c1-60` |
@@ -428,4 +429,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 22:02:10 | Bash | Investigate suite kill | `cd /home/ronald/saas-hasner; tail -c 1500 logs/cobparc/v7/suite_full.log; echo; stat -c '%y' logs/cobparc/v7/suite_full.log; docker events --since 40m --until 0s --filter event=kill --filter event=die --filter event=oom --format '{{.Time}} {{.Action}} {{.Actor.Attributes.name}} {{.Actor.Attributes.exitCode}} {{.Actor.Attributes.signal}}' 2>&1 \| tail -15` |
 | 22:02:03 | Bash | Record measures and check suite | `cd /home/ronald/saas-hasner; H=$(date +%H:%M); echo "- $H COBPARC v7 medidas na sombra (logs/cobparc7_medidas.out, FIM-DA-SONDA, 0 Traceback; copia 8f21ec29; 652 colabs, celulas 21/08..01/11): MEDIDA 5 ata ausencia sem cobertura_parcial com vencedora parcial (cobertura_ausencia_periodo para=folha): F0 prod 67 de 3259 -> B 0 de 3290. MEDIDA 7 FuroDiario (apurar real emp 2/3/4, janela 21/09..20/11,  ...` |
 | 22:01:44 | Bash | Confirm sonda output lines | `cd /home/ronald/saas-hasner; tail -25 logs/cobparc7_medidas.out \| cut -c1-250; docker ps --format '{{.Names}} {{.Status}}' \| grep -i sombra` |
-| 21:43:18 | Bash | Check suite and sonda | `cd /home/ronald/saas-hasner; kill -0 1989734 2>/dev/null && echo VIVO; wc -c logs/cobparc/v7/suite_full.log; grep -cE '^(ERROR\|FAIL):' logs/cobparc/v7/suite_full.log; ls -la logs/cobparc7_medidas.out 2>/dev/null; /usr/bin/sleep 45; wc -c logs/cobparc/v7/suite_full.log` |
