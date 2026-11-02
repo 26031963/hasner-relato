@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 07:56:15.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (154.7 MB). Acoes na janela: **458**.
+**Medido em 02/11/2026 08:01:45.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (154.7 MB). Acoes na janela: **455**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -465,6 +465,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:03:33 | Bash | Read the rest of the v5 question | `cd /home/ronald/saas-hasner && tail -c +2500 logs/cobparc/v5/codex/v1.q; wc -c logs/cobparc/v5/codex/leis.txt` |
 | 20:03:23 | Bash | Look at v5 Codex question template and wrapper usage | `cd /home/ronald/saas-hasner && ls logs/cobparc/v5/codex/; head -c 2500 logs/cobparc/v5/codex/v1.q; sed -n 1,40p bin/codex_pergunta.sh \| grep -E "^#" \| head -25` |
 | 20:03:18 | Bash | Check suite and sonda verdict lines | `cd /home/ronald/saas-hasner && kill -0 306065 2>/dev/null && echo suite_vivo; ls -l logs/cobparc6_det.out logs/cobparc/v6/suite_full.log; grep -E "VINTE-E-NOVE\|FM09 .*intacto\|FORA DOS 5\|MOTOR col187\|ATA comp09\|LEI-AKITA-6\|SONDA_OK\|ERROS" logs/cobparc6_det.out \| cut -c1-300; date +%H:%M` |
-| 20:00:50 | Bash | Recheck full suite log growth | `cd /home/ronald/saas-hasner && /usr/bin/sleep 45; ls -l logs/cobparc/v6/suite_full.log; kill -0 306065 && echo vivo; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
-| 20:00:16 | Bash | Record pce green and point ESPERANDO at full suite | `cd /home/ronald/saas-hasner && H=$(date +%H:%M) && printf -- "- %s COBPARC v6 suite_pce sobre c1c6f565 VERDE: OK (skipped=11, expected failures=25), Ran 8890, rc=0; suite inteira lancada (pid 306065, logs/cobparc/v6/suite_full.log); sonda cobparc6_det na sombra em curso.\n" "$H" >> app/docs/RELATO.md && sed -i '3s#.*#ESPERANDO: trava_teste.sh \| pid=306065 \| arquivo=logs/cobparc/v6/suite_full.log ...` |
-| 20:00:09 | Bash | Read pce verdict and sonda state | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/bbpzote0n.output \| cut -c1-250; cd /home/ronald/saas-hasner; bash bin/trava_teste.sh --quem; ls -l logs/cobparc/v6/suite_full.log logs/cobparc6_det.out; tail -2 logs/cobparc6_det.out \| cut -c1-200` |
