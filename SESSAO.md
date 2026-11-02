@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 19:58:47.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (172.0 MB). Acoes na janela: **545**.
+**Medido em 02/11/2026 20:04:16.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (172.1 MB). Acoes na janela: **549**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:03:30 | Bash | Repoint ESPERANDO to rerun pid | `cd /home/ronald/saas-hasner && sed -i '3s#^ESPERANDO:.*#ESPERANDO: pasta.sh \| pid=4176832 \| arquivo=logs/dme/pasta_wt-dme-193144.log#' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md` |
+| 20:03:27 | Bash | Check builder liveness | `f=$(readlink -f /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/abbbcd4f0982ce7a5.output); ls -l --time-style=+%H:%M:%S $f \| awk '{print $6}'; ps -ef \| grep -v grep \| grep -E 'wt-dme' \| cut -c1-200 \| head -5; wc -l /home/ronald/saas-hasner/logs/dme/pasta_wt-dme-193144.log` |
+| 20:03:22 | Bash | Compare red selos copy vs HEAD | `cd /home/ronald/saas-hasner/logs/dme && for f in pasta_wt-dme-193144.log pasta_wt-dme-head-194142.log; do echo "== $f"; grep -E '^rc=[^0]' $f \| sort; tail -n1 $f; done; ls -la pasta.fim` |
+| 20:03:18 | Bash | Check selo run progress | `cd /home/ronald/saas-hasner && kill -0 2963460 2>/dev/null && echo vivo; wc -l logs/dme/pasta_wt-dme-head-194142.log; ls logs/dme/pasta.fim 2>/dev/null; date +%H:%M` |
 | 19:53:19 | Bash | Check selo run progress and failures | `cd /home/ronald/saas-hasner && kill -0 2963460 2>/dev/null && echo vivo; wc -l logs/dme/pasta_*.log; grep -v '^rc=0' logs/dme/pasta_*.log \| head -20; ls logs/dme/pasta.fim 2>/dev/null` |
 | 19:44:53 | Bash | Point ESPERANDO at builder's selo run | `cd /home/ronald/saas-hasner && sed -i '3s#^ESPERANDO:.*#ESPERANDO: pasta.sh \| pid=2963460 \| arquivo=logs/dme/pasta_wt-dme-193144.log#' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md; wc -l logs/dme/pasta_wt-dme-193144.log` |
 | 19:44:49 | Bash | Read pasta.sh and its output fd | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/dme/pasta.sh; ls -l /proc/2963460/fd 2>/dev/null \| grep -v pipe \| tail -4` |
