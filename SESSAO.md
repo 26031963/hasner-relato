@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 03:20:18.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (148.6 MB). Acoes na janela: **517**.
+**Medido em 02/11/2026 03:25:45.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (149.4 MB). Acoes na janela: **511**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:23:38 | Bash | Check sombra producer alive and RELATO top | `ps -p 1627532 -o pid,etime,cmd \| cut -c1-150; sed -n 1,5p /home/ronald/saas-hasner/app/docs/RELATO.md \| cut -c1-200` |
+| 03:23:34 | Bash | Check main changes since copy base | `cd /home/ronald/saas-hasner && git diff --name-only a8709a53 HEAD; git merge-base HEAD 3e6bbf52` |
+| 03:23:31 | Bash | Verify copy tree matches certified commit | `cd /home/ronald/wt-cobparc5b-184858 && git log --oneline -1 && git status --porcelain \| head; for f in $(git diff --name-only a8709a53 3e6bbf52); do git show 3e6bbf52:$f \| cmp -s - "$f" && echo "IGUAL $f" \|\| echo "DIFERE $f"; done` |
+| 03:23:26 | Bash | Fix BACKLOG form line, log opus approval | `python3 - <<'EOF' p='docs/BACKLOG.md' s=open(p).read() a="COBPARC ao rebasear vira (4,'2026-09')." assert s.count(a)==1 s=s.replace(a,"COBPARC pousa (4,'2026-10') pelo aval COBPARC-HORIZONTE-10 (02/11).") open(p,'w').write(s) EOF H=$(date +%H:%M); cat >> docs/RELATO.md <<EOF - $H OPUS FINAL v9b (delta 72eb11be..3e6bbf52): APROVADO, nada BLOQUEIA. FORMA curada na hora: BACKLOG GRADE-POS-POUSO dizia ...` |
+| 03:22:16 | Bash | Find stale BACKLOG line and check bloco | `grep -n "(4,'2026-09')\\|(4, '2026-09')" docs/BACKLOG.md \| cut -c1-300; tail -3 ../logs/cobparc/h10/bloco_v9b.log` |
 | 03:16:19 | Bash | Put ESPERANDO on sombra bloco at RELATO top | `sed -i '3i ESPERANDO: sombra.sh \| pid=1627532 \| arquivo=/home/ronald/saas-hasner/logs/cobparc/h10/bloco_v9b.log' docs/RELATO.md && sed -n 3,4p docs/RELATO.md \| cut -c1-120` |
 | 03:16:11 | Bash | Get sombra bloco pid | `/usr/bin/sleep 5; ps -eo pid,args \| grep "sombra.sh --bloco" \| grep -v grep \| head -3; ls -la /home/ronald/saas-hasner/logs/cobparc/h10/bloco_v9b.log` |
 | 03:16:07 | Bash | Run sombra bloco on obra tree, then conferir | `cd /home/ronald/saas-hasner && SOMBRA_ARVORE=/home/ronald/saas-hasner/logs/cobparc/h10/b2/app bash bin/sombra.sh --bloco > logs/cobparc/h10/bloco_v9b.log 2>&1; echo "rc=$?" >> logs/cobparc/h10/bloco_v9b.log; bash bin/sombra.sh --conferir >> logs/cobparc/h10/bloco_v9b.log 2>&1; echo "conferir_rc=$?" >> logs/cobparc/h10/bloco_v9b.log; tail -4 logs/cobparc/h10/bloco_v9b.log` |
@@ -516,14 +521,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:25:54 | Bash | Point ESPERANDO at sombra.sh pid | `cd /home/ronald/saas-hasner && sed -i 's#^ESPERANDO: sombra.sh \| pid=369897 #ESPERANDO: sombra.sh \| pid=369901 #' app/docs/RELATO.md; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
 | 15:25:51 | Bash | Inspect cmdline of the pid | `tr '\0' ' ' < /proc/369897/cmdline; echo; pgrep -af 'sonda_carimbo_vivo' \| cut -c1-150` |
 | 15:25:48 | Bash | Use bare produtor name | `cd /home/ronald/saas-hasner && sed -i 's#^ESPERANDO: bin/sombra.sh #ESPERANDO: sombra.sh #' app/docs/RELATO.md; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
-| 15:25:45 | Bash | Fix produtor name to match cmdline | `cd /home/ronald/saas-hasner && sed -i 's#^ESPERANDO: /home/ronald/saas-hasner/bin/sombra.sh #ESPERANDO: bin/sombra.sh #' app/docs/RELATO.md; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
-| 15:25:38 | Bash | Repoint ESPERANDO to the live sonda pid | `cd /home/ronald/saas-hasner && /usr/bin/sleep 3; P=$(pgrep -f 'sombra.sh --rodar sonda_carimbo_vivo' \| head -1); echo pid=$P; [ -n "$P" ] && sed -i "s#^ESPERANDO: .*#ESPERANDO: /home/ronald/saas-hasner/bin/sombra.sh \| pid=$P \| arquivo=logs/o261e/f2/sonda_carimbo_vivo.out#" app/docs/RELATO.md; grep -n '^ESPERANDO' app/docs/RELATO.md; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._es ...` |
-| 15:25:33 | Bash | Run frota sonda in the sombra | `cd /home/ronald/saas-hasner && bin/sombra.sh --rodar sonda_carimbo_vivo.py o261e/f2/sonda_carimbo_vivo > /dev/null 2>&1; echo FIM-RODADA; grep -E 'universo\|identidade\|mortas\|VIVAS\|viva_com\|autor_sem\|carimbo_sem\|via_sem\|SONDA_OK\|Error\|Traceback' logs/o261e/f2/sonda_carimbo_vivo.out` |
-| 15:25:31 | Bash | Copy sonda to sombra dir reading main authority | `cd /home/ronald/saas-hasner && sed -e 's/^from chamados.models import PerguntaDisputa$/from chamados.models import PerguntaDisputa\nfrom chamados.services.relavra_via import VIAS_DE_IDENTIDADE/' -e 's/set(PerguntaDisputa.vias_de_identidade())/set(VIAS_DE_IDENTIDADE)/' logs/o261e/f2/sonda_carimbo_vivo.py > logs/sombra/sonda_carimbo_vivo.py && grep -n 'IDENT' logs/sombra/sonda_carimbo_vivo.py \| hea ...` |
-| 15:25:27 | Bash | Check VIAS_DE_IDENTIDADE exists in main | `git grep -n 'VIAS_DE_IDENTIDADE' -- chamados/services/relavra_via.py \| head -3` |
-| 15:25:15 | Bash | Find vias_de_identidade in the F2 copy | `cd /home/ronald && grep -rn -A8 'def vias_de_identidade' --include=models.py wt-* codex_ws 2>/dev/null \| head -20; ls -d /home/ronald/wt-* 2>/dev/null \| head` |
-| 15:25:11 | Bash | Check vias_de_identidade in main | `git grep -n 'vias_de_identidade' -- chamados/models.py \| head -3` |
-| 15:25:09 | Bash | Confirm sonda symbols exist in main | `git grep -n -E 'def (vias_de_identidade\|pergunta_viva)\|VIA_COMPETENCIA_TRANCADA *=' -- chamados/ \| head` |
-| 15:25:05 | Bash | Read the frota sonda script | `cd /home/ronald/saas-hasner && cat logs/o261e/f2/sonda_carimbo_vivo.py` |
-| 15:25:02 | Bash | Check sombra --rodar argument form | `cd /home/ronald/saas-hasner && ls -l logs/sombra/ \| grep -E 'carimbo\|sonda_dono'; grep -n -A12 -- '--rodar)' bin/sombra.sh \| head -30` |
-| 15:24:58 | Bash | Check sombra is free and sonda script exists | `cd /home/ronald/saas-hasner && ps -eo pid,cmd \| grep -E 'sombra.sh --rodar' \| grep -v grep; ls -l logs/o261e/f2/sonda_carimbo_vivo.py; tail -3 logs/cobparc/ata09/sonda_dono.out` |
