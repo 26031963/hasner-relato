@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 17:25:06.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (169.2 MB). Acoes na janela: **537**.
+**Medido em 02/11/2026 17:30:22.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (169.3 MB). Acoes na janela: **540**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:27:29 | Bash | Wait for the next long L1 run and point ESPERANDO at it | `cd /home/ronald/saas-hasner; for i in $(seq 1 50); do q=$(bin/trava_teste.sh --quem); case "$q" in suite:*) p=${q#suite:}; p=${p%% *}; /usr/bin/sleep 45; if ps -p $p >/dev/null; then f=$(ls -t logs/e4cal/*.log \| head -1); break; fi;; esac; /usr/bin/sleep 10; done; echo "$p $f"; ps -p $p -o pid= && sed -i "3s#^ESPERANDO: .*#ESPERANDO: trava_teste.sh \| pid=$p \| arquivo=$f#" app/docs/RELATO.md; se ...` |
+| 17:27:24 | SendMessage |  | `-` |
+| 17:27:11 | Bash | List the failing neighbour tests | `cd /home/ronald/saas-hasner; grep -E '^(FAIL\|ERROR):' logs/e4cal/r5_vizinhos.log \| sed 's/ (.*\.\([A-Za-z_]*Test[A-Za-z_]*\))/ \1/' \| sort \| uniq -c \| sort -rn \| head -25` |
+| 17:27:06 | Bash | Check where the agent's D5 dry run is running | `cd /home/ronald/saas-hasner; cat logs/e4cal/r5_d5_dry.lancador.log \| head; head -5 logs/e4cal/r5_d5_dry.out; ps -eo pid,etime,args \| grep -E 'd5\|sombra\|lavrar_status' \| grep -v grep \| cut -c1-220` |
 | 17:23:20 | Bash | Wait for the vizinhos run's verdict | `cd /home/ronald/saas-hasner; for i in $(seq 1 30); do ps -p 2682175 >/dev/null \|\| break; /usr/bin/sleep 20; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|rc=' logs/e4cal/r5_vizinhos.log \| tail -3; bin/trava_teste.sh --quem; ls -t logs/e4cal/ \| head -3` |
 | 17:21:05 | Bash | Check what the L1 agent is running now | `cd /home/ronald/saas-hasner; ps -p 2682175 -o pid=; bin/trava_teste.sh --quem; ls -t --time-style=+%H:%M:%S -la logs/e4cal/ \| head -4; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|rc=' logs/e4cal/r5_vizinhos.log \| tail -3` |
 | 17:20:27 | Bash | Check the vizinhos run and the hook log | `cd /home/ronald/saas-hasner; /usr/bin/sleep 30; ps -p 2682175 -o pid=; ls -la --time-style=+%H:%M:%S logs/e4cal/r5_vizinhos.log; tail -2 logs/hook_stop_fila1.log \| cut -c1-160` |
@@ -546,4 +550,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 05:31:32 | Bash | Check why hook rejected ESPERANDO | `cd /home/ronald/saas-hasner && ps -p 1398594 -o pid,args \| cut -c1-120; ls -l --time-style=+%T logs/e3isento/medida_impacto.out; grep -n "ESPERANDO\\|mtime\\|arquivo" bin/hook_stop_fila1.py \| head -30` |
 | 05:31:24 | Bash | Declare proven ESPERANDO on E3 sombra run | `python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') assert not L[2].startswith('ESPERANDO') L.insert(2,'ESPERANDO: sombra.sh \| pid=1398594 \| arquivo=/home/ronald/saas-hasner/logs/e3isento/medida_impacto.out') open(p,'w').write('\n'.join(L)) EOF sed -n 3p docs/RELATO.md` |
 | 05:31:21 | Bash | Find the builder's background producer | `ps -eo pid,etime,args \| grep -E "sombra.sh\|suite.sh" \| grep -v grep \| cut -c1-180; ls -t /home/ronald/saas-hasner/logs/e3isento/ 2>/dev/null \| head -5` |
-| 05:25:31 | Bash | Check producers and E3 builder progress | `date +%H:%M && ps -eo pid,etime,args \| grep -E "sombra.sh\|suite.sh\|push.sh" \| grep -v grep \| cut -c1-160; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/a7dbc1e3e239f0a4a.output \| cut -c1-300` |
