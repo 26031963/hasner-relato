@@ -1,6 +1,6 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **02/11/2026 18:27** · publicado em **02/11/2026 18:27** (UTC-3)
+> Ultima resposta processada: **02/11/2026 18:27** · publicado em **02/11/2026 18:55** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
 
 ## 02/11 18:27 · sessao ae4ec323f2f3 · DEPLOY-[nome]-ELO-DA-CORRENTE · leitura · origem=Code
@@ -520,7 +520,7 @@ A antiga porta **da pergunta** `fechar_por_competencia_trancada` foi removida; F
 
 [truncado em 20000 de 26646 caracteres]
 
-## 01/11 18:54 · sessao 0d1e007159c1 · - · - · origem=Ronald (tmux)
+## 01/11 18:54 -- HISTORICO (mais de 24 h) · sessao 0d1e007159c1 · - · - · origem=Ronald (tmux)
 
 Censo Q3/Q6, somente código, sem executar comandos de aplicação.
 
@@ -559,7 +559,7 @@ Censo Q3/Q6, somente código, sem executar comandos de aplicação.
 
 O dado recebido não lista linhas/pks nem atributos do estoque; portanto nenhum contraexemplo acima pode ser atribuído a uma linha real ou ter quantidade confirmada `[nao verificado]`.
 
-## 01/11 18:54 · sessao d3a74d0e3ea4 · - · - · origem=Ronald (tmux)
+## 01/11 18:54 -- HISTORICO (mais de 24 h) · sessao d3a74d0e3ea4 · - · - · origem=Ronald (tmux)
 
 Para Q2, o contador F0 existe: `materializada_viva()['aberta']` é literalmente o tamanho do balde `aberta` devolvido por `carimbos_sem_lastro_por_dono`, não um contador geral de toda pergunta carimbada e viva (`app/chamados/services/vigia_fio.py:800-804`).
 
@@ -594,7 +594,7 @@ Para Q4, existem comandos específicos de estoque; não foi identificado um exec
 
 `auditar_invariantes_chamados` não tem `--corrigir`/`--apply`; seus argumentos são `--html` e `--amostra`; `--html` grava arquivo (`app/chamados/management/commands/auditar_invariantes_chamados.py:545-550`, `:1838-1849`). Mesmo o dry de `materializar_passivo_validado` cria diretório e JSON de resultado, portanto não é execução compatível com a restrição desta tarefa (`app/chamados/management/commands/materializar_passivo_validado.py:85`, `:114-127`).
 
-## 01/11 18:54 · sessao 86f8555eafdd · - · - · origem=Ronald (tmux)
+## 01/11 18:54 -- HISTORICO (mais de 24 h) · sessao 86f8555eafdd · - · - · origem=Ronald (tmux)
 
 Q5 — leitores e efeito sobre folha/export, somente código:
 

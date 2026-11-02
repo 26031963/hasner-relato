@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 18:50:04.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (170.6 MB). Acoes na janela: **533**.
+**Medido em 02/11/2026 18:55:11.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (170.6 MB). Acoes na janela: **532**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -542,4 +542,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 07:07:36 | Bash | Create worktree for COBPARC-FILA-RELOGIO | `cd /home/ronald/saas-hasner && T=$(date +%H%M%S) && W=/home/ronald/wt-cobparc-relogio-$T && git worktree add -q $W -b cobparc-relogio-$T HEAD && mkdir -p $W/app/logs $W/app/media && git -C $W log --oneline -1 && echo $W && cd app && python3 - <<EOF p='docs/BACKLOG.md'; s=open(p).read() old='PADRAO: relogio na borda. \| registrada, fila 1, depois do pouso COBPARC \|' assert s.count(old)==1 s=s.repl ...` |
 | 07:07:31 | Bash | Close marco: clean worktree, handoff | `cd /home/ronald/saas-hasner && sed -i '3{/^ESPERANDO: push.sh \| pid=1984928/d}' app/docs/RELATO.md && echo "- 07:0x PUSH OK origin/main=e1c08457 (pre-push OK; pos_push 15c3a8b5). Deploy rc 0, 3 rotas, importerror_500=0, smoke prod: marcos_do_jogo exclui dispensada e _furos_do_dia le o dono = True/True. MARCO FECHADO." >> app/docs/RELATO.md && git worktree remove /home/ronald/wt-cobparc-rotulo-053 ...` |
 | 07:07:24 | Bash | Read push verdict from remote | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/bw5dvxj5e.output; cd /home/ronald/saas-hasner && git log --oneline -3; git status --porcelain \| grep -v '^??'` |
-| 06:53:17 | Bash | Check push progress | `kill -0 1984928 2>/dev/null && echo PUSH_VIVO \|\| echo PUSH_FIM; tail -3 /home/ronald/saas-hasner/logs/cobparc_rotulo/push.log \| cut -c1-160` |
