@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: construtor | arquivo=/home/ronald/.claude/projects/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/subagents/agent-a9ba61aa4d60c4177.jsonl
+ESPERANDO: trava_teste.sh | pid=1331760 | arquivo=logs/cobparc/v7/green_largo.log
 
 aval Ronald 19:37 (logs/cobparc/v6/AVAL_HORIZONTE_09.md): COBPARC5-HORIZONTE-09 RESPONDIDA -- horizonte v4 fica 2026-09; CABE 38 parciais, col643, chamados 82=82, col926 (03/09 dono BATIDA -> Pauta DP); NAO CABE 29 dias col187/col311 ausencia->folga: achar e curar antes do pouso (RED ferias/aviso_home_office sobre folga = ausencia; prop nova); col878: nomear dia e juiz.
 aval Ronald 19:35: REABERTURA-RECUSADA-DEDUP-CANCELA -- construtor encerrado, item volta a fila 1 de tras (ruido de log, nao trava placar nem contrato 20; cota da semana); vaga VAZIA ate a resposta da COBPARC5-HORIZONTE-09; suites da COBPARC seguem; sem vaga util = esperar.
