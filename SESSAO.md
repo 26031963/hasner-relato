@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/11/2026 22:57:26.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (144.0 MB). Acoes na janela: **852**.
+**Medido em 01/11/2026 23:02:45.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (144.7 MB). Acoes na janela: **855**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:02:43 | Bash | Ruff the two files and commit in the copy | `cd /home/ronald/wt-cobparc5b-184858 && (cd app && ruff check --config ruff.toml escala/services/leitor_celula.py ponto/tests/test_cobparc8_leitor_transporta_justificado.py 2>&1 \| tail -2; rm -rf .ruff_cache) ; git add app/escala/services/leitor_celula.py app/ponto/tests/test_cobparc8_leitor_transporta_justificado.py && git commit -q -F - <<'EOF' [COBERTURA-PARCIAL-UM-JUIZ] v8 higiene: selo import ...` |
+| 23:02:37 | Bash | Make test import the constant and rename _n_ok in the copy | `cd /home/ronald/wt-cobparc5b-184858/app && python3 - <<'EOF' import re p='ponto/tests/test_cobparc8_leitor_transporta_justificado.py' s=open(p).read() a=" from escala.services.leitor_celula import n_ok_lavrado\n self._cenario_justificado()" assert s.count(a)==1 s=s.replace(a," from escala.services.leitor_celula import n_ok_lavrado\n from ponto.services.cartorio import DISPENSA_POR_JUSTIFICATIVA\n  ...` |
+| 23:02:31 | Bash | Check copy commits, run verdict and sites to tidy | `cd /home/ronald/wt-cobparc5b-184858 && git log --oneline -3 && git status --porcelain \| head; tail -3 /home/ronald/saas-hasner/logs/cobparc/v8/green_largo.log; bash ~/saas-hasner/bin/trava_teste.sh --quem; grep -n "_n_ok\b\\|_n_ok " app/escala/services/leitor_celula.py \| head; sed -n 85,100p app/ponto/tests/test_cobparc8_leitor_transporta_justificado.py` |
 | 22:54:56 | Bash | Publish DESENHO line as second top line | `cd /home/ronald/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys;H=sys.argv[1];p='app/docs/RELATO.md';L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO:') and L[3].startswith('PERGUNTA DE DESENHO COBERTURA-PARCIAL-UM-JUIZ') L.insert(3,"DESENHO COBERTURA-PARCIAL-UM-JUIZ: lei=lampada 4a pergunta=o dia que o leitor monta da ata nao carrega o `justificado` lavrado e o supr ...` |
 | 22:54:50 | Bash | Find the site lines in the live tree | `cd /home/ronald/saas-hasner; grep -n "get('justificado')" app/ponto/supra_juiz.py; grep -n "_teve_fato =" app/escala/services/leitor_celula.py` |
 | 22:54:47 | Bash | Confirm arquivo:linha exists in the repo root | `cd /home/ronald/saas-hasner; wc -l app/ponto/supra_juiz.py app/escala/services/leitor_celula.py; sed -n 371p app/ponto/supra_juiz.py; sed -n 343,345p app/escala/services/leitor_celula.py` |
