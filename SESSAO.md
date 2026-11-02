@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 06:21:12.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (153.1 MB). Acoes na janela: **528**.
+**Medido em 02/11/2026 06:26:16.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (153.1 MB). Acoes na janela: **527**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:23:17 | Bash | Check builder's suite and sombra state | `ps -p 4041884 >/dev/null && echo SUITE_VIVA \|\| echo SUITE_FIM; ps -eo pid,args \| grep "sombra.sh --rodar" \| grep -v grep \| head -1 \| cut -c1-100` |
 | 06:15:09 | Bash | Declare ESPERANDO on builder suite | `sed -i '2a ESPERANDO: trava_teste.sh \| pid=4041884' docs/RELATO.md && sed -n 3p docs/RELATO.md` |
 | 06:15:06 | Bash | Look for builder's producer process | `ps -eo pid,etime,args \| grep -E "trava_teste.sh\|sombra.sh --rodar" \| grep -v grep \| cut -c1-140` |
 | 06:13:16 | Bash | Look for builder's producer process | `ps -eo pid,etime,args \| grep -E "trava_teste.sh\|sombra.sh --rodar" \| grep -v grep \| cut -c1-140` |
@@ -536,5 +537,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:40:02 | Bash | Log F2 delivery, drop stale ESPERANDO | `cd /home/ronald/saas-hasner/app; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys,re;H=sys.argv[1];p='docs/RELATO.md';s=open(p).read() s=re.sub(r'^ESPERANDO: trava_teste\.sh \\| pid=2763178 \\|.*\n','',s,count=1,flags=re.M) a=[l for l in s.split('\n') if l.startswith('- ') and 'COBPARC volta 5 ESTACIONADA 2' in l]; assert len(a)==1 b=('- %s O261-E-F2 parte 2 (ii) ENTREGUE na copia @ 5c2bb8a4 (s ...` |
 | 18:39:50 | Agent | verificador: opus final O261-E-F2 v2 | `OPUS FINAL v2 da obra O261-E-F2 (Hasner Ponto). Voce nao viu a construcao; procure o que esta errado. Somente leitura. Leia /home/ronald/saas-hasner/CLAUDE.md (LEI-AKITA, secao 6, 7b CODEX item 5). Arvore certificada: copia /home/ronald/wt-o261e-f2-6f583cbc-140011, HEAD 5c2bb8a4 (base 6f583cbc; o main de hoje 58aac78f difere da base so em docs). Diff: `git -C /home/ronald/wt-o261e-f2-6f583cbc-1400 ...` |
 | 18:39:32 | Bash | Verify F2 suite verdict and commit range | `cd /home/ronald/saas-hasner; L=logs/o261e/f2/suite_completa_v5.log; grep -E '^(OK\|FAILED)($\| \()' $L\|tail -1; grep '^Ran' $L\|tail -1; cat logs/o261e/f2/suite_v5_antes.txt logs/o261e/f2/suite_v5_depois.txt; cd /home/ronald/wt-o261e-f2-6f583cbc-140011; git log --oneline 6f583cbc..HEAD; git status --porcelain\|wc -l; git diff --stat 6f583cbc..HEAD \| tail -3; ls /home/ronald/saas-hasner/logs/o261 ...` |
-| 18:23:26 | Bash | Repoint ESPERANDO to new suite pid | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md';s=open(p).read() old='ESPERANDO: trava_teste.sh \| pid=783068 \|' assert s.count(old)==1 s=s.replace(old,'ESPERANDO: trava_teste.sh \| pid=2763178 \|',1); open(p,'w').write(s) EOF cd ../bin; python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"; /usr/bin/sleep 25; python3 -c "import hook_stop_fila1 as h;  ...` |
-| 18:23:22 | Bash | Check what the F2 builder is waiting on | `cd /home/ronald/saas-hasner; date +%T; pgrep -af '^bash .*bin/(suite\|trava_teste\|codex_pergunta)\.sh' \| cut -c1-200; ls -lt --time-style=+%T logs/o261e/f2 \| head -6; L=logs/o261e/f2/suite_completa_v5.log; grep -E '^(OK\|FAILED)($\| \()' $L\|tail -1; grep '^Ran' $L\|tail -1` |
