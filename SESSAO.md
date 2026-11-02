@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 18:44:36.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (170.6 MB). Acoes na janela: **539**.
+**Medido em 02/11/2026 18:50:04.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (170.6 MB). Acoes na janela: **533**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -543,9 +543,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 07:07:31 | Bash | Close marco: clean worktree, handoff | `cd /home/ronald/saas-hasner && sed -i '3{/^ESPERANDO: push.sh \| pid=1984928/d}' app/docs/RELATO.md && echo "- 07:0x PUSH OK origin/main=e1c08457 (pre-push OK; pos_push 15c3a8b5). Deploy rc 0, 3 rotas, importerror_500=0, smoke prod: marcos_do_jogo exclui dispensada e _furos_do_dia le o dono = True/True. MARCO FECHADO." >> app/docs/RELATO.md && git worktree remove /home/ronald/wt-cobparc-rotulo-053 ...` |
 | 07:07:24 | Bash | Read push verdict from remote | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/bw5dvxj5e.output; cd /home/ronald/saas-hasner && git log --oneline -3; git status --porcelain \| grep -v '^??'` |
 | 06:53:17 | Bash | Check push progress | `kill -0 1984928 2>/dev/null && echo PUSH_VIVO \|\| echo PUSH_FIM; tail -3 /home/ronald/saas-hasner/logs/cobparc_rotulo/push.log \| cut -c1-160` |
-| 06:49:19 | Bash | Wait for push to finish, read remote | `while kill -0 1984928 2>/dev/null; do /usr/bin/sleep 15; done; tail -5 /home/ronald/saas-hasner/logs/cobparc_rotulo/push.log; cd /home/ronald/saas-hasner && git fetch -q && git log --oneline -1 origin/main` |
-| 06:49:11 | Bash | Launch push and declare ESPERANDO | `cd /home/ronald/saas-hasner && (setsid bash bin/push.sh > logs/cobparc_rotulo/push.log 2>&1 &) ; /usr/bin/sleep 3; P=$(pgrep -f "^bash bin/push.sh" \| head -1); echo pid=$P; sed -i "2a ESPERANDO: push.sh \| pid=$P" app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md` |
-| 06:49:04 | Bash | Prod smoke of new code, prep push | `cd /home/ronald/saas-hasner && docker exec saas_core python -c "import inspect,relatorios.furos as f,escala.services.furos_diarios as d; print('dispensada' in inspect.getsource(f.marcos_do_jogo), 'marcos_do_jogo' in inspect.getsource(d._furos_do_dia))" 2>&1 \| tail -1; sed -i '3{/^ESPERANDO: deploy.sh \| pid=1350665/d}' app/docs/RELATO.md; bash bin/tickets_placar.sh --escrever 2>&1 \| tail -2; git ...` |
-| 06:48:58 | Bash | Read deploy result | `cd /home/ronald/saas-hasner && cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/b4vdyyw85.output \| tail -3; tail -16 logs/cobparc_rotulo/deploy.log` |
-| 06:48:48 | Bash | Declare ESPERANDO on the deploy | `sed -i '2a ESPERANDO: deploy.sh \| pid=1350665' docs/RELATO.md && sed -n 3p docs/RELATO.md` |
-| 06:48:44 | Bash | Check deploy progress | `cd /home/ronald/saas-hasner && tail -5 logs/cobparc_rotulo/deploy.log; ps -eo pid,args \| grep "bin/deploy.sh" \| grep -v grep \| head -2 \| cut -c1-80` |
