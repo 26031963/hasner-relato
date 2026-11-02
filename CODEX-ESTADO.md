@@ -1,6 +1,6 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **02/11/2026 18:27** · publicado em **02/11/2026 18:55** (UTC-3)
+> Ultima resposta processada: **02/11/2026 18:27** · publicado em **02/11/2026 19:00** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
 
 ## 02/11 18:27 · sessao ae4ec323f2f3 · DEPLOY-[nome]-ELO-DA-CORRENTE · leitura · origem=Code
@@ -431,7 +431,7 @@ Inventário complementar: `REGRA_VERSOES` tem declaração em `cartorio.py:111`,
 
 10. **Nota — escala_auto não consome diretamente esses montadores.** As propostas consultam `turnos_do_colab` e `EC.eh_dia_trabalho`; o executor altera o vínculo por sua porta: `app/escala/services/escala_auto.py:87`, `app/escala/services/escala_auto.py:144`, `app/escala/services/escala_auto_executor.py:103`. A v6 não modifica diretamente esses insumos; repercussões indiretas pela geometria/ata exigiriam execução adicional: [nao verificado].
 
-## 01/11 18:57 · sessao cc9e17bf9b48 · O261-E-F3 · censo · origem=Code
+## 01/11 18:57 -- HISTORICO (mais de 24 h) · sessao cc9e17bf9b48 · O261-E-F3 · censo · origem=Code
 
 **O contador do F0 existe, mas mede um recorte: carimbadas, vivas pelo C6, em disputa aberta e fora das vias de identidade. Não equivale ao estoque inteiro de perguntas vivas sob destino terminal.** (`app/chamados/services/vigia_fio.py:743`, `app/chamados/services/vigia_fio.py:800`, `app/chamados/services/relavra_via.py:170`.)
 
