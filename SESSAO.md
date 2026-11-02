@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 12:56:51.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (159.7 MB). Acoes na janela: **431**.
+**Medido em 02/11/2026 13:01:59.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (160.5 MB). Acoes na janela: **438**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:01:25 | Bash | Write the (a)-(e) table and named causa into RELATO | `python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('CAUSA-13-COMPLEMENTO (aval 02/11 12:4x) estado 12:4x')] assert len(i)==1 L[i[0]]=("CAUSA-13-COMPLEMENTO (aval 02/11 12:4x) TABELA 13:0x -- sonda_causa_13_v2_{cura,head}.out, mesmo dump, atomic+raise, funcao real, FIM ok=True nos dois bracos. " "CAUSA NOMEADA: `out` e UM `contadores()` pa ...` |
+| 13:01:07 | Bash | Read the time and the RELATO top | `date '+%H:%M'; sed -n 1,8p docs/RELATO.md \| cut -c1-900` |
+| 13:01:04 | Bash | Check julgar_colab start for any cods reset and its callers | `grep -n "def julgar_colab\\|def _julgar_colab_corpo\\|def contadores\\|_julgada_antes\s*=" ponto/services/cartorio.py; sed -n '/^def julgar_colab/,/_sobra = out.pop/p' ponto/services/cartorio.py \| head -60; grep -rn "julgar_colab(" --include=*.py . \| grep -v "def \\|tests/" \| head` |
+| 13:00:54 | Bash | Read the fabrica loop and the cods writer | `sed -n 955,1025p ponto/services/cartorio.py; echo ----; sed -n 1370,1384p ponto/services/cartorio.py` |
+| 12:59:37 | Bash | Find who writes out['cods'] and how out is shared | `grep -nE "\['cods'\]\|'cods'\|\"cods\"" ponto/services/cartorio.py ponto/management/commands/processar_cartorio.py \| head -20; sed -n '40,75p' ponto/management/commands/processar_cartorio.py` |
+| 12:59:26 | Bash | Read V2 judgment trails both arms | `cd /home/ronald/saas-hasner/logs/e3isento/pouso && for f in sonda_causa_13_v2_cura.out sonda_causa_13_v2_head.out; do echo "######## $f"; awk '/--- V2 trilha/{p=1} /--- VALORES DEPOIS/{p=0} p' $f \| cut -c1-600; done` |
+| 12:59:22 | Bash | Read v2 sonda verdicts | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/bcy4s1bvo.output; cd /home/ronald/saas-hasner/logs/e3isento/pouso && for f in sonda_causa_13_v2_cura.out sonda_causa_13_v2_head.out; do echo "######## $f"; grep -nE 'ARVORE\|FIM-DA-SONDA\|ERRO\|DOS 13\|13 itens\|voltaram\|processar_cartorio --apply' $f \| cut -c1-300; done` |
 | 12:49:01 | Bash | Fix timestamps per date | `sed -i '3s/corrigido 12:5x/corrigido 12:4x/; 5s/estado 12:5x/estado 12:4x/' RELATO.md && sed -n '3p;5p' RELATO.md \| grep -oE '(corrigido\|estado) 12:[0-9]x'` |
 | 12:48:56 | Bash | Correct RELATO line and record agent status | `cd /home/ronald/saas-hasner/app/docs && date '+%H:%M' && python3 - <<'EOF' p='RELATO.md' L=open(p).read().split('\n') a='11 perguntas ganham materializada_em/via_resolucao' assert L[2].startswith('! PAREI') and L[2].count(a)==1 L[2]=L[2].replace(a,'11 perguntas PERDEM o carimbo -- materializada_em/_por e via_resolucao vao a vazio pelo descarimbar (corrigido 12:5x, aval CAUSA-13-COMPLEMENTO; dizia  ...` |
 | 12:48:20 | Bash | Locate depois3.out owner | `find /home/ronald /tmp/claude-1001 -name 'depois3*' -mmin -300 2>/dev/null \| head; ps -eo pid,etime,cmd \| grep -iE 'claude' \| grep -v grep \| cut -c1-150 \| head` |
