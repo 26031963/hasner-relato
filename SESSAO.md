@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 00:23:15.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (145.5 MB). Acoes na janela: **787**.
+**Medido em 02/11/2026 00:28:45.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (145.5 MB). Acoes na janela: **786**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -796,4 +796,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:29:18 | Bash | Log CONTENCAO delivery; look up O261-E | `cd /home/ronald/saas-hasner; H=$(date +%H:%M); echo "- $H CONTENCAO volta 5 entregue @40da0560 (6 commits cc91695e..40da0560, RED/GREEN red_v2_*/green_v2_*, 21 vizinhos rc=0, ruff ok); em fundo: test_disjuntor inteiro (green_v2_disjuntor_inteiro.log) + Codex v3 (codex_v3.r, volta 3 de 3; reprova -> opus)." >> app/docs/RELATO.md; grep -n "O261-E" app/docs/BACKLOG.md \| head -3 \| cut -c1-600` |
 | 12:29:15 | Bash | Wait for CONTENCAO full test and Codex v3 | `cd /home/ronald/saas-hasner; L=logs/contencao/v2/p1/v4; while ! grep -q '^rc=' $L/green_v2_disjuntor_inteiro.log \|\| [ ! -s $L/codex_v3.r ]; do /usr/bin/sleep 30; done; date +%T; tail -3 $L/green_v2_disjuntor_inteiro.log; echo FALHAS=$(grep -cE 'FALHA\|NAO MORDE' $L/green_v2_disjuntor_inteiro.log); wc -c $L/codex_v3.r` |
 | 12:29:08 | Bash | Check CONTENCAO background jobs | `cd /home/ronald/saas-hasner; L=logs/contencao/v2/p1/v4; date +%T; wc -l $L/green_v2_disjuntor_inteiro.log; tail -2 $L/green_v2_disjuntor_inteiro.log; ls -l --time-style=+%T $L/green_v2_disjuntor_inteiro.log $L/codex_v3.* 2>&1 \| cut -c30-; pgrep -f 'test_disjuntor.sh' \| head -3; kill -0 1881637 && echo codex vivo` |
-| 12:23:16 | Bash | Check COBPARC and postmortem progress | `cd /home/ronald/saas-hasner; date +%T; kill -0 666379 2>/dev/null && echo sombra vivo; cat logs/cobparc/v4/sombra_bump_v5.run \| cut -c1-300 \| tail -20; ls -l --time-style=+%T logs/grade_juiz/va/postmortem.* 2>/dev/null` |
