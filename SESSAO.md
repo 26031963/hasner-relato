@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 20:15:27.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (173.1 MB). Acoes na janela: **562**.
+**Medido em 02/11/2026 20:20:54.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (173.1 MB). Acoes na janela: **563**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:15:29 | Bash | Repoint ESPERANDO line to suite | `cd /home/ronald/saas-hasner && sed -i '3s#^ESPERANDO: .*#ESPERANDO: trava_teste.sh \| pid=600991 \| arquivo=logs/dme/suite_b1f9d4f1.log#' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md` |
 | 20:15:26 | Bash | Check suite process and RELATO top | `cd /home/ronald/saas-hasner && ps -o pid,args -p 600991 2>/dev/null \| tail -1; pgrep -f 'trava_teste.sh' -a \| head -3; tail -c 300 logs/dme/suite_b1f9d4f1.log; sed -n 1,4p app/docs/RELATO.md \| cut -c1-200` |
 | 20:14:27 | Bash | Write DME triage and RELATO line | `cd /home/ronald/saas-hasner && cat > logs/dme/v1_triagem.md <<'EOF' # TRIAGEM Codex verificador v1 DEPLOY-[nome]-ELO b1f9d4f1 (02/11 20:2x, conferido abrindo arquivo:linha na copia) PROCEDENTES (voltam ao construtor): P1 hibrido entre dois exec atravessa o restart: sentinela RAW com 4 `docker exec mensageria` em laco (mensageria/bin/sentinela_diario.sh:14-16); casca=0 e a arvore so ve o exec em curs ...` |
 | 20:13:58 | Bash | Spot-check Codex findings in the copy | `cd /home/ronald/wt-dme-193144 && sed -n 70,104p bin/deploy_agendado.sh; echo ----; sed -n 25,50p bin/reinicio_sob_admissao.sh; echo ----; sed -n 10,20p app/core/services/crons_quebrados.py; sed -n 40,48p app/core/services/crons_quebrados.py; echo ----; sed -n 12,18p mensageria/bin/sentinela_diario.sh; sed -n 40,50p bin/cron_run.sh` |
