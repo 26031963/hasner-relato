@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 03:25:45.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (149.4 MB). Acoes na janela: **511**.
+**Medido em 02/11/2026 03:31:15.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (149.4 MB). Acoes na janela: **502**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -512,12 +512,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:33:28 | Bash | Compare REGRA_VERSOES in main vs cura copy | `git grep -n 'REGRA_VERSOES' -- '*.py' \| grep -v tests \| head; ls -d /home/ronald/wt-cobparc* 2>/dev/null; for d in /home/ronald/wt-cobparc*; do grep -rn 'REGRA_VERSOES *=' $d/app --include=*.py \| grep -v tests \| head -3; done` |
 | 15:33:22 | Bash | Compare controle rows with sonda_dono approach | `cd /home/ronald/saas-hasner && grep -E '^col(638\|749\|900\|926)' logs/cobparc_controle.out \| awk '$7!="0.00"\|\|$8!="0.00"'; grep -n -iE 'bump\|passada\|col638\|REGRA_VERS' logs/sombra/sonda_dono.py \| head -20` |
 | 15:33:18 | Bash | Read the controle output header | `cd /home/ronald/saas-hasner && ls -l logs/cobparc_controle.out logs/sombra/sonda_dono.py; head -15 logs/cobparc_controle.out; grep -n -iE 'arvore\|hash\|flag\|bump\|passada\|regen\|impress' logs/cobparc_controle.out \| head -15` |
-| 15:26:29 | Bash | Record frota number and repoint ESPERANDO to F2 suite | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p).read() old='Numero de frota: sonda sombra sonda_carimbo_vivo.py, em fila atras da ATA09.' assert s.count(old)==1 new=('FROTA (sombra, juiz real pergunta_viva, logs/o261e/f2/sonda_carimbo_vivo.out, SONDA_OK): universo 34449 carimbadas = ' '9922 identidade + 24154 mortas + 373 VIVAS COM CARIMBO (chamado_encerrado 196,  ...` |
-| 15:26:24 | Bash | Find F2 suite log path | `tr '\0' ' ' < /proc/4156126/cmdline \| grep -oE '(tee\|>) *[^ ;\|&]+\.log' \| head; ls -lt /home/ronald/saas-hasner/logs/o261e/f2/ \| head -5` |
-| 15:26:21 | Bash | Locate F2 question line and check suite state | `cd /home/ronald/saas-hasner && grep -n 'PERGUNTA DE DESENHO O261-E-F2' app/docs/RELATO.md \| head -2; grep -n 'frota pendente\\|numero de frota pendente\\|Frota pendente' app/docs/RELATO.md \| head; bin/trava_teste.sh --quem; ps -eo pid,etime,cmd \| grep -E 'manage.py test\|suite.sh' \| grep -v grep \| cut -c1-120` |
-| 15:26:16 | Bash | Read sonda result | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/br3exfxzi.output; tail -5 /home/ronald/saas-hasner/logs/o261e/f2/sonda_carimbo_vivo.out` |
-| 15:26:12 | Bash | Read hook ESPERANDO logic | `cd /home/ronald/saas-hasner/bin && grep -n -B3 -A25 'def _esperando_com_prova' hook_stop_fila1.py \| head -60; grep -n '_esperando_com_prova(' hook_stop_fila1.py` |
-| 15:26:09 | Bash | Check sonda status and hook proof | `cd /home/ronald/saas-hasner && kill -0 369901 2>/dev/null && echo vivo \|\| echo morto; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/br3exfxzi.output; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
-| 15:25:54 | Bash | Point ESPERANDO at sombra.sh pid | `cd /home/ronald/saas-hasner && sed -i 's#^ESPERANDO: sombra.sh \| pid=369897 #ESPERANDO: sombra.sh \| pid=369901 #' app/docs/RELATO.md; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
-| 15:25:51 | Bash | Inspect cmdline of the pid | `tr '\0' ' ' < /proc/369897/cmdline; echo; pgrep -af 'sonda_carimbo_vivo' \| cut -c1-150` |
-| 15:25:48 | Bash | Use bare produtor name | `cd /home/ronald/saas-hasner && sed -i 's#^ESPERANDO: bin/sombra.sh #ESPERANDO: sombra.sh #' app/docs/RELATO.md; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
