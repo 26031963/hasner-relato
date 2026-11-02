@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: trava_teste.sh | pid=2074515 | arquivo=logs/e4cal/r5_sql_antes.log
+ESPERANDO: trava_teste.sh | pid=2381106 | arquivo=logs/e4cal/r5_green2.log
 DESENHO E3-ISENTO-INSUMOS: lei=lampada 4a pergunta=quem diz a fabrica QUAIS celulas DESTE colab foram julgadas NESTE ato? hoje e o out['cods'] do LOTE da empresa, chaveado so por data, e a fabrica roda em celula de outro colab nao rejulgada app/ponto/services/cartorio.py:966 app/ponto/services/cartorio.py:977 app/ponto/services/cartorio.py:1380 app/ponto/management/commands/processar_cartorio.py:43
 DESPACHO NOREVERSE-UI-NO-CORE-AGORA 15:4x: construir cura+RED+selo+suite -> opus (copia wt-noreverse-021533) | medir 7 (vigiar_fio_morto sem carimbo 31/10-02/11; batidas abortadas em engolir) -> sonnet (motivo: Codex em reserva so final) | L1 commita e para na copia, retoma no pouso desta cura
 DESPACHO DEPLOY-[nome]-ELO 16:4x: medir quando o elo lavrar_he_pendente comecou x ultima checagem do em_curso x restart (02/11) + sombra.sh roda fora das cascas? -> sonnet (motivo: Codex em reserva so final) | CONTRATO de 5 linhas antes de construir; construcao espera vaga (teto 1 = L1)

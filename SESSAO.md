@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 17:14:09.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (169.1 MB). Acoes na janela: **556**.
+**Medido em 02/11/2026 17:19:20.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (169.2 MB). Acoes na janela: **552**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:15:41 | Bash | Wait for an L1 run that lasts longer than 45 s | `cd /home/ronald/saas-hasner; for i in $(seq 1 50); do q=$(bin/trava_teste.sh --quem); case "$q" in suite:*) p=${q#suite:}; p=${p%% *}; /usr/bin/sleep 45; if ps -p $p >/dev/null; then f=$(ls -t logs/e4cal/*.log \| head -1); break; fi;; esac; /usr/bin/sleep 10; done; echo "$p $f"; ps -p $p -o pid=` |
+| 17:15:15 | Bash | Check the green2 run and the hook's last verdict | `cd /home/ronald/saas-hasner; /usr/bin/sleep 20; ps -p 2381106 -o pid=; ls -la --time-style=+%H:%M:%S logs/e4cal/r5_green2.log; tail -1 logs/hook_stop_fila1.log \| cut -c1-200; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|rc=' logs/e4cal/r5_green2.log \| tail -3` |
+| 17:15:05 | Bash | Point ESPERANDO at the L1 green2 run | `cd /home/ronald/saas-hasner; sed -i '3s#^ESPERANDO: .*#ESPERANDO: trava_teste.sh \| pid=2381106 \| arquivo=logs/e4cal/r5_green2.log#' app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md; ps -p 2381106 -o pid=` |
 | 17:10:11 | Bash | Wait for an L1 run that lasts longer than 20 s | `cd /home/ronald/saas-hasner; for i in $(seq 1 40); do q=$(bin/trava_teste.sh --quem); case "$q" in suite:*) p=${q#suite:}; p=${p%% *}; f=$(ls -t logs/e4cal/*.log \| head -1); /usr/bin/sleep 20; if ps -p $p >/dev/null; then break; fi;; esac; /usr/bin/sleep 15; done; echo "$q"; echo "$f"; ps -p $p -o pid=; ls -t --time-style=+%H:%M:%S -la logs/e4cal/ \| head -4` |
 | 17:10:02 | Bash | Read the rest of the O261-E-CELULA-20 row | `cd /home/ronald/saas-hasner/app; sed -n 836p docs/BACKLOG.md \| cut -c1200-3500` |
 | 17:09:59 | Bash | Read the O261-E-CELULA-20 row in the BACKLOG | `cd /home/ronald/saas-hasner/app; grep -n 'O261-E-CELULA-20-UM-DONO' docs/BACKLOG.md \| cut -c1-1200` |
@@ -559,10 +562,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 05:21:01 | Bash | Delete stale branch; write design question to RELATO | `cd /home/ronald/saas-hasner && [ "$(git rev-parse o261e-f3-020437)" = "$(git rev-parse b5e69ac7)" ] && git branch -D o261e-f3-020437; H=$(date +%H:%M); cd app && python3 - "$H" <<'EOF' import sys H=sys.argv[1] p='docs/RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO:') L[2]=('PERGUNTA DE DESENHO O261-E-F3 (%s; obra PARADA, esteira segue): estoque PASSIVO da comp ABERTA =  ...` |
 | 05:20:49 | Bash | Remove stale F3 copy; create E3 copy from main | `cd /home/ronald/saas-hasner && git worktree remove /home/ronald/wt-o261e-f3-020437 && git branch -d o261e-f3-020437 2>&1 \| tail -1; T=$(date +%H%M%S); W=/home/ronald/wt-e3isento-$T; git worktree add -q -b e3isento-$T $W HEAD && mkdir -p $W/app/logs $W/app/media && git -C $W log --oneline -1 && echo $W` |
 | 05:20:43 | Bash | Verify F3 copy clean; read next fila items | `cd /home/ronald/saas-hasner && git -C /home/ronald/wt-o261e-f3-020437 status --porcelain \| grep -v '^??' \| head; git -C /home/ronald/wt-o261e-f3-020437 status --porcelain \| grep '^??' \| head; git log --oneline b5e69ac7..o261e-f3-020437 \| head; grep -n "^\| E3-ISENTO-INSUMOS\\|^\| E4-CALENDARIO-L1\\|^\| PARCIAL-NA-PORTA" app/docs/BACKLOG.md \| cut -c1-1500` |
-| 05:18:48 | Bash | Find F0 design guidance on the passive stock | `grep -n -i "passivo\\|terminal\\|reabr\\|sem_cobranca\\|ancora" ../logs/o261e/f0_desenho_opus.txt \| cut -c1-400 \| head -30` |
-| 05:18:44 | Bash | Read obra's F3 definition and F0 design | `sed -n 834p docs/BACKLOG.md \| cut -c600-3000; grep -n "F3" ../logs/o261e/f0_desenho_opus.txt \| head -20` |
-| 05:18:41 | Bash | Find the obra's written aval and law | `grep -n "CELULA-20-UM-DONO" docs/BACKLOG.md docs/CORTES.md docs/LEIS.md \| cut -c1-600 \| head -8` |
-| 05:18:35 | Bash | Scan C6 logic for terminal destino handling | `sed -n 1053,1200p chamados/juizes.py \| grep -n "TERMINAIS\\|status_local\\|return\\|def \\|degrau\\|# " \| head -70` |
-| 05:18:32 | Bash | Read C6 judge entrypoint | `sed -n 800,860p chamados/juizes.py; grep -n "def _pergunta_viva_calc\\|def motivo_pergunta_viva\\|def pergunta_viva_motivo\\|return .*'degrau" chamados/juizes.py \| head` |
-| 05:18:24 | Bash | Read candidate port and sonda bucket code | `sed -n 549,620p chamados/reconciliador.py; grep -n "sem_cobranca_viva_do_dia\\|validacao_admin" ../logs/o261e/f3/o261e_f3_estoque_v1.py \| head` |
-| 05:18:19 | Bash | Verify ports cited by the builder exist | `git grep -n "def retratar_perguntas_absolvidas_por_celula\\|def reapontar_resolvedora\\|def desfazer_carimbo_sem_lastro\\|def _plano_pergunta_viva\\|def pergunta_viva" -- '*.py' \| grep -v tests; tail -5 ../logs/o261e/f3/estoque_v1.out \| cut -c1-200` |
