@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 04:31:01.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (149.6 MB). Acoes na janela: **465**.
+**Medido em 02/11/2026 04:35:59.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (149.6 MB). Acoes na janela: **468**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:35:48 | Bash | Update ESPERANDO line and RELATO | `python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO:'), L[2] L[2]='ESPERANDO: processar_cartorio \| pid=1590159 \| arquivo=/home/ronald/saas-hasner/logs/cobparc/h10/apply_cartorio.log' open(p,'w').write('\n'.join(L)) EOF H=$(date +%H:%M); cat >> docs/RELATO.md <<EOF - $H DEPLOY b5e69ac7 OK (tres cascas, tres rotas). Janela merge->reload ~10 min (depl ...` |
+| 04:35:40 | Bash | Identify duplicate processar_cartorio processes | `ps -o pid,ppid,lstart,cmd -p 2106587,2106589,2116754,2116802 \| cut -c1-140; ps -o pid,ppid,cmd -p $(ps -o ppid= -p 2106587) \| cut -c1-140` |
+| 04:35:35 | Bash | Check apply progress and load | `cd /home/ronald/saas-hasner; cat logs/cobparc/h10/apply_cartorio.log; pgrep -f 'processar_cartorio' -a \| cut -c1-120; uptime; H=$(date +%H:%M); P=$(pgrep -f 'for e in 2 3 4' \| head -1); echo "P=$P H=$H"` |
 | 04:25:27 | Bash | Run processar_cartorio apply for empresas 2,3,4 | `cd /home/ronald/saas-hasner && for e in 2 3 4; do echo "== emp $e $(date +%H:%M:%S)"; docker exec saas_core python manage.py tenant_command processar_cartorio --schema=juliani --empresa $e --apply 2>&1 \| tail -4; done > logs/cobparc/h10/apply_cartorio.log 2>&1; cat logs/cobparc/h10/apply_cartorio.log \| cut -c1-250` |
 | 04:25:12 | Bash | Smoke-import calendario module in UI | `cd /home/ronald/saas-hasner && docker exec saas_ui python -c " import django,os;os.environ.setdefault('DJANGO_SETTINGS_MODULE','config.settings');django.setup() import colaboradores.services.calendario as c;print('import calendario OK')" 2>&1 \| tail -1` |
 | 04:25:11 | Bash | Count 500s since reload | `docker logs saas_ui --since 2026-11-02T07:24:37Z 2>&1 \| grep -cE "ImportError\| -> 500 "; docker logs saas_ui --since 2026-11-02T07:24:37Z 2>&1 \| grep -c " -> 200 "` |
