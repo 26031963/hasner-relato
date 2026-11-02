@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 11:08:15.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (157.9 MB). Acoes na janela: **424**.
+**Medido em 02/11/2026 11:13:48.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (157.9 MB). Acoes na janela: **421**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -431,6 +431,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 23:20:07 | Agent | opus final verificador COBPARC v8 | `Papel: VERIFICADOR, LEITURA FINAL (opus final) da obra COBERTURA-PARCIAL-UM-JUIZ, volta 8. Somente leitura. Voce nao viu a construcao: procure o que esta errado. Arvore: copia /home/ronald/wt-cobparc5b-184858 em f05713f5 (base a8709a53 = main de codigo; o main vivo /home/ronald/saas-hasner esta em 88519add, que so acrescenta docs). - Diff inteiro da obra: /home/ronald/saas-hasner/logs/cobparc/v8/d ...` |
 | 23:19:49 | Bash | Write the final and delta diffs for the verifier | `cd /home/ronald/wt-cobparc5b-184858 && git diff a8709a53..f05713f5 > /home/ronald/saas-hasner/logs/cobparc/v8/diff_final.patch && git diff 8f21ec29..f05713f5 > /home/ronald/saas-hasner/logs/cobparc/v8/diff_delta_v8.patch && wc -l /home/ronald/saas-hasner/logs/cobparc/v8/diff_*.patch; git -C /home/ronald/saas-hasner log --oneline -1 origin/main; git -C /home/ronald/saas-hasner log --oneline -1` |
 | 23:19:41 | Bash | Confirm the copy is clean and read the B3 state | `cd /home/ronald/saas-hasner && git -C /home/ronald/wt-cobparc5b-184858 status --porcelain \| head; git -C /home/ronald/wt-cobparc5b-184858 log --oneline -1; python3 bin/disjuntor.py --linha 2>&1 \| head -5; tail -5 logs/sessao/disjuntor.log 2>/dev/null \| cut -c1-250` |
-| 23:13:36 | Bash | Wait for the full suite to finish and read its verdict | `cd /home/ronald/saas-hasner && for i in $(seq 1 9); do ps -p 3127595 >/dev/null \|\| break; /usr/bin/sleep 60; done; tail -3 logs/cobparc/v8/suite_full.log; grep -E '^(OK\|FAILED)($\| \()' logs/cobparc/v8/suite_full.log \| tail -1; grep '^Ran ' logs/cobparc/v8/suite_full.log \| tail -1` |
-| 23:13:25 | Bash | Read the rest of the disjuntor B3 rules | `cd /home/ronald/saas-hasner && python3 bin/disjuntor.py --help 2>&1 \| sed -n 15,45p` |
-| 23:13:19 | Bash | Check suite progress and disjuntor B3 state | `cd /home/ronald/saas-hasner && ls -la logs/cobparc/v8/suite_full.log; tail -c 400 logs/cobparc/v8/suite_full.log; ps -p 3127595 -o pid=; bash bin/disjuntor.py --estado 2>/dev/null \| head -5; python3 bin/disjuntor.py --help 2>&1 \| head -15` |
