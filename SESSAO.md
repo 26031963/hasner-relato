@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 20:47:17.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (173.4 MB). Acoes na janela: **577**.
+**Medido em 02/11/2026 20:52:48.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (173.4 MB). Acoes na janela: **576**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:52:03 | Bash | Wait for sombra run to finish | `cd /home/ronald/saas-hasner && for i in $(seq 56); do ps -p 1741839 >/dev/null \|\| break; /usr/bin/sleep 10; done; ps -p 1741839 >/dev/null && echo AINDA-VIVA; grep -E 'E4CAL_R8\|Traceback\|^rc=' logs/e4cal/r8_d5_sombra.out \| cut -c1-600` |
 | 20:42:37 | Bash | Wait again for sombra run | `cd /home/ronald/saas-hasner && for i in $(seq 56); do ps -p 1741839 >/dev/null \|\| break; /usr/bin/sleep 10; done; ps -p 1741839 >/dev/null && echo AINDA-VIVA; tail -25 logs/e4cal/r8_d5_sombra.out \| cut -c1-300` |
 | 20:42:33 | Bash | Inspect sombra process tree and builder | `cd /home/ronald/saas-hasner && pstree -p 1741839 \| head; uptime; tail -c 800 /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/a255846f06c4a61fc.output \| tr '\\' '\n' \| tail -5 \| cut -c1-200` |
 | 20:33:29 | Bash | Wait in foreground for sombra run | `cd /home/ronald/saas-hasner && for i in $(seq 54); do ps -p 1741839 >/dev/null \|\| break; /usr/bin/sleep 10; done; ps -p 1741839 >/dev/null && echo AINDA-VIVA; tail -25 logs/e4cal/r8_d5_sombra.out` |
@@ -585,5 +586,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 08:58:54 | Bash | Check whether B3 fired again | `cd /home/ronald/saas-hasner && grep "COBPARC-FILA-RELOGIO" logs/sessao/disjuntor.log \| tail -2 \| cut -c1-60` |
 | 08:58:53 | SendMessage |  | `-` |
 | 08:58:42 | Bash | Append v2 verdict to opus_final.txt | `cd /home/ronald/saas-hasner/logs/cobparc_relogio && cat >> opus_final.txt <<'EOF' OPUS FINAL v2 -- @ 12200105 -- VEREDITO: REPROVADO (02/11 ~09:0x) 1. BLOQUEIA (meia-correcao): abrir -> _renascer_por_premissa_viva (models.py:881) -> reabrir(marcos=) (models.py:978) sem agora -> agora_do_ato(None) le now() por volta. Lacos: adesao.py:76, cluster_espurio.py:105, detectar_ausencias.py:190/:271, recon ...` |
-| 08:52:06 | Agent | Verificador final v2 COBPARC-FILA-RELOGIO | `LEITURA FINAL (opus final, volta 2) da obra COBPARC-FILA-RELOGIO, projeto Hasner Ponto. Somente leitura. Leia antes /home/ronald/saas-hasner/CLAUDE.md: secao 0 LEI-AKITA, secao 6 e 7b CODEX item 5. Copia e commits: - Copia: /home/ronald/wt-cobparc-relogio-070738, base 15c3a8b5. - Commits: ee9bd388 (RED), 69a6a682 (cura v1), e0562b23 (volta 2), 12200105 (teste da adesao). - Diff inteiro: `git -C /h ...` |
-| 08:51:50 | Bash | Read suite3 verdict and drop ESPERANDO | `cd /home/ronald/saas-hasner && L=logs/cobparc_relogio/suite3.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran ' $L \| tail -1; tail -1 $L; git -C /home/ronald/wt-cobparc-relogio-070738 status --porcelain \| head -2; git -C /home/ronald/wt-cobparc-relogio-070738 log --oneline -1; sed -i '3{/^ESPERANDO:/d}' app/docs/RELATO.md` |
