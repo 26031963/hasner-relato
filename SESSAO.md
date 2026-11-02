@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 19:53:17.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (172.0 MB). Acoes na janela: **544**.
+**Medido em 02/11/2026 19:58:47.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (172.0 MB). Acoes na janela: **545**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:53:19 | Bash | Check selo run progress and failures | `cd /home/ronald/saas-hasner && kill -0 2963460 2>/dev/null && echo vivo; wc -l logs/dme/pasta_*.log; grep -v '^rc=0' logs/dme/pasta_*.log \| head -20; ls logs/dme/pasta.fim 2>/dev/null` |
 | 19:44:53 | Bash | Point ESPERANDO at builder's selo run | `cd /home/ronald/saas-hasner && sed -i '3s#^ESPERANDO:.*#ESPERANDO: pasta.sh \| pid=2963460 \| arquivo=logs/dme/pasta_wt-dme-193144.log#' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md; wc -l logs/dme/pasta_wt-dme-193144.log` |
 | 19:44:49 | Bash | Read pasta.sh and its output fd | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/dme/pasta.sh; ls -l /proc/2963460/fd 2>/dev/null \| grep -v pipe \| tail -4` |
 | 19:44:46 | Bash | Find pasta.sh output file | `ls -lt --time-style=+%H:%M:%S /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/dme/ \| head -5` |
