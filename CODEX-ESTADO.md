@@ -1,6 +1,6 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **02/11/2026 20:13** · publicado em **02/11/2026 20:15** (UTC-3)
+> Ultima resposta processada: **02/11/2026 20:13** · publicado em **02/11/2026 20:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
 
 ## 02/11 20:13 · sessao 3d6058ec1077 · DEPLOY-[nome]-ELO-DA-CORRENTE · verificador · origem=Code
@@ -742,7 +742,7 @@ A equivalência da cópia com o hash/base informados, a suite Django, o deploy, 
 
 [truncado em 20000 de 30171 caracteres]
 
-## 01/11 20:41 · sessao 3d0aefa7323b · - · - · origem=Ronald (tmux)
+## 01/11 20:41 -- HISTORICO (mais de 24 h) · sessao 3d0aefa7323b · - · - · origem=Ronald (tmux)
 
 1. **BLOQUEIA — cluster é emissor omitido e passa a alcançar parcial sem período.** `cartorio.py:931-935` chama `cluster_espurio.reconciliar_colab` após lavrar; `cluster_espurio.py:23-35` lê ATA, exige duas órfãs próximas e lâmpada apagada; `:88` abre chamado sem `parcial_so_lista`. A mudança em `chamados/juizes.py:423-426` faz `dia_sem_trabalho` devolver False para a parcial. Contracaso: colaborador ativo, EC ativa, parcial sem período, duas órfãs em até 15 min e missing → chamado de cluster apesar de PSL=True. As guardas globais não abrangem cluster: `chamados/models.py:1061`, `chamados/reconciliador.py:336`, `chamados/catalogo/furo_modulos.py:15`. Ocorrência em produção: [nao verificado].
 
