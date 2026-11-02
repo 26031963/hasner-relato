@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 06:52:55.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (153.4 MB). Acoes na janela: **497**.
+**Medido em 02/11/2026 06:58:27.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (153.4 MB). Acoes na janela: **494**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:53:17 | Bash | Check push progress | `kill -0 1984928 2>/dev/null && echo PUSH_VIVO \|\| echo PUSH_FIM; tail -3 /home/ronald/saas-hasner/logs/cobparc_rotulo/push.log \| cut -c1-160` |
 | 06:49:19 | Bash | Wait for push to finish, read remote | `while kill -0 1984928 2>/dev/null; do /usr/bin/sleep 15; done; tail -5 /home/ronald/saas-hasner/logs/cobparc_rotulo/push.log; cd /home/ronald/saas-hasner && git fetch -q && git log --oneline -1 origin/main` |
 | 06:49:11 | Bash | Launch push and declare ESPERANDO | `cd /home/ronald/saas-hasner && (setsid bash bin/push.sh > logs/cobparc_rotulo/push.log 2>&1 &) ; /usr/bin/sleep 3; P=$(pgrep -f "^bash bin/push.sh" \| head -1); echo pid=$P; sed -i "2a ESPERANDO: push.sh \| pid=$P" app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md` |
 | 06:49:04 | Bash | Prod smoke of new code, prep push | `cd /home/ronald/saas-hasner && docker exec saas_core python -c "import inspect,relatorios.furos as f,escala.services.furos_diarios as d; print('dispensada' in inspect.getsource(f.marcos_do_jogo), 'marcos_do_jogo' in inspect.getsource(d._furos_do_dia))" 2>&1 \| tail -1; sed -i '3{/^ESPERANDO: deploy.sh \| pid=1350665/d}' app/docs/RELATO.md; bash bin/tickets_placar.sh --escrever 2>&1 \| tail -2; git ...` |
@@ -503,7 +504,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:03:17 | Bash | Check push and remote state | `cd /home/ronald/saas-hasner && tail -3 logs/o261e/f2/push_pouso2.log; git fetch -q origin; git log --oneline -2 origin/main; bash bin/trava_teste.sh --quem; date +%H:%M` |
 | 18:59:30 | Bash | Log stock measurement in RELATO | `cd /home/ronald/saas-hasner && H=$(date +%H:%M) && python3 - "$H" <<'EOF' import sys H=sys.argv[1]; p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if 'O261-E-F3 censo Codex v1 rc 0' in l) L.insert(i+1,f'- {H} O261-E-F3 ESTOQUE medido na sombra (logs/o261e_f3_estoque.out, SONDA_OK, conferido): C6-viva com destino TERMINAL = 2147 (resolvido 1305, fechado 842; em ...` |
 | 18:59:21 | Bash | Spot-check sonda output and push | `cd /home/ronald/saas-hasner && grep -nE "^(total\|estoque\|ESTOQUE\|SONDA\|pre\|.*aberta\|.*entregue)" logs/o261e_f3_estoque.out \| head -12; tail -1 logs/o261e_f3_estoque.out; tail -2 logs/o261e/f2/push_pouso2.log` |
-| 18:57:59 | Bash | Log censo result and check push | `cd /home/ronald/saas-hasner && H=$(date +%H:%M) && python3 - "$H" <<'EOF' import sys H=sys.argv[1]; p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if 'DESPACHO O261-E-F3: censo do passivo' in l) L.insert(i+1,f'- {H} O261-E-F3 censo Codex v1 rc 0 (logs/o261e/f3/censo_v1.r): C6 pergunta_viva unico juiz de vida; contador F0 materializada_viva mede RECORTE (carimb ...` |
-| 18:57:52 | Agent | sonda: estoque O261-E-F3 na sombra | `Papel: SONDA de leitura (so mede, nao cura, nao edita codigo). Repo /home/ronald/saas-hasner (Django em app/). Leia antes CLAUDE.md secoes 2 (SOMBRA), 4 e 6 (CONDUTAS: sonda chama a FUNCAO REAL; "sonda nao conclui com erro": except que conta erro e segue NAO pode imprimir zero -- erro aborta ou e contado e impresso). Leia o censo estatico /home/ronald/saas-hasner/logs/o261e/f3/censo_v1.r (resposta ...` |
-| 18:57:32 | Read |  | `/home/ronald/saas-hasner/logs/o261e/f3/censo_v1.r` |
-| 18:57:29 | Bash | Check Codex censo and push status | `cd /home/ronald/saas-hasner && tail -3 logs/o261e/f3/censo_v1.out; wc -c logs/o261e/f3/censo_v1.r; tail -3 logs/o261e/f2/push_pouso2.log` |
