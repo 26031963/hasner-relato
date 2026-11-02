@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 01:31:45.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (146.3 MB). Acoes na janela: **603**.
+**Medido em 02/11/2026 01:37:24.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (146.4 MB). Acoes na janela: **608**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:35:50 | Bash | Repoint wait line and log decision in RELATO | `cd /home/ronald/saas-hasner && H=$(date +%H:%M) && sed -i '3s#.*#ESPERANDO: sombra.sh \| pid=3917396 \| arquivo=logs/sombra/dumps/juliani_agora.dump#' app/docs/RELATO.md && cat >> app/docs/RELATO.md <<EOF - $H SOMBRA do pouso: --refazer --dump-agora rc=0 diverge=0; --bloco 80/80 erro=0 alarme=8; --conferir OK (logs/cobparc/v8/sombra_*.log). Como o --bloco ja aplicou o cartorio na sombra, a medida  ...` |
+| 01:35:03 | Bash | Find the dump file being written | `cd /home/ronald/saas-hasner && /usr/bin/sleep 20; find / -xdev -name '*_agora.dump' -mmin -2 2>/dev/null \| head; ls -la logs/cobparc/v8/r2/` |
+| 01:34:53 | Bash | Get the refresh process id | `cd /home/ronald/saas-hasner && /usr/bin/sleep 5; pgrep -af 'bin/sombra.sh --refazer' \| grep -v pgrep; date +%H:%M` |
+| 01:34:52 | Bash | Refresh sombra again from a fresh prod dump | `cd /home/ronald/saas-hasner && mkdir -p logs/cobparc/v8/r2 && (bash bin/sombra.sh --refazer --dump-agora > logs/cobparc/v8/r2/refazer.log 2>&1; echo "rc=$?" >> logs/cobparc/v8/r2/refazer.log); tail -n 4 logs/cobparc/v8/r2/refazer.log` |
+| 01:34:33 | Bash | Read sombra.sh usage header | `cd /home/ronald/saas-hasner && sed -n 1,60p bin/sombra.sh \| grep -n -i 'refazer\\|dump-agora\\|carimbo\\|--rodar\\|uso'` |
+| 01:34:20 | Bash | Read prior birth-measure run commands | `cd /home/ronald/saas-hasner && cat logs/cobparc/v8/nascimento_run_F0.txt logs/cobparc/v8/nascimento_run_V8.txt \| head -40; ls logs/cobparc/v8/` |
+| 01:34:08 | Bash | Read block and check verdicts | `cd /home/ronald/saas-hasner && tail -n 8 logs/cobparc/v8/sombra_bloco.log; echo ==; cat logs/cobparc/v8/sombra_conferir.log; date +%H:%M` |
 | 00:53:17 | Bash | Check block run progress | `cd /home/ronald/saas-hasner && wc -l logs/sombra/resultado.tsv; tail -n 2 logs/sombra/resultado.tsv; ls /proc/440460 >/dev/null 2>&1 && echo vivo; date +%H:%M` |
 | 00:44:44 | Bash | Wait for the sombra check to finish, then show results | `cd /home/ronald/saas-hasner && until grep -q '^rc=' logs/cobparc/v8/sombra_conferir.log 2>/dev/null; do /usr/bin/sleep 30; done; cat logs/cobparc/v8/sombra_bloco.log \| tail -n 8; echo ==; cat logs/cobparc/v8/sombra_conferir.log` |
 | 00:44:39 | Bash | Repoint wait line to the growing results file | `cd /home/ronald/saas-hasner && sed -i '3s#.*#ESPERANDO: sombra.sh \| pid=440460 \| arquivo=logs/sombra/resultado.tsv#' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md && wc -l logs/sombra/resultado.tsv && tail -n 3 logs/sombra/resultado.tsv` |
@@ -611,5 +618,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:39:57 | Bash | Dispatch Codex census for O261-E F1 status and F2 | `cd /home/ronald/saas-hasner && mkdir -p logs/o261e/f2 && cat > logs/o261e/f2/estado_v1.q <<'EOF' Obra O261-E-CELULA-20-UM-DONO (linha no app/docs/BACKLOG.md; desenho F0 anexo). Fatias declaradas: F0 desenho -> F1 porta de encerramento -> F2 porta de materializada_em -> F3 passivo -> F4 4 crons a vigia -> F5 regua por alcancabilidade (+F5B juiz porta_alcancavel_do_dia). Perguntas, respondendo sempr ...` |
 | 13:39:45 | Bash | Look up F2 design from F0 | `cd /home/ronald/saas-hasner && grep -n -i "F2\\|materializada" logs/o261e/f0_desenho_opus.txt \| head -20 \| cut -c1-300; grep -n "O261-E-F2" app/docs/BACKLOG.md \| cut -c1-300` |
 | 13:39:40 | Bash | Record dividas setup in RELATO | `cd /home/ronald/saas-hasner && H=$(date +%H:%M) && python3 - "$H" <<'EOF' import sys,re H=sys.argv[1]; p='app/docs/RELATO.md'; L=open(p).read().split('\n') idx=max(i for i,l in enumerate(L) if re.match(r'- 1[34]:\d\d ',l)) L.insert(idx+1,f"- {H} O261-E-F1C4-DIVIDAS montadas (construtor entregou, sem cura): RED-FIXTURE em 3 copias A=e046540e+teste 410bdab1 / B=37335912 / C=410bdab1 (logs/o261e/divi ...` |
-| 13:33:20 | Bash | Inspect v6 output structure for comparison | `cd /home/ronald/saas-hasner && wc -l logs/cobparc_v6_sem_forcar.out; grep -n "^==\\|^#\\|FORA\\|CHAMADOS\\|F0\\|FM09" logs/cobparc_v6_sem_forcar.out \| head -40 \| cut -c1-200` |
-| 13:33:16 | Bash | Check push, sombra, suite status | `cd /home/ronald/saas-hasner && tail -3 logs/grade_juiz/vb/push_6f583cbc.log; ps -p 1247584 -o etime \| tail -1; tail -3 logs/contencao/v2/p1/v6/suite_3a743cdd.log 2>/dev/null; bin/trava_teste.sh --quem; date +%H:%M` |
