@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 15:54:22.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (167.2 MB). Acoes na janela: **563**.
+**Medido em 02/11/2026 16:00:07.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (167.2 MB). Acoes na janela: **564**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:00:05 | Bash |  | `cd /home/ronald/saas-hasner; ps -p 316967 -o pid=; date +%T; tail -2 logs/e4cal/r2_mutantes.log \| cut -c1-100; bin/trava_teste.sh --quem; ls -l --time-style=+%T logs/noreverse/suite.log` |
 | 15:53:55 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '3s#.*#ESPERANDO: mutantes_r2.sh \| pid=316967 \| arquivo=logs/e4cal/r2_mutantes.log#' app/docs/RELATO.md; ps -p 316967 -o pid=; timeout 100 bash -c 'a=$(stat -c %Y logs/e4cal/r2_mutantes.log); until [ $(stat -c %Y logs/e4cal/r2_mutantes.log) -gt $a ]; do /usr/bin/sleep 3; done'; tail -1 logs/e4cal/r2_mutantes.log \| cut -c1-90` |
 | 15:53:50 | Bash |  | `cd /home/ronald/saas-hasner; ps -o cmd= -p 1410294 \| grep -o 'wt-[a-z0-9-]*' \| head -1; ls -lt --time-style=+%T logs/noreverse/ \| head -3; ls -lt --time-style=+%T /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/e4cal/r2/ \| head -3` |
 | 15:53:46 | Bash |  | `cd /home/ronald/saas-hasner; grep -E '^(OK\|FAILED)($\| \()\|^Ran' logs/noreverse/vizinhos.log \| tail -2; tail -1 logs/noreverse/vizinhos.log; bin/trava_teste.sh --quem; ls -lt --time-style=+%T logs/noreverse/ logs/e4cal/ \| head -8` |
