@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 02:36:21.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (147.2 MB). Acoes na janela: **537**.
+**Medido em 02/11/2026 02:41:50.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (147.2 MB). Acoes na janela: **532**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -542,8 +542,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:44:30 | Bash | Spot-check Codex citations and read ata09 census | `cd /home/ronald/wt-cobparc-222305/app && sed -n 420,428p chamados/juizes.py; echo ---; sed -n 95,100p chamados/services/declaracao_texto.py; echo ---; sed -n 109,112p ponto/services/cartorio.py; echo; cd /home/ronald/saas-hasner && cut -c1-400 logs/cobparc/ata09/censo_v1.r \| head -60; ls bin/sonda_leitura.sh; ps -p 1541892 >/dev/null \|\| echo dead` |
 | 14:43:25 | Bash | Read Codex explanation of extra chamados | `cd /home/ronald/saas-hasner && wc -l logs/cobparc/v4/det/pq/porque_v1.r && cut -c1-700 logs/cobparc/v4/det/pq/porque_v1.r` |
 | 14:43:21 | Bash | Check Codex runs and F2 construtor | `cd /home/ronald/saas-hasner && tail -1 logs/cobparc/v4/det/pq/porque_v1.run \| cut -c1-150; tail -1 logs/cobparc/ata09/censo_v1.run \| cut -c1-150; ps -p 1541892,1351520 -o pid,etime=; tail -c 800 /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/a022e34bb1bd9f4b4.output \| grep -o '"text":"[^"]\{0,300\}' \| tail -1` |
-| 14:36:54 | Bash | Point ESPERANDO at the live Codex run and self-check | `cd /home/ronald/saas-hasner && sed -i '3i ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh \| pid=1541892' app/docs/RELATO.md && cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
-| 14:36:50 | Bash | Record dispatch in RELATO and BACKLOG | `cd /home/ronald/saas-hasner && H=$(date +%H:%M) && python3 - "$H" <<'EOF' import sys,re H=sys.argv[1];p='app/docs/RELATO.md' L=open(p).read().split('\n') idx=max(i for i,l in enumerate(L) if re.match(r'- \d\d:\d\d ',l)) L.insert(idx+1,"- "+H+" DESPACHO COBPARC-DET-NAO-EXPLICA: caminho de codigo dos 4 chamados extras (cura 113fd774 x controle 9483bbce, diff 1892 linhas) -> Codex censo pid 1541892 ( ...` |
-| 14:36:44 | Bash | Dispatch Codex to explain extra chamados from cure code | `cd /home/ronald/saas-hasner && HC=$(git -C /home/ronald/wt-cobparc-222305 rev-parse --short HEAD) && HM=$(git -C /home/ronald/wt-cobparc-controle-131141 rev-parse --short HEAD) && echo cura=$HC controle=$HM && mkdir -p logs/cobparc/v4/det/pq && git diff $HM $HC --stat -- app \| tail -3 && git diff $HM $HC -- app ':!app/docs' > logs/cobparc/v4/det/pq/diff_cura.patch && wc -l logs/cobparc/v4/det/pq/ ...` |
-| 14:36:24 | Bash | Read Ausencia fields and orfao_14h emitters | `sed -n 660,720p ponto/models.py \| grep -E "^\s+\w+ = models\." \| cut -c1-110; grep -n "orfao_14h" -r --include=*.py . \| grep -v tests \| head -8` |
-| 14:36:21 | Bash | Read sonda envelope and find absence model | `cd /home/ronald/saas-hasner && sed -n 1,40p bin/sonda_leitura.sh \| grep -v '^\s*$' \| head -30; grep -n "^class Ausencia\\|^class AusenciaColaborador\\|^class Afastamento" app/*/models.py` |
