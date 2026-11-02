@@ -1,6 +1,5 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: trava_teste.sh | pid=3074401
 ERRO-BOBO COBPARC-FILA-RELOGIO: opus final v1 (07:43) reprovou por RED/mutante ausente nas bordas medir/do_dia, reconciliar_perguntas_orfas_colab e gerar_perguntas_disputa (cobertura que faltou no teste, nao lei nem juiz em aberto); volta 2 constroi os testes por laco + mutantes + cura do reabrir (chamados/models.py:1295)
 PERGUNTA DE DESENHO COBPARC-FILA-RELOGIO (07:4x; obra SEGUE na volta 2): o diff realiza "instante lido UMA vez na borda do ato e repassado" (ponto/services/cartorio.py::agora_do_ato), mas nao ha termo para isso no GLOSSARIO/PLANO-PADROES; o commit usa padrao=fonte unica (GLOSSARIO:11), que o opus final julga nao literal -- 8 bordas seguem lendo localtime(now()) (processar_cartorio:39 ... cartorio:1941). Pergunta: nasce o padrao "relogio na borda" (corte seu), ou o rotulo fica fonte unica?
 ERRO-BOBO COBPARC-FILA-ROTULO: (reescrita 07:09, o B3 so disparou 07:08 sobre a reprovacao v1 de 06:1x) leitor que nao migrou -- escala/services/furos_diarios.py:14 contava a lampada dispensada; curado na volta 2 (356a30b6), opus v2 APROVADO, obra ja POUSADA e NO AR (e1c08457); nenhum verificador final novo devido

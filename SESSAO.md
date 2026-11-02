@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 08:28:31.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (154.9 MB). Acoes na janela: **440**.
+**Medido em 02/11/2026 08:33:50.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (154.9 MB). Acoes na janela: **442**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:33:21 | Bash | Read suite2 verdict, drop ESPERANDO | `cd /home/ronald/saas-hasner && L=logs/cobparc_relogio/suite2.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran ' $L \| tail -1; git -C /home/ronald/wt-cobparc-relogio-070738 status --porcelain \| head -3; git -C /home/ronald/wt-cobparc-relogio-070738 log --oneline -1; sed -i '3{/^ESPERANDO:/d}' app/docs/RELATO.md` |
+| 08:33:17 | Bash | Check suite progress | `ps -p 3074401 -o etime=; ps -eo pid,etime,args \| grep trava_teste \| grep -v grep \| cut -c1-70; ls -t /home/ronald/saas-hasner/logs/cobparc_relogio/ \| head -3; tail -3 /home/ronald/saas-hasner/logs/cobparc_relogio/suite2.log 2>/dev/null` |
 | 08:23:21 | Bash | Refresh ESPERANDO to full suite pid | `sed -i '3s/pid=2917749/pid=3074401/' docs/RELATO.md && sed -n 3p docs/RELATO.md` |
 | 08:23:17 | Bash | Check suite pid and builder commits | `ps -eo pid,etime,args \| grep -E "trava_teste" \| grep -v grep \| cut -c1-80; cd /home/ronald/saas-hasner/app && sed -n 3p docs/RELATO.md; git -C /home/ronald/wt-cobparc-relogio-070738 log --oneline -4` |
 | 08:13:41 | Bash | Put ESPERANDO first, ERRO-BOBO second; test hook | `P=$(ps -eo pid,args \| awk '/bin\/trava_teste.sh/ && !/awk/ {print $1; exit}') && python3 - "$P" <<'EOF' import sys p='docs/RELATO.md'; L=open(p).read().split('\n') eb=L[2]; assert eb.startswith('ERRO-BOBO COBPARC-FILA-RELOGIO'); assert L[3].startswith('ESPERANDO:') L[2]='ESPERANDO: trava_teste.sh \| pid=%s'%sys.argv[1]; L[3]=eb open(p,'w').write('\n'.join(L)) EOF sed -n 3,4p docs/RELATO.md \| cut ...` |
