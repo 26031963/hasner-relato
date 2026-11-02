@@ -1,7 +1,120 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **02/11/2026 19:23** · publicado em **02/11/2026 19:26** (UTC-3)
+> Ultima resposta processada: **02/11/2026 19:35** · publicado em **02/11/2026 19:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 02/11 19:35 · sessao 629e02d70665 · E4-CALENDARIO-L1 · censo · origem=Code
+
+Uso a numeração dos anexos transcritos, incluindo linhas vazias; em `triagem.txt`, preservo os números fornecidos. Desdobro dois achados compostos para distinguir falha de revisão de ausência de evidência.
+
+A cópia local conserva trechos anteriores ao delta; portanto, ela não confirma integralmente o estado final descrito pelo opus. (`app/templates/colaboradores/partials/_calendario_grade.html:103`; `app/colaboradores/services/calendario.py:619`; `app/core/juizes.py:839`)
+
+1. **BLOQUEIA — D5 nas competências entregues: (e), NÃO PERGUNTADO no requisito necessário.**
+
+   **Pergunta:** “pouso antes do pre-requisito”. (`v1_pergunta.txt:10`)   [nao verificado]
+   **Resposta:** “sequência efetiva de pouso/apply: **[nao verificado]**”. (`v1_resposta.txt:46`) [nao verificado]
+
+   O tema genérico estava presente, mas faltou o requisito específico: retirar a guarda e completar 06–09 antes do leitor. A triagem admite literalmente: “a pergunta ao Codex nao anexou AVAL_L1_COMPLEMENTO.md”. Isso sustenta **(e)**; não transforma a guarda visível em questão exclusivamente de produção. (`triagem.txt:5`; `AVAL_L1_COMPLEMENTO.md:3`; `AVAL_L1_COMPLEMENTO.md:9`; `app/ponto/management/commands/lavrar_status_competencia.py:40`)
+
+   **Deveria levar:** COMPLEMENTO integral e cobrança explícita do PRONTO(1), separando comprovação pelo código da comprovação pelos dados. (`AVAL_L1_COMPLEMENTO.md:10`)
+
+2. **BLOQUEIA — rodapé sem cards `sem_certidao`/`sem_dados`: (e), NÃO PERGUNTADO na exigência específica.**
+
+   **Pergunta:** “ainda deriva status ou rotulo por regra propria”. (`v1_pergunta.txt:8`)  
+   **Resposta:** “rótulo próprio no calendário — bloqueia”. (`v1_resposta.txt:17`)
+
+   Revisar derivação textual não explicita a obrigação de representar essas duas contagens. A pergunta não identifica o REEQ entre seus anexos; a triagem identifica nele a exigência de rodapé. O conteúdo integral desse aval não foi fornecido aqui. (`v1_pergunta.txt:1`; `triagem.txt:62`; exigência literal completa: **[nao verificado]**)
+
+   **Deveria levar:** REEQ integral e lista dos status que o rodapé deve representar, incluindo os dois ausentes. (`triagem.txt:5`; `triagem.txt:62`)
+
+3. **BLOQUEIA — “Sem registro” sobre `resumo.faltas`: (a), tema presente e achado perdido.**
+
+   **Pergunta:** “Algum leitor […] ainda deriva status ou rotulo por regra propria”. (`v1_pergunta.txt:8`)  
+   **Resposta:** “o rodapé afirma que todo `aberto` ‘não teve saída’”. (`v1_resposta.txt:20`)
+
+   O Codex examinou a fidelidade dos textos do rodapé, mas não apontou esse outro rótulo. A associação entre “Sem registro”, ausência de batidas e `resumo.faltas` está diretamente visível no template. (`app/templates/colaboradores/partials/_calendario_grade.html:145`; `app/templates/colaboradores/partials/_calendario_grade.html:146`; `app/templates/colaboradores/partials/_calendario_grade.html:147`; `opus_final.txt:2`)
+
+   **Deveria levar:** conferir cada título e tooltip contra o predicado real do respectivo contador, inclusive falta lavrada ou decidida. (`opus_final.txt:2`)
+
+4. **BLOQUEIA — publicação de `eh_trabalho`: (e), faltou a inclusão explícita na L1.**
+
+   **Pergunta:** “passa a LER status e rotulo do dia”. (`v1_pergunta.txt:2`)  
+   **Resposta:** “Ausente no classificador removido do calendário”. (`v1_resposta.txt:40`)
+
+   O objeto declarado era status/rótulo. O BACKLOG disponível já registrava `eh_trabalho`, mas como fila da E4-CALENDARIO; a inclusão específica na L1 depende do DOMINIO MUDA 4 mencionado pelo opus, cujo texto integral não foi fornecido. (`app/docs/BACKLOG.md:827`; `opus_final.txt:2`)
+
+   **Deveria levar:** DOMINIO MUDA 4 e pergunta explícita sobre quem publica `eh_trabalho` para o resolver e o vigia. (`opus_final.txt:2`; `triagem.txt:5`)
+
+5. **FILA B — paridade mensal/unitária e `carga=`: (b), visto e encaminhado à fila.**
+
+   **Pergunta:** “foi a fila como obra propria do pareador”. (`v2_pergunta.txt:1`)  
+   **Resposta:** “fila; triagem procede pelos anexos, com ressalva”. (`v2_resposta.txt:34`)
+
+   O Codex identificou o contraexemplo e depois aceitou a preexistência com ressalva. O motivo **procede para a divergência já existente**, mas não comprova a inocuidade do novo contrato com `carga=`: a própria resposta registra resultados de status diferentes entre base e atual. (`v1_resposta.txt:60`; `v2_resposta.txt:34`; `v2_resposta.txt:36`; `opus_final.txt:2`)
+
+   **Linha da triagem que decidiu o encaminhamento:** **[nao verificado]**; essa decisão aparece na segunda pergunta, não nas linhas de triagem fornecidas.
+
+   **Deveria levar:** separar preexistência do pareador, responsabilidade do D4 pela janela recebida e registro efetivo da fila no BACKLOG. (`v2_resposta.txt:36`; `opus_final.txt:2`)
+
+6. **FILA C — constantes nos cards `escala_suspeita`/Abertos: (b), visto; rebaixamento com documentação incompleta.**
+
+   **Pergunta:** “QUEM ESCREVE e QUEM LE […] ROTULO_EM_ANDAMENTO e o texto do card”. (`v2_pergunta.txt:2`)  
+   **Resposta:** “Card `escala_suspeita` — bloqueia”; “fila para duplicação textual”. (`v2_resposta.txt:5`; `v2_resposta.txt:7`)
+
+   Portanto, o Codex **viu os dois problemas**. O envio do bloqueio à fila consta do relato inicial do pedido; a linha da triagem e seu motivo específico são **[nao verificado]**. Uma justificativa baseada em precisar tocar a lavra não sustentaria a duplicação dos cards: a resposta identifica o próprio template como escritor e registra a constante central existente. (`v2_resposta.txt:15`; `v2_resposta.txt:16`)
+
+   **Deveria levar:** decisão literal da triagem, distinguindo corrigir o vocabulário central de substituir cópias textuais nos leitores. (`v2_resposta.txt:5`; `v2_resposta.txt:7`)
+
+7. **FILA A2 — propagação derrubando consumidores inteiros: (a), tema presente; alcance não examinado.**
+
+   **Pergunta:** menciona “furos, vigia_fio” e cobra o teste de propagação da A2. (`v1_pergunta.txt:8`; `v2_pergunta.txt:2`)   [nao verificado]
+   **Resposta:** “Retirar apenas o `raise` atual deixa de satisfazer esse contrato”. (`v2_resposta.txt:24`)
+
+   O Codex verificou que o teste exige propagação, mas não discutiu sua consequência nos consumidores coletivos. O relatório de furos chama o calendário dentro do processamento dos colaboradores. (`v2_resposta.txt:24`; `app/relatorios/furos.py:187`; `app/relatorios/furos.py:195`; `opus_final.txt:2`)
+
+   **Deveria levar:** rastrear uma exceção A2 pelos chamadores e explicitar qual unidade de processamento ela aborta. (`opus_final.txt:2`)
+
+8. **FILA A2 — frequência e impacto real em produção: (c), fora do alcance evidenciado.**
+
+   **Pergunta:** cobra se o teste “morde […] o defeito”. (`v2_pergunta.txt:2`)   [nao verificado]
+   **Resposta:** “exige a exceção injetada e o log específico”. (`v2_resposta.txt:24`)
+
+   Isso demonstra contrato de teste, não incidência operacional. O opus declara que não verificou logs de produção; os dados fornecidos não quantificam falhas A2. (`opus_final.txt:2`; frequência e impacto observado: **[nao verificado]**) [nao verificado]
+
+   **Deveria levar:** medição raspada de falhas A2 e execuções afetadas; sem ela, manter o impacto observado como não verificado.
+
+9. **FILA — pendente TT6 obsoleto: (a), tema documental presente.**
+
+   **Pergunta:** anexa JUIZES e pede avaliação de baixa de pendente em `core/juizes.py`. (`v1_pergunta.txt:1`; `v1_pergunta.txt:12`)  
+   **Resposta:** “A impressão removida pertencia ao classificador apagado”. (`v1_resposta.txt:58`)
+
+   A resposta tratou o pendente nomeado, mas não identificou a incoerência residual do TT6 descrita pelo opus. A reancoragem final não é confirmada pela cópia local, que ainda conserva a âncora antiga. (`opus_final.txt:2`; `app/core/juizes.py:839`; `app/core/juizes.py:840`)
+
+   **Deveria levar:** conferir todos os pendentes alterados ou tornados obsoletos pela migração ao D4, comparando âncora e motivo. (`opus_final.txt:2`)
+
+10. **FILA — comentário antigo no `_dd`: (a), tema A2 presente.**
+
+    **Pergunta:** cobra a propagação de falha da A2. (`v2_pergunta.txt:2`)  
+    **Resposta:** “Retirar apenas o `raise` atual deixa de satisfazer esse contrato”. (`v2_resposta.txt:24`)
+
+    O Codex reconheceu o novo fluxo de exceção, mas não apontou o comentário que descrevia continuidade após falha. Esse comentário existe na cópia; sua obsolescência na árvore final é sustentada pelo anexo do opus. (`app/colaboradores/services/calendario.py:869`; `app/colaboradores/services/calendario.py:870`; `opus_final.txt:2`)
+
+    **Deveria levar:** revisar comentários que descrevem caminhos eliminados pela propagação obrigatória da A2. (`opus_final.txt:2`)
+
+**Contagem das 10 unidades acima:** **(a) 4; (b) 2; (c) 1; (e) 3; (d) 0.** Os dois casos **(b)** têm evidência de que o Codex viu o problema; as linhas específicas das decisões históricas da triagem permanecem **[nao verificado]**. (`v2_resposta.txt:5`; `v2_resposta.txt:7`; `v2_resposta.txt:34`)
+
+## 02/11 19:33 · sessao 9ae37b8be3a2 · - · - · origem=Ronald (tmux)
+
+A cópia local não reproduz os trechos pós-delta descritos nos anexos: tooltip antigo permanece no template, A2 não propaga exceção, e TT6 conserva a âncora antiga. (`app/templates/colaboradores/partials/_calendario_grade.html:103`; `app/colaboradores/services/calendario.py:619`; `app/core/juizes.py:839`)
+
+- **Rodapé:** não contém cards `sem_certidao`/`sem_dados`; `resumo.faltas` aparece entre tooltip “Dia previsto de trabalho sem nenhuma batida registrada.” e título “Sem registro”. (`app/templates/colaboradores/partials/_calendario_grade.html:138`; `:145`; `:146`; `:147`; `:173`)
+- **Textos próprios:** card `escala_suspeita` literal em `:161`; card Abertos ainda usa “Turno começou e não teve saída registrada.” em `:169`. (`app/templates/colaboradores/partials/_calendario_grade.html:161`; `:169`)
+- **`eh_trabalho`:** calendário calcula `_fora`, chama `ec.eh_dia_trabalho` e usa resultado no predicado que oferece resolução. (`app/colaboradores/services/calendario.py:777`; `:780`; `:197`)
+- **A2:** cópia local captura e registra erro sem `raise`; não confirma o comportamento pós-delta. Furos chama calendário e documenta execução para aproximadamente 750 colaboradores. (`app/colaboradores/services/calendario.py:619`; `:620`; `app/relatorios/furos.py:187`; `:195`)
+- **Comentário `_dd`:** localmente descreve fallback ainda presente; inexequibilidade na árvore final depende dos anexos. (`app/colaboradores/services/calendario.py:619`; `:869`; `:871`; `:872`)
+- **TT6:** localmente continua ancorado em `def status_do_dia`, motivo “deveria ler idem”; reancoragem final não confirmada pela cópia. (`app/core/juizes.py:839`; `:840`)
+
+Identidade da cópia com `15d4f10b`: **[nao verificado]**.
 
 ## 02/11 19:23 · sessao 94fd4804a524 · E4-CALENDARIO-L1 · verificador · origem=Code
 
@@ -651,74 +764,4 @@ Censo Q3/Q6, somente código, sem executar comandos de aplicação.
 
 O dado recebido não lista linhas/pks nem atributos do estoque; portanto nenhum contraexemplo acima pode ser atribuído a uma linha real ou ter quantidade confirmada `[nao verificado]`.
 
-## 01/11 18:54 -- HISTORICO (mais de 24 h) · sessao d3a74d0e3ea4 · - · - · origem=Ronald (tmux)
-
-Para Q2, o contador F0 existe: `materializada_viva()['aberta']` é literalmente o tamanho do balde `aberta` devolvido por `carimbos_sem_lastro_por_dono`, não um contador geral de toda pergunta carimbada e viva (`app/chamados/services/vigia_fio.py:800-804`).
-
-| Medidor | Universo e exclusões |
-|---|---|
-| `materializada_viva` / `carimbos_sem_lastro_por_dono` | Carimbo presente, disputa aberta e via fora de `VIAS_DE_IDENTIDADE`; depois exige C6 `pergunta_viva`. Particiona aberta/exportada pela competência do dia; sem data conta em aberta. Exclui disputa fechada e vias de identidade (`app/chamados/services/vigia_fio.py:743-772`; `app/chamados/services/relavra_via.py:166-182`). |
-| `censo_alcance` → `fio_morto_alcance`, causa `c` e detalhe `pergunta_viva_sob_chamado_terminal` | Conta **dias retidos sem porta**, não perguntas de todo acervo; universo de empresas visíveis e competências enumeradas por `competencias_a_lavrar`, alimentado por `fora_da_folha`. Retira hoje/futuro e baldes de dono fora do fio antes de classificar causas; causa c requer pergunta respondida sob âncora terminal, detalhe e cobre outras vivas sob terminal (`app/chamados/services/vigia_fio.py:534-552`, `:604-654`). |
-| `viva_em_disputa_fechada` | Pré-filtro `q_vivas`, disputa fechada, C6 viva; conta perguntas e disputas; sem filtro de destino terminal nem de carimbo (`app/chamados/services/vigia_fio.py:692-713`). |
-| Auditor `I2` / `I2p` | Pergunta **não carimbada** com destino terminal; exclui do I2 respondida em disputa aberta, publicada em I2p. Conta chamados, não todas as perguntas; não consulta C6 (`app/chamados/management/commands/auditar_invariantes_chamados.py:586-598`). |
-| Auditor `I8` | C6 viva, destino NULL, motivo atendível, colaborador ativo; retira piso de 2+ candidatos sem entrada no contexto (`app/chamados/management/commands/auditar_invariantes_chamados.py:853-865`, `:82-95`). |
-| Auditor `I8b`, `I8bc`, `I8bcx`, `I8bx` | C6 viva com destino e data, cuja `resolvedora_valida` é falsa. Carimbadas vão I8bc/I8bcx; não carimbadas sem célula exportadas vão I8bx; restante I8b. I8bc não é o contador geral de carimbada viva (`app/chamados/management/commands/auditar_invariantes_chamados.py:890-947`). |
-| Auditor `I21` / `I21a` | Respondida, não validada, não carimbada, texto diferente de `''`, destino **e pai** fora de VIVOS; retira ausência aprovada em I21a. Não consulta C6 (`app/chamados/management/commands/auditar_invariantes_chamados.py:1568-1582`, `:156-163`). |
-| Auditor `I22` | Chamado vivo com pelo menos uma resolvedora, todas inválidas; exclui cinco IDs históricos explícitos. Não mede estoque viva-terminal (`app/chamados/management/commands/auditar_invariantes_chamados.py:1040-1061`). |
-| Auditor `F2` | C6 viva, disputa fechada, carimbo NULL, validação NULL e colaborador ativo; exclui carimbadas (`app/chamados/management/commands/auditar_invariantes_chamados.py:1760-1765`). |
-| Auditor `S6` | Amostra aleatória de até 300 carimbadas; compara veredito lavrado com `_pergunta_materializada_de_fato`, excluindo stale e exceções. Não consulta vitalidade C6 (`app/chamados/management/commands/auditar_invariantes_chamados.py:1153-1173`). |
-| `vigia_carimbo.censo` | Perguntas de hora/data_hora validadas; classifica por materialização de fato e slot, não por C6 nem destino terminal (`app/chamados/services/vigia_carimbo.py:97-124`). |
-
-`vigiar_fio_morto` publica `materializada_viva` aberta com esperado zero e exportada separada, sem alarme; escreve carimbo apenas no modo frota (`app/chamados/management/commands/vigiar_fio_morto.py:189-191`, `:205-224`). A cerca correta aberta/entregue é `competencia_do_dia_entregue`: janela da empresa + `folha.export.competencia_entregue`; sem dia retorna None (`app/chamados/services/vigia_fio.py:775-797`).
-
-Para Q4, existem comandos específicos de estoque; não foi identificado um executor genérico que percorra todo o estoque C6-viva/destino-terminal e aplique reata/descarimbo [nao verificado].
-
-| Comando | Portas e exclusões |
-|---|---|
-| `reabrir_orfas_enterradas --apply` | Usa `reabrir_fantasma`, `reabrir_sistema` e `pai.reabrir`; só fantasma carimbada, não validada, com data, lâmpada própria False e C6 viva. Exclui luz None, carimbo fora da janela fixa, pai que recusa ou ressuscitaria irmãs; exportada recebe Pauta DP (`app/chamados/management/commands/reabrir_orfas_enterradas.py:35-37`, `:67-118`, `:145-167`). |
-| `encerrar_por_competencia_trancada --apply` | Delega a `competencia_trancada.encerrar`; usa `ch.encerrar_por_competencia_trancada()` e `d.fechar()`. Exige tranca real; não escreve perguntas desde C7. Exclui chamados sem competência, doutra competência, módulos fora da tranca, resgatados, perguntas vivas fora e disputa com pai vivo fora (`app/chamados/management/commands/encerrar_por_competencia_trancada.py:13-29`; `app/chamados/services/competencia_trancada.py:82-105`, `:122-151`, `:174-198`). |
-| `encerrar_perguntas_com_fato --apply` | Usa `encerrar_por_fato_no_espelho` e depois `DisputaSupervisao.fechar`; só carimbadas não validadas, via vazia/NULL/legado_sem_lastro e marco próprio True. Preserva demais vias; fecha disputa somente sem fio vivo (`app/chamados/management/commands/encerrar_perguntas_com_fato.py:23-43`, `:65-94`). |
-| `dedup_perguntas_fato --apply` | Usa `fio.retratar_duplicata`; só grupos duplicados colab/motivo/dia, anteriores a `--ate` (default 24/08); exclui canônica e já duplicatas. Recortes opcionais colab/limite (`app/chamados/management/commands/dedup_perguntas_fato.py:40-61`, `:71-92`). |
-| `materializar_passivo_validado --apply` | Usa `passivo_validado.reparar` → `_materializar_uma`; universo hora/data_hora validada do `vigia_carimbo`. Exclui `com_registro`, `plantio_fora_do_slot`, `slot_nao_derivavel` e recortes de colaborador/competência; demais recusas continuam nas guardas da unidade (`app/chamados/management/commands/materializar_passivo_validado.py:49-83`, `:110-111`; `app/chamados/services/passivo_validado.py:52-60`, `:324-350`, `:514-524`; `app/chamados/services/vigia_carimbo.py:97-116`). |
-| `curar_perguntas_em_limbo --apply` | Conjunto histórico fixo de 21 IDs; recusa se conjunto atual diverge. Duas usam `carimbar_resposta_pela_trilha` somente com nota; demais `reabrir_para_correcao` (`app/chamados/management/commands/curar_perguntas_em_limbo.py:21-23`, `:46-69`). |
-
-`reconciliar_chamados` já escreve, mas **não oferece dry/apply**: visita colaborador com chamado vivo ou pergunta órfã reatável, chama `reconciliar_chamados_colab`, rejunta célula e drena eventos (`app/chamados/management/commands/reconciliar_chamados.py:22-64`). `reconciliar_perguntas_orfas` é vigia sem escrita, com `--alarme` (`app/ponto/management/commands/reconciliar_perguntas_orfas.py:1-15`, `:24-36`).
-
-`auditar_invariantes_chamados` não tem `--corrigir`/`--apply`; seus argumentos são `--html` e `--amostra`; `--html` grava arquivo (`app/chamados/management/commands/auditar_invariantes_chamados.py:545-550`, `:1838-1849`). Mesmo o dry de `materializar_passivo_validado` cria diretório e JSON de resultado, portanto não é execução compatível com a restrição desta tarefa (`app/chamados/management/commands/materializar_passivo_validado.py:85`, `:114-127`).
-
-## 01/11 18:54 -- HISTORICO (mais de 24 h) · sessao 86f8555eafdd · - · - · origem=Ronald (tmux)
-
-Q5 — leitores e efeito sobre folha/export, somente código:
-
-- **“Status da pergunta” é `PerguntaDisputa.estado`, uma `@property`:** traduz `validada_em`, resultado de `pergunta_viva`, `respondida_em` e `materializada_em` em `VALIDADA/RESOLVIDA/PENDENTE/RESPONDIDA`; alterar apenas esse rótulo não é uma escrita de coluna de estado. A property `viva` delega ao C6; `q_vivas` é pré-filtro generoso, não resposta exata. (`app/chamados/models.py:2467-2482`, `2727-2738`.)
-
-| Leitor | Campos/efeito |
-|---|---|
-| `pergunta_viva` / `_pergunta_viva_calc` | `validada_em`, tranca, resposta, via, carimbo e célula determinam vida; carimbo não basta para declarar morta. Destino terminal participa da testemunha de materialização. (`app/chamados/juizes.py:1032-1118`, `720-721`.) |
-| `chamado_que_lista` | Ancora no `chamado_destino_id`; sem destino usa `disputa.chamado_id`. Reapontar muda o card ao qual pergunta é atribuída. (`app/chamados/services/fio.py:97-117`.) |
-| `perguntas_do_app` e API | Seleção `q_vivas` + C6; API separa `p.estado == RESPONDIDA`, expõe `estado`, `aguarda_admin` e `chamado_destino_id`. (`app/chamados/services/pergunta_no_app.py:39-44`; `app/api/views.py:2603-2634`.) |
-| `montar_chamados_fio` | Admin carrega perguntas vivas de disputas fechadas; ramo `so_janela` não acrescenta essas disputas; agrupa pela âncora canônica. (`app/chamados/services/fio.py:209-240`.) |
-| `raiox.creditos_perguntas` | Credita destino vivo; senão, pai da disputa. Filtra `q_vivas`, exclui carimbadas com `veredito_lavrado=VL_SIM`, separa respondidas/não respondidas. O cache pode estar velho até ciclo do cron. (`app/chamados/services/raiox.py:49-72`, `110-149`.) |
-| `qs_na_fila` | Lê `status_local` via `qs_vivos`, restringe a `COBRANCA` e exclui silêncio vigente; terminal não entra nessa fila. (`app/chamados/services/painel.py:153-155`, `158-188`.) |
-| `alimentar_portas` / `porta_alcancavel_do_dia` | Cruza fila, verbos, C6, perguntas do app e âncora. Porta pela pergunta exige viva, no app, resposta não vazia quando respondida e âncora na fila. Logo reapontamento/status do chamado podem alterar existência da porta e fio/grupo retornados. (`app/chamados/juizes.py:1160-1196`, `1226-1272`.) |
-| Cartório | Impressão inclui `pk:status_local` e quantidade de chamados vivos com fio. Julgamento deriva `_com_fio` por C6 e o passa ao suprajuiz; pode lavrar `cobrado`. Mudança real depende do novo julgamento. (`app/ponto/services/cartorio.py:356-410`, `1167-1186`, `1243-1246`, `1281-1282`.) |
-| Signal do chamado | Criação/mudança de `status_local` chama `cartorio.julgar_celula` pelo dia forte do fato; save sem mudar status retorna. (`app/chamados/signals.py:155-180`.) |
-| `furos_sem_cobranca` | Lê status do chamado e de `superado_por`; classifica vivo/coberto/decidido e exclui dia trancado. (`app/ponto/services/furos_sem_cobranca.py:66-86`.) |
-| `competencia_do_chamado`, fechamento da disputa | Competência considera dias das perguntas que C6 diz vivas; `disputa_viva_do_chamado` lê existência de perguntas e `fio_vivo`. (`app/chamados/juizes.py:1909-1941`, `1955-1968`.) |
-
-**Caminho de dinheiro:** `classificar_export` chama `motivos_retencao_espelho`; se há motivos marca pessoa `fora/furo_espelho`. O wrapper delega a `motivos_retencao_celula`. Esse retentor consulta célula por dia e lê `veredito`, `protestos`, `trabalha`, cobertura cadastral e isenções; não decide diretamente pelo carimbo, destino ou estado da pergunta. (`app/folha/export.py:942-947`, `1243-1249`, `1174-1238`.)
-
-Assim, mudar âncora/carimbo pode mudar **fio, grupo e ação indicada** sem mudar quem entra; pode mudar quem entra quando os efeitos chegarem à célula e alterarem os motivos de retenção. O cartório lê vida/estado dos chamados e fio para julgar, e o export lê a célula resultante; o efeito efetivo neste estoque é `[nao verificado]`. (`app/chamados/juizes.py:1261-1272`; `app/ponto/services/cartorio.py:1167-1186`, `1243-1246`, `1281-1282`; `app/folha/export.py:1215-1238`.)
-
-`fora_da_folha` toma **quem entra** de `classificar_export`; usa `motivos_retencao_celula(com_dias=True)` para dias retidos e `porta_alcancavel_do_dia` para o fio/grupo. `o_que_segura` usa as mesmas autoridades. Não existe juízo próprio de retenção por pergunta nessas ferramentas. (`app/folha/fora_da_folha.py:55-74`, `91-95`, `120-155`, `180-208`.)
-
-A montagem do TXT consome `classificar_export`, constrói `entra_set`, restringe fechamento aos estados `aberto/aprovado` e só monta linhas dos IDs admitidos. Portanto comparar só valores não prova preservação de pertencimento ao TXT. (`app/folha/export.py:668`, `695-708`.)
-
-**Aberta × entregue:** `competencia_do_dia_entregue` compõe `janela_atual(dia, empresa)` com `competencia_entregue`; sem dia retorna `None`. Entregue significa TXT vigente não invalidado, não apenas existência histórica de exportação. (`app/chamados/services/vigia_fio.py:775-797`; `app/folha/export.py:545-575`.)
-
-- Na **aberta**, o alcance novo C pode operar; a cerca também exclui sem data e trancada. (`app/chamados/reconciliador.py:683-716`.)
-- Na **entregue**, a cerca preserva o caminho anterior e deixa fora apenas o alcance novo C; o texto explicita O44 sem fronteira. Isso não é proibição global dos leitores ou de todas as portas. (`app/chamados/reconciliador.py:686-699`.)
-- `classificar_export`/retentor continuam lendo estado atual; o juiz `txt_vigente_x_gravado` monta o atual e compara seu hash ao TXT vigente. Logo “entregue” não garante que a leitura atual permaneça igual ao documento entregue. Divergência real neste estoque é `[nao verificado]`. (`app/folha/export.py:635-660`, `746-769`, `942-955`.)
-- Não confundir com `competencia_fechada_para_celula`: outro juiz combina TXT entregue **ou holerite publicado**. (`app/folha/export.py:578-609`.)
-
-_1470 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1472 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
