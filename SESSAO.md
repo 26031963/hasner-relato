@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 09:58:56.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (155.2 MB). Acoes na janela: **419**.
+**Medido em 02/11/2026 10:04:29.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (155.2 MB). Acoes na janela: **414**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -424,8 +424,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 22:04:46 | SendMessage |  | `-` |
 | 22:04:38 | Bash | Container lifecycle events last 50 min | `date; timeout 30 docker events --since 50m --until 1s --format '{{.Time}} {{.Type}} {{.Action}} {{.Actor.Attributes.name}} exit={{.Actor.Attributes.exitCode}} sig={{.Actor.Attributes.signal}}' 2>&1 \| grep -v "exec_" \| grep -E "container (kill\|die\|stop\|oom\|start)" \| head -30` |
 | 22:04:34 | TaskStop |  | `-` |
-| 22:04:23 | Bash | Read events and OOM logs | `/usr/bin/sleep 5; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/bm0fp8k1i.output \| head -30; dmesg 2>/dev/null \| grep -i -E "oom\|killed process" \| tail -5; journalctl -k --since "21:40" 2>/dev/null \| grep -i oom \| tail -5` |
-| 22:02:19 | Bash | Docker events around suite death | `docker events --since 2026-11-01T21:30:00 --until 2026-11-01T22:10:00 --format '{{.Time}} {{.Type}} {{.Action}} {{.Actor.Attributes.name}} {{.Actor.Attributes.image}} exit={{.Actor.Attributes.exitCode}}' 2>&1 \| grep -v "exec_" \| head -30; grep -n "docker \(kill\\|rm\\|stop\)" /home/ronald/saas-hasner/logs/sombra/sonda_cobparc7_medidas.py \| head` |
-| 22:02:10 | Bash | Investigate suite kill | `cd /home/ronald/saas-hasner; tail -c 1500 logs/cobparc/v7/suite_full.log; echo; stat -c '%y' logs/cobparc/v7/suite_full.log; docker events --since 40m --until 0s --filter event=kill --filter event=die --filter event=oom --format '{{.Time}} {{.Action}} {{.Actor.Attributes.name}} {{.Actor.Attributes.exitCode}} {{.Actor.Attributes.signal}}' 2>&1 \| tail -15` |
-| 22:02:03 | Bash | Record measures and check suite | `cd /home/ronald/saas-hasner; H=$(date +%H:%M); echo "- $H COBPARC v7 medidas na sombra (logs/cobparc7_medidas.out, FIM-DA-SONDA, 0 Traceback; copia 8f21ec29; 652 colabs, celulas 21/08..01/11): MEDIDA 5 ata ausencia sem cobertura_parcial com vencedora parcial (cobertura_ausencia_periodo para=folha): F0 prod 67 de 3259 -> B 0 de 3290. MEDIDA 7 FuroDiario (apurar real emp 2/3/4, janela 21/09..20/11,  ...` |
-| 22:01:44 | Bash | Confirm sonda output lines | `cd /home/ronald/saas-hasner; tail -25 logs/cobparc7_medidas.out \| cut -c1-250; docker ps --format '{{.Names}} {{.Status}}' \| grep -i sombra` |
