@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 02:16:04.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (147.0 MB). Acoes na janela: **552**.
+**Medido em 02/11/2026 02:21:14.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (147.0 MB). Acoes na janela: **546**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -556,9 +556,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:23:21 | Bash | Spot-check postmortem item 1 citation | `cd /home/ronald/saas-hasner/logs/contencao/v2/p1 && sed -n 36,39p codex_v1.r \| cut -c1-300; sed -n 1,3p codex_v1_triagem.txt \| cut -c1-300` |
 | 14:23:18 | Bash | Read Codex postmortem result | `cd /home/ronald/saas-hasner/logs/contencao/v2/p1/pm && tail -2 postmortem.run; wc -l postmortem.r; tail -25 postmortem.r \| cut -c1-400` |
 | 14:23:15 | Bash | Check background states | `cd /home/ronald/saas-hasner && ls logs/cobparc/v4/det/; wc -c logs/cobparc/v4/det/cura.out; tail -3 logs/claudemd/push_6c246c14.log \| cut -c1-200; ls logs/contencao/v2/p1/pm/; ps -p 14048 -o etime=` |
-| 14:18:13 | Bash | Wait for COBPARC cura det to finish | `cd /home/ronald/saas-hasner; until [ -f logs/cobparc/v4/det/rodar.done ]; do /usr/bin/sleep 30; done; grep -E '^DET\|FM09' logs/cobparc/v4/det/cura.out \| cut -c1-260` |
-| 14:18:11 | Bash | Fix typo and check cura run | `cd /home/ronald/saas-hasner && sed -i 's/\| aberta, despois da COBPARC \|/\| aberta, depois da COBPARC \|/' app/docs/BACKLOG.md && grep -c "despois" app/docs/BACKLOG.md; ps -p 14048 -o etime=; wc -c logs/cobparc/v4/det/cura.out` |
-| 14:18:03 | Bash | Write both avals to RELATO top, BACKLOG and PROMPTS | `cd /home/ronald/saas-hasner && H=$(date +%H:%M) && python3 - "$H" <<'EOF' import sys,re H=sys.argv[1] p='app/docs/RELATO.md' L=open(p).read().split('\n') # CONTENCAO pergunta -> respondida for i,l in enumerate(L[:40]): if l.startswith('PERGUNTA DE DESENHO CONTENCAO-QUE-MORDE-V2'): L[i]=("RESPONDIDA por aval Ronald DESENHO CONTENCAO-QUE-MORDE-V2 "+H+" -- estaciona 3a743cdd e devolve a vaga; instrum ...` |
-| 14:17:39 | Bash | Read COBPARC opus final findings | `cd /home/ronald/saas-hasner && sed -n 1,20p logs/cobparc/v4/opus_final.md \| cut -c1-900` |
-| 14:17:37 | Bash | Find the opus final file with MEDIO findings | `cd /home/ronald/saas-hasner && ls logs/cobparc/v4/ \| head -40; grep -n -i "medio\\|médio" logs/cobparc/v4/*.md \| cut -c1-400 \| head` |
-| 14:17:34 | Bash | Read PROMPTS format, COBPARC rows, opus MEDIO findings | `cd /home/ronald/saas-hasner && tail -3 app/docs/PROMPTS.md \| cut -c1-250; grep -n "^\| COBPARC\\|^\| COBERTURA-PARCIAL" app/docs/BACKLOG.md \| cut -c1-120; grep -n "MEDIO" logs/cobparc/v4/opus_final.md \| cut -c1-400` |
