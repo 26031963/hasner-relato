@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 15:49:02.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (167.1 MB). Acoes na janela: **555**.
+**Medido em 02/11/2026 15:54:22.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (167.2 MB). Acoes na janela: **563**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:53:55 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '3s#.*#ESPERANDO: mutantes_r2.sh \| pid=316967 \| arquivo=logs/e4cal/r2_mutantes.log#' app/docs/RELATO.md; ps -p 316967 -o pid=; timeout 100 bash -c 'a=$(stat -c %Y logs/e4cal/r2_mutantes.log); until [ $(stat -c %Y logs/e4cal/r2_mutantes.log) -gt $a ]; do /usr/bin/sleep 3; done'; tail -1 logs/e4cal/r2_mutantes.log \| cut -c1-90` |
+| 15:53:50 | Bash |  | `cd /home/ronald/saas-hasner; ps -o cmd= -p 1410294 \| grep -o 'wt-[a-z0-9-]*' \| head -1; ls -lt --time-style=+%T logs/noreverse/ \| head -3; ls -lt --time-style=+%T /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/e4cal/r2/ \| head -3` |
+| 15:53:46 | Bash |  | `cd /home/ronald/saas-hasner; grep -E '^(OK\|FAILED)($\| \()\|^Ran' logs/noreverse/vizinhos.log \| tail -2; tail -1 logs/noreverse/vizinhos.log; bin/trava_teste.sh --quem; ls -lt --time-style=+%T logs/noreverse/ logs/e4cal/ \| head -8` |
+| 15:53:40 | Bash |  | `cd /home/ronald/saas-hasner; a=$(stat -c %Y logs/noreverse/vizinhos.log); timeout 90 bash -c "until [ \$(stat -c %Y logs/noreverse/vizinhos.log) -gt $a ]; do /usr/bin/sleep 3; done"; ps -p 1391202 -o pid=; date +%T` |
+| 15:53:29 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '3s#.*#ESPERANDO: trava_teste.sh \| pid=1391202 \| arquivo=logs/noreverse/vizinhos.log#' app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md` |
+| 15:53:25 | Bash |  | `cd /home/ronald/saas-hasner/logs/noreverse; for f in red.log mutante.log green.log; do echo "== $f"; grep -E "NoReverseMatch\|^(OK\|FAILED)\|^Ran" $f \| tail -3 \| cut -c1-150; done` |
+| 15:53:22 | Bash |  | `cd /home/ronald/saas-hasner; ps -o ppid=,cmd= -p 1391202 \| grep -o 'wt-[a-z0-9-]*' \| head -1; ls -l --time-style=+%T logs/noreverse/; tail -3 logs/noreverse/red.log logs/noreverse/mutante.log \| cut -c1-150` |
+| 15:53:18 | Bash |  | `cd /home/ronald/saas-hasner; date +%T; ps -p 316967 -o pid=; tail -n 4 logs/e4cal/r2_mutantes.log \| cut -c1-120; bin/trava_teste.sh --quem; ls logs/noreverse/ 2>/dev/null; git -C /home/ronald/wt-noreverse-021533 status --porcelain \| head` |
 | 15:47:23 | Bash |  | `cd /home/ronald/saas-hasner; ps -p 316967 -o pid=; tail -n +2 logs/e4cal/r2_mutantes.log \| cut -c1-60` |
 | 15:47:18 | Bash |  | `cd /home/ronald/saas-hasner/app; H=$(date +%H:%M \| sed 's/.$/x/'); python3 - <<EOF p='docs/BACKLOG.md'; s=open(p).read() a='\| NOREVERSE-UI-NO-CORE \|' assert s.count(a)==1 row='\| DEPLOY-[nome]-ELO-DA-CORRENTE \| achado da medida 7 (NOREVERSE-AGORA, 02/11): bin/deploy.sh:268-279 espera cron em curso ate 600s e reinicia assim mesmo (declarado: "o vigia acusa"); em 02/11 o pouso COBPARC (e1c08457 06 ...` |
 | 15:47:05 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 262,285p bin/deploy.sh` |
