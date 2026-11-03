@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 08:48:40.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **344**.
+**Medido em 03/11/2026 08:54:02.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **343**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -353,4 +353,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:59:39 | SendMessage |  | `-` |
 | 20:59:36 | ToolSearch |  | `-` |
 | 20:59:33 | Bash | Record sombra result in RELATO, check producers | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='/home/ronald/saas-hasner/app/docs/RELATO.md' s=open(p).read() a=s.index('E4CAL-L1 volta 8 RED do passo 1 20:27'); b=s.index('\n',a) s=s[:b]+"\nE4CAL-L1 passo 1 SOMBRA 20:5x (logs/e4cal/r8_d5_sombra.out, rc=0, rollback provado nulo_apos=35436): nulo 06-09 emp2/3/4 35436 -> 0 (ok 14395, folga 12409, irregular 4195, ausencia 2571, escala_suspeita 87 ...` |
-| 20:52:03 | Bash | Wait for sombra run to finish | `cd /home/ronald/saas-hasner && for i in $(seq 56); do ps -p 1741839 >/dev/null \|\| break; /usr/bin/sleep 10; done; ps -p 1741839 >/dev/null && echo AINDA-VIVA; grep -E 'E4CAL_R8\|Traceback\|^rc=' logs/e4cal/r8_d5_sombra.out \| cut -c1-600` |
