@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 22:31:05.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (176.4 MB). Acoes na janela: **658**.
+**Medido em 02/11/2026 22:36:21.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (176.4 MB). Acoes na janela: **642**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -652,19 +652,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:37:21 | Bash | Remove stale ESPERANDO line | `python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') if L[2].startswith('ESPERANDO: trava_teste.sh'): del L[2] open(p,'w').write('\n'.join(L)) EOF sed -n 3p docs/RELATO.md \| cut -c1-40` |
 | 10:36:26 | Bash | Add ESPERANDO for live lock holder | `python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('ERRO-BOBO COBPARC-FILA-RELOGIO') L.insert(2,'ESPERANDO: trava_teste.sh \| pid=3338112') open(p,'w').write('\n'.join(L)) EOF sed -n 3p docs/RELATO.md` |
 | 10:36:23 | Bash | Check current lock holder alive | `ps -o pid=,etime=,args= -p 3338112 \| cut -c1-80` |
-| 10:35:01 | Bash | Remove stale ESPERANDO line | `python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO: trava_teste.sh') del L[2] open(p,'w').write('\n'.join(L)) EOF sed -n 3p docs/RELATO.md \| cut -c1-60` |
-| 10:34:34 | Bash | Strip extra field from ESPERANDO line | `python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO: trava_teste.sh \| pid=3199069') L[2]='ESPERANDO: trava_teste.sh \| pid=3199069' open(p,'w').write('\n'.join(L)) EOF sed -n 3p docs/RELATO.md; ps -o etime= -p 3199069` |
-| 10:34:30 | Bash | Tail stop hook trail | `tail -4 /home/ronald/saas-hasner/logs/hook_stop_fila1.log \| cut -c1-250` |
-| 10:34:27 | Bash | Find trilha path and orcamento log tail | `cd /home/ronald/saas-hasner && grep -n "^TRILHA" bin/hook_stop_fila1.py; f=$(python3 -c "import re;s=open('bin/hook_stop_fila1.py').read();print(re.search(r\"TRILHA = (.*)\",s).group(1))"); echo $f; tail -3 logs/sessao/orcamento.log \| cut -c1-200` |
-| 10:34:24 | Bash | Locate stop hook trail log | `cd /home/ronald/saas-hasner && grep -n "def _trilha" -A8 bin/hook_stop_fila1.py \| grep -n "log\\|open" ; ls -t logs/sessao \| head` |
-| 10:34:21 | Bash | Read hook ESPERANDO proof and stop path | `cd /home/ronald/saas-hasner && sed -n 646,700p bin/hook_stop_fila1.py; sed -n 1195,1240p bin/hook_stop_fila1.py; tail -5 logs/sessao/*stop*.log 2>/dev/null \| cut -c1-200` |
-| 10:34:17 | Bash | Check pid and how hook reads ESPERANDO | `ps -o pid,etime -p 3199069; bash /home/ronald/saas-hasner/bin/trava_teste.sh --quem; cd /home/ronald/saas-hasner && grep -n "ESPERANDO" bin/hook_stop_fila1.py \| head -20` |
-| 10:34:10 | Bash | Add ESPERANDO line to RELATO top | `python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('ERRO-BOBO COBPARC-FILA-RELOGIO') L.insert(2,'ESPERANDO: trava_teste.sh \| pid=3199069 \| COBPARC-FILA-RELOGIO volta 4 (opus v3 reprovou 10:2x; construtor rodando RED/suite na copia wt-cobparc-relogio-070738)') open(p,'w').write('\n'.join(L)) EOF sed -n 3p docs/RELATO.md` |
-| 10:34:05 | Bash | Check whether lock-holding suite is alive | `ps -o pid,etime,args -p 3199069 \| cut -c1-200; bash /home/ronald/saas-hasner/bin/trava_teste.sh --quem` |
-| 10:33:57 | Bash | Update RELOGIO BACKLOG state cell | `python3 - <<'EOF' p='docs/BACKLOG.md' s=open(p).read() old='\| construindo 02/11 07:07 na copia /home/ronald/wt-cobparc-relogio-070738 \|' assert s.count(old)==1 s=s.replace(old,'\| volta 4 desde 02/11 10:2x na copia /home/ronald/wt-cobparc-relogio-070738: opus v3 reprovou (funcao que le o relogio chamada em laco: disputa_emissao.py:267 gerar_perguntas_disputa); v2 curado em 20f2ebb2 \|') open(p,' ...` |
-| 10:33:51 | Bash | See TICKETS row format and BACKLOG RELOGIO row | `grep -n "COBPARC-FILA-ROTULO" docs/TICKETS.md \| cut -c1-300 \| head -3; sed -n 818p docs/BACKLOG.md \| cut -c1-600` |
-| 10:33:44 | Bash | Inspect process holding the test lock | `ps -o pid,args -p 3175970 \| cut -c1-200; pgrep -P 3175970 -a \| cut -c1-160 \| head -3` |
-| 10:33:37 | Monitor | COBPARC-RELOGIO volta 4: suite/trava ou commit novo na copia | `cd /home/ronald/wt-cobparc-relogio-070738; h0=$(git rev-parse HEAD); last=""; while true; do h=$(git rev-parse HEAD 2>/dev/null); [ "$h" != "$h0" ] && { echo "commit novo: $(git log --oneline -1)"; h0=$h; }; q=$(bash /home/ronald/saas-hasner/bin/trava_teste.sh --quem 2>/dev/null \| head -1); case "$q" in livre*) q=livre;; esac; [ "$q" != "$last" ] && { echo "trava: $q"; last=$q; }; [ -f /home/rona ...` |
-| 10:33:33 | ToolSearch |  | `-` |
-| 10:33:28 | Bash | Find the hook's fila item in BACKLOG | `grep -n "O261-E-CELULA-20-UM-DONO\\|CALENDARIO-HOJE" docs/BACKLOG.md \| cut -c1-400 \| head` |
-| 10:33:18 | Bash | Check builder progress and test lock | `cd /home/ronald/wt-cobparc-relogio-070738 && git log --oneline -3 && git status --porcelain \| head; bash /home/ronald/saas-hasner/bin/trava_teste.sh --quem; ls -t /home/ronald/saas-hasner/logs/cobparc_relogio/ \| head -5; tail -1 /home/ronald/saas-hasner/logs/sessao/disjuntor.log \| cut -c1-80; date +%H:%M` |
