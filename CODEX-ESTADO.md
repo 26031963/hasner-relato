@@ -1,7 +1,80 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **02/11/2026 21:03** · publicado em **02/11/2026 21:04** (UTC-3)
+> Ultima resposta processada: **02/11/2026 21:04** · publicado em **02/11/2026 21:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 02/11 21:04 · sessao da8569571a0a · E4CAL-L1-P1 · verificador · origem=Code
+
+**Parecer: a garantia irrestrita de “só status” não está fechada.** O caminho normal preserva os demais campos da célula, mas escreve auditoria; uma célula elegível com `veredito_via=NULL` pode alcançar lavra completa; e o teste deixa sobreviver uma regravação de `julgada_em` com o mesmo instante congelado. (`app/ponto/portas/celula.py:753`; `app/core/observ.py:134`; `app/escala/models.py:1739`; `app/ponto/tests/test_e3_status_lavrado.py:286`)
+
+**1) Quem escreve, quem lê e alcance financeiro**
+
+O escritor produtivo dos dois campos é `_aplicar_status`, dentro da porta: atribui em `app/ponto/portas/celula.py:705`, devolve os dois nomes em `:706` e persiste por `salvar_e_emitir`, cujo save real está em `:640`. O método do modelo apenas delega. (`app/escala/models.py:1794`)
+
+As entradas são D5, cartório normal nos dois ramos e decisão administrativa. (`app/ponto/services/cartorio.py:889`; `app/ponto/services/cartorio.py:1229`; `app/ponto/services/cartorio.py:1789`; `app/ponto/services/veredito_celula.py:330`)
+
+| Leitor produtivo | Uso e destino do valor |
+|---|---|
+| `app/ponto/status_dia.py:212` | Lê ambos e devolve status/rótulo/fonte em `:213–214`, sem guarda de exportada. A interface singular delega ao mesmo corpo em `:179`. |
+| `app/core/services/painel_op.py:336` | Consome o D4 e coloca a resposta em `linha['dia']`, em `:338`. Termina no badge/tooltip HTML: `app/templates/core/_painel_card.html:66–67`. |
+| `app/ponto/services/cartorio.py:882` | Lê `status_dia` para pular preenchimento já realizado; status ausente segue à porta em `:889`. |
+| `app/ponto/portas/celula.py:697` | Preserva ambos quando faltam fatos e o veredito permanece igual; a comparação de idempotência está em `:703`. |
+| `app/ponto/portas/celula.py:723` | Copia status para auditoria; descrição e JSON são escritos em `:762–765` e `:777–780`. A consulta administrativa exibe essa trilha. (`app/core/views.py:705`; `app/core/views.py:733`) |
+
+Para esses leitores, não encontrei passagem do **valor das duas colunas** para número de folha, TXT, FM, pauta DP ou emissão de chamado/pergunta/disputa: o consumidor externo encontrado termina em HTML; o D5 retorna antes da fábrica; e a retenção do TXT consulta veredito/protestos/trabalha. (`app/core/services/painel_op.py:338`; `app/templates/core/_painel_card.html:67`; `app/ponto/services/cartorio.py:949`; `app/folha/export.py:1215`; `app/folha/export.py:1228`; `app/folha/export.py:1237`)
+
+O painel atual consulta pares na janela de hoje menos dois dias até hoje; portanto esse caminho não varre as competências 06–09/2026 na data desta revisão. (`app/core/services/painel_op.py:327`)
+
+O calendário ainda produz seu próprio dicionário de status/rótulo; seus templates não estão lendo essas colunas. “Minha escala” também monta rótulo de previsão. Esses homônimos não são leitores adicionais de `CelulaDia.status_rotulo`. (`app/colaboradores/services/calendario.py:895`; `app/colaboradores/services/calendario.py:896`; `app/escala/views.py:54`; `app/escala/views.py:60`)
+
+Fora de produção, há escritas explícitas de preparação de testes e leituras de asserção; a migração apenas adiciona as colunas. (`app/ponto/tests/test_e3_status_lavrado.py:277`; `app/ponto/tests/test_e3_status_lavrado.py:307`; `app/ponto/tests/test_e4_1_cron_le_o_juiz_nao_a_lavra.py:52`; `app/ponto/tests/test_e4_1_cron_le_o_juiz_nao_a_lavra.py:80`; `app/escala/migrations/0044_celuladia_status_dia_celuladia_status_rotulo.py:13`)
+
+**TXT de 09:** comparando duas regenerações com todos os demais insumos fixos e somente essas duas colunas alteradas, o conteúdo permanece igual: o regerador usa `montar_linhas_export`, que lê FM para eventos e os juízes existentes para inclusão/faltas. Isso não prova igualdade com o TXT histórico já armazenado, que pode ter divergências anteriores. (`app/folha/management/commands/regerar_txt_dominio.py:85`; `app/folha/export.py:695`; `app/folha/export.py:700`; `app/folha/export.py:711`; `app/folha/export.py:721`) Igualdade real dos TXT de produção: **[nao verificado]**.
+
+**2) O que `completar_status=True` realmente grava**
+
+O caminho verifica impressão/carimbo/veredito nos dois ramos, chama `_completar_status` e continua antes da lavra normal. O invólucro retorna antes de reconciliação, segunda passada e fábrica. (`app/ponto/services/cartorio.py:1186–1189`; `app/ponto/services/cartorio.py:1345–1348`; `app/ponto/services/cartorio.py:948–950`)
+
+Com via válida de cartório e veredito/protestos preservados, a porta salva **somente `status_dia/status_rotulo` na célula**. Não passa por `carimbar`, onde seriam escritos `julgada_em`, impressão e insumos; tampouco inclui campos de edição/regeneração no save. (`app/ponto/portas/celula.py:753–760`; `app/ponto/portas/celula.py:706`; `app/ponto/portas/celula.py:640`; `app/ponto/portas/celula.py:800–807`)
+
+**Há outra escrita:** o ramo chama `evento('veredito_celula', ...)`, que tenta inserir `LogAuditoria`, com tratamento best effort. A trilha possui `criado_em` automático. Na célula decidida pelo admin, o ramo especial salva status e retorna sem essa auditoria. (`app/ponto/portas/celula.py:761–765`; `app/core/observ.py:105`; `app/core/observ.py:133–138`; `app/core/models.py:307`; `app/ponto/portas/celula.py:738–744`)
+
+No ramo normal de status apenas, não nasce `EventoCelula`: somente `veredito` ou `ata` acordam o outbox. A auditoria do command, sem usuário humano, também não satisfaz a exceção de “admin tocou o dia”. (`app/ponto/portas/celula.py:623`; `app/ponto/portas/celula.py:638–642`; `app/core/observ.py:118`; `app/chamados/juizes.py:992–999`)
+
+A operação usa `save`, portanto não fundamenta afirmar “nenhum signal é disparado”. Não localizei receptor de `CelulaDia` na cópia; execução do despacho de signals: **[nao verificado]**. (`app/ponto/portas/celula.py:640`)
+
+**Ressalva estrutural:** os gates não verificam `veredito_via`, e o modelo aceita NULL. Uma célula elegível, com veredito válido de cartório e via nula, falha na igualdade de `:753` e cai em `:769–775`: grava também protestos/veredito/via/`veredito_em` e emite outbox. A existência desse estado no conjunto raspado é **[nao verificado]**. (`app/ponto/services/cartorio.py:1186`; `app/ponto/services/cartorio.py:1345`; `app/escala/models.py:1739`; `app/ponto/portas/celula.py:753`; `app/ponto/portas/celula.py:769–775`)
+
+**3) Mordida do teste** [nao verificado]
+
+- **“Guarda volta”: sim, por inspeção.** A saída antecipada impede as contagens e o preenchimento exigidos no dry/apply. Execução do mutante: **[nao verificado]**. (`app/ponto/tests/test_e3_status_lavrado.py:317`; `app/ponto/tests/test_e3_status_lavrado.py:321`)
+- **“Também escreve `julgada_em`”: não necessariamente.** A foto inclui o campo, mas a lavra inicial e o command usam o mesmo `AGORA` congelado. Regravar `julgada_em=agora` ou `timezone.now()` pode manter exatamente o mesmo valor e passar. (`app/ponto/tests/test_e3_status_lavrado.py:189–194`; `app/ponto/tests/test_e3_status_lavrado.py:286`; `app/ponto/management/commands/lavrar_status_competencia.py:44`; `app/ponto/portas/celula.py:800`)
+- A foto cobre células **do colaborador do fixture**, excetuando ambos os status, e todas as linhas de FM/ED disponíveis no teste. Não cobre auditoria, outbox, `DiaPago`, chamados, perguntas, disputas nem células de outros colaboradores. (`app/ponto/tests/test_e3_status_lavrado.py:309–313`)
+- Não confere os rótulos; só exige status preenchido e os valores específicos de duas células. A última passada verifica contadores, sem nova foto. (`app/ponto/tests/test_e3_status_lavrado.py:310`; `app/ponto/tests/test_e3_status_lavrado.py:321–325`)
+
+Para matar a regravação de carimbo, a lavra inicial precisa ocorrer em T0 e o D5 em T1 distinto, ou a prova precisa inspecionar os campos efetivamente persistidos. A igualdade temporal atual é a brecha. (`app/ponto/tests/test_e3_status_lavrado.py:189`; `app/ponto/tests/test_e3_status_lavrado.py:286`)
+
+**4) Aval e classes reprovadas**
+
+O caminho canônico usa o mesmo juiz e a mesma porta; a competência entregue virou informação; carimbo velho fica na fila; e o relógio funcional é capturado uma vez na borda. Não aparece segundo juiz, segundo escritor produtivo ou derivação nova nesse caminho. (`app/ponto/management/commands/lavrar_status_competencia.py:43–57`; `app/ponto/services/cartorio.py:885–891`; `app/ponto/portas/celula.py:693–698`)
+
+Não há escrita de FM/ED nesse percurso. Há, porém, **leitura indireta de ED** por `competencia_entregue`, contrariando a frase documental de que o command não lê ED. (`app/ponto/management/commands/lavrar_status_competencia.py:13`; `app/ponto/management/commands/lavrar_status_competencia.py:43`; `app/folha/export.py:569–575`)
+
+A auditoria não é explicitamente proibida pelo MUDA 1 fornecido; já a possibilidade de lavra completa/outbox com via nula impede certificar seu contrato para qualquer célula elegível. O selo temporal também não está fechado. (`app/ponto/portas/celula.py:761`; `app/ponto/portas/celula.py:753–775`; `app/ponto/tests/test_e3_status_lavrado.py:286`)
+
+Não foi introduzida ordem explícita nova de locks. As células são carregadas antes e o atomic do save não revalida a impressão; segurança contra alteração concorrente permanece **[nao verificado]**. (`app/ponto/management/commands/lavrar_status_competencia.py:54`; `app/ponto/services/cartorio.py:1345`; `app/ponto/portas/celula.py:639–640`)
+
+Os ADRs ainda descrevem a guarda retirada e precisam de reconciliação documental. (`app/docs/ADR/0002-celula-e-o-dia.md:69–71`; `app/docs/ADR/0003-celula-tres-naturezas.md:113–114`)
+
+Apply das 06–09/2026, reversão prévia, hashes FM/TXT e cumprimento operacional dos pré-requisitos de pouso: **[nao verificado]**. [nao verificado]
+
+**5) Outras guardas e retorno a NULL**
+
+O cartório de lote e o julgamento unitário não têm guarda de exportada nesses caminhos. As guardas restantes identificadas protegem regeneração/reversão de DNA; seus saves não incluem status. (`app/ponto/management/commands/processar_cartorio.py:49–65`; `app/ponto/services/cartorio.py:1950–1967`; `app/ponto/portas/celula.py:238–242`; `app/ponto/portas/celula.py:264–265`; `app/ponto/portas/celula.py:520–539`)
+
+Existe mecanismo capaz de produzir `(None, None)` quando falta `fatos_do_status` e muda o veredito, mas não é guarda de exportada. Os chamadores produtivos encontrados do cartório fornecem os fatos; o admin usa seu mapeamento próprio. (`app/ponto/portas/celula.py:694–698`; `app/ponto/services/cartorio.py:889–891`; `app/ponto/services/cartorio.py:1229–1234`; `app/ponto/services/cartorio.py:1789–1794`)
+
+O D5 também pula qualquer `status_dia` não nulo, mesmo com `status_rotulo=NULL`; o leitor então usa o rótulo do vocabulário. Não encontrei outra guarda de exportada que anule o status. (`app/ponto/services/cartorio.py:882–884`; `app/ponto/status_dia.py:214`) Regressão ou divergência real após apply: **[nao verificado]**.
 
 ## 02/11 21:03 · sessao 53f77a91c3e3 · - · - · origem=Ronald (tmux)
 
@@ -675,26 +748,4 @@ A sonda pura do pareador, executada em memória, confirmou as duas atribuições
 
 **Fila — custo de CPU não medido pelo teto de queries.** Para cada par, D4 recalcula `dias_encerrados` da carga inteira; esse método percorre todos os dias da janela. Com uma carga mensal, há repetição quadrática em dias, embora turnos e consultas estejam memoizados (`app/ponto/status_dia.py:248`; `app/ponto/status_dia.py:253`; `app/ponto/turnos.py:3004`; `app/ponto/turnos.py:2162`).
 
-## 02/11 18:21 · sessao 4253b846026f · - · - · origem=Ronald (tmux)
-
-- **Fila — três classificadores paralelos persistem**, já declarados: app próprio em `app/api/views.py:1570` e `app/api/views.py:1627`–`1653`; espelho próprio em `app/ponto/services/espelho.py:152`–`171`, gravado no dicionário em `:183`; furos por missing/veredito em `app/relatorios/furos.py:32`–`83`, usado em `:162`–`171`. O inventário restante os reconhece em `app/core/medida_leitor_do_dia.py:323`–`331`.
-
-- **Bloqueia a alegação de rótulo único no render**: `_calendario_grade.html:103` mantém tooltip próprio para `escala_suspeita`, ignorando `dia.status_rotulo`; ele usa `regua_rotulo` do vínculo ativo (`app/colaboradores/services/calendario.py:265`, `:730`). D4 copia o rótulo lavrado (`app/ponto/status_dia.py:283`–`286`), portanto template e D4 podem imprimir frases diferentes. O medidor não vê templates (`app/core/medida_leitor_do_dia.py:338`).
-
-- **Contraexemplo visual além do golden**: declaração parcial 13–17, jornada 08–12/13–17, sem batidas, resto cobrado, lavra `irregular`: o teste confirma esse status em `app/ponto/tests/test_cobparc_v4_procedentes.py:262`–`269`; calendário mantém `ausencia` no mesmo dicionário (`app/colaboradores/services/calendario.py:650`, `:657`–`667`, `:717`), e o template escolhe o chip de ausência antes de qualquer ramo de status (`app/templates/colaboradores/partials/_calendario_grade.html:97`–`100`). A confirmação por render executado é **[nao verificado]**. O teste confere só o dicionário (`app/ponto/tests/test_cobparc_v4_procedentes.py:259`–`260`).
-
-- **Não procede — drawer, view e vigia como novos juízes de status**: drawer chama o calendário (`app/colaboradores/services/drawer.py:120`–`121`); view também (`app/colaboradores/views.py:1945`–`1946`); vigia importa e chama apenas a porta de `resolver_dia_oferecido` (`app/chamados/services/vigia_fio.py:280`, `:289`).
-
-- **Não procede — painel recalcular status diário**: o painel guarda a resposta do lote diretamente em `linha['dia']` (`app/core/services/painel_op.py:334`–`338`). Seu campo `status` é presença, distinguida expressamente do status diário (`app/core/medida_leitor_do_dia.py:305`–`307`). Contudo, gate usa carga `[hoje-2,hoje]` e D4 é chamado sem essa carga (`app/core/services/painel_op.py:327`, `:334`, `:336`); paridade dessas janelas permanece **[nao verificado]**.
-
-- **Não procede como novo juiz diário — escala/views**: ainda seleciona rótulo por trabalho/folga/indefinição (`app/escala/views.py:54`, `:60`), mas é tela de previsão, explicitamente declarada (`app/escala/views.py:49`–`53`; `app/core/medida_leitor_do_dia.py:300`–`302`). O relógio é `datetime.date.today()` em `app/escala/views.py:26`.
-
-- **Fila — PDF herda a fonte antiga**: recebe os dias do espelho (`app/relatorios/pdf_espelho.py:592`–`598`), cujo classificador próprio permanece em `app/ponto/services/espelho.py:152`–`183`. Principal palavra impressa vem de `palavra_dia` (`app/relatorios/pdf_espelho.py:919`–`920`); agrega frases próprias de isenção (`:921`–`922`) e turno aberto (`:958`–`967`).
-
-- **Não procede — confundir status do TXT com status diário**: `classificar_export` responde entrada no TXT (`app/folha/export.py:746`–`751`), lê retenção em `:942`–`944`; retenção responde por veredito/protestos/data (`:1212`–`1238`). Não lê as novas colunas de status nesses trechos (`app/folha/export.py:1188`, `:1212`–`1238`).
-
-- **Fila documental — nomes mortos em comentários dos ícones**: `calendario.ROTULO_STATUS` permanece em `app/templates/core/_icone_dia_extra.html:6`, `_icone_dia_espuria.html:6`, `_icone_dia_previsto.html:6`, `_icone_dia_feriado.html:6`, `_icone_dia_folga.html:5`; são comentários, não imports executáveis. Os desenhos só contêm SVG (`app/templates/core/_icone_dia_previsto.html:7`–`9`; `_icone_dia_falta.html:8`–`14`). Nenhum import Python de nome morto foi encontrado na busca textual realizada **[nao verificado por AST/importação]**.
-
-- **Fila temporal preexistente**: calendário captura o instante principal em `app/colaboradores/services/calendario.py:134`, mas lê outro relógio para permissão de desfazer retratação em `:221`–`225`. Esse segundo instante não alimenta o status D4, enviado com `_agora` em `:573`–`574`.
-
-_1479 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1480 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
