@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 02:51:00.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **667**.
+**Medido em 03/11/2026 02:56:00.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **661**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -671,9 +671,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:56:34 | Bash |  | `cd /home/ronald/saas-hasner; pgrep -f "bin/push.sh" >/dev/null && echo PUSH-RODANDO; git status --porcelain \| grep -v '^??'; grep -n "a construir no ISENTO-H10" app/docs/LEIS.md \| cut -c1-80; grep -n "^\| \*\*ISENTO-H10\\|^\| ISENTO-H10\\|ISENTO-H10" app/docs/BACKLOG.md \| cut -c1-200 \| head` |
 | 14:56:18 | Bash |  | `cd /home/ronald/saas-hasner/logs/isento_h10/pouso; docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/ih10_prova_frota.py').read())" 2>&1 \| grep -v imported \| tee prova_base_antes.out \| tail -15` |
 | 14:56:04 | Bash |  | `cd /home/ronald/saas-hasner/logs/isento_h10/pouso; for f in reversao_snapshot.py reversao_chamados.py prova_frota.py; do docker cp $f saas_core:/tmp/ih10_$f; done; docker cp fm_helper.py saas_core:/tmp/ih10_fm_helper.py; for f in reversao_snapshot reversao_chamados; do docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/ih10_$f.py').read())" 2>&1 ...` |
-| 14:53:19 | SendMessage |  | `-` |
-| 14:53:13 | Bash |  | `cd /home/ronald/wt-isento-h10-135733; git log --oneline -3; git rev-parse 491b173e^{tree} 870dff12^{tree}; git status --porcelain` |
-| 14:51:34 | Bash |  | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO:') del L[2] i=[k for k,l in enumerate(L) if l.startswith('ISENTO-H10 R1/R2/R3/R4')][0] L.insert(i+1,"ISENTO-H10 R5 14:50: suite inteira da copia 870dff12 VERDE -- Ran 13419, OK (skipped=42, expected failures=24), rc=0 (logs/isento_h10/suite.log); vizinhos 10335 OK ...` |
-| 14:51:28 | Bash |  | `cd /home/ronald/saas-hasner/logs/isento_h10/pouso && python3 - <<'EOF' import re for f in ('reversao_snapshot.py','prova_frota.py'): s=open(f).read() s=s.replace("(aval Ronald 02/11 10:4x, (A) `!` rejulgar 08/09)","(aval Ronald 02/11 13:38 HORIZONTE-PARA-FRENTE + ISENTO-H10)") s=s.replace("PAREI (aval Ronald 02/11 10:4x): veredito mudado > 0, emitido > 0, hash de FM ou TXT mudou.","PAREI (aval Ron ...` |
-| 14:51:15 | Bash |  | `cd /home/ronald/saas-hasner/logs; mkdir -p isento_h10/pouso; cp e3isento/pouso/{reversao_snapshot.py,reversao_chamados.py,prova_frota.py,fm_helper.py} isento_h10/pouso/; cd isento_h10/pouso; sed -i 's#/tmp/reversao_e3isento_pouso.json#/tmp/reversao_isento_h10_pouso.json#g; s#/tmp/reversao_e3isento_chamados.json#/tmp/reversao_isento_h10_chamados.json#g; s#/tmp/e3i_fm_helper.py#/tmp/ih10_fm_helper.p ...` |
-| 14:51:08 | Agent | opus final ISENTO-H10 delta | `Obra ISENTO-H10, leitura FINAL antes do pouso (repo /home/ronald/saas-hasner; leia CLAUDE.md secao 0 e o aval abaixo). Arvore da obra: worktree /home/ronald/wt-isento-h10-135733, commits e8d4f4f3 (RED) e 870dff12 (cura), sobre 59de6666/2bc93f52 (E3-ISENTO-INSUMOS, cherry-pick ja lido antes) e base 97b43098 (main). Delta: /home/ronald/saas-hasner/logs/isento_h10/delta.diff (97b43098..870dff12) e de ...` |
