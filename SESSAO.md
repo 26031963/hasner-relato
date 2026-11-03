@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 01:41:05.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (182.1 MB). Acoes na janela: **668**.
+**Medido em 03/11/2026 01:46:07.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (182.1 MB). Acoes na janela: **664**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -674,7 +674,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:52:11 | Bash |  | `cd /home/ronald/saas-hasner; ls -la logs/cods_ato/impacto/; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read().split('\n') assert s[2].startswith('ESPERANDO:') s[2]='ESPERANDO: sonda-impacto-CODS-DO-ATO \| arquivo=/home/ronald/saas-hasner/logs/cods_ato/impacto/cura.out' s[5]=s[5]+' \| 13:51 SUITE INTEIRA VERDE: Ran 13401, OK (skipped=42, expected failures=25), rc 0 (logs/cods_ato/suite.log ...` |
 | 13:52:07 | Agent | verificador final CODS-DO-ATO | `Obra CODS-DO-ATO (repo /home/ronald/saas-hasner; Django em app/). Voce e o verificador adversarial FINAL antes do pouso. SO LEITURA: nao edite nada, nao rode suite, nao rode docker kill/stop/rm/kill. Copia: /home/ronald/wt-cods-ato-132330 (branch cods-ato-132330). Base 15c3a8b5. Commits: dcafbc7d (RED, app/ponto/tests/test_cods_do_ato.py) e 6995671c (cura em app/ponto/services/cartorio.py::julgar_ ...` |
 | 13:51:48 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/bougnj1gz.output; cd /home/ronald/saas-hasner; grep -E "^(ERROR\|FAIL):" logs/cods_ato/suite.log \| head; grep -n "rc=\\|exit" logs/cods_ato/suite.log \| tail -3` |
-| 13:41:30 | Bash |  | `cd /home/ronald/saas-hasner; ps -p 1284971 -o etime=; stat -c '%y %s' logs/cods_ato/suite.log; ls logs/cods_ato/impacto/` |
-| 13:41:27 | Bash |  | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='BACKLOG.md'; t=open(p).read() a='INTERROMPIDA 02/11 13:2x (aval CODS-DO-ATO):' assert t.count(a)==1 t=t.replace(a,'INTERROMPIDA 02/11 13:2x (aval CODS-DO-ATO; retoma por conta propria no resultado 7 do ISENTO-H10, aval 13:38; REEQ = ISENTO-H10 no ar; D5 conta no dry os 868 de isentos 08/09):') open(p,'w').write(t) EOF cd ..; grep -n "def v ...` |
-| 13:41:22 | Bash |  | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='BACKLOG.md'; s=open(p).read().split('\n') i=[k for k,l in enumerate(s) if l.startswith('\| CODS-DO-ATO \|')]; assert len(i)==1 novas=[ '\| ISENTO-H10 \| aval Ronald 02/11 13:38 HORIZONTE-PARA-FRENTE + ISENTO-H10 (L-124; substitui o resultado 9 da CODS-DO-ATO). Na copia de c9f16a60, a parte do isento so entra na impressao com `regra >= 4` ( ...` |
-| 13:41:07 | Bash |  | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='LEIS.md'; s=open(p).read().split('\n') i=[k for k,l in enumerate(s) if l.startswith('\| **L-123** \|')]; assert len(i)==1 s.insert(i[0]+1,'\| **L-124** \| **HORIZONTE-PARA-FRENTE**: obra nova alcanca do HORIZONTE para frente, no default do COBPARC-HORIZONTE-10 (`ponto/services/cartorio.py::versao_para`); o passado fica FOTO ate fato novo;  ...` |
