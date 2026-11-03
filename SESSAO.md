@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 03:44:46.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **568**.
+**Medido em 03/11/2026 03:50:17.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **564**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -574,7 +574,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:53:25 | Bash |  | `cd /home/ronald/saas-hasner/logs/noreverse; for f in red.log mutante.log green.log; do echo "== $f"; grep -E "NoReverseMatch\|^(OK\|FAILED)\|^Ran" $f \| tail -3 \| cut -c1-150; done` |
 | 15:53:22 | Bash |  | `cd /home/ronald/saas-hasner; ps -o ppid=,cmd= -p 1391202 \| grep -o 'wt-[a-z0-9-]*' \| head -1; ls -l --time-style=+%T logs/noreverse/; tail -3 logs/noreverse/red.log logs/noreverse/mutante.log \| cut -c1-150` |
 | 15:53:18 | Bash |  | `cd /home/ronald/saas-hasner; date +%T; ps -p 316967 -o pid=; tail -n 4 logs/e4cal/r2_mutantes.log \| cut -c1-120; bin/trava_teste.sh --quem; ls logs/noreverse/ 2>/dev/null; git -C /home/ronald/wt-noreverse-021533 status --porcelain \| head` |
-| 15:47:23 | Bash |  | `cd /home/ronald/saas-hasner; ps -p 316967 -o pid=; tail -n +2 logs/e4cal/r2_mutantes.log \| cut -c1-60` |
-| 15:47:18 | Bash |  | `cd /home/ronald/saas-hasner/app; H=$(date +%H:%M \| sed 's/.$/x/'); python3 - <<EOF p='docs/BACKLOG.md'; s=open(p).read() a='\| NOREVERSE-UI-NO-CORE \|' assert s.count(a)==1 row='\| DEPLOY-[nome]-ELO-DA-CORRENTE \| achado da medida 7 (NOREVERSE-AGORA, 02/11): bin/deploy.sh:268-279 espera cron em curso ate 600s e reinicia assim mesmo (declarado: "o vigia acusa"); em 02/11 o pouso COBPARC (e1c08457 06 ...` |
-| 15:47:05 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 262,285p bin/deploy.sh` |
-| 15:46:58 | Bash |  | `cd /home/ronald/saas-hasner; grep -n "crons_em_curso\\|ainda em curso\\|600" bin/deploy.sh \| head; grep -n "crons_em_curso" bin/encadeado.sh bin/cron_run.sh \| head; git log --since='2026-11-02 06:00' --until='2026-11-02 07:00' --format='%h %ad %s' --date=format:%H:%M:%S \| head` |
