@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 22:36:21.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (176.4 MB). Acoes na janela: **642**.
+**Medido em 02/11/2026 22:41:06.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (176.4 MB). Acoes na janela: **637**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -647,8 +647,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:43:18 | Bash | Check round 4 progress | `cd /home/ronald/wt-cobparc-relogio-070738 && git log --oneline 20f2ebb2..HEAD; git status --porcelain \| head -5; bash /home/ronald/saas-hasner/bin/trava_teste.sh --quem; date +%H:%M` |
 | 10:43:02 | Bash | Point ESPERANDO at new lock holder | `python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') if L[2].startswith('ESPERANDO:'): del L[2] L.insert(2,'ESPERANDO: trava_teste.sh \| pid=3750710') open(p,'w').write('\n'.join(L)) EOF ps -o args= -p 3750710 \| cut -c1-50` |
 | 10:42:14 | Bash | Set ESPERANDO to current live lock holder | `p=$(bash /home/ronald/saas-hasner/bin/trava_teste.sh --quem \| sed -n 's/^suite:\([0-9]*\).*/\1/p'); echo "pid=$p"; [ -n "$p" ] && ps -o args= -p $p \| cut -c1-50 && cd /home/ronald/saas-hasner/app && P=$p python3 - <<'EOF' import os p='docs/RELATO.md' L=open(p).read().split('\n') if L[2].startswith('ESPERANDO:'): del L[2] L.insert(2,'ESPERANDO: trava_teste.sh \| pid=%s' % os.environ['P']) open(p, ...` |
-| 10:40:21 | Bash | Remove stale ESPERANDO line | `python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') if L[2].startswith('ESPERANDO: trava_teste.sh'): del L[2] open(p,'w').write('\n'.join(L)) EOF sed -n 3p docs/RELATO.md \| cut -c1-40` |
-| 10:39:21 | Bash | Add ESPERANDO for new lock holder if alive | `ps -o pid=,args= -p 3526590 \| cut -c1-60 && cd /home/ronald/saas-hasner/app && python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('ERRO-BOBO COBPARC-FILA-RELOGIO') L.insert(2,'ESPERANDO: trava_teste.sh \| pid=3526590') open(p,'w').write('\n'.join(L)) EOF sed -n 3p /home/ronald/saas-hasner/app/docs/RELATO.md` |
-| 10:37:21 | Bash | Remove stale ESPERANDO line | `python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') if L[2].startswith('ESPERANDO: trava_teste.sh'): del L[2] open(p,'w').write('\n'.join(L)) EOF sed -n 3p docs/RELATO.md \| cut -c1-40` |
-| 10:36:26 | Bash | Add ESPERANDO for live lock holder | `python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('ERRO-BOBO COBPARC-FILA-RELOGIO') L.insert(2,'ESPERANDO: trava_teste.sh \| pid=3338112') open(p,'w').write('\n'.join(L)) EOF sed -n 3p docs/RELATO.md` |
-| 10:36:23 | Bash | Check current lock holder alive | `ps -o pid=,etime=,args= -p 3338112 \| cut -c1-80` |
