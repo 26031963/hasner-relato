@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 08:27:16.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **356**.
+**Medido em 03/11/2026 08:32:46.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **348**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -358,11 +358,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:42:33 | Bash | Inspect sombra process tree and builder | `cd /home/ronald/saas-hasner && pstree -p 1741839 \| head; uptime; tail -c 800 /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/a255846f06c4a61fc.output \| tr '\\' '\n' \| tail -5 \| cut -c1-200` |
 | 20:33:29 | Bash | Wait in foreground for sombra run | `cd /home/ronald/saas-hasner && for i in $(seq 54); do ps -p 1741839 >/dev/null \|\| break; /usr/bin/sleep 10; done; ps -p 1741839 >/dev/null && echo AINDA-VIVA; tail -25 logs/e4cal/r8_d5_sombra.out` |
 | 20:33:18 | Bash | Check sombra run and builder outputs | `cd /home/ronald/saas-hasner && ps -p 1741839 >/dev/null && echo sombra-viva; tail -15 logs/e4cal/r8_d5_sombra.out; ls -lt logs/e4cal \| head -5` |
-| 20:28:39 | Bash | Wait for sombra dry run to finish | `cd /home/ronald/saas-hasner && while ps -p 1741839 >/dev/null; do /usr/bin/sleep 10; done; cat logs/e4cal/r8_d5_sombra.out \| tail -30` |
-| 20:28:31 | Bash | Repoint ESPERANDO to sombra dry run | `cd /home/ronald/saas-hasner && sed -i '3s#^ESPERANDO: .*#ESPERANDO: sombra.sh \| pid=1741839 \| arquivo=logs/e4cal/r8_d5_sombra.out#' app/docs/RELATO.md && sed -i 's#^\(E4CAL-L1 volta 8 RED do passo 1 20:27.*\)verde rodando (r8_p1_verde.log)\.#\1verde 20:27:44 OK 19 testes rc=0; dry D5 na sombra rodando (r8_d5_sombra.out).#' app/docs/RELATO.md && grep -c 'verde 20:27:44' app/docs/RELATO.md` |
-| 20:28:12 | Bash | Look for next builder producer | `cd /home/ronald/saas-hasner && /usr/bin/sleep 15; pgrep -af 'trava_teste\|codex_pergunta\|sombra.sh\|manage.py' \| grep -v pgrep \| cut -c1-140; ls -lt logs/e4cal \| head -4` |
-| 20:27:39 | Bash | Wait and confirm verde run advancing | `cd /home/ronald/saas-hasner && /usr/bin/sleep 30; ps -p 1670090 >/dev/null && echo vivo; stat -c '%y' logs/e4cal/r8_p1_verde.log; tail -c 200 logs/e4cal/r8_p1_verde.log` |
-| 20:27:36 | Bash | Check hook verdict and producer state | `cd /home/ronald/saas-hasner && tail -2 logs/hook_stop_fila1.log \| cut -c1-200; ps -p 1670090 >/dev/null && echo vivo; stat -c '%y' logs/e4cal/r8_p1_verde.log` |
-| 20:27:27 | Bash | Record RED, repoint ESPERANDO to verde run | `cd /home/ronald/saas-hasner && sed -i '3s#^ESPERANDO: .*#ESPERANDO: trava_teste.sh \| pid=1670090 \| arquivo=logs/e4cal/r8_p1_verde.log#' app/docs/RELATO.md && python3 - <<'EOF' p='/home/ronald/saas-hasner/app/docs/RELATO.md' s=open(p).read() a=s.index('E4CAL-L1 volta 8 20:2x'); b=s.index('\n',a) s=s[:b]+"\nE4CAL-L1 volta 8 RED do passo 1 20:27: test_D5_competencia_entregue_ganha_so_o_status FAIL  ...` |
-| 20:27:23 | Bash | Identify new test process log | `cd /home/ronald/saas-hasner && ls -l /proc/1670090/fd 2>/dev/null \| grep -oE '/home/\S+\.log' \| sort -u; ps -o args -p 1670090 \| tail -1 \| grep -oE '\-v /home/ronald/wt[^:]+\|test [a-z_. ]+--'` |
-| 20:27:20 | Bash | Check RED failure and live producers | `cd /home/ronald/saas-hasner && grep -E '^(FAIL\|ERROR):' logs/e4cal/r8_p1_red.log; pgrep -af 'trava_teste\|codex_pergunta\|sombra.sh' \| cut -c1-160` |
