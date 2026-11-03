@@ -83,7 +83,7 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
 | turno/marcos | 15/0 | 0 | 0 | 0 | 0 | 3 | 1 |
 | ausencia/ferias | 15/0 | 0 | 0 | 0 | 0 | 6 | 4 |
 | chamado | 18/0 | 0 | 0 | 0 | 0 | 3 | 11 |
-| feriado/prazo | 6/2 | 13 | 10 | 2 | 1 | 4 | 1 |
+| feriado/prazo | 6/2 | 12 | 9 | 2 | 1 | 4 | 1 |
 | fechamento | 9/0 | 0 | 0 | 0 | 0 | 5 | 1 |
 | tela | 11/1 | 110 + sitio novo: nao sei (sem varredor) | 68 | 5 | 37 + sitio novo: nao sei (sem varredor) | 0 | 2 |
 | portas | 1/0 | 124 + sitio novo: nao sei (sem varredor) | 0 | 0 | 124 + sitio novo: nao sei (sem varredor) | 0 | 25 |
@@ -172,12 +172,12 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
   - por onde alguem chega a este dia (porta alcancavel, com o verbo do painel)? -> `chamados/juizes.py::porta_alcancavel_do_dia` · registro 0
   - a cobranca do dia cala porque a celula lavrada diz que o dia nao e de trabalho? -> `chamados/juizes.py::dia_sem_trabalho` · registro 0
 
-### feriado/prazo -- fora_de_autoridade('feriado/prazo') = 13
-- pendentes: sem chamar 10 · chama e deriva 2 · nao sei 1 · [pergunta sem juiz declarado (nao ha quem chamar): 1]
+### feriado/prazo -- fora_de_autoridade('feriado/prazo') = 12
+- pendentes: sem chamar 9 · chama e deriva 2 · nao sei 1 · [pergunta sem juiz declarado (nao ha quem chamar): 1]
 - padroes proibidos: 4, varridos pelo selo da familia
 - selos: ponto/tests/test_contract_juiz_feriado.py
 - perguntas:
-  - o feriado suprime o trabalho do dia? -> `ponto/precedencia.py::fatos_do_dia` · registro 2 (sem chamar 2, chama e deriva 0, nao sei 0)
+  - o feriado suprime o trabalho do dia? -> `ponto/precedencia.py::fatos_do_dia` · registro 1 (sem chamar 1, chama e deriva 0, nao sei 0)
   - feriado trabalhado paga dobra ou hora simples? -> `ponto/motor_calculo_v2.py::CICLOS_FERIADO_SIMPLES` · registro 6 (sem chamar 6, chama e deriva 0, nao sei 0)
   - a que competencia (corte a corte) pertence o dia? -> `ponto/janelas.py::janela_atual` · registro 3 (sem chamar 2, chama e deriva 1, nao sei 0)
   - a competencia do dia esta fechada (pode escrever)? -> `ponto/janelas.py::competencia_fechada` · registro 0
