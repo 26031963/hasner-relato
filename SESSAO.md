@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 00:31:39.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (181.8 MB). Acoes na janela: **730**.
+**Medido em 03/11/2026 00:37:06.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (181.8 MB). Acoes na janela: **731**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:33:22 | Bash | Check suite and sombra progress | `cd /home/ronald/saas-hasner; date; ps -p 3766703,3824672,3840402 -o pid,etime,cmd \| cut -c1-80; tail -c 300 logs/e4cal/suite_pouso_44dd43c6.log; echo; ls logs/e4cal/l1pouso_* logs/l1pouso_* 2>/dev/null; tail -3 logs/e4cal/l1pouso_sombra.log` |
 | 00:30:05 | Bash | Fix ESPERANDO producer and verify proof | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() old='ESPERANDO: suite.sh \| pid=3766701 \| arquivo=logs/e4cal/suite_pouso_44dd43c6.log' assert s.count(old)==1 s=s.replace(old,'ESPERANDO: trava_teste.sh \| pid=3766703 \| arquivo=logs/e4cal/suite_pouso_44dd43c6.log') open(p,'w').write(s) EOF cd bin && python3 -c " import hook_stop_fila1 as h print(h._esperan ...` |
 | 00:30:00 | Bash | Show suite process tree and match rule | `ps -eo pid,ppid,etime,cmd --forest \| /bin/grep -A6 "^ *3766701" \| cut -c1-170; /bin/grep -n "def _processo_casa" -A22 /home/ronald/saas-hasner/bin/hook_stop_fila1.py` |
 | 00:29:57 | Bash | Find direct suite.sh child process | `ps -eo pid,ppid,cmd \| /bin/grep -E "suite.sh" \| /bin/grep -v grep \| cut -c1-150` |
