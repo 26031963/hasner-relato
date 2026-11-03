@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 07:23:46.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **433**.
+**Medido em 03/11/2026 07:29:16.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **428**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -438,8 +438,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:30:15 | Bash | Check disjuntor state files | `cd /home/ronald/saas-hasner && ls -t logs/disjuntor \| head; cat logs/disjuntor/$(ls -t logs/disjuntor \| head -1) 2>/dev/null \| tail -c 1500` |
 | 19:30:12 | Bash | Record L1 opus reproval in RELATO top | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p).read() a=s.index('E4CAL-L1 r7 15d4f10b'); b=s.index('\n',a) nova=("E4CAL-L1 REPROVADO no opus final 19:4x (B3 disparou; a obra PARA, liberacao e do Ronald): PERGUNTA DE DESENHO? nao -- " "os 3 bloqueios ja tem lei escrita: (1) COMPLEMENTO MUDA 1 nao feito: guarda ENTREGUE em app/ponto/management/commands/lavrar_statu ...` |
 | 19:29:59 | Bash | Read RELATO top and hook log | `cd /home/ronald/saas-hasner && head -c 6000 app/docs/RELATO.md \| head -12; echo; tail -n 30 logs/hook_stop_fila1.log \| cut -c1-300 \| tail -8` |
-| 19:29:00 | Bash | Read B3 rule text and release line format | `cd /home/ronald/saas-hasner && sed -n 11,30p bin/disjuntor.py; sed -n 625,660p bin/disjuntor.py` |
-| 19:28:58 | Bash | Read B3 disjuntor mechanics | `cd /home/ronald/saas-hasner && grep -n 'B3' bin/disjuntor.py \| head -30; grep -n 'B3\\|DESENHO' bin/hook_stop_fila1.py \| head -20` |
-| 19:28:49 | Bash | Verify the COMPLEMENTO step 1 claim | `cd /home/ronald/saas-hasner && f=$(find app/docs logs -name 'AVAL_L1_COMPLEMENTO.md' 2>/dev/null \| head -3); echo "$f"; for x in $f; do sed -n 1,30p $x; done; sed -n 30,50p /home/ronald/wt-e4cal-l1-r2-151020/app/ponto/management/commands/lavrar_status_competencia.py` |
-| 19:24:17 | Bash | Update RELATO with L1 r7 state and triage | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read().split('\n') i=[k for k,l in enumerate(s) if l.startswith('CODEX VERIFICADOR FINAL L1 18:2x')]; assert len(i)==1 s[i[0]]=("E4CAL-L1 r7 15d4f10b (d07b238e+15d4f10b sobre ded392a5): suite 13444 OK rc 0 (logs/e4cal/r7_suite2.log), 5 mutantes mortos; Codex v1 18:2x BLOQUEOU (tooltip escala_suspeita :103, card Aber ...` |
-| 19:24:10 | Agent | opus final verificador L1 | `Obra E4-CALENDARIO-L1, leitura FINAL antes do pouso (merge+deploy). Copia: /home/ronald/wt-e4cal-l1-r2-151020, branch e4cal-l1-r2-151020, HEAD 15d4f10b; base no main = f60b7e0b~1 (commits f60b7e0b, a050e267, cca882f4, cb59db69, ded392a5, d07b238e, 15d4f10b). Repo principal /home/ronald/saas-hasner (leia CLAUDE.md, secoes 0, 4, 4a, 6, 7b). Diff: `git -C /home/ronald/wt-e4cal-l1-r2-151020 diff f60b7 ...` |
