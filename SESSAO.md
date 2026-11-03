@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 01:14:47.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (182.1 MB). Acoes na janela: **705**.
+**Medido em 03/11/2026 01:20:18.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (182.1 MB). Acoes na janela: **706**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:20:03 | Bash | Check bloco progress | `cd /home/ronald/saas-hasner; date; ps -p 1439002 -o pid,etime; tail -4 logs/e4cal/l1pouso_bloco.log; bash bin/sombra.sh --conferir 2>&1 \| tail -1` |
 | 00:59:40 | Bash | Check bloco progress | `cd /home/ronald/saas-hasner; date; ps -p 1439002 -o pid,etime,cmd; tail -4 logs/e4cal/l1pouso_bloco.log; bash bin/sombra.sh --conferir 2>&1 \| tail -1` |
 | 00:54:36 | Bash | Verify padrao term exists | `cd /home/ronald/saas-hasner/app/docs && /bin/grep -il "juiz unico\\|juiz único" GLOSSARIO.md PLANO-PADROES.md; /bin/grep -n "padrao=" /home/ronald/saas-hasner/bin/tests/test_lei_akita.sh \| head -5` |
 | 00:54:32 | Bash | Draft pouso commit message | `cat > /home/ronald/saas-hasner/logs/e4cal/l1_pouso/msg_commit.txt <<'EOF' POUSO E4-CALENDARIO-L1: o calendario le o juiz do dia (D4 + lavra); Resolver dia pela lavra, eh_trabalho morre (aval L1-POUSA-E-ESCADA) LEI-AKITA: origem=colaboradores/services/calendario.py::resolver_dia_oferecido, testemunha=status lavrado, RED=ja na copia, quem-mais-le=template + vigia_fio, juizes novos=0, padrao=juiz uni ...` |
