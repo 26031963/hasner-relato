@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 03:17:16.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **607**.
+**Medido em 03/11/2026 03:22:47.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **600**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -610,10 +610,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:30:16 | Bash |  | `ps -o pid,args -p 92614 \| cut -c1-200` |
 | 15:30:13 | Bash |  | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; ls -lt --time-style=+%T logs/e4cal/ \| head -5; python3 - <<'PY' r='app/docs/RELATO.md'; R=open(r).read().split('\n'); assert R[2].startswith('ESPERANDO:') del R[2] j=[k for k,l in enumerate(R) if l.startswith('MODO-COMUM-OUT-DO-LOTE CENSO')]; assert len(j)==1 R.insert(j[0],'ISENTO-H10 PUSH OK 15:2x: 97b43098..0c9e1872 no remoto (logs/isento_ ...` |
 | 15:30:02 | Bash |  | `cd /home/ronald/saas-hasner; tail -6 logs/isento_h10/push2.log; git fetch -q origin; git log --oneline -3 origin/main; git log --oneline -2 main; git status --short app/docs` |
-| 15:20:38 | Bash |  | `date +%T; docker ps --format '{{.Names}} {{.Status}} {{.Command}}' \| grep -i -E "manage.py test\|test" \| cut -c1-150; tail -c 400 /tmp/prepush-saida.u4v7Sn` |
-| 15:20:35 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'PY' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| NOREVERSE-UI-NO-CORE \|')]; assert len(i)==1 cs=L[i[0]].split(' \| ') cs[2]='CENSO 15:4x: 1 sitio ALCANCA-CORE (pautas/services.py:426; cron processar_cartorio + signal da batida via engolir); molde existente diagnostico_escala.py:39-45 TELA_CALENDARI ...` |
-| 15:20:19 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -n 30,48p ponto/services/diagnostico_escala.py; git grep -n "TELA_CALENDARIO" -- . \| head; sed -n 160,172p pautas/services.py` |
-| 15:18:52 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'PY' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| ENCADEADO-0111-SEM-CARIMBO \|')]; assert len(i)==1 cs=L[i[0]].split(' \| ') cs[2]='CAUSA 02/11 15:3x: processar_cartorio emp2 rc 1 (cartorio.log ~8358, NoReverseMatch colaboradores em pautas/services.py:426 sob urls_core) -> obra NOREVERSE-UI-NO-CORE; ...` |
-| 15:18:44 | Agent | censo reverse de UI no core | `Censo SO LEITURA (nao edite nada, nao rode docker/manage.py/suite, nao mate processo). Repo /home/ronald/saas-hasner, Django em app/. Leia pelo HEAD com `git -C /home/ronald/saas-hasner grep -n -w` ou `git show HEAD:<path>` (o grep da sessao e ugrep, nao confie nele para censo). BUG PROVADO (prod 01/11 06:32, logs/cartorio.log ~8302-8358): o cron `processar_cartorio` (empresa 2) roda no container  ...` |
-| 15:18:24 | Bash |  | `cd /home/ronald/saas-hasner; git grep -n -E "reverse\([^)]*urlconf=\|urlconf=['\"]config" -- app ':!*/tests/*' \| head -10; git grep -n "HASNER_TENANT_URLCONF" -- app/config \| head -5; git log --oneline -3 -- app/pautas/services.py; git grep -n -w "contexto_do_dia_texto" -- app ':!*/tests/*' \| head` |
-| 15:18:12 | Bash |  | `cd /home/ronald/saas-hasner; grep -n "NoReverseMatch\\|is not a registered namespace" logs/cartorio.log \| tail -5; sed -n 415,435p app/pautas/services.py; grep -rn "colaboradores" app/config/urls_core.py \| head -5; docker exec saas_core printenv \| grep -i -E "URLCONF\|SETTINGS_MODULE"` |
