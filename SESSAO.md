@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 02:02:42.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.3 MB). Acoes na janela: **685**.
+**Medido em 03/11/2026 02:08:07.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.3 MB). Acoes na janela: **684**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:04:02 | Bash | Keep waiting for push2 verdict | `cd /home/ronald/saas-hasner && for i in $(seq 1 38); do grep -q '^rc=' logs/e4cal/l1_pouso/push2.log && break; /usr/bin/sleep 15; done; tail -3 logs/e4cal/l1_pouso/push2.log \| cut -c1-200` |
 | 01:54:28 | Bash | Wait for push2 verdict in foreground | `cd /home/ronald/saas-hasner && for i in $(seq 1 38); do grep -q '^rc=' logs/e4cal/l1_pouso/push2.log && break; /usr/bin/sleep 15; done; tail -4 logs/e4cal/l1_pouso/push2.log \| cut -c1-200` |
 | 01:54:22 | Bash | Read hook PAREI logic | `cd /home/ronald/saas-hasner && sed -n 1085,1135p bin/hook_stop_fila1.py` |
 | 01:54:19 | Bash | Check hook bang rule and dry-run it | `cd /home/ronald/saas-hasner && grep -n "_SO_BANG\\|startswith('!')\\|'!'" bin/hook_stop_fila1.py \| head; python3 bin/hook_stop_fila1.py </dev/null 2>&1 \| tail -3` |
@@ -693,5 +694,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:16:52 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/e3isento/pouso/; wc -l logs/e3isento/pouso/sonda_*.py; tail -30 /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/a5db00ea9607b2f8c.output \| cut -c1-300` |
 | 14:16:46 | Bash |  | `cd /home/ronald/saas-hasner; tr '\0' ' ' < /proc/3946153/cmdline; echo; head -8 app/docs/RELATO.md \| cut -c1-200; cat logs/isento_h10/green_modulo.log` |
 | 14:15:43 | Bash |  | `cd /home/ronald/saas-hasner; ls -la logs/isento_h10/ 2>/dev/null; git worktree list \| grep isento-h10; bin/trava_teste.sh --quem` |
-| 14:07:58 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 28); do grep -q '^rc=' logs/cods_ato/push.log && break; /usr/bin/sleep 20; done; tail -3 logs/cods_ato/push.log` |
-| 14:07:40 | Bash |  | `cd /home/ronald/saas-hasner; tail -c 600 logs/cods_ato/push.log; pgrep -fa "bin/push.sh\|pre-push" \| grep -v pgrep \| head -3; bin/trava_teste.sh --quem` |
