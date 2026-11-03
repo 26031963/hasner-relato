@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 05:05:47.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **493**.
+**Medido em 03/11/2026 05:11:01.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **486**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -496,10 +496,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:15:41 | Bash | Wait for an L1 run that lasts longer than 45 s | `cd /home/ronald/saas-hasner; for i in $(seq 1 50); do q=$(bin/trava_teste.sh --quem); case "$q" in suite:*) p=${q#suite:}; p=${p%% *}; /usr/bin/sleep 45; if ps -p $p >/dev/null; then f=$(ls -t logs/e4cal/*.log \| head -1); break; fi;; esac; /usr/bin/sleep 10; done; echo "$p $f"; ps -p $p -o pid=` |
 | 17:15:15 | Bash | Check the green2 run and the hook's last verdict | `cd /home/ronald/saas-hasner; /usr/bin/sleep 20; ps -p 2381106 -o pid=; ls -la --time-style=+%H:%M:%S logs/e4cal/r5_green2.log; tail -1 logs/hook_stop_fila1.log \| cut -c1-200; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|rc=' logs/e4cal/r5_green2.log \| tail -3` |
 | 17:15:05 | Bash | Point ESPERANDO at the L1 green2 run | `cd /home/ronald/saas-hasner; sed -i '3s#^ESPERANDO: .*#ESPERANDO: trava_teste.sh \| pid=2381106 \| arquivo=logs/e4cal/r5_green2.log#' app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md; ps -p 2381106 -o pid=` |
-| 17:10:11 | Bash | Wait for an L1 run that lasts longer than 20 s | `cd /home/ronald/saas-hasner; for i in $(seq 1 40); do q=$(bin/trava_teste.sh --quem); case "$q" in suite:*) p=${q#suite:}; p=${p%% *}; f=$(ls -t logs/e4cal/*.log \| head -1); /usr/bin/sleep 20; if ps -p $p >/dev/null; then break; fi;; esac; /usr/bin/sleep 15; done; echo "$q"; echo "$f"; ps -p $p -o pid=; ls -t --time-style=+%H:%M:%S -la logs/e4cal/ \| head -4` |
-| 17:10:02 | Bash | Read the rest of the O261-E-CELULA-20 row | `cd /home/ronald/saas-hasner/app; sed -n 836p docs/BACKLOG.md \| cut -c1200-3500` |
-| 17:09:59 | Bash | Read the O261-E-CELULA-20 row in the BACKLOG | `cd /home/ronald/saas-hasner/app; grep -n 'O261-E-CELULA-20-UM-DONO' docs/BACKLOG.md \| cut -c1-1200` |
-| 17:09:33 | Bash | Point ESPERANDO at the query-count run | `cd /home/ronald/saas-hasner; sed -i '3s#^ESPERANDO: .*#ESPERANDO: trava_teste.sh \| pid=2074515 \| arquivo=logs/e4cal/r5_sql_antes.log#' app/docs/RELATO.md; /usr/bin/sleep 20; ps -p 2074515 -o pid=; ls -la --time-style=+%H:%M:%S logs/e4cal/r5_sql_antes.log` |
-| 17:09:30 | Bash | Read the green run's verdict and find the new run's log | `cd /home/ronald/saas-hasner; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|rc=' logs/e4cal/r5_green1.log \| tail -3; ls -t --time-style=+%H:%M:%S -la logs/e4cal/ \| head -3; ps -p 2074515 -o args= \| grep -o 'logs/e4cal/[a-z0-9_]*\.log'` |
-| 17:08:55 | Bash | Check that the green run is alive and its log is growing | `cd /home/ronald/saas-hasner; /usr/bin/sleep 30; ps -p 2017827 -o pid=; ls -la --time-style=+%H:%M:%S logs/e4cal/r5_green1.log; tail -2 logs/hook_stop_fila1.log \| cut -c1-200; bin/trava_teste.sh --quem` |
-| 17:08:44 | Bash | Point ESPERANDO at the L1 green run | `cd /home/ronald/saas-hasner; sed -i '3s#^ESPERANDO: .*#ESPERANDO: trava_teste.sh \| pid=2017827 \| arquivo=logs/e4cal/r5_green1.log#' app/docs/RELATO.md; ps -p 2017827 -o pid=; sed -n 3p app/docs/RELATO.md` |
