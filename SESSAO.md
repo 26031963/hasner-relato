@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 21:47:34.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (175.1 MB). Acoes na janela: **629**.
+**Medido em 02/11/2026 21:52:58.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (175.3 MB). Acoes na janela: **638**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:52:58 | Bash | Add via-NULL guard and fix hash comment | `cd /home/ronald/saas-hasner/logs/e4cal/r8_pouso && python3 - <<'EOF' p='reversao_snapshot.py'; s=open(p).read() a="cel = []\n" assert s.count(a)==1 g='''# GUARDA D5-VIA-NULA (opus final 02/11): celula com veredito e via NULA cai na lavra completa (portas/celula.py:767-780) # e o reverter NAO desfaz via/veredito_em/outbox -> aborta ANTES do apply se houver uma so no universo. _via_nula = sum(celula ...` |
+| 21:52:50 | Bash | Backup aplicar.sh and read snapshot head | `cd /home/ronald/saas-hasner/logs/e4cal/r8_pouso && cp aplicar.sh /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/l1p1/aplicar.sh.bak && sed -n 1,25p reversao_snapshot.py` |
+| 21:52:44 | Bash | Read apply script and common helpers | `cd /home/ronald/saas-hasner/logs/e4cal/r8_pouso && cat aplicar.sh; sed -n 1,40p comum.py` |
+| 21:52:16 | Bash | Deploy passo 1 without migrate | `cd /home/ronald/saas-hasner && date +%H:%M && bash bin/deploy.sh --sem-migrate > logs/e4cal/p1_deploy.log 2>&1; echo rc=$?; tail -15 logs/e4cal/p1_deploy.log` |
+| 21:52:12 | Bash | Update docs and commit the merge | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/BACKLOG.md'; s=open(p).read() a='prova de frota PAREI cobre o apply \| fila \|' assert s.count(a)==1 s=s.replace(a,'prova de frota PAREI detecta mas o reverter.py NAO cobre via/veredito_em/outbox: aplicar.sh aborta com via NULA>0 no universo (opus final 02/11) \| fila \|') open(p,'w').write(s) p='app/docs/RELATO.md'; s=open(p).read() a=' ...` |
+| 21:51:58 | Bash | Merge passo 1 branch and cmp against copy | `cd /home/ronald/saas-hasner && git merge --no-ff --no-commit l1p1-210029 2>&1 \| tail -2; ls .git/MERGE_HEAD && for f in app/docs/ADR/0002-celula-e-o-dia.md app/docs/ADR/0003-celula-tres-naturezas.md app/ponto/management/commands/lavrar_status_competencia.py app/ponto/tests/test_e3_status_lavrado.py; do cmp $f /home/ronald/wt-l1p1-210029/$f && echo "cmp ok $f"; done` |
+| 21:51:54 | Bash | Pre-merge checks: no push, tree state, diff stat | `cd /home/ronald/saas-hasner && pgrep -af 'push.sh\|pre-push\|regua.sh' \| grep -v pgrep \| head -3; git status --porcelain \| grep -v '^??' ; git log --oneline -1; git diff --stat d69da038 l1p1-210029 \| tail -8` |
+| 21:49:34 | Bash | Repoint ESPERANDO to new suite pid | `cd /home/ronald/saas-hasner; F=$(readlink /proc/2502653/fd/1); echo $F; R=${F#/home/ronald/saas-hasner/}; sed -i "3s#.*#ESPERANDO: trava_teste.sh \| pid=2502653 \| arquivo=$R#" app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md` |
+| 21:49:30 | Bash | Confirm producer alive and log advancing | `cd /home/ronald/saas-hasner; pgrep -af 'trava_teste\|sombra.sh' \| grep -v pgrep \| cut -c1-120; stat -c %y logs/e4cal/r8_p3_verde.log; date +%T` |
 | 21:46:27 | Bash | Wait for log to advance before next stop | `/usr/bin/sleep 180; tail -2 /home/ronald/saas-hasner/logs/hook_stop_fila1.log \| cut -c1-160` |
 | 21:45:58 | Bash | Repoint ESPERANDO to L1 suite log | `cd /home/ronald/saas-hasner && sed -i '3s#.*#ESPERANDO: trava_teste.sh \| pid=2259625 \| arquivo=logs/e4cal/r8_p3_verde.log#' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md; /usr/bin/sleep 20; stat -c %y logs/e4cal/r8_p3_verde.log` |
 | 21:45:55 | Bash | Find L1 suite log file | `ls -l /proc/2259625/fd/1 /proc/2259625/fd/2 2>&1;` |
