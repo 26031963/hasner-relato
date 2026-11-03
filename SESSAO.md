@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 00:16:00.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (180.4 MB). Acoes na janela: **685**.
+**Medido em 03/11/2026 00:21:01.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (180.4 MB). Acoes na janela: **683**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -693,5 +693,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:21:29 | Bash | Read RELATO top, PROMPTS row, writer code | `cd /home/ronald/saas-hasner/app/docs && sed -n '1,4p' RELATO.md \| cut -c1-600; grep -n 'E3-ISENTO-INSUMOS-ALCANCE' PROMPTS.md \| tail -2 \| cut -c1-300; sed -n '960,990p' ../ponto/services/cartorio.py; sed -n '150,180p' ../chamados/services/fabrica_da_celula.py; sed -n '215,235p' ../chamados/services/relavra_via.py` |
 | 12:21:20 | Bash | Summarize intercepted writes and stacks | `cd /home/ronald/saas-hasner/logs/e3isento/pouso && sed -n '74,400p' sonda_causa_13_cura1.out \| grep -E '^\* ' \| sed -E 's/ \\| t=.*//' \| cut -c1-140 \| sort \| uniq -c \| head -40; echo ---; grep -nE 'stack:' sonda_causa_13_cura1.out \| sed -E 's/^[0-9]+:\s*stack: //' \| cut -c1-330 \| sort \| uniq -c` |
 | 12:21:14 | Bash | Check causa sonda progress | `cd /home/ronald/saas-hasner/logs/e3isento/pouso && date '+%H:%M:%S'; ls -la --time-style=+%H:%M:%S sonda_causa_13* ; tail -c 1500 /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/adece10d44a34cd72.output \| tr -d '\000' \| tail -20` |
-| 12:20:03 | Bash | Read causa findings from the cure run | `cd /home/ronald/saas-hasner/logs/e3isento/pouso && grep -vE '^\s*$' sonda_causa_13_cura1.out \| grep -nE 'FOTO\|ISENTO\|isento\|GRAVA\|grava\|materializ\|contexto\|Traceback\|File \|EVENTO\|evento\|colab\|FIM' \| cut -c1-260 \| head -80` |
-| 12:19:57 | Bash | Check whether causa sonda is alive | `cd /home/ronald/saas-hasner && date '+%H:%M:%S'; ls -la logs/e3isento/pouso/ \| grep -i causa; ls -la logs/sombra/ \| grep -i causa; docker ps --format '{{.Names}} {{.RunningFor}} {{.Status}}' \| grep -iv 'saas_\\|juliani\\|mensageria\\|caddy' \| head; ps -eo pid,etime,args \| grep -E 'sombra.sh\|sonda_causa' \| grep -v grep \| head` |
