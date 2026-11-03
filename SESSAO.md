@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 01:31:06.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (182.1 MB). Acoes na janela: **698**.
+**Medido em 03/11/2026 01:36:04.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (182.1 MB). Acoes na janela: **684**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -694,17 +694,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:39:43 | Bash |  | `cd /home/ronald/saas-hasner/app/docs; grep -ohE "L-1[0-9]{2}" LEIS.md CORTES.md ../../CLAUDE.md \| sort -u \| tail -4; grep -n "L-123\\|L-124\\|L-122" LEIS.md \| head -5 \| cut -c1-250; grep -n "^### \\|^## " LEIS.md \| head -20` |
 | 13:39:38 | Bash |  | `cd /home/ronald/saas-hasner/app/docs; grep -n "L-12[0-9]\\|L-11[0-9]" LEIS.md \| tail -6 \| cut -c1-220; sed -n 364,372p LEIS.md \| cut -c1-250; grep -n "^\| E3-ISENTO-INSUMOS \\|^\| CODS-DO-ATO \\|^\| E4-CALENDARIO-L1 " BACKLOG.md \| cut -c1-80; tail -3 PROMPTS.md \| cut -c1-200; ls ../docs/adr* adr 2>/dev/null; git -C .. ls-files \| grep -i "adr/0003\\|0003"` |
 | 13:39:34 | Bash |  | `cd /home/ronald/saas-hasner/app/docs; grep -n "Backfill" GLOSSARIO.md PLANO-PADROES.md \| head; grep -on "L-1[0-9][0-9]" LEIS.md \| awk -F: '{print $3}' \| sort -u \| tail -3; grep -n "^## \\|^### L-12" LEIS.md \| tail -5; tail -5 CORTES.md \| cut -c1-200; grep -n "COBPARC-HORIZONTE-10" LEIS.md CORTES.md BACKLOG.md \| head -5 \| cut -c1-200` |
-| 13:34:56 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -i '3s#^ESPERANDO: suite-CODS-DO-ATO \| pid=1284971 \|#ESPERANDO: trava_teste.sh \| pid=1284971 \|#' docs/RELATO.md; sed -n 3p docs/RELATO.md; ps -p 1284971 -o etime=` |
-| 13:34:53 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 445,475p bin/hook_stop_fila1.py; sed -n 501,522p bin/hook_stop_fila1.py; grep -n "def _esperando_com_prova" -A40 bin/hook_stop_fila1.py \| head -60` |
-| 13:34:49 | Bash |  | `cd /home/ronald/saas-hasner; grep -n "ESPERANDO\\|pid\\|mtime\\|_ESP" bin/hook_stop_fila1.py \| head -40` |
-| 13:33:54 | Bash |  | `cd /home/ronald/saas-hasner; stat -c '%y %s' logs/cods_ato/suite.log; /usr/bin/sleep 45; stat -c '%y %s' logs/cods_ato/suite.log` |
-| 13:33:44 | Bash |  | `cd /home/ronald/saas-hasner; until grep -qE '^(OK\|FAILED)($\| \()' logs/cods_ato/suite.log && ! ps -p 1284971 >/dev/null; do /usr/bin/sleep 30; done; grep -E '^(OK\|FAILED)($\| \()' logs/cods_ato/suite.log \| tail -1; grep -E '^Ran [0-9]+ tests' logs/cods_ato/suite.log \| tail -1; tail -3 logs/cods_ato/suite.log; date` |
-| 13:33:39 | Bash |  | `cd /home/ronald/wt-cods-ato-132330/app; git grep -n "\['cods'\]\\|get('cods')\\|\"cods\"\\|'cods'" -- '*.py' \| grep -v /tests/` |
-| 13:33:34 | Bash |  | `git -C /home/ronald/wt-cods-ato-132330 diff 15c3a8b5 6995671c --stat; git -C /home/ronald/wt-cods-ato-132330 diff dcafbc7d 6995671c -- app/ponto/services` |
-| 13:33:30 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read().split('\n') assert s[2].startswith('ESPERANDO: construtor-CODS-DO-ATO') s[2]='ESPERANDO: suite-CODS-DO-ATO \| pid=1284971 \| arquivo=/home/ronald/saas-hasner/logs/cods_ato/suite.log' s.insert(5,'CODS-DO-ATO 13:3x: RED dcafbc7d (3 de 6 vermelhos no HEAD, logs/cods_ato/red_head.log); cura 6995671c; vizinhos 149 OK ...` |
-| 13:33:26 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -n 1,5p docs/RELATO.md \| cut -c1-200; ps -p 1284971 -o pid,etime,cmd \| cut -c1-150` |
-| 13:33:21 | Bash |  | `cd /home/ronald/saas-hasner; ls -la logs/cods_ato/; for f in logs/cods_ato/*.log; do echo "== $f"; grep -E '^(OK\|FAILED)($\| \()' $f \| tail -1; grep -E '^Ran [0-9]+ tests' $f \| tail -1; grep -E '^rc=' $f \| tail -1; done; git -C /home/ronald/wt-cods-ato-132330 log --oneline -3; git -C /home/ronald/wt-cods-ato-132330 status --porcelain \| head; bin/trava_teste.sh --quem; date` |
-| 13:32:06 | Agent | sonda impacto CODS-DO-ATO | `Voce faz a SONDA DE IMPACTO da obra CODS-DO-ATO (repo /home/ronald/saas-hasner, Django ponto eletronico). Papel: sonda, SO LEITURA de prod via banco SOMBRA, atomic+raise. Leia /home/ronald/saas-hasner/CLAUDE.md secoes 0, 2 (SOMBRA), 6 (BANCO SOMBRA, ZONA INVIOLAVEL). Proibido: tocar /home/ronald/saas-hasner/app (arvore viva) exceto escrever em /home/ronald/saas-hasner/logs/cods_ato/impacto/; docke ...` |
-| 13:31:42 | Bash | Read the control sonda as the model for the impact sonda | `cd /home/ronald/saas-hasner && head -60 logs/e3isento/pouso/sonda_controle_head.py; wc -l logs/e3isento/pouso/sonda_controle_head.py` |
-| 13:31:39 | Bash | Locate the prior two-arm sombra sonda tooling | `cd /home/ronald/saas-hasner && ls logs/e3isento/pouso/ \| head -40; ls logs/sombra/ \| grep -i "causa_13\\|controle\\|roda" ; find logs -name "roda4*" \| head` |
-| 13:31:31 | Bash | Check CODS-DO-ATO builder progress | `cd /home/ronald/saas-hasner && date +%H:%M; bash bin/trava_teste.sh --quem; ls -la logs/cods_ato/ 2>/dev/null; git -C /home/ronald/wt-cods-ato-132330 log --oneline -3; git -C /home/ronald/wt-cods-ato-132330 status --porcelain` |
