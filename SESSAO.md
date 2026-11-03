@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 02:40:46.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **671**.
+**Medido em 03/11/2026 02:46:00.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **669**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -679,5 +679,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:51:08 | Agent | opus final ISENTO-H10 delta | `Obra ISENTO-H10, leitura FINAL antes do pouso (repo /home/ronald/saas-hasner; leia CLAUDE.md secao 0 e o aval abaixo). Arvore da obra: worktree /home/ronald/wt-isento-h10-135733, commits e8d4f4f3 (RED) e 870dff12 (cura), sobre 59de6666/2bc93f52 (E3-ISENTO-INSUMOS, cherry-pick ja lido antes) e base 97b43098 (main). Delta: /home/ronald/saas-hasner/logs/isento_h10/delta.diff (97b43098..870dff12) e de ...` |
 | 14:50:51 | Bash |  | `cd /home/ronald/saas-hasner; grep -E '^Ran' logs/cods_ato/suite.log \| tail -2; head -3 logs/isento_h10/suite.log \| cut -c1-200; cd /home/ronald/wt-isento-h10-135733; git status --porcelain; git log --oneline -1` |
 | 14:50:47 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/b1fwibv0v.output; date +%T; ls -la --time-style=+%T /home/ronald/saas-hasner/logs/isento_h10/` |
-| 14:43:23 | Bash |  | `while test -d /proc/956394; do /usr/bin/sleep 20; done; grep -E '^(OK\|FAILED)($\| \()' /home/ronald/saas-hasner/logs/isento_h10/suite.log \| tail -1; grep -E '^Ran' /home/ronald/saas-hasner/logs/isento_h10/suite.log \| tail -1; tail -3 /home/ronald/saas-hasner/logs/isento_h10/suite.log` |
-| 14:43:18 | Bash |  | `date +%T; test -d /proc/956394 && echo vivo; grep -E '^(OK\|FAILED)($\| \()' /home/ronald/saas-hasner/logs/isento_h10/suite.log \| tail -1; grep -E '^Ran' /home/ronald/saas-hasner/logs/isento_h10/suite.log \| tail -1; tail -c 200 /home/ronald/saas-hasner/logs/isento_h10/suite.log` |
