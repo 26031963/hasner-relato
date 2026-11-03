@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 05:00:24.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **499**.
+**Medido em 03/11/2026 05:05:47.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **493**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -503,9 +503,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:09:30 | Bash | Read the green run's verdict and find the new run's log | `cd /home/ronald/saas-hasner; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|rc=' logs/e4cal/r5_green1.log \| tail -3; ls -t --time-style=+%H:%M:%S -la logs/e4cal/ \| head -3; ps -p 2074515 -o args= \| grep -o 'logs/e4cal/[a-z0-9_]*\.log'` |
 | 17:08:55 | Bash | Check that the green run is alive and its log is growing | `cd /home/ronald/saas-hasner; /usr/bin/sleep 30; ps -p 2017827 -o pid=; ls -la --time-style=+%H:%M:%S logs/e4cal/r5_green1.log; tail -2 logs/hook_stop_fila1.log \| cut -c1-200; bin/trava_teste.sh --quem` |
 | 17:08:44 | Bash | Point ESPERANDO at the L1 green run | `cd /home/ronald/saas-hasner; sed -i '3s#^ESPERANDO: .*#ESPERANDO: trava_teste.sh \| pid=2017827 \| arquivo=logs/e4cal/r5_green1.log#' app/docs/RELATO.md; ps -p 2017827 -o pid=; sed -n 3p app/docs/RELATO.md` |
-| 17:04:30 | Bash | Wait for the L1 agent's next run | `cd /home/ronald/saas-hasner; for i in $(seq 1 22); do q=$(bin/trava_teste.sh --quem); case "$q" in suite:*) break;; esac; /usr/bin/sleep 25; done; echo "$q"; ls -t --time-style=+%H:%M:%S -la logs/e4cal/ \| head -3; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|rc=' logs/e4cal/r5_red.log \| tail -3` |
-| 17:04:26 | Bash | List scheduled deploys and re-point ESPERANDO | `cd /home/ronald/saas-hasner; bin/deploy_agendado.sh listar 2>&1 \| tail -8; sed -i '3s#^ESPERANDO: .*#ESPERANDO: trava_teste.sh \| pid=1731645 \| arquivo=logs/e4cal/r5_red.log#' app/docs/RELATO.md; ps -p 1731645 -o pid=; sed -n 3p app/docs/RELATO.md` |
-| 17:04:23 | Bash | Record the aval in RELATO, PROMPTS and BACKLOG | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') i=[n for n,l in enumerate(L) if l.startswith('lei: E4-CALENDARIO-L1')] assert len(i)==1; i=i[0] L[i]='RESPONDIDA por aval L1-SEM-PREVISTO-PASSADO 17:0x (DECIDIDO PELA LEI 8c23399a/ADR 0002: lavrado manda, sem lavra = sem_certidao, nunca aberto; copia @cb59db69 ja responde assim, so o teste do D10 vir ...` |
-| 17:04:14 | Bash | Locate the lei line and the PROMPTS format | `cd /home/ronald/saas-hasner/app; grep -n '^lei: E4-CALENDARIO-L1' docs/RELATO.md \| cut -c1-80; tail -2 docs/PROMPTS.md \| cut -c1-200; date +%H:%M` |
-| 17:04:13 | SendMessage |  | `-` |
-| 17:04:00 | Bash | Read the copy's status_dos_dias_lavrados | `cd /home/ronald/wt-e4cal-l1-r2-151020/app; sed -n 195,264p ponto/status_dia.py` |
