@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 01:09:16.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (182.1 MB). Acoes na janela: **708**.
+**Medido em 03/11/2026 01:14:47.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (182.1 MB). Acoes na janela: **705**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -715,6 +715,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:22:57 | Bash | Census of out keys and other cods readers | `grep -n "out\.pop\\|out\.get(\\|out\[\\|out\.setdefault" ponto/services/cartorio.py \| cut -c1-150 \| head -60; echo ---; sed -n 130,160p ponto/management/commands/celula_veredito_velho.py; grep -n "cods" ponto/management/commands/*.py escala/regua_defesa.py \| head` |
 | 13:22:53 | SendMessage |  | `-` |
 | 13:22:47 | ToolSearch |  | `-` |
-| 13:13:59 | Bash | Read the latest mutant result | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/bs90fq1lw.output; date +%H:%M` |
-| 13:13:23 | Bash | Wait in background for the next mutant result | `cd /home/ronald/saas-hasner && m=$(stat -c %Y logs/e4cal/l1_mutantes.log); for i in $(seq 1 120); do /usr/bin/sleep 5; [ "$(stat -c %Y logs/e4cal/l1_mutantes.log)" != "$m" ] && break; done; tail -1 logs/e4cal/l1_mutantes.log \| cut -c1-140` |
-| 13:13:19 | Bash | Check L1 mutant progress | `cd /home/ronald/saas-hasner && date +%H:%M; tail -4 logs/e4cal/l1_mutantes.log \| cut -c1-140; bash bin/trava_teste.sh --quem; cd /home/ronald/wt-e4cal-l1-122941 && git log --oneline -2 && git status --porcelain` |
