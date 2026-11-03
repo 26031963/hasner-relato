@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 05:16:00.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **483**.
+**Medido em 03/11/2026 05:21:00.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **481**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -491,5 +491,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:27:06 | Bash | Check where the agent's D5 dry run is running | `cd /home/ronald/saas-hasner; cat logs/e4cal/r5_d5_dry.lancador.log \| head; head -5 logs/e4cal/r5_d5_dry.out; ps -eo pid,etime,args \| grep -E 'd5\|sombra\|lavrar_status' \| grep -v grep \| cut -c1-220` |
 | 17:23:20 | Bash | Wait for the vizinhos run's verdict | `cd /home/ronald/saas-hasner; for i in $(seq 1 30); do ps -p 2682175 >/dev/null \|\| break; /usr/bin/sleep 20; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|rc=' logs/e4cal/r5_vizinhos.log \| tail -3; bin/trava_teste.sh --quem; ls -t logs/e4cal/ \| head -3` |
 | 17:21:05 | Bash | Check what the L1 agent is running now | `cd /home/ronald/saas-hasner; ps -p 2682175 -o pid=; bin/trava_teste.sh --quem; ls -t --time-style=+%H:%M:%S -la logs/e4cal/ \| head -4; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|rc=' logs/e4cal/r5_vizinhos.log \| tail -3` |
-| 17:20:27 | Bash | Check the vizinhos run and the hook log | `cd /home/ronald/saas-hasner; /usr/bin/sleep 30; ps -p 2682175 -o pid=; ls -la --time-style=+%H:%M:%S logs/e4cal/r5_vizinhos.log; tail -2 logs/hook_stop_fila1.log \| cut -c1-160` |
-| 17:20:20 | Bash | Point ESPERANDO at the L1 vizinhos run | `cd /home/ronald/saas-hasner; sed -i '3s#^ESPERANDO: .*#ESPERANDO: trava_teste.sh \| pid=2682175 \| arquivo=logs/e4cal/r5_vizinhos.log#' app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md` |
