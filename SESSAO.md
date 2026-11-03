@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 21:52:58.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (175.3 MB). Acoes na janela: **638**.
+**Medido em 02/11/2026 21:57:57.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (175.3 MB). Acoes na janela: **641**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:53:19 | Bash | Check ESPERANDO producer still alive | `pgrep -af 'trava_teste' \| grep -v pgrep \| cut -c1-80; sed -n 3p /home/ronald/saas-hasner/app/docs/RELATO.md` |
+| 21:53:07 | Bash | Run prod apply at 22:01 with reversao and proof | `cd /home/ronald/saas-hasner && while [ "$(date +%H%M)" -lt 2201 ]; do /usr/bin/sleep 20; done; date; bash logs/e4cal/r8_pouso/aplicar.sh > logs/e4cal/r8_pouso/aplicar.log 2>&1; echo rc=$? >> logs/e4cal/r8_pouso/aplicar.log; tail -25 logs/e4cal/r8_pouso/aplicar.log` |
+| 21:53:03 | Bash | Check prova parses new command output | `cd /home/ronald/saas-hasner/logs/e4cal/r8_pouso && sed -n 1,50p prova_frota.py \| grep -n 'fila\\|re\.\\|ENTREGUE\\|fim ' \| head; date +%H:%M` |
 | 21:52:58 | Bash | Add via-NULL guard and fix hash comment | `cd /home/ronald/saas-hasner/logs/e4cal/r8_pouso && python3 - <<'EOF' p='reversao_snapshot.py'; s=open(p).read() a="cel = []\n" assert s.count(a)==1 g='''# GUARDA D5-VIA-NULA (opus final 02/11): celula com veredito e via NULA cai na lavra completa (portas/celula.py:767-780) # e o reverter NAO desfaz via/veredito_em/outbox -> aborta ANTES do apply se houver uma so no universo. _via_nula = sum(celula ...` |
 | 21:52:50 | Bash | Backup aplicar.sh and read snapshot head | `cd /home/ronald/saas-hasner/logs/e4cal/r8_pouso && cp aplicar.sh /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/l1p1/aplicar.sh.bak && sed -n 1,25p reversao_snapshot.py` |
 | 21:52:44 | Bash | Read apply script and common helpers | `cd /home/ronald/saas-hasner/logs/e4cal/r8_pouso && cat aplicar.sh; sed -n 1,40p comum.py` |
