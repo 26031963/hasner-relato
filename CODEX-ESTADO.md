@@ -1,7 +1,163 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **02/11/2026 22:07** · publicado em **02/11/2026 22:09** (UTC-3)
+> Ultima resposta processada: **02/11/2026 22:14** · publicado em **02/11/2026 22:14** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 02/11 22:14 · sessao e603127b50ca · E4CAL-L1-P3 · verificador · origem=Code
+
+1. **Sim: o delta cura os itens 4 e 5 por inspeção dos testes. Execução verde: [nao verificado].** O teste real agora desliga o mock, congela o relógio durante a chamada inteira e passa `hoje=25/04/2026` ao censo; exige efetivamente `(fio_morto, decisao_do_dia_pendente) = (0, 1)`. (`app/chamados/tests/test_o261_vigia_fio.py:498`, `app/chamados/tests/test_o261_vigia_fio.py:503`, `app/chamados/tests/test_o261_vigia_fio.py:507`.)
+
+   **O `freeze_time` cobre o relógio da porta curta.** `_agora` é uma variável local criada por `timezone.now()`, do `django.utils.timezone`, a cada montagem do contexto. A porta curta chama esse contexto dentro do congelamento; `hoje` deriva de `_agora`, e o mesmo instante segue para o D4. Não vem do parâmetro `hoje` do censo. (`app/colaboradores/services/calendario.py:22`, `app/colaboradores/services/calendario.py:112`, `app/colaboradores/services/calendario.py:140`, `app/colaboradores/services/calendario.py:141`, `app/colaboradores/services/calendario.py:579`.)
+
+   Com o corte padrão 21 da empresa da fixture, em 25/04 a competência corrente começa em 21/04; o dia testado, 16/04, fica anterior a ela. Portanto, desaparece a contradição temporal apontada na volta 1. (`app/chamados/tests/test_o261_vigia_fio.py:26`, `app/chamados/tests/test_o261_vigia_fio.py:34`, `app/colaboradores/models.py:46`, `app/ponto/janelas.py:24`, `app/ponto/janelas.py:60`, `app/colaboradores/services/calendario.py:711`.)
+
+   O item 5 ganha expectativa literal para **F = `('irregular', True)` na tela e `True` pela porta curta**. Isso cobre a lacuna da folga lavrada irregular; rejeição efetivamente executada de mutantes: [nao verificado]. (`app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:67`, `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:75`, `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:77`, `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:83`, `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:86`.)
+
+2. **Sim: F chega ao ramo lavrado do D4, com a fixture atual.** F é 19/08, criado com `trabalha=False`; `_fixar()`, chamado depois das demais preparações, grava diretamente `status_dia='irregular'`. (`app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:38`, `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:40`, `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:54`, `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:100`.)
+
+   Há um detalhe decisivo: **`dna.marcos={}` não encerra a busca de horários**. Como `if m` é falso, o código cai no template, que na fixture tem horário 07–19; o método de horários não decide trabalho/folga. (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:68`, `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:89`, `app/escala/models.py:1099`, `app/escala/models.py:1108`, `app/escala/models.py:331`, `app/escala/models.py:343`.)
+
+   Esse fim previsto já passou no relógio congelado em 17/09; a comparação temporal devolve encerrado. No D4, `em_curso=False` permite ler a coluna irregular e sair com `fonte='lavrado'` **antes** do ramo que classificaria a natureza como folga. (`app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:32`, `app/escala/servico_jornada.py:92`, `app/ponto/turnos.py:2122`, `app/ponto/status_dia.py:255`, `app/ponto/status_dia.py:266`, `app/ponto/status_dia.py:268`, `app/ponto/status_dia.py:269`, `app/ponto/status_dia.py:291`.)
+
+   **Limite da prova:** F verifica a leitura/oferta de uma coluna irregular fixada numa folga. Não verifica se a derivação produtiva da lavra produziria irregular para esses fatos, pois `_fixar()` escreve a coluna diretamente, enquanto a porta produtiva chama `status_da_lavra`/`status_do_admin`. (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:100`, `app/ponto/portas/celula.py:693`, `app/ponto/portas/celula.py:698`.)
+
+3. **Para o passo 3 completo, descartar ambos apenas por serem preexistentes é insuficiente: retirar `eh_trabalho` amplia o conjunto de dias atingíveis pelos defeitos.** O código registra a retirada desse veto e mantém apenas último recurso + passado + status. O v2 cura o relógio do teste específico; a cadeia produtiva continua sem transportar `hoje` à porta. (`app/colaboradores/services/calendario.py:89`, `app/colaboradores/services/calendario.py:103`, `app/chamados/tests/test_o261_vigia_fio.py:504`, `app/chamados/services/vigia_fio.py:400`, `app/colaboradores/services/calendario.py:107`.)
+
+   - **Exceção engolida — agravamento condicional do efeito:** uma falha depois de carregar a janela pode deixar `_perg_viva` vazio/parcial; ausência nesse mapa permite último recurso. Num dia antes vetado por `eh_trabalho=False/None`, com status que pede decisão, essa falha agora pode liberar oferta indevida. A retirada não demonstra maior probabilidade de exceção; demonstra maior alcance quando ela ocorre. Frequência real: [nao verificado]. (`app/colaboradores/services/calendario.py:436`, `app/colaboradores/services/calendario.py:440`, `app/colaboradores/services/calendario.py:447`, `app/colaboradores/services/calendario.py:451`, `app/colaboradores/services/calendario.py:711`, `app/colaboradores/services/calendario.py:103`.)
+
+     Esse contraexemplo demonstra oferta indevida na tela/porta. Não implica automaticamente erro no contador do censo: pergunta viva já provoca desvio antes da consulta à porta. (`app/templates/colaboradores/partials/_calendario_grade.html:125`, `app/colaboradores/services/calendario.py:115`, `app/chamados/services/vigia_fio.py:392`, `app/chamados/services/vigia_fio.py:400`.)
+
+   - **Relógios distintos — também há ampliação condicional:** mantendo `censo(hoje=17/04)` e a porta em 25/04, o dia 16/04 pertence à competência corrente para o primeiro relógio e à anterior para o segundo. No universo sem vínculo da fixture, o veto antigo mascarava a divergência; após sua retirada, a porta pode oferecer e o censo contar decisão pendente. O v2 alinha os relógios nesse teste, sem corrigir o contrato produtivo. (`app/chamados/tests/test_o261_vigia_fio.py:40`, `app/chamados/tests/test_o261_vigia_fio.py:122`, `app/ponto/janelas.py:24`, `app/colaboradores/services/calendario.py:140`, `app/colaboradores/services/calendario.py:440`, `app/chamados/services/vigia_fio.py:400`, `app/chamados/services/vigia_fio.py:401`, `app/chamados/tests/test_o261_vigia_fio.py:503`.)
+
+4. **Escritores e leitores do que muda ou passa a ser exercitado:**
+
+   | Objeto | Quem escreve/publica | Quem lê |
+   |---|---|---|
+   | Tempo do teste real | O teste fixa o relógio e fornece `hoje`. (`app/chamados/tests/test_o261_vigia_fio.py:503`) | Censo lê `hoje`; contexto lê `timezone.now()`; D4 recebe `_agora`. (`app/chamados/services/vigia_fio.py:313`; `app/colaboradores/services/calendario.py:140`; `app/colaboradores/services/calendario.py:579`) |
+   | Célula/status de F | `_celula` cria a célula e `_fixar` grava a coluna. (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:90`; `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:100`) | D4 lê a coluna; calendário publica o retorno; golden lê status e oferta. (`app/ponto/status_dia.py:266`; `app/colaboradores/services/calendario.py:637`; `app/colaboradores/services/calendario.py:699`; `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:67`) |
+   | `resolver_dia_oferecido` | Calendário carimba o resultado do predicado em memória. (`app/colaboradores/services/calendario.py:742`) | Porta curta e grade leem o campo; vigia lê a porta, compartilhada por censo e alcance. (`app/colaboradores/services/calendario.py:115`; `app/templates/colaboradores/partials/_calendario_grade.html:125`; `app/chamados/services/vigia_fio.py:289`; `app/chamados/services/vigia_fio.py:400`; `app/chamados/services/vigia_fio.py:610`) |
+   | Invariante do MAPA | Fonte é o contrato no módulo; gerador lê a inscrição e escreve o Markdown. (`app/colaboradores/services/calendario.py:12`; `bin/gerar_mapa.py:43`; `bin/gerar_mapa.py:110`; `bin/gerar_mapa.py:119`) | O artefato agora corresponde ao predicado; execução efetiva da regeneração e consumidores do Markdown: [nao verificado]. (`app/docs/MAPA/calendario-dia-da-tela.md:12`; `app/colaboradores/services/calendario.py:103`) |
+
+   Os consumidores indiretos do contexto incluem view, drawer e relatório de furos. (`app/colaboradores/views.py:1946`, `app/colaboradores/services/drawer.py:121`, `app/relatorios/furos.py:195`.)
+
+## 02/11 22:13 · sessao 66015e8d000e · - · - · origem=Ronald (tmux)
+
+A triagem precisa separar **delta v2** de **passo 3**: o código registra que P3 retirou o veto `eh_trabalho`, deixando último recurso + passado + status; portanto ser preexistente não basta para descartar agravamento por ampliação do domínio. (`app/colaboradores/services/calendario.py:89`, `app/colaboradores/services/calendario.py:103`, `app/colaboradores/services/calendario.py:620`.)
+
+- **Exceção engolida: há agravamento condicional do efeito.** `_ini_comp_atual` é preenchido antes da consulta/julgamento das perguntas; uma exceção posterior é capturada, deixando `_perg_viva` vazio/parcial. O cálculo interpreta ausência no mapa como permissão. Para um dia anteriormente vetado por `eh_trabalho=False/None`, passado, de competência anterior e com status `irregular`, esse estado passa a produzir oferta; antes a perna removida ainda a barrava. Isso demonstra ampliação dos casos atingidos, **não aumento da probabilidade da exceção**; frequência real [nao verificado]. (`app/colaboradores/services/calendario.py:436`, `app/colaboradores/services/calendario.py:440`, `app/colaboradores/services/calendario.py:447`, `app/colaboradores/services/calendario.py:451`, `app/colaboradores/services/calendario.py:711`, `app/colaboradores/services/calendario.py:103`.)
+
+  O contraexemplo seguro é a **oferta na tela/porta curta**. Não atribuir automaticamente essa mesma falha ao contador do vigia: `censo` já desvia perguntas vivas antes de consultar a oferta. (`app/templates/colaboradores/partials/_calendario_grade.html:125`, `app/colaboradores/services/calendario.py:115`, `app/chamados/services/vigia_fio.py:392`, `app/chamados/services/vigia_fio.py:400`.)
+
+- **Relógios distintos: também amplia os dias cujo resultado pode divergir.** A fixture documenta exatamente um novo universo: sem vínculo, anteriormente `eh_trabalho=None`, agora oferecendo `sem_certidao`. O dia é 16/04 e o `_censo` tem default 17/04; a porta, sem parâmetro temporal, chama contexto que lê `timezone.now()`. (`app/chamados/tests/test_o261_vigia_fio.py:26`, `app/chamados/tests/test_o261_vigia_fio.py:40`, `app/chamados/tests/test_o261_vigia_fio.py:122`, `app/colaboradores/services/calendario.py:107`, `app/colaboradores/services/calendario.py:112`, `app/colaboradores/services/calendario.py:140`.)
+
+  Contraexemplo estático: manter `censo(hoje=17/04)` e porta em 25/04, corte 21. Em 17/04, 16/04 está na competência corrente e não tem último recurso; em 25/04, fica antes de 21/04 e pode oferecê-lo. Antes o veto de vínculo mascarava isso nesse universo; agora o vigia pode classificar como decisão pendente. O v2 cura o teste específico usando 25/04 em ambos, mas a API continua sem transportar `hoje`. (`app/colaboradores/models.py:46`, `app/ponto/janelas.py:24`, `app/ponto/janelas.py:60`, `app/colaboradores/services/calendario.py:440`, `app/colaboradores/services/calendario.py:711`, `app/chamados/services/vigia_fio.py:313`, `app/chamados/services/vigia_fio.py:400`, `app/chamados/services/vigia_fio.py:401`, `app/chamados/tests/test_o261_vigia_fio.py:503`.)
+
+Escritor/leitores produtivos: calendário publica `status` lido do D4, constrói `pode_ultimo_recurso` e carimba `resolver_dia_oferecido`; porta curta e grade leem esse carimbo; `dono_fora_do_fio` lê a porta e serve `censo`/`censo_alcance`. (`app/colaboradores/services/calendario.py:636`, `app/colaboradores/services/calendario.py:699`, `app/colaboradores/services/calendario.py:711`, `app/colaboradores/services/calendario.py:742`, `app/colaboradores/services/calendario.py:115`, `app/templates/colaboradores/partials/_calendario_grade.html:125`, `app/chamados/services/vigia_fio.py:289`, `app/chamados/services/vigia_fio.py:400`, `app/chamados/services/vigia_fio.py:610`.)
+
+## 02/11 22:12 · sessao b98dec301141 · - · - · origem=Ronald (tmux)
+
+**F chega ao ramo lavrado, por inspeção estática.**
+
+- O R8 define F=19/08/2026, chama `_celula(... trabalha=False, status='irregular')` e aplica `_fixar()` depois das batidas dos demais casos. `_celula` grava `trabalha=False`, `dna={'marcos': {}}`, associa a geradora e guarda o status desejado; `_fixar` escreve diretamente `status_dia` e `status_rotulo`. (`app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:38`, `:40`, `:54`; `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:87`, `:89`, `:90`, `:91`, `:92`, `:97`, `:100`.)
+
+- **Detalhe decisivo:** `{}` em `dna.marcos` não significa “sem previsto” neste código: `if m` falha e `EscalaColaborador.marcos_do_dia` cai no template. O template da fixture fornece 07–19 e seu método não decide trabalho/folga; assim F ganha fim previsto em 19/08 às 19h. (`app/escala/models.py:1099`, `:1100`, `:1108`, `:326`, `:331`, `:343`; `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:66`, `:68`; `app/escala/servico_jornada.py:68`, `:69`, `:81`, `:89`, `:92`, `:93`.)
+
+- A geradora está dentro da vigência: vínculo começa em D−40, com D=17/09, portanto antes de F; a seleção por geradora devolve esse vínculo quando a data está na vigência. Com relógio congelado em 17/09, o fim de F já passou e `_dia_encerrado_motivo_puro` retorna `None`; a carga usa esse mesmo julgamento. (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:46`, `:82`, `:83`; `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:32`; `app/escala/alimentacao.py:237`, `:247`, `:250`, `:252`; `app/ponto/turnos.py:2119`, `:2122`, `:2164`, `:3004`.)
+
+- Não há batida de F na fixture; as batidas criadas são B e E. No D4, motivo `None` dá `em_curso=False`; a coluna `irregular` entra em `if not em_curso and cel is not None and cel.status_dia`, e o `continue` impede alcançar o ramo de natureza/folga. O teste portanto exercita o ramo `fonte='lavrado'`, embora não faça asserção explícita sobre `fonte`. (`app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:40`, `:43`, `:44`, `:47`, `:48`; `app/ponto/status_dia.py:252`, `:253`, `:255`, `:266`, `:267`, `:268`, `:269`, `:275`, `:291`.)
+
+- A tela recebe o D4 e publica o status sem transformação; o predicado oferece para irregular/passado/último recurso. Os golden novos exigem `('irregular', True)` na tela e `True` na porta curta. Logo a lacuna do item 5 foi coberta no código do teste. Execução/verde e rejeição efetiva de mutantes: **[nao verificado]**. (`app/colaboradores/services/calendario.py:579`, `:636`, `:637`, `:699`, `:94`, `:103`, `:104`, `:711`, `:742`; `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:67`, `:75`, `:77`, `:83`, `:86`.)
+
+**Escritores/leitores úteis à consolidação:**
+
+- Escritor de fixture: `_celula` cria célula/geradora e `_fixar` escreve coluna; leitores: `CargaDaJanela` carrega as células e D4 lê `cel.status_dia`; calendário publica; golden lê tela/porta curta. (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:90`, `:91`, `:100`; `app/ponto/turnos.py:2943`, `:2946`, `:2947`, `:2970`, `:2972`; `app/ponto/status_dia.py:251`, `:266`; `app/colaboradores/services/calendario.py:699`; `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:67`, `:86`.)
+
+- Escritor produtivo do status: porta `_status_alvo` chama `status_da_lavra`/`status_do_admin`, `_aplicar_status` atribui coluna; a fixture contorna essa derivação ao fixar coluna diretamente. Assim F prova leitura/oferta de uma coluna irregular numa folga, sem provar que `status_da_lavra` produziria irregular para esses fatos. (`app/ponto/portas/celula.py:693`, `:694`, `:695`, `:698`, `:701`, `:705`; `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:100`.)
+
+- Leitores produtivos diretos da oferta: porta curta lê o campo, template lê com `pode_veredito`, vigia chama porta curta. (`app/colaboradores/services/calendario.py:112`, `:115`; `app/templates/colaboradores/partials/_calendario_grade.html:125`; `app/chamados/services/vigia_fio.py:280`, `:289`.)
+
+- Mapa novo corresponde ao invariante já publicado no módulo. (`app/docs/MAPA/calendario-dia-da-tela.md:12`; `app/colaboradores/services/calendario.py:12`, `:13`, `:14`.)
+
+## 02/11 22:09 · sessao 42eeb25ed201 · E4CAL-L1-P3 · verificador · origem=Code
+
+1. **Predicado literal: procedente.** São exatamente `pode_ultimo_recurso` + `data < hoje` + status em `('falta', 'irregular', 'aberto', 'sem_certidao')`, sem consultar `eh_trabalho`. A porta curta monta o calendário e lê seu resultado, sem repetir a regra. (`app/colaboradores/services/calendario.py:94`, `app/colaboradores/services/calendario.py:103`, `app/colaboradores/services/calendario.py:112`, `app/colaboradores/services/calendario.py:115`.)
+
+   **“Pela lavra” não significa exigir coluna preenchida.** Sem status lavrado, o D4 ainda decide: encerrado com batida → `sem_certidao`; sem batida, ausência descontável → `falta`, ausência abonada → `ausencia`, folga/feriado → `folga`, trabalho encerrado → `sem_certidao`, nenhum fato → `sem_dados`. Portanto, dias sem lavra podem ganhar ou perder a oferta pela regra central, conforme previsto no COMPLEMENTO. (`app/ponto/status_dia.py:270`, `app/ponto/status_dia.py:273`, `app/ponto/status_dia.py:287`, `app/ponto/status_dia.py:290`, `app/ponto/status_dia.py:295`, `app/ponto/status_dia.py:297`.)
+
+   **Outro caminho de ganho/perda: procedente, preexistente ao patch fornecido.** O bloco de último recurso engole exceções. Se falhar antes de obter a competência, `_ini_comp_atual=None` elimina a oferta; se falhar depois, durante a leitura/julgamento das perguntas, `_perg_viva` pode permanecer vazio ou parcial e liberar indevidamente um dia com pergunta viva respondida. Ocorrência em produção: [nao verificado]. (`app/colaboradores/services/calendario.py:436`, `app/colaboradores/services/calendario.py:440`, `app/colaboradores/services/calendario.py:447`, `app/colaboradores/services/calendario.py:451`, `app/colaboradores/services/calendario.py:711`.)
+
+2. **Escritores e leitores: contrato identificado.**
+
+   | Campo lido | Quem publica no calendário | Fonte |
+   |---|---|---|
+   | `data` | Dicionário do dia | Janela escolhida pelo GET/modo, percorrida diariamente. (`app/colaboradores/services/calendario.py:154`, `:175`, `:581`, `:695`, `:727`.) |
+   | `status` | `status = _st['status']`, publicado sem transformação | D4, alimentado pela mesma carga de células/turnos e pelos fatos A2. (`app/colaboradores/services/calendario.py:480`, `:579`, `:636`, `:699`.) |
+   | `pode_ultimo_recurso` | Dicionário do dia | `janela_atual(hoje, empresa)` e ausência de pergunta viva **com resposta**; a vitalidade vem de `pergunta_viva`. (`app/colaboradores/services/calendario.py:440`, `:447`, `:449`, `:711`.) |
+   | `resolver_dia_oferecido` | Carimbo após montar os dias | Única chamada produtiva direta ao predicado. (`app/colaboradores/services/calendario.py:742`.) |
+
+   A coluna persistida de status é escrita pela porta da célula, que chama `status_da_lavra` ou `status_do_admin`; o método do modelo delega à porta. (`app/ponto/portas/celula.py:693`, `app/ponto/portas/celula.py:698`, `app/ponto/portas/celula.py:705`, `app/escala/models.py:1794`.)
+
+   **Leitores produtivos diretos encontrados:** campo → porta curta e grade; porta curta → `dono_fora_do_fio`, que classifica como `decisao_do_dia_pendente`. Esse último caminho é compartilhado por `censo` e `censo_alcance`. (`app/colaboradores/services/calendario.py:115`, `app/templates/colaboradores/partials/_calendario_grade.html:125`, `app/chamados/services/vigia_fio.py:289`, `app/chamados/services/vigia_fio.py:400`, `app/chamados/services/vigia_fio.py:610`.)
+
+   **Leitores indiretos:** view do calendário, drawer e relatório de furos montam o mesmo contexto. A grade exige também `pode_veredito`; o relatório inclui a grade com `only`, sem essa permissão, portanto não apresenta o botão. (`app/colaboradores/views.py:1946`, `app/colaboradores/views.py:1957`, `app/colaboradores/services/drawer.py:121`, `app/colaboradores/services/drawer.py:154`, `app/relatorios/furos.py:195`, `app/templates/relatorios/furos.html:42`, `app/templates/colaboradores/partials/_calendario_grade.html:125`.)
+
+   **Testes que leem/injetam o contrato:** `test_o261_vigia_fio`, `test_o261e_f5_alcance`, `test_calendario_eh_trabalho_le_a_celula`, `test_e4cal_l1_r8_resolver_pela_lavra`, `test_calendario_mostra_o_carro` e a fixture de `test_ui_pilulas_quebram_linha`. (`app/chamados/tests/test_o261_vigia_fio.py:478`, `:897`, `:920`; `app/chamados/tests/test_o261e_f5_alcance.py:66`, `:214`, `:322`, `:374`; `app/colaboradores/tests/test_calendario_eh_trabalho_le_a_celula.py:65`; `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:59`, `:79`; `app/colaboradores/tests/test_calendario_mostra_o_carro.py:142`, `:176`, `:194`; `app/colaboradores/tests/test_ui_pilulas_quebram_linha.py:55`.)
+
+   **Leitor dependente de `eh_trabalho` esquecido: não encontrado no censo textual.** Restam injeção deliberada de `False`/`None` e testes proibindo a chave; o calendário não a publica. Acesso por chave construída dinamicamente, inclusive JS/API: [nao verificado]. (`app/chamados/tests/test_o261_vigia_fio.py:910`, `app/colaboradores/tests/test_calendario_eh_trabalho_le_a_celula.py:80`, `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:86`, `app/colaboradores/services/calendario.py:694`.)
+
+   **Documentação desatualizada: procedente.** O mapa ainda descreve “dia de trabalho” como perna do predicado. (`app/docs/MAPA/calendario-dia-da-tela.md:12`.)
+
+3. **Conjunto paralelo ao D4: não procedente como segundo juiz.** `STATUS_QUE_PEDEM_DECISAO` pertence ao juiz da **oferta**, em `calendario.py`; o D4 define o vocabulário e decide **qual status o dia tem**. São perguntas diferentes. O patch fornecido conserva a constante, e `_TT11` já aponta para esse predicado. (`app/colaboradores/services/calendario.py:94`, `app/ponto/status_dia.py:30`, `app/ponto/status_dia.py:49`, `app/ponto/status_dia.py:200`, `app/core/juizes.py:704`, `app/core/juizes.py:718`.)
+
+4. **Mocks: isolamento legítimo, mas com perda de integração nos cenários mockados.** O par SIM/NÃO continua testando se o vigia respeita a resposta da autoridade; isso não demonstra o comportamento do juiz real nesses mesmos cenários. No alcance, o caso SIM também permanece mockado. (`app/chamados/tests/test_o261_vigia_fio.py:46`, `app/chamados/tests/test_o261_vigia_fio.py:481`, `app/chamados/tests/test_o261e_f5_alcance.py:66`, `app/chamados/tests/test_o261e_f5_alcance.py:214`.)
+
+   **O novo caso real morde, mas tem relógio solto: procedente.** Ele desliga o mock e exige mudança efetiva dos contadores. A fixture realmente deixa `status_dia` nulo: lavra `furo` sem `fatos_do_status`, situação em que a porta devolve status nulo. (`app/chamados/tests/test_o261_vigia_fio.py:94`, `app/chamados/tests/test_o261_vigia_fio.py:496`, `app/chamados/tests/test_o261_vigia_fio.py:500`, `app/ponto/portas/celula.py:696`.)
+
+   Entretanto, `_censo` usa **17/04/2026**, enquanto a porta curta lê a data real da máquina. Congelando também o calendário em 17/04, o dia 16/04 estaria na competência corrente e não ofereceria Resolver, contrariando a expectativa desse teste. É um contraexemplo estático à estabilidade do selo; execução dessa falha: [nao verificado]. (`app/chamados/tests/test_o261_vigia_fio.py:26`, `app/chamados/tests/test_o261_vigia_fio.py:122`, `app/colaboradores/services/calendario.py:140`, `app/colaboradores/services/calendario.py:440`, `app/colaboradores/services/calendario.py:711`, `app/ponto/janelas.py:60`.)
+
+   Falta, nesses testes alterados, um caso de `censo_alcance` que retire o mock e use o juiz real. O R8 cobre separadamente a porta real, mas não sua integração com esse universo do vigia. (`app/chamados/tests/test_o261e_f5_alcance.py:66`, `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:74`.)
+
+5. **RED e mutantes nomeados: mordida procedente por inspeção.** O R8 exige respostas literais para trabalho sem lavra, folga com batida sem lavra, irregular lavrado sem vínculo ativo, folga sem lavra em competência anterior e lavrado `ok`; repete os cinco pela porta curta. (`app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:65`, `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:77`.)
+
+   | Mutante | Asserção que o rejeita |
+   |---|---|
+   | P3a: `and dia.get('eh_trabalho')` | Positivos sem a chave passam a devolver falso. (`app/chamados/tests/test_o261_vigia_fio.py:889`, `:897`.) |
+   | P3b: `and dia.get('eh_trabalho', True)` | `False` e `None` explícitos devem continuar oferecendo. (`app/chamados/tests/test_o261_vigia_fio.py:909`, `:910`.) |
+   | P3c: republicar a chave | `assertNotIn('eh_trabalho', dia)`. (`app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:86`.) |
+
+   **Variantes sobreviventes aos casos P3: possível e demonstrável por inspeção.** O teste cruza todos os status com chave ausente, mas testa `False`/`None` somente com status `falta`. Um gate seletivo para `irregular` com `eh_trabalho=False` escaparia dessas asserções. Como a chave não é publicada atualmente, essa variante isolada não alteraria o calendário real. (`app/chamados/tests/test_o261_vigia_fio.py:889`, `app/chamados/tests/test_o261_vigia_fio.py:896`, `app/chamados/tests/test_o261_vigia_fio.py:909`, `app/colaboradores/services/calendario.py:694`.)
+
+   A variante material — voltar a consultar a célula e vetar **folga lavrada irregular** — também não é exercitada pelos cinco golden: B é sem lavra; C usa `trabalha=True`. Sobrevivência na suíte inteira: [nao verificado]. (`app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:39`, `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:49`, `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:87`.)
+
+   Execuções históricas RED/verde e relatórios dos mutantes P3a/P3b/P3c: [nao verificado]. [nao verificado]
+
+6. **Classes de reprovação anteriores:**
+
+   | Classe | Veredito |
+   |---|---|
+   | Segundo juiz | **Não procedente no P3:** autoridade registrada e porta curta delegante. (`app/core/juizes.py:718`; `app/colaboradores/services/calendario.py:112`.) |
+   | Segundo escritor fora da porta | **Não identificado no caminho alterado:** calendário publica o retorno do D4; persistência continua na porta. (`app/colaboradores/services/calendario.py:637`, `:699`; `app/ponto/portas/celula.py:705`.) |
+   | Relógio dentro do predicado | **Não procedente:** recebe `hoje`; calendário deriva `hoje` de `_agora` e passa o mesmo instante ao D4. (`app/colaboradores/services/calendario.py:97`, `:140`, `:141`, `:579`, `:742`.) |
+   | Relógios distintos na cadeia do vigia | **Procedente:** `censo(hoje=...)` não transmite esse tempo à porta curta. (`app/chamados/services/vigia_fio.py:313`, `:400`, `:289`; `app/colaboradores/services/calendario.py:107`, `:140`.) |
+   | Derivação paralela | **Não procedente no P3:** status é lido do D4; fatos A2 são alimentação compartilhada. (`app/colaboradores/services/calendario.py:480`, `:579`, `:636`.) |
+   | Selo/RED sem mordida | **Não como acusação geral:** há expectativas literais e casos negativos; permanece o defeito temporal do novo teste real. (`app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:65`, `:95`; `app/chamados/tests/test_o261_vigia_fio.py:122`, `:499`.) |
+   | Ordem de trava | **Nenhuma inversão introduzida identificada:** expressão pura e carimbo em memória. Concorrência de toda a cadeia: [nao verificado]. (`app/colaboradores/services/calendario.py:103`, `:742`.) |
+   | Pouso antes do pré-requisito | **[nao verificado].** O comando permite completar status de competência entregue, mas sua existência não prova aplicação do D5 nem ordem de deploy. (`app/ponto/management/commands/lavrar_status_competencia.py:43`, `:56`.) |
+
+   D5 aplicado na sombra/no ar, novos dias ≤50, comparação HEAD×L1 nas competências 06–09, hashes e ordem efetiva de pouso: [nao verificado]. [nao verificado]
+
+7. **Contraexemplos além dos golden: não encontrei inversão causada pela retirada de `eh_trabalho` nas condições abaixo.**
+
+   | Situação adicional, passado e com último recurso | Resultado pelo código |
+   |---|---|
+   | Desligado/sem escala ativa, D4 devolvendo `irregular` | **Oferece.** O predicado não tem condição de situação/vínculo. (`app/colaboradores/services/calendario.py:103`.) |
+   | Antes da admissão, com célula e status lavrado `irregular` | **Oferece**, se o D4 chega ao ramo lavrado; esse ramo não consulta admissão. (`app/ponto/status_dia.py:266`; `app/colaboradores/services/calendario.py:103`.) |
+   | Célula `trabalha=False`, lavrada `irregular` | **Oferece**, se chega ao ramo lavrado: a coluna precede a natureza sem lavra. (`app/ponto/status_dia.py:266`, `:275`; `app/colaboradores/services/calendario.py:94`.) |
+   | Mesmo cadastro, lavrado `folga` ou `ok` | **Não oferece.** Esses status estão fora do conjunto. (`app/colaboradores/services/calendario.py:94`, `:104`.) |
+
+   Esses resultados seguem a regra de oferta pelo status; os novos golden não cobrem desligado, antes da admissão com célula ou folga **lavrada irregular**. (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:76`, `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:38`, `:49`.)
+
+   **Há contraexemplo condicional na cadeia completa:** dia lavrado irregular, anterior à competência corrente, com pergunta viva respondida; se a consulta/julgamento dessa pergunta lançar exceção após carregar a janela, ele pode oferecer indevidamente. É o caminho preexistente do item 1, não efeito da remoção de `eh_trabalho`; ocorrência real: [nao verificado]. (`app/colaboradores/services/calendario.py:440`, `:447`, `:451`, `:711`.)
 
 ## 02/11 22:07 · sessao 17f5c627a035 · - · - · origem=Ronald (tmux)
 
@@ -568,96 +724,4 @@ A cópia local não reproduz os trechos pós-delta descritos nos anexos: tooltip
 
 Identidade da cópia com `15d4f10b`: **[nao verificado]**.
 
-## 02/11 19:23 · sessao 94fd4804a524 · E4-CALENDARIO-L1 · verificador · origem=Code
-
-**O delta cura o tooltip diário e dá mordida aos testes, mas não certifica cura integral dos textos na origem: resta um bloqueio no card `escala_suspeita`.** (`app/templates/colaboradores/partials/_calendario_grade.html:103`, `app/templates/colaboradores/partials/_calendario_grade.html:161`; `app/colaboradores/tests/test_e4cal_l1_r7_grade_le_o_rotulo.py:41`)
-
-1. **Item (1), tooltip diário — não procede manter o bloqueio.** Agora lê `dia.status_rotulo`; o calendário apenas repassa o rótulo recebido do D4. A régua do vínculo ativo saiu desse caminho, sem novo classificador no leitor. (`app/templates/colaboradores/partials/_calendario_grade.html:103`; `app/colaboradores/services/calendario.py:573`, `app/colaboradores/services/calendario.py:654`, `app/colaboradores/services/calendario.py:719`)
-
-   **Card `escala_suspeita` — bloqueia a cura integral na origem.** Continua escrevendo “Sem batida em dia previsto” no template. Entretanto, a regra devolve `escala_suspeita` para `indefinida` também **com batida**; há teste explícito desse contrato. O próprio rótulo central conserva “Sem batida”, portanto só trocar o card por essa constante não resolveria a inconsistência: a correção precisa começar no núcleo. Isso demonstra inconsistência no código, sem demonstrar ocorrência em produção. (`app/templates/colaboradores/partials/_calendario_grade.html:161`; `app/ponto/status_dia.py:38`, `app/ponto/status_dia.py:122`; `app/ponto/tests/test_e3_status_lavrado.py:43`, `app/ponto/tests/test_e3_status_lavrado.py:50`)
-
-2. **Item (2), “Abertos” — não procede manter o bloqueio funcional; fila para duplicação textual.** O contador inclui todo status `aberto`; o título agora contempla turno sem saída e dia ainda em andamento com batidas fechadas. Contudo, escreve cópias literais dos dois rótulos: não os lê do núcleo. Não surgiu novo predicado de classificação, mas a origem textual continua duplicada. (`app/colaboradores/services/calendario.py:780`; `app/ponto/status_dia.py:259`, `app/ponto/status_dia.py:263`; `app/templates/colaboradores/partials/_calendario_grade.html:169`)
-
-3. **Quem escreve e quem lê depois do delta:**
-
-   | Objeto | Escritor | Leitor |
-   |---|---|---|
-   | `CelulaDia.status_rotulo` | A porta consulta `status_da_lavra`/`status_do_admin`, atribui e persiste. (`app/ponto/portas/celula.py:693`, `app/ponto/portas/celula.py:705`, `app/ponto/portas/celula.py:773`) | D4 lê a coluna, com fallback ao vocabulário se vazia. (`app/ponto/status_dia.py:268`) |
-   | `dia.status_rotulo` do calendário | Contexto copia `_st['rotulo']`. (`app/colaboradores/services/calendario.py:719`) | Ícones da grade. (`app/templates/colaboradores/partials/_calendario_grade.html:99`, `app/templates/colaboradores/partials/_calendario_grade.html:107`) |
-   | `ROTULO_EM_ANDAMENTO` | Constante do núcleo. (`app/ponto/status_dia.py:56`) | D4 e teste do card; o card contém uma cópia literal. (`app/ponto/status_dia.py:263`; `app/colaboradores/tests/test_e4cal_l1_r7_grade_le_o_rotulo.py:50`; `app/templates/colaboradores/partials/_calendario_grade.html:169`) |
-   | Texto do card `escala_suspeita` | O próprio template. (`app/templates/colaboradores/partials/_calendario_grade.html:161`) | O `title` entregue ao navegador; do contexto, o card lê somente a contagem. (`app/templates/colaboradores/partials/_calendario_grade.html:162`) |
-
-   Existe outro `status_rotulo`, de **previsão**, montado por `escala/views.py`; ele não escreve a coluna persistida. (`app/escala/views.py:54`, `app/escala/views.py:60`; `app/templates/escala/minha_escala.html:75`)
-
-4. **Item (5), testes sem mordida — não procede para os defeitos específicos, por inspeção.** [nao verificado]
-
-   - **Render:** restaurar o tooltip antigo elimina o `title="SENTINELA"` exigido; restaurar “Abertos” antigo elimina `ROTULO_EM_ANDAMENTO` do título. (`app/colaboradores/tests/test_e4cal_l1_r7_grade_le_o_rotulo.py:41`, `app/colaboradores/tests/test_e4cal_l1_r7_grade_le_o_rotulo.py:49`, `app/colaboradores/tests/test_e4cal_l1_r7_grade_le_o_rotulo.py:50`)
-   - **Lavra absolve:** mantém trabalho previsto e nenhuma batida; alterna somente as colunas entre `ok`, `irregular` e `ok` com sentinela. Rejulgar pela grade ou reconstruir o rótulo contraria as asserções. É teste de leitura da coluna, não da escrita pela porta. (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:250`, `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:256`, `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:259`)
-   - **Falha A2:** exige a exceção injetada e o log específico. Retirar apenas o `raise` atual deixa de satisfazer esse contrato. Confere classe, não identidade da exceção. (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:272`, `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:274`, `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:276`; `app/colaboradores/services/calendario.py:486`)
-
-   **Limite:** os testes passam com os textos dos cards ainda escritos no template; não certificam origem única nem detectam o bloqueio descrito acima. O teste geral também procura a sentinela em qualquer lugar do HTML. (`app/colaboradores/tests/test_e4cal_l1_r7_grade_le_o_rotulo.py:35`, `app/colaboradores/tests/test_e4cal_l1_r7_grade_le_o_rotulo.py:41`, `app/colaboradores/tests/test_e4cal_l1_r7_grade_le_o_rotulo.py:49`)
-
-5. **Aquecimento — não procede acusar ocultação de crescimento proporcional de queries.** Continua comparando 0, 1 e 8 dias sem fim na mesma janela de oito dias. Aquecer remove a assimetria inicial de um catálogo global cujo carregamento independe dessa quantidade. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:192`, `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:198`, `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:210`; `app/ponto/catalogo/ausencias.py:249`, `app/ponto/catalogo/ausencias.py:276`)
-
-   Não mede tempo, CPU, primeira chamada fria nem crescimento da janela; “51 × 50” aparece somente no comentário. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:205`, `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:207`)
-
-6. **Remoção de `regua_rotulo` — não procede apontar leitor direto quebrado.** O censo textual encontrou apenas comentários e asserções de ausência; os antigos consumidores usam rótulo recebido ou texto literal. Consumidores externos e chaves construídas dinamicamente: **[não verificado]**. (`app/colaboradores/services/calendario.py:264`; `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:253`, `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:262`; `app/templates/colaboradores/partials/_calendario_grade.html:103`, `app/templates/colaboradores/partials/_calendario_grade.html:161`)
-
-7. **Item 7 — fila; triagem procede pelos anexos, com ressalva.** Ambos mostram a mesma divergência de atribuição do pareador. Porém, o RED do status não é idêntico: base apresenta `folga × folga_trabalhada`; atual, `folga × sem_certidao`. Vínculo dos logs ao commit `f60b7e0b`: **[não verificado]**.
-
-   O mecanismo permanece na origem: mapa não vazio sem a véspera retorna `None`; mapa vazio usa `_bm_all`. A tela fornece carga mensal, enquanto o unitário abre carga diária. A divergência deve ser corrigida no pareador. (`app/ponto/turnos.py:1297`, `app/ponto/turnos.py:1300`; `app/colaboradores/services/calendario.py:573`; `app/ponto/status_dia.py:197`, `app/ponto/status_dia.py:249`)
-
-Execução local dos testes e dos mutantes, GREEN atual e RED contra restaurações: **[não verificado]**. [nao verificado]
-
-## 02/11 19:22 · sessao 63cc0a24b971 · - · - · origem=Ronald (tmux)
-
-- **Item 5 — não procede, quanto aos defeitos específicos.** O render usa sentinelas distintas por status/layout; restaurar o tooltip antigo de `escala_suspeita` falharia no `title="SENTINELA"` exigido. Restaurar o card antigo falharia por ausência de `ROTULO_EM_ANDAMENTO` no título. (`app/colaboradores/tests/test_e4cal_l1_r7_grade_le_o_rotulo.py:29`, `:37`, `:44`; `app/templates/colaboradores/partials/_calendario_grade.html:103`, `:169`.)
-
-- **Lavra — não procede.** A fixture confirma trabalho previsto, nenhuma batida e ausência de absolvição inicial; depois altera somente as colunas lavradas para `ok`, `irregular` e `ok` com sentinela. Exige resultados literais dessas colunas na tela e no D4: um leitor que volte a decidir pela grade ou reconstrua o rótulo falharia. (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:246`, `:250`, `:254`, `:259`; `app/ponto/status_dia.py:266`.)
-
-- **Propagação A2 — não procede.** O teste injeta `Injetada` na função efetivamente importada pelo calendário, exige essa classe de exceção e o log específico; restaurar um `except` que engole a falha falharia. Limite: exige a classe, não identidade do objeto da exceção. (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:269`, `:272`, `:274`, `:276`; `app/colaboradores/services/calendario.py:468`, `:482`.)
-
-- **Limites de cobertura — fila, se a promessa for universal.** O primeiro teste só procura a sentinela em qualquer lugar do HTML; as fixtures não exercitam `ausencia` nem `palavra_dia`, que precedem os ícones de status. Portanto não certifica todo caminho de apresentação. O teste específico de `escala_suspeita` prende a sentinela ao atributo `title`. (`app/colaboradores/tests/test_e4cal_l1_r7_grade_le_o_rotulo.py:22`, `:35`, `:41`; `app/templates/colaboradores/partials/_calendario_grade.html:97`, `:98`.)
-
-- **Aquecimento — não procede como acusação de mascarar crescimento proporcional de consultas.** A janela permanece com oito dias; o teste mede `contexto_calendario` depois de trocar zero, um ou oito DNAs para sem fim, e continua exigindo igualdade. O catálogo tem cache global de 60 segundos e sua carga consulta tipos ativos independentemente dessa quantidade; aquecer torna as medições comparáveis. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:192`, `:198`, `:201`, `:210`; `app/ponto/catalogo/ausencias.py:249`, `:257`, `:275`.)
-
-- **Limite do custo — fila somente para afirmação mais ampla.** O teste mede número de queries com cache aquecido, não tempo, CPU, quantidade de linhas, primeira chamada fria nem crescimento da própria janela. Os números “51 × 50” aparecem em comentário; execução que os confirme não foi fornecida. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:192`, `:205`, `:207`; medição independente: **[não verificado]**.)
-
-Execução local dos testes e dos mutantes: **[não verificado]**. [nao verificado]
-
-## 02/11 19:21 · sessao f2f080b25b73 · - · - · origem=Ronald (tmux)
-
-- **Item 1, tooltip — não procede manter o bloqueio:** o ícone `escala_suspeita` lê diretamente `dia.status_rotulo`; o calendário repassa `_st['rotulo']` do D4, sem compor frase nem consultar régua ativa. (`app/templates/colaboradores/partials/_calendario_grade.html:103`; `app/colaboradores/services/calendario.py:654`; `app/colaboradores/services/calendario.py:719`)
-
-- **Item 2, significado de Abertos — não procede manter o bloqueio funcional:** o contador conta todo `status == 'aberto'`; o D4 distingue turno vivo e dia com batidas fechadas ainda em andamento; o novo `title` menciona ambos. (`app/colaboradores/services/calendario.py:780`; `app/ponto/status_dia.py:259`; `app/ponto/status_dia.py:263`; `app/templates/colaboradores/partials/_calendario_grade.html:169`) **Ressalva de origem:** o template copia literalmente os dois rótulos; não lê `ROTULO_STATUS` nem `ROTULO_EM_ANDAMENTO`. É duplicação editorial, sem novo predicado de classificação. (`app/ponto/status_dia.py:40`; `app/ponto/status_dia.py:56`; `app/templates/colaboradores/partials/_calendario_grade.html:169`)
-
-**Quem escreve e lê:**
-
-| Objeto | Escritor/origem | Leitor |
-|---|---|---|
-| `CelulaDia.status_rotulo` persistido | `_status_alvo` consulta `status_da_lavra`/`status_do_admin`; `_aplicar_status` atribui o campo; `lavrar_veredito` grava pela porta. (`app/ponto/portas/celula.py:693`; `app/ponto/portas/celula.py:705`; `app/ponto/portas/celula.py:773`) | D4 lê coluna, com fallback ao vocabulário quando vazia. (`app/ponto/status_dia.py:266`) |
-| `dia['status_rotulo']` no calendário | Contexto copia o rótulo do D4. (`app/colaboradores/services/calendario.py:719`) | Ícones da grade. (`app/templates/colaboradores/partials/_calendario_grade.html:99`; `app/templates/colaboradores/partials/_calendario_grade.html:107`) |
-| `ROTULO_EM_ANDAMENTO` | Constante no núcleo. (`app/ponto/status_dia.py:56`) | D4 usa no ramo com batida e dia ainda em andamento; teste importa e compara ao título. (`app/ponto/status_dia.py:263`; `app/colaboradores/tests/test_e4cal_l1_r7_grade_le_o_rotulo.py:16`; `app/colaboradores/tests/test_e4cal_l1_r7_grade_le_o_rotulo.py:50`) |
-| Texto do card `escala_suspeita` | Literal do próprio template. (`app/templates/colaboradores/partials/_calendario_grade.html:161`) | Navegador recebe esse `title`; template lê somente a contagem do resumo. (`app/templates/colaboradores/partials/_calendario_grade.html:161`; `app/templates/colaboradores/partials/_calendario_grade.html:162`) |
-
-- **Remoção de `regua_rotulo` — não procede apontar leitor direto quebrado:** censo textual amplo encontrou somente comentário histórico e testes de ausência; nenhuma leitura executável de `regua_rotulo` em template, JS, PDF ou API. Os antigos locais agora leem `status_rotulo` ou texto literal. (`app/colaboradores/services/calendario.py:264`; `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:253`; `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:262`; `app/templates/colaboradores/partials/_calendario_grade.html:103`; `app/templates/colaboradores/partials/_calendario_grade.html:161`) Consumidor externo à cópia ou chave montada dinamicamente: **[não verificado]**.
-
-- **Fila editorial preexistente:** o card `escala_suspeita` ainda afirma “Sem batida em dia previsto”; contudo, `status_da_lavra` retorna esse status para `veredito == 'indefinida'` antes de testar `tem_batida`, portanto a frase não descreve universalmente o domínio do status. (`app/templates/colaboradores/partials/_calendario_grade.html:161`; `app/ponto/status_dia.py:122`; `app/ponto/status_dia.py:126`) A frase já existia no delta fornecido; o delta apenas remove sua interpolação da régua. (`anexo delta.txt`, sem numeração: **[não verificado]** quanto à linhagem em Git)
-
-- **Outro homônimo, fora do calendário:** `escala/views.py` escreve um `status_rotulo` de previsão usando `ROTULO_STATUS`; `minha_escala.html` o lê. Não é escrita da coluna persistida nem novo derivador introduzido no delta do calendário. (`app/escala/views.py:49`; `app/escala/views.py:54`; `app/escala/views.py:60`; `app/templates/escala/minha_escala.html:75`; `app/templates/escala/minha_escala.html:84`)
-
-## 02/11 19:21 · sessao 7a6298e1627e · - · - · origem=Ronald (tmux)
-
-**Item 7 — fila; triagem procede quanto à preexistência da divergência de atribuição, com limite de evidência.** Os anexos atual e base mostram a mesma falha do pareador: `[] != [(2026-09-09, False, True)]`; vínculo da execução ao commit `f60b7e0b` não pôde ser auditado nesta cópia, sem histórico Git disponível. [não verificado]
-
-O mecanismo permanece: `_vespera` decide pelo mapa inteiro ser vazio/não vazio; mapa não vazio sem a véspera retorna `None`, enquanto mapa vazio usa `_bm_all`. Isso permite que DNA de outro dia altere o tratamento da mesma saída. `app/ponto/turnos.py:1297`, `app/ponto/turnos.py:1298`, `app/ponto/turnos.py:1299`, `app/ponto/turnos.py:1300`.
-
-A alimentação também depende da janela: `marcos_dna_periodo` filtra as células entre `ini` e `fim`; `CargaDaJanela` entrega esse mapa convertido para `None` se vazio. `app/escala/utils.py:97`, `app/escala/utils.py:105`, `app/ponto/turnos.py:2993`.
-
-**Não procede chamar o RED de D4 de resultado idêntico.** No anexo base, a diferença é `folga × folga_trabalhada`; no atual, `folga × sem_certidao`. A divergência existe em ambos, mas a palavra exibida mudou. [não verificado — anexos fornecidos]
-
-O resultado atual é coerente com o código: com batida atribuída ao dia encerrado e sem lavra, D4 retorna `sem_certidao`; sem batida, a faixa `folga` retorna `folga`. `app/ponto/status_dia.py:271`, `app/ponto/status_dia.py:273`, `app/ponto/status_dia.py:291`.
-
-A tela usa a carga da janela inteira, enquanto a porta unitária constrói carga `[data,data]`; portanto a paridade continua pendente na origem do pareamento, sem necessidade de criar correção no leitor. `app/colaboradores/services/calendario.py:573`, `app/ponto/status_dia.py:197`, `app/ponto/status_dia.py:249`.
-
-_1486 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1490 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
