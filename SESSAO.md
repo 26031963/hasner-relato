@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 02:29:46.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **680**.
+**Medido em 03/11/2026 02:35:17.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **678**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -688,5 +688,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:38:26 | Bash |  | `date +%T; test -d /proc/4105325 && echo vivo; ls -la --time-style=+%T /home/ronald/saas-hasner/logs/isento_h10/; grep -E '^(OK\|FAILED)($\| \()' /home/ronald/saas-hasner/logs/isento_h10/vizinhos.log \| tail -1; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; sed -n 3p /home/ronald/saas-hasner/app/docs/RELATO.md` |
 | 14:38:13 | Bash |  | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('CODS-DO-ATO PUSH OK')][0] L.insert(i+1,"ISENTO-H10 R1/R2/R3/R4 14:4x: RED 5/18 no HEAD (logs/isento_h10/red.log); mutante sem o portao versao_para morde 5/18 (mutante.log); sombra HEAD x cura (logs/isento_h10/impacto/RESULTADO*.txt, 128.785 celulas, 15 ...` |
 | 14:38:05 | Bash |  | `cd /home/ronald/wt-isento-h10-135733/app; sed -n 125,140p ponto/services/cartorio.py; grep -n "def versao_para" -A25 ponto/services/cartorio.py \| head -35` |
-| 14:33:23 | Bash |  | `cd /home/ronald/saas-hasner/logs/isento_h10; grep -E '^(OK\|FAILED)\|^Ran\|^FAIL:\|rc=' mutante.log red.log \| tail -12; grep -c . /dev/null; grep -E 'R3\|comp\|ERRO NA SONDA\|FIM-DA' ../isento_h10_head.out \| grep -v MUDOU \| tail -15 \| cut -c1-200` |
-| 14:33:19 | Bash |  | `date '+%H:%M:%S'; ls -la --time-style=+%T /home/ronald/saas-hasner/logs/isento_h10/ /home/ronald/saas-hasner/logs/isento_h10/impacto 2>/dev/null; test -d /proc/4105325 && echo vivo-viz; grep -E '^(OK\|FAILED)($\| \()' /home/ronald/saas-hasner/logs/isento_h10/vizinhos.log \| tail -1; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; ls -la --time-style=+%T /home/ronald/saas-hasner/logs/isento_h10 ...` |
