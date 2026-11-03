@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 02:08:07.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.3 MB). Acoes na janela: **684**.
+**Medido em 03/11/2026 02:13:16.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **691**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:12:29 | Bash | Read escada trigger condition | `cd /home/ronald/saas-hasner && grep -n "^def escada" -A30 bin/disjuntor.py \| head -45` |
+| 02:12:27 | Bash | Check cota state and B4 escada condition | `cd /home/ronald/saas-hasner && cat logs/sessao/cota.json 2>/dev/null; echo; sed -n 1195,1225p bin/disjuntor.py` |
+| 02:12:24 | Bash | See how disjuntor handles PAREI: ! COTA | `cd /home/ronald/saas-hasner && grep -n "COTA" bin/disjuntor.py \| head -20` |
+| 02:12:21 | Bash | Read the cota form regex | `cd /home/ronald/saas-hasner && grep -n "_COTA_RE\s*=" -A3 bin/disjuntor.py; grep -n "_eh_cota(" bin/hook_stop_fila1.py; grep -n "COTA" bin/hook_stop_fila1.py \| head` |
+| 02:12:18 | Bash | Read cota/clear forms | `cd /home/ronald/saas-hasner && sed -n 700,760p bin/hook_stop_fila1.py` |
+| 02:12:16 | Bash | Find pause forms the hook accepts | `cd /home/ronald/saas-hasner && grep -n "def _eh_cota\\|def _eh_clear\\|pausad\\|quarentena\\|dinheiro_fechado" bin/hook_stop_fila1.py \| head -20; cat esteira.pausada 2>/dev/null \| head -5` |
+| 02:12:09 | Bash | Write stop line, test hook, run handoff | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() i=s.index('! PAREI: L1-POUSA-E-ESCADA'); j=s.index('\n',i) s=s[:i]+"PAREI: ! aval L1-POUSA-E-ESCADA proibe outra obra ate o reset: O261-E-CELULA-20-UM-DONO e a fila 1 inteira esperam (L1 NO AR c960973b, push 8af4d050) \| espera Ronald: reset qua 04/11 18:00, RETOMA = CODS/NOREVERSE 6 -> DEPLOY-ELO -> MODO-COM ...` |
 | 02:04:02 | Bash | Keep waiting for push2 verdict | `cd /home/ronald/saas-hasner && for i in $(seq 1 38); do grep -q '^rc=' logs/e4cal/l1_pouso/push2.log && break; /usr/bin/sleep 15; done; tail -3 logs/e4cal/l1_pouso/push2.log \| cut -c1-200` |
 | 01:54:28 | Bash | Wait for push2 verdict in foreground | `cd /home/ronald/saas-hasner && for i in $(seq 1 38); do grep -q '^rc=' logs/e4cal/l1_pouso/push2.log && break; /usr/bin/sleep 15; done; tail -4 logs/e4cal/l1_pouso/push2.log \| cut -c1-200` |
 | 01:54:22 | Bash | Read hook PAREI logic | `cd /home/ronald/saas-hasner && sed -n 1085,1135p bin/hook_stop_fila1.py` |
