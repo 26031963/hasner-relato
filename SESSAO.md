@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 04:49:19.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **505**.
+**Medido em 03/11/2026 04:54:46.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **500**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -510,8 +510,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:04:13 | SendMessage |  | `-` |
 | 17:04:00 | Bash | Read the copy's status_dos_dias_lavrados | `cd /home/ronald/wt-e4cal-l1-r2-151020/app; sed -n 195,264p ponto/status_dia.py` |
 | 16:56:24 | Bash | Wait for the L1 agent's next test run | `cd /home/ronald/saas-hasner; for i in $(seq 1 22); do q=$(bin/trava_teste.sh --quem); case "$q" in suite:*) break;; esac; /usr/bin/sleep 25; done; echo "$q"; ls -t --time-style=+%H:%M:%S -la logs/e4cal/ \| head -3` |
-| 16:53:25 | Bash | Wait for the L1 r4 baseline run to finish | `cd /home/ronald/saas-hasner; for i in $(seq 1 22); do ps -p 1002168 >/dev/null \|\| break; /usr/bin/sleep 25; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|rc=' logs/e4cal/r4_base.log \| tail -3; bin/trava_teste.sh --quem; ls -t logs/e4cal/ \| head -3` |
-| 16:53:20 | Bash | Check the state of the L1 r4 runs | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; ls -t --time-style=+%H:%M:%S -la logs/e4cal/ \| head -4; for f in $(ls -t logs/e4cal/r4_*.log \| head -2); do echo "== $f"; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|rc=' $f \| tail -3; done` |
-| 16:52:40 | Bash | Read the hook's own reason for blocking | `cd /home/ronald/saas-hasner; tail -4 logs/hook_stop_fila1.log \| cut -c1-400; ps -p 1002168 -o pid=; ls -la --time-style=+%H:%M:%S logs/e4cal/r4_base.log` |
-| 16:52:37 | Bash | Read how the stop hook checks the ESPERANDO line | `cd /home/ronald/saas-hasner; grep -n 'ESPERANDO\\|mtime\\|arquivo\\|RAIZ\\|def _esperando' bin/hook_stop_fila1.py \| head -40` |
-| 16:51:41 | Bash | Point ESPERANDO at the L1 r4 baseline run | `cd /home/ronald/saas-hasner/app; sed -i '3s#^ESPERANDO: .*#ESPERANDO: trava_teste.sh \| pid=1002168 \| arquivo=logs/e4cal/r4_base.log#' docs/RELATO.md; sed -n 3p docs/RELATO.md; /usr/bin/sleep 45; ls -la --time-style=+%H:%M:%S /home/ronald/saas-hasner/logs/e4cal/r4_base.log; ps -p 1002168 -o pid=` |
