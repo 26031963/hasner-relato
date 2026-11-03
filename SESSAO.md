@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 06:31:03.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **448**.
+**Medido em 03/11/2026 06:36:00.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **442**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -452,9 +452,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:38:14 | Bash | Wait for suite log mtime to advance | `cd /home/ronald/saas-hasner && a=$(stat -c %Y logs/e4cal/r7_suite.log); for i in $(seq 1 20); do /usr/bin/sleep 15; b=$(stat -c %Y logs/e4cal/r7_suite.log); [ "$b" != "$a" ] && break; done; echo antes=$a depois=$b; tail -1 logs/hook_stop_fila1.log \| cut -c1-150; ps -p 3178686 -o etime=` |
 | 18:38:06 | Bash | Point ESPERANDO at the r7 full suite | `cd /home/ronald/saas-hasner && ls -l /proc/3178686/fd 2>/dev/null \| grep -o 'logs/e4cal/[^ ]*'; sed -i "3s#.*#ESPERANDO: trava_teste.sh \| pid=3178686 \| arquivo=logs/e4cal/r7_suite.log#" app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md` |
 | 18:38:02 | Bash | Check why hook still blocks | `cd /home/ronald/saas-hasner && tail -2 logs/hook_stop_fila1.log \| cut -c1-200; ps -p 2967138 -o etime=; stat -c %y logs/e4cal/r7_red.log; ls -t logs/e4cal \| head -3; pgrep -af trava_teste.sh \| cut -c1-80` |
-| 18:33:48 | Bash | Check hook log and producer state | `cd /home/ronald/saas-hasner && tail -3 logs/hook_stop_fila1.log \| cut -c1-250; ps -p 2967138 -o etime=; stat -c %y logs/e4cal/r7_red.log; date` |
-| 18:33:41 | Bash | Point ESPERANDO line at the builder's r7 run | `cd /home/ronald/saas-hasner && sed -i "3s#.*#ESPERANDO: trava_teste.sh \| pid=2967138 \| arquivo=logs/e4cal/r7_red.log#" app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md` |
-| 18:33:38 | Bash | Identify the suite's copy and log file | `ps -p 2967138 -o args= \| grep -o -- '--dir [^ ]*\\|wt-[a-z0-9-]*' \| head -3; ls -l --time-style=+%T /proc/2967138/fd 2>/dev/null \| grep -o '/home[^ ]*log' \| head; ls -t /home/ronald/saas-hasner/logs/e4cal/ \| head -2` |
-| 18:33:34 | Bash | Wait up to 10 min for builder suite process | `for i in $(seq 1 30); do p=$(pgrep -f 'bin/trava_teste.sh' \| head -1); [ -n "$p" ] && break; /usr/bin/sleep 20; done; echo p=$p; [ -n "$p" ] && ps -p $p -o args= \| cut -c1-200; ls -t /home/ronald/saas-hasner/logs/e4cal/ \| head -4` |
-| 18:33:30 | Bash | Find O261-E backlog item | `cd /home/ronald/saas-hasner && grep -n 'O261-E-CELULA-20-UM-DONO\\|O261-E' app/docs/BACKLOG.md \| cut -c1-700 \| head -8` |
-| 18:33:18 | Bash | Check builder r7 activity | `ls -t /home/ronald/saas-hasner/logs/e4cal/ \| head -5; ps -eo pid,etime,args \| grep -E 'trava_teste\|suite.sh\|manage.py test' \| grep -v grep \| head` |
