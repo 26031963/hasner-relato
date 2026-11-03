@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 01:56:59.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.3 MB). Acoes na janela: **688**.
+**Medido em 03/11/2026 02:02:42.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.3 MB). Acoes na janela: **685**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -695,6 +695,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:15:43 | Bash |  | `cd /home/ronald/saas-hasner; ls -la logs/isento_h10/ 2>/dev/null; git worktree list \| grep isento-h10; bin/trava_teste.sh --quem` |
 | 14:07:58 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 28); do grep -q '^rc=' logs/cods_ato/push.log && break; /usr/bin/sleep 20; done; tail -3 logs/cods_ato/push.log` |
 | 14:07:40 | Bash |  | `cd /home/ronald/saas-hasner; tail -c 600 logs/cods_ato/push.log; pgrep -fa "bin/push.sh\|pre-push" \| grep -v pgrep \| head -3; bin/trava_teste.sh --quem` |
-| 13:57:36 | Bash |  | `cd /home/ronald/saas-hasner; until grep -q '^rc=' logs/cods_ato/push.log 2>/dev/null; do /usr/bin/sleep 20; done; tail -5 logs/cods_ato/push.log; git fetch -q origin; git log --oneline -1 origin/main` |
-| 13:57:28 | Agent | construtor ISENTO-H10 | `Voce e o CONSTRUTOR da obra ISENTO-H10 no repo /home/ronald/saas-hasner (Django em app/, ponto eletronico CLT). Leia /home/ronald/saas-hasner/CLAUDE.md INTEIRO antes de agir (secoes 0, 3, 4, 6 e 7b valem literal). Aval (literal do Ronald, 02/11 13:38): "OBRA 1 ISENTO-H10, depois do pouso da CODS-DO-ATO. MUDA: na copia de c9f16a60, a parte do isento so entra na impressao com `regra >= 4` (versao_pa ...` |
-| 13:57:02 | Bash |  | `cd /home/ronald/saas-hasner; bash bin/push.sh > logs/cods_ato/push.log 2>&1; echo rc=$? >> logs/cods_ato/push.log; tail -4 logs/cods_ato/push.log; git fetch -q origin; git log --oneline -1 origin/main` |
