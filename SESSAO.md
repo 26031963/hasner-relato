@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 05:52:47.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **471**.
+**Medido em 03/11/2026 05:58:17.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **468**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -478,6 +478,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:19:04 | Bash | Check commit and whether files changed after the suite | `cd /home/ronald/wt-e4cal-l1-r2-151020 && git log --oneline -3 && git status --porcelain \| head && head -3 /home/ronald/saas-hasner/logs/e4cal/r6_suite2.log; stat -c '%y %n' /home/ronald/saas-hasner/logs/e4cal/r6_suite2.log; git diff --name-only cb59db69 ded392a5 \| while read f; do [ -f "$f" ] && stat -c '%y %n' "$f"; done \| sort \| tail -5; date` |
 | 18:13:04 | Bash | Read the rc and the copy's commits and status | `cd /home/ronald/saas-hasner; /usr/bin/sleep 15; tail -2 logs/e4cal/r6_suite2.log; cd /home/ronald/wt-e4cal-l1-r2-151020 && git log --oneline -4 && git status --porcelain \| head` |
 | 18:03:18 | Bash | Wait for the second full suite's verdict | `cd /home/ronald/saas-hasner; for i in $(seq 1 29); do ps -p 763908 >/dev/null \|\| break; /usr/bin/sleep 20; done; ps -p 763908 -o pid=; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|rc=' logs/e4cal/r6_suite2.log \| tail -3` |
-| 17:57:34 | Bash | Check that the second full suite is alive and its log is growing | `cd /home/ronald/saas-hasner; /usr/bin/sleep 40; ps -p 763908 -o pid=; ls -la --time-style=+%H:%M:%S logs/e4cal/r6_suite2.log` |
-| 17:56:23 | Bash | Wait for the next long L1 run and point ESPERANDO at it | `cd /home/ronald/saas-hasner; p=""; f=""; for i in $(seq 1 50); do q=$(bin/trava_teste.sh --quem); case "$q" in suite:*) p=${q#suite:}; p=${p%% *}; /usr/bin/sleep 45; if [ -n "$p" ] && ps -p "$p" >/dev/null; then f=$(ls -t logs/e4cal/*.log \| head -1); break; fi;; esac; /usr/bin/sleep 10; done; echo "p=$p f=$f"; [ -n "$f" ] && sed -i "3s#^ESPERANDO: .*#ESPERANDO: trava_teste.sh \| pid=$p \| arquivo ...` |
-| 17:56:09 | Bash | List the two failures in the r6 full suite | `cd /home/ronald/saas-hasner; grep -E '^(FAIL\|ERROR):' logs/e4cal/r6_suite.log` |
