@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 08:01:00.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **389**.
+**Medido em 03/11/2026 08:06:00.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **385**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -395,7 +395,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:09:48 | Bash | Launch Codex verificador for DME | `D=/tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/dme/v1; echo "AVAL DEPLOY-FORA-DA-CORRENTE (Ronald 02/11 17:0x): nenhum deploy, manual ou agendado, entre 06:00 e 07:30 ate o instrumento DEPLOY-[nome]-ELO-DA-CORRENTE pousar." >> $D/avais.txt cd /home/ronald/saas-hasner && A=""; for x in diff.txt contrato.txt contrato_leitura_codex.txt avais.txt leis.txt ...` |
 | 20:09:42 | Bash | Assemble Codex verificador question and annexes | `D=/tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/dme; cp $D/resposta.txt $D/v1/contrato_leitura_codex.txt; grep -n 'CONTRATO DEPLOY-[nome]-ELO' -A5 /home/ronald/saas-hasner/app/docs/RELATO.md \| cut -c1-1500 > $D/v1/contrato.txt; grep -n 'DEPLOY-FORA-DA-CORRENTE\\|DEPLOY-[nome]-ELO' /home/ronald/saas-hasner/app/docs/PROMPTS.md /home/ronald/saas-hasner/app ...` |
 | 20:09:27 | Bash | Prepare diff and law excerpts for Codex | `cd /home/ronald/wt-dme-193144 && git log --oneline -2 && git diff --stat d69da038 b1f9d4f1 \| tail -3; D=/tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/dme/v1; mkdir -p $D; git diff d69da038 b1f9d4f1 > $D/diff.txt; cd /home/ronald/saas-hasner/app/docs && grep -n -E 'deploy\.sh\|deploy_agendado\|cron_run\|encadeado\.sh\|placar_code\|contrato_deploy' LE ...` |
-| 20:03:30 | Bash | Repoint ESPERANDO to rerun pid | `cd /home/ronald/saas-hasner && sed -i '3s#^ESPERANDO:.*#ESPERANDO: pasta.sh \| pid=4176832 \| arquivo=logs/dme/pasta_wt-dme-193144.log#' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md` |
-| 20:03:27 | Bash | Check builder liveness | `f=$(readlink -f /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/abbbcd4f0982ce7a5.output); ls -l --time-style=+%H:%M:%S $f \| awk '{print $6}'; ps -ef \| grep -v grep \| grep -E 'wt-dme' \| cut -c1-200 \| head -5; wc -l /home/ronald/saas-hasner/logs/dme/pasta_wt-dme-193144.log` |
-| 20:03:22 | Bash | Compare red selos copy vs HEAD | `cd /home/ronald/saas-hasner/logs/dme && for f in pasta_wt-dme-193144.log pasta_wt-dme-head-194142.log; do echo "== $f"; grep -E '^rc=[^0]' $f \| sort; tail -n1 $f; done; ls -la pasta.fim` |
-| 20:03:18 | Bash | Check selo run progress | `cd /home/ronald/saas-hasner && kill -0 2963460 2>/dev/null && echo vivo; wc -l logs/dme/pasta_wt-dme-head-194142.log; ls logs/dme/pasta.fim 2>/dev/null; date +%H:%M` |
