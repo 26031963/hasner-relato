@@ -6,10 +6,21 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 22:03:29.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (175.3 MB). Acoes na janela: **641**.
+**Medido em 02/11/2026 22:09:07.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (175.5 MB). Acoes na janela: **652**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:09:05 | Bash | Read selo term-parsing logic | `cd /home/ronald/saas-hasner && sed -n 85,160p bin/tests/test_lei_akita.sh` |
+| 22:09:02 | Bash | Look for errata mechanism in lei_akita selo | `cd /home/ronald/saas-hasner && grep -n 'errata\\|ERRATA\\|corrig\\|nota\\|notes\\|allow\\|EXCE' bin/tests/test_lei_akita.sh \| head -15; grep -n 'Backfill\\|Reprocess' app/docs/GLOSSARIO.md app/docs/PLANO-PADROES.md \| head` |
+| 22:08:55 | Bash | Read push result and new suite producer | `cd /home/ronald/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/bu23ckmpy.output \| tail -8; git fetch -q; git log --oneline -1 origin/main; tr '\0' ' ' </proc/3435629/cmdline \| grep -o '\-v [^ ]*:/app ' ; readlink /proc/3435629/fd/1` |
+| 22:08:51 | Bash | Check producers and hook reason | `cd /home/ronald/saas-hasner; pgrep -af 'trava_teste\|push.sh' \| grep -v pgrep \| cut -c1-90; tail -3 logs/hook_stop_fila1.log \| cut -c1-160; stat -c %y logs/e4cal/r8_p3_verde.log; date +%T` |
+| 22:08:36 | Bash | Push the marco through the regua | `cd /home/ronald/saas-hasner && bash bin/push.sh > logs/e4cal/p1_push.log 2>&1; echo rc=$? >> logs/e4cal/p1_push.log; tail -5 logs/e4cal/p1_push.log; git log --oneline -1 origin/main` |
+| 22:08:32 | Bash | Refresh tickets placar before push | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever 2>&1 \| tail -2; git status --porcelain \| grep -v '^??'` |
+| 22:08:28 | Bash | Record frota proof and commit | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='POUSO E4CAL-L1-P1 (passo 1, D5 em entregue)' i=s.index(a); j=s.index('\n',i) s=s[:j+1]+('APPLY PROD E4CAL-L1-P1 02/11 22:01-22:07 (pre-aprovado DINHEIRO 1; competencia exportada: so coluna status, MUDA 1): ' 'guarda via_nula=0; reversao ANTES logs/e4cal/r8_pouso/reversao_e4cal_r8_muda1.json md5 e98b4aaa (3 ...` |
+| 22:08:16 | Bash | Read nulo-after lines and reversao md5 | `cd /home/ronald/saas-hasner/logs/e4cal/r8_pouso && grep -n '^NULO\\|fila_cartorio DECLARADA' prova_frota.out \| cut -c1-160; tail -2 reversao_snapshot.out; grep -c 'fim ' apply.out` |
+| 22:08:07 | Bash | Read-only check of FM 11 updates since 22h | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/l1p1/fm11.py <<'EOF' import datetime from django.utils import timezone as tz from ponto.models import FechamentoMensal ini = tz.make_aware(datetime.datetime(2026,11,2,22,0)) for e in (2,3,4): for m in (9,10,11): q = FechamentoMensal.objects.filter(colaborador__empresa_ ...` |
+| 22:07:55 | Bash | Inspect FM check and recent cron logs | `cd /home/ronald/saas-hasner && grep -n 'FM 06' -B2 logs/e4cal/r8_pouso/prova_frota.py \| head; grep -n "fm\b\\|fm_todos\\|def fm" logs/e4cal/r8_pouso/prova_frota.py \| head -5; ls -lt logs/*.log 2>/dev/null \| head -8 \| awk '{print $6,$7,$8,$9}'` |
+| 22:07:46 | Bash | Read apply and proof results | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/boybgtfrr.output \| cut -c1-300; grep -n 'GUARDA\\|md5\\|^reversao\\|gravad' /home/ronald/saas-hasner/logs/e4cal/r8_pouso/reversao_snapshot.out \| head` |
 | 21:53:19 | Bash | Check ESPERANDO producer still alive | `pgrep -af 'trava_teste' \| grep -v pgrep \| cut -c1-80; sed -n 3p /home/ronald/saas-hasner/app/docs/RELATO.md` |
 | 21:53:07 | Bash | Run prod apply at 22:01 with reversao and proof | `cd /home/ronald/saas-hasner && while [ "$(date +%H%M)" -lt 2201 ]; do /usr/bin/sleep 20; done; date; bash logs/e4cal/r8_pouso/aplicar.sh > logs/e4cal/r8_pouso/aplicar.log 2>&1; echo rc=$? >> logs/e4cal/r8_pouso/aplicar.log; tail -25 logs/e4cal/r8_pouso/aplicar.log` |
 | 21:53:03 | Bash | Check prova parses new command output | `cd /home/ronald/saas-hasner/logs/e4cal/r8_pouso && sed -n 1,50p prova_frota.py \| grep -n 'fila\\|re\.\\|ENTREGUE\\|fim ' \| head; date +%H:%M` |

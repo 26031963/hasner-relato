@@ -1,7 +1,61 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **02/11/2026 21:29** · publicado em **02/11/2026 21:31** (UTC-3)
+> Ultima resposta processada: **02/11/2026 22:07** · publicado em **02/11/2026 22:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 02/11 22:07 · sessao 17f5c627a035 · - · - · origem=Ronald (tmux)
+
+1. **Mocks: isolamento procedente, cobertura integral não demonstrada.** O padrão NÃO passa pela mesma costura que os testes já usavam; os casos SIM sobrepõem o patch, e a comparação SIM/NÃO continua mordendo a classificação do vigia (`app/chamados/tests/test_o261_vigia_fio.py:39-48`, `:472-489`). Na classe de alcance, o SIM também permanece mockado (`app/chamados/tests/test_o261e_f5_alcance.py:58-68`, `:213-218`). Integração real específica de `censo_alcance` não está demonstrada por esses testes; sobrevivência na suíte completa [nao verificado].
+
+2. **Novo caso real tem mordida, mas relógio solto — procedente.** Ele desliga o patch e exige `fio_morto=0` / `decisao_do_dia_pendente=1` (`app/chamados/tests/test_o261_vigia_fio.py:491-501`). A fixture efetivamente deixa status nulo: cria célula e lavra `furo` sem `fatos_do_status` (`:94-96`); `_status_alvo` devolve `(None,None)` quando faltam fatos e muda o veredito (`app/ponto/portas/celula.py:686-698`). Contudo, `_censo` injeta 17/04/2026 (`app/chamados/tests/test_o261_vigia_fio.py:115-123`), enquanto a porta curta chama calendário sem instante (`app/colaboradores/services/calendario.py:107-115`), que lê `timezone.now()` (`:139-141`). Isso contradiz “nenhum caminho deste selo lê relógio real” (`app/chamados/tests/test_o261_vigia_fio.py:116`). Sob relógio 17/04/2026, 16/04 permanece na competência corrente e perde último recurso (`app/colaboradores/services/calendario.py:711-712`); falha executada [nao verificado].
+
+3. **RED pela regra: procedente por inspeção.** R8 cobre trabalho sem lavra, folga com batida sem lavra, lavrado irregular sem vínculo ativo, folga sem lavra e lavrado ok; exige os pares literais status/oferta (`app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:33-72`). Repete os cinco pela porta curta real (`:74-81`), exige ausência da chave (`:83-86`) e mantém competência corrente sem oferta (`:88-96`). A fixture fixa explicitamente as colunas após as batidas (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:97-100`). Execução RED/verde e relatórios P3a/P3b/P3c [nao verificado].
+
+4. **Mutantes nomeados: mordida estática procedente.**
+   
+   - P3a, `and dia.get('eh_trabalho')`: morre inclusive no caso positivo sem chave (`app/chamados/tests/test_o261_vigia_fio.py:888-897`).
+   - P3b, `and dia.get('eh_trabalho', True)`: morre com False/None explícitos (`:905-910`).
+   - P3c, republicar a chave: morre em R8 (`app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:83-86`) e no teste histórico (`app/colaboradores/tests/test_calendario_eh_trabalho_le_a_celula.py:78-80`).
+
+5. **Variantes além das três: lacuna procedente; sobrevivência completa [nao verificado].** O teste positivo percorre todos os status, sempre sem `eh_trabalho`; o teste False/None usa somente status padrão `falta` (`app/chamados/tests/test_o261_vigia_fio.py:888-910`). Portanto, não cobre o produto status × valor do campo. Um gate seletivo para célula `trabalha=False` **lavrada irregular** não é exercitado pelos novos golden: B é sem lavra/`sem_certidao`, D é `folga`, C usa `trabalha=True` por padrão (`app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:38-50`; `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:87-92`). Os novos casos também não montam desligado ou antes da admissão com célula; `_colab` cria ativo e não informa admissão (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:76-85`).
+
+## 02/11 22:06 · sessao 3fc40b9d8f18 · - · - · origem=Ronald (tmux)
+
+1. **Segundo juiz: não procedente no passo 3.** A oferta já tem autoridade registrada como `_TT11` em `app/core/juizes.py:704` e `app/core/juizes.py:718`, com corte anterior documentado em `app/docs/CORTES.md:271`. A porta curta monta o calendário e lê o campo; não repete o predicado (`app/colaboradores/services/calendario.py:112`, `app/colaboradores/services/calendario.py:115`).
+
+2. **Constante paralela ao D4: não procedente como duplicação da mesma pergunta.** `STATUS_QUE_PEDEM_DECISAO` classifica status para a oferta (`app/colaboradores/services/calendario.py:94`); o D4 define o vocabulário e responde qual status o dia tem (`app/ponto/status_dia.py:30`, `app/ponto/status_dia.py:49`, `app/ponto/status_dia.py:200`). São perguntas distintas e o patch fornecido conserva a constante preexistente [nao verificado quanto ao histórico Git local, ausente].
+
+3. **Segundo escritor de status: não identificado no caminho alterado.** O calendário recebe a resposta do D4 e atribui `status = _st['status']`, publicando-a no dicionário (`app/colaboradores/services/calendario.py:579`, `app/colaboradores/services/calendario.py:636`, `app/colaboradores/services/calendario.py:699`). A coluna persistida é atribuída em `_aplicar_status`, dentro da porta (`app/ponto/portas/celula.py:701`, `app/ponto/portas/celula.py:705`), chamada pela lavra (`app/ponto/portas/celula.py:752`, `app/ponto/portas/celula.py:773`).
+
+4. **Relógio fora da borda do predicado: não procedente.** `resolver_dia_oferecido` recebe `hoje` (`app/colaboradores/services/calendario.py:97`); o calendário lê `_agora` e deriva `hoje` uma vez para esse caminho (`app/colaboradores/services/calendario.py:140`), passa esse `_agora` ao D4 (`app/colaboradores/services/calendario.py:579`) e usa `hoje` ao carimbar a oferta (`app/colaboradores/services/calendario.py:742`). Há outra leitura de relógio no mesmo calendário, porém exclusivamente para prazo de desfazer batida (`app/colaboradores/services/calendario.py:227`, `app/colaboradores/services/calendario.py:231`).
+
+5. **Derivação paralela do status: não procedente no passo 3.** O antigo gate por grade foi removido e o calendário lê o D4 (`app/colaboradores/services/calendario.py:620`, `app/colaboradores/services/calendario.py:636`). Os fatos A2 são carregados por autoridade e fornecidos ao D4 como alimentação (`app/colaboradores/services/calendario.py:480`, `app/colaboradores/services/calendario.py:579`); o D4 consome o mapa fornecido sem fallback (`app/ponto/status_dia.py:279`).
+
+6. **Caminho de ganho/perda por outra regra: procedente, preexistente.** O último recurso depende da competência atual e de pergunta viva com resposta (`app/colaboradores/services/calendario.py:440`, `app/colaboradores/services/calendario.py:447`, `app/colaboradores/services/calendario.py:711`). O bloco captura qualquer exceção: falha antes de obter a competência mantém `_ini_comp_atual=None` e elimina a oferta; falha depois de obter a competência pode deixar `_perg_viva` vazio/parcial e permitir oferta apesar de pergunta viva ainda não lida (`app/colaboradores/services/calendario.py:436`, `app/colaboradores/services/calendario.py:451`, `app/colaboradores/services/calendario.py:711`). Falha da A2, diferentemente, propaga (`app/colaboradores/services/calendario.py:488`).
+
+7. **Ordem de trava: alteração nova não identificada no trecho examinado.** O predicado é expressão pura, a porta curta chama o calendário e o carimbo altera apenas o dicionário retornado (`app/colaboradores/services/calendario.py:103`, `app/colaboradores/services/calendario.py:112`, `app/colaboradores/services/calendario.py:742`). Reprodução de concorrência ou prova dinâmica de toda a cadeia [nao verificado].
+
+8. **Pré-requisito D5/pouso: não certificável.** O comando da cópia permite competência entregue, usa `completar_status=True` e oferece `--apply` explícito (`app/ponto/management/commands/lavrar_status_competencia.py:30`, `app/ponto/management/commands/lavrar_status_competencia.py:43`, `app/ponto/management/commands/lavrar_status_competencia.py:56`). O completador grava pela porta apenas quando `apply_` é verdadeiro (`app/ponto/services/cartorio.py:889`). Execução do D5 na sombra/no ar, contagens após D5, comparação HEAD×L1 nas competências 06–09, limites de novos dias, hashes e ordem efetiva de deploy [nao verificado]. O dado fornecido contém condições normativas, sem resultados dessas medições [nao verificado].
+
+9. **Documentação local antiga não deve contrariar o aval anexado.** O ADR ainda afirma que competência entregue não se toca (`app/docs/ADR/0002-celula-e-o-dia.md:71`); o comando já documenta a emenda do COMPLEMENTO que permite completar seu status (`app/ponto/management/commands/lavrar_status_competencia.py:10`). A execução efetiva dessa emenda permanece [nao verificado].
+
+## 02/11 22:06 · sessao af1a8cc5bdcf · - · - · origem=Ronald (tmux)
+
+1. **Escritores do contrato do predicado:** `contexto_calendario` publica `data` em `app/colaboradores/services/calendario.py:695`, `status` em `:699`, `pode_ultimo_recurso` em `:711` e, depois, o resultado do único predicado em `:742`. A data vem da janela escolhida pelos modos/GET (`:154`, `:175`, `:187`), começa em `data_ini` (`:581`) e avança diariamente (`:727`). O status vem exclusivamente do retorno do D4 consultado em `:579`, lido em `:636` e `:637`.
+
+2. **Fonte de último recurso:** início da competência atual vem de `ponto.janelas.janela_atual(hoje, empresa)`, em `app/colaboradores/services/calendario.py:439`; perguntas são filtradas por dia, com resposta não vazia, e submetidas ao juiz `pergunta_viva`, em `:447` e `:449`. O campo exige data anterior ao início atual e ausência dessa pergunta viva em `:711`.
+
+3. **Leitores produtivos diretos completos encontrados:** predicado chamado pelo carimbo em `app/colaboradores/services/calendario.py:742`; campo lido pela porta curta em `:115` e pelo template em `app/templates/colaboradores/partials/_calendario_grade.html:125`; porta curta chamada em `app/chamados/services/vigia_fio.py:289`. O vigia prioriza essa resposta e devolve `decisao_do_dia_pendente` em `:290`, antes das ausências e demais baldes (`:291`, `:294`, `:296`).
+
+4. **Views, drawer e relatórios:** perfil monta contexto em `app/colaboradores/views.py:1946`, acrescenta permissão em `:1957` e renderiza em `:1962`; template inclui a grade em `app/templates/colaboradores/calendario_partial.html:62`. Drawer monta calendário em `app/colaboradores/services/drawer.py:121`, publica `cal`/permissão em `:153` e `:154`, e inclui a grade em `app/templates/colaboradores/partials/_drawer_diagnostico.html:35`. Relatórios montam `cal` em `app/relatorios/furos.py:195`; `app/templates/relatorios/furos.html:42` inclui a grade com `only`, sem passar `pode_veredito`, portanto não desenha o Resolver condicionado por essa permissão em `_calendario_grade.html:125`.
+
+5. **Leitores em testes:** juiz direto em `app/chamados/tests/test_o261_vigia_fio.py:894`, `:900`, `:908`; campo/template em `:920`; costura da porta curta em `:478`, juiz real exercitado em `:491`. Costuras de alcance em `app/chamados/tests/test_o261e_f5_alcance.py:66`, `:214`, `:322`, `:374`. Novos testes integram campo e porta curta em `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:59`, `:76`; testes anteriores leem campo em `app/colaboradores/tests/test_calendario_eh_trabalho_le_a_celula.py:65` e `app/colaboradores/tests/test_calendario_mostra_o_carro.py:142`. Fixtures de apresentação injetam campo em `test_calendario_mostra_o_carro.py:176` e `app/colaboradores/tests/test_ui_pilulas_quebram_linha.py:55`.
+
+6. **Apagamento de `eh_trabalho`: não encontrei leitor executável remanescente dependente da chave.** O predicado lê apenas três pernas em `app/colaboradores/services/calendario.py:103`; o dicionário publicado não contém a chave (`:694` até `:725`). As ocorrências executáveis restantes são a injeção proposital `False`/`None` para garantir independência em `app/chamados/tests/test_o261_vigia_fio.py:910` e as proibições da chave em `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:86` e `app/colaboradores/tests/test_calendario_eh_trabalho_le_a_celula.py:80`. JS/API/JSON não apresentaram referências ao identificador na busca integral [nao verificado quanto a acesso dinâmico por chave construída].
+
+7. **Documentação derivada ficou velha:** `app/docs/MAPA/calendario-dia-da-tela.md:12` ainda descreve o predicado com “dia de trabalho”; `app/docs/BACKLOG.md:1785` contém trecho histórico `dia.eh_trabalho`. Isso não é leitor executável, mas o mapa contradiz o contrato atual de `app/colaboradores/services/calendario.py:103`.
+
+8. **Outro caminho que altera a oferta sem lavra, preexistente ao diff fornecido:** o `try` do último recurso engole qualquer exceção em `app/colaboradores/services/calendario.py:451`. Se falhar a janela, `_ini_comp_atual=None` inicial de `:436` elimina oferta em `:711`; se a janela já respondeu e falhar a carga/julgamento das perguntas, `_perg_viva` pode ficar vazio ou parcial (`:437`, `:450`), permitindo oferta que pergunta viva com resposta deveria impedir (`:712`). A ocorrência real desse erro não consta dos dados [nao verificado].
 
 ## 02/11 21:29 · sessao 9f7ef7d7568c · E4CAL-L1-P1 · verificador · origem=Code
 
@@ -606,113 +660,4 @@ O resultado atual é coerente com o código: com batida atribuída ao dia encerr
 
 A tela usa a carga da janela inteira, enquanto a porta unitária constrói carga `[data,data]`; portanto a paridade continua pendente na origem do pareamento, sem necessidade de criar correção no leitor. `app/colaboradores/services/calendario.py:573`, `app/ponto/status_dia.py:197`, `app/ponto/status_dia.py:249`.
 
-## 02/11 18:27 · sessao ae4ec323f2f3 · DEPLOY-[nome]-ELO-DA-CORRENTE · leitura · origem=Code
-
-A cópia ainda faz **“teto → aviso → restart”**, e o agendador **não repete automaticamente uma tentativa recusada**. São duas divergências diretas do contrato proposto. (`bin/deploy.sh:274–279`; `bin/deploy_agendado.sh:68–82`)
-
-1. **Quem escreve, lê e quais execuções escapam da marca**
-
-   `cron_run.sh` recebe nome/empresa/comando, cria `${N}_${E}.$$`, grava a data ISO e instala limpeza por `trap EXIT`. O PID é do envelope no host; a marca não identifica o container. (`bin/cron_run.sh:5–11`)
-
-   O leitor operacional é `deploy.sh::em_curso()`: extrai o PID do nome, consulta `/proc/<pid>`, devolve nome/empresa quando encontra o processo e remove a marca quando não encontra. Não lê a data gravada no conteúdo. (`bin/deploy.sh:271–272`)
-
-   Todos os comandos **C e RAW renderizados** passam por `_run()` → `cron_run.sh`; a execução final de cada elo também passa pelo runner. (`app/config/crons.py:1423`; `app/config/crons.py:1431–1434`; `app/config/crons.py:1789–1802`; `bin/encadeado.sh:93`)
-
-   **Há furo comprovado:** `--corrente` é anexado depois do envelope, separado por `;`, e executa `docker exec saas_core ... crons corrente` antes de qualquer marca própria. A espera pelos carimbos também fica fora da marca; o comando final do elo recebe marca somente na linha 93. (`app/config/crons.py:1812–1813`; `bin/encadeado.sh:42`; `bin/encadeado.sh:77–93`)
-
-   Existe ainda agendamento fora desse render: `deploy_agendado.sh` gera uma entrada em `/etc/cron.d` sem runner. A igualdade entre crontab instalado e configuração nesta produção é **[nao verificado]**. (`bin/deploy_agendado.sh:54–56`; mecanismo de comparação em `bin/crons.sh:17–22`)
-
-2. **Como distinguir host de casca**
-
-   Não há campo explícito `host/container/alvos` nos esquemas C, RAW ou ENC. `estagio`, `cwd` e `depende` não fornecem essa classificação. (`app/config/crons.py:29–33`; `app/config/crons.py:53–54`; `app/config/crons.py:102–109`)
-
-   C usa `MANAGE`, definido como `docker exec saas_core`; os elos também lançam seu comando em `saas_core`. Para RAW, é necessário seguir o script chamado. (`app/config/crons.py:21`; `app/config/crons.py:1798`; `bin/encadeado.sh:93`; `app/config/crons.py:1791`)
-
-   **RAW não significa “fora das cascas”:** a sentinela é RAW e executa em `mensageria`; `lavrar_abriu_nao_bateu.sh` coleta logs no host e executa uma etapa em `saas_core`. (`app/config/crons.py:669`; `mensageria/bin/sentinela_diario.sh:14–16`; `bin/lavrar_abriu_nao_bateu.sh:19–24`)
-
-   **A sombra é híbrida:** o script parte do host, executa o ensaio em container separado por `docker run`, mas também chama `docker exec saas_core` para ler a lavra. Portanto, excluir a sombra inteira da proteção exige esclarecer o tratamento dessa fase interna; classificá-la apenas pelo nome ou por RAW deixa essa exposição. (`app/config/crons.py:331–333`; `bin/sombra.sh:138–144`; `bin/sombra.sh:182–191`)
-
-3. **Marca órfã e espera eterna**
-
-   Hoje há duas limpezas: o runner remove sua marca no `EXIT`; o deploy remove marcas cujo PID não existe em `/proc`. A limpeza de órfãs já está dentro da consulta usada pelo deploy, sem cron separado. (`bin/cron_run.sh:10`; `bin/deploy.sh:271–274`)
-
-   A identidade é fraca: o deploy verifica somente a existência do PID, sem conferir início ou comando do processo. Por inferência, um PID reutilizado pode parecer cron vivo; também não há comprovação de que a morte do envelope encerrou todos os seus filhos. (`bin/deploy.sh:272`; `bin/cron_run.sh:9–11`)
-
-   **Desenho proposto:** preservar a limpeza de órfãs confirmadas, fortalecer a identidade e, diante de execução ainda viva ou identidade inconclusiva, atingir um teto e **recusar sem restart**, nomeando o impedimento. Isso evita espera eterna sem transformar idade da marca em autorização para matar trabalho. Implementação desse comportamento: **[nao verificado]**; hoje o teto permite restart. (`bin/deploy.sh:274–279`)
-
-4. **Corrida e ponto para impedir novo elo**
-
-   A corrida permanece aberta: a última consulta está na linha 278 e o restart na 279, sem exclusão compartilhada com o nascimento da marca. Um elo pode alcançar o runner nesse intervalo. (`bin/deploy.sh:278–279`; `bin/encadeado.sh:93`; `bin/cron_run.sh:9–11`)
-
-   Há uma **porta comum para a execução dos elos**: `cron_run.sh`, antes de registrar a marca e lançar o comando. Os C e RAW renderizados também passam ali. A trava existente em `encadeado.sh` é por comando (`/tmp/encadeado_$CMD.lock`), para deduplicar elos; o deploy não participa dela. (`bin/cron_run.sh:9–11`; `app/config/crons.py:1431–1434`; `bin/encadeado.sh:71–75`; `bin/deploy.sh:271–279`)
-
-   **Proposta, sem cron novo:** admissão sincronizada nessa porta; o runner registra a execução sob a mesma exclusão usada pelo deploy. O deploy fecha novas admissões, espera as marcas existentes, reconsulta e mantém a exclusão até concluir o restart ou recusar. Um arquivo consultado sem exclusão atômica conservaria a corrida. Esse protocolo ainda é **[nao verificado]** na cópia. (`bin/cron_run.sh:9–11`; `bin/deploy.sh:271–279`)
-
-   A porta precisa também abranger a descoberta hoje desmarcada em `encadeado.sh:42`. Não convém bloquear globalmente antes da espera pelos gatilhos, pois ela depende dos carimbos das outras empresas. (`bin/encadeado.sh:42`; `bin/encadeado.sh:77–90`)
-
-5. **Outros consumidores e selos**
-
-   No código encontrado, `ESPERA_CRON_S` é lido somente pelo ramo de restart do deploy, com padrão 600 e incrementos de cinco segundos. `deploy_agendado` consome o resultado da esteira, sem ler essa variável. (`bin/deploy.sh:274–278`; `bin/deploy_agendado.sh:73–77`)
-
-   O selo específico atual apenas procura os textos `DEPLOY-ESPERA-CRON` e `crons_em_curso`; não demonstra recusa, filtragem host/casca ou ausência de restart. Ele é consumido pelo placar de código. (`bin/contrato_deploy.sh:47–49`; `bin/placar_code.sh:130–132`)
-
-   Os outros testes preservam contratos distintos: conflitos/URLconfs, janela de autenticação, histórico após provas e ordem/teto dos carimbos encadeados. Esses trechos não exercitam a proteção contra restart com cron vivo. (`bin/tests/test_deploy_recusa_conflito.sh:52–60`; `bin/tests/test_janela_auth.sh:123–144`; `bin/tests/test_orcamento_contexto.sh:263–333`; `bin/tests/test_furo_encadeado_ao_cartorio.sh:24–68`)
-
-   O molde de cadeia exige `deploy: OK` e sai com falha quando não encontra esse resultado; não contém repetição nesse trecho. Resultado de execução dos selos: **[nao verificado]**. (`bin/molde_fatia/cadeia.sh:89–90`)
-
-6. **Furos restantes no contrato**
-
-   **Quem chama/repete:** a promessa “recusa vira nova tentativa pelo agendador” não corresponde à implementação. Ele executa cada esteira uma vez, registra seu `rc`, gera `.done` e remove agenda e cron independentemente desse resultado. O `echo` final ainda pode fazer `rodar` terminar com sucesso após uma esteira falhar. (`contrato.txt:5`, anexo; `bin/deploy_agendado.sh:68–82`)
-
-   **Quem espera:** “todo cron com marca” não cobre a descoberta da corrente; e excluir “cron do host” exige tratar scripts híbridos, inclusive a sombra. (`bin/encadeado.sh:42`; `bin/sombra.sh:138–144`; `mensageria/bin/sentinela_diario.sh:14–16`)
-
-   **Falha/limite:** o contrato exige teto absoluto declarado; o número ainda está delegado ao construtor. Os 764 s do incidente não estabelecem duração máxima. Na fonte, `_espera` conta intervalos de sono, e o vencimento apenas avisa. (`contrato.txt:1` e `contrato.txt:3`, anexo; `bin/deploy.sh:273–279`)
-
-   **Marca obrigatória:** falhas de `mkdir` ou gravação da marca não impedem explicitamente o lançamento do comando. Além disso, o runner usa caminho absoluto e o leitor usa `$RAIZ`; uma execução noutra raiz pode consultar diretórios diferentes. (`bin/cron_run.sh:9–11`; `bin/deploy.sh:45`; `bin/deploy.sh:271`)
-
-   **Medida:** `crons_quebrados` considera a última corrida por nome/empresa, em 26 horas, e qualquer saída diferente de 0/2; não mede “137 no minuto de deploy”. Recuperação posterior pode retirar a morte desse contador. (`app/core/services/crons_quebrados.py:16–17`; `app/core/services/crons_quebrados.py:33–47`)
-
-   O placar contém início/fim/duração/exit, mas o histórico do deploy é gravado após as provas, não no instante do restart. Falta definir a correlação temporal e o tratamento de registros ausentes; o contador atual retorna lista vazia quando não consegue abrir o placar. Valor da medida exigida e eficácia posterior à cura: **[nao verificado]**. (`bin/cron_run.sh:13`; `bin/deploy.sh:279`; `bin/deploy.sh:342–347`; `app/core/services/crons_quebrados.py:29–32`)
-
-   **Quem desliga/modos:** `--reload-agendado` e `--reload-copia` usam HUP e não atravessam essa espera. O contrato deve delimitar a proteção ao restart destrutivo e exigir liberação automática da admissão ao terminar ou recusar, sem flag de bypass. O mutante “avisa e reinicia” precisa reprovar no selo novo; hoje ele corresponde ao comportamento da cópia. (`bin/deploy.sh:54–60`; `bin/deploy.sh:237–279`; `bin/contrato_deploy.sh:47–49`; `contrato.txt:5`, anexo)
-
-## 02/11 18:25 · sessao bf48b9348077 · - · - · origem=Ronald (tmux)
-
-- **Escritor, formato, conteúdo:** `bin/cron_run.sh:5` recebe nome/empresa/comando; `:9` monta `logs/crons_em_curso/${N}_${E}.$$`, com PID do envelope do host; `:10` grava instante ISO e instala `trap ... EXIT`; `:11` executa o comando. A marca não guarda alvo/container nem identidade adicional do processo (`bin/cron_run.sh:7-11`).
-- **Leitor operacional e limpeza:** `bin/deploy.sh:271-272` enumera marcas, extrai o sufixo após o último ponto, considera vivo se `/proc/<pid>` existe, imprime nome/empresa e remove marca cujo PID não existe; `:274-278` usa essa lista para esperar e avisar. O conteúdo ISO da marca não é lido por essa função (`bin/deploy.sh:271-272`). O outro consumidor encontrado é estático: selo procura texto `crons_em_curso` no deploy e runner (`bin/contrato_deploy.sh:47-49`).
-- **Cobertura normal:** tanto RAW quanto C renderizados passam `_run()` (`app/config/crons.py:1789-1802`), que chama runner (`:1423`, `:1431-1434`); os comandos finais dos elos também passam runner (`bin/encadeado.sh:93`). O crontab instalado de produção e sua igualdade com o render atual são **[nao verificado]**; há mecanismo para comparar, não evidência dessa execução (`bin/crons.sh:17-22`).
-- **Furo sem marca comprovado:** o disparo `encadeado.sh --corrente` é anexado **após** o envelope, com `;` (`app/config/crons.py:1812-1813`). Esse caminho chama `docker exec saas_core ... crons corrente` sem runner (`bin/encadeado.sh:37-49`); portanto existe comando de casca da infraestrutura do cron sem marca. A espera de carimbos também fica sem marca e só entra no runner ao lançar efetivamente o elo (`bin/encadeado.sh:71-93`). Não significa que os management commands finais dos elos estejam sem marca (`bin/encadeado.sh:93`).
-- **Fora do render:** `deploy_agendado.sh` escreve uma entrada `/etc/cron.d` que chama diretamente seu modo `rodar`, sem runner (`bin/deploy_agendado.sh:54-56`); este executa `esteira.sh` fornecido pelo chamador (`:68-74`). Quais comandos de casca essas esteiras executam: **[nao verificado]**.
-
-- **Distinção por fonte:** C usa `MANAGE = docker exec saas_core ...` (`app/config/crons.py:21`, `:1798`); ENC lança `docker exec saas_core` (`bin/encadeado.sh:93`). Os esquemas C, RAW e ENC não declaram campo host/container/alvos (`app/config/crons.py:29-33`, `:53-54`, `:102-109`).
-- **RAW não equivale a “fora das cascas”:** sentinela é RAW (`app/config/crons.py:669`) e executa dentro de `mensageria` (`mensageria/bin/sentinela_diario.sh:14-16`); negou_fogo também (`app/config/crons.py:686-687`; `mensageria/bin/negou_fogo_diario.sh:10-11`). `lavrar_abriu_nao_bateu.sh` mistura coleta no host e comando em `saas_core` (`bin/lavrar_abriu_nao_bateu.sh:19-24`).
-- **Sombra é híbrida:** seu agendamento RAW chama script do host (`app/config/crons.py:331-333`), que lança container de ensaio separado por `docker run` (`bin/sombra.sh:182-191`), mas também executa uma fase de leitura de lavra dentro de `saas_core` (`bin/sombra.sh:138-144`). Para distinguir proteção efetiva pela fonte atual, é necessário seguir comando e scripts/fases; não basta RAW/C nem nome (`app/config/crons.py:102-109`, `:1789-1802`; `bin/sombra.sh:138-144`, `:182-191`).
-
-- **Órfã:** limpeza normal é `trap EXIT` do runner (`bin/cron_run.sh:10`); limpeza de PID ausente é feita pelo deploy ao enumerar (`bin/deploy.sh:271-272`). Não há validação de identidade além da existência de `/proc/<pid>` nessa leitura, portanto reutilização de PID pode ser confundida com cron vivo — inferência direta do teste (`bin/deploy.sh:272`).
-- **Tratamento proposto:** preservar a eliminação/ignorância de marca comprovadamente órfã; para marca considerada viva, a recusa com teto absoluto evita espera eterna. Validação mais forte de identidade exigiria desenho adicional: a marca atual só contém data e PID no nome (`bin/cron_run.sh:9-10`); implementação dessa cura **[nao verificado]**.
-
-- **Ponto comum possível:** o runner é o ponto comum antes do lançamento efetivo dos C, RAW e elos (`app/config/crons.py:1431-1434`, `:1789-1802`; `bin/encadeado.sh:93`). Hoje não há coordenação com deploy nessa sequência marca→comando (`bin/cron_run.sh:9-11`; `bin/deploy.sh:271-279`). Um protocolo de exclusão compartilhado runner/deploy pode impedir novo lançamento enquanto deploy drena/reinicia; arquivo consultado sem exclusão atômica manteria a corrida — proposta, **[nao verificado]**.
-- **Limites dessa proposta:** o `flock` atual é por elo (`/tmp/encadeado_$CMD.lock`), serve para deduplicar empresas e não é consultado pelo deploy (`bin/encadeado.sh:71-75`; `bin/deploy.sh:271-279`). Também seria necessário cobrir o `docker exec` de descoberta anterior ao runner (`bin/encadeado.sh:42`).
-
-## 02/11 18:25 · sessao 8161155c5547 · - · - · origem=Ronald (tmux)
-
-**Corrida e ponto de admissão**
-
-- A corrida existe na fonte: deploy lê marcas em `em_curso()`, termina a espera e faz uma última leitura em `bin/deploy.sh:271-278`; o restart seguinte não está protegido por trava (`bin/deploy.sh:279`). Nesse intervalo, um elo pode terminar a espera pelos carimbos e entrar no runner (`bin/encadeado.sh:77-93`).
-- A corrente executa cada elo sequencialmente, mas sem marca própria abrangendo toda a corrente (`bin/encadeado.sh:42`, `bin/encadeado.sh:53-60`). A marca de cada execução nasce apenas ao entrar em `cron_run.sh` (`bin/encadeado.sh:93`, `bin/cron_run.sh:9-11`).
-- A trava existente é `/tmp/encadeado_$CMD.lock`, por comando, para impedir duplicata de elo; deploy não participa dela (`bin/encadeado.sh:71-72`, `bin/deploy.sh:271-279`).
-- Há uma porta comum para **execução dos elos**: `bin/encadeado.sh:93` → `bin/cron_run.sh:9-11`. As linhas C e RAW geradas também usam esse runner (`app/config/crons.py:1423`, `app/config/crons.py:1431-1434`, `app/config/crons.py:1789-1802`).
-- **Proposta, ainda não implementada:** protocolo de admissão nessa porta, antes de criar a marca e lançar o comando; deploy fecha a admissão sob a mesma trava, drena as execuções já marcadas, faz a rechecagem e mantém a admissão fechada até terminar o restart ou recusar. O ponto de inserção é `bin/cron_run.sh:9-11`; o trecho a proteger é `bin/deploy.sh:271-279`. Flag lida sem exclusão mútua não fecha a corrida; eficácia de implementação futura [nao verificado].
-- Não colocar a admissão global antes da espera por gatilho: ali o elo depende de outras empresas chegarem aos carimbos (`bin/encadeado.sh:77-90`). O bloqueio deve atingir o nascimento da execução em `bin/encadeado.sh:93`.
-- Limite dessa porta: o render da corrente já executa `docker exec saas_core` antes do runner (`bin/encadeado.sh:42`); logo “toda atividade dentro da casca passa pelo runner” não é verdade na fonte (`bin/encadeado.sh:42`, `bin/encadeado.sh:93`).
-
-**Furos do contrato comprovados**
-
-- A promessa de “recusa vira nova tentativa pelo deploy_agendado” não corresponde ao script: ele executa a esteira uma vez e registra seu rc (`bin/deploy_agendado.sh:73-77`); depois gera `.done` e remove agenda e cron independentemente desse rc (`bin/deploy_agendado.sh:79-82`). Há ainda risco de o `rodar` acabar com rc 0 pelo `echo` final mesmo após esteira falhar (`bin/deploy_agendado.sh:74`, `bin/deploy_agendado.sh:82`).
-- O molde de cadeia reconhece falha de deploy e sai 1, mas não faz nova tentativa (`bin/molde_fatia/cadeia.sh:89-90`).
-- O cron de higiene usa HUP, não restart, e não passa pela espera de marcas: ramificação `AGENDADO` em `bin/deploy.sh:237-265`; espera apenas no `else`, `bin/deploy.sh:266-279`. As flags que selecionam esse ramo estão em `bin/deploy.sh:54` e `bin/deploy.sh:60`.
-- O selo atual do deploy só procura strings relacionadas à espera e à marca, sem demonstrar recusa no teto ou exclusão da corrida (`bin/contrato_deploy.sh:47-50`).
-- A classificação RAW não significa execução exclusivamente fora das cascas: `lavrar_abriu_nao_bateu.sh` é RAW (`app/config/crons.py:271`), mas sua pipeline executa comando dentro de `saas_core` (`bin/lavrar_abriu_nao_bateu.sh:19-24`). Logo classificar todo RAW como host abriria furo (`app/config/crons.py:271`, `bin/lavrar_abriu_nao_bateu.sh:23-24`).
-- O selo antigo do encadeado usa `CRON_RUN_FAKE=1` (`bin/tests/test_furo_encadeado_ao_cartorio.sh:55`), porém o runner lido não contém ramo para essa variável e executa `bash -c "$CMD"` (`bin/cron_run.sh:5-11`). Esse selo não deve ser tomado como prova de isolamento sem conferência adicional [nao verificado].
-
-_1483 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1486 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
