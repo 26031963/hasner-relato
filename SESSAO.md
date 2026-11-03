@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 05:58:17.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **468**.
+**Medido em 03/11/2026 06:03:46.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **467**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -477,4 +477,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:19:11 | Bash | Read Codex wrapper usage | `cd /home/ronald/saas-hasner && sed -n 1,40p bin/codex_pergunta.sh \| grep -E '^#' \| head -30; ls logs/codex/ 2>/dev/null \| tail -3` |
 | 18:19:04 | Bash | Check commit and whether files changed after the suite | `cd /home/ronald/wt-e4cal-l1-r2-151020 && git log --oneline -3 && git status --porcelain \| head && head -3 /home/ronald/saas-hasner/logs/e4cal/r6_suite2.log; stat -c '%y %n' /home/ronald/saas-hasner/logs/e4cal/r6_suite2.log; git diff --name-only cb59db69 ded392a5 \| while read f; do [ -f "$f" ] && stat -c '%y %n' "$f"; done \| sort \| tail -5; date` |
 | 18:13:04 | Bash | Read the rc and the copy's commits and status | `cd /home/ronald/saas-hasner; /usr/bin/sleep 15; tail -2 logs/e4cal/r6_suite2.log; cd /home/ronald/wt-e4cal-l1-r2-151020 && git log --oneline -4 && git status --porcelain \| head` |
-| 18:03:18 | Bash | Wait for the second full suite's verdict | `cd /home/ronald/saas-hasner; for i in $(seq 1 29); do ps -p 763908 >/dev/null \|\| break; /usr/bin/sleep 20; done; ps -p 763908 -o pid=; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|rc=' logs/e4cal/r6_suite2.log \| tail -3` |
