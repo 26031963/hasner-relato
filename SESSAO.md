@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 04:21:53.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **530**.
+**Medido em 03/11/2026 04:27:23.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **529**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -539,4 +539,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:34:25 | Bash |  | `cd /home/ronald/saas-hasner; ps -o cmd= -p 4065006 \| grep -o 'wt-[a-z0-9-]*' \| head -1; ls -lt --time-style=+%T logs/e4cal/ \| head -3` |
 | 16:34:18 | Bash |  | `cd /home/ronald/saas-hasner; H=$(date +%H:%M \| sed 's/.$/x/'); sed -i "s#cmp 2/2 contra a copia certificada\. E4CAL-L1#cmp 2/2 contra a copia certificada; commit 499b250b; deploy --sem-migrate OK (logs/noreverse/deploy.log, 0 cron em curso, importerror_500=0); smoke PROD saas_core ROOT_URLCONF=config.urls_core contexto_do_dia_texto -> LINK_OK; PUSH OK $H (origin/main 499b250b, pos_push d69da038). ...` |
 | 16:34:12 | Bash |  | `cd /home/ronald/saas-hasner; git fetch -q; git log --oneline -1 origin/main; git log --oneline -2; git status --porcelain \| grep -v '^??'` |
-| 16:25:08 | Bash |  | `cd /home/ronald/saas-hasner; timeout 590 bash -c 'until grep -q "^rc=" logs/noreverse/push.log; do /usr/bin/sleep 15; done'; tail -3 logs/noreverse/push.log; date +%T` |
