@@ -1,7 +1,86 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **02/11/2026 21:04** · publicado em **02/11/2026 21:09** (UTC-3)
+> Ultima resposta processada: **02/11/2026 21:29** · publicado em **02/11/2026 21:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 02/11 21:29 · sessao 9f7ef7d7568c · E4CAL-L1-P1 · verificador · origem=Code
+
+**1. O delta fecha o item 3 específico da v1.** A lavra ocorre em T0=12h; o D5 passa às 13h e repete às 14h. Regravar `julgada_em` ou `veredito_em` com o relógio dessas passadas passa a alterar a foto. O mesmo vale para os demais timestamps fotografados, inclusive `FechamentoMensal.atualizado_em`, que é `auto_now`. (`app/ponto/tests/test_e3_status_lavrado.py:31`, `:298`, `:309–331`; `app/ponto/models.py:479`)
+
+Isso é conclusão estática sobre o teste. O resultado do mutante citado pela triagem e sua execução nesta revisão são **[não verificado]**. (`triagem_v1.txt:2`, anexo) [nao verificado]
+
+**Há escapes fora dessa foto:**
+
+- `Colaborador.atualizado_em` é `auto_now`, há colaborador no fixture e essa tabela não entra na foto. Um mutante hipotético que apenas atualizasse esse campo com o relógio escaparia da comparação; ocorrência dessa escrita no D5 atual **[não verificado]**. (`app/colaboradores/models.py:381`; `app/ponto/tests/test_e3_status_lavrado.py:170`, `:309–313`)
+- `EventoCelula` também fica fora. Um mutante que inserisse outbox sem alterar os campos fotografados escaparia. No código atual, salvar somente status não emite outbox: apenas `veredito` e `ata` o despertam. (`app/ponto/tests/test_e3_status_lavrado.py:309–313`; `app/ponto/portas/celula.py:623`, `:634–642`)
+- `LogAuditoria` fica fora e recebe, legitimamente, uma nova linha no ramo de status. Portanto, a foto não demonstra “nenhuma outra tabela escrita”. (`app/ponto/portas/celula.py:761–765`; `app/core/observ.py:134–138`)
+
+A igualdade das fotos demonstra igualdade do **estado observado**; não detecta um `UPDATE` que conserve o valor nem escrita fora das tabelas/linhas fotografadas. (`app/ponto/tests/test_e3_status_lavrado.py:309–331`)
+
+**2. Os descartes têm alcances diferentes.**
+
+**`veredito_via=NULL`: o defeito estrutural continua existindo.** Os dois gates de atualidade não exigem via; `_completar_status` chama a porta com `via='cartorio'`. Com via nula, falha a igualdade exigida pelo ramo somente status: a porta escreve `veredito_via`, `veredito_em`, veredito/protestos e emite outbox por incluir `veredito` nos campos. (`app/ponto/services/cartorio.py:1186–1189`, `:1345–1348`, `:889–891`; `app/ponto/portas/celula.py:753–775`, `:638–642`)
+
+**Pode deixar de bloquear este apply delimitado, sem considerar o defeito corrigido.** A triagem relata sombra sobre as 35.436 células do universo exato, com zero mudanças fora do status, incluindo comparação de via e timestamp. Isso é evidência relatada no anexo; o conteúdo dos scripts e sua execução são **[não verificado]**. (`triagem_v1.txt:4`, anexo)
+
+Para essa evidência sustentar o descarte, precisaria ser verdade:
+
+- A sombra executou o caminho real de `--apply`, inclusive a porta, sobre o mesmo universo e estado destinados ao pouso. O dry sozinho não serve: ele não chama a lavra. (`app/ponto/services/cartorio.py:888–891`; equivalência da sombra **[não verificado]**)
+- `CAMPOS_FORA` comparou cópias independentes dos valores persistidos antes/depois, sem perder células, incluindo efetivamente `veredito_via` e `veredito_em`. A implementação de `logs/sombra/e4cal_r8_d5_entregue.py:37` é **[não verificado]**.
+- A prova de produção cobriu o mesmo alcance, os campos proibidos e os hashes exigidos; sua execução e resultado são **[não verificado]**. (`triagem_v1.txt:4`; `AVAL_L1_COMPLEMENTO.md:3`, `:10`, anexos)
+
+**PAREI posterior não equivale a impedir ou desfazer a escrita.** O command não envolve o lote inteiro em uma transação; a porta tem atomicidade por chamada de salvamento. Se a prova apenas detecta a divergência depois, é necessário saber como a reversão prevista é executada. Esse comportamento dos scripts externos é **[não verificado]**. (`app/ponto/management/commands/lavrar_status_competencia.py:32–62`; `app/ponto/portas/celula.py:634–642`; `AVAL_L1_COMPLEMENTO.md:3`, anexo)
+
+Assim: **sombra válida mais prova operacional válida sustentam o apply deste universo, deixando D5-VIA-NULA na fila; somente a menção a “zero” e “PAREI” não permite certificar isso nesta cópia.** (`triagem_v1.txt:4`, anexo; condições externas **[não verificado]**)
+
+**O descarte da auditoria procede.** MUDA 1 restringe a alteração da célula ao status; a trilha é outra entidade e atende à exigência de registrar ação crítica. O ramo grava descrição e antes/depois por `evento`, que insere `LogAuditoria`. Isso não autoriza consumidor/outbox, que continuam excluídos do ramo somente status. (`AVAL_L1_COMPLEMENTO.md:3`, anexo; `CLAUDE.md:32–34`; `app/ponto/portas/celula.py:757–765`; `app/core/observ.py:134–138`)
+
+**3. Escritores e leitores relevantes.**
+
+| Campo/artefato | Quem escreve | Quem lê |
+|---|---|---|
+| `status_dia`, `status_rotulo` | Porta `lavrar_veredito` → `_aplicar_status` → salvamento. O teste os zera para simular legado. (`app/ponto/portas/celula.py:701–706`, `:753–760`; `app/ponto/tests/test_e3_status_lavrado.py:307`) | D5 verifica status existente; D4 lê status/rótulo; a porta compara o par. (`app/ponto/services/cartorio.py:882`; `app/ponto/status_dia.py:212–214`; `app/ponto/portas/celula.py:703`) |
+| `veredito`, `veredito_via`, `veredito_em`, `protestos`, `ata` | Porta de lavra; a precedência também escreve sua chave da ata. (`app/ponto/portas/celula.py:767–775`, `:811–822`) | D5 reutiliza veredito/protestos; a porta lê via/ata para escolher o ramo; `_foto` observa todos. (`app/ponto/services/cartorio.py:889`; `app/ponto/portas/celula.py:726–753`; `app/ponto/tests/test_e3_status_lavrado.py:309–311`) |
+| `julgada_em`, `impressao`, `insumos_em` | Operação `carimbar`. (`app/ponto/portas/celula.py:800–807`) | Gates de atualidade e foto. (`app/ponto/services/cartorio.py:1186`, `:1345`; `app/ponto/tests/test_e3_status_lavrado.py:309–311`) |
+| FM/ED fotografados | O fixture cria os registros. (`app/ponto/tests/test_e3_status_lavrado.py:299–302`) | `_foto` lê todas as colunas; D5 lê ED indiretamente pelo juiz de entregue. (`app/ponto/tests/test_e3_status_lavrado.py:312–313`; `app/ponto/management/commands/lavrar_status_competencia.py:43`; `app/folha/export.py:569–575`) |
+
+**Não localizei selo que case o texto alterado dos ADRs 0002/0003 ou da docstring D5; ausência absoluta de leitores externos é [não verificado].** O selo da guarda da linha consulta AST, `_meta` e catálogo próprio, explicitamente “nunca texto”; o selo de naturezas do ADR 0003 está declarado como futuro/fila. (`app/escala/tests/test_d3_guarda_da_linha_celula.py:11–19`, `:167–173`; `app/docs/ADR/0003-celula-tres-naturezas.md:125–130`)
+
+Existe leitor genérico de docstrings no MAPA, mas ele exige `@bolha`, ausente na docstring D5. O casamento documental da LEI-AKITA consultado lê `GLOSSARIO.md` e `PLANO-PADROES.md`. Portanto, não encontrei nesses mecanismos dependência das frases modificadas neste delta. (`app/core/mapa/contrato.py:45–48`, `:83–88`; `app/ponto/management/commands/lavrar_status_competencia.py:1–16`; `bin/tests/test_lei_akita.sh:94–108`)
+
+## 02/11 21:27 · sessao 0fd26c7d7b50 · - · - · origem=Ronald (tmux)
+
+1. **O delta fecha o defeito específico de relógio na foto:** lavra em T0=12h, D5 em T1=13h e repetição em T2=14h. Regravar `julgada_em`, `veredito_em`, `insumos_em` ou outro campo fotografado com o relógio desses atos altera o estado comparado. (`app/ponto/tests/test_e3_status_lavrado.py:31`, `:298`, `:309-331`)
+
+2. **`auto_now` de FM está coberto:** `_foto()` inclui `.values()` de todas FM; `FechamentoMensal.atualizado_em` é `auto_now=True`. (`app/ponto/tests/test_e3_status_lavrado.py:312`, `app/ponto/models.py:478-479`)
+
+3. **Existe escape concreto fora da foto:** `Colaborador.atualizado_em` é `auto_now=True`, há colaborador no fixture e `_foto()` não fotografa essa tabela. Um mutante hipotético que regrave esse campo com o relógio do D5 passaria por essa comparação; não localizei tal escrita no caminho atual. (`app/colaboradores/models.py:380-381`, `app/ponto/tests/test_e3_status_lavrado.py:170-173`, `:309-313`; ocorrência real desse mutante [não verificado])
+
+4. **Outras tabelas também ficam fora:** `EventoCelula.criado_em` e `processado_em`, `LogAuditoria.criado_em`, `DiaPago.lavrado_em` (`auto_now=True`). A foto observa somente células desse colaborador, FM e ED. (`app/escala/models.py:1822-1828`, `app/core/models.py:307`, `app/ponto/models.py:380`, `app/ponto/tests/test_e3_status_lavrado.py:309-313`)
+
+5. **Trilha não é escape acidental da regra atual:** o ramo status chama `evento('veredito_celula', ...)`, que insere `LogAuditoria`; sua ausência da foto permite essa escrita prevista. (`app/ponto/portas/celula.py:761-765`, `app/core/observ.py:134-138`)
+
+6. **Outbox mereceria testemunha própria se a afirmação for “não acorda consumidor”:** status somente não dispara evento porque `CAMPOS_QUE_ACORDAM={'veredito','ata'}`; porém mutante que inserisse um `EventoCelula` sem mudar os campos fotografados escaparia dessa foto. (`app/ponto/portas/celula.py:622-642`, `app/ponto/tests/test_e3_status_lavrado.py:309-313`)
+
+7. **O furo `veredito_via=NULL` é estrutural e real:** gates de carimbo não exigem via; `_completar_status()` chama lavra com `via='cartorio'`; comparação da porta exige igualdade da via e, se falha, escreve via/veredito/protestos/`veredito_em`, além de acordar outbox por incluir `veredito`. O fixture normal lavra previamente pela porta e não introduz via nula. (`app/ponto/services/cartorio.py:1186-1189`, `:1345-1348`, `:889-891`, `app/ponto/portas/celula.py:753-775`, `:622-642`, `app/ponto/tests/test_e3_status_lavrado.py:189-194`, `:298-307`)
+
+8. **Limite da prova:** igualdade das fotos prova estado final nos registros observados; não prova ausência de SQL redundante, escrita com valor igual, alteração seguida de restauração ou escrita fora do universo fotografado. (`app/ponto/tests/test_e3_status_lavrado.py:309-331`; execução SQL [não verificado])
+
+## 02/11 21:27 · sessao f68fd42d7647 · - · - · origem=Ronald (tmux)
+
+Para a pergunta 3:
+
+- **ADR 0002/0003 e docstring D5:** não localizei leitor que case o texto alterado por selo; ausência absoluta ou leitores externos **[não verificado]**. O command mantém `help` próprio, sem `help = __doc__` (`app/ponto/management/commands/lavrar_status_competencia.py:24`).
+
+- **Selo existente do ADR 0002:** verifica AST e `_meta`, expressamente “nunca texto”; seu catálogo declara `status_dia`/`status_rotulo` como saídas escritas pela porta (`app/escala/tests/test_d3_guarda_da_linha_celula.py:11`, `:33`, `:64`). `_estado` lê AST de `ponto/portas/celula.py` e `ponto/services/cartorio.py`; o teste compara o resultado ao `CATALOGO`, sem ler ADR Markdown (`app/escala/tests/test_d3_guarda_da_linha_celula.py:75`, `:167`, `:171`).
+
+- **ADR 0003:** o selo de naturezas está declarado como obra futura/fila, inclusive com nome provisório (`app/docs/ADR/0003-celula-tres-naturezas.md:125`, `:127`, `:130`).
+
+- **Existe leitor genérico de docstrings:** MAPA usa `ast.get_docstring` (`app/core/mapa/contrato.py:83`, `:88`), mas devolve `{}` quando falta `@bolha` (`:45`, `:47`). A docstring D5 não contém essa inscrição (`app/ponto/management/commands/lavrar_status_competencia.py:1`, `:16`); o universo obrigatório do MAPA deriva dos registros `core/juizes.py`/`core/portas.py` (`app/core/mapa/contrato.py:157`, `:164`, `:171`, `:180`).
+
+- **LEI-AKITA:** há casamento textual de vocabulário documental, mas lê `GLOSSARIO.md` e `PLANO-PADROES.md`, incluindo os ADRs internos deste último; não os arquivos ADR 0002/0003 (`bin/tests/test_lei_akita.sh:94`, `:102`, `:105`).
+
+- **Teste alterado:** o executor chama D5 via `call_command` (`app/ponto/tests/test_e3_status_lavrado.py:264`, `:266`); a foto lê todas as colunas das células do colaborador, excetuando apenas status, e todas as linhas/colunas de FM/ED (`:309`, `:310`, `:312`). A conferência dos novos horários e fotos ocorre em `:318`, `:327`, `:329`, `:331`; execução efetiva nesta revisão **[não verificado]**.
 
 ## 02/11 21:04 · sessao da8569571a0a · E4CAL-L1-P1 · verificador · origem=Code
 
@@ -636,116 +715,4 @@ A cópia ainda faz **“teto → aviso → restart”**, e o agendador **não re
 - A classificação RAW não significa execução exclusivamente fora das cascas: `lavrar_abriu_nao_bateu.sh` é RAW (`app/config/crons.py:271`), mas sua pipeline executa comando dentro de `saas_core` (`bin/lavrar_abriu_nao_bateu.sh:19-24`). Logo classificar todo RAW como host abriria furo (`app/config/crons.py:271`, `bin/lavrar_abriu_nao_bateu.sh:23-24`).
 - O selo antigo do encadeado usa `CRON_RUN_FAKE=1` (`bin/tests/test_furo_encadeado_ao_cartorio.sh:55`), porém o runner lido não contém ramo para essa variável e executa `bash -c "$CMD"` (`bin/cron_run.sh:5-11`). Esse selo não deve ser tomado como prova de isolamento sem conferência adicional [nao verificado].
 
-## 02/11 18:25 · sessao 6079d3f52882 · - · - · origem=Ronald (tmux)
-
-Achados para consolidação, todos por leitura de fonte; execução dos selos [nao verificado].
-
-1. **`deploy_agendado` não oferece a nova tentativa prometida no contrato.** Executa cada `esteira.sh` uma vez, captura e registra `rc`, segue o laço, copia resultado para `.done`, remove agenda e remove `/etc/cron.d/...`, independentemente do `rc` da fatia. Não há laço de repetição nessa implementação. `bin/deploy_agendado.sh:68-81`. Portanto, “recusa vira nova tentativa pelo deploy_agendado” é um furo concreto do contrato contra a cópia. `bin/deploy_agendado.sh:73-81`.
-
-2. **Consumidor de `ESPERA_CRON_S`: somente o ramo de restart de `deploy.sh` no código encontrado.** Usa default 600, espera em passos de cinco segundos, imprime aviso e reinicia mesmo se o cron permanece vivo. `bin/deploy.sh:274-279`. O agendador não lê essa variável: chama uma esteira e lê seu `rc`. `bin/deploy_agendado.sh:73-77`. Há referências documentais em `app/docs/RELATO.md:3673`, `:3676`, `:3907`, `:4336`; seus relatos de produção adicionais não devem ser usados para ampliar o dado raspado autorizado.
-
-3. **O selo de deploy atual é fraco para este defeito.** `contrato_deploy.sh` apenas exige os textos `DEPLOY-ESPERA-CRON` e `crons_em_curso`; não prova espera, recusa, filtragem host/casca nem ausência de restart com marca viva. `bin/contrato_deploy.sh:47-49`. O mutante “teto e reinicia” já corresponde ao comportamento da cópia. `bin/deploy.sh:274-279`. Esse contrato é consumido pelo placar de código. `bin/placar_code.sh:130-132`.
-
-4. **Outros selos que leem deploy têm contratos diferentes.** `test_deploy_recusa_conflito.sh` cobra chamada à guarda de conflitos e importação dos URLconfs. `bin/tests/test_deploy_recusa_conflito.sh:52-60`. `test_orcamento_contexto.sh` cobra histórico depois das provas, seus modos e que reprovação da prova de casca continua sendo porta; seus mutantes não exercitam cron vivo/restart. `bin/tests/test_orcamento_contexto.sh:263-333`. `test_janela_auth.sh` verifica a chamada da guarda; `bin/tests/test_janela_auth.sh:64-67`. Nenhum desses trechos é prova do novo contrato de cron vivo. `bin/contrato_deploy.sh:47-49`; `bin/tests/test_deploy_recusa_conflito.sh:52-60`; `bin/tests/test_orcamento_contexto.sh:263-333`.
-
-5. **Há modos sem docker restart e sem essa espera.** `--reload-agendado` e `--reload-copia` definem `AGENDADO=1`; esse ramo usa HUP nas três cascas. `bin/deploy.sh:54-60`, `:237-251`. A espera por marca está no `else` do ramo. `bin/deploy.sh:266-279`. Ao especificar “todo pouso”, delimitar o contrato para a operação destrutiva de restart evita confundir HUP com restart. `bin/deploy.sh:237-279`. A configuração instalada do reload é conferida por `selo_reciclagem.sh`; não é verificada aqui no host de produção. `bin/selo_reciclagem.sh:70-75`; situação instalada [nao verificado].
-
-6. **O contador existente não é a medida “rc137 no minuto de deploy”.** `crons_quebrados` considera a última corrida por `(nome, emp)`, nas últimas 26h, dentre as últimas 20 mil linhas, e conta qualquer exit diferente de 0/2. `app/core/services/crons_quebrados.py:16-17`, `:33-47`. O placar chama esse contador. `bin/placar_code.sh:451-455`. Assim, ele pode deixar de contar uma morte após uma recuperação e não correlaciona cron com deploy. `app/core/services/crons_quebrados.py:41-47`.
-
-7. **Fontes para construir a medida existem, mas falta definir a correlação.** O runner registra `nome`, `emp`, `ini`, `fim`, `dur`, `exit`. `bin/cron_run.sh:13`. O histórico de deploy registra hora/head/0 somente depois das provas, não no instante do restart. `bin/deploy.sh:279`, `:342-347`. Definir log de restart, janela temporal, denominador e tratamento de ausência de registro são requisitos ainda não comprovados por um contador implementado; valor atual da medida pedida [nao verificado].
-
-8. **O vigia acusa depois da morte; não preserva o elo.** O runner cria flag/pauta quando RC é diferente de 0/2 e recupera quando volta bem. `bin/cron_run.sh:29-35`. O carimbo de fim só nasce para RC 0/2. `bin/cron_run.sh:22-25`. A guarda nova precisa impedir a morte antes do restart; manter o vigia não satisfaz por si o contrato. `bin/deploy.sh:278-279`; `bin/cron_run.sh:22-35`.
-
-9. **Selos mínimos a cobrar no desenho:** marca viva de casca deve impedir restart e terminar por fim do cron ou recusa; marca de host não deve segurar; órfã não deve travar; nascimento concorrente deve usar a mesma exclusão do restart; mutante “avisa e reinicia” deve reprovar. São critérios propostos a partir dos furos do ramo atual, não testes já existentes. `bin/deploy.sh:271-279`; existência/resultado desses novos selos [nao verificado].
-
-## 02/11 18:24 · sessao b1c5436d1ca9 · E4-CALENDARIO-L1 · verificador · origem=Code
-
-**Veredito: bloqueia.** A leitura direta do D4 entrou, mas a janela mensal pode produzir status diferente da consulta unitária; o template também conserva rótulos próprios. (`app/colaboradores/services/calendario.py:572`; `app/ponto/status_dia.py:249`; `app/ponto/turnos.py:1297`; `app/templates/colaboradores/partials/_calendario_grade.html:103`)
-
-**1. Quem escreve e quem lê — não procede a acusação de novo escritor persistente no diff.**
-
-| Campo/valor | Quem produz/escreve | Quem lê |
-|---|---|---|
-| `CelulaDia.status_dia` | Regra `status_da_lavra`; porta calcula o alvo, atribui e salva junto do veredito. (`app/ponto/status_dia.py:92`; `app/ponto/portas/celula.py:686`; `:705`; `:773`) | D4 lê a coluna; calendário copia a resposta; resumo conta esse status. O cartório também verifica se a coluna já existe. (`app/ponto/status_dia.py:266`; `app/colaboradores/services/calendario.py:653`; `:766`; `app/ponto/services/cartorio.py:882`) |
-| `CelulaDia.status_rotulo` | Mesma porta e mesmo alvo do status. (`app/ponto/portas/celula.py:705`; `:773`) | D4 lê, com fallback para `ROTULO_STATUS`; calendário publica como `status_rotulo`. (`app/ponto/status_dia.py:268`; `app/colaboradores/services/calendario.py:718`) |
-| Resposta transitória `status`/`rotulo` | D4 produz por `_lido` ou pela coluna lavrada; não persiste o andamento. (`app/ponto/status_dia.py:174`; `:260`; `:267`) | Calendário e painel consomem a resposta. (`app/colaboradores/services/calendario.py:653`; `:718`; `app/core/services/painel_op.py:338`) |
-| `ROTULO_EM_CURSO` | Constante do núcleo. (`app/ponto/status_dia.py:61`) | D4 escolhe a frase quando o resultado já é `previsto` e `data <= hoje`; calendário apenas repassa. (`app/ponto/status_dia.py:298`; `app/colaboradores/services/calendario.py:718`) |
-| `faixa` | A2 seleciona o vencedor e monta o dicionário. (`app/ponto/precedencia.py:393`; `:400`) | D4 lê para natureza; calendário fornece os fatos previamente carregados. (`app/ponto/status_dia.py:287`; `app/colaboradores/services/calendario.py:473`; `:572`) |
-| `dia['ausencia']` | Cobertura seleciona a ausência; calendário monta o chip, lendo efeito e catálogo. (`app/ponto/turnos.py:2753`; `:2769`; `app/colaboradores/services/calendario.py:451`; `:663`) | Template dá prioridade ao chip. (`app/templates/colaboradores/partials/_calendario_grade.html:97`) |
-| `CelulaDia.ausencia` | É outro campo: escrito pelas operações `carimbar` e `carimbar_insumos_em_lote`, dentro da porta. (`app/ponto/portas/celula.py:802`; `:838`; `:843`) | Não é a fonte do chip carregado pelo calendário. (`app/colaboradores/services/calendario.py:451`; `:650`) |
-| `sem_fim` | Booleano local do D4; nenhuma persistência. (`app/ponto/status_dia.py:256`) | Ramos de andamento e previsão. (`app/ponto/status_dia.py:262`; `:295`) |
-| `motivo` | Juíza temporal retorna `turno_aberto*`, `sem_previsto`, `relogio` ou `None`; carregador publica por data. (`app/ponto/turnos.py:2114`; `:2117`; `:2121`; `:2122`; `:2166`) | D4 lê e decide andamento/lavra/disponibilidade. (`app/ponto/status_dia.py:253`; `:255`; `:259`; `:266`) |
-
-**2. Leitores restantes — fila; rótulo próprio no calendário — bloqueia.**
-
-- **Bloqueia:** `escala_suspeita` ainda recebe tooltip escrito no template, ignorando `dia.status_rotulo` e usando a régua do vínculo ativo. O D4, por sua vez, devolve o rótulo lavrado. (`app/templates/colaboradores/partials/_calendario_grade.html:103`; `app/colaboradores/services/calendario.py:265`; `:730`; `app/ponto/status_dia.py:268`)
-- **Bloqueia a fidelidade do rótulo:** o rodapé afirma que todo `aberto` “não teve saída”, embora o novo D4 produza `aberto` para par já fechado antes do fim previsto. (`app/templates/colaboradores/partials/_calendario_grade.html:169`; `app/ponto/status_dia.py:262`; `:263`; `app/ponto/tests/test_e4cal_l1_d4_natureza.py:156`)
-- **Fila, já declarada:** espelho, app e furos continuam classificando o dia por regras próprias. (`app/ponto/services/espelho.py:152`; `:183`; `app/api/views.py:1570`; `:1627`; `app/relatorios/furos.py:32`; `:162`; `app/core/medida_leitor_do_dia.py:323`)
-- **Fila:** PDF recebe os dias desse espelho e acrescenta frases próprias de isenção e turno aberto. (`app/relatorios/pdf_espelho.py:592`; `:919`; `:921`; `:958`)
-- **Não procede como duplicação do status diário:** drawer e view chamam o calendário; vigia chama a porta de oferecer resolução; painel guarda a resposta D4. (`app/colaboradores/services/drawer.py:120`; `app/colaboradores/views.py:1945`; `app/chamados/services/vigia_fio.py:280`; `:289`; `app/core/services/painel_op.py:338`)
-- **Não procede como julgamento de dia encerrado:** `escala/views.py` deriva previsão e seu rótulo, papel expressamente declarado. (`app/escala/views.py:49`; `:54`; `:60`; `app/core/medida_leitor_do_dia.py:300`)
-- **Não procede confundir TXT com status diário:** `classificar_export` responde entrada no TXT e consulta retenção por outra autoridade. (`app/folha/export.py:746`; `:942`; `:1212`)
-- **Fila documental:** os ícones ainda citam `calendario.ROTULO_STATUS` em comentários; isso não executa import. (`app/templates/core/_icone_dia_extra.html:6`; `app/templates/core/_icone_dia_previsto.html:6`; `app/templates/core/_icone_dia_folga.html:5`) Nenhum import executável de nome morto apareceu na busca textual; garantia por importação/AST completa: **[nao verificado]**.
-
-**3. Passado, relógio e meia-noite.**
-
-- **Não procede:** passado com `MOTIVO_SEM_PREVISTO` não entra em `sem_fim`; com coluna lavrada, lê a coluna; sem lavra e com batida, retorna `sem_certidao`. Os dois casos possuem testes específicos. (`app/ponto/status_dia.py:256`; `:266`; `:271`; `app/ponto/tests/test_e4cal_l1_d4_natureza.py:410`; `:417`)
-- **Não procede proibir todo `aberto` passado:** ele continua possível quando a própria juíza informa `turno_aberto*`; esse ramo não decide pela data. (`app/ponto/status_dia.py:259`; `app/ponto/turnos.py:2114`)
-- **Não procede nova leitura de relógio no caminho do status:** calendário captura `_agora`, injeta no D4, que deriva `hoje` desse instante e o repassa à juíza. `data <= hoje` escolhe apenas o rótulo de um status já determinado. (`app/colaboradores/services/calendario.py:134`; `:572`; `app/ponto/status_dia.py:231`; `:233`; `:253`; `:298`)
-- **Fila preexistente:** existe outra leitura de relógio no calendário, para permissão de desfazer retratação. Ela não alimenta o D4. (`app/colaboradores/services/calendario.py:221`; `:225`; `:572`)
-- **Não procede teto somente por data no encerramento:** a juíza compara `agora >= fim` e considera turno vivo; o defeito de meia-noite encontrado está na atribuição da órfã conforme a janela, detalhado no item 7. (`app/ponto/turnos.py:2114`; `:2119`; `:2122`; `:1297`)
-
-**4. Classes de reprovação.**
-
-| Classe | Resultado |
-|---|---|
-| Segundo juiz | **Ausente no classificador removido do calendário; presente como fila nos demais leitores declarados.** (`app/colaboradores/services/calendario.py:78`; `app/core/medida_leitor_do_dia.py:323`) |
-| Segundo escritor fora da porta | **Não identificado no diff de produção; não procede.** As atribuições persistentes examinadas continuam na porta. (`app/ponto/portas/celula.py:705`; `:773`) |
-| Relógio fora da borda | **Ausente como introdução no status; presente preexistente para desfazer, fila.** (`app/colaboradores/services/calendario.py:134`; `:221`; `:572`) |
-| Derivação paralela de fonte única | **Presente: bloqueia no rótulo do template; fila nos outros leitores.** (`app/templates/colaboradores/partials/_calendario_grade.html:103`; `app/core/medida_leitor_do_dia.py:323`) |
-| Selo sem mordida suficiente | **Presente, fila:** paridade examina dicionários, sem render; propagação de erro A2 só exercita caminho feliz. (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:202`; `app/colaboradores/tests/test_calendario_um_juiz.py:92`) |
-| Ordem de trava | **[nao verificado]** |
-| Pouso antes do pré-requisito | A exigência está documentada, e a cópia contém a alteração de isenção; sequência efetiva de pouso/apply: **[nao verificado]**. (`app/docs/RELATO.md:19`; `app/ponto/services/cartorio.py:520`) |
-
-**5. Testes apagados e asserções reescritas.** [nao verificado]
-
-- **Fila:** perdeu-se a fixture adversária explícita “lavra absolve enquanto grade/motor acusam”, dos testes apagados. Os novos casos usam `ok` com batidas exatas e `irregular` sem batida; falta acrescentar essa oposição em `CalendarioLeODoD4Test`, alternando somente a coluna lavrada. (`app/colaboradores/tests/test_calendario_ata_decide.py:23`, arquivo apagado no diff fornecido; `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:117`; `:126`)
-- **Não procede perda da regra de isenção:** há cobertura funcional na regra, na porta e na tela, incluindo o rótulo; o teste apagado verificava apenas texto-fonte. (`app/ponto/tests/test_e3_status_lavrado.py:62`; `:220`; `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:148`; `:192`; `app/colaboradores/tests/test_calendario_isencao.py:8`, arquivo apagado no diff)
-- **Não procede vacuidade total do teste retargetado:** ele diferencia efetivamente `ok` de `irregular` e exige `None != ok`. O caso chamado “missing” agora injeta diretamente `irregular`; deixou de provar a antiga relação grade-missing → status, retirada do leitor. (`app/colaboradores/tests/test_t4_lei_status_none_alerta.py:114`; `:123`; `:129`; `:138`; `app/colaboradores/services/calendario.py:366`)
-- **Fila:** falta injetar falha de `fatos_do_periodo` e exigir propagação; `assertNoLogs` no caminho feliz não protege o novo `raise`. (`app/colaboradores/tests/test_calendario_um_juiz.py:92`; `app/colaboradores/services/calendario.py:485`)
-- **Bloqueia:** P14/P16 precisa ganhar o caso do item 7; também falta teste de render que detecte o tooltip próprio. Os testes atuais comparam apenas `status`/`status_rotulo` do contexto. (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:202`; `:211`; `app/templates/colaboradores/partials/_calendario_grade.html:103`)
-
-**6. Baixa feriado/prazo — não procede a reprovação.**
-
-A impressão removida pertencia ao classificador apagado, e o teste nomeado existe: distingue `trabalha_em_feriado=False → folga` de `True → previsto`, com cadastros separados e comparação dos resultados. A2 efetivamente conserva trabalho quando o feriado só afeta pagamento. (`app/core/juizes.py:456`; `app/colaboradores/services/calendario.py:78`; `app/ponto/tests/test_e4cal_l1_d4_natureza.py:323`; `:333`; `:343`; `app/ponto/precedencia.py:373`; `:378`) Execução verde desse teste: **[nao verificado]**.
-
-**7. Contraexemplo além do golden — bloqueia.**
-
-Caso sintético: vínculo 12x36 noturno 19–07, sem intervalo, âncora 08/09/2026; única batida próxima é `S` em 09/09 às 07h; sem células em 07–10/09; existe DNA 19–07 distante, em 02/09; sem ausência ou feriado em 09/09; instante posterior ao encerramento. A alternância faz 09/09 ser folga. (`app/escala/models.py:1260`; `app/ponto/precedencia.py:380`)
-
-| Consulta | Caminho | Resultado |
-|---|---|---|
-| Calendário mensal | DNA distante torna o mapa não vazio; véspera ausente no mapa impede usar o template; órfã fica em 09/09. D4 vê batida e nenhuma lavra. (`app/escala/utils.py:103`; `app/ponto/turnos.py:1297`; `:285`; `app/ponto/status_dia.py:252`; `:271`) | **`sem_certidao`** |
-| D4 unitário de 09/09 | Pad 07–10/09 não contém DNA; mapa vira `None`; template atribui a órfã a 08/09, filtrada fora da consulta. Sem batida em 09/09, natureza responde folga. (`app/ponto/turnos.py:1845`; `:2993`; `:1300`; `:295`; `:1993`; `app/ponto/status_dia.py:291`) | **`folga`** |
-
-A sonda pura do pareador, executada em memória, confirmou as duas atribuições da mesma saída: **09/09 com mapa distante; 08/09 sem mapa**. A integração completa calendário/D4 e ocorrência desse cadastro em produção permanecem **[nao verificado]**. (`app/ponto/turnos.py:1297`; `:1300`; `:1494`)
-
-## 02/11 18:22 · sessao 17d91a766eb9 · - · - · origem=Ronald (tmux)
-
-**Bloqueia — janela muda o status do mesmo dia.** Contraexemplo estático: vínculo 12x36 noturno 19–07, sem intervalo, âncora 08/09; única batida na região: `S` em 09/09 às 07h; nenhuma célula em 07–10/09; célula com DNA 19–07 em 02/09; agora 20/09. A natureza de 09/09 é folga pela alternância (`app/escala/models.py:1260`).
-
-- Calendário mensal: o DNA de 02/09 torna o mapa não vazio; como 08/09 falta nele, `_vespera` retorna `None`; a saída órfã fica em 09/09. D4 recebe `tem_batida=True` e devolve `sem_certidao` (`app/escala/utils.py:103`; `app/ponto/turnos.py:1297`; `app/ponto/turnos.py:285`; `app/ponto/turnos.py:1494`; `app/ponto/status_dia.py:252`; `app/ponto/status_dia.py:271`).
-- D4 unitário de 09/09: pad 07–10/09 sem DNA faz o mapa virar `None`; `_vespera` usa template 19–07; a órfã é atribuída a 08/09 e descartada do resultado unitário. Sem batida em 09/09, D4 lê natureza folga e devolve `folga` (`app/ponto/turnos.py:1845`; `app/ponto/turnos.py:2993`; `app/ponto/turnos.py:1300`; `app/ponto/turnos.py:291`; `app/ponto/turnos.py:1990`; `app/ponto/status_dia.py:291`).
-- É dedução dos ramos da cópia; reprodução executada e ocorrência em produção: **[nao verificado]**.
-
-**Não procede — passado `sem_previsto` virar aberto por data.** O predicado exclui passado; nesse ramo, com lavra lê a coluna, sem lavra e com batida entrega `sem_certidao`. Há testes específicos para ambos (`app/ponto/status_dia.py:256`; `app/ponto/status_dia.py:266`; `app/ponto/status_dia.py:271`; `app/ponto/tests/test_e4cal_l1_d4_natureza.py:410`; `app/ponto/tests/test_e4cal_l1_d4_natureza.py:417`).
-
-**Não procede — nova leitura temporal do status fora da borda.** Calendário captura `_agora`, passa-o ao D4, que obtém `hoje` desse instante e injeta o mesmo instante na juíza. O rótulo `data <= hoje` apenas escolhe a frase depois de `s == 'previsto'` (`app/colaboradores/services/calendario.py:134`; `app/colaboradores/services/calendario.py:572`; `app/ponto/status_dia.py:231`; `app/ponto/status_dia.py:253`; `app/ponto/status_dia.py:298`).
-
-**Fila — segunda leitura de relógio preexistente no calendário.** `_agora_retr = timezone.now()` decide prazo de desfazer; não participa do status nem foi acrescentada pelo diff (`app/colaboradores/services/calendario.py:221`; `app/colaboradores/services/calendario.py:225`).
-
-**Não procede — meia-noite tratada só por data no encerramento.** Marcos são encadeados em instantes, avançando dia quando necessário; a juíza compara `agora >= fim` e prioriza turno aberto vivo (`app/escala/servico_jornada.py:79`; `app/escala/servico_jornada.py:89`; `app/ponto/turnos.py:2114`; `app/ponto/turnos.py:2119`).
-
-**Fila — custo de CPU não medido pelo teto de queries.** Para cada par, D4 recalcula `dias_encerrados` da carga inteira; esse método percorre todos os dias da janela. Com uma carga mensal, há repetição quadrática em dias, embora turnos e consultas estejam memoizados (`app/ponto/status_dia.py:248`; `app/ponto/status_dia.py:253`; `app/ponto/turnos.py:3004`; `app/ponto/turnos.py:2162`).
-
-_1480 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1483 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
