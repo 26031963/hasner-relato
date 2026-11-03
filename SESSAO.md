@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 23:01:15.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (176.7 MB). Acoes na janela: **620**.
+**Medido em 02/11/2026 23:06:17.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (176.7 MB). Acoes na janela: **619**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -629,4 +629,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 11:06:39 | Bash | Check commit citations and TICKETS format | `cd /home/ronald/wt-e3isento-pouso-104938 && git log --format='%s%n%b' 15c3a8b5..HEAD \| grep -oE '\[[A-Z0-9-]+\]' \| sort -u; cd /home/ronald/saas-hasner && grep -n 'E3-STATUS\\|E3-HASH' app/docs/TICKETS.md \| head -3 \| cut -c1-200; sed -n 1,12p app/docs/TICKETS.md \| cut -c1-200` |
 | 11:06:31 | Bash | Remove stale ESPERANDO; find doc rows | `cd /home/ronald/saas-hasner && bash /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/esperando.sh rm 2>&1\|tail -1; sed -n 1,5p app/docs/RELATO.md \| cut -c1-120; grep -n 'E3-ISENTO' app/docs/TICKETS.md \| cut -c1-250 \| head; grep -n 'E3-ISENTO-INSUMOS' app/docs/BACKLOG.md \| cut -c1-400` |
 | 11:06:25 | Agent | opus final E3-ISENTO-INSUMOS | `Verificador final (opus) da obra E3-ISENTO-INSUMOS, antes do pouso (merge+deploy+apply em prod). Somente leitura. Voce nao viu a construcao; procure o que esta errado. Copia certificada: /home/ronald/wt-e3isento-pouso-104938 (HEAD e16530a0, base main 15c3a8b5). Diff do delta: /home/ronald/saas-hasner/logs/e3isento/pouso/delta.diff (`git -C /home/ronald/wt-e3isento-pouso-104938 diff 15c3a8b5..HEAD` ...` |
-| 11:06:06 | Bash | Read suite verdict and copy state | `cd /home/ronald/saas-hasner && cat logs/e3isento/pouso/suite.rc; grep -E '^(OK\|FAILED)($\| \()' logs/e3isento/pouso/suite.log \| tail -1; grep -E '^Ran [0-9]+ tests' logs/e3isento/pouso/suite.log \| tail -1; cd /home/ronald/wt-e3isento-pouso-104938 && git status --porcelain \| head; git rev-parse HEAD` |
