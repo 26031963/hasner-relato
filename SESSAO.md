@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 04:54:46.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **500**.
+**Medido em 03/11/2026 05:00:24.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **499**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -509,4 +509,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:04:14 | Bash | Locate the lei line and the PROMPTS format | `cd /home/ronald/saas-hasner/app; grep -n '^lei: E4-CALENDARIO-L1' docs/RELATO.md \| cut -c1-80; tail -2 docs/PROMPTS.md \| cut -c1-200; date +%H:%M` |
 | 17:04:13 | SendMessage |  | `-` |
 | 17:04:00 | Bash | Read the copy's status_dos_dias_lavrados | `cd /home/ronald/wt-e4cal-l1-r2-151020/app; sed -n 195,264p ponto/status_dia.py` |
-| 16:56:24 | Bash | Wait for the L1 agent's next test run | `cd /home/ronald/saas-hasner; for i in $(seq 1 22); do q=$(bin/trava_teste.sh --quem); case "$q" in suite:*) break;; esac; /usr/bin/sleep 25; done; echo "$q"; ls -t --time-style=+%H:%M:%S -la logs/e4cal/ \| head -3` |
