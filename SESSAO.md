@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 23:39:30.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (177.9 MB). Acoes na janela: **629**.
+**Medido em 02/11/2026 23:45:04.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (178.2 MB). Acoes na janela: **638**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:44:31 | Bash | Check deploy locking and vigia_logins | `cd /home/ronald/wt-dme-v3-234409; grep -n "flock\\|DEPLOY_RECUSA_ID\\|RECUSA_ARQ=" bin/deploy.sh \| head; sed -n 60,72p bin/vigia_logins.sh; grep -n "uptime" bin/*.sh \| head -3` |
+| 23:44:14 | Bash | Read selo part 2 | `cd /home/ronald/wt-dme-v3-234409; sed -n 120,400p bin/tests/test_deploy_nao_mata_elo.sh` |
+| 23:44:14 | Bash | Read selo part 1 | `cd /home/ronald/wt-dme-v3-234409; wc -l bin/tests/test_deploy_nao_mata_elo.sh; sed -n 1,120p bin/tests/test_deploy_nao_mata_elo.sh` |
+| 23:44:09 | Bash | Create v3 worktree from f98e5dc4 | `cd /home/ronald/saas-hasner; T=$(date +%H%M%S); git worktree add -b dme-v3-$T /home/ronald/wt-dme-v3-$T f98e5dc4 2>&1 \| tail -1; cd /home/ronald/wt-dme-v3-$T && git log --oneline -1 && echo WT=/home/ronald/wt-dme-v3-$T; grep -ln "contrato_deploy" /home/ronald/saas-hasner/bin/tests/*.sh /home/ronald/saas-hasner/bin/*.sh \| head; grep -n "docker" bin/vigia_logins.sh \| head` |
+| 23:43:48 | Bash | Show P6 diffs and readers | `cd /home/ronald/wt-dme-193144; git diff b1f9d4f1 HEAD -- app/config/crons.py app/core/management/commands/pipeline_placar.py bin/crons_duracao.py app/chamados/tests/test_contract_crons.py; grep -n "EXITS_NAO_RODOU\\|70, 75\\|nao_rodou" -r bin app --include=*.py --include=*.sh \| grep -v "^app/logs"` |
+| 23:43:39 | Bash | Check timeout use in crons and rc137 | `cd /home/ronald/wt-dme-193144; grep -n "timeout" app/config/crons.py \| head; grep -n "RUNNER" app/config/crons.py \| head -5; cat -n bin/rc137_no_restart.sh` |
+| 23:43:30 | Bash | Read admissao_cron and cron_run | `cd /home/ronald/wt-dme-193144; cat -n bin/admissao_cron.sh; echo -----; cat -n bin/cron_run.sh` |
+| 23:43:08 | Bash | Read contrato_deploy, reinicio, deploy refusal section | `cd /home/ronald/wt-dme-193144; sed -n 15,30p bin/contrato_deploy.sh; echo ----; cat -n bin/reinicio_sob_admissao.sh; echo ----; sed -n 270,295p bin/deploy.sh` |
+| 23:42:57 | Bash | Read Codex v2 answer | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/dme_v2; tail -3 $S/wrapper.out; cat $S/resposta.txt` |
 | 23:35:53 | Bash | Wait for Codex v2 to finish | `while kill -0 689891 2>/dev/null; do /usr/bin/sleep 20; done; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/dme_v2/wrapper.out \| tail -3` |
 | 23:35:49 | Bash | Append progress line to RELATO | `cd /home/ronald/saas-hasner; printf '%s\n' '23:34 ANDOU: DME volta 2 bateria r3 TOTAL 22 mutantes, 0 vivos (M13/M14 mortos pelos casos rc1/conteudo; logs/dme/v2_mutantes_r3.log); commit f98e5dc4 na copia; Codex verificador v2 (pid 689891) + suite inteira na copia (logs/dme/suite_f98e5dc4.log). L1: aval E4CAL-L1-RESOLVER-NUMEROS registrado, pouso em E4CAL-L1-POUSO-0411 (portao qua 04/11 18:00).' >> ...` |
 | 23:35:29 | Bash | Point ESPERANDO at live producer | `cd /home/ronald/saas-hasner; /usr/bin/sleep 15; bin/trava_teste.sh --quem; P=$(pgrep -f "suite.sh --dir /home/ronald/wt-dme-193144" \| head -1); echo pid=$P; sed -i "3s#^ANDOU 23:34.*#ESPERANDO: codex_pergunta.sh \| pid=689891#" app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md` |
