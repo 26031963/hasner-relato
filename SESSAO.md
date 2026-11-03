@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 04:38:20.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **520**.
+**Medido em 03/11/2026 04:43:47.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **518**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -528,5 +528,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:44:05 | Bash | Check whether the mutant loop finished and read its tally | `cd /home/ronald/saas-hasner; ps -p 48442 -o pid=; bin/trava_teste.sh --quem; grep -c MORTO logs/e4cal/r3_mutantes.log; grep -vc MORTO logs/e4cal/r3_mutantes.log; grep -v MORTO logs/e4cal/r3_mutantes.log \| cut -c1-200` |
 | 16:43:59 | Bash | Add the DEPLOY-[nome]-ELO dispatch line to the RELATO | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') i=[n for n,l in enumerate(L) if l.startswith('DESPACHO NOREVERSE')][0] L.insert(i+1,'DESPACHO DEPLOY-[nome]-ELO 16:4x: medir quando o elo lavrar_he_pendente comecou x ultima checagem do em_curso x restart (02/11) + sombra.sh roda fora das cascas? -> sonnet (motivo: Codex em reserva so final) \| CONTRAT ...` |
 | 16:43:55 | Agent | sonda: elo morto pelo deploy 02/11 | `SONDA SO LEITURA (repo /home/ronald/saas-hasner). PROIBIDO: escrever em qualquer arquivo do repo, docker exec que escreva, docker kill/stop/rm/restart, kill/pkill, rodar crons ou deploy. Pode ler arquivos, `docker logs` (com --since em formato ISO, ex. 2026-11-02T09:30:00Z -- nunca HH:MM), ls/stat, grep (use /bin/grep). Pergunta: no dia 02/11/2026, `bin/deploy.sh` (log em logs/cobparc/h10/deploy.l ...` |
-| 16:43:37 | Bash | Check how the chained crons mark themselves as in progress | `cd /home/ronald/saas-hasner; grep -n 'crons_em_curso\\|cron_run' bin/encadeado.sh bin/cron_run.sh \| head -20; grep -n 'lavrar_he_pendente' app/config/crons.py \| head` |
-| 16:43:21 | Bash | Check mutant progress and the DEPLOY-[nome]-ELO row | `cd /home/ronald/saas-hasner; tail -4 logs/e4cal/r3_mutantes.log \| cut -c1-200; grep -n 'DEPLOY-[nome]-ELO' app/docs/BACKLOG.md \| cut -c1-900; sed -n 255,285p bin/deploy.sh` |
