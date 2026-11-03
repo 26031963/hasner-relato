@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 03:55:46.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **556**.
+**Medido em 03/11/2026 04:01:00.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **553**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -563,6 +563,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:10:47 | Bash |  | `cd /home/ronald/wt-noreverse-021533; /usr/bin/sleep 45; git log --oneline -2; git status --porcelain \| head` |
 | 16:03:29 | Bash |  | `cd /home/ronald/saas-hasner; timeout 590 bash -c 'until ! ps -p 1657393 >/dev/null; do /usr/bin/sleep 10; done'; date +%T; grep -E '^(OK\|FAILED)($\| \()\|^Ran' logs/noreverse/suite.log \| tail -2; tail -2 logs/noreverse/suite.log` |
 | 16:03:18 | Bash |  | `cd /home/ronald/saas-hasner; date +%T; ps -p 1657393 -o pid=; grep -E '^(OK\|FAILED)($\| \()\|^Ran' logs/noreverse/suite.log \| tail -2; tail -c 200 logs/noreverse/suite.log` |
-| 16:00:38 | Bash |  | `cd /home/ronald/saas-hasner; /usr/bin/sleep 30; ps -p 1657393 -o pid=; ls -l --time-style=+%T logs/noreverse/suite.log; date +%T` |
-| 16:00:09 | Bash |  | `cd /home/ronald/saas-hasner; ps -o cmd= -p 1657393 \| grep -o 'wt-[a-z0-9-]*' \| head -1; sed -i '3s#.*#ESPERANDO: trava_teste.sh \| pid=1657393 \| arquivo=logs/noreverse/suite.log#' app/docs/RELATO.md; /usr/bin/sleep 20; ls -l --time-style=+%T logs/noreverse/suite.log` |
-| 16:00:05 | Bash |  | `cd /home/ronald/saas-hasner; ps -p 316967 -o pid=; date +%T; tail -2 logs/e4cal/r2_mutantes.log \| cut -c1-100; bin/trava_teste.sh --quem; ls -l --time-style=+%T logs/noreverse/suite.log` |
