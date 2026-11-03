@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: suite.sh | pid=3766701 | arquivo=logs/e4cal/suite_pouso_44dd43c6.log
+ESPERANDO: trava_teste.sh | pid=3766703 | arquivo=logs/e4cal/suite_pouso_44dd43c6.log
 L1-POUSA-E-ESCADA (aval Ronald 03/11 00:2x) EM CURSO: L1 unica obra; copia 95aa4fe1 rebase sobre 25ff1fe2 = wt-l1-pouso-002413 @ 44dd43c6 (12 commits, e5cf3719 pulado por ja aplicado; delta .py do rebase = 0: patch identico e os 2 arquivos comuns iguais ao 25ff1fe2 -> sem opus) -> suite; frota na sombra de hoje (dump 03/11 00:2x) lados A main e D copia, logs/e4cal/l1pouso_{A,D}.run, depois --bloco -> pouso+deploy ate 05:30, resultados 1-8; teto duro = nao pousa e PARA.
 DEPLOY-ELO ESTACIONADA na copia wt-dme-v3-234409 @ 43c64f48 (aval L1-POUSA-E-ESCADA 03/11): NAO pousa; bateria pid 2133111 (logs/dme/v3_mutantes.log) e Codex v3 pid 2192755 (scratchpad dme_v3/resposta.txt) terminam sozinhos, ninguem le; retoma qua 04/11 apos 18:00 como item (2).
 E4CAL-L1-EH-TRABALHO RESPONDIDA por aval Ronald E4CAL-L1-RESOLVER-NUMEROS 02/11 23:3x: aceita 3.041->4.453 sem recorte (1.946 dias de 146 desligados aparecem). POUSO da L1 (copia 95aa4fe1 intacta) so DEPOIS de qua 04/11 18:00, fora de 06:00-07:30: rebase sobre o HEAD do dia, suite inteira, opus do delta de .py; resultados 1-6 do aval (pouso+deploy, catraca 5->3, frota Resolver e decisao_do_dia_pendente antes/depois, nascidos 0, FM/TXT hash igual, smoke 1 ativo + 1 desligado). PROIBIDO recorte por situacao, juiz novo, pouso antes do reset, apply.
