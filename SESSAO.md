@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 07:40:17.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **398**.
+**Medido em 03/11/2026 07:45:46.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **390**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -400,11 +400,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:03:22 | Bash | Compare red selos copy vs HEAD | `cd /home/ronald/saas-hasner/logs/dme && for f in pasta_wt-dme-193144.log pasta_wt-dme-head-194142.log; do echo "== $f"; grep -E '^rc=[^0]' $f \| sort; tail -n1 $f; done; ls -la pasta.fim` |
 | 20:03:18 | Bash | Check selo run progress | `cd /home/ronald/saas-hasner && kill -0 2963460 2>/dev/null && echo vivo; wc -l logs/dme/pasta_wt-dme-head-194142.log; ls logs/dme/pasta.fim 2>/dev/null; date +%H:%M` |
 | 19:53:19 | Bash | Check selo run progress and failures | `cd /home/ronald/saas-hasner && kill -0 2963460 2>/dev/null && echo vivo; wc -l logs/dme/pasta_*.log; grep -v '^rc=0' logs/dme/pasta_*.log \| head -20; ls logs/dme/pasta.fim 2>/dev/null` |
-| 19:44:53 | Bash | Point ESPERANDO at builder's selo run | `cd /home/ronald/saas-hasner && sed -i '3s#^ESPERANDO:.*#ESPERANDO: pasta.sh \| pid=2963460 \| arquivo=logs/dme/pasta_wt-dme-193144.log#' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md; wc -l logs/dme/pasta_wt-dme-193144.log` |
-| 19:44:49 | Bash | Read pasta.sh and its output fd | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/dme/pasta.sh; ls -l /proc/2963460/fd 2>/dev/null \| grep -v pipe \| tail -4` |
-| 19:44:46 | Bash | Find pasta.sh output file | `ls -lt --time-style=+%H:%M:%S /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/dme/ \| head -5` |
-| 19:44:42 | Bash | Find any builder-related processes | `ps -ef \| grep -v grep \| grep -E 'wt-dme\|codex_pergunta\|suite\|manage.py test' \| cut -c1-220 \| head; docker ps --format '{{.Names}} {{.Status}}' \| grep -v -E '^saas_\|juliani_db\|sombra_db\|mensageria' \| head` |
-| 19:44:38 | Bash | Inspect builder background process | `ps -o pid,etime,args --ppid 3154072 \| cut -c1-250; pstree -p 3154072 \| head -5; cat /proc/3154072/cmdline \| tr '\0' ' ' \| cut -c1-900` |
-| 19:44:35 | Bash | See what background work the builder runs | `cd /home/ronald/saas-hasner && bin/trava_teste.sh --quem 2>&1 \| head -5; ps -ef \| grep -E '[t]rava_teste\|[s]uite.sh' \| cut -c1-200 \| head` |
-| 19:43:22 | Bash | Look up O261-E items in BACKLOG | `grep -n 'O261-E' docs/BACKLOG.md \| cut -c1-220 \| head` |
-| 19:43:20 | Bash | Check DME builder progress | `f=/tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/abbbcd4f0982ce7a5.output; ls -la --time-style=+%H:%M:%S $(readlink -f $f) \| awk '{print $6,$5}'; date +%H:%M:%S; ls -d /home/ronald/wt-dme-* ; git -C $(ls -d /home/ronald/wt-dme-* \| head -1) log --oneline -3` |
