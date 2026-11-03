@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/11/2026 21:31:16.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (175.0 MB). Acoes na janela: **621**.
+**Medido em 02/11/2026 21:36:36.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (175.0 MB). Acoes na janela: **619**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -629,5 +629,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:12:43 | Agent | Verificador final v3 COBPARC-FILA-RELOGIO | `LEITURA FINAL (opus final, volta 3) da obra COBPARC-FILA-RELOGIO, projeto Hasner Ponto. Somente leitura. Leia antes /home/ronald/saas-hasner/CLAUDE.md: secao 0 LEI-AKITA, secao 6 e 7b CODEX item 5. Copia: /home/ronald/wt-cobparc-relogio-070738, base 15c3a8b5, HEAD final 20f2ebb2. Diff inteiro: `git -C /home/ronald/wt-cobparc-relogio-070738 diff 15c3a8b5..20f2ebb2`. Commits por `git log 15c3a8b5..2 ...` |
 | 10:12:26 | Bash | Verify suite4 verdict, clean tree, B3 state | `cd /home/ronald/saas-hasner && L=logs/cobparc_relogio/suite4.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran ' $L \| tail -1; cat logs/cobparc_relogio/suite4.rc 2>/dev/null; git -C /home/ronald/wt-cobparc-relogio-070738 log --oneline -1; git -C /home/ronald/wt-cobparc-relogio-070738 status --porcelain \| head -3; sed -i '3{/^ESPERANDO:/d}' app/docs/RELATO.md; grep "COBPARC-FILA-RELO ...` |
 | 09:43:17 | Bash | Check current suite process | `ps -p 3644011 -o etime=; P=$(ps -eo pid,args \| awk '/bin\/trava_teste.sh/ && !/awk/ {print $1; exit}'); echo P=$P; ls -t /home/ronald/saas-hasner/logs/cobparc_relogio/ \| head -3` |
-| 09:33:20 | Bash | Refresh ESPERANDO pid | `sed -i '3s/pid=3065259/pid=3644011/' docs/RELATO.md && sed -n 3p docs/RELATO.md` |
-| 09:33:17 | Bash | Check suite pid and builder commits | `ps -p 3065259 -o etime=; P=$(ps -eo pid,args \| awk '/bin\/trava_teste.sh/ && !/awk/ {print $1; exit}'); echo P=$P; git -C /home/ronald/wt-cobparc-relogio-070738 log --oneline -3` |
