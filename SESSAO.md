@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 05:11:01.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **486**.
+**Medido em 03/11/2026 05:16:00.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **483**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -493,6 +493,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:21:05 | Bash | Check what the L1 agent is running now | `cd /home/ronald/saas-hasner; ps -p 2682175 -o pid=; bin/trava_teste.sh --quem; ls -t --time-style=+%H:%M:%S -la logs/e4cal/ \| head -4; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|rc=' logs/e4cal/r5_vizinhos.log \| tail -3` |
 | 17:20:27 | Bash | Check the vizinhos run and the hook log | `cd /home/ronald/saas-hasner; /usr/bin/sleep 30; ps -p 2682175 -o pid=; ls -la --time-style=+%H:%M:%S logs/e4cal/r5_vizinhos.log; tail -2 logs/hook_stop_fila1.log \| cut -c1-160` |
 | 17:20:20 | Bash | Point ESPERANDO at the L1 vizinhos run | `cd /home/ronald/saas-hasner; sed -i '3s#^ESPERANDO: .*#ESPERANDO: trava_teste.sh \| pid=2682175 \| arquivo=logs/e4cal/r5_vizinhos.log#' app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md` |
-| 17:15:41 | Bash | Wait for an L1 run that lasts longer than 45 s | `cd /home/ronald/saas-hasner; for i in $(seq 1 50); do q=$(bin/trava_teste.sh --quem); case "$q" in suite:*) p=${q#suite:}; p=${p%% *}; /usr/bin/sleep 45; if ps -p $p >/dev/null; then f=$(ls -t logs/e4cal/*.log \| head -1); break; fi;; esac; /usr/bin/sleep 10; done; echo "$p $f"; ps -p $p -o pid=` |
-| 17:15:15 | Bash | Check the green2 run and the hook's last verdict | `cd /home/ronald/saas-hasner; /usr/bin/sleep 20; ps -p 2381106 -o pid=; ls -la --time-style=+%H:%M:%S logs/e4cal/r5_green2.log; tail -1 logs/hook_stop_fila1.log \| cut -c1-200; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|rc=' logs/e4cal/r5_green2.log \| tail -3` |
-| 17:15:05 | Bash | Point ESPERANDO at the L1 green2 run | `cd /home/ronald/saas-hasner; sed -i '3s#^ESPERANDO: .*#ESPERANDO: trava_teste.sh \| pid=2381106 \| arquivo=logs/e4cal/r5_green2.log#' app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md; ps -p 2381106 -o pid=` |
