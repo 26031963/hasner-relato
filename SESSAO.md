@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/11/2026 02:46:00.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **669**.
+**Medido em 03/11/2026 02:51:00.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (183.4 MB). Acoes na janela: **667**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -677,5 +677,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:51:28 | Bash |  | `cd /home/ronald/saas-hasner/logs/isento_h10/pouso && python3 - <<'EOF' import re for f in ('reversao_snapshot.py','prova_frota.py'): s=open(f).read() s=s.replace("(aval Ronald 02/11 10:4x, (A) `!` rejulgar 08/09)","(aval Ronald 02/11 13:38 HORIZONTE-PARA-FRENTE + ISENTO-H10)") s=s.replace("PAREI (aval Ronald 02/11 10:4x): veredito mudado > 0, emitido > 0, hash de FM ou TXT mudou.","PAREI (aval Ron ...` |
 | 14:51:15 | Bash |  | `cd /home/ronald/saas-hasner/logs; mkdir -p isento_h10/pouso; cp e3isento/pouso/{reversao_snapshot.py,reversao_chamados.py,prova_frota.py,fm_helper.py} isento_h10/pouso/; cd isento_h10/pouso; sed -i 's#/tmp/reversao_e3isento_pouso.json#/tmp/reversao_isento_h10_pouso.json#g; s#/tmp/reversao_e3isento_chamados.json#/tmp/reversao_isento_h10_chamados.json#g; s#/tmp/e3i_fm_helper.py#/tmp/ih10_fm_helper.p ...` |
 | 14:51:08 | Agent | opus final ISENTO-H10 delta | `Obra ISENTO-H10, leitura FINAL antes do pouso (repo /home/ronald/saas-hasner; leia CLAUDE.md secao 0 e o aval abaixo). Arvore da obra: worktree /home/ronald/wt-isento-h10-135733, commits e8d4f4f3 (RED) e 870dff12 (cura), sobre 59de6666/2bc93f52 (E3-ISENTO-INSUMOS, cherry-pick ja lido antes) e base 97b43098 (main). Delta: /home/ronald/saas-hasner/logs/isento_h10/delta.diff (97b43098..870dff12) e de ...` |
-| 14:50:51 | Bash |  | `cd /home/ronald/saas-hasner; grep -E '^Ran' logs/cods_ato/suite.log \| tail -2; head -3 logs/isento_h10/suite.log \| cut -c1-200; cd /home/ronald/wt-isento-h10-135733; git status --porcelain; git log --oneline -1` |
-| 14:50:47 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/b1fwibv0v.output; date +%T; ls -la --time-style=+%T /home/ronald/saas-hasner/logs/isento_h10/` |
