@@ -1720,6 +1720,8 @@
 | V-FASE-FILA-MIUDOS | fila (opus itens 4-7): proposta_do_fio mostra so a 1a proposta (sequencial); C10 `aplicavel` velho entre a virada e a lavra 07:38; teste do rotulo por substring; descartes do Codex (C9 sem corte por hoje, pre-filtro de pautas com insumos incompletos, JUIZES.md sem o censo_fase como lavra) | registrado |
 | V-FASE-DONO-AS-OF | **cura (aval 30/10 23:4x, opcao (a))**: `e6_oraculo.InsumosDoDono.fase()` le, por dia passado, a lavra MAIS RECENTE que COBRIU aquele dia (as-of, `MetricaSnapshot` por data_ref), nao a ultima lavra; GATILHO: cadastro ou batida do dia mudou depois da lavra -> o dia volta a ser lavrado (corte 07/10 'mudou, muda em tudo'); lavra congelada sem gatilho = proibido. RED: col451 10/10 com `--hoje` depois de 21/11 segue CADASTRO. | construtor aberto 30/10 23:4x | aval 30/10 23:4x | `escala/services/fase_12x36.py::ultimo_lavrado` | 30/10 |
 | V-FASE-FILA-LAVRA-TODAS-AS-COMPS | medida (nao trava): custo do censo_fase_12x36 lavrando todas as comps (opcao (c)); se couber no cron, (c) substitui (a) por aval dele | fila | aval 30/10 23:4x | &mdash; | 30/10 |
+| HOLERITE-SHARE-WEBVIEW | **fila 2** (aval GASTA-ATE-O-RESET 04/11): 2.997 de 3.000 beacons com canShare(files)=false, 379 usuarios -- o compartilhar do holerite nao funciona no webview; cura pelo SERVIDOR, sem build do app. | fila 2 | registrado, nada construido | 04/11 |
+| AUDIT-[nome]-0311 | auditoria Fernando 03/11 itens 1-10 (insumo da F3-DRY: 345 dias, 246 comp 10 e 99 comp 11). Lacunas: item 7 sem tabela de traducao; item 10 sem ultimo clique. | registrar | registrado, nada construido | 04/11 |
 <!-- OBRAS:FIM -->
 
 ## Contagem por portao
