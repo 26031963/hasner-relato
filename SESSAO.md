@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 09:00:19.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (5.5 MB). Acoes na janela: **171**.
+**Medido em 04/11/2026 09:05:59.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (5.5 MB). Acoes na janela: **173**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:00:28 | Bash | Wait for push result | `cd /home/ronald/saas-hasner; L=$(ls -t logs/push/push_*_3commits.log \| head -1); for i in $(seq 1 38); do /bin/grep -q '^rc=' $L && break; /usr/bin/sleep 15; done; tail -4 $L \| cut -c1-200` |
+| 09:00:22 | Bash | Retry push through the régua | `cd /home/ronald/saas-hasner; L=logs/push/push_$(date +%Y%m%d_%H%M)_3commits.log; bash bin/push.sh origin main > $L 2>&1; echo "rc=$?" >> $L; tail -3 $L` |
 | 09:00:16 | Bash | Commit docs marco and TICKETS placar | `cd /home/ronald/saas-hasner; git add app/docs/TICKETS.md app/docs/RELATO.md app/docs/BACKLOG.md app/docs/PROMPTS.md && git commit -q -F - <<'EOF' F3-RECORTE (A) PUBLICADA + DEPLOY-ELO PARADO B3 + O261-E-F3-DORMENTE registrado; TICKETS placar 04/11 Marco: F3-RECORTE (A), medida do aval F3-RECORTE-E-CAUDA, tabela no topo do RELATO (3016 perguntas / 1178 chamados; reabrir real aceita 373; soma das pa ...` |
 | 09:00:07 | Bash | Rewrite TICKETS placar header | `cd /home/ronald/saas-hasner; bash bin/tickets_placar.sh --escrever \| tail -2; git status --porcelain \| head;` |
 | 09:00:01 | Bash | Read push outcome | `cd /home/ronald/saas-hasner; tail -15 logs/push/push_20261104_0859_2commits.log \| cut -c1-200; git fetch -q; git log --oneline origin/main..main` |
