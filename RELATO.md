@@ -1,5 +1,5 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: suite-MC-a25e2149 | arquivo=/home/ronald/saas-hasner/logs/mc/suite_a25e2149.log
+ESPERANDO: push-lote-d317bb40 | arquivo=/home/ronald/saas-hasner/logs/mc/push_lote.log
 ERRO-BOBO MODO-COMUM-OUT-DO-LOTE: volta 2 do opus final reprovou de novo so por FORMA (selo: apelido por .get('out'), out=out para funcao de fora, += de fila; docstring do selo; linha fim do lavrar_status_competencia sem os 2 vigias; padrao antigo no commit 40268612), 0 de comportamento; curado na copia pelo aval MODO-COMUM-POUSA item 5 (escrita 13:1x, depois do disparo da volta 2)
 DESENHO DEPLOY-[nome]-ELO-DA-CORRENTE: lei=escritor unico pergunta=recarregar codigo tem uma forma so, o HUP gracioso que ja roda todo dia, e o docker restart fica so para o que exige boot bin/deploy.sh:237 bin/deploy.sh:279
 MODO-COMUM-POUSA 04/11 11:5x (aval Ronald): wt-mc-082755 rebase 0a0bb6e6 -> c0a43e57 sobre 08bdec40, sem conflito, os mesmos 4 arquivos (cartorio.py, gerar_diagrama.py, MAPA.md, test_out_do_lote.py), nenhum .py alem do previsto; suite inteira em curso na pista ANTES da do reload (logs/mc/suite_c0a43e57.log); depois opus final e pouso --sem-migrate
@@ -6050,3 +6050,11 @@ LEI-AKITA: origem=bin/deploy.sh, testemunha=PIDs dos workers e rc do exec, RED=b
 - INCOMPLETO: prova do item 3 em casca real (exec vivo no deploy) e 3 rotas -- linha abaixo apos o deploy; wt-dme-v6 vira lapide depois
 - NO AR 13:24 (af710af2): `bin/deploy.sh --sem-migrate` deploy_rc=0, "tres cascas recarregadas juntas pelo HUP gracioso"; `docker exec saas_core sleep 60` vivo durante o deploy exec_rc=0 (item 3 provado em casca real); rotas core /health/ 200, ui /colaboradores/ 302, mensageria /health/ 200; selo BUG 128 verde; importerror_500=0 (logs/dme/reload/pouso_deploy.log, pouso_exec_rc.txt)
 - LAPIDE (L-111): worktree wt-dme-v6-091249 removida (volta 6 superada pelo reload); branch dme-v6-091249 @e8f72370 mantida, copia em /tmp/lapide_wt-dme-v6-091249.tgz
+
+## POUSO MODO-COMUM-OUT-DO-LOTE 04/11 13:3x (aval MODO-COMUM-POUSA 11:5x + MODO-COMUM-CORTE-DE-FORMA 13:2x)
+LEI-AKITA: origem=cartorio, testemunha=delta do ato, RED=test_out_do_lote, quem-mais-le=censo dos 7 grupos, juizes novos=0, padrao=Single Source of Truth
+- DISPENSA: opus final volta 3 dispensado por corte Ronald MODO-COMUM-CORTE-DE-FORMA (excecao desta obra, CORTES.md 04/11 13:2x); voltas 1 e 2 so de forma, censo real 0/0/0/0
+- mudados: ponto/services/cartorio.py (finally drena e conta no out), processar_cartorio.py e lavrar_status_competencia.py (linha fim com descartados_do_ato), core/.../gerar_diagrama.py, MAPA.md, ponto/tests/test_out_do_lote.py (selo por AST, mutante real :1025 morto)
+- PROVA: suite inteira a25e2149 OK (skipped=42, expected failures=24) Ran 13484 rc=0 (logs/mc/suite_a25e2149.log); cmp 6/6 contra wt-mc-082755 @a25e2149
+- INCOMPLETO: deploy + 3 rotas (linha abaixo); prova depois do cartorio seguinte (0 decisao do ato lendo chave do lote)
+- NO AR 13:3x (fc62165a): `bin/deploy.sh --sem-migrate` deploy_rc=0 pelo HUP gracioso com 18 crons em curso (sem flag crons_quebrados nova); rotas core /health/ 200, ui /colaboradores/ 302, mensageria /health/ 200; selo BUG 128 verde (logs/mc/pouso_deploy.log). Prova do cartorio: processar_cartorio 05/11 06:27 (crons.py:597), linha `fim` com descartados_do_ato

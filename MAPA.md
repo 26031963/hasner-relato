@@ -24,6 +24,7 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
 
 ## (e) EVENTO (o sinal acorda o juiz do dia)
 - ponto/services/cartorio.py::julgar_celula (juiz UNICO do dia)
+- ponto/services/cartorio.py::CHAVES_DO_ATO (_adiados_pela_lampada, _parcial_na_lista_vistos, cods, rejulgar) -- estado do ATO no `out` do LOTE; as filas saem no finally de julgar_colab, cods volta ao lote (selo ponto/tests/test_out_do_lote.py)
 - ponto/signals.py::_nucleo_post_save_batida (post_save Batida)
 - ponto/signals.py::_realtime_post_save_batida (post_save Batida)
 - ponto/signals.py::_nucleo_post_delete_batida (post_delete Batida)
