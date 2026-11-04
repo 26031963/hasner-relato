@@ -2,6 +2,7 @@
 
 ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh | pid=1145610 | arquivo=/home/ronald/saas-hasner/logs/dme/suite_887e5ea0.log
 
+F3-RECORTE-E-CAUDA 04/11 08:3x (aval Ronald): DESPACHO F3-RECORTE (A): medida na sombra savepoint+raise -> sonnet (motivo: sonda que escreve na sombra; Codex em reserva para a FINAL), saida logs/f3_recorte/resultado.md; (B) classificar_dia entra apos item 5 MODO-COMUM.
 PAREI DEPLOY-[nome]-ELO-DA-CORRENTE RESPONDIDA por aval Ronald RESTART-FEITO 04/11 07:4x (segue item 2 DEPLOY-ELO, pouso ate 14:30; depois 3 F3-DRY, 4 COMP10-HOLERITE, 5 MODO-COMUM em copia) -- era: parada pelo RESTART-NO-MARCO (o /clear e o restart sao dele) | espera Ronald -- (aval COMPLEMENTO-2 07:5x, item 4 "PRONTO PARA CLEAR E RESTART e PARA"): handoff 018b8924, /tasks vazio; depois do restart segue o item 2 DEPLOY-ELO pelo HANDOFF sem aval.
 
 GASTA-ATE-O-RESET 04/11 07:2x (aval Ronald; COMPLEMENTO-2 07:5x revoga o PARA 16:30, ver RESTART-NO-MARCO): revoga o PAREI do L1-POUSA-E-ESCADA ate o reset 18:00; teto 1 construtor, Codex so na volta FINAL do item 2, PARA 16:30. FILA: (1) PROVA-CODS -> (2) DEPLOY-ELO (pouso fora de 06:00-07:30, ate 14:30) -> (3) F3-DRY -> (4) COMP10-HOLERITE -> (5) MODO-COMUM-OUT-DO-LOTE em copia. LEI-AKITA: origem=fila do aval, testemunha=funcoes reais citadas, RED=item 2, quem-mais-le=item 4, juizes novos=0, padrao=n/a (medida); item 2 padrao=n/a (instrumento)
