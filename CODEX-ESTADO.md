@@ -1,9 +1,9 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **03/11/2026 00:05** · publicado em **04/11/2026 00:05** (UTC-3)
+> Ultima resposta processada: **03/11/2026 00:05** · publicado em **04/11/2026 00:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
 
-## 03/11 00:05 · sessao d1798f3d1359 · DEPLOY-[nome]-ELO · verificador · origem=Code
+## 03/11 00:05 -- HISTORICO (mais de 24 h) · sessao d1798f3d1359 · DEPLOY-[nome]-ELO · verificador · origem=Code
 
 **A volta 3 melhora a proteção, mas ainda não fecha a classe.** Restam um caminho real de `docker exec` fora da admissão, um desvio do teto por `ADM_RESTART_TIMEOUT_S=00` e descarte de placar ilegível que pode produzir zero. (`bin/cron_run.sh:49`; `bin/admissao_cron.sh:55`; `bin/rc137_no_restart.sh:69`)
 
