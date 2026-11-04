@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 11:41:01.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (9.5 MB). Acoes na janela: **283**.
+**Medido em 04/11/2026 11:46:01.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (9.5 MB). Acoes na janela: **284**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:43:22 | Bash | Check hook state and constructor outputs | `tail -2 /home/ronald/saas-hasner/logs/hook_stop_fila1.log \| cut -c1-110; ls /home/ronald/saas-hasner/logs/dme/v7/` |
 | 11:38:24 | Bash | Confirm constructor transcript is growing | `f=/home/ronald/.claude/projects/-home-ronald-saas-hasner-app/29e4229d-9fb7-4166-9986-a16d88f0e0e5/subagents/agent-a8d12cf6ee0ac7d86.jsonl; stat -c '%y %s' $f; /usr/bin/sleep 20; stat -c '%y %s' $f` |
 | 11:38:19 | Bash | Check why stop hook rejected waiting line | `tail -5 /home/ronald/saas-hasner/logs/hook_stop_fila1.log; sed -n 1,3p /home/ronald/saas-hasner/app/docs/RELATO.md \| cut -c1-120` |
 | 11:38:02 | Bash | Record the decision line in RELATO | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read().split('\n') l='DEPLOY-ELO v6->v7 (11:4x): Codex v3 deu 4 BLOQUEIA, os 4 procedentes (em_casca.sh:28-38 transferencia fora do fd8 + janela de SIGKILL; pauta deploy_recusado em rc!=0 sem recusa, codex_v3.r:63-64; deploy x deploy, codex_v3.r:117). DECISAO TECNICA (PARADA 5, cura mais restritiva): marca por GRUPO de processos desde o nascimento, p ...` |
