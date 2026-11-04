@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 20:14:50.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (1.4 MB). Acoes na janela: **47**.
+**Medido em 04/11/2026 20:20:13.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (1.5 MB). Acoes na janela: **55**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:18:27 | Bash |  | `python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') L.insert(1,'ESPERANDO: sombra.sh \| pid=3959999') open(p,'w').write('\n'.join(L)) EOF grep -h 'N1Q' /home/ronald/saas-hasner/logs/n1q2-copia.out \| cut -c1-120` |
+| 20:18:22 | Bash |  | `ps -eo pid,args \| grep 'sombra.sh --rodar' \| grep -v grep \| cut -c1-120` |
+| 20:18:11 | Bash |  | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') assert L[1].startswith('ESPERANDO:'); del L[1] L.insert(2,"N1 SUITE 4892a6ab: OK (skipped=42, expected failures=39), Ran 13513, rc=0 (logs/n1im/suite_4892a6ab.log), copia limpa. Medida por tabela (n1q-*.out, paralelo): head colaboradores_empresa 39.662 / colaborador 38.640 / periodofechado 38.516  ...` |
+| 20:18:02 | Bash |  | `cd /home/ronald/saas-hasner/logs/n1im; cat suite_4892a6ab.rc; grep -E '^(OK\|FAILED)($\| \()' suite_4892a6ab.log \| tail -1; grep '^Ran ' suite_4892a6ab.log \| tail -1; grep -E '^(ERROR\|FAIL):' suite_4892a6ab.log \| head -20; cd /home/ronald/wt-n1im-183722 && git status --porcelain \| head` |
+| 20:15:34 | Bash |  | `cd /home/ronald/saas-hasner; sed -i "s/ for k, v in c.most_common(15): print('N1Q', v, k)/ print('N1Q TOTAL', sum(c.values()))\n for k, v in c.most_common(6): print('N1Q', v, k)/" logs/sombra/sonda_n1im_q.py; grep -n TOTAL logs/sombra/sonda_n1im_q.py; SOMBRA_ARVORE=/home/ronald/wt-n1im-183722/app bin/sombra.sh --rodar sonda_n1im_q.py n1q2-copia >/dev/null 2>&1; bin/sombra.sh --rodar sonda_n1im_q.p ...` |
+| 20:15:25 | Bash |  | `cd /home/ronald/saas-hasner; grep -n 'SOMBRA_ARVORE\\|ARVORE=' bin/sombra.sh \| head -12; head -2 logs/n1q-head.out logs/n1q-copia.out logs/n1im-q-head.out logs/n1im-q-copia.out \| cut -c1-200` |
+| 20:15:14 | Bash |  | `cut -c1-230 /tmp/claude-1001/-home-ronald-saas-hasner-app/354179ca-a13f-4642-a6f5-791cf69a0acd/tasks/blkqdz9nx.output` |
+| 20:15:01 | Bash |  | `python3 - <<'EOF' p='PROMPTS.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if 'aval Ronald BUG-SW-DEPOIS-DO-HE' in l]; assert len(i)==1; i=i[0] L[i]="- 04/11 20:1x \| aval Ronald BUG-SW-DEPOIS-DO-HE v2 (substitui a v1 de 20:1x: BUG-SW-RESPOND-UNDEFINED depois do pouso de LAVRAR-HE-PENDENTE-ESCALA e antes de OTIMIZA 1-3; teto 1 agente; so sw.js + selo; :41/:70/:77 sempre Response v ...` |
 | 20:11:25 | Bash |  | `python3 - <<'EOF' p='BACKLOG.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| BUG-SW-RESPOND-UNDEFINED \|')][0] c=L[i].split(' \| ') c[2]='fila 1 (aval BUG-SW-DEPOIS-DO-HE 04/11 20:1x: depois do pouso de LAVRAR-HE-PENDENTE-ESCALA, antes de OTIMIZA 1-3; so sw.js + selo; padrao=Offline Fallback)' L[i]=' \| '.join(c); open(p,'w').write('\n'.join(L)) p='RELATO.md'; L= ...` |
 | 20:11:14 | Bash |  | `python3 - <<'EOF' import re p='PROMPTS.md'; s=open(p).read().rstrip('\n')+'\n' s+="- 04/11 20:1x \| aval Ronald BUG-SW-DEPOIS-DO-HE (BUG-SW-RESPOND-UNDEFINED depois do pouso de LAVRAR-HE-PENDENTE-ESCALA e antes de OTIMIZA 1-3; teto 1 agente; so sw.js + selo; 3 sitios :41/:70/:77 sempre Response valida; RED fetch rejeitado sem cache; selo smoke SW casca app; PRONTO suite verde + opus delta + smoke  ...` |
 | 20:11:07 | Bash |  | `cd /home/ronald/saas-hasner/app/docs; grep -n 'BUG-SW-RESPOND-UNDEFINED' BACKLOG.md \| cut -c1-500; tail -2 PROMPTS.md \| cut -c1-200` |

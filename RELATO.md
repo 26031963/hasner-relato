@@ -1,6 +1,7 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: trava_teste.sh | pid=2635810
+ESPERANDO: sombra.sh | pid=3959999
 NOITE-0411 item 1 N1 20:1x: construtor entregou 4892a6ab na copia wt-n1im-183722 (15 arquivos, classe inteira: helper chamados/juizes.py::um_colaborador_por_identidade + ~25 lacos; ficha.py le perguntas_do_app; GLOSSARIO:28 Identity Map; RED 5 logs, 30 mutantes mordem, vizinhos Ran 4691 OK rc 0, lei_akita rc 0) -> suite inteira da copia (logs/n1im/suite_4892a6ab.log) + sombra sha head x copia (logs/n1im-head.out, n1im-copia.out); depois opus final.
+N1 SUITE 4892a6ab: OK (skipped=42, expected failures=39), Ran 13513, rc=0 (logs/n1im/suite_4892a6ab.log), copia limpa. Medida por tabela (n1q-*.out, paralelo): head colaboradores_empresa 39.662 / colaborador 38.640 / periodofechado 38.516 x copia 1.925 / (fora do top) / 2.016 -- contradiz o total de n1im-q; re-medida sequencial invertida em curso (n1q2-*.out).
 ORDEM NOITE-0411 20:1x (aval BUG-SW-DEPOIS-DO-HE): 1 N1 (em curso) -> 2 LAVRAR-HE-PENDENTE-ESCALA (construindo) -> 2b BUG-SW-RESPOND-UNDEFINED (so sw.js + selo, smoke Fernando antes do push) -> 3 OTIMIZA 1-3 -> ...
 N1 SOMBRA 20:1x: sha IGUAL head x copia (56f41101, len 42309) MAS a copia faz MAIS consultas: censo_alcance head 113 s / 101.944 queries x copia 205 s / 214.516 (logs/n1im-q-*.out, mesmo dump, suite concorrente nos dois). O ganho 212->146 da volta anterior nao se reproduz; a cura 4892a6ab NAO pousa assim. Investigando por tabela (sonda_n1im_q.py).
 DESPACHO LAVRAR-HE-PENDENTE-ESCALA 20:0x (item 2, sem arquivo em comum com a N1): autopsia+cura+RED+sombra sha -> opus construtor na copia wt-he-200326 (main 0e4e4b71) | suite inteira e opus final -> sessao | Codex fora (sem cota) | 1 agente vivo (COTA-40PCT)
