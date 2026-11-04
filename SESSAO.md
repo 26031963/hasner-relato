@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 20:30:51.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (2.4 MB). Acoes na janela: **77**.
+**Medido em 04/11/2026 20:36:06.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (2.4 MB). Acoes na janela: **78**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:33:22 | Bash |  | `cd /home/ronald/saas-hasner; ps -p 213194 >/dev/null && echo PUSH_VIVO \|\| echo PUSH_FIM; tail -5 logs/push/n1_26ee6979.log \| cut -c1-200; bash bin/trava_teste.sh --quem; git -C /home/ronald/wt-he-200326 log --oneline -1; git -C /home/ronald/wt-he-200326 status --short \| head; date +%H:%M` |
 | 20:25:14 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -i '2i ESPERANDO: push.sh \| pid=213194' docs/RELATO.md; sed -n 2p docs/RELATO.md` |
 | 20:25:07 | Bash |  | `sleep 3; pgrep -f "bin/push.sh origin main" \| head -1; pgrep -af "bin/push.sh origin main" \| head -2 \| cut -c1-120` |
 | 20:25:01 | Bash |  | `cd /home/ronald/saas-hasner; mkdir -p logs/push; bash bin/push.sh origin main > logs/push/n1_26ee6979.log 2>&1; echo "rc=$?" >> logs/push/n1_26ee6979.log` |
