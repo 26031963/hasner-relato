@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 10:10:03.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (8.0 MB). Acoes na janela: **237**.
+**Medido em 04/11/2026 10:15:26.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (8.1 MB). Acoes na janela: **241**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:14:10 | Bash | Replace RELATO matrix line with cause-read becos | `python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() a='MATRIZ F3-DORMENTE FASE 1 (' assert s.count(a)==1 i=s.index(a); j=s.index('\n',i) ln=("MATRIZ F3-DORMENTE FASE 1 (04/11, sombra savepoint+raise, ROLLBACK_NULO True, CENSO_IGUAL, 1332 cutucadas, ERROS 0): " "universo 3016 = aceita 1422 + admin_sem_fato_novo 600 + agrupado 730 + premissa_regularizada 223 + transicao 1 + veto_do_dia 40 (censo d ...` |
+| 10:13:54 | Bash | Spot-check the agent's cited lines | `cd /home/ronald/saas-hasner/app; sed -n 1676,1688p ponto/services/cartorio.py; echo ----; sed -n 1280,1300p chamados/models.py; echo ----; sed -n 730,737p ponto/management/commands/detectar_ausencias.py` |
+| 10:13:44 | Bash | Check which matrix file survived | `cd /home/ronald/saas-hasner/logs/f3_dormente; ls -la --time-style=+%H:%M:%S; head -5 matriz.md; grep -c . matriz.md` |
+| 10:13:21 | Bash | Check TOAST suite status | `cd /home/ronald/saas-hasner; date +%H:%M; kill -0 3302024 && echo suite-viva; grep -E '^(OK\|FAILED)($\| \()\|^Ran\|^rc=' logs/toast/suite_36768b29.log \| tail -3` |
 | 10:07:15 | Bash | Correct the hour label from the clock | `cd /home/ronald/saas-hasner/app; H=$(date +%H:%M); sed -i "s\|MATRIZ F3-DORMENTE FASE 1 (04/11 10:1x,\|MATRIZ F3-DORMENTE FASE 1 (04/11 $H,\|" docs/RELATO.md; grep -c "FASE 1 (04/11 $H" docs/RELATO.md; kill -0 3302024 && echo suite-viva` |
 | 10:07:08 | Bash | Publish the matrix summary at the RELATO top | `python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() a='ERRO-BOBO TOAST-E-NOME-CALENDARIO:' assert s.count(a)==1 i=s.index(a); j=s.index('\n',i)+1 ln=("MATRIZ F3-DORMENTE FASE 1 (04/11 10:1x, sombra savepoint+raise, ROLLBACK_NULO True, CENSO_IGUAL, ERROS 0): " "universo 3016 = aceita 1422 + admin_sem_fato_novo 600 + agrupado 730 + premissa_regularizada 223 + transicao 1 + veto_do_dia 40; " "6 cla ...` |
 | 10:06:56 | Bash | Build frota-weighted class x poke matrix | `cd /home/ronald/saas-hasner; python3 - <<'EOF' import json,collections L=open('logs/f3_dormente/f3_dormente.out').read().splitlines() R=[json.loads(l[4:]) for l in L if l.startswith('RES\|')] fro={} for l in L: if l.startswith('ESTRATO\|'): _,e,f,a=l.split('\|'); fro[tuple(json.loads(e))]=(int(f.split('=')[1]),int(a.split('=')[1])) assert sum(f for f,a in fro.values())==3016 CL=['aceita','admin_se ...` |
