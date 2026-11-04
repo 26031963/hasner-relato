@@ -1,7 +1,95 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **04/11/2026 12:22** · publicado em **04/11/2026 12:22** (UTC-3)
+> Ultima resposta processada: **04/11/2026 12:25** · publicado em **04/11/2026 12:28** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 04/11 12:25 · sessao b12a53e8fff6 · DEPLOY-[nome]-ELO-DA-CORRENTE · verificador · origem=Code
+
+**Reprovo o aval literal:** há consumidores que continuam ignorando falha de reload, a trava nova não estabelece Single Writer da árvore, e `--so-conferir` pode executar deploy. (`app/core/integrador_lote.py:638`; `app/core/esteira_vigia.py:1267`; `bin/vigia_logins.sh:71`; `bin/trava.sh:64`; `bin/deploy.sh:60`.)
+
+1. **Modos e passagem pela recusa**
+
+   - Normal, `--sem-migrate`, `--sem-sombra`, `--reload-copia` e `--reload-agendado`, quando passam pelas guardas, convergem no mesmo `docker kill -s HUP`, **sem chamar `recusa_restart_com_cron`**. Isso é deliberado para o HUP; não há restart nesses ramos. (`bin/deploy.sh:295`; `bin/deploy.sh:300`; `bin/deploy.sh:315`.)
+   - O único `docker restart` fica no ramo `RESTART=1`, imediatamente depois da recusa; há outra recusa antes das migrations. Sem motivo, `--restart` termina com rc 2. (`bin/deploy.sh:72`; `bin/deploy.sh:112`; `bin/deploy.sh:297`; `bin/deploy.sh:298`.)
+   - **`--so-conferir` não é reconhecido.** O parser reconhece `--conferir`; a grafia perguntada mantém `SO_CONFERIR=0` e pode chegar a migration e HUP. Argumentos desconhecidos também não são rejeitados. (`bin/deploy.sh:56`; `bin/deploy.sh:60`; `bin/deploy.sh:167`; `bin/deploy.sh:315`.)
+   - O verdadeiro `--conferir` termina sem reload e com rc 0, inclusive quando o mensageria não respondeu ao check. Os demais encerramentos anteriores ao sinal são recusas explícitas. (`bin/deploy.sh:147`; `bin/deploy.sh:171`; `bin/deploy.sh:89`.)
+   - Há **sucesso possível sem provar a troca dos workers**: lista anterior vazia apenas avisa e pula; lista atual vazia satisfaz “nenhum antigo restou”. A prova posterior abre outro Python por `docker exec`, não consulta os workers HTTP. (`bin/deploy.sh:318`; `bin/deploy.sh:321`; `bin/deploy.sh:324`; `bin/deploy.sh:353`.)
+
+2. **Segundo caminho, fallback e Single Writer**
+
+   Não localizei outro emissor operacional de HUP/restart das três cascas em `bin/`: as emissões encontradas estão no deploy. Falha do HUP encerra; o laço posterior somente observa workers e também encerra por falha. Não há fallback por `ESPERA_CRON_S` nem operação compose nesse fluxo. (`bin/deploy.sh:298`; `bin/deploy.sh:315`; `bin/deploy.sh:320`; `bin/deploy.sh:328`.)
+
+   **Passar pela recusa não garante ausência de cron no instante do restart.** Um envelope pode criar sua marca depois da segunda consulta e antes do comando seguinte: criação e restart não compartilham trava. (`bin/cron_run.sh:9`; `bin/cron_run.sh:11`; `bin/deploy.sh:297`; `bin/deploy.sh:298`.)
+
+   **Single Writer global continua furado:** o vigia usa sua trava própria para executar `git revert`, enquanto a porta da árvore usa `/tmp/cadeia.lock`. A nova trava impede duas passadas desse vigia, mas não impede concorrência com uma cadeia. (`bin/vigia_logins.sh:71`; `bin/vigia_logins.sh:87`; `bin/trava.sh:64`; `bin/molde_fatia/cadeia.sh:11`.)
+
+3. **Guarda de migration do mensageria**
+
+   A guarda fecha corretamente diante de ausência de resposta: qualquer rc diferente de zero vira `PEND_MSG=1`, incluindo rc diferente de 1 e container indisponível. Ela descarta a distinção entre pendência e erro de execução, além de ocultar stderr. (`bin/deploy.sh:141`; `bin/deploy.sh:144`.)
+
+   Isso bloqueia normal, cópia e agendado **antes da migration do core e do reload**. Só conferência e restart são exceções; cópia/agendado não ligam nenhuma dessas exceções. (`bin/deploy.sh:57`; `bin/deploy.sh:79`; `bin/deploy.sh:147`; `bin/deploy.sh:167`.)
+
+   **Recusar às 03:30 é coerente com o contrato:** o HUP publica a árvore viva e não executa a migration existente no comando de boot. Liberá-lo com pendência publicaria código sem cumprir esse pré-requisito. O custo é perder a higiene de memória daquela rodada; necessidade concreta ou ocorrência em produção: **[não verificado]**. (`bin/deploy.sh:187`; `docker-compose.mensageria.yml:20`; `app/config/crons.py:300`; `app/config/crons.py:305`.)
+
+4. **Escritores, leitores e consumidores restantes**
+
+   | Valor | Quem escreve | Quem lê |
+   |---|---|---|
+   | `RESTART` | Inicialização em 0; apenas `--restart` põe 1. (`bin/deploy.sh:67`; `:70`.) | Recusa inicial, exceção da guarda, escolha do sinal e mensagem final. (`bin/deploy.sh:112`; `:147`; `:295`; `:400`.) |
+   | `PEND_MSG` | Resultado do check: sucesso 0; qualquer falha 1. (`bin/deploy.sh:141`; `:144`.) | Diagnóstico e guarda. (`bin/deploy.sh:146`; `:147`.) |
+   | `logs/crons_em_curso` | Envelope cria/escreve e remove por `trap EXIT`; **deploy também remove** marcas cujo PID considera morto. (`bin/cron_run.sh:9`; `:10`; `bin/deploy.sh:106`.) | `em_curso`, chamado pela recusa. (`bin/deploy.sh:105`; `:108`.) |
+   | `logs/vigia_logins.lock` | Vigia abre em append e adquire flock; selo ocupa o mesmo arquivo no fixture. (`bin/vigia_logins.sh:71`; `:72`; `bin/tests/test_vigia_logins_sem_sobreposicao.sh:58`.) | O flock decide entrada ou recusa. (`bin/vigia_logins.sh:72`.) |
+   | `deploy: OK` | Ambos os finais do deploy preservam o prefixo. (`bin/deploy.sh:401`; `:403`.) | Os dois moldes procuram apenas `^deploy: OK`: continuam compatíveis. (`bin/molde_fatia/cadeia.sh:90`; `bin/molde_autocura/cadeia.sh:87`.) |
+   | rc em `_subir` | `_rodar` devolve o returncode real; `_subir` o captura. (`app/core/integrador_lote.py:247`; `:753`.) | Falha grava diagnóstico e retorna antes de FIM/NO_AR; `_fechar` persiste o registro. (`app/core/integrador_lote.py:754`; `:761`; `:763`; `:766`; `:825`.) |
+
+   **Consumidores não migrados e afirmações excessivas:**
+
+   - O integrador ignora o rc do `--reload-copia` e começa a suíte mesmo após recusa do reload. (`app/core/integrador_lote.py:638`; `:639`.)
+   - `esteira_vigia.auto_revert` ignora os resultados dos dois deploys e pode anunciar restauração da tela com base apenas nos testes. (`app/core/esteira_vigia.py:1267`; `:1269`; `:1275`; `:1287`.)
+   - Os dois `desfazer_copia` usam `set +e`, ignoram o rc do reload e anunciam “recarregada”. (`bin/molde_fatia/cadeia.sh:26`; `:32`; `:33`; `bin/molde_autocura/cadeia.sh:25`; `:31`; `:32`.)
+   - O CLI do integrador ainda devolve 0 depois de `rodar`, mesmo com veredito `deploy falhou`. (`app/core/integrador_lote.py:856`; `:858`.)
+   - A mensagem nova “PROD SEGUE no código de antes” **não decorre de rc não zero**: pode haver falha depois do sinal, nas rotas ou no selo. O estado efetivo nesse caso é **[não verificado]**. (`app/core/integrador_lote.py:758`; `bin/deploy.sh:315`; `:374`; `:381`.)
+
+5. **Os selos mordem, mas deixam lacunas**
+
+   O selo do deploy tem mordida sobre a escolha do comando: exige sucesso, um HUP, zero restart e três trocas; o restart falso mata os sleeps registrados. Porém, a sobrevivência ao HUP é comportamento implementado pelo próprio falso, não prova do runtime Docker. (`bin/tests/test_deploy_reload_gracioso.sh:62`; `:64`; `:67`; `:103`.)
+
+   Há cobertura ausente para cópia, conferência, mensageria com rc diferente de 1, HUP falho e workers sem troca. O sleep também pode terminar antes do sinal se a execução demorar, tornando vácua a parte temporal da sobrevivência. (`bin/tests/test_deploy_reload_gracioso.sh:83`; `:91`; `:111`; `:145`.)
+
+   O selo do vigia possui controle positivo útil e verifica recusa com trava ocupada. Mas o deploy falso termina imediatamente: não testa manutenção da trava durante um deploy demorado nem detecta retirada do `7>&-`. O caso `Revert` só exige ausência de commits/deploy, sem exigir mensagem ou rc do ramo esperado. (`bin/tests/test_vigia_logins_sem_sobreposicao.sh:30`; `:52`; `:62`; `:70`; `:71`.)
+
+   **Existe risco condicional de tocar Docker real:** ambos preservam o restante do `PATH`, sem verificar qual executável foi resolvido. Se o stub não puder executar — por exemplo, temporário em filesystem `noexec` — a busca pode alcançar um Docker posterior no `PATH`; o deploy copiado mantém os nomes reais das cascas. As guardas de raiz não isolam o daemon. Condições reais desse cenário: **[não verificado]**. (`bin/tests/test_deploy_reload_gracioso.sh:36`; `:73`; `:88`; `bin/tests/test_vigia_logins_sem_sobreposicao.sh:26`; `:38`; `:45`; `bin/deploy.sh:315`.)
+
+   O teste Python acrescentado também é textual: remover o retorno antecipado de `_subir` não viola suas asserções sobre presença e ordem das strings. (`app/core/tests/test_selo_pronta_nao_e_residuo.py:219`; `:224`; `app/core/integrador_lote.py:761`.)
+
+   Execução GREEN/RED dos dois selos: **[não verificado]**; eles criam e removem arquivos, contrariando a regra desta verificação. (`bin/tests/test_deploy_reload_gracioso.sh:33`; `:98`; `bin/tests/test_vigia_logins_sem_sobreposicao.sh:22`; `:54`.)
+
+6. **fd 7, fechamento e `Revert "`**
+
+   O uso mostrado está correto para serializar este vigia: o pai mantém o fd 7 aberto enquanto espera; `7>&-` fecha apenas o descritor recebido pelo deploy. A trava cobre as leituras decisórias, o revert e a espera pela publicação. (`bin/vigia_logins.sh:71`; `:76`; `:87`.)
+
+   A guarda é apenas um **prefixo literal e sensível a maiúsculas**: títulos editados podem escapar, e um commit comum intitulado `Revert "..."` também será bloqueado. O fixture testa justamente esse segundo caso, criando um commit comum com esse título. (`bin/vigia_logins.sh:78`; `:80`; `bin/tests/test_vigia_logins_sem_sobreposicao.sh:42`; `:70`.)
+
+   **O buraco principal é de recuperação:** se o revert funcionar e o deploy falhar antes do HUP, a próxima passada vê `Revert "` e não tenta publicar novamente. A reversão pode ficar somente no disco, sem retry automático; o selo não cobre porque seu deploy sempre retorna zero. (`bin/vigia_logins.sh:80`; `:87`; `bin/deploy.sh:147`; `bin/tests/test_vigia_logins_sem_sobreposicao.sh:30`.)
+
+## 04/11 12:23 · sessao 9bfce67a1876 · - · - · origem=Ronald (tmux)
+
+Achados dos itens 5–6 (análise estática; execução GREEN/RED e condições reais de produção [não verificado]):
+
+1. **Buraco de recuperação:** se `git revert` funcionar e o deploy falhar antes do HUP, o próximo ciclo encontra `Revert "` e pula também a publicação. Assim, pode deixar o rollback apenas no disco, com os workers anteriores ainda vivos. O ramo de erro só imprime mensagem; não registra publicação pendente nem tenta publicar novamente (`bin/vigia_logins.sh:80–87`; exemplo de falha antes do HUP: `bin/deploy.sh:147–149`). O selo não cobre: seu deploy falso sempre retorna zero (`bin/tests/test_vigia_logins_sem_sobreposicao.sh:30`).
+
+2. **Os selos podem alcançar Docker real sob condição de ambiente:** os stubs são escolhidos exclusivamente por prefixo de `PATH`, preservando o restante; não há verificação de que o `docker` resolvido é o falso (`bin/tests/test_deploy_reload_gracioso.sh:73–89`; `bin/tests/test_vigia_logins_sem_sobreposicao.sh:38–45`). Se o temporário estiver em filesystem `noexec` ou o stub não puder executar, a busca pode encontrar outro Docker no `PATH`. O selo do deploy mantém os nomes das cascas reais, e o script copiado contém o HUP/restart desses nomes (`bin/deploy.sh:298`, `bin/deploy.sh:315`). As guardas de raiz só procuram o literal `/home/ronald/saas-hasner`; não isolam o daemon Docker (`bin/tests/test_deploy_reload_gracioso.sh:36–39`; `bin/tests/test_vigia_logins_sem_sobreposicao.sh:25–28`). Existência de Docker real acessível/noexec neste ambiente: [não verificado].
+
+3. **O selo do deploy morde regressões de escolha do comando:** exige rc zero, um HUP, zero restart e três mensagens de troca nos modos que exercita; o restart falso mata os sleeps registrados (`bin/tests/test_deploy_reload_gracioso.sh:64–69`, `bin/tests/test_deploy_reload_gracioso.sh:101–117`). Entretanto:
+   - Não exercita `--reload-copia`, `--conferir`, rc de mensageria diferente de 1, falha do HUP ou workers que não trocam (`bin/tests/test_deploy_reload_gracioso.sh:110–150`).
+   - “O exec sobreviveu ao HUP” é comportamento imposto pelo próprio falso; o ramo `kill` só avança gerações. Não é prova do runtime Docker (`bin/tests/test_deploy_reload_gracioso.sh:59–69`).
+   - O sleep dura 5/9 s e não há confirmação de que ainda estava vivo no instante do sinal: essa parte pode ser temporalmente vácua se o deploy demorar (`bin/tests/test_deploy_reload_gracioso.sh:83–91`, `bin/tests/test_deploy_reload_gracioso.sh:111–120`).
+
+4. **O selo do vigia possui controle útil, mas cobertura incompleta:** o primeiro caso exige que o ramo automático faça um novo commit e uma chamada de deploy; o segundo exige recusa com lock externo ocupado (`bin/tests/test_vigia_logins_sem_sobreposicao.sh:50–65`). Contudo, o deploy falso retorna imediatamente, portanto remover `7>&-` ou liberar a trava antes do término do deploy não seria detectado por esses casos (`bin/tests/test_vigia_logins_sem_sobreposicao.sh:30`, `bin/tests/test_vigia_logins_sem_sobreposicao.sh:58–65`). O caso `Revert` só exige ausência de commits/deploy: não exige rc nem mensagem esperados, aceitando também erro que ocorra nesse caso (`bin/tests/test_vigia_logins_sem_sobreposicao.sh:70–72`).
+
+5. **fd 7/fechamento estão corretos no caminho mostrado:** abre o arquivo em append, adquire `flock -n 7` antes das leituras usadas para decidir o revert e mantém o descritor do processo pai até terminar. `7>&-` fecha somente a cópia do descritor recebida pelo deploy; o pai continua segurando a trava enquanto aguarda o comando (`bin/vigia_logins.sh:71–87`). Isso coordena passadas deste vigia; outros escritores da árvore não adquirem essa trava automaticamente (`bin/vigia_logins.sh:71–87`).
+
+6. **A guarda `Revert "` é apenas um prefixo literal e sensível a maiúsculas:** cobre o assunto convencional produzido pelo próprio `git revert --no-edit`, mas não identifica semanticamente reversões com título editado; também bloqueia qualquer commit normal cujo título comece assim (`bin/vigia_logins.sh:78–87`). O fixture cria um commit normal intitulado `Revert "..."`, não uma reversão real, e por isso testa precisamente o prefixo (`bin/tests/test_vigia_logins_sem_sobreposicao.sh:39–42`, `bin/tests/test_vigia_logins_sem_sobreposicao.sh:70`).
 
 ## 04/11 12:22 · sessao c2861ff43f2f · - · - · origem=Ronald (tmux)
 
@@ -824,118 +912,4 @@ Achados para consolidar, todos por leitura; execução integral de selo e mutant
 - **Relógio fora da borda permanece nos leitores:** medidor consulta hoje duas vezes: `bin/crons_duracao.py:66`, `bin/crons_duracao.py:108`; pipeline consulta hoje e duas vezes o instante: `app/core/management/commands/pipeline_placar.py:122`, `app/core/management/commands/pipeline_placar.py:124`; vigia recebe `agora` ou consulta relógio: `app/core/services/crons_quebrados.py:27`. Encadeado agora mede espera por uptime, mas copia implementação em `_mono`, sem consultar `adm_agora`: `bin/encadeado.sh:93`; fonte compartilhada original em `bin/admissao_cron.sh:70`.
 - **Mutante plausível fora de `bin/`:** retirar filtro `linha_nao_rodou` de `app/core/management/commands/pipeline_placar.py:72` transforma recusa em corrida/erro. O selo shell testa medidor em `bin/tests/test_deploy_nao_mata_elo.sh:409`, `bin/tests/test_deploy_nao_mata_elo.sh:418`, mas não executa pipeline; teste Django próprio o ataca em `app/chamados/tests/test_contract_crons.py:199`. Sobrevivência integral executada: **[nao verificado]**. Outro candidato: acrescentar descarte por `exit==70` em `bin/crons_duracao.py:85`; caso15 só mede corridas reais 0/75: `bin/tests/test_deploy_nao_mata_elo.sh:396`, `bin/tests/test_deploy_nao_mata_elo.sh:397`, `bin/tests/test_deploy_nao_mata_elo.sh:408`.
 
-## 03/11 00:05 -- HISTORICO (mais de 24 h) · sessao d1798f3d1359 · DEPLOY-[nome]-ELO · verificador · origem=Code
-
-**A volta 3 melhora a proteção, mas ainda não fecha a classe.** Restam um caminho real de `docker exec` fora da admissão, um desvio do teto por `ADM_RESTART_TIMEOUT_S=00` e descarte de placar ilegível que pode produzir zero. (`bin/cron_run.sh:49`; `bin/admissao_cron.sh:55`; `bin/rc137_no_restart.sh:69`)
-
-Executei o contrato em leitura: retornou `contrato_deploy: OK`. Não executei o selo integral, pois ele cria e remove arquivos; suíte inteira e mutantes executados permanecem **[nao verificado]**. (`bin/contrato_deploy.sh:60`; `bin/tests/test_deploy_nao_mata_elo.sh:44`)
-
-**1. V3-1..V3-7: classe ou caso**
-
-| Item | Conclusão |
-|---|---|
-| **V3-1 — fecho/reconhecimento** | **Cura os formatos nomeados, não toda a classe.** Agora há fecho transitivo com vistos, caminhos relativos, continuação por `\`, opções de compose e `$var`. Porém o classificador recebe somente o comando principal: deixa fora o próprio runner, que também executa `docker exec`. (`bin/admissao_cron.sh:89,97,99,119,128,131,208`; `bin/cron_run.sh:49,51`) |
-| **V3-2 — ancestral** | **Cura o autoimpedimento síncrono do vigia; a exceção é mais ampla.** Qualquer marca ancestral recebe `segura=0`, sem examinar outros filhos ainda usando casca. O vigia real chama deploy sincronamente; um exec irmão concorrente nesse caminho atual é **[nao verificado]**. (`bin/admissao_cron.sh:189`; `bin/vigia_logins.sh:71`) |
-| **V3-3 — relógio/passo** | **Cura retrocesso civil e sono do passo inteiro; não garante teto absoluto do procedimento.** As varreduras não têm prazo e, se a segunda vier vazia, o script prossegue antes de conferir o tempo esgotado. (`bin/admissao_cron.sh:66`; `bin/reinicio_sob_admissao.sh:40,44,45,48,54`) |
-| **V3-4 — teto/escalada** | **Parcial: há contraexemplo concreto.** A validação rejeita apenas a grafia `0`; aceita `00` e `000`, menores que 120, e entrega esse prazo zero ao `timeout`. Conferi a função e um comando inofensivo em memória: o timeout interno permaneceu até ser interrompido pelo externo. A escalada `-k` existe, mas depende de o prazo disparar. (`bin/admissao_cron.sh:55`; `bin/reinicio_sob_admissao.sh:25,66`) |
-| **V3-5 — contrato leitor** | **Cura o leitor para a linha atual com `timeout`.** Continua sendo verificação textual: uma linha executável que apenas imprima `"docker restart saas_core saas_ui mensageria"` também satisfaria essa busca. Não demonstra execução nem reunião das cascas em um único ato. (`bin/contrato_deploy.sh:25,28`) |
-| **V3-6 — contador** | **Cura os casos nomeados, não toda a classe “ilegível não vira zero”.** Janela deriva da biblioteca; fim invertido e JSON quebrado contendo `137` viram desconhecido. JSON quebrado antes de aparecer `137` continua descartado e pode terminar em zero. (`bin/rc137_no_restart.sh:25,53,69,70,72,81`) |
-| **V3-7 — proveniência** | **Cura a ambiguidade exit/proveniência nas novas linhas e nos dois leitores identificados.** Somente `rodou is False` exclui a corrida; saída real 70/75 continua sendo corrida com erro. Ausência do campo equivale a `true`. (`bin/cron_run.sh:20,23,29`; `app/config/crons.py:1433`; `app/core/management/commands/pipeline_placar.py:72,80`; `bin/crons_duracao.py:85`) |
-
-O **contraexemplo com cron real** é `HOME + '/scripts/backup_all.sh'`, declarado e envelopado pelo runner. O censo o considera host. Se a admissão recusar, o comando principal não roda, mas o runner segue para `docker exec saas_core ... cron_quebrado`, sem marca e sem nova passagem pela trava. Também há esse caminho após falha do backup, cuja marca pode estar como `casca=0`. A árvore viva só pode reconhecer o exec depois que ele existir; não fecha a janela anterior ao seu nascimento. Ocorrência dessa corrida em produção: **[nao verificado]**. (`app/config/crons.py:263,1800`; `bin/tests/test_deploy_nao_mata_elo.sh:324`; `bin/cron_run.sh:16,25,48,49`; `bin/admissao_cron.sh:170,208`)
-
-No sentido conservador, `vigia_logins.sh --auto` pode terminar pelo piso/percentual sem executar nada dentro da casca, embora nasça `casca=1` pelo ramo que contém deploy. Isso prova classificação além do caminho efetivamente executado; **recusa permanente causada por esse ramo não está demonstrada**. (`app/config/crons.py:284`; `bin/vigia_logins.sh:48,52,71`; `bin/tests/test_deploy_nao_mata_elo.sh:324`)
-
-**2. Quem escreve e quem lê**
-
-| Campo/artefato | Quem escreve | Quem lê |
-|---|---|---|
-| **`rodou` em `placar.jsonl`** | Runner inicia `false`, muda para `true` antes do comando e publica no JSON. (`bin/cron_run.sh:20,23,29`) | Predicado da configuração; pipeline e medidor perguntam a ele. Vigia e contador leem a mesma linha para outras perguntas. (`app/config/crons.py:1433`; `app/core/management/commands/pipeline_placar.py:72`; `bin/crons_duracao.py:85`; `app/core/services/crons_quebrados.py:46`; `bin/rc137_no_restart.sh:73`) |
-| **`linha_nao_rodou`** | Definição única na configuração. (`app/config/crons.py:1432`) | Importação no pipeline e carregamento no medidor. (`app/core/management/commands/pipeline_placar.py:9`; `bin/crons_duracao.py:54`) |
-| **`restarts.log`** | Restarter publica início antes do restart e fim nos caminhos de sucesso/falha. (`bin/reinicio_sob_admissao.sh:64,65,67,70,72`) | Contador; selo inspeciona registros. O placar de host consome a saída do contador. (`bin/rc137_no_restart.sh:45`; `bin/tests/test_deploy_nao_mata_elo.sh:359`; `bin/placar_code.sh:459`) |
-| **Marca `<nome>_<emp>.<pid>`** | `adm_marcar`, chamado pelo runner e pela descoberta da corrente; publicação por temporário e `mv`. (`bin/admissao_cron.sh:203,210,211`; `bin/cron_run.sh:16`; `bin/encadeado.sh:48`) | Validação de identidade, classificação, ancestralidade e varredura. Remoção pelo desmarcador ou pela varredura de órfãs. (`bin/admissao_cron.sh:151,165,183,192,218`) |
-| **`.admissao`, fd8 e flock** | Cron abre e trava antes da classificação/publicação; deploy abre e trava antes da segunda varredura e do restart. (`bin/admissao_cron.sh:206,207,208,211`; `bin/reinicio_sob_admissao.sh:28,43,44,66`) | Os mesmos participantes disputam a trava. Cron fecha fd8 antes do comando; deploy mantém a trava até terminar o restarter. (`bin/admissao_cron.sh:214`; `bin/reinicio_sob_admissao.sh:69,73`) |
-
-**Não localizei leitor produtivo que ainda use 70/75 para decidir “não rodou”.** O vigia continua tratando saída diferente de 0/2 como quebra, deliberadamente; isso inclui recusas. O contador continua procurando 137. Nenhum desses dois distingue ausência de `rodou` de `rodou=true`. (`app/core/services/crons_quebrados.py:16,46`; `bin/rc137_no_restart.sh:73`)
-
-**Único escritor produtivo do placar localizado na cópia: `bin/cron_run.sh`.** As outras escritas encontradas são fixtures; escritor externo à cópia ou dinâmico permanece **[nao verificado]**. (`bin/cron_run.sh:29`; `bin/tests/test_medicao_de_cron_nao_expira.sh:31`; `app/core/tests/test_crons_quebrados.py:33`)
-
-A migração não recupera proveniência histórica: uma recusa antiga sem `rodou` será contada como corrida real, conforme a compatibilidade escolhida. Quantidade dessas linhas no dado produtivo: **[nao verificado]**. (`app/config/crons.py:1428,1433`)
-
-**3. Relógio e ancestralidade**
-
-O teto de espera do **restarter** agora usa `/proc/uptime`; seus `date` restantes registram início/fim civis. Entretanto, **a corrente ainda decide seu teto por `date +%s`**, podendo prolongar a espera se o relógio retroceder. (`bin/reinicio_sob_admissao.sh:37,38,63,65`; `bin/encadeado.sh:91,96,97`)
-
-Ainda há janelas civis no medidor de sete dias, no vigia de 26 horas e no pipeline; este obtém hora e minuto em duas leituras distintas. O contador cruza timestamps civis, portanto o relógio monotônico do restarter não torna a correlação imune a ajustes civis. (`bin/crons_duracao.py:66`; `app/core/services/crons_quebrados.py:27,39`; `app/core/management/commands/pipeline_placar.py:122,124`; `bin/rc137_no_restart.sh:60,76,79`)
-
-Quanto ao `/proc`:
-
-- **`comm` contendo `) ` não demonstra defeito:** `${s##*) }` remove até a última ocorrência, preservando PPID e starttime. Conferi também strings com múltiplos `) ` em memória. (`bin/admissao_cron.sh:75,79,177`)
-- **Reuso simples de PID não passa na marca moderna:** starttime é validado antes da isenção ancestral. Marca legada sem starttime aceita mera existência do PID e não prova identidade original. (`bin/admissao_cron.sh:154,156,159,188,189`)
-- **A cadeia de ancestrais guarda somente PIDs**, sem identidade temporal nem retrato atômico com a validação posterior. Há uma lacuna contra mudanças entre essas leituras; isenção concreta de uma marca moderna não ancestral, pelo fluxo atual, permanece **[nao verificado]**. (`bin/admissao_cron.sh:173,178,185,188,189`)
-
-**4. Mordida dos casos 13, 15 e 16**
-
-| Caso | O que efetivamente distingue | Mutante plausível que ainda escapa |
-|---|---|---|
-| **13** | Docker herdando fd8; restart lento/falho; falha em gravar o início impedindo restart. A fixture de diretório no lugar de `restarts.log` agora ataca o pré-requisito. (`bin/tests/test_deploy_nao_mata_elo.sh:52,355,358,364,370,372`) | Retirar `8>&-` das varreduras/sono e preservá-lo nos Docker: o observador de fd8 está somente no fake Docker. Sobrevivência integral executada: **[nao verificado]**. (`bin/reinicio_sob_admissao.sh:40,44,54`; `bin/tests/test_deploy_nao_mata_elo.sh:52`) |
-| **15** | Diferencia corrida real 75 de recusa 75, exige os três valores de proveniência e duas amostras. (`bin/tests/test_deploy_nao_mata_elo.sh:396,397,400,407,419`) | Acrescentar `or d.get('exit') == 70` ao filtro do medidor apagaria corridas reais 70, sem atingir as amostras 0/75. O teste Django novo também só usa corrida real 75. Execução do mutante: **[nao verificado]**. (`bin/crons_duracao.py:85`; `app/chamados/tests/test_contract_crons.py:234`) |
-| **16** | Ataca os formatos novos, ciclo, ancestral sequencial, relógio parado, TERM ignorado, passo maior que teto, limite alto do ambiente, leitor do contrato e erros do contador. (`bin/tests/test_deploy_nao_mata_elo.sh:423,434,444,455,460,468,472,478,488,491`) | Fixar `SEM_FIM_S=670` preserva a fixture atual: ela mata o velho 660, mas não demonstra derivação da fonte. Também falta ambiente `00` e ancestral com exec irmão vivo. Execução dos mutantes: **[nao verificado]**. (`bin/rc137_no_restart.sh:25`; `bin/tests/test_deploy_nao_mata_elo.sh:444,472,484,486`) |
-
-O teste de restart surdo **morde a ausência de `-k`**: o fake ignora TERM antes de virar `sleep`, e o caso exige término dentro da escalada. (`bin/tests/test_deploy_nao_mata_elo.sh:55,56,460,461`)
-
-O antigo mutante `_rr=0` agora é atacado: o caso 8 extrai a chamada real, exige a captura `$?` e cobra saída 75 com arquivo/argv. (`bin/tests/test_deploy_nao_mata_elo.sh:223,224,233`)
-
-**5. Classes recorrentes**
-
-| Classe | Conferência |
-|---|---|
-| **Segundo juiz registrado** | Não identifiquei duplicação de juiz de negócio no delta. A pergunta nova de proveniência tem um predicado compartilhado pelos dois consumidores; o registro vivo continua sendo `core/juizes.py`. Ausência global de duplicações: **[nao verificado]**. (`app/config/crons.py:1432`; `app/core/management/commands/pipeline_placar.py:9`; `bin/crons_duracao.py:54`; `app/docs/JUIZES.md:11`) |
-| **Segundo escritor fora da porta** | Não localizei segundo escritor produtivo do placar. Há, contudo, **execução fora da porta de admissão** no alarme/recuperação do runner. (`bin/cron_run.sh:29,49,51`) |
-| **Relógio fora da borda** | Corrigido o relógio civil da espera do restarter; permanece na espera da corrente e nas janelas dos leitores. (`bin/reinicio_sob_admissao.sh:38`; `bin/encadeado.sh:96,97`; `bin/crons_duracao.py:66`) |
-| **Derivação paralela** | A janela sem fim agora deriva das constantes compartilhadas. **670 é coerente:** a primeira subida que falha encerra o procedimento, portanto não se acumulam três escaladas de KILL. A comparação das cascas literais do restart com `ADM_CASCAS` ainda depende do selo. (`bin/admissao_cron.sh:63`; `bin/reinicio_sob_admissao.sh:66,69,70`; `bin/tests/test_deploy_nao_mata_elo.sh:283,284`) |
-| **Selo sem mordida** | Persistem as lacunas de 70 real, prazo `00`, derivação por valor fixo e sincronização do caso 14. (`bin/tests/test_deploy_nao_mata_elo.sh:383,397,472,484`) |
-| **Ordem de trava** | Entre participantes migrados, publicação sob flock e segunda varredura sob a mesma trava fecham a janela publicação→restart. O alarme do runner não participa desse protocolo. (`bin/admissao_cron.sh:207,211`; `bin/reinicio_sob_admissao.sh:43,44,66`; `bin/cron_run.sh:49`) |
-| **Pouso antes do pré-requisito** | Registro precede restart; migration precede chamada ao restarter. Suíte inteira, leitura final e pouso efetivo: **[nao verificado]**. A conduta exige suíte antes do opus e proíbe aprovação de pouso só pelo Codex. (`bin/reinicio_sob_admissao.sh:64,66`; `bin/deploy.sh:124,282`; `CLAUDE.md:370,373`) |
-
-O comentário “fd8 não vai a filho nenhum” ainda excede o código: `date` e o `tr` das pipelines não recebem fechamento explícito. O selo demonstra fechamento no Docker. (`bin/reinicio_sob_admissao.sh:44,60,63,65,66`; `bin/tests/test_deploy_nao_mata_elo.sh:52`)
-
-**6. Descartes da triagem**
-
-- **D4b — envelope morto com filho vivo:** não é refutado. PID ausente torna a marca órfã e ela é removida, sem busca por descendentes reparentados. “Nenhum caminho de produção mata só o runner” permanece **[nao verificado]**; a fila não transforma isso em garantia de proteção. (`bin/admissao_cron.sh:154,192`; `bin/cron_run.sh:22`)
-- **`manual` compartilhado:** a pendência permanece. Chamadas sem id compartilham destino e `.novo`; sucesso remove o arquivo desse id. O agendado tem ids próprios, portanto sua correção específica não depende de resolver o manual. (`bin/deploy.sh:52,54,285,286,361`; `bin/deploy_agendado.sh:94,104`)
-- **Caso 14 apoiado em sleep:** a crítica permanece. Se o deploy atrasar antes da primeira varredura, ela já verá a marca e um mutante sem segunda varredura poderá passar. Não há confirmação da fase presumida pelo comentário. (`bin/tests/test_deploy_nao_mata_elo.sh:381,383,386,390`)
-
-Esses descartes podem ser decisões de fila pelo julgador final; **não são demonstrações de improcedência técnica**, e a própria conduta manda encaminhar descartes ao opus. (`CLAUDE.md:368,369`)
-
-**7. Noturno, recusa 75 e progresso do deploy** [nao verificado]
-
-A classificação `noturno.py=1` tem fundamento: o RAW chama o noturno, este chama filhos literais, e eles executam em `mensageria`. O teto é 1500; o valor 2518 consta no dado fornecido e na configuração versionada, mas duração atual em produção permanece **[nao verificado]**. (`app/config/crons.py:575,576`; `eval/noturno.py:32,36,43,93`; `eval/gerador.py:65`; `eval/investigador.py:24`; `bin/admissao_cron.sh:35`; `app/config/crons_duracao.json:51`)
-
-**2518 > 1500, sozinho, não implica bloqueio eterno.** Num cenário com uma corrida de 2518s começando junto da tentativa, sem outros bloqueadores, a primeira recusa após 1500s e uma segunda pode esperar os aproximadamente 1018s restantes. As hipóteses desse cenário em produção são **[nao verificado]**. (`bin/reinicio_sob_admissao.sh:48,50`; `bin/deploy_agendado.sh:99,105`)
-
-O agendado tem **três novas tentativas por padrão**, termina 75 se a recusa persistir e remove seu agendamento; não há repetição infinita por padrão nesse laço. Entretanto, o `flock` da régua não tem prazo: existe espera sem teto antes da tentativa. Além disso, novos crons continuam admitidos enquanto o deploy espera, permitindo recusas repetidas sem garantia de oportunidade livre. Ocorrência de bloqueio permanente: **[nao verificado]**. (`bin/deploy_agendado.sh:99,105,113,121,123`; `bin/reinicio_sob_admissao.sh:29,46`; `bin/admissao_cron.sh:207,214`)
-
-**No caminho normal, marca moderna válida e não ancestral do noturno impede o restart; atingir 1500 não o mata.** Ainda não há garantia geral para envelope morto com filho vivo ou para a exceção ancestral ampla. Os timeouts internos do noturno também podem encerrar seus subprocessos independentemente do deploy. Morte produtiva do noturno após este delta: **[nao verificado]**. (`bin/admissao_cron.sh:154,168,189`; `bin/reinicio_sob_admissao.sh:48,50`; `eval/noturno.py:33,37,44,94`)
-
-## 03/11 00:01 -- HISTORICO (mais de 24 h) · sessao 740c1f5f01c0 · - · - · origem=Ronald (tmux)
-
-**V3-1 cura os formatos nomeados, mas não fecha o universo executado pelo cron.** O fecho segue arquivos transitivamente, aceita caminhos relativos e usa `vistos`; o parser junta `\`, pula opções do compose e considera `$var` como casca. Continua sendo reconhecimento lexical de arquivos nomeados, limitado a arquivos menores que 2 MB, sem interpretar imports, expansões ou controle de fluxo. (`bin/admissao_cron.sh:89`, `bin/admissao_cron.sh:97`, `bin/admissao_cron.sh:99`, `bin/admissao_cron.sh:119`, `bin/admissao_cron.sh:121`, `bin/admissao_cron.sh:128`, `bin/admissao_cron.sh:131`)
-
-**Contraexemplo com cron real:** `HOME + '/scripts/backup_all.sh'`, declarado em `CRONS`, nasce classificado como host; porém seu envelope pode executar `docker exec saas_core ... cron_quebrado` após falha do backup ou após recusa da própria admissão. O classificador recebe somente `CMD`, deixando o código do envelope fora do fecho. Na recusa nem sequer há marca publicada; após falha do comando a marca pode existir com `casca=0`. A árvore viva só protege enquanto o Docker já estiver visível, deixando a janela anterior ao exec. (`app/config/crons.py:263`, `app/config/crons.py:1800`, `bin/admissao_cron.sh:208`, `bin/cron_run.sh:16`, `bin/cron_run.sh:25`, `bin/cron_run.sh:45`, `bin/cron_run.sh:49`, `bin/admissao_cron.sh:170`)
-
-Verifiquei apenas os predicados em leitura: o fecho de `scripts/backup_all.sh` retornou 1; o texto de `bin/cron_run.sh` retornou classificação casca. A reprodução integral dessa corrida e sua ocorrência produtiva permanecem **[nao verificado]**. (`bin/admissao_cron.sh:126`, `bin/cron_run.sh:49`)
-
-**Outro cron real sujeito ao mesmo caminho:** `tickets_rodape.sh --conferir` está pinado host; havendo flag anterior, seu sucesso ou rc2 pode executar a recuperação em `saas_core` pelo envelope. (`app/config/crons.py:296`, `bin/tests/test_deploy_nao_mata_elo.sh:324`, `bin/cron_run.sh:50`, `bin/cron_run.sh:51`)
-
-**V3-2 resolve o autoimpedimento síncrono de `vigia_logins.sh --auto`, mas a exceção é mais ampla que esse caso:** toda marca cujo PID esteja na lista de ancestrais recebe `segura=0`, sem conferir se existem outros descendentes em Docker. O cron real chama deploy sincronamente; não encontrei nesse caminho um exec irmão concorrente que prove dano atual. (`app/config/crons.py:284`, `bin/vigia_logins.sh:71`, `bin/admissao_cron.sh:185`, `bin/admissao_cron.sh:189`)
-
-**Não procede acusar o parser de quebrar por `comm` contendo `) `.** Tanto `adm_starttime` quanto `adm_ancestrais` removem até a **última** ocorrência de `) `, preservando os campos posteriores; a primeira função lê o campo 22 e a segunda o PPID. (`bin/admissao_cron.sh:75`, `bin/admissao_cron.sh:79`, `bin/admissao_cron.sh:177`)
-
-**Reuso simples de PID não burla uma marca moderna:** a validação do starttime acontece antes da isenção ancestral. A ressalva é a marca legada sem starttime: basta existir `/proc/<pid>` para ela ser considerada viva, sem provar identidade do processo originalmente marcado. Uma corrida entre o retrato dos ancestrais e a conferência posterior não é protegida por identidade na lista, que contém somente PIDs; exploração concreta pelo fluxo atual permanece **[nao verificado]**. (`bin/admissao_cron.sh:154`, `bin/admissao_cron.sh:156`, `bin/admissao_cron.sh:159`, `bin/admissao_cron.sh:173`, `bin/admissao_cron.sh:188`, `bin/admissao_cron.sh:189`)
-
-**Noturno:** o fecho agora encontra seus filhos literais `gerador.py`, `harness.py`, `juiz.py` e `investigador.py`; esses executam `docker exec mensageria`. A classificação `noturno.py=1` tem fundamento na cópia. (`eval/noturno.py:32`, `eval/noturno.py:36`, `eval/noturno.py:43`, `eval/noturno.py:93`, `eval/gerador.py:65`, `eval/harness.py:45`, `eval/juiz.py:241`, `eval/investigador.py:24`)
-
-Não achei outro falso negativo no comando principal dos RAW atualmente pinados; ausência global de outros caminhos permanece **[nao verificado]**. O contraexemplo do envelope já basta para reprovar a alegação de classe fechada. (`bin/tests/test_deploy_nao_mata_elo.sh:324`, `bin/admissao_cron.sh:208`, `bin/cron_run.sh:49`)
-
-_1516 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1518 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
