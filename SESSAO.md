@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 12:06:32.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (10.0 MB). Acoes na janela: **302**.
+**Medido em 04/11/2026 12:11:47.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (10.1 MB). Acoes na janela: **305**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:08:51 | Bash | Record suite verdict in RELATO | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read().split('\n') l='MODO-COMUM-POUSA 12:0x: suite inteira c0a43e57 OK (skipped=42, expected failures=24), Ran 13475, rc=0 (logs/mc/suite_c0a43e57.log); sem Codex: orcamento (Codex em reserva para a FINAL do reload); opus final em curso' assert s.count(l)==0; s.insert(4,l); open(p,'w').write('\n'.join(s)) EOF` |
+| 12:08:46 | Agent | Opus final MODO-COMUM-OUT-DO-LOTE | `Verificacao FINAL (opus final) da obra MODO-COMUM-OUT-DO-LOTE antes do pouso. Voce nao viu a construcao; procure o que esta errado. Somente leitura. Arvore: copia /home/ronald/wt-mc-082755, HEAD c0a43e57 (rebase sobre o main 08bdec40). Diff: `git -C /home/ronald/wt-mc-082755 diff 08bdec40 c0a43e57` (4 arquivos: app/ponto/services/cartorio.py, app/core/management/commands/gerar_diagrama.py, app/doc ...` |
+| 12:08:27 | Bash | Read MODO-COMUM suite verdict | `L=/home/ronald/saas-hasner/logs/mc/suite_c0a43e57.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran' $L \| tail -1; tail -1 $L; date; cat /home/ronald/saas-hasner/logs/mc/suite_hash.txt; git -C /home/ronald/wt-mc-082755 rev-parse HEAD; git -C /home/ronald/wt-mc-082755 status --porcelain \| head` |
 | 11:53:21 | Bash | Check suite and constructor progress | `bash /home/ronald/saas-hasner/bin/trava_teste.sh --quem; tail -c 300 /home/ronald/saas-hasner/logs/mc/suite_c0a43e57.log; echo; ls /home/ronald/saas-hasner/logs/dme/reload/` |
 | 11:51:30 | Bash | Record MODO-COMUM rebase and suite in RELATO | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read().split('\n') l='MODO-COMUM-POUSA 04/11 11:5x (aval Ronald): wt-mc-082755 rebase 0a0bb6e6 -> c0a43e57 sobre 08bdec40, sem conflito, os mesmos 4 arquivos (cartorio.py, gerar_diagrama.py, MAPA.md, test_out_do_lote.py), nenhum .py alem do previsto; suite inteira em curso na pista ANTES da do reload (logs/mc/suite_c0a43e57.log); depois opus final e  ...` |
 | 11:51:24 | Bash | Gather MODO-COMUM avals and history | `cd /home/ronald/saas-hasner; ls logs/mc/; grep -rln 'MODO-COMUM' logs/*.txt logs/mc 2>/dev/null \| head; grep -n 'MODO-COMUM' app/docs/RELATO.md \| cut -c1-220 \| head; grep -n 'MODO-COMUM-OUT-DO-LOTE\\|PROVA-CODS' app/docs/BACKLOG.md app/docs/CORTES.md \| cut -c1-200 \| head` |
