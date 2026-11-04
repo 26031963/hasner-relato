@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 08:49:32.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (5.1 MB). Acoes na janela: **150**.
+**Medido em 04/11/2026 08:55:01.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (5.2 MB). Acoes na janela: **154**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:53:30 | Bash | Read status_da_lavra rule | `cd /home/ronald/saas-hasner/app; sed -n 60,180p ponto/status_dia.py` |
+| 08:53:24 | Bash | Check TOAST A suite status | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; /bin/grep -E '^(OK\|FAILED)($\| \()\|^Ran\|^rc=' logs/toast/suite_ffd97ed8.log \| tail -3; date +%H:%M` |
+| 08:49:39 | Bash | Update BACKLOG and check TOAST suite | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; s=open(p).read() o='(A) despachada sonnet 08:3x; (B) apos MODO-COMUM' assert s.count(o)==1 s=s.replace(o,'(A) PUBLICADA 08:5x no topo do RELATO (3016 perguntas/1178 chamados, reabrir aceita 373; decisao do Ronald); (B) apos MODO-COMUM'); open(p,'w').write(s) EOF tail -c 300 logs/toast/suite_ffd97ed8.log` |
+| 08:49:35 | Bash | Publish F3-RECORTE table in RELATO | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() anc='(B) classificar_dia entra apos item 5 MODO-COMUM.\n' assert s.count(anc)==1 blk='''F3-RECORTE (A) PUBLICADA 04/11 08:5x (medida, SEM cura nem apply; sombra, logs/sombra/f3_recorte.py, ROLLBACK_NULO True + CENSO_IGUAL de chamados.* e carimbos PerguntaDisputa; tabela logs/f3_recorte/resultado.md; conferido p ...` |
 | 08:49:18 | Bash | Peek RELATO top region | `cd /home/ronald/saas-hasner/app; awk 'NR>=9 && NR<=396 && length($0)>0 {print NR": "substr($0,1,110)}' docs/RELATO.md \| head -40` |
 | 08:49:14 | Bash | Find RELATO section structure | `cd /home/ronald/saas-hasner/app; /bin/grep -n "^## \\|^F3-RECORTE\\|^### " docs/RELATO.md \| head -20` |
 | 08:49:05 | Bash | Confer cited judge lines and refusal motives | `cd /home/ronald/saas-hasner/app; sed -n 1181p chamados/juizes.py; sed -n 1247p chamados/juizes.py; sed -n 1310,1330p chamados/models.py \| /bin/grep -n "admin_sem_fato_novo\\|agrupado\\|premissa\\|veto" ; git grep -n "admin_sem_fato_novo\\|'agrupado'\\|premissa_regularizada\\|veto_do_dia" chamados/models.py \| head -5` |
