@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 17:23:58.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (26.0 MB). Acoes na janela: **892**.
+**Medido em 04/11/2026 17:28:56.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (26.1 MB). Acoes na janela: **896**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:28:53 | Bash | Full suite on cron15 copy | `cd /home/ronald/saas-hasner; rm -f logs/cron15/suite.rc; bash bin/suite.sh --dir /home/ronald/wt-cron15-171947 > logs/cron15/suite.log 2>&1; echo rc=$? > logs/cron15/suite.rc` |
+| 17:28:48 | Bash | Check which test skipped | `cd /home/ronald/saas-hasner; grep -iE "skip" logs/cron15/foco.log \| head -5; grep -n "def test" /home/ronald/wt-cron15-171947/app/core/tests/test_contract_esmeril.py \| head` |
+| 17:28:32 | Bash | Focused tests on cron15 copy | `cd /home/ronald/saas-hasner; mkdir -p logs/cron15; bash bin/suite.sh --dir /home/ronald/wt-cron15-171947 --only "chamados.tests.test_contract_crons chamados.tests.test_cron_longo_sai_da_medida core.tests.test_contract_crons_duracao_horario core.tests.test_marca_cron15 core.tests.test_selo_teste_sem_relogio core.tests.test_contract_mypy core.tests.test_contract_esmeril" > logs/cron15/foco.log 2>&1; ...` |
+| 17:28:26 | Bash | Read N1 suite2 verdict | `cd /home/ronald/saas-hasner; grep -E '^(OK\|FAILED)($\| \()' logs/n1pna/suite2.log \| tail -1; grep -E '^Ran ' logs/n1pna/suite2.log \| tail -1; grep -E '^(ERROR\|FAIL):' logs/n1pna/suite2.log \| sort \| uniq -c` |
 | 17:23:07 | Bash | Block until suite2 rc file appears | `cd /home/ronald/saas-hasner; until [ -f logs/n1pna/suite2.rc ]; do /usr/bin/sleep 15; done; cat logs/n1pna/suite2.rc` |
 | 17:23:00 | Bash | Inspect clock selo rules | `cd /home/ronald/wt-cron15-171947/app; grep -nE "time\.time\|fromtimestamp\|PROIBID\|_RELOGIO\|allow" core/tests/test_selo_teste_sem_relogio.py \| head -30` |
 | 17:22:57 | Bash | Wait for N1 suite2 to finish | `cd /home/ronald/saas-hasner; until [ -f logs/n1pna/suite2.rc ]; do /usr/bin/sleep 20; done; cat logs/n1pna/suite2.rc; grep -E '^(OK\|FAILED)($\| \()' logs/n1pna/suite2.log \| tail -1; grep -E '^Ran ' logs/n1pna/suite2.log \| tail -1; grep -E '^(ERROR\|FAIL):' logs/n1pna/suite2.log \| sort \| uniq -c \| head -30` |
