@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 18:06:04.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (26.5 MB). Acoes na janela: **919**.
+**Medido em 04/11/2026 18:11:11.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (26.5 MB). Acoes na janela: **921**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:11:09 | Bash | Register aval, PAREI line, run handoff | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; r=open(p).read() q='PERGUNTA DE DESENHO (DISJUNTOR B3, N1-PERGUNTAS-DO-APP bf659ad7, 04/11 17:4x):' assert r.count(q)==1 r=r.replace(q,'RESPONDIDA por aval N1-IDENTITY-MAP 18:0x (padrao=Identity Map, termo novo no GLOSSARIO por este corte; cura os 3 sitios + ficha.py:164-166, volta ao opus, sha igual na sombra, ganho por sitio) ...` |
+| 18:10:54 | Bash | Handoff usage and leftover containers | `cd /home/ronald/saas-hasner; sed -n 1,30p bin/handoff_sessao.sh \| grep -E "^#" \| head -15; git status --porcelain \| grep -v '^??'; docker ps --format '{{.Names}}' \| grep -vE '^(saas_\|juliani_db_test\|sombra_db\|mensageria)' \| head` |
 | 18:01:46 | Bash | Wait for push2 rc and verify remote | `cd /home/ronald/saas-hasner; until grep -q '^rc=' logs/cron15/push2.log; do /usr/bin/sleep 20; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|FALHA' logs/cron15/push2.log \| tail -6; tail -3 logs/cron15/push2.log; git fetch -q origin; git log -1 --format=%h origin/main; git log -1 --format=%h HEAD` |
 | 17:51:38 | Bash | Wait for push2 result | `cd /home/ronald/saas-hasner; until grep -q '^rc=' logs/cron15/push2.log; do /usr/bin/sleep 20; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|FALHA\|error' logs/cron15/push2.log \| tail -6; tail -3 logs/cron15/push2.log` |
 | 17:51:31 | Bash | Retry push after reword | `cd /home/ronald/saas-hasner; bash bin/push.sh origin main > logs/cron15/push2.log 2>&1; echo rc=$? >> logs/cron15/push2.log` |
