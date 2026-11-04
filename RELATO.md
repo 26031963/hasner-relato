@@ -1,5 +1,6 @@
 # RELATO — esteira saas-hasner
-! PAREI: B3 TOAST-E-NOME-CALENDARIO | espera Ronald: liberacao ERRO-BOBO ou DESENHO (proposta ERRO-BOBO: os 3 achados do opus sao texto/selo -- selo re-deriva o censo do gate E3, LEI-AKITA cita a PARTE B, comentario views_wizard.py:129 promete o toast da PARTE B); em voo: suite MODO-COMUM pid 873162, construtor DEPLOY-ELO v6 (teto 1), matriz F3-DORMENTE FASE 1; nada mais de fila 1 abre antes (OTIMIZA espera o pouso DEPLOY-ELO, FASE 2 espera a matriz)
+ERRO-BOBO TOAST-E-NOME-CALENDARIO: os 3 achados do opus final sobre ffd97ed8 sao de selo e texto, nenhum de comportamento; o veto, o status e os chamadores foram conferidos sem achado.
+AVAL B3-TOAST 04/11 10:0x (transcrito): CURA na copia wt-toastA-084019 (1) selo cita o gate E3 e a autoridade core/portas.py sem re-derivar o censo, caso que morde sobre o E3; (2) LEI-AKITA e RED so da PARTE A; (3) comentario de views_wizard sem prometer o toast da PARTE B. PRONTO: mutante morto, suite inteira da arvore final verde, opus final so do delta com o aval anexo, pouso --sem-migrate fora de 06:00-07:30; comportamento no opus = PERGUNTA DE DESENHO. Corrida 2o POST = fila. RESPONDIDA por este aval: o '! PAREI: B3 TOAST' das 09:3x.
 DESENHO DEPLOY-[nome]-ELO-DA-CORRENTE: lei=juiz unico pergunta=quem segura o restart e so o comando dentro da casca, nao o envelope do cron no host; opcao (a) bin/sombra.sh:138 bin/vigia_arvore.sh:173 app/config/crons.py:575 e o rc da recusa em app/core/esteira_vigia.py:1267 app/core/integrador_lote.py:748 bin/vigia_logins.sh:71
 
 
