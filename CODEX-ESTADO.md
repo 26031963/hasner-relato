@@ -1,7 +1,40 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **03/11/2026 00:05** · publicado em **04/11/2026 00:10** (UTC-3)
+> Ultima resposta processada: **04/11/2026 08:05** · publicado em **04/11/2026 08:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 04/11 08:05 · sessao 323413e04117 · - · - · origem=Ronald (tmux)
+
+Achados para consolidar, todos por leitura; execução integral de selo e mutantes **[nao verificado]**.
+
+1. **Retry pode declarar fatia concluída sem executar sua cauda.** `abono-no-ar` usa `pipefail`, transforma qualquer falha do deploy em `exit 1` e para antes do backfill e do contador. O agendado reconhece o arquivo da recusa, repete somente `deploy.sh`, substitui `rc` pelo resultado dessa chamada e publica `.done`, sem retomar a esteira. Assim uma recusa seguida de deploy bem sucedido pode produzir resultado zero com o backfill ausente. Disparo atual dessa esteira em produção: **[nao verificado]**. (`fatias_agendadas/abono-no-ar/esteira.sh:21,37,38,45,48,52,67`; `bin/deploy_agendado.sh:99,105,106,116,119`)
+
+2. **Consumidores da recusa e progresso.** O agendado confere o primeiro campo `id=...`, cria um id por tentativa, recupera o argv e valida arquivo/rc nas chamadas diretas. Faz três novas tentativas por padrão; ao esgotar, retorna 75, remove pendência e desagenda o cron. Entretanto, seu `flock` da régua não tem prazo e pode esperar indefinidamente. A ocorrência produtiva de bloqueio indefinido é **[nao verificado]**. (`bin/deploy_agendado.sh:83,87,94,99,101,104,105,107,110,111,113,120,121,123`)
+
+3. **Régua e pós-push não consomem 75 diretamente.** A régua disputa `/tmp/regua.lock` e roda os selos; não chama deploy. O pós-push busca origin, deriva o TICKETS e commita; não chama deploy nem lê recusa. `push.sh` só chama pós-push depois de push zero. A cadeia molde, sob `set -e`, chama deploy e pode propagar sua falha; `abono-no-ar` a traduz explicitamente para 1. (`bin/regua.sh:16,97,100,138,140`; `bin/pos_push.sh:18,19,20,29,30`; `bin/push.sh:6,8,9`; `bin/molde_fatia/cadeia.sh:4,89`; `fatias_agendadas/abono-no-ar/esteira.sh:37,38`)
+
+4. **Mutantes plausíveis sobreviventes ao selo específico:**
+   - Reverter `_mono` de `encadeado.sh` para `date +%s`. O selo só executa o encadeado em `--corrente`; o fake Docker não emite elos, portanto sai antes do laço que usa `_mono`. O grep posterior só verifica o comando final. (`bin/encadeado.sh:59,61,93,99`; `bin/tests/test_deploy_nao_mata_elo.sh:54,58,59,164,295`)
+   - Remover o filtro `linha_nao_rodou` do pipeline. O selo mede `crons_duracao.py`, sem importar ou executar `pipeline_placar`; o teste Django é uma proteção separada. (`app/core/management/commands/pipeline_placar.py:72`; `bin/tests/test_deploy_nao_mata_elo.sh:409,411,416`; `app/chamados/tests/test_contract_crons.py:199`)
+   - Restabelecer `docker exec ... --recuperou` direto somente no ramo de recuperação do runner. O código atual protege falha e recuperação pela mesma `_alarme`, mas o caso 17 cria flags e não faz depois uma corrida bem sucedida do mesmo nome; o caso 15 também termina em recusa depois da falha real. A execução desses mutantes permanece **[nao verificado]**. (`bin/cron_run.sh:65,67`; `bin/tests/test_deploy_nao_mata_elo.sh:397,398,401,498,500,505,508`)
+
+5. **Caso 17 não força a recusa do alarme.** O runner `morre17b` nasce antes, sem `ADM_ESPERA_ADMISSAO_S=1`; esse valor é passado somente ao restarter. A biblioteca do runner já capturou seu prazo padrão 900. Normalmente o teste exercita esperar a abertura e executar marcado; o ramo que exige alarme recusado não tem fixture determinística. (`bin/admissao_cron.sh:42`; `bin/tests/test_deploy_nao_mata_elo.sh:505,508,511,515,517`)
+
+6. **Caso 11 depende comprovadamente de fora de `bin/`.** Importa `app/config/crons.py`, troca HOME pela árvore medida e percorre os arquivos nomeados. RAWs apontam para `mensageria/bin/sentinela_diario.sh`, `mensageria/bin/negou_fogo_diario.sh` e `eval/noturno.py`; seus execs estão nesses arquivos ou filhos. Logo uma montagem com apenas `bin/` pode alterar o censo. A montagem concreta que produziu `v4_mutantes.log` é **[nao verificado]**; o log sozinho não prova sua causa. As falhas específicas 17 registradas para m1–m4 continuam distinguindo as mutações além do ruído comum do caso 11. (`bin/tests/test_deploy_nao_mata_elo.sh:325,327,329,331,334,335`; `bin/admissao_cron.sh:114,115,123,124,125,138`; `app/config/crons.py:575,576,669,686`; `mensageria/bin/sentinela_diario.sh:16`; `mensageria/bin/negou_fogo_diario.sh:10,11`; `eval/noturno.py:32,36,43,93`; `eval/gerador.py:65,84`; `eval/harness.py:45,54`; `eval/juiz.py:241`; `eval/investigador.py:24`)
+
+7. **Descartes sobre contrato e caso 14 não constituem refutação técnica.** O contrato procura texto contendo `docker restart`, não prova execução desse comando; o caso 14 presume por `sleep 0.5` que o deploy já chegou à espera da trava, sem handshake dessa fase. Um deploy atrasado pode ver a marca na primeira varredura e deixar passar um mutante sem a segunda. (`bin/contrato_deploy.sh:25,28`; `bin/tests/test_deploy_nao_mata_elo.sh:379,382,384,387,391`)
+
+## 04/11 08:05 · sessao 82f428d196e5 · - · - · origem=Ronald (tmux)
+
+- **Placar: escritor produtivo localizado único** `bin/cron_run.sh:29`; escreve `exit`, `dur`, `ini`, `fim`, `rodou`. Proveniência nasce `false`, vira `true` antes de executar: `bin/cron_run.sh:20`, `bin/cron_run.sh:23`, `bin/cron_run.sh:24`. Fixtures também escrevem placares, em arquivos temporários: `bin/tests/test_medicao_de_cron_nao_expira.sh:31`, `app/core/tests/test_crons_quebrados.py:33`.
+- **Leitores de corrida/duração consultam a função compartilhada** `app/config/crons.py:1432`, `app/config/crons.py:1433`: pipeline em `app/core/management/commands/pipeline_placar.py:72`; medidor em `bin/crons_duracao.py:54`, `bin/crons_duracao.py:85`. Ausência histórica de `rodou` conta como corrida pelo próprio predicado: `app/config/crons.py:1433`. Quantidade histórica de recusas sem campo: **[nao verificado]**.
+- **Outras perguntas sobre a linha:** vigia escolhe corrida mais recente por `ini` e alarma saída diferente de 0/2, incluindo recusa: `app/core/services/crons_quebrados.py:36`, `app/core/services/crons_quebrados.py:39`, `app/core/services/crons_quebrados.py:42`, `app/core/services/crons_quebrados.py:46`. Comando consumidor: `app/core/management/commands/cron_quebrado.py:25`, `app/core/management/commands/cron_quebrado.py:29`; host chama em `bin/placar_code.sh:453`. Contador de morte cruza `exit=137`/`fim` com restarts: `bin/rc137_no_restart.sh:75`, `bin/rc137_no_restart.sh:78`, `bin/rc137_no_restart.sh:81`. Esses leitores não duplicam a pergunta “rodou”: respondem quebra e correlação temporal, respectivamente: mesmos sítios.
+- **`crons_duracao.json`:** medidor lê placar, filtra proveniência, agrega p95, preserva valores antigos sem amostra, escreve arquivo: `bin/crons_duracao.py:73`, `bin/crons_duracao.py:85`, `bin/crons_duracao.py:90`, `bin/crons_duracao.py:94`, `bin/crons_duracao.py:107`, `bin/crons_duracao.py:111`. Gatilho produtivo é `crons.sh check --medir`: `bin/crons.sh:13`, `bin/crons.sh:14`; erro apenas avisa e segue: `bin/crons.sh:15`. Configuração lê JSON e monta `DUR_MAX_S`: `app/config/crons.py:146`, `app/config/crons.py:154`, `app/config/crons.py:159`, `app/config/crons.py:160`; agenda derivada consome em `app/config/crons.py:241`, `app/config/crons.py:248`. Contratos também consomem: `app/chamados/tests/test_contract_crons.py:316`, `app/chamados/tests/test_contract_crons.py:342`, `app/chamados/tests/test_contract_crons.py:402`.
+- **`logs/fim`: existe segundo escritor fora do runner.** Runner grava no rc0/2: `bin/cron_run.sh:38`, `bin/cron_run.sh:41`; encadeado decide idempotência/dependência pela existência: `bin/encadeado.sh:87`, `bin/encadeado.sh:97`. Entretanto, `bin/tests/test_furo_encadeado_ao_cartorio.sh:15` resolve a raiz da árvore, apaga carimbos reais dessa raiz e `/tmp/encadeado_apurar_furos_diarios.lock` em `bin/tests/test_furo_encadeado_ao_cartorio.sh:18`, inclusive via trap e na entrada: `bin/tests/test_furo_encadeado_ao_cartorio.sh:20`, `bin/tests/test_furo_encadeado_ao_cartorio.sh:22`; fabrica três carimbos em `bin/tests/test_furo_encadeado_ao_cartorio.sh:49`, `bin/tests/test_furo_encadeado_ao_cartorio.sh:50`, `bin/tests/test_furo_encadeado_ao_cartorio.sh:51`. Execução produtiva desse selo após a obra: **[nao verificado]**.
+- **`restarts.log` e contador:** escritor é o restarter antes e depois do ato: `bin/reinicio_sob_admissao.sh:64`, `bin/reinicio_sob_admissao.sh:65`. Leitor é `bin/rc137_no_restart.sh:45`; janela sem fim vem da biblioteca em `bin/rc137_no_restart.sh:25`. Placar host transforma desconhecido em contador aceso e inclui no TOTAL: `bin/placar_code.sh:459`, `bin/placar_code.sh:461`, `bin/placar_code.sh:537`.
+- **F4 fecha JSON sintaticamente ilegível não vazio, não valida todo o contrato da linha.** JSON válido sem `exit`, uma lista `[]`, ou `exit:"137"` são silenciosamente descartados e podem produzir zero: `bin/rc137_no_restart.sh:75`. Executei exclusivamente o heredoc real em memória, substituindo `open` por `StringIO`: `{}`, `[]` e `{"exit":"137","fim":"2026-11-02T06:48:47-03:00"}` imprimiram `0`. Essas formas produzidas pelo runner atual: **[nao verificado]**; seu `printf` publica schema completo com saída numérica em `bin/cron_run.sh:29`.
+- **Relógio fora da borda permanece nos leitores:** medidor consulta hoje duas vezes: `bin/crons_duracao.py:66`, `bin/crons_duracao.py:108`; pipeline consulta hoje e duas vezes o instante: `app/core/management/commands/pipeline_placar.py:122`, `app/core/management/commands/pipeline_placar.py:124`; vigia recebe `agora` ou consulta relógio: `app/core/services/crons_quebrados.py:27`. Encadeado agora mede espera por uptime, mas copia implementação em `_mono`, sem consultar `adm_agora`: `bin/encadeado.sh:93`; fonte compartilhada original em `bin/admissao_cron.sh:70`.
+- **Mutante plausível fora de `bin/`:** retirar filtro `linha_nao_rodou` de `app/core/management/commands/pipeline_placar.py:72` transforma recusa em corrida/erro. O selo shell testa medidor em `bin/tests/test_deploy_nao_mata_elo.sh:409`, `bin/tests/test_deploy_nao_mata_elo.sh:418`, mas não executa pipeline; teste Django próprio o ataca em `app/chamados/tests/test_contract_crons.py:199`. Sobrevivência integral executada: **[nao verificado]**. Outro candidato: acrescentar descarte por `exit==70` em `bin/crons_duracao.py:85`; caso15 só mede corridas reais 0/75: `bin/tests/test_deploy_nao_mata_elo.sh:396`, `bin/tests/test_deploy_nao_mata_elo.sh:397`, `bin/tests/test_deploy_nao_mata_elo.sh:408`.
 
 ## 03/11 00:05 -- HISTORICO (mais de 24 h) · sessao d1798f3d1359 · DEPLOY-[nome]-ELO · verificador · origem=Code
 
@@ -630,104 +663,4 @@ Para a pergunta 3:
 
 - **Teste alterado:** o executor chama D5 via `call_command` (`app/ponto/tests/test_e3_status_lavrado.py:264`, `:266`); a foto lê todas as colunas das células do colaborador, excetuando apenas status, e todas as linhas/colunas de FM/ED (`:309`, `:310`, `:312`). A conferência dos novos horários e fotos ocorre em `:318`, `:327`, `:329`, `:331`; execução efetiva nesta revisão **[não verificado]**.
 
-## 02/11 21:04 -- HISTORICO (mais de 24 h) · sessao da8569571a0a · E4CAL-L1-P1 · verificador · origem=Code
-
-**Parecer: a garantia irrestrita de “só status” não está fechada.** O caminho normal preserva os demais campos da célula, mas escreve auditoria; uma célula elegível com `veredito_via=NULL` pode alcançar lavra completa; e o teste deixa sobreviver uma regravação de `julgada_em` com o mesmo instante congelado. (`app/ponto/portas/celula.py:753`; `app/core/observ.py:134`; `app/escala/models.py:1739`; `app/ponto/tests/test_e3_status_lavrado.py:286`)
-
-**1) Quem escreve, quem lê e alcance financeiro**
-
-O escritor produtivo dos dois campos é `_aplicar_status`, dentro da porta: atribui em `app/ponto/portas/celula.py:705`, devolve os dois nomes em `:706` e persiste por `salvar_e_emitir`, cujo save real está em `:640`. O método do modelo apenas delega. (`app/escala/models.py:1794`)
-
-As entradas são D5, cartório normal nos dois ramos e decisão administrativa. (`app/ponto/services/cartorio.py:889`; `app/ponto/services/cartorio.py:1229`; `app/ponto/services/cartorio.py:1789`; `app/ponto/services/veredito_celula.py:330`)
-
-| Leitor produtivo | Uso e destino do valor |
-|---|---|
-| `app/ponto/status_dia.py:212` | Lê ambos e devolve status/rótulo/fonte em `:213–214`, sem guarda de exportada. A interface singular delega ao mesmo corpo em `:179`. |
-| `app/core/services/painel_op.py:336` | Consome o D4 e coloca a resposta em `linha['dia']`, em `:338`. Termina no badge/tooltip HTML: `app/templates/core/_painel_card.html:66–67`. |
-| `app/ponto/services/cartorio.py:882` | Lê `status_dia` para pular preenchimento já realizado; status ausente segue à porta em `:889`. |
-| `app/ponto/portas/celula.py:697` | Preserva ambos quando faltam fatos e o veredito permanece igual; a comparação de idempotência está em `:703`. |
-| `app/ponto/portas/celula.py:723` | Copia status para auditoria; descrição e JSON são escritos em `:762–765` e `:777–780`. A consulta administrativa exibe essa trilha. (`app/core/views.py:705`; `app/core/views.py:733`) |
-
-Para esses leitores, não encontrei passagem do **valor das duas colunas** para número de folha, TXT, FM, pauta DP ou emissão de chamado/pergunta/disputa: o consumidor externo encontrado termina em HTML; o D5 retorna antes da fábrica; e a retenção do TXT consulta veredito/protestos/trabalha. (`app/core/services/painel_op.py:338`; `app/templates/core/_painel_card.html:67`; `app/ponto/services/cartorio.py:949`; `app/folha/export.py:1215`; `app/folha/export.py:1228`; `app/folha/export.py:1237`)
-
-O painel atual consulta pares na janela de hoje menos dois dias até hoje; portanto esse caminho não varre as competências 06–09/2026 na data desta revisão. (`app/core/services/painel_op.py:327`)
-
-O calendário ainda produz seu próprio dicionário de status/rótulo; seus templates não estão lendo essas colunas. “Minha escala” também monta rótulo de previsão. Esses homônimos não são leitores adicionais de `CelulaDia.status_rotulo`. (`app/colaboradores/services/calendario.py:895`; `app/colaboradores/services/calendario.py:896`; `app/escala/views.py:54`; `app/escala/views.py:60`)
-
-Fora de produção, há escritas explícitas de preparação de testes e leituras de asserção; a migração apenas adiciona as colunas. (`app/ponto/tests/test_e3_status_lavrado.py:277`; `app/ponto/tests/test_e3_status_lavrado.py:307`; `app/ponto/tests/test_e4_1_cron_le_o_juiz_nao_a_lavra.py:52`; `app/ponto/tests/test_e4_1_cron_le_o_juiz_nao_a_lavra.py:80`; `app/escala/migrations/0044_celuladia_status_dia_celuladia_status_rotulo.py:13`)
-
-**TXT de 09:** comparando duas regenerações com todos os demais insumos fixos e somente essas duas colunas alteradas, o conteúdo permanece igual: o regerador usa `montar_linhas_export`, que lê FM para eventos e os juízes existentes para inclusão/faltas. Isso não prova igualdade com o TXT histórico já armazenado, que pode ter divergências anteriores. (`app/folha/management/commands/regerar_txt_dominio.py:85`; `app/folha/export.py:695`; `app/folha/export.py:700`; `app/folha/export.py:711`; `app/folha/export.py:721`) Igualdade real dos TXT de produção: **[nao verificado]**.
-
-**2) O que `completar_status=True` realmente grava**
-
-O caminho verifica impressão/carimbo/veredito nos dois ramos, chama `_completar_status` e continua antes da lavra normal. O invólucro retorna antes de reconciliação, segunda passada e fábrica. (`app/ponto/services/cartorio.py:1186–1189`; `app/ponto/services/cartorio.py:1345–1348`; `app/ponto/services/cartorio.py:948–950`)
-
-Com via válida de cartório e veredito/protestos preservados, a porta salva **somente `status_dia/status_rotulo` na célula**. Não passa por `carimbar`, onde seriam escritos `julgada_em`, impressão e insumos; tampouco inclui campos de edição/regeneração no save. (`app/ponto/portas/celula.py:753–760`; `app/ponto/portas/celula.py:706`; `app/ponto/portas/celula.py:640`; `app/ponto/portas/celula.py:800–807`)
-
-**Há outra escrita:** o ramo chama `evento('veredito_celula', ...)`, que tenta inserir `LogAuditoria`, com tratamento best effort. A trilha possui `criado_em` automático. Na célula decidida pelo admin, o ramo especial salva status e retorna sem essa auditoria. (`app/ponto/portas/celula.py:761–765`; `app/core/observ.py:105`; `app/core/observ.py:133–138`; `app/core/models.py:307`; `app/ponto/portas/celula.py:738–744`)
-
-No ramo normal de status apenas, não nasce `EventoCelula`: somente `veredito` ou `ata` acordam o outbox. A auditoria do command, sem usuário humano, também não satisfaz a exceção de “admin tocou o dia”. (`app/ponto/portas/celula.py:623`; `app/ponto/portas/celula.py:638–642`; `app/core/observ.py:118`; `app/chamados/juizes.py:992–999`)
-
-A operação usa `save`, portanto não fundamenta afirmar “nenhum signal é disparado”. Não localizei receptor de `CelulaDia` na cópia; execução do despacho de signals: **[nao verificado]**. (`app/ponto/portas/celula.py:640`)
-
-**Ressalva estrutural:** os gates não verificam `veredito_via`, e o modelo aceita NULL. Uma célula elegível, com veredito válido de cartório e via nula, falha na igualdade de `:753` e cai em `:769–775`: grava também protestos/veredito/via/`veredito_em` e emite outbox. A existência desse estado no conjunto raspado é **[nao verificado]**. (`app/ponto/services/cartorio.py:1186`; `app/ponto/services/cartorio.py:1345`; `app/escala/models.py:1739`; `app/ponto/portas/celula.py:753`; `app/ponto/portas/celula.py:769–775`)
-
-**3) Mordida do teste** [nao verificado]
-
-- **“Guarda volta”: sim, por inspeção.** A saída antecipada impede as contagens e o preenchimento exigidos no dry/apply. Execução do mutante: **[nao verificado]**. (`app/ponto/tests/test_e3_status_lavrado.py:317`; `app/ponto/tests/test_e3_status_lavrado.py:321`)
-- **“Também escreve `julgada_em`”: não necessariamente.** A foto inclui o campo, mas a lavra inicial e o command usam o mesmo `AGORA` congelado. Regravar `julgada_em=agora` ou `timezone.now()` pode manter exatamente o mesmo valor e passar. (`app/ponto/tests/test_e3_status_lavrado.py:189–194`; `app/ponto/tests/test_e3_status_lavrado.py:286`; `app/ponto/management/commands/lavrar_status_competencia.py:44`; `app/ponto/portas/celula.py:800`)
-- A foto cobre células **do colaborador do fixture**, excetuando ambos os status, e todas as linhas de FM/ED disponíveis no teste. Não cobre auditoria, outbox, `DiaPago`, chamados, perguntas, disputas nem células de outros colaboradores. (`app/ponto/tests/test_e3_status_lavrado.py:309–313`)
-- Não confere os rótulos; só exige status preenchido e os valores específicos de duas células. A última passada verifica contadores, sem nova foto. (`app/ponto/tests/test_e3_status_lavrado.py:310`; `app/ponto/tests/test_e3_status_lavrado.py:321–325`)
-
-Para matar a regravação de carimbo, a lavra inicial precisa ocorrer em T0 e o D5 em T1 distinto, ou a prova precisa inspecionar os campos efetivamente persistidos. A igualdade temporal atual é a brecha. (`app/ponto/tests/test_e3_status_lavrado.py:189`; `app/ponto/tests/test_e3_status_lavrado.py:286`)
-
-**4) Aval e classes reprovadas**
-
-O caminho canônico usa o mesmo juiz e a mesma porta; a competência entregue virou informação; carimbo velho fica na fila; e o relógio funcional é capturado uma vez na borda. Não aparece segundo juiz, segundo escritor produtivo ou derivação nova nesse caminho. (`app/ponto/management/commands/lavrar_status_competencia.py:43–57`; `app/ponto/services/cartorio.py:885–891`; `app/ponto/portas/celula.py:693–698`)
-
-Não há escrita de FM/ED nesse percurso. Há, porém, **leitura indireta de ED** por `competencia_entregue`, contrariando a frase documental de que o command não lê ED. (`app/ponto/management/commands/lavrar_status_competencia.py:13`; `app/ponto/management/commands/lavrar_status_competencia.py:43`; `app/folha/export.py:569–575`)
-
-A auditoria não é explicitamente proibida pelo MUDA 1 fornecido; já a possibilidade de lavra completa/outbox com via nula impede certificar seu contrato para qualquer célula elegível. O selo temporal também não está fechado. (`app/ponto/portas/celula.py:761`; `app/ponto/portas/celula.py:753–775`; `app/ponto/tests/test_e3_status_lavrado.py:286`)
-
-Não foi introduzida ordem explícita nova de locks. As células são carregadas antes e o atomic do save não revalida a impressão; segurança contra alteração concorrente permanece **[nao verificado]**. (`app/ponto/management/commands/lavrar_status_competencia.py:54`; `app/ponto/services/cartorio.py:1345`; `app/ponto/portas/celula.py:639–640`)
-
-Os ADRs ainda descrevem a guarda retirada e precisam de reconciliação documental. (`app/docs/ADR/0002-celula-e-o-dia.md:69–71`; `app/docs/ADR/0003-celula-tres-naturezas.md:113–114`)
-
-Apply das 06–09/2026, reversão prévia, hashes FM/TXT e cumprimento operacional dos pré-requisitos de pouso: **[nao verificado]**. [nao verificado]
-
-**5) Outras guardas e retorno a NULL**
-
-O cartório de lote e o julgamento unitário não têm guarda de exportada nesses caminhos. As guardas restantes identificadas protegem regeneração/reversão de DNA; seus saves não incluem status. (`app/ponto/management/commands/processar_cartorio.py:49–65`; `app/ponto/services/cartorio.py:1950–1967`; `app/ponto/portas/celula.py:238–242`; `app/ponto/portas/celula.py:264–265`; `app/ponto/portas/celula.py:520–539`)
-
-Existe mecanismo capaz de produzir `(None, None)` quando falta `fatos_do_status` e muda o veredito, mas não é guarda de exportada. Os chamadores produtivos encontrados do cartório fornecem os fatos; o admin usa seu mapeamento próprio. (`app/ponto/portas/celula.py:694–698`; `app/ponto/services/cartorio.py:889–891`; `app/ponto/services/cartorio.py:1229–1234`; `app/ponto/services/cartorio.py:1789–1794`)
-
-O D5 também pula qualquer `status_dia` não nulo, mesmo com `status_rotulo=NULL`; o leitor então usa o rótulo do vocabulário. Não encontrei outra guarda de exportada que anule o status. (`app/ponto/services/cartorio.py:882–884`; `app/ponto/status_dia.py:214`) Regressão ou divergência real após apply: **[nao verificado]**.
-
-## 02/11 21:03 -- HISTORICO (mais de 24 h) · sessao 53f77a91c3e3 · - · - · origem=Ronald (tmux)
-
-Q2 — caminho real e efeitos:
-
-- `handle` lê a competência entregue apenas como informação, captura `agora`/`hoje`, seleciona células até ontem e chama `julgar_colab(... completar_status=True)`; não há trava de exportada nesse caminho (`app/ponto/management/commands/lavrar_status_competencia.py:43`, `:44`, `:49`, `:54`, `:56`).
-- O corpo constrói a mesma grade, verifica impressão/carimbo/veredito e, nos dois ramos, chama `_completar_status` seguido de `continue`; o wrapper retorna antes de reconciliação, segunda passada, fábrica e cluster (`app/ponto/services/cartorio.py:1113`, `:1186`, `:1187`, `:1189`, `:1345`, `:1346`, `:1348`, `:949`).
-- `_completar_status` pula status existente, conta carimbo velho como fila e, em apply, chama a porta com o veredito/protestos existentes e os fatos da grade (`app/ponto/services/cartorio.py:882`, `:885`, `:888`, `:889`).
-- `CelulaDia.lavrar_veredito` só delega à porta (`app/escala/models.py:1787`, `:1794`).
-- No ramo canônico `veredito_via='cartorio'`, a porta compara veredito/via/protestos, aplica os dois campos e executa `cel.save(update_fields=['status_dia','status_rotulo'])`; não carimba `julgada_em`, `insumos_em`, edição ou regeneração (`app/ponto/portas/celula.py:703`, `:705`, `:706`, `:753`, `:760`, `:640`). A escrita de `julgada_em` pertence a `carimbar`, que os `continue` anteriores não alcançam (`app/ponto/portas/celula.py:800`, `:805`; `app/ponto/services/cartorio.py:1189`, `:1348`).
-- **Há escrita adicional de trilha:** depois do save de status, chama `evento('veredito_celula',...)`, que efetivamente executa `LogAuditoria.objects.create`, em savepoint próprio e best effort (`app/ponto/portas/celula.py:761`, `:762`, `:764`; `app/core/observ.py:105`, `:133`, `:134`). A tabela possui timestamp automático `criado_em` (`app/core/models.py:307`).
-- Em célula decidida pelo admin, o ramo especial aplica status e retorna sem essa chamada de auditoria (`app/ponto/portas/celula.py:738`, `:739`, `:742`, `:744`).
-- **Não cria outbox nesse ramo:** somente `veredito` ou `ata` acordam `EventoCelula`; o conjunto de campos de status não intersecta esses campos (`app/ponto/portas/celula.py:623`, `:638`, `:640`, `:641`, `:631`). Não localizei receiver de `CelulaDia` no código; dispatch interno do Django não foi inspecionado [nao verificado].
-
-Ressalva estrutural importante:
-
-- A promessa “só status” pressupõe via válida existente (`cartorio` ou `admin`); a elegibilidade do D5 não testa `veredito_via`, enquanto o modelo permite `NULL` (`app/ponto/services/cartorio.py:1186`, `:1345`; `app/escala/models.py:1739`).
-- Se existir célula elegível com `veredito_via=NULL` e veredito válido de cartório, a comparação de igualdade falha e a porta escreve também `protestos`, `veredito`, `veredito_via`, `veredito_em`, além de emitir outbox e auditoria (`app/ponto/portas/celula.py:753`, `:769`, `:772`, `:773`, `:775`, `:777`, `:638`). Existência dessa condição no dado fornecido: [nao verificado].
-- Não existe `select_for_update` no caminho examinado; as células são carregadas antes e a transação envolve o save, sem revalidar impressão/veredito sob lock (`app/ponto/management/commands/lavrar_status_competencia.py:54`; `app/ponto/portas/celula.py:639`, `:640`). Segurança contra edição concorrente no intervalo: [nao verificado]. O diff não acrescenta nem inverte locks (`diff.txt` fornecido [nao verificado como arquivo local]).
-
-Q5 — outras guardas:
-
-- O cron normal do cartório seleciona todas as células passadas e chama o mesmo julgamento, sem filtro de competência exportada (`app/ponto/management/commands/processar_cartorio.py:49`, `:61`, `:65`).
-- A unidade `julgar_celula` filtra futuro, inexistência e turno ainda em andamento; depois chama o mesmo cartório sem guarda exportada (`app/ponto/services/cartorio.py:1950`, `:1952`, `:1958`, `:1962`, `:1965`).
-- Há guardas de exportada nas operações de **regenerar DNA** e **reverter regeneração**, respectivamente `app/ponto/portas/celula.py:196`, `:199`, `:238`, `:242` e `:520`, `:525`, `:526`; seus saves não incluem status (`app/ponto/portas/celula.py:264`, `:265`, `:538`, `:539`). Elas não anulam status lavrado.
-- A porta possui um ramo que devolve `(None,None)` quando faltam fatos e muda o veredito (`app/ponto/portas/celula.py:694`, `:697`); todos os chamadores de produção encontrados do cartório fornecem fatos (`app/ponto/services/cartorio.py:889`, `:890`, `:1229`, `:1233`, `:1789`, `:1793`), e o admin usa o mapeamento próprio (`app/ponto/services/veredito_celula.py:330`; `app/ponto/portas/celula.py:694`, `:695`).
-- Não encontrei guarda “exportada não se toca” aplicada à gravação de `status_dia/status_rotulo` que os faça voltar a nulo; o alcance concreto permanece condicionado à impressão em dia e status ausente (`app/ponto/services/cartorio.py:882`, `:885`, `:1186`, `:1345`). Qualquer divergência real em produção: [nao verificado].
-
-_1498 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1500 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
