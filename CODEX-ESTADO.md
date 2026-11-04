@@ -1,6 +1,6 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **03/11/2026 00:05** · publicado em **03/11/2026 00:06** (UTC-3)
+> Ultima resposta processada: **03/11/2026 00:05** · publicado em **03/11/2026 21:07** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
 
 ## 03/11 00:05 · sessao d1798f3d1359 · DEPLOY-[nome]-ELO · verificador · origem=Code
@@ -630,7 +630,7 @@ Para a pergunta 3:
 
 - **Teste alterado:** o executor chama D5 via `call_command` (`app/ponto/tests/test_e3_status_lavrado.py:264`, `:266`); a foto lê todas as colunas das células do colaborador, excetuando apenas status, e todas as linhas/colunas de FM/ED (`:309`, `:310`, `:312`). A conferência dos novos horários e fotos ocorre em `:318`, `:327`, `:329`, `:331`; execução efetiva nesta revisão **[não verificado]**.
 
-## 02/11 21:04 · sessao da8569571a0a · E4CAL-L1-P1 · verificador · origem=Code
+## 02/11 21:04 -- HISTORICO (mais de 24 h) · sessao da8569571a0a · E4CAL-L1-P1 · verificador · origem=Code
 
 **Parecer: a garantia irrestrita de “só status” não está fechada.** O caminho normal preserva os demais campos da célula, mas escreve auditoria; uma célula elegível com `veredito_via=NULL` pode alcançar lavra completa; e o teste deixa sobreviver uma regravação de `julgada_em` com o mesmo instante congelado. (`app/ponto/portas/celula.py:753`; `app/core/observ.py:134`; `app/escala/models.py:1739`; `app/ponto/tests/test_e3_status_lavrado.py:286`)
 
@@ -703,7 +703,7 @@ Existe mecanismo capaz de produzir `(None, None)` quando falta `fatos_do_status`
 
 O D5 também pula qualquer `status_dia` não nulo, mesmo com `status_rotulo=NULL`; o leitor então usa o rótulo do vocabulário. Não encontrei outra guarda de exportada que anule o status. (`app/ponto/services/cartorio.py:882–884`; `app/ponto/status_dia.py:214`) Regressão ou divergência real após apply: **[nao verificado]**.
 
-## 02/11 21:03 · sessao 53f77a91c3e3 · - · - · origem=Ronald (tmux)
+## 02/11 21:03 -- HISTORICO (mais de 24 h) · sessao 53f77a91c3e3 · - · - · origem=Ronald (tmux)
 
 Q2 — caminho real e efeitos:
 
