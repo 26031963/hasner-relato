@@ -449,7 +449,8 @@ LEI-AKITA: origem=core/tests/marca_cron15.py, testemunha=config/crons_duracao.js
 - PROVA suite copia ba6485eb: Ran 13487, OK (skipped=42, expected failures=39), rc=0 -- logs/cron15/suite.log; cmp 8/8.
 - PROVA deploy 5a988e04: rc=0, 3 rotas (core 200, ui 302, mensageria 200), importerror_500=0 -- logs/cron15/deploy.log.
 - N1-PERGUNTAS-DO-APP bf659ad7: suite = so os 15 (logs/n1pna/suite2.log); opus final REPROVOU (B3) -> pergunta de desenho no topo; NAO pousa.
-- INCOMPLETO: push dos presos (308b58bc..5a988e04) em seguida; lavrar_he_pendente nao aberto (aval: sem construtor novo antes do restart).
+- REWORD 17:5x: o push caiu no lei_akita (602d4bf4 `padrao=n/a (instrumento)` em core/medida_leitor_do_dia.py, codigo de negocio pelo caminho); so a mensagem dele passou a `padrao=juiz unico` (o da obra E4-APP-MAPA) por `git filter-branch --msg-filter`; PROVA: `git diff bkp-pre-reword-602d4bf4 HEAD --stat` = vazio (arvore identica, prod intocado), lei_akita standalone OK 16/17. Hashes: 602d4bf4->24dc28c1, b051f0ae->7ee610b7, 6f2ee0d3->a1bc54be, 3e631f42->7968eeb2, ba6485eb->fe3a20c6, 5a988e04->ab85e736, 6d6f0283->b4ae2d4e (logs/cron15/deploy.log diz 5a988e04 = mesma arvore).
+- INCOMPLETO: push dos presos (308b58bc..HEAD) em seguida; lavrar_he_pendente nao aberto (aval: sem construtor novo antes do restart).
 
 ## E1 -- LOTES 1, 2 e 3 PARA O RONALD VALIDAR (30/10 19:3x; caso nao validado nao certifica nada)
 Instrumento `bin/codex_escreve_red.sh` (contrato v2 + volta Codex, 9 procedentes; selo 12 casos + mutante; prova real `logs/e1_bateria/prova_real.out`): o Codex escreveu os testes em copia propria, o Code revisou os 40 (3 mudados no lote 1). Copia `wt-e1-1858` (258d457b instrumento, 54492960 lote 1, 925881f6 lote 2). 'Motor hoje' / 'Hoje' = informacao, nunca certificado.
