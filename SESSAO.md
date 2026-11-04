@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 20:45:57.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (2.5 MB). Acoes na janela: **79**.
+**Medido em 04/11/2026 20:51:24.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (2.6 MB). Acoes na janela: **87**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:50:29 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -i '2s/.*/ESPERANDO: trava_teste.sh \| pid=1753276/' docs/RELATO.md; sed -n 2p docs/RELATO.md` |
+| 20:50:22 | Bash |  | `pgrep -P 1753273 -a \| cut -c1-120; for c in $(pgrep -P 1753273); do pgrep -P $c -a \| cut -c1-100; done` |
+| 20:50:17 | Bash |  | `cd /home/ronald/saas-hasner; grep -n "def _prova_pid" -A30 bin/hook_stop_fila1.py \| head -40` |
+| 20:50:14 | Bash |  | `cd /home/ronald/saas-hasner; ps -p 1753273 -o pid,args \| cut -c1-120; grep -n "def _esperando_com_prova" -A40 bin/hook_stop_fila1.py \| grep -n "argv\\|produtor\\|basename\\|cmdline" \| head` |
+| 20:50:04 | Bash |  | `cd /home/ronald/saas-hasner/app; pgrep -f "^bash bin/suite.sh --dir /home/ronald/wt-he-200326" \| head -1; sed -i '2i ESPERANDO: suite.sh \| pid=1753273' docs/RELATO.md; sed -n 2p docs/RELATO.md` |
+| 20:49:59 | Bash |  | `pgrep -af "sombra.sh\|suite.sh" \| grep -v pgrep \| cut -c1-160` |
+| 20:49:47 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') assert L[1].startswith('ESPERANDO: push.sh') L[1]='N1 PUSH 20:5x: pre-push OK, origin/main 05a98fb2..26ee6979, pos_push 6fa62712 (logs/push/n1_26ee6979.log, rc 0). Marco N1 FECHADO.' open(p,'w').write('\n'.join(L)) EOF sed -n 2p docs/RELATO.md` |
+| 20:49:40 | Bash |  | `cd /home/ronald/saas-hasner; tail -6 logs/push/n1_26ee6979.log \| cut -c1-200; git fetch -q origin; git log --oneline -1 origin/main; git status --porcelain \| grep -v '^??'` |
 | 20:43:22 | Bash |  | `cd /home/ronald/saas-hasner; ps -p 213194 >/dev/null && echo PUSH_VIVO \|\| echo PUSH_FIM; tail -4 logs/push/n1_26ee6979.log \| cut -c1-200; bash bin/trava_teste.sh --quem; git -C /home/ronald/wt-he-200326 log --oneline -1; ls -t logs/he/ \| head -5; date +%H:%M` |
 | 20:33:22 | Bash |  | `cd /home/ronald/saas-hasner; ps -p 213194 >/dev/null && echo PUSH_VIVO \|\| echo PUSH_FIM; tail -5 logs/push/n1_26ee6979.log \| cut -c1-200; bash bin/trava_teste.sh --quem; git -C /home/ronald/wt-he-200326 log --oneline -1; git -C /home/ronald/wt-he-200326 status --short \| head; date +%H:%M` |
 | 20:25:14 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -i '2i ESPERANDO: push.sh \| pid=213194' docs/RELATO.md; sed -n 2p docs/RELATO.md` |
