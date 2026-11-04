@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 17:28:56.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (26.1 MB). Acoes na janela: **896**.
+**Medido em 04/11/2026 17:34:24.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (26.1 MB). Acoes na janela: **899**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:29:21 | Bash | Wait for cron15 full suite verdict | `cd /home/ronald/saas-hasner; until [ -f logs/cron15/suite.rc ]; do /usr/bin/sleep 20; done; cat logs/cron15/suite.rc; grep -E '^(OK\|FAILED)($\| \()' logs/cron15/suite.log \| tail -1; grep -E '^Ran ' logs/cron15/suite.log \| tail -1; grep -E '^(ERROR\|FAIL\|UNEXPECTED)' logs/cron15/suite.log \| head` |
+| 17:29:17 | Agent | Verify N1-PERGUNTAS-DO-APP diff | `Obra N1-PERGUNTAS-DO-APP (repo /home/ronald/wt-n1pna-164232, branch raia/wt-n1pna-164232, commits 2f800726 e bf659ad7 sobre 3e631f42). Diff: `git -C /home/ronald/wt-n1pna-164232 diff 3e631f42..bf659ad7`. O que a obra afirma: `chamados/services/pergunta_no_app.py::perguntas_do_app(colab)` passa a atribuir a instancia `colab` recebida a `p.disputa.colaborador` de cada pergunta viva antes de chamar ` ...` |
+| 17:29:05 | Bash | Commit cron15 mark in copy | `cd /home/ronald/wt-cron15-171947; git add app/core/tests/marca_cron15.py app/core/tests/test_marca_cron15.py app/chamados/tests/test_contract_crons.py app/chamados/tests/test_cron_longo_sai_da_medida.py app/core/tests/test_contract_crons_duracao_horario.py app/docs/BACKLOG.md app/docs/PROMPTS.md app/docs/RELATO.md; git commit -q -F - <<'EOF' CRON-15-NOMEADOS: os 15 selos de cron marcados pelo nome ...` |
 | 17:28:53 | Bash | Full suite on cron15 copy | `cd /home/ronald/saas-hasner; rm -f logs/cron15/suite.rc; bash bin/suite.sh --dir /home/ronald/wt-cron15-171947 > logs/cron15/suite.log 2>&1; echo rc=$? > logs/cron15/suite.rc` |
 | 17:28:48 | Bash | Check which test skipped | `cd /home/ronald/saas-hasner; grep -iE "skip" logs/cron15/foco.log \| head -5; grep -n "def test" /home/ronald/wt-cron15-171947/app/core/tests/test_contract_esmeril.py \| head` |
 | 17:28:32 | Bash | Focused tests on cron15 copy | `cd /home/ronald/saas-hasner; mkdir -p logs/cron15; bash bin/suite.sh --dir /home/ronald/wt-cron15-171947 --only "chamados.tests.test_contract_crons chamados.tests.test_cron_longo_sai_da_medida core.tests.test_contract_crons_duracao_horario core.tests.test_marca_cron15 core.tests.test_selo_teste_sem_relogio core.tests.test_contract_mypy core.tests.test_contract_esmeril" > logs/cron15/foco.log 2>&1; ...` |
