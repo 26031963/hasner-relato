@@ -1,6 +1,6 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **03/11/2026 00:05** · publicado em **03/11/2026 21:07** (UTC-3)
+> Ultima resposta processada: **03/11/2026 00:05** · publicado em **03/11/2026 21:29** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
 
 ## 03/11 00:05 · sessao d1798f3d1359 · DEPLOY-[nome]-ELO · verificador · origem=Code
@@ -551,7 +551,7 @@ Escritor/leitores produtivos: calendário publica `status` lido do D4, constrói
 
 8. **Outro caminho que altera a oferta sem lavra, preexistente ao diff fornecido:** o `try` do último recurso engole qualquer exceção em `app/colaboradores/services/calendario.py:451`. Se falhar a janela, `_ini_comp_atual=None` inicial de `:436` elimina oferta em `:711`; se a janela já respondeu e falhar a carga/julgamento das perguntas, `_perg_viva` pode ficar vazio ou parcial (`:437`, `:450`), permitindo oferta que pergunta viva com resposta deveria impedir (`:712`). A ocorrência real desse erro não consta dos dados [nao verificado].
 
-## 02/11 21:29 · sessao 9f7ef7d7568c · E4CAL-L1-P1 · verificador · origem=Code
+## 02/11 21:29 -- HISTORICO (mais de 24 h) · sessao 9f7ef7d7568c · E4CAL-L1-P1 · verificador · origem=Code
 
 **1. O delta fecha o item 3 específico da v1.** A lavra ocorre em T0=12h; o D5 passa às 13h e repete às 14h. Regravar `julgada_em` ou `veredito_em` com o relógio dessas passadas passa a alterar a foto. O mesmo vale para os demais timestamps fotografados, inclusive `FechamentoMensal.atualizado_em`, que é `auto_now`. (`app/ponto/tests/test_e3_status_lavrado.py:31`, `:298`, `:309–331`; `app/ponto/models.py:479`)
 
@@ -596,7 +596,7 @@ Assim: **sombra válida mais prova operacional válida sustentam o apply deste u
 
 Existe leitor genérico de docstrings no MAPA, mas ele exige `@bolha`, ausente na docstring D5. O casamento documental da LEI-AKITA consultado lê `GLOSSARIO.md` e `PLANO-PADROES.md`. Portanto, não encontrei nesses mecanismos dependência das frases modificadas neste delta. (`app/core/mapa/contrato.py:45–48`, `:83–88`; `app/ponto/management/commands/lavrar_status_competencia.py:1–16`; `bin/tests/test_lei_akita.sh:94–108`)
 
-## 02/11 21:27 · sessao 0fd26c7d7b50 · - · - · origem=Ronald (tmux)
+## 02/11 21:27 -- HISTORICO (mais de 24 h) · sessao 0fd26c7d7b50 · - · - · origem=Ronald (tmux)
 
 1. **O delta fecha o defeito específico de relógio na foto:** lavra em T0=12h, D5 em T1=13h e repetição em T2=14h. Regravar `julgada_em`, `veredito_em`, `insumos_em` ou outro campo fotografado com o relógio desses atos altera o estado comparado. (`app/ponto/tests/test_e3_status_lavrado.py:31`, `:298`, `:309-331`)
 
@@ -614,7 +614,7 @@ Existe leitor genérico de docstrings no MAPA, mas ele exige `@bolha`, ausente n
 
 8. **Limite da prova:** igualdade das fotos prova estado final nos registros observados; não prova ausência de SQL redundante, escrita com valor igual, alteração seguida de restauração ou escrita fora do universo fotografado. (`app/ponto/tests/test_e3_status_lavrado.py:309-331`; execução SQL [não verificado])
 
-## 02/11 21:27 · sessao f68fd42d7647 · - · - · origem=Ronald (tmux)
+## 02/11 21:27 -- HISTORICO (mais de 24 h) · sessao f68fd42d7647 · - · - · origem=Ronald (tmux)
 
 Para a pergunta 3:
 
