@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 18:01:03.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (26.5 MB). Acoes na janela: **918**.
+**Medido em 04/11/2026 18:06:04.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (26.5 MB). Acoes na janela: **919**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:01:46 | Bash | Wait for push2 rc and verify remote | `cd /home/ronald/saas-hasner; until grep -q '^rc=' logs/cron15/push2.log; do /usr/bin/sleep 20; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|FALHA' logs/cron15/push2.log \| tail -6; tail -3 logs/cron15/push2.log; git fetch -q origin; git log -1 --format=%h origin/main; git log -1 --format=%h HEAD` |
 | 17:51:38 | Bash | Wait for push2 result | `cd /home/ronald/saas-hasner; until grep -q '^rc=' logs/cron15/push2.log; do /usr/bin/sleep 20; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|FALHA\|error' logs/cron15/push2.log \| tail -6; tail -3 logs/cron15/push2.log` |
 | 17:51:31 | Bash | Retry push after reword | `cd /home/ronald/saas-hasner; bash bin/push.sh origin main > logs/cron15/push2.log 2>&1; echo rc=$? >> logs/cron15/push2.log` |
 | 17:51:28 | Bash | Record reword in RELATO/BACKLOG and commit | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; r=open(p).read() a='- INCOMPLETO: push dos presos (308b58bc..5a988e04) em seguida;' assert r.count(a)==1 m=('- REWORD 17:5x: o push caiu no lei_akita (602d4bf4 `padrao=n/a (instrumento)` em core/medida_leitor_do_dia.py, codigo de negocio pelo caminho); ' 'so a mensagem dele passou a `padrao=juiz unico` (o da obra E4-APP-MAPA) p ...` |
