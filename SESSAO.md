@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 14:32:43.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (16.2 MB). Acoes na janela: **532**.
+**Medido em 04/11/2026 14:38:23.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (16.3 MB). Acoes na janela: **537**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:34:43 | Bash | Record suite verdict; point ESPERANDO at the push pre-push pid | `cd /home/ronald/saas-hasner && ls /proc/3182055 >/dev/null && tr '\0' ' ' </proc/3182055/cmdline \| cut -c1-80; echo; python3 - <<'EOF' p='app/docs/RELATO.md'; t=open(p).read() s=t.split('\n'); assert s[1].startswith('ESPERANDO: ') s[1]='ESPERANDO: /home/ronald/saas-hasner/bin/pre-push.sh \| pid=3182055' t='\n'.join(s) a='CUSTO MEDIDO (sombra, --cpus 1' assert t.count(a)==1 i=t.index(a); j=t.index ...` |
+| 14:34:36 | Agent | verificador final E4-8-SAIDA-I | `Obra E4-8-SAIDA-I (repo saas-hasner, Django ponto eletronico CLT). Voce e o verificador FINAL (opus) antes do pouso. Somente leitura. Nao viu a construcao. Sem Codex nesta obra (orcamento esgotado): voce e o unico 2o leitor. COPIA: /home/ronald/wt-e48-133720 (branch e48-133720). Base = d317bb40 (main na epoca). Commits: 9bebfc34 (RED, adiciona app/relatorios/tests/test_e4_8_furos_le_a_lavra.py) e  ...` |
+| 14:34:11 | Bash | Read E4-8 full suite verdict | `cd /home/ronald/saas-hasner && L=logs/e4_8/suite_1fedb739.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran' $L\|tail -1; tail -1 $L; grep -E '^(FAIL\|ERROR):' $L \| head -20` |
+| 14:33:22 | Bash | Check E4-8 suite and push status | `cd /home/ronald/saas-hasner && ls /proc/2736587 >/dev/null 2>&1 && echo e48_viva \|\| { grep -E '^(OK\|FAILED)($\| \()' logs/e4_8/suite_1fedb739.log \| tail -1; grep '^Ran' logs/e4_8/suite_1fedb739.log\|tail -1; tail -1 logs/e4_8/suite_1fedb739.log; }; tail -2 logs/toast/push_2080d2d4.log; date +%H:%M` |
+| 14:32:50 | Bash | Register measured SW message in backlog row and prompts | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'EOF' p='BACKLOG.md'; t=open(p).read() old='Medir antes pela mensagem exata do [nome]; service worker exige smoke proprio; fora da noite salvo bug provado em batida' assert t.count(old)==1 t=t.replace(old,'MEDIDO (aval BUG-SW-MEDIDO 04/11 14:2x): "TypeError: Failed to convert value to \'Response\'" em sw.js, navegacao /escala/?app=1 autenticada ...` |
 | 14:23:48 | Bash | Confirm E4-8 suite alive and lei_akita passed in push | `ls /proc/2736587 >/dev/null 2>&1 && echo e48_viva; grep -c "lei_akita: OK" /home/ronald/saas-hasner/logs/toast/push_2080d2d4.log; sed -n 2p /home/ronald/saas-hasner/app/docs/RELATO.md; date +%H:%M` |
 | 14:23:43 | Bash | Check the push got past the host gates | `cd /home/ronald/saas-hasner && tail -4 logs/toast/push_2080d2d4.log; ps -eo pid,args \| grep -E "bin/push.sh\|pre-push" \| grep -v grep \| head -3 \| cut -c1-100` |
 | 14:23:38 | Bash | Retry push via the regua | `cd /home/ronald/saas-hasner && bash bin/push.sh > logs/toast/push_2080d2d4.log 2>&1; echo rc=$? >> logs/toast/push_2080d2d4.log` |
