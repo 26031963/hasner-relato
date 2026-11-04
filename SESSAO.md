@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 10:15:26.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (8.1 MB). Acoes na janela: **241**.
+**Medido em 04/11/2026 10:20:47.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (8.2 MB). Acoes na janela: **244**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:20:08 | Bash | Point wait line at the verifier and log suite result | `python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() old='ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=3302024' assert s.count(old)==1 s=s.replace(old,'ESPERANDO: agente a520e7454f78da08a \| arquivo=/tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/a520e7454f78da08a.output') a='MATRIZ F3-DORMENTE FASE 1 (' i=s.index(a) s=s[:i]+'SUITE TOAST A ...` |
+| 10:20:02 | Agent | Opus final TOAST A delta | `Obra TOAST-E-NOME-CALENDARIO PARTE A, verificacao FINAL so do DELTA (volta de ERRO-BOBO). Somente leitura. Contexto: o opus final anterior sobre ffd97ed8 reprovou com 3 achados de selo e texto, nenhum de comportamento. O Ronald classificou como ERRO-BOBO e mandou curar (aval anexo). A cura e o commit 36768b29 na copia /home/ronald/wt-toastA-084019 (branch toastA-084019), por cima de ffd97ed8. Leia ...` |
+| 10:19:44 | Bash | Read TOAST suite verdict | `cd /home/ronald/saas-hasner; L=logs/toast/suite_36768b29.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran' $L \| tail -1; grep '^rc=' $L \| tail -1; grep -E '^(FAIL\|ERROR):' $L \| head` |
 | 10:14:10 | Bash | Replace RELATO matrix line with cause-read becos | `python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() a='MATRIZ F3-DORMENTE FASE 1 (' assert s.count(a)==1 i=s.index(a); j=s.index('\n',i) ln=("MATRIZ F3-DORMENTE FASE 1 (04/11, sombra savepoint+raise, ROLLBACK_NULO True, CENSO_IGUAL, 1332 cutucadas, ERROS 0): " "universo 3016 = aceita 1422 + admin_sem_fato_novo 600 + agrupado 730 + premissa_regularizada 223 + transicao 1 + veto_do_dia 40 (censo d ...` |
 | 10:13:54 | Bash | Spot-check the agent's cited lines | `cd /home/ronald/saas-hasner/app; sed -n 1676,1688p ponto/services/cartorio.py; echo ----; sed -n 1280,1300p chamados/models.py; echo ----; sed -n 730,737p ponto/management/commands/detectar_ausencias.py` |
 | 10:13:44 | Bash | Check which matrix file survived | `cd /home/ronald/saas-hasner/logs/f3_dormente; ls -la --time-style=+%H:%M:%S; head -5 matriz.md; grep -c . matriz.md` |
