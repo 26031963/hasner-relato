@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 17:02:51.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (24.9 MB). Acoes na janela: **865**.
+**Medido em 04/11/2026 17:07:50.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (25.0 MB). Acoes na janela: **868**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:07:37 | Bash | Rerun clock selo, new test, ruff, mypy | `cd /home/ronald/saas-hasner; M=$(grep -B2 -A6 "FAIL: test_MORDE_teste_novo_com_relogio_solto" logs/n1pna/suite.log \| grep -o "([a-z_.]*\.[A-Za-z_]*)" \| head -1 \| tr -d '()' \| sed 's/\.[A-Za-z_]*$//'); echo $M; bash bin/suite.sh --dir /home/ronald/wt-n1pna-164232 --only "$M chamados.tests.test_n1_perguntas_do_app core.tests.test_ruff_zero core.tests.test_mypy_zero" > logs/n1pna/fix.log 2>&1; ec ...` |
+| 17:07:32 | Bash | Replace loose clock in new test | `cd /home/ronald/saas-hasner; grep -A12 "FAIL: test_MORDE_teste_novo_com_relogio_solto" logs/n1pna/suite.log \| grep -i "n1_perguntas\\|Assertion" \| head -4; cd /home/ronald/wt-n1pna-164232/app; python3 - <<'EOF' p='chamados/tests/test_n1_perguntas_do_app.py' s=open(p).read() assert s.count('timezone.now()')==2 s=s.replace('respondida_em=timezone.now()','respondida_em=self._quando()') assert s.cou ...` |
+| 17:07:23 | Bash | List failing tests | `cd /home/ronald/saas-hasner; grep -E "^(FAIL\|ERROR):" logs/n1pna/suite.log \| sed 's/ (.*//' \| sort \| uniq -c \| head -30; grep -E '^Ran' logs/n1pna/suite.log \| tail -1` |
 | 17:01:50 | Bash | Keep waiting for suite | `cd /home/ronald/saas-hasner; for i in $(seq 1 57); do [ -f logs/n1pna/suite.rc ] && break; /usr/bin/sleep 10; done; cat logs/n1pna/suite.rc 2>/dev/null \|\| echo ainda; tail -c 300 logs/n1pna/suite.log` |
 | 16:52:17 | Bash | Wait for copy suite result | `cd /home/ronald/saas-hasner; for i in $(seq 1 57); do [ -f logs/n1pna/suite.rc ] && break; /usr/bin/sleep 10; done; cat logs/n1pna/suite.rc 2>/dev/null \|\| echo ainda; grep -c "^ERROR:\\|^FAIL:" logs/n1pna/suite.log` |
 | 16:52:08 | Bash | Read VIGIA precedent shape | `cd /home/ronald/saas-hasner/app; git log --format='%h %ad %s' --date=short -S"--alarme" -- chamados/management/commands/fechar_becos_disputa.py \| head -3 \| cut -c1-120; grep -n "alarme\\|SystemExit" chamados/management/commands/fechar_becos_disputa.py \| head; grep -n "fechar_becos_disputa" config/crons.py \| head -3 \| cut -c1-200` |
