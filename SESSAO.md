@@ -6,10 +6,26 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 07:41:00.** Transcript: `3ca329b1-b89d-4678-ab22-5934a303573a.jsonl` (2.5 MB). Acoes na janela: **62**.
+**Medido em 04/11/2026 07:46:00.** Transcript: `3ca329b1-b89d-4678-ab22-5934a303573a.jsonl` (3.4 MB). Acoes na janela: **78**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:45:57 | Bash | Check hook loop-break mechanism | `cd /home/ronald/saas-hasner && grep -n "stop_hook_active\\|TETO\b\\|_teto_siga\\|max_siga" bin/hook_stop_fila1.py \| head` |
+| 07:45:32 | Bash | Rewrite top PAREI to name the item in course | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() a='PAREI: ! CLEAR \| espera Ronald -- RESTART-NO-MARCO' assert s.count(a)==1 s=s.replace(a,'PAREI: ! DEPLOY-[nome]-ELO-DA-CORRENTE parada pelo RESTART-NO-MARCO (o /clear e o restart sao dele) \| espera Ronald --') open(p,'w').write(s) EOF sed -n 3p docs/RELATO.md \| cut -c1-160` |
+| 07:45:25 | Bash | Read generic PAREI bang release rules | `cd /home/ronald/saas-hasner && sed -n 1085,1110p bin/hook_stop_fila1.py; sed -n 1125,1150p bin/hook_stop_fila1.py; grep -n "def _eh_cota" -A6 bin/hook_stop_fila1.py` |
+| 07:45:21 | Bash | Find how the bang on top line releases | `cd /home/ronald/saas-hasner && grep -n "_SO_BANG\\|def _linha_topo\\|def _topo" bin/hook_stop_fila1.py \| head; grep -n "_SO_BANG.search\\|_SO_BANG.match" -B8 -A6 bin/hook_stop_fila1.py \| head -60` |
+| 07:45:13 | Bash | Write PAREI ! CLEAR line at RELATO top | `python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') assert L[0].startswith('# RELATO') and L[2].startswith('GASTA-ATE-O-RESET') L.insert(2,'PAREI: ! CLEAR \| espera Ronald -- RESTART-NO-MARCO (aval COMPLEMENTO-2 07:5x, item 4 "PRONTO PARA CLEAR E RESTART e PARA"): handoff 018b8924, /tasks vazio; depois do restart segue o item 2 DEPLOY-ELO pelo HANDOFF sem aval.') L.insert(3,'') open ...` |
+| 07:45:06 | Bash | Read CLEAR-without-trigger branch | `cd /home/ronald/saas-hasner && sed -n 955,975p bin/hook_stop_fila1.py` |
+| 07:45:02 | Bash | Inspect stop hook release conditions | `cd /home/ronald/saas-hasner && grep -n "_SO_BANG\\|CLEAR\\|RESTART\\|def _libera\\|startswith('!')\\|PRONTO" bin/hook_stop_fila1.py \| head -30; head -3 app/docs/RELATO.md \| cut -c1-200` |
+| 07:44:45 | Bash | Check lock, ahead count and live jobs | `cd /home/ronald/saas-hasner && bin/trava_teste.sh --quem 2>&1 \| tail -1; git status -sb \| head -1; ps -eo pid,etime,cmd \| grep -E "suite.sh\|manage.py test\|codex_pergunta\|push.sh" \| grep -v grep \| head` |
+| 07:44:39 | Bash | Add triage line, regenerate handoff, commit docs | `python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') assert L[6].startswith('RESTART-NO-MARCO 04/11') L.insert(7,'TRIAGEM-DE-FUNDO 04/11 07:4x (RESTART-NO-MARCO item 2): shell bl8fj4x7x (mutantes DME v4) e monitor bhnozdwyq TERMINARAM; agentes aa3f3dcfaa6e89581 (COBERTURA-PARCIAL v3, 3 dias) e a8f4871cb8aa9cbc9 (sonda PROVA-CODS) COMPLETOS; agente "Splitting sem_periodo" NAO ENCONTRA ...` |
+| 07:44:30 | Bash | Locate RESTART line in RELATO and current time | `grep -n "RESTART-NO-MARCO" docs/RELATO.md \| head -3; date '+%H:%M'` |
+| 07:43:22 | Bash | Point ORDEM VIVA to DEPLOY-ELO and regenerate handoff | `python3 - <<'EOF' p='docs/BACKLOG.md'; s=open(p).read() a='<!-- ORDEM-VIVA-TOPO: O261-E-CELULA-20-UM-DONO -->' assert s.count(a)==1 s=s.replace(a,'<!-- ORDEM-VIVA-TOPO: DEPLOY-[nome]-ELO-DA-CORRENTE -->') old=' FILA; CAUSA MEDIDA 16:5x (C):' assert s.count(old)==1 s=s.replace(old,' EM CURSO 04/11 (aval GASTA-ATE-O-RESET item 2): copia wt-dme-v3-234409 @ b09405ae, volta 4 feita, mutantes 4/4; falta s ...` |
+| 07:43:15 | Bash | Find ORDEM-VIVA-TOPO marker and DEPLOY row state | `grep -n "ORDEM-VIVA-TOPO:" docs/BACKLOG.md; sed -n 907p docs/BACKLOG.md \| cut -c1-200; sed -n 907p docs/BACKLOG.md \| awk -F'\|' '{print $4}' \| cut -c1-300` |
+| 07:43:09 | Bash | How ORDEM VIVA is declared | `cd /home/ronald/saas-hasner && grep -n "ORDEM VIVA\\|ORDEM-VIVA\\|ordem_viva" bin/hook_stop_fila1.py \| head -15; grep -n "ORDEM VIVA" app/docs/BACKLOG.md \| head -5; grep -n "DEPLOY-[nome]-ELO\\|DEPLOY-ELO" app/docs/BACKLOG.md \| cut -c1-200 \| head` |
+| 07:43:00 | Bash | Read generated handoff | `cd /home/ronald/saas-hasner && cat app/docs/HANDOFF-SESSAO.md \| cut -c1-220` |
+| 07:42:53 | Bash | Update RELATO with mutant results and regenerate handoff | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() old='FALTA: mutantes da volta 4 (resultado abaixo), suite' new='MUTANTES volta 4 (scratchpad 3ca329b1.../mut4): m1 cron_run antigo, m2 admissao antiga, m3 rc137 antigo, m4 SEM_FIM=670 -> 4/4 MORTOS pelo caso 17; caso 11 vermelho igual nos 4 = artefato da montagem do mutante (copia real verde). INCOMPLETO: F6 encadeado sem caso que morda. FALTA ...` |
+| 07:42:41 | Bash | Read mutant results | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/bl8fj4x7x.output` |
 | 07:38:06 | ReadNotifications |  | `-` |
 | 07:38:01 | Bash | Check mutant run progress | `pgrep -af "test_deploy_nao_mata_elo" \| head -3; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/bl8fj4x7x.output` |
 | 07:37:55 | ReadNotifications |  | `-` |
