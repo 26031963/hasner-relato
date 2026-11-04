@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 16:10:18.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (23.1 MB). Acoes na janela: **784**.
+**Medido em 04/11/2026 16:15:20.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (23.1 MB). Acoes na janela: **789**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:15:05 | Bash | Annotate DECLARADOS and rerun mypy contract | `cd /home/ronald/wt-e4app-151143/app; python3 - <<'E' p='core/medida_leitor_do_dia.py'; s=open(p).read() o='DECLARADOS = {}\n'; assert s.count(o)==1 s=s.replace(o,'DECLARADOS: dict[str, tuple[int, str]] = {}\n') compile(s,p,'exec'); open(p,'w').write(s) E cd /home/ronald/saas-hasner; nohup bash bin/suite.sh --dir /home/ronald/wt-e4app-151143 --only "core.tests.test_contract_mypy core.tests.test_med ...` |
+| 16:14:58 | Bash | Inspect DECLARADOS definition and old shape | `cd /home/ronald/wt-e4app-151143/app; sed -n 336,342p core/medida_leitor_do_dia.py; grep -n "DECLARADOS\[" core/medida_leitor_do_dia.py \| head -3; git show 2888e9ca:app/core/medida_leitor_do_dia.py \| sed -n '/^DECLARADOS = {/,/^}/p' \| head -4` |
+| 16:14:53 | Bash | Show mypy errors | `cd /home/ronald/saas-hasner; grep -n -A25 "^FAIL: test_mypy_zero" logs/e4app/suite.log \| grep -E "error:\|AssertionError" \| head` |
+| 16:14:49 | Bash | Read full suite verdict | `cd /home/ronald/saas-hasner; grep -E '^(OK\|FAILED)($\| \()' logs/e4app/suite.log \| tail -1; grep '^Ran' logs/e4app/suite.log\|tail -1; tail -1 logs/e4app/suite.log; grep -E "^(ERROR\|FAIL):" logs/e4app/suite.log \| head` |
+| 16:13:23 | Bash | Prepare landing diff for the verifier | `cd /home/ronald/wt-e4app-151143 && git diff 2888e9ca..HEAD > /home/ronald/saas-hasner/logs/e4app/diff_pouso.txt && git diff --stat 2888e9ca..HEAD \| tail -3` |
 | 16:07:03 | Bash | Check suite progress | `cd /home/ronald/saas-hasner; tail -c 300 logs/e4app/suite.log; ps -p 576184 >/dev/null && echo vivo; date +%H:%M` |
 | 16:03:21 | Bash | Check full suite progress | `cd /home/ronald/saas-hasner; tail -1 logs/e4app/suite.log \| cut -c1-150; ps -p 576184 >/dev/null && echo vivo` |
 | 15:59:04 | Bash | Add ESPERANDO for the suite and test the hook | `cd /home/ronald/saas-hasner/app; python3 - <<'E' p='docs/RELATO.md'; s=open(p).read() a='# RELATO — esteira saas-hasner\n' assert s.count(a)==1 s=s.replace(a,a+'ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=576184\n',1) open(p,'w').write(s) E cd ..; python3 -c "import sys;sys.path.insert(0,'bin');import hook_stop_fila1 as h;print(h._esperando_com_prova()[:2])"` |
