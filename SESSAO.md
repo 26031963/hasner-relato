@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 09:48:25.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (6.8 MB). Acoes na janela: **208**.
+**Medido em 04/11/2026 09:53:47.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (6.8 MB). Acoes na janela: **209**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:48:24 | Bash | Wait for matrix or construtor progress | `cd /home/ronald/saas-hasner; for i in $(seq 1 36); do [ -f logs/f3_dormente/matriz.md ] && break; /usr/bin/sleep 15; done; ls -la logs/f3_dormente/ logs/dme/v6/ \| tail -20` |
 | 09:48:19 | Bash | Record MODO-COMUM result in RELATO | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read() old='MODO-COMUM suite 92ab99c9 09:2x rodando (logs/mc/suite_92ab99c9.log); construtor DEPLOY-ELO v6 em curso; matriz F3-DORMENTE FASE 1 em curso (sonnet).' assert s.count(old)==1 new=("MODO-COMUM suite 92ab99c9 09:4x: FAILED (failures=2, skipped=42, expected failures=24), Ran 13466, rc=1 (logs/mc/suite_92ab99c9 ...` |
 | 09:46:30 | Bash | Rerun diagram selo and new test on copy | `cd /home/ronald/saas-hasner; bash bin/suite.sh --dir /home/ronald/wt-mc-082755 --only "core.tests.test_selo_diagrama_do_codigo ponto.tests.test_out_do_lote" > logs/mc/selo_diagrama.log 2>&1; echo rc=$?; /bin/grep -E '^(OK\|FAILED)($\| \()' logs/mc/selo_diagrama.log \| tail -1; /bin/grep '^Ran' logs/mc/selo_diagrama.log \| tail -1` |
 | 09:46:25 | Bash | Read rc 2 cause | `tail -5 /home/ronald/saas-hasner/logs/mc/selo_diagrama.log` |
