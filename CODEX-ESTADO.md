@@ -1,7 +1,109 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **04/11/2026 10:34** · publicado em **04/11/2026 10:36** (UTC-3)
+> Ultima resposta processada: **04/11/2026 10:37** · publicado em **04/11/2026 10:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 04/11 10:37 · sessao b22fc9c7c9ec · DEPLOY-[nome]-ELO · verificador · origem=Code
+
+1. **Veredito: bloqueia a admissão do deploy.** Há caminhos para reiniciar com exec vivo, além de perda da recusa que alimenta o contador (`bin/em_casca.sh:26`, `bin/admissao_cron.sh:175`, `bin/deploy_agendado.sh:102`).
+
+   | Item do aval | Resultado |
+   |---|---|
+   | **MUDA 1** | **Parcial — bloqueia.** Os três envelopes passam a `casca=0`, e os execs diretamente alterados recebem wrapper (`bin/admissao_cron.sh:36`, `bin/admissao_cron.sh:230`, `bin/sombra.sh:139`, `bin/vigia_arvore.sh:177`, `eval/harness.py:54`). Porém o vigia alcança `deploy.sh`, cujos execs continuam sem marca própria; detalhes no item 3 (`app/core/esteira_vigia.py:1340`, `bin/deploy.sh:102`). |
+   | **MUDA 2** | **Parcial — bloqueia a prova do máximo completo.** Entre as durações presentes na cópia, o maior valor do universo remanescente é `processar_cartorio=412`, abaixo de 1500 (`app/config/crons_duracao.json:58`, `bin/admissao_cron.sh:43`). Mas há integrantes sem duração, como `lavrar_retrato_folha`; o selo simplesmente os exclui (`app/config/crons.py:1585`, `bin/tests/test_deploy_nao_mata_elo.sh:687`). O máximo de produção alegado no cabeçalho é **[nao verificado]**. |
+   | **MUDA 3** | **Parcial — bloqueia.** Os três caminhos alterados leem rc, solicitam pauta e deixam o contador depender da recusa; o integrador retorna antes de `FIM` (`app/core/integrador_lote.py:748`, `app/core/integrador_lote.py:780`, `app/core/esteira_vigia.py:1312`, `bin/vigia_logins.sh:90`). Entretanto o agendador ainda pode apagar a testemunha sem restart, e `_pauta` descarta falhas de abertura (`bin/deploy_agendado.sh:102`, `app/core/esteira_vigia.py:898`). |
+   | **MUDA 4** | **Realizado no caminho examinado.** A trava antecede a leitura decisiva do commit, cobre revert/publicação, e a guarda impede desfazer um assunto iniciado por `Revert "` (`bin/vigia_logins.sh:70`, `bin/vigia_logins.sh:75`, `bin/vigia_logins.sh:79`, `bin/vigia_logins.sh:86`). Os filhos de deploy e alarme fecham fd7 (`bin/vigia_logins.sh:90`, `bin/vigia_logins.sh:95`). |
+   | **MUDA 5** | **Parcial — bloqueia.** Rc75 interrompe a conferência imediata, grava relato e prepara repetição antes da pausa do vigia (`app/core/esteira_vigia.py:1270`, `app/core/esteira_vigia.py:1319`, `bin/vigia_arvore.sh:28`). Porém uma pauta `deploy_recusado` preexistente impede atualizar o texto para “commit quebrado”: a porta retorna sem alterar a pauta viva (`app/core/management/commands/alarme_esteira.py:38`). |
+   | **CONFERIR** | Há HTTP no harness, dentro do trecho já protegido pelo wrapper (`eval/harness.py:18`, `eval/harness.py:24`, `eval/harness.py:54`). A linha exigida no RELATO sobre essa descoberta é **[nao verificado]**. |
+   | **RED** | Existem casos 19–23, mas todos têm lacunas demonstráveis por leitura; ver item 5 (`bin/tests/test_deploy_nao_mata_elo.sh:576`, `bin/tests/test_deploy_nao_mata_elo.sh:817`). Mutantes efetivamente executados e mortos, suite verde desta cópia e demais condições de PRONTO: **[nao verificado]**. |
+
+   **Fila — cabeçalho ainda impreciso:** ele atribui `3300` ao `DUR_MAX_S` do vigia na cópia, mas o JSON contém `1586`, que sobrescreve o declarado (`bin/admissao_cron.sh:31`, `app/config/crons_duracao.json:82`, `app/config/crons.py:160`).
+
+2. **Escritores, leitores e chamadores.**
+
+   | Estado/autoridade | Quem escreve ou altera | Quem lê |
+   |---|---|---|
+   | **Marcas e `casca`** | Porta única `adm_marcar`, incluindo nome, PID e conteúdo (`bin/admissao_cron.sh:239`, `bin/admissao_cron.sh:247`). Chamadores: cron, alarme do cron, descoberta da corrente e wrapper (`bin/cron_run.sh:16`, `bin/cron_run.sh:52`, `bin/encadeado.sh:48`, `bin/em_casca.sh:16`). Remoção pelo dono via `adm_desmarcar`, ou reaper de órfãs (`bin/admissao_cron.sh:254`, `bin/admissao_cron.sh:208`). | Validação de vida, classificação efetiva e varredura (`bin/admissao_cron.sh:167`, `bin/admissao_cron.sh:181`, `bin/admissao_cron.sh:199`). Restart consome a varredura duas vezes; wrapper confere o campo (`bin/reinicio_sob_admissao.sh:40`, `bin/reinicio_sob_admissao.sh:44`, `bin/em_casca.sh:22`). O selo também cria e lê marcas artificiais (`bin/tests/test_deploy_nao_mata_elo.sh:125`, `bin/tests/test_deploy_nao_mata_elo.sh:627`). |
+   | **`recusa_cron.<id>.pendente`** | `deploy.sh` grava `id` e argv após rc75; apaga a própria recusa e as anteriores ao corte (`bin/deploy.sh:286`, `bin/deploy.sh:363`, `bin/deploy.sh:367`). **Também apaga o agendador**, antes da repetição (`bin/deploy_agendado.sh:102`). | Agendador valida id e recupera argv; retry lê a de `auto_revert`; contador enumera os nomes (`bin/deploy_agendado.sh:83`, `bin/deploy_agendado.sh:101`, `app/core/esteira_vigia.py:1332`, `bin/deploy_recusado.sh:22`). Fixtures escrevem recusas artificiais (`bin/tests/test_deploy_nao_mata_elo.sh:703`, `bin/tests/test_deploy_nao_mata_elo.sh:832`). |
+   | **`.restart_inicio.<pid>`** | Criado e removido por `deploy.sh`; há remoções em recusa, falha de restart e sucesso (`bin/deploy.sh:282`, `bin/deploy.sh:289`, `bin/deploy.sh:292`, `bin/deploy.sh:368`). | O próprio deploy consulta existência e usa mtime como corte da limpeza (`bin/deploy.sh:366`, `bin/deploy.sh:367`). |
+   | **`vigia_logins.lock`** | O vigia abre o arquivo e adquire flock; a fixture também o ocupa (`bin/vigia_logins.sh:70`, `bin/vigia_logins.sh:71`, `bin/tests/test_deploy_nao_mata_elo.sh:805`). | O próprio flock decide se outra passada pode continuar (`bin/vigia_logins.sh:71`). |
+   | **Pauta `deploy_recusado`** | Pedida pelo lote, auto-revert, retry e logins (`app/core/integrador_lote.py:780`, `app/core/esteira_vigia.py:1318`, `app/core/esteira_vigia.py:1342`, `bin/vigia_logins.sh:94`). Escrita efetiva pela porta existente, via `pautas.services.escrever` (`app/core/management/commands/alarme_esteira.py:54`). | A porta consulta pauta viva por motivo; resolução passa por `marcar_feita_pelo_sistema` (`app/core/management/commands/alarme_esteira.py:15`, `app/core/management/commands/alarme_esteira.py:31`). O único pedido produtivo de `--resolver deploy_recusado` encontrado está no retry (`app/core/esteira_vigia.py:1347`). |
+   | **`ADM_SO_O_EXEC`** | Declarada em um lugar (`bin/admissao_cron.sh:36`). | `adm_so_o_exec` e selo (`bin/admissao_cron.sh:219`, `bin/tests/test_deploy_nao_mata_elo.sh:582`). |
+   | **`adm_so_o_exec` / `adm_classifica_casca`** | Definidos na admissão (`bin/admissao_cron.sh:215`, `bin/admissao_cron.sh:225`). | O classificador chama o primeiro; `adm_marcar` consome o classificador; casos 11/19/20 também o consultam (`bin/admissao_cron.sh:230`, `bin/admissao_cron.sh:244`, `bin/tests/test_deploy_nao_mata_elo.sh:339`, `bin/tests/test_deploy_nao_mata_elo.sh:578`, `bin/tests/test_deploy_nao_mata_elo.sh:679`). |
+   | **`adm_texto_entra_na_casca`** | Definido na admissão, agora incluindo `docker cp` (`bin/admissao_cron.sh:96`, `bin/admissao_cron.sh:110`). | Fecho da fonte, árvore de processos, classificador e selo (`bin/admissao_cron.sh:149`, `bin/admissao_cron.sh:160`, `bin/admissao_cron.sh:229`, `bin/tests/test_deploy_nao_mata_elo.sh:661`). |
+   | **Contador / `TOTAL`** | O contador deriva quantidade e ids dos arquivos pendentes; não mantém estado próprio (`bin/deploy_recusado.sh:22`, `bin/deploy_recusado.sh:27`). O placar transforma ausência de número em 1 e soma `_n_dr` (`bin/placar_code.sh:466`, `bin/placar_code.sh:542`). | Placar e retry consomem o contador; o `TOTAL` decide mensagem e rc0/rc2 do placar (`bin/placar_code.sh:464`, `app/core/esteira_vigia.py:1346`, `bin/placar_code.sh:544`, `bin/placar_code.sh:554`). |
+
+   **Rc de `deploy.sh`, por chamador:** [nao verificado]
+
+   | Chamador | Tratamento |
+   |---|---|
+   | Lote final | Lê rc e impede `FIM` quando diferente de zero (`app/core/integrador_lote.py:771`, `app/core/integrador_lote.py:748`). |
+   | Reload inicial do integrador | **Ainda ignora rc — fila** (`app/core/integrador_lote.py:638`). |
+   | Auto-revert e retry novos | Leem `.returncode` e tratam falha (`app/core/esteira_vigia.py:1312`, `app/core/esteira_vigia.py:1340`). |
+   | Revert do revert | **Ainda ignora rc, inclusive 75 — bloqueia o fechamento desse caminho**; segue anunciando “desfeito” (`app/core/esteira_vigia.py:1283`, `app/core/esteira_vigia.py:1286`). |
+   | Vigia de logins | Lê `_rd`, solicita pauta em falha; o script termina com rc2 de alarme, não com o rc do deploy (`bin/vigia_logins.sh:90`, `bin/vigia_logins.sh:91`, `bin/vigia_logins.sh:105`). |
+   | Agendador | Lê rc da esteira e da repetição direta; combina arquivo/id com rc75; sucesso após repetição vira rc3 pela cauda não executada (`bin/deploy_agendado.sh:97`, `bin/deploy_agendado.sh:106`, `bin/deploy_agendado.sh:111`, `bin/deploy_agendado.sh:120`). |
+   | Moldes de cadeia | Deploy normal aborta por `set -e`; reload inicial tem guarda explícita (`bin/molde_fatia/cadeia.sh:4`, `bin/molde_fatia/cadeia.sh:48`, `bin/molde_fatia/cadeia.sh:89`, `bin/molde_autocura/cadeia.sh:3`, `bin/molde_autocura/cadeia.sh:45`, `bin/molde_autocura/cadeia.sh:86`). **Rollback ignora rc — fila:** usa `set +e` e anuncia recarga mesmo com falha (`bin/molde_fatia/cadeia.sh:26`, `bin/molde_fatia/cadeia.sh:32`, `bin/molde_autocura/cadeia.sh:25`, `bin/molde_autocura/cadeia.sh:31`). |
+   | Fatias agendadas existentes | O135 confere ou propaga rc; abono usa `pipefail` e converte falha para rc1 (`fatias_agendadas/o135-teto20/esteira.sh:80`, `fatias_agendadas/o135-teto20/esteira.sh:117`, `fatias_agendadas/o135-teto20/esteira.sh:124`, `fatias_agendadas/abono-no-ar/esteira.sh:21`, `fatias_agendadas/abono-no-ar/esteira.sh:37`). |
+   | Cron de higiene | Declarado como RAW; o runner captura e devolve rc (`app/config/crons.py:307`, `bin/cron_run.sh:24`, `bin/cron_run.sh:70`). |
+
+   **`DEPLOY_RECUSA_ID`:** produtores explícitos são integrador, auto-revert, retry, logins e agendador; o deploy aplica default `manual`, valida e usa no caminho/conteúdo (`app/core/integrador_lote.py:771`, `app/core/esteira_vigia.py:1311`, `app/core/esteira_vigia.py:1339`, `bin/vigia_logins.sh:90`, `bin/deploy_agendado.sh:94`, `bin/deploy_agendado.sh:104`, `bin/deploy.sh:52`, `bin/deploy.sh:54`, `bin/deploy.sh:286`).
+
+   **Sim, há consumidores fora do diff com comportamento diferente:** `cron_run.sh` continua chamando a porta, mas os três envelopes agora recebem `casca=0`; o restart inalterado consome essa mudança. A árvore viva ainda pode fazer uma marca zero segurar durante um descendente Docker (`bin/cron_run.sh:16`, `bin/admissao_cron.sh:230`, `bin/admissao_cron.sh:186`, `bin/reinicio_sob_admissao.sh:40`).
+
+3. **Sim: há execs transitivos sem `em_casca` — bloqueia.**
+
+   O caminho novo é `vigia_arvore → retentar-deploy → deploy.sh`; o auto-revert também alcança o mesmo script (`bin/vigia_arvore.sh:28`, `app/core/esteira_vigia.py:1340`, `app/core/esteira_vigia.py:1312`).
+
+   Dentro desse fecho ficam descobertos:
+
+   - Check, plano e aplicação de migrations (`bin/deploy.sh:102`, `bin/deploy.sh:109`, `bin/deploy.sh:124`).
+   - `collectstatic` no UI (`bin/deploy.sh:205`).
+   - Espera e prova de rotas com alvo por parâmetro (`bin/deploy.sh:300`, `bin/deploy.sh:316`).
+
+   A trava do restart não cobre esses preflights nem as provas posteriores; outro deploy pode reiniciar durante um desses execs. A descoberta por árvore de uma marca zero não fecha a corrida entre varredura e nascimento de um exec que não usa a admissão (`bin/deploy.sh:283`, `bin/reinicio_sob_admissao.sh:44`, `bin/reinicio_sob_admissao.sh:66`, `bin/admissao_cron.sh:186`).
+
+   **Rede:** o noturno faz HTTP para `localhost:8010` dentro da mensageria; esse trecho passa pelo wrapper (`eval/harness.py:18`, `eval/harness.py:24`, `eval/harness.py:54`). A sombra consulta o PostgreSQL de produção por socket dentro de `saas_db`; os alvos variáveis ali são fixados como `saas_db` e `sombra_db`, distintos do conjunto reiniciado (`bin/sombra.sh:72`, `bin/sombra.sh:101`, `bin/sombra.sh:105`, `bin/admissao_cron.sh:42`). Há também teste TCP local em `sombra_db` (`bin/sombra_db.sh:40`, `bin/sombra_db.sh:73`).
+
+   `saas_caddy` não pertence a `ADM_CASCAS`; o conjunto efetivo é core, UI e mensageria. Um caminho alcançável que execute especificamente em `saas_caddy` permanece **[nao verificado]** (`bin/admissao_cron.sh:42`).
+
+4. **`em_casca.sh`: caminho normal correto; ciclo de vida incompleto.**
+
+   - **Normal:** só executa após marca aceita e campo igual a 1; guarda o rc do comando e o devolve; o EXIT solicita remoção (`bin/em_casca.sh:16`, `bin/em_casca.sh:21`, `bin/em_casca.sh:22`, `bin/em_casca.sh:26`, `bin/em_casca.sh:27`).
+   - **Bloqueia — wrapper pode morrer antes do exec.** O eval passou a aplicar timeout ao processo `bash em_casca.sh`, enquanto Docker roda como filho. Não há acompanhamento do filho após morte do wrapper; existe apenas trap EXIT (`eval/oraculo.py:122`, `eval/oraculo.py:124`, `bin/em_casca.sh:21`, `bin/em_casca.sh:26`). Se o wrapper é morto e o filho continua, a marca perde validade pelo PID/starttime e o reaper a remove, permitindo restart com exec ainda vivo (`bin/admissao_cron.sh:169`, `bin/admissao_cron.sh:175`, `bin/admissao_cron.sh:208`, `bin/reinicio_sob_admissao.sh:66`). Ocorrência real: **[nao verificado]**.
+   - **Fila — marca pode sobrar fisicamente.** Morte sem execução do EXIT deixa o arquivo até uma varredura posterior; ele passa a ser órfão (`bin/em_casca.sh:21`, `bin/admissao_cron.sh:167`, `bin/admissao_cron.sh:208`).
+   - **Fila — marca nasce zero.** Para alvo como `sombra_db`, `adm_marcar` grava `casca=0` antes de o wrapper verificar e sair 64. Logo a promessa literal “não nasce diferente de 1” não é cumprida, embora o comando seja barrado (`bin/em_casca.sh:16`, `bin/em_casca.sh:22`, `bin/admissao_cron.sh:244`, `bin/admissao_cron.sh:247`).
+
+5. **Casos 19–23 mordem parcialmente. Os sobreviventes abaixo são deduções estáticas; execução dos mutantes é [nao verificado].**
+
+   | Caso | Mordida existente | Mutação plausível que passa |
+   |---|---|---|
+   | **19** | Exercita espera, recusa, desmarca e serialização de chegada durante restart (`bin/tests/test_deploy_nao_mata_elo.sh:625`, `bin/tests/test_deploy_nao_mata_elo.sh:646`). | Trocar somente o `exit "$_r"` final por `exit 0`: todos os comandos válidos exercitados retornam zero; a rejeição 64 ocorre antes. **Fila: não prova preservação de rc não zero** (`bin/em_casca.sh:24`, `bin/em_casca.sh:27`, `bin/tests/test_deploy_nao_mata_elo.sh:632`). Outra lacuna **bloqueante**: exec cru com alvo Python variável escapa do scanner de constantes, e helper novo escapa da lista fixa (`bin/tests/test_deploy_nao_mata_elo.sh:591`, `bin/tests/test_deploy_nao_mata_elo.sh:605`). |
+   | **20** | Compara teto com durações encontradas usando `DUR_MAX_S` (`bin/tests/test_deploy_nao_mata_elo.sh:687`, `bin/tests/test_deploy_nao_mata_elo.sh:692`). | Remover a duração de `lavrar_he_pendente` do JSON: continua cron, mas sai silenciosamente da medição por ausência da chave. **Bloqueia a prova de cobertura** (`app/config/crons_duracao.json:41`, `app/config/crons.py:1506`, `bin/tests/test_deploy_nao_mata_elo.sh:687`). |
+   | **21** | Testa contador vazio/com arquivos, tratamento do lote e recusa inicial do auto-revert (`bin/tests/test_deploy_nao_mata_elo.sh:701`, `bin/tests/test_deploy_nao_mata_elo.sh:704`, `bin/tests/test_deploy_nao_mata_elo.sh:769`, `bin/tests/test_deploy_nao_mata_elo.sh:774`). | Remover o `find ... -delete`, deixando o literal `recusa_cron.*.pendente` em comentário: a “prova” da limpeza é apenas grep. **Bloqueia** (`bin/deploy.sh:367`, `bin/tests/test_deploy_nao_mata_elo.sh:717`). |
+   | **22** | Testa guarda contra revert do revert e trava previamente ocupada (`bin/tests/test_deploy_nao_mata_elo.sh:802`, `bin/tests/test_deploy_nao_mata_elo.sh:805`). | Liberar fd7 imediatamente após adquirir a trava, antes de ler/reverter/publicar. A fixture ocupada continua barrando, mas não há duas passadas reais concorrentes para perceber a liberação prematura. **Bloqueia** (`bin/vigia_logins.sh:71`, `bin/vigia_logins.sh:75`, `bin/tests/test_deploy_nao_mata_elo.sh:807`). |
+   | **23** | Exercita diretamente a função, argv/id e condição de resolução (`bin/tests/test_deploy_nao_mata_elo.sh:831`, `bin/tests/test_deploy_nao_mata_elo.sh:847`). | Na CLI, substituir `print(retentar_deploy())` por `print('nada pendente')`. Os testes diretos continuam verdes; a conferência da CLI só procura o literal da opção. A repetição automática real desaparece. **Bloqueia** (`app/core/esteira_vigia.py:1641`, `bin/tests/test_deploy_nao_mata_elo.sh:857`). |
+
+6. **Classes de reprovação solicitadas.**
+
+   | Classe | Avaliação |
+   |---|---|
+   | **(a) Segundo juiz registrado** | Não identifiquei duplicação de juiz de domínio: o novo classificador é consumido pela porta de marcas, e a pauta usa o serviço existente. O registro vivo, conforme JUIZES, é `core/juizes.py` (`app/docs/JUIZES.md:11`, `bin/admissao_cron.sh:244`, `app/core/management/commands/alarme_esteira.py:54`). |
+   | **(b) Segundo escritor fora da porta** | **Bloqueia:** o apagador antigo do agendador continua alterando o estado que o novo contador declara pertencer ao deploy bem-sucedido (`bin/deploy_agendado.sh:102`, `bin/deploy_recusado.sh:7`). |
+   | **(c) Relógio fora da borda** | **Fila:** há novo corte temporal por mtime para decidir quais recusas apagar; ele nasce antes da espera/restart, sem serialização com os escritores de recusa (`bin/deploy.sh:282`, `bin/deploy.sh:286`, `bin/deploy.sh:367`). As novas chamadas de `strftime` servem ao relato, não ao teto de espera (`app/core/esteira_vigia.py:1319`, `app/core/esteira_vigia.py:1349`). |
+   | **(d) Derivação paralela** | **Bloqueia:** o fecho do selo é uma lista manual e omite o deploy realmente alcançado (`bin/tests/test_deploy_nao_mata_elo.sh:591`, `app/core/esteira_vigia.py:1340`). A duração usa a fonte correta, mas exclui suas lacunas (`bin/tests/test_deploy_nao_mata_elo.sh:687`). |
+   | **(e) Selo/RED sem mordida suficiente** | **Bloqueia:** limpeza por grep e CLI não exercitada permitem os mutantes dos casos 21 e 23 (`bin/tests/test_deploy_nao_mata_elo.sh:717`, `bin/tests/test_deploy_nao_mata_elo.sh:857`). |
+   | **(f) Ordem/herança de trava** | A admissão fecha fd8 antes do comando, e o restart fecha fd8 nos filhos longos (`bin/admissao_cron.sh:250`, `bin/reinicio_sob_admissao.sh:66`, `bin/reinicio_sob_admissao.sh:69`). O novo fd7 não vai aos filhos de deploy/alarme; o pai o segura durante a publicação conforme MUDA4 (`bin/vigia_logins.sh:68`, `bin/vigia_logins.sh:90`, `bin/vigia_logins.sh:95`). Deadlock novo demonstrado: **[nao verificado]**. |
+   | **(g) Pouso antes do pré-requisito** | Pouso, horário e comprovação prévia da suite nesta volta: **[nao verificado]**. O selo exige escrita e consulta também JSON fora da cópia, portanto sua existência não prova execução válida sob este exame (`bin/tests/test_deploy_nao_mata_elo.sh:44`, `bin/tests/test_deploy_nao_mata_elo.sh:681`). |
+   | **(h) Fallback/env solto** | O teto de cron continua declarado e o env só o reduz; ids novos são explícitos (`bin/admissao_cron.sh:43`, `bin/admissao_cron.sh:58`, `app/core/esteira_vigia.py:1311`). `ADM_ESPERA_ADMISSAO_S` permanece livre por ambiente, mas é trecho preexistente, não introdução deste diff (`bin/admissao_cron.sh:50`). |
+   | **(i) Except que engole erro** | O except novo trata especificamente arquivo ausente; não engole erro geral (`app/core/esteira_vigia.py:1334`). O fallback amplo de duração já existia e continua relevante à cobertura incompleta (`app/config/crons.py:155`, `bin/tests/test_deploy_nao_mata_elo.sh:687`). |
+   | **(j) Restart com exec vivo** | **Bloqueia:** presente pelos execs transitivos sem admissão e pela morte do wrapper antes do filho, descritos nos itens 3–4 (`bin/deploy.sh:102`, `bin/em_casca.sh:26`, `bin/admissao_cron.sh:175`). |
+
+7. **Outros defeitos.**
+
+   - **Bloqueia — contador pode zerar sem cura.** O agendador apaga a recusa antes da repetição. Se a repetição falhar numa guarda anterior ao restart, não nasce outra recusa e o contador vê zero com publicação ainda pendente (`bin/deploy_a
+
+[truncado em 20000 de 22791 caracteres]
 
 ## 04/11 10:34 · sessao fefc8cd1ab3a · - · - · origem=Ronald (tmux)
 
@@ -736,20 +838,4 @@ Escritor/leitores produtivos: calendário publica `status` lido do D4, constrói
 
    **Há contraexemplo condicional na cadeia completa:** dia lavrado irregular, anterior à competência corrente, com pergunta viva respondida; se a consulta/julgamento dessa pergunta lançar exceção após carregar a janela, ele pode oferecer indevidamente. É o caminho preexistente do item 1, não efeito da remoção de `eh_trabalho`; ocorrência real: [nao verificado]. (`app/colaboradores/services/calendario.py:440`, `:447`, `:451`, `:711`.)
 
-## 02/11 22:07 -- HISTORICO (mais de 24 h) · sessao 17f5c627a035 · - · - · origem=Ronald (tmux)
-
-1. **Mocks: isolamento procedente, cobertura integral não demonstrada.** O padrão NÃO passa pela mesma costura que os testes já usavam; os casos SIM sobrepõem o patch, e a comparação SIM/NÃO continua mordendo a classificação do vigia (`app/chamados/tests/test_o261_vigia_fio.py:39-48`, `:472-489`). Na classe de alcance, o SIM também permanece mockado (`app/chamados/tests/test_o261e_f5_alcance.py:58-68`, `:213-218`). Integração real específica de `censo_alcance` não está demonstrada por esses testes; sobrevivência na suíte completa [nao verificado].
-
-2. **Novo caso real tem mordida, mas relógio solto — procedente.** Ele desliga o patch e exige `fio_morto=0` / `decisao_do_dia_pendente=1` (`app/chamados/tests/test_o261_vigia_fio.py:491-501`). A fixture efetivamente deixa status nulo: cria célula e lavra `furo` sem `fatos_do_status` (`:94-96`); `_status_alvo` devolve `(None,None)` quando faltam fatos e muda o veredito (`app/ponto/portas/celula.py:686-698`). Contudo, `_censo` injeta 17/04/2026 (`app/chamados/tests/test_o261_vigia_fio.py:115-123`), enquanto a porta curta chama calendário sem instante (`app/colaboradores/services/calendario.py:107-115`), que lê `timezone.now()` (`:139-141`). Isso contradiz “nenhum caminho deste selo lê relógio real” (`app/chamados/tests/test_o261_vigia_fio.py:116`). Sob relógio 17/04/2026, 16/04 permanece na competência corrente e perde último recurso (`app/colaboradores/services/calendario.py:711-712`); falha executada [nao verificado].
-
-3. **RED pela regra: procedente por inspeção.** R8 cobre trabalho sem lavra, folga com batida sem lavra, lavrado irregular sem vínculo ativo, folga sem lavra e lavrado ok; exige os pares literais status/oferta (`app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:33-72`). Repete os cinco pela porta curta real (`:74-81`), exige ausência da chave (`:83-86`) e mantém competência corrente sem oferta (`:88-96`). A fixture fixa explicitamente as colunas após as batidas (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:97-100`). Execução RED/verde e relatórios P3a/P3b/P3c [nao verificado].
-
-4. **Mutantes nomeados: mordida estática procedente.**
-   
-   - P3a, `and dia.get('eh_trabalho')`: morre inclusive no caso positivo sem chave (`app/chamados/tests/test_o261_vigia_fio.py:888-897`).
-   - P3b, `and dia.get('eh_trabalho', True)`: morre com False/None explícitos (`:905-910`).
-   - P3c, republicar a chave: morre em R8 (`app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:83-86`) e no teste histórico (`app/colaboradores/tests/test_calendario_eh_trabalho_le_a_celula.py:78-80`).
-
-5. **Variantes além das três: lacuna procedente; sobrevivência completa [nao verificado].** O teste positivo percorre todos os status, sempre sem `eh_trabalho`; o teste False/None usa somente status padrão `falta` (`app/chamados/tests/test_o261_vigia_fio.py:888-910`). Portanto, não cobre o produto status × valor do campo. Um gate seletivo para célula `trabalha=False` **lavrada irregular** não é exercitado pelos novos golden: B é sem lavra/`sem_certidao`, D é `folga`, C usa `trabalha=True` por padrão (`app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:38-50`; `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:87-92`). Os novos casos também não montam desligado ou antes da admissão com célula; `_colab` cria ativo e não informa admissão (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:76-85`).
-
-_1505 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1506 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
