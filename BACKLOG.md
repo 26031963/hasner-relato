@@ -5,7 +5,7 @@
 > **livre** = pode virar fatia agora, sem humano. **corte/aval/smoke/dinheiro-ate-export** = tem dono humano e espera.
 
 <!-- ESTRUTURAL-DEDICADO-28-18H (aval 28/10 08:2x): a partir de 28/10 18:00 a ORDEM da fila 1 e (1) O-OUTBOX no reconciliar_chamados (2.1); (2) CONTRATO-20-E2-REBAIXA (medida 29/10 07:05); (3) fechar_cobranca_com_lastro e reconciliar_perguntas_orfas pela REGRA-DE-PRAZO ou evento; (4) disparar_perguntas_competencia pela C11; (5) PENDENCIA-SEM-JUIZ-3 e SILENCIO-VENCIDO-VOLTA terminam; (6) JUSTIFICATIVA-PAGA-O-PERIODO (b). Raia ao lado so sem arquivo em comum: fila 2 de UI (RECUSA-DO-ADMIN-DIZ-O-QUE-FAZER primeiro). PAZ-DO-ADMIN encerra; volta RAIA-NAO-FICA-PARADA. -->
-<!-- ORDEM-VIVA-TOPO: E4-8-SAIDA-I -->
+<!-- ORDEM-VIVA-TOPO: NOITE-0411 -->
 <!-- ANDOU 04/11 13:37, de `OTIMIZA-DUPLA` (portao: reset 18:00 e cota Codex qui 15:05) para `E4-8-SAIDA-I` (= F3-RECORTE-E-CAUDA (B), classificar_dia, 3o da ordem do aval MODO-COMUM-POUSA; F3 FASE 2 espera decisao do Ronald sobre o reabrir 373). -->
 <!-- ANDOU 04/11 13:4x, de `MODO-COMUM-OUT-DO-LOTE` (no ar fc62165a; portao = prova do cartorio 05/11 06:27) para `OTIMIZA-DUPLA` (ordem do aval MODO-COMUM-POUSA: OTIMIZA 1-5 apos o reset; F3 FASE 2; classificar_dia). -->
 <!-- ANDOU 04/11 13:25, de `DEPLOY-[nome]-ELO-DA-CORRENTE` (NO AR af710af2, HUP gracioso, prova dcd18e10) para `MODO-COMUM-OUT-DO-LOTE` (aval MODO-COMUM-POUSA 11:5x; suite a25e2149 em curso). -->
