@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 07:51:18.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (0.7 MB). Acoes na janela: **12**.
+**Medido em 04/11/2026 07:56:22.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (0.7 MB). Acoes na janela: **13**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:55:37 | Bash | Re-run mutants capturing non-ok lines | `M=/tmp/claude-1001/-home-ronald-saas-hasner-app/3ca329b1-b89d-4678-ab22-5934a303573a/scratchpad/mut4; L=/home/ronald/saas-hasner/logs/dme/v4_mutantes.log; : > $L; for m in m1 m2 m3 m4; do echo "== $m: $(diff -rq /home/ronald/wt-dme-v3-234409/bin $M/$m/bin 2>/dev/null \| grep -v 'Only in\\|pycache' \| awk '{print $2}')" >> $L; (cd $M/$m && timeout 600 bash bin/tests/test_deploy_nao_mata_elo.sh > .. ...` |
 | 07:47:18 | Bash | Re-run selo on 4 mutants and real copy | `M=/tmp/claude-1001/-home-ronald-saas-hasner-app/3ca329b1-b89d-4678-ab22-5934a303573a/scratchpad/mut4; L=/home/ronald/saas-hasner/logs/dme/v4_mutantes.log; : > $L; for m in m1 m2 m3 m4; do echo "== $m $(diff -rq /home/ronald/wt-dme-v3-234409/bin $M/$m/bin 2>/dev/null \| grep -v 'Only in\\|pycache' \| awk '{print $2}')" >> $L; (cd $M/$m && timeout 600 bash bin/tests/test_deploy_nao_mata_elo.sh 2>&1  ...` |
 | 07:47:12 | Bash | Run full suite against DME copy | `cd /home/ronald/saas-hasner; date +%H:%M:%S; bash bin/suite.sh --dir /home/ronald/wt-dme-v3-234409 > logs/dme/suite_b09405ae.log 2>&1; echo "rc=$?" >> logs/dme/suite_b09405ae.log; date +%H:%M:%S` |
 | 07:47:07 | Bash | Find suite log destination | `cd /home/ronald/saas-hasner; grep -n 'LOG\\|tee\\|>>' bin/suite.sh \| head -20` |
