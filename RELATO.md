@@ -1,5 +1,5 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh | pid=1844079
+ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh | pid=2990561
 NOITE-0411 15:2x: item 3 (2888e9ca) POUSA ao fechar suite + opus final (aval POUSO-E4-8-MANTEM: pouso sem janela, L-105/L-107); item 4 E4-APP-MAPA em copia wt-e4app-151143, depois; OTIMIZA 1-3 apos o reset; Codex guardado para a FINAL do item 4.
 RESPONDIDA por aval Ronald POUSO-E4-8-MANTEM 04/11 15:2x ((a) MANTER 115196f4; revoga a proibicao de pouso apos 14:30 do GASTA) -- era: PAREI: ! POUSO-FORA-DA-JANELA (NOITE-0411 item 1) | espera Ronald: o merge 115196f4 + deploy 14:5x (rc=0) pousou DEPOIS de 14:30, e o GASTA-ATE-O-RESET (PROMPTS:1824) PROIBE pouso apos 14:30 ate o reset 18:00; a NOITE-0411 so vale do reset. Leitor, dinheiro 0, suite 13471 OK, opus APROVA, catraca 3->2. Escolha: (a) MANTER | (b) REVERTER `git revert -m 1 115196f4` + bin/deploy.sh --sem-migrate. Nada mais pousa ate 18:00.
 NOITE-0411 ANDA 15:0x (DECISAO TECNICA, PARADA 5 | contestavel): item 2 OTIMIZA 1-3 tem portao ESCRITO "1-5 apos ... reset" (BACKLOG OTIMIZA-DUPLA) -> o andavel antes das 18:00 e o item 3 `ponto/services/espelho.py::_status_dia`, CONSTRUIDO EM COPIA, sem pouso ate o reset (GASTA). OTIMIZA 1-3 abre as 18:00 antes do pouso do item 3? nao: o pouso do 3 vem depois do item 2 na ordem.
