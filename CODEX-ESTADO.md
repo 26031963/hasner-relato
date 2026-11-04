@@ -1,6 +1,6 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **03/11/2026 00:05** · publicado em **03/11/2026 21:29** (UTC-3)
+> Ultima resposta processada: **03/11/2026 00:05** · publicado em **03/11/2026 22:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
 
 ## 03/11 00:05 · sessao d1798f3d1359 · DEPLOY-[nome]-ELO · verificador · origem=Code
@@ -416,7 +416,7 @@ Escritor/leitores produtivos: calendário publica `status` lido do D4, constrói
 
 - Mapa novo corresponde ao invariante já publicado no módulo. (`app/docs/MAPA/calendario-dia-da-tela.md:12`; `app/colaboradores/services/calendario.py:12`, `:13`, `:14`.)
 
-## 02/11 22:09 · sessao 42eeb25ed201 · E4CAL-L1-P3 · verificador · origem=Code
+## 02/11 22:09 -- HISTORICO (mais de 24 h) · sessao 42eeb25ed201 · E4CAL-L1-P3 · verificador · origem=Code
 
 1. **Predicado literal: procedente.** São exatamente `pode_ultimo_recurso` + `data < hoje` + status em `('falta', 'irregular', 'aberto', 'sem_certidao')`, sem consultar `eh_trabalho`. A porta curta monta o calendário e lê seu resultado, sem repetir a regra. (`app/colaboradores/services/calendario.py:94`, `app/colaboradores/services/calendario.py:103`, `app/colaboradores/services/calendario.py:112`, `app/colaboradores/services/calendario.py:115`.)
 
@@ -497,7 +497,7 @@ Escritor/leitores produtivos: calendário publica `status` lido do D4, constrói
 
    **Há contraexemplo condicional na cadeia completa:** dia lavrado irregular, anterior à competência corrente, com pergunta viva respondida; se a consulta/julgamento dessa pergunta lançar exceção após carregar a janela, ele pode oferecer indevidamente. É o caminho preexistente do item 1, não efeito da remoção de `eh_trabalho`; ocorrência real: [nao verificado]. (`app/colaboradores/services/calendario.py:440`, `:447`, `:451`, `:711`.)
 
-## 02/11 22:07 · sessao 17f5c627a035 · - · - · origem=Ronald (tmux)
+## 02/11 22:07 -- HISTORICO (mais de 24 h) · sessao 17f5c627a035 · - · - · origem=Ronald (tmux)
 
 1. **Mocks: isolamento procedente, cobertura integral não demonstrada.** O padrão NÃO passa pela mesma costura que os testes já usavam; os casos SIM sobrepõem o patch, e a comparação SIM/NÃO continua mordendo a classificação do vigia (`app/chamados/tests/test_o261_vigia_fio.py:39-48`, `:472-489`). Na classe de alcance, o SIM também permanece mockado (`app/chamados/tests/test_o261e_f5_alcance.py:58-68`, `:213-218`). Integração real específica de `censo_alcance` não está demonstrada por esses testes; sobrevivência na suíte completa [nao verificado].
 
@@ -513,7 +513,7 @@ Escritor/leitores produtivos: calendário publica `status` lido do D4, constrói
 
 5. **Variantes além das três: lacuna procedente; sobrevivência completa [nao verificado].** O teste positivo percorre todos os status, sempre sem `eh_trabalho`; o teste False/None usa somente status padrão `falta` (`app/chamados/tests/test_o261_vigia_fio.py:888-910`). Portanto, não cobre o produto status × valor do campo. Um gate seletivo para célula `trabalha=False` **lavrada irregular** não é exercitado pelos novos golden: B é sem lavra/`sem_certidao`, D é `folga`, C usa `trabalha=True` por padrão (`app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:38-50`; `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:87-92`). Os novos casos também não montam desligado ou antes da admissão com célula; `_colab` cria ativo e não informa admissão (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:76-85`).
 
-## 02/11 22:06 · sessao 3fc40b9d8f18 · - · - · origem=Ronald (tmux)
+## 02/11 22:06 -- HISTORICO (mais de 24 h) · sessao 3fc40b9d8f18 · - · - · origem=Ronald (tmux)
 
 1. **Segundo juiz: não procedente no passo 3.** A oferta já tem autoridade registrada como `_TT11` em `app/core/juizes.py:704` e `app/core/juizes.py:718`, com corte anterior documentado em `app/docs/CORTES.md:271`. A porta curta monta o calendário e lê o campo; não repete o predicado (`app/colaboradores/services/calendario.py:112`, `app/colaboradores/services/calendario.py:115`).
 
@@ -533,7 +533,7 @@ Escritor/leitores produtivos: calendário publica `status` lido do D4, constrói
 
 9. **Documentação local antiga não deve contrariar o aval anexado.** O ADR ainda afirma que competência entregue não se toca (`app/docs/ADR/0002-celula-e-o-dia.md:71`); o comando já documenta a emenda do COMPLEMENTO que permite completar seu status (`app/ponto/management/commands/lavrar_status_competencia.py:10`). A execução efetiva dessa emenda permanece [nao verificado].
 
-## 02/11 22:06 · sessao af1a8cc5bdcf · - · - · origem=Ronald (tmux)
+## 02/11 22:06 -- HISTORICO (mais de 24 h) · sessao af1a8cc5bdcf · - · - · origem=Ronald (tmux)
 
 1. **Escritores do contrato do predicado:** `contexto_calendario` publica `data` em `app/colaboradores/services/calendario.py:695`, `status` em `:699`, `pode_ultimo_recurso` em `:711` e, depois, o resultado do único predicado em `:742`. A data vem da janela escolhida pelos modos/GET (`:154`, `:175`, `:187`), começa em `data_ini` (`:581`) e avança diariamente (`:727`). O status vem exclusivamente do retorno do D4 consultado em `:579`, lido em `:636` e `:637`.
 
