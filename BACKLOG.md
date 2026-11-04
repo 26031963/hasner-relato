@@ -1723,6 +1723,7 @@
 | HOLERITE-SHARE-WEBVIEW | **fila 2** (aval GASTA-ATE-O-RESET 04/11): 2.997 de 3.000 beacons com canShare(files)=false, 379 usuarios -- o compartilhar do holerite nao funciona no webview; cura pelo SERVIDOR, sem build do app. | fila 2 | registrado, nada construido | 04/11 |
 | AUDIT-[nome]-0311 | auditoria Fernando 03/11 itens 1-10 (insumo da F3-DRY: 345 dias, 246 comp 10 e 99 comp 11). Lacunas: item 7 sem tabela de traducao; item 10 sem ultimo clique. | registrar | registrado, nada construido | 04/11 |
 | TOAST-E-NOME-CALENDARIO | **fila 1** (aval 04/11 08:0x, BO admin): A) veto de nome repetido de FolgaCalendario mora em escala/folgas.py (criar e salvar), wizard 400 sem 500; B) toast mostra corpo 4xx curto sem <; B so sobe com smoke nas 2 cascas. | fila 1 | registrado; constroi apos DEPLOY-ELO | 04/11 |
+| F3-RECORTE-E-CAUDA | **fila 1** (aval 04/11 08:3x): (A) medida F3-RECORTE na sombra: universo pergunta_viva sob chamado terminal pelo metodo estoque_v1/maria_A; por comp 10, 11 e entregue: perguntas, chamados, dias, colabs, acusa x nao acusa, porta existente x sem porta, reabrir real em savepoint+raise por motivo, cobranca na 11, 345 x medido; sem cura/apply. (B) apos item 5: E4 leitor relatorios/furos.py::classificar_dia le o juiz do dia, L-111, catraca 3->2. | fila 1 | (A) despachada sonnet 08:3x; (B) apos MODO-COMUM | 04/11 |
 <!-- OBRAS:FIM -->
 
 ## Contagem por portao
