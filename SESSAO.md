@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 15:59:23.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (23.1 MB). Acoes na janela: **782**.
+**Medido em 04/11/2026 16:04:52.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (23.1 MB). Acoes na janela: **783**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:03:21 | Bash | Check full suite progress | `cd /home/ronald/saas-hasner; tail -1 logs/e4app/suite.log \| cut -c1-150; ps -p 576184 >/dev/null && echo vivo` |
 | 15:59:04 | Bash | Add ESPERANDO for the suite and test the hook | `cd /home/ronald/saas-hasner/app; python3 - <<'E' p='docs/RELATO.md'; s=open(p).read() a='# RELATO — esteira saas-hasner\n' assert s.count(a)==1 s=s.replace(a,a+'ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=576184\n',1) open(p,'w').write(s) E cd ..; python3 -c "import sys;sys.path.insert(0,'bin');import hook_stop_fila1 as h;print(h._esperando_com_prova()[:2])"` |
 | 15:58:59 | Bash | List children of the wrapper and suite log tail | `ps -o pid,args --ppid 576174; tail -3 /home/ronald/saas-hasner/logs/e4app/suite.log` |
 | 15:58:52 | Bash | Find the real suite.sh pid | `pgrep -af "^bash bin/suite.sh";` |
