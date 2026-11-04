@@ -6,10 +6,31 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 20:20:13.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (1.5 MB). Acoes na janela: **55**.
+**Medido em 04/11/2026 20:25:13.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (2.4 MB). Acoes na janela: **76**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:25:07 | Bash |  | `sleep 3; pgrep -f "bin/push.sh origin main" \| head -1; pgrep -af "bin/push.sh origin main" \| head -2 \| cut -c1-120` |
+| 20:25:01 | Bash |  | `cd /home/ronald/saas-hasner; mkdir -p logs/push; bash bin/push.sh origin main > logs/push/n1_26ee6979.log 2>&1; echo "rc=$?" >> logs/push/n1_26ee6979.log` |
+| 20:24:54 | Bash |  | `cd /home/ronald/saas-hasner; ls bin/push.sh && sed -n 1,30p bin/push.sh \| grep -v '^$' \| head -30; git fetch -q origin && git log --oneline HEAD..origin/main \| head` |
+| 20:24:37 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') L.insert(1,'N1 NO AR 20:2x: commit 26ee6979 (merge --no-ff de 4892a6ab, cmp 15/15 IGUAL), bin/deploy.sh --sem-migrate rc 0, tres cascas pelo HUP, rotas 200/302/200, importerror_500=0 (logs/n1im/deploy.log). O push sai junto com o marco do item 2 (pre-push disputa a trava com a suite do construtor). P ...` |
+| 20:24:31 | Bash |  | `ps -o pid,etime,args -p 104133 \| cut -c1-200; pgrep -af "suite.sh" \| cut -c1-200 \| head` |
+| 20:24:06 | Bash |  | `cd /home/ronald/saas-hasner; timeout 900 bash bin/deploy.sh --sem-migrate > logs/n1im/deploy.log 2>&1; echo rc=$?; tail -15 logs/n1im/deploy.log` |
+| 20:23:59 | Bash |  | `cd /home/ronald/saas-hasner; git add app/docs/BACKLOG.md app/docs/PROMPTS.md app/docs/RELATO.md && git commit -q -F - <<'EOF' N1-PERGUNTAS-DO-APP pousa: IDENTITY MAP do colaborador nos lacos que perguntam ao C6 Merge da raia wt-n1im-183722 (4892a6ab, base 0e4e4b71). cmp arquivo a arquivo contra a copia: 15/15 IGUAL. Suite da copia Ran 13513 OK rc 0 (logs/n1im/suite_4892a6ab.log). Sombra, mesmo dum ...` |
+| 20:23:47 | Bash |  | `cd /home/ronald/saas-hasner; git merge --no-ff --no-commit raia/wt-n1im-183722 2>&1 \| tail -3; ls .git/MERGE_HEAD && git diff --cached --name-only \| while read f; do cmp -s "$f" "/home/ronald/wt-n1im-183722/$f" && echo "IGUAL $f" \|\| echo "DIFERE $f"; done` |
+| 20:23:39 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/BACKLOG.md' L=open(p).read().split('\n') i=747 c=L[i].split(' \| ') c[2]='NO AR 04/11 20:2x: copia wt-n1im-183722 4892a6ab (base 0e4e4b71), 15 arquivos, ~25 lacos pelo helper juizes.py::um_colaborador_por_identidade; suite Ran 13513 OK rc 0; sombra censo_alcance 214.516->101.944 queries, sha igual; opus final aprovado' L[i]=' \| '.join(c)  ...` |
+| 20:23:30 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/BACKLOG.md' L=open(p).read().split('\n') i=747 assert L[i].startswith('\| N1-PERGUNTAS-DO-APP \|') c=L[i].split(' \| ') print(len(c)); print(c[2][:300]); print(c[3][:300] if len(c)>3 else '') EOF` |
+| 20:23:21 | Bash |  | `cd /home/ronald/saas-hasner/app; grep -n "N1-PERGUNTAS-DO-APP" docs/BACKLOG.md \| cut -c1-400 \| head -4` |
+| 20:23:15 | Bash |  | `cd /home/ronald/saas-hasner; git status --porcelain \| grep -v '^??'; bash bin/trava_teste.sh --quem; ls logs/fim 2>/dev/null \| tail -3; date '+%H:%M'` |
+| 20:23:07 | Bash |  | `cd /home/ronald/wt-n1im-183722/app; grep -n "sem_resposta\\|sem_veredito\\|perguntas\b" colaboradores/services/ficha.py \| sed -n 1,20p; grep -n "ordering" chamados/models.py \| head` |
+| 20:23:01 | Bash |  | `cd /home/ronald/wt-n1im-183722; git diff 0e4e4b71..4892a6ab -- app/chamados/reconciliador.py app/chamados/services/vigia_fio.py app/chamados/services/competencia_trancada.py app/chamados/models.py app/colaboradores/services/calendario.py app/chamados/services/fio.py app/chamados/services/disputa_emissao.py app/chamados/relatorios_disputa.py app/chamados/management/commands/reabrir_orfas_enterradas ...` |
+| 20:22:52 | Bash |  | `cd /home/ronald/wt-n1im-183722; git diff --stat 0e4e4b71..4892a6ab; git diff 0e4e4b71..4892a6ab -- app/chamados/juizes.py app/chamados/services/pergunta_no_app.py app/colaboradores/services/ficha.py` |
+| 20:22:44 | Bash |  | `tail -c 1500 /tmp/claude-1001/-home-ronald-saas-hasner-app/354179ca-a13f-4642-a6f5-791cf69a0acd/tasks/aaead5d5eba27cfe4.output; echo; git -C /home/ronald/wt-he-200326 status --short \| head; git -C /home/ronald/wt-he-200326 log --oneline -2` |
+| 20:22:38 | Bash |  | `cd /home/ronald/saas-hasner/app; grep -rn "COTA-40PCT" docs/CORTES.md docs/BACKLOG.md docs/HANDOFF-SESSAO.md 2>/dev/null \| cut -c1-400 \| head -5` |
+| 20:22:26 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') assert L[1].startswith('ESPERANDO: sombra.sh') assert L[5].startswith('N1 SOMBRA 20:1x') L[5]='N1 SOMBRA 20:1x (CORRIGIDA por n1q2): a linha anterior trocou os rotulos. Re-medida sequencial invertida (logs/n1q2-*.out, mesmo dump, sha IGUAL 56f41101 len 42309): censo_alcance COPIA 113 s / 101.944 quer ...` |
+| 20:22:16 | Bash |  | `cd /home/ronald/saas-hasner/app; grep -n "N1 SOMBRA\\|ESPERANDO\\|N1 SUITE" docs/RELATO.md \| head; sed -n 1,4p docs/RELATO.md \| cut -c1-300` |
+| 20:21:21 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 470,500p bin/sombra.sh` |
+| 20:21:10 | Bash |  | `cut -c1-130 /tmp/claude-1001/-home-ronald-saas-hasner-app/354179ca-a13f-4642-a6f5-791cf69a0acd/tasks/b5asge7r8.output` |
 | 20:18:27 | Bash |  | `python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') L.insert(1,'ESPERANDO: sombra.sh \| pid=3959999') open(p,'w').write('\n'.join(L)) EOF grep -h 'N1Q' /home/ronald/saas-hasner/logs/n1q2-copia.out \| cut -c1-120` |
 | 20:18:22 | Bash |  | `ps -eo pid,args \| grep 'sombra.sh --rodar' \| grep -v grep \| cut -c1-120` |
 | 20:18:11 | Bash |  | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') assert L[1].startswith('ESPERANDO:'); del L[1] L.insert(2,"N1 SUITE 4892a6ab: OK (skipped=42, expected failures=39), Ran 13513, rc=0 (logs/n1im/suite_4892a6ab.log), copia limpa. Medida por tabela (n1q-*.out, paralelo): head colaboradores_empresa 39.662 / colaborador 38.640 / periodofechado 38.516  ...` |
