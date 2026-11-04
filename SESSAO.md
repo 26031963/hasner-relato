@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 13:01:02.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (11.4 MB). Acoes na janela: **351**.
+**Medido em 04/11/2026 13:06:06.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (11.5 MB). Acoes na janela: **358**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:01:58 | Bash | Run focused selos plus e3 status test | `cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/wt-mc-082755 --only "ponto.tests.test_out_do_lote ponto.tests.test_e3_status_lavrado core.tests.test_selo_diagrama_do_codigo" > logs/mc/foco_v3.log 2>&1; echo rc=$?; /bin/grep -E '^(OK\|FAILED)($\| \()' logs/mc/foco_v3.log \| tail -1; /bin/grep '^Ran' logs/mc/foco_v3.log \| tail -1; /bin/grep -E '^(FAIL\|ERROR):' logs/mc/foco_v3.log \| ...` |
+| 13:01:52 | Bash | Find tests touching lavrar fim line | `cd /home/ronald/wt-mc-082755 && git grep -ln "fila_cartorio\\|lavrar_status_competencia" -- 'app/*tests*' \| head` |
+| 13:01:47 | Bash | Fix finally prose, lavrar fim line, add MORDE tests | `cd /home/ronald/wt-mc-082755/app && python3 - <<'EOF' import py_compile def edit(p, pares): s=open(p).read() for a,b in pares: assert s.count(a)==1,(p,a); s=s.replace(a,b) open(p,'w').write(s); py_compile.compile(p,doraise=True) edit('ponto/services/cartorio.py',[(""" # julga a celula do anterior: toda fila de `CHAVES_DO_ATO` sai aqui e o que sobrou e CONTADO (esperado 0).""", """ # julga a celula ...` |
+| 13:01:33 | Bash | Read finally prose | `cd /home/ronald/wt-mc-082755/app && sed -n 1050,1072p ponto/services/cartorio.py` |
+| 13:01:24 | Bash | Allow dict(_kw, out=X) copy; reprobe | `cd /home/ronald/wt-mc-082755/app && python3 - <<'EOF' p='ponto/tests/test_out_do_lote.py'; s=open(p).read() a=""" k2, c2 = pai.get(id(n)), pai.get(id(pai.get(id(n)))) if not (isinstance(k2, ast.keyword) and k2.arg is None and isinstance(c2, ast.Call) and isinstance(c2.func, ast.Name) and c2.func.id in tem_out): return False """ b=""" k2 = pai.get(id(n)) if (isinstance(k2, ast.Call) and isinstance( ...` |
+| 13:01:11 | Bash | Check corpo signature and _kw uses | `cd /home/ronald/wt-mc-082755/app && grep -n "^def _julgar_colab_corpo" -A3 ponto/services/cartorio.py; grep -n "_kw\b" ponto/services/cartorio.py \| head` |
+| 13:01:06 | Bash | Read the _kw site | `cd /home/ronald/wt-mc-082755/app && sed -n 930,950p ponto/services/cartorio.py; sed -n 968,975p ponto/services/cartorio.py` |
 | 13:00:58 | Bash | Harden censo for volta-2 findings and probe | `cd /home/ronald/wt-mc-082755/app && python3 - <<'EOF' p='ponto/tests/test_out_do_lote.py'; s=open(p).read() def rep(a,b): global s; assert s.count(a)==1,a; s=s.replace(a,b) rep(""" for n in ast.walk(arv): # apelido por dict, em qualquer funcao (o `_kw['out']` nao tem parametro `out`) if isinstance(n, ast.Subscript) and _chave(n.slice) == 'out': apelidos.append(n.lineno) """,""" for n in ast.walk(a ...` |
 | 13:00:31 | Bash | Read lavrar_status fim, processar fim, AugAssigns, 'out' constants | `cd /home/ronald/wt-mc-082755/app && sed -n 40,70p ponto/management/commands/lavrar_status_competencia.py; sed -n 60,75p ponto/management/commands/processar_cartorio.py; grep -n "+= " ponto/services/cartorio.py \| grep "out\[" ; grep -n "'out'" ponto/services/cartorio.py` |
 | 12:55:10 | Bash | Confirm verificador jsonl is advancing | `ls -la --time-style=+%H:%M:%S /home/ronald/.claude/projects/-home-ronald-saas-hasner-app/29e4229d-9fb7-4166-9986-a16d88f0e0e5/subagents/agent-ac9bdecc4240c12c7.jsonl; date +%H:%M:%S` |
