@@ -1,5 +1,5 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: push-lote-d317bb40 | arquivo=/home/ronald/saas-hasner/logs/mc/push_lote.log
+ESPERANDO: opus-construtor-E4-8 | arquivo=/home/ronald/.claude/projects/-home-ronald-saas-hasner-app/29e4229d-9fb7-4166-9986-a16d88f0e0e5/subagents/agent-a5c87b255cff0a3de.jsonl
 ERRO-BOBO MODO-COMUM-OUT-DO-LOTE: volta 2 do opus final reprovou de novo so por FORMA (selo: apelido por .get('out'), out=out para funcao de fora, += de fila; docstring do selo; linha fim do lavrar_status_competencia sem os 2 vigias; padrao antigo no commit 40268612), 0 de comportamento; curado na copia pelo aval MODO-COMUM-POUSA item 5 (escrita 13:1x, depois do disparo da volta 2)
 DESENHO DEPLOY-[nome]-ELO-DA-CORRENTE: lei=escritor unico pergunta=recarregar codigo tem uma forma so, o HUP gracioso que ja roda todo dia, e o docker restart fica so para o que exige boot bin/deploy.sh:237 bin/deploy.sh:279
 MODO-COMUM-POUSA 04/11 11:5x (aval Ronald): wt-mc-082755 rebase 0a0bb6e6 -> c0a43e57 sobre 08bdec40, sem conflito, os mesmos 4 arquivos (cartorio.py, gerar_diagrama.py, MAPA.md, test_out_do_lote.py), nenhum .py alem do previsto; suite inteira em curso na pista ANTES da do reload (logs/mc/suite_c0a43e57.log); depois opus final e pouso --sem-migrate
@@ -6058,3 +6058,8 @@ LEI-AKITA: origem=cartorio, testemunha=delta do ato, RED=test_out_do_lote, quem-
 - PROVA: suite inteira a25e2149 OK (skipped=42, expected failures=24) Ran 13484 rc=0 (logs/mc/suite_a25e2149.log); cmp 6/6 contra wt-mc-082755 @a25e2149
 - INCOMPLETO: deploy + 3 rotas (linha abaixo); prova depois do cartorio seguinte (0 decisao do ato lendo chave do lote)
 - NO AR 13:3x (fc62165a): `bin/deploy.sh --sem-migrate` deploy_rc=0 pelo HUP gracioso com 18 crons em curso (sem flag crons_quebrados nova); rotas core /health/ 200, ui /colaboradores/ 302, mensageria /health/ 200; selo BUG 128 verde (logs/mc/pouso_deploy.log). Prova do cartorio: processar_cartorio 05/11 06:27 (crons.py:597), linha `fim` com descartados_do_ato
+
+## E4-8-SAIDA-I 04/11 13:37 (= F3-RECORTE-E-CAUDA (B), classificar_dia)
+- ORDEM: OTIMIZA-DUPLA no portao (reset 18:00 + cota Codex qui 15:05); F3 FASE 2 espera decisao do Ronald (reabrir aceita 373); proxima andavel = E4-8 (PARADA 7, decisao tecnica)
+- PRECONDICAO E4-D5-PROD: NO AR 31/10 15:28 (logs/e4_d5/apply.log); linha do BACKLOG estava velha, atualizada
+- DESPACHO E4-8: construir -> opus (copia wt-e48-133720 @d317bb40, logs/e4_8/) | pre-verificador Codex -> sem cota ate qui 15:05: vai como item do opus final, motivo na linha
