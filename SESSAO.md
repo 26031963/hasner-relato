@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 19:47:18.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (0.9 MB). Acoes na janela: **15**.
+**Medido em 04/11/2026 19:52:55.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (1.0 MB). Acoes na janela: **22**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:52:24 | Bash |  | `cd /home/ronald/saas-hasner/app/docs && sed -i '2s#^ESPERANDO: trava_teste.sh \| pid=2133283 \| arquivo=.*#ESPERANDO: trava_teste.sh \| pid=2133283#' RELATO.md && sed -n 2p RELATO.md; ps -p 2133283 >/dev/null && echo vivo` |
+| 19:52:19 | Bash |  | `cd /home/ronald/saas-hasner; tail -4 logs/hook_stop_fila1.log \| cut -c1-300; sed -n '/def _prova_pid/,/^def /p' bin/hook_stop_fila1.py \| head -40` |
+| 19:52:09 | Bash |  | `cd /home/ronald/saas-hasner/app/docs && sed -i '2s/^ESPERANDO: suite vizinhos3 do construtor N1-IDENTITY-MAP \|/ESPERANDO: trava_teste.sh \|/' RELATO.md && sed -n 2p RELATO.md` |
+| 19:52:05 | Bash |  | `cd /home/ronald/saas-hasner; ps -p 2133283 -o pid,etimes,args \| cut -c1-80; tail -3 logs/n1im/vizinhos3.log; ls -t logs \| grep -i 'hook\\|pisos\\|stop' \| head -3; tail -3 logs/hook_stop*.log 2>/dev/null \| cut -c1-300` |
+| 19:51:55 | Bash |  | `cd /home/ronald/saas-hasner/app/docs && sed -n 646,700p /home/ronald/saas-hasner/bin/hook_stop_fila1.py \| grep -n 'pid\\|arquivo\\|agente' \| head; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n',1) assert L[0].startswith('# RELATO') open(p,'w').write(L[0]+'\nESPERANDO: suite vizinhos3 do construtor N1-IDENTITY-MAP \| pid=2133283 \| arquivo=/home/ronald/saas-hasner/logs/n1im/vizinhos ...` |
+| 19:51:50 | Bash |  | `cd /home/ronald/saas-hasner; grep -n 'ESPERANDO' bin/hook_stop_fila1.py \| head -20` |
+| 19:51:41 | Bash |  | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem 2>&1 \| tail -3; ps -eo pid,etimes,args \| grep -E 'wt-n1im\|suite.sh\|manage.py test' \| grep -v grep \| cut -c1-200 \| head; ls -t logs/n1im/ 2>/dev/null \| head` |
 | 18:38:18 | Bash |  | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'EOF' p='RELATO.md'; s=open(p).read() a="\| teto 1 agente (COTA-40PCT)\n" assert s.count(a)==1 s=s.replace(a,a+"NOITE-0411 item 2 lido (sonda logs/sonda_he_fases.out 17:18, so leitura do log): lavrar_he_pendente emp2 11/2026 673 s / 333 colabs; por colab ~1,2 espelho_do_colab e ~2,5 motor calcular_mes (830 em motor_calculo_v2.py:2253 + 283 em :32 ...` |
 | 18:38:11 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 146,190p logs/sonda_he_fases.out \| cut -c1-170` |
 | 18:38:07 | Bash |  | `cd /home/ronald/saas-hasner; grep -n '^EMP\\|^TOTAL\\|^FIM' logs/sonda_he_fases.out \| head -20` |

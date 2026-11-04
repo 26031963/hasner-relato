@@ -1,4 +1,5 @@
 # RELATO — esteira saas-hasner
+ESPERANDO: trava_teste.sh | pid=2133283
 NOITE-0411 18:3x: RESTART FEITO pelo Ronald (2.1.317); COBPARC volta 3 (construtor aa3f3dcf) NAO retomada: SUPERADA pela v8, que esta no AR (72eb11be e o pouso e1c08457 sao ancestrais do HEAD 0e4e4b71; deploy 5a988e04 17:46). Segue item 1 N1-PERGUNTAS-DO-APP.
 DESPACHO N1-IDENTITY-MAP 18:3x: cura 3 sitios + ficha.py:164-166 + termo GLOSSARIO -> opus construtor na copia wt-n1im-183722 (main 0e4e4b71 + os 2 arquivos de bf659ad7; a raia velha fica estacionada) | suite inteira, sombra sha e opus final -> sessao | Codex fora (sem cota) | teto 1 agente (COTA-40PCT)
 NOITE-0411 item 2 lido (sonda logs/sonda_he_fases.out 17:18, so leitura do log): lavrar_he_pendente emp2 11/2026 673 s / 333 colabs; por colab ~1,2 espelho_do_colab e ~2,5 motor calcular_mes (830 em motor_calculo_v2.py:2253 + 283 em :3283), fechamento_lido -> recalcular_fechamento_mes 399x (262 s), 506.828 queries; emp2 10/2026 530 s. Construcao depois do pouso da N1 (teto 1).
