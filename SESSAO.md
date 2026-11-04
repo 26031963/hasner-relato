@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 13:54:54.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (14.3 MB). Acoes na janela: **452**.
+**Medido em 04/11/2026 14:00:21.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (14.3 MB). Acoes na janela: **454**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:57:18 | Bash | Read hook trail and progress | `cd /home/ronald/saas-hasner && tail -4 logs/hook_stop_fila1.log \| cut -c1-200; tail -c 300 logs/toast/suite_53c663f5.log; echo; tail -2 logs/mc/push_lote.log` |
+| 13:57:07 | Bash | Point ESPERANDO at the live toast suite log | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') assert L[1].startswith('ESPERANDO:') L[1]='ESPERANDO: suite-toast-53c663f5 \| arquivo=/home/ronald/saas-hasner/logs/toast/suite_53c663f5.log' open(p,'w').write('\n'.join(L)) EOF sed -n 2p RELATO.md` |
 | 13:53:23 | Bash | Check push, toast suite, and test lock | `cd /home/ronald/saas-hasner && date +%T; tail -3 logs/mc/push_lote.log; tail -3 logs/toast/suite_53c663f5.log; bin/trava_teste.sh --quem 2>&1 \| tail -2` |
 | 13:47:44 | Bash | Update toast backlog state | `python3 - <<'EOF' p='BACKLOG.md'; t=open(p).read() old='\| fila 1 \| registrado; constroi apos DEPLOY-ELO \| 04/11 \|' assert t.count(old)==1 new='\| fila 1 \| A no ar (ffd97ed8); B EM POUSO 04/11 13:4x (aval TOAST-B-SOBE): rebase 53c663f5, suite inteira rodando (logs/toast/suite_53c663f5.log), opus do delta, deploy --sem-migrate; push espera o smoke do [nome] (itens 1-4 no topo do RELATO) \| 04 ...` |
 | 13:47:37 | Bash | Read toast backlog state column | `sed -n 1729p BACKLOG.md \| cut -d'\|' -f4- \| cut -c1-500` |
