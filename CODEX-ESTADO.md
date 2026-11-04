@@ -1,6 +1,6 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **03/11/2026 00:05** · publicado em **03/11/2026 23:37** (UTC-3)
+> Ultima resposta processada: **03/11/2026 00:05** · publicado em **03/11/2026 23:43** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
 
 ## 03/11 00:05 · sessao d1798f3d1359 · DEPLOY-[nome]-ELO · verificador · origem=Code
@@ -165,7 +165,7 @@ Não há timeout externo sobre o RAW completo no envelope, e a marca permanece a
 
 - **Caso15 testa ausência de `rodou` apenas indiretamente fora do selo shell:** o novo teste Django fornece uma linha com `true` e outra sem campo, ambas com75, exigindo duas corridas e dois erros. Não verifica corrida real70 no medidor. (`app/chamados/tests/test_contract_crons.py:226,233,235,236,241,242`; `bin/tests/test_deploy_nao_mata_elo.sh:396,397,400`)
 
-## 02/11 23:42 · sessao cf0aa3782303 · DEPLOY-[nome]-ELO · verificador · origem=Code
+## 02/11 23:42 -- HISTORICO (mais de 24 h) · sessao cf0aa3782303 · DEPLOY-[nome]-ELO · verificador · origem=Code
 
 **A volta 2 ainda não fecha P1..P7 como classes:** permanecem falhas de cobertura da fonte, teto e interpretação do placar; há também um leitor não migrado. (`bin/admissao_cron.sh:58,87`; `bin/reinicio_sob_admissao.sh:25,51`; `bin/rc137_no_restart.sh:63`; `bin/contrato_deploy.sh:23`)
 
@@ -259,7 +259,7 @@ Outro sobrevivente previsto é permitir prosseguir quando falha a escrita inicia
 - **D3 continua válido quanto à proteção do elo:** alarme falho não cria flag. Porém a repetição depende de novo disparo com rc ruim; não há retry incondicional do alarme perdido. (`bin/cron_run.sh:44,45`)
 - **D4 precisa ser dividido.** Marca retida pelo vigia é conservadora, pois o trap limpa somente na saída. **Envelope morto com filho vivo não é conservador:** `/proc/<pid>` ausente torna a marca órfã, a varredura a remove e não procura o filho reparentado. Isso deixa um contraexemplo à proteção; ocorrência produtiva: **[nao verificado]**. (`bin/cron_run.sh:19,45,50`; `bin/admissao_cron.sh:108,124,131,134`)
 
-## 02/11 23:38 · sessao 74d8250b82c6 · - · - · origem=Ronald (tmux)
+## 02/11 23:38 -- HISTORICO (mais de 24 h) · sessao 74d8250b82c6 · - · - · origem=Ronald (tmux)
 
 P5/P6 têm cura dos casos citados, mas restam contraexemplos de classe.
 
@@ -295,7 +295,7 @@ A espera da admissão ocorre antes de `T0`: a afirmação de que os900s entram n
 
 O teste antigo `test_medicao_de_cron_nao_expira.sh` não quebra pela nova constante: importa o medidor real e substitui apenas caminhos do placar/saída; `CRONS_PY` segue apontando à configuração real. A fixture sem `exit` passa como `None`. (`bin/tests/test_medicao_de_cron_nao_expira.sh:16`, `bin/tests/test_medicao_de_cron_nao_expira.sh:44`, `bin/tests/test_medicao_de_cron_nao_expira.sh:47`, `bin/crons_duracao.py:31`, `bin/crons_duracao.py:85`)
 
-## 02/11 23:38 · sessao 98ad748d0fa4 · - · - · origem=Ronald (tmux)
+## 02/11 23:38 -- HISTORICO (mais de 24 h) · sessao 98ad748d0fa4 · - · - · origem=Ronald (tmux)
 
 Achados por inspeção estática; execução da suíte e dos mutantes [nao verificado], pois o selo cria e remove arquivos em `bin/tests/test_deploy_nao_mata_elo.sh:40`.
 
