@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 08:06:17.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (1.0 MB). Acoes na janela: **32**.
+**Medido em 04/11/2026 08:11:46.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (1.3 MB). Acoes na janela: **41**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:11:25 | Bash | Update caso 8 and add caso 18 | `cd /home/ronald/wt-dme-v3-234409; python3 - <<'EOF' p='bin/tests/test_deploy_nao_mata_elo.sh'; s=open(p).read() reps=[ ('''if [ "$_rc" = 0 ] && [ "$(wc -l < "$F/chamadas")" = 2 ] && [ "$(sed -n 2p "$F/chamadas" \| cut -d' ' -f2-)" = "2 --sem-sombra raia x" ]; then _ok "8: recusa -> nova tentativa com o mesmo argv, rc 0"''', '''# volta FINAL: o deploy que entra na nova tentativa NAO conclui a fatia ...` |
+| 08:11:07 | Bash | Read selo caso 8 | `cd /home/ronald/wt-dme-v3-234409; sed -n 171,225p bin/tests/test_deploy_nao_mata_elo.sh` |
+| 08:11:02 | Bash | Apply two cures in the DME copy | `cd /home/ronald/wt-dme-v3-234409; python3 - <<'EOF' p='bin/encadeado.sh'; s=open(p).read() old='''# volta 4 (Codex v3 item 3): o teto da espera e TEMPO DECORRIDO pelo relogio MONOTONICO (/proc/uptime, a mesma fonte de # adm_agora) -- o civil andando para tras esticava a espera. _mono() { local u; read -r u _ < /proc/uptime; echo "${u%%.*}"; } t0=$(_mono) ''' new='''# volta 4 (Codex v3 item 3): o t ...` |
+| 08:10:45 | Bash | Read encadeado single-mode setup | `cd /home/ronald/wt-dme-v3-234409; sed -n 60,86p bin/encadeado.sh` |
+| 08:10:39 | Bash | Read encadeado header and selo fixture setup | `cd /home/ronald/wt-dme-v3-234409; sed -n 1,60p bin/encadeado.sh; grep -n 'encadeado' bin/tests/test_deploy_nao_mata_elo.sh \| head; sed -n 30,70p bin/tests/test_deploy_nao_mata_elo.sh` |
+| 08:10:31 | Bash | Inspect selo structure for new case | `cd /home/ronald/wt-dme-v3-234409; grep -n '^# *caso\\|^echo.*caso\\|^# --- \\|^## ' bin/tests/test_deploy_nao_mata_elo.sh \| tail -8; tail -30 bin/tests/test_deploy_nao_mata_elo.sh; grep -n '^ok()\\|^falha()\\|^ok ()\\|^nok' bin/tests/test_deploy_nao_mata_elo.sh` |
+| 08:10:14 | Bash | Read deploy_agendado retry and encadeado mono | `cd /home/ronald/wt-dme-v3-234409; sed -n 80,125p bin/deploy_agendado.sh; echo ----; sed -n 85,110p bin/encadeado.sh; grep -n '^adm_agora\\|adm_agora()' -A8 bin/admissao_cron.sh \| head -14; grep -n 'source\\|\. .*admissao' bin/encadeado.sh \| head` |
+| 08:09:56 | Bash | Read Codex FINAL response | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/29e4229d-9fb7-4166-9986-a16d88f0e0e5/scratchpad/dme_final; tail -2 $S/wrapper.out; wc -c $S/resposta.txt; cat $S/resposta.txt` |
+| 08:09:33 | Bash | Check Codex and F3 progress | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/29e4229d-9fb7-4166-9986-a16d88f0e0e5/scratchpad/dme_final; tail -3 $S/wrapper.out; ls -la $S/resposta.txt 2>/dev/null; ls /home/ronald/saas-hasner/logs/f3_dry/ 2>/dev/null; date +%H:%M` |
 | 08:05:01 | ReadNotifications |  | `-` |
 | 08:04:58 | Bash | Record suite verdict in RELATO | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p).read() anc='DEPLOY-ELO EM CURSO na copia' assert s.count(anc)==1 lin='DEPLOY-ELO SUITE b09405ae 08:1x: OK (skipped=42, expected failures=24), Ran 13461, rc=0 (logs/dme/suite_b09405ae.log). DESPACHO F3-DRY: medida na sombra atomic+raise -> sonnet (motivo: sonda que escreve na sombra; Codex so na FINAL do item 2) -> logs ...` |
 | 08:04:51 | Agent | F3-DRY medida na sombra | `Medida SEM cura (item 3 F3-DRY do aval GASTA-ATE-O-RESET do Ronald, 04/11). Repo /home/ronald/saas-hasner (Django em app/). Leia /home/ronald/saas-hasner/CLAUDE.md secoes 2, 6 e 7b antes de rodar qualquer coisa: banco de prod NUNCA e tocado; a medida roda SO no banco sombra (sombra_db) pelo `bin/sombra.sh` (veja app/docs/INFRA.md e `bin/sombra.sh --help`; cuidado conhecido: `sombra.sh --rodar` dev ...` |
