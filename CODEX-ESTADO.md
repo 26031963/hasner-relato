@@ -1,7 +1,118 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **04/11/2026 11:02** · publicado em **04/11/2026 11:02** (UTC-3)
+> Ultima resposta processada: **04/11/2026 11:08** · publicado em **04/11/2026 11:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 04/11 11:08 · sessao 74fc7acb1b74 · DEPLOY-[nome]-ELO · verificador · origem=Code
+
+1. **Os PROCEDENTES tiveram cura parcial. Eu não daria fechamento: permanecem caminhos sem garantia contra restart sobre exec vivo, proibido pelo aval.** A serialização cobre o restart, enquanto outros execs do deploy ficam fora dela; o wrapper também pode perder sua marca após timeout (`bin/reinicio_sob_admissao.sh:43`, `bin/deploy.sh:124`, `bin/em_casca.sh:21`, `bin/admissao_cron.sh:208`; `AVAL_DEPLOY-ELO-B3.txt:13`, anexo).
+
+   Referências aos anexos abaixo usam a numeração das linhas do texto fornecido. Suíte executada nesta cópia: **[não verificado]**. Não executei o selo porque ele cria e remove arquivos (`bin/tests/test_deploy_nao_mata_elo.sh:176`, `bin/tests/test_deploy_nao_mata_elo.sh:193`).
+
+   | PROCEDENTE da triagem | Verificação em 4f7035a3 |
+   |---|---|
+   | Recusa apagada antes da nova tentativa | **Curado no cenário apontado:** `_rec_ant` preserva a anterior quando a tentativa dá rc1 sem arquivo novo; o caso 8 exige essa preservação. A autorização para substituir por recusa nova verifica apenas existência, ressalva de **fila** detalhada no item 6 (`bin/deploy_agendado.sh:102`, `bin/deploy_agendado.sh:110`, `bin/tests/test_deploy_nao_mata_elo.sh:224`). |
+   | `_pauta` ignorava rc | **Parcial:** agora devolve rc e escreve diagnóstico; três chamadores consomem esse retorno. Os demais, inclusive a resolução e a pauta do revert do revert, continuam descartando-o. **Fila** para os consumidores restantes (`app/core/esteira_vigia.py:902`, `app/core/esteira_vigia.py:905`, `app/core/esteira_vigia.py:1291`, `app/core/esteira_vigia.py:1364`; censo no item 3). |
+   | Revert do revert ignorava rc do deploy | **Leitura curada; comunicação parcial:** `rrd` entra no texto da pauta, mas seu envio pode falhar ou encontrar pauta já viva; o relato e o retorno não carregam o rc. **Fila** (`app/core/esteira_vigia.py:1289`, `app/core/esteira_vigia.py:1293`, `app/core/esteira_vigia.py:1295`, `app/core/esteira_vigia.py:1298`, `app/core/management/commands/alarme_esteira.py:38`). |
+   | Chave única engolia pauta de outro chamador | **Curado entre os três novos motivos**, mas o fechamento continua condicionado ao sucesso de um retry do auto-revert. Há também **regressão de compatibilidade, fila:** a chave antiga perde seu resolvedor automático (`app/core/integrador_lote.py:780`, `bin/vigia_logins.sh:95`, `app/core/esteira_vigia.py:1332`, `app/core/esteira_vigia.py:1349`, `app/core/esteira_vigia.py:1364`). |
+   | 19: `exit 0` sobrevivia | **Curado para esse mutante:** agora exige rc3 do comando e desmarcação (`bin/tests/test_deploy_nao_mata_elo.sh:660`, `bin/tests/test_deploy_nao_mata_elo.sh:661`). |
+   | 21: limpeza provada só por grep | **Curado quanto ao bloco de limpeza:** ele é executado. Ainda não prova a criação real do marcador; lacuna de **fila** (`bin/tests/test_deploy_nao_mata_elo.sh:734`, `bin/tests/test_deploy_nao_mata_elo.sh:738`, `bin/tests/test_deploy_nao_mata_elo.sh:740`). |
+   | 23: CLI não exercitada | **Parcial:** passou de grep para AST, mas continua sem executar a CLI e aceita comparação invertida. **Fila de mordida** (`bin/tests/test_deploy_nao_mata_elo.sh:904`, `bin/tests/test_deploy_nao_mata_elo.sh:905`; `app/core/esteira_vigia.py:1657`). |
+   | 20: cron sem duração excluído calado | **Curado para a fonte viva considerada pelo selo:** informa ausentes e exige zero nesse caminho; lacunas da cópia são apenas informadas. O dado fornecido declara 13 lacunas na cópia e nenhuma no vivo; não houve nova medição de produção (`bin/tests/test_deploy_nao_mata_elo.sh:699`, `bin/tests/test_deploy_nao_mata_elo.sh:707`; `triagem_v1.txt:11`, anexo). |
+
+2. **FILA/DESCARTADO: duas justificativas não bastam para fechamento diante do PROIBIDO escrito; outra contém afirmação factual incorreta.** O aval não escreve exceção para DEPLOY × DEPLOY ou morte do wrapper (`AVAL_DEPLOY-ELO-B3.txt:13`, anexo). [nao verificado]
+
+   | Item triado | O motivo sustenta-se? Gravidade |
+   |---|---|
+   | Execs internos do deploy: “DEPLOY × DEPLOY, fora do aval” | O diagnóstico técnico sustenta-se; a dispensa, **não**. Migrate, collectstatic e prova de rota executam sem marca própria, enquanto o mutex cobre somente o restart. Dois deploys podem sobrepor esses trechos. **Bloqueia pelo PROIBIDO**, embora não seja introdução do delta da volta 2; ocorrência em produção **[não verificado]** (`bin/deploy.sh:124`, `bin/deploy.sh:205`, `bin/deploy.sh:316`, `bin/reinicio_sob_admissao.sh:43`, `bin/reinicio_sob_admissao.sh:73`). |
+   | Timeout/SIGKILL deixa docker sem marca | “SIGKILL não se trapa” explica a limitação, mas não a cura. Há timeout sobre o wrapper; ele só trata EXIT, identifica sua própria vida e roda docker como filho. Morto o wrapper, o reaper pode apagar sua marca sem comprovar término do exec. **Bloqueia a garantia exigida por MUDA 1/PROIBIDO**; sobrevivência concreta em produção **[não verificado]** (`eval/harness.py:56`, `eval/juiz.py:245`, `bin/em_casca.sh:21`, `bin/em_casca.sh:26`, `bin/admissao_cron.sh:175`, `bin/admissao_cron.sh:208`; `AVAL_DEPLOY-ELO-B3.txt:6`, `:13`, anexo). |
+   | Marca casca=0 antes do rc64 | Sustenta-se: a validação vem após marcar, mas antes de executar; EXIT desmarca. **Fila**, sem execução indevida demonstrada (`bin/em_casca.sh:16`, `bin/em_casca.sh:21`, `bin/em_casca.sh:22`, `bin/em_casca.sh:26`). |
+   | Marca sobra após morte sem EXIT | **DESCARTA sustentado quanto à limpeza da marca:** PID/starttime/cmdline são conferidos e órfãs são removidas. Isso não resolve o filho órfão do item anterior (`bin/admissao_cron.sh:167`, `bin/admissao_cron.sh:175`, `bin/admissao_cron.sh:177`, `bin/admissao_cron.sh:208`). |
+   | Reload inicial do integrador ignora rc | Sustenta-se: não guarda retorno e segue à suíte. **Fila**; não é o deploy final do lote tratado por MUDA 3 (`app/core/integrador_lote.py:638`, `app/core/integrador_lote.py:639`, `app/core/integrador_lote.py:748`). |
+   | Rollback dos moldes ignora rc | Sustenta-se: executa reload e anuncia “recarregada” sem conferir sucesso. **Fila**, fora do delta fornecido (`bin/molde_fatia/cadeia.sh:32`, `bin/molde_fatia/cadeia.sh:33`, `bin/molde_autocura/cadeia.sh:31`, `bin/molde_autocura/cadeia.sh:32`). |
+   | fd7 liberado cedo | **DESCARTA como defeito atual sustentado:** o pai conserva fd7; `7>&-` fecha nos filhos. **Fila** para ampliar mordida do teste (`bin/vigia_logins.sh:70`, `bin/vigia_logins.sh:71`, `bin/vigia_logins.sh:90`, `bin/vigia_logins.sh:95`). |
+   | Corte por mtime nasce antes da espera | Sustenta-se para o cenário descrito: recusa produzida durante a espera pode sobreviver ao restart que a superou. É **supercontagem, fila** (`bin/deploy.sh:282`, `bin/deploy.sh:283`, `bin/deploy.sh:367`). |
+   | Mesmo id concorrente disputa `.novo` | Sustenta-se: temporário e destino derivam só do id. As travas dos chamadores não constituem mutex comum de deploy inteiro. **Fila**, ligada ao primeiro bloqueio (`bin/deploy.sh:54`, `bin/deploy.sh:286`, `bin/integrador.sh:9`, `bin/vigia_arvore.sh:23`, `bin/vigia_logins.sh:70`). |
+   | CLI retorna 0 / `tail` perde rc | Sustenta-se: a CLI imprime o texto e retorna 0; o vigia não decide pelo rc. **Fila** para esse contrato, sem provar sucesso da resolução (`app/core/esteira_vigia.py:1658`, `app/core/esteira_vigia.py:1659`, `bin/vigia_arvore.sh:28`). |
+   | “Cascas não reiniciaram” para qualquer rc1 | A objeção procede: rc1 também pode acontecer depois do restart, na prova de rota ou selo. **Fila de comunicação**, pois o estado afirmado pode estar errado (`app/core/esteira_vigia.py:1329`, `bin/deploy.sh:283`, `bin/deploy.sh:337`, `bin/deploy.sh:344`). |
+   | Retry não refaz conferência/marcação do auto-revert | Sustenta-se. O sucesso resolve pautas e relata; não volta aos testes nem à marcação das fatias. **Fila**: MUDA 5 exige retry automático, mas não explicita essa continuação (`app/core/esteira_vigia.py:1283`, `app/core/esteira_vigia.py:1303`, `app/core/esteira_vigia.py:1362`, `app/core/esteira_vigia.py:1367`; `AVAL_DEPLOY-ELO-B3.txt:10`, anexo). |
+   | argv perde campo vazio | Sustenta-se; o produtor atual passa argumentos não vazios. **Fila** (`app/core/esteira_vigia.py:1353`, `app/core/esteira_vigia.py:1276`). |
+   | Cabeçalho 3300 → 1586 | Correção conferida contra o JSON da cópia (`bin/admissao_cron.sh:31`, `app/config/crons_duracao.json:82`). |
+   | Env de admissão “só encurta” | **Motivo parcialmente falso:** o valor é aceito sem limite superior e passado ao `flock`; também pode aumentar a espera. É verdadeiro que não altera o teto do restart. **Fila**, preexistente no delta (`bin/admissao_cron.sh:50`, `bin/admissao_cron.sh:243`, `bin/admissao_cron.sh:58`, `bin/reinicio_sob_admissao.sh:18`). |
+
+   **CONFERIR:** no harness, o HTTP está dentro de `_TIRO`, executado pelo docker exec protegido; não é HTTP direto do host nessa função. O código atende à marca nesse trecho. Execução da conferência e eventual linha no RELATO: **[não verificado]** (`eval/harness.py:14`, `eval/harness.py:18`, `eval/harness.py:24`, `eval/harness.py:54`; `AVAL_DEPLOY-ELO-B3.txt:11`, anexo).
+
+3. **Censo de escritores e leitores.**
+
+   **Motivos e tupla:**
+
+   | Elemento | Quem escreve | Quem lê |
+   |---|---|---|
+   | `deploy_recusado:auto_revert` | Abertura em `_deploy_do_revert` e na falha do retry (`app/core/esteira_vigia.py:1332`, `app/core/esteira_vigia.py:1357`). | Resolução pelo loop dos ids (`app/core/esteira_vigia.py:1364`). |
+   | `deploy_recusado:integrador` | `_deploy_do_lote` (`app/core/integrador_lote.py:780`). | Mesmo loop (`app/core/esteira_vigia.py:1364`). |
+   | `deploy_recusado:vigia_logins` | Shell do vigia (`bin/vigia_logins.sh:95`). | Mesmo loop (`app/core/esteira_vigia.py:1364`). |
+   | `DEPLOY_RECUSA_IDS` | Uma definição literal (`app/core/esteira_vigia.py:1316`). | Um consumidor: universo do loop de resolução (`app/core/esteira_vigia.py:1362`). |
+   | Estado efetivo da pauta | O comando delega abertura/fechamento aos serviços (`app/core/management/commands/alarme_esteira.py:27`, `app/core/management/commands/alarme_esteira.py:31`, `app/core/management/commands/alarme_esteira.py:54`). | A localização da pauta viva usa prefixo do texto; pauta já viva impede reescrever o conteúdo (`app/core/management/commands/alarme_esteira.py:15`, `app/core/management/commands/alarme_esteira.py:38`). |
+
+   **Chave antiga — regressão, fila:** não resta produtor ou resolvedor automático específico de `deploy_recusado` sem sufixo. A porta genérica ainda aceita essa chave, mas os novos resolvedores procuram `ESTEIRA deploy_recusado:<id>:` e não encontram o texto antigo `ESTEIRA deploy_recusado: ...`. As ações genéricas atuais também não produzem essa resolução (`app/core/management/commands/alarme_esteira.py:15`, `app/core/management/commands/alarme_esteira.py:24`, `app/core/esteira_vigia.py:1364`, `app/core/esteira_vigia.py:490`, `app/core/esteira_vigia.py:504`, `app/core/esteira_vigia.py:530`, `app/core/esteira_vigia.py:597`). Pauta antiga viva em produção: **[não verificado]**.
+
+   **Rc de `_pauta`:** nasce do subprocess, é diagnosticado centralmente e devolvido (`app/core/esteira_vigia.py:900`, `app/core/esteira_vigia.py:902`, `app/core/esteira_vigia.py:905`).
+
+   | Chamador | Retorno lido? |
+   |---|---|
+   | `_deploy_do_lote` | **Sim:** acrescenta falha ao relato (`app/core/integrador_lote.py:780`, `app/core/integrador_lote.py:781`). |
+   | `_deploy_do_revert` | **Sim:** acrescenta falha ao relato (`app/core/esteira_vigia.py:1332`, `app/core/esteira_vigia.py:1334`). |
+   | `retentar_deploy`, abertura | **Sim:** acrescenta falha à string devolvida, impressa pela CLI (`app/core/esteira_vigia.py:1357`, `app/core/esteira_vigia.py:1359`, `app/core/esteira_vigia.py:1658`). |
+   | `_relance_nao_pegou` | **Não** (`app/core/esteira_vigia.py:959`). |
+   | `curar_zumbido` | **Não** (`app/core/esteira_vigia.py:1179`). |
+   | `conferir_quarentena`, prazo e depósito | **Não**, nos dois pontos (`app/core/esteira_vigia.py:1241`, `app/core/esteira_vigia.py:1244`). |
+   | `auto_revert`, revert que não aplicou e revert desfeito | **Não**, nos dois pontos (`app/core/esteira_vigia.py:1274`, `app/core/esteira_vigia.py:1291`). |
+   | `retentar_deploy`, resolução | **Não** (`app/core/esteira_vigia.py:1364`). |
+   | `curar_por_relogio`, quarentena e vermelho | **Não**, nos dois pontos (`app/core/esteira_vigia.py:1398`, `app/core/esteira_vigia.py:1405`). |
+   | `passada`, ações genéricas de alarme e resolução | **Não**, nos dois pontos (`app/core/esteira_vigia.py:1637`, `app/core/esteira_vigia.py:1642`). |
+
+   **Pendentes `recusa_cron.<id>.pendente`:**
+
+   | Papel | Sítios |
+   |---|---|
+   | Criar/sobrescrever em produção | `deploy.sh` escreve `.novo` e faz `mv`, exclusivamente no ramo rc75 (`bin/deploy.sh:286`, `bin/deploy.sh:287`, `bin/deploy.sh:290`). |
+   | Apagar em produção | Próprio id no fim do deploy; recusas anteriores pelo corte; nomes de tentativas do agendado antes de iniciar; recusa anterior substituída pelo agendado (`bin/deploy.sh:363`, `bin/deploy.sh:367`, `bin/deploy_agendado.sh:95`, `bin/deploy_agendado.sh:104`, `bin/deploy_agendado.sh:110`). |
+   | `_rec_ant` | Recebe o caminho anterior; seu único consumidor é o `rm` condicionado a rc0 ou rc75 com arquivo novo (`bin/deploy_agendado.sh:102`, `bin/deploy_agendado.sh:110`). |
+   | Ler conteúdo | Agendado valida id e recupera argv; retry lê somente o arquivo do auto-revert (`bin/deploy_agendado.sh:83`, `bin/deploy_agendado.sh:101`, `app/core/esteira_vigia.py:1345`, `app/core/esteira_vigia.py:1348`). |
+   | Ler existência/nomes | Loop de resolução e contador; placar consome o contador e soma ao TOTAL (`app/core/esteira_vigia.py:1363`, `bin/deploy_recusado.sh:22`, `bin/deploy_recusado.sh:25`, `bin/placar_code.sh:464`, `bin/placar_code.sh:542`). |
+   | Criar/apagar em testes | Fixtures dos casos 8, 21 e 23, além dos blocos extraídos de produção (`bin/tests/test_deploy_nao_mata_elo.sh:176`, `bin/tests/test_deploy_nao_mata_elo.sh:189`, `bin/tests/test_deploy_nao_mata_elo.sh:238`, `bin/tests/test_deploy_nao_mata_elo.sh:716`, `bin/tests/test_deploy_nao_mata_elo.sh:736`, `bin/tests/test_deploy_nao_mata_elo.sh:858`, `bin/tests/test_deploy_nao_mata_elo.sh:870`, `bin/tests/test_deploy_nao_mata_elo.sh:879`). |
+
+   **Rc do deploy do revert do revert:** o único consumidor de `rrd` é a composição do texto enviado à pauta; não controla retry, relato ou retorno. Esse segundo deploy não fixa o id `auto_revert`: herda o ambiente ou usa `manual`, cujo pendente não é lido pelo retentador automático. **Fila** (`app/core/esteira_vigia.py:1289`, `app/core/esteira_vigia.py:1293`, `app/core/esteira_vigia.py:1295`, `app/core/esteira_vigia.py:1298`, `bin/deploy.sh:52`, `app/core/esteira_vigia.py:1345`).
+
+4. **Os casos ganharam mordida, mas não provam toda a cura anunciada.**
+
+   | Caso | Mordida e mutação sobrevivente |
+   |---|---|
+   | 8, rc1 | Mata a exclusão incondicional da recusa anterior. Entretanto, remover a exclusão de `_rec_ant` inteiramente deixa acumular recusas substituídas: a persistência exige existência, sem exigir quantidade. **Fila de cobertura** (`bin/deploy_agendado.sh:110`, `bin/tests/test_deploy_nao_mata_elo.sh:207`, `bin/tests/test_deploy_nao_mata_elo.sh:224`). |
+   | 19(e) | Mata `exit 0`: exige rc3 e nenhuma marca restante. **Cura específica sustentada** (`bin/em_casca.sh:27`, `bin/tests/test_deploy_nao_mata_elo.sh:660`, `bin/tests/test_deploy_nao_mata_elo.sh:661`). |
+   | 21, limpeza | Mata alterações do bloco que preservem a velha, apaguem a nova ou deixem marcador. **Sobrevive apagar a criação real do marcador:** o próprio teste o fabrica. **Fila** (`bin/deploy.sh:282`, `bin/deploy.sh:366`, `bin/tests/test_deploy_nao_mata_elo.sh:738`, `bin/tests/test_deploy_nao_mata_elo.sh:740`). |
+   | 21, chave do lote | Mata voltar à chave única. Porém retirar “PAUTA NÃO ABRIU” do relato passa: `_pauta` foi substituída por coletor que retorna `None`, sem cenário de falha. **Fila** (`bin/tests/test_deploy_nao_mata_elo.sh:750`, `bin/tests/test_deploy_nao_mata_elo.sh:808`, `app/core/integrador_lote.py:781`). |
+   | 21, revert do revert | Mata ignorar completamente o rc, mas só injeta 75. Alterar a composição para anunciar apenas rc75, silenciando rc1, passa. **Fila** (`bin/tests/test_deploy_nao_mata_elo.sh:796`, `bin/tests/test_deploy_nao_mata_elo.sh:813`, `app/core/esteira_vigia.py:1293`). |
+   | 20, lacuna | Detecta ausência na fonte viva dentro do universo construído. Contudo, retirar um cron desse universo pelo classificador também o retira da checagem; só dois nomes têm presença explicitamente exigida. Mutante completo executado: **[não verificado]**. **Fila de independência da prova** (`bin/tests/test_deploy_nao_mata_elo.sh:689`, `bin/tests/test_deploy_nao_mata_elo.sh:699`, `bin/tests/test_deploy_nao_mata_elo.sh:707`, `bin/tests/test_deploy_nao_mata_elo.sh:711`). |
+   | 23, CLI | **Sobrevivente confirmado em memória:** trocar `==` por `!=` mantém a aceitação da AST, mas impede atender o comando correto. O teste verifica string e chamada, sem verificar o operador. **Fila** (`app/core/esteira_vigia.py:1657`, `bin/tests/test_deploy_nao_mata_elo.sh:904`, `bin/tests/test_deploy_nao_mata_elo.sh:905`). |
+   | 23, resolução por id | Mata resolver o integrador com sua recusa ainda presente. Não testa falha do resolvedor, cura por outro deploy nem migração da chave velha; `_pauta` é coletor. **Fila** (`bin/tests/test_deploy_nao_mata_elo.sh:865`, `bin/tests/test_deploy_nao_mata_elo.sh:878`, `bin/tests/test_deploy_nao_mata_elo.sh:888`). |
+
+   Essas lacunas não tornam todos os REDs inúteis: existem mutantes específicos mortos. Impedem, porém, tratar AST como execução da CLI ou chamada ao coletor como resolução efetiva de pauta (`bin/tests/test_deploy_nao_mata_elo.sh:661`, `bin/tests/test_deploy_nao_mata_elo.sh:808`, `bin/tests/test_deploy_nao_mata_elo.sh:865`, `bin/tests/test_deploy_nao_mata_elo.sh:904`; exigência RED em `AVAL_DEPLOY-ELO-B3.txt:12`, anexo).
+
+5. **Classes da casa no delta da volta 2:**
+
+   | Classe | Resultado |
+   |---|---|
+   | (a) Segundo juiz registrado | **Não identificado no delta.** A pauta continua passando pelo comando e pelos serviços; o lookup aponta o registro vivo, não constitui outra autoridade (`app/core/management/commands/alarme_esteira.py:27`, `app/docs/JUIZES.md:10`). |
+   | (b) Segundo escritor fora da porta | **Presente na gestão das recusas, fila:** o delta mantém no agendado uma exclusão de estado também gerido pelo deploy. A substituição pode ser correta, mas contradiz “ninguém mais apaga” do contador. Para estado ORM de pauta, a porta permanece canônica (`bin/deploy_agendado.sh:110`, `bin/deploy.sh:367`, `bin/deploy_recusado.sh:7`, `app/pautas/services.py:180`, `app/pautas/services.py:272`). |
+   | (c) Relógio fora da borda | **Não identifiquei nova leitura de relógio no código de produção do delta.** O corte por mtime já está no diff total e tem a supercontagem descrita acima (`bin/deploy.sh:282`, `bin/deploy.sh:367`; `diff_v6_delta.patch`, anexo). |
+   | (d) Derivação/lista paralela | **Sim, fila:** `DEPLOY_RECUSA_IDS` enumera separadamente os mesmos ids escritos pelos produtores; eles não consultam a tupla (`app/core/esteira_vigia.py:1316`, `app/core/esteira_vigia.py:1325`, `app/core/integrador_lote.py:771`, `bin/vigia_logins.sh:90`). |
+   | (e) RED sem mordida | **Mordida parcial, fila**, especialmente CLI por AST e limpeza com marcador fabricado; não são provas integrais dos caminhos anunciados (`bin/tests/test_deploy_nao_mata_elo.sh:738`, `bin/tests/test_deploy_nao_mata_elo.sh:904`). |
+   | (f) Ordem de trava | Não demonstrada nova inversão no delta; o fd7 continua pertencendo ao pai. **[não verificado]** quanto à ausência de toda corrida possível (`bin/vigia_logins.sh:70`, `bin/vigia_logins.sh:90`). |
+   | (g) Pouso antes do pré-requisito | O FIM do lote está depois da guarda de sucesso do deploy. Pouso próprio e janela autorizada: **[não verificado]** (`app/core/integrador_lote.py:748`, `app/core/integrador_lote.py:751`; `AVAL_DEPLOY-ELO-B3.txt:14`, anexo). |
+   | (h
+
+[truncado em 20000 de 22609 caracteres]
 
 ## 04/11 11:02 · sessao c956083d529c · - · - · origem=Ronald (tmux)
 
@@ -757,41 +868,4 @@ Achados por inspeção estática; execução da suíte e dos mutantes [nao verif
 
 - **D3/D4 permanecem conservadores no código inspecionado.** Falha do alarme não cria flag, permitindo novo disparo; o sucesso cria a flag (`bin/cron_run.sh:45`). A marca fica até o envelope sair, inclusive durante o vigia, por trap EXIT (`bin/cron_run.sh:19`; `bin/cron_run.sh:45`; `bin/cron_run.sh:50`), e um envelope vivo marcado `casca=1` segura (`bin/admissao_cron.sh:122`). Isso pode retardar deploy; ocorrência concreta em produção [nao verificado].
 
-## 02/11 22:14 -- HISTORICO (mais de 24 h) · sessao e603127b50ca · E4CAL-L1-P3 · verificador · origem=Code
-
-1. **Sim: o delta cura os itens 4 e 5 por inspeção dos testes. Execução verde: [nao verificado].** O teste real agora desliga o mock, congela o relógio durante a chamada inteira e passa `hoje=25/04/2026` ao censo; exige efetivamente `(fio_morto, decisao_do_dia_pendente) = (0, 1)`. (`app/chamados/tests/test_o261_vigia_fio.py:498`, `app/chamados/tests/test_o261_vigia_fio.py:503`, `app/chamados/tests/test_o261_vigia_fio.py:507`.)
-
-   **O `freeze_time` cobre o relógio da porta curta.** `_agora` é uma variável local criada por `timezone.now()`, do `django.utils.timezone`, a cada montagem do contexto. A porta curta chama esse contexto dentro do congelamento; `hoje` deriva de `_agora`, e o mesmo instante segue para o D4. Não vem do parâmetro `hoje` do censo. (`app/colaboradores/services/calendario.py:22`, `app/colaboradores/services/calendario.py:112`, `app/colaboradores/services/calendario.py:140`, `app/colaboradores/services/calendario.py:141`, `app/colaboradores/services/calendario.py:579`.)
-
-   Com o corte padrão 21 da empresa da fixture, em 25/04 a competência corrente começa em 21/04; o dia testado, 16/04, fica anterior a ela. Portanto, desaparece a contradição temporal apontada na volta 1. (`app/chamados/tests/test_o261_vigia_fio.py:26`, `app/chamados/tests/test_o261_vigia_fio.py:34`, `app/colaboradores/models.py:46`, `app/ponto/janelas.py:24`, `app/ponto/janelas.py:60`, `app/colaboradores/services/calendario.py:711`.)
-
-   O item 5 ganha expectativa literal para **F = `('irregular', True)` na tela e `True` pela porta curta**. Isso cobre a lacuna da folga lavrada irregular; rejeição efetivamente executada de mutantes: [nao verificado]. (`app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:67`, `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:75`, `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:77`, `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:83`, `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:86`.)
-
-2. **Sim: F chega ao ramo lavrado do D4, com a fixture atual.** F é 19/08, criado com `trabalha=False`; `_fixar()`, chamado depois das demais preparações, grava diretamente `status_dia='irregular'`. (`app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:38`, `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:40`, `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:54`, `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:100`.)
-
-   Há um detalhe decisivo: **`dna.marcos={}` não encerra a busca de horários**. Como `if m` é falso, o código cai no template, que na fixture tem horário 07–19; o método de horários não decide trabalho/folga. (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:68`, `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:89`, `app/escala/models.py:1099`, `app/escala/models.py:1108`, `app/escala/models.py:331`, `app/escala/models.py:343`.)
-
-   Esse fim previsto já passou no relógio congelado em 17/09; a comparação temporal devolve encerrado. No D4, `em_curso=False` permite ler a coluna irregular e sair com `fonte='lavrado'` **antes** do ramo que classificaria a natureza como folga. (`app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:32`, `app/escala/servico_jornada.py:92`, `app/ponto/turnos.py:2122`, `app/ponto/status_dia.py:255`, `app/ponto/status_dia.py:266`, `app/ponto/status_dia.py:268`, `app/ponto/status_dia.py:269`, `app/ponto/status_dia.py:291`.)
-
-   **Limite da prova:** F verifica a leitura/oferta de uma coluna irregular fixada numa folga. Não verifica se a derivação produtiva da lavra produziria irregular para esses fatos, pois `_fixar()` escreve a coluna diretamente, enquanto a porta produtiva chama `status_da_lavra`/`status_do_admin`. (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:100`, `app/ponto/portas/celula.py:693`, `app/ponto/portas/celula.py:698`.)
-
-3. **Para o passo 3 completo, descartar ambos apenas por serem preexistentes é insuficiente: retirar `eh_trabalho` amplia o conjunto de dias atingíveis pelos defeitos.** O código registra a retirada desse veto e mantém apenas último recurso + passado + status. O v2 cura o relógio do teste específico; a cadeia produtiva continua sem transportar `hoje` à porta. (`app/colaboradores/services/calendario.py:89`, `app/colaboradores/services/calendario.py:103`, `app/chamados/tests/test_o261_vigia_fio.py:504`, `app/chamados/services/vigia_fio.py:400`, `app/colaboradores/services/calendario.py:107`.)
-
-   - **Exceção engolida — agravamento condicional do efeito:** uma falha depois de carregar a janela pode deixar `_perg_viva` vazio/parcial; ausência nesse mapa permite último recurso. Num dia antes vetado por `eh_trabalho=False/None`, com status que pede decisão, essa falha agora pode liberar oferta indevida. A retirada não demonstra maior probabilidade de exceção; demonstra maior alcance quando ela ocorre. Frequência real: [nao verificado]. (`app/colaboradores/services/calendario.py:436`, `app/colaboradores/services/calendario.py:440`, `app/colaboradores/services/calendario.py:447`, `app/colaboradores/services/calendario.py:451`, `app/colaboradores/services/calendario.py:711`, `app/colaboradores/services/calendario.py:103`.)
-
-     Esse contraexemplo demonstra oferta indevida na tela/porta. Não implica automaticamente erro no contador do censo: pergunta viva já provoca desvio antes da consulta à porta. (`app/templates/colaboradores/partials/_calendario_grade.html:125`, `app/colaboradores/services/calendario.py:115`, `app/chamados/services/vigia_fio.py:392`, `app/chamados/services/vigia_fio.py:400`.)
-
-   - **Relógios distintos — também há ampliação condicional:** mantendo `censo(hoje=17/04)` e a porta em 25/04, o dia 16/04 pertence à competência corrente para o primeiro relógio e à anterior para o segundo. No universo sem vínculo da fixture, o veto antigo mascarava a divergência; após sua retirada, a porta pode oferecer e o censo contar decisão pendente. O v2 alinha os relógios nesse teste, sem corrigir o contrato produtivo. (`app/chamados/tests/test_o261_vigia_fio.py:40`, `app/chamados/tests/test_o261_vigia_fio.py:122`, `app/ponto/janelas.py:24`, `app/colaboradores/services/calendario.py:140`, `app/colaboradores/services/calendario.py:440`, `app/chamados/services/vigia_fio.py:400`, `app/chamados/services/vigia_fio.py:401`, `app/chamados/tests/test_o261_vigia_fio.py:503`.)
-
-4. **Escritores e leitores do que muda ou passa a ser exercitado:**
-
-   | Objeto | Quem escreve/publica | Quem lê |
-   |---|---|---|
-   | Tempo do teste real | O teste fixa o relógio e fornece `hoje`. (`app/chamados/tests/test_o261_vigia_fio.py:503`) | Censo lê `hoje`; contexto lê `timezone.now()`; D4 recebe `_agora`. (`app/chamados/services/vigia_fio.py:313`; `app/colaboradores/services/calendario.py:140`; `app/colaboradores/services/calendario.py:579`) |
-   | Célula/status de F | `_celula` cria a célula e `_fixar` grava a coluna. (`app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:90`; `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:100`) | D4 lê a coluna; calendário publica o retorno; golden lê status e oferta. (`app/ponto/status_dia.py:266`; `app/colaboradores/services/calendario.py:637`; `app/colaboradores/services/calendario.py:699`; `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:67`) |
-   | `resolver_dia_oferecido` | Calendário carimba o resultado do predicado em memória. (`app/colaboradores/services/calendario.py:742`) | Porta curta e grade leem o campo; vigia lê a porta, compartilhada por censo e alcance. (`app/colaboradores/services/calendario.py:115`; `app/templates/colaboradores/partials/_calendario_grade.html:125`; `app/chamados/services/vigia_fio.py:289`; `app/chamados/services/vigia_fio.py:400`; `app/chamados/services/vigia_fio.py:610`) |
-   | Invariante do MAPA | Fonte é o contrato no módulo; gerador lê a inscrição e escreve o Markdown. (`app/colaboradores/services/calendario.py:12`; `bin/gerar_mapa.py:43`; `bin/gerar_mapa.py:110`; `bin/gerar_mapa.py:119`) | O artefato agora corresponde ao predicado; execução efetiva da regeneração e consumidores do Markdown: [nao verificado]. (`app/docs/MAPA/calendario-dia-da-tela.md:12`; `app/colaboradores/services/calendario.py:103`) |
-
-   Os consumidores indiretos do contexto incluem view, drawer e relatório de furos. (`app/colaboradores/views.py:1946`, `app/colaboradores/services/drawer.py:121`, `app/relatorios/furos.py:195`.)
-
-_1509 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1510 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
