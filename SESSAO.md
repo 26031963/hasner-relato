@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 09:32:27.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (6.7 MB). Acoes na janela: **197**.
+**Medido em 04/11/2026 09:37:57.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (6.7 MB). Acoes na janela: **198**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:35:38 | Bash | Keep waiting for suite verdict | `cd /home/ronald/saas-hasner; L=logs/mc/suite_92ab99c9.log; for i in $(seq 1 39); do /bin/grep -q '^rc=' $L && break; /usr/bin/sleep 15; done; /bin/grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; /bin/grep '^Ran' $L \| tail -1; tail -1 $L \| cut -c1-100` |
 | 09:25:44 | Bash | Wait for MODO-COMUM suite verdict | `cd /home/ronald/saas-hasner; L=logs/mc/suite_92ab99c9.log; for i in $(seq 1 39); do /bin/grep -q '^rc=' $L && break; /usr/bin/sleep 15; done; /bin/grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; /bin/grep '^Ran' $L \| tail -1; tail -1 $L` |
 | 09:25:16 | Bash | Write DESENHO question line for TOAST in top 2 | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read() lines=s.split('\n') assert lines[2].startswith('DESENHO DEPLOY-[nome]-ELO-DA-CORRENTE:') lines[2]=("DESENHO TOAST-E-NOME-CALENDARIO: lei=juiz unico pergunta=quem responde 'quem cria FolgaCalendario fora da porta' -- o gate E3 (censo_escritas + portas.py:471) ou o selo novo que re-deriva o censo a mao; a pergunta  ...` |
 | 09:24:51 | Bash | Put PAREI ! line for TOAST B3 at top | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read() old='ESPERANDO: /home/ronald/saas-hasner/bin/suite.sh \| pid=873162\n' assert s.count(old)==1 new=("! PAREI: B3 TOAST-E-NOME-CALENDARIO \| espera Ronald: liberacao ERRO-BOBO ou DESENHO (proposta ERRO-BOBO: os 3 achados do opus sao texto/selo -- selo re-deriva o censo do gate E3, LEI-AKITA cita a PARTE B, coment ...` |
