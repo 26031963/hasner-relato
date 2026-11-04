@@ -6,10 +6,23 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 19:52:55.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (1.0 MB). Acoes na janela: **22**.
+**Medido em 04/11/2026 19:58:22.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (1.2 MB). Acoes na janela: **35**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:57:02 | Bash |  | `cd /home/ronald/saas-hasner; sleep 5; bin/trava_teste.sh --quem 2>&1\|tail -1; P=$(bin/trava_teste.sh --quem 2>&1\|tail -1\|sed -n 's/^suite:\([0-9]*\).*/\1/p'); echo P=$P; cd app/docs && python3 - "$P" <<'EOF' import sys p='RELATO.md'; L=open(p).read().split('\n') assert L[1].startswith('ESPERANDO:') L[1]='ESPERANDO: trava_teste.sh \| pid=%s' % sys.argv[1] L.insert(2,"NOITE-0411 item 1 N1 20:1x:  ...` |
+| 19:56:50 | Bash |  | `cd /home/ronald/saas-hasner; bin/sombra.sh --rodar sonda_n1pna.py n1im-head > logs/n1im/sombra_head.run 2>&1; SOMBRA_ARVORE=/home/ronald/wt-n1im-183722/app bin/sombra.sh --rodar sonda_n1pna.py n1im-copia > logs/n1im/sombra_copia.run 2>&1; grep -h 'N1PNA censo\\|ROLLBACK\\|Traceback' logs/n1im-head.out logs/n1im-copia.out` |
+| 19:56:42 | Bash |  | `cd /home/ronald/saas-hasner; grep -l 'N1PNA' logs/sombra/*.py 2>/dev/null; f=$(grep -l 'N1PNA' logs/sombra/*.py \| head -1); cat "$f"` |
+| 19:56:37 | Bash |  | `cd /home/ronald/saas-hasner; grep -l 'N1PNA' /tmp/*.py scratchpad/*.py logs/n1pna/* 2>/dev/null \| head; grep -n 'sombra --rodar' -r bin/sombra.sh \| head -3; grep -n '\-\-rodar' bin/sombra.sh \| head -5` |
+| 19:56:32 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/n1pna/sonda_copia.out \| head -20; grep -n 'sonda_copia\\|sonda_head' app/docs/RELATO.md \| cut -c1-300 \| head -3; ls -t scratchpad 2>/dev/null \| head; ls -t /tmp/*.py 2>/dev/null \| head -5` |
+| 19:56:25 | Bash |  | `cd /home/ronald/saas-hasner; bash bin/suite.sh --dir /home/ronald/wt-n1im-183722 > logs/n1im/suite_4892a6ab.log 2>&1; echo $? > logs/n1im/suite_4892a6ab.rc` |
+| 19:56:24 | Bash |  | `cd /home/ronald/wt-n1im-183722 && git log --oneline -2 && git status --porcelain \| wc -l && git diff --stat 0e4e4b71 HEAD \| tail -1` |
+| 19:53:53 | Bash |  | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'EOF' p='RELATO.md'; s=open(p).read() a="Construcao depois do pouso da N1 (teto 1).\n" assert s.count(a)==1 s=s.replace(a,a+"NOITE-0411 item 2 leitura de codigo (sessao, Codex sem cota): por colab, espelho_do_colab roda o motor 2x por caminhos distintos -- espelho.py:1227 autoridade_do_periodo(vis_ini..hoje) -> apurar_por_fatia (:1164) E cartao_p ...` |
+| 19:53:47 | Bash |  | `cd /home/ronald/saas-hasner; ps -p 2133283 >/dev/null && echo vivo \|\| echo morto; bin/trava_teste.sh --quem 2>&1\|tail -1; ls -t logs/n1im \| head -3` |
+| 19:53:41 | Bash |  | `cd /home/ronald/saas-hasner/app; grep -n 'apurar_por_fatia\\|calcular_mes\\|fechamento_lido\\|folha_manda\\|autoridade_do_periodo(' ponto/services/espelho.py relatorios/cartao_pela_celula.py \| head -30; grep -n 'def apurar_por_fatia' -A30 ponto/services/fechamento.py \| grep -n 'calcular_mes\\|cache\\|memo'` |
+| 19:53:35 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -n 1703,1760p ponto/services/fechamento.py` |
+| 19:53:28 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -n 60,140p ponto/services/he_pendente_lavrado.py` |
+| 19:53:23 | Bash |  | `cd /home/ronald/saas-hasner; ps -p 2133283 >/dev/null && echo vivo \|\| echo morto; grep -E '^(OK\|FAILED)($\| \()\|^Ran ' logs/n1im/vizinhos3.log \| tail -2; cat logs/n1im/vizinhos3.rc 2>/dev/null; cd /home/ronald/wt-n1im-183722 && git log --oneline -2 && git status --porcelain \| head` |
 | 19:52:24 | Bash |  | `cd /home/ronald/saas-hasner/app/docs && sed -i '2s#^ESPERANDO: trava_teste.sh \| pid=2133283 \| arquivo=.*#ESPERANDO: trava_teste.sh \| pid=2133283#' RELATO.md && sed -n 2p RELATO.md; ps -p 2133283 >/dev/null && echo vivo` |
 | 19:52:19 | Bash |  | `cd /home/ronald/saas-hasner; tail -4 logs/hook_stop_fila1.log \| cut -c1-300; sed -n '/def _prova_pid/,/^def /p' bin/hook_stop_fila1.py \| head -40` |
 | 19:52:09 | Bash |  | `cd /home/ronald/saas-hasner/app/docs && sed -i '2s/^ESPERANDO: suite vizinhos3 do construtor N1-IDENTITY-MAP \|/ESPERANDO: trava_teste.sh \|/' RELATO.md && sed -n 2p RELATO.md` |
