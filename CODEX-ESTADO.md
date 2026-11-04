@@ -1,7 +1,51 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **04/11/2026 11:33** · publicado em **04/11/2026 11:35** (UTC-3)
+> Ultima resposta processada: **04/11/2026 12:22** · publicado em **04/11/2026 12:22** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 04/11 12:22 · sessao c2861ff43f2f · - · - · origem=Ronald (tmux)
+
+Mapa de escritores/leitores e falhas:
+
+- **RESTART**: valor local inicializado em `0`, alterado para `1` apenas por `MODO=--restart`; motivo obrigatório (`bin/deploy.sh:67-72`). Leitores: primeira recusa (`bin/deploy.sh:112-114`), exceção da guarda mensageria (`bin/deploy.sh:147`), escolha restart/HUP (`bin/deploy.sh:295-315`), frase final (`bin/deploy.sh:400-403`). O contrato examina textualmente esse ramo (`bin/contrato_deploy.sh:41-49`).
+
+- **PEND_MSG**: escrito pelo resultado de `docker exec mensageria … migrate --check`, `0` em sucesso e `1` em qualquer falha (`bin/deploy.sh:141-145`); lido na saída e na guarda (`bin/deploy.sh:146-149`). O fake do selo fornece o rc por `FAKE_PEND_MSG` (`bin/tests/test_deploy_reload_gracioso.sh:55`).
+
+- **logs/crons_em_curso**: envelope cria diretório/marca `${N}_${E}.$$`, escreve horário e remove em `trap EXIT` (`bin/cron_run.sh:9-10`). Deploy percorre marcas e consulta `/proc/<pid>`; **também escreve**, removendo marcas consideradas mortas (`bin/deploy.sh:105-106`). Leitura para recusa usa `em_curso` (`bin/deploy.sh:107-110`). O selo cria marca falsa de PID vivo (`bin/tests/test_deploy_reload_gracioso.sh:85`).
+
+- **logs/vigia_logins.lock**: `vigia_logins` abre fd 7 e tenta flock exclusivo não bloqueante (`bin/vigia_logins.sh:71-75`); o selo mantém a mesma trava ocupada no fixture (`bin/tests/test_vigia_logins_sem_sobreposicao.sh:58`). A trava cobre as leituras decisórias e o revert/deploy (`bin/vigia_logins.sh:76-87`).
+
+- **“deploy: OK”**: escritores preservam prefixo nos dois modos (`bin/deploy.sh:401-403`); leitores usam apenas `^deploy: OK`, portanto compatíveis com nova redação (`bin/molde_fatia/cadeia.sh:89-90`, `bin/molde_autocura/cadeia.sh:86-87`). Ambos têm `set -e`, além da conferência textual (`bin/molde_fatia/cadeia.sh:4`, `bin/molde_autocura/cadeia.sh:3`).
+
+- **rc em `_subir`**: `_rodar` retorna o `subprocess.run(...).returncode` real (`app/core/integrador_lote.py:242-248`); novo ramo lê o rc, grava `veredito`/`deploy_rc` e retorna antes de FIM/NO_AR (`app/core/integrador_lote.py:753-766`). `_fechar` persiste o registro em LOTES e no log (`app/core/integrador_lote.py:825-829`). Entretanto, `main rodar` sempre retorna `0`, portanto o shell ainda recebe sucesso mesmo com veredito `deploy falhou` (`app/core/integrador_lote.py:856-858`, `bin/integrador.sh:52`).
+
+Falhas a destacar:
+
+1. **Consumidor não migrado: reload da cópia do integrador ignora rc** e entra na suite imediatamente, mesmo quando a nova guarda recusou reload (`app/core/integrador_lote.py:638-640`).
+
+2. **Consumidor não migrado: `esteira_vigia.auto_revert` ignora rc dos dois deploys**, inicial e revert do revert (`app/core/esteira_vigia.py:1267-1268`, `app/core/esteira_vigia.py:1275`). Pode concluir “a tela volta” porque testes passaram sem provar publicação (`app/core/esteira_vigia.py:1269-1273`, `app/core/esteira_vigia.py:1287-1291`).
+
+3. **Alarme novo afirma estado de prod que o rc não prova.** Para qualquer rc não zero informa “PROD SEGUE no codigo de antes do lote” (`app/core/integrador_lote.py:754-760`), porém falhas podem acontecer depois de restart/HUP, na espera de workers, rotas ou selo (`bin/deploy.sh:298`, `bin/deploy.sh:315`, `bin/deploy.sh:328`, `bin/deploy.sh:374`, `bin/deploy.sh:381`). Estado efetivo nessas falhas: **[não verificado]**.
+
+4. **Trava do vigia não estabelece Single Writer global.** Vigia usa trava própria e faz `git revert` (`bin/vigia_logins.sh:71-87`), enquanto a porta compartilhada da árvore é `/tmp/cadeia.lock` (`bin/trava.sh:57-70`), usada pelas cadeias (`bin/molde_fatia/cadeia.sh:11`, `bin/molde_autocura/cadeia.sh:10`). `auto_revert` também reverte sem adquirir essa porta dentro da função (`app/core/esteira_vigia.py:1242-1291`). Sobreposição real em prod: **[não verificado]**.
+
+## 04/11 12:22 · sessao 00bdd655fe03 · - · - · origem=Ronald (tmux)
+
+1. **Existe HUP sem `recusa_restart_com_cron`, por desenho:** normal, `--sem-migrate`, `--sem-sombra`, `--reload-copia` e `--reload-agendado` convergem no único `docker kill -s HUP`; a recusa só é chamada para `RESTART=1` (`bin/deploy.sh:112-114`, `bin/deploy.sh:295-315`). O único `docker restart` está imediatamente após a segunda recusa (`bin/deploy.sh:297-298`).
+
+   **`--so-conferir` não existe no parser.** Só `--conferir` liga `SO_CONFERIR`; `--so-conferir` atravessa o fluxo normal, podendo migrar e emitir HUP (`bin/deploy.sh:56-62`, `bin/deploy.sh:167`, `bin/deploy.sh:171-174`, `bin/deploy.sh:315`). Não encontrei um modo válido silenciosamente esquecendo reload: as saídas anteriores são recusas e o modo de conferência (`bin/deploy.sh:89`, `bin/deploy.sh:147-174`, `bin/deploy.sh:213-235`, `bin/deploy.sh:267-273`).
+
+2. **No deploy não há retry de sinal nem fallback restart:** HUP falho chama `falhou`; o laço apenas observa PIDs e também termina em falha (`bin/deploy.sh:315-328`). O único restart explícito é `bin/deploy.sh:298`; os outros comandos Docker de partida localizados em scripts operacionais são para os bancos de teste/sombra (`bin/db_teste.sh:70`, `bin/sombra_db.sh:100`). Não há operação compose no fluxo de deploy; só comentários indicando o ato separado de infraestrutura (`bin/deploy.sh:20-22`, `bin/deploy.sh:65-66`).
+
+   **Limitação Single Writer:** as duas recusas não excluem um cron que comece entre checagem e restart; o envelope cria a marca sem trava compartilhada, e a segunda consulta é seguida pelo restart (`bin/cron_run.sh:9-11`, `bin/deploy.sh:105-110`, `bin/deploy.sh:297-298`). Há passagem pela recusa, mas não exclusão mútua com o início dos crons nesses pontos.
+
+   **Prova de workers permite vazio:** PIDs anteriores vazios só avisam e pulam; consulta atual vazia satisfaz “nenhum antigo restou” e aprova (`bin/deploy.sh:318`, `bin/deploy.sh:321-324`). A prova de rota executa um processo Python novo por `docker exec`, sem consultar o worker HTTP (`bin/deploy.sh:353-356`).
+
+3. **Guarda mensageria:** qualquer rc não zero, incluindo container indisponível e rc diferente de 1, define `PEND_MSG=1`; bloqueia antes da migration do core e do reload em todos os modos, salvo `--conferir` e `--restart` (`bin/deploy.sh:141-150`, `bin/deploy.sh:167`). Isso inclui agendado e cópia, pois os dois mantêm `SO_CONFERIR=0`, `RESTART=0` (`bin/deploy.sh:57-79`). Conferência pode sair zero mesmo sem resposta do mensageria, apenas imprimindo o estado (`bin/deploy.sh:146-147`, `bin/deploy.sh:171-174`).
+
+   Recusar às 03:30 com migration pendente é coerente com o desenho registrado: o cron declara que não deve publicar fatia inacabada, o HUP publica a árvore viva, e a migration mensageria está no comando de boot (`app/config/crons.py:303-308`, `bin/deploy.sh:187-189`, `docker-compose.mensageria.yml:20`). O custo é deixar a higiene de memória sem ocorrer até correção; o próprio propósito desse cron é pagar o vazamento retirado da reciclagem por contagem (`app/config/crons.py:300-306`). Ocorrência real em produção: [não verificado].
+
+**Nota para consolidação do item 4:** rc não zero não prova “PROD SEGUE no código de antes”: erros podem acontecer depois de emitir HUP, por rota ou selo (`bin/deploy.sh:315`, `bin/deploy.sh:374`, `bin/deploy.sh:381`); a mensagem do integrador é forte demais nesse aspecto (`app/core/integrador_lote.py:757-760`).
 
 ## 04/11 11:33 · sessao c5de69a10b63 · DEPLOY-[nome]-ELO · verificador · origem=Code
 
@@ -894,52 +938,4 @@ Verifiquei apenas os predicados em leitura: o fecho de `scripts/backup_all.sh` r
 
 Não achei outro falso negativo no comando principal dos RAW atualmente pinados; ausência global de outros caminhos permanece **[nao verificado]**. O contraexemplo do envelope já basta para reprovar a alegação de classe fechada. (`bin/tests/test_deploy_nao_mata_elo.sh:324`, `bin/admissao_cron.sh:208`, `bin/cron_run.sh:49`)
 
-## 03/11 00:01 -- HISTORICO (mais de 24 h) · sessao f9861db3b76e · - · - · origem=Ronald (tmux)
-
-O selo melhorou e morde regressões específicas; ainda não prova as classes inteiras. A análise foi somente estática, pois ele cria e remove arquivos. Execução integral e sobrevivência efetivamente executada dos mutantes: **[nao verificado]**. (`bin/tests/test_deploy_nao_mata_elo.sh:44`)
-
-| Caso | O que morde | Mutante plausível sobrevivente |
-|---|---|---|
-| **13** | fd8 herdado pelo Docker; restart lento; falha com registro; impossibilidade de registrar início impede qualquer restart. (`bin/tests/test_deploy_nao_mata_elo.sh:354`, `:358`, `:364`, `:370`) | Remover o fechamento de fd8 das varreduras/sono, mantendo-o no Docker: o caso13 só observa `/proc/$$/fd/8` no fake Docker. Sobrevivência integral **[nao verificado]**. (`bin/tests/test_deploy_nao_mata_elo.sh:52`, `:355`; `bin/reinicio_sob_admissao.sh:40`, `:44`, `:54`) |
-| **15** | Distingue corrida real exit75 de recusa exit75; exige proveniência e exatamente duas amostras de duração. (`bin/tests/test_deploy_nao_mata_elo.sh:396`, `:397`, `:400`, `:407`, `:419`) | `linha_nao_rodou = rodou is False OR exit == 70`: continuaria apagando corridas reais exit70. O caso15 só produz exit0/75; o novo Django também só produz corrida real75. Sobrevivência prevista; execução **[nao verificado]**. (`bin/tests/test_deploy_nao_mata_elo.sh:396`, `:397`, `:400`; `app/chamados/tests/test_contract_crons.py:233`, `:235`, `:236`) |
-| **16** | Casos positivos/negativos do parser; fecho relativo com ciclo; ancestral; relógio parado; TERM ignorado; passo acima do teto; limite do env; contrato com casca faltante; truncamento137 e fim invertido. (`bin/tests/test_deploy_nao_mata_elo.sh:423`, `:434`, `:444`, `:455`, `:460`, `:468`, `:472`, `:478`, `:488`, `:491`) | Fixar `SEM_FIM_S=670`: a fixture compara comportamento no número atual, sem alterar as constantes produtoras. Portanto ela morde o velho660, mas não a derivação paralela. Sobrevivência integral **[nao verificado]**. (`bin/tests/test_deploy_nao_mata_elo.sh:483`, `:484`, `:486`; `bin/admissao_cron.sh:59`, `:63`) |
-
-O caso16 do ancestral usa um único fluxo sequencial, com `docker exec ... true` concluído antes do restart. Não testa ancestral com outro filho ainda usando a casca nem identidade temporal da cadeia de pais. (`bin/tests/test_deploy_nao_mata_elo.sh:444`; `bin/admissao_cron.sh:173`, `:189`)
-
-O caso8 agora morde o antigo mutante `_rr=0`: extrai a própria chamada e captura do retorno e exige saída75, arquivo e argv; a extração também exige literalmente `_rr=$?`. (`bin/tests/test_deploy_nao_mata_elo.sh:223`, `:224`, `:233`)
-
-**Descartes:**
-
-- **Caso14:** permanece dependente de sleeps. Assume que o deploy já fez a primeira varredura antes da publicação; se o processo atrasar, a primeira varredura já verá a marca e o mutante sem segunda varredura poderá passar. A fila é decisão de escopo, não demonstração de cura. (`bin/tests/test_deploy_nao_mata_elo.sh:378`, `:380`, `:381`, `:383`, `:386`, `:390`)
-- **Manual compartilhado:** continua literal `manual`, compartilhando arquivo e `.novo`; sucesso pode apagar a recusa daquele id. O agendado usa ids próprios, portanto isso não desfaz seu isolamento, mas não cura a classe concorrente manual. (`bin/deploy.sh:52`, `:54`, `:285`, `:286`, `:361`; `bin/deploy_agendado.sh:94`, `:104`)
-- **D4b:** `/proc/<pid>` ausente declara marca órfã; a varredura remove-a sem procurar descendentes reparentados. A afirmação “nenhum caminho de produção mata só o envelope” permanece **[nao verificado]**; descartá-la da garantia geral de proteção não é provado pelo código. (`bin/admissao_cron.sh:154`, `:192`; `bin/cron_run.sh:22`)
-
-**Noturno e retries:**
-
-O RAW real chama `cd .../eval && /usr/bin/python3 noturno.py`; o comentário registra2518s, coincidindo com o dado fornecido. O teto é1500s. (`app/config/crons.py:559`, `:575`, `:576`; `bin/admissao_cron.sh:35`)
-
-Isso sozinho não implica bloqueio eterno: sob a hipótese de uma corrida2518s iniciada junto à primeira tentativa, sem outro cron bloqueador nem atraso externo, a primeira tentativa recusa em1500s e a segunda dispõe de teto suficiente para o restante1018s. Hipóteses produtivas e duração atual: **[nao verificado]**. (`bin/reinicio_sob_admissao.sh:48`, `:50`; `bin/deploy_agendado.sh:99`, `:105`)
-
-As novas tentativas têm limite padrão3; recusa persistente termina75 e o agendamento é removido. Entretanto, o `flock` de `/tmp/regua.lock` não tem `-w`: há caminho de espera sem prazo antes de uma tentativa de deploy. Bloqueio produtivo dessa trava: **[nao verificado]**. (`bin/deploy_agendado.sh:78`, `:99`, `:105`, `:113`, `:121`, `:123`)
-
-Não há timeout externo sobre o RAW completo no envelope, e a marca permanece até a saída do runner; timeout1500 do deploy não mata o noturno no caminho de recusa. Há timeouts internos dos subprocessos do noturno, independentes do deploy. (`bin/cron_run.sh:22`, `:24`; `bin/reinicio_sob_admissao.sh:48`, `:50`; `eval/noturno.py:32`, `:36`, `:43`, `:93`)
-
-## 03/11 00:01 -- HISTORICO (mais de 24 h) · sessao de5873872725 · - · - · origem=Ronald (tmux)
-
-- **V3-7 fecha a ambiguidade para as novas linhas:** o runner grava `rodou=false` antes da admissão e só muda para `true` antes de executar; escreve o campo no placar. O predicado exclui exclusivamente `False`; ausência do campo e `true` são equivalentes. Ambos os leitores de corrida/duração consultam esse predicado. (`bin/cron_run.sh:20,23,24,29`; `app/config/crons.py:1432,1433`; `app/core/management/commands/pipeline_placar.py:9,72`; `bin/crons_duracao.py:54,85`)
-
-- **Nenhum leitor produtivo localizado usa 70/75 para inferir “não rodou”.** O vigia continua julgando quebra por saída diferente de 0/2, enquanto o contador busca 137; são perguntas distintas. (`app/core/services/crons_quebrados.py:46`; `bin/rc137_no_restart.sh:73`)
-
-- **Único escritor produtivo localizado do placar:** `cron_run.sh`; as outras escritas encontradas pertencem a fixtures. Escritor externo à cópia: **[nao verificado]**. (`bin/cron_run.sh:29`; `bin/tests/test_medicao_de_cron_nao_expira.sh:31`; `app/core/tests/test_crons_quebrados.py:33`; `bin/tests/test_deploy_nao_mata_elo.sh:240`)
-
-- **V3-6 cura os casos nomeados, não toda a classe “ilegível não é zero”.** Placar truncado antes de conter `137` continua sendo ignorado e pode resultar em zero. A verificação depende da substring literal. (`bin/rc137_no_restart.sh:69,70,71,72,81`)
-
-- **670s não está subestimado por faltar KILL em cada casca:** cada primeira subida que falha encerra o script. O limite é restart antes de120 + duas subidas antes de180 + última subida180 com escalada10 =670. A derivação efetiva usa as constantes compartilhadas. (`bin/admissao_cron.sh:39,40,41,59,63`; `bin/reinicio_sob_admissao.sh:66,67,69,70`)
-
-- **Persistem relógios civis decidindo outras janelas/tetos:** corrente espera carimbos com `date +%s`; medidor recorta sete dias; vigia recorta26h; pipeline lê hora/minuto separadamente. A espera do restarter usa `/proc/uptime`; seus `date` restantes registram testemunhas civis. (`bin/encadeado.sh:91,96,97`; `bin/crons_duracao.py:66`; `app/core/services/crons_quebrados.py:27,39`; `app/core/management/commands/pipeline_placar.py:122,124`; `bin/admissao_cron.sh:66,68`; `bin/reinicio_sob_admissao.sh:37,38,63,65`)
-
-- **Mutantes sobreviventes previstos, sem execução:** acrescentar ao filtro de duração `or d.get('exit') == 70` apagaria corrida real70; o caso15 só oferece0/75. Copiar literalmente o predicado em `_nao_rodou` preservaria os efeitos e violaria fonte única; não há mutação da autoridade nessa fixture. Fixar `SEM_FIM_S=670` também conserva o caso16: ele cobra o valor atual, não a derivação. (`bin/crons_duracao.py:54,85`; `bin/tests/test_deploy_nao_mata_elo.sh:396,397,400,414,419,484,485,486`; `bin/rc137_no_restart.sh:25`)
-
-- **Caso15 testa ausência de `rodou` apenas indiretamente fora do selo shell:** o novo teste Django fornece uma linha com `true` e outra sem campo, ambas com75, exigindo duas corridas e dois erros. Não verifica corrida real70 no medidor. (`app/chamados/tests/test_contract_crons.py:226,233,235,236,241,242`; `bin/tests/test_deploy_nao_mata_elo.sh:396,397,400`)
-
-_1514 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1516 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
