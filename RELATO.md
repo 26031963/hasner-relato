@@ -1,7 +1,8 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh | pid=1145610 | arquivo=/home/ronald/saas-hasner/logs/dme/suite_887e5ea0.log
+ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh | pid=2376196
 
+SMOKE TOAST: passos (PARTE B, copia wt-toast-082134 @8f94c1c5, NAO sobe sem este smoke -- BUG 73): nas DUAS cascas (painel admin base.html e app base_app.html), (1) Escala > Tipos > wizard de calendario, salvar com nome VAZIO -> toast 'Nao deu: Preencha o nome do calendario.'; (2) salvar com nome de calendario JA existente -> toast 'Nao deu: Ja existe um calendario de folga com o nome "X"...', sem 500; (3) editor do calendario, renomear para nome existente -> mesma recusa de hoje; (4) qualquer 403/404 segue 'HTTP 403'/'HTTP 404'. OK seu -> pouso B por deploy --sem-migrate.
 F3-RECORTE-E-CAUDA 04/11 08:3x (aval Ronald): DESPACHO F3-RECORTE (A): medida na sombra savepoint+raise -> sonnet (motivo: sonda que escreve na sombra; Codex em reserva para a FINAL), saida logs/f3_recorte/resultado.md; (B) classificar_dia entra apos item 5 MODO-COMUM.
 PAREI DEPLOY-[nome]-ELO-DA-CORRENTE RESPONDIDA por aval Ronald RESTART-FEITO 04/11 07:4x (segue item 2 DEPLOY-ELO, pouso ate 14:30; depois 3 F3-DRY, 4 COMP10-HOLERITE, 5 MODO-COMUM em copia) -- era: parada pelo RESTART-NO-MARCO (o /clear e o restart sao dele) | espera Ronald -- (aval COMPLEMENTO-2 07:5x, item 4 "PRONTO PARA CLEAR E RESTART e PARA"): handoff 018b8924, /tasks vazio; depois do restart segue o item 2 DEPLOY-ELO pelo HANDOFF sem aval.
 
