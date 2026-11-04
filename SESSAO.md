@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 17:34:24.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (26.1 MB). Acoes na janela: **899**.
+**Medido em 04/11/2026 17:39:48.** Transcript: `29e4229d-9fb7-4166-9986-a16d88f0e0e5.jsonl` (26.2 MB). Acoes na janela: **900**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:39:30 | Bash | Wait for cron15 suite verdict | `cd /home/ronald/saas-hasner; until [ -f logs/cron15/suite.rc ]; do /usr/bin/sleep 20; done; cat logs/cron15/suite.rc; grep -E '^(OK\|FAILED)($\| \()' logs/cron15/suite.log \| tail -1; grep -E '^Ran ' logs/cron15/suite.log \| tail -1; grep -E '^(ERROR\|FAIL\|UNEXPECTED)' logs/cron15/suite.log \| head` |
 | 17:29:21 | Bash | Wait for cron15 full suite verdict | `cd /home/ronald/saas-hasner; until [ -f logs/cron15/suite.rc ]; do /usr/bin/sleep 20; done; cat logs/cron15/suite.rc; grep -E '^(OK\|FAILED)($\| \()' logs/cron15/suite.log \| tail -1; grep -E '^Ran ' logs/cron15/suite.log \| tail -1; grep -E '^(ERROR\|FAIL\|UNEXPECTED)' logs/cron15/suite.log \| head` |
 | 17:29:17 | Agent | Verify N1-PERGUNTAS-DO-APP diff | `Obra N1-PERGUNTAS-DO-APP (repo /home/ronald/wt-n1pna-164232, branch raia/wt-n1pna-164232, commits 2f800726 e bf659ad7 sobre 3e631f42). Diff: `git -C /home/ronald/wt-n1pna-164232 diff 3e631f42..bf659ad7`. O que a obra afirma: `chamados/services/pergunta_no_app.py::perguntas_do_app(colab)` passa a atribuir a instancia `colab` recebida a `p.disputa.colaborador` de cada pergunta viva antes de chamar ` ...` |
 | 17:29:05 | Bash | Commit cron15 mark in copy | `cd /home/ronald/wt-cron15-171947; git add app/core/tests/marca_cron15.py app/core/tests/test_marca_cron15.py app/chamados/tests/test_contract_crons.py app/chamados/tests/test_cron_longo_sai_da_medida.py app/core/tests/test_contract_crons_duracao_horario.py app/docs/BACKLOG.md app/docs/PROMPTS.md app/docs/RELATO.md; git commit -q -F - <<'EOF' CRON-15-NOMEADOS: os 15 selos de cron marcados pelo nome ...` |
