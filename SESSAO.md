@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 23:05:43.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (7.6 MB). Acoes na janela: **281**.
+**Medido em 04/11/2026 23:11:02.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (8.3 MB). Acoes na janela: **283**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:06:56 | Bash |  | `python3 - <<'EOF' p='docs/RELATO.md' L=open(p,encoding='utf-8').read().split('\n') s=("MEDIDO JUIZ-VARREDURA-2 23:0x (sonda sonnet, prod, bin/sonda_leitura.sh, ERROS=0): hipotese 'lastro x reconciliar sao 2 juizes' ERRADA. " "Os 4 (36845, 36457, 28011, 36442; batida_ausente, lampada do marco ACESA) passam decidir/premissa/_gate_premissa_do_fechamento; quem recusa e " "chamados/models.py:393 _gate_ ...` |
+| 23:06:48 | Bash |  | `sed -n 1,12p docs/RELATO.md \| cut -c1-200; date '+%d/%m %H:%M'` |
 | 23:04:08 | Bash |  | `python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') i=[n for n,l in enumerate(L) if l.startswith('ACHADO JUIZ-VARREDURA-2')][0] L.insert(i+1,"DESPACHO JUIZ-VARREDURA-2 pre-obra 23:1x: os 4 com lastro x fechados=0 -> sonnet (sonda de leitura PROD por bin/sonda_leitura.sh; motivo: Codex sem cota). Leitura do codigo (sessao): lastro.py::fechar:300 julga com_lastro e ch.reconciliar() (c ...` |
 | 23:04:02 | Agent | Sonda dos 4 com lastro | `Sonda de LEITURA em producao, SaaS de ponto (Django, django-tenants, schema `juliani`). Motivo de nao ir ao Codex: cota esgotada ate 05/11 15:05 (aval OTIMIZA-SEM-CODEX). Leia /home/ronald/saas-hasner/CLAUDE.md secoes 4 e 6 antes. PERGUNTA: o cron `fechar_cobranca_com_lastro` (app/ponto/services/lastro.py::fechar, :300) imprime em prod toda hora "(a) COM LASTRO (fecha aqui) . 4" e "fechados=0" (lo ...` |
 | 23:03:46 | Bash |  | `cd /home/ronald/saas-hasner && sed -n 1,40p bin/sonda_leitura.sh \| grep -v "^$" \| head -30; git grep -n "def reconciliar" -- app/chamados/models.py` |
