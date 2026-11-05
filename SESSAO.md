@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 20:10:23.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (30.5 MB). Acoes na janela: **1058**.
+**Medido em 05/11/2026 20:15:47.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (30.6 MB). Acoes na janela: **1060**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:12:26 | Bash | Log H12H06 escalation in RELATO | `cd /home/ronald/saas-hasner/app; cat >> docs/RELATO.md <<'EOF' - 05/11 23:2x H12H06: Codex v7 REPROVA, 1 procedente nao curado. Em `ausencia.py:591`, `_ato_h06_confirmado` devolve False em DatabaseError, e o except `:744` apaga o arquivo de um ato que ja commitou. Sao 3 voltas seguidas com procedente, entao pela CODEX 5(d) a obra subiu ao opus de escalada, so leitura, sem esperar a suite. Ele deci ...` |
+| 20:12:21 | Agent | Opus escalation H12H06 v7 | `Obra H12H06 (aval Ronald 05/11 17:2x H12H06-UMA-PORTA, padrao Policy Enforcement Point + Single Writer: aplicar e reverter sao as duas direcoes da MESMA porta de escrita `ponto/services/ausencia.py::porta_do_ato_h06`; ordem de trava Empresa->Colaborador->Ausencia; arquivo de reversao CONSUMIDO com hash na trilha LogAuditoria na mesma transacao; proibido guarda copiada, autoridade nova, modelo novo ...` |
 | 20:07:47 | Bash | Point RELATO waiter at live trava_teste pid | `cd /home/ronald/saas-hasner/app; sed -i '2s/.*/ESPERANDO: \/home\/ronald\/saas-hasner\/bin\/trava_teste.sh \| pid=489674/' docs/RELATO.md; sed -n 2p docs/RELATO.md` |
 | 20:07:43 | Bash | Find the docker run client pid | `pgrep -af "docker run" \| grep -v pgrep \| cut -c1-140; pgrep -af trava_teste \| cut -c1-140` |
 | 20:07:39 | Bash | Find live suite process | `cd /home/ronald/saas-hasner; tail -3 logs/jv3/suite_0f918814.log \| cut -c1-200; pgrep -af "suite.sh" \| grep -v pgrep \| cut -c1-160; docker ps --format '{{.ID}} {{.Names}} {{.Status}}' \| grep -v saas_ \| head` |
