@@ -1,7 +1,27 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **05/11/2026 19:11** · publicado em **05/11/2026 19:16** (UTC-3)
+> Ultima resposta processada: **05/11/2026 19:42** · publicado em **05/11/2026 19:43** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 05/11 19:42 · sessao 10a5b029df2a · - · - · origem=Ronald (tmux)
+
+Na volta 2, não encontrei introdução das classes citadas: a mudança executável de produção é a inclusão de `r['premissa']` na saída; os outros trechos de produção alterados pelo delta são comentários/docstring. A conclusão se limita ao delta fornecido e à cópia, sem execução. (`app/chamados/management/commands/consumir_eventos_celula.py:31`; `app/chamados/models.py:1048`; `app/ponto/nucleo.py:70`)
+
+- **Segundo juiz / derivação paralela:** o contexto da obra mantém a consulta a `_veredito_premissa`, que consulta o catálogo, e a retratação passa por `_retratar`; os testes novos não acrescentam autoridade de produção. (`app/chamados/reconciliador.py:247`, `app/chamados/reconciliador.py:1437`, `app/chamados/reconciliador.py:1443`)
+- **Segundo escritor fora da porta:** os produtores chamam `emitir_evento_celula`, onde está o INSERT do evento; o DELETE continua em `ponto/nucleo.py`, porta declarada de `TurnoMaterializado`. (`app/chamados/models.py:1059`, `app/ponto/nucleo.py:91`, `app/ponto/portas/celula.py:643`, `app/core/portas.py:114`)
+- **Relógio fora da borda:** o delta V2 não acrescenta leitura de relógio ao código de produção; os testes novos pertencem às classes com `freeze_time`. (`app/chamados/management/commands/consumir_eventos_celula.py:31`, `app/chamados/tests/test_c20_juiz3_outbox.py:83`, `app/chamados/tests/test_c20_juiz3_outbox.py:149`, `app/chamados/tests/test_c20_juiz3_outbox.py:232`)
+- **Selo sem mordida:** a mudança do teste antigo continua cobrando uma igualdade exata: `eventos == len(salvos) + 1`; cobra também nenhuma emissão na repetição. O teto numérico do selo 17 e sua execução nesta cópia permanecem **[não verificado]**. (`app/ponto/tests/test_o_outbox_celula.py:107`, `app/ponto/tests/test_o_outbox_celula.py:111`, `app/ponto/tests/test_o_outbox_celula.py:116`)
+- **Ordem de trava:** o delta V2 não adiciona trava; no contexto completo, o consumidor chama a porta por chamado e só envolve a marcação dos eventos em atomic próprio, após os julgamentos. (`app/chamados/reconciliador.py:1354`, `app/chamados/reconciliador.py:1360`, `app/chamados/reconciliador.py:1370`)
+
+O DELETE cru invisível ao censo continua **INCOMPLETO**; a volta 2 documenta o limite, sem corrigir sua cobertura. (`app/ponto/nucleo.py:70`, `app/ponto/nucleo.py:75`, `app/ponto/nucleo.py:80`)
+
+## 05/11 19:42 · sessao 9667632ea367 · - · - · origem=Ronald (tmux)
+
+- **Destino da linha:** command imprime o novo campo em `app/chamados/management/commands/consumir_eventos_celula.py:32–35`; cron está declarado a cada minuto com `log='consumir_eventos_celula.log'` em `app/config/crons.py:394`; render redireciona stdout/stderr ao arquivo em `app/config/crons.py:1829–1830`.
+- **Testes:** `app/chamados/tests/test_orfas_pelo_evento.py:209` executa o command normal com `StringIO`, mas verifica estado da pergunta, sem inspecionar saída (`:210–211`). `app/ponto/tests/test_o_outbox_celula.py:464–466` inspeciona somente “outra execucao”, ramo que retorna antes da linha nova (`app/chamados/management/commands/consumir_eventos_celula.py:19–22`). Os testes C20 chamam diretamente a função Python (`app/chamados/tests/test_c20_juiz3_outbox.py:240–243`).
+- **Envelope e medidores:** `bin/cron_run.sh:11–13` executa o command e registra JSON próprio com duração/exit; `:22–35` decide pelo exit. Vigia lê esse JSON (`app/core/services/crons_quebrados.py:30–46`), assim como o medidor de duração (`bin/crons_duracao.py:61–75`); esses caminhos não analisam a frase acrescentada.
+- **Docs:** `app/docs/RELATO.md:1120` registra contagens históricas e cita esse log; não define parser/formato para o novo campo.
+- **Limite:** busca por nome do command/log e fragmentos da linha não encontrou parser específico nem asserção da expressão nova; leitores externos, crontab efetivamente instalado e ausência universal de parsers são **[não verificado]**.
 
 ## 05/11 19:11 · sessao 5816bfa46ce5 · H12H06 · verificador · origem=Code
 
@@ -986,77 +1006,4 @@ As divergências por **omissão** estão discriminadas abaixo, com sua classific
 
 [truncado em 20000 de 23754 caracteres]
 
-## 05/11 18:33 · sessao d8df42718d53 · - · - · origem=Ronald (tmux)
-
-Conferência de B: não identifiquei incompatibilidade entre as duas descrições dos sítios centrais; ambas descrevem as mesmas portas e limitações. O acréscimo efetivo no consumidor existe apenas no candidato de pc1, matéria de desenho, pois o consumidor atual termina a reconciliação sem chamar a fábrica (`app/chamados/reconciliador.py:1326`, `app/chamados/reconciliador.py:1329`, `app/chamados/reconciliador.py:1332`).
-
-Coincidências conferidas:
-
-- Registro: C6=`pergunta_viva`, C15=`fio_vivo`, C17=`porta_alcancavel_do_dia`; C11 é ausência, não FIO MUDO (`app/core/juizes.py:266`, `app/core/juizes.py:271`, `app/core/juizes.py:275`, `app/core/juizes.py:277`).
-- `abrir` trava colaborador, pode retornar existente/renascido e só emite evento no nascimento real, condicionado a `MODULOS_DE_TURNO`; essa tupla não contém `batida_ausente` (`app/chamados/models.py:866`, `app/chamados/models.py:882`, `app/chamados/models.py:885`, `app/chamados/models.py:933`, `app/chamados/models.py:939`, `app/chamados/reconciliador.py:336`).
-- `criar` termina com criação, trilha e retorno, sem emissão explícita nesse corpo (`app/chamados/models.py:1048`, `app/chamados/models.py:1049`, `app/chamados/models.py:1050`).
-- Detector tenta fio em `try/except`; grade termina sem emissão direta; C2 usa `abrir` e reapontamento (`app/ponto/management/commands/detectar_ausencias.py:790`, `app/ponto/management/commands/detectar_ausencias.py:801`, `app/ponto/management/commands/detectar_ausencias.py:802`, `app/ponto/management/commands/reconciliar_grade.py:507`, `app/ponto/management/commands/reconciliar_grade.py:531`, `app/chamados/reconciliador.py:879`, `app/chamados/reconciliador.py:922`).
-- Sinal do chamado pode retornar durante julgamento e está sob `engolir` (`app/chamados/signals.py:172`, `app/chamados/signals.py:174`).
-- Reabertura grava vivo e ressuscita existentes; filtro exige pergunta histórica materializada e pode resultar em zero (`app/chamados/models.py:1382`, `app/chamados/models.py:1391`, `app/chamados/models.py:1423`, `app/chamados/models.py:1482`).
-- Duplicata usa `carimbar_identidade` e retorna; reapontamento escreve destino/lavra/save e retorna sem tratar origem nesse corpo (`app/chamados/services/fio.py:891`, `app/chamados/services/fio.py:895`, `app/chamados/services/fio.py:845`, `app/chamados/services/fio.py:846`, `app/chamados/services/fio.py:849`).
-- Validação individual e devolução estão em `atomic`; materialização da disputa ocorre depois (`app/chamados/services/validacao.py:395`, `app/chamados/services/validacao.py:422`, `app/chamados/services/validacao.py:425`, `app/chamados/services/validacao.py:430`).
-- Fábrica exclui identidade histórica não duplicata, independentemente de C6 (`app/chamados/services/fabrica_da_celula.py:118`, `app/chamados/services/fabrica_da_celula.py:119`, `app/chamados/services/fabrica_da_celula.py:123`, `app/chamados/services/fabrica_da_celula.py:126`).
-- Cartório chama fábrica somente para datas presentes no conjunto julgado naquela passada (`app/ponto/services/cartorio.py:986`, `app/ponto/services/cartorio.py:995`, `app/ponto/services/cartorio.py:996`, `app/ponto/services/cartorio.py:997`).
-- Cron está configurado com `--apply`, permanece na lista de julgamento por varredura; instrumento já possui `--alarme` sem escrita (`app/config/crons.py:1495`, `app/config/crons.py:2007`, `app/config/crons.py:2011`, `app/chamados/management/commands/disparar_perguntas_competencia.py:251`).
-
-Exclusivos globais relevantes de pc1:
-
-- Matriz formal de campos com escritores/leitores, incluindo quatro portas de contexto e duas de silêncio, ausentes como inventário em pc2 (`app/chamados/services/contexto.py:62`, `app/chamados/services/contexto.py:81`, `app/chamados/services/contexto.py:106`, `app/chamados/services/contexto.py:128`, `app/chamados/services/arquivo.py:141`, `app/chamados/services/arquivo.py:176`).
-- Registro explícito de C1/C2/C3/C16/C18 e regra do lookup versus registro vivo (`app/core/juizes.py:261`, `app/core/juizes.py:262`, `app/core/juizes.py:263`, `app/core/juizes.py:276`, `app/core/juizes.py:278`, `app/docs/JUIZES.md:7`, `app/docs/JUIZES.md:14`).
-- Tratamento específico da tranca por serviço e gancho no ato (`app/chamados/services/competencia_trancada.py:178`, `app/chamados/services/competencia_trancada.py:184`, `app/chamados/services/competencia_trancada.py:276`, `app/chamados/services/competencia_trancada.py:282`).
-- Comando e agenda da relavra stale, distinguindo seu juiz de materialização de C6 (`app/chamados/management/commands/lavrar_perguntas_stale.py:58`, `app/chamados/management/commands/lavrar_perguntas_stale.py:87`, `app/chamados/veredito_lavrado.py:219`, `app/config/crons.py:390`).
-- Exclusão explícita de “Resolver dia” de C17, embora o vigia aceite essa ação separadamente (`app/chamados/juizes.py:1367`, `app/chamados/juizes.py:1369`, `app/chamados/services/vigia_fio.py:283`).
-
-Exclusivos globais relevantes de pc2:
-
-- C12/C13 nomeados e registrados como autoridades de alcance da fábrica/retenção (`app/core/juizes.py:119`, `app/core/juizes.py:120`, `app/core/juizes.py:272`, `app/core/juizes.py:273`).
-- `canonica_do_grupo` prioriza resposta, depois menor identificador (`app/chamados/services/fio.py:867`, `app/chamados/services/fio.py:873`, `app/chamados/services/fio.py:874`, `app/chamados/services/fio.py:875`).
-- `relavrar` como escritor adicional de via; a definição está em 104 e escrita real em 123–126 (`app/chamados/services/relavra_via.py:104`, `app/chamados/services/relavra_via.py:123`, `app/chamados/services/relavra_via.py:124`, `app/chamados/services/relavra_via.py:125`).
-- Chamadores irmãos individualizados: dedup, migração, declaração textual, limbo, reata, foto/API, ações e classe A (`app/chamados/management/commands/dedup_perguntas_fato.py:88`, `app/chamados/services/fio.py:943`, `app/chamados/services/fio.py:947`, `app/chamados/services/declaracao_texto.py:320`, `app/chamados/services/limbo_folgas.py:243`, `app/chamados/services/limbo_folgas.py:276`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:122`, `app/api/foto_recebida.py:51`, `app/chamados/services/acoes_disputa.py:375`, `app/chamados/management/commands/validar_classe_a.py:100`).
-- Retorno antecipado de `julgar_celula` por ausência de célula ou turno atual ainda em curso (`app/ponto/services/cartorio.py:1976`, `app/ponto/services/cartorio.py:1977`, `app/ponto/services/cartorio.py:1982`, `app/ponto/services/cartorio.py:1986`).
-- Falha da lista administrativa não exclui dia e contador textual tem consumidor no placar (`app/chamados/services/vigia_fio.py:195`, `app/chamados/services/vigia_fio.py:219`, `app/chamados/services/vigia_fio.py:225`, `app/chamados/management/commands/disparar_perguntas_competencia.py:235`, `bin/placar_code.sh:381`).
-- Exceção formal do selo e condição de saída para cron (`bin/tests/test_papel_prazo_nao_deriva.sh:303`, `bin/tests/test_papel_prazo_nao_deriva.sh:306`, `bin/tests/test_papel_prazo_nao_deriva.sh:307`, `app/docs/CORTES.md:305`).
-
-Cuidados para consolidação:
-
-- Reapontamento irmão **não é SO NUMA global**: pc1 já o inclui na matriz de campos e pc2 o individualiza como sítio; o corpo realmente escreve célula e destino da identidade existente (`app/chamados/models.py:2424`, `app/chamados/models.py:2427`, `app/chamados/models.py:2439`, `app/chamados/models.py:2463`).
-- Risco de ordem de trava de pc2 é de desenho; a ordem declarada é Disputa→Colaborador e `abrir` já segura colaborador (`app/chamados/models.py:843`, `app/chamados/models.py:845`, `app/chamados/models.py:866`).
-- Universo do ramo é qualquer módulo vivo com célula na janela, sem filtro de `batida_ausente`; pc2 o explicita em D13, pc1 cita a consulta no censo B, portanto diferenciar explicitação de omissão completa (`app/chamados/management/commands/disparar_perguntas_competencia.py:141`).
-
-Citações falsas de B: nenhuma materialmente falsa identificada nos sítios conferidos; conferência literal de todas as referências periféricas de leitores **[não verificado]**. Referências a início de função não devem ser rotuladas falsas quando o corpo sustenta a afirmação: pc1 cita `materializacao.py:728`, cuja reconciliação está em 738 e aplicação a destino/clones em 740–748; pc2 cita `relavra_via.py:104`, cuja escrita está em 123–126 (`app/chamados/services/materializacao.py:728`, `app/chamados/services/materializacao.py:738`, `app/chamados/services/materializacao.py:740`, `app/chamados/services/materializacao.py:748`, `app/chamados/services/relavra_via.py:104`, `app/chamados/services/relavra_via.py:123`).
-
-## 05/11 18:32 · sessao f4be53cc4ea6 · - · - · origem=Ronald (tmux)
-
-Casos equivalentes conferidos:
-
-| pc1 | pc2 | Sustentação na cópia |
-|---|---|---|
-| A1/A2 | A01/A02 | Evento e idempotência: `CLAUDE.md:168`, `CLAUDE.md:175`. |
-| A3 | A03 | Reabertura não equivale a ação nomeada: `app/chamados/services/vigia_fio.py:283`. |
-| A4/A5 | A05/A06 | Duplicata preserva identidade; resposta discordante pode continuar viva: `app/chamados/models.py:2617`, `app/chamados/juizes.py:1150`. |
-| A7/A8 | A07/A08 | Marco atendido não quita outro; devolução preserva resposta: `app/chamados/juizes.py:1173`, `app/chamados/services/validacao.py:171`. |
-| A9/A10 | A10/A11 | Alcance exige porta: `app/chamados/juizes.py:1344`. |
-| A11 | A12 | Morte por leitura existente em C6: `app/chamados/juizes.py:1135`, `app/chamados/juizes.py:1140`, `app/chamados/juizes.py:1195`. |
-| A13/A14 | A15/A14 | Igualdade vence (`<=`); turno noturno: `app/ponto/services/cartorio.py:846`, `app/chamados/services/fabrica_da_celula.py:18`. |
-| A15/A18 | A13/A16 | Janela por empresa; geradora dentro da vigência: `app/ponto/janelas.py:54`, `app/escala/alimentacao.py:272`. |
-| A19/A20 | A17/A19 | Ausência de ata; parcial administrativa: `app/chamados/services/disputa_emissao.py:842`, `app/chamados/services/fabrica_da_celula.py:101`. |
-| A21 | A09/A20/A21 | Registro não pede ação; ausência/decisão/lista são baldes legítimos: `app/chamados/services/painel.py:174`, `app/chamados/services/vigia_fio.py:283`. |
-| A22/A23 histórico | A23 | Hoje fora do alarme; passado até fato novo: `app/chamados/services/vigia_fio.py:420`, `app/docs/LEIS.md:145`. |
-
-Divergência de **DESENHO**: pc1 A23 cita congelamento do gravado exportado (`app/docs/LEIS.md:125`); pc2 A24 cita revogação dessa recusa geral, preservando TXT anterior e trilha (`app/docs/LEIS.md:149`). A cópia declara a queda da recusa geral em `app/ponto/services/fechamento.py:477`, conserva TXT/trilha em `app/ponto/services/fechamento.py:484` e registra exportada por aviso em `app/ponto/services/fechamento.py:532`; ainda há guarda específica em `app/ponto/services/fechamento.py:552`. A fábrica mantém tratamento particular do limbo exportado e permite perguntar em dia de trabalho exportado (`app/chamados/services/fabrica_da_celula.py:167`).
-
-Somente como casos explicitamente discriminados:
-
-- **pc1:** validação integral A6 (`app/chamados/models.py:681`); resposta concordante com a luz A12 (`app/chamados/juizes.py:1090`, `app/chamados/juizes.py:1159`); toque humano posterior à tranca A17 (`app/chamados/juizes.py:1054`, `app/chamados/juizes.py:1071`).
-- **pc2:** recusa de reabertura A04, implementada por decisão humana sem fato novo e premissa regularizada (`app/chamados/models.py:1292`, `app/chamados/models.py:1298`); ramo passado sem escala A18 (`app/chamados/services/fabrica_da_celula.py:21`, `app/chamados/services/fabrica_da_celula.py:52`).
-
-O caso pc2 A22 “viva sem porta” também aparece conceitualmente em pc1 B/D; C17 distingue vitalidade e alcance e exclui expressamente “Resolver dia” (`app/chamados/juizes.py:1344`, `app/chamados/juizes.py:1367`). Ausência aberta, registro e decisão legítima estão agrupados em pc1 A21 e separados em pc2; isso é detalhe de exposição (`app/chamados/services/vigia_fio.py:283`, `app/chamados/services/vigia_fio.py:287`, `app/chamados/services/painel.py:174`).
-
-Não classificar `app/docs/LEIS.md:125` como citação falsa: a linha sustenta literalmente o congelamento, mas foi alterada pela regra de `app/docs/LEIS.md:149`. A divergência é normativa e material; falsidade da localização não foi demonstrada. As outras referências da seção A examinadas sustentam seus núcleos, com a ressalva de que `app/docs/LEIS.md:65` trata de escritor/trilha e não basta, isoladamente, para provar preservação da decisão humana (`app/docs/LEIS.md:65`, `app/chamados/models.py:1292`).
-
-_1969 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1971 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
