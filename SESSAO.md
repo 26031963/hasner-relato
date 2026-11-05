@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 11:40:54.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (2.2 MB). Acoes na janela: **54**.
+**Medido em 05/11/2026 11:46:05.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (2.2 MB). Acoes na janela: **56**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:45:45 | Bash | Update ESPERANDO pid and identify suite tree | `cd /home/ronald/saas-hasner; sed -i '2s/pid=[0-9]*/pid=3454055/' app/docs/RELATO.md; ps -o args= -p 3454055 \| grep -o -- '-v /home/ronald/wt[^ ]*:/app'` |
+| 11:45:42 | Bash | Check suite lock | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; date +%H:%M; sed -n 2p app/docs/RELATO.md` |
 | 11:29:29 | Bash | Update ESPERANDO pid to running suite | `cd /home/ronald/saas-hasner; sed -i '2s/pid=[0-9]*/pid=2688801/' app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md; ps -o args= -p 2688801 \| grep -o -- '-v [^ ]*:/app' \| head -2` |
 | 11:29:26 | Bash | Check suite lock and (c)(1) logs | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; ls -la logs/sombra_c1/ 2>/dev/null \| tail -5` |
 | 11:25:12 | Bash | Check if suite producer still alive | `ps -p 2396211 >/dev/null && echo vivo \|\| echo morto; ps -eo pid,etime,args \| grep -E "trava_teste\|manage.py test" \| grep -v grep \| cut -c1-160 \| head` |
