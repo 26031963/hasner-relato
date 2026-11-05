@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 02:06:11.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (13.6 MB). Acoes na janela: **453**.
+**Medido em 05/11/2026 02:11:08.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (13.7 MB). Acoes na janela: **455**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:10:55 | Bash | Record JUIZ-1 status and check remote before push | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('N1-ALIMENTACAO-UNICA NO AR')) L.insert(i,"JUIZ-VARREDURA-1 volta 2 APROVADA 02:1x pelo opus final (suite inteira da copia OK Ran 13543 rc 0), mas NAO POUSA ainda: item 4 do opus = a cura PIORA um caso -- vinculo.py:909-920 reavaliar_pela_troca_de_mu ...` |
+| 02:10:41 | Bash | Read push.sh usage header | `cd /home/ronald/saas-hasner && sed -n 1,25p bin/push.sh \| grep '^#' \| head -20` |
 | 02:02:05 | Agent | Opus final JUIZ-1 volta 2 | `Obra JUIZ-VARREDURA-1, FINAL verification round 2, before landing. Copy /home/ronald/wt-raf-225748, commits bc7c8f9f (round 1) + c55996a7 (round 2) over main base 4ea56040 (`git -C /home/ronald/wt-raf-225748 log --oneline 4ea56040..HEAD`, `git diff 4ea56040..c55996a7`). Main repo /home/ronald/saas-hasner — read CLAUDE.md sections 0, 4, 4a, 4b, 6, 7b (CODEX item 5 rejection classes). No Codex (no q ...` |
 | 02:01:53 | Bash | Point ESPERANDO at current trava holder | `cd /home/ronald/saas-hasner && sed -i '2s/.*/ESPERANDO: trava_teste.sh \| pid=3592432/' app/docs/RELATO.md && python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
 | 02:01:47 | Bash | Read JUIZ-1 suite verdict | `cd /home/ronald/saas-hasner && cat /tmp/claude-1001/-home-ronald-saas-hasner-app/354179ca-a13f-4642-a6f5-791cf69a0acd/tasks/bm5ecxs8b.output; date +%H:%M; bash bin/trava_teste.sh --quem; git -C /home/ronald/wt-raf-225748 status --porcelain \| head -3` |
