@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 10:16:08.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (24.7 MB). Acoes na janela: **643**.
+**Medido em 05/11/2026 10:21:09.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (24.8 MB). Acoes na janela: **646**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:19:49 | Bash | Record aval, check F3 suite2 | `cd /home/ronald/saas-hasner/app; printf '05/11 10:2x \| aval Ronald CLEAR-E-RESTART-EXPLICITO: PARADA TOTAL com espera; nada novo (inclusive CRONS-INSTALL-SOB-MARCA); construtores F3-BECO-1, JUIZ-1 v5, (c)(1) commitam na copia e encerram; handoff; PAREI: ! PRONTO PARA CLEAR E RESTART; depois do restart registra CLEAR-E-RESTART FEITOS e retoma F3, JUIZ-1 v5, (c)(1), CRONS-INSTALL-SOB-MARCA \| onde: ...` |
+| 10:19:47 | SendMessage |  | `-` |
+| 10:19:44 | SendMessage |  | `-` |
 | 10:14:08 | Bash | Record repeated aval as one line | `cd /home/ronald/saas-hasner/app; date +%H:%M; printf '05/11 10:2x \| aval Ronald CRON-MARCA-COBRE-INSTALL (versao 10:2x, substitui a 10:1x; mesmo conteudo) -- ja recebido 10:1x, estado: itens 4 e 5 registrados no RELATO/BACKLOG; JUIZ-1 volta 5 construindo; instrumento crons.sh install sob a marca com CONTRATO no topo, espera vaga (teto 2); outra recusa ou outra linha no diff do crontab = PAREI com ...` |
 | 10:11:25 | Bash | Remove empty stray worktree and branch | `cd /home/ronald/saas-hasner; git worktree remove /home/ronald/wt-cim-101112 && git branch -d raia/cim-101112` |
 | 10:11:22 | Bash | Check stray worktree is clean | `cd /home/ronald/saas-hasner; git -C /home/ronald/wt-cim-101112 status --porcelain \| head; git -C /home/ronald/wt-cim-101112 log --oneline -1` |
