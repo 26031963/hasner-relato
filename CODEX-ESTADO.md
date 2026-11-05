@@ -1,7 +1,290 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **05/11/2026 16:15** · publicado em **05/11/2026 16:15** (UTC-3)
+> Ultima resposta processada: **05/11/2026 16:20** · publicado em **05/11/2026 16:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 05/11 16:20 · sessao d9ecee284088 · - · - · origem=Ronald (tmux)
+
+**Item 4 — fontes e efeitos exatos**
+
+- `SessionStart` com matcher `compact` declara, em ordem, `cat .../HANDOFF-SESSAO.md` e `python3 .../marco_de_clear.py compact`; o matcher `clear` declara os mesmos comandos, com argumento `clear`. `.claude/settings.json:34-60`.
+- `PreCompact` declara `bash .../bin/handoff_sessao.sh` tanto para `manual` como para `auto`. `.claude/settings.json:14-32`.
+- O HANDOFF da cópia mede **54 linhas e 2.834 bytes** (`wc -lc`, conteúdo em `app/docs/HANDOFF-SESSAO.md:1-54`). O arquivo contém a fotografia datada de **05/11/2026 10:32**, inclusive seus próprios HEAD/origin/main registrados; são conteúdo da fotografia. `app/docs/HANDOFF-SESSAO.md:3-16`.
+- O `cat` declarado despeja esse arquivo inteiro; no caso do conteúdo da cópia, 54 linhas/2.834 bytes por execução. `.claude/settings.json:40`; `app/docs/HANDOFF-SESSAO.md:1-54`.
+- O teto declarado e aplicado pelo gerador é **60 linhas**, sem teto de bytes: `TETO=60`; se exceder, grava as primeiras 59 e acrescenta aviso de corte como linha 60; caso contrário move o temporário inteiro para a saída. `bin/handoff_sessao.sh:22`; `bin/handoff_sessao.sh:293-302`.
+
+**`marco_de_clear.py compact`**
+
+- **Não imprime nada**; o `main` não contém emissão e retorna 0, inclusive após exceções absorvidas. `bin/marco_de_clear.py:10-11`; `bin/marco_de_clear.py:23-66`.
+- Lê stdin como JSON; payload ilegível ou diferente de objeto vira `{}`. O argumento fixa `origem="compact"`; `source` e `session_id` continuam vindos do payload, com string vazia como fallback. `bin/marco_de_clear.py:25-32`; `bin/marco_de_clear.py:44-45`.
+- Determina a raiz por `HOOK_STOP_RAIZ` ou pela localização do script e escreve `logs/sessao/ultimo_clear.json`. `bin/marco_de_clear.py:19-20`.
+- Cria o diretório e abre/cria `ultimo_clear.json.lock` com modo `0600` e `O_NOFOLLOW`; toma `flock` exclusivo e só então lê a hora atual. `bin/marco_de_clear.py:36-43`.
+- O objeto gravado tem `hora` epoch, `iso` local (`%Y-%m-%d %H:%M:%S`), `origem`, `session_id`, `source` e `clear_horas`. `bin/marco_de_clear.py:43-57`.
+- Lê o marco anterior via `orcamento_contexto.abre`, preserva somente valores numéricos de `clear_horas`, conserva os últimos 20 e **só acrescenta uma nova hora à lista quando `origem == "clear"`**. Portanto `compact` atualiza o marco e conserva a lista sem inserir seu próprio horário nela. `bin/marco_de_clear.py:47-57`.
+- Grava JSON em temporário `.ultimo_clear.*` no mesmo diretório e substitui o marco com `os.replace`; fecha a trava em `finally`; falhas são silenciadas. `bin/marco_de_clear.py:58-66`.
+- O leitor `abre` exige arquivo regular, usa `O_NOFOLLOW|O_NONBLOCK` e recusa links/FIFOs etc. `bin/orcamento_contexto.py:68-81`.
+
+**O que `PreCompact` faz**
+
+- Determina a raiz pelo caminho do script, saída `app/docs/HANDOFF-SESSAO.md`, temporário `${TMPDIR:-/tmp}/handoff_sessao.$$`; produz o documento por comandos e captura stdout **e stderr** do bloco nesse temporário. `bin/handoff_sessao.sh:17-27`; `bin/handoff_sessao.sh:291`.
+- Coleta HEAD, executa **`git fetch -q`**, lê origin/main, conta commits a empurrar e captura até oito linhas de `git status --short`. `bin/handoff_sessao.sh:30-41`.
+- Importa `hook_stop_fila1`, lê BACKLOG, pergunta ao hook a ORDEM VIVA e o próximo item da fila. `bin/handoff_sessao.sh:44-78`.
+- Lê todo o bloco inicial do RELATO até a primeira seção `## `; seleciona `PAREI`, `lei:` e `!:`, imprime até quatro linhas cortadas a 220 caracteres e obtém do hook os vereditos “trava o item em curso?”/“devolve o turno?”. `bin/handoff_sessao.sh:85-125`.
+- Lê PROMPTS do dia, cruza os IDs com BACKLOG e consulta `_item_fechado`; imprime até seis avais mais recentes ainda não fechados e contagem dos demais. `bin/handoff_sessao.sh:128-171`.
+- Lê a frase de placar em `app/core/placar_estrutural.py`, itens abertos da raia no BACKLOG, branches `raia20-*` com commits à frente de main e o último aval `COTA-*` no PROMPTS. `bin/handoff_sessao.sh:174-211`.
+- Verifica as travas declaradas `/tmp/juliani_db_test.lock` e `logs/sombra.lock` via `flock -n`; lê `logs/deploy.stamp` se existir. `bin/handoff_sessao.sh:221-240`.
+- Executa **`gerar_avais.py`**, lê seu contador e até oito itens de `AVAIS.md`. `bin/handoff_sessao.sh:243-250`. Esse comando lê `app/docs/PENDENTES_RONALD.json` e **reescreve `app/docs/AVAIS.md`**; sem `--escrever`, como nesta chamada, não grava a normalização no JSON. `bin/gerar_avais.py:29-31`; `bin/gerar_avais.py:94-108`.
+- Se não houver próximo item livre, consulta `travas_da_fila()` e imprime até 12 itens travados; por fim consulta novamente o próximo item e imprime o próximo passo. `bin/handoff_sessao.sh:255-290`.
+- Aplica o corte de 60 linhas, substitui o HANDOFF e imprime a mensagem `handoff_sessao: <caminho> (<N> linhas, teto 60)`. O código não protege a seção final contra o corte: retém literalmente as primeiras 59 linhas mais o aviso quando necessário. `bin/handoff_sessao.sh:293-302`.
+
+**Limite factual:** o que efetivamente será incorporado pelo runtime e se esses hooks estiveram ativos na sessão não é demonstrado por esses arquivos; o código comprova as declarações e os efeitos dos comandos quando executados. `[não verificado]`
+
+## 05/11 16:18 · sessao fa0a1a80f2f8 · LASTRO2 · censo · origem=Code
+
+**Fora de `TIPO_CHOICES` não significa fora do catálogo válido.** A criação valida pelo catálogo vivo e exclui deliberadamente `tipo` do `full_clean` do modelo. Portanto, um código cadastrado pode ser gravado mesmo ausente dos choices. (`app/ponto/services/ausencia.py:193-195,385-387`; `app/ponto/catalogo/ausencias.py:240-285`)
+
+O dado fornecido sobre a ausência **5356** não informa seu `data`, nem o cadastro de `TipoAusencia` vigente na criação. Sua competência e a validade de `'folga'` naquele momento são **[nao verificado]**.
+
+1. Os escritores e o caminho de `'folga'`
+
+| Escritor operacional | Valida antes de gravar? | Evidência |
+|---|---|---|
+| `criar_ausencia`: constrói `Ausencia(**kwargs)` e chama `save()` completo | **Sim, catálogo vivo**; não exige presença em `TIPO_CHOICES` | `app/ponto/services/ausencia.py:193-195,341-345,385-387,418` |
+| `editar_ausencia_registro`: atribui `ausencia.tipo = tipo` e salva | **Sim, catálogo vivo**; não exige choices | `app/ponto/services/ausencia.py:473-475,497-508` |
+| `rederivar_fim`: chama `save()` completo | **Não valida tipo**; regrava o valor carregado | `app/ponto/services/ausencia.py:1277-1282`; chamador: `app/ponto/management/commands/curar_ausencia_sem_fim.py:42-46` |
+| `Ausencia.save`, persistência comum aos anteriores | **Não valida catálogo nem choices**; deriva carimbo, minutos e intervalo, depois chama `super().save()` | `app/ponto/models.py:866-906` |
+
+Os demais `save(update_fields=...)` operacionais não incluem `tipo`: prazo, estado, documento, descrição e decisão. O `QuerySet.update` existente altera somente estado/carimbo. (`app/ponto/services/ausencia.py:536,807-819,843,896-911,1114,1124,1132,1265-1267`)
+
+Não apareceu escritor operacional de `tipo` por `update`, `bulk_update` ou `bulk_create` no censo da cópia. O varredor contempla essas operações e separa testes/migrations; essa conclusão não cobre execução externa arbitrária. (`app/core/censo_escritas.py:54-82`) Execução externa em produção: **[nao verificado]**.
+
+Os caminhos que chegam aos escritores validados são:
+
+| Entrada | Destino e validação |
+|---|---|
+| Lançamento pelo admin da aplicação | Recebe `tipo` do POST e chama `criar_ausencia`, já aprovada. `app/ponto/views.py:2368,2405-2411` |
+| Submissão PWA | Chama `criar_ausencia`. `app/ponto/views.py:2526` |
+| API do aplicativo | Chama `criar_ausencia`; traduz apenas aliases legados de atestado/luto. `app/api/views.py:1768-1771,1820` |
+| Copiloto | Chama `criar_ausencia`, aprovada. `app/ponto/services/checar_ausencia.py:43-48` |
+| Veredito humano da célula | Passa `falta` ou `tipo_ausencia` à criação. `app/ponto/services/veredito_celula.py:311-317` |
+| Materialização de disputa | Passa tipo do mapa/argumento à criação. `app/chamados/services/materializacao.py:484,519` |
+| Regularização | Passa `falta` por `garantir_ausencia`. `app/ponto/services/regularizacao.py:118-122` |
+| Abandono provisório | Passa `falta` por `garantir_ausencia`. `app/ponto/management/commands/marcar_abandono_provisorio.py:76-84` |
+| Espelhamento de férias | Passa literalmente `ferias` à criação. `app/ponto/services/ausencia.py:1186-1191` |
+| Wrapper idempotente | `garantir_ausencia` delega à criação validada. `app/ponto/services/ausencia.py:453-462` |
+| Edição HTTP | Chama `editar_ausencia_registro`. `app/ponto/views.py:2784-2792` |
+
+O formulário também valida pelo catálogo vivo, e não pelos choices. O Django admin atual proíbe adicionar, alterar e excluir `Ausencia`. (`app/ponto/forms.py:60-68`; `app/ponto/admin.py:37-47`; `app/core/admin.py:59-75`)
+
+**Nenhum dos escritores identificados fixa literalmente `'folga'` como `Ausencia.tipo`.** Eles recebem o tipo como argumento; o produtor de férias fixa `ferias`. (`app/ponto/services/ausencia.py:130-134,342,465-467,497,1187`)
+
+Existe, porém, um caminho dinâmico para gravar `'folga'`:
+
+- O cadastro aceita código derivado do POST ou nome, verificando vazio e duplicidade; pode, portanto, cadastrar código `folga` ativo. (`app/ponto/views_tipos_ausencia.py:80-94`; `app/ponto/services/ausencia.py:1285-1294`)
+- Tipos ativos entram em `codigos_validos()`. Se `folga` estiver nesse conjunto, a criação e a edição o aceitam. (`app/ponto/catalogo/ausencias.py:249-252,267-285`; `app/ponto/services/ausencia.py:194,474`)
+- Os selects de lançamento, submissão e edição recebem valores dinâmicos; o JS envia `FormData` sem traduzir o tipo. A API também anuncia o catálogo vivo. (`app/templates/ponto/lancar_ausencia.html:26-34`; `app/templates/ponto/submeter_ausencia.html:21-30`; `app/templates/ponto/partials/painel_ausencia.html:134-138`; `app/templates/ponto/ausencias.html:249`; `app/api/views.py:1867`)
+
+Existência, efeito e estado ativo de um cadastro `folga` em produção: **[nao verificado]**.
+
+Os literais `tipo='folga'` encontrados no aceite de disputa seguem outro destino: `declarar_dia` despacha para `lancar_folga(..., 'FD')`, sem criar `Ausencia`. (`app/chamados/services/validacao.py:280,291`; `app/ponto/services/declarar_dia.py:167,179-191`)
+
+A porta central emite exatamente auditoria `acao='criar', modelo='Ausencia'`, mas isso não identifica seu chamador. Atribuir a ausência 5356 a um endpoint específico permanece **[nao verificado]**. (`app/ponto/services/ausencia.py:441-448`)
+
+2. Os leitores e o tratamento do desconhecido
+
+Nesta tabela, **desconhecido** significa ausente do catálogo retornado por `vigente()`. Esse catálogo usa `TipoAusencia` ativo, com semente como fallback quando a leitura falha ou fica vazia. (`app/ponto/catalogo/ausencias.py:240-254,267-285`)
+
+| Leitor | O que faz com tipo desconhecido | Evidência |
+|---|---|---|
+| Catálogo de efeitos e `Ausencia.efeito` | Efeito `None`; rótulo é o código; duração padrão `por_lei`; fica fora dos conjuntos de abono, desconto, bloqueio, parcial, médico, documento e intervalo indeterminado | `app/ponto/catalogo/ausencias.py:192-195,293-310,326-358,385-387,424-467`; `app/ponto/models.py:837-840` |
+| `precedencia.faixa_de` | Cai em **`atestado`**. Isso também acontece com literal `folga`: o mapa só associa `folga_compensatoria` e `feriado_folga` à faixa folga | `app/ponto/precedencia.py:52-79` |
+| `fatos_do_periodo` | Inclui a ausência não rejeitada, preserva o código e a coloca na faixa atestado; pode vencer feriado, folga e trabalho | `app/ponto/precedencia.py:273-279,336-339,379-405` |
+| Cobertura, sobreposição, expansão e vigência | Pode cobrir a data inicial ou intervalo fechado. Sem `data_fim`, desconhecido cobre somente a data inicial. Folha exige aprovada; cobrança aceita não rejeitada | `app/ponto/turnos.py:2509-2518,2529-2533,2552-2557,2753-2790,2815-2824,3087-3095` |
+| Parcial/integral | Não é parcial. Sendo diferente de `falta`, explica o dia inteiro; porém não entra no mapa de integrais **abonados** enviado ao motor, que exige efeito `ABONA` | `app/ponto/turnos.py:2595-2600,2668-2690` |
+| Afastamentos | Não entra no universo restrito a `afastamento_inss` | `app/ponto/turnos.py:2702-2719` |
+| Grade | Aprovada vira `tipo_dia='ausencia'`, preserva código/id, marca parcial falso e limpa células/órfãs; pode sobrepor uma folga da grade | `app/escala/utils.py:1208-1212,1231-1251,1272-1274` |
+| Cartório | Copia precedência para a ata; se aprovada e integral, dispensa lâmpadas usando o código literal em `dispensada` | `app/ponto/services/cartorio.py:766-778,1947-1956` |
+| Suprajuiz | Usa cobertura e parcialidade sem revalidar código; pode impedir cobrança de furo ou classificar trabalho/cobrança em ausência, conforme os demais insumos | `app/ponto/supra_juiz.py:255-269,304-316,400-405,530-534` |
+| **Fechamento financeiro** | **Suprime o previsto**, porque `None != DESCONTA`; não abona nem concede crédito de minutos pagos | `app/ponto/services/fechamento.py:664-669,684-692,720-723` |
+| **Espelho/PDF — coletor de efeitos** | **Não justifica nem suprime**: exige comparação explícita com `ABONA` ou `SUPRIME`. Diverge do fechamento para efeito `None` | `app/ponto/services/efeito_ausencia.py:43-61`; consumidores: `app/ponto/services/espelho.py:1068`; `app/relatorios/pdf_espelho.py:332-333` |
+| Motor e calculador de pontualidade | Recebem o mapa de integrais abonados; desconhecido não obtém por esse mapa o teto que zera atraso/saída. O código do tipo aparece apenas na mensagem desse ramo | `app/ponto/turnos.py:2684-2690`; `app/ponto/services/fechamento.py:742`; `app/ponto/motor_calculo_v2.py:1085-1105`; `app/ponto/calculador/regras.py:117-120` |
+| Export de faltas/8792 | Não entra: seleção exige tipo do conjunto `descontam_vigentes()` | `app/folha/export.py:75-81,127-131,168-170` |
+| Export de abonos/8932 | Não entra: seleção exige tipo abonado pelo catálogo | `app/folha/export.py:182-195` |
+| **Veredito visual** | **Retorna `ABONADO` para efeito `None`**, salvo rejeitada; apresentação de aberta tem ramo pendente | `app/ponto/services/dia_decidido.py:447-450,460-481` |
+| Status do dia | Faixa atestado com efeito `None` resulta em `ausencia`; somente `DESCONTA` vira falta nesse ramo | `app/ponto/status_dia.py:296-319` |
+| Classificação/materialização de cobranças | Ausência desconhecida não parcial pode calar classificação de falta e pergunta; cobertura diferente de `falta` também suspende adesão/furos | `app/escala/servico_jornada.py:340-345`; `app/chamados/services/materializacao.py:78-82`; `app/chamados/services/adesao.py:68-70`; `app/escala/services/furos_diarios.py:223-224`; `app/ponto/management/commands/reconciliar_grade.py:402` |
+| Estado, documento e decisão | Estado inicial: aguardando decisão, sem prazo documental. Desconhecido não exige documento e não é considerado contradição documental por desconto | `app/ponto/services/ausencia.py:591-618,763-781`; `app/ponto/models.py:723-729`; `app/ponto/services/atestados_lote.py:25-29` |
+| Crédito parcial e aviso na batida | Não recebe crédito de tipo pago nem aviso reservado aos bloqueantes | `app/ponto/services/credito_parcial.py:23-26`; `app/ponto/services/aviso_da_batida.py:77-92` |
+| Universo médico | Fica fora dos alertas e relatórios restritos aos tipos médicos | `app/ponto/services/alertas_ausencia.py:49-50`; `app/ponto/views.py:2223,2830`; `app/relatorios/views.py:282` |
+| Inteligência | Resumo exclui dos contadores de abono/desconto; score inclui não rejeitada como não abonada, penalizando 10 pontos; alertas recorrentes incluem no limiar de três registros | `app/inteligencia/resumo.py:41-44`; `app/inteligencia/management/commands/calcular_scores.py:11-16`; `app/inteligencia/management/commands/gerar_alertas.py:54-61` |
+| Vigias | Conta tipo fora do catálogo entre não rejeitadas; desconhecido aprovado também participa das auditorias de discordância e ausência sem efeito | `app/ponto/services/vigia_ausencia.py:102-105,180-184`; `app/ponto/services/vigia_ausencia_veredito.py:49-57`; `app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:44-60` |
+| Rótulo/ícone | Código cru, rótulo curto limitado e ícone padrão de atestado | `app/ponto/catalogo/ausencias.py:175-181,298-300` |
+
+Essas são consequências condicionais do código. Efeito financeiro, ata ou export efetivamente associados à ausência 5356: **[nao verificado]**.
+
+3. Uma sonda somente de leitura
+
+O recorte abaixo conta **registros pela competência que contém `Ausencia.data`**, usando a empresa atual do colaborador. Não soma dias nem todas as competências atravessadas pelo intervalo. A janela vem de `janela_atual`; entrega vem exclusivamente de `competencia_entregue`. (`app/ponto/models.py:750-754`; `app/colaboradores/models.py:321`; `app/ponto/janelas.py:60-63`; `app/folha/export.py:545,569-575`)
+
+A saída separa `fora_choices` e `fora_catalogo`, inclui todos os status e informa registrador somente por ID, agrupado por mês de criação. Os campos correspondentes estão em `app/ponto/models.py:690-705,799-811`. Empresa histórica na data do fato: **[nao verificado]**.
+
+Código para o Python recebido por `bin/sonda_leitura.sh`, que já abre shell Django no schema `juliani`. O wrapper também escreve credencial/trilha; por isso, sua execução não integra esta resposta sob a regra absoluta de nenhum arquivo alterado. (`bin/sonda_leitura.sh:126-143,235-240,248-250`) Números de produção: **[nao verificado]**.
+
+```python
+import json
+from collections import Counter
+
+from django.db import connection, transaction
+from django.utils import timezone
+
+from colaboradores.models import Empresa
+from ponto.models import Ausencia, TipoAusencia
+from ponto.catalogo import ausencias as CAT
+from ponto.janelas import janela_atual
+from folha.export import competencia_entregue
+
+NM = "nao medido"
+
+
+def medir():
+    with transaction.atomic():
+        with connection.cursor() as cur:
+            cur.execute(
+                "SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY"
+            )
+            cur.execute("SELECT current_user, current_schema()")
+            if cur.fetchone() != ("leitor", "juliani"):
+                raise RuntimeError("contexto_incorreto")
+
+        # app/ponto/catalogo/ausencias.py:240-285.
+        # A leitura explícita não deixa falha de SELECT parecer catálogo vazio.
+        ativos = set(
+            TipoAusencia.objects.filter(ativo=True)
+            .values_list("codigo", flat=True)
+        )
+        CAT.invalidar_cache()
+        catalogo = CAT.codigos_validos()
+        if ativos and catalogo != ativos:
+            raise RuntimeError("catalogo_inconsistente")
+
+        choices = {codigo for codigo, _ in Ausencia.TIPO_CHOICES}
+
+        # app/ponto/models.py:743-811. Nenhum nome/CPF selecionado.
+        campos = (
+            "tipo", "status", "data", "registrado_por_id", "criado_em",
+            "colaborador__empresa_id",
+        )
+        # União dos dois universos; sem filtro de status ou período.
+        linhas = list(
+            Ausencia.objects.order_by()
+            .exclude(tipo__in=sorted(choices & catalogo))
+            .values(*campos)
+        )
+        ids = {a["colaborador__empresa_id"] for a in linhas}
+        empresas = {
+            e.pk: e
+            for e in Empresa.objects.filter(pk__in=ids)
+            .only("pk", "dia_inicio_competencia")
+        }
+
+        grupos, origens = Counter(), Counter()
+        totais, entregas = Counter(), {}
+
+        for a in linhas:
+            universos = []
+            if a["tipo"] not in choices:
+                universos.append("fora_choices")
+            if a["tipo"] not in catalogo:
+                universos.append("fora_catalogo")
+
+            criado = a["criado_em"]
+            if criado is None:
+                raise ValueError("criacao_ausente")
+            if timezone.is_aware(criado):
+                criado = timezone.localtime(criado)
+            mes_criacao = criado.strftime("%Y-%m")
+
+            eid = a["colaborador__empresa_id"]
+            if eid is None or eid not in empresas:
+                raise ValueError("empresa_ausente")
+
+            # app/ponto/janelas.py:60-63.
+            ini, fim = janela_atual(a["data"], empresas[eid])
+            chave = (eid, fim.month, fim.year)
+            if chave not in entregas:
+                # app/folha/export.py:545,569-575; somente SELECT.
+                entregas[chave] = competencia_entregue(*chave)
+
+            for universo in universos:
+                totais[universo] += 1
+                grupos[
+                    (universo, a["tipo"], a["status"], eid, ini, fim)
+                ] += 1
+                origens[
+                    (universo, a["tipo"], a["registrado_por_id"], mes_criacao)
+                ] += 1
+
+        detalhes = []
+        totais_entregues = Counter()
+        for (u, tipo, status, eid, ini, fim), n in sorted(grupos.items()):
+            entregue = entregas[(eid, fim.month, fim.year)]
+            # Zero somente após False medido pelo juiz.
+            ne = n if entregue else 0
+            totais_entregues[u] += ne
+            detalhes.append(dict(
+                universo=u,
+                tipo=tipo,
+                status=status,
+                empresa_id=eid,
+                competencia=fim.strftime("%Y-%m"),
+                janela_inicio=ini.isoformat(),
+                janela_fim=fim.isoformat(),
+                quantidade=n,
+                em_competencia_entregue=ne,
+            ))
+
+        return dict(
+            fonte_catalogo=(
+                "cadastro_ativo" if ativos else "semente_cadastro_vazio"
+            ),
+            totais={
+                u: dict(
+                    quantidade=totais[u],
+                    em_competencia_entregue=totais_entregues[u],
+                )
+                for u in ("fora_choices", "fora_catalogo")
+            },
+            por_tipo_status_empresa_competencia=detalhes,
+            por_tipo_registrador_mes=[
+                dict(
+                    universo=u,
+                    tipo=t,
+                    registrado_por_id=uid,
+                    mes_criacao=mes,
+                    quantidade=n,
+                )
+                for (u, t, uid, mes), n in sorted(origens.items())
+            ],
+            impacto_financeiro=NM,
+            outras_competencias_atravessadas_pelo_intervalo=NM,
+        )
+
+
+try:
+    resultado = medir()
+except Exception as exc:
+    # Não publica resultados parciais nem transforma falha em zero.
+    # Não imprime mensagem, SQL, objetos ou traceback.
+    resultado = dict(
+        totais=NM,
+        por_tipo_status_empresa_competencia=NM,
+        por_tipo_registrador_mes=NM,
+        em_competencia_entregue=NM,
+        erro_classe=type(exc).__name__,
+    )
+
+print(json.dumps(resultado, ensure_ascii=False, sort_keys=True))
+```
 
 ## 05/11 16:15 · sessao 462f84cc4015 · CODEX-SUFOCA-20-futurologia · leitura · origem=Code
 
@@ -956,91 +1239,4 @@ Leitores diretos do juiz que rematerializa instantes e períodos: motor (`app/po
 
 Limite da proposta: identidade + instante não resolvem sozinhos batidas órfãs, precedência, tipo de ausência, decisão humana nem geometrias incompatíveis; o próprio motor exige que a ata explique as batidas antes de substituir períodos. (`app/ponto/motor_calculo_v2.py:622-645`.) Benefício de guardar toda a geometria realizada, quantidade de leitores eliminados, estado das células reais e impacto financeiro: **[não verificado]**.
 
-## 05/11 16:11 · sessao 3c414707875a · CODEX-SUFOCA-15-escala-carga · leitura · origem=Code
-
-**Há N+1 e gravações por pessoa/dia comprováveis na cópia; nenhuma view pode ser declarada acima de 30 s hoje com a evidência disponível.** Os maiores multiplicadores encontrados são o histórico inteiro no cartório, as consultas de folga no gerador e a aplicação coletiva de calendário dentro do request. (`app/ponto/management/commands/processar_cartorio.py:61`; `app/ponto/portas/celula.py:598`; `app/escala/views.py:407`)
-
-A correspondência criptográfica da cópia com o hash informado é **[não verificado]**: não há repositório Git disponível para atestá-la. Ocorrência dos cenários em produção, população atual e tempos atuais: **[não verificado]**.
-
-As estimativas abaixo contam operações identificáveis no código. **N** significa pessoas alcançadas pelo sítio, assumindo um vínculo por pessoa quando o laço percorre vínculos; **D** significa dias efetivamente percorridos. Mantendo dias e estado, a parcela proporcional a N cresce **3×/5× contra uma referência sintética de 1.000 pessoas**, ou **1,67× de 3.000 para 5.000**. Esses são fatores de trabalho, não de segundos. (`app/ponto/portas/celula.py:589`; `app/ponto/portas/celula.py:591`)
-
-**A ressalva dos 30 s.** A configuração declara `gthread`, cinco workers, quatro threads e `timeout=30`; o próprio código documenta que esse timeout não necessariamente interrompe uma requisição longa em `gthread`. Portanto, “ultrapassar 30 s” e “morrer por timeout” precisam ser tratados separadamente. Configuração efetivamente carregada em produção e comportamento observado: **[não verificado]**. (`app/gunicorn.conf.py:18`; `app/gunicorn.conf.py:19`; `app/gunicorn.conf.py:20`; `app/gunicorn.conf.py:21`; `app/config/crons.py:1337`)
-
-1. **Cartório: histórico sem limite inferior, inclusive quando a impressão não mudou.** O comando busca todas as células anteriores a hoje e faz duas consultas diretas por colaborador antes do serviço. No ramo com batidas, consulta ausência por célula **antes** da guarda de impressão inalterada. Só esse componente representa **90.000/150.000 consultas para D=30**, ou **1.095.000/1.825.000 para D=365**. (`app/ponto/management/commands/processar_cartorio.py:49`; `app/ponto/management/commands/processar_cartorio.py:59`; `app/ponto/services/cartorio.py:1306`; `app/ponto/services/cartorio.py:1362`; `app/ponto/turnos.py:2552`)
-
-   Há também uma varredura de todas as batidas carregadas para cada célula: custo **O(N×D×B)** em comparações. **Inferência condicional:** com densidade constante de batidas, B cresce com D e essa parcela vira **O(N×D²)**; passar de 30 para 365 dias multiplica aproximadamente por **148** as comparações. A guarda de impressão poupa o julgamento posterior, mas chega depois dessas operações. (`app/ponto/services/cartorio.py:1082`; `app/ponto/services/cartorio.py:1123`; `app/ponto/services/cartorio.py:1303`; `app/ponto/services/cartorio.py:1307`; `app/ponto/services/cartorio.py:1362`)
-
-2. **Gerador: lote de células não elimina consulta de folga por dia.** Existe carregamento de `CelulaDia` em lotes de 500, mas `eh_dia_trabalho_calculado(d)` é chamado sem fornecer `folgas`, antes de verificar se a célula será pulada. Para D=30, são **90.000/150.000 consultas mensais de folga**; havendo foto no mês, são **pelo menos 180.000/300.000 consultas de folga**. Células faltantes acrescentam `create` individual; alterações usam `save` individual. (`app/ponto/portas/celula.py:586`; `app/ponto/portas/celula.py:598`; `app/escala/models.py:1286`; `app/escala/models.py:1310`; `app/ponto/portas/celula.py:601`; `app/ponto/portas/celula.py:623`)
-
-   O horizonte padrão é a união das competências atuais das empresas ativas; portanto, **D não é necessariamente 30**. Cortes diferentes podem ampliar a janela percorrida por todos os vínculos. (`app/ponto/management/commands/gerar_celulas.py:291`; `app/ponto/management/commands/gerar_celulas.py:292`; `app/ponto/management/commands/gerar_celulas.py:309`)
-
-3. **Apuração de furos: atualização individual mesmo sem mudança funcional.** O serviço percorre colaboradores e competências; a porta executa `update_or_create` para cada dia retornado, renovando `avaliada_em`. Com 30 linhas por pessoa, são **90.000/150.000 chamadas ORM**; com 60, **180.000/300.000**. A competência anterior entra enquanto não estiver trancada. Quantidade exata de statements e savepoints: **[não verificado]**. (`app/escala/services/furos_diarios.py:77`; `app/escala/services/furos_diarios.py:96`; `app/escala/services/furos_diarios.py:98`; `app/ponto/portas/celula.py:871`; `app/ponto/portas/celula.py:875`)
-
-4. **Lavrador de HE: um espelho completo por ativo, antes de descobrir que não há ponta.** São **3.000/5.000 chamadas a `espelho_do_colab` por competência**, ou **6.000/10.000** quando a anterior ainda não foi entregue. O descarte dos dias sem HE ocorre depois da montagem. O início visual pode anteceder a competência solicitada; não é defensável atribuir um número fixo de consultas por espelho nesta análise. (`app/ponto/services/he_pendente_lavrado.py:92`; `app/ponto/services/he_pendente_lavrado.py:94`; `app/ponto/services/he_pendente_lavrado.py:132`; `app/ponto/services/he_pendente_lavrado.py:223`; `app/ponto/services/espelho.py:1225`)
-
-5. **Plano de Folgas: consulta por vínculo/dia no GET.** A grade carrega vínculos sem `tipo_escala`, acessa essa relação por vínculo e chama `eh_dia_trabalho(d)` sem células previamente carregadas. No cenário de mês com 31 dias, células existentes e nenhuma `FolgaDia`, o piso é **2+32N consultas: 96.002/160.002**, excluindo consultas adicionais de apresentação. O dado pode estar inteiramente correto. (`app/escala/views_plano_folgas.py:59`; `app/escala/views_plano_folgas.py:66`; `app/escala/views_plano_folgas.py:69`; `app/escala/views_plano_folgas.py:76`; `app/escala/models.py:1092`)
-
-6. **Aplicar calendário ao tipo: regeneração repetida e transação coletiva síncrona.** A view percorre todos os vínculos ativos do tipo numa única transação. Faz duas fotos mensais, cada uma já acompanhada de re-lavra, e depois outra re-lavra cobrindo os dois meses: **3N chamadas explícitas**, ou **9.000/15.000**. (`app/escala/views.py:392`; `app/escala/views.py:407`; `app/escala/views.py:411`; `app/escala/views.py:412`; `app/escala/views.py:416`; `app/escala/folgas.py:192`)
-
-   No cenário novembro/dezembro, D=61, vínculo cobrindo ambos e foto em cada mês, isso produz **pelo menos 2ND visitas aos dias e 4ND consultas de folga: 732.000/1.220.000**. O horizonte pode ampliar; escritas dependem de célula faltante ou alteração e **não devem ser multiplicadas automaticamente por três**. (`app/ponto/portas/celula.py:172`; `app/ponto/portas/celula.py:209`; `app/ponto/portas/celula.py:243`; `app/ponto/portas/celula.py:245`; `app/escala/models.py:1286`; `app/escala/models.py:1310`)
-
-7. **Dashboard, dados do dashboard, supervisor e TV: consulta individual de turno.** Os quatro sítios chamam `turno_aberto_de` por candidato. O caminho individual carrega vínculo, batidas, células da ata e escalas da ata: piso conservador de **4N consultas auxiliares**, ou **12.000/20.000 por chamada**, antes de outros componentes. O carregador plural já existe. (`app/core/views.py:176`; `app/core/views.py:375`; `app/core/views.py:778`; `app/core/views.py:1180`; `app/ponto/turnos.py:2216`; `app/ponto/turnos.py:2217`; `app/ponto/turnos.py:1584`; `app/ponto/turnos.py:1591`; `app/ponto/turnos.py:2293`)
-
-   No supervisor, pessoas sem entrada ainda provocam consulta individual de escala. Na TV, o filtro de empresa ocorre **depois** da apuração de turnos de todo o universo candidato; a página agenda recarga após 60 s. Logo, selecionar uma empresa pequena não reduz esse primeiro N. (`app/core/views.py:398`; `app/core/views.py:401`; `app/core/views.py:775`; `app/core/views.py:798`; `app/templates/core/painel_tv.html:342`)
-
-8. **Tela de turnos abertos: percorre todos os ativos antes do filtro de nível.** Cada ativo chama `turnos_do_colab`; cada turno aberto elegível acrescenta busca de chamado. No cenário com entrada recente sem saída para todos, o piso conservador é **1+4N consultas: 12.001/20.001**, excluindo auxiliares opcionais. (`app/ponto/views.py:376`; `app/ponto/views.py:392`; `app/ponto/views.py:405`; `app/ponto/turnos.py:1861`; `app/ponto/turnos.py:1884`; `app/ponto/turnos.py:1885`)
-
-9. **Classificador da folha: N+1 compartilhado por várias telas.** Para cada fechamento que alcança a retenção, carrega células e vínculos separadamente: piso de **2N consultas, 6.000/10.000**, além das cargas iniciais e outros auxiliares; a inspeção dos dias acrescenta trabalho proporcional a N×D. Esse custo alcança prévia, raio-X, ranking e pendências. (`app/folha/export.py:795`; `app/folha/export.py:942`; `app/folha/export.py:1188`; `app/folha/export.py:1194`; `app/folha/export.py:1207`; `app/folha/views.py:331`; `app/folha/views.py:589`; `app/relatorios/views.py:1658`; `app/relatorios/views_pend.py:58`)
-
-10. **Prévia da proposta: paginação posterior ao trabalho integral.** O montador classifica toda a empresa e faz um `exists` de batidas por pessoa antes do `Paginator(..., 50)`: **mais 3.000/5.000 consultas** sobre o classificador anterior. Para R pessoas retidas com dias propostos, consulta novamente células e vínculos: **+2R**. Assim, a primeira página de 50 preserva o custo da população inteira. (`app/folha/views.py:723`; `app/folha/views.py:764`; `app/folha/previa.py:43`; `app/folha/previa.py:57`; `app/folha/previa.py:120`; `app/folha/previa.py:170`)
-
-11. **Auditoria de espelhos: carga coletiva seguida de calendários individuais.** `dataset_furos` inicia com `CargaDaJanela` coletiva, mas chama `contexto_calendario` por card; esse calendário cria outra carga individual. No percurso sem erro, há **pelo menos sete consultas explícitas repetidas por calendário: 21.000/35.000**, além dessa nova carga e demais auxiliares. (`app/relatorios/furos.py:123`; `app/relatorios/furos.py:160`; `app/colaboradores/services/calendario.py:221`; `app/colaboradores/services/calendario.py:239`; `app/colaboradores/services/calendario.py:258`; `app/colaboradores/services/calendario.py:411`; `app/colaboradores/services/calendario.py:437`; `app/colaboradores/services/calendario.py:442`; `app/colaboradores/services/calendario.py:447`; `app/colaboradores/services/calendario.py:473`)
-
-   Com `todos=1`, todos geram card. A validação admite até **93 datas inclusivas**, permitindo **279.000/465.000 pares pessoa-dia**; contra uma janela de 30 dias, o componente proporcional a dias cresce **3,1×**. (`app/relatorios/views.py:1538`; `app/relatorios/views.py:1540`; `app/relatorios/views.py:1541`; `app/relatorios/furos.py:122`; `app/relatorios/furos.py:141`)
-
-**Proteções existentes delimitam os achados.** O painel situacional usa o carregador plural de turnos; o retrato da folha lê materialização; o caderno de cartões dispara processo próprio. Portanto, os custos das implementações individuais acima não devem ser atribuídos indistintamente a essas outras entradas. (`app/colaboradores/services/situacional.py:167`; `app/folha/views_retrato.py:190`; `app/relatorios/lote_espelho.py:127`; `app/relatorios/lote_espelho.py:132`)
-
-**Especulação rotulada:** esses volumes podem produzir requisições longas e atrasar os crons dependentes; quando isso ocorre e quantos segundos custa são **[não verificado]**. O encadeamento espera carimbos e executa os elos em sequência; o teto de espera não constitui processamento em lote nem limite de duração do comando já iniciado. (`bin/encadeado.sh:56`; `bin/encadeado.sh:87`; `bin/encadeado.sh:92`; `bin/encadeado.sh:102`)
-
-Não consegui verificar latência SQL, planos de execução, índices implantados, concorrência, memória, cardinalidades por empresa, distribuição dos estados, duração atual ou qualquer ocorrência individual em produção. **[não verificado]** Os contraexemplos abaixo são sintéticos; sua ocorrência em produção é **[não verificado]**. A certeza **alta** refere-se ao caminho e ao crescimento estrutural demonstrados, não ao tempo previsto. O dono é **ESTRUTURA** porque o achado é a repetição de trabalho pelo código; eventual problema no cadastro ou nas batidas continua separado pela L-099. (`CLAUDE.md:176`)
-
-| achado | arquivo:linha | contra-exemplo | certeza | dono L-099 |
-|---|---|---|---|---|
-| 1. Cartório percorre histórico e consulta ausência antes do skip | `app/ponto/management/commands/processar_cartorio.py:61`; `app/ponto/services/cartorio.py:1306` | Pessoa com batidas existentes, 365 células julgadas, impressão inalterada e nenhuma ausência | Alta | ESTRUTURA |
-| 2. Gerador consulta folga por vínculo/dia | `app/ponto/portas/celula.py:598`; `app/escala/models.py:1286` | Vínculo 12×36 com âncora válida, células completas e nenhuma foto mensal | Alta | ESTRUTURA |
-| 3. Furos atualizam linhas individualmente | `app/ponto/portas/celula.py:872` | Trinta atas passadas de trabalho com marcos previstos positivos e `FuroDiario` já atualizado | Alta | ESTRUTURA |
-| 4. Lavrador de HE monta espelho por ativo | `app/ponto/services/he_pendente_lavrado.py:94` | Ativos com batidas regulares, nenhuma HE pendente e competência anterior não entregue | Alta | ESTRUTURA |
-| 5. Plano de Folgas consulta célula por dia | `app/escala/views_plano_folgas.py:76`; `app/escala/models.py:1092` | Mês de 31 dias, vínculos ativos, células completas e nenhuma `FolgaDia` | Alta | ESTRUTURA |
-| 6. Aplicação coletiva repete regeneração | `app/escala/views.py:411`; `app/escala/views.py:416`; `app/escala/folgas.py:192` | Mesmo tipo para todos, vínculos cobrindo novembro/dezembro, foto nos dois meses e nenhuma competência exportada | Alta | ESTRUTURA |
-| 7. Quatro painéis consultam turno individualmente | `app/core/views.py:176`; `app/core/views.py:375`; `app/core/views.py:778`; `app/core/views.py:1180` | Todos os candidatos com entrada recente; no supervisor, ausência de entrada também dispara busca de escala | Alta | ESTRUTURA |
-| 8. Tela de turnos varre todos os ativos | `app/ponto/views.py:376`; `app/ponto/views.py:392` | Todos ativos com entrada nas últimas 26 h e sem saída | Alta | ESTRUTURA |
-| 9. Classificação da folha consulta por fechamento | `app/folha/export.py:942`; `app/folha/export.py:1188`; `app/folha/export.py:1194` | Não isentos, código Domínio preenchido, sem demissão/férias e horas positivas | Alta | ESTRUTURA |
-| 10. Prévia pagina depois de consultar todos | `app/folha/views.py:723`; `app/folha/views.py:764`; `app/folha/previa.py:58` | Primeira página solicitada para empresa com 3.000/5.000 fechamentos; retidos com proposta repetem retenção | Alta | ESTRUTURA |
-| 11. Auditoria recria calendários individuais | `app/relatorios/furos.py:160`; `app/colaboradores/services/calendario.py:221` | `todos=1` numa janela válida de 93 datas, mesmo com cadastro e batidas corretos | Alta | ESTRUTURA |
-
-## 05/11 16:11 · sessao fa41640659e2 · - · - · origem=Ronald (tmux)
-
-Achados fortes, todos por leitura estática; execução, cadastros efetivos e impacto em produção **[não verificado]**.
-
-| Achado | Arquivo:linha | Contra-exemplo concreto | Certeza | Dono L-099 |
-|---|---|---|---|---|
-| Novo domínio é criado pelo painel, mas a configuração SaaS só permite Juliani/localhost | `app/tenants/views.py:46-54`; `app/config/settings/saas.py:115`; `Caddyfile:25-29` | Provisionar slug `cliente2` cria `cliente2.work-key.hasner.com.br`; request nesse Host encontra `ALLOWED_HOSTS` sem esse domínio. Com os settings da cópia, o acesso é rejeitado. Settings ativos em produção **[não verificado]**. | Alta | ESTRUTURA |
-| Agenda versionada só executa comandos no schema Juliani e restringe empresas a 2/3/4 | `app/config/crons.py:17-21`, `:426`, `:462`, `:1821-1826` | Tenant `cliente2`, empresa pk1, colaborador com vínculo 5x2: o cron declarado de `gerar_celulas` continua sendo montado com `--schema=juliani`; `reconciliar_grade` leva `--empresa 2,3,4`. O novo tenant fica fora dessa agenda. Existência de agenda externa adicional **[não verificado]**. | Alta | ESTRUTURA |
-| Assistente seleciona um cliente global do processo, default `juliani`, em vez do tenant da request | `app/config/settings/base.py:171`; `app/core/views_ia.py:23`, `:52`, `:908-910`; `mensageria/nucleo/views.py:136-147` | Admin autorizado de `cliente2` pergunta algo que segue ao serviço: corpo enviado continua `cliente=’juliani’`; mensageria seleciona `AtivacaoCliente.slug=’juliani’` para contexto. **Especulação rotulada:** dados de Juliani podem aparecer ao segundo cliente, dependendo da ativação/credenciais existentes **[não verificado]**. | Alta para seleção errada; média para consequência externa | ESTRUTURA |
-| Memória de competência cruza tenants porque a chave usa somente empresa/competência | `app/folha/export.py:996`, `:1019-1045`; `app/ponto/janelas.py:15-21` | Mesmo processo: tenant A, empresa pk2, corte15, comp10/2026, snapshot previsto zerado → guarda início15/09. Depois tenant B, empresa pk2, corte21, snapshot zerado, não-isento, demissão18/09 → reutiliza15/09 e devolve `sem_escala`; sua janela começa21/09, portanto o ramo correto seria `rescisao`. Não depende do bug do corte1. | Alta no ramo demonstrado | ESTRUTURA |
-| Cache de pautas também cruza tenants: chave só por user.pk e valor inclui remetentes | `app/pautas/context_processors.py:13`, `:23-35` | Dois tenants com staff pk2; primeiro tem 7 pautas e remetentes próprios, segundo tem 0. Chamadas no mesmo backend de cache dentro de30s devolvem ao segundo número/remetentes do primeiro. Backend efetivo em produção **[não verificado]**. | Alta para colisão; média para ocorrência operacional | ESTRUTURA |
-| Instrução de recuperação do bloqueio do export aponta explicitamente ao schema errado | `app/folha/porta_export.py:806-817` | Empresa do tenant `cliente2` sem carimbo diário solicita TXT: mensagem manda rodar `selo_leitores_no_mesmo_numero --schema=juliani`; seguir a instrução não produz o carimbo no tenant solicitante. | Alta | ESTRUTURA |
-
-Cadastro/sementes e contrapontos:
-
-- O bootstrap cria Empresa, setores do catálogo e superuser; não recebe corte/regime/CCT/integração de folha. A empresa nasce com corte21 e regime vazio, mesmo quando o novo cliente exige corte1 e outra CCT. É **CADASTRO faltante**, separado das limitações estruturais dos leitores: `app/tenants/bootstrap.py:13-38`; `app/colaboradores/models.py:46`, `:150-157`.
-- A integração Domínio não nasce no bootstrap; sua ausência causa erro explícito ao montar TXT: `app/tenants/bootstrap.py:25-38`; `app/folha/export.py:23-32`, `:693`. Contra-exemplo: tenant recém-criado sem `EmpresaIntegracao`, tentativa de exportar. **Alta, CADASTRO**.
-- Se faltar mapeamento de evento, a montagem do TXT ignora esse evento; o gate de homologação também ignora evento sem rubrica. Contra-exemplo: fechamento com2h de `hora_extra_diurna`, integração configurada e nenhuma `RubricaDominio` para esse evento → essas2h não viram linha. Ausência concreta no tenant atual **[não verificado]**. A lacuna é **CADASTRO**; eventual promessa de completude do export não foi avaliada aqui. `app/folha/export.py:711-719`, `:976-983`.
-- Não é correto dizer que toda semente só existe em Juliani: usuário `sistema` possui migration, tipos de ausência também, e novos setores semeiam permissões pelo signal. `app/core/migrations/0003_user_sistema.py:6-20`, `:36`; `app/ponto/migrations/0052_seed_tipoausencia.py:30-37`; `app/colaboradores/signals.py:25-30`.
-- Existe runner que percorre tenants ativos, mas a agenda acima usa schema fixo: `app/tenants/cron.py:13-30`; `app/config/crons.py:1826`. Não alegar inexistência de suporte multi-tenant.
-- APK aponta para domínio Juliani, mas isso sozinho prova centralização do download, não seleção errada de tenant dentro do aplicativo: `app/api/views.py:3062-3069`. Comportamento do APK **[não verificado]**.
-- CSRF trusted origins contém Juliani, porém não constitui, sozinho, prova de falha em POST de mesma origem; evitar esse falso positivo. Configuração: `app/config/settings/base.py:135-137`.
-
-Não verifiquei DNS/TLS reais, settings carregados, instalação de cron, existência de tenants/empresas/CCT/rubricas/ativação IA, logs, batidas ou quantidade de pessoas afetadas **[não verificado]**.
-
-_1814 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1816 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
