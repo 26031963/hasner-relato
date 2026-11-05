@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 00:36:22.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (11.4 MB). Acoes na janela: **379**.
+**Medido em 05/11/2026 00:41:14.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (11.5 MB). Acoes na janela: **380**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:38:04 | Bash | Record F3 beco 1 stop with numbers | `python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read().split('\n') s.insert(3,"PAROU F3-BECO-1-B 00:4x (condicao do aval, LEI-AKITA 9): medida na sombra (carimbo 04/11, logs/f3_beco1/f3_beco1.out, causa.out) -- universo 730 perguntas = 234 dias (colab,dia) de 44 colabs, 70 chamados; dono pelo juiz e6_oraculo.InsumosDoDono -> dono_da_divergencia: CADASTRO 234/234 (100%, condicao <80% NAO dispara), c ...` |
 | 00:35:12 | Bash | Check trava and record slots | `bash ../bin/trava_teste.sh --quem; python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read().split('\n') s.insert(3,"VAGAS 00:3x: construtor 1 = JUIZ-1 volta 2 (wt-raf-225748) \| construtor 2 = N1-ALIMENTACAO-UNICA (wt-n1alim-*) \| OTIMIZA-3 volta 3 espera vaga (teto 2) \| JUIZ-2 parte 1 suite inteira rodando \| F3 beco 1 medida na sombra rodando.") open(p,'w').write('\n'.join(s)) EOF cd .. && python3 ...` |
 | 00:34:59 | Agent | Curar reprova JUIZ-1 | `You are the construtor of obra JUIZ-VARREDURA-1, round 2. The copy is /home/ronald/wt-raf-225748 (branch already has commit bc7c8f9f). Repo main is /home/ronald/saas-hasner. Read /home/ronald/saas-hasner/CLAUDE.md fully first, then `git -C /home/ronald/wt-raf-225748 show bc7c8f9f` for what was built, and CORTES.md:358 (lei CONTRATO-20-E2-FORA-DO-ESPERADO: "o cron so rebaixa quando o evento que pro ...` |
 | 00:34:38 | Bash | Write ERRO-BOBO lines at RELATO top | `date '+%H:%M' && python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read().split('\n') novas=[ "ERRO-BOBO JUIZ-VARREDURA-1: opus final REPROVOU bc7c8f9f -- o evento de vinculo.py:837-852 so encerra a falta se a celula muda; 12x36/personalizado (feriado_vira_folga False, montar_dna sem trabalha_em_feriado) e troca de posto/municipio mudam o feriado SEM tocar celula e ficam abertos, classe (ii) da lei C ...` |
