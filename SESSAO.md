@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 14:26:12.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (6.1 MB). Acoes na janela: **188**.
+**Medido em 05/11/2026 14:31:08.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (6.2 MB). Acoes na janela: **192**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:26:43 | Bash | Point ESPERANDO at the push's suite | `cd /home/ronald/saas-hasner && sed -i '2s/pid=[0-9]*/pid=3111029/' app/docs/RELATO.md && sed -n 2p app/docs/RELATO.md` |
+| 14:26:40 | Bash | Check lock holder and push 3 | `cd /home/ronald/saas-hasner && bin/trava_teste.sh --quem; tail -2 logs/jv1/push3.log; sed -n 2p app/docs/RELATO.md` |
+| 14:26:38 | SendMessage |  | `-` |
+| 14:26:34 | Bash | Record H12 decision by existing law | `cd /home/ronald/saas-hasner && date +%H:%M; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,x in enumerate(L) if x.startswith('JUIZ-1 v5 NO AR')][0] L.insert(i,'DECIDIDO PELA LEI L-092 + DINHEIRO item 2 + L-099: H12 (raia /home/ronald/wt-h12h06-124723, 8f9747aa->1d1bb520; suite Ran 13590 OK rc=0, logs/h12h06/suite_inteira.log): os 11 colabs da 09 que o TXT entregu ...` |
 | 14:11:48 | Bash | Update ESPERANDO pid to the new lock holder | `cd /home/ronald/saas-hasner && sed -i '2s/pid=[0-9]*/pid=3092137/' app/docs/RELATO.md && sed -n 2p app/docs/RELATO.md; ps -o pid,args -p 3092137 \| tail -1 \| cut -c1-150` |
 | 14:11:45 | Bash | Confirm lock holder matches ESPERANDO | `cd /home/ronald/saas-hasner && bin/trava_teste.sh --quem; sed -n 2p app/docs/RELATO.md; tail -1 logs/jv1/push3.log` |
 | 14:03:46 | Bash | Check HEAD, lock, push 3 status | `cd /home/ronald/saas-hasner && git rev-parse --short HEAD; bin/trava_teste.sh --quem; tail -2 logs/jv1/push3.log 2>/dev/null` |
