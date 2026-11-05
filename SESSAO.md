@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 21:02:12.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (2.6 MB). Acoes na janela: **89**.
+**Medido em 04/11/2026 21:07:51.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (2.8 MB). Acoes na janela: **98**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:03:27 | Bash |  | `cd /home/ronald/saas-hasner; tail -5 logs/he/fm_head.run; ls -la logs/he-fm-head.out 2>&1; tail -3 logs/he/suite_18e1afc4.log \| cut -c1-200` |
+| 21:03:22 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/he/suite_18e1afc4.rc 2>/dev/null; ls logs/he/fm.fim 2>/dev/null; grep "^FME\\|FMTOTAL\\|ROLLBACK\\|Error" logs/he-fm-head.out logs/he-fm-copia.out 2>/dev/null \| cut -c1-160; date +%H:%M` |
+| 21:03:09 | Bash |  | `cd /home/ronald/wt-he-200326; git diff main..HEAD --stat; git diff main..HEAD -- app/escala app/ponto/services` |
+| 21:03:04 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') assert L[1].startswith('ESPERANDO:') L[1]='ESPERANDO: trava_teste.sh \| pid=2543875' L.insert(2,'ITEM 2 LAVRAR-HE 21:0x: construtor entregou e354ffa5, rebase sobre main -> 18e1afc4 (wt-he-200326). Identity Map da celula do ato em apurar_por_fatia (escala/alimentacao.py::celulas_do_ato + EC._celulas_d ...` |
+| 21:02:52 | Bash |  | `sleep 5; pgrep -af "trava_teste.sh\|sombra.sh --rodar" \| grep -v pgrep \| cut -c1-140` |
+| 21:02:47 | Bash |  | `cd /home/ronald/saas-hasner; cat > logs/sombra/sonda_he_fm.py <<'EOF' # LAVRAR-HE-PENDENTE-ESCALA, fronteira de prova: o FechamentoMensal em somente_leitura, FROTA, por empresa x comp # (10 e 11/2026), head x copia. atomic + raise: nada fica. Saida: sha por colab (FMC) e por empresa x comp (FME). import hashlib, json, time from django.db import transaction from colaboradores.models import Empresa  ...` |
+| 21:02:37 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 1,60p logs/sombra/sonda_he_igual.py` |
+| 21:02:29 | Bash |  | `cd /home/ronald/saas-hasner; (bash bin/suite.sh --dir /home/ronald/wt-he-200326 --espera 3600 > logs/he/suite_18e1afc4.log 2>&1; echo "rc=$?" > logs/he/suite_18e1afc4.rc) > /dev/null 2>&1 & echo started; grep -n "def recalcular_fechamento_mes" -A25 app/ponto/services/fechamento.py \| head -40` |
+| 21:02:21 | Bash |  | `cd /home/ronald/wt-he-200326; git status --porcelain \| head; git log --oneline -1; git rebase main 2>&1 \| tail -2; git log --oneline -3` |
 | 20:53:28 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/he/sombra.fim 2>/dev/null \| head; ls logs/he-*.out 2>/dev/null; for f in logs/he-*.out; do echo "== $f"; grep -v '^$' $f \| tail -3 \| cut -c1-200; done` |
 | 20:53:23 | Bash |  | `cd /home/ronald/saas-hasner; ps -p 1753276 >/dev/null && echo SUITE_VIVA \|\| echo SUITE_FIM; git -C /home/ronald/wt-he-200326 log --oneline -2; ls -t logs/he/ \| head -4; bash bin/trava_teste.sh --quem; date +%H:%M; tail -c 600 /tmp/claude-1001/-home-ronald-saas-hasner-app/354179ca-a13f-4642-a6f5-791cf69a0acd/tasks/aaead5d5eba27cfe4.output \| grep -o '"text":"[^"]*' \| tail -2` |
 | 20:50:29 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -i '2s/.*/ESPERANDO: trava_teste.sh \| pid=1753276/' docs/RELATO.md; sed -n 2p docs/RELATO.md` |
