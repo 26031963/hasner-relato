@@ -1,5 +1,5 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: trava_teste.sh | pid=3267263
+ESPERANDO: trava_teste.sh | pid=3384379
 ORDEM VIVA MANHA-0511 (aval 05/11 08:3x, substitui NOITE-NON-STOP): 1 F3-BECO-1 -> 2 JUIZ-1 (+3 12x36 (B)) -> 4 JUIZ-3 (a) -> 5 JUIZ-4 FIO MUDO (i) -> 6 JUIZ-2 produto 78b755f8 -> 7 O261 item 3 PEP -> 8 OTIMIZA-3 (nao varrer .sh embutido; teto 2 voltas opus). Teto 2 construtores; Codex so apos 15:05. RESPONDIDAS por este aval as linhas PAROU F3-BECO-1-B, PERGUNTA DE DESENHO JUIZ-VARREDURA-1 (01:3x e 03:5x), JUIZ-VARREDURA-3, REPROVA-E-DESENHO OTIMIZA-3 abaixo.
 DESPACHO MANHA-0511: 1 F3-BECO-1 -> opus (construtor A) | 2+3 JUIZ-1 -> opus (construtor B) | sonda/DIFF na sombra -> dentro de cada construtor em sonnet (motivo: Codex sem cota ate 15:05) | 4,5,7 -> opus quando vagar | 6 -> sessao (suite do produto 78b755f8) | 8 -> opus, teto 2 voltas | pre-verificador Codex SUSPENSO ate 15:05 (OTIMIZA-SEM-CODEX), opus final segue.
 JUIZ-4A NO AR (07:4x): 8238da4c (merge --no-ff raia/jv4prod) + bin/deploy.sh --sem-migrate rc=0, 3 cascas, rotas provadas, importerror_500=0. Suite INTEIRA da copia OK 13556 rc=0 (logs/jv4/suite_inteira_jv4prod.log); cmp 12/12 iguais. PROVA prod: saas_core carrega disparar_perguntas_competencia com _ontem_em_janela/_de_ontem. RESPONDIDA a linha 'pouso depois de 07:30' abaixo.

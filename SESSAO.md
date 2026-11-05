@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 09:26:44.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (23.4 MB). Acoes na janela: **663**.
+**Medido em 05/11/2026 09:32:29.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (23.4 MB). Acoes na janela: **665**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:29:14 | Bash |  | `cd /home/ronald/saas-hasner && sed -i '2s/^ESPERANDO: .*/ESPERANDO: trava_teste.sh \| pid=3384379/' app/docs/RELATO.md && sed -n 2p app/docs/RELATO.md` |
+| 09:29:11 | Bash |  | `cd /home/ronald/saas-hasner && tail -3 logs/hook_stop_fila1.log \| cut -c1-200; bash bin/trava_teste.sh --quem; ps -eo pid,args \| grep -E "^ *[0-9]+ bash [^ ]*trava_teste.sh" \| cut -c1-80` |
 | 09:23:23 | Bash |  | `cd /home/ronald/saas-hasner && sed -i '2s/^ESPERANDO: .*/ESPERANDO: trava_teste.sh \| pid=3267263/' app/docs/RELATO.md && sed -n 2p app/docs/RELATO.md` |
 | 09:23:21 | Bash |  | `cd /home/ronald/saas-hasner && date +%H:%M; bash bin/trava_teste.sh --quem; ps -p 3196989 >/dev/null && echo vivo` |
 | 09:22:56 | Bash |  | `cd /home/ronald/saas-hasner && sed -i '2s/^ESPERANDO: .*/ESPERANDO: trava_teste.sh \| pid=3196989/' app/docs/RELATO.md && sed -n 2p app/docs/RELATO.md` |
