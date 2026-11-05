@@ -6392,6 +6392,7 @@ LEI-AKITA: origem=n/a (medida), testemunha=censo Codex sobre os anexos raspados,
 - Nao classificados 3: col194 atraso sem dia; 1 reciclagem sem identidade; "batidas livres" de supervisor sem pessoa nem rota
 - PERGUNTA do censo (nao e cura): janela de 14 dias em cluster_espurio.py:21 x regra "nao fecha por idade" -> anexo ao opus final da O169
 - G1/18: sonda pelo envelope bin/sonda_leitura.sh em curso; resultado na linha abaixo quando sair (erro de guarda SELECT/SAVEPOINT = nao medido)
+  - G1 RESULTADO (sonda_g1.out, 232 l., rc=0, "erro"=0, nao medido=0): 13 casos colab+dia medidos; tela (calendario/espelho/API, as 3 iguais) x D4 status_do_dia_lavrado = IGUAL em 13/13. Exportador/lista julgam a JANELA: na janela que contem o dia, 7/13 entra, 6/13 fora por furo_espelho com o dia lavrado ok/folga, e as datas furadas listadas NAO incluem o dia do caso (conferido nos retratos 10/11 e col204 no 4). Diferenca dia x janela, nao entre juizes sobre o mesmo dia. 5 colabs sem dia so com fontes de lista (sem comparacao). Nao cruzado: dia_pago_lavrada, veredito_dia, badge_template.
 
 ## CODEX-QUEIMA -- tabela final por tema (17:2x; CAUDA do aval H12H06-UMA-PORTA; fila SUFOCA em FIM 16:15:10, logs/codex_queima/rcs.txt)
 LEI-AKITA: origem=n/a (medida), testemunha=rcs.txt + turn.completed.usage dos jsonl, RED=n/a, quem-mais-le=placar por papel, juizes novos=0, padrao=n/a (medida)
