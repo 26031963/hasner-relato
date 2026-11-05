@@ -1,7 +1,262 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **05/11/2026 16:31** · publicado em **05/11/2026 16:32** (UTC-3)
+> Ultima resposta processada: **05/11/2026 16:35** · publicado em **05/11/2026 16:37** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 05/11 16:35 · sessao 493adf4cd9cc · - · - · origem=Ronald (tmux)
+
+G3 — cadeia provada no código:
+
+| Pergunta | Autoridade/cadeia | Prova |
+|---|---|---|
+| Qual vínculo responde pelo dia, inclusive após troca? | `escala_vigente` carrega e chama `escala.alimentacao.vinculo_do_dia`; célula/geradora e vigência alimentam o juiz. | `app/escala/servico_jornada.py:15`, `:38`, `:55` |
+| Quais marcos? | `EscalaColaborador.marcos_do_dia` lê `CelulaDia.dna.marcos`; sem marcos congelados, lê template. | `app/escala/models.py:1098`, `:1124`, `:1133` |
+| Qual dia é trabalho? | `eh_dia_trabalho` lê `cel.trabalha`; sem célula usa aritmética do vínculo. | `app/escala/models.py:1069`, `:1094` |
+| Como cruza meia-noite? | `marcos_turno` ancora no dia e avança um dia quando marco seguinte `<=` anterior. | `app/escala/servico_jornada.py:61`, `:80` |
+| A qual jornada pertence a batida? | `_data_do_turno` examina envelope da véspera; `_mk` usa essa resposta também para saída órfã. | `app/ponto/turnos.py:246`, `:283`, `:310` |
+| Quem pareia turno? | `parear_turnos`, chamado pelo motor através de `turnos_via_autoridade` com DNA e papel da ata. | `app/ponto/turnos.py:1190`; `app/ponto/motor_calculo_v2.py:453`, `:472`, `:497`, `:503` |
+| Como turno chega ao DiaPago? | `_periodos_via_autoridade` preserva jornada; `lavrar` usa `dia_da_jornada` em `_dia_de` e agrega rubricas. | `app/ponto/motor_calculo_v2.py:509`, `:530`; `app/ponto/services/dia_pago.py:109`, `:135`, `:173` |
+| Troca no meio da competência? | `apurar_por_fatia` resolve vínculo por dia e fatias; lavra recebe `resultado.dia_da_jornada`. | `app/ponto/services/fechamento.py:132`, `:188`, `:203`, `:1271` |
+| Porta de troca de vínculo? | `julgar_vinculo` julga, `executar_vinculo` escreve; chat chama mesma porta da tela. | `app/colaboradores/services/vinculo.py:50`, `:167`; `app/colaboradores/services/troca_pelo_chat.py:3`, `:64` |
+
+H-02: encontrei somente referência à “triagem H-02 col129 11/10”; não há definição de escopo comprovada. `app/docs/PROMPTS.md:1861`, `app/docs/RELATO.md:24`, `app/docs/BACKLOG.md:1742`. H-04 e aval BO-[nome]-0511-CENSO não foram localizados nos Markdown desta cópia; significado e cobertura [não verificado].
+
+Casos candidatos G3 pelo relatório fornecido: col29 15/10; col789 s/d; col129 s/d; **col751 com id 923**, s/d; col174 25–26/10; col33 03→04/10; col94 16/10; col163 troca 10↔17/10; col873 21/09 e 26/09; col949 troca de ciclo s/d; col214 mudança manhã/tarde s/d. Datas sem detalhe de batidas/turnos não permitem determinar o defeito concreto [não verificado].
+
+Uma batida física na data civil não prova falta do par transnoite: o código atribui batidas por jornada. `app/ponto/turnos.py:246`, `:2874`. Autorização de plantão, escala real, troca e HE continua dependente dos fatos/documentos do DP no dado fornecido [não verificado].
+
+G5 — separação:
+
+| Subclasse | Casos candidatos do relatório | Prova e limite |
+|---|---|---|
+| Exibição de rubricas | col297 06/13/20/10 e autorização 27/10; col960 s/d; col235 s/d; col194 atraso s/d; col219 s/d | `rubricas_do_dia` lê campos do DiaPago; `pago_do_dia` soma normais, folga e folga-feriado. `app/ponto/services/dia_pago.py:865`, `:896`, `:899`. A tela específica e defeito desses casos [não verificado]. |
+| Decisão DP | col189 21/09 e 19/10; col43 10/10 e 12/10; col222/col256 feriado; col123 troca/reciclagem; col247 QRF 24/10; janta col960 | Dado não contém autorização/documentos; defeito medido [não verificado]. Precedência de feriado/folga vem de `app/ponto/precedencia.py:242`, `:369`. |
+| Cadastro temporal / defeito de classe já nomeado | col270 competência 10/11, data desligamento ausente | `classificar_export` exclui qualquer `data_demissao is not None`, sem comparar janela, embora comentário diga “demissão na janela”. `app/folha/export.py:835`, `:840`. H-12/MODO-COMUM já consta em `app/docs/RELATO.md:9`; impacto retroativo específico no col270 [não verificado]. |
+| Integridade ao alterar batidas livres | supervisor não identificado | Transição e registros antes/depois ausentes; defeito [não verificado]. Usuário excluiu passe livre fechado. |
+| Identificação insuficiente | Weverton reciclagem | Cadastro/período não identificado univocamente no anexo; classe de persistência [não verificado]. |
+
+A gestão de HE já separa pendência lavrada, cadastro e dinheiro do DiaPago; escrita ocorre em `ponto/portas/he.py`, leitura em gestão. `app/ponto/services/gestao_he.py:2`, `:6`, `:9`, `:14`. Isso permite separar reclamação de exibição de autorização e efeito financeiro; não prova comportamento de produção desses casos [não verificado].
+
+G6 — só reprodução, sem cura:
+
+A tela do relato não está identificada [não verificado]. Candidata rastreável: Central `/chamados/painel/`, view `painel_gestao`, que usa `request.GET.get('pagina',1)` e retorna partial em HTMX. `app/chamados/views.py:721`, `:734`, `:742`.
+
+No template, busca envia filtros sem parâmetro `pagina`; partial guarda `data-pagina`, links paginam HTMX; já há restauração de `scrollTop` e, ao filtrar colaborador, guarda/restaura página e rolagem. `app/templates/chamados/painel_gestao.html:127`, `:131`, `:278`, `:648`, `:665`; `app/templates/chamados/partials/_lista_resumo.html:8`, `:12`, `:17`.
+
+Roteiro somente leitura: abrir listagem; ir a página N>1; rolar container `lista-scroller`; registrar URL, filtros, `data-pagina`, `scrollTop`; usar atualização GET da tela; capturar requisição e verificar presença de `pagina`, partial retornado, filtros e rolagem; repetir em resumo/lista e filtro por colaborador/limpar. Presença do defeito e operação concreta do relato [não verificado]. Não executar validação, resposta ou alteração de chamado para reproduzir nesta auditoria.
+
+## 05/11 16:35 · sessao 94d8d9e9b483 · - · - · origem=Ronald (tmux)
+
+G2 — **classe exata e dono por dia não são demonstráveis nos anexos**: faltam PerguntaDisputa, âncora, participação em `qs_na_fila`/app, lista Cadastro x Realidade e timestamps apuráveis. `batidas_qtd` por data não substitui o conjunto da jornada usado pelo oráculo. [não verificado]
+
+- `censo_alcance`: universo = dias que retêm competências abertas; porta = `porta_alcancavel_do_dia`. Fontes em `app/chamados/services/vigia_fio.py:541`, `:576`, `:634`.
+- Causas sem porta: **a** chamado vivo com véu; **b** respondida sem resposta; **c** respondida com destino terminal; **d** colaborador na CxR, dia fora; **e** detalhe nomeado, incluindo sem célula/pergunta/âncora ou pergunta fora do app. Definição `app/chamados/services/vigia_fio.py:518`; execução `:660`.
+- Antes dessas causas, separa porta acessível, hoje/futuro e quatro situações com responsável: decisão do dia pendente, ausência aberta, folga contestada validada, fio do admin. `app/chamados/services/vigia_fio.py:641`, `:273`.
+- L-099 responde em `dono_da_divergencia`: cadastro inválido primeiro; batida fora de turno ou conjunto ímpar → BATIDA; fase deslocada/CxR → CADASTRO; resto → ESTRUTURA. `app/ponto/management/commands/e6_oraculo.py:98`. Carregamento correto em `InsumosDoDono`, `:128`.
+- col407+21/10 e col909+16/10 sugerem BATIDA somente pela contagem física; col836+13–14/10 admite hipótese ESTRUTURA condicionada à ausência de defeitos cadastrais; todos esses donos permanecem [não verificado].
+- col292+21/09 está explicitamente no complemento O261; o documento descreve a classe histórica, sem provar a classe atual. `app/docs/BACKLOG.md:782`.
+
+Cobertura existente:
+
+| Família | Cobertura comprovada no código/docs |
+|---|---|
+| Folga não definida, beco de cadastro | F3-BECO-1; não é cobertura genérica de zero horas. `app/docs/BACKLOG.md:1762`, `:1745` |
+| Pergunta viva sob âncora terminal/passivo | O261-E-CELULA-20-UM-DONO. `app/docs/BACKLOG.md:859` |
+| Cluster | O169; assinatura própria: ≥2 órfãs em rajada ≤15 minutos e marco apagado. `app/docs/BACKLOG.md:1380`; `app/ponto/services/cluster_espurio.py:15` |
+| Turno aberto/24h/órfão14h | JUIZ-3; emissão por recompute/outbox é a opção aprovada documentada. `app/docs/RELATO.md:63`, `:39` |
+| Batida ausente viva sem pergunta viva | FIO MUDO/JUIZ-4; opção aprovada: evento da abertura de `batida_ausente`. `app/docs/RELATO.md:89`, `:39` |
+| Cobrança sem furo com conversa | O168, guarda `pode_executar_csf`; resposta existente impede retratação automática. `app/docs/BACKLOG.md:1379`; `app/ponto/supra_juiz.py:539` |
+
+Nenhum anexo permite atribuir cluster, FIO MUDO ou violação da guarda de conversa a um caso específico. [não verificado]
+
+G4 — cadeia do ato até célula/DiaPago:
+
+1. Resposta entra por `responder_pergunta_disputa_core`; escreve texto e `respondida_em`. `app/chamados/services/disputa_emissao.py:1247`, `:1282`.
+2. Ação de tela `acao_validar_pergunta` chama `validar_pergunta`; `_carimbar_validacao` escreve a validação. `app/chamados/services/acoes_disputa.py:13`; `app/chamados/services/validacao.py:127`, `:343`.
+3. Validação agenda recálculo pela **data do fato** e chama a materialização real. `app/chamados/services/validacao.py:395`, `:405`, `:422`.
+4. `_materializar_uma` exige batida e lastro; reprovação faz rollback. `app/chamados/services/materializacao.py:1142`.
+5. Materialização usa `registrar_batida`, escritor único; carimba a pergunta somente após comprovação. `app/chamados/services/materializacao.py:893`, `:1193`; `app/ponto/registro_batida.py:94`, `:157`.
+6. Evento da batida recompõe turno e julga dia local/anterior. `app/ponto/signals.py:19`, `:85`, `:108`, `:132`.
+7. Cartório lavra célula; porta única escreve veredito, ata e status. `app/ponto/services/cartorio.py:1802`; `app/ponto/portas/celula.py:717`, `:775`.
+8. Recálculo `on_commit` escolhe competência do fato e chama fechamento; este chama `dia_pago.lavrar`. `app/ponto/services/fechamento.py:1782`, `:1793`, `:1183`; `app/ponto/services/dia_pago.py:135`.
+9. Calendário lê DiaPago por `linhas_do_periodo`. `app/colaboradores/services/calendario.py:274`, `:290`.
+
+`veredito_lavrado` da **pergunta** é outra coisa: certifica materialização da pergunta, não é o veredito da célula. `app/chamados/veredito_lavrado.py:211`.
+
+Para col407+21/10, col836+13–14/10 e col909+16/10, os anexos provam estados administrativos e célula acusando, mas não identificam o ATO admin nem o elo que falhou; resposta/validação/materialização e recusa específicas permanecem [não verificado].
+
+## 05/11 16:35 · sessao 0afbc76a1b6f · - · - · origem=Ronald (tmux)
+
+Censo fechado em **72 unidades**, contando cada pessoa+dia explícito; sem dia, uma unidade `ND`; duplicatas A/C eliminadas. Isso vem dos anexos inline, sem arquivo local para citar. [não verificado]
+
+| Parte | Unidades |
+|---|---:|
+| A | 23 |
+| B | 32 |
+| C, apenas unidades novas | 17 |
+| Total | 72 |
+
+| Grupo | Unidades | Casos |
+|---|---:|---|
+| G1, candidatos | 19 | col504 21/10; col226 21/10; col709 22/10; col255 03/10; col204 21/09; col43 26/10; col956 16 e 22/10; col253 ND; col283 ND; col502 09/10; col55 03/10; col92 ND; col235 ND; col219 ND; col288 04/10; col523 25/10; col130 05/10; col194 ND |
+| G2 | 8 | col407 21/10; col239 07/10; col909 16/10; col292 21/09; col207 ND; col332 ND; col446 ND; col1023 ND |
+| G3 | 16 | col29 15/10; col789 ND; col129 ND; col923 ND; col174 25 e 26/10; col33 03 e 04/10; col94 16/10; col163 10 e 17/10; col873 21 e 26/09; col949 ND; col214 ND; col673 ND |
+| G4 | 7 | col836 13 e 14/10; col39 15/10; col292 09/10; col42 ND; col960 ND; col250 ND |
+| G5 — decisão DP | 15 | col239 12/10; col189 21/09 e 19/10; col43 10 e 12/10; col222 12/10; col256 12/10; col297 06, 13, 20 e 27/10; col247 24/10; col231 ND; col123 ND; col270 ND |
+| G5 — exibição | 1 | col246 ND |
+| G5 — mistos, defeito não medido | 2 | col89 ND; col78 ND |
+| G6 | 1 | UX, sem pessoa/dia |
+| Não classificado | 1 | Weverton: ID e período indefinidos |
+| Fora | 2 | col523 07/11, futuro; batidas livres, excluído pelo usuário |
+
+**19 + 8 + 16 + 7 + 18 + 1 + 1 + 2 = 72.** Classificação provável pelo relato, sem reprodução de produção. [não verificado]
+
+Cuidados de identidade: `col253 do [nome]` tem **ID 407**, diferente de `col253`, ID 253; `col751 de [nome]` tem **ID 923**. `col465 21/09` aparece somente no JSONL, sem caso no relatório, portanto não soma às 72 unidades. [não verificado]
+
+A contagem inclui as datas existentes no corpo das linhas: col297 06/13/20/27; col292 21/09 e 09/10; col43 10/12/26. Em G4, col836 13–14 fica somente uma vez por dia, priorizando o ato resolvido sem efeito descrito. [não verificado]
+
+Não encontrei `BO-[nome]-0511` ou `BO-[nome]-0511-CENSO` na busca limitada aos Markdown de `app/docs`; a existência do aval em outro local permanece [não verificado].
+
+## 05/11 16:34 · sessao 6cc051563d19 · - · - · origem=Ronald (tmux)
+
+Censo somente estático; execução e incidência além do dado raspado: [nao verificado].
+
+**Leitura histórica direta/por juiz em `ponto/` e `escala/`:**
+
+| Sítio | Comportamento atual |
+|---|---|
+| `app/escala/utils.py:904` | `_marcar_isencao` consulta a isenção uma vez por colaborador e aplica o resultado a todos os dias (`:909`); chamada pelos builders em `:808` e `:1871`. |
+| `app/escala/services/leitor_celula.py:349` | `grade_da_celula` consulta uma vez antes do laço e aplica overlay por dia (`:412`), devolvendo também um único `isento_ponto` no topo (`:416`). |
+| `app/ponto/services/cartorio.py:1141` | Consulta uma vez; entrega à impressão dos dois ramos (`:1198`, `:1354`). |
+| `app/ponto/services/cartorio.py:890`, `:1229`, `:1246`, `:1419`, `:1806` | Lê diretamente a flag atual ao classificar/lavrar status de células históricas. |
+| `app/ponto/services/espelho.py:600`, `:669` | `_isento` único fora do laço elimina inconsistência de todos os dias. |
+| `app/ponto/services/fechamento.py:357` | Retorna lista de faltas vazia antes de examinar as datas (`:360`). |
+| `app/escala/services/furos_diarios.py:33` | Retorna vazio para toda `[ini,fim]`; `:298` classifica isento no quadro da janela. |
+| `app/escala/regua_defesa.py:136`, `:355`, `:513` | Flag direta exclui os diagnósticos de janelas históricas; funções `diagnostico_regua` (`:118`), `turnos_longos_suspeitos` (`:345`), `entradas_fora_do_inicio` (`:503`). |
+| `app/escala/services/propositor.py:456` | Exclui colaborador atualmente isento depois de distribuir dias históricos por `vinculo_do_dia` (`:448`); usa janela até ontem (`:436`). |
+| `app/escala/services/previsto_cego.py:143` | Filtra não isentos atuais no universo da competência corrente (`:138`). |
+| `app/escala/management/commands/termometro_regua.py:34` | Exclui isentos atuais antes do diagnóstico com `--dias` (`:43`, `:47`). |
+| `app/ponto/services/esmeril_espelho.py:216` | Exclui isentos da apuração de anomalias da janela e proposta dos últimos sessenta dias (`:219`, `:223`). |
+| `app/ponto/management/commands/emitir_furo_retroativo.py:106` | Passa flag atual diretamente para julgamento retroativo. |
+| `app/ponto/management/commands/supra_juiz.py:228` | Passa flag atual diretamente para auditoria histórica. |
+| `app/ponto/management/commands/mapa_divergencia.py:65`, `:99` | Exclui pelo cadastro atual e pelo topo da grade ao comparar competência. |
+| `app/ponto/management/commands/propor_reorganizacao.py:35` | Universo não isento atual; lê janela referenciada em `:65`. |
+| `app/ponto/management/commands/vigiar_motor_autoridade.py:46` | Universo não isento atual; motor calcula `[hoje-dias,hoje]` em `:58`. |
+| `app/ponto/management/commands/reconciliar_grade.py:230` | Usa alias `isento_art62`; alias apenas delega sem D a `isento_ponto` (`app/ponto/marcos.py:111`, `:115`, `:116`). |
+| `app/ponto/management/commands/detectar_ausencias.py:104` | Gate único antes do laço hoje/ontem (`:71`, `:72`, `:112`). |
+| `app/ponto/management/commands/processar_alertas_turno.py:85` | Salta turnos materializados de janela de 36h (`:51`, `:76`), inclusive resolução de fechado (`:88`, `:89`). |
+| `app/ponto/management/commands/processar_alertas_avancados.py:32` | Gate atual, embora restante do laço seja explicitamente de ontem (`:34`, `:37`). |
+| `app/ponto/services/vigia_de_hora.py:117` | Gate atual sobre células de hoje/ontem (`:109`, `:115`); julga pela data da célula (`:131`). |
+| `app/ponto/services/bordas_realizado.py:71` | Usa flag única no topo da grade para todos os dias da janela (`:72`); para isentos só órfã prova batida, `n_ok` não (`:49`, `:51`). |
+
+**Leituras sobre hoje/ato atual e distinções:**
+
+- `faltas_de_hoje_sem_cobranca` pergunta hoje e exclui isentos atuais: `app/ponto/services/faltas_de_hoje.py:29`, `:33`.
+- `deslogados.apurar` declara pergunta de hoje (`app/ponto/services/deslogados.py:45`) e filtra destinatário atual em `:157`, embora use histórico para medir corrida (`:163`, `:168`); só esse filtro não demonstra que esteja respondendo isenção histórica.
+- `escala_auto.dry_da_frota` seleciona propostas para vínculo atual (`app/escala/services/escala_auto.py:171`, `:172`, `:182`); decisão histórica de isenção nesse ponto: [nao verificado].
+- `detectar_intervalo_ausente` reconcilia acervo antes do gate de isento (`app/ponto/management/commands/detectar_intervalo_ausente.py:127`, `:138`, `:147`); nascimento já está aposentado (`:149`, `:156`).
+- Gates de desligado no cartório são explicitamente de emissão para quem responde agora (`app/ponto/services/cartorio.py:1651`, `:1697`, `:1762`).
+
+**Funções e campos derivados que transportam o efeito:**
+
+- `aplicar_isencao_no_dia` muda célula de memória para `status='ok'`, `missing=False`, `delta=0`, `isencao=True`, com hora prevista; hora real existente permanece (`app/escala/utils.py:850`, `:852`, `:858`, `:860`). O rótulo do dia só entra para trabalho com forma conhecida (`:878`, `:888`, `:889`).
+- `_overlay_isencao` só delega à mesma função (`app/escala/services/leitor_celula.py:212`, `:213`); seu docstring antigo diz que sem hora não cobre (`:206`), mas a lei chamada explicita crédito também sem marco (`app/escala/utils.py:823`, `:825`).
+- `classificar_dia` retorna lista vazia quando recebe `isento_ponto=True` (`app/ponto/supra_juiz.py:220`, `:221`).
+- `fatos_do_status` transporta `isento` como bool (`app/ponto/status_dia.py:190`); porta da célula chama `status_da_lavra` com esses fatos (`app/ponto/portas/celula.py:701`, `:706`).
+- `status_da_lavra` precede isenção por falta/ausência/indefinida/folga; com previsto e sem batida, isento resulta `ok` e rótulo próprio (`app/ponto/status_dia.py:139`, `:141`, `:143`, `:148`, `:150`, `:151`).
+- `_carimbar_isencao` propaga marcador da célula para lâmpada da ata (`app/ponto/services/cartorio.py:556`, `:557`); atas antigas permanecem ambíguas segundo contrato local (`:547`, `:549`).
+- `impressao_insumos` acrescenta `isento:1` somente com regra ≥4 (`app/ponto/services/cartorio.py:520`, `:521`); horizonte da regra é competência 10+, não início individual do passe (`:514`, `:516`).
+- `datas_em_aberto_de` recebe `isento` obrigatório e o usa ao calcular ausência (`app/ponto/services/dia_decidido.py:238`, `:263`, `:270`, `:315`); leitor identificado: `app/relatorios/cartao_pela_celula.py:418`.
+- PDF herda grade e lê `isencao`/`celulas_isencao`: `app/relatorios/pdf_espelho.py:543`, `:553`, `:556`, `:889`, `:925`.
+- A documentação local declara motor sem conhecimento do Art.62 (`app/ponto/services/dia_decidido.py:264`); busca textual não encontrou leitura direta em `motor_calculo_v2.py`; ausência absoluta de caminho indireto: [nao verificado].
+
+**Casos de borda sustentados pelo código:**
+
+- Célula inexistente gera `sem_celula` antes do overlay; não é automaticamente jornada cumprida (`app/escala/services/leitor_celula.py:371`, `:372`, `:412`).
+- Célula sem ata lê tipo da célula e pode calcular previsto pelo juiz (`app/escala/services/leitor_celula.py:356`, `:374`, `:376`, `:382`, `:383`); sem lâmpadas não ganha rótulo de isenção (`app/escala/utils.py:878`, `:888`).
+- Marcos noturnos são ancorados em D e avançam dia quando o próximo horário não sucede o anterior (`app/escala/servico_jornada.py:62`, `:81`, `:82`, `:83`); saída pode estar em D+1 sem mudar o dia-turno. `marco_vencido` expressa o mesmo caso (`app/ponto/marcos.py:73`, `:100`, `:103`).
+- Vínculo do dia é decidido pela geradora dentro da vigência, sem substituir pelo atual; geradora fora da vigência não autoriza escolher outra (`app/escala/alimentacao.py:228`, `:269`, `:272`, `:277`, `:279`).
+- Competência com corte 21 vai do dia 21 do mês anterior até dia 20; virada do ano é explícita (`app/ponto/janelas.py:15`, `:16`, `:17`, `:18`, `:20`). A janela usa corte atual da empresa (`:50`, `:57`).
+- E3 testa troca da flag provocando rejulgamento em competência 10 (`app/ponto/tests/test_e3_isento_na_impressao.py:189`, `:195`, `:197`, `:198`), e permanência da impressão anterior na 09 (`:215`, `:230`, `:232`, `:233`); não apresenta períodos sucessivos da pessoa nesses trechos.
+- O crédito não deve ser confundido com batida; há carimbo próprio exatamente porque hora igual ao marco não prova batida (`app/ponto/services/cartorio.py:527`, `:531`, `:539`, `:556`).
+
+**Leitores indiretos adicionais da mesma grade (para consolidação com outros exploradores):**
+
+`app/ponto/worklist.py:18`; `app/chamados/services/disputa_emissao.py:66`; `app/chamados/services/declaracao_texto.py:82`, `:83`; `app/chamados/services/materializacao.py:233`, `:282`; `app/relatorios/furos.py:132`, `:194`; `app/inteligencia/calculadores.py:42`, `:143`, `:332`; `app/folha/export.py:327`; `app/colaboradores/services/calendario.py:334`; `app/ponto/services/espelho.py:519`; `app/ponto/management/commands/supra_juiz.py:129`; `app/ponto/management/commands/emitir_furo_retroativo.py:60`.
+
+## 05/11 16:33 · sessao 6afa9ba448ed · - · - · origem=Ronald (tmux)
+
+**Escritor e trilha**
+
+- `Colaborador.isento_ponto` é booleano, default `False`; o comentário declara flag como fonte única e `core.constants.isento_ponto` como juiz. (`app/colaboradores/models.py:291`, `app/colaboradores/models.py:294`.)
+- Passe Livre exige autenticação e ação `editar_cadastro`; lê o colaborador no POST; `acao == 'add'` significa `True`, qualquer outro valor significa `False`; se muda, exige motivo com ao menos 10 caracteres. (`app/colaboradores/views.py:144`, `app/colaboradores/views.py:151`, `app/colaboradores/views.py:156`, `app/colaboradores/views.py:157`, `app/colaboradores/views.py:164`.)
+- O ato compara o valor carregado, chama `gravar(..., 'cadastro', {'isento_ponto': novo_valor})` e só depois chama a auditoria. Repetir o mesmo valor não escreve a linha. (`app/colaboradores/views.py:173`, `app/colaboradores/views.py:176`, `app/colaboradores/views.py:183`; selo estático em `app/colaboradores/tests/test_passe_livre_trilha.py:103`.)
+- A porta permite a flag na operação `cadastro`; `gravar` atribui e salva com `update_fields`, sem acrescentar trilha. `salvar_campos` também grava campos permitidos; `salvar_inteiro` salva o objeto completo; `atualizar_em_lote` faz `update`; `criar_colaborador` aceita `**campos`. São capacidades de escrita, não evidência de outros atos específicos da flag em runtime. (`app/colaboradores/services/colaborador.py:34`, `app/colaboradores/services/colaborador.py:55`, `app/colaboradores/services/colaborador.py:65`, `app/colaboradores/services/colaborador.py:73`, `app/colaboradores/services/colaborador.py:80`, `app/colaboradores/services/colaborador.py:91`.)
+- A migration 0043 é escritor histórico: semeia `True` por substring de cargo `SUPERVISOR`, `DIRETOR`, `GERENTE`, sem chamar auditoria. O juiz atual não consulta cargo. (`app/colaboradores/migrations/0043_isento_ponto.py:6`, `app/colaboradores/migrations/0043_isento_ponto.py:10`, `app/colaboradores/migrations/0043_isento_ponto.py:13`; `app/core/constants.py:13`.)
+- O admin de Colaborador herda `SoLeitura`; não é outro editor manual da flag. (`app/colaboradores/admin.py:47`.)
+
+**Formato e alcance da auditoria**
+
+- Passe Livre grava `acao='editar'`, `modelo='Colaborador'`, `objeto_id=colab.pk`, descrição `Passe livre (isencao Art.62): {antes} -> {novo_valor}. Motivo: {_motivo}`, JSON anterior `{'isento_ponto': antes}` e posterior `{'isento_ponto': novo_valor, 'motivo': _motivo}`. (`app/colaboradores/views.py:183`, `app/colaboradores/views.py:185`.)
+- A trilha antiga existia somente na descrição; procurar exclusivamente `valor_antes`/`valor_depois` exclui esse formato antigo. O comentário e o selo narram explicitamente essa diferença. (`app/colaboradores/views.py:178`, `app/colaboradores/tests/test_passe_livre_trilha.py:6`.)
+- `registrar_log` leva usuário autenticado e IP para `core.observ.evento`; `evento` é o escritor de `LogAuditoria`, que persiste identificação, descrição, antes/depois e IP. (`app/core/auditoria.py:8`, `app/core/auditoria.py:18`, `app/core/auditoria.py:22`; `app/core/observ.py:94`, `app/core/observ.py:133`.)
+- `LogAuditoria` dispõe de usuário, ação, modelo, objeto, descrição, dois JSONs, IP, ator e `criado_em=auto_now_add`; ordenação default apenas `-criado_em`; não há campo separado de vigência da isenção nesse modelo. (`app/core/models.py:295`, `app/core/models.py:300`, `app/core/models.py:306`, `app/core/models.py:307`, `app/core/models.py:312`.)
+- A troca da flag pode sobreviver à falha de trilha: o escritor explicita isso, `registrar_log` captura exceção, e `evento` usa best effort com savepoint próprio. Completude da trilha por colaborador não decorre da existência da tela. (`app/colaboradores/views.py:187`, `app/colaboradores/views.py:189`, `app/core/auditoria.py:25`, `app/core/observ.py:105`, `app/core/observ.py:133`.)
+- O leitor de auditoria da tela lista `LogAuditoria` por data descendente, filtra usuário/ação/modelo/texto/período e limita a 500. É apresentação da trilha, não julgamento da isenção em D. (`app/core/views.py:705`, `app/core/views.py:707`, `app/core/views.py:713`, `app/core/views.py:715`, `app/core/views.py:726`.)
+
+**Autoridades e quarentena**
+
+- `isento_ponto(colab)` responde exclusivamente pelo booleano carregado, sem argumento de data e sem ler auditoria. (`app/core/constants.py:13`, `app/core/constants.py:18`.)
+- `JUIZES.md` declara ser lookup e manda que o registro vivo `core/juizes.py` prevaleça. Não encontrei registro específico de isenção histórica ou implementação de `inicio_da_isencao`/`colab_em_quarentena` na cópia: implementação **[nao verificado]**. (`app/docs/JUIZES.md:7`, `app/docs/JUIZES.md:11`, `app/docs/JUIZES.md:14`.)
+- A regra pedida mora literalmente em `CORTES.md:352`: isento sem trilha = quarentena desde admissão, rótulo “desde a admissao -- flag sem trilha”; toda troca abre/fecha janela pela porta; item sem dia entra somente em janela aberta. A linha consta como “em construcao”. (`app/docs/CORTES.md:352`.)
+- O corte anterior distingue quarentena de cobrança e cálculo: nada apagar/fechar/silenciar; espelho, folha e TXT não mudam pela quarentena; item cujo dia pertence à janela não cobra. Isso não equivale a um juiz histórico implementado para a folha. (`app/docs/CORTES.md:348`.)
+- Na cópia, o serviço ativo `silencio_isentos.alvos` seleciona todos os chamados vivos, ainda sem véu, dos colaboradores cuja flag atual é `True`, sem data do chamado nem início da isenção. `silenciar` passa pela porta do arquivo e cria prazo. (`app/chamados/services/silencio_isentos.py:20`, `app/chamados/services/silencio_isentos.py:24`, `app/chamados/services/silencio_isentos.py:27`, `app/chamados/services/silencio_isentos.py:39`, `app/chamados/services/silencio_isentos.py:43`.)
+- Receivers chamam esse serviço após commit: save de colaborador com flag ligada e nascimento/retorno de chamado vivo. O receiver de colaborador não testa transição antes/depois: qualquer save de instância com flag verdadeira agenda o serviço. (`app/chamados/signals.py:213`, `app/chamados/signals.py:215`, `app/chamados/signals.py:224`, `app/chamados/signals.py:227`, `app/chamados/signals.py:238`, `app/chamados/signals.py:251`.)
+- L-007 exige um escritor e trilha de ação crítica; L-124 trata horizonte da obra, não início/fim individual da flag. (`app/docs/LEIS.md:65`, `app/docs/LEIS.md:145`.)
+
+**Limites para contraexemplos/RED**
+
+- **Duas remoções:** quantidade de linhas `True -> False` não prova dois períodos completos nem datas de entrada; a semente pode iniciar `True` sem trilha, e a auditoria pode falhar. Os JSONs e o texto podem informar transições quando presentes. (`app/colaboradores/migrations/0043_isento_ponto.py:13`, `app/colaboradores/views.py:183`, `app/core/observ.py:105`.)
+- **Remover e religar no mesmo dia:** as duas mudanças deixam linhas distintas e timestamp de registro, quando a trilha funciona; o código não tem argumento de dia/instante no juiz. Política de arredondamento do dia da mudança, inclusividade e tratamento do intervalo intradiário pelo aval: **[nao verificado]**. (`app/colaboradores/views.py:173`, `app/colaboradores/views.py:183`, `app/core/models.py:307`, `app/core/constants.py:13`.)
+- **Concorrência:** duas requisições podem carregar `True` antes de qualquer salvar e ambas registrar `True -> False`: leitura/comparação/save/log são separados e `gravar` não faz atualização condicional. É contrafactual estático; ocorrência em produção **[nao verificado]**. (`app/colaboradores/views.py:156`, `app/colaboradores/views.py:173`, `app/colaboradores/views.py:176`, `app/colaboradores/views.py:183`, `app/colaboradores/services/colaborador.py:55`.)
+- **Sem trilha:** o corte manda desde admissão para o isento sem trilha; a origem sem log pode ser a semente, mas atribuir essa origem a um `colNN` específico do raspado é **[nao verificado]**. (`app/docs/CORTES.md:352`, `app/colaboradores/migrations/0043_isento_ponto.py:6`.)
+- **Fuso/borda:** Django usa `America/Sao_Paulo`, `USE_TZ=True`; `criado_em` registra datetime. Converter o timestamp em dia sem considerar esse fuso não é uma equivalência garantida. (`app/config/settings/base.py:93`, `app/config/settings/base.py:95`, `app/core/models.py:307`.)
+- **Turno cross-meia-noite:** as autoridades existentes distinguem pertença ao turno (`turnos_do_colab`), marcos congelados e cruzamento de meia-noite; nenhuma dessas declara a política intradiária da alteração da flag. (`app/core/juizes.py:196`, `app/core/juizes.py:201`, `app/core/juizes.py:204`.)
+- **Vínculo trocado:** `vinculo_do_dia` e `vinculo_cobre_a_data` estão registrados; são autoridades de vínculo, não vigência da isenção pessoal. (`app/core/juizes.py:1285`.)
+- **Competência exportada:** L-124 preserva L-092/L-113 e remete correção comprovada em exportada à porta existente; o aval dado proíbe tocar exportada, portanto não autoriza reconstrução nela. (`app/docs/LEIS.md:145`; proibição específica do anexo **[nao verificado]** por não haver arquivo local do anexo.)
+
+## 05/11 16:33 · sessao 956be7cc0f3c · - · - · origem=Ronald (tmux)
+
+Censo somente leitura fora de `ponto/`, `escala/`, `folha/` e `relatorios/`; completude de caminhos indiretos não enumerados: [nao verificado].
+
+| Classe | Leitor e efeito atual |
+|---|---|
+| **D passado** | `reemitir_chamado_do_dia(p,colab,dia)` suprime a reemissão pela flag atual, sem passar `dia` ao juiz: `app/chamados/reconciliador.py:730`, `app/chamados/reconciliador.py:819`. |
+| **D passado** | A contraprova do piso de perguntas absolve por `getattr(_col,'isento_ponto',False)`; a condição é posterior aos testes da célula, mas não compara a data da flag com D: `app/chamados/management/commands/auditar_invariantes_chamados.py:400`, `app/chamados/management/commands/auditar_invariantes_chamados.py:410`. |
+| **D passado / diagnóstico** | `_calc_escalas_desvio` usa janela de 31 dias terminada ontem, filtrando o universo pela flag atual e pelo vínculo ativo atual: `app/inteligencia/calculadores.py:320`, `app/inteligencia/calculadores.py:325`, `app/inteligencia/calculadores.py:327`, `app/inteligencia/calculadores.py:332`. |
+| **D passado / leitura indireta** | `_marcos_faltantes` consulta grade de véspera até D; a flag agregada da grade retorna `ESTADO_FORA_VINCULO,[]` antes do teste de ata ausente: `app/chamados/services/declaracao_texto.py:80`, `app/chamados/services/declaracao_texto.py:83`, `app/chamados/services/declaracao_texto.py:91`, `app/chamados/services/declaracao_texto.py:103`. |
+| **D passado / propagação** | O calendário lê `grade_da_celula` para o período; materialização lê os marcos daquela mesma autoridade: `app/colaboradores/services/calendario.py:334`, `app/chamados/services/materializacao.py:233`, `app/chamados/services/materializacao.py:282`. |
+| **Hoje / intencional pelo objeto consultado** | API de pendências cadastrais exclui isentos dos cadastros correntes sem plano de folgas, sem adesão e incompletos; cobertura de ausência é consultada para hoje: `app/api/views_mensageria.py:1216`, `app/api/views_mensageria.py:1221`, `app/api/views_mensageria.py:1236`, `app/api/views_mensageria.py:1243`, `app/api/views_mensageria.py:1273`. |
+| **Hoje / adesão corrente** | `sincronizar_adesao` calcula `janela_atual(hoje,empresa)`, exclui isentos atuais e testa ausência de hoje para emitir pai de adesão; isso não constitui consulta de vigência individual da flag em cada D: `app/chamados/services/adesao.py:44`, `app/chamados/services/adesao.py:56`, `app/chamados/services/adesao.py:64`, `app/chamados/services/adesao.py:68`, `app/chamados/services/adesao.py:74`. |
+| **Hoje / lista de cadastro** | Passe Livre lista isentos atuais e candidatos ativos não isentos: `app/colaboradores/views.py:204`, `app/colaboradores/views.py:206`. |
+| **Competência / rótulo diagnóstico** | `bin/censo_folha.py` consulta `classificar_export` para a competência e acrescenta rótulo `ART62` pela flag atual; o rótulo não é cálculo de isenção em D: `bin/censo_folha.py:14`, `bin/censo_folha.py:17`, `bin/censo_folha.py:34`. |
+
+**Silêncio de chamados, escritor e leitores derivados.**
+
+- `silencio_isentos.alvos` seleciona isentos atuais e todos os chamados vivos sem véu, sem cláusula de data do fato ou início individual da isenção: `app/chamados/services/silencio_isentos.py:24`, `app/chamados/services/silencio_isentos.py:27`.
+- `silenciar` usa `arquivo.prazo_padrao`, aplica `arquivo.silenciar` chamado a chamado com motivo e `extra={'lote':'isentos'}`; é escrita de véu, não de batidas: `app/chamados/services/silencio_isentos.py:39`, `app/chamados/services/silencio_isentos.py:43`, `app/chamados/services/silencio_isentos.py:47`.
+- O receiver do colaborador dispara em qualquer `post_save` cujo objeto esteja isento, sem exigir mudança da flag; agenda `silenciar_do_colab` por `on_commit`: `app/chamados/signals.py:213`, `app/chamados/signals.py:215`, `app/chamados/signals.py:224`.
+- O receiver do chamado agenda o mesmo serviço quando chamado nasce/volta vivo ou tem véu levantado, desde que esteja sem véu: `app/chamados/signals.py:228`, `app/chamados/signals.py:238`, `app/chamados/signals.py:242`, `app/chamados/signals.py:251`.
+- O cron compartilha `alvos`; `--alarme` impede aplicar, conta e sai com código 2 se houver alvo; `--apply` sem alarme chama a escrita: `app/chamados/management/commands/silenciar_chamados_isentos.py:33`, `app/chamados/management/commands/silenciar_chamados_isentos.py:36`, `app/chamados/management/commands/silenciar_chamados_isentos.py:44`, `app/chamados/management/commands/silenciar_chamados_isentos.py:49`. O agendamento é diário às 07:05 com `--alarme`: `app/config/crons.py:609`.
+- Um teste existente exige que desligar a flag **não levante** o véu já escrito; outro exige que resgatar chamado de isento volte ao véu pelo evento: `app/chamados/tests/test_varredura_isentos_evento.py:77`, `app/chamados/tests/test_varredura_isentos_evento.py:85`, `app/chamados/tests/test_varredura_isentos_evento.py:57`, `app/chamados/tests/test_varredura_isentos_evento.py:68`.
+- Frente ao corte posterior por período, esse silêncio sem data individual é sítio irmão da mesma classe; não oferece resposta “era isento em D”: `app/chamados/services/silencio_isentos.py:24`, `app/docs/CORTES.md:348`, `app/docs/CORTES.md:352`.
+
+**Limites úteis para a consolidação.**
+
+- `cala_para_isento` responde apenas se o módulo pertence ao conjunto `CALADOS_POR_ISENCAO`; não calcula a condição pessoal nem sua vigência: `app/chamados/catalogo/modulos.py:235`, `app/chamados/catalogo/modulos.py:275`.
+- O admin de colaboradores herda `SoLeitura`; não é outra tela editável da flag: `app/colaboradores/admin.py:48`.
+- `core/configuracao_efeito.py` declara metadado `('Posto','isento_ponto')`, enquanto o juiz executável lê a propriedade do colaborador; o metadado não demonstra outro leitor operacional: `app/core/configuracao_efeito.py:117`, `app/core/constants.py:18`.
+- `bin/censo_folha.py` não foi executado; se executado, escreve CSV apesar do comentário inicial “Zero escrita”: `bin/censo_folha.py:3`, `bin/censo_folha.py:45`.
 
 ## 05/11 16:31 · sessao f758b9bcb9ae · PD-JUIZ-3 · censo · origem=Code
 
@@ -698,160 +953,4 @@ Há um sítio aberto verificável da classe **FERRAMENTA**: os testes continuam 
 
 Existe também limite residual na **prova exclusiva do ato**, já mencionado em `codex_v2.r`, item 5, “não há estado de consumo do arquivo”: aplicar R1 720→420, reverter R1 420→720, aplicar R2 720→420 e reverter novamente R1 satisfaz as mesmas comparações. O arquivo é apenas lido, e o comando confere estado atual, sem consumir o arquivo anterior; prejuízo financeiro e ocorrência em produção [nao verificado]. Esse limite não deve entrar na contagem histórica como novo procedente. (`app/ponto/management/commands/rederivar_falta_declarada.py:87`, `app/ponto/management/commands/rederivar_falta_declarada.py:236`, `app/ponto/management/commands/rederivar_falta_declarada.py:255`, `app/ponto/management/commands/rederivar_falta_declarada.py:268`, `app/ponto/services/ausencia.py:531`.)
 
-## 05/11 16:26 · sessao 90b85dbddf23 · - · - · origem=Ronald (tmux)
-
-Achados no código, sem acesso a estado de produção:
-
-- **Espera sem limite total:** o wrapper espera o gate com `flock 9` sem prazo e procura slot em laço; o `timeout` só começa no `codex exec`. Portanto a saída por falha de `contrato.txt:3` não cobre a espera anterior à execução. PD/AUT usam o mesmo conjunto de slots das chamadas de verificação, podendo atrasá-las; ocorrência real [nao verificado]. (`bin/codex_pergunta.sh:137`, `bin/codex_pergunta.sh:142`, `bin/codex_pergunta.sh:150`, `bin/codex_pergunta.sh:174`; `contrato.txt:1`, `contrato.txt:3`.)
-
-- **Prazo de execução e prazo de resposta separados:** `CODEX_TIMEOUT` vale 900 s por padrão, é aplicado à trava da resposta e depois novamente ao processo Codex. A redação de falha não explicita esse tempo nem a espera de slot, apesar de o contrato de instrumento vigente pedir erro, timeout e limite. (`bin/codex_pergunta.sh:46`, `bin/codex_pergunta.sh:163`, `bin/codex_pergunta.sh:174`; `app/docs/PISTA.md:172`; `contrato.txt:3`.)
-
-- **Construtor como quem espera:** `contrato.txt:2` põe o construtor como esperador, mas não diz como a espera ocorre. PISTA exige “quem espera e como”, sem agente ocioso ou turno vazio. Não é possível afirmar que haverá agente ocioso: [nao verificado]. (`contrato.txt:2`; `app/docs/PISTA.md:171`, `app/docs/PISTA.md:172`.)
-
-- **Recusa antes de existir rc do wrapper:** o disjuntor pode negar consultas Codex de qualquer papel por orçamento; sem `CODEX_VOLTA`, o parser assume `meio`. O contrato prevê rc 75 ou “falha do Codex”, mas não explicita o tratamento de negativa do hook, em que a consulta nem executa. Isso é ponto de espera indefinida se a sessão insistir em obter a autópsia antes da próxima volta; insistência real [nao verificado]. (`bin/disjuntor.py:1336`, `bin/disjuntor.py:1373`, `bin/disjuntor.py:1383`; `contrato.txt:1`, `contrato.txt:2`, `contrato.txt:3`.)
-
-- **Censo não libera o verificador/B3:** só `papel=verificador` consulta B3 no wrapper; a triagem formal também rejeita `papel=censo`. Assim a resposta AUT/PD não produz liberação de B3 nem pode ser contada automaticamente como volta formal de verificação. O contrato já diz que não substitui verificador, portanto não há violação demonstrada, mas seria incorreto tomar a autópsia como liberação. (`bin/codex_pergunta.sh:164`; `bin/disjuntor.py:798`; `contrato.txt:1`, `contrato.txt:3`.)
-
-- **Pouso já aprovado:** a salvaguarda está explícita, sem bloqueio novo demonstrado pelo texto. Atraso indireto continua possível pelos slots compartilhados; aconteceu ou afetou pouso concreto [nao verificado]. (`contrato.txt:2`; `bin/codex_pergunta.sh:137`, `bin/codex_pergunta.sh:143`.)
-
-- **Escopo e prioridade:** contrato preserva literalmente “fila não se reordena”, mas não repete teto 2 nem a proteção nominal de F3/H12+H06 do aval anterior. Isso é omissão documental, não prova de mudança da fila. (`contrato.txt:2`; `avais.txt:1`.)
-
-- **Regra vigente preservada:** a reprovação final já para a obra na primeira ocorrência; autópsia na segunda reprovação não pode ser lida como permissão para avançar ignorando a primeira. O contrato não declara essa permissão. (`CLAUDE.md:271`, `CLAUDE.md:272`; `bin/disjuntor.py:76`; `contrato.txt:1`; `avais.txt:2`.)
-
-## 05/11 16:26 · sessao febf73418c30 · - · - · origem=Ronald (tmux)
-
-- **Lei específica já responde (b):** “chamado de cluster NAO fecha por idade; so morre por lastro”; fechamento por janela é dívida. (`app/docs/BACKLOG.md:424-426`)
-- **Juiz da premissa:** `_C3` aponta para `premissa_morta`; `avaliar` conserva fato ausente/`None`, conserva verdadeiro e declara morta a premissa somente para valor falso coletado. (`app/core/juizes.py:263`; `app/chamados/catalogo/premissa.py:115-150`)
-- **Assinatura de cluster ainda não tem juiz único declarado:** `SEM_JUIZ['batida']` registra que `detectar_cluster_espurio --apply` e o cluster-guard de `escala/utils.py` decidem em sítios diferentes. Isso é pergunta distinta de “a premissa morreu?”. (`app/core/juizes.py:109`; `app/core/juizes.py:1184-1186`)
-- **Transição, vida e identidade temporal:** registro aponta `VIVOS`, `decidir`, `data_do_chamado` e `competencia_do_chamado`. (`app/core/juizes.py:261-275`)
-- **Dado desconhecido não é regularização:** `_celula_furada` retorna `None` sem célula e sem `lampadas` na ata; a premissa conserva `None`. (`app/chamados/juizes.py:457-462`; `app/chamados/juizes.py:471-476`; `app/chamados/catalogo/premissa.py:127-130`)
-- **Dia sem trabalho:** juiz registrado `_C18`; `trabalha=False` cala, `trabalha=None` isoladamente cobra, ata com tipo preenchido diferente de trabalho cala, ressalvada ausência parcial que cobra o resto. (`app/core/juizes.py:136-149`; `app/core/juizes.py:278`; `app/chamados/juizes.py:398-426`; `app/docs/CORTES.md:416`)
-- **Competência 21→20:** leis L-026 e L-090 exigem corte da empresa, nunca mês civil; `janela_fechamento` e `janela_atual` leem `corte_da_empresa`. (`app/docs/LEIS.md:77`; `app/docs/LEIS.md:123`; `app/ponto/janelas.py:36-63`)
-- **Tranca é fato próprio:** `dia_em_competencia_trancada` consulta `PeriodoFechado` não reaberto e testa a data dentro da janela, inclusive bordas; `competencia_do_chamado` toma o fato mais recente, incluindo perguntas vivas. (`app/chamados/juizes.py:1701-1719`; `app/chamados/juizes.py:1978-2000`)
-- **Tranca possui exceções concretas:** o serviço preserva resgatados posteriores ao fechamento e chamados com perguntas vivas preservadas; competência apenas passada sem `PeriodoFechado` não produz seleção. (`app/chamados/services/competencia_trancada.py:82-105`; `app/chamados/services/competencia_trancada.py:135-146`)
-- **Cross-meia-noite:** registro distingue pertencimento da batida ao turno, marco ocupado e cruzamento previsto; `marcos_turno` encadeia os instantes e avança um dia quando o próximo horário é menor ou igual ao anterior; início igual ao fim representa 24h. (`app/core/juizes.py:196-204`; `app/escala/servico_jornada.py:61-86`; `app/escala/servico_jornada.py:96-103`)
-- **Vínculo trocado:** juiz registrado `vinculo_do_dia`; geradora da célula manda dentro da vigência, falta da geradora carregada ou data fora de vigência devolve `None`; sem geradora escolhe pelos vínculos que cobrem a data. (`app/core/juizes.py:1285-1286`; `app/escala/alimentacao.py:269-286`)
-- **Lei transversal:** consumidor lê célula/ata; L-061 não equipara transição do chamado ao julgamento do fato. (`app/docs/LEIS.md:95`)
-- **A matriz continua declaradamente parcial pela O169:** nota exige O168, O169 e LASTRO e proíbe tornar a célula verde por mera reclassificação do papel do sítio. (`app/core/contratos_estruturais.py:260-269`)
-- **Autoridade do documento:** `JUIZES.md` é lookup e o código vivo manda; o próprio lookup ainda declara SLA/disputa sem juiz enquanto o registro vivo já contém autoridades. (`app/docs/JUIZES.md:8-15`; `app/docs/JUIZES.md:51-54`; `app/core/juizes.py:267-269`)
-- **Medição real de 30 dias, RED executado de 15 dias e estado atual de produção:** [não verificado].
-
-## 05/11 16:26 · sessao e57de376397d · - · - · origem=Ronald (tmux)
-
-Achados literais dos anexos; referências usam a numeração das cinco linhas do contrato e das duas linhas dos avais. (contrato.txt:1; avais.txt:2)
-
-1. **Itens do aval sem cobertura explícita:** o contrato não enumera os cinco recortes do censo — escreve/lê, juiz/lei, contraexemplo, RED e irmãos — nem as três classes da autópsia — implementação/desenho/ferramenta. `CODEX_PAPEL=censo` identifica o papel, mas não declara esses conteúdos. (avais.txt:2; contrato.txt:1)
-   Também não repete “piloto, não regra”, “nenhuma lei nova” e “CLAUDE.md intocado”; ausência textual não prova que houve mudança de lei ou arquivo. (avais.txt:2; contrato.txt:1; contrato.txt:2; contrato.txt:3; contrato.txt:4; contrato.txt:5)
-
-2. **Desvio efetivo declarado:** O169 recebe o PD depois de o construtor já estar aberto, embora o aval exija o censo antes do construtor. O próprio contrato chama isso de desvio; autorização posterior para essa exceção não consta do dado. (contrato.txt:5; avais.txt:2)
-   **Acréscimos sem previsão expressa no aval:** seguir sem PD em falha; proibir código na resposta e aplicar “sem desenho” indistintamente às duas peças; atribuir ao Code o desligamento e ao chat a decisão posterior. São cláusulas adicionais; sua simples existência não demonstra lei nova. (contrato.txt:3; contrato.txt:5; avais.txt:2)
-
-3. **Espera criada:** a peça 1 antecede a abertura do construtor e a peça 2 antecede a próxima volta; há dependência de uma resposta do instrumento nesses dois pontos. O contrato libera em falha, mas não estabelece prazo de espera até a falha ser declarada. (contrato.txt:1; contrato.txt:2; contrato.txt:3)
-   O contrato protege expressamente pouso já aprovado, ordem da fila e autoridade do verificador/opus final. Bloqueio real desses três por esse instrumento: [nao verificado]. (contrato.txt:2; contrato.txt:3) [nao verificado]
-
-4. **Medidas sem fonte nomeada:** voltas Codex e opus até aprovação; tokens do construtor; tokens do PD; classificação “item útil / reprovação já prevista / reprovação nova”. A linha da medida não identifica arquivo ou log de origem nem ligação entre os registros por obra. (contrato.txt:4)
-   A régua aponta apenas “obras de 05/11 já no RELATO”, sem selecionar as obras ou localizar seus registros de medida. A tabela final tem destino declarado — RELATO —, mas isso não identifica a origem dos valores. (contrato.txt:4; contrato.txt:5)
-
-## 05/11 16:25 · sessao 40ff844da7b0 · - · - · origem=Ronald (tmux)
-
-Passo 2 mantém o juiz registrado e o universo estático correto, mas introduz conservação temporal dos insumos entre dias. O registro aponta `minutos_previstos_do_dia`; a grade o chama com células já carregadas e vínculos carregados uma única vez. (app/core/juizes.py:173; app/escala/services/leitor_celula.py:350,389–395)
-
-1. **Contraexemplo concreto: vínculo encerrado durante a grade.** col01 tem EC iniciada em 01/07/2026, ativa, sem fim; células de 04 e 05/08/2026 trabalham, DNA 08:00–17:00 com pausa 12:00–13:00, ata sem previsto. A grade percorre do fim para o início e julga 05/08, conservando EC na lista. Durante a chamada, `fechar_vigencia(EC, 03/08/2026, autor=admin)` confirma `ativa=False/data_fim=03/08`. Ao julgar 04/08, o novo caminho usa EC aberta conservada e produz **480**; o anterior recarrega EC, a geradora fica fora da vigência e produz **0**. (app/escala/services/leitor_celula.py:359–360,389–395; app/colaboradores/services/vinculo.py:561,612–625; app/escala/utils.py:2201–2204,2282–2295,2326–2341; app/escala/alimentacao.py:279–283) Execução e ocorrência: [nao verificado].
-
-2. **Contraexemplo concreto: DNA regenerado durante a grade.** A grade carrega célula com DNA 08:00–17:00/12:00–13:00; antes de calcular o dia, a porta real regenera seu DNA para 08:00–18:00/12:00–13:00. Novo caminho usa a célula conservada e produz **480**; anterior relia célula no juiz e produziria **540**, mantendo ata sem previsto nas condições do cenário. (app/escala/services/leitor_celula.py:350,382–395; app/ponto/portas/celula.py:243–265; app/escala/utils.py:2158–2160,2279–2280,2290–2295,2312,2326–2341; app/escala/models.py:1124–1133,1196–1201) Execução e ocorrência: [nao verificado].
-
-3. **Universos estáticos.** Geradora fora da janela continua carregada porque a consulta não restringe datas; fora da vigência retorna `None`; com múltiplos vínculos a geradora manda; sem geradora ocorre desempate por `(ativa, data_inicio)`; lista vazia produz zero. (app/escala/services/leitor_celula.py:391–392; app/escala/alimentacao.py:269–286; app/escala/utils.py:2277–2278) Dia sem célula retorna `sem_celula/0` antes do juiz; eventual diferença contra o avulso é preexistente ao diff fornecido. (app/escala/services/leitor_celula.py:373–378; diff_v3_p2.patch:[nao verificado])
-
-4. **Escritores e leitores.**
-
-   | Insumo | Escritores | Leitores |
-   |---|---|---|
-   | `celulas`, chaves `(colab.pk, data)` | Grade transforma sua carga em mapa. (app/escala/services/leitor_celula.py:350,393) | Juiz do vínculo, trabalho, marcos e pausas. (app/escala/utils.py:2280–2290,2312; app/escala/alimentacao.py:269–270; app/escala/models.py:1087–1096,1117–1133,1182–1208) |
-   | Colaborador/data/trabalha/geradora/DNA da célula | Porta cria, regenera, restaura ou atualiza. (app/ponto/portas/celula.py:247–248,259–265,538–546,601–604,618–623) | Grade e autoridades acima. (app/escala/services/leitor_celula.py:350–362,389–395; app/escala/alimentacao.py:269–283) |
-   | DNA marcos/pausas | Produtor congela os valores do template. (app/ponto/management/commands/gerar_celulas.py:73–103) | EC lê marcos e todas as pausas; previsto calcula duração líquida. (app/escala/models.py:1124–1133,1189–1208; app/escala/utils.py:2290–2341) |
-   | `escalas` | Grade carrega lista inteira. (app/escala/services/leitor_celula.py:389–392) | `_esc_vigente_do_dia` entrega lista ao juiz; vazio significa nenhum vínculo. (app/escala/utils.py:2175–2187,2200–2215,2277–2283) |
-   | EC: colaborador/template/início/fim/ativa | Porta cria ou atualiza; fechamento; correção retroativa. (app/colaboradores/services/vinculo.py:265–288,612–625,909–925) | Juiz seleciona geradora/vigência ou desempata; EC entrega trabalho/marcos/pausas. (app/escala/alimentacao.py:205–216,269–286; app/escala/models.py:1087–1208) |
-   | Template de horários/pausas | Cadastro escreve e salva, podendo propagar regeneração. (app/escala/services/cadastro_tipo.py:223–235,264–266,306,334–350) | Fallback dos marcos/pausas da EC. (app/escala/models.py:326–345,1133,1208) |
-   | `ata.minutos_previstos` | Cartório produz; porta persiste ata. (app/ponto/services/cartorio.py:696–705; app/ponto/portas/celula.py:735–751,775–783) | Grade prefere esse valor e só chama juiz se ausente. (app/escala/services/leitor_celula.py:382–395) |
-
-5. **Selos.** O teste de desempenho morde a reversão do passo 2 por inspeção; o teste de valor passaria com o passo 2 revertido, porque compara o mesmo juiz em cenário estático. (app/escala/tests/test_snc2_grade_previsto_em_lote.py:83–109) A fixture sempre cria célula e geradora, usa vínculos adjacentes e não intercala escritores: não cobre sem célula, sem geradora, ausência de vínculos, sobreposição simultânea ou mudança durante a grade. (app/escala/tests/test_snc2_grade_previsto_em_lote.py:53–80,96–109) Execução dos testes/mutantes: [nao verificado].
-
-6. **Alcance real.** Leitores incluem folha, espelho, relatórios, calendário, calculadores, furos, suprajuiz, worklist, declaração, emissão e materialização. (app/folha/export.py:327; app/ponto/services/espelho.py:519; app/relatorios/furos.py:132,194; app/colaboradores/services/calendario.py:334; app/inteligencia/calculadores.py:42,143,332; app/escala/services/furos_diarios.py:43; app/ponto/management/commands/supra_juiz.py:129; app/ponto/worklist.py:18; app/chamados/services/declaracao_texto.py:82; app/chamados/services/disputa_emissao.py:66; app/chamados/services/materializacao.py:233,282)
-
-**Conclusão do subescopo: REPROVA pela divergência temporal demonstrável dos itens 1 e 2; produção e execução permanecem [nao verificado].**
-
-## 05/11 16:25 · sessao 96f0544b3ad5 · - · - · origem=Ronald (tmux)
-
-A cura da tranca entre colaboradores está presente: `dia_da_pergunta_trancado` usa `_memo_da_tranca(colab, lote=False)`, preservando dono request/colaborador para empresa e tranca; somente toque SIM e usuário sistema continuam usando o lote. (app/chamados/juizes.py:940–954, app/chamados/juizes.py:966–979, app/chamados/juizes.py:1043–1049, app/chamados/juizes.py:1068–1072)
-
-O contraexemplo da célula antecipada permanece no diff total, e o descarte da triagem não sustenta a equivalência exigida: os carimbos da pergunta já serem antigos nos dois caminhos não impede uma célula fresca no caminho anterior produzir resposta diferente da célula carregada antecipadamente no novo. (app/chamados/services/pergunta_no_app.py:46–53, app/chamados/juizes.py:801, app/chamados/juizes.py:1135–1196)
-
-1. **Contraexemplo concreto remanescente.** Competência aberta; P2 sem validação, resposta ou materialização; célula C com `veredito='furo'`. A lista de `perguntas_do_app` carrega P2 e C, mas P2 ainda não foi julgada. Durante o lote, o admin confirma Resolver `trabalhou`; o serviço fecha perguntas por instâncias próprias e lavra o veredito de C. P2 da lista conserva os carimbos antigos em ambos caminhos, mas no novo conserva também C=`furo`, retornando `True`; no anterior fornecido, `_chave_memo_pv` carregaria C depois do ato, com `trabalhou`, e sem marcos pendentes retornaria `False`. (app/chamados/services/pergunta_no_app.py:46–53, app/ponto/services/veredito_celula.py:174–178, app/ponto/services/veredito_celula.py:325–336, app/chamados/juizes.py:801, app/chamados/juizes.py:1181–1196)
-
-   Portanto, alegar que a célula passou a compartilhar a fotografia dos carimbos não demonstra “mesmo veredito”; o exemplo usa exatamente os mesmos carimbos antigos nas duas execuções e muda apenas o instante da leitura da célula. (app/chamados/juizes.py:1135–1196, app/chamados/services/pergunta_no_app.py:46–53)
-
-2. **Memo: escritores e leitores.**
-
-   | Estado | Escritor | Leitor/dono |
-   |---|---|---|
-   | `_tranca_memo` | `_memo_da_tranca`, por `setdefault`; teste remove explicitamente. (app/chamados/juizes.py:979, app/ponto/tests/test_selo_chokepoint_escrita.py:417) | Request atual; sem request, colaborador. (app/chamados/juizes.py:975–979) |
-   | `('empresa', empresa_id)` | `dia_da_pergunta_trancado` guarda `colab.empresa`. (app/chamados/juizes.py:941–943) | A mesma função passa a empresa a `janela_atual`; sempre fora do dono lote. (app/chamados/juizes.py:940–944) |
-   | `('tranca', empresa_id, mês, ano)` | A mesma função guarda `periodo_trancado`, inclusive `None`. (app/chamados/juizes.py:945–947) | A mesma função lê presença e `fechado_em`; sempre fora do dono lote. (app/chamados/juizes.py:948–954) |
-   | `('toque', colab.pk, data, desde)` | `_admin_tocou_o_dia_depois` grava somente `True`. (app/chamados/juizes.py:1044–1049) | A mesma função retorna SIM guardado; dentro do lote, dono lote; fora, request/colaborador. (app/chamados/juizes.py:972–979, app/chamados/juizes.py:1043–1047) |
-   | `('sistema',)` | `_toque_humano_no_dia` guarda PK de `get_user_sistema`. (app/chamados/juizes.py:1068–1070) | A mesma função exclui esse usuário da trilha humana; compartilha o dono do memo de toque. (app/chamados/juizes.py:1071–1072) |
-   | `LOTE_DA_TRANCA` | Declaração e context manager `set/reset`. (app/chamados/juizes.py:990–1003) | `_memo_da_tranca`, guarda reentrante e testes do comando. (app/chamados/juizes.py:972–974, app/chamados/juizes.py:996, app/chamados/tests/test_snc2_toque_em_lote.py:208–213) |
-   | `REQUISICAO_DA_TRILHA` | Middleware instala/restaura; teste instala/restaura. (app/core/middleware.py:76–82, app/chamados/tests/test_snc2_toque_em_lote.py:235–243) | Escolha do dono fora do lote e usuário/IP da trilha. (app/chamados/juizes.py:975–979, app/core/observ.py:108–118) |
-
-3. **Fontes, escritores e leitores fora do diff.**
-
-   | Fonte | Escrita | Leitura |
-   |---|---|---|
-   | Empresa do colaborador | Edição atribui `empresa_id`; transferência atribui empresa do posto e salva pela porta. (app/colaboradores/views.py:1313, app/colaboradores/views.py:1383–1388, app/colaboradores/services/colaborador.py:73–76) | C6 lê empresa/ID para classificar competência. (app/chamados/juizes.py:932–945) |
-   | Corte da empresa | Formulário recebe corte e chama `atualizar_empresa`, que salva. (app/colaboradores/views.py:496–499, app/colaboradores/views.py:521–523, app/colaboradores/services/estrutura.py:17–20) | `janela_atual` lê corte, classifica o mês e retorna o período. (app/ponto/janelas.py:24–33, app/ponto/janelas.py:50–63) |
-   | Tranca/reabertura | `trancar_periodo` cria ou retranca; `reabrir_periodo` grava `reaberto_em`. (app/ponto/services/fechamento.py:1392–1403, app/ponto/services/fechamento.py:1421–1425) | `periodo_trancado` seleciona somente linha com `reaberto_em` nulo. (app/ponto/services/fechamento.py:1448–1454) |
-   | Usuário sistema | Helper usa `get_or_create`; comando garantidor cria/normaliza. (app/core/utils.py:18, app/core/management/commands/garantir_user_sistema.py:13–41) | Exclusão do autor sistema na trilha humana. (app/chamados/juizes.py:1068–1072) |
-   | Trilha: usuário, ação, modelo, objeto, descrição e tempo | `registrar_log` adapta para `evento`; `evento` cria; `criado_em` automático. (app/core/auditoria.py:22–24, app/core/observ.py:134–138, app/core/models.py:295–307) | Filtro estritamente posterior e atos/vínculos do dia. (app/chamados/juizes.py:1071–1084) |
-   | Cobrar | Grava ação, colaborador e `dia=ISO` antes do cartório. (app/chamados/services/cobrar_dia.py:29–39) | Primeiro `exists`. (app/chamados/juizes.py:1073–1075) |
-   | Resolver | Serviço e porta da célula gravam ação `veredito_celula`. (app/ponto/services/veredito_celula.py:329–336, app/ponto/portas/celula.py:770–789) | Busca trilha nas células atuais do dia, sem filtrar `via`. (app/chamados/juizes.py:1076–1080) |
-   | Desarquivar | Porta grava estado e chama `_trilha`→`evento`. (app/chamados/services/arquivo.py:193–209, app/chamados/services/arquivo.py:130–138) | Reconstrói chamados atuais ligados às células do colaborador/dia. (app/chamados/juizes.py:1081–1084) |
-   | Identidade da pergunta | `PerguntaDisputa.abrir` recebe disputa/data, busca célula e cria. (app/chamados/models.py:2387–2419, app/chamados/models.py:2465–2466) | C6 lê disputa/colaborador/data e célula. (app/chamados/juizes.py:931–954, app/chamados/juizes.py:1147–1196) |
-   | Carimbo da pergunta | `_escrever_carimbo`; Resolver chama `fechar_por_admin` em instâncias consultadas por ele. (app/chamados/models.py:2545–2549, app/chamados/models.py:2497–2512, app/ponto/services/veredito_celula.py:174–178) | Primeiros degraus e identidade no C6. (app/chamados/juizes.py:1135–1172) |
-
-4. **Monotonicidade do SIM por vínculos.** Não há suporte para afirmar que `apontar_celula` remove ou substitui o vínculo: ela recusa `None` e retorna sem escrever quando já existe célula. Assim, o cenário de desfazer SIM por reapontamento nessa porta não está demonstrado. (app/chamados/services/vinculos.py:73–78, app/chamados/services/vinculos.py:92–100)
-
-   `LogAuditoria.usuario` admite `SET_NULL` em exclusão do usuário, mas um escritor concreto sobrevivente que realize essa exclusão durante o lote não foi demonstrado nesta auditoria; usar isso como defeito confirmado seria [nao verificado]. (app/core/models.py:295)
-
-5. **Mordida dos REDs v3.** Reabrir/trancar usam outro colaborador e portas reais, discriminando a tranca compartilhada do v2; retirada integral do lote do comando não os afetaria, pois abrem `_lote()` diretamente. (app/chamados/tests/test_snc2_toque_em_lote.py:171–198)
-
-   O teste do comando observa somente `censo`; morde retirada integral do contexto, mas não retirada de `censo_alcance` ou dos três contadores do contexto. (app/chamados/tests/test_snc2_toque_em_lote.py:200–213, app/chamados/management/commands/vigiar_fio_morto.py:171–176)
-
-   Os testes fora de lote/requisição posterior seguem guardas que poderiam passar com a cura v3 revertida; não exercitam reabertura, tranca nem corte. (app/chamados/tests/test_snc2_toque_em_lote.py:215–243)
-
-6. **Classes adicionais.** O contexto só instala um dicionário e restaura o token: não estabelece transação nem trava contra atos externos. O comando captura `agora/hoje`, mas isso não alimenta cada dependência interna de C6. (app/chamados/juizes.py:993–1003, app/chamados/management/commands/vigiar_fio_morto.py:159–176)
-
-A regra exige levar descartes ao opus, suíte inteira verde antes da leitura final e revisão de escritores/leitores fora do diff; o relato fornecido de suítes parciais não permite comprovar a suíte inteira da árvore. (CLAUDE.md:368–373; execução integral: [nao verificado]) [nao verificado]
-
-## 05/11 16:24 · sessao 4d5958956d51 · - · - · origem=Ronald (tmux)
-
-Censo estático de travas explícitas:
-
-- **Aplicar:** `atomic` → Empresa por `travar_entrega` → consulta `Ausencia.select_for_update` → consulta `Colaborador.select_for_update`, ordenada por PK → UPDATE Ausencia pela porta; rechecagem de entrega é SELECT simples. (`app/ponto/management/commands/rederivar_falta_declarada.py:180`, `:181`, `:182`, `:189`, `:199`, `:210`; `app/folha/export.py:565`; `app/ponto/management/commands/rederivar_falta_declarada.py:56`; `app/ponto/services/ausencia.py:508`.)
-- **Reverter:** `atomic` → Empresas em PK crescente → consulta Ausencia com `select_for_update` → Colaboradores em PK crescente → SELECT entrega → UPDATE Ausencia pela reposição. (`app/ponto/management/commands/rederivar_falta_declarada.py:244`, `:245`, `:247`, `:248`, `:263`, `:269`; `app/ponto/services/ausencia.py:532`.)
-- **Ressalva decisiva:** a consulta Ausencia não restringe `of=('self',)` nem substitui a ordenação padrão, que contém `colaborador__nome`; portanto a declaração “só Ausencia antes de Colaborador” não está provada. O SQL e a ordem física entre linhas/tabelas do JOIN são **[nao verificado]**. (`app/ponto/models.py:819`; `app/ponto/management/commands/rederivar_falta_declarada.py:182`, `:247`.)
-- **FechamentoMensal:** `foto` apenas consulta; não adiciona trava `FOR UPDATE` nem escrita de fechamento a esses dois caminhos. (`app/ponto/management/commands/carimbo_gravado.py:53`; `app/ponto/management/commands/rederivar_falta_declarada.py:195`, `:213`.)
-
-Outros escritores confirmados com duas dessas tabelas na mesma transação:
-
-1. **ExportacaoDominio.registrar:** Empresa `FOR UPDATE` → INSERT ExportacaoDominio. (`app/folha/models.py:179`, `:181`, `:186`.)
-2. **Aprovação de irmãos:** atomic → UPDATE Ausencia em `mudar_estado` → UPDATE FechamentoMensal em `invalidar_fechamento`; repete A→F no laço, mantendo as travas anteriores até o commit. (`app/ponto/views.py:2638`, `:2640`; `app/ponto/services/ausencia.py:915`, `:839`, `:950`; `app/ponto/services/fechamento.py:1635`, `:1640`.)
-
-Correções para evitar falsos positivos:
-
-- **Desligamento não comprova C→F via signal:** grava Colaborador e chama `fechar_vinculos_ativos`, mas este usa `QuerySet.update`, sem `post_save` de escala. (`app/colaboradores/services/desligamento.py:103`, `:108`, `:123`; `app/colaboradores/services/vinculo.py:816`, `:615`.)
-- **Transferência não chama fechamento pelo histórico:** Colaborador→HistoricoVinculo; a porta do histórico apenas faz `create`. (`app/colaboradores/views.py:1384`, `:1388`, `:1393`; `app/colaboradores/services/historico_vinculo.py:25`.)
-- **Gerar TXT não demonstra F→Empresa na mesma transação:** aprovação ocorre antes de `registrar`, sem atomic externo identificado nessa view. (`app/folha/views.py:252`, `:297`; `app/folha/models.py:179`.)
-- **Validação não demonstra C→A:** seu atomic agenda o recálculo por evento e materializa hora; processamento posterior da disputa começa fora daquele atomic. (`app/chamados/services/validacao.py:395`, `:407`, `:424`, `:430`.)
-
-Não demonstrei ciclo concreto entre os caminhos explicitamente confirmados. **Exaustividade transitiva de todos os writers/sinais e deadlock efetivo: [nao verificado].** Uma eventual aresta Colaborador→Empresa por verificação de FK na transferência depende do SQL/constraint efetiva e deve ser apresentada como inferência **[nao verificado]**, não como deadlock provado. (`app/colaboradores/views.py:1386`, `:1388`.)
-
-_1842 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1848 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
