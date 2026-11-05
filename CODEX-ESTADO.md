@@ -1,7 +1,279 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **05/11/2026 19:06** · publicado em **05/11/2026 19:06** (UTC-3)
+> Ultima resposta processada: **05/11/2026 19:09** · publicado em **05/11/2026 19:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 05/11 19:09 · sessao 9e2282fbfa3a · C20-JUIZ-3 · verificador · origem=Code
+
+**O diff conecta os dois produtores ao consumidor existente, sem demonstrar juiz ou escritor novo; porém os testes deixam passar a perda da atomicidade própria e do tratamento de falhas.** Há também uma promessa incorreta sobre a atomicidade da trilha. (`app/chamados/models.py:1053`, `app/ponto/nucleo.py:57`, `app/chamados/reconciliador.py:1360`, `app/chamados/tests/test_c20_juiz3_outbox.py:125`, `app/core/observ.py:105`)
+
+Referências abaixo são da cópia fornecida. Identidade Git, ancestralidade, execução da suíte, execução dos mutantes e ocorrência produtiva dos cenários: **[nao verificado]**. [nao verificado]
+
+**1. Quem escreve e quem lê**
+
+| Campo/valor | Quem escreve | Quem lê |
+|---|---|---|
+| `EventoCelula.celula_id` | `emitir_evento_celula`, copiando `cel.pk`. (`app/ponto/portas/celula.py:643`) | Vigia de absolvição e semeadura procuram pendente por célula. (`app/chamados/reconciliador.py:1262`, `app/chamados/reconciliador.py:1284`, `app/chamados/reconciliador.py:1297`) |
+| `EventoCelula.colaborador_id` | Mesma porta, copiando `cel.colaborador_id`. (`app/ponto/portas/celula.py:643`) | Consumidor agrupa/carrega colaborador; vigia constrói `_com_evento`. (`app/chamados/reconciliador.py:1338`, `app/chamados/reconciliador.py:1344`, `app/chamados/management/commands/reconciliar_chamados.py:62`) |
+| `EventoCelula.data` | Mesma porta, copiando `cel.data`. (`app/ponto/portas/celula.py:643`) | O consumidor **não restringe o trabalho à data do evento**: percorre o colaborador inteiro. Outro leitor produtivo específico desse campo: **[nao verificado]**. (`app/chamados/reconciliador.py:1338`, `app/chamados/reconciliador.py:1432`) |
+| `processado_em` | Nasce nulo; consumidor grava `agora` no sucesso. (`app/escala/models.py:1859`, `app/chamados/reconciliador.py:1380`) | Elegibilidade, contador de mortos, proteção do UPDATE e retenção. (`app/chamados/reconciliador.py:1238`, `app/chamados/reconciliador.py:1244`, `app/chamados/reconciliador.py:1372`, `app/chamados/reconciliador.py:1387`) |
+| `tentativas` | Default zero; consumidor incrementa com `F` na falha. (`app/escala/models.py:1860`, `app/chamados/reconciliador.py:1374`) | Separação entre pendentes vivos e mortos. (`app/chamados/reconciliador.py:1238`, `app/chamados/reconciliador.py:1244`) |
+| `erro` | Default vazio; consumidor grava falhas concatenadas, limitadas a 500 caracteres. Leitor produtivo específico: **[nao verificado]**. (`app/escala/models.py:1861`, `app/chamados/reconciliador.py:1374`) | **[nao verificado]** |
+| `TurnoMaterializado` | Núcleo monta linhas, apaga recorte e faz `bulk_create`. (`app/ponto/nucleo.py:48`, `app/ponto/nucleo.py:58`, `app/ponto/nucleo.py:59`) | O novo `RETURNING` lê dia/entrada/saída; a diferença entre identidades abertas antigas e novas determina emissão. (`app/ponto/nucleo.py:64`, `app/ponto/nucleo.py:79`, `app/ponto/nucleo.py:80`) |
+| `ChamadoColaborador.status_local` | Nascimento por `abrir`/`criar`; transições por `_gravar_estado`. O consumidor chega pela sequência `_retratar → reconciliar → _gravar_estado`. (`app/chamados/models.py:932`, `app/chamados/models.py:1054`, `app/chamados/models.py:222`, `app/chamados/reconciliador.py:523`, `app/chamados/models.py:620`) | Seleção de vivos, motor de transição, signals e painel. (`app/chamados/reconciliador.py:1433`, `app/chamados/models.py:639`, `app/chamados/signals.py:70`, `app/chamados/services/painel.py:211`) |
+| `LogAuditoria/fechamento_recusado` | Gates de premissa/pergunta chamam `_registrar_recusa`; este deduplica e delega o INSERT a `core.observ.evento`. (`app/chamados/models.py:730`, `app/chamados/models.py:408`, `app/chamados/models.py:386`, `app/chamados/models.py:391`, `app/core/observ.py:134`) | Próprio deduplicador, consulta genérica de auditoria e testes novos. (`app/chamados/models.py:386`, `app/core/views.py:705`, `app/chamados/tests/test_c20_juiz3_outbox.py:239`) |
+| Retorno `premissa` | Inicializado em zero, incrementado pelo retorno da função extraída e devolvido no dicionário. (`app/chamados/reconciliador.py:1327`, `app/chamados/reconciliador.py:1360`, `app/chamados/reconciliador.py:1388`) | Testes leem; **o command consumidor não imprime essa chave**, embora imprima `retratados`. Outro leitor produtivo: **[nao verificado]**. (`app/chamados/tests/test_c20_juiz3_outbox.py:254`, `app/chamados/management/commands/consumir_eventos_celula.py:32`) |
+
+Os chamadores do INSERT são `salvar_e_emitir`, nascimento por `abrir`, nascimento por `criar`, recompute e semeadura; todos delegam à mesma porta. Os dois novos produtores não inserem `EventoCelula` diretamente. (`app/ponto/portas/celula.py:654`, `app/chamados/models.py:941`, `app/chamados/models.py:1058`, `app/ponto/nucleo.py:90`, `app/chamados/reconciliador.py:1286`)
+
+**Não identifiquei escritor explícito novo fora da porta no caminho alterado:** turno permanece em `ponto/nucleo.py`, e estado do chamado em `chamados/models.py`, ambos autorizados. `EventoCelula` e `LogAuditoria` não têm entrada própria em `PORTAS`; seus donos estão declarados no modelo do evento e em `core.observ.evento`. A manutenção de processamento pelo consumidor escreve campos distintos dos identificadores inseridos pela porta. (`app/core/portas.py:117`, `app/core/portas.py:233`, `app/core/portas.py:38`, `app/escala/models.py:1851`, `app/core/observ.py:96`, `app/chamados/reconciliador.py:1374`)
+
+**2. Equivalência do DELETE e outros escritores**
+
+Para colaborador persistido, modelo e configuração presentes, **o conjunto apagado é o mesmo**: colaborador por PK e intervalo inclusivo de `data_turno`. O `RETURNING` não limita a exclusão aos abertos: apaga todo o recorte e depois seleciona, no resultado, entrada presente/saída ausente. (`app/ponto/nucleo.py:78`, `app/ponto/nucleo.py:80`; filtro anterior no diff fornecido)
+
+A classe atual é simples, sem manager ou override de exclusão; suas FKs são **saintes**, para colaborador e batidas. Elas não significam apagar colaborador/batidas ao excluir o turno. Dependente entrante ou receiver específico de exclusão de `TurnoMaterializado` não foi localizado; cobertura de registros dinâmicos externos: **[nao verificado]**. (`app/ponto/models.py:1196`, `app/ponto/models.py:1201`, `app/ponto/models.py:1204`, `app/ponto/models.py:1206`)
+
+Logo, **não há perda concreta de signal/cascata de saída demonstrada nesta cópia**, mas o SQL não conserva genericamente o mecanismo de exclusão do ORM: usa diretamente a conexão padrão e executa o DELETE. Equivalência sob outro roteador/alias ou dependentes adicionados depois: **[nao verificado]**. (`app/ponto/nucleo.py:74`, `app/ponto/nucleo.py:76`, `app/ponto/nucleo.py:78`)
+
+Além do núcleo, existe exclusão indireta por cascata ao apagar colaborador ou batida. A porta de batida chama `.delete()`, e seu receiver recompõe depois da exclusão; portanto um turno já eliminado pela cascata pode não estar no `RETURNING`. Esse detector não garante evento para tal caminho. (`app/ponto/models.py:1202`, `app/ponto/models.py:1205`, `app/ponto/models.py:1207`, `app/ponto/registro_batida.py:291`, `app/ponto/signals.py:48`, `app/ponto/nucleo.py:80`)
+
+**Há perda de cobertura do censo:** o novo `cur.execute` fica invisível ao reconhecedor de escritas ORM usado pelo gate de turno. Isso não cria outro escritor, mas enfraquece a capacidade do selo de enxergar esse DELETE. (`app/ponto/nucleo.py:77`, `app/core/censo_escritas.py:364`, `app/core/censo_escritas.py:377`, `app/ponto/tests/test_chokepoint_turno_gate.py:35`)
+
+**3. Atomicidade e chamadores de recompute**
+
+**Sim:** `criar` envolve chamado e evento no mesmo `atomic(savepoint=False)`; recompute envolve DELETE, recriação e emissão no mesmo `atomic`. Não aparece nesses blocos caminho normal de commit do evento elegível com rollback do respectivo chamado/materializado, ou o inverso. (`app/chamados/models.py:1053`, `app/chamados/models.py:1058`, `app/ponto/nucleo.py:57`, `app/ponto/nucleo.py:66`)
+
+Existem estados sem evento por desenho: módulo fora da lista, chamado sem célula, recompute sem identidade aberta removida e fechamento em dia sem célula. Portanto a cobertura não é “qualquer nascimento/qualquer recompute”. (`app/chamados/models.py:1056`, `app/ponto/nucleo.py:64`, `app/ponto/nucleo.py:89`)
+
+A garantia também não engloba necessariamente a **escrita de origem**: batida/vínculo podem persistir enquanto recompute e evento falham, pois os receivers engolem a exceção; flip salva a alteração antes da recomposição. Isso não separa evento de materializado dentro do atomic do núcleo. (`app/ponto/signals.py:29`, `app/ponto/signals.py:67`, `app/ponto/services/flip_batida.py:30`, `app/ponto/services/flip_batida.py:39`)
+
+Chamadores produtivos encontrados por busca textual — execução de `git grep`/completude histórica: **[nao verificado]**:
+
+| Chamador | Atomic externo local |
+|---|---|
+| Save/delete de batida, via `_recompute_around` | Não abre atomic no wrapper. (`app/ponto/signals.py:19`, `app/ponto/signals.py:26`, `app/ponto/signals.py:48`) |
+| Save de vínculo, via `_recompute_escala` | Não abre atomic no wrapper. (`app/ponto/signals.py:53`, `app/ponto/signals.py:64`) |
+| Alertas de turno | Sem atomic externo local. (`app/ponto/management/commands/processar_alertas_turno.py:32`, `app/ponto/management/commands/processar_alertas_turno.py:67`) |
+| Alertas avançados | Sem atomic externo local. (`app/ponto/management/commands/processar_alertas_avancados.py:19`, `app/ponto/management/commands/processar_alertas_avancados.py:57`) |
+| Materialização explícita | Sem atomic externo local. (`app/ponto/management/commands/materializar_turnos.py:16`, `app/ponto/management/commands/materializar_turnos.py:24`) |
+| Flip | Sem atomic externo local. (`app/ponto/services/flip_batida.py:10`, `app/ponto/services/flip_batida.py:39`) |
+| Veredito humano | Dentro do atomic iniciado antes. (`app/ponto/services/veredito_celula.py:204`, `app/ponto/services/veredito_celula.py:308`) |
+
+**A prosa nova promete mais que o código:** “create, trilha e INSERT juntos ou nenhum” não vale para falha da trilha, porque `evento()` tem savepoint próprio e engole a exceção. Chamado e evento podem persistir sem a trilha de nascimento. Também é incorreto dizer que as guardas anteriores “não escrevem nada”: recusas/vetos podem gravar auditoria antes do create. (`app/chamados/models.py:1050`, `app/chamados/models.py:1175`, `app/core/observ.py:105`, `app/core/observ.py:133`, `app/chamados/models.py:1034`, `app/chamados/models.py:1038`)
+
+**4. Classes de reprovação**
+
+| Classe | Incorre? |
+|---|---|
+| Segundo juiz duplicando autoridade | **Não demonstrado.** O produtor detecta mudança no materializado; o consumidor continua perguntando `_veredito_premissa`, que delega ao catálogo registrado. (`app/ponto/nucleo.py:64`, `app/chamados/reconciliador.py:1437`, `app/chamados/reconciliador.py:301`, `app/core/juizes.py:263`) |
+| Segundo escritor fora da porta | **Não demonstrado no diff.** Novas emissões delegam à porta existente; transição continua no gate do chamado. (`app/ponto/nucleo.py:90`, `app/chamados/models.py:1058`, `app/chamados/models.py:620`) |
+| Relógio fora da borda | **Nenhuma leitura nova demonstrada.** Os trechos acrescentados trabalham com estado/dias recebidos; o relógio do consumidor já é capturado na entrada. (`app/ponto/nucleo.py:64`, `app/chamados/reconciliador.py:1325`, `app/chamados/reconciliador.py:1437`) |
+| Derivação paralela de fonte única | **Não demonstrada para a decisão da premissa.** A diferença de conjuntos produz notificação; não substitui o julgamento existente. (`app/ponto/nucleo.py:64`, `app/chamados/reconciliador.py:1360`, `app/chamados/reconciliador.py:1437`) |
+| Selo/RED sem mordida | **Parcialmente sim:** atomic próprio e propagação de falhas têm mutantes sobreviventes previstos; DELETE cru sai do alcance do censo. (`app/chamados/tests/test_c20_juiz3_outbox.py:125`, `app/chamados/tests/test_c20_juiz3_outbox.py:196`, `app/chamados/reconciliador.py:1447`, `app/core/censo_escritas.py:377`) |
+| Ordem de trava | Não há nova trava explícita de colaborador/disputa no consumidor; o fechamento trava o chamado pela porta existente. Deadlock efetivo: **[nao verificado]**. (`app/chamados/reconciliador.py:1311`, `app/chamados/models.py:668`) |
+| Pouso antes de pré-requisito | **[nao verificado]**: o material entregue não prova sequência de pousos, suíte ou leitura final; essas condições estão documentadas. (`app/docs/PISTA.md:108`, `app/docs/PISTA.md:113`) |
+
+**5. Extração e `tranca_em_lote`**
+
+No caminho antigo, **a extração preserva ordem, universo, decisão, exceção e retorno**: perguntas absolvidas, órfãs, premissa; vivos do colaborador ordenados por PK; mesmo juiz, mesma retratação; exceção logada/ignorada; soma final mantida. (`app/chamados/reconciliador.py:1411`, `app/chamados/reconciliador.py:1420`, `app/chamados/reconciliador.py:1432`, `app/chamados/reconciliador.py:1443`, `app/chamados/reconciliador.py:1445`; comparação com o diff fornecido)
+
+O consumidor acrescenta deliberadamente `falhas`: exceções por chamado entram na lista e impedem marcar o lote como processado. Um `False` por retenção ou gate **não é exceção** e não impede processamento do evento. (`app/chamados/reconciliador.py:1360`, `app/chamados/reconciliador.py:1447`, `app/chamados/reconciliador.py:1373`, `app/chamados/reconciliador.py:518`, `app/chamados/reconciliador.py:523`)
+
+**Sim, chama fora de `tranca_em_lote`.** Esse contexto é memo em `ContextVar`, não lock SQL, e está expressamente reservado a leitor que não escreve trilha; o consumidor executa escritas. (`app/chamados/reconciliador.py:1360`, `app/chamados/juizes.py:990`, `app/chamados/juizes.py:994`)
+
+**6. Janela criada pelo skip do vigia**
+
+- **Tentativas esgotadas:** não mascaram por si: saem de `eventos_pendentes`; são contadas como eventos mortos e entram no alarme. (`app/chamados/reconciliador.py:1238`, `app/chamados/reconciliador.py:1244`, `app/chamados/management/commands/reconciliar_chamados.py:118`)
+- **Processado sem retratar:** sem outro pendente do colaborador, volta ao julgamento do vigia. Recusa/retenção legítima fica como MEDIDA. (`app/chamados/management/commands/reconciliar_chamados.py:62`, `app/chamados/management/commands/reconciliar_chamados.py:73`, `app/chamados/management/commands/reconciliar_chamados.py:79`)
+- **Evento de outro dia:** exclui o colaborador inteiro da contagem, mas o consumidor também julga todos os seus vivos; o dia diferente, sozinho, não prova abandono. (`app/chamados/management/commands/reconciliar_chamados.py:73`, `app/chamados/reconciliador.py:1338`, `app/chamados/reconciliador.py:1432`)
+- **Há uma janela por fotografia:** `_com_evento` é calculado antes do laço; consumo posterior não atualiza esse conjunto nesta execução. Ocorrência/duração produtiva: **[nao verificado]**. (`app/chamados/management/commands/reconciliar_chamados.py:62`, `app/chamados/management/commands/reconciliar_chamados.py:71`)
+- **Há mascaramento prolongável:** órfã adiada mantém evento pendente sem gastar tentativas; enquanto existir, exclui também a premissa do contador. O consumidor ainda tenta julgá-la, mas idade/quantidade de pendentes são somente MEDIDA, fora da soma de alarme. Isso não prova julgamento bem-sucedido. (`app/chamados/reconciliador.py:1360`, `app/chamados/reconciliador.py:1375`, `app/chamados/management/commands/reconciliar_chamados.py:113`, `app/chamados/management/commands/reconciliar_chamados.py:118`)
+
+**7. Os testes mordem? Mutantes** [nao verificado]
+
+**Mordem comportamento real:** emissão, exclusão de módulo estranho, fechamento/repetição/preservação do aberto, pai retratado, recusa do furo e reentrega idempotente. (`app/chamados/tests/test_c20_juiz3_outbox.py:99`, `app/chamados/tests/test_c20_juiz3_outbox.py:109`, `app/chamados/tests/test_c20_juiz3_outbox.py:135`, `app/chamados/tests/test_c20_juiz3_outbox.py:146`, `app/chamados/tests/test_c20_juiz3_outbox.py:155`, `app/chamados/tests/test_c20_juiz3_outbox.py:242`, `app/chamados/tests/test_c20_juiz3_outbox.py:271`)
+
+Dois mutantes relevantes têm sobrevivência prevista por inspeção; execução: **[nao verificado]**:
+
+1. **Retirar `falhas=falhas` da chamada nova.** Caminhos felizes permanecem; exceção por chamado é engolida sem avisar o consumidor, que pode marcar o evento processado. Os erros injetados pelos testes novos são no INSERT do evento, não nesse julgamento. (`app/chamados/reconciliador.py:1360`, `app/chamados/reconciliador.py:1445`, `app/chamados/reconciliador.py:1380`, `app/chamados/tests/test_c20_juiz3_outbox.py:123`, `app/chamados/tests/test_c20_juiz3_outbox.py:194`)
+2. **Retirar os atomics próprios de `criar`/recompute, reindentando os corpos.** A base usa `TestCase`, e os dois testes de falha ainda fornecem atomic externo. Assim, não distinguem proteção própria de proteção do chamador; em autocommit, o mutante permitiria estado persistido antes da falha do evento. (`app/chamados/models.py:1053`, `app/ponto/nucleo.py:57`, `app/chamados/tests/test_c20_juiz3_outbox.py:37`, `app/chamados/tests/test_c20_juiz3_outbox.py:125`, `app/chamados/tests/test_c20_juiz3_outbox.py:196`)
+
+**8. Contradição com aval/PROIBIDOS**
+
+Não aparece no diff fornecido nova reclassificação, alteração da nota/listas do contrato, juiz novo ou fallback novo; o caminho principal realiza evento em `criar`/recompute e consumo pelo O-OUTBOX existente. Isso **não equivale a certificar cobertura completa ou fechamento do contrato**. (`app/chamados/models.py:1053`, `app/ponto/nucleo.py:57`, `app/chamados/reconciliador.py:1360`, `app/core/contratos_estruturais.py:263`, `app/core/contratos_estruturais.py:269`)
+
+**Ressalva do “selo 17”:** a cópia já contém teto **18** para `_gravar_estado (sem pergunta)`, enquanto a prosa diz 17. O arquivo desse teto não está no diff anexado; portanto não atribuo essa subida à obra. Origem histórica e conformidade desse 18 com o aval literal: **[nao verificado]**. (`app/ponto/tests/test_selo_chokepoint_escrita.py:116`, `app/docs/RELATO.md:25`)
+
+Os pontos concretos que impedem um aceite sem ressalvas são a prova insuficiente de atomicidade/retry, a exclusão do DELETE do alcance do censo e a promessa falsa sobre a trilha; o novo contador `premissa` também fica ausente da saída produtiva do command. (`app/chamados/tests/test_c20_juiz3_outbox.py:125`, `app/chamados/reconciliador.py:1447`, `app/core/censo_escritas.py:377`, `app/core/observ.py:105`, `app/chamados/management/commands/consumir_eventos_celula.py:32`)
+
+## 05/11 19:07 · sessao b8013929f9c6 · - · - · origem=Ronald (tmux)
+
+O contraexemplo de **reversão obsoleta × aprovação UI** fecha a lacuna das mesmas linhas, como inferência estática:
+
+1. R1 foi emitido para A falta/aprovada; posteriormente o DP edita **a mesma A** para um tipo parcial e minutos abaixo de 480, cancela e reverte a rejeição com documento. A reabertura preserva o PK e usa `estado_inicial`, que com documento devolve `aguardando_decisao`. A edição de tipo da aprovada, isoladamente, **não** a reabre, pois `rejulgar_status_pelo_tipo` só atua em ABERTAS. (`app/ponto/services/ausencia.py:497`, `app/ponto/services/ausencia.py:507`, `app/ponto/services/ausencia.py:744`, `app/ponto/services/ausencia.py:994`; `app/ponto/views.py:2725`, `app/ponto/views.py:2731`; `app/ponto/services/ausencia.py:1297`, `app/ponto/services/ausencia.py:1305`, `app/ponto/services/ausencia.py:1312`, `app/ponto/services/ausencia.py:1322`, `app/ponto/services/ausencia.py:1344`.)
+
+2. A aprovação UI abre atomic, atualiza A e mantém essa trava durante o signal. Com célula existente, tipo parcial vigente, cobertura parcial com resto faltante, data no horizonte e sem chamado vivo, o cartório pode emitir o chamado do resto e pedir **FOR UPDATE C**. (`app/ponto/views.py:2638`, `app/ponto/views.py:2640`; `app/ponto/services/ausencia.py:1038`; `app/ponto/signals.py:147`; `app/ponto/turnos.py:2598`; `app/ponto/services/cartorio.py:1676`, `app/ponto/services/cartorio.py:1762`, `app/ponto/services/cartorio.py:1777`, `app/ponto/services/cartorio.py:1778`; `app/ponto/management/commands/detectar_ausencias.py:693`; `app/chamados/models.py:866`.)
+
+3. Intercale a reversão de R1 depois do UPDATE A e antes desse pedido C: a porta obtém E e **NO KEY UPDATE C**, depois espera A. A UI segura A e espera C. A guarda de identidade da reversão só será avaliada **depois** de obter A, portanto não evita o ciclo. (`app/ponto/services/ausencia.py:647`, `app/ponto/services/ausencia.py:651`, `app/ponto/services/ausencia.py:654`, `app/ponto/services/ausencia.py:664`, `app/ponto/services/ausencia.py:665`.)
+
+Logo permanece um ciclo de travas explícitas **porta C→A × aprovação UI A→C**, com o mesmo C e o mesmo PK A; a troca `FOR UPDATE`→`NO KEY UPDATE` não elimina conflito com o `FOR UPDATE C` do gate de chamados nem com o UPDATE A. O arquivo obsoleto é suficiente; não depende de H06 censar uma Ausencia aberta. As condições descritas e a execução do deadlock em produção são [nao verificado]. (`app/ponto/services/ausencia.py:651`, `app/ponto/services/ausencia.py:654`; `app/chamados/models.py:866`; `app/ponto/views.py:2638`; `app/ponto/services/ausencia.py:1038`.)
+
+## 05/11 19:06 · sessao b8013929f9c6 · - · - · origem=Ronald (tmux)
+
+Censo em `app/**/*.py`: os únicos chamadores de `travar_entrega` são `ExportacaoDominio.registrar` e `porta_do_ato_h06`; ambos abrem `atomic` antes da chamada. (`app/folha/models.py:179`, `app/folha/models.py:181`; `app/ponto/services/ausencia.py:646`, `app/ponto/services/ausencia.py:647`.) Não apareceu outro comando chamando essa função na pesquisa; exaustividade além da cópia: [nao verificado].
+
+| Caminho | Efeito da v6 |
+|---|---|
+| `registrar` × porta; porta × porta | Continuam serializados pela mesma Empresa em `NO KEY UPDATE`; Colaborador e Ausencia também passam a `NO KEY UPDATE`. (`app/folha/export.py:570`; `app/folha/models.py:181`; `app/ponto/services/ausencia.py:647`, `app/ponto/services/ausencia.py:651`, `app/ponto/services/ausencia.py:654`.) |
+| `registrar` × admissão/transferência para a Empresa | A proteção anteriormente incidental por conflito com a checagem FK deixa de existir: o modo novo admite `KEY SHARE`. O teste novo exige justamente isso. (`app/folha/export.py:564`, `app/folha/export.py:570`; `app/ponto/tests/test_h06_reversao_guardas.py:885`.) |
+| Admissão | Mantém atomic externo, trava Cmax para matrícula e depois insere Cnovo com FK Empresa. A mudança em E elimina a espera da FK de E contra a porta; a disputa pelo próprio Cmax continua, se for alvo da porta. (`app/colaboradores/views.py:1175`, `app/colaboradores/views.py:1182`; `app/colaboradores/models.py:321`, `app/colaboradores/models.py:431`, `app/colaboradores/models.py:439`; `app/ponto/services/ausencia.py:651`.) |
+| Transferência/edição cadastral | Mantêm UPDATE de C no atomic; a mudança de empresa referencia E destino. A porta continua disputando a mesma linha C, mas sua trava E deixa a checagem da FK avançar. (`app/colaboradores/views.py:1313`, `app/colaboradores/views.py:1340`, `app/colaboradores/views.py:1342`, `app/colaboradores/views.py:1384`, `app/colaboradores/views.py:1386`, `app/colaboradores/views.py:1388`; `app/colaboradores/services/colaborador.py:76`; `app/ponto/services/ausencia.py:651`.) |
+| `ChamadoColaborador.abrir` | Continua tomando **FOR UPDATE C**, portanto continua conflitando com a trava C da porta. Não perdeu sua serialização de dedup/nascimento. (`app/chamados/models.py:863`, `app/chamados/models.py:866`, `app/chamados/models.py:867`, `app/chamados/models.py:932`; `app/ponto/services/ausencia.py:651`.) |
+| INSERTs que apenas referenciam C | Deixam de ser barrados pela trava inicial C da porta; isso não equivale a liberar `abrir`, que toma trava explícita forte antes do INSERT. (`app/ponto/services/ausencia.py:649`, `app/ponto/services/ausencia.py:651`; `app/chamados/models.py:866`, `app/chamados/models.py:932`.) |
+| Cartório/Celula→Ausencia | A trava inicial A da porta deixa avançar a checagem FK da célula para A; o cartório atribui a FK e salva a célula em atomic. O antigo ciclo que dependia **somente** de `KEY SHARE A` versus `FOR UPDATE A` perde essa aresta. (`app/ponto/services/ausencia.py:654`; `app/ponto/portas/celula.py:647`, `app/ponto/portas/celula.py:648`, `app/ponto/portas/celula.py:810`, `app/ponto/portas/celula.py:815`; `app/ponto/tests/test_h06_reversao_guardas.py:885`.) |
+| `ExportacaoDominio.invalidar` | Não chama a trava E; atualiza apenas invalidação/motivo/substituta em ED. O juiz K6 passa a falso quando o vigente está invalidado, mas `invalidar` não cria nem desinvalida ED. A v6 não acrescentou uma nova serialização para ele. (`app/folha/models.py:143`, `app/folha/models.py:154`, `app/folha/models.py:158`, `app/folha/models.py:162`; `app/folha/export.py:598`, `app/folha/export.py:600`.) |
+
+A alegação “a porta fica NO KEY nas três linhas durante todo o ato” é excessiva: seu save dispara `post_save`; quando o cartório alcança emissão, chama `ChamadoColaborador.abrir`, que readquire C em `FOR UPDATE`. O teste de `KEY SHARE` para na foto **anterior** à escrita e não examina esse modo posterior. Alcançabilidade efetiva desse ramo para uma falta específica de produção: [nao verificado]. (`app/ponto/services/ausencia.py:693`, `app/ponto/services/ausencia.py:711`, `app/ponto/services/ausencia.py:725`; `app/ponto/signals.py:143`, `app/ponto/signals.py:147`; `app/ponto/services/cartorio.py:1740`, `app/ponto/services/cartorio.py:1778`; `app/ponto/management/commands/detectar_ausencias.py:693`; `app/chamados/models.py:866`; `app/ponto/tests/test_h06_reversao_guardas.py:819`, `app/ponto/tests/test_h06_reversao_guardas.py:885`.)
+
+**Correção importante à triagem sobre o ciclo UI A→C.** A view de edição simples não abre `atomic`, e o serviço também não: chama `Ausencia.save()` diretamente. O perfil SaaS da cópia não declara `ATOMIC_REQUESTS`. Sob autocommit, não se pode presumir que o UPDATE A permaneça travado durante o signal posterior; portanto o ciclo dessa view, sozinho, não está demonstrado. Transação efetiva em produção: [nao verificado]. (`app/ponto/views.py:2747`, `app/ponto/views.py:2791`; `app/ponto/services/ausencia.py:465`, `app/ponto/services/ausencia.py:508`; `app/ponto/models.py:908`; `app/config/settings/saas.py:83`.)
+
+Há um caminho UI com atomic explícito: aprovação de irmãos envolve o laço em `atomic`, salva Ausencia e pode chegar a C pelo signal. Ele tem ordem potencial **A→C**, inversa à porta **C→A**; a troca para `NO KEY` não elimina conflito entre esses locks de escrita/explícitos. Porém a seleção desse caminho é por estados ABERTAS, enquanto H06 censa falta aprovada; afirmar ciclo executável nas **mesmas linhas** exige apresentar o interleaving que supera essa diferença e habilita o ramo emissor. Esse interleaving e sua execução permanecem [nao verificado]. (`app/ponto/views.py:2603`, `app/ponto/views.py:2613`, `app/ponto/views.py:2615`, `app/ponto/views.py:2638`, `app/ponto/views.py:2640`; `app/ponto/services/ausencia.py:1038`; `app/ponto/signals.py:147`; `app/chamados/models.py:866`; `app/ponto/services/ausencia.py:651`, `app/ponto/services/ausencia.py:654`; `app/ponto/management/commands/rederivar_falta_declarada.py:55`.)
+
+Os ciclos v5 admissão/transferência por FK de E e célula por FK de A foram tratados no modo inicial das travas; uma garantia global de ausência de ciclos, incluindo upgrades e escritores transacionais, não foi demonstrada pelos testes novos, que sondam a porta antes do primeiro save. (`app/folha/export.py:570`; `app/ponto/services/ausencia.py:651`, `app/ponto/services/ausencia.py:654`; `app/ponto/tests/test_h06_reversao_guardas.py:819`, `app/ponto/tests/test_h06_reversao_guardas.py:875`, `app/ponto/tests/test_h06_reversao_guardas.py:885`.)
+
+## 05/11 19:06 · sessao 32c480cca735 · - · - · origem=Ronald (tmux)
+
+Revisão estática; testes Django e mutantes de produção executados: **[nao verificado]**. Executei somente os helpers AST extraídos em memória, usando `python3 -B`, sem importar o app nem gravar arquivos; o comportamento descrito corresponde a `app/chamados/tests/test_h06_selo_minutos_sem_literal.py:22-52`.
+
+| Teste novo/alterado na v6 | O que morde; mutante que permanece verde isoladamente | [nao verificado]
+|---|---|
+| `test_MORDE_entrega_e_ato_tomam_a_mesma_trava_da_empresa` | Aceita SQL `FOR UPDATE` e `FOR NO KEY UPDATE`, mas só verifica presença do nome da tabela. **Sobrevive registrar fazer SELECT de Empresa `pk=-1` em vez da Empresa real**, mantendo a porta correta. Não prova conflito real entrega × ato. (`app/ponto/tests/test_h06_reversao_guardas.py:251-267`; produção: `app/folha/models.py:181`.) |
+| `test_MORDE_aplicar_trava_e_reconfere_a_empresa_antes_de_escrever` | Cobra ordem SQL Empresa/C/A e UPDATE depois. Sobrevive SELECT de Ausencia sobre PK inexistente seguido de leitura real sem trava; a nova sonda posterior é que mata esse mutante. (`app/ponto/tests/test_h06_reversao_guardas.py:346-374`; produção: `app/ponto/services/ausencia.py:654-655`.) |
+| `test_MORDE_reverter_toma_a_trava_da_entrega_na_mesma_ordem` | Mesma limitação do teste de aplicar: ordem de comandos não prova suas linhas. (`app/ponto/tests/test_h06_reversao_guardas.py:346-380`.) |
+| `test_MORDE_usuario_inexistente_recusa_na_porta_antes_de_escrever` | Morde retirar a exigência de ator, porque exige a mensagem específica e entrada na porta. Sobrevive trocar `getattr(por,'pk',None) is None` por `por is None`: o comando resolve nome inexistente para `None`; não testa objeto sem PK ou PK sem cadastro. (`app/ponto/tests/test_h06_reversao_guardas.py:565-573`; produção: `app/ponto/services/ausencia.py:619-621`; resolvedor: `app/ponto/management/commands/rederivar_falta_declarada.py:89-91`.) |
+| `test_MORDE_porta_chamada_direto_sem_ator_recusa` | Morde ausência da guarda na chamada direta; a forma inválida `ato={}` impede falso verde pela validação seguinte, pois a mensagem exigida é de usuário. Sobrevive a mesma mutação `por is None`, pois o único ator exercitado é `None`. (`app/ponto/tests/test_h06_reversao_guardas.py:575-579`; produção: `app/ponto/services/ausencia.py:619-638`.) |
+| `test_MORDE_ato_que_nao_confirma_nao_deixa_arquivo` | Morde retirar limpeza para falha `evento→None`. Sobrevive limitar a limpeza a `AusenciaInvalida`, deixando escapar falha de I/O, commit ou callback posterior: o teste só provoca `AusenciaInvalida`. (`app/ponto/tests/test_h06_reversao_guardas.py:581-588`; produção: `app/ponto/services/ausencia.py:704-706`, `app/ponto/services/ausencia.py:730-733`.) |
+| `test_MORDE_trilha_da_linha_que_nao_grava_desfaz_o_ato` | Morde retorno ignorado da trilha individual **de aplicar**, pois deixa a trilha do ato real e faz a individual devolver `None`. **Sobrevive retirar a exigência da trilha individual da reversão**, que esse caso não executa. (`app/ponto/tests/test_h06_reversao_guardas.py:590-601`; aplicar: `app/ponto/services/ausencia.py:717-723`; reversão: `app/ponto/services/ausencia.py:533-537`.) |
+| `test_MORDE_arquivo_com_pk_repetido_e_recusado` | Morde tirar unicidade: a recusa posterior por hash não basta porque exige mensagem `pk unico`. Sobrevive aceitar PKs de tipos inadequados/valores malformados: só usa duplicação de PK inteiro válido. (`app/ponto/tests/test_h06_reversao_guardas.py:603-613`; produção: `app/ponto/services/ausencia.py:631-638`.) |
+| `test_MORDE_trava_da_ausencia_e_OF_self_sem_join_de_colaborador` | Morde modo diferente de `NO KEY`, remoção de `OF self` ou JOIN na consulta inspecionada. Isoladamente ainda aceita PK inexistente: só vê SQL. (`app/ponto/tests/test_h06_reversao_guardas.py:616-626`; produção: `app/ponto/services/ausencia.py:654-655`.) |
+| `test_MORDE_antes_da_primeira_escrita_a_porta_ja_segura_as_TRES_linhas_reais` | **Fecha o sobrevivente original pk=-1 + leitura real sem trava**, pois pausa na primeira foto atual e tenta `NO KEY UPDATE NOWAIT` nas três PKs reais. Sobrevive trocar `NO KEY UPDATE` por `FOR UPDATE`: ambos conflitam com a sonda. O teste de KEY SHARE complementa isso. (`app/ponto/tests/test_h06_reversao_guardas.py:813-875`; ponto atual de pausa: `app/ponto/services/ausencia.py:693`.) |
+| `test_MORDE_fk_de_outro_escritor_nao_espera_a_porta` | Morde `FOR UPDATE` nas três linhas no instante anterior às escritas. Isoladamente sobrevive retirar todas as travas: KEY SHARE igualmente passa. Não executa admissão, transferência, cartório ou signals de UI; simula seus modos de FK. (`app/ponto/tests/test_h06_reversao_guardas.py:877-884`, `app/ponto/tests/test_h06_reversao_guardas.py:850-865`.) |
+| `test_MORDE_reverter_parada_antes_de_escrever_segura_as_tres_e_solta_a_fk` | Combina conflito NO KEY e compatibilidade KEY SHARE nas linhas reais da reversão; morde tanto remover trava quanto fortalecê-la para UPDATE nesse ponto. Sobrevive alterar exclusivamente as travas de aplicar: o aplicar preparatório é serial e só sua conclusão é usada. (`app/ponto/tests/test_h06_reversao_guardas.py:886-895`.) |
+| AST `test_nenhum_sitio_de_producao_escreve_numero_de_minutos` | Agora pega `12*60`, `x or 720` e `ImportFrom ... as nova`. Ainda sobrevive derivador em variável: `n=720; criar_ausencia(minutos=n)`, alias por atribuição `nova=criar_ausencia; nova(minutos=720)`, `criar_ausencia(**{'minutos':720})` ou `minutos=int('720')`. Demonstrei esses quatro retornos vazios em memória. (`app/chamados/tests/test_h06_selo_minutos_sem_literal.py:30-44`, `app/chamados/tests/test_h06_selo_minutos_sem_literal.py:66-72`.) |
+| AST `test_a_varredura_MORDE` | Os três novos exemplos exercitam as três curas declaradas. Como o teste só passa strings próprias ao detector, qualquer mutante na materialização produtiva permanece verde **nesse teste isolado**; cabe à varredura real pegá-lo. As quatro expressões anteriores escapam dos dois testes. (`app/chamados/tests/test_h06_selo_minutos_sem_literal.py:74-86`; materialização: `app/chamados/services/materializacao.py:484-494`, `app/chamados/services/materializacao.py:520-528`.) |
+
+Os sobreviventes isolados complementares não invalidam automaticamente a bateria: o teste NO KEY e o teste KEY SHARE foram feitos para se complementar. A cura do mutante original de Ausencia está presente na bateria. (`app/ponto/tests/test_h06_reversao_guardas.py:867-895`.)
+
+Há, porém, um **sobrevivente conjunto relevante**: substituir **somente dentro de `ExportacaoDominio.registrar`** a trava real por `Empresa.objects.select_for_update(no_key=True).filter(pk=-1)` mantém o teste SQL satisfeito, enquanto todas as novas sondas reais continuam examinando a **porta**, nunca a entrega. A entrega intercalada também é injetada serialmente antes da porta. Esse conjunto não demonstra que `registrar` protege a Empresa real; execução do mutante: **[nao verificado]**. (`app/folha/models.py:181`; `app/ponto/tests/test_h06_reversao_guardas.py:251-267`, `app/ponto/tests/test_h06_reversao_guardas.py:495-508`, `app/ponto/tests/test_h06_reversao_guardas.py:867-895`.)
+
+Sobre os helpers:
+
+- `_updates_de_ausencia` **corrigiu o corte temporal apontado na v5**: marca antes de chamar a implementação e conta os UPDATEs desde a entrada, exigindo uma entrada. Um UPDATE ORM da própria porta anterior à trava Empresa agora entra na contagem. (`app/ponto/tests/test_h06_reversao_guardas.py:403-422`.)
+- A afirmação “tudo conta” ainda precisa do limite: captura a conexão corrente e só SQL começando literalmente com `UPDATE "ponto_ausencia"`. Escrita no comando antes da porta, outra conexão, CTE contendo UPDATE ou SQL com outro prefixo não é contado. Não encontrei esses desvios no código atual da porta; são limites de prova, não escrita atual demonstrada. (`app/ponto/tests/test_h06_reversao_guardas.py:405-422`; implementação atual: `app/ponto/services/ausencia.py:646-733`.)
+- `_trava` só reconhece a expressão textual `FOR (NO KEY )?UPDATE`; não prova PK, linha retornada, `OF`, ausência de JOIN ou modo exato. Os testes SQL que o usam podem aceitar uma trava sobre conjunto vazio ou modo mais forte; as novas sondas reais reduzem essa lacuna para a porta, mas não para `registrar`. (`app/ponto/tests/test_h06_reversao_guardas.py:34-37`, `app/ponto/tests/test_h06_reversao_guardas.py:255-267`, `app/ponto/tests/test_h06_reversao_guardas.py:356-370`.)
+- `_pega` transforma **qualquer `OperationalError`** em “linha ocupada”, sem exigir SQLSTATE de lock. O teste KEY SHARE em conjunto exige sucesso e reduz falsos positivos de falha persistente, mas o helper sozinho não identifica a causa da recusa. (`app/ponto/tests/test_h06_reversao_guardas.py:850-860`.)
+- O helper de pausa sinaliza `chegou` também no `finally`; o teste KEY SHARE poderia observar porta já concluída se a primeira foto desaparecesse. Os testes que também exigem NO KEY conflitante reprovam esse caso. A pausa é um marco do código atual, não uma medição independente de “primeira escrita”. (`app/ponto/tests/test_h06_reversao_guardas.py:819-848`, `app/ponto/tests/test_h06_reversao_guardas.py:867-895`.)
+- O teste de duas reversões continua podendo sobreviver à remoção da trava da Empresa, porque Colaborador ainda serializa as execuções e `_espera_bloqueio` observa apenas `wait_event_type='Lock'`. Isso não derruba a sonda real de Empresa, mas impede atribuir a esse teste isolado a prova de serialização especificamente na Empresa. (`app/ponto/tests/test_h06_reversao_guardas.py:722-737`, `app/ponto/tests/test_h06_reversao_guardas.py:897-941`; produção: `app/ponto/services/ausencia.py:647-655`.)
+
+## 05/11 19:06 · sessao a704c090f59e · - · - · origem=Ronald (tmux)
+
+Q3 — a porta centraliza entrega, identidade, empresa atual, minutos esperados e hash/consumo nas duas direções; o comando chama a mesma função em `app/ponto/management/commands/rederivar_falta_declarada.py:122` e `:144`, e as guardas ficam em `app/ponto/services/ausencia.py:657`, `:664`, `:668`, `:670`, `:676`, `:681`. O consumo e a escrita individual ficam dentro do mesmo `atomic` iniciado em `app/ponto/services/ausencia.py:646`, com lavra em `:699` e reversão em `:725`.
+
+A unificação **literal** continua incompleta: o predicado `(motivo or '').strip()` é exigido tanto pela porta H06 (`app/ponto/services/ausencia.py:617`) quanto pelo escritor de reversão (`app/ponto/services/ausencia.py:528`). O único chamador de produção encontrado desse escritor é a própria porta (`app/ponto/services/ausencia.py:725`); isso afasta um segundo caminho atual, mas não elimina a duplicação. O comando agora apenas resolve o usuário (`app/ponto/management/commands/rederivar_falta_declarada.py:88`), e a porta exige PK (`app/ponto/services/ausencia.py:619`). “Usuário existente” não é validado por consulta da própria porta: ela confere a presença de PK; o comando resolve por consulta e a auditoria tem FK (`app/ponto/management/commands/rederivar_falta_declarada.py:91`; `app/core/models.py:295`).
+
+O censo ainda seleciona falta/aprovada/720/com chamado/data na janela, calcula a grade, separa zero e diferença (`app/ponto/management/commands/rederivar_falta_declarada.py:55`, `:61`, `:65`, `:69`). A porta confere a identidade fornecida; não valida independentemente essa elegibilidade (`app/ponto/services/ausencia.py:633`, `:665`). Portanto, o descarte 1 procede como separação do censo autorizada no texto fornecido, sem significar que a porta seja autossuficiente diante de qualquer produtor arbitrário de `ato` (`app/ponto/management/commands/rederivar_falta_declarada.py:118`; `app/ponto/services/ausencia.py:665`).
+
+Q3 — arquivos:
+
+- **Arquivo preexistente:** `xb` falha antes de `escrito.append`, portanto a sentinela preexistente não entra no `unlink` desse caminho (`app/ponto/services/ausencia.py:696`, `:698`, `:731`).
+- **Órfão por escrita/close falhar:** a propriedade do arquivo só é registrada depois de sair do `with open`. Se `write` ou o fechamento falhar depois de criá-lo, `escrito` continua vazio e ele fica no disco. Logo PROCEDENTE 6 está apenas **parcialmente fechado** (`app/ponto/services/ausencia.py:696`, `:697`, `:698`, `:730`).
+- **Atomic externo:** a porta usa `transaction.atomic()` comum, sem exigir a transação externa final. Um rollback posterior do chamador não atravessa seu `except`, podendo deixar arquivo de ato não confirmado. Os chamadores CLI atuais não abrem atomic externo, mas a função pública permite aninhamento (`app/ponto/services/ausencia.py:646`, `:730`; `app/ponto/management/commands/rederivar_falta_declarada.py:93`, `:122`, `:144`).
+- **Arquivo confirmado apagado:** o `except BaseException` engloba a saída de `atomic`; o `save` registra callback `on_commit` (`app/ponto/signals.py:272`, `:279`). Os blocos normais desse callback usam `engolir`, que captura apenas `Exception`, permitindo escapar `KeyboardInterrupt/SystemExit` (`app/ponto/signals.py:254`, `:260`, `:263`; `app/core/observ.py:90`). Se uma dessas interrupções ocorrer no callback pós-commit, o `unlink` da porta será executado embora a transação já esteja confirmada (`app/ponto/services/ausencia.py:730`). Ocorrência e semântica efetiva do Django instalado: **[nao verificado]**; Django não está instalado no ambiente consultado.
+- **Arquivo substituído no caminho:** a limpeza guarda somente o pathname e não confere inode/hash antes de apagar; uma substituição externa entre criação e falha seria apagada. Nenhum escritor de produção que faça essa substituição foi localizado; ocorrência **[nao verificado]** (`app/ponto/services/ausencia.py:698`, `:732`).
+
+Q4 — mapa atualizado:
+
+| Valor | Escritor | Leitor |
+|---|---|---|
+| `Ausencia.minutos` | criação recebe valor em `app/ponto/services/ausencia.py:343`; edição zera/atribui em `:507`; modelo soma grade em `app/ponto/models.py:877`, `:885`, `:887`; transição persiste em `app/ponto/services/ausencia.py:1037`; reversão repõe em `:531` | censo `app/ponto/management/commands/rederivar_falta_declarada.py:56`, `:69`; guarda/pós-checagem `app/ponto/services/ausencia.py:668`, `:714`; rateio `app/folha/export.py:121`; financeiro `app/ponto/services/fechamento.py:665`, `:685`; crédito `app/ponto/services/credito_parcial.py:24`; efeitos `app/ponto/services/efeito_ausencia.py:44`, `:51`; parcialidade `app/ponto/turnos.py:2600` |
+| `Ausencia.tipo` | criação `app/ponto/services/ausencia.py:342`; edição `:497`; produtores materializadores `app/chamados/services/materializacao.py:468`, `:485`, `:521` | censo `app/ponto/management/commands/rederivar_falta_declarada.py:55`; identidade `app/ponto/services/ausencia.py:548`, `:665`; derivação `app/ponto/models.py:877`; parcialidade `app/ponto/turnos.py:2598` |
+| `Ausencia.status` | criação `app/ponto/services/ausencia.py:344`; máquina `:1027`, `:1038`; rejeição de férias em lote `:1486` | censo `app/ponto/management/commands/rederivar_falta_declarada.py:55`; identidade `app/ponto/services/ausencia.py:548`, `:665`; derivação `app/ponto/models.py:877` |
+| `Colaborador.empresa_id` | portas gerais `app/colaboradores/services/colaborador.py:55`, `:61`, `:73`, `:76`, `:91`, `:93`; lote permitido em `:80`, `:88` | censo `app/ponto/management/commands/rederivar_falta_declarada.py:55`; leitura travada e comparação `app/ponto/services/ausencia.py:651`, `:653`, `:670`; foto `app/ponto/management/commands/carimbo_gravado.py:53`; lista `app/ponto/services/fechamento_lista.py:103` |
+| `LogAuditoria.valor_depois` | escritor efetivo `app/core/observ.py:134`, `:136`; ato fornece `{hash,ato,arquivo,linhas}` em `app/ponto/services/ausencia.py:699`, `:702`; linhas fornecem minutos em `:535`, `:720` | H06 lê `hash` em `app/ponto/services/ausencia.py:580`; os outros campos do payload do ato não têm leitor semântico H06 localizado **[nao verificado]** |
+| arquivo de reversão | comando monta nome/dict `app/ponto/management/commands/rederivar_falta_declarada.py:116`, `:118`; serviço serializa `app/ponto/services/ausencia.py:623`, escreve `:696`; exceção apaga `:732` | serviço lê bytes `app/ponto/services/ausencia.py:625`, interpreta `:628`, valida chaves/PK único `:631`, `:635`, faz hash `:639`, consulta trilha `:676`, `:681`; testes leem `['linhas']` em `app/ponto/tests/test_h06_rederivar_falta_declarada.py:92` e `app/ponto/tests/test_h06_reversao_guardas.py:145` |
+
+Correção da revisão v5: a tela genérica carrega objetos de auditoria, mas **não renderiza `valor_depois`**; mostra data, usuário, ação, modelo, objeto, descrição e IP (`app/core/views.py:705`; `app/templates/core/log_auditoria.html:55`, `:57`, `:58`, `:68`, `:71`, `:72`, `:73`, `:74`).
+
+A validação de formato agora exige PK único, mas continua sem tipos dos valores; PK não hashable pode gerar `TypeError` no set antes de `atomic`, em vez da recusa nominal (`app/ponto/services/ausencia.py:633`, `:635`, `:646`). Arquivos legados em lista continuam recusados (`app/ponto/services/ausencia.py:633`). Existência desses arquivos em produção: **[nao verificado]**.
+
+Q6:
+
+- Não identifiquei segundo escritor novo fora dos módulos declarados: Ausencia pertence a `ponto/services/ausencia.py`, ED a `folha/models.py`; as novas escritas seguem esses módulos (`app/core/portas.py:485`, `:504`; `app/ponto/services/ausencia.py:508`, `:532`).
+- Os juízes registrados continuam grade=`minutos_previstos_do_dia`, TXT=`classificar_export`, entrega=`competencia_entregue`, janela=`janela_atual` (`app/core/juizes.py:173`, `:298`, `:299`, `:312`, `:314`). O helper H12 tem uma implementação compartilhada em `app/folha/export.py:60`; a lista o chama em `app/ponto/services/fechamento_lista.py:109`.
+- Materialização omite minutos nos dois sítios; não há novo derivador diário: modelo e censo chamam o mesmo juiz (`app/chamados/services/materializacao.py:484`, `:520`; `app/ponto/models.py:885`; `app/ponto/management/commands/rederivar_falta_declarada.py:63`).
+- Relógio novo está na borda do nome do arquivo (`app/ponto/management/commands/rederivar_falta_declarada.py:46`); os relógios internos preexistentes continuam alcançáveis (`app/ponto/models.py:873`; `app/ponto/signals.py:122`). Descarte 2 procede quanto à autoria do delta, não como prova de ausência dessa classe.
+- Parcialidade 480 e financeiro por presença de minutos continuam distintos (`app/ponto/turnos.py:2580`, `:2598`; `app/ponto/services/fechamento.py:665`, `:685`); rateio uniforme permanece (`app/folha/export.py:121`).
+- Pré-requisitos não podem ser dados como cumpridos: o aval exige medidas 09/10/11, preservação09 e pouso antes da exportação11 (`app/docs/PROMPTS.md:1860`, `:1861`). A foto H06 compara `FechamentoMensal`, não bytes do TXT (`app/ponto/management/commands/carimbo_gravado.py:36`, `:53`). Cumprimento em produção **[nao verificado]**.
+
+## 05/11 19:06 · sessao 4fae3920c9ba · - · - · origem=Ronald (tmux)
+
+Q3 — No banco padrão configurado, evento e estado materializado são escritos no mesmo `atomic`: DELETE, `bulk_create` e emissão ficam em `app/ponto/nucleo.py:57–66`; `criar` envolve create, trilha e emissão em `atomic(savepoint=False)` em `app/chamados/models.py:1053–1058`. A configuração SaaS declara uma conexão `default` em `app/config/settings/saas.py:83–93`.
+
+Há estados sem evento autorizados pelas guardas: nascimento fora de `MODULOS_DE_TURNO` ou sem célula (`app/chamados/models.py:1056`), recompute que não remove uma identidade aberta (`app/ponto/nucleo.py:64–66`) e fechamento em dia sem célula (`app/ponto/nucleo.py:83–90`). Não aparece caminho normal que faça commit do evento elegível e rollback do respectivo chamado/materializado, ou vice-versa, dentro desses blocos; ocorrência produtiva: [nao verificado].
+
+A garantia não inclui a escrita de origem: recompute prepara linhas antes de seu atomic (`app/ponto/nucleo.py:45–57`); salvar Batida ou vínculo pode persistir e o recompute falhar/voltar, porque os wrappers engolem a exceção (`app/ponto/signals.py:19–31`, `app/ponto/signals.py:53–69`). `registrar_batida` cria sem atomic local (`app/ponto/registro_batida.py:157–159`) e flip salva antes de recomputar (`app/ponto/registro_batida.py:254`, `app/ponto/services/flip_batida.py:30–39`).
+
+Chamadores produtivos diretos encontrados por `rg` — `git grep` indisponível pela ausência de `.git` [nao verificado]:
+
+- `app/ponto/signals.py:26`, acionado por save/delete Batida (`:34–50`), sem atomic externo local.
+- `app/ponto/signals.py:64`, acionado por save vínculo (`:72–74`), sem atomic externo local.
+- `app/ponto/management/commands/processar_alertas_turno.py:67`, sem atomic externo local (`:32–67`).
+- `app/ponto/management/commands/processar_alertas_avancados.py:57`, sem atomic externo local (`:19–57`).
+- `app/ponto/management/commands/materializar_turnos.py:24`, sem atomic externo local (`:16–24`).
+- `app/ponto/services/flip_batida.py:39`, sem atomic externo local (`:10–39`).
+- `app/ponto/services/veredito_celula.py:308`, dentro do atomic iniciado em `:204`.
+
+O comentário “guardas acima […] não escrevem nada” é literalmente incorreto: ramos anteriores chamam trilhas (`app/chamados/models.py:1034`, `:1038`) cujas implementações escrevem auditoria (`:1143`, `:1161`). Isso não é nascimento/evento parcialmente persistido: os ramos retornam antes do create (`:1035`, `:1039`).
+
+Também é excessiva a promessa “create, trilha e INSERT […] juntos ou nenhum” (`app/chamados/models.py:1049–1051`): trilha de nascimento é best-effort (`app/chamados/models.py:1175–1180`); `core.observ.evento` engole falha e usa savepoint próprio (`app/core/observ.py:94–105`, `:133–139`). Portanto chamado e EventoCelula podem commitar sem essa linha de trilha; não é separação entre chamado e EventoCelula.
+
+Q5 — A extração preserva, no chamador antigo, etapas anteriores, ordem, universo, decisões, tratamento de exceção e soma retornada: perguntas absolvidas, órfãs, helper e retorno em `app/chamados/reconciliador.py:1411–1421`; filtro de todos os vivos do colaborador por pk em `:1432–1434`; juiz e `_retratar` em `:1437–1444`; exceção logada/engolida sem lista em `:1445–1448`. A comparação com o antes é sustentada pelo diff fornecido [nao verificado quanto ao histórico Git].
+
+O consumidor adiciona lista de falhas ao helper e contador próprio (`app/chamados/reconciliador.py:1360`), fazendo exceção manter eventos pendentes/incrementar tentativas (`:1373–1374`). Retorno `False` de retenção/gate não entra nessa lista (`:518–524`), permitindo marcar evento processado sem retratar (`:1380`).
+
+O consumidor chama fora de `tranca_em_lote` (`app/chamados/reconciliador.py:1343–1380`; command em `app/chamados/management/commands/consumir_eventos_celula.py:17–31`). Esse contexto é memo em `ContextVar`, não trava SQL (`app/chamados/juizes.py:990–1003`), e é expressamente destinado a leitor que não escreve trilha (`:995`).
+
+Quanto a ordem de trava, a chamada nova não introduz trava explícita de Colaborador/Disputa (`app/chamados/reconciliador.py:1311–1314`); segue as portas existentes, que travam a linha do chamado (`app/chamados/models.py:668–675`). O command mantém advisory lock por execução (`app/chamados/management/commands/consumir_eventos_celula.py:19–23`). Ciclo/deadlock efetivo em produção: [nao verificado].
+
+## 05/11 19:06 · sessao f56589db6ad3 · - · - · origem=Ronald (tmux)
+
+Achados Q1/Q2, somente inspeção estática; execução de testes/SQL e identidade independente do hash: **[nao verificado]**. [nao verificado]
+
+**Q1 — escritores/leitores**
+
+| Campo/valor | Escritor | Leitor |
+|---|---|---|
+| `EventoCelula.celula_id` | `emitir_evento_celula`, a partir de `cel.pk` (`app/ponto/portas/celula.py:643`). | Semeadura verifica pendente por célula (`app/chamados/reconciliador.py:1284`, `:1297`); vigia da absolvição por célula (`:1262`). O consumidor carrega a linha, mas não usa o ID para restringir a ação (`:1331`, `:1338`, `:1344`). |
+| `EventoCelula.colaborador_id` | Mesma porta, a partir de `cel.colaborador_id` (`app/ponto/portas/celula.py:643`). | Consumidor agrupa por colaborador e carrega colaborador (`app/chamados/reconciliador.py:1338`, `:1344`); vigia forma `_com_evento` (`app/chamados/management/commands/reconciliar_chamados.py:62`). |
+| `EventoCelula.data` | Mesma porta, a partir de `cel.data` (`app/ponto/portas/celula.py:643`). | Consumidor não filtra dia: processa colaborador inteiro (`app/chamados/reconciliador.py:1338`, `:1352`, `:1360`). Outro leitor produtivo específico de `EventoCelula.data`: **[nao verificado]**. |
+| `processado_em` | Inicialmente nulo (`app/escala/models.py:1859`); sucesso grava `agora` (`app/chamados/reconciliador.py:1380`). | Pendentes/mortos (`:1238`, `:1244`), guarda do UPDATE (`:1372`), retenção (`:1387`). |
+| `tentativas` | Default 0 (`app/escala/models.py:1860`); falhas incrementam com `F` (`app/chamados/reconciliador.py:1374`). | Elegibilidade pendente/morto (`:1238`, `:1244`). |
+| `erro` | Default vazio (`app/escala/models.py:1861`); falhas concatenadas, truncadas a 500 (`app/chamados/reconciliador.py:1374`). | Leitor produtivo específico: **[nao verificado]**. |
+| `TurnoMaterializado` | Núcleo monta campos (`app/ponto/nucleo.py:48`), raw DELETE do recorte (`:78`) e `bulk_create` (`:59`). `atualizado_em` é `auto_now` (`app/ponto/models.py:1211`). | O novo `RETURNING` lê `data_turno`, `entrada_id`, `saida_id` (`app/ponto/nucleo.py:79`); identifica abertos por entrada presente/saída ausente (`:80`); compara com novos rows (`:64`). Outros leitores: premissa (`app/chamados/reconciliador.py:96`), alertas (`app/ponto/management/commands/processar_alertas_turno.py:76`; `app/ponto/management/commands/processar_alertas_avancados.py:58`), idade (`app/ponto/turnos.py:3122`), seleção (`app/ponto/selecao_periodo.py:270`), testemunha (`app/chamados/juizes.py:1478`), flip (`app/ponto/services/flip_batida.py:37`), auditor (`app/chamados/management/commands/auditar_invariantes_chamados.py:604`), shadow (`app/ponto/management/commands/verificar_nucleo.py:30`). |
+| `ChamadoColaborador.status_local` | Nascimento por `abrir`: defaults do motor + `get_or_create` (`app/chamados/models.py:899`, `:932`); por `criar` (`:1054`). Transições por `_gravar_estado` (`:222`, `:279`); novo consumidor chega por `_retratar` → `reconciliar` → `_gravar_estado` (`app/chamados/reconciliador.py:1443`, `:523`; `app/chamados/models.py:620`). | Novo helper seleciona `VIVOS` (`app/chamados/reconciliador.py:1433`); motor/fechamento (`app/chamados/models.py:639`); signals (`app/chamados/signals.py:70`, `:81`, `:169`); fila/painel (`app/chamados/services/painel.py:211`). Escritas `:339/:354` são somente simulação em memória, revertida em `finally`. |
+| `LogAuditoria`, ação `fechamento_recusado` | Gate da premissa (`app/chamados/models.py:730`) e gate da pergunta (`:408`) chamam único `_registrar_recusa`; este deduplica por último payload/estado (`:386`, `:388`) e chama `core.observ.evento` (`:391`), que faz INSERT em savepoint próprio best effort (`app/core/observ.py:105`, `:133`, `:134`). | Próprio dedup (`app/chamados/models.py:386`); tela genérica de auditoria (`app/core/views.py:705`). Teste novo lê `valor_depois` e exige motivo (`app/chamados/tests/test_c20_juiz3_outbox.py:225`, `:247`). |
+| Retorno `premissa` | Inicialização 0 (`app/chamados/reconciliador.py:1327`); soma retorno do helper (`:1360`); devolve dict (`:1388`). | Testes novos (`app/chamados/tests/test_c20_juiz3_outbox.py:245`, `:271`, `:276`, `:295`). **Command consumidor não imprime essa chave**: template imprime `retratados`, mas não `premissa` (`app/chamados/management/commands/consumir_eventos_celula.py:32`). Outro leitor produtivo específico: **[nao verificado]**. |
+
+A nova emissão usa o mesmo INSERT da porta, sem segundo escritor novo (`app/ponto/nucleo.py:90`; `app/chamados/models.py:1058`; `app/ponto/portas/celula.py:643`). `TurnoMaterializado` permanece no módulo autorizado por `PORTAS` (`app/core/portas.py:117`); `status_local` permanece no módulo da porta do ciclo (`app/core/portas.py:217`, `:233`). `EventoCelula` e `LogAuditoria` não têm entrada no mapa de famílias: o comentário exclui modelos de log/configuração do censo de famílias (`app/core/portas.py:38`). Assim, **não confundir ausência no mapa com novo escritor ilegal**; para Evento, a declaração explícita de escritor único é do INSERT em `escala/models.py:1851`, enquanto metadata de processamento é escrita no consumidor (`app/chamados/reconciliador.py:1374`, `:1380`).
+
+**Q2 — equivalência do DELETE**
+
+Para o modelo/configuração presentes, o predicado SQL é o mesmo do ORM anterior: colaborador por PK e extremos inclusivos de `data_turno` (`app/ponto/nucleo.py:78`; diff fornecido). A classe atual não declara manager ou override de delete; suas únicas FKs são **saintes**, para Colaborador e Batida, com `CASCADE` (`app/ponto/models.py:1196`, `:1201`, `:1204`, `:1206`). Não localizei referência entrante nem receiver de delete para TurnoMaterializado; a afirmação negativa de cobertura completa dinâmica é **[nao verificado]**. Os receivers de delete localizados são para Batida/Ausência/Setor/TipoAusência (`app/ponto/signals.py:48`, `:138`, `:150`, `:282`; `app/colaboradores/signals.py:35`; `app/ponto/models.py:1234`).
+
+Portanto, não há perda de signal/cascata de saída demonstrada nesta cópia; **SQL cru não é equivalente genericamente ao Collector Django**, pois o ignora. Também fixa `django.db.connection` default (`app/ponto/nucleo.py:74`, `:76`); roteamento para outros aliases não é preservado por construção. A cópia configura somente `TenantSyncRouter` nos settings SaaS/CI e routers vazios em teste (`app/config/settings/saas.py:93`; `app/config/settings/ci_tenants.py:19`; `app/config/settings_test.py:5`); uso produtivo de outro alias/router: **[nao verificado]**.
+
+Além do núcleo, há deleção **indireta por cascata** ao apagar Colaborador ou Batida (`app/ponto/models.py:1201`, `:1204`, `:1206`); porta de apagar Batida chama `.delete()` (`app/ponto/registro_batida.py:291`), e ensaio tem deleção em lote (`:345`). O receiver de Batida recompõe **depois** do delete (`app/ponto/signals.py:48`, `:50`): um turno já cascado pode não aparecer no `RETURNING`, portanto esse caminho não tem emissão garantida pelo novo detector (`app/ponto/nucleo.py:80`). Isso é uma lacuna de cobertura, não um segundo escritor introduzido pelo diff.
 
 ## 05/11 19:06 · sessao 194b901e3953 · - · - · origem=Ronald (tmux)
 
@@ -734,675 +1006,4 @@ Não classificar `app/docs/LEIS.md:125` como citação falsa: a linha sustenta l
 
 - **pc2 D05**, frase “acrescentar apenas evento no primeiro carimbo ainda permitiria observar intenção antes do desfecho”: as referências não demonstram essa consequência para outbox criado dentro da transação. A assinatura, materialização individual e devolução estão no mesmo `atomic`; o comentário declara que leitores `on_commit` veem o desfecho. A materialização da disputa inteira ocorre depois. Portanto existe insuficiência de cobertura, mas leitura prematura depende do tipo/posição do gancho e permanece **[não verificado]**. (`app/chamados/services/validacao.py:392`; `app/chamados/services/validacao.py:395`; `app/chamados/services/validacao.py:396`; `app/chamados/services/validacao.py:424`; `app/chamados/services/validacao.py:425`; `app/chamados/services/validacao.py:430`)
 
-## 05/11 18:29 · sessao 476cec01b106 · PC2-FIO-MUDO · censo · origem=Code
-
-HASH LIDO = 9c0fd9d3e90f166cba697ec840422b5585a8ab09
-
-## A CASOS PELA REGRA
-
-O hash identifica a cópia informada; sua correspondência com um commit Git é **[não verificado]**. Os **494** são o agregado declarado no aval; cadastro individual, distribuição pelas cinco perdas e quantidade de exclusões legítimas são **[não verificado]**. O mandato exige abertura de `batida_ausente` mais **reabrir, retratar_duplicata, validação, morte por leitura e reapontar**, retirando os vivos legítimos antes do RED. (`app/docs/PROMPTS.md:1875`, `app/docs/PROMPTS.md:1882`)
-
-Os casos abaixo são cenários normativos, não registros observados dos 494. A referência é a regra aplicada ao cadastro e às batidas; executar ou comparar com o código anterior não substitui essa referência. (`app/docs/LEIS.md:136`)
-
-| Caso | Cadastro + estado + ato | Resposta pela regra |
-|---|---|---|
-| A01 — nascimento | Ativo, vínculo do dia válido, ata acusa marco vencido, sem identidade histórica; abrir `batida_ausente`. | Entregar a pergunta pelo evento de abertura, lendo a célula/ata. A varredura deve apenas detectar o que o evento deixou. (`app/docs/PROMPTS.md:1875`, `CLAUDE.md:167`, `CLAUDE.md:169`) |
-| A02 — duas aberturas | Mesmo cadastro e fato de A01; duas transações abrem simultaneamente. | Mesmo estado final, uma trilha do fato e nenhuma pergunta duplicada. (`CLAUDE.md:175`) |
-| A03 — reabrir sem candidata | Dia ainda devido, chamado encerrado, nenhuma pergunta restaurável; reabrir. | Reabrir o chamado não basta: a dívida conserva pergunta viva ou ação administrativa nomeada. (`app/docs/CORTES.md:253`) |
-| A04 — reabertura recusada | Dia regularizado ou decisão humana ainda válida, sem fato novo; tentar reabrir automaticamente. | Preservar a decisão e recusar a reabertura; não produzir pergunta para preencher contador. (`app/chamados/models.py:1269`, `app/chamados/models.py:1327`, `app/docs/LEIS.md:65`) |
-| A05 — retratar duplicata | A perde sua última resolvedora; a canônica do mesmo fato está em B. | Preservar o fio do fato pela canônica e sua porta alcançável. Não exigir uma pergunta para cada chamado duplicado. (`app/docs/CORTES.md:253`, `CLAUDE.md:175`, `app/chamados/juizes.py:1344`) |
-| A06 — duplicata respondida | Duplicata tem resposta discordante, sem decisão humana; retratá-la. | Preservar a conversa para decisão. A via de identidade não autoriza apagar a resposta pendente. (`app/chamados/juizes.py:1150`, `app/chamados/juizes.py:1171`, `app/docs/LEIS.md:65`) |
-| A07 — validação com resto | Saída e intervalo devidos; validar/materializar somente a saída. | Não perguntar novamente a saída atendida; conservar fio ou ação nomeada para o intervalo residual. (`app/chamados/juizes.py:1173`, `app/docs/CORTES.md:253`) |
-| A08 — validação recusada | Resposta de hora; a materialização recusa sem resolver o fato. | A recusa não pode produzir quitação fictícia. A resposta e o motivo continuam disponíveis ao admin pela porta de devolução. (`app/chamados/services/validacao.py:155`, `app/chamados/services/validacao.py:171`, `app/docs/LEIS.md:65`) |
-| A09 — decisão legítima | Pergunta do mesmo marco já decidida; chamado continua vivo sem pergunta. | Separar a ação administrativa efetivamente disponível da necessidade de perguntar. Não criar irmã só porque C6 devolve morta; excluir do universo indevido somente com dono/ação demonstrados. (`app/docs/PROMPTS.md:1882`, `app/chamados/services/vigia_fio.py:283`, `app/chamados/management/commands/disparar_perguntas_competencia.py:201`) |
-| A10 — reapontar | A perde a última resolvedora para B; o dia continua devido. | Preservar a alcançabilidade do fato e tratar a origem que perdeu o fio; transferência não constitui dívida nova. (`app/docs/CORTES.md:253`, `app/chamados/juizes.py:1344`, `CLAUDE.md:175`) |
-| A11 — costura concorrente | Reapontamento disputa com encerramento do destino. | A intercalação não pode deixar pergunta viva inacessível sob âncora terminal; preservar alcance ou recusar com motivo. (`app/chamados/services/fio.py:743`, `app/chamados/juizes.py:1344`, `CLAUDE.md:175`) |
-| A12 — morte por leitura | Sem alteração do carimbo, uma leitura encontra tranca, marco atendido ou célula regularizada. | Consultar **C6 existente**. Morte da pergunta não significa automaticamente quitação do dia nem autorização para reemitir. (`app/core/juizes.py:266`, `app/chamados/juizes.py:1135`, `app/docs/CORTES.md:253`) |
-| A13 — borda 21→20 | Empresa com corte 21; fatos de 20/10 e 21/10; trancar competência 10. | Competência 10 abrange 21/09–20/10; 21/10 pertence à 11. Ler o corte da empresa e a competência do fato, sem fronteira civil ou 21 universal. (`CLAUDE.md:81`, `app/ponto/janelas.py:10`, `app/ponto/janelas.py:36`) |
-| A14 — cross-meia-noite | Turno 22h–06h ancorado ontem; observar 00h01 e 06h10. | Meia-noite não encerra a jornada. Com margem de 30 minutos, a saída das 06h ainda não venceu às 06h10. (`CLAUDE.md:185`, `app/chamados/services/fabrica_da_celula.py:18`) |
-| A15 — instante exato | Marco 18h, margem vigente de 30 minutos; observar 18h29min59s e 18h30. | Não antecipar a cobrança; comparar o instante encadeado acrescido da margem. (`CLAUDE.md:185`, `app/ponto/services/cartorio.py:845`) |
-| A16 — vínculo trocado | Célula gerada pelo vínculo antigo, dentro da vigência; outro vínculo está ativo hoje. | Vale a geradora do dia. Fora de sua vigência, o problema é CADASTRO; não substituir silenciosamente pelo vínculo atual. (`app/escala/alimentacao.py:231`, `app/escala/alimentacao.py:272`, `app/docs/LEIS.md:122`) |
-| A17 — célula sem ata | Há escala vigente, mas falta ata; tentar perguntar por marco. | Não afirmar marco faltante sem a ata. Nomear a ausência de ata e aguardar a autoridade; não converter desconhecimento em folga. (`app/chamados/services/disputa_emissao.py:818`, `app/chamados/services/disputa_emissao.py:842`, `app/docs/LEIS.md:95`) |
-| A18 — sem escala | Dia passado sem escala e sem marcos comparáveis; existem batidas. | Usar o ramo existente para esse cadastro. Ele não autoriza transformar falha de leitura da ata em fallback. (`app/chamados/services/fabrica_da_celula.py:34`, `app/chamados/services/disputa_emissao.py:833`, `app/docs/LEIS.md:136`) |
-| A19 — parcial administrativa | Ausência parcial sem período, encaminhada à lista administrativa. | Conservar o dia na lista, sem pergunta indevida; retirar essa condição legítima antes do RED. (`app/chamados/services/fabrica_da_celula.py:101`, `app/chamados/services/pergunta_no_app.py:26`, `app/docs/PROMPTS.md:1882`) |
-| A20 — ausência aberta | Ausência aberta cobre o dia; cobrança suspensa. | Preservar a decisão pendente de ausência; não fabricar pergunta para zerar agregado. (`app/chamados/services/silencio_ausencia.py:77`, `app/chamados/services/vigia_fio.py:287`, `app/docs/PROMPTS.md:1882`) |
-| A21 — registro/silêncio | Chamado `registrado` ou com silêncio vigente, sem pergunta. | Existência viva não prova ação devida. Separar essas condições e verificar a premissa antes de classificá-las como defeito. (`app/chamados/services/painel.py:174`, `app/chamados/services/painel.py:186`, `app/docs/PROMPTS.md:1882`) |
-| A22 — viva sem porta | C6 verdadeiro, mas pergunta fora do app ou sob âncora fora da fila. | Não declarar alcance apenas pela vitalidade. Aplicar C17: chamado da célula na fila ou pergunta viva no app com âncora na fila. (`app/chamados/juizes.py:1344`) |
-| A23 — hoje/passado | Marco de hoje ainda não venceu; ou dia antigo sem fato novo. | Não antecipar cobrança/alarmar o ciclo legítimo. Obra nova respeita o horizonte; passado permanece foto até fato novo, sem backfill implícito. (`CLAUDE.md:185`, `app/chamados/services/vigia_fio.py:420`, `app/docs/LEIS.md:145`) |
-| A24 — exportada | Fato novo em competência já exportada. | Preservar TXT anterior e trilha; não aplicar a antiga proibição absoluta de recalcular, alterada pela L-113. Isso não autoriza reparo indiscriminado dos 494. (`app/docs/LEIS.md:149`, `app/docs/LEIS.md:145`) |
-
-“Falta de batida” não deve ser transformada automaticamente em “falta decidida”; nem esta obra autoriza fabricar batida. (`app/docs/LEIS.md:87`, `CLAUDE.md:140`)
-
-## B SITIOS
-
-**Juízes existentes:** morte por leitura está coberta por **C6**, coleção por **C15**, alcance por **C17**, exclusões/causas da fábrica por **C12/C13**. O **C11 registrado é ausência**, distinto do nome operacional “C11=(i)” do aval; não há fundamento para renomeá-lo como juiz de FIO MUDO. (`app/core/juizes.py:117`, `app/core/juizes.py:266`, `app/core/juizes.py:271`, `app/core/juizes.py:272`, `app/core/juizes.py:273`, `app/core/juizes.py:275`, `app/core/juizes.py:277`)
-
-| Sítio/família | Escritor, leitor ou dependência que a obra precisa resolver |
-|---|---|
-| Nascimento comum | `ChamadoColaborador.abrir`: trava colaborador, deduplica, pode renascer e retornar antes do trecho de evento; nascimento real grava evento somente para `MODULOS_DE_TURNO`. (`app/chamados/models.py:863`, `app/chamados/models.py:882`, `app/chamados/models.py:932`, `app/chamados/models.py:938`) |
-| Nascimento irmão | `ChamadoColaborador.criar`: cria e registra nascimento, sem evento explícito nesse corpo. Uma solução restrita a `abrir` precisa declarar essa irmã. (`app/chamados/models.py:1015`, `app/chamados/models.py:1048`) |
-| Três emissores de `batida_ausente` | Detector, grade e reemissão C2 convergem em `abrir`; detector ainda tenta fio depois, grade retorna e C2 reaponta. (`app/ponto/management/commands/detectar_ausencias.py:693`, `app/ponto/management/commands/detectar_ausencias.py:787`, `app/ponto/management/commands/reconciliar_grade.py:507`, `app/ponto/management/commands/reconciliar_grade.py:531`, `app/chamados/reconciliador.py:879`, `app/chamados/reconciliador.py:922`) |
-| Sinal indireto | `post_save` do chamado chama julgamento sob `engolir` e sai durante `em_julgamento`; não constitui entrega garantida da pergunta. (`app/chamados/signals.py:165`, `app/chamados/signals.py:172`, `app/chamados/signals.py:174`, `app/chamados/signals.py:180`) |
-| Estado do chamado | `_gravar_estado` escreve `status_local`, `resolvido_em`, `via_encerramento` e campos associados; terminal tem guarda de perguntas vivas. Reabertura e fechamento devem continuar usando essa porta. (`app/chamados/models.py:195`, `app/chamados/models.py:215`, `app/chamados/models.py:222`, `app/chamados/models.py:274`) |
-| Reabrir | `reabrir` grava vivo e ressuscita existentes; universo exige candidatas históricas e pode resultar em zero. Não cria pergunta inexistente. (`app/chamados/models.py:1312`, `app/chamados/models.py:1382`, `app/chamados/models.py:1391`, `app/chamados/models.py:1423`, `app/chamados/models.py:1482`) |
-| Duplicata | `canonica_do_grupo` prioriza resposta; `retratar_duplicata` chama a porta de identidade e termina sem reconciliar o chamado que perdeu a pergunta. (`app/chamados/services/fio.py:867`, `app/chamados/services/fio.py:878`, `app/chamados/services/fio.py:891`) |
-| Validação | `_carimbar_validacao` escreve assinatura; `devolver_validacao_recusada` desfaz assinatura preservando resposta. Validação e tentativa individual de plantio estão em `atomic`; materialização da disputa inteira ocorre depois. (`app/chamados/services/validacao.py:127`, `app/chamados/services/validacao.py:155`, `app/chamados/services/validacao.py:395`, `app/chamados/services/validacao.py:430`) |
-| Outros escritores da assinatura | Resposta nova desfaz validação; correção em lote também limpa; ressuscitação passa por `descarimbar_em_lote`; `carimbar(resposta='validar')` pode preencher assinatura. Não basta instrumentar `validar_pergunta`. (`app/chamados/services/disputa_emissao.py:1295`, `app/chamados/services/disputa_emissao.py:1393`, `app/chamados/models.py:1493`, `app/chamados/models.py:2580`) |
-| Carimbo da pergunta | `_escrever_carimbo`, `carimbar`, `carimbar_identidade`, `descarimbar` e `descarimbar_em_lote` controlam materialização/via; `encerrar_por_fato_no_espelho` troca via isoladamente; `relavrar` também troca via pela porta própria. (`app/chamados/models.py:2545`, `app/chamados/models.py:2551`, `app/chamados/models.py:2614`, `app/chamados/models.py:2635`, `app/chamados/models.py:2644`, `app/chamados/models.py:2655`, `app/chamados/services/relavra_via.py:104`) |
-| Reapontar | `reapontar_resolvedora` escreve destino/data e lavra no mesmo ato; valida o dia e trava o destino. O corpo não trata a origem que perdeu a última resolvedora. (`app/chamados/services/fio.py:784`, `app/chamados/services/fio.py:837`, `app/chamados/services/fio.py:845`) |
-| Reapontamento irmão | `PerguntaDisputa.abrir` também altera destino/célula da identidade histórica. Um gatilho apenas em `reapontar_resolvedora` deixa esse caminho descoberto. (`app/chamados/models.py:2420`, `app/chamados/models.py:2424`, `app/chamados/models.py:2427`, `app/chamados/models.py:2463`) |
-| Morte por leitura | C6 lê assinatura, tranca, resposta, identidade, marco, célula e janela; a porta é memoizada por instância. C6 não deve ser confundido com carimbo ou com alcance. (`app/chamados/juizes.py:822`, `app/chamados/juizes.py:1135`, `app/chamados/juizes.py:1171`, `app/chamados/juizes.py:1197`) |
-| Lavra/relógio | `lavrar` e persistência em lote controlam `veredito_lavrado`, `julgado_em`, `janela_expira_em`; `esta_stale` lê expiração e marcos. O módulo declara mudança por relógio sem escrita. (`app/chamados/veredito_lavrado.py:23`, `app/chamados/veredito_lavrado.py:173`, `app/chamados/veredito_lavrado.py:197`, `app/chamados/veredito_lavrado.py:211`) |
-| Lâmpada e outbox | `salvar_e_emitir` junta célula e evento em transação; `ata`/`veredito` acordam o consumidor; `emitir_evento_celula` é o escritor do evento. (`app/ponto/portas/celula.py:661`, `app/ponto/portas/celula.py:664`, `app/ponto/portas/celula.py:672`) |
-| Consumidor existente | Consome eventos, retrata chamados absolvidos e encerra órfãs; falha mantém pendente, teto pode adiar, sucesso marca processado. Não chama a fábrica nesse corpo. (`app/chamados/reconciliador.py:1283`, `app/chamados/reconciliador.py:1326`, `app/chamados/reconciliador.py:1329`, `app/chamados/reconciliador.py:1339`, `app/chamados/reconciliador.py:1346`) |
-| Fonte da pergunta | `motivos_a_perguntar` seleciona pela lâmpada e exclui identidades históricas; `perguntar` usa as portas existentes; `perguntar_pela_celula` orquestra. Não abrir segundo escritor em detector, sinal ou cron. (`app/chamados/services/fabrica_da_celula.py:74`, `app/chamados/services/fabrica_da_celula.py:118`, `app/chamados/services/fabrica_da_celula.py:129`, `app/chamados/services/fabrica_da_celula.py:145`, `CLAUDE.md:175`) |
-| Julgamento | Cartório chama fábrica somente para células julgadas naquela passada; `julgar_celula` também pode retornar por célula ausente ou turno de hoje ainda em curso. (`app/ponto/services/cartorio.py:982`, `app/ponto/services/cartorio.py:995`, `app/ponto/services/cartorio.py:1976`, `app/ponto/services/cartorio.py:1982`) |
-| Vivos legítimos | C12/C13 nomeiam retenções; `dono_fora_do_fio` lê decisão disponível, ausência aberta e lista administrativa. Exclusão exige a fonte responder; falha da lista não absolve o dia. (`app/core/juizes.py:272`, `app/core/juizes.py:273`, `app/chamados/services/vigia_fio.py:195`, `app/chamados/services/vigia_fio.py:274`) |
-| Cron e instrumento | Ramo FIO MUDO ainda escreve; execução configurada usa `--apply`; `--alarme` já oferece caminho sem escrita. Exceção e registro de varredura só saem com a condição documentada satisfeita. (`app/chamados/management/commands/disparar_perguntas_competencia.py:251`, `app/chamados/management/commands/disparar_perguntas_competencia.py:280`, `app/config/crons.py:1495`, `app/config/crons.py:2007`, `bin/tests/test_papel_prazo_nao_deriva.sh:303`, `app/docs/CORTES.md:305`) |
-
-Os acionadores irmãos incluem dedup por comando, migração de resolvedoras, declaração textual, limbo, reata do beco e validação por foto/API, ações de disputa e comando de classe A. (`app/chamados/management/commands/dedup_perguntas_fato.py:88`, `app/chamados/services/fio.py:943`, `app/chamados/services/fio.py:947`, `app/chamados/services/declaracao_texto.py:320`, `app/chamados/services/limbo_folgas.py:243`, `app/chamados/services/limbo_folgas.py:276`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:122`, `app/api/foto_recebida.py:51`, `app/chamados/services/acoes_disputa.py:375`, `app/chamados/management/commands/validar_classe_a.py:100`)
-
-Os leitores que devem permanecer coerentes com esses campos e portas são:
-
-| Leitores | Referências |
-|---|---|
-| App, resposta web/API, propriedades `estado/viva`, relatórios, aviso de pendência, calendário e detalhe do dia | `app/chamados/services/pergunta_no_app.py:53`; `app/chamados/views.py:1238`; `app/api/views.py:2627`; `app/chamados/models.py:2491`; `app/chamados/models.py:2762`; `app/chamados/relatorios_disputa.py:18`; `app/chamados/services/aviso_pendencia.py:13`; `app/colaboradores/services/calendario.py:468`; `app/ponto/services/dia_do_colab.py:70` |
-| Fechamento da disputa, dedup de emissão, limbo, prévia, grade, supra e emissão retroativa | `app/chamados/models.py:1783`; `app/chamados/services/disputa_emissao.py:1244`; `app/chamados/services/limbo_folgas.py:201`; `app/folha/previa.py:144`; `app/ponto/management/commands/reconciliar_grade.py:460`; `app/ponto/management/commands/supra_juiz.py:215`; `app/ponto/management/commands/emitir_furo_retroativo.py:98` |
-| Fio administrativo, guarda de encerramento, carimbo, desfazimento de carimbo e vigias | `app/chamados/services/fio.py:234`; `app/chamados/models.py:351`; `app/chamados/models.py:2585`; `app/chamados/services/relavra_via.py:227`; `app/chamados/services/vigia_fio.py:417`; `app/chamados/services/vigia_fio.py:813` |
-| Alcance, folha e lista administrativa | `app/chamados/juizes.py:1341`; `app/folha/fora_da_folha.py:67`; `app/chamados/services/vigia_fio.py:635`; `app/escala/services/cadastro_realidade.py:421` |
-| Contador textual raspado pelo placar | `app/chamados/management/commands/disparar_perguntas_competencia.py:235`; `bin/placar_code.sh:381` |
-
-A exaustividade de chamadas dinâmicas e o alcance individual nos 494 permanecem **[não verificado]**. O censo de escritores deve fechar antes de um filtro novo; transferir chamadores sem aposentar autoridade abandonada também não encerra a obrigação. (`CLAUDE.md:193`, `app/docs/LEIS.md:137`)
-
-## C DIFF PROPOSTO EM TEXTO
-
-**Não fecho um diff integral que realize o contrato.** A morte por leitura já tem juiz — C6 —, portanto não há motivo demonstrado para “PAREI por juiz novo”; falta fechar a cobertura dos produtores, das identidades históricas e da perda de alcance. A seção C solicitada fica **incompleta**, sem alegação de solução pronta. (`app/core/juizes.py:266`, `app/docs/PROMPTS.md:1882`, `app/chamados/models.py:2427`, `app/chamados/veredito_lavrado.py:23`)
-
-Este é o menor candidato local para incluir o **nascimento real** de `batida_ausente` no evento existente. Ele fica **REPROVADO como diff da obra**, pelos contraexemplos da seção D; não deve ser confundido com implementação dos seis gatilhos. (`app/chamados/models.py:932`, `app/chamados/models.py:939`, `app/docs/PROMPTS.md:1875`)
-
-```diff
---- a/app/chamados/models.py
-+++ b/app/chamados/models.py
-@@ -938,4 +938,4 @@
-                 from chamados.reconciliador import MODULOS_DE_TURNO as _MT
--                if (_mo or '') in _MT and ch.celula_id is not None:
-+                if ((_mo or '') in _MT or _mo == 'batida_ausente') and ch.celula_id is not None:
-                     from ponto.portas.celula import emitir_evento_celula
-                     emitir_evento_celula(ch.celula)
-```
-
-O candidato conserva a porta escritora de evento e sua transação existente. Ele **não entrega a pergunta**: o consumidor atual retrata/encerra, sem chamar a fábrica. Acrescentar uma chamada à fábrica também não demonstra cobertura das perdas históricas. (`app/chamados/models.py:863`, `app/ponto/portas/celula.py:664`, `app/chamados/reconciliador.py:1326`, `app/chamados/reconciliador.py:1329`, `app/
-
-[truncado em 20000 de 25078 caracteres]
-
-## 05/11 18:28 · sessao bf8af0890a16 · C20-O169 · verificador · origem=Code
-
-1. **Fechado.** A L-125 e o ADR agora ressalvam que `dia_sem_trabalho` prevalece sobre a falta de insumos, exatamente como o leitor executa: consulta o juiz antes de validar `orfas` e `lampadas` (`app/docs/LEIS.md:146`; `app/docs/PLANO-PADROES.md:74`; `app/ponto/services/cluster_espurio.py:25-30`).
-
-2. **A descrição nova corresponde à ordem implementada nos cinco casos**, considerando os chamados vivos selecionados pelo coletor e com dia identificado pelo juiz (`app/ponto/services/cluster_espurio.py:66-74`; `app/docs/LEIS.md:146`; `app/docs/PLANO-PADROES.md:74`).
-
-   | Caso | Ordem e resultado no código |
-   |---|---|
-   | **Célula ausente** | O coletor **não chama o leitor**: atribui `None`, preserva esse valor como fato e o catálogo conserva a premissa; não entra em `a_fechar` (`app/ponto/services/cluster_espurio.py:74-77`; `app/chamados/catalogo/premissa.py:127-130,144-150`). |
-   | **Ata sem insumos, dia de trabalho** | O juiz retorna falso; depois, a falta de `orfas` ou `lampadas` como listas produz `None`. O coletor conserva a premissa (`app/chamados/juizes.py:422-428`; `app/ponto/services/cluster_espurio.py:25-30,74-77`; `app/chamados/catalogo/premissa.py:127-130`). |
-   | **Ata sem insumos, dia sem trabalho** | O juiz retorna verdadeiro e o leitor devolve `()` **antes da validação dos insumos**. O coletor transforma isso em `False`; a premissa morre e o chamado entra em `a_fechar`. Isso inclui `trabalha=False, ata={}` (`app/chamados/juizes.py:422-428`; `app/ponto/services/cluster_espurio.py:25-30,74-77`; `app/chamados/catalogo/premissa.py:132-134,144-150`). |
-   | **Ata medida sem cluster** | Se o juiz não declarar dia sem trabalho, o leitor valida as listas e avalia a assinatura; sem ela, retorna `()`. Se declarar, retorna `()` antes. Nos dois caminhos, fica elegível ao fechamento (`app/ponto/services/cluster_espurio.py:25-37,74-77`). |
-   | **Ata com cluster** | **Se o juiz não declarar dia sem trabalho**, a assinatura produz `(orfas, n_missing)`, convertida em `True`, conservando a premissa. **Se declarar**, prevalece o retorno antecipado `()`, mesmo havendo insumos com assinatura (`app/ponto/services/cluster_espurio.py:25-36,74-77`; `app/chamados/catalogo/premissa.py:132-134`). |
-
-   “Elegível” está correto: o fechamento efetivo ainda depende do recorte de colaborador/escala e das guardas de reconciliação (`app/ponto/services/cluster_espurio.py:117-125`; `app/chamados/models.py:637-655`).
-
-3. **Não identifiquei outra divergência de comportamento entre esses textos e o coletor.** Ele consulta as datas dos próprios chamados, sem janela de idade, e distingue `None`, ausência e assinatura, compatível com a reconciliação descrita (`app/docs/LEIS.md:146`; `app/docs/PLANO-PADROES.md:74-75`; `app/ponto/services/cluster_espurio.py:66-77`).
-
-   Permanecem duas ressalvas documentais:
-
-   - “Fechamento por idade com outro nome” é uma **analogia**, não uma condição executada: converter `None` em `False` também atingiria dias recentes sem medida (`app/docs/PLANO-PADROES.md:76`; `app/ponto/services/cluster_espurio.py:74-77`; `app/chamados/catalogo/premissa.py:127-134`).
-   - A frase “entra aqui no commit que mexe no código” continua na L-125; cumprimento histórico dessa exigência: **[nao verificado]** (`app/docs/LEIS.md:146`; exigência em `app/docs/BACKLOG.md:421-423`).
-
-   O teste específico `trabalha=False, ata={}` continua declarado como fila; o caso existente usa listas preenchidas como vazias, portanto não prova essa precedência específica (`app/docs/LEIS.md:146`; `app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:108-111`).
-
-**APROVA — bloqueantes desta volta: nenhum; a generalização apontada na volta 2 foi corrigida nos dois textos (`app/docs/LEIS.md:146`; `app/docs/PLANO-PADROES.md:74`; `app/ponto/services/cluster_espurio.py:25-30`).**
-
-## 05/11 18:28 · sessao f24449a2fddb · PCCMP-PEP · censo · origem=Code
-
-HASH LIDO = 9c0fd9d3e90f166cba697ec840422b5585a8ab09
-
-**1 COINCIDE**
-
-As duas adotam a candidata 1: transação e releitura travada dentro de `carimbar`, seguida de C6, com conferência do memo e medição das travas antes do verde. Esse aval está registrado em `app/docs/PROMPTS.md:1882`.
-
-**Casos comuns**
-
-| pc1 ↔ pc2 | Item coincidente | Conferência na cópia |
-|---|---|---|
-| A1 ↔ A5 | Pergunta viva deve recusar carimbo automático. | O candidato passa por C6; resultado vivo desfaz o candidato e retorna `False`. `app/chamados/models.py:2585`; `app/chamados/models.py:2589`. |
-| A2 ↔ A6 | Resolver o marco perguntado não exige resolver todos os demais marcos. | A precedência do marco perguntado está explícita em `app/chamados/juizes.py:1173`; condição em `app/chamados/juizes.py:1177`. |
-| A3/A4 ↔ A14 | Resposta concordante pode encerrar; discordante ou incomparável permanece para decisão. | Critério em `app/chamados/juizes.py:1090`; incomparabilidade em `app/chamados/juizes.py:1096`; consumo em `app/chamados/juizes.py:1162`. |
-| A5 ↔ A1 | Intenção antiga não deve substituir decisão humana posterior. | O inverso documenta essa corrida e relê a linha travada. `app/chamados/services/relavra_via.py:214`; `app/chamados/services/relavra_via.py:221`. |
-| A6/A7 ↔ A2/A3 | Resposta nova não herda a assinatura da anterior, nas duas ordens de intercalação. | O escritor limpa a validação conforme a instância recebida e salva campos selecionados. `app/chamados/services/disputa_emissao.py:1286`; `app/chamados/services/disputa_emissao.py:1295`; `app/chamados/services/disputa_emissao.py:1301`. |
-| A8 ↔ A4 | Repetição deve preservar estado e trilha. | Regra em `CLAUDE.md:175`; renovação atual do instante em `app/chamados/models.py:2570`; guarda administrativa em `app/chamados/models.py:2502`. |
-| A9 ↔ A7 | Corte 21→20 e competência pertencente ao fato. | Cálculo em `app/ponto/janelas.py:10`; passagem à competência seguinte em `app/ponto/janelas.py:27`; corte cadastrado em `app/ponto/janelas.py:60`. |
-| A10 ↔ A8 | Meia-noite integra a jornada iniciada anteriormente. | Encadeamento dos marcos em `app/escala/servico_jornada.py:80`; avanço para D+1 em `app/escala/servico_jornada.py:82`. |
-| A11 ↔ A9 | Provisório sem prova não absolve; chegada da batida permite reconhecer o marco. | Corte em `app/docs/CORTES.md:413`; tratamento em `app/chamados/juizes.py:1190`; condição em `app/chamados/juizes.py:1195`. |
-| A12 ↔ A10 | Respeitar a geradora histórica, com a diferença de fronteira indicada na seção 2. | Autoridade da geradora em `app/escala/alimentacao.py:231`; limite de vigência em `app/escala/alimentacao.py:272`. |
-| A15 ↔ A13 | Ausência parcial cobra o restante descoberto. | Predicado em `app/chamados/juizes.py:403`; implementação em `app/chamados/juizes.py:410`; regra em `app/docs/JUIZES.md:58`. |
-| A17 ↔ A16 | Falha do julgamento, lavra ou salvamento deve restaurar a memória local. | Restaurações em `app/chamados/models.py:2586` e `app/chamados/models.py:2599`; testes em `app/chamados/tests/test_o261e_f2_fila.py:179`, `app/chamados/tests/test_o261e_f2_fila.py:190` e `app/chamados/tests/test_o261e_f2_fila.py:200`. |
-| A18 ↔ parte de A17 | Antiguidade não substitui fato resolutivo. | Corte específico em `app/docs/PROMPTS.md:1317`. |
-
-**Sítios e escritores comuns**
-
-| Item presente nas duas | Sítios conferidos |
-|---|---|
-| Fonte da alteração e julgamento existente | `carimbar`, atribuição da tripla, C6 e salvamento: `app/chamados/models.py:2551`; `app/chamados/models.py:2545`; `app/chamados/models.py:2585`; `app/chamados/models.py:2598`. |
-| Autoridades C6/C7/C15/C17/C18 e competência | `app/core/juizes.py:266`; `app/core/juizes.py:267`; `app/core/juizes.py:275`; `app/core/juizes.py:277`; `app/core/juizes.py:278`; `app/core/juizes.py:283`. |
-| Vínculo histórico e marcos após meia-noite | Registro do vínculo em `app/core/juizes.py:1285`; endereço dos marcos em `app/docs/JUIZES.md:24`. |
-| Tripla atribuída por carimbo, identidade, restauração e descarimbo; limpeza em lote | `app/chamados/models.py:2575`; `app/chamados/models.py:2626`; `app/chamados/models.py:2608`; `app/chamados/models.py:2637`; `app/chamados/models.py:2652`. |
-| Escritores adicionais da via isolada | `app/chamados/models.py:2662`; `app/chamados/services/relavra_via.py:123`. |
-| Escritores de resposta e instante de resposta | `app/chamados/services/disputa_emissao.py:1282`; `app/chamados/services/disputa_emissao.py:1428`; `app/chamados/services/disputa_emissao.py:1445`; limpeza em `app/chamados/services/disputa_emissao.py:1393`. |
-| Validação também escrita fora da porta de validação | `app/chamados/models.py:2581`; `app/chamados/services/validacao.py:131`; `app/chamados/services/disputa_emissao.py:1295`; `app/chamados/models.py:1493`. |
-| Lavra, restauração e persistência em lote | `app/chamados/veredito_lavrado.py:211`; `app/chamados/veredito_lavrado.py:240`; `app/chamados/veredito_lavrado.py:197`. |
-| Memo produzido por C6, reutilizado por chave e removido no desfazimento | `app/chamados/juizes.py:847`; `app/chamados/juizes.py:837`; `app/chamados/models.py:2612`; `app/chamados/models.py:2638`. |
-
-Os **oito pontos diretos** enumerados coincidem:
-
-| Chamador | Sítio |
-|---|---|
-| `encerrar_fantasma` | `app/chamados/models.py:2674` |
-| `lavrar_sem_turno_aberto` | `app/chamados/reconciliador.py:405` |
-| `retratar_perguntas_absolvidas_por_celula` | `app/chamados/reconciliador.py:620` |
-| Resolução por chamado, dois ramos | `app/chamados/services/disputa_emissao.py:1603`; `app/chamados/services/disputa_emissao.py:1675` |
-| Absorção por ausência | `app/chamados/services/materializacao.py:546` |
-| `_materializar_uma` | `app/chamados/services/materializacao.py:1199` |
-| `materializar_pendentes_aprovadas` | `app/chamados/services/materializacao.py:1346` |
-
-Também coincidem os seguintes grupos de leitores; referências diferentes dentro da mesma função não foram consideradas omissões, como definição e retorno de `perguntas_do_app`. `app/chamados/services/pergunta_no_app.py:42`; `app/chamados/services/pergunta_no_app.py:53`.
-
-| Grupo comum | Sítios conferidos |
-|---|---|
-| Estado, seleção, vitalidade, lastro e raio-X | `app/chamados/models.py:2481`; `app/chamados/models.py:2713`; `app/chamados/juizes.py:632`; `app/chamados/services/raiox.py:133`. |
-| Reconciliação, materialização, validação e fábrica | `app/chamados/reconciliador.py:583`; `app/chamados/services/materializacao.py:433`; `app/chamados/services/materializacao.py:529`; `app/chamados/services/materializacao.py:1293`; `app/chamados/services/validacao.py:363`; `app/chamados/services/fabrica_da_celula.py:119`. |
-| Fio, ações, declaração, avisos e becos | `app/chamados/services/fio.py:336`; `app/chamados/services/fio.py:656`; `app/chamados/services/acoes_disputa.py:130`; `app/chamados/services/acoes_disputa.py:341`; `app/chamados/services/declaracao_texto.py:211`; `app/chamados/services/declaracao_texto.py:366`; `app/chamados/services/aviso_pendencia.py:13`; `app/chamados/services/becos.py:30`. |
-| Histórico, painel, verbos, explicação, canal e relatório | `app/chamados/services/historico.py:99`; `app/chamados/services/painel.py:67`; `app/chamados/services/verbos.py:240`; `app/chamados/services/verbos.py:311`; `app/chamados/services/explicador.py:79`; `app/chamados/canal.py:65`; `app/chamados/relatorios_disputa.py:21`. |
-| App, API, mensageria e telas | `app/chamados/views.py:1257`; `app/chamados/views_cobrar.py:169`; `app/api/views.py:1173`; `app/api/views.py:2580`; `app/api/views.py:2636`; `app/api/views_mensageria.py:567`. |
-| Calendário, ficha, folha, dia, cartório e procedência | `app/colaboradores/services/calendario.py:474`; `app/colaboradores/services/ficha.py:171`; `app/folha/previa.py:142`; `app/ponto/services/dia_do_colab.py:69`; `app/ponto/services/cartorio.py:1590`; `app/ponto/services/cartorio.py:1599`; `app/ponto/services/procedencia_batida.py:72`. |
-| Vigias, supra e passivo | `app/chamados/services/vigia_fio.py:675`; `app/chamados/services/vigia_carimbo.py:98`; `app/chamados/services/furo_sem_canal.py:81`; `app/ponto/supra_juiz.py:545`; `app/chamados/services/passivo_validado.py:64`; `app/chamados/services/passivo_validado.py:140`. |
-| Comandos e auditoria | `app/chamados/management/commands/curar_perguntas_em_limbo.py:46`; `app/chamados/management/commands/dedup_perguntas_fato.py:71`; `app/chamados/management/commands/encerrar_perguntas_com_fato.py:33`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:67`; `app/chamados/management/commands/relavrar_via_i6.py:58`; `app/ponto/management/commands/reconciliar_fantasmas.py:212`; `app/chamados/management/commands/auditar_invariantes_chamados.py:538`; `app/chamados/management/commands/auditar_invariantes_chamados.py:905`; `app/chamados/management/commands/auditar_invariantes_chamados.py:955`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1073`. |
-| Templates, eventos e selos | `app/templates/chamados/partials/_card_atendimento.html:94`; `app/templates/chamados/partials/_card_atendimento.html:186`; `app/templates/chamados/partials/_card_atendimento.html:384`; `app/templates/chamados/partials/_pergunta_card.html:20`; `app/templates/chamados/partials/modal_fio.html:212`; `app/chamados/signals.py:75`; `app/chamados/signals.py:125`; `app/chamados/signals.py:202`; `app/chamados/tests/test_o261e_f2_porta_carimbo.py:374`. |
-
-**Trechos comuns dos diffs**
-
-- Ambos propõem `refresh_from_db(from_queryset=...)` com `select_for_update(of=('self', 'disputa')).select_related('disputa', 'celula')`. O padrão existente está em `app/chamados/services/relavra_via.py:221`; o corpo atual de `carimbar` começa a mutação sem essa releitura em `app/chamados/models.py:2572`.
-- Ambos fotografam o mesmo conjunto de 13 campos, rejeitam mudança desde a coleta e executam `self.__dict__.pop('_pv_memo', None)` antes do candidato. A chave atual e sua reutilização estão em `app/chamados/juizes.py:811` e `app/chamados/juizes.py:837`; ata e DNA são lidos em `app/chamados/juizes.py:1105` e `app/chamados/juizes.py:1111`.
-- Ambos conservam `_escrever_carimbo`, C6 e a autoridade da lavra, sem apresentar outro escritor persistente nesses trechos. `app/chamados/models.py:2545`; `app/chamados/models.py:2585`; `app/chamados/veredito_lavrado.py:211`.
-
-**Contraexemplos comuns**
-
-| pc1 ↔ pc2 | Lacuna comum conferida |
-|---|---|
-| D1 ↔ D1 | Resposta posterior pode usar `update_fields` formado antes da validação concorrente. `app/chamados/services/disputa_emissao.py:1285`; `app/chamados/services/disputa_emissao.py:1297`; `app/chamados/services/disputa_emissao.py:1301`. |
-| D2 ↔ D2 | Validação busca e examina a pergunta antes do `atomic`, sem releitura travada naquele caminho. `app/chamados/services/validacao.py:359`; `app/chamados/services/validacao.py:374`; `app/chamados/services/validacao.py:395`; `app/chamados/services/validacao.py:396`. |
-| D3 ↔ D6/D8 | A trava proposta não inclui todos os insumos de C6; copiar o `of` não mede ordem global. `app/chamados/services/relavra_via.py:221`; `app/chamados/juizes.py:1178`; `app/chamados/juizes.py:1201`; `app/docs/PROMPTS.md:1882`. |
-| D4 ↔ D10 | Rollback da transação externa após retorno positivo ultrapassa a restauração local da porta. `app/chamados/services/materializacao.py:1142`; `app/chamados/services/materializacao.py:1199`; `app/chamados/models.py:2603`. |
-| D5 ↔ D5 | A guarda de obsolescência não impede repetir uma linha já recarregada e renovar seu instante. `app/chamados/models.py:2570`; `app/chamados/models.py:2598`; contraste em `app/chamados/models.py:2502`. |
-| D6 ↔ D7 | Limpar o memo nessa chamada não corrige sua chave para os demais leitores. `app/chamados/juizes.py:811`; `app/chamados/juizes.py:837`. |
-| D7 ↔ D3 | Ata vazia recebe tratamentos diferentes no juiz de furo e em C6. `app/chamados/juizes.py:477`; `app/chamados/juizes.py:1195`. |
-| D8 ↔ D4 | Tranca pode mudar entre o filtro do consumidor e a porta; C6 morto pela tranca não prova resolução. `app/chamados/reconciliador.py:616`; `app/chamados/services/disputa_emissao.py:1589`; `app/chamados/juizes.py:1140`. |
-| D9 ↔ fecho de D | A prova precisa observar consumidores da escrita e `on_commit`. `app/chamados/services/disputa_emissao.py:1680`; `app/ponto/services/procedencia_batida.py:72`; `app/chamados/services/passivo_validado.py:140`; `app/chamados/signals.py:202`. |
-
-**2 DIVERGE**
-
-| Divergência | O que pc1 diz | O que pc2 diz | O que a cópia mostra e classificação |
-|---|---|---|---|
-| Ato obsoleto | C acrescenta `return False` após comparar a fotografia. Sítio alterado: `app/chamados/models.py:2570`. | C acrescenta `raise ValueError(...)` na mesma condição. Sítio alterado: `app/chamados/models.py:2570`. | Hoje a recusa booleana corresponde a C6 viva. Ausência registra essa interpretação; materialização transforma-a em reprovação. **DESENHO: protocolo de conflito e tratamento pelos consumidores.** `app/chamados/models.py:2589`; `app/chamados/services/materializacao.py:546`; `app/chamados/services/materializacao.py:549`; `app/chamados/services/materializacao.py:1201`; `app/chamados/services/materializacao.py:1207`. |
-| Identidade preexistente | C não acrescenta guarda para identidade já presente quando a fotografia continua igual. O candidato continua no escritor atual. `app/chamados/models.py:2575`. | C acrescenta `False` se a linha já estiver materializada por identidade. Referência invocada: `app/chamados/services/relavra_via.py:161`. | A porta atual rejeita identidade na **via recebida**, mas não testa a identidade anterior antes de sobrescrevê-la. **DESENHO: quais estados o escritor pode substituir.** `app/chamados/models.py:2566`; `app/chamados/models.py:2575`; `app/chamados/models.py:2615`. |
-| Limite da restauração transacional | C usa `@transaction.atomic`, preservando os tratamentos internos atuais. `app/chamados/models.py:2584`; `app/chamados/models.py:2594`. | C põe `with transaction.atomic()` dentro de `try`, incluindo a saída da transação local no tratamento. Autoridade de restauração: `app/chamados/veredito_lavrado.py:240`. | Os tratamentos atuais cobrem exceções de C6 e de lavra/save; terminam antes do retorno. **DESENHO: alcance da restauração.** Nenhuma proposta cobre automaticamente rollback futuro do consumidor. `app/chamados/models.py:2586`; `app/chamados/models.py:2599`; `app/chamados/models.py:2603`; `app/chamados/services/materializacao.py:1142`. |
-| Ata vazia contraditória | A14 deixa o resultado exato de `trabalha=True`, veredito não acusador e `ata={}` como `[nao verificado]`. Referências: `app/docs/LEIS.md:95`; `app/docs/LEIS.md:136`; `app/docs/CORTES.md:416`. | A11 exige desconhecimento e rejeita encerramento. Referências: `app/docs/LEIS.md:95`; `app/chamados/juizes.py:473`; `app/docs/LEIS.md:136`. | `_celula_furada` retorna `None` sem lâmpadas; C6 pode retornar `False` pelo veredito não acusador e pela ausência de pendências. **DESENHO: resultado exigido e autoridade aplicável.** O código atual não resolve a divergência normativa. `app/chamados/juizes.py:477`; `app/chamados/juizes.py:1195`; `app/ponto/services/lastro.py:148`; `app/docs/LEIS.md:136`. |
-| Limite da geradora histórica | A12 manda respeitar geradora e DNA, sem explicitar geradora fora da vigência do fato. `app/docs/JUIZES.md:98`; `app/escala/alimentacao.py:231`. | A10 acrescenta geradora fora da vigência → desconhecimento/CADASTRO. `app/escala/alimentacao.py:272`. | A função devolve `None` fora da vigência, sem escolher silenciosamente outro vínculo. **DESENHO por omissão de fronteira**; os textos são compatíveis dentro da vigência. `app/escala/alimentacao.py:279`; `app/escala/alimentacao.py:282`. |
-| Contrato documental da memória | C atualiza a descrição para desfazer sobre a linha relida. Sítio: `app/chamados/models.py:2606`. | C mantém a descrição atual, embora também releia a instância. Sítio: `app/chamados/models.py:2606`. | O texto atual promete voltar “EXATAMENTE como chegou”. **Detalhe documental com efeito sobre o contrato descrito.** `app/chamados/models.py:2606`; `app/chamados/models.py:2607`. |
-| Organização e ordem dos campos | A3/A4 separados; A8 reúne concorrência e repetição; C ordena os 13 campos de uma forma. `app/chamados/juizes.py:1090`; `CLAUDE.md:175`. | A14 agrupa concordância/discordância; A4 enfatiza repetição; C reordena os mesmos campos. `app/chamados/juizes.py:1090`; `CLAUDE.md:175`. | **Detalhe:** não muda o juiz nem o conjunto comparado; os campos centrais continuam em `app/chamados/models.py:2572`, `app/chamados/models.py:2576` e `app/chamados/models.py:2580`. |
-
-As diferenças do censo na seção 3 são divergências de **universo da prova por omissão**, sem demonstrarem comportamentos incompatíveis dos consumidores. A conferência de data é particularmente relevante: altera a liberação da materialização e não aparece nos campos comparados de nenhum dos dois diffs. `app/chamados/services/validacao.py:617`; `app/chamados/services/materializacao.py:1116`.
-
-**3 SO NUMA**
-
-**Só pc1 — casos e sítios adicionais**
-
-| Item | Conferência |
-|---|---|
-| A13: variante explícita `trabalha=None` versus `False` | Corte em `app/docs/CORTES.md:416`; predicado em `app/chamados/juizes.py:418`. |
-| A16: continente encerrado não equivale à decisão humana do dia | Corte em `app/docs/CORTES.md:342`; C6 procura a decisão na célula em `app/chamados/juizes.py:1148`. |
-| Instrumentos fora de `app` | `bin/censo_folha.py:28`; `bin/censo_folha.py:29`; `bin/sombra_regras_pessoais.py:85`. |
-| Cobrança e flip | `app/chamados/services/cobranca.py:229`; `app/ponto/services/flip_auto.py:129`. |
-| Comandos adicionais | `app/ponto/management/commands/reconciliar_grade.py:461`; `app/chamados/management/commands/validar_classe_a.py:80`; `app/chamados/management/commands/auditar_disputas.py:71`; `app/chamados/management/commands/auditar_disputas.py:150`. |
-| Preparação dos campos da lavra no backfill | `app/chamados/management/commands/backfill_veredito_lavrado.py:138`; `app/chamados/management/commands/backfill_veredito_lavrado.py:139`; `app/chamados/management/commands/backfill_veredito_lavrado.py:140`. |
-| Seletores e consumidores adicionais em arquivos comuns | `app/chamados/reconciliador.py:1017`; `app/chamados/reconciliador.py:1433`; `app/chamados/services/materializacao.py:604`; `app/chamados/services/disputa_emissao.py:909`; `app/chamados/services/disputa_emissao.py:1152`; `app/chamados/services/fabrica_da_celula.py:138`; `app/chamados/services/acoes_disputa.py:95`; `app/chamados/services/declaracao_texto.py:635`; `app/chamados/services/painel.py:260`; `app/chamados/services/explicador.py:32`; `app/chamados/services/explicador.py:95`. |
-| Propriedade e redução adicionais | `app/chamados/models.py:2807`; `app/chamados/juizes.py:1225`; `app/chamados/juizes.py:1257`. |
-| App/API/foto adicionais | `app/chamados/views.py:1280`; `app/chamados/views.py:1416`; `app/chamados/views_cobrar.py:176`; `app/api/views.py:1009`; `app/api/views.py:1187`; `app/api/foto_recebida.py:48`. |
-| Templates adicionais | `app/templates/chamados/partials/modal_fio.html:184`; `app/templates/chamados/partials/modal_fio.html:223`; `app/templates/chamados/partials/_card_atendimento.html:100`; `app/templates/chamados/partials/_card_atendimento.html:137`; `app/templates/chamados/partials/_card_atendimento.html:155`; `app/templates/chamados/partials/_pergunta_card.html:42`. |
-| I20: resposta preenchida sem instante de resposta | O sítio existe, mas recebeu rótulo inadequado no anexo, conforme seção 4. `app/chamados/management/commands/auditar_invariantes_chamados.py:1102`. |
-
-**Só pc2 — casos, guardas e sítios adicionais**
-
-| Item | Conferência |
-|---|---|
-| A15: identidade com resposta ainda pendente | A resposta pode preceder a identidade em C6. `app/chamados/models.py:2617`; `app/chamados/juizes.py:1150`; `app/chamados/juizes.py:1171`. |
-| A10: geradora fora da vigência do fato | Fronteira explícita em `app/escala/alimentacao.py:272`; retorno em `app/escala/alimentacao.py:282`. |
-| Guarda de identidade preexistente
-
-[truncado em 20000 de 25961 caracteres]
-
-## 05/11 18:27 · sessao e719ad4dc562 · PC3-OTIMIZA-3 · censo · origem=Code
-
-HASH LIDO = d1354f77cf4c7214728709ad948145994a0c0366
-
-## A CASOS PELA REGRA
-
-O hash acima identifica a cópia solicitada; não consegui confirmá-lo por Git porque esta cópia não contém `.git`. [nao verificado]
-
-A referência é o contrato, pela L-110. A unidade é **faceta**: arquivo e cada símbolo mudado têm cobertura própria. Faceta coberta devolve N; cobertura desconhecida devolve **“nao varrido”**, com eventuais achados avulsos. Um zero não pode fundamentar L-111 quando o mecanismo do chamador não foi coberto. (`app/docs/LEIS.md:136`, `app/docs/LEIS.md:137`, `bin/quem_chama.py:8`)
-
-O aval fornecido determina **não varrer Python em `.sh`** e limita o instrumento a duas voltas opus; as reprovações #3/#4 também integram o contrato desta análise. Esses anexos não têm localização conferida na cópia. [nao verificado]
-
-Nos casos sintéticos abaixo, N pressupõe somente os leitores expressamente descritos; não representa contagem de produção. (`bin/quem_chama.py:11`, `CLAUDE.md:35`)
-
-| Alvo + estado + ato | Resposta exigida |
-|---|---|
-| `datas_cravadas_prod` mudado; chamada existente em `placar_code.sh` por `shell --command` | Declarar **não varridas** as facetas Python afetadas; conservar a citação encontrada como avulsa. Nunca apresentar zero conclusivo para o símbolo. (`bin/placar_code.sh:384`, `bin/quem_chama.py:12`) |
-| Módulo/símbolo mudado; único leitor em heredoc, `python3 -c` ou `shell --command` | Mesma abstenção, independentemente do invólucro shell. A solução não pode depender apenas da forma do caso de `placar_code`. (`bin/quem_chama.py:14`, `bin/esteira.sh:16`, `bin/fabricante.sh:41`, `bin/placar_code.sh:384`; aval específico [nao verificado]) |
-| `core.esteira_vigia` mudado; leitor usa `from core import esteira_vigia` | Não exigir a presença textual de `core.esteira_vigia` para reconhecer cobertura incompleta. Declarar não varrido. (`bin/esteira.sh:19`, `bin/fabricante.sh:43`, `bin/quem_chama.py:12`) |
-| Módulo `bin/foo.py`; leitor shell cita `foo`, inclusive execução `-mfoo` | A ausência de ponto no nome não autoriza zero. Declarar a cobertura incompleta. (`bin/quem_chama.py:125`, `bin/quem_chama.py:14`; caso `-mfoo` [nao verificado]) |
-| `.py` comum; somente `from m.lib import mudada`, absoluto ou relativo | Arquivo: **1**; símbolo `mudada`: **1**. O import precisa aparecer na faceta correta. (`bin/quem_chama.py:39`, `bin/quem_chama.py:51`, `bin/tests/test_quem_chama.sh:6`) |
-| `mudada` alterada; único leitor importa `parada`, inclusive por relativo | Arquivo: **1**; símbolo `mudada`: **0**, se não houver outro leitor nem mecanismo excluído. A linha “importa de” pertence somente ao arquivo. (`bin/tests/test_quem_chama.sh:158`, `bin/tests/test_quem_chama.sh:166`) |
-| Pacote sem `__init__.py`; símbolo sem uso local; único leitor relativo externo | Símbolo: **1**. Uso próprio não pode mascarar uma falha na resolução do relativo. (`bin/quem_chama.py:39`, `bin/tests/test_quem_chama.sh:28`, `bin/tests/test_quem_chama.sh:55`) |
-| Símbolo apagado/renomeado ou módulo apagado; leitor permanece na ponta | Manter o alvo antigo e listar o leitor residual da ponta; arquivo apagado deve ser identificado. (`bin/quem_chama.py:17`, `bin/tests/test_quem_chama.sh:7`) |
-| CSS/JS/imagem sob `static/`; única referência literal suportada | Faceta arquivo: **1**. A extensão isoladamente não o torna não varrido. (`bin/quem_chama.py:49`, `bin/tests/test_quem_chama.sh:213`) |
-| Template; único `include`/`extends` literal ou referência de renderização | Faceta arquivo: **1**. (`bin/quem_chama.py:47`, `bin/tests/test_quem_chama.sh:182`) |
-| Filtro registrado; template carrega a biblioteca e usa `\|nome` | Biblioteca e símbolo recebem seus respectivos achados; filtro com um uso: **1**. (`bin/quem_chama.py:53`, `bin/tests/test_quem_chama.sh:217`) |
-| Filtro registrado; único uso em `{% filter nome %}` | O uso deve alcançar a faceta do filtro; não pode resultar em zero falso. A fila da reprovação cita essa borda. (`bin/quem_chama.py:53`; anexo da reprovação [nao verificado]) |
-| Aparente uso somente em `{# … #}` ou `{% comment %}…{% endcomment %}`, multilinha | Não contar o comentário. Havendo apenas o carregamento da biblioteca: arquivo **1**, filtro **0**. (`bin/quem_chama.py:21`, `bin/quem_chama.py:520`) |
-| Método por instância/herança; setting; autodiscovery; decorador opaco; tipo desconhecido | **Não varrido**, mesmo quando nenhum achado avulso exista. (`bin/quem_chama.py:14`, `bin/quem_chama.py:299`, `bin/quem_chama.py:315`) |
-| Nome dinâmico, reexport ou crontab do host | Exclusão declarada; a contagem da parte coberta não prova ausência nesses mecanismos. (`bin/quem_chama.py:65`) |
-| Mesmo range imutável, disco alterado ou duas leituras concorrentes sem saída compartilhada | Ler a ponta identificada pelo range; alterações do disco não entram. Mesmos insumos devem produzir o mesmo texto. (`bin/quem_chama.py:17`, `bin/tests/test_quem_chama.sh:184`, `bin/tests/test_quem_chama.sh:257`) |
-| Mudança 21→20, cross-meia-noite, vínculo trocado ou célula sem ata, sem alterar os insumos Git | Não introduzir julgamento de ponto nesta ferramenta. Essas bordas pertencem ao domínio; aqui os insumos são revisões e conteúdo Git. (`CLAUDE.md:81`, `CLAUDE.md:185`, `bin/quem_chama.py:17`) |
-
-## B SITIOS
-
-O instrumento declara **zero autoridade nova**. `core/juizes.py` registra autoridades de domínio e `JUIZES.md` é lookup; não identifiquei juiz registrado que substitua o contrato de cobertura deste censo. (`bin/quem_chama.py:6`, `app/core/juizes.py:3`, `app/docs/JUIZES.md:7`)
-
-| Sítio/campo | Escritor e leitores que precisam acompanhar a obra |
-|---|---|
-| **Contrato e exclusões — tocar** | Docstring e `FORA`; `render` publica as exclusões. (`bin/quem_chama.py:8`, `bin/quem_chama.py:65`, `bin/quem_chama.py:706`) |
-| **Tipo da faceta arquivo — tocar na fonte** | `tipo_do_arquivo` decide; `quem_chama` grava `tipo`; `render/_faceta` leem. A abstenção deve nascer aqui, sem remendo no texto final. (`bin/quem_chama.py:284`, `bin/quem_chama.py:637`, `bin/quem_chama.py:658`, `bin/quem_chama.py:713`) |
-| **Tipo da faceta símbolo** | `_tipo_simbolo` herda tipos não cobertos; `quem_chama` grava `info['tipo']`; `render` lê cada símbolo. (`bin/quem_chama.py:311`, `bin/quem_chama.py:655`, `bin/quem_chama.py:715`) |
-| **Código shell — tocar a alimentação do classificador** | `tipo_chamador` identifica shell, inclusive script sem extensão; `_codigo_sh` retira comentários; `varrer_linhas` e `artefatos_sh` já leem essas linhas. (`bin/quem_chama.py:599`, `bin/quem_chama.py:479`, `bin/quem_chama.py:510`, `bin/quem_chama.py:576`, `bin/quem_chama.py:674`) |
-| **Identidade da biblioteca — preservar ao tocar** | `lib` nasce em `quem_chama`; `Alvos.libs` indexa; `varrer_template` consulta. Transformar cobertura em desconhecida não pode apagar essa identidade. (`bin/quem_chama.py:657`, `bin/quem_chama.py:373`, `bin/quem_chama.py:549`) |
-| **Filtro em bloco — tocar na fonte** | `varrer_template` produz o achado do símbolo; é chamado pelo ramo template do coletor. Limpeza de comentários já existe. (`bin/quem_chama.py:526`, `bin/quem_chama.py:560`, `bin/quem_chama.py:676`, `bin/quem_chama.py:520`) |
-| Insumos Git e conjunto de alvos | `lados`, `tocados_do_diff`, `linhas_mudadas`, `_git/_git_bytes` e `_ler_rev` alimentam `quem_chama`. Base fornece os apagados; ponta fornece leitores. (`bin/quem_chama.py:76`, `bin/quem_chama.py:88`, `bin/quem_chama.py:109`, `bin/quem_chama.py:142`, `bin/quem_chama.py:157`, `bin/quem_chama.py:619`) |
-| Metadados `nomes/modulo/template/estatico/artefatos` | `quem_chama` constrói; `Alvos` indexa; leitores são `varrer_py`, `varrer_linhas` e `varrer_template`. Artefatos shell vêm de `artefatos_sh`. (`bin/quem_chama.py:633`, `bin/quem_chama.py:658`, `bin/quem_chama.py:363`, `bin/quem_chama.py:390`, `bin/quem_chama.py:510`, `bin/quem_chama.py:573`) |
-| Metadados dos símbolos | `simbolos_mudados` usa `_parse`, `_libs_de_template`, `_registro` e `_nome_decorador`; `_sim`, `varrer_py`, `varrer_proprio`, `_tipo_simbolo` e `render` consomem os resultados. (`bin/quem_chama.py:195`, `bin/quem_chama.py:212`, `bin/quem_chama.py:233`, `bin/quem_chama.py:243`, `bin/quem_chama.py:385`, `bin/quem_chama.py:442`, `bin/quem_chama.py:649`) |
-| Imports e referências Python | `_resolve`, `_cadeia`, `_prosa` e `Alvos.citacoes` são lidos por `varrer_py`; não devem ser reutilizados para interpretar payload shell contra o aval. (`bin/quem_chama.py:329`, `bin/quem_chama.py:336`, `bin/quem_chama.py:351`, `bin/quem_chama.py:378`, `bin/quem_chama.py:390`; aval [nao verificado]) |
-| Achados e contadores | `quem_chama` agrega `por`; shell atualmente escreve somente `q=None`. `_faceta` conta varridas/zeros/desconhecidas; `render` fecha o resumo; `main` lê `conta['nao']`. (`bin/quem_chama.py:510`, `bin/quem_chama.py:662`, `bin/quem_chama.py:681`, `bin/quem_chama.py:690`, `bin/quem_chama.py:718`, `bin/quem_chama.py:747`) |
-| **Selo — tocar** | Fixture, asserções de parado/relativo, isolamento por arquivo e invariante de cobertura. As verificações atuais não prendem a faceta. (`bin/tests/test_quem_chama.sh:28`, `bin/tests/test_quem_chama.sh:159`, `bin/tests/test_quem_chama.sh:167`, `bin/tests/test_quem_chama.sh:210`, `bin/tests/test_quem_chama.sh:239`) |
-| Consumidores externos encontrados | O selo seleciona a ferramenta por `QUEM_CHAMA_PY`, executa fixture, determinismo e históricos; a régua chama todos os selos shell. (`bin/tests/test_quem_chama.sh:25`, `bin/tests/test_quem_chama.sh:148`, `bin/tests/test_quem_chama.sh:257`, `bin/tests/test_quem_chama.sh:266`, `bin/regua.sh:138`) |
-| Saída persistida | `main` é quem cria diretórios e grava `--saida/--obra`. Esse caminho não foi necessário para a proposta e não deve ganhar outro escritor. (`bin/quem_chama.py:738`, `bin/quem_chama.py:741`) |
-
-## C DIFF PROPOSTO EM TEXTO
-
-O candidato abaixo cura a classe shell por **abstenção conservadora no classificador**, preserva a biblioteca de template e corrige o filtro em bloco. Não interpreta Python em shell nem acrescenta juiz. O selo passa a conferir arquivo **e faceta**. Permanecem os limites impeditivos descritos em D. (`bin/quem_chama.py:284`, `bin/quem_chama.py:311`, `bin/quem_chama.py:560`, `bin/quem_chama.py:657`, `bin/tests/test_quem_chama.sh:159`)
-
-```diff
---- a/bin/quem_chama.py
-+++ b/bin/quem_chama.py
-@@ -12,7 +12,8 @@
- faceta de qualquer outro tipo imprime 'nao varrido (<tipo>)', NUNCA 0, e lista o que achou como AVULSO (achado
- avulso prova que ha chamador; a falta dele nao prova nada). O RESUMO do fim conta as nao varridas por tipo.
- Desconhecido e desconhecido: o classificador (`tipo_do_arquivo`, `_tipo_simbolo`) cai em tipo FORA da lista para
--tudo que nao reconhece.
-+tudo que nao reconhece. Python em shell nao passa por AST: ocorrencia textual do ultimo componente do
-+modulo em codigo shell torna suas facetas nao varridas; os achados continuam avulsos.
- 
- O que se le: a arvore e o conteudo da PONTA do range, por git, nunca o disco; o lado VELHO (a base) so entra para
- colher o que o diff apagou ou renomeou (simbolo e modulo apagados seguem com os chamadores que sobraram na ponta).
-@@ -66,7 +67,8 @@
-         'com variavel); reexport por __init__ (o __init__ entra, quem importa dele nao); crontab do host (vale '
-         'config/crons.py); artefato escrito por .py; no proprio arquivo, nome local que sombreia o de topo conta '
-         'como uso, e nome ambiguo/texto visivel de template conta como citacao (falso positivo, nunca falso 0); '
--        'comentario de .sh dentro de string de varias linhas.')
-+        'comentario de .sh dentro de string de varias linhas; Python em shell nao e varrido '
-+        '(modulo citado: facetas nao varridas, achados avulsos).')
- LOGS = os.path.join(os.path.expanduser('~'), 'saas-hasner', 'logs')
- RAIZES_DE_MODULO = ('app/', 'bin/')     # sys.path do Django (app/) e dos scripts de host (bin/)
- _CONFIG_EXT = ('.json', '.yml', '.yaml', '.toml', '.ini', '.cfg', '.conf', '.service', '.timer', '.path',
-@@ -281,7 +283,7 @@
- _COMANDO = re.compile(r'(?:^|/)management/commands/(\w+)\.py$')
- 
- 
--def tipo_do_arquivo(rel):
-+def tipo_do_arquivo(rel, codigo_sh=''):
-     """Tipo da faceta ARQUIVO. Tipo fora de VARRIDOS = nao varrido. -> str"""
-     base = rel.rsplit('/', 1)[-1]
-     ext = base.rsplit('.', 1)[-1].lower() if '.' in base.strip('.') else ''
-@@ -292,6 +294,8 @@
-     if ext == 'py':
-         if modulo_de(rel) is None:
-             return 'py fora de app/ e bin/'
-+        if modulo_de(rel).rsplit('.', 1)[-1] in codigo_sh:
-+            return 'py citado em shell: payload nao varrido'
-         if re.search(r'(^|/)tests?/', rel) or re.match(r'(test_.*|.*_test|conftest|tests)\.py$', base):
-             return 'py-teste' [nao verificado]
-         if '/migrations/' in rel:
-@@ -557,7 +561,7 @@
-                 if not reg or not reg[1] or (nomes is not None and reg[1] not in nomes):
-                     continue
-                 papel, nome = reg
--                rx = re.compile(r'\|\s*' + re.escape(nome) + r'(?![\w])' if papel == 'filtro'
-+                rx = re.compile(r'(?:\|\s*|{%\s*filter\s+)' + re.escape(nome) + r'(?![\w])' if papel == 'filtro'
-                                 else r'{%\s*' + re.escape(nome) + r'(?![\w])')
-                 for n, ln in enumerate(linhas, start=1):
-                     if rx.search(ln):
-@@ -626,6 +630,8 @@
-     por_base = {}
-     for r in arvore:
-         por_base[r.rsplit('/', 1)[-1]] = por_base.get(r.rsplit('/', 1)[-1], 0) + 1
-+    codigo_sh = '\n'.join(cod for r, f in na_ponta.items() if tipo_chamador(r, f) == 'sh'
-+                          for cod in _codigo_sh(f).values())
-     alvos = []
-     for rel in tocados:
-         fonte, antiga = na_ponta.get(rel), na_base.get(rel)
-@@ -634,7 +640,7 @@
-         if base != rel:
-             n = por_base.get(base, 0)
-             nomes.append((base, 'cita' if n <= 1 else 'cita (nome ambiguo, %d arquivos)' % n))
--        tipo = tipo_do_arquivo(rel)
-+        tipo = tipo_do_arquivo(rel, codigo_sh)
-         mod = modulo_de(rel)
-         cmd = _COMANDO.search(rel)
-         if cmd:
-@@ -654,7 +660,7 @@
-                         simb[q]['registro'] = info['registro']
-         for info in simb.values():
-             info['tipo'] = _tipo_simbolo(rel, tipo, info)
--        lib = base[:-3] if tipo == 'py-templatetag' else None
-+        lib = base[:-3] if tipo_do_arquivo(rel) == 'py-templatetag' else None
-         alvos.append({'rel': rel, 'existe': fonte is not None, 'modulo': mod, 'simbolos': simb, 'tipo': tipo,
-                       'template': _template_de(rel), 'estatico': _estatico_de(rel), 'lib': lib,
-                       'artefatos': artef, 'nomes': nomes})
---- a/bin/tests/test_quem_chama.sh
-+++ b/bin/tests/test_quem_chama.sh
-@@ -115,6 +115,33 @@
- : > app/m/vazio.py
- printf '{"hooks": {"Stop": "bash bin/alvo.sh"}}\n' > .claude/settings.json
- printf '[Service]\nExecStart=/bin/bash bin/alvo.sh\n' > bin/hasner-x.service
-+# Casos independentes: nenhum uso local nem __init__.py mascara o import relativo.
-+printf 'def unico():\n    return 1\n' > app/m/isolada.py
-+printf 'from .isolada import unico\n' > app/m/rel_isolada.py
-+for _nome in shell_heredoc shell_c shell_command shell_import shell_sem_ext; do
-+  printf 'def unico():\n    return 1\n' > "app/m/$_nome.py"
-+done
-+printf 'def unico():\n    return 1\n' > bin/shell_raiz.py
-+cat > bin/emb.sh <<'EOT'
-+python3 - <<'PY'
-+from m.shell_heredoc import unico
-+PY
-+python3 -c "from m.shell_c import unico"
-+python manage.py shell --command "from m.shell_command import unico"
-+python3 -c "from m import shell_import"
-+python3 -mshell_raiz
-+EOT
-+printf '#!/bin/sh\npython3 -c "from m import shell_sem_ext"\n' > bin/emb
-+cat > app/m/templates/m/bloco.html <<'EOT'
-+{% load m_tags %}
-+{% filter rot %}x{% endfilter %}
-+{#
-+{{ x|rot }}
-+#}
-+{% comment %}
-+{{ x|rot }}
-+{% endcomment %}
-+EOT
- git add -A && git commit -qm base [nao verificado]
- # --- muda: mudada muda, sumiu some, velho_nome vira novo_nome, velho.py some, cmd_x/alvo.html/ação.sh mudam
- printf '#!/usr/bin/env bash\necho b > logs/alvo.stamp\n' > bin/alvo.sh
-@@ -137,6 +164,10 @@
- printf 'from x import receiver\n\n\n@receiver("s")\ndef r():\n    return 2\n' > app/m/sinais.py
- printf 'caf\351 2\n' > app/m/dados.txt
- git rm -q app/m/vazio.py
-+for _nome in isolada shell_heredoc shell_c shell_command shell_import shell_sem_ext; do
-+  printf 'def unico():\n    return 2\n' > "app/m/$_nome.py"
-+done
-+printf 'def unico():\n    return 2\n' > bin/shell_raiz.py
- git commit -qam muda [nao verificado]
- # (f) disco sujo depois da ponta: um chamador NAO commitado nao entra; um chamador apagado so no disco segue [nao verificado]
- printf 'from m.lib import mudada\n' > app/m/sujo_sai.py && git add app/m/sujo_sai.py && git commit -qm sujo
-@@ -148,6 +179,18 @@
- python3 "$Q" ponta~2..ponta --raiz "$F" --saida "$T/f.txt" >/dev/null 2>"$T/err" || _falha "fixture rc!=0: $(head -c 300 "$T/err")"
- _tem()   { grep -qF -- "$2" "$T/f.txt" || _falha "$1: devia listar [$2]"; }
- _naotem(){ grep -qF -- "$2" "$T/f.txt" && _falha "$1: MORDE -- [$2] entrou"; }
-+# Isola arquivo E faceta; "simbolos" seleciona todas as facetas de simbolo.
-+_fac() {
-+  awk -v a="== $2 (" -v f="$3" '
-+    /^== / {alvo=index($0,a)==1; faceta=0}
-+    /^RESUMO/ {alvo=0}
-+    alvo && /^   (arquivo|simbolo )/ {
-+      faceta=(f=="simbolos" && index($0,"   simbolo ")==1) ||
-+             index($0,"   " f " [")==1 || index($0,"   " f ":")==1
-+    }
-+    alvo && faceta {print}
-+  ' "$1"
-+}
- # (a) codigo x prosa
- _tem   base   "  bin/codigo.sh:2:"
- _tem   base   "  app/m/usa.py:1:"
-@@ -156,16 +199,16 @@
- _naotem prosa "  bin/prosa.sh:"
- _naotem prosa "  app/m/doc.py:"
- # volta 4: quem importa um nome PARADO carrega o ARQUIVO (faceta arquivo), mas nao chama o simbolo mudado
--grep -F "  app/m/usa_outra.py:" "$T/f.txt" | grep -qv "^  app/m/usa_outra.py:1: importa de m.lib$" && _falha "simbolo-parado: MORDE -- usa_outra entrou fora da faceta arquivo"
--_tem   simbolo-parado "  app/m/usa_outra.py:1: importa de m.lib"
-+_fac "$T/f.txt" app/m/lib.py arquivo | grep -qxF "  app/m/usa_outra.py:1: importa de m.lib" || _falha "simbolo-parado: falta faceta arquivo"
-+_fac "$T/f.txt" app/m/lib.py simbolos | grep -qF "  app/m/usa_outra.py:" && _falha "simbolo-parado: chamador na faceta de simbolo"
- _naotem fim-de-linha "  bin/fim_coment.sh:"
- _tem   fim-de-linha "  bin/codigo_coment.sh:2:"
- # (b) relativo e apelido
- _tem   relativo1 "  app/m/rel1.py:1: importa mudada"
- _tem   relativo2 "  app/m/sub/rel2.py:1: importa mudada"
- # volta 4: quem importa um nome PARADO carrega o ARQUIVO (faceta arquivo), mas nao chama o simbolo mudado
--grep -F "  app/m/rel_outra.py:" "$T/f.txt" | grep -qv "^  app/m/rel_outra.py:1: importa de m.lib$" && _falha "relativo-parado: MORDE -- rel_outra entrou fora da faceta arquivo"
--_tem   relativo-parado "  app/m/rel_outra.py:1: importa de m.lib"
-+_fac "$T/f.txt" app/m/lib.py arquivo | grep -qxF "  app/m/rel_outra.py:1: importa de m.lib" || _falha "relativo-parado: falta faceta arquivo"
-+_fac "$T/f.txt" app/m/lib.py simbolos | grep -qF "  app/m/rel_outra.py:" && _falha "relativo-parado: chamador na faceta de simbolo"
- _tem   apelido1 "  app/m/apelido1.py:2: usa L.mudada"
- _tem   apelido2 "  app/m/apelido2.py:2: usa L.mudada"
- # (c) lado velho
-@@ -249,6 +292,17 @@
-     && _falha "r4-invariante $2: faceta que nao e contagem nem nao varrido"
- }
- _invariante "$T/f.txt" fixture
-+# O relativo e o unico leitor: a faceta precisa mostrar exatamente um.
-+[ ! -e "$F/app/m/__init__.py" ] || _falha "fixture ganhou __init__.py"
-+_fac "$T/f.txt" app/m/isolada.py 'simbolo unico' | grep -qF ']: 1 chamador(es)' || _falha "relativo isolado: contagem"
-+_fac "$T/f.txt" app/m/isolada.py 'simbolo unico' | grep -qxF '  app/m/rel_isolada.py:1: importa unico (mudado no diff)' || _falha "relativo isolado: leitor"
-+for _alvo in app/m/shell_{heredoc,c,command,import,sem_ext}.py bin/shell_raiz.py; do
-+  for _faceta in arquivo 'simbolo unico'; do
-+    _fac "$T/f.txt" "$_alvo" "$_faceta
-
-[truncado em 20000 de 23817 caracteres]
-
-## 05/11 18:26 · sessao 9ef08422633f · C20-O169 · verificador · origem=Code
-
-1. **A ausência da lei foi corrigida; o cumprimento temporal não foi demonstrado.** A L-125 reproduz literalmente o corte de `app/docs/BACKLOG.md:424-426`, protege as funções existentes `_leitura_da_celula` e `_vivos_que_a_premissa_matou`, e cita uma classe de teste existente com sete casos (`app/docs/LEIS.md:146`; `app/ponto/services/cluster_espurio.py:15,53`; `app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:39,74-111`).
-
-   O adendo exige registro **no commit que mexer no código** (`app/docs/BACKLOG.md:421-423`). Os anexos apresentados mostram cura e registro em commits separados; conferência no histórico local: [nao verificado]. Portanto, fecha a falta atual de registro, mas não comprova a frase “entra aqui no commit que mexe no código” (`app/docs/LEIS.md:146`). O corte pertinente em CORTES determina consultar `dia_sem_trabalho`, e essa consulta permanece no código (`app/docs/CORTES.md:416`; `app/ponto/services/cluster_espurio.py:25-26`). Existência do literal O169 também em CORTES: [nao verificado].
-
-2. **Há uma generalização documental falsa sobre ata sem insumos.** O confronto das afirmações é:
-
-   | Afirmação da L-125/ADR | Código da cópia |
-   |---|---|
-   | Não fecha por idade; consulta o próprio dia, a qualquer idade. | Correto para esse coletor: seleciona chamados vivos, obtém o dia pelo juiz e consulta essas datas sem janela (`app/ponto/services/cluster_espurio.py:66-76`). |
-   | Assinatura presente conserva; medida sem assinatura permite fechar. | Correto: assinatura retorna tupla; ausência retorna `()`; o coletor converte para booleano e consulta a premissa (`app/ponto/services/cluster_espurio.py:31-37,74-77`; `app/chamados/catalogo/premissa.py:132-150`). |
-   | Dia sem trabalho permite fechar. | Correto: o juiz é consultado primeiro e retorna `()` antes da validação dos insumos (`app/ponto/services/cluster_espurio.py:25-30`; `app/chamados/juizes.py:426-428`). |
-   | “Célula ausente […] o chamado vive.” | Correto nesse coletor: falta de célula produz `None`, conservado pelo catálogo (`app/ponto/services/cluster_espurio.py:74-76`; `app/chamados/catalogo/premissa.py:127-130`). |
-   | “Ata sem insumos = não medido, e o chamado vive.” | **Falso sem ressalva.** Com `trabalha=False, ata={}`, o juiz responde verdadeiro e o leitor retorna `()` antes de chegar ao ramo `None`; o fato fica `False` e a premissa morre (`app/docs/LEIS.md:146`; `app/docs/PLANO-PADROES.md:74`; `app/chamados/juizes.py:428`; `app/ponto/services/cluster_espurio.py:25-30,75-77`). |
-   | Reconciliação *level-triggered*. | Compatível: compara o chamado vivo com o estado da célula, sem usar idade na decisão (`app/docs/PLANO-PADROES.md:75`; `app/ponto/services/cluster_espurio.py:66-77`). |
-   | Trocar `None` por `False` fecha por falta de medida. | Correto quanto ao efeito; chamar isso de fechamento “por idade” é uma analogia: também afetaria dia recente sem medida (`app/docs/PLANO-PADROES.md:76`; `app/chamados/catalogo/premissa.py:127-134`; `app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:86-94`). |
-
-   A correção documental mínima é: **“Se o juiz não declarar dia sem trabalho, ata sem insumos conserva; dia sem trabalho prevalece.”** Essa é a ordem já implementada (`app/ponto/services/cluster_espurio.py:25-30`). “Fecha” deve ser entendido como elegibilidade no coletor: o ato ainda passa pelas guardas de reconciliação (`app/ponto/services/cluster_espurio.py:123-125`; `app/chamados/models.py:637-655`).
-
-3. **O formato ADR está completo.** Lei, Contexto, Alternativas, Consequências, Padrão e Armadilha aparecem na seção L-125, conforme o formato exigido pela L-122 (`app/docs/PLANO-PADROES.md:36-42,70-76`; `app/docs/LEIS.md:143`). O padrão já existia no glossário; não nasceu desse ADR (`app/docs/GLOSSARIO.md:13`). Completude formal não resolve a imprecisão das Consequências apontada acima (`app/docs/PLANO-PADROES.md:74`).
-
-4. **Não identifiquei proteção nominal duplicada das duas funções.** A entrada que as protege é a L-125; as demais células PROTEGE preenchidas nomeiam outros sítios (`app/docs/LEIS.md:117,129-130,140-146,148-151`). A consulta ao juiz de dia sem trabalho é complementar e continua respeitada (`app/docs/CORTES.md:416`; `app/ponto/services/cluster_espurio.py:25-26`). A regra do índice exige proteção expressa, sem deduzi-la de leis gerais (`app/docs/LEIS.md:43-48`).
-
-5. **Os três itens permanecem FILA; nenhum demonstra defeito atual da cura.**
-
-   - **Assinatura duplicada/15 literal:** existe duplicação do limiar, atualmente igual; o classificador agrupa órfãs, enquanto o serviço decide a assinatura do chamado (`app/escala/orfa_classe.py:28,40-48,74-77`; `app/ponto/services/cluster_espurio.py:31-36`).
-   - **Caso 7 sem mordida específica:** procede. As listas vazias permitem retornar `()` mesmo removendo a consulta ao juiz (`app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:109`; `app/ponto/services/cluster_espurio.py:37`). Contudo, essa remoção global seria detectada pelos testes existentes de emissão com assinatura válida em folga/ausência (`app/chamados/tests/test_f1c4_3_emissores.py:113-128`). Permanece descoberto o mutante que verifica insumos **antes** do juiz: ele alteraria justamente `trabalha=False, ata={}`, hoje tratado corretamente (`app/ponto/services/cluster_espurio.py:25-30`). Isso não torna vacuosos os testes centrais de idade e conservação (`app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:74-100`).
-   - **Contador de `None`:** falta observabilidade desse universo; o coletor retorna somente os candidatos a fechamento, e o vigia contabiliza abertura/fechamento (`app/ponto/services/cluster_espurio.py:74-78`; `app/ponto/management/commands/detectar_cluster_espurio.py:53-60`).
-
-6. **Quem escreve e quem lê:**
-
-   - **Autoria documental:** o ADR identifica a redação como do Code; os selos abaixo leem o índice, sem escrevê-lo (`app/docs/PLANO-PADROES.md:77`; `bin/tests/test_lei_protege_sitio.sh:49`; `bin/tests/test_leis_indice.sh:29`). Autoria histórica do commit: [nao verificado].
-   - **Proteção de sítio:** lê PROTEGE, encontra funções por AST e exige L-125 se o diff tocar uma delas. Aceita citação em **qualquer commit do range**, sem exigir o mesmo commit da cura; não valida a semântica da lei nem o RED (`bin/tests/test_lei_protege_sitio.sh:77-87,160-177,179-204`). A L-125 não acrescenta proteção a outro arquivo (`app/docs/LEIS.md:146`).
-   - **Índice:** verifica IDs de CORTES.json, colunas obrigatórias e IDs de lei duplicados; não confronta frases com código nem valida ADR/testes (`bin/tests/test_leis_indice.sh:28-35,49,63`). A cobertura é JSON→LEIS; o mapeamento novo não cria exigência inversa sobre CORTES (`app/docs/LEIS.md:387`; `bin/tests/test_leis_indice.sh:35`).
-   - **Akita:** lê GLOSSARIO/PLANO, não a linha L-125. O ADR acrescenta o termo isolado *level-triggered* ao vocabulário capturado por itálico, podendo mudar a aceitação de `padrao=level-triggered` em outro commit; o termo completo já existia (`bin/tests/test_lei_akita.sh:95-108,138-140`; `app/docs/PLANO-PADROES.md:75`; `app/docs/GLOSSARIO.md:13`).
-   - **Outros leitores:** o verificador lê LEIS; a publicação raspa seu conteúdo; o disjuntor reconhece o nome do anexo, sem julgar L-125 (`.claude/agents/verificador.md:8,15`; `bin/relato.sh:103-108`; `bin/raspar_publico.py:28-40`; `bin/disjuntor.py:1232,1363-1366`). Vereditos de push reais: [nao verificado].
-
-**REPROVA. Bloqueante: corrigir a generalização “ata sem insumos vive” na L-125 e no ADR, explicitando a precedência de `dia_sem_trabalho`; o código já realiza essa precedência (`app/docs/LEIS.md:146`; `app/docs/PLANO-PADROES.md:74`; `app/ponto/services/cluster_espurio.py:25-30`).**
-
-## 05/11 18:26 · sessao f4d60ab09e1e · PCCMP-OTIMIZA-3 · censo · origem=Code
-
-HASH LIDO = d1354f77cf4c7214728709ad948145994a0c0366
-
-PC1 e PC2 identificam os anexos transcritos na pergunta; a numeração dos arquivos originais desses anexos é **[nao verificado]**. As referências abaixo apontam para os sítios conferidos nesta cópia.
-
-**1 COINCIDE**
-
-| Item presente nas duas | Conferência no código |
-|---|---|
-| **Regra:** contar por faceta; cobertura desconhecida recebe “nao varrido”, preservando avulsos. | O contrato distingue arquivo e símbolo; `_faceta` publica contagem somente para tipos presentes em `VARRIDOS`. (`bin/quem_chama.py:10`, `bin/quem_chama.py:691`, `bin/quem_chama.py:697`) |
-| **Caso:** importar função alterada produz achado de arquivo e de símbolo; importar somente função parada pertence ao arquivo. | O achado de arquivo é incondicional quando o módulo coincide; o de símbolo depende de `_sim` encontrar o nome entre os alterados. (`bin/quem_chama.py:408`, `bin/quem_chama.py:409`, `bin/quem_chama.py:411`, `bin/quem_chama.py:414`) |
-| **Caso:** chamada Python embutida em shell impede concluir ausência pela falta de achado de símbolo. | Há chamada concreta em shell; o despacho shell atual produz apenas referências textuais da faceta arquivo. (`bin/placar_code.sh:384`, `bin/quem_chama.py:512`, `bin/quem_chama.py:674`) |
-| **Casos:** heredoc, `-c`, comando Django, importação pelo pacote e shell sem extensão precisam integrar a discussão de cobertura. | Existem importações pelo pacote em comando inline e heredoc; o detector reconhece `.sh` e arquivo sem extensão com shebang. (`bin/placar_code.sh:484`, `bin/gate_cobranca.sh:47`, `bin/gate_cobranca.sh:50`, `bin/quem_chama.py:608`, `bin/quem_chama.py:612`) |
-| **Casos:** biblioteca carregada e uso de filtro/tag são facetas distintas; comentários não contam. | O carregamento gera achado de arquivo; o uso registrado gera achado de símbolo; comentários são removidos preservando quebras de linha. (`bin/quem_chama.py:550`, `bin/quem_chama.py:565`, `bin/quem_chama.py:521`, `bin/quem_chama.py:523`) |
-| **Casos:** métodos, settings, convenções, testes e decoradores não transparentes não recebem automaticamente cobertura completa. | Há classificações específicas fora da lista positiva. (`bin/quem_chama.py:295`, `bin/quem_chama.py:315`, `bin/quem_chama.py:317`, `bin/quem_chama.py:319`, `bin/quem_chama.py:323`) |
-| **Caso:** símbolos apagados/renomeados continuam confrontados com leitores da ponta. | A montagem reúne símbolos da base e da ponta; o selo verifica leitores sobreviventes. (`bin/quem_chama.py:650`, `bin/tests/test_quem_chama.sh:172`, `bin/tests/test_quem_chama.sh:173`, `bin/tests/test_quem_chama.sh:175`) |
-| **Caso:** mesmas revisões resolvidas determinam o conteúdo consultado, independentemente do disco sujo ou da hora. | As revisões são resolvidas para commits e os conteúdos vêm de `_ler_rev`. (`bin/quem_chama.py:120`, `bin/quem_chama.py:624`, `bin/quem_chama.py:625`) |
-| **Sítios:** classificação → alvos/índices → scanners → conjuntos de achados → `_faceta` → apresentação/saída. | Essa cadeia está materializada na montagem dos tipos, índices, conjuntos e chamadas de apresentação. (`bin/quem_chama.py:637`, `bin/quem_chama.py:656`, `bin/quem_chama.py:661`, `bin/quem_chama.py:662`, `bin/quem_chama.py:713`, `bin/quem_chama.py:737`) |
-| **Diff comum:** acrescentar reconhecimento de `{% filter nome %}`, preservar a biblioteca e corrigir negativas que não prendem a faceta. | A regex atual reconhece somente `\|`; `lib` alimenta o índice de bibliotecas; as negativas atuais examinam texto sem acompanhar o cabeçalho da faceta. (`bin/quem_chama.py:560`, `bin/quem_chama.py:657`, `bin/quem_chama.py:375`, `bin/tests/test_quem_chama.sh:159`, `bin/tests/test_quem_chama.sh:167`) |
-| **Integração:** manter `_faceta` como contador, o selo existente e sua execução pela régua; não acrescentar juiz. | `_faceta` atualiza os contadores; o selo seleciona a ferramenta; a régua executa o glob de selos; o contrato declara “fato, não juiz”. (`bin/quem_chama.py:694`, `bin/quem_chama.py:698`, `bin/tests/test_quem_chama.sh:25`, `bin/regua.sh:138`, `bin/regua.sh:140`, `bin/quem_chama.py:6`) |
-| **Contraexemplos comuns:** falha de AST pode desaparecer como ausência de achados; saída concorrente usa escrita direta; zero do instrumento não significa zero de produção. | `_parse` retorna `None`, o scanner retorna lista vazia, a saída abre em `w`, e qualquer `.py` pode ser chamador, inclusive teste. A L-111 exige chamador de produção. (`bin/quem_chama.py:191`, `bin/quem_chama.py:393`, `bin/quem_chama.py:742`, `bin/quem_chama.py:606`, `app/docs/LEIS.md:137`) |
-
-**2 DIVERGE**
-
-**D1 — Universo rebaixado: DESENHO.**
-
-- **PC1/C:** propõe `ha_shell` na leitura da ponta e `_tipo_cobertura` aplicado às facetas Python antes cobertas; qualquer shell basta. Âncoras do diff: `bin/quem_chama.py:625`, `bin/quem_chama.py:656`, `bin/quem_chama.py:658`.
-- **PC2/C:** propõe concatenar código shell e procurar qualquer componente literal de `mod.split('.')`; somente os alvos com coincidência lexical são rebaixados. Âncoras do diff: `bin/quem_chama.py:623`, `bin/quem_chama.py:652`, `bin/quem_chama.py:655`.
-- **A cópia:** atribui diretamente `tipo_do_arquivo(rel)` e `_tipo_simbolo(...)`, sem propagação de exposição shell à cobertura. Depois, `if tipo in VARRIDOS` decide publicar N. Portanto as propostas divergem sobre **quais facetas podem afirmar zero**. (`bin/quem_chama.py:637`, `bin/quem_chama.py:656`, `bin/quem_chama.py:691`)
-- Um shell contendo apenas `true` já acionaria PC1; PC2 dependeria de coincidência lexical. Um componente comum também pode rebaixar módulos diferentes em PC2, pois `_padrao_nome` verifica limites lexicais, não identidade de módulo. (`bin/quem_chama.py:347`, `bin/quem_chama.py:348`; predicados propostos nos anexos C)
-
-**D2 — Ordem da classificação e motivos publicados: detalhe de diagnóstico.** [nao verificado]
-
-- **PC1/C:** classifica o símbolo e depois rebaixa somente os tipos cobertos; preserva motivos já desconhecidos. Sítio substituído: `bin/quem_chama.py:656`.
-- **PC2/C:** altera primeiro o tipo do arquivo e depois chama `_tipo_simbolo`. Sítios substituídos: `bin/quem_chama.py:655`, `bin/quem_chama.py:657`.
-- **A cópia:** `_tipo_simbolo` devolve imediatamente tipos de arquivo fora dos três tipos Python admitidos. Em PC2, esse retorno substituiria os motivos específicos de método, setting, convenção, registro dinâmico e decorador pelo motivo shell. Essas facetas continuariam desconhecidas; muda a explicação e o agrupamento do resumo. (`bin/quem_chama.py:313`, `bin/quem_chama.py:314`, `bin/quem_chama.py:315`, `bin/quem_chama.py:319`, `bin/quem_chama.py:322`, `bin/quem_chama.py:720`)
-
-**D3 — Expectativas do selo: DESENHO decorrente de D1.**
-
-- **PC1/C:** troca expectativas de símbolo coberto por “nao varrido” e acrescenta uma consulta sem shells para recuperar expectativas de zero. Os sítios alterados são `bin/tests/test_quem_chama.sh:218`, `bin/tests/test_quem_chama.sh:223`, `bin/tests/test_quem_chama.sh:224`, `bin/tests/test_quem_chama.sh:231`, `bin/tests/test_quem_chama.sh:279`.
-- **PC2/C:** mantém essas expectativas e acrescenta verificações dos módulos lexicalmente expostos. Os pontos de inserção são `bin/tests/test_quem_chama.sh:44` e `bin/tests/test_quem_chama.sh:210`.
-- **A cópia:** exige atualmente filtro e símbolo de topo cobertos, inclusive zero para filtro não utilizado. Não são expectativas intercambiáveis entre os dois desenhos. (`bin/tests/test_quem_chama.sh:218`, `bin/tests/test_quem_chama.sh:223`, `bin/tests/test_quem_chama.sh:231`)
-
-**D4 — Negativa de faceta: detalhe com acoplamento ao desenho.**
-
-- **PC1/C:** propõe `awk` aceitando cabeçalho de arquivo contado ou não varrido. **PC2/C:** propõe Python exigindo `faceta.startswith('arquivo [')`, portanto apenas arquivo contado. Ambos substituem as negativas em `bin/tests/test_quem_chama.sh:159` e `bin/tests/test_quem_chama.sh:167`.
-- **A cópia:** os formatos são distintos: arquivo contado contém colchetes; arquivo desconhecido começa com `arquivo: nao varrido`. O teste de PC2 rejeitaria uma saída desconhecida mesmo que o achado estivesse corretamente sob arquivo. (`bin/quem_chama.py:692`, `bin/quem_chama.py:697`)
-
-**D5 — Comentário multilinha e posição posterior: detalhe da prova.**
-
-- **PC1/C:** acrescenta uso válido depois do comentário e exige sua linha original. **PC2/C:** exige uso anterior ao comentário e ausência dentro dele; não prende a numeração posterior. Pontos de inserção/substituição: `bin/tests/test_quem_chama.sh:106`, `bin/tests/test_quem_chama.sh:107`.
-- **A cópia:** preserva as quebras de linha dos comentários, mas a fixture existente fecha cada comentário na mesma linha. A prova proposta por PC1 é mais específica para a preservação posterior. (`bin/quem_chama.py:521`, `bin/quem_chama.py:523`, `bin/tests/test_quem_chama.sh:61`)
-
-**D6 — Isolamento das formas shell: detalhe da prova, sem independência demonstrada.**
-
-- **PC1/C:** põe as três formas sobre um único módulo; **PC2/C:** usa três módulos, todos sob o mesmo pacote. São acréscimos junto à montagem dos leitores em `bin/tests/test_quem_chama.sh:45`.
-- No predicado de PC2, o componente compartilhado `ilha` permite que uma única forma rebaixe os três módulos; portanto três asserções positivas não demonstram separadamente as três formas. A identidade do módulo vem do caminho, e o predicado lexical usa os limites de `_padrao_nome`. (`bin/quem_chama.py:130`, `bin/quem_chama.py:133`, `bin/quem_chama.py:347`, `bin/quem_chama.py:638`)
-
-As divergências por **omissão** estão discriminadas em 3; os dois diffs preservam o contador e o escritor de relatório existentes. (`bin/quem_chama.py:690`, `bin/quem_chama.py:737`, `bin/quem_chama.py:742`; propostas C dos anexos)
-
-**3 SO NUMA**
-
-**Só PC1:**
-
-- **Contraexemplo de função sob condicional — DESENHO/universo:** o inventário recursa em classes, mas não em corpos de condicionais; uma definição alterada pode faltar como faceta. (`bin/quem_chama.py:257`, `bin/quem_chama.py:264`, `bin/quem_chama.py:266`, `bin/quem_chama.py:277`)
-- **Contraexemplo de Python em configuração — DESENHO/universo:** a cura shell proposta não cobre configuração que recebe apenas busca textual. (`bin/quem_chama.py:610`, `bin/quem_chama.py:678`)
-- **Contraexemplo de caminho com quebra de linha — DESENHO/universo:** `_ler_rev` exclui esses caminhos e a varredura ignora conteúdo ausente. (`bin/quem_chama.py:90`, `bin/quem_chama.py:668`)
-- **Caso explícito de binário, vazio e alteração somente de modo — detalhe do inventário:** a lista de alvos vem de `--name-status`; não depende de haver linhas textuais alteradas. (`bin/quem_chama.py:143`, `bin/quem_chama.py:144`, `bin/quem_chama.py:621`)
-- **Mudança explícita de `FORA` e controle sem shell no diff — respectivamente detalhe de documentação e prova do desenho global.** Os sítios atuais são a declaração apresentada no relatório e a transição para o smoke. (`bin/quem_chama.py:65`, `bin/quem_chama.py:706`, `bin/tests/test_quem_chama.sh:260`)
-
-**Só PC2:**
-
-- **Quantidades históricas específicas:** 39 alvos documentais, 12 achados de JSON, CSS N=3, biblioteca N=13 e filtro N=15. A confirmação dessas quantidades é **[nao verificado]**; classificação documental, carregamento e registro são conferíveis nos sítios citados. (`bin/quem_chama.py:308`, `app/templates/base.html:17`, `app/chamados/templatetags/chamados_tags.py:53`)
-- **Caso de módulo simples de `bin/` — detalhe de abrangência:** `modulo_de` admite nome sem ponto, enquanto a lista textual só acrescenta o módulo quando contém ponto. (`bin/quem_chama.py:125`, `bin/quem_chama.py:133`, `bin/quem_chama.py:642`)
-- **Caso explícito de JSON como chamador sem ser alvo coberto — detalhe de classificação:** JSON entra como configuração chamadora, mas seu tipo de alvo não está na lista positiva. (`bin/quem_chama.py:72`, `bin/quem_chama.py:308`, `bin/quem_chama.py:610`, `bin/quem_chama.py:691`)
-- **Caso explícito de range/revisão/raiz ilegível — detalhe do contrato de erro:** falha Git gera `RuntimeError`, capturado como rc=2. (`bin/quem_chama.py:78`, `bin/quem_chama.py:119`, `bin/quem_chama.py:734`, `bin/quem_chama.py:736`)
-- **Contraexemplo de sintaxe de template repartida em linhas — DESENHO/universo:** as buscas de carregamento, inclusão, estático e uso de filtro operam por linha. (`bin/quem_chama.py:528`, `bin/quem_chama.py:531`, `bin/quem_chama.py:541`, `bin/quem_chama.py:562`)
-- **Contraexemplo explícito de nomes calculados e reexport — DESENHO/universo declarado:** são exclusões expressas que o diff não elimina. (`bin/quem_chama.py:65`, `bin/quem_chama.py:66`)
-
-**4 CITACAO FALSA**
-
-**Não identifiquei contradição demonstrada nos sítios funcionais citados. Há citações que não sustentam a parte quantitativa atribuída a elas:**
-
-| Atribuição de PC2/A | O que a citação efetivamente sustenta |
-|---|---|
-| 39 alvos documentais e 12 achados do JSON. | Classificação e apresentação de cobertura; essas linhas não enumeram os alvos nem os achados históricos. Quantidades: **[nao verificado]**. (`bin/quem_chama.py:284`, `bin/quem_chama.py:308`, `bin/quem_chama.py:697`) |
-| CSS N=3. | Um carregamento concreto e a regra do scanner; não o total histórico de três leitores. N=3: **[nao verificado]**. (`app/templates/base.html:17`, `bin/quem_chama.py:537`) |
-| Biblioteca N=13; filtro N=15. | Declaração de cobertura e registro do filtro; não os totais históricos. N=13/N=15: **[nao verificado]**. (`bin/quem_chama.py:43`, `bin/quem_chama.py:53`, `app/chamados/templatetags/chamados_tags.py:53`) |
-
-As referências originais a `avais.txt`, `otimiza3_reprovacoes.txt` e `pd_otimiza3.r`, assim como as verificações em memória alegadas pelos anexos, permanecem **[nao verificado]**. Ausência dessa evidência não demonstra falsidade dos resultados alegados.
-
-A citação de PC2 a `bin/tests/test_quem_chama.sh:51` **não é falsa quanto a N=1 por faceta**: embora a fixture também contenha `mudada()`, o scanner externo não registra esse `Name` simples; registra a importação. (`bin/tests/test_quem_chama.sh:51`, `bin/quem_chama.py:414`, `bin/quem_chama.py:420`, `bin/quem_chama.py:429`)
-
-## 05/11 18:25 · sessao e7c93d089ad0 · - · - · origem=Ronald (tmux)
-
-Auditoria B consolidada, com os sítios abertos:
-
-**Coincide**
-
-- Os oito pontos literais de chamada de `carimbar` coincidem: `app/chamados/models.py:2674`; `app/chamados/reconciliador.py:405`; `app/chamados/reconciliador.py:620`; `app/chamados/services/disputa_emissao.py:1603`; `app/chamados/services/disputa_emissao.py:1675`; `app/chamados/services/materializacao.py:546`; `app/chamados/services/materializacao.py:1199`; `app/chamados/services/materializacao.py:1346`.
-- O registro sustenta C6/C7/C15/C17/C18 e competência: `app/core/juizes.py:266`; `app/core/juizes.py:267`; `app/core/juizes.py:275`; `app/core/juizes.py:277`; `app/core/juizes.py:278`; `app/core/juizes.py:283`.
-- `app/core/juizes.py:1285` realmente registra `vinculo_do_dia`: não é citação falsa. O lookup distingue endereço de autoridade e registro vivo em `app/docs/JUIZES.md:7`; `app/docs/JUIZES.md:11`.
-- A tripla é atribuída em `_escrever_carimbo`; carimbo, identidade, restauração e descarimbo o chamam: `app/chamados/models.py:2545`; `app/chamados/models.py:2575`; `app/chamados/models.py:2608`; `app/chamados/models.py:2626`; `app/chamados/models.py:2628`; `app/chamados/models.py:2637`.
-- Há escritores da via isolada: `app/chamados/models.py:2662`; `app/chamados/services/relavra_via.py:123`. Há atribuições de validação fora do serviço de validação: `app/chamados/models.py:2581`; `app/chamados/services/disputa_emissao.py:1295`; `app/chamados/models.py:1493`.
-- O memo omite ata/DNA na chave e reutiliza resultado por igualdade da chave: `app/chamados/juizes.py:811`; `app/chamados/juizes.py:837`. O salvamento agenda beco em `on_commit`: `app/chamados/signals.py:191`; `app/chamados/signals.py:202`.
-
-**Só pc1 — sítios/grupos adicionais do censo**
-
-- Instrumentos externos ao `app`: `bin/censo_folha.py:28`; `bin/censo_folha.py:29`; `bin/sombra_regras_pessoais.py:85`.
-- Cobrança e flip: `app/chamados/services/cobranca.py:229`; `app/ponto/services/flip_auto.py:129`.
-- Comandos: `app/ponto/management/commands/reconciliar_grade.py:461`; `app/chamados/management/commands/validar_classe_a.py:80`; `app/chamados/management/commands/auditar_disputas.py:71`; `app/chamados/management/commands/auditar_disputas.py:150`.
-- Preparação direta dos campos da lavra no backfill, omitida do inventário de escritores de pc2: `app/chamados/management/commands/backfill_veredito_lavrado.py:138`; `app/chamados/management/commands/backfill_veredito_lavrado.py:139`; `app/chamados/management/commands/backfill_veredito_lavrado.py:140`.
-- Outros seletores/consumidores: `app/chamados/reconciliador.py:1017`; `app/chamados/reconciliador.py:1433`; `app/chamados/services/materializacao.py:604`; `app/chamados/services/disputa_emissao.py:909`; `app/chamados/services/disputa_emissao.py:1152`; `app/chamados/services/fabrica_da_celula.py:138`; `app/chamados/services/acoes_disputa.py:95`; `app/chamados/services/declaracao_texto.py:635`; `app/chamados/services/painel.py:260`; `app/chamados/services/explicador.py:32`; `app/chamados/services/explicador.py:95`.
-- Propriedade/reduções adicionais: `app/chamados/models.py:2807`; `app/chamados/juizes.py:1225`; `app/chamados/juizes.py:1257`.
-- App/API/foto: `app/chamados/views.py:1280`; `app/chamados/views.py:1416`; `app/chamados/views_cobrar.py:176`; `app/api/views.py:1009`; `app/api/views.py:1187`; `app/api/foto_recebida.py:48`.
-- Templates adicionais: `app/templates/chamados/partials/modal_fio.html:184`; `app/templates/chamados/partials/modal_fio.html:223`; `app/templates/chamados/partials/_card_atendimento.html:100`; `app/templates/chamados/partials/_card_atendimento.html:137`; `app/templates/chamados/partials/_card_atendimento.html:155`; `app/templates/chamados/partials/_pergunta_card.html:42`.
-- I20, resposta sem instante: `app/chamados/management/commands/auditar_invariantes_chamados.py:1102`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1103`.
-
-**Só pc2 — sítios/grupos adicionais do censo**
-
-- Conferência humana escreve `data_conferida_em/por`, sem escrever `data_evento`, e libera o gate de materialização: `app/chamados/services/validacao.py:617`; `app/chamados/services/validacao.py:619`; `app/chamados/services/materializacao.py:1115`; `app/chamados/services/materializacao.py:1116`.
-- Efeitos de exclusão `SET_NULL`: célula em `app/chamados/models.py:2198`; `app/chamados/models.py:2199`; destino em `app/chamados/models.py:2772`; `app/chamados/models.py:2774`.
-- Emissores que alimentam `tipo_resposta`: `app/chamados/services/disputa_emissao.py:393`; `app/chamados/services/disputa_emissao.py:774`; `app/chamados/services/acoes_disputa.py:262`; `app/chamados/services/declaracao_texto.py:325`; `app/chamados/services/declaracao_texto.py:614`.
-- Leitores adicionais: `app/chamados/templatetags/chamados_tags.py:128`; `app/templates/chamados/partials/_lote_preview.html:24`; `app/chamados/services/passivo_validado.py:515`; `app/chamados/views_cobrar.py:291`; `app/chamados/services/fio.py:882`; `app/chamados/services/historico.py:103`.
-- Ampliação explícita dos chamadores de C6: `app/chamados/models.py:351`; `app/chamados/models.py:1447`; `app/chamados/models.py:1728`; `app/chamados/reconciliador.py:727`; `app/chamados/reconciliador.py:1054`; `app/chamados/services/competencia_trancada.py:122`; `app/chamados/services/pergunta_no_app.py:111`; `app/chamados/services/fio.py:775`; `app/chamados/services/vigia_fio.py:755`.
-- Slot e fato do marco explicitados no inventário: `app/chamados/juizes.py:326`; `app/chamados/juizes.py:875`.
-
-As diferenças de inventário acima ampliam o universo da prova apresentado por cada anexo; não demonstram implementações incompatíveis nesses consumidores. O caso da conferência de data acrescenta um insumo real ausente dos snapshots propostos: `app/chamados/services/validacao.py:617`; `app/chamados/services/materializacao.py:1116`.
-
-**Citações sem sustentação semântica encontradas em B**
-
-1. **pc1, leitores de `resposta_colab`: `app/chamados/juizes.py:277`.** O sítio pertence a `_retratada_com_trilha`, que consulta `materializada_em`, `pk` e auditoria; não lê a resposta nem deriva seu slot. O corpo completo confirma isso em `app/chamados/juizes.py:271`; `app/chamados/juizes.py:277`; `app/chamados/juizes.py:280`. O slot que lê a resposta está em `app/chamados/juizes.py:326`; `app/chamados/juizes.py:334`.
-
-2. **pc1, grupo de auditorias: `app/chamados/management/commands/auditar_invariantes_chamados.py:1103`.** Não sustenta os quatro rótulos apresentados naquele grupo (“carimbo sem testemunha, materializada viva, via ausente e validação sem plantio”). É I20, texto de resposta preenchido com instante de resposta nulo, declarado em `app/chamados/management/commands/auditar_invariantes_chamados.py:1102`; filtro em `app/chamados/management/commands/auditar_invariantes_chamados.py:1103`. Trata-se de associação imprecisa dessa referência; outras referências do grupo sustentam seus próprios rótulos, por exemplo via ausente em `app/chamados/management/commands/auditar_invariantes_chamados.py:954`; validação sem materialização/recusa em `app/chamados/management/commands/auditar_invariantes_chamados.py:1072`.
-
-Definições e linhas próximas que permanecem no mesmo sítio semântico não foram tratadas como falsas, como `_carimbar_validacao` em `app/chamados/services/validacao.py:127` e sua atribuição em `app/chamados/services/validacao.py:131`, ou `abrir` em `app/chamados/models.py:2387` e criação em `app/chamados/models.py:2465`.
-
-_1961 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1968 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
