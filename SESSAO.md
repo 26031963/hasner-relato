@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 23:41:55.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (9.1 MB). Acoes na janela: **334**.
+**Medido em 04/11/2026 23:47:22.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (9.1 MB). Acoes na janela: **335**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:43:24 | Bash |  | `cd /home/ronald/saas-hasner && bash bin/trava_teste.sh --quem; ps -p 3925678 >/dev/null && echo vivo \|\| echo morto; date +%T` |
 | 23:39:55 | Bash |  | `sed -i '2s/.*/ESPERANDO: trava_teste.sh \| pid=3925678/' docs/RELATO.md; cat /proc/3925678/cmdline \| tr '\0' ' ' \| grep -o -- "--only [^-]*\\|wt-[a-z0-9-]*" \| head -3` |
 | 23:39:52 | Bash |  | `cd /home/ronald/saas-hasner && bash bin/trava_teste.sh --quem; pgrep -af "trava_teste.sh --espera" \| grep -v pgrep \| cut -c1-100` |
 | 23:39:46 | Bash |  | `python3 - <<'EOF' p='docs/RELATO.md'; L=open(p,encoding='utf-8').read().split('\n') L.insert(2,"ERRO-BOBO OTIMIZA-3: verificador opus final REPROVOU 23:3x (3 bloqueia: lado VELHO do diff nao lido -- simbolo/modulo apagado ou renomeado da '0 chamador', falsa prova da L-111; management command nao chega a config/crons.py nem call_command por nome; selo sem fixture de import relativo/ast.Import com a ...` |
