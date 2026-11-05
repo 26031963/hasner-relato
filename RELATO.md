@@ -1,5 +1,5 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh | pid=3038234
+ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh | pid=3148849
 RESPONDIDA por aval H12H06-UMA-PORTA 17:2x: PERGUNTA DE DESENHO H12H06 (17:1x) -- aplicar e reverter = duas direcoes da MESMA porta, arquivo de reversao consumido por hash na trilha; v5 abre.
 CONTRATO-DE-INSTRUMENTO CODEX-PRE-DESENHO-PILOTO (aval 16:2x; padrao=n/a (instrumento)): QUEM CHAMA = a sessao, por bin/codex_pergunta.sh CODEX_PAPEL=censo CODEX_OBRA=PD-<obra> (peca 1, antes de abrir o construtor) ou AUT-<obra> (peca 2, antes da volta seguinte a 2a reprovacao procedente)
   QUEM ESPERA = o construtor da obra (recebe a .r como anexo e responde por escrito item a item: cobre/descarta+motivo) e a proxima volta da obra na peca 2; pouso ja aprovado NAO espera; fila nao se reordena
@@ -6421,3 +6421,10 @@ DESPACHO BO G1: sonda pelo envelope bin/sonda_leitura.sh -> sonnet (motivo: scri
 - O169: Codex v1 0 procedentes / 6 descartados (logs/c20_o169/triagem.txt); raia mergeada com main (6afa8aa1), suite na fila (logs/c20_o169/suite_6afa8aa1.log) -> opus final com triagem + pd_o169.r anexos
 - F3: re-suite na arvore 3b8d4a3e (main+SNC2, conflito vigiar_fio_morto.py resolvido mantendo agora=agora e o with tranca_em_lote)
 - OTIMIZA-3 (pd_otimiza3.r, 94 l.): sem achado de DESENHO; limite da copia = bin/quem_chama.py so na raia wt-qc-224741, fora do HEAD. Nao vira PERGUNTA DE DESENHO; pre-desenho refeito com a raia anexa quando a obra abrir vaga. O169 construtor entregou (e76e0419, RED 3 falhas -> GREEN Ran 66, Codex v1 0/6); suite do merge 6afa8aa1 na fila da trava atras da F3.
+
+## F3 suite verde + CODEX-FUNIL-28 aberto (17:4x)
+- SUITE F3 3b8d4a3e (main+SNC2): OK (skipped=42, expected failures=39), Ran 13667, rc=0 (logs/f3_beco1/suite_3b8d4a3e.log).
+- Pouso F3 SEGURA o opus do delta: opus_final_2 diz "resolucao a mao em .py derruba este laudo"; fbd3fca5 sem hunk .py a mao, 3b8d4a3e com 1 hunk (vigiar_fio_morto.py, ListaDoAdmin(agora=) fora do with tranca_em_lote()). Codex verificador da resolucao rodando (logs/f3_beco1/codex_merge.r) -> opus do delta -> pouso.
+- DESPACHO CODEX-FUNIL-28: consolidacao -> Codex censo em 3 lotes (A = CRIVO 1-8, 142 KB; B = SUFOCA 01-10, 160 KB; C = SUFOCA 11-20, 120 KB) + 1 chamada de fusao A+B+C | conferencia arquivo:linha -> Code | sem construtor, fila 1 intocada.
+- O169 suite 6afa8aa1 rodando na trava (pid 3148849).
+- F3 merge: Codex verificador da resolucao APROVA, 0 bloqueantes (logs/f3_beco1/codex_merge.r); conferido vigia_fio.py:199-216 (carga preguicosa) e juizes.py:994-1003 (ContextVar). Opus do delta rodando.
