@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 08:17:26.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (21.9 MB). Acoes na janela: **656**.
+**Medido em 05/11/2026 08:22:47.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (21.9 MB). Acoes na janela: **646**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -656,13 +656,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:23:07 | Bash |  | `cd /home/ronald/wt-n1im-183722/app; grep -n "sem_resposta\\|sem_veredito\\|perguntas\b" colaboradores/services/ficha.py \| sed -n 1,20p; grep -n "ordering" chamados/models.py \| head` |
 | 20:23:01 | Bash |  | `cd /home/ronald/wt-n1im-183722; git diff 0e4e4b71..4892a6ab -- app/chamados/reconciliador.py app/chamados/services/vigia_fio.py app/chamados/services/competencia_trancada.py app/chamados/models.py app/colaboradores/services/calendario.py app/chamados/services/fio.py app/chamados/services/disputa_emissao.py app/chamados/relatorios_disputa.py app/chamados/management/commands/reabrir_orfas_enterradas ...` |
 | 20:22:52 | Bash |  | `cd /home/ronald/wt-n1im-183722; git diff --stat 0e4e4b71..4892a6ab; git diff 0e4e4b71..4892a6ab -- app/chamados/juizes.py app/chamados/services/pergunta_no_app.py app/colaboradores/services/ficha.py` |
-| 20:22:44 | Bash |  | `tail -c 1500 /tmp/claude-1001/-home-ronald-saas-hasner-app/354179ca-a13f-4642-a6f5-791cf69a0acd/tasks/aaead5d5eba27cfe4.output; echo; git -C /home/ronald/wt-he-200326 status --short \| head; git -C /home/ronald/wt-he-200326 log --oneline -2` |
-| 20:22:38 | Bash |  | `cd /home/ronald/saas-hasner/app; grep -rn "COTA-40PCT" docs/CORTES.md docs/BACKLOG.md docs/HANDOFF-SESSAO.md 2>/dev/null \| cut -c1-400 \| head -5` |
-| 20:22:26 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') assert L[1].startswith('ESPERANDO: sombra.sh') assert L[5].startswith('N1 SOMBRA 20:1x') L[5]='N1 SOMBRA 20:1x (CORRIGIDA por n1q2): a linha anterior trocou os rotulos. Re-medida sequencial invertida (logs/n1q2-*.out, mesmo dump, sha IGUAL 56f41101 len 42309): censo_alcance COPIA 113 s / 101.944 quer ...` |
-| 20:22:16 | Bash |  | `cd /home/ronald/saas-hasner/app; grep -n "N1 SOMBRA\\|ESPERANDO\\|N1 SUITE" docs/RELATO.md \| head; sed -n 1,4p docs/RELATO.md \| cut -c1-300` |
-| 20:21:21 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 470,500p bin/sombra.sh` |
-| 20:21:10 | Bash |  | `cut -c1-130 /tmp/claude-1001/-home-ronald-saas-hasner-app/354179ca-a13f-4642-a6f5-791cf69a0acd/tasks/b5asge7r8.output` |
-| 20:18:27 | Bash |  | `python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') L.insert(1,'ESPERANDO: sombra.sh \| pid=3959999') open(p,'w').write('\n'.join(L)) EOF grep -h 'N1Q' /home/ronald/saas-hasner/logs/n1q2-copia.out \| cut -c1-120` |
-| 20:18:22 | Bash |  | `ps -eo pid,args \| grep 'sombra.sh --rodar' \| grep -v grep \| cut -c1-120` |
-| 20:18:11 | Bash |  | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') assert L[1].startswith('ESPERANDO:'); del L[1] L.insert(2,"N1 SUITE 4892a6ab: OK (skipped=42, expected failures=39), Ran 13513, rc=0 (logs/n1im/suite_4892a6ab.log), copia limpa. Medida por tabela (n1q-*.out, paralelo): head colaboradores_empresa 39.662 / colaborador 38.640 / periodofechado 38.516  ...` |
-| 20:18:02 | Bash |  | `cd /home/ronald/saas-hasner/logs/n1im; cat suite_4892a6ab.rc; grep -E '^(OK\|FAILED)($\| \()' suite_4892a6ab.log \| tail -1; grep '^Ran ' suite_4892a6ab.log \| tail -1; grep -E '^(ERROR\|FAIL):' suite_4892a6ab.log \| head -20; cd /home/ronald/wt-n1im-183722 && git status --porcelain \| head` |
