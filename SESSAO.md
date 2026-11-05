@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/11/2026 23:58:22.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (9.2 MB). Acoes na janela: **337**.
+**Medido em 05/11/2026 00:03:52.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (9.2 MB). Acoes na janela: **338**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:03:24 | Bash |  | `cd /home/ronald/saas-hasner && bash bin/trava_teste.sh --quem; date +%T` |
 | 23:54:46 | Bash |  | `sed -i '2s/.*/ESPERANDO: trava_teste.sh \| pid=644210/' docs/RELATO.md; tr '\0' ' ' </proc/644210/cmdline \| grep -o "wt-[a-z0-9-]*" \| head -1` |
 | 23:54:39 | Bash |  | `cd /home/ronald/saas-hasner && tail -2 logs/hook_stop_fila1.log \| cut -c1-160; bash bin/trava_teste.sh --quem; pgrep -af "trava_teste.sh --espera" \| grep -v pgrep \| cut -c1-60` |
 | 23:43:24 | Bash |  | `cd /home/ronald/saas-hasner && bash bin/trava_teste.sh --quem; ps -p 3925678 >/dev/null && echo vivo \|\| echo morto; date +%T` |
