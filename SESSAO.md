@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 13:26:26.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (4.5 MB). Acoes na janela: **140**.
+**Medido em 05/11/2026 13:31:56.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (4.5 MB). Acoes na janela: **142**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:27:11 | Bash | Point ESPERANDO at current lock holder | `cd /home/ronald/saas-hasner; ps -o args= -p 811584 \| grep -o 'wt-[a-z0-9-]*' \| head -1; sed -i 's/^ESPERANDO: \/home\/ronald\/saas-hasner\/bin\/trava_teste.sh \| pid=[0-9]*/ESPERANDO: \/home\/ronald\/saas-hasner\/bin\/trava_teste.sh \| pid=811584/' app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md` |
+| 13:27:07 | Bash | Check lock holder vs ESPERANDO | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; sed -n 2p app/docs/RELATO.md` |
 | 13:15:28 | Bash | Wait for JUIZ-1 post-merge suite verdict | `L=/home/ronald/saas-hasner/logs/jv1/suite_pos_merge.log; until grep -q '^rc=' $L 2>/dev/null; do /usr/bin/sleep 30; done; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep -E '^Ran ' $L \| tail -1; tail -1 $L; grep -E '^(ERROR\|FAIL):' $L \| head` |
 | 13:15:26 | Bash | Refresh ESPERANDO pid and record status | `cd /home/ronald/saas-hasner/app/docs; sed -i 's/^ESPERANDO: \/home\/ronald\/saas-hasner\/bin\/trava_teste.sh \| pid=[0-9]*/ESPERANDO: \/home\/ronald\/saas-hasner\/bin\/trava_teste.sh \| pid=767707/' RELATO.md; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') i=[k for k,x in enumerate(L) if x.startswith('CRONS-INSTALL-SOB-MARCA 073d840f POUSA')][0] L[i]=L[i].replace('POUSA 13:2x','NO A ...` |
 | 13:15:17 | Bash | Check whether JUIZ-1 suite got the lock or rc 75 | `sleep 3; cat /home/ronald/saas-hasner/logs/jv1/suite_pos_merge.log \| tail -5` |
