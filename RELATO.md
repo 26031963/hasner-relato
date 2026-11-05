@@ -6438,3 +6438,9 @@ LEI-AKITA: origem=escala/services/cadastro_realidade.py::beco_em_lote + escala/f
 - Piloto peca 2 (voltas): F3 = 3 voltas Codex + 2 opus finais + 1 delta Codex/opus da resolucao.
 - DEPLOY 9c0fd9d3 rc=0 (logs/f3_beco1/deploy_9c0fd9d3.log): 3 cascas HUP, rotas 200/302/200, importerror_500=0. crons.sh check: render falha CronNaoCabe sombra.sh 87 min -- PRE-EXISTENTE (BACKLOG CRON-SOMBRA-NAO-CABE / CRON-NAO-CABE-SOMBRA-65-MIN); F3 so acrescenta 2 FORA_DE_PIPELINE, nenhuma linha de crontab. Push: no proximo marco.
 - FUNIL-28 lotes: A 86 itens (din 60, sem obra 66), B 171 (din 90, sem obra 125), C 116 (din 66, sem obra 73); 0 nao verificavel; soma 373 antes da fusao entre lotes; chamada de FUSAO rodando (logs/codex_queima/funil/r_fusao.md).
+
+## CODEX-FUNIL-28 v2 -- regra dos estratos ESCRITA ANTES de abrir arquivo (18:0x)
+- S1 = a coluna afirmacao do item final AFIRMA valor, minutos, rubrica, DiaPago ou TXT ERRADO (resultado, nao risco/lacuna/teste/doc) E a coluna obra = "nenhuma". Item cujo unico vinculo com folha e o ARQUIVO (folha/, holerite/, exportacao) sem afirmar numero errado NAO entra em S1. Classificacao pela coluna afirmacao + obra da lista Codex, sem abrir codigo.
+- S2 = todo o resto. Amostra aleatoria 15% (minimo 30), python random.Random(semente).sample sobre os ids F-NNN ordenados; semente = 20261105. Se procedentes na amostra > 20%: linha aqui e a amostra dobra UMA vez (mesma semente, sample de 2x).
+- Classes finais: procedente | descartado (motivo) | ja coberto | nao verificavel | nao conferido. Nao conferido nunca conta como procedente.
+- DESPACHO FUNIL-28 v2: fusao -> Codex (rodando) | estratificacao -> Code pela regra acima, mecanica | conferencia S1 integral + S2 amostra -> sonnet (motivo: conferencia mecanica de citacao arquivo:linha, sem opus e sem construtor, por aval v2) | classificacao final e tabela -> Code.

@@ -1,7 +1,61 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **05/11/2026 17:56** · publicado em **05/11/2026 17:56** (UTC-3)
+> Ultima resposta processada: **05/11/2026 17:57** · publicado em **05/11/2026 18:01** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 05/11 17:57 · sessao aa351fdaafbd · - · - · origem=Ronald (tmux)
+
+Critério: classificar pelo conteúdo alegado, sem validar procedência.
+
+- `divergencia-texto-codigo`: comparação explícita de comentário, help, docstring, cláusula ou promessa com o código.
+- `defeito`: comportamento funcional ou ausência funcional alegados, inclusive riscos de segurança e carga sem categoria própria.
+- `lacuna-de-teste-ou-selo`: teste, selo, saída ou comprovação operacional insuficientes. [nao verificado]
+- `documentacao`: relato histórico ou configuração produtiva sem insumos para comprovação.
+- `risco-concorrencia` e `risco-idempotencia`: somente quando o mecanismo correspondente aparece na afirmação.
+- `instrumentacao`: limitações de censos, auditores, contadores e alarmes.
+- `apresentacao`: informação exposta em tela, PDF, mensagem ou payload.
+
+Exceções LA ao predominante `divergencia-texto-codigo`:
+
+| Classe | IDs |
+|---|---|
+| defeito | LA-21, LA-32, LA-49, LA-50, LA-55 |
+| risco-idempotencia | LA-15 |
+| apresentacao | LA-34 |
+| documentacao | LA-16, LA-27, LA-35, LA-53, LA-56, LA-60 |
+| lacuna-de-teste-ou-selo | LA-06, LA-70, LA-76, LA-83 | [nao verificado]
+
+LC: `lacuna` funcional deve virar `defeito`; exceções são LC-69 → `risco-idempotencia` e LC-116 → `instrumentacao`. Entre `risco`, LC-48 → `risco-idempotencia`; LC-05 e LC-98–102 → `documentacao`; restantes → `defeito`.
+
+Exceções entre LC originalmente `divergência`:
+
+| Classe | IDs |
+|---|---|
+| divergencia-texto-codigo | LC-35 |
+| documentacao | LC-45 |
+| apresentacao | LC-02, LC-36, LC-66, LC-71, LC-74, LC-76, LC-79 |
+| instrumentacao | LC-93 |
+| defeito | LC-06, LC-10, LC-12, LC-13, LC-58, LC-59, LC-70, LC-78, LC-82, LC-91, LC-92, LC-103 |
+
+Contagem anterior às fusões nessa proposta:
+
+| Classe | LA | LC |
+|---|---:|---:|
+| defeito | 5 | 97 |
+| divergencia-texto-codigo | 69 | 1 |
+| documentacao | 6 | 7 |
+| lacuna-de-teste-ou-selo | 4 | 0 | [nao verificado]
+| instrumentacao | 0 | 2 |
+| risco-idempotencia | 1 | 2 |
+| apresentacao | 1 | 7 |
+| Total | 86 | 116 |
+
+Não fundir apenas por compartilharem referência:
+
+- LA-17 e LC-84: help de 720 versus derivação automática, e materializador que fornece 720, respectivamente (`ponto/models.py:875`; `app/chamados/services/materializacao.py:519`).
+- LA-01 e LC-107: contradição documental da retenção versus derivação de furo somente de pausa (`docs/LEIS.md:81`; `app/folha/export.py:1124`).
+- LA-70 e LC-46: comprovação histórica de alcance versus custo de consultas anteriores ao skip (`ponto/services/cartorio.py:1362`; `app/ponto/services/cartorio.py:1362`).
+- LB-25 e LC-92: fallback de paridade sem foto versus escopo de vínculo diferente na leitura de folga (`app/escala/models.py:1280`).
 
 ## 05/11 17:56 · sessao eb873f1af426 · - · - · origem=Ronald (tmux)
 
@@ -1060,20 +1114,4 @@ Se o consumidor executar dentro de um lote já aquecido, `_memo_da_tranca` devol
 
 O limite da garantia é este: o SIM também depende dos vínculos atuais célula/chamado, ausentes da chave do memo; além disso, o dicionário só é descartado ao sair do contexto. **Inferência estática:** se um toque consultado sofrer rollback enquanto o mesmo lote continuar aberto, o SIM já guardado poderá sobreviver à reversão. A sequência efetiva com consumidor no mesmo `with`, rollback ou mudança desses vínculos é **[nao verificado]**. (`app/chamados/juizes.py:1044`; `app/chamados/juizes.py:1046`; `app/chamados/juizes.py:1076`; `app/chamados/juizes.py:1081`; `app/chamados/juizes.py:999`; `app/chamados/juizes.py:1003`)
 
-## 05/11 17:28 · sessao d5535b51ef1c · - · - · origem=Ronald (tmux)
-
-O único `with tranca_em_lote()` produtivo encontrado está em `vigiar_fio_morto.Command.handle`; envolve cinco medições e termina antes da impressão/carimbo. O comando do consumidor abre `consumidor_exclusivo`, depois chama `consumir_eventos_celula`; não abre o lote da tranca. (`app/chamados/management/commands/vigiar_fio_morto.py:171`; `app/chamados/management/commands/vigiar_fio_morto.py:172`; `app/chamados/management/commands/vigiar_fio_morto.py:176`; `app/chamados/management/commands/consumir_eventos_celula.py:19`; `app/chamados/management/commands/consumir_eventos_celula.py:31`)
-
-Se o consumidor fosse executado dentro de um lote já aberto, o caminho das órfãs alcançaria seu memo: consumidor → `encerrar_orfas_pela_lampada` → `veredito_orfa` → `pergunta_viva` → `_pergunta_viva_calc` → `dia_da_pergunta_trancado` → `_admin_tocou_o_dia_depois` → `_memo_da_tranca`, que devolve o dict do contexto. (`app/chamados/reconciliador.py:1329`; `app/chamados/reconciliador.py:1103`; `app/chamados/reconciliador.py:1054`; `app/chamados/juizes.py:839`; `app/chamados/juizes.py:1140`; `app/chamados/juizes.py:954`; `app/chamados/juizes.py:1043`; `app/chamados/juizes.py:972`; `app/chamados/juizes.py:974`)
-
-O memo da rodada não guarda **NÃO**; após resultado falso, a consulta é repetida. Logo, a simples inclusão posterior de toque humano não fica escondida por um NÃO desse memo. **SIM** retorna diretamente, sem repetir a consulta. (`app/chamados/juizes.py:1045`; `app/chamados/juizes.py:1047`; `app/chamados/juizes.py:1048`; `app/chamados/juizes.py:1049`)
-
-Há possibilidade estrutural de SIM velho se um toque visível durante uma transação aquecer o memo e essa transação for revertida antes do consumo no mesmo lote: o dict recebe `True`, e sua limpeza só acontece ao sair do `with`; não há vínculo com rollback nesse corpo. Execução produtiva dessa sequência: **[não verificado]**. (`app/chamados/juizes.py:1049`; `app/chamados/juizes.py:999`; `app/chamados/juizes.py:1003`)
-
-A monotonicidade também depende das relações atuais: a consulta cruza células atuais do colaborador/dia e chamados atualmente ligados a essas células; tais relações não integram a chave do SIM. Uma alteração que retire esse suporte pode tornar a consulta fresca falsa enquanto o SIM permanece. Ocorrência e caminho produtivo de tal alteração: **[não verificado]**. (`app/chamados/juizes.py:1076`; `app/chamados/juizes.py:1081`; `app/chamados/juizes.py:1083`; `app/chamados/juizes.py:1044`; `app/chamados/juizes.py:1045`)
-
-Empresa e período trancado ficam fora do memo da rodada, mas continuam memoizados no request ou colaborador. O usuário de sistema entra no memo da rodada na primeira consulta; seu helper usa `get_or_create(username='sistema')`. (`app/chamados/juizes.py:940`; `app/chamados/juizes.py:941`; `app/chamados/juizes.py:947`; `app/chamados/juizes.py:979`; `app/chamados/juizes.py:1068`; `app/chamados/juizes.py:1070`; `app/core/utils.py:18`)
-
-O consumidor não chama diretamente `retratar_perguntas_absolvidas_por_celula`: suas duas chamadas são a retratação de chamados e o encerramento de órfãs. (`app/chamados/reconciliador.py:1326`; `app/chamados/reconciliador.py:1329`)
-
-_1899 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1900 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

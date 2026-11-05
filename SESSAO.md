@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 17:56:27.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (23.6 MB). Acoes na janela: **813**.
+**Medido em 05/11/2026 18:01:15.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (24.3 MB). Acoes na janela: **816**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:58:59 | Bash | Check O169 suite and fusion progress | `cd /home/ronald/saas-hasner; ps -p 3148849 -o pid,etime,cmd \| tail -1; tail -2 logs/c20_o169/suite_6afa8aa1.log \| cut -c1-200; ls -la logs/codex_queima/funil/ \| tail -5; cat logs/codex_queima/funil/out_fusao.txt 2>/dev/null \| tail -3; bin/trava_teste.sh --quem` |
+| 17:58:52 | Bash | Read the three builder results and the waiter | `cd /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks; for t in a8f7354f806790dab af25e5feeb23c90aa a3d64b62b38120eb0; do echo "=== $t"; tail -c 3500 $t.output; echo; done; cat bd02v92tn.output` |
+| 17:57:51 | Bash | Register FUNIL-28 v2 and write strata rule before reading | `cd /home/ronald/saas-hasner; date +%H:%M; echo "- 05/11 18:0x CODEX-FUNIL-28 v2 (substitui v1): fusao Codex -> estratos S1 (afirma valor/minutos/rubrica/DiaPago/TXT errado E sem obra; so-arquivo-de-folha nao entra) conferencia integral, S2 amostra 15% min 30 semente publicada; leitura sonnet -> BACKLOG CODEX-FUNIL-28" >> app/docs/PROMPTS.md sed -i 's#^\| CODEX-FUNIL-28 \| medida (aval 05/11 17:4x, ...` |
 | 17:54:19 | Bash | Wait for O169 suite or fusion result | `cd /home/ronald/saas-hasner/logs; for i in $(seq 1 240); do for f in c20_o169/suite_6afa8aa1.log codex_queima/funil/out_fusao.txt; do m=/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/visto_$(echo $f\|tr / _); [ -e $m ] && continue; /bin/grep -q '^rc=' $f 2>/dev/null && { touch $m; echo "PRONTO $f"; exit 0; }; done; /usr/bin/sleep 20; done` |
 | 17:54:13 | Bash | Launch FUNIL-28 cross-lote fusion Codex call | `cd /home/ronald/saas-hasner; F=logs/codex_queima/funil; cat > $F/q_fusao.txt <<'EOF' CODEX_OBRA=FUNIL-28, papel censo, FUSAO. Hash da copia: ad28270d. ANEXOS: r_A.md (consolidacao dos lotes CRIVO 1-8, ids LA-), r_B.md (SUFOCA 01-10, ids LB-), r_C.md (SUFOCA 11-20, ids LC-). Cada um ja e lista sem repeticao DENTRO do lote; os vocabularios de classe diferem entre eles. TAREFA: produzir a lista UNICA ...` |
 | 17:53:56 | Bash | Read lote B and C totals | `cd /home/ronald/saas-hasner/logs/codex_queima/funil; wc -l r_*.md; for x in B C; do echo "== $x"; /bin/grep -A12 -i 'Itens únicos\\|total de itens' r_$x.md \| head -14; done` |
