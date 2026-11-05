@@ -1,6 +1,6 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **04/11/2026 15:44** · publicado em **05/11/2026 11:35** (UTC-3)
+> Ultima resposta processada: **04/11/2026 15:44** · publicado em **05/11/2026 12:22** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
 
 ## 04/11 15:44 · sessao a3f628326e9b · E4-APP-MAPA · verificador · origem=Code
@@ -401,7 +401,7 @@ Achados dos itens 5–6 (análise estática; execução GREEN/RED e condições 
 
 6. **A guarda `Revert "` é apenas um prefixo literal e sensível a maiúsculas:** cobre o assunto convencional produzido pelo próprio `git revert --no-edit`, mas não identifica semanticamente reversões com título editado; também bloqueia qualquer commit normal cujo título comece assim (`bin/vigia_logins.sh:78–87`). O fixture cria um commit normal intitulado `Revert "..."`, não uma reversão real, e por isso testa precisamente o prefixo (`bin/tests/test_vigia_logins_sem_sobreposicao.sh:39–42`, `bin/tests/test_vigia_logins_sem_sobreposicao.sh:70`).
 
-## 04/11 12:22 · sessao c2861ff43f2f · - · - · origem=Ronald (tmux)
+## 04/11 12:22 -- HISTORICO (mais de 24 h) · sessao c2861ff43f2f · - · - · origem=Ronald (tmux)
 
 Mapa de escritores/leitores e falhas:
 
@@ -427,7 +427,7 @@ Falhas a destacar:
 
 4. **Trava do vigia não estabelece Single Writer global.** Vigia usa trava própria e faz `git revert` (`bin/vigia_logins.sh:71-87`), enquanto a porta compartilhada da árvore é `/tmp/cadeia.lock` (`bin/trava.sh:57-70`), usada pelas cadeias (`bin/molde_fatia/cadeia.sh:11`, `bin/molde_autocura/cadeia.sh:10`). `auto_revert` também reverte sem adquirir essa porta dentro da função (`app/core/esteira_vigia.py:1242-1291`). Sobreposição real em prod: **[não verificado]**.
 
-## 04/11 12:22 · sessao 00bdd655fe03 · - · - · origem=Ronald (tmux)
+## 04/11 12:22 -- HISTORICO (mais de 24 h) · sessao 00bdd655fe03 · - · - · origem=Ronald (tmux)
 
 1. **Existe HUP sem `recusa_restart_com_cron`, por desenho:** normal, `--sem-migrate`, `--sem-sombra`, `--reload-copia` e `--reload-agendado` convergem no único `docker kill -s HUP`; a recusa só é chamada para `RESTART=1` (`bin/deploy.sh:112-114`, `bin/deploy.sh:295-315`). O único `docker restart` está imediatamente após a segunda recusa (`bin/deploy.sh:297-298`).
 
