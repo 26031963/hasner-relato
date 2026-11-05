@@ -6,10 +6,25 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 10:05:17.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (23.7 MB). Acoes na janela: **627**.
+**Medido em 05/11/2026 10:10:55.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (24.6 MB). Acoes na janela: **642**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:10:45 | Bash | Write 5-line instrument contract in RELATO | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() o='ORDEM VIVA MANHA-0511' k=s.index(o) c=('CONTRATO CRONS-INSTALL-SOB-MARCA (instrumento, aval CRON-MARCA-COBRE-INSTALL 10:1x; Codex sem cota, opus le): ' '(1) QUEM CHAMA: `bin/crons.sh install` (humano/pouso); passa o crontab vivo do host ao render. ' '(2) QUEM ESPERA: o pouso do JUIZ-1, que confere o diff do  ...` |
+| 10:10:27 | Bash | Read inicio_derivado and its callers | `cd /home/ronald/saas-hasner/app; sed -n 185,270p config/crons.py; grep -n 'inicio_derivado(' config/crons.py; cat ../logs/crons_check.log 2>/dev/null \| tail -5` |
+| 10:10:23 | Bash | Inspect crons.sh and render failure path | `cd /home/ronald/saas-hasner; cat bin/crons.sh; grep -n 'NAO CABE\\|def inicio_derivado\\|def render\\|raise' app/config/crons.py \| head -30; grep -rn "crons\b.*render\\|'render'" app/core/management/commands/crons.py 2>/dev/null \| head; ls app/*/management/commands/crons.py` |
+| 10:10:17 | Bash | Record 10:1x aval in RELATO, PROMPTS, BACKLOG | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' import re p='docs/RELATO.md'; s=open(p).read() a='PAREI: juiz1-pouso-sem-crons-install \|' assert s.count(a)==1 s=s.replace(a,'~~PAREI: juiz1-pouso-sem-crons-install~~ RESPONDIDA por aval CRON-MARCA-COBRE-INSTALL 05/11 10:1x (a marca CRON-15 cobre o install ate 13/11; antes cura a volta 5) \|') b='lei: TRANSFERENCIA-DE-POSTO-NAO-CORTA-O-VINCULO (a ...` |
+| 10:10:00 | Bash | Find BUG-SW records | `cd /home/ronald/saas-hasner/app; grep -n 'BUG-SW' docs/RELATO.md docs/BACKLOG.md docs/PENDENTES_RONALD.json docs/FABRICANTE.md 2>/dev/null \| cut -c1-400 \| head -20` |
+| 10:09:55 | Bash | Locate RELATO/PROMPTS lines to update | `cd /home/ronald/saas-hasner/app; head -12 docs/RELATO.md; grep -n 'PAREI: juiz1-pouso\\|lei: TRANSFERENCIA' docs/RELATO.md; tail -3 docs/PROMPTS.md; grep -n '22:5x' docs/RELATO.md docs/BACKLOG.md \| head` |
+| 10:09:54 | Bash | Wait for F3 suite2 verdict | `cd /home/ronald/saas-hasner; until grep -q '^rc=' logs/f3_beco1/suite2.log; do /usr/bin/sleep 30; done; grep -E '^(OK\|FAILED)($\| \()' logs/f3_beco1/suite2.log\|tail -1; grep '^Ran' logs/f3_beco1/suite2.log\|tail -1; grep '^rc=' logs/f3_beco1/suite2.log` |
+| 10:09:51 | Bash | Check F3 suite2 status and lock holder | `cd /home/ronald/saas-hasner; tail -3 logs/f3_beco1/suite2.log; bash bin/trava_teste.sh --quem; git -C /home/ronald/wt-f3b1-082714 log --oneline -3` |
+| 10:09:48 | Bash | Read F3 builder result tail | `tail -c 6000 /tmp/claude-1001/-home-ronald-saas-hasner-app/354179ca-a13f-4642-a6f5-791cf69a0acd/tasks/a16b5fb575c01efe8.output; date` |
+| 10:08:41 | SendMessage |  | `-` |
+| 10:08:18 | Bash |  | `cd /home/ronald/saas-hasner && cat app/core/tests/marca_cron15.py \| head -80; grep -n "check\\|install\\|render" bin/crons.sh \| head -40; wc -l bin/crons.sh` |
+| 10:08:16 | Bash |  | `cd /home/ronald/saas-hasner && grep -rln "CRON-NAO-CABE-SOMBRA-87" --include=* bin app/core app/config app/chamados 2>/dev/null \| head; grep -rn "CRON-NAO-CABE-SOMBRA-87" app/docs/BACKLOG.md \| cut -c1-400` |
+| 10:08:13 | Bash |  | `cd /home/ronald/saas-hasner && grep -rn "CRON-NAO-CABE-SOMBRA-87-MIN\\|CRON-15" bin/*.sh bin/*.py app/config/*.py 2>/dev/null \| cut -c1-220 \| head -20; grep -n "CRON-15-E-RESTART" app/docs/CORTES.md app/docs/PROMPTS.md \| cut -c1-300 \| head` |
+| 10:07:33 | Bash |  | `cd /home/ronald/saas-hasner && sed -i '2s/^ESPERANDO: .*/ESPERANDO: trava_teste.sh \| pid=1884719/' app/docs/RELATO.md && sed -n 2p app/docs/RELATO.md` |
+| 10:07:30 | Bash |  | `cd /home/ronald/saas-hasner && bash bin/trava_teste.sh --quem; ps -p 606464 >/dev/null && echo vivo \|\| echo morto` |
 | 09:53:21 | Bash |  | `cd /home/ronald/saas-hasner && date +%H:%M; bash bin/trava_teste.sh --quem; ps -p 606464 >/dev/null && echo vivo \|\| echo morto` |
 | 09:51:57 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=[k for k,x in enumerate(L[:14]) if x.startswith('PAREI: juiz1-pouso-sem-crons-install')][0] L.insert(i+1,'JUIZ-1 v4 OPUS FINAL REPROVOU (09:5x): BLOQUEIA (meia-correcao, LEI-AKITA 2/5) -- `ponto/management/commands/detectar_ausencias.py:623` `cobra_no_dia(colab.posto, data_ref)` le o posto do CAD ...` |
 | 09:47:02 | Bash |  | `cd /home/ronald/saas-hasner && sed -i '2s/^ESPERANDO: .*/ESPERANDO: trava_teste.sh \| pid=606464/' app/docs/RELATO.md && sed -n 2p app/docs/RELATO.md` |
