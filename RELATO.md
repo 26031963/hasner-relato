@@ -1,5 +1,5 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: suite F3 3b8d4a3e (main+SNC2) | pid=3038231 | arquivo=logs/f3_beco1/suite_3b8d4a3e.rc
+ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh | pid=3038234
 RESPONDIDA por aval H12H06-UMA-PORTA 17:2x: PERGUNTA DE DESENHO H12H06 (17:1x) -- aplicar e reverter = duas direcoes da MESMA porta, arquivo de reversao consumido por hash na trilha; v5 abre.
 CONTRATO-DE-INSTRUMENTO CODEX-PRE-DESENHO-PILOTO (aval 16:2x; padrao=n/a (instrumento)): QUEM CHAMA = a sessao, por bin/codex_pergunta.sh CODEX_PAPEL=censo CODEX_OBRA=PD-<obra> (peca 1, antes de abrir o construtor) ou AUT-<obra> (peca 2, antes da volta seguinte a 2a reprovacao procedente)
   QUEM ESPERA = o construtor da obra (recebe a .r como anexo e responde por escrito item a item: cobre/descarta+motivo) e a proxima volta da obra na peca 2; pouso ja aprovado NAO espera; fila nao se reordena
@@ -6393,7 +6393,7 @@ LEI-AKITA: origem=n/a (medida), testemunha=censo Codex sobre os anexos raspados,
 - PERGUNTA do censo (nao e cura): janela de 14 dias em cluster_espurio.py:21 x regra "nao fecha por idade" -> anexo ao opus final da O169
 - G1/18: sonda pelo envelope bin/sonda_leitura.sh em curso; resultado na linha abaixo quando sair (erro de guarda SELECT/SAVEPOINT = nao medido)
 
-## CODEX-QUEIMA -- tabela final por tema (17:3x; CAUDA do aval H12H06-UMA-PORTA; fila SUFOCA em FIM 16:15:10, logs/codex_queima/rcs.txt)
+## CODEX-QUEIMA -- tabela final por tema (17:2x; CAUDA do aval H12H06-UMA-PORTA; fila SUFOCA em FIM 16:15:10, logs/codex_queima/rcs.txt)
 LEI-AKITA: origem=n/a (medida), testemunha=rcs.txt + turn.completed.usage dos jsonl, RED=n/a, quem-mais-le=placar por papel, juizes novos=0, padrao=n/a (medida)
 | tema | chamadas rc=0 | duracao min | achados/proc/desc | input tok (cache) | output (reasoning) |
 |---|---|---|---|---|---|
@@ -6411,3 +6411,12 @@ LEI-AKITA: origem=n/a (medida), testemunha=rcs.txt + turn.completed.usage dos js
 | TOTAL | 57 | 393,8 (parede, ate 6 em paralelo) | - | 127,28 M (119,97 M) | 669.497 (217.764) |
 - Fora da soma: 8 chamadas rc=75 as 15:05 (limite, logs/codex_queima/rcs_1505_limite.txt, sem tokens); 1 "extra PWA-OFFLINE censo" com FEITO sem abre. Conferencia: 53 abre, 54 FEITO rc=0 (o extra), j003 usage = linha LASTRO
 - INCOMPLETO: procedentes/descartados sem contagem -- nenhum tema da queima tem triagem escrita; nao se conta pela forma do texto
+
+## VAGAS e DESPACHO (17:2x-17:3x)
+DESPACHO H12H06-UMA-PORTA: v5 (uma porta aplicar/reverter, hash consumido na trilha) -> opus construtor (vaga 1) | verificador Codex -> o construtor | tabela da queima -> sonnet (leitura de log; amostra conferida: 53 abre, j003 usage = linha LASTRO)
+DESPACHO C20-JUIZ-3: construtor opus na raia wt-jv3-013523 (vaga 2, merge do main primeiro) | FRESCOR: main mudou chamados/juizes.py (SNC2) desde a0269430 -> chamada delta PD-JUIZ-3 logs/piloto_pd/pd_juiz3_delta.*
+DESPACHO BO G1: sonda pelo envelope bin/sonda_leitura.sh -> sonnet (motivo: script pronto do censo, execucao e leitura de saida; Codex nao tem banco)
+- teto 2 cheio (H12H06 v5 + JUIZ-3); FIO MUDO, O168 e PEP esperam vaga com o PD-TRIAGEM-CHAT itens 1-3 no brief
+- O169: Codex v1 0 procedentes / 6 descartados (logs/c20_o169/triagem.txt); raia mergeada com main (6afa8aa1), suite na fila (logs/c20_o169/suite_6afa8aa1.log) -> opus final com triagem + pd_o169.r anexos
+- F3: re-suite na arvore 3b8d4a3e (main+SNC2, conflito vigiar_fio_morto.py resolvido mantendo agora=agora e o with tranca_em_lote)
+- OTIMIZA-3 (pd_otimiza3.r, 94 l.): sem achado de DESENHO; limite da copia = bin/quem_chama.py so na raia wt-qc-224741, fora do HEAD. Nao vira PERGUNTA DE DESENHO; pre-desenho refeito com a raia anexa quando a obra abrir vaga. O169 construtor entregou (e76e0419, RED 3 falhas -> GREEN Ran 66, Codex v1 0/6); suite do merge 6afa8aa1 na fila da trava atras da F3.

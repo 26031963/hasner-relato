@@ -1,7 +1,71 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **05/11/2026 17:23** · publicado em **05/11/2026 17:26** (UTC-3)
+> Ultima resposta processada: **05/11/2026 17:28** · publicado em **05/11/2026 17:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 05/11 17:28 · sessao 351339669556 · PD-JUIZ-3 · censo · origem=Code
+
+1. **As citações diretas do censo seguem válidas; nenhuma aponta para corpo alterado pelo delta.** As referências no código novo são:
+
+| Linha do censo | Classificação | Referência nova |
+|---|---|---|
+| §1 — leitor de `TurnoMaterializado`, testemunha de resolução | Segue válida | `app/chamados/juizes.py:1478`; `app/chamados/juizes.py:1479` |
+| §1 — leitor de contexto, `dia_do_fato` | Segue válida | `app/chamados/juizes.py:80`; `app/chamados/juizes.py:93` |
+| §1 — prioridade da célula ligada | Segue válida | `app/chamados/juizes.py:91`; `app/chamados/juizes.py:92` |
+| §2 — data do fato prioriza célula/contexto | Segue válida | `app/chamados/juizes.py:91`; `app/chamados/juizes.py:93` |
+| §3 — armadilha de competência: fato mais recente das perguntas vivas | Segue válida | `app/chamados/juizes.py:2036`; `app/chamados/juizes.py:2050`; `app/chamados/juizes.py:2054` |
+| §3 — armadilha da célula sem ata: indeterminação não significa folga | Segue válida | `app/chamados/juizes.py:418`; `app/chamados/juizes.py:428` |
+| RED R9 — indeterminado sem ata | Segue válida | `app/chamados/juizes.py:418`; `app/chamados/juizes.py:428` |
+
+A competência, embora preserve seu corpo, tem dependência indireta alterada: seleciona perguntas por `pergunta_viva`, cujo cálculo consulta a tranca e chega ao memo do toque. (`app/chamados/juizes.py:2031`; `app/chamados/juizes.py:1140`; `app/chamados/juizes.py:954`; `app/chamados/juizes.py:1043`)
+
+2. **Há novo estado transitório de memo e uma extração de leitor; não há novo produtor de evento nesses trechos.** O contexto cria o dicionário da rodada; `_admin_tocou_o_dia_depois` grava nele somente o SIM, e `_toque_humano_no_dia` guarda o identificador do usuário de sistema. (`app/chamados/juizes.py:999`; `app/chamados/juizes.py:1049`; `app/chamados/juizes.py:1070`)
+
+O novo helper concentra leituras já presentes no delta fornecido: trilha de auditoria, células do colaborador/dia e chamados ligados a essas células. São estados usados na decisão que o consumidor alcança por `veredito_orfa` → `pergunta_viva` → tranca → toque. (`app/chamados/juizes.py:1071`; `app/chamados/juizes.py:1076`; `app/chamados/juizes.py:1081`; `app/chamados/reconciliador.py:1329`; `app/chamados/reconciliador.py:1103`; `app/chamados/reconciliador.py:1054`; `app/chamados/juizes.py:1140`; `app/chamados/juizes.py:954`)
+
+Há uma escrita persistente **possível e preexistente** por baixo da leitura do usuário: `get_user_sistema` usa `get_or_create`. O delta muda sua frequência e memoriza o PK; não introduz essa possibilidade de criação. (`app/chamados/juizes.py:1068`; `app/chamados/juizes.py:1070`; `app/core/utils.py:18`)
+
+As lacunas produtoras permanecem: `criar` termina com criação e trilha, e `recompute_turnos` termina com exclusão/recriação do materializado, sem emissão de evento nesses corpos. (`app/chamados/models.py:1048`; `app/chamados/models.py:1049`; `app/chamados/models.py:1050`; `app/ponto/nucleo.py:57`; `app/ponto/nucleo.py:60`; `app/ponto/nucleo.py:61`)
+
+3. **Pode conservar um SIM velho, condicionalmente; isso não demonstra ocorrência no outbox.** Quem abre o lote no fluxo mostrado é `vigiar_fio_morto.handle`, envolvendo as cinco medições. O comando do consumidor abre outra trava, `consumidor_exclusivo`, e chama o consumo fora daquele bloco. (`app/chamados/management/commands/vigiar_fio_morto.py:171`; `app/chamados/management/commands/vigiar_fio_morto.py:172`; `app/chamados/management/commands/vigiar_fio_morto.py:176`; `app/chamados/management/commands/consumir_eventos_celula.py:19`; `app/chamados/management/commands/consumir_eventos_celula.py:31`)
+
+Se o consumidor executar dentro de um lote já aquecido, `_memo_da_tranca` devolve o dicionário existente; um SIM retorna imediatamente, sem reler a trilha. O NÃO volta a consultar. Empresa e período ficam fora do memo da rodada, embora continuem memorizados no request/colaborador. (`app/chamados/juizes.py:972`; `app/chamados/juizes.py:974`; `app/chamados/juizes.py:1045`; `app/chamados/juizes.py:1047`; `app/chamados/juizes.py:1049`; `app/chamados/juizes.py:940`; `app/chamados/juizes.py:979`; `app/chamados/juizes.py:947`)
+
+O limite da garantia é este: o SIM também depende dos vínculos atuais célula/chamado, ausentes da chave do memo; além disso, o dicionário só é descartado ao sair do contexto. **Inferência estática:** se um toque consultado sofrer rollback enquanto o mesmo lote continuar aberto, o SIM já guardado poderá sobreviver à reversão. A sequência efetiva com consumidor no mesmo `with`, rollback ou mudança desses vínculos é **[nao verificado]**. (`app/chamados/juizes.py:1044`; `app/chamados/juizes.py:1046`; `app/chamados/juizes.py:1076`; `app/chamados/juizes.py:1081`; `app/chamados/juizes.py:999`; `app/chamados/juizes.py:1003`)
+
+## 05/11 17:28 · sessao d5535b51ef1c · - · - · origem=Ronald (tmux)
+
+O único `with tranca_em_lote()` produtivo encontrado está em `vigiar_fio_morto.Command.handle`; envolve cinco medições e termina antes da impressão/carimbo. O comando do consumidor abre `consumidor_exclusivo`, depois chama `consumir_eventos_celula`; não abre o lote da tranca. (`app/chamados/management/commands/vigiar_fio_morto.py:171`; `app/chamados/management/commands/vigiar_fio_morto.py:172`; `app/chamados/management/commands/vigiar_fio_morto.py:176`; `app/chamados/management/commands/consumir_eventos_celula.py:19`; `app/chamados/management/commands/consumir_eventos_celula.py:31`)
+
+Se o consumidor fosse executado dentro de um lote já aberto, o caminho das órfãs alcançaria seu memo: consumidor → `encerrar_orfas_pela_lampada` → `veredito_orfa` → `pergunta_viva` → `_pergunta_viva_calc` → `dia_da_pergunta_trancado` → `_admin_tocou_o_dia_depois` → `_memo_da_tranca`, que devolve o dict do contexto. (`app/chamados/reconciliador.py:1329`; `app/chamados/reconciliador.py:1103`; `app/chamados/reconciliador.py:1054`; `app/chamados/juizes.py:839`; `app/chamados/juizes.py:1140`; `app/chamados/juizes.py:954`; `app/chamados/juizes.py:1043`; `app/chamados/juizes.py:972`; `app/chamados/juizes.py:974`)
+
+O memo da rodada não guarda **NÃO**; após resultado falso, a consulta é repetida. Logo, a simples inclusão posterior de toque humano não fica escondida por um NÃO desse memo. **SIM** retorna diretamente, sem repetir a consulta. (`app/chamados/juizes.py:1045`; `app/chamados/juizes.py:1047`; `app/chamados/juizes.py:1048`; `app/chamados/juizes.py:1049`)
+
+Há possibilidade estrutural de SIM velho se um toque visível durante uma transação aquecer o memo e essa transação for revertida antes do consumo no mesmo lote: o dict recebe `True`, e sua limpeza só acontece ao sair do `with`; não há vínculo com rollback nesse corpo. Execução produtiva dessa sequência: **[não verificado]**. (`app/chamados/juizes.py:1049`; `app/chamados/juizes.py:999`; `app/chamados/juizes.py:1003`)
+
+A monotonicidade também depende das relações atuais: a consulta cruza células atuais do colaborador/dia e chamados atualmente ligados a essas células; tais relações não integram a chave do SIM. Uma alteração que retire esse suporte pode tornar a consulta fresca falsa enquanto o SIM permanece. Ocorrência e caminho produtivo de tal alteração: **[não verificado]**. (`app/chamados/juizes.py:1076`; `app/chamados/juizes.py:1081`; `app/chamados/juizes.py:1083`; `app/chamados/juizes.py:1044`; `app/chamados/juizes.py:1045`)
+
+Empresa e período trancado ficam fora do memo da rodada, mas continuam memoizados no request ou colaborador. O usuário de sistema entra no memo da rodada na primeira consulta; seu helper usa `get_or_create(username='sistema')`. (`app/chamados/juizes.py:940`; `app/chamados/juizes.py:941`; `app/chamados/juizes.py:947`; `app/chamados/juizes.py:979`; `app/chamados/juizes.py:1068`; `app/chamados/juizes.py:1070`; `app/core/utils.py:18`)
+
+O consumidor não chama diretamente `retratar_perguntas_absolvidas_por_celula`: suas duas chamadas são a retratação de chamados e o encerramento de órfãs. (`app/chamados/reconciliador.py:1326`; `app/chamados/reconciliador.py:1329`)
+
+## 05/11 17:27 · sessao c2a2d06e45cf · - · - · origem=Ronald (tmux)
+
+Nenhuma citação direta do anexo a `app/chamados/juizes.py` aponta para corpo alterado pelo delta. Classificação: **seguem válidas**, com estas referências novas:
+
+| Linha do censo | Referência antiga | Referência nova |
+|---|---:|---|
+| §1, leitor de `TurnoMaterializado`, escolha da testemunha | 1420 | `app/chamados/juizes.py:1478` e `app/chamados/juizes.py:1479` |
+| §1, leitor de `contexto_json`, `dia_do_fato` | 78 | `app/chamados/juizes.py:80` e `app/chamados/juizes.py:93` |
+| §1, leitor de `ChamadoColaborador.celula` | 89 | `app/chamados/juizes.py:91` e `app/chamados/juizes.py:92` |
+| §2, data/competência/vínculo, prioridade do dia | 78 | `app/chamados/juizes.py:80`, `app/chamados/juizes.py:91` e `app/chamados/juizes.py:93` |
+| §3, borda de competência, fato mais recente das perguntas vivas | 1978 | `app/chamados/juizes.py:2036`, `app/chamados/juizes.py:2050` e `app/chamados/juizes.py:2054` |
+| §3, célula sem ata: `trabalha=None` não significa folga | 416 e 426 | `app/chamados/juizes.py:418` e `app/chamados/juizes.py:428` |
+| RED R9, indeterminado sem ata | 416 e 426 | `app/chamados/juizes.py:418` e `app/chamados/juizes.py:428` |
+
+Nenhuma linha dos sítios irmãos cita diretamente `juizes.py`; essa ausência foi conferida no anexo fornecido, cuja localização em arquivo não foi disponibilizada. [não verificado]
+
+Distinção útil: a regra de competência continua a mesma, mas seu caminho das perguntas vivas alcança indiretamente o trecho alterado: `_dias_das_perguntas_vivas` chama `pergunta_viva`, cujo cálculo pergunta pela tranca. Portanto, “corpo citado não mudou” não significa “nenhuma dependência mudou”. (`app/chamados/juizes.py:2031`; `app/chamados/juizes.py:1140`; `app/chamados/juizes.py:940`; `app/chamados/juizes.py:954`)
 
 ## 05/11 17:23 · sessao 4e3cf3fedfbf · C20-O169 · verificador · origem=Code
 
@@ -1211,91 +1275,4 @@ Sítios irmãos fora cartório/supra (todos chamadores reais encontrados, sem CS
 - K: revisão vínculo `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:57`; aviso régua `app/escala/management/commands/fechar_avisos_regua_na_lista.py:47`.
 - Indiretos `.Disputa.fechar→signal R`: admin/remoção motivo `app/chamados/models.py:1868`, `:1975`; becos `app/chamados/services/becos.py:52`; tranca `app/chamados/services/competencia_trancada.py:204`; emissor/ciclo `app/chamados/services/disputa_emissao.py:1118`, `:1696`; reconciliador `app/chamados/reconciliador.py:412`, `:636`, `:1139`; materialização `app/chamados/services/materializacao.py:565`, `:1255`; encerrar fato `app/chamados/management/commands/encerrar_perguntas_com_fato.py:88`; foto `app/api/foto_recebida.py:80`; entrada sincronizada `app/ponto/services/entrada_sincronizada.py:59`; desligamento `app/colaboradores/services/desligamento.py:142`.
 
-## 05/11 16:44 · sessao 9dbce1eedae8 · - · - · origem=Ronald (tmux)
-
-Censo somente leitura de SW/cascas, com limites:
-
-- **Cache nomeado** `juliani-__BUILD_ID__`: escritor do ID é `build_id_do_sw()`, hash SHA1 truncado dos conteúdos `sw.js`, `pwa.js`, manifest e dois ícones; `_CACHE_DO_BUILD['v']=(agora,build)` memoriza por 30 s; `service_worker()` injeta o ID, publica ETag/no-cache e retorna 304 quando coincide. Leitores do nome são instalação, gravação estática e gravação de `/`/batida; ativação compara o nome para apagar todos os demais caches, sem filtro de prefixo. (`app/core/views.py:520`, `:524`, `:533`, `:543`, `:556`, `:560`, `:564`, `:572`; `app/static/sw.js:1`, `:12`, `:20`, `:59`, `:74`.)
-- **Chaves instaladas**: `/static/pwa.js`, `/static/manifest.json`, `/static/icons/icon-192.png`, `/static/icons/icon-512.png`; escritor `install → cache.addAll`; leitor `fetch /static/ → caches.match(event.request)`; demais URLs estáticas entram sob a chave Request na primeira busca sem cópia. Leituras `caches.match` pesquisam globalmente, sem abrir primeiro `CACHE_NAME`; gravações clonam a resposta sem condição explícita de status. (`app/static/sw.js:3`, `:10`, `:12`, `:54`, `:56`, `:57`, `:59`.)
-- **Chaves HTML**: `/` e prefixo `/ponto/bater/` têm escritor no ramo `comCache`, mas `request.mode==='navigate'` retorna antes dele, buscando rede e somente lendo cache em falha; navegação bem sucedida não grava sua resposta. Bater-v2 `/ponto/bater-v2/` tampouco corresponde ao prefixo `/ponto/bater/`. (`app/static/sw.js:45`, `:48`, `:50`, `:68`, `:69`, `:74`; `app/ponto/urls.py:12`.)
-- **Fallback** `doCacheOuErroDeRede` lê a chave Request e devolve cópia ou `Response.error()`. É chamado pela navegação, ramo comCache e resto. Login/logout/admin/onboarding tentam somente rede; métodos diferentes de GET não são interceptados. (`app/static/sw.js:29`, `:30`, `:36`, `:40`, `:42`, `:48`, `:77`, `:84`.)
-- **Duas cascas** carregam `pwa.js`, manifest e meta `user-perfil=colaborador` quando `!request.user.is_staff`; meta não contém ID nem exige explicitamente usuário autenticado. A escolha normal `base_tpl` é `app_shell → modo_app`, usando carimbo de sessão/cookie ou `app=1` GET/POST; bater-v2 e base da triagem fixam `base.html`. (`app/templates/base.html:8`, `:16`, `:20`; `app/templates/base_app.html:8`, `:16`, `:20`; `app/core/context_processors.py:194`, `:205`, `:210`; `app/core/utils.py:45`, `:67`; `app/templates/ponto/bater_ponto_v2.html:1`; `app/templates/ponto/triagem/base_triagem.html:1`.)
-- **HTML contém usuário**: base mostra `user.username`; triagem mostra nome/matrícula; dashboard mostra nome, matrícula e empresa. V2 injeta coordenadas/raio do posto e tipo sugerido. Portanto esses documentos atuais contêm dados associados ao usuário; cache efetivamente encontrado em aparelho real é [não verificado]. (`app/templates/base.html:316`; `app/templates/ponto/triagem/base_triagem.html:10`, `:11`; `app/templates/core/dashboard_colaborador_v2.html:14`, `:16`; `app/templates/ponto/bater_ponto_v2.html:104`, `:139`, `:140`.)
-- **Registro e atualização**: `registrarSW()` registra `/sw.js` escopo `/`, chama update imediatamente, a cada 15 min, no foco e `online`; mensagem `SYNC_BATIDAS` dispara sincronização. `install` chama skipWaiting; activate chama clients.claim; controllerchange recarrega uma vez se não houve input em form. (`app/static/pwa.js:11`, `:14`, `:15`, `:18`, `:24`, `:25`, `:26`, `:34`, `:41`, `:44`; `app/static/sw.js:14`, `:23`; `app/core/urls.py:24`.)
-- **Versão SW versus fila**: SW novo apaga caches antigos; banco IndexedDB continua nome fixo `juliani-offline`, versão 2; upgrade apenas cria stores ausentes. Não há migração dos itens no corpo de upgrade nem ligação explícita ao ID do SW. (`app/static/sw.js:17`, `:20`; `app/static/pwa.js:48`, `:50`, `:51`, `:53`, `:55`.)
-- **Config IndexedDB**: store `config`, keyPath `chave`; `salvarConfig` grava `{chave,valor}`, `lerConfig` lê `.valor`. `calcularESalvarGap` grava `ntp_gap` e `ntp_calculado_em` após `/hora/`; fallback lê gap. `obterGap` lê data, atualiza após 30 min e lê gap; `registrarBatidaOffline` e `JulianiPWA.agora` consomem `obterGap`; inicialização também calcula gap. (`app/static/pwa.js:55`, `:63`, `:67`, `:73`, `:78`, `:83`, `:86`, `:92`, `:93`, `:96`, `:100`, `:107`, `:108`, `:305`, `:307`, `:326`; `app/core/urls.py:23`.)
-- **SessionStorage pertinente**: `avisos_convite` é lido por `oferecerAvisos`, escrito como `visto` pelos botões adiar/ligar; `gps_aviso_visto` é lido/escrito por confirmação offline da triagem; `scrollpos:<pathname>` é escrito no submit POST clássico e lido/removido no load em ambas as bases. A fila usa IndexedDB, sem chamadas localStorage no caminho de gravação/sincronização. (`app/static/pwa.js:351`, `:353`, `:362`, `:366`; `app/templates/ponto/triagem/apto.html:278`, `:286`; `app/templates/base.html:406`, `:410`, `:415`, `:416`; `app/templates/base_app.html:161`, `:165`, `:170`, `:171`; `app/static/pwa.js:107`, `:126`.)
-- **Recarga “5 min”** ocorre quando a V2 volta a visible após diferença `>300000`, não por timer contínuo; `_vistoEm` é atualizado ao ocultar. Não há verificação onLine. Dois listeners pageshow persisted também recarregam, V2 e pwa global. (`app/templates/ponto/bater_ponto_v2.html:305`, `:306`, `:307`, `:308`, `:309`; `app/static/pwa.js:431`.)
-- **Outros deslocamentos offline**: triagem, após salvar fila, redireciona ao dashboard em 3 s; V2 online usa `v2Sucesso` que redireciona em 3 s; offline V2 mostra feedback sem chamar `v2Sucesso`. (`app/templates/ponto/triagem/apto.html:289`, `:299`, `:305`; `app/templates/ponto/bater_ponto_v2.html:150`, `:157`, `:340`, `:355`, `:367`, `:374`.)
-- **Sync SW** escuta tag `sync-batidas`, manda mensagem para TODOS os clientes inclusive não controlados; sem cliente mostra notificação. Cliques em notificações focam a primeira janela ou abrem `/`, sem consultar `data.url`. (`app/static/sw.js:102`, `:105`, `:106`, `:107`, `:112`, `:113`, `:116`, `:119`, `:122`, `:125`.)
-- **Concorrência**: inicialização, evento online e mensagem SW chamam `sincronizarBatidas`; a função lê todos os itens antes do laço e só deleta após resposta, sem trava explícita no corpo. SW manda para todos os clientes. Guardas `_enviando` V2 e `_confirmandoOffline` triagem pertencem à página. (`app/static/pwa.js:16`, `:126`, `:132`, `:138`, `:153`, `:162`, `:320`, `:328`; `app/static/sw.js:119`; `app/templates/ponto/bater_ponto_v2.html:321`; `app/templates/ponto/triagem/apto.html:260`, `:262`.)
-- **Consumidores fora da V2** da mesma gravação sem identidade: `bater_ponto.html` possui duas chamadas; triagem apto possui uma. A view ordinária `/ponto/bater/` termina na triagem; `/ponto/bater-v2/` ativa ui_v2, e os dois dashboards ligam à V2. (`app/templates/ponto/bater_ponto.html:543`, `:597`; `app/templates/ponto/triagem/apto.html:289`; `app/ponto/views.py:225`, `:235`, `:356`, `:358`; `app/ponto/urls.py:12`; `app/templates/core/dashboard_colaborador.html:39`; `app/templates/core/dashboard_colaborador_v2.html:31`.)
-- **Teste existente** executa sw real em Node com mocks, recebe cache pronto do cenário e `put` vazio; verifica Response.error sem cópia, cópia quando existe, rede prevalecendo. Não mede a criação do cache de navegação nem ciclo entre usuários. A rota batida no cenário é `mode='cors'`, não navegação. (`app/core/tests/test_sw_offline_fallback.py:23`, `:33`, `:37`, `:42`, `:62`, `:64`, `:79`, `:89`, `:96`.)
-- **Teste de versão** compara lista governada, altera conteúdo simulado, verifica ETag/304/no-cache/build injetado/escopo. Seu teste de template chama `os.utime`; não executei. (`app/core/tests/test_sw_casca_versao.py:35`, `:47`, `:63`, `:79`, `:102`, `:108`, `:114`, `:120`, `:126`.)
-- **Lei já nomeada** Offline Fallback no glossário; duas cascas são L-071, smoke de clique nas duas é L-072. App Shell no glossário lido: [não verificado]; o corte fornecido pelo usuário é a evidência do novo padrão. (`app/docs/GLOSSARIO.md:29`; `app/docs/LEIS.md:98`, `:99`.)
-
-Funções finais de pwa que compartilham ciclo/casca: `ehInstalado` lê navigator.standalone/media query; `inscreverPush` usa VAPID/subscription e POST com cookie CSRF; `avisarNotificacaoNegada` POST keepalive; `oferecerAvisos` usa sessionStorage; `agendarPingGeo` agenda timer 15–90 min e `executarPingGeo` envia latitude/longitude/accuracy ao `/ponto/ping-geo/` apenas online e com meta perfil; persistência pede `navigator.storage.persist` best effort. (`app/static/pwa.js:225`, `:239`, `:246`, `:259`, `:273`, `:351`, `:380`, `:392`, `:404`, `:419`, `:436`.)
-
-## 05/11 16:44 · sessao e0d43004ad27 · - · - · origem=Ronald (tmux)
-
-Contagem conferida no texto fornecido: **A = 23; B = 32; C = 17 novas; total = 72 unidades**. Deduplicadas as repetições de col253, col283 e col270 em C. Sem 07/11: **71 unidades no escopo**. [não verificado por arquivo]
-
-- Base: 54 pessoas distintas + 3 temas sem identificação (Weverton, batidas livres, UX) = 57.
-- Expansões de datas: A +5; B +9; C +1 = 15.
-- Fechamento: **57 + 15 = 72; 72 − 1 futuro = 71**. [não verificado por arquivo]
-
-Expansões:
-
-| Seção | Pessoas e acréscimos |
-|---|---|
-| A | col239 +1; col189 +1; col43 +2; col956 +1 |
-| B | col836 +1; col292 +1; col297 +3; col174 +1; col33 +1; col163 +1; col873 +1 |
-| C | col523 +1 |
-
-col297 conta **06, 13, 20 e 27/10**, quatro datas explícitas. col222 e col256 ficam **sem data individual verificada**: há referência conjunta a 12/10 na ação do relatório, mas a sonda não informa célula/data desses dois. col465 aparece nas sondas, porém não constitui caso do relatório. [não verificado por arquivo]
-
-## 05/11 16:44 · sessao c6dcf7b81ff8 · - · - · origem=Ronald (tmux)
-
-**Cinco classes de perda identificáveis no Q2; vínculo literal da expressão “5 atos” a essa enumeração: [não verificado].** Na cópia, os avais encontrados nomeiam evento na abertura e distinguem “sem furo: morrer por lastro / com furo: evento”, sem enumerar cinco atos. (`app/docs/PROMPTS.md:1519`; `app/docs/PROMPTS.md:1853`)
-
-| Classe | Comportamento atual e limites |
-|---|---|
-| Reabertura sem pergunta restaurável | `reabrir()` grava estado vivo e chama `ressuscitar_perguntas()`, sem emitir nova pergunta. A ressuscitação seleciona somente materializadas sem resposta, pula marco aceso e pergunta ao C6 sobre cópia descarimbada; universo vazio retorna zero. (`app/chamados/models.py:1379`; `app/chamados/models.py:1391`; `app/chamados/models.py:1423`; `app/chamados/models.py:1441`; `app/chamados/models.py:1481`) |
-| Identidade/duplicata | `retratar_duplicata()` carimba `VIA_DUPLICATA` pela porta de identidade; não encerra chamado. C6 mata identidade materializada somente depois de conferir resposta por decidir; portanto duplicata respondida pode permanecer viva. (`app/chamados/services/fio.py:878`; `app/chamados/services/fio.py:891`; `app/chamados/juizes.py:1092`; `app/chamados/juizes.py:1112`) |
-| Validação/materialização e outro furo residual | Validação grava assinatura dentro de `atomic`; pergunta validada é morta no primeiro degrau do C6. Materialização reconcilia destino e clones; o gate recusa fechar sobrevivente cujo dia segue furado para folha. A recusa de plantio HORA com motivo pode devolver assinatura, preservando resposta. (`app/chamados/services/validacao.py:395`; `app/chamados/juizes.py:1078`; `app/chamados/services/materializacao.py:728`; `app/chamados/models.py:701`; `app/chamados/models.py:730`; `app/chamados/services/validacao.py:180`) |
-| Morte por leitura | C6 declara morta por tranca, marco já aceso com carimbo, ou célula não acusando sem pendência aplicável, sem precisar novo carimbo. Célula acusando ou resposta discordante por decidir dão contraexemplo à leitura “carimbo = morte”. (`app/chamados/juizes.py:1082`; `app/chamados/juizes.py:1092`; `app/chamados/juizes.py:1119`; `app/chamados/juizes.py:1125`; `app/chamados/juizes.py:1137`) |
-| Transferência da última resolvedora | `reapontar_resolvedora()` salva destino e lavra, sem encerrar destino anterior. Sua guarda protege o **novo** destino terminal; não verifica se o anterior perdeu a última resolvedora. Incidência concreta: [não verificado]. (`app/chamados/services/fio.py:742`; `app/chamados/services/fio.py:764`; `app/chamados/services/fio.py:829`; `app/chamados/services/fio.py:845`) |
-
-**Escritores atuais importantes para o censo:**
-
-- Nascimento, identidade do fato e reapontamento durante dedup: `PerguntaDisputa.abrir`; reapontamento posterior explícito: `reapontar_resolvedora`. **Q2 não deve ser repetido como exclusividade absoluta do segundo**, pois o primeiro também atribui `chamado_destino`. (`app/chamados/models.py:2387`; `app/chamados/models.py:2439`; `app/chamados/models.py:2465`; `app/chamados/services/fio.py:845`)
-- Trio `materializada_em/materializada_por/via_resolucao`: `_escrever_carimbo`, chamado por `carimbar`, `carimbar_identidade`, `descarimbar`; lote por `descarimbar_em_lote`. Há ainda troca isolada de via em `encerrar_por_fato_no_espelho`. (`app/chamados/models.py:2545`; `app/chamados/models.py:2551`; `app/chamados/models.py:2614`; `app/chamados/models.py:2635`; `app/chamados/models.py:2644`; `app/chamados/models.py:2662`)
-- `validada_em/validada_por`: `_carimbar_validacao` escreve, `devolver_validacao_recusada` zera; resposta nova zera assinatura; ressuscitação e correção zeram em lote; `carimbar(resposta='validar')` também preenche quando há texto. (`app/chamados/services/validacao.py:127`; `app/chamados/services/validacao.py:188`; `app/chamados/services/disputa_emissao.py:1295`; `app/chamados/models.py:1493`; `app/chamados/services/disputa_emissao.py:1393`; `app/chamados/models.py:2580`)
-- `resposta_colab/respondida_em`: `responder_pergunta_disputa_core` escreve resposta e instante, desfaz validação anterior e chama `reabrir_por_resposta`; correção apaga resposta e carimbos, guardando versão anterior dentro do mesmo atomic. (`app/chamados/services/disputa_emissao.py:1282`; `app/chamados/services/disputa_emissao.py:1295`; `app/chamados/services/disputa_emissao.py:1300`; `app/chamados/services/disputa_emissao.py:1393`; `app/chamados/services/disputa_emissao.py:1401`)
-
-**Chamadores de perda/carimbo, inclusive fora dos sítios iniciais:**
-
-- Dedup: comando `dedup_perguntas_fato` e migração de resolvedoras usam `retratar_duplicata`. (`app/chamados/management/commands/dedup_perguntas_fato.py:88`; `app/chamados/services/fio.py:943`)
-- Reapontamento: reconciliador, declaração textual, limbo e gate do chamado usam porta de fio. (`app/chamados/reconciliador.py:922`; `app/chamados/reconciliador.py:1570`; `app/chamados/reconciliador.py:1582`; `app/chamados/services/declaracao_texto.py:320`; `app/chamados/services/limbo_folgas.py:242`; `app/chamados/models.py:420`)
-- Carimbos não identidade: ausência declarada, declaração/materialização, aprovação pelo lastro, sem turno aberto e célula absolvida passam por `carimbar`, que pergunta ao C6 no pós-estado e desfaz em memória se viva. (`app/chamados/services/materializacao.py:546`; `app/chamados/services/materializacao.py:1199`; `app/chamados/services/materializacao.py:1346`; `app/chamados/reconciliador.py:405`; `app/chamados/reconciliador.py:620`; `app/chamados/models.py:2585`)
-- Identidade também nasce em decisão admin, paridade recusada e colisão de plantio. (`app/chamados/models.py:2511`; `app/chamados/services/materializacao.py:891`; `app/chamados/services/materializacao.py:1066`)
-
-**Leitores fora dos sítios iniciais:**
-
-- App filtra pelo juiz; propriedade `.viva` delega ao juiz; `estado` traduz assinatura e C6; disputa usa ausência de respostas sem veredito e ausência de fio vivo para permitir fecho. (`app/chamados/services/pergunta_no_app.py:53`; `app/chamados/models.py:2762`; `app/chamados/models.py:2488`; `app/chamados/models.py:1783`)
-- Cartório, supra e emissão retroativa distinguem chamados com fio vivo; prévia de folha e explicador também leem `fio_vivo`. (`app/ponto/services/cartorio.py:1339`; `app/ponto/management/commands/supra_juiz.py:215`; `app/ponto/management/commands/emitir_furo_retroativo.py:98`; `app/folha/previa.py:144`; `app/chamados/services/explicador.py:137`)
-- Reconciliar grade lê resolvedoras vivas; avisos, relatórios, detalhe do dia e limbo leem C6/fio. (`app/ponto/management/commands/reconciliar_grade.py:460`; `app/chamados/services/aviso_pendencia.py:13`; `app/chamados/relatorios_disputa.py:18`; `app/ponto/services/dia_do_colab.py:70`; `app/chamados/services/limbo_folgas.py:201`)
-
-**Contraexemplos/concurrency precisos:**
-
-- Novo destino terminal é protegido por estado relido do banco e `select_for_update` dentro de atomic; o gate `PerguntaDisputa.abrir` também usa a guarda, mas a própria guarda declara que essa chamada pode vir fora de atomic e nesse caso só lê banco. (`app/chamados/services/fio.py:752`; `app/chamados/services/fio.py:761`; `app/chamados/services/fio.py:837`; `app/chamados/models.py:2436`)
-- Desfazer carimbo de instância antiga não é decisão atual: `relavra_via` relê pergunta e disputa travadas e só descarimba se C6 da linha atual disser viva. (`app/chamados/services/relavra_via.py:214`; `app/chamados/services/relavra_via.py:221`; `app/chamados/services/relavra_via.py:227`)
-- O SQL `q_vivas` declara contenção e não igualdade com C6; não implementa tranca por leitura, admin decidiu, lei acusa e juiz do lastro. Usá-lo como substituto exato muda o universo contado. (`app/chamados/models.py:2723`)
-
-**Irmãos comprovados por corpo:**
-
-1. `PerguntaDisputa.abrir` reaponta pergunta histórica existente e retorna a mesma, sem gerar nova para o destino anterior. (`app/chamados/models.py:2420`; `app/chamados/models.py:2439`; `app/chamados/models.py:2464`)
-2. `migrar_resolvedoras_vivas` combina dedup e transferência e termina em relatório, sem fechamento do antigo no corpo; chamado anterior sobreviver e ficar mudo depende de seus outros atos/leitores [não verificado]. (`app/chamados/services/fio.py:931`; `app/chamados/services/fio.py:943`; `app/chamados/services/fio.py:947`; `app/chamados/services/fio.py:960`)
-3. `_reconciliar_destino_e_clones` repete mesma decisão para destino e clones; residual mantém vivo pelo gate da premissa. (`app/chamados/services/materializacao.py:728`; `app/chamados/services/materializacao.py:740`; `app/chamados/services/materializacao.py:748`; `app/chamados/models.py:730`)
-
-_1878 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1881 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
