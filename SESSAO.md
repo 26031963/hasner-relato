@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 09:54:27.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (23.7 MB). Acoes na janela: **653**.
+**Medido em 05/11/2026 09:59:58.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (23.7 MB). Acoes na janela: **632**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -642,24 +642,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 22:03:37 | Bash |  | `cd /home/ronald/saas-hasner; until grep -q '^rc=' logs/sw/green.log 2>/dev/null; do /usr/bin/sleep 20; done; for f in red_head green; do echo "== $f"; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|Error' logs/sw/$f.log \| tail -8; done; tail -2 logs/push/he_95544d22.log` |
 | 22:03:27 | Bash |  | `cd /home/ronald/saas-hasner/app/docs; grep -n "OTIMIZA" BACKLOG.md \| cut -c1-400 \| head -20` |
 | 22:03:22 | Bash |  | `cd /home/ronald/saas-hasner; tail -3 logs/push/he_95544d22.log; for f in red_head green; do echo "== $f"; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/sw/$f.log 2>/dev/null \| tail -4; done; bin/trava_teste.sh --quem` |
-| 21:57:24 | Bash |  | `cd /home/ronald/saas-hasner/app/docs; sed -i '2s#.*#ESPERANDO: trava_teste.sh \| pid=1461651#' RELATO.md; sed -n 2p RELATO.md; ps -p 1461651 -o pid=` |
-| 21:57:20 | Bash |  | `cd /home/ronald/saas-hasner; grep -n "def _prova_pid" -A25 bin/hook_stop_fila1.py` |
-| 21:57:16 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 646,700p bin/hook_stop_fila1.py; sed -n 1200,1240p bin/hook_stop_fila1.py; tail -5 logs/hook_stop*.log 2>/dev/null \| cut -c1-200` |
-| 21:57:12 | Bash |  | `cd /home/ronald/saas-hasner; grep -n "ESPERANDO" bin/hook_stop_fila1.py \| head -20` |
-| 21:57:03 | Bash |  | `cd /home/ronald/saas-hasner/app/docs; sed -i '2s#.*#ESPERANDO: trava_teste \| pid=1461651#' RELATO.md; sed -n 2p RELATO.md` |
-| 21:56:59 | Bash |  | `ps -o pid,args -p 1461651 \| cut -c1-150` |
-| 21:56:54 | Bash |  | `cd /home/ronald/saas-hasner; ls -la --time-style=+%T logs/sw/; tail -2 logs/sw/red_head.log; tail -2 logs/push/he_95544d22.log; bin/trava_teste.sh --quem` |
-| 21:56:46 | Bash |  | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md' L=open(p).read().split('\n') L.insert(1,"ESPERANDO: suite \| arquivo=/home/ronald/saas-hasner/logs/sw/red_head.log") open(p,'w').write('\n'.join(L)) EOF sed -n 1,3p RELATO.md \| cut -c1-200` |
-| 21:56:41 | Bash |  | `cd /home/ronald/saas-hasner; until grep -q '^rc=' logs/sw/green.log 2>/dev/null; do /usr/bin/sleep 20; done; for f in red_head green; do echo "== $f"; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|AssertionError' logs/sw/$f.log \| tail -6; done; tail -2 logs/push/he_95544d22.log` |
-| 21:56:35 | Bash |  | `cd /home/ronald/wt-sw-215315/app/docs; python3 - <<'EOF' p='GLOSSARIO.md' s=open(p).read() anc=next(l for l in s.splitlines() if l.startswith('\| Identity Map \|'))+'\n' assert s.count(anc)==1 s=s.replace(anc, anc+"\| Offline Fallback (network-first: sem rede, a copia do cache; sem copia, o erro de rede de sempre -- nunca `undefined` no `respondWith`) \| fallback do SW \| `static/sw.js::doCacheOuE ...` |
-| 21:56:31 | Bash |  | `cd /home/ronald/wt-sw-215315/app/docs; sed -n 1,40p GLOSSARIO.md \| cut -c1-260` |
-| 21:56:27 | Bash |  | `cd /home/ronald/saas-hasner; grep -n "Offline Fallback" app/docs/GLOSSARIO.md app/docs/PLANO-PADROES.md \| head` |
-| 21:56:26 | Bash |  | `cd /home/ronald/saas-hasner; mkdir -p logs/sw; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/354179ca-a13f-4642-a6f5-791cf69a0acd/scratchpad; ( bash bin/suite.sh --dir /home/ronald/wt-sw-215315 --only core.tests.test_sw_offline_fallback > logs/sw/red_head.log 2>&1; echo "rc=$?" >> logs/sw/red_head.log; cp $S/sw_curado.js /home/ronald/wt-sw-215315/app/static/sw.js; bash bin/suite.sh --dir /home/r ...` |
-| 21:56:20 | Bash |  | `cd /home/ronald/wt-sw-215315/app; docker run --rm -v $PWD:/src:ro --entrypoint ruff $(docker inspect -f '{{.Config.Image}}' saas_core) check --config /src/ruff.toml /src/core/tests/test_sw_offline_fallback.py 2>&1 \| tail -3; git diff --stat` |
-| 21:56:14 | Bash |  | `cd /home/ronald/wt-sw-215315; tail -3 /home/ronald/saas-hasner/logs/push/he_95544d22.log; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/354179ca-a13f-4642-a6f5-791cf69a0acd/scratchpad; cp app/static/sw.js $S/sw_curado.js; git show HEAD:app/static/sw.js > app/static/sw.js; docker run --rm -v $PWD/app:/src:ro -v $PWD/ruff.toml:/r.toml:ro --entrypoint ruff $(docker inspect -f '{{.Config.Image}}' sa ...` |
-| 21:55:20 | Bash |  | `cd /home/ronald/wt-sw-215315/app; python3 - <<'EOF' p='static/sw.js' s=open(p).read() old="fetch(event.request).catch(() => caches.match(event.request))" assert s.count(old)==2, s.count(old) s=s.replace(old,"fetch(event.request).catch(() => doCacheOuErroDeRede(event.request))") old2=" .catch(() => caches.match(event.request))\n" assert s.count(old2)==1 s=s.replace(old2," .catch(() => doCacheOuErro ...` |
-| 21:55:06 | Bash |  | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/354179ca-a13f-4642-a6f5-791cf69a0acd/scratchpad; docker exec saas_core node -e "$(cat $S/h.js)" /app/static/sw.js "$(cat $S/c.json)" 2>&1 \| head -c 1500` |
-| 21:55:00 | Bash |  | `cd /home/ronald/wt-sw-215315/app; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/354179ca-a13f-4642-a6f5-791cf69a0acd/scratchpad; python3 -c " import re,json s=open('core/tests/test_sw_offline_fallback.py').read() h=s.split('HARNESS = r\"\"\"')[1].split('\"\"\"')[0] open('$S/h.js','w').write(h) c=[{'nome':n,'path':p,'mode':m,'rede':r,'cache':k} for (n,p,m) in [('navegacao','/escala/?app=1','navig ...` |
-| 21:54:49 | Bash |  | `cd /home/ronald/wt-sw-215315/app; python3 - <<'EOF' p='core/tests/test_sw_offline_fallback.py' s=open(p).read() s=s.replace("from core.views import _raiz_do_static\n","# A FONTE (`static/sw.js`), nao o `staticfiles/` coletado: a suite em copia monta o staticfiles da arvore viva, e o\n# selo mediria o sw.js que esta no ar, nao o da fatia.\nSW = os.path.join(os.path.dirname(os.path.dirname(os.path.d ...` |
-| 21:54:38 | Bash |  | `cd /home/ronald/wt-sw-215315/app; grep -n "def _raiz_do_static" -A8 core/views.py` |
-| 21:54:32 | Write |  | `/home/ronald/wt-sw-215315/app/core/tests/test_sw_offline_fallback.py` |
