@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 20:47:46.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (32.3 MB). Acoes na janela: **1141**.
+**Medido em 05/11/2026 20:53:00.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (32.4 MB). Acoes na janela: **1149**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:49:04 | Bash | Drop missing arquivo field from ESPERANDO | `cd /home/ronald/saas-hasner; sed -i '2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh \| pid=2928554#' app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md` |
+| 20:49:01 | Bash | Confirm producer alive and hook log | `kill -0 2928554 && echo vivo; tail -3 /home/ronald/saas-hasner/logs/hook_stop_fila1.log \| cut -c1-200` |
+| 20:48:57 | Bash | Rewrite ERRO-BOBO line in hook form and retest | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') pre='RESPONDIDA por aval H12H06-SEPARA-E-CRONTAB 20:4x (obra partida em A e B; volta 8 cancelada): ' j=next(k for k,l in enumerate(L) if l.startswith(pre)) s=L[j][len(pre):] assert s.startswith('ERRO-BOBO H12H06 (') L[j]='ERRO-BOBO H12H06: '+s[len('ERRO-BOBO H12H06 '):]+' \| 20:4x aval H12H06-SEPARA ...` |
+| 20:48:49 | Bash | Restore ERRO-BOBO line form and test hook | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') pre='RESPONDIDA por aval H12H06-SEPARA-E-CRONTAB 20:4x (obra partida em A e B; volta 8 cancelada): ' j=next(k for k,l in enumerate(L) if l.startswith(pre)) L[j]=L[j][len(pre):]+' \| 20:4x aval H12H06-SEPARA-E-CRONTAB partiu a obra (A em construcao; B apos censo de trava); B3 segue armado ate o rearm ...` |
+| 20:48:38 | Bash | Point RELATO line 2 to Codex census pid | `cd /home/ronald/saas-hasner; sed -i '2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh \| pid=2928554 \| arquivo=logs/trava_censo/censo_a.r#' app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md` |
+| 20:48:35 | Bash | Find live long-lived producers | `cd /home/ronald/saas-hasner; bash bin/trava_teste.sh --quem; pgrep -af 'trava_teste.sh\|codex_pergunta\|sonda_leitura' \| cut -c1-160` |
+| 20:48:31 | Bash | Point RELATO line 2 to live suite pid | `cd /home/ronald/saas-hasner; kill -0 2092413 && echo vivo; sed -i '2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=2092413#' app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md` |
+| 20:48:25 | Bash | Read push verdict and working tree | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bqc81dsti.output \| cut -c1-200; cd /home/ronald/saas-hasner; git status --porcelain \| grep -v '^??' \| head; git log --oneline -1` |
 | 20:47:23 | TaskStop |  | `-` |
 | 20:47:20 | Bash | Wait for push verdict | `cd /home/ronald/saas-hasner; until grep -q '^rc=' logs/jv3/push_c9bd52e0.log; do /usr/bin/sleep 30; done; tail -3 logs/jv3/push_c9bd52e0.log; git fetch -q origin; git log --oneline -1 origin/main` |
 | 20:47:19 | Bash | Wait for next reconciliar run and read new output | `cd /home/ronald/saas-hasner; s=$(stat -c%s logs/reconciliador.log); /usr/bin/sleep 900; tail -c +$((s+1)) logs/reconciliador.log \| grep -n -i 'escrita\\|alarme\\|esperado\\|rc' \| cut -c1-200; grep reconciliar logs/cron_run*.log 2>/dev/null \| tail -2` |
