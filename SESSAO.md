@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 09:21:14.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (23.3 MB). Acoes na janela: **658**.
+**Medido em 05/11/2026 09:26:44.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (23.4 MB). Acoes na janela: **663**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:23:23 | Bash |  | `cd /home/ronald/saas-hasner && sed -i '2s/^ESPERANDO: .*/ESPERANDO: trava_teste.sh \| pid=3267263/' app/docs/RELATO.md && sed -n 2p app/docs/RELATO.md` |
+| 09:23:21 | Bash |  | `cd /home/ronald/saas-hasner && date +%H:%M; bash bin/trava_teste.sh --quem; ps -p 3196989 >/dev/null && echo vivo` |
+| 09:22:56 | Bash |  | `cd /home/ronald/saas-hasner && sed -i '2s/^ESPERANDO: .*/ESPERANDO: trava_teste.sh \| pid=3196989/' app/docs/RELATO.md && sed -n 2p app/docs/RELATO.md` |
+| 09:22:54 | Bash |  | `cd /home/ronald/saas-hasner && bash bin/trava_teste.sh --quem; ps -eo pid,etime,args \| grep -E "^ *[0-9]+ +[0-9:-]+ (bash\|timeout)[^\|]*(trava_teste\|sombra.sh\|suite.sh)" \| grep -v grep \| cut -c1-150` |
+| 09:22:50 | Bash |  | `cd /home/ronald/saas-hasner && tail -3 logs/jv2p/push.log; git fetch -q; git log --oneline -2 origin/main; git status --porcelain \| grep -v '^??'` |
 | 09:03:21 | Bash |  | `cd /home/ronald/saas-hasner && date +%H:%M; tail -2 logs/jv2p/push.log; git log --oneline -1 origin/main; ps -p 1024955 >/dev/null && echo push-vivo` |
 | 08:53:21 | Bash |  | `cd /home/ronald/saas-hasner && date +%H:%M; tail -3 logs/jv2p/push.log; git log --oneline -1 origin/main; ps -p 1024955 >/dev/null && echo push-vivo` |
 | 08:46:18 | Bash |  | `cd /home/ronald/saas-hasner && sed -i '2s/^ESPERANDO: .*/ESPERANDO: push.sh \| pid=1024955/' app/docs/RELATO.md && sed -n 2p app/docs/RELATO.md` |
