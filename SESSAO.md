@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 09:01:08.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (23.3 MB). Acoes na janela: **666**.
+**Medido em 05/11/2026 09:06:11.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (23.3 MB). Acoes na janela: **658**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:03:21 | Bash |  | `cd /home/ronald/saas-hasner && date +%H:%M; tail -2 logs/jv2p/push.log; git log --oneline -1 origin/main; ps -p 1024955 >/dev/null && echo push-vivo` |
 | 08:53:21 | Bash |  | `cd /home/ronald/saas-hasner && date +%H:%M; tail -3 logs/jv2p/push.log; git log --oneline -1 origin/main; ps -p 1024955 >/dev/null && echo push-vivo` |
 | 08:46:18 | Bash |  | `cd /home/ronald/saas-hasner && sed -i '2s/^ESPERANDO: .*/ESPERANDO: push.sh \| pid=1024955/' app/docs/RELATO.md && sed -n 2p app/docs/RELATO.md` |
 | 08:46:13 | Bash |  | `sleep 2; ps -eo pid,args \| grep -E "^ *[0-9]+ bash bin/push.sh" \| grep -v grep` |
@@ -667,12 +668,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:49:07 | Agent | verificador item 2 LAVRAR-HE | `Obra LAVRAR-HE-PENDENTE-ESCALA (Hasner Ponto, repo /home/ronald/saas-hasner, Django em app/). Leitura final ANTES do pouso. Voce nao viu a construcao; procure o que esta errado. Somente leitura: nao edite nada, nao rode suite, nao mexa em container. Copia: /home/ronald/wt-he-200326 (branch raia/wt-he-200326), commit 18e1afc4 sobre main 6fa62712. Diff: `git -C /home/ronald/wt-he-200326 diff main..H ...` |
 | 21:48:45 | Bash |  | `cd /home/ronald/saas-hasner; grep -H FMTOTAL logs/he-fm-*.out; diff <(grep ^FMC logs/he-fm-head.out) <(grep ^FMC logs/he-fm-copia.out) \| wc -l; grep -c ^FMC logs/he-fm-head.out; grep -E '^(OK\|FAILED)($\| \()' logs/he/suite_18e1afc4.log \| tail -1; grep '^Ran ' logs/he/suite_18e1afc4.log \| tail -1; git -C /home/ronald/wt-he-200326 status --porcelain \| head -3; git -C /home/ronald/wt-he-200326 l ...` |
 | 21:48:39 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/he/suite_18e1afc4.rc 2>/dev/null \|\| echo SUITE_RODA; ls logs/he/fm.fim 2>/dev/null \|\| echo FM_RODA; grep -h "^FME\\|FMTOTAL\\|ROLLBACK\\|Traceback" logs/he-fm-head.out logs/he-fm-copia.out 2>/dev/null \| cut -c1-160; date +%H:%M` |
-| 21:03:27 | Bash |  | `cd /home/ronald/saas-hasner; tail -5 logs/he/fm_head.run; ls -la logs/he-fm-head.out 2>&1; tail -3 logs/he/suite_18e1afc4.log \| cut -c1-200` |
-| 21:03:22 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/he/suite_18e1afc4.rc 2>/dev/null; ls logs/he/fm.fim 2>/dev/null; grep "^FME\\|FMTOTAL\\|ROLLBACK\\|Error" logs/he-fm-head.out logs/he-fm-copia.out 2>/dev/null \| cut -c1-160; date +%H:%M` |
-| 21:03:09 | Bash |  | `cd /home/ronald/wt-he-200326; git diff main..HEAD --stat; git diff main..HEAD -- app/escala app/ponto/services` |
-| 21:03:04 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') assert L[1].startswith('ESPERANDO:') L[1]='ESPERANDO: trava_teste.sh \| pid=2543875' L.insert(2,'ITEM 2 LAVRAR-HE 21:0x: construtor entregou e354ffa5, rebase sobre main -> 18e1afc4 (wt-he-200326). Identity Map da celula do ato em apurar_por_fatia (escala/alimentacao.py::celulas_do_ato + EC._celulas_d ...` |
-| 21:02:52 | Bash |  | `sleep 5; pgrep -af "trava_teste.sh\|sombra.sh --rodar" \| grep -v pgrep \| cut -c1-140` |
-| 21:02:47 | Bash |  | `cd /home/ronald/saas-hasner; cat > logs/sombra/sonda_he_fm.py <<'EOF' # LAVRAR-HE-PENDENTE-ESCALA, fronteira de prova: o FechamentoMensal em somente_leitura, FROTA, por empresa x comp # (10 e 11/2026), head x copia. atomic + raise: nada fica. Saida: sha por colab (FMC) e por empresa x comp (FME). import hashlib, json, time from django.db import transaction from colaboradores.models import Empresa  ...` |
-| 21:02:37 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 1,60p logs/sombra/sonda_he_igual.py` |
-| 21:02:29 | Bash |  | `cd /home/ronald/saas-hasner; (bash bin/suite.sh --dir /home/ronald/wt-he-200326 --espera 3600 > logs/he/suite_18e1afc4.log 2>&1; echo "rc=$?" > logs/he/suite_18e1afc4.rc) > /dev/null 2>&1 & echo started; grep -n "def recalcular_fechamento_mes" -A25 app/ponto/services/fechamento.py \| head -40` |
-| 21:02:21 | Bash |  | `cd /home/ronald/wt-he-200326; git status --porcelain \| head; git log --oneline -1; git rebase main 2>&1 \| tail -2; git log --oneline -3` |
