@@ -6437,3 +6437,4 @@ LEI-AKITA: origem=escala/services/cadastro_realidade.py::beco_em_lote + escala/f
 - FILA do opus_final_2 (itens 1-8) segue em F3-BECO-1-VOLTA-3/BACKLOG; F3-BECO-2-COBRANCA-MORTA segue.
 - Piloto peca 2 (voltas): F3 = 3 voltas Codex + 2 opus finais + 1 delta Codex/opus da resolucao.
 - DEPLOY 9c0fd9d3 rc=0 (logs/f3_beco1/deploy_9c0fd9d3.log): 3 cascas HUP, rotas 200/302/200, importerror_500=0. crons.sh check: render falha CronNaoCabe sombra.sh 87 min -- PRE-EXISTENTE (BACKLOG CRON-SOMBRA-NAO-CABE / CRON-NAO-CABE-SOMBRA-65-MIN); F3 so acrescenta 2 FORA_DE_PIPELINE, nenhuma linha de crontab. Push: no proximo marco.
+- FUNIL-28 lotes: A 86 itens (din 60, sem obra 66), B 171 (din 90, sem obra 125), C 116 (din 66, sem obra 73); 0 nao verificavel; soma 373 antes da fusao entre lotes; chamada de FUSAO rodando (logs/codex_queima/funil/r_fusao.md).
