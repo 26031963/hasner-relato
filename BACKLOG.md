@@ -1748,6 +1748,7 @@
 | MEDE-CLEAR-X-COMPACT | **fila 1** (aval 05/11 16:0x, medida): compacts/clears 7 dias, pisos, tokens/turno 2 h, sessao x agentes. | em curso | ABERTA | 05/11 16:0x |
 | CODEX-QUEIMA-B | **fila 1** (aval 05/11 16:0x, medida): 686 x 416, H-12 55/18/1 x 56/19/1, 26 do diagnostico. | sondas do Fernando rodando | ABERTA | 05/11 16:0x |
 | C20-O169 | **fila 1** (aval CONTRATO-20-DECISOES 16:0x item 1): cluster nao fecha por idade (BACKLOG:424, opcao b), medida 30 d antes, RED 15 dias, padrao=level-triggered | medida 30 d no Codex | ABERTA | 05/11 16:0x |
+| LASTRO-FOLGA-FORA-DO-CATALOGO | **fila 1** (achado da LASTRO-PARTE-2 16:2x): Ausencia #5356 gravada com tipo `folga`, fora de TIPO_CHOICES; precedencia.faixa_de a joga na faixa atestado. Escritor e frota a medir antes de cura | censo+sonda no Codex (logs/lastro2/folga_tipo.q) | ABERTA | 05/11 16:2x |
 | C20-JUIZ-3 | **fila 1** (item 2): evento em criar()/recompute_turnos, consumidor O-OUTBOX, selo 17, padrao=outbox | espera vaga | ABERTA | 05/11 16:0x |
 | C20-FIO-MUDO | **fila 1** (item 3): evento na abertura de batida_ausente + 5 atos de perda, universo 494, padrao=evento | espera vaga | ABERTA | 05/11 16:0x |
 | C20-O168 | **fila 1** (item 4): pode_executar_csf no nucleo, DIFF sombra, >10% fila viva = PAREI, padrao=juiz unico | espera vaga | ABERTA | 05/11 16:0x |
