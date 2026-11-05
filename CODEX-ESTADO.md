@@ -1,6 +1,6 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **04/11/2026 15:44** · publicado em **04/11/2026 15:48** (UTC-3)
+> Ultima resposta processada: **04/11/2026 15:44** · publicado em **05/11/2026 11:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
 
 ## 04/11 15:44 · sessao a3f628326e9b · E4-APP-MAPA · verificador · origem=Code
@@ -806,7 +806,7 @@ A cura da volta 3 cobre o cenário **já transferido antes do SIGKILL**, mas int
 
 [truncado em 20000 de 22609 caracteres]
 
-## 04/11 11:02 · sessao c956083d529c · - · - · origem=Ronald (tmux)
+## 04/11 11:02 -- HISTORICO (mais de 24 h) · sessao c956083d529c · - · - · origem=Ronald (tmux)
 
 Revisão só leitura das FILA/DESCARTADO:
 
@@ -832,7 +832,7 @@ CONFERIR: a rede do harness está dentro da string `_TIRO`, enviada ao `docker e
 
 Outro detalhe do delta para consolidar: o deploy do revert do revert lê o rc, mas não fixa `DEPLOY_RECUSA_ID=auto_revert`; se recusado, usa id herdado ou `manual`, enquanto o retentador só lê `recusa_cron.auto_revert.pendente`. O rc apenas aparece em pauta `auto_revert`; o retorno dessa `_pauta` continua ignorado. `app/core/esteira_vigia.py:1289`, `app/core/esteira_vigia.py:1291`, `app/core/esteira_vigia.py:1311`, `app/core/esteira_vigia.py:1345`; `bin/deploy.sh:52`.
 
-## 04/11 11:02 · sessao f949e30a8f81 · - · - · origem=Ronald (tmux)
+## 04/11 11:02 -- HISTORICO (mais de 24 h) · sessao f949e30a8f81 · - · - · origem=Ronald (tmux)
 
 Censo e achados, apenas por leitura:
 
