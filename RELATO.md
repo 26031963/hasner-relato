@@ -6485,3 +6485,11 @@ LEI-AKITA: origem=n/a (medida), testemunha=r_fusao.md + git show 9c0fd9d3 (arqui
 - PRE-CODIGO-DUPLO: PC3-OTIMIZA-3 rc=0 (d1354f77); OTIMIZA-3 fechou o teto 3.
 - O169: Codex v3 APROVA (logs/c20_o169/codex_v3.r, 0 bloqueante) -> opus final do delta no ar (e1320986+3a5a1f12). Voltas: Codex 3, opus 1 reprova + 1 em curso.
 - PRE-CODIGO-DUPLO cmp PEP (9c0fd9d3, logs/piloto_pd/pc/r_cmp_PEP.md): DIVERGE 7 -- DESENHO 5 (ato obsoleto return False x raise; identidade preexistente sobrescrita; alcance do atomic/restauracao; ata={} com trabalha=True e veredito nao acusador: _celula_furada None x C6 False, sem lei que resolva; geradora fora da vigencia), detalhe 2; CITACAO FALSA 2, ambas do PC1 (juizes.py:277 e auditar_invariantes_chamados.py:1103), Code conferiu 2/2 procedentes no 9c0fd9d3. O caso ata={} vai ao construtor do PEP como pergunta de lei se ele precisar decidir; demais = sinal de desenho.
+
+## C20-O169 POUSA (18:3x)
+LEI-AKITA: origem=ponto/services/cluster_espurio.py::_vivos_que_a_premissa_matou, testemunha=celula do proprio dia (_leitura_da_celula + chamados/juizes.py::dia_sem_trabalho), RED=ponto/tests/test_o169_cluster_nao_fecha_por_idade.py (3 FAIL em a_fechar), quem-mais-le=detectar_cluster_espurio/catalogo premissa, juizes novos=0, padrao=reconciliacao level-triggered
+- lei: L-125 CLUSTER-NAO-FECHA-POR-IDADE (corte literal 11/10 11:4x) em LEIS.md:146 + ADR PLANO-PADROES.md#l-125.
+- suite 790a0130 (base 9c0fd9d3 = main): OK (skipped=42, expected failures=39), Ran 13674, rc=0; delta depois so docs; cmp 4/4 arquivos raia x main.
+- voltas: Codex 3 (v1 aprova codigo, v2 REPROVA texto, procedente; v3 APROVA), opus 2 (1 reprova falta da lei, 1 APROVA); opus reprovou depois do Codex aprovar: 1 (classe (e) nao perguntado: lei protegida nao estava no checklist).
+- fila: O169-ATA-VAZIA-FOLGA, O169-CONTADOR-NAO-MEDIDO, O169-LIMIAR-15-DUPLO.
+- O169 NO AR: bin/deploy.sh --sem-migrate rc=0 (3 cascas HUP, 3 rotas, importerror_500=0, logs/c20_o169/deploy.log); smoke saas_core: _leitura_da_celula carregada com a cura (inspect, True). Push (SNC2+F3+O169) espera a trava da suite H12H06 -- empurro depois dele, sem commit no meio.
