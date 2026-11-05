@@ -6,10 +6,20 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 08:44:44.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (23.1 MB). Acoes na janela: **665**.
+**Medido em 05/11/2026 08:50:26.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (23.2 MB). Acoes na janela: **668**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:46:18 | Bash |  | `cd /home/ronald/saas-hasner && sed -i '2s/^ESPERANDO: .*/ESPERANDO: push.sh \| pid=1024955/' app/docs/RELATO.md && sed -n 2p app/docs/RELATO.md` |
+| 08:46:13 | Bash |  | `sleep 2; ps -eo pid,args \| grep -E "^ *[0-9]+ bash bin/push.sh" \| grep -v grep` |
+| 08:46:09 | Bash |  | `cd /home/ronald/saas-hasner && (bash bin/push.sh > logs/jv2p/push.log 2>&1; echo rc=$? >> logs/jv2p/push.log)` |
+| 08:46:05 | Bash |  | `cd /home/ronald/saas-hasner && git status --porcelain \| grep -v '^??'; git diff --stat \| tail -2` |
+| 08:46:02 | Bash |  | `cd /home/ronald/saas-hasner && git add app/docs/BACKLOG.md app/docs/HANDOFF-SESSAO.md app/docs/PROMPTS.md app/docs/RELATO.md && git commit -q -F - <<'EOF' && git log --oneline -1 && bash bin/tickets_placar.sh --escrever 2>&1 \| tail -2; git status --porcelain \| grep -v '^??' JUIZ-2 produto marco: RELATO com prova de prod do pouso 0cd6261a, aval MANHA-0511 em PROMPTS e BACKLOG, HANDOFF-SESSAO Docs ...` |
+| 08:45:56 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=[k for k,x in enumerate(L[:12]) if x.startswith('JUIZ-2-FILA instrumento NO AR')][0] L.insert(i+1,'JUIZ-2 produto NO AR (08:4x, MANHA-0511 item 6): 0cd6261a (merge --no-ff de 0c99a2cf = 78b755f8 + volta citando "retido fica no TOTAL (L-099), confirmado") + deploy --sem-migrate rc=0, importerror_5 ...` |
+| 08:45:52 | Bash |  | `cd /home/ronald/saas-hasner && docker exec saas_core python -c "import django,os;os.environ.setdefault('DJANGO_SETTINGS_MODULE','config.settings');django.setup();import ponto.services.lastro as l;print('MANHA-0511' in (l.julgar.__doc__ or ''), 'MANHA-0511' in (l.contador.__doc__ or ''))" 2>&1 \| tail -1` |
+| 08:45:36 | Bash |  | `cd /home/ronald/saas-hasner && git commit -q -F - <<'EOF' && git log --oneline -1 && bash bin/deploy.sh --sem-migrate > logs/jv2p/deploy.log 2>&1; echo rc=$?; tail -4 logs/jv2p/deploy.log JUIZ-VARREDURA-2 produto pousa: docstrings do lastro registram a L-099 confirmada (aval MANHA-0511 item 6) Merge --no-ff de 0c99a2cf (78b755f8 da raia/jv2fila + volta que cita a resposta do aval MANHA-0511 item 6 ...` |
+| 08:45:30 | Bash |  | `cd /home/ronald/saas-hasner && git merge --no-ff --no-commit 0c99a2cf 2>&1 \| tail -2; test -f .git/MERGE_HEAD && echo MERGE_HEAD=ok; cmp app/ponto/services/lastro.py /home/ronald/wt-jv2p-082829/app/ponto/services/lastro.py && echo cmp=igual; T=$(git write-tree); git diff --stat $T 0c99a2cf^{tree} \| tail -1; echo "diff-arvore-fim"` |
+| 08:45:25 | Bash |  | `cd /home/ronald/saas-hasner && L=logs/jv2p/suite_inteira.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran ' $L \| tail -1; tail -1 $L; date +%H:%M; git log --oneline -1 main; git status --porcelain \| grep -v '^??'` |
 | 08:33:22 | Bash |  | `cd /home/ronald/saas-hasner && date +%H:%M; tail -3 logs/jv2p/suite_inteira.log; ps -p 4148562 >/dev/null && echo suite-viva; tail -c 600 /tmp/claude-1001/-home-ronald-saas-hasner-app/354179ca-a13f-4642-a6f5-791cf69a0acd/tasks/a16b5fb575c01efe8.output; echo; tail -c 600 /tmp/claude-1001/-home-ronald-saas-hasner-app/354179ca-a13f-4642-a6f5-791cf69a0acd/tasks/aeb1760c0ba0de5e4.output` |
 | 08:29:43 | Bash |  | `cd /home/ronald/saas-hasner && sed -i '2s/^ESPERANDO: trava_teste.sh \| pid=4148562 \| arquivo=logs\/jv2p\/suite_inteira.log$/ESPERANDO: trava_teste.sh \| pid=4148562/' app/docs/RELATO.md && sed -n 2p app/docs/RELATO.md && ps -p 4148562 -o args= \| cut -c1-80` |
 | 08:29:39 | Bash |  | `cd /home/ronald/saas-hasner && tail -3 logs/hook_stop_fila1.log \| cut -c1-300` |
@@ -668,10 +678,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:53:28 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/he/sombra.fim 2>/dev/null \| head; ls logs/he-*.out 2>/dev/null; for f in logs/he-*.out; do echo "== $f"; grep -v '^$' $f \| tail -3 \| cut -c1-200; done` |
 | 20:53:23 | Bash |  | `cd /home/ronald/saas-hasner; ps -p 1753276 >/dev/null && echo SUITE_VIVA \|\| echo SUITE_FIM; git -C /home/ronald/wt-he-200326 log --oneline -2; ls -t logs/he/ \| head -4; bash bin/trava_teste.sh --quem; date +%H:%M; tail -c 600 /tmp/claude-1001/-home-ronald-saas-hasner-app/354179ca-a13f-4642-a6f5-791cf69a0acd/tasks/aaead5d5eba27cfe4.output \| grep -o '"text":"[^"]*' \| tail -2` |
 | 20:50:29 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -i '2s/.*/ESPERANDO: trava_teste.sh \| pid=1753276/' docs/RELATO.md; sed -n 2p docs/RELATO.md` |
-| 20:50:22 | Bash |  | `pgrep -P 1753273 -a \| cut -c1-120; for c in $(pgrep -P 1753273); do pgrep -P $c -a \| cut -c1-100; done` |
-| 20:50:17 | Bash |  | `cd /home/ronald/saas-hasner; grep -n "def _prova_pid" -A30 bin/hook_stop_fila1.py \| head -40` |
-| 20:50:14 | Bash |  | `cd /home/ronald/saas-hasner; ps -p 1753273 -o pid,args \| cut -c1-120; grep -n "def _esperando_com_prova" -A40 bin/hook_stop_fila1.py \| grep -n "argv\\|produtor\\|basename\\|cmdline" \| head` |
-| 20:50:04 | Bash |  | `cd /home/ronald/saas-hasner/app; pgrep -f "^bash bin/suite.sh --dir /home/ronald/wt-he-200326" \| head -1; sed -i '2i ESPERANDO: suite.sh \| pid=1753273' docs/RELATO.md; sed -n 2p docs/RELATO.md` |
-| 20:49:59 | Bash |  | `pgrep -af "sombra.sh\|suite.sh" \| grep -v pgrep \| cut -c1-160` |
-| 20:49:47 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') assert L[1].startswith('ESPERANDO: push.sh') L[1]='N1 PUSH 20:5x: pre-push OK, origin/main 05a98fb2..26ee6979, pos_push 6fa62712 (logs/push/n1_26ee6979.log, rc 0). Marco N1 FECHADO.' open(p,'w').write('\n'.join(L)) EOF sed -n 2p docs/RELATO.md` |
-| 20:49:40 | Bash |  | `cd /home/ronald/saas-hasner; tail -6 logs/push/n1_26ee6979.log \| cut -c1-200; git fetch -q origin; git log --oneline -1 origin/main; git status --porcelain \| grep -v '^??'` |
