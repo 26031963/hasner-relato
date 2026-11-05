@@ -6428,3 +6428,12 @@ DESPACHO BO G1: sonda pelo envelope bin/sonda_leitura.sh -> sonnet (motivo: scri
 - DESPACHO CODEX-FUNIL-28: consolidacao -> Codex censo em 3 lotes (A = CRIVO 1-8, 142 KB; B = SUFOCA 01-10, 160 KB; C = SUFOCA 11-20, 120 KB) + 1 chamada de fusao A+B+C | conferencia arquivo:linha -> Code | sem construtor, fila 1 intocada.
 - O169 suite 6afa8aa1 rodando na trava (pid 3148849).
 - F3 merge: Codex verificador da resolucao APROVA, 0 bloqueantes (logs/f3_beco1/codex_merge.r); conferido vigia_fio.py:199-216 (carga preguicosa) e juizes.py:994-1003 (ContextVar). Opus do delta rodando.
+
+## POUSO F3-BECO-1 (17:5x)
+LEI-AKITA: origem=escala/services/cadastro_realidade.py::beco_em_lote + escala/folgas.py::relavrar_celulas_da_foto + chamados/services/limbo_folgas.py::reatar_perguntas_ao_limbo, testemunha=e6_oraculo.dono_da_divergencia + EC.defeito_folga_nao_definida + cartorio.julgar_celula, RED=escala.tests.test_f3_beco1_folga_na_lista + test_f3_beco1_cadastro_entrou + chamados.tests.test_f3_beco1_reata_limbo + pautas.tests.test_f3_beco1_pauta_exportada, quem-mais-le=C9 C10 C11 vigia_fio vigiar_fio_morto perguntas_do_app, juizes novos=0, padrao=juiz unico
+- Arvore certificada 3b8d4a3e (F3 + main ad28270d): suite OK (skipped=42, expected failures=39), Ran 13667, rc=0 (logs/f3_beco1/suite_3b8d4a3e.log).
+- Opus final 2 (59bbe2e3) APROVA codigo; resolucao a mao 3b8d4a3e (1 hunk vigiar_fio_morto.py): Codex verificador APROVA (codex_merge.r) + opus do delta APROVA, 0 bloqueantes.
+- merge --no-ff --no-commit raia/f3b1-082714 sem conflito; cmp 19/19 iguais contra a copia; sem migration -> deploy --sem-migrate.
+- FILA do opus_final_2 (itens 1-8) segue em F3-BECO-1-VOLTA-3/BACKLOG; F3-BECO-2-COBRANCA-MORTA segue.
+- Piloto peca 2 (voltas): F3 = 3 voltas Codex + 2 opus finais + 1 delta Codex/opus da resolucao.
+- DEPLOY 9c0fd9d3 rc=0 (logs/f3_beco1/deploy_9c0fd9d3.log): 3 cascas HUP, rotas 200/302/200, importerror_500=0. crons.sh check: render falha CronNaoCabe sombra.sh 87 min -- PRE-EXISTENTE (BACKLOG CRON-SOMBRA-NAO-CABE / CRON-NAO-CABE-SOMBRA-65-MIN); F3 so acrescenta 2 FORA_DE_PIPELINE, nenhuma linha de crontab. Push: no proximo marco.
