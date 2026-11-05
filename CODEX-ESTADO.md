@@ -1,7 +1,52 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **05/11/2026 17:57** · publicado em **05/11/2026 18:01** (UTC-3)
+> Ultima resposta processada: **05/11/2026 18:07** · publicado em **05/11/2026 18:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 05/11 18:07 · sessao 2d1e22c04bb5 · - · - · origem=Ronald (tmux)
+
+Regras verificadas para consolidar:
+
+- **C11 do registro vivo é ausência**, não “FIO MUDO”: pergunta “a ausência do dia suspende, fecha ou levanta a cobrança viva?” e aponta a `silencio_ausencia.reconciliar_por_ausencia`. O rótulo operacional do aval não autoriza substituir essa autoridade. (`app/core/juizes.py:117`; `app/core/juizes.py:271`)
+- **Morte por leitura já tem juiz: C6 `pergunta_viva`**. C15 `fio_vivo` reduz a coleção; C17 `porta_alcancavel_do_dia` responde alcance. Não precisam nascer juiz novo. (`app/core/juizes.py:266`; `app/core/juizes.py:275`; `app/core/juizes.py:277`)
+- C6 é leitura com memo por instância, cuja regra mora em `_pergunta_viva_calc`; introduzir escrita na consulta faria o consumidor virar produtor. (`app/chamados/juizes.py:822`; `app/chamados/juizes.py:839`; `CLAUDE.md:168`; `CLAUDE.md:170`)
+- A regra estrutural exige fio vivo ou ação administrativa nomeada enquanto persistir dívida da lâmpada; a morte não pode ser decidida por carimbo isolado, e o cron é vigia esperado zero. (`app/docs/CORTES.md:253`; `CLAUDE.md:167`; `CLAUDE.md:169`)
+- O aceite deve nascer de cadastro + batidas + regra, antes de desenho/código; o caminho velho só mede impacto. (`app/docs/LEIS.md:136`)
+- Idempotência exigida: repetir dá mesmo estado, uma linha de trilha, zero duplicata; censo de escritores deve fechar antes de alterar filtro/regra. (`CLAUDE.md:175`; `CLAUDE.md:193`)
+
+Casos para A, com resposta pela regra:
+
+| Cadastro/estado/ato | Resposta exigida |
+|---|---|
+| Ativo, vínculo válido, marco vencido faltante na ata, chamado aberto por `batida_ausente`. | A emissão nasce no evento da célula/abertura contemplada pelo aval; pergunta é do marco devido, não do simples status vivo. (`CLAUDE.md:168`; `app/docs/CORTES.md:253`; `app/chamados/services/fabrica_da_celula.py:8`) |
+| Duas aberturas ou perdas simultâneas do mesmo fato. | Mesma dívida/fio final sem duplicação e com trilha idempotente. (`CLAUDE.md:175`) |
+| Reabrir com dívida persistente, sem candidata a ressuscitar. | Estado vivo sozinho não satisfaz a regra: deve haver pergunta viva ou ação administrativa nomeada. (`app/docs/CORTES.md:253`) |
+| Retratar duplicata cuja canônica cobre o mesmo fato. | Preservar unidade do fato; não criar irmã só porque um chamado ficou sem pergunta. Resposta discordante pendente continua para decisão humana. (`CLAUDE.md:175`; `app/chamados/juizes.py:1150`; `app/chamados/juizes.py:1163`) |
+| Validar uma saída, permanecendo intervalo devido. | Marco quitado não volta a ser cobrado; outro marco continua com fio/ação. Pergunta cobra marco, célula julga dia. (`app/chamados/juizes.py:1173`; `app/docs/CORTES.md:253`) |
+| Reapontar a última resolvedora de A para B. | Dívida conserva porta alcançável; não existe obrigação de uma pergunta por chamado duplicado. (`app/docs/CORTES.md:253`; `app/docs/CORTES.md:404`; `CLAUDE.md:175`) |
+| Morte por leitura com competência trancada. | Pergunta sai da fila, resposta fica na trilha e decisão segue ao DP; isso não planta batida nem absolve o dia. (`app/chamados/juizes.py:1138`; `app/chamados/juizes.py:1142`) |
+| Morte por leitura de marco atendido, ainda havendo outro furo. | Não recriar pergunta do marco atendido; conservar cobertura do resto pela lâmpada. (`app/chamados/juizes.py:1173`; `app/docs/CORTES.md:253`) |
+| Resposta discordante ou sem hora comparável, sem decisão explícita do admin. | Continua viva para decisão humana; não transformar discordância em quitação. (`app/chamados/juizes.py:1096`; `app/chamados/juizes.py:1158`) |
+| Empresa com corte 21, competência 10. | Janela é **21/09→20/10**, não mês civil; 21/10 pertence à seguinte. Usar corte da empresa, nunca 21 fixo. (`app/docs/LEIS.md:77`; `app/ponto/janelas.py:10`; `app/ponto/janelas.py:24`; `app/ponto/janelas.py:54`) |
+| Turno 22h→06h ancorado ontem; observar 00h01 ou 06h10. | Meia-noite não encerra fato; saída ainda não vence antes de 06h30, usando margem vigente 30 min e marcos encadeados. (`CLAUDE.md:185`; `app/ponto/services/cartorio.py:828`; `app/ponto/services/cartorio.py:834`; `app/ponto/services/cartorio.py:846`; `app/chamados/services/fabrica_da_celula.py:18`) |
+| Vínculo antigo gerou célula e cobre a data, embora inativo hoje. | Geradora responde; vínculo ativo atual não substitui. Fora da vigência, resposta é `None` e dono CADASTRO. (`app/escala/alimentacao.py:231`; `app/escala/alimentacao.py:272`) |
+| Escala vigente, célula sem ata, tentar perguntar marco. | Esperar ata e acender indicação de falta de ata; não inventar marco/furo. `trabalha=None` não equivale a folga. (`app/chamados/services/disputa_emissao.py:818`; `app/chamados/services/disputa_emissao.py:839`; `app/docs/JUIZES.md:56`) |
+| Ausência parcial sem período, caso mandado à lista admin. | Sem pergunta, sem pai, sem push; ação fica no cadastro/lista. (`app/chamados/services/fabrica_da_celula.py:77`; `app/chamados/services/fabrica_da_celula.py:101`; `app/chamados/services/disputa_emissao.py:847`) |
+| `registrado`, sem ação devida. | Vivo legítimo sem cobrança; excluir do universo de defeitos antes de RED. (`app/chamados/catalogo/motor.py:24`; `app/chamados/catalogo/motor.py:25`) |
+| Ausência em decisão ou silêncio manual vigente. | Suspensão legítima; não criar pergunta para zerar bruto. Ausência aprovada só fecha se a premissa morreu. (`app/chamados/services/silencio_ausencia.py:77`; `app/chamados/services/silencio_ausencia.py:80`; `app/chamados/services/silencio_ausencia.py:93`) |
+| Dia regularizado sem dívida, chamado ainda vivo. | Cobrança sem premissa morre por lastro, não recebe pergunta artificial. (`app/docs/PROMPTS.md:1519`) |
+| Histórico fora do horizonte, sem fato novo. | Passado é foto; esta obra não autoriza backfill recorrente. Exportada conserva gravado e diferença tem porta própria. (`app/docs/LEIS.md:145`; `app/docs/LEIS.md:125`) |
+
+Contraexemplos críticos para D:
+
+- **“C6 morreu ⇒ emitir pergunta” é errado**: validação, tranca, identidade, marco atendido e célula conclusiva regular são mortes legítimas; dívida residual exige outro marco/ação. (`app/chamados/juizes.py:1136`; `app/chamados/juizes.py:1140`; `app/chamados/juizes.py:1171`; `app/chamados/juizes.py:1178`; `app/chamados/juizes.py:1195`)
+- **C15 verdadeiro não prova alcance**: C17 exige chamado da célula na fila ou pergunta viva no app com âncora na fila. (`app/chamados/juizes.py:1233`; `app/chamados/juizes.py:1341`; `app/chamados/juizes.py:1378`)
+- **“Excluir todo `trabalha=None`” cala LIMBO devido**: só `trabalha=False` ou ata válida de outro tipo cala; parcial tem exceções próprias. (`app/docs/JUIZES.md:55`; `app/docs/JUIZES.md:58`)
+- **“Sem ata: fabricar pela classificação” viola autoridade quando há escala**: a exceção de ramo só batidas é para ausência de escala; célula com marcos sem ata espera. (`app/chamados/services/disputa_emissao.py:833`; `app/chamados/services/fabrica_da_celula.py:39`; `app/chamados/services/fabrica_da_celula.py:52`)
+- **Evento pós-save genérico não demonstra entrega garantida**: o chamado usa `engolir` e pode sair por julgamento em curso; a cura precisa fonte e cobertura das cinco perdas. (`app/chamados/signals.py:172`; `app/chamados/signals.py:174`)
+- **Não retirar cron só por proposta**: baixa de pendente exige frota real não vazia, condição literal medida, contador no mesmo commit e reversão declarada. Sem banco/log, cumprimento dessas condições é [nao verificado]. (`app/docs/LEIS.md:139`)
+
+A individualização dos 494 e quantos são vivos legítimos, cada via e eventual redução do universo são [nao verificado]; o anexo só fornece total declarado, sem registros. (`avais.txt`, anexo:1)
 
 ## 05/11 17:57 · sessao aa351fdaafbd · - · - · origem=Ronald (tmux)
 
@@ -1084,34 +1129,4 @@ Pontos para a consolidação:
 
 Nenhum bloqueante identificado por esta revisão dos testes e da costura estática; execução dos testes e resultado de produção: `[não verificado]`. [nao verificado]
 
-## 05/11 17:28 · sessao 351339669556 · PD-JUIZ-3 · censo · origem=Code
-
-1. **As citações diretas do censo seguem válidas; nenhuma aponta para corpo alterado pelo delta.** As referências no código novo são:
-
-| Linha do censo | Classificação | Referência nova |
-|---|---|---|
-| §1 — leitor de `TurnoMaterializado`, testemunha de resolução | Segue válida | `app/chamados/juizes.py:1478`; `app/chamados/juizes.py:1479` |
-| §1 — leitor de contexto, `dia_do_fato` | Segue válida | `app/chamados/juizes.py:80`; `app/chamados/juizes.py:93` |
-| §1 — prioridade da célula ligada | Segue válida | `app/chamados/juizes.py:91`; `app/chamados/juizes.py:92` |
-| §2 — data do fato prioriza célula/contexto | Segue válida | `app/chamados/juizes.py:91`; `app/chamados/juizes.py:93` |
-| §3 — armadilha de competência: fato mais recente das perguntas vivas | Segue válida | `app/chamados/juizes.py:2036`; `app/chamados/juizes.py:2050`; `app/chamados/juizes.py:2054` |
-| §3 — armadilha da célula sem ata: indeterminação não significa folga | Segue válida | `app/chamados/juizes.py:418`; `app/chamados/juizes.py:428` |
-| RED R9 — indeterminado sem ata | Segue válida | `app/chamados/juizes.py:418`; `app/chamados/juizes.py:428` |
-
-A competência, embora preserve seu corpo, tem dependência indireta alterada: seleciona perguntas por `pergunta_viva`, cujo cálculo consulta a tranca e chega ao memo do toque. (`app/chamados/juizes.py:2031`; `app/chamados/juizes.py:1140`; `app/chamados/juizes.py:954`; `app/chamados/juizes.py:1043`)
-
-2. **Há novo estado transitório de memo e uma extração de leitor; não há novo produtor de evento nesses trechos.** O contexto cria o dicionário da rodada; `_admin_tocou_o_dia_depois` grava nele somente o SIM, e `_toque_humano_no_dia` guarda o identificador do usuário de sistema. (`app/chamados/juizes.py:999`; `app/chamados/juizes.py:1049`; `app/chamados/juizes.py:1070`)
-
-O novo helper concentra leituras já presentes no delta fornecido: trilha de auditoria, células do colaborador/dia e chamados ligados a essas células. São estados usados na decisão que o consumidor alcança por `veredito_orfa` → `pergunta_viva` → tranca → toque. (`app/chamados/juizes.py:1071`; `app/chamados/juizes.py:1076`; `app/chamados/juizes.py:1081`; `app/chamados/reconciliador.py:1329`; `app/chamados/reconciliador.py:1103`; `app/chamados/reconciliador.py:1054`; `app/chamados/juizes.py:1140`; `app/chamados/juizes.py:954`)
-
-Há uma escrita persistente **possível e preexistente** por baixo da leitura do usuário: `get_user_sistema` usa `get_or_create`. O delta muda sua frequência e memoriza o PK; não introduz essa possibilidade de criação. (`app/chamados/juizes.py:1068`; `app/chamados/juizes.py:1070`; `app/core/utils.py:18`)
-
-As lacunas produtoras permanecem: `criar` termina com criação e trilha, e `recompute_turnos` termina com exclusão/recriação do materializado, sem emissão de evento nesses corpos. (`app/chamados/models.py:1048`; `app/chamados/models.py:1049`; `app/chamados/models.py:1050`; `app/ponto/nucleo.py:57`; `app/ponto/nucleo.py:60`; `app/ponto/nucleo.py:61`)
-
-3. **Pode conservar um SIM velho, condicionalmente; isso não demonstra ocorrência no outbox.** Quem abre o lote no fluxo mostrado é `vigiar_fio_morto.handle`, envolvendo as cinco medições. O comando do consumidor abre outra trava, `consumidor_exclusivo`, e chama o consumo fora daquele bloco. (`app/chamados/management/commands/vigiar_fio_morto.py:171`; `app/chamados/management/commands/vigiar_fio_morto.py:172`; `app/chamados/management/commands/vigiar_fio_morto.py:176`; `app/chamados/management/commands/consumir_eventos_celula.py:19`; `app/chamados/management/commands/consumir_eventos_celula.py:31`)
-
-Se o consumidor executar dentro de um lote já aquecido, `_memo_da_tranca` devolve o dicionário existente; um SIM retorna imediatamente, sem reler a trilha. O NÃO volta a consultar. Empresa e período ficam fora do memo da rodada, embora continuem memorizados no request/colaborador. (`app/chamados/juizes.py:972`; `app/chamados/juizes.py:974`; `app/chamados/juizes.py:1045`; `app/chamados/juizes.py:1047`; `app/chamados/juizes.py:1049`; `app/chamados/juizes.py:940`; `app/chamados/juizes.py:979`; `app/chamados/juizes.py:947`)
-
-O limite da garantia é este: o SIM também depende dos vínculos atuais célula/chamado, ausentes da chave do memo; além disso, o dicionário só é descartado ao sair do contexto. **Inferência estática:** se um toque consultado sofrer rollback enquanto o mesmo lote continuar aberto, o SIM já guardado poderá sobreviver à reversão. A sequência efetiva com consumidor no mesmo `with`, rollback ou mudança desses vínculos é **[nao verificado]**. (`app/chamados/juizes.py:1044`; `app/chamados/juizes.py:1046`; `app/chamados/juizes.py:1076`; `app/chamados/juizes.py:1081`; `app/chamados/juizes.py:999`; `app/chamados/juizes.py:1003`)
-
-_1900 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1901 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

@@ -1,5 +1,5 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh | pid=3148849
+ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh | pid=1317039
 RESPONDIDA por aval H12H06-UMA-PORTA 17:2x: PERGUNTA DE DESENHO H12H06 (17:1x) -- aplicar e reverter = duas direcoes da MESMA porta, arquivo de reversao consumido por hash na trilha; v5 abre.
 CONTRATO-DE-INSTRUMENTO CODEX-PRE-DESENHO-PILOTO (aval 16:2x; padrao=n/a (instrumento)): QUEM CHAMA = a sessao, por bin/codex_pergunta.sh CODEX_PAPEL=censo CODEX_OBRA=PD-<obra> (peca 1, antes de abrir o construtor) ou AUT-<obra> (peca 2, antes da volta seguinte a 2a reprovacao procedente)
   QUEM ESPERA = o construtor da obra (recebe a .r como anexo e responde por escrito item a item: cobre/descarta+motivo) e a proxima volta da obra na peca 2; pouso ja aprovado NAO espera; fila nao se reordena
@@ -6444,3 +6444,14 @@ LEI-AKITA: origem=escala/services/cadastro_realidade.py::beco_em_lote + escala/f
 - S2 = todo o resto. Amostra aleatoria 15% (minimo 30), python random.Random(semente).sample sobre os ids F-NNN ordenados; semente = 20261105. Se procedentes na amostra > 20%: linha aqui e a amostra dobra UMA vez (mesma semente, sample de 2x).
 - Classes finais: procedente | descartado (motivo) | ja coberto | nao verificavel | nao conferido. Nao conferido nunca conta como procedente.
 - DESPACHO FUNIL-28 v2: fusao -> Codex (rodando) | estratificacao -> Code pela regra acima, mecanica | conferencia S1 integral + S2 amostra -> sonnet (motivo: conferencia mecanica de citacao arquivo:linha, sem opus e sem construtor, por aval v2) | classificacao final e tabela -> Code.
+
+## CODEX-PRE-CODIGO-DUPLO -- CONTRATO-DE-INSTRUMENTO (18:1x, publicado uma vez)
+- QUEM CHAMA: o Code, pelo wrapper bin/codex_pergunta.sh, CODEX_PAPEL=censo, CODEX_OBRA=PC1-<obra>/PC2-<obra>(/PC3-<obra>), read-only; obras FIO-MUDO e PEP no HEAD 9c0fd9d3, OTIMIZA-3 em d1354f77 (raia wt-qc-224741, onde a ferramenta mora). PC1 e PC2 com a mesma pergunta, sessoes separadas, nenhuma ve a outra.
+- QUEM ESPERA: ninguem; construtor nao espera PC (fila 2, nao toma vaga). Quando abrir: frescor `git diff --stat <hash> main -- <arquivos>`, RED pela regra escrito ANTES de abrir o anexo PC, resposta item a item cobre/descarta.
+- FALHA/LIMITE: rc 75 ou falha -> obra segue sem PC, linha aqui; raspador mordeu -> resposta fica so em logs/piloto_pd/pc/, linha aqui; teto 3 chamadas por obra.
+- MEDIDA: por obra no pouso -- voltas Codex e opus, itens uteis do PC, divergencias PC1xPC2 que viraram reprovacao ou nao; entra na tabela do piloto.
+- QUEM DESLIGA: o Ronald (corte); sozinho desliga ao teto 3 por obra ou com o construtor aberto. PROIBIDO aplicar patch de PC em raia/main, PC no lugar do verificador/opus final.
+
+## O169 suite 6afa8aa1 VERDE + remerge (18:1x)
+- Suite 6afa8aa1: OK (skipped=42, expected failures=39), Ran 13633, rc=0 (logs/c20_o169/suite_6afa8aa1.log). A arvore NAO contem o F3 (main 9c0fd9d3); decisao tecnica: merge do main na raia (790a0130, sem conflito, 0 arquivo em comum com o F3) e suite de novo na arvore que vai pousar (SUITE-UMA-VEZ-POR-ARVORE), logs/c20_o169/suite_790a0130.log. Opus final da cura e76e0419 em paralelo, com D1, a leitura da celula a qualquer idade e a sonda de frota anexas.
+- DESPACHO PRE-CODIGO-DUPLO: PC1/PC2 x FIO-MUDO, PEP (9c0fd9d3), OTIMIZA-3 (d1354f77) -> Codex censo, 6 chamadas lancadas 18:1x, saida logs/piloto_pd/pc/.
