@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 02:48:53.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (15.0 MB). Acoes na janela: **481**.
+**Medido em 05/11/2026 02:54:21.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (15.1 MB). Acoes na janela: **485**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:50:36 | Bash | Check file overlap between N1 and JUIZ-2 product | `cd /home/ronald/saas-hasner && comm -12 <(git diff --name-only a49a6182 b7f938d6 \| sort) <(git diff --name-only a49a6182 8659ba17 \| sort)` |
+| 02:50:33 | Bash | Create instrument raia by cherry-picking onto main | `cd /home/ronald/saas-hasner && W=/home/ronald/wt-jv2instr-$(date +%H%M%S) && git worktree add -q -b raia/jv2-instr $W b7f938d6 && cd $W && git cherry-pick 12322a88 && git log --oneline -2 && git diff --stat HEAD~1 && echo $W` |
+| 02:50:29 | Bash | Check N1 push status before pouso | `cd /home/ronald/saas-hasner && tail -4 logs/n1alim/push2.log; git status --porcelain \| grep -v '^??' ; git log --oneline -1 origin/main; date +%H:%M` |
+| 02:48:55 | Bash | Update RELATO top with ESPERANDO and law decision | `python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') assert L[1].startswith('ESPERANDO:') L[1]='ESPERANDO: pre-push.sh \| pid=930450' novo=("DECIDIDO PELA LEI L-020 JUIZ-VARREDURA-1 volta 3 (02:5x): RED provado (logs/jv1/round3_red.log, FAILED 1: 10/12 trabalhado no posto ANTIGO reescrito pelo municipio novo de P). " "Fonte de 'posto em D' NAO confiavel (sombra, logs/jv1/round3_censo_ ...` |
 | 02:48:47 | Agent | Opus final JUIZ-2 volta 2 | `You are the FINAL adversarial verifier (opus final) for obra JUIZ-VARREDURA-2, round 2. You are read-only. The repo is /home/ronald/wt-lastro-233358 (a git worktree; Django lives in app/). The base is main a49a6182. The commits under review are: - b5adfdd0 (round 1, reviewed before) - 8659ba17 (product: ponto/services/lastro.py::fechar now loops over com_lastro + retido_pelo_fechamento) - 12322a88 ...` |
 | 02:48:34 | Bash | Inspect JUIZ-2 raia commits | `cd /home/ronald/wt-lastro-233358 && git log --oneline -4 && git diff --stat main...HEAD \| tail -5` |
 | 02:48:33 | SendMessage |  | `-` |
