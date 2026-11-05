@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 18:39:19.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (27.8 MB). Acoes na janela: **972**.
+**Medido em 05/11/2026 18:45:01.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (27.9 MB). Acoes na janela: **980**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:40:56 | Bash | Wait for PC3 FIO-MUDO | `cd /home/ronald/saas-hasner; f=logs/piloto_pd/pc/out_pc3_FIO-MUDO.txt; until grep -q '^rc=' $f 2>/dev/null; do /usr/bin/sleep 20; done; grep '^rc=' $f; /bin/grep raspar $f` |
+| 18:40:51 | Bash | Point the wait line at the push's trava and log it | `cd /home/ronald/saas-hasner; sed -i '2s/pid=3386278/pid=3476932/' app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md; tr '\0' '\n' < /proc/3509839/cmdline \| /bin/grep "^/home/ronald/wt" \| head -1; echo "- PUSH SNC2+F3+O169 (bede09aa) no pre-push, trava pid 3476932, log logs/push_o169_1839.log; sem commit ate o rc." >> app/docs/RELATO.md` |
+| 18:39:47 | Bash | Find the push's trava pid | `/usr/bin/sleep 60; cd /home/ronald/saas-hasner; bash bin/trava_teste.sh --quem; pgrep -af "bin/trava_teste.sh" \| /bin/grep -v snapshot \| cut -c1-90; tail -3 logs/push_o169_1839.log` |
+| 18:39:40 | Bash | Push SNC2, F3 and O169 through the pre-push gates | `cd /home/ronald/saas-hasner; bash bin/push.sh > logs/push_o169_1839.log 2>&1; echo rc=$? >> logs/push_o169_1839.log` |
+| 18:39:36 | Bash | Check running test containers | `docker ps --format '{{.ID}} {{.Image}} {{.RunningFor}} {{.Mounts}}' \| /bin/grep -v "saas_\\|mensageria" \| head; cd /home/ronald/saas-hasner; bash bin/trava_teste.sh --quem` |
+| 18:39:31 | Bash | List live trava_teste processes and their trees | `pgrep -af "bin/trava_teste.sh" \| /bin/grep -v snapshot \| cut -c1-80; for p in $(pgrep -f "bin/trava_teste.sh"); do tr '\0' '\n' < /proc/$p/cmdline 2>/dev/null \| /bin/grep -E "^/home/ronald/wt" \| head -1; done` |
+| 18:39:27 | Bash | Identify the new trava holder | `tr '\0' '\n' < /proc/3428954/cmdline \| /bin/grep -E "/home/ronald/wt" \| head -2` |
+| 18:39:22 | Bash | Check trava, remote, and push.sh usage | `cd /home/ronald/saas-hasner; bash bin/trava_teste.sh --quem; ls .git/MERGE_HEAD 2>/dev/null; git fetch -q origin && git log --oneline origin/main..main \| head; git log --oneline main..origin/main \| head -3; sed -n 1,25p bin/push.sh \| /bin/grep -iE "uso\|usage\|^#" \| head -8` |
 | 18:39:13 | Bash | Write the ERRO-BOBO line at the top of the RELATO | `cd /home/ronald/saas-hasner && python3 - <<'EOF' import pathlib p=pathlib.Path('app/docs/RELATO.md'); L=p.read_text().split('\n') assert L[1].startswith('ESPERANDO:') L.insert(2,"ERRO-BOBO C20-O169: o opus final 1 reprovou por OMISSAO de registro -- a cura cumpria corte literal (BACKLOG:424) mas a L-125 nao estava em LEIS.md; nao ha pergunta sem juiz (dia_sem_trabalho e a celula ja respondem, clus ...` |
 | 18:39:03 | Bash | Read how the B3 release reads the RELATO top | `cd /home/ronald/saas-hasner; sed -n 905,935p bin/disjuntor.py; sed -n 626,660p bin/disjuntor.py; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bg5o8a1ir.output` |
 | 18:38:58 | Bash | Read the RELATO top and the B3 release rule | `cd /home/ronald/saas-hasner; sed -n 1,12p app/docs/RELATO.md \| cut -c1-200; /bin/grep -n "ERRO-BOBO\\|linhas_libera_b3" bin/disjuntor.py \| head -12` |
