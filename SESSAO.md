@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 05:14:28.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (17.1 MB). Acoes na janela: **548**.
+**Medido em 05/11/2026 05:19:59.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (17.2 MB). Acoes na janela: **551**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:17:48 | Bash | Check ESPERANDO liveness | `cd /home/ronald/saas-hasner && python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"; ps -eo pid,etime,args \| grep 'bin/trava_teste.sh' \| grep -v grep \| cut -c1-60; date +%H:%M` |
+| 05:17:45 | SendMessage |  | `-` |
+| 05:16:11 | SendMessage |  | `-` |
 | 05:12:56 | Bash | Record JUIZ-2-FILA opus reproval | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p,encoding='utf-8').read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('JUIZ-VARREDURA-2-FILA CONSTRUIDA')) L.insert(i,'JUIZ-VARREDURA-2-FILA opus final #1 REPROVOU 38b5d468 (05:3x): 3 mutantes vivos no selo -- (1) zeragem do loop :85-87 apaga _lastro/_retido e `+ _lastro` no TOTAL passa (prod: dupla co ...` |
 | 05:12:50 | SendMessage |  | `-` |
 | 05:12:40 | ToolSearch |  | `-` |
