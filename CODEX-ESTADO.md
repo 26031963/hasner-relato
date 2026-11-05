@@ -1,6 +1,6 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **04/11/2026 15:44** · publicado em **05/11/2026 11:30** (UTC-3)
+> Ultima resposta processada: **04/11/2026 15:44** · publicado em **05/11/2026 11:35** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
 
 ## 04/11 15:44 · sessao a3f628326e9b · E4-APP-MAPA · verificador · origem=Code
@@ -445,7 +445,7 @@ Falhas a destacar:
 
 **Nota para consolidação do item 4:** rc não zero não prova “PROD SEGUE no código de antes”: erros podem acontecer depois de emitir HUP, por rota ou selo (`bin/deploy.sh:315`, `bin/deploy.sh:374`, `bin/deploy.sh:381`); a mensagem do integrador é forte demais nesse aspecto (`app/core/integrador_lote.py:757-760`).
 
-## 04/11 11:33 · sessao c5de69a10b63 · DEPLOY-[nome]-ELO · verificador · origem=Code
+## 04/11 11:33 -- HISTORICO (mais de 24 h) · sessao c5de69a10b63 · DEPLOY-[nome]-ELO · verificador · origem=Code
 
 1. **Veredito: bloqueia. As curas da marca e da pauta são parciais.** Há caminho para restart com cliente vivo e caminho para pauta aberta sem fechamento automático (`bin/em_casca.sh:28-38`; `bin/admissao_cron.sh:202-208`; `bin/deploy.sh:368-375`). Execução da suíte, morte efetiva dos mutantes e ocorrência desses caminhos em produção: **[nao verificado]**.
 
