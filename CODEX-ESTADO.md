@@ -1,7 +1,25 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **05/11/2026 18:45** · publicado em **05/11/2026 18:50** (UTC-3)
+> Ultima resposta processada: **05/11/2026 19:06** · publicado em **05/11/2026 19:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 05/11 19:06 · sessao 194b901e3953 · - · - · origem=Ronald (tmux)
+
+**6. O skip pode adiar a contagem, mas os três casos perguntados têm comportamentos distintos.**
+
+- **Tentativas esgotadas:** não mascaram o chamado: `eventos_pendentes()` exige `tentativas<5`; os esgotados entram em contador próprio, incluído no alarme. (`app/chamados/reconciliador.py:1198`, `app/chamados/reconciliador.py:1238`, `app/chamados/reconciliador.py:1244`, `app/chamados/management/commands/reconciliar_chamados.py:118`)
+- **Processado sem retratar:** o evento processado sai de `_com_evento`; sem outro pendente daquele colaborador, o vigia volta a perguntar. Se o escritor recusa/retem, o vigia contabiliza somente como MEDIDA, pelas mesmas guardas. (`app/chamados/management/commands/reconciliar_chamados.py:62`, `app/chamados/management/commands/reconciliar_chamados.py:73`, `app/chamados/management/commands/reconciliar_chamados.py:79`, `app/chamados/management/commands/reconciliar_chamados.py:107`)
+- **Evento de outro dia:** mascara a contagem por colaborador, mas o consumidor também trabalha por colaborador e a função extraída percorre todos os chamados VIVOS, sem filtro de data/célula do evento. Portanto o dia diferente, sozinho, não demonstra perda de julgamento. (`app/chamados/reconciliador.py:1337`, `app/chamados/reconciliador.py:1360`, `app/chamados/reconciliador.py:1432`)
+- **Janela demonstrável por leitura:** `_com_evento` é fotografia tomada antes do laço. Se o evento for processado depois da fotografia, o vigia pode pular aquele colaborador nesta execução mesmo após o consumo. Ocorrência e duração produtivas: **[nao verificado]**. (`app/chamados/management/commands/reconciliar_chamados.py:62`, `app/chamados/management/commands/reconciliar_chamados.py:71`)
+- **Pendente persistente:** órfã adiada deixa evento pendente sem consumir tentativas; enquanto esse pendente existir, a premissa fica fora do contador, e quantidade/idade dos pendentes são somente MEDIDA. O consumidor ainda tenta julgar a premissa em cada consumo. (`app/chamados/reconciliador.py:1360`, `app/chamados/reconciliador.py:1366`, `app/chamados/reconciliador.py:1375`, `app/chamados/management/commands/reconciliar_chamados.py:113`)
+
+**7. Os testes mordem caminhos felizes e alguns negativos, mas permitem mutantes relevantes.** [nao verificado]
+
+Mordem emissão pelo nascimento, exclusão de módulo estranho, fechamento do aberto, recompute repetido, preservação do aberto, custo diferencial, pai retratado com recusa do furo, idempotência e vigia pendente/processado. (`app/chamados/tests/test_c20_juiz3_outbox.py:99`, `app/chamados/tests/test_c20_juiz3_outbox.py:109`, `app/chamados/tests/test_c20_juiz3_outbox.py:135`, `app/chamados/tests/test_c20_juiz3_outbox.py:146`, `app/chamados/tests/test_c20_juiz3_outbox.py:155`, `app/chamados/tests/test_c20_juiz3_outbox.py:164`, `app/chamados/tests/test_c20_juiz3_outbox.py:242`, `app/chamados/tests/test_c20_juiz3_outbox.py:271`, `app/chamados/tests/test_c20_juiz3_outbox.py:299`)
+
+**Mutante concreto:** retirar `falhas=falhas` da chamada adicionada em `app/chamados/reconciliador.py:1360`. Os caminhos felizes ficam iguais; diante de exceção por chamado, a função engole/loga sem alimentar a lista do consumidor, que pode marcar o evento processado. (`app/chamados/reconciliador.py:1445`, `app/chamados/reconciliador.py:1447`, `app/chamados/reconciliador.py:1373`, `app/chamados/reconciliador.py:1380`) Os únicos erros injetados no arquivo novo são no INSERT do evento; não há erro injetado no julgamento/retratação do consumidor. (`app/chamados/tests/test_c20_juiz3_outbox.py:123`, `app/chamados/tests/test_c20_juiz3_outbox.py:194`) Sobrevivência prevista por inspeção; execução do mutante: **[nao verificado]**.
+
+**Outra lacuna:** remover os atomics próprios de `criar` e `recompute_turnos`, reindentando os corpos, não é distinguido pelos testes de rollback: a base usa `TestCase` e ambos os testes envolvem explicitamente o ato em outro `transaction.atomic()`. Logo eles demonstram rollback no atomic externo, sem isolar a proteção em autocommit. (`app/chamados/tests/test_c20_juiz3_outbox.py:37`, `app/chamados/tests/test_c20_juiz3_outbox.py:125`, `app/chamados/tests/test_c20_juiz3_outbox.py:196`, `app/chamados/models.py:1053`, `app/ponto/nucleo.py:57`) Execução desse mutante: **[nao verificado]**.
 
 ## 05/11 18:45 · sessao 27a1f0698658 · H12H06 · verificador · origem=Code
 
@@ -1387,20 +1405,4 @@ As diferenças de inventário acima ampliam o universo da prova apresentado por 
 
 Definições e linhas próximas que permanecem no mesmo sítio semântico não foram tratadas como falsas, como `_carimbar_validacao` em `app/chamados/services/validacao.py:127` e sua atribuição em `app/chamados/services/validacao.py:131`, ou `abrir` em `app/chamados/models.py:2387` e criação em `app/chamados/models.py:2465`.
 
-## 05/11 18:25 · sessao 42d8407c5a99 · - · - · origem=Ronald (tmux)
-
-Os três itens de FILA não demonstram bug atual na cura; há uma lacuna de teste na precedência entre “dia sem trabalho” e “ata sem insumos”. O código atual resolve corretamente essa precedência: pergunta ao juiz antes de validar os insumos. (`app/ponto/services/cluster_espurio.py:25`, `app/ponto/services/cluster_espurio.py:29`)
-
-1. **Assinatura duplicada / 15 literal — FILA.** O classificador usa `JANELA_CLUSTER_MIN = 15` para agrupar rajadas; o serviço compara consecutivas com `15`. Ambos preservam o mesmo limiar, mas têm saídas distintas: classificação de órfãs versus assinatura que sustenta o chamado. (`app/escala/orfa_classe.py:28`, `app/escala/orfa_classe.py:44`, `app/escala/orfa_classe.py:75`, `app/ponto/services/cluster_espurio.py:35`)
-
-2. **Caso 7 — lacuna real, sem invalidar todos os REDs.** Ele fornece listas vazias; retirar o juiz ainda produz `()` pelo retorno final, portanto esse caso isolado não verifica a consulta ao juiz. (`app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:109`, `app/ponto/services/cluster_espurio.py:37`) Porém a remoção global da consulta seria detectada pelos testes existentes de emissão: folga e ausência possuem órfãs e lâmpada apagada, mas esperam nenhum achado. (`app/chamados/tests/test_f1c4_3_emissores.py:115`, `app/chamados/tests/test_f1c4_3_emissores.py:121`, `app/chamados/tests/test_f1c4_3_emissores.py:127`, `app/ponto/services/cluster_espurio.py:47`)
-
-   Um mutante mais específico — validar os insumos antes do juiz — preservaria esses testes com listas e o caso 7, mas transformaria `trabalha=False, ata={}` em `None`, conservando indevidamente o chamado. Isso decorre da ordem atual dos dois ramos e das fixtures citadas; execução desse mutante: [nao verificado]. (`app/ponto/services/cluster_espurio.py:25`, `app/ponto/services/cluster_espurio.py:29`, `app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:109`, `app/chamados/tests/test_f1c4_3_emissores.py:66`)
-
-3. **Contador de fato `None` — FILA.** O coletor conserva `None`, mas retorna apenas a lista dos chamados cuja premissa morreu; o vigia conta pendências de abertura e fechamento, sem expor o universo não medido. (`app/ponto/services/cluster_espurio.py:74`, `app/ponto/services/cluster_espurio.py:78`, `app/ponto/management/commands/detectar_cluster_espurio.py:53`, `app/ponto/management/commands/detectar_cluster_espurio.py:60`)
-
-**Bloqueante documental recomendado:** a generalização “ata sem insumos = não medido e o chamado vive” é falsa sem ressalvar a prioridade do juiz, principalmente no ADR, que não explicita essa exceção. (`app/docs/LEIS.md:146`, `app/docs/PLANO-PADROES.md:74`) Para `trabalha=False, ata={}`, o juiz responde verdadeiro, o leitor devolve `()`, o fato vira `False` e a premissa morre. (`app/chamados/juizes.py:428`, `app/ponto/services/cluster_espurio.py:25`, `app/ponto/services/cluster_espurio.py:75`, `app/chamados/catalogo/premissa.py:134`, `app/chamados/catalogo/premissa.py:150`)
-
-A redação fiel precisa limitar a conservação por falta de insumos aos dias que o juiz **não** declarou sem trabalho; o código já realiza essa ordem. (`app/ponto/services/cluster_espurio.py:25`, `app/ponto/services/cluster_espurio.py:29`)
-
-_1960 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1961 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
