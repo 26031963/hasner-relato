@@ -203,9 +203,9 @@ flowchart TD
     t_celula["CELULA / ATA por marco<br/>o que aconteceu (lampada)"]
     t_evento["EVENTO<br/>batida, ausencia, chamado -> cartorio julga na hora (signals B5.2)"]
     t_consumidor["CONSUMIDORES<br/>chamado, pergunta, tela, folha: leem a lampada, nunca re-julgam"]
-    t_vigia["CRON = VIGIA<br/>37 vigias; contador esperado 0, so alarma"]
+    t_vigia["CRON = VIGIA<br/>38 vigias; contador esperado 0, so alarma"]
     t_prazo["CRON = PRAZO (L-101)<br/>12 cron(s): a falta nao emite evento, o relogio e o unico sinal dela;<br/>julgam pela funcao do juiz da casa, sem regra propria (PRAZO_DELEGA_A)"]
-    t_juiz["JUIZ POR VARREDURA (divida)<br/>4 crons ainda julgam: esperado 0"]
+    t_juiz["JUIZ POR VARREDURA (divida)<br/>3 crons ainda julgam: esperado 0"]
     t_escala --> t_celula
     t_evento --> t_celula
     t_celula --> t_consumidor
@@ -215,7 +215,6 @@ flowchart TD
   end
   j_disparar_perguntas_competencia["disparar_perguntas_competencia"] -.-> t_juiz
   j_fechar_cobranca_com_lastro["fechar_cobranca_com_lastro"] -.-> t_juiz
-  j_reavaliar_ausencias_feriado["reavaliar_ausencias_feriado"] -.-> t_juiz
   j_reconciliar_chamados["reconciliar_chamados"] -.-> t_juiz
   pz_apurar_furos_diarios["apurar_furos_diarios<br/>escala.services.furos_diarios::apurar"] -.-> t_prazo
   pz_detectar_ausencias["detectar_ausencias<br/>ponto.services.cartorio::marcos_vencidos"] -.-> t_prazo
@@ -391,6 +390,7 @@ flowchart TD
     vg_mapa_divergencia["mapa_divergencia"]
     vg_negou_fogo_diario_sh["negou_fogo_diario.sh"]
     vg_pipeline_placar["pipeline_placar"]
+    vg_reavaliar_ausencias_feriado["reavaliar_ausencias_feriado"]
     vg_reavaliar_ausencias_lancadas["reavaliar_ausencias_lancadas"]
     vg_reconciliar_fantasmas["reconciliar_fantasmas"]
     vg_reconciliar_geofence["reconciliar_geofence"]
