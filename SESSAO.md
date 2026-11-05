@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 07:55:23.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (21.4 MB). Acoes na janela: **644**.
+**Medido em 05/11/2026 08:00:51.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (21.4 MB). Acoes na janela: **637**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -647,10 +647,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:02:52 | Bash |  | `cd /home/ronald/saas-hasner; bin/sombra.sh --rodar sonda_n1im.py n1im-q-head > /dev/null 2>&1; SOMBRA_ARVORE=/home/ronald/wt-n1im-183722/app bin/sombra.sh --rodar sonda_n1im.py n1im-q-copia >/dev/null 2>&1; grep -h 'N1IM\\|ROLLBACK\\|Traceback' logs/n1im-q-head.out logs/n1im-q-copia.out` |
 | 20:02:47 | Bash |  | `cd /home/ronald/saas-hasner/logs/sombra; cat > sonda_n1im.py <<'EOF' import time, json, hashlib from django.db import transaction, connection from django.utils import timezone from chamados.services import vigia_fio as V hoje = timezone.localdate() class Stop(Exception): pass n = [0] def conta(execute, sql, params, many, context): n[0] += 1 return execute(sql, params, many, context) try: with tran ...` |
 | 20:02:37 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/354179ca-a13f-4642-a6f5-791cf69a0acd/tasks/be52x5h3i.output; head -3 /home/ronald/saas-hasner/logs/n1im-head.out /home/ronald/saas-hasner/logs/n1im-copia.out \| cut -c1-150` |
-| 19:57:02 | Bash |  | `cd /home/ronald/saas-hasner; sleep 5; bin/trava_teste.sh --quem 2>&1\|tail -1; P=$(bin/trava_teste.sh --quem 2>&1\|tail -1\|sed -n 's/^suite:\([0-9]*\).*/\1/p'); echo P=$P; cd app/docs && python3 - "$P" <<'EOF' import sys p='RELATO.md'; L=open(p).read().split('\n') assert L[1].startswith('ESPERANDO:') L[1]='ESPERANDO: trava_teste.sh \| pid=%s' % sys.argv[1] L.insert(2,"NOITE-0411 item 1 N1 20:1x:  ...` |
-| 19:56:50 | Bash |  | `cd /home/ronald/saas-hasner; bin/sombra.sh --rodar sonda_n1pna.py n1im-head > logs/n1im/sombra_head.run 2>&1; SOMBRA_ARVORE=/home/ronald/wt-n1im-183722/app bin/sombra.sh --rodar sonda_n1pna.py n1im-copia > logs/n1im/sombra_copia.run 2>&1; grep -h 'N1PNA censo\\|ROLLBACK\\|Traceback' logs/n1im-head.out logs/n1im-copia.out` |
-| 19:56:42 | Bash |  | `cd /home/ronald/saas-hasner; grep -l 'N1PNA' logs/sombra/*.py 2>/dev/null; f=$(grep -l 'N1PNA' logs/sombra/*.py \| head -1); cat "$f"` |
-| 19:56:37 | Bash |  | `cd /home/ronald/saas-hasner; grep -l 'N1PNA' /tmp/*.py scratchpad/*.py logs/n1pna/* 2>/dev/null \| head; grep -n 'sombra --rodar' -r bin/sombra.sh \| head -3; grep -n '\-\-rodar' bin/sombra.sh \| head -5` |
-| 19:56:32 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/n1pna/sonda_copia.out \| head -20; grep -n 'sonda_copia\\|sonda_head' app/docs/RELATO.md \| cut -c1-300 \| head -3; ls -t scratchpad 2>/dev/null \| head; ls -t /tmp/*.py 2>/dev/null \| head -5` |
-| 19:56:25 | Bash |  | `cd /home/ronald/saas-hasner; bash bin/suite.sh --dir /home/ronald/wt-n1im-183722 > logs/n1im/suite_4892a6ab.log 2>&1; echo $? > logs/n1im/suite_4892a6ab.rc` |
-| 19:56:24 | Bash |  | `cd /home/ronald/wt-n1im-183722 && git log --oneline -2 && git status --porcelain \| wc -l && git diff --stat 0e4e4b71 HEAD \| tail -1` |
