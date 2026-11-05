@@ -6519,3 +6519,22 @@ LEI-AKITA: origem=ponto/nucleo.py::recompute_turnos + chamados/models.py::Chamad
 - Deploy de9fd69b --sem-migrate: rc=0, 3 cascas HUP, rotas 200/302/200, importerror_500=0 (logs/jv3/deploy_de9fd69b.log).
 - O crontab nao foi re-renderizado: `bin/crons.sh check` falha com CronNaoCabe (sombra.sh 87 min), PRE-EXISTENTE (BACKLOG, ja visto no deploy 9c0fd9d3). A linha */15 do reconciliar_chamados segue sem `--alarme`. O codigo ja e vigia e nao escreve; falta so o rc 2 do alarme.
 - INCOMPLETO: medir escritas_por_cron do reconciliar_chamados em prod nas proximas rodadas */15 (esperado 0). FILA do opus: docstring test_o_outbox_celula.py:87-88; `assert_called_once`; censo do atomic(savepoint=False) em chamados/models.py:1055.
+- 05/11 20:4x MEDIDA pos-deploy de9fd69b, rodada */15 das 20:30 (logs/reconciliador.log:115844-115857): 0 retratado, premissa morta sem evento 0. "celula absolveu sem evento" = 5, ja era 5 antes do deploy (:115745), entao preexistente. Outbox: 4 pendentes desde ~17:02, "adiado pelo teto", que e o desenho (chamados/reconciliador.py:1059-1061: pergunta orfa do dia de hoje segura pelo relogio ate o dia encerrar). Nao e defeito.
+
+## 05/11 20:4x HJ-INGESTAO item 1 (so leitura): universo 80 = soma das partes
+LEI-AKITA: origem=n/a (medida), testemunha=dias_que_seguram + InsumosDoDono.dono + status_do_dia_lavrado + classificar_export + porta_alcancavel_do_dia + chamados (funcoes REAIS, sonda logs/hj_0511/sonda_a.py READ ONLY), RED=n/a, quem-mais-le=n/a, juizes novos=0, padrao=n/a (medida)
+- Unidades: 80 (HJ-NNN-Uk); 50 casadas com col+dia, 30 indeterminadas por "nao casado" ou "sem dia" (sem dia inventado).
+- Regra de estado: divergente = o dia SEGURA a folha; dono = InsumosDoDono.dono. Sem divergencia hoje = nao segura e lavrado nao irregular. Indeterminado = sem col/dia, dia futuro, ou lavrado irregular que nao segura (testemunhas discordam).
+| estado | dono | n |
+|---|---|---|
+| divergente com dono | ESTRUTURA | 6 (HJ-005-U1/U2/U4 col42, HJ-012-U2 col239, HJ-017-U1 col923, HJ-030-U1 col94) |
+| divergente com dono | CADASTRO | 3 (HJ-001-U1/U2 col836, HJ-016-U1 col297) -> lista do admin |
+| divergente com dono | BATIDA | 5 (HJ-002-U1 col909, HJ-003-U1 col407, HJ-005-U5 col42, HJ-015-U1 col39, HJ-027-U1 col292) -> lista do admin |
+| sem divergencia hoje pela funcao | - | 33 |
+| indeterminado | - | 33 (30 sem col/dia; 1 dia futuro HJ-050-U2; 2 lavrado irregular sem segurar: HJ-012-U1 col239, HJ-031-U1 col247) |
+- Soma: 6+3+5+33+33 = 80. Grupos: G1 18, G2 8, G3 17, G4 8, G5 24, G6 1, nao classificada 3, futura 1 (= 80); obra por unidade no mapa privado.
+- HJ-001 = col836, divergente CADASTRO (escala_suspeita; segura por espelho_indefinida; chamado 30870 resolvido localmente). Remedir DEPOIS do F3: o F3-PORTA-E-CRON-PRAZO NAO pousou.
+- HJ-054 = nao casado (sem col pelo mapa): indeterminado.
+- Nenhuma unidade foi escrita como "resolvido": o encerramento e do Fernando. Mapa com nomes: logs/hj_0511/mapa.md (600, gitignored).
+- PROVA: logs/hj_0511/sonda_a.out resumo processadas=50 com_erro=0 puladas=30 soma=80, rc=0; mapa.md 600, git check-ignore ok.
+- INCOMPLETO: (1) as 6 ESTRUTURA apontam a obra pelo mapa, e a obra do Codex segue `[nao verificado]` por unidade; (2) HJ-001 pos-F3.
