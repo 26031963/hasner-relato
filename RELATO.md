@@ -1,5 +1,5 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: trava_teste.sh | pid=1822501
+ESPERANDO: trava_teste.sh | pid=2140122
 ERRO-BOBO OTIMIZA-3: (disjuntor 02:1x, disparo 02:11:16) opus final #3 REPROVOU 8d7f61a2 -- os 2 bloqueios da volta 2 CURADOS (conferidos), mas o FORA enumera CASOS e nao a CLASSE: alvo que a ferramenta nao varre (.css/.js por {% static %}, templatetag por |filtro/{% load %}, metodo lido por instancia) imprime '0 chamador(es)' (prova 6a61d405: hasner-ponto.css 0, base.html:17 carrega; 9e12489c: filtro espera so o teste). Cura volta 4: lista POSITIVA do que se varre; todo o resto sai 'nao varrido', nunca 0.
 - O261-E-F2-FILA NO AR 05:48 (31681388): opus final APROVOU; merge --no-ff, cmp 10 arquivos = 0 diferem, deploy rc 0 (3 cascas HUP, 3 rotas), PROVA prod: saas_core importa VIAS_DE_IDENTIDADE (4) + vias_que_encerram (5, com a tranca) + desfazer_lavra_em_memoria. Fila do opus Q1-Q8 no corpo do commit. Voltas: opus 1, Codex 0 (sem cota).
 - JUIZ-VARREDURA-4A 06:0x: cura do bloqueio HOJE em bb789e67 (vigia so conta `data < hoje`, relogio unico da borda; RED logs/jv4/hoje_red.log 2 FAIL por assercao, GREEN hoje_green.log Ran 115 OK) -> suite inteira r2 (logs/jv4/suite_inteira_jv4m_r2.log) -> opus. ACHADO fila: turno noturno de ontem cujo ultimo marco vence hoje ~06:30 ainda pode dar rc 2 antes do vigia das 06:40 (mesmo furo da guarda velha).
