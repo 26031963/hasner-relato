@@ -1,6 +1,6 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **04/11/2026 15:44** · publicado em **05/11/2026 11:08** (UTC-3)
+> Ultima resposta processada: **04/11/2026 15:44** · publicado em **05/11/2026 11:30** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
 
 ## 04/11 15:44 · sessao a3f628326e9b · E4-APP-MAPA · verificador · origem=Code
@@ -577,7 +577,7 @@ Falhas a destacar:
 
 [truncado em 20000 de 24144 caracteres]
 
-## 04/11 11:27 · sessao 931f9f956368 · - · - · origem=Ronald (tmux)
+## 04/11 11:27 -- HISTORICO (mais de 24 h) · sessao 931f9f956368 · - · - · origem=Ronald (tmux)
 
 Leitura estática concluída; execução/mutantes/suite verde: **[nao verificado]**. O selo cria e apaga arquivos, portanto não o executei (`bin/tests/test_deploy_nao_mata_elo.sh:44`).
 
@@ -622,7 +622,7 @@ Leitura estática concluída; execução/mutantes/suite verde: **[nao verificado
    - **(a)/(c)/(g)/(i):** não identifiquei instância nova nos trechos examinados; conclusão global sobre delta3 **[nao verificado]**.
    - Conferência da hipótese de rede: o harness chama HTTP dentro de `_TIRO` (`eval/harness.py:14-24`), executado sob em_casca (`:53-56`); não é uma chamada HTTP direta do run no host nessa implementação. Linha correspondente no RELATO exigida pelo aval: **[nao verificado]**.
 
-## 04/11 11:27 · sessao 953adbce7ef6 · - · - · origem=Ronald (tmux)
+## 04/11 11:27 -- HISTORICO (mais de 24 h) · sessao 953adbce7ef6 · - · - · origem=Ronald (tmux)
 
 Achados principais, por leitura estática:
 
@@ -666,7 +666,7 @@ RCs dos chamadores encontrados:
 
 O segundo apagador `deploy_agendado` já pertence ao diff total fornecido, não ao delta3; sua existência contradiz o comentário “ninguém mais apaga” (`bin/deploy_recusado.sh:6-8` versus `bin/deploy_agendado.sh:110`). Não identifiquei novo escritor direto de `feito_em` na volta 3: fechamento continua pela porta `app/pautas/services.py:256-275`.
 
-## 04/11 11:27 · sessao 9fcf87ff9ab8 · - · - · origem=Ronald (tmux)
+## 04/11 11:27 -- HISTORICO (mais de 24 h) · sessao 9fcf87ff9ab8 · - · - · origem=Ronald (tmux)
 
 **BLOQUEIA — transferência sem fd8 permite restart com exec vivo.** `adm_marcar` solta fd8 antes do comando (`bin/admissao_cron.sh:250`); a transferência publica outra marca e remove a anterior sem retomar a trava (`bin/em_casca.sh:32-36`). A varredura expande o glob uma vez (`bin/admissao_cron.sh:202`): se ele contém apenas a velha e a transferência ocorre antes do teste `-e`, a velha é pulada (`bin/admissao_cron.sh:203`) e a nova não pertence àquela enumeração. Isso também vale para a varredura final sob fd8 (`bin/reinicio_sob_admissao.sh:43-45`), permitindo alcançar o restart com cliente docker vivo (`bin/reinicio_sob_admissao.sh:66`). O comentário “nunca vê zero” não se sustenta (`bin/em_casca.sh:31`).
 

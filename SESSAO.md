@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 11:25:11.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (2.1 MB). Acoes na janela: **51**.
+**Medido em 05/11/2026 11:30:17.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (2.2 MB). Acoes na janela: **54**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:29:29 | Bash | Update ESPERANDO pid to running suite | `cd /home/ronald/saas-hasner; sed -i '2s/pid=[0-9]*/pid=2688801/' app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md; ps -o args= -p 2688801 \| grep -o -- '-v [^ ]*:/app' \| head -2` |
+| 11:29:26 | Bash | Check suite lock and (c)(1) logs | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; ls -la logs/sombra_c1/ 2>/dev/null \| tail -5` |
+| 11:25:12 | Bash | Check if suite producer still alive | `ps -p 2396211 >/dev/null && echo vivo \|\| echo morto; ps -eo pid,etime,args \| grep -E "trava_teste\|manage.py test" \| grep -v grep \| cut -c1-160 \| head` |
 | 11:25:09 | Bash | Register LASTRO-PARTE-2 despacho in RELATO | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read(); L=s.split('\n') assert not any(x.startswith('DESPACHO LASTRO-PARTE-2') for x in L) i=[k for k,x in enumerate(L) if x.startswith('JUIZ-1 v5 APROVADA')]; assert len(i)==1 L.insert(i[0],'DESPACHO LASTRO-PARTE-2 11:3x: autopsia #35623/#33126/#36045 -> Codex depois de 15:05 (conferida no arquivo:linha) \| cura+vigi ...` |
 | 11:25:04 | Bash | Check construtor progress | `cd /home/ronald/saas-hasner; for f in a3d64b62b38120eb0 af2c4348c25a28742; do echo "== $f"; tail -c 1500 /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/$f.output \| tr '\n' ' ' \| tail -c 800; echo; done; grep -n "CRONS-INSTALL-SOB-MARCA" app/docs/RELATO.md \| cut -c1-120 \| head -3` |
 | 11:25:00 | Bash | Register aval LASTRO-PARTE-2 and read refusal | `cd /home/ronald/saas-hasner/app/docs; cat >> PROMPTS.md <<'EOF' 05/11 11:3x \| aval Ronald LASTRO-PARTE-2 (nenhuma lei nova; 4a, CONTRATO-20-E2, L-099; depois do pouso JUIZ-1, antes do JUIZ-3 se houver vaga): 1 AUTOPSIA #35623 #33126 #36045 (Codex depois 15:05, conferida) 2 cura na origem: fecho por MARCO aceso vai ao evento da celula por reconciliar(), sem juiz novo 3 fechar_cobranca_com_lastro v ...` |
