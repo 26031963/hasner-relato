@@ -1,5 +1,5 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh | pid=1317039
+ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh | pid=1332539
 RESPONDIDA por aval H12H06-UMA-PORTA 17:2x: PERGUNTA DE DESENHO H12H06 (17:1x) -- aplicar e reverter = duas direcoes da MESMA porta, arquivo de reversao consumido por hash na trilha; v5 abre.
 CONTRATO-DE-INSTRUMENTO CODEX-PRE-DESENHO-PILOTO (aval 16:2x; padrao=n/a (instrumento)): QUEM CHAMA = a sessao, por bin/codex_pergunta.sh CODEX_PAPEL=censo CODEX_OBRA=PD-<obra> (peca 1, antes de abrir o construtor) ou AUT-<obra> (peca 2, antes da volta seguinte a 2a reprovacao procedente)
   QUEM ESPERA = o construtor da obra (recebe a .r como anexo e responde por escrito item a item: cobre/descarta+motivo) e a proxima volta da obra na peca 2; pouso ja aprovado NAO espera; fila nao se reordena
@@ -6464,3 +6464,18 @@ LEI-AKITA: origem=escala/services/cadastro_realidade.py::beco_em_lote + escala/f
 - PRE-CODIGO-DUPLO item 3: PC1 e PC2 de PEP voltaram (rc=0, raspador 0 vazamento) com o construtor do PEP fechado -> PC3-PEP lancado no HEAD 9c0fd9d3 (main nao andou), mesma pergunta, sem PC1/PC2 anexos; teto 3 atingido para PEP. Comparacao PC1 x PC2 sai quando as 3 obras tiverem PC2.
 - PRE-CODIGO-DUPLO item 3: PC2-OTIMIZA-3 voltou (rc=0, 0 vazamento), raia wt-qc-224741 parada em d1354f77 sem construtor -> PC3-OTIMIZA-3 lancado em d1354f77, sem PC1/PC2; teto 3 atingido.
 - FUNIL-28 S2a: 15/24 procedentes, 9 ja cobertos (res_S2a.md). Amostra 1 de S2 = 31/48 procedentes (65%), dobra ja lancada.
+
+## CODEX-FUNIL-28 v2 -- PRONTO (18:2x)
+LEI-AKITA: origem=n/a (medida), testemunha=r_fusao.md + git show 9c0fd9d3 (arquivo:linha aberto por item), RED=n/a, quem-mais-le=BACKLOG FUNIL-28-PROCEDENTES + tabela CODEX-QUEIMA, juizes novos=0, padrao=n/a (medida)
+- logs/codex_queima/funil_28.md: universo 351 = procedente 91 + descartado 0 + ja coberto 30 + nao verificavel 4 + nao conferido 226. S1 29 (25/0/3/1), S2 conferido 96 (66/0/27/3), S2 nao conferido 226. Amostra do Code sobre o sonnet: F-018, F-150, F-249 = 3/3.
+- CODEX-QUEIMA completada (so conferidos): CRIVO 1-8 = 24 proc / 0 desc / 6 cob / 2 nv / 53 nao conf (inclui 5 mistos CRIVO+SUFOCA nas duas linhas); SUFOCA 01-20 = 72 / 0 / 29 / 2 / 178. Tokens por procedente conferido: CRIVO 0,70 M input / 4.893 output; SUFOCA 0,66 M / 3.038. Sobre a amostra, entao e teto do custo, nao media da frota.
+- Por tema (S1 / S2 conferido): defeito 14/20 proc, divergencia 8/12, risco 1/20, apresentacao 2/6, instrumentacao 0/6, lacuna 0/2, documentacao 0/0. Descartado 0 em todo tema.
+- Destino: linha BACKLOG FUNIL-28-PROCEDENTES. 0 trava a fila 1. F-150 (comando one-shot da 09 exportada nao idempotente sob --aplicar) fica so leitura. 5 itens de S1 sao do motor_v2 (so com `!`).
+- INCOMPLETO: 226 de S2 nao conferidos, e nao viram procedente.
+- PRE-CODIGO-DUPLO FALHA/LIMITE: PC2-FIO-MUDO rc=124 (timeout do wrapper, CODEX_TIMEOUT default 900 s; log out_pc2_FIO-MUDO.t1_rc124.txt). Nova tentativa unica com CODEX_TIMEOUT=2400 (env da chamada, wrapper intocado), mesma pergunta, sem ver PC1; conta no teto 3. Se falhar de novo, FIO-MUDO segue so com PC1.
+
+## O169 volta do opus (18:2x)
+- SUITE 790a0130 (O169 + main 9c0fd9d3): OK (skipped=42, expected failures=39), Ran 13674, rc=0 (logs/c20_o169/suite_790a0130.log).
+- Bloqueante do opus (L-NNN ausente, BACKLOG.md:418-422): L-125 CLUSTER-NAO-FECHA-POR-IDADE em LEIS.md + indice + ADR PLANO-PADROES.md#l-125, commit e1320986 so docs (nenhum .py desde a arvore certificada). Selos de host na raia: test_leis_indice OK (93 leis), test_lei_protege_sitio RED antes do commit -> OK depois (L-125 citada), test_lei_akita OK.
+- CODEX item 5(c): opus reprovou -> volta ao Codex verificador v2 (logs/c20_o169/codex_v2.r, anexos delta_l125.patch + opus_final_1.txt) -> depois opus do delta.
+- PRE-CODIGO-DUPLO: comparacao PC1 x PC2 de PEP e OTIMIZA-3 -> Codex censo (logs/piloto_pd/pc/r_cmp_*.md).
