@@ -1,6 +1,6 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **04/11/2026 15:44** · publicado em **05/11/2026 11:03** (UTC-3)
+> Ultima resposta processada: **04/11/2026 15:44** · publicado em **05/11/2026 11:08** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
 
 ## 04/11 15:44 · sessao a3f628326e9b · E4-APP-MAPA · verificador · origem=Code
@@ -695,7 +695,7 @@ O segundo apagador `deploy_agendado` já pertence ao diff total fornecido, não 
 
 A cura da volta 3 cobre o cenário **já transferido antes do SIGKILL**, mas introduz o segundo escritor sem fd8 e deixa janelas anteriores/fallback abertas (`bin/em_casca.sh:28-38`).
 
-## 04/11 11:08 · sessao 74fc7acb1b74 · DEPLOY-[nome]-ELO · verificador · origem=Code
+## 04/11 11:08 -- HISTORICO (mais de 24 h) · sessao 74fc7acb1b74 · DEPLOY-[nome]-ELO · verificador · origem=Code
 
 1. **Os PROCEDENTES tiveram cura parcial. Eu não daria fechamento: permanecem caminhos sem garantia contra restart sobre exec vivo, proibido pelo aval.** A serialização cobre o restart, enquanto outros execs do deploy ficam fora dela; o wrapper também pode perder sua marca após timeout (`bin/reinicio_sob_admissao.sh:43`, `bin/deploy.sh:124`, `bin/em_casca.sh:21`, `bin/admissao_cron.sh:208`; `AVAL_DEPLOY-ELO-B3.txt:13`, anexo).
 
