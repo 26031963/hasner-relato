@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 06:39:43.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (20.3 MB). Acoes na janela: **626**.
+**Medido em 05/11/2026 06:45:13.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (20.4 MB). Acoes na janela: **632**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:40:04 | Bash |  | `P=$(ps -eo pid,args \| awk '$2=="/bin/bash" && $3 ~ /janela_0730.sh$/ {print $1}' \| head -1); [ -z "$P" ] && P=$(ps -eo pid,args \| awk '$0 ~ /janela_0730.sh/ && $0 !~ /awk/ && $0 !~ /snapshot/ {print $1}' \| head -1); echo $P; cd /home/ronald/saas-hasner && sed -i "2s/.*/ESPERANDO: janela_0730.sh \| pid=$P/" app/docs/RELATO.md && python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop ...` |
+| 06:39:59 | Bash |  | `/home/ronald/saas-hasner/logs/jv4/janela_0730.sh` |
+| 06:39:58 | TaskStop |  | `-` |
+| 06:39:58 | Bash |  | `cat > /home/ronald/saas-hasner/logs/jv4/janela_0730.sh <<'EOF' #!/bin/bash # espera a janela de pouso (fora de 06:00-07:30, aval NOITE-NON-STOP) until [ "$(date +%H%M)" -ge 0730 ]; do /usr/bin/sleep 30; done echo janela-aberta $(date +%H:%M) EOF chmod +x /home/ronald/saas-hasner/logs/jv4/janela_0730.sh` |
+| 06:39:54 | Bash |  | `cd /home/ronald/saas-hasner && sed -i "2s/.*/ESPERANDO: sleep \| pid=1634815/" app/docs/RELATO.md && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') L.insert(3,"JUIZ-4A bd936b13 APROVADO pelo opus (06:4x), suite inteira r3 OK 13546 rc=0. Pouso L-107 (merge --no-ff + cmp + deploy) depois de 07:30, junto do pouso do instrumento JUIZ-2-FILA (proprio). Fila do opus: pulo de ontem ...` |
+| 06:39:45 | Bash |  | `cd /home/ronald/saas-hasner && sed -i "2s/.*/ESPERANDO: sleep \| pid=1634815 \| arquivo=janela de pouso 07:30/" app/docs/RELATO.md && python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
 | 06:39:40 | Bash |  | `cd /home/ronald/saas-hasner && sed -i "2s/.*/ESPERANDO: janela-0730 \| pid=1634815/" app/docs/RELATO.md && python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
 | 06:39:32 | Bash |  | `/usr/bin/sleep 2; P=$(cat /tmp/claude-1001/-home-ronald-saas-hasner-app/354179ca-a13f-4642-a6f5-791cf69a0acd/scratchpad/janela.pid); ps -p $P -o pid,args \| tail -1 \| cut -c1-80; cd /home/ronald/saas-hasner && sed -i "2s/.*/ESPERANDO: janela de pouso 07:30 \| pid=$P/" app/docs/RELATO.md && python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova( ...` |
 | 06:39:30 | Bash |  | `echo $$ > /tmp/claude-1001/-home-ronald-saas-hasner-app/354179ca-a13f-4642-a6f5-791cf69a0acd/scratchpad/janela.pid; until [ "$(date +%H%M)" -ge 0730 ]; do /usr/bin/sleep 30; done; echo janela-aberta $(date +%H:%M)` |
