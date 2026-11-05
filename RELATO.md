@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: trava_teste.sh | pid=3576690
-PERGUNTA DE DESENHO H12H06 (17:1x; peca 2 do piloto, logs/piloto_pd/aut_h12h06.r; Codex v4 REPROVA logs/h12h06/codex_v4.r; obra PARADA, as outras seguem): 12 procedentes em v1-v3 = desenho 6, ferramenta 4, implementacao 2. A guarda da ESCRITA (entrega da competencia, identidade do ato, empresa de HOJE, trava Empresa->Colaborador->Ausencia) reaparece incompleta a cada volta porque mora em DOIS caminhos (aplicar :181-202 e _reverter :246-269 de ponto/management/commands/rederivar_falta_declarada.py), e o arquivo de reversao e lido sem consumo (R1->reverter->R2 aceita R1 de novo, :236/:255). v4 ainda: guarda de status sem mordida (test_h06_reversao_guardas.py:309, a pos-checagem :202 pega antes) e ordem de trava provada so por SQL (:352 aceita trava de linha inexistente). PERGUNTA: aplicar e reverter passam a ser UMA porta de escrita do ato H06 (lei existente: LEI-AKITA 7, excecao nasce como PORTA separada com trilha), com o arquivo de reversao CONSUMIDO na trilha -- ou ficam dois caminhos com guardas espelhadas? Sem resposta, a v5 nao abre; o apply H06 comp 11 nao roda.
+ESPERANDO: suite F3 3b8d4a3e (main+SNC2) | pid=3038231 | arquivo=logs/f3_beco1/suite_3b8d4a3e.rc
+RESPONDIDA por aval H12H06-UMA-PORTA 17:2x: PERGUNTA DE DESENHO H12H06 (17:1x) -- aplicar e reverter = duas direcoes da MESMA porta, arquivo de reversao consumido por hash na trilha; v5 abre.
 CONTRATO-DE-INSTRUMENTO CODEX-PRE-DESENHO-PILOTO (aval 16:2x; padrao=n/a (instrumento)): QUEM CHAMA = a sessao, por bin/codex_pergunta.sh CODEX_PAPEL=censo CODEX_OBRA=PD-<obra> (peca 1, antes de abrir o construtor) ou AUT-<obra> (peca 2, antes da volta seguinte a 2a reprovacao procedente)
   QUEM ESPERA = o construtor da obra (recebe a .r como anexo e responde por escrito item a item: cobre/descarta+motivo) e a proxima volta da obra na peca 2; pouso ja aprovado NAO espera; fila nao se reordena
   FALHA/LIMITE = rc 75 ou falha do Codex -> a obra segue sem o pre-desenho com linha no RELATO (a peca nao trava a fila); Codex so le; resposta nunca substitui verificador nem opus final; sem desenho nem codigo na resposta
@@ -6374,3 +6374,40 @@ DESPACHO LASTRO2-FOLGA: escritores/leitores + sonda -> Codex censo (logs/lastro2
 - 'folga' NAO e defeito: esta no catalogo VIVO (TipoAusencia cadastrado); TIPO_CHOICES nao e a autoridade (criar_ausencia valida por CAT.codigos_validos, ausencia.py:193-195). fora_choices = 127 (folga 50, troca_de_plantao 43, folga_abonada 10, reciclagem 8, ...), 24 em competencia entregue.
 - fora do CATALOGO vivo = 6 (atestado_medico 4, obito 1, outros 1; criadas 06-07/2026), 5 em competencia entregue; aprovadas 3, todas em entregue. Dono L-099: CADASTRO (vigia_ausencia.py:102 alarma, esperado 0) -> lista do admin.
 - ACHADO ESTRUTURA (efeito None = tipo fora do catalogo): fechamento.py:690 suprime o previsto (`!= DESCONTA`) e o coletor efeito_ausencia.py:57 nada faz (`== SUPRIME`) -- 2a derivacao da mesma pergunta, dentro do fechamento; dia_decidido.py:450 (veredito_de) pinta ABONADO, precedencia.py:52-79 faixa atestado. Para os 3 efeitos do catalogo os dois coincidem; diverge so em None. Impacto em competencia aberta HOJE: 0 aprovadas. Obra C20? nao: linha de fila EFEITO-NONE-UM-LEITOR (BACKLOG).
+
+
+## SNC2 pousa (17:2x)
+LEI-AKITA: origem=chamados/juizes.py::tranca_em_lote + escala/services/leitor_celula.py, testemunha=um_colaborador_por_identidade e a grade, RED=test_snc2_toque_em_lote.py::test_RED_o_lote_nao_paga_usuario_de_sistema_por_pergunta_e_pergunta_cada_NAO e test_snc2_grade_previsto_em_lote.py::test_RED_o_previsto_da_grade_nao_custa_query_por_dia, quem-mais-le=vigiar_fio_morto.py:171 e perguntas_do_app, juizes novos=0, padrao=Identity Map
+- suite e3ef579a: OK (skipped=42, expected failures=39), Ran 13626, rc=0 (logs/snc2/suite_p2.rc); opus final APROVA com condicoes (logs/snc2/opus_final_1.txt), (a)(b)(c) cumpridas
+- cmp 6/6 igual contra wt-snc2-135455; GLOSSARIO:28 no mesmo commit; FILA do opus -> BACKLOG SNC2-FILA
+- F3 (fbd3fca5, suite OK Ran 13656) toca vigiar_fio_morto.py em comum: fora do comboio, re-suite sobre main+SNC2
+
+## BO-[nome]-0511-CENSO -- triagem G3-G6 por classe (17:2x; PD-TRIAGEM-CHAT item 4; so leitura, Codex censo_1.r rc=0 hash a0269430, nomes so no arquivo privado logs/bo_mauricio_0511/)
+LEI-AKITA: origem=n/a (medida), testemunha=censo Codex sobre os anexos raspados, RED=n/a, quem-mais-le=lista do admin, juizes novos=0, padrao=n/a (medida)
+- Contagem do censo: G1 18 + G2 8 + G3 15 + G4 4 + G5 22 + G6 1 = 68; +3 nao classificados = 71; +1 futuro excluido (col523 07/11) = 72. Dono L-099 = HIPOTESE de triagem em todos; o juiz nao rodou por caso
+- G3/15 marco e par: 8 transnoite (col29, col129, col923, col174 x2, col33 x2, col94) -> ATA-X-TURNO/juiz do par; 6 troca de plantao/ciclo (col789, col163 x2, col873, col949, col214) -> CADASTRO provavel, vinculo do dia; 1 intrajornada (col247 24/10) -> JUIZ-DO-PAR
+- G4/4 ausencia parcial x abono: col39, col42 -> COBERTURA-PARCIAL-UM-JUIZ; col250, col960 -> FIO-LE-O-JUIZ condicional; janta sem obra comprovada
+- G5/22 decisao do DP e exibicao: 7 feriado/folga trabalhada/autorizacao (sem obra individual, CADASTRO/DP); 3 documento/reabertura (sem obra); 4 col297 (3 exibicao de HE + 1 autorizacao); 7 QRF/geofence/competencia indeterminados; 1 col270 rescisao -> H12-DEMISSAO-NA-JANELA
+- G6/1 lista volta ao inicio (sem id): ESTRUTURA provavel de UX, paginacao chamados/views.py:734 x painel_situacional; so reproducao
+- Nao classificados 3: col194 atraso sem dia; 1 reciclagem sem identidade; "batidas livres" de supervisor sem pessoa nem rota
+- PERGUNTA do censo (nao e cura): janela de 14 dias em cluster_espurio.py:21 x regra "nao fecha por idade" -> anexo ao opus final da O169
+- G1/18: sonda pelo envelope bin/sonda_leitura.sh em curso; resultado na linha abaixo quando sair (erro de guarda SELECT/SAVEPOINT = nao medido)
+
+## CODEX-QUEIMA -- tabela final por tema (17:3x; CAUDA do aval H12H06-UMA-PORTA; fila SUFOCA em FIM 16:15:10, logs/codex_queima/rcs.txt)
+LEI-AKITA: origem=n/a (medida), testemunha=rcs.txt + turn.completed.usage dos jsonl, RED=n/a, quem-mais-le=placar por papel, juizes novos=0, padrao=n/a (medida)
+| tema | chamadas rc=0 | duracao min | achados/proc/desc | input tok (cache) | output (reasoning) |
+|---|---|---|---|---|---|
+| H12-H06 verificador | 1 | 8,0 | sem triagem | 3,81 M (3,62 M) | 16.260 (5.399) |
+| SOMBRA-NAO-CABE-2 | 1 | 4,9 | sem triagem | 1,83 M (1,70 M) | 9.949 (3.666) |
+| LASTRO-PARTE-2 | 1 | 4,8 | sem triagem | 1,57 M (1,46 M) | 11.056 (3.649) |
+| A-683-SEM-FIO | 1 | 7,9 | sem triagem | 4,04 M (3,80 M) | 17.065 (4.227) |
+| H12-ITEM-C | 1 | 3,3 | sem triagem | 0,97 M (0,90 M) | 6.607 (1.566) |
+| REVISAO x12 | 12 | 76,2 | 8 listados (RELATO:44), sem proc/desc | 24,60 M (23,16 M) | 117.825 (38.766) |
+| BATERIA-QUEIXAS-ADMIN | 4 | 33,8 | sem triagem | 4,03 M (3,68 M) | 61.014 (25.753) |
+| QUEIMA-E-CONTRAEX | 4 | 26,6 | sem triagem | 13,50 M (12,84 M) | 50.654 (17.650) |
+| CRIVO-AINDA-VALE 1-8 | 8 | 72,5 | sem triagem | 16,90 M (15,90 M) | 117.443 (43.799) |
+| CODEX-SUFOCA 01-20 | 20 | 136,0 | sem triagem | 47,73 M (45,12 M) | 218.767 (60.045) |
+| CONTRATO-20-CENSO c20_1-4 | 4 | 19,9 | conferido 9/9 (conformidade) | 8,29 M (7,80 M) | 42.857 (13.244) |
+| TOTAL | 57 | 393,8 (parede, ate 6 em paralelo) | - | 127,28 M (119,97 M) | 669.497 (217.764) |
+- Fora da soma: 8 chamadas rc=75 as 15:05 (limite, logs/codex_queima/rcs_1505_limite.txt, sem tokens); 1 "extra PWA-OFFLINE censo" com FEITO sem abre. Conferencia: 53 abre, 54 FEITO rc=0 (o extra), j003 usage = linha LASTRO
+- INCOMPLETO: procedentes/descartados sem contagem -- nenhum tema da queima tem triagem escrita; nao se conta pela forma do texto

@@ -1,7 +1,117 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **05/11/2026 17:20** · publicado em **05/11/2026 17:20** (UTC-3)
+> Ultima resposta processada: **05/11/2026 17:23** · publicado em **05/11/2026 17:26** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 05/11 17:23 · sessao 4e3cf3fedfbf · C20-O169 · verificador · origem=Code
+
+**A cura elimina o fechamento por janela no coletor do cluster. Não garante que todo fechamento desse módulo dependa da assinatura da ata:** outras portas continuam podendo encerrá-lo sem essa consulta. O corte está em `app/docs/BACKLOG.md:424-426`; a cura local está em `app/ponto/services/cluster_espurio.py:68-77`; a liberação do cluster no gate genérico está em `app/chamados/models.py:680-691`.
+
+A comparação abaixo usa o diff fornecido e a cópia aplicada. Execução da suíte Django, contagem medida de queries, estado de produção e ordem efetiva de implantação: **[nao verificado]**. [nao verificado]
+
+**1. Fechamentos que ainda existem**
+
+No caminho local, chamado sem dia forte é conservado; sem célula ou sem os dois insumos como listas produz fato `None`; assinatura produz `True`; medição sem assinatura ou resposta positiva de `dia_sem_trabalho` produz `False`. O catálogo conserva `None`. Portanto, nesse caminho e sem concorrência, a idade deixou de decidir. `app/ponto/services/cluster_espurio.py:25-37`, `app/ponto/services/cluster_espurio.py:68-77`, `app/chamados/catalogo/premissa.py:127-134`.
+
+A proteção não está na porta de fechamento: o cluster normalmente emitido tem categoria `batida_espuria`, não pertence ao universo de furo e passa diretamente pela guarda de premissa. As guardas de perguntas/disputas continuam podendo impedir um fechamento, mas não perguntam pela assinatura específica do cluster. `app/ponto/services/cluster_espurio.py:135`, `app/chamados/models.py:1194-1200`, `app/chamados/catalogo/modulos.py:235-241`, `app/chamados/models.py:648-655`, `app/chamados/models.py:690-691`.
+
+| Caminho externo que pode fechar o módulo | Condição e prova |
+|---|---|
+| Resposta livre do gestor e resposta rápida no fio | Transicionam o chamado indicado, sem filtro de módulo; a guarda de regularização é restrita a furo. `app/chamados/services/acoes_chamado.py:313-315`; `app/chamados/services/fio.py:705-717`; `app/chamados/models.py:175-193`. |
+| Ação `aprovar_excecao` sobre o PK do cluster | O roteador verifica papel; o serviço registra batida e transiciona para resolvido, sem exigir desaparecimento da assinatura. `app/chamados/views.py:425-427`; `app/chamados/services/acoes_chamado.py:29-44`, `app/chamados/services/acoes_chamado.py:70`. |
+| Ação `autorizar_geofence` sobre o PK do cluster | Sem filtro de módulo, inclusive pelo fio; termina em transição para resolvido. `app/chamados/services/fio.py:529-542`; `app/chamados/services/acoes_chamado.py:176-181`, `app/chamados/services/acoes_chamado.py:222`. |
+| Resolver/declarar o dia | Seleciona todos os chamados vivos pelo JSON ou FK, carimba perguntas e reconcilia os chamados. Resolver chama o fechamento antes da lavra administrativa. `app/ponto/services/veredito_celula.py:148-156`, `app/ponto/services/veredito_celula.py:174-187`, `app/ponto/services/veredito_celula.py:325-330`; `app/ponto/services/declarar_dia.py:203-207`; `app/chamados/services/validacao.py:270-271`. |
+| Desligamento | Encerra os chamados da pessoa sem filtro de módulo; a porta verifica estado/pergunta viva, sem assinatura de cluster. `app/colaboradores/services/desligamento.py:139-155`; `app/chamados/models.py:1524-1538`. Também é alcançado pelo desligamento agendado: `app/config/crons.py:440`. |
+| Competência trancada | Seleciona vivos da competência; cluster não está nas exceções. Encerra pela via própria sem consultar sua assinatura. `app/chamados/services/competencia_trancada.py:88-103`, `app/chamados/services/competencia_trancada.py:135-146`, `app/chamados/services/competencia_trancada.py:181-194`; `app/chamados/catalogo/modulos.py:268-272`; `app/chamados/models.py:1547-1558`. Entradas: `app/ponto/services/fechamento.py:1410`; `app/chamados/management/commands/encerrar_por_competencia_trancada.py:29`. |
+| `retratar_chamados_lei_cala --modulo cluster_batida_espuria --apply` | `--modulo` é livre; exige dia passado e ausência de falta pelo outro classificador, depois chama `retratar`. `app/chamados/management/commands/retratar_chamados_lei_cala.py:24`, `app/chamados/management/commands/retratar_chamados_lei_cala.py:33-47`, `app/chamados/management/commands/retratar_chamados_lei_cala.py:59`; `app/chamados/reconciliador.py:518-524`. |
+| `marcar_feriado_do_posto --apply` | Universo da fila sem filtro de módulo; recorta vínculo/posto/feriado e reconcilia. Não exige ata sem assinatura. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:102-115`, `app/colaboradores/management/commands/marcar_feriado_do_posto.py:138-145`. |
+
+Também há caminhos condicionados a vínculos ou valores adicionais; a existência desses casos em produção é **[nao verificado]**:
+
+| Vínculo/valor adicional | Caminho e prova |
+|---|---|
+| Cluster como pai de disputa | Qualquer fechamento da disputa pode acionar Defesa 1 e reconciliar o pai, sem filtro de módulo. Inclui remoção do último motivo. `app/chamados/signals.py:18-45`; `app/chamados/models.py:1965-1975`. |
+| Cluster como destino ou relacionado de pergunta | Materialização reconcilia destino e clones; ausência já decidida também reconcilia o destino. `app/chamados/services/materializacao.py:728-748`; `app/chamados/services/materializacao.py:559-561`. |
+| Justificativa aprovada com cluster em `chamado_origem` | Busca por PK sem filtro de módulo e chama `retratar`. `app/ponto/services/justificativa.py:33-43`. |
+| Cluster com batida indicada no contexto | `recusar_geofence` verifica pertencimento da batida, retrata e transiciona, sem exigir fim da assinatura. `app/chamados/services/acoes_chamado.py:257-277`. |
+| Categoria legada `disputa_supervisao` | `auditar_chamados_orfaos --fechar` filtra categoria, não módulo. `app/chamados/management/commands/auditar_chamados_orfaos.py:34-43`, `app/chamados/management/commands/auditar_chamados_orfaos.py:67`. |
+| Categoria legada `escala_aceite` ou `agenda_aceite` | Troca/aceite fecha por categoria. `app/colaboradores/services/vinculo.py:384-387`; `app/chamados/services/acoes_chamado.py:88-108`, `app/chamados/services/acoes_chamado.py:130-149`. |
+| Subcategoria legada `vinculo_divergente` | Comando da lista seleciona subcategoria sem filtro de módulo e cancela. `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:42-57`. |
+| Regularização externa apontando para cluster | Materializador chama `encerrar`; o escritor normal, porém, cria outro módulo. Relação legada/corrompida com cluster: **[nao verificado]**. `app/chamados/services/regularizacao_ext.py:201-205`, `app/chamados/services/regularizacao_ext.py:246-257`. |
+
+Há ainda uma corrida no próprio caminho corrigido: coleta “sem assinatura”, outra transação grava assinatura e depois o reconciliador consome o candidato antigo. A leitura da célula antecede o atomic do gate; este trava o chamado e não revalida a assinatura do cluster. Ocorrência concreta: **[nao verificado]**. `app/ponto/services/cluster_espurio.py:71-76`, `app/ponto/services/cluster_espurio.py:121-124`; `app/chamados/models.py:616-620`, `app/chamados/models.py:668-691`.
+
+Os caminhos examinados abaixo **não são fechadores adicionais do cluster normal**:
+
+- Reconciliador genérico, signal da batida e cron: não coletam `FATO_CLUSTER_ESPURIO`; o catálogo conserva o fato ausente. `app/chamados/reconciliador.py:262-301`; `app/chamados/catalogo/premissa.py:127-130`; `app/ponto/signals.py:214-215`; `app/config/crons.py:395`.
+- Absolvição pelo outbox e laços de cobrança do cartório restringem módulos de turno/furo; cluster fica fora. `app/chamados/reconciliador.py:334-337`, `app/chamados/reconciliador.py:964-966`; `app/ponto/services/cartorio.py:112-117`; `app/chamados/catalogo/furo_modulos.py:15-16`.
+- Cobertura passa fatos de falta/turno/intervalo, não o fato de cluster; lastro restringe `batida_ausente`; silêncio de ausência restringe seu próprio universo. `app/ponto/services/cobertura.py:117-124`, `app/ponto/services/cobertura.py:310-317`; `app/ponto/services/lastro.py:239`; `app/chamados/services/silencio_ausencia.py:21`, `app/chamados/services/silencio_ausencia.py:60`.
+- O cron do cluster é `--alarme`: não fecha. O `--apply` manual usa o coletor corrigido. `app/config/crons.py:598`; `app/ponto/management/commands/detectar_cluster_espurio.py:34-61`.
+
+**2. Mudanças de comportamento**
+
+Para atas produzidas normalmente pelo cartório, os insumos são listas; nessa população a abertura mantém o predicado anterior, e o fechamento passa a conservar os casos não medidos e os assinados fora da janela. `app/ponto/services/cartorio.py:701-711`; `app/ponto/services/cluster_espurio.py:29-37`, `app/ponto/services/cluster_espurio.py:68-77`.
+
+A comparação completa por classe de entrada é esta; “ausente” significa que o dia não entra na saída de `dias_com_cluster`. O comportamento anterior é o corpo removido no diff fornecido; as referências apontam as operações correspondentes na cópia aplicada. `app/ponto/services/cluster_espurio.py:25-49`.
+
+| Forma/condição da ata | Antes → depois em `dias_com_cluster` |
+|---|---|
+| `None`, `{}` ou outro valor JSON falso no topo | Ausente → ausente; internamente o novo leitor retorna `None`. `app/ponto/services/cluster_espurio.py:27-30`. |
+| `orfas` ausente/`None`, ou `lampadas` ausente/`None` | Ausente → ausente; agora é explicitamente não medido. `app/ponto/services/cluster_espurio.py:29-30`. |
+| Ambas listas vazias | Ausente → ausente; agora é medido sem assinatura, `()`. `app/ponto/services/cluster_espurio.py:29-37`. |
+| `orfas` lista com não strings ou strings menores que cinco caracteres | Esses elementos são ignorados nos dois corpos; as strings restantes decidem. `app/ponto/services/cluster_espurio.py:31-36`. |
+| `lampadas` lista com não dicionários | Ignorados nos dois corpos; só dicionário com `acesa is False` conta. Ausente/`None`/`0` em `acesa` não conta como `False`. `app/ponto/services/cluster_espurio.py:32`. |
+| Duas órfãs válidas próximas e apagada | Mesmo `(data, orfas, n_missing)` nos dois corpos. `app/ponto/services/cluster_espurio.py:31-36`, `app/ponto/services/cluster_espurio.py:49`. |
+| Órfãs sem par próximo, menos de duas órfãs ou nenhuma apagada | Ausente → ausente. `app/ponto/services/cluster_espurio.py:33-37`. |
+| `orfas` **dicionário**, com chaves `18:56` e `18:58`, e lâmpada apagada em lista | **Assinatura antes → ausente depois**: antes iterava as chaves; agora a exigência de lista recusa. `app/ponto/services/cluster_espurio.py:29-31`. |
+| Insumo não lista, mas iterável | Antes podia ser percorrido; agora é não medido. Para JSON, strings/dicionários em `lampadas` não forneciam dicionários de lâmpadas. `app/ponto/services/cluster_espurio.py:29-32`. |
+| Insumo numérico/booleano verdadeiro, não iterável | Antes podia levantar `TypeError`; agora a validação retorna `None`. `app/ponto/services/cluster_espurio.py:29-32`. |
+| Ata verdadeira no topo que não seja dicionário | Continua podendo levantar `AttributeError` no juiz, antes de chegar à validação nova — inclusive com `trabalha=False`. `app/chamados/juizes.py:408`, `app/chamados/juizes.py:420-426`. |
+| Strings de hora inválidas, com tamanho ≥5 | Continua podendo levantar `ValueError` se alcançar a conversão com duas órfãs e apagada; não há validação de faixa/formato. `app/ponto/services/cluster_espurio.py:31-35`. |
+| `dia_sem_trabalho` responde verdadeiro | Ausente nos dois corpos; agora o leitor retorna `()`, permitindo fecho com esse lastro. `app/ponto/services/cluster_espurio.py:25-26`. |
+| Ausência parcial com `trabalha=True` ou `None` | O juiz conserva cobrança do resto nos dois corpos; assinatura depende das listas. `app/chamados/juizes.py:408`, `app/chamados/juizes.py:424-426`. |
+| Parcial sem período; ou com período e sem fato novo | Assinatura pode continuar em `achados`; `na_lista` impede abertura, sem matar chamado assinado já vivo. `app/ponto/services/cluster_espurio.py:91-108`; `app/ponto/services/cartorio.py:395-400`. |
+
+**Fechamentos novos:** com entradas regulares, estado estável e execução anterior concluindo, não há ampliação: dentro da janela o falso medido já fechava; fora dela o código anterior já tratava todo dia como falso. A mudança retira fechamentos por ausência de medição/recorte. `app/ponto/services/cluster_espurio.py:54-59`, `app/ponto/services/cluster_espurio.py:74-77`.
+
+Há, entretanto, diferença quando antes ocorria exceção: um insumo não iterável na janela podia abortar `pendencias` antes de qualquer ato; agora pode ser ignorado como não medido, permitindo fechar **outro** chamado medido sem assinatura ou abrir outro achado. No sentido inverso, agora uma ata antiga malformada, fora da janela e pertencente a chamado vivo, pode abortar a coleta que antes não a examinava. `app/ponto/services/cluster_espurio.py:29-35`, `app/ponto/services/cluster_espurio.py:71-76`, `app/ponto/services/cluster_espurio.py:100-108`, `app/ponto/services/cluster_espurio.py:121-130`.
+
+**Abertura/alarme:** a recusa nova de `orfas` como dicionário pode retirar o dia de `achados`, `a_abrir`, `na_lista` e das tentativas reais de abertura. O alarme lê `a_abrir` e `a_fechar`; portanto também muda. A abertura real percorre `achados`, não `a_abrir`, e ainda chama `abrir` para dias com chamado existente. `app/ponto/services/cluster_espurio.py:100-108`, `app/ponto/services/cluster_espurio.py:127-130`; `app/ponto/management/commands/detectar_cluster_espurio.py:51-64`.
+
+**3. Quem escreve e quem lê**
+
+| Campo/valor | Escritores | Leitores relevantes |
+|---|---|---|
+| `ata.tipo_dia`, `ata.orfas`, `ata.lampadas` | Cartório fabrica tipo, lista de horas e lâmpadas; chama a lavra. A porta atribui `ata`. `app/ponto/services/cartorio.py:701-711`, `app/ponto/services/cartorio.py:1800-1802`; `app/ponto/portas/celula.py:738-749`, `app/ponto/portas/celula.py:775-776`. | Predicado do cluster; juiz sem trabalho; coletor de furo; transporte da grade; lastro. `app/ponto/services/cluster_espurio.py:25-35`; `app/chamados/juizes.py:420-426`, `app/chamados/juizes.py:463-488`; `app/escala/services/leitor_celula.py:374-405`; `app/ponto/services/lastro.py:89`, `app/ponto/services/lastro.py:113`. |
+| `lampadas[].acesa` | Construção admite `True`, `False`, `None`; teto temporal pode marcar pendente como `None`. `app/ponto/services/cartorio.py:638-644`, `app/ponto/services/cartorio.py:862-872`. | Cluster conta somente `is False`. `app/ponto/services/cluster_espurio.py:32`. |
+| `cobertura_parcial`, `periodo_parcial` | Grade produz; cartório transporta para ata. `app/escala/utils.py:1241-1274`; `app/ponto/services/cartorio.py:729-737`. | Juiz sem trabalho e `parcial_so_lista`. `app/chamados/juizes.py:398-426`; `app/ponto/services/cartorio.py:395-400`. |
+| `CelulaDia.trabalha` | Geração/regeneração/reversão pela porta. `app/ponto/portas/celula.py:231-265`, `app/ponto/portas/celula.py:540-547`, `app/ponto/portas/celula.py:598-623`. | Juiz sem trabalho e leitor da grade; `None` não cala sozinho. `app/chamados/juizes.py:424-426`; `app/escala/services/leitor_celula.py:374-399`. |
+| `contexto_json.data_turno` | Emissor do cluster no lookup/defaults; comando de carimbo também pode preencher pela porta do contexto. `app/ponto/services/cluster_espurio.py:133`, `app/ponto/services/cluster_espurio.py:145`; `app/chamados/management/commands/carimbar_por_batida_coincidente.py:98-99`; `app/chamados/services/contexto.py:96-102`. | Dedup local e abertura; catálogo/juiz do dia; fechamento amplo do fio. `app/ponto/services/cluster_espurio.py:85`, `app/ponto/services/cluster_espurio.py:133`; `app/chamados/catalogo/modulos.py:115`, `app/chamados/catalogo/modulos.py:219-225`; `app/chamados/juizes.py:91-112`; `app/ponto/services/veredito_celula.py:148-150`. |
+| `ChamadoColaborador.celula_id` | É **FK própria**, não chave do JSON. Nasce resolvida por `abrir`/`criar`; posteriormente `apontar_celula` preserva o primeiro vínculo. `app/chamados/models.py:41-46`, `app/chamados/models.py:914-919`, `app/chamados/models.py:1026-1028`; `app/chamados/services/vinculos.py:92-99`. | Juiz prioriza a FK; fechamento amplo também usa a relação. `app/chamados/juizes.py:89-90`; `app/ponto/services/veredito_celula.py:154-156`. |
+| `status_local` | Nascimento pelo motor/defaults; transições por `_gravar_estado`, com trilha e save no atomic. `app/chamados/models.py:894-901`, `app/chamados/models.py:932`, `app/chamados/models.py:222`, `app/chamados/models.py:274-279`. | Seleção de vivos; dedup; decisão do gate; signals de encerramento. `app/ponto/services/cluster_espurio.py:66-68`; `app/chamados/models.py:882-885`, `app/chamados/models.py:638-651`; `app/chamados/signals.py:70-81`. |
+
+A FK pode mandar no dia usado pelo fecho enquanto o JSON continua mandando no dedup/abertura; divergência concreta entre os dois em produção é **[nao verificado]**. `app/chamados/juizes.py:89-112`; `app/ponto/services/cluster_espurio.py:68`, `app/ponto/services/cluster_espurio.py:85`, `app/ponto/services/cluster_espurio.py:133`.
+
+Os contratos dos retornos e seus consumidores são:
+
+- `_leitura_da_celula`: `None`, `()` ou `(orfas, n_missing)`; abertura usa sua verdade, fecho preserva a distinção `None`/falso. `app/ponto/services/cluster_espurio.py:15-37`, `app/ponto/services/cluster_espurio.py:47-49`, `app/ponto/services/cluster_espurio.py:74-76`.
+- `dias_com_cluster`: lista de triplas, consumida por `pendencias`, reexportada pelo comando e diretamente testada. `app/ponto/services/cluster_espurio.py:49-50`, `app/ponto/services/cluster_espurio.py:100`; `app/ponto/management/commands/detectar_cluster_espurio.py:19`; `app/ponto/tests/test_detectar_cluster_espurio.py:56`.
+- `_vivos_que_a_premissa_matou`: lista de chamados, entregue a `pendencias['a_fechar']`; o ato chama `reconciliar`, enquanto o vigia apenas registra pendência. `app/ponto/services/cluster_espurio.py:77-78`, `app/ponto/services/cluster_espurio.py:108`, `app/ponto/services/cluster_espurio.py:123-125`; `app/ponto/management/commands/detectar_cluster_espurio.py:55-64`.
+- `na_lista` controla abertura real; `a_abrir` controla a pendência do vigia; `achados` controla exibição e tentativas reais de abertura. `app/ponto/services/cluster_espurio.py:107`, `app/ponto/services/cluster_espurio.py:127-130`; `app/ponto/management/commands/detectar_cluster_espurio.py:51-54`.
+
+**4. Checklist**
+
+Aqui, SIM significa que a classe de problema está presente; quando preexistente, isso está explicitado. `app/ponto/services/cluster_espurio.py:15-108`.
+
+| Classe | Resultado e prova |
+|---|---|
+| (a) Segundo juiz duplicando autoridade registrada | **NÃO introduzido.** Reusa os juízes de dia, premissa e sem trabalho; a assinatura foi extraída para um corpo compartilhado. Cluster continua declarado em `SEM_JUIZ`, sem alteração de registro. `app/ponto/services/cluster_espurio.py:21-25`, `app/ponto/services/cluster_espurio.py:60-76`; `app/core/juizes.py:261-278`, `app/core/juizes.py:1184-1186`. |
+| (b) Segundo escritor fora da porta | **NÃO produtivo no diff.** A coleta só lê e devolve candidatos. A fixture usa `update(ata,trabalha)`, mas o selo exclui testes. `app/ponto/services/cluster_espurio.py:65-78`; `app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:54`; `app/ponto/tests/test_selo_veredito_so_pela_porta.py:1-4`. |
+| (c) Relógio fora da borda | **SIM, preexistente no fluxo.** Fora do julgamento, `_agora=None`; parcial com período/julgamento anterior pode alcançar `houve_fato_novo`, que lê `now()`. O diff não acrescenta essa leitura. `app/ponto/services/cluster_espurio.py:101-104`; `app/ponto/services/cartorio.py:82-87`, `app/ponto/services/cartorio.py:345`, `app/ponto/services/cartorio.py:400`. |
+| (d) Derivação paralela da assinatura exata | **NÃO encontrada no caminho produtivo.** Abertura e fecho chamam o mesmo corpo. O coletor de furo responde outra pergunta, missing **ou** órfã. `app/ponto/services/cluster_espurio.py:31-36`, `app/ponto/services/cluster_espurio.py:47`, `app/ponto/services/cluster_espurio.py:74`; `app/chamados/juizes.py:475-488`. |
+| (e) RED sem mordida ou vazio | **NÃO.** Exige criação e estado vivo antes do ato; 15 dias assinado reprova a volt
+
+[truncado em 20000 de 24903 caracteres]
 
 ## 05/11 17:20 · sessao 85532525cb37 · - · - · origem=Ronald (tmux)
 
@@ -1188,34 +1298,4 @@ col297 conta **06, 13, 20 e 27/10**, quatro datas explícitas. col222 e col256 f
 2. `migrar_resolvedoras_vivas` combina dedup e transferência e termina em relatório, sem fechamento do antigo no corpo; chamado anterior sobreviver e ficar mudo depende de seus outros atos/leitores [não verificado]. (`app/chamados/services/fio.py:931`; `app/chamados/services/fio.py:943`; `app/chamados/services/fio.py:947`; `app/chamados/services/fio.py:960`)
 3. `_reconciliar_destino_e_clones` repete mesma decisão para destino e clones; residual mantém vivo pelo gate da premissa. (`app/chamados/services/materializacao.py:728`; `app/chamados/services/materializacao.py:740`; `app/chamados/services/materializacao.py:748`; `app/chamados/models.py:730`)
 
-## 05/11 16:44 · sessao 0645a9ea289e · - · - · origem=Ronald (tmux)
-
-- **Lei específica:** O168 exige guarda de conversa também no evento, cartório não fecha cobrança sem furo com conversa e `--executar` só sai depois dessa guarda e `CSF_RETRATADO` medido em zero (`app/docs/BACKLOG.md:1379`). O complemento de 05/11 sobre núcleo, DIFF sombra e >10% da fila viva consta apenas do anexo do usuário; localização na cópia [não verificado].
-
-- **Leis estruturais:** testemunhas leem a mesma autoridade; evento julga e carimba; consumidores leem a lâmpada; cron de varredura é vigia; contrato exige um juiz por pergunta e um escritor por entidade (`CLAUDE.md:20`, `CLAUDE.md:166`, `CLAUDE.md:175`; `app/docs/LEIS.md:94`, `app/docs/LEIS.md:95`). O teto temporal exige instante ou fato encerrado, e o censo de escritores precede filtro/regra nova (`CLAUDE.md:185`, `CLAUDE.md:193`).
-
-- **Autoridades distintas já existentes:** chamado vivo = `VIVOS`; transição = `decidir`; premissa morta = `premissa_morta`; pergunta viva = `pergunta_viva`; disputa pode fechar = `DisputaSupervisao.pode_fechar`; conjunto com fio vivo = `fio_vivo`; dia sem trabalho = `dia_sem_trabalho` (`app/core/juizes.py:261`, `app/core/juizes.py:262`, `app/core/juizes.py:263`, `app/core/juizes.py:266`, `app/core/juizes.py:267`, `app/core/juizes.py:275`, `app/core/juizes.py:278`). O parentesco “vivo implica cobrança” foi expressamente separado no próprio registro (`app/core/juizes.py:100`).
-
-- **CSF hoje:** `pode_executar_csf` recusa qualquer pergunta com `respondida_em` preenchido nas disputas de origem ou em `perguntas_que_resolvem`; não verifica `validada_em`, `materializada_em`, status da disputa ou conteúdo de followup (`app/ponto/supra_juiz.py:539`). Os testes existentes cobrem ausência de conversa, resposta na origem, resposta direta e coleção vazia (`app/ponto/tests/test_supra_juiz_executor.py:38`).
-
-- **Supra hoje:** `classificar_dia` alimenta placar/alarme; o executor lê `veredito='cobranca_indevida'` e um código de protesto da lavra, consulta CSF, depois cobrança órfã de regeneração e finalmente chama `retratar`; incrementa `CSF_RETRATADO` somente se a porta devolver verdadeiro (`app/ponto/management/commands/supra_juiz.py:239`, `app/ponto/management/commands/supra_juiz.py:261`, `app/ponto/management/commands/supra_juiz.py:275`, `app/ponto/management/commands/supra_juiz.py:286`).
-
-Contraexemplos e ingredientes para os casos RED:
-
-| Cadastro + estado + ato | Distinção demonstrada e expectativa lastreada |
-|---|---|
-| Trabalho, todas as marcas casadas, pergunta respondida na origem ou destino; fecho automático CSF. | A conversa exige decisão humana; CSF recusa (`app/ponto/supra_juiz.py:540`; `app/ponto/tests/test_supra_juiz_executor.py:42`). |
-| Trabalho, 731 minutos para previsto 720, dois marcos intermediários missing; julgamento CSF. | Minutos suficientes não provam ausência de furo; não deve ser classificado CSF (`app/ponto/tests/test_supra_juiz_cobranca.py:32`). |
-| `trabalha=None`, sem ata/tipo; julgamento de “dia sem trabalho”. | Indeterminação não é folga: cobrança não cala (`app/chamados/juizes.py:411`, `app/chamados/juizes.py:420`; `app/ponto/tests/test_f1c4_3_supra_pergunta_ao_juiz.py:56`). |
-| Célula com chamado vivo, mas sem veredito; `supra --executar`. | Ausência de lavra é “não sei”: não retrata e conta `CSF_SEM_LAVRA` (`app/ponto/management/commands/supra_juiz.py:245`; `app/ponto/tests/test_lenvivos_retratador_le_a_lavra.py:134`). |
-| Ausência parcial com período e resto missing; tentativa de calar toda cobrança. | A parcial cobra o resto; não equivale a dia inteiro coberto (`app/chamados/juizes.py:398`, `app/chamados/juizes.py:424`; `app/ponto/supra_juiz.py:525`). |
-| Corte 21, ato sobre 20/10 e 21/10. | São competências distintas: período termina em 20/10; 21/10 inicia o período seguinte, respeitando corte da empresa (`app/ponto/janelas.py:10`, `app/ponto/janelas.py:24`, `app/ponto/janelas.py:60`). |
-| Turno noturno da véspera ainda aberto após meia-noite; julgamento de furo. | Data anterior não encerra o fato: juiz verifica aberta viva e fim previsto; sem previsto não afirma encerramento (`CLAUDE.md:185`; `app/ponto/turnos.py:2105`). |
-| Saída 06:30 de turno 21:30 da véspera; contagem por calendário. | A saída pertence ao dia-turno anterior; não deve produzir órfã fantasma no seguinte (`app/ponto/tests/test_supra_juiz_orfa_builder.py:1`, `app/ponto/tests/test_supra_juiz_orfa_builder.py:16`). |
-| Célula gerada por vínculo anterior, vínculo novo ativo; julgamento histórico. | A geradora governa dentro da vigência; geradora ausente ou fora da vigência devolve `None`, sem escolher outro vínculo (`app/escala/alimentacao.py:269`). |
-| Dia fora da janela carregada; consumidor interpreta chave ausente como ausência real. | Alimentação exige janela completa; chave ausente significa “não existe”, não “não carreguei” (`app/escala/alimentacao.py:14`, `app/escala/alimentacao.py:240`). |
-| Resposta concorrente entre leitura de CSF e fechamento. | A guarda CSF apenas percorre relações; a porta possui recarga e trava da linha do chamado dentro de atomic; execução concreta desse entrelaçamento e proteção da pergunta pela mesma trava [não verificado] (`app/ponto/supra_juiz.py:543`; `app/chamados/models.py:668`). |
-
-O histórico de cinco linhas `CSF_RETRATADO=1` é texto de backlog, não série disponível de produção atual; medição atual zero, DIFF e proporção da fila viva [não verificado] (`app/docs/BACKLOG.md:1381`).
-
-_1877 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1878 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
