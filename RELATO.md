@@ -1,5 +1,6 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh | pid=17293
+ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh | pid=40610
+ERRO-BOBO F3-BECO-1: opus final #1 reprovou e2e3d901 por implementacao -- a C11 respondeu "sem porta" pelas ancoras terminais em vez de perguntar ao juiz registrado _C17 porta_alcancavel_do_dia; lei e juiz ja existem, faltou chamar. Cura no retrabalho do aval F3-PORTA-E-CRON-PRAZO, laudo em logs/f3_beco1/opus_final_1.txt.
 ERRO-BOBO JUIZ-VARREDURA-1: a v4 reprovou por meia-correcao de implementacao, nao por desenho -- detectar_ausencias lia o posto do cadastro 4 linhas depois de ler o do vinculo, e marcar_feriado_do_posto filtrava por colaborador__posto_id; a lei ja estava decidida (posto do VINCULO, aval CRON-MARCA-COBRE-INSTALL 10:1x), faltou o censo dos sitios. Volta 5 em construcao (wt-jv1-082703).
 ~~PAREI: ! PRONTO PARA CLEAR E RESTART~~ RESPONDIDA por /clear+/restart e "segue a fila" 05/11 10:4x -- retomada: F3-BECO-1 opus final + pouso | JUIZ-1 v5 construtor | (c)(1) na vaga seguinte
 DESPACHO RETOMADA 10:4x: F3-BECO-1 opus final -> verificador (raia wt-f3b1-082714 e2e3d901) | JUIZ-1 v5 -> opus construtor (wt-jv1-082703) | cura (c)(1) -> opus construtor (wt-sombra-094556) | Codex sem cota ate 15:05. Construtores 2/2.
