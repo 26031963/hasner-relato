@@ -6456,7 +6456,11 @@ LEI-AKITA: origem=escala/services/cadastro_realidade.py::beco_em_lote + escala/f
 - Suite 6afa8aa1: OK (skipped=42, expected failures=39), Ran 13633, rc=0 (logs/c20_o169/suite_6afa8aa1.log). A arvore NAO contem o F3 (main 9c0fd9d3); decisao tecnica: merge do main na raia (790a0130, sem conflito, 0 arquivo em comum com o F3) e suite de novo na arvore que vai pousar (SUITE-UMA-VEZ-POR-ARVORE), logs/c20_o169/suite_790a0130.log. Opus final da cura e76e0419 em paralelo, com D1, a leitura da celula a qualquer idade e a sonda de frota anexas.
 - DESPACHO PRE-CODIGO-DUPLO: PC1/PC2 x FIO-MUDO, PEP (9c0fd9d3), OTIMIZA-3 (d1354f77) -> Codex censo, 6 chamadas lancadas 18:1x, saida logs/piloto_pd/pc/.
 
-## CODEX-FUNIL-28 v2 -- fusao conferida e estratos (18:3x)
+## CODEX-FUNIL-28 v2 -- fusao conferida e estratos (18:1x)
 - Fusao Codex (logs/codex_queima/funil/r_fusao.md, rc=0): 351 itens finais; conferido por parser: 351 ids unicos, 373 ids de origem citados = 86 LA + 171 LB + 116 LC, 0 faltantes, 0 repetidos, 22 a menos por 16 grupos de fusao.
 - Estratos pela regra das 18:0x (lista em funil/estratos.json): S1 = 29 (afirmacao de resultado de dinheiro errado E obra "nenhuma"; das 246 sem obra, pela coluna afirmacao, sem abrir codigo); S2 = 322; amostra S2 = 48 (15% de 322, > minimo 30), random.Random(20261105).sample sobre ids ordenados.
 - DESPACHO FUNIL-28 conferencia: S1 29 integral + S2a 24 + S2b 24 -> 3 sonnet (motivo: conferencia mecanica de citacao arquivo:linha no HEAD 9c0fd9d3, sem opus e sem construtor, aval v2 item 3). Nao conferidos de S2: 274.
+- FUNIL-28 S2 > 20% (aval v2 item 3): S2b deu 16/24 procedentes, o que ja e >= 16/48 = 33% da amostra 1 qualquer que seja a S2a -> amostra DOBRA uma vez: +48 por random.Random(20261105).sample(S2 ordenado menos amostra 1, 48), total 96 (estratos.json `amostra_S2_dobra`). DESPACHO: S2c 24 + S2d 24 -> 2 sonnet (mesmo motivo). Nao conferidos de S2: 226.
+- PRE-CODIGO-DUPLO item 3: PC1 e PC2 de PEP voltaram (rc=0, raspador 0 vazamento) com o construtor do PEP fechado -> PC3-PEP lancado no HEAD 9c0fd9d3 (main nao andou), mesma pergunta, sem PC1/PC2 anexos; teto 3 atingido para PEP. Comparacao PC1 x PC2 sai quando as 3 obras tiverem PC2.
+- PRE-CODIGO-DUPLO item 3: PC2-OTIMIZA-3 voltou (rc=0, 0 vazamento), raia wt-qc-224741 parada em d1354f77 sem construtor -> PC3-OTIMIZA-3 lancado em d1354f77, sem PC1/PC2; teto 3 atingido.
+- FUNIL-28 S2a: 15/24 procedentes, 9 ja cobertos (res_S2a.md). Amostra 1 de S2 = 31/48 procedentes (65%), dobra ja lancada.
