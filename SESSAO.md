@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 15:45:00.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (12.8 MB). Acoes na janela: **444**.
+**Medido em 05/11/2026 15:49:56.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (13.1 MB). Acoes na janela: **453**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:49:48 | Bash | Point ESPERANDO at the live sonda | `cd /home/ronald/saas-hasner/app; P=$(ps -eo pid,args \| grep 'bin/sonda_leitura.sh logs/codex' \| grep -v grep \| awk '{print $1}' \| head -1); echo $P; sed -i "2s#.*#ESPERANDO: sonda_leitura.sh \| pid=$P#" docs/RELATO.md; sed -n 2p docs/RELATO.md` |
+| 15:49:45 | Bash | Write census table lines Q1/Q4 and pending Q2/Q3 into RELATO | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') i=[k for k,x in enumerate(L) if x.startswith('VERIFICADOR H12+H06 v2')][0] new=["CONTRATO-20-CENSO (Codex censo 15:4x, hash a0269430, logs/codex_queima/c20_1..4.md; conferido: cluster_espurio.py:21-50,95-99, premissa.py:127-134, test_selo_chokepoint_escrita.py:112, crons.py:2018, supra_juiz.py:261/28 ...` |
+| 15:49:30 | Bash | Run both read-only prod sondas sequentially | `cd /home/ronald/saas-hasner; for n in 2 3; do timeout 1200 bash bin/sonda_leitura.sh logs/codex_queima/c20/sonda_$n.py > logs/codex_queima/c20/sonda_$n.out 2>&1; echo "rc=$?" >> logs/codex_queima/c20/sonda_$n.out; done` |
+| 15:49:27 | Bash | Extract and syntax-check the two sonda scripts | `cd /home/ronald/saas-hasner/logs/codex_queima/c20; for n in 2 3; do awk '/===SONDA===/{f=1;next}/===FIM===/{f=0}f' ../c20_$n.md \| grep -v '^```' > sonda_$n.py; wc -l sonda_$n.py; python3 -c "import ast;ast.parse(open('sonda_$n.py').read())" && echo ok$n; done` |
+| 15:49:22 | Bash | Read sonda_leitura usage | `cd /home/ronald/saas-hasner; sed -n '1,40p' bin/sonda_leitura.sh` |
+| 15:49:20 | Bash | Confer Q1-Q3 claims at the census hash | `cd /home/ronald/saas-hasner/app; H=a0269430; git show $H:app/ponto/tests/test_selo_chokepoint_escrita.py \| sed -n '108,114p'; echo ---; git show $H:app/config/crons.py \| sed -n '2015,2020p'; echo ---; git show $H:app/ponto/management/commands/supra_juiz.py \| sed -n '258,264p;285,290p'; echo ---; git show $H:app/ponto/services/cartorio.py \| sed -n '1515,1524p'; echo ---; git show $H:app/ponto/m ...` |
+| 15:49:15 | Bash | Confer Q4 claims at the census hash | `cd /home/ronald/saas-hasner/app; git show a0269430:app/ponto/services/cluster_espurio.py \| sed -n '10,55p;90,100p'; echo ----; git show a0269430:app/chamados/catalogo/premissa.py \| sed -n '125,135p'` |
+| 15:49:12 | Read |  | `/home/ronald/.claude/projects/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tool-results/b6sfo8ev0.txt` |
+| 15:49:09 | Bash | Read census answers | `cd /home/ronald/saas-hasner/logs/codex_queima; cat c20/rcs.txt; wc -c c20_*.md; for n in 1 2 3 4; do echo "=== $n"; cat c20_$n.md; done \| head -c 60000` |
 | 15:43:19 | Bash | Check completed construtor agent output tail | `tail -c 1500 /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/a3d64b62b38120eb0.output` |
 | 15:43:15 | Bash | Point ESPERANDO at live census pid; inspect other trava | `cd /home/ronald/saas-hasner/app; sed -i '2s#.*#ESPERANDO: codex_pergunta.sh \| pid=1154919#' docs/RELATO.md; sed -n 2p docs/RELATO.md; ps -o pid,lstart,args -p 1059343 \| cut -c1-250` |
 | 15:43:11 | Bash | Inspect live producers | `cd /home/ronald/saas-hasner; ps -o pid,args -p 866617 \| cut -c1-150; ls -la logs/h12h06/red_v3.log logs/codex_queima/c20/; ps -eo pid,args \| grep -E 'codex_pergunta\|trava_teste' \| grep -v grep \| cut -c1-160` |
