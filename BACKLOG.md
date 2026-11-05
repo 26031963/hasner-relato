@@ -1753,7 +1753,10 @@
 | MEDE-CODE-POR-PAPEL | **fila 1** (aval 05/11 15:5x, so medida): consumo do Code 24 h por papel e modelo, extrator sonnet, tabela no RELATO, script em logs/mede_code_papel/. | tabela no RELATO 16:0x, sem papel 0%, soma OK | FECHADA | 05/11 15:5x |
 | MEDE-CLEAR-X-COMPACT | **fila 1** (aval 05/11 16:0x, medida): compacts/clears 7 dias, pisos, tokens/turno 2 h, sessao x agentes. | em curso | ABERTA | 05/11 16:0x |
 | CODEX-QUEIMA-B | **fila 1** (aval 05/11 16:0x, medida): 686 x 416, H-12 55/18/1 x 56/19/1, 26 do diagnostico. | sondas do Fernando rodando | ABERTA | 05/11 16:0x |
-| C20-O169 | **fila 1** (aval CONTRATO-20-DECISOES 16:0x item 1): cluster nao fecha por idade (BACKLOG:424, opcao b), medida 30 d antes, RED 15 dias, padrao=level-triggered | medida 30 d no Codex | ABERTA | 05/11 16:0x |
+| C20-O169 | **fila 1** (aval CONTRATO-20-DECISOES 16:0x item 1): cluster nao fecha por idade (BACKLOG:424, opcao b), medida 30 d antes, RED 15 dias, padrao=level-triggered | POUSADA 05/11: L-125, cura cluster_espurio.py, RED 3 FAIL, suite OK Ran 13674, Codex 3 voltas, opus 1 reprova + 1 aprova | FECHADA | 05/11 16:0x |
+| O169-ATA-VAZIA-FOLGA | fila (opus O169): caso trabalha=False com ata={} que espere FECHA, morde o mutante insumos antes do juiz em _leitura_da_celula | aberta | 05/11 18:3x |
+| O169-CONTADOR-NAO-MEDIDO | fila (Codex v2 O169): contador do universo fato None (chamado vive sem medida), vigia esperado e caso que morde | aberta | 05/11 18:3x |
+| O169-LIMIAR-15-DUPLO | fila (Codex v2 O169): limiar 15 min do cluster copiado em escala/orfa_classe.py e cluster_espurio.py, juiz unico da assinatura | aberta | 05/11 18:3x |
 | LASTRO-FOLGA-FORA-DO-CATALOGO | **fila 1** (achado da LASTRO-PARTE-2 16:2x): Ausencia #5356 gravada com tipo `folga`, fora de TIPO_CHOICES; precedencia.faixa_de a joga na faixa atestado. Escritor e frota a medir antes de cura | censo+sonda no Codex (logs/lastro2/folga_tipo.q) | ABERTA | 05/11 16:2x |
 | C20-JUIZ-3 | **fila 1** (item 2): evento em criar()/recompute_turnos, consumidor O-OUTBOX, selo 17, padrao=outbox | espera vaga | ABERTA | 05/11 16:0x |
 | C20-FIO-MUDO | **fila 1** (item 3): evento na abertura de batida_ausente + 5 atos de perda, universo 494, padrao=evento | espera vaga | ABERTA | 05/11 16:0x |
