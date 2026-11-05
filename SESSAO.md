@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 16:10:55.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (16.3 MB). Acoes na janela: **574**.
+**Medido em 05/11/2026 16:15:49.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (16.3 MB). Acoes na janela: **579**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:15:05 | Bash | Find F3 v3_q3 verdict and triage | `cd /home/ronald/saas-hasner; ls logs/f3_beco1 \| grep -i -E "triag\|v3_q3\|achado" ; grep -n "APROVA\\|REPROVA" logs/f3_beco1/codex/v3_q3.r \| tail -3; grep -n -i "^##\\|^\*\*[0-9]\\|^[0-9]\." logs/f3_beco1/codex/v3_q3.r \| head -20` |
+| 16:15:01 | Bash | Read F3 codex list and previous opus final | `cd /home/ronald/saas-hasner; ls -t logs/f3_beco1/codex \| head -12; tail -30 logs/f3_beco1/opus_final_1.txt` |
+| 16:14:59 | Bash | Locate F3 Codex rounds and raia state | `cd /home/ronald/saas-hasner; ls -t logs/f3_beco1/ \| grep -E "codex\|triag\|opus" \| head; git -C /home/ronald/wt-f3b1-082714 log --oneline -4; git -C /home/ronald/wt-f3b1-082714 status --porcelain \| head` |
+| 16:14:55 | Bash | Read F3 suite verdict | `cd /home/ronald/saas-hasner; L=logs/f3_beco1/v3b_suite_59bbe2e3.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran' $L \| tail -1; tail -1 $L; ls logs/f3_beco1/ \| tail -20` |
+| 16:10:58 | Bash | Drop stalled file proof, keep pid proof | `cd /home/ronald/saas-hasner; sed -i '2s/.*/ESPERANDO: trava_teste.sh \| pid=2745126/' app/docs/RELATO.md; echo '{}' \| python3 bin/hook_stop_fila1.py 2>&1 \| head -3` |
 | 16:10:54 | Bash | Read ESPERANDO proof logic | `cd /home/ronald/saas-hasner; sed -n 640,700p bin/hook_stop_fila1.py; sed -n 1195,1240p bin/hook_stop_fila1.py` |
 | 16:10:51 | Bash | Find ESPERANDO parser in hook | `cd /home/ronald/saas-hasner; grep -n "ESPERANDO" bin/hook_stop_fila1.py \| head -20` |
 | 16:10:48 | Bash | Check why hook rejected ESPERANDO | `cd /home/ronald/saas-hasner; ps -p 2745126 -o pid,args \| cut -c1-120; tail -3 logs/h12h06/red4.log; sed -n 2p app/docs/RELATO.md; echo '{}' \| python3 bin/hook_stop_fila1.py 2>&1 \| head -5` |
