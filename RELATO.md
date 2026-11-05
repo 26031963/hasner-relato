@@ -1,5 +1,5 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh | pid=1165157
+ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh | pid=3092137
 ERRO-BOBO F3-BECO-1: (disjuntor 13:1x, disparo 13:11:27, mesma reprovacao ab7ae2a6 das 10:41 contada so agora) opus final #1 reprovou e2e3d901 por implementacao -- a C11 respondeu "sem porta" pelas ancoras terminais em vez de perguntar ao juiz registrado _C17 porta_alcancavel_do_dia; lei e juiz ja existem, faltou chamar. Cura no retrabalho do aval F3-PORTA-E-CRON-PRAZO, laudo em logs/f3_beco1/opus_final_1.txt.
 ERRO-BOBO JUIZ-VARREDURA-1: a v4 reprovou por meia-correcao de implementacao, nao por desenho -- detectar_ausencias lia o posto do cadastro 4 linhas depois de ler o do vinculo, e marcar_feriado_do_posto filtrava por colaborador__posto_id; a lei ja estava decidida (posto do VINCULO, aval CRON-MARCA-COBRE-INSTALL 10:1x), faltou o censo dos sitios. Volta 5 em construcao (wt-jv1-082703).
 ~~lei: F3-ITEM1-REJULGA-O-PASSADO~~ RESPONDIDA por aval F3-ITEM1-A 14:1x: (a) emite pela porta existente; ordem item 1 -> reata remedida; fio subiu = reata nao aplica; 346/610 ao beco 2. (195 perguntas/121 chamados na sombra, logs/f3_beco1/v3_sombra.out)

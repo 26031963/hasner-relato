@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 14:09:53.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (6.0 MB). Acoes na janela: **186**.
+**Medido em 05/11/2026 14:15:27.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (6.1 MB). Acoes na janela: **188**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:11:48 | Bash | Update ESPERANDO pid to the new lock holder | `cd /home/ronald/saas-hasner && sed -i '2s/pid=[0-9]*/pid=3092137/' app/docs/RELATO.md && sed -n 2p app/docs/RELATO.md; ps -o pid,args -p 3092137 \| tail -1 \| cut -c1-150` |
+| 14:11:45 | Bash | Confirm lock holder matches ESPERANDO | `cd /home/ronald/saas-hasner && bin/trava_teste.sh --quem; sed -n 2p app/docs/RELATO.md; tail -1 logs/jv1/push3.log` |
 | 14:03:46 | Bash | Check HEAD, lock, push 3 status | `cd /home/ronald/saas-hasner && git rev-parse --short HEAD; bin/trava_teste.sh --quem; tail -2 logs/jv1/push3.log 2>/dev/null` |
 | 14:03:43 | Bash | Check whether the cancelled worktree has work | `cd /home/ronald/saas-hasner && git -C /home/ronald/wt-snc2-135455 status --porcelain \| head -5; git -C /home/ronald/wt-snc2-135455 log --oneline -1` |
 | 14:03:39 | Bash | Check snc2 worktree and record the cancellation | `cd /home/ronald/saas-hasner && git worktree list \| grep snc2; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,x in enumerate(L) if x.startswith('DESPACHO SOMBRA-NAO-CABE-2 passo 1')][0] L[i]+=' \| PRE-APROVADO (c) 14:0x: construtor SNC2 cancelado minutos depois (nada commitado) -- a F3 volta 3 retomou com o aval F3-ITEM1-A e e fila 1 anterior; teto 2 = H12+H06 e  ...` |
