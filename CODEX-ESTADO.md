@@ -1,7 +1,652 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **05/11/2026 15:29** · publicado em **05/11/2026 15:29** (UTC-3)
+> Ultima resposta processada: **05/11/2026 15:34** · publicado em **05/11/2026 15:34** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 05/11 15:34 · sessao 276c86da9dbb · BATERIA-QUEIXAS-ADMIN · leitura · origem=Code
+
+**Q4 — casos pela regra, antes do código.** Os cadastros e as batidas abaixo são cenários propostos, sem execução nem observação de produção. [não verificado] O gabarito segue a regra aplicada ao cadastro e às batidas, conforme L-110. (`app/docs/LEIS.md:136`)
+
+**Convenções das tabelas**
+
+- Valores em minutos: **P/T/F/A/N/HE** = previsto / trabalhado computado / falta decidida / abono / noturno / hora extra. Noturno é uma parcela do trabalhado, com adicional próprio; não se soma novamente ao tempo trabalhado. (`app/docs/LEIS.md:84`; `app/docs/CORTES.md:418`)
+- **D = 03/11/2026**, na competência aberta de uma empresa cadastrada com corte no dia 21; **R = 15/09/2026**, anterior ao horizonte 10. Datas escolhidas para os cenários. [não verificado] A janela deve vir do cadastro da empresa; L-124 preserva a fotografia anterior ao horizonte até fato novo. (`app/docs/LEIS.md:77`; `app/docs/LEIS.md:145`)
+- Horários locais UTC−3. No noturno, “+1” identifica o dia seguinte, sem transferir a jornada para ele. (`app/docs/LEIS.md:107`; `app/docs/LEIS.md:117`)
+- Os cenários são independentes. Nos casos de troca, o cadastro anterior está comprovadamente errado desde D: a correção usa a exceção formal de L-020, com vigência declarada, denúncia na célula e trilha. D−1 conserva seu cadastro. (`app/docs/LEIS.md:71`; `app/docs/LEIS.md:72`; `app/docs/LEIS.md:150`)
+
+A coluna **leitores** usa estes contratos:
+
+| Código | Espelho, app, célula, DiaPago e chamado |
+|---|---|
+| **V** | Espelho e app apresentam a tupla indicada; célula mantém o previsto/marcos e a lavratura correspondente; DiaPago representa os mesmos valores. Chamado/pergunta lê o lastro atual da célula, sem cálculo próprio. (`app/docs/LEIS.md:60`; `app/docs/LEIS.md:95`; `app/docs/LEIS.md:113`; `app/docs/GLOSSARIO.md:22`) |
+| **VC** | V após a correção. A marcação original permanece no histórico como retratada e sai da apuração; nenhuma cobrança pode continuar sustentada exclusivamente por ela. Isso não determina o nome literal do status do chamado. (`app/docs/LEIS.md:76`; `app/docs/CORTES.md:182`; `app/docs/CORTES.md:316`) |
+| **VR** | Antes do fato novo, todos representam a fotografia; depois dele, representam o novo julgamento. TXT anterior permanece preservado. (`app/docs/LEIS.md:145`; `app/docs/LEIS.md:149`) |
+| **VA** | V com ausência aprovada cobrindo integralmente o dia; os marcos cobertos não sustentam cobrança de batida faltante. (`app/docs/LEIS.md:95`; `app/docs/LEIS.md:120`; `app/docs/LEIS.md:121`; `app/docs/CORTES.md:319`) |
+| **VF** | V com falta explicitamente decidida; deve aparecer como falta, sem continuar apresentada como mero furo indecidido. (`app/docs/LEIS.md:87`; `app/docs/CORTES.md:179`) |
+
+**6x1 — 44h semanais, 7h20 por dia, intervalo de 1h**
+
+Cadastro-base: segunda a sábado, **08:00–12:00 / 13:00–16:20**, domingo de folga; P diário = 440 e semanal = 2.640. O intervalo cadastrado fica fora da jornada. (`app/docs/LEIS.md:75`; `app/docs/LEIS.md:80`)
+
+| id | cadastro | batidas | lançamentos | resposta da regra | regra citada | leitores |
+|---|---|---|---|---|---|---|
+| **6-1 Cadastro** | Base vigente em D | 08:00; 12:00; 13:00; 16:20 | 1. Cadastrar vínculo e grade; 2. registrar batidas; 3. apurar | **440/440/0/0/0/0**. Trabalho: 240 + 200 = 440. | L-024/L-032: `app/docs/LEIS.md:75`; `app/docs/LEIS.md:80` | **V**; nenhum furo desses quatro marcos. |
+| **6-2 Troca na aberta** | Errado: 08–12/13–16, P420. Correto desde D: base, P440 | 08:00; 12:00; 13:00; 16:20 | 1. Declarar correção desde D; 2. encerrar anterior em D−1; 3. regenerar pela exceção; 4. rejulgar competência | **440/440/0/0/0/0**. Os 20 minutos entre 16:00 e 16:20 passam a integrar a jornada prevista; não ficam como HE pendente herdada do cadastro errado. | L-020/L-024/L-097/L-112: `app/docs/LEIS.md:71`; `app/docs/LEIS.md:75`; `app/docs/LEIS.md:115`; `app/docs/LEIS.md:150`; `app/docs/CORTES.md:229` | **V**; célula denuncia correção; chamado usa os novos marcos. |
+| **6-3 Correção de batida** | Base | 08:00; 12:00; 13:00; saída errada 15:50 | 1. Retratar 15:50 com motivo; 2. registrar saída correta 16:20; 3. rejulgar | Antes: **440/410/0/0/0/0**, antecipada 30. Depois: **440/440/0/0/0/0**, antecipada 0. Os 30 minutos não eram falta decidida. | L-025/L-039/L-093: `app/docs/LEIS.md:76`; `app/docs/LEIS.md:87`; `app/docs/LEIS.md:111`; `app/docs/CORTES.md:182` | **VC**; 15:50 retratada continua visível no histórico. |
+| **6-4 Retroativo L-124** | Base em R; fotografia inicial **440/410/0/0/0/0** | R: 08:00; 12:00; 13:00; 15:50 equivocada | 1. Pousar obra nova sem fato novo; 2. conferir fotografia; 3. corrigir saída para 16:20 pela retratação; 4. rejulgar | Após 1: permanece **440/410/0/0/0/0**. Após 3–4: **440/440/0/0/0/0**. Não reprocessar os demais dias antigos por consequência desse ato. | L-124/L-113: `app/docs/LEIS.md:145`; `app/docs/LEIS.md:149`; `app/docs/CORTES.md:419` | **VR + VC**. |
+| **6-5 Lote e folgas** | Pessoas X/Y/Z passam à base desde D. Y tinha folga de calendário do vínculo anterior; Z tem folga avulsa pessoal em D | X: caso 6-3; Y: quatro batidas completas da base; Z: nenhuma | 1. Corrigir vínculos; 2. corrigir saída de X; 3. processar lote; 4. repetir os mesmos atos | X = **440/440/0/0/0/0**; Y = igual; Z = **0/0/0/0/0/0**. Agregado: **880/880/0/0/0/0**, igual na repetição. Folga antiga de Y não acompanha o vínculo; a avulsa de Z sobrevive. | `app/docs/CORTES.md:417`; `app/docs/CORTES.md:229`; L-007/L-110/L-114: `app/docs/LEIS.md:65`; `app/docs/LEIS.md:136`; `app/docs/LEIS.md:148` | **VC** para X; **V** para Y/Z; Z sem cobrança de trabalho previsto. |
+| **6-6 Abono integral** | Base; D previsto | Nenhuma | 1. Lançar ausência integral abonadora; 2. aprovar; 3. rejulgar | **440/0/0/440/0/0**. Abono cobre os 440 previstos não trabalhados. | L-088/L-089: `app/docs/LEIS.md:120`; `app/docs/LEIS.md:121`; `app/docs/CORTES.md:88` | **VA**. |
+| **6-7 Falta decidida** | Base; D previsto | Nenhuma | 1. Lançar ausência integral descontável; 2. aprovar decisão; 3. rejulgar | **440/0/440/0/0/0**. Antes da decisão, ausência de batidas não basta para fabricar essa falta. | L-039/L-088: `app/docs/LEIS.md:87`; `app/docs/LEIS.md:120`; `app/docs/CORTES.md:179` | **VF**. |
+
+**12x36 diurno — 07:00–19:00, intervalo de 1h**
+
+Cadastro-base: **07:00–12:00 / 13:00–19:00**, com foto/paridade declarando D como trabalho e D+1 como folga. P = 720 − 60 = **660**, sem presumir que o nome “12x36” representa 720 minutos trabalhados. (`app/docs/LEIS.md:73`; `app/docs/LEIS.md:75`; `app/docs/LEIS.md:80`; `app/docs/LEIS.md:124`)
+
+| id | cadastro | batidas | lançamentos | resposta da regra | regra citada | leitores |
+|---|---|---|---|---|---|---|
+| **D-1 Cadastro** | Base | 07:00; 12:00; 13:00; 19:00 | 1. Cadastrar vínculo, foto e fase; 2. registrar batidas; 3. apurar | **660/660/0/0/0/0**. Trabalho: 300 + 360 = 660. | L-022/L-024/L-032: `app/docs/LEIS.md:73`; `app/docs/LEIS.md:75`; `app/docs/LEIS.md:80` | **V**; quatro marcos cumpridos. |
+| **D-2 Troca na aberta** | Errado: 6x1 P440. Correto desde D: base 12x36, P660; descanso entre jornadas preservado | 07:00; 12:00; 13:00; 19:00 | 1. Declarar início/fase D; 2. encerrar anterior D−1; 3. regenerar formalmente; 4. rejulgar | **660/660/0/0/0/0**. A diferença de 220 para o cadastro antigo integra o novo previsto; não vira HE pela diferença entre escalas. | L-020/L-024/L-097/L-112: `app/docs/LEIS.md:71`; `app/docs/LEIS.md:75`; `app/docs/LEIS.md:115`; `app/docs/LEIS.md:150` | **V**; célula denuncia a correção; chamado perde premissas exclusivas da escala anterior. |
+| **D-3 Correção de batida** | Base | 07:00; 12:00; 13:00; saída errada 18:30 | 1. Retratar 18:30; 2. registrar 19:00; 3. rejulgar | Antes: **660/630/0/0/0/0**, antecipada 30. Depois: **660/660/0/0/0/0**, antecipada 0. | L-025/L-039/L-093: `app/docs/LEIS.md:76`; `app/docs/LEIS.md:87`; `app/docs/LEIS.md:111`; `app/docs/CORTES.md:182` | **VC**. |
+| **D-4 Retroativo L-124** | Base em R; foto **660/630/0/0/0/0** | R: 07:00; 12:00; 13:00; 18:30 equivocada | 1. Pousar sem fato novo; 2. conferir foto; 3. corrigir saída para 19:00; 4. rejulgar R | Após 1: **660/630/0/0/0/0**. Após correção: **660/660/0/0/0/0**. Demais fotografias antigas preservadas. | L-124/L-113: `app/docs/LEIS.md:145`; `app/docs/LEIS.md:149`; `app/docs/CORTES.md:419` | **VR + VC**. |
+| **D-5 Lote e folgas** | X/Y/Z na base; Y com folga do calendário antigo; Z com folga avulsa pessoal D | X: caso D-3; Y: 07:00; 12:00; 13:00; 19:00; Z: nenhuma | 1. Corrigir vínculos; 2. corrigir X; 3. processar lote; 4. repetir | X/Y: cada **660/660/0/0/0/0**; Z: **0/0/0/0/0/0**. Agregado **1320/1320/0/0/0/0**, estável na repetição. | `app/docs/CORTES.md:417`; `app/docs/CORTES.md:229`; `app/docs/LEIS.md:65`; `app/docs/LEIS.md:136`; `app/docs/LEIS.md:148` | **VC** para X; **V** para Y/Z; folga pessoal de Z permanece. |
+| **D-6 Abono integral** | Base; D de trabalho | Nenhuma | 1. Lançar ausência abonadora integral; 2. aprovar; 3. rejulgar | **660/0/0/660/0/0**. Abono corresponde ao previsto líquido do dia. | `app/docs/LEIS.md:120`; `app/docs/LEIS.md:121`; `app/docs/CORTES.md:88` | **VA**. |
+| **D-7 Falta decidida** | Base; D de trabalho | Nenhuma | 1. Lançar ausência descontável integral; 2. aprovar; 3. rejulgar | **660/0/660/0/0/0**. Não descontar 720: o intervalo não integra o previsto trabalhável. | `app/docs/LEIS.md:80`; `app/docs/LEIS.md:87`; `app/docs/LEIS.md:120` | **VF**. |
+
+**12x36 noturno — 19:00–07:00, intervalo de 1h, CCT Londrina**
+
+Cadastro-base: CCT Vigilantes Londrina aplicável e vigente, **19:00–01:00 / 02:00–07:00**, foto/fase explícita; prorrogação pós-05h **desmarcada**. A cl.38-d determina hora de 60 minutos e mantém adicional de 20%; a prorrogação depende de cadastro separado. Assim, P/T completos = **660** e N = 22–05 menos pausa 01–02 = **360**. (`app/core/regua_cct.py:129`; `app/core/regua_cct.py:136`; `app/core/regua_cct.py:166`; `app/docs/LEIS.md:83`; `app/docs/LEIS.md:84`)
+
+| id | cadastro | batidas | lançamentos | resposta da regra | regra citada | leitores |
+|---|---|---|---|---|---|---|
+| **N-1 Cadastro** | Base; pós-05h desmarcada | D 19:00; +1 01:00; 02:00; 07:00 | 1. Cadastrar vínculo/fase/CCT; 2. registrar batidas; 3. apurar após encerrar turno | **660/660/0/0/360/0**. São 300 minutos diurnos + 360 noturnos; adicional de 20% sobre N, sem conversão por 52min30s. Tudo pertence a D. | L-032/L-035/L-036/L-073/L-085: `app/docs/LEIS.md:80`; `app/docs/LEIS.md:83`; `app/docs/LEIS.md:84`; `app/docs/LEIS.md:100`; `app/docs/LEIS.md:117` | **V**; +1 não ganha outro dia trabalhado. |
+| **N-2 Troca na aberta** | Errado: diurno 07–19. Correto desde D: base noturna; último turno anterior suficientemente afastado para preservar descanso | D 19:00; +1 01:00; 02:00; 07:00 | 1. Declarar vigência/fase correta; 2. encerrar vínculo anterior; 3. regenerar formalmente; 4. rejulgar | **660/660/0/0/360/0**. P conserva 660, mas os marcos mudam; corrigir não cria outro turno no dia seguinte nem HE por comparação com os marcos diurnos. | `app/docs/LEIS.md:71`; `app/docs/LEIS.md:75`; `app/docs/LEIS.md:115`; `app/docs/LEIS.md:117`; `app/docs/LEIS.md:150` | **V**; célula denuncia a correção; cobrança acompanha os marcos noturnos. |
+| **N-3 Correção de batida** | Base | D 19:00; +1 01:00; 02:00; saída errada 06:30 | 1. Retratar 06:30; 2. registrar 07:00; 3. rejulgar D | Antes: **660/630/0/0/360/0**, antecipada 30. Depois: **660/660/0/0/360/0**. N permanece 360 porque os 30 corrigidos são após 05h e a prorrogação está desmarcada. | `app/docs/LEIS.md:76`; `app/docs/LEIS.md:83`; `app/docs/LEIS.md:87`; `app/docs/LEIS.md:111`; `app/docs/CORTES.md:182` | **VC**; histórico de +1 permanece associado ao turno D. |
+| **N-4 Retroativo L-124** | Base em R; foto **660/630/0/0/360/0** | R 19:00; +1 01:00; 02:00; 06:30 equivocada | 1. Pousar sem fato novo; 2. conferir foto; 3. corrigir saída para 07:00; 4. rejulgar R | Após pouso: fotografia **660/630/0/0/360/0**. Após fato novo: **660/660/0/0/360/0**. | `app/docs/LEIS.md:145`; `app/docs/LEIS.md:149`; `app/docs/CORTES.md:419` | **VR + VC**; se exportada, conservar TXT anterior. |
+| **N-5 Lote e folgas** | X/Y/Z na base; Y com folga do calendário antigo; Z com folga avulsa pessoal em D | X: caso N-3; Y: 19:00/+1 01:00/02:00/07:00; Z: nenhuma | 1. Corrigir vínculos; 2. corrigir X; 3. processar lote; 4. repetir | X/Y: cada **660/660/0/0/360/0**; Z: zeros. Agregado **1320/1320/0/0/720/0**, sem duplicação na repetição nem no dia +1. | `app/docs/CORTES.md:417`; `app/docs/CORTES.md:229`; `app/docs/LEIS.md:117`; `app/docs/LEIS.md:136`; `app/docs/LEIS.md:148` | **VC** para X; **V** para Y/Z. |
+| **N-6 Abono integral** | Base; D de trabalho | Nenhuma | 1. Lançar ausência abonadora cobrindo o turno D19–+1 07; 2. aprovar; 3. rejulgar | **660/0/0/660/0/0**. Abono de 660; nenhum minuto noturno efetivamente trabalhado. Eventual reflexo remuneratório do adicional habitual exige regra específica: **lei:** [não verificado]. | `app/docs/LEIS.md:120`; `app/docs/LEIS.md:121`; `app/docs/CORTES.md:330` | **VA**; cobertura pertence ao turno D. |
+| **N-7 Falta decidida** | Base; D de trabalho | Nenhuma | 1. Lançar ausência integral descontável do turno; 2. aprovar; 3. rejulgar | **660/0/660/0/0/0**. Uma falta do turno D; nenhuma segunda falta em +1. | `app/docs/LEIS.md:87`; `app/docs/LEIS.md:117`; `app/docs/LEIS.md:120` | **VF**. |
+| **N-8 Prorrogação declarada** | Igual à base, mas pós-05h **marcada**, vigente em D | D 19:00; +1 01:00; 02:00; 07:00 | 1. Declarar aplicação/vigência do cadastro; 2. apurar D | **660/660/0/0/480/0**. N = 22–07, 540 − 60 de pausa = 480; diurno 180. Hora permanece de 60 minutos e adicional de 20%. | `app/docs/LEIS.md:83`; `app/docs/LEIS.md:84`; `app/docs/CORTES.md:418` | **V**; todos apresentam N480, conforme esse cadastro. |
+
+**Personalizado — 6h corridas, sem intervalo cadastrado**
+
+Cadastro-base solicitado: **08:00–14:00**, intervalo zero, P360. A grade decide esse previsto; não se inventa pausa cadastral para reduzir o trabalho observado. (`app/docs/LEIS.md:75`; `app/docs/LEIS.md:80`; `app/docs/LEIS.md:124`)
+
+Há uma ressalva jurídica concreta: para empregado urbano sujeito à regra geral, seis horas de trabalho exigem intervalo de 15 minutos; sua supressão gera indenização do período suprimido com acréscimo de 50%. Portanto, **360 trabalhados não viram 345**, e a indenização é separada de HE. Fonte: [CLT, art.71, §§1º, 2º e 4º — Câmara](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html). Lastro integral desses parágrafos em arquivo local: [não verificado].
+
+Abaixo, **J15** significa essa indenização de 15 minutos, separada da tupla. **lei:** os textos locais consultados não definem a representação dessa combinação “intervalo cadastrado zero + mínimo legal de 15” em cada leitor. Não considerar o cadastro juridicamente regular apenas porque P/T fecham. (`app/docs/LEIS.md:79`; `app/docs/LEIS.md:80`; `app/docs/CORTES.md:411`; [não verificado])
+
+| id | cadastro | batidas | lançamentos | resposta da regra | regra citada | leitores |
+|---|---|---|---|---|---|---|
+| **P-1 Cadastro** | Base 08–14; intervalo zero | 08:00; 14:00 | 1. Cadastrar grade; 2. registrar batidas; 3. apurar | **360/360/0/0/0/0**, mais **J15**. Não deduzir pausa fictícia nem classificar a indenização como HE. | `app/docs/LEIS.md:75`; `app/docs/LEIS.md:124`; CLT art.71 §§1º/4º, fonte acima; lastro local [não verificado] | **V** para a tupla; J15 separado, com a lacuna de representação declarada acima. |
+| **P-2 Troca na aberta** | Errado: 6x1 P440 com intervalo1h. Correto desde D: 08–14, intervalo0, P360 | 08:00; 14:00 | 1. Declarar correção desde D; 2. encerrar anterior D−1; 3. regenerar formalmente; 4. rejulgar | **360/360/0/0/0/0**, mais J15. Não conservar o desconto de 1h nem cobrar os 80 minutos do previsto anterior. | `app/docs/LEIS.md:71`; `app/docs/LEIS.md:75`; `app/docs/LEIS.md:80`; `app/docs/LEIS.md:150`; CLT art.71, lastro local [não verificado] | **V**; célula denuncia mudança; chamado usa apenas os marcos 08/14. |
+| **P-3 Correção de batida** | Base | 08:00; saída errada 13:30 | 1. Retratar 13:30; 2. registrar 14:00; 3. rejulgar | Antes: **360/330/0/0/0/0**, antecipada30. Depois: **360/360/0/0/0/0**, antecipada0. J15 nos dois cenários de trabalho contínuo sem pausa. | `app/docs/LEIS.md:76`; `app/docs/LEIS.md:87`; `app/docs/LEIS.md:111`; `app/docs/CORTES.md:182`; CLT art.71, lastro local [não verificado] | **VC**; não manter 330 em DiaPago após apresentar 360 no espelho. |
+| **P-4 Retroativo L-124** | Base em R; foto **360/330/0/0/0/0**, J15 | R 08:00; 13:30 equivocada | 1. Pousar sem fato novo; 2. conferir foto; 3. corrigir saída para14:00; 4. rejulgar | Só pouso mantém **360/330/0/0/0/0**. Correção leva a **360/360/0/0/0/0**; J15 separado. | `app/docs/LEIS.md:145`; `app/docs/LEIS.md:149`; `app/docs/CORTES.md:419`; CLT art.71, lastro local [não verificado] | **VR + VC**. |
+| **P-5 Lote e folgas** | X/Y/Z na base; Y com folga do calendário anterior; Z com folga avulsa pessoal D | X: caso P-3; Y:08:00/14:00; Z:nenhuma | 1. Corrigir vínculos; 2. corrigir X; 3. processar lote; 4. repetir | X/Y: cada **360/360/0/0/0/0**, J15; Z: zeros, J0. Agregado **720/720/0/0/0/0**, J30; repetição conserva os valores. | `app/docs/CORTES.md:417`; `app/docs/CORTES.md:229`; `app/docs/LEIS.md:136`; `app/docs/LEIS.md:148`; CLT art.71, lastro local [não verificado] | **VC** para X; **V** para Y/Z; indenização separada, sem duplicação. |
+| **P-6 Abono integral** | Base; D previsto | Nenhuma | 1. Lançar ausência integral abonadora; 2. aprovar; 3. rejulgar | **360/0/0/360/0/0**, J0: não houve trabalho com intervalo suprimido. | `app/docs/LEIS.md:120`; `app/docs/LEIS.md:121`; `app/docs/CORTES.md:88`; CLT art.71, lastro local [não verificado] | **VA**. |
+| **P-7 Falta decidida** | Base; D previsto | Nenhuma | 1. Lançar ausência integral descontável; 2. aprovar; 3. rejulgar | **360/0/360/0/0/0**, J0. Desconto corresponde aos 360 previstos, sem acrescentar intervalo inexistente na grade. | `app/docs/LEIS.md:75`; `app/docs/LEIS.md:87`; `app/docs/LEIS.md:120` | **VF**. |
+
+**Propriedades fixas exigidas em todos os casos**
+
+| Propriedade | Asserção exigida pela regra |
+|---|---|
+| **Partes somam o total** | Nos dias completos destas tabelas: 6x1, 240+200=440; diurno, 300+360=660; noturno sem prorrogação, 300 diurnos+360 noturnos=660; com prorrogação, 180+480=660. N não se soma novamente a T; indenização de intervalo também não vira tempo trabalhado. (`app/docs/LEIS.md:80`; `app/docs/LEIS.md:84`; `app/docs/LEIS.md:148`; `app/docs/CORTES.md:418`) |
+| **Previsto independente do realizado** | Corrigir, retratar ou remover uma batida não muda P. Só mudança pertinente da grade/cadastro/decisão do dia pode alterá-lo. (`app/docs/LEIS.md:75`; `app/docs/CORTES.md:240`; `app/docs/CORTES.md:333`) |
+| **Déficit não fabrica falta** | Nos casos de saída 30 minutos antecipada, F continua0 sem decisão descontável. Antecipada respeita o teto P−T. Dia sem batidas e sem decisão permanece “em aberto”, com o número correspondente. (`app/docs/LEIS.md:87`; `app/docs/LEIS.md:111`; `app/docs/CORTES.md:179`) |
+| **Abono não duplica trabalho** | Abono cobre somente o previsto que as batidas não cobriram. Nos casos integrais: T0+A=P; com dia totalmente trabalhado, não acrescentar outro P de abono. (`app/docs/CORTES.md:88`) |
+| **Idempotência e determinismo** | Mesmos fatos e cadastro efetivo produzem o mesmo julgamento; repetir o lote não duplica minutos, decisões ou cobrança do mesmo fato. (`app/docs/LEIS.md:122`; `app/docs/LEIS.md:148`; `app/docs/GLOSSARIO.md:27`) |
+| **Todo leitor lê o mesmo número** | Comparar os mesmos dias, competência e versão da lavratura entre espelho, app, célula e DiaPago. Chamado lê esse mesmo lastro; seu fechamento isolado não prova pagamento ou correção. (`app/docs/LEIS.md:60`; `app/docs/LEIS.md:95`; `app/docs/LEIS.md:113`; `app/docs/CORTES.md:316`) |
+| **Correção conserva história** | Retratada fica fora da apuração, co
+
+[truncado em 20000 de 21317 caracteres]
+
+## 05/11 15:34 · sessao 5528345e03b0 · - · - · origem=Ronald (tmux)
+
+Duas fichas sustentáveis por leitura estática; não executei testes nem consultei produção. [não verificado] [nao verificado]
+
+1. **Justificativa aprovada depois da lavra mantém marco faltante; antes da lavra o dispensa.**
+
+   Entrada sintética: 6x1, 07:00–15:20, pausa 13:00–14:00, domingo de folga; dia passado com `07:00 E / 13:00 S / 15:20 S`, faltando retorno 14:00. Justificativa `esqueci`, sem `saida_informada`, sem `batida_entrada` e sem `chamado_origem`; esses campos evitam plantio e fechamento de chamado como fatos adicionais. A aprovação aceita o ramo sem plantio, grava `aprovada` e apenas invalida o fechamento. `app/ponto/services/justificativa.py:137`, `app/ponto/services/justificativa.py:190`, `app/ponto/services/justificativa.py:199`.
+
+   **Ordem A:** aprovar antes do primeiro julgamento → grade limpa o `missing`, marca `justificado`; cartório dispensa a lâmpada, resultando em zero marcos faltantes. `app/escala/utils.py:1213`, `app/escala/utils.py:1275`, `app/ponto/services/cartorio.py:763`, `app/ponto/services/cartorio.py:772`.
+
+   **Ordem B:** julgar primeiro, aprovar depois → signal chama cartório sem `forcar`; justificativa não integra a impressão; impressão igual faz o cartório pular a célula, preservando a lâmpada antiga faltante. `app/ponto/signals.py:85`, `app/ponto/signals.py:161`, `app/ponto/services/cartorio.py:443`, `app/ponto/services/cartorio.py:1348`, `app/ponto/services/cartorio.py:1358`.
+
+   A própria bateria mantém esse defeito como `expectedFailure`, especificamente “Justificativa aprovada não move a impressão”. `app/ponto/tests/test_d3_impressao_cobre_insumos.py:247`.
+
+   Leitores públicos seguem a ata/status antigos: espelho carrega `grade_da_celula`; app recebe `cel.status_dia` lavrado. Não afirmar divergência numérica entre admin e app neste caso: ambos podem conservar o mesmo resultado velho; a violação comprovável é **dependência da ordem para o mesmo estado final**, contra determinismo L-099. `app/ponto/services/espelho.py:506`, `app/ponto/status_dia.py:287`, `app/docs/LEIS.md:122`.
+
+   **Certeza:** alta para a falha do hash; a adaptação exata do fixture existente de 5x2 para 6x1 não foi executada. `app/ponto/tests/test_d3_impressao_cobre_insumos.py:57`, `app/ponto/tests/test_d3_impressao_cobre_insumos.py:247`. **Dono L-099: ESTRUTURA.** `app/docs/LEIS.md:122`.
+
+2. **Editar template compartilhado atualiza previsão sem atualizar DiaPago.**
+
+   Entrada sintética: 6x1 07:00–15:20, pausa 13:00–14:00; `07:00 E / 13:00 S / 14:00 E / 15:20 S`; fechamento e DiaPago inicialmente lavrados com previsto **440 min**. Editar o template para saída 16:20 dá previsto **500 min**, pelo cálculo bruto menos pausa. `app/escala/services/cadastro_tipo.py:290`.
+
+   Ordem: lavrar → editar template → próximo julgamento do cartório → ler célula e DiaPago antes do recálculo financeiro. A edição propaga regeneração com `recalculo=False`, explicitamente, e apenas invalida fechamento. `app/escala/services/cadastro_tipo.py:307`, `app/escala/services/cadastro_tipo.py:327`, `app/escala/services/cadastro_tipo.py:348`, `app/escala/services/cadastro_tipo.py:357`.
+
+   Regeneração escreve DNA novo; julgamento antecipado e dinheiro estão condicionados a `recalculo`. Depois de julgamento separado, ata recebe o previsto novo; DiaPago permanece com o velho porque invalidar apenas zera `FechamentoMensal.derivado_em`. `app/ponto/portas/celula.py:251`, `app/ponto/portas/celula.py:360`, `app/ponto/portas/celula.py:384`, `app/ponto/services/cartorio.py:704`, `app/ponto/services/fechamento.py:1636`.
+
+   **Código:** célula/ata **500 previstos**, DiaPago **440 previstos** até rederivação. O escritor de DiaPago copia previsão da grade somente quando sua lavratura efetivamente ocorre. `app/ponto/services/dia_pago.py:384`, `app/ponto/services/dia_pago.py:391`, `app/ponto/services/dia_pago.py:395`. **Regra:** dinheiro e leitores devem acompanhar o cadastro de modo coerente; a implementação declara que o recálculo dessa porta continua manual. `app/docs/LEIS.md:122`, `app/escala/services/cadastro_tipo.py:339`.
+
+   **Certeza:** alta para existência do intervalo sem atualização; execução dessa entrada sintética e ocorrência em produção não verificadas. [não verificado] **Dono L-099: ESTRUTURA.** `app/docs/LEIS.md:122`.
+
+| Caso | Divergência | Dono | Prova principal |
+|---|---|---|---|
+| Justificativa antes/depois | 0 × 1 marco faltante, conforme ordem | ESTRUTURA | `app/ponto/services/cartorio.py:1358`; `app/ponto/tests/test_d3_impressao_cobre_insumos.py:247` |
+| Edição de template | célula/ata 500 × DiaPago 440 minutos previstos | ESTRUTURA | `app/escala/services/cadastro_tipo.py:348`; `app/ponto/services/fechamento.py:1636` |
+
+## 05/11 15:33 · sessao 8e0f66c1c2ec · BATERIA-QUEIXAS-ADMIN · leitura · origem=Code
+
+Passo (1): **gabarito pela regra**, com oito casos parametrizados por escala. Cada par roda nas duas ordens; cada trio, nas seis permutações. São 36 sequências por escala, 144 no conjunto — contagem da matriz sintética, sem execução contra o sistema. `[nao verificado]`
+
+Não criei, alterei nem apaguei arquivos. Não consultei as implementações proibidas para decidir resultados. `[nao verificado]` O método adotado é o da L-110: cadastro + batidas + regra; lacuna não recebe resposta emprestada do código. (`app/docs/LEIS.md:136`, `app/docs/CORTES.md:240`)
+
+**Convenções para ler as tabelas.**
+
+- A resposta é o vetor **`(P,T,F,A,N,HE)`**, em minutos: previsto, trabalhado, falta descontável, abono, trabalho noturno efetivo e horas extras. Noturno é uma parte do trabalhado; não se soma novamente à jornada. (`app/docs/LEIS.md:113`, `app/docs/CORTES.md:240`)
+- **G** = folga válida; **F** = lançamento de falta integral; **A** = atestado aprovado, com efeito abonador; **V** = férias concedidas e vigentes. Nos casos 04, A é parcial, com período explícito; nos demais, cobre integralmente o plantão. São premissas sintéticas, não cadastros encontrados no banco. `[nao verificado]`
+- `X⇄Y` significa duas execuções independentes: `X→Y` e `Y→X`. `Π(X,Y,Z)` significa `XYZ`, `XZY`, `YXZ`, `YZX`, `ZXY`, `ZYX`. Cada execução começa novamente no cadastro inicial. `[nao verificado]`
+- **Z** = `(0,0,0,0,0,0)`: folga reconhecida pela grade, sem batidas. Ausência não cria abono, desconto ou consumo de saldo de ausência nessa folga. (`app/docs/LEIS.md:75`, `app/docs/LEIS.md:121`)
+- **U(b)** = **`(lei: ?,0,0,lei: ?,0,0)`**, com previsão contratual de referência **b**. Os textos não especificam suficientemente se férias zeram o previsto apurável ou mantêm uma referência coberta, nem como essa cobertura entra no campo abono. Não significa dia sem remuneração. **lei: `[nao verificado]`**; método para conservar a lacuna: `app/docs/CORTES.md:240`.
+
+Férias são contadas em dias corridos. Portanto, “ausência não consome saldo em folga” não autoriza retirar domingos ou descansos do período de férias. A CLT também preserva remuneração de férias e manda considerar adicionais na sua base; **N=0 de trabalho efetivo não significa adicional habitual de férias igual a zero**. ([CLT, arts. 129, 130 e 142, §§5º–6º](https://legis.senado.leg.br/norma/530547/publicacao/37353698); referência local desses dispositivos: `[nao verificado]`)
+
+Os códigos da coluna **leitores** expandem-se assim; os rótulos são descrições do resultado, não afirmações sobre nomes de enums existentes. `[nao verificado]`
+
+| Código | Espelho e app | Célula | DiaPago | Chamado | Regra |
+|---|---|---|---|---|---|
+| **S** | Folga; vetor Z; sem falta ou abono artificial | Dia sem trabalho, com a folga reconhecida | Mesmos minutos Z; isso não declara salário/DSR igual a zero | Cobrança de batidas desse dia deve calar | `app/docs/LEIS.md:95`, `app/docs/LEIS.md:113`, `app/docs/LEIS.md:121`, `app/docs/CORTES.md:416` |
+| **J** | Trabalho parcial e atestado parcial, discriminando T e A | Períodos trabalhado e coberto coerentes com o vetor | Mesmo T, A, F, N e HE | Não cobrar marcos cobertos; batidas fora do período de A não viram fato dentro da ausência | `app/docs/CORTES.md:277`, `app/docs/CORTES.md:312`, `app/docs/CORTES.md:315` |
+| **SV** | Minutos Z; **lei:** palavra principal “folga”/“férias” não definida | Mesmo resultado numérico; prioridade de classificação pendente | Minutos Z, sem concluir remuneração de férias zero | Sem cobrança de falta injustificada; tratamento do conflito de classificação: **lei** | `app/docs/LEIS.md:121`, `app/docs/CORTES.md:198`, `app/docs/CORTES.md:240`; prioridade: `[nao verificado]` |
+| **V** | Férias justificam a ausência; mostrar os valores decididos de U(b) | F=0; representação de P/A: **lei** | Não inventar P/A nem duplicar cobertura | Não cobrar como falta injustificada; encaminhamento da colisão: **lei** | `app/docs/LEIS.md:120`, `app/docs/LEIS.md:136`; representação: `[nao verificado]` |
+| **AV** | Colisão atestado/férias explicitada neste gabarito; U(b) | Precedência e representação de P/A: **lei** | Sem duplicar atestado e férias; número definitivo depende da decisão escrita | Estado/ação de resolução da colisão: **lei** | `app/docs/CORTES.md:240`, `app/docs/CORTES.md:277`; precedência: `[nao verificado]` |
+
+**6x1.** Cadastro sintético **C6**: 44h semanais; segunda a sábado, 07:00–15:20, intervalo 11:00–12:00; domingo de descanso. Um dia de trabalho tem **440 minutos**, descontado o intervalo cadastrado. Datas, vínculo e aplicação da CCT são premissas de teste. `[nao verificado]` A retirada do intervalo da jornada vem da L-032. (`app/docs/LEIS.md:80`)
+
+| id | cadastro | batidas — horário local | lançamentos | resposta da regra | regra citada | leitores |
+|---|---|---|---|---|---|---|
+| 6-01 | C6; dia originalmente trabalhável; G avulsa válida | Nenhuma | G⇄F | **Z**. F não cobra 440 min em folga | L-089 — `app/docs/LEIS.md:121` | S |
+| 6-02 | C6; domingo; G de calendário do vínculo vigente | Nenhuma | G⇄A | **Z**. A não produz abono nem consome saldo de ausência | L-023/L-089 — `app/docs/LEIS.md:74`, `app/docs/LEIS.md:121`; calendário — `app/docs/CORTES.md:417` | S |
+| 6-03 | C6; G avulsa válida; V abrangendo o dia | Nenhuma | G⇄V | **Z** nos minutos; **lei:** classificação principal e sua representação | L-089 — `app/docs/LEIS.md:121`; lacuna — `app/docs/CORTES.md:240` | SV |
+| 6-04 | C6; A parcial 10:40–15:20 | E 07:00; S 10:40 | F⇄A | **`(440,220,0,220,0,0)`**. A cobre 10:40–11:00 + 12:00–15:20; intervalo não é abonado | L-032/L-088 — `app/docs/LEIS.md:80`, `app/docs/LEIS.md:120`; abono residual — `app/docs/CORTES.md:277`, `app/docs/CORTES.md:315` | J |
+| 6-05 | C6; V válida abrangendo o dia; base 440 | Nenhuma | F⇄V | **U(440)**. Não cabe falta injustificada; **lei:** P/A sob férias | L-088/L-110 — `app/docs/LEIS.md:120`, `app/docs/LEIS.md:136` | V |
+| 6-06 | C6; A integral e V concorrentes; base 440 | Nenhuma | A⇄V | **U(440)**. **lei:** qual efeito permanece e como registrar P/A | L-110 — `app/docs/LEIS.md:136`; lacuna — `app/docs/CORTES.md:240` | AV |
+| 6-07 | C6; G avulsa válida; demais fatos integrais | Nenhuma | Π(G,F,A); Π(G,F,V); Π(G,A,V) | **Z** nas 18 ordens. Sem V: folga. Com V: **lei** para classificação, sem abono/desconto de ausência em folga | L-089/L-099 — `app/docs/LEIS.md:121`, `app/docs/LEIS.md:122`; lacuna — `app/docs/CORTES.md:240` | S sem V; SV com V |
+| 6-08 | C6; sem G; A integral, V vigente; base 440 | Nenhuma | Π(F,A,V) | **U(440)** nas seis ordens. F não se torna injustificada por ser lançada por último; **lei:** precedência A/V | L-088/L-110 — `app/docs/LEIS.md:120`, `app/docs/LEIS.md:136` | AV |
+
+**12x36 diurno.** Cadastro sintético **CD**: 07:00–19:00, intervalo 12:00–13:00; fase declarada com o dia-alvo trabalhável e o seguinte de descanso. Previsto do plantão: **660 minutos**. `[nao verificado]` O intervalo cadastrado sai da jornada; a fase não deve ser inventada a partir da ausência de batidas. (`app/docs/LEIS.md:73`, `app/docs/LEIS.md:80`)
+
+| id | cadastro | batidas — horário local | lançamentos | resposta da regra | regra citada | leitores |
+|---|---|---|---|---|---|---|
+| D-01 | CD; plantão convertido em G avulsa válida | Nenhuma | G⇄F | **Z**. F não cobra 660 min de folga | L-089 — `app/docs/LEIS.md:121` | S |
+| D-02 | CD; dia de descanso reconhecido pela fase | Nenhuma | G⇄A | **Z**. Sem abono e sem consumo de saldo de ausência | L-022/L-089 — `app/docs/LEIS.md:73`, `app/docs/LEIS.md:121` | S |
+| D-03 | CD; G avulsa válida e V abrangendo o dia | Nenhuma | G⇄V | **Z** nos minutos; **lei:** classificação principal | L-089 — `app/docs/LEIS.md:121`; lacuna — `app/docs/CORTES.md:240` | SV |
+| D-04 | CD; A parcial 11:00–19:00 | E 07:00; S 11:00 | F⇄A | **`(660,240,0,420,0,0)`**. A cobre 11:00–12:00 + 13:00–19:00 | L-032/L-088 — `app/docs/LEIS.md:80`, `app/docs/LEIS.md:120`; abono residual — `app/docs/CORTES.md:277`, `app/docs/CORTES.md:315` | J |
+| D-05 | CD; V vigente; base 660 | Nenhuma | F⇄V | **U(660)**. F=0; **lei:** representação de P/A | L-088/L-110 — `app/docs/LEIS.md:120`, `app/docs/LEIS.md:136` | V |
+| D-06 | CD; A integral e V concorrentes; base 660 | Nenhuma | A⇄V | **U(660)**. **lei:** precedência A/V, sem duplicar cobertura | L-110 — `app/docs/LEIS.md:136`; abono limitado — `app/docs/CORTES.md:277` | AV |
+| D-07 | CD; G avulsa válida; demais fatos integrais | Nenhuma | Π(G,F,A); Π(G,F,V); Π(G,A,V) | **Z** nas 18 ordens; com V, classificação principal permanece **lei** | L-089/L-099 — `app/docs/LEIS.md:121`, `app/docs/LEIS.md:122`; lacuna — `app/docs/CORTES.md:240` | S sem V; SV com V |
+| D-08 | CD; sem G; A integral, V vigente; base 660 | Nenhuma | Π(F,A,V) | **U(660)** nas seis ordens. Sem falta injustificada; **lei:** efeito prevalente e P/A | L-088/L-110 — `app/docs/LEIS.md:120`, `app/docs/LEIS.md:136` | AV |
+
+**12x36 noturno.** Cadastro sintético **CN**: 19:00 de D–07:00 de D+1, intervalo 01:00–02:00; D trabalhável, D+1 de descanso; CCT Vigilantes Londrina aplicável. Previsto: **660 minutos**. `[nao verificado]` A cl. 38-d determina hora de 60 minutos e preserva o adicional de 20%; o plantão pertence a D. (`app/core/regua_cct.py:132`, `app/core/regua_cct.py:136`, `app/docs/LEIS.md:84`, `app/docs/LEIS.md:117`)
+
+| id | cadastro | batidas — horário local | lançamentos | resposta da regra | regra citada | leitores |
+|---|---|---|---|---|---|---|
+| N-01 | CN; plantão D convertido em G avulsa válida | Nenhuma | G⇄F | **Z**. A madrugada não cria falta separada em D+1 | L-085/L-089 — `app/docs/LEIS.md:117`, `app/docs/LEIS.md:121` | S |
+| N-02 | CN; descanso D+1; A sem alcançar outro plantão previsto | Nenhuma | G⇄A | **Z**. Nem 660 min de abono, nem saldo consumido no descanso | L-089 — `app/docs/LEIS.md:121` | S |
+| N-03 | CN; G avulsa válida e V abrangendo o plantão | Nenhuma | G⇄V | **Z** nos minutos; **lei:** classificação principal e alcance documental da virada | L-085/L-089 — `app/docs/LEIS.md:117`, `app/docs/LEIS.md:121`; lacuna — `app/docs/CORTES.md:240` | SV |
+| N-04 | CN; A parcial D 23:00–D+1 07:00 | E D 19:00; S D 23:00 | F⇄A | **`(660,240,0,420,60,0)`**. N=22:00–23:00, em minutos de 60s; adicional de 20% sobre essa base. A exclui 01:00–02:00 | Cl.38-d/L-036 — `app/core/regua_cct.py:132`, `app/docs/LEIS.md:84`; L-032 — `app/docs/LEIS.md:80`; parcial noturna — `app/docs/CORTES.md:330`; abono — `app/docs/CORTES.md:277` | J |
+| N-05 | CN; V vigente; base 660 | Nenhuma | F⇄V | **U(660)**. N efetivo=0; F=0; **lei:** P/A de férias | L-085/L-088/L-110 — `app/docs/LEIS.md:117`, `app/docs/LEIS.md:120`, `app/docs/LEIS.md:136` | V |
+| N-06 | CN; A integral cobrindo o plantão e V concorrente | Nenhuma | A⇄V | **U(660)**. **lei:** precedência A/V; não inventar minutos noturnos trabalhados | L-110 — `app/docs/LEIS.md:136`; cl.38-d — `app/core/regua_cct.py:132` | AV |
+| N-07 | CN; G avulsa válida; demais fatos integrais | Nenhuma | Π(G,F,A); Π(G,F,V); Π(G,A,V) | **Z** nas 18 ordens, sem transferir cobrança para D+1; com V, classificação **lei** | L-085/L-089/L-099 — `app/docs/LEIS.md:117`, `app/docs/LEIS.md:121`, `app/docs/LEIS.md:122` | S sem V; SV com V |
+| N-08 | CN; sem G; A integral, V vigente; base 660 | Nenhuma | Π(F,A,V) | **U(660)** nas seis ordens. Mesmo plantão D; **lei:** precedência e representação P/A | L-085/L-088/L-110 — `app/docs/LEIS.md:117`, `app/docs/LEIS.md:120`, `app/docs/LEIS.md:136` | AV |
+
+No N-04, não há trabalho depois das 05:00; portanto, seu N=60 não depende de resolver prorrogação noturna. Para outro caso com trabalho pós-05:00, a regra exige conferir o regime e o texto coletivo aplicável; a cl.38-d isolada não fornece toda essa resposta. (`app/docs/LEIS.md:83`, `app/core/regua_cct.py:132`)
+
+**Personalizado sem intervalo.** Cadastro sintético **CP**: CLT, 07:00–13:00, intervalo cadastrado zero, referência de **360 minutos**. `[nao verificado]` **lei:** esse cadastro não demonstra autorização para seis horas efetivamente corridas: trabalho superior a quatro e até seis horas exige 15 minutos de intervalo. Se houver supressão efetiva, ela precisa ser tratada separadamente, sem transformar automaticamente a indenização em HE. ([CLT, art.71, §§1º e 4º](https://legis.senado.leg.br/norma/530547/publicacao/37353698); fundamento local específico para dispensar esse intervalo: `[nao verificado]`)
+
+| id | cadastro | batidas — horário local | lançamentos | resposta da regra | regra citada | leitores |
+|---|---|---|---|---|---|---|
+| P-01 | CP; dia convertido em G avulsa válida | Nenhuma | G⇄F | **Z**. F não cobra 360 min em folga | L-089 — `app/docs/LEIS.md:121` | S |
+| P-02 | CP; descanso previsto no calendário vigente | Nenhuma | G⇄A | **Z**. Sem abono e sem consumo de saldo de ausência | L-089 — `app/docs/LEIS.md:121`; calendário — `app/docs/CORTES.md:417` | S |
+| P-03 | CP; G avulsa válida e V abrangendo o dia | Nenhuma | G⇄V | **Z** nos minutos; **lei:** classificação principal | L-089 — `app/docs/LEIS.md:121`; lacuna — `app/docs/CORTES.md:240` | SV |
+| P-04 | CP; A parcial 10:00–13:00 | E 07:00; S 10:00 | F⇄A | **`(360,180,0,180,0,0)`**. Foram trabalhadas 3h; não houve seis horas efetivas corridas | L-088 — `app/docs/LEIS.md:120`; abono residual — `app/docs/CORTES.md:277`, `app/docs/CORTES.md:315` | J |
+| P-05 | CP; V vigente; base 360 | Nenhuma | F⇄V | **U(360)**. F=0; **lei:** P/A sob férias | L-088/L-110 — `app/docs/LEIS.md:120`, `app/docs/LEIS.md:136` | V |
+| P-06 | CP; A integral e V concorrentes; base 360 | Nenhuma | A⇄V | **U(360)**. **lei:** precedência, sem duplicar cobertura | L-110 — `app/docs/LEIS.md:136`; abono limitado — `app/docs/CORTES.md:277` | AV |
+| P-07 | CP; G avulsa válida; demais fatos integrais | Nenhuma | Π(G,F,A); Π(G,F,V); Π(G,A,V) | **Z** nas 18 ordens; com V, classificação principal **lei** | L-089/L-099 — `app/docs/LEIS.md:121`, `app/docs/LEIS.md:122`; lacuna — `app/docs/CORTES.md:240` | S sem V; SV com V |
+| P-08 | CP; sem G; A integral, V vigente; base 360 | Nenhuma | Π(F,A,V) | **U(360)** nas seis ordens. **lei:** efeito prevalente e representação P/A | L-088/L-110 — `app/docs/LEIS.md:120`, `app/docs/LEIS.md:136` | AV |
+
+**Propriedades fixas para todas as execuções**, inclusive depois de cada lançamento e de cada rejulgamento:
+
+| Propriedade | Exigência da bateria | Regra |
+|---|---|---|
+| Partes somam o total | Nos casos 04: 440=220+220; 660=240+420; 360=180+180. Em Z, todas as parcelas são zero. Férias precisam de uma representação de cobertura definida antes de fechar a identidade correspondente | `app/docs/CORTES.md:240`, `app/docs/CORTES.md:277`; representação de férias: **lei**, `[nao verificado]` |
+| Sem dupla cobertura | Abono cobre somente previsto não coberto pelas batidas. Não pagar o mesmo minuto novamente como trabalho e abono | `app/docs/CORTES.md:277` |
+| Noturno não aumenta artificialmente T | No N-04, os 60 min noturnos estão dentro dos 240 trabalhados; o adicional é de 20%, com hora de 60 min | `app/docs/LEIS.md:84`, `app/core/regua_cct.py:132`, `app/docs/CORTES.md:240` |
+| Idempotência | Julgar duas vezes produz o mesmo resultado; repetir o mesmo fato não duplica minutos, saldo ou pergunta | `app/docs/CORTES.md:333`, `app/docs/GLOSSARIO.md:27` |
+| Previsto independente do realizado | Apagar ou acrescentar batidas não redefine a previsão. Mudança de previsto precisa decorrer do cadastro/fato reconhecido pela grade | `app/docs/LEIS.md:75`, `app/docs/CORTES.md:240` |
+| Mesmo número em todos os leitores | Espelho, app, célula, DiaPago e chamado compartilham resultado e cobertura; leitor não refaz a conta | `app/docs/LEIS.md:60`, `app/docs/LEIS.md:95`, `app/docs/LEIS.md:113` |
+| Furo não é falta | Antes de decisão válida, batida ausente é pergunta em aberto; não vira desconto automaticamente | `app/docs/LEIS.md:87`, `app/docs/LEIS.md:120`, `app/docs/CORTES.md:179` |
+| Folga não vira ausência com efeito | Atestado/falta em folga não criam minutos nem consomem saldo de ausência | `app/docs/LEIS.md:121` |
+| Virada preservada | Plantão noturno, cobertura e seus minutos pertencem ao dia de início; não duplicar em D+1 | `app/docs/LEIS.md:117`, `app/docs/CORTES.md:330` |
+| Totais conferíveis | Minutos inteiros na fonte; topo e rodapé iguais à soma das linhas, sem ajuste compensatório | `app/docs/CORTES.md:210` |
+| Ordem não substitui regra | Nos resultados decididos, todas as permutações do mesmo conjunto de fatos devem chegar ao mesmo resultado. Nas lacunas, não adotar “último lançamento vence” como gabarito | `app/docs/LEIS.md:122`, `app/docs/LEIS.md:136`, `app/docs/CORTES.md:240` |
+
+Permanecem **três decisões de lei** para completar o gabarito numérico: precedência atestado/férias, classificação principal folga/férias e representação de férias em previsto/abono/DiaPago. Também falta fundamento para considerar lícito o cadastro de seis horas efetivamente corridas sem intervalo. Essas lacunas estão marcadas; não foram preenchidas por comportamento da implementação. **lei: `[nao verificado]`** (`app/docs/CORTES.md:240`)
+
+## 05/11 15:33 · sessao d721c186275b · - · - · origem=Ronald (tmux)
+
+Três contraexemplos sintéticos sustentados pelo código atual; ocorrência em produção [não verificado].
+
+1. **12x36 diurno: pausa gozada vira trabalho.** Cadastro 07:00–19:00, pausa 12:00–13:00; lançar `09:30 E → 12:00 S → 13:00 E → 15:00 S`. O caso existente garante um período fechado com essa geometria; a saída foi escolhida fora do envelope da pausa. (`app/ponto/tests/test_o280_bateria_da_lei.py:1735`, `:1752`, `:1786`.)
+
+   O motor calcula envelope de 330 minutos e só desconta a pausa se `duracao > 360`: resultado **330 trabalhados, pausa descontada 0**. (`app/ponto/motor_calculo_v2.py:2761`, `:2767`, `:2774`, `:2785`.) O juiz do realizado desconta a pausa batida e retorna **270**; a regra do Art.71 §2, transcrita na bateria, também pede **270**. (`app/ponto/turnos.py:754`, `:765`, `:769`; `app/ponto/tests/test_o280_bateria_da_lei.py:1741`.) A versão oráculo do DiaPago propaga 330, porque só quebra o envelope se o motor informou desconto. (`app/ponto/calculador/alimentacao.py:124`, `:129`, `:137`.) **Certeza estática alta; dono ESTRUTURA/L-099**, pois o mesmo cadastro e batidas recebem duas derivações. (`app/docs/LEIS.md:122`.)
+
+2. **12x36 noturno em empresa CCT: switch desligado aplica restrição reservada ao CLT declarado.** Cadastro: empresa `regime_trabalhista='cct'`, nenhuma aplicação vigente; ciclo 12x36, 19:00–07:00, pausa 01:00–02:00. Lançar cronologicamente as quatro batidas exatas. A regra interna preserva prorrogação quando falta CLT declarado: `_regua_legal` começa com o padrão `True` e só altera para CLT explicitamente declarado. (`app/core/regua_cct.py:185`, `:210`, `:211`; regra `app/docs/LEIS.md:83`.)
+
+   Com `regua_cct_ativa=0`, a fábrica não injeta a prorrogação para empresa CCT; o motor decide `False` apenas pelo ciclo. (`app/core/regua_cct.py:449`, `:453`, `:457`; `app/ponto/motor_calculo_v2.py:758`; `app/core/regua_cct.py:182`.) Resultado calculável: **360 minutos noturnos de relógio = 411,43 legais**, contra **480 = 548,57 legais** pela régua preservada. As contas usam janela 22–05, extensão até 07 quando ligada, desconto da pausa e fator 60/52,5. (`app/ponto/motor_calculo_v2.py:99`, `:110`, `:983`, `:985`, `:986`, `:992`.) Com switch ligado e a mesma lacuna de aplicação, `regua_para` retorna a régua preservada, mudando o resultado. (`app/core/regua_cct.py:366`, `:371`, `:458`, `:466`.) **Certeza estática alta; leitores entre si [não verificado]; conflito código versus L-035 demonstrável; dono ESTRUTURA/L-099.** (`app/docs/LEIS.md:83`, `:122`.)
+
+3. **Mudança de vigência CCT dentro do mesmo vínculo recebe régua do primeiro dia da fatia.** Entrada concreta: competência 21/09–20/10; único vínculo cobrindo todo o período; células atribuídas ao mesmo vínculo; empresa CCT; switch ligado; uma aplicação empresarial ativa cujo sindicato tem vigência 01/10–31/12 e `prorrogacao_noturna_pos5h=False`. Em plantão previsto de **02/10**, lançar `19:00 E → 03/10 01:00 S → 02:00 E → 07:00 S`. Aplicação empresarial e vigência são decididas pelo cadastro mencionado. (`app/core/regua_cct.py:253`, `:257`, `:261`, `:267`.)
+
+   A apuração cria a fatia pela vigência do vínculo e monta um motor para todos os dias; a consulta CCT recebe **21/09**, não 02/10. (`app/ponto/services/fechamento.py:204`, `:236`, `:270`, `:277`, `:727`.) O espelho repete a consulta pelo início da fatia. (`app/ponto/services/espelho.py:1111`.) Em 21/09 a CCT é descartada por vigência; a lacuna preserva prorrogação `True`. (`app/core/regua_cct.py:261`, `:371`, `:210`.) Portanto o plantão de 02/10 recebe **480 noturnos de relógio / 548,57 legais**; perguntar a própria autoridade pelo dia 02/10 encontra a CCT e fornece `False`, correspondente a **360 / 411,43**. (`app/core/regua_cct.py:297`, `:374`, `:466`; `app/ponto/motor_calculo_v2.py:983`.) **Certeza estática alta sobre a seleção temporal; execução integrada [não verificado]; dono ESTRUTURA/L-099.** (`app/docs/LEIS.md:122`.)
+
+A faixa **4–6 horas sem pausa** também paga **0** em vez do piso **15 minutos**, mas a cópia declara expressamente a pendência L-031 e a compensação indevida entre portão e `default=60`; apresentar como dívida conhecida com decisão de cadastro pendente, não como correção já autorizada. (`app/escala/models.py:17`, `:19`; `app/ponto/motor_calculo_v2.py:3232`; `app/ponto/calculador/regras.py:764`; `app/ponto/calculador/periodo.py:316`, `:320`, `:326`; `app/docs/LEIS.md:79`.)
+
+## 05/11 15:33 · sessao d403ea06b76b · - · - · origem=Ronald (tmux)
+
+Contra-exemplo confirmado por leitura estática: **falta aprovada → atestado aprovado ou férias** mantém desconto de falta e acrescenta abono no mesmo dia; a aprovação altera apenas a ausência alvo, sem rejeitar a falta anterior (`app/ponto/services/ausencia.py:881`, `app/ponto/services/ausencia.py:895`, `app/ponto/services/ausencia.py:930`).
+
+Entrada concreta comum: dia **04/11/2026**, célula `trabalha=True`, geradora correta, DNA com marcos abaixo; batidas `[]`; primeiro falta aprovada com `minutos=0`, depois atestado aprovado com documento, ou férias cobrindo o dia. A falta deriva os minutos previstos; atestado/férias podem atravessar falta porque ambos abonam (`app/ponto/models.py:875`, `app/ponto/catalogo/ausencias.py:95`, `app/ponto/catalogo/ausencias.py:101`, `app/ponto/precedencia.py:127`).
+
+| Cadastro concreto | Motor selecionado | P | Resultado estático após F→A/V |
+|---|---|---:|---|
+| 6x1, base comercial, 08–17, pausa12–13, domingo folga, sábado08–12 | MotorComercial | 480min | abono480min **e** falta8h, TXT1dia |
+| 12x36 diurno, base12x36, 07–19, pausa12–13, âncora de plantão04/11 | Motor12x36ComEscala | 660min | abono660min **e** falta11h, TXT1dia |
+| 12x36 noturno, base12x36, 19–07, pausa00–01, âncora04/11 | Motor12x36ComEscala | 660min | abono660min **e** falta11h, TXT1dia |
+| Personalizado, basecomercial, JSON `{"2":{"hi":"08:00","hf":"10:00"}}`, sem intervalo | MotorComercial | 120min | abono120min **e** falta2h, TXT1dia |
+
+Seleção de motor: `app/ponto/motor_calculo_v2.py:3572`, `app/ponto/motor_calculo_v2.py:3633`, `app/ponto/motor_calculo_v2.py:3668`. Personalizado responde pela chave weekday do JSON: `app/escala/models.py:862`. Marcos: `app/escala/models.py:337`; célula soberana: `app/escala/models.py:1094`, `app/escala/models.py:1124`. Previsto líquido: `app/escala/utils.py:2290`, `app/escala/utils.py:2293`, `app/escala/utils.py:2326`.
+
+Caminho do abono: grade soma segmentos E→S, grava P e depois aplica ausência mais recente, preservando P; sem batidas, abono=P (`app/escala/utils.py:1656`, `app/escala/utils.py:1828`, `app/escala/utils.py:1869`, `app/ponto/turnos.py:2757`, `app/ponto/turnos.py:2769`, `app/escala/utils.py:1241`, `app/ponto/services/dia_pago.py:385`, `app/ponto/services/dia_pago.py:394`).
+
+Caminho do desconto: busca todas as faltas aprovadas sem eliminar a suprimida; fechamento e DiaPago conservam P/60; TXT conta um dia (`app/folha/export.py:76`, `app/folha/export.py:129`, `app/ponto/services/fechamento.py:865`, `app/ponto/services/fechamento.py:987`, `app/ponto/services/dia_pago.py:272`, `app/folha/export.py:170`, `app/folha/export.py:207`, `app/folha/export.py:721`).
+
+Regra: falta custa o previsto do dia **sem justificativa**; atestado abona; férias não podem virar8792 (`app/docs/LEIS.md:120`, `app/ponto/catalogo/ausencias.py:95`, `app/folha/export.py:202`). Esperado nos quatro casos: **abono=P e falta0h, TXT0dias de falta**; dono **L-099/ESTRUTURA**, pois a contradição decorre do mesmo cadastro, não de cadastro ausente (`app/docs/LEIS.md:113`, `app/ponto/services/fechamento.py:1010`).
+
+Não confirmei divergência numérica **app versus admin**: API chama a mesma fonte e usa os totais do espelho (`app/api/views.py:1358`, `app/api/views.py:1369`, `app/api/views.py:1431`). O demonstrado é contradição **grade/abono versus falta lavrada/TXT**; execução e incidência em produção **[nao verificado]**.
+
+**Descartar meu candidato anterior “range falta abrangendo plantão e folga natural” pela porta normal**: o veto percorre todos os dias e recusa falta em dia sem jornada (`app/ponto/precedencia.py:501`, `app/ponto/precedencia.py:508`, `app/ponto/precedencia.py:538`).
+
+## 05/11 15:33 · sessao b4a525895ad8 · - · - · origem=Ronald (tmux)
+
+Dois contra-exemplos demonstráveis por leitura estática; ocorrência em produção e execução nesta cópia: [nao verificado].
+
+**CE — parcial descontável vira um dia inteiro no TXT.**
+
+Entrada construída: 14/10/2026, escala personalizada sem intervalo, 08:00–12:00; batidas 08:00 E / 11:30 S; `TipoAusencia.codigo=saida_antecipada`, `efeito=desconta`, `parcial=True`, `fim=dia_unico`, ativo; lançamento aprovado de 30 minutos, depois das batidas. O cadastro aceita essas combinações: `app/ponto/views_tipos_ausencia.py:64`, `:69`, `:76`, `:78`, `:80`; grava efetivamente em `app/ponto/services/ausencia.py:1289`. A porta admite minutos quando o tipo é parcial e preserva os 30 no registro: `app/ponto/services/ausencia.py:193`, `:206`, `:341`. O corte expresso manda saída antecipada descontar **em minutos**, com palavra “desconta Xh”: `app/docs/CORTES.md:202`.
+
+Cadeia de dinheiro:
+
+- `descontam_vigentes()` inclui qualquer tipo com efeito DESCONTA: `app/ponto/catalogo/ausencias.py:331`.
+- `ausencias_na_janela` seleciona o registro aprovado: `app/folha/export.py:76`.
+- `_rateio_por_dia` produz `{14/10:30}`: `app/folha/export.py:103`, `:110`; `minutos_de_falta_por_dia` usa esse mapa: `:129`.
+- Fechamento calcula `horas_falta=0,5`: `app/ponto/services/fechamento.py:864`, `:866`, `:987`; DiaPago grava `horas_falta=0,5`: `app/ponto/services/dia_pago.py:272`.
+- O leitor de dias do TXT reaproveita os tipos DESCONTA, mas expande a data sem olhar minutos: `app/folha/export.py:149`, `:168`.
+- O escritor de 8792 usa **`len(datas)`**: `app/folha/export.py:204`, `:207`. Assim retorna quantidade **1 dia**, com registro `11` para 14/10: `:208`. Esse escritor é efetivamente chamado na montagem do TXT: `:721`–`:725`.
+
+Código versus regra: **DiaPago 0,5 h / TXT 8792 1 dia**, para falta parcial de 30 minutos; regra cadastrada e corte pedem 30 minutos (`app/docs/CORTES.md:202`). Não converter 1 dia em quantidade monetária: valor pago pelo Domínio [nao verificado].
+
+A palavra do admin/app usa os minutos e dirá “Saida antecipada (desconta 30min)”: `app/ponto/services/dia_decidido.py:219`, `:148`; composição comum `:428`; admin aplica em `app/ponto/services/espelho.py:340`; app copia em `app/api/views.py:1395`, `:1609`. Portanto a divergência é **palavra/admin/app e DiaPago contra quantidade do 8792**, não admin contra app.
+
+Há também caminho de 8069 para a saída antecipada apurada das batidas: `app/folha/export.py:438`–`:441`, `app/ponto/services/fechamento.py:986`. Uma dupla emissão de 8069+8792 é consequência possível se a apuração produzir saída antecipada e o colaborador for elegível; emissão real [nao verificado].
+
+**Elegibilidade deve ficar explícita:** `montar_linhas` só emite para `classificar_export` com `status=entra` e fechamento aberto/aprovado: `app/folha/export.py:668`, `:697`, `:707`. O classificador exige código Domínio e exclui rescisão/férias com batida: `:840`, `:846`, `:850`; a retenção consulta o veredito da célula: `:1215`–`:1236`. Assim o número errado **na função emissora** é certo; não afirmar que atravessou a retenção em produção.
+
+Certeza: alta, estática, condicionada ao cadastro explícito; dono **ESTRUTURA**, pois dois leitores divergem com o mesmo cadastro (`app/docs/LEIS.md:122`).
+
+---
+
+**CE — falta inteira ainda não decidida aparece “Faltas 1” e “Em aberto 1” no mesmo PDF.**
+
+Entrada construída: 14/10/2026, personalizado 08:00–12:00 sem intervalo, vínculo/célula de trabalho válidos, sem batidas e sem ausência/justificativa; pedir PDF do período livre **14/10–14/10**, em 05/11/2026. Falta decidida é zero pela L-039: `app/docs/LEIS.md:87`; furo permanece pergunta pela L-088: `:120`.
+
+Cadeia:
+
+- O PDF alimenta os dias previstos e justificadas no motor: `app/relatorios/pdf_espelho.py:372`, `:394`.
+- Motor considera o dia previsto sem trabalho/justificativa, grava `dias_falta=1`, `horas_falta=4`: `app/ponto/motor_calculo_v2.py:2595`–`:2619`.
+- O PDF copia esses campos para o resumo: `app/relatorios/pdf_espelho.py:461`, `:471`.
+- `folha_manda` sobrescreve os totais apenas no ramo de período correspondente a competência: `app/relatorios/cartao_pela_celula.py:321`–`:346`. Período livre passa direto.
+- A mesma função calcula corretamente decididas vazias e aberto um: `app/relatorios/cartao_pela_celula.py:373`, `:418`–`:421`; derivador subtrai decididas de furo: `app/ponto/services/dia_decidido.py:315`–`:320`.
+- PDF chama essa função: `app/relatorios/pdf_espelho.py:628`, reaplica a palavra “Em aberto” em `:638`, mas conserva `dias_falta=1`.
+- Renderização imprime **“Faltas 1 dia(s)”** em `app/relatorios/pdf_espelho.py:787` e **“Em aberto (a decidir) 1 dia(s)”** em `:791`.
+
+Resposta da regra: **0 faltas decididas, 1 dia em aberto** (`app/docs/LEIS.md:87`). Resposta do PDF: **1 falta e 1 em aberto**, referentes ao mesmo único dia (`app/relatorios/pdf_espelho.py:787`, `:791`). Não depende de ausência de fechamento porque o período livre nem entra no ramo que os consulta (`app/relatorios/cartao_pela_celula.py:321`).
+
+O app copia a palavra do espelho em `app/api/views.py:1395`–`:1403` e para dia sem batidas expõe `falta` pelo D4 em `:1621`; sem decisão, o D4 responde `sem_certidao`, não `falta`: `app/ponto/status_dia.py:314`–`:316`; adaptador entrega `neutro`: `:84`. O PDF, portanto, conserva uma contagem de falta que o status do app não afirma.
+
+Certeza: alta, estática; dono **ESTRUTURA** pela L-099 (`app/docs/LEIS.md:122`). A própria dívida documental coincide com o código: `app/docs/LEIS.md:163`.
+
+**Suspeita não promovida a achado principal:** crédito de atestado parcial só abate atraso (`app/ponto/services/credito_parcial.py:47`, `app/ponto/services/fechamento.py:985`), enquanto saída antecipada segue integral (`:986`; DiaPago `app/ponto/services/dia_pago.py:185`). Existe teste preservando desconto em parcial (`app/ponto/tests/test_abono_dia_inteiro_zera_pontualidade.py:98`), e o aval ali transcrito restringe a cura a dia inteiro (`:4`). Pode ser contra-exemplo à regra trabalhista, mas norma externa que determine o resultado preciso não foi verificada; tratar como [nao verificado], evitando afirmar que é regressão já corrigida.
+
+## 05/11 15:33 · sessao 792007f13eef · - · - · origem=Ronald (tmux)
+
+Matriz das portas de criação, com `X=falta`, `A=atestado`, `V=férias`, catálogo canônico (`X=DESCONTA`, `A/V=ABONA`): `app/ponto/catalogo/ausencias.py:88`, `app/ponto/catalogo/ausencias.py:95`, `app/ponto/catalogo/ausencias.py:101`. O cadastro vivo de produção é [nao verificado].
+
+| Ordem tentada, continuando depois de cada veto | Aceitos | Vetados |
+|---|---|---|
+| XA | X,A | — |
+| AX | A | X |
+| XV | X,V | — |
+| VX | V | X |
+| AV | A | V |
+| VA | V | A |
+| XAV | X,A | V |
+| XVA | X,V | A |
+| AXV | A | X,V |
+| AVX | A | V,X |
+| VXA | V | X,A |
+| VAX | V | A,X |
+
+A matriz deriva da exceção `abona_sobre_falta`, que libera **todo tipo ABONA sobre falta**, inclusive férias, e do veto por linha contra qualquer outra ausência viva: `app/ponto/precedencia.py:127`, `app/ponto/precedencia.py:145`, `app/ponto/precedencia.py:461`. A criação usa esse veto; aprovação só altera o estado da própria ausência, sem rejeitar a falta anterior: `app/ponto/services/ausencia.py:377`, `app/ponto/services/ausencia.py:881`, `app/ponto/services/ausencia.py:801`.
+
+Contra-exemplos prioritários, todos **ESTRUTURA / L-099**, por divergência com o mesmo cadastro: `app/docs/LEIS.md:122`. Certeza alta por inspeção estática; execução e ocorrência em produção [nao verificado].
+
+1. **X→A aprovado: atestado abona visualmente, mas falta continua no DiaPago/TXT.** Entrada construída: CLT, 6x1, terça-feira 06/10/2026, jornada 08:00–12:00/13:00–17:00, célula `trabalha=True`, batidas `[]`, falta aprovada com 480 minutos; depois atestado do mesmo dia, inteiro (`minutos=0`), com documento e aprovado. Os campos são entrada do cenário, não dado de produção [nao verificado]. A porta admite a justificativa sobre falta: `app/ponto/precedencia.py:127`, `app/ponto/services/ausencia.py:315`. A cobertura escolhe A pelo maior `(data,pk)`: `app/ponto/turnos.py:2552`, `app/ponto/turnos.py:2753`. A grade fica `tipo_dia='ausencia', ausencia_tipo='atestado'`: `app/escala/utils.py:1209`, `app/escala/utils.py:1231`. A palavra da tela usa essa cobertura e mostra atestado abonado: `app/ponto/services/dia_decidido.py:363`, `app/ponto/services/dia_decidido.py:428`. Entretanto o extrator do desconto pega **todas** as faltas aprovadas sem consultar o vencedor: `app/folha/export.py:76`, `app/folha/export.py:127`. Isso chega a `FechamentoMensal.horas_falta=8` e `DiaPago.horas_falta=8`: `app/ponto/services/fechamento.py:864`, `app/ponto/services/fechamento.py:987`, `app/ponto/services/fechamento.py:1184`, `app/ponto/services/dia_pago.py:272`. Havendo elegibilidade e rubrica configurada, TXT inclui 06/10 na falta: `app/folha/export.py:721`. Regra esperada: a justificativa aprovada vence a falta; o próprio contrato promete isso: `app/ponto/precedencia.py:119`. **Não afirmar 8932 simultânea no TXT**: `datas_abonadas` existe em `app/folha/export.py:190`, mas seu chamador produtivo atual é [nao verificado].
+
+2. **X→V: férias cobrem o dia, TXT ainda desconta.** Mesma entrada anterior, substituindo A por férias aprovadas materializadas pelo agendamento; entrada construída [nao verificado]. Férias atravessam falta porque ABONA: `app/ponto/catalogo/ausencias.py:101`, `app/ponto/precedencia.py:127`. O agendamento consulta o veto e materializa férias: `app/ferias/models.py:428`, `app/ferias/models.py:434`, `app/ponto/services/ausencia.py:1186`. Férias vencem os fatos pela faixa e a grade pela cobertura: `app/ponto/precedencia.py:46`, `app/ponto/precedencia.py:396`, `app/ponto/turnos.py:2753`. A falta permanece aprovada porque a nova criação não muda as outras linhas: `app/ponto/services/ausencia.py:341`, `app/ponto/services/ausencia.py:385`. O caminho de desconto é o mesmo do item 1: `app/folha/export.py:76`, `app/ponto/services/fechamento.py:864`, `app/ponto/services/dia_pago.py:272`, `app/folha/export.py:721`. O próprio export declara que seu papel é impedir falta 8792 no dia de férias: `app/folha/export.py:196`. Inversão V→X veta X: `app/ponto/precedencia.py:145`.
+
+3. **X→A: direito de férias conta a falta já justificada.** Entrada construída: seis faltas singelas aprovadas em dias previstos dentro do período aquisitivo; depois atestado inteiro aprovado sobre uma delas, sem rejeitar X [nao verificado]. A cobertura passa a A: `app/ponto/turnos.py:2552`. `PeriodoAquisitivo.faltas_periodo` continua retornando **6**, porque conta linhas de falta aprovadas e ignora a cobertura: `app/ferias/models.py:140`. `aplicar_art130` usa esse número e determina **24 dias**, enquanto cinco faltas remanescentes corresponderiam a **30 dias** na tabela local: `app/ferias/services.py:243`, `app/ferias/models.py:52`. O código que permite X→A e promete a vitória da justificativa é `app/ponto/precedencia.py:119`. O impacto real em saldo é [nao verificado].
+
+4. **X de range anterior→A em dia posterior: ata de precedência diverge deterministicamente da grade.** Entrada construída: X aprovada cobrindo 05–06/10/2026; A aprovada só em 06/10, sem batidas nesse dia [nao verificado]. A porta admite A sobre X: `app/ponto/precedencia.py:127`. `fatos_do_periodo` ordena ausências pela data crescente e põe X e A na mesma faixa; o sort final só considera a faixa: `app/ponto/precedencia.py:273`, `app/ponto/precedencia.py:379`, `app/ponto/precedencia.py:396`, `app/ponto/precedencia.py:77`. Portanto em 06/10 a precedência preserva X, enquanto a cobertura escolhe A pela data mais recente: `app/ponto/turnos.py:2753`. O cartório grava esse `tipo_do_dia='falta'` em `ata['precedencia']`, mas a grade fica A: `app/ponto/services/cartorio.py:1947`, `app/escala/utils.py:1209`. Para **mesma data inicial**, a consulta ordena somente por `data`, sem desempate por `pk`; a ordem retornada pelo banco e o vencedor da precedência são [nao verificado].
+
+## 05/11 15:32 · sessao 14e497c6e2c5 · - · - · origem=Ronald (tmux)
+
+Os valores propostos são coerentes, com estas condições:
+
+- **6h contínuas:** `P360/T360/HE0/I15`. Declare trabalho contínuo comprovado, regime CLT e `intervalo_indenizavel=True`; cadastro sem pausa não autoriza dedução fictícia de 15 minutos. `app/docs/LEIS.md:79`, `app/docs/LEIS.md:80`; CLT art.71 §§1º/4º [nao verificado em arquivo local].
+- **Falta integral decidida:** `F360/I0`; **atestado integral aprovado:** `A360/I0`. Furo anterior à decisão continua “em aberto”. `app/docs/LEIS.md:87`, `app/docs/LEIS.md:120`.
+- **Parcial paga 08–10, trabalho 10–14:** `T240/A120/I0`, considerando exatamente quatro horas efetivas e nenhuma sobreposição paga. `app/docs/CORTES.md:277`, `app/docs/CORTES.md:315`; CLT art.71 §1º [nao verificado em arquivo local].
+- **08–14:30 contínuo comprovado:** antes da autorização, `T computável360/HE0/HP30/I60`; depois, `T390/HE30/HP0/I60`. A obrigação de uma hora de intervalo decorre do trabalho contínuo superior a seis horas, não do clique que autoriza a ponta. `app/docs/LEIS.md:115`; CLT art.71 caput/§4º [nao verificado em arquivo local].
+- **Noturno 19–07, pausa 00–01:** `T660/N360` sem prorrogação; `T660/N480` com prorrogação expressamente cadastrada até 07h. Com pausa validada **05–06** e sem prorrogação: `T660/N420`. Hora de 60 minutos; adicional de 20%. `app/docs/LEIS.md:80`, `app/docs/LEIS.md:83`, `app/docs/LEIS.md:84`, `app/docs/CORTES.md:418`.
+
+**lei:** a cl.38-d, isoladamente, não determina prorrogação após 05h; explicite esse cadastro em cada variante. Uma resposta apenas informando a saída também não comprova ausência de pausa: continuidade deve constar como entrada hipotética do caso. `app/docs/LEIS.md:83`; `app/docs/CORTES.md:273`.
+
+## 05/11 15:32 · sessao 5f08f305e748 · - · - · origem=Ronald (tmux)
+
+Contra-exemplo estático confirmado: **falta aprovada → folga de calendário** deixa o mesmo dia como folga na grade e falta no extrator do TXT. A ordem inversa recusa a falta. Ocorrência em produção e execução destes cenários: [nao verificado].
+
+Entrada construída: colaborador ativo, vínculo vigente, empresa CLT, competência aberta; 6x1 08:00–12:00/13:00–17:00, quarta-feira 04/11/2026 inicialmente prevista, batidas `[]`, falta aprovada de 480 minutos. Depois aplicar calendário que declare 04/11 folga. A aplicação real troca o calendário e materializa a foto; o escritor da foto não consulta `veto_de_lancamento`. (`app/escala/views.py:409`, `app/escala/views.py:411`, `app/escala/folgas.py:150`, `app/escala/folgas.py:173`.)
+
+Caminho e respostas:
+
+- Foto ⇒ folga: `eh_dia_trabalho_calculado` responde `False` para data fotografada; a foto provoca regeneração. (`app/escala/models.py:1311`, `app/escala/models.py:1317`, `app/escala/folgas.py:192`.)
+- Grade ⇒ folga: `_marcar_ausencias` explicitamente impede falta de substituir folga. O teste existente exige esse resultado. (`app/escala/utils.py:1231`, `app/escala/tests/test_grade_segue_a_precedencia.py:48`.)
+- Extrator TXT ⇒ falta de **1 dia**, mantendo **480 minutos**: consulta faltas aprovadas sem filtrar jornada ou selecionar o fato vencedor; expande D e soma seus minutos. (`app/folha/export.py:76`, `app/folha/export.py:129`, `app/folha/export.py:149`, `app/folha/export.py:158`.)
+- Regra ⇒ **zero desconto em folga**, pois ausência que abona/desconta só alcança dia previsto. (`app/docs/LEIS.md:121`.)
+- Ordem inversa calendário→falta ⇒ recusa por folga existente; falta→folga **manual** também recusa. (`app/ponto/precedencia.py:514`, `app/ponto/precedencia.py:538`, `app/escala/folgas.py:258`, `app/ponto/precedencia.py:461`.)
+
+**Não afirmar `DiaPago.horas_falta=0`:** o extrator de minutos mantém 480; o valor final do DiaPago exige rastrear a ligação completa. [nao verificado]
+
+Extensão numérica ao saldo: período aquisitivo com outras cinco faltas válidas e a falta de D acima. O contador conta **6 registros**, incluindo a falta agora em folga; `aplicar_art130` atribui **24 dias**, enquanto a exclusão da falta em folga deixaria cinco faltas e **30 dias**. (`app/ferias/models.py:144`, `app/ferias/services.py:246`, `app/ferias/models.py:54`, `app/docs/LEIS.md:121`.)
+
+A mesma construção alcança 12x36 diurno/noturno com D inicialmente plantão e falta de 720 minutos, ou personalizado sem intervalo 08:00–16:00 com 480 minutos: o escritor de foto e os extratores não restringem o ciclo. Efeitos adicionais da foto na fase do 12x36 devem ser explicitados, pois a foto vence a âncora. (`app/escala/folgas.py:173`, `app/folha/export.py:76`, `app/escala/models.py:1289`, `app/escala/models.py:1296`.)
+
+Matriz relevante da folga manual — assimetrias abaixo são **intencionais na implementação**, e não defeitos por si:
+
+| Ordem | Resultado da porta | Referência |
+|---|---|---|
+| Folga→falta | Recusa | `app/ponto/precedencia.py:514` |
+| Falta→folga | Recusa | `app/ponto/precedencia.py:461` |
+| Folga→atestado | Recusa | `app/ponto/precedencia.py:514` |
+| Atestado→folga | Recusa | `app/ponto/precedencia.py:461` |
+| Folga→férias | Permite; férias suprimem folga | `app/ponto/precedencia.py:496` |
+| Férias→folga | Recusa | `app/ponto/precedencia.py:461` |
+
+A exceção para férias atravessarem folga já lançada está documentada como decisão específica; não exigir cancelamentos individuais. (`app/ponto/precedencia.py:470`, `app/ponto/precedencia.py:485`, `app/ponto/precedencia.py:492`.)
+
+Outro achado, de classificação: **atestado aprovado em folga automática** transforma a grade em ausência e limpa células/orfas; o teste atual exige isso. A própria tabela de leis reconhece o conflito com L-089. Valores monetários divergentes decorrentes deste caso: [nao verificado]. (`app/escala/utils.py:1231`, `app/escala/utils.py:1241`, `app/escala/utils.py:1272`, `app/escala/tests/test_grade_segue_a_precedencia.py:43`, `app/docs/LEIS.md:173`.)
+
+| CE | Código × regra | Leitores/efeitos divergentes | Certeza | Dono |
+|---|---|---|---|---|
+| Falta→folga calendário | Extrator mantém 480/720 min e 1 dia; regra exige zero | Grade folga × extrator TXT falta | Alta estática; execução [nao verificado] | ESTRUTURA, L-099 (`app/docs/LEIS.md:122`) |
+| Mesmo caso + cinco faltas válidas | Direito férias 24 × 30 dias | Grade folga × contador do período | Alta estática; execução [nao verificado] | ESTRUTURA, L-099 (`app/docs/LEIS.md:122`) |
+| Atestado sobre folga automática | Grade ausência × L-089 sem efeito em folga | Classificação; dinheiro [nao verificado] | Alta estática | ESTRUTURA, L-099 (`app/docs/LEIS.md:122`) |
+
+## 05/11 15:32 · sessao 5007f5a878cd · - · - · origem=Ronald (tmux)
+
+Achados por leitura estática; ocorrência em produção e execução integrada destes cenários: [nao verificado]. Nenhum arquivo foi criado, editado ou apagado.
+
+1. Personalizado sem intervalo: falta parcial de três horas desaparece.
+
+Entrada construída: segunda-feira passada, não feriado; empresa `regime_trabalhista='clt'`; vínculo vigente; `tipo_ciclo='personalizado'`, `tipo_base='comercial'`, `hora_inicio=08:00`, `hora_fim=12:00`, `horarios_por_dia={'0': {'hi':'08:00','hf':'12:00'}}`, ambos os campos de intervalo `None`; célula `trabalha=True`, DNA com esses marcos. Primeiro cadastro/célula, depois batidas `11:00 E`, `12:00 S`; nenhuma ausência. O personalizado reconhece os dias pelas chaves do mapa e os horários pelo override: `app/escala/models.py:862`, `app/escala/models.py:326`.
+
+Caminho:
+
+- Fábrica escolhe `MotorComercial`: `app/ponto/motor_calculo_v2.py:3572`, `app/ponto/motor_calculo_v2.py:3668`.
+- Comercial chama a pontualidade: `app/ponto/motor_calculo_v2.py:3293`.
+- Marcos vêm do vínculo/célula ou template: `app/ponto/motor_calculo_v2.py:2048`.
+- `diff=180`; o limiar é `>=180`: `app/escala/regua_defesa.py:381`, `app/escala/regua_defesa.py:498`.
+- Sem marcos de intervalo, retira `prevista_entrada`, independentemente de a saída ser exata: `app/ponto/motor_calculo_v2.py:2122`, `app/ponto/motor_calculo_v2.py:2142`.
+- Sem previsão da entrada, atraso permanece zero; saída exata também dá zero: `app/ponto/motor_calculo_v2.py:2217`, `app/ponto/motor_calculo_v2.py:1970`, `app/ponto/motor_calculo_v2.py:2006`.
+
+Resposta: **60 minutos trabalhados; atraso 0**, com alerta `HORARIO_DESLOCADO`. Pela L-084 escrita, uma ponta distante segue descontando; pela L-093, o teto é `240−60=180`: **180 minutos de atraso**. Referências: `app/docs/LEIS.md:116`, `app/docs/LEIS.md:111`.
+
+Certeza alta para a resposta do caminho. Ressalva indispensável: a exceção para dia sem intervalo está expressamente descrita como recorte aprovado nos comentários, portanto há **colisão entre a regra absoluta de LEIS.md e o recorte implementado**, e não desconhecimento dessa condição: `app/ponto/motor_calculo_v2.py:2123`, `app/ponto/calculador/regras.py:197`. Os dois calculadores repetem o mesmo resultado; divergência concreta entre leitores deste exemplo: [nao verificado]. Dono L-099: **ESTRUTURA**, porque o mesmo cadastro íntegro contém o marco de entrada e a única ponta distante é apagada por regra do programa; separação de donos em `app/docs/LEIS.md:122`.
+
+2. Atestado de oito horas no 12x36 é promovido a dia inteiro; declarar o período é recusado.
+
+Entrada construída: 12x36 diurno previsto `07:00–19:00`, pausa `12:00–13:00`, dia explicitamente de trabalho, previsão líquida **660 minutos**; atestado de **480 minutos**, um único dia, tipo `atestado` habilitado para minutos. Ordem: cadastrar escala/célula, lançar atestado de 480 minutos, tentar aprovar com período `07:00–15:00`; alternativamente, aprovar sem período. Não é preciso supor batidas para demonstrar a recusa; use zero batidas para mostrar a dispensa integral. O previsto deriva dos marcos e pausas: `app/escala/utils.py:2287`, `app/escala/utils.py:2293`, `app/escala/utils.py:2312`.
+
+Caminho e resposta:
+
+- A porta aceita minutos em tipo parcial cadastrado: `app/ponto/services/ausencia.py:206`.
+- O juiz fixa `MINUTOS_DIA_INTEIRO=480`; exige `0 < minutos < 480` para considerar parcial, sem perguntar o previsto do dia: `app/ponto/turnos.py:2580`, `app/ponto/turnos.py:2598`.
+- Aprovação com período passa por `_validar_periodo`, que recusa **“So ausencia PARCIAL tem periodo.”**: `app/ponto/services/ausencia.py:890`, `app/ponto/services/ausencia.py:863`.
+- Sem período, o registro é considerado inteiro, a grade marca `cobertura_parcial=False` e apaga todas as células e órfãs: `app/escala/utils.py:1210`, `app/escala/utils.py:1251`, `app/escala/utils.py:1272`.
+- A mesma promoção alcança o conjunto de ausência integral que zera atraso/saída antecipada: `app/ponto/turnos.py:2668`, `app/ponto/turnos.py:2684`, `app/ponto/services/fechamento.py:683`, `app/ponto/services/fechamento.py:742`, `app/ponto/motor_calculo_v2.py:1092`.
+- O cartório dispensa as lâmpadas não acesas quando a grade não marcou parcial: `app/ponto/services/cartorio.py:763`.
+
+Regra aplicável: atestado por minutos não abona o dia inteiro; o próprio contrato documentado do efeito da ausência distingue o crédito parcial do dia integral: `app/ponto/services/efeito_ausencia.py:19`. Portanto, **480 não explica 660 minutos**, e não pode dispensar os 180 minutos de jornada restantes por simples limiar de oito horas. Valor líquido exato de cobertura de um documento `07:00–15:00` com pausa dentro: [nao verificado]; a falha de aceitar um período parcial é independente desse cálculo.
+
+Ressalva relevante: os comentários admitem que os 480 nasceram como aval para **“so o contador”**, mas o predicado hoje alimenta portas, grade e desconto: `app/ponto/turnos.py:2575`. Certeza alta na recusa e classificação integral; regra jurídica específica externa: [nao verificado]. Dono L-099: **ESTRUTURA**, pois o programa ignora o previsto conhecido ao interpretar a mesma quantidade de minutos; `app/docs/LEIS.md:122`.
+
+O mesmo limiar produz o mesmo problema de classificação em 12x36 noturno `19:00–07:00` com pausa `02:00–03:00`, previsão líquida 660; o encadeamento atravessa a meia-noite em `app/escala/servico_jornada.py:80`. Uma entrada concreta para aprovação seria atestado480 com período `19:00–03:00`; a mesma recusa ocorre antes de qualquer cálculo noturno: `app/ponto/services/ausencia.py:892`. A porta reconhece período noturno `fim<inicio`; o impedimento é o falso “inteiro”: `app/ponto/services/ausencia.py:863`.
+
+3. Outro elo relevante para a consolidação: parcial120 pode ganhar todo o restante do previsto no DiaPago.
+
+A grade marca qualquer ausência não-falta como `tipo_dia='ausencia'`, mantendo essa classificação também na parcial: `app/escala/utils.py:1241`, `app/escala/utils.py:1245`. O leitor de célula transporta a parcial e os números lavrados: `app/escala/services/leitor_celula.py:389`, `app/escala/services/leitor_celula.py:404`.
+
+`por_dia_da_grade` calcula **abono = previsto − realizado** para todo dia `ausencia`, sem consultar minutos do atestado ou `cobertura_parcial`: `app/ponto/services/dia_pago.py:385`, `app/ponto/services/dia_pago.py:391`. Esse mapa vai para o fechamento: `app/ponto/services/fechamento.py:1044`.
+
+Exemplo aritmético na entrada dessa função: dia previsto660, realizado360, atestado120 → **abono300**, embora o contrato do parcial diga que só os minutos declarados viram crédito: `app/ponto/services/efeito_ausencia.py:19`. Recomendo ao pai verificar a montagem integral desse dia e o leitor concorrente antes de publicar como contraexemplo independente; minha certeza é alta no cálculo local e a integração ponta a ponta permanece [nao verificado].
+
+## 05/11 15:32 · sessao 9e4b4b7477c4 · - · - · origem=Ronald (tmux)
+
+Três contra-exemplos estáticos fortes; ocorrência em produção e execução nesta cópia [nao verificado].
+
+| Caso | Entrada concreta e ordem | Código hoje × regra | Leitores divergentes | Certeza / L-099 |
+|---|---|---|---|---|
+| E-A — atestado posterior mantém desconto | 6x1, 03/11/2026 previsto 480 min, sem batidas. Primeiro falta aprovada, `minutos=0`; depois atestado do mesmo dia, `minutos=0`, anexado e aprovado. A falta deriva 480 min: `app/ponto/models.py:875`. A porta permite abono sobre falta: `app/ponto/services/ausencia.py:309`, `app/ponto/precedencia.py:106`. | Cobertura escolhe atestado por maior PK no empate de data: `app/ponto/turnos.py:2753`. Grade vira ausência: `app/escala/utils.py:1231`; abono = 480: `app/ponto/services/dia_pago.py:391`. Porém falta aprovada continua somada sem resolver cobertura: `app/folha/export.py:129`; fechamento desconta 8 h: `app/ponto/services/fechamento.py:865`, `:987`; DiaPago também: `app/ponto/services/dia_pago.py:272`. Regra: falta exige ausência de justificativa: `app/docs/LEIS.md:120`; aprovação do atestado vence falta: `app/ponto/precedencia.py:119`. | Grade/abono 480 min contra falta 8 h no próprio DiaPago; TXT inclui 1 dia, se elegível e rubrica configurada: `app/folha/export.py:721`, `:204`. | Alta por leitura; **ESTRUTURA**: `app/docs/LEIS.md:122`. |
+| E-B — data inicial vence ordem real do lançamento | Mesma escala, sem batidas. Primeiro falta aprovada em 03/11; depois atestado aprovado de 02–04/11, `dias_corridos=3`, `minutos=0`. Derivação inclusiva: `app/ponto/services/ausencia.py:76`; permissão sobre falta: `:309`. | Em 03/11, cobertura escolhe falta porque sua `data=03/11` supera `02/11`, mesmo com atestado lançado depois: `app/ponto/turnos.py:2753`. Grade vira falta: `app/escala/utils.py:1234`. Já precedência ordena ausências por data crescente: `app/ponto/precedencia.py:273`; falta e atestado ocupam mesma faixa: `:52`, `:76`; ordenação apenas por faixa conserva atestado primeiro: `:380`, `:396`. Regra expressa diz atestado ganha de falta na aprovação: `:119`; falta com justificativa contraria `app/docs/LEIS.md:120`. | `ata.precedencia.tipo_do_dia='atestado'`, gravado em `app/ponto/services/cartorio.py:1947`, contra grade `tipo_dia='falta'` e desconto 480 min: `app/escala/utils.py:1234`, `app/folha/export.py:129`. | Alta por leitura; **ESTRUTURA**: `app/docs/LEIS.md:122`. |
+| E-C — falta inteira distribuída no dia errado | 6x1, folga domingo; padrão 08–17, intervalo 12–13; sábado reduzido 08–12 por `horarios_por_dia={"5":{"hi":"08:00","hf":"12:00"}}`, cadastro nativo: `app/escala/models.py:193`, `:198`, `:336`. Sem batidas em sexta 30/10 e sábado 31/10. Lançar uma falta aprovada de dois dias, minutos zero. | Modelo soma previstos: 480+240=720 min: `app/ponto/models.py:875`. Export divide igualmente pelos dois dias: 360+360, `app/folha/export.py:102`; mapa segue à lavratura: `app/ponto/services/fechamento.py:1184`; DiaPago registra 6 h+6 h: `app/ponto/services/dia_pago.py:272`. Regra exige custo previsto **daquele dia**, portanto 8 h+4 h: `app/docs/LEIS.md:120`. | Previsto por dia 480/240 contra falta DiaPago 360/360; total mensal permanece 720: `app/ponto/models.py:883`, `app/folha/export.py:110`, `app/ponto/services/dia_pago.py:274`. | Alta por leitura; **ESTRUTURA**: `app/docs/LEIS.md:122`. |
+
+Ressalvas úteis para consolidação:
+
+- **Atestado sobre folga humana é vetado atualmente**, não usar como bug antigo: `app/ponto/precedencia.py:509`.
+- **Atestado sobre folga de template entra**, mas a troca de rótulo para ausência não prova dinheiro indevido: `app/ponto/precedencia.py:435`, `app/escala/utils.py:1231`. O dia de folga recebe previsto zero: `app/escala/utils.py:1822`; abono resulta zero: `app/ponto/services/dia_pago.py:391`.
+- `datas_abonadas()` conta datas sem filtrar folga: `app/folha/export.py:190`; chegada dessa função à rubrica 8932 do TXT [nao verificado]. Não encontrei chamador de produção na busca.
+- Nenhum desses exemplos depende de inventar pessoa ou registro do dado raspado; sua ocorrência real no hash [nao verificado].
+
+## 05/11 15:30 · sessao be86a22ee392 · - · - · origem=Ronald (tmux)
+
+Bases para as duas tabelas: horários locais UTC−3 (L-080, `app/docs/LEIS.md:107`); noturno atribuído integralmente ao dia de início (L-085, `app/docs/LEIS.md:117`); `P/T/F/A/N/HE` = previsto/trabalhado/falta decidida/abono/noturno/extra, em minutos. O cadastro de prorrogação pós05h precisa constar explicitamente: cl.38-d fixa hora60 e adicional20%, mas deixa a prorrogação para o cadastro (L-035/L-036, `app/docs/LEIS.md:83`, `app/docs/LEIS.md:84`; texto da cláusula em `app/core/regua_cct.py:129`).
+
+**Propostas 12x36 noturno:** adotar cadastro CCT Londrina vigente, 19–07, pausa01–02, prorrogação pós05h=False; foto/paridade declarando o dia como trabalho. Assim P=660 e N=360 (`app/docs/LEIS.md:73`, `app/docs/LEIS.md:80`, `app/docs/LEIS.md:83`, `app/docs/LEIS.md:84`).
+
+| id | cadastro | batidas | lançamentos, na ordem | resposta da regra | regra citada | leitores |
+|---|---|---|---|---|---|---|
+| N1 | Base acima; competência aberta | D19:00, D+1 01:00/02:00/07:00 | cadastrar vínculo e foto → apurar | `660/660/0/0/360/0`; 300min diurnos+360min noturnos=660; adicional20% sobre N | L-024/032/035/036/085, `LEIS.md:75`, `:80`, `:83`, `:84`, `:117` | Todos os valores coincidem; nenhuma pergunta pelo turno completo: L-002/061/095, `LEIS.md:60`, `:95`, `:113` |
+| N2 | Antes diurno07–19; correção administrativa comprovada para noturno19–07 desde D | Mesmas de N1 | declarar vigência D → reescrever célula pela exceção → rejulgar | Resultado N1; dia D−1 conserva seu vínculo e seus marcos; cadastro incorreto não pode zerar trabalho | L-020/024/084/112, `LEIS.md:71`, `:75`, `:116`, `:150`; vínculo do dia, `GLOSSARIO.md:24` | Célula denuncia correção; todos passam a N1; chamado lê o fato atual, `LEIS.md:95` |
+| N3 | Base | D19:00, D+1 01:00/02:00; saída equivocada06:00 | retratar06:00 com motivo → lançar saída correta07:00 → rejulgar | Antes T600, saída antecipada60; depois N1. N continua360; falta decidida não nasce de simples déficit | L-025/039/093, `LEIS.md:76`, `:87`, `:111`; porta e trilha, `CORTES.md:182` | Marca06:00 continua no histórico cru como retratada; apuração usa07:00. Pergunta sem fato desaparece, L-025/061 |
+| N4 | Dia anterior ao horizonte, já fotografado com T600 | Como N3 | pouso de regra nova, sem fato → depois correção humana06→07 | Só pouso conserva fotografia600; fato novo rejulga e leva a N1; exportação antiga permanece documento da versão anterior | L-124/113, `LEIS.md:145`, `:149`; `CORTES.md:419` | Todos leem fotografia antes do fato; depois todos leem660, preservando TXT anterior | [nao verificado]
+| N5 | Base; duas pessoas/dias equivalentes | Em cada dia19:00,01:00/02:00/07:30 | apurar lote → “Não” para ponta30min de A → autorizar30min de B → repetir lote | A=`660/660/0/0/360/0`; B=`660/690/0/0/360/30`. Antes da decisão ambas têm HE0 e30min pendentes. Minuto posterior05h não integra N porque cadastro=False | L-097/035/110, `LEIS.md:115`, `:83`, `:136` | A mostra ponta riscada e ciência; B mostra30 autorizados; pendência resolvida sem duplicar no replay; trilha por dia |
+| N6 | Base, alterando explicitamente prorrogação pós05h=True | N1 | declarar cadastro aplicável → rejulgar dia alcançado | `660/660/0/0/480/0`; N=22–07(540)−pausa60=480; 180diurnos+480noturnos=660. Hora continua60 | L-035/036, `LEIS.md:83`, `:84`; intervalo na mesma janela, `CORTES.md:418` | Todos exibem480, não360 nem hora reduzida; cadastro efetivo/vigência precisa estar explícito |
+
+**Propostas personalizado 6h corridas:** definir cadastro08–14, intervalo0, jornada360, dias de trabalho explícitos; o desenho manda, não o rótulo (`app/docs/LEIS.md:75`, `app/docs/LEIS.md:124`). **lei:** a legalidade de seis horas sem os15min da CLT art.71§1 e a indenização correspondente exigem fonte CLT primária; esse artigo integral não está nos trechos normativos consultados [não verificado]. Não apresentar esta escala como juridicamente regular só por existir cadastro; preservar a aritmética do trabalho e separar a rubrica de intervalo [não verificado].
+
+| id | cadastro | batidas | lançamentos | resposta aritmética pela grade; ressalva legal acima | regra citada | leitores |
+|---|---|---|---|---|---|---|
+| P1 | 08–14, sem intervalo | 08:00/14:00 | cadastrar → apurar | `360/360/0/0/0/0`; nenhuma hora fictícia de pausa subtraída | L-024/091, `LEIS.md:75`, `:124` | Todos360; **lei:** rubrica legal de intervalo, separada de HE |
+| P2 | Antes08–14; mudança prospectiva para09–15 desde D | D−1 08–14; D09–15 | encerrar antigo em D−1 → declarar novo D → apurar | Cada dia `360/360/0/0/0/0`; marcos diferentes por vigência; nenhuma alteração no D−1 | L-020/021/112, `LEIS.md:71`, `:72`, `:150`; `GLOSSARIO.md:24` | Célula/espelho/app/DiaPago usam vínculo do dia |
+| P3 | Base | 08:00/13:00 equivocado | retratar13:00 → lançar14:00 correto → rejulgar | Antes T300 e antecipada60; depois P1; F0 sem lançamento de falta | L-025/039/093, `LEIS.md:76`, `:87`, `:111`; `CORTES.md:182` | Histórico preserva13 retratada; todos360 depois; nenhum leitor mantém300 |
+| P4 | Dia antigo antes do horizonte com T300 | Como P3 | apenas pouso → posteriormente corrigir batida | Pouso mantém300; fato novo leva360, sem backfill geral | L-124/113, `LEIS.md:145`, `:149` | Fotografia antes; valor corrigido depois em todos; TXT anterior intacto | [nao verificado]
+| P5 | Base; dois dias equivalentes | 08:00/14:30 em ambos | lote → negar ponta de A → autorizar ponta de B → repetir | A=`360/360/0/0/0/0`; B=`360/390/0/0/0/30`; inicialmente30 pendentes em cada | L-097/110, `LEIS.md:115`, `:136` | Riscar30 em A; mostrar HE30 em B; sem duplicação pelo lote |
+| P6 | Base; D previsto e D+1 folga avulsa da pessoa | Nenhuma | lançar abono integralD → trocar vínculo → reapurar lote | D=`360/0/0/360/0/0`; D+1=`0/0/0/0/0/0`; folga avulsa sobrevive à troca; calendário do vínculo antigo não acompanha o novo | L-089, `LEIS.md:121`; abono só residual, `CORTES.md:88`; folga pessoa×vínculo, `CORTES.md:417` | Todos mostram abono360 somenteD; não cobrar trabalho da folga |
+
+Para quaisquer tabelas, o chamado deve seguir a pergunta viva derivada do fato, não “fechar chamado” como prova do pagamento (`app/docs/CORTES.md:316`, `app/docs/CORTES.md:322`). Evitar prometer um rótulo exato de status não definido pela regra; pode dizer “sem cobrança desse fato” e deixar **lei:** para enumeração do status (`app/docs/LEIS.md:95`, `app/docs/LEIS.md:136`).
+
+## 05/11 15:30 · sessao 657665964edf · - · - · origem=Ronald (tmux)
+
+Sugestão: oito casos por escala, todos com `N=0/HE=0`; unidades em minutos. São cenários propostos, sem execução. [não verificado]
+
+| Caso | 6x1: 07–12/13–15:20 | 12x36 diurno: 07–12/13–19 | Fundamento |
+|---|---|---|---|
+| 1. Cadastro conforme | P440/T440/F0/A0 | P660/T660/F0/A0 | Previsto vem da grade e intervalo cadastrado sai da jornada: `app/docs/LEIS.md:75`, `app/docs/LEIS.md:80`. |
+| 2. Troca na aberta | Vínculo anterior termina D−1; novo 6x1 começa D; batidas completas em D → P440/T440/F0/A0; D−1 conserva sua escala | Vínculo anterior termina D−1; novo 12x36 começa D, com foto/fase explicitamente declarada; batidas completas → P660/T660/F0/A0 | Vigência sem fim anterior ao início; início declarado; exceção formal para cadastro errado: `app/docs/LEIS.md:72`, `app/docs/LEIS.md:150`, `app/docs/LEIS.md:71`. |
+| 3. Corrigir saída | Retratar 15:00 e lançar 15:20: T420→440; P440/F0/A0 | Retratar 18:00 e lançar 19:00: T600→660; P660/F0/A0 | Retratada fora da apuração; marcações cruas continuam exibidas: `app/docs/LEIS.md:76`; log imutável com compensação: `app/docs/GLOSSARIO.md:25`. |
+| 4. Retro sem fato novo | Foto histórica P440/T420/F0/A0 permanece após pouso de obra nova | Foto histórica P660/T600/F0/A0 permanece | Passado fica foto até fato novo, sem backfill a cada pouso: `app/docs/LEIS.md:145`, `app/docs/CORTES.md:419`. |
+| 5. Retro com fato novo | Na foto do caso 4, corrigir saída 15:00→15:20 → P440/T440/F0/A0 | Na foto do caso 4, corrigir saída 18:00→19:00 → P660/T660/F0/A0 | Fato novo rejulga normalmente em qualquer competência; cálculo usa o que tem: `app/docs/LEIS.md:145`, `app/docs/LEIS.md:149`. |
+| 6. Lote e repetição | Corrigir dois dias iguais ao caso 3 → cada um440; agregado880; repetir não duplica valores | Corrigir dois dias iguais ao caso 3 → cada um660; agregado1320; repetir não duplica valores | Idempotência e partes somam total: `app/docs/LEIS.md:136`, `app/docs/LEIS.md:148`; trilha por ação crítica: `app/docs/LEIS.md:65`. |
+| 7. Ausência abonada | Sem batidas; aprovar ausência integral de tipo abonador → P440/T0/F0/A440 | Sem batidas; aprovar ausência integral abonadora → P660/T0/F0/A660 | Ausência tem efeito no dia previsto; justificativa distingue falta; custo do dia vem do previsto: `app/docs/LEIS.md:120`, `app/docs/LEIS.md:121`. |
+| 8. Falta decidida | Sem batidas; aprovar ausência integral descontável → P440/T0/F440/A0 | Sem batidas; aprovar ausência integral descontável → P660/T0/F660/A0 | Falta exige ausência lançada de tipo descontável: `app/docs/LEIS.md:87`; custo previsto daquele dia: `app/docs/LEIS.md:120`. |
+
+Nos casos 3 e 4, antes da correção, o déficit de 20/60 não é automaticamente uma falta decidida; a antecipada deve respeitar o teto P−T. `app/docs/LEIS.md:87`, `app/docs/LEIS.md:111`.
+
+Espelho, app, célula e DiaPago devem representar a mesma lavratura; chamado/pergunta lê o estado da célula, sem recálculo próprio. `app/docs/LEIS.md:60`, `app/docs/LEIS.md:95`, `app/docs/LEIS.md:113`; projeções reconstruíveis: `app/docs/GLOSSARIO.md:22`.
+
+**lei:** atomicidade do lote em falha parcial, prazo máximo de atualização das projeções e nome literal do status final do chamado não ficaram definidos pelos textos consultados. [não verificado]
+
+**lei:** impedir emissão durante tentativas intermediárias de troca não pode ser presumido; o próprio corte remete essa condição a pergunta de lei. `app/docs/CORTES.md:310`.
+
+Folga avulsa pertence à pessoa e sobrevive à troca; folga do calendário pertence ao vínculo e vale somente na vigência dele. `app/docs/CORTES.md:417`.
+
+## 05/11 15:29 · sessao 6d501cd6306e · - · - · origem=Ronald (tmux)
+
+- **Fonte e invariantes:** resposta nasce da regra aplicada ao cadastro e às batidas; código atual não é gabarito. Todo caso deve exigir partes somando total, idempotência, previsto independente do realizado e igualdade entre leitores. `app/docs/LEIS.md:136` (L-110); invariantes valem também para dados sujos. `app/docs/LEIS.md:148` (L-114).
+
+- **Troca de escala:** grade é fonte única do previsto; mudança exige vigência válida, sem fim anterior ao início. `app/docs/LEIS.md:75` (L-024), `app/docs/LEIS.md:72` (L-021). Admin declara início e fase inclusive antes da primeira batida. `app/docs/LEIS.md:150` (L-112). Passado errado por cadastro admite regeneração formal denunciada pela célula. `app/docs/LEIS.md:71` (L-020).
+
+- **Folgas durante troca:** folga de calendário pertence ao vínculo e só vale na sua vigência; folga avulsa manual pertence à pessoa e sobrevive à troca. `app/docs/CORTES.md:417`. Calendário com uso muda por versão com vigência, preservando o passado. `app/docs/CORTES.md:291`.
+
+- **Correção de batidas:** retratar nunca apaga: guarda `retratada_em`, autor, instante e motivo; rejulga o dia imediatamente; desfazer disponível por sete dias. `app/docs/CORTES.md:182`. Apuração exclui retratadas; exibição de marcação mantém o cru. `app/docs/LEIS.md:76` (L-025); log imutável com evento compensatório. `app/docs/GLOSSARIO.md:25`.
+
+- **Reatividade e lote:** depois de regenerar células, chamar a porta de dinheiro uma vez por competência tocada, com motivo do vínculo; lote segue por job. `app/docs/CORTES.md:229`. Ação crítica exige usuário, antes/depois e motivo. `app/docs/LEIS.md:65` (L-007). Não inferir atomicidade integral do lote nem política de falha parcial: **lei:** essas condições não estão decididas nesse corte. `app/docs/CORTES.md:229`.
+
+- **Retroativo L-124:** obra nova alcança horizonte em diante; passado permanece fotografia até fato novo; alcance geral retroativo ocorre no backfill único final. Fato novo rejulga qualquer competência; correção provada em exportada segue a porta vigente. `app/docs/LEIS.md:145`, `app/docs/CORTES.md:419`. L-113 permite recalcular exportada, conservando TXT anterior, trilha e DIFF anterior a ato de frota. `app/docs/LEIS.md:149`. **lei:** não escolher arbitrariamente uma versão numérica da regra para exemplo anterior ao horizonte; declarar a fotografia inicial do caso e distinguir pouso sem fato de correção com fato novo. `app/docs/LEIS.md:145`.
+
+- **Leitores:** espelho, app, calendário, fechamento e TXT leem o dinheiro lavrado; não derivam novamente. `app/docs/LEIS.md:113` (L-095). Chamado/pergunta leem célula/ata. `app/docs/LEIS.md:95` (L-061). Espelho e DiaPago são projeções reconstruíveis. `app/docs/GLOSSARIO.md:22`; reconstrução pela porta após cura de juiz em competência não exportada. `app/docs/LEIS.md:142` (L-121).
+
+- **Furo e falta:** falta depende de ausência descontável ou veredito explícito; furo indecidido deve aparecer como “dias em aberto (a decidir)”, com número. `app/docs/CORTES.md:179`. Marcação humana do dia leva identificação de quem/quando/o quê, lida da ata. `app/docs/CORTES.md:194`.
+
+- **Perguntas de lei relevantes:** segurar emissão de cobranças enquanto admin experimenta versões antes de confirmar aparece expressamente como questão de lei, sem decisão fechada. `app/docs/CORTES.md:310`. Não converter estado do chamado em prova de regularidade: pergunta viva segue autoridade própria e pode aparecer em disputa fechada sem reabertura em lote. `app/docs/CORTES.md:316`.
+
+## 05/11 15:29 · sessao ee5632eb0b51 · BATERIA-QUEIXAS-ADMIN · leitura · origem=Code
+
+**BATERIA-QUEIXAS-ADMIN — passo 1, Q1: falta e atestado.** Gabarito proposto pela regra, sem usar o comportamento da implementação como referência. (L-110, `app/docs/LEIS.md:136`)
+
+Todos os cadastros, horários e lançamentos abaixo são **cenários sintéticos**, não registros de produção. `[nao verificado]`
+
+**Convenções para ler as tabelas**
+
+- Valores em minutos: **P** previsto; **T** trabalhado dentro da jornada; **F** ausência decidida que desconta; **A** abono; **U** período ainda em aberto; **N** noturno efetivamente trabalhado; **HE** hora extra. F parcial não significa um dia inteiro de falta. (`app/docs/LEIS.md:120`; `app/docs/CORTES.md:202`; `app/docs/CORTES.md:240`)
+- Horários locais, UTC−3; no noturno, `+1` significa o dia seguinte. A jornada pertence ao dia do início. (`app/docs/LEIS.md:107`; `app/docs/LEIS.md:117`)
+- “Atestado aprovado” significa documento aceito para abonar **o período explicitamente informado**. Não se presume abono integral de uma declaração de comparecimento. (`app/docs/CORTES.md:315`; `app/docs/CORTES.md:319`; [CFM, art. 4º](https://sistemas.cfm.org.br/normas/arquivos/resolucoes/BR/2024/2381_2024.pdf))
+- Os intervalos indicados são gozados ou estão integralmente dentro do afastamento aprovado; não há minutos externos à jornada nestes casos, portanto **HE=0**. (`app/docs/LEIS.md:80`; `app/docs/LEIS.md:115`)
+
+A coluna **leitores** usa estes contratos, aplicáveis a cada linha:
+
+| Código | Espelho, app, célula, DiaPago e chamado devem mostrar |
+|---|---|
+| **R-F** | Espelho e app: **Falta decidida**, com o desconto da linha. Célula: mesma decisão e minutos. DiaPago: mesmo efeito de falta. Chamado: não continuar perguntando uma ausência já decidida; preservar histórico. (`app/docs/LEIS.md:87`; `app/docs/LEIS.md:95`; `app/docs/LEIS.md:113`; `app/docs/CORTES.md:198`) |
+| **R-P** | Espelho e app: **“Saída antecipada — desconta 2h”**, preservando o trabalho realizado. Célula e DiaPago: F=120, sem falta inteira adicional. Chamado: refletir essa decisão. (`app/docs/CORTES.md:202`; `app/docs/LEIS.md:95`; `app/docs/LEIS.md:111`) |
+| **R-A** | Espelho e app: **Atestado**, distinguindo trabalho e abono. Célula e DiaPago: mesmos T/A/F e rubricas. Chamado: não cobrar marcos cobertos; cobertura parcial não elimina cobrança fora do período. (`app/docs/CORTES.md:312`; `app/docs/CORTES.md:315`; `app/docs/LEIS.md:95`; `app/docs/GLOSSARIO.md:22`) |
+| **R-L** | Todos preservam **Folga**, sem falta, abono ou consumo de saldo. Chamado: nenhuma cobrança de jornada nessa folga. (`app/docs/LEIS.md:121`; `app/docs/CORTES.md:416`) |
+| **R-X** | Mostrar falta anterior e atestado posterior, períodos, situação e documento; oferecer resolução ao admin. **lei:** precedência automática e operação de substituição não estão definidas nos textos examinados. Não fabricar resultado definitivo. (`app/docs/CORTES.md:338`; `[nao verificado]`) |
+| **R-C** | Mostrar trabalho e atestado conflitantes; célula registra o conflito e os leitores o reproduzem. Não duplicar trabalho com abono. Havendo batida dentro do período declarado, cabe **FATO_EM_AUSENCIA** e decisão do admin. (`app/docs/CORTES.md:277`; `app/docs/CORTES.md:315`; `app/docs/LEIS.md:95`) |
+| **R-U** | Espelho e app: **Em aberto — a decidir**, sem chamar de falta. Célula mantém a pendência; DiaPago não apresenta ausência como falta decidida nem como abono. Chamado/pergunta permanece alcançável para regularização. (`app/docs/CORTES.md:179`; `app/docs/LEIS.md:120`; `app/docs/LEIS.md:141`) |
+
+**lei:** esses contratos definem conteúdo e coerência; não inventam um nome de status terminal para todo chamado de atestado. O corte que manda encerrar o chamado de origem fala especificamente de aprovação de **Justificativa**. (`app/docs/CORTES.md:362`; `[nao verificado]`)
+
+**6x1 — 44h semanais; 08:00–16:20, intervalo 12:00–13:00**
+
+Cadastro **S6**: segunda a sábado, domingo de folga; 440 minutos líquidos por dia, total semanal 2.640 minutos. O intervalo não integra o previsto. (Premissa sintética: `[nao verificado]`; exclusão do intervalo: L-032, `app/docs/LEIS.md:80`)
+
+| id | cadastro | batidas | lançamentos — na ordem | resposta da regra | regra citada | leitores |
+|---|---|---|---|---|---|---|
+| Q1-6-01 | S6; D útil | Nenhuma | 1. Admin decide falta integral de D | **P440 T0 F440 A0 U0 N0 HE0** | L-039/L-088 — `app/docs/LEIS.md:87`; `app/docs/LEIS.md:120` | **R-F**; desconto de 440 min |
+| Q1-6-02 | S6; D útil | 08:00, 12:00, 13:00, 14:20 | 1. Admin decide saída antecipada 14:20–16:20, sem abono | **P440 T320 F120 A0 U0 N0 HE0**; desconto parcial, sem somar falta inteira | `app/docs/CORTES.md:202`; L-093 — `app/docs/LEIS.md:111` | **R-P**; trabalho 5h20, desconto 2h |
+| Q1-6-03 | S6; D útil | 10:00, 12:00, 13:00, 16:20 | 1. Receber atestado 08:00–10:00; 2. Aprovar abono desse período | **P440 T320 F0 A120 U0 N0 HE0** | `app/docs/CORTES.md:312`; `app/docs/CORTES.md:315` | **R-A**; trabalho 5h20 + abono 2h |
+| Q1-6-04 | S6; D e D+1 úteis | Nenhuma nos dois dias | 1. Receber atestado de dois dias; 2. Aprovar ambos | Cada dia: **P440 T0 F0 A440 U0 N0 HE0**. Total: **P880 A880** | L-088/L-089 — `app/docs/LEIS.md:120`; `app/docs/LEIS.md:121`; `app/docs/CORTES.md:277` | **R-A** por dia; sem falta nesses períodos |
+| Q1-6-05 | S6; domingo de folga | Nenhuma | 1. Registrar documento cobrindo somente domingo | **P0 T0 F0 A0 U0 N0 HE0**; não consumir saldo nem transportar abono para segunda | L-089 — `app/docs/LEIS.md:121` | **R-L** |
+| Q1-6-06 | S6; D útil | Nenhuma | 1. Aprovar falta integral; 2. Depois receber atestado integral de D | Antes: **P440 T0 F440 A0**. **lei:** recepção posterior não define, sozinha, substituição. Se a decisão anterior for regularizada e o atestado aceito como cobertura: **F0 A440** | `app/docs/CORTES.md:338`; `app/docs/LEIS.md:120`; `[nao verificado]` para precedência | **R-X**; após decisão válida, **R-A**, preservando trilha |
+| Q1-6-07 | S6; D útil | 08:00, 12:00, 13:00, 16:20 | 1. Registrar atestado parcial 11:30–13:30 sobre jornada já realizada | **P440 T440 F0 A0 U0 N0 HE0** na decomposição temporal; não acrescentar abono sobre trabalho. Batidas 12:00/13:00 estão no período declarado: conflito requer decisão | `app/docs/CORTES.md:277`; `app/docs/CORTES.md:315` | **R-C**; não apresentar pagamento adicional de 2h |
+| Q1-6-08 | S6; D encerrado | Nenhuma | Nenhuma decisão ou justificativa | **P440 T0 F0 A0 U440 N0 HE0**; não converter U440 automaticamente em F440 | L-039/L-088 — `app/docs/LEIS.md:87`; `app/docs/LEIS.md:120`; `app/docs/CORTES.md:179` | **R-U** |
+
+**12x36 diurno — 07:00–19:00, intervalo 12:00–13:00**
+
+Cadastro **SD**: plantões D e D+2; D+1 de folga; **P660 por plantão**, resultante de 720 minutos de envelope menos 60 de intervalo. (Premissa sintética: `[nao verificado]`; L-032, `app/docs/LEIS.md:80`)
+
+| id | cadastro | batidas | lançamentos — na ordem | resposta da regra | regra citada | leitores |
+|---|---|---|---|---|---|---|
+| Q1-D-01 | SD; D de plantão | Nenhuma | 1. Admin decide falta integral | **P660 T0 F660 A0 U0 N0 HE0**; falta custa 11h, não 12h | `app/docs/LEIS.md:80`; `app/docs/LEIS.md:120` | **R-F**; desconto de 660 min |
+| Q1-D-02 | SD; D de plantão | 07:00, 12:00, 13:00, 17:00 | 1. Decidir saída antecipada 17:00–19:00, sem abono | **P660 T540 F120 A0 U0 N0 HE0** | `app/docs/CORTES.md:202`; `app/docs/LEIS.md:111` | **R-P**; trabalho 9h, desconto 2h |
+| Q1-D-03 | SD; D de plantão | 09:00, 12:00, 13:00, 19:00 | 1. Receber atestado 07:00–09:00; 2. Aprovar período | **P660 T540 F0 A120 U0 N0 HE0** | `app/docs/CORTES.md:312`; `app/docs/CORTES.md:315` | **R-A** |
+| Q1-D-04 | SD; D e D+2 plantões; D+1 folga | Nenhuma | 1. Receber atestado de três dias, D até D+2; 2. Aprovar | D e D+2: cada qual **P660 T0 F0 A660 U0 N0 HE0**. D+1: tudo zero. Total **P1320 A1320**, não A1980 | `app/docs/LEIS.md:80`; L-089 — `app/docs/LEIS.md:121`; `app/docs/CORTES.md:277` | **R-A** nos plantões; **R-L** na folga |
+| Q1-D-05 | SD; D+1 folga | Nenhuma | 1. Registrar atestado somente de D+1 | **P0 T0 F0 A0 U0 N0 HE0** | L-089 — `app/docs/LEIS.md:121` | **R-L** |
+| Q1-D-06 | SD; D de plantão | Nenhuma | 1. Aprovar falta integral; 2. Depois receber atestado integral | Antes: **P660 T0 F660 A0**. **lei:** substituição automática não definida. Após regularização da falta e aceitação do atestado: **F0 A660** | `app/docs/CORTES.md:338`; `app/docs/LEIS.md:120`; `[nao verificado]` para precedência | **R-X** → **R-A**, quando decidida a colisão |
+| Q1-D-07 | SD; D de plantão | 07:00, 12:00, 13:00, 19:00 | 1. Registrar atestado 11:30–13:30 sobre trabalho realizado | **P660 T660 F0 A0 U0 N0 HE0** temporalmente; batidas dentro do período geram conflito, sem abono duplicado | `app/docs/CORTES.md:277`; `app/docs/CORTES.md:315` | **R-C** |
+| Q1-D-08 | SD; plantão encerrado | Nenhuma | Nenhuma decisão ou justificativa | **P660 T0 F0 A0 U660 N0 HE0**; ainda não é falta decidida | `app/docs/LEIS.md:87`; `app/docs/LEIS.md:120`; `app/docs/CORTES.md:179` | **R-U** |
+
+**12x36 noturno — 19:00–07:00+1, intervalo 01:00–02:00+1**
+
+Cadastro **SN**: CCT Vigilantes Londrina aplicável; hora de **60 minutos**, adicional de **20%**; P660 por plantão. Não converter 60 minutos físicos em 68,57 minutos pela hora reduzida. (Premissa de aplicação: `[nao verificado]`; cláusula 38-d, [`app/core/regua_cct.py:132`](/home/ronald/codex_ws/a026943099b8d88468240fd4b18491141b6810af/app/core/regua_cct.py:132); L-036, `app/docs/LEIS.md:84`; intervalo, `app/docs/LEIS.md:80`)
+
+**† lei: pós-05h.** A cláusula transcrita não resolve a prorrogação; L-035 remete à CCT cadastrada. Nas linhas com trabalho 05:00–07:00, **δ** representa os 120 minutos cuja inclusão no adicional depende dessa definição: δ=0 ou δ=120. O corte sobre SINEEPRES não prova, sozinho, a correspondência desse sindicato com o cadastro sintético SN. (`app/docs/LEIS.md:83`; `app/docs/CORTES.md:279`; `app/core/regua_cct.py:132`; `[nao verificado]`)
+
+**‡ lei: noturno remunerado no afastamento.** N abaixo mede trabalho noturno efetivo. Não concluo que a rubrica remuneratória de adicional deva zerar durante atestado: a integração salarial do afastamento não está definida nesses textos. (`app/docs/LEIS.md:113`; `app/core/regua_cct.py:132`; `[nao verificado]`)
+
+| id | cadastro | batidas | lançamentos — na ordem | resposta da regra | regra citada | leitores |
+|---|---|---|---|---|---|---|
+| Q1-N-01 | SN; plantão D | Nenhuma | 1. Admin decide falta integral do plantão | **P660 T0 F660 A0 U0 N0 HE0** | `app/docs/LEIS.md:80`; `app/docs/LEIS.md:120`; `app/docs/LEIS.md:117` | **R-F**; uma falta do plantão D, sem outra em D+1 |
+| Q1-N-02 | SN; plantão D | D 19:00; +1 01:00, 02:00, 05:00 | 1. Decidir saída antecipada 05:00–07:00+1, sem abono | **P660 T540 F120 A0 U0 N360 HE0**. N=22:00–05:00 menos intervalo de 60 min | `app/docs/CORTES.md:202`; `app/docs/LEIS.md:84`; `app/docs/LEIS.md:111`; `app/docs/LEIS.md:117` | **R-P**; N360 a 20%, sem redução fictícia da hora |
+| Q1-N-03 | SN; plantão D | D 19:00, 23:00; +1 03:00, 07:00 | 1. Receber atestado D 23:00–03:00+1; 2. Aprovar período | **P660 T480 F0 A180 U0 N(180+δ) HE0**. Abono: 240 min de envelope menos intervalo 01:00–02:00. **lei: AN pago do afastamento‡** | `app/docs/CORTES.md:330`; `app/docs/CORTES.md:312`; `app/docs/LEIS.md:80`; `app/docs/LEIS.md:83` | **R-A**; cobertura atravessa meia-noite e pertence a D; †‡ |
+| Q1-N-04 | SN; plantões D e D+2 | Nenhuma | 1. Receber atestado de quatro dias civis, D até D+3, cobrindo ambos os plantões inteiros; 2. Aprovar | Cada plantão: **P660 T0 F0 A660 U0 N0 HE0**. Total **P1320 A1320**. Folgas sem abono adicional. **lei: AN pago‡** | `app/docs/LEIS.md:117`; `app/docs/LEIS.md:121`; `app/docs/CORTES.md:277` | **R-A** nos plantões; **R-L** nas folgas; ‡ |
+| Q1-N-05 | SN; folga D+1 | Turno anterior: D 19:00; +1 01:00, 02:00, 07:00 | 1. Registrar atestado para a folga D+1 | Folga D+1: **P0 T0 F0 A0 U0 N0 HE0**. Batidas da madrugada continuam no plantão D. **lei:** eventual cobertura do trecho civil do plantão anterior exige decisão explícita; não presumir | `app/docs/LEIS.md:117`; `app/docs/LEIS.md:121`; `app/docs/CORTES.md:330`; `[nao verificado]` para alcance do documento | **R-L** em D+1; preservar o turno D |
+| Q1-N-06 | SN; plantão D | Nenhuma | 1. Aprovar falta integral; 2. Depois receber atestado cobrindo D 19:00–07:00+1 | Antes: **P660 T0 F660 A0**. **lei:** substituição automática não definida. Após regularização e aceitação integral: **F0 A660 N efetivo0**; **lei: AN pago‡** | `app/docs/CORTES.md:338`; `app/docs/LEIS.md:120`; `app/docs/LEIS.md:117`; `[nao verificado]` para precedência | **R-X** → **R-A**, quando decidida a colisão; ‡ |
+| Q1-N-07 | SN; plantão D | D 19:00; +1 01:00, 02:00, 07:00 | 1. Registrar atestado parcial 00:30–02:30+1 sobre trabalho realizado | **P660 T660 F0 A0 U0 N(360+δ) HE0** temporalmente. As batidas 01:00/02:00 estão no período declarado: conflito, sem duplicar abono | `app/docs/CORTES.md:277`; `app/docs/CORTES.md:315`; `app/docs/LEIS.md:84`; `app/docs/LEIS.md:83` | **R-C**; † |
+| Q1-N-08 | SN; julgamento após 07:00+1 | Nenhuma | Nenhuma decisão ou justificativa | **P660 T0 F0 A0 U660 N0 HE0**. Antes do fim previsto, não declarar falta pelo simples encerramento do dia civil D | `app/docs/LEIS.md:100`; `app/docs/LEIS.md:117`; `app/docs/LEIS.md:120` | **R-U**; uma pendência do plantão D |
+
+**Personalizado sem intervalo — exemplo solicitado de 6h corridas, 08:00–14:00**
+
+Cadastro **SP**: P360 e intervalo cadastrado zero. **lei:** esse desenho exige regularização ou fundamento específico: a CLT determina 15 minutos de intervalo quando o trabalho ultrapassa quatro horas até seis. As contas abaixo preservam o cadastro recebido para expor o caso, sem atestar sua conformidade jurídica. Não se deve inventar intervalo gozado nem apagar trabalho efetivo. (`app/docs/LEIS.md:122`; [CLT, art. 71, §§1º–4º](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html); fundamento de exceção: `[nao verificado]`)
+
+| id | cadastro | batidas | lançamentos — na ordem | resposta da regra | regra citada | leitores |
+|---|---|---|---|---|---|---|
+| Q1-P-01 | SP; D previsto | Nenhuma | 1. Admin decide falta integral | Com o cadastro recebido: **P360 T0 F360 A0 U0 N0 HE0**; não usar 440 ou 660 por padrão | L-024/L-088 — `app/docs/LEIS.md:75`; `app/docs/LEIS.md:120`; ressalva SP acima | **R-F**; sinalização de cadastro separada |
+| Q1-P-02 | SP; D previsto | 08:00, 12:00 | 1. Decidir saída antecipada 12:00–14:00, sem abono | **P360 T240 F120 A0 U0 N0 HE0** | `app/docs/CORTES.md:202`; `app/docs/LEIS.md:111`; ressalva SP | **R-P** |
+| Q1-P-03 | SP; D previsto | 10:00, 14:00 | 1. Receber atestado 08:00–10:00; 2. Aprovar período | **P360 T240 F0 A120 U0 N0 HE0** | `app/docs/CORTES.md:312`; `app/docs/CORTES.md:315`; ressalva SP | **R-A**; não cobrar intervalo inexistente no cadastro como batida faltante |
+| Q1-P-04 | SP; D e D+1 previstos | Nenhuma | 1. Receber atestado de dois dias; 2. Aprovar | Cada dia: **P360 T0 F0 A360 U0 N0 HE0**. Total **P720 A720** | `app/docs/LEIS.md:75`; `app/docs/LEIS.md:121`; `app/docs/CORTES.md:277`; ressalva SP | **R-A** |
+| Q1-P-05 | SP; data declarada de folga | Nenhuma | 1. Registrar atestado apenas para essa folga | **P0 T0 F0 A0 U0 N0 HE0** | L-089 — `app/docs/LEIS.md:121` | **R-L** |
+| Q1-P-06 | SP; D previsto | Nenhuma | 1. Aprovar falta integral; 2. Depois receber atestado integral | Antes: **P360 T0 F360 A0**. **lei:** substituição automática não definida. Após regularização e aceitação: **F0 A360** | `app/docs/CORTES.md:338`; `app/docs/LEIS.md:120`; `[nao verificado]` para precedência; ressalva SP | **R-X** → **R-A**, quando decidida a colisão |
+| Q1-P-07 | SP; D previsto | 08:00, 14:00 | 1. Registrar atestado integral sobre jornada realizada | **P360 T360 F0 A0 U0 N0 HE0** temporalmente; conflito com o documento, sem abono duplicado. Sem exceção normativa, **15 min de intervalo suprimido são matéria de indenização separada, não HE** | `app/docs/CORTES.md:277`; `app/docs/CORTES.md:315`; `app/docs/LEIS.md:79`; [CLT, art. 71](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html); ressalva SP | **R-C**; todos mostram também a questão do intervalo |
+| Q1-P-08 | SP; D encerrado | Nenhuma | Nenhuma decisão ou justificativa | **P360 T0 F0 A0 U360 N0 HE0**; cadastro problemático não autoriza inventar falta | `app/docs/LEIS.md:87`; `app/docs/LEIS.md:120`; `app/docs/LEIS.md:122`; ressalva SP | **R-U**; questão do cadastro destinada ao admin |
+
+**Propriedades fixas para todos os casos**
+
+1. **Partes somam o previsto:** nestes cenários, sem trabalho externo autorizado, **P=T+F+A+U**. Trabalho e abono não ocupam duas vezes o mesmo minuto; intervalo fica fora da partição. N é uma classificação sobre minutos, não uma parcela a somar novamente. Indenização de intervalo também fica separada. (`app/docs/CORTES.md:240`; `app/docs/CORTES.md:277`; `app/docs/LEIS.md:79`; `app/docs/LEIS.md:80`)
+2. **Idempotência e determinismo:** mesmas entradas e decisões produzem o mesmo resultado; julgar duas vezes não duplica abono, desconto, pergunta ou efeito financeiro. (`app/docs/CORTES.md:333`; `app/docs/LEIS.md:148`; `app/docs/GLOSSARIO.md:27`)
+3. **Previsto independe do realizado:** falta, atestado ou ausência de batidas não transformam P440/P660/P360 em zero. Folga já prevista tem P0. (`app/docs/LEIS.md:75`; `app/docs/CORTES.md:333`)
+4. **Todo leitor lê o mesmo número e a mesma decisão:** espelho, app, célula, DiaPago e chamado não mantêm cálculos concorrentes; DiaPago é projeção reconstruível. (`app/docs/LEIS.md:60`; `app/docs/LEIS.md:95`; `app/docs/LEIS.md:113`; `app/docs/GLOSSARIO.md:22`)
+5. **Sem período, sem inferência:** atestado parcial sem início/fim declarado vai para **CADASTRO — parcial sem período**; não recebe abono arbitrário nem acusação automática de batida dentro da ausência. (`app/docs/CORTES.md:319`)
+6. **Trilha e totais:** retificação preserva quem, quando, motivo e antes/depois; totais do período somam minutos das linhas, sem ajuste no rodapé. (`app/docs/LEIS.md:65`; `app/docs/CORTES.md:194`; `app/docs/CORTES.md:210`)
 
 ## 05/11 15:29 · sessao 2f176748e217 · REVISAO-JUIZ-1-V5 · verificador · origem=Code
 
@@ -273,417 +918,4 @@ O glossário classifica espelho e DiaPago como projeções reconstruíveis e a d
 
    **Não encontrei chamador pronto que revalide a fila sob trava:** os caminhos examinados desembocam na mesma porta, inclusive migração e reconciliação (`app/chamados/services/limbo_folgas.py:243`, `app/chamados/services/fio.py:947`, `app/chamados/reconciliador.py:1570`). O predicado existente pode ser reutilizado sem inventar regra: `qs_na_fila` aceita `_base`; falta executar essa validação dentro do ato que mantém a trava até a costura (`app/chamados/services/painel.py:158`, `app/chamados/services/painel.py:186`, `app/chamados/services/fio.py:837`).
 
-## 05/11 15:27 · sessao 992a292411ec · - · - · origem=Ronald (tmux)
-
-Extração normativa concluída apenas em `app/docs/CORTES.md` e `app/docs/GLOSSARIO.md`; não consultei as implementações citadas pelos documentos. [nao verificado]
-
-| Tema | Regra escrita e referência |
-|---|---|
-| Método obrigatório | O gabarito nasce de CLT/CCT/L-NNN aplicada ao cadastro e às batidas; casos antes de código; lacuna vira pergunta de lei; implementação anterior serve apenas para medir impacto. `app/docs/CORTES.md:240` |
-| Propriedades fixas | Partes somam total; idempotência; previsto independe de realizado; todo leitor lê o mesmo número. `app/docs/CORTES.md:240` |
-| Determinismo | Mesmos dados devem produzir resultado coerente, determinístico e idempotente em todo lugar; dia ímpar deve aparecer “EM ABERTO” igualmente nos cinco leitores. `app/docs/CORTES.md:228` |
-| Repetição | “Julgar 2x = julgar 1x”; jornada pertence ao dia de início; previsto não depende de realizado. `app/docs/CORTES.md:333` |
-| Falta | Falta significa ausência cujo tipo desconta ou veredito “falta” na célula. Furo sem decisão fica “dias em aberto (a decidir)”, nunca vira falta sozinho. `app/docs/CORTES.md:179` |
-| Abono com trabalho | Abono cobre somente o previsto que as batidas não cobriram. `app/docs/CORTES.md:277` |
-| Justificativa parcial | Cobre apenas tipo e período; trabalho paga realizado mais abonado do período. `app/docs/CORTES.md:312`; `app/docs/CORTES.md:315` |
-| Parcial sem horário | Hora inicial/final é cadastro do admin; ausência parcial sem período vai à lista CADASTRO, sem inferir dentro/fora nem fabricar FATO_EM_AUSENCIA. `app/docs/CORTES.md:319` |
-| Parcial noturna | Fim menor que início cruza meia-noite e pertence ao dia inicial do turno. `app/docs/CORTES.md:330` |
-| Folga do calendário | Pertence ao vínculo e só vale nos dias dele. `app/docs/CORTES.md:417` |
-| Folga avulsa | Pertence à pessoa e sobrevive à troca de vínculo. `app/docs/CORTES.md:417` |
-| Chamado em dia sem trabalho | Cobrança cala quando célula lavrada informa `trabalha=False` ou ata preenchida com tipo diferente de trabalho; `trabalha=None` sem ata de outro tipo não é absolvição. `app/docs/CORTES.md:416` |
-| Estado do dia | Leitor deve retornar status lavrado da célula; antes do encerramento, previsto/aberto. `app/docs/CORTES.md:415` |
-| Espelho/PDF | PDF usa exatamente os dias do espelho, linha a linha, sem regra própria; dia diferente de “trabalhou” leva palavra do veredito na grade e PDF; falta nunca fica vazia. `app/docs/CORTES.md:198` |
-| Tela/app/resumo | Na competência, resumo lê fechamento gravado; período livre é calculado uma vez e rotulado “apurado, não é folha”; sem fechamento, “sem apuração ainda”. `app/docs/CORTES.md:188` |
-| Tela/folha | Tela nunca deve diferir da folha, inclusive dia passado com fim previsto. `app/docs/CORTES.md:405` |
-| Arredondamento/soma | Minutos inteiros na fonte; topo e rodapé são soma dos minutos das linhas, com formatação no fim; proibidos ajuste de rodapé e tolerância. `app/docs/CORTES.md:210` |
-| Marca humana | Decisão pelo Resolver dia mostra marca com quem/quando/o quê, lida da ata. `app/docs/CORTES.md:194` |
-| Batida ímpar | Dia em aberto, sem número fechado. `app/docs/CORTES.md:278` |
-| Intervalo ausente | Corte remete a L-031/L-032: indeniza apenas período suprimido; HE 0 no caso referido. `app/docs/CORTES.md:411` |
-| Noturno do intervalo | Intervalo usa a mesma janela de prorrogação do turno; parte ≤ todo. `app/docs/CORTES.md:418` |
-| Ausência e retenção | Bateria validada registra “C18 ausência não retém”; não fornece nessa linha valores de minutos ou regra completa de colisão. `app/docs/CORTES.md:412` |
-| Fonte e projeções | Célula soberana = Single Source of Truth/Aggregate Root; espelho, DiaPago, fechamento, retrato e pílulas = projeções reconstruíveis. `app/docs/GLOSSARIO.md:11`; `app/docs/GLOSSARIO.md:22` |
-| Idempotência do chamado | Glossário define dedup pela chave do fato; não especifica ordem jurídica de folga/falta/atestado/férias. `app/docs/GLOSSARIO.md:27` |
-| Prevalência terminológica | Alias da casa é cosmético; em divergência, vale termo técnico e lei citada. `app/docs/GLOSSARIO.md:3` |
-
-`lei:` estes dois documentos, isoladamente, não estabelecem uma precedência completa entre folga/falta/atestado/férias, nem a diferença jurídica entre atestado iniciado antes e durante férias. Não permitem concluir “último lançamento vence” nem atribuir abono a férias por inferência; isso precisa vir de LEIS/CLT/CCT ou ficar `[nao verificado]`. [nao verificado]
-
-## 05/11 15:27 · sessao 2793496fa1ae · - · - · origem=Ronald (tmux)
-
-Referências normativas de `app/docs/LEIS.md`, usando a coluna **LEI**, sem tomar os relatos de implementação como gabarito:
-
-| Tema | Regra escrita | Referência |
-|---|---|---|
-| Método | Número esperado vem da REGRA aplicada ao cadastro e às batidas; código atual não é gabarito. | `app/docs/LEIS.md:136` — L-110 |
-| Previsto | Grade é a fonte única; existindo fonte, nenhuma derivação paralela. | `app/docs/LEIS.md:75` — L-024 |
-| Falta decidida | Falta significa ausência lançada cujo tipo desconta. | `app/docs/LEIS.md:87` — L-039 |
-| Falta versus furo | Falta exige dia previsto, sem trabalho e sem justificativa, e custa o previsto daquele dia. Marco não cumprido é pergunta em aberto. | `app/docs/LEIS.md:120` — L-088 |
-| Folga versus ausência | Ausência que abona/desconta só alcança dia que a escala previa; em folga não produz efeito nem consome saldo. | `app/docs/LEIS.md:121` — L-089 |
-| Intervalo | Intervalo cadastrado sempre sai da jornada. | `app/docs/LEIS.md:80` — L-032 |
-| Intervalo ausente | Cadastro decide indenização; pré-assinalado não produz HE nem indenização e a batida faltante vira pergunta. | `app/docs/LEIS.md:79` — L-031 |
-| Intervalo e retenção | Entrada/saída presentes e somente intervalo faltante: dia pagável, pergunta segue sem bloquear. | `app/docs/LEIS.md:81` — L-033 |
-| Noturno | CLT 12x36 não prorroga após 05h; CLT comum prorroga; CCT segue a regra cadastrada. | `app/docs/LEIS.md:83` — L-035 |
-| CCT 12x36 | Cl.38-d: hora normal de 60 minutos; adicional noturno de 20% continua devido. | `app/docs/LEIS.md:84` — L-036 |
-| Virada da noite | Jornada inteira pertence ao dia de início, inclusive domingo/feriado/semana/DSR; madrugada não cria trabalho no dia seguinte. | `app/docs/LEIS.md:117` — L-085 |
-| HE100 | Plantão previsto não vira HE100 por domingo/feriado; dobra ocorre fora da escala. | `app/docs/LEIS.md:118` — L-086 |
-| Pontas de HE | Minutos antes/depois dos marcos não contam sem autorização; aparecem riscados e pendentes; autorização exige trilha. | `app/docs/LEIS.md:115` — L-097 |
-| Leitores | Tela, PDF, TXT, badge e contador leem mesma autoridade. | `app/docs/LEIS.md:60` — L-002 |
-| Chamado | Chamado, pergunta, tela e folha leem célula/ata sem rejulgar. | `app/docs/LEIS.md:95` — L-061 |
-| Espelho/PDF | Cartão = espelho; PDF não possui regra própria. | `app/docs/LEIS.md:85` — L-037; `app/docs/LEIS.md:86` — L-038 |
-| DiaPago | Dinheiro diário por rubrica é lavrado uma vez e todos os leitores o consomem. | `app/docs/LEIS.md:113` — L-095 |
-| Coerência | Sistema deve ser coerente, determinístico e idempotente com o cadastro que tem. | `app/docs/LEIS.md:122` — L-099 |
-| Invariantes | Mesmo número em todo leitor, idempotência e partes somando o total valem para qualquer dado, limpo ou sujo. | `app/docs/LEIS.md:148` — L-114 |
-| Horário local | Banco usa UTC; apresentação em UTC−3. | `app/docs/LEIS.md:107` — L-080 |
-
-**Lacunas para marcar `lei:`:** não encontrei na coluna normativa de LEIS precedência explícita entre férias, atestado e falta concorrentes, nem política expressa de aceitação/recusa/substituição de lançamentos em cada ordem. Não atribuir automaticamente “vence o último”, “vence férias” ou “vence atestado”. `[nao verificado]`
-
-**Consequência diretamente defensável:** depois de reconhecida a folga válida como dia não previsto, falta/abono por ausência devem ter efeito zero, sem consumir saldo, independentemente da ordem de apresentação dos mesmos fatos; a escolha de qual lançamento estabelece validamente essa folga ainda requer a regra de precedência dos outros textos. `app/docs/LEIS.md:121`, `app/docs/LEIS.md:122`
-
-## 05/11 15:26 · sessao 1942b1d38384 · REVISAO-CRONS-INSTALL · verificador · origem=Code
-
-**ACHADO de cobertura:** a integração do comando pode voltar ao comportamento anterior sem os testes novos perceberem. Também há leitores de cadastro atual decidindo competência passada fora do diff. (`app/core/tests/test_crons_marca_cobre_install.py:85`; `bin/tests/test_crons_sh_so_install_passa_o_host.sh:21`; `app/folha/export.py:767`)
-
-Cadastro real afetado, frequência e valor financeiro em produção: **[não verificado]**.
-
-**1. Quem escreve e quem lê os valores envolvidos**
-
-| Campo/valor | Quem escreve | Quem lê |
-|---|---|---|
-| Tipo `CronNaoCabe`, mensagem, `nome`, `vizinho` | `inicio_derivado` levanta a exceção; o construtor grava os atributos. (`app/config/crons.py:239`; `app/config/crons.py:271`) | O fallback captura o tipo e consulta `nome`; o teste verifica tipo, nome e mensagem. (`app/core/management/commands/crons.py:95`; `app/core/management/commands/crons.py:97`; `app/core/tests/test_crons_marca_cobre_install.py:66`) Leitor funcional de `.vizinho`: **[não verificado]**. |
-| `DUR_MAX_S` e duração usada na derivação | O medidor grava o JSON; a configuração incorpora seus valores. (`bin/crons_duracao.py:97`; `app/config/crons.py:159`) | `inicio_derivado` lê duração, vizinho, piso e tolerância. (`app/config/crons.py:245`; `app/config/crons.py:259`) |
-| `sched` da sombra | Nasce como callable; o fallback substitui pelos cinco campos do host e restaura no `finally`. (`app/config/crons.py:350`; `app/core/management/commands/crons.py:111`; `app/core/management/commands/crons.py:115`) | Acesso normal deriva o callable; `linhas`, `corrida_no_horario` e `pipeline_placar` consultam o horário. (`app/config/crons.py:92`; `app/config/crons.py:1819`; `app/config/crons.py:2257`; `app/core/management/commands/pipeline_placar.py:44`) |
-| `--crontab-do-host` e conteúdo do host | O shell fornece `crontab -l` por stdin; o parser recebe a opção. (`bin/crons.sh:24`; `app/core/management/commands/crons.py:33`) | `handle` lê stdin/arquivo; o helper procura uma linha ativa, extrai horário e exige igualdade da linha reconstruída. (`app/core/management/commands/crons.py:52`; `app/core/management/commands/crons.py:63`; `app/core/management/commands/crons.py:103`; `app/core/management/commands/crons.py:116`) |
-| `PRAZO`, `ITEM_DE_FILA`, data da consulta | Constantes da marca; data padrão capturada no import. (`app/core/tests/marca_cron15.py:24`; `app/core/tests/marca_cron15.py:49`) | `no_prazo` decide validade; o fallback consulta a validade e monta o aviso. (`app/core/tests/marca_cron15.py:52`; `app/core/management/commands/crons.py:97`; `app/core/management/commands/crons.py:118`) |
-| Texto renderizado, aviso e `R` | Helper devolve texto/aviso; comando escreve stdout/stderr; shell captura stdout em `R`. (`app/core/management/commands/crons.py:118`; `app/core/management/commands/crons.py:57`; `bin/crons.sh:24`) | Shell compara host/render e entrega `R` ao instalador. (`bin/crons.sh:29`; `bin/crons.sh:36`; `bin/crons.sh:40`) |
-| `--seco` | Segundo argumento do shell. (`bin/crons.sh:37`) | Após imprimir o diff, o ramo encerra antes do backup/instalação. (`bin/crons.sh:36`; `bin/crons.sh:37`) |
-| Durações e horário fabricados nos testes | Constantes e `mock.patch.dict`. (`app/core/tests/test_crons_marca_cobre_install.py:23`; `app/core/tests/test_crons_marca_cobre_install.py:46`) | Fixtures do host e chamadas diretas ao helper. (`app/core/tests/test_crons_marca_cobre_install.py:50`; `app/core/tests/test_crons_marca_cobre_install.py:99`) |
-
-**2. Contraexemplo concreto**
-
-Um contraexemplo com **cadastro real fornecido** e violação de regra temporal expressa nas LEIS/CORTES anexadas: **[não verificado]**.
-
-Há uma contraprova **sintética e alcançável pelo código**: em **05/11/2026**, colaborador ativo, demissão agendada para **10/11/2026**, empresa com corte 21 e fechamento de **10/2026**, cuja janela é **21/09–20/10**. O agendamento grava a data futura e mantém a situação ativa; o cálculo da janela decorre do corte informado. (`app/colaboradores/services/desligamento.py:77`; `app/colaboradores/services/desligamento.py:85`; `app/ponto/janelas.py:10`)
-
-Ao classificar outubro, o código devolve `fora / rescisao_modulo_proprio` somente porque `data_demissao` está preenchida, sem comparar com a janela. Isso diverge do comentário local que restringe a exclusão à demissão **na janela**. (`app/folha/export.py:834`; `app/folha/export.py:840`)
-
-Esse critério temporal específico nas LEIS/CORTES anexadas: **[não verificado]**. O anexo JUIZES identifica `classificar_export` como autoridade, mas não especifica essa fronteira da demissão. (`app/docs/JUIZES.md:74`)
-
-**3. Regra de negócio alterada sem lastro**
-
-A alteração operacional demonstrada é permitir o install quando a sombra não cabe, mantendo sua linha do host durante o prazo. O próprio diff registra um aval específico para isso. (`app/core/management/commands/crons.py:74`; `app/core/tests/test_crons_marca_cobre_install.py:4`)
-
-A L-062 exige prazo, tripwire e item de fila; a marca declara esses três elementos. (`app/docs/LEIS.md:96`; `app/core/tests/marca_cron15.py:7`)
-
-Registro específico desse aval nas LEIS/CORTES **anexadas**, ou alteração de regra financeira introduzida pelo diff: **[não verificado]**. A ausência desse registro nos anexos não demonstra, sozinha, ausência de autorização.
-
-**4. Selo que não morde**
-
-Reverter **somente a integração de `Command.handle`** para `self.stdout.write(render(), ending='')`, mantendo parser e helper, deixa os testes novos sem observar a perda da cura: os testes Python chamam diretamente `render_mantendo_sombra_do_host`, enquanto o shell usa um `docker` falso que imprime uma resposta constante. (`app/core/management/commands/crons.py:49`; `app/core/tests/test_crons_marca_cobre_install.py:85`; `app/core/tests/test_crons_marca_cobre_install.py:99`; `bin/tests/test_crons_sh_so_install_passa_o_host.sh:21`)
-
-Nesse cenário, o install continua enviando o host, mas o comando deixa de consumi-lo; o render puro recusa a sombra e o shell encerra com “render falhou”. (`bin/crons.sh:24`; `app/config/crons.py:271`)
-
-O caso feliz morde a retirada do **helper**, mas não essa reversão da **integração**. (`app/core/tests/test_crons_marca_cobre_install.py:94`)
-
-**5. Cadastro de hoje decidindo passado**
-
-O caminho alcança competência passada: a configuração declara `lavrar_retrato_folha --apply`; o comando consulta também `janela_anterior`, monta o retrato e chega a `classificar_export`. (`app/config/crons.py:1594`; `app/folha/management/commands/lavrar_retrato_folha.py:60`; `app/folha/retrato_folha.py:1157`; `app/folha/fora_da_folha.py:119`)
-
-| Campo | Escritor identificado | Uso sobre passado |
-|---|---|---|
-| `situacao` | Desligamento/reativação. (`app/colaboradores/services/desligamento.py:104`; `app/colaboradores/services/desligamento.py:210`) | Situação atual participa da trava de âncora da competência. (`app/folha/export.py:791`) |
-| `data_demissao` | Agendamento, desligamento e reativação. (`app/colaboradores/services/desligamento.py:85`; `app/colaboradores/services/desligamento.py:105`; `app/colaboradores/services/desligamento.py:211`) | Qualquer data preenchida exclui da competência consultada. (`app/folha/export.py:840`) |
-| `empresa` | Transferência acompanha a empresa do novo posto. (`app/colaboradores/views.py:1385`) | O universo dos fechamentos passados filtra a empresa atual do colaborador. (`app/folha/export.py:767`) |
-| `regime_trabalhista` | Formulário envia o valor à porta de estrutura. (`app/colaboradores/views.py:512`; `app/colaboradores/views.py:523`; `app/colaboradores/services/estrutura.py:17`) | A régua recebe competência datada, mas consulta empresa e regime atuais. (`app/core/regua_cct.py:297`; `app/core/regua_cct.py:352`) |
-| `isento_ponto` | Tela Passe Livre grava o booleano. (`app/colaboradores/views.py:176`) | O booleano sem data pode dispensar retenção de dias passados e suprimir eventos do fechamento. (`app/core/constants.py:13`; `app/folha/export.py:1174`; `app/folha/export.py:407`) |
-| vínculo atual | Executor cria/reativa; encerramento grava `ativa=False/data_fim`. (`app/colaboradores/services/vinculo.py:267`; `app/colaboradores/services/vinculo.py:278`; `app/colaboradores/services/vinculo.py:615`) | A trava de âncora consulta `ativa=True`, sem recorte da competência. (`app/folha/export.py:787`) |
-| `posto` | Transferência altera o posto atual. (`app/colaboradores/views.py:1385`) | Na régua examinada, a praça vem do posto do vínculo **da competência**. Leitor do posto atual decidindo passado nesse percurso: **[não verificado]**. (`app/core/regua_cct.py:329`) |
-
-Esses leitores estão fora do diff fornecido; suas ocorrências e consequências em cadastros reais permanecem **[não verificado]**.
-
-**VEREDITO: ACHADO**
-
-1. `app/core/tests/test_crons_marca_cobre_install.py:85` + `bin/tests/test_crons_sh_so_install_passa_o_host.sh:21` — **item 4**: reversão da integração escapa dos testes novos; **toca dinheiro: não**.
-2. `app/folha/export.py:840` — **item 5**: data de demissão atual decide exclusão de competência passada; **toca dinheiro: sim**.
-3. `app/folha/export.py:767` + `app/folha/export.py:787` — **item 5**: empresa, situação e vínculo atuais decidem universo/trava da competência passada; **toca dinheiro: sim**.
-4. `app/core/regua_cct.py:352` + `app/folha/export.py:407` — **item 5**: regime e isenção atuais participam da decisão sobre fechamento passado; **toca dinheiro: sim**.
-
-## 05/11 15:26 · sessao 52722dc7edd4 · - · - · origem=Ronald (tmux)
-
-Achado principal novo, demonstrável pelo fluxo estático:
-
-- Em **10/12/2026**, cadastro construído com ecQ em Maringá (`ativa=True`, início 01/01) e ecP no posto P (`ativa=False`, início 01/02, fim 20/12), ambos 5x2 e `trabalha_em_feriado=False`. A célula de 10/12 foi gerada por ecQ e diz trabalho; a juíza responde ecQ, pois a geradora válida vence os demais candidatos (`app/escala/alimentacao.py:269-284`). Esse cadastro não viola a unicidade colab+início nem a constraint início/fim (`app/escala/models.py:1004`, `app/escala/models.py:1037-1042`).
-- Ao corrigir P.municipio de vazio para Londrina, o evento percorre ecP por ele **cobrir hoje**, sem verificar se é o vínculo escolhido pela juíza (`app/colaboradores/services/estrutura.py:58-69`; `app/colaboradores/services/vinculo.py:899-904`).
-- A regeneração calcula folga pelo município de P e sobrescreve a célula de ecQ: a condição aceita geradora diferente e grava `trabalha=False`, `escala_geradora=ecP` e DNA novo (`app/ponto/portas/celula.py:243-265`). O E2 passa a reavaliar a falta usando esse chão alterado (`app/ponto/portas/celula.py:428-441`; `app/chamados/services/feriado_reavaliar.py:33-39`).
-- Contraria a escolha soberana do vínculo do dia registrada em `app/docs/CORTES.md:284` e a soberania da célula em `app/docs/LEIS.md:71`. A mudança de município passa a trocar o dono do dia mesmo sem alteração de vínculo autorizada pelo ato (`app/colaboradores/services/vinculo.py:899-904`; `app/ponto/portas/celula.py:251-265`). **Itens 1–3; toca dinheiro: sim**, porque muda trabalho/folga e DNA; a chamada usa `recalculo=False` e invalida o fechamento, adiando a derivação (`app/colaboradores/services/vinculo.py:904-905`; `app/ponto/services/fechamento.py:1633-1640`). Ocorrência em produção: **[nao verificado]**.
-
-Outros pontos para consolidação:
-
-1. **Município atual ainda decide passado.** `lugar_do_vinculo` lê a FK viva `Posto.municipio`, sem versão por data (`app/core/feriados.py:118-119`). Os escritores são `atualizar_posto` e `definir_municipio_posto` (`app/colaboradores/services/estrutura.py:64-69`, `app/colaboradores/services/estrutura.py:86-93`). `feriados_do_colab` reaplica essa localização para cada dia histórico (`app/core/feriados.py:147-153`), consumida pela precedência (`app/ponto/precedencia.py:330-331`, `app/ponto/precedencia.py:376-383`). O teste do próprio diff preserva a célula passada como trabalho, mas exige que o vigia passe a contar a falta após a correção atual do município (`app/chamados/tests/test_jv1_volta3_municipio_e_quem_chegou.py:59-74`). **Item 5; toca dinheiro: sim**, pelo leitor de feriados do fechamento (`app/ponto/services/fechamento.py:638-639`). Validade desse recorte por aval externo MANHA-0511: **[nao verificado]**; seu literal não consta nos LEIS/CORTES anexados.
-
-2. **Alteração da flag sem trilha própria.** A porta grava `trabalha_em_feriado` antes da regeneração e não registra evento próprio (`app/colaboradores/services/vinculo.py:843-860`). Num 12x36 com todas as células já materializadas, mudar True→False não muda o dia (`app/escala/models.py:1390-1394`); se a regeneração alterar zero células, sua trilha fica suprimida por `if n` (`app/ponto/portas/celula.py:297-315`). O chamador canônico omite autor e motivo (`app/colaboradores/management/commands/sincronizar_feriado_admin.py:54-56`). Isso deixa sem trilha da flag os requisitos usuário/antes/depois/motivo da L-007 (`app/docs/LEIS.md:65`). **Itens 1/3; toca dinheiro: sim em geral**, conforme o efeito da porta declarado e executado (`app/colaboradores/services/vinculo.py:857-860`; `app/ponto/portas/celula.py:384-399`). Ocorrência concreta em produção: **[nao verificado]**.
-
-3. **Selo isolado que passa sem o evento.** `test_RED_transferido_dentro_da_janela_o_feriado_do_posto_antigo_fica` apenas exige preservação da célula e da falta antigas após a troca de município (`app/chamados/tests/test_jv1_volta3_municipio_e_quem_chegou.py:23-44`). Reverter a adição do evento de município em `atualizar_posto` deixa esse caso sem ação capaz de modificar o passado e preserva suas asserções (`app/colaboradores/services/estrutura.py:64-69`; patch anexado desse escritor). **Item 4; toca dinheiro: não diretamente.** Resultado executado do mutante: **[nao verificado]**.
-
-Nenhum teste foi executado; as conclusões acima são de leitura estática. **[nao verificado]** [nao verificado]
-
-## 05/11 15:26 · sessao 2e237d18a7de · - · - · origem=Ronald (tmux)
-
-Regras verificadas sem ler implementações:
-
-| Tema | Resultado normativo | Referência |
-|---|---|---|
-| 12x36 noturno CCT | Hora de 60 minutos; adicional de 20% preservado. A cláusula transcrita não determina prorrogação após 05h. | `app/core/regua_cct.py:132`–149; L-036, `app/docs/LEIS.md:84` |
-| Pós-05h | L-035 remete ao cadastro da CCT. Há corte explícito de prorrogação **desmarcada para SINEEPRES em 19/10**; pode integrar o cadastro do cenário, sem generalizar automaticamente a toda CCT de Londrina. | `app/docs/LEIS.md:83`; `app/docs/CORTES.md:279` |
-| Intervalo | 07–19 ou 19–07 com uma hora de intervalo gozado = **660 minutos efetivos previstos**, por exclusão do intervalo da jornada. | L-032, `app/docs/LEIS.md:80`; CLT71§2, [Câmara](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html) |
-| Personalizado de 6h corridas | CLT71§1 exige 15 minutos quando a duração ultrapassa quatro horas até seis. Cadastro “sem intervalo” não demonstra exceção normativa. Se efetivamente trabalhadas seis horas contínuas, não fabricar intervalo nem reduzir automaticamente o trabalhado: há supressão de 15 minutos a tratar separadamente; CLT71§4 prevê indenização do suprimido com acréscimo de 50%. | [CLT71 §§1,2,4 — Câmara](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html); ausência de exceção específica: [nao verificado] |
-| Atestado de dias | Nos primeiros quinze dias consecutivos de afastamento por doença, a empresa deve pagar salário integral. Doença comprovada é ausência justificada para DSR. | [Lei8.213, art60§3 — Planalto](https://www.planalto.gov.br/ccivil_03/leis/l8213cons.htm); [Lei605, art6§1f e §2 — Câmara](https://www2.camara.leg.br/legin/fed/lei/1940-1949/lei-605-5-janeiro-1949-367115-normaatualizada-pl.html); sem arquivo local específico: [nao verificado] |
-| “Atestado de horas” | Convém declarar no cenário **documento válido e abono aprovado**, com período explícito. Declaração de comparecimento sem recomendação de afastamento não equivale automaticamente a incapacidade: a resolução admite abono com anuência do empregador. | [ResoluçãoCFM2.381/2024, art4I e III](https://sistemas.cfm.org.br/normas/arquivos/resolucoes/BR/2024/2381_2024.pdf); sem arquivo local: [nao verificado] |
-| Noturno durante ausência abonada | Minutos efetivamente trabalhados à noite podem ser separados objetivamente. Os textos consultados não fecham como converter manutenção salarial por doença em **minutos de AN** no DiaPago. Não fixar AN pago zero por ausência apenas porque não houve labor: marcar **lei:** para integração remuneratória/critério da rubrica. | L-095, `app/docs/LEIS.md:113`; alcance da cl.38-d, `app/core/regua_cct.py:132`; critério específico: [nao verificado] |
-
-CLT58§1 também prevê tolerância de cinco minutos por registro, limitada a dez diários; usar diferenças de uma hora nos casos evita introduzir essa variável. [CLT58 — Câmara](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html); sem arquivo local específico: [nao verificado]
-
-No piso CLT do 12x36, o art59-A, parágrafo único, considera compensadas as prorrogações noturnas; essa regra não autoriza ignorar a escolha normativa da CCT expressamente exigida por L-035. `app/docs/LEIS.md:83`; [CLT59-A — Câmara](https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html).
-
-## 05/11 15:26 · sessao 9d760e829384 · - · - · origem=Ronald (tmux)
-
-Achado principal: **a empresa atual pode liberar regeneração de dia pertencente a competência exportada de outra empresa**. A nova porta da flag usa `ec.colaborador.empresa` para escolher a janela anterior (`app/colaboradores/services/vinculo.py:850-858`); a porta de regeneração consulta a empresa atual do banco para identificar exportações (`app/ponto/portas/celula.py:199-202`); o carregador enumera apenas os TXT dessa empresa (`app/ponto/management/commands/gerar_celulas.py:161-162`).
-
-Contraexemplo sintético: A e B com corte 21; vínculo 5x2 no posto de Londrina, flag `True`, célula de 10/12/2026 gerada como trabalho; A exportou 12/2026, sem holerite publicado; em 05/01/2027 o cadastro é transferido para B, que não exportou dezembro; o vínculo permanece no posto de A. A transferência grava `posto` e `empresa` do cadastro (`app/colaboradores/views.py:1383-1388`), sem encerrar o vínculo nesse fluxo (`app/colaboradores/views.py:1392-1400`). Ao marcar a flag `False`, a janela anterior inclui 10/12 (`app/ponto/janelas.py:66-72`); a consulta de lavra olha B, não encontra o TXT de A, e libera a reescrita para folga (`app/ponto/portas/celula.py:238-265`). O evento admite exclusivamente competência aberta pelo corte `app/docs/CORTES.md:362`; ocorrência concreta em produção **[nao verificado]**.
-
-**Toca dinheiro: sim**: a regeneração chama `recalcular_por_evento` por competência usando novamente a empresa atual (`app/ponto/portas/celula.py:384-399`), e o fechamento persiste os valores calculados (`app/ponto/services/fechamento.py:1121-1128`, `app/ponto/services/fechamento.py:1144-1173`). O teste de exportada do diff usa uma única empresa e não exerce transferência (`app/chamados/tests/test_jv1_feriado_vira_vigia.py:118-132`).
-
-Outras leituras de cadastro atual no caminho do diff, sem concluir isoladamente violação:
-
-| Campo atual | Escritor localizado | Leitor de passado |
-|---|---|---|
-| `situacao`, `data_demissao` | `app/colaboradores/services/desligamento.py:103-108`; reativação limpa demissão em `:210-214` | Universo da competência em `app/ponto/services/fechamento.py:422-435` |
-| `empresa` | Transferência em `app/colaboradores/views.py:1383-1388`; edição em `:1313` e salvamento em `:1340-1342` | Janela passada em `app/ponto/services/fechamento.py:610-612`; régua em `app/core/regua_cct.py:352-366` |
-| `regime_trabalhista` | `app/colaboradores/views.py:512-523` → `app/colaboradores/services/estrutura.py:17-20` | `app/core/regua_cct.py:352-366`, chamado pelo motor da fatia histórica em `app/ponto/services/fechamento.py:725-731` |
-| `isento_ponto` | `app/colaboradores/views.py:173-186` → `app/colaboradores/services/colaborador.py:55-61` | Faltas afirmáveis da competência em `app/ponto/services/fechamento.py:355-358`, `:1099-1111`; inconsistência de cada dia do espelho em `app/ponto/services/espelho.py:599-600`, `:653-670` |
-| Vínculo atual | A praça e o ciclo da régua perguntam corretamente pelo vínculo da data em `app/core/regua_cct.py:328-339` | A empresa/regime continuam saindo do colaborador atual em `app/core/regua_cct.py:352-366` |
-
-A ocorrência real desses cenários, número de afetados e impacto financeiro em produção são **[nao verificado]**.
-
-## 05/11 15:26 · sessao 3c00a0526c4f · - · - · origem=Ronald (tmux)
-
-**Achado 2 — conclusão sugerida: fila para repetição mensal; duplicação efetiva não demonstrada.** A transição mensal não é serializada antes do snapshot: os escritores fazem leitura ANTES, escrita e leitura DEPOIS sem trava comum de vínculo/mês (`app/escala/folgas.py:309`; `app/escala/folgas.py:311`; `app/escala/folgas.py:355`; `app/escala/folgas.py:383`; `app/escala/folgas.py:229`).
-
-Para dois lançamentos que mantêm a folga, mês inicialmente no defeito, transações que confirmam e ignorando falhas/guardas:
-
-| Entrelaçamento | Re-julgamentos mensais solicitados |
-|---|---|
-| A lê ANTES verdadeiro, grava, compara DEPOIS falso e confirma; B lê ANTES após commit de A, obtendo falso | **1** (`app/escala/folgas.py:311`; `app/escala/folgas.py:312`; `app/escala/folgas.py:314`; `app/escala/folgas.py:227`) |
-| A e B leem ANTES verdadeiro antes do primeiro commit; cada um grava e lê DEPOIS falso, enxergando ao menos a própria folga | **2**, independentemente de uma comparação DEPOIS ocorrer antes ou depois do commit alheio (`app/escala/models.py:1249`; `app/escala/folgas.py:229`; `app/escala/folgas.py:231`) |
-| Ambas leem ANTES falso porque o mês já tinha folga | **0** (`app/escala/models.py:1249`; `app/escala/folgas.py:220`; `app/escala/folgas.py:227`) |
-
-**Zero não decorre somente do entrelaçamento no cenário inicial verdadeiro + duas inserções bem-sucedidas**: a primeira transação a confirmar necessariamente viu ANTES verdadeiro; sua própria escrita torna DEPOIS falso (`app/escala/models.py:1249`; `app/escala/folgas.py:311`; `app/escala/folgas.py:312`; `app/escala/folgas.py:229`). Zero julgamentos efetivos ainda pode decorrer de guardas ou exceções, questão distinta da seleção mensal (`app/ponto/portas/celula.py:294`; `app/ponto/portas/celula.py:399`; `app/ponto/portas/celula.py:405`). Folgas na mesma data podem esperar no `get_or_create` pela unicidade vínculo/data; isso ocorre **depois** do snapshot e não apaga um ANTES verdadeiro já obtido (`app/escala/folgas.py:311`; `app/escala/folgas.py:312`; `app/escala/models.py:1600`).
-
-**Dois julgamentos não implicam duas emissões.** `forcar=True` remove o pulo pela impressão, mas conserva a fábrica e suas guardas (`app/ponto/services/cartorio.py:1362`; `app/ponto/services/cartorio.py:997`):
-
-- **PerguntaDisputa:** antes de emitir, a fábrica coleta motivos existentes por colaborador/dia e exclui os já perguntados; ignora somente linhas marcadas como duplicata (`app/chamados/services/fabrica_da_celula.py:118`; `app/chamados/services/fabrica_da_celula.py:126`). `perguntar` chama a emissão de disputa/perguntas; o gate final busca identidade por colaborador/motivo/data e retorna existente (`app/chamados/services/fabrica_da_celula.py:139`; `app/chamados/services/fabrica_da_celula.py:141`; `app/chamados/models.py:2381`; `app/chamados/models.py:2420`; `app/chamados/models.py:2464`). A emissão também contém filtros locais por disputa/motivo/data (`app/chamados/services/disputa_emissao.py:370`; `app/chamados/services/disputa_emissao.py:386`).
-- **Chamado:** `ChamadoColaborador.abrir` abre `atomic`, trava Colaborador **antes da leitura**, relê a chave e retorna existente; portanto há proteção concorrente real nessa porta (`app/chamados/models.py:863`; `app/chamados/models.py:866`; `app/chamados/models.py:867`; `app/chamados/models.py:885`). A fábrica de disputa passa por ela (`app/chamados/services/disputa_emissao.py:504`).
-- **Pauta:** só existe o desvio limbo/competência entregue; a guarda procura todas as cabeças anteriores da âncora dia/DP/marcador e retira motivos já presentes, incluindo histórico feito/cancelado (`app/chamados/services/fabrica_da_celula.py:171`; `app/chamados/services/fabrica_da_celula.py:185`; `app/chamados/services/fabrica_da_celula.py:219`; `app/chamados/services/fabrica_da_celula.py:222`; `app/chamados/services/fabrica_da_celula.py:234`). No caminho mensal, dias exportados são barrados antes de incluir `rejulgar` (`app/ponto/portas/celula.py:294`).
-
-**Limite:** a idempotência de PerguntaDisputa/Pauta comprova que uma segunda passagem que **enxerga** a primeira não duplica; os respectivos gates não mostram trava própria entre a consulta de existência e o create (`app/chamados/models.py:2420`; `app/chamados/models.py:2465`; `app/chamados/services/fabrica_da_celula.py:234`; `app/pautas/services.py:180`). No fluxo mensal, gravação da célula precede a fábrica e pode serializar aquele dia quando há escrita; porém `carimbar` permite no-op, logo não equivale a trava explícita universal (`app/ponto/services/cartorio.py:1802`; `app/ponto/services/cartorio.py:1822`; `app/ponto/services/cartorio.py:997`; `app/ponto/portas/celula.py:669`; `app/ponto/portas/celula.py:826`). Duplicação efetiva de PerguntaDisputa/Pauta nas condições integrais da produção: **[não verificado]**.
-
-## 05/11 15:26 · sessao 0b11d97c29de · - · - · origem=Ronald (tmux)
-
-4. **Conclusão: permanece; gravidade: bloqueia.** O comando materializa os pais na fila fora de um `atomic` envolvente e depois grava a reversão, busca pais e só então costura (`app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:46`, `:59`, `:86`, `:91`, `:92`, `:95`). A transação da costura começa apenas em `fio.reapontar_resolvedora`, que recarrega/trava o pai, mas aceita imediatamente qualquer status não terminal; não confere silêncio nem pertença à fila (`app/chamados/services/fio.py:837`, `:760`, `:762`, `:763`, `:765`). A fila exige status de cobrança e exclui silêncio vigente (`app/chamados/services/painel.py:186`, `:187`, `:188`).
-
-A janela começa no SELECT da linha 59 e só termina no UPDATE da pergunta, após a lavra; inclui inclusive I/O do arquivo de reversão (`app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:59`, `:91`; `app/chamados/services/fio.py:845`, `:846`, `:847`). Pai silenciado ou tornado `registrado` nesse intervalo continua elegível à porta se permanecer não terminal (`app/chamados/services/painel.py:174`, `:187`, `:188`; `app/chamados/services/fio.py:765`).
-
-**Consultas:** para a primeira costura efetiva, depois da seleção da fila existem **quatro SELECTs explícitos antes do UPDATE**, mais as consultas variáveis da lavra: destinos anteriores, pais, perguntas e pai sob trava (`app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:86`, `:92`; `app/chamados/services/limbo_folgas.py:237`; `app/chamados/services/fio.py:763`). E4-c não acrescenta consulta para o pai LIMBO: seu módulo tem escopo `PERIODO`, que retorna antes das verificações de turno (`app/chamados/catalogo/modulos.py:126`; `app/chamados/juizes.py:1910`, `:1912`, `:1914`). A lavra executada antes do UPDATE chama o juiz de materialização, cujo número de consultas depende de tipo, via, resposta e relações carregadas; total exato **[não verificado]** (`app/chamados/services/fio.py:846`; `app/chamados/veredito_lavrado.py:219`; `app/chamados/juizes.py:645`, `:670`, `:716`, `:718`, `:772`, `:776`). Para perguntas posteriores há também todas as consultas e escritas das anteriores; não há transação única para o lote (`app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:94`; `app/chamados/services/limbo_folgas.py:237`, `:243`; `app/chamados/services/fio.py:837`).
-
-**Não encontrei outro chamador que ofereça revalidação de fila sob trava.** Os caminhos existentes usam a mesma porta: helper LIMBO, agrupamento de furo, migração de resolvedoras, declaração do colaborador, gate de fechamento e reconciliador (`app/chamados/services/limbo_folgas.py:243`, `:276`; `app/chamados/services/fio.py:947`; `app/chamados/services/declaracao_texto.py:320`; `app/chamados/models.py:420`; `app/chamados/reconciliador.py:922`, `:1570`, `:1582`). A migração deduplica perguntas por fato, sem validar fila (`app/chamados/services/fio.py:931`, `:937`, `:947`). O gate seleciona sobrevivente pelo C8, que filtra `VIVOS`, sem silêncio/fila e sem trava nessa consulta (`app/chamados/models.py:373`; `app/chamados/juizes.py:1839`, `:1844`). Portanto não há, nesses caminhos examinados, operação pronta que o comando possa simplesmente chamar para ganhar essa garantia; o predicado existente reutilizável continua sendo `qs_na_fila`, inclusive com `_base`, mas sua execução sob a trava teria de ser acrescentada ao ato (`app/chamados/services/painel.py:158`, `:186`; `app/chamados/services/fio.py:837`, `:840`).
-
-## 05/11 15:26 · sessao 03898f3b1a52 · - · - · origem=Ronald (tmux)
-
-Achado 3 — **o risco permanece; recuperação automática garantida não encontrada** (`app/ponto/portas/celula.py:402-409`; `app/ponto/services/cartorio.py:1358-1364`).
-
-- A chamada usa `forcar=True`, mas captura `Exception` por dia e continua; uma falha Python pode deixar a transação confirmar sem concluir o dia (`app/ponto/portas/celula.py:402-409`). Falhas SQL que invalidem a transação têm efeito distinto; ocorrência concreta [não verificado].
-- O `except` não foi introduzido pelo diff2 fornecido, que altera somente folgas e teste; comprovação por Git/blame e data de introdução **[não verificado]**: a raiz da cópia não contém `.git`, e `git` respondeu “not a git repository” **[não verificado]**. [nao verificado]
-- O cron configurado chama `processar_cartorio --apply`, sem `--forcar` (`app/config/crons.py:597`). O comando enumera todas as células passadas, mas o juiz pula impressão igual mesmo com veredito `indefinida` — a única exceção explícita nesse teste é `nunca_bateu` (`app/ponto/management/commands/processar_cartorio.py:49-65`; `app/ponto/services/cartorio.py:1358-1364`).
-- Signals de batida, ausência e justificativa chamam sem força; podem recuperar quando outro insumo mudar, mas não constituem repetição garantida pela cura mensal (`app/ponto/signals.py:85-93`; `app/ponto/signals.py:131-165`). O signal de chamado também chama sem força e só segue quando criado ou quando muda status (`app/chamados/signals.py:165-180`).
-- A vigia de hora alcança hoje/ontem, com filtros de turno, e chama sem força; não cobre genericamente o passado mensal (`app/ponto/services/vigia_de_hora.py:15-23`; `app/ponto/services/vigia_de_hora.py:120-131`).
-- Existem recuperações forçadas por outro ato: alteração de vínculo e correção retroativa usam `reconciliar_apos_vinculo`, que percorre dias e exclui humanos/já julgados (`app/colaboradores/services/pos_vinculo.py:50-76`; `app/colaboradores/services/vinculo.py:330`; `app/colaboradores/management/commands/corrigir_escala_retroativa.py:237`). A ação manual “Cobrar dia” força julgamento passado (`app/chamados/services/cobrar_dia.py:26-39`).
-- `furos_sem_cobranca` força julgamento, porém seleciona somente `veredito='furo'`, excluindo o caso `indefinida` (`app/ponto/services/furos_sem_cobranca.py:61-63`; `app/ponto/services/furos_sem_cobranca.py:128`).
-- `supra_juiz` lê a lavra para retratar; o cron de perguntas stale chama `lavrar(p)` de PerguntaDisputa. Esses caminhos não re-julgam a célula (`app/ponto/management/commands/supra_juiz.py:165-166`; `app/ponto/management/commands/supra_juiz.py:245-250`; `app/chamados/management/commands/lavrar_perguntas_stale.py:54`; `app/chamados/management/commands/lavrar_perguntas_stale.py:85-87`).
-
-Gravidade: **bloqueia a garantia de cura completa após exceção**, embora a anterioridade histórica desse tratamento e seu enquadramento como regressão permaneçam **[não verificado]** (`app/ponto/portas/celula.py:405-409`; `app/ponto/services/cartorio.py:1362-1364`).
-
-## 05/11 15:25 · sessao f75be3e86c96 · H-02 · sonda · origem=Code
-
-Referências **S1–S34**: linhas do bloco fornecido, contando `sonda_leitura:` como S1 e incluindo linhas vazias; são referências à saída, não ao script.
-
-**VEREDITO: dono=BATIDA no caminho alimentado descrito abaixo, salvo prioridade de CADASTRO. O dono efetivamente retornado em produção é [não verificado]: a sonda não imprime todos os insumos do juiz.** (`app/ponto/management/commands/e6_oraculo.py:98`, `:104`, `:168`.)
-
-1. **O par e o nascimento do zero.**
-
-   A sonda imprime E **124339**, 11/10 17:31:27, e S **124645**, 12/10 06:31:31, ambas não retratadas; imprime também um turno fechado, atribuído a **11/10**, cruzando meia-noite. Isso comprova aquele resultado da sonda; seus argumentos de pareamento são **[não verificado]**. (S24–S25; S32, linha `TURNO ... date(2026, 10, 11)`.)
-
-   **Com os marcos do DNA alimentados, a cópia separa esse par.** O teto usa `hi→hf + 4 h`: 21:30→05:42 = **492 + 240 = 732 minutos**, independentemente dos `minutos_jornada=432`. O vão real é aproximadamente **780 minutos**, portanto excede o teto. A exceção L-084 exige **as duas pontas** distantes mais de 180 minutos; aqui são aproximadamente 239 na E e 49 na S, logo não se aplica. (`app/ponto/turnos.py:64`, `:1428`, `:1438`, `:1445`; S10, S24–S25.)
-
-   Nesse caminho, fica **E aberta em 11/10 e S órfã em 12/10**; o aberto de 11/10 impede devolver a S à véspera. A pós-passagem também respeita o teto. O teste específico de col129 fixa essa mesma separação em 25→26/10. (`app/ponto/turnos.py:1293`, `:1451`, `:1081`; `app/ponto/tests/test_col129_par_separado_pelo_teto.py:57`.)
-
-   **Órfã do turno e órfã do marco são perguntas distintas:** apesar da separação geométrica, a ata de 11/10 reconhece S06:31 no marco S05:42, mantém E21:30 apagada e registra `orfas=['17:31']`. (S11–S12.) O casamento por marco tem envelope próprio; não equivale ao fechamento de um turno. (`app/escala/utils.py:585`, `:625`.)
-
-   Eco de flush não explica essa E no universo fornecido: a regra exige outra E distante entre 30 minutos e 14 horas; as E disponíveis estão separadas por mais de 19 horas. (`app/ponto/turnos.py:342`, `:368`; S20, S22, S24.) Os horários de chegada, `criado_em`, são **[não verificado]**.
-
-   **O zero nasce na apuração dos turnos sem par fechado:** `realizado_dos_turnos` marca aberto e não soma turno sem fim; a grade copia o resultado para `minutos_realizados`, e o cartório o grava na ata. No motor, o adaptador entrega `(entrada, None)` e transforma S órfã somente em anomalia; a ata com entrada apagada não recompõe o par. (`app/ponto/turnos.py:731`, `:769`; `app/escala/utils.py:2066`; `app/ponto/services/cartorio.py:704`; `app/ponto/adaptador_motor.py:30`; `app/ponto/motor_calculo_v2.py:632`.)
-
-   Portanto, **há zero anterior à tela comprovado na célula**: `minutos_realizados: 0`. A saída efetiva do motor, `DiaPago`, fechamento e tela desse dia são **[não verificado]**; não vieram na sonda. (S12.)
-
-2. **Dono pela L-099.**
-
-   O E6 não usa diretamente o turno cru impresso na sonda: `InsumosDoDono` pede `turnos_do_colab`, que carrega o mapa DNA e o passa ao pareador. (`app/ponto/management/commands/e6_oraculo.py:144`; `app/ponto/turnos.py:1907`, `:1990`.)
-
-   Com a separação acima, `batida_fora_de_turno` encontra realizado aberto e procura especificamente uma **entrada apurável daquele dia sem saída**. A batida identificadora é **E124339**; sua existência e não retratação estão na sonda. Esse insumo faz o juiz devolver **BATIDA antes da paridade**, mesmo havendo duas pontas cruas. (`app/ponto/management/commands/e6_oraculo.py:181`, `:191`, `:104`; S24.)
-
-   Contudo, `folga_nao_definida` ou ausência de vínculo válido fazem **CADASTRO vencer primeiro**. Esses indicadores não estão impressos; `dna.vinculo_id=853` sozinho não demonstra sua validade atual. O retorno completo em produção permanece **[não verificado]**. (`app/ponto/management/commands/e6_oraculo.py:98`; `app/ponto/supra_juiz.py:166`, `:193`; S10.)
-
-   A ata fornecida satisfaz a classe **`BATIDA_ORFA_FORA_TOLERANCIA`** — trabalho, previsto positivo, realizado zero e órfã presente. Isso é classe do classificador, não prova de dono ESTRUTURA. (`app/ponto/supra_juiz.py:515`; S12.) A origem específica do `veredito trabalhou`, sem `veredito_via`, protestos ou histórico, é **[não verificado]**. (S10.)
-
-3. **Quem escreve e quem lê.**
-
-   | Campo | Quem produz e grava | Quem lê no caminho relevante |
-   |---|---|---|
-   | `ata.orfas` | A grade produz as sobras; `ata_do_dia` copia as horas; a porta persiste a ata. (`app/escala/utils.py:621`, `:1853`; `app/ponto/services/cartorio.py:711`; `app/ponto/portas/celula.py:775`.) | `_orfas_da_ata`, `periodos_do_dia` e o classificador. (`app/escala/services/leitor_celula.py:175`; `app/ponto/juiz_batida.py:161`; `app/ponto/supra_juiz.py:514`.) |
-   | `ata.lampadas` | `lampadas_do_dia` traduz as células da grade; `ata_do_dia` monta a ata; a mesma porta grava. (`app/ponto/services/cartorio.py:677`, `:702`; `app/ponto/portas/celula.py:775`.) | Leitor da célula e juiz dos períodos; o pareador recebe os papéis derivados dessa leitura. (`app/escala/services/leitor_celula.py:114`; `app/ponto/juiz_batida.py:157`; `app/ponto/turnos.py:1631`, `:1680`.) |
-   | `veredito` | O cartório consulta `classificar_dia` e chama `lavrar_veredito`; a porta atribui e persiste, respeitando decisão administrativa anterior. (`app/ponto/services/cartorio.py:1413`, `:1802`; `app/ponto/portas/celula.py:745`, `:778`.) | `grade_da_celula` transporta o valor gravado. (`app/escala/services/leitor_celula.py:395`.) |
-   | Minutos realizados | `realizado_dos_turnos` calcula; a grade publica; o cartório copia para a ata. (`app/ponto/turnos.py:705`; `app/escala/utils.py:2079`; `app/ponto/services/cartorio.py:706`.) | O leitor da célula lê os minutos da ata; o espelho também consulta a autoridade dos turnos e publica minutos/horas. (`app/escala/services/leitor_celula.py:394`; `app/ponto/services/espelho.py:675`, `:783`, `:799`.) |
-
-   Os valores observados desses campos em 11/10 são E apagada, S06:31 acesa, órfã17:31, realizado0 e veredito `trabalhou`. (S10–S12.)
-
-4. **Há cadastro de HOJE no caminho?**
-
-   **Sim, existe leitura explícita pela data de hoje:** `intervalo_cadastrado` chama `tipo_escala.pausas_do_dia(date.today())`, inclusive quando falta uma borda. O leitor dos papéis também pode selecionar vínculo por `ativa,data_inicio`. (`app/ponto/juiz_batida.py:125`, `:265`; `app/ponto/turnos.py:1556`, `:1591`.)
-
-   **Isso não demonstra que essa leitura causou o zero de 11/10.** As bordas desse dia vêm do DNA; com hi apagada, o juiz declara `em_aberto`, e o motor preserva a geometria. O teto explicado no item 1 usa os marcos congelados fornecidos. (`app/ponto/juiz_batida.py:157`, `:259`; `app/ponto/motor_calculo_v2.py:632`; `app/escala/utils.py:103`; S10–S11.) O cadastro vivo efetivamente encontrado e seu efeito nessa execução são **[não verificado]**.
-
-5. **Contraexemplo concreto e limite da evidência.**
-
-   **Contraexemplo estrito — E fora do raio de atribuição e S junto ao marco seguinte, tratadas diferentemente — [não verificado].** A sonda só traz outro col129: em 09 e 10/10 as E estão a 7 e 6 minutos do marco, com realizados540 e539; em 12/10, a batida17:30 é **S**, não E. Esses dias não reproduzem a forma estrita da queixa. (S4–S9, S26.)
-
-   Na cópia há um controle mais fraco: E16/10 **19:55**→S17/10 **05:10**, marcos20:00→05:00, é exigido fechado pelo mesmo pareador; porém a E está apenas cinco minutos antes do marco. (`app/ponto/tests/test_h_portao_teto_do_dia.py:28`, `:38`.) Já o caso forte col129, E25/10 **17:30**→S26/10 **06:30**, mesmo DNA da queixa, exige **o mesmo tratamento de separação**, não tratamento diferente. (`app/ponto/tests/test_col129_par_separado_pelo_teto.py:57`.)
-
-## 05/11 15:25 · sessao 12bcc9dc9b9e · - · - · origem=Ronald (tmux)
-
-1. **Item 4 — selo que não morde a reversão do lugar na precedência.** `test_RED_transferencia_as_20h_nao_reescreve_hoje` transfere o cadastro e verifica somente `CelulaDia.trabalha` e `Chamado.status_local`; não consulta o juiz depois da transferência (`app/chamados/tests/test_jv1_volta4_posto_do_dia.py:111`, `:119`, `:121`, `:124`). Restaurar a leitura antiga de município do cadastro na precedência, com o helper antigo correspondente, mantendo o gerador atual, deixa esse teste passar: a célula nasce em Maringá e `gravar` apenas salva o novo posto, sem regeneração (`app/colaboradores/services/colaborador.py:55`, `:61`). O defeito reapareceria na consulta posterior ao juiz, hoje migrada para `feriados_do_colab` (`app/ponto/precedencia.py:330`). Derivação estática; execução do mutante [nao verificado]. **Toca dinheiro: sim**, pois a função de feriados também alimenta o fechamento (`app/ponto/services/fechamento.py:639`).
-
-2. **Item 4 — selo sintático independente da cura.** O teste modificado `test_com_lugar_nao_acusa` analisa apenas uma string com `eh_feriado(d, lugar_do_vinculo(ec))`; não executa `lugar_do_vinculo`, nem verifica qual posto ela lê (`app/core/tests/test_contract_feriado_com_praca.py:65`). O verificador aceita qualquer chamada com dois argumentos, independentemente do conteúdo do segundo (`app/core/contrato_feriado.py:73`, `:75`). Portanto, esse teste passa com a implementação da cura revertida; execução [nao verificado]. **Toca dinheiro: não diretamente**; a cobertura omitida alcança o feriado usado no fechamento (`app/ponto/services/fechamento.py:639`).
-
-3. **Itens 1–3 — alimentação incompleta na presença por posto.** Quando a célula não tem geradora, `presenca_em_feriado` passa `[]` à juíza e descarta a observação por falta de posto (`app/colaboradores/services/feriado_do_posto.py:102`, `:103`, `:106`). Entretanto, a juíza resolve célula sem geradora pelo vínculo vigente fornecido na alimentação (`app/escala/alimentacao.py:285`); o carregador de um dia faz precisamente essa carga quando falta a geradora (`app/escala/servico_jornada.py:55`, `:58`). A autoridade é a declarada no corte `JUIZ-VINCULO-DO-DIA-NASCE` (`app/docs/CORTES.md:284`).
-
-   Contraexemplo de cadastro permitido: vínculo cobrindo **10/12/2026**, posto em Londrina, célula `trabalha=True`, ATA com lâmpadas e `escala_geradora=None`; a presença desse dia é omitida, embora o vínculo do dia possa ser resolvido pela vigência (`app/colaboradores/services/feriado_do_posto.py:94`, `:97`, `:103`; `app/escala/alimentacao.py:285`). A FK aceita nulo e usa `SET_NULL` na exclusão do vínculo (`app/escala/models.py:1692`); existe exclusão de vínculos na reversão de snapshot (`app/colaboradores/services/vinculo.py:944`). Com duas outras observações de feriado, perder a terceira impede atingir o piso de três e elimina o posto do resultado (`app/colaboradores/services/feriado_do_posto.py:36`, `:121`). Existência desse cadastro em produção [nao verificado]. **Toca dinheiro: não**: o resultado é sugestão para decisão humana (`app/colaboradores/services/feriado_do_posto.py:28`, `:136`).
-
-4. **Item 1 — escritor relevante fora do diff.** `EscalaColaborador.posto` não é histórico imutável: `executar_vinculo` reaproveita o vínculo da mesma data de início e substitui seu posto pelo posto atual do colaborador (`app/colaboradores/services/vinculo.py:250`, `:266`, `:274`). Os leitores novos obtêm o município pelo objeto atual desse posto (`app/core/feriados.py:121`, `:122`, `:151`). O próprio fluxo depois solicita regeneração retroativa, portanto essa escrita isoladamente não demonstra violação da exceção de cadastro da L-020 (`app/colaboradores/services/vinculo.py:306`; `app/docs/LEIS.md:71`). Efeito indevido concreto em produção [nao verificado].
-
-## 05/11 15:25 · sessao b9bdbaa56058 · - · - · origem=Ronald (tmux)
-
-Extraí apenas textos normativos dos documentos; não consultei os `.py` proibidos. [nao verificado]
-
-| Tema | Regra escrita e referência |
-|---|---|
-| Mesmo número em todos os leitores | **L-002:** tela, PDF, TXT, badge e contador leem a mesma autoridade; derivação própria é proibida. `app/docs/LEIS.md:60` |
-| Fonte do previsto | **L-024:** a grade é fonte única do previsto. `app/docs/LEIS.md:75` |
-| Dinheiro e leitores | **L-095:** normais, HE, noturno, intra, pontualidade, folga trabalhada e falta são lavrados uma vez; tela, PDF, cartão, fechamento, TXT, calendário e app leem a lavratura. `app/docs/LEIS.md:113` |
-| Célula, chamado e pergunta | **L-061:** chamado, pergunta, tela e folha leem célula/ata, sem novo julgamento. `app/docs/LEIS.md:95` |
-| DiaPago | O glossário classifica **espelho, DiaPago, fechamento, retrato e pílulas** como projeções reconstruíveis/CQRS; combinado com L-002/L-095, DiaPago deve conservar o mesmo resultado monetário da autoridade, sem derivação paralela. `app/docs/GLOSSARIO.md:22`; `app/docs/LEIS.md:60`; `app/docs/LEIS.md:113` |
-| Texto no espelho/cartão | Dia diferente de “trabalhou” leva a palavra do veredito na grade/PDF; falta nunca fica vazia. `app/docs/CORTES.md:198` |
-| Marca do ato humano | Decisão no Resolver dia mostra marca com quem, quando e o quê, lida da ata. `app/docs/CORTES.md:194` |
-| Falta decidida versus furo | Falta = ausência cujo tipo desconta ou veredito “falta” na célula; furo sem decisão aparece como “dias em aberto (a decidir)”, com número, sem sumir nem virar falta sozinho. `app/docs/CORTES.md:179`; **L-039**, `app/docs/LEIS.md:87` |
-| Custo da falta | **L-088:** falta é dia previsto sem trabalho e sem justificativa e custa o previsto daquele dia; furo é marco não cumprido/pergunta aberta. `app/docs/LEIS.md:120` |
-| Folga e atestado | **L-089:** ausência que abona/desconta só alcança dia previsto de trabalho; sobre folga não gera efeito nem consome saldo. `app/docs/LEIS.md:121` |
-| Parcial com período | Período é cadastro `hora_ini/hora_fim`, declarado pelo admin; sem período, vai à lista de CADASTRO como “parcial sem período”, sem inferir ponta nem emitir `FATO_EM_AUSENCIA`. `app/docs/CORTES.md:319` |
-| Batida durante parcial | `FATO_EM_AUSENCIA` só quando a batida está **dentro** do período declarado; justificativa cobre só tipo e período. `app/docs/CORTES.md:315` |
-| Pagamento de parcial | Texto explícito: “trabalhou paga realizado + abonado do período”; cobertura e abono usam o mesmo juiz. `app/docs/CORTES.md:312` |
-| Não converter parcial em falta inteira | O corte proíbe trocar abono integral por falta inteira com DSR perdido sem pagar o período; depois determina que justificativa aprovada vire efeito parcial pela mesma porta da ausência. `app/docs/CORTES.md:330`; `app/docs/CORTES.md:336` |
-| Parcial noturna | `hora_fim < hora_ini` cruza meia-noite e pertence ao dia de início do turno. `app/docs/CORTES.md:330`; **L-085**, `app/docs/LEIS.md:117` |
-| Justificativa aprovada e chamado | Aprovar **Justificativa** encerra o chamado de origem pela porta do chamado na mesma transação; esse texto fala especificamente da entidade Justificativa, não autoriza presumir que todo registro de Ausência tem essa mesma transição nominal. `app/docs/CORTES.md:362` |
-| Cobrança sobre folga | Cobrança cala quando célula lavrada declara dia sem trabalho; todos os emissores devem perguntar à mesma autoridade. `app/docs/CORTES.md:416` |
-
-Propriedades fixas que podem ser citadas diretamente:
-
-- **Partes somam total, idempotência e todos os leitores dão o mesmo número**, para qualquer dado limpo ou sujo: **L-114**, `app/docs/LEIS.md:148`.
-- **Julgar 2× = julgar 1×**, **previsto não depende do realizado**, jornada pertence ao dia de início e partes somam total: `app/docs/CORTES.md:333`.
-- **Determinismo:** mesmas entradas dão o mesmo veredito; nenhum estado muda sem trilha: `app/docs/CORTES.md:333`; **L-007**, `app/docs/LEIS.md:65`.
-- **Totais de período:** arredondar uma vez na fonte; rodapé e topo somam minutos inteiros das linhas impressas, formatados no fim; sem tolerância ou ajuste no rodapé: `app/docs/CORTES.md:210`.
-- **Pontualidade:** atraso + saída antecipada ≤ previsto − trabalhado; previsto zero implica teto zero: **L-093**, `app/docs/LEIS.md:111`.
-- **Sem duplicar abono, trabalho e falta na mesma partição** é aplicação aritmética de “partes somam total”, não uma fórmula explícita encontrada nos documentos; convém apresentar a fórmula como decomposição dos casos e citar `app/docs/CORTES.md:333`, sem atribuir fórmula nova à CLT. [nao verificado]
-
-Lacunas para marcar **“lei:”**:
-
-- Não encontrei nos textos lidos regra explícita de **precedência/transição entre falta já lançada e atestado posterior**, nem se o registro antigo deve ser rejeitado, substituído ou cancelado; o resultado deve respeitar justificativa e ausência sem duplicação, mas a operação nominal exige regra. [nao verificado]
-- Não há nestes textos um esquema normativo completo dos campos do **DiaPago**; pode exigir equivalência de rubricas com a lavratura, sem inventar nomes de campo. `app/docs/GLOSSARIO.md:22`; `app/docs/LEIS.md:113`.
-- Não extrapolar “aprovar Justificativa encerra chamado de origem” para toda **Ausência/atestado** sem regra específica. `app/docs/CORTES.md:362`.
-- Não somar **noturno** outra vez ao total de minutos físicos: L-095 o enumera como rubrica, mas a fórmula completa de particionamento é matéria dos casos/CLT/CCT, não destes textos. `app/docs/LEIS.md:113`; [nao verificado]
-
-## 05/11 15:25 · sessao 46da3fd09e0b · - · - · origem=Ronald (tmux)
-
-Regras extraídas apenas dos textos normativos:
-
-| Tema | Regra escrita | Referência |
-|---|---|---|
-| Gabarito | A referência é REGRA aplicada ao cadastro e às batidas; implementação existente não decide a resposta. | `app/docs/LEIS.md:136`; `app/docs/CORTES.md:240` |
-| Falta inteira | Falta é dia previsto sem trabalho e sem justificativa; custa os minutos previstos daquele dia. | L-088, `app/docs/LEIS.md:120` |
-| Falta decidida × furo | Falta exige decisão; marco ausente sem decisão permanece “em aberto (a decidir)”, nunca vira falta sozinho. | L-039, `app/docs/LEIS.md:87`; `app/docs/CORTES.md:179` |
-| Falta parcial por saída antecipada | Desconta em minutos, e a palavra deve mostrar “Saída antecipada (desconta Xh)”. | `app/docs/CORTES.md:202` |
-| Teto de pontualidade | Atraso + saída antecipada ≤ previsto − trabalhado; previsto zero implica desconto zero. | L-093, `app/docs/LEIS.md:111` |
-| Abono e trabalho | Abono cobre somente o previsto não coberto pelas batidas; não duplicar minutos realizados e abonados. | `app/docs/CORTES.md:88`; confirmação em `app/docs/CORTES.md:277` |
-| Justificativa parcial | Cobre somente tipo e período; paga realizado + abonado do período. | `app/docs/CORTES.md:312`; `app/docs/CORTES.md:315` |
-| Período parcial | `hora_ini/hora_fim` devem ser declarados pelo admin; sem período vai à lista CADASTRO “parcial sem período”; não inferir a ponta pelo tipo, nem acusar FATO_EM_AUSENCIA. | `app/docs/CORTES.md:319` |
-| Batida em ausência parcial | FATO_EM_AUSENCIA somente com batida dentro do período declarado. | `app/docs/CORTES.md:315` |
-| Parcial noturna | Fim menor que início significa período atravessando meia-noite, pertencente ao dia inicial do turno. | `app/docs/CORTES.md:330` |
-| Atendido o período | Não transformar abono parcial em falta inteira/DSR perdido; período pago deve chegar ao cálculo pela mesma fonte dos leitores. | `app/docs/CORTES.md:330`; `app/docs/CORTES.md:336`; `app/docs/CORTES.md:353` |
-| Atestado em folga | Ausência que abona/desconta só alcança dia previsto de trabalho; folga não gera efeito nem consome saldo. | L-089, `app/docs/LEIS.md:121` |
-| Dia inicial | Jornada noturna pertence integralmente ao dia em que começou; não cria trabalho na folga seguinte. | L-085, `app/docs/LEIS.md:117` |
-| Intervalo | Intervalo cadastrado sempre sai da jornada; sem batida, indenização depende do cadastro e não gera HE. | L-031/L-032, `app/docs/LEIS.md:79`; `app/docs/LEIS.md:80` |
-| HE | Nenhuma HE nasce automaticamente; pontas externas ficam pendentes e não compensam faltas dentro da jornada. | L-097, `app/docs/LEIS.md:115` |
-| Noturno 12x36 Londrina | Hora normal de 60 minutos e adicional de 20% devido. | L-036, `app/docs/LEIS.md:84` |
-| Prorrogação | Para CCT, pós-05h depende do cadastro da convenção, não apenas de dizer “12x36 noturno”. | L-035, `app/docs/LEIS.md:83` |
-| Leitores | Espelho, app, DiaPago, PDF, folha, chamado e pergunta devem ler a mesma lavratura/célula; não recalculam por conta própria. | L-002/L-061/L-095, `app/docs/LEIS.md:60`; `app/docs/LEIS.md:95`; `app/docs/LEIS.md:113` |
-| Rótulo | Todo dia diferente de “trabalhou” leva a palavra do veredito na grade e no PDF; falta não fica vazia. | `app/docs/CORTES.md:198` |
-| Propriedades | Partes somam total; julgar duas vezes equivale a uma; previsto independe do realizado; leitores dão o mesmo número. | `app/docs/CORTES.md:240`; `app/docs/CORTES.md:333`; L-114, `app/docs/LEIS.md:148` |
-| Trilha | Ato crítico registra usuário, motivo, antes/depois; um escritor por estado. | L-007, `app/docs/LEIS.md:65` |
-
-**Lacunas que precisam de “lei:” no gabarito:**
-
-- **lei: atestado após falta lançada.** Os textos examinados não estabelecem expressamente precedência automática, cancelamento ou substituição entre os dois registros aprovados. A regra de sobreposição exige mostrar número, tipo, período inteiro, status, documento e ações possíveis; não decide sozinha qual efeito vence. `app/docs/CORTES.md:338`. A necessidade de resolver a colisão sem dupla contagem decorre das propriedades, mas o procedimento/vencedor não foi escrito nesses trechos. `[nao verificado]`
-- **lei: noturno abonado em atestado.** L-036 garante adicional e define unidade de 60 minutos; não diz expressamente se campo “noturno” deve conter somente trabalho noturno efetivo ou também horas noturnas abonadas. `app/docs/LEIS.md:84`; `[nao verificado]`
-- **lei: atestado de horas sem período declarado.** Pode-se afirmar CADASTRO e proibir inferência da ponta; não há número fechado de falta/abono até resolver o período. `app/docs/CORTES.md:319`.
-- **lei: status exato do chamado após falta/atestado.** A norma exige refletir a célula e não cobrar fato já coberto, mas os trechos examinados não prescrevem um único nome de status para cada um dos seis cenários de Q1. L-061, `app/docs/LEIS.md:95`; `[nao verificado]`
-
-Cuidado para não usar “12x36 = previsto 720”: o intervalo cadastrado sai da jornada, portanto 07–19 ou 19–07 com 1h de intervalo corresponde a 660 minutos previstos de trabalho. L-032, `app/docs/LEIS.md:80`.
-
-## 05/11 15:25 · sessao 6956be04fe0c · - · - · origem=Ronald (tmux)
-
-Contraexemplo de lote confirmado no pareador real extraído por AST em memória: a janela ampla inclui uma entrada antiga cujo `criado_em` interrompe a sequência usada para reconhecer eco de flush; o dia 04/09/2026 passa de nenhum turno próprio para turno fechado 08:00–17:00. A causa está em `app/ponto/turnos.py:353–372`; o diff amplia a janela em `app/colaboradores/services/calendario.py:126–135`.
-
-Com cadastro sem vínculo, células sem DNA/ata/status e `trabalha=False` em 04/09, a leitura individual resulta `folga`, enquanto a ampla resulta `sem_certidao`, pelo D4 (`app/ponto/status_dia.py:273`, `app/ponto/status_dia.py:292`, `app/ponto/status_dia.py:312`). Isso muda `resolver_dia_oferecido` de falso para verdadeiro (`app/colaboradores/services/calendario.py:103`), respeitadas as demais condições de último recurso (`app/colaboradores/services/calendario.py:738`). Integração completa com o universo real do cron e ocorrência em produção: [nao verificado].
-
-O script exato e o mapa escritor/leitor foram enviados por mensagem. O teste novo de paridade mede uma fixture sem essa sequência adversarial (`app/chamados/tests/test_sombra_c1_resolver_em_lote.py:71`); sozinho, passaria com implementação plural por dia, revertendo a otimização e preservando a API. Os testes de quantidade de calendários efetivamente mordem essa reversão (`app/chamados/tests/test_sombra_c1_resolver_em_lote.py:41`, `app/chamados/tests/test_sombra_c1_resolver_em_lote.py:64`).
-
-Cadastro atual alcança o passado por posto/município (`app/core/feriados.py:113`) e por empresa/janela usada para habilitar último recurso (`app/colaboradores/services/calendario.py:463`). A seleção inicial de vínculo ativo possui complemento pela geradora; não é suficiente, isoladamente, para provar erro temporal (`app/ponto/precedencia.py:327`).
-
-## 05/11 15:25 · sessao 491dab573827 · - · - · origem=Ronald (tmux)
-
-Mapa do item 5, com os limites de prova:
-
-| Campo | Escritor concreto | Leitor que decide passado |
-|---|---|---|
-| `situacao` | Desligamento grava `'desligado'`; reativação grava `'ativo'`: `app/colaboradores/services/desligamento.py:104`, `:210`; persistência em `app/colaboradores/services/colaborador.py:65`. | `classificar_export` usa `colaborador__situacao='ativo'` para a trava de âncora da competência: `app/folha/export.py:791`. O cartório também condiciona emissão de furo passado à situação atual: `app/ponto/services/cartorio.py:1696`, `:1762`. |
-| `data_demissao` | Agendamento futuro grava a data sem desligar: `app/colaboradores/services/desligamento.py:82`, `:85`; desligamento grava data: `:105`; reativação apaga: `:211`. | Qualquer data não nula exclui do TXT da competência consultada, sem comparar com sua janela: `app/folha/export.py:840`. Outros leitores comparam temporalmente: `:1061`, `:1182`. |
-| `empresa` | Transferência grava a empresa do novo posto: `app/colaboradores/views.py:1386`, persistindo em `:1388`; edição também atribui empresa: `:1313`. | Universo do fechamento passado filtra a empresa atual do colaborador: `app/folha/export.py:767`; a janela usa `colab.empresa`: `:326`, `:1055`. Regra dos anexos exigindo empresa histórica para essa seleção: [não verificado]. |
-| `regime` | Formulário lê `regime_trabalhista` e o envia à porta: `app/colaboradores/views.py:512`, `:523`; gravação: `app/colaboradores/services/estrutura.py:17`. | Caminho comprovado: `classificar_export` → homologação em `app/folha/export.py:948` → `feriado_12x36_em_dobra` em `:978` → `regua_para(colab, fim_da_competencia)` em `:359`, `:369`. A régua lê empresa e regime atuais: `app/core/regua_cct.py:352`. Os anexos designam essa autoridade, sem fixar vigência histórica do campo regime: `app/docs/JUIZES.md:30`. |
-| `isento_ponto` | Passe livre envia o novo booleano à porta: `app/colaboradores/views.py:173`, `:176`; persistência: `app/colaboradores/services/colaborador.py:47`. | O juiz lê somente o booleano atual, sem data: `app/core/constants.py:13`. Isso dispensa retenção de dias passados: `app/folha/export.py:1174`; altera prontidão da competência: `:1011`; e suprime eventos de um fechamento já apurado: `:407`. No cartório o booleano atual entra no julgamento do dia passado: `app/ponto/services/cartorio.py:1419`. |
-| vínculo atual | Criação com `ativa=True`: `app/colaboradores/services/vinculo.py:278`; reutilização reativa e apaga fim: `:267`; encerramento grava `ativa=False/data_fim`: `:615`. | A trava de aprovação da competência consulta `ativa=True`, sem janela: `app/folha/export.py:787`. Em contraste, o ciclo e a praça da régua consultam o vínculo da data da competência: `app/folha/export.py:348`, `app/core/regua_cct.py:329`. A autoridade temporal consta expressamente no anexo: `app/docs/JUIZES.md:98`. |
-| `posto` | Transferência altera posto atual: `app/colaboradores/views.py:1385`; o executor copia esse posto ao vínculo criado: `app/colaboradores/services/vinculo.py:280`. | No caminho comprovado da régua, a praça vem do posto do **vínculo da competência**, não de `colab.posto`: `app/core/regua_cct.py:329`, `:330`. Leitor do posto atual decidindo passado neste caminho: [não verificado]. Existe leitor atual em `app/core/feriados.py:113`, mas não fechei sua ligação transitiva ao percurso auditado: [não verificado]. |
-
-O caminho até a competência passada é concreto: sombra executa `crons sombra` e cada comando listado (`bin/sombra.sh:346`, `:381`); `bloco_da_manha` inclui encadeados (`app/config/crons.py:1874`); `lavrar_retrato_folha --apply` está declarado (`:1594`); o lavrador consulta também `janela_anterior` (`app/folha/management/commands/lavrar_retrato_folha.py:60`), chama `montar_linhas` (`:65`), que chama `fora_da_folha` (`app/folha/retrato_folha.py:1157`), chegando a `classificar_export` (`app/folha/fora_da_folha.py:119`).
-
-Contraexemplo sintético: em 05/11/2026, colaborador ativo, com demissão agendada para 10/11/2026 e fechamento de outubro/2026. O agendamento mantém o colaborador ativo e grava a data futura (`app/colaboradores/services/desligamento.py:77`, `:85`), mas o juiz exclui seu fechamento de outubro apenas porque a data está preenchida (`app/folha/export.py:840`). O comentário local restringe a exclusão à demissão **na janela** (`:834`); essa restrição temporal não aparece nas LEIS/CORTES anexadas: [não verificado]. Ocorrência em cadastro real: [não verificado].
-
-Contraexemplo sintético do vínculo: outubro/2026 possui vínculo 12x36 sem âncora, encerrado em 20/10; desde 21/10 há vínculo 6x1 ativo. A trava de outubro ignora o 12x36 encerrado e não devolve `sem_ancora_12x36`, porque consulta somente `ativa=True` (`app/folha/export.py:787`, `:813`). O anexo manda consultar o vínculo do dia (`app/docs/JUIZES.md:98`); seu efeito específico sobre a regra de aprovação por âncora não está explicitado ali: [não verificado].
-
-Esses leitores existem fora do diff informado; não há base para atribuir sua introdução ao CRONS-INSTALL. [não verificado]
-
-_1624 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_1639 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
