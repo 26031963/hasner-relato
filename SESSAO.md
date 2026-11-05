@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 12:22:27.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (2.3 MB). Acoes na janela: **56**.
+**Medido em 05/11/2026 12:27:45.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (2.4 MB). Acoes na janela: **59**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:27:41 | Bash | Read full CRONS-INSTALL contract line | `cd /home/ronald/saas-hasner; sed -n 19p app/docs/RELATO.md` |
+| 12:27:39 | Bash | Fetch CRONS-INSTALL-SOB-MARCA contract and marca file | `cd /home/ronald/saas-hasner; grep -n "CRONS-INSTALL-SOB-MARCA" app/docs/RELATO.md app/docs/BACKLOG.md \| cut -c1-80; grep -n "CONTRATO CRONS-INSTALL-SOB-MARCA\\|CONTRATO-DE-INSTRUMENTO CRONS-INSTALL" -A8 app/docs/RELATO.md \| cut -c1-400 \| head -20; cat app/core/tests/marca_cron15.py \| head -40` |
+| 12:27:32 | Bash | Inspect previsto_em and feriados= callers in copy | `cd /home/ronald/wt-sombra-094556/app; git log --oneline -3; sed -n 428,455p ponto/models.py; git grep -n "feriados=" -- '*.py' \| grep -v tests \| grep -iv "^ponto/motor_calculo_v2" \| head -30` |
 | 11:45:45 | Bash | Update ESPERANDO pid and identify suite tree | `cd /home/ronald/saas-hasner; sed -i '2s/pid=[0-9]*/pid=3454055/' app/docs/RELATO.md; ps -o args= -p 3454055 \| grep -o -- '-v /home/ronald/wt[^ ]*:/app'` |
 | 11:45:42 | Bash | Check suite lock | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; date +%H:%M; sed -n 2p app/docs/RELATO.md` |
 | 11:29:29 | Bash | Update ESPERANDO pid to running suite | `cd /home/ronald/saas-hasner; sed -i '2s/pid=[0-9]*/pid=2688801/' app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md; ps -o args= -p 2688801 \| grep -o -- '-v [^ ]*:/app' \| head -2` |

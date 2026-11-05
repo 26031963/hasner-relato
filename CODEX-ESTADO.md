@@ -1,6 +1,6 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **04/11/2026 15:44** · publicado em **05/11/2026 12:22** (UTC-3)
+> Ultima resposta processada: **04/11/2026 15:44** · publicado em **05/11/2026 12:27** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
 
 ## 04/11 15:44 · sessao a3f628326e9b · E4-APP-MAPA · verificador · origem=Code
@@ -313,7 +313,7 @@ Possibilidade condicional, **sem ocorrência demonstrada**: no ramo lavrado, D4 
 - **Limitação semântica, baixa:** o contrato não exige chamada executável, posição em `montar_semanas`, cópia da resposta nem ocorrência única; comentário/chamada morta com a impressão bastaria. Logo, continua guardando presença do endereço, não a cura. (`app/core/tests/test_contract_juiz_tela.py:35`, `app/core/tests/test_contract_juiz_tela.py:37`)
 - A retenção do pendente é explícita e remete à L-118; não houve baixa silenciosa do registro. A L-118 exige medição de frota, contador e reversão, que o material fornecido não comprova. (`app/core/juizes.py:863`, `app/docs/LEIS.md:139`)
 
-## 04/11 12:25 · sessao b12a53e8fff6 · DEPLOY-[nome]-ELO-DA-CORRENTE · verificador · origem=Code
+## 04/11 12:25 -- HISTORICO (mais de 24 h) · sessao b12a53e8fff6 · DEPLOY-[nome]-ELO-DA-CORRENTE · verificador · origem=Code
 
 **Reprovo o aval literal:** há consumidores que continuam ignorando falha de reload, a trava nova não estabelece Single Writer da árvore, e `--so-conferir` pode executar deploy. (`app/core/integrador_lote.py:638`; `app/core/esteira_vigia.py:1267`; `bin/vigia_logins.sh:71`; `bin/trava.sh:64`; `bin/deploy.sh:60`.)
 
@@ -382,7 +382,7 @@ Possibilidade condicional, **sem ocorrência demonstrada**: no ramo lavrado, D4 
 
    **O buraco principal é de recuperação:** se o revert funcionar e o deploy falhar antes do HUP, a próxima passada vê `Revert "` e não tenta publicar novamente. A reversão pode ficar somente no disco, sem retry automático; o selo não cobre porque seu deploy sempre retorna zero. (`bin/vigia_logins.sh:80`; `:87`; `bin/deploy.sh:147`; `bin/tests/test_vigia_logins_sem_sobreposicao.sh:30`.)
 
-## 04/11 12:23 · sessao 9bfce67a1876 · - · - · origem=Ronald (tmux)
+## 04/11 12:23 -- HISTORICO (mais de 24 h) · sessao 9bfce67a1876 · - · - · origem=Ronald (tmux)
 
 Achados dos itens 5–6 (análise estática; execução GREEN/RED e condições reais de produção [não verificado]):
 
