@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 02:27:07.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (14.0 MB). Acoes na janela: **470**.
+**Medido em 05/11/2026 02:32:26.** Transcript: `354179ca-a13f-4642-a6f5-791cf69a0acd.jsonl` (14.0 MB). Acoes na janela: **473**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:31:31 | Bash | Point ESPERANDO at the stable waiter pid | `cd /home/ronald/saas-hasner && P=$(ps -eo pid,args \| grep '^ *[0-9]* bash /tmp/.*[e]spera_noite.sh' \| awk '{print $1}' \| head -1); echo $P; sed -i "2s/.*/ESPERANDO: espera_noite.sh \| pid=$P/" app/docs/RELATO.md && python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
+| 02:31:26 | Bash | Run waiter for JUIZ-2 full suite in background | `bash /tmp/claude-1001/-home-ronald-saas-hasner-app/354179ca-a13f-4642-a6f5-791cf69a0acd/scratchpad/espera_noite.sh` |
+| 02:31:18 | Bash | Write stable waiter script for JUIZ-2 suite | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/354179ca-a13f-4642-a6f5-791cf69a0acd/scratchpad/espera_noite.sh; cat > $S <<'EOF' #!/bin/bash # espera o rc= da suite inteira do JUIZ-2 volta 2 (ou 2 h) L=/home/ronald/saas-hasner/logs/juizvarredura2/suite_inteira_r2.log for i in $(seq 1 720); do grep -q '^rc=' "$L" 2>/dev/null && { tail -3 "$L"; exit 0; }; /usr/bin/sleep 10; done; echo timeout EOF c ...` |
 | 02:14:37 | Bash | Repoint ESPERANDO with matching producer name | `cd /home/ronald/saas-hasner && sed -i '2s/.*/ESPERANDO: trava_teste.sh \| pid=935010/' app/docs/RELATO.md && python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
 | 02:14:32 | Bash | Point ESPERANDO at the pre-push process | `cd /home/ronald/saas-hasner && ps -o pid,args -p 935010 \| cut -c1-150; sed -i '2s/.*/ESPERANDO: pre-push.sh \| pid=935010/' app/docs/RELATO.md && python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
 | 02:14:21 | Bash | Check ESPERANDO proof and trava holder | `cd /home/ronald/saas-hasner && python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"; bash bin/trava_teste.sh --quem; sed -n 1,3p app/docs/RELATO.md \| cut -c1-80` |
