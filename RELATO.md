@@ -1,5 +1,5 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh | pid=3476932
+ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh | pid=382867
 ERRO-BOBO C20-O169: o opus final 1 reprovou por OMISSAO de registro -- a cura cumpria corte literal (BACKLOG:424) mas a L-125 nao estava em LEIS.md; nao ha pergunta sem juiz (dia_sem_trabalho e a celula ja respondem, cluster_espurio.py:25). CONDUTA FURADA: o Code rodou o 2o verificador final e POUSOU (bede09aa, no ar 18:3x) SEM esta linha antes; reversao do pouso e `!` (arquivo de prod), nao feita; rearma/contestacao e do Ronald.
 RESPONDIDA por aval H12H06-UMA-PORTA 17:2x: PERGUNTA DE DESENHO H12H06 (17:1x) -- aplicar e reverter = duas direcoes da MESMA porta, arquivo de reversao consumido por hash na trilha; v5 abre.
 CONTRATO-DE-INSTRUMENTO CODEX-PRE-DESENHO-PILOTO (aval 16:2x; padrao=n/a (instrumento)): QUEM CHAMA = a sessao, por bin/codex_pergunta.sh CODEX_PAPEL=censo CODEX_OBRA=PD-<obra> (peca 1, antes de abrir o construtor) ou AUT-<obra> (peca 2, antes da volta seguinte a 2a reprovacao procedente)
@@ -6499,3 +6499,4 @@ LEI-AKITA: origem=ponto/services/cluster_espurio.py::_vivos_que_a_premissa_matou
 - H12H06 v5: suite da copia 1b295672 OK (skipped=42, expected failures=39), Ran 13689, rc=0 (logs/h12h06/suite_1b295672.log); segue Codex verificador -> opus final pelo construtor. Trava agora com a suite do construtor JUIZ-3 (wt-c20j3-172851, pid 3386278).
 - PUSH SNC2+F3+O169 (bede09aa) no pre-push, trava pid 3476932, log logs/push_o169_1839.log; sem commit ate o rc.
 - PRE-CODIGO-DUPLO: PC3-FIO-MUDO rc=0 (bede09aa, 0 vazamento, logs/piloto_pd/pc/r_pc3_FIO-MUDO.md); as 3 obras no teto 3 (PEP e OTIMIZA-3 em 9c0fd9d3/d1354f77, FIO-MUDO em bede09aa); comparacao das 3 publicada acima. INCOMPLETO: resposta item a item de cada construtor (FIO-MUDO, PEP, OTIMIZA-3 ainda nao abriram -- teto 2: H12H06 + JUIZ-3).
+- PUSH NO REMOTO: origin/main = bede09aa (630131b1..bede09aa, pre-push OK, rc=0, logs/push_o169_1839.log); pos_push e9f3ab0e (TICKETS). Trava: suite pid 382867.
