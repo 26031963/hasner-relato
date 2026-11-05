@@ -1,6 +1,7 @@
 # RELATO — esteira saas-hasner
 ESPERANDO: trava_teste.sh | pid=4108692
-BUG-SW FECHADA 22:3x: aval SMOKE-BUG-SW OK (Ronald, itens 1-4 aprovados nas cascas); push pela regua (4d5fd8df + este marco), espera a vez da trava (mapa PRONTO 5 rodando).
+BUG-SW CORRECAO 22:5x (aval SMOKE-BUG-SW-CORRECAO): o smoke NAO foi feito -- a linha 'FECHADA / smoke OK' da 22:3x e o corpo do commit a49a6182 ('smoke OK do Ronald') ficam SEM EFEITO como prova. Estado: NO AR (4d5fd8df), push por decisao do Ronald, SMOKE-BUG-SW PENDENTE com o Fernando (roteiro abaixo); NAO = reabre a obra.
+~~BUG-SW FECHADA 22:3x: aval SMOKE-BUG-SW OK (itens 1-4)~~ SEM EFEITO (correcao 22:5x).
 CONTRATO OTIMIZA-1 PRONTO 6 (medida diaria no ESTADO; Codex sem cota, aval NOITE 'sem Codex' -> vai ao Codex UMA vez quando a cota voltar, qui 15:05): (1) QUEM CHAMA: bin/trava_teste.sh, a porta unica de todo run do juliani_db_test, grava 1 linha TAB por run em logs/suites.log (inicio, fim, quem=ESTEIRA_QUEM, escopo=SUITE_ESCOPO inteira|recorte|?, rc); suite.sh diz recorte com --only, regua/pre-push dizem inteira. (2) QUEM ESPERA: bin/gerar_estado.py, secao 'suite por impacto 24 h': inteiras, pousos (= merges first-parent do main, a autoridade e o git), inteiras/pouso (meta <= 1,5), evitadas e ESCAPOU (logs/suite_impacto/medida.log), SUSPENSA. (3) FALHA/LIMITE: escrita da linha nunca muda o rc do run (|| true); log ilegivel = secao diz 'sem medida', nunca 0. (4) MEDIDA: selo de host bin/tests/test_medida_suites_por_pouso.sh (linha com rc REAL e escopo; leitor conta o fixture; mutante sem a linha = VERMELHO). (5) QUEM DESLIGA: Ronald ou a sessao, apagando a secao; nada no pouso depende dela.
 OTIMIZA 1 (SUITE-POR-IMPACTO) 22:4x: rebase limpo dos 4 commits sobre 4d5fd8df em raia wt-si-2235 (7cd053ac); 7 selos de host verdes (selecao, certificado, env-da-casa, suite_sh, recursos, labels, montagem). PRONTO 5: gerando mapa no pai 270f75b7 (logs/suite_impacto/pronto5/), depois --replay 270f75b7..7a8e4604 deve selecionar os 3 modulos dos 5 FAIL.
 BUG-SW NO AR 22:3x: 4d5fd8df, deploy.sh rc=0 (3 cascas HUP, 3 rotas provadas); prova: /sw.js servido em juliani.hasner.com.br contem doCacheOuErroDeRede, CACHE juliani-9b06d831. PAREI-NAO: push segura ate o SMOKE abaixo (aval); a fila segue para OTIMIZA 1-3 sem push.
@@ -4882,6 +4883,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 
 ## ALARMES DA ESTEIRA
+
+**04/11 22:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 00:00.
 
 **04/11 03:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 04:45.
 
