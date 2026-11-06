@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 22:18:29.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (34.2 MB). Acoes na janela: **1206**.
+**Medido em 05/11/2026 22:23:23.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (34.3 MB). Acoes na janela: **1209**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:20:31 | Bash | Record PD findings and check push | `cd /home/ronald/saas-hasner/app; cat >> docs/RELATO.md <<'E' - 05/11 22:3x PD Codex do B (logs/h12h06b/pd_b.q/.r, 600, rc=0): `Ausencia.save` so deriva falta APROVADA com minutos 0 (`ponto/models.py:877-887`); `editar_ausencia_registro` recusa minutos>0 em tipo nao parcial (`ponto/services/ausencia.py:480-482`), aceita 0 (`:508`). DECISAO TECNICA: o one-shot NAO escreve minutos>0 -- grava 0 pelo e ...` |
+| 22:20:14 | Bash | Read rest of Codex PD answer | `cd /home/ronald/saas-hasner/logs/h12h06b; python3 -c "print(open('pd_b.r').read()[14000:])"` |
+| 22:20:11 | Bash | Read Codex pre-design answer for B | `cd /home/ronald/saas-hasner/logs/h12h06b; chmod 600 pd_b.*; tail -2 pd_b.out; wc -c pd_b.r; head -c 14000 pd_b.r` |
 | 22:17:10 | Bash | Publish deadlock measure in RELATO | `cd /home/ronald/saas-hasner/app; cat >> docs/RELATO.md <<'E' - 05/11 22:2x ORDEM GLOBAL, medida (aval H12H06-B-SIMPLES): `deadlock detected` em PROD nos ultimos 30 dias = **0**. PROVA: `docker logs saas_db --since 2026-10-06T00:00:00 \| /bin/grep -c 'deadlock detected'` = 0, em 29.793 linhas com 4.525 `ERROR:` (o log registra erro; cobertura desde 2026-07-06 00:09 UTC, logging_collector=off, docke ...` |
 | 22:17:01 | Bash | Recheck log coverage and stats_reset | `docker logs saas_db 2>&1 \| /bin/grep -m1 -E '^[0-9]{4}-' \| cut -c1-30; docker logs saas_db --since 2026-10-06T00:00:00 2>&1 \| wc -l; docker logs saas_db --since 2026-10-06T00:00:00 2>&1 \| /bin/grep -c 'ERROR:'; docker exec saas_db psql -U saas_user -d saas_hasner -Atc "select datname,deadlocks,coalesce(stats_reset::text,'null') from pg_stat_database where datname is not null"` |
 | 22:16:54 | Bash | Confirm deadlock count and coverage | `docker logs saas_db --since 2026-10-06T00:00:00 2>&1 \| /bin/grep -c 'deadlock detected'; docker logs saas_db 2>&1 \| head -1 \| cut -c1-40; docker exec saas_db psql -U saas_user -d saas_hasner -Atc "select deadlocks, stats_reset from pg_stat_database where datname='saas_hasner'"` |

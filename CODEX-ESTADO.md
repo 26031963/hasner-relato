@@ -1,7 +1,151 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **05/11/2026 22:17** · publicado em **05/11/2026 22:18** (UTC-3)
+> Ultima resposta processada: **05/11/2026 22:20** · publicado em **05/11/2026 22:23** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 05/11 22:20 · sessao 1640fe6c71e4 · PD-H12H06-B · censo · origem=Code
+
+**O ponto decisivo: reexecutar `save()` sobre `minutos=720` preserva os 720. A derivação automática existe apenas para `falta`, aprovada, com minutos zero; não existe para atestado.** `app/ponto/models.py:877-887`.
+
+**Também há impacto além da duração:** atestado de um dia passando de 720 para menos de 480 pode virar cobertura parcial, conforme o cadastro vivo do tipo. `app/ponto/turnos.py:2580-2600`.
+
+**1. Escritores e possibilidade de substituir o positivo**
+
+| Escritor | Decisão relevante |
+|---|---|
+| **`Ausencia.save()`** | Aceita um novo positivo atribuído pelo chamador e o grava; não recalcula positivo nem deriva atestado. Só calcula falta aprovada com minutos falsy. `app/ponto/models.py:877-887,908`. |
+| **`criar_ausencia()`** | Valida minutos contra `parciais_vigentes()`, salvo `checar_parcial=False`; cria e chama `save`. Nos modos de devolver existente, retorna a linha sem corrigir minutos. `app/ponto/services/ausencia.py:206-209,246-252,294-314,385,417-418`. |
+| **`garantir_ausencia()`** | Usa `se_existir='retornar'`: existente fica intacta. `app/ponto/services/ausencia.py:453-462,311-314`. |
+| **`editar_ausencia_registro()`** | Substitui positivo, mas recusa minutos truthy se o tipo não estiver em `parciais_vigentes()`. Com `None/0`, zera; somente falta aprovada será derivada pelo modelo. Também revalida sobreposição e reescreve datas/range. `app/ponto/services/ausencia.py:473-508`. |
+| **`mudar_estado()`** | Mesmo estado retorna sem salvar. Mudando estado, inclui `minutos` em `update_fields`, mas não recebe um novo valor nem zera o anterior; portanto conserva 720. `app/ponto/services/ausencia.py:801-819`. |
+| **`decidir()`** | Chama `mudar_estado`, altera carimbos, descrição e período; não recebe minutos. Não é uma porta de recomposição da duração. `app/ponto/services/ausencia.py:881-911`. |
+| **Materialização** | Hoje omite minutos: falta aprovada deriva; atestado nasce com zero, documentado como dia inteiro. Existente pode voltar sem atualização. `app/chamados/services/materializacao.py:484-492,519-528`. |
+| **`rederivar_fim()`** | Apenas `save()` e `refresh_from_db()`; não corrige 720 positivo. `app/ponto/services/ausencia.py:1277-1282`; `app/ponto/models.py:877`. |
+| **Espelhamento de férias** | Cria com minutos zero; ignora dia existente. `app/ponto/services/ausencia.py:1182-1191`. |
+| **Django admin** | `AusenciaAdmin` é somente leitura; não permite adicionar, alterar ou excluir. `app/ponto/admin.py:37-48`; `app/core/admin.py:59-75`. |
+
+Os trechos que decidem são:
+
+```python
+if self.status == 'aprovada' and self.tipo == 'falta' and not self.minutos:
+    ...
+    self.minutos = _tot
+...
+super().save(*args, **kwargs)
+```
+
+`app/ponto/models.py:877-908`.
+
+```python
+if minutos and tipo not in _CATV.parciais_vigentes():
+    raise AusenciaInvalida(..., codigo='tipo_nao_parcial')
+...
+ausencia.minutos = int(minutos or 0)
+ausencia.save()
+```
+
+`app/ponto/services/ausencia.py:480-508`.
+
+Portanto, **o modelo aceita gravar o previsto calculado externamente sobre um positivo**, desde que `minutos` entre nos campos efetivamente salvos; a edição de serviço só aceita esse positivo conforme o cadastro parcial do tipo e ainda altera/revalida outros campos. `app/ponto/models.py:877-908`; `app/ponto/services/ausencia.py:473-508`.
+
+A permissão para lançar por minutos vem do cadastro vivo; sua situação nas 30 linhas não foi consultada. `app/ponto/catalogo/ausencias.py:336-358`; **[não verificado]**.
+
+**2. Efeitos, gravações e travas**
+
+A sequência verificável do caminho direto é esta; ela contém ramos condicionais, não uma lista fixa de entidades sempre escritas. `app/ponto/signals.py:85-93,143-147`; `app/ponto/services/cartorio.py:1358-1367,1488-1522,1799-1823`.
+
+1. **Modelo → Ausencia:** carimba decisão sem `aprovada_em`, eventualmente deriva minutos, normaliza o range e chama `super().save()`. Não há `select_for_update` explícito nesse método. `app/ponto/models.py:868-908`.
+2. **`post_save` → cartório, imediatamente:** salvo `raw`, chama `_julgar_dias`; o antirrecursão pode interromper. Percorre os dias da ausência, podendo alcançar várias células de um range mesmo que o comando salve uma única ausência. `app/ponto/signals.py:85-93,115-128,143-147`.
+3. **Cartório → leitura da célula:** usa `.filter(...).first()`, sem trava explícita nessa busca; célula inexistente/futura ou turno corrente ainda não encerrado pode impedir o julgamento. `app/ponto/services/cartorio.py:1974-1987`.
+4. **Cartório → efeitos condicionais:** pode reconciliar chamados antes de lavrar a célula, emitir cobrança e ressuscitar perguntas; depois pode reconciliar novamente e fabricar perguntas/disputas. Logo, “Ausencia → Celula e acabou” seria uma descrição incompleta. `app/ponto/services/cartorio.py:1488-1522,1600-1622,1777-1789,958-973,981-999`.
+5. **Lavra → LogAuditoria → CelulaDia → EventoCelula:** no ramo normal, `lavrar_veredito(save=False)` prepara a célula e registra a trilha; `carimbar` efetiva o save. `salvar_e_emitir` grava primeiro a célula e depois insere o evento, no mesmo `atomic`. `app/ponto/services/cartorio.py:1800-1823`; `app/ponto/portas/celula.py:814-849,676-684`; `app/core/observ.py:133-138`.
+6. **Precedência:** depois do julgamento, pode salvar novamente a ata da célula e emitir outro evento; igualdade evita essa escrita. `app/ponto/services/cartorio.py:1995-1997`; `app/ponto/portas/celula.py:853-864`.
+7. **Consumidor, após commit:** agenda a devolução de perguntas absorvidas quando rejeitada; depois reconcilia chamados do colaborador e fecha chamados da ausência decidida. Com `atomic` externo, isso ocorre ao sair dele; não é um job enfileirado por esse código. `app/ponto/signals.py:250-279`; `app/chamados/services/silencio_ausencia.py:119-129`.
+
+Nos ramos de chamado, **reconciliar abre `atomic`, trava o chamado com `select_for_update`, decide e grava**; a atualização do chamado vem antes da resolução/relavra das perguntas pelos receivers. Já o nascimento por `abrir` trava o **Colaborador** antes do dedup/criação. `app/chamados/models.py:616-620,638,668-675,261-279,863-867`; `app/chamados/signals.py:75-94`.
+
+**`invalidar_fechamento` não é efeito automático de todo `Ausencia.save()`.** É uma chamada explícita de `decidir`, depois dos saves da decisão; ela percorre as competências afetadas e atualiza `FechamentoMensal.derivado_em=None`, com savepoint por competência e sem recalcular o motor. `app/ponto/services/ausencia.py:895-932`; `app/ponto/services/fechamento.py:1632-1640`.
+
+Assim, um save direto dos minutos não garante atualização da projeção mensal; também não garante regravação da célula, pois o cartório pode pular por impressão igual, que não codifica o valor exato dos minutos. `app/ponto/signals.py:143-147,275-279`; `app/ponto/services/cartorio.py:452-456,498-508,1348-1364`.
+
+**Sobre um `atomic` por linha:** ele não inverte, por si, a sequência interna acima nem acumula as 30 ausências numa transação. Entretanto, amplia a duração das travas até o commit daquela linha e adia os consumidores; portanto não equivale a dizer que todo `save()` em autocommit já possui esse mesmo escopo transacional. Essa é uma inferência da posição dos saves, atomics e callbacks. `app/ponto/models.py:908`; `app/ponto/portas/celula.py:681-684`; `app/ponto/signals.py:272`; `app/chamados/models.py:673-674`. Ausência de deadlock em concorrência: **[não verificado]**.
+
+**3. Autoridade de competência entregue/exportada**
+
+A autoridade é **`folha.export.competencia_entregue(empresa_id, mes, ano)`**: existe `ExportacaoDominio` vigente e esse vigente não está invalidado. Não basta existir qualquer exportação histórica. `app/folha/export.py:556-586`.
+
+Para `(colaborador, data)`, já existe a composição:
+
+```python
+competencia_do_dia_entregue(data, colaborador.empresa)
+```
+
+Ela usa `janela_atual(data, empresa)` e consulta a competência do **mês/ano do fim da janela**, não o mês civil da data; sem data retorna `None`. `app/chamados/services/vigia_fio.py:822-844`.
+
+As distinções são:
+
+| Pergunta | Autoridade |
+|---|---|
+| Foi entregue? | `competencia_entregue`, sobre exportação vigente válida. `app/folha/export.py:580-586`. |
+| Está aprovada/exportada para a guarda de batida? | `competencia_fechada`, sobre `FechamentoMensal.status`. `app/ponto/janelas.py:75-89`; `app/ponto/registro_batida.py:133-135`. |
+| Está fechada para regenerar célula? | `competencia_fechada_para_celula`: entregue **ou** holerite do colaborador em lote publicado. `app/folha/export.py:589-616`. |
+| O export pode passar pela conferência atual? | `folha/porta_export.py::conferir`, que verifica medição/carimbo/falhas; não responde se já foi entregue. `app/folha/porta_export.py:800-821`. |
+
+Outros escritores já usam esse juiz: `competencias_a_lavrar` consulta `competencia_entregue`; o fechamento o consulta via `marcos_da_competencia`; a regeneração de células usa a composição mais restritiva própria da célula. `app/ponto/services/he_pendente_lavrado.py:209-225`; `app/ponto/services/fechamento.py:1513-1524`; `app/ponto/management/commands/gerar_celulas.py:126-174`.
+
+Criar/editar ausência hoje não barra competência fechada; portanto o recorte “somente competência aberta” precisaria estar explícito no comando. `app/ponto/services/ausencia.py:226-233,485`. A abertura efetiva da competência informada: **[não verificado]**.
+
+**4. Leitores e efeito da troca de 720 pelo previsto**
+
+| Leitor | Regra e consequência |
+|---|---|
+| **Fechamento: faltas** | Ausências aprovadas dos tipos que descontam têm minutos rateados por todos os dias do registro; o fechamento soma e divide por 60. **Muda horas de falta** quando o total muda; num dia, 720→420 significa 12h→7h. `app/folha/export.py:87-92,113-122,138-143`; `app/ponto/services/fechamento.py:864-866,987`. |
+| **Fechamento: pagas** | Usa `tipo in TIPOS_PAGOS and minutos`, sem teto de 480: soma crédito e pula a aplicação do abono integral por cobertura. Positivo→positivo mantém esse ramo; zero muda o ramo. `app/ponto/services/fechamento.py:665-669,684-692`. |
+| **`efeitos_da_ausencia`** | Mesmo predicado pago+minutos truthy: soma `min_parcial_pagos` e não justifica/suprime integralmente por esse ramo. **Muda o crédito bruto**; positivo→positivo mantém o `continue`. `app/ponto/services/efeito_ausencia.py:43-61`. |
+| **`credito_parcial`** | Crédito inteiro na data inicial; abatimento `min(atraso_do_dia, credito_do_dia)`, sem transportar sobra. **Muda crédito**, mas o atraso líquido só muda quando o novo crédito deixa de cobri-lo. `app/ponto/services/credito_parcial.py:23-25,47-58`; `app/ponto/services/fechamento.py:982-985`. |
+| **`turnos.cobre_parte_do_dia`** | Exige tipo parcial vivo, registro de um dia e **`0 < minutos < 480`**. 720→420 pode virar parcial; 720→480/660 continua inteiro; 720→0 também continua inteiro; range maior que um dia não vira parcial. `app/ponto/turnos.py:2580-2600`. |
+| **Dia inteiro/pontualidade** | Exclui falta e exige `not cobre_parte_do_dia`; o mapa de dias abonados inteiros alimenta o motor. **Pode mudar** ao cruzar 480, alterando a cobertura da pontualidade. `app/ponto/turnos.py:2668-2690`; `app/ponto/services/fechamento.py:680-683,742`. |
+| **Grade/cobrança** | Inteira dispensa o dia; parcial preserva a cobrança restante e dispensa marcos conforme o período. **Pode reativar cobrança** ao passar para 1..479; sem horas declaradas, resulta `sem_periodo`. `app/escala/utils.py:1195-1212,1251-1274`; `app/ponto/turnos.py:2632-2641`; `app/escala/servico_jornada.py:340-345`. |
+| **Abono materializado** | `por_dia_da_grade` usa previsto e realizado da grade, não diretamente `Ausencia.minutos`. **Não substitui diretamente o abono pelo novo campo**; efeitos indiretos dependem da classificação. `app/ponto/services/dia_pago.py:384-400`. |
+| **TXT, falta 8792** | Expande datas e emite `len(datas)`, mais registro 11 por data. **Não muda diretamente** mantendo tipo/status/datas: conta dias, não as horas gravadas. `app/folha/export.py:157-185,215-221,732-736`. |
+| **TXT, atraso 8069** | Usa atraso/saída do fechamento. **Pode mudar indiretamente** após apuração, pelo crédito ou pela cobertura. `app/folha/export.py:449-452`; `app/ponto/services/fechamento.py:982-986`. |
+| **Datas abonadas/8932** | A contagem crua expande datas sem ler minutos; **não muda só pela duração**. `app/folha/export.py:193-206`. |
+| **Espelho, rótulos** | Rótulo aprovado de desconto/abono apresenta horas derivadas de minutos; **muda o texto numérico**. Zero elimina a duração no rótulo. `app/ponto/services/dia_decidido.py:148-155,217-235,484-489`. |
+| **Espelho, totais** | Tela/PDF recebem resumo do fechamento/lavratura; **dependem da reapuração**, não apenas do novo valor na ausência. Contagem de dias de falta continua pelas datas. `app/ponto/services/espelho.py:1283-1284`; `app/relatorios/pdf_espelho.py:628`; `app/relatorios/cartao_pela_celula.py:320-346`. |
+| **API** | GET serializa `a.minutos` diretamente: **muda o JSON**. `app/api/views.py:1869-1880`. |
+| **Lista web** | Mostra dias primeiro, depois minutos se `cobre_parte`, senão “1 dia”/fim aberto. **Pode mudar de “1 dia” para minutos** ao cruzar o juiz de 480. `app/ponto/views.py:2233-2243`; `app/templates/ponto/ausencias.html:159-165`. |
+| **Drawer/formulário/admin** | Exibem/preenchem minutos; propriedade `horas` divide por 60. **Mudam os números apresentados**. `app/templates/ponto/partials/painel_ausencia.html:125,149,296-313`; `app/ponto/admin.py:44`; `app/ponto/models.py:864-866`. |
+
+**Há dois conceitos distintos de parcial:** crédito/efeito usam pago+minutos truthy; cobertura usa tipo parcial+um dia+`0<minutos<480`. Não se pode interpretar “previsto correto gravado” como “mesmo efeito funcional garantido”. `app/ponto/services/credito_parcial.py:24-25`; `app/ponto/services/efeito_ausencia.py:44-52`; `app/ponto/turnos.py:2598-2600`.
+
+A antiga comparação de apresentação `>=720` foi retirada; a view atual delega ao juiz de cobertura. `app/ponto/views.py:2233-2240`.
+
+**5. Moldes de backfill, snapshot e reversão**
+
+- **Molde mais próximo:** `curar_ausencia_sem_fim` identifica anomalias, oferece dry-run, passa cada linha pelo serviço e registra antes/depois. Não corrige positivo porque `rederivar_fim` só chama o save existente. `app/ponto/management/commands/curar_ausencia_sem_fim.py:29-53`; `app/ponto/services/ausencia.py:1277-1282`.
+- **Backfill histórico de Ausencia:** migration 0057 muda estados e registra uma trilha por linha; possui reversa, mas ela volta estados para `pendente`, não restaura minutos nem uma fotografia exata. `app/ponto/migrations/0057_a4_backfill_pendente.py:35-65`.
+- **Backfill de célula:** `backfill_b5_insumos` usa o juiz e carimba insumos na célula; não altera `Ausencia.minutos`. `app/ponto/management/commands/backfill_b5_insumos.py:51-84`.
+- **Snapshot/restore reutilizável como formato:** scripts existentes fotografam/restauram `FechamentoMensal` e `DiaPago`, não Ausencia. `bin/snapshot_relavratura_10_2026.py:20-64`; `bin/restore_relavratura_10_2026.py:69-86`.
+- **Trilha não equivale a snapshot garantido:** `evento` é best-effort e pode retornar `None`; inferência: não deve ser tratado sozinho como garantia de reversão completa. `app/core/observ.py:94-105,124-139`.
+
+Não foi localizado um comando que já substitua esses 720 positivos pelo previsto, nem snapshot/restore específico de Ausencia; inexistência absoluta: **[não verificado]**.
+
+**6. Contraexemplos e resultados zero/None**
+
+| Caso | Consequência |
+|---|---|
+| **Salvar mesmo valor novamente** | Save completo continua chegando ao banco, move `atualizado_em` e dispara os receivers. A segunda execução precisa de comparação explícita para ser sem escrita; inferência desses trechos. `app/ponto/models.py:813-814,908`; `app/ponto/signals.py:143-147`. |
+| **Previsto legítimo de 720** | O registro continua no filtro `minutos=720`; esse filtro sozinho não identifica pendência. Comparar atual e previsto evita regravação; inferência do cálculo. `app/escala/utils.py:2293-2341`. |
+| **Insumos alterados entre execuções** | Célula, DNA, vínculo, template e folgas podem produzir outro previsto na segunda execução. `app/escala/utils.py:2280-2290`; `app/escala/models.py:1094-1096,1124-1133,1280-1288`. |
+| **Zero atribuído a falta aprovada** | O save chama novamente o helper; não preserva necessariamente o zero calculado antes, se os insumos mudarem nesse intervalo. `app/ponto/models.py:877-887`. |
+| **Range legado incoerente** | Calcula minutos antes de derivar `data_fim` por `dias_corridos`. Primeira passada pode calcular um dia e criar o range; uma nova derivação pode então somar vários dias. `app/ponto/models.py:882-887,893-907`. |
+| **Sem escala/tipo/marcos completos** | Helper devolve **0** quando não encontra vínculo/tipo ou falta entrada/saída. `app/escala/utils.py:2277-2292`. |
+| **Folga ou dia indefinido** | `eh_dia_trabalho(...) is not True` devolve **0**, inclusive quando a resposta é `None`; célula existente manda por `trabalha`. `app/escala/utils.py:2287-2288`; `app/escala/models.py:1087-1096`. |
+| **Feriado** | Não é zero universal: vira folga conforme ciclo autorizado, configuração e feriado no lugar do vínculo. Célula existente continua tendo precedência. `app/escala/models.py:1094-1096,1367-1395`. |
+| **12x36** | Sem foto do mês, âncora individual válida decide pela paridade; folga retorna zero. Template 12x36 sozinho pode responder `None`, que o helper converte em zero. Foto mensal pode substituir a fase da âncora. `app/escala/models.py:824-829,1272-1292,1309-1317,1351-1364`; `app/escala/utils.py:2287-2288`. |
+| **Turno noturno/pausas** | Calcula span com virada de meia-noite e desconta pausas; não usa simplesmente 720 nem `minutos_jornada`. Entrada igual à saída produz 1440 antes das pausas, pela aritmética existente. `app/escala/utils.py:2293-2295,2312,2326-2341`. |
+
+**O helper normalmente retorna inteiro, inclusive zero; não retorna `None` nos caminhos normais examinados.** O zero mistura “folga” com “não há informação suficiente de escala/marcos”, portanto não prova sozinho que o dia deveria ter duração zero. `app/escala/utils.py:2277-2292,2341`.
 
 ## 05/11 22:17 · sessao 916f5668e728 · - · - · origem=Ronald (tmux)
 
@@ -853,36 +997,4 @@ O corte de aposentadoria continua pendente na cópia: o universo exclui desligad
 
 [truncado em 20000 de 24439 caracteres]
 
-## 05/11 21:05 · sessao 2b546d724cfa · - · - · origem=Ronald (tmux)
-
-Consolidação das direções inversas; todas são estáticas, execução/primeira aquisição concreta de linhas **[nao verificado]**.
-
-| Par/direção | Testemunha na mesma transação |
-|---|---|
-| **Colaborador → Empresa** | `normalizar_identificadores.py:106` atomic → C U `:109` → `colaboradores/services/colaborador.py:88` → E U command `:112` → `colaboradores/services/estrutura.py:27`. |
-| **Empresa → Colaborador/Ausencia** | Não encontrei testemunha; zero global **[nao verificado]**. Escritores e exclusões administrativas detalhados abaixo. |
-| **Chamado/Colaborador → Ausencia nova** | `regularizacao.py:89` atomic → Justificativa I `:91` ou U `:106` → receiver `ponto/signals.py:162/:165` → cartório K, com possíveis L de Chamado/Colaborador → loop `regularizacao.py:110/:111/:118` → `ausencia.py:461` → I `:418` ou reabertura U via `:291`. |
-| **Chamado/Colaborador → Ausencia de dia seguinte** | `marcar_abandono_provisorio.py:22` atomic abrangente → loops pessoas `:43` e dias `:70` → garantir `:76`; K do fato anterior precede Ausencia seguinte. Condicionado ao ramo de K que efetivamente trava e à existência de outra iteração. |
-| **Chamado/Colaborador → Ausencia de férias seguinte** | Atomic externo dos serviços de férias → `ausencia.py:1182` loop → criar `:1186`; K do dia anterior precede I/U seguinte. Atomic, override e famílias específicos pertencem ao inventário do agente de escritores. |
-| **Chamado/Colaborador → nova Ausencia após D antiga** | `ferias/services.py:375` atomic → apagar `:385` → `ausencia.py:1254` D → K → `ferias/services.py:387` ag.save → `ferias/models.py:437` sync → `ausencia.py:1186` I em data nova. Condicionado ao K e ao dia novo faltante. |
-| **Chamado/Colaborador → Ausencia de outra irmã** | `ponto/views.py:2631` atomic → loop `:2632/:2633`; K após primeiro U `ausencia.py:819` pode travar Chamado/Colaborador antes do U da próxima irmã. |
-| **FechamentoMensal → Ausencia de outra irmã** | Mesmo atomic/loop `views.py:2631/:2632/:2633`: `ausencia.py:895` → U `:819`, carimbos U `:911`, invalidar `:930` → FM U `fechamento.py:1640` → próxima irmã U `ausencia.py:819`. Requer ≥2 irmãs e FM atingida. |
-| **Colaborador → FechamentoMensal** | `justificativa.py:125` atomic → registrar batida `:173` → I `registro_batida.py:152` ou `:157` → onboarding `colaboradores/signals.py:87/:102` → C U `colaboradores/services/colaborador.py:61` → `Colaborador.save`, `models.py:439` → invalidar `justificativa.py:200` → FM U `fechamento.py:1640`. Guards onboarding: batida criada `signals.py:94`, onboarding false `:97`, usuário com last_login `:99`. |
-| **FechamentoMensal → Colaborador** | `views.py:1793` atomic → invalidar `:1806` → FM U `fechamento.py:1640` → se saída informada e sem batida gerada `views.py:1809`, registrar `:1816` → I `registro_batida.py:152/:157` → mesmo receiver onboarding e C U acima. O K anterior do `j.save()` em `views.py:1800` pode já ter adquirido C; primeira aquisição C posterior a FM **[nao verificado]**. |
-| **Colaborador → CelulaDia** | J1 acima: onboarding C U durante registrar batida `justificativa.py:173`; após retorno, `j.save()` `:193` → `ponto/signals.py:162/:165` → K → lavra `cartorio.py:1822` → `portas/celula.py:682` U. Requer guards onboarding e julgamento que efetivamente lavra. |
-
-**Regravação, separada de primeira aquisição:** no `decidir`, K após U `ausencia.py:819` pode travar C/Chamado antes do segundo U `:911`; a própria Ausencia já estava adquirida. Também `_reabrir` pode fazer saves sucessivos `ausencia.py:1124/:1125/:1132`, cada um com K, mas isso não prova primeira aquisição inversa.
-
-**Empresa — fechamento das entradas encontradas:**
-
-- `atualizar_empresa` efetua `empresa.save()` em `app/colaboradores/services/estrutura.py:20`; normalização efetua queryset update `:27`.
-- Formulário chama atualização em `app/colaboradores/views.py:521`, sem atomic próprio abrangente na função `:485`.
-- `diff_janela_he` tem atomic `app/ponto/management/commands/diff_janela_he.py:74`, E U `:101/:103`, depois `_tot` `:102/:104` → leitura `autoridade_do_periodo` `:59`. Não demonstra C/A U/L.
-- `diff_janela_he_total.py:106` atualiza E pela mutação executada dentro de `app/ponto/services/diff_frota.py:72` atomic, callback `:86`; cálculo posterior recebe `somente_leitura=True` `:87/:88`. Não demonstra C/A U/L.
-- `aplicar_janela_he_total.py:119` atualiza E, sem atomic abrangente próprio; delegação de recálculo começa em `:137`. Não uni as transações.
-- `EmpresaAdmin` herda `ModelAdmin` padrão em `app/colaboradores/admin.py:7/:8`; implementação SQL/atomic/cascatas do Django **[nao verificado]**. `Colaborador.empresa` usa PROTECT em `app/colaboradores/models.py:321`.
-- Admin de Colaborador `app/colaboradores/admin.py:48` e de Ausencia `app/ponto/admin.py:38` usam SoLeitura; delete negado por `app/core/admin.py:65/:66`.
-
-**Caminho excluído da prova de mesma transação:** `responder_pergunta_disputa_core` chama `_ressuscitar_por_resposta` em `app/chamados/services/disputa_emissao.py:1326` → Chamado U `app/chamados/services/arquivo.py:208`, depois materializa Ausencia em `disputa_emissao.py:1330` → `materializacao.py:519`. Não há atomic no core definido em `disputa_emissao.py:1247`; as chamadas web/API `app/chamados/views.py:1283` e `app/api/views.py:2643` não forneceram atomic abrangente. Os wrappers transacionais `declaracao_texto.py:302/:605` aceitam/produzem HH:MM (`:276`, `:368`, `:641`), não os escapes de ausência. Atomic externo efetivo desse caminho **[nao verificado]**.
-
-_2011 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2012 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
