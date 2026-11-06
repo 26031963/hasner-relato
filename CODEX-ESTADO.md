@@ -1,7 +1,40 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **05/11/2026 22:20** · publicado em **05/11/2026 22:23** (UTC-3)
+> Ultima resposta processada: **05/11/2026 22:27** · publicado em **05/11/2026 22:29** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 05/11 22:27 · sessao e05481d49698 · H12H06-B-SIMPLES · sonda · origem=Code
+
+Saída fornecida, transcrita literalmente; não houve nova execução da sonda. Execução e hash informados: [não verificado].
+
+```text
+sonda_leitura: sonda_h12_comp10.py [8d165ce05418159e] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+emp2 janela=2026-09-21..2026-10-20 entregue=False exp=None hash=None fm=477 demitidos=71 demissao_apos_fim=12 no_txt=0 ids=col343,col574,col878,col981,col518,col318,col912,col663,col973,col270,col699,col907
+emp3 janela=2026-09-21..2026-10-20 entregue=False exp=None hash=None fm=119 demitidos=18 demissao_apos_fim=7 no_txt=0 ids=col761,col79,col90,col752,col984,col755,col641
+emp4 janela=2026-09-21..2026-10-20 entregue=False exp=None hash=None fm=24 demitidos=0 demissao_apos_fim=0 no_txt=0 ids=
+```
+
+Conforme exclusivamente o dado raspado fornecido, sem validação independente: [não verificado].
+
+| Empresa | 10/2026 entregue, vigente não invalidada? | Colaboradores do FM com demissão após 20/10 | Destes, com linha no TXT vigente | Fonte |
+|---|---|---:|---:|---|
+| 2 | Não (`entregue=False`, `exp=None`) | 12 | 0 | Dado fornecido [não verificado] |
+| 3 | Não (`entregue=False`, `exp=None`) | 7 | 0 | Dado fornecido [não verificado] |
+| 4 | Não (`entregue=False`, `exp=None`) | 0 | 0 | Dado fornecido [não verificado] |
+
+O código define entrega pela existência de exportação vigente com `invalidada_em is None`. [app/folha/export.py:580](app/folha/export.py:580) [app/folha/export.py:583](app/folha/export.py:583)
+
+Na comparação solicitada:
+
+- **Antes do POUSO A:** o registro da alteração descreve o predicado anterior como `if colab.data_demissao is not None:`, sem consultar a janela; esses colaboradores seriam excluídos como rescisão. [app/docs/RELATO.md:90](app/docs/RELATO.md:90) [app/folha/tests/test_rescisao_modulo_proprio.py:44](app/folha/tests/test_rescisao_modulo_proprio.py:44)
+- **Atual, na cópia:** `sai_pela_rescisao` exige demissão até o fim da janela, inclusive. Demissão posterior deixa de causar `fora / rescisao_modulo_proprio` e segue para os demais filtros. [app/folha/export.py:60](app/folha/export.py:60) [app/folha/export.py:858](app/folha/export.py:858) [app/folha/export.py:864](app/folha/export.py:864)
+
+Portanto, numa nova geração, **os 12 da empresa 2 e os 7 da empresa 3 deixariam de ser excluídos por esse motivo**; na empresa 4, o grupo informado é vazio. Quantidades: dado fornecido [não verificado]; efeito do predicado: [app/folha/export.py:60](app/folha/export.py:60) [app/folha/export.py:858](app/folha/export.py:858).
+
+Isso não demonstra que ganhariam linhas: ainda existem filtros de código, férias, cadastro, espelho e homologação, além das condições da montagem. **Quantos efetivamente entrariam, com quais rubricas e valores: [não verificado].** [app/folha/export.py:760](app/folha/export.py:760) [app/folha/export.py:960](app/folha/export.py:960) [app/folha/export.py:708](app/folha/export.py:708) [app/folha/export.py:725](app/folha/export.py:725)
+
+Identidade da cópia com o HEAD solicitado: [não verificado].
 
 ## 05/11 22:20 · sessao 1640fe6c71e4 · PD-H12H06-B · censo · origem=Code
 
@@ -860,141 +893,4 @@ FKs confirmadas:
 
 Essas declarações incluem atualizações referenciais no escopo das exclusões; SQL emitido, ordem do Collector, posição desses updates relativamente ao `post_delete` e primeira aquisição efetiva de travas: **[nao verificado]**.
 
-## 05/11 21:05 · sessao b5677bb09b8e · H12H06-A · verificador · origem=Code
-
-**Parecer: reprovo A como concluído.** H12 está coerente por inspeção. Em H06, falta aprovada com zero minutos ainda pode produzir **um dia de falta no TXT**, embora o fechamento compute zero horas; também sobrevivem leitores financeiros com regra própria de parcialidade. (`app/folha/export.py:121`, `app/folha/export.py:218`, `app/folha/export.py:732`, `app/ponto/services/fechamento.py:866`, `app/ponto/services/fechamento.py:665`)
-
-Execução da suíte, RED/GREEN na base e ocorrência/impacto em produção: **[não verificado]**. [nao verificado]
-
-**1. Quem escreve e quem lê**
-
-O censo abaixo distingue quem fornece os valores de quem efetivamente os persiste: as portas recebem tipo/minutos/status; `criar_ausencia`, `editar_ausencia_registro`, `mudar_estado` e `Ausencia.save` fazem a gravação. (`app/ponto/services/ausencia.py:130`, `app/ponto/services/ausencia.py:341`, `app/ponto/services/ausencia.py:497`, `app/ponto/services/ausencia.py:792`, `app/ponto/models.py:868`)
-
-| Campo/valor | Escritores | Leitores |
-|---|---|---|
-| `Ausencia.minutos` | Default zero; criação recebe `minutos`; edição recebe/zera; `save` deriva falta aprovada zero. (`app/ponto/models.py:755`, `app/ponto/services/ausencia.py:343`, `app/ponto/services/ausencia.py:507`, `app/ponto/models.py:877`) | Rateio da falta, fechamento, efeitos, crédito parcial, cobertura, apresentação/API/CSV/auditoria, discriminados abaixo. (`app/folha/export.py:121`, `app/ponto/services/fechamento.py:665`, `app/ponto/services/efeito_ausencia.py:44`, `app/ponto/services/credito_parcial.py:24`, `app/ponto/turnos.py:2600`) |
-| `Ausencia.status` | Criação usa status fornecido ou `estado_inicial`; transição por `mudar_estado`; rejeição em lote de férias usa `update`. Migration histórica 0057 também escreve status. (`app/ponto/services/ausencia.py:344`, `app/ponto/services/ausencia.py:763`, `app/ponto/services/ausencia.py:808`, `app/ponto/services/ausencia.py:1265`, `app/ponto/migrations/0057_a4_backfill_pendente.py:43`) | Derivação, cobertura, precedência, decisão visual, cobrança, filtros/telas, relatórios e vigias. (`app/ponto/models.py:877`, `app/ponto/turnos.py:2514`, `app/ponto/precedencia.py:273`, `app/ponto/services/dia_decidido.py:481`, `app/chamados/services/silencio_ausencia.py:77`, `app/ponto/services/vigia_ausencia.py:108`) |
-| `Ausencia.tipo` | Criação e edição; os dois materializadores fornecem o tipo. (`app/ponto/services/ausencia.py:342`, `app/ponto/services/ausencia.py:497`, `app/chamados/services/materializacao.py:485`, `app/chamados/services/materializacao.py:521`) | Derivação literal de `falta`, catálogo/efeito, cobertura/range, precedência, leitores financeiros, cobrança e apresentação. (`app/ponto/models.py:877`, `app/ponto/models.py:842`, `app/ponto/turnos.py:2532`, `app/ponto/precedencia.py:381`, `app/ponto/services/fechamento.py:685`, `app/chamados/services/materializacao.py:602`) |
-| `Colaborador.data_demissao` | Agendamento, desligamento efetivo e reativação, persistidos pela porta de colaborador. (`app/colaboradores/services/desligamento.py:85`, `app/colaboradores/services/desligamento.py:105`, `app/colaboradores/services/desligamento.py:211`, `app/colaboradores/services/colaborador.py:32`) | Predicado H12, prontidão, recortes de grade/cobrança/universo, ciclo do desligamento e apresentação, discriminados abaixo. (`app/folha/export.py:60`, `app/folha/export.py:1060`, `app/ponto/services/fechamento.py:423`, `app/escala/services/leitor_celula.py:351`, `app/folha/views.py:658`) |
-| Chave `rescisao` | Somente `montar_resumos`. (`app/ponto/services/fechamento_lista.py:109`) | Linha/cor/badge e contador da view; o atributo HTML alimenta o filtro. (`app/templates/ponto/_fech_linha.html:2`, `app/templates/ponto/_fech_linha.html:4`, `app/ponto/views.py:1215`, `app/templates/ponto/fechamento.html:117`) |
-| `n_rescisao` | Soma de `r['rescisao']` na view. (`app/ponto/views.py:1215`) | Pílula do fechamento. (`app/templates/ponto/fechamento.html:65`) |
-| `_DECLARA_FALTA_MAPA` | Declaração em `chamados/models.py`. (`app/chamados/models.py:3018`) | Materializador da pergunta; o selo inspeciona sua AST. (`app/chamados/services/materializacao.py:468`, `app/chamados/tests/test_h06_selo_minutos_sem_literal.py:50`) |
-| `cobre_parte` | Atributo transitório preenchido na lista pela chamada ao juiz existente. (`app/ponto/views.py:2240`) | Duração apresentada na lista. (`app/templates/ponto/ausencias.html:163`) |
-| `sai_pela_rescisao` | Definição única do predicado. (`app/folha/export.py:54`) | `classificar_export` e `montar_resumos`. (`app/folha/export.py:858`, `app/ponto/services/fechamento_lista.py:109`) |
-| `janela_competencia` | Wrapper de `janela_fechamento`; corte vem de `Empresa.dia_inicio_competencia`. (`app/folha/export.py:47`, `app/ponto/janelas.py:50`, `app/ponto/janelas.py:57`) | Export, resumos, prontidão, prévia, PDFs, relatórios e comandos, discriminados abaixo. (`app/folha/export.py:807`, `app/ponto/services/fechamento_lista.py:104`, `app/folha/export.py:1073`, `app/folha/previa.py:42`, `app/folha/validacao_pdf.py:42`, `app/relatorios/services.py:214`) |
-
-Os fornecedores de `tipo/minutos/status` fora do diff também passam pela porta:
-
-| Origem | Sítio |
-|---|---|
-| Lançamento administrativo, colaborador e API | `app/ponto/views.py:2412`, `app/ponto/views.py:2533`, `app/api/views.py:1820` |
-| Veredito da célula e copiloto de ausência | `app/ponto/services/veredito_celula.py:315`, `app/ponto/services/checar_ausencia.py:46` |
-| Regularização e abandono provisório | `app/ponto/services/regularizacao.py:118`, `app/ponto/management/commands/marcar_abandono_provisorio.py:76` |
-| Espelho de férias | `app/ferias/models.py:385`, `app/ponto/services/ausencia.py:1186` |
-| Edição de tipo/minutos | `app/ponto/views.py:2791` |
-| Decisões individuais/em lote | `app/ponto/views.py:85`, `app/ponto/views.py:2287`, `app/ponto/views.py:2316`, `app/ponto/views.py:2640`, `app/ponto/views.py:2698` |
-| Reverter rejeição; rejeitar férias | `app/ponto/views.py:2581`, `app/ferias/services.py:356` |
-| Rejulgar status e rederivar fim | `app/ponto/management/commands/rejulgar_status_por_tipo.py:31`, `app/ponto/management/commands/curar_ausencia_sem_fim.py:46` |
-
-Os demais leitores de **minutos**, inclusive fora do diff, são:
-
-- Propriedade `horas`, admin e fotografias de auditoria. (`app/ponto/models.py:865`, `app/ponto/admin.py:44`, `app/ponto/services/ausencia.py:446`, `app/ponto/views.py:2347`, `app/ponto/views.py:2730`, `app/ponto/views.py:2768`, `app/ponto/views.py:2811`)
-- Palavra/cartão/histórico, payload da API e CSV. (`app/ponto/services/dia_decidido.py:423`, `app/ponto/services/dia_decidido.py:488`, `app/ponto/services/dia_decidido.py:512`, `app/api/views.py:1878`, `app/ponto/services/atestados_lote.py:128`)
-- Juiz de parcialidade, lista e drawer. (`app/ponto/turnos.py:2598`, `app/templates/ponto/ausencias.html:163`, `app/templates/ponto/partials/painel_ausencia.html:125`, `app/templates/ponto/partials/painel_ausencia.html:149`, `app/templates/ponto/partials/painel_ausencia.html:299`)
-
-Os demais leitores de **tipo/status** concentram-se nestes sítios:
-
-| Domínio | Leitores fora do diff |
-|---|---|
-| Cobertura, sobreposição e afastamento | `app/ponto/turnos.py:2509`, `app/ponto/turnos.py:2521`, `app/ponto/turnos.py:2536`, `app/ponto/turnos.py:2705`, `app/ponto/turnos.py:2733`, `app/ponto/turnos.py:2793`, `app/ponto/turnos.py:3087` |
-| Propriedades e apresentação | `app/ponto/models.py:711`, `app/ponto/models.py:723`, `app/ponto/models.py:732`, `app/ponto/services/dia_decidido.py:453`, `app/ponto/services/dia_decidido.py:476`, `app/api/views.py:1873`, `app/ponto/admin.py:44` |
-| Precedência, grade, furo e cartório | `app/ponto/precedencia.py:127`, `app/ponto/precedencia.py:273`, `app/ponto/precedencia.py:339`, `app/escala/servico_jornada.py:340`, `app/escala/utils.py:1209`, `app/escala/utils.py:1231`, `app/ponto/services/cartorio.py:355` |
-| Chamados e cobrança | `app/chamados/services/materializacao.py:78`, `app/chamados/services/materializacao.py:602`, `app/chamados/services/materializacao.py:638`, `app/chamados/services/silencio_ausencia.py:77`, `app/chamados/services/silencio_ausencia.py:93`, `app/chamados/services/historico.py:129`, `app/escala/services/furos_diarios.py:223` |
-| Relatórios, calendário, inteligência e férias | `app/relatorios/views.py:197`, `app/relatorios/views.py:277`, `app/colaboradores/services/calendario.py:674`, `app/colaboradores/services/detalhe.py:104`, `app/ponto/services/alertas_ausencia.py:48`, `app/inteligencia/resumo.py:39`, `app/inteligencia/views.py:71`, `app/inteligencia/views.py:239`, `app/inteligencia/views.py:516`, `app/ferias/models.py:144` |
-| Vigias e comandos | `app/ponto/services/vigia_ausencia.py:59`, `app/ponto/services/vigia_ausencia.py:104`, `app/ponto/services/vigia_ausencia.py:108`, `app/ponto/services/vigia_ausencia.py:115`, `app/ponto/services/vigia_ausencia.py:120`, `app/ponto/services/vigia_ausencia_veredito.py:46`, `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:56`, `app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:41`, `app/ponto/management/commands/ausencia_bloqueante_sem_fim.py:27`, `app/inteligencia/management/commands/calcular_scores.py:12`, `app/inteligencia/management/commands/gerar_alertas.py:55` |
-
-Para **`data_demissao`**, além dos leitores financeiros já citados, há leitores de disponibilidade, cadastro, julgamento, holerite e ciclo do vínculo. (`app/ponto/utils.py:180`, `app/escala/services/cadastro_realidade.py:444`, `app/ponto/services/cartorio.py:1096`, `app/ponto/supra_juiz.py:177`, `app/ponto/supra_juiz.py:194`, `app/holerite/matriz.py:88`, `app/colaboradores/services/vinculo.py:92`, `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:38`, `app/colaboradores/management/commands/fechar_vinculo_de_desligado.py:41`, `app/colaboradores/management/commands/tripwire_vinculo_orfao.py:55`)
-
-Os demais consumidores de **`janela_competencia`** incluem ausências, grade, férias, retenção, histórico da folha e serviços/comandos auxiliares. (`app/folha/export.py:166`, `app/folha/export.py:185`, `app/folha/export.py:337`, `app/folha/export.py:486`, `app/folha/export.py:1266`, `app/folha/views.py:529`, `app/folha/views.py:588`, `app/folha/services/vigia_pausa.py:123`, `app/folha/services/sem_furo.py:47`, `app/relatorios/cartao_pela_celula.py:24`, `app/ponto/services/vigia_pareador_celula.py:59`, `app/ponto/management/commands/censo_col900.py:89`, `app/ponto/management/commands/gerar_celulas.py:176`, `app/ponto/management/commands/lavrar_status_competencia.py:40`, `app/ponto/management/commands/mapa_divergencia.py:61`, `app/ponto/management/commands/mapa_divergencia.py:93`)
-
-**Sim, sobraram regras próprias contraditórias:** os leitores financeiros de parcialidade; o TXT que conta falta zero; e apresentação que ainda ensina `>0 = parcial`. (`app/ponto/services/fechamento.py:665`, `app/ponto/services/efeito_ausencia.py:51`, `app/ponto/services/credito_parcial.py:24`, `app/folha/export.py:218`, `app/templates/ponto/lancar_ausencia.html:70`)
-
-**2. Condições exatas de `Ausencia.save` e caminhos de gravação**
-
-A derivação acontece em **qualquer `save`**, sem exigir detectar um flip, quando simultaneamente:
-
-- `status == 'aprovada'`;
-- `tipo == 'falta'`;
-- `not self.minutos`.
-
-Ela soma o juiz do previsto, inclusivamente, de `data` até `data_fim or data`. Valores não zero são preservados. (`app/ponto/models.py:877`, `app/ponto/models.py:882`, `app/ponto/models.py:885`)
-
-Para uma **falta nova** dos dois materializadores, não encontrei bypass: ambos omitem minutos, a porta aplica zero, instancia `Ausencia` e chama `save()` inteiro. A aprovação posterior inclui `minutos` e demais derivados em `update_fields`. (`app/chamados/services/materializacao.py:484`, `app/chamados/services/materializacao.py:520`, `app/ponto/services/ausencia.py:130`, `app/ponto/services/ausencia.py:385`, `app/ponto/services/ausencia.py:418`, `app/ponto/services/ausencia.py:818`)
-
-Há duas distinções necessárias:
-
-- **Atestado aprovado zero não deriva**, porque o teste exige tipo literal `falta`. Isso é o comportamento introduzido pelos sítios, não um bypass de criação. (`app/ponto/models.py:877`, `app/chamados/services/materializacao.py:523`)
-- **Registro existente pode ser devolvido sem `save`**, inclusive uma falta já aprovada com zero. Portanto repetir a materialização não garante rederivação de legado. (`app/ponto/services/ausencia.py:294`, `app/ponto/services/ausencia.py:299`)
-
-O `update` de produção identificado rejeita exclusivamente férias; o admin é somente leitura; os receivers de ausência julgam/reconciliam consumidores. Não encontrei `bulk_create` ou `update` que aprove faltas oriundas desses sítios. Ausência absoluta de SQL dinâmico ou chamadas não atribuíveis: **[não verificado]**. (`app/ponto/services/ausencia.py:1265`, `app/ponto/admin.py:38`, `app/ponto/signals.py:143`, `app/ponto/signals.py:250`, `app/core/censo_escritas.py:43`)
-
-Para **atestado aprovado com efeito ABONA no catálogo**:
-
-| Leitor | Zero | 720 |
-|---|---|---|
-| Juiz de cobertura | Dia inteiro | Dia inteiro. (`app/ponto/turnos.py:2598`) |
-| Lista | “1 dia” | “1 dia”. (`app/ponto/views.py:2240`, `app/templates/ponto/ausencias.html:163`) |
-| Fechamento | Justifica o dia; não soma crédito parcial | Soma 720 como crédito e pula justificação do dia. (`app/ponto/services/fechamento.py:665`, `app/ponto/services/fechamento.py:685`) |
-| `efeitos_da_ausencia` | Justifica o dia | Crédito 720; pula justificação. (`app/ponto/services/efeito_ausencia.py:44`, `app/ponto/services/efeito_ausencia.py:51`) |
-| `creditos_por_dia` | Nenhum crédito | Crédito 720 no dia inicial do registro. (`app/ponto/services/credito_parcial.py:24`) |
-| Teto de pontualidade | Dia inteiro | Também dia inteiro, pelo juiz — divergindo da regra de justificação acima. (`app/ponto/turnos.py:2668`, `app/ponto/turnos.py:2689`, `app/ponto/services/fechamento.py:683`) |
-| Drawer | Oculta detalhe de minutos; não pede período parcial | Mostra 720; também não pede período parcial. (`app/templates/ponto/partials/painel_ausencia.html:125`, `app/templates/ponto/partials/painel_ausencia.html:296`, `app/ponto/views.py:2084`) |
-| Palavra do dia | Sem duração numérica | Acrescenta 12h. (`app/ponto/services/dia_decidido.py:230`, `app/ponto/services/dia_decidido.py:488`) |
-| API/CSV/admin | Valor cru zero | Valor cru 720. (`app/api/views.py:1878`, `app/ponto/services/atestados_lote.py:128`, `app/ponto/admin.py:44`) |
-
-O TXT efetivo recebe os eventos do fechamento e as datas de falta; não lê diretamente minutos de atestado nesse laço. Assim, a diferença zero/720 chega a ele pelos resultados anteriores do fechamento. (`app/folha/export.py:722`, `app/folha/export.py:732`)
-
-**3. Folga, sem escala e sem célula**
-
-Sem escala vigente, sem tipo, com `eh_dia_trabalho(...) is not True`, ou sem marcos de início/fim, o juiz devolve zero; a falta aprovada grava esse zero após passar pela derivação. (`app/escala/utils.py:2282`, `app/escala/utils.py:2284`, `app/escala/utils.py:2287`, `app/escala/utils.py:2291`, `app/ponto/models.py:887`)
-
-**Sem célula não implica zero:** a autoridade existente pode consultar o cálculo do vínculo/template. O diff reutiliza essa autoridade; não acrescenta fallback próprio. (`app/escala/models.py:1096`, `app/escala/models.py:1133`, `app/escala/utils.py:2290`, `app/ponto/models.py:881`)
-
-O contraexemplo relevante é:
-
-1. Os materializadores pedem `retornar_mesmo_tipo`; o veto de precedência só é executado no modo `veto`. Logo esses sítios não passam por esse veto ao criar a linha. (`app/chamados/services/materializacao.py:490`, `app/chamados/services/materializacao.py:526`, `app/ponto/services/ausencia.py:377`)
-2. A falta pode nascer aprovada zero sem escala — situação expressamente aceita pelo teste alterado. (`app/api/tests/test_falta_na_resposta.py:44`, `app/api/tests/test_falta_na_resposta.py:48`)
-3. O fechamento soma zero minutos/horas. (`app/folha/export.py:121`, `app/ponto/services/fechamento.py:866`, `app/ponto/services/fechamento.py:987`)
-4. O TXT seleciona o registro por tipo/status/data e conta `len(datas)`: **um dia**, se o colaborador entrar no crivo e existir a rubrica. (`app/folha/export.py:87`, `app/folha/export.py:160`, `app/folha/export.py:218`, `app/folha/export.py:732`)
-5. Em folga, a grade mantém explicitamente **folga**, apesar da falta aprovada; o seletor de datas do TXT não consulta essa decisão. (`app/escala/utils.py:1227`, `app/escala/utils.py:1231`, `app/folha/export.py:181`)
-
-Portanto, **sim: zero significa nada nas horas, mas pode significar um dia no TXT**. Essa divergência impede certificar a migração dos leitores de H06. (`app/ponto/services/fechamento.py:866`, `app/folha/export.py:218`)
-
-**4. H12: pergunta e janela**
-
-Os quatro sítios pedidos estão alinhados: predicado único `data_demissao is not None and data_demissao <= fim`, classificador, chave dos resumos, linha e contador. (`app/folha/export.py:60`, `app/folha/export.py:858`, `app/ponto/services/fechamento_lista.py:109`, `app/templates/ponto/_fech_linha.html:2`, `app/ponto/views.py:1215`)
-
-A janela também coincide: classificador usa a empresa recebida; resumos usam `colab.empresa`, com cache por empresa; ambos chegam a `janela_fechamento`. Portanto respeitam cortes distintos, sem fixar 21 nesses leitores novos. (`app/folha/export.py:807`, `app/ponto/services/fechamento_lista.py:103`, `app/ponto/janelas.py:50`, `app/ponto/janelas.py:57`)
-
-Os baldes de rescisão de `folha/views`, relatórios e retrato acompanham o classificador. (`app/folha/views.py:589`, `app/folha/views.py:594`, `app/relatorios/views.py:1658`, `app/relatorios/views_pend.py:58`, `app/folha/fora_da_folha.py:119`, `app/folha/retrato_folha.py:1157`)
-
-Persistem duas diferenças, com perguntas distintas:
-
-- `prontidao` chama de `"rescisao"` a cegueira de quem saiu **antes do início**; não usa o predicado H12. Isso não decide entrada no TXT, mas o vocabulário não representa a mesma classificação. (`app/folha/export.py:1060`, `app/folha/export.py:1081`, `app/folha/export.py:1083`)
-- O raio-X ainda escreve `†deslig.` pela mera presença da data, inclusive futura; seu balde de rescisão, entretanto, lê o juiz. (`app/folha/views.py:658`, `app/folha/views.py:594`)
-
-O corte de aposentadoria continua pendente na cópia: o universo exclui desligados anteriores à janela, mas o classificador ainda consulta seus fechamentos gravados; não existe `encerrado` nas escolhas e o vigia continua incluindo as projeções nulas. Isso é dívida anterior, não regressão do predicado H12 de A. (`app/docs/CORTES.md:270`, `app/ponto/services/fechamento.py:423`, `app/folha/export.py:777`, `app/ponto/models.py:399`, `app/ponto/services/fechamento.py:1680`)
-
-**5. Classes de reprovação**
-
-| Classe | Verificação |
-|---|---|
-| Segundo juiz | Não identifiquei juiz novo no diff: H12 extrai uma condição compartilhada; H06 chama o previsto e a cobertura existentes. K1/K2 continuam registrados em `classificar_export`. (`app/folha/export.py:54`, `app/folha/export.py:858`, `app/ponto/views.py:2240`, `app/core/juizes.py:298`) |
-| Segundo escritor | Os sítios alterados continuam pela porta; aprovação persiste os derivados do modelo. (`app/chamados/services/materializacao.py:484`, `app/chamados/services/materializacao.py:520`, `app/ponto/services/ausencia.py:818`) |
-| Relógio fora da borda | Não aparece leitura nova de relógio nos hunks funcionais: o predicado H12 recebe fim; a derivação usa as datas da ausência. (`app/folha/export.py:54`, `app/ponto/models.py:882`, `app/ponto/services/fechamento_lista.py:104`) |
-| Derivação paralela | Os dois literais foram removidos, mas sobreviveram os julgamentos financeiros de parcialidade e o contador de dias independente do valor zero. (`app/chamados/services/materializacao.py:484`, `app/chamados/services/materializacao.py:520`, `app/ponto/services/fechamento.py:685`, `app/ponto/services/credito_parcial.py:24`, `app/folha/export.py:218`) |
-
-
-[truncado em 20000 de 24439 caracteres]
-
-_2012 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2013 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
