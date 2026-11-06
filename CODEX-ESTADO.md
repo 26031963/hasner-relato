@@ -1,7 +1,166 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 01:57** · publicado em **06/11/2026 01:57** (UTC-3)
+> Ultima resposta processada: **06/11/2026 02:07** · publicado em **06/11/2026 02:08** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 02:07 · sessao 657abac16215 · H12H06-B · sonda · origem=Code
+
+**Parte A — funções reais e limite da conferência.** O conteúdo de `sonda_h12h06b.py` não foi localizado na cópia nem consta do anexo transcrito; portanto, seus imports, argumentos, filtros e eventuais reconstruções de lógica ficam **[nao verificado]**. A vinculação da cópia ao HEAD informado também fica **[nao verificado]**. O identificador entre colchetes no cabeçalho do envelope é o SHA-256 abreviado **do script**, calculado em `bin/sonda_leitura.sh:219` e impresso em `bin/sonda_leitura.sh:221`.
+
+As quatro funções existem com estas assinaturas:
+
+| Função | Assinatura real | Fonte |
+|---|---|---|
+| `parciais_vigentes` | `parciais_vigentes()` | `app/ponto/catalogo/ausencias.py:336` |
+| `cobre_parte_do_dia` | `cobre_parte_do_dia(a, parciais=None)` | `app/ponto/turnos.py:2583` |
+| `janela_atual` | `janela_atual(data, empresa=None)` | `app/ponto/janelas.py:60` |
+| `competencia_entregue` | `competencia_entregue(empresa_id, mes, ano, registro=False)` | `app/folha/export.py:556` |
+
+`parciais_vigentes()` seleciona a flag de parcial do catálogo vigente; `cobre_parte_do_dia()` exige tipo nesse conjunto, registro de um único dia e **`0 < minutos < 480`**. `janela_atual()` recebe a data primeiro e aplica o corte da empresa. `competencia_entregue()` consulta a exportação vigente e exige que não esteja invalidada. (`app/ponto/catalogo/ausencias.py:357`; `app/ponto/turnos.py:2580`; `app/ponto/turnos.py:2595`; `app/ponto/turnos.py:2598`; `app/ponto/janelas.py:63`; `app/folha/export.py:580`)
+
+**O filtro `status='aprovada', minutos>0` não é o universo integral dos leitores.** Para folha, o carregador filtra aprovadas, mas não exige minutos positivos; para cobrança, exclui apenas rejeitadas. Os carregadores também consideram interseção de datas e os intervalos abertos permitidos. (`app/ponto/turnos.py:2514`; `app/ponto/turnos.py:2516`; `app/ponto/turnos.py:2529`; `app/ponto/turnos.py:2753`)
+
+Quem lê e como trata minutos:
+
+| Leitor | Leitura efetiva | Fonte |
+|---|---|---|
+| Fechamento mensal | Carrega ausências para folha; soma minutos de tipos pagos e pula o efeito de dia inteiro quando esses minutos são não zero | `app/ponto/services/fechamento.py:630`, `:665`, `:685` |
+| Efeitos da ausência | Usa os carregadores para folha e o mesmo teste de tipo pago com minutos não zero | `app/ponto/services/efeito_ausencia.py:43`, `:44`, `:49`, `:51` |
+| Crédito parcial | Acumula minutos de tipos pagos pela data inicial | `app/ponto/services/credito_parcial.py:23`, `:24` |
+| Exportação | Filtra aprovadas, tipos solicitados e interseção da janela, sem exigir minutos positivos | `app/folha/export.py:87`, `:88`, `:90` |
+
+Nos três primeiros leitores, esses testes locais usam **tipo pago + verdade lógica de `minutos`**, sem chamar `cobre_parte_do_dia()` nesses pontos; portanto, não aplicam ali o limite de 480 nem a condição de dia único do juiz. São tratamentos locais distintos do predicado real. Reconstruções dentro **da sonda** permanecem indeterminadas. (`app/ponto/services/fechamento.py:665`; `app/ponto/services/fechamento.py:685`; `app/ponto/services/efeito_ausencia.py:44`; `app/ponto/services/efeito_ausencia.py:51`; `app/ponto/services/credito_parcial.py:24`; `app/ponto/turnos.py:2598`) **[nao verificado — conteúdo da sonda]**
+
+**Parte B — saída fornecida.** Nela, **`falta` não está em `parciais_vigentes()`**: o resultado é `false`, e a lista contém `abon_hr`, `atestado`, `atraso`, `declaracao`, `saida_antecipada`. **[nao verificado — dado fornecido, sem nova consulta]**
+
+A tabela abaixo preserva `n` e os identificadores recebidos, inclusive quando há vários registros para um mesmo identificador. **[nao verificado — dado fornecido]**
+
+| Empresa | Competência | Exportada | Tipo | n | Colaboradores | Evidência |
+|---:|:---:|:---:|---|---:|---|---|
+| 2 | 06/2026 | false | falta | 1 | col43 | [nao verificado] |
+| 4 | 06/2026 | true | falta | 3 | col39, col40, col47 | [nao verificado] |
+| 3 | 07/2026 | true | abono | 1 | col148 | [nao verificado] |
+| 3 | 07/2026 | true | falta | 2 | col64 | [nao verificado] |
+| 4 | 07/2026 | true | falta | 1 | col676 | [nao verificado] |
+| 2 | 08/2026 | true | abono | 3 | col666, col819, col905 | [nao verificado] |
+| 2 | 08/2026 | true | atestado | 7 | col284, col342, col400, col433, col707, col842 | [nao verificado] |
+| 2 | 08/2026 | true | falta | 46 | col187, col200, col228, col237, col272, col328, col335, col338, col344, col347, col366, col406, col433, col442, col489, col493, col552, col568, col718, col760, col783, col823, col874 | [nao verificado] |
+| 2 | 08/2026 | true | saida_antecipada | 1 | col649 | [nao verificado] |
+| 3 | 08/2026 | false | atestado | 1 | col159 | [nao verificado] |
+| 3 | 08/2026 | false | falta | 8 | col58, col60, col122, col128, col743, col769 | [nao verificado] |
+| 4 | 08/2026 | false | abono | 1 | col712 | [nao verificado] |
+| 4 | 08/2026 | false | atestado_inss | 1 | col42 | [nao verificado] |
+| 4 | 08/2026 | false | falta | 3 | col46, col50 | [nao verificado] |
+| 2 | 09/2026 | true | atestado | 3 | col518, col885, col906 | [nao verificado] |
+| 2 | 09/2026 | true | falta | 114 | col174, col200, col268, col304, col325, col327, col331, col338, col370, col406, col417, col437, col443, col492, col493, col558, col566, col572, col576, col584, col594, col622, col659, col666, col667, col673, col697, col704, col726, col735, col782, col786, col814, col823, col824, col855, col877, col894, col905, col906 | [nao verificado] |
+| 2 | 09/2026 | true | suspensao | 1 | col417 | [nao verificado] |
+| 3 | 09/2026 | true | atestado | 2 | col111, col643 | [nao verificado] |
+| 3 | 09/2026 | true | falta | 16 | col92, col154, col161, col173, col502, col515, col643, col746, col876 | [nao verificado] |
+| 3 | 09/2026 | true | suspensao | 1 | col90 | [nao verificado] |
+| 4 | 09/2026 | true | atestado | 1 | col40 | [nao verificado] |
+| 4 | 09/2026 | true | falta | 2 | col50, col510 | [nao verificado] |
+| 1 | 10/2026 | false | falta | 1 | col950 | [nao verificado] |
+| 2 | 10/2026 | false | atestado | 17 | col204, col252, col354, col389, col446, col511, col518, col558, col566, col618, col626, col889, col905, col920 | [nao verificado] |
+| 2 | 10/2026 | false | falta | 83 | col55, col200, col206, col207, col248, col304, col307, col335, col370, col373, col427, col432, col444, col507, col569, col576, col577, col622, col655, col666, col697, col699, col718, col736, col833, col885, col889, col893, col924, col928, col929, col944, col951, col954, col966, col968 | [nao verificado] |
+| 3 | 10/2026 | false | falta | 6 | col113, col173, col643, col752, col769 | [nao verificado] |
+| 4 | 10/2026 | false | falta | 2 | col510, col857 | [nao verificado] |
+| 2 | 11/2026 | false | atestado | 4 | col200, col701, col891, col967 | [nao verificado] |
+| 2 | 11/2026 | false | falta | 20 | col298, col304, col364, col444, col566, col570, col723, col823, col869, col885, col905, col924, col928, col966 | [nao verificado] |
+| 3 | 11/2026 | false | falta | 2 | col769, col984 | [nao verificado] |
+| 2 | 09/2029 | false | falta | 1 | col667 | [nao verificado] |
+
+**As linhas detalhadas somam 355, não 448.** Os 93 de `parcial_pelo_juiz` aparecem somente no agregado; sua distribuição por empresa, competência, exportada, tipo e colaboradores é **indeterminada**. **[nao verificado — cálculo e limites do dado fornecido]**
+
+| Parcela | n | Evidência |
+|---|---:|---|
+| Linhas detalhadas com `exportada=false` — coincide numericamente com `aberta` | 151 | [nao verificado] |
+| Linhas detalhadas com `exportada=true` — coincide com `exportada` | 204 | [nao verificado] |
+| Subtotal detalhado | 355 | [nao verificado] |
+| `parcial_pelo_juiz`, sem detalhamento fornecido | 93 | [nao verificado] |
+| **Universo: 151 + 204 + 93** | **448** | [nao verificado] |
+
+Combinações ausentes não foram preenchidas com zero; a composição individual dos 93 permanece indeterminada. **[nao verificado — ausência de detalhamento no dado]**
+
+**Parte C(A) — competência exportada grava, com exceção explícita para 09/2026.** No modo de escrita, exportação gera aviso; os fechamentos abertos são salvos com `save()`, e os demais recebem `update()` dos campos calculados. Entretanto, `GUARDA_COMPETENCIA` contém **09/2026**, e os colaboradores das empresas exportadas nessa competência são excluídos do processamento, preservando seus fechamentos nessa chamada. (`app/ponto/services/fechamento.py:36`; `app/ponto/services/fechamento.py:530`; `app/ponto/services/fechamento.py:532`; `app/ponto/services/fechamento.py:551`; `app/ponto/services/fechamento.py:555`; `app/ponto/services/fechamento.py:1121`; `app/ponto/services/fechamento.py:1128`; `app/ponto/services/fechamento.py:1144`)
+
+Com `somente_leitura=True`, não grava `FechamentoMensal`; a combinação com `lavrar_dias_pagos=True` pode escrever `DiaPago`. (`app/ponto/services/fechamento.py:1112`; `app/ponto/services/fechamento.py:1175`)
+
+**Parte C(B) — sim, há caminho indireto de cron para competência anterior.** `detectar_par_relampago` está agendado com `--dias 2 --apply --retratar`; a busca retrocede dois dias e pode atravessar a virada da competência. (`app/config/crons.py:605`; `app/ponto/management/commands/detectar_par_relampago.py:83`; `app/ponto/management/commands/detectar_par_relampago.py:335`)
+
+A cadeia é: comando chama `_retratar(alvo)` → `retratar_batida()` → `_fechamento_por_evento()` com o timestamp da batida → `recalcular_por_evento()` → `recalcular_fechamento_mes()` na competência **do fato**, após commit. (`app/ponto/management/commands/detectar_par_relampago.py:363`; `app/ponto/management/commands/detectar_par_relampago.py:224`; `app/ponto/registro_batida.py:281`; `app/ponto/registro_batida.py:178`; `app/ponto/services/fechamento.py:1793`; `app/ponto/services/fechamento.py:1794`; `app/ponto/services/fechamento.py:1808`)
+
+O comando mensal `recalcular_fechamento` está declarado fora do pipeline; isso não elimina o caminho indireto acima. (`app/config/crons.py:767`; `app/config/crons.py:1107`) Ocorrência efetiva desse recálculo em produção: **[nao verificado]**.
+
+**Parte C(C) — outros caminhos capazes de recalcular o passado, além do botão:**
+
+| Caminho | Chamada e evidência |
+|---|---|
+| Registro e retratação de batida | `app/ponto/registro_batida.py:155`, `:160`, `:178`, `:281` |
+| Decisão de HE referente ao dia informado | `app/ponto/portas/he.py:202` |
+| Folga aceita e resposta validada | `app/chamados/services/validacao.py:331`, `:407` |
+| Regeneração de células do vínculo, por competência tocada | `app/ponto/portas/celula.py:414`, `:422`, `:427` |
+| Regeneração de exportada, chamada pelo passivo validado | `app/chamados/services/passivo_validado.py:429`, `:438`; `app/ponto/portas/regen_exportada.py:179` |
+| Comando `recalcular_fechamento --mes --ano --apply` | `app/ponto/management/commands/recalcular_fechamento.py:78`, `:79`, `:110`, `:118` |
+| Comando `aplicar_09_corte_b` | `app/ponto/management/commands/aplicar_09_corte_b.py:212` |
+| Comando `diff_reclassificar_partido`, com `--aplicar` | `app/ponto/management/commands/diff_reclassificar_partido.py:206`, `:213`, `:232` |
+| Comando `aplicar_janela_he_total`, delegando ao comando mensal | `app/ponto/management/commands/aplicar_janela_he_total.py:145` |
+| Scripts para 10/2026, nos respectivos ramos de aplicação | `bin/aplicar_o263_comp10.py:26`, `:48`, `:51`; `bin/relavrar_o118_col221.py:19`, `:52`, `:53`; `bin/relavrar_o119_col221.py:18`, `:51`, `:52`; `bin/r5_idempotencia_frota.py:26`, `:117` |
+
+Esses caminhos continuam sujeitos à guarda de 09/2026 no escritor. (`app/ponto/services/fechamento.py:551`) Já `fechamento_lido()` também recalcula competências solicitadas, mas usa `somente_leitura=True`, sem persistir `FechamentoMensal`. (`app/ponto/services/fechamento.py:1743`)
+
+`bin/relavrar_o120_col221_09.py:75` passa `permitir_exportada=True`, argumento ausente da assinatura atual; essa chamada é incompatível com a cópia. (`app/ponto/services/fechamento.py:439`)
+
+A execução efetiva desses caminhos sobre os registros do dado fornecido permanece **[nao verificado]**.
+
+## 06/11 02:04 · sessao a2114b554fe1 · - · - · origem=Ronald (tmux)
+
+C(A): **exportada em geral grava `FechamentoMensal`**, mas **09/2026 exportada é preservada pela guarda ativa**: competência declarada em `app/ponto/services/fechamento.py:36`; empresas exportadas detectadas em `:530`; colaboradores dessas empresas excluídos do universo em `:551–555`. Para os demais casos, `status='aberto'` usa `save()` em `:1121–1128`; outros status usam `update()` dos campos calculados em `:1144–1174`. `somente_leitura=True` não grava o fechamento (`:1112–1120`), embora a combinação com `lavrar_dias_pagos=True` possa gravar `DiaPago` (`:1175`).
+
+C(C): além do botão, recalculam competências passadas pelos seguintes caminhos do código:
+
+- **Eventos retroativos:** `recalcular_por_evento` determina a competência pela data do fato e chama o escritor (`app/ponto/services/fechamento.py:1793–1794`), após commit (`:1808`). Chamadores: batida (`app/ponto/registro_batida.py:155`, `:160`, `:178`); decisão HE (`app/ponto/portas/he.py:202`); folga aceita (`app/chamados/services/validacao.py:331`); resposta validada (`:407`); regeneração de vínculo, para cada competência tocada (`app/ponto/portas/celula.py:414–429`).
+- **Retificação de exportada:** `regenerar_em_exportada` chama diretamente o escritor (`app/ponto/portas/regen_exportada.py:179`); o serviço de passivo validado chama essa porta quando houve plantio em exportada (`app/chamados/services/passivo_validado.py:429–439`).
+- **Comando operacional:** `recalcular_fechamento --mes --ano --apply` (`app/ponto/management/commands/recalcular_fechamento.py:77–81`, `:110–120`).
+- **Outros comandos que podem persistir:** `aplicar_09_corte_b.py:212`; `diff_reclassificar_partido.py:206` com commit no ramo `--aplicar` (`:213–214`, `:232–238`); `aplicar_janela_he_total.py:145` delega ao comando operacional. [nao verificado]
+- **Scripts existentes:** `bin/aplicar_o263_comp10.py:26`, `:48–52`; `bin/relavrar_o118_col221.py:19`, `:52–53`; `bin/relavrar_o119_col221.py:18`, `:51–52`; `bin/r5_idempotencia_frota.py:26`, `:117`.
+
+`bin/relavrar_o120_col221_09.py:75` passa `permitir_exportada=True`, argumento ausente da assinatura atual (`app/ponto/services/fechamento.py:439–442`); essa chamada está incompatível com a cópia.
+
+Medidores com recálculo seguido de rollback: `desvio_o68b.py:93–95`, `folga_que_sumiu.py:69–71`, `plano_b_no_dinheiro.py:109–112`. `celula_veredito_velho.py` desliga recálculo no apply (`:95–99`); no ensaio, recalcula e reverte (`:146–157`).
+
+Ocorrência efetiva desses caminhos em produção: **[não verificado]**.
+
+## 06/11 02:04 · sessao 573d59eacfa9 · - · - · origem=Ronald (tmux)
+
+**C(B): sim, existe caminho indireto de cron para recálculo de competência anterior.** O cron `detectar_par_relampago` roda com `--dias 2 --apply --retratar`; o recorte usa hoje menos dois dias, sem limitar pela competência corrente. Assim, na virada da janela, pode alcançar a anterior. (`app/config/crons.py:605`; `app/ponto/management/commands/detectar_par_relampago.py:335`; `app/ponto/management/commands/detectar_par_relampago.py:343`)
+
+Cadeia executável:
+
+- O comando chama `_retratar(alvo)` ou `_retratar` nas duas batidas do par. (`app/ponto/management/commands/detectar_par_relampago.py:363`; `app/ponto/management/commands/detectar_par_relampago.py:399`)
+- `_retratar` chama `retratar_batida`. (`app/ponto/management/commands/detectar_par_relampago.py:224`)
+- `retratar_batida` chama `_fechamento_por_evento` com o **timestamp da batida retratada**. (`app/ponto/registro_batida.py:281`)
+- O helper chama `recalcular_por_evento`; este resolve a competência daquele fato e chama `recalcular_fechamento_mes`, após commit. (`app/ponto/registro_batida.py:177`; `app/ponto/registro_batida.py:178`; `app/ponto/services/fechamento.py:1793`; `app/ponto/services/fechamento.py:1794`; `app/ponto/services/fechamento.py:1808`)
+- A competência é obtida pela data do fato, através de `competencia_do_fato` → `competencias_do_fato` → `competencias_do_intervalo`. (`app/ponto/services/fechamento.py:1588`; `app/ponto/services/fechamento.py:1578`; `app/ponto/services/fechamento.py:1583`)
+
+A declaração de que `recalcular_fechamento` está fora do pipeline refere-se ao comando mensal direto; ela não elimina essa cadeia indireta. (`app/config/crons.py:767`; `app/config/crons.py:1107`)
+
+O cron `pre_fechamento --apply` escreve pautas e apenas consulta os marcos da competência anterior; seu corpo não chama o recálculo mensal. (`app/config/crons.py:406`; `app/folha/management/commands/pre_fechamento.py:59`; `app/folha/management/commands/pre_fechamento.py:61`; `app/folha/management/commands/pre_fechamento.py:73`; `app/folha/management/commands/pre_fechamento.py:74`)
+
+Ocorrência efetiva desse recálculo indireto em produção, frequência e colaboradores atingidos: **[não verificado]**.
+
+## 06/11 02:04 · sessao 07f1d044bfe0 · - · - · origem=Ronald (tmux)
+
+- `status='aprovada'` é o universo por status da folha: `_pelo_efeito(..., para='folha')` filtra aprovada; cobrança lê todas exceto rejeitada. `minutos>0` não integra esse carregador: `ausencias_do_periodo` e `cobertura_ausencia_periodo` leem interseção de datas, incluindo ranges abertos permitidos, sem filtro de minutos. Portanto aprovada + minutos>0 é recorte dos leitores, não seu universo integral. (`app/ponto/turnos.py:2514`, `app/ponto/turnos.py:2516`, `app/ponto/turnos.py:2529`, `app/ponto/turnos.py:2753`)
+
+- Quem lê esse universo: fechamento carrega `ausencias_do_periodo(..., para='folha')`; efeitos da ausência e crédito parcial fazem a mesma chamada. (`app/ponto/services/fechamento.py:629`, `app/ponto/services/fechamento.py:630`, `app/ponto/services/efeito_ausencia.py:43`, `app/ponto/services/credito_parcial.py:23`)
+
+- As três implementações de dinheiro usam **tipo pago e minutos não zero**, sem perguntar `cobre_parte_do_dia`: fechamento soma minutos e pula o efeito de dia inteiro; efeitos da ausência faz o mesmo; crédito parcial acumula por data. Isso difere do juiz, que exige tipo em parciais, registro de um só dia e `0 < minutos < 480`. Ressalva: o código usa verdade lógica de `minutos`, não comparação literal `>0`; o campo é `IntegerField`. (`app/ponto/services/fechamento.py:665`, `app/ponto/services/fechamento.py:685`, `app/ponto/services/efeito_ausencia.py:44`, `app/ponto/services/efeito_ausencia.py:51`, `app/ponto/services/credito_parcial.py:24`, `app/ponto/turnos.py:2580`, `app/ponto/turnos.py:2595`, `app/ponto/turnos.py:2598`, `app/ponto/models.py:755`)
+
+- A tela do espelho e o PDF leem `efeitos_da_ausencia`; o fechamento também usa `creditos_por_dia`. (`app/ponto/services/espelho.py:1048`, `app/ponto/services/espelho.py:1068`, `app/relatorios/pdf_espelho.py:332`, `app/relatorios/pdf_espelho.py:333`, `app/ponto/services/fechamento.py:978`, `app/ponto/services/fechamento.py:983`)
+
+- Exportação tem outro leitor: `ausencias_na_janela` filtra aprovadas, tipos pedidos e interseção da janela, sem filtro de minutos; `minutos_de_falta_por_dia` usa tipos que descontam e rateia minutos pelos dias. (`app/folha/export.py:87`, `app/folha/export.py:88`, `app/folha/export.py:90`, `app/folha/export.py:138`, `app/folha/export.py:140`, `app/folha/export.py:141`)
+
+- Não localizei `sonda_h12h06b.py` nem com `rg --files -uuu`; ausência do script impede conferir as chamadas que ele efetivamente fez ou identificar reconstruções dentro dele. [não verificado]
 
 ## 06/11 01:57 · sessao 43ff11e3f048 · H12H06-B · verificador · origem=Code
 
@@ -470,71 +629,4 @@ Selos que copiam a palavra:
 
 Nenhum achado bloqueador novo de rótulo identificado por inspeção; execução dos testes e comportamento efetivo em produção: [nao verificado]. [nao verificado]
 
-## 06/11 00:59 · sessao 18261b5dadb9 · - · - · origem=Ronald (tmux)
-
-Achados confirmados por leitura:
-
-- **Alta — snapshot não distingue tentativa de commit.** A foto é persistida antes do escritor (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:154`), mas recusas e conferências podem desfazer a transação depois (`:160`, `:165`, `:167`, `:175`). A reversão consome todas as fotos, sem consultar resultado nem `atualizado_em` (`:211`). Contraexemplo: atestado 720→0 é desfeito pela trilha `None`; outro ato posteriormente grava 0; reverter a foto da tentativa restaura 720 e desfaz esse outro ato. O teste da trilha verifica os minutos após rollback, mas não esse uso posterior da foto (`app/ponto/tests/test_h12h06b_rederivar_minutos.py:163`).
-
-- **Média — idempotência operacional falha no mesmo segundo.** O nome tem resolução de segundos (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:203`); `open(..., 'x')` acontece antes do laço (`:222`, `:234`). Uma segunda execução imediata pode levantar `FileExistsError` antes de produzir “zero mudanças”. O teste desloca a segunda execução para outra hora (`app/ponto/tests/test_h12h06b_rederivar_minutos.py:137`). O arquivo existente fica protegido; o defeito é a colisão.
-
-- **Média — exceção inesperada interrompe prestação de contas após commits parciais.** O tratamento captura apenas `_Desfaz` (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:178`); fechamento do arquivo, impressão do caminho/hash e resultado ficam depois do laço, sem `finally` (`:234`, `:243`, `:244`, `:246`). As linhas anteriores já podem estar confirmadas, pois cada uma usa seu próprio `atomic` (`:134`); suas fotos receberam `flush`/`fsync` (`:227`). Portanto, não afirmar perda das fotos: o problema é ausência do fechamento garantido e do relatório final.
-
-Casos que fecham:
-
-- **PK fora da LISTA:** filtrado antes da construção do plano de reversão (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:208`, `:213`).
-- **Reversão da reversão de atestado confirmado:** a foto registra o estado encontrado e o alvo (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:120`); a leitura troca esperado/alvo usando `novo` e `minutos` (`:211`). Assim, 720→0, 0→720 e 720→0 permanecem representáveis.
-- **Arquivo já existente:** abertura exclusiva antecede qualquer processamento de linha (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:222`, `:234`).
-- **Falta recusada:** continua sendo limitação explicitamente exercitada pelo teste; não deduzi que prosseguir para a irmã viola o aval (`app/ponto/tests/test_h12h06b_rederivar_minutos.py:264`, `:279`).
-
-## 06/11 00:32 · sessao 39d2bd7c3dd5 · G3G4-DONO-MEDIDO · censo · origem=Code
-
-**G3-08 tem vínculo nominal documentado com FIO-LE-O-JUIZ**: o corte identifica col94, 16/10 e chamado #31873; o escopo da obra inclui a disputa #6984 desse colaborador (`app/docs/CORTES.md:297`; `app/docs/BACKLOG.md:771`). A reprodução atual do defeito histórico é [nao verificado].
-
-Para avaliar o alcance das outras obras:
-
-- **ATA-X-TURNO** trata da ata que associa batidas pelo raio sem consultar o juiz do turno (`app/docs/BACKLOG.md:1651`).
-- **JUIZ-DO-PAR-DUAS-ENTRADAS** trata de pareamentos diferentes para as mesmas batidas e marcos (`app/docs/BACKLOG.md:753`).
-- **COBERTURA-PARCIAL-UM-JUIZ** trata da cobertura de declaração/justificativa parcial conforme tipo e período (`app/docs/BACKLOG.md:763`).
-- **FIO-LE-O-JUIZ** trata da leitura de perguntas vivas independentemente do estado da disputa e dos escritores de carimbos de validação/materialização (`app/docs/BACKLOG.md:771`).
-
-**Critério R, comum às quatro:** tomando a medição informada como premissa, `ESTRUTURA` só pode ter vindo do retorno residual: guardas de cadastro não acionadas, `batida_fora_de_turno` falso, contagem par — inclusive zero —, fase deslocada não acionada e dia fora de `dias_cadastro_x_realidade` (`app/ponto/management/commands/e6_oraculo.py:98–110`). `InsumosDoDono.dono` consulta essa lista antes de devolver `ESTRUTURA` (`app/ponto/management/commands/e6_oraculo.py:179–183`). Quantidade exata de batidas e causa concreta: [nao verificado].
-
-Os termos documentais da FIO são **“juiz unico”** e **“fonte unica”**, presentes em `app/docs/GLOSSARIO.md:12` e `app/docs/GLOSSARIO.md:11`; ambos constam do escopo da obra (`app/docs/BACKLOG.md:771`). O retorno `ESTRUTURA` não distingue qual padrão foi quebrado (`app/ponto/management/commands/e6_oraculo.py:98–110`).
-
-Colaborador, data e correspondência com cada uid abaixo são os fornecidos pelo anexo, sem confirmação independente [nao verificado].
-
-| uid | col | dia | obra/lei existente (ou nenhuma) | arquivo:linha | padrao quebrado | criterio do dono |
-|---|---:|---|---|---|---|---|
-| G3-08 [nao verificado] | 94 | 2026-10-16 | **FIO-LE-O-JUIZ**, por vínculo nominal do dia/#31873; mecanismo atual [nao verificado] | `app/docs/CORTES.md:297`; `app/docs/BACKLOG.md:771` | Escopo: **juiz unico / fonte unica** (`app/docs/GLOSSARIO.md:12`, `:11`); quebra atual [nao verificado] | **R**, retorno residual (`app/ponto/management/commands/e6_oraculo.py:110`). O chamado `turno_aberto` não substitui a verificação de órfã real exigida pelo carregador (`:196–200`). |
-| G3-10 [nao verificado] | 163 | 2026-10-10 | **Nenhuma demonstrada**: `ausencia` não informa cobertura parcial, tipo/período ou divergência de pareamento; enquadramento [nao verificado] | Escopos: `app/docs/BACKLOG.md:763`, `:1651`, `:753`, `:771` | [nao verificado] | **R**, retorno residual (`app/ponto/management/commands/e6_oraculo.py:110`); causa específica [nao verificado] |
-| G3-11 [nao verificado] | 163 | 2026-10-17 | **Nenhuma demonstrada**: `folga_trabalhada`, porta nula e chamados vazios não identificam mecanismo das quatro obras; enquadramento [nao verificado] | Escopos: `app/docs/BACKLOG.md:1651`, `:753`, `:763`, `:771` | [nao verificado] | **R**, retorno residual (`app/ponto/management/commands/e6_oraculo.py:110`); causa específica [nao verificado] |
-| G3-12 [nao verificado] | 873 | 2026-09-26 | **Nenhuma demonstrada**: `ausencia` e chamado de ausência não demonstram parcialidade ou divergência entre leitores; enquadramento [nao verificado] | Escopos: `app/docs/BACKLOG.md:763`, `:1651`, `:753`, `:771` | [nao verificado] | **R**, retorno residual (`app/ponto/management/commands/e6_oraculo.py:110`); causa específica [nao verificado] |
-
-**Soma = 4** unidades fornecidas no anexo [nao verificado].
-
-## 06/11 00:31 · sessao 0d7a10e08017 · - · - · origem=Ronald (tmux)
-
-Para as quatro unidades, o único caminho que devolve `ESTRUTURA` é o resíduo de `dono_da_divergencia`: guardas de cadastro falsas, `batida_fora_de_turno` falsa, quantidade par de horas/batidas do oráculo, fase deslocada falsa e dia fora de `dias_cadastro_x_realidade` — `app/ponto/management/commands/e6_oraculo.py:98`, `:104`, `:106`, `:108`, `:110`. `InsumosDoDono.dono` confirma a lista do motor antes de devolver `ESTRUTURA`; o atalho só devolve antecipadamente outra classificação — mesmo arquivo `:179`, `:180`, `:181`, `:183`.
-
-| Unidade do anexo | Critério dedutível, condicionando à medição real informada |
-|---|---|
-| G3-08 [não verificado] | Resíduo acima; a presença de chamado `turno_aberto` não determina o insumo `batida_fora_de_turno`: esse exige realizado aberto **e** entrada órfã real ainda apurável — `app/ponto/management/commands/e6_oraculo.py:187`, `:196`, `:198`, `:200`. Contagem exata e causa concreta [não verificado]. |
-| G3-10 [não verificado] | Mesmo resíduo; `ausencia`, chamados e porta nula não são argumentos do juiz — `app/ponto/management/commands/e6_oraculo.py:53`, `:175`, `:183`. Contagem exata e causa concreta [não verificado]. |
-| G3-11 [não verificado] | Mesmo resíduo; `folga_trabalhada` e lista vazia de chamados não são argumentos do juiz — `app/ponto/management/commands/e6_oraculo.py:53`, `:175`, `:183`. Contagem exata e causa concreta [não verificado]. |
-| G3-12 [não verificado] | Mesmo resíduo; status e chamado de ausência não são argumentos do juiz — `app/ponto/management/commands/e6_oraculo.py:53`, `:175`, `:183`. Contagem exata e causa concreta [não verificado]. |
-
-Zero é explicitamente aceito como par e também pode levar ao resíduo; não se pode distinguir zero de outro número par pelo anexo — `app/ponto/management/commands/e6_oraculo.py:72`, `:106`, `:110`; quantidade efetiva [não verificado].
-
-Os termos exatos disponíveis são `Single Source of Truth / Aggregate Root` / `celula soberana / fonte unica` em `app/docs/GLOSSARIO.md:11` e `Single Writer Principle` / `juiz unico / escritor unico` em `app/docs/GLOSSARIO.md:12`. A classificação `ESTRUTURA` não identifica automaticamente qual padrão desses foi quebrado: o retorno só lê os insumos citados — `app/ponto/management/commands/e6_oraculo.py:98`, `:110`; padrão concreto quebrado sem classe causal [não verificado].
-
-Existe vínculo documental nominal para G3-08: `col94`, dia `16/10` e chamado `#31873` aparecem em `app/docs/CORTES.md:297`; `app/docs/CORTES.md:321` encaminha `col94 -> FECHAR3/(C)`; `app/docs/BACKLOG.md:771` define FIO-LE-O-JUIZ como BO-[nome] (C), incluindo `#6984 col94`, perguntas vivas em disputas fechadas e escritores que desfazem validação/materialização sem trilha. O anexo atual não informa disputa, pergunta ou trilha; violação atual específica dessa obra [não verificado].
-
-## 06/11 00:31 · sessao 17faa885b181 · - · - · origem=Ronald (tmux)
-
-- **G3-08 → FIO-LE-O-JUIZ, vínculo nominal documental.** O escopo inclui perguntas vivas em disputa fechada e o caso `#6984 col94` (`app/docs/BACKLOG.md:771`). O corte identifica exatamente `col94`, dia `16/10`, chamado `#31873` e disputa `#6984` (`app/docs/CORTES.md:297`); depois registra `col94 #31873 / disputa #6984` como item incompleto da obra (C) (`app/docs/CORTES.md:332`). Isso sustenta o destino existente; a reprodução atual do mecanismo histórico permanece **[não verificado]**, pois o anexo não traz disputa, perguntas ou carimbos.
-- **G3-10, G3-11 e G3-12 → nenhuma das quatro demonstrada pelo anexo.** ATA-X-TURNO exige divergência entre casamento por raio e papel dado pelo juiz do turno (`app/docs/BACKLOG.md:1651`); JUIZ-DO-PAR exige pareamentos diferentes para as mesmas batidas e marcos (`app/docs/BACKLOG.md:753`); COBERTURA-PARCIAL exige declaração/justificativa parcial e interpretação do tipo/período (`app/docs/BACKLOG.md:763`); FIO exige relação entre pergunta viva, chamado/disputa ou carimbos (`app/docs/BACKLOG.md:771`). Esses insumos não constam das três linhas do anexo **[não verificado]**. `ausencia`, `folga_trabalhada`, `null` e chamados em `R` não demonstram por si esses mecanismos **[não verificado]**.
-- **Padrões documentais:** `Single Source of Truth / Aggregate Root` / `fonte unica` (`app/docs/GLOSSARIO.md:11`); `Single Writer Principle` / `juiz unico` (`app/docs/GLOSSARIO.md:12`). FIO registra ambos no próprio escopo (`app/docs/BACKLOG.md:771`). Afirmar qual padrão está atualmente quebrado em cada unidade exige mais que o dono ESTRUTURA **[não verificado]**; mantenha `n/a (medida)` para o trabalho e marque a quebra específica não demonstrada.
-- **Lei geral existente para as quatro:** L-099 define ESTRUTURA como contradição do sistema com o cadastro existente, separando CADASTRO e BATIDA (`app/docs/LEIS.md:122`). Ela cobre a classificação geral fornecida, mas não identifica automaticamente uma das quatro obras nem a causa de cada unidade **[não verificado]**.
-
-_2069 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2073 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
