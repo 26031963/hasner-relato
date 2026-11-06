@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 01:00:06.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (38.6 MB). Acoes na janela: **1273**.
+**Medido em 06/11/2026 01:05:27.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (38.8 MB). Acoes na janela: **1281**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:04:05 | Bash | Repoint ESPERANDO to live trava | `sed -i '2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=1814849#' /home/ronald/saas-hasner/app/docs/RELATO.md; kill -0 1814849 && echo vivo` |
+| 01:04:02 | Bash | Confirm ESPERANDO pid is alive | `cd /home/ronald/saas-hasner; kill -0 535259 2>/dev/null && echo vivo \|\| { ps -eo pid,args \| grep 'trava_teste.sh --' \| grep -v grep \| cut -c1-30; }` |
+| 01:03:59 | SendMessage |  | `-` |
+| 01:03:49 | Bash | Insert ERRO-BOBO and DECIDIDO PELA LEI lines at RELATO top | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ERRO-BOBO H12H06:') assert not any(l.startswith('ERRO-BOBO C20-FIO-MUDO:') for l in L) L[3:3]=[ 'ERRO-BOBO C20-FIO-MUDO: (opus final 06/11 01:0x REPROVA 5f3ea8c2, 1a leitura final) omissao contra padrao da casa, nao desenho novo: (1) on_commit novo `chamados/models.py:518` e  ...` |
+| 01:03:30 | Bash | Read L-050 and the fence code | `cd /home/ronald/saas-hasner/app; sed -n 88,94p docs/LEIS.md \| cut -c1-900; sed -n 465,480p /home/ronald/wt-c20fm-203209/app/chamados/models.py; grep -rn "def competencia_do_dia_entregue" --include=*.py . \| head -2` |
+| 01:03:21 | Bash | Read RELATO top block | `cd /home/ronald/saas-hasner/app/docs; sed -n 3,40p RELATO.md \| cut -c1-230` |
+| 01:03:08 | Bash | Read B3 doc header | `cd /home/ronald/saas-hasner; sed -n 8,30p bin/disjuntor.py` |
+| 01:03:05 | Bash | Inspect disjuntor B3 mechanism | `cd /home/ronald/saas-hasner; grep -n 'def \\|B3\\|ERRO-BOBO\\|DESENHO' bin/disjuntor.py \| head -40` |
 | 00:55:08 | Bash | Log FIO-MUDO state in RELATO, check lock | `cd /home/ronald/saas-hasner; cat >> app/docs/RELATO.md <<'EOF' ### C20-FIO-MUDO pronto para opus final (06/11 00:5x) - Copia wt-c20fm-203209 hash 5f3ea8c2, suite inteira Ran 13718 OK rc=0 (logs/c20_fiomudo/suite_full_5f3ea8c2.log); RED no HEAD c9bd52e0 R08/R08b/R08r FAIL + R19b ERROR; 11 mutantes mordem; pacote logs/c20_fiomudo/opus_final_5f3ea8c2/. - Codex 3 voltas (limite 5(d)): v1 6 e v2 4 proc ...` |
 | 00:55:01 | Agent | verificador opus final C20-FIO-MUDO | `Opus final (adversarial, read-only) for obra C20-FIO-MUDO before pouso. You did not see the construction; find what is wrong. Material: - Copy /home/ronald/wt-c20fm-203209, branch raia-c20-fiomudo-203209, base c9bd52e0, certified hash 5f3ea8c2. Read the code there (git -C that dir diff c9bd52e0..5f3ea8c2). - Package /home/ronald/saas-hasner/logs/c20_fiomudo/opus_final_5f3ea8c2/ (diff, RED on head  ...` |
 | 00:53:23 | Bash | Check suite queue and latest logs | `cd /home/ronald/saas-hasner; date +%H:%M; bin/trava_teste.sh --quem; ps -eo pid,etime,args \| grep -E 'trava_teste.sh --' \| grep -v grep \| cut -c1-60; for f in logs/c20_fiomudo logs/h12h06b; do ls -t $f \| head -3; done` |
