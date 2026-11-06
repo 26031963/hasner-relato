@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 22:29:01.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (35.3 MB). Acoes na janela: **1239**.
+**Medido em 05/11/2026 22:34:30.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (35.3 MB). Acoes na janela: **1245**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:33:55 | Bash | Wait for pre-push process to exit | `until ! ps -p 3714160 >/dev/null 2>&1; do /usr/bin/sleep 30; done; tail -4 /home/ronald/saas-hasner/logs/push_h12h06a.log` |
+| 22:33:50 | Bash | Save closed list of 30 rows for the builder | `cd /home/ronald/saas-hasner; { echo "# BRIEF construtor H12H06-B-SIMPLES (preparado 05/11 22:4x)"; echo "Lista fechada (30 linhas, de logs/h12h06a_comp11.out linhas 13-47):"; sed -n '13,47p' logs/h12h06a_comp11.out \| grep "aus#"; } > logs/h12h06b/brief_lista.txt; grep -c "aus#" logs/h12h06b/brief_lista.txt` |
+| 22:33:42 | Bash | See row-level lines in comp11 output | `cd /home/ronald/saas-hasner; grep -n "aus#\\|^LINHA\\|^ " logs/h12h06a_comp11.out \| head -40 \| cut -c1-180` |
+| 22:33:37 | Bash | Get the 18 atestado rows of comp 11 | `cd /home/ronald/saas-hasner; ls logs/h12h06a_comp11.out logs/sombra/h12h06a_comp11*.out 2>/dev/null; f=$(ls logs/h12h06a_comp11.out logs/sombra/h12h06a_comp11*.out 2>/dev/null\|head -1); grep -c "" $f; grep -i "atestado" $f \| head -25 \| cut -c1-160` |
+| 22:33:33 | Bash | Check backlog status of disparar_perguntas_competencia writes | `cd /home/ronald/saas-hasner; grep -n "disparar_perguntas_competencia" app/docs/BACKLOG.md \| cut -c1-300 \| tail -5; grep -n "disparar_perguntas_competencia" app/config/crons.py \| head -5` |
+| 22:33:25 | Bash | Check push, FIO-MUDO suite, lock, F-346 progress | `cd /home/ronald/saas-hasner; tail -3 logs/push_h12h06a.log; git fetch -q; git log -1 --format=%h origin/main; cat logs/c20_fiomudo/green5.log \| tail -3; bin/trava_teste.sh --quem; tail -c 600 /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/a01734f43a70aeecc.output \| grep -o '"text":"[^"]*' \| tail -1 \| cut -c1-300` |
 | 22:27:39 | Bash | Record sonda result in RELATO | `cd /home/ronald/saas-hasner; cat >> app/docs/RELATO.md <<'EOF' ### H12H06-B COMPLEMENTO: sonda H12 na comp 10/2026 (so leitura, 05/11 22:3x) - Pela porta `bin/codex_pergunta.sh --sonda` (CODEX_PAPEL=sonda), script `logs/h12h06b/sonda_h12_comp10.py`, resposta `logs/h12h06b/sonda_h12_comp10.r`, hash a2156d95. - Comp 10 NAO entregue nas 3 empresas (`competencia_entregue`=False, nenhuma ExportacaoDomi ...` |
 | 22:27:30 | Bash | Verify Codex citations in export.py | `cd /home/ronald/saas-hasner/app; sed -n 578,584p folha/export.py; sed -n 856,866p folha/export.py` |
 | 22:27:23 | Bash | Read Codex sonda answer | `cd /home/ronald/saas-hasner; cat logs/h12h06b/sonda_h12_comp10.r \| head -60 \| cut -c1-400` |
