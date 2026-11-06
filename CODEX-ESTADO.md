@@ -1,7 +1,90 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 15:24** · publicado em **06/11/2026 15:24** (UTC-3)
+> Ultima resposta processada: **06/11/2026 17:05** · publicado em **06/11/2026 17:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 17:05 · sessao 2588e3e439fa · - · - · origem=Ronald (tmux)
+
+Consolidação apenas dos anexos textuais; todas as referências abaixo são `[nao verificado]`, com a chave da linha de origem.
+
+Cobertura — origem em cada parte: `COBERTURA_COLAB|competencia`; fechamento também indicado por `SOMA COBERTURA|competencia|True`. `[nao verificado]`
+
+| Parte | 10/2026: medidos + excluídos = universo | 11/2026: medidos + excluídos = universo |
+|---|---:|---:|
+| 1 | 86 + 24 = 110 | 74 + 22 = 96 |
+| 2 | 81 + 28 = 109 | 79 + 20 = 99 |
+| 3 | 86 + 16 = 102 | 78 + 19 = 97 |
+| 4 | 79 + 17 = 96 | 71 + 20 = 91 |
+| 5 | 89 + 18 = 107 | 86 + 13 = 99 |
+| 6 | 83 + 17 = 100 | 79 + 17 = 96 |
+| **Soma** | **504 + 120 = 624** | **467 + 111 = 578** |
+
+Todas fecham; os universos somados coincidem com `UNIVERSO|2026-10|colabs_porta=624` e `UNIVERSO|2026-11|colabs_porta=578`. Todas as partes apresentam `COBERTURA_INTEGRAL|competencia|False` nos dois meses. `[nao verificado]`
+
+Motivos de exclusão — origem em cada parte: `EXCLUIDO|competencia|colNNN|PRODUTO:classe`, resumida por `PRODUTO|competencia|classe`. Os traços abaixo indicam classe sem linha `PRODUTO` na parte, sem atribuir observação adicional. `[nao verificado]`
+
+| Competência / classe | P1 | P2 | P3 | P4 | P5 | P6 | Soma |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 10 / RECUSA_PORTA_SEM_DONO | 18 | 19 | 13 | 11 | 11 | 13 | **85** |
+| 10 / SEM_RETORNO_FECHAMENTO | 6 | 6 | 1 | 5 | 7 | 3 | **28** |
+| 10 / MOTOR_FECHAMENTO_horas_trabalhadas | — | 3 | 2 | 1 | — | 1 | **7** |
+| **10 / total** | **24** | **28** | **16** | **17** | **18** | **17** | **120** |
+| 11 / RECUSA_PORTA_SEM_DONO | 21 | 16 | 17 | 16 | 12 | 15 | **97** |
+| 11 / SEM_RETORNO_FECHAMENTO | — | 1 | 1 | 3 | 1 | 1 | **7** |
+| 11 / MOTOR_FECHAMENTO_horas_trabalhadas | 1 | 3 | 1 | 1 | — | 1 | **7** |
+| **11 / total** | **22** | **20** | **19** | **20** | **13** | **17** | **111** |
+
+PRODUTO: células no formato **colabs/dias**, somadas por classe entre partes. Cada célula vem da linha `PRODUTO|competencia|classe|colabs|dias` da parte correspondente. Não somar classes como pessoas distintas, pois elas podem abranger os mesmos colaboradores. `[nao verificado]`
+
+| 10/2026 — classe(s) com valores iguais | P1 | P2 | P3 | P4 | P5 | P6 | Soma |
+|---|---|---|---|---|---|---|---|
+| DIA_FORA_UNIVERSO_PORTA; SEM_DECISAO_horas_trabalhadas; SEM_DECISAO_horas_intra_indenizada; SEM_DECISAO_horas_folga_trabalhada | 56/296 | 51/247 | 58/324 | 48/321 | 59/346 | 52/229 | **324/1763** |
+| MOTOR_FECHAMENTO_horas_trabalhadas | — | 3/54 | 2/42 | 1/19 | — | 1/24 | **7/139** |
+| RECUSA_PORTA_SEM_DONO | 18/237 | 19/295 | 13/137 | 11/191 | 11/155 | 13/181 | **85/1196** |
+| SEM_DECISAO_horas_atraso; SEM_DECISAO_horas_saida_antecipada | 59/326 | 55/271 | 61/370 | 49/340 | 61/369 | 55/258 | **340/1934** |
+| SEM_DECISAO_horas_extras_100; SEM_DECISAO_horas_extras_100_feriado | 59/321 | 53/259 | 59/352 | 49/340 | 60/365 | 54/249 | **334/1886** |
+| SEM_DECISAO_horas_extras_100_noturna; SEM_DECISAO_horas_extras_50; SEM_DECISAO_horas_extras_50_noturna | 59/321 | 53/260 | 59/352 | 49/340 | 60/365 | 54/249 | **334/1887** |
+| SEM_DECISAO_horas_noturnas | 59/312 | 52/254 | 59/335 | 49/332 | 61/356 | 55/242 | **335/1831** |
+| SEM_RETORNO_FECHAMENTO | 6/0 | 6/0 | 1/0 | 5/0 | 7/0 | 3/0 | **28/0** |
+
+Todos os valores da tabela anterior: `[nao verificado]`, origem `PRODUTO|2026-10|classe` nas partes 1–6.
+
+| 11/2026 — classe(s) com valores iguais | P1 | P2 | P3 | P4 | P5 | P6 | Soma |
+|---|---|---|---|---|---|---|---|
+| DIA_FORA_UNIVERSO_PORTA; SEM_DECISAO_horas_trabalhadas; SEM_DECISAO_horas_intra_indenizada; SEM_DECISAO_horas_folga_trabalhada | 74/817 | 77/857 | 76/805 | 70/791 | 86/967 | 78/876 | **461/5113** |
+| MOTOR_FECHAMENTO_horas_trabalhadas | 1/14 | 3/39 | 1/14 | 1/11 | — | 1/12 | **7/90** |
+| RECUSA_PORTA_SEM_DONO | 21/329 | 16/269 | 17/272 | 16/310 | 12/239 | 15/223 | **97/1642** |
+| SEM_DECISAO_horas_atraso; SEM_DECISAO_horas_saida_antecipada | 74/846 | 78/885 | 77/839 | 71/804 | 86/990 | 79/894 | **465/5258** |
+| SEM_DECISAO_horas_extras_100; SEM_DECISAO_horas_extras_100_feriado; SEM_DECISAO_horas_extras_100_noturna; SEM_DECISAO_horas_extras_50; SEM_DECISAO_horas_extras_50_noturna | 74/844 | 77/881 | 76/832 | 70/800 | 86/990 | 78/891 | **461/5238** |
+| SEM_DECISAO_horas_noturnas | 74/830 | 78/866 | 76/814 | 70/800 | 86/970 | 79/884 | **463/5164** |
+| SEM_RETORNO_FECHAMENTO | — | 1/0 | 1/0 | 3/0 | 1/0 | 1/0 | **7/0** |
+
+Todos os valores da tabela anterior: `[nao verificado]`, origem `PRODUTO|2026-11|classe` nas partes 1–6.
+
+Os zeros em dias de `SEM_RETORNO_FECHAMENTO` vêm acompanhados de `DIAS_NAO_LOCALIZADOS|competencia|PRODUTO|SEM_RETORNO_FECHAMENTO|colabs=...`; portanto, não representam comprovação de ausência de dias afetados. `[nao verificado]`
+
+| Parte | rc | INCOMPLETO | COLABS_COM_FALHA_INSTRUMENTO | TRATADA_LOCAL | EXCLUIDOS_TOTAL |
+|---|---:|---|---:|---|---:|
+| 1 | 0 | sem ocorrência no texto | 0 | sem ocorrência no texto | 46 |
+| 2 | 0 | sem ocorrência no texto | 0 | sem ocorrência no texto | 48 |
+| 3 | 0 | sem ocorrência no texto | 0 | sem ocorrência no texto | 35 |
+| 4 | 0 | sem ocorrência no texto | 0 | sem ocorrência no texto | 37 |
+| 5 | 0 | sem ocorrência no texto | 0 | sem ocorrência no texto | 31 |
+| 6 | 0 | sem ocorrência no texto | 0 | sem ocorrência no texto | 34 |
+| **Soma** | — | — | **0** | — | **231** |
+
+Origem: rodapé de cada parte, linhas `rc_sombra=0`, `COLABS_COM_FALHA_INSTRUMENTO|0`, `EXCLUIDOS_TOTAL|N`; busca textual das ocorrências restantes. Todas as células são `[nao verificado]`. Não há linha de erro de instrumento no texto fornecido; ausência efetiva de erros e contagem de exceções tratadas localmente permanecem `[nao verificado]`. Os 231 excluídos somam **ocorrências por competência**, sem deduplicação entre outubro e novembro. `[nao verificado]`
+
+## 06/11 17:05 · sessao 4407b2add58b · - · - · origem=Ronald (tmux)
+
+- O DIFF v2 × v3 é medida de impacto por rubrica, com dono; não valida o motor novo. [CLAUDE.md:45](/home/ronald/codex_ws/320ef1c738b115e3f7e0004e4c51a48a6eb2d953/CLAUDE.md:45), [CLAUDE.md:415](/home/ronald/codex_ws/320ef1c738b115e3f7e0004e4c51a48a6eb2d953/CLAUDE.md:415).
+- Exigem `!`: tocar o gravado de competência exportada e alterar `motor_calculo_v2.py`; a documentação do calculador declara o repontamento da troca como passo dependente de `!`. [CLAUDE.md:262](/home/ronald/codex_ws/320ef1c738b115e3f7e0004e4c51a48a6eb2d953/CLAUDE.md:262), [CLAUDE.md:403](/home/ronald/codex_ws/320ef1c738b115e3f7e0004e4c51a48a6eb2d953/CLAUDE.md:403), [periodo.py:8](/home/ronald/codex_ws/320ef1c738b115e3f7e0004e4c51a48a6eb2d953/app/ponto/calculador/periodo.py:8).
+- Há dependências concretas do v2: constantes de tolerância importadas em `periodo.py`; classes/função noturna e chamada `he_noturna` em `regras.py`. Isso identifica dependência de código, não uma lista medida de `!` por colaborador. [periodo.py:163](/home/ronald/codex_ws/320ef1c738b115e3f7e0004e4c51a48a6eb2d953/app/ponto/calculador/periodo.py:163), [regras.py:35](/home/ronald/codex_ws/320ef1c738b115e3f7e0004e4c51a48a6eb2d953/app/ponto/calculador/regras.py:35), [regras.py:825](/home/ronald/codex_ws/320ef1c738b115e3f7e0004e4c51a48a6eb2d953/app/ponto/calculador/regras.py:825).
+- As três lacunas `FORA_DA_MEDIDA` dos anexos correspondem ao `NAO_DECIDE` do código: `horas_falta` vem da ausência aprovada; `horas_reflexo_dsr` e `saldo_banco_horas` são ajustes mensais. [regras.py:429](/home/ronald/codex_ws/320ef1c738b115e3f7e0004e4c51a48a6eb2d953/app/ponto/calculador/regras.py:429).
+- O juiz do dono retorna `CADASTRO`, `BATIDA` ou `ESTRUTURA`. `RESIDUO` nos anexos deve ser apresentado separadamente, preservando `ATE_LIMIAR` e `SEM_DECISAO`, sem atribuí-lo como quarto retorno desse juiz. [e6_oraculo.py:98](/home/ronald/codex_ws/320ef1c738b115e3f7e0004e4c51a48a6eb2d953/app/ponto/management/commands/e6_oraculo.py:98).
+- A releitura declara que o alerta textual permanece contando a versão v2 quando o número v3 muda; é limite do código, não lacuna adicional explicitamente medida pelos anexos. [periodo.py:573](/home/ronald/codex_ws/320ef1c738b115e3f7e0004e4c51a48a6eb2d953/app/ponto/calculador/periodo.py:573).
+- Os anexos fornecidos não identificam exportação das competências nem trazem lista explícita de `!`; não há fundamento para marcar colaboradores ou rubricas como exportados somente pelo delta. [nao verificado]
+- Não encontrei `AGENTS.md` aplicável nem o script da sonda na cópia; `logs/` está ausente. [nao verificado]
 
 ## 06/11 15:24 · sessao 460f61b14993 · O10-C · verificador · origem=Code
 
@@ -1736,68 +1819,4 @@ RECUSA|2026-11|col638|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_
 
 [truncado em 20000 de 41426 caracteres]
 
-## 06/11 14:26 · sessao 1e74e491b7d2 · H12H06-B-PAUTA-08 · verificador · origem=Code
-
-**Ainda não daria quitação integral:** a detecção de DEVIDO alterado não cobre a convergência com PAGO, e uma falha ao atualizar a reversão depois do `atomic` deixa pautas persistidas fora do arquivo. (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:133–135,162,198–199,239`)
-
-A cópia não contém metadados Git; a comparação histórica exata com `5855dfc5` ficou **[não verificado]**. A suite Django também ficou **[não verificado]**; as verificações executadas foram em memória, sem criar arquivos **[não verificado]**.
-
-1. **`continue`, variáveis e travas**
-
-   O `continue` sai do contexto e passa à próxima iteração; não alcança o uso posterior de `novos` ou `p`. Todo caminho que chega a essas leituras passa antes pelas respectivas atribuições. Não há reutilização acidental nem variável indefinida nesse ramo. (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:182–201`)
-
-   `@transaction.atomic` em `escrever` não equivale a travar uma Pauta existente: a porta insere Pauta, registra trilha e atualiza `ContadorPauta`. Portanto, além de Colaborador, há contenção no contador do DP. Não identifiquei caminho inverso concreto que prove um ciclo; ausência global de deadlocks permanece **[não verificado]**. (`app/pautas/services.py:152,180–188,344–358`)
-
-2. **`_diz_existente`**
-
-   `ja.respostas.nao_canceladas()` é compatível com o manager declarado: `respostas` é a relação reversa, `objects` deriva de `PautaQuerySet.as_manager()` e `nao_canceladas` é método público desse queryset. (`app/pautas/models.py:60–64,101–110`)
-
-   O prefixo separa respostas comuns do DP, mas não identifica autoria: se o DP copiar um texto começando por `chave + ' > '`, ele entra na comparação e pode gerar aviso falso. A porta de resposta aceita texto livre. Isso não cria duplicata, pois o ramo existente termina em `continue`. (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:187–190,224–230`; `app/pautas/services.py:192–200`)
-
-   A comparação é estável para os mesmos valores e formatação: campos ordenados, packer determinístico, inserção sequencial e leitura por PK. (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:133,168–170,194–197,224–226`; `app/pautas/services.py:123–149`)
-
-3. **`O_EXCL`, `exists` e reversão**
-
-   A combinação é coerente para impedir duas primeiras gravações no mesmo caminho: `exists` antecipa a recusa; `O_EXCL` fecha a corrida; somente quem reservou o caminho chega ao `tmp + replace`. O `exists` pode permanecer. (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:87–89,255–267`)
-
-   **Permanece uma falha de recuperação:** se `_grava` falhar na linha 199, o `atomic` já terminou, mas o JSON anterior não contém os novos PKs. `_reverter` percorre exclusivamente `rev['pautas']`; não recupera pelo plano. A cura dos “PKs mortos” não garante reversão nesse intervalo. (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:198–199,239–246`)
-
-   Há também um intervalo inicial com arquivo reservado vazio antes do `replace`; nesse ponto nenhuma pauta foi escrita. (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:159,182,261–267`)
-
-4. **FORA_DE_PIPELINE e diagrama**
-
-   A entrada satisfaz os predicados de B6.1 e de entrada não podre: existe command correspondente e ele está declarado como ato manual em `FORA_DE_PIPELINE`. Os cálculos reproduzidos deram `sobra=[]` e `podres=[]`; execução dos testes Django **[não verificado]**. (`app/config/crons.py:781–786`; `app/chamados/tests/test_contract_crons.py:214–237`)
-
-   Essa inclusão não altera os blocos do diagrama derivados de crons: eles leem `CRONS`, `ENCADEADOS`, `todas_as_entradas` e os registros de vigias. Os três blocos conferidos coincidiram com o `.mmd`; selo completo B9/MAPA **[não verificado]**. (`app/core/management/commands/gerar_diagrama.py:164–183,233–243,372–408`)
-
-   `manage.py gerar_diagrama` escreve arquivos; a modalidade somente leitura é `--check`. (`app/core/management/commands/gerar_diagrama.py:921–934`)
-
-5. **Descartes anteriores**
-
-   **Não mantenho nenhum como bloqueante**, pelos motivos apresentados:
-
-   - Autor: a criação eventual pertence à porta canônica; o command só a chama no caminho de escrita. (`app/core/utils.py:18`; `app/pautas/services.py:70–90`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:175–181`)
-   - Hash: `previsto_em` é exclusão expressa da autoridade utilizada. (`app/ponto/portas/regen_exportada.py:35–38,62–74`)
-   - K6 fixo: o escopo documentado desta obra é a competência 08. (`app/docs/BACKLOG.md:1779`)
-   - Mutante `desligado`: o fixture cobre essa situação; não demonstra outro caso de exclusão do universo. (`app/pautas/tests/test_pauta_pago_x_devido_exportada.py:54,136–143`)
-   - Nome no logger: está no fechamento; o command apresenta colaboradores por PK. (`app/ponto/services/fechamento.py:1287–1291`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:171`)
-
-6. **O que continua sem cura integral**
-
-   **DEVIDO que passa a igualar PAGO:** `_medir` classifica como `sem_movimento`, mas a consulta da pauta existente só acontece no laço de `com_diferenca`. A pauta antiga permanece sem `ja_divergente` ou `ATENCAO`. O teste novo altera **PAGO**, via `FechamentoMensal`, e não cobre essa convergência. (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:129–135,162,175–190`; `app/pautas/tests/test_pauta_pago_x_devido_exportada.py:260–270`; `app/ponto/portas/regen_exportada.py:77–84`)
-
-   **Reversão após falha de gravação:** permanece o intervalo descrito no item 3. Os testes novos cobrem queda na filha e preservação da feita, mas não falha ao atualizar o JSON depois do `atomic`. (`app/pautas/tests/test_pauta_pago_x_devido_exportada.py:228–258`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:198–199`)
-
-   Outros itens eventualmente presentes na resposta integral da volta 1, além da triagem fornecida: **[não verificado]**.
-
-## 06/11 14:25 · sessao 963078751906 · - · - · origem=Ronald (tmux)
-
-- **`continue` correto:** o ramo `ja` em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:187` termina em `continue` na linha 190; sai do contexto e passa à próxima iteração, sem executar as linhas 198–201. Portanto não reutiliza `novos`/`p` anteriores nem acessa variáveis indefinidas. `novos`/`p` são definidos no único ramo que alcança esse trecho, nas linhas 191–197.
-
-- **A trava nova não é `Colaborador → SELECT FOR UPDATE Pauta`:** o command trava Colaborador na linha 185; `escrever`, embora decorado com `@transaction.atomic`, faz INSERT de Pauta e lavra contador (`app/pautas/services.py:152`, `app/pautas/services.py:180`, `app/pautas/services.py:188`). Pauta usa âncora textual e não FK para Colaborador (`app/pautas/models.py:82`, `app/pautas/models.py:101`).
-
-- **Há também `Colaborador → ContadorPauta(dp)`:** o contador recebe UPDATE em `app/pautas/services.py:354`. Não encontrei caminho inverso concreto que demonstrasse deadlock com essa mudança; ausência global de ciclos permanece **[não verificado]**. As operações canônicas de concluir/cancelar Pauta atualizam Pauta, trilha e contador, sem adquirir explicitamente Colaborador (`app/pautas/services.py:247`, `app/pautas/services.py:272`, `app/pautas/services.py:294`).
-
-- **Residual real da reversão:** após concluir o atomic, o command atualiza primeiro `rev` na memória e só depois o arquivo (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:198`). Uma queda/falha na gravação da linha 199 deixa pautas persistentes fora da lista de PKs em disco; `_reverter` consulta exclusivamente essa lista (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:239`). Isso não invalida a cura de “PK morto”, mas permanece como janela de recuperação por arquivo; resistência a queda nesse intervalo **[não verificado]**.
-
-_2341 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2343 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
