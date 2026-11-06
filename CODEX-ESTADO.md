@@ -1,7 +1,62 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 09:48** · publicado em **06/11/2026 09:48** (UTC-3)
+> Ultima resposta processada: **06/11/2026 09:49** · publicado em **06/11/2026 09:54** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 09:49 · sessao a483d8cfa564 · PEP-REENTRADA · verificador · origem=Code
+
+Execução dos testes e mutantes: **[nao verificado]**. As conclusões abaixo são por inspeção do código. [nao verificado]
+
+1. **Os dois testes têm mordida local, com limites diferentes.** [nao verificado]
+
+   No **laço sem credor**, retirar isoladamente a guarda deve permitir o carimbo da P e contrariar `assertIsNone`: o teste deixa sua validação nula e força o C6 a responder “morta”. A irmã sem destino comprova a passagem pelo segundo laço, pois fica fora do filtro do primeiro. (`app/chamados/tests/test_pep_reentrada.py:227`, `app/chamados/tests/test_pep_reentrada.py:229`, `app/chamados/tests/test_pep_reentrada.py:233`, `app/chamados/tests/test_pep_reentrada.py:239`; `app/chamados/services/disputa_emissao.py:1573`, `app/chamados/services/disputa_emissao.py:1665`, `app/chamados/services/disputa_emissao.py:1671`.)
+
+   Entretanto, substituir essa guarda por **`if q.chamado_destino_id: continue`** também preservaria o teste: P tem destino; irmã não tem. Portanto, ele distingue essas duas perguntas, mas não prova sozinho que a distinção depende exclusivamente do voo. (`app/chamados/tests/test_pep_reentrada.py:58`, `app/chamados/tests/test_pep_reentrada.py:227`, `app/chamados/tests/test_pep_reentrada.py:238`; `app/chamados/services/disputa_emissao.py:1671`.)
+
+   **O mock altera também a porta de escrita.** Seus leitores potenciais nessa chamada são:
+
+   - **Laço 1:** importa a função mockada, mas a guarda de voo pula P antes de consultá-la. (`app/chamados/services/disputa_emissao.py:1577`, `app/chamados/services/disputa_emissao.py:1586`, `app/chamados/services/disputa_emissao.py:1592`.)
+   - **`carimbar`:** importa novamente a mesma função e a consulta depois de aplicar o carimbo e os campos de resposta em memória. O mock força essa aceitação também. (`app/chamados/models.py:2576`, `app/chamados/models.py:2586`, `app/chamados/models.py:2596`.)
+   - **Cauda:** C7 chega à função por `fio_vivo`, e `fechar` também a importa. Contudo, neste teste a guarda de voo impede essa avaliação; mesmo removendo-a, `respostas_sem_veredito` ainda considera o texto não validado da P. (`app/chamados/services/disputa_emissao.py:1710`; `app/chamados/models.py:1784`, `app/chamados/models.py:1794`, `app/chamados/models.py:1815`; `app/chamados/juizes.py:1242`.)
+
+   Há diferença concreta para o código real: `resposta='responder'` preenche `respondida_em`, sem preencher `validada_em`. Na irmã criada sem célula, o C6 real não comprova concordância com a luz e mantém viva essa resposta, recusando o carimbo. O teste força o resultado contrário na porta; demonstra a guarda **sob C6 artificial**, não a integração real desse cenário. (`app/chamados/tests/test_pep_reentrada.py:227`, `app/chamados/tests/test_pep_reentrada.py:233`; `app/chamados/models.py:2587`, `app/chamados/models.py:2591`, `app/chamados/models.py:2600`; `app/chamados/juizes.py:890`, `app/chamados/juizes.py:1101`, `app/chamados/juizes.py:1150`, `app/chamados/juizes.py:1162`.)
+
+   No **S144**, a irmã corrige a vacuidade apontada: remover a guarda carimbaria P; desligar o receiver ou “pular todas” deixaria a irmã sem a via exigida; continuar bloqueando P depois do voo contrariaria o controle `[p.pk]`. As verificações acontecem dentro do bloco, pelo receiver síncrono. (`app/chamados/tests/test_pep_reentrada.py:252`, `app/chamados/tests/test_pep_reentrada.py:256`, `app/chamados/tests/test_pep_reentrada.py:257`, `app/chamados/tests/test_pep_reentrada.py:259`; `app/chamados/signals.py:139`; `app/chamados/services/materializacao.py:1399`, `app/chamados/services/materializacao.py:1405`.)
+
+   **Mutantes ainda sobreviventes:** desligar S143 deixa os dois verdes — o primeiro chama o resolver diretamente; o segundo exercita S144. Além disso, ambos verificam apenas `materializada_em` da P durante o voo: uma escrita indevida apenas de `via_resolucao` ou `materializada_por`, seguida do `continue`, escaparia desses dois testes. Isso é limite desses testes, não afirmação de que tal escritor exista na cópia. (`app/chamados/signals.py:92`; `app/chamados/tests/test_pep_reentrada.py:235`, `app/chamados/tests/test_pep_reentrada.py:239`, `app/chamados/tests/test_pep_reentrada.py:253`, `app/chamados/tests/test_pep_reentrada.py:256`.)
+
+2. **Há dois descartes incorretos e uma justificativa incompleta.**
+
+   **Receiver S143 vivo:** o descarte está errado. `UM_escritor` exige destino encerrado, batida e carimbo único do materializador; tudo isso também ocorre com S143 desligado, porque o próprio materializador reconcilia o destino e carimba P. `S143_nao_fecha` igualmente observaria apenas o fechamento normal posterior, fora do voo. Compartilhar o fixture não prova que o receiver executou. (`app/chamados/tests/test_pep_reentrada.py:87`, `app/chamados/tests/test_pep_reentrada.py:91`, `app/chamados/tests/test_pep_reentrada.py:113`; `app/chamados/services/materializacao.py:746`, `app/chamados/services/materializacao.py:1251`, `app/chamados/services/materializacao.py:1352`.)
+
+   **Divergência de documentação:** reconhecer e adiar não cumpre a instrução expressa de corrigir no mesmo commit. A tabela ainda diz “disputa fecha […] SEM juiz”, enquanto C7 está implementado e registrado. A divergência pode ser anterior à obra; o descarte como dispensável nesta entrega continua contrário à regra do próprio documento. (`app/docs/JUIZES.md:14`, `app/docs/JUIZES.md:54`; `app/chamados/models.py:1789`; `app/core/juizes.py:267`.)
+
+   **Censo de escrita crua:** “só `_escrever_carimbo` e descarimbos” é incompleto para `via_resolucao`: existem duas portas adicionais que escrevem somente a via, inclusive reconhecidas pelo selo AST. Isso corrige a justificativa, mas não demonstra escritor adicional durante o voo. (`app/chamados/models.py:2673`; `app/chamados/services/relavra_via.py:123`; `app/chamados/tests/test_o261e_f2_porta_carimbo.py:51`.)
+
+3. **Nos caminhos atuais examinados, não sobra outro escritor da P em voo; continuam existindo leitores.**
+
+   **Quem escreve:** o materializador chama `carimbar`; as atribuições do trio ficam em `_escrever_carimbo`, e a persistência na porta. Os carimbos de identidade por paridade/colisão também pertencem ao materializador. A chamada de recusa no `finally` da unidade ocorre depois da saída do contexto de voo. (`app/chamados/services/materializacao.py:1251`, `app/chamados/services/materializacao.py:899`, `app/chamados/services/materializacao.py:1074`, `app/chamados/services/materializacao.py:1271`; `app/chamados/models.py:2556`, `app/chamados/models.py:2609`, `app/chamados/models.py:2644`.)
+
+   **Outros escritores alcançáveis pela cadeia:** S143 pula P nos dois laços e barra sua cauda; S144 pula P antes de carimbar. O absolvedor do reconciliador exige validação nula; o descarimbo exige C6 vivo; o dedup também seleciona perguntas vivas. Os chamadores atuais materializam com validação gravada, que faz C6 retornar morto já no primeiro degrau. (`app/chamados/services/disputa_emissao.py:1586`, `app/chamados/services/disputa_emissao.py:1671`, `app/chamados/services/disputa_emissao.py:1710`; `app/chamados/services/materializacao.py:1399`, `app/chamados/services/materializacao.py:1343`; `app/chamados/services/validacao.py:396`; `app/chamados/services/vigia_carimbo.py:98`; `app/chamados/reconciliador.py:620`; `app/chamados/services/relavra_via.py:227`; `app/chamados/services/fio.py:935`; `app/chamados/juizes.py:1136`.)
+
+   **Quem lê o trio nessa cadeia:**
+
+   | Leitor | Campos e finalidade |
+   |---|---|
+   | S143 | Seleciona por `materializada_em`; o laço sem credor também lê a via para a trilha, depois da guarda de voo. (`app/chamados/services/disputa_emissao.py:1574`, `app/chamados/services/disputa_emissao.py:1665`, `app/chamados/services/disputa_emissao.py:1676`.) |
+   | S144 | Seleciona por `materializada_em`, antes da guarda. (`app/chamados/services/materializacao.py:1392`.) |
+   | `carimbar` | Lê os três campos para restaurá-los se houver recusa ou exceção. (`app/chamados/models.py:2583`, `app/chamados/models.py:2619`.) |
+   | C6 e juiz do lastro | Leem instante/via; C6 da P validada retorna antes desses degraus. (`app/chamados/juizes.py:647`, `app/chamados/juizes.py:1136`, `app/chamados/juizes.py:1171`, `app/chamados/juizes.py:1207`.) |
+   | C7 e crédito de irmãs | Leem `materializada_em` nas pendências; são chamados pela cadeia de fechamento/reconciliação. (`app/chamados/models.py:1784`; `app/chamados/juizes.py:1748`; `app/chamados/services/materializacao.py:737`.) |
+   | Recusa | Relê instante e via antes de decidir o carimbo de colisão. (`app/chamados/services/materializacao.py:1064`.) |
+
+   A exclusividade é dos caminhos examinados, não um bloqueio universal na porta: `materializacao_em_voo` registra o PK, mas `carimbar_identidade` e `descarimbar` não consultam esse sinal. (`app/chamados/services/materializacao.py:1120`, `app/chamados/services/materializacao.py:1129`; `app/chamados/models.py:2625`, `app/chamados/models.py:2646`.)
+
+4. **No delta V3, a ressalva é de cobertura do selo, não uma nova infração demonstrada no código de produção.**
+
+   Os dois testes mordem as remoções locais descritas; o S144 ganhou controle positivo efetivo. Persistem os limites do mock amplo, da identidade confundida com presença de destino e da conexão S143 sem prova positiva. Portanto, não os classifico como totalmente “sem mordida”, nem como prova completa do contrato. (`app/chamados/tests/test_pep_reentrada.py:227`, `app/chamados/tests/test_pep_reentrada.py:233`, `app/chamados/tests/test_pep_reentrada.py:235`, `app/chamados/tests/test_pep_reentrada.py:257`.)
+
+   O delta fornecido altera testes; nele não identifiquei novo segundo juiz/escritor de produção, relógio fora da borda, derivação paralela, inversão de trava ou estado de módulo sobrevivente. No código completo, o voo mantém `reset` em `finally` e termina antes da cauda normal de fechamento. Pouso efetivo e efeitos em produção: **[nao verificado]**. (`app/chamados/tests/test_pep_reentrada.py:219`, `app/chamados/tests/test_pep_reentrada.py:241`; `app/chamados/services/materializacao.py:1123`, `app/chamados/services/materializacao.py:1194`, `app/chamados/services/materializacao.py:1352`.)
 
 ## 06/11 09:48 · sessao 4f4e1062af72 · - · - · origem=Ronald (tmux)
 
@@ -732,30 +787,4 @@ Para concluir faltam: script integral da sonda; resultado dos atos nas retentora
 
 Não há **LEI FALTANDO demonstrada**: o corte existente define alcance das causas. Uma obrigação adicional de exibir cada dia afetado ligado às suas retentoras precisaria de regra específica, cuja existência permanece **[não verificado]**. ([CORTES.md:379](app/docs/CORTES.md:379), [CORTES.md:401](app/docs/CORTES.md:401))
 
-## 06/11 09:25 · sessao 892efc794fa0 · - · - · origem=Ronald (tmux)
-
-Achados consolidados, todos somente leitura:
-
-| Candidato | Condição no código e aplicação aos casos |
-|---|---|
-| Cartório, ramo sem adesão | A primeira batida apurável define `adesao`; nenhuma batida entra no ramo cuja regra escrita é “carimba e nao emite”. Esse ramo lavra `nunca_bateu` sem cobertura integral e retorna antes da emissão normal. Aplica-se ao `col574` conforme o dado fornecido. `app/ponto/services/cartorio.py:1154-1162`, `:1232-1242`, `:1268`. |
-| Cobrança normal do cartório | Exclui expressamente `situacao == 'desligado'`, tanto para furo inteiro quanto parcial. Também exige código de furo, ausência de chamado vivo/piso e vínculo/dia de trabalho/marco inicial. O desligamento basta para impedir `col574`; os demais gates não devem ser inventados. `app/ponto/services/cartorio.py:1684`, `:1696-1697`, `:1714-1742`, `:1762`. |
-| Adesão | `universo_adesao` exige situação `ativo` e célula com `veredito='nunca_bateu'`. O sincronizador reforça “desligado nao adere a nada”. Assim, `col574` é excluído pela situação; `col950` não tem o veredito exigido e já bateu. `app/chamados/services/adesao.py:25-40`, `:58-67`, `:74-86`. |
-| Detector de ausência/batida | Universo passa por `colaboradores_em_operacao`, que exige ativo, empresa ativa, username operacional, rollout e vínculo vigente hoje. Examina hoje/ontem e só cobra antes de o dia encerrar; depois a atribuição escrita é do cartório. `col574` é excluído por desligamento; para `col950`, rollout/identidade/vínculo hoje não foram impressos. `app/colaboradores/queries.py:25-28`, `:50-65`; `app/ponto/management/commands/detectar_ausencias.py:98-99`, `:136-138`, `:305-306`, `:460-473`. |
-| Funil de cobrança | A célula veta cobrança por `trabalha=False` ou `veredito='nunca_bateu'`; o funil real lê esse juiz. Isso impede cobrar as folgas e os nunca-bateu do `col574`, mesmo se chamado diretamente. `app/ponto/marcos.py:119`, `:155-162`; `app/ponto/management/commands/detectar_ausencias.py:630-633`. |
-| Fábrica de perguntas por chamados | Não percorre dias retidos autonomamente: recebe chamados órfãos, retorna se lista vazia ou sem regularizáveis. Mesmo havendo chamado, sem ata e com vínculo existente abstém-se de perguntar. Para os chamados sem célula que a sonda apenas conta, faltam módulo, contexto/data canônica, status e destino para determinar se alcançariam os dias. `app/chamados/services/disputa_emissao.py:876-896`, `:925-933`, `:818-843`. |
-| Turno aberto | Emissor corrente exige turno materializado aberto com entrada; retroativo exige turno aberto e timestamp da entrada. Dias sem batida não criam tal fato. Para `col950` em 09/10 a única batida da vizinhança é de 08/10: atribuição ao turno exige medir a autoridade, não usar a vizinhança como prova. `app/ponto/management/commands/processar_alertas_turno.py:76-98`; `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:88-103`. |
-| Ausência do colaborador | O emissor recebe uma `Ausencia` real já criada; não transforma automaticamente silêncio de batida em documento/ausência. API e formulário o chamam após criar registro. `ausencia_id=None` na célula não prova inexistência de ausência crua ou submissão. `app/ponto/services/ausencia.py:621-628`, `:643-646`; `app/api/views.py:1848-1857`; `app/ponto/views.py:2535-2547`. |
-| `sem_batidas_mes` | Emissor aposentado por escrito desde 02/07, por duplicata sem dono; painel de folha registra inconsistências. O único cancelado de `col574` não pode ser identificado como causa histórica dos 20 dias. `app/ponto/services/fechamento.py:1089-1093`. |
-| `reconciliar_grade` | O grep encontra um escritor de bancada, mas módulo declara comando como medidor sem escritor rotineiro; `--apply` ficou para sombra dirigida. Ainda exigiria ativo e leria o veto da célula. `app/ponto/management/commands/reconciliar_grade.py:1-11`, `:106`, `:501-504`. |
-| Consumidor `EventoCelula` | Rejunta chamados, retrata perguntas/chamados/premissas, encerra órfãs e fecha por lastro. Não constitui emissor autônomo de porta para dia vazio. Evento processado não prova que havia obrigação de criar chamado/pergunta. `app/chamados/reconciliador.py:1346-1371`. |
-
-Ponto decisivo para `col950`: o cartório declarado no cron é `por_empresa=True`, mas o universo estático é somente `(2,3,4)`. Portanto a configuração da cópia não agenda o cartório para a empresa 1. A expansão usa essa tupla. Isso explica um caminho estrutural de não alcance; não prova qual execução histórica ocorreu. O próprio contrato nomeia esse universo como empresas em operação, então a mera existência de `col950` na empresa 1 não basta para provar violação de uma regra que a inclua. `app/config/crons.py:10-17`, `:616`, `:1835`.
-
-Se o cartório for chamado para empresa 1, sua fila é toda célula passada, sem filtro de situação. Célula sem julgamento não é pulada pela idempotência; ainda pode ser pulada se o dia não aparecer na grade carregada. Para fechar o mecanismo de `col950`, faltam o resultado dessa grade, vínculo alimentado e execução real do comando. `app/ponto/management/commands/processar_cartorio.py:45-65`; `app/ponto/services/cartorio.py:1358-1367`.
-
-Para classificação: em `col574`, há regra explícita para calar cobrança e adesão; não encontrei regra específica atribuindo a algum emissor a dívida de pessoa desligada que nunca bateu, embora o dia permaneça retido. Isso sustenta **LEI FALTANDO quanto à atribuição de emissão**, sem converter o “esperado 0” em emissor inventado. `app/ponto/services/cartorio.py:1157-1162`, `:1268`; `app/chamados/services/adesao.py:66-67`; `app/chamados/services/vigia_fio.py:532-534`.
-
-Em `col950`, há atribuição existente ao cartório para dia encerrado, mas seu cron declarado exclui empresa 1; falta regra incluindo a empresa 1 no universo operacional, além de execução/grade para estabelecer a causa concreta. **INCONCLUSIVO**, com divergência de universos comprovada na configuração. `app/ponto/management/commands/detectar_ausencias.py:460-464`; `app/ponto/management/commands/processar_cartorio.py:45-65`; `app/config/crons.py:17`, `:616`, `:1835`.
-
-_2189 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2190 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
