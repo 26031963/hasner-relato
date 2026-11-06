@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 00:00:54.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (36.9 MB). Acoes na janela: **1254**.
+**Medido em 06/11/2026 00:06:15.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (37.0 MB). Acoes na janela: **1254**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
