@@ -1,7 +1,70 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 03:23** · publicado em **06/11/2026 03:24** (UTC-3)
+> Ultima resposta processada: **06/11/2026 03:34** · publicado em **06/11/2026 03:34** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 03:34 · sessao 90e685ecd2b5 · - · - · origem=Ronald (tmux)
+
+- **PROCEDENTE-candidato — descarte 5b exagera ao dizer que `atomic()` sempre aberto não muda comportamento.** Savepoint muda a contenção de erro de banco quando o chamador captura a exceção: sem ele, o atomic externo pode terminar em rollback; com ele, pode continuar e confirmar outras escritas. O repositório documenta exatamente essa classe em `app/core/observ.py:124` e `app/chamados/signals.py:83`. S144 chama o materializador e captura exceções sem savepoint próprio em `app/chamados/signals.py:139`; o materializador chama `carimbar` em `app/chamados/services/materializacao.py:1349`. Ocorrência concreta desse problema no v2: **[não verificado]**.
+
+- **OBSERVAÇÃO — fotografia ainda inexistente não é restaurada.** No patch, `antes = lavra_antes = None` e os dois `if ... is not None` impedem desempacotar/restaurar fotografia inexistente. Falha de releitura, julgamento da linha já carimbada, relógio ou obtenção do autor acontece antes da escrita nova; o primeiro carimbo vem depois de `antes`. Referência: `app/chamados/models.py:2596` **v2 virtual**, bloco imediatamente posterior. A lavra é fotografada antes de sua alteração; a foto e restauração reais cobrem três campos em `app/chamados/veredito_lavrado.py:235` e `app/chamados/veredito_lavrado.py:240`.
+
+- **OBSERVAÇÃO — restauração de memória não equivale a rollback do SQL.** Se `save()` efetivar o UPDATE e um hook levantar exceção Python depois, o `nullcontext` permite que um chamador capture a exceção e confirme o SQL, embora o `except` da porta restaure a instância. Não encontrei esse caminho ordinário comprovado nos receivers atuais: o único receiver de Pergunta registra callback em `app/chamados/signals.py:191`, e seu trabalho fica sob `engolir` em `app/chamados/signals.py:199`, cuja captura está em `app/core/observ.py:85`. Portanto, cenário possível sob falha/hook, mas ocorrência no código atual **[não verificado]**.
+
+- **OBSERVAÇÃO — commit externo permanece fora do alcance.** Quando a porta herda transação, retorna antes do commit do chamador; uma falha posterior desse commit não atravessa seu `except`. A promessa de recuperar memória no commit vale para o atomic aberto pela própria porta, conforme a seleção do contexto no patch de `app/chamados/models.py:2598` **v2 virtual**; cobertura de commit externo: **[não verificado]**.
+
+- **PROCEDENTE-candidato — mutante de lavra no commit sobrevive à cobertura apresentada.** Mutante: restaurar a lavra no `except` somente se `_cx.in_atomic_block`, mantendo a recuperação do carimbo incondicional. Os testes antigos de erro de lavra/save continuam passando porque herdam `TestCase` por `app/chamados/tests/test_o261e_f2_fila.py:143` e exercitam suas falhas em `app/chamados/tests/test_o261e_f2_fila.py:179`, `:190`, `:200`. O teste novo de commit chama a porta sem `lavrar_veredito=True` e verifica somente o carimbo; não denuncia lavra persistente na memória após commit falho com lavra solicitada: `app/chamados/tests/test_o261_item3_pep.py:307` **anexo**. Execução do mutante: **[não verificado]**.
+
+- **OBSERVAÇÃO — testes anteriores simulam falha antes de SQL.** Os mocks de `PerguntaDisputa.save` lançam diretamente `RuntimeError`; não fazem o save real antes de lançar. Assim não cobrem a divergência “SQL confirmado / memória restaurada”: `app/chamados/tests/test_o261e_f2_fila.py:184`, `:211`. O v2 acrescenta cobertura útil do commit próprio e dos quatro campos humanos isolados, mas não comprova comportamento após save real seguido de exceção Python: `app/chamados/tests/test_o261_item3_pep.py:99`, `:307` **anexo**.
+
+## 06/11 03:33 · sessao 41021277887b · - · - · origem=Ronald (tmux)
+
+1. **OBSERVAÇÃO — 1c/7b: o descarte sustenta uma ressalva específica, não elimina o achado de frescor.** A célula do julgamento em curso existe como projeção explícita: `celula_deste_julgamento()` obtém ata/par do cartório e delega a `celula_como_o_julgamento_deixa()`; esta preserva a instância fora desse contexto e produz cópia quando há projeção. A ressuscitação usa expressamente essa função. (`app/chamados/juizes.py:383`; `app/chamados/juizes.py:394`; `app/ponto/portas/celula.py:709`; `app/chamados/models.py:1448`)
+
+   **PROCEDENTE-candidato — preservar qualquer relação carregada não distingue projeção legítima de cache obsoleto.** O C6 lê veredito/via/ata/DNA da célula e também conteúdo de outras relações: destino/status e disputa/contexto. A justificativa sobre a célula não sustenta preservar indistintamente destino e disputa. (`app/chamados/juizes.py:1147`; `app/chamados/juizes.py:1181`; `app/chamados/juizes.py:893`; `app/chamados/juizes.py:910`; `app/chamados/juizes.py:743`; `app/chamados/juizes.py:361`)
+
+   **OBSERVAÇÃO — o próprio E2 tem leitura comum do banco.** `perguntas_absolvidas_pela_celula()` carrega célula/disputa/destino via `select_related`; o cartório chama E2 depois da lavra da primeira passada. Portanto “cartório emite antes de lavrar” é verdadeiro para outros caminhos, mas não torna toda célula recebida por `carimbar` uma projeção mais nova que o banco. (`app/chamados/reconciliador.py:641`; `app/chamados/reconciliador.py:586`; `app/ponto/services/cartorio.py:948`; `app/ponto/services/cartorio.py:953`; `app/ponto/services/cartorio.py:959`; `app/ponto/services/cartorio.py:1802`)
+
+   **OBSERVAÇÃO — reler e travar célula são decisões diferentes.** A porta da célula salva e emite outbox dentro de atomic; nessas operações não há demonstração de ordem concorrente com P/D. A afirmação “travar célula inverteria a ordem” continua **[não verificado]** quanto ao ciclo concreto. (`app/ponto/portas/celula.py:676`; `app/ponto/portas/celula.py:681`)
+
+2. **OBSERVAÇÃO — 1d: ausência de chamador atual sustenta rebaixar a observação, mas o argumento geral é excessivo.** A busca por `.only()`/`.defer()` na produção de `chamados` e `ponto` não localizou projeção de PerguntaDisputa; os exemplos encontrados projetam outras entidades. (`app/chamados/rejuncao.py:78`; `app/chamados/services/juizes_do_dia.py:93`; `app/chamados/services/disputa_emissao.py:868`; carregamento parcial de PerguntaDisputa: **[não verificado]**)
+
+   **OBSERVAÇÃO — “não carregou atributo, logo não decidiu sobre ele” não é implicação válida.** Uma decisão poderia decorrer de filtro SQL sobre campo omitido pela projeção; exemplo hipotético `filter(validada_em__isnull=True).only('pk')`: **[não verificado]**, nenhum chamador atual localizado. Os chamadores efetivamente conferidos carregam perguntas completas. (`app/chamados/services/disputa_emissao.py:1572`; `app/chamados/reconciliador.py:641`; `app/chamados/services/materializacao.py:1343`)
+
+3. **OBSERVAÇÃO — classe (f): comparar a cláusula não fecha o grafo.** A referência relavra trava pergunta/disputa no mesmo SELECT, mas carrega célula fresca; o v2 mantém os mesmos alvos declarados, com relações preservadas. A igualdade de `FOR UPDATE OF` prova alvos, não a ordem física entre eles nem ausência de ciclo com chamado. (`app/chamados/services/relavra_via.py:217`; `app/chamados/services/relavra_via.py:221`; `app/chamados/services/relavra_via.py:227`; teste novo `OrdemDaTrava`, anexo)
+
+   **OBSERVAÇÃO — há caminhos anteriores envolvendo chamado e disputa.** O gate do chamado trava CH antes de seu save/receiver S143; o fechamento de disputa salva D e seu receiver pode reconciliar CH; o novo carimbo acrescenta D à trava e antecipa P. Ocorrência concreta de deadlock e plano de aquisição: **[não verificado]**. (`app/chamados/models.py:674`; `app/chamados/signals.py:91`; `app/chamados/signals.py:92`; `app/chamados/models.py:1865`; `app/chamados/signals.py:41`; `app/chamados/signals.py:42`; `app/chamados/models.py::_reler_travada`, v2 anexo)
+
+4. **OBSERVAÇÃO — classes restantes.**
+
+   - **(a)/(d):** o novo ramo delega vida ao C6; comparação de fotografia humana não demonstra juiz paralelo. O risco identificado é insumo obsoleto para a autoridade existente. (`app/chamados/juizes.py:822`; `app/chamados/juizes.py:1135`; `app/chamados/models.py::carimbar`, v2 anexo)
+   - **(b):** cópia dinâmica em memória não cria nova porta persistente; o selo declara não alcançar nome obtido por atributo, portanto não demonstra exclusividade dessa cópia. (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:111`; `app/chamados/tests/test_o261e_f2_porta_carimbo.py:113`; `app/chamados/models.py:2556`)
+   - **(c):** dívida existente: `encerrar_fantasma` continua sem repassar `agora`, e há fallback de relógio. (`app/chamados/models.py:2685`; `app/docs/BACKLOG.md:1154`)
+   - **(e):** os testes de trava e fotografia são discriminantes, mas não exercitam alteração de relação com mesma FK; o teste de identity map apenas conserva identidade. (`app/chamados/tests/test_o261_item3_pep.py`, anexo, `test_relacoes_carregadas_ficam_identity_map`; `test_MORDE_carimbar_trava_pergunta_e_disputa_como_a_relavra`)
+   - **(g):** execução, cronologia “medido antes do verde” e pouso: **[não verificado]**; o patch contém os testes propostos, não evidência de sua execução. (`app/chamados/tests/test_o261_item3_pep.py`, anexo)
+
+## 06/11 03:33 · sessao c3aa33033a39 · - · - · origem=Ronald (tmux)
+
+1. **PROCEDENTE-candidato — `True` já carimbada não preserva contrato “gravou?”.** O docstring continua `-> bool (gravou?)`, mas v2 retorna `not pergunta_viva(self)` sem escrever. Isso é seguro para detectar estado encerrado; não prova autoria, instante ou causalidade do ato corrente. (`app/chamados/models.py:2563`, v2 virtual ramo `_RELIDA_JA_CARIMBADA` do anexo).
+
+2. **Efeitos nos oito chamadores**, considerando outra via/autor/instante encontrado na releitura:
+
+| Chamador | Efeito de `True` | Avaliação |
+|---|---|---|
+| `lavrar_sem_turno_aberto` | Pode fechar a disputa com resolução “sem turno aberto”; retorna `True`. (`app/chamados/reconciliador.py:405`, `:411`, `:412`, `:414`) | Fechar pelo juiz pode ser correto; atribuir a resolução atual à via sem turno não decorre do retorno, pois a pergunta foi encerrada por outro ato. O consumidor trata `True` como trabalho concluído. (`app/chamados/reconciliador.py:1598`) |
+| `retratar_perguntas_absolvidas_por_celula` | Incrementa `n`; agenda disputa e pode fechá-la com resolução que atribui absolvição à célula. (`app/chamados/reconciliador.py:588`, `:590`, `:601`, `:603`) | Contar estado encerrado é defensável; contar retratação própria e atribuir causa à célula não é garantido pelo carimbo alheio. O número entra em `out['perguntas']`. (`app/chamados/reconciliador.py:1353`) |
+| S143, ramo principal | Incrementa `perguntas_resolvidas`, inclui disputa para fechamento; não re-lavra porque a porta retorna antes. (`app/chamados/services/disputa_emissao.py:1603`, `:1606`, `:1607`, `:1696`, `:1698`; v2 virtual ramo já carimbada) | Resolve reentrada quando S143 pertence à mesma materialização; o retorno genérico também contabiliza ato de outra pessoa/processo. O comentário “carimbou ⇒ re-lavra” deixa de valer nessa chamada. (`app/chamados/services/disputa_emissao.py:1602`) |
+| S143, sem credor | Emite `fecho_sem_credor`; não incrementa `n_pq` nesse ramo. (`app/chamados/services/disputa_emissao.py:1678`, `:1686`) | **Erro concreto de trilha:** `antes.materializada_em=None`, `ator=user`, `depois.materializada_em=_agora`, apesar de a linha preservar instante/autor alheios. (`app/chamados/services/disputa_emissao.py:1666`, `:1678`, `:1683`) |
+| `_materializar_ausencia_de_resposta` | Não acrescenta recusa nem evento de recusa; reconcilia destino e pode fechar disputa. Ausência já foi criada. (`app/chamados/services/materializacao.py:520`, `:549`, `:550`, `:564`, `:568`) | Preservar outra decisão é correto; ela não integra automaticamente o grupo desta absorção, identificado pelo mesmo instante. Falta distinguir “já resolvida por outro ato” de “absorvida aqui”. (`app/chamados/services/materializacao.py:593`, `:608`, `:609`, `:614`) |
+| `_materializar_uma` | Conserva o plantio/reuso feito antes da porta; marca `_materializou=True`; chamador incrementa materializadas. (`app/chamados/services/materializacao.py:1145`, `:1147`, `:1207`, `:1301`, `:1302`) | Corrige a reentrada própria. Para carimbo de ato independente, morte pelo C6 não prova que o plantio já realizado era autorizado pelo estado atualizado. A guarda humana é pulada nesse ramo do v2. (v2 virtual `_reler_travada`: materializada antes da comparação humana) |
+| `materializar_pendentes_aprovadas` | Acrescenta PK em `feitas`; receiver ignora a lista. (`app/chamados/services/materializacao.py:1349`, `:1350`; `app/chamados/signals.py:140`) | A lista deixa de significar exatamente “foram carimbadas” por esta chamada. Sem evento extra nesse trecho; carimbo alheio preservado. (`app/chamados/services/materializacao.py:1317`) |
+| `encerrar_fantasma` | Devolve `True`; consumidor grava evento fantasma, incrementa `encerradas`, inclui disputa para fechamento. (`app/chamados/models.py:2685`; `app/chamados/reconciliador.py:1136`, `:1138`, `:1145`, `:1146`) | **Trilha indevida:** contrato local exige uma trilha “só quando a porta escreveu”; evento diz “Encerrada no evento da lavra” e usa ator corrente mesmo quando o encerramento foi alheio. (`app/chamados/reconciliador.py:1107`, `:1108`, `:1139`, `:1144`) |
+
+3. **PROCEDENTE-candidato — contraexemplo novo e direto de `True` errado/trilha falsa.** No ramo sem credor, Q foi lida sem carimbo; outro ato chama `carimbar_identidade(VIA_ADMIN_DECIDIU, A, quando=tA)`; Q sem resposta permanece morta pelo degrau de identidade; B chama `carimbar(..., quando=tB)` sobre sua instância velha e recebe `True` sem salvar. O chamador grava `fecho_sem_credor` com `depois.materializada_em=tB` e ator B, enquanto Q continua com instante tA/autor A. O erro de conteúdo do evento decorre dos argumentos explícitos, independentemente de plano de locks. (`app/chamados/models.py:2639`, `:2644`; `app/chamados/juizes.py:1171`; `app/chamados/services/disputa_emissao.py:1666`, `:1675`, `:1678`, `:1683`; v2 virtual ramo já carimbada). Execução concreta: **[não verificado]**.
+
+4. **PROCEDENTE-candidato — os dois textos de `False` ainda têm limites.** “C6 viva ou humano mudou” cobre a nova comparação, mas não cobre `fresca is None`, que recusa sem executar C6 e sem demonstrar mudança humana. Além disso, “ela segue pendente” não decorre da recusa: se `validada_em` passou de `None` para instante, a comparação recusa, mas o C6 real já a considera morta e `.estado` retorna `VALIDADA`. (v2 virtual `_reler_travada`, ramo linha sumida/comparação humana; `app/chamados/juizes.py:1136`; `app/chamados/models.py:2499`). Permanecem também nome de ação `irma_viva_na_ausencia` e docstring que promete lista apenas de irmãs vivas. (`app/chamados/services/materializacao.py:510`, `:573`).
+
+5. **OBSERVAÇÃO — testes do anexo não defendem esses consumidores.** Os testes `LinhaJaCarimbadaPorOutroAto` verificam retorno e preservação do banco diretamente; `ReentradaNaMesmaTransacao` cobre `_materializar_uma` com plantio e C6 mockados. Nenhum dos testes novos chama os ramos reais de evento `fecho_sem_credor` ou `encerrar_orfas_pela_lampada`; portanto não confrontam instante/autor da trilha com a linha preservada. (`app/chamados/tests/test_o261_item3_pep.py:114`, `:123`, `:151`, `:157`, `:173`, `:175`, anexo). Execução: **[não verificado]**.
 
 ## 06/11 03:23 · sessao 8f44185a9a9d · O261-ITEM3-PEP · verificador · origem=Code
 
@@ -606,69 +669,4 @@ Se a última confirmação falhar e o `finally` conseguir gravar o resultado, `c
 
 **PK versus commit:** escritor concreto com log anterior à escrita, pk menor e alteração pós-apply capaz de passar todas as guardas: [não verificado]. Não promover esse risco genérico. [nao verificado]
 
-## 06/11 01:55 · sessao d295a10a7b09 · - · - · origem=Ronald (tmux)
-
-- **Alta — cura #2 não fecha quando a trilha falha.** `mudar_estado` salva `status`, `minutos` e `data_fim` sem `atualizado_em`, depois chama a auditoria; não exige sucesso dela ([ausencia.py](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/services/ausencia.py:807), [ausencia.py](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/services/ausencia.py:818)). `evento` engole a falha e retorna `None`, e `registrar_log` descarta esse retorno ([observ.py](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/core/observ.py:105), [observ.py](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/core/observ.py:139), [auditoria.py](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/core/auditoria.py:22)). Contraexemplo: após apply, rejeitar e reabrir o atestado com falha nos dois logs deixa identidade, minutos e carimbo iguais; a reversão aceita e restaura 720, porque só procura logs existentes com pk maior ([comando](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:152)). Ocorrência em produção: [não verificado].
-
-- **Alta — mesma cura possui janela mesmo sem falha definitiva.** A escrita de `mudar_estado` termina antes da chamada de auditoria, sem transação englobando ambas ([ausencia.py](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/services/ausencia.py:792), [ausencia.py](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/services/ausencia.py:819)). Duas chamadas intercaladas podem completar a ida/volta de estado e parar antes dos respectivos logs; nesse intervalo a reversão não encontra trilha posterior ([comando](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:157)). Interleaving executado: [não verificado].
-
-- **Cura #1 fecha o caso descrito:** o objeto é recarregado e o carimbo devolvido dentro do `atomic` que mantém a trava ([comando](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:137), [comando](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:173), [comando](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:189)).
-
-- **Trilha própria da reversão:** ela grava evento com o próprio pk e confirma esse pk; o filtro usa `pk__gt`, portanto não conta essa mesma trilha como ato posterior ([comando](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:182), [comando](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:274), [comando](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:157)).
-
-- **PK versus commit:** o modelo não contém campo de ordenação de commits; `pk__gt` mede pk, e a criação acontece dentro da transação do chamador ([models.py](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/core/models.py:285), [observ.py](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/core/observ.py:133)). Um escritor concreto com log menor e alteração da mesma ausência depois do apply: [não verificado]; não apresento a hipótese genérica como achado.
-
-## 06/11 01:55 · sessao b77f0a7fd3d0 · - · - · origem=Ronald (tmux)
-
-- **Exportação — corrida estrutural, gravidade alta se descarte negava a possibilidade.** A trava cobre somente Ausencia (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:138`); a cerca consulta entrega antes da escrita (`:160`, `:169`), enquanto `competencia_entregue` apenas consulta (`app/folha/export.py:581`) e o export registra sem trava compartilhada (`app/folha/models.py:182`, chamado em `app/folha/views.py:297`). Um export pode registrar entre a cerca e a alteração; ocorrência ou disponibilidade operacional na produção: [não verificado].
-
-- **Push do apply desfeito — caminho síncrono existe, mas alcance específico não demonstrado.** O save (`app/ponto/services/ausencia.py:508`) dispara julgamento síncrono (`app/ponto/signals.py:143`, `:147`, `:93`), que pode emitir (`app/ponto/services/cartorio.py:1740`, `:1778`) e enviar push (`app/ponto/management/commands/detectar_ausencias.py:778`) antes dos checks que provocam rollback (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:175`, `:178`, `:186`). Gravidade média condicional; células, vínculos, chamados e gates necessários para alcançar essas emissões nas 30 linhas: [não verificado]. O ramo flexível cala o push (`app/ponto/management/commands/detectar_ausencias.py:777`), e a cobertura parcial depende de tipo cadastrado e minutos abaixo de 480 (`app/ponto/turnos.py:2595`).
-
-Autores explícitos de LogAuditoria com modelo `Ausencia` fora de `services/ausencia.py`:
-
-- `app/core/views_ia.py:991`: lançamento por IA.
-- `app/ponto/views.py:2357`: cancelamento em lote.
-- `app/ponto/views.py:2614`: confirmação de aprovação apesar do anexo.
-- `app/ponto/views.py:2739`: cancelamento individual.
-- `app/ponto/views.py:2808`: edição.
-- `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:182`: apply e reversão.
-- `app/ponto/management/commands/curar_ausencia_sem_fim.py:47`: cura de fim.
-- `app/chamados/services/materializacao.py:663`: devolução de perguntas absorvidas após rejeição; grava no pk da ausência, embora altere perguntas/disputas (`:657`–`:665`).
-
-Todos esses chamadores usam `evento` direta ou indiretamente: `app/core/auditoria.py:22`, escritor físico em `app/core/observ.py:134`.
-
-Os anexos originais de triagem/opus mencionados não foram disponibilizados no dado: [não verificado].
-
-## 06/11 01:55 · sessao 674011c3259a · - · - · origem=Ronald (tmux)
-
-**Alta — #2 permanece aberto quando a trilha falha.** `mudar_estado` persiste `status`, `minutos` e `data_fim` sem `atualizado_em`, depois tenta auditoria (`app/ponto/services/ausencia.py:807`, `:818`, `:819`, `:820`). `evento` admite falha e retorna `None`, preservando a alteração de negócio; `registrar_log` ignora o retorno (`app/core/observ.py:105`, `:133`, `:139`; `app/core/auditoria.py:22`). Assim, ida e volta de status com falhas nas duas trilhas pode deixar identidade/minutos/carimbo iguais e passar pela reversão (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:142`, `:154`, `:157`). Ocorrência em produção: [não verificado].
-
-**Quem registra `modelo='Ausencia'`:**
-
-- `app/ponto/services/ausencia.py:441`: criação.
-- `app/ponto/services/ausencia.py:820`: mudança de estado.
-- `app/ponto/services/ausencia.py:854`: documento anexado.
-- `app/ponto/services/ausencia.py:915`: período parcial.
-- `app/ponto/views.py:2357`: cancelamento em lote.
-- `app/ponto/views.py:2614`: aprovação apesar do anexo.
-- `app/ponto/views.py:2739`: cancelamento individual.
-- `app/ponto/views.py:2808`: edição.
-- `app/core/views_ia.py:991`: criação pela IA.
-- `app/chamados/services/materializacao.py:663`: devolução das perguntas absorvidas.
-- `app/ponto/management/commands/curar_ausencia_sem_fim.py:47`: cura do fim.
-- `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:182`: apply **e reversão**.
-- Migrações históricas: `app/ponto/migrations/0057_a4_backfill_pendente.py:44`, `app/ponto/migrations/0058_a4_relogio_recomeca.py:43`, `app/ponto/migrations/0059_a4_d0_no_primeiro_dia_do_cron.py:37`.
-
-Escritor físico atual: `app/core/observ.py:134`; adaptador: `app/core/auditoria.py:22`.
-
-**Quem escreve Ausencia sem trilha própria:**
-
-- `editar_ausencia_registro`: `app/ponto/services/ausencia.py:508`; save completo, com log pelos chamadores conhecidos `app/ponto/views.py:2808` e comando `:182`.
-- `rederivar_fim`: `app/ponto/services/ausencia.py:1280`; log no chamador `app/ponto/management/commands/curar_ausencia_sem_fim.py:47`.
-- `rejeitar_ausencias_de_ferias`: `app/ponto/services/ausencia.py:1265`; sem log, mas move explicitamente `atualizado_em` em `:1267`.
-- Exclusões sem trilha da Ausencia: `app/ponto/services/ausencia.py:1174`, `:1197`, `:1254`, `:1274`; a reversão recusa linha ausente (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:140`).
-- Escritas de metadados sem carimbo/log próprio: `app/ponto/services/ausencia.py:536`, `:911` sem período e estado inalterado, `:1114`, `:1124`, `:1132`. Esses caminhos isolados não demonstram mudança de minutos/identidade/status: [não verificado].
-
-Log com outro modelo encontrado: aviso de recusa em `Colaborador`, sem criação da ausência (`app/api/views.py:1937`); correção de férias em `AgendamentoFerias`, com exclusão/recriação do espelho (`app/ferias/views.py:497`; `app/ferias/services.py:385`, `:387`). Escritor invisível que altere a mesma ausência preservada nesses caminhos: [não verificado].
-
-_2084 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2087 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
