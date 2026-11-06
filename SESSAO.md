@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 16:50:16.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (66.5 MB). Acoes na janela: **789**.
+**Medido em 06/11/2026 16:55:46.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (66.5 MB). Acoes na janela: **787**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -797,5 +797,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 05:21:01 | Bash | Save opus verdict and put REPROVA question at RELATO top | `cd /home/ronald/saas-hasner; D=logs/otimiza3/opus_final_c745af93; cat > $D/veredito_opus.md <<'EOF' # Opus final #5 (volta opus 1 de 2) sobre c745af93 -- REPROVA BLOQUEIO 1: modulo ligado por LOADER de string (spec_from_file_location por CAMINHO, importlib.import_module, __import__(..., fromlist), 'm.lib:f') -> faceta simbolo-de-topo imprime "0 chamador" (tipo em VARRIDOS => afirmacao falsa). - Ca ...` |
 | 05:12:47 | Bash | Record OTIMIZA-3 v5 build in RELATO, check suites | `cd /home/ronald/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys h=sys.argv[1]; p='app/docs/RELATO.md' L=open(p).read().split('\n') L.insert(6, f"OTIMIZA-3 V5 CONSTRUIDA {h}: c745af93 (wt-otim3-035531): .sh/config/string .py embutido -> faceta 'nao varrido', nunca 0 (a54904be: datas_cravadas_prod deixa de dar 0); selo prende a faceta (_fac/_so_na_fac). RED 31->0 (+6/2/2 nas voltas  ...` |
 | 05:12:40 | Agent | verificador opus final OTIMIZA-3 c745af93 | `Obra OTIMIZA-3 (instrumento de host `bin/quem_chama.py` + selo `bin/tests/test_quem_chama.sh`), opus final volta 5 (teto: esta e a 1a de 2 voltas opus). Copia /home/ronald/wt-otim3-035531, hash c745af93, base main a37c673d. Pacote: /home/ronald/saas-hasner/logs/otimiza3/opus_final_c745af93/ (diff_vs_a37c673d.patch, commits.txt, RED/green/mutantes, triagem_v5.md, fila_v5.md, Codex .q/.r). Suite int ...` |
-| 04:52:57 | Bash | Repoint ESPERANDO to the live suite pid | `cd /home/ronald/saas-hasner; sed -i '2s/pid=[0-9]*/pid=3737723/' app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md` |
-| 04:52:53 | Bash | Check suite states and ESPERANDO pid | `cd /home/ronald/saas-hasner; pgrep -af "^bash /home/ronald/saas-hasner/bin/trava_teste.sh --" \| cut -c1-60; bin/trava_teste.sh --quem; sed -n 2p app/docs/RELATO.md; for f in logs/otimiza3/suite_r5.log logs/lastro2/suite_v1.log; do echo "== $f"; head -1 $f 2>/dev/null; grep -E "^(OK\|FAILED)($\| \()\|^Ran\|^rc=" $f 2>/dev/null \| tail -3; done; date +%H:%M` |
