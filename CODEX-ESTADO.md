@@ -1,7 +1,67 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 17:35** · publicado em **06/11/2026 17:37** (UTC-3)
+> Ultima resposta processada: **06/11/2026 17:42** · publicado em **06/11/2026 17:42** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 17:42 · sessao eb897eabe44c · - · - · origem=Ronald (tmux)
+
+2. Restam expressões equivalentes, mas com escopos diferentes:
+
+- `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:2`: “sem tocar o gravado”; `:14`: hash “antes e depois”, prova de que “nao se moveu”; `:72`: help “Nao toca o gravado”. São alegações sobre o ato, não prova da história desde o export (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:219`).
+- `app/pautas/tests/test_pauta_pago_x_devido_exportada.py:2`: docstring “PAGO (... L-092: nao se toca)”. A mesma docstring explicita hash antes/depois em `:13`.
+- Outro comando conserva literalmente “O TXT exportado NAO foi tocado”, referente ao TXT: `app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:33`. Também conserva “sem tocar o gravado” na docstring `:2`, exclusão de escritas em `:9` e help em `:39`.
+- A ocorrência “nao tocada(s)” em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:277` refere-se às pautas alheias puladas na reversão (`:268`), não ao gravado.
+- O literal velho aparece no comentário e na asserção negativa do teste, não como afirmação ao DP: `app/pautas/tests/test_pauta_pago_x_devido_exportada.py:123` e `:127`.
+
+5. Há problemas de escopo na linha alterada:
+
+- **Contradição documental concreta:** “até 06/11 [...] nenhum codigo criava” (`app/docs/LEIS.md:177`) colide com o marco de **19/10** que registra Pauta DP com `pago -> devido` por campo (`app/docs/RELATO-ARQUIVO.md:43468`, `:43472`). Outro marco de 19/10 registra cabeça e filhas escritas pela mesma família (`app/docs/RELATO-ARQUIVO.md:43412`, `:43419`). O código da cópia confirma os pares em `app/chamados/services/passivo_validado.py:192` e a escrita em `:229` e `:233`; o chamador associa regeneração e pauta em `:438` e `:443`. Esses caminhos retificam o gravado; distinguem-se do comando PAUTA-08 (`app/chamados/services/passivo_validado.py:423`).
+- **“Caminho AUTOMATICO segue sem codigo” precisa restringir a família:** a autorização de HE em exportada já chama a pauta quando houve autorização (`app/ponto/services/autorizacao_he_periodo.py:299`). Ela lê pago da lavratura e devido do motor (`:174`–`:176`), escreve os dois números no texto (`:184`) e grava Pauta DP (`:244`). Essa classe já está descrita em `app/docs/DOSSIES.md:279` e `:287`; não é o comparador genérico FM atual × recálculo somente_leitura.
+- **Diferença de referência:** `app/docs/LEIS.md:125` define os dois números como **exportado** × motor de hoje; `:177` descreve **gravado atual** × recálculo. O comando lê FM atual (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:130`), portanto não demonstra equivalência com o exportado.
+- A existência da pauta manual não contradiz a revogação de sua exigência como **pré-condição** em `app/docs/LEIS.md:150` e `:198`. Os cortes que mandam encaminhar diferenças ao DP são compatíveis com essa saída (`app/docs/CORTES.md:353`, `:387`, `:402`).
+
+## 06/11 17:41 · sessao f162274a47d4 · - · - · origem=Ronald (tmux)
+
+Auditoria do contrato, por inspeção estática:
+
+| Afirmação de `_cabeca` | Evidência e limite |
+|---|---|
+| Identidade `col<pk>` e competência | Montadas por `_chave`, sem medição histórica (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:53-54`, `:67`). |
+| `EXPORTADA (TXT vigente)` | Consulta `competencia_entregue` por empresa e competência (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:123-125`); juiz verifica registro vigente e não invalidado (`app/folha/export.py:580-586`). Não verifica conteúdo físico do TXT nem pagamento efetivo no Domínio (`app/folha/export.py:580-586`). |
+| `PAGO = o gravado da folha de hoje` | Lê `valores_do_gravado` (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:130`), que consulta `FechamentoMensal` e recorta `CAMPOS` (`app/ponto/portas/regen_exportada.py:77-84`). Mede gravado atual; equivalência com dinheiro efetivamente pago é **não medida**. |
+| `hash conferido intacto NESTE ato` | Compara hash inicial (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:120`) com final (`:219-222`). **Ressalva material:** persiste cabeça/filhas e encerra transação antes dessa conferência (`:189-209`); se hash divergir, lança erro depois dos commits, podendo sobreviver pauta com afirmação não confirmada (`:219-222`). |
+| `DEVIDO = o calculo de hoje, lido sem gravar` | Chamada com `somente_leitura=True` (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:135`); ramo coleta dicionário em vez de salvar (`app/ponto/services/fechamento.py:1112-1128`), e `lavrar_dias_pagos` tem default falso (`:439-441`, `:1175`). |
+| `N campo(s) diferem` | Lista por `_diferente`, excluindo `mes/ano`, e tamanho usado na cabeça (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:139`, `:174`). “Diferem” usa tolerância numérica `>0.015` (`app/ponto/portas/regen_exportada.py:248-252`). |
+| `os dois numeros vao abaixo` | Gera itens pago/devido e filhas (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:175-177`); persiste filhas (`:201-204`). |
+| `A diferenca NAO e atribuida a causa neste ato` | Texto não atribui causa; itens só contêm campo e valores (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:66`, `:175-177`). Não existe medição causal nesse fluxo (`:120-140`). |
+| `Conferir com o pago no Dominio` | Instrução humana, **não medida** pelo comando (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:66`). |
+| `(L-092)` | Referência normativa, não medição (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:65`). |
+
+O hash é MD5 truncado em 12 caracteres e cobre campos concretos menos exclusões explícitas, incluindo carimbos, identidade e aprovação; portanto “intacto” significa igualdade desse hash nos extremos, não ausência de qualquer escrita ou história desde a exportação (`app/ponto/portas/regen_exportada.py:35-38`, `:56-74`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:120`, `:219`).
+
+O teste novo derruba o texto velho literal: proíbe `NAO foi tocado` e exige `conferido intacto NESTE ato`; não barra qualquer equivalente semântico (`app/pautas/tests/test_pauta_pago_x_devido_exportada.py:127-128`). Mutante que passaria por essa lógica: conservar o cabeçalho atual e acrescentar **“O gravado permanece identico desde a exportacao.”** A nova frase evita o literal proibido e preserva o exigido, apesar de alegar história não medida (`app/pautas/tests/test_pauta_pago_x_devido_exportada.py:127-128`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:120`, `:219`). Execução do mutante: `[nao verificado]`.
+
+## 06/11 17:41 · sessao a00820d944e2 · - · - · origem=Ronald (tmux)
+
+**Quem escreve**
+
+- O comando monta cabeça e filhas em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:174`, `:175` e `:177`; pede a escrita da cabeça com `texto=cab` em `:198`–`:199` e das filhas com `texto=f` em `:202`–`:204`.
+- O autor vem de `autor_sistema(informado='ti')` em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:188`. O service efetivamente cria a linha em `app/pautas/services.py:180`, gravando `texto=texto[:500]` em `:185`; o campo tem teto 500 em `app/pautas/models.py:89`.
+
+**Quem lê**
+
+- UI: `app/pautas/views.py:33` consulta as pautas; `:40` serializa a cabeça e `:46`–`:48` serializam as respostas. O navegador exibe os textos diretamente usando `textContent`, em `app/templates/core/_copiloto.html:405` e `:424`.
+- API de mensageria: consulta a aba, normalmente DP, em `app/api/views_mensageria.py:1324`–`:1329` e entrega `p.texto` literalmente em `:1334`. `mensageria/nucleo/core_client.py:431`–`:438` obtém o JSON e `mensageria/nucleo/ferramentas.py:2241`–`:2248` repassa seus itens.
+- O próprio comando lê o texto para localizar cabeça por `texto__startswith=chave + ' '` em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:233`–`:234`; seleciona filhas por prefixo e compara seus textos integralmente em `:241`–`:243`; na reversão exige `p.texto.startswith(MARCA)` em `:268`.
+
+**Risco de parsing**
+
+- Os leitores concretos acima não dependem da prosa alterada: os reconhecedores usam a marca e a chave definidas em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:41` e `:53`–`:54`, enquanto o delta muda o trecho posterior em `:64`–`:66`. UI e API transportam/exibem o texto diretamente (`app/pautas/views.py:40`; `app/templates/core/_copiloto.html:405`; `app/api/views_mensageria.py:1334`).
+- Leitor externo ou em produção que aplique regex/split à prosa: **[nao verificado]**.
+
+**Consequência adicional**
+
+- A nova redação não corrige cabeças já existentes: a execução encontra a cabeça e continua sem reescrevê-la em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:193`–`:197`; a verificação de divergência compara somente filhas em `:241`–`:243`. Portanto uma cabeça antiga pode continuar exibindo a frase velha; existência efetiva em produção **[nao verificado]**.
 
 ## 06/11 17:35 · sessao d510127cbf40 · E-SEM-VIVA-B · verificador · origem=Code
 
@@ -1084,102 +1144,4 @@ Origem: rodapé de cada parte, linhas `rc_sombra=0`, `COLABS_COM_FALHA_INSTRUMEN
 - Os anexos fornecidos não identificam exportação das competências nem trazem lista explícita de `!`; não há fundamento para marcar colaboradores ou rubricas como exportados somente pelo delta. [nao verificado]
 - Não encontrei `AGENTS.md` aplicável nem o script da sonda na cópia; `logs/` está ausente. [nao verificado]
 
-## 06/11 15:24 · sessao 460f61b14993 · O10-C · verificador · origem=Code
-
-**Laudo: a cura fecha o contraexemplo serial da volta 2. Não encontrei outra entrada estável, aceita nas duas rodadas, que volte a escrever banco ou `LogAuditoria`. Não identifiquei bloqueio novo para entregar o comando com o apply condicionado ao aval informado.** C:198–206; P:594–596,679–680. Execução e ocorrência em produção: **[não verificado]**.
-
-Referências nesta cópia:
-
-- **C** = [comando O10-C](/home/ronald/codex_ws/40019f43b68afe3e4270634d6f251eb3af9440f0/app/ponto/management/commands/trocas_plantao_lote_o10c.py).
-- **P** = [porta da célula](/home/ronald/codex_ws/40019f43b68afe3e4270634d6f251eb3af9440f0/app/ponto/portas/celula.py).
-- **T** = [testes O10-C](/home/ronald/codex_ws/40019f43b68afe3e4270634d6f251eb3af9440f0/app/ponto/tests/test_o10c_lote_trocas.py).
-- **A** = [serviço de Ausência](/home/ronald/codex_ws/40019f43b68afe3e4270634d6f251eb3af9440f0/app/ponto/services/ausencia.py).
-- **G** = [gerar_celulas](/home/ronald/codex_ws/40019f43b68afe3e4270634d6f251eb3af9440f0/app/ponto/management/commands/gerar_celulas.py).
-
-**1. Cura e segunda rodada**
-
-A guarda agora verifica `(colaborador_id, data)` dos dois lados de todos os pares e rejeita colisões antes de abrir snapshot ou aplicar qualquer par. Essas são exatamente as chaves usadas pela porta para editar as células. C:198–216; P:673–675.
-
-Com cartas e cadastro estáveis, cada cedente declarado aplica uma vez, pares diferentes não disputam células e a segunda rodada encontra `origem`, `trabalha`, DNA e vínculo iguais. A porta retorna antes da escrita, da auditoria e dos efeitos posteriores. C:188–192,232–238; P:591–628,679–680; G:73–123.
-
-A segunda rodada **continua criando e escrevendo outro JSONL**, inclusive registrando `igual`; isso é artefato operacional, distinto de nova escrita de negócio ou auditoria. C:209–228,157–164.
-
-A conclusão não cobre concorrência irrestrita: a guarda global lê sem trava, enquanto o apply relê cartas sob trava por par. `data` é editável, mas apontar essa mutabilidade não demonstra sozinho uma colisão realizável: o editor também veta sobreposição. Não encontrei aí outro contraexemplo serial aceito nas duas rodadas. C:188–206,145–150; A:487–509.
-
-Os testes acrescentados cobram rejeição com zero chamadas da porta e, para substituto lavrado, coluna e `!`. Execução: **[não verificado]**. T:219–229,292–301. [nao verificado]
-
-**2. Quem escreve e quem lê `Ausencia.colaborador_id/data`**
-
-| Papel | Caminho verificado |
-|---|---|
-| Definição | FK `colaborador` e campo `data`. `app/ponto/models.py:743–750`. |
-| Criação | `criar_ausencia` recebe ambos, monta a instância e salva. A:130–134,341–343,385,417–418. |
-| Chamadores de criação | Lançamento administrativo e API fornecem colaborador/data à porta. `app/ponto/views.py:2415–2421`; `app/api/views.py:1820–1826`. |
-| Edição posterior de `data` | Tela lê o POST e chama `editar_ausencia_registro`; serviço atribui `data` e salva. `app/ponto/views.py:2773,2794–2802`; A:499–509. |
-| Edição posterior de `colaborador` | Não identifiquei escritor de produção; inexistência absoluta: **[não verificado]**. O editor examinado não recebe colaborador. A:465–467. |
-| Django Admin | Somente leitura. `app/ponto/admin.py:38–43`. |
-| Leitor novo | Guarda de disjunção entre pares. C:198–206. |
-| Outros leitores do comando | Classificação, localização/trava/foto da célula e apresentação. C:85–109,135–137,155–158,240–245. |
-| Porta | Confere pessoas distintas, ordena/localiza as células e registra os lados na auditoria. P:662–675,682–690. |
-| Cobertura e reação à Ausência | Juiz de cobertura lê colaborador/data; sinais usam os campos para rejulgar dias após save/delete. `app/ponto/turnos.py:2753–2769`; `app/ponto/signals.py:123–128,143–152`. |
-
-O produtor efetivo das cartas específicas de produção não aparece no material raspado: **[não verificado]**.
-
-**3. Os descartes escondem bloqueio da entrega?**
-
-Não identifiquei bloqueio novo comprovado, mas dois argumentos precisam de alcance preciso:
-
-- **(a) Deadlock:** comando e porta adquirem as cartas por PK e as células por colaborador/data, dentro da transação externa. Isso sustenta o descarte como defeito adicional de ordenação deste comando; não prova ausência geral de deadlock com outros escritores. C:144–160; P:652–675. Reprodução com gerador: **[não verificado]**.
-- **(b) Célula inexistente:** um `IntegrityError` escapa e desfaz o atomic do par. Entretanto, isso não cobre toda criação concorrente: se outra criação confirmar entre a foto vazia e a leitura da porta, a porta pode encontrar uma célula existente e prosseguir. Nesse caso, `antes=None` descreve a foto, mas não necessariamente o antes efetivo da porta. C:132,144–165; P:524–527,593–601,694–699. Reprodução: **[não verificado]**.
-- **(c) Reversão:** permanece incompleta: o reversor existente rejeita `editada`. É limitação declarada para o aval do apply, sem justificar abrir outro escritor nesta entrega. C:44–45; P:776–778; `CLAUDE.md:398–402`.
-- **(d) Resultado:** stdout posterior testemunha a saída normal do atomic do par; o JSONL isolado continua sem confirmação durável de commit. Não trataria sua linha `trocada` como prova suficiente de confirmação. C:144,164–165,225–228,238–247. [nao verificado]
-- **(e) Mutantes:** a inspeção estática dos testes não demonstra aquisição de trava, durabilidade do `fsync` ou importação da autoridade quando uma cópia local tem valores iguais. Isso limita a prova dos testes; não estabelece defeito funcional. C:76–81,155–156,228; T:153–180,338–348. [nao verificado]
-
-**4. Escrita fora da porta, juiz duplicado e nome/CPF**
-
-**Banco e auditoria:** não identifiquei escrita direta pelo comando; o ato de negócio é `trocar_plantao`. Há escrita explícita de diretório, JSONL e stdout. C:160–164,210–228,247–255.
-
-**Juízes:** não identifiquei duplicação de juiz registrado. O comando consulta `ABERTAS`, lavra e vínculo pelas autoridades existentes; a nova guarda verifica conflito entre pares declarados, sem recalcular cobertura da Ausência. C:65–109,198–206; `app/core/juizes.py:241,244`; G:151–179.
-
-**Nome/CPF:** a saída normal usa IDs e presença do documento, sem imprimir nome ou CPF cadastral. C:240–246. A garantia universal de anonimização, porém, não está demonstrada: erros ecoam argumentos brutos; o snapshot copia DNA integral; e a auditoria da porta inclui `documento.name`. C:119,132–137,187; P:528–531,682–690. Presença efetiva de nome/CPF nesses conteúdos: **[não verificado]**.
-
-Suíte executada, interleavings concorrentes e conferência individual dos 16 registros: **[não verificado]**. [nao verificado]
-
-## 06/11 15:22 · sessao f99a6f92b10b · - · - · origem=Ronald (tmux)
-
-Mapeamento verificado de `Ausencia.colaborador_id/data`:
-
-| Papel | Evidência |
-|---|---|
-| Definição dos campos | `app/ponto/models.py:743-750`: FK `colaborador`, `DateField data`. Unicidade é por `(colaborador,tipo,data)` entre não rejeitadas, não por célula: `app/ponto/models.py:826-830`. |
-| Escritor de criação de produção | `criar_ausencia` recebe `colaborador/data` em `app/ponto/services/ausencia.py:130-134`, monta kwargs em `:341-343`, instancia `Ausencia` em `:385`, persiste em `:417-418`; o `save` do modelo termina em `app/ponto/models.py:908`. |
-| Chamadores HTTP que fornecem ambos | Lançamento administrativo: `app/ponto/views.py:2415-2421`; PWA: `app/ponto/views.py:2536` (chamada localizada; detalhes não incluídos nesta leitura); API: `app/api/views.py:1820-1826`. |
-| Outros produtores pela mesma porta | Materialização: `app/chamados/services/materializacao.py:484-490,520-526`; regularização: `app/ponto/services/regularizacao.py:118-122`; abandono: `app/ponto/management/commands/marcar_abandono_provisorio.py:76-84`; veredito: `app/ponto/services/veredito_celula.py:315-317`; férias: `app/ponto/services/ausencia.py:1202-1207`; copiloto: `app/ponto/services/checar_ausencia.py:43-48`. Esses caminhos são produtores genéricos; criação efetiva das cartas específicas do dado: **[não verificado]**. |
-| Escritor posterior de `data` | A tela lê `POST data` em `app/ponto/views.py:2773` e chama `editar_ausencia_registro` em `:2794-2802`; o serviço atribui `ausencia.data=data` em `app/ponto/services/ausencia.py:499` e salva em `:509`. A própria documentação explicita que a tela não abre transação em `:512-514`. |
-| Reatribuição posterior de `colaborador` | Não identifiquei escritor de produção; ausência absoluta de outros escritores: **[não verificado]**. O editor recebe a ausência, tipo e data, sem argumento colaborador: `app/ponto/services/ausencia.py:465-467`. |
-| Django Admin | É somente leitura, não escritor: `app/ponto/admin.py:38-43`. |
-| Escritor de testes | Fixture `_lanc` usa `Ausencia.objects.create(colaborador=colab,data=data,...)`: `app/ponto/tests/test_o10c_lote_trocas.py:54-57`. |
-
-Leitores diretamente relevantes:
-
-- **Delta:** monta a chave `(a.colaborador_id,a.data)` e detecta colisão entre pares: `app/ponto/management/commands/trocas_plantao_lote_o10c.py:198-206`.
-- **Classificação:** usa ambos para lavra e vínculo; verifica colaborador igual e duração: `app/ponto/management/commands/trocas_plantao_lote_o10c.py:85-109`.
-- **Foto e travas:** `_lado` registra ambos e busca a célula: `app/ponto/management/commands/trocas_plantao_lote_o10c.py:135-137`; aplicação relê cartas travadas em `:145-147` e trava células por ambos em `:155-158`.
-- **Porta:** relê cartas em `app/ponto/portas/celula.py:657-659`, recusa colaborador igual em `:662-663`, usa os dois campos para ordenar e chamar `editar_dia` em `:673-675`, registra ambos em trilha em `:682-690`.
-- **Apresentação:** stdout e lavra consultam ambos em `app/ponto/management/commands/trocas_plantao_lote_o10c.py:240-245`.
-- **Juiz registrado de cobertura:** registro em `app/core/juizes.py:241`; implementação filtra colaborador/data e expande período em `app/ponto/turnos.py:2753-2769`. Essa decisão é cobertura de ausência, distinta da disjunção entre pares declarados.
-- **Reação a save/delete:** sinais usam colaborador e data para rejulgar dias: `app/ponto/signals.py:123-128,143-152`.
-
-**Atenção ao contraexemplo concorrente:** `data` pode mudar entre preflight sem trava (`C:188-206`) e releitura por par (`C:145-147`), mas o editor primeiro consulta sobreposição e recusa outra ausência (`app/ponto/services/ausencia.py:487-494`). Portanto, só apontar mutabilidade não prova que se consiga mover uma carta diretamente para célula já ocupada por outra carta viva. Esse interleaving concreto precisa de demonstração adicional.
-
-## 06/11 15:22 · sessao 9d68a1e6ccf6 · - · - · origem=Ronald (tmux)
-
-A cura fecha o contraexemplo serial anterior: reserva `(colaborador_id, data)` de ambos os lados de todos os pares e rejeita colisão antes de abrir snapshot ou chamar porta. A chave coincide com as células que a porta efetivamente edita. `app/ponto/management/commands/trocas_plantao_lote_o10c.py:198-216`; `app/ponto/portas/celula.py:635-637,673-675`.
-
-Não encontrei outra entrada **estável**, aceita nas duas rodadas, que reescreva banco/trilha. Cada cedente declarado aplica uma vez; pares distintos ficam com células disjuntas; na segunda aplicação a porta compara `origem`, `trabalha`, DNA e vínculo e retorna `igual` antes de escrita, trilha e rabo. O DNA é produzido do vínculo/template, sem depender dos carimbos escritos pela própria troca. `app/ponto/management/commands/trocas_plantao_lote_o10c.py:188-192,232-238`; `app/ponto/portas/celula.py:591-596,609-628,679-680`; `app/ponto/management/commands/gerar_celulas.py:73-123`.
-
-A nova guarda não é protegida contra edição concorrente das datas: lê antes das travas; o apply recarrega as cartas por par e usa as datas atuais sem repetir a disjunção global. A data é editável pela porta de Ausência. Isso permite divergência entre preflight e aplicação; contudo, se a sobreposição persistir, a rodada seguinte aborta na guarda, portanto **não é contraexemplo serial de reescrita na segunda rodada**. `app/ponto/management/commands/trocas_plantao_lote_o10c.py:188-206,145-156`; `app/ponto/services/ausencia.py:465-509`.
-
-O teste novo exige `CommandError` e zero chamadas da porta para o contraexemplo anterior; as novas asserções do substituto lavrado cobram coluna e `!`. Execução dos testes: **[não verificado]**. `app/ponto/tests/test_o10c_lote_trocas.py:219-229,292-301`.
-
-_2358 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2361 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
