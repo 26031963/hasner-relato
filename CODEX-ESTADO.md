@@ -1,7 +1,161 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 12:22** · publicado em **06/11/2026 12:24** (UTC-3)
+> Ultima resposta processada: **06/11/2026 12:26** · publicado em **06/11/2026 12:29** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 12:26 · sessao 6d24b7e0f74d · CODEX-CONSTRUTOR-NEGOCIO · verificador · origem=Code
+
+**Cura parcial: o delta fecha recusas específicas, introduz uma restrição excessiva no nome da resposta e mantém lacunas no selo.** (`bin/codex_pergunta.sh:64,123,273-275`; `bin/tests/test_codex_pergunta.sh:203-206,309-311,363-364`)
+
+Avaliação estática da cópia e do anexo. Execução da suíte, resultados dos mutantes, isolamento real e correspondência Git da cópia com o commit informado: **[nao verificado]**. [nao verificado]
+
+1. **ALTA — v2.r #1: igual; não fecha as escritas por symlink em LOGD.** `slot.gate` e `slot.N` continuam abrindo com truncamento; `chamadas.log`, JSONL/`.err` e `limite.log` continuam sem proteção individual contra symlink. O fluxo alcança também os quatro papéis de leitura. (`bin/codex_pergunta.sh:139,172,228-239,281-285,359`)
+
+2. **MÉDIA — v2.r #2: igual.** A recusa inicial de `.`/`..` e destinos não regulares permanece; o delta não acrescenta proteção à publicação contra troca posterior de ancestral ou transformação do destino em diretório. A publicação continua sendo `mv -f`, depois das esperas. Exploração efetiva: **[nao verificado]**. (`bin/codex_pergunta.sh:87-94,227-255,289`)
+
+3. **ALTA — v2.r #3: fecha dois subpontos; não fecha a exclusão global.**
+   
+   A resposta com basename `construtor.vaga*` agora é recusada em qualquer papel, fechando a substituição direta do inode por publicação de resposta. A abertura do fd 6 também passa a recusar explicitamente quando falha. (`bin/codex_pergunta.sh:64,123`)
+   
+   Permanece uma vaga por **raiz do script**, sem vinculação ao repositório comum: cópias em raízes distintas calculam caminhos distintos para a vaga. Execução concorrente desse contorno: **[nao verificado]**. (`bin/codex_pergunta.sh:49,85,112-124`)
+
+4. **ALTA — v2.r #4: fecha parcialmente.** A revalidação agora recusa status não vazio, erro de `git status` e alteração do backpointer consultado. Isso fecha o arquivo solto surgido durante a espera. (`bin/codex_pergunta.sh:273-275`; `bin/tests/test_codex_pergunta.sh:195-198`)
+   
+   Ainda não repete registro/common-dir nem compara inodes de WT/app. Uma substituição por diretório real com conteúdo equivalente não é distinguida por esses controles; continua existindo intervalo entre conferência e chamada. A corrida do `.lock` também permanece: teste de symlink seguido de abertura comum, enquanto a triagem usa `O_NOFOLLOW`. Efeitos reais desses contornos: **[nao verificado]**. (`bin/codex_pergunta.sh:109-117,253-255,271-281`; `bin/disjuntor.py:779-788`)
+
+5. **ALTA — v2.r #5: igual.** O inventário continua observando estado final: diff, status, HEAD, checksum de `.git` e links dos caminhos encontrados. Tocar um proibido e restaurá-lo sem alterar HEAD não deixa necessariamente evidência nesses controles. O teste `commit_desfaz` continua exercitando commit/revert, que altera HEAD. (`bin/codex_pergunta.sh:316-341`; `bin/tests/test_codex_pergunta.sh:264`)
+   
+   Também permanece o limite dos hardlinks: a validação inicial não examina compartilhamento de inode, e o inventário verifica `st_nlink` somente dos caminhos tocados no estado final. O contorno “hardlink preexistente, escrita, substituição por cópia regular” não foi excluído pelo delta; efeito sobre a viva: **[nao verificado]**. (`bin/codex_pergunta.sh:125-128,329-335`)
+
+6. **MÉDIA — v2.r #6: fecha a alteração tardia simples do backpointer; sobra a janela anterior ao checksum.** Agora `$_GD/gitdir` é relido imediatamente antes da chamada. Porém `$_GD` continua sendo o caminho capturado na validação inicial. (`bin/codex_pergunta.sh:115-116,274`)
+   
+   Se `.git` for reapontado depois daquela validação e antes de `GITF_ANTES`, o checksum pode incorporar o novo apontamento, enquanto a revalidação continua lendo o backpointer da entrada antiga. HEAD/status equivalentes não demonstram que a entrada atual é a mesma. Execução dessa sequência: **[nao verificado]**. (`bin/codex_pergunta.sh:115-128,272-274`)
+
+7. **ALTA — v2.r #7: igual; a prova real permanece sem autenticidade das tentativas.** O bloco continua entregue como texto ao Codex, que também pode escrever os `.out` posteriormente aceitos como evidência. Produzir o controle positivo e arquivos contendo as assinaturas esperadas pode satisfazer essas verificações sem executar os acessos, caso os controles externos passem. Verde efetivo desse contorno: **[nao verificado]**. (`bin/tests/prova_codex_pergunta_real.sh:24-47,58-80,82-100`)
+   
+   Permanecem também as provas incompletas de socket e sobrevivência: o socket dispensa assinatura de negação; a ausência posterior do processo não confirma que ele chegou a iniciar. Banco e integridade completa dos metadados Git: **[nao verificado]**. (`bin/tests/prova_codex_pergunta_real.sh:40-43,60-72,78-95`)
+
+8. **MÉDIA — v2.r #8 e os dois problemas adicionais do selo: melhora parcial.**
+   
+   Os casos de migrations/models deixam de exemplificar somente `folha`: entram `ponto/migrations` e `escala/models.py`. A limpeza de captura em `c_absoluto` fecha o uso de captura obsoleta apontado na v2.r. (`bin/tests/test_codex_pergunta.sh:145-149,241-244,277`)
+   
+   A ausência de `slot=` agora gera falha explícita em `c_revalida`, fechando o verde silencioso do caso original sem essa evidência. Contudo, `_falha` não interrompe o caso, e qualquer `FALHA` continua contando como morte de mutante, inclusive falha de preparação/temporização. (`bin/tests/test_codex_pergunta.sh:21,189-193,362-366`)
+   
+   As mortes por guarda redundante permanecem: sem `absoluto`, o nome ainda recusa; sem `inv_diff`, o commit ainda altera HEAD. O selo pode contabilizar essas mortes por mensagem ausente, sem demonstrar passagem da operação proibida. (`bin/codex_pergunta.sh:96-101,327-328`; `bin/tests/test_codex_pergunta.sh:99-101,148-149,254,317,340,363-364`)
+
+9. **MÉDIA — v2.r #9: comportamento igual; observação sobre cabeçalho fechada.** O produtor absoluto permanece compatível com o hook; transporte da linha ao topo do RELATO continua **[nao verificado]**. Quando PID e arquivo são declarados, ambos são avaliados, e a primeira observação do arquivo não comprova avanço. (`bin/codex_pergunta.sh:263`; `bin/hook_stop_fila1.py:515-528,640-641,655-680`)
+   
+   `.rc` continua condicionado a `INI=1`, podendo faltar nas recusas iniciais e usar `chamada=-` antes da atribuição de JSONL. Leitor operacional desse sinal: **[nao verificado]**. O cabeçalho agora descreve corretamente vaga fixa e produtor absoluto. (`bin/codex_pergunta.sh:77-148,172,260,40-46`)
+
+10. **BAIXA — v2.r #10: igual.** A pergunta continua exigindo apenas legibilidade; cabeçalho e dados continuam usando `mktemp`; a raspagem pode chamar `relato_nomes.sh`, cujo código consulta colaboradores via Docker. Execução desses acessos nesta avaliação: **[nao verificado]**. (`bin/codex_pergunta.sh:62,151-156,202`; `bin/relato_nomes.sh:7-21`)
+
+11. **MÉDIA — Regressão nova: reserva de nome excessiva em todos os papéis.** Uma resposta legítima como `/tmp/construtor.vaga.relatorio.txt` passa a ser recusada, embora não possa substituir `<raiz>/logs/construtor.vaga`. A regra compara somente basename, usa prefixo `*` e roda antes da seleção do papel. Portanto afeta leitura, censo, verificador, sonda e construtor. (`bin/codex_pergunta.sh:64,71`)
+   
+   Para uma WT saudável e inalterada, não identifiquei um falso positivo novo específico: status vazio e backpointer estável satisfazem as novas condições, já exigidas inicialmente. Confirmação executada: **[nao verificado]**. Os argumentos e o cabeçalho dos quatro papéis de leitura permanecem iguais; o reuso de WS existente continua sem autenticação do conteúdo. (`bin/codex_pergunta.sh:116,126-127,175-180,211-213,273-285`)
+
+12. **MÉDIA — O selo novo ainda admite “morte” por motivo diferente e deixa uma condição nova sem exercício independente.**
+   
+   - **`vaga_abre`: morte possível só pela mensagem.** O caso provoca falha de abertura com um diretório. Neutralizada `_recusa2`, sem fd 6 herdado o `flock` seguinte ainda pode recusar com rc 2, agora por “vaga ocupada”. A exigência de “nao abriu” mata o mutante sem demonstrar continuação sem trava. O cenário relevante de fd 6 herdado não é montado pelo caso. Resultado executado: **[nao verificado]**. (`bin/codex_pergunta.sh:123-124`; `bin/tests/test_codex_pergunta.sh:99-101,203-206,311,363-364`)
+   - **`revalida_status`: caso próprio, sem mutante próprio.** O caso adiciona arquivo permitido durante a espera, mas o mutante `revalida` executa apenas a troca de `app` por symlink. Assim, a morte desse mutante não certifica a condição de status. (`bin/tests/test_codex_pergunta.sh:191,195-198,309`)
+   - **Backpointer final: cobertura ausente.** `c_gitdir_volta` altera `.git` antes da validação inicial; nenhum caso listado altera `gitdir` durante a espera. Neutralizar somente a comparação final não é exercitado por um cenário que dependa dela. Verde efetivo dessa mutação: **[nao verificado]**. (`bin/tests/test_codex_pergunta.sh:180-206,276-278`; `bin/codex_pergunta.sh:116-117,274`)
+   - **`vaga_reservada`: ligação direta adequada por inspeção.** O caso pede exatamente o nome protegido, e `_recusa` exige rc, mensagem e ausência de chamada ao Codex. Isso cobre a recusa direta, embora não reproduza a sequência concorrente com uma vaga já presa. (`bin/tests/test_codex_pergunta.sh:98-101,199-201,310`)
+
+13. **INFORMATIVA — Escritores e leitores dos arquivos/campos envolvidos.**
+
+   | Arquivo/campo | Quem escreve | Quem lê/usa |
+   |---|---|---|
+   | `<raiz>/logs/construtor.vaga` | Wrapper cria/abre em append no fd 6; não grava conteúdo. O selo também abre, move e substitui por diretório. (`bin/codex_pergunta.sh:122-123`; `bin/tests/test_codex_pergunta.sh:175,204-205`) | Construtor disputa `flock`; guarda global examina o basename da resposta; selo verifica a recusa. (`bin/codex_pergunta.sh:64,124`; `bin/tests/test_codex_pergunta.sh:199-206`) |
+   | Status da WT | Não é um arquivo novo: inicialmente vira `_ST`; na revalidação é saída transitória de `git status`. O selo cria o arquivo que o altera. (`bin/codex_pergunta.sh:126-127,273`; `bin/tests/test_codex_pergunta.sh:198`) | Validação inicial, revalidação e inventário final. (`bin/codex_pergunta.sh:126-127,273,320-322`) |
+   | `<common-dir>/worktrees/<entrada>/gitdir` | O selo chama `git worktree add` e fabrica outros backpointers. Implementação da escrita operacional pelo Git: **[nao verificado]**. (`bin/tests/test_codex_pergunta.sh:87,257-258`) | Wrapper resolve `_GD`, lê inicialmente e relê o caminho armazenado antes da chamada. (`bin/codex_pergunta.sh:115-117,274`) |
+   | `WT/.git`, HEAD, WT/app e pausa | Selo reaponta `.git` e troca `app`; `pausar.sh` publica a pausa por temporário/rename. Escritores concorrentes operacionais: **[nao verificado]**. (`bin/tests/test_codex_pergunta.sh:181,191`; `bin/pausar.sh:39-46`) | Validação inicial, revalidação e controles finais de HEAD/`.git`. (`bin/codex_pergunta.sh:83,102-128,271-275,316,327-328,341`) |
+   | `$T/captura`, `$T/argv`, `$T/saida` | Codex falso grava captura/argv; harness redireciona a saída. O delta acrescenta remoção de captura/argv em `c_absoluto`. (`bin/tests/test_codex_pergunta.sh:70-77,91-94,146-148`) | Asserções de chamada, argumentos e sincronização por `slot=`. (`bin/tests/test_codex_pergunta.sh:99-101,189-190,216-228`) |
+   | `solto_depois.txt`, migration de `ponto`, model de `escala` | Ações artificiais do selo. (`bin/tests/test_codex_pergunta.sh:198,243-244`) | Status anterior à chamada ou inventário final, conforme o caso. (`bin/codex_pergunta.sh:273,302-303,320-335`) |
+
+## 06/11 12:26 · sessao 152591db75ae · R1-CAUSAD-V3 · sonda · origem=Code
+
+As seis linhas `SOMA` da parte 4 estão `True`. Não há ocorrência de `INCOMPLETO` no dado fornecido. [nao verificado]
+
+Saída integral fornecida [nao verificado]:
+
+```text
+sonda_leitura: script.py [22b7b39d0d46bdd1] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+PARTE 4 PARTES 6
+[0] UNIVERSO 10/2026 624
+UNIVERSO_PARTE 10/2026 96
+JANELA 10/2026 2026-09-21 2026-10-20
+[0] UNIVERSO 11/2026 578
+UNIVERSO_PARTE 11/2026 91
+JANELA 11/2026 2026-10-21 2026-11-20
+ESTIMATIVA processados 25 universo 187 minutos_total 2.7 ate_40_min True ate_15_min True
+ESTIMATIVA processados 50 universo 187 minutos_total 2.7 ate_40_min True ate_15_min True
+ESTIMATIVA processados 75 universo 187 minutos_total 2.7 ate_40_min True ate_15_min True
+COMPETENCIA 10/2026
+[1] {'dias_comparados': 1235, 'bate_ate_10min': 1187, 'esp_zero_e6_trabalho': 6, 'e6_zero_esp_trabalho': 1, 'diverge_10_60': 5, 'diverge_acima_60': 36, 'dia_batida_impar': 56, 'impar_que_BATE': 22, 'impar_que_DIVERGE': 34, 'impar_dentro_da_faixa': 30, 'impar_FORA_da_faixa': 4, 'impar_no_conjunto_do_dia': 33, 'impar_SO_POR_CORTE_do_oraculo': 1, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1285, 'dia_isento_ou_ausencia': 305, 'dia_sem_trabalho_ambos': 18, 'esp_desconta_janela_declarada': 37, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 96.1% de 1235 dias comparados
+[3] ESTRUTURA     3 dia-colab      15.6 h    3 colabs
+[3] CADASTRO     23 dia-colab     107.6 h    8 colabs
+[3] BATIDA       22 dia-colab     101.2 h   17 colabs
+[4] TOTAL divergentes 48
+[5] colabs com divergencia: 26
+erros_no_espelho 0
+PARCIAL|10/2026|ESTRUTURA|dias=3|horas=15.566319135833336|colabs=3
+PARCIAL|10/2026|CADASTRO|dias=23|horas=107.60888681222221|colabs=8
+PARCIAL|10/2026|BATIDA|dias=22|horas=101.15787729194444|colabs=17
+PARCIAL_TOTAL|10/2026|dias=48|horas=224.333083239999986|colabs=26
+ESTIMATIVA processados 100 universo 187 minutos_total 2.7 ate_40_min True ate_15_min True
+ESTIMATIVA processados 125 universo 187 minutos_total 2.8 ate_40_min True ate_15_min True
+ESTIMATIVA processados 150 universo 187 minutos_total 2.9 ate_40_min True ate_15_min True
+ESTIMATIVA processados 175 universo 187 minutos_total 2.9 ate_40_min True ate_15_min True
+COMPETENCIA 11/2026
+[1] {'dias_comparados': 610, 'bate_ate_10min': 596, 'esp_zero_e6_trabalho': 4, 'e6_zero_esp_trabalho': 0, 'diverge_10_60': 0, 'diverge_acima_60': 10, 'dia_batida_impar': 32, 'impar_que_BATE': 22, 'impar_que_DIVERGE': 10, 'impar_dentro_da_faixa': 9, 'impar_FORA_da_faixa': 1, 'impar_no_conjunto_do_dia': 10, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 1274, 'dia_sem_lavratura_no_espelho': 756, 'dia_isento_ou_ausencia': 148, 'dia_sem_trabalho_ambos': 19, 'esp_desconta_janela_declarada': 14, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 97.7% de 610 dias comparados
+[3] ESTRUTURA     0 dia-colab       0.0 h    0 colabs
+[3] CADASTRO      5 dia-colab      39.7 h    3 colabs
+[3] BATIDA        9 dia-colab      50.7 h    8 colabs
+[4] TOTAL divergentes 14
+[5] colabs com divergencia: 10
+erros_no_espelho 0
+PARCIAL|11/2026|ESTRUTURA|dias=0|horas=0.0|colabs=0
+PARCIAL|11/2026|CADASTRO|dias=5|horas=39.726189220555554|colabs=3
+PARCIAL|11/2026|BATIDA|dias=9|horas=50.69357468888889|colabs=8
+PARCIAL_TOTAL|11/2026|dias=14|horas=90.419763909444444|colabs=10
+TEMPO_SEGUNDOS 174.9
+TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 220720
+TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 551
+TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1090
+TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 4668
+TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 49
+TRATADA_LOCAL app/escala/utils.py:1521 GeneratorExit 1
+TRATADA_LOCAL app/escala/utils.py:1708 GeneratorExit 34
+TRATADA_LOCAL app/escala/utils.py:2012 GeneratorExit 6712
+TRATADA_LOCAL app/escala/utils.py:2054 GeneratorExit 8
+TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 3
+TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 3792
+TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 3792
+TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 284
+TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 168
+TRATADA_LOCAL app/ponto/juiz_batida.py:191 GeneratorExit 1126
+TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 409650
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 558
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 2635
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 165
+TRATADA_LOCAL app/ponto/services/dia_pago.py:890 GeneratorExit 11428
+TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 89
+TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 3666
+TRATADA_LOCAL app/ponto/services/fechamento.py:1028 GeneratorExit 177
+TRATADA_LOCAL app/ponto/turnos.py:1293 GeneratorExit 23759
+TRATADA_LOCAL app/ponto/turnos.py:1654 GeneratorExit 3165
+TRATADA_LOCAL app/ponto/turnos.py:1697 GeneratorExit 37032
+TRATADA_LOCAL app/ponto/turnos.py:677 GeneratorExit 17427
+SOMA 10/2026 48   <- tem de ser igual a soma das classes (48) True
+SOMA 10/2026 HORAS 224.333083239999986 True
+SOMA 10/2026 COLABS_UNIAO 26 True
+SOMA 11/2026 14   <- tem de ser igual a soma das classes (14) True
+SOMA 11/2026 HORAS 90.419763909444444 True
+SOMA 11/2026 COLABS_UNIAO 10 True
+rc_sombra=0
+```
 
 ## 06/11 12:22 · sessao 62301c1ca858 · R1-CAUSAD-V3 · sonda · origem=Code
 
@@ -1198,104 +1352,4 @@ lancado
 rc=0
 ```
 
-## 06/11 11:56 · sessao f377d384580c · R1-CAUSAD-V3 · leitura · origem=Code
-
-A premissa precisa de uma ressalva: **nesta cópia, a linha 75 é o desempacotamento em `_hhmm`; `datetime.time(...)` está na linha 83.** O primeiro pode levantar uma exceção tratada para entrada ausente, sem falhar o julgamento. A correspondência entre o fonte executado pela sonda e esta cópia é **[não verificado]**. (`app/ponto/juiz_batida.py:75`, `:77`, `:78`, `:83`)
-
-Nas referências ao anexo `script2.py`, contei `import ast` como linha 1.
-
-1. **A cadeia e quem fornece `s`**
-
-   A sonda chama `call_command("e6_oraculo", ...)`; o comando chama `espelho_do_colab(c, HOJE, ini, fim, agora=...)` para cada colaborador. (`script2.py:545`, anexo; `app/ponto/management/commands/e6_oraculo.py:302`, `:304`)
-
-   O espelho chama `autoridade_do_periodo`, que alimenta as células no motor e chama `apurar_por_fatia`; esta chama `motor.calcular_mes`. (`app/ponto/services/espelho.py:1227`, `:1131`, `:1164`; `app/ponto/services/fechamento.py:277`)
-
-   Há pelo menos estes dois caminhos até o juiz:
-
-   - Motor → `montar_periodos` → `_periodos_via_autoridade` → `_periodos_pelo_marco` → `periodos_do_dia`. (`app/ponto/motor_calculo_v2.py:2354`, `:2748`, `:531`, `:616`)
-   - `turnos_do_colab` → `_turnos_do_colab_puro` → `papel_por_minuto_da_ata` → `periodos_do_dia`. O espelho também pede esses turnos diretamente. (`app/ponto/turnos.py:1913`, `:1937`, `:1631`; `app/ponto/services/espelho.py:614`)
-
-   **Quem passa `s` é `periodos_do_dia`**, usando `celula.dna['marcos']`: os pares `hii/hfi`, `hii2/hfi2`, além de `hi/hf`. Nesse ponto, `s` vem do marco previsto congelado, não da luz da batida. (`app/ponto/juiz_batida.py:158`, `:159`, `:172`, `:175`)
-
-   O produtor regular é `montar_dna`: recebe horários de `TipoEscala.marcos_do_dia`/`pausas_do_dia`, serializa com `strftime('%H:%M')` ou `None` e monta `dna['marcos']`; a porta persiste esse DNA em `CelulaDia`. (`app/ponto/management/commands/gerar_celulas.py:32`, `:33`, `:81`, `:83`, `:93`, `:100`; `app/ponto/portas/celula.py:250`, `:253`, `:254`)
-
-2. **Entrada fora da faixa e particularidade do último dia**
-
-   Pela expressão implementada, o construtor falha por hora fora da faixa quando `m = 60*int(h)+int(minuto)` resulta em **`m < 0` ou `m >= 1440`**. Exemplos deduzidos por leitura: `"24:00"` e `"23:60"` dão 1440; `"-1:00"` dá −60. `_hhmm` não valida essas faixas. (`app/ponto/juiz_batida.py:75`, `:76`, `:83`)
-
-   **Os horários válidos do produtor regular não geram esses valores:** são campos `TimeField` ou overrides convertidos em `datetime.time`, depois formatados como `%H:%M`. O valor efetivamente recebido nas ocorrências é **[não verificado]**. (`app/escala/models.py:50`, `:56`, `:221`, `:338`; `app/ponto/management/commands/gerar_celulas.py:33`)
-
-   Há, porém, uma entrada **normal** que gera `ValueError` justamente na **linha 75 desta cópia**: `s=None`. O desempacotamento falha, `_hhmm` captura e devolve `None`, e `_time` retorna `None` sem chamar o construtor. (`app/ponto/juiz_batida.py:75`, `:77`, `:78`, `:83`)
-
-   Isso ocorre estaticamente para uma segunda pausa ausente: o produtor omite suas chaves, mas o leitor consulta sempre os dois pares. Uma chamada com apenas uma pausa pode, portanto, produzir duas dessas exceções internas tratadas. **Quantas ocorrências observadas vieram disso: [não verificado].** (`app/ponto/management/commands/gerar_celulas.py:92`, `:93`; `app/escala/models.py:1652`; `app/ponto/juiz_batida.py:172`)
-
-   Quanto ao último dia: corte 21 determina fim no dia 20, mas `_time` não recebe a janela nem aplica regra especial nessa data. (`app/ponto/janelas.py:15`, `:16`, `:20`; `app/ponto/juiz_batida.py:81`, `:83`)
-
-   **A data registrada pode ser contexto residual da sonda.** `contexto` procura `k/data/dia/data_turno`, ignorando `_d` e `celula.data`; o laço de células usa `_d`. No comando, `k` conserva `fim` após a comparação anterior, e o próximo espelho é chamado antes de reiniciar `dia`. Se não encontrar uma data nos frames intermediários, a sonda pode herdar aquele `k`. A data real das células das ocorrências permanece **[não verificado]**. (`script2.py:110`, `:115`, anexo; `app/ponto/turnos.py:1629`; `app/ponto/management/commands/e6_oraculo.py:304`, `:319`, `:321`, `:323`)
-
-3. **Alcance em produção**
-
-   O caminho compartilhado existe no código de produção:
-
-   | Leitor | Chamada comprovada |
-   |---|---|
-   | Tela administrativa | `espelho_do_colab` — `app/ponto/views.py:158` |
-   | App do colaborador | `espelho_do_colab` — `app/api/views.py:1363` |
-   | PDF do espelho | `espelho_do_colab` — `app/relatorios/pdf_espelho.py:602` |
-   | Folha/recalculo | Alimenta células e chama `apurar_por_fatia` — `app/ponto/services/fechamento.py:715`, `:745` |
-   | Exportação, leitor direto | `_furo_so_da_pausa` chama `periodos_do_dia` — `app/folha/export.py:1142` |
-   | Cadastro × realidade, leitor direto | Chama `periodos_do_dia` — `app/escala/services/cadastro_realidade.py:221` |
-
-   O cron configura `processar_cartorio --apply`; o comando chama `julgar_colab`. O cartório alcança `turnos_do_colab` por `dias_encerrados`, chegando ao leitor da ata citado acima. (`app/config/crons.py:616`; `app/ponto/management/commands/processar_cartorio.py:65`; `app/ponto/services/cartorio.py:1102`; `app/ponto/turnos.py:2147`, `:2148`, `:1937`)
-
-   A sonda não monta manualmente o DNA nem força uma fatia diária: chama o comando real, que passa a janela completa ao espelho. O espelho usa também sua janela visual `vis_ini..hoje`. **Execução em produção com os mesmos valores de `s`: [não verificado].** (`script2.py:505`, `:545`, anexo; `app/ponto/management/commands/e6_oraculo.py:304`; `app/ponto/services/espelho.py:1225`, `:1227`)
-
-4. **Por que milhares de repetições por colaborador-dia**
-
-   **O registro principal acontece no tracer, ao entrar no corpo de um `except`**, inclusive o tratamento normal de `_hhmm`. Ele guarda o evento `exception` e chama `registrar` no evento `line` do handler. Não exige que a exceção escape da função. (`script2.py:213`, `:214`, `:215`, `:219`, anexo)
-
-   Os laços externos da sonda são competências e colaboradores; há uma chamada ao comando por competência, sem retry explícito por dia. Dentro da aplicação, o leitor consulta o juiz em laço por célula, e o motor também o consulta em laço por dia. (`script2.py:515`, `:545`, `:455`, `:462`, anexo; `app/ponto/turnos.py:1629`, `:1631`; `app/ponto/motor_calculo_v2.py:611`, `:616`)
-
-   A deduplicação elimina novos registros **da mesma exceção**, mas cada nova conversão que levanta outra exceção pode ser contada. O multiplicador exato dos milhares apresentados é **[não verificado]**; faltam as pilhas e os valores das ocorrências. (`script2.py:123`, `:125`, anexo)
-
-5. **Efeito nos `PARCIAL`**
-
-   O efeito depende de onde a exceção foi tratada:
-
-   - **Capturada dentro de `_hhmm`, na linha 75:** retorna `None`, o julgamento continua e não há exclusão nem divergência automática por essa exceção. (`app/ponto/juiz_batida.py:78`, `:83`, `:173`)
-   - **Escapa do juiz, mas é capturada pelo leitor de turnos:** aquela consulta é ignorada na construção do mapa da ata. No caminho do motor, há log e `continue`; isso não exclui diretamente o dia da comparação do E6. (`app/ponto/turnos.py:1632`, `:1633`; `app/ponto/motor_calculo_v2.py:617`, `:619`, `:621`)
-   - **Escapa de `espelho_do_colab`:** o E6 incrementa `erros no espelho` e pula **o colaborador inteiro**. (`app/ponto/management/commands/e6_oraculo.py:305`, `:306`, `:307`)
-
-   O E6 decide separadamente quais dias compara: falta de linha, isenção/ausência, falta de lavratura, ambos zero e janela declarada têm seus próprios desvios; só depois entram `dias_comparados` e os acumuladores de divergência. O `PARCIAL` copia esses acumuladores, sem descontar o contador de exceções da sonda. (`app/ponto/management/commands/e6_oraculo.py:324`, `:327`, `:331`, `:339`, `:342`, `:352`, `:367`, `:368`; `script2.py:186`, `:190`, `:342`, anexo)
-
-   **O impacto numérico efetivo nas ocorrências fornecidas é [não verificado].** Para concluir, faltam o fonte efetivamente carregado, traceback completo, `repr(s)`, chave do marco e identificação/data real da célula. Somatórios consistentes verificam a soma dos acumuladores; não certificam a ausência de efeitos anteriores sobre o cálculo. (`script2.py:292`, `:309`, anexo)
-
-## 06/11 11:54 · sessao 456448b2f2e7 · - · - · origem=Ronald (tmux)
-
-Principais achados, com numeração do anexo contada manualmente a partir de `import ast` = linha 1:
-
-- Há divergência decisiva na premissa: na cópia, `juiz_batida.py:75` é `h, m = str(s).split(':')[:2]`; o construtor `datetime.time(...)` está na linha 83. A linha 75 pode levantar `ValueError` esperado para `None`, e o próprio `_hhmm` captura isso e retorna `None` em 77–78. Não foi demonstrado que os registros apresentados vieram do construtor. (`app/ponto/juiz_batida.py:75`, `app/ponto/juiz_batida.py:77`, `app/ponto/juiz_batida.py:83`)
-
-- O caminho benigno é alcançável sem dado malformado: `PARES_PAUSA_DNA` contém os dois pares, inclusive `hii2/hfi2`; `periodos_do_dia` chama `_time(marcos.get(...))` para todos e depois filtra pares ausentes. Um marco ausente produz `None`, erro de unpack capturado em 75–78 e retorno `None` de `_time`. A sonda registra a entrada nesse `except`, embora a função continue normalmente. (`app/escala/models.py:1652`, `app/ponto/juiz_batida.py:170`, `app/ponto/juiz_batida.py:172`, `app/ponto/juiz_batida.py:173`; anexo `script2.py:215`, `script2.py:219`)
-
-- A sonda registra exceções capturadas, não apenas falhas escapadas: `rastrear` memoriza evento `exception` e chama `registrar` quando o frame entra no corpo de um handler; `registrar` deduplica pela própria exceção, sem colapsar novas exceções equivalentes. Isso permite milhares de eventos de parsing normal repetido. Quantas das 438266 ocorrências são desse tipo: **não verificado**, faltam `s`, o frame exato da captura e a versão que executou. (anexo `script2.py:123`, `script2.py:125`, `script2.py:213`, `script2.py:219`)
-
-- Não existe retry explícito da chamada por dia no script: há laço de competências, seleção/iteração de colaboradores e chamada única ao comando por competência. O comando pede um espelho por colaborador com a janela completa. (anexo `script2.py:515`, `script2.py:545`, `script2.py:455`, `script2.py:462`; `app/ponto/management/commands/e6_oraculo.py:302`, `app/ponto/management/commands/e6_oraculo.py:304`)
-
-- Um laço que multiplica chamadas ao juiz é `for _d, cel in celulas.items()`: chama `periodos_do_dia` para cada célula, captura exceção que escape e continua. Esse corpo é alcançado por `turnos_do_colab` → `_turnos_do_colab_puro` → `papel_por_minuto_da_ata`. O motor também consulta o juiz em outro laço por `dia`. Multiplicador exato das contagens apresentadas: **não verificado**. (`app/ponto/turnos.py:1629`, `app/ponto/turnos.py:1631`, `app/ponto/turnos.py:1632`, `app/ponto/turnos.py:1913`, `app/ponto/turnos.py:1937`, `app/ponto/motor_calculo_v2.py:611`, `app/ponto/motor_calculo_v2.py:616`)
-
-- “Último dia” pode ser atribuição incorreta da sonda: ela procura locais chamados `k`, `data`, `dia`, `data_turno`, mas o laço de células usa `_d` e o juiz recebe `celula`. No `handle`, `k` permanece igual a `fim` após terminar o colaborador anterior, enquanto `dia` já virou `fim+1`; o próximo espelho é chamado antes de reiniciar `dia`. Assim, uma exceção sem uma dessas datas nos frames mais próximos pode herdar `k` do colaborador anterior. A data real das células das ocorrências **não está verificada**. (anexo `script2.py:86`, `script2.py:110`, `script2.py:115`; `app/ponto/turnos.py:1629`, `app/ponto/juiz_batida.py:149`, `app/ponto/management/commands/e6_oraculo.py:304`, `app/ponto/management/commands/e6_oraculo.py:319`, `app/ponto/management/commands/e6_oraculo.py:321`, `app/ponto/management/commands/e6_oraculo.py:323`)
-
-Quanto aos `PARCIAL`:
-
-- Se for o `ValueError` capturado dentro de `_hhmm`, não há exclusão automática de dia nem divergência automática: o parser retorna `None` e o julgamento continua. Impacto numérico das ocorrências reais: **não verificado**. (`app/ponto/juiz_batida.py:77`, `app/ponto/juiz_batida.py:83`, `app/ponto/juiz_batida.py:173`)
-
-- Se o juiz levantar externamente no caminho de `papel_por_minuto_da_ata`, somente aquela consulta de célula é ignorada nesse mapa; o restante do pareamento continua. O código não transforma a exceção diretamente em `dia_sem_lavratura`, divergência ou exclusão do universo do E6. (`app/ponto/turnos.py:1632`, `app/ponto/turnos.py:1633`, `app/ponto/turnos.py:1937`, `app/ponto/turnos.py:1990`)
-
-- Só uma exceção que escape de `espelho_do_colab` incrementa `erros no espelho` e pula **o colaborador inteiro**. Os erros internos capturados podem coexistir com `erros_no_espelho 0`. (`app/ponto/management/commands/e6_oraculo.py:304`, `app/ponto/management/commands/e6_oraculo.py:305`, `app/ponto/management/commands/e6_oraculo.py:306`, `app/ponto/management/commands/e6_oraculo.py:307`, `app/ponto/management/commands/e6_oraculo.py:396`)
-
-- O E6 percorre `ini..fim`, classifica exclusões por falta de linha, isenção/ausência, falta de lavratura, ambos zero ou janela declarada; só depois incrementa `dias_comparados`, calcula divergência e soma donos/horas/colaboradores. O `PARCIAL` copia esses acumuladores, sem recomputar nem descontar os erros registrados pela sonda. (`app/ponto/management/commands/e6_oraculo.py:320`, `app/ponto/management/commands/e6_oraculo.py:324`, `app/ponto/management/commands/e6_oraculo.py:327`, `app/ponto/management/commands/e6_oraculo.py:330`, `app/ponto/management/commands/e6_oraculo.py:339`, `app/ponto/management/commands/e6_oraculo.py:342`, `app/ponto/management/commands/e6_oraculo.py:352`, `app/ponto/management/commands/e6_oraculo.py:367`; anexo `script2.py:175`, `script2.py:186`, `script2.py:190`, `script2.py:342`)
-
-A soma fechar prova consistência dos acumuladores copiados; não prova ausência de efeitos das exceções sobre os valores calculados. (`app/ponto/management/commands/e6_oraculo.py:424`, `app/ponto/management/commands/e6_oraculo.py:426`; anexo `script2.py:292`, `script2.py:309`)
-
-_2267 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2269 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
