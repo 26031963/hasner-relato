@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 12:18:46.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (62.5 MB). Acoes na janela: **858**.
+**Medido em 06/11/2026 12:24:08.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (63.2 MB). Acoes na janela: **864**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:22:38 | Bash | Wait for two more R1 parts | `cd /home/ronald/saas-hasner; n0=$(wc -l < logs/r1remede/cadeia3.status); timeout 580 bash -c "until [ \$(wc -l < logs/r1remede/cadeia3.status) -ge $((n0+2)) ]; do /usr/bin/sleep 10; done"; tail -3 logs/r1remede/cadeia3.status; date +%T` |
+| 12:20:13 | Bash | Wait for next R1 part | `cd /home/ronald/saas-hasner; n0=$(wc -l < logs/r1remede/cadeia3.status); timeout 570 bash -c "until [ \$(wc -l < logs/r1remede/cadeia3.status) -gt $n0 ]; do /usr/bin/sleep 10; done"; tail -2 logs/r1remede/cadeia3.status; date +%T` |
+| 12:20:08 | Bash | Record O10-B decision in RELATO and BACKLOG | `cd /home/ronald/saas-hasner/app; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys h=sys.argv[1] p='docs/RELATO.md'; L=open(p).read().split('\n') assert L[1].startswith('ESPERANDO:') ins=[f"lei: O10-B folga_trabalhada fora de STATUS_QUE_PEDEM_DECISAO (colaboradores/services/calendario.py:94) -- falta a lei: troca que cai em folga trabalhada pede decisao do admin? B segue sem isso (nao bloqueia o ...` |
+| 12:19:58 | Bash | Read RELATO top and O10 BACKLOG rows | `cd /home/ronald/saas-hasner/app; sed -n 1,12p docs/RELATO.md \| cut -c1-250; grep -n "O10-TROCA\\|O10-B" docs/BACKLOG.md \| head -5` |
+| 12:19:55 | SendMessage |  | `-` |
+| 12:19:44 | Bash | Verify cobranca_orfa reads only regenerada_em | `cd /home/ronald/wt-o10b-103324/app; grep -n "regenerada_em\\|editada_em" escala/services/regeneracao.py ponto/management/commands/gerar_celulas.py ponto/management/commands/supra_juiz.py \| head -30; sed -n 38,44p /home/ronald/saas-hasner/app/docs/JUIZES.md \| cut -c1-300` |
 | 12:14:55 | Bash | Wait for next R1 part to finish | `cd /home/ronald/saas-hasner; n0=$(wc -l < logs/r1remede/cadeia3.status); timeout 570 bash -c "until [ \$(wc -l < logs/r1remede/cadeia3.status) -gt $n0 ]; do /usr/bin/sleep 10; done"; tail -2 logs/r1remede/cadeia3.status; date +%T` |
 | 12:14:49 | Bash | Chain R1 p1 rerun and update RELATO | `cd /home/ronald/saas-hasner; mv logs/r1remede/p1/s.out logs/r1remede/p1/s.out.qilegivel; cat > logs/r1remede/p1_de_novo.sh <<'E' #!/usr/bin/env bash cd /home/ronald/saas-hasner while [ ! -f logs/v3impacto/partes3.fim ]; do /usr/bin/sleep 20; done d=logs/r1remede/p1 CODEX_TIMEOUT=1800 CODEX_SONDA_ENVELOPE=$d/envelope.sh CODEX_OBRA=R1-CAUSAD-V3 CODEX_PAPEL=sonda bin/codex_pergunta.sh --sonda $d/scri ...` |
 | 12:14:38 | Bash | Find chain pid and p2 state | `cd /home/ronald/saas-hasner; P=$(ps -eo pid,args \| awk '$2=="bash" && $3=="logs/r1remede/cadeia3.sh"{print $1}'); echo chain=$P; pstree -ap $P \| head -4 \| cut -c1-120; cat logs/r1remede/p2/s.out 2>/dev/null \| head -3` |

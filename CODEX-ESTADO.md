@@ -1,7 +1,96 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 12:18** · publicado em **06/11/2026 12:18** (UTC-3)
+> Ultima resposta processada: **06/11/2026 12:22** · publicado em **06/11/2026 12:24** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 12:22 · sessao 62301c1ca858 · R1-CAUSAD-V3 · sonda · origem=Code
+
+Transcrição integral da saída fornecida [nao verificado]:
+
+```text
+sonda_leitura: script.py [c3a2fcb8e125469d] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+PARTE 3 PARTES 6
+[0] UNIVERSO 10/2026 624
+UNIVERSO_PARTE 10/2026 102
+JANELA 10/2026 2026-09-21 2026-10-20
+[0] UNIVERSO 11/2026 578
+UNIVERSO_PARTE 11/2026 97
+JANELA 11/2026 2026-10-21 2026-11-20
+ESTIMATIVA processados 25 universo 199 minutos_total 3.2 ate_40_min True ate_15_min True
+ESTIMATIVA processados 50 universo 199 minutos_total 2.9 ate_40_min True ate_15_min True
+ESTIMATIVA processados 75 universo 199 minutos_total 2.8 ate_40_min True ate_15_min True
+ESTIMATIVA processados 100 universo 199 minutos_total 2.8 ate_40_min True ate_15_min True
+COMPETENCIA 10/2026
+[1] {'dias_comparados': 1232, 'bate_ate_10min': 1165, 'esp_zero_e6_trabalho': 12, 'e6_zero_esp_trabalho': 6, 'diverge_10_60': 2, 'diverge_acima_60': 47, 'dia_batida_impar': 66, 'impar_que_BATE': 24, 'impar_que_DIVERGE': 42, 'impar_dentro_da_faixa': 33, 'impar_FORA_da_faixa': 9, 'impar_no_conjunto_do_dia': 42, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1422, 'dia_isento_ou_ausencia': 345, 'dia_sem_trabalho_ambos': 22, 'esp_desconta_janela_declarada': 39, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 94.6% de 1232 dias comparados
+[3] ESTRUTURA     3 dia-colab      15.2 h    3 colabs
+[3] CADASTRO      7 dia-colab      35.9 h    4 colabs
+[3] BATIDA       57 dia-colab     302.4 h   25 colabs
+[4] TOTAL divergentes 67
+[5] colabs com divergencia: 30
+erros_no_espelho 0
+PARCIAL|10/2026|ESTRUTURA|dias=3|horas=15.209666666666665|colabs=3
+PARCIAL|10/2026|CADASTRO|dias=7|horas=35.88209174|colabs=4
+PARCIAL|10/2026|BATIDA|dias=57|horas=302.3993460441667|colabs=25
+PARCIAL_TOTAL|10/2026|dias=67|horas=353.491104450833365|colabs=30
+ESTIMATIVA processados 125 universo 199 minutos_total 2.9 ate_40_min True ate_15_min True
+ESTIMATIVA processados 150 universo 199 minutos_total 3.0 ate_40_min True ate_15_min True
+ESTIMATIVA processados 175 universo 199 minutos_total 3.0 ate_40_min True ate_15_min True
+COMPETENCIA 11/2026
+[1] {'dias_comparados': 629, 'bate_ate_10min': 599, 'esp_zero_e6_trabalho': 4, 'e6_zero_esp_trabalho': 5, 'diverge_10_60': 0, 'diverge_acima_60': 21, 'dia_batida_impar': 42, 'impar_que_BATE': 22, 'impar_que_DIVERGE': 20, 'impar_dentro_da_faixa': 17, 'impar_FORA_da_faixa': 3, 'impar_no_conjunto_do_dia': 19, 'impar_SO_POR_CORTE_do_oraculo': 1, 'dia_sem_linha_no_espelho': 1358, 'dia_sem_lavratura_no_espelho': 814, 'dia_isento_ou_ausencia': 147, 'dia_sem_trabalho_ambos': 21, 'esp_desconta_janela_declarada': 38, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 95.2% de 629 dias comparados
+[3] ESTRUTURA     3 dia-colab      11.8 h    2 colabs
+[3] CADASTRO      5 dia-colab      15.8 h    5 colabs
+[3] BATIDA       22 dia-colab     113.4 h   10 colabs
+[4] TOTAL divergentes 30
+[5] colabs com divergencia: 15
+erros_no_espelho 0
+PARCIAL|11/2026|ESTRUTURA|dias=3|horas=11.75|colabs=2
+PARCIAL|11/2026|CADASTRO|dias=5|horas=15.826795833333335|colabs=5
+PARCIAL|11/2026|BATIDA|dias=22|horas=113.35641307083331|colabs=10
+PARCIAL_TOTAL|11/2026|dias=30|horas=140.933208904166645|colabs=15
+TEMPO_SEGUNDOS 180.0
+TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 240100
+TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 250
+TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1365
+TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 4623
+TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 41
+TRATADA_LOCAL app/escala/utils.py:1521 GeneratorExit 4
+TRATADA_LOCAL app/escala/utils.py:1708 GeneratorExit 2
+TRATADA_LOCAL app/escala/utils.py:2012 GeneratorExit 6434
+TRATADA_LOCAL app/escala/utils.py:2054 GeneratorExit 4
+TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 6
+TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 4324
+TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 4324
+TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 512
+TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 179
+TRATADA_LOCAL app/ponto/juiz_batida.py:191 GeneratorExit 16
+TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 452220
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 554
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 2847
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 157
+TRATADA_LOCAL app/ponto/services/dia_pago.py:890 GeneratorExit 11514
+TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 101
+TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 3979
+TRATADA_LOCAL app/ponto/services/fechamento.py:1028 GeneratorExit 190
+TRATADA_LOCAL app/ponto/services/fechamento.py:1029 _GradeSemCelula 4
+TRATADA_LOCAL app/ponto/turnos.py:1293 GeneratorExit 22023
+TRATADA_LOCAL app/ponto/turnos.py:1654 GeneratorExit 4399
+TRATADA_LOCAL app/ponto/turnos.py:1697 GeneratorExit 36499
+TRATADA_LOCAL app/ponto/turnos.py:677 GeneratorExit 16376
+SOMA 10/2026 67   <- tem de ser igual a soma das classes (67) True
+SOMA 10/2026 HORAS 353.491104450833365 True
+SOMA 10/2026 COLABS_UNIAO 30 True
+SOMA 11/2026 30   <- tem de ser igual a soma das classes (30) True
+SOMA 11/2026 HORAS 140.933208904166645 True
+SOMA 11/2026 COLABS_UNIAO 15 True
+rc_sombra=0
+```
+
+As seis linhas `SOMA` estão como `True` no dado fornecido. [nao verificado]
+
+Não há marcador `INCOMPLETO` na saída fornecida. [nao verificado]
 
 ## 06/11 12:18 · sessao 2a0e68fa9623 · R1-CAUSAD-V3 · sonda · origem=Code
 
@@ -1209,70 +1298,4 @@ Quanto aos `PARCIAL`:
 
 A soma fechar prova consistência dos acumuladores copiados; não prova ausência de efeitos das exceções sobre os valores calculados. (`app/ponto/management/commands/e6_oraculo.py:424`, `app/ponto/management/commands/e6_oraculo.py:426`; anexo `script2.py:292`, `script2.py:309`)
 
-## 06/11 11:54 · sessao ae67676bb6c8 · O10-B · verificador · origem=Code
-
-**Sugiro bloquear** pela guarda alimentada com empresa potencialmente desatualizada e pela proteção de cobrança órfã que não recebe a edição humana; há também risco de inversão de locks (`app/ponto/portas/celula.py:564`, `app/escala/services/regeneracao.py:145`, `app/ponto/portas/celula.py:649`).
-
-Comparação com o pai limitada ao diff fornecido. Identidade Git da cópia, execução da suíte, REDs observados, concorrência real e efeitos em produção: **[nao verificado]**. [nao verificado]
-
-| Item 1 — campo | Quem escreve e quem lê | procedencia sugerida |
-|---|---|---|
-| `CelulaDia.trabalha` | Escrevem geração, regeneração, reversão e edição, dentro da porta (`app/ponto/portas/celula.py:247`, `app/ponto/portas/celula.py:263`, `app/ponto/portas/celula.py:276`, `app/ponto/portas/celula.py:781`, `app/ponto/portas/celula.py:842`, `app/ponto/portas/celula.py:861`, `app/ponto/portas/celula.py:600`). Leem o juiz do previsto, o juiz de dia sem trabalho, o leitor da ata, o classificador de jornada e o diagnóstico do colaborador (`app/escala/models.py:1094`, `app/chamados/juizes.py:427`, `app/escala/services/leitor_celula.py:381`, `app/escala/servico_jornada.py:303`, `app/ponto/services/dia_do_colab.py:90`). | nada |
-| `CelulaDia.dna` | Escrevem geração, regeneração, enriquecimento, reversão e edição (`app/ponto/portas/celula.py:248`, `app/ponto/portas/celula.py:264`, `app/ponto/portas/celula.py:779`, `app/ponto/portas/celula.py:845`, `app/ponto/portas/celula.py:853`, `app/ponto/portas/celula.py:863`, `app/ponto/portas/celula.py:601`). Leem marcos, pausas, extra declarada, cargas de DNA e impressão/ata do cartório (`app/escala/models.py:1124`, `app/escala/models.py:1189`, `app/escala/models.py:1235`, `app/escala/utils.py:46`, `app/escala/utils.py:97`, `app/escala/utils.py:130`, `app/ponto/services/cartorio.py:1348`, `app/ponto/services/cartorio.py:1386`). | nada |
-| `CelulaDia.escala_geradora` | Escrevem geração, regeneração, reversão e edição (`app/ponto/portas/celula.py:264`, `app/ponto/portas/celula.py:276`, `app/ponto/portas/celula.py:784`, `app/ponto/portas/celula.py:844`, `app/ponto/portas/celula.py:862`, `app/ponto/portas/celula.py:602`). O juiz do vínculo lê a geradora e verifica sua vigência; carregadores também a usam para incluir o vínculo nomeado (`app/escala/alimentacao.py:270`, `app/escala/alimentacao.py:279`, `app/escala/alimentacao.py:282`, `app/ponto/turnos.py:2343`, `app/ponto/turnos.py:2944`). | nada |
-| `CelulaDia.origem` — escritores | Geração/regeneração criam `gerada`; `editar_dia` cria ou grava `editada` (`app/ponto/portas/celula.py:264`, `app/ponto/portas/celula.py:844`, `app/ponto/portas/celula.py:597`, `app/ponto/portas/celula.py:603`). | nada |
-| `origem='editada'` — regeneração | Os dois ramos de alteração exigem `gerada`. A escrita nova exclui a célula da regeneração, inclusive da desativação de dias fora da vigência (`app/ponto/portas/celula.py:242`, `app/ponto/portas/celula.py:267`). | nada |
-| `origem='editada'` — reversão e geração periódica | A reversão recusa origem diferente de `gerada`; o gerador periódico pula explicitamente `editada`. A edição passa a impedir ambos os caminhos (`app/ponto/portas/celula.py:767`, `app/ponto/portas/celula.py:847`). | nada |
-| `origem='editada'` — edição e diagnósticos | A edição exige essa origem para devolver `igual`; os diagnósticos de divergência contra o template selecionam somente `gerada`, portanto deixam de contar o dia editado (`app/ponto/portas/celula.py:591`, `app/escala/management/commands/celulas_contra_o_template.py:29`, `app/ponto/management/commands/tripwire_celulas.py:21`). Origem também é exposta na fotografia da trilha, no diagnóstico e em `__str__` (`app/ponto/portas/celula.py:527`, `app/ponto/services/dia_do_colab.py:90`, `app/escala/models.py:1842`). | nada |
-| `editada_em` — escritor | `editar_dia` obtém o instante e grava na criação/atualização (`app/ponto/portas/celula.py:595`, `app/ponto/portas/celula.py:598`, `app/ponto/portas/celula.py:604`). | nada |
-| `editada_em` — leitor de perguntas | Entra no máximo de fatos **por colaborador**; se esse máximo ultrapassa `julgado_em`, a pergunta fica stale. Uma edição pode invalidar perguntas daquele colaborador; repetição idêntica não avança o carimbo (`app/chamados/veredito_lavrado.py:151`, `app/chamados/veredito_lavrado.py:187`, `app/ponto/portas/celula.py:591`). | nada |
-| `editada_em` — leitor do cartório | `houve_fato_novo` responde verdadeiro quando `desde < editada_em <= ate`; a escrita nova pode autorizar reabertura que antes não teria esse fato (`app/ponto/services/cartorio.py:365`). | nada |
-| `editada_em` — leitor de fase | A janela antiga reabre quando o maior carimbo dos colaboradores/dias examinados supera a lavra anterior. A edição pode mudar essa decisão (`app/escala/services/fase_12x36.py:188`, `app/escala/services/fase_12x36.py:191`). | nada |
-| `editada_por` e fotografia | A edição grava o autor; a fotografia lê autor e instante para antes/depois (`app/ponto/portas/celula.py:598`, `app/ponto/portas/celula.py:605`, `app/ponto/portas/celula.py:529`). A FK também admite anulação por exclusão do usuário (`app/escala/models.py:1733`). Outro leitor decisório específico: nenhum localizado **[nao verificado quanto a acessos dinâmicos]**. | nada |
-| `LogAuditoria`: duas ações novas | A porta chama `evento_kw` para `editar_dia` e `trocar_plantao`; o adaptador delega ao escritor efetivo de auditoria (`app/ponto/portas/celula.py:608`, `app/ponto/portas/celula.py:675`, `app/core/observ.py:146`, `app/core/observ.py:134`). A tela genérica consulta e filtra essas linhas (`app/core/views.py:705`, `app/core/views.py:709`). Leitor de negócio específico das duas ações: nenhum localizado **[nao verificado quanto a acessos dinâmicos]**. | nada |
-| `Ausencia.documento/.data/.colaborador` | A troca **lê**, sem alterar: relê cartas travadas, compara colaboradores, exige documento, usa cada data e fotografa o nome do arquivo (`app/ponto/portas/celula.py:649`, `app/ponto/portas/celula.py:654`, `app/ponto/portas/celula.py:656`, `app/ponto/portas/celula.py:662`, `app/ponto/portas/celula.py:672`). A porta existente monta os três campos na criação, altera data e substitui documento (`app/ponto/services/ausencia.py:341`, `app/ponto/services/ausencia.py:499`, `app/ponto/services/ausencia.py:857`, `app/ponto/services/ausencia.py:1128`). Cobertura e fato novo leem colaborador/data (`app/ponto/turnos.py:2753`, `app/ponto/turnos.py:2766`, `app/ponto/services/cartorio.py:355`). | nada |
-| Limite das cartas | O requisito implementado é `documento` não vazio; não há consulta à existência do arquivo no storage nessa guarda (`app/ponto/portas/celula.py:656`). Existência/conteúdo das cartas em produção: **[nao verificado]**. | nada |
-
-| Item 2 — hoist | Comparação de comportamento | procedencia sugerida |
-|---|---|---|
-| Ordem e condições | Pelo diff, preserva julgar → chamar dinheiro → registrar evento posterior. Conserva exclusão de futuro/veredito humano, `recalculo`, `julgados` e deduplicação por competência (`app/ponto/portas/celula.py:428`, `app/ponto/portas/celula.py:437`, `app/ponto/portas/celula.py:440`, `app/ponto/portas/celula.py:451`, `app/ponto/portas/celula.py:462`, `app/ponto/portas/celula.py:508`). Diferença funcional nesse fluxo normal: **nenhum**. | nada |
-| Logs | Para regeneração, rótulo, contexto e motivo mantêm o texto final anterior; os formatos passam a receber parâmetros (`app/ponto/portas/celula.py:360`, `app/ponto/portas/celula.py:446`, `app/ponto/portas/celula.py:450`, `app/ponto/portas/celula.py:468`). A localização/função emissora agora é o helper, portanto não é movimento literalmente “byte a byte” (`app/ponto/portas/celula.py:372`, `app/ponto/portas/celula.py:379`). | fila |
-| Callback e `engolir` | Mantém `_reavaliar_o_dia` e os contextos `ec`/`colab` da regeneração; os testes filtram por `__name__`, que permanece igual (`app/ponto/portas/celula.py:361`, `app/ponto/portas/celula.py:499`, `app/ponto/portas/celula.py:501`, `app/ponto/portas/celula.py:505`, `app/chamados/tests/test_e2_celula_regenerada_reavalia.py:149`, `app/chamados/tests/test_e2_celula_regenerada_reavalia.py:228`). | nada |
-| Diferença no no-op | Agora `ec.colaborador` é resolvido incondicionalmente ao chamar o helper; no pai fornecido, os acessos do rabo estavam dentro dos blocos condicionais. Com relação não carregada e `_tocadas` vazio, introduz dependência de carregamento desnecessária; eventual consulta/falha real **[nao verificado]** (`app/ponto/portas/celula.py:360`, `app/ponto/portas/celula.py:428`, `app/ponto/portas/celula.py:496`). | fila |
-
-| Item 3 — `editar_dia` | Resultado | procedencia sugerida |
-|---|---|---|
-| a — universo da guarda | Usa o mesmo enumerador e, por ele, o mesmo juiz: TXT vigente e holerite de lote publicado, com janela da autoridade (`app/ponto/portas/celula.py:566`, `app/ponto/management/commands/gerar_celulas.py:161`, `app/ponto/management/commands/gerar_celulas.py:169`, `app/ponto/management/commands/gerar_celulas.py:173`, `app/folha/export.py:610`, `app/folha/export.py:614`). **Mas não garante a mesma alimentação:** regeneração consulta `empresa_id` atual no banco; edição usa a instância recebida (`app/ponto/portas/celula.py:215`, `app/ponto/portas/celula.py:564`). Contraexemplo estático: instância ainda na empresa A, cadastro já na B, TXT apenas em B; a edição pode não enumerar a exportação de B e escrever pelo mesmo colaborador (`app/ponto/management/commands/gerar_celulas.py:161`, `app/ponto/portas/celula.py:590`). Ocorrência: **[nao verificado]**. | **bloqueia** |
-| a — abertura | Só o argumento `apesar_da_lavra` desvia dessa guarda; qualquer valor verdadeiro é aceito, sem validação textual adicional, como na regeneração (`app/ponto/portas/celula.py:565`, `app/ponto/portas/celula.py:212`). A abertura é registrada na trilha (`app/ponto/portas/celula.py:611`, `app/ponto/portas/celula.py:615`). | nada |
-| b — idempotência sequencial | **Nenhum** caminho localizado que mova `editada_em` numa repetição com origem, trabalho, DNA e geradora iguais: retorna antes do relógio, save, trilha e rabo (`app/ponto/portas/celula.py:591`, `app/ponto/portas/celula.py:595`, `app/ponto/portas/celula.py:619`). Autor/motivo diferentes também são ignorados nesse no-op; template alterado pode produzir DNA diferente e justificar nova escrita (`app/ponto/portas/celula.py:588`, `app/ponto/portas/celula.py:591`). | nada |
-| b — célula ainda inexistente | O lock procura uma linha existente; não há trava de uma chave ausente nem tratamento de conflito no `create`. Duas edições isoladas concorrentes podem disputar a criação; a unicidade impede duas linhas, mas o resultado da segunda não é garantido como `igual` (`app/ponto/portas/celula.py:590`, `app/ponto/portas/celula.py:597`, `app/escala/models.py:1833`). Execução concorrente: **[nao verificado]**. | fila |
-| c — falha da trilha | `evento` usa savepoint próprio e devolve `None` após falha engolida; a edição transforma `None` em `RuntimeError`, ainda dentro do atomic, desfazendo a escrita (`app/core/observ.py:105`, `app/core/observ.py:133`, `app/core/observ.py:139`, `app/ponto/portas/celula.py:589`, `app/ponto/portas/celula.py:616`). Exceção propagada por `evento_kw` também sai do atomic (`app/ponto/portas/celula.py:608`). | nada |
-| d — DNA/vínculo do dia | **Nenhum clone localizado:** chama `vinculo_do_dia_carregado` e `montar_dna`; o carregador delega ao juiz, que privilegia a geradora dentro da vigência, sem escolher outra silenciosamente (`app/ponto/portas/celula.py:581`, `app/ponto/portas/celula.py:588`, `app/escala/alimentacao.py:289`, `app/escala/alimentacao.py:270`, `app/escala/alimentacao.py:282`). Marcos vêm do template desse vínculo (`app/ponto/management/commands/gerar_celulas.py:76`, `app/ponto/management/commands/gerar_celulas.py:81`). | nada |
-| e — futuro / sem célula | Futuro é editável: grava e agenda o rabo, mas o julgamento imediato é pulado; dinheiro/eventos continuam sendo solicitados (`app/ponto/portas/celula.py:597`, `app/ponto/portas/celula.py:619`, `app/ponto/portas/celula.py:437`, `app/ponto/portas/celula.py:464`, `app/ponto/portas/celula.py:508`). Sem célula, cria se houver vínculo; sem vínculo, retorna `sem_vinculo` e informa `barrados` quando fornecido (`app/ponto/portas/celula.py:582`, `app/ponto/portas/celula.py:597`). | nada |
-| e — veredito humano | A edição muda trabalho/DNA, conserva veredito/ata e o helper pula os vereditos humanos (`app/ponto/portas/celula.py:606`, `app/ponto/portas/celula.py:435`, `app/ponto/portas/celula.py:437`; humanos em `app/colaboradores/services/pos_vinculo.py:14`). O leitor prefere `tipo_dia` e minutos da ata, podendo continuar exibindo o julgamento anterior ao chão novo (`app/escala/services/leitor_celula.py:380`, `app/escala/services/leitor_celula.py:382`). Resultado financeiro concreto: **[nao verificado]**. | fila |
-| e — já editada | Igual devolve `igual`; diferente sobrescreve, avança autoria/instante e fotografa o antes real. Não altera os campos de regeneração (`app/ponto/portas/celula.py:591`, `app/ponto/portas/celula.py:594`, `app/ponto/portas/celula.py:600`, `app/ponto/portas/celula.py:613`). | nada |
-
-| Item 4 — `trocar_plantao` | Resultado | procedencia sugerida |
-|---|---|---|
-| a — atomicidade do par | **Nenhum caminho localizado de persistência de apenas uma edição:** atomic externo contém ambas e a trilha final; recusa sai dele antes de ser capturada, e falha inesperada propaga (`app/ponto/portas/celula.py:644`, `app/ponto/portas/celula.py:662`, `app/ponto/portas/celula.py:665`, `app/ponto/portas/celula.py:675`, `app/ponto/portas/celula.py:683`). | nada |
-| b — locks/deadlock | Cartas são ordenadas por PK; células seguem cedente → substituto, sem ordem global (`app/ponto/portas/celula.py:650`, `app/ponto/portas/celula.py:662`, `app/ponto/portas/celula.py:665`, `app/ponto/portas/celula.py:590`). O lock também inclui `select_related('colaborador')`, sem `of`, com PostgreSQL configurado (`app/ponto/portas/celula.py:649`, `app/config/settings/prod.py:11`). **Inferência:** cartas distintas podem produzir ordem A→B versus B→A nos colaboradores associados; SQL efetivo/deadlock observado **[nao verificado]**. As mesmas duas cartas já se serializam pela ordenação dos PKs (`app/ponto/portas/celula.py:650`). | **bloqueia** |
-| c — recusas estruturais | Par incompleto, carta removida, mesmo colaborador ou documento ausente geram uma entrada com `dias=0`, `de=None`, `ate=None` e texto explicativo (`app/ponto/portas/celula.py:645`, `app/ponto/portas/celula.py:652`, `app/ponto/portas/celula.py:654`, `app/ponto/portas/celula.py:656`, `app/ponto/portas/celula.py:685`). | nada |
-| c — recusa de um lado | Exportada/sem vínculo geram `dias=1`, datas daquele lado e motivo; a primeira recusa interrompe o fluxo, portanto não enumera necessariamente todos os lados inválidos (`app/ponto/portas/celula.py:577`, `app/ponto/portas/celula.py:584`, `app/ponto/portas/celula.py:663`, `app/ponto/portas/celula.py:666`, `app/ponto/portas/celula.py:687`). Sem autor/motivo ou falha inesperada levantam exceção, sem conversão para `barrados` (`app/ponto/portas/celula.py:638`, `app/ponto/portas/celula.py:640`, `app/ponto/portas/celula.py:683`). | nada |
-| d — antes do commit | `julgar_celula` roda sincronamente depois de cada edição, ainda no atomic externo; lavra e carimbo pertencem à transação e são revertidos com ela. Exceções de julgamento são logadas/engolidas (`app/ponto/portas/celula.py:619`, `app/ponto/portas/celula.py:440`, `app/ponto/portas/celula.py:443`, `app/ponto/services/cartorio.py:1802`, `app/ponto/services/cartorio.py:1822`). | nada |
-| d — depois do commit/rollback | `recalcular_por_evento` registra `_rodar`; o helper registra depois rejunção/falta. Ordem direta: dinheiro cedente → evento cedente → dinheiro substituto → evento substituto (`app/ponto/services/fechamento.py:1791`, `app/ponto/services/fechamento.py:1808`, `app/ponto/portas/celula.py:464`, `app/ponto/portas/celula.py:508`, `app/ponto/portas/celula.py:662`, `app/ponto/portas/celula.py:665`). Rollback do atomic descarta esses callbacks; comportamento observado em execução **[nao verificado]**. Falhas posteriores são tratadas como best-effort, sem desfazer o par já confirmado (`app/ponto/services/fechamento.py:1802`, `app/core/observ.py:86`). | nada |
-
-| Item 5 — classes de reprovação | Achado no diff/cadeia | procedencia sugerida |
-|---|---|---|
-| Segundo juiz / derivação paralela | **nenhum** novo localizado para vínculo, competência ou DNA: reutiliza carregador, enumerador, produtor e autoridades de julgamento/janela (`app/ponto/portas/celula.py:555`, `app/ponto/portas/celula.py:566`, `app/ponto/portas/celula.py:588`, `app/ponto/portas/celula.py:440`, `app/ponto/portas/celula.py:459`). A diferença de alimentação da empresa permanece sendo o achado 3a (`app/ponto/portas/celula.py:564`). | nada adicional |
-| Segundo escritor fora da porta | **nenhum** no diff: novas escritas estão em `editar_dia`, declarada como quarta operação; troca chama essa operação (`app/ponto/portas/celula.py:82`, `app/ponto/portas/celula.py:597`, `app/ponto/portas/celula.py:606`, `app/ponto/portas/celula.py:662`). | nada |
-| Relógio fora da borda | Novo `now()` interno carimba auditoria; o `localdate()` decisório do helper já existia no pai. A entrada nova não permite injetar esse tempo (`app/ponto/portas/celula.py:595`, `app/ponto/portas/celula.py:432`, `app/ponto/portas/celula.py:533`). O corte sobre juiz/grade pede instante recebido da borda; não há base para classificar automaticamente todo carimbo de auditoria como novo juiz (`app/docs/CORTES.md:370`). | fila |
-| Testes com resultado | Há asserções de estado para cartas, cedente/substituto, idempotência, vínculo, rollback, exportada e trilhas (`app/ponto/tests/test_o10b_editar_dia_troca.py:147`, `app/ponto/tests/test_o10b_editar_dia_troca.py:178`, `app/ponto/tests/test_o10b_editar_dia_troca.py:206`, `app/ponto/tests/test_o10b_editar_dia_troca.py:238`, `app/ponto/tests/test_o10b_editar_dia_troca.py:287`, `app/ponto/tests/test_o10b_editar_dia_troca.py:325`, `app/ponto/tests/test_o10b_editar_dia_troca.py:380`, `app/ponto/tests/test_o10b_editar_dia_troca.py:414`). RED/verde executado: **[nao verificado]**. | nada |
-| Selo de lock sem mordida suficiente | A01 procura somente os nomes `atomic`/`select_for_update`; uma chamada morta preservaria a aprovação desse selo. Não verifica avaliação, posição nem ordem das travas (`app/ponto/tests/test_o10b_editar_dia_troca.py:318`, `app/ponto/tests/test_o10b_editar_dia_troca.py:322`). | fila |
-| Rollback de callbacks sem prova | `_trocar` substitui `on_commit` por execução imediata dentro do atomic; A02 verifica células/trilhas revertidas, mas não prova descarte real dos callbacks (`app/ponto/tests/test_o10b_editar_dia_troca.py:39`, `app/ponto/tests/test_o10b_editar_dia_troca.py:115`, `app/ponto/tests/test_o10b_editar_dia_troca.py:325`). | fila |
-| Mutantes sobreviventes por inspeção | Remover as guardas `_t is None` não altera os caminhos normais testados; a falha injetada é no segundo `editar_dia`, não na auditoria (`app/ponto/portas/celula.py:616`, `app/ponto/portas/celula.py:681`, `app/ponto/tests/test_o10b_editar_dia_troca.py:330`). Remover a atualização de `editada_por` também não é distinguido pelas reedições com o mesmo administrador (`app/ponto/portas/celula.py:605`, `app/ponto/tests/test_o10b_editar_dia_troca.py:365`). Aprovação efetiva desses mutantes: **[nao verificado]**. | fila |
-| Ordem de trava | Achado do item 4b; o selo atual não o distingue (`app/ponto/portas/celula.py:649`, `app/ponto/portas/celula.py:662`, `app/ponto/tests/test_o10b_editar_dia_troca.py:322`). | **bloqueia** |
-| Fallback disfarçado | **nenhum funcional novo localizado:** falta de vínculo recusa; falha da identificação da lavra muda somente a mensagem, conservando a recusa (`app/ponto/portas/celula.py:569`, `app/ponto/portas/celula.py:573`, `app/ponto/portas/celula.py:580`, `app/ponto/po
-
-[truncado em 20000 de 24062 caracteres]
-
-_2266 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2267 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
