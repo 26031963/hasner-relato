@@ -1,7 +1,103 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 03:34** · publicado em **06/11/2026 03:34** (UTC-3)
+> Ultima resposta processada: **06/11/2026 03:38** · publicado em **06/11/2026 03:40** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 03:38 · sessao 873fb725b2fe · O261-ITEM3-PEP · verificador · origem=Code
+
+1. **OBSERVAÇÃO — os PROCEDENTES da v1 foram fechados parcialmente.** Uso **“v2 virtual”** para a numeração após incorporar o anexo em memória; as demais referências são da cópia. Execução dos testes, dos mutantes e ocorrência dos casos em produção: **[não verificado]**. [nao verificado]
+
+   | Procedente da triagem | O v2 fecha? |
+   |---|---|
+   | **1a — reentrada S143 na mesma transação** | **Fecha a recusa específica:** encontrando o carimbo anterior aceito pelo C6, retorna `True` sem sobrescrevê-lo. Isso evita `_Reprovada` naquele caminho. Porém estende o mesmo sucesso a atos independentes, com efeitos indevidos nos consumidores descritos abaixo. (`app/chamados/models.py:2598`, **v2 virtual**; `app/chamados/services/materializacao.py:1204`, cópia) |
+   | **1b — falha no commit próprio** | **Fecha o posicionamento do tratamento:** o `except` agora envolve a saída do `with` e restaura as fotografias existentes. O teste novo provoca falha de commit, mas verifica somente carimbo, sem solicitar lavra. (`app/chamados/models.py:2595`, **v2 virtual**; `app/chamados/models.py:2628`, **v2 virtual**; `app/chamados/tests/test_o261_item3_pep.py:307`, **anexo**) |
+   | **2b — resposta nova na ordem inversa** | **Não fecha.** O escritor continua decidindo limpar validação a partir da instância recebida e pode salvar apenas resposta/instante, preservando uma validação gravada depois daquela leitura. Ser anterior ao patch sustenta a classificação como dívida existente; não sustenta dizer que a proteção é bilateral. (`app/chamados/services/disputa_emissao.py:1284`; `app/chamados/services/disputa_emissao.py:1286`; `app/chamados/services/disputa_emissao.py:1301`) |
+   | **3 — textos atribuíam toda recusa ao C6** | **Fecha a causa “mudança humana”, mas não toda a veracidade.** Acrescentou essa alternativa; permanecem “segue pendente”, nome de evento “viva” e a causa omitida “linha sumiu”. (`app/chamados/services/materializacao.py:552`, **v2 virtual**; `app/chamados/services/materializacao.py:1206`, **v2 virtual**; `app/chamados/models.py:2661`, **v2 virtual**) |
+   | **5 — retirar um campo isolado da guarda sobrevivia** | **Fecha por inspeção dos testes:** o novo `subTest` altera separadamente texto, instante da resposta, instante e autor da validação. A execução dos quatro mutantes continua **[não verificado]**. (`app/chamados/tests/test_o261_item3_pep.py:99`, **anexo**) |
+
+   **OBSERVAÇÃO — a janela da validação também permanece:** lê e julga antes do `atomic`, que começa somente para gravar a assinatura. (`app/chamados/services/validacao.py:359`; `app/chamados/services/validacao.py:374`; `app/chamados/services/validacao.py:395`)
+
+2. **PROCEDENTE-candidato — dois motivos de DESCARTE são abrangentes demais.**
+
+   | Descarte | Conferência do motivo escrito |
+   |---|---|
+   | **1c e 7b — conteúdo das relações** | **A ressalva sobre julgamento em curso se sustenta.** Existe projeção explícita de célula, e a ressuscitação a utiliza. Mas isso não torna qualquer relação carregada uma fotografia mais nova que o banco. O E2 consulta normalmente célula/disputa/destino, e o cartório também tem caminho que chama E2 **depois** da lavra. Preservar indistintamente essas relações mantém o contraexemplo de cache obsoleto. (`app/chamados/juizes.py:383`; `app/chamados/models.py:1450`; `app/chamados/reconciliador.py:641`; `app/ponto/services/cartorio.py:953`; `app/ponto/services/cartorio.py:959`) |
+   | **1c — disputa/destino incluídos no descarte** | **A justificativa da célula não os cobre.** O juiz lê contexto da disputa e status do destino; o laço novo copia apenas campos concretos da pergunta, preservando relações com a mesma FK. (`app/chamados/juizes.py:364`; `app/chamados/juizes.py:743`; `app/chamados/models.py:2663`, **v2 virtual**) |
+   | **1c — reler célula exigiria inverter trava** | **Não demonstrado.** Releitura e aquisição de trava são operações distintas; a relavra de referência carrega célula, mas seu `of` declara somente pergunta/disputa. Ciclo concreto com a porta da célula: **[não verificado]**. (`app/chamados/services/relavra_via.py:221`; `app/chamados/services/relavra_via.py:222`) |
+   | **1d — campo deferido** | **Sustenta rebaixar a prioridade, não a justificativa geral.** Os chamadores conferidos carregam perguntas completas. Entretanto, decidir por filtro SQL sobre um campo não exige carregar seu atributo: o hipotético `filter(validada_em__isnull=True).only('pk')` já decide sobre ele. Chamador atual com essa projeção: **[não verificado]**. (`app/chamados/services/disputa_emissao.py:1572`; `app/chamados/reconciliador.py:641`; `app/chamados/services/materializacao.py:1343`; `app/chamados/models.py:2657`, **v2 virtual**) |
+   | **5b — sempre abrir `atomic()` só mudaria SAVEPOINT** | **Não se sustenta como equivalência comportamental.** Savepoint muda a contenção de erro quando alguém captura a exceção. O repositório documenta justamente rollback externo provocado por erro engolido sem savepoint. S144 captura exceção do materializador sem criar seu próprio savepoint. Isso não obriga mudar a candidata escolhida, mas invalida o motivo do descarte. (`app/core/observ.py:124`; `app/chamados/signals.py:83`; `app/chamados/signals.py:139`; `app/chamados/signals.py:141`) |
+
+3. **PROCEDENTE-candidato — o novo `True` mistura “estado aceito” com “ato gravado”.** O contrato escrito continua `bool (gravou?)`, mas o ramo já carimbado retorna antes de escrever, completar resposta/validação ou lavrar. Também precede a comparação dos campos humanos. (`app/chamados/models.py:2563`; `app/chamados/models.py:2602`, **v2 virtual**; `app/chamados/models.py:2665`, **v2 virtual**; `app/chamados/models.py:2667`, **v2 virtual**)
+
+   Para os oito chamadores, considerando carimbo de **outra via, autor ou instante**:
+
+   | Chamador | Consequência de `True` e avaliação |
+   |---|---|
+   | **`lavrar_sem_turno_aberto`** | Pode fechar a disputa, grava resolução “sem turno aberto” e retorna sucesso. O fechamento continua condicionado a `pode_fechar`; o retorno já não comprova que esta chamada lavrou aquela via. (`app/chamados/reconciliador.py:405`; `app/chamados/reconciliador.py:411`; `app/chamados/reconciliador.py:412`; `app/chamados/reconciliador.py:414`) |
+   | **`retratar_perguntas_absolvidas_por_celula`** | Incrementa `n`, agenda disputa e pode fechá-la atribuindo resolução à célula. O número documentado como “perguntas carimbadas” passa a incluir carimbo alheio encontrado. (`app/chamados/reconciliador.py:551`; `app/chamados/reconciliador.py:588`; `app/chamados/reconciliador.py:590`; `app/chamados/reconciliador.py:603`) |
+   | **S143, ramo principal** | Incrementa `perguntas_resolvidas`, inclui disputa e pode fechá-la. Aceitar a reentrada própria resolve 1a; contabilizar ato independente não prova resolução efetuada nesta chamada. A lavra solicitada também é pulada nesse retorno. (`app/chamados/services/disputa_emissao.py:1603`; `app/chamados/services/disputa_emissao.py:1606`; `app/chamados/services/disputa_emissao.py:1607`; `app/chamados/services/disputa_emissao.py:1696`; `app/chamados/models.py:2602`, **v2 virtual**) |
+   | **S143, ramo sem credor** | **Emite trilha incorreta:** `fecho_sem_credor`, ator atual, fotografia anterior sem carimbo e `depois.materializada_em` igual ao horário da tentativa. O banco conserva o instante alheio. Esse ramo não incrementa `n_pq`; ainda participa da cauda de fechamento. (`app/chamados/services/disputa_emissao.py:1666`; `app/chamados/services/disputa_emissao.py:1678`; `app/chamados/services/disputa_emissao.py:1683`; `app/chamados/services/disputa_emissao.py:1689`) |
+   | **`_materializar_ausencia_de_resposta`** | Não registra recusa; conserva a Ausência já criada, reconcilia destino e pode fechar disputa. Preservar decisão alheia é adequado; isso não significa que a irmã foi absorvida neste ato: o agrupamento da absorção depende do mesmo `materializada_em`. (`app/chamados/services/materializacao.py:520`; `app/chamados/services/materializacao.py:549`; `app/chamados/services/materializacao.py:564`; `app/chamados/services/materializacao.py:568`; `app/chamados/services/materializacao.py:593`) |
+   | **`_materializar_uma`** | Conserva plantio/reuso anterior ao carimbo, marca sucesso e aumenta `materializadas`. Correto para a reentrada S143 do próprio plantio; para ato independente, a morte pelo C6 não demonstra que o plantio baseado na leitura anterior continua válido. Nesse ramo nem se aplica a comparação humana. (`app/chamados/services/materializacao.py:1145`; `app/chamados/services/materializacao.py:1147`; `app/chamados/services/materializacao.py:1207`; `app/chamados/services/materializacao.py:1302`; `app/chamados/models.py:2665`, **v2 virtual**) |
+   | **`materializar_pendentes_aprovadas`** | Acrescenta PK a `feitas`; não emite evento nesse trecho, e o receiver ignora a lista. Preserva o carimbo, mas a lista deixa de representar exatamente as perguntas carimbadas pela chamada. (`app/chamados/services/materializacao.py:1317`; `app/chamados/services/materializacao.py:1349`; `app/chamados/services/materializacao.py:1350`; `app/chamados/signals.py:140`) |
+   | **`encerrar_fantasma`** | Propaga `True`; o consumidor emite evento de encerramento pela lavra, incrementa `encerradas` e agenda disputa. **Contraria o contrato local de trilha somente quando escreveu**, embora o carimbo seja de outro ato. (`app/chamados/models.py:2685`; `app/chamados/reconciliador.py:1107`; `app/chamados/reconciliador.py:1138`; `app/chamados/reconciliador.py:1145`; `app/chamados/reconciliador.py:1146`) |
+
+   **PROCEDENTE-candidato — os textos de `False` ainda não dizem toda a verdade:**
+
+   - Se `validada_em` mudou de nulo para preenchido, a guarda retorna `False` sem chamar C6; o C6 real já considera essa pergunta morta. Portanto “segue pendente” e a ação `irma_viva_na_ausencia` não decorrem do retorno. (`app/chamados/models.py:2667`, **v2 virtual**; `app/chamados/juizes.py:1136`; `app/chamados/services/materializacao.py:553`, **v2 virtual**; `app/chamados/services/materializacao.py:573`, cópia)
+   - Linha desaparecida também retorna `False`, sem provar nenhuma das duas causas escritas nos novos textos. (`app/chamados/models.py:2661`, **v2 virtual**; `app/chamados/services/materializacao.py:552`, **v2 virtual**; `app/chamados/services/materializacao.py:1206`, **v2 virtual**)
+   - A frase sobre a batida sair do espelho continua sustentada pelo `_Reprovada` dentro do `atomic` da unidade. (`app/chamados/services/materializacao.py:1145`; `app/chamados/services/materializacao.py:1204`; `app/chamados/services/materializacao.py:1208`)
+
+4. **OBSERVAÇÃO — delta de escritores e leitores em relação à v1.**
+
+   | Campos | Quem escreve / quem lê no delta |
+   |---|---|
+   | **`materializada_em`, `materializada_por`, `via_resolucao`** | Nenhum escritor persistente novo. A atribuição continua em `_escrever_carimbo`; o v2 passa a preservar os três quando encontra carimbo existente. Esse estado agora alimenta sucesso nos oito consumidores, inclusive suas trilhas. (`app/chamados/models.py:2556`; `app/chamados/models.py:2602`, **v2 virtual**; `app/chamados/services/disputa_emissao.py:1683`; `app/chamados/reconciliador.py:1143`) |
+   | **`resposta_colab`** | Continua escrita pelo core; não é escrita por `carimbar`. A comparação humana já existia na proposta v1; no v2 ela fica subordinada à ausência de carimbo. O C6 passa a lê-la também no ramo já carimbado. (`app/chamados/services/disputa_emissao.py:1282`; `app/chamados/models.py:2665`, **v2 virtual**; `app/chamados/models.py:2667`, **v2 virtual**; `app/chamados/juizes.py:1150`) |
+   | **`respondida_em`, `validada_em`, `validada_por`** | Escritores permanecem core, validação e complemento da própria porta. O v2 deixa de completar esses campos no retorno antecipado. Logo `_CAMPOS_DO_HUMANO` não significa exclusividade humana de escrita. (`app/chamados/services/disputa_emissao.py:1283`; `app/chamados/services/disputa_emissao.py:1295`; `app/chamados/services/validacao.py:131`; `app/chamados/models.py:2611`, **v2 virtual**; `app/chamados/models.py:2602`, **v2 virtual**) |
+   | **`veredito_lavrado`, `julgado_em`, `janela_expira_em`** | Escritor/restaurador continuam na porta da lavra. A fotografia mudou para depois da aprovação do C6; a recuperação passou a alcançar o commit próprio. Já carimbada retorna sem lavrar, mesmo com `lavrar_veredito=True`. (`app/chamados/veredito_lavrado.py:227`; `app/chamados/veredito_lavrado.py:235`; `app/chamados/veredito_lavrado.py:240`; `app/chamados/models.py:2622`, **v2 virtual**; `app/chamados/models.py:2602`, **v2 virtual**) |
+   | **`_pv_memo`** | Escritor/leitor continuam em `pergunta_viva`. O novo ramo já carimbado executa C6 após o `pop` e pode deixar um memo novo. A chave continua sem cobrir ata/DNA/batidas; invalidar o memo não renova relações preservadas. (`app/chamados/juizes.py:811`; `app/chamados/juizes.py:835`; `app/chamados/juizes.py:847`; `app/chamados/models.py:2660`, **v2 virtual**; `app/chamados/models.py:2664`, **v2 virtual**) |
+
+5. **OBSERVAÇÃO — a recuperação não usa fotografia inexistente, mas seu alcance transacional tem limites.**
+
+   **Antes da fotografia:** `antes = lavra_antes = None` e as guardas do `except` evitam restauração inválida. Releitura, julgamento de carimbo existente, relógio e obtenção do autor precedem o carimbo novo; a lavra é fotografada antes de sua alteração. (`app/chamados/models.py:2594`, **v2 virtual**; `app/chamados/models.py:2607`, **v2 virtual**; `app/chamados/models.py:2622`, **v2 virtual**; `app/chamados/models.py:2629`, **v2 virtual**)
+
+   **Commit do chamador:** quando há transação externa, a porta retorna antes desse commit. Uma falha posterior não atravessa seu `except`; a instância pode conservar estado posteriormente revertido. Essa limitação permanece. (`app/chamados/models.py:2596`, **v2 virtual**; `app/chamados/models.py:2627`, **v2 virtual**)
+
+   **Depois de SQL efetivado:** se um `save()` concluir o UPDATE e algum hook lançar exceção Python depois, `nullcontext` não desfaz SQL. A porta restauraria memória e um chamador que capturasse a exceção poderia confirmar o banco. **Não encontrei esse caminho ordinário demonstrado nos receivers atuais**: o receiver da pergunta agenda trabalho protegido por `engolir`. Ocorrência concreta desse cenário: **[não verificado]**. (`app/chamados/models.py:2596`, **v2 virtual**; `app/chamados/models.py:2626`, **v2 virtual**; `app/chamados/models.py:2632`, **v2 virtual**; `app/chamados/signals.py:197`; `app/core/observ.py:85`)
+
+6. **PROCEDENTE-candidato — os testes mordem, mas ainda há mutante plausível sobrevivente.** [nao verificado]
+
+   **Mordidas por inspeção:** os quatro campos isolados defendem a guarda; o caso já carimbado/vivo exige consultar C6; a reentrada exige aceitar o carimbo anterior; a captura SQL exige trava antes do juiz; o teste transacional exige recuperação após falha de commit. Execução dessas mordidas: **[não verificado]**. (`app/chamados/tests/test_o261_item3_pep.py:99`, **anexo**; `app/chamados/tests/test_o261_item3_pep.py:144`, **anexo**; `app/chamados/tests/test_o261_item3_pep.py:163`, **anexo**; `app/chamados/tests/test_o261_item3_pep.py:263`, **anexo**; `app/chamados/tests/test_o261_item3_pep.py:307`, **anexo**)
+
+   **Mutante:** restaurar lavra no `except` apenas quando `_cx.in_atomic_block`, mantendo recuperação do carimbo incondicional. Os testes antigos de falha de lavra/save herdam `TestCase`; o novo de commit não pede lavra nem verifica seus três campos. Assim, a cobertura apresentada deixa passar lavra residual em memória após commit próprio falho com `lavrar_veredito=True`. Execução do mutante: **[não verificado]**. (`app/chamados/models.py:2629`, **v2 virtual**; `app/chamados/tests/test_o261e_f2_fila.py:143`; `app/chamados/tests/test_o261e_f2_fila.py:190`; `app/chamados/tests/test_o261e_f2_fila.py:200`; `app/chamados/tests/test_o261_item3_pep.py:307`, **anexo**)
+
+   **OBSERVAÇÃO — a reentrada nova é um teste de costura simulada:** substitui plantio e julgamento; não percorre o S143 real nem verifica os eventos dos outros consumidores. Também permanece sem defesa a diferença entre projeção legítima e relação obsoleta com a mesma FK. (`app/chamados/tests/test_o261_item3_pep.py:170`, **anexo**; `app/chamados/tests/test_o261_item3_pep.py:176`, **anexo**; `app/chamados/tests/test_o261_item3_pep.py:233`, **anexo**)
+
+7. **OBSERVAÇÃO — enquadramento nas sete classes.**
+
+   | Classe | Resultado |
+   |---|---|
+   | **(a) Segundo juiz** | **Não demonstrado.** Reutiliza o C6 registrado; comparar fotografia humana é pré-condição de concorrência. (`app/core/juizes.py:266`; `app/chamados/models.py:2602`, **v2 virtual**; `app/chamados/models.py:2667`, **v2 virtual**) |
+   | **(b) Segundo escritor** | **Não há nova porta persistente demonstrada.** Há cópia dinâmica em memória; o selo declara não alcançar nomes vindos de atributo. (`app/chamados/models.py:2664`, **v2 virtual**; `app/chamados/tests/test_o261e_f2_porta_carimbo.py:113`) |
+   | **(c) Relógio fora da borda** | **Dívida mantida:** fallback `now()` e `encerrar_fantasma` sem repassar o instante recebido pelo consumidor. (`app/chamados/models.py:2605`, **v2 virtual**; `app/chamados/models.py:2685`, cópia; `app/docs/BACKLOG.md:1154`) |
+   | **(d) Derivação paralela** | **Não demonstrada para vitalidade.** O problema encontrado é fornecer insumo relacionado obsoleto ao juiz existente e interpretar sua resposta como autoria do ato. (`app/chamados/models.py:2664`, **v2 virtual**; `app/chamados/juizes.py:1181`; `app/chamados/services/disputa_emissao.py:1683`) |
+   | **(e) Selo/RED sem mordida** | **Cobertura parcial, não vacuidade total.** Há testes discriminantes e o mutante residual do item 6. (`app/chamados/tests/test_o261_item3_pep.py:99`, **anexo**; `app/chamados/tests/test_o261_item3_pep.py:307`, **anexo**) |
+   | **(f) Ordem de trava** | **Incompleto.** Igualdade de `FOR UPDATE OF` e precedência ao C6 não provam ordem física entre P/D nem ausência de ciclo com chamado. Há gate que trava chamado antes de S143 e fechamento de disputa que alcança chamado. Deadlock concreto: **[não verificado]**. (`app/chamados/services/relavra_via.py:221`; `app/chamados/tests/test_o261_item3_pep.py:250`, **anexo**; `app/chamados/models.py:674`; `app/chamados/signals.py:42`; `app/chamados/signals.py:91`) |
+   | **(g) Pouso antes do pré-requisito** | Cronologia de medição, RED/GREEN, suite e pouso: **[não verificado]**. A presença dos testes no anexo não comprova sua execução. (`app/chamados/tests/test_o261_item3_pep.py:250`, **anexo**) |
+
+8. **PROCEDENTE-candidato — contraexemplo novo: `True` produz instante falso na trilha.**
+
+   Considere o ramo sem credor com disputa aberta, pai/destinos fora de `VIVOS`, pergunta sem resposta nem carimbo e célula que permite ao C6 considerá-la morta. Esse estado alcança a tentativa de carimbo. (`app/chamados/services/disputa_emissao.py:1649`; `app/chamados/services/disputa_emissao.py:1653`; `app/chamados/services/disputa_emissao.py:1656`; `app/chamados/services/disputa_emissao.py:1663`; `app/chamados/juizes.py:1195`)
+
+   - B já leu a pergunta e prepara a fotografia com `materializada_em=None`. (`app/chamados/services/disputa_emissao.py:1666`)
+   - Antes de B entrar na porta, A grava `admin_decidiu` em `tA`. A porta de identidade grava instante, autor e via. (`app/chamados/models.py:2639`; `app/chamados/models.py:2644`, cópia)
+   - B tenta carimbar em `tB`. O v2 relê o carimbo de A, não o altera e devolve `True`, pois o C6 aceita a identidade existente. (`app/chamados/models.py:2665`, **v2 virtual**; `app/chamados/models.py:2602`, **v2 virtual**; `app/chamados/juizes.py:1171`)
+   - B emite `fecho_sem_credor` com ator B e **`depois.materializada_em=tB`**, enquanto a pergunta conserva **`materializada_em=tA` e autor A**. (`app/chamados/services/disputa_emissao.py:1678`; `app/chamados/services/disputa_emissao.py:1683`; `app/chamados/models.py:2602`, **v2 virtual**)
+
+   **O carimbo preservado está correto; o
+
+[truncado em 20000 de 20265 caracteres]
 
 ## 06/11 03:34 · sessao 90e685ecd2b5 · - · - · origem=Ronald (tmux)
 
@@ -659,14 +755,4 @@ O escritor físico atual é `evento`; `registrar_log` é adaptador. (`app/core/o
 
 **Modelo/objeto diferentes:** o cancelamento de férias altera ausências e registra o ato em `AgendamentoFerias`, com o PK do agendamento; a alteração das ausências carimba `atualizado_em`. O aviso de recusa registra `Colaborador`, mas não altera uma ausência. Nenhum desses caminhos fornece o contraexemplo invisível procurado. (`app/ferias/services.py:356`, `app/ferias/views.py:410`, `app/ponto/services/ausencia.py:1267`, `app/api/views.py:1937`)
 
-## 06/11 01:57 · sessao d295a10a7b09 · - · - · origem=Ronald (tmux)
-
-**Achado adicional sólido, média — #3 continua parcial se a confirmação ficar truncada.** O diário faz `write`, `flush` e `fsync`; uma falha que deixe um fragmento JSON final não é tratada ([comando:254](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:254)). A reversão interpreta todas as linhas com `json.loads` antes de montar o plano; o fragmento aborta também a reversão das linhas anteriores confirmadas ([comando:222](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:222)). Ocorrência real: [não verificado].
-
-Se a última confirmação falhar e o `finally` conseguir gravar o resultado, `completo` será `true`: a última linha já entrou em `saida` antes da confirmação ([comando:270](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:270), [comando:285](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:285)). **Não elevar isoladamente:** o próprio predicado define completude como quantidade de linhas processadas, que pode estar completa apesar da confirmação ausente ([comando:285](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:285)).
-
-**Sem novo achado de `on_commit`:** o consumidor de Ausencia envolve o trabalho em `engolir`; não há nesse callback um caminho útil desprotegido demonstrado que impeça o retorno após commit ([signals:254](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/signals.py:254), [signals:260](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/signals.py:260), [signals:263](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/signals.py:263)). A trilha auxiliar `perguntas_devolvidas_ausencia_rejeitada` exige status rejeitada, ausente da LISTA ([materializacao:638](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/chamados/services/materializacao.py:638), [comando:51](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:51)).
-
-**PK versus commit:** escritor concreto com log anterior à escrita, pk menor e alteração pós-apply capaz de passar todas as guardas: [não verificado]. Não promover esse risco genérico. [nao verificado]
-
-_2087 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2088 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
