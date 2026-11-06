@@ -1,7 +1,93 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 01:14** · publicado em **06/11/2026 01:15** (UTC-3)
+> Ultima resposta processada: **06/11/2026 01:16** · publicado em **06/11/2026 01:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 01:16 · sessao 9d598bca1a77 · C20-FIO-MUDO · verificador · origem=Code
+
+**Não certificaria a obra completa.** O delta corrige captura do callback, cerca de competência e savepoint, mas continuam sem cobertura quatro atos de perda; há também uma janela concorrente na adoção. A linha permanece **ABERTA**. (`app/chamados/models.py:468`, `app/chamados/models.py:521`, `app/docs/PROMPTS.md:1882`, `app/docs/BACKLOG.md:1764`; janela detalhada no item 3.)
+
+Execução dos testes, RED/GREEN, mutantes e efeitos atuais em produção: **[nao verificado]**. [nao verificado]
+
+1. **Achados do opus final**
+
+   | Achado | Avaliação do delta |
+   |---|---|
+   | **(1) Callback sem captura** | **Resolve.** O wrapper agora captura a exceção com `engolir`; este registra ERROR e incrementa o contador de engolidos. R20a exige execução do callback seguinte. (`app/chamados/models.py:521`, `app/core/observ.py:73`, `app/core/observ.py:86`, `app/chamados/tests/test_c20_fio_mudo.py:337`) |
+   | **(2) Cerca contra L-050 e sem teste que morde** | **Resolve o achado específico.** A adoção deixou de consultar competência entregue; R20c cria exportação vigente e exige reapontamento. A prova não cobre o fluxo posterior inteiro. (`app/chamados/models.py:475`, `app/chamados/models.py:479`, `app/chamados/tests/test_c20_fio_mudo.py:385`, `app/chamados/tests/test_c20_fio_mudo.py:397`, `app/docs/LEIS.md:91`) |
+   | **(3) Cinco atos/estoque incompletos** | **Não resolve.** Os pontos de entrada continuam sendo nascimento efetivo e reabertura; o dedup de chamado já vivo retorna antes da adoção. A obra segue nomeada ABERTA. (`app/chamados/models.py:965`, `app/chamados/models.py:983`, `app/chamados/models.py:1033`, `app/chamados/models.py:1502`, `app/docs/BACKLOG.md:1764`) |
+   | **(4) M3 sobrevivente sem equivalência declarada** | **Não demonstrado como resolvido.** Definição do M3, nova execução e justificativa de equivalência: **[nao verificado]**. |
+   | **(5) `savepoint=False` tornando emissão refém** | **Resolve a estrutura transacional apontada.** Agora existe savepoint próprio, com captura por fora; R20b alcança erro SQL e consulta depois dele. Falta provar rollback após escrita parcial. (`app/chamados/models.py:468`, `app/chamados/models.py:526`, `app/chamados/tests/test_c20_fio_mudo.py:362`) |
+
+   Os achados **(3) e (4) continuam pendentes**; o primeiro está nomeado no BACKLOG, enquanto a resolução documental do M3 permanece **[nao verificado]**. (`app/docs/BACKLOG.md:1764`.)
+
+2. **Quem escreve e quem lê**
+
+   | Campo/ato | Escritores | Leitores relevantes |
+   |---|---|---|
+   | `PerguntaDisputa.chamado_destino` | `fio.reapontar_resolvedora`, com julgamento e lavra no mesmo save; nascimento em `PerguntaDisputa.abrir`. **O ramo de identidade de `abrir` também reaponta pergunta existente diretamente.** (`app/chamados/services/fio.py:829`, `app/chamados/services/fio.py:845`, `app/chamados/models.py:2550`, `app/chamados/models.py:2574`, `app/chamados/models.py:2576`) | Âncora, resolução da disputa do chamado, API e fila de validação. (`app/chamados/services/fio.py:97`, `app/chamados/services/fio.py:131`, `app/api/views.py:1007`, `app/chamados/services/validacao.py:793`) |
+   | `PerguntaDisputa.via_resolucao` | Núcleo `_escrever_carimbo`, portas de carimbar/identidade/descarimbar e limpeza em lote; atos próprios em `encerrar_por_fato_no_espelho` e `relavra_via.relavrar`. (`app/chamados/models.py:2656`, `app/chamados/models.py:2662`, `app/chamados/models.py:2725`, `app/chamados/models.py:2746`, `app/chamados/models.py:2763`, `app/chamados/models.py:2773`, `app/chamados/services/relavra_via.py:123`) | C6, exclusão de duplicatas na adoção e idempotência da retratação. (`app/chamados/juizes.py:1145`, `app/chamados/juizes.py:1171`, `app/chamados/models.py:481`, `app/chamados/services/fio.py:882`) |
+   | Disputa: `fechada_em`, `fechada_por`, `resolucao`, `motivo_fechamento` | `fechar` grava os quatro; `reabrir_admin` e `reabrir_sistema` limpam os quatro. `limpar_resolucao_residual` é porta estreita para somente resolução. (`app/chamados/models.py:1961`, `app/chamados/models.py:2163`, `app/chamados/models.py:2187`, `app/chamados/models.py:2270`) | Propriedade `aberta`, idempotência do fechamento, resolução do fio e API de disputas abertas. (`app/chamados/models.py:1864`, `app/chamados/models.py:1920`, `app/chamados/services/fio.py:131`, `app/api/views.py:1028`) |
+   | `ChamadoColaborador.status_local` | Transições por `_gravar_estado`; nascimento pelo estado decidido pelo motor nas portas de criação. (`app/chamados/models.py:222`, `app/chamados/models.py:279`, `app/chamados/models.py:994`, `app/chamados/models.py:1030`, `app/chamados/models.py:1155`) | Adoção, guarda da costura, fila e painel. (`app/chamados/models.py:469`, `app/chamados/models.py:486`, `app/chamados/services/fio.py:764`, `app/chamados/services/fila.py:126`, `app/chamados/services/painel.py:211`) |
+   | Evento `pergunta_reatada` | Gate de fechamento e nova adoção; gravação física por `core.observ.evento`. (`app/chamados/models.py:423`, `app/chamados/models.py:508`, `app/core/observ.py:94`) | Auditoria genérica consulta `LogAuditoria`; consumidor específico dessa ação: **[nao verificado]**. (`app/core/views.py:705`) |
+   | Ocorrência `disputa_reaberta_sistema` | `reabrir_sistema`, pela porta de nota, **no chamado-pai da disputa**, quando existe. (`app/chamados/models.py:2192`, `app/chamados/services/nota.py:102`) | Followups do fio e histórico. (`app/chamados/services/fio.py:171`, `app/chamados/services/historico.py:80`) |
+   | `FechamentoMensal` | Porta de fechamento: criação/cálculo, atualização, aprovação, reabertura e restauração. (`app/ponto/services/fechamento.py:889`, `app/ponto/services/fechamento.py:1144`, `app/ponto/services/fechamento.py:1307`, `app/ponto/services/fechamento.py:1342`, `app/ponto/services/fechamento.py:1433`) | Montagem do TXT lê fechamentos e classificação de entrada. (`app/folha/export.py:692`, `app/folha/export.py:695`, `app/folha/export.py:698`) |
+   | `ExportacaoDominio` | `registrar` cria conteúdo/hash históricos; `invalidar` altera invalidadores preservando conteúdo/hash. (`app/folha/models.py:143`, `app/folha/models.py:174`, `app/folha/models.py:182`) | Competência entregue, vigência, histórico e download da cópia guardada. (`app/folha/export.py:569`, `app/folha/models.py:121`, `app/folha/views.py:554`) |
+
+   **Existe segundo sítio de reapontamento fora de `reapontar_resolvedora`, preexistente ao delta.** Ele consulta os mesmos juízes, mas repete a escrita no ramo de identidade de `PerguntaDisputa.abrir`; o selo admite ambos os arquivos e não impede essa duplicação de sítio. (`app/chamados/models.py:2538`, `app/chamados/models.py:2550`, `app/chamados/models.py:2574`, `app/core/tests/test_contract_escritores_estado.py:61`.)
+
+   **Existe estado intermediário observável:** pergunta já reatada, disputa ainda fechada. `_disputa_do_chamado` e a API que seleciona disputas abertas não a encontram nesse intervalo; o fio do admin admite vivas em disputas fechadas. Não cabe afirmar invisibilidade universal ao colaborador, porque `perguntas_do_app` consulta C6 sem excluir disputa fechada. (`app/chamados/models.py:524`, `app/chamados/services/fio.py:131`, `app/api/views.py:1028`, `app/chamados/services/fio.py:209`, `app/chamados/services/pergunta_no_app.py:46`.)
+
+3. **Transação, exceções e travas**
+
+   - **Em `abrir()`:** a transação externa trava Colaborador e cria o chamado antes da adoção. O `engolir` envolve o `atomic()` interno; assim, uma exceção propagada desfaz primeiro o savepoint e só depois é capturada. Para `DatabaseError` recuperável, com rollback bem-sucedido, a estrutura preserva a transação externa. Recuperação observada nesta cópia: **[nao verificado]**. (`app/chamados/models.py:961`, `app/chamados/models.py:964`, `app/chamados/models.py:1030`, `app/chamados/models.py:468`, `app/core/observ.py:86`.)
+
+   - **O `savepoint=False` de `reapontar_resolvedora` continua existindo**, mas fica dentro do novo savepoint da adoção. Erro propagado desse núcleo alcança a proteção externa; isso preserva a emissão, sem garantir a costura. (`app/chamados/services/fio.py:837`, `app/chamados/services/fio.py:847`, `app/chamados/models.py:468`, `app/chamados/models.py:503`, `app/chamados/models.py:526`.)
+
+   - **Em `reabrir()` direto:** não existe atomic envolvendo o método inteiro. `_gravar_estado` tem atomic próprio, depois vêm ressurreição e adoção. Sem atomic do chamador, falha capturada da adoção não desfaz a reabertura anterior; falha na ressurreição pode ocorrer antes de alcançar a nova proteção. (`app/chamados/models.py:274`, `app/chamados/models.py:1492`, `app/chamados/models.py:1501`, `app/chamados/models.py:1604`, `app/chamados/models.py:1632`.)
+
+   - **Callback levantando:** seu serviço tem atomic próprio, e a captura fica por fora. A falha não desfaz a costura já comprometida; pode deixar a disputa fechada, com ERROR e contador de sobra. O contador declara dono ADMIN e “NAO alarma”; ele não é reparador nem retentativa. (`app/chamados/services/fio.py:912`, `app/chamados/models.py:521`, `app/core/observ.py:79`, `app/chamados/services/vigia_fio.py:740`, `app/chamados/services/vigia_fio.py:748`.)
+
+   - **Ordem explícita:** adoção por `abrir`: Colaborador → chamado adotante → escrita de Pergunta; adoção direta: chamado adotante → escrita de Pergunta. O callback trava Pergunta e Disputa, ordenadas por disputa/pk, e depois julga C6. A relavra existente também toma Pergunta+Disputa. (`app/chamados/models.py:964`, `app/chamados/models.py:469`, `app/chamados/services/fio.py:847`, `app/chamados/services/fio.py:913`, `app/chamados/services/relavra_via.py:221`.)
+
+   - **Lacuna concorrente:** candidatas e status das âncoras antigas são lidos sem trava. Outra costura pode transferir a pergunta a outro chamado vivo e comprometer antes da escrita da adoção; esta usa `_anc` antigo e sobrescreve o destino sem reler a Pergunta. A trava do Colaborador não serializa a porta independente de reapontamento. É um intercalamento permitido pela estrutura; ocorrência em produção: **[nao verificado]**. (`app/chamados/models.py:479`, `app/chamados/models.py:485`, `app/chamados/models.py:491`, `app/chamados/models.py:503`, `app/chamados/services/fio.py:829`, `app/chamados/services/fio.py:845`.)
+
+   - **Não há prova de ausência de deadlock.** O callback não trava explicitamente Chamado/Colaborador, mas insere nota com FK no chamado-pai; locks implícitos e adiamento das constraints efetivas: **[nao verificado]**. Também não verifica que o chamado continua vivo: verifica FK de destino e C6. (`app/chamados/models.py:2194`, `app/chamados/services/nota.py:103`, `app/chamados/services/fio.py:915`, `app/chamados/services/fio.py:917`.)
+
+4. **Retirada da cerca de competência**
+
+   **L-050 governa chamado/pergunta:** a fronteira do exportado foi retirada por desenho. Para gravado, recalculo e TXT, é necessário ler também L-113, que altera L-092/L-052 e preserva TXT anterior, trilha e DIFF antes de ato de frota. CORTES reafirma dia exportado editável. (`app/docs/LEIS.md:91`, `app/docs/LEIS.md:150`, `app/docs/CORTES.md:219`.)
+
+   A adoção escreve pergunta/lavra, identidade das irmãs, auditoria e agenda reabertura; não aparece nela escrita direta de fechamento, exportação ou célula. **Isso não prova imutabilidade do fluxo posterior:** validação chama recalculo do fechamento pela data do fato, e o fechamento tem escritor dos valores gravados. (`app/chamados/models.py:503`, `app/chamados/models.py:516`, `app/chamados/models.py:524`, `app/chamados/services/validacao.py:404`, `app/chamados/services/validacao.py:407`, `app/ponto/services/fechamento.py:1144`.)
+
+   A célula conserva sua autoridade separada, `competencia_fechada_para_celula`, composta de TXT vigente e holerite publicado; retirar a cerca da adoção não remove essa guarda. (`app/folha/export.py:578`, `app/folha/export.py:599`, `app/ponto/management/commands/gerar_celulas.py:146`.)
+
+   Há uma borda adicional sem prova: o callback reabre **o continente inteiro**, embora tenha selecionado uma pergunta reatada. CORTES distingue a apresentação de vivas em disputa fechada, “sem reabrir, sem push”; o efeito sobre outras perguntas de uma disputa mista não é exercitado pelo R20c. Conformidade desse cenário completo: **[nao verificado]**. (`app/chamados/services/fio.py:920`, `app/api/views.py:1043`, `app/docs/CORTES.md:327`, `app/chamados/tests/test_c20_fio_mudo.py:390`.)
+
+5. **Os testes mordem?** [nao verificado]
+
+   - **R20a: sim, captura e continuidade.** Mock no endereço correto, callback executado enquanto o patch está ativo, ERROR e callback seguinte exigidos. Não prova commit real nem liberação de locks, pois usa `TestCase` e captura artificial de callbacks. (`app/chamados/tests/test_c20_fio_mudo.py:32`, `app/chamados/tests/test_c20_fio_mudo.py:337`, `app/chamados/tests/test_c20_fio_mudo.py:346`.)
+   - **R20b: sim, erro SQL e transação utilizável nesse cenário; parcialmente quanto ao rollback prometido.** Quebra na eleição, antes da primeira costura. “Destino ficou igual” passaria sem qualquer escrita anterior; falta escrever primeiro e falhar depois. (`app/chamados/tests/test_c20_fio_mudo.py:362`, `app/chamados/tests/test_c20_fio_mudo.py:372`, `app/chamados/models.py:500`, `app/chamados/models.py:503`.)
+   - **R20c: sim, antiga cerca.** Exportação vigente impede vacuidade do cenário. Compara todos os campos do fechamento, mas só hash/conteúdo da exportação; não executa callback, não fotografa célula nem percorre resposta/materialização posterior. (`app/chamados/tests/test_c20_fio_mudo.py:385`, `app/chamados/tests/test_c20_fio_mudo.py:398`, `app/chamados/tests/test_c20_fio_mudo.py:401`, `app/folha/export.py:569`.)
+   - **R08j:** prova adiamento, respeito ao resultado C6 e idempotência; continuaria passando se C6 fosse avaliado antes da trava. Não demonstra intercalamento concorrente. (`app/chamados/tests/test_c20_fio_mudo.py:246`, `app/chamados/tests/test_c20_fio_mudo.py:254`, `app/chamados/tests/test_c20_fio_mudo.py:262`.)
+   - **R08g e R19b:** alcançam os ramos, exigindo chamada efetiva da porta e pergunta viva sob outro chamado após o nascimento inicial. (`app/chamados/tests/test_c20_fio_mudo.py:273`, `app/chamados/tests/test_c20_fio_mudo.py:425`, `app/chamados/tests/test_c20_fio_mudo.py:433`.)
+   - **R08i/R19c:** idempotência verifica retorno/quantidade, sem foto integral; o teste de futuro roda o vigia hoje e olha perguntas amanhã, sem tentar abertura futura. (`app/chamados/tests/test_c20_fio_mudo.py:305`, `app/chamados/tests/test_c20_fio_mudo.py:441`.)
+
+6. **Cinco atos e estoque**
+
+   | Ato | Cobertura final pelo evento |
+   |---|---|
+   | **Reabrir** | **Coberto pelo novo ponto de chamada**, depois da ressurreição; sujeito às falhas e concorrência acima. (`app/chamados/models.py:1501`, `app/chamados/models.py:1502`) |
+   | **Retratar duplicata** | **Sem restauração de cobertura na origem que perdeu a pergunta.** Marca identidade e retorna. (`app/chamados/services/fio.py:878`, `app/chamados/services/fio.py:891`) |
+   | **Validação** | **Sem evento C20 de recomposição.** C6 mata pela validação; o fluxo existente materializa/recalcula, sem chamar adoção. (`app/chamados/juizes.py:1135`, `app/chamados/services/validacao.py:395`, `app/chamados/services/validacao.py:430`) |
+   | **Morte por leitura** | **Juiz existente nomeado: C6, `pergunta_viva`/`_pergunta_viva_calc`.** Não há evento novo de recomposição nessa leitura. (`app/chamados/juizes.py:822`, `app/chamados/juizes.py:839`, `app/chamados/juizes.py:1135`) |
+   | **Reapontar** | **Sem recomposição da âncora anterior.** A porta salva destino/lavra e retorna. (`app/chamados/services/fio.py:845`, `app/chamados/services/fio.py:849`) |
+
+   **O evento não percorre automaticamente o estoque já vivo:** o dedup retorna antes da adoção. Uma nova abertura pode encontrar perguntas antigas; uma nova reabertura pode adotar órfãs, mas o número efetivamente alcançado dos 494 é **[nao verificado]**. (`app/chamados/models.py:965`, `app/chamados/models.py:983`, `app/chamados/models.py:479`, `app/chamados/models.py:1502`.)
+
+   O contrato declara **494**; o cabeçalho dos testes relata outro retrato de **495**, incluindo 3 excluídos e 34 perguntas com destino morto/sem destino. Esses números não demonstram 34 curas nem reconciliam o universo contratual; conciliação quantitativa: **[nao verificado]**. (`app/docs/PROMPTS.md:1875`, `app/chamados/tests/test_c20_fio_mudo.py:13`.)
+
+**Falta para certificar:** cobrir os quatro atos restantes e demonstrar alcance do estoque; esclarecer M3; fechar a janela de sobrescrita concorrente; provar rollback após escrita parcial e o caso de disputa fechada/mista em competência entregue. Esses pontos não estão provados pelos atuais pontos de chamada e testes. (`app/docs/PROMPTS.md:1882`, `app/chamados/models.py:479`, `app/chamados/models.py:1033`, `app/chamados/models.py:1502`, `app/chamados/tests/test_c20_fio_mudo.py:362`, `app/chamados/tests/test_c20_fio_mudo.py:374`; M3: **[nao verificado]**.)
 
 ## 06/11 01:14 · sessao 6def20f82445 · - · - · origem=Ronald (tmux)
 
@@ -525,25 +611,4 @@ O complemento muda o universo de **Ausencias aprovadas** (`para='folha'`: [app/p
 
 Sem achado de juiz novo nos três sítios migrados: [app/ponto/services/efeito_ausencia.py:48], :55; [app/ponto/services/credito_parcial.py:27]; [app/ponto/services/fechamento.py:685] leem o mesmo juiz existente [app/ponto/turnos.py:2583]. Lista de ausências já lê esse juiz ([app/ponto/views.py:2236], :2240; [app/templates/ponto/ausencias.html:163]); formulário de período também ([app/ponto/views.py:2084]; [app/templates/ponto/partials/painel_ausencia.html:296], :311). Restam textos de instrução incorretos “>0=parcial” em [app/templates/ponto/lancar_ausencia.html:70] e “lançável por minutos (cobre parte do dia…)” em [app/templates/ponto/partials/painel_tipo_ausencia.html:38], sem decisão financeira própria.
 
-## 06/11 00:20 · sessao bbcd3b3c9579 · - · - · origem=Ronald (tmux)
-
-Achados do comando, só por leitura:
-
-- **Bloqueante — reversão das 12 faltas não existe pelo caminho entregue.** O escritor recusa `minutos>0` para tipo não parcial (`app/ponto/services/ausencia.py:480-484`); o teste exige que a falta continue no valor corrigido (`app/ponto/tests/test_h12h06b_rederivar_minutos.py:202-213`) e transforma a restauração exigida em `expectedFailure` (`:217-224`). Isso não satisfaz a reversão integral solicitada.
-
-- **Alta — `--reverter` grava sem gerar snapshot anterior próprio.** Esse ramo apenas lê o snapshot recebido e monta o plano (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:198-208`); gerar snapshot fica exclusivamente no ramo `else` com `--apply` (`:209-220`). Ambos chegam ao laço que pode gravar (`:225-226`). Portanto a resposta a “snapshot antes em todos os caminhos que gravam?” é **não**.
-
-- **Alta — reversão não comprova que a execução original alterou a linha.** O plano inclui toda entrada do snapshot pertencente à LISTA e aproveita somente seus minutos (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:203-208`); ignora os resultados `aplicada`, `pulada` e `ja_aplicada` registrados depois (`:228-236`). Cenário permitido: snapshot captura720; outro ator grava0 antes do lock; apply retorna `ja_aplicada` sem save (`:139-140`); reverter encontra0 e restaura720, desfazendo ato alheio. Ocorrência em produção: **[não verificado]**.
-
-- **Alta — cerca de entrega não é serializada com exportação concorrente.** O comando trava Ausencia (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:129-131`), consulta entrega e posteriormente salva (`:144-151`). O juiz lê ExportacaoDominio sem trava (`app/folha/export.py:581-586`); a porta de exportação insere registro independentemente (`app/folha/models.py:174-188`, chamador `app/folha/views.py:297-300`). Assim o código permite um TXT surgir entre a conferência e o save. Corrida ocorrida em produção: **[não verificado]**.
-
-Outras respostas verificadas:
-
-- O snapshot de `--apply` nasce antes do laço, porém sem lock (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:212-225`); seus campos de identidade são capturados (`:94-96`) e ignorados na reversão (`:208`).
-- A segunda execução evita save/evento para valores já no alvo (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:139-140`); o teste verifica carimbos e número de eventos (`app/ponto/tests/test_h12h06b_rederivar_minutos.py:128-140`).
-- A cerca usa competência11 somente como competência inicial (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:111-113`) e confere entrega de **todos** os dias (`:115-117`), com memo por empresa/competência (`app/chamados/services/vigia_fio.py:838-844`).
-- O range5333 é explicitamente30/10..28/12 (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:73`). Pelos cortes permitidos2..28 (`app/ponto/janelas.py:25-33`, `:50-51`), atravessa11/2026,12/2026 e01/2027. Primeiro dia identifica o início, não prova que todo o range pertence a11. Corte efetivo da empresa e entregas dessas competências: **[não verificado]**.
-- Os testes de cerca exercitam exportação já existente, inclusive em competência posterior do range (`app/ponto/tests/test_h12h06b_rederivar_minutos.py:167-199`); não exercitam a concorrência descrita, nem a proveniência da reversão ou snapshot antes dela (`:202-224`).
-- Execução real de RED, green e mutantes alegados: **[não verificado]**.
-
-_2063 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2064 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

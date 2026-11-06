@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 01:15:30.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (38.9 MB). Acoes na janela: **1241**.
+**Medido em 06/11/2026 01:21:10.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (38.9 MB). Acoes na janela: **1244**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:16:54 | Bash | Point ESPERANDO at FIO-MUDO suite trava | `sed -i '2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=2946612#' /home/ronald/saas-hasner/app/docs/RELATO.md; kill -0 2946612 && echo vivo` |
+| 01:16:50 | Bash | Log v6 state and check ESPERANDO pid | `cd /home/ronald/saas-hasner; cat >> app/docs/RELATO.md <<'EOF' - C20-FIO-MUDO v6 (01:2x, copia 1d78ef7f): curas do opus -- engolir no on_commit (R20a), cerca de competencia sai por L-050 (R20c), adocao em savepoint proprio (R20b), M3 declarado equivalente a M4 (filtro saiu em 8e6ed0d1). red6 Ran 18 rc=1 -> green9 Ran 19 OK; mutantes M12/M13/M14/M8c/M4 mordem. Escopo: dos 494 (495 medidos), 0 alcan ...` |
+| 01:16:43 | Bash | Wait for FIO-MUDO suite and Codex v6 | `cd /home/ronald/saas-hasner/logs/c20_fiomudo; until grep -q "^rc=" suite_full_1d78ef7f.log 2>/dev/null && grep -qE "rc=?[0-9]" codex/v6.run.log 2>/dev/null; do /usr/bin/sleep 30; done; grep -E "^(FAIL\|ERROR):\|^Ran\|^(OK\|FAILED)($\| \()\|^rc=" suite_full_1d78ef7f.log \| tail -6; tail -2 codex/v6.run.log; wc -l codex/v6.r` |
 | 01:13:28 | Bash | Repoint ESPERANDO to queued trava | `sed -i '2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=2643196#' /home/ronald/saas-hasner/app/docs/RELATO.md; kill -0 2643196 && echo vivo` |
 | 01:13:24 | Bash | Check lock queue and builder logs | `cd /home/ronald/saas-hasner; date +%H:%M; bin/trava_teste.sh --quem; ps -eo pid,etime,args \| grep 'trava_teste.sh --' \| grep -v grep \| cut -c1-40; ls -t logs/h12h06b \| head -3; ls -t logs/c20_fiomudo \| head -3` |
 | 01:04:05 | Bash | Repoint ESPERANDO to live trava | `sed -i '2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=1814849#' /home/ronald/saas-hasner/app/docs/RELATO.md; kill -0 1814849 && echo vivo` |
