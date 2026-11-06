@@ -6,10 +6,21 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 13:38:17.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (63.9 MB). Acoes na janela: **806**.
+**Medido em 06/11/2026 13:43:27.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (64.8 MB). Acoes na janela: **817**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:43:23 | Bash | Read SOMA computation code | `cd /home/ronald/saas-hasner/logs/v3impacto; sed -n 690,735p p1/script.py; sed -n 815,832p p1/script.py` |
+| 13:43:19 | Bash | Find SOMA boolean logic in script | `cd /home/ronald/saas-hasner/logs/v3impacto; grep -n "SOMA\\|def _bool\\|incompleto" p1/script.py \| head -40` |
+| 13:43:12 | Bash | Inspect V3 SOMA and INCOMPLETO lines | `cd /home/ronald/saas-hasner/logs/v3impacto; ls p1; grep -m8 '^SOMA' p1/s.r \| cut -c1-300; grep -c '^INCOMPLETO' p1/s.r; grep '^INCOMPLETO' p1/s.r \| head -3 \| cut -c1-300` |
+| 13:43:05 | Bash | Identify lock holder process | `ps -o pid,etime,args -p 2562006 \| cut -c1-250; pgrep -af v3c_mut \| cut -c1-200` |
+| 13:42:59 | Bash | Check push, mutant run, lock status | `cd /home/ronald/saas-hasner; tail -n 3 logs/o10b/push.log; git ls-remote origin main; git log --oneline -3; echo ---; cat logs/esemvivab/v3c_mut.tab 2>/dev/null \| tail -n 8; git -C /home/ronald/wt-esemvivab-095139 status --porcelain; echo ---; bin/trava_teste.sh --quem; date` |
+| 13:41:55 | Bash | Read rest of V3 aggregation | `cd /home/ronald/saas-hasner; cut -c1-500 logs/v3impacto/agrega.r \| sed -n 90,140p` |
+| 13:41:50 | Bash | Read V3 aggregation result | `cd /home/ronald/saas-hasner; cut -c1-400 logs/v3impacto/agrega.r \| sed -n 1,90p` |
+| 13:41:45 | Bash | Independently sum R1 part outputs | `cd /home/ronald/saas-hasner; python3 - <<'EOF' import re,collections S=collections.defaultdict(lambda:[0,0.0,0]) B=collections.defaultdict(lambda:[0,0]) for p in range(1,7): t=open(f'logs/r1remede/p{p}/s.r').read() for m in re.finditer(r'PARCIAL\\|(\d+/\d+)\\|(\w+)\\|dias=(\d+)\\|horas=([\d.]+)\\|colabs=(\d+)',t): k=(m[1],m[2]); S[k][0]+=int(m[3]); S[k][1]+=float(m[4]); S[k][2]+=int(m[5]) for m in ...` |
+| 13:41:37 | Bash | Read rest of R1 aggregation and PARCIAL format | `cd /home/ronald/saas-hasner; sed -n 80,140p logs/r1remede/agrega.r; grep -h "PARCIAL" logs/r1remede/p1/s.r \| head -12` |
+| 13:41:30 | Bash | Read R1 aggregation result | `cd /home/ronald/saas-hasner; wc -c logs/r1remede/agrega.r logs/v3impacto/agrega.r; sed -n 1,80p logs/r1remede/agrega.r` |
+| 13:41:24 | Bash | Check E-SEM-VIVA mutant rerun and push progress | `cd /home/ronald/saas-hasner; cat logs/esemvivab/v3c_mut.tab; git -C /home/ronald/wt-esemvivab-095139 status --porcelain; git -C /home/ronald/wt-esemvivab-095139 log --oneline -1; tail -n 4 logs/o10b/push.log` |
 | 13:31:28 | Bash | Wait for aggregations and push | `cd /home/ronald/saas-hasner; timeout 590 bash -c 'until grep -q "^rc=" logs/r1remede/agrega.out && grep -q "^rc=" logs/v3impacto/agrega.out && grep -q "^rc=" logs/o10b/push.log; do /usr/bin/sleep 10; done'; for f in logs/r1remede/agrega.out logs/v3impacto/agrega.out logs/o10b/push.log; do echo "$f: $(grep '^rc=' $f)"; done; git ls-remote origin main \| cut -c1-10; date +%T` |
 | 13:31:24 | Bash | Check aggregation launch output | `cd /home/ronald/saas-hasner; for o in r1remede v3impacto; do tail -n 2 logs/$o/agrega.out; done` |
 | 13:31:07 | Bash | Launch Codex aggregation for R1 and V3 | `cd /home/ronald/saas-hasner; cat > logs/r1remede/agrega.q <<'EOF' Leitura (CODEX_PAPEL=leitura, obra R1-CAUSAD-V3 item 1 R1-REMEDE). Anexos: as 6 saidas da sonda R1 (partes 1..6, universos disjuntos por colaborador, mesma janela por competencia), cada uma com o bloco por competencia 10/2026 e 11/2026. Para cada competencia: (1) some, entre as 6 partes, cada chave do dicionario [1] (dias_comparados ...` |
