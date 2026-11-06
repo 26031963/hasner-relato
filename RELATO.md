@@ -1,5 +1,5 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: codex_pergunta.sh | pid=
+ESPERANDO: codex_pergunta.sh | pid=2825938
 L-123-MEDIDA-EM-PY 20:33: volta 2 a0b3f2f4 (Codex v1 REPROVA procedente: CADENCIA 7->700 passava) -> so Assign de nome em DADO_MEDIDO com dado puro e linha livre; MORDE retroativo achou bug da propria fixture (open(w) truncava antes do read), curado; selo verde na raia, 25 de 26. Codex v2 -> logs/akmed/v2.r; suite core na fila -> logs/akmed/suite_core.log.
 PLANTIO 20:33: Codex v3 procedente: freeze_time num metodo da por curado o ARQUIVO listado (api test_api_bater_ponto e o A2 da volta 2, ambos com relogio solto no vizinho) -> volta 4 8d8d28e7, cura mais restritiva: os 2 MORDE em arquivo proprio congelado, lista = a do main. Suite -> logs/plantio_mais1/suite_v4.log; Codex v4 -> v4.r. ESMERIL-V2: selo TESTE-SEM-RELOGIO julga por arquivo (fila). Codex v4 20:37 APROVA (selo novos=[] curados=[]); descartado: 'RED nao exige mock chamado' -- sem o ramo, orfao_14h do fallback fica e o assertNotIn morde.
 PLANTIO 20:2x: suite 39324b76 FAILED 1/13916 (test_a_lista_so_encolhe: test_a2 curado pelo freeze_time, sai da lista); Codex v2 procedente: 500 nos gemeos da API com _T1 None -> volta 3 14e3e385 (RED em copia red2, logs/plantio_mais1/red2.log); Codex v3 -> v3.r; depois suite inteira + opus final.
