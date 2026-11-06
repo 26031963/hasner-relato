@@ -1,7 +1,154 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 08:40** · publicado em **06/11/2026 08:44** (UTC-3)
+> Ultima resposta processada: **06/11/2026 08:47** · publicado em **06/11/2026 08:50** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 08:47 · sessao b0d20fd3ef34 · - · - · origem=Ronald (tmux)
+
+Inventário de produção: **8 chamadas de `PerguntaDisputa.carimbar` e 15 chamadas de `DisputaSupervisao.fechar`** encontradas na cópia, discriminadas abaixo; testes e migrações ficam fora deste inventário. Os próprios sítios são as referências de evidência. [nao verificado]
+
+### Todos os `carimbar`
+
+| Sítio | Alcançabilidade no bloco de `_materializar_uma` / efeito sobre P |
+|---|---|
+| `app/chamados/services/materializacao.py:1248` | **Direta**: escritor pretendido, com `VIA_DECLARACAO` quando `declarou_hora(p)`, conforme `:1232-1249`. |
+| `app/chamados/services/disputa_emissao.py:1612` | **Síncrona**, por fecho de destino/clones → `post_save` → S143 (`app/chamados/services/materializacao.py:949`; `app/chamados/signals.py:75-94`). Agora pula P em voo em `disputa_emissao.py:1587`. |
+| `app/chamados/services/disputa_emissao.py:1686` | Mesmo S143, ramo `_abertas`; nova guarda em `:1671`. Além disso `_abertas` exclui validada (`:1666`), portanto a P canônica validada já não entrava. |
+| `app/chamados/services/materializacao.py:1395` | **Síncrona indireta** se qualquer caminho fechar D durante plantio: `app/chamados/signals.py:124-140`. **Não consulta em voo**; pode carimbar P em `VIA_JUIZ_APROVOU` antes de `:1248`. |
+| `app/chamados/reconciliador.py:586` | **Síncrona** por signal da Batida (`app/ponto/signals.py:206-215`, `reconciliador.py:1416`). Não atinge a P canônica validada: filtro `validada_em__isnull=True` em `reconciliador.py:620`. Pode carimbar irmã Q e fechar a mesma D em `:602`, disparando S144 sobre P. |
+| `app/chamados/reconciliador.py:405` | **Síncrona** via reconciliação de órfãs (`:1417`, `:1493-1511`, `:1603`); P com resposta textual é excluída por `:364-365`, portanto a P canônica `hora` não recebe esse carimbo. Sem guarda `_EM_VOO`. |
+| `app/chamados/models.py:2685` | Via `encerrar_fantasma`, chamada pelo consumidor de EventoCelula (`reconciliador.py:1136`, `:1363`). Não encontrei aresta desse consumidor no fluxo síncrono do plantio; consumidor descrito como cron em `reconciliador.py:1105`. Sem guarda `_EM_VOO`. |
+| `app/chamados/services/materializacao.py:549` | Ausência declarada por resposta: chamador `disputa_emissao.py:1327-1330`, **antes e fora do caminho `_materializar_uma`**. `_materializar_resposta_escolha` chama outro helper de ausência (`materializacao.py:1052-1054`). Sem guarda `_EM_VOO`; entrada explícita/aninhada poderia atingir P `hora` ainda nula pelo filtro `:531-532`. |
+
+### Achado principal: bypass concreto do S144
+
+Condições suficientes por leitura:
+
+1. P validada, ainda não materializada; Q irmã, mesma disputa, não validada/não materializada, com célula julgada que não acusa (`app/chamados/reconciliador.py:617-631`).
+2. Plantio de P cria Batida (`app/chamados/services/materializacao.py:902`; `app/ponto/registro_batida.py:157-159`). `post_save` julga a célula e depois reconcilia chamados (`app/ponto/signals.py:131-135`, `:206-215`).
+3. Q passa no C6 e recebe carimbo `celula_absolveu` (`reconciliador.py:644-662`, `:586`); a disputa pode fechar em `:602`.
+4. P **não segura C7** porque `validada_em` mata a vitalidade imediatamente (`app/chamados/juizes.py:1135-1137`); C7 só combina ausência de resposta sem veredito e fio vivo (`app/chamados/models.py:1783-1794`).
+5. Fechar D dispara S144 imediatamente (`app/chamados/signals.py:124-140`), que considera P ainda nula e não verifica `_EM_VOO` (`materializacao.py:1389-1395`).
+6. Lastro pode aprovar P **antes do vínculo `pergunta_origem`**: o juiz tenta origem, mas aceita a batida viva na janela (`app/chamados/juizes.py:718-728`, `:774-776`). A origem só é anotada depois do primeiro `registrar_batida` (`materializacao.py:921-925`).
+7. P recebe `VIA_JUIZ_APROVOU` e depois o materializador torna a chamar `carimbar` em `materializacao.py:1248`; a porta não exige que o carimbo anterior seja nulo (`models.py:2583-2609`).
+
+É caminho estático reproduzível sob as condições acima; ocorrência real e execução desse cenário **[não verificado]**.
+
+### Todos os fechos de disputa
+
+| Sítio | Dentro do bloco? / consequência |
+|---|---|
+| `app/chamados/services/disputa_emissao.py:1713` | Sim, S143; agora pula D com qualquer P em voo em `:1710-1711`. |
+| `app/chamados/reconciliador.py:602` | **Sim**, pela Batida e por eventual E2 dentro do cartório (`app/ponto/services/cartorio.py:958-959`); sem guarda em voo, pode atingir mesma D e acionar S144. |
+| `app/chamados/reconciliador.py:412` | **Sim**, pela reconciliação de órfãs (`:1417`, `:1603`); pode fechar D após carimbar outra P, sem guarda em voo. |
+| `app/chamados/services/disputa_emissao.py:1118` | **Condicionalmente sim**: cartório chama emissor em `app/ponto/services/cartorio.py:1740`/`:1778`; emissor abre fio por `app/ponto/management/commands/detectar_ausencias.py:787-801` → `criar_disputa_a_partir_de_chamados_orfaos`. Não é a aresta da `fabrica_da_celula`; esta chama outra função em `fabrica_da_celula.py:139`. Sem guarda em voo. |
+| `app/chamados/services/materializacao.py:1304` | No fluxo normal **depois** do bloco, ao terminar o laço (`:1346-1350`). Sob reentrada aninhada de outro materializador, poderia ocorrer enquanto a marca externa continua ativa. |
+| `app/chamados/services/materializacao.py:568` | Resposta de ausência em `disputa_emissao.py:1330`, não chamada por `_materializar_uma`; não encontrei aresta síncrona a partir do bloco. Sem guarda em voo. |
+| `app/chamados/services/becos.py:52` | Callback agendado pelo save de Pergunta (`app/chamados/signals.py:191-202`); execução normal após sair da transação/bloco. Recorte/juiz em `becos.py:25-33`, `:48-52`. |
+| `app/chamados/reconciliador.py:1160` | Consumidor de EventoCelula (`:1363`), não encontrei aresta dentro do bloco; sem guarda em voo. |
+| `app/chamados/models.py:1879` | Porta humana `admin_encerra`; não encontrei aresta a partir do plantio. Fecha pela exceção e pode `fechar_por_admin` vivas (`:1852-1855`). |
+| `app/chamados/models.py:1986` | Remoção do último motivo. Callers nos signals de Posto (`app/colaboradores/signals.py:77`) e da âncora de Escala (`app/escala/signals.py:161`); plantio de `data_hora` explicitamente não grava mais fase (`materializacao.py:1001-1004`). Não encontrei aresta do plantio a esses eventos. |
+| `app/api/foto_recebida.py:80` | Upload de foto; não encontrei aresta do plantio. |
+| `app/ponto/services/entrada_sincronizada.py:59` | Sync API: `app/api/views.py:805`, `views_core.py:805`; não encontrei aresta do plantio. |
+| `app/chamados/services/competencia_trancada.py:204` | Aplicação de tranca; não encontrei aresta do plantio. |
+| `app/colaboradores/services/desligamento.py:142` | Desligamento; não encontrei aresta do plantio. |
+| `app/chamados/management/commands/encerrar_perguntas_com_fato.py:88` | Comando do acervo; não encontrei aresta do plantio. |
+
+Todos os fechos que chegam a `DisputaSupervisao.fechar` fazem o save de D (`models.py:1861-1865`) e portanto podem acionar o S144 síncrono (`signals.py:124-140`); a proteção atual está exclusivamente no chamador S143 (`disputa_emissao.py:1710`).
+
+### Campos: escritores e leitores
+
+- **Trio de carimbo**: atribuição central em `app/chamados/models.py:2556-2560`; chamado por `carimbar` (`:2583-2609`), identidade (`:2636-2644`), descarimbar (`:2646-2652`). Lote limpa os três juntos (`:2663-2664`). Escritores isolados existentes de via: `encerrar_por_fato_no_espelho` (`:2673-2674`) e relavra (`app/chamados/services/relavra_via.py:116-126`).
+- **Fechada_em/resolucao**: fecho escreve juntos em `models.py:1861-1865`; reabrir admin limpa em `:2063-2075`; sistema em `:2087-2091`; `limpar_resolucao_residual` limpa só texto de disputa aberta (`:2170-2174`). Assim “só fechar escreve resolucao” é inexato sem mencionar as portas de reabertura/limpeza.
+- **Leitores semânticos de materializada_em/via**: C6 (`app/chamados/juizes.py:1145`, `:1171`, `:1177`, `:1207-1214`), lastro (`:647-673`, `:718-778`), assinatura de memo (`:813-814`), estado de Pergunta (`models.py:2499-2505`), fila do materializador (`materializacao.py:1340-1343`), S144 (`:1389-1395`), agrupamento de ausência (`:607-614`), aplicação UI (`:433-441`), S143 (`disputa_emissao.py:1574`, `:1666`).
+- **Materializada_por**: autoria/snapshot/trilha, não condição de C6/lastro: `models.py:2583`, `:2636-2639`; `materializacao.py:654`; `reconciliador.py:1134`, `:1144`; procedência da Batida escolhe `validada_por or materializada_por` (`app/ponto/services/procedencia_batida.py:71-74`).
+- **Outros leitores de apresentação/auditoria**: `app/chamados/services/explicador.py:95` via; `historico.py:103` instante; `painel.py:67` instante agregado; `raiox.py:133`, `:173`; `passivo_validado.py:64`, `:140-142`; `app/ponto/services/flip_auto.py:129`.
+- **Fechada_em**: propriedade aberta (`models.py:1765`), idempotência de fecho (`:1820-1824`), reabrir (`:2052`, `:2081`), seleção e cauda S143 (`disputa_emissao.py:1630`, `:1654`, `:1656`, `:1710`), cauda materializador (`materializacao.py:1287`), gates/seleção de fio (`fio.py:131`, `:135`, `:184`, `:596`, `:629`), validação (`validacao.py:196-201`), UI (`app/api/views.py:1008`, `:1030`, `:2694`; `app/chamados/views.py:471`, `:495`, `:512`, `:530`, `:911`, `:1329`).
+- **Resolucao**: idempotência (`models.py:1821`), fallback materializador (`materializacao.py:1299-1300`), texto do fio após fecho (`app/chamados/signals.py:45`), limpeza residual (`models.py:2170-2173`).
+- **`_EM_VOO`**: definição `materializacao.py:1102`; `.set` no contexto `:1117`; `.reset` em `:1121`; leitura no predicado `:1126`; consumidores S143 `disputa_emissao.py:1587`, `:1671`, `:1710`. Não é fonte consultada por C6, lastro, reconciliador ou S144 nesses respectivos sítios.
+
+## 06/11 08:46 · sessao 802b8b8173a0 · - · - · origem=Ronald (tmux)
+
+Auditoria estática; execução de testes e mutantes: [não verificado]. [nao verificado]
+
+**Mordida e mutantes sobreviventes, teste a teste** [nao verificado]
+
+| Teste (`app/chamados/tests/test_pep_reentrada.py`) | O que realmente observa; mutante que pode continuar verde |
+|---|---|
+| `test_MORDE_a_P_em_voo_tem_UM_escritor_o_materializador` — :83 | Observa destino terminado, existência de Batida e exatamente um `carimbar` **bem-sucedido** com `VIA_DECLARACAO` (:87-92). Morde a remoção da guarda principal e, indiretamente, da cauda: sem a cauda, fechar dispara S144, que carimba `VIA_JUIZ_APROVOU` antes do materializador (`signals.py:139-140`; `materializacao.py:1395`, :1248). **Sobrevive:** desativar o receiver S143 inteiro; destino e materializador ainda podem cumprir as três asserções, e os testes diretos de S143 não verificam a ligação do receiver (:74-76, :169-182; `signals.py:75-92`). O spy ignora tentativas que retornam `False`, `carimbar_identidade` e escrita direta (:69-73). | [nao verificado]
+| `test_a_via_gravada_e_a_do_materializador` — :94 | Só vê via/autor finais (:98-99). **Sobrevive:** remover todas as guardas de voo do S143; o carimbo final do materializador regrava declaração/user (`materializacao.py:1248-1249`), pois `carimbar` não protege carimbo já gravado e atribui/grava novamente (`models.py:2583-2586`, :2609). É estruturalmente incapaz de detectar o segundo escritor antigo. |
+| `test_o_S143_nao_fecha_a_disputa_em_nome_dele_no_meio_do_plantio` — :101 | Só vê disputa e resolução **finais**, sem observar o meio do plantio (:104-107). **Sobrevive:** remover a guarda da cauda; o S143 fecha uma instância obtida pela consulta/refresh (`disputa_emissao.py:1616`, :1703, :1713), mas o `d` original do materializador segue com `fechada_em` em memória. A cauda do materializador não atualiza esse `d` e pode fechar novamente com texto granular (`materializacao.py:1287`, :1299-1304); `fechar` também verifica o estado da própria instância, não busca estado atual (`models.py:1820-1824`, :1861-1865). Logo a resolução S128 intermediária pode ser sobrescrita, deixando este teste verde também no fluxo antigo. | [nao verificado]
+| `test_o_sinal_existe_DURANTE_o_plantio_e_morre_na_saida` — :112 | Observa sinal na entrada de `_materializar_resposta_hora` e após sucesso (:118-124). **Sobrevive:** reset apenas no sucesso, com vazamento em exceção; não há exceção neste cenário. Não prova permanência até o carimbo nem fronteira de commit real (:118-124; :1248). | [nao verificado]
+| `test_MORDE_o_sinal_morre_no_ROLLBACK` — :126 | Força juiz de lastro falso, vê P sem carimbo e getter falso (:129-133). **Sobrevive:** o materializador deixar de instalar o sinal completamente; a propriedade “não sobrevive” passa sem jamais tê-lo visto nascer. Não verifica Batida/destino efetivamente revertidos (:131-133). A origem `_Reprovada` está em `materializacao.py:1203-1210`. |
+| `test_MORDE_o_sinal_morre_na_EXCECAO_que_atravessa` — :135 | Testa o context manager diretamente e vê getter falso após `_Boom` (:141-144). **Sobrevive:** context manager só fazer `yield`, sem instalar sinal; falta asserção positiva antes de levantar. Não testa exceção real atravessando `_materializar_uma`, que captura `Exception` (`materializacao.py:1256-1257`). |
+| `test_aninhado_cada_P_e_a_sua` — :146 | Cobre duas P distintas, duas entradas/saídas normais e restauração do pai (:150-155). **Sobrevive:** implementar conjunto global mutável com add/remove por P; neste cenário síncrono distinto ele produz os mesmos resultados. Não cobre mesma P aninhada, reentrada real de `_materializar_uma`, exceção aninhada, isolamento entre contextos ou rollback de savepoint (:150-155). |
+| `test_P_fora_de_voo_o_S143_segue_carimbando` — :167 | Controle positivo deliberado: chamada direta, uma P e batida real (:157-174). Passar no código antigo é esperado; não é RED da cura. **Sobrevive:** retirar `_em_atomic()` do getter; nenhuma P foi instalada neste cenário (:170-174; `materializacao.py:1126`). Não exige via nem autor (:173-174). |
+| `test_MORDE_P_em_voo_o_S143_pula` — :176 | Chamada direta com sinal; exige contador zero e P sem carimbo (:181-185). Morde retirada da guarda principal. **Sobrevive:** S143 pular **todas** as perguntas sempre que houver qualquer voo; o cenário tem uma P, sem controle simultâneo de outra P (:157-165, :180-185). |
+| `test_MORDE_fora_de_atomic_recusa` — :190 | Exige exceção sem atomic e getter falso (:194-197). **Sobrevive:** o context manager sempre levantar `RuntimeError`, inclusive dentro de atomic; este teste só usa a borda proibida. Também não distingue `_EM_VOO` limpo de valor escondido pelo `and _em_atomic()` (`materializacao.py:1126`). | [nao verificado]
+
+**Vacuidade e alcance**
+
+- Os testes de via final (:94-99) e resolução final (:101-107) não comprovam o defeito intermediário: o próprio fluxo pode sobrescrever a evidência; as respectivas sobrescritas estão em `materializacao.py:1248-1249`, :1299-1304 e `models.py:1861-1865`, :2586-2609. A confirmação de verde no pai: [não verificado]. [nao verificado]
+- O RED forte é a lista de carimbos bem-sucedidos (:69-73, :90-92), que preserva evidência do escritor intermediário mesmo após sobrescrita final. Ele não comprova sozinho que S143 foi realmente chamado, pois o receiver pode ser desligado (`signals.py:75-92`).
+- A fixture só prepara `hora`, uma P validada, um destino inicialmente aberto (:43-62). Não há casos de `data_hora`, `escolha`, sem destino, destino já fechado, clones com outras P, ausência/S144 invocado por outro caminho, alias diferente, mesma P aninhada, thread/contexto copiado ou savepoint interno revertido (:43-62, :83-197).
+- O helper executa `captureOnCommitCallbacks(execute=True)` num `TestCase` (:36, :74-76); não constitui observação de commit real em `TransactionTestCase`. Comportamento de commit real nessa suíte: [não verificado]. [nao verificado]
+
+**Classes de reprovação**
+
+- **Segundo juiz:** C6 e C7 vivos são `pergunta_viva` e `DisputaSupervisao.pode_fechar` (`app/core/juizes.py:266-267`). O novo estado não copia sua regra; identifica propriedade temporal de uma P (`materializacao.py:1115-1126`). Porém a cauda adiciona veto antes de C7 (`disputa_emissao.py:1710-1712`); é decisão de ordem/ownership adicional e deve ser avaliada pelo aval literal, não apresentada como se viesse de C7.
+- **JUIZES.md divergente:** diz “disputa fecha e SLA: SEM juiz” (`app/docs/JUIZES.md:54`), mas manda prevalecer o registro vivo (:10-14), onde C7 está registrado (`app/core/juizes.py:267`).
+- **Segundo escritor fora da porta:** o diff não acrescenta escrita direta desses campos; a saída preservada passa por `p.carimbar` (`materializacao.py:1248-1249`). A guarda só protege os caminhos de S143 explicitamente cobertos (`disputa_emissao.py:1586`, :1671, :1710); proteção universal de toda chamada possível não vem dela (`materializacao.py:1395` não consulta o sinal).
+- **Relógio fora da borda:** as novas funções usam só `ContextVar`, conjunto de pk e `in_atomic_block`, sem leitura de relógio (`materializacao.py:1103-1126`). As leituras de relógio próximas seguem nos carimbos/serviços já existentes (:1215; `disputa_emissao.py:1612`, :1669).
+- **Derivação paralela:** não surge derivação nova de via ou lastro no trecho adicionado; o materializador continua lendo `declarou_hora`/`via_pelo_fato` (:1232-1249), e S143 continua usando C6/via pelo fato (`disputa_emissao.py:1592`, :1612, :1674, :1684).
+- **Selo/RED sem mordida:** há mordida de escritor pela espionagem, mas os dois testes finais admitem sobrescrita; limites acima (`test_pep_reentrada.py:69-73`, :94-107). [nao verificado]
+- **Ordem de trava:** a entrada fica atomic → ContextVar e a saída restaura token antes da saída de atomic (`materializacao.py:1191`, :1117-1121). Não aparece novo `select_for_update` nessas adições; comportamento concorrente real: [não verificado].
+- **Pouso antes do pré-requisito:** carimbo final segue depois do plantio e da aprovação do juiz, ambos dentro do bloco (:1192-1210, :1248-1252); a cauda de fechamento regular segue depois do laço (:1346-1350). [nao verificado]
+- **Flag global sobrevivente:** o objeto `ContextVar` é de módulo (:1103), mas o valor é instalado com token e restaurado no `finally` (:1117-1121); não é um booleano global de processo. Garantia de isolamento por thread/task e risco de contexto copiado requerem distinguir semântica do ContextVar de identidade de transação; execução desses contornos: [não verificado].
+
+## 06/11 08:45 · sessao 4d47178d85d2 · - · - · origem=Ronald (tmux)
+
+Escopo e aliases, por leitura estática:
+
+- `_EM_VOO` é um objeto de módulo, mas o valor é um `frozenset` por contexto; o único escritor faz união com `p.pk` e restaura o token em `finally`. O fluxo normal não deixa o valor sobreviver ao próprio bloco. (`app/chamados/services/materializacao.py:1103`, `:1117`, `:1120`)
+- Em `with atomic(), materializacao_em_voo(p)`, o marcador sai primeiro: o `reset` precede commit ou rollback do `atomic`. `_Reprovada` e exceções comuns são tratadas depois dessa saída; `return` interno também atravessa `finally`. (`app/chamados/services/materializacao.py:1191`, `:1199`, `:1210`, `:1254`, `:1256`)
+- Rollback de savepoint interno não desfaz o marcador do bloco externo. Uma entrada aninhada restaura exatamente o contexto anterior: outra P acrescenta outro pk; a mesma P continua marcada quando o bloco interno sai. Isso não impede executar `_materializar_uma` duas vezes sobre a mesma P — é identificação, não trava de reentrada. (`app/chamados/services/materializacao.py:1117`, `:1121`, `:1129`)
+- Callback normal de `on_commit` executado depois do bloco não verá a marca criada por esse bloco: ela já foi restaurada antes de `atomic.__exit__`. Há callbacks dessa forma nos receivers. (`app/chamados/services/materializacao.py:1191`, `:1121`; `app/chamados/signals.py:121`, `:314`)
+- Outra thread/contexto independente não compartilha automaticamente o valor só porque o objeto está no módulo. A cópia configura `gthread`, quatro threads; implantação efetiva [não verificado]. (`app/chamados/services/materializacao.py:1103`; `app/gunicorn.conf.py:19`)
+- A garantia universal “nada sobrevive” excede a implementação: um contexto explicitamente copiado ou uma tarefa que herde o contexto pode conservar o snapshot; o `reset` original restaura apenas o contexto original. Caminho concreto com `copy_context/create_task` na cópia: [não verificado]. O código armazena apenas pk, sem identidade de transação ou contexto filho. (`app/chamados/services/materializacao.py:1103`, `:1117`, `:1121`)
+- Não é uma abstração segura para múltiplos aliases: `_em_atomic` consulta exclusivamente `django.db.connection`, e tanto o materializador como o receiver S143 abrem `atomic()` sem `using`. O receiver aceita `**kwargs`, mas não encaminha o alias do signal. (`app/chamados/services/materializacao.py:1106`, `:1191`; `app/chamados/signals.py:76`, `:91`)
+- Os perfis SaaS e prod mostrados declaram somente `default`; SaaS usa `TenantSyncRouter` com backend de schemas. Não identifiquei chamador de S143 selecionando outra conexão; configuração efetiva de produção [não verificado]. (`app/config/settings/saas.py:83`, `:93`; `app/config/settings/prod.py:9`)
+- Além do receiver, chamam S143 `_retratar`, `reatar_pergunta_orfa`, `fechar_beco` e o comando `reconciliar_fantasmas`, todos sem alias na chamada. (`app/chamados/reconciliador.py:536`, `:1631`; `app/chamados/services/becos.py:49`; `app/ponto/management/commands/reconciliar_fantasmas.py:281`)
+- O import local novo não introduz a dependência: `disputa_emissao` já importa `materializacao` no topo. O inverso existe como import local de `reabrir_para_correcao`; `models` reexporta primeiro `materializacao`, depois `disputa_emissao`. O import novo ocorre durante a função, depois da carga usual dos módulos, sem evidência estática de novo ciclo de inicialização. (`app/chamados/services/disputa_emissao.py:7`, `:1578`; `app/chamados/services/materializacao.py:642`; `app/chamados/models.py:3276`, `:3281`)
+- `pergunta_em_voo` e seu import não consultam banco. A cauda nova, porém, avalia `d.perguntas.all()` para cada candidata aberta, mesmo quando `_EM_VOO` está vazio: acrescenta consulta/carregamento das perguntas nessa posição; custo medido [não verificado]. (`app/chamados/services/materializacao.py:1126`; `app/chamados/services/disputa_emissao.py:1710`)
+
+## 06/11 08:45 · sessao 183ceb44a177 · LASTRO-PARTE-3 · verificador · origem=Code
+
+**Há uma lacuna procedente, baixa: retirar a chamada de varredura de `_ancoradas` do selo deixa as cinco verificações verdes. A costura testa o scanner isoladamente, sem garantir sua inclusão no selo.** `app/ponto/tests/test_lastro_parte3_fecho_na_pergunta.py:252`; `app/ponto/tests/test_lastro_parte3_fecho_na_pergunta.py:283`.
+
+1. **Kwargs alheios: possível; limitação procedente, baixa. Contaminação atual: não procedente.** O scanner percorre qualquer `ast.Call` e aceita qualquer kwarg cujo primeiro segmento coincida com campo da pergunta; não verifica método nem modelo. Assim, uma chamada hipotética `OutroModelo.objects.filter(recusa_motivo='x')` dentro da função seria contabilizada. `app/ponto/tests/test_lastro_parte3_fecho_na_pergunta.py:233`; `app/ponto/tests/test_lastro_parte3_fecho_na_pergunta.py:235`.
+
+   Na `_ancoradas` atual, todos os kwargs encontrados pertencem ao filtro de `PerguntaDisputa` ou aos seus `Q`. `select_related` e `order_by` recebem argumentos posicionais, que esse scanner não coleta. `app/chamados/models.py:327`; `app/chamados/models.py:328`; `app/chamados/models.py:329`; `app/chamados/models.py:330`.
+
+   Essa sobreinclusão pode inflar `lidos`, mas não esconder campo ausente no teste principal: acrescentar elementos não elimina uma diferença já existente em `lidos - CAMPOS_QUE_ACORDAM`. `app/ponto/tests/test_lastro_parte3_fecho_na_pergunta.py:258`.
+
+2. **Fecho FK escondendo um lado ausente: não procedente; sem severidade.** O fechamento amplia apenas os campos exigidos, não `CAMPOS_QUE_ACORDAM`. Para uma FK detectada, exige ambos os nomes; se faltar qualquer lado no conjunto produtivo, a diferença permanece não vazia. `app/ponto/tests/test_lastro_parte3_fecho_na_pergunta.py:242`; `app/ponto/tests/test_lastro_parte3_fecho_na_pergunta.py:245`; `app/ponto/tests/test_lastro_parte3_fecho_na_pergunta.py:258`.
+
+   Caso concreto: a leitura de `celula` exige também `celula_id`; retirar somente `celula_id` do conjunto reprova o selo principal. Hoje ambos estão presentes. `app/chamados/juizes.py:1147`; `app/ponto/tests/test_lastro_parte3_fecho_na_pergunta.py:219`; `app/chamados/models.py:2662`.
+
+3. **Mordida das costuras: parcial; lacuna procedente, baixa.**
+
+   | Mutante | Resultado das cinco verificações do selo |
+   |---|---|
+   | Retirar `celula_id` de `CAMPOS_QUE_ACORDAM` | O teste principal falha; a costura FK continua passando, pois sua própria expressão já subtrai esse campo. `app/ponto/tests/test_lastro_parte3_fecho_na_pergunta.py:258`; `app/ponto/tests/test_lastro_parte3_fecho_na_pergunta.py:278`. |
+   | Desativar o fechamento FK | A costura FK falha no `assertIn('celula_id', lidos)`. `app/ponto/tests/test_lastro_parte3_fecho_na_pergunta.py:277`. |
+   | Fazer o scanner de kwargs retornar vazio | A costura do filtro falha. `app/ponto/tests/test_lastro_parte3_fecho_na_pergunta.py:284`. |
+   | Retirar somente a chamada do scanner de `_lidos_pelo_c6` | **Todas passam:** a costura chama o helper diretamente, e os campos atuais do filtro já aparecem nas outras funções. `app/ponto/tests/test_lastro_parte3_fecho_na_pergunta.py:251`; `app/ponto/tests/test_lastro_parte3_fecho_na_pergunta.py:283`; `app/chamados/models.py:344`; `app/chamados/juizes.py:1136`. |
+
+   Esses resultados foram reproduzidos em memória com os métodos extraídos da cópia e metadados substitutos derivados das declarações dos campos; execução integrada com Django: **[nao verificado]**. Código exercitado: `app/ponto/tests/test_lastro_parte3_fecho_na_pergunta.py:188`.
+
+4. **Campo funcional direto faltante: não procedente; sem severidade.** As leituras diretas, filtros e pares FK resultam nos mesmos 12 nomes presentes em `CAMPOS_QUE_ACORDAM`: os seis campos escalares e os pares `celula`, `disputa` e `chamado_destino`. `app/chamados/juizes.py:1135`; `app/chamados/models.py:327`; `app/chamados/models.py:344`; `app/chamados/models.py:2661`; `app/chamados/models.py:2662`.
+
+   Há duas ressalvas de escopo: `_ancoradas` usa `pk` para ordenação, fora do conjunto; e as leituras transitivas de `motivo`/`tipo_resposta` continuam fora, como declarado. A ordenação não acrescenta condição de seleção; a exclusão dos helpers permanece explícita, sem nova cura neste delta. `app/chamados/models.py:330`; `app/chamados/models.py:2660`; `app/ponto/tests/test_lastro_parte3_fecho_na_pergunta.py:195`; `app/chamados/juizes.py:886`; `app/chamados/juizes.py:1099`.
 
 ## 06/11 08:40 · sessao bf99151fb9fa · LASTRO-PARTE-3 · verificador · origem=Code
 
@@ -692,184 +839,4 @@ Se o receiver passasse a **escrever diretamente pergunta**, ficariam vermelhos o
 
 O teste de reentrega do outbox exige uma retratação e nenhum followup duplicado, mas aceita eventos que a própria retratação gere (`app/ponto/tests/test_o_outbox_celula.py:150-173`, especialmente `:161`).
 
-## 06/11 07:49 · sessao ef717d1946a3 · LASTRO-PARTE-3 · leitura · origem=Code
-
-**Os cinco atos admitem montagem em TestCase, mas nem todo ramo deve fechar o chamado.** Em particular, uma resposta discordante continua prevalecendo sobre `carimbar_identidade`; esse é um controle legítimo. (`app/chamados/models.py:2625`, `app/chamados/juizes.py:1150`, `app/chamados/juizes.py:1171`)
-
-Os vermelhos abaixo são **previstos pela leitura da cópia**; execução dos novos casos e confirmação independente do hash: **[nao verificado]**. Ocorrência ou quantidade desses estados em produção: **[nao verificado]**.
-
-**Peças de fixture já existentes**
-
-Nenhum dos helpers abaixo, isoladamente, entrega toda a combinação pedida; é necessário compor chamado, âncora e célula. O A5 de LASTRO-PARTE-2 simula a recusa com mock, portanto não demonstra retenção por C6 real. (`app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:63`, `app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:144`)
-
-| Peça | Helper existente | Teste que o usa | [nao verificado]
-|---|---|---|
-| Cadastro com colaborador, usuário e admin; chamados e disputa com pai/destino separados | `_Base.setUpTestData`, `_ch`, `_disputa`, `_pergunta`, em `app/chamados/tests/test_o261e_f1_porta_encerramento.py:49`, `:59`, `:65`, `:69` | Retenção real por destino: `app/chamados/tests/test_o261e_f1_porta_encerramento.py:82` |
-| Pergunta de hora já ancorada; aceita sobrescrever motivo, resposta, data e célula por `**kw` | `PortaValidacaoPerguntaTest._pergunta`, `app/chamados/tests/test_porta_validacao_pergunta.py:175` | Recusa pública: `app/chamados/tests/test_porta_validacao_pergunta.py:233` |
-| Pergunta discordante, DNA, lâmpada e dia coerente | `PerguntaRespondidaEMarcoAcesoTest._caso('19:06')`, `app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:36` | Confirma C6 viva aos seis minutos: `app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:59` |
-| Célula acusando outro marco; pergunta muda com materialização opcional | `_Base._celula` e `_pergunta`, `app/chamados/tests/test_bug117_marco_no_espelho.py:55`, `:64` | Marco aceso sem materialização ainda deixa pergunta viva: `app/chamados/tests/test_bug117_marco_no_espelho.py:137` |
-| Chamado cobrando marcos nomeados e ata plantada depois dos sinais | `_Base._caso`, `app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:63` | `app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:97` |
-| Vínculo válido no dia | `dar_vinculo`, `app/chamados/tests/_vinculo_do_dia.py:15` | `app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:61` |
-
-Para os casos, a composição concreta é esta:
-
-- Colaborador ativo, com vínculo, usuário e autor administrativo; competência sem entrega/tranca. Usar os cadastros F1 e o vínculo acima; o gate só considera perguntas da competência aberta. (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:49`, `app/chamados/tests/_vinculo_do_dia.py:15`, `app/chamados/models.py:347`)
-- Alvo `batida_ausente`, `status_local='em_analise'`, sem silêncio; dia do chamado igual ao da célula e da pergunta; `contexto_json.marcos_faltantes` contendo **somente S/19:00**. A receita Q6 entrega chamado e âncora; a LP2 mostra como nomear o marco cobrado. (`app/chamados/tests/test_porta_validacao_pergunta.py:179`, `app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:68`)
-- Pergunta `orfao_14h`, `tipo_resposta='hora'`, `chamado_destino=alvo`, `celula=cel`; DNA com `hf='19:00'`, lâmpada S/19:00 acesa e `luz='19:00'`. Esse motivo cobra precisamente S/`hf`. (`app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:21`, `app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:36`, `app/chamados/juizes.py:869`)
-- Plantar a ata final depois das criações que acionam o cartório, seguindo a ordem LP2; não deixar outra cobrança viva apta a receber reata do mesmo colaborador/dia. (`app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:64`, `app/chamados/models.py:373`)
-- Antes do ato, exigir **C6 viva**, `marcos_acesos(alvo, cel) is True`, alvo na fila e `alvo.reconciliaria() is False`. Assim o caso prova retenção real, não apenas a presença de uma pergunta. (`app/chamados/juizes.py:1135`, `app/ponto/services/lastro.py:153`, `app/chamados/services/painel.py:186`, `app/chamados/models.py:623`)
-
-Em cada ato com `save`, executar os callbacks com `captureOnCommitCallbacks(execute=True)`, padrão já usado na suíte; o evento da pergunta é registrado em `on_commit`. Relê-se pergunta, célula e chamado antes das asserções. (`app/chamados/tests/test_varredura_becos_evento_pergunta.py:55`, `app/chamados/signals.py:191`, `app/chamados/signals.py:202`)
-
-A ordem abaixo considera primeiro o aproveitamento direto da fixture discordante, depois os acréscimos necessários. **[nao verificado]**
-
-1. **Corrigir a resposta para a hora da luz — RED previsto**
-
-   **Fixture:** composição acima, pai da disputa igual ao alvo vivo; resposta anterior `19:06`, `respondida_em` preenchido, `validada_em=None`, `materializada_em=None`; célula `concorde`, via `cartorio`, demais lâmpadas acesas. A discordância mantém C6 viva mesmo com o marco aceso. (`app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:36`, `app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:59`)
-
-   **Ato exato:** `responder_pergunta_disputa_core(p, '19:00', colab.usuario, True)`. A função grava texto e instante da nova resposta. (`app/chamados/services/disputa_emissao.py:1247`, `app/chamados/services/disputa_emissao.py:1282`)
-
-   **Pela regra:** C6 morre pela concordância com a luz em dia coerente; o alvo passa a `reconciliaria()=True` e deve sair da fila por `reconciliar()`, cujo destino é `resolvido`, via sistema. (`app/chamados/juizes.py:1130`, `app/chamados/juizes.py:1162`, `app/chamados/models.py:623`, `app/chamados/catalogo/motor.py:95`, `app/chamados/catalogo/motor.py:111`)
-
-   **Asserção vermelha:** exigir que o `status_local` relido esteja fora de `VIVOS`, ao final do ato e dos callbacks. A leitura prevê que continue `em_analise`: o ramo HH:MM salva a resposta e acrescenta nota, sem reconciliar o destino; o resgate não atua sem silêncio, e o beco não atua com pai vivo. (`app/chamados/services/disputa_emissao.py:1301`, `app/chamados/services/disputa_emissao.py:1326`, `app/chamados/services/disputa_emissao.py:1355`, `app/chamados/services/materializacao.py:687`, `app/chamados/services/becos.py:31`)
-
-   **Controle:** trocar o veredito para `furo` faz a concordância com a luz deixar de absolver a pergunta; o chamado deve continuar vivo. (`app/chamados/juizes.py:1132`, `app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:62`)
-
-2. **Recusar a resposta / `reabrir_para_correcao` — RED previsto**
-
-   **Fixture:** a mesma do caso 1, ainda com resposta discordante `19:06` e célula coerente. A receita da recusa pública já existe na suíte. (`app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:59`, `app/chamados/tests/test_porta_validacao_pergunta.py:224`)
-
-   **Ato público exato:** `recusar_pergunta(p.pk, admin, 'hora incorreta')`. O ato interno relevante é `reabrir_para_correcao(PerguntaDisputa.objects.filter(pk=p.pk))`, com `desfazer_absorcao=False`, o padrão. (`app/chamados/services/validacao.py:545`, `app/chamados/services/validacao.py:547`, `app/chamados/services/disputa_emissao.py:1362`)
-
-   **Pela regra:** apagada a resposta discordante, C6 morre pelo veredito coerente da célula; o alvo torna-se reconciliável e deve sair da fila pelo mesmo gate. (`app/chamados/services/disputa_emissao.py:1393`, `app/chamados/juizes.py:1195`, `app/chamados/models.py:623`)
-
-   **Asserção vermelha:** novamente, `status_local` relido fora de `VIVOS`. A recusa salva primeiro o motivo, enquanto a resposta ainda retém; depois o `qs.update` remove resposta e validação, sem `post_save` dessa mudança e sem reconciliação na função. A nota posterior também não chama o gate nesse caminho. (`app/chamados/services/validacao.py:545`, `app/chamados/services/disputa_emissao.py:1413`, `app/chamados/services/validacao.py:551`)
-
-   **Controle:** com célula `furo`, pergunta muda e sem materialização continua viva pelo veredito acusador; nesse ramo, reabrir não autoriza fechar. (`app/chamados/juizes.py:1183`, `app/chamados/tests/test_bug117_marco_no_espelho.py:137`)
-
-3. **`carimbar_identidade` — um RED e um controle obrigatório**
-
-   **Fixture do RED:** pai vivo; pergunta **muda**, sem materialização ou validação; célula `furo`, via `cartorio`, porque S/12:00 está apagada; o alvo cobra exclusivamente S/19:00, que está acesa. A receita BUG117 já demonstra pergunta viva com outro marco apagado e o próprio marco aceso, desde que ainda sem materialização. (`app/chamados/tests/test_bug117_marco_no_espelho.py:77`, `app/chamados/tests/test_bug117_marco_no_espelho.py:137`)
-
-   **Ato exato:** `p.carimbar_identidade(PerguntaDisputa.VIA_ADMIN_DECIDIU, admin)`. Essa é uma via usada pelo próprio encerramento administrativo da pergunta. (`app/chamados/models.py:2522`, `app/chamados/models.py:2625`)
-
-   **Pela regra:** C6 morre pela identidade; o furo vizinho não impede regularizar a premissa do chamado que cobra somente o marco aceso. Portanto, `reconciliaria()=True` e o alvo deve sair por `reconciliar()`. (`app/chamados/juizes.py:1171`, `app/chamados/models.py:1247`, `app/chamados/models.py:623`)
-
-   **Asserção vermelha:** `status_local` relido fora de `VIVOS`. O carimbador termina salvando somente a pergunta; seu callback não encontra beco com pai vivo. (`app/chamados/models.py:2640`, `app/chamados/models.py:2644`, `app/chamados/services/becos.py:31`)
-
-   **Controle obrigatório:** aplicar o mesmo carimbo à fixture discordante do caso 1. A pergunta continua viva porque a resposta é julgada **antes** da identidade; sem reata, `reconciliaria()` continua falso e o chamado deve permanecer vivo. Exigir fechamento aqui produziria um teste contrário à regra. (`app/chamados/juizes.py:1150`, `app/chamados/juizes.py:1162`, `app/chamados/models.py:2630`, `app/chamados/models.py:405`)
-
-4. **Encerrar administrativamente a disputa com pai terminal e destino distinto — RED previsto**
-
-   **Fixture:** a pergunta muda e a célula acusadora do caso 3. Acrescentar um pai `disputa_supervisao` já `resolvido`, criado **antes das perguntas**, e manter `chamado_destino=alvo` vivo, diferente do pai. Os helpers F1 permitem essa separação; o teste administrativo existente cobre o outro ramo, com pai vivo. (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:59`, `app/chamados/tests/test_o261e_f1_porta_encerramento.py:65`, `app/chamados/tests/test_o261e_f1_porta_encerramento.py:69`, `app/chamados/tests/test_o261e_f1_porta_encerramento.py:220`)
-
-   **Ato exato:** `d.admin_encerra(admin, 'decisao no teste')`, que chama `d.fechar(admin, resolucao='decisao no teste', motivo=d.FECHOU_ADMIN_ENCERRA)`. (`app/chamados/models.py:1872`, `app/chamados/models.py:1879`)
-
-   **Pela regra:** a porta carimba a muda antes de fechar a disputa; C6 morre e o destino com marco aceso torna-se reconciliável. É o **destino** que deve sair da fila pelo gate. (`app/chamados/models.py:1852`, `app/chamados/juizes.py:1171`, `app/chamados/models.py:1249`, `app/chamados/models.py:623`)
-
-   **Asserção vermelha:** `status_local` relido do **alvo**, fora de `VIVOS`. O receiver consulta somente o pai e retorna porque ele já está encerrado; o materializador posterior exclui a pergunta recém-carimbada. O beco também retorna quando a disputa já está fechada. (`app/chamados/signals.py:32`, `app/chamados/signals.py:33`, `app/chamados/services/materializacao.py:1343`, `app/chamados/services/becos.py:27`)
-
-5. **Validar pergunta já materializada — RED previsto, montagem mais exigente**
-
-   **Fixture:** resposta discordante `19:06`, célula coerente e luz `19:00`, como no caso 1; acrescentar `materializada_em` preenchido e `validada_em=None`. O helper BUG117 já monta materialização, e seu teste demonstra a precedência da resposta sobre ela. (`app/chamados/tests/test_bug117_marco_no_espelho.py:64`, `app/chamados/tests/test_bug117_marco_no_espelho.py:145`)
-
-   Usar pai vivo **diferente do alvo**, com módulo `disputa_supervisao`; acrescentar uma irmã muda, não materializada, de outro dia, ancorada no pai e sem célula. A irmã permanece viva e impede quitar a disputa, sem reter o alvo; esse pai também não pertence aos módulos usados para procurar uma cobrança sobrevivente. (`app/chamados/juizes.py:1207`, `app/chamados/models.py:328`, `app/chamados/models.py:1794`, `app/chamados/catalogo/modulos.py:235`, `app/chamados/models.py:373`)
-
-   **Ato exato:** `validar_pergunta(p.pk, admin, confirmar_implausivel=True)`, executando também os callbacks. O argumento explícito evita que a guarda de plausibilidade impeça alcançar o ramo examinado. (`app/chamados/services/validacao.py:343`, `app/chamados/services/validacao.py:374`)
-
-   **Pela regra:** `validada_em` mata C6 imediatamente; o alvo passa a reconciliável e deve sair da fila pelo gate, mesmo que a disputa continue aberta por outra pergunta. (`app/chamados/juizes.py:1136`, `app/chamados/models.py:327`, `app/chamados/models.py:623`)
-
-   **Asserção vermelha:** `status_local` relido do alvo fora de `VIVOS`. A validação carimba, mas pula `_materializar_uma` porque a pergunta já está materializada; o lote também a exclui. A irmã impede fechar a disputa, e o pai vivo impede o beco. (`app/chamados/services/validacao.py:396`, `app/chamados/services/validacao.py:422`, `app/chamados/services/materializacao.py:1297`, `app/chamados/services/materializacao.py:1241`, `app/chamados/services/becos.py:31`)
-
-   O recálculo mensal agendado precisa ser executado no teste; sua chamada não equivale, por si, a uma chamada ao gate do chamado ou à emissão de `EventoCelula`. (`app/ponto/services/fechamento.py:1791`, `app/ponto/services/fechamento.py:1794`, `app/ponto/services/fechamento.py:1808`)
-
-**Quem escreve e quem lê os campos usados nessas verificações**
-
-A tabela delimita os escritores da fixture/atos e os leitores relevantes aos casos; não é um censo de todos os leitores do projeto. **[nao verificado]**
-
-| Campo | Quem escreve | Quem lê |
-|---|---|---|
-| `Chamado.status_local` — campo da asserção RED | Fixture `_ch`; em produção, `reconciliar()` chama `_gravar_estado`, que atribui e salva. (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:59`, `app/chamados/models.py:620`, `app/chamados/models.py:222`, `app/chamados/models.py:279`) | Asserção sobre objeto relido; motor do fechamento; fila. (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:77`, `app/chamados/models.py:639`, `app/chamados/services/painel.py:187`) |
-| `silenciado_ate` — pertinência à fila | Nasce nulo; portas de arquivo atribuem ou limpam. (`app/chamados/models.py:84`, `app/chamados/services/arquivo.py:166`, `app/chamados/services/arquivo.py:201`) | Fila e resgate por resposta. (`app/chamados/services/painel.py:188`, `app/chamados/services/materializacao.py:687`) |
-| `contexto_json.data_turno`, `marcos_faltantes`, `modulo_origem` | Helpers de chamado e fixture LP2. (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:59`, `app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:68`) | Seleção de `batida_ausente`, extração dos marcos e premissa regularizada. (`app/ponto/services/lastro.py:240`, `app/ponto/services/lastro.py:74`, `app/chamados/models.py:1247`) |
-| `Pergunta.chamado_destino`, `disputa`; `Disputa.chamado` | Helpers de âncora Q6/F1. (`app/chamados/tests/test_porta_validacao_pergunta.py:184`, `app/chamados/tests/test_porta_validacao_pergunta.py:186`, `app/chamados/tests/test_o261e_f1_porta_encerramento.py:65`) | Coletor de ancoradas e julgamento no pós-estado; receiver do pai. (`app/chamados/models.py:328`, `app/chamados/models.py:344`, `app/chamados/signals.py:32`) |
-| `motivo`, `tipo_resposta`, `data_evento`, `celula` da pergunta | Helper Q6 aceita esses dados; PRAM/BUG117 montam motivo, dia e célula. (`app/chamados/tests/test_porta_validacao_pergunta.py:186`, `app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:47`, `app/chamados/tests/test_bug117_marco_no_espelho.py:68`) | Mapeamento do marco, comparação com a luz e cerca da competência. (`app/chamados/juizes.py:886`, `app/chamados/juizes.py:1099`, `app/chamados/models.py:347`) |
-| `resposta_colab`, `respondida_em` | Core da resposta; reabertura zera ambos por `update`. (`app/chamados/services/disputa_emissao.py:1282`, `app/chamados/services/disputa_emissao.py:1393`, `app/chamados/services/disputa_emissao.py:1413`) | C6 dá precedência à resposta e compara seu texto com a luz. (`app/chamados/juizes.py:1150`, `app/chamados/juizes.py:1113`) |
-| `validada_em` | `_carimbar_validacao`; nova resposta e reabertura podem limpar. (`app/chamados/services/validacao.py:131`, `app/chamados/services/disputa_emissao.py:1295`, `app/chamados/services/disputa_emissao.py:1393`) | Primeiro degrau de C6 e filtro das ancoradas. (`app/chamados/juizes.py:1136`, `app/chamados/models.py:327`) |
-| `materializada_em`, `via_resolucao` | `_escrever_carimbo`, persistido pelo carimbador de identidade; BUG117 também os prepara como fixture. (`app/chamados/models.py:2556`, `app/chamados/models.py:2644`, `app/chamados/tests/test_bug117_marco_no_espelho.py:71`) | C6; validação e materializadores leem a presença da materialização. (`app/chamados/juizes.py:1171`, `app/chamados/services/validacao.py:422`, `app/chamados/services/materializacao.py:1297`) |
-| `Celula.colaborador`, `data`, `trabalha`, `dna.marcos` | Fixture `_celula`; porta de célula também grava DNA/trabalho. (`app/chamados/tests/test_bug117_marco_no_espelho.py:55`, `app/ponto/portas/celula.py:650`) | Localização da célula do chamado, premissa e identificação do marco da pergunta. (`app/ponto/services/lastro.py:393`, `app/chamados/models.py:1245`, `app/chamados/juizes.py:893`) |
-| `ata.lampadas.{tipo,hora,acesa,luz}` | Fixtures PRAM/LP2; cartório constrói tipo, hora, acendimento e luz. (`app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:39`, `app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:72`, `app/ponto/services/cartorio.py:677`) | `marcos_acesos`, fato do marco e concordância resposta/luz. (`app/ponto/services/lastro.py:174`, `app/chamados/juizes.py:910`, `app/chamados/juizes.py:1111`) |
-| `veredito`, `veredito_via` | Fixture `_celula`; produção pela lavra da célula. (`app/chamados/tests/test_bug117_marco_no_espelho.py:60`, `app/ponto/portas/celula.py:812`) | C6 distingue decisão administrativa, dia coerente e dia acusador. (`app/chamados/juizes.py:1147`, `app/chamados/juizes.py:1132`, `app/chamados/juizes.py:1183`) |
-| `Disputa.fechada_em` | `Disputa.fechar`. (`app/chamados/models.py:1861`, `app/chamados/models.py:1865`) | Receiver do pai, classificador de beco e cauda da materialização. (`app/chamados/signals.py:28`, `app/chamados/services/becos.py:27`, `app/chamados/services/materializacao.py:1241`) |
-
-Para reproduzir especificamente o escape do evento, a fixture deve começar sem evento pendente do colaborador; há helper de limpeza já existente. Após o ato, o diagnóstico esperado por leitura é alvo ainda vivo, agora em `com_lastro`, e contável em `com_lastro_sem_evento`. (`app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:75`, `app/ponto/services/lastro.py:318`, `app/ponto/services/lastro.py:421`)
-
-**Não chamar `reconciliar()` antes da asserção vermelha:** isso executaria justamente o fechamento cuja reação está faltando. `reconciliaria()` é a consulta adequada para demonstrar que o juiz já permitiria a saída. (`app/chamados/models.py:617`, `app/chamados/models.py:620`, `app/chamados/models.py:623`)
-
-## 06/11 07:45 · sessao 66bbc807ce84 · - · - · origem=Ronald (tmux)
-
-**Resposta HH:MM — montável e candidato RED.** Base concreta: pergunta `orfao_14h`, `tipo_resposta='hora'`, resposta anterior `19:06`, `respondida_em` preenchido, célula com DNA `hf='19:00'`, lâmpada S/19:00 acesa com `luz='19:00'`, veredito `concorde`, via `cartorio`; esse conjunto já existe em `PerguntaRespondidaEMarcoAcesoTest._caso` e seu teste discordante (`app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:36`, `app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:59`). Falta complementá-lo com chamado `batida_ausente` aberto, cobrando exclusivamente S/19:00, `chamado_destino` da pergunta igual a esse chamado, pai da disputa vivo e ausência de outro chamado apto à reata; o helper LP2 `_caso` fornece chamado+ata e o helper F1 `_disputa`/`_pergunta` fornece a montagem da âncora, mas nenhum desses helpers isoladamente entrega todo o estado (`app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:63`, `app/chamados/tests/test_o261e_f1_porta_encerramento.py:65`, `app/chamados/tests/test_o261e_f1_porta_encerramento.py:69`).
-
-Ato: `responder_pergunta_disputa_core(p, '19:00', colab.usuario, True)`. O core grava resposta e carimbo, só materializa escapes de ausência, acrescenta followup e retorna; HH:MM não chama reconciliação nem emite evento nesse corpo (`app/chamados/services/disputa_emissao.py:1247`, `app/chamados/services/disputa_emissao.py:1282`, `app/chamados/services/disputa_emissao.py:1327`, `app/chamados/services/disputa_emissao.py:1343`, `app/chamados/services/disputa_emissao.py:1359`). C6 passa a morta porque resposta concorda com a luz em dia coerente (`app/chamados/juizes.py:1099`, `app/chamados/juizes.py:1130`, `app/chamados/juizes.py:1158`). O gate, antes retido por pergunta sem reata, passa a permitir o fechamento (`app/chamados/models.py:373`, `app/chamados/models.py:405`, `app/chamados/models.py:623`). O RED esperado é a permanência em `qs_na_fila` depois do ato; execução efetiva desse teste: **[nao verificado]**. O contrato existente considera defeito lastro elegível sem evento pendente (`app/ponto/services/lastro.py:411`).
-
-**Recusa/reabertura — montável e candidato RED no mesmo estado coerente.** Ato público: `recusar_pergunta(p.pk, admin, 'hora incorreta')`; ato interno equivalente relevante: `reabrir_para_correcao(PerguntaDisputa.objects.filter(pk=p.pk))` (`app/chamados/services/validacao.py:494`, `app/chamados/services/validacao.py:545`, `app/chamados/services/validacao.py:547`). Há helper/teste real dessa recusa, `_pergunta` e `test_MORDE_recusar_SEM_request_carimba_reabre_e_deixa_trilha`, mas ele precisa ganhar célula, DNA, lâmpada e marco cobrado para este caso (`app/chamados/tests/test_porta_validacao_pergunta.py:175`, `app/chamados/tests/test_porta_validacao_pergunta.py:224`).
-
-A recusa primeiro salva o motivo enquanto a resposta discordante ainda retém; depois `qs.update` apaga resposta e carimbos sem novo `post_save` da pergunta (`app/chamados/services/validacao.py:545`, `app/chamados/services/disputa_emissao.py:1393`, `app/chamados/services/disputa_emissao.py:1413`). Sem resposta e com veredito coerente, C6 morre, permitindo `reconciliaria=True`, mas nenhum fechamento aparece nesse caminho; a mesma asserção de saída da fila é o RED previsto, ainda **[nao verificado]** por execução (`app/chamados/juizes.py:1181`, `app/chamados/juizes.py:1195`, `app/chamados/models.py:623`, `app/chamados/services/validacao.py:548`).
-
-**Controle necessário:** se a célula ainda acusa outro marco (`veredito='furo'`), recusar/apagar a resposta deixa a pergunta viva; nesse cenário não cabe exigir fechamento só porque o marco cobrado está aceso (`app/chamados/juizes.py:1181`, `app/chamados/juizes.py:1183`). Concordar com a luz também não mata a pergunta enquanto o dia acusa (`app/chamados/juizes.py:1132`, `app/chamados/juizes.py:1162`; teste existente `app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:62`).
-
-**Não deixar o TestCase esconder callbacks:** o `post_save` de pergunta agenda o beco via `on_commit`; convém executar os callbacks capturados ao redor do ato. Mantendo o pai vivo, o beco continua sem agir; mantendo `silenciado_ate=None`, o resgate também não interfere (`app/chamados/signals.py:191`, `app/chamados/signals.py:202`, `app/chamados/services/becos.py:31`, `app/chamados/services/materializacao.py:687`).
-
-**Limite do helper LP2:** A5 anuncia retenção por pergunta viva, mas efetivamente usa mock de `reconciliar=False`; não serve como prova de fixture com C6 real (`app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:137`, `app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:144`).
-
-## 06/11 07:45 · sessao 5408b8736f70 · - · - · origem=Ronald (tmux)
-
-Os dois atos são montáveis; `carimbar_identidade` exige dois casos, pois resposta discordante continua viva por precedência. (`app/chamados/models.py:2625-2632`; `app/chamados/juizes.py:1150-1172`)
-
-1. **Controle: identidade sobre resposta discordante — permanece vivo, sem RED legítimo.** Partindo da pergunta ancorada respondida e discordante, executar `p.carimbar_identidade(PerguntaDisputa.VIA_DUPLICATA, admin)`. O carimbo grava `materializada_em`, autor e via, mas C6 decide pela resposta antes de consultar identidade; consequentemente `pergunta_viva(p)=True`, `ch.reconciliaria()=False` sem sobrevivente, chamado permanece vivo. (`app/chamados/models.py:2633-2644`; `app/chamados/juizes.py:1150-1172`; `app/chamados/models.py:393-414`)
-
-2. **Identidade sobre pergunta muda — RED possível.** Montar célula `veredito='furo', veredito_via='cartorio'`, lâmpada cobrada pelo chamado acesa e outro marco apagado; pergunta muda, sem materialização, ancorada no chamado. Antes, C6 viva pelo veredito acusador; depois de `p.carimbar_identidade(PerguntaDisputa.VIA_DUPLICATA, admin)`, C6 morta pela via. `marcos_acesos=True` regulariza a premissa independentemente do outro furo; portanto `ch.reconciliaria()=True`. O ato somente salva a pergunta e seu callback trata beco, sem reconciliar destino; com pai vivo, nem beco existe. RED: chamado deve sair da fila ao final do ato/callbacks, mas permanece. (`app/chamados/juizes.py:1181-1184`; `app/chamados/juizes.py:1170-1172`; `app/chamados/models.py:1247-1250`; `app/chamados/models.py:2644`; `app/chamados/signals.py:191-202`; `app/chamados/services/becos.py:31`)
-
-3. **Admin encerra disputa, pai terminal e destino distinto — RED possível.** Usar estado anterior de pergunta muda acima; criar pai terminal **antes** das perguntas e apontar a pergunta para outro chamado vivo. Executar `d.admin_encerra(admin, 'decisao no teste')`, equivalente a `d.fechar(admin, resolucao='decisao no teste', motivo=d.FECHOU_ADMIN_ENCERRA)`. A porta carimba a muda antes de fechar disputa, C6 morre e destino fica reconciliável; receiver ignora pai terminal e nunca percorre destinos. Materializador posterior exclui pergunta já carimbada. RED: destino deve sair da fila, mas permanece vivo. (`app/chamados/models.py:1872-1879`; `app/chamados/models.py:1852-1865`; `app/chamados/signals.py:28-42`; `app/chamados/services/materializacao.py:1343-1344`)
-
-**Helpers existentes para composição:** `_Base._ch(modulo, status, dia)`, `_disputa(pai)` e `_pergunta(d, destino, **campos)` permitem criar pai terminal, destino distinto e pergunta ligada à célula; uso conjunto no teste de retenção por destino e no teste administrativo de pai vivo. (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:59-71`; usos `:82-87`, `:220-226`) O helper `_Base._caso(marcos,lampadas)` planta a célula e o chamado com ata acesa depois dos signals; teste A1 o usa e confirma fecho pelo evento. Ele **não** cria pergunta viva, e A5 apenas simula recusa com mock: não apresentá-lo como fixture pronta de retenção real. (`app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:63-73`; `:97-109`; `:137-150`)
-
-**Cuidados da montagem:** pergunta muda com célula `concorde` já está morta, logo não demonstra desbloqueio por identidade. (`app/chamados/juizes.py:1195-1196`) Executar os callbacks com `captureOnCommitCallbacks(execute=True)` evita atribuir ao produto um efeito da transação do TestCase; o callback é registrado por `transaction.on_commit`. (`app/chamados/signals.py:202`) A execução efetiva dos novos casos e o resultado observado do runner: [nao verificado].
-
-**Campos lidos pelas asserções:**
-
-| Campo | Quem escreve | Quem lê |
-|---|---|---|
-| `status_local` | `_gravar_estado`, atribuição e save. (`app/chamados/models.py:222`; `:279`) | `reconciliaria` → `_decisao_do_fechamento`; fila. (`app/chamados/models.py:623-651`; `app/chamados/services/painel.py:186-188`) |
-| `materializada_em`, `materializada_por_id`, `via_resolucao` | `_escrever_carimbo`, persistido por `carimbar_identidade`. (`app/chamados/models.py:2556-2560`; `:2644`) | C6 lê instante/via; materializador lê instante. (`app/chamados/juizes.py:1170-1172`; `app/chamados/services/materializacao.py:1343-1344`) |
-| `respondida_em`, `resposta_colab` | Fixture existente `_pergunta`; os atos de identidade/admin não alteram resposta. (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:629-637`; `app/chamados/models.py:2640-2644`) | C6 lê antes da identidade. (`app/chamados/juizes.py:1150-1162`) |
-| Âncora `chamado_destino`, `disputa.chamado`, `validada_em` | Helpers `_pergunta` e `_disputa`. (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:65-71`) | `_ancoradas` e `_vivas_entre`. (`app/chamados/models.py:327-351`) |
-| `contexto_json.marcos_faltantes`, `ata.lampadas` | Helper `_caso`. (`app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:68-72`) | `_marcos_cobrados`, `_lampada`, premissa. (`app/ponto/services/lastro.py:62-94`; `app/chamados/models.py:1247-1250`) |
-| `veredito`, `veredito_via` | Produção: `lavrar_veredito`; fixture pode usar padrão de `update` já existente. (`app/ponto/portas/celula.py:751`; `:812-815`; `app/chamados/tests/test_o261e_f1_porta_encerramento.py:181-186`) | C6. (`app/chamados/juizes.py:1147-1149`; `:1181-1184`) |
-| `Disputa.fechada_em` | `Disputa.fechar`. (`app/chamados/models.py:1861-1865`) | Receiver do pai e classificador de beco. (`app/chamados/signals.py:28`; `app/chamados/services/becos.py:27-28`) |
-
-## 06/11 07:44 · sessao 7bdef93e5b55 · - · - · origem=Ronald (tmux)
-
-`validar_pergunta` com pergunta já materializada é montável; o RED exige impedir que o fechamento da disputa reconcilie o pai incidentalmente. (`app/chamados/services/validacao.py:419`, `app/chamados/services/materializacao.py:1241`, `app/chamados/signals.py:42`)
-
-- **Helpers existentes:** `_Base._celula(lampadas, veredito='furo')`, `_Base._pergunta(motivo, cel, materializada=True)` montam célula com DNA/ata e pergunta materializada; usados conjuntamente no teste da precedência da resposta. (`app/chamados/tests/test_bug117_marco_no_espelho.py:55`, `app/chamados/tests/test_bug117_marco_no_espelho.py:64`, `app/chamados/tests/test_bug117_marco_no_espelho.py:145`)
-- **Helper para pergunta respondida discordante e dia coerente:** `PerguntaRespondidaEMarcoAcesoTest._caso('19:06')` produz pergunta `orfao_14h`, luz `19:00`, veredito `concorde`; o teste confirma C6 viva aos seis minutos. Ele ainda não cria chamado/âncora. (`app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:36`, `app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:59`)
-- **Helpers para âncora:** `_Base._ch`, `_disputa(pai=...)`, `_pergunta(d, destino=...)` e teste que confirma recusa real de `reconciliar` por pergunta viva, sem sobrevivente. (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:59`, `app/chamados/tests/test_o261e_f1_porta_encerramento.py:65`, `app/chamados/tests/test_o261e_f1_porta_encerramento.py:69`, `app/chamados/tests/test_o261e_f1_porta_encerramento.py:82`)
-
-**Caso concreto:** alvo `batida_ausente` aberto, cobrando exclusivamente `S 19:00`, célula com DNA `hf=19:00`, lâmpada acesa com luz `19:00`, veredito `concorde` via cartório; pergunta `orfao_14h` ancorada no alvo, resposta `19:06`, `respondida_em` preenchido, `materializada_em` preenchido e `validada_em=None`. C6 permanece viva pela discordância antes de ler o carimbo. Acrescentar pai vivo da disputa e uma segunda pergunta viva de **outro dia**, ancorada no pai, para não reter o alvo nem oferecer sobrevivente do mesmo dia. (`app/chamados/juizes.py:1150`, `app/chamados/juizes.py:1162`, `app/chamados/models.py:373`)
-
-**Ato:** `validar_pergunta(p.pk, admin, confirmar_implausivel=True)`, dentro de `captureOnCommitCallbacks(execute=True)`; esse mecanismo já é usado para testar os eventos da pergunta. (`app/chamados/services/validacao.py:343`, `app/chamados/tests/test_varredura_becos_evento_pergunta.py:55`)
-
-**Antes:** confirmar `pergunta_viva(p)=True`, `alvo.reconciliaria()=False` e alvo na fila; ausência de sobrevivente é necessária para que não ocorra reata legítima. (`app/chamados/models.py:357`, `app/chamados/models.py:375`, `app/chamados/models.py:405`)
-
-**Depois pela regra:** C6 morta por `validada_em`; o chamado agora é reconciliável, e deveria sair da fila pelo gate `reconciliar()`, não por escrita direta de estado. (`app/chamados/juizes.py:1136`, `app/chamados/models.py:607`, `app/chamados/models.py:623`)
-
-**Asserção RED proposta:** após ato e callbacks, `assertFalse(qs_fila(_base=ChamadoColaborador.objects.filter(pk=alvo.pk)).exists())`, ou equivalente `assertNotIn(status_recarregado, VIVOS)`. O hash mantém o alvo aberto: carimba validação, pula `_materializar_uma` por já materializada, exclui a pergunta do lote, e a irmã impede fechar a disputa; beco tampouco atua com pai vivo. (`app/chamados/services/validacao.py:396`, `app/chamados/services/validacao.py:422`, `app/chamados/services/materializacao.py:1294`, `app/chamados/services/materializacao.py:1241`, `app/chamados/services/becos.py:31`, `app/chamados/services/painel.py:186`)
-
-**Não suprimir callbacks:** `recalcular_por_evento` agenda o cálculo mensal em `on_commit`; o corpo chama `recalcular_fechamento_mes`, sem chamada explícita a `reconciliar` ou emissão de `EventoCelula` nesse trecho. (`app/ponto/services/fechamento.py:1782`, `app/ponto/services/fechamento.py:1791`, `app/ponto/services/fechamento.py:1808`)
-
-**Escritores/leitores principais:** validação escreve `validada_em/por` em `_carimbar_validacao`; C6 lê `validada_em`, e o coletor de âncoras filtra esse campo. O carimbo `materializada_em/por/via` é atribuído por `_escrever_carimbo`; validação/lote leem `materializada_em`. `status_local` é escrito por `_gravar_estado`, através de `reconciliar`, e lido pela fila. (`app/chamados/services/validacao.py:127`, `app/chamados/juizes.py:1136`, `app/chamados/models.py:327`, `app/chamados/models.py:2556`, `app/chamados/services/validacao.py:422`, `app/chamados/services/materializacao.py:1297`, `app/chamados/models.py:222`, `app/chamados/models.py:620`, `app/chamados/services/painel.py:187`)
-
-Execução deste caso no hash: **[nao verificado]**.
-
-_2139 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2143 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
