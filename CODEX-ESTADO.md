@@ -1,7 +1,122 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 08:27** · publicado em **06/11/2026 08:28** (UTC-3)
+> Ultima resposta processada: **06/11/2026 08:32** · publicado em **06/11/2026 08:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 08:32 · sessao 44cd8afa75f9 · FIO-MORTO-POR-DONO-0611 · sonda · origem=Code
+
+**PROD**
+
+A conferência integral dos scripts ficou **[nao verificado]**: `conta_prod.py`, `sonda_dono.py` e `logs/a683/sonda_sem_fio.py` não foram encontrados na cópia. Os números abaixo são os dados raspados fornecidos, com as somas recalculadas; equivalência das sondas e hashes contra seus conteúdos: **[nao verificado]**.
+
+O código permite conferir o contrato: universo deduplicado por colaborador/data nas competências consideradas; `limite=0` preserva todos os dias `sem_porta`; hoje/futuro é separado antes desse contador. Portanto, o balde `de_hoje_pra_frente=10` informado em PROD não integra seus 319 `sem_porta`. ([vigia_fio.py:581](/home/ronald/codex_ws/185c878317e21679038d2274c24f4d017998ee4b/app/chamados/services/vigia_fio.py:581), [vigia_fio.py:625](/home/ronald/codex_ws/185c878317e21679038d2274c24f4d017998ee4b/app/chamados/services/vigia_fio.py:625), [vigia_fio.py:648](/home/ronald/codex_ws/185c878317e21679038d2274c24f4d017998ee4b/app/chamados/services/vigia_fio.py:648); valores PROD: [nao verificado])
+
+| Medida de 06/11 | Universo | Sem porta | Fonte |
+|---|---:|---:|---|
+| PROD, contador vivo às 08:27:18 | 2.144 | **319** | Dado fornecido [nao verificado] |
+| SOMBRA, dump das 05:02, consultado às 08:28:22 | 2.127 | **322** | Dado fornecido [nao verificado] |
+| PROD − SOMBRA | +17 | −3 | Cálculo sobre o dado [nao verificado] |
+
+O dado compara o estado do dump das 05:02 com uma leitura posterior de PROD. Mostra universos diferentes e três dias sem porta a menos em PROD; quais mudanças produziram essa diferença e qualquer atribuição a pouso: **[nao verificado]**. [nao verificado]
+
+**SOMBRA**
+
+O método `InsumosDoDono.dono` chama o juiz que retorna ESTRUTURA, CADASTRO ou BATIDA; a classe do censo não substitui essa medição. A implementação da convenção “não medido → INDETERMINADO” na sonda ausente: **[nao verificado]**. ([e6_oraculo.py:172](/home/ronald/codex_ws/185c878317e21679038d2274c24f4d017998ee4b/app/ponto/management/commands/e6_oraculo.py:172), [e6_oraculo.py:98](/home/ronald/codex_ws/185c878317e21679038d2274c24f4d017998ee4b/app/ponto/management/commands/e6_oraculo.py:98))
+
+Há uma inconsistência no pedido: **247/159/12 não corresponde ao `TAB` nem ao `TRANS` de 05/11 fornecidos**, que reconstituem **244/162/12**. A tabela abaixo usa essa decomposição, também registrada na cópia; reconciliar os três dias entre essas duas distribuições: **[nao verificado]**. ([RELATO.md:38](/home/ronald/codex_ws/185c878317e21679038d2274c24f4d017998ee4b/app/docs/RELATO.md:38), [RELATO.md:40](/home/ronald/codex_ws/185c878317e21679038d2274c24f4d017998ee4b/app/docs/RELATO.md:40))
+
+As classes `e-terminal` e `e-sem-viva` correspondem, respectivamente, aos detalhes `pergunta_viva_sob_chamado_terminal` e `sem_pergunta_viva` do censo. ([vigia_fio.py:685](/home/ronald/codex_ws/185c878317e21679038d2274c24f4d017998ee4b/app/chamados/services/vigia_fio.py:685))
+
+“Novos” significa **fora dos 418 sem porta de 05/11**; não demonstra entrada nova no universo. O motivo das quatro saídas do universo, a identidade das diferenças entre PROD e SOMBRA e a causa operacional das mudanças de rota ficam **[nao verificado]**.
+
+| SOMBRA | Universo | Sem porta | ESTRUTURA | CADASTRO | BATIDA | INDETERMINADO | Fonte |
+|---|---:|---:|---:|---:|---:|---:|---|
+| 05/11, `TAB`/`TRANS` | 1.987 | 418 | 244 | 162 | 12 | 0 | Anexo [nao verificado] |
+| 06/11 | 2.127 | 322 | 278 | 31 | 13 | 0 | Anexo [nao verificado] |
+
+| HOJE, por dono | Passado | Hoje pra frente | Total | Fonte |
+|---|---:|---:|---:|---|
+| ESTRUTURA | 278 | 0 | **278** | Anexo [nao verificado] |
+| CADASTRO | 31 | 0 | **31** | Anexo [nao verificado] |
+| BATIDA | 13 | 0 | **13** | Anexo [nao verificado] |
+| INDETERMINADO | 0 | 0 | **0** | Anexo [nao verificado] |
+| **Total** | **322** | **0** | **322** | Anexo [nao verificado] |
+
+| Classe — valores **05/11 → 06/11** | ESTRUTURA | CADASTRO | BATIDA | INDETERMINADO | Total | Fonte |
+|---|---:|---:|---:|---:|---:|---|
+| a | 0 → 0 | 0 → 0 | 2 → 2 | 0 → 0 | **2 → 2** | Anexo [nao verificado] |
+| b | 0 → 0 | 1 → 0 | 0 → 0 | 0 → 0 | **1 → 0** | Anexo [nao verificado] |
+| c | 8 → 8 | 20 → 5 | 2 → 3 | 0 → 0 | **30 → 16** | Anexo [nao verificado] |
+| d | 185 → 200 | 9 → 14 | 3 → 3 | 0 → 0 | **197 → 217** | Anexo [nao verificado] |
+| e-terminal | 33 → 31 | 132 → 12 | 5 → 5 | 0 → 0 | **170 → 48** | Anexo [nao verificado] |
+| e-sem-viva | 18 → 39 | 0 → 0 | 0 → 0 | 0 → 0 | **18 → 39** | Anexo [nao verificado] |
+| **Total** | **244 → 278** | **162 → 31** | **12 → 13** | **0 → 0** | **418 → 322** | Anexo [nao verificado] |
+
+| Destino dos 418 de 05/11 | Dias | Detalhamento | Fonte |
+|---|---:|---|---|
+| Saíram do universo porque a competência saiu | **0** | Nenhuma ocorrência informada | `TRANS` [nao verificado] |
+| Saíram do universo com competência ainda presente | **4** | c/CADASTRO: 1; d/BATIDA: 1; e-terminal/ESTRUTURA: 2 | `TRANS` [nao verificado] |
+| Seguem no universo → `fio_do_admin` | **135** | b/CADASTRO: 1; c/CADASTRO: 14; e-terminal/CADASTRO: 120 | `TRANS` [nao verificado] |
+| Seguem no universo → `porta_pergunta` | **1** | e-terminal/CADASTRO: 1 | `TRANS` [nao verificado] |
+| Seguem sem porta, mesma classe e dono | **278** | Decomposição abaixo | `TRANS` [nao verificado] |
+| Seguem sem porta, classe ou dono mudou | **0** | Nenhuma ocorrência informada | `TRANS` [nao verificado] |
+| **TRANS_SOMA** | **418** | **0 + 4 + 135 + 1 + 278 + 0 = 418** | Cálculo sobre o anexo [nao verificado] |
+
+| Classe/dono | Seguem sem porta, mesma classe/dono | Novos sem porta | HOJE | Fonte |
+|---|---:|---:|---:|---|
+| a / BATIDA | 2 | 0 | 2 | Anexo [nao verificado] |
+| b / CADASTRO | 0 | 0 | 0 | Anexo [nao verificado] |
+| c / ESTRUTURA | 8 | 0 | 8 | Anexo [nao verificado] |
+| c / CADASTRO | 5 | 0 | 5 | Anexo [nao verificado] |
+| c / BATIDA | 2 | 1 | 3 | Anexo [nao verificado] |
+| d / ESTRUTURA | 185 | 15 | 200 | Anexo [nao verificado] |
+| d / CADASTRO | 9 | 5 | 14 | Anexo [nao verificado] |
+| d / BATIDA | 2 | 1 | 3 | Anexo [nao verificado] |
+| e-terminal / ESTRUTURA | 31 | 0 | 31 | Anexo [nao verificado] |
+| e-terminal / CADASTRO | 11 | 1 | 12 | Anexo [nao verificado] |
+| e-terminal / BATIDA | 5 | 0 | 5 | Anexo [nao verificado] |
+| e-sem-viva / ESTRUTURA | 18 | 21 | 39 | Anexo [nao verificado] |
+| **Total** | **278** | **44** | **322** | Anexo [nao verificado] |
+
+| Conferência | Soma recalculada | Resultado informado | Fonte |
+|---|---|---|---|
+| Universo PROD | 1.038 + 330 + 10 + 288 + 14 + 2 + 143 + 319 = **2.144** | Confere | Anexo [nao verificado] |
+| Universo SOMBRA 05/11 | 1.000 + 312 + 0 + 238 + 17 + 0 + 2 + 418 = **1.987** | Confere | Anexo [nao verificado] |
+| Universo SOMBRA 06/11 | 1.035 + 323 + 0 + 288 + 15 + 0 + 144 + 322 = **2.127** | Confere | Anexo [nao verificado] |
+| `SOMA_CONFERE dono` | 278 + 31 + 13 + 0 = **322** | True | Anexo [nao verificado] |
+| `SOMA_CONFERE classe` | 2 + 0 + 16 + 217 + 48 + 39 = **322** | True | Anexo [nao verificado] |
+| `SOMA_CONFERE tempo` | 322 + 0 = **322** | True | Anexo [nao verificado] |
+| `TRANS_SOMA` | 4 + 136 + 278 = **418** | True | Anexo [nao verificado] |
+| `HOJE = SEGUE + NOVO` | 278 + 44 = **322** | True | Anexo [nao verificado] |
+
+`rc_prod=0; rc_sombra=0; hashes impressos: conta_prod.py=d1c151d5c135c518, sonda_dono.py=454e4be486841a45, sonda_sem_fio.py=24efa49ef6157099; somas: universos 2144/1987/2127, dono=classe=tempo=322, TRANS=418, SEGUE+NOVO=278+44=322.` — dado fornecido [nao verificado].
+
+## 06/11 08:30 · sessao f8387567b3d9 · - · - · origem=Ronald (tmux)
+
+Auditoria somente leitura do censo:
+
+- Universo = dias retornados por `dias_que_seguram`, nas competências de `competencias_a_lavrar`, para empresas visíveis; chave única `(colaborador_id, data)` e contador `len(dias)`. [app/chamados/services/vigia_fio.py:566](app/chamados/services/vigia_fio.py:566), [app/chamados/services/vigia_fio.py:581](app/chamados/services/vigia_fio.py:581)
+- `dias_que_seguram` seleciona colaboradores retidos por `furo_espelho` e lê seus dias de retenção. [app/folha/fora_da_folha.py:118](app/folha/fora_da_folha.py:118)
+- Competências = atual e anterior enquanto esta não estiver entregue; empresas visíveis = ativas, excluído prefixo de diagnóstico. [app/ponto/services/he_pendente_lavrado.py:220](app/ponto/services/he_pendente_lavrado.py:220), [app/colaboradores/queries.py:85](app/colaboradores/queries.py:85)
+- Ordem da classificação: porta alcançável → hoje/futuro → baldes legais → sem porta. Consequentemente, `sem_porta` nesta implementação só contém passado; `de_hoje_pra_frente=10` de PROD pertence a outro balde, não aos 319 sem porta. [app/chamados/services/vigia_fio.py:642](app/chamados/services/vigia_fio.py:642), [app/chamados/services/vigia_fio.py:648](app/chamados/services/vigia_fio.py:648), [app/chamados/services/vigia_fio.py:654](app/chamados/services/vigia_fio.py:654)
+- `limite=0` não afeta contador nem omite dia sem porta; afeta somente a listagem das outras rotas. [app/chamados/services/vigia_fio.py:625](app/chamados/services/vigia_fio.py:625)
+- Classes: a = véu vivo; b = resposta vazia; c = respondida com destino terminal; d = sem pergunta viva, colaborador na lista e dia fora dela; e = demais detalhes. `e-sem-viva` corresponde a `sem_pergunta_viva`; `e-terminal` a `pergunta_viva_sob_chamado_terminal`. A classe d não mede dono. [app/chamados/services/vigia_fio.py:667](app/chamados/services/vigia_fio.py:667), [app/chamados/services/vigia_fio.py:677](app/chamados/services/vigia_fio.py:677), [app/chamados/services/vigia_fio.py:685](app/chamados/services/vigia_fio.py:685)
+- `fio_do_admin` é balde distinto, aplicado após as três primeiras leis quando `lista.dia_do_admin` responde verdadeiro. [app/chamados/services/vigia_fio.py:306](app/chamados/services/vigia_fio.py:306)
+- Porta é chamada da célula na fila ou pergunta viva no app com âncora na fila; a rota prefere `porta_fila` se ambas existirem. [app/chamados/juizes.py:1373](app/chamados/juizes.py:1373)
+- Formato anexado coincide com `linhas_alcance` da cópia. [app/chamados/services/vigia_fio.py:705](app/chamados/services/vigia_fio.py:705)
+
+Não localizei `logs/a683/sonda_sem_fio.py`, `sonda_dono.py` ou `conta_prod.py` na cópia; conferir os scripts, sua equivalência ou recalcular seus hashes permanece **[não verificado]**. `.gitignore` ignora `logs/`, mas isso não prova por que os arquivos não estão presentes. [.gitignore:53](.gitignore:53)
+
+O valor entre colchetes em `sonda_leitura:` é o prefixo de 16 caracteres do SHA-256 da cópia do script efetivamente executada, não hash da árvore. [bin/sonda_leitura.sh:219](bin/sonda_leitura.sh:219), [bin/sonda_leitura.sh:221](bin/sonda_leitura.sh:221)
+
+## 06/11 08:30 · sessao 34229530d650 · - · - · origem=Ronald (tmux)
+
+- `InsumosDoDono.dono` reúne cadastro, turno e fase e chama o juiz único; consulta CxR quando necessário: `app/ponto/management/commands/e6_oraculo.py:172-183`.
+- A precedência executável é: folga indefinida/sem vínculo → CADASTRO; batida fora do turno ou contagem ímpar → BATIDA; fase deslocada → CADASTRO; CxR → CADASTRO; restante → ESTRUTURA. `app/ponto/management/commands/e6_oraculo.py:98-110`.
+- O carregador de CxR usa `dias_cadastro_x_realidade` do resultado do motor. `app/ponto/management/commands/e6_oraculo.py:154-162`.
+- O juiz retorna somente esses três donos; INDETERMINADO deve indicar ausência de medição, conforme a convenção do dado fornecido. `app/ponto/management/commands/e6_oraculo.py:98-110`; implementação dessa convenção na sonda: [não verificado].
+- Os scripts `sonda_sem_fio.py` e `sonda_dono.py` não foram encontrados na cópia pesquisada; equivalência e hashes das sondas: [não verificado].
+- Há divergência no próprio pedido: o cabeçalho informa 05/11 = ESTRUTURA 247 / CADASTRO 159 / BATIDA 12, enquanto `TAB` e `TRANS` fornecidos somam **244 / 162 / 12**, total 418. Valores documentados também em `app/docs/RELATO.md:40-41`; prevalência do cabeçalho sobre os anexos: [não verificado].
 
 ## 06/11 08:27 · sessao 9de3fb453a9a · LASTRO-PARTE-3 · verificador · origem=Code
 
@@ -671,64 +786,4 @@ Nuance do ramo por proximidade: `_reais` inclui horas sintéticas de isenção, 
 
 Assim, sustento: **nenhum escritor de produção atual rastreado produz o caso vazio e sem marcador; legado ambíguo pode ser consumido, mas sua presença no dado fornecido é [nao verificado]**. O retorno para legado vazio seria hora cobrada por fallback; para legado de isenção com `luz='00:00'`, o retorno usaria a própria string, sem fallback: `app/ponto/services/lastro.py:340`.
 
-## 06/11 07:37 · sessao 26487d3ddb3e · - · - · origem=Ronald (tmux)
-
-Na cópia, **não encontrei caminho de produção que escreva uma célula de grade não missing, sem hora e sem `isencao`/`dispensada`, e a lave como lâmpada acesa**. O construtor aceita esse formato, mas os escritores atuais não o produzem: `app/ponto/services/cartorio.py:647`, `app/ponto/services/cartorio.py:677`, `app/ponto/services/cartorio.py:687`.
-
-- `como_acendeu` não lê `missing`, `acesa`, `pendente`, `tipo_real` nem a hora prevista da própria lâmpada. Lê somente `dispensada`, `isencao` e `luz`; sem marcadores, retorna `('batida', lamp.get('luz') or hora)`: `app/ponto/services/lastro.py:336`.
-- Os dois chamadores efetivos só chegam à função com lâmpada acesa: `julgar` exige `lamp.get('acesa')`, em `app/ponto/services/lastro.py:289`; o fechador exige `marcos_acesos(...) is True`, em `app/ponto/services/lastro.py:394`, cujo teste recusa qualquer `acesa` falsy, em `app/ponto/services/lastro.py:179`. Portanto `acesa=None` e `pendente=True` não chegam à nota por esse caminho: `app/ponto/services/cartorio.py:869`, `app/ponto/services/lastro.py:394`.
-
-Prova pelos escritores:
-
-| Caminho | Escrita e resultado |
-|---|---|
-| Batida alinhada normal | `_match_marcos` escreve missing ou chama `_celula_do_marco`, que sempre escreve `hora=instante.strftime('%H:%M')`: `app/escala/utils.py:618`, `app/escala/utils.py:659`, `app/escala/utils.py:325`. A lâmpada copia essa hora para `luz`: `app/ponto/services/cartorio.py:677`. Retorno: `('batida', hora_real)`: `app/ponto/services/lastro.py:340`. |
-| Batida intermitente / intervalo explícito / reconciliação de ponta | Hora vem igualmente do timestamp: `app/escala/utils.py:1569`, `app/escala/utils.py:1849`, `app/escala/utils.py:2061`. O modelo intermitente `00:00–23:59` fica fora da régua por hora: `app/escala/utils.py:1377`. |
-| Dispensa parcial | A grade escreve `missing=False,hora=None,dispensada=_slug`: `app/escala/utils.py:1266`. Cartório copia `dispensada`: `app/ponto/services/cartorio.py:561`. Retorno: `('dispensa', slug)`: `app/ponto/services/lastro.py:336`. |
-| Ausência inteira / justificativa | A grade remove células por `None` ou remove só missing: `app/escala/utils.py:1272`, `app/escala/utils.py:1275`. O cartório acende as lâmpadas sem luz **com** `dispensada`: `app/ponto/services/cartorio.py:766`, `app/ponto/services/cartorio.py:773`. Retorno: `('dispensa', motivo)`: `app/ponto/services/lastro.py:336`. |
-| Isenção | A grade escreve hora planejada, `missing=False,isencao=True`: `app/escala/utils.py:857`. O cartório copia o marcador: `app/ponto/services/cartorio.py:556`. Retorno: `('isencao', None)`: `app/ponto/services/lastro.py:338`. |
-| Lâmpada do DNA sem posição na régua | Se acende por proximidade, escreve uma hora real formatada em `luz`; sem hora real, fica False ou None: `app/ponto/services/cartorio.py:632`. Não produz acesa True sem luz. |
-| Ata agregada antiga lida | O leitor produz células `missing=False,hora=None` sem marcador para a parte não missing: `app/escala/services/leitor_celula.py:167`. Isso é saída do leitor, não lâmpada gravada: seu ramo agregador devolve `marcos=[]`, em `app/escala/services/leitor_celula.py:171`. O cartório remonta a grade pelas batidas, em `app/ponto/services/cartorio.py:1123`; dispatcher em `app/escala/utils.py:2105`. |
-| Ata com `acesa=None` lida | O leitor traduz para `missing=False`, com hora recebida de `luz` possivelmente None: `app/escala/services/leitor_celula.py:119`. Esse dict também não é fonte da lavratura atual: `app/ponto/services/cartorio.py:1126`. |
-| Builder legacy ativado pela flag | Chama o single, que usa o mesmo alinhamento e overlays: `app/escala/utils.py:1037`, `app/escala/utils.py:776`, `app/escala/utils.py:806`. A união apenas rearranja dicts: `app/escala/utils.py:1058`. Logo não introduz o branco sem marcador. |
-
-Há teste que **injeta** `{'status': 'ok'}` sem hora e confirma que `ata_do_dia` gera `acesa=True,luz=None`: `app/ponto/tests/test_t40_ata_lampadas.py:10`, `app/ponto/tests/test_t40_ata_lampadas.py:15`. Isso demonstra que o construtor aceita o formato, não um escritor de produção que o fornece: `app/ponto/services/cartorio.py:647`, `app/ponto/services/cartorio.py:677`.
-
-Sobre **“acendeu as 00:00” sem batida**:
-
-- Uma lâmpada acesa sem marcador e com `luz=None`, se já estivesse gravada e cobrasse `hora='00:00'`, produziria `('batida','00:00')` pelo fallback e a nota afirmativa: `app/ponto/services/lastro.py:340`, `app/ponto/services/lastro.py:347`, `app/ponto/services/lastro.py:355`. Que algum escritor real desta cópia produza esse estado: **[nao verificado]**; os escritores rastreados acima não produzem.
-- Uma isenção **legada sem marcador**, com hora planejada `00:00` em `luz`, também seria lida como batida; nesse caso **`lamp['luz']=='00:00'`**, e o `or hora` nem seria acionado: `app/ponto/services/lastro.py:336`, `app/ponto/services/lastro.py:340`. O próprio código documenta atas antigas ambíguas e decisão de não inventar o marcador retrospectivo: `app/ponto/services/cartorio.py:547`, `app/escala/services/leitor_celula.py:134`. Existir tal registro no dado fornecido, ou ele ter hora `00:00`: **[nao verificado]**.
-- A isenção **escrita hoje** recebe marcador e devolve `isencao`, portanto não usa a frase de batida: `app/ponto/services/cartorio.py:556`, `app/ponto/services/lastro.py:338`, `app/ponto/services/lastro.py:352`.
-
-## 06/11 07:37 · sessao 4295aa63f985 · - · - · origem=Ronald (tmux)
-
-Os pontos 938–941 e 1057–1060 são de **`app/chamados/models.py`**. Eles não emitem diretamente `EventoCelula` para `batida_ausente`: ambos exigem módulo em `MODULOS_DE_TURNO`; a tupla contém somente `turno_aberto`, `turno_aberto_24h` e `entrada_bloqueada_turno_aberto`. (`app/chamados/models.py:938`, `app/chamados/models.py:1054`, `app/chamados/reconciliador.py:336`)
-
-Isso não prova nascimento sem qualquer evento indireto: o `post_save` do chamado julga a célula no nascimento ou mudança de status, salvo julgamento já em curso. (`app/chamados/signals.py:164–180`) O julgamento pode reconciliar os marcos já satisfeitos no próprio ato. (`app/ponto/services/cartorio.py:1461–1495`) Só lavra com alteração de `veredito`/`ata` acorda o consumidor; lavra idêntica retorna sem save/evento. (`app/ponto/portas/celula.py:662–684`, `app/ponto/portas/celula.py:795–802`) Portanto não usar “nasceu sem emissão direta” como prova suficiente de escape.
-
-Critérios relevantes:
-
-- `julgar()` considera apenas fila de cobrança do módulo `batida_ausente`; exige marcos e tipos conferíveis. (`app/ponto/services/lastro.py:239–241`, `app/ponto/services/lastro.py:273–282`)
-- Aceita lâmpada acesa ou, na ausência dela, batida casada por tipo e tolerância de horário; depois só põe em `com_lastro` se `reconciliaria()` permitir fechamento. (`app/ponto/services/lastro.py:287–319`)
-- O fechador do evento exige célula gravada e `marcos_acesos(...) is True`; escreve a nota somente após `reconciliar()` retornar verdadeiro, no mesmo `atomic`. (`app/ponto/services/lastro.py:393–402`)
-- `reconciliaria()` e `reconciliar()` consultam a mesma `_decisao_do_fechamento`; ela consulta motor, guarda da premissa e guarda da pergunta viva. (`app/chamados/models.py:607–659`)
-- A guarda da pergunta viva recusa quando há viva ancorada sem plano de reata para outra cobrança; sem viva, deixa fechar. (`app/chamados/models.py:393–428`)
-- O consumidor chama o fechador e, sem falha/adiamento, marca os eventos como processados mesmo quando o fechamento foi legitimamente recusado. (`app/chamados/reconciliador.py:1367–1385`)
-
-**N do vigia:** de `com_lastro`, conta chamado cujo colaborador não tenha evento pendente **ou** cujos marcos na célula não estejam todos acesos. Assim, lastro obtido pelo recuo de batidas, sem lâmpada, conta mesmo havendo evento pendente. (`app/ponto/services/lastro.py:420–423`) Evento “pendente” significa `processado_em IS NULL` e tentativas abaixo do teto. (`app/chamados/reconciliador.py:1235–1238`) Com `--alarme` e escapes, o comando lista e sai com código 2. (`app/ponto/management/commands/fechar_cobranca_com_lastro.py:77–83`)
-
-Há testes explícitos para lâmpada acesa sem evento → `sem_evento=1`/saída 2; com evento → zero; recuo sem lâmpada mesmo com evento → um. São fixtures que plantam a ata/deletam eventos, portanto não demonstram sozinhas um caminho normal de produção. (`app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:63–83`, `app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:214–260`)
-
-## 06/11 05:22 · sessao c611628a56e6 · OTIMIZA-3 · censo · origem=Code
-
-**BLOQUEIO 1: classe (e) — NÃO PERGUNTADO.** Nenhuma das três perguntas trouxe loader/import dinâmico ou leitura de símbolo por atributo de módulo carregado. Referência: anexos q1–q3 fornecidos; arquivo:linha na cópia [nao verificado].
-
-| achado | classe | trecho pergunta | trecho resposta | trecho triagem |
-|---|---|---|---|---|
-| Loader de string deixa a faceta símbolo-de-topo imprimir zero falso. O caso por caminho existe na cópia: carregamento e chamada em `bin/gerar_estado.py:142` e `bin/gerar_estado.py:145`; resolução do atributo depende de `apelidos` em `bin/quem_chama.py:473`. | **(e) NÃO PERGUNTADO** — pelas perguntas fornecidas [nao verificado]. | q1/P1: “Existe forma de Python embutido em .sh, config ou string de .py que IMPORTA um modulo-alvo e que o novo `_rx_embutido` nao casa”. q1/P7: “Qualquer outro defeito que voce veja no diff”. q2/P6 e q3/P5: “Qualquer outro defeito no delta”. Nenhum desses trechos explicita o mecanismo de loader. [nao verificado] | r1/6: “há escapes reais da regex, mas não demonstrei uma faceta com zero falso causada por eles”. r2/6: “nenhum dos antigos achados 5, 6, 8 e 9 ganhou falso zero demonstrado com o delta”. Tratam dos escapes anteriores; nenhuma das três respostas relata o bloqueio de loader. [nao verificado] | v5/6: “regex embutida nao resolve `from .ci import *` dentro de heredoc nem `from pacote.sub import` contra o __init__ do pacote”; motivo escrito: “falso 0 real nao demonstrado”. **Esse encaminhamento para FILA trata de outro mecanismo**, não de um loader identificado pelo Codex e descartado. [nao verificado] |
-
-**O pedido genérico de procurar zero falso não conta, sozinho, como tema PRESENTE nesta classificação.** Caso contrário, “qualquer outro defeito” tornaria impossível a classe (e). Aqui, P1 delimita Python embutido e `_rx_embutido`; P2 pergunta por “faceta de um modulo rebaixado”, pressupondo rebaixamento. Nenhum deles pergunta pelo vínculo criado por loader que não foi reconhecido. Referência: q1/P1–P2/P7 fornecidos [nao verificado].
-
-A distinção tem fundamento no código: os vínculos de `apelidos` vêm de `ast.Import`/`ast.ImportFrom`; o carregamento real usa `spec_from_file_location` seguido de `mod.placar()`. (`bin/quem_chama.py:448`, `bin/quem_chama.py:454`, `bin/gerar_estado.py:142`, `bin/gerar_estado.py:145`)
-
-_2132 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2135 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
