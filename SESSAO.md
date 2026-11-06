@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 02:14:15.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (41.4 MB). Acoes na janela: **1267**.
+**Medido em 06/11/2026 02:19:19.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (41.4 MB). Acoes na janela: **1269**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:14:21 | Bash | Drop the not-yet-existing arquivo from ESPERANDO | `cd /home/ronald/saas-hasner; ps -p 2391979 >/dev/null && echo vivo; sed -i '2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh \| pid=2391979#' app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md` |
+| 02:14:17 | Bash | Read pid proof logic and hook trail | `cd /home/ronald/saas-hasner; grep -n "def _prova_pid" -A22 bin/hook_stop_fila1.py \| head -30; ls logs/ \| grep -i hook \| head; tail -3 logs/hook_stop*.log 2>/dev/null \| cut -c1-300` |
 | 02:14:12 | Bash | Read ESPERANDO proof logic | `cd /home/ronald/saas-hasner; sed -n 640,700p bin/hook_stop_fila1.py; sed -n 1200,1240p bin/hook_stop_fila1.py` |
 | 02:14:09 | Bash | Inspect hook ESPERANDO validation | `cd /home/ronald/saas-hasner; grep -n "ESPERANDO" bin/hook_stop_fila1.py \| head -20` |
 | 02:13:56 | Bash | Point ESPERANDO at the live Codex query | `cd /home/ronald/saas-hasner; sed -i '2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh \| pid=2391979 \| arquivo=logs/fila1_0611/estado.r#' app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md; ps -p 2391979 >/dev/null && echo vivo` |
