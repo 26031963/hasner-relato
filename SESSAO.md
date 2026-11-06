@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 01:36:14.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (40.0 MB). Acoes na janela: **1268**.
+**Medido em 06/11/2026 01:41:31.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (40.0 MB). Acoes na janela: **1270**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:36:43 | Bash | Repoint ESPERANDO to new trava pid | `cd /home/ronald/saas-hasner; ps -p 38848 -o cmd= \| grep -o "\-v [^ ]*:/app "; sed -i '2s/pid=[0-9]*/pid=38848/' app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md` |
+| 01:36:39 | Bash | Check ESPERANDO pid alive | `ps -p 4084561 >/dev/null && echo vivo \|\| /home/ronald/saas-hasner/bin/trava_teste.sh --quem` |
 | 01:34:10 | Bash | Repoint ESPERANDO to live trava | `cd /home/ronald/saas-hasner; ps -p 4084561 -o cmd= \| grep -o "\-v [^ ]*:/app "; sed -i '2s/pid=[0-9]*/pid=4084561/' app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md` |
 | 01:34:06 | Bash | Check trava holder now | `/home/ronald/saas-hasner/bin/trava_teste.sh --quem; pgrep -af "bin/trava_teste.sh --" \| cut -c1-80` |
 | 01:34:02 | Bash | Find newest trava pid for ESPERANDO | `sleep 60 2>/dev/null; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; pgrep -f "trava_teste.sh --" \| head` |
