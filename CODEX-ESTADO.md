@@ -1,7 +1,110 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 02:18** · publicado em **06/11/2026 02:19** (UTC-3)
+> Ultima resposta processada: **06/11/2026 02:26** · publicado em **06/11/2026 02:30** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 02:26 · sessao a4b5542bebe9 · H12H06-B · verificador · origem=Code
+
+**REPROVA quanto à abrangência da invalidação:** há janela que o leitor alcança e a nova chamada deixa de fora. (`app/ponto/services/ausencia.py:519`; `app/ponto/turnos.py:2762`)
+
+1. **Alta — ausência aberta deixa projeções futuras carimbadas.**  
+   O fim vazio vira `max(data, hoje)`, enquanto a cobertura de `TIPOS_EM_ABERTO` se estende até o fim da competência consultada. (`app/ponto/services/ausencia.py:515–520`; `app/ponto/turnos.py:2753–2767`)
+
+   Contraexemplo: em 06/11, corte 21, INSS aprovado desde 01/10, sem fim, com projeção de dezembro existente; editar para atestado de um dia em 01/10 invalida outubro/novembro, mas dezembro perde a supressão sem perder `derivado_em`. O escritor permite calcular e gravar dezembro; não garante a premissa “competência futura não tem projeção”. Existência desse caso em produção: **[não verificado]**. (`app/ponto/janelas.py:10–33`; `app/ponto/services/ausencia.py:496–520`; `app/ponto/services/ausencia.py:940`; `app/ponto/services/fechamento.py:430–436`, `:610–630`, `:674–692`, `:1127–1128`)
+
+   Para ranges finitos válidos, o envelope cobre antigo/novo, deslocamentos para trás/para frente e competências intermediárias. `NULL` de tipo não aberto pode invalidar competências extras, pois sua cobertura efetiva é um dia. (`app/ponto/services/ausencia.py:516–520`; `app/ponto/services/fechamento.py:1578–1583`; `app/ponto/services/dia_pago.py:712–716`; `app/ponto/turnos.py:2762–2767`)
+
+2. **Alta — permanece caminho de alteração de aprovada sem invalidação.**  
+   `curar_ausencia_sem_fim` inclui aprovadas e chama `rederivar_fim`, que apenas salva/relê. O modelo então pode preencher `data_fim`, alterando a cobertura de várias competências sem invalidá-las. É caminho legado; existência de alvos atuais em produção: **[não verificado]**. (`app/ponto/management/commands/curar_ausencia_sem_fim.py:29–31`, `:46`; `app/ponto/services/ausencia.py:1289–1294`; `app/ponto/models.py:902–908`)
+
+   Os sinais não fecham esse buraco: julgam células e reconciliam chamados, sem invalidar o fechamento nesses caminhos. (`app/ponto/signals.py:85–93`, `:143–147`, `:250–272`)
+
+3. **Média — “dentro do atomic do chamador” não vale para a tela.**  
+   No comando, edição e invalidação estão no `atomic` de `tratar_linha`; `_Desfaz` desfaz também o carimbo. Na view, não há `atomic` envolvendo a chamada; os blocos internos de `invalidar_fechamento` começam depois do `save` da ausência. As configurações copiadas tampouco habilitam `ATOMIC_REQUESTS`. (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:137–191`; `app/ponto/views.py:2750–2803`; `app/ponto/services/ausencia.py:509–520`; `app/ponto/services/fechamento.py:1632–1640`; `app/config/settings/saas.py:83–92`; `app/config/settings/prod.py:9–18`)
+
+   Portanto, rollback do comando restaura o carimbo; falha posterior na tela não desfaz automaticamente os atos anteriores. Além disso, falha da invalidação é engolida, retorna zero e não impede confirmar a edição — limite herdado do helper utilizado. (`app/ponto/services/fechamento.py:1645–1649`; `app/ponto/services/ausencia.py:520`)
+
+4. **Média, condicional — contesto descartar a corrida com exportação incondicionalmente.**  
+   O apply trava somente a ausência e consulta “entregue” antes de editar; a exportação aceita competência solicitada, calcula sua fotografia e registra o TXT sem compartilhar essa trava. É possível consultar “não entregue”, exportar a fotografia anterior e confirmar a edição concorrentemente. Ocorrência em produção: **[não verificado]**. (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:137–170`; `app/folha/views.py:109–120`, `:207–209`, `:297–300`; `app/folha/models.py:174–188`)
+
+   “Antes de 21/11” não constitui garantia pelo código: o portão verifica carimbo do dia/competência e falhas, sem exigir encerramento temporal. A ausência operacional de exportação concorrente continua **[não verificado]**. (`app/folha/porta_export.py:800–867`)
+
+5. **Baixa — teste de rollback pode passar vazio isoladamente.**   [nao verificado]
+   `test_linha_desfeita_nao_vence_a_projecao` exige apenas carimbo preenchido; também passa se o comando pular antes de editar. O irmão da trilha verifica resumo e minutos restaurados, mas o teste novo não demonstra que chegou a invalidar antes do rollback. (`app/ponto/tests/test_h12h06b_rederivar_minutos.py:254–259`, `:163–169`)
+
+   O teste de range cobre somente avanço de um atestado aguardando documento, de outubro para novembro — competências 11→12. Não cobre aberto, retorno para trás, fim antigo mais distante nem exportada/barrada. (`app/ponto/tests/test_h12h06b_rederivar_minutos.py:72–76`, `:261–272`)
+
+**Rastreio de `derivado_em`:**
+
+| Papel | Quem / comportamento | Evidência |
+|---|---|---|
+| Preenche | Recalcular fechamento: `save` para aberto, `update` para demais status | `app/ponto/services/fechamento.py:1121–1128`, `:1144–1173` |
+| Esvazia | `invalidar_fechamento`; `restaurar_fechamento`, salvo valor explicitamente fornecido | `app/ponto/services/fechamento.py:1635–1640`, `:1364–1377` |
+| Lê `NULL` | Queryset/contador de projeções vencidas e comando que conta/lista; não rederivam | `app/ponto/services/fechamento.py:1675–1683`, `:1705`; `app/ponto/management/commands/projecoes_vencidas.py:47–68` |
+| `decidir` | Chama invalidação; não consulta o carimbo | `app/ponto/services/ausencia.py:942–944` |
+| Evento | Recalcula após commit, independentemente do carimbo | `app/ponto/services/fechamento.py:1791–1808` |
+| `fechamento_lido` | Deriva em memória, independentemente do carimbo | `app/ponto/services/fechamento.py:1743–1745` |
+| Leitores do gravado | Os caminhos padrão de classificação/export carregam valores sem testar o carimbo | `app/folha/export.py:709–724`, `:775–780` |
+| TXT pela view | Injeta fechamentos derivados em memória | `app/folha/views.py:207–212` |
+
+O que fica vazio é **o carimbo**, não as rubricas. A invalidação alcança também exportadas/barradas dentro da janela; a guarda da 09 pode impedir reconstrução, deixando valores antigos com carimbo nulo. (`app/ponto/services/fechamento.py:1635–1640`, `:549–555`)
+
+Os testes positivos têm mordida: começam com carimbos preenchidos e exigem `None`; o DSR consulta `FechamentoMensal` gravado, usa motor real e exige delta exato `(+1, −1)` para 720/0, com contraste 479. O teste de 720 exige perda prévia; há mock da lavra como `{}`, limitando a integração comprovada. Execução GREEN/RED/M16/M17: **[não verificado]**. (`app/ponto/tests/test_h12h06b_rederivar_minutos.py:241–252`, `:261–272`; `app/ponto/tests/test_h12h06b_parcial_pelo_juiz.py:130–178`)
+
+Nos leitores examinados, a decisão de parcial continua delegada ao juiz existente; não identifiquei nova derivação paralela nesses sítios. O relógio é lido dentro da porta de edição; classificá-lo sozinho como “fora da borda” não está demonstrado. (`app/ponto/services/fechamento.py:681–685`; `app/ponto/services/efeito_ausencia.py:33–55`; `app/ponto/services/credito_parcial.py:20–27`; `app/ponto/turnos.py:2583–2600`; `app/ponto/services/ausencia.py:513–519`)
+
+O DIFF de impacto anterior ao pouso permanece **[não verificado]**; “medida em curso” não demonstra cumprimento do pré-requisito. A exigência continua registrada, e eventos continuam podendo regravar competências exportadas fora da guarda da 09. (`app/docs/LEIS.md:112`, `:142`; `app/ponto/services/fechamento.py:530–555`, `:1793–1794`)
+
+## 06/11 02:26 · sessao b2671fcd93c3 · - · - · origem=Ronald (tmux)
+
+Achados principais:
+
+1. **Alta — atomicidade prometida não existe na tela.** `app/ponto/services/ausencia.py:509` salva a ausência antes da invalidação em `:520`; a função começa em `:465` sem `atomic`. O chamador de tela tem apenas `@login_required` (`app/ponto/views.py:2750`) e chama a porta em `:2794`. A configuração copiada não ativa `ATOMIC_REQUESTS` (`app/config/settings/saas.py:83`). Portanto, o comentário “Dentro do atomic do chamador” (`app/ponto/services/ausencia.py:512`) só corresponde ao comando: a tela deixa escrita e carimbo em transações separadas. Configuração efetiva de produção: `[não verificado]`.
+
+2. **Alta, caminho legado — outro escritor altera insumo de aprovada sem invalidar.** `curar_ausencia_sem_fim` seleciona todas as não rejeitadas, incluindo aprovadas (`app/ponto/management/commands/curar_ausencia_sem_fim.py:29`), e chama `rederivar_fim` em `:46`. Essa função apenas salva e relê (`app/ponto/services/ausencia.py:1289`), sem invalidar. O modelo preenche `data_fim` (`app/ponto/models.py:902`) e também pode preencher minutos de falta aprovada zero (`:877`). É outro caminho de escrita dos campos perguntados, embora dentro do arquivo declarado como porta. O comando é classificado como cura de acervo, uma vez (`app/config/crons.py:1257`). Existência atual de alvos: `[não verificado]`.
+
+3. **Alta, contestação do descarte — executar antes de 21/11 não elimina estruturalmente a corrida com exportação.** O comando trava somente Ausencia (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:137`), consulta a entrega em `:160` e depois escreve em `:169`. O export recebe mês/ano sem exigir competência encerrada (`app/folha/views.py:109`); `conferir` verifica carimbo do dia, competência e falhas (`app/folha/porta_export.py:800`), sem barreira de data. Lê a projeção online (`app/folha/views.py:207`) e registra o TXT posteriormente (`:297`), usando `exists/create`, sem trava comum (`app/folha/models.py:174`). Interleaving possível: cerca passa → export lê dados antigos → apply confirma → export registra TXT antigo. Ocorrência real e carimbo verde atual: `[não verificado]`.
+
+Conferências:
+
+- **Comando:** `transaction.atomic()` em `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:137` contém porta e invalidação. `_Desfaz` por diferença de campos/valor ou auditoria ausente (`:175`, `:178`, `:186`) desfaz também o carimbo.
+- **Signals não cobrem o segundo escritor:** o receiver da Ausencia chama cartório (`app/ponto/signals.py:143`); `_julgar_dias` julga células (`:85`). O consumidor apenas reconcilia chamados após commit (`:250`).
+- **Admin não é escritor adicional:** AusenciaAdmin usa SoLeitura (`app/ponto/admin.py:37`), que nega adicionar/editar/apagar (`app/core/admin.py:59`).
+- **Form não é escritor adicional:** AusenciaForm deriva de `forms.Form` (`app/ponto/forms.py:41`).
+- **Férias não edita esses campos de Ausencia existente:** o modelo delega o espelho (`app/ferias/models.py:379`); o espelho mantém existentes e cria ausentes (`app/ponto/services/ausencia.py:1194`).
+
+## 06/11 02:25 · sessao 78bcf75af9d3 · - · - · origem=Ronald (tmux)
+
+**Achado: janela incompleta para ausência aberta com projeção futura existente — gravidade alta, condicional à existência desse gravado.** `editar_ausencia_registro` substitui `data_fim=NULL` pelo máximo entre início e hoje, limitando a invalidação (`app/ponto/services/ausencia.py:515-520`); o leitor de cobertura estende ausência de `TIPOS_EM_ABERTO` até o fim de qualquer janela consultada (`app/ponto/turnos.py:2753-2767`).
+
+Contraexemplo por código: em 06/11, corte21, ausência aprovada INSS iniciada em 01/10, sem fim, e projeção de 12/2026 existente; editar para atestado de um dia em 01/10 invalida somente competências10/11, mas a12 perde toda a supressão antiga sem perder seu carimbo (`app/ponto/services/ausencia.py:496-520`; `app/ponto/janelas.py:10-33`; `app/ponto/services/fechamento.py:674-692`). O escritor aceita competência futura: seu universo não limita mês/ano por hoje e a gravação usa a janela pedida (`app/ponto/services/fechamento.py:430-436`, `:610-630`, `:1121-1128`). Existência desse caso em produção: `[não verificado]`. A premissa “competência futura não tem projeção gravada” aparece no comentário de `decidir`, mas não é garantida pelo escritor (`app/ponto/services/ausencia.py:938-943`; `app/ponto/services/fechamento.py:430-436`).
+
+Para ranges finitos válidos, o envelope mínimo dos inícios/máximo dos fins cobre antigo e novo, inclusive deslocamentos nos dois sentidos; sua tradução em competências percorre todas as janelas pelo corte da empresa (`app/ponto/services/ausencia.py:496-520`; `app/ponto/services/fechamento.py:1578-1583`; `app/ponto/services/dia_pago.py:700-716`). Para `NULL` de tipo não aberto, o limite hoje apenas pode invalidar competências extras, pois a cobertura efetiva é um dia (`app/ponto/services/ausencia.py:519`; `app/ponto/turnos.py:2762-2767`).
+
+**Quem escreve/lê `derivado_em`.**
+
+- Escritores com carimbo preenchido: recalcular fechamento aberto por `save`, e demais status por `update` (`app/ponto/services/fechamento.py:1121-1128`, `:1144-1173`).
+- Escritores que apagam: `invalidar_fechamento` (`app/ponto/services/fechamento.py:1632-1640`); `restaurar_fechamento`, salvo se o chamador fornecer explicitamente outro valor (`:1364-1377`). O default do modelo é `NULL` (`app/ponto/models.py:454-464`).
+- Leitores explícitos do carimbo: `projecoes_vencidas_qs`, contador e comando de listagem; detectam `NULL` e imprimem/contam, sem rederivar (`app/ponto/services/fechamento.py:1675-1683`, `:1705`; `app/ponto/management/commands/projecoes_vencidas.py:47-68`). O default observa somente a competência corrente (`app/ponto/services/fechamento.py:1676-1679`; `app/ponto/janelas.py:102-108`).
+- `decidir` escreve invalidação, sem ler o carimbo (`app/ponto/services/ausencia.py:942-944`); `recalcular_por_evento` recalcula incondicionalmente após commit (`app/ponto/services/fechamento.py:1791-1808`); `fechamento_lido` deriva incondicionalmente em memória (`:1743-1745`).
+- A folha continua carregando o gravado sem filtro de `derivado_em`: `classificar_export` (`app/folha/export.py:775-780`) e `montar_linhas_export` (`:709-724`). Portanto, carimbo vazio alarma, mas não força atualização dos números consumidos nesses caminhos (`app/ponto/services/fechamento.py:1675-1683`; `app/folha/export.py:709-724`).
+- O carimbo é excluído das comparações de fotografia/hash (`app/ponto/portas/regen_exportada.py:35-38`; `app/ponto/management/commands/carimbo_gravado.py:27-30`).
+
+**Exportada/barrada:** a invalidação não filtra status, exportação nem guarda da09, portanto também apaga esses carimbos (`app/ponto/services/fechamento.py:1635-1640`). A reconstrução da09 exportada é barrada pelo universo do escritor (`:549-555`), enquanto a leitura online segue disponível pelo modo `somente_leitura=True` (`:530-531`, `:1743-1745`). O gravado barrado pode permanecer `NULL`, com os números antigos ainda disponíveis ao export (`app/folha/export.py:709-724`). Isso decorre do desenho existente; introdução desse comportamento pelo delta `[não verificado]`.
+
+## 06/11 02:25 · sessao 9456bae2f482 · - · - · origem=Ronald (tmux)
+
+1. **Não bloqueante — lacuna de cobertura da janela.** O teste de range cobre somente mover `27/10` para `23/11`, com `data_fim=None` e status `aguardando_documento`; não cobre fim antigo posterior ao novo, edição para trás, intervalo aberto nem exportada/barrada. O nome promete mais que os casos exercitados. `app/ponto/tests/test_h12h06b_rederivar_minutos.py:72`, `:261-272`.
+
+2. **Não bloqueante — rollback pode passar vazio isoladamente.** `test_linha_desfeita_nao_vence_a_projecao` verifica apenas que `derivado_em` continua preenchido: passa também se o comando pular antes do escritor. Não afirma resumo, minutos restaurados ou que a invalidação aconteceu dentro da transação. O teste irmão da trilha cobre resumo `puladas=2` e minutos restaurados; portanto a suíte tem contraparte, mas este teste sozinho não comprova reversão do carimbo após invalidar. `app/ponto/tests/test_h12h06b_rederivar_minutos.py:254-259`, `:163-169`. O caminho real invalida antes da falha de trilha, que lança `_Desfaz` fora do `atomic`. `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:137`, `:169-191`; `app/ponto/services/ausencia.py:509-520`.
+
+3. **Testes positivos têm mordida estrutural.** O apply começa com duas projeções preenchidas e exige ambas nulas; o teste direto começa com comp11/12 preenchidas e exige ambas nulas. Suprimir a invalidação deixa esses valores iniciais vivos, salvo outro efeito ainda não demonstrado. `app/ponto/tests/test_h12h06b_rederivar_minutos.py:241-252`, `:261-272`. Execução dos RED/M16/M17: **[não verificado]**; os logs citados no commit não foram encontrados na listagem de `logs`/`app/logs` **[não verificado quanto à existência fora desses diretórios]**.
+
+4. **A cura do GRAVADO é efetiva pelo código do teste.** O helper chama `recalcular_fechamento_mes`, espia `get_motor_cct` devolvendo o motor real, exige que o motor tenha sido chamado e lê `FechamentoMensal` persistido. Exige delta exato `(ok+1, perdido−1)` para 720 e 0; 720 ainda exige semana previamente perdida. Isso não passa por saída vazia. `app/ponto/tests/test_h12h06b_parcial_pelo_juiz.py:130-139`, `:152-178`. O escritor persiste os campos do resultado real do motor, cuja regra usa presença/justificação dos dias obrigatórios. `app/ponto/services/fechamento.py:1085-1086`, `:1127-1128`; `app/ponto/motor_calculo_v2.py:2595-2608`, `:2629-2630`. Limite: `esmeril_espelho.ler_lavra` é mockado como `{}`, portanto estes testes não demonstram convivência com lavra de produção. `app/ponto/tests/test_h12h06b_parcial_pelo_juiz.py:136`.
+
+5. **Classes arquiteturais:** os leitores de dinheiro consultam o mesmo juiz `cobre_parte_do_dia`, cujo corpo centraliza tipo parcial, dia único e limite 480; não identifiquei juiz paralelo novo nesses sítios. `app/ponto/services/fechamento.py:681-685`; `app/ponto/services/efeito_ausencia.py:33-55`; `app/ponto/services/credito_parcial.py:20-27`; `app/ponto/turnos.py:2583-2600`. A composição `TIPOS_PAGOS and cobre_parte_do_dia` continua repetida nos quatro sítios, como no apontamento anterior. Mesmas referências.
+
+6. **Relógio:** o delta lê `localdate()` dentro da porta, sem entrada `hoje/agora`; os testes congelam globalmente o relógio. `app/ponto/services/ausencia.py:513-519`; `app/ponto/tests/test_h12h06b_rederivar_minutos.py:36`. A classificação “relógio lido fora da borda” consta do checklist, mas regra específica que faça essa leitura, isoladamente, bloquear a obra: **[não verificado]**. `CLAUDE.md:365-367`.
 
 ## 06/11 02:18 · sessao e1c59897b38c · FILA1-ESTADO · leitura · origem=Code
 
@@ -569,91 +672,4 @@ Os demais contraexemplos pedidos:
 - **(2), exportação:** permanece risco potencial **alto**, fora do escopo conforme o aval informado. A cerca antecede a escrita, enquanto o exportador calcula e só depois registra a entrega; não há serialização entre esses atos nos trechos examinados (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:154`, `app/folha/views.py:208`, `app/folha/views.py:297`). Ocorrência: **[nao verificado]**.
 - **(3), push:** contesto tratá-lo como tecnicamente resolvido por sair `pulada`. O `save()` dispara cartório síncrono, que pode enviar push antes das verificações que provocam rollback; o resultado não recolhe esse efeito externo. **Gravidade média**, mantendo o aceite residual informado (`app/ponto/services/ausencia.py:508`, `app/ponto/signals.py:147`, `app/ponto/services/cartorio.py:1740`, `app/ponto/management/commands/detectar_ausencias.py:778`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:169`). Emissão concreta nessas 30 linhas: **[nao verificado]**.
 
-## 06/11 01:14 · sessao 7617c8ab0520 · - · - · origem=Ronald (tmux)
-
-Auditoria por leitura; execução, GREEN/RED e sobrevivência de mutantes: [nao verificado].
-
-- **R20a morde a captura do callback.** O mock está no endereço importado pelo método; a captura executa os callbacks enquanto o patch permanece ativo. Exige ERROR, pergunta adotada, callback seguinte executado e sobra contada. Sem `engolir`, o `RuntimeError` escapa. Limite: usa `TestCase` e `captureOnCommitCallbacks`; não demonstra commit real nem liberação efetiva de travas. `app/chamados/tests/test_c20_fio_mudo.py:32,337-350`; `app/chamados/models.py:518-524`.
-- **R20b morde erro SQL e transação utilizável**, porque injeta consulta de tabela inexistente e consulta novamente depois. Porém quebra em `canonica_do_grupo`, antes de `reapontar_resolvedora`: destino inalterado não prova rollback de alteração parcialmente realizada; a alteração sequer começou. Falta caso que escreve primeiro e quebra depois, incluindo descarte de callbacks registrados no savepoint. `app/chamados/tests/test_c20_fio_mudo.py:362-372`; `app/chamados/models.py:500-516`.
-- **R20c morde a antiga cerca.** Cria exportação vigente para a competência calculada pela janela e exige adoção; esse registro satisfaz o juiz `competencia_entregue`. Compara todos os campos do fechamento e somente hash/conteúdo da exportação. Não executa callbacks, não fotografa célula e não valida resposta/materialização posterior nem TXT em disco. `app/chamados/tests/test_c20_fio_mudo.py:385-401`; `app/folha/export.py:569-575`.
-- **R08j prova adiamento, respeito ao resultado C6 e idempotência; não prova julgamento sob trava.** O teste continuaria passando se a avaliação C6 fosse antecipada antes da trava, pois não há intercalamento concorrente nem inspeção da trava. `app/chamados/tests/test_c20_fio_mudo.py:246-262`.
-- **R08g e R19b corrigidos alcançam seus ramos.** R08g exige chamada efetiva da porta com canônica/alvo; R19b cria primeiro a cobrança, depois transfere a pergunta a outro vivo e confirma que a pergunta permanece viva antes de readotar. `app/chamados/tests/test_c20_fio_mudo.py:273-284,425-439`.
-- **Outros limites:** R08i verifica retorno vazio e quantidade de perguntas, sem fotografia integral de campos/trilha; R19c só executa vigia hoje e olha ausência de perguntas amanhã, embora seu nome prometa testar também abertura futura. `app/chamados/tests/test_c20_fio_mudo.py:305-318,441-444`.
-- **M3 específico:** o anexo não define a mutação e não encontrei definição correspondente nos arquivos da obra examinados; equivalência declarada e morte do mutante: [nao verificado]. O contrato permanece expressamente ABERTO. `app/docs/BACKLOG.md:1764`.
-
-Retirada da cerca:
-
-- A lei diretamente aplicável a chamado/pergunta é **L-050**, que declara ausência de fronteira do exportado; para dinheiro e célula devem ser lidas também **L-113**, que altera L-092/L-052, preservando versão anterior do TXT, trilha e DIFF antes de ato de frota. Não usar texto antigo de L-092 isoladamente como proibição absoluta vigente. `app/docs/LEIS.md:91,93,125,150`.
-- A adoção escreve costura/lavra de pergunta, identidade das irmãs, evento e agenda reabertura; nela não aparece escrita de fechamento/exportação/célula. Isso permite afirmar o alcance direto, não garantir efeitos posteriores de resposta/materialização. `app/chamados/models.py:479-524`; `app/chamados/services/fio.py:829-848,878-895`.
-- Célula tem pergunta distinta e juiz próprio: `competencia_fechada_para_celula`; a enumeração de competências chama esse juiz, incluindo o fato do holerite publicado. A remoção da cerca da adoção não remove essa guarda. `app/folha/export.py:578`; `app/ponto/management/commands/gerar_celulas.py:146-174`.
-
-Mapa da folha/TXT útil para consolidação:
-
-| Objeto | Escritores | Leitores |
-|---|---|---|
-| `FechamentoMensal` | Porta `ponto/services/fechamento.py`: cálculo/get-or-create/update, aprovação, reabertura, restauração; registro formal autoriza esse arquivo. `app/ponto/services/fechamento.py:889,1144,1307-1338,1342-1377,1433-1436`; `app/core/portas.py:499` | Montagem TXT consulta os fechamentos gravados e transforma rubricas; aceita objetos derivados fornecidos pelo chamador. `app/folha/export.py:681-713` |
-| `ExportacaoDominio` | `registrar` cria histórico com conteúdo/hash; `invalidar` escreve invalidadores e trilha preservando conteúdo/hash. `app/folha/models.py:143-188`; registro da porta: `app/core/portas.py:504` | `competencia_entregue` lê vigente não invalidada; histórico/vigência e download leem cópia armazenada. `app/folha/export.py:569-575`; `app/folha/models.py:121-137,192-200`; `app/folha/views.py:548-562` |
-| Célula de competência entregue | Guarda separada de regeneração consulta juiz de fechamento para célula. `app/ponto/management/commands/gerar_celulas.py:146-174` | C6 lê célula/ata e tranca para determinar vida; exportação, por si só, não é esse predicado de vida. `app/chamados/juizes.py:919-954,1135-1208` |
-
-Escopo/estoque:
-
-- O contrato inclui os cinco atos, enquanto a medição estática registrada já dizia que abertura só cobre nascimento e deixa perdas posteriores. O corte nomeia `reabrir`, `retratar_duplicata`, validação, morte por leitura e reapontar. `app/docs/PROMPTS.md:1875,1882`; `app/docs/RELATO.md:31`.
-- C20 instala adoção somente no nascimento efetivo e em `reabrir`; cobrança já viva sem nova abertura não recebe esse evento. `app/chamados/models.py:1031-1033,1502`.
-- O cron antigo continua examinando chamados vivos sem pergunta viva e recusando fatos já existentes; ele não foi convertido integralmente em vigia pelo delta mostrado. `app/chamados/management/commands/disparar_perguntas_competencia.py:141-175,211-217`.
-- As quantidades do cabeçalho do teste são alegações históricas, não nova prova de produção. Alcance quantitativo atual nos 494 e equivalência com a amostra de 495: [nao verificado]. `app/chamados/tests/test_c20_fio_mudo.py:15-18`.
-
-## 06/11 01:13 · sessao 794cf64b33f9 · - · - · origem=Ronald (tmux)
-
-- **Alta — confirmação pode pertencer a outro ato.** `tratar_linha` devolve o carimbo protegido pela transação em `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:182`, mas `handle` o substitui por uma consulta posterior, sem trava, em `:253`. Entre ambos, `editar_ausencia_registro` pode preservar identidade/minutos e salvar outra descrição (`app/ponto/services/ausencia.py:496`, `:501`, `:507`, `:508`), gerando outro carimbo (`app/ponto/models.py:814`). O snapshot confirma esse segundo ato (`…rederivar_minutos_h06_comp11.py:254`); a reversão aceita identidade, minutos e carimbo (`:141`, `:148`, `:151`) e restaura os minutos anteriores sobre ele (`:163`). Cura (1) parcial; ocorrência em produção [nao verificado].
-
-- **Média — linha efetivada pode ficar sem confirmação e desaparecer do resultado parcial.** A transação termina ao retornar de `tratar_linha` (`…rederivar_minutos_h06_comp11.py:136`, `:182`); a consulta e a escrita da confirmação vêm depois (`:253`, `:254`), incluindo `write`, `flush` e `fsync` (`:238`, `:239`, `:240`). Se qualquer operação dessa janela falhar, a linha já foi efetivada, mas ainda não entrou em `conta`/`saida` (`:256`, `:257`). O `finally` grava somente `saida` (`:270`), e a reversão exclui fotos sem confirmação (`:225`). Cura (4) cobre as linhas anteriores, não esta janela; falha efetiva em produção [nao verificado].
-
-- **PK repetido — fragilidade condicional.** A confirmação é indexada somente por PK e a última vence (`…rederivar_minutos_h06_comp11.py:219`); todas as fotos desse PK recebem essa confirmação (`:221`, `:225`). Um arquivo duplicado/concatenado pode vincular confirmação à foto errada; existência desse arquivo [nao verificado]. A LISTA normal não repete PK (`:50` a `:80`).
-
-- **Reversão de reversão — sem defeito isolado demonstrado.** O leitor aceita o snapshot de qualquer ato (`…rederivar_minutos_h06_comp11.py:212`, `:225`); para atestado, a foto da primeira reversão inverte novamente os minutos (`:120`, `:123`, `:163`). Proibição desse uso [nao verificado].
-
-- **Fuso — sem contraexemplo normal demonstrado.** Comparação usa `isoformat()` de leituras do banco em ambos os lados (`…rederivar_minutos_h06_comp11.py:151`, `:253`, `:255`); a configuração da cópia habilita `USE_TZ` (`app/config/settings/base.py:95`). Fuso da conexão de produção [nao verificado].
-
-- **`on_commit` — regravação da própria ausência não demonstrada.** O callback de Ausencia chama devolução de perguntas, reconciliação e fechamento de chamados (`app/ponto/signals.py:254`, `:262`, `:269`, `:271`, `:272`). Uma regravação posterior seria absorvida pela consulta do carimbo sem nova conferência de identidade/minutos (`…rederivar_minutos_h06_comp11.py:253`); caminho normal concreto que faça isso [nao verificado].
-
-## 06/11 01:13 · sessao d1db771d57b5 · - · - · origem=Ronald (tmux)
-
-**Achado — alta: o carimbo não acompanha todos os atos.** `mudar_estado` grava status, minutos e outros campos sem incluir `atualizado_em` (`app/ponto/services/ausencia.py:807-819`); `Ausencia.save` repassa `update_fields` ao Django, sem acrescentar o campo (`app/ponto/models.py:868-908`). Rejeitar e reaprová-la pode devolver a ausência à mesma identidade sem mover a testemunha: ambas as transições existem (`app/ponto/services/ausencia.py:754-759`). A reversão compara apenas identidade, minutos e carimbo (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:141-153`). Para concretizar com restauração positiva, usar o atestado admitido pelo cadastro/testes; falta com alvo positivo enfrenta a validação de tipo parcial (`app/ponto/services/ausencia.py:480-484`).
-
-**Escritores que movem o carimbo:**
-
-- Campo `auto_now`, persistido por `save()` completo: `app/ponto/models.py:814`; criação em `app/ponto/services/ausencia.py:418`, edição em `:508`, rederivação do fim em `:1280`.
-- Declaração do período parcial inclui expressamente `atualizado_em`: `app/ponto/services/ausencia.py:875-878`, persistência em `:908-911`.
-- Rejeição em lote de férias escreve `timezone.now()` explicitamente: `app/ponto/services/ausencia.py:1265-1267`.
-- A tela de edição chama o escritor completo: `app/ponto/views.py:2794-2803`; o comando desta obra também: `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:163-164`.
-
-**Atos que não movem o carimbo:**
-
-- Mudança de estado: `app/ponto/services/ausencia.py:807-819`.
-- Prazo recalculado após rejulgamento: `app/ponto/services/ausencia.py:536`.
-- Anexo: `app/ponto/services/ausencia.py:843`.
-- Decisor, data da aprovação e descrição, quando não há declaração do período parcial: `app/ponto/services/ausencia.py:896-911`.
-- Reabertura com documento, descrição ou prazo: `app/ponto/services/ausencia.py:1114`, `:1124`, `:1132`.
-
-**Leitores:**
-
-- Snapshot: `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:123`.
-- Estado completo antes/depois, incluindo o carimbo: `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:94-95`, chamadas em `:160`, `:168`.
-- Guarda da reversão: `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:151-153`.
-- Retorno da transação: `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:182`.
-- Confirmações carregadas do snapshot: `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:219`.
-- Confirmação pós-transação: `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:253-255`.
-- **Outro leitor funcional:** `houve_fato_novo` pergunta se uma ausência mudou no intervalo usando também `atualizado_em`; portanto não é campo consumido somente pela reversão (`app/ponto/services/cartorio.py:330-357`).
-- Exibição no admin somente leitura: `app/ponto/admin.py:37-47`.
-
-## 06/11 01:13 · sessao d90502a41793 · - · - · origem=Ronald (tmux)
-
-- **Corrida com exportação permanece, sem novidade que reabra o escopo excluído.** A cerca consulta a entrega antes do escritor (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:154`, `:164`); o juiz lê `ExportacaoDominio` (`app/folha/export.py:580`). O exportador calcula (`app/folha/views.py:207`), monta (`:268`) e registra a entrega depois (`:297`; `app/folha/models.py:178`). A trava de `Ausencia` do comando (`rederivar_minutos_h06_comp11.py:137`) não serializa esse registro. Gravidade potencial **alta**; ocorrência em produção [nao verificado].
-
-- **Push anterior ao rollback continua tecnicamente possível.** O escritor executa `save()` (`app/ponto/services/ausencia.py:508`), cujo receiver chama o cartório sincronamente (`app/ponto/signals.py:143`, `:93`). O cartório pode chamar o emissor (`app/ponto/services/cartorio.py:1740`, `:1778`), que envia push diretamente (`app/ponto/management/commands/detectar_ausencias.py:778`). As conferências que podem desfazer a linha vêm depois (`rederivar_minutos_h06_comp11.py:169`, `:180`). O descarte é aceite residual; o delta não cura o efeito externo. Gravidade **média**; condições concretas para emissão nas 30 linhas [nao verificado].
-
-- **Não encontrei regravação da mesma `Ausencia` pelo `on_commit` rastreado.** O callback chama devolução de perguntas, reconciliação e fechamento de chamados (`app/ponto/signals.py:254`). A devolução só atua para rejeitada (`app/chamados/services/materializacao.py:638`); a cascata de fechamento chama `materializar_pendentes_aprovadas` (`app/chamados/signals.py:139`), que carimba perguntas (`app/chamados/services/materializacao.py:1343`). É diferente de `materializar_perguntas_validadas_da_disputa`, que pode produzir ausência (`:1274`, `:1300`). Um caminho que regrave a mesma ausência nesse callback [nao verificado].
-
-- **Exceções usuais dos serviços do callback direto são engolidas.** Os três serviços estão em blocos `engolir` (`app/ponto/signals.py:260`, `:263`). A janela concreta de exceção pós-commit continua na consulta e escrita da confirmação do comando (`rederivar_minutos_h06_comp11.py:253`, `:254`).
-
-_2076 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2080 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
