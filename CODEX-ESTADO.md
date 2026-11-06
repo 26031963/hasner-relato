@@ -1,7 +1,162 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 18:25** · publicado em **06/11/2026 18:25** (UTC-3)
+> Ultima resposta processada: **06/11/2026 18:26** · publicado em **06/11/2026 18:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 18:26 · sessao eeb4262ba705 · DIA-SEM-TRABALHO-NA-FRENTE · sonda · origem=Code
+
+**1) Transcrição literal**
+
+Fonte deste bloco: o dado raspado da mensagem, sem arquivo numerado disponível para conferência [nao verificado]. Preservei os exemplos existentes; os grupos menores não trazem três exemplos. Não há linha `CONCLUSAO` no texto recebido: há `INCOMPLETO: 100 erros` [nao verificado].
+
+```text
+U_D_BASE sem_porta classe d n=217 omitidos=0
+U_D n=173 (CAUSA-D 11:2x: 165+5=170) fora={'BATIDA': 3, 'CADASTRO': 14, 'ESTRUTURA_mas_dia_de_trabalho': 27}
+U_A n=170 (chat 17:4x PROD: 175) | INTERSECAO mesmo colab+dia=0 | so_D=173 so_A=170 | UNIAO=343
+LINHAS 343 == UNIAO 343 True
+QUADRO (por_que, batidas, porta, status pede decisao?, segura folha?) -- soma=343
+GRUPO|n=156|folga_do_calendario ; batERRO ; sem_porta ; nao_pede(folga) ; segura|dono={'ESTRUTURA': 156}|em={'D': 156}
+   ex col144 2026-09-21 clausula=trabalha_False fer=False/True/False aus=[] n_bat=ERRO orfas=0 porta=None status=folga resolver=False comp=10/2026
+   ex col144 2026-09-23 clausula=trabalha_False fer=False/True/False aus=[] n_bat=ERRO orfas=0 porta=None status=folga resolver=False comp=10/2026
+   ex col144 2026-09-25 clausula=trabalha_False fer=False/True/False aus=[] n_bat=ERRO orfas=0 porta=None status=folga resolver=False comp=10/2026
+GRUPO|n=126|folga_do_calendario ; batERRO ; sem_porta ; nao_pede(folga_trabalhada) ; nao_segura|dono={'BATIDA': 27, 'CADASTRO': 71, 'ESTRUTURA': 28}|em={'A': 126}
+   ex col49 2026-11-04 clausula=trabalha_False fer=False/True/False aus=[] n_bat=ERRO orfas=1 porta=None status=folga_trabalhada resolver=False comp=11/2026
+   ex col60 2026-11-03 clausula=trabalha_False fer=False/True/False aus=[] n_bat=ERRO orfas=3 porta=None status=folga_trabalhada resolver=False comp=11/2026
+   ex col60 2026-11-05 clausula=trabalha_False fer=False/True/False aus=[] n_bat=ERRO orfas=3 porta=None status=folga_trabalhada resolver=False comp=11/2026
+GRUPO|n=30|feriado_sem_trabalha_em_feriado ; batERRO ; sem_porta ; nao_pede(folga_trabalhada) ; nao_segura|dono={'CADASTRO': 22, 'ESTRUTURA': 7, 'BATIDA': 1}|em={'A': 30}
+   ex col43 2026-11-02 clausula=trabalha_False fer=True/False/True aus=[] n_bat=ERRO orfas=2 porta=None status=folga_trabalhada resolver=False comp=11/2026
+   ex col203 2026-11-02 clausula=trabalha_False fer=True/False/True aus=[] n_bat=ERRO orfas=4 porta=None status=folga_trabalhada resolver=False comp=11/2026
+   ex col207 2026-11-02 clausula=trabalha_False fer=True/False/True aus=[] n_bat=ERRO orfas=2 porta=None status=folga_trabalhada resolver=False comp=11/2026
+GRUPO|n=8|feriado_trab_feriado_True_mas_folga ; batERRO ; sem_porta ; nao_pede(folga) ; segura|dono={'ESTRUTURA': 8}|em={'D': 8}
+   ex col144 2026-11-02 clausula=trabalha_False fer=True/True/False aus=[] n_bat=ERRO orfas=0 porta=None status=folga resolver=False comp=11/2026
+   ex col209 2026-11-02 clausula=trabalha_False fer=True/True/False aus=[] n_bat=ERRO orfas=0 porta=None status=folga resolver=False comp=11/2026
+   ex col268 2026-11-02 clausula=trabalha_False fer=True/True/False aus=[] n_bat=ERRO orfas=0 porta=None status=folga resolver=False comp=11/2026
+GRUPO|n=5|ausencia_lancada ; batERRO ; sem_porta ; pede ; segura|dono={'ESTRUTURA': 5}|em={'D': 5}
+   ex col137 2026-11-03 clausula=ata_tipo_dia=ausencia fer=False/True/False aus=[(4851, 'reciclagem', 'por_outro', 'sem_chamado')] n_bat=ERRO orfas=0 porta=None status=irregular resolver=False comp=11/2026
+   ex col137 2026-11-05 clausula=ata_tipo_dia=ausencia fer=False/True/False aus=[(4851, 'reciclagem', 'por_outro', 'sem_chamado')] n_bat=ERRO orfas=0 porta=None status=irregular resolver=False comp=11/2026
+   ex col292 2026-10-22 clausula=ata_tipo_dia=ausencia fer=False/True/False aus=[(5110, 'atestado', 'por_outro', 'sem_chamado')] n_bat=ERRO orfas=0 porta=None status=irregular resolver=False comp=11/2026
+GRUPO|n=5|feriado_trab_feriado_True_mas_folga ; batERRO ; sem_porta ; nao_pede(folga_trabalhada) ; nao_segura|dono={'ESTRUTURA': 1, 'BATIDA': 1, 'CADASTRO': 3}|em={'A': 5}
+   ex col366 2026-11-02 clausula=trabalha_False fer=True/True/False aus=[] n_bat=ERRO orfas=1 porta=None status=folga_trabalhada resolver=False comp=11/2026
+   ex col788 2026-11-02 clausula=trabalha_False fer=True/True/False aus=[] n_bat=ERRO orfas=8 porta=None status=folga_trabalhada resolver=False comp=11/2026
+   ex col868 2026-11-02 clausula=trabalha_False fer=True/True/False aus=[] n_bat=ERRO orfas=1 porta=None status=folga_trabalhada resolver=False comp=11/2026
+GRUPO|n=3|ata_tipo_dia_folga_sem_ausencia_cobrindo ; batERRO ; sem_porta ; nao_pede(escala_suspeita) ; segura|dono={'CADASTRO': 3}|em={'A': 3}
+   ex col97 2026-11-03 clausula=ata_tipo_dia=folga fer=False/None/None aus=[] n_bat=ERRO orfas=1 porta=None status=escala_suspeita resolver=False comp=11/2026
+   ex col97 2026-11-05 clausula=ata_tipo_dia=folga fer=False/None/None aus=[] n_bat=ERRO orfas=1 porta=None status=escala_suspeita resolver=False comp=11/2026
+   ex col741 2026-11-05 clausula=ata_tipo_dia=folga fer=False/None/None aus=[] n_bat=ERRO orfas=2 porta=None status=escala_suspeita resolver=False comp=11/2026
+GRUPO|n=2|folga_do_calendario ; batERRO ; sem_porta ; pede ; segura|dono={'ESTRUTURA': 2}|em={'D': 2}
+   ex col348 2026-10-24 clausula=trabalha_False fer=False/True/False aus=[] n_bat=ERRO orfas=0 porta=None status=irregular resolver=False comp=11/2026
+   ex col348 2026-10-31 clausula=trabalha_False fer=False/True/False aus=[] n_bat=ERRO orfas=0 porta=None status=irregular resolver=False comp=11/2026
+GRUPO|n=2|ata_tipo_dia_folga_sem_ausencia_cobrindo ; batERRO ; porta ; nao_pede(escala_suspeita) ; segura|dono={'CADASTRO': 2}|em={'A': 2}
+   ex col741 2026-11-03 clausula=ata_tipo_dia=folga fer=False/None/None aus=[] n_bat=ERRO orfas=1 porta=porta_pergunta status=escala_suspeita resolver=False comp=11/2026
+   ex col866 2026-11-04 clausula=ata_tipo_dia=folga fer=False/None/None aus=[] n_bat=ERRO orfas=2 porta=porta_pergunta status=escala_suspeita resolver=False comp=11/2026
+GRUPO|n=1|ata_tipo_dia_folga_sem_ausencia_cobrindo ; batERRO ; sem_porta ; pede ; segura|dono={'CADASTRO': 1}|em={'A': 1}
+   ex col741 2026-11-01 clausula=ata_tipo_dia=folga fer=False/None/None aus=[] n_bat=ERRO orfas=1 porta=None status=aberto resolver=False comp=11/2026
+GRUPO|n=1|ata_tipo_dia_folga_sem_ausencia_cobrindo ; batERRO ; sem_porta ; pede ; nao_segura|dono={'CADASTRO': 1}|em={'A': 1}
+   ex col866 2026-10-21 clausula=ata_tipo_dia=folga fer=False/None/None aus=[] n_bat=ERRO orfas=1 porta=None status=aberto resolver=False comp=11/2026
+GRUPO|n=1|ata_tipo_dia_folga_sem_ausencia_cobrindo ; batERRO ; porta ; pede ; segura|dono={'CADASTRO': 1}|em={'A': 1}
+   ex col866 2026-11-02 clausula=ata_tipo_dia=folga fer=False/None/None aus=[] n_bat=ERRO orfas=1 porta=porta_pergunta status=aberto resolver=False comp=11/2026
+GRUPO|n=1|ausencia_lancada_pelo_colab ; batERRO ; sem_porta ; pede ; segura|dono={'ESTRUTURA': 1}|em={'D': 1}
+   ex col889 2026-10-25 clausula=ata_tipo_dia=ausencia fer=False/True/False aus=[(4670, 'atestado', 'pelo_colab', 'sem_chamado')] n_bat=ERRO orfas=0 porta=None status=irregular resolver=False comp=11/2026
+GRUPO|n=1|feriado_sem_trabalha_em_feriado ; batERRO ; sem_porta ; nao_pede(folga) ; segura|dono={'ESTRUTURA': 1}|em={'D': 1}
+   ex col969 2026-10-12 clausula=trabalha_False fer=True/False/True aus=[] n_bat=ERRO orfas=None porta=None status=folga resolver=False comp=10/2026
+GRUPO|n=1|folga_do_calendario ; batERRO ; sem_porta ; nao_pede(ok) ; nao_segura|dono={'BATIDA': 1}|em={'A': 1}
+   ex col975 2026-11-01 clausula=trabalha_False fer=False/True/False aus=[] n_bat=ERRO orfas=2 porta=None status=ok resolver=False comp=11/2026
+MARGINAL|POR_QUE|{'feriado_sem_trabalha_em_feriado': 31, 'folga_do_calendario': 285, 'ata_tipo_dia_folga_sem_ausencia_cobrindo': 8, 'ausencia_lancada': 5, 'feriado_trab_feriado_True_mas_folga': 13, 'ausencia_lancada_pelo_colab': 1}
+MARGINAL|BAT|{'ERRO': 343}
+MARGINAL|PORTA|{None: 340, 'porta_pergunta': 3}
+MARGINAL|STATUS|{'folga_trabalhada': 161, 'escala_suspeita': 5, 'irregular': 8, 'folga': 165, 'aberto': 3, 'ok': 1}
+MARGINAL|PEDE_DECISAO|{False: 332, True: 11}
+MARGINAL|RESOLVER_DIA|{False: 343}
+MARGINAL|SEGURA|{False: 163, True: 180}
+MARGINAL|DONO|{'CADASTRO': 104, 'BATIDA': 30, 'ESTRUTURA': 209}
+MARGINAL|EM|{'A': 170, 'D': 173}
+MARGINAL|CLAUSULA|{'trabalha_False': 329, 'ata_tipo_dia=folga': 8, 'ata_tipo_dia=ausencia': 6}
+D_FOLGA_TRABALHADA n=161 com_bat=0 sem_porta=161 resolver_dia_True=0 (STATUS_QUE_PEDEM_DECISAO inclui? False)
+C444 {'col': 'col444', 'dia': '2026-10-25', 'emp': 2, 'em': 'A', 'clausula': 'trabalha_False', 'tipo_dia_ata': 'folga', 'feriado': False, 'trab_feriado': True, 'fer_vira_folga': False, 'aus': [], 'por_que': 'folga_do_calendario', 'n_bat': 'ERRO', 'n_orfas': 4, 'porta': None, 'status': 'folga_trabalhada', 'status_pede_decisao': False, 'resolver_dia': False, 'segura': False, 'comp': '11/2026', 'dono': 'ESTRUTURA'}
+ERRO|dia_das_batidas|col43|2026-11-02|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col49|2026-11-04|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col60|2026-11-03|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col69|2026-10-25|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col97|2026-11-02|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col123|2026-11-05|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col130|2026-10-30|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col137|2026-11-03|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col144|2026-09-21|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col203|2026-11-02|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col207|2026-11-02|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col209|2026-09-21|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col211|2026-10-24|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col227|2026-11-03|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col242|2026-11-02|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col268|2026-09-21|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col270|2026-10-22|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col278|2026-11-02|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col282|2026-11-01|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col292|2026-10-22|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col300|2026-10-24|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col301|2026-10-22|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col312|2026-09-21|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col328|2026-10-22|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col348|2026-10-24|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col354|2026-10-30|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col366|2026-10-27|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col369|2026-11-02|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col373|2026-10-21|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERRO|dia_das_batidas|col384|2026-11-02|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
+ERROS {'dia_das_batidas:TypeError': 100}
+INCOMPLETO: 100 erros
+rc_sombra=0
+```
+
+**2) Funções, contratos e decisões da sonda**
+
+O corpo de `sonda_dst.py` não está disponível no material consultável; sua identificação/hash na saída não permite conferir suas chamadas. Portanto, os argumentos efetivamente passados a **cada uma** das funções abaixo são [nao verificado].
+
+| Função e localização | Contrato documentado/implementado | Sonda cumpre? |
+|---|---|---|
+| `dia_sem_trabalho(cel)` — `app/chamados/juizes.py:413-428` | Recebe célula; lê `trabalha` e `ata`. Ausência parcial tem tratamento próprio. | [nao verificado] |
+| `censo_alcance(empresas=None, hoje=None, limite=50, lista=None)` — `app/chamados/services/vigia_fio.py:542-554` | Censo de dias retidos sem porta; `empresas=None` usa empresas visíveis. `limite` não corta os dias sem porta. | [nao verificado] |
+| `InsumosDoDono.dono(self, data)` — `app/ponto/management/commands/e6_oraculo.py:172-183` | Recebe a data; utiliza os insumos da instância. O construtor recebe colaborador, `ini`, `fim`, `hoje` e exige `agora=` — `:113-145`. | [nao verificado] |
+| `dia_das_batidas(colab, ini, fim, turnos=None)` — `app/ponto/turnos.py:2874-2897` | Janela apresentada; `turnos=` é alimentação. Retorna **`{batida.pk: date}`**, não contagem. | [nao verificado] |
+| `dias_da_ausencia(tipo, data, data_fim, ini, fim)` — `app/ponto/turnos.py:2774-2790` | Retorna datas no intervalo fechado; ausência sem fim estende até `fim` somente para `TIPOS_EM_ABERTO`. | [nao verificado] |
+| `porta_alcancavel_do_dia(celula_id, *, alimentacao=None)` — `app/chamados/juizes.py:1341-1370` | Recebe **ID da célula**; alimentação opcional vem de `alimentar_portas(lote)`. Retorna `None` ou dicionário de rota/fila/verbos/fio. | [nao verificado] |
+| `status_dos_dias_lavrados(pares, *, agora=None, carga=None, fatos=None)` — `app/ponto/status_dia.py:221-247` | Pares `(colaborador, data)`; carga opcional deve conter pessoas e datas; `fatos` somente com carga. Validações em `:259-267`. | [nao verificado] |
+| `resolver_dia_oferecido_nas_datas(colaborador, datas)` — `app/colaboradores/services/calendario.py:117-138` | Datas de um mesmo colaborador; retorna `{date: bool}` lendo o calendário. Dia ausente do calendário responde `False`. | [nao verificado] |
+| `o_que_segura(colab, mes, ano)` — `app/folha/fora_da_folha.py:203-231` | Recebe colaborador e competência; retorna dicionário com os dias retidos e seus motivos/fios. | [nao verificado] |
+| `competencia_do_fato(colaborador, quando)` — `app/ponto/services/fechamento.py:1586-1588` | Fato de um dia; retorna `(mes, ano)`. Normaliza `date`/`datetime` pelo caminho `:1542-1583`. | [nao verificado] |
+
+O erro impresso comprova apenas a mensagem de comparação entre `date` e `datetime`; sem a chamada e o traceback, atribuí-lo definitivamente a argumentos errados da sonda seria [nao verificado]. O código chama o pareador quando `turnos` não foi alimentado e contém comparação de datas de segmento com `data_turno`. (`app/ponto/turnos.py:2900-2905,1990-1993`)
+
+**`com_bat=0` não comprova “zero batidas”**: a própria saída registra `MARGINAL|BAT|{'ERRO': 343}`; a contagem correta das batidas permanece [nao verificado].
+
+Quanto às decisões próprias:
+
+- **`por_que`:** a implementação e sua ordem de precedência são [nao verificado]. O juiz existente não devolve esses motivos: devolve um booleano por `trabalha is False` ou tipo de ata preenchido diferente de `trabalho`, com exceção para cobertura parcial. Tratar os nomes impressos como causas oficiais extrapolaria esse contrato. (`app/chamados/juizes.py:413-428`)
+- **`folga_do_calendario`:** `trabalha=False`, isoladamente, não documenta a causa da folga; o próprio código explica que a célula guarda esse booleano sem guardar o porquê. O rótulo pode servir ao agrupamento, mas sua derivação pela sonda é [nao verificado]. (`app/escala/models.py:1373-1384`)
+- **Os dois rótulos de feriado:** `trabalha_em_feriado=True` pode coexistir com folga; essa flag impede a transformação por feriado, mas não transforma uma folga já existente em trabalho. Portanto, o nome `feriado_trab_feriado_True_mas_folga` não demonstra contradição. A regra completa também considera ciclo e lugar do vínculo; um teste apenas da flag seria insuficiente. (`app/escala/models.py:1367-1371,1382-1395`)
+- **`ausencia_lancada` e `ata_tipo_dia_folga_sem_ausencia_cobrindo`:** a ata não laboral já participa do juiz; a lista de ausências não é requisito adicional desse predicado. Se a sonda usa essa lista somente para subdividir os resultados, é agrupamento; se redecide o booleano com ela, a equivalência é [nao verificado]. (`app/chamados/juizes.py:422-428`)
+- **`pelo_colab`:** já existe teste de identidade entre o colaborador de `registrado_por` e o colaborador da ausência. Se a sonda compara `registrado_por_id` com `colab.usuario_id`, repete essa identidade; a comparação efetivamente escrita é [nao verificado]. Essa identidade não prova origem via disputa nem aprovação. (`app/ponto/services/ausencia.py:627-631`; `app/colaboradores/models.py:351`; `app/chamados/services/materializacao.py:495-528`)
+
+**3) Guarda do emissor, outros escritores e leitores da constante**
+
+`motivos_a_perguntar` executa nesta ordem:
+
+1. Recusa por `dia_sem_trabalho(cel)`; somente se falso, pelo curto-circuito do `or`, verifica colaborador diferente de `ativo`. (`app/chamados/services/fabrica_da_celula.py:89-92`)
+2. Recusa data futura. (`app/chamados/services/fabrica_da_celula.py:93-94`)
+3. Obtém `agora`, calcula marcos vencidos e recusa veredito preenchido fora de `VEREDITOS_ACUSAM`. (`app/chamados/services/fabrica_da_celula.py:95-100`)
+4. Recusa ausência parcial destinada somente à lista administrativa, por `parcial_so_lista`. (`app/chamados/services/fabrica_da_celula.py:101-104`)
+5. Carrega perguntas existentes, exclui duplicatas e devolve somente motivos ainda não perguntados. O cálculo dos motivos aplica o conjunto de marcos vencidos e as guardas de ata. (`app/chamados/services/fabrica_da_celula.py:118-126,45-64`)
+
+Para as linhas cuja cláusula impressa é `trabalha_False`, **a primeira guarda basta**, independentemente de o status ser `folga_trabalhada`. (`app/chamados/juizes.py:428`; `app/chamados/services/fabrica_da_celula.py:91-92`; correspondência efetiva das células com a impressão: [nao verificado])
+
+**Sim, existem caminhos fora dessa fábrica que podem criar chamado da célula ou pergunta:**
+
+- **Chamado da célula:** a abertura administrativa aceita tipo catalogado e data do fato; por exemplo, `ausencia_colab` tem escopo DIA e chave `data`. A criação resolve a célula por colaborador/data. As guardas dessa criação não constituem proibição universal de `folga_trabalhada`. (`app/chamados/services/abertura.py:147-153,172-192`; `app/chamados/catalogo/modulos.py:120-122`; `app/chamados/models.py:1026-1039,1073-1076,1097-1106,1193-1201`)
+- **Pergunta por batida em folga:** o detector devolve anomalia grave quando a escala diz folga; a API encaminha o motivo à disputa; o helper gera perguntas. A data é extraída do contexto e `PerguntaDisputa.abrir` associa a célula daquele colaborador/data, sem consultar `dia_sem_trabalho` nesse nascimento. (`app/chamados/detector_anomalias.py:164-175`; `app/api/views_core.py:725-730,771-780`; `app/chamados/services/disputa_emissao.py:350-366,389-397,598-618`; `app/chamados/models.py:2428-2430,2476-2477`)
+
+**Nascer não basta para constituir porta alcançável:** o chamado precisa estar na fila; pela pergunta, ela precisa estar viva, no app e sob âncora na fila. Uma pergunta
+
+[truncado em 20000 de 22672 caracteres]
 
 ## 06/11 18:25 · sessao 2da3cfdb4a00 · PAUTA-08 · verificador · origem=Code
 
@@ -843,67 +998,4 @@ Caminhos comprovados no código:
 
 Cuidado ao citar comentários como regra executável: há comentários antigos dizendo “feriado previsto não dobra” em `app/ponto/motor_calculo_v2.py:2807` e `app/ponto/motor_calculo_v2.py:3088-3091`, mas o predicado efetivamente chamado em `app/ponto/motor_calculo_v2.py:934` não consulta previsto; consulta apenas o flag de dobra e o feriado.
 
-## 06/11 17:59 · sessao 837afbd0fb35 · E-SEM-VIVA-B · verificador · origem=Code
-
-**As curas de produção estão corretas para os alvos apontados; a certificação continua parcial.** O filtro exige `furo_espelho`, o positivo corrente cobre a competência antes ausente e o corpo da C5 continua lendo a lavra, sem consultar demissão, admissão ou retentor. `app/escala/services/cadastro_realidade.py:179`, `app/escala/services/cadastro_realidade.py:185`, `app/escala/services/cadastro_realidade.py:189`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:217`.
-
-Execução da suíte Django, sobrevivência dos mutantes à suíte integral e ocorrência dos cenários em produção: **[nao verificado]**. [nao verificado]
-
-1. **MÉDIA — falta uma prova da fronteira inferior, inclusive para “ativo nunca-bateu igual”.**
-
-   O mutante plausível que remove `data__gte=janelas[0][0]` deixa passar dias anteriores à janela. Por inspeção, os testes novos não o distinguem: suas células começam depois dessa fronteira, inclusive no corte 10. O teste do vigia com `hoje=01/09` continua excluindo 01/10 pelo limite **superior**. `app/escala/services/cadastro_realidade.py:176`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:33`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:250`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:264`, `app/folha/tests/test_vigia_retido_calado.py:133`.
-
-   **Como provar:** ativo, corte 21, `hoje=25/10`, células `nunca_bateu` em 20/09 e 21/09; exigir somente 21/09. Remover o filtro inclui ambas; trocar `gte` por `gt` exclui ambas. Esse cenário distingue duas regressões na regra dos ativos. `app/ponto/janelas.py:10`, `app/ponto/janelas.py:66`, `app/escala/services/cadastro_realidade.py:175`.
-
-2. **BAIXA — a cura do selo ORM é correta, mas não completa.**
-
-   O detector agora encontra `filter(data_demissao__isnull=False)`. Ainda ignora `filter(**{'data_demissao__isnull': False})`, porque a expansão tem `k.arg=None`, descartado pelo próprio filtro do AST. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:327`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:357`.
-
-   **Como provar:** inserir essa expansão na consulta de desligados e executar `_veredito`: o campo fica fora de `campos`, satisfazendo indevidamente o selo. A sonda AST em memória confirmou isso; não significa sobrevivência comportamental, pois o novo teste de cadastro torto combate essa alteração específica. `app/escala/services/cadastro_realidade.py:179`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:227`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:335`.
-
-   A chamada descartada à porta também continua suficiente para a exigência positiva do AST. Os testes de ausência de retrato e divergência lavra/vivo combatem a recomposição simples, mas o selo não certifica fluxo de dados. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:154`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:160`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:317`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:332`.
-
-3. **BAIXA — descarte 1 defensável como CADASTRO; documentação ainda contraditória.**
-
-   Com fechamento preexistente, retirar `data_demissao` não impede a nova lavra: `_K2` lê os fechamentos existentes, rescisão responde falso para data nula e o retentor não recorta o fim. A C5 acompanha essa resposta. O teste novo reproduz corretamente o histórico e exige igualdade com a autoridade. Isso sustenta retirar o caso da correção local da C5, sem criar predicado paralelo. `app/folha/export.py:775`, `app/folha/export.py:60`, `app/folha/export.py:1200`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:227`, `app/escala/services/cadastro_realidade.py:189`.
-
-   Entretanto, “sem `data_demissao` = fora” permanece escrito antes da ressalva sobre fechamento antigo. O primeiro enunciado precisa da condição de ausência de fechamento preexistente. `app/escala/services/cadastro_realidade.py:148`, `app/escala/services/cadastro_realidade.py:151`.
-
-   **Como provar:** `_fechar()`, apagar a demissão, `_lavrar()`, consultar C5 — exatamente o histórico agora exercitado pelo teste. Uma obrigação adicional de excluir data nula pelo aval literal fornecido é **[nao verificado]**; o código atual não faz essa exclusão. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:228`, `app/escala/services/cadastro_realidade.py:179`.
-
-4. **MÉDIA — descarte 3 sustenta a separação de escopo, mas a perda de competência permanece.**
-
-   O vigia declara unidade **pessoa** e transforma C5 em conjunto de IDs. Portanto, a triagem pode tratar isso como granularidade preexistente; não pode concluir que o roteamento respeita a competência de cada linha. `app/folha/vigia_retido_calado.py:12`, `app/folha/vigia_retido_calado.py:43`, `app/folha/vigia_retido_calado.py:48`.
-
-   **Como provar:** hoje 25/10, corte 21, desligado com demissão 25/11, fechamentos 10 e 11, `nunca_bateu` em 05/10 e vínculo cobrindo 21–24/10 sem células. A anterior pode ser retida pelo `nunca_bateu`; a corrente, por `sem_celula`, sem porta e com fio `ninguem`. C5 contém somente 05/10, mas o vigia roteia ambas as linhas pelo mesmo ID. O aval por dias/competência não fica demonstrado por esse contador. `app/folha/export.py:1231`, `app/folha/export.py:1233`, `app/folha/fora_da_folha.py:67`, `app/folha/fora_da_folha.py:86`, `app/folha/retrato_folha.py:1186`, `app/escala/services/cadastro_realidade.py:175`, `app/folha/vigia_retido_calado.py:48`.
-
-5. **MÉDIA — descarte 4 correto para empresa sem lavra na tela; insuficiente para retrato histórico no vigia.**
-
-   A tela e o lavrador usam `empresas_visiveis`, sustentando o descarte no caminho apresentado. Mas “sem lavra não tem folha” não vale para a autoridade viva: `_K2` consulta fechamentos diretamente. `app/escala/views.py:487`, `app/folha/management/commands/lavrar_retrato_folha.py:49`, `app/folha/export.py:775`.
-
-   **Como provar o caminho residual:** lavrar uma empresa visível com C5 positiva e depois alterar somente `Empresa.ativa=False`. O lavrador deixa de atualizá-la; `censo([id])` ainda lê seu retrato histórico, C5 ainda aceita empresa/retrato e o vigia pode declarar `roteados`. A tela já exclui essa empresa. Logo, pode haver “roteado para a lista” sem presença na lista acessível. `app/colaboradores/queries.py:85`, `app/folha/management/commands/lavrar_retrato_folha.py:49`, `app/folha/vigia_retido_calado.py:35`, `app/folha/vigia_retido_calado.py:38`, `app/escala/services/cadastro_realidade.py:171`, `app/escala/services/cadastro_realidade.py:185`, `app/folha/vigia_retido_calado.py:48`, `app/escala/views.py:487`.
-
-6. **SEM DEFEITO NOVO IDENTIFICADO — filtro de motivo e sua origem.**
-
-   O caminho normal atual sustenta a cura: somente IDs classificados como `furo_espelho` alimentam os dias de `dias_que_seguram`; férias terminam em outro ramo e fornecem outra lista. Não identifiquei, nesse caminho, outro motivo com datas dessa fonte nem furo com datas de férias. `app/folha/fora_da_folha.py:128`, `app/folha/fora_da_folha.py:137`, `app/folha/export.py:876`, `app/folha/retrato_folha.py:1171`, `app/folha/retrato_folha.py:1175`.
-
-   | Quem escreve/lê | Caminho |
-   |---|---|
-   | Decide `motivo='furo_espelho'` | `classificar_export`. `app/folha/export.py:962`. |
-   | Produz suas datas | Retentor → `dias_que_seguram` → conversão ISO em `fora_da_folha`. `app/folha/fora_da_folha.py:98`, `app/folha/fora_da_folha.py:137`, `app/folha/fora_da_folha.py:192`. |
-   | Monta e persiste o JSON | `montar_linhas` copia motivo/datas; command grava. `app/folha/retrato_folha.py:1181`, `app/folha/retrato_folha.py:1183`, `app/folha/management/commands/lavrar_retrato_folha.py:74`. |
-   | Compara literalmente furo no retrato | Nova C5; derivações de fio e tipo. `app/escala/services/cadastro_realidade.py:189`, `app/folha/retrato_folha.py:366`, `app/folha/retrato_folha.py:380`. |
-   | Outros leitores de motivo | Balde, saldo, ação/drawer, apresentação e recorte temporal. `app/folha/retrato_folha.py:93`, `app/folha/retrato_folha.py:501`, `app/folha/retrato_folha.py:1062`, `app/folha/views_retrato.py:285`, `app/folha/retrato_folha.py:1240`. |
-   | Vigia | Lê indiretamente pelo balde e fio. `app/folha/vigia_retido_calado.py:46`, `app/folha/vigia_retido_calado.py:47`. |
-
-   Essa garantia não certifica qualquer JSON histórico: o modelo prevê retratos sem `datas` e declara `linhas` como JSON sem esquema de conteúdo. Conteúdo divergente em produção: **[nao verificado]**. `app/folha/models.py:332`, `app/folha/models.py:348`.
-
-7. **SEM RELÓGIO SOLTO IDENTIFICADO nos testes novos/alterados; curas específicas com mordida adequada.** [nao verificado]
-
-   Os comportamentais estão congelados por classe; os testes AST analisam texto. O positivo corrente distingue `janelas[:1]`, e o negativo de férias distingue a retirada do filtro de motivo. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:90`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:243`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:256`, `app/folha/tests/test_vigia_retido_calado.py:69`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:217`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:210`.
-
-   O teste do command prova repasse de `hoje`, mas não unicidade da leitura do relógio: uma segunda chamada a `localdate()` não violaria suas asserções. O command atual contém uma leitura. `app/folha/tests/test_vigia_retido_calado.py:140`, `app/folha/tests/test_vigia_retido_calado.py:143`, `app/folha/management/commands/vigiar_retido_calado.py:31`.
-
-   Não identifiquei push novo nos trechos alterados: C5 monta retorno/link; vigia conta; command imprime/alarma. `app/escala/services/cadastro_realidade.py:201`, `app/escala/services/cadastro_realidade.py:657`, `app/folha/vigia_retido_calado.py:44`, `app/folha/management/commands/vigiar_retido_calado.py:31`.
-
-_2395 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2396 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
