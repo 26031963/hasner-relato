@@ -1,7 +1,84 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 11:56** · publicado em **06/11/2026 11:57** (UTC-3)
+> Ultima resposta processada: **06/11/2026 12:02** · publicado em **06/11/2026 12:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 12:02 · sessao d715f789926a · - · - · origem=Ronald (tmux)
+
+Conteúdo dos arquivos de prova. O lançamento retornou `rc=0`; a sobrevivência do processo permanece [nao verificado].
+
+[prova/1_viva.out:1](/home/ronald/wt-codex-provaefeito-115741/app/prova/1_viva.out:1)
+```text
+/bin/bash: line 3: /home/ronald/saas-hasner/INTRUSO_VIVA_C.txt: Read-only file system
+rc=1
+```
+
+[prova/2_tmp.out:1](/home/ronald/wt-codex-provaefeito-115741/app/prova/2_tmp.out:1)
+```text
+/bin/bash: line 4: /tmp/INTRUSO_TMP_C.txt: Read-only file system
+rc=1
+```
+
+[prova/2b_tmpdir.out:1](/home/ronald/wt-codex-provaefeito-115741/app/prova/2b_tmpdir.out:1)
+```text
+/bin/bash: line 5: /tmp/INTRUSO_TMPDIR_C.txt: Read-only file system
+rc=1 TMPDIR=
+```
+
+[prova/3_git.out:1](/home/ronald/wt-codex-provaefeito-115741/app/prova/3_git.out:1)
+```text
+/bin/bash: line 6: /home/ronald/saas-hasner/.git/INTRUSO_GIT_C.txt: Read-only file system
+rc=1
+```
+
+[prova/3b_commit.out:1](/home/ronald/wt-codex-provaefeito-115741/app/prova/3b_commit.out:1)
+```text
+fatal: Unable to create '/home/ronald/saas-hasner/.git/worktrees/wt-codex-provaefeito-115741/index.lock': Read-only file system
+rc=128
+```
+
+[prova/4_raiz.out:1](/home/ronald/wt-codex-provaefeito-115741/app/prova/4_raiz.out:1)
+```text
+/bin/bash: line 8: /home/ronald/wt-codex-provaefeito-115741/INTRUSO_RAIZ_WT.txt: Read-only file system
+rc=1
+```
+
+[prova/5_home.out:1](/home/ronald/wt-codex-provaefeito-115741/app/prova/5_home.out:1)
+```text
+/bin/bash: line 9: /home/ronald/INTRUSO_HOME_C.txt: Read-only file system
+rc=1
+```
+
+[prova/6_docker.out:1](/home/ronald/wt-codex-provaefeito-115741/app/prova/6_docker.out:1)
+```text
+permission denied while trying to connect to the docker API at unix:///var/run/docker.sock
+rc=1
+```
+
+[prova/6b_sock.out:1](/home/ronald/wt-codex-provaefeito-115741/app/prova/6b_sock.out:1)
+```text
+rc=7
+```
+
+[prova/7_tcp_local.out:1](/home/ronald/wt-codex-provaefeito-115741/app/prova/7_tcp_local.out:1)
+```text
+bash: socket: Operation not permitted
+bash: line 1: /dev/tcp/127.0.0.1/22: Operation not permitted
+rc=1
+```
+
+[prova/7b_tcp_ext.out:1](/home/ronald/wt-codex-provaefeito-115741/app/prova/7b_tcp_ext.out:1)
+```text
+bash: socket: Operation not permitted
+bash: line 1: /dev/tcp/1.1.1.1/443: Operation not permitted
+rc=1
+```
+
+[prova/8_sobrevive.out:1](/home/ronald/wt-codex-provaefeito-115741/app/prova/8_sobrevive.out:1)
+```text
+lancado
+rc=0
+```
 
 ## 06/11 11:56 · sessao f377d384580c · R1-CAUSAD-V3 · leitura · origem=Code
 
@@ -1785,26 +1862,4 @@ Contagem manual do **primeiro anexo `script.py`**, considerando `def sonda_r1():
 
 Âncoras: `def rastrear` — `script.py:128`; `def receber_log` — `script.py:146`; `def ler_relatorio` — `script.py:151`; `try:` externo — `script.py:229`.
 
-## 06/11 11:21 · sessao 28b6e5352e01 · - · - · origem=Ronald (tmux)
-
-Ponto de partição seguro: interceptar exclusivamente a chamada `Colaborador.objects.filter(pk__in=ids)` feita pelo `Command.handle`, filtrar a lista de IDs com `pk % PARTES == PARTE - 1` e chamar o filtro original. Identificar o chamador por `frame.f_code is e6_oraculo.Command.handle.__code__` evita alterar consultas internas da autoridade. A seleção nativa percorre empresas ativas e IDs de `FechamentoMensal` da competência (`app/ponto/management/commands/e6_oraculo.py:291`, `:293`, `:302`).
-
-O wrapper pode devolver um gerador sobre `queryset.iterator(chunk_size=1)` e executar limpeza ao retomar após cada `yield`: nesse momento o comando já terminou a comparação daquele colaborador, inclusive suas chamadas ao juiz. O loop completo do colaborador ocorre entre as linhas 302 e 392; o próximo passo do iterador é solicitado após esse trabalho (`app/ponto/management/commands/e6_oraculo.py:302`, `:316`, `:366`, `:392`). Disponibilidade e implementação do `iterator()` Django instalado: [nao verificado].
-
-Para as linhas cruas, aproveitar os acumuladores produzidos pelo próprio `handle`, observando seu frame no retorno:
-
-- Dias por dono: `T['dono_%s' % dono]`, incrementado pelo comando (`app/ponto/management/commands/e6_oraculo.py:367`).
-- Minutos por dono: `DONO_H[dono]`, acumulado como `abs(df)`; horas são esse acumulador dividido por 60 (`app/ponto/management/commands/e6_oraculo.py:368`, `:423`).
-- Colaboradores por dono: `len(DONO_C[dono])`, conjunto alimentado pelo comando (`app/ponto/management/commands/e6_oraculo.py:369`, `:423`).
-- Dias totais: `_div_tot`, a soma nativa das quatro classes divergentes (`app/ponto/management/commands/e6_oraculo.py:424`).
-- Colaboradores totais: união de `x[1]` nas divergências, como faz a autoridade (`app/ponto/management/commands/e6_oraculo.py:429`).
-
-Não derivar horas cruas do texto da tabela: ela usa somente uma casa decimal. Somar as seis tabelas arredondadas pode produzir diferença em relação ao acumulador original (`app/ponto/management/commands/e6_oraculo.py:422`, `:423`).
-
-Não exigir que a soma de `colabs` dos três donos coincida com o total: o código permite que o mesmo colaborador entre nos conjuntos de vários donos e calcula o total por união (`app/ponto/management/commands/e6_oraculo.py:369`, `:429`). Dias e horas são particionados por dono; a conferência nativa de dias compara a soma dos donos com a soma das classes (`app/ponto/management/commands/e6_oraculo.py:366`, `:368`, `:415`, `:424`, `:427`).
-
-Entre as seis partes, os colaboradores são disjuntos na mesma competência pela condição de módulo proposta [nao verificado: implementação proposta]. Portanto, somar dias, horas e colaboradores de cada dono entre partes; somar também os três campos de `PARCIAL_TOTAL` entre partes. Não somar colaboradores entre competências para obter pessoas distintas: a seleção é refeita por competência (`app/ponto/management/commands/e6_oraculo.py:284`, `:293`).
-
-Há estado legítimo da autoridade que cresce até terminar a parte: `div` recebe uma linha por dia divergente e `DONO_C` guarda os conjuntos usados na saída. Não limpar esses objetos durante o comando: isso alteraria as classes ou o total de colaboradores (`app/ponto/management/commands/e6_oraculo.py:286`, `:289`, `:369`, `:389`, `:428`, `:429`). Duração aproximada de 15 minutos e consumo abaixo de 2 GiB após as mudanças: [nao verificado].
-
-_2249 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2250 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
