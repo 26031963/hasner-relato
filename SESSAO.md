@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 20:53:00.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (32.4 MB). Acoes na janela: **1149**.
+**Medido em 05/11/2026 20:58:05.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (32.5 MB). Acoes na janela: **1150**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:53:23 | Bash | Check FIO-MUDO copy and census progress | `date +%H:%M; cd /home/ronald/wt-c20fm-203209 && git log --oneline -1; ls -t /home/ronald/saas-hasner/logs/ \| head -8; ls -la /home/ronald/saas-hasner/logs/trava_censo/` |
 | 20:49:04 | Bash | Drop missing arquivo field from ESPERANDO | `cd /home/ronald/saas-hasner; sed -i '2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh \| pid=2928554#' app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md` |
 | 20:49:01 | Bash | Confirm producer alive and hook log | `kill -0 2928554 && echo vivo; tail -3 /home/ronald/saas-hasner/logs/hook_stop_fila1.log \| cut -c1-200` |
 | 20:48:57 | Bash | Rewrite ERRO-BOBO line in hook form and retest | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') pre='RESPONDIDA por aval H12H06-SEPARA-E-CRONTAB 20:4x (obra partida em A e B; volta 8 cancelada): ' j=next(k for k,l in enumerate(L) if l.startswith(pre)) s=L[j][len(pre):] assert s.startswith('ERRO-BOBO H12H06 (') L[j]='ERRO-BOBO H12H06: '+s[len('ERRO-BOBO H12H06 '):]+' \| 20:4x aval H12H06-SEPARA ...` |
