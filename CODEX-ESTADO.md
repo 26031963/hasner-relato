@@ -1,7 +1,100 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 20:26** · publicado em **06/11/2026 20:26** (UTC-3)
+> Ultima resposta processada: **06/11/2026 20:28** · publicado em **06/11/2026 20:32** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 20:28 · sessao a13400452ea1 · BUG-PLANTIO-NOTURNO-MAIS-1 · verificador · origem=Code
+
+**O tratamento de `None` está coerente com o fluxo atual, mas a V3 tem uma reprovação independente no selo de relógio:** o novo `freeze_time` faz o varredor considerar o arquivo API “curado”, enquanto ele permanece na lista de exceções (`app/api/tests/test_api_bater_ponto.py:242`; `app/core/tests/test_selo_teste_sem_relogio.py:28`, `:72`; `app/core/tests/testes_sem_relogio.txt:5`). Execução Django completa, execução contra o pai e efeitos em produção: [nao verificado].
+
+1. **Movimento do bloco e existência de `batida`.**
+
+   Entre a posição nova e a antiga existem três operações relevantes: `em_disputa = False`, leitura de `motivos_anomalia` pelo `if` e escrita de `contexto_anomalia['ultima_batida']`, lendo `batida.pk`, `tipo` e `agora`. Portanto, **há leitura/escrita entre as posições**; antecipar a normalização permite que a remoção do último motivo impeça a entrada nesse `if` (`app/api/views.py:785`; `app/api/views_core.py:785`).
+
+   **A batida já passou pela persistência.** A API chama `registrar_batida` antes; a porta devolve uma existente ou executa `Batida.objects.create` antes de retornar. Se devolver `None`, a API responde e sai antes de alcançar o bloco novo (`app/api/views.py:684`, `:699`; `app/api/views_core.py:681`, `:696`; `app/ponto/registro_batida.py:113`, `:120`, `:157`).
+
+   “Já gravada” inclui **linha preexistente**, inclusive chave retratada devolvida pela busca de mesma chave; não significa necessariamente criação nesta requisição (`app/ponto/registro_batida.py:116`). Confirmação de commit em produção: [nao verificado].
+
+2. **Outras origens de `orfao_14h` e segurança da remoção.**
+
+   Existe outra origem sem `entrada_sem_saida`: `detectar_anomalias` recebe bloqueio órfão, acrescenta `orfao_14h` e grava contexto sob **`orfao_14h`**. Se ocorrer exceção depois do append, o `except` também pode preservar o motivo sem completar esse contexto (`app/chamados/detector_anomalias.py:31`, `:34`, `:49`, `:54`).
+
+   **Esse órfão não é apagado pelo bloco novo no fluxo atual.** A escrita de `saida_sem_entrada` exige previamente `'orfao_14h' not in motivos_anomalia`. Se o detector já trouxe o motivo, não nasce esse contexto; sem ele, o novo bloco não executa (`app/api/views.py:652`, `:655`, `:775`; `app/api/views_core.py:649`, `:652`, `:775`).
+
+   A origem E sem S acrescenta o motivo junto de `entrada_sem_saida`, explicitamente preservado pela remoção. Além disso, E e S são ramos distintos pelo mesmo `tipo` (`app/api/views.py:635`, `:663`, `:668`, `:780`; `app/api/views_core.py:632`, `:660`, `:665`, `:780`).
+
+   Assim, **não aparece apagamento de órfão legítimo de outra origem nos caminhos atuais**. A proteção depende da guarda que impede criar SSE quando o motivo já existe; o código não mantém uma contagem de origens do motivo (`app/api/views.py:652`, `:780`; `app/api/views_core.py:649`, `:780`).
+
+   A remoção também atua na lista local da requisição: o helper agrega motivos à disputa existente por união; não remove automaticamente motivos antigos persistidos (`app/api/views.py:781`, `:795`; `app/chamados/services/disputa_emissao.py:506`).
+
+3. **Quem consome depois e se exige motivo para toda SSE.**
+
+   | Consumidor | Comportamento |
+   |---|---|
+   | Guarda da API | Lista não vazia decide escrever `ultima_batida`, chamar o helper e marcar `em_disputa` (`app/api/views.py:787`; `app/api/views_core.py:787`). |
+   | JSON | Devolve a lista resultante em `motivos_disputa` (`app/api/views.py:848`; `app/api/views_core.py:848`). |
+   | Aviso | Recebe a lista; nesse argumento, consulta apenas `em_ferias` (`app/api/views.py:838`; `app/ponto/services/aviso_da_batida.py:69`). |
+   | Disputa/perguntas | Helper aceita lista vazia retornando `None`; com motivos, copia/deduplica, abre/agrega e gera perguntas (`app/chamados/services/disputa_emissao.py:626`, `:629`, `:632`, `:640`, `:652`). |
+   | Push | É chamado no nascimento ou para motivos novos; usa o primeiro motivo e possui mensagem genérica para lista vazia (`app/chamados/services/disputa_emissao.py:641`, `:656`, `:1574`). |
+   | Chamado de auditoria de desvio leve | É criado **antes** do bloco novo, usando `ctx_desvio`, `batida` e `tipo`; não lê SSE nem `motivos_anomalia` (`app/api/views.py:735`; `app/api/views_core.py:732`). |
+   | Auditor de disputas | Examina motivos efetivamente persistidos e sua correspondência com contexto (`app/chamados/management/commands/auditar_disputas.py:85`). |
+
+   **Esses consumidores não exigem que toda S sem entrada produza motivo:** lista vazia e ausência de emissão são caminhos explícitos. Contrato de clientes externos que recebem o JSON: [nao verificado] (`app/api/views.py:787`, `:848`; `app/chamados/services/disputa_emissao.py:626`).
+
+4. **Mordida do RED, patch e roteamento.**
+
+   **Há mordida dedutiva contra o pai descrito no anexo; execução contra `39324b76`: [nao verificado].** A fixture cria colaborador sem escala/batidas e envia S três horas retroativa. Esse atraso é aceito e evita a correção de tipo ao vivo; sem escala, a correção retroativa não altera S (`app/api/tests/test_api_bater_ponto.py:197`, `:243`; `app/api/hora_do_aparelho.py:141`; `app/api/views_core.py:592`, `:611`).
+
+   Sem batidas/marcos, a classificação tem fallback que fornece motivo; a guarda pode então criar SSE. Com o patch devolvendo `None`, o trecho antigo apresentado no anexo tentaria `None.isoformat()`, produzindo erro — o cliente de testes pode propagá-lo antes dos asserts, continuando RED (`app/escala/servico_jornada.py:469`, `:544`; `app/api/views_core.py:649`; `app/api/tests/test_api_bater_ponto.py:244`). Correspondência do trecho antigo com o objeto Git do pai: [nao verificado].
+
+   **O patch alcança os dois imports locais:** ele fica ativo durante o POST, e ambos importam o atributo de `ponto.turnos` dentro da função, imediatamente antes de chamá-lo (`app/api/tests/test_api_bater_ponto.py:243`; `app/api/views.py:776`; `app/api/views_core.py:776`).
+
+   **Qual gêmeo resolve depende do settings:**
+
+   | Execução | Destino |
+   |---|---|
+   | Esteira `bin/suite.sh` | Usa `config.settings.ci` → `config.urls_ci` → `api.urls` → **`views.py`** (`bin/suite.sh:103`; `app/config/settings/ci.py:5`; `app/config/urls_ci.py:18`; `app/api/urls.py:2`, `:67`). |
+   | `config.settings_test` | Usa `config.urls_test`, concatenando rotas core primeiro → **`views_core.py`** (`app/config/settings_test.py:9`; `app/config/urls_test.py:8`, `:11`, `:15`; `app/api/urls_core.py:5`, `:14`). |
+
+   Settings efetivamente usado numa execução do RED anexado: [nao verificado].
+
+   **O outro gêmeo tem selo de paridade AST.** O selo compara funções homônimas dos dois arquivos, com whitelist vazia; a comparação em memória confirmou igualdade atual de `api_bater_ponto`. Isso comprova igualdade estrutural, não duas execuções comportamentais (`app/api/tests/test_contract_paridade_kernels.py:12`, `:18`, `:26`).
+
+   O RED simula **a resposta `None`**; não prepara uma chave retratada real nem prova integralmente esse cenário de persistência (`app/api/tests/test_api_bater_ponto.py:197`, `:244`, `:254`).
+
+5. **Classes de reprovação.**
+
+   | Classe | Resultado da inspeção |
+   |---|---|
+   | Segundo juiz | O delta consulta a autoridade existente. O helper recorta `dia_das_batidas` por PK; essa fonte usa `t.data_turno`, com dia civil para batida que nenhum turno reclama (`app/api/views.py:776`; `app/ponto/turnos.py:2917`, `:2935`). |
+   | Segundo escritor fora da porta | O delta altera lista/dicionário locais; Batida continua entrando por `registrar_batida`, e a disputa pelo helper existente (`app/api/views.py:684`, `:779`, `:795`; `app/api/views_core.py:681`, `:779`, `:795`). |
+   | Relógio fora da borda | O bloco novo não consulta relógio; o placeholder civil anterior permanece (`app/api/views.py:655`, `:775`; `app/api/views_core.py:652`, `:775`). |
+   | Derivação paralela | O juiz de slot consulta `_ts_tipo_do_plantio`; o plantio aplica o ajustador overnight existente (`app/chamados/juizes.py:344`; `app/chamados/services/materializacao.py:418`). |
+   | Selo/RED sem mordida | RED tem mordida dedutiva; paridade verifica AST. O selo P13 fiscaliza escrita de `data_evento`, sem provar a semântica de `SSE.data` (`app/api/tests/test_api_bater_ponto.py:236`; `app/api/tests/test_contract_paridade_kernels.py:26`; `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:25`, `:58`). |
+
+   **Reprovação concreta do selo de relógio:** a avaliação em memória das funções reais encontrou `curados=['api/tests/test_api_bater_ponto.py']`; a asserção exige lista vazia. O regex considera o arquivo inteiro congelado ao encontrar qualquer `freeze_time`, mas a entrada API continua na lista (`app/core/tests/test_selo_teste_sem_relogio.py:28`, `:32`, `:72`; `app/core/tests/testes_sem_relogio.txt:5`).
+
+   A retirada de A2 satisfaz esse critério textual, mas **não demonstra congelamento integral**: somente um método está decorado; outros ainda usam `now()` e `localdate()` fora dele (`app/chamados/tests/test_a2_data_evento_batida.py:32`, `:49`, `:51`; `app/core/tests/test_selo_teste_sem_relogio.py:34`).
+
+   **ESMERIL-SEMANTICA — literalmente, não são todos os escritores de `SSE.data` que escrevem dia do turno.** Os gêmeos primeiro escrevem `agora_local.date()`, depois sobrescrevem pelo juiz ou removem a chave antes da emissão. O desvio intermediário usa contexto próprio, sem ler essa data provisória (`app/api/views.py:655`, `:729`, `:775`, `:793`; `app/api/views_core.py:652`, `:726`, `:775`, `:793`).
+
+   Os demais escritores identificados usam dia do juiz ou da célula; os leitores usam a data para texto, destino, `data_evento` e plantio (`app/ponto/services/triagem_batida.py:726`; `app/chamados/services/fabrica_da_celula.py:139`; `app/chamados/services/disputa_emissao.py:283`, `:292`, `:342`, `:364`; `app/chamados/catalogo/query.py:58`; `app/chamados/services/materializacao.py:343`).
+
+   Há ainda uma distinção preexistente: **a API escreve contexto SSE, mas acrescenta motivo `orfao_14h`**. Como o gerador percorre os motivos, ele não lê automaticamente a chave SSE; pode usar os fallbacks do órfão. O catálogo distingue pergunta de saída e de entrada (`app/api/views.py:654`; `app/api/views_core.py:651`; `app/chamados/services/disputa_emissao.py:312`, `:337`, `:364`; `app/chamados/catalogo/perguntas.py:48`, `:56`).
+
+6. **Quem escreve e quem lê os campos tocados.**
+
+   | Campo | Quem escreve | Quem lê |
+   |---|---|---|
+   | `motivos_anomalia` | Detector inicial; acréscimos API de foto/GPS/device/liveness, SSE, E sem S e desvio grave; nova remoção (`app/chamados/detector_anomalias.py:26`; `app/api/views.py:482`, `:490`, `:507`, `:514`, `:521`, `:654`, `:671`, `:733`, `:781`). | Guardas de duplicidade/remoção, guarda de emissão, helper, aviso e JSON (`app/api/views.py:652`, `:669`, `:780`, `:787`, `:795`, `:838`, `:848`). |
+   | `contexto_anomalia` | Detector inicial, detalhes das anomalias API, normalização SSE e `ultima_batida` (`app/api/views.py:446`, `:483`, `:491`, `:508`, `:515`, `:522`, `:655`, `:672`, `:734`, `:779`, `:783`, `:788`). | Bloco novo e helper de disputa (`app/api/views.py:775`, `:780`, `:795`). |
+   | `saida_sem_entrada` e `.data` | API cria placeholder; delta remove ou substitui `.data`. PWA, fábrica e emissão também podem escrever a chave por motivo (`app/api/views.py:655`, `:779`, `:783`; `app/api/views_core.py:652`, `:779`, `:783`; `app/ponto/services/triagem_batida.py:738`; `app/chamados/services/fabrica_da_celula.py:139`; `app/chamados/services/disputa_emissao.py:292`, `:345`). | Normalizador; leitores genéricos de texto, destino/data, plantio e auditoria (`app/api/views.py:775`; `app/chamados/catalogo/query.py:58`; `app/chamados/services/disputa_emissao.py:191`, `:364`; `app/chamados/services/materializacao.py:343`; `app/chamados/management/commands/auditar_disputas.py:75`). |
+   | `entrada_sem_saida` | Ramo E, incluindo `entrada_id`, `entrada_aberta_em` e `hora_tentativa` (`app/api/views.py:672`; `app/api/views_core.py:669`). | Guarda de preservação do motivo; derivação do dia pela batida de origem (`app/api/views.py:780`; `app/api/views_core.py:780`; `app/chamados/services/disputa_emissao.py:59`, `:68`). |
+   | `batida` / PK / timestamp | Porta devolve linha existente ou criada; o delta não altera seus campos (`app/ponto/registro_batida.py:113`, `:120`, `:157`; `app/api/views.py:684`; `app/api/views_core.py:681`). | Novo helper, que lê timestamp e procura o PK no mapa do juiz (`app/api/views.py:777`; `app/api/views_core.py:777`; `app/ponto/turnos.py:2921`). |
+   | `_dia_sse` | Retorno de `dia_do_turno_da_batida` (`app/api/views.py:777`; `app/api/views_core.py:777`). | Teste de `None` e serialização ISO (`app/api/views.py:778`, `:783`; `app/api/views_core.py:778`, `:783`). |
+   | `ultima_batida`, `em_disputa`, `motivos_disputa` | API escreve contexto, flag e resposta após normalização (`app/api/views.py:786`, `:788`, `:797`, `:847`; `app/api/views_core.py:786`, `:788`, `:797`, `:847`). | Emissão consulta `ultima_batida.id`; o RED verifica status, motivos e existência de S (`app/chamados/services/disputa_emissao.py:72`, `:379`; `app/api/tests/test_api_bater_ponto.py:252`). |
+
+   A persistência dos motivos/contextos ocorre no merge ou nascimento da disputa; esses pontos copiam/agregam os valores recebidos, sem reinterpretar `SSE.data` (`app/chamados/services/disputa_emissao.py:506`, `:518`, `:550`, `:557`).
 
 ## 06/11 20:26 · sessao f234c37c52bf · - · - · origem=Ronald (tmux)
 
@@ -1161,20 +1254,4 @@ O teste novo de `hora` rejeita somente pergunta com data de hoje; não demonstra
 
 **ESMERIL:** permanece a divergência já declarada fora do escopo: conversa grava dia da pergunta, enquanto `do_fato` e fábrica usam a mesma data como identidade de fato/célula, sem discriminador. A guarda nova elimina a conversa `hora` deste emissor, mas não resolve essa colisão geral. Referências: `app/chamados/models.py:2422`, `app/chamados/models.py:2396`, `app/chamados/models.py:2453`, `app/chamados/services/fabrica_da_celula.py:118`, `app/chamados/services/disputa_emissao.py:411`.
 
-## 06/11 20:01 · sessao 0ca929e8dcf8 · - · - · origem=Ronald (tmux)
-
-**(c) fecha a omissão para batidas novas; não transforma `criado_em` em data da última materialização.** O filtro agora usa nascimento da linha, enquanto a comparação continua pelo juiz `_T1`. Referências: `app/ponto/management/commands/vigia_plantio_overnight.py:76`, `app/ponto/management/commands/vigia_plantio_overnight.py:87`.
-
-- **Escritor normal:** `Batida.criado_em` é `auto_now_add=True`; as criações passam por `Batida.objects.create`. A porta de anotação não permite alterar esse campo. Referências: `app/ponto/models.py:79`, `app/ponto/registro_batida.py:152`, `app/ponto/registro_batida.py:157`, `app/ponto/registro_batida.py:203`, `app/ponto/registro_batida.py:241`.
-- **Reescritor dedicado do campo em produção: nao achei.** A restauração de tenant usa `pg_restore`; a sombra incremental copia `ponto_batida` com `SELECT *` e repõe as colunas por `COPY`. Por essas operações, o valor é preservado do registro original, não recalculado pela hora da cópia — inferência do SQL. Referências: `scripts/restore_tenant.sh:8`, `scripts/backup_tenant.sh:10`, `bin/sombra_incremental.sh:34`, `bin/sombra_incremental.sh:57`, `bin/sombra_incremental.sh:62`. Conteúdo real dos dumps e restaurações executadas: **[nao verificado]**.
-- **Plantio depois de reabertura:** quando cria outra linha, recebe o nascimento novo; quando reaproveita linha existente, conserva o nascimento antigo. O materializador primeiro busca batida no marco e somente cria se não encontrou; depois pode apenas trocar `pergunta_origem`. Referências: `app/chamados/services/materializacao.py:835`, `app/chamados/services/materializacao.py:847`, `app/chamados/services/materializacao.py:903`, `app/chamados/services/materializacao.py:922`, `app/chamados/services/materializacao.py:924`.
-- **Outro reaproveitamento:** `registrar_batida` devolve linha existente pelo mesmo tipo na janela ou pela mesma chave colaborador/instante, inclusive retratada; não altera `criado_em`. Referências: `app/ponto/registro_batida.py:113`, `app/ponto/registro_batida.py:120`.
-- **Restauração de retratação:** a porta `desfazer` só grava `aprovada=True` e `retratada_em=None`; conserva `criado_em`. Referência: `app/ponto/services/retratar_humano.py:207`.
-
-**Limite semântico:** “plantada recentemente” coincide com `criado_em` para criação nova; não coincide com reaproveitamento/revinculação recente de linha antiga. Assim, uma linha antiga de `origem='disputa_s84_retro'` vinculada hoje a outra pergunta continua fora da janela por criação. Referências: `app/ponto/management/commands/vigia_plantio_overnight.py:67`, `app/ponto/management/commands/vigia_plantio_overnight.py:73`, `app/ponto/management/commands/vigia_plantio_overnight.py:76`, `app/chamados/services/materializacao.py:924`. Isso não demonstra nova regressão: se seu `timestamp` também era antigo, o filtro do pai já a omitia — comparação com o delta fornecido; execução no pai **[nao verificado]**.
-
-**Teste do vigia: morde por análise contrafactual.** Cria a linha em 01/12, com instante em 23/10; na janela de 30 dias, o filtro anterior por `timestamp` exclui a única candidata e o resultado seria `[]`, contrariando `[b.pk]`. O teste cobre criação nova, não reaproveitamento. Referências: `app/chamados/tests/test_plantio_noturno_mais1.py:30`, `app/chamados/tests/test_plantio_noturno_mais1.py:32`, `app/chamados/tests/test_plantio_noturno_mais1.py:192`, `app/chamados/tests/test_plantio_noturno_mais1.py:193`, `app/chamados/tests/test_plantio_noturno_mais1.py:195`. RED executado: **[nao verificado]**.
-
-**Demais leitores de `Batida.criado_em` encontrados:** o pareador usa chegada para distinguir eco de flush; o contador de sequência seleciona batidas criadas desde um marco; o cache de veredito usa o máximo de criação e trata retratação separadamente. Esses usos conservam o significado de criação/chegada. Referências: `app/ponto/turnos.py:355`, `app/ponto/turnos.py:366`, `app/ponto/turnos.py:368`, `app/ponto/turnos.py:2384`, `app/chamados/veredito_lavrado.py:137`, `app/chamados/veredito_lavrado.py:140`.
-
-_2513 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2514 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
