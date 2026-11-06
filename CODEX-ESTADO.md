@@ -1,7 +1,35 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 13:23** · publicado em **06/11/2026 13:27** (UTC-3)
+> Ultima resposta processada: **06/11/2026 13:32** · publicado em **06/11/2026 13:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 13:32 · sessao f98b37141a96 · - · - · origem=Ronald (tmux)
+
+Achados de código, sem banco/log e sem escrita:
+
+- **DIFF é impacto, não validação**; a regra exige dono L-099 para divergências. [CLAUDE.md:49](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/CLAUDE.md:49) [CLAUDE.md:52](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/CLAUDE.md:52)
+- `rc=0` é retorno da execução Docker; o wrapper não avalia as linhas `SOMA` nem `INCOMPLETO`. O pipeline captura o retorno e termina com `exit "$rc"`. [bin/sonda_leitura.sh:241](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/bin/sonda_leitura.sh:241) [bin/sonda_leitura.sh:251](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/bin/sonda_leitura.sh:251)
+- Não localizei na cópia o `script.py` específico nem os emissores de `SOMA COBERTURA`, `SOMA PARTES_EMISSOR`, `SOMA ERROS_ZERO`, `TRATADA_LOCAL` ou `ERROS_POR_TIPO`; portanto o significado booleano de `False` além do literal fornecido permanece `[nao verificado]`.
+- O backlog registra expressamente a entrega pedida: DIFF 10/11 por rubrica/dono e “lista fechada do que a troca exige (resto dos 38, ! do v2, ESTRUTURA do v3)”; ali está em curso, sem lista preenchida. [app/docs/BACKLOG.md:1750](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/app/docs/BACKLOG.md:1750)
+
+Os sítios de erro fornecidos correspondem a:
+
+| Sítio | Comportamento no código |
+|---|---|
+| `dia_pago.py:315` | Levanta `ValueError` quando falta dono declarado de campo do dia. [app/ponto/services/dia_pago.py:310](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/app/ponto/services/dia_pago.py:310) |
+| `leitor_celula.py:25` | Faz parse `HH:MM`; captura `Exception` e retorna `None`. [app/escala/services/leitor_celula.py:23](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/app/escala/services/leitor_celula.py:23) |
+| `juiz_batida.py:75` | Faz parse `HH:MM`; captura `ValueError/AttributeError` e retorna `None`. [app/ponto/juiz_batida.py:72](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/app/ponto/juiz_batida.py:72) |
+| `motor_calculo_v2.py:1075` | Atribui mapa `dia_da_jornada`; captura `Exception` e faz `pass`. [app/ponto/motor_calculo_v2.py:1068](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/app/ponto/motor_calculo_v2.py:1068) |
+| `fechamento.py:1029` | Levanta `_GradeSemCelula` se todos os dias dentro do vínculo são `sem_celula`. [app/ponto/services/fechamento.py:1027](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/app/ponto/services/fechamento.py:1027) |
+
+Para a lista `!`:
+
+- Tocar o **gravado de competência exportada** e editar `motor_calculo_v2.py` exige `!` pela regra local. [CLAUDE.md:262](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/CLAUDE.md:262)
+- As saídas não informam quais empresas/competências estão exportadas; não permitem atribuir `!` financeiro a colaboradores específicos. `[nao verificado]` O código pergunta isso por empresa e competência, via `empresas_exportadas_no_escopo`. [app/ponto/services/fechamento.py:1480](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/app/ponto/services/fechamento.py:1480)
+- Há dependência concreta de v2: funções/classes/fator noturno importados, métodos de pontualidade emprestados, constantes de tolerância e função `he_noturna`. [app/ponto/calculador/regras.py:35](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/app/ponto/calculador/regras.py:35) [app/ponto/calculador/regras.py:112](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/app/ponto/calculador/regras.py:112) [app/ponto/calculador/periodo.py:163](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/app/ponto/calculador/periodo.py:163) [app/ponto/calculador/regras.py:825](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/app/ponto/calculador/regras.py:825)
+- O releitor também recebe períodos do resultado atual, nos campos `periodos/periodos_ft`; a porta recusa campo ausente. [app/ponto/calculador/periodo.py:609](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/app/ponto/calculador/periodo.py:609) [app/ponto/calculador/nucleo.py:393](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/app/ponto/calculador/nucleo.py:393)
+- O código documenta pendências v2 de reancoragem de janela e remoção de par duplicado na origem, explicitamente destinadas ao `!`; seus números históricos não devem ser trazidos como medida atual. [app/ponto/calculador/periodo.py:659](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/app/ponto/calculador/periodo.py:659) [app/ponto/calculador/periodo.py:726](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/app/ponto/calculador/periodo.py:726)
+- Não somar rubricas como um total de dinheiro: extras noturnas/feriado são subconjuntos das extras totais; somá-las ao total duplica horas. [app/ponto/services/dia_pago.py:902](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/app/ponto/services/dia_pago.py:902)
 
 ## 06/11 13:23 · sessao c1ab63920e77 · R1-CAUSAD-V3 · sonda · origem=Code
 
@@ -2041,26 +2069,4 @@ Pontos adicionais de teste/checklist: [nao verificado]
 
 As assinaturas não aceitam `**kwargs`: eventual chamador externo à cópia com `regenerada_em=` levantaria `TypeError`, sem absorção silenciosa. Existência de chamador externo: `[nao verificado]`. (`app/escala/services/regeneracao.py:100`, `app/escala/services/regeneracao.py:128`.)
 
-## 06/11 12:31 · sessao d9bf608f3084 · - · - · origem=Ronald (tmux)
-
-5. Walrus correto: `cel is None` escolhe diretamente `{'existe': False}`; com célula, a condição atribui `_reescrita` antes de `localtime`; ambos os carimbos nulos produzem `None`. Não há variável usada antes da atribuição nesses ramos (`app/ponto/services/dia_do_colab.py:91-96`; `app/escala/services/regeneracao.py:81`).
-
-6. As três mutações têm mordida estática identificável:
-
-- **Helper ignora edição:** falham os resultados exigidos para edição posterior e edição isolada (`app/escala/tests/test_o10b_orfa_edicao.py:54-56`).
-- **Supra lê somente regeneração:** os dois RED exigem positivamente `COBRANCA_ORFA_REGENERACAO`, inclusive regeneração anterior + edição posterior (`app/escala/tests/test_o10b_orfa_edicao.py:229-241`).
-- **Editar não marca:** o teste chama a porta real, exige retorno `editada`, recarrega o chamado e exige marca e marcos originais (`app/escala/tests/test_o10b_orfa_edicao.py:125-134`); o marcador efetivamente escreve pela porta `renovar_contexto` (`app/ponto/management/commands/gerar_celulas.py:255-256`).
-
-Os testes do supra não passam por simplesmente pular o dia: a presença exigida do contador depende de alcançar o ramo após chamado vivo, lavra `cobranca_indevida`, código válido e ausência de conversa (`app/ponto/management/commands/supra_juiz.py:246-277`). A fixture cria quatro batidas, chamado vivo calado com `marcos_faltantes`, força a lavra e afirma a pré-condição (`app/escala/tests/test_o10b_orfa_edicao.py:190-208`). O controle exige positivamente `CSF_RETRATAVEL_DRY` (`app/escala/tests/test_o10b_orfa_edicao.py:222-227`).
-
-A execução da suíte e dos três mutantes permanece **[nao verificado]**. [nao verificado]
-
-7. `reescrita_da_celula` é insumo puro do juiz existente: calcula um carimbo e não recebe chamado nem instante de comparação (`app/escala/services/regeneracao.py:71-81`); `cobranca_orfa` continua decidindo a orfandade (`app/escala/services/regeneracao.py:128-142`) e continua sendo a autoridade registrada (`app/core/juizes.py:116`; `app/core/juizes.py:270`).
-
-O selo CQ-C10 possui alcance limitado: procura strings e proíbe somente o literal exato `"'regenerada_em'"`; sozinho não prova ausência de aliases, `max` paralelo ou chamadas presentes só em comentário (`app/escala/tests/test_cq_c10.py:13-20`).
-
-8. Lacunas dos novos testes: a ponte só testa célula com edição positiva (`app/escala/tests/test_o10b_orfa_edicao.py:153-159`); não há caso nesse arquivo para o fallback histórico quando `regenerada_em=None` e `editada_em` anterior à cobrança, nem teste da ponte com célula ausente/ambos os carimbos nulos (`app/escala/tests/test_o10b_orfa_edicao.py:51-77`; `app/escala/tests/test_o10b_orfa_edicao.py:125-159`; `app/escala/tests/test_o10b_orfa_edicao.py:222-255`).
-
-Há dependência temporal indireta no teste da marca: a cobrança é literal de 26/08, mas a edição usa relógio real, pois somente a classe do supra está congelada (`app/escala/tests/test_o10b_orfa_edicao.py:128-129`; `app/escala/tests/test_o10b_orfa_edicao.py:162`; `app/ponto/portas/celula.py:598`). O selo estático de relógio reconhece congelamento pelo arquivo inteiro e declara não enxergar dependência de hoje dentro do serviço (`app/core/tests/test_selo_teste_sem_relogio.py:10-12`; `app/core/tests/test_selo_teste_sem_relogio.py:32-35`).
-
-_2291 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2292 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
