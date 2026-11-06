@@ -1,7 +1,53 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 12:49** · publicado em **06/11/2026 12:50** (UTC-3)
+> Ultima resposta processada: **06/11/2026 12:53** · publicado em **06/11/2026 12:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 12:53 · sessao aae66ffeb1c3 · CODEX-CONSTRUTOR-NEGOCIO · censo · origem=Code
+
+**Classificação: 1(a), 2(a), 3(b), 4(b), 5(a).** Uso “tema presente” conforme a pergunta: inventário, guardas e selo foram explicitamente submetidos à revisão, mesmo sem nomear cada vetor. As citações dos anexos e da triagem vêm do texto fornecido; sua localização em arquivos da cópia é **[nao verificado]**.
+
+1. **(a) — `.git` interno e caminhos ocultos ao Git: tema perguntado; vetor específico não identificado nas respostas.** [nao verificado]
+
+   **Pergunta, v1.q #1:** “ou em que um arquivo proibido passa pelo inventario sem rc 3?” **[nao verificado]**
+
+   **Resposta, v3.r #5:** “O inventário continua observando estado final: diff, status, HEAD, checksum de `.git` e links dos caminhos encontrados.” **[nao verificado]**
+
+   A resposta discute restauração e hardlinks, sem apontar a omissão de entradas `.git` internas. Na cópia, os caminhos vêm de `diff`/`status`, e a inspeção de links percorre somente esse conjunto; `c_p_git` cria apenas `.gitignore`. (`bin/codex_pergunta.sh:324`, `bin/codex_pergunta.sh:326`, `bin/codex_pergunta.sh:335`, `bin/tests/test_codex_pergunta.sh:262`)
+
+2. **(a) — `.pyc`/`.pth`/`sitecustomize`: revisão de guardas e selo solicitada; vetor específico ausente das respostas.** [nao verificado]
+
+   **Pergunta, v1.q #4:** “O selo bin/tests/test_codex_pergunta.sh e a prova prova_codex_pergunta_real.sh mordem de verdade, ou ha caso vacuo / mutante que sobreviveria?” **[nao verificado]**
+
+   **Resposta, v1.r #8:** “Isso verifica o wrapper, não a eficácia do sandbox.” **[nao verificado]**
+
+   Esse trecho reconhece um limite diferente; não identifica carregamento de bytecode ou inicialização Python adulterada. A lista da cópia não contém esses nomes/extensões; um arquivo regular em `app/` sem outro motivo recebe `TOCADO`. A execução de bytecode forjado pela suíte permanece **[nao verificado]** nesta leitura. (`bin/codex_pergunta.sh:304`, `bin/codex_pergunta.sh:336`, `bin/codex_pergunta.sh:340`)
+
+3. **(b) — Vaga por raiz do script: resposta identificou; triagem descartou.** [nao verificado]
+
+   **Pergunta, v2.q #1:** “Ha jeito de contornar a cura nova (gitdir_volta, revalida, vaga em <raiz>/logs, resposta_nome, p_link/p_hardlink, inv_falha, prova com controle externo)?” **[nao verificado]**
+
+   **Resposta, v3.r #3:** “Permanece uma vaga por **raiz do script**, sem vinculação ao repositório comum: cópias em raízes distintas calculam caminhos distintos para a vaga.” **[nao verificado]**
+
+   **Motivo literal do descarte:** “#3 vaga por raiz do script descartado (wrapper so roda da raiz viva)”. Essa premissa operacional é **[nao verificado]**; na cópia, `R` deriva da localização do script e determina a vaga. (`bin/codex_pergunta.sh:50`, `bin/codex_pergunta.sh:87`, `bin/codex_pergunta.sh:125`)
+
+4. **(b) — Autenticidade dos `.out`: resposta identificou; triagem descartou.** [nao verificado]
+
+   **Pergunta, v2.q #1:** “Para cada achado da v1.r: a cura no delta fecha o achado?” **[nao verificado]**
+
+   **Resposta, v3.r #7:** “O bloco continua entregue como texto ao Codex, que também pode escrever os `.out` posteriormente aceitos como evidência.” **[nao verificado]**
+
+   **Motivo literal do descarte:** “#7 autenticidade da prova descartado (alvos medidos de fora; assinatura de socket fila)”. **[nao verificado]**
+
+   A cópia mede externamente arquivos-alvo e controles, mas os veredictos de Docker/socket/TCP também leem os `.out` em `app/prova`. (`bin/tests/prova_codex_pergunta_real.sh:59`, `bin/tests/prova_codex_pergunta_real.sh:68`, `bin/tests/prova_codex_pergunta_real.sh:75`, `bin/tests/prova_codex_pergunta_real.sh:81`)
+
+5. **(a) — Cobertura da lista proibida: tema perguntado; essas lacunas específicas não foram identificadas.** [nao verificado]
+
+   **Pergunta, v3.q:** “Leia bin/codex_pergunta.sh (ramo do papel construtor e o inventario) e bin/tests/test_codex_pergunta.sh no commit.” **[nao verificado]**
+
+   **Resposta, v3.r #8:** “Os casos de migrations/models deixam de exemplificar somente `folha`: entram `ponto/migrations` e `escala/models.py`.” **[nao verificado]**
+
+   A resposta examinou diversidade de aplicações, sem apontar `settings*.py`, URLs, Dockerfile ou modelos com outros nomes. A lista usa `models.py`/diretório `models` e `config/crons.py`, sem regras específicas para os demais exemplos. A obrigação contratual de proibir cada um deles é **[nao verificado]**, pois o contrato não foi fornecido integralmente. (`bin/codex_pergunta.sh:304`, `bin/codex_pergunta.sh:309`, `bin/codex_pergunta.sh:310`, `bin/codex_pergunta.sh:317`)
 
 ## 06/11 12:49 · sessao 7e6fe695373f · R1-CAUSAD-V3 · sonda · origem=Code
 
@@ -1402,527 +1448,4 @@ Os `on_commit` continuam sendo registrados dentro do `atomic` externo: por lado 
 
 Assim, uma reescrita humana posterior à cobrança não chega ao juiz por esses insumos; o supra pode ultrapassar a guarda de órfã e chamar a retratação (`app/ponto/management/commands/supra_juiz.py:275-287`; trava global em seco está `False` em `:45`). O texto pode afirmar que a cobrança “nasceu sem lastro” quando os marcos antigos não aparecem mais (`app/ponto/supra_juiz.py:131-138`), enquanto o lookup manda preservar cobrança cujo DNA foi reescrito depois dela (`app/docs/JUIZES.md:41-44`). **Procedência sugerida: bloqueia**, mantendo a pergunta de lei já encaminhada; ocorrência concreta em produção: [nao verificado].
 
-## 06/11 12:13 · sessao 311137dd7a1b · R1-CAUSAD-V3 · leitura · origem=Code
-
-A distinção estrutural está nas linhas **7 e 10 de ambos os scripts abaixo**: compara a identidade dos frames, sem lista de arquivos permitidos. A contagem local é provisória; quando a exceção atravessa um frame, ela sai de `TRATADA_LOCAL` e entra em `ERRO`. Assim, A→B com `except: pass` em B continua contando. (`r1_script2.py:7`, `r1_script2.py:10`; `v3_script2.py:7`, `v3_script2.py:10`, versões abaixo)
-
-O diagnóstico tem orçamento de 192 KiB, até cinco exemplos por grupo e resumo explícito do detalhamento omitido; as contagens continuam completas. O teto da **saída inteira** é [não verificado], pois o V3 mantém suas linhas `DIA`. Propostas sem execução; compatibilidade, duração e resultados de uma nova execução: [não verificado].
-
-```python
-def cruzou_frame(frame, tb):
-    if tb is None:
-        return False
-    origem = tb
-    while origem.tb_next is not None:
-        origem = origem.tb_next
-    if frame is not None and frame is not origem.tb_frame:
-        return True
-    while tb is not None:
-        if tb.tb_frame is not origem.tb_frame:
-            return True
-        tb = tb.tb_next
-    return False
-
-
-class RegistroErros:
-    def __init__(self):
-        self.marca = object()
-        self.total = 0
-        self.grupos = {}
-        self.locais = {}
-        self.por_tipo = {}
-
-    def __len__(self):
-        return self.total
-
-    def estado(self, exc):
-        estado = exc.__dict__.get("_sonda_estado_estrutural")
-        if isinstance(estado, list) and estado[0] is self.marca:
-            return estado
-        estado = [self.marca, None, False]
-        exc.__dict__["_sonda_estado_estrutural"] = estado
-        return estado
-
-    def ultimo(self, tb):
-        if tb is not None:
-            while tb.tb_next is not None:
-                tb = tb.tb_next
-        return tb
-
-    def dados(self, exc, tb, prefixo):
-        tipo = type(exc).__name__
-        if not tipo.isascii() or not tipo.isidentifier() or len(tipo) > 80:
-            tipo = "Excecao"
-        if tb is None:
-            return "sonda", tipo
-        nome = tb.tb_frame.f_code.co_filename
-        if prefixo and nome.startswith(prefixo):
-            sitio = "app/" + nome[len(prefixo):]
-        else:
-            sitio = "[fora-do-app]"
-        return "%s:%d" % (sitio, tb.tb_lineno), tipo
-
-    def local(self, exc, tb, prefixo):
-        estado = self.estado(exc)
-        if estado[1] is not None or estado[2]:
-            return
-        chave = self.dados(exc, tb, prefixo)
-        estado[1] = chave
-        self.locais[chave] = self.locais.get(chave, 0) + 1
-
-    def erro(self, exc, comp, col=None, dia=None, tb=None, prefixo=None):
-        estado = self.estado(exc)
-        if estado[2]:
-            return
-        # A classificação local era provisória: propagação a revoga.
-        if estado[1] is not None:
-            chave_local = estado[1]
-            self.locais[chave_local] -= 1
-            if not self.locais[chave_local]:
-                del self.locais[chave_local]
-            estado[1] = None
-        estado[2] = True
-        tb = self.ultimo(tb if tb is not None else exc.__traceback__)
-        sitio, tipo = self.dados(exc, tb, prefixo)
-        chave = (comp or "NA", sitio, tipo)
-        grupo = self.grupos.setdefault(chave, [0, []])
-        grupo[0] += 1
-        self.total += 1
-        self.por_tipo[tipo] = self.por_tipo.get(tipo, 0) + 1
-
-        if isinstance(col, int) and not isinstance(col, bool):
-            col = "col%d" % col
-        if not (
-            isinstance(col, str) and col.startswith("col")
-            and col[3:].isascii() and col[3:].isdigit()
-        ):
-            col = "-"
-        dia = str(dia) if dia is not None else "-"
-        if not (
-            len(dia) == 10 and dia[4] == dia[7] == "-"
-            and dia.replace("-", "").isascii()
-            and dia.replace("-", "").isdigit()
-        ):
-            dia = "-"
-        exemplo = (col, dia)
-        if len(grupo[1]) < 5 and exemplo not in grupo[1]:
-            grupo[1].append(exemplo)
-
-    def observar(self, frame, arg, prefixo, comp, contexto):
-        exc, tb = arg[1], arg[2]
-        estado = exc.__dict__.get("_sonda_estado_estrutural")
-        marcada = isinstance(estado, list) and estado[0] is self.marca
-        no_app = bool(prefixo and frame.f_code.co_filename.startswith(prefixo))
-        if not no_app and not marcada:
-            return
-
-        ultimo = self.ultimo(tb)
-        if cruzou_frame(frame, tb):
-            col, dia = contexto(frame)
-            self.erro(exc, comp, col, dia, tb, prefixo)
-        elif no_app and ultimo is not None:
-            # Só fica local se nenhum evento posterior comprovar propagação.
-            self.local(exc, ultimo, prefixo)
-
-    def emitir(self, imprimir):
-        # Orçamento exclusivo do diagnóstico; demais saídas ficam intactas.
-        limite = 192 * 1024
-        usados = 0
-        omitidos = {"grupos_erro": 0, "erros": 0,
-                    "grupos_locais": 0, "tratadas": 0, "tipos": 0}
-
-        def emitir_linha(texto):
-            nonlocal usados
-            texto = texto.encode("ascii", "backslashreplace").decode("ascii")
-            tamanho = len(texto.encode("ascii")) + 1
-            if usados + tamanho > limite - 1024:
-                return False
-            imprimir(texto)
-            usados += tamanho
-            return True
-
-        for (comp, sitio, tipo), (n, exemplos) in sorted(self.grupos.items()):
-            texto = "ERRO %s %s %s %d exemplos=%r" % (
-                comp, sitio, tipo, n, exemplos
-            )
-            if not emitir_linha(texto):
-                omitidos["grupos_erro"] += 1
-                omitidos["erros"] += n
-        for (sitio, tipo), n in sorted(self.locais.items()):
-            if not emitir_linha("TRATADA_LOCAL %s %s %d" % (sitio, tipo, n)):
-                omitidos["grupos_locais"] += 1
-                omitidos["tratadas"] += n
-        for tipo, n in sorted(self.por_tipo.items()):
-            if not emitir_linha("ERROS_POR_TIPO %s %d" % (tipo, n)):
-                omitidos["tipos"] += 1
-        if any(omitidos.values()):
-            imprimir("DIAGNOSTICO_OMITIDO_POR_TETO", omitidos)
-
-
-import ast
-import datetime as dt
-import gc
-import io
-import logging
-import re
-import sys
-import time
-import tokenize
-from collections import Counter
-from contextlib import redirect_stderr, redirect_stdout
-from decimal import Decimal, localcontext
-from pathlib import Path
-from unittest.mock import patch
-
-PARTE = 1
-PARTES = 6
-
-sys.dont_write_bytecode = True
-
-
-def sonda_r1():
-    # Proposta sem execução; desempenho e compatibilidade: [nao verificado].
-    saida = sys.stdout
-    inicio = time.monotonic()
-    limite = inicio + 15 * 60
-    rastreador_anterior = sys.gettrace()
-    competencia = "-"
-    raiz = None
-    prefixo_app = None
-    codigo_handle = None
-    bruto = None
-    chamadas = 0
-    universo_parte_total = 0
-    registro_erros = RegistroErros()
-    erros_total = 0
-    erros_por_tipo = registro_erros.por_tipo
-    somas = {}
-    quantidades = {}
-    selecionados = Counter()
-    pulsos = 0
-    resetar_queries = None
-    invalidar_catalogo = None
-
-    DONOS = ("ESTRUTURA", "CADASTRO", "BATIDA")
-    CHAVES = (
-        "dias_comparados", "bate_ate_10min",
-        "esp_zero_e6_trabalho", "e6_zero_esp_trabalho",
-        "diverge_10_60", "diverge_acima_60",
-        "dia_batida_impar", "impar_que_BATE", "impar_que_DIVERGE",
-        "impar_dentro_da_faixa", "impar_FORA_da_faixa",
-        "impar_no_conjunto_do_dia", "impar_SO_POR_CORTE_do_oraculo",
-        "dia_sem_linha_no_espelho", "dia_sem_lavratura_no_espelho",
-        "dia_isento_ou_ausencia", "dia_sem_trabalho_ambos",
-        "esp_desconta_janela_declarada", "esp_lido_pelo_pago_h",
-    )
-
-    class TempoEsgotado(BaseException):
-        pass
-
-    class Descartar:
-        # Descarte imediato: não acumula stdout/stderr livres em StringIO.
-        def write(self, texto):
-            return len(texto)
-
-        def flush(self):
-            return None
-
-    def imprimir(*partes):
-        print(*partes, file=saida, flush=True)
-
-    def data_segura(valor):
-        if isinstance(valor, dt.datetime):
-            return valor.date().isoformat()
-        if isinstance(valor, dt.date):
-            return valor.isoformat()
-        if isinstance(valor, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", valor):
-            return dt.date.fromisoformat(valor).isoformat()
-        return None
-
-    def contexto(frame):
-        col, dia = None, None
-        while frame is not None:
-            loc = frame.f_locals
-            if col is None:
-                objetos = [loc.get("colaborador"), loc.get("colab"), loc.get("c")]
-                obj_self = loc.get("self")
-                if obj_self is not None:
-                    objetos.append(getattr(obj_self, "__dict__", {}).get("c"))
-                for obj in objetos:
-                    meta = getattr(type(obj), "_meta", None)
-                    if getattr(meta, "model_name", None) == "colaborador":
-                        pk = obj.pk
-                        if isinstance(pk, int) and not isinstance(pk, bool):
-                            col = "col%d" % pk
-                            break
-                if col is None:
-                    for chave in ("colaborador_id", "colab_id"):
-                        pk = loc.get(chave)
-                        if isinstance(pk, int) and not isinstance(pk, bool):
-                            col = "col%d" % pk
-                            break
-            if dia is None:
-                # k é o dia julgado; dia já foi incrementado.
-                # app/ponto/management/commands/e6_oraculo.py:321
-                # app/ponto/management/commands/e6_oraculo.py:323
-                for chave in ("k", "data", "dia", "data_turno"):
-                    valor = data_segura(loc.get(chave))
-                    if valor is not None:
-                        dia = valor
-                        break
-            frame = frame.f_back
-        return col or "-", dia or "-"
-
-    def registrar(exc, frame=None):
-        nonlocal erros_total
-        ultimo = registro_erros.ultimo(exc.__traceback__)
-        col, dia = contexto(frame or (ultimo.tb_frame if ultimo else None))
-        registro_erros.erro(
-            exc, competencia, col, dia, prefixo=prefixo_app
-        )
-        erros_total = registro_erros.total
-
-    def copiar_acumuladores(frame):
-        nonlocal bruto
-        loc = frame.f_locals
-        necessarios = ("T", "DONO_H", "DONO_C", "div", "_div_tot")
-        if not all(chave in loc for chave in necessarios):
-            return
-
-        # Só lê o que a autoridade já acumulou; não refaz julgamento.
-        # app/ponto/management/commands/e6_oraculo.py:367
-        # app/ponto/management/commands/e6_oraculo.py:368
-        # app/ponto/management/commands/e6_oraculo.py:369
-        t, h, c = loc["T"], loc["DONO_H"], loc["DONO_C"]
-        uniao = set()
-        for dono in DONOS:
-            uniao.update(c.get(dono, ()))
-        bruto = {
-            "dias": {dono: int(t.get("dono_" + dono, 0)) for dono in DONOS},
-            # Mesma divisão da autoridade, sem a formatação %.1f.
-            # app/ponto/management/commands/e6_oraculo.py:423
-            "horas": {dono: repr(h.get(dono, 0) / 60.0) for dono in DONOS},
-            "colabs": {dono: len(c.get(dono, ())) for dono in DONOS},
-            "total_dias": int(loc["_div_tot"]),
-            # Mesma união usada na saída nativa.
-            # app/ponto/management/commands/e6_oraculo.py:429
-            "total_colabs": len({x[1] for x in loc["div"]}),
-            "uniao_colabs": len(uniao),
-        }
-
-    def rastrear(frame, evento, arg):
-        nonlocal pulsos, erros_total
-        if evento == "call":
-            pulsos += 1
-            if pulsos % 256 == 0 and time.monotonic() >= limite:
-                raise TempoEsgotado()
-            # Inclui chamadores externos para observar A(app) -> B(externo).
-            # Sem eventos line: não depende de entrar num except específico.
-            frame.f_trace_lines = False
-            return rastrear
-        if evento == "exception":
-            registro_erros.observar(
-                frame, arg, prefixo_app, competencia, contexto
-            )
-            erros_total = registro_erros.total
-        elif evento == "return" and frame.f_code is codigo_handle:
-            copiar_acumuladores(frame)
-        return rastrear
-
-    def receber_log(logger, registro):
-        nonlocal erros_total
-        if registro.exc_info and registro.exc_info[1] is not None:
-            exc = registro.exc_info[1]
-            tb = registro.exc_info[2]
-            ultimo = registro_erros.ultimo(tb)
-            origem_app = (
-                ultimo is not None and prefixo_app is not None
-                and ultimo.tb_frame.f_code.co_filename.startswith(prefixo_app)
-            )
-            if origem_app and not cruzou_frame(None, tb):
-                # logger.exception no próprio frame não transforma
-                # uma exceção local em erro da medida.
-                registro_erros.local(exc, ultimo, prefixo_app)
-            else:
-                col, dia = contexto(sys._getframe(1))
-                registro_erros.erro(
-                    exc, competencia, col, dia, tb, prefixo_app
-                )
-            erros_total = registro_erros.total
-
-    def limpar():
-        if resetar_queries is not None:
-            resetar_queries()
-        if invalidar_catalogo is not None:
-            # Cache único de catálogo; não é cache crescente por colaborador.
-            # app/ponto/catalogo/ausencias.py:257
-            # app/ponto/catalogo/ausencias.py:261
-            invalidar_catalogo()
-
-        # Não limpa memos de motores vivos nem os acumuladores do comando.
-        # Os memos pertencem à instância/cálculo:
-        # app/ponto/motor_calculo_v2.py:848
-        # app/ponto/motor_calculo_v2.py:2285
-        # O registro de fontes é fraco e morre com os motores:
-        # app/core/regua_cct.py:487
-        # app/core/regua_cct.py:494
-        gc.collect()
-
-    def ler_relatorio(texto, erros_antes):
-        linhas = texto.splitlines()
-        padrao_counter = (
-            r"\{(?:'[A-Za-z0-9_]+'\s*:\s*\d+"
-            r"(?:,\s*'[A-Za-z0-9_]+'\s*:\s*\d+)*)?\}"
-        )
-        contadores = [
-            ast.literal_eval(linha)
-            for linha in linhas if re.fullmatch(padrao_counter, linha)
-        ]
-        donos = [
-            m for linha in linhas
-            if (m := re.match(
-                r"^\s*(ESTRUTURA|CADASTRO|BATIDA)\s+"
-                r"(\d+) dia-colab\s+(\d+\.\d+) h\s+(\d+) colabs",
-                linha
-            ))
-        ]
-        soma = [
-            m for linha in linhas
-            if (m := re.match(
-                r"^\s*SOMA\s+(\d+)\s+"
-                r"<- tem de ser igual a soma das classes \((\d+)\)", linha
-            ))
-        ]
-        colabs = [
-            m for linha in linhas
-            if (m := re.fullmatch(r"colabs com divergencia: (\d+)", linha))
-        ]
-        falhas = [
-            m for linha in linhas
-            if (m := re.fullmatch(r"erros no espelho: (\d+)", linha))
-        ]
-        if not (
-            len(contadores) == len(soma) == len(colabs) == len(falhas) == 1
-            and len(donos) == 3
-            and {m[1] for m in donos} == set(DONOS)
-            and bruto is not None
-        ):
-            raise RuntimeError("FormatoDaAutoridadeIncompleto")
-
-        soma_dias = sum(bruto["dias"].values())
-        confere_dias = (
-            soma_dias == bruto["total_dias"]
-            == int(soma[0][1]) == int(soma[0][2])
-        )
-        confere_colabs = (
-            bruto["uniao_colabs"] == bruto["total_colabs"] == int(colabs[0][1])
-        )
-        for m in donos:
-            dono = m[1]
-            if (
-                int(m[2]) != bruto["dias"][dono]
-                or int(m[4]) != bruto["colabs"][dono]
-                or m[3] != format(float(bruto["horas"][dono]), ".1f")
-            ):
-                raise RuntimeError("AcumuladoresDaAutoridadeDivergentes")
-
-        if not confere_dias or not confere_colabs:
-            raise RuntimeError("SomaDaAutoridadeDivergente")
-        if selecionados[competencia] != quantidades[competencia]:
-            raise RuntimeError("UniversoDaParteDivergente")
-        if int(falhas[0][1]) and erros_total == erros_antes:
-            raise RuntimeError("ErroDoEspelhoSemDetalhamento")
-
-        imprimir("COMPETENCIA", competencia)
-        t = contadores[0]
-        imprimir("[1]", {chave: t.get(chave, 0) for chave in CHAVES})
-        for linha in linhas:
-            if re.fullmatch(
-                r"BATE \(ate 10 min\): \d+\.\d+% de \d+ dias comparados", linha
-            ):
-                imprimir("[2]", linha)
-        for m in donos:
-            imprimir("[3]", m[0].strip())
-        imprimir("[4] TOTAL divergentes", soma[0][2])
-        imprimir("[5]", colabs[0][0])
-        imprimir("erros_no_espelho", falhas[0][1])
-
-        # Decimal soma exatamente as representações decimais emitidas.
-        # Não usa as horas arredondadas da tabela nativa.
-        with localcontext() as ctx:
-            ctx.prec = 80
-            horas = {dono: Decimal(bruto["horas"][dono]) for dono in DONOS}
-            total_horas = sum(horas.values(), Decimal(0))
-            texto_total_horas = format(total_horas, "f")
-            confere_horas = (
-                sum((Decimal(bruto["horas"][d]) for d in DONOS), Decimal(0))
-                == Decimal(texto_total_horas)
-            )
-
-        for dono in DONOS:
-            imprimir(
-                "PARCIAL|%s|%s|dias=%d|horas=%s|colabs=%d" % (
-                    competencia, dono, bruto["dias"][dono],
-                    bruto["horas"][dono], bruto["colabs"][dono],
-                )
-            )
-        imprimir(
-            "PARCIAL_TOTAL|%s|dias=%d|horas=%s|colabs=%d" % (
-                competencia, bruto["total_dias"],
-                texto_total_horas, bruto["total_colabs"],
-            )
-        )
-        somas[competencia] = (
-            soma[0][0].strip(), confere_dias,
-            texto_total_horas, confere_horas,
-            bruto["total_colabs"], confere_colabs,
-        )
-
-    try:
-        with (
-            patch.object(logging.Logger, "handle", receber_log),
-            redirect_stdout(Descartar()),
-            redirect_stderr(Descartar()),
-        ):
-            from django.apps import apps
-            from django.conf import settings
-            from django.core.management import call_command
-            from django.db import connection, reset_queries, transaction
-            from ponto import janelas
-            from ponto.catalogo import ausencias
-            from ponto.management.commands import e6_oraculo
-            from ponto.services import espelho as modulo_espelho
-
-            raiz = Path(e6_oraculo.__file__).resolve().parents[3]
-            prefixo_app = str(raiz) + "/"
-            codigo_handle = e6_oraculo.Command.handle.__code__
-            resetar_queries = reset_queries
-            invalidar_catalogo = ausencias.invalidar_cache
-
-            if (
-                type(PARTE) is not int
-                or type(PARTES) is not int
-                or PARTES != 6
-                or not 1 <= PARTE <= PARTES
-                or settings.SETTINGS_MODULE != "config.settings.sombra"
-                or not settings.BANCO_DE_ENSAIO
-                or connection.settings_dict["NAME"] != "sombra"
-                or connection.schema_name != "juliani"
-                or rastreador_anterior is not None
-            ):
-                raise RuntimeError("AmbienteIncompativel")
-
-            Empresa = apps.get_model("colaboradores", "Empresa")
-            FM = apps.get_model("ponto", "FechamentoMensal")
-            Colaborador = apps.get_model("colaboradores", "Colaborador")
-            gerente = Colaborador.objects
-            filtro_real = gerente.filter
-            real_espelho = modulo_espelho.espelho_do_colab
-
-            with transaction.atomic():
-                try:
-                    with connection.cursor() a
-
-[truncado em 20000 de 59909 caracteres]
-
-_2278 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2279 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
