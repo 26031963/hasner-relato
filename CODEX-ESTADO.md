@@ -1,7 +1,572 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 18:56** · publicado em **06/11/2026 18:56** (UTC-3)
+> Ultima resposta processada: **06/11/2026 19:01** · publicado em **06/11/2026 19:02** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 19:01 · sessao a41448ae7296 · - · - · origem=Ronald (tmux)
+
+A data da batida pode legitimamente diferir de `data_evento`: o código monta inicialmente o timestamp na data do evento e depois aplica o ajuste noturno; o ajuste consulta os marcos da escala e aceita a hora no evento ou no dia seguinte. (`app/chamados/services/materializacao.py:412-420`; `app/chamados/juizes.py:302-314`)
+
+O teste da volta de intervalo de um turno 19h–07h exige que a entrada de 00h vá para o dia seguinte; portanto, `batida-data_evento=+1` isoladamente não identifica erro. (`app/chamados/tests/test_plantio_intervalo_overnight.py:19-21`; `app/chamados/tests/test_plantio_intervalo_overnight.py:27-33`)
+
+Riscos concretos da escolha de vizinho, a conferir contra os filtros efetivos da sonda:
+
+- Se o filtro “real” for `pergunta_origem IS NULL`, ele admite também plantio anterior a 06/09, conforme a definição do campo. (`app/ponto/models.py:40-44`)
+- A materialização pode reutilizar uma batida real existente e gravar nela `pergunta_origem`. Assim, excluir toda batida com pergunta de origem também pode excluir uma batida real reutilizada. (`app/chamados/services/materializacao.py:832-834`; `app/chamados/services/materializacao.py:916-924`)
+- Há batidas E/S intrajornada; o modelo declara expressamente que `is_intervalo` não forma turno. Selecionar só pelo tipo e pela proximidade, sem considerar intervalo, pode tomar uma volta E como entrada do turno ou uma saída de intervalo S como saída final. (`app/ponto/models.py:9-11`; `app/ponto/models.py:26`)
+- A identidade de turno usada pelo código é colaborador + timestamp de entrada; o próprio juiz distingue dois turnos no mesmo dia. A proximidade temporal dentro de três dias, por si, não verifica essa identidade. (`app/chamados/juizes.py:1880-1883`; `app/chamados/juizes.py:1911-1922`)
+
+Não verifiquei a ocorrência desses cenários nas 668 batidas nem os filtros da `sonda_frota2.py`; os agregados fornecidos não exibem pares individuais. [nao verificado]
+
+## 06/11 19:01 · sessao 7ce4087313eb · - · - · origem=Ronald (tmux)
+
+Sim: a escolha descrita pode divergir do pareamento da cópia. Os riscos são demonstráveis no código; a ocorrência entre as 668 batidas do dado é [nao verificado].
+
+- **Tipo gravado diferente do papel efetivo:** o pareador consulta o papel da ata e o usa antes de recorrer a `tipo`. Buscar exclusivamente E/S gravados pode ignorar uma vizinha válida ou selecionar uma inválida. `app/ponto/turnos.py:1308`, `app/ponto/turnos.py:1380`. Há teste explícito de plantio com “vizinha tipo mentiroso”: `app/ponto/tests/test_plantio_paridade.py:8`.
+- **Intervalo confundido com borda:** batidas de intervalo entram como internas e não abrem/fecham turno. Uma última E pode ser volta de intervalo; uma primeira S pode ser ida ao intervalo, encurtando a duração medida. `app/ponto/turnos.py:1324`, `app/ponto/turnos.py:1369`. O teste preserva um único turno de 06:57 a 15:51 apesar de S 13:02 e E 14:31: `app/ponto/tests/test_parear_borda_vs_intervalo.py:24`, `app/ponto/tests/test_parear_borda_vs_intervalo.py:28`.
+- **Vizinha já pertencente a outro turno:** ao encontrar uma nova E, o pareador mantém o turno anterior aberto e abre outro; uma S posterior não é automaticamente a saída de qualquer E anterior. `app/ponto/turnos.py:1415`. Além disso, S acima do teto da jornada deixa E aberta e vira órfã. Uma distância calculável dentro de três dias não prova par válido. `app/ponto/turnos.py:1445`.
+- **Filtro “real” pode excluir contraparte apurável plantada:** a autoridade do universo apurável exige `retratada_em` nulo e aplica colaborador/janela, sem filtro por origem. Se “real” excluir batidas plantadas, `sem_vizinha` não equivale a “sem contraparte apurável”. `app/ponto/turnos.py:2863`. O filtro efetivo da sonda, ausente no material recebido por este agente, é [nao verificado].
+- **Janela de três dias:** `sem_vizinha` nessa regra expressa ausência apenas no recorte pesquisado; ausência em toda a vida é [nao verificado]. A função apurável permite desativar as bordas da janela, justamente para a pergunta sobre entrada sem saída. `app/ponto/turnos.py:2855`.
+
+Para o cruzamento calendário/duração, a cópia tem teste no qual batidas da madrugada pertencem ao turno da véspera; portanto deslocamento de calendário +1 não estabelece duração superior a 24 horas. `app/ponto/tests/test_turno_da_madrugada_pertence_a_vespera.py:25`.
+
+## 06/11 19:00 · sessao 4e9cf1fe587d · ESMERIL-SEMANTICA · censo · origem=Code
+
+```python
+#!/usr/bin/env python3
+"""Uso: python3 -I inventario_datas.py <raiz_do_repo>."""
+import ast
+from collections import defaultdict
+from pathlib import Path
+import re
+import sys
+import tokenize
+import warnings
+
+APPS = {"ponto", "escala", "chamados", "colaboradores", "folha"}
+PARAMETRO = re.compile(
+    r"^(data(_\w+)?|dia(_\w+)?|data_turno|data_evento|ini|fim|inicio|competencia_\w+)$"
+)
+ESCRITA = {
+    "create", "get_or_create", "update_or_create", "update", "bulk_create", "abrir"
+}
+FILTROS = {"filter", "exclude", "get", "Q"}
+STRINGS = {"values", "values_list", "order_by", "only", "F"}
+
+
+def celula(value):
+    return (str(value).replace("\\", "\\\\").replace("\t", "\\t")
+            .replace("\r", "\\r").replace("\n", "\\n"))
+
+
+def emitir(*values):
+    print("\t".join(celula(value) for value in values))
+
+
+def canon(nome):
+    return nome[4:] if nome.startswith("app.") else nome
+
+
+def pontilhado(node):
+    if isinstance(node, ast.Name):
+        return node.id
+    if isinstance(node, ast.Attribute):
+        base = pontilhado(node.value)
+        return base + "." + node.attr if base else node.attr
+    return ""
+
+
+def literal_string(node):
+    if isinstance(node, ast.Constant) and isinstance(node.value, str):
+        return node.value
+    return None
+
+
+def itens_literais(node):
+    if isinstance(node, (ast.List, ast.Tuple, ast.Set)):
+        return node.elts
+    return ()
+
+
+def trecho(node, source, limite=160):
+    if isinstance(node, ast.Constant):
+        text = repr(node.value)
+    else:
+        text = ast.get_source_segment(source, node) or ast.dump(node)
+    text = " ".join(text.split())
+    return text if len(text) <= limite else text[:limite - 3] + "..."
+
+
+class Escopo:
+    def __init__(self, parent=None, partes=(), tipo="modulo"):
+        self.parent = parent
+        self.partes = partes
+        self.tipo = tipo
+        self.bindings = {}
+
+    def resolver(self, node):
+        name = pontilhado(node)
+        if not name:
+            return ""
+        first, dot, rest = name.partition(".")
+        scope = self
+        while scope is not None:
+            if first in scope.bindings:
+                base = scope.bindings[first]
+                return canon(base + (dot + rest if dot else ""))
+            scope = scope.parent
+        return canon(name)
+
+
+class Indice(ast.NodeVisitor):
+    """Resolve imports lexicais e classes; nao executa o modulo."""
+    def __init__(self, tree, modulo, pacote):
+        self.modulo = modulo
+        self.pacote = pacote
+        self.scope = Escopo()
+        self.at = {}
+        self.classes = {}
+        self.visit(tree)
+
+    def visit(self, node):
+        self.at[node] = self.scope
+        return super().visit(node)
+
+    def visit_Import(self, node):
+        for item in node.names:
+            if item.asname:
+                self.scope.bindings[item.asname] = item.name
+            else:
+                first = item.name.split(".")[0]
+                self.scope.bindings[first] = first
+
+    def visit_ImportFrom(self, node):
+        if node.level:
+            parts = self.pacote.split(".") if self.pacote else []
+            drop = node.level - 1
+            parts = parts[:len(parts) - drop] if drop <= len(parts) else []
+            if node.module:
+                parts.extend(node.module.split("."))
+            base = ".".join(parts)
+        else:
+            base = node.module or ""
+        for item in node.names:
+            if item.name != "*":
+                self.scope.bindings[item.asname or item.name] = (
+                    base + "." + item.name if base else item.name
+                )
+
+    def entrar(self, node, tipo):
+        parent = self.scope
+        partes = parent.partes + (node.name,)
+        ident = ".".join(filter(None, (self.modulo, ".".join(partes))))
+        parent.bindings[node.name] = ident
+        self.scope = Escopo(parent, partes, tipo)
+        if tipo == "classe":
+            self.classes[ident] = (node, parent)
+        self.generic_visit(node)
+        self.scope = parent
+
+    def visit_ClassDef(self, node):
+        self.entrar(node, "classe")
+
+    def visit_FunctionDef(self, node):
+        self.entrar(node, "funcao")
+
+    visit_AsyncFunctionDef = visit_FunctionDef
+
+
+class Usos(ast.NodeVisitor):
+    def __init__(self, arquivo, indice, campos, modelos, eventos):
+        self.arquivo = arquivo
+        self.indice = indice
+        self.campos = campos
+        self.modelos = modelos
+        self.nomes_modelos = {name.rsplit(".", 1)[-1] for name in modelos}
+        self.eventos = eventos
+        self.pilha = []
+
+    def contexto(self):
+        return ".".join(self.pilha) or "<modulo>"
+
+    def registrar(self, tipo, nome, node, forma=""):
+        if tipo in {"ESC", "LEI"} and nome not in self.campos:
+            return
+        self.eventos.append((
+            tipo, nome, self.arquivo, node.lineno, node.col_offset,
+            self.contexto(), forma
+        ))
+
+    def entrar(self, node):
+        self.pilha.append(node.name)
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            args = node.args
+            params = list(args.posonlyargs) + list(args.args) + list(args.kwonlyargs)
+            params += [arg for arg in (args.vararg, args.kwarg) if arg is not None]
+            for arg in params:
+                if PARAMETRO.fullmatch(arg.arg):
+                    self.registrar("PARAM", arg.arg, arg)
+        self.generic_visit(node)
+        self.pilha.pop()
+
+    visit_ClassDef = entrar
+    visit_FunctionDef = entrar
+    visit_AsyncFunctionDef = entrar
+
+    def visit_Attribute(self, node):
+        if isinstance(node.ctx, ast.Store):
+            self.registrar("ESC", node.attr, node, "atributo.Store")
+        elif isinstance(node.ctx, ast.Load):
+            self.registrar("LEI", node.attr, node, "atributo.Load")
+        self.generic_visit(node)
+
+    def visit_Call(self, node):
+        scope = self.indice.at[node]
+        raw = pontilhado(node.func)
+        resolved = scope.resolver(node.func)
+        # Attribute funciona tambem em chamadas encadeadas: qs().filter(...).
+        final = (node.func.attr if isinstance(node.func, ast.Attribute)
+                 else raw.rsplit(".", 1)[-1])
+        resolved_final = resolved.rsplit(".", 1)[-1]
+        called = resolved or raw or "<chamada dinamica>"
+        constructor = (resolved in self.modelos
+                       or final in self.nomes_modelos)
+        filtro = final in FILTROS or resolved_final == "Q"
+        strings = final in STRINGS or resolved_final == "F"
+
+        for kw in node.keywords:
+            if kw.arg and PARAMETRO.fullmatch(kw.arg):
+                self.registrar("ARG", kw.arg, kw, called)
+
+            if kw.arg in self.campos and (final in ESCRITA or constructor):
+                self.registrar("ESC", kw.arg, kw, "kwarg:" + (final or called))
+
+            if kw.arg and filtro:
+                field = kw.arg.split("__", 1)[0]
+                self.registrar("LEI", field, kw, "filtro:" + kw.arg)
+
+            if kw.arg == "defaults" and isinstance(kw.value, ast.Dict):
+                for key in kw.value.keys:
+                    field = literal_string(key)
+                    if field is not None:
+                        self.registrar("ESC", field, key, "defaults:" + called)
+
+            if kw.arg == "update_fields":
+                for item in itens_literais(kw.value):
+                    field = literal_string(item)
+                    if field is not None:
+                        self.registrar("ESC", field, item, "update_fields")
+
+        if final == "setattr" and len(node.args) >= 2:
+            field = literal_string(node.args[1])
+            if field is not None:
+                self.registrar("ESC", field, node.args[1], "setattr")
+
+        if strings:
+            # Expressoes nos kwargs continuam sendo visitadas abaixo.
+            for arg in node.args:
+                value = literal_string(arg)
+                if value is None:
+                    continue
+                text = (
+                    value[1:]
+                    if final == "order_by" and value.startswith("-")
+                    else value
+                )
+                field = text.split("__", 1)[0]
+                self.registrar(
+                    "LEI", field, arg,
+                    "string:" + (final or called) + ":" + value
+                )
+
+        self.generic_visit(node)
+
+
+def excluido(rel):
+    return ("migrations" in rel.parts[:-1] or "tests" in rel.parts[:-1]
+            or rel.name.startswith("test_"))
+
+
+def inventariar(root):
+    erros = []
+    fontes = []
+    app_dir = root / "app"
+    if not app_dir.is_dir():
+        emitir("ERRO", app_dir, "FileNotFoundError: diretorio app inexistente")
+        emitir("ERROS=1")
+        return 2
+
+    # A exclusao de migrations/tests aplica-se aos usos; nao aos modelos.
+    for path in sorted(app_dir.rglob("*.py"), key=lambda p: p.as_posix()):
+        rel_app = path.relative_to(app_dir)
+        candidato = bool(rel_app.parts) and rel_app.parts[0] in APPS
+        usos = not excluido(rel_app)
+        if not (candidato or usos):
+            continue
+
+        arquivo = path.relative_to(root).as_posix()
+        try:
+            with tokenize.open(str(path)) as handle:
+                source = handle.read()
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", SyntaxWarning)
+                tree = ast.parse(source, filename=arquivo)
+
+            parts = list(rel_app.with_suffix("").parts)
+            init = parts[-1] == "__init__"
+            if init:
+                parts.pop()
+            modulo = ".".join(parts)
+            pacote = modulo if init else ".".join(parts[:-1])
+            indice = Indice(tree, modulo, pacote)
+        except Exception as exc:
+            erros.append((arquivo, type(exc).__name__ + ": " + str(exc)))
+            continue
+
+        fontes.append((arquivo, source, tree, indice, candidato, usos))
+
+    classes = {}
+    for _, _, _, indice, _, _ in fontes:
+        classes.update(indice.classes)
+
+    modelos = {"django.db.models.Model"}
+    while True:
+        novos = {
+            ident for ident, (node, scope) in classes.items()
+            if ident not in modelos
+            and any(scope.resolver(base) in modelos for base in node.bases)
+        }
+        if not novos:
+            break
+        modelos.update(novos)
+    modelos.discard("django.db.models.Model")
+
+    campos = []
+    donos = defaultdict(set)
+    declaracoes = defaultdict(set)
+
+    for arquivo, source, tree, indice, candidato, _ in fontes:
+        if not candidato:
+            continue
+        app = Path(arquivo).parts[1]
+
+        for node in ast.walk(tree):
+            if not isinstance(node, (ast.Assign, ast.AnnAssign)):
+                continue
+            scope = indice.at[node]
+            if scope.tipo != "classe":
+                continue
+
+            ident = ".".join(filter(None, (
+                indice.modulo, ".".join(scope.partes)
+            )))
+            value = node.value
+            if ident not in modelos or not isinstance(value, ast.Call):
+                continue
+
+            tipo = scope.resolver(value.func)
+            if tipo not in {
+                "django.db.models.DateField",
+                "django.db.models.DateTimeField",
+            }:
+                continue
+
+            targets = (
+                node.targets if isinstance(node, ast.Assign) else [node.target]
+            )
+            kwargs = {kw.arg: kw.value for kw in value.keywords if kw.arg}
+            relevantes = []
+            for key in ("auto_now", "auto_now_add", "null", "help_text"):
+                if key in kwargs:
+                    relevantes.append(key + "=" + trecho(
+                        kwargs[key], source, 100 if key == "help_text" else 160
+                    ))
+
+            for target in targets:
+                if not isinstance(target, ast.Name):
+                    continue
+                owner = app + "." + ".".join(scope.partes)
+                campos.append((
+                    owner + "." + target.id,
+                    tipo.rsplit(".", 1)[-1],
+                    arquivo,
+                    target.lineno,
+                    "; ".join(relevantes) or "-",
+                ))
+                donos[target.id].add(ident)
+                declaracoes[target.id].add(
+                    arquivo + ":" + str(target.lineno)
+                )
+
+    eventos = []
+    for arquivo, _, tree, indice, _, usos in fontes:
+        if usos:
+            Usos(arquivo, indice, set(donos), modelos, eventos).visit(tree)
+
+    emitir(
+        "NOTA",
+        "[nao verificado] Inventario AST por nome; "
+        "o casamento nao distingue modelo."
+    )
+    emitir(
+        "NOTA",
+        "[nao verificado] Contagens de ocorrencias sintaticas, "
+        "sem inferencia de execucao."
+    )
+    emitir(
+        "NOTA",
+        "[nao verificado] GENERICO significa nome declarado "
+        "em pelo menos dois modelos."
+    )
+    emitir(
+        "NOTA",
+        "[nao verificado] ARQUIVOS conta a uniao dos arquivos "
+        "com ESC/LEI, sem declaracoes isoladas."
+    )
+
+    for nome, tipo, arquivo, linha, kwargs in sorted(campos):
+        emitir("CAMPO", nome, tipo, arquivo + ":" + str(linha), kwargs)
+
+    contagens = {
+        nome: {"ESC": 0, "LEI": 0, "arquivos": set()} for nome in donos
+    }
+
+    for tag, nome, arquivo, linha, coluna, contexto, forma in sorted(
+        eventos, key=lambda e: (e[2], e[3], e[4], e[0], e[1], e[6])
+    ):
+        row = [tag, nome, arquivo + ":" + str(linha), contexto]
+        if tag != "PARAM":
+            row.append(forma)
+        emitir(*row)
+
+        if tag in {"ESC", "LEI"}:
+            contagens[nome][tag] += 1
+            contagens[nome]["arquivos"].add(arquivo)
+
+    for arquivo, exc in sorted(erros):
+        emitir("ERRO", arquivo, exc)
+
+    for nome in sorted(donos, key=lambda name: (-contagens[name]["LEI"], name)):
+        counts = contagens[nome]
+        emitir(
+            "RESUMO",
+            nome,
+            "ESC=" + str(counts["ESC"]),
+            "LEI=" + str(counts["LEI"]),
+            "ARQUIVOS=" + str(len(counts["arquivos"])),
+            "GENERICO" if len(donos[nome]) >= 2 else "-",
+            "MODELOS=" + str(len(donos[nome])),
+            "DECLARACOES=" + ",".join(sorted(declaracoes[nome])),
+        )
+
+    emitir("ERROS=" + str(len(erros)))
+    return 1 if erros else 0
+
+
+def main():
+    if len(sys.argv) != 2:
+        print(__doc__, file=sys.stderr)
+        return 2
+    return inventariar(Path(sys.argv[1]).expanduser().resolve())
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+```
+
+- [nao verificado] O casamento por nome pode incluir objetos e métodos sem relação com os modelos; não infere tipos dos receptores.
+- [nao verificado] Não detecta `getattr`, `setattr` com nome calculado, acesso por `__dict__`, SQL cru ou código gerado.
+- [nao verificado] Não expande `**kwargs`, `*args`, dicionários ou listas guardados em variáveis, nem propaga valores entre funções.
+- [nao verificado] Reconhece aliases explícitos de imports; não resolve aliases por atribuição, reexportações, imports `*` ou rebinding conforme o fluxo.
+- [nao verificado] Identifica modelos pela cadeia estática até `django.db.models.Model`; bases externas, fábricas e metaclasses podem escapar.
+- [nao verificado] Reconhece o primeiro componente de `campo__lookup`; não percorre relações como `relacao__campo`.
+- [nao verificado] Conta ocorrências sintáticas, inclusive código morto; atribuição e `update_fields` podem contar separadamente a mesma operação.
+- [nao verificado] `auto_now`/`auto_now_add` entram em CAMPOS, sem gerar escritores implícitos; `AugAssign` entra como Store conforme o AST.
+- [nao verificado] PARAM/ARG registram nomes e locais; não comprovam transferência de valores ou significado temporal.
+- [nao verificado] Erros tornam o inventário parcial; a sintaxe aceita depende da versão do Python usada.
+
+## 06/11 18:58 · sessao 24c9748813fc · BUG-PLANTIO-NOTURNO-MAIS-1 · sonda · origem=Code
+
+Consolidação da saída fornecida, sem nova execução da sonda. O cabeçalho informa **06/11 18:56:15**, mas não informa a data do dump da sombra. [nao verificado]
+
+**(a) UNIVERSO: 9.729**, sendo 6.733 em 10/2026 e 2.996 em 11/2026. A soma da tabela abaixo fecha nesse universo. [nao verificado]
+
+**(b) Motivo × classe × estado × competência.** `D_e_dia_da_saida` significa `data_evento` no dia da saída, conforme a definição fornecida. [nao verificado]
+
+| Motivo | Classe | Estado | 10/2026 | 11/2026 | Evidência |
+|---|---|---|---:|---:|---|
+| orfao_14h | D_e_dia_da_saida | aberta | 25 | 22 | [nao verificado] |
+| orfao_14h | D_e_dia_da_saida | materializada | 92 | 30 | [nao verificado] |
+| orfao_14h | D_e_dia_da_saida | respondida | 9 | 4 | [nao verificado] |
+| orfao_14h | coerente | aberta | 32 | 53 | [nao verificado] |
+| orfao_14h | coerente | materializada | 485 | 162 | [nao verificado] |
+| orfao_14h | coerente | respondida | 11 | 28 | [nao verificado] |
+| orfao_14h | outro | materializada | 19 | 4 | [nao verificado] |
+| orfao_14h | sem_turno | aberta | 755 | 640 | [nao verificado] |
+| orfao_14h | sem_turno | materializada | 2.660 | 712 | [nao verificado] |
+| orfao_14h | sem_turno | respondida | 85 | 59 | [nao verificado] |
+| saida_sem_entrada | D_e_dia_da_saida | aberta | 5 | 2 | [nao verificado] |
+| saida_sem_entrada | D_e_dia_da_saida | materializada | 10 | 3 | [nao verificado] |
+| saida_sem_entrada | D_e_dia_da_saida | respondida | 13 | 1 | [nao verificado] |
+| saida_sem_entrada | coerente | aberta | 35 | 7 | [nao verificado] |
+| saida_sem_entrada | coerente | materializada | 282 | 66 | [nao verificado] |
+| saida_sem_entrada | coerente | respondida | 9 | 6 | [nao verificado] |
+| saida_sem_entrada | sem_turno | aberta | 731 | 646 | [nao verificado] |
+| saida_sem_entrada | sem_turno | materializada | 1.420 | 492 | [nao verificado] |
+| saida_sem_entrada | sem_turno | respondida | 55 | 59 | [nao verificado] |
+
+**(c) EFEITO — distribuição de `delta_civil` das batidas plantadas.** [nao verificado]
+
+| Motivo | Competência | delta=0 | delta=1 | delta≥2 | Total | Evidência |
+|---|---|---:|---:|---:|---:|---|
+| orfao_14h | 10/2026 | 213 | 82 | 0* | 295 | [nao verificado] |
+| orfao_14h | 11/2026 | 56 | 15 | 0* | 71 | [nao verificado] |
+| saida_sem_entrada | 10/2026 | 241 | 0* | 0* | 241 | [nao verificado] |
+| saida_sem_entrada | 11/2026 | 56 | 1 | 0* | 57 | [nao verificado] |
+
+`0*` significa nenhuma linha correspondente no bloco EFEITO fornecido. Portanto, **nenhuma `orfao_14h` com `delta_civil≥2` aparece nessa saída**, em nenhuma das duas competências; o número fornecido não demonstra saída plantada um dia além. [nao verificado]
+
+**(d) VIVAS em `D_e_dia_da_saida`: 81**, distribuídas abaixo. São as classificadas pela sonda no recorte indicado para mudança de leitura. [nao verificado]
+
+| Motivo | Estado | 10/2026 | 11/2026 | Total | Evidência |
+|---|---|---:|---:|---:|---|
+| orfao_14h | aberta | 25 | 22 | 47 | [nao verificado] |
+| orfao_14h | respondida | 9 | 4 | 13 | [nao verificado] |
+| saida_sem_entrada | aberta | 5 | 2 | 7 | [nao verificado] |
+| saida_sem_entrada | respondida | 13 | 1 | 14 | [nao verificado] |
+| **Total** | **aberta/respondida** | **52** | **29** | **81** | [nao verificado] |
+
+**(e) ERROS:** `{}`, isto é, nenhum erro reportado; `rc_sombra=0`. A saída não aciona a condição “ERROS>0 = sem conclusão”. [nao verificado]
+
+Sobre **T, turno incompleto em `{D−1,D}`**: esse predicado, sozinho, **não garante associação ao episódio correto**. O pareador preserva o turno anterior incompleto quando chega outra entrada; a emissão, por sua vez, agrupa o episódio pela identidade da batida-origem. Assim, presença de turno incompleto na vizinhança não estabelece que ele seja a origem daquela pergunta. [turnos.py:1415](/home/ronald/codex_ws/40a0054572dd35f01266dac318e2ddc50eb6edaa/app/ponto/turnos.py:1415), [disputa_emissao.py:1021](/home/ronald/codex_ws/40a0054572dd35f01266dac318e2ddc50eb6edaa/app/chamados/services/disputa_emissao.py:1021)
+
+O exemplo de dois plantões consecutivos de **12x36** não demonstra, por si, dois candidatos em `{D−1,D}`: o ciclo é descrito como um dia de trabalho e outro de folga. A ocorrência de classificação errada nesse exemplo, neste dump, permanece [nao verificado]. [models.py:37](/home/ronald/codex_ws/40a0054572dd35f01266dac318e2ddc50eb6edaa/app/escala/models.py:37)
+
+A divergência de contrato está no código: o emissor resolve `data_evento` pelo **dia da saída**, enquanto `_turno_tem_saida` procura `data_turno == data_evento`. O plantio também usa essa data como base e o ajuste overnight testa `D` e `D+1`. [servico_jornada.py:483](/home/ronald/codex_ws/40a0054572dd35f01266dac318e2ddc50eb6edaa/app/escala/servico_jornada.py:483), [juizes.py:362](/home/ronald/codex_ws/40a0054572dd35f01266dac318e2ddc50eb6edaa/app/chamados/juizes.py:362), [materializacao.py:414](/home/ronald/codex_ws/40a0054572dd35f01266dac318e2ddc50eb6edaa/app/chamados/services/materializacao.py:414), [juizes.py:302](/home/ronald/codex_ws/40a0054572dd35f01266dac318e2ddc50eb6edaa/app/chamados/juizes.py:302)
+
+Não localizei o corpo de `sonda_frota.py` na cópia. Seu desempate de T, a correspondência com o hash `a38dd1d8efe5a829` e quantas das 81 classificações estariam erradas permanecem **[nao verificado]**.
+
+## 06/11 18:57 · sessao b72bad75e38d · - · - · origem=Ronald (tmux)
+
+- O emissor `resolver_data_evento` retorna o dia da **saída esperada** em `orfao_14h` e o dia da **saída órfã** em `saida_sem_entrada`. [app/escala/servico_jornada.py:483](/home/ronald/codex_ws/40a0054572dd35f01266dac318e2ddc50eb6edaa/app/escala/servico_jornada.py:483)
+- O detector também grava `contexto['orfao_14h']['data']` com a data da saída esperada. [app/chamados/detector_anomalias.py:45](/home/ronald/codex_ws/40a0054572dd35f01266dac318e2ddc50eb6edaa/app/chamados/detector_anomalias.py:45)
+- Essa saída esperada é o último marco encadeado: o encadeamento avança um dia quando o horário seguinte cruza a meia-noite e a função retorna `fim.date()`. [app/escala/utils.py:936](/home/ronald/codex_ws/40a0054572dd35f01266dac318e2ddc50eb6edaa/app/escala/utils.py:936), [app/escala/utils.py:968](/home/ronald/codex_ws/40a0054572dd35f01266dac318e2ddc50eb6edaa/app/escala/utils.py:968)
+- O plantio usa `p.data_evento` como data-base, combina nela a hora declarada e chama o ajuste overnight. [app/chamados/services/materializacao.py:344](/home/ronald/codex_ws/40a0054572dd35f01266dac318e2ddc50eb6edaa/app/chamados/services/materializacao.py:344), [app/chamados/services/materializacao.py:413](/home/ronald/codex_ws/40a0054572dd35f01266dac318e2ddc50eb6edaa/app/chamados/services/materializacao.py:413)
+- O ajuste busca a escala vigente nessa data e testa candidatos em `data_evento` e `data_evento+1` contra o envelope dos marcos. [app/chamados/juizes.py:302](/home/ronald/codex_ws/40a0054572dd35f01266dac318e2ddc50eb6edaa/app/chamados/juizes.py:302)
+- O leitor de completude `_turno_tem_saida` consulta exclusivamente o turno com `t.data_turno == p.data_evento`. Portanto, o código contém duas leituras distintas da data: saída no emissor e turno nesse leitor. [app/chamados/juizes.py:362](/home/ronald/codex_ws/40a0054572dd35f01266dac318e2ddc50eb6edaa/app/chamados/juizes.py:362)
+- O juiz de batida plantada aceita a hora do slot nas datas `data_evento−1`, `data_evento` e `data_evento+1`; logo, esse julgamento não demonstra sozinho que o dia civil está correto. [app/chamados/juizes.py:263](/home/ronald/codex_ws/40a0054572dd35f01266dac318e2ddc50eb6edaa/app/chamados/juizes.py:263)
+- Não localizei `sonda_frota.py` na cópia; só os wrappers `bin/sonda_frota.sh` e `bin/sonda_leitura.sh`. Correspondência do hash `a38dd1d8efe5a829` com algum código executável presente: [nao verificado].
+- Atribuir os números raspados a um desses caminhos específicos de emissão/plantio: [nao verificado].
+
+## 06/11 18:57 · sessao 03ab1999c4a9 · - · - · origem=Ronald (tmux)
+
+- O código identifica o episódio pela **batida-origem**, agrupando chamados por `origem.pk`; portanto, apenas achar algum turno incompleto em `{D-1,D}` não demonstra que ele pertence à pergunta examinada. A associação usada pela sonda permanece [nao verificado], pois seu `.py` não foi localizado na cópia. Evidência do vínculo real: `app/chamados/services/disputa_emissao.py:1021-1048`.
+
+- O pareador preserva turnos incompletos anteriores quando chega outra entrada: emite o turno anterior e abre o seguinte. Logo, “há turno incompleto na vizinhança” não estabelece sozinho uma origem única. `app/ponto/turnos.py:1415-1418`. O retorno contém os turnos encontrados e é ordenado por `data_turno`, sem deduplicação nessa etapa. `app/ponto/turnos.py:1990-1995`.
+
+- O exemplo “dois plantões consecutivos de 12x36” **não demonstra sozinho dois candidatos em dois dias civis consecutivos**: o modelo descreve 12x36 como “um dia trabalha, um dia folga”. `app/escala/models.py:37`. Existência desses casos e quantidade de classificações erradas no dump: [nao verificado].
+
+- A divergência de contrato é comprovável: `resolver_data_evento` devolve a data da saída esperada para `orfao_14h`. `app/escala/servico_jornada.py:483-491`. O materializador usa essa data para compor a resposta e passa ao ajuste overnight. `app/chamados/services/materializacao.py:344-347`, `app/chamados/services/materializacao.py:414-420`. O ajuste ancora os marcos em `data_evento` e testa as datas `D` e `D+1`. `app/chamados/juizes.py:302-313`. Isso prova o mecanismo no código; incidência efetiva de saída plantada um dia além deve vir dos números `delta_civil`, não apenas da classe da pergunta. [nao verificado]
 
 ## 06/11 18:56 · sessao 9d4d73a5e5aa · BO-[nome]-0611 · sonda · origem=Code
 
@@ -876,266 +1441,4 @@ O leitor é **`decididos_do_periodo`**, que monta `{data: cartao_do_dia}`. Sua c
 
 [truncado em 20000 de 21951 caracteres]
 
-## 06/11 18:35 · sessao c724227316a6 · - · - · origem=Ronald (tmux)
-
-`motivos_a_perguntar` recusa nesta ordem:
-
-1. `dia_sem_trabalho(cel)`; pelo `or` com curto circuito, só depois testa colaborador diferente de `ativo`. Qualquer um devolve `[]`. (`app/chamados/services/fabrica_da_celula.py:89-92`)
-2. Dia futuro (`cel.data > hoje`), devolvendo `[]`. (`app/chamados/services/fabrica_da_celula.py:93-94`)
-3. Define `agora` quando ausente e calcula `vencidos_no_instante`; esse cálculo antecede a próxima guarda. (`app/chamados/services/fabrica_da_celula.py:95-98`)
-4. Veredito preenchido fora de `CelulaDia.VEREDITOS_ACUSAM`. (`app/chamados/services/fabrica_da_celula.py:99-100`)
-5. `parcial_so_lista`, usando a ata e o julgamento anterior recebido ou da própria célula. (`app/chamados/services/fabrica_da_celula.py:101-104`)
-6. Retira motivos já presentes em perguntas do mesmo colaborador/data, excluindo somente `VIA_DUPLICATA`; retorna motivos de `motivos_pela_ata` ainda ausentes. (`app/chamados/services/fabrica_da_celula.py:118-126`)
-
-Dentro de `motivos_pela_ata`, conjunto vazio de vencidos cala; `_ata_do_dia` que não permite cala; sem ata e com conjunto de vencidos também cala; sem ata e `vencidos=None` consulta `classificar_falta`; com ata, só seleciona marcos vencidos. (`app/chamados/services/fabrica_da_celula.py:45-64`)
-
-`dia_sem_trabalho` aceita ausência parcial como exceção: nela, só `cel.trabalha is False` cala; nos demais casos, cala por `trabalha is False` ou `ata.tipo_dia` preenchido e diferente de `trabalho`. (`app/chamados/juizes.py:422-428`)
-
-Há outros escritores possíveis sem essa guarda global; portanto o silêncio desse emissor não demonstra impossibilidade de outra porta. Um exemplo concreto de chamado da célula é `detectar_par_relampago.Command.handle`: após suas guardas próprias (`par_completo`, dry-run/retratador), chama `ChamadoColaborador.abrir` com módulo `par_relampago` e `contexto_json.data_turno`; não consulta `dia_sem_trabalho` nesse caminho. (`app/ponto/management/commands/detectar_par_relampago.py:327`, `app/ponto/management/commands/detectar_par_relampago.py:352-385`)
-
-O catálogo declara `par_relampago` como fato do dia, chave `data_turno`, dono supervisão; `abrir` resolve a célula correspondente antes de gravar. (`app/chamados/catalogo/modulos.py:113-114`; `app/chamados/models.py:913-932`) As guardas centrais não proíbem todo nascimento em folga: `_celula_que_absolve` só alcança `MODULOS_DE_TURNO`; `_veto_da_regua` só alcança a união `FURO_MODULES + MODULOS_DE_TURNO`, listas que não incluem `par_relampago`. (`app/chamados/models.py:1073-1076`; `app/chamados/models.py:1097-1099`; `app/ponto/services/furos_vetados.py:74-81`; `app/chamados/catalogo/furo_modulos.py:15-16`; `app/chamados/reconciliador.py:336-337`) Assim, há possibilidade estática de um chamado desse módulo nascer para uma folga trabalhada que satisfaça o detector; ocorrência nos 161 dias da amostra: **[não verificado]**.
-
-Também há nascimento de pergunta por outro caminho: a API acrescenta `foto_ausente` conforme `selfie_ausente`, registra `ultima_batida` e chama `criar_ou_atualizar_disputa`; esse helper chama `gerar_perguntas_disputa`, que deriva a data local da última batida e chama `PerguntaDisputa.abrir`. (`app/api/views_core.py:459-475`; `app/api/views_core.py:769-780`; `app/chamados/services/disputa_emissao.py:605-618`; `app/chamados/services/disputa_emissao.py:350-364`; `app/chamados/services/disputa_emissao.py:389-396`) O gate da pergunta resolve a célula pelo dia e efetua o `create`, sem guarda `dia_sem_trabalho`. (`app/chamados/models.py:2398-2477`) `foto_ausente` tem pergunta no catálogo. (`app/chamados/catalogo/perguntas.py:94-97`)
-
-Nascimento de pergunta não garante porta alcançável: ela ainda precisa estar viva pelo C6, no app, sob âncora na fila, sem resposta vazia quando respondida; chamado da célula precisa estar na fila. (`app/chamados/juizes.py:1341-1369`; `app/chamados/juizes.py:1375-1386`) O C6 pode encerrar pela célula, mas resposta textual ainda não validada tem precedência quando não houve decisão explícita do admin. (`app/chamados/juizes.py:1135-1162`; `app/chamados/juizes.py:1180-1196`) Logo, possibilidade de outro escritor: **sim, condicional**; porta efetivamente nascida para algum dos 161 casos: **[não verificado]**.
-
-A busca global do identificador encontrou somente um leitor de produção de `STATUS_QUE_PEDEM_DECISAO`: `resolver_dia_oferecido`, em `app/colaboradores/services/calendario.py:104`; o outro consumidor é o teste, que importa, confere a tupla e itera seus status. (`app/chamados/tests/test_o261_vigia_fio.py:901-903`) A tupla contém `falta`, `irregular`, `aberto`, `sem_certidao`, sem `folga_trabalhada`. (`app/colaboradores/services/calendario.py:94`)
-
-Nenhum `AGENTS.md` foi encontrado nos diretórios ancestrais consultados nem sob `app`; existência fora desses lugares: **[não verificado]**.
-
-## 06/11 18:35 · sessao 03448364f99c · - · - · origem=Ronald (tmux)
-
-Contratos encontrados:
-
-| Função | Contrato documentado |
-|---|---|
-| `dia_das_batidas(colab, ini, fim, turnos=None)` | `app/ponto/turnos.py:2874`. Recebe colaborador e janela apresentada; `turnos` é alimentação opcional. Retorna `{batida.pk: date}`: batida reclamada pertence ao dia do turno; outra pertence à sua data local. `app/ponto/turnos.py:2875`, `app/ponto/turnos.py:2895`, `app/ponto/turnos.py:2911`. |
-| `dias_da_ausencia(tipo, data, data_fim, ini, fim)` | `app/ponto/turnos.py:2774`. Retorna lista de datas na interseção com `[ini,fim]`; ausência sem fim estende até `fim` somente para `TIPOS_EM_ABERTO`, senão ocupa o dia único. `app/ponto/turnos.py:2775`, `app/ponto/turnos.py:2779`. |
-| `status_dos_dias_lavrados(pares, *, agora=None, carga=None, fatos=None)` | `app/ponto/status_dia.py:221`. `pares` contém `(colaborador,data)`; retorna `{(colaborador_id,data):dict}`. `carga` deve conter datas e colaboradores; `fatos` só pode ser passado com `carga`. `app/ponto/status_dia.py:222`, `app/ponto/status_dia.py:238`, `app/ponto/status_dia.py:259`. |
-| `o_que_segura(colab, mes, ano)` | `app/folha/fora_da_folha.py:203`. Retorna os dias que retêm o colaborador naquela competência, com veredito, motivo, fio, destrava e chamado. As datas retornadas são strings. `app/folha/fora_da_folha.py:204`, `app/folha/fora_da_folha.py:227`. |
-| `competencia_do_fato(colaborador, quando)` | `app/ponto/services/fechamento.py:1586`. Retorna `(mes,ano)` do fato de um dia; aceita `date` ou `datetime`, normalizando datetime consciente para a data local. `app/ponto/services/fechamento.py:1587`, `app/ponto/services/fechamento.py:1542`, `app/ponto/services/fechamento.py:1578`. |
-
-A conformidade das chamadas da sonda com esses contratos é **[não verificado]**: o texto fornecido contém a saída, mas não o corpo de `sonda_dst.py`; tampouco localizei esse arquivo na cópia **[não verificado]**.
-
-Para avaliar `por_que`:
-
-- `dia_sem_trabalho` já decide por duas cláusulas: `trabalha is False` ou `ata.tipo_dia` presente e diferente de `trabalho`; ausência parcial conserva cobrança, salvo `trabalha is False`. `app/chamados/juizes.py:413`, `app/chamados/juizes.py:426`.
-- Identificar feriado apenas por `trabalha_em_feriado=False` repetiria incompletamente a regra existente: `feriado_vira_folga` exige também ciclo elegível e feriado no lugar do vínculo. `app/escala/models.py:1373`, `app/escala/models.py:1382`, `app/escala/models.py:1389`.
-- `feriado_trab_feriado_True_mas_folga` não demonstra contradição: a transformação por feriado só altera `base is True`, preservando folga já existente; a precedência também admite feriado vencer folga. `app/escala/models.py:1367`, `app/ponto/precedencia.py:17`, `app/ponto/precedencia.py:376`.
-- Ausência, feriado, folga e trabalho já têm classificação e precedência próprias na produção; o vencedor é obtido ordenando os fatos por `PRECEDENCIA`. `app/ponto/precedencia.py:46`, `app/ponto/precedencia.py:379`, `app/ponto/precedencia.py:396`.
-- Sem o script, dizer se `por_que` apenas agrupa ou reimplementa/contradiz essa regra permanece **[não verificado]**.
-
-## 06/11 18:34 · sessao e15b5cdc899a · - · - · origem=Ronald (tmux)
-
-O leitor central é **`decididos_do_periodo(colaborador, data_ini, data_fim, *, ausencias=None)`**, que declara responder “houve decisão humana neste dia?”, inclusive para rejeitadas; sua consulta filtra colaborador e interseção com a janela, **sem exigir autor admin, aprovação ou chamado de origem**. Portanto, uma ausência registrada pelo próprio colaborador alcança esse leitor se sua data/período intersectar a janela. Ele expande o intervalo e monta `cartao_do_dia`; o lançamento mais recente vence. (`app/ponto/services/dia_decidido.py:529`, `:532`, `:547`, `:550`, `:557`, `:561`.)
-
-O cartão inclui `veredito`, `cor`, `rotulo`, minutos, tipo, status, ID, quem e quando; `quem_quando` prefere quem aprovou/recusou e usa quem registrou como alternativa. Logo, não exclui o próprio colaborador na autoria. (`app/ponto/services/dia_decidido.py:500`, `:506`, `:512`, `:516`.)
-
-A ligação com a tela do admin existe:
-
-- Calendário chama `decididos_do_periodo` e `cobertura_ausencia_periodo(..., para='folha')`; passa ambos para `do_dia` e publica `palavra_dia`, `cor_dia`, `veredito_dia`. O template mostra o rótulo no chip de ausência ou “O que foi decidido neste dia: …”. (`app/colaboradores/services/calendario.py:531`, `:533`, `:534`, `:715`, `:724`; `app/templates/colaboradores/partials/_calendario_grade.html:97`, `:98`.)
-- Espelho chama o mesmo leitor para a janela, transporta `_decisao_do_dia` e entrega-o a `do_dia`. (`app/ponto/services/espelho.py:647`, `:649`, `:871`, `:328`, `:340`.)
-- Histórico do drawer lê `linha_do_tempo`, que consulta todas as ausências do colaborador, exclui filhas de intervalo e distingue pendentes; o template imprime rótulo, quem e quando. (`app/ponto/views.py:2014`, `:2015`; `app/ponto/services/dia_decidido.py:566`, `:587`, `:593`, `:610`; `app/templates/ponto/partials/painel_ausencia.html:184`, `:188`.)
-
-**Limite:** alcançar `decididos_do_periodo` não demonstra que houve aprovação do admin. Essa função não filtra status, e `cartao_do_dia` calcula o veredito pelo tipo, salvo rejeitada; `do_dia` trata pedido pendente separadamente quando recebe `pendente`. (`app/ponto/services/dia_decidido.py:550`, `:453`, `:461`, `:468`, `:420`.) Para aprovada, a cobertura de folha entra primeiro; pendência deve dizer “aguardando decisão”. (`app/ponto/turnos.py:2514`; `app/ponto/services/dia_decidido.py:363`, `:224`, `:420`.)
-
-No dado fornecido, `col889/2026-10-25` tem ausência `4670`, tipo `atestado`, `pelo_colab`, `sem_chamado`; **status da ausência, datas inicial/final, origem efetiva via disputa, aprovação, rótulo renderizado e presença efetiva na tela não constam**. [não verificado] O código admite alcançar esse dia, porém a sonda não mediu esse leitor. [não verificado]
-
-Sobre `pelo_colab`, já existe uma regra equivalente de identificação de autoria: `getattr(ausencia.registrado_por, 'colaborador', None)` e comparação de seu `pk` com `ausencia.colaborador_id`; ali ela serve especificamente à guarda de aprovação de tipo que exige documento sem anexo. Não prova origem via disputa nem decisão administrativa. (`app/ponto/services/ausencia.py:627`, `:628`, `:630`, `:632`.)
-
-A materialização via disputa usa `registrado_por=user`, `chamado_origem=p.chamado_destino` e descrição da disputa; a documentação distingue falta aprovada e atestado cujo estado inicial é decidido pelo juiz. Assim, ausência nascida via disputa não implica decisão do admin, e um destino vazio pode produzir `chamado_origem=None`. (`app/chamados/services/materializacao.py:495`, `:498`, `:499`, `:520`, `:525`, `:526`, `:527`.)
-
-## 06/11 18:26 · sessao eeb4262ba705 · DIA-SEM-TRABALHO-NA-FRENTE · sonda · origem=Code
-
-**1) Transcrição literal**
-
-Fonte deste bloco: o dado raspado da mensagem, sem arquivo numerado disponível para conferência [nao verificado]. Preservei os exemplos existentes; os grupos menores não trazem três exemplos. Não há linha `CONCLUSAO` no texto recebido: há `INCOMPLETO: 100 erros` [nao verificado].
-
-```text
-U_D_BASE sem_porta classe d n=217 omitidos=0
-U_D n=173 (CAUSA-D 11:2x: 165+5=170) fora={'BATIDA': 3, 'CADASTRO': 14, 'ESTRUTURA_mas_dia_de_trabalho': 27}
-U_A n=170 (chat 17:4x PROD: 175) | INTERSECAO mesmo colab+dia=0 | so_D=173 so_A=170 | UNIAO=343
-LINHAS 343 == UNIAO 343 True
-QUADRO (por_que, batidas, porta, status pede decisao?, segura folha?) -- soma=343
-GRUPO|n=156|folga_do_calendario ; batERRO ; sem_porta ; nao_pede(folga) ; segura|dono={'ESTRUTURA': 156}|em={'D': 156}
-   ex col144 2026-09-21 clausula=trabalha_False fer=False/True/False aus=[] n_bat=ERRO orfas=0 porta=None status=folga resolver=False comp=10/2026
-   ex col144 2026-09-23 clausula=trabalha_False fer=False/True/False aus=[] n_bat=ERRO orfas=0 porta=None status=folga resolver=False comp=10/2026
-   ex col144 2026-09-25 clausula=trabalha_False fer=False/True/False aus=[] n_bat=ERRO orfas=0 porta=None status=folga resolver=False comp=10/2026
-GRUPO|n=126|folga_do_calendario ; batERRO ; sem_porta ; nao_pede(folga_trabalhada) ; nao_segura|dono={'BATIDA': 27, 'CADASTRO': 71, 'ESTRUTURA': 28}|em={'A': 126}
-   ex col49 2026-11-04 clausula=trabalha_False fer=False/True/False aus=[] n_bat=ERRO orfas=1 porta=None status=folga_trabalhada resolver=False comp=11/2026
-   ex col60 2026-11-03 clausula=trabalha_False fer=False/True/False aus=[] n_bat=ERRO orfas=3 porta=None status=folga_trabalhada resolver=False comp=11/2026
-   ex col60 2026-11-05 clausula=trabalha_False fer=False/True/False aus=[] n_bat=ERRO orfas=3 porta=None status=folga_trabalhada resolver=False comp=11/2026
-GRUPO|n=30|feriado_sem_trabalha_em_feriado ; batERRO ; sem_porta ; nao_pede(folga_trabalhada) ; nao_segura|dono={'CADASTRO': 22, 'ESTRUTURA': 7, 'BATIDA': 1}|em={'A': 30}
-   ex col43 2026-11-02 clausula=trabalha_False fer=True/False/True aus=[] n_bat=ERRO orfas=2 porta=None status=folga_trabalhada resolver=False comp=11/2026
-   ex col203 2026-11-02 clausula=trabalha_False fer=True/False/True aus=[] n_bat=ERRO orfas=4 porta=None status=folga_trabalhada resolver=False comp=11/2026
-   ex col207 2026-11-02 clausula=trabalha_False fer=True/False/True aus=[] n_bat=ERRO orfas=2 porta=None status=folga_trabalhada resolver=False comp=11/2026
-GRUPO|n=8|feriado_trab_feriado_True_mas_folga ; batERRO ; sem_porta ; nao_pede(folga) ; segura|dono={'ESTRUTURA': 8}|em={'D': 8}
-   ex col144 2026-11-02 clausula=trabalha_False fer=True/True/False aus=[] n_bat=ERRO orfas=0 porta=None status=folga resolver=False comp=11/2026
-   ex col209 2026-11-02 clausula=trabalha_False fer=True/True/False aus=[] n_bat=ERRO orfas=0 porta=None status=folga resolver=False comp=11/2026
-   ex col268 2026-11-02 clausula=trabalha_False fer=True/True/False aus=[] n_bat=ERRO orfas=0 porta=None status=folga resolver=False comp=11/2026
-GRUPO|n=5|ausencia_lancada ; batERRO ; sem_porta ; pede ; segura|dono={'ESTRUTURA': 5}|em={'D': 5}
-   ex col137 2026-11-03 clausula=ata_tipo_dia=ausencia fer=False/True/False aus=[(4851, 'reciclagem', 'por_outro', 'sem_chamado')] n_bat=ERRO orfas=0 porta=None status=irregular resolver=False comp=11/2026
-   ex col137 2026-11-05 clausula=ata_tipo_dia=ausencia fer=False/True/False aus=[(4851, 'reciclagem', 'por_outro', 'sem_chamado')] n_bat=ERRO orfas=0 porta=None status=irregular resolver=False comp=11/2026
-   ex col292 2026-10-22 clausula=ata_tipo_dia=ausencia fer=False/True/False aus=[(5110, 'atestado', 'por_outro', 'sem_chamado')] n_bat=ERRO orfas=0 porta=None status=irregular resolver=False comp=11/2026
-GRUPO|n=5|feriado_trab_feriado_True_mas_folga ; batERRO ; sem_porta ; nao_pede(folga_trabalhada) ; nao_segura|dono={'ESTRUTURA': 1, 'BATIDA': 1, 'CADASTRO': 3}|em={'A': 5}
-   ex col366 2026-11-02 clausula=trabalha_False fer=True/True/False aus=[] n_bat=ERRO orfas=1 porta=None status=folga_trabalhada resolver=False comp=11/2026
-   ex col788 2026-11-02 clausula=trabalha_False fer=True/True/False aus=[] n_bat=ERRO orfas=8 porta=None status=folga_trabalhada resolver=False comp=11/2026
-   ex col868 2026-11-02 clausula=trabalha_False fer=True/True/False aus=[] n_bat=ERRO orfas=1 porta=None status=folga_trabalhada resolver=False comp=11/2026
-GRUPO|n=3|ata_tipo_dia_folga_sem_ausencia_cobrindo ; batERRO ; sem_porta ; nao_pede(escala_suspeita) ; segura|dono={'CADASTRO': 3}|em={'A': 3}
-   ex col97 2026-11-03 clausula=ata_tipo_dia=folga fer=False/None/None aus=[] n_bat=ERRO orfas=1 porta=None status=escala_suspeita resolver=False comp=11/2026
-   ex col97 2026-11-05 clausula=ata_tipo_dia=folga fer=False/None/None aus=[] n_bat=ERRO orfas=1 porta=None status=escala_suspeita resolver=False comp=11/2026
-   ex col741 2026-11-05 clausula=ata_tipo_dia=folga fer=False/None/None aus=[] n_bat=ERRO orfas=2 porta=None status=escala_suspeita resolver=False comp=11/2026
-GRUPO|n=2|folga_do_calendario ; batERRO ; sem_porta ; pede ; segura|dono={'ESTRUTURA': 2}|em={'D': 2}
-   ex col348 2026-10-24 clausula=trabalha_False fer=False/True/False aus=[] n_bat=ERRO orfas=0 porta=None status=irregular resolver=False comp=11/2026
-   ex col348 2026-10-31 clausula=trabalha_False fer=False/True/False aus=[] n_bat=ERRO orfas=0 porta=None status=irregular resolver=False comp=11/2026
-GRUPO|n=2|ata_tipo_dia_folga_sem_ausencia_cobrindo ; batERRO ; porta ; nao_pede(escala_suspeita) ; segura|dono={'CADASTRO': 2}|em={'A': 2}
-   ex col741 2026-11-03 clausula=ata_tipo_dia=folga fer=False/None/None aus=[] n_bat=ERRO orfas=1 porta=porta_pergunta status=escala_suspeita resolver=False comp=11/2026
-   ex col866 2026-11-04 clausula=ata_tipo_dia=folga fer=False/None/None aus=[] n_bat=ERRO orfas=2 porta=porta_pergunta status=escala_suspeita resolver=False comp=11/2026
-GRUPO|n=1|ata_tipo_dia_folga_sem_ausencia_cobrindo ; batERRO ; sem_porta ; pede ; segura|dono={'CADASTRO': 1}|em={'A': 1}
-   ex col741 2026-11-01 clausula=ata_tipo_dia=folga fer=False/None/None aus=[] n_bat=ERRO orfas=1 porta=None status=aberto resolver=False comp=11/2026
-GRUPO|n=1|ata_tipo_dia_folga_sem_ausencia_cobrindo ; batERRO ; sem_porta ; pede ; nao_segura|dono={'CADASTRO': 1}|em={'A': 1}
-   ex col866 2026-10-21 clausula=ata_tipo_dia=folga fer=False/None/None aus=[] n_bat=ERRO orfas=1 porta=None status=aberto resolver=False comp=11/2026
-GRUPO|n=1|ata_tipo_dia_folga_sem_ausencia_cobrindo ; batERRO ; porta ; pede ; segura|dono={'CADASTRO': 1}|em={'A': 1}
-   ex col866 2026-11-02 clausula=ata_tipo_dia=folga fer=False/None/None aus=[] n_bat=ERRO orfas=1 porta=porta_pergunta status=aberto resolver=False comp=11/2026
-GRUPO|n=1|ausencia_lancada_pelo_colab ; batERRO ; sem_porta ; pede ; segura|dono={'ESTRUTURA': 1}|em={'D': 1}
-   ex col889 2026-10-25 clausula=ata_tipo_dia=ausencia fer=False/True/False aus=[(4670, 'atestado', 'pelo_colab', 'sem_chamado')] n_bat=ERRO orfas=0 porta=None status=irregular resolver=False comp=11/2026
-GRUPO|n=1|feriado_sem_trabalha_em_feriado ; batERRO ; sem_porta ; nao_pede(folga) ; segura|dono={'ESTRUTURA': 1}|em={'D': 1}
-   ex col969 2026-10-12 clausula=trabalha_False fer=True/False/True aus=[] n_bat=ERRO orfas=None porta=None status=folga resolver=False comp=10/2026
-GRUPO|n=1|folga_do_calendario ; batERRO ; sem_porta ; nao_pede(ok) ; nao_segura|dono={'BATIDA': 1}|em={'A': 1}
-   ex col975 2026-11-01 clausula=trabalha_False fer=False/True/False aus=[] n_bat=ERRO orfas=2 porta=None status=ok resolver=False comp=11/2026
-MARGINAL|POR_QUE|{'feriado_sem_trabalha_em_feriado': 31, 'folga_do_calendario': 285, 'ata_tipo_dia_folga_sem_ausencia_cobrindo': 8, 'ausencia_lancada': 5, 'feriado_trab_feriado_True_mas_folga': 13, 'ausencia_lancada_pelo_colab': 1}
-MARGINAL|BAT|{'ERRO': 343}
-MARGINAL|PORTA|{None: 340, 'porta_pergunta': 3}
-MARGINAL|STATUS|{'folga_trabalhada': 161, 'escala_suspeita': 5, 'irregular': 8, 'folga': 165, 'aberto': 3, 'ok': 1}
-MARGINAL|PEDE_DECISAO|{False: 332, True: 11}
-MARGINAL|RESOLVER_DIA|{False: 343}
-MARGINAL|SEGURA|{False: 163, True: 180}
-MARGINAL|DONO|{'CADASTRO': 104, 'BATIDA': 30, 'ESTRUTURA': 209}
-MARGINAL|EM|{'A': 170, 'D': 173}
-MARGINAL|CLAUSULA|{'trabalha_False': 329, 'ata_tipo_dia=folga': 8, 'ata_tipo_dia=ausencia': 6}
-D_FOLGA_TRABALHADA n=161 com_bat=0 sem_porta=161 resolver_dia_True=0 (STATUS_QUE_PEDEM_DECISAO inclui? False)
-C444 {'col': 'col444', 'dia': '2026-10-25', 'emp': 2, 'em': 'A', 'clausula': 'trabalha_False', 'tipo_dia_ata': 'folga', 'feriado': False, 'trab_feriado': True, 'fer_vira_folga': False, 'aus': [], 'por_que': 'folga_do_calendario', 'n_bat': 'ERRO', 'n_orfas': 4, 'porta': None, 'status': 'folga_trabalhada', 'status_pede_decisao': False, 'resolver_dia': False, 'segura': False, 'comp': '11/2026', 'dono': 'ESTRUTURA'}
-ERRO|dia_das_batidas|col43|2026-11-02|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col49|2026-11-04|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col60|2026-11-03|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col69|2026-10-25|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col97|2026-11-02|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col123|2026-11-05|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col130|2026-10-30|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col137|2026-11-03|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col144|2026-09-21|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col203|2026-11-02|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col207|2026-11-02|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col209|2026-09-21|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col211|2026-10-24|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col227|2026-11-03|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col242|2026-11-02|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col268|2026-09-21|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col270|2026-10-22|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col278|2026-11-02|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col282|2026-11-01|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col292|2026-10-22|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col300|2026-10-24|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col301|2026-10-22|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col312|2026-09-21|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col328|2026-10-22|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col348|2026-10-24|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col354|2026-10-30|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col366|2026-10-27|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col369|2026-11-02|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col373|2026-10-21|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERRO|dia_das_batidas|col384|2026-11-02|'<=' not supported between instances of 'datetime.date' and 'datetime.datetime'
-ERROS {'dia_das_batidas:TypeError': 100}
-INCOMPLETO: 100 erros
-rc_sombra=0
-```
-
-**2) Funções, contratos e decisões da sonda**
-
-O corpo de `sonda_dst.py` não está disponível no material consultável; sua identificação/hash na saída não permite conferir suas chamadas. Portanto, os argumentos efetivamente passados a **cada uma** das funções abaixo são [nao verificado].
-
-| Função e localização | Contrato documentado/implementado | Sonda cumpre? |
-|---|---|---|
-| `dia_sem_trabalho(cel)` — `app/chamados/juizes.py:413-428` | Recebe célula; lê `trabalha` e `ata`. Ausência parcial tem tratamento próprio. | [nao verificado] |
-| `censo_alcance(empresas=None, hoje=None, limite=50, lista=None)` — `app/chamados/services/vigia_fio.py:542-554` | Censo de dias retidos sem porta; `empresas=None` usa empresas visíveis. `limite` não corta os dias sem porta. | [nao verificado] |
-| `InsumosDoDono.dono(self, data)` — `app/ponto/management/commands/e6_oraculo.py:172-183` | Recebe a data; utiliza os insumos da instância. O construtor recebe colaborador, `ini`, `fim`, `hoje` e exige `agora=` — `:113-145`. | [nao verificado] |
-| `dia_das_batidas(colab, ini, fim, turnos=None)` — `app/ponto/turnos.py:2874-2897` | Janela apresentada; `turnos=` é alimentação. Retorna **`{batida.pk: date}`**, não contagem. | [nao verificado] |
-| `dias_da_ausencia(tipo, data, data_fim, ini, fim)` — `app/ponto/turnos.py:2774-2790` | Retorna datas no intervalo fechado; ausência sem fim estende até `fim` somente para `TIPOS_EM_ABERTO`. | [nao verificado] |
-| `porta_alcancavel_do_dia(celula_id, *, alimentacao=None)` — `app/chamados/juizes.py:1341-1370` | Recebe **ID da célula**; alimentação opcional vem de `alimentar_portas(lote)`. Retorna `None` ou dicionário de rota/fila/verbos/fio. | [nao verificado] |
-| `status_dos_dias_lavrados(pares, *, agora=None, carga=None, fatos=None)` — `app/ponto/status_dia.py:221-247` | Pares `(colaborador, data)`; carga opcional deve conter pessoas e datas; `fatos` somente com carga. Validações em `:259-267`. | [nao verificado] |
-| `resolver_dia_oferecido_nas_datas(colaborador, datas)` — `app/colaboradores/services/calendario.py:117-138` | Datas de um mesmo colaborador; retorna `{date: bool}` lendo o calendário. Dia ausente do calendário responde `False`. | [nao verificado] |
-| `o_que_segura(colab, mes, ano)` — `app/folha/fora_da_folha.py:203-231` | Recebe colaborador e competência; retorna dicionário com os dias retidos e seus motivos/fios. | [nao verificado] |
-| `competencia_do_fato(colaborador, quando)` — `app/ponto/services/fechamento.py:1586-1588` | Fato de um dia; retorna `(mes, ano)`. Normaliza `date`/`datetime` pelo caminho `:1542-1583`. | [nao verificado] |
-
-O erro impresso comprova apenas a mensagem de comparação entre `date` e `datetime`; sem a chamada e o traceback, atribuí-lo definitivamente a argumentos errados da sonda seria [nao verificado]. O código chama o pareador quando `turnos` não foi alimentado e contém comparação de datas de segmento com `data_turno`. (`app/ponto/turnos.py:2900-2905,1990-1993`)
-
-**`com_bat=0` não comprova “zero batidas”**: a própria saída registra `MARGINAL|BAT|{'ERRO': 343}`; a contagem correta das batidas permanece [nao verificado].
-
-Quanto às decisões próprias:
-
-- **`por_que`:** a implementação e sua ordem de precedência são [nao verificado]. O juiz existente não devolve esses motivos: devolve um booleano por `trabalha is False` ou tipo de ata preenchido diferente de `trabalho`, com exceção para cobertura parcial. Tratar os nomes impressos como causas oficiais extrapolaria esse contrato. (`app/chamados/juizes.py:413-428`)
-- **`folga_do_calendario`:** `trabalha=False`, isoladamente, não documenta a causa da folga; o próprio código explica que a célula guarda esse booleano sem guardar o porquê. O rótulo pode servir ao agrupamento, mas sua derivação pela sonda é [nao verificado]. (`app/escala/models.py:1373-1384`)
-- **Os dois rótulos de feriado:** `trabalha_em_feriado=True` pode coexistir com folga; essa flag impede a transformação por feriado, mas não transforma uma folga já existente em trabalho. Portanto, o nome `feriado_trab_feriado_True_mas_folga` não demonstra contradição. A regra completa também considera ciclo e lugar do vínculo; um teste apenas da flag seria insuficiente. (`app/escala/models.py:1367-1371,1382-1395`)
-- **`ausencia_lancada` e `ata_tipo_dia_folga_sem_ausencia_cobrindo`:** a ata não laboral já participa do juiz; a lista de ausências não é requisito adicional desse predicado. Se a sonda usa essa lista somente para subdividir os resultados, é agrupamento; se redecide o booleano com ela, a equivalência é [nao verificado]. (`app/chamados/juizes.py:422-428`)
-- **`pelo_colab`:** já existe teste de identidade entre o colaborador de `registrado_por` e o colaborador da ausência. Se a sonda compara `registrado_por_id` com `colab.usuario_id`, repete essa identidade; a comparação efetivamente escrita é [nao verificado]. Essa identidade não prova origem via disputa nem aprovação. (`app/ponto/services/ausencia.py:627-631`; `app/colaboradores/models.py:351`; `app/chamados/services/materializacao.py:495-528`)
-
-**3) Guarda do emissor, outros escritores e leitores da constante**
-
-`motivos_a_perguntar` executa nesta ordem:
-
-1. Recusa por `dia_sem_trabalho(cel)`; somente se falso, pelo curto-circuito do `or`, verifica colaborador diferente de `ativo`. (`app/chamados/services/fabrica_da_celula.py:89-92`)
-2. Recusa data futura. (`app/chamados/services/fabrica_da_celula.py:93-94`)
-3. Obtém `agora`, calcula marcos vencidos e recusa veredito preenchido fora de `VEREDITOS_ACUSAM`. (`app/chamados/services/fabrica_da_celula.py:95-100`)
-4. Recusa ausência parcial destinada somente à lista administrativa, por `parcial_so_lista`. (`app/chamados/services/fabrica_da_celula.py:101-104`)
-5. Carrega perguntas existentes, exclui duplicatas e devolve somente motivos ainda não perguntados. O cálculo dos motivos aplica o conjunto de marcos vencidos e as guardas de ata. (`app/chamados/services/fabrica_da_celula.py:118-126,45-64`)
-
-Para as linhas cuja cláusula impressa é `trabalha_False`, **a primeira guarda basta**, independentemente de o status ser `folga_trabalhada`. (`app/chamados/juizes.py:428`; `app/chamados/services/fabrica_da_celula.py:91-92`; correspondência efetiva das células com a impressão: [nao verificado])
-
-**Sim, existem caminhos fora dessa fábrica que podem criar chamado da célula ou pergunta:**
-
-- **Chamado da célula:** a abertura administrativa aceita tipo catalogado e data do fato; por exemplo, `ausencia_colab` tem escopo DIA e chave `data`. A criação resolve a célula por colaborador/data. As guardas dessa criação não constituem proibição universal de `folga_trabalhada`. (`app/chamados/services/abertura.py:147-153,172-192`; `app/chamados/catalogo/modulos.py:120-122`; `app/chamados/models.py:1026-1039,1073-1076,1097-1106,1193-1201`)
-- **Pergunta por batida em folga:** o detector devolve anomalia grave quando a escala diz folga; a API encaminha o motivo à disputa; o helper gera perguntas. A data é extraída do contexto e `PerguntaDisputa.abrir` associa a célula daquele colaborador/data, sem consultar `dia_sem_trabalho` nesse nascimento. (`app/chamados/detector_anomalias.py:164-175`; `app/api/views_core.py:725-730,771-780`; `app/chamados/services/disputa_emissao.py:350-366,389-397,598-618`; `app/chamados/models.py:2428-2430,2476-2477`)
-
-**Nascer não basta para constituir porta alcançável:** o chamado precisa estar na fila; pela pergunta, ela precisa estar viva, no app e sob âncora na fila. Uma pergunta
-
-[truncado em 20000 de 22672 caracteres]
-
-## 06/11 18:25 · sessao 2da3cfdb4a00 · PAUTA-08 · verificador · origem=Code
-
-1. **Fecha o achado da volta 2 sobre congelar o gravado até a gravação da pauta, mas não estabelece essa garantia para toda escrita da reversão.** O comando agora executa o `select_for_update` de `FechamentoMensal`, confere o hash e escreve cabeça, filhas e atualização da reversão dentro do mesmo `atomic` por colaborador. Não identifiquei caminho que persista uma cabeça nova sem essa conferência no mesmo bloco. ([comando:190](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:190), [comando:196](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:196), [comando:199](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:199), [comando:207](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:207), [comando:217](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:217))
-
-   **Existe, porém, reversão gravada sem conferência no mesmo `atomic`: o JSON inicial.** Ele recebe o plano e os hashes medidos anteriormente, com `pautas=[]`, e é escrito antes do laço e da transação. O próprio teste de hash divergente abre esse arquivo após a recusa. ([comando:120](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:120), [comando:162](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:162), [comando:167](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:167), [teste:211](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/tests/test_pauta_pago_x_devido_exportada.py:211))
-
-   O arquivo também continua fora do rollback do banco: falha no commit posterior à sua atualização pode deixar PKs mortos nele; `_reverter` pula PK inexistente. A comparação final ocorre depois das transações por colaborador. ([comando:214](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:214), [comando:228](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:228), [comando:275](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:275))
-
-2. **O teste novo morde presença e ordem do SQL, não toda a garantia anunciada.** Exige algum `FOR UPDATE` contendo `fechamentomensal` antes do primeiro `INSERT` contendo `pauta`. Não verifica o filtro, linhas bloqueadas, lock anterior ao hash, duração do bloqueio ou concorrência. ([teste:225](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/tests/test_pauta_pago_x_devido_exportada.py:225), [teste:228](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/tests/test_pauta_pago_x_devido_exportada.py:228), [teste:231](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/tests/test_pauta_pago_x_devido_exportada.py:231))
-
-   **Mutante que passaria por análise estática:** mover somente o lock da linha 196 para depois do `if/raise` de hash, antes de `_existente`. Continua havendo lock antes do `INSERT`; o teste de hash adulterado continua recusando antes de criar pautas ou acrescentar PKs ao JSON. As demais verificações seriais preservam seus resultados. Execução dos 26 testes com esse mutante: **[nao verificado]**. ([comando:196](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:196), [comando:199](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:199), [comando:202](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:202), [teste:204](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/tests/test_pauta_pago_x_devido_exportada.py:204), [teste:217](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/tests/test_pauta_pago_x_devido_exportada.py:217))
-
-   Esse mutante reabre uma janela entre conferência e lock: uma alteração concorrente pode entrar ali, seguida da escrita da cabeça sem reconferência; o hash final só reclamaria depois da saída do `atomic`. ([comando:199](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:199), [comando:207](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:207), [comando:218](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:218), [comando:228](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:228))
-
-3. **Sim: a frase nova sobre HE autorizada em exportada corresponde ao código, condicionada a haver autorizações efetivas.** `_ato` chama automaticamente `_linha_para_o_dp` quando `exportada` e `autorizados` são verdadeiros; o emissor chama `pautas.services.escrever`. A confirmação envolve `_ato` em transação e recusa divergência do DIFF mostrado; a prévia desfaz sua transação. ([LEIS.md:177](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/docs/LEIS.md:177), [autorizacao_he_periodo.py:299](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/ponto/services/autorizacao_he_periodo.py:299), **[emissor:244](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/ponto/services/autorizacao_he_periodo.py:244)**, [prévia:321](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/ponto/services/autorizacao_he_periodo.py:321), [confirmação:343](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/ponto/services/autorizacao_he_periodo.py:343))
-
-4. **Escritores e leitores no caminho examinado:**
-
-   | Objeto | Quem escreve/produz | Quem lê |
-   |---|---|---|
-   | Hash do gravado | `hash_do_gravado` calcula MD5 truncado sobre campos de `FechamentoMensal`; o comando guarda o resultado no plano e no JSON. ([regen_exportada.py:62](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/ponto/portas/regen_exportada.py:62), [comando:120](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:120), [comando:165](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:165)) | O comando compara por colaborador e no fim. A porta REGEN calcula antes/depois, envia à auditoria e devolve `mudou`. ([comando:199](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:199), [comando:228](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:228), [regen_exportada.py:206](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/ponto/portas/regen_exportada.py:206), [regen_exportada.py:218](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/ponto/portas/regen_exportada.py:218)) |
-   | `FechamentoMensal` | PAUTA-08 pede somente leitura. No ramo escritor relacionado, `recalcular_fechamento_mes` usa `get_or_create`, `save` ou `update`; REGEN chama esse ramo. ([comando:135](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:135), [fechamento.py:889](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/ponto/services/fechamento.py:889), [fechamento.py:1128](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/ponto/services/fechamento.py:1128), [fechamento.py:1144](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/ponto/services/fechamento.py:1144), [regen_exportada.py:179](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/ponto/portas/regen_exportada.py:179)) | `hash_do_gravado`, `valores_do_gravado`, recálculo que semeia objeto destacado e novo SELECT de bloqueio. ([regen_exportada.py:71](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/ponto/portas/regen_exportada.py:71), [regen_exportada.py:81](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/ponto/portas/regen_exportada.py:81), [fechamento.py:881](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/ponto/services/fechamento.py:881), [comando:196](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:196)) |
-   | Arquivo de reversão | `_escrever` chama `_grava` inicialmente e após acrescentar PKs; `_grava` serializa em temporário e executa `os.replace`. ([comando:167](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:167), [comando:216](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:216), [comando:302](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:302)) | `_reverter` carrega JSON, valida marca/schema e percorre PKs para cancelar pautas; **não reconfere `hash_gravado` do plano**. ([comando:262](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:262), [comando:266](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:266), [comando:273](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:273), [comando:283](/home/ronald/codex_ws/54619807cdfb351178aec93562973eb3f60cad4c/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:283)) |
-
-   Ocorrência desses cenários em produção: **[nao verificado]**.
-
-## 06/11 18:23 · sessao 88a1e5c18480 · - · - · origem=Ronald (tmux)
-
-O teste novo **morde a presença e a ordem textual do SQL**, não a garantia inteira anunciada: procura qualquer `FOR UPDATE` em `fechamentomensal` antes do primeiro `INSERT` contendo `pauta`; não verifica se o lock antecede o hash, quais linhas foram selecionadas ou uma disputa concorrente. (`app/pautas/tests/test_pauta_pago_x_devido_exportada.py:225`, `:228`, `:229`, `:231`)
-
-**Mutante preferível:** mover somente o lock de `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:196` para depois da comparação/recusa de hash (`:199`–`:201`), antes de `_existente` (`:202`). O SQL continua antes do `INSERT` (`:207`), satisfazendo o novo teste; o teste do hash adulterado continua recusando antes das criações e preservando a lista vazia do JSON. (`app/pautas/tests/test_pauta_pago_x_devido_exportada.py:204`, `:213`, `:214`, `:217`, `:231`)
-
-Esse mutante permite alteração concorrente **entre a conferência e a aquisição do lock**: a pauta pode ser criada sem nova conferência depois da alteração; a comparação final só ocorre após sair do `atomic` daquela pessoa. (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:190`, `:199`, `:207`, `:218`, `:228`)
-
-Outro mutante explícito: acrescentar `pk__isnull=True` ao filtro do lock, gerando `SELECT … FOR UPDATE` sem travar linha alguma; o teste não inspeciona o filtro nem o resultado. (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:196`; `app/pautas/tests/test_pauta_pago_x_devido_exportada.py:228`, `:231`)
-
-A previsão de que esses mutantes passam pelos 26 testes decorre da inspeção estática das asserções; execução dos testes e dos mutantes: **[nao verificado]**. [nao verificado]
-
-_2413 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2419 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
