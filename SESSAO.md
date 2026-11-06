@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 13:01:18.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (63.6 MB). Acoes na janela: **832**.
+**Medido em 06/11/2026 13:06:12.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (63.6 MB). Acoes na janela: **825**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:04:12 | Bash | Wait for V3 parts or O10-B suite | `cd /home/ronald/saas-hasner; n0=$(wc -l < logs/r1remede/cadeia3.status); timeout 590 bash -c "until [ \$(wc -l < logs/r1remede/cadeia3.status) -ge $((n0+2)) ] \|\| grep -q '^rc=' logs/o10b/suite.log; do /usr/bin/sleep 10; done"; tail -3 logs/r1remede/cadeia3.status; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/o10b/suite.log \| tail -3; date +%T` |
 | 12:54:17 | Bash | Wait for more V3 parts | `cd /home/ronald/saas-hasner; n0=$(wc -l < logs/r1remede/cadeia3.status); timeout 590 bash -c "until [ \$(wc -l < logs/r1remede/cadeia3.status) -ge $((n0+2)) ]; do /usr/bin/sleep 10; done"; tail -3 logs/r1remede/cadeia3.status; tail -2 logs/o10b/suite.log; date +%T` |
 | 12:54:11 | Bash | Remove O10-B mutant worktrees | `cd /home/ronald/saas-hasner; for w in wt-o10b-m4b-121627 wt-o10b-m7-122713 wt-o10b-m8-122713 wt-o10b-m9-122713 wt-o10b-m7-123806 wt-o10b-m8-123806 wt-o10b-m9-123806 wt-o10b-m10-123806; do git worktree remove --force /home/ronald/$w 2>&1 \| tail -1; done; git worktree list \| grep -c o10b` |
 | 12:54:07 | Bash | Record postmortem in RELATO | `cd /home/ronald/saas-hasner/app; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys h=sys.argv[1] p='docs/RELATO.md'; L=open(p).read().split('\n') L.insert(3,f"POSTMORTEM CODEX-CONSTRUTOR {h} (Codex censo, logs/codexneg/postmortem.r): achado 1 .git (bloqueia) = (a) falha do Codex; 2 .pyc = (a); 5 lista proibida = (a); 3 vaga por raiz = (b) triagem descartou por premissa nao verificada; 4 prova .o ...` |
@@ -834,11 +835,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:16:43 | Bash | Wait for FIO-MUDO suite and Codex v6 | `cd /home/ronald/saas-hasner/logs/c20_fiomudo; until grep -q "^rc=" suite_full_1d78ef7f.log 2>/dev/null && grep -qE "rc=?[0-9]" codex/v6.run.log 2>/dev/null; do /usr/bin/sleep 30; done; grep -E "^(FAIL\|ERROR):\|^Ran\|^(OK\|FAILED)($\| \()\|^rc=" suite_full_1d78ef7f.log \| tail -6; tail -2 codex/v6.run.log; wc -l codex/v6.r` |
 | 01:13:28 | Bash | Repoint ESPERANDO to queued trava | `sed -i '2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=2643196#' /home/ronald/saas-hasner/app/docs/RELATO.md; kill -0 2643196 && echo vivo` |
 | 01:13:24 | Bash | Check lock queue and builder logs | `cd /home/ronald/saas-hasner; date +%H:%M; bin/trava_teste.sh --quem; ps -eo pid,etime,args \| grep 'trava_teste.sh --' \| grep -v grep \| cut -c1-40; ls -t logs/h12h06b \| head -3; ls -t logs/c20_fiomudo \| head -3` |
-| 01:04:05 | Bash | Repoint ESPERANDO to live trava | `sed -i '2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=1814849#' /home/ronald/saas-hasner/app/docs/RELATO.md; kill -0 1814849 && echo vivo` |
-| 01:04:02 | Bash | Confirm ESPERANDO pid is alive | `cd /home/ronald/saas-hasner; kill -0 535259 2>/dev/null && echo vivo \|\| { ps -eo pid,args \| grep 'trava_teste.sh --' \| grep -v grep \| cut -c1-30; }` |
-| 01:03:59 | SendMessage |  | `-` |
-| 01:03:49 | Bash | Insert ERRO-BOBO and DECIDIDO PELA LEI lines at RELATO top | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ERRO-BOBO H12H06:') assert not any(l.startswith('ERRO-BOBO C20-FIO-MUDO:') for l in L) L[3:3]=[ 'ERRO-BOBO C20-FIO-MUDO: (opus final 06/11 01:0x REPROVA 5f3ea8c2, 1a leitura final) omissao contra padrao da casa, nao desenho novo: (1) on_commit novo `chamados/models.py:518` e  ...` |
-| 01:03:30 | Bash | Read L-050 and the fence code | `cd /home/ronald/saas-hasner/app; sed -n 88,94p docs/LEIS.md \| cut -c1-900; sed -n 465,480p /home/ronald/wt-c20fm-203209/app/chamados/models.py; grep -rn "def competencia_do_dia_entregue" --include=*.py . \| head -2` |
-| 01:03:21 | Bash | Read RELATO top block | `cd /home/ronald/saas-hasner/app/docs; sed -n 3,40p RELATO.md \| cut -c1-230` |
-| 01:03:08 | Bash | Read B3 doc header | `cd /home/ronald/saas-hasner; sed -n 8,30p bin/disjuntor.py` |
-| 01:03:05 | Bash | Inspect disjuntor B3 mechanism | `cd /home/ronald/saas-hasner; grep -n 'def \\|B3\\|ERRO-BOBO\\|DESENHO' bin/disjuntor.py \| head -40` |
