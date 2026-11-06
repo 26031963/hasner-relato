@@ -1,7 +1,95 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 09:26** · publicado em **06/11/2026 09:27** (UTC-3)
+> Ultima resposta processada: **06/11/2026 09:28** · publicado em **06/11/2026 09:32** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 09:28 · sessao 61eb5622041b · E-SEM-VIVA-CACA · sonda · origem=Code
+
+**O dado permite explicar os bloqueios atuais do col574 e apontar uma diferença de universo para o col950; não permite provar uma causa histórica comum aos 21 novos.** Os valores de produção abaixo vêm exclusivamente do texto fornecido, sem conferência independente: `[nao verificado]`.
+
+**1. A sonda usa as chamadas reais?**
+
+**Não é possível certificar os argumentos da sonda:** o texto contém a saída, mas não o conteúdo de `sonda_esemviva.py`; esse script também não foi localizado na cópia examinada. Portanto, divergências concretas **script × código** permanecem `[nao verificado]`.
+
+Este é o contrato real contra o qual conferir o script:
+
+| Função | Assinatura e chamada do sistema |
+|---|---|
+| `censo_alcance` | Assinatura `(empresas=None, hoje=None, limite=50, lista=None)`. O comando chama `censo_alcance(empresas, hoje=hoje, lista=lista)`, dentro de `tranca_em_lote()`. `app/chamados/services/vigia_fio.py:542`; `app/chamados/management/commands/vigiar_fio_morto.py:171-173`. |
+| `ListaDoAdmin` | Recebe `(hoje, empresas=None, *, agora=None)`. O comando fornece o mesmo instante da rodada: `ListaDoAdmin(hoje, empresas, agora=agora)`. `app/chamados/services/vigia_fio.py:199`; `app/chamados/management/commands/vigiar_fio_morto.py:163-167`. |
+| `motivos_retencao_celula` | Recebe `(colab, ini, fim, hoje=None, com_dias=False)`. O leitor de dias retidos usa `com_dias=True`, sem fornecer `hoje` nesse chamador. `app/folha/export.py:1168`; `app/folha/fora_da_folha.py:95-99`. |
+| `InsumosDoDono` | Recebe `(colaborador, ini, fim, hoje, espelho=None, *, agora, dias_de_fase=None, cadastro=None)`. O comando E6 fornece `espelho=esp, agora=_agora_do_ato`. `app/ponto/management/commands/e6_oraculo.py:128`; `app/ponto/management/commands/e6_oraculo.py:316`. |
+| `pergunta_viva` | Recebe o **objeto da pergunta**, cujo estado e relações são consultados pelo cálculo. A alimentação das portas chama esse juiz para as perguntas da célula. `app/chamados/juizes.py:822-848`; `app/chamados/juizes.py:1300-1303`. |
+
+Passar `limite` maior explica uma listagem mais extensa, mas não muda os contadores nem omite dias sem porta: esses dias entram sempre. Isso, isoladamente, não seria divergência de classificação. `app/chamados/services/vigia_fio.py:551-553`; `app/chamados/services/vigia_fio.py:628-631`.
+
+**2. Quem poderia emitir e por que não emite?**
+
+A distinção decisiva é: **col574 tem julgamento `nunca_bateu`; col950 tem célula física sem julgamento**, conforme a saída fornecida. `[nao verificado]`
+
+O motivo `sem_celula` da folha também designa **célula existente sem veredito**, quando `trabalha` está preenchido; portanto ele não prova ausência física de `CelulaDia`. `app/folha/export.py:1255-1256`.
+
+| Candidato existente | Bloqueio demonstrável ou limite da conclusão |
+|---|---|
+| **Cartório — col574** | A primeira batida apurável define adesão. Sem nenhuma, entra no ramo explicitamente descrito como **“carimba e não emite”**, lavra `nunca_bateu` sem cobertura integral e retorna antes da emissão normal. Os campos fornecidos — zero batidas da vida, `nunca_bateu`, protestos vazios — correspondem a esse mecanismo. `app/ponto/services/cartorio.py:1154-1162`; `app/ponto/services/cartorio.py:1232-1242`; `app/ponto/services/cartorio.py:1268`. |
+| **Cobrança normal do cartório — col574** | Além do retorno anterior, o caminho normal exclui desligados. O estado atual fornecido basta para barrá-lo; não prova qual era a situação na data de cada julgamento. `app/ponto/services/cartorio.py:1696-1697`; `app/ponto/services/cartorio.py:1762`. Histórico: `[nao verificado]`. |
+| **Cartório — col950** | É o responsável existente por julgar células passadas: a fila contém todas elas, sem filtro de situação. Entretanto, o cron declarado só expande empresas **2, 3 e 4**; a empresa 1 fornecida está fora dessa expansão. Isso prova o não alcance pela configuração declarada, não qual execução histórica ocorreu. `app/ponto/management/commands/processar_cartorio.py:45-65`; `app/config/crons.py:17`; `app/config/crons.py:616`; `app/config/crons.py:1835`. |
+| **Fábrica de perguntas pela célula** | Exige colaborador ativo e dia que o juiz não considere sem trabalho: col574 desligado é barrado; suas folgas também. Para col950, a fábrica depende dos motivos extraídos da ata; sem ata, o questionário se abstém quando existe vínculo. O retorno efetivo do vínculo e de `_marcos_faltantes` não foi impresso. `app/chamados/services/fabrica_da_celula.py:89-104`; `app/chamados/services/fabrica_da_celula.py:45-57`; `app/chamados/services/disputa_emissao.py:818-843`. Aplicação completa ao col950: `[nao verificado]`. |
+| **Pergunta por chamados órfãos** | Recebe chamados, não dias retidos. Retorna se a entrada estiver vazia ou sem chamados regularizáveis. A contagem de chamados sem célula criados perto do dia não informa módulo, data canônica, status ou destino suficientes para provar que alcançariam aquele dia. `app/chamados/services/disputa_emissao.py:876-896`; `app/chamados/services/disputa_emissao.py:925-933`. Conteúdo desses chamados: `[nao verificado]`. |
+| **Detector de ausência/batida** | Seleciona colaboradores em operação, exigindo ativo, empresa ativa, identidade operacional, rollout e vínculo vigente hoje. Col574 é excluído pela situação atual. Para col950, apenas estar ativo não comprova todas essas guardas. O detector percorre hoje/ontem e, depois do encerramento do dia, atribui a cobrança ao cartório. `app/ponto/management/commands/detectar_ausencias.py:98-99`; `app/colaboradores/queries.py:25-29`; `app/colaboradores/queries.py:65`; `app/ponto/management/commands/detectar_ausencias.py:136-138`; `app/ponto/management/commands/detectar_ausencias.py:460-473`. |
+| **Funil de cobrança de furo** | O veto da célula cala `trabalha=False` e `veredito=nunca_bateu`. Isso cobre as folgas e os dias de trabalho do col574 descritos no dado, mesmo numa chamada direta ao funil. `app/ponto/marcos.py:119`; `app/ponto/marcos.py:155-162`; `app/ponto/management/commands/detectar_ausencias.py:630-633`. |
+| **Adesão** | O universo exige **ativo + `nunca_bateu`**; também exclui quem já possui batida apurável. Col574 é desligado; col950 já bateu e não apresenta esse veredito. Há ainda a regra expressa “desligado não adere a nada”. `app/chamados/services/adesao.py:32-34`; `app/chamados/services/adesao.py:60-67`. |
+| **Lista DP/Cadastro x Realidade — C5** | É o encaminhamento escrito para quem nunca bateu, mas o carregador exclui desligados. Além disso, C5 é uma assinatura do colaborador, sem campo `data`; não insere seus dias em `dias_na_lista`. `app/escala/services/cadastro_realidade.py:72-79`; `app/escala/services/cadastro_realidade.py:151-164`; `app/escala/services/cadastro_realidade.py:955-970`. |
+| **Turno aberto, corrente ou retroativo** | Exige turno materializado aberto e entrada; o retroativo exige também timestamp da entrada. Zero batidas na vida do col574 não fornece esse fato. Os turnos materializados do col950 não foram impressos; a batida da vizinhança de 09/10 não prova sua atribuição ao turno. `app/ponto/management/commands/processar_alertas_turno.py:76-93`; `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:88-103`. Turnos efetivos: `[nao verificado]`. |
+| **Chamado de ausência** | Recebe uma `Ausencia` já existente; não converte automaticamente dia sem batida em ausência. `ausencia_id=None` na célula não prova inexistência de registro bruto ou submissão. `app/ponto/services/ausencia.py:621-646`. Ausências não lavradas: `[nao verificado]`. |
+| **Consumidor de `EventoCelula`** | Rejunta, retrata, encerra órfãs e fecha cobrança por lastro. O processamento do evento não significa que deveria criar uma porta para um dia vazio. `app/chamados/reconciliador.py:1346-1371`. |
+| **`sem_batidas_mes` / `reconciliar_grade`** | O primeiro emissor está aposentado por escrito; o segundo é medidor na rotina, com escrita reservada à bancada dirigida. Encontrá-los no grep não os torna responsáveis atuais pelos dias. `app/ponto/services/fechamento.py:1089-1093`; `app/ponto/management/commands/reconciliar_grade.py:1-11`. |
+
+Para o **Resolver dia**, a competência corrente não recebe `pode_ultimo_recurso`; a função também exige passado e status `falta`, `irregular`, `aberto` ou `sem_certidao`. Isso explica o bloqueio dos dias desde 21/10 e, pelo status de folga, das quatro folgas antigas do col574, contra os campos fornecidos. `app/colaboradores/services/calendario.py:94-104`; `app/colaboradores/services/calendario.py:738-739`.
+
+Para os dias antigos do col950, `status_dia=None` bruto não basta para explicar o `False`: falta o item efetivo do calendário, incluindo presença do dia, `status` e `pode_ultimo_recurso`. A porta também responde `False` quando o calendário não devolve o dia. `app/colaboradores/services/calendario.py:97-104`; `app/colaboradores/services/calendario.py:132-136`.
+
+**3. Quem escreve e quem lê os campos decisivos?**
+
+“Pergunta viva”, “dono fora do fio” e “motivo de retenção” são resultados produzidos por funções; não são campos independentes que algum emissor simplesmente preenche. `app/chamados/juizes.py:822-848`; `app/chamados/services/vigia_fio.py:274-315`; `app/folha/export.py:1218-1222`.
+
+| Campo ou resultado | Escritor/produtor | Leitor que decide a classe |
+|---|---|---|
+| Existência da pergunta, `data_evento`, `celula`, destino | `PerguntaDisputa.abrir` localiza/reaponta célula e destino e cria a pergunta. `app/chamados/models.py:2428-2477`. | `alimentar_portas` agrupa perguntas da célula e testa vitalidade; o censo recebe esse mapa. `app/chamados/juizes.py:1300-1303`; `app/chamados/services/vigia_fio.py:610-616`. |
+| `resposta_colab`, `respondida_em` | Porta de resposta. `app/chamados/services/disputa_emissao.py:1282-1301`. | Vitalidade exige carimbo e texto para o ramo de resposta. `app/chamados/juizes.py:1150-1162`. |
+| `validada_em` | Validação escreve; nova resposta desfaz validação anterior. `app/chamados/services/validacao.py:127-133`; `app/chamados/services/disputa_emissao.py:1285-1297`. | Primeiro degrau da vitalidade. `app/chamados/juizes.py:1135-1137`. |
+| `materializada_em`, `via_resolucao` | Portas de carimbo, identidade e descarimbo. `app/chamados/models.py:2532-2543`; `app/chamados/models.py:2625-2644`. | Vitalidade lê via, carimbo e testemunho do marco/dia. `app/chamados/juizes.py:1145-1146`; `app/chamados/juizes.py:1170-1214`. |
+| “Pergunta viva” | `pergunta_viva` delega ao cálculo; a property `viva` delega ao mesmo juiz. `app/chamados/juizes.py:822-848`; `app/chamados/models.py:2763-2773`. | Porta alcançável e mapa usado pelo censo. `app/chamados/juizes.py:1373-1383`; `app/chamados/services/vigia_fio.py:610`. |
+| Colaborador e dia na lista do admin | `cadastro_realidade.lista` monta linhas/assinaturas; `dias_na_lista` exige assinatura com `data` e resolve seu dono. `app/escala/services/cadastro_realidade.py:792-857`; `app/escala/services/cadastro_realidade.py:950-970`. | `ListaDoAdmin` guarda separadamente conjunto de colaboradores e mapa de dias; a classificação consulta ambos. `app/chamados/services/vigia_fio.py:216-218`; `app/chamados/services/vigia_fio.py:222-251`; `app/chamados/services/vigia_fio.py:661-686`. |
+| “Resolver dia” | Calendário produz último recurso; juiz exige passado/status permitido. `app/colaboradores/services/calendario.py:738-739`; `app/colaboradores/services/calendario.py:97-104`. | Porta plural e `dono_fora_do_fio`. `app/colaboradores/services/calendario.py:132-136`; `app/chamados/services/vigia_fio.py:306-307`. |
+| Dono fora do fio | Ordem: Resolver oferecido → ausência cobrindo em `ABERTAS` → aceite de folga validado → dia na lista do admin. `app/chamados/services/vigia_fio.py:306-315`. | `censo_alcance` consulta esse resultado antes de atribuir causa. `app/chamados/services/vigia_fio.py:654-659`. |
+| Dono E6 mostrado na sonda | `InsumosDoDono.dono` monta insumos e chama `dono_da_divergencia`. `app/ponto/management/commands/e6_oraculo.py:172-183`. | **Não entra diretamente na classe:** o vigia lê o dono presente na lista. `app/chamados/services/vigia_fio.py:313-314`. |
+| Veredito, protestos, ata e status da célula | Porta de lavra grava esses dados. `app/ponto/portas/celula.py:809-817`. | Retenção lê veredito/protestos; vitalidade também lê veredito e marco da ata. `app/folha/export.py:1233-1256`; `app/chamados/juizes.py:1177-1196`. |
+| Motivo e dias de retenção | `motivos_retencao_celula` produz ambos na mesma decisão. `app/folha/export.py:1218-1256`. | `dias_que_seguram` fornece o universo ao censo. `app/folha/fora_da_folha.py:95-99`; `app/chamados/services/vigia_fio.py:582-587`. |
+
+**`ESTRUTURA` não identifica um emissor faltante:** no E6 é o resíduo das outras condições, e zero batidas é expressamente contagem par. `app/ponto/management/commands/e6_oraculo.py:69-75`; `app/ponto/management/commands/e6_oraculo.py:98-110`.
+
+**4. Existe causa comum aos 21 novos?**
+
+**Não foi demonstrada.** O dado divide os novos em **20 do col574 e 1 do col950**, mas não fornece o estado anterior de cada porta nem o evento responsável pela mudança. `[nao verificado]`
+
+Os mecanismos atuais são distintos:
+
+- **col574:** retenção por veredito acusador com protestos vazios, combinada com silêncio de cobrança/adesão e exclusão da C5 por desligamento. `app/folha/export.py:1233-1254`; `app/ponto/services/cartorio.py:1157-1162`; `app/escala/services/cadastro_realidade.py:151-154`.
+- **col950:** retenção por célula sem veredito; seu novo dia 05/11 também passou a ser passado em 06/11, condição que o retentor e o vigia usam. Isso torna o avanço de data compatível com esse único novo, sem provar o histórico da execução. `app/folha/export.py:1255-1256`; `app/chamados/services/vigia_fio.py:648-650`. Causa histórica: `[nao verificado]`.
+
+Não se pode afirmar que col574 foi desligado entre as duas sondas, nem que o cancelamento de `sem_batidas_mes` provocou a entrada dos vinte: faltam situação anterior, trilha e conteúdo do chamado. `[nao verificado]`
+
+**5. Classificação**
+
+| Colaborador | Classificação sustentada |
+|---|---|
+| **col574 — 20 dias** | **LEI FALTANDO quanto à atribuição específica de encaminhamento do desligado que nunca bateu.** As regras existentes mandam calar cobrança, excluem desligado da adesão e da C5, enquanto a retenção continua lendo seus dias até a demissão. Não encontrei regra específica que determine qual emissor deve abrir uma porta substituta nessa combinação. `app/ponto/services/cartorio.py:1157-1162`; `app/chamados/services/adesao.py:66-67`; `app/escala/services/cadastro_realidade.py:134-154`; `app/folha/export.py:1198-1201`. Ausência de outra atribuição escrita: `[nao verificado]`. |
+| **col950 — 19 dias** | **INCONCLUSIVO sobre o mecanismo histórico.** Há responsável escrito: cartório para células passadas. Há diferença comprovada de universos: cron somente 2/3/4 e censo por empresas visíveis. Falta estabelecer a obrigação operacional da empresa 1 e se houve chamada efetiva do cartório para ela; se houve, falta saber se a grade devolveu esses dias ou ocorreu falha. `app/ponto/management/commands/processar_cartorio.py:45-65`; `app/config/crons.py:17`; `app/config/crons.py:1835`; `app/chamados/services/vigia_fio.py:567-585`; `app/ponto/services/cartorio.py:1365-1367`. |
+
+Essa classificação **não significa ausência de regra geral de alcance**: há corte escrito exigindo fio para lâmpada acusadora, encaminhando dia sem fio ao Admin e qualificando o contador positivo como bug. A falha de alcance está registrada no dado fornecido; o que não ficou provado, pelo critério mais específico da pergunta, é **um emissor individual desobedecendo sua própria obrigação neste caso**. `app/docs/CORTES.md:263`; `app/docs/CORTES.md:265`; dado atual `[nao verificado]`.
+
+Para fechar o diagnóstico faltam: **o script da sonda; os argumentos/estado da rodada de 05/11; a execução efetiva do cartório para empresa 1; e, por dia do col950, a saída da grade e do calendário usados pelos juízes.** Os pontos que consomem essas informações estão em `app/chamados/management/commands/vigiar_fio_morto.py:163-173`, `app/ponto/management/commands/processar_cartorio.py:65`, `app/ponto/services/cartorio.py:1365-1367` e `app/colaboradores/services/calendario.py:132-136`. Disponibilidade dessas medições: `[nao verificado]`.
 
 ## 06/11 09:26 · sessao 984f6712ccf6 · G1-PORTA · sonda · origem=Code
 
@@ -906,24 +994,4 @@ Campos específicos de par/cedente/substituto/identidade da troca/segundo anexo/
 
 A catraca atual declara `editada_em` e `editada_por` sem escritor de produção: app/escala/tests/test_d3_guarda_da_linha_celula.py:50. Isso é evidência da cópia, não regra para esperado do O10.
 
-## 06/11 09:15 · sessao 5df745df4184 · - · - · origem=Ronald (tmux)
-
-Fontes de regras e campos para bordas/adversariais:
-
-- **O10 completo:** `app/docs/BACKLOG.md:1224` e `app/docs/CORTES.md:187`: par, cedido folga sem desconto, assumido normal com AN/intra sem HE100, pedido só vale confirmado pelo admin com cartas dos dois lados, `trocas_sem_par`, conversão legado por DRY→aval.
-- **S5b literal do anexo:** `app/docs/BACKLOG.md:1248`: não cria desconto novo; classe que não julga pontualidade não passa a cobrar.
-- **Idempotência normativa:** `CLAUDE.md:175`: “2x = mesmo estado, 1 linha de trilha, 0 duplicata”.
-- **Competência pela data:** `app/docs/CORTES.md:216`: data do fato, 21–20, nunca mês civil. `app/ponto/janelas.py:10`–`:14` declara corte 21 = 21 do mês anterior até 20 do mês de competência.
-- **Campo do corte:** `Empresa.dia_inicio_competencia` em `app/colaboradores/models.py:46`.
-- **Meia-noite:** `app/escala/servico_jornada.py:61`–`:64`: marcos ancorados no dia e encadeados; `:96`–`:103`: fim≤início cruza, inclusive duração 24h. Isso define geometria; não define rateio O10 entre competências.
-- **Exportada:** L-092, `app/docs/LEIS.md:125`: gravado não muda; diferença vira Pauta DP com os dois números. Exceção exige `!` e porta própria, `CLAUDE.md:403`–`:409`.
-- **Célula já editada:** `app/escala/models.py:1638`–`:1643` só assegura que o **gerador** não reescreve `origem='editada'`; não decide conflito com outra edição humana.
-- **Campos da célula:** colaborador `app/escala/models.py:1681`; data `:1685`; trabalha `:1686`; origem `:1691`; escala_geradora `:1692`; dna `:1697`; editada_em `:1732`; editada_por `:1733`.
-- **Dia já trabalhado:** `Batida.colaborador` `app/ponto/models.py:22`; timestamp `:23`; tipo `:24`.
-- **FechamentoMensal:** colaborador `app/ponto/models.py:405`; mes `:408`; ano `:409`; status `:410` (opção exportado `:402`); horas_noturnas `:413`; horas_extras_100 `:417`; horas_folga_trabalhada `:423`; horas_atraso `:425`; horas_saida_antecipada `:426`; horas_falta `:427`; horas_intra_indenizada `:428`.
-
-Ressalva documental: a fotografia S5b fornecida diz que `MotorComercial` não julga; há corte posterior O271 em `app/docs/BACKLOG.md:1512`. `app/ponto/calculador/regras.py:466`–`:472` documenta que comercial passou a julgar. Não usar comportamento atual para substituir o esperado do recorte solicitado.
-
-Não encontrei regra específica O10 escrita para aceitar/recusar dia cedido já trabalhado, substituir edição humana existente, confirmar colega sem vínculo no dia, ordem/vencedor de confirmações concorrentes distintas, status HTTP/texto exato de recusa, chave formal de identidade do par ou rateio de AN/intra entre competências. Nessas partes, esperado **“regra nao decide”**. Atomicidade do par vem do aval FATIA B fornecido; não encontrei extensão disso que determine resposta individual a cada requisição concorrente.
-
-_2171 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2172 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

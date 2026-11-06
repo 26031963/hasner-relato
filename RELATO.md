@@ -1,5 +1,34 @@
 # RELATO — esteira saas-hasner
 ESPERANDO: trava_teste.sh | pid=2718392
+lei: E-SEM-VIVA col574 (06/11 09:2x, Codex rc=0 logs/esemviva0611/r1.md) -- colab DESLIGADO com ZERO batida na vida segura a folha em 20 dias (espelho_nunca_bateu, folha/export.py:1198-1201 le ate a demissao) e NENHUM emissor abre porta: cartorio carimba e nao emite (ponto/services/cartorio.py:1157-1162, HX-CARTORIO-NUNCA-BATEU, escrito para colab ATIVO), adesao exclui desligado (chamados/services/adesao.py:66-67), C5 exclui desligado (escala/services/cadastro_realidade.py:151-154); a lei "lampada acusadora tem fio" (CORTES.md:263, O261-GRUPO-D) pede porta. Duas leis escritas, candidatas: (A) desligado que nunca bateu NAO segura a folha | (B) segura e vai a lista do admin com porta. Numeros: 20 dias, 1 colab, 21 novos e-sem-viva de 06/11 = 20 deste + 1 col950. Esteira SEGUE sem ela.
+H12H06-B POUSO 09:3x: suite do COMBOIO 62017e70 (H12H06-B 97754f8d + LASTRO-3 94e45065) VERDE Ran 13803 OK rc=0 (logs/comboio/suite_62017e70.log); merge --no-ff --no-commit raia-h12h06b (MERGE_HEAD presente) -> cmp 10/10 igual contra /home/ronald/wt-comboio-085426; sem migration; aval LEI-H12H06-B-A (A) com ! (dinheiro em exportada comp 08, faixa so DSR). Proximo: deploy, depois DRY das 30 da comp 11 ANTES do apply.
+E-SEM-VIVA-CACA + G1-PORTA 09:2x (medida, padrao=n/a (medida), juizes novos=0; Codex --sonda rc=0, SOMBRA READ ONLY ERROS=0, base 185c8783; A logs/esemviva0611/r1.md sha256 bd00318c.., B logs/g1porta0611/r1.md 76b8d2b6..; amostra conferida pela sessao 3/3: cartorio.py:1157-1162, crons.py:17, cadastro_realidade.py:151-154)
+  (2) E-SEM-VIVA 39 = col574 20 (todos novos; empresa 2, desligado, 0 batida na vida, veredito nunca_bateu, 0 chamado/pergunta/FuroDiario; dono ESTRUTURA = residuo e6_oraculo.py:110) + col950 19 (1 novo, 05/11 virou passado; colab de TESTE empresa 1, celula nunca julgada: cartorio roda so EMPRESAS=(2,3,4) crons.py:17, o censo le empresa 1). BUG PROVADO: 0. col574 -> lei: no topo. col950 -> INCONCLUSIVO (universo do censo inclui empresa fora de operacao; linha de fila, sem cura). Causa comum dos 21 novos: NAO (20 col574 + 1 col950); por que col574 entrou desde 05/11 nao medido (sem trilha anterior).
+  (3) G1-PORTA: 5 colab+dia (nao 6: o criterio de RELATO:6439 sobre sonda_g1.out da 5). Dia retido fora do censo (vigia_fio.py:585 lista so as datas que causam a retencao, CORTES.md:379). Datas retentoras, todas com porta (s):
+| colab | dia retido | datas retentoras (rota/verbo, dono) | admin pode validar |
+|---|---|---|---|
+| col504 | 21/10 | 29/10 fila/cobrar CADASTRO | n (so cobrar) |
+| col709 | 22/10 | 30/10 fila/validar BATIDA; 02/11 fila/cobrar ESTRUTURA; 03/11 e 04/11 fila/cobrar BATIDA | parcial (1 de 4) |
+| col204 | 21/09 | 29/09 fila/validar CADASTRO | s |
+| col43 | 26/10 | 01/11 pergunta/cobrar CADASTRO | n |
+| col502 | 09/10 | 28/09 pergunta/cobrar, 07/10 fila/cobrar, 10/10 fila/decidir, 18/10 fila/cobrar CADASTRO; 14/10 fila/decidir BATIDA | n (cobrar/decidir) |
+  Retentoras sem porta: 0 de 12. BUG PROVADO: 0. Dono por data e o residuo quando perguntado fora de divergencia (e6_oraculo.py:353-366 so pergunta apos divergir). Tela que ligue "dia X preso pelas datas Y/Z": nao existe (colaboradores/views.py:975-982), sem lei que a peca -- registrado, nao obra.
+BO-0511-G2-TRIAGEM TABELA DOS 46 09:2x (medida, padrao=n/a (medida), dono L-099, juizes novos=0; Codex censo rc=0 logs/bo_g2_0611/censo.r sha256 04c1ea47.. + Codex --sonda rc=0 sonda.r c5ad1452.. (SOMBRA dump 06/11 04:00), base 185c8783; G1 = sonda HJ 05/11 e G3/G4 = sonda G3G4 06/11 00:2x, ambas leitura em PROD (logs/sonda_leitura.log:742); amostra conferida pela sessao: e6_oraculo.py:98-110, fora_da_folha.py:102, juizes.py:1341 batem; detalhe por caso logs/bo_g2_0611/tabela_46.md)
+| grupo | dono L-099 | destino | casos | n |
+|---|---|---|---|---|
+| G1 | ESTRUTURA (residuo :110) | sem obra -- NAO diverge hoje (janela em G1-PORTA) | col504 21/10, col226 21/10, col709 22/10, col204 21/09, col43 10/10, col43 26/10, col956 16/10, col956 22/10, col502 09/10, col523 25/10, col55 03/10, col288 04/10 | 12 |
+| G1 | CADASTRO | sem obra -- NAO diverge hoje | col255 03/10 | 1 |
+| G1/G2/G3/G4 | indeterminado (sem dia) | sem obra -- pedir o dia ao admin | col253, col283, col92, col235, col219 / col207, col332, col446 / col129, col923, col789, col949, col214 / col42, col250, col960 | 16 |
+| G2 | BATIDA | lista do admin | col407 21/10, col909 16/10, col292 21/09 | 3 |
+| G2 | CADASTRO | lista do admin | col836 13/10, col836 14/10 | 2 |
+| G3 | BATIDA | lista do admin | col29 15/10, col33 03/10, col33 04/10, col247 24/10 | 4 |
+| G3 | CADASTRO | lista do admin | col174 25/10, col174 26/10 | 2 |
+| G3 | ESTRUTURA | obra existente FIO-LE-O-JUIZ | col94 16/10 | 1 |
+| G3 | ESTRUTURA (residuo) | sem obra (G3G4-ESTRUTURA-RESIDUO, fila, padrao nao nomeado) | col163 10/10, col163 17/10, col873 26/09 | 3 |
+| G4 | BATIDA | lista do admin | col39 15/10 | 1 |
+| G6 | indeterminado (UX, sem col/dia) | obra existente G6-PAGINA | - | 1 |
+  SOMA 46 = grupo G1 18 + G2 8 + G3 15 + G4 4 + G6 1 | destino lista do admin 12 + obra existente 2 + sem obra 32 (13 nao divergem hoje, 16 sem dia, 3 residuo) | dono ESTRUTURA 16 (so 1 divergente) + CADASTRO 5 + BATIDA 8 + indeterminado 17.
+  RESOLVIDO POR CODIGO HOJE: 0 (nenhum pouso atribuido por id). ENDERECADO: 14 (lista do admin 12 + obra 2). Divergentes hoje: 7 (BATIDA 4, CADASTRO 2, ESTRUTURA 1).
 DESPACHO BO-0511-G2-TRIAGEM 09:2x: (1) censo dos 8 G2 -> Codex censo | (2) sonda segura/dono/status/porta -> Codex --sonda (funcoes da sonda logs/g3g4_0611) | (3) montagem e amostra -> agente preparador; conferencia e tabela dos 46 -> sessao. Prazo 12:00.
 DESPACHO O10-TROCA-DE-PLANTAO-ENTRA 09:2x: A1 censo (celula editada, rubricas, resolver_dia_oferecido, leitores troca) -> Codex logs/o10/a1.q | A2 RED-POR-EXEMPLO -> Codex logs/o10/a2.q | B construir -> opus na 1a vaga apos C20/H12H06-B/PEP | C lote 16 -> DRY + aval. Base 185c8783.
 CXR-NA-FILA TABELA 09:1x (medida, padrao=n/a (medida); Codex leitura rc=0, base 185c8783, logs/cxr0611/q1.r; amostra conferida 4/4: BACKLOG.md:775, vigia_fio.py:677 (d) e :685 (e/sem_pergunta_viva), e6_oraculo.py:183 -- batem; SEM reordenar a fila)
