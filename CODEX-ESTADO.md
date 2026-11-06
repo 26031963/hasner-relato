@@ -1,7 +1,512 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 11:23** · publicado em **06/11/2026 11:25** (UTC-3)
+> Ultima resposta processada: **06/11/2026 11:26** · publicado em **06/11/2026 11:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 11:26 · sessao 5710202ccc04 · R1-CAUSAD-V3 · leitura · origem=Code
+
+```python
+import ast
+import datetime as dt
+import gc
+import io
+import logging
+import re
+import sys
+import time
+import tokenize
+from collections import Counter
+from contextlib import redirect_stderr, redirect_stdout
+from decimal import Decimal, localcontext
+from pathlib import Path
+from unittest.mock import patch
+
+PARTE = 1
+PARTES = 6
+
+sys.dont_write_bytecode = True
+
+
+def sonda_r1():
+    # Proposta sem execução; desempenho e compatibilidade: [nao verificado].
+    saida = sys.stdout
+    inicio = time.monotonic()
+    limite = inicio + 15 * 60
+    rastreador_anterior = sys.gettrace()
+    competencia = "-"
+    raiz = None
+    prefixo_app = None
+    codigo_handle = None
+    bruto = None
+    chamadas = 0
+    universo_parte_total = 0
+    erros_total = 0
+    erros_por_tipo = Counter()
+    somas = {}
+    quantidades = {}
+    selecionados = Counter()
+    arquivos = {}
+    codigos = {}
+    pendentes = {}
+    pulsos = 0
+    marca = object()
+    resetar_queries = None
+    invalidar_catalogo = None
+
+    DONOS = ("ESTRUTURA", "CADASTRO", "BATIDA")
+    CHAVES = (
+        "dias_comparados", "bate_ate_10min",
+        "esp_zero_e6_trabalho", "e6_zero_esp_trabalho",
+        "diverge_10_60", "diverge_acima_60",
+        "dia_batida_impar", "impar_que_BATE", "impar_que_DIVERGE",
+        "impar_dentro_da_faixa", "impar_FORA_da_faixa",
+        "impar_no_conjunto_do_dia", "impar_SO_POR_CORTE_do_oraculo",
+        "dia_sem_linha_no_espelho", "dia_sem_lavratura_no_espelho",
+        "dia_isento_ou_ausencia", "dia_sem_trabalho_ambos",
+        "esp_desconta_janela_declarada", "esp_lido_pelo_pago_h",
+    )
+
+    class TempoEsgotado(BaseException):
+        pass
+
+    class Descartar:
+        # Descarte imediato: não acumula stdout/stderr livres em StringIO.
+        def write(self, texto):
+            return len(texto)
+
+        def flush(self):
+            return None
+
+    def imprimir(*partes):
+        print(*partes, file=saida, flush=True)
+
+    def data_segura(valor):
+        if isinstance(valor, dt.datetime):
+            return valor.date().isoformat()
+        if isinstance(valor, dt.date):
+            return valor.isoformat()
+        if isinstance(valor, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", valor):
+            return dt.date.fromisoformat(valor).isoformat()
+        return None
+
+    def contexto(frame):
+        col, dia = None, None
+        while frame is not None:
+            loc = frame.f_locals
+            if col is None:
+                objetos = [loc.get("colaborador"), loc.get("colab"), loc.get("c")]
+                obj_self = loc.get("self")
+                if obj_self is not None:
+                    objetos.append(getattr(obj_self, "__dict__", {}).get("c"))
+                for obj in objetos:
+                    meta = getattr(type(obj), "_meta", None)
+                    if getattr(meta, "model_name", None) == "colaborador":
+                        pk = obj.pk
+                        if isinstance(pk, int) and not isinstance(pk, bool):
+                            col = "col%d" % pk
+                            break
+                if col is None:
+                    for chave in ("colaborador_id", "colab_id"):
+                        pk = loc.get(chave)
+                        if isinstance(pk, int) and not isinstance(pk, bool):
+                            col = "col%d" % pk
+                            break
+            if dia is None:
+                # k é o dia julgado; dia já foi incrementado.
+                # app/ponto/management/commands/e6_oraculo.py:321
+                # app/ponto/management/commands/e6_oraculo.py:323
+                for chave in ("k", "data", "dia", "data_turno"):
+                    valor = data_segura(loc.get(chave))
+                    if valor is not None:
+                        dia = valor
+                        break
+            frame = frame.f_back
+        return col or "-", dia or "-"
+
+    def registrar(exc, frame=None):
+        nonlocal erros_total
+
+        # Marca na própria exceção: não conserva exc nem traceback num
+        # dicionário global. Evita também deduplicação incorreta por id reusado.
+        if exc.__dict__.get("_sonda_r1_registrada") is marca:
+            return
+        exc.__dict__["_sonda_r1_registrada"] = marca
+
+        tb = exc.__traceback__
+        ultimo = None
+        while tb is not None:
+            ultimo = tb
+            tb = tb.tb_next
+
+        col, dia = contexto(frame or (ultimo.tb_frame if ultimo else None))
+        tipo = type(exc).__name__
+        if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", tipo):
+            tipo = "Excecao"
+
+        origem = "-"
+        if ultimo is not None:
+            caminho = Path(ultimo.tb_frame.f_code.co_filename)
+            if raiz is not None and caminho.is_relative_to(raiz):
+                origem = "app/%s:%d" % (
+                    caminho.relative_to(raiz).as_posix(), ultimo.tb_lineno
+                )
+            else:
+                origem = "[fora-do-app]:%d" % ultimo.tb_lineno
+
+        # Mesmo contrato de sanitização do anexo: mensagem livre suprimida.
+        ultima_linha = (tipo + ": [mensagem suprimida]")[:200]
+        erros_total += 1
+        erros_por_tipo[tipo] += 1
+
+        # Emite imediatamente; não guarda uma lista crescente de erros.
+        imprimir("ERRO", competencia, (col, dia, tipo, origem, ultima_linha))
+
+    def linhas_de_handlers(codigo):
+        nome = codigo.co_filename
+        if prefixo_app is None or not nome.startswith(prefixo_app):
+            # Não memoiza todos os códigos externos vistos pelo tracer.
+            return frozenset()
+        if codigo in codigos:
+            return codigos[codigo]
+        if nome not in arquivos:
+            with tokenize.open(nome) as fonte:
+                arvore = ast.parse(fonte.read(), filename=nome)
+            arquivos[nome] = {
+                item.body[0].lineno
+                for item in ast.walk(arvore)
+                if isinstance(item, ast.ExceptHandler) and item.body
+            }
+        linhas_codigo = {linha for _, _, linha in codigo.co_lines() if linha}
+        codigos[codigo] = frozenset(arquivos[nome] & linhas_codigo)
+        return codigos[codigo]
+
+    def copiar_acumuladores(frame):
+        nonlocal bruto
+        loc = frame.f_locals
+        necessarios = ("T", "DONO_H", "DONO_C", "div", "_div_tot")
+        if not all(chave in loc for chave in necessarios):
+            return
+
+        # Só lê o que a autoridade já acumulou; não refaz julgamento.
+        # app/ponto/management/commands/e6_oraculo.py:367
+        # app/ponto/management/commands/e6_oraculo.py:368
+        # app/ponto/management/commands/e6_oraculo.py:369
+        t, h, c = loc["T"], loc["DONO_H"], loc["DONO_C"]
+        uniao = set()
+        for dono in DONOS:
+            uniao.update(c.get(dono, ()))
+        bruto = {
+            "dias": {dono: int(t.get("dono_" + dono, 0)) for dono in DONOS},
+            # Mesma divisão da autoridade, sem a formatação %.1f.
+            # app/ponto/management/commands/e6_oraculo.py:423
+            "horas": {dono: repr(h.get(dono, 0) / 60.0) for dono in DONOS},
+            "colabs": {dono: len(c.get(dono, ())) for dono in DONOS},
+            "total_dias": int(loc["_div_tot"]),
+            # Mesma união usada na saída nativa.
+            # app/ponto/management/commands/e6_oraculo.py:429
+            "total_colabs": len({x[1] for x in loc["div"]}),
+            "uniao_colabs": len(uniao),
+        }
+
+    def rastrear(frame, evento, arg):
+        nonlocal pulsos
+        if evento == "call":
+            pulsos += 1
+            if pulsos % 256 == 0 and time.monotonic() >= limite:
+                raise TempoEsgotado()
+            if frame.f_code is codigo_handle:
+                linhas_de_handlers(frame.f_code)
+                return rastrear
+            return rastrear if linhas_de_handlers(frame.f_code) else None
+        if evento == "exception":
+            pendentes[id(frame)] = arg[1]
+        elif evento == "line":
+            if frame.f_lineno in codigos.get(frame.f_code, ()):
+                exc = sys.exc_info()[1] or pendentes.get(id(frame))
+                if exc is not None:
+                    registrar(exc, frame)
+        elif evento == "return":
+            try:
+                if frame.f_code is codigo_handle:
+                    copiar_acumuladores(frame)
+            finally:
+                pendentes.pop(id(frame), None)
+        return rastrear
+
+    def receber_log(logger, registro):
+        if registro.exc_info and registro.exc_info[1] is not None:
+            registrar(registro.exc_info[1], sys._getframe(1))
+
+    def limpar():
+        # Pendentes podem conservar exceções/tracebacks enquanto o frame vive.
+        pendentes.clear()
+        if resetar_queries is not None:
+            resetar_queries()
+        if invalidar_catalogo is not None:
+            # Cache único de catálogo; não é cache crescente por colaborador.
+            # app/ponto/catalogo/ausencias.py:257
+            # app/ponto/catalogo/ausencias.py:261
+            invalidar_catalogo()
+
+        # Não limpa memos de motores vivos nem os acumuladores do comando.
+        # Os memos pertencem à instância/cálculo:
+        # app/ponto/motor_calculo_v2.py:848
+        # app/ponto/motor_calculo_v2.py:2285
+        # O registro de fontes é fraco e morre com os motores:
+        # app/core/regua_cct.py:487
+        # app/core/regua_cct.py:494
+        gc.collect()
+
+    def ler_relatorio(texto, erros_antes):
+        linhas = texto.splitlines()
+        padrao_counter = (
+            r"\{(?:'[A-Za-z0-9_]+'\s*:\s*\d+"
+            r"(?:,\s*'[A-Za-z0-9_]+'\s*:\s*\d+)*)?\}"
+        )
+        contadores = [
+            ast.literal_eval(linha)
+            for linha in linhas if re.fullmatch(padrao_counter, linha)
+        ]
+        donos = [
+            m for linha in linhas
+            if (m := re.match(
+                r"^\s*(ESTRUTURA|CADASTRO|BATIDA)\s+"
+                r"(\d+) dia-colab\s+(\d+\.\d+) h\s+(\d+) colabs",
+                linha
+            ))
+        ]
+        soma = [
+            m for linha in linhas
+            if (m := re.match(
+                r"^\s*SOMA\s+(\d+)\s+"
+                r"<- tem de ser igual a soma das classes \((\d+)\)", linha
+            ))
+        ]
+        colabs = [
+            m for linha in linhas
+            if (m := re.fullmatch(r"colabs com divergencia: (\d+)", linha))
+        ]
+        falhas = [
+            m for linha in linhas
+            if (m := re.fullmatch(r"erros no espelho: (\d+)", linha))
+        ]
+        if not (
+            len(contadores) == len(soma) == len(colabs) == len(falhas) == 1
+            and len(donos) == 3
+            and {m[1] for m in donos} == set(DONOS)
+            and bruto is not None
+        ):
+            raise RuntimeError("FormatoDaAutoridadeIncompleto")
+
+        soma_dias = sum(bruto["dias"].values())
+        confere_dias = (
+            soma_dias == bruto["total_dias"]
+            == int(soma[0][1]) == int(soma[0][2])
+        )
+        confere_colabs = (
+            bruto["uniao_colabs"] == bruto["total_colabs"] == int(colabs[0][1])
+        )
+        for m in donos:
+            dono = m[1]
+            if (
+                int(m[2]) != bruto["dias"][dono]
+                or int(m[4]) != bruto["colabs"][dono]
+                or m[3] != format(float(bruto["horas"][dono]), ".1f")
+            ):
+                raise RuntimeError("AcumuladoresDaAutoridadeDivergentes")
+
+        if not confere_dias or not confere_colabs:
+            raise RuntimeError("SomaDaAutoridadeDivergente")
+        if selecionados[competencia] != quantidades[competencia]:
+            raise RuntimeError("UniversoDaParteDivergente")
+        if int(falhas[0][1]) and erros_total == erros_antes:
+            raise RuntimeError("ErroDoEspelhoSemDetalhamento")
+
+        imprimir("COMPETENCIA", competencia)
+        t = contadores[0]
+        imprimir("[1]", {chave: t.get(chave, 0) for chave in CHAVES})
+        for linha in linhas:
+            if re.fullmatch(
+                r"BATE \(ate 10 min\): \d+\.\d+% de \d+ dias comparados", linha
+            ):
+                imprimir("[2]", linha)
+        for m in donos:
+            imprimir("[3]", m[0].strip())
+        imprimir("[4] TOTAL divergentes", soma[0][2])
+        imprimir("[5]", colabs[0][0])
+        imprimir("erros_no_espelho", falhas[0][1])
+
+        # Decimal soma exatamente as representações decimais emitidas.
+        # Não usa as horas arredondadas da tabela nativa.
+        with localcontext() as ctx:
+            ctx.prec = 80
+            horas = {dono: Decimal(bruto["horas"][dono]) for dono in DONOS}
+            total_horas = sum(horas.values(), Decimal(0))
+            texto_total_horas = format(total_horas, "f")
+            confere_horas = (
+                sum((Decimal(bruto["horas"][d]) for d in DONOS), Decimal(0))
+                == Decimal(texto_total_horas)
+            )
+
+        for dono in DONOS:
+            imprimir(
+                "PARCIAL|%s|%s|dias=%d|horas=%s|colabs=%d" % (
+                    competencia, dono, bruto["dias"][dono],
+                    bruto["horas"][dono], bruto["colabs"][dono],
+                )
+            )
+        imprimir(
+            "PARCIAL_TOTAL|%s|dias=%d|horas=%s|colabs=%d" % (
+                competencia, bruto["total_dias"],
+                texto_total_horas, bruto["total_colabs"],
+            )
+        )
+        somas[competencia] = (
+            soma[0][0].strip(), confere_dias,
+            texto_total_horas, confere_horas,
+            bruto["total_colabs"], confere_colabs,
+        )
+
+    try:
+        with (
+            patch.object(logging.Logger, "handle", receber_log),
+            redirect_stdout(Descartar()),
+            redirect_stderr(Descartar()),
+        ):
+            from django.apps import apps
+            from django.conf import settings
+            from django.core.management import call_command
+            from django.db import connection, reset_queries, transaction
+            from ponto import janelas
+            from ponto.catalogo import ausencias
+            from ponto.management.commands import e6_oraculo
+            from ponto.services import espelho as modulo_espelho
+
+            raiz = Path(e6_oraculo.__file__).resolve().parents[3]
+            prefixo_app = str(raiz) + "/"
+            codigo_handle = e6_oraculo.Command.handle.__code__
+            resetar_queries = reset_queries
+            invalidar_catalogo = ausencias.invalidar_cache
+
+            if (
+                type(PARTE) is not int
+                or type(PARTES) is not int
+                or PARTES != 6
+                or not 1 <= PARTE <= PARTES
+                or settings.SETTINGS_MODULE != "config.settings.sombra"
+                or not settings.BANCO_DE_ENSAIO
+                or connection.settings_dict["NAME"] != "sombra"
+                or connection.schema_name != "juliani"
+                or rastreador_anterior is not None
+            ):
+                raise RuntimeError("AmbienteIncompativel")
+
+            Empresa = apps.get_model("colaboradores", "Empresa")
+            FM = apps.get_model("ponto", "FechamentoMensal")
+            Colaborador = apps.get_model("colaboradores", "Colaborador")
+            gerente = Colaborador.objects
+            filtro_real = gerente.filter
+            real_espelho = modulo_espelho.espelho_do_colab
+
+            with transaction.atomic():
+                try:
+                    with connection.cursor() as cursor:
+                        cursor.execute("SELECT current_database(), current_user")
+                        if cursor.fetchone() != ("sombra", "leitor"):
+                            raise RuntimeError("BancoOuPapelIncompativel")
+
+                    empresas = list(
+                        Empresa.objects.filter(ativa=True).order_by("pk")
+                    )
+                    imprimir("PARTE", PARTE, "PARTES", PARTES)
+                    for mes in (10, 11):
+                        competencia = "%02d/2026" % mes
+                        total = quantidade = 0
+                        ids = (
+                            FM.objects.filter(
+                                mes=mes, ano=2026,
+                                colaborador__empresa__ativa=True,
+                            )
+                            .values_list("colaborador_id", flat=True)
+                            .distinct()
+                            .iterator(chunk_size=128)
+                        )
+                        try:
+                            for pk in ids:
+                                if type(pk) is not int:
+                                    raise RuntimeError("IdentificadorIncompativel")
+                                total += 1
+                                quantidade += int(pk % PARTES == PARTE - 1)
+                        finally:
+                            ids.close()
+                        quantidades[competencia] = quantidade
+                        universo_parte_total += quantidade
+                        imprimir("[0] UNIVERSO", competencia, total)
+                        imprimir("UNIVERSO_PARTE", competencia, quantidade)
+
+                        janelas_vistas = {
+                            janelas.janela_fechamento(mes, 2026, empresa)
+                            for empresa in empresas
+                        }
+                        for ini, fim in sorted(janelas_vistas):
+                            imprimir(
+                                "JANELA", competencia,
+                                ini.isoformat(), fim.isoformat(),
+                            )
+                    del empresas
+                finally:
+                    transaction.set_rollback(True)
+            limpar()
+
+            def iterar_colaboradores(queryset):
+                it = queryset.iterator(chunk_size=1)
+                try:
+                    for c in it:
+                        if time.monotonic() >= limite:
+                            raise TempoEsgotado()
+                        if c.pk % PARTES != PARTE - 1:
+                            raise RuntimeError("ColaboradorForaDaParte")
+                        selecionados[competencia] += 1
+                        try:
+                            yield c
+                        finally:
+                            # O próximo passo do iterador acontece depois de
+                            # toda a comparação/juiz deste colaborador.
+                            # app/ponto/management/commands/e6_oraculo.py:302
+                            # app/ponto/management/commands/e6_oraculo.py:392
+                            limpar()
+                finally:
+                    it.close()
+
+            def filtrar_colaboradores(*args, **kwargs):
+                # Intercepta só a seleção de colaboradores do handle real.
+                # app/ponto/management/commands/e6_oraculo.py:302
+                if sys._getframe(1).f_code is not codigo_handle:
+                    return filtro_real(*args, **kwargs)
+                if args or set(kwargs) != {"pk__in"}:
+                    raise RuntimeError("SelecaoDaAutoridadeIncompativel")
+                ids = kwargs["pk__in"]
+                if any(type(pk) is not int for pk in ids):
+                    raise RuntimeError("IdentificadorIncompativel")
+                ids_parte = [pk for pk in ids if pk % PARTES == PARTE - 1]
+                return iterar_colaboradores(filtro_real(pk__in=ids_parte))
+
+            def observar_espelho(*args, **kwargs):
+                nonlocal chamadas
+                if time.monotonic() >= limite:
+                    raise TempoEsgotado()
+                if chamadas and chamadas % 25 == 0:
+                    decorrido = time.monotonic() - inicio
+                    estimativa = (
+                        decorrido * universo_parte_total / chamadas / 60
+                    )
+                    imprimir(
+                        "ESTIMATIVA", "processados", chamadas,
+                        "universo", universo_parte_total,
+                        "minutos_total", round(estimativa, 1),
+                        "ate_40_min", estimativa 
+
+[truncado em 20000 de 27052 caracteres]
 
 ## 06/11 11:23 · sessao e60937eb81bd · - · - · origem=Ronald (tmux)
 
@@ -1994,42 +2499,4 @@ O problema mais importante do contrato é erro engolido:
 
 Capturar somente exceções que escapam do `call_command` ou somente registros de logging não atende “erro nunca engolido”, porque os dois últimos fallbacks do motor não registram logger. A alternativa instrumental sem reproduzir lógica é ler os módulos com `ast`, mapear a primeira linha executável de cada `ExceptHandler` e usar `sys.settrace` nesses frames; quando essa linha executar, registrar `sys.exc_info()` com contexto col/data da pilha. Deduplicar a mesma instância de exceção preservando referências evita contá-la novamente quando for tratada em mais de um nível. A execução usa Python 3.13 segundo `app/Dockerfile:1`.
 
-## 06/11 10:40 · sessao 79d40633b87e · - · - · origem=Ronald (tmux)
-
-O “resto dos 38” tem três blocos no registro: cenários B17–B33; fechamento/export para a propriedade “todo leitor lê o mesmo número”; e dimensionamentos de intervalo/tolerância. (`app/docs/BACKLOG.md:1621`)
-
-**Oito cenários sem execução naquela costura, segundo o registro atual da bateria complementar:**
-
-| Caso | O que falta / destino declarado | Evidência |
-|---|---|---|
-| B18 | Batida 00:00 UTC−3: pergunta dos leitores e do dia da jornada; `onde='fora'`. | `app/ponto/tests/test_o287_leg2_absurdos_do_esmeril.py:69` |
-| B20 | Segundo vínculo vigente sobreposto ao primeiro; `onde='cadastro'`. | `app/ponto/tests/test_o287_leg2_absurdos_do_esmeril.py:76` |
-| B24 | Só duas batidas da pausa: falta exercício pelos leitores/gravação; `onde='fora'`. O corte posterior manda EM ABERTO, soma dos pares fechados. | `app/ponto/tests/test_o287_leg2_absurdos_do_esmeril.py:100`; `app/docs/BACKLOG.md:1521` |
-| B25 | Colaborador sem vínculo: precisa exercitar a porta de fechamento, pois a costura exige `ec`. | `app/ponto/tests/test_o287_leg2_absurdos_do_esmeril.py:104` |
-| B29 | Retratação pertence ao universo apurável antes do motor; aponta para tripwire próprio, não para caso de período. | `app/ponto/tests/test_o287_leg2_absurdos_do_esmeril.py:122` |
-| B30 | Registro ainda pede vínculo com âncora futura; corte posterior descreve extrapolação máxima cadastrada por TipoEscala, inicialmente 180 minutos. Essa diferença impede declarar o caso atualizado apenas pelo rótulo. | `app/ponto/tests/test_o287_leg2_absurdos_do_esmeril.py:126`; `app/docs/BACKLOG.md:1521` |
-| B31 | Falta exercício da porta de cadastro e lista dos existentes; registro ainda usa pergunta antiga sobre início=fim. Corte posterior manda recusar na porta e listar existentes. | `app/ponto/tests/test_o287_leg2_absurdos_do_esmeril.py:129`; `app/docs/BACKLOG.md:1521` |
-| B33 | Atestado aprovado em folga com par fechado; fixture de cadastro ausente e metade da lei declarada sem dono. | `app/ponto/tests/test_o287_leg2_absurdos_do_esmeril.py:136` |
-
-O selo de cobertura só exige caso executável para entradas `onde='roda'`; para `fora`/`cadastro` exige explicação textual. Portanto os oito itens acima não são oito testes vermelhos nem oito bugs da v3. (`app/ponto/tests/test_o287_leg2_absurdos_do_esmeril.py:503`; `app/ponto/tests/test_o287_leg2_absurdos_do_esmeril.py:514`)
-
-**Casos já presentes que não devem ser apresentados como ainda ausentes:**
-
-- B17: virada da competência, teste e asserções 720 na competência inicial e zero na seguinte. O `660+0` do backlog está desatualizado frente à correção explicitada pela bateria. (`app/ponto/tests/test_o287_leg2_absurdos_do_esmeril.py:252`; `app/ponto/tests/test_o287_leg2_absurdos_do_esmeril.py:266`; `app/ponto/tests/test_o287_leg2_absurdos_do_esmeril.py:44`)
-- B19, B22, B23 e B32: casos tabelados com respostas numéricas. (`app/ponto/tests/test_o287_leg2_absurdos_do_esmeril.py:204`; `:213`; `:220`; `:226`)
-- B21: teste presente, mas com redação anterior “abono se cancela”; corte posterior diz batidas contam e abono cobre apenas previsto descoberto. Não certificar aderência ao corte novo sem conferir esse comportamento. (`app/ponto/tests/test_o287_leg2_absurdos_do_esmeril.py:276`; `app/docs/BACKLOG.md:1521`)
-- B26 e B28: testes presentes. (`app/ponto/tests/test_o287_leg2_absurdos_do_esmeril.py:319`; `:478`)
-- B27: presente; B27b e B27c são pinos explícitos do defeito v2 ligado à ordem/deduplicação. (`app/ponto/tests/test_o287_leg2_absurdos_do_esmeril.py:340`; `:371`; `:423`)
-
-**Demais pendências:**
-
-- Propriedade de quatro leitores: o backlog declara só 2/4 pontas e deixa fechamento/export de fixture pendentes. O teste de export explica por que compara a função isolada: montar entrada no TXT exigia catálogo, fechamento e célula julgada em todo dia, e as tentativas caíram em `cadastro_zero`/`furo_espelho`. Isso demonstra o obstáculo, não a cobertura integral dos quatro leitores. (`app/docs/BACKLOG.md:1522`; `app/docs/BACKLOG.md:1621`; `app/folha/tests/test_porta_do_export.py:216`; `:224`)
-- Art.71 §4 pós-2017: dimensionamento suprimido versus “INTEGRAL” continua pergunta nomeada; comentário v2 contém “indeniza INTEGRAL”. (`app/docs/BACKLOG.md:1621`; `app/ponto/motor_calculo_v2.py:68`)
-- Art.58 §1: dimensionamento 5 por marcação versus 10 por ponta; C13 declara explicitamente a contradição, e F9/F9b são indicados como exercícios da lei. (`app/docs/BACKLOG.md:1621`; `app/ponto/tests/test_o280_bateria_da_lei.py:605`; `:611`)
-- Degrau HE >2h→100% continua explicitamente aberto no backlog; os casos só afirmam total e conservação das parcelas, sem certificar 120/restante como lei. (`app/docs/BACKLOG.md:1621`; `app/ponto/tests/test_o280_bateria_da_lei.py:1954`; `:5742`)
-
-Há divergência documental de contagem: o backlog diz “15 células B17–B33” e chama B33 verde; a tabela atual contém **17 IDs**, o selo exige 17 e B33 está `cadastro`. (`app/docs/BACKLOG.md:1621`; `app/ponto/tests/test_o287_leg2_absurdos_do_esmeril.py:64`; `:136`; `:527`)
-
-Nenhum resultado de execução desta bateria foi produzido nesta auditoria; estado verde no ambiente atual: [nao verificado]. [nao verificado]
-
-_2231 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2232 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
