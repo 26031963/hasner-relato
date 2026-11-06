@@ -1,7 +1,266 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 13:04** · publicado em **06/11/2026 13:06** (UTC-3)
+> Ultima resposta processada: **06/11/2026 13:15** · publicado em **06/11/2026 13:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 13:15 · sessao e5bcf41be2b8 · - · - · origem=Ronald (tmux)
+
+**Equivalência — informativa, procedente com recorte:** para o mesmo estado cadastral, desligado, células `nunca_bateu` e datas `< hoje`, a C5 coincide com **rescisão + retentor**. A consulta inicial seleciona NB até ontem; depois intersecta as datas devolvidas pelo retentor nas duas janelas que não saem pela rescisão. A unicidade `(colaborador,data)` evita outra célula do mesmo dia dar motivo diferente. (`app/escala/services/cadastro_realidade.py:163–174`; `app/escala/models.py:1833`; `app/folha/export.py:1233–1254`.)
+
+**Equivalência irrestrita — média, procedente:** hoje/futuro continuam diferentes: C5 exclui por `data__lte=ontem`; retentor aceita célula acusadora até `fim`, sem condição `d < hoje` nesse ramo. Exemplo sintético: hoje 25/10, desligado sem demissão, NB em 25/10 e 26/10; retentor devolve ambos, C5 nenhum. Ocorrência em produção: [não verificado]. (`app/escala/services/cadastro_realidade.py:159,165`; `app/folha/export.py:1225–1255`.)
+
+**Classificação efetiva — informativa, procedente como limite:** a cura é do recorte acordado com o retentor, não igualdade geral com `classificar_export`. Fechamento ausente não integra o universo padrão; código vazio ou férias com batida saem antes de consultar o espelho. As fixtures `_cria` não fornecem `codigo_dominio`, cujo default é vazio; assim continuam inadequadas para provar a classificação efetiva, embora adequadas ao contrato restrito do retentor. (`app/folha/export.py:775–780,858–876,960`; `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:31–34`; `app/colaboradores/models.py:311–313`.)
+
+Casos sintéticos, todos para NB já lavrado, sem outras isenções, hoje 25/10/2026, corte21, anterior 21/09–20/10 e corrente21/10–20/11. Janelas e veto derivam das autoridades existentes. (`app/ponto/janelas.py:10–33,60–72`; `app/folha/export.py:60`; `app/escala/services/cadastro_realidade.py:163–170`.)
+
+| Caso | Resultado C5 e rescisão+retentor |
+|---|---|
+| Admissão10/10; NB05/10,20/10; demissão22/10 | Ambos só20/10: anterior passa rescisão, admissão corta05; corrente sai. (`app/folha/export.py:60,1198–1206`; `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:120–123`.) |
+| Isento | Ambos vazios. (`app/folha/export.py:1192–1196`; `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:126–129`.) |
+| Protestos somente `FURO_PRE_ADOCAO` | Ambos excluem o dia. (`app/ponto/supra_juiz.py:34–36`; `app/folha/export.py:1245–1254`; `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:132–136`.) |
+| Sem protestos ou protestos mistos, incluindo código cobrável | Ambos retêm. (`app/folha/export.py:1242–1254`.) |
+| Somente `FURO_PARCIAL` e juiz confirma somente pausa apagada | Ambos excluem; não há novo filtro paralelo na C5. (`app/folha/export.py:1140–1147,1165,1253`; `app/escala/services/cadastro_realidade.py:169–170`.) |
+| `FURO_PARCIAL` misto com outro código, ou ata desconhecida/desalinhada/turno aberto | Ambos retêm. (`app/folha/export.py:1142–1147,1165,1253–1254`.) |
+| Demissão21/09 ou20/10 | Ambas as competências saem; nada entra. (`app/folha/export.py:60`; `app/escala/services/cadastro_realidade.py:169`.) |
+| Demissão21/10 ou20/11 | Só anterior; inclusive demissão no primeiro/último dia da corrente já elimina a corrente inteira. (`app/folha/export.py:60`; `app/escala/services/cadastro_realidade.py:169`.) |
+| Demissão futura30/10 | Só anterior, pois30/10≤20/11. (`app/folha/export.py:60`; `app/escala/services/cadastro_realidade.py:169`.) |
+| Demissão21/11 ou nula | As duas competências passam; C5 ainda limita até ontem. (`app/folha/export.py:60`; `app/escala/services/cadastro_realidade.py:165,169`.) |
+| Corte10, demissão15/10, NB05/10 e12/10 | Anterior10/09–09/10 passa; corrente10/10–09/11 sai; só05/10 em ambos. (`app/ponto/janelas.py:10–33,60–72`; `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:147–152`.) |
+| Hoje21/10, primeiro dia da competência | C5 só pode devolver anterior, até20/10; retentor da corrente pode devolver NB21/10 ou futura se rescisão não a eliminar. (`app/escala/services/cadastro_realidade.py:159,163–165`; `app/folha/export.py:1233–1254`.) |
+| Mudança A/corte21→B/corte10; demissão15/10; NB05/10 | Antes nada; depois05/10 entra. C5 e export usam empresa atual; isso não prova divergência entre ambos no mesmo estado. Fotografia histórica do Retrato pode divergir da lista atual. (`app/escala/services/cadastro_realidade.py:160–170`; `app/folha/export.py:778,807,1266`; `app/folha/vigia_retido_calado.py:38–48`.) |
+
+**Custo — média, procedente:** o comentário “UMA query por empresa” ficou falso. Além da consulta NB por empresa e do lote de colaboradores desligados, cada janela elegível de cada desligado não isento/não colapsado faz uma consulta de células e outra de vínculos. Até **quatro SQL adicionais por desligado** quando ambas passam a rescisão; duas quando só uma passa; zero consultas internas quando rescisão elimina ambas, isento retorna antes ou janela colapsa. Uma consulta global carrega empresas. Não há consulta nova por dia no caminho de pausa. Contagens executadas/latência real: [não verificado]. (`app/escala/services/cadastro_realidade.py:135,160–170`; `app/folha/export.py:1192–1212`; `app/escala/alimentacao.py:148–154,163–186`; `app/folha/export.py:1140–1147`.)
+
+**RED — informativa, procedente:** admissão, isenção, pré-adoção, demissão no fim e corte diferente foram adicionados como casos. Não há caso novo cobrindo `FURO_PARCIAL`, hoje no corte ou troca de empresa; isso é lacuna de cobertura, não contraexemplo à implementação delegada. (`app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:119–160`; `app/escala/services/cadastro_realidade.py:169–170`.)
+
+## 06/11 13:15 · sessao 0235c4f257d9 · - · - · origem=Ronald (tmux)
+
+Mapa enviado ao agente principal, com referências atuais de escritores, leitores e produtores em memória. A inspeção não executou testes nem comandos de escrita; exaustividade de acessos dinâmicos e execução efetiva em produção permanecem [não verificado]. [nao verificado]
+
+## 06/11 13:12 · sessao aa768c718c00 · R1-CAUSAD-V3 · sonda · origem=Code
+
+No dado fornecido, nenhuma linha `SOMA` está `True`: todas indicam `False`. Há `INCOMPLETO: 596`. [nao verificado]
+
+Transcrição integral da saída fornecida, parte 5 de 6. [nao verificado]
+
+```text
+sonda_leitura: script.py [3027607d50f632b4] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+PARTE|5|6
+ATO|hoje=2026-11-06|agora=2026-11-06T13:04:13.903213-03:00
+FORA_DA_MEDIDA|horas_falta
+FORA_DA_MEDIDA|horas_reflexo_dsr
+FORA_DA_MEDIDA|saldo_banco_horas
+UNIVERSO|2026-10|colabs_porta=624|segundos=0.1
+UNIVERSO_PARTE 2026-10 107
+RUBRICA|competencia|rubrica|v2_h|v3_h|delta_h|colabs_div|dias_colab_div
+DONO|competencia|rubrica|dono|v2_h|v3_h|delta_h|colabs|dias_colab
+DIA|2026-10|horas_intra_indenizada|col82|2026-10-06|CADASTRO|1.166666667|0.000000000|-1.166666667
+DIA|2026-10|horas_intra_indenizada|col82|2026-10-08|CADASTRO|1.166666667|0.000000000|-1.166666667
+DIA|2026-10|horas_intra_indenizada|col82|2026-10-12|CADASTRO|1.166666667|0.000000000|-1.166666667
+DIA|2026-10|horas_intra_indenizada|col82|2026-10-14|CADASTRO|1.166666667|0.000000000|-1.166666667
+DIA|2026-10|horas_intra_indenizada|col82|2026-10-15|CADASTRO|1.166666667|0.000000000|-1.166666667
+DIA|2026-10|horas_intra_indenizada|col82|2026-10-16|CADASTRO|1.166666667|0.000000000|-1.166666667
+DIA|2026-10|horas_intra_indenizada|col82|2026-10-20|CADASTRO|1.166666667|0.000000000|-1.166666667
+DIA|2026-10|horas_extras_50|col82|2026-10-06|CADASTRO|0.000000000|0.500647778|+0.500647778
+DIA|2026-10|horas_extras_50|col82|2026-10-08|CADASTRO|0.000000000|0.471973333|+0.471973333
+DIA|2026-10|horas_extras_50|col82|2026-10-14|CADASTRO|0.000000000|0.179223056|+0.179223056
+DIA|2026-10|horas_extras_50|col82|2026-10-15|CADASTRO|0.000000000|0.557518333|+0.557518333
+DIA|2026-10|horas_atraso|col274|2026-10-04|ESTRUTURA|0.000000000|2.330333333|+2.330333333
+DIA|2026-10|horas_extras_100_noturna|col292|2026-10-12|ESTRUTURA|0.000000000|0.909870556|+0.909870556
+DIA|2026-10|horas_trabalhadas|col502|2026-10-10|CADASTRO|7.569179979|2.843692404|-4.725487575
+DIA|2026-10|horas_extras_50|col502|2026-10-10|CADASTRO|0.235846646|0.000000000|-0.235846646
+DIA|2026-10|horas_trabalhadas|col592|2026-10-20|CADASTRO|7.314860278|5.421271667|-1.893588611
+DIA|2026-10|horas_noturnas|col964|2026-09-25|ESTRUTURA|1.000000000|1.142857143|+0.142857143
+DIA|2026-10|horas_noturnas|col964|2026-09-26|BATIDA|1.015868889|1.160993016|+0.145124127
+DIA|2026-10|horas_noturnas|col964|2026-09-27|ESTRUTURA|0.976877500|1.116431429|+0.139553929
+DIA|2026-10|horas_noturnas|col964|2026-09-28|CADASTRO|0.939963611|1.074244127|+0.134280516
+DIA|2026-10|horas_trabalhadas|col988|2026-10-17|CADASTRO|6.190200326|3.268974456|-2.921225870
+PARCIAL|2026-10|horas_trabalhadas|v2_h=12435.675896993611|v3_h=12426.135594937223|colabs_div=3|dias_colab_div=3
+RUBRICA|2026-10|horas_trabalhadas|12435.675896994|12426.135594937|-9.540302056|3|3
+DONO|2026-10|horas_trabalhadas|CADASTRO|21.074240583|11.533938527|-9.540302056|3|3
+RESIDUO|2026-10|horas_trabalhadas|ATE_LIMIAR|12414.601656410|12414.601656410|+0.000000000|89|1333
+RESIDUO|2026-10|horas_trabalhadas|SEM_DECISAO|73.246107319|73.246107319|+0.000000000|59|346
+RESIDUO|2026-10|horas_trabalhadas|SEM_PAR|0.000000000|0.000000000|+0.000000000|9|155
+INSTRUMENTO_HISTORICO|2026-10|horas_trabalhadas|v2_h=12416.013102646|v3_h=12426.135594937|delta_h=+10.122492291
+PARCIAL|2026-10|horas_intra_indenizada|v2_h=369.55118945583331|v3_h=361.38452278916668|colabs_div=1|dias_colab_div=7
+RUBRICA|2026-10|horas_intra_indenizada|369.551189456|361.384522789|-8.166666667|1|7
+DONO|2026-10|horas_intra_indenizada|CADASTRO|8.166666667|0.000000000|-8.166666667|1|7
+RESIDUO|2026-10|horas_intra_indenizada|ATE_LIMIAR|361.384522789|361.384522789|+0.000000000|89|1329
+RESIDUO|2026-10|horas_intra_indenizada|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|59|346
+RESIDUO|2026-10|horas_intra_indenizada|SEM_PAR|0.000000000|0.000000000|+0.000000000|9|155
+INSTRUMENTO_HISTORICO|2026-10|horas_intra_indenizada|v2_h=366.551189456|v3_h=361.384522789|delta_h=-5.166666667
+PARCIAL|2026-10|horas_extras_50|v2_h=3.1360523825|v3_h=4.6095682363888901|colabs_div=2|dias_colab_div=5
+RUBRICA|2026-10|horas_extras_50|3.136052382|4.609568236|+1.473515854|2|5
+DONO|2026-10|horas_extras_50|CADASTRO|0.235846646|1.709362500|+1.473515854|2|5
+RESIDUO|2026-10|horas_extras_50|ATE_LIMIAR|2.900205736|2.900205736|+0.000000000|89|1312
+RESIDUO|2026-10|horas_extras_50|SEM_DECISAO|2.000000000|2.000000000|+0.000000000|60|365
+RESIDUO|2026-10|horas_extras_50|SEM_PAR|0.000000000|0.000000000|+0.000000000|9|155
+INSTRUMENTO_HISTORICO|2026-10|horas_extras_50|v2_h=5.136052382|v3_h=4.609568236|delta_h=-0.526484146
+PARCIAL|2026-10|horas_extras_100|v2_h=68.607693309444443|v3_h=68.607693309444443|colabs_div=0|dias_colab_div=0
+RUBRICA|2026-10|horas_extras_100|68.607693309|68.607693309|+0.000000000|0|0
+RESIDUO|2026-10|horas_extras_100|ATE_LIMIAR|68.607693309|68.607693309|+0.000000000|89|1317
+RESIDUO|2026-10|horas_extras_100|SEM_DECISAO|3.141441776|3.141441776|+0.000000000|60|365
+RESIDUO|2026-10|horas_extras_100|SEM_PAR|0.000000000|0.000000000|+0.000000000|9|155
+INSTRUMENTO_HISTORICO|2026-10|horas_extras_100|v2_h=71.749135085|v3_h=69.024955254|delta_h=-2.724179831
+PARCIAL|2026-10|horas_extras_100_feriado|v2_h=68.607693309444443|v3_h=68.607693309444443|colabs_div=0|dias_colab_div=0
+RUBRICA|2026-10|horas_extras_100_feriado|68.607693309|68.607693309|+0.000000000|0|0
+RESIDUO|2026-10|horas_extras_100_feriado|ATE_LIMIAR|68.607693309|68.607693309|+0.000000000|89|1317
+RESIDUO|2026-10|horas_extras_100_feriado|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|60|365
+RESIDUO|2026-10|horas_extras_100_feriado|SEM_PAR|0.000000000|0.000000000|+0.000000000|9|155
+INSTRUMENTO_HISTORICO|2026-10|horas_extras_100_feriado|v2_h=0.000000000|v3_h=69.024955254|delta_h=+69.024955254
+PARCIAL|2026-10|horas_extras_50_noturna|v2_h=0.3541233333333334|v3_h=0.3541233333333334|colabs_div=0|dias_colab_div=0
+RUBRICA|2026-10|horas_extras_50_noturna|0.354123333|0.354123333|+0.000000000|0|0
+RESIDUO|2026-10|horas_extras_50_noturna|ATE_LIMIAR|0.354123333|0.354123333|+0.000000000|89|1317
+RESIDUO|2026-10|horas_extras_50_noturna|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|60|365
+RESIDUO|2026-10|horas_extras_50_noturna|SEM_PAR|0.000000000|0.000000000|+0.000000000|9|155
+INSTRUMENTO_HISTORICO|2026-10|horas_extras_50_noturna|v2_h=0.000000000|v3_h=0.354123333|delta_h=+0.354123333
+PARCIAL|2026-10|horas_extras_100_noturna|v2_h=9.6304372222222234|v3_h=10.542015833333332|colabs_div=1|dias_colab_div=1
+RUBRICA|2026-10|horas_extras_100_noturna|9.630437222|10.542015833|+0.911578611|1|1
+DONO|2026-10|horas_extras_100_noturna|ESTRUTURA|0.000000000|0.909870556|+0.909870556|1|1
+RESIDUO|2026-10|horas_extras_100_noturna|ATE_LIMIAR|9.630437222|9.632145278|+0.001708056|89|1316
+RESIDUO|2026-10|horas_extras_100_noturna|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|60|365
+RESIDUO|2026-10|horas_extras_100_noturna|SEM_PAR|0.000000000|0.000000000|+0.000000000|9|155
+INSTRUMENTO_HISTORICO|2026-10|horas_extras_100_noturna|v2_h=0.000000000|v3_h=10.542015833|delta_h=+10.542015833
+PARCIAL|2026-10|horas_folga_trabalhada|v2_h=0|v3_h=0|colabs_div=0|dias_colab_div=0
+RUBRICA|2026-10|horas_folga_trabalhada|0.000000000|0.000000000|+0.000000000|0|0
+RESIDUO|2026-10|horas_folga_trabalhada|ATE_LIMIAR|0.000000000|0.000000000|+0.000000000|89|1336
+RESIDUO|2026-10|horas_folga_trabalhada|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|59|346
+RESIDUO|2026-10|horas_folga_trabalhada|SEM_PAR|0.000000000|0.000000000|+0.000000000|9|155
+INSTRUMENTO_HISTORICO|2026-10|horas_folga_trabalhada|v2_h=92.908901667|v3_h=0.000000000|delta_h=-92.908901667
+PARCIAL|2026-10|horas_noturnas|v2_h=2347.5012535976189|v3_h=2348.0630693119047|colabs_div=1|dias_colab_div=4
+RUBRICA|2026-10|horas_noturnas|2347.501253598|2348.063069312|+0.561815714|1|4
+DONO|2026-10|horas_noturnas|BATIDA|1.015868889|1.160993016|+0.145124127|1|1
+DONO|2026-10|horas_noturnas|CADASTRO|0.939963611|1.074244127|+0.134280516|1|1
+DONO|2026-10|horas_noturnas|ESTRUTURA|1.976877500|2.259288571|+0.282411071|1|2
+RESIDUO|2026-10|horas_noturnas|ATE_LIMIAR|2343.568543598|2343.568543598|-0.000000000|89|1322
+RESIDUO|2026-10|horas_noturnas|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|61|356
+RESIDUO|2026-10|horas_noturnas|SEM_PAR|0.000000000|0.000000000|+0.000000000|9|155
+INSTRUMENTO_HISTORICO|2026-10|horas_noturnas|v2_h=2300.755510939|v3_h=2348.063069312|delta_h=+47.307558373
+PARCIAL|2026-10|horas_atraso|v2_h=74.335833333333326|v3_h=76.66578148638888|colabs_div=1|dias_colab_div=1
+RUBRICA|2026-10|horas_atraso|74.335833333|76.665781486|+2.329948153|1|1
+DONO|2026-10|horas_atraso|ESTRUTURA|0.000000000|2.330333333|+2.330333333|1|1
+RESIDUO|2026-10|horas_atraso|ATE_LIMIAR|74.335833333|74.335448153|-0.000385180|88|1312
+RESIDUO|2026-10|horas_atraso|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|61|369
+RESIDUO|2026-10|horas_atraso|SEM_PAR|0.000000000|0.000000000|+0.000000000|9|155
+INSTRUMENTO_HISTORICO|2026-10|horas_atraso|v2_h=74.350166667|v3_h=74.349781486|delta_h=-0.000385180
+PARCIAL|2026-10|horas_saida_antecipada|v2_h=46.246166666666667|v3_h=46.246252456944447|colabs_div=0|dias_colab_div=0
+RUBRICA|2026-10|horas_saida_antecipada|46.246166667|46.246252457|+0.000085790|0|0
+RESIDUO|2026-10|horas_saida_antecipada|ATE_LIMIAR|46.246166667|46.246252457|+0.000085790|88|1313
+RESIDUO|2026-10|horas_saida_antecipada|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|61|369
+RESIDUO|2026-10|horas_saida_antecipada|SEM_PAR|0.000000000|0.000000000|+0.000000000|9|155
+INSTRUMENTO_HISTORICO|2026-10|horas_saida_antecipada|v2_h=32.592833333|v3_h=32.592919124|delta_h=+0.000085790
+UNIVERSO|2026-11|colabs_porta=578|segundos=102.2
+UNIVERSO_PARTE 2026-11 99
+RUBRICA|competencia|rubrica|v2_h|v3_h|delta_h|colabs_div|dias_colab_div
+DONO|competencia|rubrica|dono|v2_h|v3_h|delta_h|colabs|dias_colab
+DIA|2026-11|horas_trabalhadas|col82|2026-11-05|CADASTRO|7.463548611|6.085836944|-1.377711667
+DIA|2026-11|horas_intra_indenizada|col82|2026-10-25|CADASTRO|0.000000000|0.204860556|+0.204860556
+DIA|2026-11|horas_intra_indenizada|col82|2026-10-27|CADASTRO|1.166666667|0.000000000|-1.166666667
+DIA|2026-11|horas_intra_indenizada|col82|2026-10-28|CADASTRO|1.166666667|0.000000000|-1.166666667
+DIA|2026-11|horas_intra_indenizada|col82|2026-10-29|CADASTRO|1.166666667|0.000000000|-1.166666667
+DIA|2026-11|horas_intra_indenizada|col82|2026-11-03|CADASTRO|1.166666667|0.000000000|-1.166666667
+DIA|2026-11|horas_intra_indenizada|col82|2026-11-04|CADASTRO|1.166666667|0.000000000|-1.166666667
+DIA|2026-11|horas_atraso|col214|2026-11-01|CADASTRO|0.000000000|0.076333333|+0.076333333
+DIA|2026-11|horas_saida_antecipada|col214|2026-11-01|CADASTRO|0.951166667|0.874833333|-0.076333333
+DIA|2026-11|horas_trabalhadas|col592|2026-10-29|CADASTRO|7.452715833|4.403602222|-3.049113611
+DIA|2026-11|horas_intra_indenizada|col592|2026-10-31|CADASTRO|1.000000000|0.000000000|-1.000000000
+DIA|2026-11|horas_extras_50|col592|2026-10-31|CADASTRO|0.000000000|0.272015833|+0.272015833
+DIA|2026-11|horas_intra_indenizada|col922|2026-10-25|BATIDA|1.000000000|0.000000000|-1.000000000
+DIA|2026-11|horas_intra_indenizada|col922|2026-10-27|BATIDA|1.000000000|0.000000000|-1.000000000
+DIA|2026-11|horas_intra_indenizada|col922|2026-11-02|CADASTRO|1.000000000|0.000000000|-1.000000000
+DIA|2026-11|horas_extras_50|col922|2026-11-02|CADASTRO|2.000000000|0.000000000|-2.000000000
+DIA|2026-11|horas_extras_100|col922|2026-10-25|BATIDA|6.169508333|11.494480833|+5.324972500
+DIA|2026-11|horas_extras_100|col922|2026-10-27|BATIDA|6.070659167|10.791530000|+4.720870833
+DIA|2026-11|horas_extras_100|col922|2026-11-02|CADASTRO|10.745034167|20.745034167|+10.000000000
+DIA|2026-11|horas_extras_100_feriado|col922|2026-11-02|CADASTRO|4.701487222|20.745034167|+16.043546944
+DIA|2026-11|horas_trabalhadas|col988|2026-10-22|CADASTRO|7.043500000|3.347891111|-3.695608889
+DIA|2026-11|horas_trabalhadas|col988|2026-10-23|CADASTRO|6.947509637|2.004634167|-4.942875471
+DIA|2026-11|horas_trabalhadas|col988|2026-10-29|CADASTRO|8.608185508|4.593460833|-4.014724674
+DIA|2026-11|horas_extras_50|col988|2026-10-29|CADASTRO|1.608185508|0.000000000|-1.608185508
+PARCIAL|2026-11|horas_trabalhadas|v2_h=6877.6199801902776|v3_h=6860.5399458783331|colabs_div=3|dias_colab_div=5
+RUBRICA|2026-11|horas_trabalhadas|6877.619980190|6860.539945878|-17.080034312|3|5
+DONO|2026-11|horas_trabalhadas|CADASTRO|37.515459590|20.435425278|-17.080034312|3|5
+RESIDUO|2026-11|horas_trabalhadas|ATE_LIMIAR|6840.104520601|6840.104520601|-0.000000000|86|726
+RESIDUO|2026-11|horas_trabalhadas|SEM_DECISAO|49.509477702|49.509477702|+0.000000000|86|967
+RESIDUO|2026-11|horas_trabalhadas|SEM_PAR|0.000000000|0.000000000|+0.000000000|11|239
+INSTRUMENTO_HISTORICO|2026-11|horas_trabalhadas|v2_h=6715.239535224|v3_h=6860.539945878|delta_h=+145.300410654
+PARCIAL|2026-11|horas_intra_indenizada|v2_h=234.28587616805555|v3_h=224.65740339027778|colabs_div=3|dias_colab_div=10
+RUBRICA|2026-11|horas_intra_indenizada|234.285876168|224.657403390|-9.628472778|3|10
+DONO|2026-11|horas_intra_indenizada|BATIDA|2.000000000|0.000000000|-2.000000000|1|2
+DONO|2026-11|horas_intra_indenizada|CADASTRO|7.833333333|0.204860556|-7.628472778|3|8
+RESIDUO|2026-11|horas_intra_indenizada|ATE_LIMIAR|224.452542835|224.452542835|+0.000000000|86|721
+RESIDUO|2026-11|horas_intra_indenizada|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|86|967
+RESIDUO|2026-11|horas_intra_indenizada|SEM_PAR|0.000000000|0.000000000|+0.000000000|11|239
+INSTRUMENTO_HISTORICO|2026-11|horas_intra_indenizada|v2_h=217.285876168|v3_h=224.657403390|delta_h=+7.371527222
+PARCIAL|2026-11|horas_extras_50|v2_h=9.5188135633333317|v3_h=6.1826438888888884|colabs_div=3|dias_colab_div=3
+RUBRICA|2026-11|horas_extras_50|9.518813563|6.182643889|-3.336169674|3|3
+DONO|2026-11|horas_extras_50|CADASTRO|3.608185508|0.272015833|-3.336169674|3|3
+RESIDUO|2026-11|horas_extras_50|ATE_LIMIAR|5.910628056|5.910628056|-0.000000000|84|705
+RESIDUO|2026-11|horas_extras_50|SEM_DECISAO|0.714590833|0.714590833|+0.000000000|86|990
+RESIDUO|2026-11|horas_extras_50|SEM_PAR|0.000000000|0.000000000|+0.000000000|11|239
+INSTRUMENTO_HISTORICO|2026-11|horas_extras_50|v2_h=10.233404397|v3_h=6.182643889|delta_h=-4.050760508
+PARCIAL|2026-11|horas_extras_100|v2_h=80.016508748333337|v3_h=100.06235208166666|colabs_div=1|dias_colab_div=3
+RUBRICA|2026-11|horas_extras_100|80.016508748|100.062352082|+20.045843333|1|3
+DONO|2026-11|horas_extras_100|BATIDA|12.240167500|22.286010833|+10.045843333|1|2
+DONO|2026-11|horas_extras_100|CADASTRO|10.745034167|20.745034167|+10.000000000|1|1
+RESIDUO|2026-11|horas_extras_100|ATE_LIMIAR|57.031307082|57.031307082|+0.000000000|84|705
+RESIDUO|2026-11|horas_extras_100|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|86|990
+RESIDUO|2026-11|horas_extras_100|SEM_PAR|0.000000000|0.000000000|+0.000000000|11|239
+INSTRUMENTO_HISTORICO|2026-11|horas_extras_100|v2_h=80.016508748|v3_h=100.062352082|delta_h=+20.045843333
+PARCIAL|2026-11|horas_extras_100_feriado|v2_h=61.732794303888888|v3_h=77.776341248333324|colabs_div=1|dias_colab_div=1
+RUBRICA|2026-11|horas_extras_100_feriado|61.732794304|77.776341248|+16.043546944|1|1
+DONO|2026-11|horas_extras_100_feriado|CADASTRO|4.701487222|20.745034167|+16.043546944|1|1
+RESIDUO|2026-11|horas_extras_100_feriado|ATE_LIMIAR|57.031307082|57.031307082|+0.000000000|84|707
+RESIDUO|2026-11|horas_extras_100_feriado|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|86|990
+RESIDUO|2026-11|horas_extras_100_feriado|SEM_PAR|0.000000000|0.000000000|+0.000000000|11|239
+INSTRUMENTO_HISTORICO|2026-11|horas_extras_100_feriado|v2_h=0.000000000|v3_h=77.776341248|delta_h=+77.776341248
+PARCIAL|2026-11|horas_extras_50_noturna|v2_h=1.3930904940507469|v3_h=1.3930904940507469|colabs_div=0|dias_colab_div=0
+RUBRICA|2026-11|horas_extras_50_noturna|1.393090494|1.393090494|+0.000000000|0|0
+RESIDUO|2026-11|horas_extras_50_noturna|ATE_LIMIAR|1.393090494|1.393090494|+0.000000000|84|708
+RESIDUO|2026-11|horas_extras_50_noturna|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|86|990
+RESIDUO|2026-11|horas_extras_50_noturna|SEM_PAR|0.000000000|0.000000000|+0.000000000|11|239
+INSTRUMENTO_HISTORICO|2026-11|horas_extras_50_noturna|v2_h=0.000000000|v3_h=1.393090494|delta_h=+1.393090494
+PARCIAL|2026-11|horas_extras_100_noturna|v2_h=11.701480339282588|v3_h=11.703889505949252|colabs_div=0|dias_colab_div=0
+RUBRICA|2026-11|horas_extras_100_noturna|11.701480339|11.703889506|+0.002409167|0|0
+RESIDUO|2026-11|horas_extras_100_noturna|ATE_LIMIAR|11.701480339|11.703889506|+0.002409167|84|708
+RESIDUO|2026-11|horas_extras_100_noturna|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|86|990
+RESIDUO|2026-11|horas_extras_100_noturna|SEM_PAR|0.000000000|0.000000000|+0.000000000|11|239
+INSTRUMENTO_HISTORICO|2026-11|horas_extras_100_noturna|v2_h=0.000000000|v3_h=11.703889506|delta_h=+11.703889506
+PARCIAL|2026-11|horas_folga_trabalhada|v2_h=0|v3_h=0|colabs_div=0|dias_colab_div=0
+RUBRICA|2026-11|horas_folga_trabalhada|0.000000000|0.000000000|+0.000000000|0|0
+RESIDUO|2026-11|horas_folga_trabalhada|ATE_LIMIAR|0.000000000|0.000000000|+0.000000000|86|731
+RESIDUO|2026-11|horas_folga_trabalhada|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|86|967
+RESIDUO|2026-11|horas_folga_trabalhada|SEM_PAR|0.000000000|0.000000000|+0.000000000|11|239
+INSTRUMENTO_HISTORICO|2026-11|horas_folga_trabalhada|v2_h=211.889922669|v3_h=0.000000000|delta_h=-211.889922669
+PARCIAL|2026-11|horas_noturnas|v2_h=1293.2316784055952|v3_h=1293.2316784055952|colabs_div=0|dias_colab_div=0
+RUBRICA|2026-11|horas_noturnas|1293.231678406|1293.231678406|+0.000000000|0|0
+RESIDUO|2026-11|horas_noturnas|ATE_LIMIAR|1293.231678406|1293.231678406|+0.000000000|86|728
+RESIDUO|2026-11|horas_noturnas|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|86|970
+RESIDUO|2026-11|horas_noturnas|SEM_PAR|0.000000000|0.000000000|+0.000000000|11|239
+INSTRUMENTO_HISTORICO|2026-11|horas_noturnas|v2_h=1180.231678406|v3_h=1293.231678406|delta_h=+113.000000000
+PARCIAL|2026-11|horas_atraso|v2_h=38.779833333333336|v3_h=38.856047777777782|colabs_div=1|dias_colab_div=1
+RUBRICA|2026-11|horas_atraso|38.779833333|38.856047778|+0.076214444|1|1
+DONO|2026-11|horas_atraso|CADASTRO|0.000000000|0.076333333|+0.076333333|1|1
+RESIDUO|2026-11|horas_atraso|ATE_LIMIAR|38.779833333|38.779714444|-0.000118889|84|707
+RESIDUO|2026-11|horas_atraso|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|86|990
+RESIDUO|2026-11|horas_atraso|SEM_PAR|0.000000000|0.000000000|+0.000000000|11|239
+INSTRUMENTO_HISTORICO|2026-11|horas_atraso|v2_h=38.779833333|v3_h=38.856047778|delta_h=+0.076214444
+PARCIAL|2026-11|horas_saida_antecipada|v2_h=21.576166666666666|v3_h=21.49984737777778|colabs_div=1|dias_colab_div=1
+RUBRICA|2026-11|horas_saida_antecipada|21.576166667|21.499847378|-0.076319289|1|1
+DONO|2026-11|horas_saida_antecipada|CADASTRO|0.951166667|0.874833333|-0.076333333|1|1
+RESIDUO|2026-11|horas_saida_antecipada|ATE_LIMIAR|20.625000000|20.625014044|+0.000014044|84|707
+RESIDUO|2026-11|horas_saida_antecipada|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|86|990
+RESIDUO|2026-11|horas_saida_antecipada|SEM_PAR|0.000000000|0.000000000|+0.000000000|11|239
+INSTRUMENTO_HISTORICO|2026-11|horas_saida_antecipada|v2_h=21.576166667|v3_h=21.499847378|delta_h=-0.076319289
+ERRO 2026-10 app/ponto/services/dia_pago.py:315 ValueError 11 exemplos=[('col268', '-'), ('col298', '-'), ('col370', '-'), ('col400', '-'), ('col574', '-')]
+ERRO 2026-10 sonda ConservacaoNaoFecha 99 exemplos=[('col316', '-'), ('col430', '-'), ('col460', '-'), ('col760', '-'), ('col862', '-')]
+ERRO 2026-10 sonda LacunaDeMedicao 196 exemplos=[('col268', '-'), ('col268', '2026-09-22'), ('col268', '2026-09-24'), ('col268', '2026-09-26'), ('col268', '2026-09-28')]
+ERRO 2026-11 app/ponto/services/dia_pago.py:315 ValueError 12 exemplos=[('col76', '-'), ('col106', '-'), ('col142', '-'), ('col220', '-'), ('col268', '-')]
+ERRO 2026-11 sonda ConservacaoNaoFecha 22 exemplos=[('col76', '-'), ('col946', '-')]
+ERRO 2026-11 sonda LacunaDeMedicao 256 exemplos=[('col76', '-'), ('col106', '-'), ('col106', '2026-10-21'), ('col106', '2026-10-22'), ('co
+
+[truncado em 20000 de 29038 caracteres]
 
 ## 06/11 13:04 · sessao d7f31bb1735a · R1-CAUSAD-V3 · sonda · origem=Code
 
@@ -1825,61 +2084,4 @@ O mapa dos artefatos e metadados acrescentados ou alterados pelo delta é:
 
 **BAIXA — O cabeçalho ficou desatualizado:** ainda descreve vaga em `$LOGD` e produtor relativo, embora o comportamento use `<raiz>/logs` e produtor absoluto. (`bin/codex_pergunta.sh:40,44,119-121,260`)
 
-## 06/11 12:16 · sessao e38464c87e8f · - · - · origem=Ronald (tmux)
-
-Auditoria estática do wrapper, sem execução dos testes que gravam arquivos. [nao verificado]
-
-| v1 | Resultado no delta |
-|---|---|
-| **1 — ALTA** | **Aberto.** A guarda de symlink cobre resposta/sidecars, mas não `slot.gate`, `slot.N`, `chamadas.log`, JSONL/`.err` ou `limite.log`; aberturas continuam seguindo symlinks, algumas com truncamento. (`bin/codex_pergunta.sh:89-90,168-169,225,231,236,276,354`) |
-| **2 — MÉDIA** | **Fecha o bypass determinístico descrito:** recusa basename `.`/`..` e resposta existente não regular. Acrescenta verificação dos temporários `.rc.$$`/`.novo.$$`. Continua sendo verificação anterior às esperas, sem abertura segura do diretório ou publicação por descriptor. (`bin/codex_pergunta.sh:87-90,224-252,284`) |
-| **3 — ALTA** | **Fecha dois LOGDs na mesma raiz:** ambos disputam `$RL/construtor.vaga`. Não assegura exclusão entre duas cópias do wrapper em raízes distintas: `R` deriva da localização do script, não do repositório Git comum. Também permanece possível substituir o inode da vaga; não há `O_NOFOLLOW`. (`bin/codex_pergunta.sh:48,82,119-121`) |
-| **4 — ALTA** | **Parcial.** A troca `app -> symlink` durante a espera e a pausa criada nesse intervalo agora são recusadas. Porém `revalida` não refaz limpeza, registro, common-dir ou referência inversa, não compara inode de WT/app e continua separada do uso do caminho. Trocar `app` por outro diretório real canônico ou sujar a WT durante a espera passa pela nova guarda. Escrita efetiva indevida pelo sandbox: **[nao verificado]**. (`bin/codex_pergunta.sh:100-125,268-276`) |
-| **5 — ALTA / MÉDIA** | **“Mexe e restaura” continua aberto:** inventário só observa estado final. **Links novos que permanecem tocados são recusados**, mas links limpos preexistentes não são examinados; não há varredura inicial de inodes compartilhados. (`bin/codex_pergunta.sh:123-125,311-328`) |
-| **6 — MÉDIA** | **Fecha `.git` de outra WT simples:** verifica diretório Git em `common/worktrees` e retorno `gitdir -> WT/.git`. Essa referência inversa só é lida na validação inicial; `revalida` compara bytes de `WT/.git` e HEAD, não os metadados apontados. (`bin/codex_pergunta.sh:112-114,268-269`) |
-
-**ALTA — Contorno de `p_hardlink`:** uma WT inicialmente limpa pode conter arquivo permitido compartilhando inode com a viva, com bytes idênticos ao commit. O status inicial não inspeciona `st_nlink`. Após escrever nesse arquivo, basta substituir o nome na WT por uma cópia regular: a checagem final encontra `nlink=1` e classifica somente `TOCADO` permitido. O efeito sobre a viva pelo sandbox é **[nao verificado]**, mas a guarda nova não exclui essa sequência. (`bin/codex_pergunta.sh:123-125,313-328`)
-
-**MÉDIA — Falha ao abrir a vaga não é tratada:** `exec 6>>...` não tem teste de retorno; com fd 6 herdado, uma falha de abertura pode deixar `flock -n 6` operando o descriptor anterior. Exemplo de precondição: `construtor.vaga` é diretório, portanto passa `! -L`, mas falha no open. Exploração integral **[nao verificado]**. (`bin/codex_pergunta.sh:46,119-121`)
-
-**`inv_falha` fecha a lacuna específica do selo:** agora existe caso que força erro de Git apagando HEAD e exige rc 3, `FALHA` e ausência de `.id`; há mutante `exit(1)->exit(0)`. O tratamento produtivo de inventário não mudou: qualquer `_IRC != 0` provoca recusa. (`bin/tests/test_codex_pergunta.sh:252-256,296`; `bin/codex_pergunta.sh:318-320,335-348`)
-
-**Quatro papéis de leitura:** o delta mantém a seleção do ramo `read-only`, `-C "$WS"` e o cabeçalho de leitura; as guardas novas ficam no ramo construtor. A vulnerabilidade comum dos arquivos de LOGD continua alcançando os quatro papéis. (`bin/codex_pergunta.sh:74,208-209,225-251,267-280`)
-
-## 06/11 12:16 · sessao 59aba8de6f2d · - · - · origem=Ronald (tmux)
-
-**ALTA — v1 #7 fecha os `.out` vazios, mas ainda permite verde sem executar as tentativas.** O bloco de comandos entra apenas como texto no prompt; o verificador confia em arquivos produzidos dentro de `app/`. Um Codex que crie somente o controle positivo e os 12 `.out` com assinatura de negação e `rc=` satisfaz as novas verificações, mantendo alvos ausentes, Git intacto e nenhum processo sobrevivente; com controles externos disponíveis e WRC 0, o fluxo termina verde. Execução desse contorno: **[nao verificado]**. (`bin/tests/prova_codex_pergunta_real.sh:24-47,56-80,81-100`)
-
-**MÉDIA — Mesmo com execução honesta, socket e sobrevivência ainda têm prova incompleta.** O socket dispensa assinatura do sandbox e aceita erro não zero; indisponibilidade transitória dentro seguida de sucesso no controle externo pode passar. Sobrevivência exige apenas arquivo com `rc=` e ausência posterior do processo: o lançamento em segundo plano seguido de `echo lancado` pode retornar zero mesmo se `setsid`/`nohup`/`sleep` falhar. (`bin/tests/prova_codex_pergunta_real.sh:40,43,60-72,85-95`)
-
-**MÉDIA — Novo `c_revalida` tem corrida de sincronização.** Após aproximadamente dez segundos de polling, o teste troca `app` mesmo se não encontrou `slot=`; uma execução lenta pode receber a troca antes da validação inicial, produzindo recusa por outro motivo. O teste marca qualquer `FALHA` do caso como mutante morto. O polling que aguarda o holder também não tem deadline. (`bin/tests/test_codex_pergunta.sh:184-192,344-346`)
-
-**MÉDIA — O placar continua aceitando mortes sem demonstrar perda da proteção.** `c_absoluto` continua recusado pela guarda de nome quando se neutraliza a guarda de absoluto; a mudança do motivo já gera `FALHA`. Além disso, esse caso não passa por `_roda`, portanto não limpa `$T/captura`: no loop de mutantes, o caso anterior `lock_symlink` pode deixar uma captura antiga e produzir outra falsa causa de morte. `inv_diff` continua usando commit, que também ativa a guarda HEAD. (`bin/tests/test_codex_pergunta.sh:90-101,145-149,238,298-299,322,344-346`; `bin/codex_pergunta.sh:93-98,322-323`)
-
-**MÉDIA — A cobertura de “qualquer app” continua limitada a `folha`.** Restringir os matchers de migrations/models a `app/folha/` continua compatível com os únicos exemplos presentes. Execução desses mutantes: **[nao verificado]**. (`bin/tests/test_codex_pergunta.sh:227-228,312-313`)
-
-As curas novas **efetivamente acrescentam cobertura direta**, por inspeção: `p_link`, `p_hardlink` e `inv_falha` possuem casos que atingem suas guardas; `inherit=core` passou a ser exigido no argv positivo. Resultado executado desses testes: **[nao verificado]**. (`bin/tests/test_codex_pergunta.sh:202-204,250-256,294-296`; `bin/codex_pergunta.sh:318-328`)
-
-A prova real dos quatro papéis de leitura segue com a lacuna anterior: as chamadas não têm retorno obrigatório nem controle positivo de execução; igualdade dos hashes/status e ausência das sentinelas bastam para verde. (`bin/tests/prova_codex_pergunta_real.sh:108-123`)
-
-O teste dos quatro papéis confere argv, diretório e cabeçalho, mas usa Codex falso e disjuntor falso; comprovação do sandbox e da porta B3 reais permanece **[nao verificado]**. (`bin/tests/test_codex_pergunta.sh:57,67-77,265-275`)
-
-## 06/11 12:15 · sessao a9594c7a6826 · - · - · origem=Ronald (tmux)
-
-Mapa dos novos artefatos/campos:
-
-| Artefato/campo | Escritor | Leitor/consumidor |
-|---|---|---|
-| `<raiz>/logs/construtor.vaga` | Wrapper cria/abre append no fd 6; conteúdo não é preenchido. (`bin/codex_pergunta.sh:119-120`) | Wrapper disputa exclusividade com `flock -n 6`. O selo abre e prende a mesma vaga e verifica recusa também com outro LOGD. (`bin/codex_pergunta.sh:121`; `bin/tests/test_codex_pergunta.sh:175-178`) |
-| `<common-dir>/worktrees/<entrada>/gitdir` | Escritor operacional é o Git externo: implementação concreta nesta cópia **[nao verificado]**. O selo chama `git worktree add` e também escreve backpointers artificiais diretamente. (`bin/tests/test_codex_pergunta.sh:87,241`) | Wrapper resolve `--git-dir`, exige entrada diretamente sob `common-dir/worktrees`, lê `gitdir` e compara seu caminho resolvido com `$WT/.git`. (`bin/codex_pergunta.sh:112-114`) |
-| Linha `ESPERANDO`, produtor absoluto, `pid`, `arquivo` | Wrapper imprime no stderr. (`bin/codex_pergunta.sh:260`) | Selo extrai a linha, verifica existência do JSONL e identidade do `.rc`. (`bin/tests/test_codex_pergunta.sh:211-214`) O hook consome a linha **do topo do RELATO**, valida produtor/PID e avanço do arquivo; transporte automático stderr → RELATO **[nao verificado]**. (`bin/hook_stop_fila1.py:429,655-679`) |
-| JSONL indicado em `arquivo=` | Shell redireciona stdout do Codex para o nome calculado pelo wrapper. (`bin/codex_pergunta.sh:257,276`) | Hook mede mtime e inode quando a linha está no topo; wrapper lê sessão e erros. (`bin/hook_stop_fila1.py:563-642`; `bin/codex_pergunta.sh:347,350,361`) |
-| `.rc`: `chamada`, `rc`, `fim` | Trap escreve temporário e renomeia. (`bin/codex_pergunta.sh:138-139`) | Selo interpreta identidade/status; prova real somente copia. Leitor operacional concreto **[nao verificado]**. (`bin/tests/test_codex_pergunta.sh:109,214`; `bin/tests/prova_codex_pergunta_real.sh:50`) |
-
-**BAIXA — Documentação interna ficou divergente:** cabeçalho ainda anuncia vaga em `$LOGD/construtor.vaga` e produtor relativo, enquanto o comportamento agora usa `<raiz>/logs/construtor.vaga` e produtor absoluto. (`bin/codex_pergunta.sh:40,44,119-121,260`)
-
-**O produtor absoluto fecha a incompatibilidade sintática apontada na v1**, pois o hook exige absoluto quando há `/` e resolve o caminho completo para conferir o processo. Isso não demonstra integração operacional executada. (`bin/codex_pergunta.sh:260`; `bin/hook_stop_fila1.py:515-528`) Quando PID e arquivo estão presentes, ambos devem passar; na primeira observação do arquivo, o hook retorna “arquivo nao andou”. (`bin/hook_stop_fila1.py:640-641,675-680`)
-
-**Quatro papéis de leitura:** as novas validações e revalidação ficam no ramo construtor; leitura/censo/verificador/sonda continuam com chamada `read-only -C "$WS"` e cabeçalho de leitura. Regressão efetivamente executada **[nao verificado]**. (`bin/codex_pergunta.sh:74,203-210,267-280`) O selo cobre argv, diretório, cabeçalho e ausência de `.rc`/inventário nos quatro papéis, mas usa CLI falso. (`bin/tests/test_codex_pergunta.sh:265-275`)
-
-_2281 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2284 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
