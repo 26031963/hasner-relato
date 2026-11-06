@@ -1,7 +1,129 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 17:11** · publicado em **06/11/2026 17:11** (UTC-3)
+> Ultima resposta processada: **06/11/2026 17:23** · publicado em **06/11/2026 17:26** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 17:23 · sessao 89a375b18f4a · O10-C · censo · origem=Code
+
+O O10-C atual **não deposita SOLO numa lista persistida do admin**: classifica e imprime a linha; a lista `!` também é saída de terminal. A aplicação fica restrita a `trocaria`, obtida com par declarado. (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:90`, `:233`, `:237`, `:247`, `:254`)
+
+**1) As listas e superfícies administrativas encontradas são estas:**
+
+| Lista / entidade | Quem escreve a linha | Quem lê | Link ou ação existente |
+|---|---|---|---|
+| **Ausências — `Ausencia`**, com colaborador e data/período. (`app/ponto/models.py:743`, `:750`) | `ponto.services.ausencia.criar_ausencia`; o lançamento administrativo chama essa função. (`app/ponto/services/ausencia.py:130`, `:385`; `app/ponto/views.py:2415`) | `lista_ausencias` → `ponto/ausencias.html`, com filtros por colaborador, tipo e status. (`app/ponto/views.py:2155`, `:2183`, `:2202`, `:2244`) | Linha abre painel; há documento, aprovação/cancelamento e upload individual. Esses controles não recebem colega nem duas cartas. (`app/templates/ponto/ausencias.html:113`, `:142`, `:167`; `app/templates/ponto/partials/painel_ausencia.html:90`, `:134`) |
+| **Central de Justificativas — `Justificativa`**, por colaborador/data do turno. (`app/ponto/models.py:136`, `:144`) | Há vários escritores: `_abrir_justificativa_fluxo`, API, `regularizar_turno_orfao` e `_abrir_justificativa_automatica`. (`app/ponto/views.py:1621`, `:1635`; `app/api/views.py:1997`, `:2007`; `app/ponto/services/regularizacao.py:91`; `app/ponto/management/commands/processar_alertas_turno.py:389`) | `fila_justificativas` → `ponto/fila_justificativas.html`, por padrão pendentes. (`app/ponto/views.py:1695`, `:1704`, `:1709`, `:1749`) | Abre painel da justificativa; este oferece POSTs de aprovação e rejeição. (`app/templates/ponto/fila_justificativas.html:148`; `app/templates/ponto/partials/painel_justificativa.html:51`, `:58`) |
+| **Central de Chamados — `ChamadoColaborador`**, com colaborador e FK opcional de célula. (`app/chamados/models.py:32`, `:44`) | Portas de nascimento `ChamadoColaborador.abrir` — cria ou pega — e `criar`, sem deduplicação. (`app/chamados/models.py:796`, `:867`, `:1015`) | `painel_gestao` → `montar_contexto_painel` → listas resumida/detalhada. (`app/chamados/views.py:721`, `:726`, `:740`, `:767`) | Linha abre o fio; existem ações conforme o verbo, como validar e cobrar. (`app/templates/chamados/partials/_lista_chamados.html:42`, `:82`) |
+| **Pendência administrativa da pergunta — `PerguntaDisputa.pendencia_admin`**, junto de `recusa_motivo`; não é uma tabela genérica de casos. (`app/chamados/models.py:2317`, `:2321`) | `_materializar_resposta_hora` grava os dois campos juntos. (`app/chamados/services/materializacao.py:759`, `:821`, `:825`) | `modal_fio_colaborador` → `chamados/partials/modal_fio.html`. (`app/chamados/views.py:869`, `:927`) | O bloco mostra aviso e motivo; a orientação de correção é textual, sem link próprio nesse bloco. (`app/templates/chamados/partials/modal_fio.html:217`; `app/chamados/services/explicador.py:85`) |
+| **Pautas — `Pauta`**, destinadas a departamento/usuário; aceitam âncora de dia `<colab>:<AAAA-MM-DD>`. (`app/pautas/models.py:74`, `:83`) | Escritor canônico `pautas.services.escrever`, que cria pauta, trilha e contador. (`app/pautas/services.py:153`, `:180`, `:186`) | `pautas.views.aba` → painel `_copiloto.html`. (`app/pautas/views.py:29`, `:33`, `:61`; `app/templates/core/_copiloto.html:404`) | Há responder/feita/cancelar. A navegação por âncora atende `colab`, `chamado`, `posto`; **`dia` e `competencia` caem no aviso “ainda não tem tela própria”**. (`app/templates/core/_copiloto.html:432`, `:443`, `:452`, `:564`, `:570`) |
+| **Fila humana do flip**, por batida/colaborador/dia. (`app/ponto/services/flip_auto.py:248`) | Não tem depósito próprio nesses caminhos: `avaliar_fila` deriva os itens e deduplica por ID da batida. (`app/ponto/services/flip_auto.py:266`, `:268`) | `flip_fila_view` seleciona `veredito='humano'` → `ponto/flip_fila.html`. (`app/ponto/views.py:3299`, `:3305`) | Link para espelho e POST `flip_batida`. (`app/templates/ponto/flip_fila.html:11`, `:16`) |
+| **Pendências de cadastro / Furos de espelho** — agregadas por colaborador/período. (`app/relatorios/views_pend.py:21`, `:24`; `app/templates/relatorios/pendencias_espelho.html:42`) | São derivadas de `ranking_colabs` + `universo_empresa`; essas funções de montagem não depositam um caso próprio. (`app/relatorios/views_pend.py:23`; `app/relatorios/pendencias.py:120`, `:135`) | `pendencias_cadastro_view` / `pendencias_espelho_view` → templates homônimos. (`app/relatorios/views_pend.py:74`, `:84`, `:87`, `:95`) | Linhas exibem nome, contato, natureza, descrição, recomendação e dias; não têm ação/link na linha. (`app/templates/relatorios/pendencias_cadastro.html:42`; `app/templates/relatorios/pendencias_espelho.html:42`) |
+| **Gestão de HE**, com pendências por colaborador/dia. (`app/ponto/views.py:884`) | `he_pendente_lavrado.lavrar` grava o retrato em `MetricaSnapshot`; decisões vigentes são lidas de `DecisaoHE`. (`app/ponto/services/he_pendente_lavrado.py:177`, `:182`; `app/ponto/services/gestao_he.py:81`) | `gestao_he` lê o retrato e renderiza `ponto/gestao_he.html`. (`app/ponto/views.py:931`, `:942`, `:951`) | A célula do dia posta para `decidir_he`; a view chama a porta de HE. (`app/templates/ponto/gestao_he.html:256`; `app/ponto/views.py:517`, `:529`) |
+
+Sobre **“PortaFila”**: o correspondente encontrado é o valor `'porta_fila'` retornado por `porta_alcancavel_do_dia`, a partir dos chamados da célula na fila; essa função lê alcance, não cria casos. O próprio contrato exclui “Resolver dia” desse conceito específico de porta. (`app/chamados/juizes.py:1341`, `:1367`, `:1375`, `:1386`)
+
+**2) Não localizei chamador de UI de `trocar_plantao` ou `editar_dia`.** Os chamadores produtivos encontrados são O10-C → `trocar_plantao` e, dentro desta, → `editar_dia`; o cabeçalho do comando declara ser o primeiro chamador de produção da troca. (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:4`, `:160`; `app/ponto/portas/celula.py:675`)
+
+A tela mais próxima é **perfil do colaborador → Calendário de Ponto → dia**. O perfil carrega o calendário; a grade inclui “Resolver dia” já com colaborador e data. O drawer de diagnóstico também inclui essa grade. (`app/templates/colaboradores/detalhe.html:215`; `app/colaboradores/views.py:1935`; `app/templates/colaboradores/partials/_calendario_grade.html:125`; `app/templates/colaboradores/partials/_drawer_diagnostico.html:33`)
+
+A cadeia existente é:
+
+`_veredito_dia.html` → URL `celula/veredito/` → `veredito_celula_view` → serviço `veredito_celula`, com `trabalhou`, `faltou`, `justificado`. “Justificado” chama `criar_ausencia`. (`app/templates/ponto/partials/_veredito_dia.html:17`; `app/ponto/urls.py:58`; `app/ponto/views.py:3340`; `app/ponto/services/veredito_celula.py:18`, `:310`)
+
+O que falta **na cadeia atual** para alcançar a troca dali: o formulário não coleta substituto, duas Ausências/cartas ou motivo; o handler não despacha para `trocar_plantao`. Para `editar_dia`, também não há despacho com `trabalha` e motivo. Esses argumentos constam das respectivas portas. (`app/templates/ponto/partials/_veredito_dia.html:19`; `app/ponto/views.py:3318`, `:3340`; `app/ponto/portas/celula.py:534`, `:561`, `:632`, `:646`)
+
+Além disso, o botão não aparece automaticamente para todo SOLO: exige permissão, último recurso, dia passado e status `falta`, `irregular`, `aberto` ou `sem_certidao`. O botão “DP”, que abre pauta com colaborador/data, está sob a mesma condição da grade. (`app/colaboradores/services/calendario.py:94`, `:103`; `app/templates/colaboradores/partials/_calendario_grade.html:125`, `:126`)
+
+**3) Os “dois anexos obrigatórios” são duas cartas no mesmo campo de modelo:**
+
+- Carta do cedente: `ausencia_cedente.documento`.
+- Carta do substituto: `ausencia_substituto.documento`.
+
+A assinatura recebe duas `Ausencia`; o campo é `FileField`, com `upload_to="ausencias/documentos/"`, permitindo vazio no modelo. A obrigatoriedade dupla é imposta pela porta. (`app/ponto/portas/celula.py:632`, `:635`, `:664`; `app/ponto/models.py:777`)
+
+A porta recarrega e trava os registros, recusa lado ausente/inexistente ou mesmo colaborador e testa literalmente `if not a.documento` em cada lado. Essa validação não abre o arquivo nem segue `documento_referencia`; a trilha guarda `documento.name`. (`app/ponto/portas/celula.py:653`, `:656`, `:660`, `:662`, `:664`, `:682`)
+
+**4) Sim, existem precedentes de lote que deposita caso para o admin, sem resolver o fato por ele:**
+
+| Precedente | Depósito e escritor | Idempotência / chave |
+|---|---|---|
+| **`processar_alertas_turno`** | `_abrir_justificativa_automatica` cria `Justificativa(status='pendente', tipo='esqueci_saida')`; a Central de Justificativas lê essas linhas. (`app/ponto/management/commands/processar_alertas_turno.py:389`, `:398`; `app/ponto/views.py:1704`) | `get_or_create(colaborador, data_turno)`. O banco impõe uma pendente por `(colaborador,data_turno)`, além da unicidade geral com `batida_entrada`. (`app/ponto/management/commands/processar_alertas_turno.py:391`; `app/ponto/models.py:187`, `:189`) |
+| **`pautas_discordantes`** | Comando chama `sincronizar`; com aplicação, escreve pautas ao DP por `pautas.services.escrever` e fecha as que saíram do alvo. (`app/ponto/management/commands/pautas_discordantes.py:113`, `:118`; `app/ponto/services/pautas_dos_discordantes.py:173`) | Cabeça `[DISCORDANTE] <DONO> col<ID> <AAAA-MM>`, entre pautas vivas do DP, âncora competência. É agrupado por dono/colaborador/competência, contendo os dias. (`app/ponto/services/pautas_dos_discordantes.py:84`, `:143`, `:165`) |
+| **`pauta_dia_em_aberto`** | Escreve pauta ao DP e filhas com detalhamento, pela porta `escrever`. (`app/pautas/management/commands/pauta_dia_em_aberto.py:139`) | Cabeça viva por âncora `empresa:AAAA-MM` e prefixo `[DIA EM ABERTO]`; completar filhas também tem guarda própria. (`app/pautas/management/commands/pauta_dia_em_aberto.py:104`, `:107`, `:117`) |
+
+O escritor canônico de **Pauta** é `escrever`, mas ele faz `create`: a chave de idempotência é conferida por cada emissor, não deduplicada genericamente pela porta. (`app/pautas/services.py:153`, `:180`; `app/ponto/services/pautas_dos_discordantes.py:165`)
+
+Há também precedente **por dia**: `pauta_dp_do_limbo_exportado` escreve ao DP com âncora `<colab>:<data>`. Deduplica pelo histórico inteiro — inclusive feita/cancelada — considerando âncora, destinatário DP, cabeça sem pai, prefixo e tag `[motivo:X]`. (`app/chamados/services/fabrica_da_celula.py:208`, `:219`, `:225`, `:236`)
+
+E existe um serviço diretamente relacionado ao nome ausente: `declarar_cobertura_passada`, sem substituto, abre pauta à supervisão perguntando quem cobriu. A chave considera pauta viva, dia, destinatário supervisão e prefixo `[COBERTURA-A-CONFIRMAR]`; é serviço, não comando de lote. (`app/ponto/services/cobertura.py:238`, `:246`, `:329`, `:333`)
+
+**5) O contraexemplo depende de “SOLO” significar ausência de `--par` ou ausência de colega no cadastro legado:**
+
+- **Sem `--par`: não há caminho de aplicação da troca.** O caso retorna `so_um_lado` — ou outra recusa anterior, como pedido/rejeitada/sem carta — e apenas `trocaria` chama `aplicar_par`. Não passa pela escrita de células/trilhas da porta. (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:77`, `:90`, `:237`)
+- **Mesmo sem par, `--aplicar` escreve arquivo:** cria diretório e abre um snapshot exclusivo antes do laço. Sem aplicação de par, esse arquivo não recebe as fotos de `aplicar_par`. (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:209`, `:216`, `:157`, `:164`)
+- **Se SOLO significa o lançamento legado sem colega no cadastro, existe caminho de escrita por CLI:** `--par C:S --aplicar --por USER` fornece a segunda Ausência ao classificador e pode chegar à troca. A porta então escreve `CelulaDia` e trilhas `editar_dia`/`trocar_plantao`; o teste existente monta um lançamento legado SOLO, fornece a segunda carta por `--par` e espera duas células editadas e trilha. (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:172`, `:233`, `:238`, `:160`; `app/ponto/portas/celula.py:600`, `:609`, `:611`, `:686`; `app/ponto/tests/test_o10c_lote_trocas.py:54`, `:140`)
+- **O comando não cria o lado do substituto:** consulta uma `Ausencia` já existente pelo ID declarado. Também não deposita o SOLO em Pauta, Justificativa ou chamado; a saída do laço é `stdout`, contadores e lista `!`. (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:188`, `:191`, `:233`, `:247`, `:254`)
+
+Execução dos testes e conteúdo atual do banco: **[nao verificado]**. [nao verificado]
+
+## 06/11 17:22 · sessao 24261d69a599 · - · - · origem=Ronald (tmux)
+
+- **Pautas** aceitam âncora de colaborador, chamado, posto, **dia** (`<colab_id>:<AAAA-MM-DD>`) e competência; o destinatário pode ser departamento ou usuário. Escritor canônico: `pautas.services.escrever`, que cria a linha, registra trilha e lavra contador. (`app/pautas/models.py:30`, `app/pautas/models.py:74`, `app/pautas/models.py:83`, `app/pautas/services.py:153`, `app/pautas/services.py:180`).
+- Leitor: `pautas.views.aba` chama `listar_por_aba` e devolve as linhas ao painel do copiloto. As ações existentes são marcar feita, responder e cancelar. (`app/pautas/views.py:29`, `app/pautas/views.py:33`, `app/pautas/views.py:61`, `app/templates/core/_copiloto.html:432`, `app/templates/core/_copiloto.html:443`, `app/templates/core/_copiloto.html:452`).
+- **A pauta de dia não tem navegação acionável própria no copiloto**: seu texto pode incorporar URL do calendário, mas o painel o renderiza com `textContent`; as rotas clicáveis cobrem somente `colab`, `chamado` e `posto`, e `dia` cai no aviso “ainda não tem tela própria”. (`app/pautas/services.py:428`, `app/pautas/services.py:429`, `app/templates/core/_copiloto.html:404`, `app/templates/core/_copiloto.html:564`, `app/templates/core/_copiloto.html:570`).
+- Existe bloco de pautas na ficha, mas ele mostra somente remetente, destinatário, estado e texto truncado em 180 caracteres. O serviço `pautas_do_colab` consulta âncoras de colaborador e seus dias; não encontrei chamador Python desse serviço além da própria definição — alimentação desse contexto **[não verificado]**. (`app/templates/colaboradores/detalhe.html:108`, `app/templates/colaboradores/detalhe.html:115`, `app/templates/colaboradores/detalhe.html:119`, `app/pautas/services.py:433`).
+
+- **Central de chamados**: a linha persistida é `ChamadoColaborador`, com colaborador e FK opcional de `CelulaDia`; não há garantia de uma linha por dia no modelo. O painel usa `montar_contexto_painel`; a linha abre o fio e oferece ações de validar, cobrar e desarquivar conforme o verbo. (`app/chamados/models.py:32`, `app/chamados/models.py:44`, `app/chamados/models.py:101`, `app/chamados/views.py:721`, `app/chamados/views.py:727`, `app/templates/chamados/partials/_lista_chamados.html:42`, `app/templates/chamados/partials/_lista_chamados.html:82`).
+- Escritores canônicos de nascimento: `ChamadoColaborador.abrir` faz cria-ou-pega com deduplicação por `colaborador + **lookup`, dentro de transação e trava na linha do colaborador; `criar` cria sem deduplicação. (`app/chamados/models.py:796`, `app/chamados/models.py:863`, `app/chamados/models.py:867`, `app/chamados/models.py:932`, `app/chamados/models.py:1015`, `app/chamados/models.py:1056`).
+- **`PortaFila` não é entidade separada nas fontes encontradas**: `porta_fila` é valor do dicionário devolvido por `porta_alcancavel_do_dia`, quando há chamado da célula em `qs_na_fila`; essa função lê, não deposita casos. O conceito exclui explicitamente o botão Resolver dia do calendário. (`app/chamados/juizes.py:1341`, `app/chamados/juizes.py:1352`, `app/chamados/juizes.py:1367`, `app/chamados/juizes.py:1375`, `app/chamados/juizes.py:1386`).
+- `qs_na_fila` seleciona chamados em estados de cobrança, excluindo os silenciados no futuro. (`app/chamados/services/painel.py:158`, `app/chamados/services/painel.py:186`).
+
+- **Pendência do admin na pergunta**: é o campo `PerguntaDisputa.pendencia_admin`, acompanhado de `recusa_motivo`, e não uma tabela genérica de pendências. O escritor explícito é `_materializar_resposta_hora`, que grava ambos juntos. (`app/chamados/models.py:2312`, `app/chamados/models.py:2317`, `app/chamados/models.py:2321`, `app/chamados/services/materializacao.py:759`, `app/chamados/services/materializacao.py:821`, `app/chamados/services/materializacao.py:825`).
+- O fio do admin carrega perguntas via `montar_chamados_fio`; `modal_fio_colaborador` renderiza o template que exibe o aviso e o motivo dessa pendência. Nesse bloco não há link de correção: o explicador fornece instrução textual para conferir horário e lançar correção com trilha. (`app/chamados/views.py:869`, `app/chamados/views.py:889`, `app/chamados/views.py:927`, `app/templates/chamados/partials/modal_fio.html:217`, `app/chamados/services/explicador.py:85`).
+
+- **Precedente claro de lote que envia à lista do admin**: `pautas_discordantes` apura casos e chama `sincronizar`; com `--apply`, o serviço escreve pautas ao DP e marca feitas as que saíram do alvo. A chave é a cabeça textual `[DISCORDANTE] <DONO> col<ID> <AAAA-MM>`, agrupada por dono, colaborador e competência; a consulta de existentes considera pauta viva, âncora competência, destinatário DP e prefixo do emissor. (`app/ponto/management/commands/pautas_discordantes.py:113`, `app/ponto/management/commands/pautas_discordantes.py:118`, `app/ponto/services/pautas_dos_discordantes.py:84`, `app/ponto/services/pautas_dos_discordantes.py:93`, `app/ponto/services/pautas_dos_discordantes.py:165`, `app/ponto/services/pautas_dos_discordantes.py:173`).
+- Outro comando existente, `pauta_dia_em_aberto`, escreve pautas ao DP por competência em vez de decidir os dias; deduplica uma cabeça viva por âncora `empresa:AAAA-MM` e prefixo `[DIA EM ABERTO]`. (`app/pautas/management/commands/pauta_dia_em_aberto.py:104`, `app/pautas/management/commands/pauta_dia_em_aberto.py:107`, `app/pautas/management/commands/pauta_dia_em_aberto.py:139`).
+- Existe também emissão **por dia**: `pauta_dp_do_limbo_exportado` usa `escrever`, destinatário DP e âncora `<colab>:<data>`. Sua idempotência considera todo o histórico, inclusive pautas feitas ou canceladas, pela âncora de dia, destinatário, cabeça sem pai, prefixo `LIMBO EM COMPETENCIA EXPORTADA` e tag `[motivo:X]`. (`app/chamados/services/fabrica_da_celula.py:208`, `app/chamados/services/fabrica_da_celula.py:214`, `app/chamados/services/fabrica_da_celula.py:219`, `app/chamados/services/fabrica_da_celula.py:225`, `app/chamados/services/fabrica_da_celula.py:236`).
+- Precedente diretamente relacionado ao nome de quem cobriu: `declarar_cobertura_passada` sem substituto abre pauta à supervisão pedindo o nome. Deduplica por pauta viva, âncora do dia, destinatário supervisão e prefixo `[COBERTURA-A-CONFIRMAR]`; trata-se de serviço, não de comando de lote. (`app/ponto/services/cobertura.py:238`, `app/ponto/services/cobertura.py:241`, `app/ponto/services/cobertura.py:246`, `app/ponto/services/cobertura.py:329`, `app/ponto/services/cobertura.py:333`).
+
+## 06/11 17:21 · sessao 95781dacd4db · - · - · origem=Ronald (tmux)
+
+Complemento para perguntas 1 e 4, com fontes:
+
+| Lista existente | Quem escreve / forma da linha | Quem lê | Link/ação existente |
+|---|---|---|---|
+| **Ausências** | Escritor da entidade: `ponto.services.ausencia.criar_ausencia`, que recebe colaborador/tipo/data/documento/status e constrói `Ausencia`; chamador administrativo `lancar_ausencia` chama essa função. (`app/ponto/services/ausencia.py:130`, `app/ponto/services/ausencia.py:385`, `app/ponto/views.py:2415`). Constraint: `(colaborador,tipo,data)` para linhas não rejeitadas. (`app/ponto/models.py:827`) | `lista_ausencias` consulta por vigência e permite filtros por colaborador, tipo e status; renderiza `ponto/ausencias.html`. (`app/ponto/views.py:2155`, `app/ponto/views.py:2178`, `app/ponto/views.py:2183`, `app/ponto/views.py:2202`, `app/ponto/views.py:2244`) | A linha mostra data/colaborador/tipo e abre painel pelo ID; há documento, aprovação/cancelamento em lote, anexar documento e editar registro. (`app/templates/ponto/ausencias.html:113`, `app/templates/ponto/ausencias.html:142`, `app/templates/ponto/ausencias.html:150`, `app/templates/ponto/ausencias.html:167`, `app/templates/ponto/partials/painel_ausencia.html:90`, `app/templates/ponto/partials/painel_ausencia.html:134`) Esses formulários não coletam colega/substituto nem dois documentos: upload único `documento`, edição de tipo/data/duração/descrição. (`app/templates/ponto/partials/painel_ausencia.html:92`, `app/templates/ponto/partials/painel_ausencia.html:134`) |
+| **Central de Justificativas** | Escritores encontrados: `_abrir_justificativa_fluxo` busca pendente por `(colaborador,data_turno)` e atualiza ou cria; `api_justificativas` faz o mesmo; `regularizar_turno_orfao` usa `get_or_create(colaborador,batida_entrada,data_turno)`; comando `processar_alertas_turno._abrir_justificativa_automatica` usa `get_or_create(colaborador,data_turno)`. (`app/ponto/views.py:1568`, `app/ponto/views.py:1621`, `app/ponto/views.py:1635`, `app/api/views.py:1944`, `app/api/views.py:1997`, `app/api/views.py:2007`, `app/ponto/services/regularizacao.py:19`, `app/ponto/services/regularizacao.py:91`, `app/ponto/management/commands/processar_alertas_turno.py:389`) Portanto não há escritor único entre esses caminhos. (mesmas fontes) | `fila_justificativas` lê `Justificativa`, filtra status e renderiza a central. (`app/ponto/views.py:1695`, `app/ponto/views.py:1704`, `app/ponto/views.py:1749`) | Cada linha tem colaborador/data e abre `painel_justificativa`; painel contém POSTs `aprovar_justificativa` e `rejeitar_justificativa`, que chamam serviços próprios de decisão. (`app/templates/ponto/fila_justificativas.html:98`, `app/templates/ponto/fila_justificativas.html:109`, `app/templates/ponto/fila_justificativas.html:148`, `app/templates/ponto/partials/painel_justificativa.html:51`, `app/templates/ponto/partials/painel_justificativa.html:58`, `app/ponto/views.py:1915`, `app/ponto/views.py:1927`) |
+| **Pendências de cadastro / Furos de espelho** | São listas derivadas em memória: `_base` consulta `ranking_colabs` + `universo_empresa`; `pendencias_cadastro` e `pendencias_espelho` copiam/filtram os dicionários recebidos. Não há depósito persistido nessas funções. (`app/relatorios/views_pend.py:14`, `app/relatorios/views_pend.py:23`, `app/relatorios/pendencias.py:120`, `app/relatorios/pendencias.py:135`) São por colaborador/período, com contadores/dias afetados, não um caso persistido por dia. (`app/templates/relatorios/pendencias_espelho.html:24`, `app/templates/relatorios/pendencias_espelho.html:42`) | `pendencias_cadastro_view` / `pendencias_espelho_view`, templates homônimos. (`app/relatorios/views_pend.py:74`, `app/relatorios/views_pend.py:84`, `app/relatorios/views_pend.py:87`, `app/relatorios/views_pend.py:95`) | Linhas apresentam nome, telefone, natureza, descrição, recomendação e dias; nenhum link/form/ação nas linhas atuais. (`app/templates/relatorios/pendencias_cadastro.html:42`, `app/templates/relatorios/pendencias_espelho.html:42`) |
+| **Fila humana do flip E/S** | Derivada de `avaliar_fila`, que recebe `fila_flip(dias)` e deduplica por ID da batida; `fila_flip` une pares de mesmo tipo e recusas de paridade, sem depósito em modelo próprio nesses caminhos. (`app/ponto/services/flip_auto.py:144`, `app/ponto/services/flip_auto.py:248`, `app/ponto/services/flip_auto.py:268`) | `flip_fila_view` filtra itens com `veredito='humano'` e renderiza `ponto/flip_fila.html`. (`app/ponto/views.py:3299`, `app/ponto/views.py:3305`) | Linha por batida/colaborador/dia, link para espelho e POST `flip_batida`; view chama `flip_tipo`. (`app/templates/ponto/flip_fila.html:7`, `app/templates/ponto/flip_fila.html:11`, `app/templates/ponto/flip_fila.html:16`, `app/ponto/views.py:3260`, `app/ponto/views.py:3266`) |
+
+**Precedente adicional de comando que deposita caso para decisão administrativa:** `processar_alertas_turno.Command._abrir_justificativa_automatica` cria `Justificativa` pendente, tipo `esqueci_saida`, descrição automática, opcionalmente vinculada ao chamado. O `get_or_create` usa **`(colaborador,data_turno)`**, com demais campos em `defaults`; a central lê essa mesma entidade. (`app/ponto/management/commands/processar_alertas_turno.py:389`, `app/ponto/management/commands/processar_alertas_turno.py:391`, `app/ponto/views.py:1704`)
+
+A garantia de banco da fila de justificativas inclui unicidade de **pendente por `(colaborador,data_turno)`** e a unicidade geral `(colaborador,data_turno,batida_entrada)`. (`app/ponto/models.py:187`, `app/ponto/models.py:189`)
+
+**PortaFila:** o nome encontrado no código é o valor de rota **`'porta_fila'`**, retornado pelo juiz de alcance do dia, não uma classe/modelo `PortaFila` nas fontes encontradas; o retorno carrega IDs da fila e verbos. (`app/chamados/juizes.py:1352`, `app/chamados/juizes.py:1386`; inexistência absoluta de modelo `[não verificado]`)
+
+O calendário administrativo também oferece um botão **DP** que abre pauta já com colaborador e data, na mesma fileira do “Resolver dia”. (`app/templates/colaboradores/partials/_calendario_grade.html:125`, `app/templates/colaboradores/partials/_calendario_grade.html:126`)
+
+## 06/11 17:21 · sessao fac77d592841 · - · - · origem=Ronald (tmux)
+
+2. **Não há chamador UI identificado para `trocar_plantao` ou `editar_dia`.** A chamada de produção da primeira está no comando O10-C (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:160`), cujo cabeçalho declara ser seu primeiro chamador de produção (`:4`). A chamada de `editar_dia` está dentro da própria troca (`app/ponto/portas/celula.py:675`).
+
+A tela mais próxima é **perfil do colaborador → Calendário de Ponto → dia**: o perfil carrega `calendario_ponto` (`app/templates/colaboradores/detalhe.html:215`); a rota é `app/colaboradores/urls.py:24`; a view monta o calendário e concede `pode_veredito` conforme `regularizar_batida` (`app/colaboradores/views.py:1935`, `:1945`, `:1948`, `:1957`); o template inclui a grade (`app/templates/colaboradores/calendario_partial.html:62`), que inclui **Resolver dia** com colaborador e data (`app/templates/colaboradores/partials/_calendario_grade.html:125-126`).
+
+O drawer de diagnóstico também chega à mesma grade: view (`app/colaboradores/views.py:2938-2943`), contexto (`app/colaboradores/services/drawer.py:120-121`) e inclusão (`app/templates/colaboradores/partials/_drawer_diagnostico.html:33-36`).
+
+**Resolver dia é outra cadeia:** form → `ponto:veredito_celula` (`app/templates/ponto/partials/_veredito_dia.html:17`) → rota (`app/ponto/urls.py:58`) → `veredito_celula_view` (`app/ponto/views.py:3312-3341`) → serviço `veredito_celula` (`app/ponto/services/veredito_celula.py:191`), com apenas `trabalhou`, `faltou` e `justificado` (`:18`). “Justificado” chama `criar_ausencia`, não a troca (`:310-317`).
+
+A lacuna factual nessa tela é: o formulário só oferece `colab`, `data`, `volta`, veredito e tipo de ausência (`app/templates/ponto/partials/_veredito_dia.html:19-25`); não coleta substituto, duas Ausências/cartas ou motivo da troca exigidos pela assinatura da porta (`app/ponto/portas/celula.py:632`, `:646-667`), nem despacha para ela (`app/ponto/views.py:3340-3341`). Também não oferece o booleano `trabalha` e motivo exigidos por `editar_dia` (`app/ponto/portas/celula.py:534`, `:561-564`).
+
+Além disso, Resolver dia não é garantido em qualquer dia: exige permissão e o predicado do dia (`app/templates/colaboradores/partials/_calendario_grade.html:125`); esse predicado exige último recurso, passado e status `falta`, `irregular`, `aberto` ou `sem_certidao` (`app/colaboradores/services/calendario.py:94`, `:97-104`).
+
+3. **Os dois anexos são duas cartas, cada uma no campo `Ausencia.documento`: uma do cedente e outra do substituto.** O campo é `FileField`, `upload_to="ausencias/documentos/"`, permitindo vazio no modelo (`app/ponto/models.py:777-780`); a obrigatoriedade dupla nasce na porta (`app/ponto/portas/celula.py:635`, `:664-667`).
+
+A porta recusa lado ausente (`app/ponto/portas/celula.py:653-655`), recarrega e trava as duas Ausências por PK (`:656-659`), recusa registro inexistente (`:660-661`), recusa o mesmo colaborador nos dois lados (`:662-663`) e verifica literalmente `if not a.documento` para cada lado (`:664-667`). A trilha guarda o nome de cada documento (`:682-691`).
+
+Essa validação não consulta `documento_referencia` nem abre o arquivo; seu teste é o preenchimento de `a.documento` (`app/ponto/portas/celula.py:664-667`). O painel de Ausência permite anexar/substituir **um documento individual** (`app/templates/ponto/partials/painel_ausencia.html:90-93`), pela view `anexar_documento_ausencia`, que recebe `request.FILES['documento']` e chama o serviço de anexo (`app/ponto/views.py:2133-2151`).
 
 ## 06/11 17:11 · sessao b51996e540eb · R1-CAUSAD-V3 · leitura · origem=Code
 
@@ -1248,375 +1370,4 @@ Outras verificações:
 - **MAPA:** o comando não pertence ao universo obrigatório de inscrição, que deriva exclusivamente de `core/juizes.py` e `core/portas.py`; consulta somente leitura confirmou isso (`app/core/mapa/contrato.py:157–184`; `app/core/tests/test_selo_mapa_contrato.py:41–49`). O MAPA commitado deliberadamente exclui contagens de leitores novos; elas vão à saída do gerador (`app/core/management/commands/gerar_diagrama.py:861–865`, `:936–939`; `app/core/tests/test_selo_diagrama_do_codigo.py:328–333`). Comparação completa do MAPA regenerado: [não verificado].
 - **Cópia de juiz que passa pelos selos:** `ABERTOS` replica a pergunta registrada em `ABERTAS`; o comando declara a tupla em `:50` e a consulta em `:68`. A autoridade registrada é `ponto/services/ausencia.py::ABERTAS` (`app/core/juizes.py:244`). O selo não acusa essa cópia porque os padrões da família não incluem status aberto; análise de todos os padrões proibidos sobre o novo fonte retornou zero ocorrências (`app/core/juizes.py:1406–1420`; varredor `app/ponto/tests/test_contract_juiz_celula.py:48–60`).
 
-## 06/11 14:53 · sessao 1e8ffbad88c7 · - · - · origem=Ronald (tmux)
-
-Convenção: `T` = `app/ponto/tests/test_o10c_lote_trocas.py`; `C` = `app/ponto/management/commands/trocas_plantao_lote_o10c.py`; `P` = `app/ponto/portas/celula.py`. Os sobreviventes abaixo são previsão por leitura, sem execução de mutação: [não verificado].
-
-| Teste novo | Mutante plausível que esse teste não pegaria | [nao verificado]
-|---|---|
-| `test_dry_classifica_cada_lancamento_e_nao_escreve` | Criar arquivo de snapshot também no DRY: verifica porta, origem editada, contagem da trilha e saída, mas não filesystem. `T:88-107`; abertura atual condicionada em `C:176-195`. |
-| `test_dry_com_par_completo_diz_trocaria_e_nao_chama_a_porta` | Retirar a guarda de competência do classificador: fixture só usa novembro aberto. `T:109-117`; guarda `C:90-92`. |
-| `test_solo_em_competencia_lavrada_diz_que_e_bang` | Apagar inteiramente a emissão da lista `!`: teste só exige `so_um_lado` e `lavrada=S`. `T:119-127`; emissão `C:214-221`. | [nao verificado]
-| `test_aprovado_com_par_e_duas_cartas_vira_par` | Remover toda a gravação do snapshot: verifica células e trilha, sem ler arquivo. `T:132-143`; snapshot `C:137-138`. |
-| `test_snapshot_das_duas_celulas_nasce_antes_da_porta` | Remover `os.fsync`: o teste abre arquivo no mesmo processo e verifica JSON visível, sem durabilidade. `T:153-167`; `C:193-195`. Também sobreviveria snapshot sem `dna`, `editada_em`, `editada_por_id` e geradora, porque só confere par, trabalha e origem cedente. `T:164-167`; formato `P:528-531`. | [nao verificado]
-| `test_rejeitado_e_aguardando_nao_aplicam_mesmo_com_par` | Permitir substituto com status rejeitada: ambos os cedentes já são rejeitado/pedido, saindo antes de examinar o substituto. `T:169-177`; ordem `C:66-71`, guarda substituto `C:83-84`. |
-| `test_sem_a_carta_de_um_lado_recusa_sem_escrever` | Retirar a segunda classificação sob trava: os dois exemplos já são excluídos pela primeira. `T:179-189`; seleção apply `C:202-205`; reclassificação `C:134-136`. |
-| `test_dia_em_competencia_exportada_vai_a_lista_bang_e_nao_toca` | Consultar lavra apenas do cedente: os dois lados estão no mesmo dia/empresa exportada, suficiente para passar. `T:193-204`; consulta atual dos dois `C:90`. |
-| `test_lado_do_substituto_em_lavrada_tambem_e_bang` | Não adicionar `!` quando somente substituto está exportado: teste só confere classe, sem linha `!`, contador, apply ou ausência de chamada da porta. `T:206-213`; `C:214-221`. | [nao verificado]
-| `test_segunda_rodada_e_idempotente` | Criar novo snapshot e acrescentar linha na segunda rodada: já é o comportamento atual e passa pelas asserções, limitadas a quatro campos das células e IDs de LogAuditoria. `T:215-228`; `C:176-195`, `C:137-143`; porta retorna igual em `P:594-596`, `P:679-680`. |
-| `test_nenhum_colaborador_ganha_desconto_novo` | Injetar novo desconto em colaborador fora dos três ou dia fora de 21/10–09/11: foto só cobre esse filtro. `T:231-239`, `T:246-249`. Alternativamente retirar fsync sobrevive porque o teste não inspeciona snapshots. `C:195`; `T:230-249`. | [nao verificado]
-| `test_aplicar_exige_autor` | Aceitar username fornecido mas inexistente: teste só omite `--por`; não passa usuário desconhecido. `T:251-253`; ramo não coberto `C:163-165`. | [nao verificado]
-| `test_par_repetido_ou_mal_escrito_e_erro` | Rejeitar qualquer repetição, mas aceitar valores negativos ou `1:2:3`: teste cobre duplicata exata e `abc`, sem esses formatos. `T:255-261`; parser `C:103-109`. | [nao verificado]
-| `test_par_cujo_cedente_nao_e_troca_de_plantao_nao_aplica` | Remover tratamento de cedente inexistente: fixture é declaração existente. `T:263-270`; ramo `C:171-173`. |
-| `test_a_costura_MORDE` | Remover `select_for_update` das Ausencias ou `atomic` externo: teste confere chamada e argumentos da porta mockada, sem concorrência/rollback. `T:275-287`; `C:128-130`. | [nao verificado]
-| `test_o_comando_so_escreve_pela_porta` | Adicionar escrita por SQL cru, por exemplo `cursor.execute(...)`: blacklist olha nomes das chamadas, não SQL nem atribuições indiretas. `T:294-299`; ela proíbe save/create/update/etc., mas não `execute`. |
-| `test_o_dry_responde_o_que_a_porta_faria` | Retirar reclassificação sob trava ou detecção de período: só testa um par normal e um par exportado, ambos sem período. `T:308-314`; `C:72-74`, `C:85-87`, `C:134-136`. |
-
-O caso SOLO tem falha concreta, além da hipótese de mutação: retorna `so_um_lado` antes da avaliação de lavra (`C:77-80`, `C:90-92`), e só classe `lavrada` entra em `bang` (`C:214-221`). Logo `test_solo_em_competencia_lavrada_diz_que_e_bang` não prova o “bang” do próprio nome: explicitamente espera `so_um_lado` e só procura `lavrada=S` (`T:126-127`). A coluna mostra exportação, mas não há `!` nem incremento de bang nessa linha (`C:211`, `C:214-225`).
-
-A costura não é inteiramente vazia: o teste exige uma chamada com as duas cartas/autor e exige células imóveis sob dublê (`T:279-287`); o teste de resultado exige a alteração efetiva dos dois lados e trilha com IDs (`T:136-143`). O par “trocaria/lavrada” também exige resultados distintos da porta (`T:311-314`). A declaração geral “DRY responde o que a porta faria” excede os dois exemplos cobertos (`T:301-314`): cedente rejeitado/pedido, tipo diferente e período têm guardas próprias em `C:64-74`, mas a porta só verifica existência, colaborador e documentos antes das edições (`P:653-675`). [nao verificado]
-
-Nenhum desses testes exercita semântica real de `on_commit`: `_run` sempre substitui por execução imediata (`T:61`), e `_agora_mesmo` chama `fn()` diretamente (`app/ponto/tests/test_o10b_editar_dia_troca.py:39-41`). Assim, não demonstram descarte dos callbacks no rollback nem adiamento até o commit externo; também não há concorrência concorrente nos corpos dos 17 testes (`T:88-314`).
-
-O snapshot é anterior à chamada e dá flush/fsync (`C:137-142`, `C:193-195`), mas células são fotografadas sem trava (`C:113-116`), ao passo que a porta só trava a célula depois de montar DNA (`P:591-593`): há janela para “antes” obsoleto perante outro escritor. A reversão existente rejeita origem diferente de `gerada` (`P:776-778`), enquanto a troca grava `editada` (`P:600-609`). Portanto essa operação de reversão não desfaz as células editadas pela troca; o comando também só oferece par/aplicar/por (`C:149-153`). Suficiência operacional do arquivo para reversão integral não está demonstrada pelos testes, que conferem apenas trabalha/origem (`T:164-167`). [nao verificado]
-
-A regra de casos aparece no docstring (`T:5-14`), mas a afirmação “escrita antes do código” e uma execução RED histórica não podem ser confirmadas pela cópia sem Git/log fornecido: [não verificado]. A regra anti-vacuidade exige caso que morde para selo com mock ou saída (`CLAUDE.md:191`); os casos citados mordem parte do contrato, com a exceção evidente do SOLO/bang (`T:119-127`).
-
-## 06/11 14:49 · sessao dda1e5a29e82 · V3-IMPACTO-COM-DONO · sonda · origem=Code
-
-Todas as linhas `SOMA` da parte fornecida apresentam `True` em seus indicadores. [nao verificado]
-
-Não há registro `INCOMPLETO` no texto fornecido. Há `COBERTURA_INTEGRAL=False` nos dois meses e `EXCLUIDOS_TOTAL|31`. [nao verificado]
-
-Transcrição integral do dado fornecido, sem verificação independente em arquivo: [nao verificado]
-
-```text
-sonda_leitura: script.py [8c14bf8ab6205915] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-
-PARTE|5|6
-FINALIDADE|IMPACTO_NUNCA_VALIDACAO
-BASE_SOMAS|COLABORADORES_MEDIDOS
-COBERTURA_SOMA|MEDIDOS_MAIS_EXCLUIDOS_IGUAL_UNIVERSO_PARTE
-ATO|hoje=2026-11-06|agora=2026-11-06T14:40:13.976256-03:00
-FORA_DA_MEDIDA|horas_falta
-FORA_DA_MEDIDA|horas_reflexo_dsr
-FORA_DA_MEDIDA|saldo_banco_horas
-UNIVERSO|2026-10|colabs_porta=624
-UNIVERSO_PARTE 2026-10 107
-MEDIDO|2026-10|col28
-MEDIDO|2026-10|col40
-MEDIDO|2026-10|col70
-MEDIDO|2026-10|col76
-MEDIDO|2026-10|col82
-DIA|2026-10|horas_intra_indenizada|col82|2026-10-06|CADASTRO|1.1666666666666667|0|-1.1666666666666667
-DIA|2026-10|horas_intra_indenizada|col82|2026-10-08|CADASTRO|1.1666666666666667|0|-1.1666666666666667
-DIA|2026-10|horas_intra_indenizada|col82|2026-10-12|CADASTRO|1.1666666666666667|0|-1.1666666666666667
-DIA|2026-10|horas_intra_indenizada|col82|2026-10-14|CADASTRO|1.1666666666666667|0|-1.1666666666666667
-DIA|2026-10|horas_intra_indenizada|col82|2026-10-15|CADASTRO|1.1666666666666667|0|-1.1666666666666667
-DIA|2026-10|horas_intra_indenizada|col82|2026-10-16|CADASTRO|1.1666666666666667|0|-1.1666666666666667
-DIA|2026-10|horas_intra_indenizada|col82|2026-10-20|CADASTRO|1.1666666666666667|0|-1.1666666666666667
-DIA|2026-10|horas_extras_50|col82|2026-10-06|CADASTRO|0|0.50064777777777847|0.50064777777777847
-DIA|2026-10|horas_extras_50|col82|2026-10-08|CADASTRO|0|0.47197333333333424|0.47197333333333424
-DIA|2026-10|horas_extras_50|col82|2026-10-14|CADASTRO|0|0.17922305555555529|0.17922305555555529
-DIA|2026-10|horas_extras_50|col82|2026-10-15|CADASTRO|0|0.55751833333333323|0.55751833333333323
-MEDIDO|2026-10|col94
-MEDIDO|2026-10|col100
-MEDIDO|2026-10|col106
-MEDIDO|2026-10|col112
-MEDIDO|2026-10|col118
-MEDIDO|2026-10|col130
-MEDIDO|2026-10|col136
-MEDIDO|2026-10|col142
-MEDIDO|2026-10|col148
-MEDIDO|2026-10|col154
-MEDIDO|2026-10|col166
-MEDIDO|2026-10|col190
-MEDIDO|2026-10|col196
-MEDIDO|2026-10|col202
-MEDIDO|2026-10|col214
-MEDIDO|2026-10|col220
-MEDIDO|2026-10|col226
-MEDIDO|2026-10|col238
-MEDIDO|2026-10|col250
-MEDIDO|2026-10|col256
-MEDIDO|2026-10|col262
-RECUSA|2026-10|col268|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=15
-EXCLUIDO|2026-10|col268|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-10|col274
-DIA|2026-10|horas_atraso|col274|2026-10-04|ESTRUTURA|0|2.3303333333333334|2.3303333333333334
-MEDIDO|2026-10|col280
-MEDIDO|2026-10|col292
-DIA|2026-10|horas_extras_100_noturna|col292|2026-10-12|ESTRUTURA|0|0.90987055555555552|0.90987055555555552
-RECUSA|2026-10|col298|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=30
-EXCLUIDO|2026-10|col298|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-10|col304
-MEDIDO|2026-10|col310
-HISTORICO_T|2026-10|col316|sem_resultado_do_fechamento|1
-EXCLUIDO|2026-10|col316|PRODUTO:SEM_RETORNO_FECHAMENTO
-MEDIDO|2026-10|col328
-MEDIDO|2026-10|col334
-MEDIDO|2026-10|col340
-MEDIDO|2026-10|col346
-MEDIDO|2026-10|col358
-MEDIDO|2026-10|col364
-RECUSA|2026-10|col370|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=28
-EXCLUIDO|2026-10|col370|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-10|col376
-MEDIDO|2026-10|col382
-MEDIDO|2026-10|col388
-MEDIDO|2026-10|col394
-RECUSA|2026-10|col400|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=1
-EXCLUIDO|2026-10|col400|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-10|col406
-MEDIDO|2026-10|col418
-MEDIDO|2026-10|col424
-HISTORICO_T|2026-10|col430|sem_resultado_do_fechamento|1
-EXCLUIDO|2026-10|col430|PRODUTO:SEM_RETORNO_FECHAMENTO
-MEDIDO|2026-10|col442
-MEDIDO|2026-10|col454
-HISTORICO_T|2026-10|col460|sem_resultado_do_fechamento|1
-EXCLUIDO|2026-10|col460|PRODUTO:SEM_RETORNO_FECHAMENTO
-MEDIDO|2026-10|col466
-MEDIDO|2026-10|col472
-MEDIDO|2026-10|col478
-MEDIDO|2026-10|col490
-MEDIDO|2026-10|col496
-MEDIDO|2026-10|col502
-DIA|2026-10|horas_trabalhadas|col502|2026-10-10|CADASTRO|7.5691799794444456|2.8436924044444445|-4.7254875750000007
-DIA|2026-10|horas_extras_50|col502|2026-10-10|CADASTRO|0.23584664611111161|0|-0.23584664611111161
-MEDIDO|2026-10|col532
-MEDIDO|2026-10|col556
-MEDIDO|2026-10|col562
-RECUSA|2026-10|col574|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=26
-EXCLUIDO|2026-10|col574|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-10|col592
-DIA|2026-10|horas_trabalhadas|col592|2026-10-20|CADASTRO|7.3148602777777789|5.4212716666666676|-1.8935886111111113
-MEDIDO|2026-10|col598
-MEDIDO|2026-10|col610
-MEDIDO|2026-10|col616
-MEDIDO|2026-10|col622
-MEDIDO|2026-10|col634
-RECUSA|2026-10|col646|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=30
-EXCLUIDO|2026-10|col646|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-10|col658
-MEDIDO|2026-10|col670
-MEDIDO|2026-10|col712
-MEDIDO|2026-10|col718
-MEDIDO|2026-10|col736
-HISTORICO_T|2026-10|col760|sem_resultado_do_fechamento|1
-EXCLUIDO|2026-10|col760|PRODUTO:SEM_RETORNO_FECHAMENTO
-MEDIDO|2026-10|col784
-MEDIDO|2026-10|col814
-MEDIDO|2026-10|col820
-MEDIDO|2026-10|col826
-RECUSA|2026-10|col832|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=15
-EXCLUIDO|2026-10|col832|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-10|col838
-MEDIDO|2026-10|col844
-MEDIDO|2026-10|col850
-HISTORICO_T|2026-10|col862|sem_resultado_do_fechamento|1
-EXCLUIDO|2026-10|col862|PRODUTO:SEM_RETORNO_FECHAMENTO
-MEDIDO|2026-10|col868
-MEDIDO|2026-10|col874
-HISTORICO_T|2026-10|col880|sem_resultado_do_fechamento|1
-EXCLUIDO|2026-10|col880|PRODUTO:SEM_RETORNO_FECHAMENTO
-MEDIDO|2026-10|col892
-MEDIDO|2026-10|col898
-HISTORICO_T|2026-10|col904|sem_resultado_do_fechamento|1
-EXCLUIDO|2026-10|col904|PRODUTO:SEM_RETORNO_FECHAMENTO
-MEDIDO|2026-10|col910
-MEDIDO|2026-10|col922
-MEDIDO|2026-10|col928
-MEDIDO|2026-10|col934
-MEDIDO|2026-10|col940
-MEDIDO|2026-10|col946
-MEDIDO|2026-10|col952
-MEDIDO|2026-10|col958
-MEDIDO|2026-10|col964
-DIA|2026-10|horas_noturnas|col964|2026-09-25|ESTRUTURA|1|1.1428571428571428|0.14285714285714279
-DIA|2026-10|horas_noturnas|col964|2026-09-26|BATIDA|1.0158688888888889|1.1609930158730157|0.1451241269841268
-DIA|2026-10|horas_noturnas|col964|2026-09-27|ESTRUTURA|0.97687750000000007|1.1164314285714285|0.13955392857142845
-DIA|2026-10|horas_noturnas|col964|2026-09-28|CADASTRO|0.93996361111111115|1.074244126984127|0.13428051587301582
-MEDIDO|2026-10|col970
-MEDIDO|2026-10|col976
-RECUSA|2026-10|col982|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=8
-EXCLUIDO|2026-10|col982|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-10|col988
-DIA|2026-10|horas_trabalhadas|col988|2026-10-17|CADASTRO|6.1902003261111114|3.2689744558333333|-2.921225870277778
-RECUSA|2026-10|col994|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=2
-EXCLUIDO|2026-10|col994|PRODUTO:RECUSA_PORTA_SEM_DONO
-RECUSA|2026-10|col1000|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=0
-EXCLUIDO|2026-10|col1000|PRODUTO:RECUSA_PORTA_SEM_DONO
-RECUSA|2026-10|col1006|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=0
-EXCLUIDO|2026-10|col1006|PRODUTO:RECUSA_PORTA_SEM_DONO
-COBERTURA_COLAB|2026-10|medidos=89|universo_parte=107|excluidos=18
-COBERTURA_INTEGRAL|2026-10|False
-PRODUTO|2026-10|DIA_FORA_UNIVERSO_PORTA|59|346
-PRODUTO|2026-10|RECUSA_PORTA_SEM_DONO|11|155
-PRODUTO|2026-10|SEM_DECISAO_horas_atraso|61|369
-PRODUTO|2026-10|SEM_DECISAO_horas_extras_100|60|365
-PRODUTO|2026-10|SEM_DECISAO_horas_extras_100_feriado|60|365
-PRODUTO|2026-10|SEM_DECISAO_horas_extras_100_noturna|60|365
-PRODUTO|2026-10|SEM_DECISAO_horas_extras_50|60|365
-PRODUTO|2026-10|SEM_DECISAO_horas_extras_50_noturna|60|365
-PRODUTO|2026-10|SEM_DECISAO_horas_folga_trabalhada|59|346
-PRODUTO|2026-10|SEM_DECISAO_horas_intra_indenizada|59|346
-PRODUTO|2026-10|SEM_DECISAO_horas_noturnas|61|356
-PRODUTO|2026-10|SEM_DECISAO_horas_saida_antecipada|61|369
-PRODUTO|2026-10|SEM_DECISAO_horas_trabalhadas|59|346
-PRODUTO|2026-10|SEM_RETORNO_FECHAMENTO|7|0
-DIAS_NAO_LOCALIZADOS|2026-10|PRODUTO|SEM_RETORNO_FECHAMENTO|colabs=7
-DONO|2026-10|horas_trabalhadas|CADASTRO|21.074240583333335|11.533938526944446|-9.5403020563888905|3|3
-RESIDUO|2026-10|horas_trabalhadas|ATE_LIMIAR|12414.601656410277|12414.601656410277|2.6645352591003757e-14|89|1333
-RESIDUO|2026-10|horas_trabalhadas|SEM_DECISAO|73.246107319444448|73.246107319444448|0|59|346
-PARCIAL|2026-10|horas_trabalhadas|v2_h=12435.675896993611|v3_h=12426.135594937223|autoridade2_h=12508.922004313055|autoridade3_h=12499.381702256667|porta_h=12426.135594937223|emitido_decidido_h=12426.135594937223|fm_dias=12508.95|fm_retorno=12508.95|colabs_div=3|dias_colab_div=3
-RUBRICA|2026-10|horas_trabalhadas|12435.675896993611|12426.135594937223|-9.5403020563881|3|3
-INSTRUMENTO_HISTORICO|2026-10|horas_trabalhadas|v2_h=12416.[cpf]|v3_h=12426.135594937223|delta_h=10.122492290833179|colabs=89
-DONO|2026-10|horas_intra_indenizada|CADASTRO|8.1666666666666679|0|-8.1666666666666679|1|7
-RESIDUO|2026-10|horas_intra_indenizada|ATE_LIMIAR|361.38452278916668|361.38452278916668|0|89|1329
-RESIDUO|2026-10|horas_intra_indenizada|SEM_DECISAO|0|0|0|59|346
-PARCIAL|2026-10|horas_intra_indenizada|v2_h=369.55118945583331|v3_h=361.38452278916668|autoridade2_h=369.55118945583331|autoridade3_h=361.38452278916668|porta_h=361.38452278916668|emitido_decidido_h=361.38452278916668|fm_dias=369.56|fm_retorno=369.56|colabs_div=1|dias_colab_div=7
-RUBRICA|2026-10|horas_intra_indenizada|369.55118945583331|361.38452278916668|-8.1666666666666288|1|7
-INSTRUMENTO_HISTORICO|2026-10|horas_intra_indenizada|v2_h=366.55118945583331|v3_h=361.38452278916668|delta_h=-5.1666666666666288|colabs=89
-DONO|2026-10|horas_extras_50|CADASTRO|0.23584664611111161|1.7093625000000012|1.4735158538888897|2|5
-RESIDUO|2026-10|horas_extras_50|ATE_LIMIAR|2.9002057363888882|2.9002057363888882|0|89|1312
-RESIDUO|2026-10|horas_extras_50|SEM_DECISAO|2|2|0|60|365
-PARCIAL|2026-10|horas_extras_50|v2_h=3.1360523825|v3_h=4.6095682363888901|autoridade2_h=5.1360523825|autoridade3_h=6.6095682363888901|porta_h=4.6095682363888901|emitido_decidido_h=4.6095682363888901|fm_dias=5.13|fm_retorno=5.13|colabs_div=2|dias_colab_div=5
-RUBRICA|2026-10|horas_extras_50|3.1360523825|4.6095682363888901|1.4735158538888902|2|5
-INSTRUMENTO_HISTORICO|2026-10|horas_extras_50|v2_h=5.1360523825|v3_h=4.6095682363888892|delta_h=-0.52648414611111072|colabs=89
-RESIDUO|2026-10|horas_extras_100|ATE_LIMIAR|68.607693309444443|68.607693309444443|0|89|1317
-RESIDUO|2026-10|horas_extras_100|SEM_DECISAO|3.1414417758333326|3.1414417758333326|0|60|365
-PARCIAL|2026-10|horas_extras_100|v2_h=68.607693309444443|v3_h=68.607693309444443|autoridade2_h=71.749135085277771|autoridade3_h=71.749135085277771|porta_h=68.607693309444443|emitido_decidido_h=68.607693309444443|fm_dias=71.75|fm_retorno=71.75|colabs_div=0|dias_colab_div=0
-RUBRICA|2026-10|horas_extras_100|68.607693309444443|68.607693309444443|0|0|0
-INSTRUMENTO_HISTORICO|2026-10|horas_extras_100|v2_h=71.749135085277771|v3_h=69.024955253888891|delta_h=-2.7241798313888808|colabs=89
-RESIDUO|2026-10|horas_extras_100_feriado|ATE_LIMIAR|68.607693309444443|68.607693309444443|0|89|1317
-RESIDUO|2026-10|horas_extras_100_feriado|SEM_DECISAO|0|0|0|60|365
-PARCIAL|2026-10|horas_extras_100_feriado|v2_h=68.607693309444443|v3_h=68.607693309444443|autoridade2_h=68.607693309444443|autoridade3_h=68.607693309444443|porta_h=68.607693309444443|emitido_decidido_h=68.607693309444443|fm_dias=68.61|fm_retorno=68.61|colabs_div=0|dias_colab_div=0
-RUBRICA|2026-10|horas_extras_100_feriado|68.607693309444443|68.607693309444443|0|0|0
-INSTRUMENTO_HISTORICO|2026-10|horas_extras_100_feriado|v2_h=0|v3_h=69.024955253888891|delta_h=69.024955253888891|colabs=89
-RESIDUO|2026-10|horas_extras_50_noturna|ATE_LIMIAR|0.3541233333333334|0.3541233333333334|0|89|1317
-RESIDUO|2026-10|horas_extras_50_noturna|SEM_DECISAO|0|0|0|60|365
-PARCIAL|2026-10|horas_extras_50_noturna|v2_h=0.3541233333333334|v3_h=0.3541233333333334|autoridade2_h=0.3541233333333334|autoridade3_h=0.3541233333333334|porta_h=0.3541233333333334|emitido_decidido_h=0.3541233333333334|fm_dias=0.35|fm_retorno=0.35|colabs_div=0|dias_colab_div=0
-RUBRICA|2026-10|horas_extras_50_noturna|0.3541233333333334|0.3541233333333334|0|0|0
-INSTRUMENTO_HISTORICO|2026-10|horas_extras_50_noturna|v2_h=0|v3_h=0.3541233333333334|delta_h=0.3541233333333334|colabs=89
-DONO|2026-10|horas_extras_100_noturna|ESTRUTURA|0|0.90987055555555552|0.90987055555555552|1|1
-RESIDUO|2026-10|horas_extras_100_noturna|ATE_LIMIAR|9.6304372222222234|9.6321452777777772|0.0017080555555537558|89|1316
-RESIDUO|2026-10|horas_extras_100_noturna|SEM_DECISAO|0|0|0|60|365
-PARCIAL|2026-10|horas_extras_100_noturna|v2_h=9.6304372222222234|v3_h=10.542015833333332|autoridade2_h=9.6304372222222234|autoridade3_h=10.542015833333332|porta_h=10.542015833333332|emitido_decidido_h=10.542015833333332|fm_dias=9.64|fm_retorno=9.64|colabs_div=1|dias_colab_div=1
-RUBRICA|2026-10|horas_extras_100_noturna|9.6304372222222234|10.542015833333332|0.91157861111110883|1|1
-INSTRUMENTO_HISTORICO|2026-10|horas_extras_100_noturna|v2_h=0|v3_h=10.542015833333332|delta_h=10.542015833333332|colabs=89
-RESIDUO|2026-10|horas_folga_trabalhada|ATE_LIMIAR|0|0|0|89|1336
-RESIDUO|2026-10|horas_folga_trabalhada|SEM_DECISAO|0|0|0|59|346
-PARCIAL|2026-10|horas_folga_trabalhada|v2_h=0|v3_h=0|autoridade2_h=0|autoridade3_h=0|porta_h=0|emitido_decidido_h=0|fm_dias=0.0|fm_retorno=0.0|colabs_div=0|dias_colab_div=0
-RUBRICA|2026-10|horas_folga_trabalhada|0|0|0|0|0
-INSTRUMENTO_HISTORICO|2026-10|horas_folga_trabalhada|v2_h=92.908901666666665|v3_h=0|delta_h=-92.908901666666665|colabs=89
-DONO|2026-10|horas_noturnas|BATIDA|1.0158688888888889|1.1609930158730157|0.1451241269841268|1|1
-DONO|2026-10|horas_noturnas|CADASTRO|0.93996361111111115|1.074244126984127|0.13428051587301582|1|1
-DONO|2026-10|horas_noturnas|ESTRUTURA|1.9768775000000001|2.2592885714285713|0.28241107142857125|1|2
-RESIDUO|2026-10|horas_noturnas|ATE_LIMIAR|2343.5685435976188|2343.5685435976188|-2.6645352591003757e-15|89|1322
-RESIDUO|2026-10|horas_noturnas|SEM_DECISAO|0|0|0|61|356
-PARCIAL|2026-10|horas_noturnas|v2_h=2347.5012535976189|v3_h=2348.0630693119047|autoridade2_h=2347.5012535976189|autoridade3_h=2348.0630693119047|porta_h=2348.0630693119047|emitido_decidido_h=2348.0630693119047|fm_dias=2347.51|fm_retorno=2347.51|colabs_div=1|dias_colab_div=4
-RUBRICA|2026-10|horas_noturnas|2347.5012535976189|2348.0630693119047|0.56181571428578536|1|4
-INSTRUMENTO_HISTORICO|2026-10|horas_noturnas|v2_h=2300.7555109388886|v3_h=2348.0630693119047|delta_h=47.307558373016036|colabs=89
-DONO|2026-10|horas_atraso|ESTRUTURA|0|2.3303333333333334|2.3303333333333334|1|1
-RESIDUO|2026-10|horas_atraso|ATE_LIMIAR|74.335833333333326|74.335448153055552|-0.0003851802777788127|88|1312
-RESIDUO|2026-10|horas_atraso|SEM_DECISAO|0|0|0|61|369
-PARCIAL|2026-10|horas_atraso|v2_h=74.335833333333326|v3_h=76.66578148638888|autoridade2_h=74.335833333333326|autoridade3_h=76.66578148638888|porta_h=76.66578148638888|emitido_decidido_h=76.66578148638888|fm_dias=74.36|fm_retorno=74.36|colabs_div=1|dias_colab_div=1
-RUBRICA|2026-10|horas_atraso|74.335833333333326|76.66578148638888|2.3299481530555539|1|1
-INSTRUMENTO_HISTORICO|2026-10|horas_atraso|v2_h=74.350166666666667|v3_h=74.349781486388892|delta_h=-0.00038518027777456609|colabs=89
-RESIDUO|2026-10|horas_saida_antecipada|ATE_LIMIAR|46.246166666666667|46.246252456944447|8.5790277777664237e-05|88|1313
-RESIDUO|2026-10|horas_saida_antecipada|SEM_DECISAO|0|0|0|61|369
-PARCIAL|2026-10|horas_saida_antecipada|v2_h=46.246166666666667|v3_h=46.246252456944447|autoridade2_h=46.246166666666667|autoridade3_h=46.246252456944447|porta_h=46.246252456944447|emitido_decidido_h=46.246252456944447|fm_dias=46.27|fm_retorno=46.27|colabs_div=0|dias_colab_div=0
-RUBRICA|2026-10|horas_saida_antecipada|46.246166666666667|46.246252456944447|8.5790277779551616e-05|0|0
-INSTRUMENTO_HISTORICO|2026-10|horas_saida_antecipada|v2_h=32.592833333333331|v3_h=32.592919123611111|delta_h=8.5790277779551616e-05|colabs=89
-UNIVERSO|2026-11|colabs_porta=578
-UNIVERSO_PARTE 2026-11 99
-MEDIDO|2026-11|col28
-MEDIDO|2026-11|col40
-MEDIDO|2026-11|col70
-RECUSA|2026-11|col76|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=0
-EXCLUIDO|2026-11|col76|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-11|col82
-DIA|2026-11|horas_trabalhadas|col82|2026-11-05|CADASTRO|7.4635486111111105|6.085836944444444|-1.3777116666666664
-DIA|2026-11|horas_intra_indenizada|col82|2026-10-25|CADASTRO|0|0.20486055555555563|0.20486055555555563
-DIA|2026-11|horas_intra_indenizada|col82|2026-10-27|CADASTRO|1.1666666666666667|0|-1.1666666666666667
-DIA|2026-11|horas_intra_indenizada|col82|2026-10-28|CADASTRO|1.1666666666666667|0|-1.1666666666666667
-DIA|2026-11|horas_intra_indenizada|col82|2026-10-29|CADASTRO|1.1666666666666667|0|-1.1666666666666667
-DIA|2026-11|horas_intra_indenizada|col82|2026-11-03|CADASTRO|1.1666666666666667|0|-1.1666666666666667
-DIA|2026-11|horas_intra_indenizada|col82|2026-11-04|CADASTRO|1.1666666666666667|0|-1.1666666666666667
-MEDIDO|2026-11|col94
-MEDIDO|2026-11|col100
-RECUSA|2026-11|col106|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=24
-EXCLUIDO|2026-11|col106|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-11|col112
-MEDIDO|2026-11|col118
-MEDIDO|2026-11|col130
-MEDIDO|2026-11|col136
-RECUSA|2026-11|col142|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,h
-
-[truncado em 20000 de 44159 caracteres]
-
-## 06/11 14:46 · sessao 3ad44ccc9689 · H12H06-B-PAUTA-08 · verificador · origem=Code
-
-**PROCEDENTE, com alcance delimitado:** mover `_grava` para dentro do `atomic` cura a pauta que sobrevivia à falha de gravação, mas permite novamente PK morto no JSON quando a gravação termina e o commit posterior falha com rollback. O próprio comentário reconhece essa janela. [pauta_pago_x_devido_exportada.py:198](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:198)
-
-Análise estática da cópia; comparação com o pai, execução da suíte e ocorrência em produção: **[nao verificado]**. [nao verificado]
-
-1. **Ordem das falhas e alcance da reversão**
-
-   A ordem é: abrir `atomic` → criar cabeça → criar todas as filhas → acrescentar seus PKs a `rev['pautas']` → gravar JSON → sair do `atomic`. Portanto, se o JSON foi substituído e o commit depois falha com rollback, o arquivo conserva os PKs do colaborador desfeito, além dos anteriores já registrados. [pauta_pago_x_devido_exportada.py:182](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:182), [pauta_pago_x_devido_exportada.py:191](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:191), [pauta_pago_x_devido_exportada.py:200](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:200)
-
-   `_reverter` consulta cada PK: ausente ou cancelado é ignorado; feito é preservado; encontrado e pendente é passado a `cancelar`. Assim, **PK morto é tolerado**, embora a propriedade “arquivo não cita PK morto” deixe de valer nessa janela. [pauta_pago_x_devido_exportada.py:249](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:249)
-
-   A queda durante a criação de uma filha continua protegida: acontece antes de `rev['pautas'].extend(novos)` e da atualização do arquivo. [pauta_pago_x_devido_exportada.py:194](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:194), [pauta_pago_x_devido_exportada.py:200](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:200)
-
-   **Há caminho para atingir outro ato:** fornecer a este `--reverter` um JSON legítimo de `pauta_folga_nao_definida_exportada`. Esse produtor também registra seus PKs em `pautas`; o leitor daqui não verifica produtor, marca ou competência e chama `cancelar(p, p.autor_user)`, satisfazendo a guarda de autoria com o autor da própria pauta encontrada. Isso demonstra aceitação de arquivo alheio; a lista normalmente emitida por `_escrever` contém somente os PKs recém-criados. [pauta_folga_nao_definida_exportada.py:133](app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:133), [pauta_pago_x_devido_exportada.py:193](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:193), [pauta_pago_x_devido_exportada.py:246](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:246), [services.py:288](app/pautas/services.py:288)
-
-   Também falta vinculação ao tenant: o JSON não guarda schema, `Pauta` pertence a `TENANT_APPS` e a reversão consulta somente PK no contexto corrente. Com PK coincidente elegível em outro tenant, pode atingir pauta daquele tenant; existência desse cenário em produção: **[nao verificado]**. [pauta_pago_x_devido_exportada.py:155](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:155), [pauta_pago_x_devido_exportada.py:250](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:250), [saas.py:34](app/config/settings/saas.py:34)
-
-2. **Cobertura e contagem de `sem_movimento`**
-
-   Sim: `_medir` preenche `linhas[pk]` antes de colocar o PK em `sem_movimento`; o novo laço percorre integralmente esse balde. Os `continue` anteriores pertencem ao laço de `com_diferenca` e não saltam este. A conclusão pressupõe chegada normal ao trecho, sem exceção anterior. [pauta_pago_x_devido_exportada.py:133](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:133), [pauta_pago_x_devido_exportada.py:162](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:162), [pauta_pago_x_devido_exportada.py:204](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:204)
-
-   Cada PK com cabeça existente incrementa **uma vez** `ja_existia` e `ja_divergente`. Esses contadores passam a abranger fatos dos dois baldes; são indicadores sobrepostos aos baldes, não parcelas adicionais de `pedidos`. A soma dos quatro baldes permanece intacta; já `ja_existia <= com_diferenca` deixa de ser uma identidade válida. `escritas` conta cabeças/colaboradores, não filhas. [pauta_pago_x_devido_exportada.py:139](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:139), [pauta_pago_x_devido_exportada.py:178](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:178), [pauta_pago_x_devido_exportada.py:202](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:202), [pauta_pago_x_devido_exportada.py:208](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:208)
-
-   Roda também com `--escrever`: não existe guarda `dry` nesse laço. Ali só há consulta, contagem e aviso; nenhuma criação, alteração ou cancelamento de pauta. A execução com `--escrever` já criou anteriormente o arquivo inicial de reversão. [pauta_pago_x_devido_exportada.py:158](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:158), [pauta_pago_x_devido_exportada.py:204](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:204)
-
-3. **Os testes mordem pelo motivo?** [nao verificado]
-
-   **`convergiu_ao_pago`: sim, pela inspeção.** Primeiro cria a pauta; depois recalcula o gravado e exige `sem_movimento=2`, `ja_divergente=1`, identificação da cabeça e `ATENCAO`. Sem o novo laço, faltariam o contador divergente e o aviso da cabeça. Ressalva: o teste faz **PAGO alcançar DEVIDO**, alterando o gravado; prova o tratamento da igualdade com pauta anterior, mas não reproduz especificamente uma mudança exclusiva de DEVIDO. [test_pauta_pago_x_devido_exportada.py:272](app/pautas/tests/test_pauta_pago_x_devido_exportada.py:272)
-
-   **`queda_ao_gravar_a_reversao`: sim, pela inspeção.** O patch deixa passar a reserva inicial e lança `OSError` na atualização; exige chamadas `[True, False]` e nenhuma pauta remanescente. Com `_grava` depois do bloco, a exceção ocorreria sem desfazer as pautas daquele bloco. O teste não cobre gravação bem-sucedida seguida de falha no commit. [test_pauta_pago_x_devido_exportada.py:288](app/pautas/tests/test_pauta_pago_x_devido_exportada.py:288)
-
-   **O `staticmethod` substitui efetivamente `self._grava`.** O patch instala o descritor na classe `Command`; o acesso pela instância entrega a função sem acrescentar `self`, compatível com `(caminho, rev, novo=False)`. As duas chamadas reais usam esse acesso pela instância. [test_pauta_pago_x_devido_exportada.py:293](app/pautas/tests/test_pauta_pago_x_devido_exportada.py:293), [test_pauta_pago_x_devido_exportada.py:300](app/pautas/tests/test_pauta_pago_x_devido_exportada.py:300), [pauta_pago_x_devido_exportada.py:159](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:159), [pauta_pago_x_devido_exportada.py:201](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:201)
-
-4. **Quem escreve e quem lê**
-
-   | Campo | Escritores | Leitores relevantes |
-   |---|---|---|
-   | `Pauta.texto` | O comando fornece cabeça/filhas; `services.escrever` persiste. Entrada humana e resposta livre também chegam ao mesmo escritor. [comando:191](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:191), [services.py:180](app/pautas/services.py:180), [views.py:109](app/pautas/views.py:109) | `_existente` lê prefixo da cabeça; `_diz_existente` compara textos das filhas; a view entrega texto à tela. [comando:224](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:224), [comando:234](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:234), [views.py:40](app/pautas/views.py:40) |
-   | `feito_em` | `marcar_feita`, mediante destinatário; também `marcar_feita_pelo_sistema`, com chamador concreto na pauta semanal. [services.py:240](app/pautas/services.py:240), [services.py:272](app/pautas/services.py:272), [semanal.py:226](app/pautas/semanal.py:226) | Avisos, reversão, filtro `vivas()`, estado da tela e guarda de cancelamento. Portanto, “feita pelo DP” é rótulo do comando, não autoria humana provada pelo campo. [comando:211](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:211), [comando:253](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:253), [models.py:57](app/pautas/models.py:57), [services.py:290](app/pautas/services.py:290) |
-   | `cancelado_em` | `services.cancelar`, chamado pela view e pela reversão. [services.py:294](app/pautas/services.py:294), [views.py:120](app/pautas/views.py:120), [comando:256](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:256) | Reversão e `nao_canceladas()`, utilizado na deduplicação e na comparação. [comando:251](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:251), [models.py:60](app/pautas/models.py:60), [comando:226](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:226) |
-   | JSON de reversão | `_escrever` monta `mes`, `ano`, `gerado_em`, `plano` e `pautas`; acrescenta os novos PKs; `_grava` serializa em temporário e faz `replace`. [comando:155](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:155), [comando:200](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:200), [comando:274](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:274) | `_reverter` usa somente `pautas`; não usa os demais campos para validar a origem ou restaurar números. [comando:246](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:246) |
-
-5. **Novidades introduzidas pelas curas**
-
-   A novidade problemática demonstrável é a janela **JSON atualizado → commit/rollback**, sem transação comum entre arquivo e banco. Também passa a haver operação de filesystem enquanto a trava do colaborador continua retida; impacto operacional: **[nao verificado]**. [pauta_pago_x_devido_exportada.py:185](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:185), [pauta_pago_x_devido_exportada.py:201](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:201), [pauta_pago_x_devido_exportada.py:277](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:277)
-
-   O novo laço introduz consulta e aviso para `sem_movimento`, além do alargamento dos contadores descrito acima; não introduz escrita nem cancelamento nesse caminho. Atribuir ao delta a falta de validação da origem do JSON depende do pai: **[nao verificado]**. [pauta_pago_x_devido_exportada.py:204](app/pautas/management/commands/pauta_pago_x_devido_exportada.py:204)
-
-## 06/11 14:44 · sessao 268eb97a2155 · - · - · origem=Ronald (tmux)
-
-- **Sim, reaparece a possibilidade de PK morto no arquivo**, especificamente depois de todas as filhas: cria cabeça/filhas, junta PKs, grava o JSON e só então sai do `atomic`. Se essa saída falhar e a transação for desfeita, o arquivo conserva os PKs daquela transação; o próprio comentário reconhece esse caso. A queda na filha continua ocorrendo antes da atualização do arquivo. (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:182`, `:191`, `:194`, `:198`, `:200`, `:201`.)
-
-- **Na reversão, PK ausente é ignorado**; também ignora cancelada e preserva feita. Se encontrar pauta viva com aquele PK, chama `cancelar(p, p.autor_user)`: não confere marca, competência, texto, plano ou identidade do ato. A guarda de autoria do service fica satisfeita pelo próprio autor da pauta encontrada. (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:249`, `:251`, `:253`, `:256`; `app/pautas/services.py:288`, `:294`.)
-
-- **Outro caminho comprovável para pauta de outro ato:** fornecer ao `--reverter` um JSON produzido por `pauta_folga_nao_definida_exportada`. Esse produtor também grava seus PKs em `rev['pautas']`; o leitor deste comando aceita a lista sem distinguir o produtor. Não exige adulteração do JSON, reaproveitamento de PK ou colisão entre tenants. (`app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:133`, `:136`, `:141`, `:149`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:246`, `:249`, `:256`.)
-
-- **Também falta vínculo ao tenant:** JSON gerado não contém schema; `Pauta` integra `TENANT_APPS`, com backend por schema. Portanto, arquivo do tenant A levado à reversão no tenant B consulta os PKs de B. Existirem PKs coincidentes e pautas elegíveis em produção é **[nao verificado]**. (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:155`, `:250`; `app/config/settings/saas.py:34`, `:47`, `:83`; `app/tenants/models.py:4`.)
-
-- **Atribuição ao delta:** a ordem atual explica a nova janela entre gravação e commit; afirmar que os problemas de proveniência do JSON foram introduzidos agora depende da versão pai, **[nao verificado]**. O novo teste provoca a exceção **antes** da gravação real da atualização; não testa gravação bem sucedida seguida de falha no commit. (`app/pautas/tests/test_pauta_pago_x_devido_exportada.py:293`, `:295`, `:297`, `:303`.)
-
-- **A atomicidade banco/arquivo continua limitada:** `_grava` usa arquivo temporário e `os.replace`, sem mecanismo que reverta o arquivo em caso de rollback posterior. O `atomic` envolve as escritas do banco e a chamada ao filesystem, mas não estabelece uma transação comum entre os dois recursos. (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:182`, `:201`, `:274`, `:277`.)
-
-_2346 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2350 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
