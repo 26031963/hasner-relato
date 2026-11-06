@@ -1,7 +1,161 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 14:58** · publicado em **06/11/2026 15:02** (UTC-3)
+> Ultima resposta processada: **06/11/2026 15:06** · publicado em **06/11/2026 15:07** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 15:06 · sessao efb8fe82e623 · O10-C · verificador · origem=Code
+
+**Laudo: as curas são parciais. Permanece um bloqueio de idempotência: cartas distintas podem representar as mesmas células em pares opostos. A foto também continua vulnerável quando a célula inexiste.** `app/ponto/models.py:826–831`; `C:93–101,120–124,154–157`; `P:593–601,673–675`.
+
+Referências abreviadas nesta cópia:
+
+- **C** = [comando O10-C](/home/ronald/codex_ws/fe9e8c19e5360e9658bd076d943845666a742b2a/app/ponto/management/commands/trocas_plantao_lote_o10c.py).
+- **P** = [porta da célula](/home/ronald/codex_ws/fe9e8c19e5360e9658bd076d943845666a742b2a/app/ponto/portas/celula.py).
+- **T** = [testes O10-C](/home/ronald/codex_ws/fe9e8c19e5360e9658bd076d943845666a742b2a/app/ponto/tests/test_o10c_lote_trocas.py).
+- **G** = [comando gerar_celulas](/home/ronald/codex_ws/fe9e8c19e5360e9658bd076d943845666a742b2a/app/ponto/management/commands/gerar_celulas.py).
+
+Execução da suíte, execução de mutantes, ancestralidade Git e ocorrência dos problemas em produção: **[não verificado]**. O material fornecido não permite conferir os 16 registros individualmente: **[não verificado]**. [nao verificado]
+
+**1. Cada cura está correta e completa?**
+
+| Cura | Verificação |
+|---|---|
+| `ABERTOS` → autoridade `ABERTAS` | **Correta.** Importa e consulta a constante registrada como autoridade. `C:75–80`; `app/ponto/services/ausencia.py:765`; `app/core/juizes.py:244`. |
+| SOLO/qualquer classe lavrada → `!` | **Correta na implementação.** A apresentação consulta os dois lados independentemente da classe e alimenta `bang` pela lavra. `C:230–243`. |
+| `--par` bijetivo | **Correta por identidade da carta; incompleta para garantir idempotência das células.** O conjunto `vistos` guarda PKs de Ausência, enquanto a escrita é por colaborador/data. `C:120–124`; `P:673–675`. Contraexemplo abaixo. |
+| Trava antes da foto | **Corrige a janela para linhas existentes**, adquirindo as duas travas antes de `_lado`. **Não reserva célula ausente.** `C:128–136,143–157`; `P:524–527`. |
+| Resultado no JSONL | **Registra o retorno da porta**, mas ainda dentro do atomic externo. Não constitui sozinho confirmação de commit: uma interrupção entre o `fsync` e a conclusão da transação deixa resultado no arquivo sem prova de confirmação no banco. `C:143,159–164,213–216`. | [nao verificado]
+| Casa em `FORA_DE_PIPELINE` | **Correta para o contrato de casa.** Entrada declarada e reconhecida pelo selo existente. `app/config/crons.py:1346–1348`; `app/chamados/tests/test_contract_crons.py:220–236`. |
+| Docstring de equivalência | **Corrigida quanto à distinção lote/porta:** agora declara critérios adicionais e admite `igual`/`recusada`. Permanece a limitação operacional de reversão explicitada no próprio texto. `C:17–23,39–45`. |
+
+O furo da bijeção admite este contraexemplo estático, no mesmo dia aberto, com documentos e vínculos válidos:
+
+| Carta | Colaborador | Tipo | Papel |
+|---|---|---|---|
+| A | X | `troca_de_plantao` | Cedente do primeiro par |
+| B | Y | Outro tipo | Substituto do primeiro par |
+| C | Y | `troca_de_plantao` | Cedente do segundo par |
+| D | X | Outro tipo | Substituto do segundo par |
+
+Essa configuração respeita a unicidade existente, que inclui **tipo**; o comando exige o tipo legado somente do cedente. Os quatro PKs diferentes passam em `_pares`. `app/ponto/models.py:826–831`; `C:76–77,93–101,120–124`.
+
+Com `A:B` e `C:D`, o primeiro par deixa X folgando/Y trabalhando; o segundo faz o contrário nas **mesmas células**. Na rodada seguinte, ambos voltam a alterar estado e produzir trilha. Portanto, a promessa de idempotência do lote continua falsa para entradas aceitas. `C:220–226`; `P:594–609,673–691`. Execução desse contraexemplo: **[não verificado]**.
+
+**2. Quem trava `CelulaDia`, em qual ordem e com quais riscos?**
+
+| Caminho | Aquisição e ordem |
+|---|---|
+| O10-C | Ausências por PK crescente; depois células por `(colaborador_id,data)` crescente, antes da foto. `C:143–157`. |
+| `trocar_plantao` | Ausências por PK crescente; chama `editar_dia` na ordem crescente de `(colaborador_id,data)`. `P:652–675`. |
+| `editar_dia` isolado | `select_for_update` de uma célula. `P:592–593`. |
+| `gerar_celulas` | **Não usa leitura travada.** Mantém atomic para todo o lote, percorre vínculos segundo sua ordenação padrão e dias crescentes; `create`/`save` são os pontos de escrita. `G:309–311`; `P:824–871`. |
+| `regenerar_celulas_vinculo` | **Não usa leitura travada.** Um colaborador por chamada, dias crescentes dentro do atomic; escreve nos ramos de criação/regeneração. `P:218–221,245,259–277,281`. |
+| Reversão/lavra/carimbos | Também escrevem células: reversão por `save`, lavra/carimbos por `salvar_e_emitir`, insumos por `bulk_update` sem ordenação própria. `P:785–795,899–902,1003,1020,1035,1067,1082,1094–1103`. |
+
+**Há risco estático de deadlock com o gerador.** A ordenação dos vínculos é `-data_inicio`, não colaborador/data. Havendo escrita nas duas células, ele pode conservar B e esperar A, enquanto O10-C conserva A e espera B. A ausência de `select_for_update` no gerador não elimina as travas adquiridas pelas escritas. `app/escala/models.py:1003`; `G:309–311`; `P:824–839,849–871`; `C:154–155`. Reprodução e ocorrência real: **[não verificado]**.
+
+A regeneração isolada segue datas crescentes de um único colaborador, mas **a leitura anterior à escrita permanece vulnerável**: pode carregar `origem='gerada'`, aguardar a troca e depois sobrescrever trabalha/DNA usando essa decisão antiga, mesmo após a troca tornar a célula humana. A trava nova em C não força esse escritor a reler a origem. `P:219,263–277`; `P:603–609`. Reprodução: **[não verificado]**.
+
+Não identifiquei chamador de tela para `editar_dia` na cópia; os chamadores encontrados são comando → troca → edição. O próprio comando se declara primeiro chamador de produção da troca. Caminho “editar_dia vindo da tela”: **[não verificado]**. `C:4,159`; `P:675`.
+
+**Célula inexistente:** o SELECT retorna vazio, a foto pode guardar `antes=None`, e a porta posteriormente tenta criar. Outro escritor pode criar entre esses momentos, tornando a foto diferente do antes efetivamente encontrado pela porta; uma corrida de criação também pode terminar em `IntegrityError`, pois existe unicidade por colaborador/data e o handler da troca só captura `_TrocaRecusada`. `C:128–131,154–159`; `P:524–527,593–601,694–699`; `app/escala/models.py:1833`. Ocorrência concreta: **[não verificado]**.
+
+**3. Quem escreve e quem lê os elementos novos consumidos pelo delta?**
+
+`ABERTAS` e `FORA_DE_PIPELINE` são definições de código; o JSONL é arquivo de execução. Não são três campos novos de banco. `app/ponto/services/ausencia.py:765`; `app/config/crons.py:769,1346–1348`; `C:198–216`.
+
+| Elemento | Quem escreve/define | Quem lê |
+|---|---|---|
+| `ABERTAS` | Definição em `app/ponto/services/ausencia.py:765`. | Novo leitor O10-C: `C:75–80`. Registro da autoridade: `app/core/juizes.py:244`. Demais leitores identificados abaixo. |
+| `FORA_DE_PIPELINE` | Dicionário e entrada O10-C em `app/config/crons.py:769,1346–1348`. | Contrato de casa e de entradas válidas: `app/chamados/tests/test_contract_crons.py:220–236`. O10-C não consulta essa entrada para executar; seu fluxo está em `C:176–250`. |
+| Snapshot JSONL | `handle` cria arquivo exclusivo; `diario` serializa, faz `flush` e `fsync`. `aplicar_par` fornece foto e resultado. `C:156–163,198–216`. | Leitor automatizado encontrado: teste abre antes da porta e depois da execução. `T:161–180`. Reversor de produção que consuma esse formato: **[não verificado]**; o reversor existente consulta a célula/DNA, não esse arquivo. `P:776–795`. | [nao verificado]
+
+Leitores efetivos de `ABERTAS` identificados além do comando:
+
+| Uso | Referência |
+|---|---|
+| Rejulgar tipo, decidir/tratar ausência | `app/ponto/services/ausencia.py:541,692,716` |
+| Propriedade do modelo e decisão do dia | `app/ponto/models.py:719–720`; `app/ponto/services/dia_decidido.py:447–448` |
+| Filtros, contadores e atos da tela de ausências | `app/ponto/views.py:2187,2195,2206,2282,2316,2606,2618,2687,2691` |
+| Espelho | `app/ponto/services/espelho.py:878–880` |
+| API: pendência e recebimento de documento | `app/api/views.py:1582–1586,3101–3103` |
+| Materialização, silêncio e vigia | `app/chamados/services/materializacao.py:562–564`; `app/chamados/services/silencio_ausencia.py:57,77`; `app/chamados/services/vigia_fio.py:298,309` |
+| Auditoria e reabertura | `app/chamados/management/commands/auditar_invariantes_chamados.py:634,643`; `app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:27,36` |
+| Teste de estados | `app/ponto/tests/test_a4_estados_com_porta.py:286–289` |
+
+**4. Algum descarte esconde bloqueio?**
+
+- **(a) `on_commit` mockado:** não demonstra isoladamente defeito funcional do comando, mas continua sendo limitação da prova. O molde executa imediatamente callbacks que, no caminho real, são registrados para depois do commit. Herdar o molde não verifica adiamento ou descarte no rollback. `T:59–63`; `app/ponto/tests/test_o10b_editar_dia_troca.py:39–41`; `P:493–502`; `app/ponto/services/fechamento.py:1782–1808`.
+
+- **(b) Reversão fiel:** **manteria como bloqueio operacional do apply, não como exigência de abrir escritor fora deste aval.** Documentar `INCOMPLETO` é correto, mas não demonstra reversibilidade: a troca produz `editada`, o reversor aceita apenas `gerada` com DNA anterior, e repetir `editar_dia` remonta DNA e renova carimbos. A regra exige arquivo de reversão anterior ao apply; a suficiência operacional deste arquivo continua sem demonstração. `C:43–44`; `P:591,598–609,776–778`; `CLAUDE.md:398–400`. Exceção autorizando aplicar nessa condição: **[não verificado]**.
+
+- **(c) Novo snapshot na segunda rodada:** descarte válido quanto à distinção arquivo/estado de negócio. Contudo, **não salva a idempotência do lote**, pelo contraexemplo de células coincidentes acima. `C:198–216`; `P:594–596`; `C:120–124`; `app/ponto/models.py:826–831`.
+
+- **(d) TOCTOU de lavra/vínculo:** reclassificar e reconferir reduz a janela, mas não a elimina; a porta ainda consulta guarda/vínculo/DNA antes de adquirir a trava. O backlog documenta expressamente a guarda anterior ao atomic. É risco herdado identificado, não cura completa. `C:149–155`; `P:567–593`; `app/docs/BACKLOG.md:1790`. Violação efetiva da exportada nesta execução: **[não verificado]**.
+
+- **(e) Atomic por par:** descarte coerente com o desenho declarado; não encontrei promessa de atomicidade do lote inteiro. Cada chamada tem seu atomic, dentro do laço de aplicação. `C:39,143,220–226`.
+
+**5. Os testes mordem os mutantes das curas?** [nao verificado]
+
+A avaliação abaixo é estática; execução de mutação: **[não verificado]**.
+
+| Mutante | Mordida identificada |
+|---|---|
+| Voltar a aceitar `A:B` + `B:A` ou `A:A` | **Sim:** exige erro e zero chamadas da porta. `T:278–287`. |
+| Voltar a emitir `!` somente para classe `lavrada` | **Sim:** exige `!` para SOLO e pedido. `T:126–135`. |
+| Omitir resultado do snapshot | **Sim, no sucesso:** exige `[None,'trocada']`. `T:176–180`. |
+| Aceitar substituto rejeitado | **Sim:** exige classe específica e zero chamadas. `T:289–296`. |
+| Aceitar três componentes no par | **Sim:** exige erro. `T:275–276`. |
+| Acrescentar chamadas diretas `execute/raw/cursor` | **Sim, pela blacklist AST.** `T:329–334`. |
+| **Retirar, atrasar ou inverter as travas novas** | **Não há mordida demonstrada:** foto e costura são seriais e não verificam aquisição/ordem das travas. `T:153–180,310–334`; `C:154–155`. |
+| Voltar a copiar localmente `ABERTAS` | **Não há mordida demonstrada:** mesmos valores mantêm os resultados; também existe fallback para qualquer status diferente de aprovada. `C:80–83`; `app/ponto/services/ausencia.py:765`; `app/core/juizes.py:1406–1420`. |
+| Tirar `fsync`, mantendo `flush` | **Não há mordida demonstrada:** ler o arquivo não testa durabilidade. `T:162–180`; `C:214–216`. |
+| Ignorar lavra exclusivamente do substituto na coluna/`!` | **Não há mordida demonstrada:** o teste específico exige somente a classe. `T:219–226`; `C:230–237`. | [nao verificado]
+| Aceitar cartas distintas que disputam as mesmas células | **Não há mordida demonstrada:** o teste novo cobre repetição de PKs; o de idempotência usa um único par. `T:228–241,278–287`. | [nao verificado]
+| Remover a casa em `FORA_DE_PIPELINE` | **Sim pelo selo existente**, não pelos testes novos O10-C. `app/chamados/tests/test_contract_crons.py:214–228`. |
+| Reintroduzir docstring equivocada | **Não há mordida demonstrada:** o teste compara dois casos de comportamento, sem validar a declaração geral. `T:336–349`. | [nao verificado]
+
+## 06/11 15:05 · sessao 2ae8f65e87f3 · - · - · origem=Ronald (tmux)
+
+- **Ordem O10-C/porta:** Ausências por PK crescente, depois células por `(colaborador_id, data)`. `app/ponto/management/commands/trocas_plantao_lote_o10c.py:143–155`; `app/ponto/portas/celula.py:652–675`.
+- **Travas explícitas de CelulaDia encontradas:** comando em `trocas_plantao_lote_o10c.py:155` e `editar_dia` em `celula.py:593`. `trocar_plantao` chega à trava pelo `editar_dia`. `celula.py:673–675`.
+- **Gerador pode inverter ordem entre colaboradores:** seu comando conserva um atomic para todo o lote; vínculos não recebem ordenação global por colaborador e seguem `EscalaColaborador.Meta.ordering = ["-data_inicio"]`; cada vínculo escreve seus dias em ordem crescente. Portanto, é possível o gerador conservar B e esperar A enquanto O10-C conserva A e espera B. É ciclo possível pela leitura do código; reprodução e ocorrência real **[não verificado]**. `app/ponto/management/commands/gerar_celulas.py:309–311`; `app/ponto/portas/celula.py:824–839,849–871`; `app/escala/models.py:1003`.
+- **Regeneração isolada:** trabalha em um colaborador, datas crescentes; nessa operação não há inversão da ordem de células. Entretanto, não faz leitura travada: a origem é lida antes de quaisquer saves. Um escritor pode ler `gerada`, esperar O10-C e depois sobrescrever trabalha/DNA já tornados humanos. A trava adicionada em C não cura esse escritor concorrente. `app/ponto/portas/celula.py:218–221,245,257–277`. Reprodução **[não verificado]**.
+- **Outros escritores adquirem travas implícitas:** reversão (`celula.py:785–795`); `salvar_e_emitir`, usado por lavra/carimbos (`celula.py:899–900,1003,1020,1035,1067,1082`); backfill de insumos com `bulk_update`, sem ordenação própria (`celula.py:1094–1103`).
+- **Célula inexistente:** o SELECT de C não reserva sua ausência; snapshot pode registrar `None`, e a porta pode encontrar uma célula criada depois ou competir no `create`. Há restrição única por colaborador/data; `IntegrityError` não é convertido em `recusada` porque o handler cobre somente `_TrocaRecusada`. `trocas_plantao_lote_o10c.py:128–131,155–159`; `celula.py:524–526,593,599–601,694`; `app/escala/models.py:1833`. Concorrência real **[não verificado]**.
+- **Tela:** não identifiquei chamador de produção em views/admin na cópia. Chamadas presentes: comando → troca → editar. A declaração do próprio comando é “1º chamador de produção”. Caminho “editar_dia vindo da tela”: **[não verificado]**. `trocas_plantao_lote_o10c.py:4,159`; `celula.py:675`.
+- **Ressalva de escopo das travas:** os SELECTs de células não usam `of=('self',)` nem limpam o ordering, enquanto os modelos ordenam por colaborador/nome. Possível JOIN e trava adicional de Colaborador: SQL efetivo **[não verificado]**; evitar afirmar que travam exclusivamente CelulaDia. `trocas_plantao_lote_o10c.py:155`; `celula.py:593`; `app/escala/models.py:1834`; `app/colaboradores/models.py:403`.
+
+## 06/11 15:04 · sessao b4d294fee06c · - · - · origem=Ronald (tmux)
+
+Referências: **C** = `app/ponto/management/commands/trocas_plantao_lote_o10c.py`; **T** = `app/ponto/tests/test_o10c_lote_trocas.py`; **P** = `app/ponto/portas/celula.py`.
+
+**Furo bloqueante na cura da bijeção:** ela elimina repetição de **Ausencia.pk**, mas não colisão de **célula**. A unicidade viva de Ausencia inclui `tipo`, permitindo duas cartas de tipos distintos para o mesmo colaborador/dia. O substituto não precisa ter `tipo='troca_de_plantao'`. Assim, quatro PKs distintos podem representar `A(X,troca):B(Y,outro_tipo)` e `C(Y,troca):D(X,outro_tipo)`, no mesmo dia. Os dois pares passam no parser e fazem as mesmas células alternarem, gerando novas escritas em toda rodada. Sustentação: `C:76`, `C:93-101`, `C:120-124`; `app/ponto/models.py:826-831`; `P:594-596`, `P:673-675`. O teste novo cobre IDs repetidos, invertidos e autopar; não cobre células coincidentes com cartas distintas. `T:278-287`. Contraexemplo executado: **[não verificado]**.
+
+Cobertura por leitura estática; execução e mutação real: **[não verificado]**.
+
+| Mutante | Mordida identificada |
+|---|---|
+| Voltar a aceitar `A:B` + `B:A` ou `A:A` | **Sim**: exige `CommandError` e zero chamadas da porta. `T:278-287`. |
+| Voltar a enviar a `!` somente `classe='lavrada'` | **Sim**: SOLO e pedido continuam nessas classes e precisam aparecer em `!`. `T:126-135`. |
+| Omitir linha de resultado do JSONL | **Sim** para sucesso: exige `[None,'trocada']`. `T:176-180`. |
+| Aceitar substituto rejeitado | **Sim**: classe específica e zero chamadas. `T:289-296`. |
+| Aceitar três componentes em `--par` | **Sim**: exige erro. `T:275-276`. |
+| Acrescentar chamadas diretas `execute`, `raw` ou `cursor` | **Sim** na blacklist AST. `T:329-334`. |
+| Tirar as travas novas, movê-las para depois da foto ou inverter sua ordem | **Não demonstrado**: teste da foto executa serialmente e só confere conteúdo; costura não inspeciona locks. `T:153-180`, `T:310-334`; trava que seria removida: `C:154-155`. | [nao verificado]
+| Voltar a copiar localmente os valores de `ABERTAS` | **Não demonstrado**: valores continuariam iguais, há fallback para status diferente de aprovada, e selo de ausência não proíbe essa tupla. `C:80-83`; `app/ponto/services/ausencia.py:765`; `app/core/juizes.py:1406-1420`. |
+| Tirar `fsync`, mantendo `flush` | **Não demonstrado**: teste apenas abre/lê arquivo, sem exigir durabilidade. `C:214-216`; `T:162-180`. | [nao verificado]
+| Omitir DNA, autor, hora ou geradora da foto | **Não demonstrado**: asserções conferem par, `trabalha`, origem e resultado. `T:171-180`. |
+| Ignorar lavra exclusivamente do substituto na coluna/`!` | **Não demonstrado**: teste específico exige somente classe, mantendo-se possível a classificação correta com apresentação errada. `T:219-226`; apresentação: `C:230-237`. | [nao verificado]
+| Enviar a `!` somente classes `so_um_lado`, `pedido` e `lavrada` | **Não demonstrado**: fixtures lavradas não cobrem rejeitada, período, sem carta etc. `T:119-135`, `T:204-226`. |
+| Remover entrada de `FORA_DE_PIPELINE` | **Sim pelo selo existente**, não pelos testes novos: varre comandos e exige casa. `app/chamados/tests/test_contract_crons.py:214-228`; entrada: `app/config/crons.py:1346-1348`. |
+| Voltar à docstring equivocada | **Não demonstrado**: teste verifica resultados de dois casos, não texto ou equivalência geral. `T:336-349`. | [nao verificado]
+
+**Resultado JSONL não prova commit:** ele é escrito com `fsync` dentro do atomic externo e antes da saída desse contexto. O teste chama isso de “confirmado”, mas só verifica o retorno da porta. `C:143`, `C:159-164`, `C:213-216`; `T:176-180`. Portanto a linha distingue resultado da porta; confirmação durável da transação pelo arquivo: **[não verificado]**. [nao verificado]
+
+**Sobre os descartes:** herdar o molde não transforma o teste em prova de `on_commit` real: `_run` executa callbacks imediatamente, e o molde faz exatamente isso. `T:59-63`; `app/ponto/tests/test_o10b_editar_dia_troca.py:39-41`. Isso sustenta uma limitação da prova, sem demonstrar isoladamente defeito funcional do comando. `P:493-502`.
+
+**Reversão permanece pendência material:** declarar ausência da porta não satisfaz por si só o requisito existente de arquivo de reversão anterior ao apply. A troca produz origem `editada`, enquanto o reversor disponível aceita somente `gerada` com DNA anterior. `CLAUDE.md:398-400`; `C:43-44`; `P:600-609`, `P:776-778`. Aceitação dessa incompletude como exceção operacional: **[não verificado]**.
 
 ## 06/11 14:58 · sessao 5caca5add164 · V3-IMPACTO-COM-DONO · sonda · origem=Code
 
@@ -1884,137 +2038,4 @@ A cura exige decidir uma política no publicador: vincular a data ao arquivo efe
 
 **A responsabilidade técnica pertence ao publicador**, com teste de integração R1: ele escolhe a fonte e fornece a data; o placar recebe esses dados e permanece puro. Isso não exige repetir a medição. A separação formal em outra obra é **[nao verificado]**; a separação de responsabilidades está explícita no código. (`bin/gerar_estado.py:34`, `:80`; `app/core/placar_estrutural.py:618`, `:623`.)
 
-## 06/11 14:19 · sessao 6af08ca7b704 · - · - · origem=Ronald (tmux)
-
-O limite permanece: `_medido_em` lê somente `fonte_do_medido`, enumera a glob e devolve a maior data, sem consultar `prova`. `bin/gerar_estado.py:47`, `bin/gerar_estado.py:51`, `bin/gerar_estado.py:56`.
-
-O selo atual valida correspondência com a glob e um único arquivo citado entre leitores; não chama `_medido_em`. `app/core/tests/test_r1_termometro_uma_medicao.py:33`, `app/core/tests/test_r1_termometro_uma_medicao.py:50`, `app/core/tests/test_r1_termometro_uma_medicao.py:67`.
-
-Reproduzi em memória, sem arquivos nem bytecode: os cinco testes passam; com glob simulada contendo arquivos de 06/11 e 07/11, a função real retorna `{'R1': '2026-11-07'}`, mantendo provas em 06/11. Bases da reprodução: `app/core/tests/test_r1_termometro_uma_medicao.py:49`, `app/core/placar_estrutural.py:120`, `bin/gerar_estado.py:56`. Existência real do arquivo de 07/11: [nao verificado].
-
-Proposta de selo: chamar o publicador real com glob simulada e provas sintéticas, cobrindo arquivo único coincidente, candidato posterior sem atualização da prova, dois arquivos da mesma data e ausência de arquivo datado. Comparar identidade de arquivo, não apenas data: o contrato atual exige uma única medição, não somente datas iguais. `app/core/tests/test_r1_termometro_uma_medicao.py:11`, `app/core/tests/test_r1_termometro_uma_medicao.py:70`.
-
-Só acrescentar esse teste deixaria o caso posterior vermelho; fechar o limite exige mudar a seleção ou publicar explicitamente a divergência. A função atual escolhe o máximo e seu chamador usa esse resultado para data, cadência e veredito. `bin/gerar_estado.py:56`, `bin/gerar_estado.py:80`, `bin/gerar_estado.py:81`, `bin/gerar_estado.py:84`, `bin/gerar_estado.py:116`.
-
-Custo estimado: baixo para caracterizar com teste isolado; maior para escolher e implementar a política de publicação e verificar seus consumidores. Prazo preciso: [nao verificado]. Riscos inferidos: um selo que consulte arquivos reais pode reprovar a cópia sem logs; simplesmente usar a prova pode esconder medição mais recente; lançar exceção indiscriminada pode substituir todo o placar por “indisponível”. Bases: `bin/gerar_estado.py:51`, `bin/gerar_estado.py:56`, `bin/gerar_estado.py:86`.
-
-Minha recomendação é tratar a cura como extensão do **publicador**, acompanhada de teste de integração R1: a autoridade de I/O é explicitamente do publicador, enquanto o placar recebe data e relógio pelo chamador e permanece puro. `bin/gerar_estado.py:34`, `app/core/placar_estrutural.py:618`, `app/core/placar_estrutural.py:623`. A divisão formal da obra em outro documento: [nao verificado].
-
-## 06/11 14:19 · sessao 9881bdce649f · - · - · origem=Ronald (tmux)
-
-| Campo | Quem escreve | Quem lê |
-|---|---|---|
-| `SOMA.fonte` | Declaração em `app/core/placar_estrutural.py:108-109` | Copiado por `placar()` em `app/core/placar_estrutural.py:634-643`; selo genérico varre campos string em `bin/tests/test_placar_nao_afirma_fora_do_ar.sh:65-75`. O publicador só menciona o campo no rodapé, sem renderizar seu valor: `bin/gerar_estado.py:121-123`. |
-| `R1.numero` | Declaração em `app/core/placar_estrutural.py:118` | Presença usada no estado efetivo em `app/core/placar_estrutural.py:637-639`; cópia em `:635`; renderização integral em `bin/gerar_estado.py:112-117`; selo genérico em `bin/tests/test_placar_nao_afirma_fora_do_ar.sh:65-75`. |
-| Seis `ETAPAS[*].prova` | `app/core/espelho_verdade.py:49`, `:82`, `:169`, `:173`, `:177`, `:179` | Presença para validar FEITO em `app/core/espelho_verdade.py:201-203`; publicação limitada a 150 caracteres em `bin/gerar_estado.py:164`; censo e validação de caminhos em `app/core/tests/test_r1_termometro_uma_medicao.py:45-46`, `:64`, `:69-71`. |
-
-Não identifiquei quebra de execução na análise estática: continuam strings nas mesmas chaves; os consumidores usam presença, cópia ou formatação, e o selo R1 examina os caminhos nas provas. `app/core/placar_estrutural.py:635-643`; `app/core/espelho_verdade.py:201-203`; `bin/gerar_estado.py:116-117`, `:164`; `app/core/tests/test_r1_termometro_uma_medicao.py:64-71`.
-
-O recorte de conteúdo permanece imposto pelo publicador, independentemente da redação das provas. `bin/gerar_estado.py:164`.
-
-Handoff e selo R6 leem outros dados: regex da frase dos contratos e `R6.numero`, respectivamente. `bin/handoff_sessao.sh:179-181`; `app/core/tests/test_selo_r6_frase_do_juiz.py:17-24`.
-
-Execução Django e selos host: [nao verificado].
-
-## 06/11 14:17 · sessao 8bb22732cf87 · H12H06-B-PAUTA-08 · verificador · origem=Code
-
-**Não considero a obra pronta:** o novo command deixa vermelho o contrato B6.1, e a idempotência não está protegida contra execuções concorrentes (`app/chamados/tests/test_contract_crons.py:220`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:174`; `app/pautas/models.py:123`).
-
-Analisei a cópia disponível e reproduzi detectores em memória. Identidade do HEAD/parent e exclusividade dos três arquivos no diff: **[nao verificado]**. Suite Django e mutações de código: **[nao verificado]**. [nao verificado]
-
-1. **Quem escreve e quem lê.**
-
-   | Estado/valor | Escritor | Leitores relevantes |
-   |---|---|---|
-   | Todos os 26 `CAMPOS` de `FechamentoMensal` | Criação com mês/ano; cálculo e persistência pelo serviço de fechamento; restauração pela mesma porta. `app/ponto/management/commands/aplicar_09_corte_b.py:67`; `app/ponto/services/fechamento.py:889`; `app/ponto/services/fechamento.py:893`; `app/ponto/services/fechamento.py:1128`; `app/ponto/services/fechamento.py:1144`; `app/ponto/services/fechamento.py:1376` | PAGO, retorno de leitura, comparação nova e exportação TXT. `app/ponto/portas/regen_exportada.py:79`; `app/ponto/services/fechamento.py:1118`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:133`; `app/folha/export.py:722` |
-   | `Pauta.texto`, `ancora_tipo`, `ancora_id`, `pai` | `escrever`, no `create` canônico. `app/pautas/services.py:180` | Deduplicação nova, API e seleção de cabeças. `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:174`; `app/pautas/views.py:40`; `app/pautas/services.py:435` |
-   | `Pauta.cancelado_em` | `cancelar`. `app/pautas/services.py:294` | `nao_canceladas`, reversão. `app/pautas/models.py:60`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:214` |
-   | `Pauta.feito_em` | `marcar_feita` e `marcar_feita_pelo_sistema`, ambos na porta. `app/pautas/services.py:247`; `app/pautas/services.py:272` | QuerySet, API, deduplicação e reversão. `app/pautas/models.py:57`; `app/pautas/views.py:43`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:178`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:216` |
-   | `ExportacaoDominio` | `registrar` cria conteúdo/hash/metadados; `invalidar` escreve invalidação/substituição. `app/folha/models.py:182`; `app/folha/models.py:158` | K6 consulta empresa/competência e vigência; o command lê exclusivamente sua resposta. `app/folha/export.py:581`; `app/folha/models.py:211`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:118` |
-
-   **Não encontrei escritor novo de Pauta fora da porta:** cabeças/filhas passam por `escrever`, reversão por `cancelar` (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:184`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:188`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:219`).
-
-   A chamada de DEVIDO usa `somente_leitura=True`, com **`lavrar_dias_pagos=False` no default**. Ela monta instância destacada, evita `get_or_create`/`save`/`update` e não entra na lavra de `DiaPago` nem na trilha da guarda; células são consultadas (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:129`; `app/ponto/services/fechamento.py:439`; `app/ponto/services/fechamento.py:881`; `app/ponto/services/fechamento.py:1112`; `app/ponto/services/fechamento.py:1175`; `app/ponto/services/fechamento.py:530`; `app/ponto/services/fechamento.py:595`).
-
-   **Entretanto, escrever pauta também escreve `ContadorPauta` e `LogAuditoria`, e pode criar `auth.User`.** `autor_sistema` chama `get_user_sistema`, cujo código faz `get_or_create`; isso ocorre antes do `atomic` do command e não é desfeito pela reversão (`app/pautas/services.py:186`; `app/pautas/services.py:352`; `app/core/observ.py:134`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:182`; `app/core/utils.py:18`). Prova dinâmica de ausência de escrita em todas as tabelas: **[nao verificado]**.
-
-2. **DEVIDO versus REGEN e `fechamento_lido`.**
-
-   Os argumentos que definem a conta coincidem: mês/ano e lista unitária; `empresa_id=None` nos dois caminhos. `motivo_exportada` muda o registro do ato; `coletar_furos` coleta saída; `retornar_objeto` escolhe a representação. `fechamento_lido` chama a mesma função, acrescentando apenas `retornar_objeto=True` (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:129`; `app/ponto/portas/regen_exportada.py:179`; `app/ponto/services/fechamento.py:439`; `app/ponto/services/fechamento.py:538`; `app/ponto/services/fechamento.py:1111`; `app/ponto/services/fechamento.py:1119`; `app/ponto/services/fechamento.py:1743`).
-
-   **Ressalva:** mesma conta não garante o mesmo resultado da retificação completa: REGEN primeiro regenera células, alterando os insumos. Além disso, a guarda da 09 pode bloquear a escrita enquanto permite leitura (`app/ponto/portas/regen_exportada.py:174`; `app/ponto/portas/regen_exportada.py:179`; `app/ponto/services/fechamento.py:530`; `app/ponto/services/fechamento.py:551`).
-
-3. **Chaves e unidades.**
-
-   Ambos projetam exatamente o mesmo `CAMPOS`; não há chave unilateral no código atual. Mês/ano são excluídos da comparação. Horas continuam horas, minutos continuam minutos e contadores continuam contadores, sem conversão pelo command (`app/ponto/portas/regen_exportada.py:84`; `app/ponto/services/fechamento.py:1120`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:42`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:133`; `app/ponto/models.py:412`; `app/ponto/models.py:432`; `app/ponto/models.py:465`).
-
-   **Ausência versus zero pode desaparecer:** `_diferente(None, 0)` considera igualdade por usar `a or 0`. É comportamento da autoridade reutilizada, não divergência de chaves introduzida aqui (`app/ponto/portas/regen_exportada.py:248`).
-
-4. **Derivação paralela e formatação.**
-
-   Não identifiquei regra financeira própria: cálculo e tolerância vêm das autoridades; a soma local conta colaboradores nos baldes (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:104`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:129`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:133`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:139`).
-
-   Para números finitos, `_fmt` não transforma diferença acusada em dois números iguais: arredonda a quatro casas, enquanto `_diferente` exige delta superior a `0.015` — inferência matemática dessas duas implementações (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:45`; `app/ponto/portas/regen_exportada.py:250`).
-
-5. **Universo e ordem das checagens.**
-
-   Em execução concluída, as quatro partes somam os **IDs distintos** pedidos. Inexistentes recusam; ausência de DEVIDO recusa o ato antes de `_escrever`; os demais entram em exatamente um balde (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:91`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:107`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:119`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:125`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:135`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:136`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:139`).
-
-   Entregue antes de gravado é coerente com o escopo: K6 exige TXT vigente não invalidado; competência não entregue fica fora desta pauta, com explicação. Não significa proibir seu recálculo nem fazer Pauta pré-condição, revogada pela L-113 (`app/folha/export.py:583`; `app/core/juizes.py:312`; `CLAUDE.md:398`; `CLAUDE.md:403`; `app/docs/LEIS.md:150`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:121`).
-
-   **A promessa sobre desligado é condicional:** se não entregue ou sem gravado, ele entra nesses baldes; somente quem chega ao cálculo sem retorno provoca recusa. Não é “todo desligado sempre recusa” (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:123`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:128`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:130`).
-
-6. **Idempotência.**
-
-   `col1` não casa com `col12`: a chave contém espaço depois do PK e competência completa; a busca acrescenta outro espaço delimitador. Feitas continuam participando porque a consulta usa `nao_canceladas` (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:53`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:174`; `app/pautas/models.py:60`).
-
-   **Não há unicidade garantida:** consulta e criação estão separadas, a consulta ocorre antes do `atomic`, e o modelo não tem constraint dessa chave. Duas execuções podem observar ausência e criar duas cabeças (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:174`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:183`; `app/pautas/models.py:123`).
-
-   Pelo contrato declarado de chave do fato, uma segunda rodada com DEVIDO diferente **não cria outra pauta**: também não atualiza a antiga. Assim, a pauta persistida pode conservar o DEVIDO anterior; o teste de duas rodadas não muda o motor entre elas (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:29`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:176`; `app/pautas/tests/test_pauta_pago_x_devido_exportada.py:188`).
-
-7. **Reversão e falhas.**
-
-   O arquivo com plano nasce antes da primeira pauta e antes de `autor_sistema`; cabeça e filhas ficam numa transação por colaborador. Rodadas parcialmente concluídas preservam os grupos anteriores e seus IDs no arquivo (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:154`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:158`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:182`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:183`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:191`).
-
-   **Banco e arquivo não são atomicamente coerentes:** o JSON recebe IDs antes do commit; falha no commit pode deixá-lo apontando para registros inexistentes. O reverter ignora IDs ausentes. Há também corrida entre `exists` e a gravação: duas execuções com o mesmo caminho podem ultrapassar a recusa e sobrescrever o arquivo (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:192`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:213`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:87`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:231`).
-
-   `cancelar(p, p.autor_user)` é permitido pela porta: ela exige igualdade com o autor gravado. O command pula feitas, cuja tentativa de cancelamento seria recusada (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:216`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:219`; `app/pautas/services.py:288`).
-
-8. **Tamanho e identificação.**
-
-   O teto é 500. As filhas passam pelo packer, que inclui prefixo e continuação no cálculo e recusa item impossível. A cabeça não passa pelo packer, mas seu molde fixo cabe; medi em memória 334 caracteres com PK de 19 dígitos e ano 9999 (`app/pautas/models.py:89`; `app/pautas/services.py:123`; `app/pautas/services.py:133`; `app/pautas/services.py:140`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:57`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:169`).
-
-   Texto e stdout explícitos usam `colNNN`, sem nome/CPF. **O caminho indireto de falha pode registrar nome no logger do fechamento**; destino efetivo desse logger em stdout/stderr: **[nao verificado]** (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:54`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:167`; `app/ponto/services/fechamento.py:1287`).
-
-   “PAGO” significa gravado de `FechamentoMensal`, não pagamento comprovado nem conteúdo recuperado do TXT; o próprio cabeçalho manda conferir no Domínio (`app/ponto/portas/regen_exportada.py:81`; `CLAUDE.md:410`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:60`).
-
-9. **Os testes mordem, mas não fecham todas as propriedades.** [nao verificado]
-
-   Os mutantes abaixo são candidatos por inspeção; sobrevivência efetivamente executada: **[nao verificado]**.
-
-   | Propriedade | Mutante que a cobertura deixa aberto |
-   |---|---|
-   | Entregue | Fixar K6 em agosto/2026: todas as chamadas do helper usam essa competência. `app/pautas/tests/test_pauta_pago_x_devido_exportada.py:73` |
-   | Gravado intacto | Alterar apenas `previsto_em`, `derivado_em` ou carimbos de aprovação: o hash os exclui e o teste não compara esses campos. `app/ponto/portas/regen_exportada.py:37`; `app/pautas/tests/test_pauta_pago_x_devido_exportada.py:175` |
-   | Dry não escreve | Antecipar `autor_sistema` para antes da saída dry, permitindo criar User: o teste conta somente Pauta. `app/pautas/tests/test_pauta_pago_x_devido_exportada.py:156` |
-   | Duas rodadas | Deduplicar também pelo valor de DEVIDO: as duas rodadas do teste têm o mesmo DEVIDO. `app/pautas/tests/test_pauta_pago_x_devido_exportada.py:188` |
-   | Feita | Remover o salto da feita na reversão: o teste de feita apenas repete a emissão; não reverte. A porta real recusaria a tentativa. `app/pautas/tests/test_pauta_pago_x_devido_exportada.py:205`; `app/pautas/services.py:290` |
-   | Reversão antes/coerência | Remover o `atomic`: a falha simulada ocorre já na primeira escrita, sem cabeça prévia para ficar órfã; não cobre falha na filha/commit. `app/pautas/tests/test_pauta_pago_x_devido_exportada.py:216` |
-   | Recusa do desligado | Substituir a ausência no retorno por regra própria `situacao == 'desligado'`: o único fixture sem retorno usado nessa prova é desligado. `app/pautas/tests/test_pauta_pago_x_devido_exportada.py:54`; `app/pautas/tests/test_pauta_pago_x_devido_exportada.py:136` |
-
-   Há mordida concreta para os dois números, exclusão da empresa aberta, duplicação sequencial e cancelamento sem apagar; não classifico a bateria inteira como decorativa (`app/pautas/tests/test_pauta_pago_x_devido_exportada.py:99`; `app/pautas/tests/test_pauta_pago_x_devido_exportada.py:125`; `app/pautas/tests/test_pauta_pago_x_devido_exportada.py:188`).
-
-10. **Contratos e selos.**
-
-   - **B6.1 vermelho:** reproduzindo a expressão do contrato, sobra `pauta_pago_x_devido_exportada`. Todo command precisa estar nas entradas ou em `FORA_DE_PIPELINE`; o molde está cadastrado, o novo não (`app/chamados/tests/test_contract_crons.py:214`; `app/chamados/tests/test_contract_crons.py:225`; `app/config/crons.py:777`).
-   - **S4 não acusa esta chamada:** libera a presença de `somente_leitura`; o novo command passa `True` (`app/ponto/tests/test_s4_ninguem_recalcula_para_ler.py:88`; `app/ponto/tests/test_s4_ninguem_recalcula_para_ler.py:116`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:129`).
-   - **Pauta/censo não ganham escrita fora da porta:** o command delega as mutações; os contratos cobram esse limite (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:184`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:219`; `app/pautas/tests/test_contract_um_escritor.py:37`; `app/core/tests/test_censo_escritas.py:297`).
-   - **Relógio:** o teste congela o tempo; o command lê `now` uma vez para o metadado da reversão, antes do laço. Os detectores da grade não apontaram ocorrência nova (`app/pautas/tests/test_pauta_pago_x_devido_exportada.py:34`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:154`; `app/escala/tests/test_selo_grade_pede_o_instante.py:93`).
-
-11. **Classes de reprovação anteriores.**
-
-   Não identifiquei segundo juiz, segundo escritor de Pauta ou derivação financeira paralela: o command chama K6, fechamento, comparação e portas existentes. O registro vivo é `core/juizes.py`, conforme o próprio documento de consulta (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:103`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:129`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:133`; `app/docs/JUIZES.md:7`; `app/core/juizes.py:312`).
-
-   **Aparecem lacunas de prova e de proteção concorrente:** falha intermediária/commit não exercitada, DEVIDO alterado entre rodadas não exercitado e deduplicação sem trava/constraint. Há ainda o pré-requisito estrutural B6.1 pendente (`app/pautas/tests/test_pauta_pago_x_devido_exportada.py:188`; `app/pautas/tests/test_pauta_pago_x_devido_exportada.py:216`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:174`; `app/pautas/models.py:123`; `app/chamados/tests/test_contract_crons.py:220`). Ordem operacional das travas e pouso efetivo antes de pré-requisito: **[nao verificado]**.
-
-_2334 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2337 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
