@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 01:21:10.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (38.9 MB). Acoes na janela: **1244**.
+**Medido em 06/11/2026 01:26:12.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (39.0 MB). Acoes na janela: **1250**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:23:51 | Bash | Find what C11=(i) means | `cd /home/ronald/saas-hasner; grep -rn 'C11' logs/c20_fiomudo/*.md logs/piloto_pd/*FIO* logs/codex_queima/c20_2.md 2>/dev/null \| cut -c1-400 \| head -8` |
+| 01:23:48 | Bash | Find FIO MUDO triage items in PD-TRIAGEM-CHAT | `cd /home/ronald/saas-hasner/app/docs; sed -n 1882p PROMPTS.md \| cut -c1-2500 \| tr ';' '\n' \| grep -in 'fio\\|C11\\|reabr'` |
+| 01:23:44 | Bash | Read FIO-MUDO aval and related cuts | `cd /home/ronald/saas-hasner/app/docs; sed -n 1875p PROMPTS.md \| cut -c1-1500; echo; grep -n 'FIO MUDO\\|FIO-MUDO' PROMPTS.md CORTES.md \| cut -c1-300 \| tail -8` |
+| 01:23:36 | Bash | Check CORTES:327, M3 filter, callback body | `cd /home/ronald/wt-c20fm-203209/app; sed -n 325,329p docs/CORTES.md \| cut -c1-900; echo ===; grep -n 'validada_em__isnull' chamados/models.py \| head; git log --oneline -1 8e6ed0d1; echo ===; sed -n 905,925p chamados/services/fio.py` |
+| 01:23:27 | Bash | Read Codex v6 answer | `cd /home/ronald/saas-hasner/logs/c20_fiomudo/codex; wc -c v6.r; cat v6.r \| head -150` |
+| 01:23:23 | Bash | Check suites and Codex progress | `cd /home/ronald/saas-hasner; date +%H:%M; bin/trava_teste.sh --quem; ps -eo pid,etime,args \| grep 'trava_teste.sh --' \| grep -v grep \| cut -c1-40; tail -2 logs/c20_fiomudo/codex/v6.run.log 2>/dev/null; ls -t logs/h12h06b \| head -3` |
 | 01:16:54 | Bash | Point ESPERANDO at FIO-MUDO suite trava | `sed -i '2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=2946612#' /home/ronald/saas-hasner/app/docs/RELATO.md; kill -0 2946612 && echo vivo` |
 | 01:16:50 | Bash | Log v6 state and check ESPERANDO pid | `cd /home/ronald/saas-hasner; cat >> app/docs/RELATO.md <<'EOF' - C20-FIO-MUDO v6 (01:2x, copia 1d78ef7f): curas do opus -- engolir no on_commit (R20a), cerca de competencia sai por L-050 (R20c), adocao em savepoint proprio (R20b), M3 declarado equivalente a M4 (filtro saiu em 8e6ed0d1). red6 Ran 18 rc=1 -> green9 Ran 19 OK; mutantes M12/M13/M14/M8c/M4 mordem. Escopo: dos 494 (495 medidos), 0 alcan ...` |
 | 01:16:43 | Bash | Wait for FIO-MUDO suite and Codex v6 | `cd /home/ronald/saas-hasner/logs/c20_fiomudo; until grep -q "^rc=" suite_full_1d78ef7f.log 2>/dev/null && grep -qE "rc=?[0-9]" codex/v6.run.log 2>/dev/null; do /usr/bin/sleep 30; done; grep -E "^(FAIL\|ERROR):\|^Ran\|^(OK\|FAILED)($\| \()\|^rc=" suite_full_1d78ef7f.log \| tail -6; tail -2 codex/v6.run.log; wc -l codex/v6.r` |
