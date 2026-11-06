@@ -1,7 +1,76 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 18:26** · publicado em **06/11/2026 18:31** (UTC-3)
+> Ultima resposta processada: **06/11/2026 18:35** · publicado em **06/11/2026 18:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 18:35 · sessao c724227316a6 · - · - · origem=Ronald (tmux)
+
+`motivos_a_perguntar` recusa nesta ordem:
+
+1. `dia_sem_trabalho(cel)`; pelo `or` com curto circuito, só depois testa colaborador diferente de `ativo`. Qualquer um devolve `[]`. (`app/chamados/services/fabrica_da_celula.py:89-92`)
+2. Dia futuro (`cel.data > hoje`), devolvendo `[]`. (`app/chamados/services/fabrica_da_celula.py:93-94`)
+3. Define `agora` quando ausente e calcula `vencidos_no_instante`; esse cálculo antecede a próxima guarda. (`app/chamados/services/fabrica_da_celula.py:95-98`)
+4. Veredito preenchido fora de `CelulaDia.VEREDITOS_ACUSAM`. (`app/chamados/services/fabrica_da_celula.py:99-100`)
+5. `parcial_so_lista`, usando a ata e o julgamento anterior recebido ou da própria célula. (`app/chamados/services/fabrica_da_celula.py:101-104`)
+6. Retira motivos já presentes em perguntas do mesmo colaborador/data, excluindo somente `VIA_DUPLICATA`; retorna motivos de `motivos_pela_ata` ainda ausentes. (`app/chamados/services/fabrica_da_celula.py:118-126`)
+
+Dentro de `motivos_pela_ata`, conjunto vazio de vencidos cala; `_ata_do_dia` que não permite cala; sem ata e com conjunto de vencidos também cala; sem ata e `vencidos=None` consulta `classificar_falta`; com ata, só seleciona marcos vencidos. (`app/chamados/services/fabrica_da_celula.py:45-64`)
+
+`dia_sem_trabalho` aceita ausência parcial como exceção: nela, só `cel.trabalha is False` cala; nos demais casos, cala por `trabalha is False` ou `ata.tipo_dia` preenchido e diferente de `trabalho`. (`app/chamados/juizes.py:422-428`)
+
+Há outros escritores possíveis sem essa guarda global; portanto o silêncio desse emissor não demonstra impossibilidade de outra porta. Um exemplo concreto de chamado da célula é `detectar_par_relampago.Command.handle`: após suas guardas próprias (`par_completo`, dry-run/retratador), chama `ChamadoColaborador.abrir` com módulo `par_relampago` e `contexto_json.data_turno`; não consulta `dia_sem_trabalho` nesse caminho. (`app/ponto/management/commands/detectar_par_relampago.py:327`, `app/ponto/management/commands/detectar_par_relampago.py:352-385`)
+
+O catálogo declara `par_relampago` como fato do dia, chave `data_turno`, dono supervisão; `abrir` resolve a célula correspondente antes de gravar. (`app/chamados/catalogo/modulos.py:113-114`; `app/chamados/models.py:913-932`) As guardas centrais não proíbem todo nascimento em folga: `_celula_que_absolve` só alcança `MODULOS_DE_TURNO`; `_veto_da_regua` só alcança a união `FURO_MODULES + MODULOS_DE_TURNO`, listas que não incluem `par_relampago`. (`app/chamados/models.py:1073-1076`; `app/chamados/models.py:1097-1099`; `app/ponto/services/furos_vetados.py:74-81`; `app/chamados/catalogo/furo_modulos.py:15-16`; `app/chamados/reconciliador.py:336-337`) Assim, há possibilidade estática de um chamado desse módulo nascer para uma folga trabalhada que satisfaça o detector; ocorrência nos 161 dias da amostra: **[não verificado]**.
+
+Também há nascimento de pergunta por outro caminho: a API acrescenta `foto_ausente` conforme `selfie_ausente`, registra `ultima_batida` e chama `criar_ou_atualizar_disputa`; esse helper chama `gerar_perguntas_disputa`, que deriva a data local da última batida e chama `PerguntaDisputa.abrir`. (`app/api/views_core.py:459-475`; `app/api/views_core.py:769-780`; `app/chamados/services/disputa_emissao.py:605-618`; `app/chamados/services/disputa_emissao.py:350-364`; `app/chamados/services/disputa_emissao.py:389-396`) O gate da pergunta resolve a célula pelo dia e efetua o `create`, sem guarda `dia_sem_trabalho`. (`app/chamados/models.py:2398-2477`) `foto_ausente` tem pergunta no catálogo. (`app/chamados/catalogo/perguntas.py:94-97`)
+
+Nascimento de pergunta não garante porta alcançável: ela ainda precisa estar viva pelo C6, no app, sob âncora na fila, sem resposta vazia quando respondida; chamado da célula precisa estar na fila. (`app/chamados/juizes.py:1341-1369`; `app/chamados/juizes.py:1375-1386`) O C6 pode encerrar pela célula, mas resposta textual ainda não validada tem precedência quando não houve decisão explícita do admin. (`app/chamados/juizes.py:1135-1162`; `app/chamados/juizes.py:1180-1196`) Logo, possibilidade de outro escritor: **sim, condicional**; porta efetivamente nascida para algum dos 161 casos: **[não verificado]**.
+
+A busca global do identificador encontrou somente um leitor de produção de `STATUS_QUE_PEDEM_DECISAO`: `resolver_dia_oferecido`, em `app/colaboradores/services/calendario.py:104`; o outro consumidor é o teste, que importa, confere a tupla e itera seus status. (`app/chamados/tests/test_o261_vigia_fio.py:901-903`) A tupla contém `falta`, `irregular`, `aberto`, `sem_certidao`, sem `folga_trabalhada`. (`app/colaboradores/services/calendario.py:94`)
+
+Nenhum `AGENTS.md` foi encontrado nos diretórios ancestrais consultados nem sob `app`; existência fora desses lugares: **[não verificado]**.
+
+## 06/11 18:35 · sessao 03448364f99c · - · - · origem=Ronald (tmux)
+
+Contratos encontrados:
+
+| Função | Contrato documentado |
+|---|---|
+| `dia_das_batidas(colab, ini, fim, turnos=None)` | `app/ponto/turnos.py:2874`. Recebe colaborador e janela apresentada; `turnos` é alimentação opcional. Retorna `{batida.pk: date}`: batida reclamada pertence ao dia do turno; outra pertence à sua data local. `app/ponto/turnos.py:2875`, `app/ponto/turnos.py:2895`, `app/ponto/turnos.py:2911`. |
+| `dias_da_ausencia(tipo, data, data_fim, ini, fim)` | `app/ponto/turnos.py:2774`. Retorna lista de datas na interseção com `[ini,fim]`; ausência sem fim estende até `fim` somente para `TIPOS_EM_ABERTO`, senão ocupa o dia único. `app/ponto/turnos.py:2775`, `app/ponto/turnos.py:2779`. |
+| `status_dos_dias_lavrados(pares, *, agora=None, carga=None, fatos=None)` | `app/ponto/status_dia.py:221`. `pares` contém `(colaborador,data)`; retorna `{(colaborador_id,data):dict}`. `carga` deve conter datas e colaboradores; `fatos` só pode ser passado com `carga`. `app/ponto/status_dia.py:222`, `app/ponto/status_dia.py:238`, `app/ponto/status_dia.py:259`. |
+| `o_que_segura(colab, mes, ano)` | `app/folha/fora_da_folha.py:203`. Retorna os dias que retêm o colaborador naquela competência, com veredito, motivo, fio, destrava e chamado. As datas retornadas são strings. `app/folha/fora_da_folha.py:204`, `app/folha/fora_da_folha.py:227`. |
+| `competencia_do_fato(colaborador, quando)` | `app/ponto/services/fechamento.py:1586`. Retorna `(mes,ano)` do fato de um dia; aceita `date` ou `datetime`, normalizando datetime consciente para a data local. `app/ponto/services/fechamento.py:1587`, `app/ponto/services/fechamento.py:1542`, `app/ponto/services/fechamento.py:1578`. |
+
+A conformidade das chamadas da sonda com esses contratos é **[não verificado]**: o texto fornecido contém a saída, mas não o corpo de `sonda_dst.py`; tampouco localizei esse arquivo na cópia **[não verificado]**.
+
+Para avaliar `por_que`:
+
+- `dia_sem_trabalho` já decide por duas cláusulas: `trabalha is False` ou `ata.tipo_dia` presente e diferente de `trabalho`; ausência parcial conserva cobrança, salvo `trabalha is False`. `app/chamados/juizes.py:413`, `app/chamados/juizes.py:426`.
+- Identificar feriado apenas por `trabalha_em_feriado=False` repetiria incompletamente a regra existente: `feriado_vira_folga` exige também ciclo elegível e feriado no lugar do vínculo. `app/escala/models.py:1373`, `app/escala/models.py:1382`, `app/escala/models.py:1389`.
+- `feriado_trab_feriado_True_mas_folga` não demonstra contradição: a transformação por feriado só altera `base is True`, preservando folga já existente; a precedência também admite feriado vencer folga. `app/escala/models.py:1367`, `app/ponto/precedencia.py:17`, `app/ponto/precedencia.py:376`.
+- Ausência, feriado, folga e trabalho já têm classificação e precedência próprias na produção; o vencedor é obtido ordenando os fatos por `PRECEDENCIA`. `app/ponto/precedencia.py:46`, `app/ponto/precedencia.py:379`, `app/ponto/precedencia.py:396`.
+- Sem o script, dizer se `por_que` apenas agrupa ou reimplementa/contradiz essa regra permanece **[não verificado]**.
+
+## 06/11 18:34 · sessao e15b5cdc899a · - · - · origem=Ronald (tmux)
+
+O leitor central é **`decididos_do_periodo(colaborador, data_ini, data_fim, *, ausencias=None)`**, que declara responder “houve decisão humana neste dia?”, inclusive para rejeitadas; sua consulta filtra colaborador e interseção com a janela, **sem exigir autor admin, aprovação ou chamado de origem**. Portanto, uma ausência registrada pelo próprio colaborador alcança esse leitor se sua data/período intersectar a janela. Ele expande o intervalo e monta `cartao_do_dia`; o lançamento mais recente vence. (`app/ponto/services/dia_decidido.py:529`, `:532`, `:547`, `:550`, `:557`, `:561`.)
+
+O cartão inclui `veredito`, `cor`, `rotulo`, minutos, tipo, status, ID, quem e quando; `quem_quando` prefere quem aprovou/recusou e usa quem registrou como alternativa. Logo, não exclui o próprio colaborador na autoria. (`app/ponto/services/dia_decidido.py:500`, `:506`, `:512`, `:516`.)
+
+A ligação com a tela do admin existe:
+
+- Calendário chama `decididos_do_periodo` e `cobertura_ausencia_periodo(..., para='folha')`; passa ambos para `do_dia` e publica `palavra_dia`, `cor_dia`, `veredito_dia`. O template mostra o rótulo no chip de ausência ou “O que foi decidido neste dia: …”. (`app/colaboradores/services/calendario.py:531`, `:533`, `:534`, `:715`, `:724`; `app/templates/colaboradores/partials/_calendario_grade.html:97`, `:98`.)
+- Espelho chama o mesmo leitor para a janela, transporta `_decisao_do_dia` e entrega-o a `do_dia`. (`app/ponto/services/espelho.py:647`, `:649`, `:871`, `:328`, `:340`.)
+- Histórico do drawer lê `linha_do_tempo`, que consulta todas as ausências do colaborador, exclui filhas de intervalo e distingue pendentes; o template imprime rótulo, quem e quando. (`app/ponto/views.py:2014`, `:2015`; `app/ponto/services/dia_decidido.py:566`, `:587`, `:593`, `:610`; `app/templates/ponto/partials/painel_ausencia.html:184`, `:188`.)
+
+**Limite:** alcançar `decididos_do_periodo` não demonstra que houve aprovação do admin. Essa função não filtra status, e `cartao_do_dia` calcula o veredito pelo tipo, salvo rejeitada; `do_dia` trata pedido pendente separadamente quando recebe `pendente`. (`app/ponto/services/dia_decidido.py:550`, `:453`, `:461`, `:468`, `:420`.) Para aprovada, a cobertura de folha entra primeiro; pendência deve dizer “aguardando decisão”. (`app/ponto/turnos.py:2514`; `app/ponto/services/dia_decidido.py:363`, `:224`, `:420`.)
+
+No dado fornecido, `col889/2026-10-25` tem ausência `4670`, tipo `atestado`, `pelo_colab`, `sem_chamado`; **status da ausência, datas inicial/final, origem efetiva via disputa, aprovação, rótulo renderizado e presença efetiva na tela não constam**. [não verificado] O código admite alcançar esse dia, porém a sonda não mediu esse leitor. [não verificado]
+
+Sobre `pelo_colab`, já existe uma regra equivalente de identificação de autoria: `getattr(ausencia.registrado_por, 'colaborador', None)` e comparação de seu `pk` com `ausencia.colaborador_id`; ali ela serve especificamente à guarda de aprovação de tipo que exige documento sem anexo. Não prova origem via disputa nem decisão administrativa. (`app/ponto/services/ausencia.py:627`, `:628`, `:630`, `:632`.)
+
+A materialização via disputa usa `registrado_por=user`, `chamado_origem=p.chamado_destino` e descrição da disputa; a documentação distingue falta aprovada e atestado cujo estado inicial é decidido pelo juiz. Assim, ausência nascida via disputa não implica decisão do admin, e um destino vazio pode produzir `chamado_origem=None`. (`app/chamados/services/materializacao.py:495`, `:498`, `:499`, `:520`, `:525`, `:526`, `:527`.)
 
 ## 06/11 18:26 · sessao eeb4262ba705 · DIA-SEM-TRABALHO-NA-FRENTE · sonda · origem=Code
 
@@ -871,131 +940,4 @@ O código comprova estes caminhos de transformação:
 
 Para col655, o dado imprime `fer_vira_folga=False`; portanto, ele não fornece evidência de enquadramento no ramo de folga-feriado de `fechamento.py:940`. Atribuir o contraste do PAR a “12x36 versus 6x1”, a uma CCT específica ou a outro vínculo seria **[nao verificado]**.
 
-## 06/11 18:09 · sessao e58a772d7f48 · ESPURIA · sonda · origem=Code
-
-O QUADRO fecha: **161 + 136 + 96 + 30 + 27 + 12 + 4 = 466**, igual a `UNIVERSO dias_com_orfa_na_ata=466` e `LINHAS 466`. Os vetores `sem_trab` somam **136 + 30 + 4 = 170**; o bloco DINHEIRO soma **93 + 72 + 3 + 1 + 1 = 170**. [nao verificado]
-
-Não aparece campo literal `ERRO`; aparece `ERROS {}`. Há `CONCLUSAO_LIBERADA`. [nao verificado]
-
-A linha a conferir como possível problema de instrumento é **`HE nos sem_trabalho {(False, False, False): 170}`**, pelos três indicadores zerados em todos os 170 dias; as AMOSTRA também exibem `he`, `he_fer` e `folga_trab` em `0.0`. Isso não comprova erro de instrumento. [nao verificado] O modelo define rubricas separadas `horas_extras_50`, `horas_extras_100`, `horas_extras_100_feriado` e `horas_folga_trabalhada`. [app/ponto/models.py:328](/home/ronald/codex_ws/7c140052a45f90bc52eb5d68726782428fe9307c/app/ponto/models.py:328) O mapeamento dessas rubricas para os rótulos da sonda não foi conferido: não localizei `logs/espuria/sonda_espuria.py` nesta cópia. [nao verificado]
-
-As transcrições abaixo são literais do texto fornecido. **Cada linha dos blocos recebe `[nao verificado]`**, indicado aqui fora dos blocos para preservar o conteúdo literal.
-
-1. Agregados, DINHEIRO, ERROS e conclusão — [nao verificado]
-
-```text
-UNIVERSO dias_com_orfa_na_ata=466 (aval citou 477 em PROD 17:3x; aqui SOMBRA dump do dia)
-ITEM3 {'celulas': 9845, 'dias_lampada_acesa_tipo_real_desconhecido': 578, 'dias_lampada_tipo_divergente': 200, 'dias_lampada_tipo_divergente_COM_orfa': 111, 'dias_lampada_tipo_divergente_SEM_orfa': 89, 'lampadas_tipo_divergente': 303, 'par_E_aceso_por_S': 166, 'par_S_aceso_por_E': 137}
-LINHAS 466
-QUADRO por vetor (sem_trabalho, lista CxR do motor, regenerada) -- soma=466
-  trab/nao_cxr/nao_regen                   161
-  sem_trab/nao_cxr/nao_regen               136
-  trab/cxr/nao_regen                       96
-  sem_trab/nao_cxr/regen                   30
-  trab/nao_cxr/regen                       27
-  trab/cxr/regen                           12
-  sem_trab/cxr/nao_regen                   4
-STATUS {'folga_trabalhada': 161, 'escala_suspeita': 6, 'ok': 107, 'irregular': 189, 'aberto': 3}
-DONO {'CADASTRO': 279, 'ESTRUTURA': 109, 'BATIDA': 78}
-DONO x vetor {('sem_trab/nao_cxr/nao_regen', 'CADASTRO'): 86, ('trab/nao_cxr/nao_regen', 'CADASTRO'): 66, ('sem_trab/nao_cxr/regen', 'ESTRUTURA'): 7, ('trab/nao_cxr/nao_regen', 'ESTRUTURA'): 64, ('trab/nao_cxr/nao_regen', 'BATIDA'): 31, ('trab/cxr/nao_regen', 'CADASTRO'): 88, ('sem_trab/nao_cxr/nao_regen', 'BATIDA'): 19, ('sem_trab/nao_cxr/nao_regen', 'ESTRUTURA'): 31, ('trab/nao_cxr/regen', 'ESTRUTURA'): 7, ('sem_trab/nao_cxr/regen', 'CADASTRO'): 16, ('trab/nao_cxr/regen', 'CADASTRO'): 9, ('trab/nao_cxr/regen', 'BATIDA'): 11, ('sem_trab/nao_cxr/regen', 'BATIDA'): 7, ('trab/cxr/regen', 'CADASTRO'): 12, ('trab/cxr/nao_regen', 'BATIDA'): 8, ('sem_trab/cxr/nao_regen', 'CADASTRO'): 2, ('sem_trab/cxr/nao_regen', 'BATIDA'): 2}
-FERIADO {(True, False, True): 30, (False, None, None): 10, (False, True, False): 325, (False, False, False): 78, (True, True, False): 23}
-ESCALA_ERRADA {None: 268, 'LIMBO': 66, 'A2': 122, 'A8': 10}
-SUGESTAO_PROPOR_ESCALA (por dia) {'media': 191, 'insuficiente': 159, 'alta': 116}
---- DINHEIRO dos dias sem trabalho n=170
-  pago / decisao_he=None / porta=None / sem_verbo_admin                            93
-  sem_pago / decisao_he=None / porta=None / sem_verbo_admin                        72
-  sem_pago / decisao_he=None / porta=porta_pergunta / sem_verbo_admin              3
-  pago / decisao_he=autorizado / porta=None / sem_verbo_admin                      1
-  sem_pago / decisao_he=nao / porta=None / sem_verbo_admin                         1
-ESTRUTURA_DINHEIRO (sem pago E sem decisao E sem porta/verbo admin): 72
-HE nos sem_trabalho {(False, False, False): 170}
-ERROS {}
-CONCLUSAO_LIBERADA
-```
-
-2. Todas as linhas ITEM3_EX_SEM_ORFA — [nao verificado]
-
-```text
-ITEM3_EX_SEM_ORFA ('col174', '2026-10-25', [('S', '02:00', '02:27', 'E')])
-ITEM3_EX_SEM_ORFA ('col191', '2026-10-22', [('S', '16:00', '17:54', 'E'), ('E', '17:00', '18:59', 'S'), ('S', '23:00', '23:01', 'E')])
-ITEM3_EX_SEM_ORFA ('col200', '2026-10-29', [('E', '22:00', '02:00', 'S')])
-ITEM3_EX_SEM_ORFA ('col200', '2026-11-02', [('E', '22:00', '02:00', 'S'), ('S', '02:00', '02:00', 'E'), ('E', '03:00', '03:02', 'S')])
-ITEM3_EX_SEM_ORFA ('col207', '2026-10-24', [('E', '13:00', '13:38', 'S')])
-ITEM3_EX_SEM_ORFA ('col247', '2026-10-24', [('E', '23:00', '00:00', 'S')])
-```
-
-Todas as linhas AMOSTRA — [nao verificado]
-
-```text
-AMOSTRA sem_trab/nao_cxr/nao_regen {'col': 'col43', 'dia': '2026-11-02', 'emp': 2, 'sug': ("{'tipo_escala_id': 421, 'codigo': '34', 'descricao': '6x1milano', 'ciclo': '6x1', 'horario': '07:30-16:30'}", 'media'), 'sem_trabalho': True, 'status': 'folga_trabalhada', 'tipo_dia': 'folga', 'trabalha': False, 'regen': False, 'feriado': True, 'trab_feriado': False, 'fer_vira_folga': True, 'ec': 1411, 'escala_errada': None, 'cxr': False, 'dono': 'CADASTRO', 'lavrada': True, 'pago': None, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': None, 'porta': None, 'verbo_admin': []}
-AMOSTRA sem_trab/nao_cxr/nao_regen {'col': 'col97', 'dia': '2026-11-02', 'emp': 2, 'sug': (None, 'insuficiente'), 'sem_trabalho': True, 'status': 'folga_trabalhada', 'tipo_dia': 'folga', 'trabalha': False, 'regen': False, 'feriado': False, 'trab_feriado': None, 'fer_vira_folga': None, 'ec': None, 'escala_errada': None, 'cxr': False, 'dono': 'CADASTRO', 'lavrada': True, 'pago': None, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': None, 'porta': None, 'verbo_admin': []}
-AMOSTRA sem_trab/nao_cxr/nao_regen {'col': 'col97', 'dia': '2026-11-03', 'emp': 2, 'sug': (None, 'insuficiente'), 'sem_trabalho': True, 'status': 'escala_suspeita', 'tipo_dia': 'folga', 'trabalha': True, 'regen': False, 'feriado': False, 'trab_feriado': None, 'fer_vira_folga': None, 'ec': None, 'escala_errada': None, 'cxr': False, 'dono': 'CADASTRO', 'lavrada': False, 'pago': None, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': None, 'porta': None, 'verbo_admin': []}
-AMOSTRA trab/nao_cxr/nao_regen {'col': 'col174', 'dia': '2026-10-23', 'emp': 2, 'sug': (None, 'insuficiente'), 'sem_trabalho': False, 'status': 'ok', 'tipo_dia': 'trabalho', 'trabalha': True, 'regen': False, 'feriado': False, 'trab_feriado': True, 'fer_vira_folga': False, 'ec': 1156, 'escala_errada': 'LIMBO', 'cxr': False, 'dono': 'CADASTRO', 'lavrada': True, 'pago': 6.782049166666667, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': 'nao', 'porta': None, 'verbo_admin': []}
-AMOSTRA trab/nao_cxr/nao_regen {'col': 'col174', 'dia': '2026-10-24', 'emp': 2, 'sug': (None, 'insuficiente'), 'sem_trabalho': False, 'status': 'ok', 'tipo_dia': 'trabalho', 'trabalha': True, 'regen': False, 'feriado': False, 'trab_feriado': True, 'fer_vira_folga': False, 'ec': 1156, 'escala_errada': 'LIMBO', 'cxr': False, 'dono': 'CADASTRO', 'lavrada': True, 'pago': None, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': None, 'porta': None, 'verbo_admin': []}
-AMOSTRA trab/nao_cxr/nao_regen {'col': 'col174', 'dia': '2026-10-26', 'emp': 2, 'sug': (None, 'insuficiente'), 'sem_trabalho': False, 'status': 'ok', 'tipo_dia': 'trabalho', 'trabalha': True, 'regen': False, 'feriado': False, 'trab_feriado': True, 'fer_vira_folga': False, 'ec': 1156, 'escala_errada': 'LIMBO', 'cxr': False, 'dono': 'CADASTRO', 'lavrada': True, 'pago': None, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': 'nao', 'porta': None, 'verbo_admin': []}
-AMOSTRA sem_trab/nao_cxr/regen {'col': 'col207', 'dia': '2026-11-02', 'emp': 2, 'sug': ("{'tipo_escala_id': 573, 'codigo': '142', 'descricao': '[nome]', 'ciclo': '6x1', 'horario': '06:30-12:30'}", 'media'), 'sem_trabalho': True, 'status': 'folga_trabalhada', 'tipo_dia': 'folga', 'trabalha': False, 'regen': True, 'feriado': True, 'trab_feriado': False, 'fer_vira_folga': True, 'ec': 1452, 'escala_errada': None, 'cxr': False, 'dono': 'ESTRUTURA', 'lavrada': True, 'pago': None, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': None, 'porta': None, 'verbo_admin': []}
-AMOSTRA trab/cxr/nao_regen {'col': 'col214', 'dia': '2026-11-01', 'emp': 2, 'sug': ("{'tipo_escala_id': 175, 'codigo': 'PAI-COMERCIAL.1', 'descricao': '6x1 - 12:40 - 17:00/18:00 - 21:00', 'ciclo': '6x1', 'horario': '12:40-21:00'}", 'alta'), 'sem_trabalho': False, 'status': 'ok', 'tipo_dia': 'trabalho', 'trabalha': True, 'regen': False, 'feriado': False, 'trab_feriado': True, 'fer_vira_folga': False, 'ec': 182, 'escala_errada': None, 'cxr': True, 'dono': 'CADASTRO', 'lavrada': True, 'pago': 7.382154238055556, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': None, 'porta': None, 'verbo_admin': []}
-AMOSTRA sem_trab/nao_cxr/regen {'col': 'col270', 'dia': '2026-10-22', 'emp': 2, 'sug': ("{'tipo_escala_id': 252, 'codigo': 'PAI-12x36.55', 'descricao': '15:00 19:00 20:00 23:00 FOLGA QUINTA', 'ciclo': '12x36', 'horario': '15:00-23:00'}", 'alta'), 'sem_trabalho': True, 'status': 'folga_trabalhada', 'tipo_dia': 'folga', 'trabalha': False, 'regen': True, 'feriado': False, 'trab_feriado': True, 'fer_vira_folga': False, 'ec': 1449, 'escala_errada': None, 'cxr': False, 'dono': 'ESTRUTURA', 'lavrada': True, 'pago': None, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': None, 'porta': None, 'verbo_admin': []}
-AMOSTRA sem_trab/nao_cxr/regen {'col': 'col270', 'dia': '2026-10-29', 'emp': 2, 'sug': ("{'tipo_escala_id': 252, 'codigo': 'PAI-12x36.55', 'descricao': '15:00 19:00 20:00 23:00 FOLGA QUINTA', 'ciclo': '12x36', 'horario': '15:00-23:00'}", 'alta'), 'sem_trabalho': True, 'status': 'folga_trabalhada', 'tipo_dia': 'folga', 'trabalha': False, 'regen': True, 'feriado': False, 'trab_feriado': True, 'fer_vira_folga': False, 'ec': 1449, 'escala_errada': None, 'cxr': False, 'dono': 'ESTRUTURA', 'lavrada': True, 'pago': None, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': None, 'porta': None, 'verbo_admin': []}
-AMOSTRA trab/nao_cxr/regen {'col': 'col278', 'dia': '2026-10-26', 'emp': 2, 'sug': ("{'tipo_escala_id': 457, 'codigo': '44x1', 'descricao': '6x1 - 07:50 - 11:10 - 12:10 - 15:50', 'ciclo': '6x1', 'horario': '07:50-15:50'}", 'alta'), 'sem_trabalho': False, 'status': 'irregular', 'tipo_dia': 'trabalho', 'trabalha': True, 'regen': True, 'feriado': False, 'trab_feriado': False, 'fer_vira_folga': False, 'ec': 1350, 'escala_errada': None, 'cxr': False, 'dono': 'ESTRUTURA', 'lavrada': True, 'pago': 6.836554444444444, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': None, 'porta': 'porta_fila', 'verbo_admin': []}
-AMOSTRA trab/nao_cxr/regen {'col': 'col278', 'dia': '2026-10-29', 'emp': 2, 'sug': ("{'tipo_escala_id': 457, 'codigo': '44x1', 'descricao': '6x1 - 07:50 - 11:10 - 12:10 - 15:50', 'ciclo': '6x1', 'horario': '07:50-15:50'}", 'alta'), 'sem_trabalho': False, 'status': 'irregular', 'tipo_dia': 'trabalho', 'trabalha': True, 'regen': True, 'feriado': False, 'trab_feriado': False, 'fer_vira_folga': False, 'ec': 1350, 'escala_errada': None, 'cxr': False, 'dono': 'ESTRUTURA', 'lavrada': True, 'pago': 6.844773611111111, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': None, 'porta': 'porta_fila', 'verbo_admin': []}
-AMOSTRA trab/nao_cxr/regen {'col': 'col278', 'dia': '2026-10-30', 'emp': 2, 'sug': ("{'tipo_escala_id': 457, 'codigo': '44x1', 'descricao': '6x1 - 07:50 - 11:10 - 12:10 - 15:50', 'ciclo': '6x1', 'horario': '07:50-15:50'}", 'alta'), 'sem_trabalho': False, 'status': 'irregular', 'tipo_dia': 'trabalho', 'trabalha': True, 'regen': True, 'feriado': False, 'trab_feriado': False, 'fer_vira_folga': False, 'ec': 1350, 'escala_errada': None, 'cxr': False, 'dono': 'ESTRUTURA', 'lavrada': True, 'pago': 6.834293055555556, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': None, 'porta': 'porta_fila', 'verbo_admin': []}
-AMOSTRA trab/cxr/nao_regen {'col': 'col371', 'dia': '2026-11-02', 'emp': 2, 'sug': ("{'tipo_escala_id': 277, 'codigo': 'PAI-12x36.74', 'descricao': '12:00 16:00 17:00 20:00 folga segunda', 'ciclo': '12x36', 'horario': '12:00-20:00'}", 'alta'), 'sem_trabalho': False, 'status': 'ok', 'tipo_dia': 'trabalho', 'trabalha': True, 'regen': False, 'feriado': True, 'trab_feriado': True, 'fer_vira_folga': False, 'ec': 324, 'escala_errada': None, 'cxr': True, 'dono': 'CADASTRO', 'lavrada': True, 'pago': 5.010742500000001, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': None, 'porta': 'porta_fila', 'verbo_admin': []}
-AMOSTRA trab/cxr/regen {'col': 'col373', 'dia': '2026-10-29', 'emp': 2, 'sug': ("{'tipo_escala_id': 382, 'codigo': 'PAI-6X1.ALPHAT', 'descricao': '6x1 - 12:50 - 14:40 - 15:50 - 21:20', 'ciclo': '6x1', 'horario': '14:00-22:20'}", 'media'), 'sem_trabalho': False, 'status': 'ok', 'tipo_dia': 'trabalho', 'trabalha': True, 'regen': True, 'feriado': False, 'trab_feriado': True, 'fer_vira_folga': False, 'ec': 1497, 'escala_errada': 'LIMBO', 'cxr': True, 'dono': 'CADASTRO', 'lavrada': True, 'pago': 5.77680861111111, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': 'nao', 'porta': 'porta_fila', 'verbo_admin': []}
-AMOSTRA trab/cxr/regen {'col': 'col373', 'dia': '2026-10-30', 'emp': 2, 'sug': ("{'tipo_escala_id': 382, 'codigo': 'PAI-6X1.ALPHAT', 'descricao': '6x1 - 12:50 - 14:40 - 15:50 - 21:20', 'ciclo': '6x1', 'horario': '14:00-22:20'}", 'media'), 'sem_trabalho': False, 'status': 'ok', 'tipo_dia': 'trabalho', 'trabalha': True, 'regen': True, 'feriado': False, 'trab_feriado': True, 'fer_vira_folga': False, 'ec': 1497, 'escala_errada': 'LIMBO', 'cxr': True, 'dono': 'CADASTRO', 'lavrada': True, 'pago': 6.099447777777778, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': 'nao', 'porta': None, 'verbo_admin': []}
-AMOSTRA trab/cxr/nao_regen {'col': 'col382', 'dia': '2026-10-23', 'emp': 2, 'sug': ("{'tipo_escala_id': 547, 'codigo': '120', 'descricao': 'pgconcentrix', 'ciclo': '6x1', 'horario': '15:00-23:30'}", 'media'), 'sem_trabalho': False, 'status': 'irregular', 'tipo_dia': 'trabalho', 'trabalha': True, 'regen': False, 'feriado': False, 'trab_feriado': True, 'fer_vira_folga': False, 'ec': 1269, 'escala_errada': None, 'cxr': True, 'dono': 'CADASTRO', 'lavrada': True, 'pago': 7.195496111111111, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': None, 'porta': None, 'verbo_admin': []}
-AMOSTRA trab/cxr/regen {'col': 'col707', 'dia': '2026-10-29', 'emp': 2, 'sug': ("{'tipo_escala_id': 381, 'codigo': '12x36_DG.2', 'descricao': '12X36 SUPERVISAO CURITIBA  DAS 11:00 AS 23:00', 'ciclo': '12x36', 'horario': '11:00-23:00'}", 'media'), 'sem_trabalho': False, 'status': 'irregular', 'tipo_dia': 'trabalho', 'trabalha': True, 'regen': True, 'feriado': False, 'trab_feriado': True, 'fer_vira_folga': False, 'ec': 1465, 'escala_errada': None, 'cxr': True, 'dono': 'CADASTRO', 'lavrada': True, 'pago': 11.165899238888887, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': None, 'porta': 'porta_fila', 'verbo_admin': []}
-AMOSTRA sem_trab/cxr/nao_regen {'col': 'col788', 'dia': '2026-10-23', 'emp': 2, 'sug': (None, 'insuficiente'), 'sem_trabalho': True, 'status': 'folga_trabalhada', 'tipo_dia': 'folga', 'trabalha': False, 'regen': False, 'feriado': False, 'trab_feriado': True, 'fer_vira_folga': False, 'ec': 1301, 'escala_errada': 'A2', 'cxr': True, 'dono': 'CADASTRO', 'lavrada': True, 'pago': 7.057353611111112, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': None, 'porta': None, 'verbo_admin': []}
-AMOSTRA sem_trab/cxr/nao_regen {'col': 'col788', 'dia': '2026-10-29', 'emp': 2, 'sug': (None, 'insuficiente'), 'sem_trabalho': True, 'status': 'folga_trabalhada', 'tipo_dia': 'folga', 'trabalha': False, 'regen': False, 'feriado': False, 'trab_feriado': True, 'fer_vira_folga': False, 'ec': 1301, 'escala_errada': 'A2', 'cxr': True, 'dono': 'BATIDA', 'lavrada': True, 'pago': 0.8538388888888889, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': None, 'porta': None, 'verbo_admin': []}
-AMOSTRA sem_trab/cxr/nao_regen {'col': 'col788', 'dia': '2026-11-02', 'emp': 2, 'sug': (None, 'insuficiente'), 'sem_trabalho': True, 'status': 'folga_trabalhada', 'tipo_dia': 'folga', 'trabalha': False, 'regen': False, 'feriado': True, 'trab_feriado': True, 'fer_vira_folga': False, 'ec': 1301, 'escala_errada': 'A2', 'cxr': True, 'dono': 'BATIDA', 'lavrada': True, 'pago': 16.0160475, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': None, 'porta': None, 'verbo_admin': []}
-```
-
-Todas as linhas D0211 — [nao verificado]
-
-```text
-D0211 {'col': 'col43', 'dia': '2026-11-02', 'emp': 2, 'sug': ("{'tipo_escala_id': 421, 'codigo': '34', 'descricao': '6x1milano', 'ciclo': '6x1', 'horario': '07:30-16:30'}", 'media'), 'sem_trabalho': True, 'status': 'folga_trabalhada', 'tipo_dia': 'folga', 'trabalha': False, 'regen': False, 'feriado': True, 'trab_feriado': False, 'fer_vira_folga': True, 'ec': 1411, 'escala_errada': None, 'cxr': False, 'dono': 'CADASTRO', 'lavrada': True, 'pago': None, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': None, 'porta': None, 'verbo_admin': []}
-D0211 {'col': 'col97', 'dia': '2026-11-02', 'emp': 2, 'sug': (None, 'insuficiente'), 'sem_trabalho': True, 'status': 'folga_trabalhada', 'tipo_dia': 'folga', 'trabalha': False, 'regen': False, 'feriado': False, 'trab_feriado': None, 'fer_vira_folga': None, 'ec': None, 'escala_errada': None, 'cxr': False, 'dono': 'CADASTRO', 'lavrada': True, 'pago': None, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': None, 'porta': None, 'verbo_admin': []}
-D0211 {'col': 'col203', 'dia': '2026-11-02', 'emp': 2, 'sug': ("{'tipo_escala_id': 305, 'codigo': 'PAI-12x36.92', 'descricao': '07:00 - 12:00/13:00 - 15:00', 'ciclo': '12x36', 'horario': '07:00-15:00'}", 'alta'), 'sem_trabalho': True, 'status': 'folga_trabalhada', 'tipo_dia': 'folga', 'trabalha': False, 'regen': False, 'feriado': True, 'trab_feriado': False, 'fer_vira_folga': True, 'ec': 1409, 'escala_errada': 'LIMBO', 'cxr': False, 'dono': 'CADASTRO', 'lavrada': True, 'pago': 7.069715555555556, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': None, 'porta': None, 'verbo_admin': []}
-D0211 {'col': 'col207', 'dia': '2026-11-02', 'emp': 2, 'sug': ("{'tipo_escala_id': 573, 'codigo': '142', 'descricao': '[nome]', 'ciclo': '6x1', 'horario': '06:30-12:30'}", 'media'), 'sem_trabalho': True, 'status': 'folga_trabalhada', 'tipo_dia': 'folga', 'trabalha': False, 'regen': True, 'feriado': True, 'trab_feriado': False, 'fer_vira_folga': True, 'ec': 1452, 'escala_errada': None, 'cxr': False, 'dono': 'ESTRUTURA', 'lavrada': True, 'pago': None, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': None, 'porta': None, 'verbo_admin': []}
-D0211 {'col': 'col227', 'dia': '2026-11-02', 'emp': 2, 'sug': (None, 'insuficiente'), 'sem_trabalho': False, 'status': 'irregular', 'tipo_dia': 'trabalho', 'trabalha': True, 'regen': False, 'feriado': True, 'trab_feriado': True, 'fer_vira_folga': False, 'ec': 195, 'escala_errada': None, 'cxr': False, 'dono': 'BATIDA', 'lavrada': True, 'pago': 8.893322777777776, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': None, 'porta': 'porta_fila', 'verbo_admin': []}
-D0211 {'col': 'col242', 'dia': '2026-11-02', 'emp': 2, 'sug': ("{'tipo_escala_id': 277, 'codigo': 'PAI-12x36.74', 'descricao': '12:00 16:00 17:00 20:00 folga segunda', 'ciclo': '12x36', 'horario': '12:00-20:00'}", 'alta'), 'sem_trabalho': True, 'status': 'folga_trabalhada', 'tipo_dia': 'folga', 'trabalha': False, 'regen': False, 'feriado': True, 'trab_feriado': False, 'fer_vira_folga': True, 'ec': 1398, 'escala_errada': None, 'cxr': False, 'dono': 'ESTRUTURA', 'lavrada': True, 'pago': None, 'he': 0.0, 'he_fer': 0.0, 'folga_trab': 0.0, 'decisao_he': None, 'porta': None, 'verbo_admin': []}
-D0211 {'col': 'col278', 'dia': '2026-11-02', 'emp': 2, 'sug': ("{'tipo_escala_id': 457, 'codigo': '44x1', 'descricao': '6x1 - 07:50 - 11:10 - 12:10 - 15:50', 'ciclo': '6x1', 'horario': '07:50-15:50'}", 'alta'), 'sem_trabalho': True, 'status': 'folga_trabalhada', 'tipo_dia': 'folga', 'trabalha': False, 'regen': True, 'feriado': True, 'tra
-
-[truncado em 20000 de 47416 caracteres]
-
-## 06/11 18:08 · sessao c956e686389f · - · - · origem=Ronald (tmux)
-
-Não é possível certificar a implementação da sonda: `sonda_espuria2.py` e seus emissores `S2_DIN`/`PAR_ACHADOS` não foram localizados na cópia pesquisada. Linha da própria sonda que replique regra: **[não verificado]**.
-
-As fontes reais comprovadas:
-
-- **Rubricas:** `rubricas_do_dia` lê `DiaPago.horas_extras_50` e `.horas_extras_100`, devolvendo `extras_50`/`extras_100`; `minutos_extra` é a soma desses totais ×60. Não devolve chaves `horas_extras_*`. `app/ponto/services/dia_pago.py:908-926`.
-- **Uso em produção pelo código:** espelho importa e chama `linhas_do_periodo`, `pago_do_dia`, `rubricas_do_dia`; calendário também chama `rubricas_do_dia`. `app/ponto/services/espelho.py:406-410`, `app/ponto/services/espelho.py:811-813`, `app/colaboradores/services/calendario.py:655-656`.
-- **HE feriado e folga trabalhada:** campos diretos do modelo. `app/ponto/models.py:331-333`.
-- **Pago:** a porta `pago_do_dia` primeiro retorna `None` se não houver sinal em nenhuma rubrica monetária; senão soma trabalhadas + folga trabalhada + `detalhe['folga_feriado_min']/60`. Reproduzir esse critério na sonda seria duplicação; se isso ocorre nela é **[não verificado]**. `app/ponto/services/dia_pago.py:888-896`.
-- **Batidas apuráveis:** porta aplica `retratada_em IS NULL`, os limites opcionais inclusivos e colaborador, ordenando por timestamp. Não aplica regra de dia da jornada. `app/ponto/turnos.py:2863-2871`.
-- **Dia de cada batida:** existe porta própria `dia_das_batidas`; atribui batidas reclamadas ao `data_turno` e as restantes à data local. Agrupar manualmente todas por data civil não reproduziria essa atribuição; implementação da sonda **[não verificado]**. `app/ponto/turnos.py:2874-2905`, `app/ponto/turnos.py:2908-2919`.
-- **Atenção a `min_real`:** o campo persistido `DiaPago.minutos_realizados` existe e é alimentado pelo mapa da grade; o relógio publicado no espelho vem de `realizado_do_dia`, passando pelo vínculo e intervalo do dia, e aparece como `minutos_realizados` no dicionário da tela. São origens que precisam ser distinguidas; a origem exata do `min_real` da sonda é **[não verificado]**. `app/ponto/models.py:351`, `app/ponto/services/dia_pago.py:283-290`, `app/ponto/services/espelho.py:286-294`, `app/ponto/services/espelho.py:675-676`, `app/ponto/services/espelho.py:783`, `app/ponto/turnos.py:772-793`.
-
-As ausências são diferentes: `rubricas_do_dia(None)` entrega zeros com `lavrada=False`; `pago_do_dia` entrega `None` tanto para linha ausente quanto para linha com todas as rubricas monetárias zeradas. Portanto `sem_pago` sozinho não prova falta de lavratura. `app/ponto/services/dia_pago.py:888-891`, `app/ponto/services/dia_pago.py:908-914`.
-
-## 06/11 18:08 · sessao 8f98d7cb6b29 · - · - · origem=Ronald (tmux)
-
-Não é possível explicar o cadastro concreto do PAR: o dado termina com `PAR_ACHADOS {}`, não identifica os dois participantes e não fornece ciclo/tipo de escala nem régua de ambos. Atribuir a diferença a 12x36 versus 6x1 seria [não verificado].
-
-O dado mostra col655 em 02/11 com `ec=1275`, `trab_feriado=True`, `fer_vira_folga=False`, `min_real=240`, `pago=2.305491111111111`, `he=2.31`, `he_fer=2.305491111111111`; a identidade do outro participante é [não verificado].
-
-Caminhos comprovados no código:
-
-- Vínculo do dia: `app/escala/servico_jornada.py:38-58` carrega célula e vínculos e delega a `vinculo_do_dia`; havendo geradora na célula, ela alimenta a decisão.
-- `feriado_vira_folga`: `app/escala/models.py:1389-1395` retorna falso se `trabalha_em_feriado=True` ou escala ausente; exige ciclo permitido e feriado no lugar do vínculo. Ciclos permitidos são 6x1, 5x2 e semanal, em `app/escala/models.py:32`. Em `app/escala/models.py:1369-1371`, o predicado pode converter trabalho previsto em folga.
-- Folga com adicional: `app/ponto/services/fechamento.py:919-926` filtra `resultado.periodos_ft` por `escala_certa_no_dia`. O juiz recusa LIMBO em `app/escala/services/escala_certa.py:31-33` e assinaturas A2/A8 em `app/escala/services/escala_certa.py:38-51`.
-- Rubrica de feriado em folga: `app/ponto/services/fechamento.py:935-950` resolve o vínculo do dia, pergunta `feriado_vira_folga`, separa esses períodos e soma suas horas a HE100 e HE100 feriado. O resto elegível vai a folga trabalhada. O mesmo conjunto é entregue à lavratura de `DiaPago` em `app/ponto/services/fechamento.py:1184-1188`; `app/ponto/services/dia_pago.py:244-256` escreve HE100, HE100 feriado e `detalhe['folga_feriado_min']`.
-- Folga sem escala certa: fica fora dos adicionais e entra em trabalhadas por `app/ponto/services/fechamento.py:964-969` e `app/ponto/services/dia_pago.py:257-265`.
-- Feriado dos períodos normais: `app/ponto/motor_calculo_v2.py:934` exige `feriado_em_dobra` e feriado; um dos escritores da rubrica está em `app/ponto/motor_calculo_v2.py:2809-2812`, outro em `app/ponto/motor_calculo_v2.py:3092-3095`.
-- O padrão `feriado_em_dobra` é decidido pelo **tipo_ciclo**, não pelo `tipo_base` ou nome da classe: `app/ponto/motor_calculo_v2.py:3623-3624,3669-3680`. Apenas `'12x36'` pertence ao conjunto padrão de feriado simples (`app/ponto/motor_calculo_v2.py:3599`). CCT pode habilitar dobra do 12x36 em `app/core/regua_cct.py:477-478`.
-- Régua do motor: fechamento chama `get_motor_cct` com tipo da escala e início da fatia em `app/ponto/services/fechamento.py:725-732`. `regua_para` lê vínculo e praça do dia em `app/core/regua_cct.py:328-339`, regime da empresa em `app/core/regua_cct.py:352-366` e aplicação/CCT em `app/core/regua_cct.py:366-379`; `get_motor_cct` injeta os parâmetros em `app/core/regua_cct.py:458-478`.
-
-Cuidado ao citar comentários como regra executável: há comentários antigos dizendo “feriado previsto não dobra” em `app/ponto/motor_calculo_v2.py:2807` e `app/ponto/motor_calculo_v2.py:3088-3091`, mas o predicado efetivamente chamado em `app/ponto/motor_calculo_v2.py:934` não consulta previsto; consulta apenas o flag de dobra e o feriado.
-
-_2396 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2399 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
