@@ -1,7 +1,86 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 04:16** · publicado em **06/11/2026 04:16** (UTC-3)
+> Ultima resposta processada: **06/11/2026 04:19** · publicado em **06/11/2026 04:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 04:19 · sessao 985df92221f6 · OTIMIZA-3 · verificador · origem=Code
+
+**Parecer: bloqueia.** Há caminhos reproduzíveis para zero falso e uma lacuna no selo de facetas (`bin/quem_chama.py:701`, `bin/quem_chama.py:732`, `bin/tests/test_quem_chama.sh:303`). Execução dos ranges históricos e do selo completo: **[nao verificado]**. Os contraexemplos sintéticos abaixo foram exercitados em memória; ocorrência deles em produção: **[nao verificado]**.
+
+1. **BLOQUEIA — P2/P7: metadado velho pode esconder decorador novo.** A coleta percorre base antes da ponta, conserva o primeiro `info` por `setdefault` e atualiza apenas `registro` (`bin/quem_chama.py:699`, `bin/quem_chama.py:701`, `bin/quem_chama.py:703`).
+
+   Contraexemplo: base com `def f(): ...`; ponta acrescenta `@receiver(sinal)` ao mesmo `f`. Permanece `decor=[]`, e a classificação resulta em `simbolo-de-topo`, permitindo zero, em vez do motivo “decorado” (`bin/quem_chama.py:350`, `bin/quem_chama.py:705`, `bin/quem_chama.py:759`). O fixture mantém `@receiver` nos dois lados, portanto não cobre essa transição (`bin/tests/test_quem_chama.sh:117`, `bin/tests/test_quem_chama.sh:158`).
+
+2. **BLOQUEIA — P7: renomear o registro de filtro conserva somente o nome velho.** Se ambos os lados têm `registro`, a união mantém o antigo (`bin/quem_chama.py:702`).
+
+   Contraexemplo: `@register.filter(name="old")` passa para `name="new"`; template carrega a biblioteca e usa `{{ v|new }}`. O símbolo continua registrado internamente como `old`; a busca usa esse nome e retorna zero para o filtro realmente utilizado (`bin/quem_chama.py:605`, `bin/quem_chama.py:608`, `bin/quem_chama.py:612`). É o mesmo problema de precedência do lado velho, agora produzindo falso zero em `filtro/tag` (`bin/quem_chama.py:699`, `bin/quem_chama.py:759`).
+
+3. **BLOQUEIA — P2/P7: Python embutido no próprio arquivo é descartado antes do rebaixamento.** O guarda `alvo_rel == rel` vem antes do tratamento de `EMBUTIDO` (`bin/quem_chama.py:732`, `bin/quem_chama.py:734`).
+
+   Contraexemplo sintético em `app/m/selfmod.py`:
+
+   ```python
+   def f(): return 1
+   exec("from m.selfmod import f; f()")
+   ```
+
+   `varrer_py` reconhece o import embutido; o guarda o elimina, e `varrer_proprio` não enxerga nomes dentro da string. A faceta `simbolo f [simbolo-de-topo]` termina com zero (`bin/quem_chama.py:469`, `bin/quem_chama.py:506`, `bin/quem_chama.py:732`). Ocorrência real dessa forma executável no próprio módulo: **[nao verificado]**.
+
+4. **BLOQUEIA — P5: sítios podem desaparecer da faceta arquivo sem morder as asserções novas.** Mutante plausível em `bin/quem_chama.py:749`:
+
+   ```python
+   if q is not None:
+       por[(a['rel'], q)] |= sitios
+   ```
+
+   No heredoc do fixture, ele mantém o símbolo rebaixado com `bin/heredoc.sh:3`, mas deixa a faceta arquivo sem esse sítio (`bin/tests/test_quem_chama.sh:127`). As quatro condições de r5 continuam satisfeitas: cabeçalho, sítio e ausência de zero são exigidos no símbolo; no arquivo exige-se somente o cabeçalho (`bin/tests/test_quem_chama.sh:300`, `bin/tests/test_quem_chama.sh:301`, `bin/tests/test_quem_chama.sh:302`, `bin/tests/test_quem_chama.sh:303`). Sobrevivência ao selo completo: **[nao verificado]**.
+
+5. **FILA — P3: linha errada em string de `.py` com escapes/concatenação.** O cálculo usa quebras do **valor decodificado**, somadas à linha inicial do nó AST (`bin/quem_chama.py:470`).
+
+   Contraexemplo real: o literal começa em `app/core/tests/test_selo_diagrama_do_codigo.py:250`, contendo dois `\n`; o import está fisicamente na linha **251**, mas é relatado como **252**, onde começa outro literal (`app/core/tests/test_selo_diagrama_do_codigo.py:251`, `app/core/tests/test_selo_diagrama_do_codigo.py:252`).
+
+   Para heredoc e comentários intermediários de `.sh`, o cálculo preserva as posições: `_codigo_sh` conserva os números originais, e `varrer_linhas` repõe lacunas como linhas vazias (`bin/quem_chama.py:524`, `bin/quem_chama.py:528`, `bin/quem_chama.py:557`). O import real em `bin/esteira_status.sh:55` permanece na linha 55 por esse caminho (`bin/quem_chama.py:558`).
+
+6. **FILA — P1: há escapes reais da regex, mas não demonstrei uma faceta com zero falso causada por eles.**
+
+   - O heredoc gera um módulo com `from .ci import *`; a regex de `config.settings.ci` não resolve esse relativo (`bin/regua_calendario.sh:28`, `bin/regua_calendario.sh:30`, `bin/quem_chama.py:89`). Entretanto, há import absoluto do mesmo alvo em outro script, suficiente para provocar rebaixamento global (`bin/regua_relogio.sh:35`, `bin/quem_chama.py:741`). **Faceta que ainda sairia zero por esse escape: [nao verificado].**
+   - A string executada importa `colaboradores.models` e `chamados.fcm_utils`; as regex dos módulos-pacote `colaboradores` e `chamados` não reconhecem esses `from pacote.submod import ...` (`bin/alarme_sessao_ociosa.py:142`, `bin/alarme_sessao_ociosa.py:144`, `bin/alarme_sessao_ociosa.py:145`, `bin/quem_chama.py:89`). **Zero das facetas arquivo dos respectivos `__init__.py` na árvore completa: [nao verificado].**
+
+   Esses sítios demonstram perda de cobertura; não sustentam afirmar uma repetição real da reprovação de `datas_cravadas_prod` **[nao verificado]**.
+
+7. **FILA — P4/P5: comportamento atual de comentário está coerente; falta mordida para `{% comment %}` multilinha.** A remoção de DOTALL de `{# #}` concorda com o contrato já existente no repo (`bin/quem_chama.py:569`, `app/holerite/tests/test_contract_lapide_nao_vaza.py:3`). `{% comment %}` multilinha continua removido e conserva as quebras de linha; há exemplo real delimitado em `app/templates/base.html:139` e `app/templates/base.html:152` (`bin/quem_chama.py:570`).
+
+   Mutante: remover `flags=re.S` da segunda substituição. O novo r5 de comentário não o mata, pois exercita `{# #}`; o fixture de `{% comment %}` está inteiro numa linha (`bin/quem_chama.py:571`, `bin/tests/test_quem_chama.sh:67`, `bin/tests/test_quem_chama.sh:138`, `bin/tests/test_quem_chama.sh:222`). Sobrevivência ao selo completo: **[nao verificado]**.
+
+   Falso positivo grave ou falso zero causado pelo novo regex de `{% filter %}` em template real: **[nao verificado]**; o caso acrescentado ao selo é positivo e sintético (`bin/quem_chama.py:608`, `bin/tests/test_quem_chama.sh:137`, `bin/tests/test_quem_chama.sh:262`).
+
+8. **FILA — P5: alcance das demais asserções novas.**
+
+   | Asserção/helper | Verificação e limite |
+   |---|---|
+   | `_fac` | Exige espaço ou `:` após o rótulo. `simbolo f_emb` não casa `simbolo f_emb_here`; o alvo também exige caminho seguido de ` (` (`bin/tests/test_quem_chama.sh:176`, `bin/tests/test_quem_chama.sh:179`). |
+   | `_so_na_fac` | **Total zero não passa**: exige `tot >= 1`. Mover o achado de símbolo-parado/relativo-parado para outra faceta viola a igualdade entre total e ocorrências sob arquivo (`bin/tests/test_quem_chama.sh:186`, `bin/tests/test_quem_chama.sh:195`, `bin/tests/test_quem_chama.sh:202`). |
+   | `r5-init-reexporta` e `r5-import-local` | Exigem presença correta, mas aceitam duplicação adicional sob arquivo. Mutante: emitir também com `q=None` o achado de importação do símbolo (`bin/quem_chama.py:453`, `bin/tests/test_quem_chama.sh:207`, `bin/tests/test_quem_chama.sh:208`). |
+   | `r5-comentario-multilinha` e `r5-filter-tag` | Também são positivos sem exclusividade; duplicar o achado em outra faceta não contradiz essas asserções (`bin/tests/test_quem_chama.sh:222`, `bin/tests/test_quem_chama.sh:262`). |
+   | `r5-embutido-*` e reais | Ausência total é morta pelos positivos vizinhos; o negativo sozinho seria vacuoso. A perda exclusiva do sítio sob arquivo sobrevive às condições novas, como no achado 4 (`bin/tests/test_quem_chama.sh:182`, `bin/tests/test_quem_chama.sh:300`, `bin/tests/test_quem_chama.sh:353`). |
+   | `r5-solo-*` | Prendem o zero e o tipo nos dois cabeçalhos, mas não cobrem comentário com import absoluto direto: fixture usa `from m import solo` (`bin/tests/test_quem_chama.sh:133`, `bin/tests/test_quem_chama.sh:134`, `bin/tests/test_quem_chama.sh:306`). |
+
+9. **FILA — P7: segunda implementação da regra código/prosa, com divergência concreta.** O instrumento declara seguir a regra da casa, mas implementa `_prosa` local; a autoridade existente declara centralização e já possui wrapper importador (`bin/quem_chama.py:21`, `bin/quem_chama.py:356`, `app/core/censo_codigo.py:15`, `bin/censo_codigo_py.py:34`).
+
+   Contraexemplo real: a string de código em `app/core/management/commands/gerar_diagrama.py:873` cita `bin/gerar_diagrama.py` depois de `#`. O instrumento conta a citação, enquanto o censo a corta no primeiro `#`, inclusive dentro da string (`bin/quem_chama.py:472`, `app/core/censo_codigo.py:60`). Isso prova divergência entre derivadores; nesse caso, o instrumento é mais conservador e não produz falso zero (`bin/quem_chama.py:473`).
+
+10. **P2/P6 — fluxo dos campos: sem falha adicional de ordem no rebaixamento.** Uma vez coletado o sítio, todas as facetas são percorridas; apenas tipos em `VARRIDOS` mudam, preservando os motivos de teste, setting e decorado (`bin/quem_chama.py:745`, `bin/quem_chama.py:746`, `bin/quem_chama.py:747`). Símbolos são classificados antes disso; alvo apagado conserva módulo e símbolos da base; `__init__.py` de pacote conserva módulo, enquanto `app/__init__.py` sem módulo cai fora da lista positiva (`bin/quem_chama.py:151`, `bin/quem_chama.py:317`, `bin/quem_chama.py:687`, `bin/quem_chama.py:699`, `bin/quem_chama.py:705`).
+
+   | Campo | Escritores | Leitores |
+   |---|---|---|
+   | `alvo['tipo']` | Inicialização: `bin/quem_chama.py:707`; rebaixamento por alias `info`: `bin/quem_chama.py:748`. | Guarda por alias: `bin/quem_chama.py:747`; render: `bin/quem_chama.py:782`. |
+   | `info['tipo']` | Classificação: `bin/quem_chama.py:705`; rebaixamento: `bin/quem_chama.py:748`. | Guarda: `bin/quem_chama.py:747`; render dos símbolos: `bin/quem_chama.py:784`. |
+   | `alvo['embutido']` | `bin/quem_chama.py:745`. | `bin/quem_chama.py:781`; conteúdo formatado em `bin/quem_chama.py:756`. |
+   | `por[(rel,q)]` | Inicialização: `bin/quem_chama.py:711`, `bin/quem_chama.py:714`; acréscimos: `bin/quem_chama.py:737`, `bin/quem_chama.py:740`, `bin/quem_chama.py:749`. | Acumulação nos mesmos sítios; ordenação: `bin/quem_chama.py:750`; render: `bin/quem_chama.py:782`, `bin/quem_chama.py:784`; total: `bin/quem_chama.py:817`. |
+   | `EMBUTIDO` | Constante: `bin/quem_chama.py:81`. | Emissão do marcador: `bin/quem_chama.py:470`, `bin/quem_chama.py:558`; coleta: `bin/quem_chama.py:734`; tipo final: `bin/quem_chama.py:748`; apresentação: `bin/quem_chama.py:754`. |
+   | `Alvos.emb` | Construção: `bin/quem_chama.py:400`. | Busca: `bin/quem_chama.py:410`, chamada por `bin/quem_chama.py:469` e `bin/quem_chama.py:559`. |
+
+   A guarda de tipo e a acumulação de `por` leem valores antes da última atualização por necessidade do próprio algoritmo; a renderização lê depois do laço final. O defeito de precedência identificado está nos metadados antigos preservados pelos `setdefault`, conforme achados 1–2 (`bin/quem_chama.py:701`, `bin/quem_chama.py:747`, `bin/quem_chama.py:750`, `bin/quem_chama.py:782`).
 
 ## 06/11 04:16 · sessao 04a0a7bc1c6c · - · - · origem=Ronald (tmux)
 
@@ -783,44 +862,4 @@ Para ranges finitos válidos, o envelope mínimo dos inícios/máximo dos fins c
 
 6. **Relógio:** o delta lê `localdate()` dentro da porta, sem entrada `hoje/agora`; os testes congelam globalmente o relógio. `app/ponto/services/ausencia.py:513-519`; `app/ponto/tests/test_h12h06b_rederivar_minutos.py:36`. A classificação “relógio lido fora da borda” consta do checklist, mas regra específica que faça essa leitura, isoladamente, bloquear a obra: **[não verificado]**. `CLAUDE.md:365-367`.
 
-## 06/11 02:18 · sessao e1c59897b38c · FILA1-ESTADO · leitura · origem=Code
-
-“NO AR” abaixo significa **deploy registrado nos anexos**, sem confirmação independente de produção [nao verificado]. Os hashes são os citados nesses registros; a cópia não permite conferir o histórico Git, e o `git log --oneline -60` não veio no dado fornecido [nao verificado]. [nao verificado]
-
-**MANHA-0511 — estado por item**, conforme a enumeração de `app/docs/BACKLOG.md:1738`:
-
-| Item | Estado atual com prova |
-|---|---|
-| **1 — F3-BECO-1** | **NO AR**, árvore certificada `3b8d4a3e`, deploy `9c0fd9d3`, rc=0. Permanecem os itens de fila do opus e a lei **F3-PERGUNTAS-DO-APP-463**; portanto, pouso comprovado não equivale a encerramento integral. `app/docs/RELATO.md:6441`, `app/docs/RELATO.md:6444`, `app/docs/RELATO.md:6446`, `app/docs/RELATO.md:59`. |
-| **2 — JUIZ-1 vinculo_do_dia** | **NO AR**, v5, deploy `8ece7834` às 13:49, com instalação do crontab registrada. O hash foi depois amendado para `98ce09f8`; outra reescrita preservou as árvores e terminou no HEAD `630131b1`. Correspondência individual final após essa reescrita: [nao verificado]. `app/docs/RELATO.md:78`, `app/docs/RELATO.md:79`, `app/docs/RELATO.md:80`. |
-| **3 — 12x36 (B)** | **Incluído na v5 do JUIZ-1 NO AR**: a medida registra os casos col334/col727 passando de feriado para trabalho; o aval vincula expressamente a frota (B) à volta 5. Mesmo deploy `8ece7834` do item 2. `app/docs/RELATO.md:94`, `app/docs/RELATO.md:97`, `app/docs/RELATO.md:78`. |
-| **4 — JUIZ-3 (a), outbox** | **NO AR `de9fd69b`**, suite da árvore `0f918814`, deploy rc=0. O registro posterior mede a rodada das 20:30; ainda declara que o crontab ficou sem `--alarme`. `app/docs/RELATO.md:6517`, `app/docs/RELATO.md:6522`, `app/docs/RELATO.md:6523`, `app/docs/RELATO.md:6525`. |
-| **5 — JUIZ-4 (i), FIO MUDO** | **Em construção**, como **C20-FIO-MUDO**: abertura do construtor registrada e posteriormente mantida entre os trabalhos ativos. **Hash da implementação e pouso: [nao verificado]**. O `8238da4c` comprova somente **JUIZ-4A**, não este ramo (i). `app/docs/RELATO.md:6512`, `app/docs/RELATO.md:6570`, `app/docs/RELATO.md:109`; distinção de escopo em `app/docs/PROMPTS.md:1875`. |
-| **6 — JUIZ-2, retido no TOTAL** | **NO AR `0cd6261a`**, merge da cópia `0c99a2cf`, contendo o produto `78b755f8` e a confirmação de que o retido fica no TOTAL; deploy rc=0. Isso comprova esta parte, não o rebaixamento completo do cron, tratado depois como LASTRO-PARTE-2. `app/docs/RELATO.md:111`, `app/docs/BACKLOG.md:1740`. |
-| **7 — O261 item 3, PEP** | **Sem implementação comprovada nesta retomada**: aguardava vaga; depois recebeu pré-código e casos para o futuro construtor. **Hash próprio de cura/pouso: [nao verificado]**. `9c0fd9d3` e `3a514a4e` são bases das leituras registradas. `app/docs/RELATO.md:6427`, `app/docs/RELATO.md:6507`, `app/docs/RELATO.md:6599`, `app/docs/RELATO.md:6602`. |
-| **8 — OTIMIZA-3** | **Em raia `wt-qc-224741 @ d1354f77`, sem construtor na última indicação explícita**. A reprovação/B3 antiga está em `RELATO:126`, mas MANHA-0511 declara essa parada respondida; posteriormente a obra continuava aguardando abertura. **Novo hash ou pouso: [nao verificado]**. `app/docs/RELATO.md:126`, `app/docs/RELATO.md:104`, `app/docs/RELATO.md:6472`, `app/docs/RELATO.md:6507`. |
-
-**NOITE-0411 — cobertura da lista que permanece no BACKLOG**, incluindo seus desdobramentos posteriores (`app/docs/BACKLOG.md:1737`):
-
-| Item | Estado atual com prova |
-|---|---|
-| **1 — E4-8-SAIDA-I** | **NO AR `115196f4`**. O `!` por pouso fora da janela foi **respondido: manter**, pelo aval POUSO-E4-8-MANTEM. `app/docs/RELATO.md:6316`, `app/docs/RELATO.md:212`. |
-| **2 — OTIMIZA 1-3** | **OTIMIZA-1:** em raia `wt-si-2235 @ 2d91d590`; faltavam suite, replay, verificador e pouso. PRONTO 5 ficou em fila. **OTIMIZA-2:** registrado parado pela cota, sem retorno à ordem da noite; execução posterior [nao verificado]. **OTIMIZA-3:** estado descrito no item 8 acima. `app/docs/RELATO.md:179`, `app/docs/RELATO.md:169`, `app/docs/BACKLOG.md:1791`, `app/docs/RELATO.md:6472`. |
-| **3 — espelho.py::_status_dia** | **NO AR `7f275efd`**, deploy rc=0; catraca viva caiu para 1. `app/docs/RELATO.md:6327`. |
-| **4 — E4-APP-MAPA** | **NO AR `b051f0ae`**, deploy rc=0. `app/docs/RELATO.md:6338`. |
-| **5 — catraca=0** | **FECHADO por medida viva**, no pouso `b051f0ae`: número 0, itens e novos vazios. `app/docs/RELATO.md:6338`. |
-| **6 — E4-1/E4-6 SAIDA-II + JUIZ-1/JUIZ-2** | **E4-1/E4-6 NO AR `fb84b97d`**; **JUIZ-1 NO AR**, conforme item 2 da manhã; **JUIZ-2 parte 1 NO AR `0cd6261a`**. **LASTRO-PARTE-2** permanece em investigação de origem, com cura+vigia aguardando construtor; hash dessa parte [nao verificado]. `app/docs/RELATO.md:210`, `app/docs/RELATO.md:78`, `app/docs/RELATO.md:111`, `app/docs/RELATO.md:48`. |
-| **6b — F3-DORMENTE, beco 1** | **NO AR**, deploy `9c0fd9d3`, com a lei residual indicada no item 1 da manhã. `app/docs/RELATO.md:6446`, `app/docs/RELATO.md:59`. |
-| **6c — juízes 3 e 4** | **JUIZ-3 NO AR `de9fd69b`**. **JUIZ-4A NO AR `8238da4c`**; **FIO MUDO em construção**, sem hash/pouso comprovado. `app/docs/RELATO.md:6517`, `app/docs/RELATO.md:109`, `app/docs/RELATO.md:6512`. |
-| **7 — OTIMIZA 4-5** | Último estado explícito: **aguardavam contrato ao Codex/cota**. Construção, hash ou pouso posterior: **[nao verificado]**. `app/docs/RELATO.md:152`. |
-| **9 — motor v3 pela bateria** | **Sem abertura comprovada desta retomada**: o registro diz que não abre sem Codex. Hash ou conclusão desse item da noite: **[nao verificado]**. `app/docs/RELATO.md:134`. |
-
-Nos desdobramentos da noite também há **N1-PERGUNTAS-DO-APP NO AR `26ee6979`**, **LAVRAR-HE NO AR `95544d22`**, **BUG-SW NO AR `4d5fd8df`** e **N1-ALIMENTACAO-UNICA NO AR `e44d7efa`**. `app/docs/RELATO.md:193`, `app/docs/PROMPTS.md:1867`, `app/docs/RELATO.md:184`, `app/docs/RELATO.md:149`.
-
-**Substituições e alterações posteriores:**
-
-- **NOITE-NON-STOP**, de 05/11 00:3x, reordena os pousos da noite; **MANHA-0511**, de 08:3x, declara expressamente substituir as versões anteriores e a ordem da NOITE-0411. O marcador continua literalmente em NOITE-0411. `app/docs/PROMPTS.md:1851`, `app/docs/PROMPTS.md:1853`, `app/docs/BACKLOG.md:1738`, `app/docs/BACKLOG.md:8`.
-- Após MANHA, há alterações explícitas: **CRON-MARCA-COBRE-INSTALL** insere (c)(1) antes do item 4; **F3-PORTA-E-CRON-PRAZO** substitui o encerramento previsto no item 1; **LASTRO-PARTE-2** ganha encaixe após JUIZ-1; **CONTRATO-20-DECISOES** libera e redefine JUIZ-3/FIO MUDO numa sequência local. `app/docs/PROMPTS.md:1854`, `app/docs/PROMPTS.md:1857`, `app/docs/PROMPTS.md:1859`, `app/docs/PROMPTS.md:1875`.
-- Uma **substituição integral posterior de MANHA-0511** não está comprovada [nao verificado]. O complemento do piloto de 16:4x diz expressamente **“ordem e fila intocados”**. `app/docs/PROMPTS.md:1881`.
-
-_2095 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2096 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
