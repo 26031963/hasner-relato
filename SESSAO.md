@@ -6,10 +6,23 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 17:42:29.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (69.5 MB). Acoes na janela: **870**.
+**Medido em 06/11/2026 17:47:59.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (69.6 MB). Acoes na janela: **883**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:47:43 | Bash | Check logs ignored and PROMPTS format | `cd /home/ronald/saas-hasner; git check-ignore -v logs/espuria/x.txt; tail -3 app/docs/PROMPTS.md \| cut -c1-200; date +%H:%M` |
+| 17:47:32 | Bash | See prior sonda workflow artifacts | `cd /home/ronald/saas-hasner; ls logs/bo_g2_0611/; grep -n "sonda" bin/codex_pergunta.sh \| head -20` |
+| 17:43:59 | Bash | Wait for Codex RED-by-example answer | `cd /home/ronald/saas-hasner; f=logs/o10c/solo/r1.out; until grep -q "^rc=" $f 2>/dev/null; do /usr/bin/sleep 20; done; tail -1 $f` |
+| 17:43:52 | Bash | Check Codex RED launch status | `sleep 3; cat /home/ronald/saas-hasner/logs/o10c/solo/r1.out; pgrep -af "r1.q" \| grep -v pgrep \| cut -c1-80` |
+| 17:43:45 | Bash | Launch Codex RED-by-example for O10-C SOLO | `cd /home/ronald/saas-hasner; D=logs/o10c/solo; cat > $D/aval_solo.txt <<'EOF' aval Ronald: lei O10-C-SOLO -> o lado do substituto vem do ADMIN pela porta da troca (O10-B), nunca deduzido, corte Ronald por delegacao 06/11, substitui qualquer versao anterior. Os 16 lancamentos SOLO nao viram par por lote: cada um vai a lista do admin COM a porta da troca ja aberta no dia (quem cobriu + os 2 anexos o ...` |
+| 17:43:31 | Bash | Read prior RED-by-example question | `cd /home/ronald/saas-hasner; head -c 1500 logs/o10/a2.q` |
+| 17:43:27 | Bash | Check Codex wrapper papers for RED | `cd /home/ronald/saas-hasner; grep -n "CODEX_PAPEL\\|red)" bin/codex_pergunta.sh \| head -15; ls logs/o10/ \| head -30` |
+| 17:43:01 | Bash | Repoint ESPERANDO to trava_teste pid | `cd /home/ronald/saas-hasner/bin; python3 -c "import hook_stop_fila1 as h; print(repr(h._prova_pid('trava_teste.sh',283522)))"; cd ..; sed -i "2s#.*#ESPERANDO: trava_teste.sh \| pid=283522 \| arquivo=logs/h12h06b/pauta08/v4/suite_2322d080.log#" app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md` |
+| 17:42:55 | Bash | Find suite.sh child pid that matches | `cd /home/ronald/saas-hasner; for c in $(pgrep -P 283520); do ps -o pid=,args= -p $c \| cut -c1-120; done; cd bin; for c in $(pgrep -P 283520); do python3 -c "import hook_stop_fila1 as h; print($c, repr(h._prova_pid('suite.sh',$c)))"; done` |
+| 17:42:51 | Bash | See how pid cmdline is matched | `cd /home/ronald/saas-hasner; grep -n "def _prova_pid" -A25 bin/hook_stop_fila1.py \| grep -n "cmdline\\|split\\|basename\\|argv" ; pgrep -af "suite.sh --dir /home/ronald/wt-pauta08" \| cut -c1-150` |
+| 17:42:46 | Bash | Test hook top-line and pid proof | `cd /home/ronald/saas-hasner/bin; python3 -c " import hook_stop_fila1 as h print(repr(h._linha_do_topo())) print(repr(h._prova_pid('suite.sh',283520))) "` |
+| 17:42:41 | Bash | Read ESPERANDO proof function | `cd /home/ronald/saas-hasner; sed -n 646,700p bin/hook_stop_fila1.py` |
+| 17:42:33 | Bash | Compare suite log mtime with hook memory | `cd /home/ronald/saas-hasner; date +%T; stat -c '%y %s' logs/h12h06b/pauta08/v4/suite_2322d080.log; cat logs/hook_stop_espera.json 2>/dev/null \| head -c 300; ls -t logs/codex/PAUTA-08_* \| head -1` |
 | 17:42:27 | Bash | Inspect hook ESPERANDO logic | `cd /home/ronald/saas-hasner; grep -n "ESPERANDO\\|mtime\\|_SO_BANG" bin/hook_stop_fila1.py \| head -30` |
 | 17:42:17 | Bash | Confirm suite alive and log advancing | `cd /home/ronald/saas-hasner; ls -la --time-style=+%H:%M:%S logs/h12h06b/pauta08/v4/suite_2322d080.log; ps -p 283520 >/dev/null && echo vivo; date +%H:%M:%S` |
 | 17:42:02 | Bash | Check time and E-SEM-VIVA-B agent progress | `date +%H:%M; tail -c 300 /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/a3f744c5c32db9cd5.output \| tr -d '\0' \| tail -3` |

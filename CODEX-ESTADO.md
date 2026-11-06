@@ -1,7 +1,105 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 17:42** · publicado em **06/11/2026 17:42** (UTC-3)
+> Ultima resposta processada: **06/11/2026 17:45** · publicado em **06/11/2026 17:47** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 17:45 · sessao 17c10b2746e0 · - · - · origem=Ronald (tmux)
+
+- **Porta e atomicidade:** `app/ponto/portas/celula.py:633` declara par no mesmo atomic e retornos `trocada|igual|recusada`. `:635` diz que cada carta determina o dia do próprio lado; `:636` determina cedente como folga sem desconto; `:637` determina substituto como dia normal do próprio template. `:639` exige recusa antes de escrever quando falta lado, são o mesmo colaborador ou falta carta. `:640` determina rollback do outro lado se houver competência lavrada ou ausência de vínculo, “nunca meio par”. `:641` determina trilha somente quando algum lado mudou; `:642` determina segunda confirmação `igual`, sem escrita.
+- **Estado intermediário:** `app/ponto/portas/celula.py:540` exige trilha com antes real/depois e motivo; `:541` determina que falha de trilha desfaça a edição. Falha entre lados tem caso explícito em `app/ponto/tests/test_o10b_editar_dia_troca.py:325`, com preservação das células e ausência de trilhas observadas em `:338`.
+- **Concorrência:** regra explícita em `app/ponto/tests/test_o10b_editar_dia_troca.py:315`: “Duas confirmacoes concorrentes: a segunda espera a primeira e le o estado DELA (no-op).” `app/ponto/portas/celula.py:670` documenta ordem global de trava `(colaborador_id,data)`, independente do papel; o cenário cruzado está descrito em `app/ponto/tests/test_o10b_editar_dia_troca.py:443`.
+- **Vínculo:** `app/ponto/portas/celula.py:510` determina vínculo escolhido para a data e marcos do template desse vínculo; `:537` reafirma DNA do vínculo do dia. `:550` determina `sem_vinculo` quando nenhum responde pelo dia.
+- **Exportada:** `app/ponto/portas/celula.py:548` determina que dia em competência com TXT emitido não se edita, retorna `barrada` com frase em `barrados`; `:549` permite somente `apesar_da_lavra=<motivo>`. O lote declara nunca passar essa abertura em `app/ponto/management/commands/trocas_plantao_lote_o10c.py:46`.
+- **Pauta:** `app/pautas/models.py:9` declara pauta ancorada e abertura do objeto; `:33` define âncora dia `<colab_id>:<AAAA-MM-DD>`. `app/pautas/services.py:156` declara `escrever` como único caminho de escrita. Precedente de dedup por todo histórico, incluindo feitas/canceladas, é específico do limbo, em `app/chamados/services/fabrica_da_celula.py:228`; não constitui regra escrita de dedup de SOLO.
+- **DRY:** `app/ponto/management/commands/trocas_plantao_lote_o10c.py:37` determina somente leitura e nenhuma chamada à porta. `app/ponto/tests/test_o10c_lote_trocas.py:14` também determina nenhuma escrita sem `--aplicar`.
+- **Par declarado:** regra normativa anterior preservável em `app/ponto/tests/test_o10c_lote_trocas.py:6`: aprovado, colega declarado, duas cartas e fora de lavrada vira par pela porta; cedido folga e assumido normal. `:12` determina segunda rodada sem nova escrita; `:13` proíbe desconto novo.
+
+Definições dos campos:
+
+| Modelo | Campos com definição |
+|---|---|
+| `Ausencia` | `colaborador` `app/ponto/models.py:743`; `tipo` `:749`; `data` `:750`; `data_fim` `:751`; `hora_ini` `:768`; `hora_fim` `:770`; `descricao` `:776`; `documento` `:777`; `documento_referencia` `:791`; `status` `:799`; `registrado_por` `:801` |
+| `CelulaDia` | `colaborador` `app/escala/models.py:1681`; `data` `:1685`; `trabalha` `:1686`; `origem` `:1691`; `escala_geradora` `:1692`; `dna` `:1697`; `editada_em` `:1732`; `editada_por` `:1733` |
+| `Pauta` | `destinatario_departamento` `app/pautas/models.py:76`; `destinatario_user` `:78`; `ancora_tipo` `:83`; `ancora_id` `:84`; `texto` `:89`; `feito_em` `:93`; `cancelado_em` `:97`; `pai` `:101` |
+| `LogAuditoria` | `usuario` `app/core/models.py:295`; `acao` `:296`; `modelo` `:297`; `objeto_id` `:298`; `descricao` `:299`; `valor_antes` `:300`; `valor_depois` `:301` |
+
+Não encontrei regra escrita específica de SOLO para concorrência de depósito em Pauta, fechamento/cancelamento e reexecução, falha entre depósito e disponibilização da porta, chave por lançamento versus colaborador/dia, nem definição operacional de “porta já aberta/alcancável”; o aval fornecido exige o resultado, mas não detalha essas decisões. `[nao verificado]`
+
+## 06/11 17:45 · sessao 9ad22bc8dbbb · - · - · origem=Ronald (tmux)
+
+Regras escritas e campos conferidos, somente por leitura:
+
+- Competência: `app/ponto/janelas.py:10` define competência pelo mês/ano do fim; `:12` manda começar no corte do mês anterior e terminar em corte−1; `:13` explicita 21→20. Campo `Empresa.dia_inicio_competencia`: `app/colaboradores/models.py:46`.
+- Vínculo trocado: `app/ponto/portas/celula.py:507`–`:511` manda produzir DNA e marcos pelo vínculo que responde à data. `app/escala/alimentacao.py:231`–`:233` declara `CelulaDia.escala_geradora` como autoridade; `:244`–`:246` disciplina ausência de célula/geradora; `:249`–`:252` exclui vínculo desativado sem fim declarado.
+- Exportada: `app/ponto/portas/celula.py:548`–`:550` estabelece que dia com TXT emitido não se edita, retorna `barrada`, registra frase e só abre por `apesar_da_lavra=<motivo>`. Isso descreve edição da célula; não define integralmente “nada se grava na competência”.
+- Troca confirmada: `app/ponto/portas/celula.py:633`–`:642` exige duas edições no mesmo atomic; cada `Ausencia.data` é o dia daquele lado; cedente vira folga e substituto vira trabalho normal; recusa lado/carta ausente; nunca deixa meio par; repetição retorna `igual` sem escrita.
+- Cross-meia-noite: caso normativo nomeado `test_B07_turno_que_cruza_a_meia_noite_fica_no_dia_em_que_comeca`, `app/ponto/tests/test_o10b_editar_dia_troca.py:252`; preservação dos marcos 19:00→07:00 em `:257`. O aval literal desse arquivo, `:4`–`:9`, exige dia assumido normal, sem HE100 por ter sido folga.
+- Concorrência de confirmação: regra textual no docstring `app/ponto/tests/test_o10b_editar_dia_troca.py:315`: “Duas confirmacoes concorrentes: a segunda espera a primeira e le o estado DELA (no-op).”
+- Estado intermediário: regra “nunca meio par” em `app/ponto/portas/celula.py:640`; caso de falha entre lados em `app/ponto/tests/test_o10b_editar_dia_troca.py:325`.
+- Vazio: recusa lado ausente escrita em `app/ponto/portas/celula.py:639`; par inteiramente vazio exercitado em `app/ponto/tests/test_o10b_editar_dia_troca.py:304`.
+
+Definições dos campos:
+
+| Model | Campos e definição |
+|---|---|
+| `Ausencia` | `colaborador` `app/ponto/models.py:743`; `tipo` `:749`; `data` `:750`; `data_fim` `:751`; `documento` `:777` |
+| `EscalaColaborador` | `colaborador` `app/escala/models.py:872`; `posto` `:873`; `tipo_escala` `:874`; `data_inicio` `:875`; `data_fim` `:876`; `ativa` `:877`; `data_ancora_colaborador` `:974` |
+| `TipoEscala` | `hora_inicio` `app/escala/models.py:50`; `hora_fim` `:51`; `hora_inicio_intervalo` `:52`; `hora_fim_intervalo` `:53` |
+| `CelulaDia` | `colaborador` `app/escala/models.py:1681`; `data` `:1685`; `trabalha` `:1686`; `origem` `:1691`; `escala_geradora` `:1692`; `dna` `:1697` |
+| `ExportacaoDominio` | `empresa` `app/folha/models.py:77`; `mes` `:78`; `ano` `:79`; `gerado_por` `:81`; `nome_arquivo` `:82`; `hash_sha256` `:83` |
+
+Não encontrei regra de atomicidade/idempotência concorrente do depósito SOLO em lista administrativa; a regra de concorrência localizada é da confirmação da troca. `[nao verificado]`
+
+## 06/11 17:44 · sessao 99a3602610bb · PAUTA-08 · verificador · origem=Code
+
+1. **O texto novo mede o estado atual, mas a afirmação “hash conferido intacto” pode ser persistida antes da conferência.** A cabeça é gravada dentro da transação por colaborador; a comparação final fica depois desses commits ([comando:198](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:198), [comando:219](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:219)).
+
+| Afirmação de `_cabeca` | O que a sustenta / limite |
+|---|---|
+| Identidade `colNN` e competência | Montadas com PK, mês e ano recebidos ([comando:54](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:54), [comando:67](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:67)). |
+| “EXPORTADA (TXT vigente)” | Consulta `competencia_entregue` por empresa/competência; o juiz verifica registro vigente não invalidado ([comando:124](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:124), [export.py:581](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/folha/export.py:581)). |
+| “PAGO = o gravado da folha de hoje” | Lê o `FechamentoMensal` atual, recortado pelos campos canônicos. Igualdade com o TXT exportado ou pagamento efetivo no Domínio: **não medida** ([comando:130](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:130), [regen_exportada.py:77](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/ponto/portas/regen_exportada.py:77)). |
+| “hash conferido intacto NESTE ato” | Compara hash inicial e final ([comando:120](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:120), [comando:219](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:219)). Se divergir, lança erro **depois de gravar as pautas**; elas podem sobreviver com a afirmação não confirmada ([comando:189](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:189), [comando:221](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:221)). |
+| “DEVIDO = o calculo de hoje, lido sem gravar” | Chama `somente_leitura=True`; o ramo retorna os campos calculados em vez de salvar o fechamento ([comando:135](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:135), [fechamento.py:1112](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/ponto/services/fechamento.py:1112)). |
+| “N campo(s) diferem” | Conta os campos selecionados por `_diferente`, excluindo mês/ano. Diferença numérica significa tolerância `> 0.015` ([comando:139](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:139), [comando:174](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:174), [regen_exportada.py:248](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/ponto/portas/regen_exportada.py:248)). |
+| “os dois numeros vao abaixo” | Monta `campo: pago X -> devido Y`, distribui em filhas e as escreve ([comando:175](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:175), [comando:202](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:202)). |
+| “A diferenca NAO e atribuida a causa neste ato” | Condiz com a saída: os itens contêm campo e valores, sem atribuição causal ([comando:66](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:66), [comando:175](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:175)). |
+| “Conferir com o pago no Dominio” | Instrução humana; conferência **não medida** pelo comando ([comando:66](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:66)). |
+| “(L-092)” | Referência normativa, não medição ([comando:65](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:65)). |
+
+“Intacto” significa igualdade do hash nos dois extremos, dentro dos campos cobertos; há exclusões explícitas, e o hash é MD5 truncado em 12 caracteres. Isso não demonstra história desde a exportação nem ausência de alterações intermediárias ([regen_exportada.py:37](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/ponto/portas/regen_exportada.py:37), [regen_exportada.py:56](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/ponto/portas/regen_exportada.py:56), [regen_exportada.py:74](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/ponto/portas/regen_exportada.py:74)).
+
+2. **Sim, restam expressões equivalentes, com escopos distintos.**
+
+- No comando: “sem tocar o gravado” na docstring; “antes e depois […] nao se moveu”; help “Nao toca o gravado”. Referem-se ao ato, sem demonstrar a história anterior ([comando:2](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:2), [comando:14](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:14), [comando:72](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:72)).
+- Na docstring do teste: “PAGO […] L-092: nao se toca”; a propriedade descrita é hash antes/depois ([teste:2](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/tests/test_pauta_pago_x_devido_exportada.py:2), [teste:13](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/tests/test_pauta_pago_x_devido_exportada.py:13)).
+- Em outro comando de `pautas/`: “O TXT exportado NAO foi tocado”, sobre **TXT**, além de “sem tocar o gravado” na docstring e no help ([pauta_folga_nao_definida_exportada.py:33](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:33), [mesmo arquivo:2](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:2), [mesmo arquivo:39](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:39)).
+- O literal velho também permanece como texto rejeitado no comentário/assert do teste; não é uma afirmação emitida ao DP ([teste:123](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/tests/test_pauta_pago_x_devido_exportada.py:123), [teste:127](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/tests/test_pauta_pago_x_devido_exportada.py:127)).
+
+3. **O teste rejeita o texto velho literal, mas não qualquer variante histórica.** Ele apenas proíbe `NAO foi tocado` e exige `conferido intacto NESTE ato` ([teste:127](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/tests/test_pauta_pago_x_devido_exportada.py:127), [teste:128](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/tests/test_pauta_pago_x_devido_exportada.py:128)).
+
+Um mutante que passa por essas duas asserções: conservar o texto novo e acrescentar **“Desde a exportacao, o gravado permaneceu inalterado.”** Mantém a substring exigida, evita a proibida e volta a afirmar uma história que a comparação inicial/final não mede ([teste:127](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/tests/test_pauta_pago_x_devido_exportada.py:127), [teste:128](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/tests/test_pauta_pago_x_devido_exportada.py:128), [comando:120](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:120), [comando:219](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:219)). Execução da suíte Django: **[nao verificado]**.
+
+4. **Escritores e leitores localizados:**
+
+| Quem | Operação sobre `Pauta.texto` |
+|---|---|
+| Comando → serviço | Cabeça e filhas passam por `_ps.escrever`; o serviço persiste `texto[:500]` ([comando:198](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:198), [comando:202](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:202), [services.py:185](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/services.py:185)). |
+| Próprio comando | Localiza cabeça por prefixo; seleciona filhas por prefixo e compara textos completos; reversão verifica a marca inicial ([comando:234](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:234), [comando:241](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:241), [comando:268](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:268)). |
+| Painel de pautas | Serializa cabeça/respostas; navegador mostra ambas por `textContent` ([views.py:40](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/views.py:40), [views.py:47](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/views.py:47), [_copiloto.html:405](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/templates/core/_copiloto.html:405), [_copiloto.html:424](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/templates/core/_copiloto.html:424)). |
+| API/mensageria | API entrega texto literal; cliente busca o JSON e ferramenta repassa os itens ([views_mensageria.py:1334](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/api/views_mensageria.py:1334), [core_client.py:431](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/mensageria/nucleo/core_client.py:431), [ferramentas.py:2241](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/mensageria/nucleo/ferramentas.py:2241)). |
+| Testes do comando | Inspecionam prefixo, valores das filhas e substrings da cabeça ([teste:105](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/tests/test_pauta_pago_x_devido_exportada.py:105), [teste:108](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/tests/test_pauta_pago_x_devido_exportada.py:108), [teste:127](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/tests/test_pauta_pago_x_devido_exportada.py:127)). |
+
+**Não identifiquei leitor que quebre ao parsear a prosa alterada:** os reconhecedores desse comando usam marca/chave preservadas; UI e API exibem ou transportam o texto ([comando:41](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:41), [comando:54](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:54), [comando:234](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:234), [_copiloto.html:405](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/templates/core/_copiloto.html:405)). Existem parsers de outras famílias, protegidos por outros marcadores, como Esmeril e Discordantes ([pautas_do_esmeril.py:63](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/ponto/services/pautas_do_esmeril.py:63), [pautas_dos_discordantes.py:165](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/ponto/services/pautas_dos_discordantes.py:165)). Leitores externos: **[nao verificado]**.
+
+**Cabeças antigas não são corrigidas pelo comando:** encontrar uma existente provoca `continue`; a comparação posterior considera apenas filhas. Assim, uma cabeça antiga pode conservar a frase velha; ocorrência real em produção: **[nao verificado]** ([comando:193](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:193), [comando:241](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:241)).
+
+5. **Sim: `LEIS.md:177` ainda contém uma generalização histórica contradita pelos docs.**
+
+- **“Até 06/11 […] nenhum código criava”** conflita com o registro de **19/10** de Pauta DP com `pago -> devido` por campo. A cópia contém essa montagem e a escrita de cabeça/filhas em outro fluxo ([LEIS.md:177](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/docs/LEIS.md:177), [RELATO-ARQUIVO.md:43468](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/docs/RELATO-ARQUIVO.md:43468), [RELATO-ARQUIVO.md:43472](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/docs/RELATO-ARQUIVO.md:43472), [passivo_validado.py:192](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/chamados/services/passivo_validado.py:192), [passivo_validado.py:229](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/chamados/services/passivo_validado.py:229)). Esse fluxo retifica o gravado; é diferente do comparador somente leitura da PAUTA-08 ([passivo_validado.py:438](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/chamados/services/passivo_validado.py:438), [comando:135](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:135)).
+- **“Caminho AUTOMATICO segue sem codigo” precisa delimitar a família.** A autorização de HE já gera automaticamente Pauta DP em exportada após autorização, com pago da lavratura e devido do motor. Isso não implementa o comparador genérico da PAUTA-08 ([autorizacao_he_periodo.py:174](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/ponto/services/autorizacao_he_periodo.py:174), [mesmo arquivo:184](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/ponto/services/autorizacao_he_periodo.py:184), [mesmo arquivo:299](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/ponto/services/autorizacao_he_periodo.py:299)).
+- **Há diferença de referência entre linhas da própria LEIS:** a linha 125 exige **exportado × motor de hoje**; a 177 descreve **gravado atual × recálculo**. O comando não demonstra equivalência entre gravado atual e exportado ([LEIS.md:125](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/docs/LEIS.md:125), [LEIS.md:177](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/docs/LEIS.md:177), [comando:130](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/pautas/management/commands/pauta_pago_x_devido_exportada.py:130)).
+- A pauta manual é compatível com os cortes que encaminham diferenças ao DP e com a revogação da pauta como **pré-condição**: deixar de exigir previamente não impede sua emissão ([CORTES.md:353](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/docs/CORTES.md:353), [LEIS.md:150](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/docs/LEIS.md:150), [LEIS.md:198](/home/ronald/codex_ws/2322d0801c7cecd6728a1bd6c242ca19bb3117e0/app/docs/LEIS.md:198)).
 
 ## 06/11 17:42 · sessao eb897eabe44c · - · - · origem=Ronald (tmux)
 
@@ -963,185 +1061,4 @@ As execuções de M6, RED e suíte, ocorrências em produção e eventuais omiss
 | (d) Modo-comum demonstrado | 0 |
 | **Total** | **5** |
 
-## 06/11 17:07 · sessao 2c03cec8cc75 · - · - · origem=Ronald (tmux)
-
-Contagens abaixo em **colabs/dias-colab**, apenas das linhas `DONO` emitidas; `—` significa ausência de linha daquela classe no texto. Cada célula referencia a chave `DONO|competência|rubrica|classe` das partes indicadas e permanece `[nao verificado]` por ser transcrição sem arquivo:linha.
-
-| 10/2026 — rubrica | ESTRUTURA: parcelas → soma | CADASTRO: parcelas → soma | BATIDA: parcelas → soma |
-|---|---|---|---|
-| horas_trabalhadas | P3 1/1 → **1/1** | P1 1/1 + P2 1/1 + P5 3/3 + P6 1/1 → **6/6** | P3 1/1 → **1/1** |
-| horas_intra_indenizada | P3 1/1 → **1/1** | P3 3/6 + P4 2/3 + P5 1/7 + P6 2/8 → **8/24** | P1 1/2 + P3 2/2 → **3/4** |
-| horas_extras_50 | — | P4 1/2 + P5 2/5 + P6 1/1 → **4/8** | — |
-| horas_extras_100 | P2 1/1 + P3 1/1 → **2/2** | — | — |
-| horas_extras_100_feriado | P2 1/1 + P3 1/1 → **2/2** | — | — |
-| horas_extras_50_noturna | — | — | — |
-| horas_extras_100_noturna | P1 3/3 + P4 2/2 + P5 1/1 → **6/6** | P2 2/2 + P6 1/1 → **3/3** | — |
-| horas_folga_trabalhada | — | — | — |
-| horas_noturnas | P2 2/9 + P4 1/3 + P5 1/2 → **4/14** | P5 1/1 → **1/1** | P5 1/1 → **1/1** |
-| horas_atraso | P1 1/1 + P2 2/3 + P3 1/1 + P5 1/1 → **5/6** | P2 1/1 + P4 1/1 → **2/2** | — |
-| horas_saida_antecipada | P3 1/1 → **1/1** | P4 1/1 → **1/1** | — |
-
-Todas as células da tabela: `[nao verificado — DONO|2026-10|rubrica|classe, P1..P6]`.
-
-| 11/2026 — rubrica | ESTRUTURA: parcelas → soma | CADASTRO: parcelas → soma | BATIDA: parcelas → soma |
-|---|---|---|---|
-| horas_trabalhadas | — | P2 1/1 + P5 3/5 → **4/6** | P3 1/1 → **1/1** |
-| horas_intra_indenizada | — | P1 1/1 + P3 1/1 + P4 1/2 + P5 3/8 + P6 2/6 → **8/18** | P5 1/2 → **1/2** |
-| horas_extras_50 | — | P5 3/3 + P6 1/2 → **4/5** | — |
-| horas_extras_100 | P2 1/1 + P3 1/1 + P4 1/1 → **3/3** | P5 1/1 → **1/1** | P5 1/2 → **1/2** |
-| horas_extras_100_feriado | P2 1/1 + P3 1/1 + P4 1/1 → **3/3** | P5 1/1 → **1/1** | — |
-| horas_extras_50_noturna | — | — | — |
-| horas_extras_100_noturna | P1 2/2 + P2 2/2 + P4 2/2 → **6/6** | P2 1/1 + P3 1/1 + P6 1/1 → **3/3** | — |
-| horas_folga_trabalhada | — | — | — |
-| horas_noturnas | — | — | — |
-| horas_atraso | P2 1/1 + P4 1/1 → **2/2** | P4 1/3 + P5 1/1 → **2/4** | — |
-| horas_saida_antecipada | P6 1/1 → **1/1** | P4 1/3 + P5 1/1 → **2/4** | — |
-
-Todas as células da tabela: `[nao verificado — DONO|2026-11|rubrica|classe, P1..P6]`.
-
-**Não somar colabs entre donos como união:** um colaborador pode aparecer em classes diferentes em dias distintos. Exemplos concretos: em 10/2026, intra soma `12` presenças nos donos contra `10` colabs na união de `PARCIAL`; noturnas soma `6` contra `4`. Em 11/2026, intra soma `9` contra `8`; extras_100 soma `5` contra `4`. `[nao verificado — DONO e PARCIAL das respectivas rubricas, P1..P6]`
-
-Somas de `partes_h` das linhas **`SOMA DIVERGENCIA`**, calculadas com `Decimal`, sem arredondamento intermediário. Estes valores representam a divergência atribuída e **não substituem** `Σ(Decimal(PARCIAL.v3_h) − Decimal(PARCIAL.v2_h))`, que inclui resíduos. `[nao verificado — SOMA DIVERGENCIA|competência|rubrica|partes_h, P1..P6]`
-
-| Rubrica | 10/2026: Σ partes_h | 11/2026: Σ partes_h |
-|---|---:|---:|
-| horas_trabalhadas | -22.4888848341666705 | -23.9155754230555561 |
-| horas_intra_indenizada | -22.85860694444444556 | -17.39179638888888795 |
-| horas_extras_50 | 1.19472173305555515 | -2.95532467444444169 |
-| horas_extras_100 | 23.135103333333331 | 29.0182865599999961 |
-| horas_extras_100_feriado | 23.135103333333331 | 25.0159901711111061 |
-| horas_extras_50_noturna | 0 | 0 |
-| horas_extras_100_noturna | 11.54273918194444492 | 13.2956696391666664 |
-| horas_folga_trabalhada | 0 | 0 |
-| horas_noturnas | 0.57112954714284966 | 0 |
-| horas_atraso | 10.5703825000000005 | 1.827685833333333356 |
-| horas_saida_antecipada | -0.74333333333333329 | 3.500166944444443826 |
-
-Todas as células da tabela: `[nao verificado — SOMA DIVERGENCIA|competência|rubrica|partes_h, P1..P6]`.
-
-Parcelas de `partes_h`, na ordem P1, P2, P3, P4, P5, P6, para auditoria da soma:
-
-```text
-10/2026
-horas_trabalhadas:
--2.5428905555555561; -2.8423052777777782; -3.0353216666666674; 0; -9.5403020563888905; -4.5280652777777783
-horas_intra_indenizada:
--2; 0; -4.0566669444444443; -0.63527333333333336; -8.1666666666666679; -8
-horas_extras_50:
-0; 0; 0; -0.50294833333333311; 1.4735158538888897; 0.22415421249999856
-horas_extras_100 e horas_extras_100_feriado, cada:
-0; 10.985971388888888; 12.149131944444443; 0; 0; 0
-horas_extras_100_noturna:
-2.0639545019444445; 6.1646777861111115; 0; 1.4042363383333334; 0.90987055555555552; 1
-horas_noturnas:
-0; -2.5623561507936552; 0; 2.571669983650791; 0.56181571428571386; 0
-horas_atraso:
-2.3685; 4.5787158333333338; 1.1068333333333333; 0.186; 2.3303333333333334; 0
-horas_saida_antecipada:
-0; 0; -0.5571666666666667; -0.18616666666666659; 0; 0
-
-11/2026
-horas_trabalhadas:
-0; -2.8425216666666664; -3.9930194444444447; 0; -17.080034311944445; 0
-horas_intra_indenizada:
--1.1666666666666667; 0; -1; 0.40334305555555555; -9.6284727777777768; -6
-horas_extras_50:
-0; 0; 0; 0; -3.3361696744444429; 0.38084500000000121
-horas_extras_100:
-0; -7.0528018630555556; 12.066969811944444; 3.9582752777777777; 20.04584333333333; 0
-horas_extras_100_feriado:
-0; -7.0528018630555556; 12.066969811944444; 3.9582752777777777; 16.04354694444444; 0
-horas_extras_100_noturna:
-1.1387258297222222; 7.8098224536111109; 1; 1.4858424669444446; 0; 1.8612788888888887
-horas_atraso:
-0; 0.62282416666666662; 0; 1.1285283333333334; 0.076333333333333336; 0
-horas_saida_antecipada:
-0; 0; 0; -0.75533333333333341; -0.076333333333333364; 4.3318336111111106
-```
-
-Todas as parcelas: `[nao verificado — SOMA DIVERGENCIA|competência|rubrica|partes_h, P1..P6]`. As rubricas omitidas desse bloco têm seis `partes_h=0` emitidos: extras_50_noturna e folga_trabalhada nos dois meses, mais noturnas em novembro. `[nao verificado — mesmas chaves]`
-
-## 06/11 17:05 · sessao 2588e3e439fa · - · - · origem=Ronald (tmux)
-
-Consolidação apenas dos anexos textuais; todas as referências abaixo são `[nao verificado]`, com a chave da linha de origem.
-
-Cobertura — origem em cada parte: `COBERTURA_COLAB|competencia`; fechamento também indicado por `SOMA COBERTURA|competencia|True`. `[nao verificado]`
-
-| Parte | 10/2026: medidos + excluídos = universo | 11/2026: medidos + excluídos = universo |
-|---|---:|---:|
-| 1 | 86 + 24 = 110 | 74 + 22 = 96 |
-| 2 | 81 + 28 = 109 | 79 + 20 = 99 |
-| 3 | 86 + 16 = 102 | 78 + 19 = 97 |
-| 4 | 79 + 17 = 96 | 71 + 20 = 91 |
-| 5 | 89 + 18 = 107 | 86 + 13 = 99 |
-| 6 | 83 + 17 = 100 | 79 + 17 = 96 |
-| **Soma** | **504 + 120 = 624** | **467 + 111 = 578** |
-
-Todas fecham; os universos somados coincidem com `UNIVERSO|2026-10|colabs_porta=624` e `UNIVERSO|2026-11|colabs_porta=578`. Todas as partes apresentam `COBERTURA_INTEGRAL|competencia|False` nos dois meses. `[nao verificado]`
-
-Motivos de exclusão — origem em cada parte: `EXCLUIDO|competencia|colNNN|PRODUTO:classe`, resumida por `PRODUTO|competencia|classe`. Os traços abaixo indicam classe sem linha `PRODUTO` na parte, sem atribuir observação adicional. `[nao verificado]`
-
-| Competência / classe | P1 | P2 | P3 | P4 | P5 | P6 | Soma |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| 10 / RECUSA_PORTA_SEM_DONO | 18 | 19 | 13 | 11 | 11 | 13 | **85** |
-| 10 / SEM_RETORNO_FECHAMENTO | 6 | 6 | 1 | 5 | 7 | 3 | **28** |
-| 10 / MOTOR_FECHAMENTO_horas_trabalhadas | — | 3 | 2 | 1 | — | 1 | **7** |
-| **10 / total** | **24** | **28** | **16** | **17** | **18** | **17** | **120** |
-| 11 / RECUSA_PORTA_SEM_DONO | 21 | 16 | 17 | 16 | 12 | 15 | **97** |
-| 11 / SEM_RETORNO_FECHAMENTO | — | 1 | 1 | 3 | 1 | 1 | **7** |
-| 11 / MOTOR_FECHAMENTO_horas_trabalhadas | 1 | 3 | 1 | 1 | — | 1 | **7** |
-| **11 / total** | **22** | **20** | **19** | **20** | **13** | **17** | **111** |
-
-PRODUTO: células no formato **colabs/dias**, somadas por classe entre partes. Cada célula vem da linha `PRODUTO|competencia|classe|colabs|dias` da parte correspondente. Não somar classes como pessoas distintas, pois elas podem abranger os mesmos colaboradores. `[nao verificado]`
-
-| 10/2026 — classe(s) com valores iguais | P1 | P2 | P3 | P4 | P5 | P6 | Soma |
-|---|---|---|---|---|---|---|---|
-| DIA_FORA_UNIVERSO_PORTA; SEM_DECISAO_horas_trabalhadas; SEM_DECISAO_horas_intra_indenizada; SEM_DECISAO_horas_folga_trabalhada | 56/296 | 51/247 | 58/324 | 48/321 | 59/346 | 52/229 | **324/1763** |
-| MOTOR_FECHAMENTO_horas_trabalhadas | — | 3/54 | 2/42 | 1/19 | — | 1/24 | **7/139** |
-| RECUSA_PORTA_SEM_DONO | 18/237 | 19/295 | 13/137 | 11/191 | 11/155 | 13/181 | **85/1196** |
-| SEM_DECISAO_horas_atraso; SEM_DECISAO_horas_saida_antecipada | 59/326 | 55/271 | 61/370 | 49/340 | 61/369 | 55/258 | **340/1934** |
-| SEM_DECISAO_horas_extras_100; SEM_DECISAO_horas_extras_100_feriado | 59/321 | 53/259 | 59/352 | 49/340 | 60/365 | 54/249 | **334/1886** |
-| SEM_DECISAO_horas_extras_100_noturna; SEM_DECISAO_horas_extras_50; SEM_DECISAO_horas_extras_50_noturna | 59/321 | 53/260 | 59/352 | 49/340 | 60/365 | 54/249 | **334/1887** |
-| SEM_DECISAO_horas_noturnas | 59/312 | 52/254 | 59/335 | 49/332 | 61/356 | 55/242 | **335/1831** |
-| SEM_RETORNO_FECHAMENTO | 6/0 | 6/0 | 1/0 | 5/0 | 7/0 | 3/0 | **28/0** |
-
-Todos os valores da tabela anterior: `[nao verificado]`, origem `PRODUTO|2026-10|classe` nas partes 1–6.
-
-| 11/2026 — classe(s) com valores iguais | P1 | P2 | P3 | P4 | P5 | P6 | Soma |
-|---|---|---|---|---|---|---|---|
-| DIA_FORA_UNIVERSO_PORTA; SEM_DECISAO_horas_trabalhadas; SEM_DECISAO_horas_intra_indenizada; SEM_DECISAO_horas_folga_trabalhada | 74/817 | 77/857 | 76/805 | 70/791 | 86/967 | 78/876 | **461/5113** |
-| MOTOR_FECHAMENTO_horas_trabalhadas | 1/14 | 3/39 | 1/14 | 1/11 | — | 1/12 | **7/90** |
-| RECUSA_PORTA_SEM_DONO | 21/329 | 16/269 | 17/272 | 16/310 | 12/239 | 15/223 | **97/1642** |
-| SEM_DECISAO_horas_atraso; SEM_DECISAO_horas_saida_antecipada | 74/846 | 78/885 | 77/839 | 71/804 | 86/990 | 79/894 | **465/5258** |
-| SEM_DECISAO_horas_extras_100; SEM_DECISAO_horas_extras_100_feriado; SEM_DECISAO_horas_extras_100_noturna; SEM_DECISAO_horas_extras_50; SEM_DECISAO_horas_extras_50_noturna | 74/844 | 77/881 | 76/832 | 70/800 | 86/990 | 78/891 | **461/5238** |
-| SEM_DECISAO_horas_noturnas | 74/830 | 78/866 | 76/814 | 70/800 | 86/970 | 79/884 | **463/5164** |
-| SEM_RETORNO_FECHAMENTO | — | 1/0 | 1/0 | 3/0 | 1/0 | 1/0 | **7/0** |
-
-Todos os valores da tabela anterior: `[nao verificado]`, origem `PRODUTO|2026-11|classe` nas partes 1–6.
-
-Os zeros em dias de `SEM_RETORNO_FECHAMENTO` vêm acompanhados de `DIAS_NAO_LOCALIZADOS|competencia|PRODUTO|SEM_RETORNO_FECHAMENTO|colabs=...`; portanto, não representam comprovação de ausência de dias afetados. `[nao verificado]`
-
-| Parte | rc | INCOMPLETO | COLABS_COM_FALHA_INSTRUMENTO | TRATADA_LOCAL | EXCLUIDOS_TOTAL |
-|---|---:|---|---:|---|---:|
-| 1 | 0 | sem ocorrência no texto | 0 | sem ocorrência no texto | 46 |
-| 2 | 0 | sem ocorrência no texto | 0 | sem ocorrência no texto | 48 |
-| 3 | 0 | sem ocorrência no texto | 0 | sem ocorrência no texto | 35 |
-| 4 | 0 | sem ocorrência no texto | 0 | sem ocorrência no texto | 37 |
-| 5 | 0 | sem ocorrência no texto | 0 | sem ocorrência no texto | 31 |
-| 6 | 0 | sem ocorrência no texto | 0 | sem ocorrência no texto | 34 |
-| **Soma** | — | — | **0** | — | **231** |
-
-Origem: rodapé de cada parte, linhas `rc_sombra=0`, `COLABS_COM_FALHA_INSTRUMENTO|0`, `EXCLUIDOS_TOTAL|N`; busca textual das ocorrências restantes. Todas as células são `[nao verificado]`. Não há linha de erro de instrumento no texto fornecido; ausência efetiva de erros e contagem de exceções tratadas localmente permanecem `[nao verificado]`. Os 231 excluídos somam **ocorrências por competência**, sem deduplicação entre outubro e novembro. `[nao verificado]`
-
-## 06/11 17:05 · sessao 4407b2add58b · - · - · origem=Ronald (tmux)
-
-- O DIFF v2 × v3 é medida de impacto por rubrica, com dono; não valida o motor novo. [CLAUDE.md:45](/home/ronald/codex_ws/320ef1c738b115e3f7e0004e4c51a48a6eb2d953/CLAUDE.md:45), [CLAUDE.md:415](/home/ronald/codex_ws/320ef1c738b115e3f7e0004e4c51a48a6eb2d953/CLAUDE.md:415).
-- Exigem `!`: tocar o gravado de competência exportada e alterar `motor_calculo_v2.py`; a documentação do calculador declara o repontamento da troca como passo dependente de `!`. [CLAUDE.md:262](/home/ronald/codex_ws/320ef1c738b115e3f7e0004e4c51a48a6eb2d953/CLAUDE.md:262), [CLAUDE.md:403](/home/ronald/codex_ws/320ef1c738b115e3f7e0004e4c51a48a6eb2d953/CLAUDE.md:403), [periodo.py:8](/home/ronald/codex_ws/320ef1c738b115e3f7e0004e4c51a48a6eb2d953/app/ponto/calculador/periodo.py:8).
-- Há dependências concretas do v2: constantes de tolerância importadas em `periodo.py`; classes/função noturna e chamada `he_noturna` em `regras.py`. Isso identifica dependência de código, não uma lista medida de `!` por colaborador. [periodo.py:163](/home/ronald/codex_ws/320ef1c738b115e3f7e0004e4c51a48a6eb2d953/app/ponto/calculador/periodo.py:163), [regras.py:35](/home/ronald/codex_ws/320ef1c738b115e3f7e0004e4c51a48a6eb2d953/app/ponto/calculador/regras.py:35), [regras.py:825](/home/ronald/codex_ws/320ef1c738b115e3f7e0004e4c51a48a6eb2d953/app/ponto/calculador/regras.py:825).
-- As três lacunas `FORA_DA_MEDIDA` dos anexos correspondem ao `NAO_DECIDE` do código: `horas_falta` vem da ausência aprovada; `horas_reflexo_dsr` e `saldo_banco_horas` são ajustes mensais. [regras.py:429](/home/ronald/codex_ws/320ef1c738b115e3f7e0004e4c51a48a6eb2d953/app/ponto/calculador/regras.py:429).
-- O juiz do dono retorna `CADASTRO`, `BATIDA` ou `ESTRUTURA`. `RESIDUO` nos anexos deve ser apresentado separadamente, preservando `ATE_LIMIAR` e `SEM_DECISAO`, sem atribuí-lo como quarto retorno desse juiz. [e6_oraculo.py:98](/home/ronald/codex_ws/320ef1c738b115e3f7e0004e4c51a48a6eb2d953/app/ponto/management/commands/e6_oraculo.py:98).
-- A releitura declara que o alerta textual permanece contando a versão v2 quando o número v3 muda; é limite do código, não lacuna adicional explicitamente medida pelos anexos. [periodo.py:573](/home/ronald/codex_ws/320ef1c738b115e3f7e0004e4c51a48a6eb2d953/app/ponto/calculador/periodo.py:573).
-- Os anexos fornecidos não identificam exportação das competências nem trazem lista explícita de `!`; não há fundamento para marcar colaboradores ou rubricas como exportados somente pelo delta. [nao verificado]
-- Não encontrei `AGENTS.md` aplicável nem o script da sonda na cópia; `logs/` está ausente. [nao verificado]
-
-_2361 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2364 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
