@@ -1,7 +1,80 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 04:34** · publicado em **06/11/2026 04:38** (UTC-3)
+> Ultima resposta processada: **06/11/2026 04:44** · publicado em **06/11/2026 04:43** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 04:44 · sessao 5d2f2b28a4fe · - · - · origem=Ronald (tmux)
+
+P1/P5, conferidos por inspeção e execução em memória:
+
+1. **BLOQUEIA — múltiplos registros são apagados de `decor`, mas somente um entra em `registros`.** `_registro` retorna no primeiro decorador reconhecido (`bin/quem_chama.py:256`), enquanto o delta remove todos os decoradores de registro (`bin/quem_chama.py:282`, `bin/quem_chama.py:284`).
+
+   Contraexemplo:
+
+   ```python
+   register = template.Library()
+
+   @register.filter(name="a")
+   @register.filter(name="b")
+   def f(x):
+       return x
+   ```
+
+   Um template `{% load m_tags %}\n{{ x|b }}` não é associado ao símbolo: o metadado contém apenas `('filtro', 'a')`, e o varredor busca exclusivamente `info['registros']` (`bin/quem_chama.py:611`, `bin/quem_chama.py:614`). A reprodução em memória emitiu `simbolo f [filtro/tag]: 0 chamador(es)`; a leitura própria também ficou vazia (`bin/quem_chama.py:492`, `bin/quem_chama.py:529`, `bin/quem_chama.py:770`).
+
+   O falso zero já era possível na v6 anexada, pela precedência antiga; a remoção indiscriminada nova conserva esse defeito mesmo depois da inversão de precedência (`bin/quem_chama.py:353`, `bin/quem_chama.py:356`). Ocorrência concreta desse empilhamento na cópia: **[nao verificado]**.
+
+2. **FILA — `@stringfilter` passa a rebaixar filtro conhecido.** Com `@register.filter` empilhado com `@stringfilter`, o primeiro sai de `decor`, mas `stringfilter` permanece e não integra `DECORADORES_TRANSPARENTES` (`bin/quem_chama.py:65`, `bin/quem_chama.py:69`, `bin/quem_chama.py:284`). A reprodução devolveu `decorado @stringfilter: o decorador pode registrar`, antes de considerar o registro conhecido (`bin/quem_chama.py:353`, `bin/quem_chama.py:356`). É perda conservadora de precisão; não produz zero contado (`bin/quem_chama.py:774`). Ocorrência real desse decorador na cópia: **[nao verificado]**.
+
+3. **FILA — os demais casos pedidos conservam a proteção.**
+
+   - Biblioteca desconhecida de `_libs_de_template`: `_registro` não reconhece, o decorador permanece e vira motivo opaco (`bin/quem_chama.py:245`, `bin/quem_chama.py:282`, `bin/quem_chama.py:353`).
+   - `simple_tag(takes_context=True)`: conserva o nome da função; a lógica especial de argumentos posicionais só vale para `filter` e `tag` (`bin/quem_chama.py:247`, `bin/quem_chama.py:253`). A reprodução sobre `nav_extras.next_para` devolveu `filtro/tag`; o caso existe em `app/core/templatetags/nav_extras.py:49`.
+   - `inclusion_tag(..., takes_context=True)`: igualmente preservado; caso real `voltar` em `app/core/templatetags/nav_extras.py:36`.
+   - `register.filter("x", f)` fora de decorador: `f` fica `simbolo-de-topo`, mas a chamada gera leitura própria de `f`, evitando zero no exemplo (`bin/quem_chama.py:360`, `bin/quem_chama.py:521`, `bin/quem_chama.py:529`).
+   - Membro de classe: não recebe registro e prevalece o tipo não varrido de atributo de classe (`bin/quem_chama.py:280`, `bin/quem_chama.py:345`).
+
+## 06/11 04:43 · sessao 16c879ef65ef · - · - · origem=Ronald (tmux)
+
+P2: fluxo consistente; nenhum leitor encontrado exige o decorador de registro dentro de `decor` (`bin/quem_chama.py:280`, `bin/quem_chama.py:353`, `bin/quem_chama.py:712`).
+
+| Campo | Escritores | Leitores |
+|---|---|---|
+| `decor` cru | Coleta e filtragem: `bin/quem_chama.py:281`, `bin/quem_chama.py:283`; gravação: `bin/quem_chama.py:285` | União: `bin/quem_chama.py:712` |
+| `decor` somado | Inicialização: `bin/quem_chama.py:710`; união: `bin/quem_chama.py:712` | Deduplicação: `bin/quem_chama.py:712`; classificação: `bin/quem_chama.py:353` |
+| `registro` singular | `_registro`: `bin/quem_chama.py:247`, `bin/quem_chama.py:251`, `bin/quem_chama.py:255`; dict cru: `bin/quem_chama.py:285` | Condição da filtragem: `bin/quem_chama.py:282`; exclusão da cópia: `bin/quem_chama.py:709`; união: `bin/quem_chama.py:713`, `bin/quem_chama.py:714` |
+| `registros` plural | Inicialização: `bin/quem_chama.py:710`; acréscimo: `bin/quem_chama.py:714` | Deduplicação: `bin/quem_chama.py:713`; classificação: `bin/quem_chama.py:356`, `bin/quem_chama.py:357`; usos em template: `bin/quem_chama.py:611`, `bin/quem_chama.py:612` |
+
+A classificação ocorre depois da soma e a varredura de templates ocorre depois da construção dos alvos (`bin/quem_chama.py:715`, `bin/quem_chama.py:716`, `bin/quem_chama.py:721`, `bin/quem_chama.py:737`). A busca textual em código de `app/` e `bin/` não encontrou consumidor adicional dessas funções; consumidor fora desse universo: **[nao verificado]**.
+
+P4: os bloqueios identificados nas voltas anteriores estão fechados pelo fluxo atual:
+
+- Decorador acrescentado na ponta: a união conserva `receiver`; o tipo fica “decorado”, sem contagem (`bin/quem_chama.py:712`, `bin/quem_chama.py:353`, `bin/quem_chama.py:355`).
+- Registro renomeado: os nomes velho e novo ficam em `registros` e ambos geram usos em template (`bin/quem_chama.py:713`, `bin/quem_chama.py:714`, `bin/quem_chama.py:611`, `bin/quem_chama.py:620`).
+- Autoimport em string executada: é processado antes da guarda do próprio arquivo; arquivo e símbolo recebem o sítio e são rebaixados (`bin/quem_chama.py:743`, `bin/quem_chama.py:746`, `bin/quem_chama.py:757`, `bin/quem_chama.py:760`).
+- Registro na base e opaco na ponta: o registro reconhecido sai de `decor`, mas `receiver` permanece; opaco vence o registro (`bin/quem_chama.py:280`, `bin/quem_chama.py:284`, `bin/quem_chama.py:353`, `bin/quem_chama.py:356`).
+
+Esses três primeiros fluxos também foram exercitados com `quem_chama()` e revisões substituídas por dicionários em memória; os resultados corresponderam aos ramos citados (`bin/quem_chama.py:705`, `bin/quem_chama.py:716`, `bin/quem_chama.py:743`, `bin/quem_chama.py:760`). Execução de ranges históricos e do selo integral: **[nao verificado]**.
+
+Não identifiquei defeito adicional no delta relativo aos campos ou ao fechamento dos bloqueios; contraexemplo adicional: **[nao verificado]**.
+
+## 06/11 04:43 · sessao 9b3c092840e4 · - · - · origem=Ronald (tmux)
+
+P3: **nenhum defeito demonstrado nas asserções novas ou falha espúria nos fixtures atuais** (`bin/tests/test_quem_chama.sh:149`, `bin/tests/test_quem_chama.sh:205`, `bin/tests/test_quem_chama.sh:329`, `bin/tests/test_quem_chama.sh:344`).
+
+| Asserção nova | Conferência |
+|---|---|
+| Lista nominal sob arquivo, linha 329 | Exige texto do cabeçalho EMBUTIDO dentro da faceta arquivo; o achado comum não contém esse texto (`bin/quem_chama.py:766`, `bin/quem_chama.py:778`). |
+| Autoimport sob arquivo, linhas 344–345 | Exige tanto cabeçalho rebaixado quanto sítio específico `selfmod.py:5`; omitir o arquivo reprova ambas (`bin/tests/test_quem_chama.sh:181`, `bin/quem_chama.py:743`, `bin/quem_chama.py:757`). |
+| Registro versus opaco, linhas 347–348 | Fixture conserva registro da base e acrescenta receiver na ponta; tipo `filtro/tag` não satisfaz o positivo (`bin/tests/test_quem_chama.sh:149`, `bin/tests/test_quem_chama.sh:182`, `bin/quem_chama.py:351`). |
+| Opaco removido, linha 350 | O receiver existe somente na base; conservar apenas decoradores da ponta perde o texto exigido (`bin/tests/test_quem_chama.sh:150`, `bin/tests/test_quem_chama.sh:183`). |
+| Nome antigo do filtro, linha 352 | O template específico usa somente `velho_f`; manter somente registro novo perde o achado exigido (`bin/tests/test_quem_chama.sh:153`, `bin/quem_chama.py:611`). |
+| Include entre comentários, linha 354 | Exercício em memória: atual emite include na linha 2; mutante guloso `.*` não emite (`bin/tests/test_quem_chama.sh:151`, `bin/quem_chama.py:577`). |
+| Argumento de outra tag, linha 356 | Exercício em memória: atual emite load e tag `tg`; mutante que generaliza `filter` para qualquer tag acrescenta exatamente o uso falso proibido (`bin/tests/test_quem_chama.sh:152`, `bin/quem_chama.py:614`). |
+
+A exigência `tot=1, sob=1` detecta duplicação de linhas; os usos atuais do helper escolhem achados únicos nos respectivos fixtures (`bin/tests/test_quem_chama.sh:205`, `bin/tests/test_quem_chama.sh:216`, `bin/tests/test_quem_chama.sh:223`, `bin/tests/test_quem_chama.sh:228`, `bin/tests/test_quem_chama.sh:229`, `bin/tests/test_quem_chama.sh:243`, `bin/tests/test_quem_chama.sh:284`, `bin/tests/test_quem_chama.sh:340`, `bin/tests/test_quem_chama.sh:352`, `bin/tests/test_quem_chama.sh:354`).
+
+Execução integral do selo e mutantes integrais: **[nao verificado]**.
 
 ## 06/11 04:34 · sessao b4f914dd4fbb · LASTRO-PARTE-2 · verificador · origem=Code
 
@@ -840,67 +913,4 @@ Existem caminhos explícitos pós-materialização: destino e clones são reconc
 
 [truncado em 20000 de 20265 caracteres]
 
-## 06/11 03:34 · sessao 90e685ecd2b5 · - · - · origem=Ronald (tmux)
-
-- **PROCEDENTE-candidato — descarte 5b exagera ao dizer que `atomic()` sempre aberto não muda comportamento.** Savepoint muda a contenção de erro de banco quando o chamador captura a exceção: sem ele, o atomic externo pode terminar em rollback; com ele, pode continuar e confirmar outras escritas. O repositório documenta exatamente essa classe em `app/core/observ.py:124` e `app/chamados/signals.py:83`. S144 chama o materializador e captura exceções sem savepoint próprio em `app/chamados/signals.py:139`; o materializador chama `carimbar` em `app/chamados/services/materializacao.py:1349`. Ocorrência concreta desse problema no v2: **[não verificado]**.
-
-- **OBSERVAÇÃO — fotografia ainda inexistente não é restaurada.** No patch, `antes = lavra_antes = None` e os dois `if ... is not None` impedem desempacotar/restaurar fotografia inexistente. Falha de releitura, julgamento da linha já carimbada, relógio ou obtenção do autor acontece antes da escrita nova; o primeiro carimbo vem depois de `antes`. Referência: `app/chamados/models.py:2596` **v2 virtual**, bloco imediatamente posterior. A lavra é fotografada antes de sua alteração; a foto e restauração reais cobrem três campos em `app/chamados/veredito_lavrado.py:235` e `app/chamados/veredito_lavrado.py:240`.
-
-- **OBSERVAÇÃO — restauração de memória não equivale a rollback do SQL.** Se `save()` efetivar o UPDATE e um hook levantar exceção Python depois, o `nullcontext` permite que um chamador capture a exceção e confirme o SQL, embora o `except` da porta restaure a instância. Não encontrei esse caminho ordinário comprovado nos receivers atuais: o único receiver de Pergunta registra callback em `app/chamados/signals.py:191`, e seu trabalho fica sob `engolir` em `app/chamados/signals.py:199`, cuja captura está em `app/core/observ.py:85`. Portanto, cenário possível sob falha/hook, mas ocorrência no código atual **[não verificado]**.
-
-- **OBSERVAÇÃO — commit externo permanece fora do alcance.** Quando a porta herda transação, retorna antes do commit do chamador; uma falha posterior desse commit não atravessa seu `except`. A promessa de recuperar memória no commit vale para o atomic aberto pela própria porta, conforme a seleção do contexto no patch de `app/chamados/models.py:2598` **v2 virtual**; cobertura de commit externo: **[não verificado]**.
-
-- **PROCEDENTE-candidato — mutante de lavra no commit sobrevive à cobertura apresentada.** Mutante: restaurar a lavra no `except` somente se `_cx.in_atomic_block`, mantendo a recuperação do carimbo incondicional. Os testes antigos de erro de lavra/save continuam passando porque herdam `TestCase` por `app/chamados/tests/test_o261e_f2_fila.py:143` e exercitam suas falhas em `app/chamados/tests/test_o261e_f2_fila.py:179`, `:190`, `:200`. O teste novo de commit chama a porta sem `lavrar_veredito=True` e verifica somente o carimbo; não denuncia lavra persistente na memória após commit falho com lavra solicitada: `app/chamados/tests/test_o261_item3_pep.py:307` **anexo**. Execução do mutante: **[não verificado]**.
-
-- **OBSERVAÇÃO — testes anteriores simulam falha antes de SQL.** Os mocks de `PerguntaDisputa.save` lançam diretamente `RuntimeError`; não fazem o save real antes de lançar. Assim não cobrem a divergência “SQL confirmado / memória restaurada”: `app/chamados/tests/test_o261e_f2_fila.py:184`, `:211`. O v2 acrescenta cobertura útil do commit próprio e dos quatro campos humanos isolados, mas não comprova comportamento após save real seguido de exceção Python: `app/chamados/tests/test_o261_item3_pep.py:99`, `:307` **anexo**.
-
-## 06/11 03:33 · sessao 41021277887b · - · - · origem=Ronald (tmux)
-
-1. **OBSERVAÇÃO — 1c/7b: o descarte sustenta uma ressalva específica, não elimina o achado de frescor.** A célula do julgamento em curso existe como projeção explícita: `celula_deste_julgamento()` obtém ata/par do cartório e delega a `celula_como_o_julgamento_deixa()`; esta preserva a instância fora desse contexto e produz cópia quando há projeção. A ressuscitação usa expressamente essa função. (`app/chamados/juizes.py:383`; `app/chamados/juizes.py:394`; `app/ponto/portas/celula.py:709`; `app/chamados/models.py:1448`)
-
-   **PROCEDENTE-candidato — preservar qualquer relação carregada não distingue projeção legítima de cache obsoleto.** O C6 lê veredito/via/ata/DNA da célula e também conteúdo de outras relações: destino/status e disputa/contexto. A justificativa sobre a célula não sustenta preservar indistintamente destino e disputa. (`app/chamados/juizes.py:1147`; `app/chamados/juizes.py:1181`; `app/chamados/juizes.py:893`; `app/chamados/juizes.py:910`; `app/chamados/juizes.py:743`; `app/chamados/juizes.py:361`)
-
-   **OBSERVAÇÃO — o próprio E2 tem leitura comum do banco.** `perguntas_absolvidas_pela_celula()` carrega célula/disputa/destino via `select_related`; o cartório chama E2 depois da lavra da primeira passada. Portanto “cartório emite antes de lavrar” é verdadeiro para outros caminhos, mas não torna toda célula recebida por `carimbar` uma projeção mais nova que o banco. (`app/chamados/reconciliador.py:641`; `app/chamados/reconciliador.py:586`; `app/ponto/services/cartorio.py:948`; `app/ponto/services/cartorio.py:953`; `app/ponto/services/cartorio.py:959`; `app/ponto/services/cartorio.py:1802`)
-
-   **OBSERVAÇÃO — reler e travar célula são decisões diferentes.** A porta da célula salva e emite outbox dentro de atomic; nessas operações não há demonstração de ordem concorrente com P/D. A afirmação “travar célula inverteria a ordem” continua **[não verificado]** quanto ao ciclo concreto. (`app/ponto/portas/celula.py:676`; `app/ponto/portas/celula.py:681`)
-
-2. **OBSERVAÇÃO — 1d: ausência de chamador atual sustenta rebaixar a observação, mas o argumento geral é excessivo.** A busca por `.only()`/`.defer()` na produção de `chamados` e `ponto` não localizou projeção de PerguntaDisputa; os exemplos encontrados projetam outras entidades. (`app/chamados/rejuncao.py:78`; `app/chamados/services/juizes_do_dia.py:93`; `app/chamados/services/disputa_emissao.py:868`; carregamento parcial de PerguntaDisputa: **[não verificado]**)
-
-   **OBSERVAÇÃO — “não carregou atributo, logo não decidiu sobre ele” não é implicação válida.** Uma decisão poderia decorrer de filtro SQL sobre campo omitido pela projeção; exemplo hipotético `filter(validada_em__isnull=True).only('pk')`: **[não verificado]**, nenhum chamador atual localizado. Os chamadores efetivamente conferidos carregam perguntas completas. (`app/chamados/services/disputa_emissao.py:1572`; `app/chamados/reconciliador.py:641`; `app/chamados/services/materializacao.py:1343`)
-
-3. **OBSERVAÇÃO — classe (f): comparar a cláusula não fecha o grafo.** A referência relavra trava pergunta/disputa no mesmo SELECT, mas carrega célula fresca; o v2 mantém os mesmos alvos declarados, com relações preservadas. A igualdade de `FOR UPDATE OF` prova alvos, não a ordem física entre eles nem ausência de ciclo com chamado. (`app/chamados/services/relavra_via.py:217`; `app/chamados/services/relavra_via.py:221`; `app/chamados/services/relavra_via.py:227`; teste novo `OrdemDaTrava`, anexo)
-
-   **OBSERVAÇÃO — há caminhos anteriores envolvendo chamado e disputa.** O gate do chamado trava CH antes de seu save/receiver S143; o fechamento de disputa salva D e seu receiver pode reconciliar CH; o novo carimbo acrescenta D à trava e antecipa P. Ocorrência concreta de deadlock e plano de aquisição: **[não verificado]**. (`app/chamados/models.py:674`; `app/chamados/signals.py:91`; `app/chamados/signals.py:92`; `app/chamados/models.py:1865`; `app/chamados/signals.py:41`; `app/chamados/signals.py:42`; `app/chamados/models.py::_reler_travada`, v2 anexo)
-
-4. **OBSERVAÇÃO — classes restantes.**
-
-   - **(a)/(d):** o novo ramo delega vida ao C6; comparação de fotografia humana não demonstra juiz paralelo. O risco identificado é insumo obsoleto para a autoridade existente. (`app/chamados/juizes.py:822`; `app/chamados/juizes.py:1135`; `app/chamados/models.py::carimbar`, v2 anexo)
-   - **(b):** cópia dinâmica em memória não cria nova porta persistente; o selo declara não alcançar nome obtido por atributo, portanto não demonstra exclusividade dessa cópia. (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:111`; `app/chamados/tests/test_o261e_f2_porta_carimbo.py:113`; `app/chamados/models.py:2556`)
-   - **(c):** dívida existente: `encerrar_fantasma` continua sem repassar `agora`, e há fallback de relógio. (`app/chamados/models.py:2685`; `app/docs/BACKLOG.md:1154`)
-   - **(e):** os testes de trava e fotografia são discriminantes, mas não exercitam alteração de relação com mesma FK; o teste de identity map apenas conserva identidade. (`app/chamados/tests/test_o261_item3_pep.py`, anexo, `test_relacoes_carregadas_ficam_identity_map`; `test_MORDE_carimbar_trava_pergunta_e_disputa_como_a_relavra`)
-   - **(g):** execução, cronologia “medido antes do verde” e pouso: **[não verificado]**; o patch contém os testes propostos, não evidência de sua execução. (`app/chamados/tests/test_o261_item3_pep.py`, anexo)
-
-## 06/11 03:33 · sessao c3aa33033a39 · - · - · origem=Ronald (tmux)
-
-1. **PROCEDENTE-candidato — `True` já carimbada não preserva contrato “gravou?”.** O docstring continua `-> bool (gravou?)`, mas v2 retorna `not pergunta_viva(self)` sem escrever. Isso é seguro para detectar estado encerrado; não prova autoria, instante ou causalidade do ato corrente. (`app/chamados/models.py:2563`, v2 virtual ramo `_RELIDA_JA_CARIMBADA` do anexo).
-
-2. **Efeitos nos oito chamadores**, considerando outra via/autor/instante encontrado na releitura:
-
-| Chamador | Efeito de `True` | Avaliação |
-|---|---|---|
-| `lavrar_sem_turno_aberto` | Pode fechar a disputa com resolução “sem turno aberto”; retorna `True`. (`app/chamados/reconciliador.py:405`, `:411`, `:412`, `:414`) | Fechar pelo juiz pode ser correto; atribuir a resolução atual à via sem turno não decorre do retorno, pois a pergunta foi encerrada por outro ato. O consumidor trata `True` como trabalho concluído. (`app/chamados/reconciliador.py:1598`) |
-| `retratar_perguntas_absolvidas_por_celula` | Incrementa `n`; agenda disputa e pode fechá-la com resolução que atribui absolvição à célula. (`app/chamados/reconciliador.py:588`, `:590`, `:601`, `:603`) | Contar estado encerrado é defensável; contar retratação própria e atribuir causa à célula não é garantido pelo carimbo alheio. O número entra em `out['perguntas']`. (`app/chamados/reconciliador.py:1353`) |
-| S143, ramo principal | Incrementa `perguntas_resolvidas`, inclui disputa para fechamento; não re-lavra porque a porta retorna antes. (`app/chamados/services/disputa_emissao.py:1603`, `:1606`, `:1607`, `:1696`, `:1698`; v2 virtual ramo já carimbada) | Resolve reentrada quando S143 pertence à mesma materialização; o retorno genérico também contabiliza ato de outra pessoa/processo. O comentário “carimbou ⇒ re-lavra” deixa de valer nessa chamada. (`app/chamados/services/disputa_emissao.py:1602`) |
-| S143, sem credor | Emite `fecho_sem_credor`; não incrementa `n_pq` nesse ramo. (`app/chamados/services/disputa_emissao.py:1678`, `:1686`) | **Erro concreto de trilha:** `antes.materializada_em=None`, `ator=user`, `depois.materializada_em=_agora`, apesar de a linha preservar instante/autor alheios. (`app/chamados/services/disputa_emissao.py:1666`, `:1678`, `:1683`) |
-| `_materializar_ausencia_de_resposta` | Não acrescenta recusa nem evento de recusa; reconcilia destino e pode fechar disputa. Ausência já foi criada. (`app/chamados/services/materializacao.py:520`, `:549`, `:550`, `:564`, `:568`) | Preservar outra decisão é correto; ela não integra automaticamente o grupo desta absorção, identificado pelo mesmo instante. Falta distinguir “já resolvida por outro ato” de “absorvida aqui”. (`app/chamados/services/materializacao.py:593`, `:608`, `:609`, `:614`) |
-| `_materializar_uma` | Conserva o plantio/reuso feito antes da porta; marca `_materializou=True`; chamador incrementa materializadas. (`app/chamados/services/materializacao.py:1145`, `:1147`, `:1207`, `:1301`, `:1302`) | Corrige a reentrada própria. Para carimbo de ato independente, morte pelo C6 não prova que o plantio já realizado era autorizado pelo estado atualizado. A guarda humana é pulada nesse ramo do v2. (v2 virtual `_reler_travada`: materializada antes da comparação humana) |
-| `materializar_pendentes_aprovadas` | Acrescenta PK em `feitas`; receiver ignora a lista. (`app/chamados/services/materializacao.py:1349`, `:1350`; `app/chamados/signals.py:140`) | A lista deixa de significar exatamente “foram carimbadas” por esta chamada. Sem evento extra nesse trecho; carimbo alheio preservado. (`app/chamados/services/materializacao.py:1317`) |
-| `encerrar_fantasma` | Devolve `True`; consumidor grava evento fantasma, incrementa `encerradas`, inclui disputa para fechamento. (`app/chamados/models.py:2685`; `app/chamados/reconciliador.py:1136`, `:1138`, `:1145`, `:1146`) | **Trilha indevida:** contrato local exige uma trilha “só quando a porta escreveu”; evento diz “Encerrada no evento da lavra” e usa ator corrente mesmo quando o encerramento foi alheio. (`app/chamados/reconciliador.py:1107`, `:1108`, `:1139`, `:1144`) |
-
-3. **PROCEDENTE-candidato — contraexemplo novo e direto de `True` errado/trilha falsa.** No ramo sem credor, Q foi lida sem carimbo; outro ato chama `carimbar_identidade(VIA_ADMIN_DECIDIU, A, quando=tA)`; Q sem resposta permanece morta pelo degrau de identidade; B chama `carimbar(..., quando=tB)` sobre sua instância velha e recebe `True` sem salvar. O chamador grava `fecho_sem_credor` com `depois.materializada_em=tB` e ator B, enquanto Q continua com instante tA/autor A. O erro de conteúdo do evento decorre dos argumentos explícitos, independentemente de plano de locks. (`app/chamados/models.py:2639`, `:2644`; `app/chamados/juizes.py:1171`; `app/chamados/services/disputa_emissao.py:1666`, `:1675`, `:1678`, `:1683`; v2 virtual ramo já carimbada). Execução concreta: **[não verificado]**.
-
-4. **PROCEDENTE-candidato — os dois textos de `False` ainda têm limites.** “C6 viva ou humano mudou” cobre a nova comparação, mas não cobre `fresca is None`, que recusa sem executar C6 e sem demonstrar mudança humana. Além disso, “ela segue pendente” não decorre da recusa: se `validada_em` passou de `None` para instante, a comparação recusa, mas o C6 real já a considera morta e `.estado` retorna `VALIDADA`. (v2 virtual `_reler_travada`, ramo linha sumida/comparação humana; `app/chamados/juizes.py:1136`; `app/chamados/models.py:2499`). Permanecem também nome de ação `irma_viva_na_ausencia` e docstring que promete lista apenas de irmãs vivas. (`app/chamados/services/materializacao.py:510`, `:573`).
-
-5. **OBSERVAÇÃO — testes do anexo não defendem esses consumidores.** Os testes `LinhaJaCarimbadaPorOutroAto` verificam retorno e preservação do banco diretamente; `ReentradaNaMesmaTransacao` cobre `_materializar_uma` com plantio e C6 mockados. Nenhum dos testes novos chama os ramos reais de evento `fecho_sem_credor` ou `encerrar_orfas_pela_lampada`; portanto não confrontam instante/autor da trilha com a linha preservada. (`app/chamados/tests/test_o261_item3_pep.py:114`, `:123`, `:151`, `:157`, `:173`, `:175`, anexo). Execução: **[não verificado]**.
-
-_2104 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2107 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
