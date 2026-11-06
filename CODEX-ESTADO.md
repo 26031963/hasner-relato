@@ -1,7 +1,208 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 11:26** · publicado em **06/11/2026 11:31** (UTC-3)
+> Ultima resposta processada: **06/11/2026 11:44** · publicado em **06/11/2026 11:46** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 11:44 · sessao 598e3a39227a · - · - · origem=Ronald (tmux)
+
+- O anexo retém exceções em `VISTOS[id(exc)] = exc`; cada exceção pode manter traceback, frames e locais de colaboradores. A linha exata do anexo precisa ser contada pelo agente principal; arquivo local ausente [nao verificado]. Deduplicar com um atributo booleano/token na própria exceção evita uma raiz global que retenha traceback. Um conjunto de `id(exc)` sem referência é inadequado, porque IDs podem ser reutilizados [nao verificado].
+- O comando retém resultados completos em `_res_fech` (`app/ponto/management/commands/diff_calculador.py:116`, `:135`) e mantém `_certa_cache` entre colaboradores (`app/ponto/management/commands/diff_calculador.py:95`, `:418`). Uma invocação real por colaborador, com `colaborador_ids=[cid]` no fechamento, limita essas estruturas; o parâmetro restringe o universo (`app/ponto/services/fechamento.py:502`).
+- O fechamento também mantém lote de células e seu índice por colaborador (`app/ponto/services/fechamento.py:596`, `:602`), além dos objetos retornados (`app/ponto/services/fechamento.py:1119`). A chamada por colaborador limita esses lotes.
+- O cache do motor é por instância/cálculo (`app/ponto/motor_calculo_v2.py:2285`); o cache do fechamento nasce dentro da passagem do colaborador (`app/ponto/services/fechamento.py:923`). Não apagar memos durante o cálculo.
+- Há cache de módulo de catálogo, que guarda um catálogo e um instante, sem chave por colaborador (`app/ponto/catalogo/ausencias.py:257`, `:276`, `:279`). A API real de limpeza é `invalidar_cache`, que zera instante e valor (`app/ponto/catalogo/ausencias.py:261`). Não identifiquei caches de módulo por colaborador nos arquivos motor/calculador examinados [nao verificado: resultado de busca estática, sem execução].
+- Após concluir o colaborador e agregar seus números: soltar capturas, `InsumosDoDono`, retorno e contexto; depois `reset_queries()` e `gc.collect()`. `InsumosDoDono` retém colaborador, oráculo, turnos e dados de cadastro/realidade (`app/ponto/management/commands/e6_oraculo.py:131`, `:145`, `:151`, `:160`). `reset_queries`/`gc.collect` pertencem às bibliotecas, cujas linhas locais não foram verificadas.
+- Sombra herda `saas`, cujo `DEBUG=False` está em `app/config/settings/saas.py:14`; a herança está em `app/config/settings/sombra.py:27`. Acúmulo efetivo de queries nesta execução permanece [nao verificado].
+
+## 06/11 11:43 · sessao c2c817f7858b · R1-CAUSAD-V3 · sonda · origem=Code
+
+Não executei nova sonda: o `script.py` anexo não foi localizado na cópia. [nao verificado] O fluxo `--sonda` executa o envelope antes de entregar o dado raspado ao agente (`bin/codex_pergunta.sh:103`, `bin/codex_pergunta.sh:133`).
+
+Vereditos:
+- **SOMA: [nao verificado].** Não há linha `SOMA` no dado recebido; não há veredito de fechamento emitido pelo script. [nao verificado]
+- **INCOMPLETO: sim, pelo retorno informado `rc_sombra=137`; não há linha literal `INCOMPLETO`.** A causa da interrupção e o conteúdo restante são [nao verificado]. O envelope propaga o retorno da execução (`bin/sonda_leitura.sh:241`, `bin/sonda_leitura.sh:251`).
+
+Transcrição integral do dado recebido, sem acrescentar linhas à saída. [nao verificado]
+
+```text
+sonda_leitura: script.py [432e14f15d01f891] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+ATO|hoje=2026-11-06|agora=2026-11-06T11:17:26.613842-03:00
+FORA_DA_MEDIDA|horas_falta
+FORA_DA_MEDIDA|horas_reflexo_dsr
+FORA_DA_MEDIDA|saldo_banco_horas
+UNIVERSO|2026-10|colabs_porta=624|segundos=844.3
+RUBRICA|competencia|rubrica|v2_h|v3_h|delta_h|colabs_div|dias_colab_div
+DONO|competencia|rubrica|dono|v2_h|v3_h|delta_h|colabs|dias_colab
+DIA|2026-10|horas_trabalhadas|col204|2026-09-29|CADASTRO|7.316473056|4.773582500|-2.542890556
+DIA|2026-10|horas_trabalhadas|col502|2026-10-10|CADASTRO|7.569179979|2.843692404|-4.725487575
+DIA|2026-10|horas_trabalhadas|col512|2026-10-11|ESTRUTURA|6.478212222|11.442890556|+4.964678333
+DIA|2026-10|horas_trabalhadas|col577|2026-10-15|CADASTRO|7.290805556|4.448500278|-2.842305278
+DIA|2026-10|horas_trabalhadas|col592|2026-10-20|CADASTRO|7.314860278|5.421271667|-1.893588611
+DIA|2026-10|horas_trabalhadas|col599|2026-10-20|CADASTRO|10.100982500|5.572917222|-4.528065278
+DIA|2026-10|horas_trabalhadas|col788|2026-09-24|BATIDA|8.964272778|0.964272778|-8.000000000
+DIA|2026-10|horas_trabalhadas|col988|2026-10-17|CADASTRO|6.190200326|3.268974456|-2.921225870
+RUBRICA|2026-10|horas_trabalhadas|70627.257635674|70604.768750840|-22.488884834|8|8
+DONO|2026-10|horas_trabalhadas|BATIDA|8.964272778|0.964272778|-8.000000000|1|1
+DONO|2026-10|horas_trabalhadas|CADASTRO|45.782501694|26.328938527|-19.453563168|6|6
+DONO|2026-10|horas_trabalhadas|ESTRUTURA|6.478212222|11.442890556|+4.964678333|1|1
+RESIDUO|2026-10|horas_trabalhadas|ATE_LIMIAR|70566.032648980|70566.032648980|-0.000000000|511|7676
+RESIDUO|2026-10|horas_trabalhadas|SEM_DECISAO|343.609469184|343.609469184|+0.000000000|331|1805
+RESIDUO|2026-10|horas_trabalhadas|SEM_PAR|0.000000000|0.000000000|+0.000000000|64|1196
+INSTRUMENTO_HISTORICO|2026-10|horas_trabalhadas|v2_h=70224.761664336|v3_h=70604.768750840|delta_h=+380.007086504
+DIA|2026-10|horas_intra_indenizada|col82|2026-10-06|CADASTRO|1.166666667|0.000000000|-1.166666667
+DIA|2026-10|horas_intra_indenizada|col82|2026-10-08|CADASTRO|1.166666667|0.000000000|-1.166666667
+DIA|2026-10|horas_intra_indenizada|col82|2026-10-12|CADASTRO|1.166666667|0.000000000|-1.166666667
+DIA|2026-10|horas_intra_indenizada|col82|2026-10-14|CADASTRO|1.166666667|0.000000000|-1.166666667
+DIA|2026-10|horas_intra_indenizada|col82|2026-10-15|CADASTRO|1.166666667|0.000000000|-1.166666667
+DIA|2026-10|horas_intra_indenizada|col82|2026-10-16|CADASTRO|1.166666667|0.000000000|-1.166666667
+DIA|2026-10|horas_intra_indenizada|col82|2026-10-20|CADASTRO|1.166666667|0.000000000|-1.166666667
+DIA|2026-10|horas_intra_indenizada|col450|2026-09-27|BATIDA|1.000000000|0.000000000|-1.000000000
+DIA|2026-10|horas_intra_indenizada|col450|2026-10-11|BATIDA|1.000000000|0.000000000|-1.000000000
+DIA|2026-10|horas_intra_indenizada|col512|2026-10-11|ESTRUTURA|0.000000000|1.000000000|+1.000000000
+DIA|2026-10|horas_intra_indenizada|col599|2026-09-22|CADASTRO|1.000000000|0.000000000|-1.000000000
+DIA|2026-10|horas_intra_indenizada|col599|2026-09-24|CADASTRO|1.000000000|0.000000000|-1.000000000
+DIA|2026-10|horas_intra_indenizada|col599|2026-09-26|CADASTRO|1.000000000|0.000000000|-1.000000000
+DIA|2026-10|horas_intra_indenizada|col599|2026-09-28|CADASTRO|1.000000000|0.000000000|-1.000000000
+DIA|2026-10|horas_intra_indenizada|col599|2026-09-30|CADASTRO|1.000000000|0.000000000|-1.000000000
+DIA|2026-10|horas_intra_indenizada|col599|2026-10-02|CADASTRO|1.000000000|0.000000000|-1.000000000
+DIA|2026-10|horas_intra_indenizada|col599|2026-10-06|CADASTRO|1.000000000|0.000000000|-1.000000000
+DIA|2026-10|horas_intra_indenizada|col638|2026-10-01|CADASTRO|1.500000000|0.000000000|-1.500000000
+DIA|2026-10|horas_intra_indenizada|col638|2026-10-04|CADASTRO|0.000000000|0.497353333|+0.497353333
+DIA|2026-10|horas_intra_indenizada|col638|2026-10-11|CADASTRO|0.000000000|0.496789722|+0.496789722
+DIA|2026-10|horas_intra_indenizada|col788|2026-09-25|CADASTRO|1.000000000|0.000000000|-1.000000000
+DIA|2026-10|horas_intra_indenizada|col788|2026-10-01|CADASTRO|1.000000000|0.000000000|-1.000000000
+DIA|2026-10|horas_intra_indenizada|col788|2026-10-05|BATIDA|1.000000000|0.449190000|-0.550810000
+DIA|2026-10|horas_intra_indenizada|col824|2026-10-04|BATIDA|1.000000000|0.000000000|-1.000000000
+DIA|2026-10|horas_intra_indenizada|col824|2026-10-18|CADASTRO|1.000000000|0.000000000|-1.000000000
+DIA|2026-10|horas_intra_indenizada|col849|2026-10-09|CADASTRO|1.000000000|0.000000000|-1.000000000
+DIA|2026-10|horas_intra_indenizada|col915|2026-09-27|CADASTRO|0.000000000|0.181985833|+0.181985833
+DIA|2026-10|horas_intra_indenizada|col915|2026-10-01|CADASTRO|0.000000000|0.182740833|+0.182740833
+DIA|2026-10|horas_intra_indenizada|col941|2026-10-01|CADASTRO|1.000000000|0.000000000|-1.000000000
+RUBRICA|2026-10|horas_intra_indenizada|2194.339455993|2171.480849048|-22.858606944|10|29
+DONO|2026-10|horas_intra_indenizada|BATIDA|4.000000000|0.449190000|-3.550810000|3|4
+DONO|2026-10|horas_intra_indenizada|CADASTRO|21.666666667|1.358869722|-20.307796944|8|24
+DONO|2026-10|horas_intra_indenizada|ESTRUTURA|0.000000000|1.000000000|+1.000000000|1|1
+RESIDUO|2026-10|horas_intra_indenizada|ATE_LIMIAR|2168.672789326|2168.672789326|+0.000000000|511|7655
+RESIDUO|2026-10|horas_intra_indenizada|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|331|1805
+RESIDUO|2026-10|horas_intra_indenizada|SEM_PAR|0.000000000|0.000000000|+0.000000000|64|1196
+INSTRUMENTO_HISTORICO|2026-10|horas_intra_indenizada|v2_h=2178.394776548|v3_h=2171.480849048|delta_h=-6.913927500
+DIA|2026-10|horas_extras_50|col82|2026-10-06|CADASTRO|0.000000000|0.500647778|+0.500647778
+DIA|2026-10|horas_extras_50|col82|2026-10-08|CADASTRO|0.000000000|0.471973333|+0.471973333
+DIA|2026-10|horas_extras_50|col82|2026-10-14|CADASTRO|0.000000000|0.179223056|+0.179223056
+DIA|2026-10|horas_extras_50|col82|2026-10-15|CADASTRO|0.000000000|0.557518333|+0.557518333
+DIA|2026-10|horas_extras_50|col502|2026-10-10|CADASTRO|0.235846646|0.000000000|-0.235846646
+DIA|2026-10|horas_extras_50|col599|2026-10-16|CADASTRO|0.000000000|0.224154212|+0.224154212
+DIA|2026-10|horas_extras_50|col915|2026-09-27|CADASTRO|0.320207500|0.000000000|-0.320207500
+DIA|2026-10|horas_extras_50|col915|2026-10-01|CADASTRO|0.516049722|0.333308889|-0.182740833
+RUBRICA|2026-10|horas_extras_50|66.971818349|68.166540082|+1.194721733|4|8
+DONO|2026-10|horas_extras_50|CADASTRO|1.072103868|2.266825601|+1.194721733|4|8
+RESIDUO|2026-10|horas_extras_50|ATE_LIMIAR|65.899714481|65.899714481|+0.000000000|509|7524
+RESIDUO|2026-10|horas_extras_50|SEM_DECISAO|2.430862778|2.430862778|+0.000000000|341|1957
+RESIDUO|2026-10|horas_extras_50|SEM_PAR|0.000000000|0.000000000|+0.000000000|64|1196
+INSTRUMENTO_HISTORICO|2026-10|horas_extras_50|v2_h=69.402681127|v3_h=68.166540082|delta_h=-1.236141045
+DIA|2026-10|horas_extras_100|col727|2026-10-12|ESTRUTURA|0.000000000|10.985971389|+10.985971389
+DIA|2026-10|horas_extras_100|col830|2026-10-12|ESTRUTURA|0.000000000|12.149131944|+12.149131944
+RUBRICA|2026-10|horas_extras_100|422.982309410|446.117412743|+23.135103333|2|2
+DONO|2026-10|horas_extras_100|ESTRUTURA|0.000000000|23.135103333|+23.135103333|2|2
+RESIDUO|2026-10|horas_extras_100|ATE_LIMIAR|422.982309410|422.982309410|-0.000000000|509|7531
+RESIDUO|2026-10|horas_extras_100|SEM_DECISAO|6.572320665|6.572320665|+0.000000000|341|1956
+RESIDUO|2026-10|horas_extras_100|SEM_PAR|0.000000000|0.000000000|+0.000000000|64|1196
+INSTRUMENTO_HISTORICO|2026-10|horas_extras_100|v2_h=425.616685630|v3_h=456.966780521|delta_h=+31.350094891
+DIA|2026-10|horas_extras_100_feriado|col727|2026-10-12|ESTRUTURA|0.000000000|10.985971389|+10.985971389
+DIA|2026-10|horas_extras_100_feriado|col830|2026-10-12|ESTRUTURA|0.000000000|12.149131944|+12.149131944
+RUBRICA|2026-10|horas_extras_100_feriado|419.479367232|442.614470565|+23.135103333|2|2
+DONO|2026-10|horas_extras_100_feriado|ESTRUTURA|0.000000000|23.135103333|+23.135103333|2|2
+RESIDUO|2026-10|horas_extras_100_feriado|ATE_LIMIAR|419.479367232|419.479367232|-0.000000000|509|7531
+RESIDUO|2026-10|horas_extras_100_feriado|SEM_DECISAO|3.430878889|3.430878889|+0.000000000|341|1956
+RESIDUO|2026-10|horas_extras_100_feriado|SEM_PAR|0.000000000|0.000000000|+0.000000000|64|1196
+INSTRUMENTO_HISTORICO|2026-10|horas_extras_100_feriado|v2_h=0.000000000|v3_h=453.463838343|delta_h=+453.463838343
+RUBRICA|2026-10|horas_extras_50_noturna|0.828852396|0.828852396|+0.000000000|0|0
+RESIDUO|2026-10|horas_extras_50_noturna|ATE_LIMIAR|0.828852396|0.828852396|+0.000000000|509|7532
+RESIDUO|2026-10|horas_extras_50_noturna|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|341|1957
+RESIDUO|2026-10|horas_extras_50_noturna|SEM_PAR|0.000000000|0.000000000|+0.000000000|64|1196
+INSTRUMENTO_HISTORICO|2026-10|horas_extras_50_noturna|v2_h=0.000000000|v3_h=0.828852396|delta_h=+0.828852396
+DIA|2026-10|horas_extras_100_noturna|col191|2026-10-12|CADASTRO|0.000000000|1.000000000|+1.000000000
+DIA|2026-10|horas_extras_100_noturna|col270|2026-10-12|ESTRUTURA|0.000000000|0.959735944|+0.959735944
+DIA|2026-10|horas_extras_100_noturna|col292|2026-10-12|ESTRUTURA|0.000000000|0.909870556|+0.909870556
+DIA|2026-10|horas_extras_100_noturna|col301|2026-10-12|ESTRUTURA|0.000000000|0.856398333|+0.856398333
+DIA|2026-10|horas_extras_100_noturna|col390|2026-10-12|ESTRUTURA|0.000000000|0.553309638|+0.553309638
+DIA|2026-10|horas_extras_100_noturna|col468|2026-10-12|ESTRUTURA|0.000000000|0.550908919|+0.550908919
+DIA|2026-10|horas_extras_100_noturna|col469|2026-10-12|CADASTRO|0.000000000|1.000000000|+1.000000000
+DIA|2026-10|horas_extras_100_noturna|col825|2026-10-12|ESTRUTURA|0.000000000|0.562620556|+0.562620556
+DIA|2026-10|horas_extras_100_noturna|col849|2026-10-12|ESTRUTURA|0.000000000|0.841615783|+0.841615783
+DIA|2026-10|horas_extras_100_noturna|col865|2026-10-12|CADASTRO|0.000000000|5.164677786|+5.164677786
+RUBRICA|2026-10|horas_extras_100_noturna|60.714638630|73.127033645|+12.412395015|10|10
+DONO|2026-10|horas_extras_100_noturna|CADASTRO|0.000000000|7.164677786|+7.164677786|3|3
+DONO|2026-10|horas_extras_100_noturna|ESTRUTURA|0.000000000|5.234459729|+5.234459729|7|7
+RESIDUO|2026-10|horas_extras_100_noturna|ATE_LIMIAR|60.714638630|60.727896130|+0.013257500|509|7522
+RESIDUO|2026-10|horas_extras_100_noturna|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|341|1957
+RESIDUO|2026-10|horas_extras_100_noturna|SEM_PAR|0.000000000|0.000000000|+0.000000000|64|1196
+INSTRUMENTO_HISTORICO|2026-10|horas_extras_100_noturna|v2_h=0.000000000|v3_h=73.127033645|delta_h=+73.127033645
+RUBRICA|2026-10|horas_folga_trabalhada|0.000000000|0.000000000|+0.000000000|0|0
+RESIDUO|2026-10|horas_folga_trabalhada|ATE_LIMIAR|0.000000000|0.000000000|+0.000000000|511|7684
+RESIDUO|2026-10|horas_folga_trabalhada|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|331|1805
+RESIDUO|2026-10|horas_folga_trabalhada|SEM_PAR|0.000000000|0.000000000|+0.000000000|64|1196
+INSTRUMENTO_HISTORICO|2026-10|horas_folga_trabalhada|v2_h=742.930323022|v3_h=0.000000000|delta_h=-742.930323022
+DIA|2026-10|horas_noturnas|col245|2026-09-21|CADASTRO|1.867681376|2.134493001|+0.266811625
+DIA|2026-10|horas_noturnas|col245|2026-09-23|CADASTRO|1.869965836|2.137103813|+0.267137977
+DIA|2026-10|horas_noturnas|col245|2026-09-24|ESTRUTURA|1.851872500|2.116425714|+0.264553214
+DIA|2026-10|horas_noturnas|col245|2026-09-25|CADASTRO|1.863168056|2.129334921|+0.266166865
+DIA|2026-10|horas_noturnas|col245|2026-09-26|ESTRUTURA|1.915446667|2.189081905|+0.273635238
+DIA|2026-10|horas_noturnas|col245|2026-09-27|CADASTRO|1.885175556|2.154486349|+0.269310794
+DIA|2026-10|horas_noturnas|col245|2026-09-28|ESTRUTURA|1.942230278|2.219691746|+0.277461468
+DIA|2026-10|horas_noturnas|col245|2026-09-30|ESTRUTURA|1.956297778|2.235768889|+0.279471111
+DIA|2026-10|horas_noturnas|col373|2026-09-30|ESTRUTURA|0.572047302|0.500541389|-0.071505913
+DIA|2026-10|horas_noturnas|col373|2026-10-01|ESTRUTURA|0.646286032|0.565500278|-0.080785754
+DIA|2026-10|horas_noturnas|col489|2026-09-23|ESTRUTURA|6.000774068|6.858027506|+0.857253438
+DIA|2026-10|horas_noturnas|col489|2026-09-25|ESTRUTURA|6.000494001|6.857707430|+0.857213429
+DIA|2026-10|horas_noturnas|col489|2026-09-27|ESTRUTURA|6.000421816|6.857624933|+0.857203117
+DIA|2026-10|horas_noturnas|col727|2026-10-12|ESTRUTURA|5.987302500|6.842631429|+0.855328929
+DIA|2026-10|horas_noturnas|col727|2026-10-14|ESTRUTURA|6.003224444|6.860827937|+0.857603492
+DIA|2026-10|horas_noturnas|col727|2026-10-16|ESTRUTURA|6.068942500|6.935934286|+0.866991786
+DIA|2026-10|horas_noturnas|col859|2026-09-21|ESTRUTURA|6.857064127|5.999931111|-0.857133016
+DIA|2026-10|horas_noturnas|col859|2026-09-22|ESTRUTURA|6.858000000|6.000750000|-0.857250000
+DIA|2026-10|horas_noturnas|col859|2026-09-24|ESTRUTURA|6.844368889|5.988822778|-0.855546111
+DIA|2026-10|horas_noturnas|col859|2026-09-25|ESTRUTURA|6.856735873|5.999643889|-0.857091984
+DIA|2026-10|horas_noturnas|col859|2026-09-26|ESTRUTURA|6.867731746|6.009265278|-0.858466468
+DIA|2026-10|horas_noturnas|col859|2026-09-28|ESTRUTURA|6.854342222|5.997549444|-0.856792778
+DIA|2026-10|horas_noturnas|col964|2026-09-25|ESTRUTURA|1.000000000|1.142857143|+0.142857143
+DIA|2026-10|horas_noturnas|col964|2026-09-26|BATIDA|1.015868889|1.160993016|+0.145124127
+DIA|2026-10|horas_noturnas|col964|2026-09-27|ESTRUTURA|0.976877500|1.116431429|+0.139553929
+DIA|2026-10|horas_noturnas|col964|2026-09-28|CADASTRO|0.939963611|1.074244127|+0.134280516
+RUBRICA|2026-10|horas_noturnas|15948.373066655|15950.946552788|+2.573486133|6|26
+DONO|2026-10|horas_noturnas|BATIDA|1.015868889|1.160993016|+0.145124127|1|1
+DONO|2026-10|horas_noturnas|CADASTRO|8.425954434|9.629662210|+1.203707776|2|5
+DONO|2026-10|horas_noturnas|ESTRUTURA|88.060460243|89.295014512|+1.234554269|6|20
+RESIDUO|2026-10|horas_noturnas|ATE_LIMIAR|15850.870783089|15850.860883049|-0.009900040|510|7590
+RESIDUO|2026-10|horas_noturnas|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|342|1873
+RESIDUO|2026-10|horas_noturnas|SEM_PAR|0.000000000|0.000000000|+0.000000000|64|1196
+INSTRUMENTO_HISTORICO|2026-10|horas_noturnas|v2_h=15728.549148812|v3_h=15964.082576240|delta_h=+235.533427428
+DIA|2026-10|horas_atraso|col87|2026-09-22|CADASTRO|0.000000000|0.186000000|+0.186000000
+DIA|2026-10|horas_atraso|col205|2026-09-21|CADASTRO|0.178166667|1.178166667|+1.000000000
+DIA|2026-10|horas_atraso|col258|2026-10-19|ESTRUTURA|0.000000000|2.368500000|+2.368500000
+DIA|2026-10|horas_atraso|col259|2026-10-14|ESTRUTURA|0.000000000|1.169655833|+1.169655833
+DIA|2026-10|horas_atraso|col259|2026-10-15|ESTRUTURA|0.000000000|1.585000000|+1.585000000
+DIA|2026-10|horas_atraso|col274|2026-10-04|ESTRUTURA|0.000000000|2.330333333|+2.330333333
+DIA|2026-10|horas_atraso|col368|2026-09-21|ESTRUTURA|0.000000000|1.106833333|+1.106833333
+DIA|2026-10|horas_atraso|col655|2026-09-30|ESTRUTURA|0.000000000|0.824060000|+0.824060000
+RUBRICA|2026-10|horas_atraso|355.091333333|365.661421482|+10.570088149|7|8
+DONO|2026-10|horas_atraso|CADASTRO|0.178166667|1.364166667|+1.186000000|2|2
+DONO|2026-10|horas_atraso|ESTRUTURA|0.000000000|9.384382500|+9.384382500|5|6
+RESIDUO|2026-10|horas_atraso|ATE_LIMIAR|354.913166667|354.912872316|-0.000294351|502|7477
+RESIDUO|2026-10|horas_atraso|SEM_DECISAO|10.822000000|10.822000000|+0.000000000|347|2004
+RESIDUO|2026-10|horas_atraso|SEM_PAR|0.000000000|0.000000000|+0.000000000|64|1196
+INSTRUMENTO_HISTORICO|2026-10|horas_atraso|v2_h=356.664166667|v3_h=346.027980551|delta_h=-10.636186116
+DIA|2026-10|horas_saida_antecipada|col87|2026-09-22|CADASTRO|1.074666667|0.888500000|-0.186166667
+DIA|2026-10|horas_saida_antecipada|col512|2026-10-11|ESTRUTURA|0.557166667|0.000000000|-0.557166667
+RUBRICA|2026-10|horas_saida_antecipada|390.477500000|389.735126896|-0.742373104|2|2
+DONO|2026-10|horas_saida_antecipada|CADASTRO|1.074666667|0.888500000|-0.186166667|1|1
+DONO|2026-10|horas_saida_antecipada|ESTRUTURA|0.557166667|0.000000000|-0.557166667|1|1
+RESIDUO|2026-10|horas_saida_antecipada|ATE_LIMIAR|388.845666667|388.846626896|+0.000960230|502|7483
+RESIDUO|2026-10|horas_saida_antecipada|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|347|2004
+RESIDUO|2026-10|horas_saida_antecipada|SEM_PAR|0.000000000|0.000000000|+0.000000000|64|1196
+INSTRUMENTO_HISTORICO|2026-10|horas_saida_antecipada|v2_h=354.632166667|v3_h=353.889766749|delta_h=-0.742399917
+rc_sombra=137
+```
 
 ## 06/11 11:26 · sessao 5710202ccc04 · R1-CAUSAD-V3 · leitura · origem=Code
 
@@ -2447,56 +2648,4 @@ Se o contrato for interpretado como exigência de medir também o chamado, seria
 - O fechamento também engole falhas do emissor e por colaborador; é necessário observá-las para cumprir `INCOMPLETO`. Seu log por colaborador contém nome, portanto não deve ir diretamente ao stdout. (`app/ponto/services/fechamento.py:1222`, `:1281`, `:1287`, `:1290`)
 - Tempo de execução e universo atual não podem ser certificados sem execução/dados adicionais. [nao verificado]
 
-## 06/11 10:41 · sessao 481eb41296f1 · - · - · origem=Ronald (tmux)
-
-Montagem e reconciliação:
-
-- Use exatamente `V.censo_alcance(limite=10**7)`; filtre `x[4] == 'sem_porta' and x[5] == 'd'`; agrupe por `x[1]`; monte `InsumosDoDono(c, min(datas), max(datas), hoje, agora=agora)` e retenha somente `ins.dono(data) == 'ESTRUTURA'`. Esta é a montagem do anexo; a autoridade do primeiro total é `r['alcance_d']`, e a do subconjunto é o retorno de `ins.dono`. (`app/chamados/services/vigia_fio.py:542`, `app/ponto/management/commands/e6_oraculo.py:128`, `app/ponto/management/commands/e6_oraculo.py:172`)
-- A lista contém `[celula_id, colab_id, data, competencia, rota, causa, detalhe, papel]`; carregue a célula por `x[0]`, conferindo colaborador/data. Há unicidade colaborador/data na montagem do censo. (`app/chamados/services/vigia_fio.py:548`, `app/chamados/services/vigia_fio.py:593`, `app/chamados/services/vigia_fio.py:629`)
-- `200` e `182/13/5` devem ser expectativas históricas, nunca totais impostos ao processamento. Valores atuais na sombra: [nao verificado].
-
-Caminho verdadeiro do evento:
-
-`_cartorio_post_save_batida` → `_julgar_dias` → `cartorio.julgar_celula` → `cartorio.julgar_colab` → `fabrica_da_celula.perguntar_pela_celula`. (`app/ponto/signals.py:131`, `app/ponto/signals.py:85`, `app/ponto/signals.py:93`, `app/ponto/services/cartorio.py:1960`, `app/ponto/services/cartorio.py:1989`, `app/ponto/services/cartorio.py:997`)
-
-O comando `processar_cartorio` usa o mesmo `julgar_colab`, com `detectar_ausencias.Command` como emissor do chamado do dia. (`app/ponto/management/commands/processar_cartorio.py:36`, `app/ponto/management/commands/processar_cartorio.py:42`, `app/ponto/management/commands/processar_cartorio.py:65`)
-
-Não confundir isso com `post_save` de `CelulaDia`: a porta documenta expressamente que o gatilho é o ato de corrigir cadastro, e recusa adicionar sinal à entidade. (`app/ponto/portas/celula.py:362`)
-
-Instrumentação sem copiar predicados:
-
-- `patch(..., wraps=real)` nas funções `dia_sem_trabalho`, `vencidos_no_instante`, `parcial_so_lista`, `_ata_do_dia`, `motivos_pela_ata`, `limbo_vai_a_pauta`.
-- Para os retornos inline, `sys.settrace` limitado aos `__code__` reais de `motivos_a_perguntar`, `motivos_pela_ata`, `perguntar_pela_celula`; registrar `frame.f_lineno` no evento `return`. Assim a classificação decorre da linha executada, sem reproduzir `situacao`, `data`, `veredito` ou os filtros.
-- Guardas de `motivos_a_perguntar`, na ordem: dia sem trabalho/inativo (`91–92`); futuro (`93–94`); vencimento calculado (`98`); veredito absolvente (`99–100`); parcial só lista (`102–104`); deduplicação após motivos da ata (`118–126`). (`app/chamados/services/fabrica_da_celula.py:91`, `app/chamados/services/fabrica_da_celula.py:93`, `app/chamados/services/fabrica_da_celula.py:98`, `app/chamados/services/fabrica_da_celula.py:99`, `app/chamados/services/fabrica_da_celula.py:102`, `app/chamados/services/fabrica_da_celula.py:126`)
-- Guardas internas dos motivos: vencidos vazio (`45–46`), ata não autoriza (`50–51`), faltantes `None` com vencidos não `None` (`52–54`), classificador sem motivo (`56–57`), exclusão de marcos não vencidos (`60–61`), ausência de correspondência de motivo (`62–64`). (`app/chamados/services/fabrica_da_celula.py:45`, `app/chamados/services/fabrica_da_celula.py:50`, `app/chamados/services/fabrica_da_celula.py:52`, `app/chamados/services/fabrica_da_celula.py:56`, `app/chamados/services/fabrica_da_celula.py:60`, `app/chamados/services/fabrica_da_celula.py:62`)
-- `parcial_so_lista` deve ter a própria linha de retorno registrada: `399` distingue parcial sem período; `400` distingue a regra de julgamento anterior/ausência de fato novo. A instrumentação não precisa copiar esses testes. (`app/ponto/services/cartorio.py:398`, `app/ponto/services/cartorio.py:400`)
-- Depois dos motivos, limbo entregue segue para Pauta DP e retorna `[]`; isso é destino alternativo, não ausência de emissão. (`app/chamados/services/fabrica_da_celula.py:171`, `app/chamados/services/fabrica_da_celula.py:172`, `app/chamados/services/fabrica_da_celula.py:173`)
-
-Armadilhas:
-
-- `_ata_do_dia` captura `Exception` e devolve `(True, None)`. O contrato exige observar essa captura; envolver `core.observ.registrar_engolido` para contar a exceção recebida preservando/repropagando conforme desenho da sonda. Contar só erros que escapam do emissor perderia estes casos. (`app/chamados/services/disputa_emissao.py:828`, `app/chamados/services/disputa_emissao.py:830`, `app/chamados/services/disputa_emissao.py:832`)
-- Chamar diretamente `perguntar_pela_celula` prova a resposta atual do emissor para o estado lido. Não demonstra que o evento histórico efetivamente o chamou: `julgar_colab` só chega ali com `apply_` e célula presente no `cods` do ato. (`app/ponto/services/cartorio.py:981`, `app/ponto/services/cartorio.py:986`, `app/ponto/services/cartorio.py:995`)
-- Para não vazar conteúdo, represente o último frame como `arquivo:linha:funcao`, com até 200 caracteres; não imprima `str(exc)`, SQL nem linha de código contendo dados. A existência de dados pessoais em mensagens concretas permanece [nao verificado].
-- Tempo de execução na sombra: [nao verificado]. O custo amplo é do censo e do motor solicitado uma vez por colaborador pelo carregador; as 200 chamadas diretas da fábrica evitam rejulgar a frota. (`app/chamados/services/vigia_fio.py:582`, `app/ponto/management/commands/e6_oraculo.py:154`, `app/ponto/management/commands/e6_oraculo.py:159`)
-
-## 06/11 10:41 · sessao faa68ab99b0c · - · - · origem=Ronald (tmux)
-
-R1 chama apenas o juiz do dono; cartório e emissor são caminhos separados:
-
-- `app/ponto/management/commands/e6_oraculo.py:304`: chama `espelho_do_colab`; `:316` cria `InsumosDoDono`; `:366` chama seu `dono`; `:183` delega a `dono_da_divergencia`.
-- `app/ponto/services/espelho.py:1227`: `autoridade_do_periodo`; `:1262` chama `montar_dias`; `:1284` chama `folha_manda`. Não identifiquei escrita nesse caminho. [não verificado quanto à totalidade transitiva dos métodos de modelos]
-- `app/ponto/services/cartorio.py:895`: `julgar_colab` é outra entrada. Seu corpo chama `classificar_dia` em `:1413`; emissor `_abrir_chamado` é chamado somente com `apply_=True`, em `:1725`–`:1740` e `:1777`–`:1778`. Portanto `apply_=False` não mede o emissor.
-- `app/ponto/management/commands/detectar_ausencias.py:693`: emissor chama a porta `ChamadoColaborador.abrir`; depois pode escrever marcos (`:744`), contexto/nota (`:765`, `:768`), enviar push (`:778`) e criar fio (`:801`). Não basta interceptar só a criação para fazer uma sondagem desse caminho.
-
-O problema mais importante do contrato é erro engolido:
-
-- `app/ponto/management/commands/e6_oraculo.py:305`: exceção do espelho vira apenas contador e `continue`.
-- `app/ponto/services/espelho.py:411`: falha lendo DiaPago vira `{}`.
-- `app/ponto/services/espelho.py:569`: falha da grade vira grade vazia.
-- `app/ponto/services/espelho.py:650`: falha de fatos/palavra vira ausência da palavra.
-- `app/ponto/motor_calculo_v2.py:1387`: falha de carregar empresa vira `None`; `:1419`: falha das decisões HE vira `{}`.
-- `app/escala/services/leitor_celula.py:27`: erro de conversão vira `None`.
-
-Capturar somente exceções que escapam do `call_command` ou somente registros de logging não atende “erro nunca engolido”, porque os dois últimos fallbacks do motor não registram logger. A alternativa instrumental sem reproduzir lógica é ler os módulos com `ast`, mapear a primeira linha executável de cada `ExceptHandler` e usar `sys.settrace` nesses frames; quando essa linha executar, registrar `sys.exc_info()` com contexto col/data da pilha. Deduplicar a mesma instância de exceção preservando referências evita contá-la novamente quando for tratada em mais de um nível. A execução usa Python 3.13 segundo `app/Dockerfile:1`.
-
-_2232 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2234 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
