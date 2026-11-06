@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 13:21:59.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (63.9 MB). Acoes na janela: **830**.
+**Medido em 06/11/2026 13:27:33.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (63.9 MB). Acoes na janela: **823**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -833,10 +833,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:27:56 | Bash | Find HX-RESSUSCITA-REABRE-DISPUTA precedent | `cd /home/ronald/saas-hasner/app/docs; grep -n "HX-RESSUSCITA-REABRE-DISPUTA" CORTES.md LEIS.md BACKLOG.md DOSSIES.md 2>/dev/null \| cut -c1-700 \| head -8; sed -n 327p CORTES.md \| cut -c380-1200` |
 | 01:27:51 | Bash | Recheck cut text, reopen sites, H12H06-B RED v4 | `cd /home/ronald/saas-hasner; sed -n 325,329p app/docs/CORTES.md \| cut -c1-400; grep -n "reabrir_sistema" /home/ronald/wt-c20fm-203209/app/chamados/services/fio.py /home/ronald/wt-c20fm-203209/app/chamados/models.py \| head; ls -la logs/h12h06b/red_v4.log; tail -3 logs/h12h06b/red_v4.log` |
 | 01:27:45 | Bash | Read H12H06-B report, FIO suite waiter, RELATO top | `tail -c 4000 /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/a3eacc55d09b6c05b.output; echo ===; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/b15eq0dt0.output; echo ===; head -6 /home/ronald/saas-hasner/app/docs/RELATO.md \| cut -c1-200; ps -p 2946612 -o pid,cmd \| tail -1` |
-| 01:26:26 | Bash | Confirm M4 mutant bites | `cd /home/ronald/saas-hasner/logs/c20_fiomudo; cat v6_mut.out 2>/dev/null \| head -20; tail -3 v6_mutante_M4_sem_C6.log` |
-| 01:23:51 | Bash | Find what C11=(i) means | `cd /home/ronald/saas-hasner; grep -rn 'C11' logs/c20_fiomudo/*.md logs/piloto_pd/*FIO* logs/codex_queima/c20_2.md 2>/dev/null \| cut -c1-400 \| head -8` |
-| 01:23:48 | Bash | Find FIO MUDO triage items in PD-TRIAGEM-CHAT | `cd /home/ronald/saas-hasner/app/docs; sed -n 1882p PROMPTS.md \| cut -c1-2500 \| tr ';' '\n' \| grep -in 'fio\\|C11\\|reabr'` |
-| 01:23:44 | Bash | Read FIO-MUDO aval and related cuts | `cd /home/ronald/saas-hasner/app/docs; sed -n 1875p PROMPTS.md \| cut -c1-1500; echo; grep -n 'FIO MUDO\\|FIO-MUDO' PROMPTS.md CORTES.md \| cut -c1-300 \| tail -8` |
-| 01:23:36 | Bash | Check CORTES:327, M3 filter, callback body | `cd /home/ronald/wt-c20fm-203209/app; sed -n 325,329p docs/CORTES.md \| cut -c1-900; echo ===; grep -n 'validada_em__isnull' chamados/models.py \| head; git log --oneline -1 8e6ed0d1; echo ===; sed -n 905,925p chamados/services/fio.py` |
-| 01:23:27 | Bash | Read Codex v6 answer | `cd /home/ronald/saas-hasner/logs/c20_fiomudo/codex; wc -c v6.r; cat v6.r \| head -150` |
-| 01:23:23 | Bash | Check suites and Codex progress | `cd /home/ronald/saas-hasner; date +%H:%M; bin/trava_teste.sh --quem; ps -eo pid,etime,args \| grep 'trava_teste.sh --' \| grep -v grep \| cut -c1-40; tail -2 logs/c20_fiomudo/codex/v6.run.log 2>/dev/null; ls -t logs/h12h06b \| head -3` |
