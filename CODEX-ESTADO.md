@@ -1,7 +1,152 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 18:51** · publicado em **06/11/2026 18:51** (UTC-3)
+> Ultima resposta processada: **06/11/2026 18:56** · publicado em **06/11/2026 18:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 18:56 · sessao 9d4d73a5e5aa · BO-[nome]-0611 · sonda · origem=Code
+
+Saída fornecida, sem reexecução da sonda. [nao verificado]
+
+- **(a)** `TOTAL_RECUSAS 0 COLABS 0`: zero recusas, zero colaboradores. O recorte desde 07/10 não aparece na saída. [nao verificado]
+- **(b)** `RECUSAS_SEM_BATIDA_EM_30MIN 0 COLABS 0`: zero candidatas a batida perdida, zero colaboradores. [nao verificado]
+- **(c)** Não há série diária apresentada; existência de degrau e sua data: [nao verificado].
+- **(d)** Não aparece linha de `col155`. [nao verificado]
+- **(e)** `ERROS {}`: nenhum erro listado. [nao verificado]
+
+**O caminho que escreve o log não é o único bloqueio por falta de GPS.** Na tela V2, coordenadas ausentes fazem `garantirRequisitos()` retornar `false`; o chamador encerra antes do envio à API. [app/templates/ponto/bater_ponto_v2.html:297](app/templates/ponto/bater_ponto_v2.html#L297), [app/templates/ponto/bater_ponto_v2.html:325](app/templates/ponto/bater_ponto_v2.html#L325).
+
+Nas duas views, `if not latitude or not longitude` chama `registrar_log` com `batida_recusada_sem_gps` e retorna HTTP 403, código `gps_obrigatorio`. [app/api/views_core.py:440](app/api/views_core.py#L440), [app/api/views.py:449](app/api/views.py#L449). Se a auditoria lançar exceção, `registrar_log` captura e registra a falha; a view segue para o 403. [app/core/auditoria.py:25](app/core/auditoria.py#L25), [app/api/views_core.py:454](app/api/views_core.py#L454), [app/api/views.py:462](app/api/views.py#L462).
+
+**A fila offline mantém a batida após 403 e reenvia na próxima sincronização.** Remove o item somente em resposta de sucesso ou HTTP 400; o 403 não executa essas exclusões. A sincronização lê novamente todos os pendentes e envia cada um. [app/static/pwa.js:130](app/static/pwa.js#L130), [app/static/pwa.js:153](app/static/pwa.js#L153), [app/static/pwa.js:158](app/static/pwa.js#L158), [app/static/pwa.js:166](app/static/pwa.js#L166). Há chamadas de sincronização no evento `online` e na inicialização, quando conectado. [app/static/pwa.js:320](app/static/pwa.js#L320), [app/static/pwa.js:328](app/static/pwa.js#L328).
+
+## 06/11 18:54 · sessao 6c1044e8ea77 · BO-[nome]-0611 · sonda · origem=Code
+
+**BO-[nome]-0611 — triagem somente leitura.** Os fatos das FICHAS/anexo estão identificados com **[nao verificado]**, pois foram fornecidos no texto, sem arquivo:linha acessível. As referências abaixo sustentam o comportamento da cópia; a separação de donos segue `CLAUDE.md:176`.
+
+**01+04 — col39, 15/10: producao batida, dono BATIDA.** É o candidato de maior atividade, 20 contra 11. O atestado **virou Ausência 4879 e está aprovado** desde 16/10 16:36:56; há três marcações em 15/10, sem saída final, e a retenção informada é **`espelho_fato_em_ausencia`**, não “atestado que não chegou”. (FICHA 01+04 [nao verificado].)
+
+O código retém fato em dia coberto por ausência; portanto, o conflito informado explica a retenção. A porta do documento é **Ausências**; o calendário também oferece **Resolver dia**, mas não se deve presumir que “Trabalhou” aceitará um dia já coberto por ausência. (`app/escala/models.py:1753`; `app/folha/export.py:1233`; `app/ponto/services/ausencia.py:637`; `app/ponto/services/veredito_celula.py:221`.)
+
+**02 — col993 comparado com col1023: falta informacao.** Mantive col993, atividade 102 contra 91 e 19: a FICHA mostra várias correções materializadas em 03/11, com origem `disputa_s84_retro`. O que aparece parado é a volta de intervalo de **24/10, pergunta 53441**, ainda sem resposta, além das perguntas de 03/11 e 05/11; a Justificativa 3465 também está pendente, sem saída informada. (FICHAS 02a/02b [nao verificado].)
+
+Os caminhos são diferentes:
+
+- **Justificativa:** aprovar só gera saída se houver `saida_informada` e `batida_entrada`; pode ficar aprovada sem gerar batida. (`app/ponto/services/justificativa.py:137`; `app/ponto/services/justificativa.py:190`.)
+- **RegularizacaoExterna:** exige confirmação do colaborador e produz origem `reg_externa`; ambas as FICHAS têm `regularizacoes=[]`. (`app/chamados/services/regularizacao_ext.py:36`; `app/chamados/services/regularizacao_ext.py:76`; FICHAS [nao verificado].)
+- **PerguntaDisputa:** exige resposta para validar e materializar. Em intervalo fixo, o plantio pode usar a hora do marco, não a hora livre digitada. (`app/chamados/services/validacao.py:363`; `app/chamados/services/materializacao.py:404`.)
+
+Col1023 mostra abonos em 03–04/11, uma batida retratada e marcações do app em 05–06/11; não identifica a suposta correção de horário que “chegou”. Falta o dia/hora ou ID da solicitação comparada para concluir onde **a correção alegada** parou. (FICHA 02b [nao verificado].)
+
+**03 — lote: nosso com obra, dono ESTRUTURA; cobertura específica: sem obra.** A view executa o lote **sincronamente**, antes de devolver o resultado; o serviço percorre e valida as referências individualmente. Isso mantém trabalho longo na requisição, contrariando a orientação de job da infraestrutura. Enquadramento de padrão: **Event-driven architecture**, aplicado à retirada desse processamento da pilha HTTP. (`app/chamados/views_cobrar.py:379`; `app/chamados/services/validacao.py:680`; `CLAUDE.md:89`; `app/docs/GLOSSARIO.md:16`.)
+
+O **Caddyfile não configura timeout específico para essa rota**. Os 30 segundos do `gthread` não constituem limite por requisição: a própria documentação da O284 distingue requisição longa de worker travado. Não há fundamento para afirmar “passou de 30 s, o usuário recebe erro”. (`Caddyfile:8`; `Caddyfile:10`; `app/gunicorn.conf.py:19`; `app/gunicorn.conf.py:21`; `app/docs/TICKETS.md:132`.)
+
+O formulário HTMX não declara timeout próprio; o resultado aparece quando a resposta chega. Em erro HTTP ou de transporte há mensagens diferentes, mas **não foi identificado um X segundos para desistência da tela**. (`app/templates/chamados/partials/_lote_preview.html:21`; `app/templates/chamados/partials/_lote_preview.html:5`; `app/templates/core/_dialogo.html:61`; `app/templates/core/_dialogo.html:75`.)
+
+Os 35 retornos anexados são 200, entre 10,435 e 122,373 s; **200 não prova validação integral**, pois o resultado também comporta recusadas e validadas sem gravação. A causa da subida a partir de 03/11 permanece desconhecida: faltam tamanho/referências dos lotes e perfil da execução. (Anexo `ui_lote.log` [nao verificado]; `app/templates/chamados/partials/_lote_preview.html:7`; `app/templates/chamados/partials/_lote_preview.html:9`.)
+
+Não localizei obra específica que cubra esse endpoint. **O284 cobre PDF do espelho**, não validar chamados; atribuir sua cobertura a esta rota seria indevido. (`app/docs/TICKETS.md:132`; cobertura específica [nao verificado].)
+
+**05 — col155: nosso com obra, dono ESTRUTURA; sem obra específica localizada.** É o maior candidato, atividade 23 contra 15; tem dois devices ativos e as marcações apresentadas chegaram com geolocalização. O anexo não identifica uma tentativa recusada nem sua versão efetiva do aplicativo. (FICHA 05 [nao verificado].)
+
+**Sim, há bloqueio:** o helper do PWA retorna `null` quando não consegue GPS; a tela V2 interrompe o envio sem coordenadas; a API efetiva retorna **403 `gps_obrigatorio` antes do registro**, inclusive para envio pela fila offline. Isso contraria a regra interna de batida nunca barrada. (`app/static/pwa.js:289`; `app/templates/ponto/bater_ponto_v2.html:297`; `app/templates/ponto/bater_ponto_v2.html:325`; `app/static/pwa.js:153`; `app/api/views_core.py:440`; `CLAUDE.md:140`.)
+
+Padrão quebrado: **Duplicated business logic / logic drift** — a tela antiga permite prosseguir sem GPS, enquanto V2/API barram. O bloqueio está provado no código; **uma batida individual perdida de col155 não está demonstrada**. (`app/docs/GLOSSARIO.md:23`; `app/templates/ponto/bater_ponto.html:507`; `app/api/views_core.py:454`; perda individual [nao verificado].)
+
+**06 — col950: producao cadastro, dono CADASTRO.** O backlog o identifica expressamente como conta de teste; TESTE06 mostra devices iOS, seis batidas, **em comuns=true e em operação=false**. (`app/docs/BACKLOG.md:1797`; TESTE06 [nao verificado].)
+
+“Comuns” exige situação ativa, empresa ativa e username de 11 dígitos; “operação” acrescenta rollout e vínculo vigente. **`situacao='desligado'` o retiraria dos dois universos**; `isento_ponto` não participa desses filtros. Qual condição adicional o exclui hoje da operação não aparece no anexo. (`app/colaboradores/queries.py:25`; `app/colaboradores/queries.py:65`; motivo específico [nao verificado].)
+
+**07 — col836, 14/10: ja OK hoje quanto à exclusão da lista inicial.** O chamado **31151 existe e está resolvido via sistema desde 14/10 08:15:08**; não tem `superado_por` nem silenciamento, possui célula e pertence à empresa 2. (FICHA 07 [nao verificado].)
+
+A lista pertinente é **Painel de gestão, `/chamados/`**: por padrão mostra cobrança, aberto/em análise; **Histórico** inclui resolvido/fechado. Esse status basta para excluir o registro da lista inicial; filtros efetivamente escolhidos e acesso concreto do usuário não foram fornecidos. (`app/chamados/urls.py:9`; `app/chamados/views.py:721`; `app/chamados/services/painel.py:298`; `app/chamados/services/painel.py:314`; filtros/acesso [nao verificado].)
+
+O queryset citado não exclui automaticamente por célula, `superado_por` ou “empresa visível”; empresa, praça e colaborador entram por filtros explícitos. A pendência de escala indicada na célula é separada da visibilidade desse chamado resolvido. (`app/chamados/services/painel.py:96`; FICHA 07 [nao verificado].)
+
+**08 — col617, 05–06/11: ja OK hoje quanto à alegação de autoaceite.** A ausência 5380 está rejeitada; a **5399 está aprovada**, cobrindo 05–06/11. Ambas foram registradas pelo colaborador, mas `aprov_proprio=false`: o dado não sustenta aprovação pelo próprio colaborador; tampouco mostra a data correta do documento ou a identidade do decisor. (FICHA 08 [nao verificado].)
+
+Atestado com documento nasce **aguardando decisão**. A aprovação automática da declaração **`FALTA_DIA` não se estende ao atestado**: `ATESTADO` usa o estado inicial do serviço. A auditoria da tela distingue “Lançado por” de “Decidido por”. (`app/ponto/services/ausencia.py:779`; `app/chamados/services/materializacao.py:579`; `app/templates/ponto/partials/painel_ausencia.html:257`.)
+
+**09 — col1000: ja OK hoje para os dias sem batida apresentados.** Em **26/10** há abono aprovado; em **31/10** o dia é folga e há decisões `admin_decidiu` registradas em 06/11. Isso explica dias sem marcação que não permanecem como falta pendente; o anexo não identifica o usuário que decidiu. (FICHA 09 [nao verificado].)
+
+“Resolvido” pode ser o **status do chamado**, não uma afirmação de jornada completa; chamado filho agrupado também pode estar resolvido enquanto outra pendência continua. O calendário separa o vínculo do chamado da marca de decisão humana. (`app/chamados/models.py:772`; `app/templates/colaboradores/partials/_calendario_grade.html:108`; `app/templates/colaboradores/partials/_calendario_grade.html:109`.)
+
+A alegação não descreve integralmente o estado atual: **27/10 tem perguntas pendentes; 29 e 30/10 têm chamados próprios em análise**, criados hoje. A tela exata originalmente chamada de “resolvido” permanece sem identificação. (FICHA 09 [nao verificado].)
+
+**10 — col399: falta informacao para a cronologia da alteração alegada.** As batidas de 31/10 foram criadas às **06:20:44 e 18:22:42**; a ausência de troca de 24/10 foi criada em **04/11 16:13:01**. Hoje a célula de 31/10 informa `folga_trabalhada`, sem retenção; a de 24/10 informa ausência. (FICHA 10 [nao verificado].)
+
+Esses registros antecedem o deploy O10-B documentado em **06/11 13:20**. Porém a FICHA não contém `editada_em`, `regenerada_em`, antes/depois nem trilha de mudança de tipo: **não permite datar quando as células/batidas teriam mudado ou virado espúrias**. (`app/docs/RELATO.md:17`; cronologia da alteração [nao verificado].)
+
+O `git log main` solicitado não pôde ser consultado porque a cópia não tem repositório Git disponível. A O10-B existente escreve o par da troca pela porta da célula, mas seu código não prova aplicação ao caso. (`app/ponto/portas/celula.py:632`; histórico Git/aplicação [nao verificado].)
+
+**11 — col921: ja OK hoje; regra de competência.** `resolver_dia=true` em **14, 15, 16, 18, 19 e 20/10**; falso nas folgas **17 e 24/10**, e também nos dias **21–23 e 25–28/10**, ainda irregulares. (FICHA 11+12 [nao verificado].)
+
+O botão exige passado, status que pede decisão e **último recurso em competência já encerrada**; dentro da corrente, o caminho é chamado/pergunta. A mudança em 21/10 é compatível com a competência 21–20 apresentada na FICHA, não demonstra defeito. (`app/colaboradores/services/calendario.py:97`; `app/colaboradores/services/calendario.py:455`; `app/colaboradores/services/calendario.py:738`; `app/ponto/janelas.py:10`.)
+
+**12 — col921: ja OK hoje quanto à recusa de falta em folga.** O veto recusa falta quando a autoridade da escala diz que não existe jornada prevista. As folgas mostradas são 17 e 24/10; as seis faltas aprovadas apresentadas recaem em dias de trabalho. (`app/ponto/precedencia.py:536`; FICHA 11+12 [nao verificado].)
+
+**Não há lançamento específico de “abandono de posto em folga” demonstrado neste caso.** O comando de abandono provisório usa o próprio tipo `falta`; o modelo de Advertência tem “Ausência/Outro”, mas isso não comprova uma porta de tela para o lançamento pretendido nem autoriza tratar folga como falta. (`app/ponto/management/commands/marcar_abandono_provisorio.py:76`; `app/ponto/models.py:1164`; porta pretendida [nao verificado].)
+
+**13+14 — col407: nosso com obra, dono ESTRUTURA.** Aqui há evidência contrária ao maior candidato: col114 apresenta caso diurno e perguntas de intervalo; **col407 corresponde à assinatura noturna relatada**. A pergunta **47210**, vinculada a 22/10, respondeu 07:00 em 22/10 e foi validada hoje às 14:45:08; gerou a batida **147824, saída em 23/10 07:00, origem `disputa_s84_retro`**, enquanto 21/10 continua com furo. (FICHAS 13+14 [nao verificado].)
+
+Isso confirma a assinatura do aval informado: data da pergunta tratada como base do turno, com saída deslocada mais um dia. O plantio combina `data_evento` com a hora e passa pelo ajuste noturno; o backlog reconhece expressamente as semânticas diferentes desse campo. (`app/chamados/services/materializacao.py:344`; `app/chamados/services/materializacao.py:414`; `app/chamados/juizes.py:310`; `app/docs/BACKLOG.md:990`.)
+
+Padrão: **Single Writer Principle**. A obra existente que cobre é **DIA-DA-PERGUNTA-E-O-TURNO, complemento O261**; o identificador literal `BUG-PLANTIO-NOTURNO-MAIS-1` veio no pedido, sem correspondência localizada nos dois registros pesquisados. (`app/docs/GLOSSARIO.md:12`; `app/docs/BACKLOG.md:990`; correspondência literal [nao verificado].)
+
+A batida anômala veio da resposta validada, **não do aparelho**. `timestamp_dispositivo` e `sincronizado_em` são campos anuláveis; seus nulos não provam perda, e o anexo não traz uma tentativa local ausente do servidor nem valores monetários para demonstrar dinheiro errado. (`app/ponto/models.py:75`; `app/ponto/models.py:77`; FICHA/perda/dinheiro [nao verificado].)
+
+**ERROS da sonda:** veio `ERROS {}`; nenhum item ficou inconclusivo por erro declarado da sonda. As lacunas centrais de **02 e 10**, a causa da lentidão de 03 e as identidades não expostas permanecem sem conclusão por falta de evidência. (Anexo [nao verificado].)
+
+**(1) Tabela consolidada.** Datas/colaboradores abaixo vêm do anexo [nao verificado]; os enquadramentos remetem às evidências acima. “Não provado” em SOBE significa ausência de prova de dinheiro errado ou batida perdida [nao verificado].
+
+| item | colNNN + dia | classe | padrão quebrado | obra | SOBE? |
+|---|---|---|---|---|---|
+| 01 | col39 · 15/10 | producao batida | n/a — BATIDA | n/a | Não provado |
+| 02 | col993 × col1023 · pedido sem dia identificado | falta informacao | não determinado | não determinada | Não provado |
+| 03 | col não informado · 28/10–06/11 | nosso com obra | Event-driven architecture | **sem obra** específica localizada | Não provado |
+| 04 | col39 · 15/10 | producao batida | n/a — BATIDA | n/a | Não provado |
+| 05 | col155 · 28/10–06/11 | nosso com obra | Duplicated business logic / logic drift | **sem obra** específica localizada | Não provado |
+| 06 | col950 · TESTE06 | producao cadastro | n/a — CADASTRO | n/a | Não provado |
+| 07 | col836 · 14/10 | ja OK hoje | n/a | n/a | Não provado |
+| 08 | col617 · 05–06/11 | ja OK hoje | n/a | n/a | Não provado |
+| 09 | col1000 · 26 e 31/10 sem batida | ja OK hoje | n/a | n/a | Não provado |
+| 10 | col399 · 24 e 31/10 | falta informacao | não determinado | O10-B relacionada; aplicação não provada | Não provado |
+| 11 | col921 · 14–28/10 | ja OK hoje | n/a | n/a | Não provado |
+| 12 | col921 · folgas 17 e 24/10 | ja OK hoje | n/a | n/a | Não provado |
+| 13 | col407 · turno 21/10 / saída plantada 23/10 | nosso com obra | Single Writer Principle | DIA-DA-PERGUNTA-E-O-TURNO / O261 | Não provado |
+| 14 | col407 · pergunta 47210 de 22/10 | nosso com obra | Single Writer Principle | DIA-DA-PERGUNTA-E-O-TURNO / O261 | Não provado |
+
+**(2) Contagem:** ja OK hoje **5**; nosso com obra **4**; producao batida **2**; producao cadastro **1**; falta informacao **2**. **SOMA = 14**, contando 01/04 e 13/14 separadamente, conforme as linhas da tabela.
+
+**(3) Textos para o DP**
+
+**01.** Abra o atestado em **Ausências** e confira a data e o período junto das marcações de 15/10. O documento já consta aprovado, mas existem marcações na mesma data. (`app/templates/ponto/partials/painel_ausencia.html:130`; FICHA [nao verificado].)
+
+**02.** Abra o chamado da correção e confira a data da pergunta e se ela já recebeu resposta. Há horários registrados e perguntas ainda sem resposta; a aprovação de justificativa e a confirmação de lote são etapas diferentes. (`app/chamados/services/validacao.py:363`; `app/chamados/services/regularizacao_ext.py:36`; FICHAS [nao verificado].)
+
+**03.** Em **Validar em lote**, aguarde o quadro de resultado. Confira nele quantas perguntas foram validadas, quais ficaram de fora e quais foram validadas sem gravar o ponto. (`app/templates/chamados/partials/_lote_preview.html:5`.)
+
+**04.** No calendário de 15/10, consulte **Resolver dia** e compare as marcações com o atestado em Ausências. A pendência indicada é a existência de marcações em um dia já coberto pela ausência. (`app/templates/colaboradores/partials/_calendario_grade.html:125`; FICHA [nao verificado].)
+
+**05.** Confira se a tentativa terminou com confirmação de registro. Quando aparece a mensagem de GPS obrigatório, aquela tentativa não é registrada; as marcações apresentadas neste levantamento chegaram com localização. (`app/api/views_core.py:454`; FICHA [nao verificado].)
+
+**06.** Consulte a situação cadastral da conta de teste. Ela ainda aparece como ativa e entra nos colaboradores comuns, embora já esteja fora do universo de operação. (`app/colaboradores/queries.py:25`; TESTE06 [nao verificado].)
+
+**07.** No painel **Chamados**, selecione **Histórico** para localizar o registro de 14/10. A lista inicial mostra os chamados que aguardam ação, e esse registro consta como resolvido. (`app/chamados/services/painel.py:298`; FICHA [nao verificado].)
+
+**08.** Abra o segundo atestado em **Ausências** e confira o período 05–06/11 e a guia **Auditoria**. O registro está aprovado, e essa guia distingue quem lançou de quem decidiu. (`app/templates/ponto/partials/painel_ausencia.html:257`; FICHA [nao verificado].)
+
+**09.** Confira separadamente os dias no calendário e abra o chamado pelo número exibido. Em 26/10 há abono e em 31/10 há folga; 29 e 30/10 têm chamados próprios em análise. (`app/templates/colaboradores/partials/_calendario_grade.html:108`; FICHA [nao verificado].)
+
+**10.** No calendário, compare 24/10 e 31/10 com o pedido de troca. O levantamento mostra ausência no primeiro dia e folga trabalhada no segundo, mas não informa quando essa classificação mudou. (`app/colaboradores/services/calendario.py:662`; FICHA [nao verificado].)
+
+**11.** Para os dias depois de 20/10, abra o chamado e acompanhe as perguntas. **Resolver dia** fica disponível como último recurso para competência já encerrada. (`app/colaboradores/services/calendario.py:455`.)
+
+**12.** Confira no calendário se o dia está previsto como trabalho ou folga. **Falta** só aceita dia com jornada prevista; o levantamento não identifica um lançamento específico de abandono para esses dias de folga. (`app/ponto/precedencia.py:536`; lançamento específico [nao verificado].)
+
+**13.** Confira no espelho o turno iniciado em 21/10 e a saída da manhã seguinte. A marca das 07:00 exibida em 23/10 veio da resposta validada no chamado, não de uma nova marcação do aparelho. (`app/chamados/services/materializacao.py:414`; FICHA [nao verificado].)
+
+**14.** Abra o chamado em análise e confira a data indicada junto da pergunta respondida. A resposta consta validada, enquanto o dia 21/10 continua irregular no levantamento. (`app/chamados/services/fio.py:40`; FICHA [nao verificado].)
 
 ## 06/11 18:51 · sessao 5be272a7c35a · - · - · origem=Ronald (tmux)
 
@@ -993,59 +1138,4 @@ Outro mutante explícito: acrescentar `pk__isnull=True` ao filtro do lock, geran
 
 A previsão de que esses mutantes passam pelos 26 testes decorre da inspeção estática das asserções; execução dos testes e dos mutantes: **[nao verificado]**. [nao verificado]
 
-## 06/11 18:23 · sessao a75e25bc3777 · - · - · origem=Ronald (tmux)
-
-1. `motivos_a_perguntar` recusa na seguinte ordem:
-
-   - Primeiro `dia_sem_trabalho(cel)`; por curto circuito, só consulta situação do colaborador se esse juiz devolver falso. Colaborador diferente de ativo também recusa. **`app/chamados/services/fabrica_da_celula.py:89-92`**.
-   - Data futura. **`app/chamados/services/fabrica_da_celula.py:93-94`**.
-   - Calcula `agora` e marcos vencidos; depois recusa veredito preenchido que não esteja em `CelulaDia.VEREDITOS_ACUSAM`. **`app/chamados/services/fabrica_da_celula.py:95-100`**.
-   - Recusa parcial destinado só à lista administrativa (`parcial_so_lista`). **`app/chamados/services/fabrica_da_celula.py:101-104`**.
-   - Consulta perguntas existentes, excetuando duplicatas, e só devolve motivos da ata ainda não perguntados. Teto dos marcos é aplicado dentro de `motivos_pela_ata`. **`app/chamados/services/fabrica_da_celula.py:118-126`**, **`:45-64`**.
-
-   O juiz considera `trabalha is False` ou tipo de ata preenchido diferente de trabalho; ausência parcial deixa o restante cobrável, salvo `trabalha is False`. **`app/chamados/juizes.py:422-428`**. Logo, para os registros cuja cláusula é `trabalha_False`, a primeira guarda já explica a recusa; não depende do status `folga_trabalhada`. **`app/chamados/services/fabrica_da_celula.py:91`**, **`app/chamados/juizes.py:428`**.
-
-2. **Há outros escritores; ausência de porta na medição não prova impossibilidade de emissão.**
-
-   Caminho específico para batida em folga:
-
-   - `detectar_batida_fora_escala` usa `esc.eh_dia_trabalho(data_turno_ref)` e devolve grave / `batida_em_folga` quando falso. **`app/chamados/detector_anomalias.py:164-175`**.
-   - API converte grave em motivo `batida_fora_escala_grave` e chama `criar_ou_atualizar_disputa`, preenchendo também `ultima_batida.timestamp`. **`app/api/views_core.py:725-730`**, **`:771-780`**; mesmo código em `app/api/views.py`.
-   - O helper abre/agrega disputa e chama o gerador de perguntas. **`app/chamados/services/disputa_emissao.py:598-618`**.
-   - O gerador lê `ultima_batida.timestamp`, converte para data local e passa `data_evento` a `PerguntaDisputa.abrir`. **`app/chamados/services/disputa_emissao.py:350-366`**, **`:389-397`**.
-   - A porta consulta a célula por colaborador/data e cria a pergunta com essa célula; não tem guarda `dia_sem_trabalho`. **`app/chamados/models.py:2428-2430`**, **`:2476-2477`**.
-   - Nascer pergunta não garante porta alcançável: `porta_alcancavel_do_dia` ainda exige pergunta viva, no app e âncora na fila. **`app/chamados/juizes.py:1378-1381`**. Pergunta respondida com texto pode permanecer viva apesar de a célula não acusar, salvo decisão administrativa; pergunta nova sem resposta pode morrer pelo veredito não acusador. **`app/chamados/juizes.py:1150-1162`**, **`:1181-1196`**.
-
-   Outro caminho concreto de **chamado da célula**: abertura administrativa no fio recebe tipo catalogado e data do fato, cria chamado com a chave de data; `criar` resolve a célula do colaborador/data. Exemplo de tipo permitido: `ausencia_colab`, de escopo DIA, chave `data`. **`app/chamados/services/abertura.py:147-153`**, **`:172-192`**; **`app/chamados/catalogo/modulos.py:120-122`**; **`app/chamados/models.py:1026-1028`**, **`:1193-1201`**. As guardas posteriores são absolvição de módulo de turno e veto da régua; não constituem veto universal a `folga_trabalhada`. **`app/chamados/models.py:1031-1039`**, **`:1073-1076`**, **`:1097-1106`**. O chamado só constitui porta se integrar a fila considerada pelo juiz. **`app/chamados/juizes.py:1375-1386`**.
-
-   Outros emissores de cobrança possuem guardas diferentes: detector canônico chama `celula_veta_cobranca`; c2 também, e essa função veta `trabalha is False` sem chamar `dia_sem_trabalho`. **`app/ponto/management/commands/detectar_ausencias.py:630-633`**, **`app/chamados/reconciliador.py:876-880`**, **`app/ponto/marcos.py:154-163`**. Portanto não se deve dizer que “todo escritor passa por dia_sem_trabalho”. **Mesmas referências.**
-
-3. `STATUS_QUE_PEDEM_DECISAO`: a busca em Python encontrou somente definição e uso produtivo em `resolver_dia_oferecido`; fora dele, leitura direta apenas no teste que importa, compara a tupla e a percorre. **`app/colaboradores/services/calendario.py:94`**, **`:103-104`**; **`app/chamados/tests/test_o261_vigia_fio.py:901-903`**. O vigia lê indiretamente a decisão pela porta plural do calendário. **`app/chamados/services/vigia_fio.py:263-271`**.
-
-4. Não encontrei escritores chamados `extra_sem_aviso` ou `batida_orfa`; `batida_orfa` aparece como mapeamento legado de categoria para `orfao_14h`. **`app/chamados/models.py:3025-3026`**. Não usar os nomes como escritores provados. A ocorrência de `BATIDA_ORFA_FORA_TOLERANCIA` é protesto do suprajuiz. **`app/ponto/supra_juiz.py:518-522`**.
-
-## 06/11 18:22 · sessao 4f61a43c87d5 · - · - · origem=Ronald (tmux)
-
-Leitor existente e alcance:
-
-- `app/ponto/services/dia_decidido.py:529` — `decididos_do_periodo(colaborador, data_ini, data_fim, *, ausencias=None)` responde `{date: cartao_do_dia}`. A consulta seleciona ausências do colaborador que tocam a janela, sem filtro por autor, status ou chamado (`:550-555`); expande cada ausência entre `data` e `data_fim or data`, recortada pela janela (`:558-562`). Assim alcança também ausência registrada pelo próprio colaborador, desde que o dia esteja nessa janela.
-- `app/ponto/services/dia_decidido.py:512-526` — `cartao_do_dia` entrega veredito, cor, rótulo, minutos, tipo, status, ID, quem e quando. `quem_quando` prefere `aprovado_por`, depois `registrado_por`, e usa `aprovada_em or criado_em` (`:500-509`).
-- A grade do admin carrega `decididos_do_periodo` em `app/colaboradores/services/calendario.py:531-534`, fornece a decisão a `do_dia` em `:715-720` e publica palavra/cor/veredito em `:724`. O template mostra a palavra e usa o tooltip “O que foi decidido neste dia” em `app/templates/colaboradores/partials/_calendario_grade.html:98`; se há ausência, o chip usa a palavra no título e abre o registro (`:97`).
-- O espelho carrega o mesmo leitor em `app/ponto/services/espelho.py:647-649`, transporta `_decisao_do_dia` em `:871` e fornece a `do_dia` em `:340-345`.
-- Atenção: alcance não garante que a palavra mostrada será “decidido/aprovado”. `do_dia` considera cobertura, decisão e pedido pendente (`app/ponto/services/dia_decidido.py:399-435`). Pedido pendente no espelho ganha palavra “aguardando decisão” (`:420-425`). Os dados raspados não trazem `Ausencia.status` da ausência 4670; aprovação e palavra efetiva para col889 são `[nao verificado]`.
-
-Autoria:
-
-- O teste de identidade já existe no gate de aprovação: `app/ponto/services/ausencia.py:627-631` verifica se `ausencia.registrado_por.colaborador.pk == ausencia.colaborador_id`. A relação inversa é sustentada por `Colaborador.usuario`, OneToOne de `auth.User`, `related_name="colaborador"` em `app/colaboradores/models.py:351`.
-- Se a sonda compara `registrado_por_id == colab.usuario_id`, repete essa identidade existente; a chamada exata da sonda permanece `[nao verificado]`. Identidade do autor, sozinha, não comprova origem via disputa.
-- A autodeclaração via disputa está documentada em `app/chamados/services/materializacao.py:495-508`; a criação passa `registrado_por=user` e `chamado_origem=p.chamado_destino` em `:520-528`. O caminho `declara_falta` passa `request_user` e `ch` em `:484-492`.
-- Não encontrei `_quem_da_ausencia`; a função de autoria no módulo é `quem_quando`, `app/ponto/services/dia_decidido.py:500`.
-
-Contratos das funções:
-
-- `app/ponto/turnos.py:2774-2776` — `dias_da_ausencia(tipo, data, data_fim, ini, fim)` devolve lista de datas em intervalo fechado. Sem `data_fim`, estende até `fim` somente para `TIPOS_EM_ABERTO`; nos demais tipos usa um dia (`:2779-2789`).
-- `app/ponto/turnos.py:2874-2897` — `dia_das_batidas(colab, ini, fim, turnos=None)` devolve **mapa `{batida.pk: date}`**, não lista/número. `ini/fim` são a janela apresentada; `turnos=` é alimentação. A implementação chama `turnos_do_colab` e `janela_com_pad` (`:2900-2905`).
-- `turnos_do_colab` documenta intervalo por `data_turno` em `app/ponto/turnos.py:1848-1857`; o corpo compara `seg_ini <= t.data_turno <= seg_fim` em `:1993`. Um `datetime` misturado com `date` poderia falhar, mas sem a sonda/traceback a origem exata do TypeError é `[nao verificado]`.
-- A busca por nome não encontrou `sonda_dst.py` na cópia; argumentos efetivamente utilizados pela sonda são `[nao verificado]`.
-
-_2411 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2413 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
