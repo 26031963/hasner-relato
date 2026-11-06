@@ -1,7 +1,457 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 12:26** · publicado em **06/11/2026 12:29** (UTC-3)
+> Ultima resposta processada: **06/11/2026 12:34** · publicado em **06/11/2026 12:34** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 12:34 · sessao 0e23a98c7cdf · R1-CAUSAD-V3 · sonda · origem=Code
+
+As seis linhas `SOMA` terminam em `True`. Não há ocorrência de `INCOMPLETO` no texto fornecido. [nao verificado]
+
+Transcrição integral da parte 6 fornecida: [nao verificado]
+
+```text
+sonda_leitura: script.py [455c4e7660bc3a87] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+PARTE 6 PARTES 6
+[0] UNIVERSO 10/2026 624
+UNIVERSO_PARTE 10/2026 100
+JANELA 10/2026 2026-09-21 2026-10-20
+[0] UNIVERSO 11/2026 578
+UNIVERSO_PARTE 11/2026 96
+JANELA 11/2026 2026-10-21 2026-11-20
+ESTIMATIVA processados 25 universo 196 minutos_total 2.9 ate_40_min True ate_15_min True
+ESTIMATIVA processados 50 universo 196 minutos_total 2.8 ate_40_min True ate_15_min True
+ESTIMATIVA processados 75 universo 196 minutos_total 2.7 ate_40_min True ate_15_min True
+COMPETENCIA 10/2026
+[1] {'dias_comparados': 1292, 'bate_ate_10min': 1253, 'esp_zero_e6_trabalho': 5, 'e6_zero_esp_trabalho': 2, 'diverge_10_60': 1, 'diverge_acima_60': 31, 'dia_batida_impar': 53, 'impar_que_BATE': 25, 'impar_que_DIVERGE': 28, 'impar_dentro_da_faixa': 25, 'impar_FORA_da_faixa': 3, 'impar_no_conjunto_do_dia': 28, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1396, 'dia_isento_ou_ausencia': 279, 'dia_sem_trabalho_ambos': 12, 'esp_desconta_janela_declarada': 21, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 97.0% de 1292 dias comparados
+[3] ESTRUTURA     2 dia-colab       8.2 h    1 colabs
+[3] CADASTRO      9 dia-colab      44.1 h    3 colabs
+[3] BATIDA       28 dia-colab     122.6 h   16 colabs
+[4] TOTAL divergentes 39
+[5] colabs com divergencia: 20
+erros_no_espelho 0
+PARCIAL|10/2026|ESTRUTURA|dias=2|horas=8.15|colabs=1
+PARCIAL|10/2026|CADASTRO|dias=9|horas=44.14612722222221|colabs=3
+PARCIAL|10/2026|BATIDA|dias=28|horas=122.57225449861109|colabs=16
+PARCIAL_TOTAL|10/2026|dias=39|horas=174.86838172083330|colabs=20
+ESTIMATIVA processados 100 universo 196 minutos_total 2.7 ate_40_min True ate_15_min True
+ESTIMATIVA processados 125 universo 196 minutos_total 2.8 ate_40_min True ate_15_min True
+ESTIMATIVA processados 150 universo 196 minutos_total 2.9 ate_40_min True ate_15_min True
+ESTIMATIVA processados 175 universo 196 minutos_total 2.8 ate_40_min True ate_15_min True
+COMPETENCIA 11/2026
+[1] {'dias_comparados': 674, 'bate_ate_10min': 647, 'esp_zero_e6_trabalho': 2, 'e6_zero_esp_trabalho': 2, 'diverge_10_60': 1, 'diverge_acima_60': 22, 'dia_batida_impar': 39, 'impar_que_BATE': 18, 'impar_que_DIVERGE': 21, 'impar_dentro_da_faixa': 16, 'impar_FORA_da_faixa': 5, 'impar_no_conjunto_do_dia': 20, 'impar_SO_POR_CORTE_do_oraculo': 1, 'dia_sem_linha_no_espelho': 1344, 'dia_sem_lavratura_no_espelho': 767, 'dia_isento_ou_ausencia': 155, 'dia_sem_trabalho_ambos': 20, 'esp_desconta_janela_declarada': 16, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 96.0% de 674 dias comparados
+[3] ESTRUTURA     1 dia-colab       2.6 h    1 colabs
+[3] CADASTRO      5 dia-colab      50.7 h    4 colabs
+[3] BATIDA       21 dia-colab     110.3 h   15 colabs
+[4] TOTAL divergentes 27
+[5] colabs com divergencia: 18
+erros_no_espelho 0
+PARCIAL|11/2026|ESTRUTURA|dias=1|horas=2.5604991666666668|colabs=1
+PARCIAL|11/2026|CADASTRO|dias=5|horas=50.7295725|colabs=4
+PARCIAL|11/2026|BATIDA|dias=21|horas=110.33564643499999|colabs=15
+PARCIAL_TOTAL|11/2026|dias=27|horas=163.6257181016666568|colabs=18
+TEMPO_SEGUNDOS 172.6
+TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 219208
+TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 16
+TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1158
+TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 3928
+TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 56
+TRATADA_LOCAL app/escala/utils.py:1521 GeneratorExit 2
+TRATADA_LOCAL app/escala/utils.py:1708 GeneratorExit 8
+TRATADA_LOCAL app/escala/utils.py:2012 GeneratorExit 6308
+TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 6
+TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 3771
+TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 3771
+TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 520
+TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 177
+TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 414465
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 470
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 2680
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 185
+TRATADA_LOCAL app/ponto/services/dia_pago.py:890 GeneratorExit 11236
+TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 73
+TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 3903
+TRATADA_LOCAL app/ponto/services/fechamento.py:1028 GeneratorExit 186
+TRATADA_LOCAL app/ponto/services/fechamento.py:1029 _GradeSemCelula 4
+TRATADA_LOCAL app/ponto/turnos.py:1293 GeneratorExit 20152
+TRATADA_LOCAL app/ponto/turnos.py:1654 GeneratorExit 3840
+TRATADA_LOCAL app/ponto/turnos.py:1697 GeneratorExit 35418
+TRATADA_LOCAL app/ponto/turnos.py:677 GeneratorExit 15407
+SOMA 10/2026 39   <- tem de ser igual a soma das classes (39) True
+SOMA 10/2026 HORAS 174.86838172083330 True
+SOMA 10/2026 COLABS_UNIAO 20 True
+SOMA 11/2026 27   <- tem de ser igual a soma das classes (27) True
+SOMA 11/2026 HORAS 163.6257181016666568 True
+SOMA 11/2026 COLABS_UNIAO 18 True
+rc_sombra=0
+```
+
+## 06/11 12:33 · sessao 1648ed6f1015 · O10-B · verificador · origem=Code
+
+**Não aprovaria a v3 como “apenas mais restritiva”: há um contraexemplo que retira proteção histórica e uma inversão possível de travas no caminho da edição.** (`app/escala/services/regeneracao.py:109`; `app/ponto/portas/celula.py:593`; `app/ponto/management/commands/gerar_celulas.py:256`; `app/chamados/signals.py:180`.)
+
+**1. Escritores e leitores**
+
+Escritores de produção encontrados:
+
+| Campo | Operação | Escrita |
+|---|---|---|
+| `regenerada_em` | `regenerar_celulas_vinculo` | `app/ponto/portas/celula.py:274` |
+| `regenerada_em` | **`reverter_regeneracao_dia`** | `app/ponto/portas/celula.py:792` |
+| `editada_em` | `editar_dia`, criando célula | `app/ponto/portas/celula.py:600` |
+| `editada_em` | `editar_dia`, atualizando célula | `app/ponto/portas/celula.py:607` |
+
+Portanto, a descrição nova de “dois reescritores” omite a operação de reversão, que também troca DNA e avança `regenerada_em`. (`app/escala/services/regeneracao.py:74`; `app/ponto/portas/celula.py:785`.)
+
+Leitores diretos de produção:
+
+| Leitor | Campos e finalidade |
+|---|---|
+| `carimbos_de_reescrita` | Ambos; filtro e entrega ao helper canônico. `app/escala/services/regeneracao.py:94`, `app/escala/services/regeneracao.py:97` |
+| `dia_do_colab` | Ambos, pelo helper canônico. `app/ponto/services/dia_do_colab.py:94` |
+| `cartorio.houve_fato_novo` | Ambos **crus**, comparados separadamente em `(desde, ate]`. `app/ponto/services/cartorio.py:365` |
+| `fase_12x36.janelas_reabertas` | `Max` dos dois campos e `max()` com outros fatos, comparado à lavra. `app/escala/services/fase_12x36.py:188`, `app/escala/services/fase_12x36.py:191` |
+| `veredito_lavrado.marcos_do_lote` | `Greatest` dos dois com outros carimbos, agregado por colaborador. `app/chamados/veredito_lavrado.py:151` |
+| `materializar_passivo_validado._trecho_da_regen` | Só `regenerada_em`, desde o começo do ensaio; métrica especificamente de regeneração. `app/chamados/management/commands/materializar_passivo_validado.py:210`, `app/chamados/management/commands/materializar_passivo_validado.py:220` |
+| `_estado_da_edicao` | Só `editada_em`, para trilha. `app/ponto/portas/celula.py:530` |
+
+**Sim, permanecem leitores da reescrita fora do helper**, especialmente o cartório; os dois agregadores também incorporam a reescrita em relógios mais amplos de invalidação. Logo, a afirmação universal “nenhum leitor tira o max por conta própria” excede a migração realizada. (`app/escala/services/regeneracao.py:77`; `app/ponto/services/cartorio.py:365`; `app/escala/services/fase_12x36.py:191`; `app/chamados/veredito_lavrado.py:153`.)
+
+**Não se deve substituir cegamente o OR do cartório pelo máximo:** ele pergunta por intervalo limitado. Se um carimbo estiver dentro de `(desde, ate]` e o outro depois de `ate`, o OR responde verdadeiro e o máximo responderia falso. Há consumidor passando limite histórico explícito. (`app/ponto/services/cartorio.py:365`; `app/chamados/services/vigia_loop.py:50`.)
+
+**2. Kwarg antigo**
+
+Não encontrei chamador na cópia passando `regenerada_em=` às duas funções. Os chamadores de produção usam `reescrita_em=`; os testes usam o nome novo ou omitem o argumento opcional. (`app/escala/services/regeneracao.py:141`; `app/escala/services/regeneracao.py:173`; `app/ponto/management/commands/gerar_celulas.py:249`; `app/ponto/management/commands/supra_juiz.py:275`; `app/escala/tests/test_cobranca_orfa_regeneracao.py:72`; `app/escala/tests/test_cobranca_orfa_regeneracao.py:84`; `app/escala/tests/test_o10b_orfa_edicao.py:63`.)
+
+As assinaturas não possuem `**kwargs`: eventual chamada com o nome antigo resulta em **`TypeError`**, sem absorção silenciosa. Chamadores externos à cópia: `[nao verificado]`. (`app/escala/services/regeneracao.py:100`; `app/escala/services/regeneracao.py:128`.)
+
+**3. Pode retratar mais ou diminuir a fila? Sim**
+
+Para o mesmo chamado e as mesmas janelas, sendo `R=regenerada_em`, `E=editada_em` e `X=criado_em`:
+
+| Situação | Efeito da troca |
+|---|---|
+| `R` preenchido, qualquer ordem entre `R` e `E` | O máximo nunca é menor que `R`; uma proteção anterior por `R>X` permanece. |
+| Ambos nulos | Continua consultando as janelas. |
+| `R=None`, `E>X` | A edição protege. |
+| **`R=None`, `E<=X`** | **O carimbo da edição impede consultar as janelas; pode desaparecer uma proteção anterior.** |
+
+Esses resultados decorrem do máximo e do retorno antecipado quando existe qualquer carimbo. (`app/escala/services/regeneracao.py:81`; `app/escala/services/regeneracao.py:107`.)
+
+Contraexemplo: célula do dia 03/08, `R=None`, edição em 25/08, cobrança em 26/08, janela abrangente do LogAuditoria em 27/08. Antes, a ausência de `R` permitia encontrar 27/08; agora, `E=25/08` retorna `None` antes da janela. A janela pode abranger dias não tocados — essa proteção conservadora é explicitamente documentada. (`app/escala/services/regeneracao.py:44`; `app/escala/services/regeneracao.py:109`; `app/escala/services/regeneracao.py:111`.)
+
+Consequências: a fila deixa de produzir esse item; no supra, satisfeitas as demais condições, o chamado deixa de ser segurado como órfão e alcança o ramo retratável. A ocorrência desse estado em produção é `[nao verificado]`. (`app/escala/services/regeneracao.py:172`; `app/escala/services/regeneracao.py:174`; `app/ponto/management/commands/supra_juiz.py:249`; `app/ponto/management/commands/supra_juiz.py:275`; `app/ponto/management/commands/supra_juiz.py:279`.)
+
+**4. `editar_dia`, atomicidade, travas e rabo**
+
+A sequência é: trava célula, escreve edição, exige trilha, marca cobranças, sai do `atomic` local e chama o rabo. Uma exceção propagada pelo marcador desfaz edição, trilha e alterações anteriores nessa transação. (`app/ponto/portas/celula.py:592`; `app/ponto/portas/celula.py:609`; `app/ponto/portas/celula.py:619`; `app/ponto/portas/celula.py:626`; `app/ponto/portas/celula.py:627`.)
+
+**Há inversão possível de travas:**
+
+- Edição: segura **célula**, depois tenta atualizar **chamado** pelo `renovar_contexto`. A renovação não faz `select_for_update`; seu `save` produz o UPDATE. (`app/ponto/portas/celula.py:593`; `app/ponto/management/commands/gerar_celulas.py:256`; `app/chamados/services/contexto.py:96`; `app/chamados/services/contexto.py:102`.)
+- Cancelamento: segura **chamado**, muda status e pode julgar/gravar a **célula** sincronamente pelo signal. (`app/chamados/models.py:674`; `app/chamados/models.py:744`; `app/chamados/models.py:751`; `app/chamados/signals.py:180`; `app/ponto/services/cartorio.py:1822`; `app/ponto/portas/celula.py:900`.)
+
+Assim, duas transações podem esperar uma pela outra. A edição passa a reproduzir essa classe de inversão; ocorrência concreta de deadlock é `[nao verificado]`. (`app/ponto/portas/celula.py:626`; referências dos dois caminhos acima.)
+
+Na troca, as cartas travam por PK e as edições por `(colaborador_id, data)`. As marcas dos dois lados pertencem ao `atomic` externo; recusa do segundo lado desfaz o primeiro, inclusive a marca. Essa ordenação das células não elimina a inversão célula/chamado. (`app/ponto/portas/celula.py:652`; `app/ponto/portas/celula.py:657`; `app/ponto/portas/celula.py:670`; `app/ponto/portas/celula.py:675`.)
+
+`igual` retorna antes da marca e do rabo; `barrada` retorna antes do `atomic` de edição. Portanto, esses ramos não criam nem reparam marca. (`app/ponto/portas/celula.py:583`; `app/ponto/portas/celula.py:594`; `app/ponto/portas/celula.py:626`.)
+
+O save apenas do contexto, com status inalterado, não dispara novo julgamento pelo receiver. O rabo explícito pode julgar, atualizar marcos e encerrar cobranças; isso pode retirar um chamado da fila de vivos, sem significar remoção da chave. (`app/chamados/signals.py:168`; `app/ponto/portas/celula.py:434`; `app/ponto/management/commands/detectar_ausencias.py:558`; `app/ponto/portas/celula.py:499`.)
+
+O rabo não chama o marcador novamente nem a limpeza explícita da chave. A limpeza está em `reconciliar_grade`; a renovação escreve uma chave de dict, não acrescenta uma segunda marca. Contudo, a leitura do contexto sem trava não garante ausência de perda de atualização concorrente. (`app/ponto/portas/celula.py:422`; `app/ponto/portas/celula.py:493`; `app/ponto/management/commands/reconciliar_grade.py:454`; `app/ponto/management/commands/reconciliar_grade.py:474`; `app/chamados/services/contexto.py:96`.)
+
+Existe dependência circular entre módulos, mas não encontrei ciclo de inicialização provocado pela mudança: `gerar_celulas` importa a porta no topo, enquanto os imports inversos ficam dentro das funções, inclusive o novo. (`app/ponto/management/commands/gerar_celulas.py:13`; `app/ponto/portas/celula.py:558`; `app/ponto/portas/celula.py:625`.)
+
+**5. Walrus**
+
+Correto nos ramos perguntados: com `cel=None`, o condicional externo evita todos os acessos; com célula, a condição atribui `_reescrita` antes de `localtime`; com ambos os carimbos nulos, o helper retorna `None` e o valor apresentado também é `None`. (`app/ponto/services/dia_do_colab.py:91`; `app/ponto/services/dia_do_colab.py:94`; `app/ponto/services/dia_do_colab.py:96`; `app/escala/services/regeneracao.py:81`.)
+
+**6. Mordida dos testes** [nao verificado]
+
+As três mutações têm assertivas capazes de detectá-las por inspeção:
+
+| Mutação | Mordida |
+|---|---|
+| Helper ignora `editada_em` | Exige edição posterior e edição isolada como resultado. `app/escala/tests/test_o10b_orfa_edicao.py:54`, `app/escala/tests/test_o10b_orfa_edicao.py:56` |
+| Supra lê só `regenerada_em` | Exige positivamente `COBRANCA_ORFA_REGENERACAO`, inclusive com regeneração anterior e edição posterior. `app/escala/tests/test_o10b_orfa_edicao.py:233`, `app/escala/tests/test_o10b_orfa_edicao.py:240` |
+| `editar_dia` não marca | Chama a porta, recarrega o chamado e exige marca e marcos. `app/escala/tests/test_o10b_orfa_edicao.py:129`, `app/escala/tests/test_o10b_orfa_edicao.py:132` |
+
+Os testes positivos do supra **não passam simplesmente porque o dia foi pulado**: exigem um contador produzido dentro do ramo efetivo de proteção. A fixture planta batidas, chamado vivo com marcos e lavra indevida; o controle exige positivamente o ramo retratável. (`app/escala/tests/test_o10b_orfa_edicao.py:190`; `app/escala/tests/test_o10b_orfa_edicao.py:208`; `app/escala/tests/test_o10b_orfa_edicao.py:226`; `app/ponto/management/commands/supra_juiz.py:249`; `app/ponto/management/commands/supra_juiz.py:277`.)
+
+Execução da suíte, execução dos mutantes e histórico RED→GREEN: **`[nao verificado]`**. [nao verificado]
+
+Faltam casos para o contraexemplo histórico da pergunta 3 e para concorrência/rollback das marcas na troca; os novos testes de supra usam carimbos sem plantar janelas históricas. (`app/escala/tests/test_o10b_orfa_edicao.py:125`; `app/escala/tests/test_o10b_orfa_edicao.py:219`; `app/escala/tests/test_o10b_orfa_edicao.py:222`.)
+
+**7. Checklist das classes**
+
+| Classe | Avaliação |
+|---|---|
+| Segundo juiz | O helper fornece um carimbo; a decisão continua em `cobranca_orfa`, autoridade registrada. `app/escala/services/regeneracao.py:81`, `app/escala/services/regeneracao.py:128`, `app/core/juizes.py:270` |
+| Segundo escritor fora da porta | A edição continua na porta da célula; contexto passa pela porta de contexto. `app/ponto/portas/celula.py:609`, `app/ponto/management/commands/gerar_celulas.py:256` |
+| Relógio fora da borda | Helper sem relógio; edição lê na porta. O marcador ainda lê `timezone.now()` internamente, trecho preexistente agora alcançado pela edição. `app/escala/services/regeneracao.py:81`, `app/ponto/portas/celula.py:598`, `app/ponto/management/commands/gerar_celulas.py:256` |
+| Derivação paralela | Os alimentadores migraram, mas permanecem as leituras cruas/agregações descritas no item 1. `app/ponto/services/cartorio.py:365`, `app/escala/services/fase_12x36.py:191` |
+| Selo/RED sem mordida | Há mordida comportamental para as três mutações; CQ-C10 isoladamente é textual e estreito. `app/escala/tests/test_o10b_orfa_edicao.py:132`, `app/escala/tests/test_o10b_orfa_edicao.py:233`, `app/escala/tests/test_cq_c10.py:16` |
+| Ordem de trava | Reprovada a garantia global: há caminhos célula→chamado e chamado→célula. `app/ponto/portas/celula.py:593`, `app/chamados/models.py:744`, `app/chamados/signals.py:180` |
+| Pouso antes do pré-requisito | Histórico de validação, pouso e deploy: `[nao verificado]`. | [nao verificado]
+
+**8. Outros problemas**
+
+O teste da marca depende do relógio real: a cobrança tem instante literal de agosto, enquanto `editar_dia` carimba “agora”; somente a classe do supra está congelada. Isso deixa o teste dependente da data de execução. (`app/escala/tests/test_o10b_orfa_edicao.py:128`; `app/escala/tests/test_o10b_orfa_edicao.py:162`; `app/ponto/portas/celula.py:598`.)
+
+A documentação “o resto é puro” ficou incorreta com o novo carregador ORM; e “nunca retratar mais” é contrariada pelo fallback suprimido descrito no item 3. (`app/escala/services/regeneracao.py:28`; `app/escala/services/regeneracao.py:94`; `app/escala/tests/test_o10b_orfa_edicao.py:10`; `app/escala/services/regeneracao.py:109`.)
+
+## 06/11 12:32 · sessao e79cde00dfdd · - · - · origem=Ronald (tmux)
+
+Achado de trava que merece bloqueio: existe inversão **CelulaDia → ChamadoColaborador / ChamadoColaborador → CelulaDia**, com deadlock possível por interleaving; ocorrência real em produção `[nao verificado]`.
+
+- `editar_dia` trava a célula em `app/ponto/portas/celula.py:592-593`, grava e chama o marcador ainda dentro do atomic em `:625-626`. O marcador chama `renovar_contexto` em `app/ponto/management/commands/gerar_celulas.py:255-256`; a porta salva o chamado em `app/chamados/services/contexto.py:100-102`. Embora não use `select_for_update`, esse UPDATE também disputa trava da linha.
+- Na direção inversa, `cancelar()` entra em atomic e trava o chamado (`app/chamados/models.py:744-745`, `:673-675`), muda `status_local` em `:222` e salva em `:279`. O receiver detecta status anterior diferente e chama o julgamento sincronamente (`app/chamados/signals.py:161`, `:168-180`). O julgamento grava a célula (`app/ponto/services/cartorio.py:1822-1823` → `app/ponto/portas/celula.py:1067` → `:899-900`).
+- Interleaving suficiente: B trava chamado; A trava célula; B muda status e espera gravar célula; A tenta marcar contexto e espera chamado. Escolhendo dia passado e célula normalmente julgável, os guardas temporais não eliminam esse caminho (`app/ponto/services/cartorio.py:1974-1989`).
+
+Demais respostas sobre o fluxo:
+
+- A marca, edição e trilha estão na mesma transação. Trilha ausente levanta antes da marca; falha não engolida do marcador também sai do atomic e desfaz a edição (`app/ponto/portas/celula.py:592`, `:611-626`).
+- `'barrada'` retorna antes do atomic; `'sem_vinculo'` também; `'igual'` retorna antes de novo carimbo, trilha, marca e rabo (`app/ponto/portas/celula.py:583`, `:590`, `:594-598`, `:625-627`). A repetição igual não “repara” uma marca ausente.
+- `trocar_plantao` tem atomic externo e trava as cartas ordenadas por PK; chama as duas edições ordenadas por `(colaborador_id, data)` (`app/ponto/portas/celula.py:652`, `:657-658`, `:673-675`). Segundo lado barrado/sem vínculo levanta `_TrocaRecusada`, desfazendo primeiro lado e sua marca; duas iguais não produzem trilha da troca (`:676-680`, `:694-699`). A ordenação entre células não resolve a inversão com chamados descrita acima.
+- O rabo do primeiro `editar_dia` roda antes da segunda edição, mas dentro do atomic externo da troca; julgamento é inline, enquanto callbacks de dinheiro/reavaliação ficam subordinados ao commit externo (`app/ponto/portas/celula.py:627`, `:675`, `:434`, `:458`, `:493-502`).
+- No caso normal, renovar contexto não reentra no cartório: o status permanece igual e o receiver retorna (`app/chamados/services/contexto.py:99-102`, `app/chamados/signals.py:168-170`). A porta usa contexto da instância sem reler/travar; portanto ausência de lost update concorrente não está garantida (`app/chamados/services/contexto.py:96-102`).
+- O rabo pode encerrar chamado pelo juiz do dia, tornando-o inelegível à fila de vivos, mas não limpa diretamente `orfa_regeneracao` (`app/ponto/services/cartorio.py:1514-1522`, `app/chamados/services/feriado_reavaliar.py:43-48`, `app/escala/services/regeneracao.py:157`). Espelhamento de marcos usa merge pela porta e preserva a marca carregada (`app/ponto/services/cartorio.py:1787-1789`, `app/ponto/management/commands/detectar_ausencias.py:554-559`). O rabo não chama `reconciliar_grade`; a limpeza explícita está em `app/ponto/management/commands/reconciliar_grade.py:453-454` e `:471-474`.
+- Não há duplicação de chave: a marca é escalar no dict. Nova edição efetiva pode substituir o conteúdo e timestamp da marca anterior; `'igual'` não a renova (`app/ponto/management/commands/gerar_celulas.py:256`, `app/chamados/services/contexto.py:99`, `app/ponto/portas/celula.py:594-596`).
+- Há dependência nos dois sentidos, mas o novo import é local; não há ciclo de inicialização demonstrado. `gerar_celulas` importa as funções da porta no topo, enquanto a porta só importa o command ao executar operações já definidas; `editar_dia` já o importava antes deste diff (`app/ponto/management/commands/gerar_celulas.py:13`, `app/ponto/portas/celula.py:558`, `:625`). Importação real em runtime `[nao verificado]`.
+
+Pontos adicionais de teste/checklist: [nao verificado]
+
+- O teste de marca de `editar_dia` depende de relógio real: chamado nasce em data fixa (`app/escala/tests/test_o10b_orfa_edicao.py:128`) e a edição usa `timezone.now()` (`app/ponto/portas/celula.py:598`). A classe não está congelada (`app/escala/tests/test_o10b_orfa_edicao.py:122`); a classe do supra está (`:163`). Isso não garante teste determinístico antes da data literal.
+- Esse teste morde remover a chamada ao marcador: ele exige a chave e os marcos (`app/escala/tests/test_o10b_orfa_edicao.py:132-134`), e os caminhos do rabo citados não criam essa chave. Não prova rollback da marca nem execução dos callbacks após commit: herda `TestCase` (`:81`, `:122`) e não executa explicitamente os `on_commit` registrados na porta (`app/ponto/portas/celula.py:502`).
+- Não nasce segundo escritor do contexto: o marcador passa por `renovar_contexto`; nem escritor novo dos carimbos da célula: a nova costura apenas chama o marcador (`app/ponto/management/commands/gerar_celulas.py:255-256`, `app/ponto/portas/celula.py:625-626`).
+- O helper puro não lê relógio; o marcador continua lendo outro `timezone.now()` para `orfa_regeneracao.em`, além do relógio da própria edição (`app/escala/services/regeneracao.py:81`, `app/ponto/management/commands/gerar_celulas.py:256`, `app/ponto/portas/celula.py:598`). Esse relógio no command é preexistente conforme o diff fornecido; o novo caminho passa a alcançá-lo.
+
+## 06/11 12:31 · sessao dad008f259eb · - · - · origem=Ronald (tmux)
+
+1. **Escritores de produção encontrados:** `regenerada_em` é escrito em `regenerar_celulas_vinculo` e também em **`reverter_regeneracao_dia`**; `editada_em` é escrito somente em `editar_dia`, tanto na criação quanto na atualização. Portanto, a documentação nova que enumera apenas dois reescritores está incompleta: a reversão também reescreve e carimba DNA. (`app/ponto/portas/celula.py:274`, `app/ponto/portas/celula.py:792`, `app/ponto/portas/celula.py:600`, `app/ponto/portas/celula.py:607`, `app/escala/services/regeneracao.py:74`.)
+
+**Leitores diretos de ambos os campos:**
+
+- `carimbos_de_reescrita`: filtra qualquer carimbo e entrega os dois para a função canônica. (`app/escala/services/regeneracao.py:94`, `app/escala/services/regeneracao.py:97`.)
+- `dia_do_colab`: entrega os dois para a função canônica. (`app/ponto/services/dia_do_colab.py:94`.)
+- `cartorio.houve_fato_novo`: ainda compara os dois campos crus, com OR, para detectar reescrita em **`(desde, ate]`**. É leitor da reescrita fora da função nova. (`app/ponto/services/cartorio.py:329`, `app/ponto/services/cartorio.py:337`, `app/ponto/services/cartorio.py:365`.)
+- `fase_12x36.janelas_reabertas`: agrega `Max` separado dos dois e faz `max()` junto de `julgada_em` e `gerada_em`, comparando o resultado com a lavra anterior. É derivação própria de “algum fato mudou depois da lavra”, incluindo a reescrita. (`app/escala/services/fase_12x36.py:188`, `app/escala/services/fase_12x36.py:191`, `app/escala/services/fase_12x36.py:192`.)
+- `veredito_lavrado.marcos_do_lote`: usa `Greatest` dos dois junto de outros três carimbos, e agrega por colaborador; o consumidor compara com `julgado_em`. É relógio geral de invalidação, incluindo a reescrita. (`app/chamados/veredito_lavrado.py:151`, `app/chamados/veredito_lavrado.py:153`, `app/chamados/veredito_lavrado.py:189`.)
+
+**Outros leitores crus específicos:**
+
+- `_estado_da_edicao` lê `editada_em` para a trilha, sem julgar reescrita. (`app/ponto/portas/celula.py:530`.)
+- `materializar_passivo_validado._trecho_da_regen` pergunta explicitamente se a porta reescreveu DNA depois do início do ensaio, mas usa somente `regenerada_em__gte=desde`; a métrica é especificamente denominada `celulas_regeradas_no_ensaio`. (`app/chamados/management/commands/materializar_passivo_validado.py:210`, `app/chamados/management/commands/materializar_passivo_validado.py:220`, `app/chamados/management/commands/materializar_passivo_validado.py:221`.)
+
+**Ressalva sobre centralizar o cartório:** substituir seu OR por `desde < max(r,e) <= ate` altera a resposta quando um carimbo está dentro do intervalo e o outro depois de `ate`. Há consumidor real com limite histórico explícito: o vigia passa o instante da reabertura como `ate`. A centralização precisa preservar a pergunta de intervalo. (`app/ponto/services/cartorio.py:365`, `app/chamados/services/vigia_loop.py:50`.)
+
+2. **Nenhuma chamada direta encontrada com o kwarg antigo**; a inspeção AST em memória encontrou exatamente estas chamadas:
+
+- Produção, todas com `reescrita_em=`: `app/ponto/management/commands/supra_juiz.py:275`, `app/ponto/management/commands/gerar_celulas.py:249`, `app/escala/services/regeneracao.py:141`, `app/escala/services/regeneracao.py:173`.
+- Testes, com `reescrita_em=`: `app/escala/tests/test_o10b_orfa_edicao.py:63`, `app/escala/tests/test_o10b_orfa_edicao.py:69`, `app/escala/tests/test_o10b_orfa_edicao.py:76`, `app/escala/tests/test_cobranca_orfa_regeneracao.py:84`, `app/escala/tests/test_cobranca_orfa_regeneracao.py:86`.
+- Testes sem o argumento opcional: `app/escala/tests/test_cobranca_orfa_regeneracao.py:72`, `app/escala/tests/test_cobranca_orfa_regeneracao.py:78`, `app/escala/tests/test_cobranca_orfa_regeneracao.py:92`, `app/escala/tests/test_cobranca_orfa_regeneracao.py:96`, `app/escala/tests/test_cobranca_orfa_regeneracao.py:101`, `app/escala/tests/test_cobranca_orfa_regeneracao.py:105`.
+
+As assinaturas não aceitam `**kwargs`: eventual chamador externo à cópia com `regenerada_em=` levantaria `TypeError`, sem absorção silenciosa. Existência de chamador externo: `[nao verificado]`. (`app/escala/services/regeneracao.py:100`, `app/escala/services/regeneracao.py:128`.)
+
+## 06/11 12:31 · sessao d9bf608f3084 · - · - · origem=Ronald (tmux)
+
+5. Walrus correto: `cel is None` escolhe diretamente `{'existe': False}`; com célula, a condição atribui `_reescrita` antes de `localtime`; ambos os carimbos nulos produzem `None`. Não há variável usada antes da atribuição nesses ramos (`app/ponto/services/dia_do_colab.py:91-96`; `app/escala/services/regeneracao.py:81`).
+
+6. As três mutações têm mordida estática identificável:
+
+- **Helper ignora edição:** falham os resultados exigidos para edição posterior e edição isolada (`app/escala/tests/test_o10b_orfa_edicao.py:54-56`).
+- **Supra lê somente regeneração:** os dois RED exigem positivamente `COBRANCA_ORFA_REGENERACAO`, inclusive regeneração anterior + edição posterior (`app/escala/tests/test_o10b_orfa_edicao.py:229-241`).
+- **Editar não marca:** o teste chama a porta real, exige retorno `editada`, recarrega o chamado e exige marca e marcos originais (`app/escala/tests/test_o10b_orfa_edicao.py:125-134`); o marcador efetivamente escreve pela porta `renovar_contexto` (`app/ponto/management/commands/gerar_celulas.py:255-256`).
+
+Os testes do supra não passam por simplesmente pular o dia: a presença exigida do contador depende de alcançar o ramo após chamado vivo, lavra `cobranca_indevida`, código válido e ausência de conversa (`app/ponto/management/commands/supra_juiz.py:246-277`). A fixture cria quatro batidas, chamado vivo calado com `marcos_faltantes`, força a lavra e afirma a pré-condição (`app/escala/tests/test_o10b_orfa_edicao.py:190-208`). O controle exige positivamente `CSF_RETRATAVEL_DRY` (`app/escala/tests/test_o10b_orfa_edicao.py:222-227`).
+
+A execução da suíte e dos três mutantes permanece **[nao verificado]**. [nao verificado]
+
+7. `reescrita_da_celula` é insumo puro do juiz existente: calcula um carimbo e não recebe chamado nem instante de comparação (`app/escala/services/regeneracao.py:71-81`); `cobranca_orfa` continua decidindo a orfandade (`app/escala/services/regeneracao.py:128-142`) e continua sendo a autoridade registrada (`app/core/juizes.py:116`; `app/core/juizes.py:270`).
+
+O selo CQ-C10 possui alcance limitado: procura strings e proíbe somente o literal exato `"'regenerada_em'"`; sozinho não prova ausência de aliases, `max` paralelo ou chamadas presentes só em comentário (`app/escala/tests/test_cq_c10.py:13-20`).
+
+8. Lacunas dos novos testes: a ponte só testa célula com edição positiva (`app/escala/tests/test_o10b_orfa_edicao.py:153-159`); não há caso nesse arquivo para o fallback histórico quando `regenerada_em=None` e `editada_em` anterior à cobrança, nem teste da ponte com célula ausente/ambos os carimbos nulos (`app/escala/tests/test_o10b_orfa_edicao.py:51-77`; `app/escala/tests/test_o10b_orfa_edicao.py:125-159`; `app/escala/tests/test_o10b_orfa_edicao.py:222-255`).
+
+Há dependência temporal indireta no teste da marca: a cobrança é literal de 26/08, mas a edição usa relógio real, pois somente a classe do supra está congelada (`app/escala/tests/test_o10b_orfa_edicao.py:128-129`; `app/escala/tests/test_o10b_orfa_edicao.py:162`; `app/ponto/portas/celula.py:598`). O selo estático de relógio reconhece congelamento pelo arquivo inteiro e declara não enxergar dependência de hoje dentro do serviço (`app/core/tests/test_selo_teste_sem_relogio.py:10-12`; `app/core/tests/test_selo_teste_sem_relogio.py:32-35`).
+
+## 06/11 12:31 · sessao e83d5beea3f5 · - · - · origem=Ronald (tmux)
+
+Conteúdo de [prova/1_viva.out:1](/home/ronald/wt-codex-provaefeito-123006/app/prova/1_viva.out:1):
+
+```text
+/bin/bash: line 3: /home/ronald/saas-hasner/INTRUSO_VIVA_C.txt: Read-only file system
+rc=1
+```
+
+Conteúdo de [prova/2_tmp.out:1](/home/ronald/wt-codex-provaefeito-123006/app/prova/2_tmp.out:1):
+
+```text
+/bin/bash: line 4: /tmp/INTRUSO_TMP_C.txt: Read-only file system
+rc=1
+```
+
+Conteúdo de [prova/2b_tmpdir.out:1](/home/ronald/wt-codex-provaefeito-123006/app/prova/2b_tmpdir.out:1):
+
+```text
+/bin/bash: line 5: /tmp/INTRUSO_TMPDIR_C.txt: Read-only file system
+rc=1 TMPDIR=
+```
+
+Conteúdo de [prova/3_git.out:1](/home/ronald/wt-codex-provaefeito-123006/app/prova/3_git.out:1):
+
+```text
+/bin/bash: line 6: /home/ronald/saas-hasner/.git/INTRUSO_GIT_C.txt: Read-only file system
+rc=1
+```
+
+Conteúdo de [prova/3b_commit.out:1](/home/ronald/wt-codex-provaefeito-123006/app/prova/3b_commit.out:1):
+
+```text
+fatal: Unable to create '/home/ronald/saas-hasner/.git/worktrees/wt-codex-provaefeito-123006/index.lock': Read-only file system
+rc=128
+```
+
+Conteúdo de [prova/4_raiz.out:1](/home/ronald/wt-codex-provaefeito-123006/app/prova/4_raiz.out:1):
+
+```text
+/bin/bash: line 8: /home/ronald/wt-codex-provaefeito-123006/INTRUSO_RAIZ_WT.txt: Read-only file system
+rc=1
+```
+
+Conteúdo de [prova/5_home.out:1](/home/ronald/wt-codex-provaefeito-123006/app/prova/5_home.out:1):
+
+```text
+/bin/bash: line 9: /home/ronald/INTRUSO_HOME_C.txt: Read-only file system
+rc=1
+```
+
+Conteúdo de [prova/6_docker.out:1](/home/ronald/wt-codex-provaefeito-123006/app/prova/6_docker.out:1):
+
+```text
+permission denied while trying to connect to the docker API at unix:///var/run/docker.sock
+rc=1
+```
+
+Conteúdo de [prova/6b_sock.out:1](/home/ronald/wt-codex-provaefeito-123006/app/prova/6b_sock.out:1):
+
+```text
+rc=7
+```
+
+Conteúdo de [prova/7_tcp_local.out:1](/home/ronald/wt-codex-provaefeito-123006/app/prova/7_tcp_local.out:1):
+
+```text
+bash: socket: Operation not permitted
+bash: line 1: /dev/tcp/127.0.0.1/22: Operation not permitted
+rc=1
+```
+
+Conteúdo de [prova/7b_tcp_ext.out:1](/home/ronald/wt-codex-provaefeito-123006/app/prova/7b_tcp_ext.out:1):
+
+```text
+bash: socket: Operation not permitted
+bash: line 1: /dev/tcp/1.1.1.1/443: Operation not permitted
+rc=1
+```
+
+Conteúdo de [prova/8_sobrevive.out:1](/home/ronald/wt-codex-provaefeito-123006/app/prova/8_sobrevive.out:1):
+
+```text
+lancado
+rc=0
+```
+
+Sobrevivência efetiva do processo: [nao verificado].
+
+## 06/11 12:30 · sessao bf679e7b2b06 · R1-CAUSAD-V3 · sonda · origem=Code
+
+As seis linhas `SOMA` da parte 5 apresentam `True`. Não há ocorrência de `INCOMPLETO` no dado fornecido. [nao verificado]
+
+Transcrição integral da saída fornecida: [nao verificado]
+
+```text
+sonda_leitura: script.py [972aacf9a2766647] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+PARTE 5 PARTES 6
+[0] UNIVERSO 10/2026 624
+UNIVERSO_PARTE 10/2026 107
+JANELA 10/2026 2026-09-21 2026-10-20
+[0] UNIVERSO 11/2026 578
+UNIVERSO_PARTE 11/2026 99
+JANELA 11/2026 2026-10-21 2026-11-20
+ESTIMATIVA processados 25 universo 206 minutos_total 3.1 ate_40_min True ate_15_min True
+ESTIMATIVA processados 50 universo 206 minutos_total 3.1 ate_40_min True ate_15_min True
+ESTIMATIVA processados 75 universo 206 minutos_total 3.1 ate_40_min True ate_15_min True
+ESTIMATIVA processados 100 universo 206 minutos_total 3.0 ate_40_min True ate_15_min True
+COMPETENCIA 10/2026
+[1] {'dias_comparados': 1282, 'bate_ate_10min': 1213, 'esp_zero_e6_trabalho': 9, 'e6_zero_esp_trabalho': 3, 'diverge_10_60': 2, 'diverge_acima_60': 55, 'dia_batida_impar': 76, 'impar_que_BATE': 28, 'impar_que_DIVERGE': 48, 'impar_dentro_da_faixa': 42, 'impar_FORA_da_faixa': 6, 'impar_no_conjunto_do_dia': 48, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1539, 'dia_isento_ou_ausencia': 271, 'dia_sem_trabalho_ambos': 45, 'esp_desconta_janela_declarada': 73, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 94.6% de 1282 dias comparados
+[3] ESTRUTURA     3 dia-colab      29.2 h    3 colabs
+[3] CADASTRO     21 dia-colab      60.1 h    8 colabs
+[3] BATIDA       45 dia-colab     190.2 h   25 colabs
+[4] TOTAL divergentes 69
+[5] colabs com divergencia: 29
+erros_no_espelho 0
+PARCIAL|10/2026|ESTRUTURA|dias=3|horas=29.23270916666667|colabs=3
+PARCIAL|10/2026|CADASTRO|dias=21|horas=60.14375256333333|colabs=8
+PARCIAL|10/2026|BATIDA|dias=45|horas=190.17304430305552|colabs=25
+PARCIAL_TOTAL|10/2026|dias=69|horas=279.54950603305552|colabs=29
+ESTIMATIVA processados 125 universo 206 minutos_total 3.1 ate_40_min True ate_15_min True
+ESTIMATIVA processados 150 universo 206 minutos_total 3.2 ate_40_min True ate_15_min True
+ESTIMATIVA processados 175 universo 206 minutos_total 3.3 ate_40_min True ate_15_min True
+ESTIMATIVA processados 200 universo 206 minutos_total 3.3 ate_40_min True ate_15_min True
+COMPETENCIA 11/2026
+[1] {'dias_comparados': 690, 'bate_ate_10min': 629, 'esp_zero_e6_trabalho': 4, 'e6_zero_esp_trabalho': 2, 'diverge_10_60': 6, 'diverge_acima_60': 49, 'dia_batida_impar': 63, 'impar_que_BATE': 23, 'impar_que_DIVERGE': 40, 'impar_dentro_da_faixa': 32, 'impar_FORA_da_faixa': 8, 'impar_no_conjunto_do_dia': 40, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 1386, 'dia_sem_lavratura_no_espelho': 785, 'dia_isento_ou_ausencia': 130, 'dia_sem_trabalho_ambos': 24, 'esp_desconta_janela_declarada': 54, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 91.2% de 690 dias comparados
+[3] ESTRUTURA     4 dia-colab      20.1 h    3 colabs
+[3] CADASTRO     27 dia-colab     106.3 h    7 colabs
+[3] BATIDA       30 dia-colab     164.1 h   19 colabs
+[4] TOTAL divergentes 61
+[5] colabs com divergencia: 26
+erros_no_espelho 0
+PARCIAL|11/2026|ESTRUTURA|dias=4|horas=20.109676988055558|colabs=3
+PARCIAL|11/2026|CADASTRO|dias=27|horas=106.31719708361109|colabs=7
+PARCIAL|11/2026|BATIDA|dias=30|horas=164.14298169666668|colabs=19
+PARCIAL_TOTAL|11/2026|dias=61|horas=290.569855768333328|colabs=26
+TEMPO_SEGUNDOS 195.6
+TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 257916
+TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 434
+TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1676
+TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 6042
+TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 79
+TRATADA_LOCAL app/escala/utils.py:1521 GeneratorExit 2
+TRATADA_LOCAL app/escala/utils.py:1708 GeneratorExit 20
+TRATADA_LOCAL app/escala/utils.py:2012 GeneratorExit 7771
+TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 6
+TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 5601
+TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 5601
+TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 310
+TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 190
+TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 471429
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 788
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 3044
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 194
+TRATADA_LOCAL app/ponto/services/dia_pago.py:890 GeneratorExit 12714
+TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 143
+TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 4139
+TRATADA_LOCAL app/ponto/services/fechamento.py:1028 GeneratorExit 195
+TRATADA_LOCAL app/ponto/turnos.py:1293 GeneratorExit 27833
+TRATADA_LOCAL app/ponto/turnos.py:1654 GeneratorExit 3152
+TRATADA_LOCAL app/ponto/turnos.py:1697 GeneratorExit 41156
+TRATADA_LOCAL app/ponto/turnos.py:2639 GeneratorExit 2
+TRATADA_LOCAL app/ponto/turnos.py:677 GeneratorExit 19560
+SOMA 10/2026 69   <- tem de ser igual a soma das classes (69) True
+SOMA 10/2026 HORAS 279.54950603305552 True
+SOMA 10/2026 COLABS_UNIAO 29 True
+SOMA 11/2026 61   <- tem de ser igual a soma das classes (61) True
+SOMA 11/2026 HORAS 290.569855768333328 True
+SOMA 11/2026 COLABS_UNIAO 26 True
+rc_sombra=0
+```
 
 ## 06/11 12:26 · sessao 6d24b7e0f74d · CODEX-CONSTRUTOR-NEGOCIO · verificador · origem=Code
 
@@ -1043,313 +1493,4 @@ Pergunta 3 — **procedência sugerida: fila**, pela mudança de diagnóstico; n
 
 A10 monta a transferência de empresa e exige `'barrada'` com célula ainda gerada; execução do teste: [nao verificado]. `app/ponto/tests/test_o10b_editar_dia_troca.py:423-440`.
 
-## 06/11 12:13 · sessao 374039bcdafc · - · - · origem=Ronald (tmux)
-
-`prova/1_viva.out:1`
-```text
-/bin/bash: line 3: /home/ronald/saas-hasner/INTRUSO_VIVA_C.txt: Read-only file system
-rc=1
-```
-
-`prova/2_tmp.out:1`
-```text
-/bin/bash: line 4: /tmp/INTRUSO_TMP_C.txt: Read-only file system
-rc=1
-```
-
-`prova/2b_tmpdir.out:1`
-```text
-/bin/bash: line 5: /tmp/INTRUSO_TMPDIR_C.txt: Read-only file system
-rc=1 TMPDIR=
-```
-
-`prova/3_git.out:1`
-```text
-/bin/bash: line 6: /home/ronald/saas-hasner/.git/INTRUSO_GIT_C.txt: Read-only file system
-rc=1
-```
-
-`prova/3b_commit.out:1`
-```text
-fatal: Unable to create '/home/ronald/saas-hasner/.git/worktrees/wt-codex-provaefeito-121239/index.lock': Read-only file system
-rc=128
-```
-
-`prova/4_raiz.out:1`
-```text
-/bin/bash: line 8: /home/ronald/wt-codex-provaefeito-121239/INTRUSO_RAIZ_WT.txt: Read-only file system
-rc=1
-```
-
-`prova/5_home.out:1`
-```text
-/bin/bash: line 9: /home/ronald/INTRUSO_HOME_C.txt: Read-only file system
-rc=1
-```
-
-`prova/6_docker.out:1`
-```text
-permission denied while trying to connect to the docker API at unix:///var/run/docker.sock
-rc=1
-```
-
-`prova/6b_sock.out:1`
-```text
-rc=7
-```
-
-`prova/7_tcp_local.out:1`
-```text
-bash: socket: Operation not permitted
-bash: line 1: /dev/tcp/127.0.0.1/22: Operation not permitted
-rc=1
-```
-
-`prova/7b_tcp_ext.out:1`
-```text
-bash: socket: Operation not permitted
-bash: line 1: /dev/tcp/1.1.1.1/443: Operation not permitted
-rc=1
-```
-
-`prova/8_sobrevive.out:1`
-```text
-lancado
-rc=0
-```
-
-O último comando registrou `rc=0` (`prova/8_sobrevive.out:2`); sobrevivência do processo após a execução: [nao verificado].
-
-## 06/11 12:08 · sessao bf5b04d1e747 · CODEX-CONSTRUTOR-NEGOCIO · verificador · origem=Code
-
-**Parecer: há buracos no confinamento das saídas do wrapper, no inventário e na prova real. O conjunto ainda não sustenta a garantia anunciada de isolamento.** A análise abaixo é estática; execução dos testes e isolamento efetivo do processo construtor são **[nao verificado]**. (`bin/codex_pergunta.sh:82-89,220-231,303-325`; `bin/tests/prova_codex_pergunta_real.sh:48-77`)
-
-1. **ALTA — Arquivos de LOGD podem redirecionar escritas para fora de `logs/`.** A validação confere o diretório, mas não seus arquivos. Por exemplo, um `slot.gate` previamente apontado por symlink para uma sentinela será aberto com `>` e truncará o alvo **antes da chamada ao Codex**. `slot.N` também usa truncamento; `chamadas.log`, JSONL/`.err`, `limite.log` e o temporário `.rc.$$` igualmente abrem sem proteção contra symlink. É uma falha do wrapper no host, independente do sandbox do filho. (`bin/codex_pergunta.sh:82-89,111-116,130-134,163-164,220-231,268,343`)
-
-2. **MÉDIA — `RESPOSTA=…/logs/..` contorna o confinamento sem corrida.** O código valida somente `dirname`, aceita `basename=..` e não exige resposta regular. Nesse caso, `NOVA` vira `…/logs/...novo.$$`; o `mv` para `…/logs/..` publica esse arquivo na raiz do projeto, fora de `logs/`. Diretórios também são aceitos como resposta. (`bin/codex_pergunta.sh:84-89,261,276`)
-
-3. **ALTA — A vaga única depende de um diretório escolhido pelo chamador.** Dois `CODEX_LOGD` distintos, ambos dentro de `logs/`, produzem duas `construtor.vaga`. Assim, a exclusão não garante um único construtor nem protege a mesma WT contra chamadas concorrentes com LOGDs diferentes. Os locks de slots também ficam separados. (`bin/codex_pergunta.sh:71,83,114-119,220-232`)
-
-4. **ALTA — A identidade do destino pode mudar entre validação e uso.** WT, `app`, registro, HEAD e limpeza são conferidos antes da montagem do prompt e das esperas por slots/resposta. Depois, `-C "$WT/app"` usa novamente o caminho, sem revalidar sua identidade. Uma troca de `app` por symlink nesse intervalo contorna a guarda inicial; escrita efetiva na viva pelo sandbox é **[nao verificado]**. A pausa também só é consultada antes dessas esperas. (`bin/codex_pergunta.sh:80,98-120,178-247,268`)
-
-   O lock da resposta continua sendo teste seguido de abertura comum, não `O_NOFOLLOW`: append elimina o truncamento anterior, mas não elimina a corrida nem garante que wrapper e leitor estejam travando o mesmo inode. O leitor Python usa `O_NOFOLLOW`. (`bin/codex_pergunta.sh:245-247`; `bin/disjuntor.py:779-789`)
-
-5. **ALTA — “Mexeu e restaurou” passa sem rc 3.** Alterar um proibido e restaurar seus bytes antes do inventário, sem commit, deixa HEAD, diff, status e checksum do arquivo `.git` iguais. O inventário observa o estado final; não registra as escritas ocorridas durante a chamada. O caso chamado `commit_desfaz` testa commit seguido de revert, que deixa HEAD diferente: não cobre restauração sem commit. (`bin/codex_pergunta.sh:303-325`; `bin/tests/test_codex_pergunta.sh:229`)
-
-   **MÉDIA — Links são classificados somente pelo nome.** Um novo symlink `app/atalho` apontando para fora ou para um proibido não encontra matcher; não há inspeção do tipo ou destino. Isso demonstra uma lacuna do inventário, enquanto escrita no alvo externo pelo sandbox permanece **[nao verificado]**. A limpeza inicial também não verifica compartilhamento de inode por hardlink com a viva; exploração efetiva dessa possibilidade é **[nao verificado]**. (`bin/codex_pergunta.sh:98-120,285-319`)
-
-6. **MÉDIA — `common_dir` autentica o repositório, mas não a worktree específica.** O registro verifica o caminho WT; depois, só se compara o diretório Git comum. Um `.git` previamente reapontado para outra WT do mesmo repo, com HEAD e estado compatíveis, não é distinguido por essas verificações. O checksum final só compara com esse apontamento inicial. O selo cobre outro repositório, não outra WT do mesmo repo. (`bin/codex_pergunta.sh:101-120,325`; `bin/tests/test_codex_pergunta.sh:165-168`)
-
-7. **ALTA — A prova real admite verde sem executar as tentativas.** `WRC` é apenas impresso. O controle positivo exige somente `INTRUSO_WT.txt`; as evidências das tentativas de escrita e sobrevivência não são obrigatórias. Para Docker/socket/TCP, arquivos vazios passam como “negado”, pois basta não conterem as palavras de sucesso. Portanto, positivo mais quatro `.out` vazios, sem executar as tentativas, satisfaz as verificações. (`bin/tests/prova_codex_pergunta_real.sh:48-77`)
-
-   Mesmo executando o bloco, ferramenta ausente, serviço indisponível, conexão recusada ou timeout também viram “negado”; não há controle externo demonstrando que o recurso funcionaria fora do sandbox. Banco não é tentado. As verificações de Git comparam status/HEAD e uma sentinela, sem comprovar integridade de todos os metadados. Logo, negação efetiva de banco, Docker, rede e alterações arbitrárias em `.git` é **[nao verificado]**. (`bin/tests/prova_codex_pergunta_real.sh:20-43,58-71`)
-
-8. **MÉDIA — O selo exercita comportamento, mas seu placar de mutantes exagera a evidência.** Há controle positivo de argv, cabeçalho, resposta e inventário; porém o Codex falso executa diretamente a ação e sempre termina com zero. Isso verifica o wrapper, não a eficácia do sandbox. (`bin/tests/test_codex_pergunta.sh:67-77,180-201`)
-
-   Uma guarda pode aparecer como “morta” apenas por mudar a mensagem: removida a guarda de caminho absoluto, a guarda do nome ainda recusa; zerado `inv_diff`, HEAD ainda recusa o commit. O teste exige motivos específicos e contabiliza qualquer `FALHA` como morte. (`bin/tests/test_codex_pergunta.sh:98-101,141-150,219,289,311-315`; `bin/codex_pergunta.sh:95-97,314-315`)
-
-   **Mutantes adicionais que sobreviveriam por inspeção:**
-
-   - Trocar `sys.exit(1)` do erro de inventário por `sys.exit(0)`: nenhum caso força esse erro; `c_inventario` só altera o motor. (`bin/codex_pergunta.sh:300-312`; `bin/tests/test_codex_pergunta.sh:231,233-235`)
-   - Restringir migrations/models a `app/folha/`: os únicos exemplos dessas classes estão nessa aplicação; os mutantes cadastrados ainda seriam mortos pelos mesmos exemplos. (`bin/tests/test_codex_pergunta.sh:208-209,279-280`)
-   - Remover `shell_environment_policy.inherit=core`: essa opção não é exigida pelo controle positivo. Execução desses mutantes: **[nao verificado]**. (`bin/codex_pergunta.sh:267`; `bin/tests/test_codex_pergunta.sh:183-189`)
-
-9. **MÉDIA — Os sinais operacionais têm lacunas.** A linha `ESPERANDO` declara produtor relativo com `/`, mas o hook exige caminho absoluto nesse caso; copiá-la literalmente para o topo reprova a prova do PID. (`bin/codex_pergunta.sh:255`; `bin/hook_stop_fila1.py:527-528,675-680`)
-
-   `.rc` também não cobre toda saída: recusas iniciais ocorrem antes do trap; falhas posteriores ao `ini`, mas anteriores à atribuição de JSONL, podem publicar `chamada=-`. Leitor operacional que interprete o conteúdo desse `.rc`: **[nao verificado]**. (`bin/codex_pergunta.sh:75-140,164,252`)
-
-10. **BAIXA — Pergunta e temporários não seguem o confinamento descrito no contrato.** A pergunta só precisa ser legível, sem exigência de estar em `logs/`; cabeçalho e dados temporários usam `mktemp`. Isso é comportamento do wrapper, não demonstra escrita externa do shell construtor. (`bin/codex_pergunta.sh:60-61,143,194`)
-
-    A via inteira também não é independente de banco/Docker: mesmo sem `--sonda`, o registro da pergunta pode chamar `relato_nomes.sh`, que usa Docker e consulta `Colaborador.objects.all()`. Esse efeito pertence ao wrapper/Code, antes do sandbox. (`bin/codex_pergunta.sh:143-164`; `bin/relato_nomes.sh:7-21`)
-
-Quanto aos **quatro papéis de leitura**, sandbox `read-only`, destino `WS/<hash>` e cabeçalho de somente leitura permanecem no ramo existente. Houve mudança no lock: agora symlink é recusado com rc 3 e a abertura usa append. `--construtor` com papel de leitura também passa a ser recusado explicitamente. Portanto, “intactos” vale para sandbox/destino/cabeçalho, mas não para todo o comportamento. (`bin/codex_pergunta.sh:74-76,162-172,204,245-247,271-272`)
-
-A seleção da cópia de leitura continua reutilizando qualquer diretório existente em `WS`, sem autenticar conteúdo/destino. A prova real de leitura também pode ficar verde com chamadas falhas e nenhuma tentativa executada, pois não exige controle positivo de execução. (`bin/codex_pergunta.sh:162-172`; `bin/tests/prova_codex_pergunta_real.sh:85-103`)
-
-O mapa de escrita e leitura dos artefatos é este:
-
-| Artefato/campo | Quem escreve | Quem lê/usa |
-|---|---|---|
-| `.rc`: `chamada`, `rc`, `fim` | Trap do wrapper; temporário `.rc.$$` seguido de `mv`. (`bin/codex_pergunta.sh:129-134`) | Selo interpreta; prova apenas copia. Leitor operacional: **[nao verificado]**. (`bin/tests/test_codex_pergunta.sh:109,195`; `bin/tests/prova_codex_pergunta_real.sh:50`) |
-| `.inventario`: classificação, caminho, motivo | Python do inventário; wrapper acrescenta violação do `.git`. (`bin/codex_pergunta.sh:310-325`) | Wrapper filtra para `.recusa`; selo confere caminhos; prova copia. (`bin/codex_pergunta.sh:329`; `bin/tests/test_codex_pergunta.sh:196-204`; `bin/tests/prova_codex_pergunta_real.sh:50`) |
-| `.recusa` | Wrapper reúne aviso e linhas diferentes de `TOCADO`. (`bin/codex_pergunta.sh:328-329`) | Wrapper publica no stderr; selo interpreta; prova copia. (`bin/codex_pergunta.sh:330`; `bin/tests/test_codex_pergunta.sh:106-107`; `bin/tests/prova_codex_pergunta_real.sh:50`) |
-| `.lock` | Wrapper abre append e toma exclusividade. (`bin/codex_pergunta.sh:245-247`) | Triagem abre com `O_NOFOLLOW` e tenta lock compartilhado. (`bin/disjuntor.py:779-789`) |
-| `.id`: `obra`, `papel`, `hash`, `pid`, `fim`, `sha` | Wrapper remove o anterior e publica em sucesso com resposta nova. (`bin/codex_pergunta.sh:259,353-356`) | Triagem lê os campos e verifica papel/sha. **Só aceita `verificador`; não certifica construtor.** (`bin/disjuntor.py:755-760,795-801`) |
-| `construtor.vaga` | Wrapper abre no fd 6. (`bin/codex_pergunta.sh:114-115`) | Wrapper disputa lock; selo ocupa a vaga para testar recusa. (`bin/codex_pergunta.sh:116`; `bin/tests/test_codex_pergunta.sh:171-173`) |
-| `slot.gate`, `slot.N` | Wrapper abre com `>`. (`bin/codex_pergunta.sh:220,226,231`) | Wrappers disputam gate/slots e mantêm fd 8 até terminar. (`bin/codex_pergunta.sh:222-235`) |
-| `chamadas.log`: hora, obra, papel, hash12, pid, `ini`, pergunta; `fim`, sessão, rc, duração | Wrapper escreve início; trap escreve fim. (`bin/codex_pergunta.sh:130-131,163-164`) | Parser, contagem, últimas chamadas, procedência e tokens. ESTADO e CODEX-ESTADO consomem essas funções. (`bin/codex_limite_estado.py:49-96,185-194`; `bin/gerar_estado.py:269-270`; `bin/gerar_codex_estado.py:176`) |
-| `$LOGD/*.jsonl` e `.err` | Shell redireciona stdout/stderr do CLI. (`bin/codex_pergunta.sh:252,264-272`) | Wrapper lê `thread_id`, erros e stderr; hook pode medir avanço do arquivo declarado. (`bin/codex_pergunta.sh:333-350`; `bin/hook_stop_fila1.py:563-641,678-679`) |
-| JSONL de `~/.codex/sessions` | Escritor concreto nesta cópia: **[nao verificado]**. Destino consultado em `bin/codex_limite_estado.py:101-104`. | Leitores extraem plano, limites, janelas e tokens; CODEX-ESTADO lê respostas finais. (`bin/codex_limite_estado.py:99-123,131-161,198-212`; `bin/gerar_codex_estado.py:77-103`) |
-| `PAPEIS` | Tupla do código acrescenta `construtor`. (`bin/codex_limite_estado.py:23`) | Inicialização/classificação da contagem, classificação de tokens e texto publicado. (`bin/codex_limite_estado.py:74-78,194,216-219`) |
-| `limite.log`: hora, obra, mensagem | Wrapper, ao reconhecer erro de limite. (`bin/codex_pergunta.sh:338-346`) | Contador do ESTADO. (`bin/codex_limite_estado.py:27-46`; `bin/gerar_estado.py:269-270`) |
-| Pausa `codex-construtor` | Escritor indicado pelo wrapper: `bin/pausar.sh`. (`bin/codex_pergunta.sh:39`) | Wrapper consulta existência e publica conteúdo antes de admitir a chamada. (`bin/codex_pergunta.sh:80`) |
-| Pergunta, anexos e temporários | Pergunta/anexos vêm do chamador; wrapper cria dados raspados e cabeçalho e os remove no encerramento. (`bin/codex_pergunta.sh:60,137,143-158,181-217`) | Wrapper lê e compõe stdin do CLI. (`bin/codex_pergunta.sh:186,213-217,268`) |
-| Cópia `WS`; WT, HEAD e `.git` | Wrapper extrai `WS` apenas para leitura; construtor recebe a WT existente. (`bin/codex_pergunta.sh:166-175,264-268`) | Validação inicial e inventário final consultam WT/Git; `.git` recebe comparação de checksum. (`bin/codex_pergunta.sh:98-120,303-325`) |
-
-As opções de rede desligada e exclusão de `/tmp`/`TMPDIR` estão presentes na chamada. A comprovação de que elas negam todos os efeitos pretendidos continua **[nao verificado]**, porque a prova fornecida aceita os falsos verdes descritos acima. (`bin/codex_pergunta.sh:264-268`; `bin/tests/prova_codex_pergunta_real.sh:48-77`)
-
-## 06/11 12:07 · sessao 39f679766a14 · - · - · origem=Ronald (tmux)
-
-A comparação `ultimo_tb.tb_frame is not frame` identifica propagação e preserva o contraexemplo A→B: o evento de exceção em B contém o traceback originado em A, mesmo quando B executa `except: pass`. [não verificado por execução]
-
-Evite classificar apenas no evento `return`: geradores produzem esse evento em `yield`, e um único “pendente por frame” pode confundir exceções aninhadas em `finally`. [não verificado por execução]
-
-A alternativa mais segura é:
-
-1. No primeiro evento originado em um frame app, incrementar provisoriamente `TRATADA_LOCAL` e anexar metadados escalares à própria exceção.
-2. Continuar observando eventos `exception` também em frames externos, sem eventos `line`.
-3. Quando a exceção aparecer em outro frame, retirar sua contagem local e registrar o erro agregado uma única vez.
-4. Os catches explícitos existentes cobrem escapes para frames já ativos quando `settrace` foi instalado. [não verificado por execução]
-
-Essa abordagem dispensa listas globais de exceções e independe de retorno normal, unwind e yield. O custo de acompanhar frames externos é [não verificado].
-
-O caso concreto `_hhmm` lança no desempacotamento e captura no próprio frame, retornando `None`; deve permanecer apenas em `TRATADA_LOCAL`. (`app/ponto/juiz_batida.py:75`, `app/ponto/juiz_batida.py:77`, `app/ponto/juiz_batida.py:78`)
-
-## 06/11 12:06 · sessao 760fbe2d7d94 · - · - · origem=Ronald (tmux)
-
-Análise estática; não executei testes nem escrevi arquivos. Resultados de execução são [nao verificado]. [nao verificado]
-
-- **ALTA — Prova real pode ficar verde sem executar as tentativas.** O `WRC` é apenas impresso; o positivo exige somente `INTRUSO_WT.txt`. Os arquivos de viva, `/tmp`, Git, raiz, HOME e sobrevivência não são obrigatórios: quando ausentes, apenas deixam de ser impressos. Docker/socket/TCP aceitam arquivos vazios como “negado”. Contramodelo: criar o positivo e quatro `.out` vazios (`6`, `6b`, `7`, `7b`), omitir as tentativas e não deixar processo permite `rc=0`. (`bin/tests/prova_codex_pergunta_real.sh:48-54,62-77`)
-
-- **ALTA — Ausência de conectividade não prova bloqueio do sandbox.** A prova considera qualquer resultado sem `CONECTOU`, `CONTAINER ID` ou `ApiVersion` uma negativa válida; não exige erro de permissão, ferramenta funcional, serviço existente ou controle positivo externo ao sandbox. `connection refused`, ferramenta ausente e timeout também passam. Banco não é tentado pelo bloco. (`bin/tests/prova_codex_pergunta_real.sh:30-43,62-71`)
-
-- **ALTA — Editar e restaurar um proibido escapa do inventário.** Guardar os bytes do motor, alterar/executar/restaurar sem commit mantém HEAD, diff, status e `.git` iguais: o inventário não guarda histórico de escritas. O selo testa commit seguido de revert, que deixa HEAD diferente, e não cobre alteração seguida de restauração sem commit. (`bin/codex_pergunta.sh:303-320,325`; `bin/tests/test_codex_pergunta.sh:229,233-235`)
-
-- **MÉDIA — “Mutante morto” pode significar somente mensagem diferente.** `_recusa` exige texto específico. Neutralizar a guarda de absoluto ainda provoca recusa pela guarda de nome, mas o teste a declara morta porque mudou o motivo. Zerar `inv_diff` ainda recusa o commit por HEAD, mas o teste exige também o motivo “registro de juizes”. O contador aceita qualquer `FALHA` como morte. Isso limita a interpretação do placar, embora o selo exercite caminhos reais com o falso Codex. (`bin/tests/test_codex_pergunta.sh:98-101,141-150,219,289,311-315`; `bin/codex_pergunta.sh:95-97,314-315`)
-
-- **MÉDIA — Mutantes adicionais sobreviveriam por inspeção.** Trocar o `sys.exit(1)` do `except` do inventário por `sys.exit(0)` tornaria falhas de Git permissivas, mas nenhum caso injeta falha nesse subprocesso; `c_inventario` somente altera o motor. Restringir os matchers de migrations/models a `app/folha/` também preservaria todos os casos e a morte dos mutantes cadastrados, pois os únicos exemplos são nessa aplicação. Execução desses mutantes: [nao verificado]. (`bin/codex_pergunta.sh:289-290,300-312`; `bin/tests/test_codex_pergunta.sh:77,208-209,231,233-235,279-280`)
-
-- **MÉDIA — Inventário aceita links por nome.** Um novo symlink chamado `app/atalho` apontando para fora ou para um proibido não encontra matcher: não há inspeção de tipo/destino, apenas nomes do Git e regex. A possibilidade de escrever no alvo externo pelo sandbox permanece [nao verificado]. (`bin/codex_pergunta.sh:303-319`)
-
-- **MÉDIA — A prova padrão de leitura permanece potencialmente vazia.** Não exige sucesso da preparação nem da chamada principal e não tem controle positivo de execução. Uma preparação falha pode produzir `sha=ausente` antes e depois, todos os intrusos ausentes e veredito verde. (`bin/tests/prova_codex_pergunta_real.sh:85-103`)
-
-O controle positivo do selo verifica argv, cabeçalho, `.rc`, inventário, `.id` e `chamadas.log`; portanto o selo não é inteiramente vazio. Sua cobertura não certifica os efeitos do sandbox, porque o falso Codex executa `FAKE_ACAO` diretamente e termina sempre com zero. (`bin/tests/test_codex_pergunta.sh:67-77,180-201`)
-
-## 06/11 12:06 · sessao fb923ffc4071 · - · - · origem=Ronald (tmux)
-
-Achados por análise estática; nenhuma mutação executada.
-
-- **Alta — symlink em arquivos de LOGD permite escrita externa pelo wrapper.** Só o diretório é validado; `slot.gate` e `slot.N` abrem com truncamento e sem verificar symlink. Um `logs/codex/slot.gate -> sentinela` trunca a sentinela antes do Codex. `chamadas.log`, JSONL/`.err`, `limite.log` e o temporário `.rc.$$` também seguem symlinks. Isso pertence ao wrapper no host; não depende de fuga do sandbox. (`bin/codex_pergunta.sh:82-89,111-116,130-134,163-164,220-231,252,268,343`)
-
-- **Alta — destino pode mudar durante a fila.** WT/app é validada antes da espera por slots e lock da resposta; o mesmo caminho é reutilizado depois sem revalidação nem descritor que preserve sua identidade. Trocar `WT/app` por symlink nesse intervalo contorna a validação inicial. O resultado efetivo de escrita na viva depende do sandbox e é **[nao verificado]**. (`bin/codex_pergunta.sh:98-110,219-247,268`)
-
-- **Média — `RESPOSTA=$R/logs/..` sai de logs sem corrida.** A validação confere somente `dirname`; `basename ..` permanece. `NOVA` nasce como `$R/logs/...novo.$$`, e `mv -f NOVA "$R/logs/.."` move o arquivo para `$R/...novo.$$`. Diretórios como resposta também são aceitos. (`bin/codex_pergunta.sh:84-89,261,276`)
-
-- **Alta para o teto — vaga global é escolhida pelo chamador.** Dois `CODEX_LOGD` distintos sob logs produzem duas `construtor.vaga`, permitindo dois construtores e duas chamadas sobre a mesma WT passarem pela exclusão. A comparação de estado não constitui lock da WT. (`bin/codex_pergunta.sh:71,83,114-119`)
-
-- **Média — `.git` pode apontar outra WT do mesmo repo.** Registro testa o nome e `common_dir` testa apenas o repositório; não há correspondência entre gitdir específico, backlink e WT. Reapontar `.git` antes da chamada para outra WT do mesmo repo/HEAD não viola essas comparações; o hash final só detecta mudança posterior do arquivo. O teste cobre outro repositório, não outra WT do mesmo repo. (`bin/codex_pergunta.sh:101-120,325`; `bin/tests/test_codex_pergunta.sh:165-168`)
-
-- **Média — “sem banco/docker” não descreve a via inteira.** Mesmo sem `--sonda`, o início chama `_pergunta_raspada`; sem `CODEX_NOMES_JSON`, ela chama `relato_nomes.sh`, que usa Docker e ORM do banco. É ação do wrapper/Code, não acesso demonstrado do filho. (`bin/codex_pergunta.sh:143-146,153-164`; `bin/relato_nomes.sh:7-21`)
-
-Dois candidatos adicionais exigem manter a limitação explícita:
-
-- **Inventário de repositório embutido:** ele não percorre o filesystem; confia nos nomes de `git diff/status`. Um repo embutido sob `app/x/` pode resumir arquivos internos proibidos a uma entrada permitida `app/x/`; comportamento exato não executado nesta auditoria **[nao verificado]**. (`bin/codex_pergunta.sh:300-319`)
-- **Hardlink preparado antes da chamada:** a limpeza não compara inodes da WT com a viva. Um arquivo permitido com conteúdo idêntico pode compartilhar inode com a viva; a eficácia da escrita pelo alias dentro do sandbox é **[nao verificado]**. (`bin/codex_pergunta.sh:98-120,305-319`)
-
-## 06/11 12:06 · sessao ca43a0006973 · - · - · origem=Ronald (tmux)
-
-Mapa de escritores/leitores e regressões, por análise estática:
-
-| Artefato/campo | Quem escreve | Quem lê |
-|---|---|---|
-| `<resposta>.rc`: `chamada`, `rc`, `fim` | Trap `_saida`, somente `INI=1` e papel construtor; temporário `.rc.$$` seguido de `mv` (`bin/codex_pergunta.sh:129-134`). Sinais anteriores removidos em `bin/codex_pergunta.sh:254`. | Selo verifica `rc=3` e identidade de chamada (`bin/tests/test_codex_pergunta.sh:109,195`); prova apenas copia o arquivo (`bin/tests/prova_codex_pergunta_real.sh:50`). Leitor operacional que interprete esses campos: [nao verificado]. |
-| `<resposta>.inventario`: `TOCADO`/`PROIBIDO`/`FALHA`, caminho, motivo | Python imprime o inventário (`bin/codex_pergunta.sh:310-320`); wrapper redireciona e acrescenta violação do `.git` (`bin/codex_pergunta.sh:324-325`). | Wrapper filtra para `.recusa` (`bin/codex_pergunta.sh:329`); selo verifica caminhos (`bin/tests/test_codex_pergunta.sh:196-197,204`); prova copia (`bin/tests/prova_codex_pergunta_real.sh:50`). |
-| `<resposta>.recusa` | Wrapper reúne aviso e linhas não `TOCADO` (`bin/codex_pergunta.sh:328-329`). | Wrapper publica no stderr (`bin/codex_pergunta.sh:330`); selo interpreta campos `PROIBIDO` e motivo (`bin/tests/test_codex_pergunta.sh:106-107`); prova copia (`bin/tests/prova_codex_pergunta_real.sh:50`). |
-| `<resposta>.lock` | Wrapper abre append e toma `LOCK_EX` pelo fd 7 (`bin/codex_pergunta.sh:245-247`). | Triagem abre com `O_NOFOLLOW`, tenta `LOCK_SH|LOCK_NB` e recusa enquanto tomado (`bin/disjuntor.py:779-789`). |
-| `<resposta>.id`: `obra`, `papel`, `hash`, `pid`, `fim`, `sha` | Wrapper remove identidade anterior (`bin/codex_pergunta.sh:259`), publica somente `RC=0 && DESTA=1` (`bin/codex_pergunta.sh:353-356`). | Triagem lê os seis campos e verifica papel/sha (`bin/disjuntor.py:755-760,795-801`). Construtor nunca entra na triagem atual, pois ela exige `papel=verificador` (`bin/disjuntor.py:798-799`). |
-| `$LOGD/construtor.vaga` | Wrapper abre append pelo fd 6 (`bin/codex_pergunta.sh:114-115`). | Wrapper tenta lock não bloqueante (`bin/codex_pergunta.sh:116`); selo ocupa a vaga no fd 5 (`bin/tests/test_codex_pergunta.sh:171-173`). |
-| `chamadas.log`: `hora,obra,papel,hash12,pid,ini,pergunta`; `fim,sessao,rc,duracao` | Wrapper publica `ini` (`bin/codex_pergunta.sh:163-164`) e trap publica `fim` (`bin/codex_pergunta.sh:130-131`). | Parser único (`bin/codex_limite_estado.py:49-68`); contagem por papel (`bin/codex_limite_estado.py:71-78`), últimas chamadas (`bin/codex_limite_estado.py:82-88`), procedência (`bin/codex_limite_estado.py:92-96`), tokens por papel (`bin/codex_limite_estado.py:185-194`). ESTADO chama leitor (`bin/gerar_estado.py:269-270`); CODEX-ESTADO usa procedência (`bin/gerar_codex_estado.py:176`); disjuntor usa contagem/tokens (`bin/disjuntor.py:1603,1611`). |
-| `$LOGD/<obra>_<data>_<pid>.jsonl` e `.err` | Nome montado pelo wrapper (`bin/codex_pergunta.sh:252`); stdout/stderr do CLI redirecionados pelo shell, fora do sandbox do filho (`bin/codex_pergunta.sh:264-272`). | Wrapper extrai `thread_id` (`bin/codex_pergunta.sh:336,350`), busca erros de limite (`bin/codex_pergunta.sh:339-341`) e publica `.err` (`bin/codex_pergunta.sh:333`). Selo lê existência do JSONL anunciado (`bin/tests/test_codex_pergunta.sh:192-194`). Hook pode medir mtime do caminho declarado (`bin/hook_stop_fila1.py:563-579,678-679`). |
-| JSONL em `~/.codex/sessions` | Escritor concreto do CLI nesta cópia: [nao verificado]. São arquivos distintos do stdout `$LOGD/*.jsonl`, conforme destinos declarados (`bin/codex_pergunta.sh:252,268`; `bin/codex_limite_estado.py:101-104`). | `rate_limits`/plano (`bin/codex_limite_estado.py:99-123`), leituras semanais (`bin/codex_limite_estado.py:131-161`), tokens (`bin/codex_limite_estado.py:198-212`), respostas finais para CODEX-ESTADO (`bin/gerar_codex_estado.py:77-103`). |
-| `PAPEIS` | Tupla no código; o diff acrescenta `construtor` (`bin/codex_limite_estado.py:23`). | Inicializa/classifica contagem (`bin/codex_limite_estado.py:74-78`), classifica tokens (`bin/codex_limite_estado.py:194`), filtra texto publicado (`bin/codex_limite_estado.py:216-219`). |
-| `limite.log` | Wrapper publica em falha reconhecida de limite (`bin/codex_pergunta.sh:338-346`). | Contador em `bin/codex_limite_estado.py:27-45`, consumido pelo ESTADO (`bin/gerar_estado.py:269-270`). |
-| `slot.gate`, `slot.N` | Wrapper abre com truncamento `>` (`bin/codex_pergunta.sh:220,226,231`). | Wrapper disputa gate/slots (`bin/codex_pergunta.sh:222,227,232`), mantém fd 8 até terminar (`bin/codex_pergunta.sh:235`). |
-
-Achados:
-
-- **MÉDIA — o `ESPERANDO` emitido não satisfaz o hook.** O wrapper emite produtor relativo `bin/codex_pergunta.sh` (`bin/codex_pergunta.sh:255`), enquanto `_prova_pid` rejeita produtor com `/` que não seja absoluto (`bin/hook_stop_fila1.py:527-528`). Copiada essa linha para o topo, PID vivo e JSONL crescendo ainda não tornam a espera válida; o hook exige ambas as provas declaradas (`bin/hook_stop_fila1.py:675-680`).
-
-- **MÉDIA — `.rc` não cobre “toda saída” e pode perder identidade.** Recusas de validação saem antes da instalação do trap (`bin/codex_pergunta.sh:75-119,140`); o trap publica somente após `INI=1` (`bin/codex_pergunta.sh:129`). Falha após `ini` e antes de montar `JSONL` publica `chamada=-` (`bin/codex_pergunta.sh:123,133,164,252`). O selo só confere `.rc` nas saídas positiva e de inventário, sem cobrir esse intervalo (`bin/tests/test_codex_pergunta.sh:103-109,195`).
-
-- **BAIXA — houve alteração de comportamento dos quatro papéis de leitura no lock.** Symlink agora é recusado com rc 3 e abertura passou de truncamento para append, conforme o diff fornecido e código atual (`bin/codex_pergunta.sh:245-247`). Nos critérios pedidos, preservam `read-only`, `-C "$WS"` e cabeçalho somente leitura (`bin/codex_pergunta.sh:162,204,271-272`); o teste exercita os quatro papéis com CLI falso (`bin/tests/test_codex_pergunta.sh:236-249`). A chamada de leitura com `--construtor` passa a ser recusada explicitamente (`bin/codex_pergunta.sh:74-76`).
-
-- **Informativo — ausência de `.id` não é a barreira particular do construtor na triagem atual.** Mesmo um construtor com `.id` válido é recusado pelo papel (`bin/disjuntor.py:798-799`). O comentário “sem `.id` a triagem recusa” descreve condição suficiente, mas essa triagem não implementa certificação do construtor (`bin/codex_pergunta.sh:42-43`; `bin/disjuntor.py:771-774,798-799`).
-
-## 06/11 12:02 · sessao d715f789926a · - · - · origem=Ronald (tmux)
-
-Conteúdo dos arquivos de prova. O lançamento retornou `rc=0`; a sobrevivência do processo permanece [nao verificado].
-
-[prova/1_viva.out:1](/home/ronald/wt-codex-provaefeito-115741/app/prova/1_viva.out:1)
-```text
-/bin/bash: line 3: /home/ronald/saas-hasner/INTRUSO_VIVA_C.txt: Read-only file system
-rc=1
-```
-
-[prova/2_tmp.out:1](/home/ronald/wt-codex-provaefeito-115741/app/prova/2_tmp.out:1)
-```text
-/bin/bash: line 4: /tmp/INTRUSO_TMP_C.txt: Read-only file system
-rc=1
-```
-
-[prova/2b_tmpdir.out:1](/home/ronald/wt-codex-provaefeito-115741/app/prova/2b_tmpdir.out:1)
-```text
-/bin/bash: line 5: /tmp/INTRUSO_TMPDIR_C.txt: Read-only file system
-rc=1 TMPDIR=
-```
-
-[prova/3_git.out:1](/home/ronald/wt-codex-provaefeito-115741/app/prova/3_git.out:1)
-```text
-/bin/bash: line 6: /home/ronald/saas-hasner/.git/INTRUSO_GIT_C.txt: Read-only file system
-rc=1
-```
-
-[prova/3b_commit.out:1](/home/ronald/wt-codex-provaefeito-115741/app/prova/3b_commit.out:1)
-```text
-fatal: Unable to create '/home/ronald/saas-hasner/.git/worktrees/wt-codex-provaefeito-115741/index.lock': Read-only file system
-rc=128
-```
-
-[prova/4_raiz.out:1](/home/ronald/wt-codex-provaefeito-115741/app/prova/4_raiz.out:1)
-```text
-/bin/bash: line 8: /home/ronald/wt-codex-provaefeito-115741/INTRUSO_RAIZ_WT.txt: Read-only file system
-rc=1
-```
-
-[prova/5_home.out:1](/home/ronald/wt-codex-provaefeito-115741/app/prova/5_home.out:1)
-```text
-/bin/bash: line 9: /home/ronald/INTRUSO_HOME_C.txt: Read-only file system
-rc=1
-```
-
-[prova/6_docker.out:1](/home/ronald/wt-codex-provaefeito-115741/app/prova/6_docker.out:1)
-```text
-permission denied while trying to connect to the docker API at unix:///var/run/docker.sock
-rc=1
-```
-
-[prova/6b_sock.out:1](/home/ronald/wt-codex-provaefeito-115741/app/prova/6b_sock.out:1)
-```text
-rc=7
-```
-
-[prova/7_tcp_local.out:1](/home/ronald/wt-codex-provaefeito-115741/app/prova/7_tcp_local.out:1)
-```text
-bash: socket: Operation not permitted
-bash: line 1: /dev/tcp/127.0.0.1/22: Operation not permitted
-rc=1
-```
-
-[prova/7b_tcp_ext.out:1](/home/ronald/wt-codex-provaefeito-115741/app/prova/7b_tcp_ext.out:1)
-```text
-bash: socket: Operation not permitted
-bash: line 1: /dev/tcp/1.1.1.1/443: Operation not permitted
-rc=1
-```
-
-[prova/8_sobrevive.out:1](/home/ronald/wt-codex-provaefeito-115741/app/prova/8_sobrevive.out:1)
-```text
-lancado
-rc=0
-```
-
-_2269 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2276 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
