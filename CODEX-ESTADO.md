@@ -1,7 +1,398 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 17:05** · publicado em **06/11/2026 17:06** (UTC-3)
+> Ultima resposta processada: **06/11/2026 17:11** · publicado em **06/11/2026 17:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 17:11 · sessao b51996e540eb · R1-CAUSAD-V3 · leitura · origem=Code
+
+**A cobertura contábil fecha: outubro tem `504 medidos + 120 excluídos = 624`; novembro, `467 + 111 = 578`. O impacto abaixo abrange os MEDIDOS; todas as partes declaram `COBERTURA_INTEGRAL=False`.** [nao verificado] Origem: P1–P6, `COBERTURA_COLAB`, `UNIVERSO` e `COBERTURA_INTEGRAL`.
+
+P1–P6 identificam os seis blocos fornecidos. Como são transcrições no pedido, sem arquivo:linha verificável, cada resultado recebe `[nao verificado]` e sua chave de origem. Nas tabelas, as rubricas aparecem sem o prefixo `horas_`. [nao verificado]
+
+Calculei `Δ = Decimal(PARCIAL.v3_h) − Decimal(PARCIAL.v2_h)`, somando sem arredondamento intermediário. `C/D` significa colaboradores/dias-colaborador; no impacto, corresponde a `colabs_div/dias_colab_div`. `fm_dias` não foi usado como quantidade de dias. [nao verificado] Origem: campos das linhas `PARCIAL`.
+
+**1) Cobertura e exclusões**
+
+Cada célula abaixo vem de `Pn:COBERTURA_COLAB|competência`; as seis parcelas formam o total. [nao verificado]
+
+| Parte | 10/2026: medidos + excluídos = universo | 11/2026: medidos + excluídos = universo | Referência |
+|---|---:|---:|---|
+| P1 | 86 + 24 = 110 | 74 + 22 = 96 | [nao verificado] |
+| P2 | 81 + 28 = 109 | 79 + 20 = 99 | [nao verificado] |
+| P3 | 86 + 16 = 102 | 78 + 19 = 97 | [nao verificado] |
+| P4 | 79 + 17 = 96 | 71 + 20 = 91 | [nao verificado] |
+| P5 | 89 + 18 = 107 | 86 + 13 = 99 | [nao verificado] |
+| P6 | 83 + 17 = 100 | 79 + 17 = 96 | [nao verificado] |
+| **Soma** | **504 + 120 = 624** | **467 + 111 = 578** | [nao verificado] |
+
+As contas por parte e somadas fecham; os totais coincidem com `UNIVERSO|2026-10|colabs_porta=624` e `UNIVERSO|2026-11|colabs_porta=578`. Isso é fechamento da cobertura contábil, não cobertura integral da medida. [nao verificado]
+
+Motivos: origem `Pn:EXCLUIDO|competência|colNNN|PRODUTO:classe`, com contagens resumidas em `PRODUTO|competência|classe`. `—` significa ausência de linha dessa classe, contribuindo zero à soma do texto. [nao verificado]
+
+| Competência / motivo | P1 | P2 | P3 | P4 | P5 | P6 | Soma | Referência |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| 10 — RECUSA_PORTA_SEM_DONO | 18 | 19 | 13 | 11 | 11 | 13 | **85** | [nao verificado] |
+| 10 — SEM_RETORNO_FECHAMENTO | 6 | 6 | 1 | 5 | 7 | 3 | **28** | [nao verificado] |
+| 10 — MOTOR_FECHAMENTO_horas_trabalhadas | — | 3 | 2 | 1 | — | 1 | **7** | [nao verificado] |
+| **10 — total** | **24** | **28** | **16** | **17** | **18** | **17** | **120** | [nao verificado] |
+| 11 — RECUSA_PORTA_SEM_DONO | 21 | 16 | 17 | 16 | 12 | 15 | **97** | [nao verificado] |
+| 11 — SEM_RETORNO_FECHAMENTO | — | 1 | 1 | 3 | 1 | 1 | **7** | [nao verificado] |
+| 11 — MOTOR_FECHAMENTO_horas_trabalhadas | 1 | 3 | 1 | 1 | — | 1 | **7** | [nao verificado] |
+| **11 — total** | **22** | **20** | **19** | **20** | **13** | **17** | **111** | [nao verificado] |
+
+Portanto, por classe: outubro `85 + 28 + 7 = 120`; novembro `97 + 7 + 7 = 111`. [nao verificado] Origem: parcelas da tabela anterior.
+
+**2) Impacto por rubrica dos MEDIDOS**
+
+Origem de cada célula Pn: `Pn:PARCIAL|competência|horas_<rubrica>`, campos `v2_h/v3_h`. A coluna soma é a adição das seis diferenças decimais exibidas. [nao verificado]
+
+**10/2026 — Δ em horas**
+
+| Rubrica | P1 | P2 | P3 | P4 | P5 | P6 | **Σ Δ** | Referência |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| trabalhadas | -2.542890555555 | -2.842305277778 | -3.035321666668 | 0 | -9.540302056388 | -4.528065277778 | **-22.488884834167** | [nao verificado] |
+| intra_indenizada | -2 | 0 | -4.05666694444443 | -0.63527333333331 | -8.16666666666663 | -8 | **-22.85860694444437** | [nao verificado] |
+| extras_50 | 0 | 0 | 0 | -0.502948333333335 | 1.4735158538888901 | 0.224154212500004 | **1.1947217330555591** | [nao verificado] |
+| extras_100 | 0 | 10.985971388888899 | 12.149131944444441 | 0 | 0 | 0 | **23.135103333333340** | [nao verificado] |
+| extras_100_feriado | 0 | 10.985971388888899 | 12.149131944444441 | 0 | 0 | 0 | **23.135103333333340** | [nao verificado] |
+| extras_50_noturna | 0 | 0 | 0 | 0 | 0 | 0 | **0** | [nao verificado] |
+| extras_100_noturna | 2.061344224166667 | 6.164677786111110 | 0.014159722222222 | 1.4042363383333330 | 0.9115786111111086 | 0.9999999999999999 | **11.5559966819444405** | [nao verificado] |
+| folga_trabalhada | 0 | 0 | 0 | 0 | 0 | 0 | **0** | [nao verificado] |
+| noturnas | 0 | -2.5623561507937 | 0 | 2.5716699836512 | 0.5618157142858 | 0 | **0.5711295471433** | [nao verificado] |
+| atraso | 2.368802113333331 | 4.579233728611108 | 1.106468535277777 | 0.186039155000003 | 2.329948153055554 | -0.000374091944444 | **10.570117593333329** | [nao verificado] |
+| saida_antecipada | 0.000684534722225 | 0.000212258611107 | -0.557056842500004 | -0.186263274722222 | 0.000085790277780 | 0.000029152222226 | **-0.742308381388888** | [nao verificado] |
+
+**11/2026 — Δ em horas**
+
+| Rubrica | P1 | P2 | P3 | P4 | P5 | P6 | **Σ Δ** | Referência |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| trabalhadas | 0 | -2.8425216666665 | -3.9930194444451 | 0 | -17.0800343119445 | 0 | **-23.9155754230561** | [nao verificado] |
+| intra_indenizada | -1.16666666666666 | 0 | -1 | 0.40334305555555 | -9.62847277777777 | -6 | **-17.39179638888888** | [nao verificado] |
+| extras_50 | 0 | 0 | 0 | 0 | -3.3361696744444433 | 0.380845000000001 | **-2.9553246744444423** | [nao verificado] |
+| extras_100 | 1.5E-14 | -7.052801863055549 | 12.066969811944446 | 3.958275277777773 | 20.045843333333323 | 0 | **29.018286560000008** | [nao verificado] |
+| extras_100_feriado | 1.5E-14 | -7.052801863055549 | 12.066969811944446 | 3.958275277777773 | 16.043546944444436 | 0 | **25.015990171111121** | [nao verificado] |
+| extras_50_noturna | 0 | 0 | 0 | 0 | 0 | 0 | **0** | [nao verificado] |
+| extras_100_noturna | 1.137680829722223 | 7.819367573333334 | 1 | 1.4999583002777781 | 0.002409166666664 | 1.8612788888888885 | **13.3206947588888876** | [nao verificado] |
+| folga_trabalhada | 0 | 0 | 0 | 0 | 0 | 0 | **0** | [nao verificado] |
+| noturnas | 0 | 0 | 0 | 0 | 0 | 0 | **0** | [nao verificado] |
+| atraso | -0.000158523888889 | 0.622596846944446 | 0.000051118333336 | 1.128749770277779 | 0.076214444444446 | -0.000024863333337 | **1.827428792777781** | [nao verificado] |
+| saida_antecipada | -0.000158888888891 | 0.000201111111110 | 0.000008888888885 | -0.755222120833338 | -0.076319288888886 | 4.331691891666661 | **3.500201593055541** | [nao verificado] |
+
+Contagens afetadas publicadas: origem `Pn:PARCIAL|competência|horas_<rubrica>|…|colabs_div=C|dias_colab_div=D`. Cada sequência está na ordem **P1 + P2 + P3 + P4 + P5 + P6**. [nao verificado] [nao verificado]
+
+| Rubrica | 10/2026 — parcelas C/D → soma | 11/2026 — parcelas C/D → soma | Referência |
+|---|---|---|---|
+| trabalhadas | 1/1 + 1/1 + 2/2 + 0/0 + 3/3 + 1/1 → **8/8** | 0/0 + 1/1 + 1/1 + 0/0 + 3/5 + 0/0 → **5/7** | [nao verificado] |
+| intra_indenizada | 1/2 + 0/0 + 4/9 + 2/3 + 1/7 + 2/8 → **10/29** | 1/1 + 0/0 + 1/1 + 1/2 + 3/10 + 2/6 → **8/20** | [nao verificado] |
+| extras_50 | 0/0 + 0/0 + 0/0 + 1/2 + 2/5 + 1/1 → **4/8** | 0/0 + 0/0 + 0/0 + 0/0 + 3/3 + 1/2 → **4/5** | [nao verificado] |
+| extras_100 | 0/0 + 1/1 + 1/1 + 0/0 + 0/0 + 0/0 → **2/2** | 0/0 + 1/1 + 1/1 + 1/1 + 1/3 + 0/0 → **4/6** | [nao verificado] |
+| extras_100_feriado | 0/0 + 1/1 + 1/1 + 0/0 + 0/0 + 0/0 → **2/2** | 0/0 + 1/1 + 1/1 + 1/1 + 1/1 + 0/0 → **4/4** | [nao verificado] |
+| extras_50_noturna | seis 0/0 → **0/0** | seis 0/0 → **0/0** | [nao verificado] |
+| extras_100_noturna | 3/3 + 2/2 + 0/0 + 2/2 + 1/1 + 1/1 → **9/9** | 2/2 + 3/3 + 1/1 + 2/2 + 0/0 + 1/1 → **9/9** | [nao verificado] |
+| folga_trabalhada | seis 0/0 → **0/0** | seis 0/0 → **0/0** | [nao verificado] |
+| noturnas | 0/0 + 2/9 + 0/0 + 1/3 + 1/4 + 0/0 → **4/16** | seis 0/0 → **0/0** | [nao verificado] |
+| atraso | 1/1 + 3/4 + 1/1 + 1/1 + 1/1 + 0/0 → **7/8** | 0/0 + 1/1 + 0/0 + 2/4 + 1/1 + 0/0 → **4/6** | [nao verificado] |
+| saida_antecipada | 0/0 + 0/0 + 1/1 + 1/1 + 0/0 + 0/0 → **2/2** | 0/0 + 0/0 + 0/0 + 1/3 + 1/1 + 1/1 → **3/5** | [nao verificado] |
+
+Esses C/D são as contagens de divergência publicadas pelo instrumento: há deltas residuais com `colabs_div=0`, como `extras_100_noturna` de outubro/P3. Portanto, não representam a contagem de todo valor textual que mudou. [nao verificado] Origem: P3, `PARCIAL|2026-10|horas_extras_100_noturna` e `RESIDUO|…|ATE_LIMIAR`. [nao verificado]
+
+Para distinguir as duas medidas, seguem também as somas decimais de `SOMA DIVERGENCIA|competência|rubrica|partes_h`. Elas excluem o resíduo da divergência atribuída e não substituem o delta completo de `PARCIAL`. [nao verificado]
+
+| Rubrica | 10/2026 — Σ partes_h | 11/2026 — Σ partes_h | Referência |
+|---|---:|---:|---|
+| trabalhadas | -22.4888848341666705 | -23.9155754230555561 | [nao verificado] |
+| intra_indenizada | -22.85860694444444556 | -17.39179638888888795 | [nao verificado] |
+| extras_50 | 1.19472173305555515 | -2.95532467444444169 | [nao verificado] |
+| extras_100 | 23.135103333333331 | 29.0182865599999961 | [nao verificado] |
+| extras_100_feriado | 23.135103333333331 | 25.0159901711111061 | [nao verificado] |
+| extras_50_noturna | 0 | 0 | [nao verificado] |
+| extras_100_noturna | 11.54273918194444492 | 13.2956696391666664 | [nao verificado] |
+| folga_trabalhada | 0 | 0 | [nao verificado] |
+| noturnas | 0.57112954714284966 | 0 | [nao verificado] |
+| atraso | 10.5703825000000005 | 1.827685833333333356 | [nao verificado] |
+| saida_antecipada | -0.74333333333333329 | 3.500166944444443826 | [nao verificado] |
+
+Não usei `INSTRUMENTO_HISTORICO` como esse DIFF: por exemplo, `folga_trabalhada` tem `PARCIAL.v2_h=v3_h=0` em todas as partes de outubro, enquanto o histórico mostra outra comparação. Pequenas diferenças frente a `RUBRICA.delta` também foram preservadas: os cálculos acima subtraem as strings decimais de `PARCIAL`, sem reutilizar a subtração binária já impressa. [nao verificado] Origem: linhas `PARCIAL`, `RUBRICA` e `INSTRUMENTO_HISTORICO` dos anexos.
+
+**3) Dono por rubrica e contagens**
+
+Origem: `Pn:DONO|competência|horas_<rubrica>|classe|…|C|D`. Abaixo, `—` significa nenhuma linha `DONO` publicada para aquela classe/rubrica. [nao verificado] [nao verificado]
+
+**10/2026**
+
+| Rubrica | ESTRUTURA: parcelas → C/D | CADASTRO: parcelas → C/D | BATIDA: parcelas → C/D | Referência |
+|---|---|---|---|---|
+| trabalhadas | P3 1/1 → **1/1** | P1 1/1 + P2 1/1 + P5 3/3 + P6 1/1 → **6/6** | P3 1/1 → **1/1** | [nao verificado] |
+| intra_indenizada | P3 1/1 → **1/1** | P3 3/6 + P4 2/3 + P5 1/7 + P6 2/8 → **8/24** | P1 1/2 + P3 2/2 → **3/4** | [nao verificado] |
+| extras_50 | — | P4 1/2 + P5 2/5 + P6 1/1 → **4/8** | — | [nao verificado] |
+| extras_100 | P2 1/1 + P3 1/1 → **2/2** | — | — | [nao verificado] |
+| extras_100_feriado | P2 1/1 + P3 1/1 → **2/2** | — | — | [nao verificado] |
+| extras_50_noturna | — | — | — | [nao verificado] |
+| extras_100_noturna | P1 3/3 + P4 2/2 + P5 1/1 → **6/6** | P2 2/2 + P6 1/1 → **3/3** | — | [nao verificado] |
+| folga_trabalhada | — | — | — | [nao verificado] |
+| noturnas | P2 2/9 + P4 1/3 + P5 1/2 → **4/14** | P5 1/1 → **1/1** | P5 1/1 → **1/1** | [nao verificado] |
+| atraso | P1 1/1 + P2 2/3 + P3 1/1 + P5 1/1 → **5/6** | P2 1/1 + P4 1/1 → **2/2** | — | [nao verificado] |
+| saida_antecipada | P3 1/1 → **1/1** | P4 1/1 → **1/1** | — | [nao verificado] |
+
+**11/2026**
+
+| Rubrica | ESTRUTURA: parcelas → C/D | CADASTRO: parcelas → C/D | BATIDA: parcelas → C/D | Referência |
+|---|---|---|---|---|
+| trabalhadas | — | P2 1/1 + P5 3/5 → **4/6** | P3 1/1 → **1/1** | [nao verificado] |
+| intra_indenizada | — | P1 1/1 + P3 1/1 + P4 1/2 + P5 3/8 + P6 2/6 → **8/18** | P5 1/2 → **1/2** | [nao verificado] |
+| extras_50 | — | P5 3/3 + P6 1/2 → **4/5** | — | [nao verificado] |
+| extras_100 | P2 1/1 + P3 1/1 + P4 1/1 → **3/3** | P5 1/1 → **1/1** | P5 1/2 → **1/2** | [nao verificado] |
+| extras_100_feriado | P2 1/1 + P3 1/1 + P4 1/1 → **3/3** | P5 1/1 → **1/1** | — | [nao verificado] |
+| extras_50_noturna | — | — | — | [nao verificado] |
+| extras_100_noturna | P1 2/2 + P2 2/2 + P4 2/2 → **6/6** | P2 1/1 + P3 1/1 + P6 1/1 → **3/3** | — | [nao verificado] |
+| folga_trabalhada | — | — | — | [nao verificado] |
+| noturnas | — | — | — | [nao verificado] |
+| atraso | P2 1/1 + P4 1/1 → **2/2** | P4 1/3 + P5 1/1 → **2/4** | — | [nao verificado] |
+| saida_antecipada | P6 1/1 → **1/1** | P4 1/3 + P5 1/1 → **2/4** | — | [nao verificado] |
+
+Os colaboradores não devem ser somados entre donos como união: outubro/intra soma `12` presenças nas classes, mas `PARCIAL` informa `10` colaboradores; outubro/noturnas dá `6` contra `4`; novembro/intra, `9` contra `8`; novembro/extras_100, `5` contra `4`. [nao verificado] Origem: `DONO` e `PARCIAL` dessas rubricas, P1–P6.
+
+`RESIDUO` está separado porque o juiz de dono retorna `CADASTRO`, `BATIDA` ou `ESTRUTURA`. [e6_oraculo.py:98](/home/ronald/codex_ws/320ef1c738b115e3f7e0004e4c51a48a6eb2d953/app/ponto/management/commands/e6_oraculo.py:98)
+
+Contagens publicadas de **RESIDUO/ATE_LIMIAR**, na ordem P1 + P2 + P3 + P4 + P5 + P6; são participação nessa classe, não a união de colaboradores afetados de `PARCIAL`. Origem: `Pn:RESIDUO|competência|horas_<rubrica>|ATE_LIMIAR|…|C|D`. [nao verificado] [nao verificado]
+
+| Rubrica | 10/2026 — parcelas → C/D | 11/2026 — parcelas → C/D | Referência |
+|---|---|---|---|
+| trabalhadas | 86/1222 + 81/1254 + 86/1222 + 79/1236 + 89/1333 + 83/1271 → **504/7538** | 74/588 + 79/650 + 78/629 + 71/591 + 86/726 + 79/663 → **467/3847** | [nao verificado] |
+| intra_indenizada | 86/1221 + 81/1255 + 86/1215 + 79/1233 + 89/1329 + 83/1264 → **504/7517** | 74/587 + 79/651 + 78/629 + 71/589 + 86/721 + 79/657 → **467/3834** | [nao verificado] |
+| extras_50 | 84/1198 + 81/1242 + 86/1196 + 79/1215 + 89/1312 + 83/1251 → **502/7414** | 70/561 + 76/627 + 77/603 + 70/582 + 84/705 + 79/646 → **456/3724** | [nao verificado] |
+| extras_100 | 84/1198 + 81/1242 + 86/1195 + 79/1217 + 89/1317 + 83/1252 → **502/7421** | 70/561 + 76/626 + 77/602 + 70/581 + 84/705 + 79/648 → **456/3723** | [nao verificado] |
+| extras_100_feriado | 84/1198 + 81/1242 + 86/1195 + 79/1217 + 89/1317 + 83/1252 → **502/7421** | 70/561 + 76/626 + 77/602 + 70/581 + 84/707 + 79/648 → **456/3725** | [nao verificado] |
+| extras_50_noturna | 84/1198 + 81/1242 + 86/1196 + 79/1217 + 89/1317 + 83/1252 → **502/7422** | 70/561 + 76/627 + 77/603 + 70/582 + 84/708 + 79/648 → **456/3729** | [nao verificado] |
+| extras_100_noturna | 84/1195 + 81/1240 + 86/1196 + 79/1215 + 89/1316 + 83/1251 → **502/7413** | 70/559 + 76/624 + 77/602 + 70/580 + 84/708 + 79/647 → **456/3720** | [nao verificado] |
+| folga_trabalhada | 86/1223 + 81/1255 + 86/1224 + 79/1236 + 89/1336 + 83/1272 → **504/7546** | 74/588 + 79/651 + 78/630 + 71/591 + 86/731 + 79/663 → **467/3854** | [nao verificado] |
+| noturnas | 85/1207 + 81/1239 + 86/1213 + 79/1222 + 89/1322 + 83/1259 → **503/7462** | 73/575 + 78/642 + 78/621 + 70/582 + 86/728 + 79/655 → **464/3803** | [nao verificado] |
+| atraso | 83/1192 + 79/1227 + 84/1177 + 79/1216 + 88/1312 + 82/1243 → **495/7367** | 69/559 + 75/622 + 75/596 + 69/574 + 84/707 + 78/645 → **450/3703** | [nao verificado] |
+| saida_antecipada | 83/1193 + 79/1231 + 84/1177 + 79/1216 + 88/1313 + 82/1243 → **495/7373** | 69/559 + 75/623 + 75/596 + 69/575 + 84/707 + 77/644 → **449/3704** | [nao verificado] |
+
+As contagens de **RESIDUO/SEM_DECISAO** coincidem, rubrica a rubrica e parte a parte, com `PRODUTO:SEM_DECISAO_horas_<rubrica>` nas tabelas seguintes. Os deltas v3−v2 publicados nessas linhas de resíduo são zero. [nao verificado] Origem: P1–P6, `RESIDUO|competência|rubrica|SEM_DECISAO` e respectivos `PRODUTO`. [nao verificado]
+
+**4) PRODUTO por classe**
+
+Células em **C/D**, origem `Pn:PRODUTO|competência|classe|C|D`. Classes agrupadas na mesma linha têm individualmente os mesmos valores; o total não multiplica pelo número de classes. [nao verificado]
+
+**10/2026**
+
+| Classe(s) | P1 | P2 | P3 | P4 | P5 | P6 | **Σ C/D** | Referência |
+|---|---|---|---|---|---|---|---|---|
+| DIA_FORA_UNIVERSO_PORTA; SEM_DECISAO_horas_trabalhadas; SEM_DECISAO_horas_intra_indenizada; SEM_DECISAO_horas_folga_trabalhada | 56/296 | 51/247 | 58/324 | 48/321 | 59/346 | 52/229 | **324/1763** | [nao verificado] |
+| MOTOR_FECHAMENTO_horas_trabalhadas | — | 3/54 | 2/42 | 1/19 | — | 1/24 | **7/139** | [nao verificado] |
+| RECUSA_PORTA_SEM_DONO | 18/237 | 19/295 | 13/137 | 11/191 | 11/155 | 13/181 | **85/1196** | [nao verificado] |
+| SEM_DECISAO_horas_atraso; SEM_DECISAO_horas_saida_antecipada | 59/326 | 55/271 | 61/370 | 49/340 | 61/369 | 55/258 | **340/1934** | [nao verificado] |
+| SEM_DECISAO_horas_extras_100; SEM_DECISAO_horas_extras_100_feriado | 59/321 | 53/259 | 59/352 | 49/340 | 60/365 | 54/249 | **334/1886** | [nao verificado] |
+| SEM_DECISAO_horas_extras_100_noturna; SEM_DECISAO_horas_extras_50; SEM_DECISAO_horas_extras_50_noturna | 59/321 | 53/260 | 59/352 | 49/340 | 60/365 | 54/249 | **334/1887** | [nao verificado] |
+| SEM_DECISAO_horas_noturnas | 59/312 | 52/254 | 59/335 | 49/332 | 61/356 | 55/242 | **335/1831** | [nao verificado] |
+| SEM_RETORNO_FECHAMENTO | 6/0 | 6/0 | 1/0 | 5/0 | 7/0 | 3/0 | **28/0** | [nao verificado] |
+
+**11/2026**
+
+| Classe(s) | P1 | P2 | P3 | P4 | P5 | P6 | **Σ C/D** | Referência |
+|---|---|---|---|---|---|---|---|---|
+| DIA_FORA_UNIVERSO_PORTA; SEM_DECISAO_horas_trabalhadas; SEM_DECISAO_horas_intra_indenizada; SEM_DECISAO_horas_folga_trabalhada | 74/817 | 77/857 | 76/805 | 70/791 | 86/967 | 78/876 | **461/5113** | [nao verificado] |
+| MOTOR_FECHAMENTO_horas_trabalhadas | 1/14 | 3/39 | 1/14 | 1/11 | — | 1/12 | **7/90** | [nao verificado] |
+| RECUSA_PORTA_SEM_DONO | 21/329 | 16/269 | 17/272 | 16/310 | 12/239 | 15/223 | **97/1642** | [nao verificado] |
+| SEM_DECISAO_horas_atraso; SEM_DECISAO_horas_saida_antecipada | 74/846 | 78/885 | 77/839 | 71/804 | 86/990 | 79/894 | **465/5258** | [nao verificado] |
+| SEM_DECISAO_horas_extras_100; SEM_DECISAO_horas_extras_100_feriado; SEM_DECISAO_horas_extras_100_noturna; SEM_DECISAO_horas_extras_50; SEM_DECISAO_horas_extras_50_noturna | 74/844 | 77/881 | 76/832 | 70/800 | 86/990 | 78/891 | **461/5238** | [nao verificado] |
+| SEM_DECISAO_horas_noturnas | 74/830 | 78/866 | 76/814 | 70/800 | 86/970 | 79/884 | **463/5164** | [nao verificado] |
+| SEM_RETORNO_FECHAMENTO | — | 1/0 | 1/0 | 3/0 | 1/0 | 1/0 | **7/0** | [nao verificado] |
+
+Não há união global de pessoas entre classes nessas saídas; somar classes produziria presenças repetidas. `SEM_RETORNO_FECHAMENTO` informa dias `0`, mas também publica `DIAS_NAO_LOCALIZADOS`: esse zero não comprova ausência de dias afetados. [nao verificado] Origem: linhas `PRODUTO` e `DIAS_NAO_LOCALIZADOS` das respectivas partes.
+
+**5) Execução por parte**
+
+Origem: rodapés `rc_sombra`, `COLABS_COM_FALHA_INSTRUMENTO`, `EXCLUIDOS_TOTAL`; para os demais campos, presença ou ausência de ocorrência no texto fornecido. [nao verificado]
+
+| Parte | rc_sombra | INCOMPLETO | Colabs com falha do instrumento | Linhas de erro | TRATADA_LOCAL | Excluídos nas duas competências | Referência |
+|---|---:|---|---:|---|---|---:|---|
+| P1 | 0 | não aparece | 0 | não aparecem | não aparece | 46 | [nao verificado] |
+| P2 | 0 | não aparece | 0 | não aparecem | não aparece | 48 | [nao verificado] |
+| P3 | 0 | não aparece | 0 | não aparecem | não aparece | 35 | [nao verificado] |
+| P4 | 0 | não aparece | 0 | não aparecem | não aparece | 37 | [nao verificado] |
+| P5 | 0 | não aparece | 0 | não aparecem | não aparece | 31 | [nao verificado] |
+| P6 | 0 | não aparece | 0 | não aparecem | não aparece | 34 | [nao verificado] |
+| **Soma** | — | — | **0** | — | — | **231** | [nao verificado] |
+
+Os `231 = 120 + 111` são ocorrências de exclusão por competência, sem deduplicação entre meses. Ausência de linha `TRATADA_LOCAL` não fornece uma contagem comprovada de exceções tratadas localmente. [nao verificado]
+
+Todas as linhas `SOMA` publicadas trazem indicadores `True`. Isso registra o que os anexos declaram; não certifica a execução nem valida o motor v3. [nao verificado] Origem: linhas `SOMA` de P1–P6. O p
+
+[truncado em 20000 de 22933 caracteres]
+
+## 06/11 17:07 · sessao 7fc157e55244 · E-SEM-VIVA-B · censo · origem=Code
+
+**Classificação: os cinco achados ficam em (b), com a ressalva de precisão do item 2 abaixo.** Os alertas sobre classificação incompleta, testemunha e perda da C5 aparecem nas respostas e foram restringidos ou descartados pela triagem. (`v2.r:1,20–24`; `v3_triagem:3–4`; `v3b.r:32–38`.)
+
+Nas referências aos **anexos fornecidos**, conto linhas desde a primeira após `== anexo: ... ==`, incluindo linhas vazias. Essas referências identificam o texto recebido; as referências `app/...` identificam o código conferido.
+
+Primeiro, quem perguntou e quem triou: a pergunta original exigia comparação com **`classificar_export`**, incluindo demissão nula, e cobrava derivação paralela e força dos testes. Portanto, esses temas foram perguntados. A restrição a “rescisão + retentor” aparece expressamente na triagem e depois volta como premissa da pergunta 3b. (`v2.q:7,10`; `v3_triagem:3`; `v3b.q:3`.) Essa restrição também recebeu concordância posterior do Codex: “**O descarte de escopo procede**”. Isso é participação no rebaixamento, embora o problema já tivesse sido apontado. (`v3b.r:38`.) [nao verificado]
+
+1. **Derivação paralela do juiz registrado — (b), falha da triagem.**
+
+   **Pergunta literal:** “2o juiz duplicando juiz registrado” e “derivacao paralela de fonte unica”. (`v2.q:10`.)
+
+   **Resposta literal:** “A C5 consulta a autoridade da rescisão; continua sem consultar os demais portões de `classificar_export` e os filtros do retentor.” (`v2.r:1`.)
+
+   **Triagem e motivo literal:** “Equivalencia com classificar_export inteiro [...] NAO provada: fora do recorte (aval "comp que ele segura" = rescisao+retentor pela triagem v2)”. (`v3_triagem:3`.)
+
+   O alerta sobre a composição incompleta foi visto. A triagem redefiniu a comparação e posteriormente declarou “derivacao paralela ausente”. (`v2.r:1`; `v3_triagem:3,8`.) Na cópia, a C5 compõe diretamente as duas funções; o registro aponta `classificar_export` como juiz, e existe leitor que primeiro consulta esse classificador. (`app/escala/services/cadastro_realidade.py:158,169–172`; `app/core/juizes.py:298–299`; `app/folha/fora_da_folha.py:115–137`.)
+
+2. **Desligado sem demissão/sem fechamento incluído na C5 — (b), com identificação anterior parcial do encadeamento.**
+
+   **Pergunta literal:** “O conjunto de dias que colabs_nunca_bateu devolve para um desligado coincide com o conjunto que folha/export.py::classificar_export seguraria [...]? Construa contra-exemplos: [...] demissao nula”. (`v2.q:7`.)
+
+   **Resposta literal:** “Sem fechamento, não existe item na classificação padrão; acrescentando um fechamento, ele sairia por `sem_codigo_dominio`, antes de `espelho_nunca_bateu`. Portanto a igualdade testada não prova a igualdade perguntada.” (`v2.r:24`.)
+
+   **Triagem e motivo literal:** “Equivalencia com classificar_export inteiro (sem fechamento, sem_codigo_dominio, ferias_com_batida, cadastro_zero) NAO provada: fora do recorte”. (`v3_triagem:3`.)
+
+   **Ressalva:** essa resposta não explicita a ligação específica entre demissão nula e exclusão do universo do fechamento. Ela identifica, porém, a ausência de fechamento nas próprias fixtures e o consequente desencontro com a classificação — inclusive o “inverso” mencionado pelo opus. Por isso classifico o achado numerado em (b), sem atribuir ao Codex uma descrição completa que ele não escreveu. (`v2.r:24`; `opus_final_97411e5c.md:3`.)
+
+   O encadeamento específico é verificável no código: desligado com demissão nula fica fora do universo; a classificação padrão percorre fechamentos; o teste exige que seus dias entrem na C5. (`app/ponto/services/fechamento.py:402,423–432`; `app/folha/export.py:775–780`; `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:86–90`.)
+
+3. **Testemunha repete a composição e fixture não tem fechamento — (b), falha da triagem.**
+
+   **Pergunta literal:** “testemunha = exportacao da folha” e “selo/RED sem mordida (os testes mordem os mutantes relevantes? qual mutante sobreviveria?)”. (`v2.q:3,10`.) [nao verificado]
+
+   **Resposta literal:** “O helper chama somente `sai_pela_rescisao` e `motivos_retencao_celula`; o classificador real exige fechamento”. Também: “Portanto a igualdade testada não prova a igualdade perguntada.” (`v2.r:22,24`.)
+
+   **Triagem e motivo literal:** “Testemunha do teste = a mesma funcao, contraexemplos do Codex [...] viram casos.” Depois, a classificação inteira foi considerada “fora do recorte”. (`v2.triagem:2`; `v3_triagem:3`.) [nao verificado]
+
+   A cura adotada incorporou filtros do retentor, mas manteve a testemunha composta pelas mesmas duas autoridades da implementação. A fixture cria colaborador e células; o helper recompõe rescisão + retenção. (`app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:31–35,49–60`; `app/escala/services/cadastro_realidade.py:169–172`.)
+
+4. **Equivalência inteira não provada deixada como informativa — (b), falha da triagem.**
+
+   **Pergunta literal:** “Os descartes [...] item 2: limite ate ontem e classificar_export inteiro fora do recorte [...] procedem?” (`v3b.q:3`.)
+
+   **Resposta literal:** “O descarte de escopo procede; igualdade com todo `classificar_export` continua sem demonstração.” (`v3b.r:38`.)
+
+   **Triagem e motivo literal:** “2 PROCEDENTE informativo” e “fora do recorte (aval "comp que ele segura" = rescisao+retentor pela triagem v2)”. (`v3_triagem:3`.)
+
+   Aqui o rebaixamento está documentado diretamente: o limite foi reconhecido e aceito. A pergunta 3b voltou a submetê-lo à revisão, e o Codex concordou com o descarte. (`v3_triagem:3`; `v3b.q:3`; `v3b.r:38`.)
+
+5. **Exceção elimina toda a C5, mas a lista continua — (b), falha da triagem.**
+
+   **Pergunta literal:** “Os descartes (item 3: excecao no retentor derruba a C5 [...] ) procedem?” (`v3b.q:3`.)
+
+   **Resposta literal:** “`lista()` captura antes de incorporar qualquer C5, inclusive dos ativos. A lista continua após registrar a exceção.” (`v3b.r:32`.)
+
+   **Triagem e motivo literal:** “DESCARTADO (duvida operacional)” porque “falha ALTA e a lei da casa” e “engolir por colab seria band-aid”. (`v3_triagem:4`.)
+
+   O Codex também contestou essa justificativa: o comentário citado tratava de campos nulos do fechamento, e “descartar a ressalva operacional por essa justificativa não procede”. (`v3b.r:34`.) O código confirma a perda da contribuição C5 com registro da exceção e continuação da lista. A expressão da triagem posterior “derruba a lista() inteira” é imprecisa. (`app/escala/services/cadastro_realidade.py:813–822`; `v3b.triagem:15–17`.)
+
+As execuções de M6, RED e suíte, ocorrências em produção e eventuais omissões de opus anteriores permanecem **[não verificado]**. A análise estática dos testes e dos caminhos acima sustenta as classificações sem depender dessas execuções. (`app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:31–90`; `app/escala/services/cadastro_realidade.py:169–177,813–819`.)
+
+**Contagem por achado numerado, incluindo as sobreposições entre eles:** (`opus_final_97411e5c.md:2–6`; evidências discriminadas acima.)
+
+| Classe | Quantidade |
+|---|---:|
+| (a) Codex não viu, tema perguntado | 0 |
+| (b) Codex viu; triagem descartou/rebaixou | **5** |
+| (c) Fora do alcance | 0 |
+| (e) Não perguntado | 0 |
+| (d) Modo-comum demonstrado | 0 |
+| **Total** | **5** |
+
+## 06/11 17:07 · sessao 2c03cec8cc75 · - · - · origem=Ronald (tmux)
+
+Contagens abaixo em **colabs/dias-colab**, apenas das linhas `DONO` emitidas; `—` significa ausência de linha daquela classe no texto. Cada célula referencia a chave `DONO|competência|rubrica|classe` das partes indicadas e permanece `[nao verificado]` por ser transcrição sem arquivo:linha.
+
+| 10/2026 — rubrica | ESTRUTURA: parcelas → soma | CADASTRO: parcelas → soma | BATIDA: parcelas → soma |
+|---|---|---|---|
+| horas_trabalhadas | P3 1/1 → **1/1** | P1 1/1 + P2 1/1 + P5 3/3 + P6 1/1 → **6/6** | P3 1/1 → **1/1** |
+| horas_intra_indenizada | P3 1/1 → **1/1** | P3 3/6 + P4 2/3 + P5 1/7 + P6 2/8 → **8/24** | P1 1/2 + P3 2/2 → **3/4** |
+| horas_extras_50 | — | P4 1/2 + P5 2/5 + P6 1/1 → **4/8** | — |
+| horas_extras_100 | P2 1/1 + P3 1/1 → **2/2** | — | — |
+| horas_extras_100_feriado | P2 1/1 + P3 1/1 → **2/2** | — | — |
+| horas_extras_50_noturna | — | — | — |
+| horas_extras_100_noturna | P1 3/3 + P4 2/2 + P5 1/1 → **6/6** | P2 2/2 + P6 1/1 → **3/3** | — |
+| horas_folga_trabalhada | — | — | — |
+| horas_noturnas | P2 2/9 + P4 1/3 + P5 1/2 → **4/14** | P5 1/1 → **1/1** | P5 1/1 → **1/1** |
+| horas_atraso | P1 1/1 + P2 2/3 + P3 1/1 + P5 1/1 → **5/6** | P2 1/1 + P4 1/1 → **2/2** | — |
+| horas_saida_antecipada | P3 1/1 → **1/1** | P4 1/1 → **1/1** | — |
+
+Todas as células da tabela: `[nao verificado — DONO|2026-10|rubrica|classe, P1..P6]`.
+
+| 11/2026 — rubrica | ESTRUTURA: parcelas → soma | CADASTRO: parcelas → soma | BATIDA: parcelas → soma |
+|---|---|---|---|
+| horas_trabalhadas | — | P2 1/1 + P5 3/5 → **4/6** | P3 1/1 → **1/1** |
+| horas_intra_indenizada | — | P1 1/1 + P3 1/1 + P4 1/2 + P5 3/8 + P6 2/6 → **8/18** | P5 1/2 → **1/2** |
+| horas_extras_50 | — | P5 3/3 + P6 1/2 → **4/5** | — |
+| horas_extras_100 | P2 1/1 + P3 1/1 + P4 1/1 → **3/3** | P5 1/1 → **1/1** | P5 1/2 → **1/2** |
+| horas_extras_100_feriado | P2 1/1 + P3 1/1 + P4 1/1 → **3/3** | P5 1/1 → **1/1** | — |
+| horas_extras_50_noturna | — | — | — |
+| horas_extras_100_noturna | P1 2/2 + P2 2/2 + P4 2/2 → **6/6** | P2 1/1 + P3 1/1 + P6 1/1 → **3/3** | — |
+| horas_folga_trabalhada | — | — | — |
+| horas_noturnas | — | — | — |
+| horas_atraso | P2 1/1 + P4 1/1 → **2/2** | P4 1/3 + P5 1/1 → **2/4** | — |
+| horas_saida_antecipada | P6 1/1 → **1/1** | P4 1/3 + P5 1/1 → **2/4** | — |
+
+Todas as células da tabela: `[nao verificado — DONO|2026-11|rubrica|classe, P1..P6]`.
+
+**Não somar colabs entre donos como união:** um colaborador pode aparecer em classes diferentes em dias distintos. Exemplos concretos: em 10/2026, intra soma `12` presenças nos donos contra `10` colabs na união de `PARCIAL`; noturnas soma `6` contra `4`. Em 11/2026, intra soma `9` contra `8`; extras_100 soma `5` contra `4`. `[nao verificado — DONO e PARCIAL das respectivas rubricas, P1..P6]`
+
+Somas de `partes_h` das linhas **`SOMA DIVERGENCIA`**, calculadas com `Decimal`, sem arredondamento intermediário. Estes valores representam a divergência atribuída e **não substituem** `Σ(Decimal(PARCIAL.v3_h) − Decimal(PARCIAL.v2_h))`, que inclui resíduos. `[nao verificado — SOMA DIVERGENCIA|competência|rubrica|partes_h, P1..P6]`
+
+| Rubrica | 10/2026: Σ partes_h | 11/2026: Σ partes_h |
+|---|---:|---:|
+| horas_trabalhadas | -22.4888848341666705 | -23.9155754230555561 |
+| horas_intra_indenizada | -22.85860694444444556 | -17.39179638888888795 |
+| horas_extras_50 | 1.19472173305555515 | -2.95532467444444169 |
+| horas_extras_100 | 23.135103333333331 | 29.0182865599999961 |
+| horas_extras_100_feriado | 23.135103333333331 | 25.0159901711111061 |
+| horas_extras_50_noturna | 0 | 0 |
+| horas_extras_100_noturna | 11.54273918194444492 | 13.2956696391666664 |
+| horas_folga_trabalhada | 0 | 0 |
+| horas_noturnas | 0.57112954714284966 | 0 |
+| horas_atraso | 10.5703825000000005 | 1.827685833333333356 |
+| horas_saida_antecipada | -0.74333333333333329 | 3.500166944444443826 |
+
+Todas as células da tabela: `[nao verificado — SOMA DIVERGENCIA|competência|rubrica|partes_h, P1..P6]`.
+
+Parcelas de `partes_h`, na ordem P1, P2, P3, P4, P5, P6, para auditoria da soma:
+
+```text
+10/2026
+horas_trabalhadas:
+-2.5428905555555561; -2.8423052777777782; -3.0353216666666674; 0; -9.5403020563888905; -4.5280652777777783
+horas_intra_indenizada:
+-2; 0; -4.0566669444444443; -0.63527333333333336; -8.1666666666666679; -8
+horas_extras_50:
+0; 0; 0; -0.50294833333333311; 1.4735158538888897; 0.22415421249999856
+horas_extras_100 e horas_extras_100_feriado, cada:
+0; 10.985971388888888; 12.149131944444443; 0; 0; 0
+horas_extras_100_noturna:
+2.0639545019444445; 6.1646777861111115; 0; 1.4042363383333334; 0.90987055555555552; 1
+horas_noturnas:
+0; -2.5623561507936552; 0; 2.571669983650791; 0.56181571428571386; 0
+horas_atraso:
+2.3685; 4.5787158333333338; 1.1068333333333333; 0.186; 2.3303333333333334; 0
+horas_saida_antecipada:
+0; 0; -0.5571666666666667; -0.18616666666666659; 0; 0
+
+11/2026
+horas_trabalhadas:
+0; -2.8425216666666664; -3.9930194444444447; 0; -17.080034311944445; 0
+horas_intra_indenizada:
+-1.1666666666666667; 0; -1; 0.40334305555555555; -9.6284727777777768; -6
+horas_extras_50:
+0; 0; 0; 0; -3.3361696744444429; 0.38084500000000121
+horas_extras_100:
+0; -7.0528018630555556; 12.066969811944444; 3.9582752777777777; 20.04584333333333; 0
+horas_extras_100_feriado:
+0; -7.0528018630555556; 12.066969811944444; 3.9582752777777777; 16.04354694444444; 0
+horas_extras_100_noturna:
+1.1387258297222222; 7.8098224536111109; 1; 1.4858424669444446; 0; 1.8612788888888887
+horas_atraso:
+0; 0.62282416666666662; 0; 1.1285283333333334; 0.076333333333333336; 0
+horas_saida_antecipada:
+0; 0; 0; -0.75533333333333341; -0.076333333333333364; 4.3318336111111106
+```
+
+Todas as parcelas: `[nao verificado — SOMA DIVERGENCIA|competência|rubrica|partes_h, P1..P6]`. As rubricas omitidas desse bloco têm seis `partes_h=0` emitidos: extras_50_noturna e folga_trabalhada nos dois meses, mais noturnas em novembro. `[nao verificado — mesmas chaves]`
 
 ## 06/11 17:05 · sessao 2588e3e439fa · - · - · origem=Ronald (tmux)
 
@@ -1228,595 +1619,4 @@ Análise estática da cópia; comparação com o pai, execução da suíte e oco
 
 - **A atomicidade banco/arquivo continua limitada:** `_grava` usa arquivo temporário e `os.replace`, sem mecanismo que reverta o arquivo em caso de rollback posterior. O `atomic` envolve as escritas do banco e a chamada ao filesystem, mas não estabelece uma transação comum entre os dois recursos. (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:182`, `:201`, `:274`, `:277`.)
 
-## 06/11 14:44 · sessao d36652b83984 · - · - · origem=Ronald (tmux)
-
-Mapa de proveniência, limitado ao código lido:
-
-| Campo | Quem escreve | Quem lê |
-|---|---|---|
-| `Pauta.texto` | Este comando monta cabeça/filhas e chama `_ps.escrever` em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:166`, `:168`, `:191`, `:195`; a persistência é `Pauta.objects.create(texto=texto[:500])` em `app/pautas/services.py:180`, `:185`. Entradas humanas passam texto livre da view para o mesmo service: `app/pautas/views.py:76`, `:81`, `:109`, `:113`; respostas passam por `app/pautas/services.py:192`, `:200`. | Deduplicação da cabeça por prefixo em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:226`; comparação das filhas em `:234`, `:236`. Payload da tela em `app/pautas/views.py:40`, `:47`; DOM via `textContent` em `app/templates/core/_copiloto.html:405`, `:424`. API de mensageria em `app/api/views_mensageria.py:1334`; detalhe do colaborador em `app/templates/colaboradores/detalhe.html:119`. |
-| `feito_em` | Humano destinatário: `marcar_feita`, com guarda de destinatário e atualização em `app/pautas/services.py:240`, `:247`, `:248`. Sistema: `marcar_feita_pelo_sistema`, atualização em `app/pautas/services.py:256`, `:272`, `:273`; há chamador concreto em `app/pautas/semanal.py:226`, `:229`. View humana chama o service em `app/pautas/views.py:101`, `:103`. | Avisos deste comando em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:211`, `:238`; reversão pula feitas em `:253`. `PautaQuerySet.vivas()` em `app/pautas/models.py:57`, `:58`; estado/botões da tela em `app/pautas/views.py:43`, `:56`, `:58`. O próprio cancelamento recusa feita em `app/pautas/services.py:290`. |
-| `cancelado_em` | `cancelar`: valida autoria, recusa feita e atualiza em `app/pautas/services.py:288`, `:290`, `:294`. View chama em `app/pautas/views.py:120`, `:123`; reversão chama em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:256`. | Reversão pula canceladas em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:251`; `nao_canceladas()` filtra em `app/pautas/models.py:60`, `:64`, usado pela deduplicação e comparação em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:226`, `:234`. |
-| JSON de reversão | `_escrever` monta `mes`, `ano`, `gerado_em`, `pautas` e `plano` em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:155`, `:157`; cria arquivo inicial em `:159`; acrescenta somente `novos`, obtidos das chamadas de escrita, em `:193`, `:195`, `:200`; serializa com `json.dump`, temporário e `os.replace` em `:274`, `:276`, `:277`. | `_reverter` carrega JSON em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:246`, `:247` e usa **somente `rev['pautas']`**, consultando PK em `:249`, `:250`. Não confere `mes`, `ano`, `plano`, schema, chave textual ou identidade do ato antes de cancelar; passa o próprio `p.autor_user` à porta em `:256`. |
-
-O contador lê esses estados por `Pauta.objects.vivas()` em `app/pautas/services.py:348`; listas também passam por `nao_canceladas()`/`vivas()` em `:323`, `:327`. Isso é leitura de estado, sem evidência de novo ciclo de trava nestas linhas (`app/pautas/services.py:348`, `:352`, `:354`).
-
-Consequência concreta para “pauta que não é deste ato”: um arquivo de outra competência/schema, contendo PK que existe no banco corrente, será resolvido exclusivamente por esse PK; se a pauta estiver não feita/não cancelada, `_reverter` chama `cancelar(p, p.autor_user)`, satisfazendo a guarda de autoria com o autor da própria pauta consultada (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:249`, `:250`, `:251`, `:253`, `:256`; `app/pautas/services.py:288`). Ocorrência desse uso em produção: [nao verificado].
-
-## 06/11 14:40 · sessao d5d516c38a29 · V3-IMPACTO-COM-DONO · sonda · origem=Code
-
-Todas as linhas `SOMA` da parte apresentam indicadores `True`. Não há ocorrência de `INCOMPLETO` no dado fornecido. [nao verificado]
-
-Transcrição integral do dado recebido: [nao verificado]
-
-```text
-sonda_leitura: script.py [ed91ca5ab97aac60] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-
-PARTE|4|6
-FINALIDADE|IMPACTO_NUNCA_VALIDACAO
-BASE_SOMAS|COLABORADORES_MEDIDOS
-COBERTURA_SOMA|MEDIDOS_MAIS_EXCLUIDOS_IGUAL_UNIVERSO_PARTE
-ATO|hoje=2026-11-06|agora=2026-11-06T14:30:57.486394-03:00
-FORA_DA_MEDIDA|horas_falta
-FORA_DA_MEDIDA|horas_reflexo_dsr
-FORA_DA_MEDIDA|saldo_banco_horas
-UNIVERSO|2026-10|colabs_porta=624
-UNIVERSO_PARTE 2026-10 96
-MEDIDO|2026-10|col27
-MEDIDO|2026-10|col33
-MEDIDO|2026-10|col39
-MEDIDO|2026-10|col51
-MEDIDO|2026-10|col63
-MEDIDO|2026-10|col69
-RECUSA|2026-10|col75|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=30
-EXCLUIDO|2026-10|col75|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-10|col81
-MEDIDO|2026-10|col87
-DIA|2026-10|horas_atraso|col87|2026-09-22|CADASTRO|0|0.186|0.186
-DIA|2026-10|horas_saida_antecipada|col87|2026-09-22|CADASTRO|1.0746666666666667|0.88850000000000007|-0.18616666666666659
-MEDIDO|2026-10|col93
-MEDIDO|2026-10|col99
-MEDIDO|2026-10|col111
-MEDIDO|2026-10|col117
-MEDIDO|2026-10|col123
-MEDIDO|2026-10|col129
-MEDIDO|2026-10|col141
-MEDIDO|2026-10|col159
-MEDIDO|2026-10|col165
-MEDIDO|2026-10|col171
-MEDIDO|2026-10|col177
-MEDIDO|2026-10|col189
-MEDIDO|2026-10|col195
-MEDIDO|2026-10|col207
-MEDIDO|2026-10|col219
-RECUSA|2026-10|col225|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=25
-EXCLUIDO|2026-10|col225|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-10|col231
-MEDIDO|2026-10|col237
-MEDIDO|2026-10|col243
-MEDIDO|2026-10|col249
-MEDIDO|2026-10|col255
-MEDIDO|2026-10|col267
-RECUSA|2026-10|col291|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=15
-EXCLUIDO|2026-10|col291|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-10|col297
-MEDIDO|2026-10|col303
-MEDIDO|2026-10|col309
-MEDIDO|2026-10|col327
-MEDIDO|2026-10|col345
-MEDIDO|2026-10|col351
-MEDIDO|2026-10|col357
-MEDIDO|2026-10|col363
-MEDIDO|2026-10|col369
-HISTORICO_T|2026-10|col393|sem_resultado_do_fechamento|1
-EXCLUIDO|2026-10|col393|PRODUTO:SEM_RETORNO_FECHAMENTO
-MEDIDO|2026-10|col399
-MEDIDO|2026-10|col411
-RECUSA|2026-10|col417|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=10
-EXCLUIDO|2026-10|col417|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-10|col435
-MEDIDO|2026-10|col441
-MEDIDO|2026-10|col465
-MEDIDO|2026-10|col489
-DIA|2026-10|horas_noturnas|col489|2026-09-23|ESTRUTURA|6.0007740680555548|6.8580275063492051|0.85725343829365031
-DIA|2026-10|horas_noturnas|col489|2026-09-25|ESTRUTURA|6.000494001111111|6.8577074298412688|0.85721342873015782
-DIA|2026-10|horas_noturnas|col489|2026-09-27|ESTRUTURA|6.0004218163888892|6.8576249330158721|0.8572031166269829
-MEDIDO|2026-10|col507
-MEDIDO|2026-10|col549
-HISTORICO_T|2026-10|col555|sem_resultado_do_fechamento|1
-EXCLUIDO|2026-10|col555|PRODUTO:SEM_RETORNO_FECHAMENTO
-MEDIDO|2026-10|col567
-MEDIDO|2026-10|col579
-MEDIDO|2026-10|col627
-MEDIDO|2026-10|col639
-RECUSA|2026-10|col645|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=30
-EXCLUIDO|2026-10|col645|PRODUTO:RECUSA_PORTA_SEM_DONO
-HISTORICO_T|2026-10|col651|sem_resultado_do_fechamento|1
-EXCLUIDO|2026-10|col651|PRODUTO:SEM_RETORNO_FECHAMENTO
-MEDIDO|2026-10|col663
-HISTORICO_T|2026-10|col669|sem_resultado_do_fechamento|1
-EXCLUIDO|2026-10|col669|PRODUTO:SEM_RETORNO_FECHAMENTO
-RECUSA|2026-10|col675|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=30
-EXCLUIDO|2026-10|col675|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-10|col699
-RECUSA|2026-10|col717|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=30
-EXCLUIDO|2026-10|col717|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-10|col723
-MEDIDO|2026-10|col735
-MEDIDO|2026-10|col741
-MEDIDO|2026-10|col747
-MEDIDO|2026-10|col789
-MEDIDO|2026-10|col819
-MEDIDO|2026-10|col825
-DIA|2026-10|horas_extras_100_noturna|col825|2026-10-12|ESTRUTURA|0|0.56262055555555557|0.56262055555555557
-MEDIDO|2026-10|col843
-MEDIDO|2026-10|col849
-DIA|2026-10|horas_intra_indenizada|col849|2026-10-09|CADASTRO|1|0|-1
-DIA|2026-10|horas_extras_100_noturna|col849|2026-10-12|ESTRUTURA|0|0.84161578277777771|0.84161578277777771
-MEDIDO|2026-10|col855
-MEDIDO|2026-10|col861
-MEDIDO|2026-10|col873
-MEDIDO|2026-10|col879
-MEDIDO|2026-10|col885
-MEDIDO|2026-10|col891
-MEDIDO|2026-10|col903
-MEDIDO|2026-10|col909
-MEDIDO|2026-10|col915
-DIA|2026-10|horas_intra_indenizada|col915|2026-09-27|CADASTRO|0|0.18198583333333324|0.18198583333333324
-DIA|2026-10|horas_intra_indenizada|col915|2026-10-01|CADASTRO|0|0.18274083333333344|0.18274083333333344
-DIA|2026-10|horas_extras_50|col915|2026-09-27|CADASTRO|0.32020749999999981|0|-0.32020749999999981
-DIA|2026-10|horas_extras_50|col915|2026-10-01|CADASTRO|0.51604972222222234|0.33330888888888904|-0.1827408333333333
-MEDIDO|2026-10|col921
-HISTORICO_T|2026-10|col927|sem_resultado_do_fechamento|1
-EXCLUIDO|2026-10|col927|PRODUTO:SEM_RETORNO_FECHAMENTO
-MEDIDO|2026-10|col933
-MEDIDO|2026-10|col939
-MEDIDO|2026-10|col945
-MEDIDO|2026-10|col951
-MEDIDO|2026-10|col957
-EXCLUIDO|2026-10|col963|PRODUTO:MOTOR_FECHAMENTO_horas_trabalhadas
-RECUSA|2026-10|col969|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=21
-EXCLUIDO|2026-10|col969|PRODUTO:RECUSA_PORTA_SEM_DONO
-RECUSA|2026-10|col975|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=0
-EXCLUIDO|2026-10|col975|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-10|col981
-MEDIDO|2026-10|col987
-MEDIDO|2026-10|col993
-RECUSA|2026-10|col999|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=0
-EXCLUIDO|2026-10|col999|PRODUTO:RECUSA_PORTA_SEM_DONO
-RECUSA|2026-10|col1005|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=0
-EXCLUIDO|2026-10|col1005|PRODUTO:RECUSA_PORTA_SEM_DONO
-COBERTURA_COLAB|2026-10|medidos=79|universo_parte=96|excluidos=17
-COBERTURA_INTEGRAL|2026-10|False
-PRODUTO|2026-10|DIA_FORA_UNIVERSO_PORTA|48|321
-PRODUTO|2026-10|MOTOR_FECHAMENTO_horas_trabalhadas|1|19
-PRODUTO|2026-10|RECUSA_PORTA_SEM_DONO|11|191
-PRODUTO|2026-10|SEM_DECISAO_horas_atraso|49|340
-PRODUTO|2026-10|SEM_DECISAO_horas_extras_100|49|340
-PRODUTO|2026-10|SEM_DECISAO_horas_extras_100_feriado|49|340
-PRODUTO|2026-10|SEM_DECISAO_horas_extras_100_noturna|49|340
-PRODUTO|2026-10|SEM_DECISAO_horas_extras_50|49|340
-PRODUTO|2026-10|SEM_DECISAO_horas_extras_50_noturna|49|340
-PRODUTO|2026-10|SEM_DECISAO_horas_folga_trabalhada|48|321
-PRODUTO|2026-10|SEM_DECISAO_horas_intra_indenizada|48|321
-PRODUTO|2026-10|SEM_DECISAO_horas_noturnas|49|332
-PRODUTO|2026-10|SEM_DECISAO_horas_saida_antecipada|49|340
-PRODUTO|2026-10|SEM_DECISAO_horas_trabalhadas|48|321
-PRODUTO|2026-10|SEM_RETORNO_FECHAMENTO|5|0
-DIAS_NAO_LOCALIZADOS|2026-10|PRODUTO|SEM_RETORNO_FECHAMENTO|colabs=5
-RESIDUO|2026-10|horas_trabalhadas|ATE_LIMIAR|11069.925809861945|11069.925809861945|-1.865174681370263e-14|79|1236
-RESIDUO|2026-10|horas_trabalhadas|SEM_DECISAO|54.076144343611112|54.076144343611112|0|48|321
-PARCIAL|2026-10|horas_trabalhadas|v2_h=11069.925809861945|v3_h=11069.925809861945|autoridade2_h=11124.001954205556|autoridade3_h=11124.001954205556|porta_h=11069.925809861945|emitido_decidido_h=11069.925809861945|fm_dias=11123.99|fm_retorno=11123.99|colabs_div=0|dias_colab_div=0
-RUBRICA|2026-10|horas_trabalhadas|11069.925809861945|11069.925809861945|0|0|0
-INSTRUMENTO_HISTORICO|2026-10|horas_trabalhadas|v2_h=11034.459172286666|v3_h=11069.925809861945|delta_h=35.466637575278583|colabs=79
-DONO|2026-10|horas_intra_indenizada|CADASTRO|1|0.36472666666666664|-0.63527333333333336|2|3
-RESIDUO|2026-10|horas_intra_indenizada|ATE_LIMIAR|278.88592557722222|278.88592557722222|0|79|1233
-RESIDUO|2026-10|horas_intra_indenizada|SEM_DECISAO|0|0|0|48|321
-PARCIAL|2026-10|horas_intra_indenizada|v2_h=279.88592557722222|v3_h=279.25065224388891|autoridade2_h=279.88592557722222|autoridade3_h=279.25065224388891|porta_h=279.25065224388891|emitido_decidido_h=279.25065224388891|fm_dias=279.88|fm_retorno=279.88|colabs_div=2|dias_colab_div=3
-RUBRICA|2026-10|horas_intra_indenizada|279.88592557722222|279.25065224388891|-0.63527333333331626|2|3
-INSTRUMENTO_HISTORICO|2026-10|horas_intra_indenizada|v2_h=279.50901613277779|v3_h=279.25065224388891|delta_h=-0.25836388888887996|colabs=79
-DONO|2026-10|horas_extras_50|CADASTRO|0.83625722222222221|0.33330888888888904|-0.50294833333333311|1|2
-RESIDUO|2026-10|horas_extras_50|ATE_LIMIAR|11.450561862500001|11.450561862499999|-1.7763568394002505e-15|79|1215
-RESIDUO|2026-10|horas_extras_50|SEM_DECISAO|0.43086277777777771|0.43086277777777771|0|49|340
-PARCIAL|2026-10|horas_extras_50|v2_h=12.286819084722222|v3_h=11.783870751388887|autoridade2_h=12.717681862500001|autoridade3_h=12.214733529166665|porta_h=11.783870751388887|emitido_decidido_h=11.783870751388887|fm_dias=12.72|fm_retorno=12.72|colabs_div=1|dias_colab_div=2
-RUBRICA|2026-10|horas_extras_50|12.286819084722222|11.783870751388887|-0.50294833333333422|1|2
-INSTRUMENTO_HISTORICO|2026-10|horas_extras_50|v2_h=12.717681862500001|v3_h=11.783870751388889|delta_h=-0.93381111111111181|colabs=79
-RESIDUO|2026-10|horas_extras_100|ATE_LIMIAR|56.767440009722222|56.767440009722222|-3.5527136788005009e-15|79|1217
-RESIDUO|2026-10|horas_extras_100|SEM_DECISAO|0|0|0|49|340
-PARCIAL|2026-10|horas_extras_100|v2_h=56.767440009722222|v3_h=56.767440009722222|autoridade2_h=56.767440009722222|autoridade3_h=56.767440009722222|porta_h=56.767440009722222|emitido_decidido_h=56.767440009722222|fm_dias=56.76|fm_retorno=56.76|colabs_div=0|dias_colab_div=0
-RUBRICA|2026-10|horas_extras_100|56.767440009722222|56.767440009722222|0|0|0
-INSTRUMENTO_HISTORICO|2026-10|horas_extras_100|v2_h=56.767440009722222|v3_h=56.767440009722222|delta_h=0|colabs=79
-RESIDUO|2026-10|horas_extras_100_feriado|ATE_LIMIAR|56.161124683055554|56.161124683055554|-3.5527136788005009e-15|79|1217
-RESIDUO|2026-10|horas_extras_100_feriado|SEM_DECISAO|0|0|0|49|340
-PARCIAL|2026-10|horas_extras_100_feriado|v2_h=56.161124683055554|v3_h=56.161124683055554|autoridade2_h=56.161124683055554|autoridade3_h=56.161124683055554|porta_h=56.161124683055554|emitido_decidido_h=56.161124683055554|fm_dias=56.16|fm_retorno=56.16|colabs_div=0|dias_colab_div=0
-RUBRICA|2026-10|horas_extras_100_feriado|56.161124683055554|56.161124683055554|0|0|0
-INSTRUMENTO_HISTORICO|2026-10|horas_extras_100_feriado|v2_h=0|v3_h=56.161124683055554|delta_h=56.161124683055554|colabs=79
-RESIDUO|2026-10|horas_extras_50_noturna|ATE_LIMIAR|0.47472906281506683|0.47472906281506683|0|79|1217
-RESIDUO|2026-10|horas_extras_50_noturna|SEM_DECISAO|0|0|0|49|340
-PARCIAL|2026-10|horas_extras_50_noturna|v2_h=0.47472906281506683|v3_h=0.47472906281506683|autoridade2_h=0.47472906281506683|autoridade3_h=0.47472906281506683|porta_h=0.47472906281506683|emitido_decidido_h=0.47472906281506683|fm_dias=0.47|fm_retorno=0.47|colabs_div=0|dias_colab_div=0
-RUBRICA|2026-10|horas_extras_50_noturna|0.47472906281506683|0.47472906281506683|0|0|0
-INSTRUMENTO_HISTORICO|2026-10|horas_extras_50_noturna|v2_h=0|v3_h=0.47472906281506683|delta_h=0.47472906281506683|colabs=79
-DONO|2026-10|horas_extras_100_noturna|ESTRUTURA|0|1.4042363383333334|1.4042363383333334|2|2
-RESIDUO|2026-10|horas_extras_100_noturna|ATE_LIMIAR|5.1377437149627116|5.1377437149627116|0|79|1215
-RESIDUO|2026-10|horas_extras_100_noturna|SEM_DECISAO|0|0|0|49|340
-PARCIAL|2026-10|horas_extras_100_noturna|v2_h=5.1377437149627116|v3_h=6.5419800532960446|autoridade2_h=5.1377437149627116|autoridade3_h=6.5419800532960446|porta_h=6.5419800532960446|emitido_decidido_h=6.5419800532960446|fm_dias=5.14|fm_retorno=5.14|colabs_div=2|dias_colab_div=2
-RUBRICA|2026-10|horas_extras_100_noturna|5.1377437149627116|6.5419800532960446|1.4042363383333329|2|2
-INSTRUMENTO_HISTORICO|2026-10|horas_extras_100_noturna|v2_h=0|v3_h=6.5419800532960446|delta_h=6.5419800532960446|colabs=79
-RESIDUO|2026-10|horas_folga_trabalhada|ATE_LIMIAR|0|0|0|79|1236
-RESIDUO|2026-10|horas_folga_trabalhada|SEM_DECISAO|0|0|0|48|321
-PARCIAL|2026-10|horas_folga_trabalhada|v2_h=0|v3_h=0|autoridade2_h=0|autoridade3_h=0|porta_h=0|emitido_decidido_h=0|fm_dias=0.0|fm_retorno=0.0|colabs_div=0|dias_colab_div=0
-RUBRICA|2026-10|horas_folga_trabalhada|0|0|0|0|0
-INSTRUMENTO_HISTORICO|2026-10|horas_folga_trabalhada|v2_h=89.542781918888892|v3_h=0|delta_h=-89.542781918888892|colabs=79
-DONO|2026-10|horas_noturnas|ESTRUTURA|18.001689885555557|20.573359869206346|2.571669983650791|1|3
-RESIDUO|2026-10|horas_noturnas|ATE_LIMIAR|2489.2247011865875|2489.2247011865875|-7.9936057773011271e-15|79|1222
-RESIDUO|2026-10|horas_noturnas|SEM_DECISAO|0|0|0|49|332
-PARCIAL|2026-10|horas_noturnas|v2_h=2507.2263910721426|v3_h=2509.7980610557938|autoridade2_h=2507.2263910721426|autoridade3_h=2509.7980610557938|porta_h=2509.7980610557938|emitido_decidido_h=2509.7980610557938|fm_dias=2507.23|fm_retorno=2507.23|colabs_div=1|dias_colab_div=3
-RUBRICA|2026-10|horas_noturnas|2507.2263910721426|2509.7980610557938|2.5716699836511907|1|3
-INSTRUMENTO_HISTORICO|2026-10|horas_noturnas|v2_h=2451.6395532943652|v3_h=2509.7980610557938|delta_h=58.158507761428609|colabs=79
-DONO|2026-10|horas_atraso|CADASTRO|0|0.186|0.186|1|1
-RESIDUO|2026-10|horas_atraso|ATE_LIMIAR|58.961666666666666|58.961705821666669|3.9154999999707618e-05|79|1216
-RESIDUO|2026-10|horas_atraso|SEM_DECISAO|0|0|0|49|340
-PARCIAL|2026-10|horas_atraso|v2_h=58.961666666666666|v3_h=59.147705821666669|autoridade2_h=58.961666666666666|autoridade3_h=59.147705821666669|porta_h=59.147705821666669|emitido_decidido_h=59.147705821666669|fm_dias=58.97|fm_retorno=58.97|colabs_div=1|dias_colab_div=1
-RUBRICA|2026-10|horas_atraso|58.961666666666666|59.147705821666669|0.18603915500000312|1|1
-INSTRUMENTO_HISTORICO|2026-10|horas_atraso|v2_h=58.324833333333338|v3_h=58.510826655000002|delta_h=0.18599332166666471|colabs=79
-DONO|2026-10|horas_saida_antecipada|CADASTRO|1.0746666666666667|0.88850000000000007|-0.18616666666666659|1|1
-RESIDUO|2026-10|horas_saida_antecipada|ATE_LIMIAR|53.484833333333334|53.484736725277777|-9.6608055555502453e-05|79|1216
-RESIDUO|2026-10|horas_saida_antecipada|SEM_DECISAO|0|0|0|49|340
-PARCIAL|2026-10|horas_saida_antecipada|v2_h=54.5595|v3_h=54.373236725277778|autoridade2_h=54.5595|autoridade3_h=54.373236725277778|porta_h=54.373236725277778|emitido_decidido_h=54.373236725277778|fm_dias=54.54|fm_retorno=54.54|colabs_div=1|dias_colab_div=1
-RUBRICA|2026-10|horas_saida_antecipada|54.5595|54.373236725277778|-0.18626327472222215|1|1
-INSTRUMENTO_HISTORICO|2026-10|horas_saida_antecipada|v2_h=54.248333333333335|v3_h=54.062082003055558|delta_h=-0.18625133027777707|colabs=79
-UNIVERSO|2026-11|colabs_porta=578
-UNIVERSO_PARTE 2026-11 91
-MEDIDO|2026-11|col27
-MEDIDO|2026-11|col33
-MEDIDO|2026-11|col39
-MEDIDO|2026-11|col51
-MEDIDO|2026-11|col63
-MEDIDO|2026-11|col69
-RECUSA|2026-11|col75|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=16
-EXCLUIDO|2026-11|col75|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-11|col81
-MEDIDO|2026-11|col87
-DIA|2026-11|horas_intra_indenizada|col87|2026-11-03|CADASTRO|0|0.20321111111111112|0.20321111111111112
-DIA|2026-11|horas_intra_indenizada|col87|2026-11-04|CADASTRO|0|0.20013194444444443|0.20013194444444443
-DIA|2026-11|horas_atraso|col87|2026-10-26|CADASTRO|0|0.20800000000000002|0.20800000000000002
-DIA|2026-11|horas_atraso|col87|2026-11-03|CADASTRO|0|0.33000000000000002|0.33000000000000002
-DIA|2026-11|horas_atraso|col87|2026-11-04|CADASTRO|0|0.21733333333333332|0.21733333333333332
-DIA|2026-11|horas_saida_antecipada|col87|2026-10-26|CADASTRO|1.0506666666666666|0.84249999999999992|-0.20816666666666672
-DIA|2026-11|horas_saida_antecipada|col87|2026-11-03|CADASTRO|0.81133333333333335|0.48149999999999998|-0.32983333333333337
-DIA|2026-11|horas_saida_antecipada|col87|2026-11-04|CADASTRO|0.88200000000000001|0.66466666666666674|-0.21733333333333327
-MEDIDO|2026-11|col93
-MEDIDO|2026-11|col99
-MEDIDO|2026-11|col111
-MEDIDO|2026-11|col117
-MEDIDO|2026-11|col123
-MEDIDO|2026-11|col129
-RECUSA|2026-11|col141|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=24
-EXCLUIDO|2026-11|col141|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-11|col159
-MEDIDO|2026-11|col165
-MEDIDO|2026-11|col171
-RECUSA|2026-11|col177|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=24
-EXCLUIDO|2026-11|col177|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-11|col189
-MEDIDO|2026-11|col195
-MEDIDO|2026-11|col207
-MEDIDO|2026-11|col219
-RECUSA|2026-11|col225|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=16
-EXCLUIDO|2026-11|col225|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-11|col231
-MEDIDO|2026-11|col237
-MEDIDO|2026-11|col243
-MEDIDO|2026-11|col249
-MEDIDO|2026-11|col255
-MEDIDO|2026-11|col267
-RECUSA|2026-11|col291|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=15
-EXCLUIDO|2026-11|col291|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-11|col297
-RECUSA|2026-11|col303|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=23
-E
-
-[truncado em 20000 de 42137 caracteres]
-
-## 06/11 14:30 · sessao c8fbea551bb5 · V3-IMPACTO-COM-DONO · sonda · origem=Code
-
-Todas as linhas `SOMA` da parte apresentam `True`. Não há ocorrência de `INCOMPLETO` no dado fornecido. [nao verificado]
-
-Transcrição integral do dado fornecido, sem verificação independente: [nao verificado]
-
-```text
-sonda_leitura: script.py [c4ac0aa8733fa696] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-
-PARTE|3|6
-FINALIDADE|IMPACTO_NUNCA_VALIDACAO
-BASE_SOMAS|COLABORADORES_MEDIDOS
-COBERTURA_SOMA|MEDIDOS_MAIS_EXCLUIDOS_IGUAL_UNIVERSO_PARTE
-ATO|hoje=2026-11-06|agora=2026-11-06T14:21:50.685272-03:00
-FORA_DA_MEDIDA|horas_falta
-FORA_DA_MEDIDA|horas_reflexo_dsr
-FORA_DA_MEDIDA|saldo_banco_horas
-UNIVERSO|2026-10|colabs_porta=624
-UNIVERSO_PARTE 2026-10 102
-MEDIDO|2026-10|col32
-MEDIDO|2026-10|col38
-MEDIDO|2026-10|col44
-MEDIDO|2026-10|col50
-MEDIDO|2026-10|col56
-MEDIDO|2026-10|col62
-MEDIDO|2026-10|col80
-MEDIDO|2026-10|col92
-MEDIDO|2026-10|col98
-MEDIDO|2026-10|col104
-RECUSA|2026-10|col110|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=30
-EXCLUIDO|2026-10|col110|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-10|col116
-RECUSA|2026-10|col128|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=15
-EXCLUIDO|2026-10|col128|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-10|col134
-MEDIDO|2026-10|col146
-MEDIDO|2026-10|col152
-MEDIDO|2026-10|col170
-MEDIDO|2026-10|col188
-MEDIDO|2026-10|col194
-MEDIDO|2026-10|col200
-MEDIDO|2026-10|col206
-MEDIDO|2026-10|col212
-MEDIDO|2026-10|col218
-MEDIDO|2026-10|col224
-MEDIDO|2026-10|col236
-MEDIDO|2026-10|col242
-MEDIDO|2026-10|col248
-MEDIDO|2026-10|col254
-MEDIDO|2026-10|col266
-MEDIDO|2026-10|col272
-MEDIDO|2026-10|col278
-MEDIDO|2026-10|col284
-MEDIDO|2026-10|col290
-MEDIDO|2026-10|col296
-MEDIDO|2026-10|col302
-MEDIDO|2026-10|col320
-MEDIDO|2026-10|col332
-RECUSA|2026-10|col338|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=2
-EXCLUIDO|2026-10|col338|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-10|col344
-MEDIDO|2026-10|col362
-MEDIDO|2026-10|col368
-DIA|2026-10|horas_atraso|col368|2026-09-21|ESTRUTURA|0|1.1068333333333333|1.1068333333333333
-MEDIDO|2026-10|col374
-MEDIDO|2026-10|col392
-MEDIDO|2026-10|col398
-MEDIDO|2026-10|col416
-RECUSA|2026-10|col422|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=2
-EXCLUIDO|2026-10|col422|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-10|col428
-RECUSA|2026-10|col440|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=30
-EXCLUIDO|2026-10|col440|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-10|col446
-MEDIDO|2026-10|col452
-MEDIDO|2026-10|col464
-EXCLUIDO|2026-10|col476|PRODUTO:MOTOR_FECHAMENTO_horas_trabalhadas
-MEDIDO|2026-10|col482
-HISTORICO_T|2026-10|col506|sem_resultado_do_fechamento|1
-EXCLUIDO|2026-10|col506|PRODUTO:SEM_RETORNO_FECHAMENTO
-MEDIDO|2026-10|col512
-DIA|2026-10|horas_trabalhadas|col512|2026-10-11|ESTRUTURA|6.4782122222222229|11.442890555555556|4.9646783333333326
-DIA|2026-10|horas_intra_indenizada|col512|2026-10-11|ESTRUTURA|0|1|1
-DIA|2026-10|horas_saida_antecipada|col512|2026-10-11|ESTRUTURA|0.5571666666666667|0|-0.5571666666666667
-MEDIDO|2026-10|col518
-MEDIDO|2026-10|col566
-MEDIDO|2026-10|col572
-MEDIDO|2026-10|col584
-MEDIDO|2026-10|col608
-MEDIDO|2026-10|col626
-MEDIDO|2026-10|col638
-DIA|2026-10|horas_intra_indenizada|col638|2026-10-01|CADASTRO|1.5|0|-1.5
-DIA|2026-10|horas_intra_indenizada|col638|2026-10-04|CADASTRO|0|0.49735333333333337|0.49735333333333337
-DIA|2026-10|horas_intra_indenizada|col638|2026-10-11|CADASTRO|0|0.49678972222222223|0.49678972222222223
-RECUSA|2026-10|col644|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=0
-EXCLUIDO|2026-10|col644|PRODUTO:RECUSA_PORTA_SEM_DONO
-RECUSA|2026-10|col650|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=15
-EXCLUIDO|2026-10|col650|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-10|col668
-RECUSA|2026-10|col674|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=30
-EXCLUIDO|2026-10|col674|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-10|col698
-MEDIDO|2026-10|col704
-MEDIDO|2026-10|col746
-MEDIDO|2026-10|col752
-RECUSA|2026-10|col758|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=0
-EXCLUIDO|2026-10|col758|PRODUTO:RECUSA_PORTA_SEM_DONO
-RECUSA|2026-10|col782|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=3
-EXCLUIDO|2026-10|col782|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-10|col788
-DIA|2026-10|horas_trabalhadas|col788|2026-09-24|BATIDA|8.9642727777777775|0.96427277777777776|-8
-DIA|2026-10|horas_intra_indenizada|col788|2026-09-25|CADASTRO|1|0|-1
-DIA|2026-10|horas_intra_indenizada|col788|2026-10-01|CADASTRO|1|0|-1
-DIA|2026-10|horas_intra_indenizada|col788|2026-10-05|BATIDA|1|0.44918999999999998|-0.55081000000000002
-MEDIDO|2026-10|col824
-DIA|2026-10|horas_intra_indenizada|col824|2026-10-04|BATIDA|1|0|-1
-DIA|2026-10|horas_intra_indenizada|col824|2026-10-18|CADASTRO|1|0|-1
-MEDIDO|2026-10|col830
-DIA|2026-10|horas_extras_100|col830|2026-10-12|ESTRUTURA|0|12.149131944444443|12.149131944444443
-DIA|2026-10|horas_extras_100_feriado|col830|2026-10-12|ESTRUTURA|0|12.149131944444443|12.149131944444443
-MEDIDO|2026-10|col836
-MEDIDO|2026-10|col848
-MEDIDO|2026-10|col854
-MEDIDO|2026-10|col860
-MEDIDO|2026-10|col866
-MEDIDO|2026-10|col872
-MEDIDO|2026-10|col878
-MEDIDO|2026-10|col884
-MEDIDO|2026-10|col890
-MEDIDO|2026-10|col902
-MEDIDO|2026-10|col908
-MEDIDO|2026-10|col920
-MEDIDO|2026-10|col926
-MEDIDO|2026-10|col932
-MEDIDO|2026-10|col938
-MEDIDO|2026-10|col944
-MEDIDO|2026-10|col950
-MEDIDO|2026-10|col956
-MEDIDO|2026-10|col962
-EXCLUIDO|2026-10|col968|PRODUTO:MOTOR_FECHAMENTO_horas_trabalhadas
-MEDIDO|2026-10|col974
-MEDIDO|2026-10|col980
-MEDIDO|2026-10|col986
-MEDIDO|2026-10|col992
-RECUSA|2026-10|col998|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=0
-EXCLUIDO|2026-10|col998|PRODUTO:RECUSA_PORTA_SEM_DONO
-RECUSA|2026-10|col1004|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=0
-EXCLUIDO|2026-10|col1004|PRODUTO:RECUSA_PORTA_SEM_DONO
-RECUSA|2026-10|col1010|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=10
-EXCLUIDO|2026-10|col1010|PRODUTO:RECUSA_PORTA_SEM_DONO
-COBERTURA_COLAB|2026-10|medidos=86|universo_parte=102|excluidos=16
-COBERTURA_INTEGRAL|2026-10|False
-PRODUTO|2026-10|DIA_FORA_UNIVERSO_PORTA|58|324
-PRODUTO|2026-10|MOTOR_FECHAMENTO_horas_trabalhadas|2|42
-PRODUTO|2026-10|RECUSA_PORTA_SEM_DONO|13|137
-PRODUTO|2026-10|SEM_DECISAO_horas_atraso|61|370
-PRODUTO|2026-10|SEM_DECISAO_horas_extras_100|59|352
-PRODUTO|2026-10|SEM_DECISAO_horas_extras_100_feriado|59|352
-PRODUTO|2026-10|SEM_DECISAO_horas_extras_100_noturna|59|352
-PRODUTO|2026-10|SEM_DECISAO_horas_extras_50|59|352
-PRODUTO|2026-10|SEM_DECISAO_horas_extras_50_noturna|59|352
-PRODUTO|2026-10|SEM_DECISAO_horas_folga_trabalhada|58|324
-PRODUTO|2026-10|SEM_DECISAO_horas_intra_indenizada|58|324
-PRODUTO|2026-10|SEM_DECISAO_horas_noturnas|59|335
-PRODUTO|2026-10|SEM_DECISAO_horas_saida_antecipada|61|370
-PRODUTO|2026-10|SEM_DECISAO_horas_trabalhadas|58|324
-PRODUTO|2026-10|SEM_RETORNO_FECHAMENTO|1|0
-DIAS_NAO_LOCALIZADOS|2026-10|PRODUTO|SEM_RETORNO_FECHAMENTO|colabs=1
-DONO|2026-10|horas_trabalhadas|BATIDA|8.9642727777777775|0.96427277777777776|-8|1|1
-DONO|2026-10|horas_trabalhadas|ESTRUTURA|6.4782122222222229|11.442890555555556|4.9646783333333326|1|1
-RESIDUO|2026-10|horas_trabalhadas|ATE_LIMIAR|11535.529855139999|11535.529855139999|6.2172489379008766e-15|86|1222
-RESIDUO|2026-10|horas_trabalhadas|SEM_DECISAO|22.868550555555554|22.868550555555554|0|58|324
-PARCIAL|2026-10|horas_trabalhadas|v2_h=11550.972340140001|v3_h=11547.937018473333|autoridade2_h=11573.840890695556|autoridade3_h=11570.805569028889|porta_h=11547.937018473333|emitido_decidido_h=11547.937018473333|fm_dias=11573.86|fm_retorno=11573.86|colabs_div=2|dias_colab_div=2
-RUBRICA|2026-10|horas_trabalhadas|11550.972340140001|11547.937018473333|-3.0353216666680964|2|2
-INSTRUMENTO_HISTORICO|2026-10|horas_trabalhadas|v2_h=11417.777769862221|v3_h=11547.937018473333|delta_h=130.15924861111125|colabs=86
-DONO|2026-10|horas_intra_indenizada|BATIDA|2|0.44918999999999998|-1.55081|2|2
-DONO|2026-10|horas_intra_indenizada|CADASTRO|4.5|0.9941430555555556|-3.5058569444444445|3|6
-DONO|2026-10|horas_intra_indenizada|ESTRUTURA|0|1|1|1|1
-RESIDUO|2026-10|horas_intra_indenizada|ATE_LIMIAR|385.50810743694444|385.50810743694444|0|86|1215
-RESIDUO|2026-10|horas_intra_indenizada|SEM_DECISAO|0|0|0|58|324
-PARCIAL|2026-10|horas_intra_indenizada|v2_h=392.00810743694444|v3_h=387.95144049250001|autoridade2_h=392.00810743694444|autoridade3_h=387.95144049250001|porta_h=387.95144049250001|emitido_decidido_h=387.95144049250001|fm_dias=392.01|fm_retorno=392.01|colabs_div=4|dias_colab_div=9
-RUBRICA|2026-10|horas_intra_indenizada|392.00810743694444|387.95144049250001|-4.0566669444444301|4|9
-INSTRUMENTO_HISTORICO|2026-10|horas_intra_indenizada|v2_h=388.00810743694444|v3_h=387.95144049250001|delta_h=-0.056666944444430101|colabs=86
-RESIDUO|2026-10|horas_extras_50|ATE_LIMIAR|1|1|0|86|1196
-RESIDUO|2026-10|horas_extras_50|SEM_DECISAO|0|0|0|59|352
-PARCIAL|2026-10|horas_extras_50|v2_h=1|v3_h=1|autoridade2_h=1|autoridade3_h=1|porta_h=1|emitido_decidido_h=1|fm_dias=1.0|fm_retorno=1.0|colabs_div=0|dias_colab_div=0
-RUBRICA|2026-10|horas_extras_50|1|1|0|0|0
-INSTRUMENTO_HISTORICO|2026-10|horas_extras_50|v2_h=1|v3_h=1|delta_h=0|colabs=86
-DONO|2026-10|horas_extras_100|ESTRUTURA|0|12.149131944444443|12.149131944444443|1|1
-RESIDUO|2026-10|horas_extras_100|ATE_LIMIAR|46.352280248611109|46.352280248611109|-8.8817841970012523e-16|86|1195
-RESIDUO|2026-10|horas_extras_100|SEM_DECISAO|0|0|0|59|352
-PARCIAL|2026-10|horas_extras_100|v2_h=46.352280248611109|v3_h=58.50141219305555|autoridade2_h=46.352280248611109|autoridade3_h=58.50141219305555|porta_h=58.50141219305555|emitido_decidido_h=58.50141219305555|fm_dias=46.34|fm_retorno=46.34|colabs_div=1|dias_colab_div=1
-RUBRICA|2026-10|horas_extras_100|46.352280248611109|58.50141219305555|12.149131944444441|1|1
-INSTRUMENTO_HISTORICO|2026-10|horas_extras_100|v2_h=46.352280248611109|v3_h=58.50141219305555|delta_h=12.149131944444441|colabs=86
-DONO|2026-10|horas_extras_100_feriado|ESTRUTURA|0|12.149131944444443|12.149131944444443|1|1
-RESIDUO|2026-10|horas_extras_100_feriado|ATE_LIMIAR|46.352280248611109|46.352280248611109|-8.8817841970012523e-16|86|1195
-RESIDUO|2026-10|horas_extras_100_feriado|SEM_DECISAO|0|0|0|59|352
-PARCIAL|2026-10|horas_extras_100_feriado|v2_h=46.352280248611109|v3_h=58.50141219305555|autoridade2_h=46.352280248611109|autoridade3_h=58.50141219305555|porta_h=58.50141219305555|emitido_decidido_h=58.50141219305555|fm_dias=46.34|fm_retorno=46.34|colabs_div=1|dias_colab_div=1
-RUBRICA|2026-10|horas_extras_100_feriado|46.352280248611109|58.50141219305555|12.149131944444441|1|1
-INSTRUMENTO_HISTORICO|2026-10|horas_extras_100_feriado|v2_h=0|v3_h=58.50141219305555|delta_h=58.50141219305555|colabs=86
-RESIDUO|2026-10|horas_extras_50_noturna|ATE_LIMIAR|0|0|0|86|1196
-RESIDUO|2026-10|horas_extras_50_noturna|SEM_DECISAO|0|0|0|59|352
-PARCIAL|2026-10|horas_extras_50_noturna|v2_h=0|v3_h=0|autoridade2_h=0|autoridade3_h=0|porta_h=0|emitido_decidido_h=0|fm_dias=0.0|fm_retorno=0.0|colabs_div=0|dias_colab_div=0
-RUBRICA|2026-10|horas_extras_50_noturna|0|0|0|0|0
-INSTRUMENTO_HISTORICO|2026-10|horas_extras_50_noturna|v2_h=0|v3_h=0|delta_h=0|colabs=86
-RESIDUO|2026-10|horas_extras_100_noturna|ATE_LIMIAR|11.780694166666667|11.794853888888889|0.014159722222222726|86|1196
-RESIDUO|2026-10|horas_extras_100_noturna|SEM_DECISAO|0|0|0|59|352
-PARCIAL|2026-10|horas_extras_100_noturna|v2_h=11.780694166666667|v3_h=11.794853888888889|autoridade2_h=11.780694166666667|autoridade3_h=11.794853888888889|porta_h=11.794853888888889|emitido_decidido_h=11.794853888888889|fm_dias=11.78|fm_retorno=11.78|colabs_div=0|dias_colab_div=0
-RUBRICA|2026-10|horas_extras_100_noturna|11.780694166666667|11.794853888888889|0.014159722222222726|0|0
-INSTRUMENTO_HISTORICO|2026-10|horas_extras_100_noturna|v2_h=0|v3_h=11.794853888888889|delta_h=11.794853888888889|colabs=86
-RESIDUO|2026-10|horas_folga_trabalhada|ATE_LIMIAR|0|0|0|86|1224
-RESIDUO|2026-10|horas_folga_trabalhada|SEM_DECISAO|0|0|0|58|324
-PARCIAL|2026-10|horas_folga_trabalhada|v2_h=0|v3_h=0|autoridade2_h=0|autoridade3_h=0|porta_h=0|emitido_decidido_h=0|fm_dias=0.0|fm_retorno=0.0|colabs_div=0|dias_colab_div=0
-RUBRICA|2026-10|horas_folga_trabalhada|0|0|0|0|0
-INSTRUMENTO_HISTORICO|2026-10|horas_folga_trabalhada|v2_h=148.95005888888889|v3_h=0|delta_h=-148.95005888888889|colabs=86
-RESIDUO|2026-10|horas_noturnas|ATE_LIMIAR|2495.6564157072617|2495.6564157072617|-2.6645352591003757e-15|86|1213
-RESIDUO|2026-10|horas_noturnas|SEM_DECISAO|0|0|0|59|335
-PARCIAL|2026-10|horas_noturnas|v2_h=2495.6564157072617|v3_h=2495.6564157072617|autoridade2_h=2495.6564157072617|autoridade3_h=2495.6564157072617|porta_h=2495.6564157072617|emitido_decidido_h=2495.6564157072617|fm_dias=2495.65|fm_retorno=2495.65|colabs_div=0|dias_colab_div=0
-RUBRICA|2026-10|horas_noturnas|2495.6564157072617|2495.6564157072617|0|0|0
-INSTRUMENTO_HISTORICO|2026-10|horas_noturnas|v2_h=2484.4123923739285|v3_h=2495.6564157072621|delta_h=11.244023333333644|colabs=86
-DONO|2026-10|horas_atraso|ESTRUTURA|0|1.1068333333333333|1.1068333333333333|1|1
-RESIDUO|2026-10|horas_atraso|ATE_LIMIAR|51.558166666666665|51.557801868611108|-0.00036479805555503231|84|1177
-RESIDUO|2026-10|horas_atraso|SEM_DECISAO|0|0|0|61|370
-PARCIAL|2026-10|horas_atraso|v2_h=51.558166666666665|v3_h=52.664635201944442|autoridade2_h=51.558166666666665|autoridade3_h=52.664635201944442|porta_h=52.664635201944442|emitido_decidido_h=52.664635201944442|fm_dias=51.53|fm_retorno=51.53|colabs_div=1|dias_colab_div=1
-RUBRICA|2026-10|horas_atraso|51.558166666666665|52.664635201944442|1.1064685352777772|1|1
-INSTRUMENTO_HISTORICO|2026-10|horas_atraso|v2_h=47.964166666666664|v3_h=47.963786313055557|delta_h=-0.00038035361110644317|colabs=86
-DONO|2026-10|horas_saida_antecipada|ESTRUTURA|0.5571666666666667|0|-0.5571666666666667|1|1
-RESIDUO|2026-10|horas_saida_antecipada|ATE_LIMIAR|81.210833333333341|81.210943157499997|0.00010982416666610595|84|1177
-RESIDUO|2026-10|horas_saida_antecipada|SEM_DECISAO|0|0|0|61|370
-PARCIAL|2026-10|horas_saida_antecipada|v2_h=81.768000000000001|v3_h=81.210943157499997|autoridade2_h=81.768000000000001|autoridade3_h=81.210943157499997|porta_h=81.210943157499997|emitido_decidido_h=81.210943157499997|fm_dias=81.77|fm_retorno=81.77|colabs_div=1|dias_colab_div=1
-RUBRICA|2026-10|horas_saida_antecipada|81.768000000000001|81.210943157499997|-0.55705684250000331|1|1
-INSTRUMENTO_HISTORICO|2026-10|horas_saida_antecipada|v2_h=78.090166666666661|v3_h=77.533010546666674|delta_h=-0.55715611999998771|colabs=86
-UNIVERSO|2026-11|colabs_porta=578
-UNIVERSO_PARTE 2026-11 97
-MEDIDO|2026-11|col32
-MEDIDO|2026-11|col38
-MEDIDO|2026-11|col44
-MEDIDO|2026-11|col50
-MEDIDO|2026-11|col56
-MEDIDO|2026-11|col62
-MEDIDO|2026-11|col80
-MEDIDO|2026-11|col92
-MEDIDO|2026-11|col98
-MEDIDO|2026-11|col110
-MEDIDO|2026-11|col116
-RECUSA|2026-11|col128|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=16
-EXCLUIDO|2026-11|col128|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-11|col134
-MEDIDO|2026-11|col146
-MEDIDO|2026-11|col152
-MEDIDO|2026-11|col170
-MEDIDO|2026-11|col188
-MEDIDO|2026-11|col194
-MEDIDO|2026-11|col200
-MEDIDO|2026-11|col206
-MEDIDO|2026-11|col212
-MEDIDO|2026-11|col218
-MEDIDO|2026-11|col224
-RECUSA|2026-11|col236|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=27
-EXCLUIDO|2026-11|col236|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-11|col242
-MEDIDO|2026-11|col248
-MEDIDO|2026-11|col254
-MEDIDO|2026-11|col266
-MEDIDO|2026-11|col272
-MEDIDO|2026-11|col278
-MEDIDO|2026-11|col284
-MEDIDO|2026-11|col290
-MEDIDO|2026-11|col296
-MEDIDO|2026-11|col302
-MEDIDO|2026-11|col320
-MEDIDO|2026-11|col332
-RECUSA|2026-11|col344|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=23
-EXCLUIDO|2026-11|col344|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-11|col362
-MEDIDO|2026-11|col368
-MEDIDO|2026-11|col374
-MEDIDO|2026-11|col392
-MEDIDO|2026-11|col398
-MEDIDO|2026-11|col416
-MEDIDO|2026-11|col428
-RECUSA|2026-11|col440|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=31
-EXCLUIDO|2026-11|col440|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-11|col446
-DIA|2026-11|horas_extras_100_noturna|col446|2026-11-02|CADASTRO|0|1|1
-MEDIDO|2026-11|col452
-MEDIDO|2026-11|col464
-MEDIDO|2026-11|col476
-MEDIDO|2026-11|col482
-MEDIDO|2026-11|col512
-RECUSA|2026-11|col518|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trabalhada,horas_intra_indenizada,horas_noturnas,horas_saida_antecipada,horas_trabalhadas|dias_tentados=1
-EXCLUIDO|2026-11|col518|PRODUTO:RECUSA_PORTA_SEM_DONO
-MEDIDO|2026-11|col566
-MEDIDO|2026-11|col572
-MEDIDO|2026-11|col584
-MEDIDO|2026-11|col608
-MEDIDO|2026-11|col626
-RECUSA|2026-11|col638|oraculo|campos=horas_atraso,horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras_50,horas_extras_50_noturna,horas_folga_trab
-
-[truncado em 20000 de 41426 caracteres]
-
-_2343 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2346 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

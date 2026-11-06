@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 17:06:06.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (67.0 MB). Acoes na janela: **806**.
+**Medido em 06/11/2026 17:11:15.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (67.8 MB). Acoes na janela: **813**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:09:36 | Bash | Deploy R1-PUBLICA pouso | `cd /home/ronald/saas-hasner; git log -1 --format=%H; bin/deploy.sh --sem-migrate > logs/r1pub/deploy.log 2>&1; echo rc=$?; tail -15 logs/r1pub/deploy.log` |
+| 17:09:32 | Bash | Write RELATO section and commit merge | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() anc="## 04/11 17:4x -- POUSO CRON-15-NOMEADOS" assert s.count(anc)==1 sec="""## 06/11 17:1x -- POUSO R1-PUBLICA (raia/r1pub-135046 @a16637ca) LEI-AKITA: origem=core/placar_estrutural.py (R1/SOMA) + core/espelho_verdade.py (6 itens), testemunha=logs/r1remede/r1_dono_10_e_11_20261106.txt (e6_oraculo na SOMBRA), R ...` |
+| 17:09:17 | Bash | Find RELATO section headers | `cd /home/ronald/saas-hasner; grep -n "^## " app/docs/RELATO.md \| head -3` |
+| 17:09:11 | Bash | Add backlog rows and start r1pub merge | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; s=open(p).read() old="publicar no placar + 9 itens = construtor R1-PUBLICA \| ABERTA \| 06/11 10:3x \|" assert s.count(old)==1 new=("R1-PUBLICA POUSA 17:1x (opus APROVA): 9 = 5 com numero + 4 fora do alcance (E1-passivo-53, E3-separados-30, E4-rotulo, E5-le-celula); E6-batida-impar remedido \| FECHADA \| 06/11 10:3x \|\n" "\|  ...` |
+| 17:09:02 | Bash | Read R1-REMEDE backlog row | `cd /home/ronald/saas-hasner; sed -n 1746,1750p app/docs/BACKLOG.md` |
+| 17:08:59 | Bash | Check main and r1pub raia state | `cd /home/ronald/saas-hasner; git log --oneline -1; git status --porcelain \| head; git log --oneline 320ef1c7..raia/r1pub-135046; git diff --stat 320ef1c7 raia/r1pub-135046; grep -n "R1-REMEDE\\|R1-PUBLICA" app/docs/BACKLOG.md \| cut -c1-250 \| head` |
+| 17:06:19 | Bash | Check suite progress and hook state | `cd /home/ronald/saas-hasner; date +%H:%M; bin/trava_teste.sh --quem; ls -la --time-style=+%H:%M:%S logs/comboio_0611/suite_a40577fb.log; tail -c 300 logs/comboio_0611/suite_a40577fb.log; sed -n 1,3p app/docs/RELATO.md \| cut -c1-200; cat logs/hook_stop_espera.json 2>/dev/null \| head -c 600` |
 | 17:05:08 | Bash | Wake at 18:46 for teto change | `s=$(( $(date -d 18:46 +%s) - $(date +%s) )); echo $s; /usr/bin/sleep $s; echo "18:46 chegou: MODO-1846 teto 1 construtor"` |
 | 17:05:04 | Bash | Record aval in PROMPTS, RELATO, BACKLOG | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/PROMPTS.md' s=open(p,encoding='utf-8').read() if 'LIBERA-B3-CODEX-CONSTRUTOR' not in s: s=s.rstrip('\n')+'\n'+"06/11 17:0x \| aval Ronald LIBERA-B3-CODEX-CONSTRUTOR + MODO-1846 (substitui versoes anteriores; nenhuma lei nova): (1) B3 CODEX-CONSTRUTOR liberado como DESENHO com a cura da propria obra (varredura de FS do $WT podando so $WT/.g ...` |
 | 17:04:38 | Bash | Read CODEX-CONSTRUTOR row and prompts tail | `cd /home/ronald/saas-hasner; date +%H:%M; grep -n "^\| CODEX-CONSTRUTOR" app/docs/BACKLOG.md \| cut -c1-700; grep -n "CODEX-CONSTRUTOR" app/docs/RELATO.md \| head -4 \| cut -c1-250; tail -n 3 app/docs/PROMPTS.md \| cut -c1-200` |
