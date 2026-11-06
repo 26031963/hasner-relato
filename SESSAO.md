@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 12:08:06.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (62.3 MB). Acoes na janela: **855**.
+**Medido em 06/11/2026 12:13:16.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (62.3 MB). Acoes na janela: **850**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -860,8 +860,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:25:20 | Bash | Find G3/G4 case days in census | `cd /home/ronald/saas-hasner/logs/bo_mauricio_0511; grep -nE 'col(29\|129\|923\|174\|33\|94\|789\|163\|873\|949\|214\|247\|39\|42\|250\|960)\b' censo_1.r \| cut -c1-260 \| head -40` |
 | 00:25:16 | Bash | List private BO census files | `cd /home/ronald/saas-hasner; ls -la logs/bo_mauricio_0511/; git check-ignore -q logs && echo "logs ignorado"` |
 | 00:25:09 | Bash | Read aval source lines and HJ sonda dir | `cd /home/ronald/saas-hasner; sed -n 6390,6398p app/docs/RELATO.md \| cut -c1-1500; ls logs/hj_0511/; wc -l logs/hj_0511/sonda_a.py` |
-| 00:09:34 | Bash | Inspect current trava and repoint ESPERANDO | `tr '\0' ' ' < /proc/3008183/cmdline \| grep -oE '\-v [^ ]+:/app \|manage.py test .*' \| cut -c1-200; cd /home/ronald/saas-hasner/app/docs; sed -i '2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=3008183#' RELATO.md; sed -n 2p RELATO.md` |
-| 00:09:27 | Bash | Diagnose stop hook rejection | `tail -3 /home/ronald/saas-hasner/logs/hook_stop_fila1.log \| cut -c1-200; ls -d /proc/2731191 2>&1 \| tail -1; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; ps -eo pid,args \| grep -E 'trava_teste.sh --\|pre-push' \| grep -v grep \| cut -c1-90` |
-| 00:09:20 | SendMessage |  | `-` |
-| 00:09:15 | ToolSearch |  | `-` |
-| 00:09:12 | Bash | Read FIO-MUDO v3 mutant summary | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/b745pml8e.output \| tail -25` |

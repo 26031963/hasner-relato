@@ -1,7 +1,75 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 12:07** · publicado em **06/11/2026 12:08** (UTC-3)
+> Ultima resposta processada: **06/11/2026 12:08** · publicado em **06/11/2026 12:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 12:08 · sessao bf5b04d1e747 · CODEX-CONSTRUTOR-NEGOCIO · verificador · origem=Code
+
+**Parecer: há buracos no confinamento das saídas do wrapper, no inventário e na prova real. O conjunto ainda não sustenta a garantia anunciada de isolamento.** A análise abaixo é estática; execução dos testes e isolamento efetivo do processo construtor são **[nao verificado]**. (`bin/codex_pergunta.sh:82-89,220-231,303-325`; `bin/tests/prova_codex_pergunta_real.sh:48-77`)
+
+1. **ALTA — Arquivos de LOGD podem redirecionar escritas para fora de `logs/`.** A validação confere o diretório, mas não seus arquivos. Por exemplo, um `slot.gate` previamente apontado por symlink para uma sentinela será aberto com `>` e truncará o alvo **antes da chamada ao Codex**. `slot.N` também usa truncamento; `chamadas.log`, JSONL/`.err`, `limite.log` e o temporário `.rc.$$` igualmente abrem sem proteção contra symlink. É uma falha do wrapper no host, independente do sandbox do filho. (`bin/codex_pergunta.sh:82-89,111-116,130-134,163-164,220-231,268,343`)
+
+2. **MÉDIA — `RESPOSTA=…/logs/..` contorna o confinamento sem corrida.** O código valida somente `dirname`, aceita `basename=..` e não exige resposta regular. Nesse caso, `NOVA` vira `…/logs/...novo.$$`; o `mv` para `…/logs/..` publica esse arquivo na raiz do projeto, fora de `logs/`. Diretórios também são aceitos como resposta. (`bin/codex_pergunta.sh:84-89,261,276`)
+
+3. **ALTA — A vaga única depende de um diretório escolhido pelo chamador.** Dois `CODEX_LOGD` distintos, ambos dentro de `logs/`, produzem duas `construtor.vaga`. Assim, a exclusão não garante um único construtor nem protege a mesma WT contra chamadas concorrentes com LOGDs diferentes. Os locks de slots também ficam separados. (`bin/codex_pergunta.sh:71,83,114-119,220-232`)
+
+4. **ALTA — A identidade do destino pode mudar entre validação e uso.** WT, `app`, registro, HEAD e limpeza são conferidos antes da montagem do prompt e das esperas por slots/resposta. Depois, `-C "$WT/app"` usa novamente o caminho, sem revalidar sua identidade. Uma troca de `app` por symlink nesse intervalo contorna a guarda inicial; escrita efetiva na viva pelo sandbox é **[nao verificado]**. A pausa também só é consultada antes dessas esperas. (`bin/codex_pergunta.sh:80,98-120,178-247,268`)
+
+   O lock da resposta continua sendo teste seguido de abertura comum, não `O_NOFOLLOW`: append elimina o truncamento anterior, mas não elimina a corrida nem garante que wrapper e leitor estejam travando o mesmo inode. O leitor Python usa `O_NOFOLLOW`. (`bin/codex_pergunta.sh:245-247`; `bin/disjuntor.py:779-789`)
+
+5. **ALTA — “Mexeu e restaurou” passa sem rc 3.** Alterar um proibido e restaurar seus bytes antes do inventário, sem commit, deixa HEAD, diff, status e checksum do arquivo `.git` iguais. O inventário observa o estado final; não registra as escritas ocorridas durante a chamada. O caso chamado `commit_desfaz` testa commit seguido de revert, que deixa HEAD diferente: não cobre restauração sem commit. (`bin/codex_pergunta.sh:303-325`; `bin/tests/test_codex_pergunta.sh:229`)
+
+   **MÉDIA — Links são classificados somente pelo nome.** Um novo symlink `app/atalho` apontando para fora ou para um proibido não encontra matcher; não há inspeção do tipo ou destino. Isso demonstra uma lacuna do inventário, enquanto escrita no alvo externo pelo sandbox permanece **[nao verificado]**. A limpeza inicial também não verifica compartilhamento de inode por hardlink com a viva; exploração efetiva dessa possibilidade é **[nao verificado]**. (`bin/codex_pergunta.sh:98-120,285-319`)
+
+6. **MÉDIA — `common_dir` autentica o repositório, mas não a worktree específica.** O registro verifica o caminho WT; depois, só se compara o diretório Git comum. Um `.git` previamente reapontado para outra WT do mesmo repo, com HEAD e estado compatíveis, não é distinguido por essas verificações. O checksum final só compara com esse apontamento inicial. O selo cobre outro repositório, não outra WT do mesmo repo. (`bin/codex_pergunta.sh:101-120,325`; `bin/tests/test_codex_pergunta.sh:165-168`)
+
+7. **ALTA — A prova real admite verde sem executar as tentativas.** `WRC` é apenas impresso. O controle positivo exige somente `INTRUSO_WT.txt`; as evidências das tentativas de escrita e sobrevivência não são obrigatórias. Para Docker/socket/TCP, arquivos vazios passam como “negado”, pois basta não conterem as palavras de sucesso. Portanto, positivo mais quatro `.out` vazios, sem executar as tentativas, satisfaz as verificações. (`bin/tests/prova_codex_pergunta_real.sh:48-77`)
+
+   Mesmo executando o bloco, ferramenta ausente, serviço indisponível, conexão recusada ou timeout também viram “negado”; não há controle externo demonstrando que o recurso funcionaria fora do sandbox. Banco não é tentado. As verificações de Git comparam status/HEAD e uma sentinela, sem comprovar integridade de todos os metadados. Logo, negação efetiva de banco, Docker, rede e alterações arbitrárias em `.git` é **[nao verificado]**. (`bin/tests/prova_codex_pergunta_real.sh:20-43,58-71`)
+
+8. **MÉDIA — O selo exercita comportamento, mas seu placar de mutantes exagera a evidência.** Há controle positivo de argv, cabeçalho, resposta e inventário; porém o Codex falso executa diretamente a ação e sempre termina com zero. Isso verifica o wrapper, não a eficácia do sandbox. (`bin/tests/test_codex_pergunta.sh:67-77,180-201`)
+
+   Uma guarda pode aparecer como “morta” apenas por mudar a mensagem: removida a guarda de caminho absoluto, a guarda do nome ainda recusa; zerado `inv_diff`, HEAD ainda recusa o commit. O teste exige motivos específicos e contabiliza qualquer `FALHA` como morte. (`bin/tests/test_codex_pergunta.sh:98-101,141-150,219,289,311-315`; `bin/codex_pergunta.sh:95-97,314-315`)
+
+   **Mutantes adicionais que sobreviveriam por inspeção:**
+
+   - Trocar `sys.exit(1)` do erro de inventário por `sys.exit(0)`: nenhum caso força esse erro; `c_inventario` só altera o motor. (`bin/codex_pergunta.sh:300-312`; `bin/tests/test_codex_pergunta.sh:231,233-235`)
+   - Restringir migrations/models a `app/folha/`: os únicos exemplos dessas classes estão nessa aplicação; os mutantes cadastrados ainda seriam mortos pelos mesmos exemplos. (`bin/tests/test_codex_pergunta.sh:208-209,279-280`)
+   - Remover `shell_environment_policy.inherit=core`: essa opção não é exigida pelo controle positivo. Execução desses mutantes: **[nao verificado]**. (`bin/codex_pergunta.sh:267`; `bin/tests/test_codex_pergunta.sh:183-189`)
+
+9. **MÉDIA — Os sinais operacionais têm lacunas.** A linha `ESPERANDO` declara produtor relativo com `/`, mas o hook exige caminho absoluto nesse caso; copiá-la literalmente para o topo reprova a prova do PID. (`bin/codex_pergunta.sh:255`; `bin/hook_stop_fila1.py:527-528,675-680`)
+
+   `.rc` também não cobre toda saída: recusas iniciais ocorrem antes do trap; falhas posteriores ao `ini`, mas anteriores à atribuição de JSONL, podem publicar `chamada=-`. Leitor operacional que interprete o conteúdo desse `.rc`: **[nao verificado]**. (`bin/codex_pergunta.sh:75-140,164,252`)
+
+10. **BAIXA — Pergunta e temporários não seguem o confinamento descrito no contrato.** A pergunta só precisa ser legível, sem exigência de estar em `logs/`; cabeçalho e dados temporários usam `mktemp`. Isso é comportamento do wrapper, não demonstra escrita externa do shell construtor. (`bin/codex_pergunta.sh:60-61,143,194`)
+
+    A via inteira também não é independente de banco/Docker: mesmo sem `--sonda`, o registro da pergunta pode chamar `relato_nomes.sh`, que usa Docker e consulta `Colaborador.objects.all()`. Esse efeito pertence ao wrapper/Code, antes do sandbox. (`bin/codex_pergunta.sh:143-164`; `bin/relato_nomes.sh:7-21`)
+
+Quanto aos **quatro papéis de leitura**, sandbox `read-only`, destino `WS/<hash>` e cabeçalho de somente leitura permanecem no ramo existente. Houve mudança no lock: agora symlink é recusado com rc 3 e a abertura usa append. `--construtor` com papel de leitura também passa a ser recusado explicitamente. Portanto, “intactos” vale para sandbox/destino/cabeçalho, mas não para todo o comportamento. (`bin/codex_pergunta.sh:74-76,162-172,204,245-247,271-272`)
+
+A seleção da cópia de leitura continua reutilizando qualquer diretório existente em `WS`, sem autenticar conteúdo/destino. A prova real de leitura também pode ficar verde com chamadas falhas e nenhuma tentativa executada, pois não exige controle positivo de execução. (`bin/codex_pergunta.sh:162-172`; `bin/tests/prova_codex_pergunta_real.sh:85-103`)
+
+O mapa de escrita e leitura dos artefatos é este:
+
+| Artefato/campo | Quem escreve | Quem lê/usa |
+|---|---|---|
+| `.rc`: `chamada`, `rc`, `fim` | Trap do wrapper; temporário `.rc.$$` seguido de `mv`. (`bin/codex_pergunta.sh:129-134`) | Selo interpreta; prova apenas copia. Leitor operacional: **[nao verificado]**. (`bin/tests/test_codex_pergunta.sh:109,195`; `bin/tests/prova_codex_pergunta_real.sh:50`) |
+| `.inventario`: classificação, caminho, motivo | Python do inventário; wrapper acrescenta violação do `.git`. (`bin/codex_pergunta.sh:310-325`) | Wrapper filtra para `.recusa`; selo confere caminhos; prova copia. (`bin/codex_pergunta.sh:329`; `bin/tests/test_codex_pergunta.sh:196-204`; `bin/tests/prova_codex_pergunta_real.sh:50`) |
+| `.recusa` | Wrapper reúne aviso e linhas diferentes de `TOCADO`. (`bin/codex_pergunta.sh:328-329`) | Wrapper publica no stderr; selo interpreta; prova copia. (`bin/codex_pergunta.sh:330`; `bin/tests/test_codex_pergunta.sh:106-107`; `bin/tests/prova_codex_pergunta_real.sh:50`) |
+| `.lock` | Wrapper abre append e toma exclusividade. (`bin/codex_pergunta.sh:245-247`) | Triagem abre com `O_NOFOLLOW` e tenta lock compartilhado. (`bin/disjuntor.py:779-789`) |
+| `.id`: `obra`, `papel`, `hash`, `pid`, `fim`, `sha` | Wrapper remove o anterior e publica em sucesso com resposta nova. (`bin/codex_pergunta.sh:259,353-356`) | Triagem lê os campos e verifica papel/sha. **Só aceita `verificador`; não certifica construtor.** (`bin/disjuntor.py:755-760,795-801`) |
+| `construtor.vaga` | Wrapper abre no fd 6. (`bin/codex_pergunta.sh:114-115`) | Wrapper disputa lock; selo ocupa a vaga para testar recusa. (`bin/codex_pergunta.sh:116`; `bin/tests/test_codex_pergunta.sh:171-173`) |
+| `slot.gate`, `slot.N` | Wrapper abre com `>`. (`bin/codex_pergunta.sh:220,226,231`) | Wrappers disputam gate/slots e mantêm fd 8 até terminar. (`bin/codex_pergunta.sh:222-235`) |
+| `chamadas.log`: hora, obra, papel, hash12, pid, `ini`, pergunta; `fim`, sessão, rc, duração | Wrapper escreve início; trap escreve fim. (`bin/codex_pergunta.sh:130-131,163-164`) | Parser, contagem, últimas chamadas, procedência e tokens. ESTADO e CODEX-ESTADO consomem essas funções. (`bin/codex_limite_estado.py:49-96,185-194`; `bin/gerar_estado.py:269-270`; `bin/gerar_codex_estado.py:176`) |
+| `$LOGD/*.jsonl` e `.err` | Shell redireciona stdout/stderr do CLI. (`bin/codex_pergunta.sh:252,264-272`) | Wrapper lê `thread_id`, erros e stderr; hook pode medir avanço do arquivo declarado. (`bin/codex_pergunta.sh:333-350`; `bin/hook_stop_fila1.py:563-641,678-679`) |
+| JSONL de `~/.codex/sessions` | Escritor concreto nesta cópia: **[nao verificado]**. Destino consultado em `bin/codex_limite_estado.py:101-104`. | Leitores extraem plano, limites, janelas e tokens; CODEX-ESTADO lê respostas finais. (`bin/codex_limite_estado.py:99-123,131-161,198-212`; `bin/gerar_codex_estado.py:77-103`) |
+| `PAPEIS` | Tupla do código acrescenta `construtor`. (`bin/codex_limite_estado.py:23`) | Inicialização/classificação da contagem, classificação de tokens e texto publicado. (`bin/codex_limite_estado.py:74-78,194,216-219`) |
+| `limite.log`: hora, obra, mensagem | Wrapper, ao reconhecer erro de limite. (`bin/codex_pergunta.sh:338-346`) | Contador do ESTADO. (`bin/codex_limite_estado.py:27-46`; `bin/gerar_estado.py:269-270`) |
+| Pausa `codex-construtor` | Escritor indicado pelo wrapper: `bin/pausar.sh`. (`bin/codex_pergunta.sh:39`) | Wrapper consulta existência e publica conteúdo antes de admitir a chamada. (`bin/codex_pergunta.sh:80`) |
+| Pergunta, anexos e temporários | Pergunta/anexos vêm do chamador; wrapper cria dados raspados e cabeçalho e os remove no encerramento. (`bin/codex_pergunta.sh:60,137,143-158,181-217`) | Wrapper lê e compõe stdin do CLI. (`bin/codex_pergunta.sh:186,213-217,268`) |
+| Cópia `WS`; WT, HEAD e `.git` | Wrapper extrai `WS` apenas para leitura; construtor recebe a WT existente. (`bin/codex_pergunta.sh:166-175,264-268`) | Validação inicial e inventário final consultam WT/Git; `.git` recebe comparação de checksum. (`bin/codex_pergunta.sh:98-120,303-325`) |
+
+As opções de rede desligada e exclusão de `/tmp`/`TMPDIR` estão presentes na chamada. A comprovação de que elas negam todos os efeitos pretendidos continua **[nao verificado]**, porque a prova fornecida aceita os falsos verdes descritos acima. (`bin/codex_pergunta.sh:264-268`; `bin/tests/prova_codex_pergunta_real.sh:48-77`)
 
 ## 06/11 12:07 · sessao 39f679766a14 · - · - · origem=Ronald (tmux)
 
@@ -1218,16 +1286,4 @@ Observação útil ao item 7: a mensagem do gate ainda enumera só gerar/lavrar/
 
 Nenhum AGENTS aplicável foi encontrado na árvore pesquisada; cobertura fora dessa árvore: **[nao verificado]**.
 
-## 06/11 11:47 · sessao 598e3a39227a · - · - · origem=Ronald (tmux)
-
-O corte em `116` é adequado à cópia: `ids` nasce como lista (`app/ponto/management/commands/diff_calculador.py:102`), os filtros opcionais terminam antes (`:108`) e os usos seguintes são a chamada ao fechamento (`:140`) e a seleção dos colaboradores (`:145`). Mutar `loc["ids"][:]` preserva o objeto usado pelo comando; atribuir apenas em `frame.f_locals["ids"]` seria inadequado [nao verificado: comportamento em execução].
-
-O wrapper deve retornar `{}` imediatamente quando `ids` estiver vazio. Sem isso, a chamada original varre a empresa, porque não recebe `colaborador_ids` (`app/ponto/management/commands/diff_calculador.py:140`). No caso selecionado, passar `colaborador_ids=[cid]` restringe o queryset antes do lote de células (`app/ponto/services/fechamento.py:545`, `:548`, `:596`).
-
-Não encontrei dependência de resultados entre colaboradores: o índice de células inclui colaborador e dia (`app/ponto/services/fechamento.py:596`); as geradoras são explicitamente filtradas pelo colaborador atual (`:645`); os feriados são carregados independentemente do conjunto de colaboradores (`:575`, `:587`). Equivalência completa permanece [nao verificado: revisão estática, sem executar].
-
-A captura original do comando permanece funcional: registra o primeiro `ResultadoMes` de cada colaborador (`app/ponto/management/commands/diff_calculador.py:131`, `:135`) e restaura o construtor/emissor em `finally` (`:141`). Descartar cada chamada elimina seu `_res_fech` e `_certa_cache` (`:116`, `:95`).
-
-Ressalva concreta: uma chamada por colaborador também obtém um novo instante real `_agora_da_passada` por chamada (`app/ponto/services/fechamento.py:607`), enquanto a chamada por empresa obtém um por empresa. Efeito numérico durante fronteira temporal permanece [nao verificado].
-
-_2254 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2255 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
