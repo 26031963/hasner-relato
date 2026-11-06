@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 17:47:59.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (69.6 MB). Acoes na janela: **883**.
+**Medido em 06/11/2026 17:53:32.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (69.8 MB). Acoes na janela: **892**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:53:31 | Bash | Read PAUTA-08 verifier answer | `cat /home/ronald/saas-hasner/logs/h12h06b/pauta08/v4/v1.r` |
+| 17:53:25 | Bash | Check all background job statuses | `cd /home/ronald/saas-hasner; date +%H:%M; for f in logs/h12h06b/pauta08/v4/v1.out logs/o10c/solo/r1.out logs/espuria/c1.out; do echo "$f: $(tail -1 $f)"; done; ls -la --time-style=+%T logs/h12h06b/pauta08/v4/suite_2322d080.log \| awk '{print $5,$6}'` |
+| 17:48:57 | Bash | Wait for ESPURIA censo answer | `cd /home/ronald/saas-hasner; f=logs/espuria/c1.out; until grep -q "^rc=" $f 2>/dev/null; do /usr/bin/sleep 20; done; tail -1 $f` |
+| 17:48:48 | Bash | Check ESPURIA censo launch output | `sleep 5; cat /home/ronald/saas-hasner/logs/espuria/c1.out` |
+| 17:48:40 | Bash | Launch Codex censo for ESPURIA | `cd /home/ronald/saas-hasner; D=logs/espuria; H=$(git rev-parse --short=8 HEAD); cat > $D/c1.q <<'EOF' PAPEL: censo pela regra, so leitura de codigo. Sem hipotese de quem pergunta. Registre na 1a linha HASH LIDO. OBRA ESPURIA-E-O-QUE-E (aval anexo aval.txt; os nomes do aval sao dado privado, nao os repita). E uma MEDIDA: nada se cura agora. Preciso saber, com arquivo:linha em cada resposta, QUAIS F ...` |
+| 17:48:22 | Bash | Find G1-PORTA sonda and sombra envelope | `cd /home/ronald/saas-hasner; ls logs/g1porta0611/ \| head; ls logs/bo_g2_0611/envelope.sh && head -20 logs/bo_g2_0611/envelope.sh` |
+| 17:48:16 | Bash | Locate orfa, juizes, porta functions | `cd /home/ronald/saas-hasner/app; git grep -n -i "orfa" -- 'ponto/services/cartorio.py' 'ponto/services/espelho.py' \| head -12; git grep -n "def dia_sem_trabalho\\|STATUS_QUE_PEDEM_DECISAO =\\|def porta_alcancavel_do_dia\\|trabalha_em_feriado =" -- '*.py' \| grep -v tests \| head; ls ../logs \| grep -i "g1\\|porta" \| head` |
+| 17:48:10 | Bash | Add BACKLOG row and DESPACHO line | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/BACKLOG.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| PAUTA-08-FILA-OPUS \|')][0] L.insert(i+1,"\| ESPURIA-E-O-QUE-E \| MEDIDA (aval 06/11 17:4x, padrao=n/a (medida), juizes novos=0; aval integral em logs/espuria/aval.txt) \| 477 dias orfa-na-ata comp 11: (1) quadro por classe pelas funcoes reais, soma  ...` |
+| 17:48:00 | Bash | Save aval privately, log in PROMPTS | `cd /home/ronald/saas-hasner; mkdir -p logs/espuria; cat > logs/espuria/aval.txt <<'EOF' aval Ronald: ESPURIA-E-O-QUE-E, corte Ronald 06/11 17:4x ("sim"), substitui qualquer versao anterior. Nenhuma lei nova; leis L-099 (dono unico), juiz unico, "tela que engana = bug nosso", TUDO TEM CADASTRO, CLAUDE.md 4a. FONTE: sondas do chat de 06/11 17:3x-17:45 (leitura PROD): 477 dias com orfa na ata na comp ...` |
 | 17:47:43 | Bash | Check logs ignored and PROMPTS format | `cd /home/ronald/saas-hasner; git check-ignore -v logs/espuria/x.txt; tail -3 app/docs/PROMPTS.md \| cut -c1-200; date +%H:%M` |
 | 17:47:32 | Bash | See prior sonda workflow artifacts | `cd /home/ronald/saas-hasner; ls logs/bo_g2_0611/; grep -n "sonda" bin/codex_pergunta.sh \| head -20` |
 | 17:43:59 | Bash | Wait for Codex RED-by-example answer | `cd /home/ronald/saas-hasner; f=logs/o10c/solo/r1.out; until grep -q "^rc=" $f 2>/dev/null; do /usr/bin/sleep 20; done; tail -1 $f` |
