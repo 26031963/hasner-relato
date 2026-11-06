@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 16:28:16.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (66.5 MB). Acoes na janela: **791**.
+**Medido em 06/11/2026 16:33:46.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (66.5 MB). Acoes na janela: **789**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -799,5 +799,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 05:12:40 | Agent | verificador opus final OTIMIZA-3 c745af93 | `Obra OTIMIZA-3 (instrumento de host `bin/quem_chama.py` + selo `bin/tests/test_quem_chama.sh`), opus final volta 5 (teto: esta e a 1a de 2 voltas opus). Copia /home/ronald/wt-otim3-035531, hash c745af93, base main a37c673d. Pacote: /home/ronald/saas-hasner/logs/otimiza3/opus_final_c745af93/ (diff_vs_a37c673d.patch, commits.txt, RED/green/mutantes, triagem_v5.md, fila_v5.md, Codex .q/.r). Suite int ...` |
 | 04:52:57 | Bash | Repoint ESPERANDO to the live suite pid | `cd /home/ronald/saas-hasner; sed -i '2s/pid=[0-9]*/pid=3737723/' app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md` |
 | 04:52:53 | Bash | Check suite states and ESPERANDO pid | `cd /home/ronald/saas-hasner; pgrep -af "^bash /home/ronald/saas-hasner/bin/trava_teste.sh --" \| cut -c1-60; bin/trava_teste.sh --quem; sed -n 2p app/docs/RELATO.md; for f in logs/otimiza3/suite_r5.log logs/lastro2/suite_v1.log; do echo "== $f"; head -1 $f 2>/dev/null; grep -E "^(OK\|FAILED)($\| \()\|^Ran\|^rc=" $f 2>/dev/null \| tail -3; done; date +%H:%M` |
-| 04:30:37 | Bash | Repoint ESPERANDO to live suite pid, peek sombra | `cd /home/ronald/saas-hasner; sed -i '2s/pid=[0-9]*/pid=2269374/' app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md; tail -5 logs/lastro2/sombra_v1.out` |
-| 04:30:33 | Bash | Find live suite pids and recent obra logs | `cd /home/ronald/saas-hasner; pgrep -af "^bash /home/ronald/saas-hasner/bin/trava_teste.sh --" \| cut -c1-160; bin/trava_teste.sh --quem; ls -t logs/lastro2/ logs/otimiza3/ \| head -12; date +%H:%M` |
