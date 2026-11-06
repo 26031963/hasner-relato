@@ -1,7 +1,123 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 01:16** · publicado em **06/11/2026 01:21** (UTC-3)
+> Ultima resposta processada: **06/11/2026 01:57** · publicado em **06/11/2026 01:57** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 01:57 · sessao 43ff11e3f048 · H12H06-B · verificador · origem=Code
+
+**Alta — a cura de #2 não fecha.** `mudar_estado` grava status, minutos e range sem mover `atualizado_em`; depois tenta registrar a trilha. Essa tentativa pode falhar sem desfazer a ausência, e `registrar_log` não verifica o retorno. (`app/ponto/services/ausencia.py:818`, `app/ponto/services/ausencia.py:820`, `app/core/auditoria.py:22`, `app/core/observ.py:105`, `app/core/observ.py:139`)
+
+Contraexemplo: depois do apply, rejeitar e reabrir um atestado, com falha nas duas trilhas, devolve status/minutos/identidade/carimbo aos valores esperados. A reversão não encontra log posterior e restaura 720 sobre o ato posterior. Há também uma janela sem falha definitiva: duas chamadas podem concluir os saves da ida/volta e ficar suspensas antes dos respectivos logs. (`app/ponto/services/ausencia.py:819`, `app/ponto/services/ausencia.py:1125`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:142`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:154`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:157`) Ocorrência em produção: [não verificado].
+
+**Média — #3 fecha o relato da linha, mas permanece parcialmente aberto para recuperação.** O resultado recebe a linha antes da confirmação, conforme pretendido. Porém, se uma falha de escrita deixar a confirmação final truncada, o leitor executa `json.loads` sobre todas as linhas e aborta antes de montar qualquer reversão, inclusive das linhas anteriores corretamente confirmadas. Falta tolerância ao fragmento final do diário. (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:270`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:274`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:254`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:222`) Reprodução dessa falha: [não verificado].
+
+**Alta — contesto o descarte categórico da corrida com exportação.** O comando trava somente a ausência, consulta a cerca e depois escreve. A consulta de competência entregue não estabelece trava compartilhada com o exportador, que registra `ExportacaoDominio` independentemente. Portanto, um export concorrente pode entregar a competência entre a conferência e a alteração. (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:138`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:160`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:169`, `app/folha/export.py:581`, `app/folha/models.py:182`, `app/folha/views.py:297`) Ocorrência e fundamento do descarte anterior: [não verificado].
+
+Quanto às demais curas e hipóteses:
+
+- **#1 fecha o caso descrito:** o objeto é recarregado e o carimbo retornado dentro da transação que mantém a trava. (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:137`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:173`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:189`)
+- **PK repetido:** a confirmação consome a última foto pendente daquele PK; não reutiliza indiscriminadamente todas as fotos anteriores. (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:233`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:235`)
+- **PK de log versus commit:** o filtro compara um identificador automático, não uma sequência de commits. Não identifiquei escritor concreto com log menor e alteração posterior da mesma ausência que atravesse todas as demais guardas; esse contraexemplo permanece [não verificado]. (`app/core/migrations/0002_log_auditoria.py:19`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:157`)
+- **Trilha própria da reversão:** ela também grava evento e confirma seu próprio PK; o filtro estritamente `pk__gt` não conta essa mesma trilha como posterior. (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:182`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:274`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:157`)
+- **Push do apply desfeito:** existe caminho síncrono entre save, julgamento e envio antes das verificações que podem provocar rollback. Entretanto, alcançar esse envio nas 30 linhas depende de condições não fornecidas; não o promovo a achado específico desta obra. (`app/ponto/services/ausencia.py:508`, `app/ponto/signals.py:147`, `app/ponto/services/cartorio.py:1740`, `app/ponto/management/commands/detectar_ausencias.py:778`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:175`) Alcance nas 30: [não verificado].
+
+**Quem escreve LogAuditoria com `modelo='Ausencia'`:**
+
+| Origem | Arquivo:linha |
+|---|---|
+| Criação, estado, documento e período | `app/ponto/services/ausencia.py:441`, `:820`, `:854`, `:915` |
+| Cancelamento em lote, aprovação apesar do anexo, cancelamento individual e edição | `app/ponto/views.py:2357`, `:2614`, `:2739`, `:2808` |
+| Lançamento pela IA | `app/core/views_ia.py:991` |
+| Devolução de perguntas absorvidas | `app/chamados/services/materializacao.py:663` |
+| Cura do fim | `app/ponto/management/commands/curar_ausencia_sem_fim.py:47` |
+| Apply e reversão desta obra | `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:182` |
+| Migrações históricas, diretamente | `app/ponto/migrations/0057_a4_backfill_pendente.py:44`, `app/ponto/migrations/0058_a4_relogio_recomeca.py:43`, `app/ponto/migrations/0059_a4_d0_no_primeiro_dia_do_cron.py:37` |
+
+O escritor físico atual é `evento`; `registrar_log` é adaptador. (`app/core/observ.py:134`, `app/core/auditoria.py:22`)
+
+**Quem escreve Ausencia sem trilha própria:**
+
+- `editar_ausencia_registro` e `rederivar_fim` fazem save completo; os chamadores identificados registram a trilha. (`app/ponto/services/ausencia.py:508`, `app/ponto/services/ausencia.py:1280`, `app/ponto/views.py:2808`, `app/ponto/management/commands/curar_ausencia_sem_fim.py:47`)
+- A rejeição de férias não registra trilha da ausência, mas move explicitamente `atualizado_em`. (`app/ponto/services/ausencia.py:1267`)
+- Há exclusões sem trilha própria; a reversão detecta que a linha desapareceu. (`app/ponto/services/ausencia.py:1174`, `app/ponto/services/ausencia.py:1197`, `app/ponto/services/ausencia.py:1254`, `app/ponto/services/ausencia.py:1274`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:140`)
+- Há saves de metadados sem carimbo/log próprio: prazo; decisão sem mudança de estado e sem período; documento/descrição/prazo na reabertura. Eles não demonstram, isoladamente, alteração invisível de minutos/identidade/status. (`app/ponto/services/ausencia.py:536`, `app/ponto/services/ausencia.py:911`, `app/ponto/services/ausencia.py:1114`, `app/ponto/services/ausencia.py:1124`, `app/ponto/services/ausencia.py:1132`)
+
+**Modelo/objeto diferentes:** o cancelamento de férias altera ausências e registra o ato em `AgendamentoFerias`, com o PK do agendamento; a alteração das ausências carimba `atualizado_em`. O aviso de recusa registra `Colaborador`, mas não altera uma ausência. Nenhum desses caminhos fornece o contraexemplo invisível procurado. (`app/ferias/services.py:356`, `app/ferias/views.py:410`, `app/ponto/services/ausencia.py:1267`, `app/api/views.py:1937`)
+
+## 06/11 01:57 · sessao d295a10a7b09 · - · - · origem=Ronald (tmux)
+
+**Achado adicional sólido, média — #3 continua parcial se a confirmação ficar truncada.** O diário faz `write`, `flush` e `fsync`; uma falha que deixe um fragmento JSON final não é tratada ([comando:254](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:254)). A reversão interpreta todas as linhas com `json.loads` antes de montar o plano; o fragmento aborta também a reversão das linhas anteriores confirmadas ([comando:222](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:222)). Ocorrência real: [não verificado].
+
+Se a última confirmação falhar e o `finally` conseguir gravar o resultado, `completo` será `true`: a última linha já entrou em `saida` antes da confirmação ([comando:270](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:270), [comando:285](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:285)). **Não elevar isoladamente:** o próprio predicado define completude como quantidade de linhas processadas, que pode estar completa apesar da confirmação ausente ([comando:285](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:285)).
+
+**Sem novo achado de `on_commit`:** o consumidor de Ausencia envolve o trabalho em `engolir`; não há nesse callback um caminho útil desprotegido demonstrado que impeça o retorno após commit ([signals:254](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/signals.py:254), [signals:260](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/signals.py:260), [signals:263](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/signals.py:263)). A trilha auxiliar `perguntas_devolvidas_ausencia_rejeitada` exige status rejeitada, ausente da LISTA ([materializacao:638](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/chamados/services/materializacao.py:638), [comando:51](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:51)).
+
+**PK versus commit:** escritor concreto com log anterior à escrita, pk menor e alteração pós-apply capaz de passar todas as guardas: [não verificado]. Não promover esse risco genérico. [nao verificado]
+
+## 06/11 01:55 · sessao d295a10a7b09 · - · - · origem=Ronald (tmux)
+
+- **Alta — cura #2 não fecha quando a trilha falha.** `mudar_estado` salva `status`, `minutos` e `data_fim` sem `atualizado_em`, depois chama a auditoria; não exige sucesso dela ([ausencia.py](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/services/ausencia.py:807), [ausencia.py](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/services/ausencia.py:818)). `evento` engole a falha e retorna `None`, e `registrar_log` descarta esse retorno ([observ.py](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/core/observ.py:105), [observ.py](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/core/observ.py:139), [auditoria.py](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/core/auditoria.py:22)). Contraexemplo: após apply, rejeitar e reabrir o atestado com falha nos dois logs deixa identidade, minutos e carimbo iguais; a reversão aceita e restaura 720, porque só procura logs existentes com pk maior ([comando](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:152)). Ocorrência em produção: [não verificado].
+
+- **Alta — mesma cura possui janela mesmo sem falha definitiva.** A escrita de `mudar_estado` termina antes da chamada de auditoria, sem transação englobando ambas ([ausencia.py](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/services/ausencia.py:792), [ausencia.py](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/services/ausencia.py:819)). Duas chamadas intercaladas podem completar a ida/volta de estado e parar antes dos respectivos logs; nesse intervalo a reversão não encontra trilha posterior ([comando](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:157)). Interleaving executado: [não verificado].
+
+- **Cura #1 fecha o caso descrito:** o objeto é recarregado e o carimbo devolvido dentro do `atomic` que mantém a trava ([comando](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:137), [comando](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:173), [comando](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:189)).
+
+- **Trilha própria da reversão:** ela grava evento com o próprio pk e confirma esse pk; o filtro usa `pk__gt`, portanto não conta essa mesma trilha como ato posterior ([comando](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:182), [comando](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:274), [comando](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:157)).
+
+- **PK versus commit:** o modelo não contém campo de ordenação de commits; `pk__gt` mede pk, e a criação acontece dentro da transação do chamador ([models.py](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/core/models.py:285), [observ.py](/home/ronald/codex_ws/4e9380e52b1a12a052e62a64b664c8c316ab414c/app/core/observ.py:133)). Um escritor concreto com log menor e alteração da mesma ausência depois do apply: [não verificado]; não apresento a hipótese genérica como achado.
+
+## 06/11 01:55 · sessao b77f0a7fd3d0 · - · - · origem=Ronald (tmux)
+
+- **Exportação — corrida estrutural, gravidade alta se descarte negava a possibilidade.** A trava cobre somente Ausencia (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:138`); a cerca consulta entrega antes da escrita (`:160`, `:169`), enquanto `competencia_entregue` apenas consulta (`app/folha/export.py:581`) e o export registra sem trava compartilhada (`app/folha/models.py:182`, chamado em `app/folha/views.py:297`). Um export pode registrar entre a cerca e a alteração; ocorrência ou disponibilidade operacional na produção: [não verificado].
+
+- **Push do apply desfeito — caminho síncrono existe, mas alcance específico não demonstrado.** O save (`app/ponto/services/ausencia.py:508`) dispara julgamento síncrono (`app/ponto/signals.py:143`, `:147`, `:93`), que pode emitir (`app/ponto/services/cartorio.py:1740`, `:1778`) e enviar push (`app/ponto/management/commands/detectar_ausencias.py:778`) antes dos checks que provocam rollback (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:175`, `:178`, `:186`). Gravidade média condicional; células, vínculos, chamados e gates necessários para alcançar essas emissões nas 30 linhas: [não verificado]. O ramo flexível cala o push (`app/ponto/management/commands/detectar_ausencias.py:777`), e a cobertura parcial depende de tipo cadastrado e minutos abaixo de 480 (`app/ponto/turnos.py:2595`).
+
+Autores explícitos de LogAuditoria com modelo `Ausencia` fora de `services/ausencia.py`:
+
+- `app/core/views_ia.py:991`: lançamento por IA.
+- `app/ponto/views.py:2357`: cancelamento em lote.
+- `app/ponto/views.py:2614`: confirmação de aprovação apesar do anexo.
+- `app/ponto/views.py:2739`: cancelamento individual.
+- `app/ponto/views.py:2808`: edição.
+- `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:182`: apply e reversão.
+- `app/ponto/management/commands/curar_ausencia_sem_fim.py:47`: cura de fim.
+- `app/chamados/services/materializacao.py:663`: devolução de perguntas absorvidas após rejeição; grava no pk da ausência, embora altere perguntas/disputas (`:657`–`:665`).
+
+Todos esses chamadores usam `evento` direta ou indiretamente: `app/core/auditoria.py:22`, escritor físico em `app/core/observ.py:134`.
+
+Os anexos originais de triagem/opus mencionados não foram disponibilizados no dado: [não verificado].
+
+## 06/11 01:55 · sessao 674011c3259a · - · - · origem=Ronald (tmux)
+
+**Alta — #2 permanece aberto quando a trilha falha.** `mudar_estado` persiste `status`, `minutos` e `data_fim` sem `atualizado_em`, depois tenta auditoria (`app/ponto/services/ausencia.py:807`, `:818`, `:819`, `:820`). `evento` admite falha e retorna `None`, preservando a alteração de negócio; `registrar_log` ignora o retorno (`app/core/observ.py:105`, `:133`, `:139`; `app/core/auditoria.py:22`). Assim, ida e volta de status com falhas nas duas trilhas pode deixar identidade/minutos/carimbo iguais e passar pela reversão (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:142`, `:154`, `:157`). Ocorrência em produção: [não verificado].
+
+**Quem registra `modelo='Ausencia'`:**
+
+- `app/ponto/services/ausencia.py:441`: criação.
+- `app/ponto/services/ausencia.py:820`: mudança de estado.
+- `app/ponto/services/ausencia.py:854`: documento anexado.
+- `app/ponto/services/ausencia.py:915`: período parcial.
+- `app/ponto/views.py:2357`: cancelamento em lote.
+- `app/ponto/views.py:2614`: aprovação apesar do anexo.
+- `app/ponto/views.py:2739`: cancelamento individual.
+- `app/ponto/views.py:2808`: edição.
+- `app/core/views_ia.py:991`: criação pela IA.
+- `app/chamados/services/materializacao.py:663`: devolução das perguntas absorvidas.
+- `app/ponto/management/commands/curar_ausencia_sem_fim.py:47`: cura do fim.
+- `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:182`: apply **e reversão**.
+- Migrações históricas: `app/ponto/migrations/0057_a4_backfill_pendente.py:44`, `app/ponto/migrations/0058_a4_relogio_recomeca.py:43`, `app/ponto/migrations/0059_a4_d0_no_primeiro_dia_do_cron.py:37`.
+
+Escritor físico atual: `app/core/observ.py:134`; adaptador: `app/core/auditoria.py:22`.
+
+**Quem escreve Ausencia sem trilha própria:**
+
+- `editar_ausencia_registro`: `app/ponto/services/ausencia.py:508`; save completo, com log pelos chamadores conhecidos `app/ponto/views.py:2808` e comando `:182`.
+- `rederivar_fim`: `app/ponto/services/ausencia.py:1280`; log no chamador `app/ponto/management/commands/curar_ausencia_sem_fim.py:47`.
+- `rejeitar_ausencias_de_ferias`: `app/ponto/services/ausencia.py:1265`; sem log, mas move explicitamente `atualizado_em` em `:1267`.
+- Exclusões sem trilha da Ausencia: `app/ponto/services/ausencia.py:1174`, `:1197`, `:1254`, `:1274`; a reversão recusa linha ausente (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:140`).
+- Escritas de metadados sem carimbo/log próprio: `app/ponto/services/ausencia.py:536`, `:911` sem período e estado inalterado, `:1114`, `:1124`, `:1132`. Esses caminhos isolados não demonstram mudança de minutos/identidade/status: [não verificado].
+
+Log com outro modelo encontrado: aviso de recusa em `Colaborador`, sem criação da ausência (`app/api/views.py:1937`); correção de férias em `AgendamentoFerias`, com exclusão/recriação do espelho (`app/ferias/views.py:497`; `app/ferias/services.py:385`, `:387`). Escritor invisível que altere a mesma ausência preservada nesses caminhos: [não verificado].
 
 ## 06/11 01:16 · sessao 9d598bca1a77 · C20-FIO-MUDO · verificador · origem=Code
 
@@ -421,194 +537,4 @@ Existe vínculo documental nominal para G3-08: `col94`, dia `16/10` e chamado `#
 - **Padrões documentais:** `Single Source of Truth / Aggregate Root` / `fonte unica` (`app/docs/GLOSSARIO.md:11`); `Single Writer Principle` / `juiz unico` (`app/docs/GLOSSARIO.md:12`). FIO registra ambos no próprio escopo (`app/docs/BACKLOG.md:771`). Afirmar qual padrão está atualmente quebrado em cada unidade exige mais que o dono ESTRUTURA **[não verificado]**; mantenha `n/a (medida)` para o trabalho e marque a quebra específica não demonstrada.
 - **Lei geral existente para as quatro:** L-099 define ESTRUTURA como contradição do sistema com o cadastro existente, separando CADASTRO e BATIDA (`app/docs/LEIS.md:122`). Ela cobre a classificação geral fornecida, mas não identifica automaticamente uma das quatro obras nem a causa de cada unidade **[não verificado]**.
 
-## 06/11 00:29 · sessao 8666c8b56a28 · G3G4-DONO-MEDIDO · sonda · origem=Code
-
-**Parte A — interfaces confirmadas na cópia; chamadas efetivas da sonda [nao verificado].**
-
-Não localizei o corpo de `sonda_g3g4.py` nem de `logs/hj_0511/sonda_a.py`; portanto, não pude conferir imports, argumentos efetivamente passados, identidade do script pelo digest nem eventual reconstrução de lógica. [nao verificado]
-
-| Campo | Assinatura real e conferência |
-|---|---|
-| a | `status_do_dia_lavrado(colaborador, data, *, agora=None)`. Delega ao leitor em lote e retorna o resultado do par solicitado. `app/ponto/status_dia.py:201`, `app/ponto/status_dia.py:218` |
-| b | `InsumosDoDono(colaborador, ini, fim, hoje, espelho=None, *, agora, dias_de_fase=None, cadastro=None)`, seguido de `.dono(data)`. **`agora` é obrigatório por palavra-chave**; o método chama `dono_da_divergencia`. `app/ponto/management/commands/e6_oraculo.py:128`, `app/ponto/management/commands/e6_oraculo.py:172`, `app/ponto/management/commands/e6_oraculo.py:180`, `app/ponto/management/commands/e6_oraculo.py:183` |
-| c | `classificar_export(empresa, mes, ano, fechamentos=None)`. Retorna lista por colaborador; não recebe diretamente colaborador e dia. `app/folha/export.py:757`, `app/folha/export.py:762` |
-| d | `dias_que_seguram(empresa, mes, ano)`. Chama realmente `classificar_export` e retorna o universo com mapas por colaborador, incluindo `dias`; não devolve diretamente uma chave `segura`. `app/folha/fora_da_folha.py:102`, `app/folha/fora_da_folha.py:119`, `app/folha/fora_da_folha.py:138` |
-| e | `porta_alcancavel_do_dia(celula_id, *, alimentacao=None)`. Recebe o **ID da célula**; pode retornar `None` ou o objeto da porta. `app/chamados/juizes.py:1341`, `app/chamados/juizes.py:1382`, `app/chamados/juizes.py:1386` |
-| f | `data_do_chamado(modulo_origem, contexto_json)`. Recebe **dois argumentos**, consulta a chave declarada no catálogo e pode retornar `None`. `app/chamados/catalogo/modulos.py:219`, `app/chamados/catalogo/modulos.py:222` |
-
-O campo `d.segura` exige uma seleção por unidade sobre o retorno da função; identificar essa seleção e distinguir adaptação de saída de reconstrução do julgamento depende do script ausente. `app/folha/fora_da_folha.py:106`, `app/folha/fora_da_folha.py:138`; implementação na sonda: [nao verificado].
-
-O envelope calcula e imprime os primeiros 16 caracteres do SHA-256 do script recebido; esse identificador sozinho não permite conferir suas chamadas. `bin/sonda_leitura.sh:217`, `bin/sonda_leitura.sh:219`, `bin/sonda_leitura.sh:221`.
-
-**Parte B — transcrição das 19 unidades fornecidas. [nao verificado]**
-
-As marcas `[nao verificado]` cobrem cada linha inteira: o dado está no enunciado, sem arquivo:linha disponível para confirmação independente. Nos chamados, a ordem é `(id, tipo, status_local)`; `R` representa o valor JSON `"\u0072esolvido"`. `null` e `[]` preservam valores explícitos do dado. [nao verificado]
-
-| uid | col | dia | segura a folha (d) | dono (b) | status lavrado (a, status / fonte) | porta (e) | chamado(s) do dia (f) | erro |
-|---|---:|---|---|---|---|---|---|---|
-| G3-01 [nao verificado] | 29 | 2026-10-15 | n | BATIDA | ok / lavrado | null | (31608, batida_ausente, R) | sem ERRO informado |
-| G3-02 [nao verificado] | 129 | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado; sem dia, campos ausentes |
-| G3-03 [nao verificado] | 923 | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado; sem dia, campos ausentes |
-| G3-04 [nao verificado] | 174 | 2026-10-25 | n | CADASTRO | ok / lavrado | null | (34869, batida_ausente, R) | sem ERRO informado |
-| G3-05 [nao verificado] | 174 | 2026-10-26 | n | CADASTRO | ok / lavrado | null | (35100, batida_ausente, R) | sem ERRO informado |
-| G3-06 [nao verificado] | 33 | 2026-10-03 | n | BATIDA | ok / lavrado | null | (28365, batida_ausente, R); (28426, turno_aberto, R) | sem ERRO informado |
-| G3-07 [nao verificado] | 33 | 2026-10-04 | n | BATIDA | folga / lavrado | null | [] | sem ERRO informado |
-| G3-08 [nao verificado] | 94 | 2026-10-16 | s | ESTRUTURA | irregular / lavrado | rota=porta_fila; fila=[31873]; verbos={31873: validar}; fio=admin | (31873, batida_ausente, em_analise); (32029, turno_aberto, R) | sem ERRO informado |
-| G3-09 [nao verificado] | 789 | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado; sem dia, campos ausentes |
-| G3-10 [nao verificado] | 163 | 2026-10-10 | n | ESTRUTURA | ausencia / lavrado | null | (29050, ausencia_colab, R); (30210, batida_ausente, R) | sem ERRO informado |
-| G3-11 [nao verificado] | 163 | 2026-10-17 | n | ESTRUTURA | folga_trabalhada / lavrado | null | [] | sem ERRO informado |
-| G3-12 [nao verificado] | 873 | 2026-09-26 | n | ESTRUTURA | ausencia / lavrado | null | (21508, ausencia_colab, R) | sem ERRO informado |
-| G3-13 [nao verificado] | 949 | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado; sem dia, campos ausentes |
-| G3-14 [nao verificado] | 214 | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado; sem dia, campos ausentes |
-| G3-15 [nao verificado] | 247 | 2026-10-24 | n | BATIDA | irregular / lavrado | rota=porta_fila; fila=[34577]; verbos={34577: validar}; fio=admin | (21598, regua_suspeita, cancelado); (34577, batida_ausente, em_analise) | sem ERRO informado |
-| G4-01 [nao verificado] | 39 | 2026-10-15 | s | BATIDA | irregular / lavrado | null | (31619, turno_aberto, R); (31792, ausencia_colab, R) | sem ERRO informado |
-| G4-02 [nao verificado] | 42 | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado; sem dia, campos ausentes |
-| G4-03 [nao verificado] | 250 | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado; sem dia, campos ausentes |
-| G4-04 [nao verificado] | 960 | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado; sem dia, campos ausentes |
-
-Contagem por dono, mantendo literalmente o campo b. [nao verificado]
-
-| Dono | Unidades |
-|---|---:|
-| ESTRUTURA | 4 [nao verificado] |
-| CADASTRO | 2 [nao verificado] |
-| BATIDA | 5 [nao verificado] |
-| indeterminado | 8 [nao verificado] |
-| **Soma** | **19 [nao verificado]** |
-
-Contagem por “segura”, exclusivamente pelo campo d. [nao verificado]
-
-| Segura | Unidades |
-|---|---:|
-| s | 2 [nao verificado] |
-| n | 9 [nao verificado] |
-| indeterminado | 8 [nao verificado] |
-| **Soma** | **19 [nao verificado]** |
-
-## 06/11 00:27 · sessao fe6774a8e9e7 · - · - · origem=Ronald (tmux)
-
-- Assinatura real de **c**: `classificar_export(empresa, mes, ano, fechamentos=None)`. Retorna lista de itens por colaborador, incluindo `status`, `motivo` e `travas_aprovacao`; não recebe colaborador nem dia diretamente. `app/folha/export.py:757`, `app/folha/export.py:762`, `app/folha/export.py:829`.
-- Assinatura real de **d**: `dias_que_seguram(empresa, mes, ano)`. Calcula janela, chama `classificar_export`, seleciona os colaboradores cujo motivo é `furo_espelho` e retorna o universo com mapas por colaborador; não retorna diretamente uma chave `segura`. `app/folha/fora_da_folha.py:102`, `app/folha/fora_da_folha.py:118`, `app/folha/fora_da_folha.py:128`, `app/folha/fora_da_folha.py:138`.
-- Os dias de retenção vêm de `_dias_que_retem(colab, ini, fim)`, que chama a função real `motivos_retencao_celula(colab, ini, fim, com_dias=True)`. O retorno é `(motivos, dias)`, sendo cada dia um dict com `data`, `motivo`, `veredito`, `celula_id`. `app/folha/fora_da_folha.py:95`, `app/folha/fora_da_folha.py:98`, `app/folha/fora_da_folha.py:137`, `app/folha/export.py:1168`, `app/folha/export.py:1185`, `app/folha/export.py:1221`.
-- A chave `segura` do dado exige uma adaptação do resultado por colaborador/dia, mas identificar o código que fez essa adaptação ou afirmar que reconstruiu o julgamento é **[nao verificado]**. O conteúdo de `sonda_g3g4.py` e `logs/hj_0511/sonda_a.py` não foi encontrado nas buscas de arquivos, inclusive ocultos e ignorados: **[nao verificado]**.
-- O wrapper calcula o digest SHA-256 truncado em 16 caracteres do script recebido e o imprime; isso não contém o corpo da sonda nem prova suas chamadas. `bin/sonda_leitura.sh:217`, `bin/sonda_leitura.sh:219`, `bin/sonda_leitura.sh:221`. A igualdade entre `c22eaa690540672d` e algum corpo disponível é **[nao verificado]**.
-- O documento da cópia registra que HJ usou as funções reais e aponta o arquivo privado; é referência documental, não inspeção do corpo da sonda. `app/docs/RELATO.md:6528`.
-
-## 06/11 00:24 · sessao 76ce544ecf5a · H12H06-B · verificador · origem=Code
-
-**Não liberaria a obra nesta volta:** a reversão exigida não funciona para as faltas, e o complemento alcança um escritor genérico que pode regravar competências exportadas. (app/ponto/services/ausencia.py:480; app/ponto/tests/test_h12h06b_rederivar_minutos.py:217; app/ponto/services/fechamento.py:530; app/ponto/services/fechamento.py:1144)
-
-1. **Bloqueante — reversão incompleta, requisito convertido em falha esperada.** A reversão tenta devolver 720 minutos às faltas, mas a porta recusa minutos positivos em tipo não parcial. O teste aceita que a falta permaneça corrigida; o teste da restauração integral recebe `@expectedFailure`. Declarar a parada não satisfaz o requisito de reversão pelo mesmo caminho. ([ausencia.py:480](/home/ronald/codex_ws/5d8c9eefdcfcac0e7006c08a07b1d77bfed21bf6/app/ponto/services/ausencia.py:480); app/ponto/tests/test_h12h06b_rederivar_minutos.py:202; app/ponto/tests/test_h12h06b_rederivar_minutos.py:217)
-
-2. **Alta — o complemento pode mudar exportada por recálculo genérico.** A mudança em `datas_justificadas` entra em `recalcular_fechamento_mes` para qualquer competência. Nesse escritor, `_exportadas` gera aviso; a exclusão efetiva depende de `GUARDA_COMPETENCIA`, cuja única entrada é 09/2026. Outras competências exportadas podem alcançar o `update` de falta, atraso e DSR. A cerca do comando não protege esse caminho do complemento. Isso contraria a proibição literal deste aval; execução desse caminho em produção: **[não verificado]**. ([fechamento.py:684](/home/ronald/codex_ws/5d8c9eefdcfcac0e7006c08a07b1d77bfed21bf6/app/ponto/services/fechamento.py:684); app/ponto/services/fechamento.py:36; app/ponto/services/fechamento.py:530; app/ponto/services/fechamento.py:551; app/ponto/services/fechamento.py:1144; app/docs/LEIS.md:125)
-
-3. **Alta — snapshot não está vinculado ao ato efetivamente aplicado.** O snapshot é lido antes das travas; a reversão usa somente `pk` e `minutos`, ignorando a identidade fotografada e o resultado original de cada linha. Intercalação permitida: snapshot captura 720; outro ator grava 0; apply encontra 0 e responde `ja_aplicada`; reverter encontra 0 e escreve 720, desfazendo o ato alheio. Também é possível fotografar um valor diferente do efetivamente encontrado antes da alteração. Ocorrência real: **[não verificado]**. ([rederivar_minutos_h06_comp11.py:212](/home/ronald/codex_ws/5d8c9eefdcfcac0e7006c08a07b1d77bfed21bf6/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:212); app/ponto/management/commands/rederivar_minutos_h06_comp11.py:94; app/ponto/management/commands/rederivar_minutos_h06_comp11.py:139; app/ponto/management/commands/rederivar_minutos_h06_comp11.py:203; app/ponto/management/commands/rederivar_minutos_h06_comp11.py:228)
-
-   **O snapshot também não nasce antes de todos os caminhos que gravam:** `--apply` o cria antes do laço; `--reverter` apenas lê o arquivo recebido e segue ao laço, sem fotografar o estado anterior à própria reversão. (app/ponto/management/commands/rederivar_minutos_h06_comp11.py:198; app/ponto/management/commands/rederivar_minutos_h06_comp11.py:211; app/ponto/management/commands/rederivar_minutos_h06_comp11.py:225)
-
-4. **Alta — alteração pode confirmar sem LogAuditoria.** O comando ignora o retorno de `evento()` e declara `aplicada`. Esse escritor de auditoria engole exceções, desfaz somente seu savepoint e retorna `None`; portanto a transação da Ausencia pode confirmar sem a trilha exigida pela L-007. O teste verifica apenas o caso de auditoria bem-sucedida. ([rederivar_minutos_h06_comp11.py:164](/home/ronald/codex_ws/5d8c9eefdcfcac0e7006c08a07b1d77bfed21bf6/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:164); app/core/observ.py:105; app/core/observ.py:133; app/core/observ.py:139; app/ponto/tests/test_h12h06b_rederivar_minutos.py:118; app/docs/LEIS.md:65)
-
-5. **Alta, condicional — dry e linha desfeita podem emitir push.** `Ausencia.save` dispara cartório síncrono; o cartório pode chamar o emissor, que envia push imediatamente. A conferência e o rollback do comando acontecem depois. O rollback desfaz alterações transacionais, mas não recolhe um push enviado. Atingir esse ramo nos 30 atos depende de células, batidas, chamados e subscriptions não fornecidos: **[não verificado]**. ([signals.py:143](/home/ronald/codex_ws/5d8c9eefdcfcac0e7006c08a07b1d77bfed21bf6/app/ponto/signals.py:143); app/ponto/signals.py:93; app/ponto/services/cartorio.py:1740; app/ponto/management/commands/detectar_ausencias.py:774; app/chamados/push_utils.py:40; app/ponto/management/commands/rederivar_minutos_h06_comp11.py:154)
-
-6. **Alta, sob concorrência — conferir entrega e salvar não estão serializados com exportação.** A trava é da Ausencia; o juiz consulta `ExportacaoDominio` sem trava, e a exportação registra seu fato independentemente. Não há nesses caminhos uma exclusão comum que impeça exportar entre `_cerca()` e o save. A cerca cobre exportação já visível na consulta; a garantia durante toda a escrita não está assegurada. Corrida em produção: **[não verificado]**. ([rederivar_minutos_h06_comp11.py:129](/home/ronald/codex_ws/5d8c9eefdcfcac0e7006c08a07b1d77bfed21bf6/app/ponto/management/commands/rederivar_minutos_h06_comp11.py:129); app/ponto/management/commands/rederivar_minutos_h06_comp11.py:144; app/folha/export.py:581; app/folha/models.py:174; app/folha/views.py:297)
-
-7. **Média — ficou leitor visual de parcial fora da migração.** `palavra_do_dia` ainda pressupõe “dia inteiro = minutos zero” e imprime qualquer minuto positivo como horas abonadas; `rotulo_de` passa os minutos crus. Um atestado de 720 pode continuar apresentado como abono de 12h, embora o cálculo agora o trate como dia inteiro. Essa palavra chega ao espelho e à observação do PDF. O formulário também mantém a instrução `>0 = parcial`. É divergência preexistente que a migração não encerra. ([dia_decidido.py:230](/home/ronald/codex_ws/5d8c9eefdcfcac0e7006c08a07b1d77bfed21bf6/app/ponto/services/dia_decidido.py:230); app/ponto/services/dia_decidido.py:484; app/ponto/services/espelho.py:340; app/relatorios/pdf_espelho.py:923; app/templates/ponto/lancar_ausencia.html:70)
-
-8. **Média — pré-requisito preexistente do abono permanece pendente.** O corte manda o abono ler o mesmo juiz de marcos cobertos pela Justificativa. Entretanto, `efeito_ausencia` e fechamento continuam promovendo diretamente toda Justificativa aprovada a uma data inteira justificada; a grade também mantém essa leitura. Os testes novos exercitam Ausencia e não demonstram cumprimento dessa parte do corte. Não atribuo ao diff a criação dessa pendência. ([CORTES.md:319](/home/ronald/codex_ws/5d8c9eefdcfcac0e7006c08a07b1d77bfed21bf6/app/docs/CORTES.md:319); app/ponto/services/efeito_ausencia.py:40; app/ponto/services/fechamento.py:651; app/escala/utils.py:1213; app/ponto/tests/test_h12h06b_parcial_pelo_juiz.py:59)
-
-O censo dos campos pedidos, incluindo os caminhos externos ao diff, é o seguinte. Dentro do comando, `_estado` lê **todos os campos concretos**, e a comparação posterior só libera diferenças em `minutos` e `atualizado_em`; `_snap` fotografa um subconjunto. (app/ponto/management/commands/rederivar_minutos_h06_comp11.py:79; app/ponto/management/commands/rederivar_minutos_h06_comp11.py:89; app/ponto/management/commands/rederivar_minutos_h06_comp11.py:94; app/ponto/management/commands/rederivar_minutos_h06_comp11.py:156)
-
-| Campo | Quem escreve | Quem lê |
-|---|---|---|
-| `Ausencia.minutos` | Criação e edição: app/ponto/services/ausencia.py:342, app/ponto/services/ausencia.py:507. Derivação da falta pela GRADE: app/ponto/models.py:877. | Comando: app/ponto/management/commands/rederivar_minutos_h06_comp11.py:139. Juiz: app/ponto/turnos.py:2598. Coletores: app/ponto/services/efeito_ausencia.py:48, app/ponto/services/credito_parcial.py:27. Tela/rótulo: app/templates/ponto/ausencias.html:163, app/ponto/services/dia_decidido.py:488. |
-| `atualizado_em` | `auto_now`: app/ponto/models.py:814. Edição de período: app/ponto/services/ausencia.py:878. Rejeição de férias: app/ponto/services/ausencia.py:1267. | Snapshot: app/ponto/management/commands/rederivar_minutos_h06_comp11.py:96. Detecção de fato novo: app/ponto/services/cartorio.py:355. |
-| `aprovada_em` | Criação aprovada: app/ponto/services/ausencia.py:347. Decisão: app/ponto/services/ausencia.py:900. Auto-carimbo: app/ponto/models.py:872. | Comparação integral: app/ponto/management/commands/rederivar_minutos_h06_comp11.py:89. Fato novo: app/ponto/services/cartorio.py:357. Autoria/data visual: app/ponto/services/dia_decidido.py:500. |
-| `dias_corridos` | Criação/edição: app/ponto/services/ausencia.py:342, app/ponto/services/ausencia.py:500. Normalização: app/ponto/models.py:893. | Derivação do fim: app/ponto/services/ausencia.py:76. Snapshot: app/ponto/management/commands/rederivar_minutos_h06_comp11.py:96. Histórico/tela/vigia: app/ponto/services/dia_decidido.py:613, app/templates/ponto/ausencias.html:159, app/ponto/services/vigia_ausencia.py:135. |
-| `data_fim` | Derivador e edição: app/ponto/services/ausencia.py:66, app/ponto/services/ausencia.py:499. Modelo: app/ponto/models.py:907. | Identidade/range do comando: app/ponto/management/commands/rederivar_minutos_h06_comp11.py:100, app/ponto/management/commands/rederivar_minutos_h06_comp11.py:134. Universo/cobertura/parcial: app/ponto/turnos.py:2529, app/ponto/turnos.py:2599, app/ponto/turnos.py:2753. Histórico: app/ponto/services/dia_decidido.py:608. |
-| `status` | Criação: app/ponto/services/ausencia.py:344. Máquina: app/ponto/services/ausencia.py:807. Rejeição de férias: app/ponto/services/ausencia.py:1267. | Identidade: app/ponto/management/commands/rederivar_minutos_h06_comp11.py:134. Folha/cobrança: app/ponto/turnos.py:2514. Consumidores/tela: app/chamados/services/silencio_ausencia.py:77, app/ponto/services/ausencia.py:676, app/templates/ponto/ausencias.html:176. |
-| `LogAuditoria` | Comando pede evento: app/ponto/management/commands/rederivar_minutos_h06_comp11.py:165. Escritor: app/core/observ.py:134. Adaptador: app/core/auditoria.py:22. | Tela: app/core/views.py:705. Teste: app/ponto/tests/test_h12h06b_rederivar_minutos.py:94. |
-| `ExportacaoDominio` | Registro/invalidação externos: app/folha/models.py:174, app/folha/models.py:158. | Comando delega ao vigia: app/ponto/management/commands/rederivar_minutos_h06_comp11.py:116. Vigia e juiz: app/chamados/services/vigia_fio.py:838, app/folha/export.py:581. |
-| `datas_justificadas` | Folha: app/ponto/services/fechamento.py:651, app/ponto/services/fechamento.py:690. Coletor: app/ponto/services/efeito_ausencia.py:40, app/ponto/services/efeito_ausencia.py:60. | Motor da folha/tela/PDF: app/ponto/services/fechamento.py:730, app/ponto/services/espelho.py:1114, app/relatorios/pdf_espelho.py:396. Falta/abono/DSR: app/ponto/motor_calculo_v2.py:796, app/ponto/motor_calculo_v2.py:2581, app/ponto/motor_calculo_v2.py:3442. |
-| `min_parcial_pagos` | Coletor: app/ponto/services/efeito_ausencia.py:46, app/ponto/services/efeito_ausencia.py:50. | PDF coleta e soma em `horas_abono`: app/relatorios/pdf_espelho.py:336, app/relatorios/pdf_espelho.py:479. O acumulador homônimo local do fechamento foi apagado: app/ponto/services/fechamento.py:663. |
-| `creditos_por_dia` | Mapa: app/ponto/services/credito_parcial.py:25, app/ponto/services/credito_parcial.py:28. | Abatimento de atraso: app/ponto/services/fechamento.py:983. Alimentação de DiaPago: app/ponto/services/fechamento.py:1190, app/ponto/services/fechamento.py:1266. |
-
-**Não encontrei segundo escritor de Ausencia no comando:** ele pede a edição à porta, que atribui os campos e chama `save`. O gate exige essa porta com allowlist vazia; o censo inclui comandos de management. (app/ponto/management/commands/rederivar_minutos_h06_comp11.py:150; app/ponto/services/ausencia.py:496; app/ponto/tests/test_chokepoint_ausencia_gate.py:25; app/ponto/tests/test_chokepoint_ausencia_gate.py:53; app/core/censo_escritas.py:54)
-
-A conferência pega e desfaz auto-carimbo de `aprovada_em` e normalização de `dias_corridos`/`data_fim`. São ajustes legítimos do modelo, mas excedem a alteração autorizada de minutos; portanto fazem a linha ser pulada. Existirem esses estados nos 30 registros: **[não verificado]**. Rejulgamento de status e alteração de `prazo_documento` por troca de tipo não acontecem nessa chamada, pois ela passa o mesmo tipo e a porta condiciona o rejulgamento à troca. (app/ponto/models.py:872; app/ponto/models.py:893; app/ponto/management/commands/rederivar_minutos_h06_comp11.py:156; app/ponto/services/ausencia.py:512)
-
-A comparação não alcança efeitos em `CelulaDia`, eventos, chamados ou perguntas. Além disso, liberar `atualizado_em` não é operacionalmente neutro: o cartório o lê como fato novo. O consumidor de Ausencia é agendado em `on_commit`, enquanto o julgamento do cartório é síncrono. (app/ponto/portas/celula.py:672; app/ponto/services/cartorio.py:1740; app/ponto/services/cartorio.py:357; app/ponto/signals.py:147; app/ponto/signals.py:272)
-
-Quanto às travas, a consulta inicial pede trava de linha somente de **Ausencia**; a ordenação vazia remove a ordenação relacionada de `Meta`, e não há `nowait`. Isso não significa que toda a transação só trave essa entidade. Depois do save, o cartório pode reconciliar e travar Chamado, emitir e travar Colaborador, e escrever CelulaDia. A ordem depende do ramo; Colaborador não é travado antes da Ausencia nesse caminho inicial. Deadlock concreto ou caminho inverso concorrente: **[não verificado]**. (app/ponto/management/commands/rederivar_minutos_h06_comp11.py:129; app/ponto/models.py:819; app/ponto/services/cartorio.py:1488; app/chamados/models.py:671; app/ponto/management/commands/detectar_ausencias.py:693; app/chamados/models.py:863; app/ponto/services/cartorio.py:1822)
-
-A cerca distingue corretamente duas perguntas: **competência inicial = 11/2026**, conferida no primeiro dia, e **nenhum dia entregue**, conferida no range inteiro. O range de #5333, 30/10..28/12, atravessa competências 11/2026, 12/2026 e 01/2027 pelos cortes admitidos. Primeiro dia basta para identificar o início, não para dizer que todo o ato pertence à comp11. Corte efetivo e entregas da empresa: **[não verificado]**. (app/ponto/management/commands/rederivar_minutos_h06_comp11.py:73; app/ponto/management/commands/rederivar_minutos_h06_comp11.py:111; app/ponto/management/commands/rederivar_minutos_h06_comp11.py:115; app/ponto/janelas.py:24; app/ponto/janelas.py:50)
-
-A segunda execução evita save/evento quando a identidade confere e os minutos já estão no alvo; o teste verifica carimbos e contagem de eventos. Essa igualdade também aceita valor atingido por outro motivo, sem provar autoria — daí o problema da reversão do achado 3. (app/ponto/management/commands/rederivar_minutos_h06_comp11.py:134; app/ponto/management/commands/rederivar_minutos_h06_comp11.py:139; app/ponto/tests/test_h12h06b_rederivar_minutos.py:128)
-
-O complemento muda dinheiro potencialmente em **aprovadas**, de tipo pago, com minutos positivos que falham em `cobre_parte_do_dia`: um dia com minutos ≥480; range maior que um dia com minutos; ou tipo pago não parcial com minutos. Essas classes deixam de gerar crédito e passam pelo efeito de dia inteiro. Parcial permitida de um dia entre 1 e 479 continua parcial. Os consumidores alcançados incluem falta/abono/DSR do motor, atraso abatido, DiaPago, números do espelho e `horas_abono` do PDF. Pessoas e valores efetivamente alterados em produção: **[não verificado]**. (app/ponto/turnos.py:2514; app/ponto/turnos.py:2598; app/ponto/services/credito_parcial.py:27; app/ponto/services/efeito_ausencia.py:55; app/ponto/motor_calculo_v2.py:2581; app/ponto/services/fechamento.py:983; app/ponto/services/fechamento.py:1190; app/ponto/services/espelho.py:1114; app/relatorios/pdf_espelho.py:479)
-
-Nas demais classes pedidas, não encontrei juiz novo nos três leitores migrados: todos chamam `cobre_parte_do_dia`; a falta continua derivada pela fonte da GRADE, sem cálculo paralelo no comando. O relógio novo é lido na entrada `handle`, para nomear os artefatos. (app/ponto/services/efeito_ausencia.py:48; app/ponto/services/credito_parcial.py:27; app/ponto/services/fechamento.py:685; app/ponto/models.py:881; app/ponto/management/commands/rederivar_minutos_h06_comp11.py:196)
-
-Os testes de parcial **não são vazios**: há contrastes 0/479/480/720 e range; o teste da folha chama o motor real pelo spy e exige chamada. Porém ele verifica a alimentação `datas_justificadas`, não os valores financeiros persistidos ou o PDF. O `expectedFailure` da reversão é a exigência explicitamente ainda vermelha. Execução e resultados alegados dos logs RED/green e dos seis mutantes: **[não verificado]**. (app/ponto/tests/test_h12h06b_parcial_pelo_juiz.py:71; app/ponto/tests/test_h12h06b_parcial_pelo_juiz.py:100; app/ponto/tests/test_h12h06b_parcial_pelo_juiz.py:131; app/ponto/tests/test_h12h06b_parcial_pelo_juiz.py:142; app/ponto/tests/test_h12h06b_rederivar_minutos.py:217)
-
-## 06/11 00:21 · sessao 094c85e121af · - · - · origem=Ronald (tmux)
-
-Achados e evidências do caminho escritor/travas:
-
-- **Alta — trilha não é garantida.** O comando chama `evento` e declara `aplicada` sem verificar retorno (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:164-169`). `evento` captura falha, isola a escrita em savepoint e retorna `None`, permitindo commit da alteração sem `LogAuditoria` (`app/core/observ.py:105`, `:133-139`). O teste só verifica auditoria bem-sucedida (`app/ponto/tests/test_h12h06b_rederivar_minutos.py:111-120`).
-
-- **Alta, condicional — dry/linha desfeita pode emitir push externo.** O `save` dispara cartório síncrono (`app/ponto/signals.py:143-147`, `:85-93`), que pode chamar o emissor (`app/ponto/services/cartorio.py:1740-1742`, `:1778`). O emissor pode abrir chamado e enviar push antes de retornar (`app/ponto/management/commands/detectar_ausencias.py:693`, `:774-783`; envio de rede em `app/chamados/push_utils.py:40-48`). O rollback do comando acontece somente depois (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:154-163`). Atingir esse ramo com as 30 linhas depende de células, batidas, chamados e subscriptions ausentes do dado: **[não verificado]**.
-
-- **Informativo — comparação cobre a Ausencia, não efeitos em outras entidades.** `_estado` inclui todos os campos concretos e o pós compara tudo exceto minutos/atualizado_em (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:79`, `:89-90`, `:154-158`). Cartório pode alterar `CelulaDia`, gerar `EventoCelula`, reconciliar/criar chamados e perguntas pelas portas existentes (`app/ponto/services/cartorio.py:906-911`, `:958-963`, `:1740`, `:1822`; `app/ponto/portas/celula.py:672-684`). Esses efeitos não entram na comparação.
-
-- **Informativo — ajustes legítimos do modelo seriam desfeitos.** `Ausencia.save` preenche `aprovada_em` ausente em aprovada/rejeitada e normaliza `dias_corridos`/`data_fim` (`app/ponto/models.py:872-873`, `:893-907`); a comparação os rejeita (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:155-158`). Existência dessas inconsistências nos 30 registros: **[não verificado]**.
-
-Não encontrei segundo escritor de Ausencia no comando. Ele chama a porta (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:149-151`), que atribui e salva (`app/ponto/services/ausencia.py:496-508`). Executei exclusivamente o censo AST puro com `python3 -B`: **14 sítios de escrita de Ausencia; zero fora da porta; comando sem escrita direta detectada**. Implementação do censo: `app/core/censo_escritas.py:451-466`; regra do gate: `app/ponto/tests/test_chokepoint_ausencia_gate.py:53-57`, `:65`.
-
-Censo essencial de campos fora do diff:
-
-| Campo | Quem escreve | Quem lê |
-|---|---|---|
-| minutos | criação `app/ponto/services/ausencia.py:341-344`; edição `:507-508`; derivação GRADE `app/ponto/models.py:877-887` | `app/ponto/models.py:866`; cobertura parcial `app/ponto/turnos.py:2583`; tela `app/templates/ponto/ausencias.html:163`; coletores alterados no diff |
-| atualizado_em | auto_now `app/ponto/models.py:814`; período `app/ponto/services/ausencia.py:878`, `:909-911`; rejeição de férias `:1265-1267` | fato novo/reabertura `app/ponto/services/cartorio.py:355-357`; snapshot do comando `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:96` |
-| aprovada_em | criação aprovada `app/ponto/services/ausencia.py:347-349`; decisão `:900-911`; modelo `app/ponto/models.py:872-873` | fato novo `app/ponto/services/cartorio.py:355-357`; autoria/data da decisão `app/ponto/services/dia_decidido.py:498-501`; comparação integral do comando `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:89-90` |
-| dias_corridos | criação `app/ponto/services/ausencia.py:342`; edição `:500`; normalização `app/ponto/models.py:893-901` | derivar fim `app/ponto/services/ausencia.py:76-77`; histórico `app/ponto/services/dia_decidido.py:613-614`; tela `app/templates/ponto/ausencias.html:159-165`; vigia `app/ponto/services/vigia_ausencia.py:135-136` |
-| data_fim | juiz `app/ponto/services/ausencia.py:66-78`; criação `:343`; edição `:477`, `:499`; modelo `app/ponto/models.py:907` | universo/cobertura `app/ponto/turnos.py:2529-2533`, `:2753-2770`; parcial `:2599`; histórico `app/ponto/services/dia_decidido.py:608-614`; cartório `app/ponto/services/cartorio.py:355-357` |
-| status | criação `app/ponto/services/ausencia.py:344`; máquina `:807-819`; rejeição de férias `:1265-1267` | filtro folha/cobrança `app/ponto/turnos.py:2515-2517`; consumidor `app/chamados/services/silencio_ausencia.py:77`, `:93`; fechamento de chamado `app/ponto/services/ausencia.py:676-678`; tela `app/templates/ponto/ausencias.html:176-179` |
-| LogAuditoria | único escritor `app/core/observ.py:134-137`; adaptador `app/core/auditoria.py:22-24`; comando `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:164-168` | tela `app/core/views.py:705-728`; teste do comando `app/ponto/tests/test_h12h06b_rederivar_minutos.py:94-96` |
-
-`editar_ausencia_registro` não rejulga status aqui: só chama o rejulgamento se o tipo mudou (`app/ponto/services/ausencia.py:512-514`), enquanto o comando passa o próprio tipo conferido (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:134-138`, `:150`). Portanto esse caminho não altera `prazo_documento` por rejulgamento; a porta de mudança de estado o limpa quando sai de aguardando_documento (`app/ponto/services/ausencia.py:809-811`).
-
-Travas:
-
-- Entrada: query limpa ordenação e pede trava somente de `Ausencia`, sem `nowait` (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:129-131`); `Meta.ordering` que incluiria colaborador está em `app/ponto/models.py:819`.
-- A porta consulta sobreposição sem `select_for_update` (`app/ponto/services/ausencia.py:487`; `app/ponto/turnos.py:2815-2824`, `:2839-2841`).
-- Dentro do save/cartório, reconciliação pode travar `ChamadoColaborador` (`app/ponto/services/cartorio.py:1488-1522`; `app/chamados/models.py:671-675`).
-- Emissão pode depois travar `Colaborador` (`app/ponto/services/cartorio.py:1740`; `app/ponto/management/commands/detectar_ausencias.py:693`; `app/chamados/models.py:863-866`).
-- A lavra salva `CelulaDia` e insere `EventoCelula` dentro da mesma transação externa (`app/ponto/services/cartorio.py:1822`; `app/ponto/portas/celula.py:849`, `:681-684`). O ramo nunca_bateu salva célula diretamente por essa porta (`app/ponto/services/cartorio.py:1264-1266`).
-- O consumidor de ausência é `on_commit` e só roda após o commit da linha (`app/ponto/signals.py:250-272`). Reconcilia os chamados vivos do colaborador (`app/chamados/services/silencio_ausencia.py:125-127`) e fecha ausência_colab decidida (`app/ponto/services/ausencia.py:705-713`).
-- Não demonstrei caminho contrário Colaborador→Ausencia nem deadlock concreto: **[não verificado]**.
-
-## 06/11 00:21 · sessao c1ac468b9bad · - · - · origem=Ronald (tmux)
-
-Achados da fatia leitores/testes: [nao verificado]
-
-- **P2, apresentação não migrada:** [app/ponto/services/dia_decidido.py:230] pressupõe que dia inteiro tem `minutos=0`; `palavra_do_dia` imprime qualquer valor positivo como horas abonadas (:234–235), e `rotulo_de` entrega minutos crus (:484–489). Um atestado de 720 continua rotulado “Atestado 12h (abonado)” embora o cálculo o trate como dia inteiro. O mesmo rótulo chega à tela pelo `do_dia` (:428–429), via [app/ponto/services/espelho.py:340], e à observação do PDF em [app/relatorios/pdf_espelho.py:923]. É preexistente, mas responde “algum leitor ficou fora?”; os campos de edição e a exibição literal “Minutos” do drawer não são, por si, classificadores de parcial.
-
-- **P2, pré-requisito de abono pendente:** [app/docs/CORTES.md:319] exige `marcos_cobertos_por_justificativa` e leitura pelo abono da mesma autoridade. Entretanto, [app/ponto/services/efeito_ausencia.py:40] e [app/ponto/services/fechamento.py:651] continuam convertendo toda Justificativa aprovada em data inteira justificada; [app/escala/utils.py:1213] repete a interpretação. A tabela viva de ausência [app/core/juizes.py:239] não contém esse juiz; a busca textual não encontrou implementação na cópia. Isso é pendência preexistente; o diff não cria juiz substituto. Os testes novos não criam Justificativa, portanto não provam esse contrato: [app/ponto/tests/test_h12h06b_parcial_pelo_juiz.py:59]. [nao verificado]
-
-- **P2, limite da prova financeira:** o teste chamado “folha abona” verifica somente a presença de DIA em `datas_justificadas` ([app/ponto/tests/test_h12h06b_parcial_pelo_juiz.py:142]), embora a regra anunciada fale em falta menor no `FechamentoMensal` (:15–16). Não verifica valores persistidos de falta, DSR, DiaPago ou PDF. Não é vacuo: chama motor real pelo spy (:131–139) e exige que o spy tenha sido chamado (:139). O mock de `ler_lavra` (:136) é obsoleto/inócuo para esse caminho, conforme a lápide em [app/ponto/services/fechamento.py:921]. [nao verificado]
-
-Censo dos campos derivados:
-
-| Campo | Escritor | Leitores |
-|---|---|---|
-| `datas_justificadas` | fechamento: Justificativas em [app/ponto/services/fechamento.py:651], Ausencias em :690; coletor equivalente em [app/ponto/services/efeito_ausencia.py:40] e :60 | montagem motor folha em fechamento :716, :730, :810; tela em [app/ponto/services/espelho.py:1114]; PDF em [app/relatorios/pdf_espelho.py:334] e :396; motor armazena em [app/ponto/motor_calculo_v2.py:796], decide falta/abono/DSR em :2581, :2600–2622 e :3442–3455 |
-| `min_parcial_pagos` | [app/ponto/services/efeito_ausencia.py:46], :50, :64 | PDF lê em [app/relatorios/pdf_espelho.py:336] e soma em `horas_abono` :479; tela consome os demais itens do coletor, não esse valor ([app/ponto/services/espelho.py:1068], :1114, :1133) |
-| `creditos_por_dia` | [app/ponto/services/credito_parcial.py:25], :28 | fechamento em [app/ponto/services/fechamento.py:983], abatimento em :984–985; mesma alimentação à lavratura DiaPago em :1190 e :1266 |
-| `_min_parcial_pagos` local do fechamento | apagado, lápide [app/ponto/services/fechamento.py:663] | não encontrei leitura remanescente; o homônimo vivo do PDF pertence a outro escopo e tem leitor :479 |
-
-O complemento muda o universo de **Ausencias aprovadas** (`para='folha'`: [app/ponto/turnos.py:2514]) com tipo em `TIPOS_PAGOS`, minutos positivos e `cobre_parte_do_dia=False`: um dia com minutos ≥480; range de mais de um dia com minutos; tipo pago não permitido para minutos com qualquer valor positivo. O juiz exige tipo parcial, um dia e `0<minutos<480`: [app/ponto/turnos.py:2598]. Essas classes entram em justificadas ([app/ponto/services/efeito_ausencia.py:55], :60; [app/ponto/services/fechamento.py:685], :690) e deixam de gerar crédito ([app/ponto/services/credito_parcial.py:27]). Isso pode mudar faltas, abonos e DSR pelo motor citado e o atraso abatido em fechamento :985; quantias e pessoas de produção: **[não verificado]**.
-
-Sem achado de juiz novo nos três sítios migrados: [app/ponto/services/efeito_ausencia.py:48], :55; [app/ponto/services/credito_parcial.py:27]; [app/ponto/services/fechamento.py:685] leem o mesmo juiz existente [app/ponto/turnos.py:2583]. Lista de ausências já lê esse juiz ([app/ponto/views.py:2236], :2240; [app/templates/ponto/ausencias.html:163]); formulário de período também ([app/ponto/views.py:2084]; [app/templates/ponto/partials/painel_ausencia.html:296], :311). Restam textos de instrução incorretos “>0=parcial” em [app/templates/ponto/lancar_ausencia.html:70] e “lançável por minutos (cobre parte do dia…)” em [app/templates/ponto/partials/painel_tipo_ausencia.html:38], sem decisão financeira própria.
-
-_2064 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2069 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
