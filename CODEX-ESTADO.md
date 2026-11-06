@@ -1,7 +1,54 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 11:17** · publicado em **06/11/2026 11:20** (UTC-3)
+> Ultima resposta processada: **06/11/2026 11:23** · publicado em **06/11/2026 11:25** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 11:23 · sessao e60937eb81bd · - · - · origem=Ronald (tmux)
+
+Contagem manual do **primeiro anexo `script.py`**, considerando `def sonda_r1():` como linha 1:
+
+- `vistos = {}` — `script.py:19`.
+- `vistos[chave] = exc` — `script.py:86`.
+- `erros.append(...)` — `script.py:106`.
+- `pendentes[id(frame)] = arg[1]` — `script.py:136`.
+- `redirect_stdout(io.StringIO())` — `script.py:232`.
+- `redirect_stderr(io.StringIO())` — `script.py:233`.
+
+Âncoras: `def rastrear` — `script.py:128`; `def receber_log` — `script.py:146`; `def ler_relatorio` — `script.py:151`; `try:` externo — `script.py:229`.
+
+## 06/11 11:21 · sessao 28b6e5352e01 · - · - · origem=Ronald (tmux)
+
+Ponto de partição seguro: interceptar exclusivamente a chamada `Colaborador.objects.filter(pk__in=ids)` feita pelo `Command.handle`, filtrar a lista de IDs com `pk % PARTES == PARTE - 1` e chamar o filtro original. Identificar o chamador por `frame.f_code is e6_oraculo.Command.handle.__code__` evita alterar consultas internas da autoridade. A seleção nativa percorre empresas ativas e IDs de `FechamentoMensal` da competência (`app/ponto/management/commands/e6_oraculo.py:291`, `:293`, `:302`).
+
+O wrapper pode devolver um gerador sobre `queryset.iterator(chunk_size=1)` e executar limpeza ao retomar após cada `yield`: nesse momento o comando já terminou a comparação daquele colaborador, inclusive suas chamadas ao juiz. O loop completo do colaborador ocorre entre as linhas 302 e 392; o próximo passo do iterador é solicitado após esse trabalho (`app/ponto/management/commands/e6_oraculo.py:302`, `:316`, `:366`, `:392`). Disponibilidade e implementação do `iterator()` Django instalado: [nao verificado].
+
+Para as linhas cruas, aproveitar os acumuladores produzidos pelo próprio `handle`, observando seu frame no retorno:
+
+- Dias por dono: `T['dono_%s' % dono]`, incrementado pelo comando (`app/ponto/management/commands/e6_oraculo.py:367`).
+- Minutos por dono: `DONO_H[dono]`, acumulado como `abs(df)`; horas são esse acumulador dividido por 60 (`app/ponto/management/commands/e6_oraculo.py:368`, `:423`).
+- Colaboradores por dono: `len(DONO_C[dono])`, conjunto alimentado pelo comando (`app/ponto/management/commands/e6_oraculo.py:369`, `:423`).
+- Dias totais: `_div_tot`, a soma nativa das quatro classes divergentes (`app/ponto/management/commands/e6_oraculo.py:424`).
+- Colaboradores totais: união de `x[1]` nas divergências, como faz a autoridade (`app/ponto/management/commands/e6_oraculo.py:429`).
+
+Não derivar horas cruas do texto da tabela: ela usa somente uma casa decimal. Somar as seis tabelas arredondadas pode produzir diferença em relação ao acumulador original (`app/ponto/management/commands/e6_oraculo.py:422`, `:423`).
+
+Não exigir que a soma de `colabs` dos três donos coincida com o total: o código permite que o mesmo colaborador entre nos conjuntos de vários donos e calcula o total por união (`app/ponto/management/commands/e6_oraculo.py:369`, `:429`). Dias e horas são particionados por dono; a conferência nativa de dias compara a soma dos donos com a soma das classes (`app/ponto/management/commands/e6_oraculo.py:366`, `:368`, `:415`, `:424`, `:427`).
+
+Entre as seis partes, os colaboradores são disjuntos na mesma competência pela condição de módulo proposta [nao verificado: implementação proposta]. Portanto, somar dias, horas e colaboradores de cada dono entre partes; somar também os três campos de `PARCIAL_TOTAL` entre partes. Não somar colaboradores entre competências para obter pessoas distintas: a seleção é refeita por competência (`app/ponto/management/commands/e6_oraculo.py:284`, `:293`).
+
+Há estado legítimo da autoridade que cresce até terminar a parte: `div` recebe uma linha por dia divergente e `DONO_C` guarda os conjuntos usados na saída. Não limpar esses objetos durante o comando: isso alteraria as classes ou o total de colaboradores (`app/ponto/management/commands/e6_oraculo.py:286`, `:289`, `:369`, `:389`, `:428`, `:429`). Duração aproximada de 15 minutos e consumo abaixo de 2 GiB após as mudanças: [nao verificado].
+
+## 06/11 11:21 · sessao e60937eb81bd · - · - · origem=Ronald (tmux)
+
+- O comando acumula `div` com uma lista por dia divergente e `DONO_C` com identificadores por dono; mantém tudo até publicar o relatório. `app/ponto/management/commands/e6_oraculo.py:286`, `:289`, `:369`, `:389`, `:428`, `:429`.
+- Os memos do motor são de instância: `_previsto_min` nasce no construtor e `_escala_certa_cache` nasce por cálculo. Não há `lru_cache`/`cache_clear` nesses módulos examinados; descarte de referências e `gc.collect()` preservam a autoridade. `app/ponto/motor_calculo_v2.py:848`, `:2283`, `:2285`; suficiência para 2 GB: [nao verificado].
+- Existe um registro de módulo do motor: `_FONTE_DO_MOTOR`, uma `WeakKeyDictionary`. Ela perde entradas quando os motores deixam de ter referências fortes; não limpar enquanto o motor estiver sendo consultado, pois guarda a fonte usada no carimbo. `app/core/regua_cct.py:480`, `:487`, `:488`, `:494`.
+- O oráculo cria mapas locais por chamada, sem retenção global nessa função. `app/ponto/calculador/nucleo.py:109`, `:112`, `:116`, `:118`.
+- `InsumosDoDono` retém espelho, turnos, cadastro × realidade e fase por instância; a limpeza deve ocorrer depois de concluir a comparação do colaborador. `app/ponto/management/commands/e6_oraculo.py:131`, `:132`, `:151`, `:160`, `:169`, `:316`, `:366`.
+- O catálogo de ausências tem cache de módulo, mas guarda um único catálogo por 60 segundos; não cresce por colaborador. Há `invalidar_cache()`, que redefine as duas entradas. `app/ponto/catalogo/ausencias.py:257`, `:258`, `:261`, `:263`, `:264`, `:276`, `:279`.
+- As horas nativas disponíveis em `DONO_H` estão em minutos; a tabela arredonda para uma casa após dividir por 60. Para linhas cruas agregáveis, capture os contadores reais antes do arredondamento. `app/ponto/management/commands/e6_oraculo.py:368`, `:422`, `:423`.
+- Colaboradores por dono podem sobrepor-se; o total exige união, como já faz a autoridade com `div`. `app/ponto/management/commands/e6_oraculo.py:369`, `:429`.
+- Os valores declarados padrão são quatro CPUs e memória de 2 GB; aplicação efetiva nessa execução: [nao verificado]. `bin/recursos.sh:61`, `:69`.
 
 ## 06/11 11:17 · sessao db14731f5c6f · R1-CAUSAD-V3 · sonda · origem=Code
 
@@ -1985,68 +2032,4 @@ Há divergência documental de contagem: o backlog diz “15 células B17–B33�
 
 Nenhum resultado de execução desta bateria foi produzido nesta auditoria; estado verde no ambiente atual: [nao verificado]. [nao verificado]
 
-## 06/11 10:40 · sessao f6ffc8ffebe3 · - · - · origem=Ronald (tmux)
-
-Sítios de escrita reais, nesta cópia:
-
-| Ramo | Sítio |
-|---|---|
-| Disputa existente: agrega contexto/motivos antes de gerar perguntas | `app/chamados/services/disputa_emissao.py:501` — `disputa_aberta.save(...)` |
-| Disputa nova: abre/reutiliza pai | `app/chamados/services/disputa_emissao.py:504` — `ChamadoColaborador.abrir(...)` |
-| Pai novo | `app/chamados/models.py:932` — `cls.objects.get_or_create(...)` |
-| Disputa nova | `app/chamados/services/disputa_emissao.py:523` — `DisputaSupervisao.objects.create(...)` |
-| Pergunta existente reapontada | `app/chamados/models.py:2474` — `ex.save(...)` |
-| Pergunta nova | `app/chamados/models.py:2476` — `cls.objects.create(...)` |
-| Descarimbo anterior à emissão | `app/chamados/services/relavra_via.py:231` → `app/chamados/models.py:2652` — `PerguntaDisputa.save(...)` |
-| Pauta do limbo exportado | `app/pautas/services.py:180` — `Pauta.objects.create(...)` |
-| Usuário sistema ausente, no ramo de pauta | `app/core/utils.py:18` — `User.objects.get_or_create(...)` |
-
-Atenções para a sonda:
-
-- Patch apenas em `ChamadoColaborador.objects.create` **não intercepta necessariamente** o `get_or_create`: este usa o `QuerySet.create`; patch de `ChamadoColaborador.save` cobre o INSERT real. (`app/chamados/models.py:932`; funcionamento interno do Django: [nao verificado])
-- A disputa existente sempre recebe `merge_contexto=contexto or {}` neste caminho, salva o contexto e só depois chama a geração da pergunta. Interromper nesse `save` prova entrada no escritor, não que a pergunta passaria pelas guardas posteriores. (`app/chamados/services/disputa_emissao.py:479`, `:501`, `:603`, `:618`)
-- Uma sentinela derivada diretamente de `BaseException` evita que os `except Exception` internos a engulam. Há captura desse tipo na emissão/reatação e na leitura da ata. (`app/chamados/services/disputa_emissao.py:411`, `:828`)
-- Se houver candidata de descarimbo, o emissor pode tentar essa escrita **antes** da emissão. Não deve contabilizar o descarimbo como pergunta/chamado emitível. (`app/chamados/services/fabrica_da_celula.py:164`, `:166`, `:174`)
-- `SELECT FOR UPDATE` ocorre antes das escritas na disputa e no descarimbo. Permissão do papel LEITOR para executá-lo: [nao verificado]. (`app/chamados/services/disputa_emissao.py:467`; `app/chamados/services/relavra_via.py:221`)
-- O ramo real da pauta chama `autor_sistema` antes do `Pauta.objects.create`; logo também existe possível escrita na obtenção do usuário sistema. (`app/chamados/services/fabrica_da_celula.py:236`; `app/pautas/services.py:87`; `app/core/utils.py:18`)
-
-Há outro emissor do chamado no cartório: `julgar_celula` instancia `detectar_ausencias.Command` e o corpo chama seu `_abrir_chamado`. A fábrica da pergunta roda depois da lavra, apenas nas células julgadas naquele ato. (`app/ponto/services/cartorio.py:1964`, `:1990`, `:1740`, `:1778`, `:981`, `:997`)
-
-## 06/11 10:40 · sessao 963cba183f13 · - · - · origem=Ronald (tmux)
-
-A contagem declarada é **8 `EM_CURSO` + 1 `ESPERA_RONALD` = 9 itens não `FEITO`**. O placar efetivo rebaixa `FEITO` sem prova, mas os itens `FEITO` lidos têm provas preenchidas; a regra está em `app/core/espelho_verdade.py:199-203`.
-
-| Item | Estado/local | Número do R1 que atualiza; limite |
-|---|---|---|
-| E1-passivo-53 | `EM_CURSO`, `app/core/espelho_verdade.py:36-47` | Não mede. `escala/services/vigencia_impossivel.py:23-24` oferece `medir()` somente leitura e devolve vínculos/colabs/ativos/lavrados em `:48-53`. |
-| E1-sem-previsao | `EM_CURSO`, `app/core/espelho_verdade.py:48-49` | Classe `esp_zero_e6_trabalho` (`app/ponto/management/commands/e6_oraculo.py:358-361`), proxy de zero no espelho com trabalho no oráculo. Não certifica previsão válida; a medição específica é `escala/services/previsto_cego.py:114-115`, que usa `janela_atual` em `:138` e cobra ativo com par e nenhum previsto (`:142-174`). |
-| E3-turno-aberto | `EM_CURSO`, `app/core/espelho_verdade.py:81-82` | `dia_batida_impar`, batem/divergem e `impar_FORA_da_faixa` (`e6_oraculo.py:347-349`, `:402-412`). São paridade/faixa do oráculo, não censo exato de turnos abertos. |
-| E4-rotulo-do-desenho | `EM_CURSO`, `app/core/espelho_verdade.py:130-131` | R1 não mede; verificar leitor da pílula/selo de UI. **Prova do placar envelhecida:** `app/templates/escala/tipos_lista.html:55` já usa `{{ t\|desenho_do_turno }}` e cita O74 e seu selo. |
-| E5-le-da-celula | `EM_CURSO`, `app/core/espelho_verdade.py:138-139` | R1 não mede proveniência do fechamento nem conclusão da troca de leitores; a pendência declarada é “falta status encerrado” (`:139`). |
-| E6-sistema-bate | `EM_CURSO`, `app/core/espelho_verdade.py:168-169` | `BATE`/dias comparados (`e6_oraculo.py:398-399`) e ESTRUTURA dias/horas/colabs (`:422-423`). |
-| E6-exportavel | `EM_CURSO`, `app/core/espelho_verdade.py:172-173` | `colabs com divergencia` (`e6_oraculo.py:429`) e colabs por dono (`:423`). R1 10/11 não mede elegibilidade real do export nem a 09 citada no título do item. |
-| E6-piso-185 | `EM_CURSO`, `app/core/espelho_verdade.py:178-179` | `SOMA` donos/classes (`e6_oraculo.py:424-427`) e ESTRUTURA dias/horas/colabs. **Não fecha causa:** o próprio placar exige “falta causa nomeada nos ... ESTRUTURA” (`espelho_verdade.py:179`). |
-| E3-separados-30 | `ESPERA_RONALD`, `app/core/espelho_verdade.py:83-84` | Não mede: é universo separado da 09 e situação de migração/aplicação; o placar declara a 09 sob responsabilidade externa (`:84`). |
-
-O backlog pede explicitamente R1 para **cinco itens**: E1-sem-previsao, E3-turno-aberto, E6-sistema-bate, E6-exportavel e E6-piso-185, e pede confirmar E6-batida-impar; este último já é `FEITO` (`app/docs/BACKLOG.md:1478`; `app/core/espelho_verdade.py:176-177`). A confirmação usa as linhas de ímpares e paridade (`app/ponto/management/commands/e6_oraculo.py:402-412`).
-
-`app/docs/ESTRUTURAL.md:34-42` estabelece o dono único, o juiz `dono_da_divergencia`, o destino CADASTRO/BATIDA no admin e a separação do placar principal R1–R6 e ESPELHO-VERDADE. `app/core/placar_estrutural.py:115-138` declara a fonte `logs/e6_cauda2c/r1_dono_*.txt`, cadência, dias/horas/colabs e tabela impressa pelo próprio comando. `:105-113` exige a soma obtida no comando, sem sonda paralela.
-
-## 06/11 10:40 · sessao 27a8fa81a908 · - · - · origem=Ronald (tmux)
-
-- **V3-MOTOR-FERIADO-HE100-NOTURNA** está na fila e exige `!`; o registro relata HE100 noturna zero em feriado com HE100 e noturnas positivas. Isso é relato do backlog, sem reexecução nesta auditoria. (`app/docs/BACKLOG.md:937`)
-  - No `MotorTurnoPartido`, as HE noturnas são zeradas antes do cálculo mensal; o ramo de dobra preenche HE100 e sai por `continue`, enquanto `_aplicar_he_noturna` aparece depois. (`app/ponto/motor_calculo_v2.py:2937`, `:3092`, `:3101`, `:3147`)
-  - No `MotorComercial`, ocorre a mesma estrutura: zera os splits, preenche a dobra e sai antes da chamada de HE noturna. (`app/ponto/motor_calculo_v2.py:3323`, `:3337`, `:3352`, `:3399`)
-  - Qual desses ramos explica cada um dos dez colaboradores registrados: **[nao verificado]**.
-
-- **V3-NOTURNO-RECORTE-LONGO** espera `!` e está explicitamente fora do escopo V3-P5. (`app/docs/BACKLOG.md:939`)
-  - `minutos_noturnos` devolve zero acima de 26 horas. (`app/ponto/motor_calculo_v2.py:93`)
-  - Com prorrogação, estende `s1` até `fim` e soma separadamente `s2` de 22–24; portanto pode contar a sobreposição duas vezes. (`app/ponto/motor_calculo_v2.py:110`, `:112`, `:116`)
-  - `MotorPlantao.calcular_periodo` delega a `Motor12x36`, que escreve noturnas pela autoridade que chama `minutos_noturnos`. (`app/ponto/motor_calculo_v2.py:3510`, `:2792`, `:983`)
-
-- **Rubricas diagnósticas para a lista:** `horas_extras_100_noturna`, contextualizada por `horas_extras_100`, `horas_extras_100_feriado` e `horas_noturnas`, pode localizar a assinatura conhecida do feriado. (`app/docs/BACKLOG.md:937`; nomes dos campos: `app/ponto/services/dia_pago.py:35`)
-  - `horas_noturnas`, `horas_extras_50_noturna` e `horas_extras_100_noturna` podem expor efeitos do recorte longo; HE50/100 também podem mudar quando a régua legal inclui o ganho noturno na base do excedente. (`app/ponto/motor_calculo_v2.py:983`, `:441`, `:3123`)
-  - Há **cegueira compartilhada**: a v3 também chama `minutos_noturnos`; igualdade no diff não elimina o defeito comum. (`app/ponto/calculador/regras.py:85`; `app/ponto/calculador/periodo.py:510`)
-  - Divergências fora dessas assinaturas são candidatos a investigação, não comprovação de bug novo. L-110 define a comparação com o código velho como **impacto**, nunca validação. (`app/docs/LEIS.md:136`)
-
-_2228 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2231 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
