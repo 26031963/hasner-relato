@@ -1,7 +1,112 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 05:22** · publicado em **06/11/2026 05:26** (UTC-3)
+> Ultima resposta processada: **06/11/2026 07:40** · publicado em **06/11/2026 07:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 07:40 · sessao e416ea4f87a3 · - · - · origem=Ronald (tmux)
+
+Escritores que podem liberar a guarda da pergunta viva:
+
+| Escritor | Campos/efeito | EventoCelula ou reconciliar no mesmo caminho |
+|---|---|---|
+| `validar_pergunta` → `_carimbar_validacao` | Grava `validada_em/por`; C6 devolve `False` imediatamente. | Carimbo não emite evento. Materializador normalmente reconcilia destino/clones; pergunta já materializada é pulada, portanto não há garantia geral. `app/chamados/services/validacao.py:131`, `app/chamados/services/validacao.py:396`, `app/chamados/services/validacao.py:422`, `app/chamados/juizes.py:1136`, `app/chamados/services/materializacao.py:1294`. |
+| Aceite de folga | Mesmo carimbo, nas duas ramificações. | Chama `fechar_o_fio_do_dia`/`declarar_dia`; o fechamento do fio chama `reconciliar()` para os chamados vivos daquele dia. `app/chamados/services/validacao.py:263`, `app/chamados/services/validacao.py:270`, `app/chamados/services/validacao.py:290`, `app/chamados/services/validacao.py:291`, `app/ponto/services/veredito_celula.py:182`. |
+| `PerguntaDisputa.carimbar(..., resposta='validar')` | Escreve materialização/via e, havendo texto, validação nula. | A porta só salva a pergunta, sem outbox/reconcile próprio. Chamadores abaixo. `app/chamados/models.py:2556`, `app/chamados/models.py:2587`, `app/chamados/models.py:2609`. |
+| `resolver_perguntas_por_chamado_resolvido` | Chama `carimbar(..., resposta='validar')`. | Exige pergunta **já morta** antes do carimbo; portanto não transforma uma pergunta viva em morta por esse carimbo. Pode fechar disputa; o signal reconcilia o pai. `app/chamados/services/disputa_emissao.py:1585`, `app/chamados/services/disputa_emissao.py:1603`, `app/chamados/services/disputa_emissao.py:1695`, `app/chamados/signals.py:42`. |
+| `_materializar_ausencia_de_resposta` | Chama `carimbar(..., resposta='validar')` nas irmãs. | Reconcilia cada destino se ausência decidida; ausência aberta mantém cobrança. `app/chamados/services/materializacao.py:549`, `app/chamados/services/materializacao.py:562`. |
+| `_materializar_uma` | Chama `carimbar(..., resposta='validar')`. | Ramos hora/data_hora/escolha chamam `_reconciliar_destino_e_clones`; helper consulta irmãs e chama `alvo.reconciliar()`. `app/chamados/services/materializacao.py:1202`, `app/chamados/services/materializacao.py:944`, `app/chamados/services/materializacao.py:1029`, `app/chamados/services/materializacao.py:1049`, `app/chamados/services/materializacao.py:731`. |
+| `responder_pergunta_disputa_core` | Troca resposta/carimbo de resposta; remove validação anterior; pode trocar discordância por concordância com a luz. | Para HH:MM, não emite outbox nem reconcilia; a exceção explícita são escapes que criam ausência. `app/chamados/services/disputa_emissao.py:1282`, `app/chamados/services/disputa_emissao.py:1301`, `app/chamados/services/disputa_emissao.py:1325`, `app/chamados/services/disputa_emissao.py:1330`, `app/chamados/services/disputa_emissao.py:1359`. |
+| `reabrir_para_correcao` | Zera texto, `respondida_em`, `validada_em/por` via `QuerySet.update`; pode remover a precedência da resposta discordante. | Sem `post_save`, sem evento/reconcile nessa função. Chamadores incluem recusa, reabertura do questionário por admin e colaborador. `app/chamados/services/disputa_emissao.py:1393`, `app/chamados/services/disputa_emissao.py:1413`, `app/chamados/services/validacao.py:547`, `app/chamados/services/acoes_disputa.py:103`, `app/chamados/views.py:1436`, `app/chamados/models.py:2146`. |
+| `carimbar_identidade` | Grava materializada/via; identidade mata C6 depois da precedência da resposta. | Porta não emite evento/reconcile. Chamadores: admin, duplicata, paridade e colisão. `app/chamados/models.py:2633`, `app/chamados/models.py:2644`, `app/chamados/juizes.py:1150`, `app/chamados/juizes.py:1170`, `app/chamados/models.py:2522`, `app/chamados/services/fio.py:891`, `app/chamados/services/materializacao.py:894`, `app/chamados/services/materializacao.py:1069`. |
+| `fechar_por_admin` pelas exceções da disputa | Mata perguntas mudas antes de gravar disputa fechada. | Signal da disputa tenta reconciliar **somente o pai**, e ignora pai já encerrado. Destino diferente não é garantidamente reconciliado. `app/chamados/models.py:1852`, `app/chamados/models.py:1865`, `app/chamados/signals.py:28`, `app/chamados/signals.py:33`, `app/chamados/signals.py:42`. |
+| Dedup de perguntas | `retratar_duplicata` chama identidade. | Command `--apply` não reconcilia nem emite outbox; migração de resolvedoras também não garante isso. `app/chamados/services/fio.py:891`, `app/chamados/management/commands/dedup_perguntas_fato.py:86`, `app/chamados/services/fio.py:943`, `app/chamados/services/fio.py:960`. |
+
+Demais carimbadores sem validação: `VIA_SEM_TURNO_ABERTO`, `VIA_CELULA_ABSOLVEU`, fecho sem credor, `VIA_JUIZ_APROVOU`, fantasma. Os dois primeiros e o fecho sem credor exigem pergunta já morta; os executados pelo consumidor são seguidos de `fechar_pelo_marco_colab` no mesmo consumo. `app/chamados/reconciliador.py:397`, `app/chamados/reconciliador.py:405`, `app/chamados/reconciliador.py:586`, `app/chamados/services/disputa_emissao.py:1663`, `app/chamados/services/disputa_emissao.py:1675`, `app/chamados/services/materializacao.py:1349`, `app/chamados/models.py:2685`, `app/chamados/reconciliador.py:1353`, `app/chamados/reconciliador.py:1370`.
+
+Cenário mais simples, sem depender de pergunta materializada: chamado na fila, marco cobrado aceso, célula coerente, pergunta respondida com hora discordante e não validada. A resposta discordante mantém C6 viva e retém o fechamento, mesmo com luz. O colaborador corrige para a hora da luz; a porta permite porque a pergunta estava viva, o core salva a resposta e C6 passa a morta por concordância. O core não reconcilia nem emite EventoCelula para HH:MM. Com pai da disputa vivo, o receiver da pergunta só chama o beco, que exige pai terminal e não age. Sem outro evento pendente, `com_lastro_sem_evento` conta esse chamado: N≥1. `app/chamados/juizes.py:1099`, `app/chamados/juizes.py:1132`, `app/chamados/juizes.py:1150`, `app/chamados/juizes.py:1162`, `app/chamados/views.py:1242`, `app/api/views.py:2631`, `app/chamados/services/disputa_emissao.py:1282`, `app/chamados/signals.py:191`, `app/chamados/services/becos.py:29`, `app/ponto/services/lastro.py:420`.
+
+Outra execução concreta do mesmo estado: admin recusa a resposta. O primeiro save de `recusa_motivo` ainda vê resposta discordante; depois `reabrir_para_correcao` apaga resposta/carimbos por update sem signal. Com célula coerente e marco aceso, C6 agora devolve falsa, chamado continua vivo e sem evento pendente, produzindo N≥1. `app/chamados/services/validacao.py:545`, `app/chamados/services/validacao.py:547`, `app/chamados/services/disputa_emissao.py:1393`, `app/chamados/services/disputa_emissao.py:1413`, `app/chamados/juizes.py:1195`, `app/ponto/services/lastro.py:422`.
+
+Recalcular fechamento não equivale a EventoCelula: o callback chama `recalcular_fechamento_mes`; outbox nasce por `emitir_evento_celula`, normalmente condicionado a campos relevantes da lavra. Lavra idêntica não salva nem emite. `app/ponto/services/fechamento.py:1791`, `app/ponto/services/fechamento.py:1808`, `app/ponto/portas/celula.py:673`, `app/ponto/portas/celula.py:680`, `app/ponto/portas/celula.py:795`.
+
+Ocorrência desses estados em produção: [nao verificado].
+
+## 06/11 07:39 · sessao 4295aa63f985 · - · - · origem=Ronald (tmux)
+
+Delimitação pelos leitores: com `marcos_acesos(...) is True`, a premissa já está regularizada; `Justificativa.status` e `Ausencia.status` não precisam mudar para liberar esse retido. (`app/chamados/models.py:1247–1250`) A decisão restante passa pelo motor de `status_local` e pelo C6/âncora/reata. (`app/chamados/models.py:637–655`, `app/chamados/models.py:327–378`)
+
+| Campo/ato adicional | Efeito e reação |
+|---|---|
+| `status_local` do próprio retido | `aberto` e `em_analise` já permitem `RECONCILIAR`; mudar entre eles não remove a recusa. Terminal sai da fila. (`app/chamados/catalogo/motor.py:111`, `app/chamados/services/painel.py:186–188`) |
+| `CelulaDia.veredito/veredito_via` por decisão admin | Remove a precedência da resposta discordante no C6; a porta grava veredito/ata com emissão atômica de `EventoCelula`. (`app/chamados/juizes.py:1147–1162`, `app/ponto/portas/celula.py:809–817`, `app/ponto/portas/celula.py:676–684`) |
+| Fechar `DisputaSupervisao` | `fechada_em` não é lido por `_pergunta_viva_calc`; fechar a disputa sozinho não mata pergunta. (`app/chamados/juizes.py:1135–1218`) |
+| `Disputa.admin_encerra` / fechamento por desligamento | Carimba perguntas mudas com `admin_decidiu` antes de salvar a disputa. O `post_save` tenta `reconciliar()` somente no chamado-pai. (`app/chamados/models.py:1852–1865`, `app/chamados/signals.py:28–45`) |
+
+**Outro cenário concreto de escape sem falha:** pai da disputa já terminal; pergunta muda cujo `chamado_destino` é outro chamado `batida_ausente` vivo; marco cobrado aceso, mas célula acusa outro furo; pergunta ainda sem `materializada_em`, portanto continua viva pelo C6 e segura o destino. Essa disputa pode continuar aberta, pois pergunta muda com destino vivo impede a classificação como beco. (`app/chamados/juizes.py:1177–1184`, `app/chamados/models.py:327–328`, `app/chamados/services/becos.py:25–33`)
+
+O admin usa `admin_encerra`: a muda recebe carimbo de identidade, passa a morta, e o destino fica fechável. O receiver ignora o pai já encerrado; não reconcilia o destino nem emite evento. (`app/chamados/models.py:1852–1865`, `app/chamados/models.py:2508–2523`, `app/chamados/juizes.py:1170–1172`, `app/chamados/signals.py:28–34`) Os demais receivers não desfazem esse cenário: sem regularização externa confirmada não há retomada; a materialização filtra apenas perguntas sem carimbo; o beco ignora disputa já fechada. (`app/chamados/signals.py:97–121`, `app/chamados/services/materializacao.py:1343–1350`, `app/chamados/services/becos.py:27–28`) Sem evento pendente, o destino entra em N do vigia. (`app/ponto/services/lastro.py:421–423`) Ocorrência em produção: [nao verificado].
+
+## 06/11 07:39 · sessao 26487d3ddb3e · - · - · origem=Ronald (tmux)
+
+Completude confirmada por escrita:
+
+- Os únicos caminhos persistentes que fornecem `ata=` à lavra são o ramo nunca bateu e o ramo normal do cartório, ambos construindo por `ata_do_dia`: `app/ponto/services/cartorio.py:1210`, `app/ponto/services/cartorio.py:1242`, `app/ponto/services/cartorio.py:1800`, `app/ponto/services/cartorio.py:1802`. A porta copia a ata recebida e preserva apenas `precedencia` da antiga: `app/ponto/portas/celula.py:768`.
+- A outra atribuição persistente a `cel.ata` só acrescenta `precedencia`: `app/ponto/portas/celula.py:860`. As atribuições em `celula_como_o_julgamento_deixa` e no builder são em cópias em memória: `app/ponto/portas/celula.py:719`, `app/escala/utils.py:1907`.
+- Não há caminho do leitor com `missing=False,hora=None` para essas lavras: as células agregadas são fabricadas para a saída do leitor, em `app/escala/services/leitor_celula.py:167`, enquanto o cartório usa o builder, em `app/ponto/services/cartorio.py:1126`.
+- A migração da ata só adiciona um JSONField nulo; não escreve lâmpadas ou remove marcadores: `app/escala/migrations/0037_hx_ata_celula.py:12`.
+- `_carimbar_isencao` propaga os marcadores truthy e não possui ramo que os apague: `app/ponto/services/cartorio.py:556`, `app/ponto/services/cartorio.py:561`.
+
+Nuance do ramo por proximidade: `_reais` inclui horas sintéticas de isenção, mas as horas dos marcos DNA que têm posição são previamente reservadas em `_usadas`, e o ramo sem posição exclui esses minutos: `app/ponto/services/cartorio.py:593`, `app/ponto/services/cartorio.py:615`, `app/ponto/services/cartorio.py:632`. Na montagem coerente da mesma foto DNA, isso não fornece um segundo marco sem marcador com a hora sintética de um marco casado; concorrência ou dados inconsistentes que produzam outra foto são **[nao verificado]**.
+
+Assim, sustento: **nenhum escritor de produção atual rastreado produz o caso vazio e sem marcador; legado ambíguo pode ser consumido, mas sua presença no dado fornecido é [nao verificado]**. O retorno para legado vazio seria hora cobrada por fallback; para legado de isenção com `luz='00:00'`, o retorno usaria a própria string, sem fallback: `app/ponto/services/lastro.py:340`.
+
+## 06/11 07:37 · sessao 26487d3ddb3e · - · - · origem=Ronald (tmux)
+
+Na cópia, **não encontrei caminho de produção que escreva uma célula de grade não missing, sem hora e sem `isencao`/`dispensada`, e a lave como lâmpada acesa**. O construtor aceita esse formato, mas os escritores atuais não o produzem: `app/ponto/services/cartorio.py:647`, `app/ponto/services/cartorio.py:677`, `app/ponto/services/cartorio.py:687`.
+
+- `como_acendeu` não lê `missing`, `acesa`, `pendente`, `tipo_real` nem a hora prevista da própria lâmpada. Lê somente `dispensada`, `isencao` e `luz`; sem marcadores, retorna `('batida', lamp.get('luz') or hora)`: `app/ponto/services/lastro.py:336`.
+- Os dois chamadores efetivos só chegam à função com lâmpada acesa: `julgar` exige `lamp.get('acesa')`, em `app/ponto/services/lastro.py:289`; o fechador exige `marcos_acesos(...) is True`, em `app/ponto/services/lastro.py:394`, cujo teste recusa qualquer `acesa` falsy, em `app/ponto/services/lastro.py:179`. Portanto `acesa=None` e `pendente=True` não chegam à nota por esse caminho: `app/ponto/services/cartorio.py:869`, `app/ponto/services/lastro.py:394`.
+
+Prova pelos escritores:
+
+| Caminho | Escrita e resultado |
+|---|---|
+| Batida alinhada normal | `_match_marcos` escreve missing ou chama `_celula_do_marco`, que sempre escreve `hora=instante.strftime('%H:%M')`: `app/escala/utils.py:618`, `app/escala/utils.py:659`, `app/escala/utils.py:325`. A lâmpada copia essa hora para `luz`: `app/ponto/services/cartorio.py:677`. Retorno: `('batida', hora_real)`: `app/ponto/services/lastro.py:340`. |
+| Batida intermitente / intervalo explícito / reconciliação de ponta | Hora vem igualmente do timestamp: `app/escala/utils.py:1569`, `app/escala/utils.py:1849`, `app/escala/utils.py:2061`. O modelo intermitente `00:00–23:59` fica fora da régua por hora: `app/escala/utils.py:1377`. |
+| Dispensa parcial | A grade escreve `missing=False,hora=None,dispensada=_slug`: `app/escala/utils.py:1266`. Cartório copia `dispensada`: `app/ponto/services/cartorio.py:561`. Retorno: `('dispensa', slug)`: `app/ponto/services/lastro.py:336`. |
+| Ausência inteira / justificativa | A grade remove células por `None` ou remove só missing: `app/escala/utils.py:1272`, `app/escala/utils.py:1275`. O cartório acende as lâmpadas sem luz **com** `dispensada`: `app/ponto/services/cartorio.py:766`, `app/ponto/services/cartorio.py:773`. Retorno: `('dispensa', motivo)`: `app/ponto/services/lastro.py:336`. |
+| Isenção | A grade escreve hora planejada, `missing=False,isencao=True`: `app/escala/utils.py:857`. O cartório copia o marcador: `app/ponto/services/cartorio.py:556`. Retorno: `('isencao', None)`: `app/ponto/services/lastro.py:338`. |
+| Lâmpada do DNA sem posição na régua | Se acende por proximidade, escreve uma hora real formatada em `luz`; sem hora real, fica False ou None: `app/ponto/services/cartorio.py:632`. Não produz acesa True sem luz. |
+| Ata agregada antiga lida | O leitor produz células `missing=False,hora=None` sem marcador para a parte não missing: `app/escala/services/leitor_celula.py:167`. Isso é saída do leitor, não lâmpada gravada: seu ramo agregador devolve `marcos=[]`, em `app/escala/services/leitor_celula.py:171`. O cartório remonta a grade pelas batidas, em `app/ponto/services/cartorio.py:1123`; dispatcher em `app/escala/utils.py:2105`. |
+| Ata com `acesa=None` lida | O leitor traduz para `missing=False`, com hora recebida de `luz` possivelmente None: `app/escala/services/leitor_celula.py:119`. Esse dict também não é fonte da lavratura atual: `app/ponto/services/cartorio.py:1126`. |
+| Builder legacy ativado pela flag | Chama o single, que usa o mesmo alinhamento e overlays: `app/escala/utils.py:1037`, `app/escala/utils.py:776`, `app/escala/utils.py:806`. A união apenas rearranja dicts: `app/escala/utils.py:1058`. Logo não introduz o branco sem marcador. |
+
+Há teste que **injeta** `{'status': 'ok'}` sem hora e confirma que `ata_do_dia` gera `acesa=True,luz=None`: `app/ponto/tests/test_t40_ata_lampadas.py:10`, `app/ponto/tests/test_t40_ata_lampadas.py:15`. Isso demonstra que o construtor aceita o formato, não um escritor de produção que o fornece: `app/ponto/services/cartorio.py:647`, `app/ponto/services/cartorio.py:677`.
+
+Sobre **“acendeu as 00:00” sem batida**:
+
+- Uma lâmpada acesa sem marcador e com `luz=None`, se já estivesse gravada e cobrasse `hora='00:00'`, produziria `('batida','00:00')` pelo fallback e a nota afirmativa: `app/ponto/services/lastro.py:340`, `app/ponto/services/lastro.py:347`, `app/ponto/services/lastro.py:355`. Que algum escritor real desta cópia produza esse estado: **[nao verificado]**; os escritores rastreados acima não produzem.
+- Uma isenção **legada sem marcador**, com hora planejada `00:00` em `luz`, também seria lida como batida; nesse caso **`lamp['luz']=='00:00'`**, e o `or hora` nem seria acionado: `app/ponto/services/lastro.py:336`, `app/ponto/services/lastro.py:340`. O próprio código documenta atas antigas ambíguas e decisão de não inventar o marcador retrospectivo: `app/ponto/services/cartorio.py:547`, `app/escala/services/leitor_celula.py:134`. Existir tal registro no dado fornecido, ou ele ter hora `00:00`: **[nao verificado]**.
+- A isenção **escrita hoje** recebe marcador e devolve `isencao`, portanto não usa a frase de batida: `app/ponto/services/cartorio.py:556`, `app/ponto/services/lastro.py:338`, `app/ponto/services/lastro.py:352`.
+
+## 06/11 07:37 · sessao 4295aa63f985 · - · - · origem=Ronald (tmux)
+
+Os pontos 938–941 e 1057–1060 são de **`app/chamados/models.py`**. Eles não emitem diretamente `EventoCelula` para `batida_ausente`: ambos exigem módulo em `MODULOS_DE_TURNO`; a tupla contém somente `turno_aberto`, `turno_aberto_24h` e `entrada_bloqueada_turno_aberto`. (`app/chamados/models.py:938`, `app/chamados/models.py:1054`, `app/chamados/reconciliador.py:336`)
+
+Isso não prova nascimento sem qualquer evento indireto: o `post_save` do chamado julga a célula no nascimento ou mudança de status, salvo julgamento já em curso. (`app/chamados/signals.py:164–180`) O julgamento pode reconciliar os marcos já satisfeitos no próprio ato. (`app/ponto/services/cartorio.py:1461–1495`) Só lavra com alteração de `veredito`/`ata` acorda o consumidor; lavra idêntica retorna sem save/evento. (`app/ponto/portas/celula.py:662–684`, `app/ponto/portas/celula.py:795–802`) Portanto não usar “nasceu sem emissão direta” como prova suficiente de escape.
+
+Critérios relevantes:
+
+- `julgar()` considera apenas fila de cobrança do módulo `batida_ausente`; exige marcos e tipos conferíveis. (`app/ponto/services/lastro.py:239–241`, `app/ponto/services/lastro.py:273–282`)
+- Aceita lâmpada acesa ou, na ausência dela, batida casada por tipo e tolerância de horário; depois só põe em `com_lastro` se `reconciliaria()` permitir fechamento. (`app/ponto/services/lastro.py:287–319`)
+- O fechador do evento exige célula gravada e `marcos_acesos(...) is True`; escreve a nota somente após `reconciliar()` retornar verdadeiro, no mesmo `atomic`. (`app/ponto/services/lastro.py:393–402`)
+- `reconciliaria()` e `reconciliar()` consultam a mesma `_decisao_do_fechamento`; ela consulta motor, guarda da premissa e guarda da pergunta viva. (`app/chamados/models.py:607–659`)
+- A guarda da pergunta viva recusa quando há viva ancorada sem plano de reata para outra cobrança; sem viva, deixa fechar. (`app/chamados/models.py:393–428`)
+- O consumidor chama o fechador e, sem falha/adiamento, marca os eventos como processados mesmo quando o fechamento foi legitimamente recusado. (`app/chamados/reconciliador.py:1367–1385`)
+
+**N do vigia:** de `com_lastro`, conta chamado cujo colaborador não tenha evento pendente **ou** cujos marcos na célula não estejam todos acesos. Assim, lastro obtido pelo recuo de batidas, sem lâmpada, conta mesmo havendo evento pendente. (`app/ponto/services/lastro.py:420–423`) Evento “pendente” significa `processado_em IS NULL` e tentativas abaixo do teto. (`app/chamados/reconciliador.py:1235–1238`) Com `--alarme` e escapes, o comando lista e sai com código 2. (`app/ponto/management/commands/fechar_cobranca_com_lastro.py:77–83`)
+
+Há testes explícitos para lâmpada acesa sem evento → `sem_evento=1`/saída 2; com evento → zero; recuo sem lâmpada mesmo com evento → um. São fixtures que plantam a ata/deletam eventos, portanto não demonstram sozinhas um caminho normal de produção. (`app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:63–83`, `app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:214–260`)
 
 ## 06/11 05:22 · sessao c611628a56e6 · OTIMIZA-3 · censo · origem=Code
 
@@ -546,145 +651,4 @@ V10: a migração mantém mordida relevante, mas não preserva literalmente toda
 
 Não executei suíte Django, selos de host nem mutações: resultados dinâmicos deles [nao verificado]. [nao verificado]
 
-## 06/11 04:30 · sessao 6dbfe6056c73 · - · - · origem=Ronald (tmux)
-
-1. **FILA — P3: falso positivo real de import embutido próprio.** Em `app/core/placar_estrutural.py:443`, o valor textual de `numero` contém a menção `from core import contratos_estruturais` (`app/core/placar_estrutural.py:461`) e, adiante no mesmo literal concatenado, `logs/placar_estrutural/...` (`app/core/placar_estrutural.py:485`). A alternativa permissiva de `bin/quem_chama.py:93` casa esse intervalo como importação de **`core.placar_estrutural`**, embora seja apenas texto no dicionário.
-
-   Exercício em memória com o arquivo real produziu:
-   ```
-   (app/core/placar_estrutural.py, EMBUTIDO, 443,
-    importa core.placar_estrutural em python embutido (string de codigo))
-   ```
-   O delta passa a aceitar esse achado próprio (`bin/quem_chama.py:738`), rebaixando as facetas originalmente varridas (`bin/quem_chama.py:753`). Isso pode esconder um zero verdadeiro, conservadoramente; **não elimina chamadores**: conserva os conjuntos existentes e acrescenta sítios (`bin/quem_chama.py:755`), imprimindo todos (`bin/quem_chama.py:773`).
-
-2. **FILA — P5, antigo 5: posição incorreta permanece; não surgiu caminho novo para zero.** O cálculo usa quebras do valor decodificado (`bin/quem_chama.py:472`), enquanto o import real ocupa `app/core/tests/test_selo_diagrama_do_codigo.py:251`, dentro de literal iniciado em `app/core/tests/test_selo_diagrama_do_codigo.py:250`. Esse cálculo altera a linha do achado, mantendo sua emissão (`bin/quem_chama.py:472`).
-
-3. **FILA — P5, antigo 6: escapes seguem existentes, mas os exemplos reais não demonstram zero.** O relativo do heredoc (`bin/regua_calendario.sh:30`) continua fora da regex (`bin/quem_chama.py:89`), porém o absoluto em `bin/regua_relogio.sh:35` permite rebaixar `config.settings.ci`. Os pacotes citados em `bin/alarme_sessao_ociosa.py:144` e `bin/alarme_sessao_ociosa.py:145` também possuem imports diretos reconhecíveis: `app/colaboradores/tests/test_s120.py:65` e `app/chamados/apps.py:10`, reconhecidos pelo ramo `bin/quem_chama.py:449`. Falso zero novo desses exemplos: **[nao verificado]**.
-
-4. **FILA — P5, antigos 8 e 9: sem falso zero novo demonstrado.** As mudanças de exclusividade pertencem ao selo (`bin/tests/test_quem_chama.sh:219`, `bin/tests/test_quem_chama.sh:220`, `bin/tests/test_quem_chama.sh:234`, `bin/tests/test_quem_chama.sh:275`). A divergência de prosa continua conservadora no exemplo real: a string contendo `bin/gerar_diagrama.py` (`app/core/management/commands/gerar_diagrama.py:873`) é visitada por `bin/quem_chama.py:474`, enquanto o censo corta no primeiro `#` (`app/core/censo_codigo.py:60`).
-
-Ranges históricos, execução integral do selo e confirmação do SHA via Git: **[nao verificado]**; esta cópia não contém repositório Git acessível **[nao verificado]**.
-
-## 06/11 04:29 · sessao c166bb812a26 · - · - · origem=Ronald (tmux)
-
-1. **BLOQUEIA — classificação ainda pode mascarar decorador opaco com registro do outro lado; defeito preexistente, não regressão exclusiva do delta.** A soma conserva `decor=['register.filter', 'receiver']` e `registros=[('filtro','old')]`, mas `_tipo_simbolo` retorna `filtro/tag` antes de examinar `receiver` (`bin/quem_chama.py:704`, `bin/quem_chama.py:707`, `bin/quem_chama.py:709`, `bin/quem_chama.py:348`, `bin/quem_chama.py:352`).
-
-   Contraexemplo exercitado em memória: base `@register.filter(name='old') def f(x): return x`; ponta `@receiver('signal') def f(x): return x+1`. Resultado: `simbolo f [filtro/tag]: 0 chamador(es)`, embora a própria classificação trate `receiver` sem registro como motivo para não varrer (`bin/quem_chama.py:354`, `bin/quem_chama.py:765`). O chamador indireto é o despachante do registrador; ocorrência dessa transição no repo real: **[nao verificado]**. O mesmo caminho já existe no algoritmo anterior anexado, pois conservava o registro da base: **[nao verificado por execução da revisão antiga]**.
-
-2. **P1 — casos pedidos são conservadores, exceto a interação acima.** `membro=True` em qualquer lado vence; registro `(papel,None)` junto de registro constante continua “nome não resolvido”; decorador removido permanece na união; um lado sozinho recebe `registros` normalmente (`bin/quem_chama.py:706`, `bin/quem_chama.py:349`, `bin/quem_chama.py:707`, `bin/quem_chama.py:705`, `bin/quem_chama.py:708`). Esses casos foram exercitados em memória.
-
-   Campos restantes usam primeiro valor, geralmente da base: a cópia está no `setdefault` e os únicos campos posteriormente combinados são `membro`, `decor` e `registros` (`bin/quem_chama.py:700`, `bin/quem_chama.py:704`, `bin/quem_chama.py:706`). Contudo, o produtor atual sempre deriva `nome` do sufixo de `q`; mudar de topo `f` para membro `C.f` também muda a chave, impedindo esse conflito natural entre lados (`bin/quem_chama.py:290`, `bin/quem_chama.py:292`, `bin/quem_chama.py:300`). Divergência de `nome` só foi demonstrada com infos artificiais injetados na soma, não produzidos pelo parser (`bin/quem_chama.py:279`).
-
-3. **P2 — migração singular/plural consistente no caminho operacional.**
-
-   | Campo | Escritores | Leitores |
-   |---|---|---|
-   | `registro` | `_add`, `bin/quem_chama.py:282` | Somente soma, `bin/quem_chama.py:708`, `bin/quem_chama.py:709`; excluído da cópia em `bin/quem_chama.py:704`. |
-   | `registros` | Inicialização em `bin/quem_chama.py:705`; acréscimo em `bin/quem_chama.py:709`. | Classificação em `bin/quem_chama.py:348`, `bin/quem_chama.py:349`; varredura de template em `bin/quem_chama.py:606`; deduplicação em `bin/quem_chama.py:708`. |
-
-   O fluxo passa pela soma antes da classificação e da construção de `Alvos`, usados pelas varreduras; não encontrei leitor singular sobre dict somado nem leitor plural sobre dict cru nesse fluxo (`bin/quem_chama.py:701`, `bin/quem_chama.py:711`, `bin/quem_chama.py:716`, `bin/quem_chama.py:728`, `bin/quem_chama.py:732`).
-
-## 06/11 04:19 · sessao 985df92221f6 · OTIMIZA-3 · verificador · origem=Code
-
-**Parecer: bloqueia.** Há caminhos reproduzíveis para zero falso e uma lacuna no selo de facetas (`bin/quem_chama.py:701`, `bin/quem_chama.py:732`, `bin/tests/test_quem_chama.sh:303`). Execução dos ranges históricos e do selo completo: **[nao verificado]**. Os contraexemplos sintéticos abaixo foram exercitados em memória; ocorrência deles em produção: **[nao verificado]**.
-
-1. **BLOQUEIA — P2/P7: metadado velho pode esconder decorador novo.** A coleta percorre base antes da ponta, conserva o primeiro `info` por `setdefault` e atualiza apenas `registro` (`bin/quem_chama.py:699`, `bin/quem_chama.py:701`, `bin/quem_chama.py:703`).
-
-   Contraexemplo: base com `def f(): ...`; ponta acrescenta `@receiver(sinal)` ao mesmo `f`. Permanece `decor=[]`, e a classificação resulta em `simbolo-de-topo`, permitindo zero, em vez do motivo “decorado” (`bin/quem_chama.py:350`, `bin/quem_chama.py:705`, `bin/quem_chama.py:759`). O fixture mantém `@receiver` nos dois lados, portanto não cobre essa transição (`bin/tests/test_quem_chama.sh:117`, `bin/tests/test_quem_chama.sh:158`).
-
-2. **BLOQUEIA — P7: renomear o registro de filtro conserva somente o nome velho.** Se ambos os lados têm `registro`, a união mantém o antigo (`bin/quem_chama.py:702`).
-
-   Contraexemplo: `@register.filter(name="old")` passa para `name="new"`; template carrega a biblioteca e usa `{{ v|new }}`. O símbolo continua registrado internamente como `old`; a busca usa esse nome e retorna zero para o filtro realmente utilizado (`bin/quem_chama.py:605`, `bin/quem_chama.py:608`, `bin/quem_chama.py:612`). É o mesmo problema de precedência do lado velho, agora produzindo falso zero em `filtro/tag` (`bin/quem_chama.py:699`, `bin/quem_chama.py:759`).
-
-3. **BLOQUEIA — P2/P7: Python embutido no próprio arquivo é descartado antes do rebaixamento.** O guarda `alvo_rel == rel` vem antes do tratamento de `EMBUTIDO` (`bin/quem_chama.py:732`, `bin/quem_chama.py:734`).
-
-   Contraexemplo sintético em `app/m/selfmod.py`:
-
-   ```python
-   def f(): return 1
-   exec("from m.selfmod import f; f()")
-   ```
-
-   `varrer_py` reconhece o import embutido; o guarda o elimina, e `varrer_proprio` não enxerga nomes dentro da string. A faceta `simbolo f [simbolo-de-topo]` termina com zero (`bin/quem_chama.py:469`, `bin/quem_chama.py:506`, `bin/quem_chama.py:732`). Ocorrência real dessa forma executável no próprio módulo: **[nao verificado]**.
-
-4. **BLOQUEIA — P5: sítios podem desaparecer da faceta arquivo sem morder as asserções novas.** Mutante plausível em `bin/quem_chama.py:749`:
-
-   ```python
-   if q is not None:
-       por[(a['rel'], q)] |= sitios
-   ```
-
-   No heredoc do fixture, ele mantém o símbolo rebaixado com `bin/heredoc.sh:3`, mas deixa a faceta arquivo sem esse sítio (`bin/tests/test_quem_chama.sh:127`). As quatro condições de r5 continuam satisfeitas: cabeçalho, sítio e ausência de zero são exigidos no símbolo; no arquivo exige-se somente o cabeçalho (`bin/tests/test_quem_chama.sh:300`, `bin/tests/test_quem_chama.sh:301`, `bin/tests/test_quem_chama.sh:302`, `bin/tests/test_quem_chama.sh:303`). Sobrevivência ao selo completo: **[nao verificado]**.
-
-5. **FILA — P3: linha errada em string de `.py` com escapes/concatenação.** O cálculo usa quebras do **valor decodificado**, somadas à linha inicial do nó AST (`bin/quem_chama.py:470`).
-
-   Contraexemplo real: o literal começa em `app/core/tests/test_selo_diagrama_do_codigo.py:250`, contendo dois `\n`; o import está fisicamente na linha **251**, mas é relatado como **252**, onde começa outro literal (`app/core/tests/test_selo_diagrama_do_codigo.py:251`, `app/core/tests/test_selo_diagrama_do_codigo.py:252`).
-
-   Para heredoc e comentários intermediários de `.sh`, o cálculo preserva as posições: `_codigo_sh` conserva os números originais, e `varrer_linhas` repõe lacunas como linhas vazias (`bin/quem_chama.py:524`, `bin/quem_chama.py:528`, `bin/quem_chama.py:557`). O import real em `bin/esteira_status.sh:55` permanece na linha 55 por esse caminho (`bin/quem_chama.py:558`).
-
-6. **FILA — P1: há escapes reais da regex, mas não demonstrei uma faceta com zero falso causada por eles.**
-
-   - O heredoc gera um módulo com `from .ci import *`; a regex de `config.settings.ci` não resolve esse relativo (`bin/regua_calendario.sh:28`, `bin/regua_calendario.sh:30`, `bin/quem_chama.py:89`). Entretanto, há import absoluto do mesmo alvo em outro script, suficiente para provocar rebaixamento global (`bin/regua_relogio.sh:35`, `bin/quem_chama.py:741`). **Faceta que ainda sairia zero por esse escape: [nao verificado].**
-   - A string executada importa `colaboradores.models` e `chamados.fcm_utils`; as regex dos módulos-pacote `colaboradores` e `chamados` não reconhecem esses `from pacote.submod import ...` (`bin/alarme_sessao_ociosa.py:142`, `bin/alarme_sessao_ociosa.py:144`, `bin/alarme_sessao_ociosa.py:145`, `bin/quem_chama.py:89`). **Zero das facetas arquivo dos respectivos `__init__.py` na árvore completa: [nao verificado].**
-
-   Esses sítios demonstram perda de cobertura; não sustentam afirmar uma repetição real da reprovação de `datas_cravadas_prod` **[nao verificado]**.
-
-7. **FILA — P4/P5: comportamento atual de comentário está coerente; falta mordida para `{% comment %}` multilinha.** A remoção de DOTALL de `{# #}` concorda com o contrato já existente no repo (`bin/quem_chama.py:569`, `app/holerite/tests/test_contract_lapide_nao_vaza.py:3`). `{% comment %}` multilinha continua removido e conserva as quebras de linha; há exemplo real delimitado em `app/templates/base.html:139` e `app/templates/base.html:152` (`bin/quem_chama.py:570`).
-
-   Mutante: remover `flags=re.S` da segunda substituição. O novo r5 de comentário não o mata, pois exercita `{# #}`; o fixture de `{% comment %}` está inteiro numa linha (`bin/quem_chama.py:571`, `bin/tests/test_quem_chama.sh:67`, `bin/tests/test_quem_chama.sh:138`, `bin/tests/test_quem_chama.sh:222`). Sobrevivência ao selo completo: **[nao verificado]**.
-
-   Falso positivo grave ou falso zero causado pelo novo regex de `{% filter %}` em template real: **[nao verificado]**; o caso acrescentado ao selo é positivo e sintético (`bin/quem_chama.py:608`, `bin/tests/test_quem_chama.sh:137`, `bin/tests/test_quem_chama.sh:262`).
-
-8. **FILA — P5: alcance das demais asserções novas.**
-
-   | Asserção/helper | Verificação e limite |
-   |---|---|
-   | `_fac` | Exige espaço ou `:` após o rótulo. `simbolo f_emb` não casa `simbolo f_emb_here`; o alvo também exige caminho seguido de ` (` (`bin/tests/test_quem_chama.sh:176`, `bin/tests/test_quem_chama.sh:179`). |
-   | `_so_na_fac` | **Total zero não passa**: exige `tot >= 1`. Mover o achado de símbolo-parado/relativo-parado para outra faceta viola a igualdade entre total e ocorrências sob arquivo (`bin/tests/test_quem_chama.sh:186`, `bin/tests/test_quem_chama.sh:195`, `bin/tests/test_quem_chama.sh:202`). |
-   | `r5-init-reexporta` e `r5-import-local` | Exigem presença correta, mas aceitam duplicação adicional sob arquivo. Mutante: emitir também com `q=None` o achado de importação do símbolo (`bin/quem_chama.py:453`, `bin/tests/test_quem_chama.sh:207`, `bin/tests/test_quem_chama.sh:208`). |
-   | `r5-comentario-multilinha` e `r5-filter-tag` | Também são positivos sem exclusividade; duplicar o achado em outra faceta não contradiz essas asserções (`bin/tests/test_quem_chama.sh:222`, `bin/tests/test_quem_chama.sh:262`). |
-   | `r5-embutido-*` e reais | Ausência total é morta pelos positivos vizinhos; o negativo sozinho seria vacuoso. A perda exclusiva do sítio sob arquivo sobrevive às condições novas, como no achado 4 (`bin/tests/test_quem_chama.sh:182`, `bin/tests/test_quem_chama.sh:300`, `bin/tests/test_quem_chama.sh:353`). |
-   | `r5-solo-*` | Prendem o zero e o tipo nos dois cabeçalhos, mas não cobrem comentário com import absoluto direto: fixture usa `from m import solo` (`bin/tests/test_quem_chama.sh:133`, `bin/tests/test_quem_chama.sh:134`, `bin/tests/test_quem_chama.sh:306`). |
-
-9. **FILA — P7: segunda implementação da regra código/prosa, com divergência concreta.** O instrumento declara seguir a regra da casa, mas implementa `_prosa` local; a autoridade existente declara centralização e já possui wrapper importador (`bin/quem_chama.py:21`, `bin/quem_chama.py:356`, `app/core/censo_codigo.py:15`, `bin/censo_codigo_py.py:34`).
-
-   Contraexemplo real: a string de código em `app/core/management/commands/gerar_diagrama.py:873` cita `bin/gerar_diagrama.py` depois de `#`. O instrumento conta a citação, enquanto o censo a corta no primeiro `#`, inclusive dentro da string (`bin/quem_chama.py:472`, `app/core/censo_codigo.py:60`). Isso prova divergência entre derivadores; nesse caso, o instrumento é mais conservador e não produz falso zero (`bin/quem_chama.py:473`).
-
-10. **P2/P6 — fluxo dos campos: sem falha adicional de ordem no rebaixamento.** Uma vez coletado o sítio, todas as facetas são percorridas; apenas tipos em `VARRIDOS` mudam, preservando os motivos de teste, setting e decorado (`bin/quem_chama.py:745`, `bin/quem_chama.py:746`, `bin/quem_chama.py:747`). Símbolos são classificados antes disso; alvo apagado conserva módulo e símbolos da base; `__init__.py` de pacote conserva módulo, enquanto `app/__init__.py` sem módulo cai fora da lista positiva (`bin/quem_chama.py:151`, `bin/quem_chama.py:317`, `bin/quem_chama.py:687`, `bin/quem_chama.py:699`, `bin/quem_chama.py:705`).
-
-   | Campo | Escritores | Leitores |
-   |---|---|---|
-   | `alvo['tipo']` | Inicialização: `bin/quem_chama.py:707`; rebaixamento por alias `info`: `bin/quem_chama.py:748`. | Guarda por alias: `bin/quem_chama.py:747`; render: `bin/quem_chama.py:782`. |
-   | `info['tipo']` | Classificação: `bin/quem_chama.py:705`; rebaixamento: `bin/quem_chama.py:748`. | Guarda: `bin/quem_chama.py:747`; render dos símbolos: `bin/quem_chama.py:784`. |
-   | `alvo['embutido']` | `bin/quem_chama.py:745`. | `bin/quem_chama.py:781`; conteúdo formatado em `bin/quem_chama.py:756`. |
-   | `por[(rel,q)]` | Inicialização: `bin/quem_chama.py:711`, `bin/quem_chama.py:714`; acréscimos: `bin/quem_chama.py:737`, `bin/quem_chama.py:740`, `bin/quem_chama.py:749`. | Acumulação nos mesmos sítios; ordenação: `bin/quem_chama.py:750`; render: `bin/quem_chama.py:782`, `bin/quem_chama.py:784`; total: `bin/quem_chama.py:817`. |
-   | `EMBUTIDO` | Constante: `bin/quem_chama.py:81`. | Emissão do marcador: `bin/quem_chama.py:470`, `bin/quem_chama.py:558`; coleta: `bin/quem_chama.py:734`; tipo final: `bin/quem_chama.py:748`; apresentação: `bin/quem_chama.py:754`. |
-   | `Alvos.emb` | Construção: `bin/quem_chama.py:400`. | Busca: `bin/quem_chama.py:410`, chamada por `bin/quem_chama.py:469` e `bin/quem_chama.py:559`. |
-
-   A guarda de tipo e a acumulação de `por` leem valores antes da última atualização por necessidade do próprio algoritmo; a renderização lê depois do laço final. O defeito de precedência identificado está nos metadados antigos preservados pelos `setdefault`, conforme achados 1–2 (`bin/quem_chama.py:701`, `bin/quem_chama.py:747`, `bin/quem_chama.py:750`, `bin/quem_chama.py:782`).
-
-## 06/11 04:16 · sessao 04a0a7bc1c6c · - · - · origem=Ronald (tmux)
-
-1. **P3 — fila: número de linha errado em string concatenada de `.py`.** Em `app/core/tests/test_selo_diagrama_do_codigo.py:250`, o primeiro literal contém dois `\n` decodificados; o import de `ponto.janelas` está fisicamente na linha **251**. `varrer_py` soma esses dois caracteres a `no.lineno=250` e relata **252**, onde está `def g()` (`bin/quem_chama.py:470`; `app/core/tests/test_selo_diagrama_do_codigo.py:252`). Reproduzido em memória, sem arquivos auxiliares.
-
-2. **P3 — cálculo preserva comentários intermediários em `.sh`.** `_codigo_sh` conserva as chaves com os números originais (`bin/quem_chama.py:524-529`); `varrer_linhas` repõe as linhas ausentes como vazias antes de contar `\n` (`bin/quem_chama.py:557-558`). O heredoc real de `bin/esteira_status.sh:55` foi relatado como linha **55**, apesar dos comentários anteriores (`bin/esteira_status.sh:45-51`).
-
-3. **P1 — escape real, mas sem falso zero demonstrado.** `bin/regua_calendario.sh:28-35` gera `config/settings/ci_calendario.py` com `from .ci import *` na linha 30. `_rx_embutido('config.settings.ci', True)` não casa o relativo nem `config.settings.ci_calendario` da linha 45, pois `_` impede a fronteira final (`bin/quem_chama.py:89-95`). Contudo, `bin/regua_relogio.sh:35` importa `config.settings.ci` absolutamente e `bin/regua.sh:169` cita o módulo completo; esses outros sítios já provocam o rebaixamento global (`bin/quem_chama.py:723-733`). Faceta com falso zero por este escape: **[nao verificado]**.
-
-4. **P1 — pacote pai também escapa; falso zero não demonstrado.** O subprocess de `bin/alarme_sessao_ociosa.py:142-149` executa `from colaboradores.models import Colaborador` e `from chamados.fcm_utils import push_fcm_colaborador`. As regex dos módulos-pacote `colaboradores` e `chamados` não casam essas strings, pois exigem `from pacote import` ou `import pacote` (`bin/quem_chama.py:89-95`). Entretanto, não foi demonstrada saída zero da faceta arquivo desses `__init__.py` na árvore completa: **[nao verificado]**.
-
-## 06/11 04:15 · sessao d50b6974a0a4 · - · - · origem=Ronald (tmux)
-
-1. **P5 — bloqueia: falta mordida para sítios sob a faceta arquivo.** O mutante `if q is not None: por[(a['rel'], q)] |= sitios` em `bin/quem_chama.py:749` remove os achados embutidos da faceta arquivo. Para o heredoc definido em `bin/tests/test_quem_chama.sh:127`, confirmei em memória: arquivo fica com `0 achado(s) avulso(s)` e perde `bin/heredoc.sh:3:`, enquanto todas as quatro condições de `bin/tests/test_quem_chama.sh:300`–`303` permanecem verdadeiras. O sítio só é exigido sob símbolo, em `bin/tests/test_quem_chama.sh:301`; arquivo exige apenas o cabeçalho em `bin/tests/test_quem_chama.sh:303`. Execução do selo completo: [nao verificado].
-
-2. **P5 — sem defeito no prefixo citado.** `_fac` exige espaço ou `:` depois do rótulo, portanto `simbolo f_emb` não casa `simbolo f_emb_here`; `arquivo` não casa `arquivo_extra`. A seção exige o caminho seguido de ` (`. Confirmei os casos executando o awk em memória — `bin/tests/test_quem_chama.sh:176`–`180`. `_so_na_fac` também **não passa com total=0**: exige explicitamente `tot >= 1` — `bin/tests/test_quem_chama.sh:186`.
-
-3. **P5 — fila: faceta correta não implica exclusividade em todos os r5.** `r5-init-reexporta`, `r5-import-local`, `r5-comentario-multilinha` e `r5-filter-tag` exigem presença sob a faceta correta, mas aceitam duplicação sob facetas erradas — `bin/tests/test_quem_chama.sh:207`, `208`, `222`, `262`. As duas reprovações específicas “símbolo parado” e “relativo parado” têm exclusividade efetiva por `_so_na_fac` — `bin/tests/test_quem_chama.sh:195`, `202`.
-
-4. **P5 — fila: negativo sozinho é vacuoso, conjunto tem mordida.** `_naotem_fac` aceita faceta ausente — `bin/tests/test_quem_chama.sh:182`. Contudo, `r5-embutido-zero` vem acompanhado de cabeçalho e sítio positivos em `bin/tests/test_quem_chama.sh:300`–`302`; o real também em `bin/tests/test_quem_chama.sh:353`–`355`. Não apontar ausência total como mutante sobrevivente desses conjuntos.
-
-5. **P5 — fila: teste novo de comentário não protege `{% comment %}` multilinha.** Remover `flags=re.S` de `bin/quem_chama.py:571` preserva o r5 de `{# #}` multilinha, que é outro mecanismo — `bin/tests/test_quem_chama.sh:138`, `222`. O fixture negativo de `{% comment %}` fica inteiro na mesma linha — `bin/tests/test_quem_chama.sh:67`. Sobrevivência ao selo histórico inteiro: [nao verificado].
-
-6. **P7 — bloqueia: metadados antigos prevalecem e podem produzir zero falso.** A coleta percorre antiga antes de nova e usa `setdefault`, atualizando apenas `registro` — `bin/quem_chama.py:699`–`703`. Contraexemplo: base contém `def f(): ...`; ponta acrescenta `@receiver("s")` ao mesmo `f`. O `decor=[]` antigo permanece, e `_tipo_simbolo` classifica como `simbolo-de-topo`, permitindo `0 chamador(es)` embora o decorador registre a função — `bin/quem_chama.py:705`, `350`–`353`, `759`–`763`. O fixture atual mantém `@receiver` nos dois lados e não cobre a transição — `bin/tests/test_quem_chama.sh:117`, `158`.
-
-_2113 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2118 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
