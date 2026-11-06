@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 04:49:25.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (43.0 MB). Acoes na janela: **800**.
+**Medido em 06/11/2026 04:54:30.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (43.1 MB). Acoes na janela: **802**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:52:57 | Bash | Repoint ESPERANDO to the live suite pid | `cd /home/ronald/saas-hasner; sed -i '2s/pid=[0-9]*/pid=3737723/' app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md` |
+| 04:52:53 | Bash | Check suite states and ESPERANDO pid | `cd /home/ronald/saas-hasner; pgrep -af "^bash /home/ronald/saas-hasner/bin/trava_teste.sh --" \| cut -c1-60; bin/trava_teste.sh --quem; sed -n 2p app/docs/RELATO.md; for f in logs/otimiza3/suite_r5.log logs/lastro2/suite_v1.log; do echo "== $f"; head -1 $f 2>/dev/null; grep -E "^(OK\|FAILED)($\| \()\|^Ran\|^rc=" $f 2>/dev/null \| tail -3; done; date +%H:%M` |
 | 04:30:37 | Bash | Repoint ESPERANDO to live suite pid, peek sombra | `cd /home/ronald/saas-hasner; sed -i '2s/pid=[0-9]*/pid=2269374/' app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md; tail -5 logs/lastro2/sombra_v1.out` |
 | 04:30:33 | Bash | Find live suite pids and recent obra logs | `cd /home/ronald/saas-hasner; pgrep -af "^bash /home/ronald/saas-hasner/bin/trava_teste.sh --" \| cut -c1-160; bin/trava_teste.sh --quem; ls -t logs/lastro2/ logs/otimiza3/ \| head -12; date +%H:%M` |
 | 03:57:23 | Bash | Record LASTRO-PARTE-2 dispatch in RELATO | `cd /home/ronald/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys h=sys.argv[1]; p='app/docs/RELATO.md' L=open(p).read().split('\n') L.insert(5, f"DESPACHO LASTRO-PARTE-2 {h}: censo/verificador -> Codex \| cura (fecho por MARCO pelo evento via reconciliar(); fechar_cobranca_com_lastro vira VIGIA --alarme; nota so quando foi batida) + sombra N=0/3 casos/DIFF 0/hash 09 -> opus constru ...` |
