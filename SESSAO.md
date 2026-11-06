@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 14:26:16.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (66.4 MB). Acoes na janela: **820**.
+**Medido em 06/11/2026 14:31:13.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (66.5 MB). Acoes na janela: **825**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:29:17 | Bash | Update E-SEM-VIVA-B BACKLOG state cell | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md' L=open(p,encoding='utf-8').read().split('\n') i=1796 c=L[i].split('\|') assert c[1].strip()=='E-SEM-VIVA-B', c[1] c[3]=" PARADA B3 14:29: opus final REPROVA 97411e5c (suite 13822 OK) -- recompoe 2 portas do juiz _K2; ERRO-BOBO decidido pela lei: volta 4 le folha/fora_da_folha.py::dias_que_seguram, fixture com FechamentoMensal;  ...` |
+| 14:29:12 | Bash | Mark lei line answered; read BACKLOG state cell | `cd /home/ronald/saas-hasner; sed -i '4s#^lei: E-SEM-VIVA-B#RESPONDIDA por DECIDIDO PELA LEI _K2 14:29 (ERRO-BOBO acima: "comp que ele segura" = resposta inteira do juiz, lida por dias_que_seguram): lei: E-SEM-VIVA-B#' app/docs/RELATO.md; sed -n 4p app/docs/RELATO.md \| cut -c1-150; sed -n 1797p app/docs/BACKLOG.md \| awk -F'\|' '{print NF; print $4}' \| cut -c1-600` |
+| 14:29:06 | Bash | Write ERRO-BOBO B3 line in RELATO | `cd /home/ronald/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys h=sys.argv[1] p='app/docs/RELATO.md' L=open(p,encoding='utf-8').read().split('\n') assert L[1].startswith('ESPERANDO:') L.insert(2, f"ERRO-BOBO E-SEM-VIVA-B ({h}, DISJUNTOR B3, opus final REPROVA 97411e5c, wt-esemvivab-095139): DECIDIDO PELA LEI juiz unico _K2 (core/juizes.py:161 -> folha/export.py::classificar_export ...` |
+| 14:28:51 | Bash | Confer opus citations in the copy | `cd /home/ronald/wt-esemvivab-095139/app; sed -n 400,403p ponto/services/fechamento.py; sed -n 105,112p folha/fora_da_folha.py; sed -n 166,173p escala/services/cadastro_realidade.py` |
+| 14:28:46 | Bash | Check disjuntor B3 format and existing lines | `cd /home/ronald/saas-hasner; grep -n "B3" bin/disjuntor.py \| head -20; grep -n "^REPROVA\\|PERGUNTA DE DESENHO" app/docs/RELATO.md \| head` |
 | 14:25:18 | Bash | Read hook mtime memory and ESPERANDO logic | `cd /home/ronald/saas-hasner; cat logs/hook_stop_espera.json; echo; sed -n 645,700p bin/hook_stop_fila1.py` |
 | 14:25:13 | Bash | Inspect hook ESPERANDO checks | `cd /home/ronald/saas-hasner; grep -n "def _esperando_com_prova\\|def _prova_arquivo\\|def _prova_pid\\|mtime\\|RELATO" bin/hook_stop_fila1.py \| head -30; stat -c '%y' logs/r1pub/suite.log; date` |
 | 14:24:58 | Bash | Record VAGAS line in RELATO | `cd /home/ronald/saas-hasner; sed -i '/^VAGAS 13:5x/i VAGAS 14:2x: construtor O10-C (lote 16, DRY pronto, apply espera aval; 09 exportada = !) + construtor H12H06-B-PAUTA-08; teto 2. OTIMIZA-3 espera vaga.' app/docs/RELATO.md; grep -n "^VAGAS 14" app/docs/RELATO.md` |
