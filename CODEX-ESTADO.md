@@ -1,7 +1,85 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 00:11** · publicado em **06/11/2026 00:12** (UTC-3)
+> Ultima resposta processada: **06/11/2026 00:14** · publicado em **06/11/2026 00:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 00:14 · sessao ccbc62b07396 · - · - · origem=Ronald (tmux)
+
+**Confirmado como contraexemplo estático novo; reprodução: [não verificado].** A retirada do atalho permite retratar a última resolvedora local usando uma fotografia antiga da âncora da canônica. (`app/chamados/models.py:500`, `app/chamados/models.py:515`, `app/chamados/models.py:529`)
+
+Pré-condições: A é `batida_ausente` vivo em competência aberta; p1 e p2 estão ancoradas em A, vivas, sem resposta, no mesmo motivo-dia; p1 tem menor PK; B está vivo e aceita a costura pelo E4-c. (`app/chamados/models.py:478`, `app/chamados/models.py:483`, `app/chamados/models.py:491`, `app/chamados/models.py:494`, `app/chamados/models.py:508`; `app/chamados/services/fio.py:873`, `app/chamados/services/fio.py:838`)
+
+1. T1 trava A, carrega perguntas sem trava explícita delas e guarda `_anc[p1] == A`. (`app/chamados/models.py:480`, `app/chamados/models.py:481`, `app/chamados/models.py:494`, `app/chamados/models.py:500`)
+2. T2 executa `reapontar_resolvedora(p1, B)`: a porta trava o destino B, grava destino/lavra e não trava nem repara explicitamente a origem A. (`app/chamados/services/fio.py:757`, `app/chamados/services/fio.py:762`, `app/chamados/services/fio.py:837`, `app/chamados/services/fio.py:845`, `app/chamados/services/fio.py:848`)
+3. Depois do commit de T2, T1 escolhe p1 da fotografia antiga; como `_anc[p1] == A`, pula a porta, sem conferir novamente sua âncora, e retrata p2. (`app/chamados/models.py:515`, `app/chamados/models.py:516`, `app/chamados/models.py:529`, `app/chamados/models.py:531`)
+4. p2 sem resposta fica morta pelo carimbo de identidade; p1 está em B. A fica vivo sem essas resolvedoras vivas. `_reatadas` vazio também impede o callback novo. (`app/chamados/services/fio.py:891`; `app/chamados/juizes.py:1150`, `app/chamados/juizes.py:1171`; `app/chamados/models.py:532`)
+
+O atalho retirado impediria especificamente a retratação de p2 nesse grupo todo local; portanto essa perda adicional decorre do delta fornecido. (anexo `delta_v3_97b0fcc4.patch`, hunk de remoção do `all(_anc[...] == self.pk)`; linha física do anexo: [não verificado])
+
+O efeito de travas implícitas do banco e a ocorrência desse interleaving em produção permanecem **[não verificado]**.
+
+## 06/11 00:13 · sessao f3eca523a8b4 · - · - · origem=Ronald (tmux)
+
+Q1 resolve a inversão **explícita do trecho novo**, mas não toda a promessa de coerência: a adoção agenda o trabalho; o helper relê e trava a Disputa, porém testa Pergunta antes dessa trava e não a protege contra alteração concorrente. (`app/chamados/models.py:30`, `app/chamados/models.py:33`, `app/chamados/models.py:535`)
+
+- **`abrir()`**: mantém o `atomic` externo e a trava do Colaborador; a adoção acrescenta trava do Chamado e escritas de Pergunta. O callback aguarda o commit externo, inclusive eventual `atomic` do chamador; não executa ao sair do `atomic(savepoint=False)` interno. (`app/chamados/models.py:971`, `app/chamados/models.py:974`, `app/chamados/models.py:1043`, `app/chamados/models.py:480`, `app/chamados/models.py:535`; semântica efetiva do framework executado: [não verificado])
+- **`reabrir()` direto**: lê/decide antes, grava estado no núcleo transacional, ressuscita e só depois entra na transação da adoção. Assim, o callback novo executa após o commit da adoção, mas não torna esses atos anteriores uma unidade indivisível. (`app/chamados/models.py:1443`, `app/chamados/models.py:1460`, `app/chamados/models.py:1502`, `app/chamados/models.py:1511`, `app/chamados/models.py:1512`, `app/chamados/models.py:292`)
+- **Falha pós-commit**: helper não contém tratamento de exceção; todas suas reaberturas e notas ficam no `atomic` dele. Uma falha na nota pode desfazer a reabertura da Disputa depois de a adoção já estar confirmada; a segunda adoção não agenda reparo se a canônica já está aqui, pois `_reatadas` só recebe perguntas efetivamente movidas. (`app/chamados/models.py:28`, `app/chamados/models.py:516`, `app/chamados/models.py:528`, `app/chamados/models.py:532`, `app/chamados/models.py:2201`, `app/chamados/models.py:2204`, `app/chamados/services/nota.py:103`; execução/reprodução: [não verificado])
+- A chamada usa `on_commit` sem `robust` nem envoltório `engolir`; pela semântica padrão de Django, uma exceção propaga após o commit e interrompe callbacks seguintes daquele lote, sem desfazer a adoção. Isso merece diferenciação explícita dos callbacks best effort de becos. (`app/chamados/models.py:535`, `app/chamados/signals.py:197`, `app/chamados/signals.py:199`, `app/chamados/signals.py:202`; comportamento efetivamente executado: [não verificado])
+
+Dois contraexemplos continuam abertos:
+
+1. **Teste de Pergunta antes da trava da Disputa**: helper coleta D porque P está viva e aponta ao adotante; outra transação reaponta P; helper trava D e a reabre sem verificar novamente P. A porta de reapontar não exige trava de D. (`app/chamados/models.py:30`, `app/chamados/models.py:33`, `app/chamados/services/fio.py:837`, `app/chamados/services/fio.py:845`, `app/chamados/services/fio.py:847`; escalonamento/reprodução: [não verificado])
+2. **Fechamento não participa do mesmo protocolo**: `fechar()` testa instância, respostas e vitalidade antes do bloco de escrita, sem reler sob trava; seu `save` pode esperar a reabertura e depois persistir uma decisão calculada anteriormente. A leitura fresca do helper não corrige o outro escritor. (`app/chamados/models.py:1930`, `app/chamados/models.py:1937`, `app/chamados/models.py:1947`, `app/chamados/models.py:1956`, `app/chamados/models.py:1975`; corrida reproduzida: [não verificado])
+
+Sobre os outros caminhos:
+
+- **`declaracao_texto` realmente oferece D→Chamado**: a transação externa obtém D pelo emissor e pode reapontar pergunta ao Chamado ainda dentro dela. (`app/chamados/services/declaracao_texto.py:302`, `app/chamados/services/declaracao_texto.py:310`, `app/chamados/services/declaracao_texto.py:320`, `app/chamados/services/disputa_emissao.py:467`, `app/chamados/services/fio.py:762`)
+- **Não usar o comentário como prova automática de D→Colaborador**: `_abrir_ou_agregar_disputa` retorna quando encontrou D; chama `Chamado.abrir` no ramo sem D encontrada. O mesmo ocorre em `criar_disputa_ancora_de_chamado`. (`app/chamados/services/disputa_emissao.py:471`, `app/chamados/services/disputa_emissao.py:502`, `app/chamados/services/disputa_emissao.py:504`, `app/chamados/services/disputa_emissao.py:1156`, `app/chamados/services/disputa_emissao.py:1162`)
+- **O ramo legado de ressuscitação ainda escreve D sob as travas externas de `abrir`**: `abrir` pode renascer existente, `reabrir` ressuscita e `ressuscitar_perguntas` chama diretamente `reabrir_sistema`. O delta não desloca essa chamada. (`app/chamados/models.py:990`, `app/chamados/models.py:992`, `app/chamados/models.py:1511`, `app/chamados/models.py:1641`, `app/chamados/models.py:1642`)
+- **Relavra trava Pergunta e Disputa juntas**, descarimba e pode reabrir D fechada. Deve entrar no censo de composição. (`app/chamados/services/relavra_via.py:217`, `app/chamados/services/relavra_via.py:221`, `app/chamados/services/relavra_via.py:231`, `app/chamados/services/relavra_via.py:245`)
+
+Há um ciclo **plausível**, condicionado às travas implícitas de FK do PostgreSQL: T1 segura Chamado B e espera UPDATE de p2 na retratação; T2 segura p2+D na relavra e cria a ocorrência da reabertura cujo FK aponta a B. Se a checagem FK pedir `KEY SHARE` incompatível com o `FOR UPDATE` de T1, T2 espera B. A remoção do atalho passa a alcançar também esse cenário com duas perguntas já locais. (`app/chamados/models.py:481`, `app/chamados/models.py:529`, `app/chamados/models.py:531`, `app/chamados/services/relavra_via.py:221`, `app/chamados/services/relavra_via.py:245`, `app/chamados/models.py:2204`, `app/chamados/services/nota.py:103`, `app/chamados/models.py:1708`; mecanismo/schema efetivo e reprodução: [não verificado])
+
+O helper também mantém D enquanto insere Followup ligado ao pai; portanto “trava só Disputa” descreve as travas explícitas do Python, não prova ausência de dependências de FK. (`app/chamados/models.py:28`, `app/chamados/models.py:33`, `app/chamados/models.py:2204`, `app/chamados/models.py:1708`; travas implícitas efetivas: [não verificado])
+
+R08f corrige o pai ausente e executa callbacks, mas só exige `fechada_em=None`: não verifica limpeza dos outros campos, ocorrência, acesso, falha, rollback, concorrência ou liberação real de travas. `captureOnCommitCallbacks(execute=True)` em `TestCase` não representa um commit real encerrando a transação externa do teste. (`app/chamados/tests/test_c20_fio_mudo.py:221`, `app/chamados/tests/test_c20_fio_mudo.py:225`, `app/chamados/tests/test_c20_fio_mudo.py:232`; execução: [não verificado])
+
+O selo de ordem reconhece apenas Colaborador/Disputa e é explicitamente intraprocedural; verde nele não certifica essas composições, UPDATEs e FKs. (`app/chamados/tests/test_selo_ordem_de_trava_disputa_colaborador.py:14`, `app/chamados/tests/test_selo_ordem_de_trava_disputa_colaborador.py:23`, `app/chamados/tests/test_selo_ordem_de_trava_disputa_colaborador.py:85`)
+
+## 06/11 00:12 · sessao ccbc62b07396 · - · - · origem=Ronald (tmux)
+
+**Q2–Q4 melhoram; não demonstram encerramento integral.** A retirada do atalho normaliza locais, mas persistem diferenças entre identidade, vitalidade C6, escolha em `Pergunta.abrir` e fechamento dos continentes. (`app/chamados/models.py:494`, `app/chamados/models.py:515`, `app/chamados/models.py:529`, `app/chamados/models.py:2541`; `app/chamados/juizes.py:1150`)
+
+- **Q2: resolve o atalho.** Todo grupo elegível passa por `canonica_do_grupo`; irmãs são retratadas mesmo com canônica local. R08h exige segunda local viva e o carimbo final, portanto morde a restauração do `continue`. Não prova o ciclo real fechar→reabrir→ressuscitar nem uma única pergunta viva pelo C6 após duas respostas. (`app/chamados/models.py:513`, `app/chamados/models.py:529`; `app/chamados/tests/test_c20_fio_mudo.py:254`, `app/chamados/tests/test_c20_fio_mudo.py:265`, `app/chamados/tests/test_c20_fio_mudo.py:267`, `app/chamados/tests/test_c20_fio_mudo.py:270`)
+- **Q3: resolve a fixture sem pai.** R08f agora cria disputa vinculada ao chamado morto. Continua sem chamar montador/API, conferir acesso do colaborador, ocorrência ou limpeza de todos os campos de fechamento. (`app/chamados/tests/test_c20_fio_mudo.py:220`, `app/chamados/tests/test_c20_fio_mudo.py:221`, `app/chamados/tests/test_c20_fio_mudo.py:230`, `app/chamados/tests/test_c20_fio_mudo.py:232`; `app/chamados/services/fio.py:181`, `app/chamados/services/fio.py:211`)
+- **Q4: resolve a vacuidade de porta não chamada.** A comparação dos argumentos exige `(a, ch)`; ainda não verifica que os destinos permanecem iguais após recusa. (`app/chamados/tests/test_c20_fio_mudo.py:243`, `app/chamados/tests/test_c20_fio_mudo.py:247`, `app/chamados/tests/test_c20_fio_mudo.py:249`)
+
+**R08f executa callbacks, mas não prova a borda de commit.** Os asserts finais também passariam se a disputa fosse reaberta imediatamente dentro da adoção: não há assert intermediário “continua fechada antes do commit”, teste com rollback nem teste de ausência das travas da abertura. Execução e eficácia de mutantes: [não verificado]. (`app/chamados/tests/test_c20_fio_mudo.py:225`, `app/chamados/tests/test_c20_fio_mudo.py:232`)
+
+**D2 sustenta somente a afirmação estreita de que existe canônica no chamado vivo.** Uma duplicata respondida pode continuar viva porque a resposta precede identidade no C6; a adoção a exclui, enquanto gate, migrador e C7 consultam C6 sem essa exclusão. Assim, “virou duplicata” não equivale a “deixou de segurar fechamento”. Não considero esse caso isolado prova de fio mudo, mas o descarte não comprova coerência entre leitores. (`app/chamados/models.py:496`, `app/chamados/models.py:369`, `app/chamados/models.py:1904`; `app/chamados/juizes.py:1150`, `app/chamados/juizes.py:1171`; `app/chamados/services/fio.py:931`)
+
+**D3 não sustenta promessa de fechamento automático de toda disputa só com duplicatas.** Salvar pergunta agenda `fechar_beco_da_disputa`; porém `becos.classificar` considera visível qualquer pergunta sem `respondida_em` e com destino vivo, mesmo carimbada duplicata. Essa disputa fica fora do fechamento por evento. C7 autoriza o fechamento, mas não o dispara; `_fechar_disputa_se_quitada` é cauda da materialização/passivo, não da adoção. O descarte precisa virar condição explícita ou permanecer incompleto; o código não prova sozinho bloqueio funcional do chamado adotante. (`app/chamados/signals.py:191`, `app/chamados/signals.py:202`; `app/chamados/services/becos.py:25`, `app/chamados/services/becos.py:29`, `app/chamados/services/becos.py:69`; `app/chamados/models.py:1899`; `app/chamados/services/materializacao.py:1224`, `app/chamados/services/materializacao.py:1238`)
+
+**Composição com `Pergunta.abrir`: identidade divergente comprovável; fio mudo decorrente, não demonstrado.** Após o cenário R08h, p1 é canônica mais antiga e p2 a duplicata mais nova. `Pergunta.abrir` procura todas as perguntas do fato e escolhe `.last()`, portanto pode devolver p2; ao reapontá-la, não descarimba a identidade. Produção alcança essa porta por `_criar_pergunta_se_couber`; seu guard examina somente a disputa recebida, enquanto a porta pesquisa qualquer disputa. Isso permite devolver/reapontar duplicata morta enquanto p1 continua viva no chamado anterior. A necessidade de nascer outro chamado B apesar dos gates de dedup, causando efetivamente fio mudo, é [não verificado]. (`app/chamados/services/fio.py:867`, `app/chamados/services/fio.py:875`; `app/chamados/models.py:2541`, `app/chamados/models.py:2548`, `app/chamados/models.py:2584`; `app/chamados/services/disputa_emissao.py:765`, `app/chamados/services/disputa_emissao.py:770`, `app/chamados/services/disputa_emissao.py:1237`)
+
+**O gate não normaliza as duplicatas respondidas:** calcula todas as vivas e reaponta uma por uma, sem chamar `canonica_do_grupo` ou `retratar_duplicata`. Portanto, duas respondidas carimbadas/eleitas na abertura podem continuar duas C6-vivas e reapontar juntas no fechamento. O delta aumenta os grupos sujeitos a esse comportamento; não cria nova lei de identidade, pois reutiliza a existente. (`app/chamados/models.py:384`, `app/chamados/models.py:390`, `app/chamados/models.py:436`, `app/chamados/models.py:438`; `app/chamados/juizes.py:1150`; `app/chamados/services/fio.py:867`)
+
+**D7 permanece sem cobertura demonstrada.** R19c executa o vigia hoje e consulta amanhã, sem órfã futura; R19a mata pelo carimbo de validação antes da tranca; a adoção restringe candidatas à igualdade de data e carrega somente `disputa`. D±1 e teto de queries não recebem demonstração nova. (`app/chamados/tests/test_c20_fio_mudo.py:326`, `app/chamados/tests/test_c20_fio_mudo.py:293`; `app/chamados/juizes.py:1136`, `app/chamados/juizes.py:1140`; `app/chamados/models.py:494`, `app/chamados/models.py:497`)
+
+**D8 continua incompleto.** R19d verifica cobrança, veredito `nunca_bateu` e nenhuma pergunta; não exige pai de adesão nem `agrupado_em`, embora o serviço preveja ambos. Os números do cabeçalho somam 495, e retirar três dá 492, incompatível com universo literal 494 sem reconciliação individual fornecida. (`app/chamados/tests/test_c20_fio_mudo.py:118`, `app/chamados/tests/test_c20_fio_mudo.py:121`, `app/chamados/tests/test_c20_fio_mudo.py:122`, `app/chamados/tests/test_c20_fio_mudo.py:1`, `app/chamados/tests/test_c20_fio_mudo.py:13`; `app/chamados/services/adesao.py:74`, `app/chamados/services/adesao.py:112`)
+
+Os cinco atos ficam assim:
+
+| Ato | Cobertura estática |
+|---|---|
+| **Reabrir** | Adoção na reabertura e dedup local existem; R08h não exerce ressuscitação real, e `ressuscitar_perguntas` continua reabrindo disputas diretamente antes da adoção. (`app/chamados/models.py:1511`, `app/chamados/models.py:1512`, `app/chamados/models.py:1641`) |
+| **Retratar duplicata** | Adoção respeita aceite da costura; porta geral apenas carimba e migrador ainda retrata antes do reapontamento. Sem reparação geral do perdedor. (`app/chamados/models.py:518`, `app/chamados/models.py:522`, `app/chamados/models.py:531`; `app/chamados/services/fio.py:891`, `app/chamados/services/fio.py:943`, `app/chamados/services/fio.py:947`) |
+| **Validação** | Permanece unidade existente de validação/materialização e recálculo por evento; nenhum gancho C20 geral para o chamado que perde última viva. (`app/chamados/services/validacao.py:395`, `app/chamados/services/validacao.py:407`, `app/chamados/services/validacao.py:430`; `app/chamados/models.py:452`) |
+| **Morte por leitura** | Sem produtor novo: C6 continua lendo validação, tranca, identidade, marco e célula; testes novos não percorrem isoladamente todos esses degraus. (`app/chamados/juizes.py:1136`, `app/chamados/juizes.py:1140`, `app/chamados/juizes.py:1171`, `app/chamados/juizes.py:1177`; `app/chamados/tests/test_c20_fio_mudo.py:254`) |
+| **Reapontar** | Porta grava destino/lavra e protege destino terminal; não protege nem repara genericamente a origem perdedora. (`app/chamados/services/fio.py:837`, `app/chamados/services/fio.py:845`, `app/chamados/services/fio.py:847`) |
+
+Testes executados, corridas reproduzidas e efeitos reais em produção: **[não verificado]**. [nao verificado]
 
 ## 06/11 00:11 · sessao be9e7e29da78 · - · - · origem=Ronald (tmux)
 
@@ -489,209 +567,4 @@ Lacunas relevantes:
 - Navegação retorna antes do trecho que grava `/` e `/ponto/bater/` (`app/static/sw.js:45`; `app/static/sw.js:50`; `app/static/sw.js:68`; `app/static/sw.js:74`). `STATIC_CACHE` só lista pwa, manifesto e ícones (`app/static/sw.js:3`).
 - App Shell no GLOSSARIO, regra explícita de migração da fila legada, texto/status de bloqueio por identidade divergente e comportamento de sessão expirada offline não foram encontrados nos arquivos examinados [não verificado].
 
-## 05/11 23:21 · sessao 564d0876fc39 · - · - · origem=Ronald (tmux)
-
-Regras escritas encontradas:
-
-- `app/docs/PROMPTS.md:1870`: aval integral da obra; “casca offline sem dado pessoal, fila com identidade, sem recarga offline, envio unico com hora do aparelho, foto/GPS intactos, Safari iOS medido”; também exige contador PWA com hora do aparelho.
-- `app/docs/PROMPTS.md:1876`: corte integral: “casca guardada no aparelho, sem dado pessoal; dado da rede ou ausente”; armadilha HTML de usuário em cache; identidade da fila na mesma obra.
-- `app/docs/BACKLOG.md:1745`: PRONTO inclui “smoke 2 cascas (L-072), iPhone modo aviao”.
-- L-072, `app/docs/LEIS.md:99`: smoke de clique Ronald nas DUAS cascas para alterações em SW/base.
-- `app/docs/GLOSSARIO.md:29`: Offline Fallback: network-first, cache na falha, erro de rede sem cópia; nunca `undefined` no `respondWith`.
-- `CLAUDE.md:143`: timestamps em UTC no banco; apresentação UTC-3.
-- L-026, `app/docs/LEIS.md:77`, e L-090, `app/docs/LEIS.md:123`: competência pelo corte cadastrado da empresa, 21→20 por padrão; nunca mês civil ou 21 fixo.
-- L-085, `app/docs/LEIS.md:117`: jornada pertence ao dia de início, inclusive cauda após meia-noite. Não equivale a deslocar o timestamp da batida.
-- `app/docs/CORTES.md:284`: autoridade `vinculo_do_dia` responde qual vínculo vale no dia.
-- `app/docs/CORTES.md:364`: corte exige leitor de data de saída usar vínculo do dia; RED troca no meio da competência.
-
-Campos úteis encontrados:
-
-- Fila IndexedDB: `app/static/pwa.js:50` versão 2; `:54` `id` autoincremental; `:114` `tipo,timestamp`; `:115` `timestamp_dispositivo`; `:116` `timestamp_gap_ms,latitude,longitude`; `:117` `gps_accuracy,gps_captured_at`; `:118` `foto`.
-- `Batida`: `app/ponto/models.py:22` colaborador; `:23` timestamp; `:24` tipo; `:58` latitude; `:59` longitude; `:60` gps_accuracy; `:75` timestamp_dispositivo; `:76` timestamp_gap_ms; `:77` sincronizado_em; `:78` foto.
-- `app/ponto/models.py:106`: unicidade declarada `(colaborador,timestamp)`.
-
-Não encontrei regras específicas escritas para migração de fila antiga sem identidade, política exata na sessão expirada offline, chave/janela do “envio único”, recuperação após aceite com resposta perdida, descarte/retenção da fila na troca de usuário, versão mínima de Safari/iOS ou texto/status obrigatório dessas situações. Busquei os termos em `PROMPTS.md`, `LEIS.md`, `CORTES.md`, `GLOSSARIO.md`, `PLANO-PADROES.md` e `CLAUDE.md`. Para essas escolhas: “regra não decide”; só identidade, ausência de dados pessoais e envio único têm contrato explícito nas duas linhas do aval.
-
-## 05/11 23:12 · sessao 7fcfc9f0d68a · C20-FIO-MUDO · verificador · origem=Code
-
-**Não certificaria a obra como completa.** P3 continua parcial; a reabertura da disputa acrescenta risco de ordem de travas e efeitos sobre outros leitores; os cinco atos de perda ainda não têm cobertura demonstrada. (`app/chamados/models.py:461`, `app/chamados/models.py:1483`, `app/chamados/models.py:1492`, `app/chamados/models.py:513`, `app/chamados/services/fio.py:891`, `app/chamados/services/fio.py:845`)
-
-Execução dos testes, eficácia dos mutantes, reprodução das corridas e resultado em produção: **[não verificado]**. [nao verificado]
-
-**1. P1–P6 e os descartes da triagem**
-
-| Achado | Avaliação do delta |
-|---|---|
-| **P1 — eleição paralela da canônica** | **Resolve a eleição no grupo misto.** Agora reúne vivas locais e órfãs por motivo e consulta `canonica_do_grupo`; desapareceu a precedência automática da local. O ramo “todas daqui” ainda pula qualquer normalização, relevante na ressuscitação posterior. (`app/chamados/models.py:491`, `app/chamados/models.py:496`, `app/chamados/models.py:498`; `app/chamados/services/fio.py:873`) |
-| **P2 — retratação antes da costura aceita** | **Resolve dentro da adoção.** Canônica externa só permite retratação após retorno positivo da porta; recusa dá `continue`. Não resolve o mesmo padrão no migrador, que continua retratando antes de reapontar. (`app/chamados/models.py:501`, `app/chamados/models.py:505`, `app/chamados/models.py:514`; `app/chamados/services/fio.py:943`, `app/chamados/services/fio.py:947`) |
-| **P3 — transação da reabertura direta** | **Resolve em parte.** Serializa a adoção do mesmo chamado e relê seu estado, mas a leitura inicial, a transição e a ressuscitação de `reabrir()` continuam anteriores a essa unidade. (`app/chamados/models.py:462`, `app/chamados/models.py:1424`, `app/chamados/models.py:1483`, `app/chamados/models.py:1492`, `app/chamados/models.py:1493`) |
-| **P4 — duplicata respondida ainda viva** | **Resolve a seleção indevida e corrige a documentação; não resolve suas consequências nos demais leitores.** A adoção exclui `VIA_DUPLICATA`, enquanto C6 continua podendo considerá-la viva pela resposta. (`app/chamados/models.py:446`, `app/chamados/models.py:477`; `app/chamados/juizes.py:1150`, `app/chamados/juizes.py:1171`) |
-| **P5 — continente fechado** | **Resolve em parte.** Reabre a disputa da canônica efetivamente movida. Não executa esse efeito quando a canônica já está aqui; tampouco demonstra acesso real pelo colaborador ou coerência dos outros chamados/perguntas do continente. (`app/chamados/models.py:499`, `app/chamados/models.py:512`, `app/chamados/models.py:514`; `app/chamados/tests/test_c20_fio_mudo.py:229`) |
-| **P6 — R19a vacuamente verde sem cobrança** | **Resolve essa vacuidade.** Agora exige cobrança existente antes de conferir contagem e destino da validada. (`app/chamados/tests/test_c20_fio_mudo.py:272`, `app/chamados/tests/test_c20_fio_mudo.py:273`, `app/chamados/tests/test_c20_fio_mudo.py:275`) |
-
-Os motivos dos descartes:
-
-- **R19c:** sustenta apenas adiamento, não cobertura. O teste continua executando hoje e consultando amanhã; não tenta adotar órfã futura. C5 determina a data do fato, sem impor por si só “não futuro”. (`app/chamados/tests/test_c20_fio_mudo.py:301`; `app/chamados/juizes.py:80`, `app/chamados/juizes.py:91`)
-- **Tranca:** a delegação ao C6 procede; a alegação de mordida por R19a não basta. R19a prepara validação, que retorna antes do degrau de tranca. Matar um mutante que remove C6 inteiro não demonstra cobertura da retirada isolada da tranca. (`app/chamados/tests/test_c20_fio_mudo.py:268`; `app/chamados/juizes.py:1136`, `app/chamados/juizes.py:1140`)
-- **Queries:** sustenta “sem medição”, não “sem risco”. A busca continua carregando apenas `disputa`, sem o mapa de identidade empregado pelo migrador. O selo de corrida usa outro módulo; a captura do chokepoint começa depois do `abrir` de preparação. Estouro efetivo: **[não verificado]**. (`app/chamados/models.py:478`; `app/chamados/services/fio.py:929`; `app/chamados/tests/test_c2_corrida_do_abrir.py:56`; `app/ponto/tests/test_selo_chokepoint_escrita.py:312`, `app/ponto/tests/test_selo_chokepoint_escrita.py:325`)
-- **D±1:** “ampliar seria juiz novo” não se sustenta como necessidade técnica: E4-c já decide compatibilidade entre datas adjacentes na mesma jornada. A seleção atual não chega a essas candidatas. Obrigatoriedade dessa ampliação pelo aval literal: **[não verificado]**. (`app/chamados/models.py:475`; `app/chamados/juizes.py:1957`, `app/chamados/juizes.py:1991`)
-- **L-113:** copiar a cerca existente não concilia a lei posterior. A adoção sai quando a competência foi entregue; L-113 permite nascimento em exportada e registra a queda da Pauta DP como pré-condição. Não considero a divergência resolvida pelo descarte. (`app/chamados/models.py:472`; `app/docs/LEIS.md:150`)
-- **Nunca-bateu:** a dispensa de questionário tem fundamento; a exclusão integral sem conferir pai/agrupamento não está provada por R19d. A própria adesão prevê agrupar os furos no pai, e o teste só exige cobrança, veredito e ausência de perguntas. (`app/chamados/services/adesao.py:19`, `app/chamados/services/adesao.py:102`, `app/chamados/services/adesao.py:112`; `app/chamados/tests/test_c20_fio_mudo.py:118`)
-- **Gancho no perdedor:** permanece incompleto. As portas gerais de retratação e reapontamento não reparam o chamado que perde sua pergunta. (`app/chamados/services/fio.py:891`, `app/chamados/services/fio.py:845`)
-- **Universo:** os números reproduzidos somam 495; retirados três, restam 492, enquanto o aval escrito continua 494. Reconciliação individual: **[não verificado]**. (`app/chamados/tests/test_c20_fio_mudo.py:1`, `app/chamados/tests/test_c20_fio_mudo.py:13`)
-
-O achado de relógio também permanece: a adoção consulta C6, cujo ramo de janela pode ler `date.today()` fora de parâmetro recebido da borda. É leitura preexistente ampliada pela composição, não corrigida pelo delta. (`app/chamados/models.py:489`; `app/chamados/juizes.py:1197`, `app/chamados/juizes.py:562`)
-
-**2. Quem escreve e quem lê**
-
-| Campo/ato | Escritores e leitores relevantes |
-|---|---|
-| **`Disputa.fechada_em`** | `fechar` preenche; `reabrir_admin` e `reabrir_sistema` limpam. Leem `aberta`, lookup de disputa, fio/API do colaborador e reconciliador. (`app/chamados/models.py:1952`, `app/chamados/models.py:2154`, `app/chamados/models.py:2178`, `app/chamados/models.py:1856`; `app/chamados/services/fio.py:131`; `app/api/views.py:1008`; `app/chamados/reconciliador.py:1149`) |
-| **`fechada_por`** | Os mesmos três caminhos escrevem/limpam; os receivers de fechamento usam o autor para retomada/materialização. (`app/chamados/models.py:1953`, `app/chamados/models.py:2155`, `app/chamados/models.py:2179`; `app/chamados/signals.py:113`, `app/chamados/signals.py:140`) |
-| **`resolucao`** | Fechamento escreve; as duas reaberturas limpam; `limpar_resolucao_residual` é outra porta preexistente específica. Leem a nota de fechamento, a cauda da materialização e a guarda de idempotência do fechamento. (`app/chamados/models.py:1954`, `app/chamados/models.py:2156`, `app/chamados/models.py:2180`, `app/chamados/models.py:2264`, `app/chamados/models.py:1912`; `app/chamados/signals.py:45`; `app/chamados/services/materializacao.py:1250`) |
-| **`motivo_fechamento`** | Fechamento preenche; reaberturas limpam. Leem a idempotência do fechamento e o contador de disputa vazia. (`app/chamados/models.py:1955`, `app/chamados/models.py:2157`, `app/chamados/models.py:2181`, `app/chamados/models.py:1913`; `app/chamados/services/vigia_fio.py:734`) |
-| **`Pergunta.via_resolucao`** | O delta usa `retratar_duplicata → carimbar_identidade → _escrever_carimbo`. Existem ainda os escritores preexistentes de relavra e encerramento por fato. Leem a nova seleção, C6, estado e ressuscitação. (`app/chamados/services/fio.py:891`; `app/chamados/models.py:2651`, `app/chamados/models.py:2735`, `app/chamados/models.py:2764`, `app/chamados/models.py:477`, `app/chamados/models.py:2593`, `app/chamados/models.py:1546`; `app/chamados/services/relavra_via.py:123`; `app/chamados/juizes.py:1171`) |
-| **`Pergunta.chamado_destino`** | Nascimento/identidade em `Pergunta.abrir` e costura em `reapontar_resolvedora`; o delta chama a costura. Leem âncora, montagem do fio, lookup de disputa, gate e migrador. (`app/chamados/models.py:2541`, `app/chamados/models.py:2567`, `app/chamados/models.py:501`; `app/chamados/services/fio.py:845`, `app/chamados/services/fio.py:117`, `app/chamados/services/fio.py:135`, `app/chamados/services/fio.py:236`, `app/chamados/services/fio.py:931`; `app/chamados/models.py:344`) |
-| **`Chamado.status_local` sob trava** | A adoção somente lê; a escrita continua em `_gravar_estado` e no nascimento. A leitura travada não atualiza `self`; a porta de costura relê seu destino. (`app/chamados/models.py:462`, `app/chamados/models.py:222`, `app/chamados/models.py:1021`; `app/chamados/services/fio.py:763`) |
-| **`pergunta_reatada`** | Gate e adoção chamam `core.observ.evento`, escritor da auditoria. No gate, `objeto_id` é o chamado que fecha; na adoção, é o que abre. Há leitura pela auditoria genérica; consumidor operacional específico: **[não verificado]**. (`app/chamados/models.py:423`, `app/chamados/models.py:506`; `app/core/observ.py:94`; `app/core/views.py:705`) |
-| **Ocorrência de `reabrir_sistema`** | Passa por `nota.anexar_ocorrencia` e vai ao **chamado original da disputa**, não ao destino adotante. Sem `objeto_ref`, não recebe deduplicação própria. O fio carrega esses followups. (`app/chamados/models.py:2183`, `app/chamados/models.py:2185`; `app/chamados/services/nota.py:95`, `app/chamados/services/nota.py:103`; `app/chamados/services/fio.py:172`) |
-
-**Não identifiquei segundo escritor direto novo fora dessas portas.** O delta acrescenta chamadas; os donos do estado fechado já incluem `reabrir_sistema`. Isso não transforma `via_resolucao` em campo com um único sítio de atribuição em toda a cópia. (`app/chamados/models.py:501`, `app/chamados/models.py:513`, `app/chamados/models.py:516`; `app/chamados/tests/test_selo_resolucao_um_escritor.py:32`; `app/chamados/services/relavra_via.py:123`)
-
-Os leitores, porém, passam a enxergar combinações distintas:
-
-- **Disputa aberta com pai terminal é possível.** `reabrir_sistema` não reabre o pai; o receiver do pai só atua no fechamento. Isso não invalida automaticamente a pergunta, cuja âncora pode ser o novo destino vivo, mas precisa ser distinguido da acessibilidade do continente. (`app/chamados/models.py:2178`, `app/chamados/models.py:2185`; `app/chamados/signals.py:28`; `app/chamados/services/fio.py:117`)
-- Reabrir a disputa torna **outras perguntas dela** elegíveis aos recortes de fio/reconciliação; não somente a adotada. Também pode fazer a disputa voltar a bloquear seu chamado original vivo. (`app/chamados/services/fio.py:214`; `app/chamados/reconciliador.py:1038`, `app/chamados/reconciliador.py:1482`; `app/chamados/juizes.py:2080`, `app/chamados/juizes.py:2084`)
-- `fio_vivo` e vigia continuam reduzindo C6, independentemente de a disputa estar aberta. Já a adoção exclui duplicatas antes de C6; o migrador não faz essa exclusão. Uma duplicata respondida pode entrar na eleição do migrador e ser ignorada pela adoção. (`app/chamados/juizes.py:1242`; `app/chamados/services/vigia_fio.py:165`; `app/chamados/models.py:477`; `app/chamados/services/fio.py:931`, `app/chamados/services/fio.py:935`)
-- Para o fechamento citado como `fechar_se_todas_respondidas`, o caminho equivalente conferido é `_fechar_disputa_se_quitada`: consulta C7, que exige ausência de respostas sem veredito e de fio vivo. Não fecha apenas porque todas responderam. Correspondência com outro símbolo exato: **[não verificado]**. (`app/chamados/services/materializacao.py:1224`, `app/chamados/services/materializacao.py:1238`; `app/chamados/models.py:1885`)
-
-**3. Ordem de trava e transação**
-
-**`abrir()`** chama a adoção dentro de seu `atomic`, já segurando o colaborador; nascimento e adoção ficam na transação externa. O `atomic(savepoint=False)` interno não libera essas travas nem cria confirmação independente. (`app/chamados/models.py:952`, `app/chamados/models.py:955`, `app/chamados/models.py:1024`, `app/chamados/models.py:461`)
-
-**`reabrir()` direto** não envolve todo o ato: consulta estado sem trava, grava a transição em seu núcleo transacional, ressuscita e depois adota. A trava nova impede duas adoções simultâneas do mesmo destino, mas não impede duas execuções de aprovarem anteriormente a reabertura. (`app/chamados/models.py:1424`, `app/chamados/models.py:274`, `app/chamados/models.py:1483`, `app/chamados/models.py:1492`, `app/chamados/models.py:1493`)
-
-**A afirmação “não trava Disputa, ordem intacta” é insuficiente.** A adoção segura Chamado, salva Pergunta e chama um `save` da Disputa; esse `UPDATE` participa das travas de escrita. No caminho de `abrir`, isso ocorre também sob a trava do Colaborador. (`app/chamados/models.py:462`, `app/chamados/models.py:955`, `app/chamados/models.py:513`, `app/chamados/models.py:2182`; `app/chamados/services/fio.py:847`)
-
-Há um **ciclo estático possível**:
-
-1. T1 segura o chamado A e carrega uma candidata cuja disputa D aparece fechada. Outro ato reabre D e confirma. (`app/chamados/models.py:462`, `app/chamados/models.py:478`, `app/chamados/models.py:2154`, `app/chamados/models.py:2166`)
-2. T2 declara hora em A; sua transação obtém D agora aberta e mantém sua trava. Reutilizando uma pergunta sem destino, tenta costurá-la em A e espera T1. (`app/chamados/services/declaracao_texto.py:302`, `app/chamados/services/declaracao_texto.py:310`, `app/chamados/services/declaracao_texto.py:314`, `app/chamados/services/declaracao_texto.py:320`; `app/chamados/services/disputa_emissao.py:467`, `app/chamados/services/disputa_emissao.py:502`; `app/chamados/services/fio.py:762`)
-3. T1 usa seu objeto antigo de D fechada e tenta `reabrir_sistema`, esperando D: **Chamado→Disputa contra Disputa→Chamado**. Reprodução do deadlock: **[não verificado]**. (`app/chamados/models.py:512`, `app/chamados/models.py:513`, `app/chamados/models.py:2182`)
-
-Não usei o comentário do selo como prova automática de Disputa→Colaborador: no emissor, encontrar a disputa retorna antes do ramo que chama `abrir`. O selo é intraprocedural, considera apenas dois modelos e não cobre essa composição nem travas por escrita. (`app/chamados/services/disputa_emissao.py:502`, `app/chamados/services/disputa_emissao.py:504`; `app/chamados/tests/test_selo_ordem_de_trava_disputa_colaborador.py:14`, `app/chamados/tests/test_selo_ordem_de_trava_disputa_colaborador.py:23`, `app/chamados/tests/test_selo_ordem_de_trava_disputa_colaborador.py:85`)
-
-Também existe trava explícita conjunta de Pergunta e Disputa na relavra, inclusive fechada no comportamento padrão; deve entrar no censo de ordem. (`app/chamados/services/relavra_via.py:185`, `app/chamados/services/relavra_via.py:221`)
-
-**Corrida com fechamento permanece:** a adoção decide sobre D carregada anteriormente; `reabrir_sistema` não relê seu estado. `fechar` também decide antes de seu bloco de escrita e grava os mesmos quatro campos. Portanto, não há decisão mutuamente protegida entre reabrir e fechar; qual escrita prevaleceria numa execução concreta: **[não verificado]**. (`app/chamados/models.py:478`, `app/chamados/models.py:512`, `app/chamados/models.py:2172`, `app/chamados/models.py:2182`, `app/chamados/models.py:1911`, `app/chamados/models.py:1937`, `app/chamados/models.py:1956`)
-
-**4. Contraexemplos e idempotência**
-
-- **Canônica daqui + órfã respondida:** se ambas têm resposta e a local é mais antiga, a local vence. Não há costura, evento ou reabertura; a órfã vira duplicata, pode continuar viva por C6 e fica na âncora terminal, excluída das adoções seguintes. (`app/chamados/services/fio.py:873`; `app/chamados/models.py:477`, `app/chamados/models.py:499`, `app/chamados/models.py:514`; `app/chamados/juizes.py:1150`)
-- **Canônica órfã em D1, locais em D2:** só D1 reabre. D2 recebe retratações sem atualização do continente; se a canônica já é local, nem a disputa dela passa pela reabertura nova. (`app/chamados/models.py:499`, `app/chamados/models.py:512`, `app/chamados/models.py:514`)
-- **Retratar local já respondida:** o carimbo não garante sua morte. A porta documenta que a resposta pode mantê-la viva; o gate continua consultando C6 sobre ancoradas sem excluir duplicata. Logo, carimbar as irmãs não demonstra “uma única viva”. (`app/chamados/models.py:2716`, `app/chamados/models.py:327`, `app/chamados/models.py:351`; `app/chamados/juizes.py:1150`)
-- **Disputa de outro chamado vivo:** a proteção examina a âncora efetiva da pergunta. Destino explícito terminal permite candidatura mesmo com `disputa.chamado` vivo diferente; reabrir esse continente pode alterar o bloqueio daquele outro chamado. (`app/chamados/services/fio.py:117`; `app/chamados/models.py:487`, `app/chamados/models.py:513`; `app/chamados/juizes.py:2080`)
-- **Segunda adoção simples:** para no grupo “todas daqui”, sem repetir costura/evento. Um segundo `reabrir` após o primeiro terminar normalmente também é recusado pela transição já viva. Isso não cobre concorrência nem ciclo posterior de fechamento/reabertura. (`app/chamados/models.py:496`, `app/chamados/models.py:1408`, `app/chamados/models.py:1478`)
-- **Ressuscitação posterior:** uma duplicata local sem resposta pode entrar no universo das materializadas sem texto, ser descarimbada e voltar viva quando o fato acusa novamente. Se a canônica também estiver local, a adoção pula o grupo inteiro e não refaz o dedup. Contraexemplo condicionado a reabertura admitida; reprodução: **[não verificado]**. (`app/chamados/models.py:1525`, `app/chamados/models.py:1546`, `app/chamados/models.py:1549`, `app/chamados/models.py:1595`, `app/chamados/models.py:2754`, `app/chamados/models.py:496`)
-
-A trilha também tem limites: `evento` é best effort; a ocorrência de reabertura não tem chave própria. Ausência de repetição de evento/nota não é demonstrada apenas pelo retorno `[]`. (`app/core/observ.py:98`, `app/core/observ.py:139`; `app/chamados/models.py:2185`; `app/chamados/services/nota.py:103`)
-
-**5. Mordida dos testes novos** [nao verificado]
-
-| Teste | Avaliação estática | [nao verificado]
-|---|---|
-| **R08d** | Tem mordida para P1: prova órfã viva respondida, cobrança e local existentes, destino da canônica e carimbo da local. Não cobre duas respondidas, canônica local ou estado das duas disputas. (`app/chamados/tests/test_c20_fio_mudo.py:180`, `app/chamados/tests/test_c20_fio_mudo.py:186`, `app/chamados/tests/test_c20_fio_mudo.py:191`) |
-| **R08e** | Tem mordida para seleção da duplicata: exige que ela continue viva, permaneça no terminal e que a canônica seja adotada. Também evidencia que a duplicata viva permanece fora da cura. (`app/chamados/tests/test_c20_fio_mudo.py:208`, `app/chamados/tests/test_c20_fio_mudo.py:214`, `app/chamados/tests/test_c20_fio_mudo.py:215`) |
-| **R08f** | Morde a ausência de reabertura de `fechada_em`, mas não a promessa completa de acesso. A fixture cria disputa sem chamado; não exercita ocorrência, pai terminal/vivo ou limpeza dos outros campos. O montador HTML exclui disputas sem chamado. (`app/chamados/tests/test_c20_fio_mudo.py:54`, `app/chamados/tests/test_c20_fio_mudo.py:220`, `app/chamados/tests/test_c20_fio_mudo.py:229`; `app/chamados/services/fio.py:181`) |
-| **R08g** | **O mock intercepta a função realmente chamada:** o import é local ao método e busca o símbolo no módulo patchado. Porém, não comprova chamada com candidata/destino esperados; uma saída antecipada pode passar sem testar recusa. Também não confere preservação dos destinos. (`app/chamados/tests/test_c20_fio_mudo.py:240`, `app/chamados/tests/test_c20_fio_mudo.py:245`; `app/chamados/models.py:474`, `app/chamados/models.py:501`) |
-| **R08i** | Prova primeira adoção e segunda chamada retornando `[]`, com contagem estável. Não confere eventos, notas, carimbos, continentes ou ciclo de reabertura. (`app/chamados/tests/test_c20_
-
-[truncado em 20000 de 22873 caracteres]
-
-## 05/11 23:11 · sessao 1af9bb312b57 · F-346 · verificador · origem=Code
-
-**R07/R08 fecham as lacunas anunciadas dos oito campos, por análise estática. O selo AST melhorou, mas continua permitindo falsos negativos e falsos positivos.** (`app/ferias/test_remarcar_limpa_janela_f346.py:112`, `app/ferias/test_remarcar_limpa_janela_f346.py:129`, `app/ferias/test_remarcar_limpa_janela_f346.py:153`, `app/ferias/test_remarcar_limpa_janela_f346.py:175`)
-
-Executei o helper, o método sintético e o detector de relógio por extração AST em memória, sem importar os módulos Django. Execução Django, mutantes em banco e comportamento em produção: **[nao verificado]**; `django` e `freezegun` não estão disponíveis neste ambiente. Conferência independente de hash/pai: **[nao verificado]**. [nao verificado]
-
-1. **Sim: os oito campos agora têm valores discriminantes.**
-
-R07 carrega o objeto **antes** do UPDATE concorrente simulado. Os três valores novos diferem dos carregados; depois da remarcação, recarrega e compara os três. Portanto, incluir isoladamente `confirmacao`, `confirmado_em` ou `obs` em `update_fields`, ou voltar ao save completo, sobrescreveria uma sentinela e falharia na comparação. Isso é dedução estática, sem execução dos mutantes. (`app/ferias/models.py:313`, `app/ferias/models.py:314`, `app/ferias/models.py:318`, `app/ferias/test_remarcar_limpa_janela_f346.py:111`, `app/ferias/test_remarcar_limpa_janela_f346.py:117`)
-
-R08 exige estas mudanças **no objeto recarregado do banco**; retirar isoladamente qualquer um dos cinco campos da persistência deixa um valor antigo discriminante. (`app/ferias/test_remarcar_limpa_janela_f346.py:31`, `app/ferias/test_remarcar_limpa_janela_f346.py:124`, `app/ferias/test_remarcar_limpa_janela_f346.py:128`)
-
-| Campo | Antes → exigido por R08 |
-|---|---|
-| `data_inicio` | `ini` → `ini + 30 dias` |
-| `data_fim` | `ini + 9 dias` → `ini + 36 dias` |
-| `dias` | `10` → `7` |
-| `aviso_emitido` | `False` → `True` |
-| `status` | `concluido` → `agendado` |
-
-Valores e comparação: `app/ferias/test_remarcar_limpa_janela_f346.py:31`, `app/ferias/test_remarcar_limpa_janela_f346.py:124`, `app/ferias/test_remarcar_limpa_janela_f346.py:129`.
-
-**Ainda faltam sentinelas explícitas de preservação para `periodo_aquisitivo_id`, `agendado_por_id` e `criado_em`.** Esses campos existem, ficam fora do save da troca e não são comparados após a remarcação em R01–R08. A PK participa das seleções/recargas, mas também não recebe uma comparação independente de preservação. (`app/ferias/models.py:299`, `app/ferias/models.py:310`, `app/ferias/models.py:319`, `app/ferias/services.py:392`, `app/ferias/test_remarcar_limpa_janela_f346.py:43`, `app/ferias/test_remarcar_limpa_janela_f346.py:112`, `app/ferias/test_remarcar_limpa_janela_f346.py:129`)
-
-R08 testa diretamente o serviço: seu estado inicial `concluido` seria recusado pela porta HTTP de remarcação. Isso não prejudica a discriminação da persistência, mas limita o que o caso demonstra sobre a porta. (`app/ferias/test_remarcar_limpa_janela_f346.py:124`, `app/ferias/test_remarcar_limpa_janela_f346.py:127`, `app/ferias/views.py:649`)
-
-2. **Resultado em memória sobre `services.py`: `['_trocar_janela']`.**
-
-Esse resultado corresponde à atribuição existente na troca; o helper examina somente o arquivo indicado pelo teste e suas funções síncronas. Não constitui prova de ausência de escritores nas formas que ele ignora. (`app/ferias/test_remarcar_limpa_janela_f346.py:133`, `app/ferias/test_remarcar_limpa_janela_f346.py:153`, `app/ferias/test_remarcar_limpa_janela_f346.py:189`, `app/ferias/services.py:379`)
-
-Confirmei estas classes de **falsos negativos** em memória:
-
-| Forma sintética | Resultado e motivo |
-|---|---|
-| `[ag.data_inicio, ag.data_fim] = [i, f]`; tupla aninhada | `[]`: só desempacota uma camada de `ast.Tuple`; não percorre listas nem alvos aninhados. (`app/ferias/test_remarcar_limpa_janela_f346.py:159`) |
-| `async def z(...): ag.data_inicio = i` | `[]`: exige `ast.FunctionDef`. Escritas no nível do módulo também ficam fora desse universo. (`app/ferias/test_remarcar_limpa_janela_f346.py:153`) |
-| `self.data_inicio = i`, sendo `self` um AG | `[]`: exclusão textual de `self`. (`app/ferias/test_remarcar_limpa_janela_f346.py:161`) |
-| `setattr(self.ag, "data_inicio", i)`; `self.agendamentos.update(data_inicio=i)`; `periodo.agendamentos.update(data_inicio=i)` | `[]`: a raiz `self`/`periodo` é excluída mesmo quando o destinatário final é AG. (`app/ferias/test_remarcar_limpa_janela_f346.py:137`, `app/ferias/test_remarcar_limpa_janela_f346.py:143`, `app/ferias/test_remarcar_limpa_janela_f346.py:170`, `app/ferias/test_remarcar_limpa_janela_f346.py:173`) |
-| `qs.bulk_update(xs, campos)` ou `fields=campos` | `[]`: não resolve a variável dos campos. (`app/ferias/test_remarcar_limpa_janela_f346.py:174`) |
-| Alias de `setattr`, `builtins.setattr(...)`, `ag.__setattr__(...)`, `ag.__dict__["data_inicio"] = i`, `getattr(qs, "update")(...)` | `[]`: não correspondem às formas literais reconhecidas. (`app/ferias/test_remarcar_limpa_janela_f346.py:160`, `app/ferias/test_remarcar_limpa_janela_f346.py:167`, `app/ferias/test_remarcar_limpa_janela_f346.py:170`, `app/ferias/test_remarcar_limpa_janela_f346.py:173`) |
-
-Confirmei também estes **falsos positivos** em memória:
-
-- `pa.data_inicio = i`, a variante anotada com valor e `setattr(pa, "data_inicio", i)` contam mesmo se `pa` for `PeriodoAquisitivo`; outro modelo ou um dicionário com `.update(dias=i)` também conta. Não há resolução de tipo/alias, e as exclusões diferem entre atribuição e chamadas. (`app/ferias/test_remarcar_limpa_janela_f346.py:137`, `app/ferias/test_remarcar_limpa_janela_f346.py:160`, `app/ferias/test_remarcar_limpa_janela_f346.py:163`, `app/ferias/test_remarcar_limpa_janela_f346.py:173`)
-- `qs.update(obs="dias")` e `qs.filter(obs="dias").update(status="concluido")` contam: a constante `"dias"` pode aparecer em **qualquer parte da chamada**, inclusive filtro ou valor de outro campo. (`app/ferias/test_remarcar_limpa_janela_f346.py:175`)
-- `qs.update(**{"obs": "x"})` e `campo="obs"; setattr(ag, campo, "x")` contam. Esse excesso é deliberado e documentado como conservador. (`app/ferias/test_remarcar_limpa_janela_f346.py:168`, `app/ferias/test_remarcar_limpa_janela_f346.py:170`, `app/ferias/test_remarcar_limpa_janela_f346.py:174`)
-- Uma função interna que atribui a data faz contar **a interna e a externa**, pois `ast.walk(fn)` atravessa definições aninhadas. (`app/ferias/test_remarcar_limpa_janela_f346.py:152`, `app/ferias/test_remarcar_limpa_janela_f346.py:155`)
-
-3. **Não cobrem cada ramo: falta uma sentinela de `AugAssign`.**
-
-Todas as asserções existentes do método sintético passaram na execução extraída em memória. A cobertura declarada está assim: (`app/ferias/test_remarcar_limpa_janela_f346.py:201`)
-
-| Forma | Caso existente |
-|---|---|
-| `Assign` simples | Sim, `a/b`. (`app/ferias/test_remarcar_limpa_janela_f346.py:202`) |
-| `AugAssign` | **Não**; o helper aceita, mas o método não contém exemplo. (`app/ferias/test_remarcar_limpa_janela_f346.py:156`, `app/ferias/test_remarcar_limpa_janela_f346.py:201`) |
-| `AnnAssign` sem/com valor | Sim, `n/o`. (`app/ferias/test_remarcar_limpa_janela_f346.py:216`, `app/ferias/test_remarcar_limpa_janela_f346.py:217`) |
-| `setattr` constante/variável | Sim, `d/m`. (`app/ferias/test_remarcar_limpa_janela_f346.py:206`, `app/ferias/test_remarcar_limpa_janela_f346.py:215`) |
-| `update` kwargs/`**` | Sim, `e/k`; `g` protege o filtro `periodo_aquisitivo`. (`app/ferias/test_remarcar_limpa_janela_f346.py:207`, `app/ferias/test_remarcar_limpa_janela_f346.py:211`, `app/ferias/test_remarcar_limpa_janela_f346.py:214`) |
-| `bulk_update` | Sim, lista literal em `f`. (`app/ferias/test_remarcar_limpa_janela_f346.py:208`) |
-| Alheio | Sim, atribuição em `periodo` e UPDATE em `PeriodoAquisitivo`. (`app/ferias/test_remarcar_limpa_janela_f346.py:205`, `app/ferias/test_remarcar_limpa_janela_f346.py:213`) |
-
-Isso não cobre todas as condições internas: faltam, por exemplo, `_raiz` com `Subscript`/retorno `None`, exclusões de chamadas por `self`/`periodo` e `setattr` constante em campo alheio. (`app/ferias/test_remarcar_limpa_janela_f346.py:143`, `app/ferias/test_remarcar_limpa_janela_f346.py:170`, `app/ferias/test_remarcar_limpa_janela_f346.py:201`)
-
-4. **Não identifiquei leitura nova de relógio fora do freeze; UTC é compatível com a configuração copiada.**
-
-O detector executado em memória retornou **`0`**. O arquivo não contém chamadas diretas a `today/now/localdate/localtime`; R07 constrói um instante literal, e R07/R08 pertencem à classe congelada. As leituras do serviço e de `status_por_data` ficam dentro da chamada feita pelos testes congelados. (`app/core/tests/test_selo_teste_sem_relogio.py:32`, `app/ferias/test_remarcar_limpa_janela_f346.py:23`, `app/ferias/test_remarcar_limpa_janela_f346.py:111`, `app/ferias/services.py:380`, `app/ferias/models.py:280`)
-
-O selo, sozinho, é menos forte: encontrar o texto `freeze_time` já faz retornar zero para o arquivo inteiro; ele não verifica o alcance do congelamento. Aqui há também o decorador efetivo na classe. (`app/core/tests/test_selo_teste_sem_relogio.py:28`, `app/core/tests/test_selo_teste_sem_relogio.py:34`, `app/ferias/test_remarcar_limpa_janela_f346.py:23`)
-
-`confirmado_em` é `DateTimeField`, o literal é aware em UTC, e a configuração declara `USE_TZ=True` e `America/Sao_Paulo`. A comparação é entre instantes, sem exigir identidade do objeto `tzinfo`; UTC versus outro offset equivalente não fragiliza essa asserção. O teste pressupõe timestamps aware: portabilidade para `USE_TZ=False`/outro backend permanece **[nao verificado]**. (`app/ferias/models.py:318`, `app/ferias/test_remarcar_limpa_janela_f346.py:111`, `app/ferias/test_remarcar_limpa_janela_f346.py:117`, `app/config/settings/base.py:93`, `app/config/settings/base.py:95`)
-
-5. **Escritores e leitores dos cinco campos semeados por UPDATE direto:**
-
-| Campo | Escritores no produto | Leitores específicos localizados |
-|---|---|---|
-| `aviso_emitido` | Default; execução; aprovação; troca. (`app/ferias/models.py:305`, `app/ferias/services.py:323`, `app/ferias/services.py:439`, `app/ferias/services.py:380`) | KPI/filtro, aviso da situação, mensagem da remarcação e template. (`app/ferias/views.py:26`, `app/ferias/views.py:77`, `app/ferias/situacao.py:257`, `app/ferias/views.py:671`, `app/templates/ferias/_secao_colab.html:121`) |
-| `status` | Default; histórico; cancelamentos DP/admin; troca; alinhamento do cron. (`app/ferias/models.py:309`, `app/ferias/services.py:282`, `app/ferias/services.py:336`, `app/ferias/services.py:361`, `app/ferias/services.py:384`, `app/ferias/services.py:518`) | Guardas do modelo/HTTP, consultas, materialização e template. (`app/ferias/models.py:324`, `app/ferias/views.py:649`, `app/ferias/services.py:51`, `app/ponto/services/ausencia.py:1164`, `app/templates/ferias/_secao_colab.html:120`) |
-| `confirmacao` | Default; pedido; resposta confirmar/recusar. (`app/ferias/models.py:314`, `app/ferias/services.py:486`, `app/ferias/services.py:496`, `app/ferias/services.py:499`) | Guarda de envio, seleção da resposta, atendimento e template. (`app/ferias/views.py:838`, `app/ferias/views.py:880`, `app/chamados/views.py:628`, `app/templates/ferias/_secao_colab.html:122`) |
-| `confirmado_em` | Pedido limpa; confirmação carimba. (`app/ferias/services.py:487`, `app/ferias/services.py:500`) | R07 e teste de confirmação. Leitor específico de runtime: **[nao verificado]**. (`app/ferias/test_remarcar_limpa_janela_f346.py:117`, `app/ferias/test_confirmacao_agendamento.py:76`) |
-| `obs` | Histórico, execução, aprovação e cancelamento admin. (`app/ferias/services.py:284`, `app/ferias/services.py:323`, `app/ferias/services.py:441`, `app/ferias/services.py:360`) | Cancelamento admin lê para concatenar o carimbo; R07 confere preservação. (`app/ferias/services.py:360`, `app/ferias/test_remarcar_limpa_janela_f346.py:117`) |
-
-**O `.update()` direto não executa o override `AgendamentoFerias.save()` nem emite os sinais de save; portanto não dispara a guarda/sincronização por esse caminho e não invalida a premissa das sentinelas.** O override concentra esses efeitos, e a própria cópia documenta o UPDATE sem signal. (`app/ferias/models.py:434`, `app/chamados/signals.py:80`, `app/colaboradores/services/colaborador.py:81`)
-
-Já o `save(update_fields=...)` posterior, dentro da troca, executa guarda e sincronização normalmente. Triggers ou customizações presentes somente no banco implantado: **[nao verificado]**. (`app/ferias/services.py:392`, `app/ferias/models.py:435`, `app/ferias/models.py:437`)
-
-_2039 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2042 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
