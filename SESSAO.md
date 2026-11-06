@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 12:34:46.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (63.2 MB). Acoes na janela: **828**.
+**Medido em 06/11/2026 12:40:12.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (63.2 MB). Acoes na janela: **817**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -827,14 +827,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:53:23 | Bash | Check suite queue and latest logs | `cd /home/ronald/saas-hasner; date +%H:%M; bin/trava_teste.sh --quem; ps -eo pid,etime,args \| grep -E 'trava_teste.sh --' \| grep -v grep \| cut -c1-60; for f in logs/c20_fiomudo logs/h12h06b; do ls -t $f \| head -3; done` |
 | 00:43:32 | Bash | Identify suites and repoint ESPERANDO | `cd /home/ronald/saas-hasner; for p in 525536 535259; do echo "$p: $(tr '\0' ' ' < /proc/$p/cmdline \| grep -oE 'wt-[^ /:]+\|test [a-z_. ]{0,80}' \| head -2 \| tr '\n' ' ')"; done; sed -i '2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=535259#' app/docs/RELATO.md` |
 | 00:43:27 | Bash | Check lock queue and ESPERANDO pid | `cd /home/ronald/saas-hasner; date +%H:%M; bin/trava_teste.sh --quem; ps -eo pid,etime,args \| grep -E 'trava_teste.sh --' \| grep -v grep \| cut -c1-60; sed -n 2p app/docs/RELATO.md` |
-| 00:35:52 | Bash | Repoint ESPERANDO to queued trava | `sed -i '2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=442762#' /home/ronald/saas-hasner/app/docs/RELATO.md; kill -0 442762 && echo vivo` |
-| 00:35:47 | Bash | Find live long-lived producers | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; ps -eo pid,etime,args \| grep -E 'trava_teste.sh --\|codex_pergunta.sh' \| grep -v grep \| cut -c1-160` |
-| 00:35:40 | Bash | Confirm ESPERANDO pid alive | `kill -0 417092 && echo vivo; sed -n 2p /home/ronald/saas-hasner/app/docs/RELATO.md` |
-| 00:35:35 | SendMessage |  | `-` |
-| 00:35:29 | ToolSearch |  | `-` |
-| 00:35:29 | Bash | Repoint ESPERANDO and read the failure detail | `cd /home/ronald/saas-hasner; sed -i '2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=417092#' app/docs/RELATO.md; grep -n -A12 'FAIL: test_todo_command_tem_casa' logs/h12h06b/suite_full.log \| grep -iE 'assert\|command\|casa' \| head -5 \| cut -c1-250` |
-| 00:35:22 | Bash | Read verdicts and current lock holder | `cd /home/ronald/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/b010n6qzn.output /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bketzvd99.output; bin/trava_teste.sh --quem; ps -ef \| grep 'trava_teste.sh --' \| grep -v grep \| awk '{print $2, $5}'` |
-| 00:35:17 | Bash | Read stop hook log reason | `cd /home/ronald/saas-hasner; tail -5 logs/hook_stop_fila1.log \| cut -c1-300; kill -0 3448535 && echo vivo` |
-| 00:35:03 | Bash | Wait for the current suite to end | `cd /home/ronald/saas-hasner; until grep -q "^rc=" logs/h12h06b/suite_full.log 2>/dev/null \|\| ! kill -0 3448535 2>/dev/null; do /usr/bin/sleep 30; done; grep -E "^(FAIL\|ERROR):\|^Ran\|^(OK\|FAILED)($\| \()\|^rc=" logs/h12h06b/suite_full.log \| tail -5; bin/trava_teste.sh --quem` |
-| 00:34:57 | Bash | Add F-346 opus fila row to BACKLOG | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='BACKLOG.md'; L=open(p).read().split('\n') assert not any(l.startswith('\| F-346-FILA-OPUS \|') for l in L) i=[k for k,l in enumerate(L) if l.startswith('\| CODEX-RED-POR-EXEMPLO \|')]; assert len(i)==1 L.insert(i[0]+1,'\| F-346-FILA-OPUS \| fila (achados do opus final F-346 05/11 23:4x, fora do marco): corrida concorrente na remarcacao; ac ...` |
-| 00:34:52 | Bash | Check existing F-346 BACKLOG rows | `cd /home/ronald/saas-hasner/app/docs; grep -n 'F-346' BACKLOG.md \| cut -c1-160 \| head` |
