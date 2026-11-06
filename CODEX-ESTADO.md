@@ -1,7 +1,175 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 11:11** · publicado em **06/11/2026 11:14** (UTC-3)
+> Ultima resposta processada: **06/11/2026 11:17** · publicado em **06/11/2026 11:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 11:17 · sessao db14731f5c6f · R1-CAUSAD-V3 · sonda · origem=Code
+
+Abaixo está a saída integral recebida, sem nova execução. O wrapper executa `--sonda` antes desta sessão e inclui o resultado raspado no prompt (`bin/codex_pergunta.sh:103`, `bin/codex_pergunta.sh:133`).
+
+```text
+sonda_leitura: script.py [a7c2bdd710f71626] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+col144 21/09/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+  ENTRA app/chamados/services/fabrica_da_celula.py:74:motivos_a_perguntar
+  ENTRA app/chamados/juizes.py:413:dia_sem_trabalho
+  RETURN app/chamados/juizes.py:428:dia_sem_trabalho True
+  DEVOLVE dia_sem_trabalho True
+  RETURN app/chamados/services/fabrica_da_celula.py:92:motivos_a_perguntar list_n=0
+  DEVOLVE motivos_a_perguntar list_n=0
+  ENTRA app/chamados/services/fabrica_da_celula.py:180:limbo_vai_a_pauta
+  RETURN app/chamados/services/fabrica_da_celula.py:186:limbo_vai_a_pauta False
+  DEVOLVE limbo_vai_a_pauta False
+  RETURN app/chamados/services/fabrica_da_celula.py:177:perguntar_pela_celula list_n=0
+  CAMINHO_EXECUTADO app/chamados/services/fabrica_da_celula.py:150:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:152:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:153:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:154:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:163:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:164:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:86:motivos_a_perguntar > app/chamados/services/fabrica_da_celula.py:87:motivos_a_perguntar > app/chamados/services/fabrica_da_celula.py:88:motivos_a_perguntar > app/chamados/services/fabrica_da_celula.py:89:motivos_a_perguntar > app/chamados/services/fabrica_da_celula.py:91:motivos_a_perguntar > app/chamados/juizes.py:422:dia_sem_trabalho > app/chamados/juizes.py:426:dia_sem_trabalho > app/chamados/juizes.py:428:dia_sem_trabalho > app/chamados/services/fabrica_da_celula.py:92:motivos_a_perguntar > app/chamados/services/fabrica_da_celula.py:165:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:171:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:185:limbo_vai_a_pauta > app/chamados/services/fabrica_da_celula.py:186:limbo_vai_a_pauta > app/chamados/services/fabrica_da_celula.py:174:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:177:perguntar_pela_celula
+  ATA_PASSAGENS|descartes_L61=0|avaliacoes_L63=0|adicoes_L64=0|app/chamados/services/fabrica_da_celula.py:59
+col137 03/11/2026|G2|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+  ENTRA app/chamados/services/fabrica_da_celula.py:74:motivos_a_perguntar
+  ENTRA app/chamados/juizes.py:413:dia_sem_trabalho
+  RETURN app/chamados/juizes.py:428:dia_sem_trabalho True
+  DEVOLVE dia_sem_trabalho True
+  RETURN app/chamados/services/fabrica_da_celula.py:92:motivos_a_perguntar list_n=0
+  DEVOLVE motivos_a_perguntar list_n=0
+  ENTRA app/chamados/services/fabrica_da_celula.py:180:limbo_vai_a_pauta
+  RETURN app/chamados/services/fabrica_da_celula.py:186:limbo_vai_a_pauta False
+  DEVOLVE limbo_vai_a_pauta False
+  RETURN app/chamados/services/fabrica_da_celula.py:177:perguntar_pela_celula list_n=0
+  CAMINHO_EXECUTADO app/chamados/services/fabrica_da_celula.py:150:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:152:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:153:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:154:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:163:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:164:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:86:motivos_a_perguntar > app/chamados/services/fabrica_da_celula.py:87:motivos_a_perguntar > app/chamados/services/fabrica_da_celula.py:88:motivos_a_perguntar > app/chamados/services/fabrica_da_celula.py:89:motivos_a_perguntar > app/chamados/services/fabrica_da_celula.py:91:motivos_a_perguntar > app/chamados/juizes.py:422:dia_sem_trabalho > app/chamados/juizes.py:426:dia_sem_trabalho > app/chamados/juizes.py:428:dia_sem_trabalho > app/chamados/services/fabrica_da_celula.py:92:motivos_a_perguntar > app/chamados/services/fabrica_da_celula.py:165:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:171:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:185:limbo_vai_a_pauta > app/chamados/services/fabrica_da_celula.py:186:limbo_vai_a_pauta > app/chamados/services/fabrica_da_celula.py:174:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:177:perguntar_pela_celula
+  ATA_PASSAGENS|descartes_L61=0|avaliacoes_L63=0|adicoes_L64=0|app/chamados/services/fabrica_da_celula.py:59
+col222 28/10/2026|G3|PARCIAL_SO_LISTA_RETORNO_399|app/chamados/services/fabrica_da_celula.py:102;app/ponto/services/cartorio.py:399
+  ENTRA app/chamados/services/fabrica_da_celula.py:74:motivos_a_perguntar
+  ENTRA app/chamados/juizes.py:413:dia_sem_trabalho
+  RETURN app/chamados/juizes.py:427:dia_sem_trabalho False
+  DEVOLVE dia_sem_trabalho False
+  ENTRA app/chamados/services/fabrica_da_celula.py:15:vencidos_no_instante
+  ENTRA app/ponto/services/cartorio.py:831:marcos_vencidos
+  ENTRA app/escala/servico_jornada.py:15:escala_vigente
+  RETURN app/escala/servico_jornada.py:57:escala_vigente EscalaColaborador
+  DEVOLVE escala_vigente EscalaColaborador
+  RETURN app/ponto/services/cartorio.py:848:marcos_vencidos tuple_n=2
+  DEVOLVE marcos_vencidos tuple_n=2
+  RETURN app/chamados/services/fabrica_da_celula.py:31:vencidos_no_instante set_n=4
+  DEVOLVE vencidos_no_instante set_n=4
+  ENTRA app/ponto/services/cartorio.py:370:parcial_so_lista
+  RETURN app/ponto/services/cartorio.py:399:parcial_so_lista True
+  DEVOLVE parcial_so_lista True
+  RETURN app/chamados/services/fabrica_da_celula.py:104:motivos_a_perguntar list_n=0
+  DEVOLVE motivos_a_perguntar list_n=0
+  ENTRA app/chamados/services/fabrica_da_celula.py:180:limbo_vai_a_pauta
+  RETURN app/chamados/services/fabrica_da_celula.py:186:limbo_vai_a_pauta False
+  DEVOLVE limbo_vai_a_pauta False
+  RETURN app/chamados/services/fabrica_da_celula.py:177:perguntar_pela_celula list_n=0
+  CAMINHO_EXECUTADO app/chamados/services/fabrica_da_celula.py:150:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:152:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:153:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:154:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:163:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:164:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:86:motivos_a_perguntar > app/chamados/services/fabrica_da_celula.py:87:motivos_a_perguntar > app/chamados/services/fabrica_da_celula.py:88:motivos_a_perguntar > app/chamados/services/fabrica_da_celula.py:89:motivos_a_perguntar > app/chamados/services/fabrica_da_celula.py:91:motivos_a_perguntar > app/chamados/juizes.py:422:dia_sem_trabalho > app/chamados/juizes.py:426:dia_sem_trabalho > app/chamados/juizes.py:427:dia_sem_trabalho > app/chamados/services/fabrica_da_celula.py:93:motivos_a_perguntar > app/chamados/services/fabrica_da_celula.py:95:motivos_a_perguntar > app/chamados/services/fabrica_da_celula.py:98:motivos_a_perguntar > app/chamados/services/fabrica_da_celula.py:27:vencidos_no_instante > app/chamados/services/fabrica_da_celula.py:28:vencidos_no_instante > app/ponto/services/cartorio.py:840:marcos_vencidos > app/ponto/services/cartorio.py:841:marcos_vencidos > app/escala/servico_jornada.py:38:escala_vigente > app/escala/servico_jornada.py:39:escala_vigente > app/escala/servico_jornada.py:40:escala_vigente > app/escala/servico_jornada.py:41:escala_vigente > app/escala/servico_jornada.py:49:escala_vigente > app/escala/servico_jornada.py:55:escala_vigente > app/escala/servico_jornada.py:56:escala_vigente > app/escala/servico_jornada.py:57:escala_vigente > app/ponto/services/cartorio.py:842:marcos_vencidos > app/ponto/services/cartorio.py:844:marcos_vencidos > app/ponto/services/cartorio.py:845:marcos_vencidos > app/ponto/services/cartorio.py:846:marcos_vencidos > app/ponto/services/cartorio.py:847:marcos_vencidos > app/ponto/services/cartorio.py:846:marcos_vencidos > app/ponto/services/cartorio.py:845:marcos_vencidos > app/ponto/services/cartorio.py:846:marcos_vencidos > app/ponto/services/cartorio.py:847:marcos_vencidos > app/ponto/services/cartorio.py:846:marcos_vencidos > app/ponto/services/cartorio.py:845:marcos_vencidos > app/ponto/services/cartorio.py:846:marcos_vencidos > app/ponto/services/cartorio.py:847:marcos_vencidos > app/ponto/services/cartorio.py:846:marcos_vencidos > app/ponto/services/cartorio.py:845:marcos_vencidos > app/ponto/services/cartorio.py:846:marcos_vencidos > app/ponto/services/cartorio.py:847:marcos_vencidos > app/ponto/services/cartorio.py:846:marcos_vencidos > app/ponto/services/cartorio.py:845:marcos_vencidos > app/ponto/services/cartorio.py:848:marcos_vencidos > app/chamados/services/fabrica_da_celula.py:29:vencidos_no_instante > app/chamados/services/fabrica_da_celula.py:31:vencidos_no_instante > app/chamados/services/fabrica_da_celula.py:99:motivos_a_perguntar > app/chamados/services/fabrica_da_celula.py:101:motivos_a_perguntar > app/chamados/services/fabrica_da_celula.py:102:motivos_a_perguntar > app/chamados/services/fabrica_da_celula.py:103:motivos_a_perguntar > app/chamados/services/fabrica_da_celula.py:102:motivos_a_perguntar > app/ponto/services/cartorio.py:395:parcial_so_lista > app/ponto/services/cartorio.py:396:parcial_so_lista > app/ponto/services/cartorio.py:398:parcial_so_lista > app/ponto/services/cartorio.py:399:parcial_so_lista > app/chamados/services/fabrica_da_celula.py:104:motivos_a_perguntar > app/chamados/services/fabrica_da_celula.py:165:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:171:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:185:limbo_vai_a_pauta > app/chamados/services/fabrica_da_celula.py:186:limbo_vai_a_pauta > app/chamados/services/fabrica_da_celula.py:174:perguntar_pela_celula > app/chamados/services/fabrica_da_celula.py:177:perguntar_pela_celula
+  ATA_PASSAGENS|descartes_L61=0|avaliacoes_L63=0|adicoes_L64=0|app/chamados/services/fabrica_da_celula.py:59
+QUADRO|grupo|guarda_ou_destino|n|exemplo1|exemplo2|fonte
+QUADRO|G1|ATA_NAO_AUTORIZA|8|col969/22/10/2026|col969/24/10/2026|app/chamados/services/fabrica_da_celula.py:51
+QUADRO|G1|DIA_SEM_TRABALHO|165|col144/21/09/2026|col144/23/09/2026|app/chamados/services/fabrica_da_celula.py:91
+QUADRO|G1|ESCRITA_INTERCEPTADA_ChamadoColaborador.save|2|col1027/04/11/2026|col1028/04/11/2026|app/chamados/models.py:932:abrir
+QUADRO|G1|ESCRITA_INTERCEPTADA_DisputaSupervisao.save|7|col144/05/11/2026|col209/05/11/2026|app/chamados/services/disputa_emissao.py:501:_abrir_ou_agregar_disputa
+QUADRO|G2|DIA_SEM_TRABALHO|5|col137/03/11/2026|col137/05/11/2026|app/chamados/services/fabrica_da_celula.py:91
+QUADRO|G2|PARCIAL_SO_LISTA_RETORNO_399|8|col258/28/09/2026|col258/19/10/2026|app/chamados/services/fabrica_da_celula.py:102;app/ponto/services/cartorio.py:399
+QUADRO|G3|DIA_SEM_TRABALHO|3|col292/22/10/2026|col348/24/10/2026|app/chamados/services/fabrica_da_celula.py:91
+QUADRO|G3|PARCIAL_SO_LISTA_RETORNO_399|2|col222/28/10/2026|col892/28/09/2026|app/chamados/services/fabrica_da_celula.py:102;app/ponto/services/cartorio.py:399
+DIAS|fonte=app/chamados/services/vigia_fio.py:542;app/ponto/management/commands/e6_oraculo.py:172
+col137 05/11/2026|G2|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col144 23/09/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col144 25/09/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col144 27/09/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col144 29/09/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col144 01/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col144 03/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col144 05/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col144 07/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col144 09/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col144 11/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col144 13/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col144 15/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col144 17/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col144 19/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col144 21/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col144 23/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col144 25/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col144 27/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col144 29/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col144 31/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col144 02/11/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col144 04/11/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col144 05/11/2026|G1|ESCRITA_INTERCEPTADA_DisputaSupervisao.save|app/chamados/services/disputa_emissao.py:501:_abrir_ou_agregar_disputa
+col209 21/09/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col209 23/09/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col209 25/09/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col209 27/09/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col209 29/09/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col209 01/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col209 03/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col209 05/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col209 07/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col209 09/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col209 11/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col209 13/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col209 15/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col209 17/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col209 19/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col209 21/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col209 23/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col209 25/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col209 27/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col209 29/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col209 31/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col209 02/11/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col209 04/11/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col209 05/11/2026|G1|ESCRITA_INTERCEPTADA_DisputaSupervisao.save|app/chamados/services/disputa_emissao.py:501:_abrir_ou_agregar_disputa
+col258 28/09/2026|G2|PARCIAL_SO_LISTA_RETORNO_399|app/chamados/services/fabrica_da_celula.py:102;app/ponto/services/cartorio.py:399
+col258 19/10/2026|G2|PARCIAL_SO_LISTA_RETORNO_399|app/chamados/services/fabrica_da_celula.py:102;app/ponto/services/cartorio.py:399
+col259 14/10/2026|G2|PARCIAL_SO_LISTA_RETORNO_399|app/chamados/services/fabrica_da_celula.py:102;app/ponto/services/cartorio.py:399
+col259 15/10/2026|G2|PARCIAL_SO_LISTA_RETORNO_399|app/chamados/services/fabrica_da_celula.py:102;app/ponto/services/cartorio.py:399
+col268 21/09/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col268 23/09/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col268 25/09/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col268 27/09/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col268 29/09/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col268 01/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col268 03/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col268 05/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col268 07/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col268 09/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col268 11/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col268 13/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col268 15/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col268 17/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col268 19/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col268 21/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col268 23/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col268 25/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col268 27/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col268 29/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col268 31/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col268 02/11/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col268 04/11/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col268 05/11/2026|G1|ESCRITA_INTERCEPTADA_DisputaSupervisao.save|app/chamados/services/disputa_emissao.py:501:_abrir_ou_agregar_disputa
+col292 22/10/2026|G3|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col292 28/10/2026|G2|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col312 21/09/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col312 23/09/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col312 25/09/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col312 27/09/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col312 29/09/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col312 01/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col312 03/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col312 05/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col312 07/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col312 09/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col312 11/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col312 13/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col312 15/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col312 17/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col312 19/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col312 21/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col312 23/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col312 25/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celula.py:91
+col312 27/10/2026|G1|DIA_SEM_TRABALHO|app/chamados/services/fabrica_da_celu
+
+[truncado em 20000 de 31156 caracteres]
 
 ## 06/11 11:11 · sessao 391a1b785573 · R1-CAUSAD-V3 · sonda · origem=Code
 
@@ -1881,35 +2049,4 @@ O backlog pede explicitamente R1 para **cinco itens**: E1-sem-previsao, E3-turno
   - Há **cegueira compartilhada**: a v3 também chama `minutos_noturnos`; igualdade no diff não elimina o defeito comum. (`app/ponto/calculador/regras.py:85`; `app/ponto/calculador/periodo.py:510`)
   - Divergências fora dessas assinaturas são candidatos a investigação, não comprovação de bug novo. L-110 define a comparação com o código velho como **impacto**, nunca validação. (`app/docs/LEIS.md:136`)
 
-## 06/11 10:40 · sessao fb0ce3409b50 · - · - · origem=Ronald (tmux)
-
-Lei geral: `CLAUDE.md:166–170` faz célula/ata a lâmpada, evento o emissor, consumidor leitor. `app/docs/CORTES.md:263` explicita “lampada acesa no marco = fio vivo obrigatorio”; não transforma toda recusa em violação, porque há exceções escritas posteriores.
-
-Guardas de `motivos_a_perguntar`, em ordem:
-
-1. `dia_sem_trabalho(cel)` e colaborador inativo: `app/chamados/services/fabrica_da_celula.py:91`, retorno `:92`. O juiz é `app/chamados/juizes.py:413`, predicado `:426–428`. Dia sem trabalho tem cobertura expressa em `app/docs/CORTES.md:416`: `trabalha=False` ou tipo lavrado diferente de trabalho; `None` cobra. Não viola 4a quando a própria lâmpada diz ausência de trabalho. Inativo tem piso por domínio RH documentado/testado em `app/chamados/tests/test_selo_f3_celula_soberana.py:19–25`, `:86–103`; não encontrei corte nomeado nesta leitura que autorize especificamente **todo** status diferente de `ativo`, então ampliação além de desligado [nao verificado].
-
-2. Dia futuro: fábrica `:93–94`. Teto temporal escrito em `CLAUDE.md:185`; `CORTES.md:263` exclui hoje por teto na formulação histórica. A fábrica atual trabalha por instante e inclui hoje quando marco venceu: docstring fábrica `:8–11` e autoridade `vencidos_no_instante :15–31`. Recusa de marco ainda não vencido é coberta; não há violação demonstrada.
-
-3. Veredito preenchido fora de `VEREDITOS_ACUSAM`: fábrica `:99–100`. Obedece à lâmpada/consumidor em `CLAUDE.md:167–170`; não há obrigação de perguntar célula absolvida.
-
-4. `parcial_so_lista`: fábrica `:101–104`; juiz real `app/ponto/services/cartorio.py:370–400`. Duas hipóteses documentadas `:378–387`: parcial sem período sempre lista do admin; parcial com período sem fato novo desde julgamento também lista. Corte explícito `app/docs/CORTES.md:319`, complemento da resposta `nao_sei :334`; aval literal “parcial sem periodo ... nunca chamado” está no código `cartorio.py:381–382`. Portanto não imputar quebra geral da 4a a esta recusa: é exceção escrita. Causa dos 200 por ela [nao verificado].
-
-5. Construção dos motivos e dedup: fábrica `:118–126`. Dedup elimina todo motivo com pergunta histórica que não seja `VIA_DUPLICATA`, sem testar aqui se viva. Se essa for a causa medida de célula acusadora sem fio vivo, a lei que confronta é `CLAUDE.md:168–170` + `CORTES.md:263`; não há nesta leitura lei que autorize substituir **fio vivo** por mera existência histórica.
-
-Guardas internas de `motivos_pela_ata`:
-
-- Vencidos vazio: fábrica `:45–46`, coberto pelo teto `CLAUDE.md:185`.
-- `_ata_do_dia` nega: fábrica `:49–51`. Autoridade real `disputa_emissao.py:818–844`; nega somente sem célula com escala vigente (`:833–843`). Docstring `:819–823` exige lavra antes de questionário. Se lâmpada acusadora existente e emissor negar por leitura inconsistente, confronto com `CLAUDE.md:167–170`; caso concreto [nao verificado].
-- Sem ata e teto por marcos: fábrica `:52–54`; aguarda porque não há marco para comparar; lei específica além de teto/lâmpada [nao verificado].
-- Sem ata e sem marcos passados: chama `classificar_falta` e pode obter nenhum motivo, fábrica `:55–57`. Se isso cala célula/ata que acusa, é consumidor rejulgando contra `CLAUDE.md:170`; ocorrência [nao verificado].
-- Filtra faltantes por vencimento, data, mapeamento e unicidade: fábrica `:59–65`. Vencimento tem teto; identidade/data preservam marco do dia. Mapeamento ausente que silencie marco acusador confronta `CORTES.md:263`, ocorrência [nao verificado].
-
-Depois dos motivos, `perguntar_pela_celula`:
-
-- Limbo exportado vai à pauta em vez de pergunta: fábrica `:171–173`; juiz `limbo_vai_a_pauta :180–188`; pauta `:225–242`. Exceção expressa comentada fábrica `:167–170` e aval em `app/docs/PROMPTS.md:1719`. Não confundir com fronteira geral exportada, abolida por `app/docs/CORTES.md:219` e `app/docs/LEIS.md:91`.
-- Pauta já existente impede duplicata: fábrica `:208–222`, `:234–236`; idempotência escrita em `CLAUDE.md:175` e fábrica `:228–230`.
-
-Atenção ao contrato de erros: `_ata_do_dia` **engole** erro real de `_marcos_faltantes` em `app/chamados/services/disputa_emissao.py:828–832`, registrando por `core.observ.registrar_engolido` e retornando `(True, None)`. Sonda deve observar essa chamada/registrador por mock, contar o erro e marcar incompleto; retorno normal do emissor não garante ausência de erro.
-
-_2227 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2228 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
