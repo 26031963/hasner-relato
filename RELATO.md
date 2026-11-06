@@ -6602,3 +6602,9 @@ DESPACHO CODEX-RED-POR-EXEMPLO: RE-PEP, RE-OTIMIZA-3, RE-O168, RE-PASSE, RE-PWA 
 - 5 .r em logs/piloto_pd/re/, todas rc=0 hash=3a514a4e: PEP 17 casos | OTIMIZA-3 46 | O168 38 | PASSE 29 | PWA 24 (linhas de tabela). PROVA: `tail -1 re_<o>.out`.
 - Forma conferida: 0 bloco de codigo/diff nas 5 (`grep -cE` de fence/def/diff); campos [nao verificado]: PEP 0, OTIMIZA-3 52, O168 13, PASSE 20, PWA 16 -- o construtor confere contra _meta antes de transcrever.
 - Consumo: cada construtor le a sua .r na abertura (item 2 do aval); tabela de medida ao fim das 5 obras.
+
+### F-346 opus final (05/11 23:3x): APROVA d2653810..2d508beb, sem bloqueio; pouso so com OK+rc=0 de logs/f346/suite_merge.log (arvore 33c9d5b0)
+- Escritor unico conferido: unica reatribuicao de datas = ferias/services.py:379 (`_trocar_janela`), grep repo inteiro; 0 receiver de AgendamentoFerias; update_fields nao perde campo lido.
+- Descartes julgados: (a) corrida concorrente -> FILA (pergunta de desenho de trava); (b) mutante equivalente, descarte certo; (c) descarte certo; (d) furos do selo AST -> FILA.
+- FILA (pre-existentes, nao bloqueiam): acervo de orfas 'ferias' em prod sem contador (dono L-099; shell proibido); ValidationError -> 500 em editar_agendamento (views.py:667-668); remarcacao sem registrar_log (LEI-AKITA 7); relogio misto date.today x localdate (services.py:314,380 x :439); confirmacao 'confirmado' herdada pela janela nova.
+- Codex: 3 voltas (v1/v2/v3), opus 1 leitura, "opus reprovou depois do Codex aprovar" = nao.
