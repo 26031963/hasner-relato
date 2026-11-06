@@ -1,7 +1,124 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 20:07** · publicado em **06/11/2026 20:11** (UTC-3)
+> Ultima resposta processada: **06/11/2026 20:16** · publicado em **06/11/2026 20:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 20:16 · sessao 3375283c7246 · - · - · origem=Ronald (tmux)
+
+Chamadores diretos de produção de `minutos_noturnos`:
+
+- `MotorBase.calcular_noturnas`, definição `app/ponto/motor_calculo_v2.py:969`, chamada `:983`: recebe `[e,s]` após `_janela_do_par`, aplicado em `:2759`, `:2886`, `:3211`. Os escritores chamam essa função em `:2792`, `:2896`, `:3247`.
+- `he_noturna`, definição `app/ponto/motor_calculo_v2.py:409`, chamada `:441`: recebe `[_inicio_do_trecho_extra(...), saida]`, calculado em `:440`. `_aplicar_he_noturna` passa `periodo.entrada/saida` em `:1015`.
+- `minutos_noturnos_dos_intervalos`, definição `app/ponto/motor_calculo_v2.py:121`: mede prefixos `[entrada,b]` e `[entrada,a]` em `:191–192`, além do total `[entrada,saida]` em `:196`.
+- `noturnas_do_dia`, definição `app/ponto/calculador/regras.py:66`, chamada `:85`: recebe cada par fornecido pelo calculador. O caminho de produção pode fornecer segmentos cortados pelos intervalos: `app/ponto/calculador/alimentacao.py:128`, `:133`, `:137`, `:158`; a função `noturno_no_par` fornece o par inteiro: `app/ponto/calculador/periodo.py:488`, `:510`.
+
+`MotorPlantao` usa a conta de `Motor12x36.calcular_periodo`, por delegação explícita em `app/ponto/motor_calculo_v2.py:3510–3511`; portanto não constitui outro chamador direto.
+
+O universo real exige mais que `batidas_apuraveis + parear_turnos`: `calcular_mes` remove duplicatas em `app/ponto/motor_calculo_v2.py:2351`, monta períodos em `:2354`, e `_periodos_via_autoridade` aplica `periodos_de_turnos(turnos_via_autoridade(...))` em `:530`, seguido de `_periodos_pelo_marco` em `:531`. O filtro por dia da jornada antecede a chamada de `calcular_periodo`: `:2403`, `:2429–2432`, `:2458`.
+
+Recomendação de instrumentação: `sys.setprofile` observando os objetos `__code__` reais permite coletar os argumentos e retornos de `minutos_noturnos`, sem reconstruir os recortes e sem alterar módulos. Contar separadamente os canais principal, HE e prefixos de intervalos; prefixos não são novos turnos. A HE pode ser chamada novamente sobre o último período após agregação diária/semanal: `app/ponto/motor_calculo_v2.py:3147`, `:3178`, `:3399`.
+
+Para o excesso de (b), reproduzir apenas a geometria da sobreposição, após verificar o limite de 26h de `app/ponto/motor_calculo_v2.py:94`. Para cada dia civil com a condição de prorrogação de `:110`, somar:
+
+```python
+max(0.0, (min(fim, meia_noite_seguinte)
+          - max(inicio, inicio_do_dia, hora_22)).total_seconds() / 60)
+```
+
+As duas parcelas que produzem a duplicidade são explicitamente somadas em `app/ponto/motor_calculo_v2.py:112–116`.
+
+O fechamento com `somente_leitura=True` e `lavrar_dias_pagos=False` não percorre o calculador. O chamador do calculador fica no ramo de lavratura em `app/ponto/services/fechamento.py:1253`, `:1255`, condicionado a competência ≥10/2026 em `:1249`. O calculador de HE chama a mesma `he_noturna` em `app/ponto/calculador/regras.py:832`, usando `he_pontas` formadas com as pontas efetivas em `app/ponto/calculador/alimentacao.py:83`, `:101–106`. Portanto medir somente o fechamento em leitura não autoriza imprimir zero para os chamadores do calculador.
+
+## 06/11 20:16 · sessao 5f84fc60e33a · - · - · origem=Ronald (tmux)
+
+Desenho recomendado para o SCRIPT 2:
+
+1. Chamar `recalcular_fechamento_mes(mes, 2026, empresa_id=empresa, colaborador_ids=[pk], somente_leitura=True, lavrar_dias_pagos=False, retornar_objeto=True)`. O universo é `universo_da_competencia`; a flag `lavrar_dias_pagos=True` altera o comportamento da guarda de competências exportadas, portanto prejudica a equivalência do universo. `app/ponto/services/fechamento.py:373`, `app/ponto/services/fechamento.py:530`, `app/ponto/services/fechamento.py:545`.
+
+2. Capturar `dict(frame.f_locals)` apenas no evento `return` de `recalcular_fechamento_mes.__code__`, mediante `sys.setprofile`. Isso entrega o `resultado` composto e os mapas usados pelo escritor de dias: `_ft_certa`, `_ft_feriado`, `_ft_sem_escala`, `_orfaos_por_dia`, `_prev_dia_m`, `_real_dia_m`. As entradas efetivas da lavratura estão em `app/ponto/services/fechamento.py:1185`.
+
+3. Para obter valores diários sem copiar aritmética, chamar a função **real** `dia_pago.lavrar` sobre uma fachada temporária de `ponto.models.DiaPago`. A fachada instancia objetos reais não salvos; somente `.objects.filter(...).delete()` e `.objects.bulk_create(...)` são substituídos por operações em memória. A função real monta todos os números antes dessas duas operações. `app/ponto/services/dia_pago.py:135`, `app/ponto/services/dia_pago.py:173`, `app/ponto/services/dia_pago.py:267`, `app/ponto/services/dia_pago.py:283`, `app/ponto/services/dia_pago.py:333`, `app/ponto/services/dia_pago.py:357`.
+
+```python
+from unittest.mock import patch
+import ponto.models as modelos
+from ponto.services.dia_pago import lavrar
+
+RealDiaPago = modelos.DiaPago
+capturadas = []
+
+class Memoria:
+    def filter(self, **kwargs):
+        return self
+
+    def delete(self):
+        return 0, {}
+
+    def bulk_create(self, objetos):
+        capturadas.extend(objetos)
+        return objetos
+
+class DiaPagoEmMemoria:
+    TIPO_DIA = RealDiaPago.TIPO_DIA
+    TIPO_AJUSTE = RealDiaPago.TIPO_AJUSTE
+    objects = Memoria()
+
+    def __new__(cls, *args, **kwargs):
+        return RealDiaPago(*args, **kwargs)
+
+# L = snapshot dos locals de recalcular_fechamento_mes,
+# rodado exclusivamente para este colaborador.
+r = L["resultado"]
+with patch.object(modelos, "DiaPago", DiaPagoEmMemoria):
+    lavrar(
+        colab, mes, 2026,
+        periodos=r.periodos,
+        ft_certa=L["_ft_certa"],
+        ft_feriado=L["_ft_feriado"],
+        ft_sem_escala=L["_ft_sem_escala"],
+        orfaos_por_dia=L["_orfaos_por_dia"],
+        previsto_por_dia=L["_prev_dia_m"],
+        realizado_por_dia=L["_real_dia_m"],
+        dia_da_jornada=getattr(r, "dia_da_jornada", None),
+        versao="motor",
+    )
+```
+
+4. Detectar aberto pela saída **real** de `MotorBase._turnos_do_juiz`, capturada no evento `return` pelo objeto de código. O retorno contém `Turno(data_turno, entrada, saida, batidas, aberto, cross_meianoite)`; filtrar `entrada is not None`, `saida is None`, `aberto`, e `data_ini <= data_turno <= data_fim` dos argumentos desse frame. A geometria desta porta responde pelo dia e pelo intervalo; os períodos e minutos continuam sendo os do motor. `app/ponto/turnos.py:41`, `app/ponto/motor_calculo_v2.py:867`, `app/ponto/motor_calculo_v2.py:882`, `app/ponto/motor_calculo_v2.py:2346`.
+
+5. Como informação adicional, comparar com `p.turno_aberto` nos períodos finais, agrupados por `resultado.dia_da_jornada[id(p)]`. O mapa preserva os mesmos objetos na composição de fatias. `app/ponto/services/fechamento.py:292`, `app/ponto/services/fechamento.py:302`.
+
+O código já admite crédito de horas em período ainda marcado aberto, a partir dos pares fechados existentes no turno; isso impede interpretar automaticamente `aberto E horas>0` como pagamento de um dia cheio. A conclusão para col882 e para a frota depende da execução da sonda, ainda [não verificado]. `app/ponto/motor_calculo_v2.py:2495`, `app/ponto/motor_calculo_v2.py:2514`, `app/ponto/motor_calculo_v2.py:2558`.
+
+Erros internos do fechamento podem ser capturados e consumidos pelo próprio serviço; retorno ausente para o colaborador deve virar erro, nunca zero. A grade também pode ficar sem resposta (`minutos_* = None`), e os mapas vazios não devem ser apresentados como minutos zero. `app/ponto/services/fechamento.py:1071`, `app/ponto/services/fechamento.py:1078`, `app/ponto/services/fechamento.py:1287`.
+
+## 06/11 20:11 · sessao f922a2f8576e · PUSH-PRESO-14 · verificador · origem=Code
+
+**Meu veredito: os três commits R1 publicam ou corrigem medições; o quarto implementa idempotência pela chave do fato e reutiliza autoridades existentes.** Evidências abaixo usam `hash:arquivo:linha` com a numeração nova dos diffs anexados. (`36c90132:app/core/placar_estrutural.py:106–120`; `6ed6adbe:app/core/placar_estrutural.py:106–119`; `a16637ca:app/core/placar_estrutural.py:108–118`; `5a3f8d0e:app/pautas/management/commands/pauta_pago_x_devido_exportada.py:130–139,190–213`)
+
+1. **`36c90132` — nenhum termo arquitetural é realizado pelo diff mostrado.** Ele substitui números e provas, troca `fonte_do_medido` e remove afirmações sobre destinos que a nova medição não responde; os estados dos itens permanecem iguais. (`36c90132:app/core/placar_estrutural.py:106–120`; `36c90132:app/core/espelho_verdade.py:168–180`)
+
+   Dois candidatos seriam **Single Source of Truth / fonte única** e **Architectural Invariants + Fitness Functions**, existentes no vocabulário. Porém, atualizar referências para a mesma medição não implementa uma autoridade única; publicar o resultado da SOMA também não implementa sua verificação. Neste diff, ambos permanecem conteúdo do placar. (`app/docs/GLOSSARIO.md:11,14`; `36c90132:app/core/placar_estrutural.py:106–120`)
+
+2. **`6ed6adbe` — nenhum termo arquitetural é realizado pelo diff mostrado.** Ele reorganiza provas para apresentar números primeiro, restringe afirmações ao universo medido e corrige a atribuição da conferência da SOMA para a sonda. (`6ed6adbe:app/core/espelho_verdade.py:49,82,168–180`; `6ed6adbe:app/core/placar_estrutural.py:106–119`)
+
+   Os candidatos seriam novamente **fonte única** e **fitness function / selo**. O diff corrige a descrição das fontes e verificações, mas não altera o mecanismo que impõe uma fonte única nem acrescenta a verificação executável; as mudanças de teste narradas na mensagem não aparecem no diff anexado. (`app/docs/GLOSSARIO.md:11`; `app/docs/PLANO-PADROES.md:48`; `6ed6adbe:app/core/placar_estrutural.py:106–119`; `6ed6adbe:app/core/espelho_verdade.py:49,82,168–180`)
+
+3. **`a16637ca` — nenhum termo arquitetural é realizado pelo diff mostrado.** Ele compacta números e ressalvas nas provas, corrige `SOMA.fonte` e documenta a partição `pk % 6`; não implementa essa partição. A compactação tem efeito concreto na publicação porque o leitor recorta a prova em 150 caracteres. (`a16637ca:app/core/espelho_verdade.py:49,82,168–180`; `a16637ca:app/core/placar_estrutural.py:108–118`; `bin/gerar_estado.py:164`)
+
+   Dois candidatos seriam **fitness function / selo** e **Shadow mode / Parallel run — sombra**. O diff apenas relata a conferência e a execução em sombra; não acrescenta um selo nem um caminho de execução paralela. (`app/docs/PLANO-PADROES.md:48`; `app/docs/GLOSSARIO.md:19`; `a16637ca:app/core/placar_estrutural.py:108–118`)
+
+4. **`5a3f8d0e` — realiza principalmente `idempotencia pela chave do fato` / `dedup do fato`.** A chave contém marca, colaborador e competência; a busca acrescenta a âncora da empresa/competência e considera cabeças não canceladas, inclusive feitas. Dentro da transação, trava o colaborador, consulta novamente a existência e só cria quando ausente. Isso implementa o mecanismo, além de declará-lo. (`app/docs/GLOSSARIO.md:27`; `5a3f8d0e:app/pautas/management/commands/pauta_pago_x_devido_exportada.py:53–54,173–174,190–213,240–243`)
+
+   O segundo candidato, **single source of truth / um juiz por pergunta**, também é realizado no consumo das autoridades: PAGO vem de `valores_do_gravado`, DEVIDO do recalculador existente em modo leitura, DIFERE de `_diferente` e ENTREGUE de `competencia_entregue`. Para escolher um único rótulo principal, escolheria **`padrao=idempotencia pela chave do fato`**, pela implementação explícita de deduplicação serializada. (`app/docs/PLANO-PADROES.md:46–47`; `5a3f8d0e:app/pautas/management/commands/pauta_pago_x_devido_exportada.py:109–139,190–213`)
+
+Quanto ao comportamento:
+
+- **Os três R1 alteram informação e apresentação do placar, sem modificar cálculo financeiro ou registro de batidas.** No primeiro, trocar a fonte também pode mudar a data reconhecida e, consequentemente, o veredito de cadência do termômetro; portanto há efeito no placar além da prosa. (`36c90132:app/core/placar_estrutural.py:111`; `6ed6adbe:app/core/espelho_verdade.py:49`; `a16637ca:app/core/espelho_verdade.py:168`; `bin/gerar_estado.py:47–56`; `app/core/placar_estrutural.py:676–684`)
+- **O quarto não é só medida:** por padrão é leitura, mas `--escrever` cria pautas DP e `--reverter` cancela pautas. Ele consulta o cálculo financeiro em `somente_leitura=True`, sem habilitar a lavratura de `DiaPago`; não introduz alteração de regra de dinheiro nem escrita de batidas. (`5a3f8d0e:app/pautas/management/commands/pauta_pago_x_devido_exportada.py:135,161–188,207–217,259–283`; `app/ponto/services/fechamento.py:439–442,1112–1128,1175`)
+- Execução efetiva desses caminhos e efeitos observados em produção: **[não verificado]**.
+
+A recusa mecânica dos três primeiros decorre da classificação por caminho: `app/`, fora de testes e documentos, é “negócio” e recusa `n/a`. Isso não demonstra que realizem um padrão; a própria L-123 exige conferir o rótulo contra o diff. (`bin/tests/test_lei_akita.sh:122–135`; `app/docs/PLANO-PADROES.md:53,58`)
 
 ## 06/11 20:07 · sessao 631ab37d7510 · BUG-PLANTIO-NOTURNO-MAIS-1 · verificador · origem=Code
 
@@ -751,84 +868,4 @@ A janela do mapa inclui tanto o dia da pergunta quanto o dia local da batida, co
 - A nova batida dispara cartório e reconciliador **antes** de a disputa nascer: receivers em `app/ponto/signals.py:131` e `:206`; chamada da gravação em `app/ponto/services/triagem_batida.py:701`, disputa em `:729`. `reconciliar_chamados_colab` passa pelas perguntas/chamados existentes (`app/chamados/reconciliador.py:1418`, `:1427`), logo o fio recém-criado não participou daquela passagem.
 - **Não achei outro sítio que exija explicitamente a disputa prévia para `dupla`/`ignorada`.** O chamador da view só devolve o `JsonResponse` recebido (`app/ponto/views.py:350`, `:353`). O efeito de perder a passagem reativa inicial deve ser distinguido de prova de fio incorreto: esse último efeito em produção é **[nao verificado]**.
 
-## 06/11 19:50 · sessao c5729b08d142 · - · - · origem=Ronald (tmux)
-
-DELETE de Batida em `app/chamados/services/regularizacao_ext.py:136` alcança:
-
-| Efeito | Modelo.campo | Referência |
-|---|---|---|
-| SET_NULL | `Justificativa.batida_entrada`, `.batida_gerada` | `app/ponto/models.py:139`, `:167` |
-| SET_NULL | `AlertaGeofence.batida` | `app/ponto/models.py:238` |
-| SET_NULL | `RegularizacaoItemBatida.batida_entrada`, `.batida_saida`, `.batida_alvo` | `app/chamados/models.py:3267`, `:3271`, `:3280` |
-| CASCADE DELETE | `PingGeo` — nome correto do modelo | `app/ponto/models.py:995`, `:1000` |
-| CASCADE DELETE | `FotoBatida` | `app/ponto/models.py:1026`, `:1027` |
-| CASCADE DELETE | `TurnoMaterializado`, pelas FKs `.entrada` ou `.saida` | `app/ponto/models.py:1206`, `:1208` |
-
-Após o DELETE, receivers ainda recomputam núcleo e cartório (`app/ponto/signals.py:48-50`, `:138-140`). Outras FKs para Batida não apareceram na varredura do código de produção `[nao verificado quanto ao schema efetivo do banco]`. Exclusão do arquivo físico de `FotoBatida.foto` não foi demonstrada `[nao verificado]`.
-
-## 06/11 19:49 · sessao 03109f34636c · - · - · origem=Ronald (tmux)
-
-**O `Ausencia.save()` aciona uma árvore de escritas condicionais; a conferência do comando só limita os campos da própria Ausencia, não os efeitos laterais.** O comando faz `_estado(a)` antes/depois e compara somente essa instância (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:166`, `:173`, `:175`). Ocorrência concreta dos efeitos abaixo nas 30 linhas: `[nao verificado]`.
-
-| Escrita condicional | Arquivo:linha | Guarda / alcance |
-|---|---|---|
-| `CelulaDia.veredito, veredito_via, veredito_em, protestos, ata, status_dia, status_rotulo` | `app/ponto/portas/celula.py:961`, `:995`, `:1027`, `:1033` | Lavra igual não escreve (`:1013`–`:1016`); decisão admin preserva o veredito, podendo mudar ata/status (`:997`–`:1004`). |
-| `CelulaDia.julgada_em, impressao, ausencia, tem_entrada, tem_saida, insumos_em` | `app/ponto/portas/celula.py:1060`–`:1067` | Mesmo insumo sem lavra retorna sem save (`:1055`–`:1059`). |
-| `CelulaDia.ata['precedencia']` | `app/ponto/portas/celula.py:1075`–`:1082` | Precedência igual não escreve (`:1076`). |
-| INSERT `EventoCelula(celula_id,colaborador_id,data)`; defaults `criado_em,processado_em=NULL,tentativas=0,erro=''` | `app/ponto/portas/celula.py:890`–`:891`; `app/escala/models.py:1857`–`:1863` | Save de ata/veredito emite no mesmo atomic (`app/ponto/portas/celula.py:894`–`:902`). |
-| INSERT `LogAuditoria(usuario,acao,modelo,objeto_id,descricao,valor_antes,valor_depois,ip,ator)` | `app/core/observ.py:118`–`:137` | Lavra deixa trilha (`app/ponto/portas/celula.py:1021`, `:1036`). Best effort no helper (`app/core/observ.py:105`). |
-| INSERT `ChamadoColaborador` de batida ausente, com `colaborador,modulo_origem,status_local,celula,assunto,descricao,area,categoria,subcategoria,urgencia,prazo_sla,contexto_json` | `app/ponto/management/commands/detectar_ausencias.py:693`–`:713`; `app/chamados/models.py:899`, `:919`, `:932` | Emissão do cartório passa pelo detector (`app/ponto/services/cartorio.py:1740`, `:1778`); várias guardas do funil (`app/ponto/management/commands/detectar_ausencias.py:599`, `:604`, `:616`, `:628`, `:631`, `:659`); dedup/reabertura (`app/chamados/models.py:867`–`:885`). |
-| `ChamadoColaborador.contexto_json`, ocorrência/nota ao espelhar marcos | `app/ponto/management/commands/detectar_ausencias.py:558`–`:567` | Mesma lista retorna sem escrita (`:556`). |
-| INSERT chamado `cluster_batida_espuria`, defaults `categoria,area,assunto,titulo,descricao,contexto_json` mais campos do gate | `app/ponto/services/cluster_espurio.py:130`–`:147` | Só colab ativo com escala ativa sem fim (`:117`–`:120`); abre na janela própria de 14 dias (`:12`, `:44`–`:46`); fechamento consulta chamados de qualquer idade (`:53`–`:77`). Cartório chama o cluster quando houve julgamento (`app/ponto/services/cartorio.py:990`–`:994`). |
-| INSERT `DisputaSupervisao(colaborador,motivos,contexto,chamado)` | `app/chamados/services/disputa_emissao.py:523`–`:528`, `:962`–`:967` | Reutiliza disputa aberta (`:467`–`:469`, `:935`–`:937`). |
-| `DisputaSupervisao.motivos,contexto` | `app/chamados/services/disputa_emissao.py:476`–`:501`; motivos também `:923`, `:971`, `:999`, `:1090` | O merge de contexto pode incrementar `qtd` e `ultima_em` (`:484`–`:495`). |
-| `DisputaSupervisao.fechada_em,fechada_por,resolucao,motivo_fechamento` para reabrir | `app/chamados/models.py:2087`–`:2091` | Só disputa fechada (`:2081`). Ressuscitação pode chamar essa porta (`:1531`–`:1532`). |
-| Mesmos quatro campos para fechar disputa | `app/chamados/models.py:1865` | Fábrica de órfãos pode fechar (`app/chamados/services/disputa_emissao.py:1112`–`:1121`); resolvedor pode fechar (`:1717`–`:1718`); beco pode fechar (`app/chamados/services/becos.py:51`–`:52`). |
-| INSERT `PerguntaDisputa(disputa,motivo,data_evento,chamado_destino,celula,pergunta,tipo_resposta,opcoes[,chamados_relacionados_ids])` | `app/chamados/models.py:2476`–`:2477`; `app/chamados/services/disputa_emissao.py:389`–`:397`, `:767`–`:778` | Identidade global por colab/motivo/data encontra existente (`app/chamados/models.py:2428`–`:2432`); fábrica deduplica (`app/chamados/services/disputa_emissao.py:299`, `:370`, `:386`). |
-| `PerguntaDisputa.celula,chamado_destino,veredito_lavrado,julgado_em,janela_expira_em` | `app/chamados/models.py:2433`–`:2474` | Reaponta existente; valida resolvedora e preserva fio (`:2440`, `:2448`). |
-| `PerguntaDisputa.materializada_em,materializada_por,via_resolucao` para descarimbar | `app/chamados/models.py:2646`–`:2652` | `desfazer_carimbo_sem_lastro` relê travado e só escreve pergunta viva (`app/chamados/services/relavra_via.py:217`–`:231`). Fábrica do julgamento usa `reabrir_fechada=False` (`app/chamados/services/fabrica_da_celula.py:164`–`:166`). |
-| Descarimbo em lote + `PerguntaDisputa.validada_em,validada_por,respondida_em=NULL` | `app/chamados/models.py:1504`, `:2699`–`:2700` | Universo calculado pela ressuscitação; sem ids retorna zero (`:1492`–`:1498`). |
-| Carimbo `PerguntaDisputa.materializada_em,materializada_por,via_resolucao`; condicionalmente `respondida_em,validada_em,validada_por,veredito_lavrado,julgado_em,janela_expira_em` | `app/chamados/models.py:2585`–`:2609` | C6 pode recusar (`:2596`–`:2602`); resolvedor usa resposta validar/lavra (`app/chamados/services/disputa_emissao.py:1617`–`:1618`); S144 só carimba (`app/chamados/services/materializacao.py:1402`–`:1407`). |
-| Mais INSERTs `EventoCelula` por mudança de PerguntaDisputa | `app/chamados/signals.py:214`–`:221`; `app/chamados/models.py:2671`–`:2688` | Nascimento não emite; campos que acordam são filtrados (`app/chamados/signals.py:216`–`:219`). Sem célula não emite (`app/chamados/models.py:2685`). |
-| INSERT `Pauta` do limbo exportado, pela porta `escrever` | `app/chamados/services/fabrica_da_celula.py:225`–`:241` | Somente limbo exportado (`:167`–`:173`); dedup de motivos (`:234`–`:235`). Colunas internas de Pauta: `[nao verificado]`. |
-| DELETE `PushSubscription` | `app/chamados/push_utils.py:49`–`:51` | Resposta push 404/410. Detector manda push supervisão (`app/ponto/management/commands/detectar_ausencias.py:774`–`:783`). |
-| `Colaborador.fcm_token='',fcm_removido_em,fcm_removido_motivo` + auditoria | `app/colaboradores/fcm.py:60`–`:67` | FCM recusou token (`app/chamados/fcm_utils.py:89`–`:94`, `:39`–`:42`); alcançável pelo fio do detector com `notificar=True` (`app/chamados/services/disputa_emissao.py:876`, `:1123`–`:1124`, `:1547`–`:1548`). |
-| INSERT/UPDATE/DELETE `Batida` pela retomada de regularização | `app/chamados/services/regularizacao_ext.py:77`–`:82`, `:136`, `:153`–`:155`; INSERT real `app/ponto/registro_batida.py:157`–`:160` | Fechamento de disputa agenda retomada (`app/chamados/signals.py:97`–`:121`). Filtro retomada só `status='confirmada',materializada_em=NULL` e colab (`app/chamados/services/regularizacao_ext.py:218`–`:224`), sem data. |
-| `RegularizacaoItemBatida.batida_alvo,aplicada_em,batida_entrada,batida_saida` | `app/chamados/services/regularizacao_ext.py:137`–`:139`, `:162`–`:163`, `:171`–`:188` | Guardas por item já aplicado ou FK já preenchida (`:125`, `:171`, `:175`, `:180`, `:184`). |
-| `RegularizacaoExterna.status,materializada_em,materializada_por` | `app/chamados/services/regularizacao_ext.py:197`–`:200` | Somente confirmada e sem disputa aberta (`:51`–`:65`). |
-| DELETE e INSERT `TurnoMaterializado(colaborador,data_turno,entrada,saida,aberto,cross_meianoite,dt_fim_previsto,atualizado_em)` | `app/ponto/nucleo.py:48`–`:59`, DELETE SQL `:80`–`:82`; timestamp `app/ponto/models.py:1213` | Batida save/delete recomputa d−2…d+1 (`app/ponto/signals.py:19`–`:36`, `:48`–`:50`). |
-| INSERT `EventoCelula` por turno que fechou | `app/ponto/nucleo.py:64`–`:66`, `:86`–`:93` | Só turno antes aberto que deixou de existir e célula existente. |
-
-A entrada principal é `Ausencia.post_save → _dias_ausencia → _julgar_dias → cartorio.julgar_celula` (`app/ponto/signals.py:143`–`:147`, `:115`–`:128`, `:85`–`:93`). O juiz barra futuro e célula inexistente, sem verificar exportação nesse ponto (`app/ponto/services/cartorio.py:1974`–`:1978`). Impressão igual pode pular o julgamento (`:1199`–`:1204`, `:1348`–`:1367`).
-
-A fábrica do julgamento silencia **seu próprio** push de disputa (`app/chamados/services/fabrica_da_celula.py:174`–`:176`), mas o detector faz push supervisão e monta fio de outros chamados órfãos do colaborador (`app/ponto/management/commands/detectar_ausencias.py:774`–`:801`). Portanto não existe garantia geral de ausência de push nesse caminho (`mesmas referências`).
-
-A cauda de regularização pode alcançar datas fora da lista: a retomada não filtra competência/data (`app/chamados/services/regularizacao_ext.py:218`–`:224`). A criação chama `registrar_batida` com `autoridade_humana=False`, sem `fato_de_chao` (`:77`–`:82`), que deriva `fato_de_chao=True` e evita a guarda de competência (`app/ponto/registro_batida.py:130`–`:137`). Essa criação agenda recálculo monetário (`:160`, `:175`–`:178`).
-
-Não identifiquei criação/edição de outra Ausencia nos caminhos lidos de cartório, fábrica, beco e regularização; a materialização S144 só carimba PerguntaDisputa (`app/chamados/services/materializacao.py:1393`–`:1407`). Prova universal de inexistência de outro caminho transitivo: `[nao verificado]`.
-
-O comando não consome o outbox diretamente: o chamador produtivo encontrado está no comando separado `app/chamados/management/commands/consumir_eventos_celula.py:31`; o consumidor atualiza tentativas/erro/processado_em e faz retenção (`app/chamados/reconciliador.py:1380`, `:1386`, `:1393`). Esses efeitos futuros devem ser distinguidos das escritas síncronas e `on_commit` acima (`mesmas referências`).
-
-O snapshot do comando não captura nenhuma dessas entidades laterais: `_foto` só fotografa Ausencia (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:120`–`:123`), e a reversão só monta plano para seus pks (`:229`–`:242`). Portanto “reversível pelo snapshot” = **não**, para todas as entidades laterais desta tabela (`mesmas referências`); push enviado tampouco é recolhido pelo rollback (`:20`–`:21`).
-
-## 06/11 19:49 · sessao c5729b08d142 · - · - · origem=Ronald (tmux)
-
-Ramo transitivo `regularizacao_ext.py:77 → registrar_batida`:
-
-| Escrita/efeito | Evidência | Guarda/limite |
-|---|---|---|
-| `TurnoMaterializado`: apaga recorte e recria `colaborador,data_turno,entrada,saida,aberto,cross_meianoite,dt_fim_previsto,atualizado_em` | `app/ponto/signals.py:19-36`; `app/ponto/nucleo.py:48-59`, `:80-83`; automático `app/ponto/models.py:1213` | Recorte D−2 a D+1; **sem guarda de exportação** nesse escritor (`signals.py:26-28`, `nucleo.py:57-66`). |
-| `EventoCelula`: INSERT `celula_id,colaborador_id,data` quando turno antes aberto deixa de existir | `app/ponto/nucleo.py:64-66`, `:86-93`; `app/ponto/portas/celula.py:890-891` | Só dias com CelulaDia existente (`nucleo.py:92`); mesma transação do DELETE/rebuild (`:57-66`). |
-| `Colaborador.onboarding_completo=True` | `app/colaboradores/signals.py:86-102`; `app/colaboradores/services/colaborador.py:55-61` | Só Batida criada, flag ainda falsa e usuário com last_login (`signals.py:94-100`). |
-| Por save do Colaborador isento: `ChamadoColaborador.silenciado_ate,silenciado_por,silenciado_motivo,atualizado_em`; `LogAuditoria` | `app/chamados/signals.py:232-243`; `app/chamados/services/silencio_isentos.py:20-31`, `:41-47`, `:52-58`; `app/chamados/services/arquivo.py:165-172`, `:130-138` | Isento; chamados vivos sem silêncio; roda `on_commit`. Sem recorte por mês. **Não escreve `resgatado_em` nesse ato** (`arquivo.py:170-171`). |
-| Adesão: `ChamadoColaborador.status_local,resolvido_em,via_encerramento,atualizado_em`, eventualmente `urgencia,urgencia_original`; `FollowupChamado` e trilha do gate | `app/ponto/signals.py:233-234`; `app/colaboradores/services/pos_vinculo.py:36-45`; `app/chamados/models.py:607-620`, `:195-247`; nota `app/chamados/services/nota.py:88-103` | Chamado vivo `sem_previsao_escala/nunca_bateu`; Batida apurável no período do próprio chamado. Não limita a comp11 (`pos_vinculo.py:36-40`). |
-| Reconciliação de chamados de todo colaborador → possíveis `Justificativa.status='rejeitada'` e `descricao` com sufixo | `app/ponto/signals.py:206-215`; `app/chamados/reconciliador.py:1417-1426`, `:1438-1449`, `:529-535` | Justificativa vinculada pendente e chamado reconciliado; save da Justificativa volta ao cartório (`app/ponto/signals.py:161-165`). |
-| Dois `pg_notify`: canal do posto + agregado | `app/ponto/signals.py:39-45`; `app/ponto/realtime.py:25-43` | Só criada e colaborador com posto; efeito sem linha de modelo persistida. |
-
-Conflito não produz modelo próprio nesse caminho: `registrar_batida` com `autoridade_humana=False` devolve `(None, conflito)` antes do INSERT (`app/ponto/registro_batida.py:145-151`); regularização conta pulada e acrescenta erro (`app/chamados/services/regularizacao_ext.py:83-88`). A existência de algum modelo chamado `BatidaAudit`/`ConflitoBatida` não foi demonstrada `[nao verificado]`; o caminho concreto usa string de conflito nessas linhas.
-
-A criação nessa regularização **omite `fato_de_chao`** (`regularizacao_ext.py:77-82`); com `autoridade_humana=False`, ele deriva `True` e pula `competencia_fechada` (`registro_batida.py:130-137`). Logo o chokepoint não acrescenta uma cerca de competência a esse ramo.
-
-Não localizei escrita persistente direta de cache ou geofence dentro de `registrar_batida`/núcleo. Os receivers explícitos de Batida examinados são núcleo, realtime, cartório, reconciliador e onboarding (`app/ponto/signals.py:34`, `:39`, `:131`, `:206`; `app/colaboradores/signals.py:86`). Efeitos adicionais via grafo completo da reconciliação/cartório permanecem com a auditoria dos demais agentes `[nao verificado]`.
-
-_2502 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2505 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
