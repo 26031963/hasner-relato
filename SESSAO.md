@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 15:13:01.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (66.5 MB). Acoes na janela: **813**.
+**Medido em 06/11/2026 15:18:18.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (66.5 MB). Acoes na janela: **810**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -820,6 +820,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 03:54:09 | Bash | Find OTIMIZA-3 history and logs | `cd /home/ronald/saas-hasner; grep -n "OTIMIZA-3\\|QUEM-CHAMA" app/docs/RELATO.md \| cut -c1-400 \| head -20; ls logs \| grep -i "otim\\|quem"` |
 | 03:54:05 | Bash | Gather OTIMIZA-3 state | `cd /home/ronald/saas-hasner; grep -n "^\| OTIMIZA-3\\|^\| OTIMIZA-DUPLA\\|OTIMIZA-3 " app/docs/BACKLOG.md \| cut -c1-900 \| head -4; git -C /home/ronald/wt-qc-224741 log --oneline -3 2>&1 \| head; git -C /home/ronald/wt-qc-224741 status --porcelain \| head -5; grep -n "OTIMIZA-3" app/docs/RELATO.md \| cut -c1-300 \| tail -6; ls logs/piloto_pd/re/ \| grep -i otim` |
 | 03:54:00 | Bash | Record PEP design question at RELATO top; read OTIMIZA-3 context | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' t=open(p).read().split('\n') l='PERGUNTA DE DESENHO O261-ITEM3-PEP (06/11 04:0x, PARADA 4): sob a trava relida, `carimbar` acha a linha ja carimbada e nao distingue REENTRADA propria (materializacao.py:1145-1203 planta -> chamado fecha -> S143 disputa_emissao.py:1572-1603 carimba a mesma P na MESMA transacao) de ATO ALHEIO (admi ...` |
-| 03:17:02 | Bash | Check trava and wait line | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; ps -p 1913117 >/dev/null && echo 1913117 vivo; head -1 logs/h12h06b/suite_full_97754f8d.log; sed -n 2p app/docs/RELATO.md` |
-| 03:15:22 | Bash | Queue suite on merged H12H06-B raia; update RELATO | `cd /home/ronald/saas-hasner; L=logs/h12h06b/suite_full_97754f8d.log; nohup bash -c "while :; do echo 'arvore=/home/ronald/wt-h12h06b-233814 hash=97754f8d' > $L; bash bin/suite.sh --dir /home/ronald/wt-h12h06b-233814 >> $L 2>&1; rc=\$?; [ \$rc -ne 75 ] && break; /usr/bin/sleep 60; done; echo rc=\$rc >> $L" >/dev/null 2>&1 & echo launcher=$!; ps -p 1913117 -o args= \| cut -c1-80 sed -i '2s#.*#ESPERA ...` |
-| 03:15:13 | Bash | Save verdict, add backlog row, merge main into H12H06-B raia | `cd /home/ronald/saas-hasner; D=logs/h12h06b/opus_final_a4970ba0; cat > $D/veredito_opus.md <<'EOF' APROVA (codigo do a4970ba0) -- pouso NAO liberado (gravado pela sessao a partir do relato do verificador opus, somente-leitura) B1 curado: logs/sombra/h12h06b_diff_impacto.py:20 chama recalcular_fechamento_mes(somente_leitura=True) real; 07=0, 08=7, 10=12, 11=3, todos a favor, outro campo 0. B2 curad ...` |
