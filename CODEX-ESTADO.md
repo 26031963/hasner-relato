@@ -1,7 +1,214 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 09:36** · publicado em **06/11/2026 09:37** (UTC-3)
+> Ultima resposta processada: **06/11/2026 09:42** · publicado em **06/11/2026 09:42** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 09:42 · sessao c5a68eae791b · AKITA-MERGE-DE-VOLTA · verificador · origem=Code
+
+**Não aprovaria como está: a interseção por nomes admite um furo com renomeação.** O filtro novo presume que ausência no diff significa igualdade naquele caminho; essa premissa pode falhar com `--name-only` e renames (`bin/tests/test_lei_akita.sh:183`; anexo → `bin/tests/test_lei_akita.sh:196–197`).
+
+Abaixo, **“novo” indica a numeração resultante do delta fornecido**.
+
+1. **Há um contraexemplo que deve continuar vermelho.**
+
+   Considere este merge hipotético: primeiro pai contém `app/x.py=B`; segundo pai, publicado, contém `app/x.py=A`; resultado remove `app/x.py` e cria `app/docs/x.py=A`. Escolha B suficientemente diferente de A para não haver rename detectado contra o primeiro pai. Reprodução desse cenário com Git: **[nao verificado]**.
+
+   Com detecção de rename ativa, o diff contra o primeiro pai pode listar a deleção `app/x.py` e a adição documental; contra o publicado, o rename exato pode listar somente o destino `app/docs/x.py`. A interseção elimina a deleção de negócio, embora **ambos os pais ainda tenham `app/x.py`**. O juiz antigo reprova pelo caminho de negócio; o novo aceita `n/a` porque sobra apenas documentação (`bin/tests/test_lei_akita.sh:123–135`, `:183–185`; novo `bin/tests/test_lei_akita.sh:196–198`).
+
+   A correção indicada é usar `--no-renames` nos dois diffs, ou contabilizar origem e destino. Há precedente no repo que inclui ambas as pontas ao tratar renames (`bin/tests/test_lei_protege_sitio.sh:104–109`).
+
+   Para caminhos contabilizados integralmente, os demais casos são coerentes com a exceção proposta:
+
+   - **Pouso main←raia e primeiro pai publicado:** o diff inicial já representa a comparação com esse pai; intersectá-lo novamente seria redundante. Pais adicionais não publicados não alteram a lista (`bin/tests/test_lei_akita.sh:183`; novo `bin/tests/test_lei_akita.sh:190–197`).
+   - **Octopus:** percorre todos os pais adicionais; basta igualdade com um publicado para retirar o caminho. Não exige igualdade com todos eles (novo `bin/tests/test_lei_akita.sh:190–197`).
+   - **Resolução de conflito:** resultado diferente de todos os pais publicados permanece julgado; escolher integralmente uma versão publicada fica dispensado, conforme a exceção proposta (novo `bin/tests/test_lei_akita.sh:186–198`).
+   - **Raia publicada por outro caminho:** a ancestralidade é consultada contra `origin/main`, sem restringir ao primeiro pai dessa história (novo `bin/tests/test_lei_akita.sh:191–195`).
+
+   Reintroduzir uma versão antiga de pai publicado também fica dispensado. Isso decorre expressamente do critério proposto; o cabeçalho não estabelece uma exigência adicional de igualdade com o **main vigente** (`bin/tests/test_lei_akita.sh:58–62`; novo `bin/tests/test_lei_akita.sh:186–197`).
+
+2. **QUEM ESCREVE e QUEM LÊ.**
+
+   `falhas_do_universo` produz a lista; `julgar → _julgar_linha → negocio` a consome. Externamente saem defeitos e contadores, sem exportação da lista (`bin/tests/test_lei_akita.sh:180–187`, `:122–146`, `:317–321`).
+
+   O pre-push chama esse mesmo selo com `LEI_AKITA_HEAD=PUSH_SHA` e barra retorno não zero; a régua executa o mesmo arquivo pelo glob de selos (`bin/pre-push.sh:33–38`; `bin/regua.sh:138–145`). O instalador atual escreve um wrapper que delega a `bin/pre-push.sh`; conteúdo do hook efetivamente instalado: **[nao verificado]** (`bin/hooks.sh:49–56`).
+
+   Existe a cópia antiga `app/core/hooks/pre-push.sh`, identificada pelo próprio repo como migração que não pousou (`bin/tests/test_recursos_sourced.sh:26–30`). Não encontrei outro juiz desse predicado; inexistência absoluta de implementação equivalente: **[nao verificado]**.
+
+3. **O novo MORDE morde os dois mutantes pedidos, por leitura.**
+
+   | Mutante | Por que falha |
+   |---|---|
+   | “Merge não é julgado” | Falta a volta maligna no conjunto exigido. |
+   | “Nenhum pai é publicado” | A volta limpa também reprova, sobrando um hash indevido. | [nao verificado]
+
+   A expectativa é exatamente `{maligna}` (novo `bin/tests/test_lei_akita.sh:335–338`).
+
+   Sobrevive um mutante plausível: **examinar apenas o segundo pai**, ignorando terceiro e seguintes; o plantio usa merges de dois pais. Também não há nesse plantio rename nem injeção de erro do `merge-base` (novo `bin/tests/test_lei_akita.sh:317–338`). O caso antigo já exige um pouso vermelho quando a raia traz negócio, protegendo contra dispensar merges indiscriminadamente (`bin/tests/test_lei_akita.sh:280–293`).
+
+4. **Sim: rc do `merge-base` fora de 0/1 gera `PADRAO_ERRO` e impede verde silencioso nesse caminho.** [nao verificado]
+
+   O delta lança `SystemExit` explicitamente; os demais comandos novos passam pelo wrapper estrito (novo `bin/tests/test_lei_akita.sh:190–196`; base `bin/tests/test_lei_akita.sh:153–159`). A interrupção impede `PADRAO_FIM`, cuja ausência incrementa falhas e leva à saída vermelha (`bin/tests/test_lei_akita.sh:317–326`, `:333–337`).
+
+Execução do MORDE: **[nao verificado]**; seu preparo cria arquivos e repositórios, incompatível com a regra de somente leitura (`bin/tests/test_lei_akita.sh:237–255`).
+
+## 06/11 09:40 · sessao 076be9594384 · - · - · origem=Ronald (tmux)
+
+Achado principal: **renomeação pode invalidar a inferência “sumiu do diff = igual ao pai publicado”**. Hipótese: P1 contém `app/x.py=B`; P2 publicado contém `app/x.py=A`; H remove `app/x.py` e cria `app/docs/x.py=A`. Sem detectar rename contra P1, a lista contém deleção de negócio; detectando rename exato contra P2, `--name-only` pode listar apenas o destino documental. A interseção então elimina a deleção e permite `n/a`. A execução dessa hipótese está `[nao verificado]`; o risco decorre da interseção por nomes no delta proposto `bin/tests/test_lei_akita.sh:196-197`, da classificação em `bin/tests/test_lei_akita.sh:122-135` e da ausência de `--no-renames` em `bin/tests/test_lei_akita.sh:183`. Correção sugerida: desligar renames em **ambos** os diffs, ou considerar ambas as pontas.
+
+Os demais casos têm leitura consistente com a regra proposta:
+
+- Primeiro pai publicado: já está representado pelo diff inicial; intersectá-lo outra vez seria idempotente. Pouso com raia não publicada mantém o julgamento atual. `bin/tests/test_lei_akita.sh:180-185`; delta proposto `:190-197`.
+- Octopus: examina todos os pais adicionais e mantém apenas caminhos diferentes de cada pai publicado. Resolução diferente de todos eles permanece; escolha integral de versão publicada sai deliberadamente. Delta proposto `:190-197`. [nao verificado]
+- Raia publicada por outro caminho: `merge-base --is-ancestor` não depende do nome do ramo nem de primeiro pai. Delta proposto `:191-195`. [nao verificado]
+- Ressuscitar versão antiga de pai publicado é **ambiguidade de política**, não contraexemplo inequívoco à exceção declarada: a versão coincide integralmente com pai publicado, precisamente o critério do delta. O cabeçalho define universo de commits, sem definir atualidade de blobs, em `bin/tests/test_lei_akita.sh:58-62`; o juiz não verifica semanticamente a cura, conforme `:7-8`.
+
+O novo MORDE mata “merges não são julgados” porque faltaria `maligna`, e “nenhum pai é publicado” porque sobraria também `limpa`; compara exatamente `{maligna}` no delta proposto `:335-338`. Sobrevivem “examinar só o segundo pai/parar no primeiro publicado”, ausência de tratamento de erro do `merge-base`, e o problema de renomeação: não há octopus, injeção desse erro ou rename no novo plantio, delta proposto `:317-338`. O mutante “todos os pais são publicados” é morto pelo MORDE **já existente**, cujo `pouso` deve continuar vermelho: `bin/tests/test_lei_akita.sh:280` e `:288-293`.
+
+RC do novo `merge-base` fora de 0/1 gera explicitamente `PADRAO_ERRO`, delta proposto `:193-194`. A interrupção impede `PADRAO_FIM`, exigido pelo envelope em `bin/tests/test_lei_akita.sh:317-326`; portanto não fica verde silencioso nesse caminho. Os demais novos comandos passam pelo wrapper estrito em `bin/tests/test_lei_akita.sh:153-159`.
+
+## 06/11 09:39 · sessao 4b900836e2b1 · PEP-REENTRADA · verificador · origem=Code
+
+**A v2 protege a P corrente nos caminhos síncronos demonstrados de S143 e S144. Não encontrei outro escritor automático dessa P nesses caminhos; isso não prova exclusão em chamadas arbitrárias, pois a proteção está nos chamadores, não na porta.** As guardas estão em `app/chamados/services/disputa_emissao.py:1586`, `:1671`, `:1710` e `app/chamados/services/materializacao.py:1399`; `carimbar` não consulta o sinal (`app/chamados/models.py:2562`).
+
+**Os testes melhoraram, mas ainda deixam passar mutantes relevantes, especialmente S144 desligado e S144 “pula todas”.** O controle posterior chama a função diretamente e não inclui irmã fora de voo (`app/chamados/tests/test_pep_reentrada.py:223–229`). Resultados de execução dos testes e mutantes: **[nao verificado]**.
+
+1. **Quem escreve, quem lê e quais caminhos alcançam o bloco**
+
+O censo abaixo trata dos caminhos de aplicação; os testes novos são examinados no item 4. Chamadas dinâmicas externas à cópia: **[nao verificado]**. [nao verificado]
+
+| Estado | Escritores encontrados | Leitores relevantes |
+|---|---|---|
+| Trio da P: `materializada_em`, `materializada_por`, `via_resolucao` | A atribuição conjunta está em `_escrever_carimbo`; persistem `carimbar`, `carimbar_identidade`, `descarimbar` e `descarimbar_em_lote` (`app/chamados/models.py:2556`, `:2609`, `:2644`, `:2652`, `:2663`). | Lastro e C6 leem materialização/via; `.estado`, seleção do materializador, S143 e S144 também (`app/chamados/juizes.py:647`, `:673`, `:1171`, `:1207`; `app/chamados/models.py:2501`; `app/chamados/services/materializacao.py:1343`, `:1392`; `app/chamados/services/disputa_emissao.py:1572`). |
+| Somente `via_resolucao` | Há escritores preexistentes fora de `carimbar`: `encerrar_por_fato_no_espelho` e `relavra_via.relavrar` (`app/chamados/models.py:2673`; `app/chamados/services/relavra_via.py:123`). | C6, explicador e apresentação leem a via (`app/chamados/juizes.py:1171`; `app/chamados/services/explicador.py:95`; `app/templates/chamados/partials/_card_atendimento.html:186`). |
+| Autor da materialização | Além da escrita conjunta, é lido para procedência, fotografia anterior e auditoria (`app/chamados/models.py:2559`, `:2583`; `app/ponto/services/procedencia_batida.py:71`; `app/chamados/reconciliador.py:1134`). | A procedência escolhe `validada_por` ou `materializada_por` (`app/ponto/services/procedencia_batida.py:72`). |
+| D: `fechada_em`, `resolucao` | `fechar` preenche ambos; `reabrir_admin` e `reabrir_sistema` zeram ambos; limpeza residual zera somente resolução (`app/chamados/models.py:1861–1865`, `:2063–2075`, `:2087–2091`, `:2173–2174`). | `.aberta`, idempotência de `fechar`, receivers, caudas e apresentação (`app/chamados/models.py:1765`, `:1820`; `app/chamados/signals.py:106`, `:130`; `app/chamados/services/materializacao.py:1290`, `:1302`; `app/templates/chamados/partials/modal_fio.html:374`). |
+| `_EM_VOO` | Declaração no módulo, `set` na entrada e `reset(token)` no `finally` (`app/chamados/services/materializacao.py:1106`, `:1120`, `:1124`). | `pergunta_em_voo` e, por ele, as três guardas S143 e a guarda S144; o teste da cauda lê diretamente o conjunto (`app/chamados/services/materializacao.py:1129`, `:1399`; `app/chamados/services/disputa_emissao.py:1586`, `:1671`, `:1710`; `app/chamados/tests/test_pep_reentrada.py:109`). |
+
+**Cada chamador de `PerguntaDisputa.carimbar`:**
+
+| Chamador | Alcance dentro do bloco e efeito sobre a P corrente |
+|---|---|
+| Materializador, `app/chamados/services/materializacao.py:1251` | **Sim:** é o escritor esperado, após lastro aprovado, usando declaração ou via derivada do fato (`:1207`, `:1235–1252`). |
+| S143, `app/chamados/services/disputa_emissao.py:1612` | **Sim**, pelo fecho do destino e receiver; pula a P antes do julgamento/carimbo (`app/chamados/services/materializacao.py:949`; `app/chamados/signals.py:91–92`; `app/chamados/services/disputa_emissao.py:1586`). |
+| S143 sem credor, `app/chamados/services/disputa_emissao.py:1686` | A varredura é alcançável, mas exclui perguntas validadas e ainda tem guarda explícita de voo (`:1665–1672`). |
+| S144, `app/chamados/services/materializacao.py:1405` | **Sim**, por qualquer fecho síncrono de disputa; pula a P corrente (`app/chamados/signals.py:139–140`; `app/chamados/services/materializacao.py:1399`). |
+| Reconciliador sem turno, `app/chamados/reconciliador.py:405` | **Sim para irmãs**, pela batida. A P-hora corrente tem texto obrigatório e é barrada nesse reconciliador (`app/ponto/signals.py:215`; `app/chamados/reconciliador.py:1417`, `:1603`, `:364`; `app/chamados/services/materializacao.py:804`). |
+| Reconciliador por célula, `app/chamados/reconciliador.py:586` | **Sim para irmãs**, pela batida; sua seleção exclui a P validada corrente (`app/ponto/signals.py:215`; `app/chamados/reconciliador.py:1416`, `:620`; `app/chamados/services/materializacao.py:1345`). |
+| Absorção de ausência, `app/chamados/services/materializacao.py:549` | Vem da porta de resposta explícita. Não foi demonstrada chamada dessa porta pelos receivers síncronos do plantio; alcance adicional **[nao verificado]** (`app/chamados/services/disputa_emissao.py:1327–1330`). |
+| Wrapper fantasma, `app/chamados/models.py:2685` | Chamado pelo consumidor de eventos, não pela cadeia síncrona de batida examinada (`app/chamados/reconciliador.py:1136`, `:1363`; `app/config/crons.py:394`). |
+
+**Cada chamador de `DisputaSupervisao.fechar`:**
+
+| Chamador | Alcance durante o bloco / tratamento da P em voo |
+|---|---|
+| S143, `app/chamados/services/disputa_emissao.py:1713` | Síncrono; **não fecha disputa que contenha P em voo**, pela guarda `:1710`. |
+| Reconciliador, `app/chamados/reconciliador.py:412` | Pode fechar por uma irmã no signal da batida; o S144 resultante pula a P corrente (`app/ponto/signals.py:215`; `app/chamados/services/materializacao.py:1399`). |
+| Reconciliador, `app/chamados/reconciliador.py:602` | Mesmo alcance, por irmã absolvida pela célula; S144 pula a P corrente (`app/chamados/reconciliador.py:1416`; `app/chamados/services/materializacao.py:1399`). |
+| Cauda do materializador, `app/chamados/services/materializacao.py:1307` | Executa **depois** da unidade e da saída do sinal (`:1350–1353`). |
+| Absorção, `app/chamados/services/materializacao.py:568` | Porta de resposta explícita; alcance pelo plantio **[nao verificado]** (`app/chamados/services/disputa_emissao.py:1330`). |
+| Becos, `app/chamados/services/becos.py:52` | O gancho da pergunta usa `on_commit`, portanto executa depois do bloco normal (`app/chamados/signals.py:197–202`). |
+| Fantasmas, `app/chamados/reconciliador.py:1160` | Consumidor de eventos separado (`:1363`; `app/config/crons.py:394`). |
+| Emissão manual, `app/chamados/services/disputa_emissao.py:1118` | Alcance síncrono pelo plantio **[nao verificado]**. A fábrica chama outra porta, `criar_ou_atualizar_disputa` (`app/chamados/services/fabrica_da_celula.py:139`). |
+| Tranca, `app/chamados/services/competencia_trancada.py:204` | Alcance pelo plantio **[nao verificado]**; se fechasse dentro dele, o S144 ainda passaria pela guarda (`app/chamados/services/materializacao.py:1399`). |
+| Desligamento, `app/colaboradores/services/desligamento.py:142` | Alcance pelo plantio **[nao verificado]**; mesmo tratamento S144 (`app/chamados/services/materializacao.py:1399`). |
+| Entrada sincronizada, `app/ponto/services/entrada_sincronizada.py:59` | Chamador API; alcance inverso pelo materializador **[nao verificado]** (`app/api/views.py:805`). |
+| Foto recebida, `app/api/foto_recebida.py:80` | Chamador API; alcance inverso pelo materializador **[nao verificado]** (`app/api/views.py:871`). |
+| Comando, `app/chamados/management/commands/encerrar_perguntas_com_fato.py:88` | Execução separada; chamada pelo plantio **[nao verificado]**. |
+| Wrapper `admin_encerra`, `app/chamados/models.py:1879` | Alcance pelo plantio **[nao verificado]**. |
+| Wrapper `remover_motivo`, `app/chamados/models.py:1986` | Associado aos eventos de posto e âncora; alcance pelo plantio **[nao verificado]** (`app/colaboradores/signals.py:77`; `app/escala/signals.py:161`). |
+
+O preenchimento efetivo de `fechada_em` encontrado na aplicação continua sendo o save da porta `fechar`; as outras escritas encontradas o zeram nas reaberturas (`app/chamados/models.py:1865`, `:2075`, `:2091`).
+
+**Ressalva sobre “pela porta `carimbar`”:** o próprio materializador já possui encerramentos por identidade — paridade e colisão — usando `carimbar_identidade`. Não são um segundo escritor automático introduzido pela obra, mas impedem afirmar que *todo* encerramento durante o voo usa literalmente `carimbar` (`app/chamados/services/materializacao.py:899`, `:1074`).
+
+Também existe caminho do cartório para descarimbo, mas ele exige C6 vivo; a P corrente validada é morta no primeiro degrau do C6 e não passa nessa condição (`app/chamados/services/fabrica_da_celula.py:166`; `app/chamados/services/relavra_via.py:227–231`; `app/chamados/juizes.py:1136–1137`).
+
+2. **S144: outros chamadores e eventual falta de carimbo**
+
+O único chamador direto de aplicação encontrado é o receiver; existem chamadas diretas nos testes de porta e no teste novo (`app/chamados/signals.py:139–140`; `app/chamados/tests/test_porta_desfecho_pergunta.py:226`, `:244`, `:248`, `:263`, `:292`; `app/chamados/tests/test_o261e_f2_porta_carimbo.py:691`; `app/chamados/tests/test_pep_reentrada.py:228`).
+
+A premissa **“S144 roda só uma vez por fecho” está errada**: o receiver aceita qualquer `post_save` de disputa fechada, sem comparar estado anterior ou `update_fields`. Uma gravação posterior pode acioná-lo novamente; que ela ocorrerá é **[nao verificado]** (`app/chamados/signals.py:124–140`).
+
+No cenário proposto — fecho durante o plantio, S144 pula, materializador reprova — **o fecho ocorrido dentro daquele atomic também volta**. Tanto a reprovação do lastro quanto a recusa de `carimbar` levantam `_Reprovada` dentro do mesmo bloco (`app/chamados/services/materializacao.py:1194`, `:1208–1217`, `:1251–1258`).
+
+Os desfechos demonstráveis são:
+
+- **Sucesso:** o materializador carimba pela via dele antes de sair (`app/chamados/services/materializacao.py:1235–1256`).
+- **Rollback com lastro anterior que permaneça aprovado:** a cauda pode fechar depois do sinal e o S144 carimbar por `VIA_JUIZ_APROVOU`, condicionado aos juízes aceitarem (`app/chamados/services/materializacao.py:1287–1307`, `:1352`, `:1401–1405`).
+- **Recusa persistente:** não há garantia de carimbo eventual. O `continue` não agenda repetição; novas tentativas existem pelas portas humanas, mas sua execução futura é **[nao verificado]** (`app/chamados/services/materializacao.py:1399–1400`; `app/chamados/services/acoes_disputa.py:139`; `app/chamados/services/fio.py:666`; `app/chamados/services/validacao.py:430`).
+
+Portanto, **não há demonstração de orfandade permanente causada pelo exemplo de rollback**, nem base para prometer “alguém sempre carimba depois”. A própria validação também pode devolver a validação recusada e reabrir a disputa, em vez de esconder a recusa com um carimbo (`app/chamados/services/validacao.py:424–427`).
+
+3. **Escopo do sinal**
+
+| Situação | Resultado pela implementação |
+|---|---|
+| Sucesso/commit | O atomic entra primeiro; o sinal entra depois e é restaurado antes da saída do atomic (`app/chamados/services/materializacao.py:1194`, `:1124`). |
+| `_Reprovada`, exceção ou retorno antecipado | Todos atravessam o `finally` do contexto; a restauração ocorre antes do tratamento externo (`app/chamados/services/materializacao.py:1121–1124`, `:1201`, `:1257–1260`). |
+| Savepoint interno desfeito e exceção absorvida | A P externa **continua em voo**, porque seu contexto externo ainda está ativo. O S143 tem precisamente savepoint interno com exceção absorvida (`app/chamados/signals.py:88–94`; `app/chamados/services/materializacao.py:1124`). |
+| Outra P aninhada | A união mantém ambas; o token restaura o conjunto externo na saída (`app/chamados/services/materializacao.py:1120–1124`). |
+| Mesma P aninhada | O token restaura a presença externa da mesma PK; não há remoção simples que a derrube (`app/chamados/services/materializacao.py:1120–1124`). |
+| `on_commit` real depois do bloco | Encontra o sinal restaurado pela ordem dos managers (`app/chamados/services/materializacao.py:1194`, `:1124`; gancho em `app/chamados/signals.py:202`). |
+| Outra thread/request | Não há armazenamento explícito do conjunto em variável global mutável ou thread-local: há `ContextVar` com conjunto imutável e reset. Comportamento efetivo entre requests/threads: **[nao verificado]** (`app/chamados/services/materializacao.py:1106`, `:1120–1124`). |
+
+A garantia é **lexical**, não uma identidade de transação armazenada: o valor contém PKs, e a consulta verifica apenas se há atomic naquele momento (`app/chamados/services/materializacao.py:1111`, `:1120`, `:1129`). Uma cópia de contexto não seria invalidada pelo reset do contexto original; caminho concreto que faça essa cópia durante o voo: **[nao verificado]**.
+
+Não encontrei sobrevivência no contexto corrente após saída normal, rollback ou exceção; afirmar ausência universal de sobrevivência em contexto transportado excederia o código demonstrado (`app/chamados/services/materializacao.py:1124`).
+
+4. **Os testes mordem?** [nao verificado]
+
+A tabela apresenta **mutantes previstos por leitura**, não mutantes executados. “Passa” abaixo é **[nao verificado]**; alguns sobrevivem apenas ao teste isolado e são mortos por outro teste do arquivo. [nao verificado]
+
+| Teste | Mordida e mutante que pode escapar | [nao verificado]
+|---|---|
+| `UM_escritor`, `app/chamados/tests/test_pep_reentrada.py:83` | Conta carimbos bem-sucedidos e exige uma declaração. Uma segunda escrita crua da P por `save/update` escapa do spy, que observa somente `carimbar` (`:69–72`, `:90–92`). |
+| `via_gravada`, `app/chamados/tests/test_pep_reentrada.py:94` | Verifica via/autor finais. Retirar a guarda S143 pode permitir escrita antecipada seguida de sobrescrita correta pelo materializador, preservando essas asserções (`:98–99`; `app/chamados/services/materializacao.py:1251`). |
+| `S143_nao_fecha`, `app/chamados/tests/test_pep_reentrada.py:101` | Agora exige exatamente uma chamada fora de voo: ausência de fecho também falha. Desligar o receiver S143 ainda pode deixá-lo verde, pois não há prova positiva da passagem pelo receiver (`:108–117`; `app/chamados/signals.py:81`). |
+| `DURANTE_o_plantio`, `app/chamados/tests/test_pep_reentrada.py:122` | Prova sinal na entrada do ramo e ausência no retorno. Restringir o contexto apenas ao ramo de plantio, retirando-o antes do julgamento/carimbo, preserva essas observações (`:126–134`; `app/chamados/services/materializacao.py:1207`, `:1251`). |
+| `ROLLBACK`, `app/chamados/tests/test_pep_reentrada.py:136` | A v2 prova nascimento do sinal e desaparecimento da batida. Limpar apenas em `_Reprovada`, vazando no sucesso, passa neste teste isolado (`:141–151`). |
+| `EXCECAO`, `app/chamados/tests/test_pep_reentrada.py:153` | Agora tem assert positivo. Limpar somente na exceção passa neste teste isolado (`:159–163`). |
+| `aninhado`, `app/chamados/tests/test_pep_reentrada.py:165` | Cobre outra P e mesma P. Restaurar token somente após `yield`, sem `finally`, passa nas saídas normais testadas e falha nas excepcionais não presentes aqui (`:169–177`; `app/chamados/services/materializacao.py:1121–1124`). |
+| `fora_de_voo`, `app/chamados/tests/test_pep_reentrada.py:189` | Controle positivo útil. `pergunta_em_voo` sempre falso passa neste teste isolado (`:193–196`). |
+| `S143_pula`, `app/chamados/tests/test_pep_reentrada.py:198` | A irmã nova mata “pula todas” no primeiro laço. Retirar a guarda do laço sem credor escapa: ambas estão validadas, enquanto esse laço exige validação nula (`:207–215`; `app/chamados/services/disputa_emissao.py:1665–1671`). |
+| `qualquer_fecho/S144`, `app/chamados/tests/test_pep_reentrada.py:219` | Trocar a guarda por “se existe qualquer voo, pule todas” preserva a única P pulada e o controle fora de voo. Falta irmã fora de voo no S144 (`:223–229`; `app/chamados/services/materializacao.py:1399`). |
+| `fora_de_atomic`, `app/chamados/tests/test_pep_reentrada.py:234` | Exige recusa fora de atomic. Um contexto que sempre lance `RuntimeError` passa neste teste isolado (`:238–241`). |
+
+**O teste S144 não é intrinsecamente vazio:** chama `fechar` real e exige depois que a mesma P seja carimbável. Porém, desligar o receiver S144 mantém o assert interno nulo e o controle direto posterior funcionando; logo ele não prova sozinho que houve tentativa pelo receiver (`app/chamados/tests/test_pep_reentrada.py:225–229`; `app/chamados/signals.py:130–140`).
+
+**O spy da cauda resolveu a fraqueza do estado final**, mas observa apenas chamadas de `fechar`; um fecho antecipado por `update` não aparece nele. A cauda também usa a instância recebida sem atualização prévia (`app/chamados/tests/test_pep_reentrada.py:108–117`; `app/chamados/services/materializacao.py:1290–1307`).
+
+Faltam demonstrações de commit real, rollback de savepoint interno, callback observando o sinal depois do bloco e isolamento entre threads/requests. Além disso, no teste S144 a captura de callbacks é o último manager e executa sua saída **antes** da saída do contexto de voo (`app/chamados/tests/test_pep_reentrada.py:36`, `:160–177`, `:224`).
+
+5. **Triagem da volta 1**
+
+- **S144 “procedente e curado”:** a guarda cura o escritor identificado, mas o selo ainda não prova receiver vivo nem poupa irmã fora de voo. “Curado no código” e “coberto integralmente pelo teste” não são equivalentes aqui (`app/chamados/services/materializacao.py:1399`; `app/chamados/tests/test_pep_reentrada.py:223–229`).
+- **Multi-alias:** descarte sustentado pelas configurações da cópia, que declaram somente `default`; configuração efetivamente carregada em produção: **[nao verificado]** (`app/config/settings/saas.py:83–95`; `app/config/settings/prod.py:9–18`).
+- **Contextos copiados:** aceitável descartar como defeito concreto não demonstrado; errado converter isso em prova de impossibilidade. O reset restaura apenas o contexto corrente; transporte concreto: **[nao verificado]** (`app/chamados/services/materializacao.py:1120–1124`).
+- **Absorção / `:405` / `:586`:** os descartes têm fundamento no alcance encontrado: absorção vem da resposta explícita; `:405` barra texto, obrigatório no plantio de hora; `:586` exclui validada (`app/chamados/services/disputa_emissao.py:1330`; `app/chamados/reconciliador.py:364`, `:620`; `app/chamados/services/materializacao.py:804`).
+- **Custo da cauda “menor”:** há leitura adicional por disputa, mas custo desprezível não foi medido no dado fornecido: **[nao verificado]** (`app/chamados/services/disputa_emissao.py:1703–1710`).
+- **Duplo fecho:** é possibilidade preexistente por instância desatualizada, não segundo escritor da P. O reconciliador fecha outra instância; a cauda e a porta consultam o estado em memória (`app/chamados/reconciliador.py:600–602`; `app/chamados/services/materializacao.py:1290`; `app/chamados/models.py:1820`). Ocorrência concreta: **[nao verificado]**.
+- **JUIZES.md “observação”: descarte insuficiente.** A própria documentação manda corrigir divergência no mesmo commit; “disputa fecha … SEM juiz” contradiz o registro e a implementação de C7 (`app/docs/JUIZES.md:14`, `:54`; `app/core/juizes.py:267`; `app/chamados/models.py:1789–1794`).
+
+6. **Classes de reprovação, uma a uma**
+
+| Classe | Avaliação neste diff |
+|---|---|
+| Segundo juiz duplicando registrado | Não identificado: o predicado novo decide posse temporária; lastro, C6 e C7 continuam nas autoridades existentes (`app/chamados/services/materializacao.py:1129`, `:1207`; `app/chamados/models.py:2596`; `app/chamados/services/disputa_emissao.py:1712`; `app/core/juizes.py:266–267`). |
+| Segundo escritor fora da porta | As adições não escrevem o trio: pulam concorrentes. Há escritores preexistentes de identidade e somente de via, que precisam permanecer distintos da afirmação de exclusividade da P
+
+[truncado em 20000 de 21751 caracteres]
+
+## 06/11 09:38 · sessao b8b07d486070 · - · - · origem=Ronald (tmux)
+
+- **Quem escreve/lê a lista:** `falhas_do_universo` produz a lista contra o primeiro pai e a entrega diretamente a `julgar`; este chama `_julgar_linha`, cujo ramo `n/a` consulta `negocio`. A lista é local, sem arquivo ou protocolo externo: [bin/tests/test_lei_akita.sh:180](/home/ronald/codex_ws/858b5d7adfc797252076767a10f8f2dd82f1b7db/bin/tests/test_lei_akita.sh:180), [bin/tests/test_lei_akita.sh:141](/home/ronald/codex_ws/858b5d7adfc797252076767a10f8f2dd82f1b7db/bin/tests/test_lei_akita.sh:141), [bin/tests/test_lei_akita.sh:122](/home/ronald/codex_ws/858b5d7adfc797252076767a10f8f2dd82f1b7db/bin/tests/test_lei_akita.sh:122). A saída externa contém falhas e contadores, não a lista: [bin/tests/test_lei_akita.sh:317](/home/ronald/codex_ws/858b5d7adfc797252076767a10f8f2dd82f1b7db/bin/tests/test_lei_akita.sh:317).
+
+- **Consumidores do veredito:** `bin/pre-push.sh` passa `PUSH_SHA` como `LEI_AKITA_HEAD` e interrompe no retorno não zero; a régua executa o mesmo script pelo glob `tests/test_*.sh`. Ambos recebem a alteração automaticamente, sem predicado duplicado nesses chamadores: [bin/pre-push.sh:33](/home/ronald/codex_ws/858b5d7adfc797252076767a10f8f2dd82f1b7db/bin/pre-push.sh:33), [bin/pre-push.sh:38](/home/ronald/codex_ws/858b5d7adfc797252076767a10f8f2dd82f1b7db/bin/pre-push.sh:38), [bin/regua.sh:138](/home/ronald/codex_ws/858b5d7adfc797252076767a10f8f2dd82f1b7db/bin/regua.sh:138).
+
+- **Hook previsto:** o instalador atual escreve `.git/hooks/pre-push` como wrapper com `exec bash "$(git rev-parse --show-toplevel)/bin/pre-push.sh" "$@"`; portanto a cadeia prevista usa o mesmo juiz: [bin/hooks.sh:49](/home/ronald/codex_ws/858b5d7adfc797252076767a10f8f2dd82f1b7db/bin/hooks.sh:49). O conteúdo do hook efetivamente instalado é `[nao verificado]`.
+
+- **Cópias antigas:** há `app/core/hooks/pre-push.sh`, reconhecido no próprio censo como migração que não pousou; esse arquivo não chama o selo e não contém outro predicado PADRAO-NA-CURA: [bin/tests/test_recursos_sourced.sh:26](/home/ronald/codex_ws/858b5d7adfc797252076767a10f8f2dd82f1b7db/bin/tests/test_recursos_sourced.sh:26), [app/core/hooks/pre-push.sh:6](/home/ronald/codex_ws/858b5d7adfc797252076767a10f8f2dd82f1b7db/app/core/hooks/pre-push.sh:6). Há também instalador antigo que copia o `bin/pre-push.sh`, mas a fonte continua sendo `bin/`: [app/core/hooks/hooks.sh:10](/home/ronald/codex_ws/858b5d7adfc797252076767a10f8f2dd82f1b7db/app/core/hooks/hooks.sh:10), [app/core/hooks/hooks.sh:35](/home/ronald/codex_ws/858b5d7adfc797252076767a10f8f2dd82f1b7db/app/core/hooks/hooks.sh:35).
+
+- A busca por `test_lei_akita`, `PADRAO_FALHA`, `PADRAO_FIM`, `falhas_do_universo`, `_julgar_linha`, `LEI_AKITA_HEAD` e literais `n/a (instrumento)` encontrou o predicado somente neste selo; inexistência absoluta de outra implementação equivalente: `[nao verificado]`.
 
 ## 06/11 09:36 · sessao b2c4c9acd30d · LEI-FIO-MUDO-B · verificador · origem=Code
 
@@ -605,109 +812,4 @@ A L-099 exige coerência dos leitores, não porta própria em cada dia afetado p
 
 Existe regra “a tela NUNCA difere da folha”, porém o ADR trata status/valor do dia e a sonda não mede tela; não basta citar essa frase para provar violação nos cinco casos. [app/docs/ADR/0002-celula-e-o-dia.md:8](app/docs/ADR/0002-celula-e-o-dia.md:8), [app/docs/ADR/0002-celula-e-o-dia.md:29](app/docs/ADR/0002-celula-e-o-dia.md:29), [não verificado]
 
-## 06/11 09:23 · sessao cd8554eb9adc · BO-0511-G2-TRIAGEM · sonda · origem=Code
-
-**Parte A — conferência na cópia**
-
-A execução, o dump, a vinculação ao hash informado e a equivalência com as sondas HJ/G3G4 ficam [nao verificado]. Abaixo, as referências apontam para as funções existentes na cópia; os detalhes do script anexado ficam [nao verificado] quanto à execução.
-
-| Campo | Chamada do anexo e conferência |
-|---|---|
-| **a** | `status_do_dia_lavrado(c, dia, agora=agora)` corresponde à assinatura `status_do_dia_lavrado(colaborador, data, *, agora=None)`. A função delega ao corpo em lote. `app/ponto/status_dia.py:201–218`. |
-| **b** | `espelho_do_colab(c, hoje, ini, fim, agora=agora)` corresponde à assinatura com quatro argumentos posicionais e `agora` obrigatório por palavra-chave. `app/ponto/services/espelho.py:1194`. `InsumosDoDono(c, ini, fim, hoje, espelho=esp, agora=agora)` e `.dono(dia)` também correspondem às assinaturas. `app/ponto/management/commands/e6_oraculo.py:128`, `:172`. É a sequência usada pelo E6. `app/ponto/management/commands/e6_oraculo.py:304`, `:316`, `:366`. |
-| **c** | A assinatura real é `classificar_export(empresa, mes, ano, fechamentos=None)`; a chamada com três argumentos usa os fechamentos gravados. `app/folha/export.py:757–780`. No anexo, o nome público passa pelo proxy de memória, que chama a referência real previamente guardada [nao verificado]. |
-| **d** | `dias_que_seguram(c.empresa, mes, ano)` corresponde à assinatura real. Ela devolve `itens`, `furo` e `dias` por colaborador. `app/folha/fora_da_folha.py:102–139`. Sua importação interna de `classificar_export` ocorre em `app/folha/fora_da_folha.py:115–119`; sob o patch do anexo, passa pelo mesmo proxy [nao verificado]. |
-| **e** | `porta_alcancavel_do_dia(cel.pk)` corresponde à assinatura `porta_alcancavel_do_dia(celula_id, *, alimentacao=None)`. `app/chamados/juizes.py:1341`. A função admite retorno `None`. `app/chamados/juizes.py:1382–1387`. |
-| **f** | `data_do_chamado(ch.modulo_origem, ch.contexto_json)` corresponde exatamente à assinatura real. A função consulta a chave de data declarada no catálogo. `app/chamados/catalogo/modulos.py:219–225`. |
-
-**Lógica construída no anexo:** em **d**, `segura` é calculado localmente pelo filtro `x["data"] == dia` e por `bool(encontrados)`, com ramos próprios para ausência no universo; em **f**, a consulta dos chamados, a conversão `date.fromisoformat(str(raw)[:10])`, a comparação com o dia e a montagem da lista são locais. Portanto, ambos chamam as funções reais, mas esses resultados agregados são construídos pela sonda [nao verificado]. As fontes reais fornecem, respectivamente, os dias por colaborador e a data catalogada. `app/folha/fora_da_folha.py:138–139`; `app/chamados/catalogo/modulos.py:219–225`.
-
-A competência usa as funções reais `corte_da_empresa(empresa)` e `janela_atual(data, empresa=None)`, com assinaturas compatíveis. `app/ponto/janelas.py:36`, `:60–63`. A exigência adicional `corte == 21` pertence ao anexo [nao verificado].
-
-**Parte B — oito unidades**
-
-Cada marca `[nao verificado]` na primeira coluna abrange a transcrição da respectiva linha do dado fornecido. `null` em porta é mantido como retorno explícito; a função pode retornar `None`. `app/chamados/juizes.py:1382–1383`.
-
-| uid | col | dia | segura a folha (d) | dono (b) | status lavrado (a) | porta (e) | chamado(s) do dia: id, tipo, status_local (f) | erro |
-|---|---:|---|---|---|---|---|---|---|
-| G2-01 [nao verificado] | 407 | 2026-10-21 | s | BATIDA | `irregular`; fonte `lavrado` | `null` | 33284, `batida_ausente`, `"fechado"`; 33290, `batida_fora_escala_leve`, `"registrado"`; 33491, `turno_aberto`, `"resolvido"` | Nenhum `ERRO` informado |
-| G2-02 [nao verificado] | 836 | 2026-10-13 | s | CADASTRO | `escala_suspeita`; fonte `lavrado` | `null` | 30870, `batida_ausente`, `"resolvido"` | Nenhum `ERRO` informado |
-| G2-03 [nao verificado] | 836 | 2026-10-14 | s | CADASTRO | `escala_suspeita`; fonte `lavrado` | `null` | 31151, `batida_ausente`, `"resolvido"` | Nenhum `ERRO` informado |
-| G2-04 [nao verificado] | 909 | 2026-10-16 | s | BATIDA | `irregular`; fonte `lavrado` | `rota=porta_fila`; `fila=[31891]`; `verbos={"31891":"validar"}`; `fio=admin` | 31889, `turno_aberto`, `"resolvido"`; 31891, `batida_ausente`, `"em_analise"`; 32064, `turno_aberto_24h`, `"fechado"` | Nenhum `ERRO` informado |
-| G2-05 [nao verificado] | 292 | 2026-09-21 | s | BATIDA | `irregular`; fonte `lavrado` | `null` | 24460, `batida_ausente`, `"fechado"` | Nenhum `ERRO` informado |
-| G2-06 [nao verificado] | 207 | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado; a–f ausentes, motivo `"sem dia"` |
-| G2-07 [nao verificado] | 332 | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado; a–f ausentes, motivo `"sem dia"` |
-| G2-08 [nao verificado] | 446 | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado; a–f ausentes, motivo `"sem dia"` |
-
-Contagem por **dono**: ESTRUTURA **0**, CADASTRO **2**, BATIDA **3**, indeterminado **3**. **Soma = 8**. Os zeros contam apenas valores identificados no dado; as três unidades sem medida permanecem indeterminadas. [nao verificado]
-
-Contagem por **segura**: s **5**, n **0**, indeterminado **3**. **Soma = 8**. [nao verificado]
-
-## 06/11 09:23 · sessao 10f9eac90e5b · - · - · origem=Ronald (tmux)
-
-Conclusões pelo código, distinguindo a medição B da sonda C:
-
-| Caso | 05/11 — B | 06/11 — C | Retenção C.d |
-|---|---|---|---|
-| G2-01 col407 21/10 | **a — `chamado_vivo_com_veu`**, detalhe `registrado`, conforme linha B fornecida e vocabulário em `app/chamados/services/vigia_fio.py:538`; predicado em `app/chamados/services/vigia_fio.py:669`. | `porta=null` e chamado `registrado` satisfazem o predicado do véu **se o dia alcançar a cadeia a..e**; os quatro baldes anteriores não foram sondados, portanto classe atual completa [nao verificado]. Precedência: `app/chamados/services/vigia_fio.py:654`; véu: `app/chamados/services/vigia_fio.py:664`. | `espelho_furo`, veredito `furo`, em C.d; regra `espelho_` + veredito em `app/folha/export.py:1254`. |
-| G2-02 col836 13/10 | **e — `pergunta_viva_sob_chamado_terminal`**, conforme B; ramo em `app/chamados/services/vigia_fio.py:687`. | `porta=null` + chamado terminal não mostra pergunta viva, resposta, texto, âncora nem baldes anteriores: classe atual [nao verificado]. Terminais sozinhos não distinguem c de e: `app/chamados/services/vigia_fio.py:675`; `app/chamados/services/vigia_fio.py:687`. | `espelho_indefinida`, veredito `indefinida`, em C.d; `app/folha/export.py:1254`. |
-| G2-03 col836 14/10 | **e — `pergunta_viva_sob_chamado_terminal`**, conforme B; `app/chamados/services/vigia_fio.py:687`. | Mesma insuficiência de campos, julgada separadamente: classe atual [nao verificado]; `app/chamados/services/vigia_fio.py:675`; `app/chamados/services/vigia_fio.py:687`. | `espelho_indefinida`, veredito `indefinida`, em C.d; `app/folha/export.py:1254`. |
-| G2-04 col909 16/10 | Sem linha B: pelo significado explicitamente fornecido no anexo, não tinha dia SEM porta na medição de 05/11; rota daquele instante [nao verificado]. | **`porta_fila`**, fila `[31891]`, verbo `validar`, fio `admin`, conforme C.e; **não entra em a..e**, pois porta provoca `continue`: `app/chamados/services/vigia_fio.py:642`. Definição da porta/verbo: `app/chamados/juizes.py:1344`; `app/chamados/juizes.py:1357`. | `espelho_furo`, veredito `furo`, em C.d; `app/folha/export.py:1254`. |
-| G2-05 col292 21/09 | **Não transferir a classe d de 22/10 ou 28/10 para 21/09**: B não possui linha deste dia. O ramo d exige ausência de perguntas vivas e dia fora da lista com colaborador na lista: `app/chamados/services/vigia_fio.py:677`. | C mostra célula, nenhuma porta e chamado `fechado`; não mostra perguntas/âncoras/lista/baldes, portanto classe a..e [nao verificado]. Terminais não determinam ramo: `app/chamados/services/vigia_fio.py:675`; `app/chamados/services/vigia_fio.py:679`. | `espelho_furo`, veredito `furo`, em C.d; `app/folha/export.py:1254`. |
-| G2-06/07/08 sem dia | B não fornece um dia dos casos; enquadramento individual [nao verificado]. | C declara `indeterminado`, `sem dia`; classe, status e motivo individual [nao verificado]. O censo opera por chave colaborador+data: `app/chamados/services/vigia_fio.py:581`; `app/chamados/services/vigia_fio.py:638`. | [nao verificado]. |
-
-A retenção não deriva do total de horas nem do estado terminal dos chamados: `dias_que_seguram` seleciona colaboradores classificados por `furo_espelho`, depois pede os dias ao juiz da retenção, sem consultar porta nessa etapa. `app/folha/fora_da_folha.py:102`; `app/folha/fora_da_folha.py:118`; `app/folha/fora_da_folha.py:128`; `app/folha/fora_da_folha.py:137`; delegação em `app/folha/fora_da_folha.py:95`.
-
-O juiz retém veredito acusador quando não incide a isenção de todos os protestos não cobráveis nem a isenção de furo só da pausa, registrando `espelho_` + veredito. `app/folha/export.py:1233`; `app/folha/export.py:1245`; `app/folha/export.py:1253`. C.d demonstra o resultado dessa regra; os protestos e a ata que explicariam individualmente qual isenção falhou permanecem [nao verificado].
-
-Detalhe útil: `registrado` é vivo, mas não cobra ação; está fora de `COBRANCA`. `app/chamados/catalogo/motor.py:24`; `app/chamados/catalogo/motor.py:26`; `app/chamados/catalogo/motor.py:29`.
-
-## 06/11 09:23 · sessao d29c534df35b · - · - · origem=Ronald (tmux)
-
-Escopos conferidos, sem escrita:
-
-| Obra/lei | Estado literal na linha | Alcance e limite |
-|---|---|---|
-| **O261-FIO-MORTO-PELO-RETRATO** | **ABSORVIDA**; “curas no ar” | Mede dia que segura folha sem porta viva, causas a–e. Enquadra documentalmente o problema de alcance de col407; não demonstra causa atual de cada ausência de porta. Cita col446/#11582, cuja identidade com G2-08 é **[nao verificado]**. `app/docs/BACKLOG.md:963` |
-| **O261-E-CELULA-20-UM-DONO** | “F0 FECHADA”; “F1 NO AR”; “F2 NO AR 01/11”; “F3 PARADA 02/11” | Escopo expresso: pergunta viva sob chamado terminal. Alcança a classe registrada em B para col836 13/10 e 14/10; permanência dessa subclasse em 06/11 **[nao verificado]**. `app/docs/BACKLOG.md:859` |
-| **O261-COMPLEMENTO-[nome]** | “(C) = cura (2) PAI-TERMINAL em copia”; “(B) materializada sem resposta 2.970 a construir” | Cita **col292 21/09** nominalmente; define alcance da porta, materializada sem resposta e nascimento sob pai terminal. Atribuir os IDs de perguntas dessa documentação ao conteúdo de C permanece **[nao verificado]**. `app/docs/BACKLOG.md:782` |
-| **O261-E-F3-DORMENTE** | “fila 1”; “medida despachada 00:3x” | Matriz do estoque por classe/cutucada; beco 1 mede dono pelo oráculo e prevê CADASTRO para lista do admin. Não prova, sozinho, que os dois dias de col836 pertencem ao estoque específico. `app/docs/BACKLOG.md:1799` |
-| **F3-BECO-1-VOLTA-3** | **NO AR 05/11 17:5x** | Rejulga mês do vínculo quando defeito de folga vira False; reata somente a pai na fila. C não contém a transição de folga nem o pai na fila, portanto enquadramento específico dos G2-02/03 **[nao verificado]**. `app/docs/BACKLOG.md:1775` |
-| **C20-JUIZ-3** | **FECHADA**, **NO AR** | Evento em criar()/recompute_turnos, consumidor O-OUTBOX. A queixa “resposta sem reflexo” e `turno_aberto` terminal não demonstram a premissa individual desse evento em G2-04. `app/docs/BACKLOG.md:1768` |
-| **C20-FIO-MUDO** | **ABERTA**, “construtor aberto” | Evento na abertura de `batida_ausente` e cinco atos de perda. Ter chamados vivos de batida ausente, sem dia, não demonstra fio mudo nem ato de perda: G2-06/07/08 **[nao verificado]**. `app/docs/BACKLOG.md:1769` |
-| **L-099** | **PELA-METADE** | Separa ESTRUTURA/CADASTRO/BATIDA; somente ESTRUTURA é fatia; CADASTRO/BATIDA são lista do admin. Serve ao enquadramento dos donos medidos, sem comprovar uma obra técnica para cada caso. `app/docs/LEIS.md:122` |
-
-O261 original consta **FECHADA 24/10 09:5x**, mas seus complementos têm estados próprios; não substituir o estado de cada complemento pelo estado da original. `app/docs/BACKLOG.md:1450`
-
-Para os três sem dia, **nenhuma encontrada com enquadramento individual demonstrado pela queixa A**; candidatos genéricos acima permanecem **[nao verificado]**. A referência de col207 a **02/10** em documentação não pode preencher o dia ausente de G2-06: ela trata de ponta de 127 minutos/raio de 90, com estado “aberta, nada construido — linha de fila, nao obra”. `app/docs/BACKLOG.md:1449`
-
-Cortes adicionais que explicitam escopo: **O261-FIO-MORTO-PELO-RETRATO**, “medida em curso”, `app/docs/CORTES.md:379`; **O261-COMPLEMENTO-[nome]**, “medida em curso”, `app/docs/CORTES.md:382`; **LAUDO-3010-JUIZ-DA-ACAO-DO-ADMIN**, “registrado”, porta comum lida por folha/raio-X/vigia, `app/docs/CORTES.md:401`.
-
-## 06/11 09:23 · sessao b22df4f1edd5 · - · - · origem=Ronald (tmux)
-
-Leitura do código:
-
-- `status_do_dia_lavrado` delega ao leitor em lote; quando o dia não está em curso e a célula tem `status_dia`, o leitor devolve a coluna e `fonte='lavrado'`, sem rederivar o status. `app/ponto/status_dia.py:217`, `app/ponto/status_dia.py:287`.
-- `furo` pertence aos vereditos que acusam irregularidade; o escritor retorna `irregular` nas passagens pertinentes, tanto sem batida quanto com batida. O rótulo significa “Batida faltando, fora do horario previsto ou em ordem inesperada”. `app/ponto/status_dia.py:32`, `app/ponto/status_dia.py:68`, `app/ponto/status_dia.py:154`, `app/ponto/status_dia.py:159`.
-- `indefinida` expressa dúvida sobre se o dia era de trabalho; a regra retorna `escala_suspeita`, salvo precedências humanas descritas e tratadas antes. O rótulo é “Sem batida, mas a ESCALA esta em duvida no cadastro — nao e falta do colaborador”. `app/ponto/status_dia.py:38`, `app/ponto/status_dia.py:128`, `app/ponto/status_dia.py:139`, `app/ponto/status_dia.py:143`.
-- Status não é o valor pago do dia: o valor fica no `DiaPago`. `app/ponto/status_dia.py:12`.
-
-Aplicação aos anexos C:
-
-| Casos | Status/veredito informado e significado no código | Dono informado e ramo demonstrável |
-|---|---|---|
-| G2-01 col407 21/10 | `irregular`, fonte `lavrado`; veredito `furo`: irregularidade de batida, conforme rótulo e conjunto `_IRREGULAR`. `app/ponto/status_dia.py:32`, `app/ponto/status_dia.py:68`, `app/ponto/status_dia.py:287`. A ocorrência individual está no anexo C fornecido, sem linha de arquivo local [nao verificado]. | `BATIDA`, respondido pelo juiz `dono_da_divergencia`, alimentado por `InsumosDoDono.dono`; alternativas: ramo `batida_fora_de_turno` ou contagem ímpar das horas atribuídas pelo oráculo. `app/ponto/management/commands/e6_oraculo.py:104`, `app/ponto/management/commands/e6_oraculo.py:106`, `app/ponto/management/commands/e6_oraculo.py:172`. Qual desses dois ramos ocorreu [nao verificado]. |
-| G2-02 col836 13/10 | `escala_suspeita`, fonte `lavrado`; veredito `indefinida`: o juiz não sabe se era dia de trabalho, status com dúvida de cadastro. `app/ponto/status_dia.py:38`, `app/ponto/status_dia.py:129`, `app/ponto/status_dia.py:143`, `app/ponto/status_dia.py:287`. A ocorrência individual está no anexo C, sem linha local [nao verificado]. | `CADASTRO`: pode sair da prioridade `folga_nao_definida / sem_vinculo_no_dia / sem_vinculo_em_dia_de_trabalho`, de `fase_deslocada`, ou de `em_cadastro_x_realidade`. `app/ponto/management/commands/e6_oraculo.py:98`, `app/ponto/management/commands/e6_oraculo.py:108`, `app/ponto/management/commands/e6_oraculo.py:110`. Qual ramo ocorreu [nao verificado]. |
-| G2-03 col836 14/10 | Mesmo enquadramento de status/veredito, aplicado separadamente ao dia 14. `app/ponto/status_dia.py:38`, `app/ponto/status_dia.py:129`, `app/ponto/status_dia.py:143`. Ocorrência individual sem linha local [nao verificado]. | Mesmo conjunto de alternativas CADASTRO, sem ramo individual demonstrado. `app/ponto/management/commands/e6_oraculo.py:98`, `app/ponto/management/commands/e6_oraculo.py:108`, `app/ponto/management/commands/e6_oraculo.py:110`; ramo [nao verificado]. |
-| G2-04 col909 16/10 | `irregular` / `furo`, fonte `lavrado`, com o mesmo significado de irregularidade acima. `app/ponto/status_dia.py:32`, `app/ponto/status_dia.py:68`, `app/ponto/status_dia.py:287`. Ocorrência individual sem linha local [nao verificado]. | `BATIDA`: ramo 104 ou 106, sem escolha possível pelo dump. `app/ponto/management/commands/e6_oraculo.py:104`, `app/ponto/management/commands/e6_oraculo.py:106`; ramo exato [nao verificado]. |
-| G2-05 col292 21/09 | `irregular` / `furo`, fonte `lavrado`, mesmo significado. `app/ponto/status_dia.py:32`, `app/ponto/status_dia.py:68`, `app/ponto/status_dia.py:287`. Ocorrência individual sem linha local [nao verificado]. | `BATIDA`: ramo 104 ou 106, sem escolha possível pelo dump. `app/ponto/management/commands/e6_oraculo.py:104`, `app/ponto/management/commands/e6_oraculo.py:106`; ramo exato [nao verificado]. |
-| G2-06/07/08 | Sem dia: status/veredito individual [nao verificado]. | Anexo C não tem `b.dono`; dono e ramo [nao verificado]. |
-
-Limites importantes para a consolidação:
-
-- A ordem efetiva do juiz é prioridade cadastral → batida fora do turno → contagem ímpar → fase deslocada → Cadastro×Realidade/resíduo ESTRUTURA. `app/ponto/management/commands/e6_oraculo.py:98`, `app/ponto/management/commands/e6_oraculo.py:104`, `app/ponto/management/commands/e6_oraculo.py:106`, `app/ponto/management/commands/e6_oraculo.py:108`, `app/ponto/management/commands/e6_oraculo.py:110`.
-- `travas_aprovacao=['turno_aberto']` e um chamado de tipo `turno_aberto` não constituem o insumo `batida_fora_de_turno`: essa função exige realizado aberto, entrada sem saída atribuída ao dia e existência da entrada no universo de batidas apuráveis. `app/ponto/management/commands/e6_oraculo.py:186`, `app/ponto/management/commands/e6_oraculo.py:196`, `app/ponto/management/commands/e6_oraculo.py:198`.
-- A quantidade usada pelo ramo de paridade vem das horas do oráculo, com carga ampliada de batidas apuráveis; não é contagem de chamados nem contagem física numa data. `app/ponto/management/commands/e6_oraculo.py:120`, `app/ponto/management/commands/e6_oraculo.py:142`, `app/ponto/management/commands/e6_oraculo.py:144`, `app/ponto/management/commands/e6_oraculo.py:180`.
-- `InsumosDoDono.dono` monta `batida_fora_de_turno`, fase e cadastro; consulta Cadastro×Realidade quando necessário. O anexo C não expõe esses argumentos, portanto o retorno permite identificar os ramos possíveis, mas não escolher um ramo exato. `app/ponto/management/commands/e6_oraculo.py:175`, `app/ponto/management/commands/e6_oraculo.py:179`, `app/ponto/management/commands/e6_oraculo.py:183`; argumentos individuais [nao verificado].
-
-_2179 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2183 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

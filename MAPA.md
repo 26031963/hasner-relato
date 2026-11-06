@@ -46,6 +46,7 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
 - chamados/signals.py::_cartorio_pre_save_chamado (pre_save ChamadoColaborador)
 - chamados/signals.py::_cartorio_post_save_chamado (post_save ChamadoColaborador) -> julga
 - chamados/signals.py::_becos_post_save_pergunta (post_save PerguntaDisputa)
+- chamados/signals.py::_outbox_post_save_pergunta (post_save PerguntaDisputa)
 - chamados/signals.py::_isentos_post_save_colaborador (post_save Colaborador)
 - chamados/signals.py::_isentos_post_save_chamado (post_save ChamadoColaborador)
 - chamados/signals.py::_feriado_post_save (post_save Feriado)

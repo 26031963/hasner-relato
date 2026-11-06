@@ -305,9 +305,11 @@ flowchart TD
     evr_cartorio_post_save_justificativa["_cartorio_post_save_justificativa<br/>post_save"]
     evs_Justificativa --> evr_cartorio_post_save_justificativa
     evr_cartorio_post_save_justificativa ==>|julga| ev_juiz
-    evs_PerguntaDisputa[/"PerguntaDisputa<br/>1 receiver(s)"/]
+    evs_PerguntaDisputa[/"PerguntaDisputa<br/>2 receiver(s)"/]
     evr_becos_post_save_pergunta["_becos_post_save_pergunta<br/>post_save"]
     evs_PerguntaDisputa --> evr_becos_post_save_pergunta
+    evr_outbox_post_save_pergunta["_outbox_post_save_pergunta<br/>post_save"]
+    evs_PerguntaDisputa --> evr_outbox_post_save_pergunta
     evs_Posto[/"Posto<br/>1 receiver(s)"/]
     evr_geofence_post_save_posto["_geofence_post_save_posto<br/>post_save"]
     evs_Posto --> evr_geofence_post_save_posto
