@@ -1,7 +1,42 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 17:59** · publicado em **06/11/2026 18:04** (UTC-3)
+> Ultima resposta processada: **06/11/2026 18:08** · publicado em **06/11/2026 18:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 18:08 · sessao c956e686389f · - · - · origem=Ronald (tmux)
+
+Não é possível certificar a implementação da sonda: `sonda_espuria2.py` e seus emissores `S2_DIN`/`PAR_ACHADOS` não foram localizados na cópia pesquisada. Linha da própria sonda que replique regra: **[não verificado]**.
+
+As fontes reais comprovadas:
+
+- **Rubricas:** `rubricas_do_dia` lê `DiaPago.horas_extras_50` e `.horas_extras_100`, devolvendo `extras_50`/`extras_100`; `minutos_extra` é a soma desses totais ×60. Não devolve chaves `horas_extras_*`. `app/ponto/services/dia_pago.py:908-926`.
+- **Uso em produção pelo código:** espelho importa e chama `linhas_do_periodo`, `pago_do_dia`, `rubricas_do_dia`; calendário também chama `rubricas_do_dia`. `app/ponto/services/espelho.py:406-410`, `app/ponto/services/espelho.py:811-813`, `app/colaboradores/services/calendario.py:655-656`.
+- **HE feriado e folga trabalhada:** campos diretos do modelo. `app/ponto/models.py:331-333`.
+- **Pago:** a porta `pago_do_dia` primeiro retorna `None` se não houver sinal em nenhuma rubrica monetária; senão soma trabalhadas + folga trabalhada + `detalhe['folga_feriado_min']/60`. Reproduzir esse critério na sonda seria duplicação; se isso ocorre nela é **[não verificado]**. `app/ponto/services/dia_pago.py:888-896`.
+- **Batidas apuráveis:** porta aplica `retratada_em IS NULL`, os limites opcionais inclusivos e colaborador, ordenando por timestamp. Não aplica regra de dia da jornada. `app/ponto/turnos.py:2863-2871`.
+- **Dia de cada batida:** existe porta própria `dia_das_batidas`; atribui batidas reclamadas ao `data_turno` e as restantes à data local. Agrupar manualmente todas por data civil não reproduziria essa atribuição; implementação da sonda **[não verificado]**. `app/ponto/turnos.py:2874-2905`, `app/ponto/turnos.py:2908-2919`.
+- **Atenção a `min_real`:** o campo persistido `DiaPago.minutos_realizados` existe e é alimentado pelo mapa da grade; o relógio publicado no espelho vem de `realizado_do_dia`, passando pelo vínculo e intervalo do dia, e aparece como `minutos_realizados` no dicionário da tela. São origens que precisam ser distinguidas; a origem exata do `min_real` da sonda é **[não verificado]**. `app/ponto/models.py:351`, `app/ponto/services/dia_pago.py:283-290`, `app/ponto/services/espelho.py:286-294`, `app/ponto/services/espelho.py:675-676`, `app/ponto/services/espelho.py:783`, `app/ponto/turnos.py:772-793`.
+
+As ausências são diferentes: `rubricas_do_dia(None)` entrega zeros com `lavrada=False`; `pago_do_dia` entrega `None` tanto para linha ausente quanto para linha com todas as rubricas monetárias zeradas. Portanto `sem_pago` sozinho não prova falta de lavratura. `app/ponto/services/dia_pago.py:888-891`, `app/ponto/services/dia_pago.py:908-914`.
+
+## 06/11 18:08 · sessao 8f98d7cb6b29 · - · - · origem=Ronald (tmux)
+
+Não é possível explicar o cadastro concreto do PAR: o dado termina com `PAR_ACHADOS {}`, não identifica os dois participantes e não fornece ciclo/tipo de escala nem régua de ambos. Atribuir a diferença a 12x36 versus 6x1 seria [não verificado].
+
+O dado mostra col655 em 02/11 com `ec=1275`, `trab_feriado=True`, `fer_vira_folga=False`, `min_real=240`, `pago=2.305491111111111`, `he=2.31`, `he_fer=2.305491111111111`; a identidade do outro participante é [não verificado].
+
+Caminhos comprovados no código:
+
+- Vínculo do dia: `app/escala/servico_jornada.py:38-58` carrega célula e vínculos e delega a `vinculo_do_dia`; havendo geradora na célula, ela alimenta a decisão.
+- `feriado_vira_folga`: `app/escala/models.py:1389-1395` retorna falso se `trabalha_em_feriado=True` ou escala ausente; exige ciclo permitido e feriado no lugar do vínculo. Ciclos permitidos são 6x1, 5x2 e semanal, em `app/escala/models.py:32`. Em `app/escala/models.py:1369-1371`, o predicado pode converter trabalho previsto em folga.
+- Folga com adicional: `app/ponto/services/fechamento.py:919-926` filtra `resultado.periodos_ft` por `escala_certa_no_dia`. O juiz recusa LIMBO em `app/escala/services/escala_certa.py:31-33` e assinaturas A2/A8 em `app/escala/services/escala_certa.py:38-51`.
+- Rubrica de feriado em folga: `app/ponto/services/fechamento.py:935-950` resolve o vínculo do dia, pergunta `feriado_vira_folga`, separa esses períodos e soma suas horas a HE100 e HE100 feriado. O resto elegível vai a folga trabalhada. O mesmo conjunto é entregue à lavratura de `DiaPago` em `app/ponto/services/fechamento.py:1184-1188`; `app/ponto/services/dia_pago.py:244-256` escreve HE100, HE100 feriado e `detalhe['folga_feriado_min']`.
+- Folga sem escala certa: fica fora dos adicionais e entra em trabalhadas por `app/ponto/services/fechamento.py:964-969` e `app/ponto/services/dia_pago.py:257-265`.
+- Feriado dos períodos normais: `app/ponto/motor_calculo_v2.py:934` exige `feriado_em_dobra` e feriado; um dos escritores da rubrica está em `app/ponto/motor_calculo_v2.py:2809-2812`, outro em `app/ponto/motor_calculo_v2.py:3092-3095`.
+- O padrão `feriado_em_dobra` é decidido pelo **tipo_ciclo**, não pelo `tipo_base` ou nome da classe: `app/ponto/motor_calculo_v2.py:3623-3624,3669-3680`. Apenas `'12x36'` pertence ao conjunto padrão de feriado simples (`app/ponto/motor_calculo_v2.py:3599`). CCT pode habilitar dobra do 12x36 em `app/core/regua_cct.py:477-478`.
+- Régua do motor: fechamento chama `get_motor_cct` com tipo da escala e início da fatia em `app/ponto/services/fechamento.py:725-732`. `regua_para` lê vínculo e praça do dia em `app/core/regua_cct.py:328-339`, regime da empresa em `app/core/regua_cct.py:352-366` e aplicação/CCT em `app/core/regua_cct.py:366-379`; `get_motor_cct` injeta os parâmetros em `app/core/regua_cct.py:458-478`.
+
+Cuidado ao citar comentários como regra executável: há comentários antigos dizendo “feriado previsto não dobra” em `app/ponto/motor_calculo_v2.py:2807` e `app/ponto/motor_calculo_v2.py:3088-3091`, mas o predicado efetivamente chamado em `app/ponto/motor_calculo_v2.py:934` não consulta previsto; consulta apenas o flag de dobra e o feriado.
 
 ## 06/11 17:59 · sessao 837afbd0fb35 · E-SEM-VIVA-B · verificador · origem=Code
 
@@ -668,290 +703,4 @@ O teste novo derruba o texto velho literal: proíbe `NAO foi tocado` e exige `co
 
 - A nova redação não corrige cabeças já existentes: a execução encontra a cabeça e continua sem reescrevê-la em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:193`–`:197`; a verificação de divergência compara somente filhas em `:241`–`:243`. Portanto uma cabeça antiga pode continuar exibindo a frase velha; existência efetiva em produção **[nao verificado]**.
 
-## 06/11 17:35 · sessao d510127cbf40 · E-SEM-VIVA-B · verificador · origem=Code
-
-**Reprovaria a volta 4.** O desligado sem demissão ainda pode entrar com fechamento preexistente; datas de férias passam como dias do retentor; e o vigia pode rotear outra competência apenas pela presença do colaborador na C5. `app/folha/export.py:775`, `app/escala/services/cadastro_realidade.py:184`, `app/folha/vigia_retido_calado.py:43`.
-
-Os achados abaixo são de código. Ocorrência e quantidades em produção, execução da suíte Django e comparação integral com `24946096`: **[nao verificado]**.
-
-1. **ALTA — a exclusão do desligado sem `data_demissao` depende de nunca ter existido fechamento.**
-
-   O universo do fechamento exclui desligado sem data, mas `_K2` consulta os `FechamentoMensal` existentes diretamente, sem reaplicar esse universo. Com data nula, `sai_pela_rescisao` responde falso e o retentor não recorta o fim da janela. Portanto, um fechamento anterior à alteração cadastral pode produzir uma **lavra nova** com dias aceitos pela C5. `app/ponto/services/fechamento.py:423`, `app/ponto/services/fechamento.py:430`, `app/folha/export.py:775`, `app/folha/export.py:60`, `app/folha/export.py:1198`, `app/escala/services/cadastro_realidade.py:186`.
-
-   O teste mascara esse histórico: apaga a data **antes** de criar fechamentos; `_fechar` só faz `get_or_create`. Ele prova ausência de fechamento naquela fixture, não exclusão de um desligado sem data que já possuía fechamento. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:140`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:60`.
-
-   **Como provar:** no caso positivo existente, executar conceitualmente `self._fechar()`, depois retirar `data_demissao`, depois `self._lavrar()`. As células continuam acusadoras, o fechamento continua existente e a C5 aceita suas datas. Esse cenário repete a ampliação reprovada na volta 3; sua execução: **[nao verificado]**. `app/escala/models.py:1767`, `app/folha/export.py:1233`, `app/escala/services/cadastro_realidade.py:183`.
-
-2. **MÉDIA — “datas de qualquer bloqueado” não equivale aos dias de `dias_que_seguram`.**
-
-   A C5 aceita as datas de **todo** item do balde `bloqueado`; a autoridade `dias_que_seguram` só preenche seu mapa de dias para `furo_espelho`. `app/escala/services/cadastro_realidade.py:184`, `app/folha/fora_da_folha.py:128`, `app/folha/fora_da_folha.py:137`.
-
-   O escritor legítimo também grava `datas` para `ferias_com_batida`. Logo, não é necessário fabricar JSON inválido para obter a divergência. `app/folha/export.py:868`, `app/folha/export.py:875`, `app/folha/retrato_folha.py:1172`, `app/folha/models.py:323`.
-
-   **Como provar:** desligado com demissão depois do fim da competência, fechamento, férias com batida e uma célula ainda `nunca_bateu` naquele dia. O lavrador grava a data de férias; a C5 a aceita; `dias_que_seguram()['dias']` não contém o colaborador por esse motivo. A própria casa reconhece o intervalo entre primeira batida e rejulgamento de `nunca_bateu`; ocorrência desse caso específico: **[nao verificado]**. `app/folha/export.py:858`, `app/folha/retrato_folha.py:1175`, `app/escala/services/cadastro_realidade.py:188`, `app/chamados/services/adesao.py:59`.
-
-3. **MÉDIA — o vigia perde competência e datas e pode reduzir `calados` além do aval.**
-
-   `censo` transforma o retorno da C5 em um conjunto de IDs. Depois considera roteada qualquer linha bloqueada com fio `ninguem` daquele colaborador, em qualquer retrato selecionado da última lavra. `app/folha/vigia_retido_calado.py:38`, `app/folha/vigia_retido_calado.py:43`, `app/folha/vigia_retido_calado.py:46`, `app/folha/vigia_retido_calado.py:48`.
-
-   **Como provar com as fontes reais:** colaborador desligado com demissão futura, um `nunca_bateu` retido na anterior e dias sem célula, mas cobertos por vínculo, na corrente. O retentor pode gerar `sem_celula` na corrente; sem célula, o fio resulta sem porta. A presença na C5 pela anterior roteia também a corrente, embora seus dias não estejam na C5. `app/folha/export.py:1227`, `app/folha/export.py:1231`, `app/folha/fora_da_folha.py:67`, `app/folha/fora_da_folha.py:78`, `app/folha/vigia_retido_calado.py:48`.
-
-   O resultado condicional é `roteados=2` e `calados=0` para duas linhas antes caladas, apesar de só uma competência ter dias C5. Isso já era possível para ativos; o diff estende o alcance aos desligados. Ocorrência em produção: **[nao verificado]**. `app/folha/vigia_retido_calado.py:48`, `app/folha/vigia_retido_calado.py:53`, `app/escala/services/cadastro_realidade.py:188`.
-
-4. **MÉDIA — o universo de empresas do leitor é maior que o do lavrador.**
-
-   A C5 consulta todas as empresas ou os IDs recebidos. O lavrador parte de `empresas_visiveis()` inclusive quando recebe `--empresa`; essa fonte exclui empresas inativas e CNPJ começando por `11222333`. `app/escala/services/cadastro_realidade.py:169`, `app/folha/management/commands/lavrar_retrato_folha.py:49`, `app/folha/management/commands/lavrar_retrato_folha.py:51`, `app/colaboradores/queries.py:85`.
-
-   **Como provar:** numa empresa excluída, manter fechamento e dia que a autoridade viva retém, sem retrato. A autoridade pode responder positivamente, mas C5 devolve ausência. Se houver retrato de quando a empresa era visível, C5 pode continuar usando uma lavra que o command já não atualiza. `app/folha/export.py:778`, `app/escala/services/cadastro_realidade.py:183`, `app/escala/services/cadastro_realidade.py:188`.
-
-   Os CNPJs das fixtures novas não exercitam a exclusão `11222333*`; suas empresas são criadas ativas. A tela também usa `empresas_visiveis`, enquanto o vigia admite IDs diretamente. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:48`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:52`, `app/escala/views.py:487`, `app/folha/vigia_retido_calado.py:34`.
-
-5. **MÉDIA — falta positivo de desligado retido na competência corrente.**
-
-   O mutante plausível **M1** — trocar `for _ini, fim in janelas:` por `for _ini, fim in janelas[:1]:` — deixa de consultar o retrato corrente e preserva, por inspeção, os resultados esperados dos testes novos/alterados. Os positivos de desligados exigem somente dias da anterior; os ativos dispensam a lavra. Execução integral contra o mutante: **[nao verificado]**. `app/escala/services/cadastro_realidade.py:181`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:120`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:223`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:243`.
-
-   **Como provar a lacuna:** desligado com demissão depois de 20/11, célula `nunca_bateu` em 23/10, fechamento e lavra da competência 11; exigir 23/10 na C5. Esse é o ramo que M1 elimina. `app/ponto/janelas.py:24`, `app/escala/services/cadastro_realidade.py:172`, `app/escala/services/cadastro_realidade.py:181`.
-
-6. **MÉDIA — o selo não certifica a promessa que anuncia.**
-
-   A C5 lê `situacao`, assim como `_K2` e o universo do fechamento; o campo foi omitido de `CAMPOS_DA_AUTORIDADE`. Portanto, “nenhum campo que o juiz lê é lido aqui” é falso pelo próprio código. Isso não significa que retirar a distinção ativo/desligado seria correto: ela sustenta a exceção aprovada para ativos. `app/escala/services/cadastro_realidade.py:151`, `app/escala/services/cadastro_realidade.py:178`, `app/folha/export.py:802`, `app/ponto/services/fechamento.py:431`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:260`.
-
-   O detector só examina atributos e argumentos posicionais de algumas chamadas. Uma leitura por `filter(data_demissao__isnull=...)` não é detectada; helpers externos também ficam fora da função inspecionada. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:273`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:294`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:298`.
-
-   Basta ainda existir uma chamada a `linhas_do_retrato`, mesmo com retorno descartado, para cumprir a exigência positiva. O selo não verifica que o resultado dessa chamada governa a seleção; o reconhecimento de código morto limita-se ao `if` com constante falsa. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:289`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:291`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:304`.
-
-   **Como provar:** inserir uma consulta ORM ao campo proibido, ou manter uma chamada descartada à porta e selecionar por leitura paralela. Ambos satisfazem o detector atual; as sondas AST em memória confirmaram essas brechas. A suíte Django com esses mutantes: **[nao verificado]**. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:277`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:302`.
-
-A equivalência universal perguntada no item 2 é, portanto, **não**. Além dos achados acima, há estes limites específicos:
-
-| Caso | Resposta pelo código |
-|---|---|
-| Competência e corte da empresa | Leitor e lavrador usam mês/ano do **fim** de `janela_anterior` e `janela_atual`. Para o mesmo dia e empresa, não encontrei divergência de idioma, inclusive no dia do corte. `app/escala/services/cadastro_realidade.py:172`, `app/escala/services/cadastro_realidade.py:182`, `app/folha/management/commands/lavrar_retrato_folha.py:60`, `app/ponto/janelas.py:27`. |
-| Lavra versus autoridade viva | A divergência é deliberadamente aceita pelo teste: mudar a demissão depois da lavra mantém os dias antigos até relavrar. Assim, a C5 não garante “antes da demissão atual”. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:160`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:169`. |
-| Readmissão | A reativação muda para ativo e limpa a demissão; C5 passa a devolver todos os candidatos, dispensando a lavra anterior. Preserva a exceção dos ativos, mas refuta uma descrição irrestrita de “somente a lavra”. `app/colaboradores/services/desligamento.py:210`, `app/colaboradores/services/desligamento.py:211`, `app/escala/services/cadastro_realidade.py:188`. |
-| `colab` repetido | C5 une as datas de todas as linhas bloqueadas; `linha_do_colab` responde pela primeira linha encontrada. O JSON não impõe unicidade interna, mas o escritor normal deriva uma linha por fechamento/item. Duplicata real: **[nao verificado]**. `app/escala/services/cadastro_realidade.py:186`, `app/folha/retrato_folha.py:935`, `app/folha/models.py:348`, `app/folha/retrato_folha.py:1162`, `app/ponto/models.py:485`. |
-| Datas não ISO | Não casam com `d.isoformat()`. O escritor normal produz `str(date)` e documenta ISO; portanto, não há evidência de formato alternativo legítimo no caminho examinado. Dados assim em produção: **[nao verificado]**. `app/escala/services/cadastro_realidade.py:188`, `app/folha/fora_da_folha.py:192`, `app/folha/retrato_folha.py:1175`, `app/folha/models.py:332`. |
-| Bloqueado por outro motivo | Ausência de datas exclui; presença de datas inclui, independentemente de ser `furo_espelho`. É o contraexemplo de férias do achado 2. `app/escala/services/cadastro_realidade.py:184`, `app/escala/services/cadastro_realidade.py:186`. |
-
-Quanto ao item 3, **não encontrei a recomposição paralela da volta 3 no novo corpo de produção**: ele lê `linhas_do_retrato`; não chama rescisão ou retentor. `_K2` continua registrado como `classificar_export`. O defeito está na equivalência assumida para o conteúdo lido e no estado atual usado para escolher quem passa por essa leitura. `app/escala/services/cadastro_realidade.py:162`, `app/escala/services/cadastro_realidade.py:184`, `app/core/juizes.py:299`, `app/docs/JUIZES.md:74`.
-
-Também não há novo escritor persistente no corpo alterado de C5/vigia: são consultas, composição do retorno e contagens. As escritas diretas dos testes são fixtures. `app/escala/services/cadastro_realidade.py:173`, `app/folha/vigia_retido_calado.py:33`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:42`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:195`.
-
-O command agora lê o dia na borda e o repassa. A assinatura permissiva de `censo` ainda permite omissão, que chega ao fallback de relógio de C5; esse fallback não nasceu neste diff. O lavrador e o retentor também conservam suas leituras próprias de relógio. `app/folha/management/commands/vigiar_retido_calado.py:31`, `app/folha/vigia_retido_calado.py:27`, `app/folha/vigia_retido_calado.py:43`, `app/escala/services/cadastro_realidade.py:167`, `app/folha/management/commands/lavrar_retrato_folha.py:48`, `app/folha/export.py:1197`.
-
-**Rastreio dos escritores e leitores solicitados:**
-
-| Campo/valor | Quem produz e escreve | Quem lê |
-|---|---|---|
-| `RetratoFolha.linhas` | `montar_linhas` monta; `lavrar_retrato_folha --apply` persiste por empresa/competência. `app/folha/retrato_folha.py:1156`, `app/folha/retrato_folha.py:1177`, `app/folha/management/commands/lavrar_retrato_folha.py:74`. | Porta `linhas_do_retrato`; `__str__` lê o tamanho. `app/folha/retrato_folha.py:110`, `app/folha/models.py:368`. |
-| Chave `colab` | ID do item devolvido por `_K2`, gravado por `montar_linhas`. `app/folha/export.py:830`, `app/folha/retrato_folha.py:1163`, `app/folha/retrato_folha.py:1178`. | C5; vigia; ordenação; lookup do drawer; portas e tabela. `app/escala/services/cadastro_realidade.py:185`, `app/folha/vigia_retido_calado.py:48`, `app/folha/retrato_folha.py:756`, `app/folha/retrato_folha.py:936`, `app/folha/retrato_folha.py:1010`, `app/folha/views_retrato.py:272`. |
-| Chaves `status`, `motivo` | `_K2` decide; `montar_linhas` copia. `app/folha/export.py:833`, `app/folha/export.py:859`, `app/folha/export.py:865`, `app/folha/export.py:870`, `app/folha/export.py:960`, `app/folha/retrato_folha.py:1180`. | Balde, fio, tipo, saldo, ação e apresentação. `app/folha/retrato_folha.py:91`, `app/folha/retrato_folha.py:441`, `app/folha/retrato_folha.py:491`, `app/folha/retrato_folha.py:501`, `app/folha/retrato_folha.py:1062`, `app/folha/views_retrato.py:284`. |
-| Chave `datas` | Dias do retentor passam por `dias_que_seguram` e `fora_da_folha`; férias vêm do item de `_K2`; `montar_linhas` grava ambas as formas. `app/folha/export.py:1221`, `app/folha/fora_da_folha.py:137`, `app/folha/fora_da_folha.py:192`, `app/folha/export.py:875`, `app/folha/retrato_folha.py:1175`, `app/folha/retrato_folha.py:1183`. | C5; teto temporal de dono; recorte por período. `app/escala/services/cadastro_realidade.py:186`, `app/folha/retrato_folha.py:478`, `app/folha/retrato_folha.py:1233`. |
-| `CelulaDia.veredito` | Método do modelo delega à porta; porta atribui e persiste. Chamadores: cartório e decisão administrativa. `app/escala/models.py:1819`, `app/ponto/portas/celula.py:814`, `app/ponto/portas/celula.py:819`, `app/ponto/services/cartorio.py:889`, `app/ponto/services/cartorio.py:1242`, `app/ponto/services/cartorio.py:1802`, `app/ponto/services/veredito_celula.py:330`. | Inventário abaixo. A cópia em memória também altera o valor, dentro da própria porta. `app/ponto/portas/celula.py:711`, `app/ponto/portas/celula.py:726`. |
-| `Colaborador.situacao` | Default ativo; operação declarada na porta; desligamento, reativação, afastamento, reversão e admissão determinam os valores. `app/colaboradores/models.py:323`, `app/colaboradores/services/colaborador.py:32`, `app/colaboradores/services/colaborador.py:55`, `app/colaboradores/services/desligamento.py:104`, `app/colaboradores/services/desligamento.py:210`, `app/ponto/views.py:2435`, `app/ponto/management/commands/reverter_situacao_afastado.py:73`, `app/colaboradores/views.py:1205`, `app/colaboradores/views.py:2610`. | Inventário abaixo; o admin exibe/filtra, mas declara o campo somente leitura. `app/colaboradores/admin.py:49`, `app/colaboradores/admin.py:71`. |
-
-Os consumidores externos de `RetratoFolha.linhas` passam pela porta na tela do retrato, drawer do colaborador, vigia e nova C5. Internamente, a porta alimenta contadores, filtros, agrupamentos, ordenação, LEDs, ações e recorte temporal. `app/folha/views_retrato.py:196`, `app/colaboradores/views.py:982`, `app/folha/vigia_retido_calado.py:46`, `app/escala/services/cadastro_realidade.py:184`, `app/folha/retrato_folha.py:120`, `app/folha/retrato_folha.py:617`, `app/folha/retrato_folha.py:657`, `app/folha/retrato_folha.py:751`, `app/folha/retrato_folha.py:547`, `app/folha/retrato_folha.py:1028`, `app/folha/retrato_folha.py:1195`.
-
-O retorno C5 tem este encadeamento de leitores, inclusive fora do diff:
-
-| Retorno | Leitores |
-|---|---|
-| `colabs_nunca_bateu` | `_nunca_bateu` e `censo`. `app/escala/services/cadastro_realidade.py:197`, `app/folha/vigia_retido_calado.py:43`. |
-| `_nunca_bateu` | `lista`. `app/escala/services/cadastro_realidade.py:829`. |
-| `lista`, contendo C5 | Tela e PDF; command C7; command C8; `ListaDoAdmin` do vigia do fio. `app/escala/views.py:487`, `app/escala/views.py:489`, `app/escala/management/commands/fechar_avisos_regua_na_lista.py:27`, `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:35`, `app/chamados/services/vigia_fio.py:216`. |
-| Censo de retidos | Command imprime números e aplica o alarme. `app/folha/management/commands/vigiar_retido_calado.py:31`, `app/folha/management/commands/vigiar_retido_calado.py:35`. |
-
-O inventário estático de acessos de produção a `CelulaDia.veredito`, incluindo leituras pelo próprio escritor e projeções do valor, é o seguinte; exaustividade de acessos dinâmicos: **[nao verificado]**.
-
-```text
-app/chamados/juizes.py:816,1132,1148,1181,1183
-app/chamados/models.py:1161,1165,1166,1710,2790,2791,2792
-app/chamados/reconciliador.py:627,629,631,997,1016
-app/chamados/management/commands/auditar_invariantes_chamados.py:198,377,1435,1444,1594,1601,1602,1604,1711,1799
-app/chamados/services/adesao.py:34
-app/chamados/services/disputa_emissao.py:705
-app/chamados/services/fabrica_da_celula.py:99
-app/chamados/services/furo_sem_canal.py:72,73,97
-app/chamados/services/limbo_folgas.py:194
-app/chamados/services/resposta_tardia.py:45,56
-app/chamados/services/silencio_ausencia.py:40
-app/chamados/services/vigia_fio.py:379
-app/colaboradores/management/commands/corrigir_escala_retroativa.py:123
-app/colaboradores/services/calendario.py:413,414
-app/colaboradores/services/pos_vinculo.py:61
-app/escala/regua_defesa.py:688
-app/escala/services/cadastro_realidade.py:173,445,581
-app/escala/services/leitor_celula.py:407
-app/escala/services/propositor.py:474
-app/folha/export.py:1222,1233,1254,1255
-app/folha/fora_da_folha.py:227
-app/folha/previa.py:94
-app/folha/services/vigia_pausa.py:157
-app/pautas/services.py:422
-app/ponto/marcos.py:155
-app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:58,62
-app/ponto/management/commands/celula_veredito_velho.py:88,106,125
-app/ponto/management/commands/recusar_ponta_pequena.py:145
-app/ponto/management/commands/supra_juiz.py:166
-app/ponto/portas/celula.py:397,701,741,766,783,797
-app/ponto/services/cartorio.py:889,891,1199,1358
-app/ponto/services/diagnostico_escala.py:177
-app/ponto/services/furos_sem_cobranca.py:61
-app/ponto/services/furos_vetados.py:61
-app/ponto/services/pautas_dos_discordantes.py:71
-app/ponto/services/veredito_celula.py:109,127
-app/ponto/services/vigia_ausencia_veredito.py:42,56
-app/relatorios/dia_da_frota.py:51,54,55,60,74
-```
-
-O inventário de acessos de produção a `Colaborador.situacao`, incluindo consultas por relações, metadados e projeções, é o seguinte; certificação absoluta de “todos”, incluindo acesso dinâmico, fixtures e migrações: **[nao verificado]**.
-
-```text
-app/api/login_helpers.py:141
-app/api/views.py:116,355,415,420,421
-app/api/views_core.py:173,344,402,407,408
-app/api/views_mensageria.py:449,1058,1221,1236,1273
-app/chamados/models.py:966
-app/chamados/reconciliador.py:810
-app/chamados/management/commands/auditar_invariantes_chamados.py:360,653,857,1473,1593,1655,1765,1777
-app/chamados/management/commands/disparar_perguntas_competencia.py:169
-app/chamados/services/adesao.py:33,66
-app/chamados/services/desvio_escala.py:107
-app/chamados/services/disputa_emissao.py:1241
-app/chamados/services/fabrica_da_celula.py:91
-app/chamados/services/pergunta_no_app.py:127
-app/colaboradores/admin.py:49,50,71
-app/colaboradores/models.py:280,
-
-[truncado em 20000 de 30776 caracteres]
-
-## 06/11 17:32 · sessao 1be5a3e989aa · OTIMIZA-3 · verificador · origem=Code
-
-**REPROVA: o exemplo original foi corrigido, mas a classe “loader de string produz falso zero” continua aberta.** Há chamadas com literais completos que escapam da detecção, e o próprio selo exige zero para uma função chamada por loader. (`bin/quem_chama.py:515–520`, `bin/tests/test_quem_chama.sh:263–265`, `bin/tests/test_quem_chama.sh:508`)
-
-A análise abaixo usa a cópia e reproduções em memória, sem criar arquivos. A cópia não contém `.git`: identidade do commit e execução integral do selo histórico **[não verificado]**. [nao verificado]
-
-1. **BLOQUEIA — P1(a,c): loader obtido por `getattr` deixa falso zero, mesmo com módulo literal completo.**
-
-   Contraexemplo sintético: alvo `app/pkg/mod.py`, contendo `def f(): return 1`; chamador:
-
-   ```python
-   import importlib
-   m = getattr(importlib, 'import_module')('pkg.mod')
-   m.f()
-   ```
-
-   A reprodução imprime `simbolo f [simbolo-de-topo]: 0 chamador(es)`. `_loaders_py` aceita somente função representada por `ast.Name` ou `ast.Attribute`; nessa chamada, a função é outro `ast.Call`. A string `'pkg.mod'` ainda conta como citação do arquivo, mas não rebaixa o símbolo. (`bin/quem_chama.py:515–520`, `bin/quem_chama.py:590–601`)
-
-   O comportamento das formas pedidas é:
-
-   | Forma | Resultado para o símbolo |
-   |---|---|
-   | `import_module('pkg.mod')`, `__import__('pkg.mod')`, `run_module('pkg.mod')` | Não varrido, com sítio. (`bin/quem_chama.py:99`, `bin/quem_chama.py:590–593`) |
-   | `__import__('pkg', fromlist=['mod'])` | Não varrido, com sítio; combina constantes de pai e folha. (`bin/quem_chama.py:526–530`, `bin/quem_chama.py:550–552`) |
-   | `import_module('.mod', package='pkg')` | Não varrido no AST, quando nome relativo e pacote são constantes. (`bin/quem_chama.py:531–536`) |
-   | `from importlib import import_module as im`; `import importlib as il` | Cobertos: apelido do from-import ou último atributo da chamada. (`bin/quem_chama.py:506–520`) |
-   | Tupla/lista/dict local, variável ou parâmetro com `'pkg.mod'` no mesmo arquivo | Cobertos lexicalmente; não há acompanhamento do valor até a chamada. (`bin/quem_chama.py:585–593`) |
-   | Nome vindo de parâmetro, `getattr`, ambiente ou settings, sem literal completo no arquivo do loader | Pode permanecer zero; não há resolução entre arquivos nem desses valores. (`bin/quem_chama.py:523–525`, `bin/quem_chama.py:590–593`) |
-   | `leaf=['mod']; __import__('pkg', fromlist=leaf)` | Pode dar zero nas duas facetas: `fromlist` variável não é combinado. (`bin/quem_chama.py:527–530`) |
-
-2. **BLOQUEIA — P1(b), P2: execução por caminho e parâmetro entre arquivos continuam descobertas.**
-
-   `spec_from_file_location`, `SourceFileLoader`, `SourcelessFileLoader`, `imp.load_source` e `run_path` são reconhecidos pelo nome. O alvo somente é associado quando alguma string do mesmo arquivo contém seu caminho ou basename. Portanto variável local, constante, `os.path.join`, `Path` e f-string funcionam **quando preservam esse literal**, como `'mod.py'`; não existe resolução dessas construções. (`bin/quem_chama.py:97–100`, `bin/quem_chama.py:433`, `bin/quem_chama.py:458–464`, `bin/quem_chama.py:586–589`)
-
-   Contraexemplo sintético entre arquivos: `load.py` define `load(path)` usando `spec_from_file_location`; `caller.py` executa `load('app/pkg/mod.py').f()`. A reprodução mantém o arquivo com citações e o símbolo `f` com zero: nenhum arquivo reúne o loader reconhecido e o literal do alvo. (`bin/quem_chama.py:547`, `bin/quem_chama.py:585–593`)
-
-   Também deixam o símbolo com zero, nos contraexemplos isolados, `exec(open('app/pkg/mod.py').read())`, `exec(compile(...))` e `subprocess.run(['python3', 'app/pkg/mod.py'])`: `exec`, `compile` e execução de Python por subprocesso não pertencem aos conjuntos de loaders. O caminho ainda pode contar na faceta arquivo. (`bin/quem_chama.py:97–99`, `bin/quem_chama.py:600–601`)
-
-   Caminho montado como `'mod' + '.py'`, sem basename completo, pode deixar **arquivo e símbolo** com zero; o aviso FORA não altera os tipos das facetas. (`bin/quem_chama.py:90–92`, `bin/quem_chama.py:462`, `bin/quem_chama.py:911–915`)
-
-3. **BLOQUEIA — P1(d,e): texto embutido tem cobertura diferente do AST e ainda produz zero.**
-
-   Contraexemplo sintético reproduzido em `.sh`:
-
-   ```sh
-   python3 -c "import importlib;m=importlib.import_module('.mod',package='pkg');m.f()"
-   ```
-
-   Para `app/pkg/mod.py`, arquivo e símbolo imprimem zero. O reconhecimento textual procura nome completo entre aspas, `__import__` com `fromlist=` ou ponto de entrada; não resolve o relativo com `package=` que o AST resolve. (`bin/quem_chama.py:437–441`, `bin/quem_chama.py:467–483`, `bin/quem_chama.py:531–536`)
-
-   Heredoc, `python3 -c`, string de código em `.py` e config são cobertos quando o texto contém um loader reconhecido e caminho/basename ou nome completo reconhecível. `exec(open(...))` embutido continua descoberto pelo mesmo motivo do achado 2. (`bin/quem_chama.py:472–483`, `bin/quem_chama.py:594–596`, `bin/quem_chama.py:685–689`)
-
-   `pkg.mod:attr` simples é reconhecido em strings de `.py`, `.sh` e configurações aceitas, incluindo `.yml/.toml/.cfg/Dockerfile`. Em `.sh/config`, o nome pontilhado também pode causar EMBUTIDO, que prevalece sobre LOADER. Arquivo chamado apenas `gunicorn`, sem extensão reconhecida ou shebang, é ignorado; `gunicorn.conf.py` passa pelo AST. (`bin/quem_chama.py:119–120`, `bin/quem_chama.py:441`, `bin/quem_chama.py:777–792`, `bin/quem_chama.py:876–893`)
-
-4. **BLOQUEIA — P5: `r9-montado-fora` certifica um falso zero concreto.**
-
-   A fixture contém `X = "ld_mont"` e chama efetivamente `importlib.import_module("m.%s" % X).f_ld_mont()`, mas a asserção exige `simbolo f_ld_mont [simbolo-de-topo]: 0 chamador(es)`. Não é um contraexemplo vácuo: existe a ligação e existe a chamada. (`bin/tests/test_quem_chama.sh:263–265`, `bin/tests/test_quem_chama.sh:508`)
-
-   A exclusão “nome montado fica FORA” está somente no texto; o símbolo continua em VARRIDOS e o resumo contabiliza seu zero como afirmação. Isso contraria o aval literal fornecido e a distinção operacional entre contado e não varrido. (`bin/quem_chama.py:10–13`, `bin/quem_chama.py:90–92`, `bin/quem_chama.py:590–593`, `bin/quem_chama.py:911–915`)
-
-5. **FILA — P1/P6: casos reais corrigidos e casos reais ainda não associados ao loader.**
-
-   O caso original está corrigido na cópia: `gerar_estado.py` conserva `'espelho_verdade.py'`, carrega o módulo e lê `mod.placar`; esse basename agora produz LOADER. O BLOQUEIO anterior foi resolvido nesse exemplo, mas não como classe, pelos achados anteriores. (`bin/gerar_estado.py:140–145`, `bin/quem_chama.py:586–589`)
-
-   Permanecem estas formas reais sem reconhecimento específico do loader:
-
-   | Caso real | Efeito demonstrável |
-   |---|---|
-   | `intake`: strings `modulo.simbolo`, separadas antes de `import_module` + `getattr` | Conta arquivo e símbolo pela regra antiga de citação; não produz LOADER. (`app/core/intake.py:34–35`, `app/core/intake.py:485–494`, `bin/quem_chama.py:606–608`) |
-   | `test_marca_cron15`: nomes em tabela externa, seguidos de dois `getattr` | O arquivo do loader não contém os módulos completos; esse sítio não é associado. (`app/core/tests/test_marca_cron15.py:62–65`, `app/core/tests/marca_cron15.py:29–35`) |
-   | `test_selo_estrutural`: dado externo, `hasattr(import_module(mod), cls)` | Mesmo problema; o alvo atual está na tabela externa. (`app/core/tests/test_selo_estrutural.py:23–31`, `app/core/estrutural.py:47`) |
-   | Settings montado por perfil, depois `getattr(mod, 'MIDDLEWARE')` | Sem associação pelo loader. (`app/core/tests/test_trilha_com_contexto.py:103–108`, `app/core/tests/test_selo_log_nao_e_cego.py:120–125`, `app/core/tests/test_selo_erro_com_mensagem.py:80–85`) |
-   | `exec(open(...).read(), ns)` e leitura de `ns['logconfig_dict']` | Execução real por caminho, sem detector correspondente. (`app/core/tests/test_access_log_persistido.py:73–78`, `bin/quem_chama.py:97–99`) |
-
-   Esses exemplos não provam zeros globais atuais: testes e settings já recebem tipos fora de VARRIDOS, e citações existentes podem fornecer achados. A quantidade de falsos zeros atuais nesses alvos é **[não verificado]**. (`bin/quem_chama.py:348–349`, `bin/quem_chama.py:366–373`, `bin/quem_chama.py:606–608`)
-
-   `include('x.urls')`, settings e `apps.get_model` não ganham reconhecimento de loader; `urlpatterns`, modelos e settings têm exclusões próprias, enquanto strings `app.mod.Classe` podem contar o símbolo diretamente. `call_command('nome')` conta o arquivo do command pelo token; `Command` é convencional, fora da contagem. (`app/config/urls.py:26`, `app/config/settings/base.py:53–68`, `bin/sombra_mascara_pessoal.py:19`, `bin/quem_chama.py:81–82`, `bin/quem_chama.py:352–355`, `bin/quem_chama.py:370–373`, `bin/quem_chama.py:817–819`, `bin/quem_chama.py:606–608`)
-
-6. **FILA — P2: o caminho reconhecido protege a faceta arquivo, inclusive no próprio alvo.**
-
-   Quando há marcador LOADER, o sítio é recolhido antes da exclusão de autocitação e depois acrescentado à faceta arquivo. Assim, loader reconhecido como único chamador, inclusive dentro do próprio alvo, não deixa arquivo com zero; os símbolos contáveis são rebaixados. (`bin/quem_chama.py:867–871`, `bin/quem_chama.py:885–894`)
-
-   `app/X.py` corresponde a módulo `X`, sem `app.`; `app/pkg/__init__.py` corresponde a `pkg`. Ambos funcionam com esses nomes. Já `'app.pkg.mod'` não corresponde à chave `pkg.mod` usada pelo detector de nome e pode deixar o símbolo com zero. (`bin/quem_chama.py:171–180`, `bin/quem_chama.py:434–436`, `bin/quem_chama.py:590–593`)
-
-   Basename coincidente associa todos os alvos correspondentes, inclusive pacotes com `__init__.py`; isso produz falsos positivos, não desambiguação. Os loaders não reconhecidos dos achados 1–3 continuam podendo deixar uma ou ambas as facetas com zero. (`bin/quem_chama.py:433`, `bin/quem_chama.py:461–464`)
-
-7. **FILA — P3: falsos positivos podem esconder zero verdadeiro; há dois alvos falsamente associados comprovados, sem contagem comprovada de zeros ocultos.**
-
-   Exemplos reais:
-
-   - `bin/crons_duracao.py` cita `'crons.py'` e carrega `app/config/crons.py`; a regra por basename associa também `app/core/management/commands/crons.py`. Outro sítio equivalente copia `config.crons` para um temporário `crons.py`. **Um alvo falso, por dois sítios comprovados.** (`bin/crons_duracao.py:31–40`, `app/chamados/tests/test_cron_longo_sai_da_medida.py:268–279`, `bin/quem_chama.py:462`)
-   - O logger `'core.erros'` é tratado como módulo carregado porque o arquivo contém `__import__`; esse loader percorre uma tupla que não contém `core.erros`. **Segundo alvo falso comprovado.** (`app/core/erros.py:30`, `app/core/erros.py:43–52`, `bin/quem_chama.py:590–593`)
-
-   Um alvo sintético `app/a/common.py::morto`, sem leitores, seria rebaixado por um loader de `app/b/common.py`. Portanto o mecanismo pode retirar do relatório um zero verdadeiro utilizável pela L-111. Esses falsos positivos são expressamente admitidos pelo instrumento; não demonstram, sozinhos, violação do aval. (`bin/quem_chama.py:91–92`, `bin/quem_chama.py:462`, `bin/quem_chama.py:892–893`, `app/docs/LEIS.md:137`)
-
-   **Nenhum zero verdadeiro oculto foi comprovado nesses dois alvos reais; total do repositório [não verificado].** Nos exemplos, há usos dos helpers e do logger. (`app/core/erros.py:71–73`, `app/colaboradores/views.py:437`, `app/core/management/commands/crons.py:57`, `app/core/management/commands/crons.py:99`)
-
-   A regex não casa genericamente `http://` ou `C:\`: exige o módulo-alvo exato e `\w` após os dois-pontos. `10:30` exigiria módulo-alvo chamado `10`; existência desse alvo **[não verificado]**. `x.y:z` em string/config pode rebaixar `x.y`; `.md` e `.txt` comum são excluídos como chamadores. (`bin/quem_chama.py:441`, `bin/quem_chama.py:481–483`, `bin/quem_chama.py:780–792`)
-
-8. **FILA — P4: os leitores de tipos e do resumo estão coerentes; a classificação incompleta é que alimenta zeros indevidos.**
-
-   | Estado | Escritor | Leitor |
-   |---|---|---|
-   | `info['tipo']` | Classificador `:837`; EMBUTIDO `:883`; LOADER `:893` | Guardas `:882/:892`; render `:936` |
-   | `a['tipo']` | Construção `:839`; EMBUTIDO `:881–883` | Render `:934` |
-   | `a['embutido']` / `a['loader']` | `:880` / `:889` | Render `:933–936` |
-   | Dicts `embutido` / `loader` | Inicialização `:847`; acumulação `:865/:868` | Consultas `:877/:886` |
-   | `LOADER` / `EMBUTIDO` | Definições `:95/:94` | Emissão `:552/:588/:592/:595/:688` e `:598/:686`; recolha `:867/:864`; render `:907/:903` |
-   | `LOADERS_CAMINHO` / `LOADERS_NOME` | `:97–99` | Regex `:100–101`; aliases `:509`; chamadas `:518/:520` |
-   | `VARRIDOS` | `:56–73` | Guardas `:882/:892`; contagem `:911`; cabeçalho `:925` |
-   | `FORA` | `:83–92` | Somente cabeçalho `:926` |
-   | Parâmetros `emb` / `ldr` | Render `:933–936` | `_faceta`: `:902–909` |
-
-   Todas as linhas da tabela pertencem a `bin/quem_chama.py`.
-
-   EMBUTIDO e LOADER incrementam “não varridas”; somente o ramo VARRIDOS incrementa varridas e zeros. RESUMO e `main` usam esses acumuladores, sem semântica antiga observada. (`bin/quem_chama.py:903–915`, `bin/quem_chama.py:939–941`, `bin/quem_chama.py:968–969`)
-
-   Não encontrei outro consumidor automatizado da saída além do selo; completude diante de referências construídas dinamicamente **[não verificado]**. O selo extrai facetas, e o uso humano pelo opus está documentado. (`bin/tests/test_quem_chama.sh:315–330`, `app/docs/RELATO.md:292`)
-
-9. **FILA — P5: há asserções mascaradas, mas os grupos positivos representados mordem; três formas declaradas não têm fixture.**
-
-   As asserções genéricas de não varrido/ausência de zero para `ld_cfg` e `ld_shn` sobrevivem à remoção do loader porque EMBUTIDO já as protege. Entretanto, as asserções de sítio específico falham: o grupo não passa inteiro por acaso. (`bin/tests/test_quem_chama.sh:499–506`, `bin/quem_chama.py:876–893`)
-
-   Nas mutações em memória, remover os detectores representados altera os grupos correspondentes: spec → `dir/var/cte/par/sh`; SourceFileLoader → `sfl`; run_path → `rp/pyc`; import_module → `im/ima/rel/shn`; `__import__` → `imp`. Relativo, fromlist e apelidos também têm verificações específicas. (`bin/tests/test_quem_chama.sh:166–259`, `bin/tests/test_quem_chama.sh:485–505`)
-
-   Já retirar `SourcelessFileLoader`, `load_source` ou `run_module` dos conjuntos e regex não altera as fixtures r9: faltam casos dessas formas. Execução do selo completo contra esses mutantes **[não verificado]**. (`bin/quem_chama.py:97–101`, `bin/tests/test_quem_chama.sh:164–259`)
-
-   `r9-prosa-nao-carrega` não é vácuo: contém loaders completos em docstring e comentário shell; remover os respectivos filtros faz suas asserções falharem. O real histórico pode ser silenciosamente pulado pelo `if git cat-file`; sua execução nesta cópia é **[não verificado]**. (`bin/tests/test_quem_chama.sh:267–273`, `bin/tests/test_quem_chama.sh:509–510`, `bin/tests/test_quem_chama.sh:561–566`, `bin/quem_chama.py:585`, `bin/quem_chama.py:856`)
-
-_2376 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2378 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
