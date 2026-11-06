@@ -1,5 +1,5 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=112105
+ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh | pid=442762
 ERRO-BOBO H12H06: (opus de escalada 05/11 23:3x REPROVA 6d951847): 4 defeitos no mesmo except/atomic da porta. (1) `ausencia.py:591` indeterminado apaga o arquivo do ato confirmado; (2) unlink `:746` mascara a excecao original; (3) atomic `:657` aninhavel; (4) ciclo C->A introduzido pela porta `:662/665`. Cura em curso na mesma copia, depois suite inteira, Codex do delta e opus final. Nada pousado, sem apply comp 11. | 20:4x aval H12H06-SEPARA-E-CRONTAB partiu a obra (A NO AR ca278fc4 22:1x; B apos a resposta da PERGUNTA DE DESENHO H12H06-B); B3 segue armado ate o rearma dele.
 RESPONDIDA por aval H12H06-SEPARA-E-CRONTAB 20:4x (sequencia E->C->A retirada; B so abre apos o censo Codex logs/trava_censo/censo_a.r): PERGUNTA DE DESENHO (nao trava H12H06): ordem de trava da casa. Todo `Ausencia.save` em atomic trava Ausencia e depois Colaborador, pelo evento sincrono `ponto/signals.py:147` -> `chamados/models.py:866` FOR UPDATE. Isso e o contrario do E->C->A que o aval H12H06-UMA-PORTA dita para a porta. Na H12H06 a porta recusa com `nowait`, sem esperar. Pergunta: declarar uma ordem global de trava antes da proxima porta que trave Colaborador antes de Ausencia? Numeros: 1 porta nova (porta_do_ato_h06) e 1 caminho de UI (ponto/views.py:2638) medidos; o censo dos demais escritores de Ausencia nao foi feito.
 RESPONDIDA por aval H12H06-B-SIMPLES 22:1x ((b) sem ordem global agora; porta do ato abandonada; ORDEM GLOBAL segue em fila com os 4 certificados + medida de deadlock): PERGUNTA DE DESENHO H12H06-B (censo de trava v1+v2 publicado, logs/trava_censo/censo_a.r + censo_b.r; mede, nao cura): declarar ORDEM GLOBAL de trava ou nao? Medido: 20 pares na v1 (8 com as duas ordens, 11 com uma so); v2 fecha o furo Ausencia/Colaborador. NAO EXISTE ordem total compativel hoje, 4 certificados: (1) Colaborador<CelulaDia (emissao `ponto/services/cartorio.py:1740` -> FOR UPDATE `chamados/models.py:866` -> lavra `cartorio.py:1822` -> `ponto/portas/celula.py:682`) e CelulaDia<Colaborador (lavra -> cluster `cartorio.py:994` -> `cluster_espurio.py:130` -> `chamados/models.py:866`); (2) Ausencia<FechamentoMensal<outra Ausencia no laco de irmas sob um atomic (`ponto/views.py:2631/2632` -> `ausencia.py:819` -> `ausencia.py:930` -> `fechamento.py:1640`); (3) Colaborador<FM (`justificativa.py:173` onboarding -> `:200`) e FM<Colaborador (lote `ponto/views.py:1806` -> `:1816`); (4) Ausencia -> K (signal `ponto/signals.py:147/152` -> cartorio) -> Colaborador/Chamado/CelulaDia -> proxima Ausencia nos lacos de aprovacao, regularizacao `regularizacao.py:89/111`, abandono `marcar_abandono_provisorio.py:22/70` e ferias `ausencia.py:1182`. Empresa: 0 testemunho com Ausencia; Empresa/Colaborador so C->E (`normalizar_identificadores.py:106-112`). Conferido 11/11 citacoes no HEAD. Deadlock em prod: nao medido. Opcoes: (a) declarar ordem global (lock hierarchy) e curar os 4 certificados; (b) nao declarar global, so a ordem da porta H06 contra o que ela toca. B NAO abre ate a resposta.
@@ -6621,3 +6621,25 @@ DESPACHO G3G4: sonda dos 19 (funcoes reais da sonda HJ, READ ONLY) -> Codex --so
 - Universo: G3 15 + G4 4 = 19 (censo_1.r:389-393); 11 com dia do relatorio raspado, 8 sem dia = indeterminado (col129, col923, col789, col949, col214, col42, col250, col960), sem dia inventado. Script logs/g3g4_0611/sonda_g3g4.py = sonda_a.py com a lista trocada (diff: so UNIDADES e os 2 asserts 80->19).
 - CODEX-PRIMEIRO vigente a partir de agora: desvio = linha com motivo.
 - DESVIO CODEX-PRIMEIRO: dias dos 19 lidos pela sessao no relatorio privado logs/bo_mauricio_0511/ (motivo: arquivo com nome cru, nao vai ao Codex; so colNNN+dia saem dele).
+
+### G3G4-DONO-MEDIDO PRONTO (06/11 00:3x)
+LEI-AKITA: origem=n/a (medida), testemunha=e6_oraculo.py::dono_da_divergencia + funcoes da sonda HJ, RED=n/a (medida), quem-mais-le=n/a, juizes novos=0, padrao=n/a (medida)
+- Codex --sonda rc=0 hash a37c673d (logs/g3g4_0611/sonda.r, raspar 0 vazamento); Codex censo rc=0 (logs/g3g4_0611/censo.r). Conferencia de amostra pela sessao: 9/9 iguais a logs/hj_0511/sonda_a.out (dono, segura, status) e o retorno residual em e6_oraculo.py conferido no HEAD.
+| uid | col | dia | segura | dono | status lavrado | porta | chamados do dia |
+|---|---|---|---|---|---|---|---|
+| G3-01 | 29 | 15/10 | n | BATIDA | ok | - | 31608 resolvido |
+| G3-04 | 174 | 25/10 | n | CADASTRO | ok | - | 34869 resolvido |
+| G3-05 | 174 | 26/10 | n | CADASTRO | ok | - | 35100 resolvido |
+| G3-06 | 33 | 03/10 | n | BATIDA | ok | - | 28365, 28426 resolvidos |
+| G3-07 | 33 | 04/10 | n | BATIDA | folga | - | nenhum |
+| G3-08 | 94 | 16/10 | s | ESTRUTURA | irregular | porta_fila 31873 validar | 31873 em_analise; 32029 resolvido |
+| G3-10 | 163 | 10/10 | n | ESTRUTURA | ausencia | - | 29050, 30210 resolvidos |
+| G3-11 | 163 | 17/10 | n | ESTRUTURA | folga_trabalhada | - | nenhum |
+| G3-12 | 873 | 26/09 | n | ESTRUTURA | ausencia | - | 21508 resolvido |
+| G3-15 | 247 | 24/10 | n | BATIDA | irregular | porta_fila 34577 validar | 21598 cancelado; 34577 em_analise |
+| G4-01 | 39 | 15/10 | s | BATIDA | irregular | - | 31619, 31792 resolvidos |
+| G3-02/03/09/13/14, G4-02/03/04 | 129, 923, 789, 949, 214, 42, 250, 960 | sem dia | indet. | indeterminado | - | - | - |
+- SOMA: ESTRUTURA 4 + CADASTRO 2 + BATIDA 5 + indeterminado 8 = **19**. Segura a folha: s 2 (col94 16/10, col39 15/10), n 9, indet. 8 = 19.
+- ESTRUTURA (censo Codex): os 4 sao o RETORNO RESIDUAL de `dono_da_divergencia` (nenhum predicado de CADASTRO/BATIDA casou), nao predicado positivo. col94 16/10 = coberto por FIO-LE-O-JUIZ (CORTES.md:297 LAUDO-[nome]-COL94-1610; BACKLOG:771). col163 10/10, col163 17/10, col873 26/09 = nenhuma obra demonstrada; padrao quebrado [nao verificado] -> linha G3G4-ESTRUTURA-RESIDUO no BACKLOG atras de H12H06-B e C20-FIO-MUDO, sem obra ate o padrao ser nomeado (L-123).
+- LISTA DO ADMIN (colNNN+dia, sem nome; nada escrito em prod): CADASTRO col174 25/10 e 26/10; BATIDA col29 15/10, col33 03/10 e 04/10, col247 24/10 (porta 34577 aberta), col39 15/10 (segura a folha). Indeterminado: 8 sem dia no relatorio; pedem o dia ao admin.
+- Limite: o Codex leu so a saida raspada; o script da sonda nao estava anexo ao censo (o envelope nao guarda a entrada).
