@@ -1,7 +1,252 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 13:57** · publicado em **06/11/2026 13:59** (UTC-3)
+> Ultima resposta processada: **06/11/2026 14:08** · publicado em **06/11/2026 14:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 14:08 · sessao df46b1c224d2 · V3-IMPACTO-COM-DONO · leitura · origem=Code
+
+**Nos caminhos de produto examinados, o leitor continua em `motor`; a ausência de `oraculo` não altera o número exibido nem cria alerta específico.** O fechamento escreve as versões separadamente, e os leitores usam `motor` por padrão ou filtro explícito (`app/ponto/services/fechamento.py:1211`, `:1278`; `app/ponto/services/dia_pago.py:548`, `:750`, `:831`; `app/folha/porta_export.py:589`). As contagens informadas da sombra e a situação atual do banco: **[não verificado]**.
+
+**1. Quais entradas deixam campos sem dono**
+
+A porta considera dono a **presença da chave**, tanto em `valores` quanto em `nao_decide`; também aceita os mapas externos vazios, desde que diferentes de `None`. A união é feita sobre **todos os dias da chamada**, não individualmente por dia (`app/ponto/services/dia_pago.py:50–75`).
+
+No fechamento, falta e os três mapas de grade nascem como `{}` e são passados à lavratura; `do_motor` não é informado. Portanto, quando `rubricas_por_dia` devolve `{}`, ficam **11 campos sem dono** (`app/ponto/services/fechamento.py:844–849`, `:1261–1278`; `app/ponto/services/dia_pago.py:139–140`, `:34–41`, `:60–75`):
+
+```text
+horas_trabalhadas
+horas_noturnas
+horas_extras_50
+horas_extras_50_noturna
+horas_extras_100
+horas_extras_100_feriado
+horas_extras_100_noturna
+horas_folga_trabalhada
+horas_atraso
+horas_saida_antecipada
+horas_intra_indenizada
+```
+
+O universo visitado por `rubricas_por_dia` é `v.minutos` mais os dias publicados pelo motor como bloqueados, recortado à janela. Se esse universo ficar vazio, retorna `{}` (`app/ponto/calculador/alimentacao.py:449–475`, `:533`).
+
+| Entrada/cenário | Efeito sobre os donos |
+|---|---|
+| Nenhum par fechado na competência; somente turnos abertos; pares existentes apenas fora da janela | Pode resultar em `{}`: o núcleo não acrescenta minutos para par aberto, e a alimentação filtra os dias pela janela (`app/ponto/calculador/nucleo.py:139–155`; `app/ponto/calculador/alimentacao.py:467–475`). |
+| Períodos sem dia no mapa, sem carimbo efetivo, ou invertidos/colapsados sem publicação como bloqueados | Esses períodos podem não fornecer pares ao núcleo; se nenhum dia restar, resulta em `{}` (`app/ponto/calculador/alimentacao.py:73–92`, `:109–123`, `:449–471`). |
+| Colaborador desligado | O estado sozinho não determina rubricas vazias. O universo exclui desligado sem data ou com demissão anterior ao início da janela da empresa; quem entra ainda depende dos períodos efetivos (`app/ponto/services/fechamento.py:419–436`; `app/ponto/calculador/alimentacao.py:449–475`). |
+| Afastado o mês inteiro, sem pares fechados nem dias bloqueados | Pode resultar em `{}`. Afastamento não exclui automaticamente do universo; ausências que suprimem previsto são tratadas no fechamento, mas não acrescentam dias a `rubricas_por_dia` (`app/ponto/services/fechamento.py:391–401`, `:684–692`; `app/ponto/calculador/alimentacao.py:459–475`). |
+| Único dia bloqueado por HE100 | **Já está contemplado nesta árvore**: a alimentação visita o dia com zero. Há teste escrito exigindo lavrar esse zero com donos completos (`app/ponto/calculador/alimentacao.py:459–471`; `app/ponto/tests/test_he100_dia_sem_previsto.py:242–248`, `:277–287`). |
+| Somente folgas trabalhadas, com escala certa respondida | **Já está contemplado**: o ramo declara também os dois splits noturnos; há teste exigindo existência do oráculo (`app/ponto/calculador/regras.py:704–739`; `app/ponto/tests/test_he100_dia_sem_previsto.py:233–240`). |
+| Dia sem trabalho previsto, não intermitente, com `certa_cache=None` | A alimentação passa `escala_certa=None`; o ramo retorna `Rubricas({}, _nd, ...)`, deixando pelo menos trabalhadas, intra e HE50 sem declaração. É uma entrada possível da função, mas o fechamento mostrado inicializa e passa um cache `{}` (`app/ponto/calculador/alimentacao.py:524`; `app/ponto/calculador/regras.py:643–645`, `:664`, `:740–741`; `app/ponto/services/fechamento.py:923`, `:1257`). |
+
+Falta de CCT, pontas de HE ou pontualidade **não significa automaticamente campo sem dono**: esses campos entram em `nao_decide`, que a porta contabiliza como declaração (`app/ponto/calculador/regras.py:604–644`; `app/ponto/services/dia_pago.py:63`).
+
+**O que deveria aceitar ou recusar pela lei escrita:**
+
+- **Aceitar resposta explicitamente vazia/zero, sustentada pela autoridade.** A casa distingue “perguntei e não havia” de “não perguntei”; exige zero declarado para dia sem turno pareado e prevê uma linha de ajuste mesmo quando zerada (`app/ponto/services/dia_pago.py:54–58`, `:346–356`; `app/docs/LEIS.md:129`).
+- **Recusar campo omitido sem valor, causa ou proveniência declarada.** Essa é precisamente a finalidade escrita da porta; regra ausente não pode virar zero (`app/ponto/services/dia_pago.py:303–319`; `app/ponto/calculador/regras.py:9–13`).
+- **`rubricas={}` sozinho não distingue essas situações.** Hoje a porta recusa ambos os casos; liberar indiscriminadamente esse dicionário esconderia também falha de alimentação. A distinção precisa vir da autoridade que fornece os dias, preservando a recusa de campos sem declaração (`app/ponto/calculador/alimentacao.py:459–466`; `app/ponto/services/dia_pago.py:310–319`; `CLAUDE.md:17–21`, `:35–36`).
+
+A recusa acontece **antes de apagar as linhas anteriores**. Logo, pode deixar o colaborador sem primeira lavratura ou preservar um oráculo antigo; o `except` apenas registra ERROR e o fechamento incrementa `processados` (`app/ponto/services/dia_pago.py:310–319`, `:357–358`; `app/ponto/services/fechamento.py:1281–1286`).
+
+**2. Quem lê e o que aparece sem oráculo**
+
+Nos caminhos abaixo, **não há seleção de `versao='oraculo'`**; ausência dessa versão é invisível para o leitor indicado, pelas consultas citadas em cada linha.
+
+| Leitor | Fonte e comportamento quando falta apenas `oraculo` |
+|---|---|
+| Tela do espelho | Continua mostrando linhas `motor`; o helper é chamado sem alterar a versão padrão. O resumo usa fechamento e, sem fechamento, soma da lavratura `motor` (`app/ponto/services/espelho.py:406–410`; `app/ponto/services/dia_pago.py:831–854`; `app/relatorios/cartao_pela_celula.py:323–345`, `:141–143`). |
+| Calendário do colaborador | Continua mostrando rubricas `motor`, obtidas por `linhas_do_periodo` (`app/colaboradores/services/calendario.py:290`, `:655–656`; `app/ponto/services/dia_pago.py:831–854`). |
+| PDF/cartão | Continua imprimindo `pago_h` e rubricas preparados pelo espelho; os totais seguem a mesma seleção entre fechamento e lavratura `motor` (`app/relatorios/pdf_espelho.py:837–839`, `:901–914`; `app/relatorios/cartao_pela_celula.py:323–345`). |
+| Extrato parcial | Continua somando `motor`, pois chama `soma_do_periodo` sem versão alternativa (`app/relatorios/views.py:481–487`; `app/ponto/services/dia_pago.py:750`, `:782–785`). |
+| Gestão de HE e informação ao DP na autorização por período | Continuam lendo a soma `motor` e o respectivo rótulo de disponibilidade (`app/ponto/services/gestao_he.py:256–257`, `:297–298`; `app/ponto/services/autorizacao_he_periodo.py:172–175`; `app/ponto/services/dia_pago.py:750`). |
+| App/API | Continua lendo `motor`; o payload recebe horas e `dia_pago_lavrada` dessa fonte (`app/api/views.py:1454–1457`, `:1539–1558`; `app/ponto/services/dia_pago.py:831`). |
+| TXT/export | As rubricas saem do `FechamentoMensal`, não da versão oráculo. A montagem percorre os fechamentos e seus eventos (`app/folha/export.py:703–724`). |
+| Conferência/placar S2 e R4 | Comparam/somam `motor`. A falta apenas de oráculo não entra em `colabs_sem_lavratura`; esse contador nasce quando a soma `motor` retorna `None` (`app/folha/porta_export.py:388–393`, `:588–597`; `app/ponto/services/dia_pago.py:548–559`). O comando publica o contador, que permanece fora de `falhas` (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:67–69`, `:88–107`; `app/folha/porta_export.py:687–701`). |
+| Termômetro R1/E6 | O “oráculo” aqui é o cálculo independente sobre batidas apuráveis; não é a linha `DiaPago.versao='oraculo'`. A comparação continua usando esse resultado (`app/ponto/management/commands/e6_oraculo.py:144–146`, `:304–318`; `app/core/placar_estrutural.py:115–116`). |
+
+Se **também faltar `motor`**, há comportamentos distintos: espelho mostra “sem apuração ainda”; extrato distingue “sem lavratura” de “sem apuração ainda”; a conferência registra `colabs_sem_lavratura`; o app entrega horas do período com `dia_pago_lavrada=False` (`app/templates/ponto/espelho.html:268–271`; `app/relatorios/views.py:516–536`; `app/folha/porta_export.py:388–393`; `app/ponto/services/espelho.py:129–136`).
+
+**3. Sonda integral — somente leitura**
+
+O script abaixo emite um `SELECT`, com tabelas qualificadas no schema `juliani`. Conta colaboradores distintos com **qualquer linha da versão**, inclusive ajuste; filtra a competência por `mes`/`ano`, pois `data` é nula no ajuste (`app/ponto/models.py:311–323`; `app/ponto/services/dia_pago.py:355–356`). A empresa é a vinculada atualmente ao colaborador (`app/colaboradores/models.py:321`).
+
+A janela usa `Empresa.dia_inicio_competencia` pela função existente; com corte 21, outubro é **21/09–20/10** e novembro **21/10–20/11** (`app/colaboradores/models.py:46`; `app/ponto/janelas.py:10–21`, `:36–57`). **Script não executado; resultados [não verificado].**
+
+```python
+from collections import defaultdict
+from types import SimpleNamespace
+
+from django.db import connection
+
+from colaboradores.models import Colaborador, Empresa
+from ponto.janelas import janela_fechamento
+from ponto.models import DiaPago
+
+
+SCHEMA = "juliani"
+COMPETENCIAS = ((10, 2026), (11, 2026))
+
+# Campos:
+# app/ponto/models.py:315-323
+# app/colaboradores/models.py:46,321
+#
+# Janela:
+# app/ponto/janelas.py:10-21,36-57
+#
+# As tabelas são qualificadas pelo schema; o script não troca search_path.
+q = connection.ops.quote_name
+
+
+def tabela(modelo):
+    return "%s.%s" % (q(SCHEMA), q(modelo._meta.db_table))
+
+
+def coluna(modelo, campo):
+    if campo == "pk":
+        return q(modelo._meta.pk.column)
+    return q(modelo._meta.get_field(campo).column)
+
+
+sql = f"""
+SELECT DISTINCT
+    e.{coluna(Empresa, "pk")},
+    e.{coluna(Empresa, "dia_inicio_competencia")},
+    dp.{coluna(DiaPago, "mes")},
+    dp.{coluna(DiaPago, "ano")},
+    dp.{coluna(DiaPago, "versao")},
+    dp.{coluna(DiaPago, "colaborador")}
+FROM {tabela(Empresa)} AS e
+LEFT JOIN {tabela(Colaborador)} AS c
+    ON c.{coluna(Colaborador, "empresa")} = e.{coluna(Empresa, "pk")}
+LEFT JOIN {tabela(DiaPago)} AS dp
+    ON dp.{coluna(DiaPago, "colaborador")} = c.{coluna(Colaborador, "pk")}
+   AND dp.{coluna(DiaPago, "ano")} = %s
+   AND dp.{coluna(DiaPago, "mes")} IN (%s, %s)
+   AND dp.{coluna(DiaPago, "versao")} IN (%s, %s)
+ORDER BY 1, 3, 4, 5, 6
+"""
+
+# Única consulta de dados: SELECT.
+with connection.cursor() as cursor:
+    cursor.execute(sql, (2026, 10, 11, "motor", "oraculo"))
+    linhas = cursor.fetchall()
+
+cortes = {}
+presenca = defaultdict(set)
+
+for empresa_id, corte, mes, ano, versao, colaborador_id in linhas:
+    cortes[empresa_id] = corte
+    if colaborador_id is not None:
+        presenca[(empresa_id, mes, ano, versao)].add(colaborador_id)
+
+for mes, ano in COMPETENCIAS:
+    for empresa_id in sorted(cortes):
+        empresa = SimpleNamespace(
+            pk=empresa_id,
+            dia_inicio_competencia=cortes[empresa_id],
+        )
+        inicio, fim = janela_fechamento(mes, ano, empresa)
+
+        motor = presenca[(empresa_id, mes, ano, "motor")]
+        oraculo = presenca[(empresa_id, mes, ano, "oraculo")]
+        faltantes = sorted(motor - oraculo)
+        rotulos = ["col%d" % pk for pk in faltantes]
+
+        print(
+            "tenant=%s empresa=emp%d competencia=%02d/%d "
+            "janela=%s..%s dia_inicio_competencia=%s "
+            "n_colabs_motor=%d n_colabs_oraculo=%d "
+            "n_motor_sem_oraculo=%d motor_sem_oraculo=%s"
+            % (
+                SCHEMA,
+                empresa_id,
+                mes,
+                ano,
+                inicio.strftime("%d/%m/%Y"),
+                fim.strftime("%d/%m/%Y"),
+                cortes[empresa_id],
+                len(motor),
+                len(oraculo),
+                len(faltantes),
+                "[" + ", ".join(rotulos) + "]",
+            )
+        )
+```
+
+## 06/11 14:08 · sessao 4a8660024d33 · - · - · origem=Ronald (tmux)
+
+Achados para consolidação, todos por leitura estática; não rodei testes nem escrevi arquivos. [nao verificado]
+
+1. **A publicação exagera o que “o próprio comando cobra”.** `SOMA.numero` afirma “36 linhas SOMA True”, “as HORAS também fecham” e “o PROPRIO comando a cobra”; `SOMA.fonte` repete “a soma e cobrada no proprio comando” ([app/core/placar_estrutural.py:106](/home/ronald/codex_ws/36c90132efac4acdd84dbf3cecb325ccdfe76c41/app/core/placar_estrutural.py:106), :108–109). O comando da cópia apenas imprime a soma dos donos e a soma das classes, sem comparação booleana, `assert`, exceção ou falha; não imprime verificações de horas nem união ([app/ponto/management/commands/e6_oraculo.py:415](/home/ronald/codex_ws/36c90132efac4acdd84dbf3cecb325ccdfe76c41/app/ponto/management/commands/e6_oraculo.py:415), :424–429). As 36 verificações constam do **anexo**, portanto são sustentadas enquanto saída fornecida; sua atribuição ao próprio comando desta cópia é incorreta. A sonda que acrescentou `UNIVERSO_PARTE`, `PARCIAL`, `PARCIAL_TOTAL`, `SOMA ... HORAS ... True`, `SOMA ... COLABS_UNIAO ... True` não foi fornecida [nao verificado]. Isso também afeta a frase de R1 em :118.
+
+2. **Nenhuma inversão de chave em E1:** `esp_zero_e6_trabalho` soma **35/28**, conforme publicado ([app/core/espelho_verdade.py:49](/home/ronald/codex_ws/36c90132efac4acdd84dbf3cecb325ccdfe76c41/app/core/espelho_verdade.py:49); anexo p1…p6, existência física [nao verificado]). A classe corresponde a `m_esp == 0`, com diferença absoluta superior a dez minutos; a chave inversa corresponde a `m_e6 == 0` e soma **19/14** ([app/ponto/management/commands/e6_oraculo.py:353](/home/ronald/codex_ws/36c90132efac4acdd84dbf3cecb325ccdfe76c41/app/ponto/management/commands/e6_oraculo.py:353), :358–360). `None` no espelho não é zero: tenta `pago_h`, e, faltando ambos, retorna ausência de lavratura (:251–257).
+
+3. **Horas publicadas são horas de diferença absoluta, não trabalho.** O acumulador acrescenta `abs(m_e6 - m_esp)` por divergência; o comando divide por sessenta ([app/ponto/management/commands/e6_oraculo.py:350](/home/ronald/codex_ws/36c90132efac4acdd84dbf3cecb325ccdfe76c41/app/ponto/management/commands/e6_oraculo.py:350), :368, :423). Os números de horas do diff são compatíveis com essa unidade; não se deve interpretá-los como horas trabalhadas ([app/core/placar_estrutural.py:106](/home/ronald/codex_ws/36c90132efac4acdd84dbf3cecb325ccdfe76c41/app/core/placar_estrutural.py:106), :118; soma do anexo, origem física [nao verificado]).
+
+4. **Subconjunto precisa ficar claro em E6-batida-impar.** `198+1=199` e `137+2=139` repartem apenas os **ímpares divergentes**, não todos os 347/262 comparados; o código só incrementa `impar_no_conjunto_do_dia`/`impar_SO_POR_CORTE_do_oraculo` depois de rejeitar BATE ([app/ponto/management/commands/e6_oraculo.py:353](/home/ronald/codex_ws/36c90132efac4acdd84dbf3cecb325ccdfe76c41/app/ponto/management/commands/e6_oraculo.py:353), :370–382). O mesmo vale para **31/25 FORA**: pertencem aos 199/139 divergentes (:383–387). Os valores de [app/core/espelho_verdade.py:177](/home/ronald/codex_ws/36c90132efac4acdd84dbf3cecb325ccdfe76c41/app/core/espelho_verdade.py:177) estão corretos, mas o texto poderia explicitar “dos que divergem”.
+
+5. **“Nenhum fica fora em silencio” exige delimitar o universo comparável.** O comando elimina dias sem linha, com isenção/ausência, sem lavratura, zero dos dois lados ou diferença explicada pelo intervalo declarado **antes** de classificar a paridade ([app/ponto/management/commands/e6_oraculo.py:324](/home/ronald/codex_ws/36c90132efac4acdd84dbf3cecb325ccdfe76c41/app/ponto/management/commands/e6_oraculo.py:324), :327–349). A medida mostra que `dia_batida_impar = impar_que_BATE + impar_que_DIVERGE` entre comparados; não informa quantos excluídos também eram ímpares [nao verificado]. A frase universal de [app/core/espelho_verdade.py:177](/home/ronald/codex_ws/36c90132efac4acdd84dbf3cecb325ccdfe76c41/app/core/espelho_verdade.py:177) não prova ausência de todos os tipos de exclusão.
+
+6. **Causa operacional não demonstrada:** “a saída que falta e cobranca, nao cura de motor” permanece em [app/core/espelho_verdade.py:82](/home/ronald/codex_ws/36c90132efac4acdd84dbf3cecb325ccdfe76c41/app/core/espelho_verdade.py:82). Contagem ímpar e faixa não demonstram essa exclusividade: o próprio comando reconhece artefato do corte como suspeita do oráculo ([app/ponto/management/commands/e6_oraculo.py:372](/home/ronald/codex_ws/36c90132efac4acdd84dbf3cecb325ccdfe76c41/app/ponto/management/commands/e6_oraculo.py:372), :379–385); a docstring cita casos em que o oráculo corta jornada verdadeira e a tela está certa (:25–31). A medida fornecida inclui **1/2** divergentes ímpares só pelo corte [nao verificado quanto arquivos físicos]. Portanto o dado não identifica “só cobrança” como causa/cura.
+
+7. **Texto velho continua em R1:** a nota ainda diz “a medicao da competencia aberta e de 09/10” e que a cadência “foi CUMPRIDA”, embora o número/prova passem a 06/11 ([app/core/placar_estrutural.py:119](/home/ronald/codex_ws/36c90132efac4acdd84dbf3cecb325ccdfe76c41/app/core/placar_estrutural.py:119), em contraste com :118/:120). É história possivelmente intencional, mas está no presente e cita a medição antiga. Não localizei os antigos 95,8%, 333, 92/449,2/39 nos seis itens novos; o `194` em placar :150 pertence a R3, outra medida.
+
+8. **Destino declarado como regra versus medido:** “CADASTRO ... BATIDA ... vao a lista do admin” em [app/core/espelho_verdade.py:173](/home/ronald/codex_ws/36c90132efac4acdd84dbf3cecb325ccdfe76c41/app/core/espelho_verdade.py:173) tem respaldo como política em L-099 ([app/docs/LEIS.md:122](/home/ronald/codex_ws/36c90132efac4acdd84dbf3cecb325ccdfe76c41/app/docs/LEIS.md:122)); o anexo não demonstra que todos os 32/113 e 33/78 tenham efetivamente entrada ou chamado [nao verificado]. O comando imprime o rótulo “lista do admin”, mas não realiza escrita nela ([app/ponto/management/commands/e6_oraculo.py:418](/home/ronald/codex_ws/36c90132efac4acdd84dbf3cecb325ccdfe76c41/app/ponto/management/commands/e6_oraculo.py:418), :419–423).
+
+9. **“0 erro” não foi reafirmado no novo E6-sistema-bate.** O comando tem contador específico de exceções de `espelho_do_colab`, imprime “erros no espelho”, mas o anexo não apresenta essa linha ([app/ponto/management/commands/e6_oraculo.py:303](/home/ronald/codex_ws/36c90132efac4acdd84dbf3cecb325ccdfe76c41/app/ponto/management/commands/e6_oraculo.py:303), :305–307, :396). `rc_sombra=0`/ausência de `INCOMPLETO` no anexo não prova, isoladamente, zero exceções capturadas [nao verificado]. A nova prova corretamente suprimiu “0 erro” ([app/core/espelho_verdade.py:169](/home/ronald/codex_ws/36c90132efac4acdd84dbf3cecb325ccdfe76c41/app/core/espelho_verdade.py:169)).
+
+10. **União somada depende das partes serem disjuntas:** a medida permite reproduzir 144/105 pela soma dos seis `PARCIAL_TOTAL.colabs`; não permite conferir identidades ou ausência de sobreposição entre partes [nao verificado]. O comando normal mantém conjuntos por dono e calcula união real do seu próprio `div` ([app/ponto/management/commands/e6_oraculo.py:369](/home/ronald/codex_ws/36c90132efac4acdd84dbf3cecb325ccdfe76c41/app/ponto/management/commands/e6_oraculo.py:369), :429). A implementação do particionamento não consta deste comando (:264–270 não têm `--parte`/`--partes`).
+
+## 06/11 14:07 · sessao bc8feadb57e1 · - · - · origem=Ronald (tmux)
+
+Achados procedentes:
+
+1. **O selo novo valida uma família de nomes, não uma única medição.** `_cita_a_medicao` usa `any(fnmatch(...))`; provas com `r1_dono_...20261106.txt` e `r1_dono_...20261024.txt` passam simultaneamente, assim como a prova literal contendo o próprio glob. Além disso, `_medido_em` escolhe a maior data entre os arquivos existentes, sem conferir qual arquivo a prova cita. Logo, o selo pode ficar verde com número/prova antigos e data de outro arquivo. Procedência: execução em memória das funções reais, sem gravação; `app/core/tests/test_r1_termometro_uma_medicao.py:29`, `:45`, `:50`, `:57`; `bin/gerar_estado.py:51`, `:56`.
+
+2. **A publicação dos seis itens elimina os números e a referência completa.** O publicador corta cada prova em 150 caracteres; todos os seis textos novos têm exatamente o mesmo prefixo de 150 caracteres, terminando em `578 na 11 = soma das partes,`. A tabela pública não mostra BATE, divergentes, ímpares, zeros ou caminho da medição nesses itens. Procedência: recorte em memória dos textos reais; `bin/gerar_estado.py:164`; `app/core/espelho_verdade.py:49`, `:82`, `:169`, `:173`, `:177`, `:179`.
+
+3. **Existe outro publicador de números E6 fora da costura nova.** O ESTADO continua carregando `logs/e6_placar.json` e publicando `pct_bate`, `dias_comparados`, `colabs_divergentes` e `quando`, independentemente da fonte R1. O selo novo só seleciona provas começando com `TERMOMETRO R1`. Se esse JSON contém números velhos, eles continuam aparecendo; o conteúdo atual é [nao verificado]. Procedência: `bin/gerar_estado.py:145`, `:168`; `app/core/espelho_verdade.py:208`; `app/core/tests/test_r1_termometro_uma_medicao.py:37`.
+
+Censo dos campos:
+
+| Campo | Escritor canônico | Leitores reais |
+|---|---|---|
+| SOMA.numero/prova | `app/core/placar_estrutural.py:106`, `:107` | `app/core/placar_estrutural.py:634`, `:637`; `bin/gerar_estado.py:99`, `:100`; selo novo lê prova em `app/core/tests/test_r1_termometro_uma_medicao.py:50`; host varre strings em `bin/tests/test_placar_nao_afirma_fora_do_ar.sh:65` |
+| R1.numero/prova | `app/core/placar_estrutural.py:118`, `:120` | `app/core/placar_estrutural.py:634`, `:637`; número publicado em `bin/gerar_estado.py:116`; prova conferida pelo selo novo em `app/core/tests/test_r1_termometro_uma_medicao.py:45`; host em `bin/tests/test_placar_nao_afirma_fora_do_ar.sh:65` |
+| R1.fonte_do_medido | `app/core/placar_estrutural.py:111` | `bin/gerar_estado.py:47`; selo novo em `app/core/tests/test_r1_termometro_uma_medicao.py:45`, `:50`, `:54`; presença exigida em `app/core/tests/test_l114_placar_papel_e_termometro.py:98`; host varre strings em `bin/tests/test_placar_nao_afirma_fora_do_ar.sh:65` |
+| ETAPAS[…].prova | `app/core/espelho_verdade.py:49`, `:82`, `:169`, `:173`, `:177`, `:179` | `app/core/espelho_verdade.py:201`, `:203`; `bin/gerar_estado.py:164`; selo novo em `app/core/tests/test_r1_termometro_uma_medicao.py:39`, `:57` |
+
+Leitores acessórios e selos:
+
+- O teste L114 lê o registro R1, a separação de papéis e o vencimento, sem fixar a pasta antiga; substitui `RESULTADOS` apenas por fixture sintética e restaura depois. `app/core/tests/test_l114_placar_papel_e_termometro.py:31`, `:65`, `:96`, `:116`.
+- O host de hash só acusa frases declaradas de “fora do ar” na mesma sentença de hash reconhecido e ancestral. Os textos novos não introduzem essa combinação. `bin/tests/test_placar_nao_afirma_fora_do_ar.sh:47`, `:65`, `:72`, `:75`; textos em `app/core/placar_estrutural.py:106`, `:118`, `:120`.
+- O selo de data percorre código por regex; a conferência real em memória retornou **nenhuma data cravada no placar**. Datas em caminhos `20261106` e prosa `06/11` não casam esses padrões. `app/core/datas_cravadas.py:26`, `:117`; exigência específica em `app/core/tests/test_l114_placar_papel_e_termometro.py:90`.
+- `handoff_sessao.sh` lê o arquivo inteiro, mas extrai somente a frase `contratos_estruturais: N/T verdes` do R6, fora dos campos alterados. O respectivo teste também só lê R6.numero. `bin/handoff_sessao.sh:178`; `app/core/tests/test_selo_r6_frase_do_juiz.py:17`.
+- A publicação passa pelo raspador e o selo de nomes/CPF examina o repositório público usando nomes do banco; não valida a pasta dos logs. Resultado real de privacidade: [nao verificado], pois exige banco e publicação. `bin/relato.sh:103`, `:105`; `bin/tests/test_publicacao_sem_nome.sh:39`, `:47`, `:60`, `:72`.
+- Número sem prova continua rebaixando o placar; FEITO sem prova continua rebaixando o espelho. As novas provas são não vazias. `app/core/placar_estrutural.py:637`; `app/core/espelho_verdade.py:201`; prova nova em `app/core/placar_estrutural.py:120`, `app/core/espelho_verdade.py:177`.
+
+A mudança para `logs/r1remede/r1_dono_*.txt` é compatível com o leitor de glob/data, desde que o arquivo datado exista no host; existência e retorno em produção são [nao verificado]. `bin/gerar_estado.py:47`, `:51`, `:52`.
+
+## 06/11 14:07 · sessao c673e8cb9b39 · - · - · origem=Ronald (tmux)
+
+Achado procedente: o selo novo não garante “uma medição”; garante apenas que alguma referência na prova casa com a glob. `_cita_a_medicao` usa somente `any(fnmatch.fnmatch(...))`, sem identificar o arquivo/data comum entre leitores (`app/core/tests/test_r1_termometro_uma_medicao.py:29`). A fonte permite múltiplos arquivos (`app/core/placar_estrutural.py:111`), enquanto o publicador escolhe a maior data entre **todos** os arquivos existentes nessa glob, independentemente da prova citada (`bin/gerar_estado.py:51`, `bin/gerar_estado.py:56`).
+
+Contraexemplo reproduzido em memória: com o padrão atual, a prova `logs/r1remede/r1_dono_10_e_11_20261024.txt` passa, assim como uma referência sem data e até `logs/r1remede/r1_dono_*.txt`. Portanto, provas de 24/10 e 06/11 podem coexistir com o selo verde e carimbo escolhido pelo máximo do diretório. Origem do defeito: matcher em `app/core/tests/test_r1_termometro_uma_medicao.py:29`; ligação ausente com o arquivo efetivamente selecionado por `bin/gerar_estado.py:51`.
+
+Outro escape reproduzido: retirando o prefixo `TERMOMETRO R1` de uma das seis provas, esse item deixa de ser fiscalizado, pois o censo usa `startswith` (`app/core/tests/test_r1_termometro_uma_medicao.py:37`). A proteção contra vacuidade exige apenas que **algum** item permaneça no conjunto (`app/core/tests/test_r1_termometro_uma_medicao.py:56`).
+
+Validação limitada, somente leitura: carreguei por `compile/exec` os módulos puros e substituí apenas a base `django.test.SimpleTestCase` por `unittest.TestCase`, executando os quatro métodos do selo. Atual: 4 casos, 0 falhas, 0 erros. Mutante mesma glob/outra data em uma prova: 4/0/0. Mutante removendo o prefixo desse item: 4/0/0. Isso não comprova execução da suite Django/canônica [nao verificado]. [nao verificado]
+
+O selo tem mordida real para a mudança **de pasta**: o caso adversarial rejeita `logs/sombra/...` e aceita `logs/x/r1_dono_...`, incluindo pontuação final (`app/core/tests/test_r1_termometro_uma_medicao.py:60`). Não copia valores medidos atuais nem data/caminho atual nas asserções; consulta as estruturas do código e usa um caminho fictício no adversarial (`app/core/tests/test_r1_termometro_uma_medicao.py:43`, `app/core/tests/test_r1_termometro_uma_medicao.py:62`). O literal “39 dia-colab” não é conferido pelo matcher, que só extrai caminhos (`app/core/tests/test_r1_termometro_uma_medicao.py:22`, `app/core/tests/test_r1_termometro_uma_medicao.py:64`).
+
+Não há leitura de relógio no selo novo: suas importações e helpers usam `fnmatch`, regex e os dois módulos de dados (`app/core/tests/test_r1_termometro_uma_medicao.py:14`). O relógio continua na borda publicadora (`bin/gerar_estado.py:79`); o cálculo do vencimento recebe `hoje` e `medido_em` por parâmetro (`app/core/placar_estrutural.py:617`, `app/core/placar_estrutural.py:647`).
+
+O RED histórico alegado no commit, com `FAILED failures=1` e `logs/r1pub/red.log`, não pode ser confirmado com o material disponível [nao verificado]. A ausência de sustentação desse histórico não elimina a mordida estática contra a pasta antiga, mas também não comprova a execução alegada (`app/core/tests/test_r1_termometro_uma_medicao.py:60`).
+
+Pequena inconsistência documental introduzida: a docstring diz “cinco itens” antigos (`app/core/tests/test_r1_termometro_uma_medicao.py:9`), enquanto o diff fornecido troca seis provas — E1-sem-previsao, E3-turno-aberto e quatro itens E6 (`app/core/espelho_verdade.py:49`, `app/core/espelho_verdade.py:82`, `app/core/espelho_verdade.py:169`, `app/core/espelho_verdade.py:173`, `app/core/espelho_verdade.py:177`, `app/core/espelho_verdade.py:179`).
+
+Das classes listadas, a ocorrência comprovável é **selo com mordida insuficiente para a propriedade declarada** (`app/core/tests/test_r1_termometro_uma_medicao.py:29`). O diff de produto altera dados declarados, sem introduzir nova função de julgamento/escrita ou travas (`app/core/placar_estrutural.py:106`, `app/core/placar_estrutural.py:118`, `app/core/espelho_verdade.py:49`). Pouso, ordem efetivamente executada, suite verde e leitura final não estão demonstrados [nao verificado].
 
 ## 06/11 13:57 · sessao 0b5c7db967e3 · V3-IMPACTO-COM-DONO · leitura · origem=Code
 
@@ -1241,193 +1486,4 @@ SOMA DIVERGENCIA|2026-10|horas_extras_100_feriado
 
 [truncado em 20000 de 27017 caracteres]
 
-## 06/11 13:18 · sessao ced52b90b319 · E-SEM-VIVA-B · verificador · origem=Code
-
-**A volta 3 cura os cortes do retentor reconhecidos na triagem. A equivalência fica demonstrável para células `nunca_bateu` até ontem, no mesmo estado cadastral; não para toda a classificação efetiva do TXT. Restam um custo novo por desligado e uma garantia incompleta do selo AST.** (`app/escala/services/cadastro_realidade.py:163–174`; `app/folha/export.py:775–780,858–876,960,1192–1258`; `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:179–199`.)
-
-**1. Informativa — procedente: escritores e leitores.**
-
-| Campo/função | Quem escreve ou produz | Quem lê |
-|---|---|---|
-| `CelulaDia.veredito` | Porta atribui e persiste; método do modelo delega. Cartório e decisão humana são chamadores. (`app/ponto/portas/celula.py:789–819`; `app/escala/models.py:1819–1828`; `app/ponto/services/cartorio.py:1242–1247`; `app/ponto/services/veredito_celula.py:330`.) | C5, retentor, adesão, vigia do fio e Dia da Frota. (`app/escala/services/cadastro_realidade.py:164`; `app/folha/export.py:1233–1255`; `app/chamados/services/adesao.py:32–34`; `app/chamados/services/vigia_fio.py:379`; `app/relatorios/dia_da_frota.py:51–60`.) |
-| `CelulaDia.protestos` | Mesma porta: cartório fornece códigos; decisão administrativa preserva os anteriores. (`app/ponto/portas/celula.py:789–795,813–819`.) | Retentor, juiz da pausa, outras assinaturas da lista e vigia de furos. **C5 não lê diretamente.** (`app/folha/export.py:1165,1246–1253`; `app/escala/services/cadastro_realidade.py:170,430,559`; `app/ponto/services/furos_sem_cobranca.py:57`.) |
-| `Colaborador.situacao` | Operação `situacao` da porta; desligamento, reativação, INSS e reversor a chamam. (`app/colaboradores/services/colaborador.py:32,55–93`; `app/colaboradores/services/desligamento.py:104–108,210–214`; `app/ponto/views.py:2433–2435`; `app/ponto/management/commands/reverter_situacao_afastado.py:65–80`.) | Seleção dos desligados na C5, C4, emissão, adesão, cobrança e efetivação dos agendados. (`app/escala/services/cadastro_realidade.py:168,550`; `app/ponto/services/cartorio.py:1697,1762`; `app/chamados/services/adesao.py:33,66`; `app/escala/services/furos_diarios.py:259`; `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:38–45`.) |
-| `Colaborador.data_demissao` | Mesma operação; agendamento preenche sem desligar, desligamento preenche, reativação limpa. (`app/colaboradores/services/colaborador.py:32,55–76`; `app/colaboradores/services/desligamento.py:85–86,104–108,210–214`.) | `sai_pela_rescisao`, retentor, cartório, cadastro e cron dos agendados. **C5 recebe a resposta das funções.** (`app/folha/export.py:60,1200–1201,1229`; `app/ponto/services/cartorio.py:1096`; `app/escala/services/cadastro_realidade.py:169–170,463`; `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:38–45`.) |
-| `Colaborador.data_admissao` | Operação `cadastro`; criação e edição cadastral fornecem o valor. (`app/colaboradores/services/colaborador.py:34–35,55–93`; `app/colaboradores/views.py:1188,1314,1340–1342`.) | Retentor corta o início; C5 herda esse corte. (`app/folha/export.py:1198–1206`; `app/escala/services/cadastro_realidade.py:170`.) |
-| `Colaborador.isento_ponto` | Operação `cadastro`, chamada pela tela de passe livre. (`app/colaboradores/services/colaborador.py:34–35,55–61`; `app/colaboradores/views.py:164–176`.) | Autoridade `core.constants.isento_ponto`; retentor, adesão e furos diários a consultam. (`app/core/constants.py:13–18`; `app/folha/export.py:1192`; `app/chamados/services/adesao.py:64`; `app/escala/services/furos_diarios.py:33,298`.) |
-| `colabs_nunca_bateu` | Produz mapa em memória, sem persistência. (`app/escala/services/cadastro_realidade.py:160–175`.) | Chamadores produtivos diretos encontrados: `_nunca_bateu` e `censo`. (`app/escala/services/cadastro_realidade.py:181`; `app/folha/vigia_retido_calado.py:43`.) |
-| `sai_pela_rescisao` | Produz booleano; compara demissão com fim, **sem ler situação**. (`app/folha/export.py:54–60`.) | Classificador, C5 e resumo do fechamento. (`app/folha/export.py:858`; `app/escala/services/cadastro_realidade.py:169`; `app/ponto/services/fechamento_lista.py:51,109`.) |
-| `motivos_retencao_celula` | Produz motivos e, opcionalmente, dias retidos; sem persistência. (`app/folha/export.py:1168–1258`.) | C5, compatibilidade do classificador, fora da folha, prévia e vigia da pausa. (`app/escala/services/cadastro_realidade.py:170`; `app/folha/export.py:960,1267`; `app/folha/fora_da_folha.py:98`; `app/folha/previa.py:170`; `app/folha/services/vigia_pausa.py:125`.) |
-| `janela_atual/anterior` | Motor produz intervalos pelo corte da empresa; não persiste. (`app/ponto/janelas.py:10–72`.) | C5, cartório, furos, cadastro de tipo, pré-fechamento, adesão e lavrador do Retrato; exportação usa `janela_fechamento` do mesmo motor. (`app/escala/services/cadastro_realidade.py:163`; `app/ponto/services/cartorio.py:264,325`; `app/escala/services/furos_diarios.py:68,76`; `app/escala/services/cadastro_tipo.py:336`; `app/folha/management/commands/pre_fechamento.py:73,89`; `app/chamados/services/adesao.py:56`; `app/folha/management/commands/lavrar_retrato_folha.py:46,60`; `app/folha/export.py:47–51`.) |
-| `vigia_retido_calado.censo` | Lê Retratos e C5, produz contadores em memória. (`app/folha/vigia_retido_calado.py:33–57`.) | Command chama; `linhas()` formata. (`app/folha/management/commands/vigiar_retido_calado.py:14,31–33`; `app/folha/vigia_retido_calado.py:60–66`.) |
-| Command `vigiar_retido_calado` | Lê relógio, chama censo, imprime e pode encerrar com código 2; não persiste. (`app/folha/management/commands/vigiar_retido_calado.py:28–40`.) | Cron registrado após a lavra do Retrato. Execução efetiva: **[não verificado]**. (`app/config/crons.py:1641–1643`.) |
-
-Exaustividade de acessos dinâmicos, SQL externo e consumidores fora desta cópia: **[não verificado]**.
-
-**2. Informativa — procedente: equivalência com rescisão + retentor, no recorte da C5.**
-
-Para desligado, a implementação calcula precisamente:
-
-`NB existente nas duas janelas, até ontem ∩ dias do retentor nas competências que não saem pela rescisão`.
-
-Não filtrar `x['motivo']` não produz divergência nesse estado: existe uma única célula por colaborador/data, e uma célula NB retida recebe `espelho_nunca_bateu`. (`app/escala/services/cadastro_realidade.py:163–174`; `app/escala/models.py:1833`; `app/folha/export.py:1233–1254`.)
-
-Casos sintéticos abaixo: hoje **25/10/2026**, corte **21**, anterior **21/09–20/10**, corrente **21/10–20/11**; NB já lavrado, sem outras isenções além das indicadas. (`app/ponto/janelas.py:10–33,60–72`; `app/escala/services/cadastro_realidade.py:163–170`.)
-
-| Caso | C5 versus rescisão + retentor |
-|---|---|
-| Admissão 10/10; NB 05/10 e 20/10; demissão 22/10 | **Coincidem: só 20/10.** Admissão corta 05/10; corrente sai pela rescisão. (`app/folha/export.py:60,1198–1206`; `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:120–123`.) |
-| Isento | **Coincidem: vazio.** (`app/folha/export.py:1192–1196`; `app/escala/services/cadastro_realidade.py:170`.) |
-| Protestos somente `FURO_PRE_ADOCAO` | **Coincidem: dia dispensado.** (`app/ponto/supra_juiz.py:34–36`; `app/folha/export.py:1245–1254`.) |
-| Sem protestos ou mistura com código cobrável | **Coincidem: dia retido.** (`app/folha/export.py:1242–1254`.) |
-| Somente `FURO_PARCIAL`, entrada/saída completas e apenas pausa apagada | **Coincidem: dia dispensado.** A resposta vem do juiz de marcos pelo retentor. (`app/folha/export.py:1140–1147,1165,1253`; `app/escala/services/cadastro_realidade.py:170`.) |
-| `FURO_PARCIAL` misto, ou ata desconhecida/desalinhada/turno aberto | **Coincidem: dia retido.** A exceção exige protesto exclusivo e confirmação da pausa. (`app/folha/export.py:1142–1147,1165,1253–1254`.) |
-| Demissão 21/09 ou 20/10 | **Coincidem: nenhuma competência passa.** (`app/folha/export.py:60`; `app/escala/services/cadastro_realidade.py:169`.) |
-| Demissão 21/10 ou 20/11 | **Coincidem: só anterior.** O primeiro e o último dia da corrente já eliminam a corrente inteira. (`app/folha/export.py:60`; `app/escala/services/cadastro_realidade.py:169`.) |
-| Demissão futura 30/10 | **Coincidem: só anterior**, embora a demissão ainda não tenha ocorrido. (`app/folha/export.py:60`; `app/escala/services/cadastro_realidade.py:169`.) |
-| Demissão nula ou 21/11 | Ambas passam pela rescisão; **coincidem para NB até ontem**. (`app/folha/export.py:60`; `app/escala/services/cadastro_realidade.py:165,169–173`.) |
-| Corte 10; demissão 15/10; NB 05/10 e 12/10 | **Coincidem: só 05/10.** Anterior termina 09/10; corrente termina 09/11. (`app/ponto/janelas.py:10–33,60–72`; `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:147–152`.) |
-| Hoje 21/10, primeiro dia da competência | C5 só alcança a anterior. O retentor da corrente pode reter NB em 21/10 ou depois, caso passe pela rescisão. **Divergência pelo limite temporal da C5.** (`app/escala/services/cadastro_realidade.py:159,163–165`; `app/folha/export.py:1233–1254`.) |
-| Sem demissão; NB em 25/10 e 26/10 | **Retentor inclui; C5 exclui ambos.** O ramo acusador do retentor não exige `d < hoje`. (`app/folha/export.py:1225–1254`; `app/escala/services/cadastro_realidade.py:165`.) |
-| Troca A/corte21 → B/corte10; demissão 15/10; NB 05/10 | Antes nada; depois 05/10 entra. **Ambos usam a empresa atual**, portanto não há divergência entre as funções no mesmo estado. Retrato histórico pode discordar da lista atual. (`app/escala/services/cadastro_realidade.py:160–170`; `app/folha/export.py:778,807,1266`; `app/folha/vigia_retido_calado.py:38–48`.) |
-
-**Média — procedente como limite da alegação:** igualdade irrestrita continua falsa por hoje/futuro. Esse limite já integra o contrato declarado da C5; não é regressão introduzida nesta volta. (`app/escala/services/cadastro_realidade.py:132,159,165`; `app/folha/export.py:1233–1254`.)
-
-**Informativa — procedente:** igualdade com o resultado efetivo de `classificar_export` também não está provada: fechamento ausente não entra no universo padrão; código vazio, férias com batida e cadastro zero podem sair antes do retentor. Isso limita a alegação, sem invalidar a cura restrita determinada pela triagem. (`app/folha/export.py:775–780,864–876,951–960`; `app/escala/services/cadastro_realidade.py:169–170`.)
-
-**3. Informativa — procedente: ativo conserva os valores; identidade operacional tem ressalva.**
-
-Comparando os anexos `v3_base.diff` e `v3.diff`, o ativo mantém o mesmo universo e ordenação de dias de **24946096** e **661c6190**: o novo filtro só alcança IDs selecionados como desligados. Admissão, isenção, protestos e demissão preenchida do ativo continuam sem cortar sua C5. Os testes exigem esses casos. (`app/escala/services/cadastro_realidade.py:164–174`; `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:93–98,153–160`; versões anteriores nos anexos fornecidos.)
-
-**Média — dúvida operacional:** uma exceção no novo retentor de qualquer desligado agora aborta a função inteira; `lista()` captura a exceção e perde toda a contribuição C5, inclusive de ativos. Portanto a preservação é de valores numa leitura concluída, não de disponibilidade sob falha. Ocorrência concreta: **[não verificado]**. (`app/escala/services/cadastro_realidade.py:168–175,811–817`.)
-
-**4. Informativa — procedente: situação da triagem da v2.**
-
-| Item | Veredito |
-|---|---|
-| Achado 2: admissão, isenção e protestos | **Curado no contrato rescisão + retentor.** Agora consulta a função real; os três contraexemplos viraram asserções. (`app/escala/services/cadastro_realidade.py:169–170`; `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:119–136`.) |
-| Achado 7: corte da empresa, demissão no fim, command sem hoje, predicado direto | **Casos acrescentados e selo presente.** A garantia arquitetural do selo tem a limitação do achado 5 abaixo. (`app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:139–152,163–208`; `app/folha/tests/test_vigia_retido_calado.py:122–130`.) |
-| Item 4: remoção do corte posterior à demissão | **Descarte procede.** Para sobreviver, demissão precisa ser posterior ao fim da competência; todo dia dessa competência é anterior à demissão. (`app/folha/export.py:60`; `app/ponto/janelas.py:60–72`; `app/escala/services/cadastro_realidade.py:169`.) |
-| Item 3: preservação do ativo | **Procede**, com a ressalva operacional acima. (`app/escala/services/cadastro_realidade.py:168–174,811–817`.) |
-| Item 13: relógio | **Curado no caminho command → censo → C5.** Fallback continua executável fora desse caminho. (`app/folha/management/commands/vigiar_retido_calado.py:31`; `app/folha/vigia_retido_calado.py:43`; `app/escala/services/cadastro_realidade.py:158`.) |
-| Item 16: citação do corte | **Curado no teste:** aponta ao trecho efetivo de admissão/demissão. (`app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:5–6`; `app/folha/export.py:1198–1201`.) |
-| Roteamento sem `data` | **Permanece tecnicamente procedente**, conforme fila expressamente informada no pedido. C5 não fornece a chave; vigia reduz o mapa a IDs. (`app/escala/services/cadastro_realidade.py:182–183,986–989`; `app/folha/vigia_retido_calado.py:43–48`.) |
-| Item 9: porta, sem push, HX intocado | **Descarte de defeito novo procede no diff fornecido.** Porta C5 preservada; emissão continua vetando desligado; HX continua lavrando pela porta com códigos vazios. (`app/escala/services/cadastro_realidade.py:637–639`; `app/ponto/services/cartorio.py:1241–1247,1696–1697,1762`.) |
-
-**5. Média — procedente: custo novo; selo com mordida limitada.**
-
-O comentário **“UMA query por empresa” está falso**. Além da consulta NB e do lote de desligados por empresa, cada janela elegível de um desligado não isento e com intervalo não colapsado consulta células e vínculos: **até quatro consultas adicionais por desligado**, duas quando só uma janela passa. Rescisão, isenção ou intervalo colapsado podem evitar essas consultas internas. Latência e quantidade real de desligados: **[não verificado]**. (`app/escala/services/cadastro_realidade.py:135,160–170`; `app/folha/export.py:1192–1212`; `app/escala/alimentacao.py:148–154,163–186`.)
-
-O selo verifica presença sintática de chamadas e ausência de quatro atributos diretos; não verifica execução das chamadas, uso dos retornos ou leitura por strings. (`app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:179–199`.)
-
-**Mutante relevante:** substituir a chamada produtiva de rescisão pelo mesmo predicado usando `getattr(colab, 'data_demissao')` e preservar `if False: sai_pela_rescisao(None, None)`. Confirmei em memória que as asserções AST aceitam essa fonte; o predicado continua equivalente à autoridade atual, mas passa a existir uma cópia independente. Sobrevivência na suíte completa: **[não verificado]**. (`app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:183–199`; `app/folha/export.py:60`.)
-
-O anexo relata **M0 verde e M1–M7 mortos**; isso sustenta mordida contra os mutantes nomeados, não garantia geral de fonte única. Código integral dos mutantes e reprodução dessas execuções: **[não verificado]**. (`v3_mutantes.tab:1–8`, anexo fornecido; `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:119–208`; `app/folha/tests/test_vigia_retido_calado.py:122–130`.)
-
-| Classe de reprovação | Presença nesta árvore |
-|---|---|
-| Segundo juiz duplicando registrado | **Ausente para rescisão + retenção:** usa efetivamente as respostas reais. O classificador completo continua sendo a autoridade para entrada no TXT. (`app/escala/services/cadastro_realidade.py:169–173`; `app/core/juizes.py:288–299`.) |
-| Segundo escritor fora da porta | **Ausente no diff produtivo:** leituras e resultados em memória; nenhum escritor novo nesses trechos. (`app/escala/services/cadastro_realidade.py:160–175`; `app/folha/vigia_retido_calado.py:33–57`; `app/folha/management/commands/vigiar_retido_calado.py:28–40`.) |
-| Relógio fora da borda | **Ausente no caminho corrigido; fallback presente.** (`app/folha/management/commands/vigiar_retido_calado.py:31`; `app/folha/vigia_retido_calado.py:43`; `app/escala/services/cadastro_realidade.py:158`.) |
-| Derivação paralela | **Ausente na implementação da pergunta restrita.** O selo não impede todas as futuras formas de reintroduzi-la. (`app/escala/services/cadastro_realidade.py:169–170`; `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:183–199`.) |
-| Selo/RED sem mordida | **Ausência total: não. Garantia incompleta: sim**, conforme mutante acima. (`app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:119–208`.) |
-| Ordem de trava | **Ausente nova aquisição/inversão explícita** nos caminhos alterados e carregadores consultados. (`app/escala/services/cadastro_realidade.py:160–175`; `app/folha/export.py:1192–1258`; `app/escala/alimentacao.py:148–154`.) |
-| Pouso antes do pré-requisito | **Dúvida — [não verificado].** Os 25 testes do anexo não demonstram suíte inteira verde seguida de opus final nem sequência de pouso. (`CLAUDE.md:364–373`; `v3_mutantes.tab:1`, anexo fornecido.) | [nao verificado]
-
-L-026 é atendida pelo corte da empresa; L-033 chega à C5 pelo retentor; L-040 conserva lista e PDF compartilhados. (`app/docs/LEIS.md:77,81,88`; `app/escala/services/cadastro_realidade.py:163,170,992`; `app/escala/views.py:484–492`.)
-
-**6. Informativa — procedente: outros leitores mudam frente a 661c6190.**
-
-Para mesmos dados, mesmo hoje e leitura concluída, a v3 acrescenta uma interseção com o retentor: **só retira dias/IDs de desligados relativamente à v2**. (`app/escala/services/cadastro_realidade.py:169–174`; versão anterior no `v3.diff` fornecido.)
-
-| Leitor | Quanto muda |
-|---|---|
-| `_nunca_bateu` / `lista()` | Menos dias no detalhe; ao perder o último, perde uma C5. C5 conta uma ocorrência por assinatura, não por dia. A pessoa desaparece se ficar sem nenhuma assinatura. (`app/escala/services/cadastro_realidade.py:181–184,813–814,858–866,875–904`.) |
-| Tela/PDF | Exibem a lista alterada. (`app/escala/views.py:484–492`; `app/escala/services/cadastro_realidade.py:992–993`.) |
-| `vigia_retido_calado` | Por ID que perde a última data: **roteados −k; calados +k**, sendo k suas linhas bloqueadas/`ninguem` nos Retratos lidos. Bloqueados e cego ficam iguais para os mesmos Retratos. (`app/folha/vigia_retido_calado.py:43–56`.) |
-| Vigia do fio | C5 continua acrescentando **zero dias** ao mapa. Perdendo a última assinatura da pessoa, pode mudar causa **d → e**, satisfeitas as demais condições. (`app/escala/services/cadastro_realidade.py:182–183,986–989`; `app/chamados/services/vigia_fio.py:216–218,677–686`.) |
-| `vigiar_fio_morto` | Contadores derivados podem mudar no carimbo JSON de frota; com `--empresa`, não carimba. (`app/chamados/management/commands/vigiar_fio_morto.py:210–230`.) |
-| Fechadores de avisos/vínculos | **Variação de seleção por C5 = zero:** selecionam exclusivamente C7/C8. (`app/escala/management/commands/fechar_avisos_regua_na_lista.py:27–37`; `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:35–45`.) |
-| `placar_estrutural` | **Variação automática = zero:** referência à lista é textual; o placar percorre `RESULTADOS`. (`app/core/placar_estrutural.py:149,650–660`.) |
-
-**Roteamento — média, procedente e já encaminhado:** a falta de `data` permanece; o vigia ainda pode rotear outra competência/motivo pelo simples ID. **Esta v3 não amplia esse defeito frente a 661c6190:** reduz o conjunto de IDs elegíveis, podendo desfazer roteamentos anteriores. (`app/escala/services/cadastro_realidade.py:169–174,182–183,986–989`; `app/folha/vigia_retido_calado.py:43–53`.)
-
-Contagens afetadas em produção, permissões efetivas dos administradores, suíte inteira e sequência de pouso: **[não verificado]**. [nao verificado]
-
-## 06/11 13:16 · sessao c0068debe084 · - · - · origem=Ronald (tmux)
-
-1. **Informativa — procedente: ativo conserva o valor, em execução concluída e cadastro estável.** O filtro inicial conserva o mesmo universo NB até ontem; o filtro novo só é aplicado a IDs que a segunda consulta identifica como `situacao='desligado'`. Isenção, admissão, protestos e demissão preenchida do ativo não cortam sua C5. (`app/escala/services/cadastro_realidade.py:164–174`; `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:93–98,153–160`.) Isso corresponde ao código antigo dos dois diffs fornecidos; comparação dos objetos Git antigos nesta cópia: **[não verificado]**.
-
-   **Limitação operacional:** agora uma falha do retentor de qualquer desligado aborta `colabs_nunca_bateu`; `lista()` captura a falha e perde toda a contribuição C5, inclusive dos ativos daquela chamada. O fato de ocorrer uma falha real é **[não verificado]**; o caminho de propagação existe. (`app/escala/services/cadastro_realidade.py:168–175,811–817`.)
-
-2. **Informativa — procedente: cura dos filtros reconhecidos na triagem.** A C5 agora pergunta ao retentor real, que corta admissão, isenção e protestos exclusivamente não cobraveis; as três novas fixtures cobrem precisamente esses contraexemplos. (`app/escala/services/cadastro_realidade.py:169–170`; `app/folha/export.py:1192–1206,1245–1254`; `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:119–136`.) A equivalência com a classificação efetiva continua limitada: existência do fechamento, código Domínio, férias com batida e cadastro zero antecedem o retentor no classificador. (`app/folha/export.py:775–780,864–876,951–960`.) A triagem procede ao curar **rescisão + retentor**, mas não prova equivalência irrestrita com `classificar_export`. (`app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:49–60`.)
-
-3. **Média — procedente: selo AST morde predicado direto, mas não garante dependência real da autoridade.** O selo registra a presença sintática das chamadas importadas e a ausência de quatro atributos diretos; não analisa execução, uso do retorno ou acesso por strings/keywords. (`app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:183–199`.) O teste da própria costura detecta precisamente `c.data_demissao`, e resolve alias de importação. (`app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:201–208`.)
-
-   **Mutante relevante sobrevivente por inspeção:** manter uma chamada morta `if False: sai_pela_rescisao(colab, fim)` e substituir a chamada produtiva por helper com `d = getattr(colab, 'data_demissao'); return d is not None and d <= fim`. O selo continua vendo a chamada e não encontra atributo proibido; os resultados dos testes de comportamento permanecem iguais à autoridade atual. Esse é precisamente um segundo juiz que voltaria a divergir quando a autoridade mudasse. (`app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:183–199`; `app/folha/export.py:54–60`.) Sobrevivência executada: **[não verificado]**. O anexo M5 comprova somente a morte do mutante executado, cujo código completo não foi fornecido: **[não verificado]**.
-
-4. **Informativa — procedente: quem mais muda frente a 661c6190.**
-
-   A v3 somente retira dias de desligados que a v2 mantinha: a interseção com dias do retentor acrescenta um filtro após a mesma rescisão. Para mesmos dados/hoje, não acrescenta IDs ou dias à v2. (`app/escala/services/cadastro_realidade.py:163–174`; v3.diff fornecido, versão anterior sem numeração própria: **[não verificado]**.)
-
-   | Consumidor | Alteração |
-   |---|---|
-   | `_nunca_bateu` e `lista()` | Detalhe tem menos dias; perdendo o último, perde uma C5. Cada C5 conta uma ocorrência, independentemente do número de dias; pode desaparecer a pessoa se era sua única assinatura. (`app/escala/services/cadastro_realidade.py:181–184,813–814,857–866,875–904`.) |
-   | Tela/PDF | Recebem e exibem a mesma lista alterada. (`app/escala/views.py:484–492`; `app/templates/escala/cadastro_x_realidade.html:21–28`; `app/escala/services/cadastro_realidade.py:1022–1033`.) |
-   | `vigia_retido_calado` | Para cada ID que perde o último dia, `roteados −k`, `calados +k`, onde k são suas linhas bloqueadas com fio `ninguem` nos Retratos lidos. `bloqueados` e `cego` permanecem iguais com mesmos Retratos. (`app/folha/vigia_retido_calado.py:43–56`.) |
-   | `ListaDoAdmin` / vigia do fio | C5 não altera mapa de dias, mas perder sua última assinatura pode retirar a presença do colaborador. Sob as demais condições, a causa muda de `d` para `e`, detalhe `sem_pergunta_viva`. (`app/chamados/services/vigia_fio.py:216–218,677–686`.) |
-   | `vigiar_fio_morto` | Os contadores e alcance derivados podem mudar no JSON persistido em rodada de frota; com recorte `--empresa`, não carimba. (`app/chamados/management/commands/vigiar_fio_morto.py:210–230`.) |
-   | Fechador de avisos e de vínculos | Seleção muda **zero por C5**, pois consomem somente C7 e C8, respectivamente. (`app/escala/management/commands/fechar_avisos_regua_na_lista.py:27–37`; `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:35–45`.) |
-   | `placar_estrutural` | Mudança automática zero: a referência a `lista` é texto; `placar()` itera `RESULTADOS`. (`app/core/placar_estrutural.py:149,650–660`.) |
-
-   Quantidades efetivas em produção: **[não verificado]**.
-
-5. **Média — procedente, pendência já autorizada em fila: roteamento continua sem data, mas não há agravamento por ampliação de universo nesta v3.** C5 segue transportando datas somente no detalhe; `dias_na_lista()` exige chave `data`. (`app/escala/services/cadastro_realidade.py:182–183,986–989`.) O vigia de retidos segue reduzindo C5 a IDs, e com um dia em qualquer janela roteia todas as linhas bloqueadas/`ninguem` desse ID, sem cruzar competência ou motivo. (`app/folha/vigia_retido_calado.py:43–48`.) A fixture usa linhas genéricas `CALADA` para demonstrar esse roteamento por pessoa. (`app/folha/tests/test_vigia_retido_calado.py:79–89`.) Como a v3 reduz o conjunto de IDs, não cria novos falsos roteados nesse mecanismo; pode desfazer roteamentos existentes. (`app/escala/services/cadastro_realidade.py:169–174`; `app/folha/vigia_retido_calado.py:43–53`.) A ocorrência histórica concreta de falso roteamento é **[não verificado]**.
-
-6. **Classes do checklist:**
-
-   - **Segundo juiz / derivação paralela: ausente na implementação para a pergunta restrita rescisão + retenção.** Chama ambas autoridades e usa efetivamente seus retornos; não copia cortes de admissão/isenção/protesto. (`app/escala/services/cadastro_realidade.py:156–170`.) Para “quem entra no TXT”, a autoridade registrada continua sendo o classificador completo; não chamar seus demais portões impede alegar equivalência geral. (`app/core/juizes.py:288–299`; `app/folha/export.py:864–876,951–960`.)
-   - **Segundo escritor e inversão de trava: ausentes nos trechos produtivos alterados.** C5, censo e command consultam/montam/imprimem, sem gravação ou aquisição explícita de trava. (`app/escala/services/cadastro_realidade.py:160–175`; `app/folha/vigia_retido_calado.py:33–57`; `app/folha/management/commands/vigiar_retido_calado.py:28–40`.)
-   - **Relógio fora da borda: ausente no caminho command corrigido; fallback interno continua.** O command injeta `hoje`, censo o repassa e C5 só lê relógio se receber valor falso/nulo. (`app/folha/management/commands/vigiar_retido_calado.py:31`; `app/folha/vigia_retido_calado.py:43`; `app/escala/services/cadastro_realidade.py:158`.) Teste novo intercepta a função real e confere o argumento. (`app/folha/tests/test_vigia_retido_calado.py:122–130`.)
-   - **Selo/RED sem mordida: ausente como ausência total; cobertura limitada conforme achado 3.** Casos de corte10, demissão no fim, ativo e filtros novos têm asserções que distinguem os defeitos nomeados. (`app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:119–160`.) Execução pessoal dos testes/mutantes: **[não verificado]**; o anexo relata M0 verde e M1–M7 mortos.
-   - **Pouso antes do pré-requisito: dúvida, [não verificado].** O documento exige suíte inteira verde antes de um opus final, e anexa descartes à decisão final; 25 testes relatados não comprovam suíte inteira nem ordem de pouso. (`CLAUDE.md:364–373`.) [nao verificado]
-
-7. **Sem defeito novo de push — procedente.** C5 conserva porta para detalhe do colaborador; `_vinculos` não exclui desligados. (`app/escala/services/cadastro_realidade.py:637–639,710–713`.) O cartório continua excluindo desligados dos dois portões de emissão, e adesão também os exclui. (`app/ponto/services/cartorio.py:1696–1697,1762`; `app/chamados/services/adesao.py:66–67`.) O ramo HX conserva a lavra `nunca_bateu` pela porta com `codigos=[]`; o diff fornecido não altera esse arquivo. (`app/ponto/services/cartorio.py:1241–1247`; v3_base.diff fornecido.)
-
-8. **Leis:** L-040 conserva lista única e mesmo PDF; L-033 mora no retentor e agora é alcançada por delegação; L-026 conserva corte da empresa nas duas janelas. (`app/docs/LEIS.md:88,81,77`; `app/escala/services/cadastro_realidade.py:163,169–170`; `app/folha/export.py:1245–1254`.)
-
-## 06/11 13:15 · sessao e5bcf41be2b8 · - · - · origem=Ronald (tmux)
-
-**Equivalência — informativa, procedente com recorte:** para o mesmo estado cadastral, desligado, células `nunca_bateu` e datas `< hoje`, a C5 coincide com **rescisão + retentor**. A consulta inicial seleciona NB até ontem; depois intersecta as datas devolvidas pelo retentor nas duas janelas que não saem pela rescisão. A unicidade `(colaborador,data)` evita outra célula do mesmo dia dar motivo diferente. (`app/escala/services/cadastro_realidade.py:163–174`; `app/escala/models.py:1833`; `app/folha/export.py:1233–1254`.)
-
-**Equivalência irrestrita — média, procedente:** hoje/futuro continuam diferentes: C5 exclui por `data__lte=ontem`; retentor aceita célula acusadora até `fim`, sem condição `d < hoje` nesse ramo. Exemplo sintético: hoje 25/10, desligado sem demissão, NB em 25/10 e 26/10; retentor devolve ambos, C5 nenhum. Ocorrência em produção: [não verificado]. (`app/escala/services/cadastro_realidade.py:159,165`; `app/folha/export.py:1225–1255`.)
-
-**Classificação efetiva — informativa, procedente como limite:** a cura é do recorte acordado com o retentor, não igualdade geral com `classificar_export`. Fechamento ausente não integra o universo padrão; código vazio ou férias com batida saem antes de consultar o espelho. As fixtures `_cria` não fornecem `codigo_dominio`, cujo default é vazio; assim continuam inadequadas para provar a classificação efetiva, embora adequadas ao contrato restrito do retentor. (`app/folha/export.py:775–780,858–876,960`; `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:31–34`; `app/colaboradores/models.py:311–313`.)
-
-Casos sintéticos, todos para NB já lavrado, sem outras isenções, hoje 25/10/2026, corte21, anterior 21/09–20/10 e corrente21/10–20/11. Janelas e veto derivam das autoridades existentes. (`app/ponto/janelas.py:10–33,60–72`; `app/folha/export.py:60`; `app/escala/services/cadastro_realidade.py:163–170`.)
-
-| Caso | Resultado C5 e rescisão+retentor |
-|---|---|
-| Admissão10/10; NB05/10,20/10; demissão22/10 | Ambos só20/10: anterior passa rescisão, admissão corta05; corrente sai. (`app/folha/export.py:60,1198–1206`; `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:120–123`.) |
-| Isento | Ambos vazios. (`app/folha/export.py:1192–1196`; `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:126–129`.) |
-| Protestos somente `FURO_PRE_ADOCAO` | Ambos excluem o dia. (`app/ponto/supra_juiz.py:34–36`; `app/folha/export.py:1245–1254`; `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:132–136`.) |
-| Sem protestos ou protestos mistos, incluindo código cobrável | Ambos retêm. (`app/folha/export.py:1242–1254`.) |
-| Somente `FURO_PARCIAL` e juiz confirma somente pausa apagada | Ambos excluem; não há novo filtro paralelo na C5. (`app/folha/export.py:1140–1147,1165,1253`; `app/escala/services/cadastro_realidade.py:169–170`.) |
-| `FURO_PARCIAL` misto com outro código, ou ata desconhecida/desalinhada/turno aberto | Ambos retêm. (`app/folha/export.py:1142–1147,1165,1253–1254`.) |
-| Demissão21/09 ou20/10 | Ambas as competências saem; nada entra. (`app/folha/export.py:60`; `app/escala/services/cadastro_realidade.py:169`.) |
-| Demissão21/10 ou20/11 | Só anterior; inclusive demissão no primeiro/último dia da corrente já elimina a corrente inteira. (`app/folha/export.py:60`; `app/escala/services/cadastro_realidade.py:169`.) |
-| Demissão futura30/10 | Só anterior, pois30/10≤20/11. (`app/folha/export.py:60`; `app/escala/services/cadastro_realidade.py:169`.) |
-| Demissão21/11 ou nula | As duas competências passam; C5 ainda limita até ontem. (`app/folha/export.py:60`; `app/escala/services/cadastro_realidade.py:165,169`.) |
-| Corte10, demissão15/10, NB05/10 e12/10 | Anterior10/09–09/10 passa; corrente10/10–09/11 sai; só05/10 em ambos. (`app/ponto/janelas.py:10–33,60–72`; `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:147–152`.) |
-| Hoje21/10, primeiro dia da competência | C5 só pode devolver anterior, até20/10; retentor da corrente pode devolver NB21/10 ou futura se rescisão não a eliminar. (`app/escala/services/cadastro_realidade.py:159,163–165`; `app/folha/export.py:1233–1254`.) |
-| Mudança A/corte21→B/corte10; demissão15/10; NB05/10 | Antes nada; depois05/10 entra. C5 e export usam empresa atual; isso não prova divergência entre ambos no mesmo estado. Fotografia histórica do Retrato pode divergir da lista atual. (`app/escala/services/cadastro_realidade.py:160–170`; `app/folha/export.py:778,807,1266`; `app/folha/vigia_retido_calado.py:38–48`.) |
-
-**Custo — média, procedente:** o comentário “UMA query por empresa” ficou falso. Além da consulta NB por empresa e do lote de colaboradores desligados, cada janela elegível de cada desligado não isento/não colapsado faz uma consulta de células e outra de vínculos. Até **quatro SQL adicionais por desligado** quando ambas passam a rescisão; duas quando só uma passa; zero consultas internas quando rescisão elimina ambas, isento retorna antes ou janela colapsa. Uma consulta global carrega empresas. Não há consulta nova por dia no caminho de pausa. Contagens executadas/latência real: [não verificado]. (`app/escala/services/cadastro_realidade.py:135,160–170`; `app/folha/export.py:1192–1212`; `app/escala/alimentacao.py:148–154,163–186`; `app/folha/export.py:1140–1147`.)
-
-**RED — informativa, procedente:** admissão, isenção, pré-adoção, demissão no fim e corte diferente foram adicionados como casos. Não há caso novo cobrindo `FURO_PARCIAL`, hoje no corte ou troca de empresa; isso é lacuna de cobertura, não contraexemplo à implementação delegada. (`app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:119–160`; `app/escala/services/cadastro_realidade.py:169–170`.)
-
-## 06/11 13:15 · sessao 0235c4f257d9 · - · - · origem=Ronald (tmux)
-
-Mapa enviado ao agente principal, com referências atuais de escritores, leitores e produtores em memória. A inspeção não executou testes nem comandos de escrita; exaustividade de acessos dinâmicos e execução efetiva em produção permanecem [não verificado]. [nao verificado]
-
-_2302 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2306 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

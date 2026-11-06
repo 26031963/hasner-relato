@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 14:04:53.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (65.4 MB). Acoes na janela: **836**.
+**Medido em 06/11/2026 14:10:08.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (65.4 MB). Acoes na janela: **826**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -836,13 +836,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 02:10:43 | Bash | Codex postmortem classification of opus reproval | `cd /home/ronald/saas-hasner/logs/h12h06b; cat > postmortem.q <<'EOF' PAPEL: censo (CODEX 6 MEDIDA E POSTMORTEM, obra H12H06-B, padrao=n/a (medida)). O opus final REPROVOU o hash 4e9380e5 com os achados do anexo opus_final_4e9380e5.md. Anexos: todas as .q/.r Codex da obra (codex_v1..v4) e as linhas de triagem (triagem_v4.md). Para CADA achado do opus (BLOQUEANTE 1, BLOQUEANTE 2, e os 3 NAO BLOQUEAN ...` |
 | 02:10:32 | Bash | Save opus findings for builder and Codex | `cat > /home/ronald/saas-hasner/logs/h12h06b/opus_final_4e9380e5.md <<'EOF' # Opus final H12H06-B -- 4e9380e5 -- REPROVA (06/11 02:1x) BLOQUEANTE 1: sem DIFF de impacto antes do deploy (L-094 cond.1, L-113, L-121). Leitores fechamento.py:685, credito_parcial.py:27, efeito_ausencia.py:48,55 passam a tratar ausencia paga >=480 min ou faixa com minutos como dia inteiro (abonado, sem credito). Alcanca  ...` |
 | 02:10:20 | SendMessage |  | `-` |
-| 02:10:02 | Bash | Write ERRO-BOBO H12H06-B line | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md' L=open(p).read().split('\n') assert L[4].startswith('lei: H12H06-B') l=("ERRO-BOBO H12H06-B: (opus final 06/11 02:1x REPROVA 4e9380e5, 1a leitura final da B) omissao contra lei escrita, nao desenho novo: " "(1) DIFF de impacto do COMPLEMENTO nao publicado antes do pouso (L-094 cond.1, L-113, L-121): leitores `fechamento.py:685`, ...` |
-| 02:09:50 | Bash | Read L-121, L-094 and invalidar_fechamento | `cd /home/ronald/saas-hasner/app/docs; grep -n "L-121\b" LEIS.md \| head -3 \| cut -c1-700; grep -n "L-094\b" LEIS.md \| head -2 \| cut -c1-500; grep -n "def invalidar_fechamento" -r ../ponto \| head` |
-| 02:09:43 | Bash | Check B3 disjuntor release rules | `cd /home/ronald/saas-hasner; sed -n 1,40p bin/disjuntor.py \| grep -n "B3\\|ERRO-BOBO\\|DESENHO" ; grep -n "def linhas_libera_b3" -A25 bin/disjuntor.py \| head -40` |
-| 02:08:33 | Bash | Keep ESPERANDO on live pid | `cd /home/ronald/saas-hasner; ps -p 1180483 >/dev/null && echo vivo \|\| { p=$(pgrep -f "^bash /home/ronald/saas-hasner/bin/trava_teste.sh --" \| head -1); echo "novo=$p"; [ -n "$p" ] && sed -i "2s/pid=[0-9]*/pid=$p/" app/docs/RELATO.md; }; sed -n 2p app/docs/RELATO.md` |
-| 02:08:26 | SendMessage |  | `-` |
-| 02:08:17 | Bash | Update DECIDIDO with numbers, add lei line for exported | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md' s=open(p).read() old="Fato que pode anular: 'falta' in parciais_vigentes() VIVO, em medicao (Codex sonda logs/h12h06b_sonda/)." assert s.count(old)==1 new=("MEDIDO 02:0x (Codex sonda rc=0, hash a37c673d, logs/h12h06b_sonda/sonda.r): 'falta' NAO esta em parciais_vigentes() (vigentes: abon_hr, atestado, atraso, declaracao, saida_a ...` |
-| 02:08:01 | Bash | Count tipos in the 30-row list | `cd /home/ronald/wt-h12h06b-233814/app; python3 - <<'EOF' import re s=open('ponto/management/commands/rederivar_minutos_h06_comp11.py').read() rows=re.findall(r"\((\d+), (\d+), '(\w+)', D\(2026, (\d+), (\d+)\)",s) from collections import Counter print(len(rows), Counter(r[2] for r in rows)) EOF` |
-| 02:07:30 | Bash | Read command header to understand falta rows | `cd /home/ronald/wt-h12h06b-233814/app; sed -n 1,58p ponto/management/commands/rederivar_minutos_h06_comp11.py` |
-| 02:07:21 | Bash | Read rest of Codex sonda result | `cd /home/ronald/saas-hasner/logs/h12h06b_sonda; tail -c 7200 sonda.r` |
-| 02:07:13 | Bash | Read Codex sonda result | `cd /home/ronald/saas-hasner/logs/h12h06b_sonda; tail -3 run.log; ls; wc -c sonda.r; head -c 5000 sonda.r` |
