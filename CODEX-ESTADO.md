@@ -1,7 +1,146 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 04:19** · publicado em **06/11/2026 04:21** (UTC-3)
+> Ultima resposta processada: **06/11/2026 04:32** · publicado em **06/11/2026 04:32** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 04:32 · sessao 896a2e2fbe7f · - · - · origem=Ronald (tmux)
+
+V5 — As vias persistentes de ata examinadas passam pela porta que salva e emite `EventoCelula` no mesmo `atomic`; a emissão depende de `ata`/`veredito` entre os campos lavrados. Não encontrei escritor persistente de ata que contorne isso nas vias rastreadas. (`app/ponto/portas/celula.py:662`, `app/ponto/portas/celula.py:676`, `app/ponto/portas/celula.py:783`, `app/ponto/portas/celula.py:810`, `app/ponto/portas/celula.py:862`.)
+
+- Cartório normal: monta ata, chama `lavrar_veredito(save=False)` e depois `carimbar(lavrados=_cv)`; o ramo `nunca_bateu` faz o mesmo. (`app/ponto/services/cartorio.py:1800`, `app/ponto/services/cartorio.py:1822`, `app/ponto/services/cartorio.py:1242`, `app/ponto/services/cartorio.py:1264`.)
+- Ausência/atestado: `post_save`/`post_delete` julgam os dias; ausência aprovada inteira ou dia justificado dispensa as lâmpadas. Parcial dispensa somente os marcos no período declarado, com `dispensada`. (`app/ponto/signals.py:143`, `app/ponto/signals.py:150`, `app/ponto/services/cartorio.py:766`, `app/escala/utils.py:1263`.)
+- Justificativa: `post_save` chama o cartório; a grade marca `justificado`, lido pela dispensa. (`app/ponto/signals.py:161`, `app/escala/utils.py:1275`, `app/ponto/services/cartorio.py:768`.)
+- Decisão administrativa justificada: cria ausência aprovada e lavra o veredito administrativo; a lavra emite pela mesma porta. (`app/ponto/services/veredito_celula.py:310`, `app/ponto/services/veredito_celula.py:330`, `app/ponto/portas/celula.py:815`.)
+- Validação de pergunta: chama materialização; plantio de batida ou criação de ausência aciona os respectivos sinais e daí a lavra. O carimbo de validação sozinho não altera ata nem produz diretamente `EventoCelula`; o receptor da pergunta examinado trata o beco da disputa. (`app/chamados/services/validacao.py:395`, `app/chamados/services/validacao.py:430`, `app/chamados/services/materializacao.py:897`, `app/chamados/services/materializacao.py:977`, `app/chamados/services/materializacao.py:484`, `app/ponto/signals.py:131`, `app/chamados/signals.py:191`.)
+- Regeneração: escreve DNA e, com `recalculo=True`, rejulga dias tocados, passados e não humanos; a nova ata então emite evento. Frota passa `recalculo=False`; reversão grava DNA e retorna sem rejulgamento. São alterações de **insumos sem relavra imediata**, não atas alteradas sem emissão. (`app/ponto/portas/celula.py:266`, `app/ponto/portas/celula.py:390`, `app/escala/services/cadastro_tipo.py:348`, `app/ponto/portas/celula.py:569`.)
+- Isenção: `passe_livre` grava a flag pelo serviço do colaborador; o receptor examinado silencia chamados, sem relavrar ata ou emitir `EventoCelula`. Também é mudança de insumo sem relavra imediata. (`app/colaboradores/views.py:173`, `app/colaboradores/services/colaborador.py:55`, `app/chamados/signals.py:213`.)
+
+V7 — Nos ramos normais, as chaves conferem: `isencao=True` credita hora prevista; `dispensada` representa dispensa, inclusive parcial; ambos são propagados às lâmpadas. Não encontrei terceira chave equivalente nas funções examinadas. (`app/escala/utils.py:858`, `app/escala/utils.py:1267`, `app/ponto/services/cartorio.py:556`, `app/ponto/services/cartorio.py:680`, `app/ponto/services/cartorio.py:691`.)
+
+Há duas limitações da garantia “EXISTE só quando foi batida”:
+
+1. `como_acendeu` considera batida qualquer lâmpada sem esses dois marcadores, até recorrendo à hora prevista; o próprio cartório documenta atas antigas de isenção sem marcador, mantidas ambíguas. Existência desses casos no acervo atual: **[nao verificado]**. (`app/ponto/services/lastro.py:336`, `app/ponto/services/lastro.py:340`, `app/ponto/services/cartorio.py:547`.)
+2. O ramo de marco fora da régua coleta `_reais` sem excluir isenção e acende por proximidade sem propagar seus marcadores. Reproduzi a função real extraída por AST, em memória: `cels=[{'hora':'07:00','missing':False,'isencao':True}]`, `marcos=[{'tipo':'E','hora':'07:00'}]`, `dna.marcos={'hi':'07:20','hii':'07:00'}` produz `{'tipo':'E','hora':'07:20','acesa':True,'luz':'07:00','tipo_real':None}`, sem `isencao`. Essa lâmpada é classificada como batida pela nova nota. Atingibilidade desse cadastro em produção: **[nao verificado]**. (`app/ponto/services/cartorio.py:593`, `app/ponto/services/cartorio.py:624`, `app/ponto/services/cartorio.py:638`, `app/ponto/services/lastro.py:340`, `app/ponto/services/lastro.py:355`.)
+
+A referência da nova docstring ao predicado do cartório não é exata: `status_dia` exclui `isencao` e `dispensada`, enquanto o contador mostrado do cartório exclui somente `dispensada`. (`app/ponto/services/lastro.py:332`, `app/ponto/status_dia.py:185`, `app/ponto/services/cartorio.py:1373`.)
+
+V9 — O novo fecho reutiliza `marcos_acesos` e `reconciliar`, e a nota usa a porta de ocorrência; não introduz escrita manual de status nem leitura explícita de relógio nesse corpo. O risco identificado nesta exploração é a testemunha afirmar batida a partir de lâmpada que perdeu/omitiu o marcador, conforme V7. (`app/ponto/services/lastro.py:388`, `app/ponto/services/lastro.py:392`, `app/ponto/services/lastro.py:395`, `app/ponto/services/lastro.py:396`.)
+
+A reprodução foi executada com `python3 -B`, extração de AST e objetos em memória, sem comando de escrita ou criação de arquivo; ausência absoluta de efeitos externos ao processo: **[nao verificado]**.
+
+## 06/11 04:31 · sessao 8e267515a30b · - · - · origem=Ronald (tmux)
+
+V3. `fechar_pelo_marco_colab` roda sem transação externa do consumidor; cada `reconciliar()` abre seu `atomic(savepoint=False)`, e a nota é gravada depois que esse gate retorna. A marcação dos eventos tem outro `atomic`, curto e posterior (`app/chamados/reconciliador.py:1343`, `app/chamados/reconciliador.py:1376`; `app/chamados/models.py:616`; `app/ponto/services/lastro.py:395`).
+
+- Exceção por chamado entra em `falhas`; o evento continua pendente, recebe `tentativas+1` e não volta na mesma execução porque seu ID já entrou em `lidos` (`app/ponto/services/lastro.py:398`; `app/chamados/reconciliador.py:1334`, `app/chamados/reconciliador.py:1378`).
+- Recusa normal de `reconciliar()` não é falha: devolve zero fechamentos e permite marcar o evento processado (`app/ponto/services/lastro.py:395`; `app/chamados/reconciliador.py:1385`).
+- `adiar` não pula o lastro: órfãs definem a flag, lastro roda em seguida e só depois a flag preserva o evento pendente sem gastar tentativa (`app/chamados/reconciliador.py:1363`, `app/chamados/reconciliador.py:1371`, `app/chamados/reconciliador.py:1380`).
+- Há buraco de atomicidade: falha ao anexar a nota pode ocorrer depois do fechamento já commitado; o retry exclui o chamado fechado e não recupera essa nota. É possibilidade pelo código, ocorrência em produção [nao verificado] (`app/chamados/models.py:616`; `app/ponto/services/lastro.py:385`, `app/ponto/services/lastro.py:395`; `app/chamados/services/nota.py:103`).
+- Exceção anterior à chamada de lastro pula sua execução, mas deixa evento pendente com tentativa gasta; colaborador inexistente pula todo o trabalho e permite marcar processado (`app/chamados/reconciliador.py:1344`, `app/chamados/reconciliador.py:1372`, `app/chamados/reconciliador.py:1378`).
+
+V4. A ordem explícita é rejunção → perguntas absolvidas → chamados absolvidos → premissa morta → órfãs → lastro (`app/chamados/reconciliador.py:1351`, `app/chamados/reconciliador.py:1371`).
+
+Entretanto, o fechamento dispara `post_save` síncrono que chama o cartório; esse cartório pode reabrir o mesmo chamado dentro do próprio `save` por `FURO_PARCIAL` ou `FURO_COM_COBRANCA_MORTA` (`app/chamados/models.py:268`; `app/chamados/signals.py:164`, `app/chamados/signals.py:180`; `app/ponto/services/cartorio.py:1689`, `app/ponto/services/cartorio.py:1777`).
+
+Caso concreto permitido pelo código: E acesa fecha a cobrança antiga; S apagada faz o emissor pedir renascimento pelo outro marco. A guarda pergunta os marcos **do pedido**, e o emissor depois substitui os marcos cobrados pelos apagados atuais (`app/chamados/models.py:1223`, `app/chamados/models.py:1248`, `app/chamados/models.py:1310`; `app/ponto/management/commands/detectar_ausencias.py:693`, `app/ponto/management/commands/detectar_ausencias.py:743`).
+
+Assim, `out['lastro']=1` e nota “Encerrado” não provam estado final encerrado: o gate pode retornar `True` após reabertura síncrona por outra instância, sem releitura final no lastro (`app/chamados/models.py:620`; `app/ponto/services/lastro.py:395`). O próprio teste migrado passou a adicionar saída e documenta que sem ela o emissor reabre (`app/ponto/tests/test_bug114_fechador_de_dois_dias.py:223`, `app/ponto/tests/test_bug114_fechador_de_dois_dias.py:259`).
+
+Isso demonstra fecha/reabre no mesmo evento, mas não demonstra loop infinito pelo mesmo marco: após espelhamento, a cobrança passa a nomear o marco apagado, que o lastro não fecha; perguntas do marco aceso também são excluídas da ressuscitação (`app/ponto/management/commands/detectar_ausencias.py:743`; `app/ponto/services/lastro.py:392`; `app/chamados/models.py:1450`).
+
+V6. Não demonstrei falso negativo **permanente**, no universo `com_lastro`, causado isoladamente pelos três exemplos apresentados (`app/ponto/services/lastro.py:416`):
+
+- Retido liberado sem evento: nova medição passa a colocá-lo em `com_lastro`, e sem pendente vivo o vigia acusa (`app/ponto/services/lastro.py:318`, `app/ponto/services/lastro.py:415`).
+- Tentativas ≥5: esses eventos não entram em `eventos_pendentes`; portanto não mascaram o vigia. Mortos têm contador separado (`app/chamados/reconciliador.py:1198`, `app/chamados/reconciliador.py:1238`; `app/chamados/management/commands/consumir_eventos_celula.py:37`).
+- Evento de outro dia: não mascara por si só, porque o consumidor agrupa por colaborador e o lastro percorre todos os chamados elegíveis dele, independentemente do dia do evento (`app/chamados/reconciliador.py:1337`; `app/ponto/services/lastro.py:385`).
+
+Há `sem_evento=0` com vivo e marco aceso por definição: retido fica fora de `com_lastro`; registrado e silenciado ficam fora da própria fila. Isso limita o alcance do número, sem demonstrar regressão da migração (`app/ponto/services/lastro.py:318`; `app/chamados/services/painel.py:186`; `app/chamados/catalogo/motor.py:24`).
+
+Zero também não certifica execução futura: falha anterior ao lastro preserva pendentes que o mascaram temporariamente; fluxo contínuo de novos eventos com falhas poderia prolongar a máscara, mas ocorrência ou permanência em produção [nao verificado] (`app/chamados/reconciliador.py:1351`, `app/chamados/reconciliador.py:1372`, `app/chamados/reconciliador.py:1379`; `app/ponto/services/lastro.py:415`).
+
+## 06/11 04:31 · sessao 135dfe29a7ab · - · - · origem=Ronald (tmux)
+
+P4: as mudanças matam os mutantes anteriormente apontados, mas não provam toda a união; há sobreviventes plausíveis por inspeção. Execução do selo completo: **[nao verificado]** (`bin/tests/test_quem_chama.sh:27`, `bin/tests/test_quem_chama.sh:183`).
+
+| Asserções novas | Mutante que matam | Mutante plausível que continua verde no conjunto novo | [nao verificado]
+|---|---|---|
+| `r5-init-reexporta`, `r5-import-local` | Duplicar `importa mudada` sob arquivo, mantendo sob símbolo (`bin/tests/test_quem_chama.sh:219`, `bin/tests/test_quem_chama.sh:220`). | Duplicar cada linha durante renderização **dentro da própria faceta**: `tot == sob` continua verdadeiro; o helper não exige uma ocorrência (`bin/tests/test_quem_chama.sh:197`, `bin/tests/test_quem_chama.sh:198`, `bin/quem_chama.py:773`). |
+| `r5-comentario-multilinha`, `r5-comment-bloco-multilinha` | Duplicar achado sob outra faceta; tirar `re.S` do comentário de bloco (`bin/tests/test_quem_chama.sh:234`, `bin/tests/test_quem_chama.sh:235`, `bin/quem_chama.py:573`). | Tornar o comentário de bloco guloso, substituindo `.*?` por `.*`: fixture com um bloco continua idêntico; com dois blocos, apaga um include executável colocado entre eles (`bin/quem_chama.py:572`, `bin/tests/test_quem_chama.sh:146`). **Exercitado em memória.** |
+| `r5-filter-tag` | Duplicar o mesmo texto de filtro em outra faceta (`bin/tests/test_quem_chama.sh:275`). | Ampliar a alternativa `{% filter ... %}` da regex para `{% QUALQUER_TAG ... %}`; o positivo continua encontrado e faltam negativos para argumentos de outras tags (`bin/quem_chama.py:609`, `bin/tests/test_quem_chama.sh:137`, `bin/tests/test_quem_chama.sh:275`). |
+| `r5-embutido-arquivo-sitio-*` | Guardar sítios somente sob símbolos (`bin/tests/test_quem_chama.sh:317`, `bin/quem_chama.py:755`). | Suprimir sítio/rebaixamento **somente na faceta arquivo dos autoimports**: o loop cobre importadores externos; `selfmod` só exige símbolo (`bin/tests/test_quem_chama.sh:309`, `bin/tests/test_quem_chama.sh:332`, `bin/tests/test_quem_chama.sh:333`). |
+| `r5-embutido-lista-*` | Remover o ramo especializado de cabeçalho EMBUTIDO, deixando apenas motivo genérico (`bin/tests/test_quem_chama.sh:319`, `bin/quem_chama.py:760`). | Usar cabeçalho genérico somente para `rotulo == 'arquivo'`: sítio e motivo permanecem sob arquivo, lista é exigida somente sob símbolo (`bin/tests/test_quem_chama.sh:316`, `bin/tests/test_quem_chama.sh:317`, `bin/tests/test_quem_chama.sh:319`). |
+| `r5-decorador-so-na-ponta`, negativo `-zero`, `r5-decorador-somado` | Conservar decoradores da base; atualizar apenas se lista antiga vazia (`bin/tests/test_quem_chama.sh:325`, `bin/tests/test_quem_chama.sh:326`, `bin/tests/test_quem_chama.sh:328`). | Trocar união por `cur['decor'] = info['decor']`: ambos fixtures têm decorador opaco na ponta, portanto passam; retirada do opaco na ponta deixa de conservar o motivo da base (`bin/quem_chama.py:700`, `bin/quem_chama.py:707`, `bin/tests/test_quem_chama.sh:171`, `bin/tests/test_quem_chama.sh:172`). |
+| `r5-filtro-renomeado` | Conservar somente nome antigo (`bin/tests/test_quem_chama.sh:330`). | Trocar append por `cur['registros'][:] = [info['registro']]`: fica somente nome da ponta, precisamente o único usado pelo fixture; template usando `velho_f` perderia chamador (`bin/quem_chama.py:709`, `bin/tests/test_quem_chama.sh:143`, `bin/tests/test_quem_chama.sh:144`, `bin/tests/test_quem_chama.sh:173`). |
+| `r5-embutido-proprio`, `-sitio` | Descartar autoimport antes do tratamento EMBUTIDO; rebaixar sem listar sítio sob símbolo (`bin/tests/test_quem_chama.sh:332`, `bin/tests/test_quem_chama.sh:333`, `bin/quem_chama.py:738`, `bin/quem_chama.py:741`). | Mesmo sobrevivente da faceta arquivo descrito acima: processar símbolos de autoimport, omitindo somente arquivo (`bin/quem_chama.py:752`, `bin/quem_chama.py:755`, `bin/tests/test_quem_chama.sh:332`, `bin/tests/test_quem_chama.sh:333`). |
+
+Os sobreviventes são **lacunas do selo, gravidade fila**, e não defeitos presentes automaticamente no código: a implementação atual conserva listas e decoradores por união (`bin/quem_chama.py:707`, `bin/quem_chama.py:709`).
+
+A exclusividade global pode reprovar uma duplicação legítima **em outro fixture**. Contraexemplo exercitado em memória: base registra `f` como `a` e `g` como `b`; ponta troca os nomes. Pela união, ambos possuem registro `b`; `{{ x|b }}` produz o mesmo texto sob `f` e `g`, coerentemente com a busca dos dois lados. `_so_na_fac` reprovaria porque `tot=2`, `sob=1` (`bin/quem_chama.py:708`, `bin/quem_chama.py:606`, `bin/quem_chama.py:615`, `bin/tests/test_quem_chama.sh:197`, `bin/tests/test_quem_chama.sh:198`). **Falha espúria nos fixtures atuais: [nao verificado]**; `ren_tags` contém apenas um símbolo registrado (`bin/tests/test_quem_chama.sh:143`, `bin/tests/test_quem_chama.sh:173`).
+
+Nos imports atuais, carregar arquivo e símbolo simultaneamente não viola a exclusividade: os textos são respectivamente `importa de m.lib` e `importa mudada (mudado no diff)` (`bin/quem_chama.py:450`, `bin/quem_chama.py:455`, `bin/tests/test_quem_chama.sh:219`, `bin/tests/test_quem_chama.sh:220`).
+
+## 06/11 04:31 · sessao b86b91d1e1ba · - · - · origem=Ronald (tmux)
+
+V8: há uma divergência concreta no artefato gerado. O cron está como vigia e com `--alarme` em `app/config/crons.py:731` e `app/config/crons.py:2157`, mas o diagrama ainda publica 39 vigias, dois juízes e a aresta de `fechar_cobranca_com_lastro` para juiz em `app/docs/ARQUITETURA.mmd:207`, `app/docs/ARQUITETURA.mmd:209` e `app/docs/ARQUITETURA.mmd:218`. O gerador deriva esses dados de `config.crons` em `app/core/management/commands/gerar_diagrama.py:242`, `app/core/management/commands/gerar_diagrama.py:251` e `app/core/management/commands/gerar_diagrama.py:264`. Executei somente essa função, extraída por AST, com Python `-B`: ela gera 40 vigias e um juiz; o bloco não coincide com o arquivo. O selo exige igualdade em `app/core/tests/test_selo_diagrama_do_codigo.py:44`; o comparador está em `app/core/management/commands/gerar_diagrama.py:921`.
+
+As demais dependências abertas não exigem manter o comando como juiz ou manter `--apply`:
+
+- O contrato estrutural referencia a lista inteira, sem nomear esse comando: `app/core/contratos_estruturais.py:263`. O contador consulta o papel declarado: `app/config/crons.py:2322`. O contrato cobra consistência da lista e do papel: `app/core/tests/test_contract_tabuleiro.py:25`.
+- O placar chama o comando sem `--apply`, raspa as linhas preservadas e mantém o retido: `bin/placar_code.sh:114`, `bin/placar_code.sh:117`, `bin/placar_code.sh:121`, `bin/placar_code.sh:549`. As strings continuam em `app/ponto/management/commands/fechar_cobranca_com_lastro.py:55` e `app/ponto/management/commands/fechar_cobranca_com_lastro.py:61`.
+- O selo de host retira os formatos do próprio comando por AST e exige argv sem `--apply`: `bin/tests/test_placar_conta_o_retido_do_lastro.sh:75`, `bin/tests/test_placar_conta_o_retido_do_lastro.sh:594`, `bin/tests/test_placar_conta_o_retido_do_lastro.sh:618`. Os comentários “dry-run/fechar(True)” ficaram historicamente desatualizados em `bin/tests/test_placar_conta_o_retido_do_lastro.sh:591`.
+- `crons_duracao.json` guarda somente a duração desse nome, 30 segundos: `app/config/crons_duracao.json:32`; a leitura utiliza o mapa `dur_s`, sem papel ou argumentos: `app/config/crons.py:154`.
+- `core/placar_estrutural.py` referencia a lista como fonte, mas conserva prosa histórica com números anteriores: `app/core/placar_estrutural.py:535`, `app/core/placar_estrutural.py:629`.
+- Comparação independente da árvore com a base a37c673d: [nao verificado]. A cópia não possui repositório Git disponível. No diff fornecido, os três blocos de `crons.py` correspondem à entrada, saída da lista e inclusão como vigia; seus destinos atuais são `app/config/crons.py:731`, `app/config/crons.py:2018` e `app/config/crons.py:2157`.
+
+V10: a migração mantém mordida relevante, mas não preserva literalmente toda cobertura anterior:
+
+- **BUG114, idade:** o caso de 30 dias sem lâmpada agora exige permanecer vivo e alarmar; abandonou expressamente a expectativa antiga de fecho nesse degrau. Isso corresponde ao escopo informado para esta obra, mas é mudança de contrato do teste: `app/ponto/tests/test_bug114_fechador_de_dois_dias.py:144`.
+- **BUG114, negativos:** sem batida, marca longe, sem marco e apenas `horario_previsto` passaram a verificar somente `julgar`; não executam o consumidor nem verificam o estado após sua passagem: `app/ponto/tests/test_bug114_fechador_de_dois_dias.py:162`, `app/ponto/tests/test_bug114_fechador_de_dois_dias.py:171`, `app/ponto/tests/test_bug114_fechador_de_dois_dias.py:182`, `app/ponto/tests/test_bug114_fechador_de_dois_dias.py:193`. Assim, isoladamente, passam mesmo com um defeito no novo escritor — ele percorre a fila diretamente, sem utilizar `julgar`: `app/ponto/services/lastro.py:385`. Não demonstra defeito atual; demonstra perda de cobertura do caminho que escreve.
+- **BUG114, retido/nota:** preserva pergunta viva real, classificação do retido, trilha de recusa e idempotência: `app/ponto/tests/test_bug114_fechador_de_dois_dias.py:242`, `app/ponto/tests/test_bug114_fechador_de_dois_dias.py:268`. A nota continua coberta pelo par “gate recusa → zero notas / fecha duas vezes → uma nota”: `app/ponto/tests/test_bug114_fechador_de_dois_dias.py:355`, `app/ponto/tests/test_bug114_fechador_de_dois_dias.py:365`.
+- **BUG115:** conserva o caso marco satisfeito com furo vizinho, exigindo `out['lastro']==1` e chamado terminal; o marco apagado exige zero e chamado vivo: `app/ponto/tests/test_bug115_lampada_do_marco.py:185`, `app/ponto/tests/test_bug115_lampada_do_marco.py:207`. O recuo por batida de outro tipo agora cobre só classificação: `app/ponto/tests/test_bug115_lampada_do_marco.py:167`.
+- **O231:** mantém duas medições deliberadamente discordantes e exige uma chamada a `julgar`; também compara `(a)=3` com `sem_evento=3`/rc2: `app/ponto/tests/test_o231_lastro_mede_uma_vez.py:54`, `app/ponto/tests/test_o231_lastro_mede_uma_vez.py:64`.
+- **lastro_rele:** não virou teste vazio. O chamado cobra E07 e o fixture planta E07 acesa: `app/ponto/tests/test_lastro_rele_o_chamado.py:46`, `app/chamados/tests/_dia_regularizado.py:8`. O objeto obsoleto deve produzir zero/nenhum FU e o controle vivo deve produzir um/nota: `app/ponto/tests/test_lastro_rele_o_chamado.py:59`, `app/ponto/tests/test_lastro_rele_o_chamado.py:69`.
+- **Cura nova revertida:** os positivos que exigem especificamente `lastro=1` continuam distinguindo a presença da chamada no consumidor, inclusive o teste novo A1: `app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:103` e `app/ponto/tests/test_bug115_lampada_do_marco.py:204`. Os negativos isolados naturalmente podem continuar passando sem o fecho; a suíte possui esses controles positivos nos mesmos caminhos.
+
+Não executei suíte Django, selos de host nem mutações: resultados dinâmicos deles [nao verificado]. [nao verificado]
+
+## 06/11 04:30 · sessao 6dbfe6056c73 · - · - · origem=Ronald (tmux)
+
+1. **FILA — P3: falso positivo real de import embutido próprio.** Em `app/core/placar_estrutural.py:443`, o valor textual de `numero` contém a menção `from core import contratos_estruturais` (`app/core/placar_estrutural.py:461`) e, adiante no mesmo literal concatenado, `logs/placar_estrutural/...` (`app/core/placar_estrutural.py:485`). A alternativa permissiva de `bin/quem_chama.py:93` casa esse intervalo como importação de **`core.placar_estrutural`**, embora seja apenas texto no dicionário.
+
+   Exercício em memória com o arquivo real produziu:
+   ```
+   (app/core/placar_estrutural.py, EMBUTIDO, 443,
+    importa core.placar_estrutural em python embutido (string de codigo))
+   ```
+   O delta passa a aceitar esse achado próprio (`bin/quem_chama.py:738`), rebaixando as facetas originalmente varridas (`bin/quem_chama.py:753`). Isso pode esconder um zero verdadeiro, conservadoramente; **não elimina chamadores**: conserva os conjuntos existentes e acrescenta sítios (`bin/quem_chama.py:755`), imprimindo todos (`bin/quem_chama.py:773`).
+
+2. **FILA — P5, antigo 5: posição incorreta permanece; não surgiu caminho novo para zero.** O cálculo usa quebras do valor decodificado (`bin/quem_chama.py:472`), enquanto o import real ocupa `app/core/tests/test_selo_diagrama_do_codigo.py:251`, dentro de literal iniciado em `app/core/tests/test_selo_diagrama_do_codigo.py:250`. Esse cálculo altera a linha do achado, mantendo sua emissão (`bin/quem_chama.py:472`).
+
+3. **FILA — P5, antigo 6: escapes seguem existentes, mas os exemplos reais não demonstram zero.** O relativo do heredoc (`bin/regua_calendario.sh:30`) continua fora da regex (`bin/quem_chama.py:89`), porém o absoluto em `bin/regua_relogio.sh:35` permite rebaixar `config.settings.ci`. Os pacotes citados em `bin/alarme_sessao_ociosa.py:144` e `bin/alarme_sessao_ociosa.py:145` também possuem imports diretos reconhecíveis: `app/colaboradores/tests/test_s120.py:65` e `app/chamados/apps.py:10`, reconhecidos pelo ramo `bin/quem_chama.py:449`. Falso zero novo desses exemplos: **[nao verificado]**.
+
+4. **FILA — P5, antigos 8 e 9: sem falso zero novo demonstrado.** As mudanças de exclusividade pertencem ao selo (`bin/tests/test_quem_chama.sh:219`, `bin/tests/test_quem_chama.sh:220`, `bin/tests/test_quem_chama.sh:234`, `bin/tests/test_quem_chama.sh:275`). A divergência de prosa continua conservadora no exemplo real: a string contendo `bin/gerar_diagrama.py` (`app/core/management/commands/gerar_diagrama.py:873`) é visitada por `bin/quem_chama.py:474`, enquanto o censo corta no primeiro `#` (`app/core/censo_codigo.py:60`).
+
+Ranges históricos, execução integral do selo e confirmação do SHA via Git: **[nao verificado]**; esta cópia não contém repositório Git acessível **[nao verificado]**.
+
+## 06/11 04:29 · sessao c166bb812a26 · - · - · origem=Ronald (tmux)
+
+1. **BLOQUEIA — classificação ainda pode mascarar decorador opaco com registro do outro lado; defeito preexistente, não regressão exclusiva do delta.** A soma conserva `decor=['register.filter', 'receiver']` e `registros=[('filtro','old')]`, mas `_tipo_simbolo` retorna `filtro/tag` antes de examinar `receiver` (`bin/quem_chama.py:704`, `bin/quem_chama.py:707`, `bin/quem_chama.py:709`, `bin/quem_chama.py:348`, `bin/quem_chama.py:352`).
+
+   Contraexemplo exercitado em memória: base `@register.filter(name='old') def f(x): return x`; ponta `@receiver('signal') def f(x): return x+1`. Resultado: `simbolo f [filtro/tag]: 0 chamador(es)`, embora a própria classificação trate `receiver` sem registro como motivo para não varrer (`bin/quem_chama.py:354`, `bin/quem_chama.py:765`). O chamador indireto é o despachante do registrador; ocorrência dessa transição no repo real: **[nao verificado]**. O mesmo caminho já existe no algoritmo anterior anexado, pois conservava o registro da base: **[nao verificado por execução da revisão antiga]**.
+
+2. **P1 — casos pedidos são conservadores, exceto a interação acima.** `membro=True` em qualquer lado vence; registro `(papel,None)` junto de registro constante continua “nome não resolvido”; decorador removido permanece na união; um lado sozinho recebe `registros` normalmente (`bin/quem_chama.py:706`, `bin/quem_chama.py:349`, `bin/quem_chama.py:707`, `bin/quem_chama.py:705`, `bin/quem_chama.py:708`). Esses casos foram exercitados em memória.
+
+   Campos restantes usam primeiro valor, geralmente da base: a cópia está no `setdefault` e os únicos campos posteriormente combinados são `membro`, `decor` e `registros` (`bin/quem_chama.py:700`, `bin/quem_chama.py:704`, `bin/quem_chama.py:706`). Contudo, o produtor atual sempre deriva `nome` do sufixo de `q`; mudar de topo `f` para membro `C.f` também muda a chave, impedindo esse conflito natural entre lados (`bin/quem_chama.py:290`, `bin/quem_chama.py:292`, `bin/quem_chama.py:300`). Divergência de `nome` só foi demonstrada com infos artificiais injetados na soma, não produzidos pelo parser (`bin/quem_chama.py:279`).
+
+3. **P2 — migração singular/plural consistente no caminho operacional.**
+
+   | Campo | Escritores | Leitores |
+   |---|---|---|
+   | `registro` | `_add`, `bin/quem_chama.py:282` | Somente soma, `bin/quem_chama.py:708`, `bin/quem_chama.py:709`; excluído da cópia em `bin/quem_chama.py:704`. |
+   | `registros` | Inicialização em `bin/quem_chama.py:705`; acréscimo em `bin/quem_chama.py:709`. | Classificação em `bin/quem_chama.py:348`, `bin/quem_chama.py:349`; varredura de template em `bin/quem_chama.py:606`; deduplicação em `bin/quem_chama.py:708`. |
+
+   O fluxo passa pela soma antes da classificação e da construção de `Alvos`, usados pelas varreduras; não encontrei leitor singular sobre dict somado nem leitor plural sobre dict cru nesse fluxo (`bin/quem_chama.py:701`, `bin/quem_chama.py:711`, `bin/quem_chama.py:716`, `bin/quem_chama.py:728`, `bin/quem_chama.py:732`).
 
 ## 06/11 04:19 · sessao 985df92221f6 · OTIMIZA-3 · verificador · origem=Code
 
@@ -699,167 +838,4 @@ Tabela conferida contra as 238 linhas do anexo `app/chamados/tests/test_o261_ite
 
 Classes: não nasce outro C6; permanece o chamado à autoridade existente, cuja separação entre memo e cálculo está em `app/chamados/juizes.py:822` e `:1135`. Não há outro escritor persistente demonstrado pelo método novo; há a limitação de selo acima. O relógio implícito já existia em `app/chamados/models.py:2581`; sua dívida está expressa em `app/docs/BACKLOG.md:1154`. O teste SQL prova alvos e momento do SELECT, mas não prova ausência de ciclo com travas anteriores/posteriores dos chamadores (`app/chamados/tests/test_o261_item3_pep.py:186`, `:199`, anexo). Pouso ou execução dos testes nesta verificação: **[não verificado]**.
 
-## 06/11 03:18 · sessao 7ffc81c85454 · - · - · origem=Ronald (tmux)
-
-**Achados para consolidar**
-
-- **PROCEDENTE-candidato — recusa de reentrada legítima.** `_materializar_uma` abre atomic, planta/reusa batida e reconcilia destino antes de chamar `carimbar` (`app/chamados/services/materializacao.py:1145`, `:897`, `:918`, `:944`, `:1202`). A reconciliação salva CH e dispara S143, que pode carimbar a mesma pergunta enquanto a instância externa permanece velha (`app/chamados/models.py:279`; `app/chamados/signals.py:91`; `app/chamados/services/disputa_emissao.py:1603`). Com o diff, a chamada externa recebe False por já carimbada e levanta `_Reprovada`, desfazendo batida e primeiro carimbo (`app/chamados/services/materializacao.py:1204`, `:1208`; anexo diff, `_reler_travada`). **Execução concreta não verificada.** Construção: D aberta, P validada, última batida correta no slot tornando premissa do CH regularizada; S143 não filtra validada nula (`app/chamados/services/disputa_emissao.py:1572`), C6 mata validada (`app/chamados/juizes.py:1136`), guard de resposta admite lastro existente (`app/chamados/services/disputa_emissao.py:1596`; `app/chamados/juizes.py:718`), e gate admite premissa regularizada (`app/chamados/models.py:701`). A própria P validada não retém fechamento (`app/chamados/juizes.py:1747`).
-
-- **PROCEDENTE-candidato — mensagens falsas.** Os novos False podem ocorrer sem executar C6 ou com P já resolvida; textos continuam afirmando “C6 manteve ... VIVA”, “segue pendente” e “C6 ... VIVA” (`app/chamados/services/materializacao.py:552`, `:1205`; anexo diff, guardas de `_reler_travada`).
-
-**Oito chamadores e travas**
-
-| Chamada | Antes na mesma transação | Depois na mesma transação / False |
-|---|---|---|
-| `reconciliador.py:405` | Método sem atomic próprio; guarda só lê (`:340`, `:362`). Travas herdadas dependem da entrada. | False retorna False (`:406`); True pode fechar D (`:412`) e CH pai pelo signal (`signals.py:41`). Sem atomic externo, a nova transação da porta termina antes disso. |
-| `reconciliador.py:586` | Método sem atomic próprio (`:579`); cartório também o chama (`ponto/services/cartorio.py:958`). | False continua (`:587`), não conta nem agenda D. D fecha somente depois do laço (`:602`), fora do atomic novo da porta salvo externo. |
-| `disputa_emissao.py:1603` | Método sem atomic próprio (`:1550`). Via S143: CH já travado pelo gate e atualizado (`models.py:638`, `:674`, `:279`; `signals.py:91`). Via `_retratar`: atomic e possível UPDATE de justificativa (`reconciliador.py:522`, `:535`). | False continua (`:1605`); depois pode reabrir pai (`:1628`), carimbar outras P e fechar D (`:1696`), cujo signal trava CH pai. |
-| `disputa_emissao.py:1675` | Mesmo contexto; pode já deter travas das P anteriores do laço e da primeira chamada (`:1603`, `:1661`). | False continua, sem evento (`:1676`). Fechamento D depois (`:1696`). |
-| `materializacao.py:549` | Sem atomic próprio. Resposta escape já salvou P (`disputa_emissao.py:1301`); criação/reabertura de Ausência vem antes (`materializacao.py:520`; `ponto/services/ausencia.py:291`, `:417`). Esses locks persistem somente se houver transação externa. | False conta e trilha (`:550`), mas segue reconciliando CH (`:564`) e pode fechar D (`:568`). Texto falso em `:552`. |
-| `materializacao.py:1202` | Atomic obrigatório (`:1145`); Batida escrita/anotada, sinais, reconciliação de destino/clones (`:897`, `:918`, `:944`, `:1029`, `:1049`). Na validação humana, UPDATE P já retido (`validacao.py:395`, `:396`; escritor `:133`). | False levanta e rollback (`:1204`), registra erro e recusa (`:1208`, `:1222`). Fecho D do laço ocorre depois do atomic interno (`:1303`), salvo atomic externo. |
-| `materializacao.py:1349` | Sem atomic local (`:1315`). Pelo receiver, D já sofreu UPDATE (`models.py:1865`; `signals.py:140`) e primeiro receiver pode ter reconciliado CH pai (`signals.py:42`). | False não adiciona pk (`:1349`); sem texto próprio. Fora de atomic, porta abre o seu; por `D.fechar`, herda transação. |
-| `models.py:2685` | Wrapper `encerrar_fantasma`; entrada produtiva abre atomic explícito antes (`reconciliador.py:1135`). Nenhuma trava explícita no trecho anterior (`:1123`). | False continua (`:1136`); True insere evento (`:1138`). Fecho D ocorre após esse atomic (`:1160`), salvo externo. |
-
-**Ordem oposta**
-
-- **OBSERVAÇÃO — CH→P preexistia.** Gate trava CH, salva e S143 atualiza P (`app/chamados/models.py:674`, `:279`; `app/chamados/signals.py:91`; `app/chamados/services/disputa_emissao.py:1603`; save antigo `app/chamados/models.py:2609`).
-- **OBSERVAÇÃO — P→D→CH também preexistia quando há atomic externo.** Carimbo já atualizava P, depois `D.fechar` atualiza D e signal reconcilia CH (`app/chamados/models.py:2609`, `:1865`; `app/chamados/signals.py:41`).
-- **OBSERVAÇÃO — diff acrescenta lock explícito de D e antecipa lock de P para antes do C6, incluindo recusas.** Igualdade de `FOR UPDATE OF` não comprova ordem temporal de aquisição das duas linhas ou ausência de deadlock; teste só compara cláusulas (anexo diff, `OrdemDaTrava`; referência da relavra `app/chamados/services/relavra_via.py:221`). Plano e execução concorrente: **[não verificado]**.
-
-## 06/11 03:17 · sessao 5a58e2b84bcc · - · - · origem=Ronald (tmux)
-
-Escritores/leitores e alcance da trava, todos conferidos somente na cópia:
-
-- **OBSERVAÇÃO — mapa de donos:** DOSSIES divide PerguntaDisputa em Q1 identidade/carimbo, Q2 resposta, Q3 materialização, Q4 reconciliação, Q5 veredito e Q6 validação; admite várias portas por dono de regra. Referências: `app/docs/DOSSIES.md:42`, `app/docs/DOSSIES.md:46`. JUIZES chama `validar_pergunta` de escritor único de `validada_em`, mas o código e o selo reconhecem exceções: `app/docs/JUIZES.md:38`, `app/chamados/tests/test_contract_dono_validada.py:26`, `app/chamados/tests/test_contract_dono_validada.py:30`.
-
-| Campo | Escritores relevantes | Leitores relevantes |
-|---|---|---|
-| `materializada_em`, `materializada_por`, `via_resolucao` | Atribuição comum `_escrever_carimbo`: `models.py:2556-2560`; portas `carimbar`: `2586`, `carimbar_identidade`: `2636-2644`, `descarimbar`: `2648-2653`; lote: `2663-2664`. Via isolada: `encerrar_por_fato_no_espelho` `2673-2674`; re-lavra: `services/relavra_via.py:123-126`. | C6: `juizes.py:1145`, `1171`, `1177`, `1207`; status: `models.py:2499-2506`; resposta pode reabrir: `models.py:2711-2713`; agregador de stale: `veredito_lavrado.py:162-165`. |
-| `resposta_colab`, `respondida_em` | Resposta humana: `services/disputa_emissao.py:1282-1301`; reabertura: `1393-1413`; automática: `1426-1430`; complemento pela trilha: `1443-1446`; carimbar com `resposta`: `models.py:2587-2590`; ressuscitar limpa instante: `models.py:1504`; desfazer somente memória: `models.py:2620`. | Validação: `services/validacao.py:363`, `374`, `382`; C6: `juizes.py:1150-1162`; último marco: `veredito_lavrado.py:166-169`; respostas exibidas: `models.py:2818`, `2823-2845`. |
-| `validada_em`, `validada_por` | Validar: `services/validacao.py:127-133`; devolver validação: `187-190`; nova resposta remove condicionalmente: `services/disputa_emissao.py:1285-1297`; reabertura: `1393-1413`; carimbar: `models.py:2591-2594`; ressuscitar: `models.py:1504`; desfazer em memória: `models.py:2621-2622`. | C6 imediatamente mata: `juizes.py:1136-1137`; validar verifica pré-condição: `services/validacao.py:363-368`; fila/status: `models.py:2499-2501`; SQL de vivas: `models.py:2757`; resposta decide limpar lendo instante: `services/disputa_emissao.py:1285-1297`. |
-| `veredito_lavrado`, `julgado_em`, `janela_expira_em` | Porta `lavrar`: `veredito_lavrado.py:211-231`; restore memória: `240-245`; lote: `197-207`; backfill atribui: `management/commands/backfill_veredito_lavrado.py:138-140`. Persistências da porta também por carimbar `models.py:2606-2609`, nascimento/reapontamento `models.py:2471-2474`, costura `services/fio.py:845-848`, re-lavra `services/relavra_via.py:123-126`, destino `models.py:291-295`, cron `management/commands/lavrar_perguntas_stale.py:85-87`. | Stale: `veredito_lavrado.py:179-190`; crédito de tela: `services/raiox.py:182-185`; comparação auditor: `management/commands/auditar_invariantes_chamados.py:1170`; foto restore: `veredito_lavrado.py:235-237`. |
-| `_pv_memo` | C6 grava: `juizes.py:835-847`; invalidações existentes: `models.py:2623`, `2649`; diff invalida também na releitura, conforme anexo. | C6 lê/cache hit: `juizes.py:835-838`; chave: `juizes.py:811-819`. |
-
-Os caminhos acima usam prefixo `app/chamados/`; as referências em intervalos são para consolidação, podendo citar uma linha âncora individualmente no relatório final.
-
-**PROCEDENTE-candidato — a corrida inversa sobrevive.** A porta web lê a pergunta sem trava em `app/chamados/views.py:1239`, julga a instância em `:1242`, e depois passa a mesma instância ao core em `:1283`; a API faz o mesmo em `app/api/views.py:2628` e `:2643`. O core decide se deve zerar validação pela instância recebida, apenas quando `p.validada_em is not None`, em `app/chamados/services/disputa_emissao.py:1285`, `:1286`, `:1295`, `:1297`, e salva em `:1301`. Portanto:
-
-1. Respondente lê R1, `validada_em=None`.
-2. `carimbar(resposta='validar')` obtém a trava nova, aplica validação e salva.
-3. O respondente, com a instância anterior, grava R2. Seu `update_fields` contém apenas resposta/instante (`disputa_emissao.py:1284`), preservando a validação aplicada enquanto ele esperava. [nao verificado]
-4. R2 fica validada por quem não a viu. O C6 a mata imediatamente (`juizes.py:1136`).
-
-É contraexemplo lógico do código; ocorrência real ou intercalamento real em produção: **[não verificado]**. O novo RED testa resposta anterior à releitura; esta ordem é distinta e permanece fora da trava da decisão do escritor.
-
-**OBSERVAÇÃO — outra janela já existente fica antes da nova porta.** `validar_pergunta` busca R1 sem trava em `app/chamados/services/validacao.py:359`, verifica resposta/validação em `:363` e `:366`, julga em `:374`, só depois entra no atomic em `:395` e grava validação em `:396` pela função `:131-133`. Se R2 chegar entre leitura e escrita, a própria validação já é sobre texto não visto. O materializador poderá ler R2 já validada; sua nova guarda não tem a foto original de R1. O diff não cria essa janela nem a fecha.
-
-**OBSERVAÇÃO — outros escritores não entram na trava nova.** Identidade e descarimbo continuam sem releitura própria (`app/chamados/models.py:2636`, `:2644`, `:2648`, `:2653`); re-lavra atribui via de instância recebida e salva sem trava própria (`app/chamados/services/relavra_via.py:115`, `:123`, `:125`); lavra cron calcula e salva sobre instâncias coletadas sem trava (`app/chamados/management/commands/lavrar_perguntas_stale.py:85`, `:87`; `app/chamados/veredito_lavrado.py:230`). UPDATE ainda serializa a escrita, mas decisões desses caminhos não passam pela foto nova. Tratar como alcance da cura, sem afirmar ocorrência em produção.
-
-**OBSERVAÇÃO — memo.** A chave cobre campos da pergunta, `celula.veredito/veredito_via` e, se já carregado, `chamado_destino.status_local` (`app/chamados/juizes.py:811-819`), mas não inclui ata/DNA/batidas; a remoção no diff é necessária para obrigar o C6 a executar outra vez. Remover o memo não atualiza os objetos de relação mantidos no cache — esse problema fica com a análise principal de cache.
-
-**OBSERVAÇÃO — LEI-PROTEGE-SITIO.** A regra distingue explicitamente dono de sítio protegido e proíbe deduzir proteção (`app/docs/LEIS.md:43-48`). O grep exato de `chamados/models.py|carimbar` não encontrou proteção nominal atual de `PerguntaDisputa.carimbar`: L050 cita sítio morto (`app/docs/LEIS.md:91`); DOSSIES registra a porta/donos (`app/docs/DOSSIES.md:46`); CORTES declara outro método, `DisputaSupervisao.pode_fechar` (`app/docs/CORTES.md:83`, `:272`), e o corte sobre resposta vazia é outro ramo, cuja guarda o diff preserva (`app/docs/CORTES.md:384`; `app/chamados/models.py:2587`). Não se pode concluir, por esse grep, que leis gerais da casa deixem de valer.
-
-## 06/11 02:26 · sessao a4b5542bebe9 · H12H06-B · verificador · origem=Code
-
-**REPROVA quanto à abrangência da invalidação:** há janela que o leitor alcança e a nova chamada deixa de fora. (`app/ponto/services/ausencia.py:519`; `app/ponto/turnos.py:2762`)
-
-1. **Alta — ausência aberta deixa projeções futuras carimbadas.**  
-   O fim vazio vira `max(data, hoje)`, enquanto a cobertura de `TIPOS_EM_ABERTO` se estende até o fim da competência consultada. (`app/ponto/services/ausencia.py:515–520`; `app/ponto/turnos.py:2753–2767`)
-
-   Contraexemplo: em 06/11, corte 21, INSS aprovado desde 01/10, sem fim, com projeção de dezembro existente; editar para atestado de um dia em 01/10 invalida outubro/novembro, mas dezembro perde a supressão sem perder `derivado_em`. O escritor permite calcular e gravar dezembro; não garante a premissa “competência futura não tem projeção”. Existência desse caso em produção: **[não verificado]**. (`app/ponto/janelas.py:10–33`; `app/ponto/services/ausencia.py:496–520`; `app/ponto/services/ausencia.py:940`; `app/ponto/services/fechamento.py:430–436`, `:610–630`, `:674–692`, `:1127–1128`)
-
-   Para ranges finitos válidos, o envelope cobre antigo/novo, deslocamentos para trás/para frente e competências intermediárias. `NULL` de tipo não aberto pode invalidar competências extras, pois sua cobertura efetiva é um dia. (`app/ponto/services/ausencia.py:516–520`; `app/ponto/services/fechamento.py:1578–1583`; `app/ponto/services/dia_pago.py:712–716`; `app/ponto/turnos.py:2762–2767`)
-
-2. **Alta — permanece caminho de alteração de aprovada sem invalidação.**  
-   `curar_ausencia_sem_fim` inclui aprovadas e chama `rederivar_fim`, que apenas salva/relê. O modelo então pode preencher `data_fim`, alterando a cobertura de várias competências sem invalidá-las. É caminho legado; existência de alvos atuais em produção: **[não verificado]**. (`app/ponto/management/commands/curar_ausencia_sem_fim.py:29–31`, `:46`; `app/ponto/services/ausencia.py:1289–1294`; `app/ponto/models.py:902–908`)
-
-   Os sinais não fecham esse buraco: julgam células e reconciliam chamados, sem invalidar o fechamento nesses caminhos. (`app/ponto/signals.py:85–93`, `:143–147`, `:250–272`)
-
-3. **Média — “dentro do atomic do chamador” não vale para a tela.**  
-   No comando, edição e invalidação estão no `atomic` de `tratar_linha`; `_Desfaz` desfaz também o carimbo. Na view, não há `atomic` envolvendo a chamada; os blocos internos de `invalidar_fechamento` começam depois do `save` da ausência. As configurações copiadas tampouco habilitam `ATOMIC_REQUESTS`. (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:137–191`; `app/ponto/views.py:2750–2803`; `app/ponto/services/ausencia.py:509–520`; `app/ponto/services/fechamento.py:1632–1640`; `app/config/settings/saas.py:83–92`; `app/config/settings/prod.py:9–18`)
-
-   Portanto, rollback do comando restaura o carimbo; falha posterior na tela não desfaz automaticamente os atos anteriores. Além disso, falha da invalidação é engolida, retorna zero e não impede confirmar a edição — limite herdado do helper utilizado. (`app/ponto/services/fechamento.py:1645–1649`; `app/ponto/services/ausencia.py:520`)
-
-4. **Média, condicional — contesto descartar a corrida com exportação incondicionalmente.**  
-   O apply trava somente a ausência e consulta “entregue” antes de editar; a exportação aceita competência solicitada, calcula sua fotografia e registra o TXT sem compartilhar essa trava. É possível consultar “não entregue”, exportar a fotografia anterior e confirmar a edição concorrentemente. Ocorrência em produção: **[não verificado]**. (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:137–170`; `app/folha/views.py:109–120`, `:207–209`, `:297–300`; `app/folha/models.py:174–188`)
-
-   “Antes de 21/11” não constitui garantia pelo código: o portão verifica carimbo do dia/competência e falhas, sem exigir encerramento temporal. A ausência operacional de exportação concorrente continua **[não verificado]**. (`app/folha/porta_export.py:800–867`)
-
-5. **Baixa — teste de rollback pode passar vazio isoladamente.**   [nao verificado]
-   `test_linha_desfeita_nao_vence_a_projecao` exige apenas carimbo preenchido; também passa se o comando pular antes de editar. O irmão da trilha verifica resumo e minutos restaurados, mas o teste novo não demonstra que chegou a invalidar antes do rollback. (`app/ponto/tests/test_h12h06b_rederivar_minutos.py:254–259`, `:163–169`)
-
-   O teste de range cobre somente avanço de um atestado aguardando documento, de outubro para novembro — competências 11→12. Não cobre aberto, retorno para trás, fim antigo mais distante nem exportada/barrada. (`app/ponto/tests/test_h12h06b_rederivar_minutos.py:72–76`, `:261–272`)
-
-**Rastreio de `derivado_em`:**
-
-| Papel | Quem / comportamento | Evidência |
-|---|---|---|
-| Preenche | Recalcular fechamento: `save` para aberto, `update` para demais status | `app/ponto/services/fechamento.py:1121–1128`, `:1144–1173` |
-| Esvazia | `invalidar_fechamento`; `restaurar_fechamento`, salvo valor explicitamente fornecido | `app/ponto/services/fechamento.py:1635–1640`, `:1364–1377` |
-| Lê `NULL` | Queryset/contador de projeções vencidas e comando que conta/lista; não rederivam | `app/ponto/services/fechamento.py:1675–1683`, `:1705`; `app/ponto/management/commands/projecoes_vencidas.py:47–68` |
-| `decidir` | Chama invalidação; não consulta o carimbo | `app/ponto/services/ausencia.py:942–944` |
-| Evento | Recalcula após commit, independentemente do carimbo | `app/ponto/services/fechamento.py:1791–1808` |
-| `fechamento_lido` | Deriva em memória, independentemente do carimbo | `app/ponto/services/fechamento.py:1743–1745` |
-| Leitores do gravado | Os caminhos padrão de classificação/export carregam valores sem testar o carimbo | `app/folha/export.py:709–724`, `:775–780` |
-| TXT pela view | Injeta fechamentos derivados em memória | `app/folha/views.py:207–212` |
-
-O que fica vazio é **o carimbo**, não as rubricas. A invalidação alcança também exportadas/barradas dentro da janela; a guarda da 09 pode impedir reconstrução, deixando valores antigos com carimbo nulo. (`app/ponto/services/fechamento.py:1635–1640`, `:549–555`)
-
-Os testes positivos têm mordida: começam com carimbos preenchidos e exigem `None`; o DSR consulta `FechamentoMensal` gravado, usa motor real e exige delta exato `(+1, −1)` para 720/0, com contraste 479. O teste de 720 exige perda prévia; há mock da lavra como `{}`, limitando a integração comprovada. Execução GREEN/RED/M16/M17: **[não verificado]**. (`app/ponto/tests/test_h12h06b_rederivar_minutos.py:241–252`, `:261–272`; `app/ponto/tests/test_h12h06b_parcial_pelo_juiz.py:130–178`)
-
-Nos leitores examinados, a decisão de parcial continua delegada ao juiz existente; não identifiquei nova derivação paralela nesses sítios. O relógio é lido dentro da porta de edição; classificá-lo sozinho como “fora da borda” não está demonstrado. (`app/ponto/services/fechamento.py:681–685`; `app/ponto/services/efeito_ausencia.py:33–55`; `app/ponto/services/credito_parcial.py:20–27`; `app/ponto/turnos.py:2583–2600`; `app/ponto/services/ausencia.py:513–519`)
-
-O DIFF de impacto anterior ao pouso permanece **[não verificado]**; “medida em curso” não demonstra cumprimento do pré-requisito. A exigência continua registrada, e eventos continuam podendo regravar competências exportadas fora da guarda da 09. (`app/docs/LEIS.md:112`, `:142`; `app/ponto/services/fechamento.py:530–555`, `:1793–1794`)
-
-## 06/11 02:26 · sessao b2671fcd93c3 · - · - · origem=Ronald (tmux)
-
-Achados principais:
-
-1. **Alta — atomicidade prometida não existe na tela.** `app/ponto/services/ausencia.py:509` salva a ausência antes da invalidação em `:520`; a função começa em `:465` sem `atomic`. O chamador de tela tem apenas `@login_required` (`app/ponto/views.py:2750`) e chama a porta em `:2794`. A configuração copiada não ativa `ATOMIC_REQUESTS` (`app/config/settings/saas.py:83`). Portanto, o comentário “Dentro do atomic do chamador” (`app/ponto/services/ausencia.py:512`) só corresponde ao comando: a tela deixa escrita e carimbo em transações separadas. Configuração efetiva de produção: `[não verificado]`.
-
-2. **Alta, caminho legado — outro escritor altera insumo de aprovada sem invalidar.** `curar_ausencia_sem_fim` seleciona todas as não rejeitadas, incluindo aprovadas (`app/ponto/management/commands/curar_ausencia_sem_fim.py:29`), e chama `rederivar_fim` em `:46`. Essa função apenas salva e relê (`app/ponto/services/ausencia.py:1289`), sem invalidar. O modelo preenche `data_fim` (`app/ponto/models.py:902`) e também pode preencher minutos de falta aprovada zero (`:877`). É outro caminho de escrita dos campos perguntados, embora dentro do arquivo declarado como porta. O comando é classificado como cura de acervo, uma vez (`app/config/crons.py:1257`). Existência atual de alvos: `[não verificado]`.
-
-3. **Alta, contestação do descarte — executar antes de 21/11 não elimina estruturalmente a corrida com exportação.** O comando trava somente Ausencia (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:137`), consulta a entrega em `:160` e depois escreve em `:169`. O export recebe mês/ano sem exigir competência encerrada (`app/folha/views.py:109`); `conferir` verifica carimbo do dia, competência e falhas (`app/folha/porta_export.py:800`), sem barreira de data. Lê a projeção online (`app/folha/views.py:207`) e registra o TXT posteriormente (`:297`), usando `exists/create`, sem trava comum (`app/folha/models.py:174`). Interleaving possível: cerca passa → export lê dados antigos → apply confirma → export registra TXT antigo. Ocorrência real e carimbo verde atual: `[não verificado]`.
-
-Conferências:
-
-- **Comando:** `transaction.atomic()` em `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:137` contém porta e invalidação. `_Desfaz` por diferença de campos/valor ou auditoria ausente (`:175`, `:178`, `:186`) desfaz também o carimbo.
-- **Signals não cobrem o segundo escritor:** o receiver da Ausencia chama cartório (`app/ponto/signals.py:143`); `_julgar_dias` julga células (`:85`). O consumidor apenas reconcilia chamados após commit (`:250`).
-- **Admin não é escritor adicional:** AusenciaAdmin usa SoLeitura (`app/ponto/admin.py:37`), que nega adicionar/editar/apagar (`app/core/admin.py:59`).
-- **Form não é escritor adicional:** AusenciaForm deriva de `forms.Form` (`app/ponto/forms.py:41`).
-- **Férias não edita esses campos de Ausencia existente:** o modelo delega o espelho (`app/ferias/models.py:379`); o espelho mantém existentes e cria ausentes (`app/ponto/services/ausencia.py:1194`).
-
-## 06/11 02:25 · sessao 78bcf75af9d3 · - · - · origem=Ronald (tmux)
-
-**Achado: janela incompleta para ausência aberta com projeção futura existente — gravidade alta, condicional à existência desse gravado.** `editar_ausencia_registro` substitui `data_fim=NULL` pelo máximo entre início e hoje, limitando a invalidação (`app/ponto/services/ausencia.py:515-520`); o leitor de cobertura estende ausência de `TIPOS_EM_ABERTO` até o fim de qualquer janela consultada (`app/ponto/turnos.py:2753-2767`).
-
-Contraexemplo por código: em 06/11, corte21, ausência aprovada INSS iniciada em 01/10, sem fim, e projeção de 12/2026 existente; editar para atestado de um dia em 01/10 invalida somente competências10/11, mas a12 perde toda a supressão antiga sem perder seu carimbo (`app/ponto/services/ausencia.py:496-520`; `app/ponto/janelas.py:10-33`; `app/ponto/services/fechamento.py:674-692`). O escritor aceita competência futura: seu universo não limita mês/ano por hoje e a gravação usa a janela pedida (`app/ponto/services/fechamento.py:430-436`, `:610-630`, `:1121-1128`). Existência desse caso em produção: `[não verificado]`. A premissa “competência futura não tem projeção gravada” aparece no comentário de `decidir`, mas não é garantida pelo escritor (`app/ponto/services/ausencia.py:938-943`; `app/ponto/services/fechamento.py:430-436`).
-
-Para ranges finitos válidos, o envelope mínimo dos inícios/máximo dos fins cobre antigo e novo, inclusive deslocamentos nos dois sentidos; sua tradução em competências percorre todas as janelas pelo corte da empresa (`app/ponto/services/ausencia.py:496-520`; `app/ponto/services/fechamento.py:1578-1583`; `app/ponto/services/dia_pago.py:700-716`). Para `NULL` de tipo não aberto, o limite hoje apenas pode invalidar competências extras, pois a cobertura efetiva é um dia (`app/ponto/services/ausencia.py:519`; `app/ponto/turnos.py:2762-2767`).
-
-**Quem escreve/lê `derivado_em`.**
-
-- Escritores com carimbo preenchido: recalcular fechamento aberto por `save`, e demais status por `update` (`app/ponto/services/fechamento.py:1121-1128`, `:1144-1173`).
-- Escritores que apagam: `invalidar_fechamento` (`app/ponto/services/fechamento.py:1632-1640`); `restaurar_fechamento`, salvo se o chamador fornecer explicitamente outro valor (`:1364-1377`). O default do modelo é `NULL` (`app/ponto/models.py:454-464`).
-- Leitores explícitos do carimbo: `projecoes_vencidas_qs`, contador e comando de listagem; detectam `NULL` e imprimem/contam, sem rederivar (`app/ponto/services/fechamento.py:1675-1683`, `:1705`; `app/ponto/management/commands/projecoes_vencidas.py:47-68`). O default observa somente a competência corrente (`app/ponto/services/fechamento.py:1676-1679`; `app/ponto/janelas.py:102-108`).
-- `decidir` escreve invalidação, sem ler o carimbo (`app/ponto/services/ausencia.py:942-944`); `recalcular_por_evento` recalcula incondicionalmente após commit (`app/ponto/services/fechamento.py:1791-1808`); `fechamento_lido` deriva incondicionalmente em memória (`:1743-1745`).
-- A folha continua carregando o gravado sem filtro de `derivado_em`: `classificar_export` (`app/folha/export.py:775-780`) e `montar_linhas_export` (`:709-724`). Portanto, carimbo vazio alarma, mas não força atualização dos números consumidos nesses caminhos (`app/ponto/services/fechamento.py:1675-1683`; `app/folha/export.py:709-724`).
-- O carimbo é excluído das comparações de fotografia/hash (`app/ponto/portas/regen_exportada.py:35-38`; `app/ponto/management/commands/carimbo_gravado.py:27-30`).
-
-**Exportada/barrada:** a invalidação não filtra status, exportação nem guarda da09, portanto também apaga esses carimbos (`app/ponto/services/fechamento.py:1635-1640`). A reconstrução da09 exportada é barrada pelo universo do escritor (`:549-555`), enquanto a leitura online segue disponível pelo modo `somente_leitura=True` (`:530-531`, `:1743-1745`). O gravado barrado pode permanecer `NULL`, com os números antigos ainda disponíveis ao export (`app/folha/export.py:709-724`). Isso decorre do desenho existente; introdução desse comportamento pelo delta `[não verificado]`.
-
-## 06/11 02:25 · sessao 9456bae2f482 · - · - · origem=Ronald (tmux)
-
-1. **Não bloqueante — lacuna de cobertura da janela.** O teste de range cobre somente mover `27/10` para `23/11`, com `data_fim=None` e status `aguardando_documento`; não cobre fim antigo posterior ao novo, edição para trás, intervalo aberto nem exportada/barrada. O nome promete mais que os casos exercitados. `app/ponto/tests/test_h12h06b_rederivar_minutos.py:72`, `:261-272`.
-
-2. **Não bloqueante — rollback pode passar vazio isoladamente.** `test_linha_desfeita_nao_vence_a_projecao` verifica apenas que `derivado_em` continua preenchido: passa também se o comando pular antes do escritor. Não afirma resumo, minutos restaurados ou que a invalidação aconteceu dentro da transação. O teste irmão da trilha cobre resumo `puladas=2` e minutos restaurados; portanto a suíte tem contraparte, mas este teste sozinho não comprova reversão do carimbo após invalidar. `app/ponto/tests/test_h12h06b_rederivar_minutos.py:254-259`, `:163-169`. O caminho real invalida antes da falha de trilha, que lança `_Desfaz` fora do `atomic`. `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:137`, `:169-191`; `app/ponto/services/ausencia.py:509-520`.
-
-3. **Testes positivos têm mordida estrutural.** O apply começa com duas projeções preenchidas e exige ambas nulas; o teste direto começa com comp11/12 preenchidas e exige ambas nulas. Suprimir a invalidação deixa esses valores iniciais vivos, salvo outro efeito ainda não demonstrado. `app/ponto/tests/test_h12h06b_rederivar_minutos.py:241-252`, `:261-272`. Execução dos RED/M16/M17: **[não verificado]**; os logs citados no commit não foram encontrados na listagem de `logs`/`app/logs` **[não verificado quanto à existência fora desses diretórios]**.
-
-4. **A cura do GRAVADO é efetiva pelo código do teste.** O helper chama `recalcular_fechamento_mes`, espia `get_motor_cct` devolvendo o motor real, exige que o motor tenha sido chamado e lê `FechamentoMensal` persistido. Exige delta exato `(ok+1, perdido−1)` para 720 e 0; 720 ainda exige semana previamente perdida. Isso não passa por saída vazia. `app/ponto/tests/test_h12h06b_parcial_pelo_juiz.py:130-139`, `:152-178`. O escritor persiste os campos do resultado real do motor, cuja regra usa presença/justificação dos dias obrigatórios. `app/ponto/services/fechamento.py:1085-1086`, `:1127-1128`; `app/ponto/motor_calculo_v2.py:2595-2608`, `:2629-2630`. Limite: `esmeril_espelho.ler_lavra` é mockado como `{}`, portanto estes testes não demonstram convivência com lavra de produção. `app/ponto/tests/test_h12h06b_parcial_pelo_juiz.py:136`.
-
-5. **Classes arquiteturais:** os leitores de dinheiro consultam o mesmo juiz `cobre_parte_do_dia`, cujo corpo centraliza tipo parcial, dia único e limite 480; não identifiquei juiz paralelo novo nesses sítios. `app/ponto/services/fechamento.py:681-685`; `app/ponto/services/efeito_ausencia.py:33-55`; `app/ponto/services/credito_parcial.py:20-27`; `app/ponto/turnos.py:2583-2600`. A composição `TIPOS_PAGOS and cobre_parte_do_dia` continua repetida nos quatro sítios, como no apontamento anterior. Mesmas referências.
-
-6. **Relógio:** o delta lê `localdate()` dentro da porta, sem entrada `hoje/agora`; os testes congelam globalmente o relógio. `app/ponto/services/ausencia.py:513-519`; `app/ponto/tests/test_h12h06b_rederivar_minutos.py:36`. A classificação “relógio lido fora da borda” consta do checklist, mas regra específica que faça essa leitura, isoladamente, bloquear a obra: **[não verificado]**. `CLAUDE.md:365-367`.
-
-_2096 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2102 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
