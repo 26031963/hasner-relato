@@ -1,7 +1,377 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 13:51** · publicado em **06/11/2026 13:54** (UTC-3)
+> Ultima resposta processada: **06/11/2026 13:57** · publicado em **06/11/2026 13:59** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 13:57 · sessao 0b5c7db967e3 · V3-IMPACTO-COM-DONO · leitura · origem=Code
+
+1. **Os 3191 registros não identificam nenhum `raise LacunaDeMedicao()` literal.** No anexo, `RegistroErros.dados` escreve `sonda` quando não recebe traceback; um `raise` capturado teria origem com linha. Condicionado ao anexo ser o código executado, os registros vieram destas chamadas **sem lançamento** de `falha(LacunaDeMedicao())`. A repartição integral entre elas não foi preservada. [anexo `q3_script_p1.py`, `RegistroErros.dados` e `executar`; nao verificado]
+
+| Sítio do anexo | O que significa | Classificação |
+|---|---|---|
+| Varredura dos contadores `historico["T"]` | Uma ocorrência por **chave não zero**, não por unidade do contador. Mistura falhas diferentes do comando. | O registro genérico é defeito do instrumento; a causa subjacente exige identificar o contador. [nao verificado] |
+| `if not c["emitido"][versao]` | Confunde chamada ausente com chamada bem sucedida sem objetos `TIPO_DIA`. | Defeito do instrumento: `lavrar` sempre pode emitir somente AJUSTE. [app/ponto/services/dia_pago.py:346] |
+| `if alvo not in c["fechos"]` | O fechamento não entregou objeto para o alvo. | Pode ser fato de escopo do produto: o fechamento aplica seu próprio universo e restrições. A causa destes casos não está demonstrada. [app/ponto/services/fechamento.py:545] [app/ponto/services/fechamento.py:555] [nao verificado] |
+| `if v2 is None or v3 is None` | Uma data pertence à união dos dias emitidos, mas falta em uma versão. | Depois de uma recusa conhecida, é **lacuna secundária fabricada pelo instrumento**; depois de duas lavras bem sucedidas, é diferença real dos conjuntos emitidos, a registrar separadamente. [app/ponto/services/fechamento.py:1281] [nao verificado quanto aos casos individuais] |
+
+O defeito concreto está na captura: o anexo guarda `rubricas`, `cegos` e `colab` **depois** de `REAL_LAVRAR`. A recusa impede essa captura; o fechamento captura a exceção e continua. O instrumento então acusa oráculo vazio e falta de par para os dias do motor. A cura é capturar a entrada **antes**, registrar tentativa e sucesso separadamente e excluir uma vez pela recusa. [anexo `q3_script_p1.py`, `emissor_capturado`; nao verificado] [app/ponto/services/fechamento.py:1272] [app/ponto/services/fechamento.py:1281]
+
+Em P1, `SEM_PAR` permite atribuir **237** lacunas de outubro e **329** de novembro ao teste diário; restam **47** e **24**, respectivamente, sem repartição recuperável entre os demais sítios sintéticos. Nada permite estender essa decomposição às outras partes. [anexos `q3_s_p1.r` e `agrega.r`; nao verificado] [nao verificado]
+
+Portanto, **um DIA vira lacuna nesse teste pela ausência de uma das duas linhas emitidas**, independentemente de valor, batida ou divergência. A data exemplificada não prova falta de decisão da autoridade. Os universos também diferem: a porta visita dias do núcleo mais bloqueados publicados pelo motor; a lavra cria dias adicionais por furos e grade. [anexo `q3_script_p1.py`, laço de `chaves`; nao verificado] [app/ponto/calculador/alimentacao.py:467] [app/ponto/calculador/alimentacao.py:469] [app/ponto/services/dia_pago.py:280] [app/ponto/services/dia_pago.py:286] [nao verificado]
+
+2. **Os 740 não são demonstradamente falhas de `porta_ok`.** O anexo usa a mesma classe na conferência mensal e na conferência porta/emissor; ambas são registradas como `sonda`. O `raise` de `n != len(capturadas)` teria traceback, portanto não corresponde à origem publicada, condicionado ao anexo executado. Além disso, `False` em `SOMA V3_PORTA_EMISSOR` pode resultar apenas de `and cobertura`. [anexo `q3_script_p1.py`, `acumular`/`publicar`; nao verificado] [nao verificado]
+
+Quem escreve os lados:
+
+- **`porta`**: `rubricas_por_dia` escreve cada dia chamando `regras.do_dia`; o fechamento entrega o mapa a `lavrar`. [app/ponto/calculador/alimentacao.py:514] [app/ponto/services/fechamento.py:1255] [app/ponto/services/fechamento.py:1272]
+- **`emitido_decidido`**: `lavrar` lê os valores da porta, atribui ao campo do dia e constrói os objetos `DiaPago`. Nesse caminho, o chamador não passa `do_motor`; a atribuição é direta. [app/ponto/services/dia_pago.py:322] [app/ponto/services/dia_pago.py:328] [app/ponto/services/dia_pago.py:343] [app/ponto/services/fechamento.py:1261]
+
+Assim, uma diferença **comprovada na mesma célula decidida** indicaria incoerência do produto, provavelmente **ESTRUTURA**, no campo identificado pela comparação. O dado atual não identifica essas células nem demonstra que essa igualdade falhou. [CLAUDE.md:176] [nao verificado]
+
+Há também defeito instrumental em `fm_ok = bool(e2) ...`: uma lavra somente de AJUSTE, com mensal zero, produz falsamente uma conservação quebrada **por rubrica**. A ocorrência concreta desses casos não pode ser contada pelo dado. [anexo `q3_script_p1.py`, `acumular`; nao verificado] [app/ponto/services/dia_pago.py:346]
+
+P1 mostra uma diferença mensal específica em novembro/trabalhadas: **5478,32 versus 5478,33**. O campo é `horas_trabalhadas`; o mensal tem arredondamento inicial e pode arredondar novamente ao adicionar folga sem escala. Isso oferece uma hipótese de **ESTRUTURA**, mas não prova a causa daquele centésimo. [anexo `q3_s_p1.r`; nao verificado] [app/ponto/services/fechamento.py:893] [app/ponto/services/fechamento.py:968]
+
+3. O caminho é `diff_calculador` → fechamento → `lavrar(..., rubricas=_rub_o, versao="oraculo")`. O comando instala normalmente `_nada`; o captador do anexo reinstala a chamada real durante o fechamento. [app/ponto/management/commands/diff_calculador.py:137] [app/ponto/management/commands/diff_calculador.py:140] [app/ponto/services/fechamento.py:1261] [app/ponto/services/fechamento.py:1272] [anexo `q3_script_p1.py`; nao verificado]
+
+**A recusa é esperada para entrada sem proveniência; “lei do ancoramento pendente” não descreve a lei vigente desta cópia.** A lei já manda ancorar por período, pela mesma `he_noturna`, e isso está implementado. [app/ponto/services/dia_pago.py:311] [app/ponto/services/dia_pago.py:315] [app/ponto/calculador/regras.py:414] [app/ponto/calculador/regras.py:825] [app/ponto/calculador/regras.py:832]
+
+O conjunto de donos depende das declarações encontradas em `rubricas.values()`, incluindo `nao_decide`. Um mapa vazio não declara os onze campos do calculador; a própria alimentação documenta esse mecanismo. Por isso a recusa depende dos insumos de cada colaborador, não ocorre indistintamente. **Não é possível afirmar que todas as 182 recusas sejam mapa vazio**, pois os campos recusados não foram publicados. As frequências fornecidas variam de 11 a 21 por parte/competência. [app/ponto/services/dia_pago.py:61] [app/ponto/services/dia_pago.py:64] [app/ponto/calculador/alimentacao.py:459] [anexo `agrega.r`; nao verificado] [nao verificado]
+
+O guard está correto ao recusar. Se a integração entrega um mês vazio sem declarar sua proveniência, o defeito é do protocolo de alimentação; não se resolve preenchendo zero nem suspendendo o guard. Qual entrada explica cada recusa permanece [nao verificado]. [app/ponto/services/dia_pago.py:308]
+
+4. O mapa escritor/leitor é este; a tabela de juízes aponta cálculo para motor/CCT e janela para `janelas`, sem substituir o código vivo. [app/docs/JUIZES.md:14] [app/docs/JUIZES.md:29] [app/docs/JUIZES.md:35]
+
+| Valor somado pelo anexo | Quem escreve | Quem lê |
+|---|---|---|
+| `v2_h` publicado | Lavra `motor`: períodos, folgas, órfãos e demais mapas; objetos em `:343`. [app/ponto/services/dia_pago.py:173] [app/ponto/services/dia_pago.py:234] [app/ponto/services/dia_pago.py:267] [app/ponto/services/dia_pago.py:343] | Captador → `acumular` → `comparados` → `publicar`. É somente o subconjunto decidido da comparação. [anexo `q3_script_p1.py`; nao verificado] | [nao verificado]
+| `v3_h` publicado | A mesma lavra, substituindo campos decididos pela porta. [app/ponto/services/dia_pago.py:328] | O mesmo percurso do anexo, versão `oraculo`. [nao verificado] | [nao verificado]
+| `porta` | `regras.do_dia`, pela alimentação chamada pelo fechamento. [app/ponto/calculador/alimentacao.py:514] [app/ponto/services/fechamento.py:1255] | `lavrar`, o DIFF e o captador do anexo. [app/ponto/services/dia_pago.py:322] [app/ponto/management/commands/diff_calculador.py:469] [nao verificado quanto ao anexo] |
+| `emitido_decidido` | Objetos produzidos pelo único emissor. [app/ponto/services/dia_pago.py:343] | O anexo seleciona os campos presentes e não cegos. [nao verificado] |
+| `INSTRUMENTO_HISTORICO` | `m_dia` de períodos e `c_dia` da porta; `S` soma essas leituras. [app/ponto/management/commands/diff_calculador.py:253] [app/ponto/management/commands/diff_calculador.py:501] [app/ponto/management/commands/diff_calculador.py:536] | Tracer do anexo. **Não é a soma dos objetos emitidos.** [nao verificado] |
+
+Leitores produtivos concretos: calendário lê linhas e `rubricas_do_dia`; export lê dias da versão `motor`; a conferência da competência agrega os campos lavrados. Isso não constitui censo global dos leitores de `oraculo`. [app/colaboradores/services/calendario.py:290] [app/colaboradores/services/calendario.py:656] [app/folha/porta_export.py:588] [app/ponto/services/dia_pago.py:560] [nao verificado quanto ao censo global]
+
+Segue a proposta completa, **não executada**. Ela admite o colaborador somente depois das conferências, aceita lavra bem sucedida sem DIA e não usa o registro global de exceções para invalidar os medidos. `SOMA COBERTURA` passa a conferir a contabilização **medidos + excluídos**; `COBERTURA_INTEGRAL` informa separadamente se houve exclusões. Os limites de tempo/RSS são cooperativos; cabimento efetivo em 2 GB/15 minutos permanece [nao verificado].
+
+```python
+# PROPOSTA NAO EXECUTADA. Todo comportamento/performance desta reescrita:
+# [nao verificado].
+#
+# Medida de IMPACTO, nunca validacao: CLAUDE.md:50,58,415.
+# LEI-AKITA: origem=captura antes de lavrar;
+# testemunha=lavrar real + retorno real do fechamento;
+# RED=[nao verificado]; quem-mais-le=JUIZES.md:29,35 e leitores citados;
+# juizes novos=0; padrao=n/a (instrumento).
+#
+# Nenhum arquivo e aberto para escrita por este script.
+# Executar somente pelo envelope de leitura ja autorizado/configurado:
+# bin/sonda_leitura.sh:237-240.
+#
+# PRODUTO.n_dias conta datas observadas associadas a classe, sem multiplicar
+# por rubrica. Na recusa: dias preparados pela lavra + chaves da porta.
+# Na conservacao mensal: dias que contribuiram ao total daquele campo.
+# Ausencia de data observavel aparece adicionalmente como DIAS_NAO_LOCALIZADOS.
+# Classes de PRODUTO podem sobrepor: nao somar suas contagens entre classes.
+
+import collections
+import datetime as dt
+import gc
+import linecache
+import logging
+import math
+import resource
+import sys
+import time
+from contextlib import redirect_stdout, redirect_stderr
+from decimal import Decimal
+from unittest.mock import Mock, patch
+
+from django.conf import settings
+from django.db import connection, reset_queries, transaction
+from django.utils import timezone
+
+from ponto.calculador import regras
+from ponto.catalogo import ausencias as CAT
+from ponto.management.commands import diff_calculador as DC
+from ponto.management.commands.e6_oraculo import InsumosDoDono
+from ponto.models import DiaPago
+from ponto.services import dia_pago as DP
+from ponto.services import fechamento as F
+PARTE = 1
+PARTES = 6
+
+sys.dont_write_bytecode = True
+
+COMPETENCIAS = ((2026, 10), (2026, 11))
+RUBRICAS = tuple(r for r in regras.RUBRICAS if r not in regras.NAO_DECIDE)
+DONOS = {"BATIDA", "CADASTRO", "ESTRUTURA"}
+LIMIAR_H = 0.02  # diff_calculador.py:538
+INICIO = time.monotonic()
+PRAZO = INICIO + 14 * 60       # reserva para diagnostico/publicacao
+RSS_LIMITE_KIB = 1900 * 1024  # Linux; controle cooperativo
+HOJE, AGORA = timezone.localdate(), timezone.now()
+
+REAL_RECALC = F.recalcular_fechamento_mes
+REAL_LAVRAR = DP.lavrar
+COD_COMANDO = DC.Command.handle.__code__
+COD_LAVRAR = REAL_LAVRAR.__code__
+RAIZ_APP = DC.__file__.split("/ponto/management/commands/")[0] + "/"
+
+SOMAS = []
+TOTAL_EXCLUIDOS = 0
+TOTAL_INSTRUMENTO = 0
+
+
+class FalhaInstrumento(Exception):
+    pass
+
+
+class Limite(BaseException):
+    def __init__(self, causa):
+        self.causa = causa
+
+
+class Descartar:
+    def write(self, texto):
+        return len(texto)
+
+    def flush(self):
+        pass
+
+    def isatty(self):
+        return False
+
+
+DESCARTAR = Descartar()
+
+
+def rotulo(cid):
+    # Mesma convencao do anexo. Nunca imprimir cid isolado, modelos,
+    # nomes, CPF, argumentos SQL ou str(exc).
+    if not isinstance(cid, int) or isinstance(cid, bool):
+        raise FalhaInstrumento("IDENTIFICADOR_INVALIDO")
+    return "col%d" % cid
+
+
+def limites():
+    # Nao interrompe, por si so, consulta bloqueada em codigo nativo.
+    if time.monotonic() >= PRAZO:
+        raise Limite("PRAZO")
+    if resource.getrusage(resource.RUSAGE_SELF).ru_maxrss >= RSS_LIMITE_KIB:
+        raise Limite("MEMORIA")
+
+
+def numero(valor):
+    try:
+        n = float(valor)
+    except (TypeError, ValueError, OverflowError):
+        raise FalhaInstrumento("NUMERO_INVALIDO") from None
+    if not math.isfinite(n):
+        raise FalhaInstrumento("NUMERO_NAO_FINITO")
+    return n
+
+
+def soma(xs):
+    return math.fsum(xs)
+
+
+def igual(a, b):
+    return math.isclose(a, b, rel_tol=1e-12, abs_tol=1e-8)
+
+
+def centavos(valor):
+    # Mantem o criterio do anexo, por colaborador.
+    return Decimal(str(round(numero(valor), 2)))
+
+
+def datas(xs):
+    return {x for x in xs if type(x) is dt.date}
+
+
+def tipo_seguro(exc):
+    nome = type(exc).__name__
+    if nome.isascii() and nome.isidentifier() and len(nome) <= 80:
+        return nome
+    return "Excecao"
+
+
+def ultimo_tb(exc):
+    tb = exc.__traceback__
+    while tb is not None and tb.tb_next is not None:
+        tb = tb.tb_next
+    return tb
+
+
+def origem(exc):
+    tb = ultimo_tb(exc)
+    if tb is None:
+        return "sem_traceback"
+    nome = tb.tb_frame.f_code.co_filename
+    if nome.startswith(RAIZ_APP):
+        return "app/%s:%d" % (nome[len(RAIZ_APP):], tb.tb_lineno)
+    return "fora_do_app:%d" % tb.tb_lineno
+
+
+def novo_resultado():
+    return {
+        "ids": set(), "cortes": 0, "completo": False, "historico": None,
+        "janela": None, "colab": None, "fecho": None,
+        "tentativas": {"motor": 0, "oraculo": 0},
+        "sucessos": {"motor": 0, "oraculo": 0},
+        "emitido": {"motor": {}, "oraculo": {}},
+        "porta": {}, "cegos": {},
+        "faltas_porta_dc": set(),
+        "produto": {}, "instrumento": {},
+        "nao_localizados": set(), "causas": set(),
+        "excecoes": [], "recusas": [], "parada": None,
+    }
+
+
+def registrar(c, natureza, classe, dias=(), bloqueia=False, localizado=True):
+    conjunto = datas(dias)
+    c[natureza].setdefault(classe, set()).update(conjunto)
+    if not localizado:
+        c["nao_localizados"].add((natureza, classe))
+    if bloqueia:
+        c["causas"].add(natureza.upper() + ":" + classe)
+
+
+def instrumental(c, classe, dias=()):
+    registrar(c, "instrumento", classe, dias, bloqueia=True)
+
+
+def produto(c, classe, dias=(), bloqueia=False, localizado=True):
+    registrar(c, "produto", classe, dias, bloqueia, localizado)
+
+
+def falhou(c, exc, operacao, dias=()):
+    if isinstance(exc, Limite):
+        instrumental(c, exc.causa, dias)
+        c["parada"] = exc.causa
+    elif isinstance(exc, MemoryError):
+        instrumental(c, "MEMORIA", dias)
+        c["parada"] = "MEMORIA"
+    elif isinstance(exc, FalhaInstrumento):
+        instrumental(c, exc.args[0], dias)
+    else:
+        classe = "FALHA_%s_%s" % (operacao, tipo_seguro(exc))
+        produto(c, classe, dias, bloqueia=True,
+                localizado=bool(datas(dias)))
+        c["excecoes"].append((operacao, tipo_seguro(exc), origem(exc)))
+
+
+def limpar():
+    # Catalogo: cache de modulo; demais referencias sao de um colaborador.
+    # app/ponto/catalogo/ausencias.py:257,261.
+    CAT.invalidar_cache()
+    reset_queries()
+    gc.collect()
+
+
+def executar(ano, mes, alvo=None):
+    c = novo_resultado()
+
+    def observar(frame, evento, arg):
+        # A sonda precisa de linhas somente no comando.
+        # Excecao interna tratada nao e, por si, falha da medicao.
+        if frame.f_code is not COD_COMANDO:
+            return None
+        frame.f_trace_lines = True
+        loc = frame.f_locals
+
+        if evento == "line":
+            limites()
+            if frame.f_lineno == 116:
+                # Antes do fechamento e do laco: diff_calculador.py:116.
+                lista = loc.get("ids")
+                if not isinstance(lista, list):
+                    raise FalhaInstrumento("IDS_NAO_LISTA")
+                if any(not isinstance(x, int) or isinstance(x, bool)
+                       for x in lista):
+                    raise FalhaInstrumento("IDS_INVALIDOS")
+                if len(lista) != len(set(lista)):
+                    raise FalhaInstrumento("IDS_DUPLICADOS")
+
+                c["cortes"] += 1
+                if alvo is None:
+                    if c["ids"].intersection(lista):
+                        raise FalhaInstrumento("IDS_ENTRE_EMPRESAS")
+                    c["ids"].update(lista)
+                    lista[:] = []
+                else:
+                    lista[:] = [
+                        x for x in lista
+                        if x == alvo and x % PARTES == PARTE - 1
+                    ]
+                    if len(lista) > 1 or c["ids"].intersection(lista):
+                        raise FalhaInstrumento("ALVO_DUPLICADO")
+                    c["ids"].update(lista)
+
+            if frame.f_lineno == 471:
+                # Dia do nucleo sem resposta da porta, nao "dia sem batida".
+                # diff_calculador.py:469-472.
+                c["faltas_porta_dc"].update(datas([loc.get("k")]))
+
+            if frame.f_lineno == 550:
+                c["completo"] = True
+
+        elif evento == "return":
+            S, T = loc.get("S"), loc.get("T")
+            if isinstance(S, dict) and isinstance(T, collections.Counter):
+                c["historico"] = {
+                    "S": {r: tuple(v) for r, v in S.items()},
+                    "T": dict(T),
+                }
+        return observar
+
+    def fechamento_capturado(m, a, **kw):
+        limites()
+        chamador = sys._getframe(1)
+        if chamador.f_code is not COD_COMANDO:
+            raise FalhaInstrumento("CHAMADOR_FECHAMENTO")
+        loc = chamador.f_locals
+        ids = set(loc.get("ids", ()))
+        if not ids:
+            return {}
+        if alvo is None or ids != {alvo}:
+            raise FalhaInstrumento("ESCOPO_FECHAMENTO")
+        if (m, a) != (mes, ano):
+            raise FalhaInstrumento("COMPETENCIA_FECHAMENTO")
+        if not kw.get("somente_leitura") or not kw.get("lavrar_dias_pagos"):
+            raise FalhaInstrumento("MODO_FECHAMENTO")
+
+        ini, fim = loc.get("ini"), loc.get("fim")
+        if type(ini) is not dt.date or type(fim) is not dt.date or ini > fim:
+            raise FalhaInstrumento("JANELA_INVALIDA")
+        c["janela"] = (ini, fim)
+
+        def emissor_capturado(colab, mm, aa, **dados):
+            limites()
+            versao = dados.get("versao", "motor")
+            if (colab.pk != alvo or (mm, aa) != (mes, ano)
+                    or versao not in ("motor", "oraculo")):
+                raise FalhaInstrumento("ESCOPO_LAVRAR")
+            if c["tentativas"][versao]:
+                raise FalhaInstrumento("LAVRAR_REPETIDA_" + versao.upper())
+
+            c["tentativas"][versao] += 1
+            c["colab"] = colab
+
+            # CURA DA CAPTURA: guardar a entrada ANTES da chamada real.
+            # Fonte: fechamento.py:1255,1272.
+            if versao == "oraculo":
+                rubricas = dados.get("rubricas")
+                if not isinstance(rubricas, dict):
+                    raise FalhaInstrumento("RUBRICAS_NAO_CAPTURADAS")
+                if dados.get("do_motor"):
+                    raise FalhaInstrumento("PROVENIENCIA_DO_MOTOR_MUDOU")
+                for dia, rub in rubricas.items():
+                    if type(dia) is not dt.date:
+                        raise FalhaInstrumento("DATA_PORTA_INVAL
+
+[truncado em 20000 de 45545 caracteres]
 
 ## 06/11 13:51 · sessao cd0d5a68c7a6 · - · - · origem=Ronald (tmux)
 
@@ -1060,229 +1430,4 @@ Casos sintéticos, todos para NB já lavrado, sem outras isenções, hoje 25/10/
 
 Mapa enviado ao agente principal, com referências atuais de escritores, leitores e produtores em memória. A inspeção não executou testes nem comandos de escrita; exaustividade de acessos dinâmicos e execução efetiva em produção permanecem [não verificado]. [nao verificado]
 
-## 06/11 13:12 · sessao aa768c718c00 · R1-CAUSAD-V3 · sonda · origem=Code
-
-No dado fornecido, nenhuma linha `SOMA` está `True`: todas indicam `False`. Há `INCOMPLETO: 596`. [nao verificado]
-
-Transcrição integral da saída fornecida, parte 5 de 6. [nao verificado]
-
-```text
-sonda_leitura: script.py [3027607d50f632b4] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-
-PARTE|5|6
-ATO|hoje=2026-11-06|agora=2026-11-06T13:04:13.903213-03:00
-FORA_DA_MEDIDA|horas_falta
-FORA_DA_MEDIDA|horas_reflexo_dsr
-FORA_DA_MEDIDA|saldo_banco_horas
-UNIVERSO|2026-10|colabs_porta=624|segundos=0.1
-UNIVERSO_PARTE 2026-10 107
-RUBRICA|competencia|rubrica|v2_h|v3_h|delta_h|colabs_div|dias_colab_div
-DONO|competencia|rubrica|dono|v2_h|v3_h|delta_h|colabs|dias_colab
-DIA|2026-10|horas_intra_indenizada|col82|2026-10-06|CADASTRO|1.166666667|0.000000000|-1.166666667
-DIA|2026-10|horas_intra_indenizada|col82|2026-10-08|CADASTRO|1.166666667|0.000000000|-1.166666667
-DIA|2026-10|horas_intra_indenizada|col82|2026-10-12|CADASTRO|1.166666667|0.000000000|-1.166666667
-DIA|2026-10|horas_intra_indenizada|col82|2026-10-14|CADASTRO|1.166666667|0.000000000|-1.166666667
-DIA|2026-10|horas_intra_indenizada|col82|2026-10-15|CADASTRO|1.166666667|0.000000000|-1.166666667
-DIA|2026-10|horas_intra_indenizada|col82|2026-10-16|CADASTRO|1.166666667|0.000000000|-1.166666667
-DIA|2026-10|horas_intra_indenizada|col82|2026-10-20|CADASTRO|1.166666667|0.000000000|-1.166666667
-DIA|2026-10|horas_extras_50|col82|2026-10-06|CADASTRO|0.000000000|0.500647778|+0.500647778
-DIA|2026-10|horas_extras_50|col82|2026-10-08|CADASTRO|0.000000000|0.471973333|+0.471973333
-DIA|2026-10|horas_extras_50|col82|2026-10-14|CADASTRO|0.000000000|0.179223056|+0.179223056
-DIA|2026-10|horas_extras_50|col82|2026-10-15|CADASTRO|0.000000000|0.557518333|+0.557518333
-DIA|2026-10|horas_atraso|col274|2026-10-04|ESTRUTURA|0.000000000|2.330333333|+2.330333333
-DIA|2026-10|horas_extras_100_noturna|col292|2026-10-12|ESTRUTURA|0.000000000|0.909870556|+0.909870556
-DIA|2026-10|horas_trabalhadas|col502|2026-10-10|CADASTRO|7.569179979|2.843692404|-4.725487575
-DIA|2026-10|horas_extras_50|col502|2026-10-10|CADASTRO|0.235846646|0.000000000|-0.235846646
-DIA|2026-10|horas_trabalhadas|col592|2026-10-20|CADASTRO|7.314860278|5.421271667|-1.893588611
-DIA|2026-10|horas_noturnas|col964|2026-09-25|ESTRUTURA|1.000000000|1.142857143|+0.142857143
-DIA|2026-10|horas_noturnas|col964|2026-09-26|BATIDA|1.015868889|1.160993016|+0.145124127
-DIA|2026-10|horas_noturnas|col964|2026-09-27|ESTRUTURA|0.976877500|1.116431429|+0.139553929
-DIA|2026-10|horas_noturnas|col964|2026-09-28|CADASTRO|0.939963611|1.074244127|+0.134280516
-DIA|2026-10|horas_trabalhadas|col988|2026-10-17|CADASTRO|6.190200326|3.268974456|-2.921225870
-PARCIAL|2026-10|horas_trabalhadas|v2_h=12435.675896993611|v3_h=12426.135594937223|colabs_div=3|dias_colab_div=3
-RUBRICA|2026-10|horas_trabalhadas|12435.675896994|12426.135594937|-9.540302056|3|3
-DONO|2026-10|horas_trabalhadas|CADASTRO|21.074240583|11.533938527|-9.540302056|3|3
-RESIDUO|2026-10|horas_trabalhadas|ATE_LIMIAR|12414.601656410|12414.601656410|+0.000000000|89|1333
-RESIDUO|2026-10|horas_trabalhadas|SEM_DECISAO|73.246107319|73.246107319|+0.000000000|59|346
-RESIDUO|2026-10|horas_trabalhadas|SEM_PAR|0.000000000|0.000000000|+0.000000000|9|155
-INSTRUMENTO_HISTORICO|2026-10|horas_trabalhadas|v2_h=12416.013102646|v3_h=12426.135594937|delta_h=+10.122492291
-PARCIAL|2026-10|horas_intra_indenizada|v2_h=369.55118945583331|v3_h=361.38452278916668|colabs_div=1|dias_colab_div=7
-RUBRICA|2026-10|horas_intra_indenizada|369.551189456|361.384522789|-8.166666667|1|7
-DONO|2026-10|horas_intra_indenizada|CADASTRO|8.166666667|0.000000000|-8.166666667|1|7
-RESIDUO|2026-10|horas_intra_indenizada|ATE_LIMIAR|361.384522789|361.384522789|+0.000000000|89|1329
-RESIDUO|2026-10|horas_intra_indenizada|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|59|346
-RESIDUO|2026-10|horas_intra_indenizada|SEM_PAR|0.000000000|0.000000000|+0.000000000|9|155
-INSTRUMENTO_HISTORICO|2026-10|horas_intra_indenizada|v2_h=366.551189456|v3_h=361.384522789|delta_h=-5.166666667
-PARCIAL|2026-10|horas_extras_50|v2_h=3.1360523825|v3_h=4.6095682363888901|colabs_div=2|dias_colab_div=5
-RUBRICA|2026-10|horas_extras_50|3.136052382|4.609568236|+1.473515854|2|5
-DONO|2026-10|horas_extras_50|CADASTRO|0.235846646|1.709362500|+1.473515854|2|5
-RESIDUO|2026-10|horas_extras_50|ATE_LIMIAR|2.900205736|2.900205736|+0.000000000|89|1312
-RESIDUO|2026-10|horas_extras_50|SEM_DECISAO|2.000000000|2.000000000|+0.000000000|60|365
-RESIDUO|2026-10|horas_extras_50|SEM_PAR|0.000000000|0.000000000|+0.000000000|9|155
-INSTRUMENTO_HISTORICO|2026-10|horas_extras_50|v2_h=5.136052382|v3_h=4.609568236|delta_h=-0.526484146
-PARCIAL|2026-10|horas_extras_100|v2_h=68.607693309444443|v3_h=68.607693309444443|colabs_div=0|dias_colab_div=0
-RUBRICA|2026-10|horas_extras_100|68.607693309|68.607693309|+0.000000000|0|0
-RESIDUO|2026-10|horas_extras_100|ATE_LIMIAR|68.607693309|68.607693309|+0.000000000|89|1317
-RESIDUO|2026-10|horas_extras_100|SEM_DECISAO|3.141441776|3.141441776|+0.000000000|60|365
-RESIDUO|2026-10|horas_extras_100|SEM_PAR|0.000000000|0.000000000|+0.000000000|9|155
-INSTRUMENTO_HISTORICO|2026-10|horas_extras_100|v2_h=71.749135085|v3_h=69.024955254|delta_h=-2.724179831
-PARCIAL|2026-10|horas_extras_100_feriado|v2_h=68.607693309444443|v3_h=68.607693309444443|colabs_div=0|dias_colab_div=0
-RUBRICA|2026-10|horas_extras_100_feriado|68.607693309|68.607693309|+0.000000000|0|0
-RESIDUO|2026-10|horas_extras_100_feriado|ATE_LIMIAR|68.607693309|68.607693309|+0.000000000|89|1317
-RESIDUO|2026-10|horas_extras_100_feriado|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|60|365
-RESIDUO|2026-10|horas_extras_100_feriado|SEM_PAR|0.000000000|0.000000000|+0.000000000|9|155
-INSTRUMENTO_HISTORICO|2026-10|horas_extras_100_feriado|v2_h=0.000000000|v3_h=69.024955254|delta_h=+69.024955254
-PARCIAL|2026-10|horas_extras_50_noturna|v2_h=0.3541233333333334|v3_h=0.3541233333333334|colabs_div=0|dias_colab_div=0
-RUBRICA|2026-10|horas_extras_50_noturna|0.354123333|0.354123333|+0.000000000|0|0
-RESIDUO|2026-10|horas_extras_50_noturna|ATE_LIMIAR|0.354123333|0.354123333|+0.000000000|89|1317
-RESIDUO|2026-10|horas_extras_50_noturna|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|60|365
-RESIDUO|2026-10|horas_extras_50_noturna|SEM_PAR|0.000000000|0.000000000|+0.000000000|9|155
-INSTRUMENTO_HISTORICO|2026-10|horas_extras_50_noturna|v2_h=0.000000000|v3_h=0.354123333|delta_h=+0.354123333
-PARCIAL|2026-10|horas_extras_100_noturna|v2_h=9.6304372222222234|v3_h=10.542015833333332|colabs_div=1|dias_colab_div=1
-RUBRICA|2026-10|horas_extras_100_noturna|9.630437222|10.542015833|+0.911578611|1|1
-DONO|2026-10|horas_extras_100_noturna|ESTRUTURA|0.000000000|0.909870556|+0.909870556|1|1
-RESIDUO|2026-10|horas_extras_100_noturna|ATE_LIMIAR|9.630437222|9.632145278|+0.001708056|89|1316
-RESIDUO|2026-10|horas_extras_100_noturna|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|60|365
-RESIDUO|2026-10|horas_extras_100_noturna|SEM_PAR|0.000000000|0.000000000|+0.000000000|9|155
-INSTRUMENTO_HISTORICO|2026-10|horas_extras_100_noturna|v2_h=0.000000000|v3_h=10.542015833|delta_h=+10.542015833
-PARCIAL|2026-10|horas_folga_trabalhada|v2_h=0|v3_h=0|colabs_div=0|dias_colab_div=0
-RUBRICA|2026-10|horas_folga_trabalhada|0.000000000|0.000000000|+0.000000000|0|0
-RESIDUO|2026-10|horas_folga_trabalhada|ATE_LIMIAR|0.000000000|0.000000000|+0.000000000|89|1336
-RESIDUO|2026-10|horas_folga_trabalhada|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|59|346
-RESIDUO|2026-10|horas_folga_trabalhada|SEM_PAR|0.000000000|0.000000000|+0.000000000|9|155
-INSTRUMENTO_HISTORICO|2026-10|horas_folga_trabalhada|v2_h=92.908901667|v3_h=0.000000000|delta_h=-92.908901667
-PARCIAL|2026-10|horas_noturnas|v2_h=2347.5012535976189|v3_h=2348.0630693119047|colabs_div=1|dias_colab_div=4
-RUBRICA|2026-10|horas_noturnas|2347.501253598|2348.063069312|+0.561815714|1|4
-DONO|2026-10|horas_noturnas|BATIDA|1.015868889|1.160993016|+0.145124127|1|1
-DONO|2026-10|horas_noturnas|CADASTRO|0.939963611|1.074244127|+0.134280516|1|1
-DONO|2026-10|horas_noturnas|ESTRUTURA|1.976877500|2.259288571|+0.282411071|1|2
-RESIDUO|2026-10|horas_noturnas|ATE_LIMIAR|2343.568543598|2343.568543598|-0.000000000|89|1322
-RESIDUO|2026-10|horas_noturnas|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|61|356
-RESIDUO|2026-10|horas_noturnas|SEM_PAR|0.000000000|0.000000000|+0.000000000|9|155
-INSTRUMENTO_HISTORICO|2026-10|horas_noturnas|v2_h=2300.755510939|v3_h=2348.063069312|delta_h=+47.307558373
-PARCIAL|2026-10|horas_atraso|v2_h=74.335833333333326|v3_h=76.66578148638888|colabs_div=1|dias_colab_div=1
-RUBRICA|2026-10|horas_atraso|74.335833333|76.665781486|+2.329948153|1|1
-DONO|2026-10|horas_atraso|ESTRUTURA|0.000000000|2.330333333|+2.330333333|1|1
-RESIDUO|2026-10|horas_atraso|ATE_LIMIAR|74.335833333|74.335448153|-0.000385180|88|1312
-RESIDUO|2026-10|horas_atraso|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|61|369
-RESIDUO|2026-10|horas_atraso|SEM_PAR|0.000000000|0.000000000|+0.000000000|9|155
-INSTRUMENTO_HISTORICO|2026-10|horas_atraso|v2_h=74.350166667|v3_h=74.349781486|delta_h=-0.000385180
-PARCIAL|2026-10|horas_saida_antecipada|v2_h=46.246166666666667|v3_h=46.246252456944447|colabs_div=0|dias_colab_div=0
-RUBRICA|2026-10|horas_saida_antecipada|46.246166667|46.246252457|+0.000085790|0|0
-RESIDUO|2026-10|horas_saida_antecipada|ATE_LIMIAR|46.246166667|46.246252457|+0.000085790|88|1313
-RESIDUO|2026-10|horas_saida_antecipada|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|61|369
-RESIDUO|2026-10|horas_saida_antecipada|SEM_PAR|0.000000000|0.000000000|+0.000000000|9|155
-INSTRUMENTO_HISTORICO|2026-10|horas_saida_antecipada|v2_h=32.592833333|v3_h=32.592919124|delta_h=+0.000085790
-UNIVERSO|2026-11|colabs_porta=578|segundos=102.2
-UNIVERSO_PARTE 2026-11 99
-RUBRICA|competencia|rubrica|v2_h|v3_h|delta_h|colabs_div|dias_colab_div
-DONO|competencia|rubrica|dono|v2_h|v3_h|delta_h|colabs|dias_colab
-DIA|2026-11|horas_trabalhadas|col82|2026-11-05|CADASTRO|7.463548611|6.085836944|-1.377711667
-DIA|2026-11|horas_intra_indenizada|col82|2026-10-25|CADASTRO|0.000000000|0.204860556|+0.204860556
-DIA|2026-11|horas_intra_indenizada|col82|2026-10-27|CADASTRO|1.166666667|0.000000000|-1.166666667
-DIA|2026-11|horas_intra_indenizada|col82|2026-10-28|CADASTRO|1.166666667|0.000000000|-1.166666667
-DIA|2026-11|horas_intra_indenizada|col82|2026-10-29|CADASTRO|1.166666667|0.000000000|-1.166666667
-DIA|2026-11|horas_intra_indenizada|col82|2026-11-03|CADASTRO|1.166666667|0.000000000|-1.166666667
-DIA|2026-11|horas_intra_indenizada|col82|2026-11-04|CADASTRO|1.166666667|0.000000000|-1.166666667
-DIA|2026-11|horas_atraso|col214|2026-11-01|CADASTRO|0.000000000|0.076333333|+0.076333333
-DIA|2026-11|horas_saida_antecipada|col214|2026-11-01|CADASTRO|0.951166667|0.874833333|-0.076333333
-DIA|2026-11|horas_trabalhadas|col592|2026-10-29|CADASTRO|7.452715833|4.403602222|-3.049113611
-DIA|2026-11|horas_intra_indenizada|col592|2026-10-31|CADASTRO|1.000000000|0.000000000|-1.000000000
-DIA|2026-11|horas_extras_50|col592|2026-10-31|CADASTRO|0.000000000|0.272015833|+0.272015833
-DIA|2026-11|horas_intra_indenizada|col922|2026-10-25|BATIDA|1.000000000|0.000000000|-1.000000000
-DIA|2026-11|horas_intra_indenizada|col922|2026-10-27|BATIDA|1.000000000|0.000000000|-1.000000000
-DIA|2026-11|horas_intra_indenizada|col922|2026-11-02|CADASTRO|1.000000000|0.000000000|-1.000000000
-DIA|2026-11|horas_extras_50|col922|2026-11-02|CADASTRO|2.000000000|0.000000000|-2.000000000
-DIA|2026-11|horas_extras_100|col922|2026-10-25|BATIDA|6.169508333|11.494480833|+5.324972500
-DIA|2026-11|horas_extras_100|col922|2026-10-27|BATIDA|6.070659167|10.791530000|+4.720870833
-DIA|2026-11|horas_extras_100|col922|2026-11-02|CADASTRO|10.745034167|20.745034167|+10.000000000
-DIA|2026-11|horas_extras_100_feriado|col922|2026-11-02|CADASTRO|4.701487222|20.745034167|+16.043546944
-DIA|2026-11|horas_trabalhadas|col988|2026-10-22|CADASTRO|7.043500000|3.347891111|-3.695608889
-DIA|2026-11|horas_trabalhadas|col988|2026-10-23|CADASTRO|6.947509637|2.004634167|-4.942875471
-DIA|2026-11|horas_trabalhadas|col988|2026-10-29|CADASTRO|8.608185508|4.593460833|-4.014724674
-DIA|2026-11|horas_extras_50|col988|2026-10-29|CADASTRO|1.608185508|0.000000000|-1.608185508
-PARCIAL|2026-11|horas_trabalhadas|v2_h=6877.6199801902776|v3_h=6860.5399458783331|colabs_div=3|dias_colab_div=5
-RUBRICA|2026-11|horas_trabalhadas|6877.619980190|6860.539945878|-17.080034312|3|5
-DONO|2026-11|horas_trabalhadas|CADASTRO|37.515459590|20.435425278|-17.080034312|3|5
-RESIDUO|2026-11|horas_trabalhadas|ATE_LIMIAR|6840.104520601|6840.104520601|-0.000000000|86|726
-RESIDUO|2026-11|horas_trabalhadas|SEM_DECISAO|49.509477702|49.509477702|+0.000000000|86|967
-RESIDUO|2026-11|horas_trabalhadas|SEM_PAR|0.000000000|0.000000000|+0.000000000|11|239
-INSTRUMENTO_HISTORICO|2026-11|horas_trabalhadas|v2_h=6715.239535224|v3_h=6860.539945878|delta_h=+145.300410654
-PARCIAL|2026-11|horas_intra_indenizada|v2_h=234.28587616805555|v3_h=224.65740339027778|colabs_div=3|dias_colab_div=10
-RUBRICA|2026-11|horas_intra_indenizada|234.285876168|224.657403390|-9.628472778|3|10
-DONO|2026-11|horas_intra_indenizada|BATIDA|2.000000000|0.000000000|-2.000000000|1|2
-DONO|2026-11|horas_intra_indenizada|CADASTRO|7.833333333|0.204860556|-7.628472778|3|8
-RESIDUO|2026-11|horas_intra_indenizada|ATE_LIMIAR|224.452542835|224.452542835|+0.000000000|86|721
-RESIDUO|2026-11|horas_intra_indenizada|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|86|967
-RESIDUO|2026-11|horas_intra_indenizada|SEM_PAR|0.000000000|0.000000000|+0.000000000|11|239
-INSTRUMENTO_HISTORICO|2026-11|horas_intra_indenizada|v2_h=217.285876168|v3_h=224.657403390|delta_h=+7.371527222
-PARCIAL|2026-11|horas_extras_50|v2_h=9.5188135633333317|v3_h=6.1826438888888884|colabs_div=3|dias_colab_div=3
-RUBRICA|2026-11|horas_extras_50|9.518813563|6.182643889|-3.336169674|3|3
-DONO|2026-11|horas_extras_50|CADASTRO|3.608185508|0.272015833|-3.336169674|3|3
-RESIDUO|2026-11|horas_extras_50|ATE_LIMIAR|5.910628056|5.910628056|-0.000000000|84|705
-RESIDUO|2026-11|horas_extras_50|SEM_DECISAO|0.714590833|0.714590833|+0.000000000|86|990
-RESIDUO|2026-11|horas_extras_50|SEM_PAR|0.000000000|0.000000000|+0.000000000|11|239
-INSTRUMENTO_HISTORICO|2026-11|horas_extras_50|v2_h=10.233404397|v3_h=6.182643889|delta_h=-4.050760508
-PARCIAL|2026-11|horas_extras_100|v2_h=80.016508748333337|v3_h=100.06235208166666|colabs_div=1|dias_colab_div=3
-RUBRICA|2026-11|horas_extras_100|80.016508748|100.062352082|+20.045843333|1|3
-DONO|2026-11|horas_extras_100|BATIDA|12.240167500|22.286010833|+10.045843333|1|2
-DONO|2026-11|horas_extras_100|CADASTRO|10.745034167|20.745034167|+10.000000000|1|1
-RESIDUO|2026-11|horas_extras_100|ATE_LIMIAR|57.031307082|57.031307082|+0.000000000|84|705
-RESIDUO|2026-11|horas_extras_100|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|86|990
-RESIDUO|2026-11|horas_extras_100|SEM_PAR|0.000000000|0.000000000|+0.000000000|11|239
-INSTRUMENTO_HISTORICO|2026-11|horas_extras_100|v2_h=80.016508748|v3_h=100.062352082|delta_h=+20.045843333
-PARCIAL|2026-11|horas_extras_100_feriado|v2_h=61.732794303888888|v3_h=77.776341248333324|colabs_div=1|dias_colab_div=1
-RUBRICA|2026-11|horas_extras_100_feriado|61.732794304|77.776341248|+16.043546944|1|1
-DONO|2026-11|horas_extras_100_feriado|CADASTRO|4.701487222|20.745034167|+16.043546944|1|1
-RESIDUO|2026-11|horas_extras_100_feriado|ATE_LIMIAR|57.031307082|57.031307082|+0.000000000|84|707
-RESIDUO|2026-11|horas_extras_100_feriado|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|86|990
-RESIDUO|2026-11|horas_extras_100_feriado|SEM_PAR|0.000000000|0.000000000|+0.000000000|11|239
-INSTRUMENTO_HISTORICO|2026-11|horas_extras_100_feriado|v2_h=0.000000000|v3_h=77.776341248|delta_h=+77.776341248
-PARCIAL|2026-11|horas_extras_50_noturna|v2_h=1.3930904940507469|v3_h=1.3930904940507469|colabs_div=0|dias_colab_div=0
-RUBRICA|2026-11|horas_extras_50_noturna|1.393090494|1.393090494|+0.000000000|0|0
-RESIDUO|2026-11|horas_extras_50_noturna|ATE_LIMIAR|1.393090494|1.393090494|+0.000000000|84|708
-RESIDUO|2026-11|horas_extras_50_noturna|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|86|990
-RESIDUO|2026-11|horas_extras_50_noturna|SEM_PAR|0.000000000|0.000000000|+0.000000000|11|239
-INSTRUMENTO_HISTORICO|2026-11|horas_extras_50_noturna|v2_h=0.000000000|v3_h=1.393090494|delta_h=+1.393090494
-PARCIAL|2026-11|horas_extras_100_noturna|v2_h=11.701480339282588|v3_h=11.703889505949252|colabs_div=0|dias_colab_div=0
-RUBRICA|2026-11|horas_extras_100_noturna|11.701480339|11.703889506|+0.002409167|0|0
-RESIDUO|2026-11|horas_extras_100_noturna|ATE_LIMIAR|11.701480339|11.703889506|+0.002409167|84|708
-RESIDUO|2026-11|horas_extras_100_noturna|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|86|990
-RESIDUO|2026-11|horas_extras_100_noturna|SEM_PAR|0.000000000|0.000000000|+0.000000000|11|239
-INSTRUMENTO_HISTORICO|2026-11|horas_extras_100_noturna|v2_h=0.000000000|v3_h=11.703889506|delta_h=+11.703889506
-PARCIAL|2026-11|horas_folga_trabalhada|v2_h=0|v3_h=0|colabs_div=0|dias_colab_div=0
-RUBRICA|2026-11|horas_folga_trabalhada|0.000000000|0.000000000|+0.000000000|0|0
-RESIDUO|2026-11|horas_folga_trabalhada|ATE_LIMIAR|0.000000000|0.000000000|+0.000000000|86|731
-RESIDUO|2026-11|horas_folga_trabalhada|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|86|967
-RESIDUO|2026-11|horas_folga_trabalhada|SEM_PAR|0.000000000|0.000000000|+0.000000000|11|239
-INSTRUMENTO_HISTORICO|2026-11|horas_folga_trabalhada|v2_h=211.889922669|v3_h=0.000000000|delta_h=-211.889922669
-PARCIAL|2026-11|horas_noturnas|v2_h=1293.2316784055952|v3_h=1293.2316784055952|colabs_div=0|dias_colab_div=0
-RUBRICA|2026-11|horas_noturnas|1293.231678406|1293.231678406|+0.000000000|0|0
-RESIDUO|2026-11|horas_noturnas|ATE_LIMIAR|1293.231678406|1293.231678406|+0.000000000|86|728
-RESIDUO|2026-11|horas_noturnas|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|86|970
-RESIDUO|2026-11|horas_noturnas|SEM_PAR|0.000000000|0.000000000|+0.000000000|11|239
-INSTRUMENTO_HISTORICO|2026-11|horas_noturnas|v2_h=1180.231678406|v3_h=1293.231678406|delta_h=+113.000000000
-PARCIAL|2026-11|horas_atraso|v2_h=38.779833333333336|v3_h=38.856047777777782|colabs_div=1|dias_colab_div=1
-RUBRICA|2026-11|horas_atraso|38.779833333|38.856047778|+0.076214444|1|1
-DONO|2026-11|horas_atraso|CADASTRO|0.000000000|0.076333333|+0.076333333|1|1
-RESIDUO|2026-11|horas_atraso|ATE_LIMIAR|38.779833333|38.779714444|-0.000118889|84|707
-RESIDUO|2026-11|horas_atraso|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|86|990
-RESIDUO|2026-11|horas_atraso|SEM_PAR|0.000000000|0.000000000|+0.000000000|11|239
-INSTRUMENTO_HISTORICO|2026-11|horas_atraso|v2_h=38.779833333|v3_h=38.856047778|delta_h=+0.076214444
-PARCIAL|2026-11|horas_saida_antecipada|v2_h=21.576166666666666|v3_h=21.49984737777778|colabs_div=1|dias_colab_div=1
-RUBRICA|2026-11|horas_saida_antecipada|21.576166667|21.499847378|-0.076319289|1|1
-DONO|2026-11|horas_saida_antecipada|CADASTRO|0.951166667|0.874833333|-0.076333333|1|1
-RESIDUO|2026-11|horas_saida_antecipada|ATE_LIMIAR|20.625000000|20.625014044|+0.000014044|84|707
-RESIDUO|2026-11|horas_saida_antecipada|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|86|990
-RESIDUO|2026-11|horas_saida_antecipada|SEM_PAR|0.000000000|0.000000000|+0.000000000|11|239
-INSTRUMENTO_HISTORICO|2026-11|horas_saida_antecipada|v2_h=21.576166667|v3_h=21.499847378|delta_h=-0.076319289
-ERRO 2026-10 app/ponto/services/dia_pago.py:315 ValueError 11 exemplos=[('col268', '-'), ('col298', '-'), ('col370', '-'), ('col400', '-'), ('col574', '-')]
-ERRO 2026-10 sonda ConservacaoNaoFecha 99 exemplos=[('col316', '-'), ('col430', '-'), ('col460', '-'), ('col760', '-'), ('col862', '-')]
-ERRO 2026-10 sonda LacunaDeMedicao 196 exemplos=[('col268', '-'), ('col268', '2026-09-22'), ('col268', '2026-09-24'), ('col268', '2026-09-26'), ('col268', '2026-09-28')]
-ERRO 2026-11 app/ponto/services/dia_pago.py:315 ValueError 12 exemplos=[('col76', '-'), ('col106', '-'), ('col142', '-'), ('col220', '-'), ('col268', '-')]
-ERRO 2026-11 sonda ConservacaoNaoFecha 22 exemplos=[('col76', '-'), ('col946', '-')]
-ERRO 2026-11 sonda LacunaDeMedicao 256 exemplos=[('col76', '-'), ('col106', '-'), ('col106', '2026-10-21'), ('col106', '2026-10-22'), ('co
-
-[truncado em 20000 de 29038 caracteres]
-
-_2301 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2302 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

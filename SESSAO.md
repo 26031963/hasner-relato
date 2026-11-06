@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 13:54:36.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (65.2 MB). Acoes na janela: **845**.
+**Medido em 06/11/2026 13:59:54.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (65.2 MB). Acoes na janela: **844**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -854,4 +854,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 02:02:19 | Bash | Prior sonda question and export model fields | `cd /home/ronald/saas-hasner; cat logs/g3g4_0611/sonda.q \| head -30; ls logs/g3g4_0611; grep -n "competencia\\|exportad" app/folha/models.py \| grep -n "class\\|def " \| head; grep -n "class ExportacaoDominio" -A25 app/folha/models.py \| grep -n "models\.\\|competencia\\|mes\\|ano" \| head` |
 | 02:02:14 | Bash | Find prior sonda invocation and function signatures | `cd /home/ronald/saas-hasner; ls logs/g3g4* logs/hj_0511 2>/dev/null \| head; grep -rl "codex_pergunta.sh --sonda" logs/*.sh logs/*/*.sh 2>/dev/null \| head -3; sed -n 2580,2600p app/ponto/turnos.py; sed -n 336,345p app/ponto/catalogo/ausencias.py` |
 | 02:02:04 | Bash | Read recalc exported branch, crons, print format | `cd /home/ronald/wt-h12h06b-233814/app; grep -n "def recalcular_fechamento_mes" -A60 ponto/services/fechamento.py \| grep -n -i "export\\|warn\\|aviso\\|return\\|GUARDA" \| head -20; grep -n "recalcular_fechamento" config/crons.py \| head; grep -n "480\\|->" ponto/management/commands/rederivar_minutos_h06_comp11.py \| head -12; git -C /home/ronald/wt-h12h06b-233814 diff --stat main..4e9380e5 \| gre ...` |
-| 01:58:34 | Bash | Look at sonda format and functions | `cd /home/ronald/saas-hasner; head -40 logs/hj_0511/sonda_a.py; git grep -n "def cobre_parte_do_dia\\|def parciais_vigentes" -- app \| head; grep -n "GUARDA_COMPETENCIA" -r app --include=*.py \| head -3` |
