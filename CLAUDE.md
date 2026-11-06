@@ -326,6 +326,11 @@ RAIAS E POUSO (regra de PISTA consolidada 31/10; funde, sem mudar o vigente, FIL
      main ha mais de 6 h (esperado 0).
   6. ESMERIL DO MARCO. A espera da suite e o esmeril DAQUELE marco: censo so do que ele deixou orfao, zero chamador de
      producao provado, orfao apagado no mesmo marco (L-111). Achado de fora do marco = linha na fila, nunca trabalho agora.
+     PERGUNTA DA SEMANTICA (ESMERIL-SEMANTICA, corte 06/11 18:52; vale tambem no ESMERIL-V2): para todo campo ou
+     parametro que o diff le ou grava, todos os escritores e leitores supoem o MESMO significado (unidade, fuso, dia do
+     turno x dia civil x instante, inclusive/exclusivo)? arquivo:linha de cada. O esmeril RODA NO CODEX (ESMERIL-NO-CODEX):
+     papel censo, sem vaga; inventario AST = script devolvido como texto e rodado pelo envelope na copia do HEAD; a sessao
+     confere amostra; o opus nao refaz o censo.
   7. MARCO FECHADO, DEPOIS COMPACTA (L-108). Fechou marco (item da fila 1, cura com DIFF publicado, lote empurrado): docs
      entram no MESMO commit (L-106; commit so de `app/docs/` fora de marco nao existe, excecao unica o derivado do
      `bin/pos_push.sh`; proibido allowlist e chamar de marco o que nao fechou item); `bin/handoff_sessao.sh`; painel "MARCO
@@ -364,7 +369,8 @@ CODEX (regra de PISTA consolidada 31/10; funde, sem mudar o vigente, GPT6-CODEX-
   5. PRE-VERIFICADOR. (a) TODO construtor, ANTES de declarar pronto, `CODEX_PAPEL=verificador` com: diff do hash da
      copia; LEIS dos sitios tocados (grep LEIS/CORTES pelos arquivos); e a lista de classes que ja reprovaram obra -- 2o
      juiz que duplica juiz registrado, 2o escritor fora da porta, relogio lido fora da borda, derivacao paralela de fonte
-     unica, selo/RED sem mordida, ordem de trava, pouso antes do pre-requisito. (b) Achado: confere arquivo:linha;
+     unica, selo/RED sem mordida, ordem de trava, pouso antes do pre-requisito, campo com dois significados
+     (ESMERIL-SEMANTICA). (b) Achado: confere arquivo:linha;
      procedente -> corrige e chama de novo; descartado ("fila", "fora do escopo", "nao procede") -> 1 linha de motivo E vai
      ANEXO ao opus (resposta + linha da triagem), que decide se e fila ou bloqueia. (c) Suite INTEIRA da arvore da obra
      VERDE, depois UM opus final (SUITE-ANTES-DO-OPUS); opus reprovou -> volta ao (a), nunca direto a outro opus. (d) Mais
