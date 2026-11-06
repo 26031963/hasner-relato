@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 06:57:46.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (43.5 MB). Acoes na janela: **530**.
+**Medido em 06/11/2026 07:03:17.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (43.5 MB). Acoes na janela: **528**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -538,5 +538,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:53:27 | Bash | Read disjuntor log for O169 entries | `cd /home/ronald/saas-hasner; ls logs/disjuntor* logs/*/disjuntor.log 2>/dev/null; f=$(ls logs/disjuntor.log logs/*/disjuntor.log 2>/dev/null\|head -1); grep -n "O169\\|pretool" $f \| tail -8; sed -n 30,36p $f` |
 | 19:53:23 | Bash | Check hook config location and prior references | `cd /home/ronald/saas-hasner; ls -la .claude app/.claude 2>&1 \| head; grep -n "disjuntor" .claude/settings*.json app/.claude/settings*.json 2>/dev/null \| head; git grep -n "97bcb01c\\|CONFIG-RAIZ" -- app/docs \| head -20` |
 | 19:52:27 | Bash | Read commit 97bcb01c | `cd /home/ronald/saas-hasner; git show --stat 97bcb01c \| head -40; date +%H:%M` |
-| 19:00:00 | Bash | Log the push and repoint the wait line | `cd /home/ronald/saas-hasner; tr '\0' '\n' < /proc/382867/cmdline \| /bin/grep "^/home/ronald/wt" \| head -1; sed -i '2s/pid=3476932/pid=382867/' app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md; echo "- PUSH NO REMOTO: origin/main = bede09aa (630131b1..bede09aa, pre-push OK, rc=0, logs/push_o169_1839.log); pos_push e9f3ab0e (TICKETS). Trava: suite pid 382867." >> app/docs/RELATO.md` |
-| 18:59:54 | Bash | Check the push verdict on the remote and the trava | `cd /home/ronald/saas-hasner; tail -6 logs/push_o169_1839.log; git fetch -q origin; git log --oneline -1 origin/main; bash bin/trava_teste.sh --quem; pgrep -af "bin/trava_teste.sh" \| /bin/grep -v snapshot \| cut -c1-70` |
