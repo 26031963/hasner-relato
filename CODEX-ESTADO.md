@@ -1,7 +1,373 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 13:32** · publicado em **06/11/2026 13:33** (UTC-3)
+> Ultima resposta processada: **06/11/2026 13:37** · publicado em **06/11/2026 13:38** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 13:37 · sessao 6a744852f01e · R1-CAUSAD-V3 · leitura · origem=Code
+
+A consolidação abaixo mede **impacto**, conforme a distinção da L-110; não certifica o v3. [CLAUDE.md:49](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/CLAUDE.md:49)
+
+Os números e suas contas derivam exclusivamente dos seis anexos, sem verificação independente. Nas tabelas, cada célula `Δ/C/D` significa **delta em horas / colaboradores divergentes / dias-colaborador divergentes**. Os nomes das rubricas omitem somente o prefixo `horas_`. [nao verificado]
+
+A coluna **Σ emitido** soma os `delta_h` de `RUBRICA`, preservando todas as casas publicadas. A última coluna calcula separadamente `Σ(PARCIAL.v3_h − PARCIAL.v2_h)`, usando integralmente os decimais transcritos, sem arredondamento intermediário. [nao verificado] [nao verificado]
+
+Para **10/2026**, a conta parte a parte é: [nao verificado]
+
+| Rubrica | P1 Δ/C/D | P2 Δ/C/D | P3 Δ/C/D | P4 Δ/C/D | P5 Δ/C/D | P6 Δ/C/D | Σ emitido Δ/C/D | Δ pelos PARCIAL integrais | Evidência |
+|---|---|---|---|---|---|---|---|---|---|
+| trabalhadas | −2.542890556/1/1 | −2.842305278/1/1 | −3.035321667/2/2 | 0/0/0 | −9.540302056/3/3 | −4.528065278/1/1 | **−22.488884835/8/8** | indisponível integralmente¹ | [nao verificado] |
+| intra_indenizada | −2/1/2 | 0/0/0 | −4.056666944/4/9 | −0.635273333/2/3 | −8.166666667/1/7 | −8/2/8 | **−22.858606944/10/29** | −22.85860694444437 | [nao verificado] |
+| extras_50 | 0/0/0 | 0/0/0 | 0/0/0 | −0.502948333/1/2 | +1.473515854/2/5 | +0.224154213/1/1 | **+1.194721734/4/8** | +1.1947217330555591 | [nao verificado] |
+| extras_100 | 0/0/0 | +10.985971389/1/1 | +12.149131944/1/1 | 0/0/0 | 0/0/0 | 0/0/0 | **+23.135103333/2/2** | +23.135103333333337 | [nao verificado] |
+| extras_100_feriado | 0/0/0 | +10.985971389/1/1 | +12.149131944/1/1 | 0/0/0 | 0/0/0 | 0/0/0 | **+23.135103333/2/2** | +23.135103333333337 | [nao verificado] |
+| extras_50_noturna | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | **0/0/0** | 0 | [nao verificado] |
+| extras_100_noturna | +2.061344224/3/3 | +7.021076119/3/3 | +0.014159722/0/0 | +1.404236338/2/2 | +0.911578611/1/1 | +1/1/1 | **+12.412395014/10/10** | +12.4123950152777756 | [nao verificado] |
+| folga_trabalhada | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | **0/0/0** | 0 | [nao verificado] |
+| noturnas | 0/0/0 | −2.724547857/3/11 | 0/0/0 | +2.571669984/1/3 | +0.561815714/1/4 | +2.164548292/1/8 | **+2.573486133/6/26** | +2.5734861329370 | [nao verificado] |
+| atraso | +2.368802113/1/1 | +4.579204284/3/4 | +1.106468535/1/1 | +0.186039155/1/1 | +2.329948153/1/1 | −0.000374092/0/0 | **+10.570088148/7/8** | +10.570088148888894 | [nao verificado] |
+| saida_antecipada | +0.000684535/0/0 | +0.000106703/0/0 | −0.557056843/1/1 | −0.186263275/1/1 | +0.000085790/0/0 | +0.000069986/0/0 | **−0.742373104/2/2** | −0.742373103611115 | [nao verificado] |
+
+¹ O `PARCIAL` de P2/trabalhadas traz `v2_h=11749.[cpf]`. Sem reconstruir esse valor, a soma integral das seis partes fica indisponível. A soma dos cinco deltas integrais disponíveis é `−19.646579556389`; acrescentar o delta explícito de `RUBRICA` de P2, `−2.842305278`, produz **−22.488884834389**, com precisão mista. [nao verificado]
+
+Para **11/2026**, a conta parte a parte é: [nao verificado]
+
+| Rubrica | P1 Δ/C/D | P2 Δ/C/D | P3 Δ/C/D | P4 Δ/C/D | P5 Δ/C/D | P6 Δ/C/D | Σ emitido Δ/C/D | Δ pelos PARCIAL integrais | Evidência |
+|---|---|---|---|---|---|---|---|---|---|
+| trabalhadas | −0.000000000/0/0 | −2.842521667/1/1 | −3.993019444/1/1 | 0/0/0 | −17.080034312/3/5 | 0/0/0 | **−23.915575423/5/7** | −23.9155754230560 | [nao verificado] |
+| intra_indenizada | −1.166666667/1/1 | 0/0/0 | −1/1/1 | +0.403343056/1/2 | −9.628472778/3/10 | −6/2/6 | **−17.391796389/8/20** | −17.39179638888888 | [nao verificado] |
+| extras_50 | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | −3.336169674/3/3 | +0.380845000/1/2 | **−2.955324674/4/5** | −2.9553246744444423 | [nao verificado] |
+| extras_100 | 0/0/0 | −7.052801863/1/1 | +12.066969812/1/1 | +3.958275278/1/1 | +20.045843333/1/3 | 0/0/0 | **+29.018286560/4/6** | +29.018286560000008 | [nao verificado] |
+| extras_100_feriado | 0/0/0 | −7.052801863/1/1 | +12.066969812/1/1 | +3.958275278/1/1 | +16.043546944/1/1 | 0/0/0 | **+25.015990171/4/4** | +25.015990171111121 | [nao verificado] |
+| extras_50_noturna | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | **0/0/0** | 0 | [nao verificado] |
+| extras_100_noturna | +1.137680830/2/2 | +7.819367573/3/3 | +1/1/1 | +1.499958300/2/2 | +0.002409167/0/0 | +1.861278889/1/1 | **+13.320694759/9/9** | +13.3206947588888876 | [nao verificado] |
+| folga_trabalhada | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | **0/0/0** | 0 | [nao verificado] |
+| noturnas | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | **0/0/0** | 0 | [nao verificado] |
+| atraso | −0.000158524/0/0 | +0.622596847/1/1 | +0.000051118/0/0 | +1.128749770/2/4 | +0.076214444/1/1 | −0.000105974/0/0 | **+1.827347681/4/6** | +1.827347681944451 | [nao verificado] |
+| saida_antecipada | −0.000158889/0/0 | +0.000201111/0/0 | +0.000008889/0/0 | −0.755222121/1/3 | −0.076319289/1/1 | +4.331691892/1/1 | **+3.500201593/3/5** | +3.500201593055542 | [nao verificado] |
+
+As duas colunas de soma preservam a diferença de precisão existente nos anexos. Por exemplo, outubro/extras_50 soma **+1.194721734** pelos deltas impressos; pelos `PARCIAL`, soma **+1.1947217330555591**, que somente ao final, em nove casas, resulta em **+1.194721733**. [nao verificado]
+
+Os **donos de 10/2026** seguem abaixo. Cada parcela mantém `Δ/C/D`; partes omitidas não publicaram uma linha `DONO` para aquela combinação. A linha conjunta de extras_100/feriado vale separadamente para cada uma das duas rubricas. [nao verificado]
+
+| Rubrica | Dono | Conta por parte — Δ/C/D | Total Δ/C/D | Evidência |
+|---|---|---|---|---|
+| trabalhadas | CADASTRO | P1(−2.542890556/1/1) + P2(−2.842305278/1/1) + P5(−9.540302056/3/3) + P6(−4.528065278/1/1) | **−19.453563168/6/6** | [nao verificado] |
+| trabalhadas | BATIDA | P3(−8/1/1) | **−8/1/1** | [nao verificado] |
+| trabalhadas | ESTRUTURA | P3(+4.964678333/1/1) | **+4.964678333/1/1** | [nao verificado] |
+| intra_indenizada | BATIDA | P1(−2/1/2) + P3(−1.550810000/2/2) | **−3.550810000/3/4** | [nao verificado] |
+| intra_indenizada | CADASTRO | P3(−3.505856944/3/6) + P4(−0.635273333/2/3) + P5(−8.166666667/1/7) + P6(−8/2/8) | **−20.307796944/8/24** | [nao verificado] |
+| intra_indenizada | ESTRUTURA | P3(+1/1/1) | **+1/1/1** | [nao verificado] |
+| extras_50 | CADASTRO | P4(−0.502948333/1/2) + P5(+1.473515854/2/5) + P6(+0.224154212/1/1) | **+1.194721733/4/8** | [nao verificado] |
+| extras_100 e extras_100_feriado | ESTRUTURA | P2(+10.985971389/1/1) + P3(+12.149131944/1/1) | **+23.135103333/2/2**, cada rubrica | [nao verificado] |
+| extras_100_noturna | CADASTRO | P2(+6.164677786/2/2) + P6(+1/1/1) | **+7.164677786/3/3** | [nao verificado] |
+| extras_100_noturna | ESTRUTURA | P1(+2.063954502/3/3) + P2(+0.856398333/1/1) + P4(+1.404236338/2/2) + P5(+0.909870556/1/1) | **+5.234459729/7/7** | [nao verificado] |
+| noturnas | BATIDA | P5(+0.145124127/1/1) | **+0.145124127/1/1** | [nao verificado] |
+| noturnas | CADASTRO | P5(+0.134280516/1/1) + P6(+1.069427260/1/4) | **+1.203707776/2/5** | [nao verificado] |
+| noturnas | ESTRUTURA | P2(−2.714647817/3/11) + P4(+2.571669984/1/3) + P5(+0.282411071/1/2) + P6(+1.095121032/1/4) | **+1.234554270/6/20** | [nao verificado] |
+| atraso | CADASTRO | P2(+1/1/1) + P4(+0.186000000/1/1) | **+1.186000000/2/2** | [nao verificado] |
+| atraso | ESTRUTURA | P1(+2.368500000/1/1) + P2(+3.578715833/2/3) + P3(+1.106833333/1/1) + P5(+2.330333333/1/1) | **+9.384382499/5/6** | [nao verificado] |
+| saida_antecipada | CADASTRO | P4(−0.186166667/1/1) | **−0.186166667/1/1** | [nao verificado] |
+| saida_antecipada | ESTRUTURA | P3(−0.557166667/1/1) | **−0.557166667/1/1** | [nao verificado] |
+
+Os **donos de 11/2026**, com a mesma notação, são: [nao verificado]
+
+| Rubrica | Dono | Conta por parte — Δ/C/D | Total Δ/C/D | Evidência |
+|---|---|---|---|---|
+| trabalhadas | CADASTRO | P2(−2.842521667/1/1) + P5(−17.080034312/3/5) | **−19.922555979/4/6** | [nao verificado] |
+| trabalhadas | BATIDA | P3(−3.993019444/1/1) | **−3.993019444/1/1** | [nao verificado] |
+| intra_indenizada | CADASTRO | P1(−1.166666667/1/1) + P3(−1/1/1) + P4(+0.403343056/1/2) + P5(−7.628472778/3/8) + P6(−6/2/6) | **−15.391796389/8/18** | [nao verificado] |
+| intra_indenizada | BATIDA | P5(−2/1/2) | **−2/1/2** | [nao verificado] |
+| extras_50 | CADASTRO | P5(−3.336169674/3/3) + P6(+0.380845000/1/2) | **−2.955324674/4/5** | [nao verificado] |
+| extras_100 e extras_100_feriado | ESTRUTURA | P2(−7.052801863/1/1) + P3(+12.066969812/1/1) + P4(+3.958275278/1/1) | **+8.972443227/3/3**, cada rubrica | [nao verificado] |
+| extras_100 | BATIDA | P5(+10.045843333/1/2) | **+10.045843333/1/2** | [nao verificado] |
+| extras_100 | CADASTRO | P5(+10/1/1) | **+10/1/1** | [nao verificado] |
+| extras_100_feriado | CADASTRO | P5(+16.043546944/1/1) | **+16.043546944/1/1** | [nao verificado] |
+| extras_100_noturna | ESTRUTURA | P1(+1.138725830/2/2) + P2(+6.809822454/2/2) + P4(+1.485842467/2/2) | **+9.434390751/6/6** | [nao verificado] |
+| extras_100_noturna | CADASTRO | P2(+1/1/1) + P3(+1/1/1) + P6(+1.861278889/1/1) | **+3.861278889/3/3** | [nao verificado] |
+| atraso | ESTRUTURA | P2(+0.622824167/1/1) + P4(+0.373195000/1/1) | **+0.996019167/2/2** | [nao verificado] |
+| atraso | CADASTRO | P4(+0.755333333/1/3) + P5(+0.076333333/1/1) | **+0.831666666/2/4** | [nao verificado] |
+| saida_antecipada | CADASTRO | P4(−0.755333333/1/3) + P5(−0.076333333/1/1) | **−0.831666666/2/4** | [nao verificado] |
+| saida_antecipada | ESTRUTURA | P6(+4.331833611/1/1) | **+4.331833611/1/1** | [nao verificado] |
+
+Não foram publicadas linhas `DONO` para extras_50_noturna ou folga_trabalhada nas duas competências, nem para noturnas em novembro. [nao verificado] [nao verificado]
+
+As contagens somam entre partes disjuntas, mas **colaboradores podem aparecer em mais de um dono da mesma rubrica**: outubro/intra soma 12 incidências por dono para 10 colaboradores da rubrica; outubro/noturnas, 9 para 6; novembro/intra, 9 para 8; novembro/extras_100, 5 para 4. [nao verificado]
+
+Também há delta fora das linhas `DONO`, em `RESIDUO|ATE_LIMIAR`. Exemplo de outubro/P1/extras_100_noturna: `+2.063954502 − 0.002610278 = +2.061344224`. Outubro/P3 dessa rubrica apresenta `+0.014159722` com `0/0` divergentes; novembro/P5 apresenta `+0.002409167` com `0/0`. Esses valores permanecem na medida de impacto. [nao verificado]
+
+Por parte, os registros `ERRO`, `INCOMPLETO`, retorno e linhas `SOMA` ficam assim. Nas contas de erro, **V = ValueError**, **C = ConservacaoNaoFecha**, **L = LacunaDeMedicao**; V aparece em `dia_pago.py:315`, enquanto C e L aparecem com origem `sonda`. São contagens de ocorrências reportadas, sem identificação de colaboradores únicos. [nao verificado]
+
+| Parte | rc_sombra | Outubro: V + C + L | Novembro: V + C + L | INCOMPLETO: outubro + novembro | Linhas SOMA | Evidência |
+|---|---:|---|---|---|---|---|
+| P1 | 0 | 18 + 121 + 284 = **423** | 21 + 34 + 353 = **408** | 423 + 408 = **831** | 113 `False`; 0 `True` | [nao verificado] |
+| P2 | 0 | 19 + 102 + 341 = **462** | 16 + 36 + 291 = **343** | 462 + 343 = **805** | 113 `False`; 0 `True` | [nao verificado] |
+| P3 | 0 | 13 + 57 + 158 = **228** | 17 + 34 + 295 = **346** | 228 + 346 = **574** | 113 `False`; 0 `True` | [nao verificado] |
+| P4 | 0 | 11 + 89 + 225 = **325** | 16 + 34 + 338 = **388** | 325 + 388 = **713** | 113 `False`; 0 `True` | [nao verificado] |
+| P5 | 0 | 11 + 99 + 196 = **306** | 12 + 22 + 256 = **290** | 306 + 290 = **596** | 113 `False`; 0 `True` | [nao verificado] |
+| P6 | 0 | 13 + 78 + 210 = **301** | 15 + 34 + 244 = **293** | 301 + 293 = **594** | 113 `False`; 0 `True` | [nao verificado] |
+| Total | 0 nas seis partes | **85 + 546 + 1414 = 2045** | **97 + 194 + 1777 = 2068** | **2045 + 2068 = 4113** | **678 `False`; 0 `True`** | [nao verificado] |
+
+A soma explícita dos `INCOMPLETO` é `831 + 805 + 574 + 713 + 596 + 594 = 4113`, também igual a `182 V + 740 C + 3191 L`. [nao verificado]
+
+Cada parte publica, por competência, `1 COBERTURA + 11 rubricas × 5 famílias = 56` linhas `SOMA`. As cinco famílias são `PARTES_EMISSOR`, `DIVERGENCIA`, `COLABS_UNIAO_DIAS`, `V3_PORTA_EMISSOR` e `MOTOR_FECHAMENTO`. Portanto: `2 × 56 + 1 ERROS_ZERO = 113` por parte; `6 × 113 = 678` no conjunto. Todos os booleanos publicados são `False`. [nao verificado] [nao verificado]
+
+O wrapper retorna o código da execução Docker e termina com `exit "$rc"`; isso explica por que o retorno do processo deve ser lido separadamente dos resultados publicados pela sonda. [bin/sonda_leitura.sh:241](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/bin/sonda_leitura.sh:241) [bin/sonda_leitura.sh:251](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/bin/sonda_leitura.sh:251)
+
+O código do `script.py` específico não foi localizado na cópia; assim, não atribuo aos `False` um significado adicional de aprovação ou reprovação. [nao verificado]
+
+As ocorrências **TRATADA_LOCAL** estão publicadas para a parte inteira, sem separação por competência: [nao verificado] [nao verificado]
+
+| Sítio / tipo | P1 | P2 | P3 | P4 | P5 | P6 | Soma | Evidência |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| leitor_celula.py:25 / ValueError | 2552 | 2962 | 2290 | 2228 | 3014 | 1881 | **14927** | [nao verificado] |
+| juiz_batida.py:75 / ValueError | 154382 | 172335 | 162681 | 145226 | 154656 | 146215 | **935495** | [nao verificado] |
+| motor_calculo_v2.py:1075 / AttributeError | 3483 | 3816 | 3625 | 3602 | 4016 | 3819 | **22361** | [nao verificado] |
+| fechamento.py:1029 / _GradeSemCelula | 5 | 2 | 4 | não publicada | não publicada | 4 | **15 reportadas** | [nao verificado] | [nao verificado]
+
+P4 e P5 não publicam a linha `_GradeSemCelula`; essa ausência não comprova zero. As contagens locais não foram acrescentadas aos `INCOMPLETO`. [nao verificado]
+
+O confronto **UNIVERSO_PARTE × UNIVERSO** é: [nao verificado]
+
+| Competência | Conta P1 + P2 + P3 + P4 + P5 + P6 | UNIVERSO informado | Diferença | Evidência |
+|---|---|---:|---:|---|
+| 10/2026 | 110 + 109 + 102 + 96 + 107 + 100 = **624** | 624 | **0** | [nao verificado] |
+| 11/2026 | 96 + 99 + 97 + 91 + 99 + 96 = **578** | 578 | **0** | [nao verificado] |
+
+Essa igualdade numérica coexiste com `SOMA COBERTURA=False` em todas as partes; não elimina os `INCOMPLETO`. [nao verificado]
+
+Quanto ao **`!`**, as saídas **não trazem a lista fechada exigida para a troca**, nem o estado de exportação por empresa/competência, nem valores monetários. Logo, não permitem identificar quais divergências desta medida moveriam dinheiro em competência exportada. [nao verificado] A lista fechada — “resto dos 38, ! do v2, ESTRUTURA do v3” — consta como entrega da obra no backlog. [app/docs/BACKLOG.md:1750](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/app/docs/BACKLOG.md:1750)
+
+O código da cópia permite nomear estes pontos, sem atribuir-lhes alcance atual de produção:
+
+- **Alterar o gravado de competência exportada** ou **editar `motor_calculo_v2.py`** exige `!` pela regra local. [CLAUDE.md:262](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/CLAUDE.md:262)
+- O calculador depende do v2 para funções/classes/fator noturno, métodos de pontualidade e `he_noturna`. A dependência existe; eventual alteração no arquivo v2 está sujeita à regra acima. [app/ponto/calculador/regras.py:35](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/app/ponto/calculador/regras.py:35) [app/ponto/calculador/regras.py:112](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/app/ponto/calculador/regras.py:112) [app/ponto/calculador/regras.py:825](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/app/ponto/calculador/regras.py:825)
+- A cópia documenta a **reancoragem da janela** e a **remoção da cópia de par na origem v2** como correções destinadas ao `!`. Seus números históricos não foram incorporados à presente medida. [app/ponto/calculador/periodo.py:659](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/app/ponto/calculador/periodo.py:659) [app/ponto/calculador/periodo.py:726](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/app/ponto/calculador/periodo.py:726)
+
+`horas_falta`, `horas_reflexo_dsr` e `saldo_banco_horas` estão expressamente fora da medida nos seis anexos; seu impacto permanece indisponível. [nao verificado] Também não cabe somar as rubricas apresentadas como um total financeiro: o código declara que as variantes noturna e de feriado são subconjuntos das extras totais. [app/ponto/services/dia_pago.py:902](/home/ronald/codex_ws/f23cccec43b642ec2da05318e67a63bdf6a7d1f0/app/ponto/services/dia_pago.py:902)
+
+## 06/11 13:35 · sessao 95d3b2f91445 · R1-CAUSAD-V3 · leitura · origem=Code
+
+O consolidado resulta em **303 dias divergentes em 10/2026** e **201 em 11/2026**, com BATE de **95,950821862889%** e **94,820922442669%**, respectivamente. [nao verificado]
+
+Todas as contas abaixo derivam exclusivamente do texto fornecido, sem arquivo:linha disponível. Os termos das somas seguem a ordem **P1 + P2 + P3 + P4 + P5 + P6**; as horas usam os decimais de `PARCIAL` e `PARCIAL_TOTAL`, sem arredondamento intermediário. [nao verificado]
+
+Para **10/2026**, a soma de cada chave de `[1]` é: [nao verificado]
+
+| Chave | Conta por parte = total | Referência |
+|---|---|---|
+| dias_comparados | 1175 + 1267 + 1232 + 1235 + 1282 + 1292 = **7483** | [nao verificado] |
+| bate_ate_10min | 1136 + 1226 + 1165 + 1187 + 1213 + 1253 = **7180** | [nao verificado] |
+| esp_zero_e6_trabalho | 1 + 2 + 12 + 6 + 9 + 5 = **35** | [nao verificado] |
+| e6_zero_esp_trabalho | 3 + 4 + 6 + 1 + 3 + 2 = **19** | [nao verificado] |
+| diverge_10_60 | 11 + 7 + 2 + 5 + 2 + 1 = **28** | [nao verificado] |
+| diverge_acima_60 | 24 + 28 + 47 + 36 + 55 + 31 = **221** | [nao verificado] |
+| dia_batida_impar | 32 + 64 + 66 + 56 + 76 + 53 = **347** | [nao verificado] |
+| impar_que_BATE | 15 + 34 + 24 + 22 + 28 + 25 = **148** | [nao verificado] |
+| impar_que_DIVERGE | 17 + 30 + 42 + 34 + 48 + 28 = **199** | [nao verificado] |
+| impar_dentro_da_faixa | 14 + 24 + 33 + 30 + 42 + 25 = **168** | [nao verificado] |
+| impar_FORA_da_faixa | 3 + 6 + 9 + 4 + 6 + 3 = **31** | [nao verificado] |
+| impar_no_conjunto_do_dia | 17 + 30 + 42 + 33 + 48 + 28 = **198** | [nao verificado] |
+| impar_SO_POR_CORTE_do_oraculo | 0 + 0 + 0 + 1 + 0 + 0 = **1** | [nao verificado] |
+| dia_sem_linha_no_espelho | 0 + 0 + 0 + 0 + 0 + 0 = **0** | [nao verificado] |
+| dia_sem_lavratura_no_espelho | 1719 + 1568 + 1422 + 1285 + 1539 + 1396 = **8929** | [nao verificado] |
+| dia_isento_ou_ausencia | 329 + 349 + 345 + 305 + 271 + 279 = **1878** | [nao verificado] |
+| dia_sem_trabalho_ambos | 34 + 24 + 22 + 18 + 45 + 12 = **155** | [nao verificado] |
+| esp_desconta_janela_declarada | 43 + 62 + 39 + 37 + 73 + 21 = **275** | [nao verificado] |
+| esp_lido_pelo_pago_h | 0 + 0 + 0 + 0 + 0 + 0 = **0** | [nao verificado] |
+
+Para **11/2026**, a soma de cada chave de `[1]` é: [nao verificado]
+
+| Chave | Conta por parte = total | Referência |
+|---|---|---|
+| dias_comparados | 603 + 675 + 629 + 610 + 690 + 674 = **3881** | [nao verificado] |
+| bate_ate_10min | 568 + 641 + 599 + 596 + 629 + 647 = **3680** | [nao verificado] |
+| esp_zero_e6_trabalho | 11 + 3 + 4 + 4 + 4 + 2 = **28** | [nao verificado] |
+| e6_zero_esp_trabalho | 5 + 0 + 5 + 0 + 2 + 2 = **14** | [nao verificado] |
+| diverge_10_60 | 1 + 2 + 0 + 0 + 6 + 1 = **10** | [nao verificado] |
+| diverge_acima_60 | 18 + 29 + 21 + 10 + 49 + 22 = **149** | [nao verificado] |
+| dia_batida_impar | 34 + 52 + 42 + 32 + 63 + 39 = **262** | [nao verificado] |
+| impar_que_BATE | 14 + 24 + 22 + 22 + 23 + 18 = **123** | [nao verificado] |
+| impar_que_DIVERGE | 20 + 28 + 20 + 10 + 40 + 21 = **139** | [nao verificado] |
+| impar_dentro_da_faixa | 13 + 27 + 17 + 9 + 32 + 16 = **114** | [nao verificado] |
+| impar_FORA_da_faixa | 7 + 1 + 3 + 1 + 8 + 5 = **25** | [nao verificado] |
+| impar_no_conjunto_do_dia | 20 + 28 + 19 + 10 + 40 + 20 = **137** | [nao verificado] |
+| impar_SO_POR_CORTE_do_oraculo | 0 + 0 + 1 + 0 + 0 + 1 = **2** | [nao verificado] |
+| dia_sem_linha_no_espelho | 1344 + 1386 + 1358 + 1274 + 1386 + 1344 = **8092** | [nao verificado] |
+| dia_sem_lavratura_no_espelho | 805 + 834 + 814 + 756 + 785 + 767 = **4761** | [nao verificado] |
+| dia_isento_ou_ausencia | 174 + 120 + 147 + 148 + 130 + 155 = **874** | [nao verificado] |
+| dia_sem_trabalho_ambos | 33 + 17 + 21 + 19 + 24 + 20 = **134** | [nao verificado] |
+| esp_desconta_janela_declarada | 17 + 37 + 38 + 14 + 54 + 16 = **176** | [nao verificado] |
+| esp_lido_pelo_pago_h | 0 + 0 + 0 + 0 + 0 + 0 = **0** | [nao verificado] |
+
+As contas por dono de **10/2026**, incluindo TOTAL, são: [nao verificado]
+
+| Dono | Medida | Conta por parte = total | Referência |
+|---|---|---|---|
+| ESTRUTURA | dia-colab | 10 + 5 + 3 + 3 + 3 + 2 = **26** | [nao verificado] |
+| ESTRUTURA | horas | 9.116283817777775 + 11.084600277777778 + 15.209666666666665 + 15.566319135833336 + 29.23270916666667 + 8.15 = **88.359579064722224** | [nao verificado] |
+| ESTRUTURA | colabs | 3 + 3 + 3 + 3 + 3 + 1 = **16** | [nao verificado] |
+| CADASTRO | dia-colab | 10 + 8 + 7 + 23 + 21 + 9 = **78** | [nao verificado] |
+| CADASTRO | horas | 38.355213611111104 + 20.397520712222224 + 35.88209174 + 107.60888681222221 + 60.14375256333333 + 44.14612722222221 = **306.533592661111078** | [nao verificado] |
+| CADASTRO | colabs | 3 + 6 + 4 + 8 + 8 + 3 = **32** | [nao verificado] |
+| BATIDA | dia-colab | 19 + 28 + 57 + 22 + 45 + 28 = **199** | [nao verificado] |
+| BATIDA | horas | 108.81011656222222 + 136.0465618775 + 302.3993460441667 + 101.15787729194444 + 190.17304430305552 + 122.57225449861109 = **961.15920057749997** | [nao verificado] |
+| BATIDA | colabs | 12 + 18 + 25 + 17 + 25 + 16 = **113** | [nao verificado] |
+| TOTAL | dia-colab | 39 + 41 + 67 + 48 + 69 + 39 = **303** | [nao verificado] |
+| TOTAL | horas | 156.281613991111099 + 167.528682867500002 + 353.491104450833365 + 224.333083239999986 + 279.54950603305552 + 174.86838172083330 = **1356.052372303333272** | [nao verificado] |
+| TOTAL | colabs | 16 + 23 + 30 + 26 + 29 + 20 = **144** | [nao verificado] |
+
+As contas por dono de **11/2026**, incluindo TOTAL, são: [nao verificado]
+
+| Dono | Medida | Conta por parte = total | Referência |
+|---|---|---|---|
+| ESTRUTURA | dia-colab | 1 + 0 + 3 + 0 + 4 + 1 = **9** | [nao verificado] |
+| ESTRUTURA | horas | 6.2 + 0.0 + 11.75 + 0.0 + 20.109676988055558 + 2.5604991666666668 = **40.6201761547222248** | [nao verificado] |
+| ESTRUTURA | colabs | 1 + 0 + 2 + 0 + 3 + 1 = **7** | [nao verificado] |
+| CADASTRO | dia-colab | 20 + 10 + 5 + 5 + 27 + 5 = **72** | [nao verificado] |
+| CADASTRO | horas | 106.69305642305555 + 28.19539852888889 + 15.826795833333335 + 39.726189220555554 + 106.31719708361109 + 50.7295725 = **347.488209589444419** | [nao verificado] |
+| CADASTRO | colabs | 7 + 7 + 5 + 3 + 7 + 4 = **33** | [nao verificado] |
+| BATIDA | dia-colab | 14 + 24 + 22 + 9 + 30 + 21 = **120** | [nao verificado] |
+| BATIDA | horas | 81.76095535388889 + 122.76838809305558 + 113.35641307083331 + 50.69357468888889 + 164.14298169666668 + 110.33564643499999 = **643.05795933833334** | [nao verificado] |
+| BATIDA | colabs | 10 + 16 + 10 + 8 + 19 + 15 = **78** | [nao verificado] |
+| TOTAL | dia-colab | 35 + 34 + 30 + 14 + 61 + 27 = **201** | [nao verificado] |
+| TOTAL | horas | 194.65401177694444 + 150.96378662194447 + 140.933208904166645 + 90.419763909444444 + 290.569855768333328 + 163.6257181016666568 = **1031.1663450824999838** | [nao verificado] |
+| TOTAL | colabs | 15 + 21 + 15 + 10 + 26 + 18 = **105** | [nao verificado] |
+
+Para os colabs de TOTAL, somei as uniões informadas por parte, considerando a disjunção entre partes declarada no pedido. [nao verificado]
+
+As conferências agregadas e os percentuais são: [nao verificado]
+
+| Conferência | 10/2026 | 11/2026 | Referência |
+|---|---|---|---|
+| UNIVERSO_PARTE × UNIVERSO | 110 + 109 + 102 + 96 + 107 + 100 = **624**, igual a 624 | 96 + 99 + 97 + 91 + 99 + 96 = **578**, igual a 578 | [nao verificado] |
+| BATE % | 7180 ÷ 7483 × 100 ≈ **95,950821862889%** | 3680 ÷ 3881 × 100 ≈ **94,820922442669%** | [nao verificado] |
+| Comparados − BATE | 7483 − 7180 = **303** | 3881 − 3680 = **201** | [nao verificado] |
+| Categorias divergentes de `[1]` | 35 + 19 + 28 + 221 = **303** | 28 + 14 + 10 + 149 = **201** | [nao verificado] |
+| Dias dos donos | 26 + 78 + 199 = **303** | 9 + 72 + 120 = **201** | [nao verificado] |
+| Horas dos donos | 88.359579064722224 + 306.533592661111078 + 961.15920057749997 = **1356.052372303333272** | 40.6201761547222248 + 347.488209589444419 + 643.05795933833334 = **1031.1663450824999838** | [nao verificado] |
+
+Os diagnósticos finais aparecem por execução de parte, abrangendo as duas competências, sem separação mensal de `TRATADA_LOCAL`. A coluna “atravessaram frame” abaixo conta somente linhas explícitas desse diagnóstico exibidas nas saídas; não comprova ocorrências fora do texto fornecido. [nao verificado]
+
+| Parte | rc_sombra | Marcador INCOMPLETO na saída | Linhas TRATADA_LOCAL | Ocorrências somadas de TRATADA_LOCAL | Linhas explícitas de erros que atravessaram frame | Referência |
+|---|---:|---|---:|---:|---:|---|
+| P1 | 0 | Ausente | 27 | 777169 | 0 | [nao verificado] |
+| P2 | 0 | Ausente | 27 | 835848 | 0 | [nao verificado] |
+| P3 | 0 | Ausente | 28 | 813047 | 0 | [nao verificado] |
+| P4 | 0 | Ausente | 27 | 752749 | 0 | [nao verificado] |
+| P5 | 0 | Ausente | 26 | 869997 | 0 | [nao verificado] |
+| P6 | 0 | Ausente | 26 | 746948 | 0 | [nao verificado] |
+
+As contas das ocorrências `TRATADA_LOCAL`, na ordem em que aparecem em cada saída, são: [nao verificado]
+
+- P1: 232873 + 214 + 945 + 5201 + 57 + 2 + 5766 + 3 + 4 + 3444 + 3444 + 649 + 180 + 433065 + 505 + 2567 + 161 + 10520 + 104 + 3607 + 191 + 5 + 20459 + 4354 + 33979 + 8 + 14862 = **777169**. [nao verificado]
+- P2: 249865 + 13 + 1341 + 5749 + 66 + 4 + 8 + 6433 + 2 + 6 + 4777 + 4777 + 498 + 185 + 459090 + 579 + 2775 + 192 + 11736 + 97 + 3584 + 197 + 2 + 23442 + 5013 + 37362 + 18055 = **835848**. [nao verificado]
+- P3: 240100 + 250 + 1365 + 4623 + 41 + 4 + 2 + 6434 + 4 + 6 + 4324 + 4324 + 512 + 179 + 16 + 452220 + 554 + 2847 + 157 + 11514 + 101 + 3979 + 190 + 4 + 22023 + 4399 + 36499 + 16376 = **813047**. [nao verificado]
+- P4: 220720 + 551 + 1090 + 4668 + 49 + 1 + 34 + 6712 + 8 + 3 + 3792 + 3792 + 284 + 168 + 1126 + 409650 + 558 + 2635 + 165 + 11428 + 89 + 3666 + 177 + 23759 + 3165 + 37032 + 17427 = **752749**. [nao verificado]
+- P5: 257916 + 434 + 1676 + 6042 + 79 + 2 + 20 + 7771 + 6 + 5601 + 5601 + 310 + 190 + 471429 + 788 + 3044 + 194 + 12714 + 143 + 4139 + 195 + 27833 + 3152 + 41156 + 2 + 19560 = **869997**. [nao verificado]
+- P6: 219208 + 16 + 1158 + 3928 + 56 + 2 + 8 + 6308 + 6 + 3771 + 3771 + 520 + 177 + 414465 + 470 + 2680 + 185 + 11236 + 73 + 3903 + 186 + 4 + 20152 + 3840 + 35418 + 15407 = **746948**. [nao verificado]
+
+Total de linhas `TRATADA_LOCAL`: 27 + 27 + 28 + 27 + 26 + 26 = **161**; total de ocorrências: 777169 + 835848 + 813047 + 752749 + 869997 + 746948 = **4795758**. [nao verificado]
+
+As linhas `SOMA` fornecidas ficam transcritas em colunas abaixo; cada célula preserva o valor e o booleano da respectiva linha. [nao verificado]
+
+| Parte | Competência | SOMA dias | SOMA HORAS | SOMA COLABS_UNIAO | Referência |
+|---|---|---|---|---|---|
+| P1 | 10/2026 | 39 — True | 156.281613991111099 — True | 16 — True | [nao verificado] |
+| P1 | 11/2026 | 35 — True | 194.65401177694444 — True | 15 — True | [nao verificado] |
+| P2 | 10/2026 | 41 — True | 167.528682867500002 — True | 23 — True | [nao verificado] |
+| P2 | 11/2026 | 34 — True | 150.96378662194447 — True | 21 — True | [nao verificado] |
+| P3 | 10/2026 | 67 — True | 353.491104450833365 — True | 30 — True | [nao verificado] |
+| P3 | 11/2026 | 30 — True | 140.933208904166645 — True | 15 — True | [nao verificado] |
+| P4 | 10/2026 | 48 — True | 224.333083239999986 — True | 26 — True | [nao verificado] |
+| P4 | 11/2026 | 14 — True | 90.419763909444444 — True | 10 — True | [nao verificado] |
+| P5 | 10/2026 | 69 — True | 279.54950603305552 — True | 29 — True | [nao verificado] |
+| P5 | 11/2026 | 61 — True | 290.569855768333328 — True | 26 — True | [nao verificado] |
+| P6 | 10/2026 | 39 — True | 174.86838172083330 — True | 20 — True | [nao verificado] |
+| P6 | 11/2026 | 27 — True | 163.6257181016666568 — True | 18 — True | [nao verificado] |
+
+Contagem de `SOMA True`: 6 + 6 + 6 + 6 + 6 + 6 = **36**; de `SOMA False`: 0 + 0 + 0 + 0 + 0 + 0 = **0**. [nao verificado]
+
+Não há linhas de **listas de dias** nem itens **ESPELHO-VERDADE** nos seis blocos de saída fornecidos; portanto, não há conteúdo dessas categorias para transcrever ou agregar. [nao verificado]
+
+A tabela final por competência é: [nao verificado]
+
+| Medida | 10/2026 | 11/2026 | Referência |
+|---|---:|---:|---|
+| Janela informada | 2026-09-21 a 2026-10-20 | 2026-10-21 a 2026-11-20 | [nao verificado] |
+| UNIVERSO_PARTE somado / UNIVERSO | 624 / 624 — confere | 578 / 578 — confere | [nao verificado] |
+| Dias comparados | 7483 | 3881 | [nao verificado] |
+| Bate até 10 min | 7180 | 3680 | [nao verificado] |
+| BATE % | 95,950821862889% | 94,820922442669% | [nao verificado] |
+| ESTRUTURA — dia-colab / horas / colabs | 26 / 88.359579064722224 / 16 | 9 / 40.6201761547222248 / 7 | [nao verificado] |
+| CADASTRO — dia-colab / horas / colabs | 78 / 306.533592661111078 / 32 | 72 / 347.488209589444419 / 33 | [nao verificado] |
+| BATIDA — dia-colab / horas / colabs | 199 / 961.15920057749997 / 113 | 120 / 643.05795933833334 / 78 | [nao verificado] |
+| **TOTAL — dia-colab / horas / colabs** | **303 / 1356.052372303333272 / 144** | **201 / 1031.1663450824999838 / 105** | [nao verificado] |
+| SOMA, por competência | 3 + 3 + 3 + 3 + 3 + 3 = 18 True; nenhum False | 3 + 3 + 3 + 3 + 3 + 3 = 18 True; nenhum False | [nao verificado] |
+
+## 06/11 13:34 · sessao 8ee384f1b5ff · - · - · origem=Ronald (tmux)
+
+Todas as contas abaixo são derivadas dos anexos, em memória, com `Decimal` dos valores textuais de `PARCIAL`, sem arredondamento intermediário. `[nao verificado]`
+
+Ordem dos vetores: **P1, P2, P3, P4, P5, P6**. `[nao verificado]`
+
+| Competência/rubrica | Deltas integrais por parte | Total integral | Arredondamento somente final, 9 casas |
+|---|---|---:|---:|
+| 10 trabalhadas | −2.542890555555; **−2.842305278***; −3.035321666668; 0; −9.540302056388; −4.528065277778 | **−22.488884834389*** | −22.488884834* |
+| 10 intra | −2; 0; −4.05666694444443; −0.63527333333331; −8.16666666666663; −8 | −22.85860694444437 | −22.858606944 |
+| 10 HE50 | 0; 0; 0; −0.502948333333335; +1.4735158538888901; +0.224154212500004 | +1.1947217330555591 | +1.194721733 |
+| 10 HE100 | 0; +10.985971388888896; +12.149131944444441; 0; 0; 0 | +23.135103333333337 | +23.135103333 |
+| 10 HE100 feriado | mesmo vetor de HE100 | +23.135103333333337 | +23.135103333 |
+| 10 HE100 noturna | +2.061344224166667; +7.021076119444445; +0.014159722222222; +1.4042363383333330; +0.9115786111111086; +1 | +12.4123950152777756 | +12.412395015 |
+| 10 noturnas | 0; −2.7245478571431; 0; +2.5716699836512; +0.5618157142858; +2.1645482921431 | +2.5734861329370 | +2.573486133 |
+| 10 atraso | +2.368802113333331; +4.579204284166672; +1.106468535277777; +0.186039155000003; +2.329948153055554; −0.000374091944443 | +10.570088148888894 | +10.570088149 |
+| 10 saída | +0.000684534722225; +0.000106703055551; −0.557056842500004; −0.186263274722222; +0.000085790277780; +0.000069985555555 | −0.742373103611115 | −0.742373104 |
+| 11 trabalhadas | −0.0000000000009; −2.8425216666665; −3.9930194444441; 0; −17.0800343119445; 0 | −23.9155754230560 | −23.915575423 |
+| 11 intra | −1.16666666666666; 0; −1; +0.40334305555555; −9.62847277777777; −6 | −17.39179638888888 | −17.391796389 |
+| 11 HE50 | 0; 0; 0; 0; −3.3361696744444433; +0.380845000000001 | −2.9553246744444423 | −2.955324674 |
+| 11 HE100 | +0.000000000000015; −7.052801863055549; +12.066969811944446; +3.958275277777773; +20.045843333333323; 0 | +29.018286560000008 | +29.018286560 |
+| 11 HE100 feriado | +0.000000000000015; −7.052801863055549; +12.066969811944446; +3.958275277777773; +16.043546944444436; 0 | +25.015990171111121 | +25.015990171 |
+| 11 HE100 noturna | +1.137680829722223; +7.819367573333334; +1; +1.4999583002777781; +0.002409166666664; +1.8612788888888885 | +13.3206947588888876 | +13.320694759 |
+| 11 atraso | −0.000158523888888; +0.622596846944447; +0.000051118333336; +1.128749770277779; +0.076214444444446; −0.000105974166669 | +1.827347681944451 | +1.827347682 |
+| 11 saída | −0.000158888888890; +0.000201111111110; +0.000008888888885; −0.755222120833338; −0.076319288888886; +4.331691891666661 | +3.500201593055542 | +3.500201593 |
+
+Fonte de todas as linhas da tabela: anexos `PARCIAL` fornecidos. `[nao verificado]`
+
+\* **Outubro/trabalhadas tem precisão mista:** o `v2_h` do `PARCIAL` P2 foi raspado como `11749.[cpf]`; utilizei exclusivamente o delta explícito `RUBRICA`, −2.842305278. O total de precisão integral das seis partes é indisponível; −22.488884834389 é apenas o total misto declarado. `[nao verificado]`
+
+As rubricas `horas_extras_50_noturna` e `horas_folga_trabalhada` têm delta integral zero nas duas competências; `horas_noturnas` tem delta integral zero em novembro. `[nao verificado]`
+
+Comparação dos totais finais em 9 casas com a soma dos `delta_h` já emitidos por `RUBRICA`: `[nao verificado]`
+
+| Competência/rubrica | Soma de `RUBRICA` | Soma `PARCIAL`, arredondada só ao final |
+|---|---:|---:|
+| 10 trabalhadas | −22.488884835 | −22.488884834* |
+| 10 HE50 | +1.194721734 | +1.194721733 |
+| 10 HE100 noturna | +12.412395014 | +12.412395015 |
+| 10 atraso | +10.570088148 | +10.570088149 |
+| 11 atraso | +1.827347681 | +1.827347682 |
+
+Fonte: contas em memória dos anexos; demais rubricas coincidem em nove casas entre as duas formas. `[nao verificado]`
+
+## 06/11 13:33 · sessao 6fec615fd82c · - · - · origem=Ronald (tmux)
+
+Consolidação dos anexos, sem verificação independente. [nao verificado]
+
+| Item | P1 | P2 | P3 | P4 | P5 | P6 | Total |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Erros outubro | 423 | 462 | 228 | 325 | 306 | 301 | 2045 |
+| Erros novembro | 408 | 343 | 346 | 388 | 290 | 293 | 2068 |
+| INCOMPLETO | 831 | 805 | 574 | 713 | 596 | 594 | 4113 |
+| TRATADA_LOCAL leitor | 2552 | 2962 | 2290 | 2228 | 3014 | 1881 | 14927 |
+| TRATADA_LOCAL juiz | 154382 | 172335 | 162681 | 145226 | 154656 | 146215 | 935495 |
+| TRATADA_LOCAL motor | 3483 | 3816 | 3625 | 3602 | 4016 | 3819 | 22361 |
+| TRATADA_LOCAL fechamento | 5 | 2 | 4 | ausente | ausente | 4 | 15 reportados |
+| Linhas SOMA | 113 | 113 | 113 | 113 | 113 | 113 | 678 |
+
+Toda a tabela deriva dos anexos. Ausência da linha de fechamento em P4/P5 não comprova zero. As 678 linhas `SOMA` exibem `False`; nenhuma exibe `True`. Cada parte contém `2 × (1 COBERTURA + 11 rubricas × 5 famílias) + 1 ERROS_ZERO = 113` linhas. [nao verificado]
+
+Erros por competência: outubro `85 ValueError + 546 ConservacaoNaoFecha + 1414 LacunaDeMedicao = 2045`; novembro `97 + 194 + 1777 = 2068`; total `182 + 740 + 3191 = 4113`, igual à soma dos `INCOMPLETO`. [nao verificado]
+
+Todos os vetores DONO, deltas exatos e contagens por parte foram enviados nas mensagens anteriores. Há sobreposição de colaboradores entre donos: outubro intra `12 incidências DONO / 10 colaboradores RUBRICA`; outubro noturnas `9/6`; novembro intra `9/8`; novembro extras100 `5/4`. Não somar esses donos para obter colaboradores únicos da rubrica. [nao verificado]
 
 ## 06/11 13:32 · sessao f98b37141a96 · - · - · origem=Ronald (tmux)
 
@@ -1816,257 +2182,4 @@ SOMA COLABS_UNIAO_DIAS|2026-10|horas_atraso|colabs=F
 
 [truncado em 20000 de 24918 caracteres]
 
-## 06/11 12:34 · sessao 0e23a98c7cdf · R1-CAUSAD-V3 · sonda · origem=Code
-
-As seis linhas `SOMA` terminam em `True`. Não há ocorrência de `INCOMPLETO` no texto fornecido. [nao verificado]
-
-Transcrição integral da parte 6 fornecida: [nao verificado]
-
-```text
-sonda_leitura: script.py [455c4e7660bc3a87] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-
-PARTE 6 PARTES 6
-[0] UNIVERSO 10/2026 624
-UNIVERSO_PARTE 10/2026 100
-JANELA 10/2026 2026-09-21 2026-10-20
-[0] UNIVERSO 11/2026 578
-UNIVERSO_PARTE 11/2026 96
-JANELA 11/2026 2026-10-21 2026-11-20
-ESTIMATIVA processados 25 universo 196 minutos_total 2.9 ate_40_min True ate_15_min True
-ESTIMATIVA processados 50 universo 196 minutos_total 2.8 ate_40_min True ate_15_min True
-ESTIMATIVA processados 75 universo 196 minutos_total 2.7 ate_40_min True ate_15_min True
-COMPETENCIA 10/2026
-[1] {'dias_comparados': 1292, 'bate_ate_10min': 1253, 'esp_zero_e6_trabalho': 5, 'e6_zero_esp_trabalho': 2, 'diverge_10_60': 1, 'diverge_acima_60': 31, 'dia_batida_impar': 53, 'impar_que_BATE': 25, 'impar_que_DIVERGE': 28, 'impar_dentro_da_faixa': 25, 'impar_FORA_da_faixa': 3, 'impar_no_conjunto_do_dia': 28, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1396, 'dia_isento_ou_ausencia': 279, 'dia_sem_trabalho_ambos': 12, 'esp_desconta_janela_declarada': 21, 'esp_lido_pelo_pago_h': 0}
-[2] BATE (ate 10 min): 97.0% de 1292 dias comparados
-[3] ESTRUTURA     2 dia-colab       8.2 h    1 colabs
-[3] CADASTRO      9 dia-colab      44.1 h    3 colabs
-[3] BATIDA       28 dia-colab     122.6 h   16 colabs
-[4] TOTAL divergentes 39
-[5] colabs com divergencia: 20
-erros_no_espelho 0
-PARCIAL|10/2026|ESTRUTURA|dias=2|horas=8.15|colabs=1
-PARCIAL|10/2026|CADASTRO|dias=9|horas=44.14612722222221|colabs=3
-PARCIAL|10/2026|BATIDA|dias=28|horas=122.57225449861109|colabs=16
-PARCIAL_TOTAL|10/2026|dias=39|horas=174.86838172083330|colabs=20
-ESTIMATIVA processados 100 universo 196 minutos_total 2.7 ate_40_min True ate_15_min True
-ESTIMATIVA processados 125 universo 196 minutos_total 2.8 ate_40_min True ate_15_min True
-ESTIMATIVA processados 150 universo 196 minutos_total 2.9 ate_40_min True ate_15_min True
-ESTIMATIVA processados 175 universo 196 minutos_total 2.8 ate_40_min True ate_15_min True
-COMPETENCIA 11/2026
-[1] {'dias_comparados': 674, 'bate_ate_10min': 647, 'esp_zero_e6_trabalho': 2, 'e6_zero_esp_trabalho': 2, 'diverge_10_60': 1, 'diverge_acima_60': 22, 'dia_batida_impar': 39, 'impar_que_BATE': 18, 'impar_que_DIVERGE': 21, 'impar_dentro_da_faixa': 16, 'impar_FORA_da_faixa': 5, 'impar_no_conjunto_do_dia': 20, 'impar_SO_POR_CORTE_do_oraculo': 1, 'dia_sem_linha_no_espelho': 1344, 'dia_sem_lavratura_no_espelho': 767, 'dia_isento_ou_ausencia': 155, 'dia_sem_trabalho_ambos': 20, 'esp_desconta_janela_declarada': 16, 'esp_lido_pelo_pago_h': 0}
-[2] BATE (ate 10 min): 96.0% de 674 dias comparados
-[3] ESTRUTURA     1 dia-colab       2.6 h    1 colabs
-[3] CADASTRO      5 dia-colab      50.7 h    4 colabs
-[3] BATIDA       21 dia-colab     110.3 h   15 colabs
-[4] TOTAL divergentes 27
-[5] colabs com divergencia: 18
-erros_no_espelho 0
-PARCIAL|11/2026|ESTRUTURA|dias=1|horas=2.5604991666666668|colabs=1
-PARCIAL|11/2026|CADASTRO|dias=5|horas=50.7295725|colabs=4
-PARCIAL|11/2026|BATIDA|dias=21|horas=110.33564643499999|colabs=15
-PARCIAL_TOTAL|11/2026|dias=27|horas=163.6257181016666568|colabs=18
-TEMPO_SEGUNDOS 172.6
-TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 219208
-TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 16
-TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1158
-TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 3928
-TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 56
-TRATADA_LOCAL app/escala/utils.py:1521 GeneratorExit 2
-TRATADA_LOCAL app/escala/utils.py:1708 GeneratorExit 8
-TRATADA_LOCAL app/escala/utils.py:2012 GeneratorExit 6308
-TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 6
-TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 3771
-TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 3771
-TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 520
-TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 177
-TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 414465
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 470
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 2680
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 185
-TRATADA_LOCAL app/ponto/services/dia_pago.py:890 GeneratorExit 11236
-TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 73
-TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 3903
-TRATADA_LOCAL app/ponto/services/fechamento.py:1028 GeneratorExit 186
-TRATADA_LOCAL app/ponto/services/fechamento.py:1029 _GradeSemCelula 4
-TRATADA_LOCAL app/ponto/turnos.py:1293 GeneratorExit 20152
-TRATADA_LOCAL app/ponto/turnos.py:1654 GeneratorExit 3840
-TRATADA_LOCAL app/ponto/turnos.py:1697 GeneratorExit 35418
-TRATADA_LOCAL app/ponto/turnos.py:677 GeneratorExit 15407
-SOMA 10/2026 39   <- tem de ser igual a soma das classes (39) True
-SOMA 10/2026 HORAS 174.86838172083330 True
-SOMA 10/2026 COLABS_UNIAO 20 True
-SOMA 11/2026 27   <- tem de ser igual a soma das classes (27) True
-SOMA 11/2026 HORAS 163.6257181016666568 True
-SOMA 11/2026 COLABS_UNIAO 18 True
-rc_sombra=0
-```
-
-## 06/11 12:33 · sessao 1648ed6f1015 · O10-B · verificador · origem=Code
-
-**Não aprovaria a v3 como “apenas mais restritiva”: há um contraexemplo que retira proteção histórica e uma inversão possível de travas no caminho da edição.** (`app/escala/services/regeneracao.py:109`; `app/ponto/portas/celula.py:593`; `app/ponto/management/commands/gerar_celulas.py:256`; `app/chamados/signals.py:180`.)
-
-**1. Escritores e leitores**
-
-Escritores de produção encontrados:
-
-| Campo | Operação | Escrita |
-|---|---|---|
-| `regenerada_em` | `regenerar_celulas_vinculo` | `app/ponto/portas/celula.py:274` |
-| `regenerada_em` | **`reverter_regeneracao_dia`** | `app/ponto/portas/celula.py:792` |
-| `editada_em` | `editar_dia`, criando célula | `app/ponto/portas/celula.py:600` |
-| `editada_em` | `editar_dia`, atualizando célula | `app/ponto/portas/celula.py:607` |
-
-Portanto, a descrição nova de “dois reescritores” omite a operação de reversão, que também troca DNA e avança `regenerada_em`. (`app/escala/services/regeneracao.py:74`; `app/ponto/portas/celula.py:785`.)
-
-Leitores diretos de produção:
-
-| Leitor | Campos e finalidade |
-|---|---|
-| `carimbos_de_reescrita` | Ambos; filtro e entrega ao helper canônico. `app/escala/services/regeneracao.py:94`, `app/escala/services/regeneracao.py:97` |
-| `dia_do_colab` | Ambos, pelo helper canônico. `app/ponto/services/dia_do_colab.py:94` |
-| `cartorio.houve_fato_novo` | Ambos **crus**, comparados separadamente em `(desde, ate]`. `app/ponto/services/cartorio.py:365` |
-| `fase_12x36.janelas_reabertas` | `Max` dos dois campos e `max()` com outros fatos, comparado à lavra. `app/escala/services/fase_12x36.py:188`, `app/escala/services/fase_12x36.py:191` |
-| `veredito_lavrado.marcos_do_lote` | `Greatest` dos dois com outros carimbos, agregado por colaborador. `app/chamados/veredito_lavrado.py:151` |
-| `materializar_passivo_validado._trecho_da_regen` | Só `regenerada_em`, desde o começo do ensaio; métrica especificamente de regeneração. `app/chamados/management/commands/materializar_passivo_validado.py:210`, `app/chamados/management/commands/materializar_passivo_validado.py:220` |
-| `_estado_da_edicao` | Só `editada_em`, para trilha. `app/ponto/portas/celula.py:530` |
-
-**Sim, permanecem leitores da reescrita fora do helper**, especialmente o cartório; os dois agregadores também incorporam a reescrita em relógios mais amplos de invalidação. Logo, a afirmação universal “nenhum leitor tira o max por conta própria” excede a migração realizada. (`app/escala/services/regeneracao.py:77`; `app/ponto/services/cartorio.py:365`; `app/escala/services/fase_12x36.py:191`; `app/chamados/veredito_lavrado.py:153`.)
-
-**Não se deve substituir cegamente o OR do cartório pelo máximo:** ele pergunta por intervalo limitado. Se um carimbo estiver dentro de `(desde, ate]` e o outro depois de `ate`, o OR responde verdadeiro e o máximo responderia falso. Há consumidor passando limite histórico explícito. (`app/ponto/services/cartorio.py:365`; `app/chamados/services/vigia_loop.py:50`.)
-
-**2. Kwarg antigo**
-
-Não encontrei chamador na cópia passando `regenerada_em=` às duas funções. Os chamadores de produção usam `reescrita_em=`; os testes usam o nome novo ou omitem o argumento opcional. (`app/escala/services/regeneracao.py:141`; `app/escala/services/regeneracao.py:173`; `app/ponto/management/commands/gerar_celulas.py:249`; `app/ponto/management/commands/supra_juiz.py:275`; `app/escala/tests/test_cobranca_orfa_regeneracao.py:72`; `app/escala/tests/test_cobranca_orfa_regeneracao.py:84`; `app/escala/tests/test_o10b_orfa_edicao.py:63`.)
-
-As assinaturas não possuem `**kwargs`: eventual chamada com o nome antigo resulta em **`TypeError`**, sem absorção silenciosa. Chamadores externos à cópia: `[nao verificado]`. (`app/escala/services/regeneracao.py:100`; `app/escala/services/regeneracao.py:128`.)
-
-**3. Pode retratar mais ou diminuir a fila? Sim**
-
-Para o mesmo chamado e as mesmas janelas, sendo `R=regenerada_em`, `E=editada_em` e `X=criado_em`:
-
-| Situação | Efeito da troca |
-|---|---|
-| `R` preenchido, qualquer ordem entre `R` e `E` | O máximo nunca é menor que `R`; uma proteção anterior por `R>X` permanece. |
-| Ambos nulos | Continua consultando as janelas. |
-| `R=None`, `E>X` | A edição protege. |
-| **`R=None`, `E<=X`** | **O carimbo da edição impede consultar as janelas; pode desaparecer uma proteção anterior.** |
-
-Esses resultados decorrem do máximo e do retorno antecipado quando existe qualquer carimbo. (`app/escala/services/regeneracao.py:81`; `app/escala/services/regeneracao.py:107`.)
-
-Contraexemplo: célula do dia 03/08, `R=None`, edição em 25/08, cobrança em 26/08, janela abrangente do LogAuditoria em 27/08. Antes, a ausência de `R` permitia encontrar 27/08; agora, `E=25/08` retorna `None` antes da janela. A janela pode abranger dias não tocados — essa proteção conservadora é explicitamente documentada. (`app/escala/services/regeneracao.py:44`; `app/escala/services/regeneracao.py:109`; `app/escala/services/regeneracao.py:111`.)
-
-Consequências: a fila deixa de produzir esse item; no supra, satisfeitas as demais condições, o chamado deixa de ser segurado como órfão e alcança o ramo retratável. A ocorrência desse estado em produção é `[nao verificado]`. (`app/escala/services/regeneracao.py:172`; `app/escala/services/regeneracao.py:174`; `app/ponto/management/commands/supra_juiz.py:249`; `app/ponto/management/commands/supra_juiz.py:275`; `app/ponto/management/commands/supra_juiz.py:279`.)
-
-**4. `editar_dia`, atomicidade, travas e rabo**
-
-A sequência é: trava célula, escreve edição, exige trilha, marca cobranças, sai do `atomic` local e chama o rabo. Uma exceção propagada pelo marcador desfaz edição, trilha e alterações anteriores nessa transação. (`app/ponto/portas/celula.py:592`; `app/ponto/portas/celula.py:609`; `app/ponto/portas/celula.py:619`; `app/ponto/portas/celula.py:626`; `app/ponto/portas/celula.py:627`.)
-
-**Há inversão possível de travas:**
-
-- Edição: segura **célula**, depois tenta atualizar **chamado** pelo `renovar_contexto`. A renovação não faz `select_for_update`; seu `save` produz o UPDATE. (`app/ponto/portas/celula.py:593`; `app/ponto/management/commands/gerar_celulas.py:256`; `app/chamados/services/contexto.py:96`; `app/chamados/services/contexto.py:102`.)
-- Cancelamento: segura **chamado**, muda status e pode julgar/gravar a **célula** sincronamente pelo signal. (`app/chamados/models.py:674`; `app/chamados/models.py:744`; `app/chamados/models.py:751`; `app/chamados/signals.py:180`; `app/ponto/services/cartorio.py:1822`; `app/ponto/portas/celula.py:900`.)
-
-Assim, duas transações podem esperar uma pela outra. A edição passa a reproduzir essa classe de inversão; ocorrência concreta de deadlock é `[nao verificado]`. (`app/ponto/portas/celula.py:626`; referências dos dois caminhos acima.)
-
-Na troca, as cartas travam por PK e as edições por `(colaborador_id, data)`. As marcas dos dois lados pertencem ao `atomic` externo; recusa do segundo lado desfaz o primeiro, inclusive a marca. Essa ordenação das células não elimina a inversão célula/chamado. (`app/ponto/portas/celula.py:652`; `app/ponto/portas/celula.py:657`; `app/ponto/portas/celula.py:670`; `app/ponto/portas/celula.py:675`.)
-
-`igual` retorna antes da marca e do rabo; `barrada` retorna antes do `atomic` de edição. Portanto, esses ramos não criam nem reparam marca. (`app/ponto/portas/celula.py:583`; `app/ponto/portas/celula.py:594`; `app/ponto/portas/celula.py:626`.)
-
-O save apenas do contexto, com status inalterado, não dispara novo julgamento pelo receiver. O rabo explícito pode julgar, atualizar marcos e encerrar cobranças; isso pode retirar um chamado da fila de vivos, sem significar remoção da chave. (`app/chamados/signals.py:168`; `app/ponto/portas/celula.py:434`; `app/ponto/management/commands/detectar_ausencias.py:558`; `app/ponto/portas/celula.py:499`.)
-
-O rabo não chama o marcador novamente nem a limpeza explícita da chave. A limpeza está em `reconciliar_grade`; a renovação escreve uma chave de dict, não acrescenta uma segunda marca. Contudo, a leitura do contexto sem trava não garante ausência de perda de atualização concorrente. (`app/ponto/portas/celula.py:422`; `app/ponto/portas/celula.py:493`; `app/ponto/management/commands/reconciliar_grade.py:454`; `app/ponto/management/commands/reconciliar_grade.py:474`; `app/chamados/services/contexto.py:96`.)
-
-Existe dependência circular entre módulos, mas não encontrei ciclo de inicialização provocado pela mudança: `gerar_celulas` importa a porta no topo, enquanto os imports inversos ficam dentro das funções, inclusive o novo. (`app/ponto/management/commands/gerar_celulas.py:13`; `app/ponto/portas/celula.py:558`; `app/ponto/portas/celula.py:625`.)
-
-**5. Walrus**
-
-Correto nos ramos perguntados: com `cel=None`, o condicional externo evita todos os acessos; com célula, a condição atribui `_reescrita` antes de `localtime`; com ambos os carimbos nulos, o helper retorna `None` e o valor apresentado também é `None`. (`app/ponto/services/dia_do_colab.py:91`; `app/ponto/services/dia_do_colab.py:94`; `app/ponto/services/dia_do_colab.py:96`; `app/escala/services/regeneracao.py:81`.)
-
-**6. Mordida dos testes** [nao verificado]
-
-As três mutações têm assertivas capazes de detectá-las por inspeção:
-
-| Mutação | Mordida |
-|---|---|
-| Helper ignora `editada_em` | Exige edição posterior e edição isolada como resultado. `app/escala/tests/test_o10b_orfa_edicao.py:54`, `app/escala/tests/test_o10b_orfa_edicao.py:56` |
-| Supra lê só `regenerada_em` | Exige positivamente `COBRANCA_ORFA_REGENERACAO`, inclusive com regeneração anterior e edição posterior. `app/escala/tests/test_o10b_orfa_edicao.py:233`, `app/escala/tests/test_o10b_orfa_edicao.py:240` |
-| `editar_dia` não marca | Chama a porta, recarrega o chamado e exige marca e marcos. `app/escala/tests/test_o10b_orfa_edicao.py:129`, `app/escala/tests/test_o10b_orfa_edicao.py:132` |
-
-Os testes positivos do supra **não passam simplesmente porque o dia foi pulado**: exigem um contador produzido dentro do ramo efetivo de proteção. A fixture planta batidas, chamado vivo com marcos e lavra indevida; o controle exige positivamente o ramo retratável. (`app/escala/tests/test_o10b_orfa_edicao.py:190`; `app/escala/tests/test_o10b_orfa_edicao.py:208`; `app/escala/tests/test_o10b_orfa_edicao.py:226`; `app/ponto/management/commands/supra_juiz.py:249`; `app/ponto/management/commands/supra_juiz.py:277`.)
-
-Execução da suíte, execução dos mutantes e histórico RED→GREEN: **`[nao verificado]`**. [nao verificado]
-
-Faltam casos para o contraexemplo histórico da pergunta 3 e para concorrência/rollback das marcas na troca; os novos testes de supra usam carimbos sem plantar janelas históricas. (`app/escala/tests/test_o10b_orfa_edicao.py:125`; `app/escala/tests/test_o10b_orfa_edicao.py:219`; `app/escala/tests/test_o10b_orfa_edicao.py:222`.)
-
-**7. Checklist das classes**
-
-| Classe | Avaliação |
-|---|---|
-| Segundo juiz | O helper fornece um carimbo; a decisão continua em `cobranca_orfa`, autoridade registrada. `app/escala/services/regeneracao.py:81`, `app/escala/services/regeneracao.py:128`, `app/core/juizes.py:270` |
-| Segundo escritor fora da porta | A edição continua na porta da célula; contexto passa pela porta de contexto. `app/ponto/portas/celula.py:609`, `app/ponto/management/commands/gerar_celulas.py:256` |
-| Relógio fora da borda | Helper sem relógio; edição lê na porta. O marcador ainda lê `timezone.now()` internamente, trecho preexistente agora alcançado pela edição. `app/escala/services/regeneracao.py:81`, `app/ponto/portas/celula.py:598`, `app/ponto/management/commands/gerar_celulas.py:256` |
-| Derivação paralela | Os alimentadores migraram, mas permanecem as leituras cruas/agregações descritas no item 1. `app/ponto/services/cartorio.py:365`, `app/escala/services/fase_12x36.py:191` |
-| Selo/RED sem mordida | Há mordida comportamental para as três mutações; CQ-C10 isoladamente é textual e estreito. `app/escala/tests/test_o10b_orfa_edicao.py:132`, `app/escala/tests/test_o10b_orfa_edicao.py:233`, `app/escala/tests/test_cq_c10.py:16` |
-| Ordem de trava | Reprovada a garantia global: há caminhos célula→chamado e chamado→célula. `app/ponto/portas/celula.py:593`, `app/chamados/models.py:744`, `app/chamados/signals.py:180` |
-| Pouso antes do pré-requisito | Histórico de validação, pouso e deploy: `[nao verificado]`. | [nao verificado]
-
-**8. Outros problemas**
-
-O teste da marca depende do relógio real: a cobrança tem instante literal de agosto, enquanto `editar_dia` carimba “agora”; somente a classe do supra está congelada. Isso deixa o teste dependente da data de execução. (`app/escala/tests/test_o10b_orfa_edicao.py:128`; `app/escala/tests/test_o10b_orfa_edicao.py:162`; `app/ponto/portas/celula.py:598`.)
-
-A documentação “o resto é puro” ficou incorreta com o novo carregador ORM; e “nunca retratar mais” é contrariada pelo fallback suprimido descrito no item 3. (`app/escala/services/regeneracao.py:28`; `app/escala/services/regeneracao.py:94`; `app/escala/tests/test_o10b_orfa_edicao.py:10`; `app/escala/services/regeneracao.py:109`.)
-
-## 06/11 12:32 · sessao e79cde00dfdd · - · - · origem=Ronald (tmux)
-
-Achado de trava que merece bloqueio: existe inversão **CelulaDia → ChamadoColaborador / ChamadoColaborador → CelulaDia**, com deadlock possível por interleaving; ocorrência real em produção `[nao verificado]`.
-
-- `editar_dia` trava a célula em `app/ponto/portas/celula.py:592-593`, grava e chama o marcador ainda dentro do atomic em `:625-626`. O marcador chama `renovar_contexto` em `app/ponto/management/commands/gerar_celulas.py:255-256`; a porta salva o chamado em `app/chamados/services/contexto.py:100-102`. Embora não use `select_for_update`, esse UPDATE também disputa trava da linha.
-- Na direção inversa, `cancelar()` entra em atomic e trava o chamado (`app/chamados/models.py:744-745`, `:673-675`), muda `status_local` em `:222` e salva em `:279`. O receiver detecta status anterior diferente e chama o julgamento sincronamente (`app/chamados/signals.py:161`, `:168-180`). O julgamento grava a célula (`app/ponto/services/cartorio.py:1822-1823` → `app/ponto/portas/celula.py:1067` → `:899-900`).
-- Interleaving suficiente: B trava chamado; A trava célula; B muda status e espera gravar célula; A tenta marcar contexto e espera chamado. Escolhendo dia passado e célula normalmente julgável, os guardas temporais não eliminam esse caminho (`app/ponto/services/cartorio.py:1974-1989`).
-
-Demais respostas sobre o fluxo:
-
-- A marca, edição e trilha estão na mesma transação. Trilha ausente levanta antes da marca; falha não engolida do marcador também sai do atomic e desfaz a edição (`app/ponto/portas/celula.py:592`, `:611-626`).
-- `'barrada'` retorna antes do atomic; `'sem_vinculo'` também; `'igual'` retorna antes de novo carimbo, trilha, marca e rabo (`app/ponto/portas/celula.py:583`, `:590`, `:594-598`, `:625-627`). A repetição igual não “repara” uma marca ausente.
-- `trocar_plantao` tem atomic externo e trava as cartas ordenadas por PK; chama as duas edições ordenadas por `(colaborador_id, data)` (`app/ponto/portas/celula.py:652`, `:657-658`, `:673-675`). Segundo lado barrado/sem vínculo levanta `_TrocaRecusada`, desfazendo primeiro lado e sua marca; duas iguais não produzem trilha da troca (`:676-680`, `:694-699`). A ordenação entre células não resolve a inversão com chamados descrita acima.
-- O rabo do primeiro `editar_dia` roda antes da segunda edição, mas dentro do atomic externo da troca; julgamento é inline, enquanto callbacks de dinheiro/reavaliação ficam subordinados ao commit externo (`app/ponto/portas/celula.py:627`, `:675`, `:434`, `:458`, `:493-502`).
-- No caso normal, renovar contexto não reentra no cartório: o status permanece igual e o receiver retorna (`app/chamados/services/contexto.py:99-102`, `app/chamados/signals.py:168-170`). A porta usa contexto da instância sem reler/travar; portanto ausência de lost update concorrente não está garantida (`app/chamados/services/contexto.py:96-102`).
-- O rabo pode encerrar chamado pelo juiz do dia, tornando-o inelegível à fila de vivos, mas não limpa diretamente `orfa_regeneracao` (`app/ponto/services/cartorio.py:1514-1522`, `app/chamados/services/feriado_reavaliar.py:43-48`, `app/escala/services/regeneracao.py:157`). Espelhamento de marcos usa merge pela porta e preserva a marca carregada (`app/ponto/services/cartorio.py:1787-1789`, `app/ponto/management/commands/detectar_ausencias.py:554-559`). O rabo não chama `reconciliar_grade`; a limpeza explícita está em `app/ponto/management/commands/reconciliar_grade.py:453-454` e `:471-474`.
-- Não há duplicação de chave: a marca é escalar no dict. Nova edição efetiva pode substituir o conteúdo e timestamp da marca anterior; `'igual'` não a renova (`app/ponto/management/commands/gerar_celulas.py:256`, `app/chamados/services/contexto.py:99`, `app/ponto/portas/celula.py:594-596`).
-- Há dependência nos dois sentidos, mas o novo import é local; não há ciclo de inicialização demonstrado. `gerar_celulas` importa as funções da porta no topo, enquanto a porta só importa o command ao executar operações já definidas; `editar_dia` já o importava antes deste diff (`app/ponto/management/commands/gerar_celulas.py:13`, `app/ponto/portas/celula.py:558`, `:625`). Importação real em runtime `[nao verificado]`.
-
-Pontos adicionais de teste/checklist: [nao verificado]
-
-- O teste de marca de `editar_dia` depende de relógio real: chamado nasce em data fixa (`app/escala/tests/test_o10b_orfa_edicao.py:128`) e a edição usa `timezone.now()` (`app/ponto/portas/celula.py:598`). A classe não está congelada (`app/escala/tests/test_o10b_orfa_edicao.py:122`); a classe do supra está (`:163`). Isso não garante teste determinístico antes da data literal.
-- Esse teste morde remover a chamada ao marcador: ele exige a chave e os marcos (`app/escala/tests/test_o10b_orfa_edicao.py:132-134`), e os caminhos do rabo citados não criam essa chave. Não prova rollback da marca nem execução dos callbacks após commit: herda `TestCase` (`:81`, `:122`) e não executa explicitamente os `on_commit` registrados na porta (`app/ponto/portas/celula.py:502`).
-- Não nasce segundo escritor do contexto: o marcador passa por `renovar_contexto`; nem escritor novo dos carimbos da célula: a nova costura apenas chama o marcador (`app/ponto/management/commands/gerar_celulas.py:255-256`, `app/ponto/portas/celula.py:625-626`).
-- O helper puro não lê relógio; o marcador continua lendo outro `timezone.now()` para `orfa_regeneracao.em`, além do relógio da própria edição (`app/escala/services/regeneracao.py:81`, `app/ponto/management/commands/gerar_celulas.py:256`, `app/ponto/portas/celula.py:598`). Esse relógio no command é preexistente conforme o diff fornecido; o novo caminho passa a alcançá-lo.
-
-## 06/11 12:31 · sessao dad008f259eb · - · - · origem=Ronald (tmux)
-
-1. **Escritores de produção encontrados:** `regenerada_em` é escrito em `regenerar_celulas_vinculo` e também em **`reverter_regeneracao_dia`**; `editada_em` é escrito somente em `editar_dia`, tanto na criação quanto na atualização. Portanto, a documentação nova que enumera apenas dois reescritores está incompleta: a reversão também reescreve e carimba DNA. (`app/ponto/portas/celula.py:274`, `app/ponto/portas/celula.py:792`, `app/ponto/portas/celula.py:600`, `app/ponto/portas/celula.py:607`, `app/escala/services/regeneracao.py:74`.)
-
-**Leitores diretos de ambos os campos:**
-
-- `carimbos_de_reescrita`: filtra qualquer carimbo e entrega os dois para a função canônica. (`app/escala/services/regeneracao.py:94`, `app/escala/services/regeneracao.py:97`.)
-- `dia_do_colab`: entrega os dois para a função canônica. (`app/ponto/services/dia_do_colab.py:94`.)
-- `cartorio.houve_fato_novo`: ainda compara os dois campos crus, com OR, para detectar reescrita em **`(desde, ate]`**. É leitor da reescrita fora da função nova. (`app/ponto/services/cartorio.py:329`, `app/ponto/services/cartorio.py:337`, `app/ponto/services/cartorio.py:365`.)
-- `fase_12x36.janelas_reabertas`: agrega `Max` separado dos dois e faz `max()` junto de `julgada_em` e `gerada_em`, comparando o resultado com a lavra anterior. É derivação própria de “algum fato mudou depois da lavra”, incluindo a reescrita. (`app/escala/services/fase_12x36.py:188`, `app/escala/services/fase_12x36.py:191`, `app/escala/services/fase_12x36.py:192`.)
-- `veredito_lavrado.marcos_do_lote`: usa `Greatest` dos dois junto de outros três carimbos, e agrega por colaborador; o consumidor compara com `julgado_em`. É relógio geral de invalidação, incluindo a reescrita. (`app/chamados/veredito_lavrado.py:151`, `app/chamados/veredito_lavrado.py:153`, `app/chamados/veredito_lavrado.py:189`.)
-
-**Outros leitores crus específicos:**
-
-- `_estado_da_edicao` lê `editada_em` para a trilha, sem julgar reescrita. (`app/ponto/portas/celula.py:530`.)
-- `materializar_passivo_validado._trecho_da_regen` pergunta explicitamente se a porta reescreveu DNA depois do início do ensaio, mas usa somente `regenerada_em__gte=desde`; a métrica é especificamente denominada `celulas_regeradas_no_ensaio`. (`app/chamados/management/commands/materializar_passivo_validado.py:210`, `app/chamados/management/commands/materializar_passivo_validado.py:220`, `app/chamados/management/commands/materializar_passivo_validado.py:221`.)
-
-**Ressalva sobre centralizar o cartório:** substituir seu OR por `desde < max(r,e) <= ate` altera a resposta quando um carimbo está dentro do intervalo e o outro depois de `ate`. Há consumidor real com limite histórico explícito: o vigia passa o instante da reabertura como `ate`. A centralização precisa preservar a pergunta de intervalo. (`app/ponto/services/cartorio.py:365`, `app/chamados/services/vigia_loop.py:50`.)
-
-2. **Nenhuma chamada direta encontrada com o kwarg antigo**; a inspeção AST em memória encontrou exatamente estas chamadas:
-
-- Produção, todas com `reescrita_em=`: `app/ponto/management/commands/supra_juiz.py:275`, `app/ponto/management/commands/gerar_celulas.py:249`, `app/escala/services/regeneracao.py:141`, `app/escala/services/regeneracao.py:173`.
-- Testes, com `reescrita_em=`: `app/escala/tests/test_o10b_orfa_edicao.py:63`, `app/escala/tests/test_o10b_orfa_edicao.py:69`, `app/escala/tests/test_o10b_orfa_edicao.py:76`, `app/escala/tests/test_cobranca_orfa_regeneracao.py:84`, `app/escala/tests/test_cobranca_orfa_regeneracao.py:86`.
-- Testes sem o argumento opcional: `app/escala/tests/test_cobranca_orfa_regeneracao.py:72`, `app/escala/tests/test_cobranca_orfa_regeneracao.py:78`, `app/escala/tests/test_cobranca_orfa_regeneracao.py:92`, `app/escala/tests/test_cobranca_orfa_regeneracao.py:96`, `app/escala/tests/test_cobranca_orfa_regeneracao.py:101`, `app/escala/tests/test_cobranca_orfa_regeneracao.py:105`.
-
-As assinaturas não aceitam `**kwargs`: eventual chamador externo à cópia com `regenerada_em=` levantaria `TypeError`, sem absorção silenciosa. Existência de chamador externo: `[nao verificado]`. (`app/escala/services/regeneracao.py:100`, `app/escala/services/regeneracao.py:128`.)
-
-_2292 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2296 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
