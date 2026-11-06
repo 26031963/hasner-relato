@@ -1,7 +1,252 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 14:49** · publicado em **06/11/2026 14:51** (UTC-3)
+> Ultima resposta processada: **06/11/2026 14:57** · publicado em **06/11/2026 14:57** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 14:57 · sessao c7446096827e · O10-C · verificador · origem=Code
+
+**Laudo: há bloqueios em C.** O comando duplica uma autoridade registrada, deixa SOLO exportado fora da lista `!`, aceita lotes cuja repetição volta a escrever e não oferece reversão fiel das células editadas. Também viola o selo existente “todo command tem casa”. Referências detalhadas abaixo.
+
+A comparação efetiva `320ef1c7..a7d1bfa2` ficou **[não verificado]**: a cópia não contém repositório Git. Execução da suíte, RED histórico, conteúdo dos 16 registros e efeitos em produção: **[não verificado]**.
+
+Para encurtar as referências:
+
+- **C** = [app/ponto/management/commands/trocas_plantao_lote_o10c.py](/home/ronald/codex_ws/a7d1bfa296b5a328978102842ba220e71b205514/app/ponto/management/commands/trocas_plantao_lote_o10c.py)
+- **T** = [app/ponto/tests/test_o10c_lote_trocas.py](/home/ronald/codex_ws/a7d1bfa296b5a328978102842ba220e71b205514/app/ponto/tests/test_o10c_lote_trocas.py)
+- **P** = [app/ponto/portas/celula.py](/home/ronald/codex_ws/a7d1bfa296b5a328978102842ba220e71b205514/app/ponto/portas/celula.py)
+- **A** = `app/ponto/services/ausencia.py`
+- **G** = `app/ponto/management/commands/gerar_celulas.py`
+
+**1. Quem escreve e quem lê**
+
+O quadro cobre os caminhos identificados relevantes à obra; exaustividade de todos os leitores e escritores históricos: **[não verificado]**.
+
+| Campo/estado | Quem escreve | Quem lê |
+|---|---|---|
+| `Ausencia.status` | Criação recebe estado inicial; transição por `mudar_estado`, escritor declarado. `A:333–344,418,808–835`. | C classifica cedente e substituto e imprime estado. `C:66–71,83–84,210`. A porta não consulta status antes das edições. `P:653–675`. |
+| `Ausencia.data` | Criação e `editar_ausencia_registro`. `A:342,418,499–509`. | Classificação, lavra, vínculo, snapshot e impressão; a porta escolhe o dia pela carta. `C:72–94,120,209`; `P:675`. |
+| `Ausencia.data_fim` | Criação/edição; `Ausencia.save` também pode derivá-la de `dias_corridos`. `A:343,418,500–509`; `app/ponto/models.py:902–907`. | C barra fim diferente do início; cobertura lê o período. `C:72–74,85–87`; `app/ponto/turnos.py:2760–2766`. A troca usa somente `data`. `P:675`. |
+| `Ausencia.documento` | Criação e `anexar_documento`. `A:350–351,418,846–859`. | C testa presença e imprime S/N; porta testa presença e inclui o caminho na trilha. `C:75,88,210`; `P:664–667,682–690`. |
+| `Ausencia.tipo` | Criação e edição. `A:342,418,498–509`. | C seleciona universo e valida tipo do cedente; modelo consulta efeito no catálogo. `C:64–65,166`; `app/ponto/models.py:840`. |
+| `Ausencia.colaborador_id` | Criação recebe `colaborador` e salva. `A:341–342,385,418`. | C compara pessoas, consulta autoridades, fotografa e imprime IDs; porta identifica e ordena os lados. `C:81,90–94,120,209`; `P:662,673–684`. |
+| `CelulaDia.trabalha` | `editar_dia`; geração/regeneração no mesmo módulo da porta. `P:259–277,600–609`. | Snapshot/idempotência e juiz do previsto. `C:113–121`; `P:528,594`; `app/escala/models.py:1092–1096`. |
+| `CelulaDia.origem` | Porta cria `gerada` ou grava `editada`. `P:259–260,600–609`. | Snapshot, idempotência, regeneração e reversão. `P:528,594,263,777`. |
+| `CelulaDia.dna` | Produtor `montar_dna`; persistência pela porta. `G:73–103`; `P:591,600–609`. | Snapshot, idempotência e leitura dos marcos congelados. `P:528,594`; `app/escala/models.py:1122–1124`. |
+| `CelulaDia.editada_em` | `editar_dia`. `P:598–609`. | Snapshot, carimbos de reescrita, frescor de veredito/fase. `P:530`; `app/escala/services/regeneracao.py:98–105`; `app/chamados/veredito_lavrado.py:151–154`; `app/escala/services/fase_12x36.py:188–192`. |
+| `LogAuditoria`, ação `editar_dia` | Porta fornece antes/depois ao escritor `core.observ.evento`. `P:611–620`; `app/core/observ.py:134–148`. | Consulta genérica da auditoria; C não consulta a trilha. `app/core/views.py:705–710`; `C:124–143,155–228`. |
+| `LogAuditoria`, ação `trocar_plantao` | Porta emite evento após as edições, com identificação das cartas. `P:682–693`; `app/core/observ.py:134–148`. | Consulta genérica da auditoria; C recebe apenas resultado/frases. `app/core/views.py:705–710`; `C:140–143`. |
+| `ExportacaoDominio` | `registrar`, chamado pela exportação HTTP e pelo regerador. `app/folha/models.py:174–188`; `app/folha/views.py:297`; `app/folha/management/commands/regerar_txt_dominio.py:118`. | G enumera competências e pergunta ao juiz; C e P chamam G. `G:161–174`; `C:55–58`; `P:567–570`. |
+| `Holerite` / publicação | Motor cria holerite; processador publica o lote. `app/holerite/motor.py:480–483`; `app/holerite/management/commands/processar_lote_holerite.py:123–146`. | G enumera holerites com lote publicado; juiz confirma pessoa/competência. `G:163–174`; `app/folha/export.py:612–620`. |
+
+**Não identifiquei escrita desses campos pelo comando fora da porta.** C chama `trocar_plantao`; sua escrita própria é o arquivo JSONL. A porta tampouco altera as cartas nessa operação. `C:124–143,183,192–195`; `P:653–693`.
+
+Isso atende à centralização da escrita, mas não resolve a duplicação de decisão descrita a seguir. O padrão declarado inclui escritor único e autoridade única por pergunta. `app/docs/GLOSSARIO.md:11–12,23`; `app/docs/PLANO-PADROES.md:46–53`.
+
+**2. `classificar`: testemunha ou segundo juiz?**
+
+**Há duplicação concreta:** `ABERTOS` copia literalmente `ABERTAS` e decide se a ausência está aberta. Essa pergunta já tem autoridade registrada. `C:50,68–69`; `A:765`; `app/core/juizes.py:244`.
+
+O anexo confirma a autoridade e também estabelece que o registro vivo prevalece sobre o lookup. `app/docs/JUIZES.md:7–15,50–52`.
+
+Para lavra e vínculo, C usa as mesmas funções que a porta:
+
+- `_empresa_do_colab` + `_competencias_exportadas`; este último consulta `competencia_fechada_para_celula`, juiz registrado. `C:53–58`; `P:567–570`; `G:173`; `app/core/juizes.py:315–322`.
+- `vinculo_do_dia_carregado`, carregador que encaminha ao juiz de vínculo. `C:63,93–96`; `P:556,584`; `app/escala/alimentacao.py:289–317`; `app/docs/JUIZES.md:101–105`.
+
+**A declaração de equivalência com a porta é falsa para outros filtros.** Supondo cartas existentes, pessoas distintas, documentos, vínculo e competência aberta:
+
+| Entrada | DRY | Porta |
+|---|---|---|
+| Cedente `aguardando_decisao` | `pedido`. `C:68–71`. | Aceita prosseguir: não verifica status. `P:653–675`. |
+| Cedente rejeitado | `rejeitada`. `C:66–67`. | Também não verifica esse estado. `P:653–675`. |
+| Cedente de outro tipo | `nao_e_troca`. `C:64–65`. | Não verifica tipo. `P:653–675`. |
+| Qualquer carta com período de vários dias | `periodo`. `C:72–74,85–87`. | Edita somente `a.data`, sem verificar fim. `P:675`. |
+| Substituto rejeitado | `carta_rejeitada`. `C:83–84`. | Não verifica status. `P:653–675`. |
+
+Essas restrições podem representar critérios próprios do lote; apresentá-las como mera leitura do que a porta decidiria contraria a implementação e a regra “testemunha lê, não recalcula”. `C:17–24`; `CLAUDE.md:20–22`.
+
+No sentido contrário, não identifiquei predicado estável omitido que, com autor válido e insumos inalterados, transforme `trocaria` em `recusada`: os filtros de documentos, pessoas, lavra e vínculo estão presentes. Contudo, vínculo/lavra podem mudar entre as consultas, produzindo recusa posterior. `C:75–96,134–142`; `P:664–677,568–590`. Além disso, `trocaria` pode resultar em `igual`, pois C não compara o estado final das células. `C:97`; `P:594–596,679–680`.
+
+**Falha no aval “09 exportada = !”:** SOLO retorna antes da classificação de lavra; a coluna imprime `lavrada=S`, mas somente `classe == 'lavrada'` entra na lista `!` e no contador `bang`. Isso também afeta linhas rejeitadas, pedidos e outras classes anteriores à lavra. `C:66–92,209–225`. Quantos dos 16 registros cairiam nisso: **[não verificado]**.
+
+**3. Atomicidade e concorrência de `aplicar_par`**
+
+- **Ordem explícita correta entre os lados:** C trava as Ausências por PK; P repete essa ordem e edita os lados por `(colaborador_id, data)`. Não encontrei inversão explícita dessas ordens no caminho inspecionado. `C:128–130`; `P:657–658,670–675`.
+- **A reclassificação protege as cartas:** ela ocorre depois das travas. Alteração anterior de estado/documento/período pode converter o par em `pulada`. `C:129–136`.
+- **A foto não protege as células:** `_celula` usa `.first()` sem trava. Outro `editar_dia` pode modificar a célula entre a foto e a aquisição da trava pela porta; o JSONL então não será o “antes real” da edição. `C:113–138`; `P:592–597`.
+- **Permanece TOCTOU de autoridades:** lavra, empresa, vínculo e DNA são consultados antes da trava da célula; não há trava correspondente sobre publicação/exportação ou cadastro nesse caminho. `C:90–96`; `P:567–593`. O risco da guarda anterior ao atomic já está registrado como pendência de B. `app/docs/BACKLOG.md:1790`.
+- **Célula inexistente:** a consulta não reserva uma linha ausente; há criação posterior e restrição única por colaborador/data. Concorrência pode terminar em erro de integridade, em vez de serialização prévia. `P:593,599–601`; `app/escala/models.py:1833`. Ocorrência concreta: **[não verificado]**.
+- **Rollback do par:** `_TrocaRecusada` desfaz o atomic interno da troca e retorna `recusada`; exceção propagada também atravessa o atomic externo de C. Falha da trilha crítica levanta exceção. O JSONL já escrito permanece. `P:619–620,652–699`; `C:128–143,193–195`.
+- **Atomicidade é por par:** pares anteriores já podem ter sido confirmados quando um par posterior falha. `C:128,199–205`.
+
+O rabo de `editar_dia` ocorre depois de seu atomic local, **ainda dentro dos atomics da troca e de C**. O julgamento inline participa dessa transação, embora suas falhas sejam capturadas. O dinheiro e a reavaliação são registrados em `on_commit`: aguardam o commit externo e seus callbacks são descartados se a transação correspondente voltar. `P:627–628,422–462,490–502`; `app/ponto/services/fechamento.py:1782–1808`.
+
+Depois do commit, falha de recálculo/reavaliação não desfaz a troca já confirmada; os caminhos tratam falhas como best effort. Portanto “par confirmado” não prova “todas as projeções atualizadas com sucesso”. `app/ponto/services/fechamento.py:1791–1805`; `P:493–502`; `app/core/observ.py:85–91`.
+
+**4. Idempotência e reversão**
+
+**Um par isolado, sem mudanças externas:** a porta devolve `igual`, sem alterar células, trilha ou executar o rabo novamente. **O comando ainda cria outro snapshot e grava outra linha antes dessa comparação.** A promessa “segunda rodada não escreve nada” não vale para arquivo. `P:594–596,627–628,679–680`; `C:137–142,176–195`; `T:12,215–228`.
+
+**O lote inteiro também não é necessariamente idempotente.** Contraexemplo estático:
+
+1. A e B são cartas aprovadas, documentadas, de pessoas distintas, no mesmo dia aberto.
+2. Declarar `--par A:B --par B:A` é aceito: o parser só proíbe repetir o mesmo cedente.
+3. O primeiro par deixa A em folga/B trabalhando; o segundo deixa B em folga/A trabalhando.
+4. A rodada seguinte repete as alterações e cria novas trilhas.
+
+Não há detecção desse conflito entre pares. `C:100–110,199–205`; `P:673–691`. Execução desse contraexemplo contra banco: **[não verificado]**.
+
+**Snapshot: pré-requisito temporal parcialmente atendido.** O arquivo nasce em `logs/o10c`, e cada foto recebe `flush/fsync` antes da chamada da porta. `C:137–142,176–195`; exigência em `CLAUDE.md:398–400`.
+
+**Não considero demonstrada sua suficiência como reversão operacional**, porque:
+
+- A foto pode estar obsoleta por concorrência. `C:113–138`; `P:593–597`.
+- Guarda seis campos da célula, mas não os estados das projeções/chamados que o ato também pode modificar; tampouco registra resultado confirmado ou tenant no payload. `P:528–531,625–628,422–502`; `C:137–143`.
+- A reversão existente exige `origem='gerada'`; a troca grava `editada`. `P:600–609,776–778`.
+- Chamar `editar_dia` com o booleano anterior remonta DNA atual, força origem `editada` e renova autor/hora; não restaura fielmente a foto anterior. `P:591,598–609`.
+
+Existe caminho para **editar novamente** uma célula editada, inclusive no sentido contrário. Não identifiquei caminho para **restaurar exatamente** seu estado anterior pelo snapshot. `P:594–609`; `C:149–153`.
+
+Hash antes/depois da exportada, prova de frota e aplicação real dos demais requisitos de DINHEIRO: **[não verificado]**; são exigidos em `CLAUDE.md:398–400`.
+
+**5. Os testes mordem?** [nao verificado]
+
+Mordem partes relevantes: resultado real dos dois lados/trilha, chamada com cartas e autor e comportamento distinto para par aberto/exportado. Não são todos vazios. `T:132–143,275–287,301–314`.
+
+A tabela abaixo indica mutantes que **o teste individual** não demonstraria detectar; sobrevivência por execução de mutação: **[não verificado]**. [nao verificado]
+
+| Teste, identificado pela linha em T | Mutante plausível não coberto | [nao verificado]
+|---|---|
+| `dry_classifica…`, `T:88–107` | Criar arquivo também no DRY: não verifica filesystem. |
+| `dry_com_par_completo…`, `T:109–117` | Remover guarda de lavra: fixture usa dia aberto. |
+| `solo_em_competencia_lavrada…bang`, `T:119–127` | Remover emissão de `!`: só exige `so_um_lado` e `lavrada=S`. |
+| `aprovado_com_par…`, `T:132–143` | Remover snapshot: não lê o arquivo. |
+| `snapshot…antes_da_porta`, `T:145–167` | Remover `fsync`, ou omitir DNA/autor/hora/geradora da foto: asserções só cobrem par, trabalha e origem. |
+| `rejeitado_e_aguardando…`, `T:169–177` | Aceitar substituto rejeitado: cedentes já saem antes dessa verificação. |
+| `sem_a_carta…`, `T:179–189` | Remover reclassificação sob trava: ambos já são barrados na primeira classificação. |
+| `dia_em_competencia_exportada…`, `T:191–204` | Consultar lavra só do cedente: ambos estão na mesma competência exportada. |
+| `lado_do_substituto…bang`, `T:206–213` | Suprimir linha `!` para lavra apenas do substituto: só verifica classe. |
+| `segunda_rodada…`, `T:215–228` | Aceitar pares invertidos conflitantes ou escrever novo snapshot: testa só um par e não filesystem. |
+| `nenhum_colaborador…desconto`, `T:230–249` | Remover `fsync`: não inspeciona arquivo; tampouco cobre descontos fora dos três colaboradores/período fotografados. |
+| `aplicar_exige_autor`, `T:251–253` | Aceitar username inexistente quando fornecido: só testa ausência de `--por`. |
+| `par_repetido_ou_mal_escrito…`, `T:255–261` | Aceitar `1:2:3`: só cobre duplicata e `abc`. |
+| `cedente_nao_e_troca…`, `T:263–270` | Remover tratamento de cedente inexistente: fixture contém registro existente. |
+| `a_costura_MORDE`, `T:275–287` | Remover trava das Ausências ou atomic externo: porta está mockada, sem concorrência/rollback. |
+| `comando_so_escreve_pela_porta`, `T:289–299` | Acrescentar SQL por `cursor.execute`: blacklist não inclui esse caminho. |
+| `dry_responde_o_que_a_porta_faria`, `T:301–314` | Remover guarda de período: só compara par normal e exportado, sem período. |
+
+**Há selo sem mordida no requisito específico SOLO/`!`:** o próprio teste espera uma classe que não alimenta `bang`. `T:126–127`; `C:214–225`. [nao verificado]
+
+**A semântica real de `on_commit` não é testada:** `_run` substitui o callback por execução imediata, mascarando adiamento e descarte no rollback. `T:59–63`; `app/ponto/tests/test_o10b_editar_dia_troca.py:39–41`.
+
+A regra dos casos está escrita no docstring; a anterioridade ao código e o RED evidenciado não podem ser confirmados nesta cópia. `T:5–14`; **[não verificado]** para histórico/execução. A exigência está em `CLAUDE.md:28–29,45–51`.
+
+**6. Nome ou CPF**
+
+Na saída normal não há leitura de `colaborador.nome` ou `cpf`: imprime IDs, datas, status e presença de carta. O snapshot usa IDs e o estado da célula; o produtor atual de DNA gera dados de escala/marcos. `C:119–121,137–138,207–212`; `P:528–531`; `G:73–103,119–122`.
+
+**Isso não prova ausência absoluta de dado pessoal:** o DNA anterior é copiado integralmente, sem sanitização; erros reproduzem `--par` inválido e username fornecido. Conteúdo real desses valores: **[não verificado]**. `P:528`; `C:105,165`.
+
+A trilha da porta também conserva `documento.name`; eventual nome/CPF embutido no caminho não é raspado. Isso é trilha, não o snapshot de C. `P:682–690`. Conteúdo dos caminhos reais: **[não verificado]**.
+
+**7. Selos existentes**
+
+| Selo | Resultado da leitura |
+|---|---|
+| **Todo command tem casa** | **Viola.** O varredor inclui o arquivo novo, mas ele não está nas listas aceitas. `app/chamados/tests/test_contract_crons.py:214–228`; `app/config/crons.py:281,769,1484,1755–1766`. Execução da suíte: **[não verificado]**. |
+| **Chokepoint da célula** | Não identifiquei escrita externa no comando; o gate exige allowlist vazia. `C:124–143`; `app/ponto/tests/test_chokepoint_celula_gate.py:20–36,50–54`. |
+| **Except-pass** | Não viola esse padrão: o handler usa `continue`, enquanto o selo acusa corpo `ast.Pass`. `C:180–188`; `app/ponto/tests/test_contract_no_except_pass.py:65–78`. |
+| **Relógio/instante** | Há relógio em `aplicar_par` e `handle`, para carimbo/nome de arquivo. Não identifiquei violação do selo de grade: essas funções não chamam seus alvos. `C:137,179`; `app/escala/tests/test_selo_grade_pede_o_instante.py:24–38,93–119`. |
+| **MAPA** | O comando não pertence ao universo obrigatório, derivado dos registros de juízes e portas. Comparação completa do diagrama regenerado: **[não verificado]**. `app/core/mapa/contrato.py:157–177`. |
+| **Juiz de ausência** | Há cópia de autoridade, mas os padrões existentes não cobrem essa tupla de status; esse selo não basta para detectá-la. `C:50,68`; `app/core/juizes.py:244,1406–1420`. |
+
+**8. Classes de reprovação presentes**
+
+- **Segundo juiz / derivação paralela: sim**, pela cópia `ABERTOS` e pela classificação apresentada como equivalente à porta, embora tenha critérios diferentes. `C:17–24,50,64–89`; `app/core/juizes.py:244`; `CLAUDE.md:20–22`.
+- **Segundo escritor fora da porta: não identificado** para os estados auditados. `C:124–143`; `P:600–618,685–693`.
+- **Relógio fora da borda de negócio: não demonstrado.** As leituras novas servem ao arquivo e ficam no módulo de comando; não julgam dia ou dinheiro. `C:137,179`; escopo do corte em `app/docs/CORTES.md:370`.
+- **Selo/RED sem mordida: sim, parcialmente**, no SOLO/`!`; também faltam provas da concorrência e do `on_commit` real. `T:119–127,61,275–314`.
+- **Ordem de trava invertida: não identificada no par.** Permanecem foto sem trava e TOCTOU da lavra/vínculo/DNA. `C:113–138`; `P:567–597,657–675`.
+- **Pouso antes do pré-requisito B: não demonstrado.** A cópia contém a porta, e o RELATO registra B no ar; o diff e a ancestralidade efetiva do commit são **[não verificado]**. `P:534,632`; `app/docs/RELATO.md:3,40–41`.
+- **Pré-requisito de reversão antes do apply: insuficiente operacionalmente**, apesar do arquivo anterior à chamada: a foto pode ser obsoleta e o reversor existente recusa a origem produzida. `C:113–142,193–195`; `P:600–609,776–778`; `CLAUDE.md:398–400`.
+
+## 06/11 14:53 · sessao 0cec89bc15c9 · - · - · origem=Ronald (tmux)
+
+Mapa do caminho exercido pelo lote; inventário exaustivo de todos os leitores históricos do repositório: [não verificado].
+
+| Estado/campo | Quem escreve no caminho de produção | Quem lê |
+|---|---|---|
+| `Ausencia.colaborador_id` | A criação recebe `colaborador`, monta `kwargs` e salva a instância pela porta `criar_ausencia` (`app/ponto/services/ausencia.py:130`, `:341`, `:385`, `:418`). | Lote compara os colaboradores, consulta lavra/vínculo, fotografa e imprime IDs (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:81`, `:90`, `:94`, `:120`, `:209`); porta usa os dois IDs (`app/ponto/portas/celula.py:662`, `:673`, `:683`). |
+| `Ausencia.tipo` | Criação em `kwargs` e `save`; edição por `editar_ausencia_registro` (`app/ponto/services/ausencia.py:342`, `:418`, `:465`, `:498`, `:509`). | Seleção do universo e classificação do cedente (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:64`, `:166`); efeito por catálogo no modelo (`app/ponto/models.py:840`). A porta `trocar_plantao` não o consulta (`app/ponto/portas/celula.py:653-675`). |
+| `Ausencia.data` | Criação e edição (`app/ponto/services/ausencia.py:342`, `:418`, `:499`, `:509`). | Classificação de período, lavra/vínculo, snapshot e impressão (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:72`, `:85`, `:90`, `:94`, `:120`, `:209`); porta escolhe o dia editado de cada carta (`app/ponto/portas/celula.py:675`). |
+| `Ausencia.data_fim` | Criação e edição (`app/ponto/services/ausencia.py:343`, `:418`, `:500`, `:509`); `Ausencia.save` também deriva fim a partir de `dias_corridos` (`app/ponto/models.py:902-907`); `mudar_estado` inclui `data_fim` no `update_fields` para persistir derivações do modelo (`app/ponto/services/ausencia.py:834-835`). | Lote recusa `data_fim != data`, dos dois lados (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:72`, `:85`); cobertura usa o fim ou fallback da autoridade (`app/ponto/turnos.py:2760-2766`). A porta troca somente `a.data` (`app/ponto/portas/celula.py:675`). |
+| `Ausencia.status` | Criação recebe estado ou `estado_inicial` (`app/ponto/services/ausencia.py:333`, `:344`, `:418`); transição pelo escritor declarado `mudar_estado` (`app/ponto/services/ausencia.py:808-835`). | Lote verifica cedente aprovada/rejeitada/aberta e substituto rejeitada, imprimindo status (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:66-71`, `:83`, `:210`). A porta não verifica status (`app/ponto/portas/celula.py:653-675`). |
+| `Ausencia.documento` | Criação recebe anexo (`app/ponto/services/ausencia.py:350-351`, `:418`); atualização pela porta `anexar_documento` (`app/ponto/services/ausencia.py:846`, `:857-859`). | Lote testa presença de ambos, imprime apenas S/N (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:75`, `:88`, `:210`); porta exige presença e grava nome do arquivo na trilha do par (`app/ponto/portas/celula.py:664-667`, `:684`). |
+| `CelulaDia.trabalha` | `editar_dia` cria ou atualiza (`app/ponto/portas/celula.py:600-609`); geração/regeneração pelo mesmo módulo (`app/ponto/portas/celula.py:259`, `:272-277`). | Lote fotografa pelo helper (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:113-121` → `app/ponto/portas/celula.py:528`); porta compara para idempotência (`app/ponto/portas/celula.py:594`); juiz previsto lê `cel.trabalha` (`app/escala/models.py:1069`, `:1092-1096`). |
+| `CelulaDia.origem` | Porta cria como gerada ou editada, e edição força editada (`app/ponto/portas/celula.py:259-260`, `:600`, `:606`, `:609`). | Snapshot (`app/ponto/portas/celula.py:528`), idempotência (`:594`), regeneração limita a gerada (`:263`) e reversão de regeneração recusa editada (`:777`). |
+| `CelulaDia.dna` | Produtor `montar_dna` é chamado pela edição; persistência fica na porta (`app/ponto/portas/celula.py:591`, `:600-609`); regeneração escreve pelo mesmo módulo (`:256`, `:272-277`). | Snapshot e comparação (`app/ponto/portas/celula.py:528`, `:594`); marcos do dia leem DNA congelado (`app/escala/models.py:1098`, `:1122-1124`). |
+| `CelulaDia.editada_em` | `editar_dia` usa `timezone.now()` e persiste (`app/ponto/portas/celula.py:598-609`). | Snapshot (`app/ponto/portas/celula.py:530`); carimbos de reescrita (`app/escala/services/regeneracao.py:98-105`); fatos novos para veredito e fase (`app/chamados/veredito_lavrado.py:151-154`, `app/escala/services/fase_12x36.py:188-192`). |
+| `LogAuditoria.acao='editar_dia'` | Porta emite `evento_kw` com antes/depois (`app/ponto/portas/celula.py:611-618`); adaptador vai ao escritor `evento`, que faz INSERT (`app/core/observ.py:134-148`). | Tela genérica consulta e permite filtrar ação (`app/core/views.py:705-710`); lote não consulta a trilha (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:124-143`, `:155-228`). |
+| `LogAuditoria.acao='trocar_plantao'` | Porta emite após os lados; inclui IDs, datas, documento e resultado (`app/ponto/portas/celula.py:682-693`), pelo mesmo escritor (`app/core/observ.py:134-148`). | Mesma tela genérica (`app/core/views.py:705-710`); o lote somente recebe retorno/frases da porta (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:140-143`). |
+| `ExportacaoDominio` | `registrar` cria registro (`app/folha/models.py:174-188`), chamado pela exportação HTTP (`app/folha/views.py:297`) e pelo regerador (`app/folha/management/commands/regerar_txt_dominio.py:118`). | `_competencias_exportadas` enumera mês/ano e pergunta ao juiz (`app/ponto/management/commands/gerar_celulas.py:161-174`); lote e porta chamam esse carregador (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:55-58`, `app/ponto/portas/celula.py:567-570`). |
+| `Holerite` / publicação de lote | Motor cria documento associado ao lote (`app/holerite/motor.py:480-483`); job de publicação grava `LoteHolerite.publicado_em` (`app/holerite/management/commands/processar_lote_holerite.py:126-130`, `:146`); uploads também criam holerite (`app/holerite/views.py:1193-1203`, `:1259-1265`). | `_competencias_exportadas` enumera somente holerites com lote publicado (`app/ponto/management/commands/gerar_celulas.py:163-174`); o juiz faz o predicado final por pessoa e competência (`app/folha/export.py:612-620`). |
+
+O lote não contém chamada direta de escrita ORM desses campos: o caminho de mutação é `celula.trocar_plantao(...)`; grava seu arquivo por `open/write/flush/fsync` (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:140-143`, `:183`, `:192-195`). O selo novo verifica nomes de chamadas, não prova sozinho a ausência de qualquer escrita indireta (`app/ponto/tests/test_o10c_lote_trocas.py:289-299`).
+
+O anexo é lookup; registro vivo manda (`app/docs/JUIZES.md:7-15`). Para “ausência aberta ou decidida”, ele aponta `services/ausencia.py::ABERTAS` (`app/docs/JUIZES.md:50-52`), igualmente registrado em `app/core/juizes.py:244`. O lote cria cópia literal `ABERTOS` e a consulta, portanto duplica essa autoridade mesmo com valores atualmente iguais (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:50`, `:68`; autoridade atual em `app/ponto/services/ausencia.py:765`).
+
+O lote consulta corretamente a autoridade existente de lavra por meio de `_competencias_exportadas`, que chama `competencia_fechada_para_celula`; esse juiz está registrado como `_K9` (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:55-58`, `app/ponto/management/commands/gerar_celulas.py:173`, `app/core/juizes.py:315-322`). Também usa o mesmo carregador de vínculo da porta (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:63`, `:93-96`; `app/ponto/portas/celula.py:556`, `:584`).
+
+A declaração “pergunta a mesma função que a porta pergunta” não vale para todos os filtros: o lote verifica tipo, estado e período; a porta verifica existência, colaboradores diferentes, documentos, lavra e vínculo, sem ler tipo/status/fim (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:64-96`; `app/ponto/portas/celula.py:653-675`). Contraprovas estáticas, supondo demais condições válidas: cedente com carta e `aguardando_decisao` dá `pedido` no DRY, mas a porta aceita; cedente tipo diferente dá `nao_e_troca`, mas a porta aceita; qualquer carta com fim diferente da data dá `periodo`, mas a porta edita somente sua data; substituto rejeitado dá `carta_rejeitada`, mas a porta aceita (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:64-89`; `app/ponto/portas/celula.py:664-675`). Essas são divergências de contrato; sua ocorrência nos 16 registros reais é [não verificado].
+
+Não há reversor fiel de edição identificado no caminho inspecionado: `reverter_regeneracao_dia` exige origem gerada (`app/ponto/portas/celula.py:776-778`); chamar `editar_dia` com booleano anterior remonta DNA atual e força origem editada, sem restaurar timestamp/origem/DNA antigos (`app/ponto/portas/celula.py:591`, `:598-609`).
+
+## 06/11 14:53 · sessao 1597aea2e856 · - · - · origem=Ronald (tmux)
+
+Achado concreto: o comando viola o selo **B6.1 — todo command tem casa**. O teste varre `*/management/commands/*.py` e exige presença em `todas_as_entradas()` ou `FORA_DE_PIPELINE`; o novo comando não aparece em nenhum dos dois, confirmado por consulta Python somente leitura aos dados de configuração. Portanto `test_todo_command_tem_casa` falharia (`app/chamados/tests/test_contract_crons.py:214–228`; fontes: `app/config/crons.py:281`, `:769`, `:1484`, `:1755–1766`).
+
+Outras verificações:
+
+- **Chokepoint:** o censo oficial aplicado somente ao novo fonte retornou `[]`; o comando só chama a porta em `:140`, sem verbo ORM de escrita. O gate da célula varre produção e tem allowlist vazia (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:128–143`; `app/ponto/tests/test_chokepoint_celula_gate.py:20–36`, `:50–54`; `app/core/censo_escritas.py:451–466`).
+- **Except-pass:** nenhum caso no AST. O único handler trata colisão do nome do snapshot com `continue`, enquanto o selo acusa exclusivamente handler cujo corpo é um `ast.Pass` (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:180–188`; `app/ponto/tests/test_contract_no_except_pass.py:65–78`).
+- **Relógio:** há leitura em `aplicar_par`, fora de `handle`, e outra em `handle`; a primeira carimba o snapshot, sem escolher comportamento por data (`app/ponto/management/commands/trocas_plantao_lote_o10c.py:137`, `:179`). O selo de instante examina somente funções que chamam seus `ALVOS`; `aplicar_par` não chama esses alvos (`app/escala/tests/test_selo_grade_pede_o_instante.py:25–38`, `:93–119`). Não constatei violação mecânica desse selo; conformidade com eventual lei mais ampla sobre borda do relógio: [não verificado].
+- **Relógio dos testes:** o selo procura leituras diretas no próprio arquivo; o novo teste não as contém. A fixture importada tem `@freeze_time(HOJE)` (`app/core/tests/test_selo_teste_sem_relogio.py:32–45`; `app/ponto/tests/test_o10c_lote_trocas.py:33–34`; `app/ponto/tests/test_o10b_editar_dia_troca.py:68–69`).
+- **MAPA:** o comando não pertence ao universo obrigatório de inscrição, que deriva exclusivamente de `core/juizes.py` e `core/portas.py`; consulta somente leitura confirmou isso (`app/core/mapa/contrato.py:157–184`; `app/core/tests/test_selo_mapa_contrato.py:41–49`). O MAPA commitado deliberadamente exclui contagens de leitores novos; elas vão à saída do gerador (`app/core/management/commands/gerar_diagrama.py:861–865`, `:936–939`; `app/core/tests/test_selo_diagrama_do_codigo.py:328–333`). Comparação completa do MAPA regenerado: [não verificado].
+- **Cópia de juiz que passa pelos selos:** `ABERTOS` replica a pergunta registrada em `ABERTAS`; o comando declara a tupla em `:50` e a consulta em `:68`. A autoridade registrada é `ponto/services/ausencia.py::ABERTAS` (`app/core/juizes.py:244`). O selo não acusa essa cópia porque os padrões da família não incluem status aberto; análise de todos os padrões proibidos sobre o novo fonte retornou zero ocorrências (`app/core/juizes.py:1406–1420`; varredor `app/ponto/tests/test_contract_juiz_celula.py:48–60`).
+
+## 06/11 14:53 · sessao 1e8ffbad88c7 · - · - · origem=Ronald (tmux)
+
+Convenção: `T` = `app/ponto/tests/test_o10c_lote_trocas.py`; `C` = `app/ponto/management/commands/trocas_plantao_lote_o10c.py`; `P` = `app/ponto/portas/celula.py`. Os sobreviventes abaixo são previsão por leitura, sem execução de mutação: [não verificado].
+
+| Teste novo | Mutante plausível que esse teste não pegaria | [nao verificado]
+|---|---|
+| `test_dry_classifica_cada_lancamento_e_nao_escreve` | Criar arquivo de snapshot também no DRY: verifica porta, origem editada, contagem da trilha e saída, mas não filesystem. `T:88-107`; abertura atual condicionada em `C:176-195`. |
+| `test_dry_com_par_completo_diz_trocaria_e_nao_chama_a_porta` | Retirar a guarda de competência do classificador: fixture só usa novembro aberto. `T:109-117`; guarda `C:90-92`. |
+| `test_solo_em_competencia_lavrada_diz_que_e_bang` | Apagar inteiramente a emissão da lista `!`: teste só exige `so_um_lado` e `lavrada=S`. `T:119-127`; emissão `C:214-221`. | [nao verificado]
+| `test_aprovado_com_par_e_duas_cartas_vira_par` | Remover toda a gravação do snapshot: verifica células e trilha, sem ler arquivo. `T:132-143`; snapshot `C:137-138`. |
+| `test_snapshot_das_duas_celulas_nasce_antes_da_porta` | Remover `os.fsync`: o teste abre arquivo no mesmo processo e verifica JSON visível, sem durabilidade. `T:153-167`; `C:193-195`. Também sobreviveria snapshot sem `dna`, `editada_em`, `editada_por_id` e geradora, porque só confere par, trabalha e origem cedente. `T:164-167`; formato `P:528-531`. | [nao verificado]
+| `test_rejeitado_e_aguardando_nao_aplicam_mesmo_com_par` | Permitir substituto com status rejeitada: ambos os cedentes já são rejeitado/pedido, saindo antes de examinar o substituto. `T:169-177`; ordem `C:66-71`, guarda substituto `C:83-84`. |
+| `test_sem_a_carta_de_um_lado_recusa_sem_escrever` | Retirar a segunda classificação sob trava: os dois exemplos já são excluídos pela primeira. `T:179-189`; seleção apply `C:202-205`; reclassificação `C:134-136`. |
+| `test_dia_em_competencia_exportada_vai_a_lista_bang_e_nao_toca` | Consultar lavra apenas do cedente: os dois lados estão no mesmo dia/empresa exportada, suficiente para passar. `T:193-204`; consulta atual dos dois `C:90`. |
+| `test_lado_do_substituto_em_lavrada_tambem_e_bang` | Não adicionar `!` quando somente substituto está exportado: teste só confere classe, sem linha `!`, contador, apply ou ausência de chamada da porta. `T:206-213`; `C:214-221`. | [nao verificado]
+| `test_segunda_rodada_e_idempotente` | Criar novo snapshot e acrescentar linha na segunda rodada: já é o comportamento atual e passa pelas asserções, limitadas a quatro campos das células e IDs de LogAuditoria. `T:215-228`; `C:176-195`, `C:137-143`; porta retorna igual em `P:594-596`, `P:679-680`. |
+| `test_nenhum_colaborador_ganha_desconto_novo` | Injetar novo desconto em colaborador fora dos três ou dia fora de 21/10–09/11: foto só cobre esse filtro. `T:231-239`, `T:246-249`. Alternativamente retirar fsync sobrevive porque o teste não inspeciona snapshots. `C:195`; `T:230-249`. | [nao verificado]
+| `test_aplicar_exige_autor` | Aceitar username fornecido mas inexistente: teste só omite `--por`; não passa usuário desconhecido. `T:251-253`; ramo não coberto `C:163-165`. | [nao verificado]
+| `test_par_repetido_ou_mal_escrito_e_erro` | Rejeitar qualquer repetição, mas aceitar valores negativos ou `1:2:3`: teste cobre duplicata exata e `abc`, sem esses formatos. `T:255-261`; parser `C:103-109`. | [nao verificado]
+| `test_par_cujo_cedente_nao_e_troca_de_plantao_nao_aplica` | Remover tratamento de cedente inexistente: fixture é declaração existente. `T:263-270`; ramo `C:171-173`. |
+| `test_a_costura_MORDE` | Remover `select_for_update` das Ausencias ou `atomic` externo: teste confere chamada e argumentos da porta mockada, sem concorrência/rollback. `T:275-287`; `C:128-130`. | [nao verificado]
+| `test_o_comando_so_escreve_pela_porta` | Adicionar escrita por SQL cru, por exemplo `cursor.execute(...)`: blacklist olha nomes das chamadas, não SQL nem atribuições indiretas. `T:294-299`; ela proíbe save/create/update/etc., mas não `execute`. |
+| `test_o_dry_responde_o_que_a_porta_faria` | Retirar reclassificação sob trava ou detecção de período: só testa um par normal e um par exportado, ambos sem período. `T:308-314`; `C:72-74`, `C:85-87`, `C:134-136`. |
+
+O caso SOLO tem falha concreta, além da hipótese de mutação: retorna `so_um_lado` antes da avaliação de lavra (`C:77-80`, `C:90-92`), e só classe `lavrada` entra em `bang` (`C:214-221`). Logo `test_solo_em_competencia_lavrada_diz_que_e_bang` não prova o “bang” do próprio nome: explicitamente espera `so_um_lado` e só procura `lavrada=S` (`T:126-127`). A coluna mostra exportação, mas não há `!` nem incremento de bang nessa linha (`C:211`, `C:214-225`).
+
+A costura não é inteiramente vazia: o teste exige uma chamada com as duas cartas/autor e exige células imóveis sob dublê (`T:279-287`); o teste de resultado exige a alteração efetiva dos dois lados e trilha com IDs (`T:136-143`). O par “trocaria/lavrada” também exige resultados distintos da porta (`T:311-314`). A declaração geral “DRY responde o que a porta faria” excede os dois exemplos cobertos (`T:301-314`): cedente rejeitado/pedido, tipo diferente e período têm guardas próprias em `C:64-74`, mas a porta só verifica existência, colaborador e documentos antes das edições (`P:653-675`). [nao verificado]
+
+Nenhum desses testes exercita semântica real de `on_commit`: `_run` sempre substitui por execução imediata (`T:61`), e `_agora_mesmo` chama `fn()` diretamente (`app/ponto/tests/test_o10b_editar_dia_troca.py:39-41`). Assim, não demonstram descarte dos callbacks no rollback nem adiamento até o commit externo; também não há concorrência concorrente nos corpos dos 17 testes (`T:88-314`).
+
+O snapshot é anterior à chamada e dá flush/fsync (`C:137-142`, `C:193-195`), mas células são fotografadas sem trava (`C:113-116`), ao passo que a porta só trava a célula depois de montar DNA (`P:591-593`): há janela para “antes” obsoleto perante outro escritor. A reversão existente rejeita origem diferente de `gerada` (`P:776-778`), enquanto a troca grava `editada` (`P:600-609`). Portanto essa operação de reversão não desfaz as células editadas pela troca; o comando também só oferece par/aplicar/por (`C:149-153`). Suficiência operacional do arquivo para reversão integral não está demonstrada pelos testes, que conferem apenas trabalha/origem (`T:164-167`). [nao verificado]
+
+A regra de casos aparece no docstring (`T:5-14`), mas a afirmação “escrita antes do código” e uma execução RED histórica não podem ser confirmadas pela cópia sem Git/log fornecido: [não verificado]. A regra anti-vacuidade exige caso que morde para selo com mock ou saída (`CLAUDE.md:191`); os casos citados mordem parte do contrato, com a exceção evidente do SOLO/bang (`T:119-127`).
 
 ## 06/11 14:49 · sessao dda1e5a29e82 · V3-IMPACTO-COM-DONO · sonda · origem=Code
 
@@ -1505,149 +1750,4 @@ Q9 — os testes têm mordida, porém deixam estes mutantes candidatos sobrevive
 
 Sobre Q11: há cobertura incompleta para falha intermediária e mudança de DEVIDO entre rodadas, além do vermelho B6.1 comprovado; não sustento “RED sem mordida” em bloco, pois existem asserções de efeito para texto com os dois números, ausência de pauta em aberta, idempotência e cancelamento sem apagar (`app/pautas/tests/test_pauta_pago_x_devido_exportada.py:99-118`; `app/pautas/tests/test_pauta_pago_x_devido_exportada.py:125-130`; `app/pautas/tests/test_pauta_pago_x_devido_exportada.py:188-203`).
 
-## 06/11 14:15 · sessao 31ef3b58b827 · - · - · origem=Ronald (tmux)
-
-- **Escritores atribuídos pelo censo:** `FechamentoMensal` permanece em `app/ponto/services/fechamento.py`; `Pauta` em `app/pautas/services.py`; `ExportacaoDominio` em `app/folha/models.py`, conforme portas declaradas em `app/core/portas.py:500`, `app/core/portas.py:505`, `app/core/portas.py:510`. Executei `varrer_arvore` em memória, sem bytecode; ele atribuiu os seguintes sítios:
-  - FM: `app/ponto/services/fechamento.py:882`, `:889`, `:1144`, `:1324`, `:1338`, `:1376`, `:1433`, `:1594`, `:1636`, `:1716`.
-  - Pauta: `app/pautas/services.py:180`, `:215`, `:247`, `:272`, `:294`.
-  - ED: `app/folha/models.py:162`.
-  - **Limitação:** o próprio censo não atribuiu `cls.objects.create` de `ExportacaoDominio.registrar`, que efetivamente escreve em `app/folha/models.py:182`; portanto não vender seu resultado como prova universal de ausência de escritor oculto. O alcance declarado do mecanismo está em `app/core/censo_escritas.py:6`.
-
-- **FM CAMPOS:** origem da lista de 26 chaves em `app/ponto/management/commands/aplicar_09_corte_b.py:67`; escritor dos números é o laço de `recalcular_fechamento_mes`, com atribuições em `app/ponto/services/fechamento.py:893`, `:909`, `:949`, `:985`, `:1046`, `:1067`, `:1084`; persistência por `save` em `:1128` ou `update` em `:1144`. Restauração de snapshot também pode escrever CAMPOS, pela mesma porta, em `app/ponto/services/fechamento.py:1342` e `:1376`. `mes/ano` entram na criação em `:889`; a restauração os exclui em `:1364`. Leitores relevantes: PAGO recorta todos os CAMPOS em `app/ponto/portas/regen_exportada.py:79`; somente leitura semeia FM em `app/ponto/services/fechamento.py:881` e entrega o mesmo recorte em `:1118`; TXT lê FM e entrega a `eventos_do_fechamento` em `app/folha/export.py:711` e `:722`; classificação lê em `:777`; outros leitores identificados são relatórios em `app/relatorios/views.py:68` e `:139`, cartão em `app/relatorios/cartao_pela_celula.py:250`, inteligência em `app/inteligencia/resumo.py:35`, detalhe em `app/colaboradores/services/detalhe.py:115`. É um mapa de leitores relevantes, não censo exaustivo.
-
-- **Pauta:** criação de `texto`, `ancora_tipo`, `ancora_id`, `pai` exclusivamente pela chamada nova a `_ps.escrever` em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:184` e `:188`; o `create` efetivo fica em `app/pautas/services.py:180`. `cancelado_em` é escrito por `cancelar` em `app/pautas/services.py:294`; `feito_em` por `marcar_feita` em `:247` e `marcar_feita_pelo_sistema` em `:272`. Novo command lê texto/âncora/pai/cancelamento para deduplicar em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:174`; lê `feito_em` em `:178` e `:216`, cancelamento em `:214`. QuerySets leem os estados em `app/pautas/models.py:57` e `:60`; API lê texto, âncoras e estado em `app/pautas/views.py:40`, `:43`, `:56`. `pai` também seleciona cabeças em `app/pautas/services.py:435`.
-
-- **Outras tabelas realmente escritas no modo escrever:** Pauta escreve trilha e contador por `app/pautas/services.py:186` e `:188`; `_trilha` chama `evento` em `:369`; este cria `LogAuditoria` em `app/core/observ.py:134`; `lavrar` cria/atualiza `ContadorPauta` em `app/pautas/services.py:352` e `:354`. **Há ainda criação possível de `auth.User`:** command chama `autor_sistema` em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:182`, antes do `atomic` de `:183`; `autor_sistema` chama `get_user_sistema` em `app/pautas/services.py:87`, que executa `User.objects.get_or_create(username='sistema')` em `app/core/utils.py:18`. A reversão guarda só IDs de pautas em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:154` e `:191`; não desfaz eventual User. Dry interrompe antes disso em `:180`.
-
-- **ED:** `registrar` escreve empresa, competência, usuário, nome, hash, linhas, reexportação e conteúdo em `app/folha/models.py:182`; `invalidar` altera invalidação/substituição e escreve auditoria em `:158` e `:163`, preservando conteúdo/hash conforme contrato em `:149`. Novo command só lê K6 em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:118`; leitura efetiva de ED em `app/folha/export.py:581`, ordenação/vigência em `app/folha/models.py:211`. Outros leitores: histórico/download em `app/folha/views.py:445`, `:522`, `:554`, `:827`; Haiku em `app/folha/haiku_export.py:67`, `:99`, `:157`; vigia em `app/folha/services/vigia_txt.py:201`.
-
-- **Universo/K6:** IDs são conjunto ordenado em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:91`. Inexistente recusa em `:107`; não entregue entra em `nao_entregue` e termina em `:119`; entregue sem gravado entra em `sem_gravado` em `:125`; restante entra em exatamente um dos dois baldes em `:135`; falta de DEVIDO recusa antes de `_escrever` em `:136`, com sequência medir/escrever em `:96`; soma conferida em `:139`. Desligado não entregue ou sem gravado não alcança a checagem de DEVIDO, pois os `continue` anteriores o classificam (`:123`, `:128`); isso é diferente de “todo desligado sempre recusa”.
-
-- **Ordem entregue antes de gravado é coerente com escopo desta pauta:** K6 significa TXT vigente não invalidado, sem provar pagamento, em `app/folha/export.py:560`, `:583`; registro vivo do juiz em `app/core/juizes.py:312`. A regra de competência exportada determina os dois números em `CLAUDE.md:403` e `:406`; não exportada tem caminho de apply em `CLAUDE.md:398`. L-113 remove Pauta como pré-condição em `app/docs/LEIS.md:150`; command não estabelece tal pré-condição porque apenas classifica e sai em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:119`. Texto não deve equiparar entregue a pago efetivo: `CLAUDE.md:410` declara que TXT é fotografia, não pagamento; o cabeçalho pede conferência no Domínio em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:60`.
-
-## 06/11 14:15 · sessao 80d80ef3e4c8 · R1-PUBLICA · verificador · origem=Code
-
-**Os achados 1 e 3 continuam parcialmente abertos. O selo corrigido morde os três casos pedidos, mas ainda não vincula o arquivo citado à data efetivamente escolhida pelo publicador.** Procedência: `bin/gerar_estado.py:164`, `app/core/placar_estrutural.py:108`, `app/core/tests/test_r1_termometro_uma_medicao.py:67`, `bin/gerar_estado.py:51`.
-
-1. **Achado 1 — parcialmente resolvido: os números chegaram ao início, mas continuam truncados.**
-
-   Reproduzi em memória o corte de 150 caracteres aplicado pelo publicador. Nenhuma das seis provas publica o caminho completo da medição; várias perdem números ou ressalvas. Procedência: `bin/gerar_estado.py:164`.
-
-   | Prova | Final efetivamente publicado | Origem | [nao verificado]
-   |---|---|---|
-   | E1-sem-previsao | ``(aberta) (medida `logs/`` | `app/core/espelho_verdade.py:49` |
-   | E3-turno-aberto | `dos impares que DIVERGEM, 31 e` | `app/core/espelho_verdade.py:82` |
-   | E6-sistema-bate | `11/2026 aberta **94,82%** (3680 ` | `app/core/espelho_verdade.py:169` |
-   | E6-exportavel | `lista do admin pela L-099; entrada ef` | `app/core/espelho_verdade.py:173` |
-   | E6-batida-impar | `198 tem contagem impar no dia e ` | `app/core/espelho_verdade.py:177` |
-   | E6-piso-185 | `120 = 201 de 20` | `app/core/espelho_verdade.py:179` |
-
-   Portanto, desapareceu o prefixo repetitivo que escondia todos os resultados, mas a publicação ainda mutila a informação — inclusive a ressalva do achado 6 e o denominador `201`. Procedência: recortes acima e `bin/gerar_estado.py:164`.
-
-2. **Achado 2 — resolvido nos três cenários pedidos; permanece um limite na origem da data.**
-
-   Executei os cinco métodos em memória, substituindo somente `SimpleTestCase` por `unittest.TestCase`. Procedência: `app/core/tests/test_r1_termometro_uma_medicao.py:49`.
-
-   | Cenário | Executados / falhas / erros | Regra responsável |
-   |---|---:|---|
-   | Texto atual | 5 / 0 / 0 | `app/core/tests/test_r1_termometro_uma_medicao.py:49` |
-   | Outro leitor cita arquivo datado diferente, na mesma glob | 5 / 1 / 0 | `app/core/tests/test_r1_termometro_uma_medicao.py:67` |
-   | Um leitor cita somente a glob literal | 5 / 1 / 0 | `app/core/tests/test_r1_termometro_uma_medicao.py:33`, `:64` |
-   | Menção no meio da prova, com caminho antigo | 5 / 1 / 0 | `app/core/tests/test_r1_termometro_uma_medicao.py:46`, `:64` |
-   | Menção no meio, com caminho correto | 5 / 0 / 0 | `app/core/tests/test_r1_termometro_uma_medicao.py:46` |
-
-   **Não copia os valores atuais nem consulta relógio:** compara caminhos derivados das declarações; os exemplos literais usam caminhos fictícios. Procedência: `app/core/tests/test_r1_termometro_uma_medicao.py:32`, `:50`, `:67`, `:75`.
-
-   **Limite persistente:** todos podem citar o mesmo arquivo de 06/11 e o publicador escolher 07/11 se existir outro arquivo correspondente à glob. `_medido_em` escolhe a maior data sem consultar as provas; a simulação desses dois caminhos devolveu 07/11. Existência real desse segundo arquivo: **[nao verificado]**. Procedência: `app/core/placar_estrutural.py:111`, `bin/gerar_estado.py:47`, `:51`, `:56`.
-
-   Retirar completamente a menção ainda remove um item do censo; esse mutante passou, conforme o limite agora declarado. Procedência: `app/core/tests/test_r1_termometro_uma_medicao.py:15`, `:46`.
-
-3. **Achado 3 — parcialmente resolvido: restou a atribuição errada em `SOMA.fonte`.**
-
-   `numero` e `prova` agora atribuem corretamente os 36 `SOMA True` à sonda, compatíveis com as seis linhas de cada uma das seis partes do anexo. Entretanto, `fonte` ainda afirma: **“a soma e cobrada no proprio comando, nao por sonda paralela”**. Procedência: anexo `medida.txt`; `app/core/placar_estrutural.py:106`, `:107`, `:108`, `:109`.
-
-   O comando apenas calcula e imprime os totais dos donos e das classes; não compara os dois para produzir booleano ou reprovar a execução. Também não confere igualdade de horas ou união. Procedência: `app/ponto/management/commands/e6_oraculo.py:415`, `:423`, `:424`, `:426`, `:429`. Implementação da sonda: **[nao verificado]**.
-
-4. **Achado 4 — resolvido no texto integral.**
-
-   A conclusão exclusiva “cobrança, não cura de motor” foi retirada da prova. Procedência: `app/core/espelho_verdade.py:82`.
-
-5. **Achado 5 — resolvido quanto aos subconjuntos e ao alcance da comparação.**
-
-   **31/25 estão corretamente atribuídos a `impar_FORA_da_faixa`, dentro dos ímpares divergentes.** Também ficou explícito que 198+1 e 137+2 repartem os divergentes, enquanto 347/262 incluem ímpares que batem e divergem. Procedência: anexo `medida.txt`; `app/core/espelho_verdade.py:82`, `:177`; `app/ponto/management/commands/e6_oraculo.py:370`, `:381`, `:386`.
-
-   A inclusão passou a valer “entre os dias COMPARADOS”, com ressalva sobre os excluídos; isso acompanha a ordem do código, que exclui antes de classificar paridade. Procedência: `app/core/espelho_verdade.py:177`; `app/ponto/management/commands/e6_oraculo.py:324`, `:327`, `:331`, `:339`, `:342`, `:347`.
-
-6. **Achado 6 — resolvido como declaração normativa no texto integral; ressalva perdida na publicação.**
-
-   “Entrada efetiva na lista NAO medida aqui” distingue a política da execução comprovada. A destinação normativa tem respaldo na L-099; entradas efetivas permanecem **[nao verificado]**. Procedência: `app/core/espelho_verdade.py:173`, `app/docs/LEIS.md:122`. O publicador corta justamente essa ressalva, conforme o achado 1: `bin/gerar_estado.py:164`.
-
-7. **Achado 7 — correções solicitadas realizadas, com pequeno resíduo na docstring.**
-
-   A nota deixou de afirmar cadência cumprida em 09/10; a docstring passou a contar seis itens. Procedência: `app/core/placar_estrutural.py:119`, `app/core/tests/test_r1_termometro_uma_medicao.py:9`.
-
-   Ainda existe desencontro descritivo: a docstring diz “prova comeca por”, enquanto a implementação aceita menção em qualquer posição. Procedência: `app/core/tests/test_r1_termometro_uma_medicao.py:6`, `:14`, `:46`.
-
-   A publicação independente por `logs/e6_placar.json` continua separada; seus valores atuais são **[nao verificado]**, sem conclusão adicional nesta revisão. Procedência: `bin/gerar_estado.py:145`, `:168`; `app/core/espelho_verdade.py:208`.
-
-8. **Texto e números: sem inversão encontrada, mas há duas qualificações pendentes.**
-
-   As somas dos campos fornecidos conferem com os números publicados: BATE/comparados, percentuais, dias e horas por dono, zeros e contadores de ímpares. As horas representam diferenças absolutas, como agora declarado. Procedência: anexo `medida.txt`; `app/core/placar_estrutural.py:106`, `:118`; `app/core/espelho_verdade.py:49`, `:82`, `:177`; `app/ponto/management/commands/e6_oraculo.py:368`, `:423`.
-
-   - **Afirmação nova sem demonstração:** “6 partes disjuntas por pk”. O anexo apresenta contagens, sem composição ou regra de partição; igualdade das somas dos universos não demonstra disjunção. Assim, 144/105 e os colaboradores por dono conferem como somas dos parciais; sua interpretação como união global sem duplicação é **[nao verificado]**. Procedência da afirmação: `app/core/placar_estrutural.py:118`; conjuntos dentro de uma execução: `app/ponto/management/commands/e6_oraculo.py:369`, `:429`.
-   - **Alcance contextual remanescente:** 95,95%/94,82% incluem ímpares que batem, mas aparecem sob “com batidas COMPLETAS”. Não são percentuais exclusivos dos completos. Procedência: `app/core/espelho_verdade.py:168`, `:169`; `app/ponto/management/commands/e6_oraculo.py:347`, `:352`, `:353`, `:355`.
-
-9. **Leitores — nenhuma quebra de execução encontrada nos caminhos examinados; permanece a quebra de conteúdo pelo recorte.**
-
-   Os dois publicadores renderizaram em memória sem cair em “indisponível”, com data simulada e ausência simulada do log E6. Os 11 métodos L114 passaram com a mesma substituição por `unittest.TestCase`. Procedência: `bin/gerar_estado.py:60`, `:127`; `app/core/tests/test_l114_placar_papel_e_termometro.py:30`, `:48`, `:69`, `:84`, `:112`.
-
-   Handoff e selo R6 leem a declaração de contratos/R6, fora dos textos alterados. Procedência: `bin/handoff_sessao.sh:179`, `app/core/tests/test_selo_r6_frase_do_juiz.py:17`.
-
-   Execução Django canônica, selo host com ancestralidade Git, publicação sem nomes e identidade Git do commit: **[nao verificado]**. Dependências dos selos: `bin/tests/test_placar_nao_afirma_fora_do_ar.sh:24`, `:75`; `bin/tests/test_publicacao_sem_nome.sh:39`, `:60`.
-
-## 06/11 14:14 · sessao b18c5d4c573a · - · - · origem=Ronald (tmux)
-
-Q1–4, leitura estática:
-
-- **Sem novo escritor de Pauta fora da porta.** O command escreve cabeçalho/filhas exclusivamente por `_ps.escrever` e reverte por `cancelar` (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:184`, `:188`, `:219`). A porta grava texto, âncora e pai em `Pauta.objects.create`, além de trilha e contador (`app/pautas/services.py:180`, `:186`, `:188`). `feito_em` pertence a `marcar_feita`/`marcar_feita_pelo_sistema`, e `cancelado_em` a `cancelar` (`app/pautas/services.py:247`, `:272`, `:294`).
-
-- **Há escrita indireta adicional de `auth.User` possível em `--escrever`.** O command chama `autor_sistema` antes do seu `transaction.atomic` (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:182`). Essa função chama `get_user_sistema` (`app/pautas/services.py:86`), que executa `User.objects.get_or_create(username='sistema')` (`app/core/utils.py:18`). Essa criação pode sobreviver a falha posterior da pauta; dry pula antes dessa chamada (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:180`).
-
-- **O modo invocado não escreve FechamentoMensal, DiaPago nem trilha de exportada.** `lavrar_dias_pagos=False` é o default (`app/ponto/services/fechamento.py:439`). Com `somente_leitura=True`, a instância é destacada, sem PK, enquanto o `get_or_create` fica no `else` (`app/ponto/services/fechamento.py:881`, `:889`). Retorna o dict antes dos ramos `save`/`update` (`app/ponto/services/fechamento.py:1112`, `:1128`, `:1144`). A lavra de DiaPago exige `(not somente_leitura) or lavrar_dias_pagos` (`app/ponto/services/fechamento.py:1175`). O warning/trilha da guarda também depende desse predicado, logo a leitura pura não entra (`app/ponto/services/fechamento.py:530`, `:552`).
-
-- **A leitura de células examinada é consulta.** O fechamento consulta o lote de CelulaDia (`app/ponto/services/fechamento.py:595`), e a grade chama `grade_da_celula` (`app/folha/export.py:335`), cuja carga também é `filter` (`app/escala/services/leitor_celula.py:350`). Não encontrei escrita nessas rotas; prova dinâmica de todas as tabelas: `[nao verificado]`.
-
-- **Escritor e leitores dos CAMPOS.** A lista canônica está em `app/ponto/management/commands/aplicar_09_corte_b.py:67`. O escritor monta horas em `app/ponto/services/fechamento.py:893`, `:909`, `:949`, `:985`; minutos/dias em `:1046`, `:1067`; demais contadores/reflexo/banco em `:1084`. Persiste por `save` ou `update` (`:1128`, `:1144`). PAGO lê essa lista por `getattr` do gravado (`app/ponto/portas/regen_exportada.py:79`); DEVIDO lê a mesma lista da instância destacada (`app/ponto/services/fechamento.py:1118`); o command compara em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:133`.
-
-- **ExportacaoDominio não é escrito pelo command.** A autoridade K6 consulta registros e verifica vigente não invalidado (`app/folha/export.py:580`). Seus escritores existentes são `registrar` para criação e `invalidar` para invalidada_em/motivo/substituída (`app/folha/models.py:174`, `:182`, `:143`, `:158`, `:162`).
-
-- **DEVIDO usa os mesmos argumentos numéricos da chamada de recalcular dentro da REGEN.** Ambos passam mês/ano e lista unitária; empresa_id permanece None (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:129`; `app/ponto/portas/regen_exportada.py:179`; default em `app/ponto/services/fechamento.py:439`). A janela é resolvida pela empresa do colaborador dentro do laço (`app/ponto/services/fechamento.py:612`). `motivo_exportada` afeta o warning (`:538`); `retornar_objeto` escolhe objeto/dict (`:1119`); `coletar_furos` só copia a saída (`:1111`). `fechamento_lido` usa a mesma chamada com `retornar_objeto=True` (`:1743`).
-
-- **Ressalva sobre a frase “o que a REGEN faria”:** a REGEN regenera células antes de recalcular, então seu resultado posterior pode mudar por insumos distintos, mesmo usando o mesmo motor (`app/ponto/portas/regen_exportada.py:174`, `:179`). Na 09/2026, a guarda atual também retira colaboradores exportados do universo da escrita, enquanto leitura pura passa (`app/ponto/services/fechamento.py:530`, `:551`, `:555`).
-
-- **Mesmas chaves e unidades.** PAGO e DEVIDO projetam exatamente CAMPOS; mês/ano são excluídos da comparação (`app/ponto/portas/regen_exportada.py:84`; `app/ponto/services/fechamento.py:1120`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:42`, `:133`). Campos de horas são Decimal com duas casas; minutos e contadores são inteiros; reflexo/banco são Float (`app/ponto/models.py:412`, `:429`, `:432`, `:465`, `:467`). **None↔0 é tratado como igual pela autoridade**, pois `_diferente` usa `float(a or 0)`; isso pode esconder ausência versus zero, mas não é divergência de chave nem regra nova do command (`app/ponto/portas/regen_exportada.py:248`).
-
-- **Sem derivação financeira paralela identificada.** O command usa as autoridades para cálculo e comparação (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:104`, `:129`, `:133`). `_fmt` arredonda a quatro casas (`:45`); a comparação exige diferença maior que 0,015 (`app/ponto/portas/regen_exportada.py:250`). Para valores finitos numéricos, esse arredondamento não transforma diferença acusada em dois números iguais: erro combinado máximo de apresentação é 0,0001, inferior à tolerância (inferência dessas linhas).
-
-- **Nome em caminho indireto de erro:** o cálculo pode registrar `colab.nome` no logger ao capturar exceção (`app/ponto/services/fechamento.py:1287`). O command só detecta a ausência de DEVIDO depois (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:130`). Portanto texto/stdout explícitos usam colNNN, mas log/stderr de falha pode carregar nome; configuração efetiva de destino desse logger `[nao verificado]`.
-
-## 06/11 14:14 · sessao 8f50287db03d · - · - · origem=Ronald (tmux)
-
-1. **Achado 3 só parcialmente resolvido.** `numero` e `prova` atribuem corretamente os 36 `SOMA True` à sonda, mas `fonte` conserva literalmente “a soma e cobrada no proprio comando, nao por sonda paralela”. Procedência: `app/core/placar_estrutural.py:106`, `:107`, `:108`, `:109`; anexo `medida.txt`, seis blocos × seis linhas `SOMA`. O comando calcula/imprime dois números, sem cotejá-los nem emitir booleano; tampouco confere horas ou união: `app/ponto/management/commands/e6_oraculo.py:415`, `:424`, `:426`, `:429`.
-
-2. **Afirmação nova sem sustentação: “6 partes disjuntas por pk”.** O anexo mostra `PARTE`, universos parciais e totais, mas não mostra IDs, predicado de particionamento ou interseções; somar 624/578 não demonstra disjunção. Procedência da afirmação: `app/core/placar_estrutural.py:118`; os seis itens dizem “6 partes por pk”: `app/core/espelho_verdade.py:49`, `:82`, `:169`, `:173`, `:177`, `:179`. O comando desta cópia também não oferece opção de particionamento: `app/ponto/management/commands/e6_oraculo.py:264`. Disjunção e implementação da sonda: **[nao verificado]**. Consequentemente, 144/105 e os colabs por dono conferem como **somas dos parciais**, mas sua interpretação como união global sem duplicações permanece **[nao verificado]**; dentro de uma execução o comando usa conjuntos: `app/ponto/management/commands/e6_oraculo.py:369`, `:429`.
-
-3. **Números/chaves conferidos, sem inversão.** Somei em memória os campos fornecidos nos seis blocos de `medida.txt`:
-
-   - Outubro: 7483 comparados, 7180 BATE = 95,95%; donos dias 26/78/199; horas 88,36/306,53/961,16; colabs somados 16/32/113; total 303/1356,05/144. Publicação: `app/core/placar_estrutural.py:106`, `:118`.
-   - Novembro: 3881 comparados, 3680 BATE = 94,82%; donos dias 9/72/120; horas 40,62/347,49/643,06; colabs somados 7/33/78; total 201/1031,17/105. Publicação: `app/core/placar_estrutural.py:106`, `:118`.
-   - `esp_zero_e6_trabalho` = 35/28, inversa = 19/14; publicação usa a chave certa: `app/core/espelho_verdade.py:49`; classificação: `app/ponto/management/commands/e6_oraculo.py:353`, `:358`.
-   - Ímpares = 347/262; BATE = 148/123; DIVERGE = 199/139; FORA = 31/25; contagem ímpar = 198/137; só corte = 1/2. Publicação: `app/core/espelho_verdade.py:82`, `:177`; alcance dos subcontadores: `app/ponto/management/commands/e6_oraculo.py:370`, `:381`, `:386`.
-
-4. **Tratamentos 4, 5 e 6 resolvidos na prosa alterada.** A atribuição exclusiva a cobrança desapareceu; 31/25 agora explicitamente pertencem aos ímpares divergentes; 198+1/137+2 também têm esse alcance; a inclusão está limitada aos comparados; entrada efetiva na lista do admin foi expressamente retirada do que se afirma medido. Procedência: `app/core/espelho_verdade.py:82`, `:173`, `:177`; exclusões anteriores à paridade: `app/ponto/management/commands/e6_oraculo.py:324`, `:327`, `:331`, `:339`, `:342`. Destino normativo CADASTRO/BATIDA: `app/docs/LEIS.md:122`.
-
-5. **Qualificação contextual remanescente:** 95,95%/94,82% são percentuais de **todos os comparados**, incluindo os ímpares que BATE, e não uma medição exclusiva de batidas completas. A prova conserva esses números sob o título “com batidas COMPLETAS”. Procedência: `app/core/espelho_verdade.py:168`, `:169`; denominador e inclusão dos ímpares: `app/ponto/management/commands/e6_oraculo.py:347`, `:352`, `:353`, `:355`. Não é inversão numérica nova; é associação de alcance potencialmente enganosa.
-
-6. **Achado 7, prosa, corrigido:** a nota deixou de atestar cadência cumprida em 09/10: `app/core/placar_estrutural.py:119`; a docstring passou de cinco para seis itens: `app/core/tests/test_r1_termometro_uma_medicao.py:9`. Resta pequeno desencontro interno da docstring: ainda diz “prova comeca por” na linha 6, embora o censo efetivo seja menção em qualquer posição: `app/core/tests/test_r1_termometro_uma_medicao.py:6`, `:14`, `:44`.
-
-_2329 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2333 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
