@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 11:31:09.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (60.6 MB). Acoes na janela: **809**.
+**Medido em 06/11/2026 11:36:19.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (60.6 MB). Acoes na janela: **805**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -815,7 +815,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 23:45:58 | Bash | Merge raia-f346 no-commit and cmp against certified copy | `cd /home/ronald/saas-hasner; git stash list \| head -2; git merge --no-ff --no-commit raia-f346; echo rc=$?; cat .git/MERGE_HEAD; git status --porcelain \| grep -v '^??'; for f in app/ferias/services.py app/ferias/test_remarcar_limpa_janela_f346.py; do cmp $f /home/ronald/wt-f346-merge-232813/$f && echo "cmp ok $f"; done; git diff --cached --name-only \| while read f; do cmp -s "$f" "/home/ronald/ ...` |
 | 23:45:53 | Bash | Check BACKLOG F-346 row and raia commits | `cd /home/ronald/saas-hasner; grep -n 'F-346' app/docs/BACKLOG.md \| cut -c1-300 \| head -5; git diff 3a514a4e raia-f346 --stat; git log --oneline 3a514a4e..raia-f346 \| head` |
 | 23:45:47 | Bash | Read merged suite verdict and tree state | `cd /home/ronald/saas-hasner; L=logs/f346/suite_merge.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep -E '^Ran' $L\|tail -1; grep '^rc=' $L\|tail -1; git status --porcelain \| head; git log -1 --format=%h; git -C /home/ronald/wt-f346-merge-232813 status --porcelain \| head` |
-| 23:34:59 | Bash | Record F-346 opus verdict and fila items | `cd /home/ronald/saas-hasner/app/docs; cat >> RELATO.md <<'EOF' ### F-346 opus final (05/11 23:3x): APROVA d2653810..2d508beb, sem bloqueio; pouso so com OK+rc=0 de logs/f346/suite_merge.log (arvore 33c9d5b0) - Escritor unico conferido: unica reatribuicao de datas = ferias/services.py:379 (`_trocar_janela`), grep repo inteiro; 0 receiver de AgendamentoFerias; update_fields nao perde campo lido. - D ...` |
-| 23:34:47 | Bash | Check merged-tree suite verdict | `cd /home/ronald/saas-hasner; wc -l logs/f346/suite_merge.log; grep -E '^(OK\|FAILED)($\| \()' logs/f346/suite_merge.log \| tail -1; grep -E '^Ran' logs/f346/suite_merge.log\|tail -1; tail -1 logs/f346/suite_merge.log; date` |
-| 23:31:21 | Bash | Drop non-growing arquivo field from ESPERANDO | `cd /home/ronald/saas-hasner/app/docs; sed -i '2s# \| arquivo=.*##' RELATO.md; sed -n 2p RELATO.md` |
-| 23:31:16 | Bash | Check why stop hook rejected | `tail -5 /home/ronald/saas-hasner/logs/hook_stop_fila1.log; sed -n 1,4p /home/ronald/saas-hasner/app/docs/RELATO.md; ls -d /proc/439128 && tr '\0' ' ' < /proc/439128/cmdline \| cut -c1-120` |
