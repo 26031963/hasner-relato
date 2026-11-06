@@ -1,7 +1,212 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 10:14** · publicado em **06/11/2026 10:15** (UTC-3)
+> Ultima resposta processada: **06/11/2026 10:20** · publicado em **06/11/2026 10:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 10:20 · sessao cffa6b326684 · - · - · origem=Ronald (tmux)
+
+Regras e definições O10 lidas:
+
+- Contrato: `app/docs/CORTES.md:187`; reprodução no backlog: `app/docs/BACKLOG.md:1224`.
+- S5b: `app/docs/BACKLOG.md:1248`. A “troca” desse corte é a substituição do motor pelo calculador: classes que não julgavam pontualidade não passam a cobrar. Não atribuir essa origem exclusivamente à troca de plantão.
+- Idempotência/coerência: L-099, `app/docs/LEIS.md:122`.
+- Competência: L-026, `app/docs/LEIS.md:77`; L-090, `app/docs/LEIS.md:123`.
+- Meia-noite: L-085, `app/docs/LEIS.md:117`.
+- Célula soberana: L-020, `app/docs/LEIS.md:71`.
+- Exportada: L-113, `app/docs/LEIS.md:150`; restrição específica O10 registrada em `app/docs/BACKLOG.md:1781` (“motor_v2/exportada sem !”).
+
+Definições para entradas:
+
+| Model | Campos com definição |
+|---|---|
+| TipoEscala | `tipo_ciclo` `app/escala/models.py:117`; valores 12x36 `:26`, 6x1 `:30`; `hora_inicio` `:50`; `hora_fim` `:51`; intervalo `:52` e `:53` |
+| EscalaColaborador | `colaborador` `app/escala/models.py:872`; `tipo_escala` `:874`; `data_inicio` `:875`; `data_fim` `:876`; `ativa` `:877` |
+| CelulaDia | `colaborador` `app/escala/models.py:1681`; `data` `:1685`; `trabalha` `:1686`; `origem` `:1691`; `escala_geradora` `:1692`; `dna` `:1697`; `editada_em` `:1732`; `editada_por` `:1733` |
+| Ausencia | `colaborador` `app/ponto/models.py:743`; `tipo` `:749`; `data` `:750`; `data_fim` `:751`; `documento` `:777`; `status` `:799`; `aprovado_por` `:805`; `aprovada_em` `:810` |
+| TipoAusencia | `codigo` `app/ponto/models.py:577`; `efeito` `:581` |
+| Batida | `colaborador` `app/ponto/models.py:22`; `timestamp` `:23` |
+| Empresa | `dia_inicio_competencia` `app/colaboradores/models.py:46` |
+| DiaPago, observáveis | `horas_trabalhadas` `app/ponto/models.py:326`; `horas_noturnas` `:327`; HE100 `:330`, `:331`, `:332`; `horas_atraso` `:334`; `horas_saida_antecipada` `:335`; `horas_falta` `:336`; `horas_intra_indenizada` `:337` |
+
+Não achei definição de model/campos próprios do par, do dia cedido e das duas cartas: substituir essas entradas por `[nao verificado]`. O registro do estado atual também diz não haver escritor humano de célula (`app/docs/RELATO.md:3`); isso não define o esperado.
+
+Casos sustentados:
+
+| Caso | Origem | Entrada e esperado pela regra | Mutante |
+|---|---|---|---|
+| Cedente 12x36 | `app/docs/CORTES.md:187` | Par completo, duas cartas, confirmação admin, cedente 12x36; dia cedido vira folga trocada, sem desconto. Valores concretos de AN/intra não definidos pelo contrato. | Override aplicado só ao substituto. |
+| Cedente 6x1 | `app/docs/CORTES.md:187` | Mesmo cenário, cedente 6x1; mesmo efeito de folga sem desconto. | Restringir troca a 12x36. |
+| Substituto em folga | `app/docs/CORTES.md:187` | Dia originalmente de folga assumido por par confirmado; dia normal com AN/intra, HE100=0. | Manter folga trabalhada/HE100 ou suprimir AN/intra. |
+| Zero anexos | `app/docs/CORTES.md:187` | Pedido de confirmação sem cartas; não vale como troca confirmada. Código/status/texto exato: regra não decide. | Remover exigência de documentos. |
+| Só carta do cedente | `app/docs/CORTES.md:187` | Um documento; não confirma. | Trocar exigência dos dois por qualquer um. |
+| Só carta do substituto | `app/docs/CORTES.md:187` | Mesmo resultado, em sentido contrário. | Validar apenas documento do substituto. |
+| Par incompleto | `app/docs/CORTES.md:187` | Ausencia `tipo='troca_de_plantao'`, só um lado; continua pedido, sem efeito de par. Mesmo status legado “aprovada” não fornece o segundo lado. | Aprovação da ausência isolada basta para efetivar. |
+| Origem cedente versus substituto | `app/docs/CORTES.md:187` | Pedido pode nascer de qualquer lado; completado e confirmado, resultado equivalente. | Aceitar apenas pedidos do cedente. |
+| Segunda confirmação | L-099, `app/docs/LEIS.md:122` | Repetir confirmação do mesmo par sem alterar entradas; mesmo estado e efeito, sem duplicar desconto, pagamento ou override. Retorno/trilha repetida: regra não decide. | Inserção incondicional na reconfirmação. |
+| Duas confirmações concorrentes | L-099, `app/docs/LEIS.md:122` | Mesmo par e entradas em duas confirmações; estado final equivalente a uma confirmação. Status HTTP, perdedor e número de tentativas de trilha: regra não decide. | Duas operações gravam duas trocas/efeitos. |
+| Estado intermediário | `app/docs/CORTES.md:187` | Pedido ainda sem par confirmado; nenhum lado deve ser tratado como troca válida. Atomicidade de armazenamento e isolamento de leitura: regra não decide. | Aplicar cedido antes de completar/confirmar o par. |
+| Meia-noite | L-085 `app/docs/LEIS.md:117` + contrato | Jornada assumida 20/10 19h–21/10 07h; jornada pertence ao dia 20, sem criar segundo trabalho dia 21; dia assumido normal sem HE100. | Classificar a cauda como trabalho independente dia 21. |
+| Competência 20/21 | L-026 `app/docs/LEIS.md:77` + contrato | Empresa com corte 21, dias cedido/assumido em 20/10 e 21/10; dia 20 pertence à comp 10, dia 21 à comp 11. Efeitos da troca não desaparecem na fronteira. | Recortar por mês civil ou exigir ambos na mesma competência. |
+| Vínculo trocado | L-020 `app/docs/LEIS.md:71` | Célula com `escala_geradora` antigo e vínculo atual diferente; preservar DNA congelado fora do ato autorizado. Qual vínculo habilita troca: regra não decide. | Resolver passado pelo vínculo atual e reescrever DNA incidentalmente. |
+| Colega sem vínculo no dia | Contrato + L-020 | Ausência de vínculo ativo no dia; regra não decide se recusa ou como aceita. | Não há mutante de aceitação/recusa justificável sem regra adicional. |
+| Cedido já trabalhado | `app/docs/CORTES.md:187` | Batidas existentes no dia cedido; regra não decide conflito entre trabalho já realizado e folga trocada. | Não há gabarito para escolher aceitar/recusar. |
+| Célula editada | L-020 `app/docs/LEIS.md:71` + contrato | `origem='editada'`, DNA já humano; regra não decide precedência entre edição anterior e troca confirmada. | Não há gabarito para substituir/preservar override. |
+| Legado solo | `app/docs/CORTES.md:187` | Ausencia `troca_de_plantao`, aprovada, `data_fim=NULL`, sem contraparte; não constitui par válido. Conversão em lote depende de DRY→aval. | Migrar toda aprovação antiga como troca confirmada. |
+| S5b contraexemplo | `app/docs/BACKLOG.md:1248` | Classe MotorComercial/Motor12x36/MotorIntermitente que não julgava pontualidade; troca do calculador não começa a cobrar atraso/antecipada. | Habilitar pontualidade dessas classes durante substituição. |
+
+Lacunas procuradas:
+
+- A2 literal O10: não consta no `aval.txt` raspado; `app/docs/BACKLOG.md:1781` só registra execução/prontidão.
+- Validação do colega sem vínculo, dia cedido já trabalhado, conflito com célula editada e datas vazias: `[nao verificado]`.
+- Status HTTP e texto de recusa, chave do par, armazenamento das duas cartas, retorno de reconfirmação e política de concorrência: `[nao verificado]`.
+- O dado legado de produção O10 não foi fornecido no bloco raspado; números históricos do backlog são relato de código/documentação, não nova leitura de produção (`app/docs/BACKLOG.md:1224`).
+
+## 06/11 10:20 · sessao ef523e07fb21 · - · - · origem=Ronald (tmux)
+
+Evidências e casos sustentados:
+
+| Caso | Regra escrita | Entrada com definições | Esperado pela regra | Mutante |
+|---|---|---|---|---|
+| CXR-vigia-d-e | Aval fornecido PRONTO (5); causas e soma em `app/chamados/services/vigia_fio.py:519`, `app/chamados/services/vigia_fio.py:531` | Dia retido passado; `CelulaDia.colaborador` `app/escala/models.py:1681`, `data` `app/escala/models.py:1685`; sem pergunta/chamado vivo; colaborador já na lista, dia antes ausente; após lavra dia presente com dono ESTRUTURA, definição do item/dono novo `[nao verificado]` | O dia sai de d e entra em e com detalhe `dia_na_lista_dono_estrutura`; d diminui 1, e aumenta 1, mesmo universo; a+b+c+d+e continua igual a `fio_morto_alcance`. ESTRUTURA continua no alarme pela regra literal `app/chamados/services/vigia_fio.py:292`. | Continuar classificando por presença apenas do colaborador; omitir o dia de ambas as classes; abater d sem acrescentar e. |
+| CXR-vigia-admin | Corte literal registrado em `app/docs/PROMPTS.md:1670`; transcrição em `app/chamados/services/vigia_fio.py:292` | Mesmo cenário, dia publicado com dono BATIDA ou CADASTRO `[nao verificado]` | Vai para `fio_do_admin`, com dono lido da lista; não é correto exigir e para esses donos. Se sair da lista sem resolver, volta ao fio morto. | Encaminhar todo dono para e; recalcular o dono no vigia; manter fora do alarme depois de sair da lista. |
+| CXR-dia-x-colab | Regra documentada em `app/escala/services/cadastro_realidade.py:953` | Lista contém assinatura de vínculo/colaborador, mas nenhuma assinatura com data do dia `[nao verificado]`; `CelulaDia.data` `app/escala/models.py:1685` | Presença do colaborador não equivale a presença do dia; o dia continua fora de `dias_na_lista`. | Marcar todos os dias de um colaborador como presentes porque existe alguma linha dele. |
+| CXR-lista-falhou | Regra explícita em `app/chamados/services/vigia_fio.py:191` | Carregamento da lista falha; mesmo dia consultado nos dois universos; parâmetros `hoje`, `empresas`, `agora` definidos em `app/chamados/services/vigia_fio.py:199` | Falha não retira dia do contador; `fio_do_admin_sem_resposta` conta uma vez o par colaborador/data na rodada. | Tratar exceção como lista vazia válida/alarme resolvido; contar duas vezes o mesmo dia. |
+| CXR-lavra-nao-reescreve-celula | L-020 `app/docs/LEIS.md:71` | `CelulaDia.origem='editada'` `app/escala/models.py:1691`; DNA congelado `app/escala/models.py:1697`; lavra/publicação de CXR | A publicação da lista não autoriza alterar dia ou marcos congelados; `origem`, `dna`, `trabalha` e proveniência permanecem. | Regerar célula como efeito colateral de publicar lista. |
+
+Definições úteis adicionais:
+
+- `EscalaColaborador`: colaborador `app/escala/models.py:872`; posto `:873`; tipo_escala `:874`; data_inicio `:875`; data_fim `:876`; ativa `:877`.
+- `Colaborador.situacao`: `app/colaboradores/models.py:323`; data_demissao: `:325`.
+- `CelulaDia.escala_geradora`: `app/escala/models.py:1692`; regenerada_em `:1718`; regeneracoes `:1723`; dna_anterior `:1726`.
+- Formato observável do vigia: `[celula_id, colab_id, data, competencia, rota, causa, detalhe, papel]`, documentado em `app/chamados/services/vigia_fio.py:548`.
+- Universo e partes: `porta_fila + porta_pergunta + de_hoje_pra_frente + quatro baldes + fio_morto_alcance = universo`; `a+b+c+d+e=fio_morto_alcance`, regra escrita em `app/chamados/services/vigia_fio.py:531`.
+- `limite` nunca omite dia sem porta; contagem por rota/papel cobre universo inteiro, regra escrita em `app/chamados/services/vigia_fio.py:551`.
+
+Lacunas encontradas:
+
+- Regra específica de CXR para lavra ainda não rodada hoje: não encontrada. C8 define retorno sem medida em `app/ponto/services/vinculo_na_lista.py:125`, mas isso é contexto de outra assinatura, não gabarito CXR.
+- Regra de CXR para exposição durante escrita intermediária e desempate entre publicações concorrentes de conteúdos diferentes: não encontrada; aval apenas exige mesmo estado ao lavrar duas vezes.
+- Regra específica CXR para desligado ou competência exportada: não encontrada além da autoridade única do aval; não importar exclusões C8/C11. C8 exclui desligado em `app/ponto/services/vinculo_na_lista.py:151`; C11 tem escopo próprio de competência aberta em `app/escala/services/cadastro_realidade.py:119`.
+- Esquema da publicação CXR: `[nao verificado]`. O modelo C8 não foi imposto pelo aval como modelo de dados; `MetricaSnapshot` está definido em `app/inteligencia/models.py:81`.
+- A garantia declarada de uma linha no C8 está em `app/ponto/services/vinculo_na_lista.py:111`; não é evidência de comportamento concorrente CXR.
+
+## 06/11 10:18 · sessao 279f5e84cfaa · O10-B · censo · origem=Code
+
+**1. Sítios que escrevem em `CelulaDia`**
+
+| Sítio físico | Escrita | Pela porta ou fora |
+|---|---|---|
+| `regenerar_celulas_vinculo` | Fora da vigência: `save` de `trabalha=False` e DNA, somente para origem `gerada`. `app/ponto/portas/celula.py:232`, `app/ponto/portas/celula.py:239` | Pela porta. |
+| `regenerar_celulas_vinculo` | `create` da célula ausente, com colaborador, data, trabalha, origem `gerada`, geradora e DNA. `app/ponto/portas/celula.py:253` | Pela porta. |
+| `regenerar_celulas_vinculo` | `save` de trabalha, geradora, DNA, DNA anterior, momento e contador de regeneração; exige origem `gerada` e diferença. `app/ponto/portas/celula.py:257`, `app/ponto/portas/celula.py:270` | Pela porta. |
+| `reverter_regeneracao_dia` | `save` de DNA restaurado, DNA anterior limpo, trabalha, geradora e trilha de regeneração. `app/ponto/portas/celula.py:570`, `app/ponto/portas/celula.py:578` | Pela porta. |
+| `gerar_celulas_periodo` | `create` da célula ausente. `app/ponto/portas/celula.py:633` | Pela porta. |
+| `gerar_celulas_periodo` | `save` somente do DNA: enriquecimento de célula passada, `gerada`, com DNA nulo. `app/ponto/portas/celula.py:643`, `app/ponto/portas/celula.py:645` | Pela porta. |
+| `gerar_celulas_periodo` | `save` de trabalha, geradora e DNA para hoje/futuro; a editada foi pulada antes. `app/ponto/portas/celula.py:638`, `app/ponto/portas/celula.py:650`, `app/ponto/portas/celula.py:655` | Pela porta. |
+| `salvar_e_emitir` | `cel.save(update_fields=campos)`, compartilhado pela lavra e pelos carimbos. `app/ponto/portas/celula.py:678`, `app/ponto/portas/celula.py:684` | Pela porta. |
+| `carimbar_insumos_em_lote` | `bulk_update` de ausência, entrada, saída e `insumos_em`. `app/ponto/portas/celula.py:887` | Pela porta. |
+| Chamadas lógicas do `save` compartilhado | Lavra sobre decisão administrativa: ata/status; atualização somente de status; lavra completa; carimbo; precedência na ata. `app/ponto/portas/celula.py:787`, `app/ponto/portas/celula.py:804`, `app/ponto/portas/celula.py:819`, `app/ponto/portas/celula.py:851`, `app/ponto/portas/celula.py:866` | Todas pela porta. |
+| Delegação do modelo e chamadores da lavra | O método do modelo delega; decisão humana e cartório chamam a lavra. Não são novos pontos físicos de `save`. `app/escala/models.py:1826`, `app/ponto/services/veredito_celula.py:330`, `app/ponto/services/cartorio.py:889`, `app/ponto/services/cartorio.py:1242`, `app/ponto/services/cartorio.py:1802` | Pela porta. |
+| Outros métodos de DML | Nenhum sítio adicional de `update`, `update_or_create`, `bulk_create` ou SQL direto contra produção foi localizado na cópia; completude além dos sítios identificados: **[nao verificado]**. |
+| SQL de cópia da sombra | Inclui `escala_celuladia` e executa `DELETE`/`COPY`, porém o destino declarado é `sombra_db`/`sombra`; produção fornece `SELECT`/`COPY TO`. `bin/sombra_incremental.sh:20`, `bin/sombra_incremental.sh:35`, `bin/sombra_incremental.sh:55`, `bin/sombra_incremental.sh:61`, `bin/sombra_incremental.sh:68` | Fora da porta, destinado à sombra. |
+| Migration `0030` | `CreateModel`: cria o esquema da tabela. `app/escala/migrations/0030_celuladia.py:17` | Fora da porta; DDL. |
+| Migration `0031` | Adiciona DNA. `app/escala/migrations/0031_celuladia_dna.py:13` | Fora da porta; DDL. |
+| Migration `0032` | Adiciona impressão e momento do julgamento. `app/escala/migrations/0032_celuladia_impressao_celuladia_julgada_em.py:13`, `app/escala/migrations/0032_celuladia_impressao_celuladia_julgada_em.py:18` | Fora da porta; DDL. |
+| Migration `0036` | Adiciona protestos e campos do veredito. `app/escala/migrations/0036_b5_celula_veredito.py:13`, `app/escala/migrations/0036_b5_celula_veredito.py:18`, `app/escala/migrations/0036_b5_celula_veredito.py:23`, `app/escala/migrations/0036_b5_celula_veredito.py:28` | Fora da porta; DDL. |
+| Migration `0037` | Adiciona ata. `app/escala/migrations/0037_hx_ata_celula.py:13` | Fora da porta; DDL. |
+| Migration `0038` | Adiciona DNA anterior, contador e momento de regeneração; contador tem default zero. `app/escala/migrations/0038_celuladia_dna_anterior_celuladia_regeneracoes_and_more.py:13`, `app/escala/migrations/0038_celuladia_dna_anterior_celuladia_regeneracoes_and_more.py:18`, `app/escala/migrations/0038_celuladia_dna_anterior_celuladia_regeneracoes_and_more.py:23` | Fora da porta; DDL. |
+| Migration `0039` | Adiciona ausência, `insumos_em`, entrada e saída. `app/escala/migrations/0039_b5f2_celula_insumos.py:15`, `app/escala/migrations/0039_b5f2_celula_insumos.py:20`, `app/escala/migrations/0039_b5f2_celula_insumos.py:25`, `app/escala/migrations/0039_b5f2_celula_insumos.py:30` | Fora da porta; DDL. |
+| Migration `0044` | Adiciona status e rótulo. `app/escala/migrations/0044_celuladia_status_dia_celuladia_status_rotulo.py:13`, `app/escala/migrations/0044_celuladia_status_dia_celuladia_status_rotulo.py:18` | Fora da porta; DDL. |
+
+**2. Leitores de origem editada, `editada_em`, `editada_por` ou motivo**
+
+| Âmbito / leitor | O que decide |
+|---|---|
+| Produção — regeneração fora da vigência | Só desliga origem `gerada`; preserva trabalha/DNA da editada. `app/ponto/portas/celula.py:232` |
+| Produção — regeneração normal | Só reescreve origem `gerada`. `app/ponto/portas/celula.py:257` |
+| Produção — reversão | Retorna `False` se origem diferente de `gerada`. `app/ponto/portas/celula.py:558` |
+| Produção — geração periódica | Origem `editada` incrementa `puladas`; enriquecimento passado exige `gerada`. `app/ponto/portas/celula.py:638`, `app/ponto/portas/celula.py:643` |
+| Produção — `medir_stale` | Consulta somente `gerada`; editada fica fora dessa acusação de divergência com o cadastro. `app/ponto/management/commands/tripwire_celulas.py:21` |
+| Produção — `contra_o_template` | Consulta somente `gerada`; editada não conta como erro do gerador. `app/escala/management/commands/celulas_contra_o_template.py:29` |
+| Produção — `houve_fato_novo` | `editada_em` em `(desde, ate]` retorna `True`. `parcial_so_lista` usa esse resultado para decidir se o restante fica somente na lista. `app/ponto/services/cartorio.py:365`, `app/ponto/services/cartorio.py:400` |
+| Produção — `marcos_do_lote` / `esta_stale` | Inclui `editada_em` no maior timestamp por colaborador; marco posterior ao julgamento torna a pergunta stale. `app/chamados/veredito_lavrado.py:151`, `app/chamados/veredito_lavrado.py:154`, `app/chamados/veredito_lavrado.py:187` |
+| Produção — `janelas_reabertas` | Inclui `Max(editada_em)`; fato posterior à lavra reabre a janela passada para nova lavra do censo de fase. `app/escala/services/fase_12x36.py:188`, `app/escala/services/fase_12x36.py:192` |
+| Produção — apresentação da origem | Expõe a origem no retrato do dia, representação textual e detalhe do contador; sem decisão especial por `editada` nesses trechos. `app/ponto/services/dia_do_colab.py:90`, `app/escala/models.py:1842`, `app/escala/management/commands/celulas_contra_o_template.py:74` |
+| Produção — `editada_por` | Nenhum leitor de negócio localizado **[nao verificado]**; o campo é declarado como FK opcional. `app/escala/models.py:1733` |
+| Produção/testes — motivo da edição | Não existe campo de motivo de edição no catálogo da célula; o catálogo é confrontado com os campos concretos do modelo. `app/escala/tests/test_d3_guarda_da_linha_celula.py:38`, `app/escala/tests/test_d3_guarda_da_linha_celula.py:146`, `app/escala/tests/test_d3_guarda_da_linha_celula.py:171` |
+| Teste — preservação da origem | Lê origem após gerar novamente e exige `editada`, com trabalha preservado. `app/escala/tests/test_celula_dia.py:83` |
+| Teste — contrato do DNA gerado | Filtra origem `gerada` para verificar vocabulário, versão e vínculo do DNA; editadas ficam fora desse universo. `app/escala/tests/test_celula_dia.py:116` |
+| Teste — regeneração não é edição humana | Exige `editada_em is None` após regeneração. `app/escala/tests/test_cobranca_orfa_regeneracao.py:166` |
+| Teste — isolamento do relógio de regeneração | Exige `editada_em is None` no caso que prova reabertura por `regenerada_em`. `app/escala/tests/test_vfase_dono_as_of.py:279` |
+| Teste — guarda da linha | Classifica os dois campos, mantém a exceção `SEM_ESCRITOR` e procura escritas sintáticas deles. `app/escala/tests/test_d3_guarda_da_linha_celula.py:50`, `app/escala/tests/test_d3_guarda_da_linha_celula.py:72`, `app/escala/tests/test_d3_guarda_da_linha_celula.py:179` |
+| Testes com fixture editada — autoridade | Escreve origem editada e verifica que `eh_dia_trabalho` acompanha a célula, divergindo da aritmética. `app/escala/tests/test_celula_dia.py:98`, `app/escala/tests/test_celula_dia.py:100` |
+| Testes com fixture editada — tripwire | Verifica que editada não acusa stale. `app/escala/tests/test_celula_dia.py:358`, `app/escala/tests/test_celula_dia.py:361` |
+| Testes com fixture editada — fim do vínculo | Verifica que célula humana permanece trabalhando fora da vigência. `app/escala/tests/test_selo_celula_alem_do_vinculo.py:103`, `app/escala/tests/test_selo_celula_alem_do_vinculo.py:106` |
+| Testes com fixture editada — foto de folgas | Verifica que a foto não reescreve trabalha humano. `app/escala/tests/test_selo_foto_folgas_relavra.py:106`, `app/escala/tests/test_selo_foto_folgas_relavra.py:109` |
+| Testes com fixture editada — contadores | Contra-template ignora editada; folga com marcos inclui editada, pois esse segundo contador vale para qualquer origem. `app/escala/tests/test_foto_nao_apaga_o_ciclo.py:98`, `app/escala/tests/test_foto_nao_apaga_o_ciclo.py:99`, `app/escala/tests/test_foto_nao_apaga_o_ciclo.py:128`, `app/escala/tests/test_foto_nao_apaga_o_ciclo.py:129` |
+| Testes com fixture editada — universo de furos | Folga materializada prevalece sobre template sem fase e resulta `sem_dia`. `app/escala/tests/test_sem_dia_pelo_juiz.py:46`, `app/escala/tests/test_sem_dia_pelo_juiz.py:65` |
+| Testes com fixture editada — troca de template | Verifica preservação da célula humana após executar mudança do vínculo. `app/colaboradores/tests/test_vinculo_regenera_celulas.py:39`, `app/colaboradores/tests/test_vinculo_regenera_celulas.py:45` |
+| Testes com fixture editada — reversão | Exige recusa da reversão mesmo havendo DNA anterior. `app/ponto/tests/test_porta_celula_dia.py:247`, `app/ponto/tests/test_porta_celula_dia.py:250` |
+| Testes com fixture editada — reconciliação | Usam folga editada para verificar reconciliação/deduplicação, sobrevivência do novo e absolvição da pergunta; não comparam diretamente origem nos asserts. `app/ponto/tests/test_fechar3_troca_escala_gate.py:134`, `app/ponto/tests/test_fechar3_troca_escala_gate.py:157`, `app/ponto/tests/test_fechar3_troca_escala_gate.py:180`, `app/ponto/tests/test_fechar3_troca_escala_gate.py:203`, `app/ponto/tests/test_fechar3_troca_escala_gate.py:225`, `app/ponto/tests/test_fechar3_troca_escala_gate.py:249` |
+| Teste com fixture `editada_em` — impressão | Atualiza ata e `editada_em`; exige hash inalterado. `app/ponto/tests/test_d3_impressao_cobre_insumos.py:140`, `app/ponto/tests/test_d3_impressao_cobre_insumos.py:141` |
+| Teste com fixture de edição e DNA novo | Atualiza origem, `editada_em` e marcos; exige hash alterado. A entrada no hash é pelo DNA. `app/ponto/tests/test_d3_impressao_cobre_insumos.py:239`, `app/ponto/tests/test_d3_impressao_cobre_insumos.py:242` |
+| Teste com fixture somente `editada_em` | Verifica reabertura da competência no censo de fase. `app/escala/tests/test_vfase_dono_as_of.py:291`, `app/escala/tests/test_vfase_dono_as_of.py:297` |
+
+**3. Quem escreve hoje `editada_em` / `editada_por`**
+
+| Campo / âmbito | Resposta |
+|---|---|
+| `editada_em`, edição em produção | **Nenhum escritor declarado**; catálogo marca `None`, e o selo exige ausência de escritor nos arquivos de produção que varre. `app/escala/tests/test_d3_guarda_da_linha_celula.py:50`, `app/escala/tests/test_d3_guarda_da_linha_celula.py:179` |
+| `editada_por`, edição em produção | **Nenhum escritor declarado**, sob a mesma guarda. `app/escala/tests/test_d3_guarda_da_linha_celula.py:51`, `app/escala/tests/test_d3_guarda_da_linha_celula.py:179` |
+| `editada_em`, testes | Há escritas explícitas nas fixtures de impressão e reabertura de fase. `app/ponto/tests/test_d3_impressao_cobre_insumos.py:140`, `app/ponto/tests/test_d3_impressao_cobre_insumos.py:243`, `app/escala/tests/test_vfase_dono_as_of.py:291` |
+| Declaração da FK | `editada_por` possui `on_delete=SET_NULL`; isso é a política declarada da relação, distinta de um escritor de edição humana. `app/escala/models.py:1733` |
+| Ocorrências reais em produção | **[nao verificado]**; o dado fornecido não contém linhas de células nem auditorias de edição. |
+
+**4. O que a porta e seus selos exigem**
+
+| Aspecto | Contrato e implementação |
+|---|---|
+| Operações existentes | `OPERACOES` contém `gerar`, `lavrar_veredito` e `carimbar`; não contém `editar_dia`. `app/ponto/portas/celula.py:66` |
+| Gate de nomes | O teste exige exatamente esses três nomes e que todas as funções declaradas sejam chamáveis. Acrescentar a quarta operação altera essa expectativa. `app/ponto/tests/test_chokepoint_celula_gate.py:62` |
+| Gate de localização | Para entidades identificadas da família, escrita deve estar na porta; allowlist e pendências são vazias. `app/ponto/tests/test_chokepoint_celula_gate.py:21`, `app/ponto/tests/test_chokepoint_celula_gate.py:25`, `app/ponto/tests/test_chokepoint_celula_gate.py:49` |
+| Gate dentro da porta | Escritas detectadas devem estar dentro de funções declaradas em `OPERACOES`. `app/ponto/tests/test_chokepoint_celula_gate.py:69` |
+| Limite do gate | Ignora achados com entidade não inferida; o varredor exclui migrations e testes. Portanto o gate não substitui a leitura do `save` genérico e das migrations. `app/ponto/tests/test_chokepoint_celula_gate.py:29`, `app/core/censo_escritas.py:66`, `app/ponto/portas/celula.py:684` |
+| Guarda de competência | Na regeneração, carrega janelas lavradas e pula seus dias. O carregador consulta o juiz `competencia_fechada_para_celula`, considerando candidatas com exportação ou holerite publicado. `app/ponto/portas/celula.py:202`, `app/ponto/portas/celula.py:244`, `app/ponto/management/commands/gerar_celulas.py:161`, `app/ponto/management/commands/gerar_celulas.py:169`, `app/ponto/management/commands/gerar_celulas.py:173` |
+| `barrados` | Regeneração conta dias barrados, guarda extremos e devolve `{dias,de,ate,texto}` se a lista foi fornecida. Também devolve recusa de vínculo sem vigência declarada. `app/ponto/portas/celula.py:139`, `app/ponto/portas/celula.py:244`, `app/ponto/portas/celula.py:474` |
+| `apesar_da_lavra` | Valor verdadeiro esvazia as janelas impeditivas; o texto entra na trilha da regeneração. O código não faz validação adicional desse texto nesse ramo. `app/ponto/portas/celula.py:202`, `app/ponto/portas/celula.py:336`, `app/ponto/portas/celula.py:344` |
+| Reversão | Repete a guarda de competência, mas devolve `False` ao bloquear; sua assinatura não oferece `barrados`. `app/ponto/portas/celula.py:520`, `app/ponto/portas/celula.py:560` |
+| Alcance das guardas | Essas verificações estão nos corpos de regeneração/reversão. `OPERACOES` é uma declaração de funções, sem invólucro que aplique automaticamente guarda, auditoria ou idempotência a uma nova operação. `app/ponto/portas/celula.py:66`, `app/ponto/portas/celula.py:202`, `app/ponto/portas/celula.py:560` |
+| Idempotência | Contrato: mesma entrada, mesmo estado e uma linha de trilha. Regeneração compara conteúdo; reversão limpa DNA anterior; lavra e carimbos retornam sem salvar quando iguais. `app/ponto/portas/celula.py:19`, `app/ponto/portas/celula.py:257`, `app/ponto/portas/celula.py:558`, `app/ponto/portas/celula.py:571`, `app/ponto/portas/celula.py:797`, `app/ponto/portas/celula.py:840`, `app/ponto/portas/celula.py:860` |
+| Selos de idempotência | Exercitam geração, regeneração, lavra, carimbo e lote; há contagem adicional de chamados/perguntas para detectar duplicação. `app/ponto/tests/test_porta_celula.py:36`, `app/ponto/tests/test_porta_celula.py:46`, `app/ponto/tests/test_porta_celula.py:63`, `app/ponto/tests/test_porta_celula.py:79`, `app/ponto/tests/test_porta_celula.py:142`, `app/ponto/tests/test_porta_celula.py:165` |
+| Trilha da regeneração | Emite `regenerar_celulas_vinculo` quando `n` é verdadeiro; inclui motivo, contagem de barrados e abertura da guarda. `app/ponto/portas/celula.py:327` |
+| Trilha da lavra | Emite `veredito_celula`; o carimbo guarda sua trilha na própria célula. `app/ponto/portas/celula.py:33`, `app/ponto/portas/celula.py:805`, `app/ponto/portas/celula.py:820`, `app/ponto/portas/celula.py:844` |
+| Auditoria e atomicidade | `evento` é escritor de `LogAuditoria`, com savepoint e comportamento best-effort; falha de auditoria não derruba o ato. Já célula e outbox são gravados no mesmo `atomic` de `salvar_e_emitir`. `app/core/observ.py:94`, `app/core/observ.py:105`, `app/core/observ.py:133`, `app/ponto/portas/celula.py:682` |
+| Autor/motivo | A documentação exige autor para a trilha, mas regeneração aceita `autor=None`, `motivo=''`; ausência de autor não é recusada pela assinatura/caminho mostrado. `app/ponto/portas/celula.py:41`, `app/ponto/portas/celula.py:100`, `app/ponto/portas/celula.py:330` |
+
+**5. `SEM_ESCRITOR` e o que o selo mede**
+
+| Item | Conteúdo / medida |
+|---|---|
+| Linha 72 | Exatamente `SEM_ESCRITOR = {'editada_em', 'editada_por'}`. `app/escala/tests/test_d3_guarda_da_linha_celula.py:72` |
+| Natureza da exceção | Ambos estão classificados como trilha, com escritor `None`. `app/escala/tests/test_d3_guarda_da_linha_celula.py:50` |
+| Completude do catálogo | Compara `CATALOGO` aos campos concretos de `CelulaDia._meta`; campo sem linha e linha sem campo geram violação. `app/escala/tests/test_d3_guarda_da_linha_celula.py:124`, `app/escala/tests/test_d3_guarda_da_linha_celula.py:146` |
+| Existência do escritor | Reconhece atribuições de atributos, kwargs de criação/atualização e nomes em listas de campos; verifica também `auto_now_add`. É reconhecimento sintático por nome de campo. `app/escala/tests/test_d3_guarda_da_linha_celula.py:80`, `app/escala/tests/test_d3_guarda_da_linha_celula.py:129` |
+| Cobertura da impressão | Insumos devem aparecer como `cel.<campo>` em cada chamada de `impressao_insumos`; a exceção atual é `trabalha`. `app/escala/tests/test_d3_guarda_da_linha_celula.py:70`, `app/escala/tests/test_d3_guarda_da_linha_celula.py:107`, `app/escala/tests/test_d3_guarda_da_linha_celula.py:140` |
+| Catracas | Os conjuntos de exceções só podem encolher. `app/escala/tests/test_d3_guarda_da_linha_celula.py:175` |
+| Ausência de escritor | Varre Python de produção, excluindo inclusive `tests` e `migrations`, e exige zero achados para os campos em `SEM_ESCRITOR`. `app/escala/tests/test_d3_guarda_da_linha_celula.py:156`, `app/escala/tests/test_d3_guarda_da_linha_celula.py:179` |
+| Nascer o escritor humano | O teste manda retirar o campo da catraca e declarar seu escritor no mesmo ato. `app/escala/tests/test_d3_guarda_da_linha_celula.py:180` |
+| Unicidade | Reusa o gate da família; aqui verifica concordância entre a porta registrada e o catálogo por campo. `app/escala/tests/test_d3_guarda_da_linha_celula.py:191` |
+| O selo não demonstra | Não consulta dados de produção nem prova propagação financeira da edição; suas entradas são AST, metadados e chamadas da impressão. `app/escala/tests/test_d3_guarda_da_linha_celula.py:167` |
+
+**6. Leitores relevantes para falta/HE, cartório, fechamento e folha**
+
+| Leitor | Dependência e decisão afetada |
+|---|---|
+| `EscalaColaborador.eh_dia_trabalho` | Havendo célula, retorna `trabalha`, sem filtro de origem. `app/escala/models.py:1087` |
+| `marcos_do_dia`, `pausas_do_dia`, `extra_declarada_do_dia` | Consomem marcos, intervalos e extra declarada congelados no DNA. `app/escala/models.py:1117`, `app/escala/models.py:1182`, `app/escala/models.py:1227` |
+| `minutos_previstos_do_dia` / `intervalo_declarado_do_dia` | Trabalho previsto, marcos e intervalos determinam minutos previsto
+
+[truncado em 20000 de 29536 caracteres]
 
 ## 06/11 10:14 · sessao 4ea10ee07e5e · - · - · origem=Ronald (tmux)
 
@@ -699,70 +904,4 @@ Auditoria estática, sem execução dos testes; resultados reais de verde/vermel
 
 Os mutantes das linhas `:136`, `:153`, `:165`, `:189`, `:234` seriam mortos por outros testes do arquivo; não os apresentaria como buracos da **suíte inteira**. Os buracos coletivos mais claros são: escrita crua invisível aos spies, receiver não demonstrado, S144 “pula todas”, ausência de caso sem credor não validado em voo e ausência dos cenários savepoint/on_commit/thread (`app/chamados/tests/test_pep_reentrada.py:69`, `:111`, `:204`, `:224`, `:228`; `app/chamados/services/disputa_emissao.py:1665`; `app/chamados/services/materializacao.py:1399`).
 
-## 06/11 09:35 · sessao 690d0fbfa393 · - · - · origem=Ronald (tmux)
-
-- **S144 fora do receiver:** não há outro chamador de produção encontrado; a chamada está em `app/chamados/signals.py:139-140`. Há chamadas diretas em testes: `app/chamados/tests/test_porta_desfecho_pergunta.py:226`, `:244`, `:248`, `:263`, `:292`; `app/chamados/tests/test_o261e_f2_porta_carimbo.py:691`; `app/chamados/tests/test_pep_reentrada.py:228`.
-- **Não roda estritamente “uma vez por fecho”:** o receiver aceita qualquer `post_save` de disputa já fechada, excluindo somente `raw`, criação e ausência de `fechada_em`; não compara estado anterior nem `update_fields`. Uma nova gravação da disputa fechada pode acioná-lo novamente. `app/chamados/signals.py:124-140`.
-- **A guarda não agenda recuperação:** apenas dá `continue`; nenhuma callback ou fila nasce nesse trecho. `app/chamados/services/materializacao.py:1399-1400`.
-- **No sucesso normal**, o próprio materializador carimba antes de sair do sinal, com `VIA_DECLARACAO` quando houve declaração; sem declaração, deriva a via por `via_pelo_fato`, ou usa `VIA_CHAMADO_ENCERRADO` sem destino. `app/chamados/services/materializacao.py:1235-1255`.
-- **O exemplo “fechou no meio, S144 pulou, materializador reprovou” não deixa aquele fecho confirmado:** reprovação do lastro ou da porta levanta `_Reprovada` dentro do mesmo `atomic` que contém o plantio e os signals síncronos; o fecho ocorrido ali também volta. `app/chamados/services/materializacao.py:1194`, `:1207-1217`, `:1251-1258`.
-- **Se o fato aprovado já existia antes**, ele pode persistir ao rollback; a cauda roda depois da saída do sinal, consulta C7 e pode fechar a disputa, fazendo S144 carimbar por `VIA_JUIZ_APROVOU`. Isso depende de C7 e do lastro aprovarem. `app/chamados/services/materializacao.py:1287-1307`, `:1352-1353`, `:1401-1405`.
-- **Não há garantia demonstrada de carimbo eventual para toda recusa:** recusas não terminais ficam pendentes com motivo; novas tentativas existem pelas ações de regularização, pelo fio e pela validação, mas sua execução futura é [nao verificado]. `app/chamados/services/materializacao.py:1058-1062`, `:1076-1078`; `app/chamados/services/acoes_disputa.py:139`; `app/chamados/services/fio.py:666`; `app/chamados/services/validacao.py:430`.
-- **A validação humana tem recuperação própria:** depois da unidade recusada, devolve validação ao admin e pode reabrir disputa fechada; não depende de um carimbo posterior do S144 para esconder a recusa. `app/chamados/services/validacao.py:424-427`, `:155-200`.
-
-Triagem:
-
-- **Multi-alias:** descarte sustentado pelas configurações da cópia: SaaS declara somente `default`, backend tenant e `TenantSyncRouter`; produção convencional também declara só `default`. Configuração efetivamente carregada em produção: [nao verificado]. `app/config/settings/saas.py:83-95`; `app/config/settings/prod.py:9-18`.
-- **Duplo fecho:** permanece possibilidade estrutural por instância desatualizada: reconciliador fecha uma instância; cauda do materializador verifica a instância recebida sem `refresh_from_db`; a porta também checa `self.fechada_em` em memória. Isso antecede as linhas alteradas nos anexos; execução concreta em produção: [nao verificado]. `app/chamados/reconciliador.py:598-604`; `app/chamados/services/materializacao.py:1290-1307`; `app/chamados/models.py:1820-1824`.
-- **JUIZES.md:** “só observação” é insuficiente perante a própria regra documental: a tabela diz “disputa fecha … SEM juiz”, mas C7 está registrado e implementado, e o documento exige corrigir divergência no mesmo commit. A divergência é preexistente; não prova juiz duplicado introduzido pela obra. `app/docs/JUIZES.md:14`, `:54`; `app/core/juizes.py:267`; `app/chamados/models.py:1789-1794`.
-
-Classes no diff:
-
-- **Segundo juiz:** a consulta nova responde posse temporária da escrita; os julgamentos de lastro/C6/C7 continuam nas autoridades existentes. `app/chamados/services/materializacao.py:1127-1129`, `:1207`, `:1251`; `app/chamados/services/disputa_emissao.py:1710-1713`.
-- **Relógio:** as adições não introduzem leitura de hora; os instantes de escrita permanecem nos pontos já existentes. `app/chamados/services/materializacao.py:1218`, `:1390`; `app/chamados/services/disputa_emissao.py:1669`.
-- **Ordem de trava:** nenhuma nova aquisição explícita de lock aparece nas adições; a cauda acrescenta leitura de perguntas. Ausência de deadlock em execução concorrente: [nao verificado]. `app/chamados/services/disputa_emissao.py:1710`; `app/chamados/services/materializacao.py:1118-1124`, `:1399-1400`.
-- **Pouso antes do pré-requisito:** o contexto verifica transação aberta, é instalado após entrar no `atomic` e antes dos ramos de plantio. `app/chamados/services/materializacao.py:1118-1122`, `:1194-1200`.
-- **Estado de módulo:** há objeto `ContextVar` no módulo, com valor inicial imutável e restauração por token; não é prova de sobrevivência do valor após o bloco. Contextos copiados/thread herdada exigem análise separada. `app/chamados/services/materializacao.py:1106`, `:1120-1124`.
-
-## 06/11 09:34 · sessao bcd698cc91fd · - · - · origem=Ronald (tmux)
-
-Achado concreto introduzido no teste: `_no_post` copia as chamadas **antes da execução dos callbacks de commit**. A captura ocorre na linha 290, dentro do `captureOnCommitCallbacks(execute=True)` iniciado em 287; o contexto só termina após a chamada artificial em 293. Assim, um push Web Push agendado no POST escapa da comparação em 298. O FCM principal fica parcialmente protegido pelo `len(...)=1` em 299, porque a chamada artificial acrescenta uma chamada nesse alvo. [app/chamados/tests/test_c20_fio_mudo.py:287; app/chamados/tests/test_c20_fio_mudo.py:290; app/chamados/tests/test_c20_fio_mudo.py:293; app/chamados/tests/test_c20_fio_mudo.py:298; app/chamados/tests/test_c20_fio_mudo.py:299]
-
-O controle “MORDE” importa o símbolo já substituído e chama diretamente o mock. Prova que o endereço patchado responde ao import local; não demonstra passagem por um chamador real de produção, nem controle positivo dos outros cinco alvos. [app/chamados/tests/test_c20_fio_mudo.py:221; app/chamados/tests/test_c20_fio_mudo.py:224; app/chamados/tests/test_c20_fio_mudo.py:230; app/chamados/tests/test_c20_fio_mudo.py:291]
-
-Censo adicional do delta da volta 2:
-
-| Alvo | Quem escreve/define | Quem lê/chama |
-|---|---|---|
-| `_CANOS_DE_PUSH` | Tupla de seis endereços no teste. [app/chamados/tests/test_c20_fio_mudo.py:217] | `_push_gravado` cria os patches; comparações usam seu tamanho. [app/chamados/tests/test_c20_fio_mudo.py:230; app/chamados/tests/test_c20_fio_mudo.py:266; app/chamados/tests/test_c20_fio_mudo.py:298] |
-| `_push_gravado` | Retorna `ExitStack` e mocks. [app/chamados/tests/test_c20_fio_mudo.py:226] | Adoção e POST Validar. [app/chamados/tests/test_c20_fio_mudo.py:256; app/chamados/tests/test_c20_fio_mudo.py:286] |
-| Novo POST `validar_pergunta` | O teste fornece ação e IDs. [app/chamados/tests/test_c20_fio_mudo.py:288] | View delega a `processar_post_fio`; este resolve pergunta, listagem e disputa e delega com `sem_reabrir`. [app/chamados/views.py:951; app/chamados/services/fio.py:581; app/chamados/services/fio.py:594; app/chamados/services/fio.py:605] |
-| `validada_em` agora observado | O ato continua em `_carimbar_validacao`, que salva timestamp/autor; a casca encaminha à porta existente. [app/chamados/services/validacao.py:127; app/chamados/services/acoes_disputa.py:18; app/chamados/services/validacao.py:396] | Novo assert; juiz considera validada morta; propriedade traduz estado; materializador seleciona validadas/respondidas; modal apresenta “Validada”. [app/chamados/tests/test_c20_fio_mudo.py:296; app/chamados/juizes.py:1136; app/chamados/models.py:2593; app/chamados/services/materializacao.py:1294; app/templates/chamados/partials/modal_fio.html:223] |
-| Wrappers FCM/Web Push | FCM verifica token e chama `push_fcm`; `push_colaborador` verifica usuário e chama `_enviar_push_usuario`; `push_web_colaborador` verifica assinaturas e chama `pywebpush.webpush`. [app/chamados/fcm_utils.py:101; app/chamados/push_utils.py:114; app/ponto/webpush.py:24] | Os novos patches interceptam wrappers antes desses guardas e os níveis inferiores. [app/chamados/tests/test_c20_fio_mudo.py:221; app/chamados/tests/test_c20_fio_mudo.py:224] |
-
-`validada_em` já tem portas anteriores de preenchimento por simetria, limpeza e reversão; o novo POST apenas exercita a validação existente. Exemplos persistentes: carimbo de validação, devolução recusada, `carimbar(resposta='validar')` e descarimbo em lote. Isso não constitui segundo escritor introduzido pela volta 2. [app/chamados/services/validacao.py:131; app/chamados/services/validacao.py:188; app/chamados/models.py:2686; app/chamados/models.py:2703; app/chamados/models.py:1598]
-
-A função removida não conserva referência executável encontrada: restam lápides nos dois sítios e menções documentais em PROMPTS, BACKLOG e RELATO. O RELATO da cópia já prefixa a passagem histórica com `RESPONDIDA`; portanto, o apontamento de “topo ainda pendente” da v1 não corresponde à passagem atual. [app/chamados/models.py:517; app/chamados/services/fio.py:899; app/docs/PROMPTS.md:1895; app/docs/BACKLOG.md:1778; app/docs/RELATO.md:65]
-
-Nenhum relógio ou escritor de produção novo aparece no delta volta1→2 fornecido: as adições ficam no teste; seus instantes usam o congelamento existente e o POST chama a porta existente, cujo relógio permanece `_carimbar_validacao`. [app/chamados/tests/test_c20_fio_mudo.py:269; app/chamados/tests/test_c20_fio_mudo.py:287; app/chamados/services/validacao.py:131]
-
-Execução dos testes, sobrevivência experimental dos mutantes e efeitos em produção: [nao verificado]. [nao verificado]
-
-## 06/11 09:34 · sessao c5ab57b1181c · - · - · origem=Ronald (tmux)
-
-**Q2: não encontrei descarte errado segundo o critério causal pedido.** A adoção chama `reapontar_resolvedora`, registra o evento e retrata duplicatas; não chama ressuscitação ou reabertura. O reapontamento salva destino e lavra; o signal da pergunta agenda fechamento de beco, cuja classificação retorna imediatamente quando a disputa já está FECHADA. [app/chamados/models.py:502; app/chamados/models.py:507; app/chamados/models.py:515; app/chamados/services/fio.py:845; app/chamados/services/fio.py:847; app/chamados/signals.py:191; app/chamados/signals.py:202; app/chamados/services/becos.py:27]
-
-- **HX-RESSUSCITA:** `reabrir` chama `ressuscitar_perguntas` **antes** da adoção. A ressuscitação seleciona perguntas MATERIALIZADAS e sem texto, descarimba e reabre suas disputas pela porta do sistema. É outro ato, preexistente e independente de executar o REATAR subsequente. [app/chamados/models.py:1495; app/chamados/models.py:1496; app/chamados/models.py:1528; app/chamados/models.py:1531; app/chamados/models.py:1598; app/chamados/models.py:1625]
-- **Cartório:** ao encontrar perguntas e fio vivo, pula a ressuscitação; `fio_vivo` é `any(pergunta_viva(...))`. Assim, a reatada ainda viva pelo C6 não causa ressuscitação nesse bloco. [app/ponto/services/cartorio.py:1594; app/ponto/services/cartorio.py:1595; app/ponto/services/cartorio.py:1622; app/chamados/juizes.py:1242]
-- **F2:** o trecho descartado apenas agrega IDs ao diagnóstico; não chama reabertura ou push. Seu filtro já alcança viva não materializada em fechada independentemente do destino estar reatado. [app/chamados/management/commands/auditar_invariantes_chamados.py:1761] [nao verificado]
-- **Reabertura administrativa:** exige ação HTTP, administrador, motivo válido e justificativa; encontra a disputa pelo próprio chamado-container, reabre e envia FCM. Não é chamada pela adoção. [app/chamados/services/fio.py:577; app/chamados/services/acoes_disputa.py:242; app/chamados/services/acoes_disputa.py:245; app/chamados/services/acoes_disputa.py:252; app/chamados/services/acoes_disputa.py:256; app/chamados/services/acoes_disputa.py:283]
-
-**Ressalva causal da fábrica posterior:** o detector chama `criar_disputa_a_partir_de_chamados_orfaos` depois da abertura, com `notificar=True` por default. Para pergunta reatada não materializada de dia atual, o filtro elimina o chamado; para dia passado com marcos nomeados, a exceção `cobra_marcos_da_ata` permite processamento mesmo com pergunta existente. A fábrica então seleciona/cria uma disputa ABERTA e pode enviar push. Essa exceção depende do chamado/data/marcos, não da reatada; também existe sem ela, e não reabre a disputa FECHADA original. [app/ponto/management/commands/detectar_ausencias.py:790; app/ponto/management/commands/detectar_ausencias.py:801; app/chamados/services/disputa_emissao.py:876; app/chamados/services/disputa_emissao.py:658; app/chamados/services/disputa_emissao.py:680; app/chamados/services/disputa_emissao.py:925; app/chamados/services/disputa_emissao.py:935; app/chamados/services/disputa_emissao.py:962; app/chamados/services/disputa_emissao.py:1123]
-
-A primeira passagem da fábrica também pode complementar perguntas usando a disputa FECHADA encontrada pela pergunta reatada; os atos lidos criam/deduplicam perguntas e salvam motivos, sem reabrir a disputa nem enviar push nesse ramo. [app/chamados/services/disputa_emissao.py:909; app/chamados/services/disputa_emissao.py:920; app/chamados/services/disputa_emissao.py:923; app/chamados/services/disputa_emissao.py:756; app/chamados/services/disputa_emissao.py:770; app/chamados/models.py:2525; app/chamados/models.py:2568]
-
-**Cron posterior:** o lembrete diário seleciona somente disputas ABERTAS. A reatada cuja disputa permanece FECHADA não habilita esse lembrete; uma reabertura por outro ato pode habilitá-lo. [app/ponto/management/commands/alertar_disputas_pendentes.py:33; app/ponto/management/commands/alertar_disputas_pendentes.py:59]
-
-Execução dos caminhos, testes, callbacks e efeitos efetivos em produção: **[nao verificado]**. [nao verificado]
-
-_2193 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2196 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
