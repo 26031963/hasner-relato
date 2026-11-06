@@ -1,7 +1,119 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 08:01** · publicado em **06/11/2026 08:01** (UTC-3)
+> Ultima resposta processada: **06/11/2026 08:06** · publicado em **06/11/2026 08:07** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 08:06 · sessao f4de5888dd8a · LASTRO-PARTE-3 · censo · origem=Code
+
+**1. Censo dos escritores**
+
+Os caminhos abaixo distinguem **a instrução que persiste** da função que a chama. `_escrever_carimbo` e `_desfazer_em_memoria` atribuem valores em memória; a persistência acontece nas portas que executam `save`/`update`. (`app/chamados/models.py:2556`, `app/chamados/models.py:2609`, `app/chamados/models.py:2616`)
+
+Na coluna de transação, “sem atomic próprio” significa que a função não abre um `atomic` explícito; ela pode herdar a transação do chamador. Os exemplos de herança estão discriminados depois das tabelas. Os ganchos da coluna final são adicionais ao receiver comum descrito na resposta 2. (`app/chamados/models.py:2562`, `app/chamados/services/disputa_emissao.py:1247`, `app/chamados/signals.py:191`)
+
+| Função | Forma e campos persistidos | Atomic explícito | EventoCelula / `reconciliar()` depois |
+|---|---|---|---|
+| `PerguntaDisputa.abrir`, nascimento | `cls.objects.create`: fornece `disputa`, `data_evento`, `celula` e demais argumentos; os outros campos pedidos nascem pelos defaults ou por `**campos`. (`app/chamados/models.py:2476`, `:2227`, `:2322`, `:2791`) | Sem próprio. (`app/chamados/models.py:2398`) | O corpo termina com auditoria e retorno. O chamador `gerar_perguntas_disputa` pode, **depois**, chamar `reatar_pergunta_orfa`, condicionalmente. (`app/chamados/models.py:2478`, `:2489`; `app/chamados/services/disputa_emissao.py:404`, `:408`) |
+| `PerguntaDisputa.abrir`, reaproveitamento | `ex.save(update_fields=upd)`: `celula` quando encontrada e diferente; `chamado_destino` quando reapontado e permitido; acrescenta `veredito_lavrado`, `julgado_em`, `janela_expira_em`. (`app/chamados/models.py:2433`, `:2450`, `:2471`, `:2474`) | Sem próprio. (`app/chamados/models.py:2398`) | Retorna imediatamente após esse bloco; sem emissão/reconciliação explícita no ramo. (`app/chamados/models.py:2474`, `:2475`) |
+| `PerguntaDisputa.carimbar` | `self.save(update_fields=campos)`: base `materializada_em`, `materializada_por`, `via_resolucao`; acrescenta `respondida_em` se solicitado, houver texto e faltar carimbo; `validada_em`, `validada_por` com `resposta='validar'` e validação ausente; os três campos de lavra se `lavrar_veredito=True`. (`app/chamados/models.py:2585`, `:2587`, `:2591`, `:2606`, `:2609`) | Sem próprio; contextos abaixo. (`app/chamados/models.py:2562`) | Depende do chamador: há fechamento de disputa e reconciliação de destinos depois, discriminados abaixo. (`app/chamados/reconciliador.py:586`, `:602`; `app/chamados/services/materializacao.py:549`, `:564`) |
+| `PerguntaDisputa.carimbar_identidade` | `self.save`: `['via_resolucao','materializada_em','materializada_por']`, mais `recusa_motivo` quando fornecido. (`app/chamados/models.py:2640`, `:2644`) | Sem próprio; contextos abaixo. (`app/chamados/models.py:2625`) | Depende do chamador; `fechar_por_admin` integra caminhos que reconciliam chamados depois. (`app/chamados/models.py:2522`; `app/ponto/services/veredito_celula.py:177`, `:183`) |
+| `PerguntaDisputa.descarimbar` | Com `salvar=True`: `self.save(update_fields=['via_resolucao','materializada_em','materializada_por'])`; zera o trio. Com `False`, somente memória. (`app/chamados/models.py:2646`, `:2652`) | Sem próprio; herdado nos caminhos abaixo. (`app/chamados/models.py:2646`) | Sem emissão/reconciliação própria; devolve a lista de campos. (`app/chamados/models.py:2650`, `:2653`) |
+| `PerguntaDisputa.descarimbar_em_lote` | `PerguntaDisputa.objects.filter(...).update(materializada_em=None, materializada_por=None, via_resolucao='', **outros)`. (`app/chamados/models.py:2663`) | Sem próprio; herda, por exemplo, o atomic de `reabrir_para_correcao`. (`app/chamados/services/disputa_emissao.py:1401`, `:1412`) | Retorna o resultado do `update`; sem gancho próprio. (`app/chamados/models.py:2663`) |
+| `PerguntaDisputa.encerrar_por_fato_no_espelho` | `self.save(update_fields=['via_resolucao'])`, escrevendo `VIA_FATO_MATERIALIZADO`; já nessa via é no-op. (`app/chamados/models.py:2671`, `:2674`) | O comando chamador abre atomic por pergunta. (`app/chamados/management/commands/encerrar_perguntas_com_fato.py:67`, `:68`) | A porta retorna após salvar; sem emissão/reconciliação própria. (`app/chamados/models.py:2674`, `:2675`) |
+| `responder_pergunta_disputa_core` | `p.save(update_fields=_campos)`: sempre `resposta_colab`, `respondida_em`; acrescenta `validada_em`, `validada_por` para desfazer validação anterior; acrescenta o trio do descarimbo quando `reabrir_por_resposta()` o devolve. (`app/chamados/services/disputa_emissao.py:1282`, `:1295`, `:1300`, `:1301`; `app/chamados/models.py:2711`) | Sem próprio; há chamadores com e sem atomic local. (`app/chamados/services/disputa_emissao.py:1247`; `app/chamados/services/declaracao_texto.py:302`, `:368`; `app/chamados/views.py:1283`) | Chama `_ressuscitar_por_resposta`; para escapes de ausência chama materialização, que pode reconciliar destinos. Resposta HORA simples não tem chamada explícita ao emissor/reconciliação nesse corpo. (`app/chamados/services/disputa_emissao.py:1326`, `:1330`, `:1359`; `app/chamados/services/materializacao.py:563`, `:564`) |
+| `reabrir_para_correcao` | `qs.update(**campos)`: `respondida_em=None`, `validada_em=None`, `validada_por=None`, `resposta_colab=''`. Com `desfazer_absorcao=True`, delega esses campos a `descarimbar_em_lote`, limpando também o trio de materialização. (`app/chamados/services/disputa_emissao.py:1393`, `:1412`, `:1413`) | **Próprio**, envolvendo histórico e alteração. (`app/chamados/services/disputa_emissao.py:1401`, `:1403`) | Não emite nem chama `reconciliar()` no corpo; termina nos retornos das escritas. (`app/chamados/services/disputa_emissao.py:1412`, `:1413`) |
+| `responder_automaticamente` | `p.save(update_fields=['resposta_colab','respondida_em'])`. (`app/chamados/services/disputa_emissao.py:1428`, `:1430`) | Sem próprio. (`app/chamados/services/disputa_emissao.py:1417`) | Retorna após salvar; o chamador da foto chama `validar_pergunta` depois. (`app/chamados/services/disputa_emissao.py:1431`; `app/api/foto_recebida.py:48`, `:51`) |
+| `carimbar_resposta_pela_trilha` | `p.save(update_fields=['respondida_em'])`. (`app/chamados/services/disputa_emissao.py:1445`, `:1446`) | Sem próprio. (`app/chamados/services/disputa_emissao.py:1434`) | Depois registra evento de **observabilidade**, não `EventoCelula`, e retorna. (`app/chamados/services/disputa_emissao.py:1447`, `:1450`) |
+| `reapontar_resolvedora` | `p.save`: `['chamado_destino']`, mais `data_evento` **somente se estava ausente**, mais `['veredito_lavrado','julgado_em','janela_expira_em']`. (`app/chamados/services/fio.py:831`, `:832`, `:834`, `:847`) | **Próprio**, `atomic(savepoint=False)`. (`app/chamados/services/fio.py:837`) | Sem emissão/reconciliação interna. Há chamador que reconcilia depois: `limbo_folgas.agrupar_furo`. (`app/chamados/services/fio.py:849`; `app/chamados/services/limbo_folgas.py:268`, `:276`, `:277`) |
+| `relavrar` | `p.save(update_fields=['via_resolucao','veredito_lavrado','julgado_em','janela_expira_em'])`. (`app/chamados/services/relavra_via.py:123`, `:125`) | Sem próprio; o comando `relavrar_via_i6` envolve a chamada em atomic. (`app/chamados/services/relavra_via.py:104`; `app/chamados/management/commands/relavrar_via_i6.py:101`, `:102`) | Depois registra observabilidade e retorna; sem emissão/reconciliação explícita. (`app/chamados/services/relavra_via.py:130`, `:137`) |
+| `_carimbar_validacao` | `perg.save(update_fields=['validada_em','validada_por'])`. (`app/chamados/services/validacao.py:131`, `:133`) | Sem próprio, mas os três sítios de chamada estão nos atomics de `_aceitar_a_folga` ou `validar_pergunta`. (`app/chamados/services/validacao.py:262`, `:263`, `:289`, `:290`, `:395`, `:396`) | O aceite de folga fecha o fio ou declara o dia; a validação normal chama materialização, cujo fechamento de destinos usa `reconciliar()`. (`app/chamados/services/validacao.py:270`, `:291`, `:430`; `app/chamados/services/materializacao.py:741`) |
+| `devolver_validacao_recusada` | `perg.save(update_fields=['validada_em','validada_por'])`, zerando ambos. (`app/chamados/services/validacao.py:188`, `:190`) | Sem próprio; seu chamador `validar_pergunta` a executa dentro do atomic. (`app/chamados/services/validacao.py:395`, `:425`) | Pode reabrir a disputa por `reabrir_sistema`; não chama diretamente emissor/reconciliação. (`app/chamados/services/validacao.py:199`, `:200`, `:205`) |
+
+Os contextos das portas do modelo completam a distinção entre escritor e chamador:
+
+- **Nascimento/reaproveitamento:** `gerar_perguntas_disputa` chama `abrir`; os caminhos `criar_disputa_a_partir_de_chamados_orfaos` e `criar_disputa_ancora_de_chamado` possuem atomic exterior. (`app/chamados/services/disputa_emissao.py:389`, `:898`, `:1148`, `:1195`)
+- **`carimbar`:** recebe chamadas de `lavrar_sem_turno`, absolvição pela célula, encerramento de fantasma, resolução por chamado encerrado, absorção por ausência e materialização. Há atomic próprio do chamador em `_retratar` e no encerramento de órfãs; a absolvição pela célula não recebe um atomic exterior do consumidor. (`app/chamados/reconciliador.py:405`, `:522`, `:586`, `:1135`, `:1136`, `:1314`; `app/chamados/services/disputa_emissao.py:1603`, `:1675`; `app/chamados/services/materializacao.py:549`, `:1202`, `:1349`)
+- **`carimbar_identidade`:** os quatro chamadores são `fechar_por_admin`, `retratar_duplicata`, `_materializar_resposta_hora` e `_carimbar_recusa`. O fechamento administrativo da disputa envolve o primeiro em atomic; o fechamento do fio do dia salva perguntas e depois reconcilia chamados. (`app/chamados/models.py:2522`, `:1846`, `:1855`; `app/chamados/services/fio.py:891`; `app/chamados/services/materializacao.py:894`, `:1069`; `app/ponto/services/veredito_celula.py:177`, `:183`)
+- **`descarimbar`:** é usado por `reabrir_fantasma`, `reabrir_por_competencia`, `reabrir_por_resposta(salvar=False)` e `desfazer_carimbo_sem_lastro`. Os três caminhos que persistem têm atomic nos respectivos chamadores mostrados. (`app/chamados/models.py:2696`, `:2713`, `:2720`; `app/chamados/services/relavra_via.py:217`, `:231`; `app/chamados/services/competencia_trancada.py:253`, `:254`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:146`, `:147`)
+- **`descarimbar_em_lote`:** além da correção de questionário, recebe `validada_em=None`, `validada_por=None`, `respondida_em=None` de `ressuscitar_perguntas`; essa função não abre atomic próprio. (`app/chamados/models.py:1461`, `:1504`; `app/chamados/services/disputa_emissao.py:1401`, `:1412`)
+
+Não apareceu no censo outro `save` dos oito campos sem `update_fields`, nem `bulk_create`/`bulk_update` deles. O `bulk_update` de `PerguntaDisputa` existente grava exclusivamente os três campos de lavra. A inexistência universal de outra forma dinâmica não reconhecida: **[nao verificado]**. (`app/chamados/veredito_lavrado.py:194`, `:207`)
+
+**2. Receivers de PerguntaDisputa**
+
+O receiver explícito encontrado é **`_becos_post_save_pergunta`**, de `post_save`. Ele ignora `raw` e pergunta sem `disputa_id`, captura o ID da disputa e agenda `fechar_beco_da_disputa` com `transaction.on_commit`, sob `engolir`. Não filtra por `created` nem pelos campos alterados. (`app/chamados/signals.py:191`)
+
+A porta do beco relê a disputa, verifica se é fechável, protege reentrada por `_EM_CURSO` e, em atomic, resolve perguntas dos chamados encerrados e fecha a disputa quando permitido. O fechamento da disputa pode chamar `reconciliar()` do chamado-pai pelo outro receiver. Portanto um `save` de pergunta **já pode chegar indiretamente à reconciliação**, mas isso é condicional ao beco e às guardas de fechamento. (`app/chamados/services/becos.py:25`, `:41`, `:49`, `:52`, `:65`; `app/chamados/signals.py:18`, `:41`, `:42`)
+
+Não localizei `pre_save` de `PerguntaDisputa` nem outra conexão explícita na cópia; registro dinâmico em execução: **[nao verificado]**. O carregamento dos sinais do app acontece em `ready()`. (`app/chamados/apps.py:8`)
+
+**3. Selos e impacto de acrescentar chamadas ao emissor**
+
+| Selo | Enumeração/exigência |
+|---|---|
+| `test_porta_pergunta_identidade` | Declara sete atos e exige sete escritas censadas no módulo do modelo; também exige a tupla exata de portas. **A contagem inclui a exclusão de perguntas por `remover_motivo`.** (`app/chamados/tests/test_porta_pergunta_identidade.py:60`, `:77`, `:102`, `:111`) |
+| `test_porta_resposta_pergunta` | Exige quatro sítios: dois em `responder_pergunta_disputa_core`, um em `carimbar_resposta_pela_trilha`, um em `responder_automaticamente`; vincula contagem à função por AST. (`app/chamados/tests/test_porta_resposta_pergunta.py:66`, `:97`, `:107`) |
+| `test_porta_desfecho_pergunta` | Exige um sítio em `_materializar_resposta_hora`, um em `_carimbar_recusa` e **zero escrita direta de pergunta em signals**. (`app/chamados/tests/test_porta_desfecho_pergunta.py:72`, `:102`, `:138`) |
+| `test_porta_reapontamento_pergunta` | Exige uma escrita em `fio.reapontar_resolvedora`, zero no reconciliador; proíbe atribuições de `data_evento`/`chamado_destino` no reconciliador e escrita direta no comando de dedup. (`app/chamados/tests/test_porta_reapontamento_pergunta.py:77`, `:113`, `:147`, `:163`) |
+| `test_porta_veredito_pergunta` | Exige uma escrita em cada função: `lavrar`, `gravar_lavras_em_lote`, `relavrar`, com conferência por função. (`app/chamados/tests/test_porta_veredito_pergunta.py:94`, `:123`) |
+| `test_porta_validacao_pergunta` | Enumera `_carimbar_validacao`, `recusar_pergunta`, `conferir_data_do_fato`, `devolver_validacao_recusada`; exige uma escrita em cada e zero nas cascas views/ações. (`app/chamados/tests/test_porta_validacao_pergunta.py:72`, `:95`, `:122`) |
+| `test_o261e_f2_porta_carimbo` | Allowlist por arquivo/função para atribuição de materialização e via; exige nenhum escritor fora e nenhum declarado fantasma. Enumera também referências a `_escrever_carimbo`, `_desfazer_em_memoria`, `carimbar_identidade`, incluindo as vias permitidas dos quatro chamadores de identidade. (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:35`, `:44`, `:224`, `:373`, `:398`, `:485`) |
+| `test_contract_escritores_estado` | Enumera arquivos escritores de `data_evento`, materialização, validação e resposta; usa regex sobre código sem comentários e rejeita novos escritores e declarações fantasmas. (`app/core/tests/test_contract_escritores_estado.py:61`, `:83`, `:133`, `:177`, `:200`) |
+| `test_contract_dono_validada` | Dono é `validacao.py`; allowlist efetiva contém `disputa_emissao.py`, `materializacao.py`, `models.py`. Procura atribuição/`update` de validação e exige zero fora. (`app/chamados/tests/test_contract_dono_validada.py:26`, `:30`, `:47`, `:65`) |
+| `test_chokepoint_chamado_gate` | Exige toda escrita censada da família dentro das portas declaradas, sem pendências/exceções. As oito portas de pergunta estão registradas em `core/portas.py`. (`app/chamados/tests/test_chokepoint_chamado_gate.py:316`, `:347`, `:391`; `app/core/portas.py:392`) |
+| `test_reabertura_fantasma` | Enumera três origens antigas, proíbe nelas a string de reabertura crua e exige os quatro campos zerados na fonte da porta canônica. (`app/chamados/tests/test_reabertura_fantasma.py:43`, `:53`, `:68`) |
+| `test_porta_remocao_motivo` | Exige `remover_motivo` entre os escritores censados de pergunta e zero escrita de disputa/pergunta nas duas origens antigas. (`app/chamados/tests/test_porta_remocao_motivo.py:140`, `:156`) |
+
+Há ainda verificadores sintáticos da forma das escritas: texto acompanhado de instante na mesma função/chamada; materialização acompanhada de autor; retorno de `carimbar` não ignorado. Eles não enumeram chamadores do emissor. (`app/chamados/tests/test_contract_par_resposta.py:65`, `:87`; `app/chamados/tests/test_contract_texto_com_carimbo.py:60`, `:148`; `app/chamados/tests/test_contract_autor_muda.py:29`; `app/chamados/tests/test_o261e_f2_fila.py:40`)
+
+**Não encontrei allowlist/contagem de chamadores de `emitir_evento_celula`.** Os selos próximos verificam outras coisas: `SeloSaveDaPortaTest` inspeciona saves de veredito/ata **dentro do arquivo da porta**; o gate da célula verifica funções que contêm escrita, não seus chamadores. Inexistência universal de outro selo: **[nao verificado]**. (`app/ponto/tests/test_o_outbox_celula.py:632`; `app/ponto/tests/test_chokepoint_celula_gate.py:62`)
+
+Consequência estática para as duas alterações hipotéticas:
+
+- **Receiver somente chamando `emitir_evento_celula`:** os enumeradores acima não o tratam como nova escrita direta de pergunta. O censo não segue chamadas de serviço interproceduralmente. Se o receiver passasse a salvar pergunta diretamente, o selo de signals e o gate da família acusariam. (`app/core/censo_escritas.py:364`; `app/chamados/tests/test_porta_desfecho_pergunta.py:138`; `app/chamados/tests/test_chokepoint_chamado_gate.py:347`)
+- **`reabrir_para_correcao` somente chamando o emissor:** também não acrescenta escrita direta de pergunta para esses enumeradores. Se acrescentasse nova escrita reconhecida pelo censo, a contagem/vinculação de funções da porta da resposta acusaria. (`app/core/censo_escritas.py:364`; `app/chamados/tests/test_porta_resposta_pergunta.py:66`, `:97`, `:107`)
+
+Resultado comportamental da suíte após qualquer dessas mudanças: **[nao verificado]**. O teste de reentrega existente exige uma retratação e nenhum followup duplicado, mas aceita eventos adicionais gerados pela própria retratação. (`app/ponto/tests/test_o_outbox_celula.py:149`, `:161`, `:170`)
+
+**4. Forma usada para encontrar a CelulaDia e nulabilidade**
+
+No nascimento de pergunta de fato, a busca é pelo par **`(disputa.colaborador_id, data_evento)`**; o resultado é gravado em `p.celula`. No C6, a decisão sobre veredito usa diretamente **`p.celula`**. A semeadura do outbox já usa a forma “FK quando existe; senão busca pelo par”. (`app/chamados/models.py:2406`, `:2430`, `:2476`; `app/chamados/juizes.py:1147`, `:1180`; `app/chamados/reconciliador.py:1295`)
+
+Essas formas não têm equivalência garantida: `_celulas_da_pergunta` só reaproveita a FK quando colaborador e data conferem; caso contrário devolve `None` para a lei consultar por seus próprios meios. (`app/chamados/juizes.py:621`)
+
+- **`celula=NULL`, `data_evento` preenchida: permitido e alcançável.** Na conversa, `abrir` troca data ausente por `localdate()`, mas mantém `celula=None`, pois pula a busca reservada à pergunta de fato. Na pergunta de fato, `.first()` também pode não encontrar célula. (`app/chamados/models.py:2407`, `:2424`, `:2428`, `:2430`, `:2476`)
+- **`data_evento=NULL`: permitido pelo modelo.** A porta `abrir` preenche a ausência; `reapontar_resolvedora` contém tratamento para pergunta já existente sem data. Existência dessas linhas no PROD fornecido: **[nao verificado]**. (`app/chamados/models.py:2218`, `:2424`; `app/chamados/services/fio.py:832`)
+- A FK aceita `NULL`, usa `SET_NULL`, e a `Meta` de pergunta não declara constraint conjugando FK e data. (`app/chamados/models.py:2209`, `:2811`)
+
+**5. Contraexemplo de realimentação pelo consumidor**
+
+**Existe caminho `consumidor → save de pergunta → novo evento → consumidor`. Isso demonstra realimentação; laço infinito não fica demonstrado.** O emissor insere um evento novo e o consumidor percorre novos pendentes em `while True`, excluindo somente os PKs já lidos naquela execução. (`app/ponto/portas/celula.py:673`; `app/chamados/reconciliador.py:1329`)
+
+| Caminho alcançado pelo consumidor | Persistência de PerguntaDisputa |
+|---|---|
+| Absolvição pela célula | Consumidor chama `retratar_perguntas_absolvidas_por_celula`, que chama `p.carimbar`; o save real está no modelo. (`app/chamados/reconciliador.py:1353`, `:586`; `app/chamados/models.py:2609`) |
+| Órfã encerrada pela lâmpada | `encerrar_orfas_pela_lampada → encerrar_fantasma → carimbar → save`. (`app/chamados/reconciliador.py:1363`, `:1136`; `app/chamados/models.py:2685`, `:2609`) |
+| Retratação por célula ou premissa | `_retratar → resolver_pergunta
+
+[truncado em 20000 de 26767 caracteres]
+
+## 06/11 08:03 · sessao f857db3e22f3 · - · - · origem=Ronald (tmux)
+
+Complementos do inventário Q3:
+
+- **`test_contract_dono_validada.py`** enumera dono (`validacao.py`) e três exceções (`disputa_emissao.py`, `materializacao.py`, `models.py`), detectando atribuição ou `update(validada_em=...)`; exige nenhum escritor fora deles. O comentário “allowlist vazia” diverge do dict existente (`app/chamados/tests/test_contract_dono_validada.py:26-43`, `:47-71`).
+- **`test_reabertura_fantasma.py`** enumera três origens onde proíbe a string `update(respondida_em=None`; exige também import canônico e quatro campos zerados na fonte de `reabrir_para_correcao` (`app/chamados/tests/test_reabertura_fantasma.py:43-48`, `:53-81`).
+- **`test_porta_remocao_motivo.py`** exige `DisputaSupervisao.remover_motivo` entre os escritores censados de pergunta em models e zero escrita de disputa/pergunta nas duas origens antigas (`app/chamados/tests/test_porta_remocao_motivo.py:140-171`; origens em `:79-81`).
+
+Outros testes inspecionados varrem formas de escrita, sem enumerar conjunto exato de escritores/chamadores: [nao verificado]
+
+- `test_contract_par_resposta.py`: atribuição de texto ou `update(resposta_colab=...)` exige escrita de `respondida_em` na mesma função; allowlist vazia (`:36-45`, `:65-94`).
+- `test_contract_texto_com_carimbo.py`: texto por atribuição ou kwargs de `update/create/get_or_create/update_or_create`; exige carimbo na mesma chamada ou nome presente no escopo AST da atribuição (`:60-108`, `:148-172`).
+- `test_contract_autor_muda.py`: atribuição de `materializada_em` exige `materializada_por`/`_id` na janela até save ou quarenta linhas; exceção para variável `reg` (`:21-57`).
+- `test_o261e_f2_fila.py`: proíbe chamada `p.carimbar(...)` como statement solto em produção; não possui lista exata de chamadores (`:40-60`).
+- `test_porta_unica.py`: enumera três arquivos para regras de fechamento de **DisputaSupervisao**, sem enumerar escritores de PerguntaDisputa (`:10-38`).
+
+Uma mera chamada a `emitir_evento_celula` não corresponde aos critérios sintáticos desses testes; resultado da suíte modificada: [não verificado]. [nao verificado]
 
 ## 06/11 08:01 · sessao 7c10cf86c128 · - · - · origem=Ronald (tmux)
 
@@ -583,100 +695,4 @@ D4: **sim, bate integralmente**. Comparei em memória o `.mmd` commitado com as 
 
 Não executei a suíte: ela inclui teste que escreve no `MAPA.md`, incompatível com a restrição de leitura (`app/core/tests/test_selo_diagrama_do_codigo.py:49-60`). A comparação em memória executou as funções originais do gerador, removendo apenas o import de Django e a classe de comando do módulo carregado; execução da suíte e ambiente Django: [nao verificado].
 
-## 06/11 04:45 · sessao d58c4d563f58 · OTIMIZA-3 · verificador · origem=Code
-
-**Parecer: bloqueia pelo achado 1. Os bloqueios anteriores estão corrigidos, mas permanece outro falso zero com registros empilhados** (`bin/quem_chama.py:256`, `bin/quem_chama.py:284`, `bin/quem_chama.py:353`, `bin/quem_chama.py:714`).
-
-1. **BLOQUEIA — P1/P5: remove todos os decoradores de registro, mas guarda somente o primeiro.**
-
-   `_registro()` retorna no primeiro decorador reconhecido; a limpeza nova retira todos os registros reconhecidos de `decor` (`bin/quem_chama.py:242`, `bin/quem_chama.py:256`, `bin/quem_chama.py:282`).
-
-   Contraexemplo, alterando somente o corpo de `f` em uma biblioteca `m_tags.py`:
-
-   ```python
-   register = template.Library()
-
-   @register.filter(name="a")
-   @register.filter(name="b")
-   def f(x):
-       return x
-   ```
-
-   Com `{% load m_tags %}` e `{{ x|b }}`, o fluxo conserva `decor=[]` e `registros=[('filtro', 'a')]`. A busca pelo nome `b` desaparece, e a faceta imprime **`simbolo f [filtro/tag]: 0 chamador(es)`**; os decoradores também não produzem leitura própria de `f` (`bin/quem_chama.py:284`, `bin/quem_chama.py:357`, `bin/quem_chama.py:521`, `bin/quem_chama.py:611`, `bin/quem_chama.py:771`).
-
-   Esse falso zero já era possível pela precedência antiga mostrada no anexo; não é regressão exclusiva desta volta. Contudo, a limpeza nova impede que o segundo registro funcione como motivo opaco depois da inversão. O contrato anunciado inclui filtros registrados com nomes constantes (`bin/quem_chama.py:61`, `bin/quem_chama.py:256`, `bin/quem_chama.py:284`). Ocorrência desse empilhamento na produção: **[nao verificado]**.
-
-2. **FILA — P1: `@stringfilter` rebaixa um filtro conhecido conservadoramente.**
-
-   Contraexemplo: `@register.filter` empilhado com `@stringfilter`. O registro sai de `decor`, mas `stringfilter` permanece e não integra `DECORADORES_TRANSPARENTES`; o resultado passa a ser `decorado @stringfilter: o decorador pode registrar` (`bin/quem_chama.py:65`, `bin/quem_chama.py:69`, `bin/quem_chama.py:284`, `bin/quem_chama.py:353`).
-
-   É perda de precisão, sem falso zero: o tipo sai da lista de contagem e os usos encontrados pelos registros continuam sendo emitidos como avulsos (`bin/quem_chama.py:611`, `bin/quem_chama.py:776`). Ocorrência real de `@stringfilter` nesta cópia: **[nao verificado]**.
-
-Nos demais casos de **P1**, a proteção permanece:
-
-| Caso concreto | Resultado |
-|---|---|
-| `@outra.filter`, com `outra` ausente de `_libs_de_template` | Não reconhece registro, conserva o decorador e classifica como opaco (`bin/quem_chama.py:245`, `bin/quem_chama.py:282`, `bin/quem_chama.py:353`). |
-| `simple_tag(takes_context=True)` | Conserva o nome da função e classifica como `filtro/tag`; exemplo existente: `next_para` (`app/core/templatetags/nav_extras.py:49`, `bin/quem_chama.py:247`, `bin/quem_chama.py:253`). |
-| `inclusion_tag(..., takes_context=True)` | Mesmo resultado; exemplo existente: `voltar` (`app/core/templatetags/nav_extras.py:36`, `bin/quem_chama.py:247`). |
-| `register.filter('x', f)` fora de decorador | `f` fica `simbolo-de-topo`, mas a chamada conta como leitura própria de `f`, evitando zero nesse exemplo (`bin/quem_chama.py:360`, `bin/quem_chama.py:521`, `bin/quem_chama.py:529`). |
-| `C.f` decorado dentro de classe | Não recebe registro; prevalece atributo de classe, não varrido (`bin/quem_chama.py:280`, `bin/quem_chama.py:345`). |
-
-**P2:** não encontrei leitor operacional dependente da semântica antiga de `decor`; classificação e varredura recebem os campos depois da soma (`bin/quem_chama.py:712`, `bin/quem_chama.py:716`, `bin/quem_chama.py:737`).
-
-| Campo | Quem escreve | Quem lê |
-|---|---|---|
-| `decor` | Coleta, limpeza e gravação: `bin/quem_chama.py:281`, `bin/quem_chama.py:283`, `bin/quem_chama.py:285`; inicialização/união: `bin/quem_chama.py:710`, `bin/quem_chama.py:712` | União/deduplicação: `bin/quem_chama.py:712`; classificação: `bin/quem_chama.py:353` |
-| `registro` singular | Extração: `bin/quem_chama.py:247`, `bin/quem_chama.py:251`, `bin/quem_chama.py:255`; gravação: `bin/quem_chama.py:285` | Condição da limpeza: `bin/quem_chama.py:282`; exclusão da cópia e transferência: `bin/quem_chama.py:709`, `bin/quem_chama.py:713`, `bin/quem_chama.py:714` |
-| `registros` plural | Inicialização/acréscimo: `bin/quem_chama.py:710`, `bin/quem_chama.py:714` | Deduplicação: `bin/quem_chama.py:713`; classificação: `bin/quem_chama.py:356`, `bin/quem_chama.py:357`; templates: `bin/quem_chama.py:611`, `bin/quem_chama.py:612` |
-
-**P3:** as asserções novas distinguem os mutantes apontados anteriormente; não identifiquei verde acidental por texto de outra faceta nos casos abaixo (`bin/tests/test_quem_chama.sh:197`, `bin/tests/test_quem_chama.sh:202`).
-
-| Asserção nova | Por que distingue o defeito |
-|---|---|
-| Lista nominal sob arquivo | Exige texto específico do cabeçalho EMBUTIDO dentro da faceta arquivo (`bin/tests/test_quem_chama.sh:329`, `bin/quem_chama.py:766`). |
-| Autoimport sob arquivo | Exige cabeçalho rebaixado **e** sítio `selfmod.py:5` nessa faceta (`bin/tests/test_quem_chama.sh:344`, `bin/tests/test_quem_chama.sh:345`). |
-| Registro versus opaco | Exige `decorado @receiver`; `filtro/tag` não satisfaz o positivo (`bin/tests/test_quem_chama.sh:347`, `bin/tests/test_quem_chama.sh:348`). |
-| Opaco removido | O `receiver` existe somente na base; conservar só a ponta perde o positivo (`bin/tests/test_quem_chama.sh:150`, `bin/tests/test_quem_chama.sh:183`, `bin/tests/test_quem_chama.sh:350`). |
-| Nome antigo do filtro | O template específico usa `velho_f`; conservar somente o novo perde o achado (`bin/tests/test_quem_chama.sh:153`, `bin/tests/test_quem_chama.sh:352`). |
-| Include entre comentários | A remoção gulosa apaga o include exigido na linha 2 (`bin/tests/test_quem_chama.sh:151`, `bin/tests/test_quem_chama.sh:354`). |
-| Argumento de outra tag | Generalizar `filter` para qualquer tag produz exatamente o falso uso proibido (`bin/tests/test_quem_chama.sh:152`, `bin/tests/test_quem_chama.sh:356`). |
-
-`_so_na_fac` agora detecta duplicação de linhas. Os fixtures atuais escolhem achados exclusivos; a troca de nomes entre dois filtros ainda poderia gerar duplicação legítima entre facetas, mas esse cenário não está nos fixtures atuais (`bin/tests/test_quem_chama.sh:205`, `bin/tests/test_quem_chama.sh:143`, `bin/tests/test_quem_chama.sh:180`, `bin/quem_chama.py:714`, `bin/quem_chama.py:620`).
-
-**P4:** os bloqueios anteriores estão fechados: decorador acrescentado ou removido permanece na união; nomes velho e novo são buscados; autoimport rebaixa arquivo e símbolos; opaco prevalece sobre registro (`bin/quem_chama.py:712`, `bin/quem_chama.py:714`, `bin/quem_chama.py:611`, `bin/quem_chama.py:743`, `bin/quem_chama.py:757`, `bin/quem_chama.py:353`).
-
-Execução integral do selo, mutantes integrais e ranges históricos: **[nao verificado]**.
-
-## 06/11 04:44 · sessao 5d2f2b28a4fe · - · - · origem=Ronald (tmux)
-
-P1/P5, conferidos por inspeção e execução em memória:
-
-1. **BLOQUEIA — múltiplos registros são apagados de `decor`, mas somente um entra em `registros`.** `_registro` retorna no primeiro decorador reconhecido (`bin/quem_chama.py:256`), enquanto o delta remove todos os decoradores de registro (`bin/quem_chama.py:282`, `bin/quem_chama.py:284`).
-
-   Contraexemplo:
-
-   ```python
-   register = template.Library()
-
-   @register.filter(name="a")
-   @register.filter(name="b")
-   def f(x):
-       return x
-   ```
-
-   Um template `{% load m_tags %}\n{{ x|b }}` não é associado ao símbolo: o metadado contém apenas `('filtro', 'a')`, e o varredor busca exclusivamente `info['registros']` (`bin/quem_chama.py:611`, `bin/quem_chama.py:614`). A reprodução em memória emitiu `simbolo f [filtro/tag]: 0 chamador(es)`; a leitura própria também ficou vazia (`bin/quem_chama.py:492`, `bin/quem_chama.py:529`, `bin/quem_chama.py:770`).
-
-   O falso zero já era possível na v6 anexada, pela precedência antiga; a remoção indiscriminada nova conserva esse defeito mesmo depois da inversão de precedência (`bin/quem_chama.py:353`, `bin/quem_chama.py:356`). Ocorrência concreta desse empilhamento na cópia: **[nao verificado]**.
-
-2. **FILA — `@stringfilter` passa a rebaixar filtro conhecido.** Com `@register.filter` empilhado com `@stringfilter`, o primeiro sai de `decor`, mas `stringfilter` permanece e não integra `DECORADORES_TRANSPARENTES` (`bin/quem_chama.py:65`, `bin/quem_chama.py:69`, `bin/quem_chama.py:284`). A reprodução devolveu `decorado @stringfilter: o decorador pode registrar`, antes de considerar o registro conhecido (`bin/quem_chama.py:353`, `bin/quem_chama.py:356`). É perda conservadora de precisão; não produz zero contado (`bin/quem_chama.py:774`). Ocorrência real desse decorador na cópia: **[nao verificado]**.
-
-3. **FILA — os demais casos pedidos conservam a proteção.**
-
-   - Biblioteca desconhecida de `_libs_de_template`: `_registro` não reconhece, o decorador permanece e vira motivo opaco (`bin/quem_chama.py:245`, `bin/quem_chama.py:282`, `bin/quem_chama.py:353`).
-   - `simple_tag(takes_context=True)`: conserva o nome da função; a lógica especial de argumentos posicionais só vale para `filter` e `tag` (`bin/quem_chama.py:247`, `bin/quem_chama.py:253`). A reprodução sobre `nav_extras.next_para` devolveu `filtro/tag`; o caso existe em `app/core/templatetags/nav_extras.py:49`.
-   - `inclusion_tag(..., takes_context=True)`: igualmente preservado; caso real `voltar` em `app/core/templatetags/nav_extras.py:36`.
-   - `register.filter("x", f)` fora de decorador: `f` fica `simbolo-de-topo`, mas a chamada gera leitura própria de `f`, evitando zero no exemplo (`bin/quem_chama.py:360`, `bin/quem_chama.py:521`, `bin/quem_chama.py:529`).
-   - Membro de classe: não recebe registro e prevalece o tipo não varrido de atributo de classe (`bin/quem_chama.py:280`, `bin/quem_chama.py:345`).
-
-_2126 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2128 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
