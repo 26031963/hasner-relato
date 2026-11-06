@@ -1,7 +1,288 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 18:39** · publicado em **06/11/2026 18:41** (UTC-3)
+> Ultima resposta processada: **06/11/2026 18:45** · publicado em **06/11/2026 18:46** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 18:45 · sessao 96f30b8ed283 · - · - · origem=Ronald (tmux)
+
+Censo persistente: **2 sítios físicos** — nascimento em `app/chamados/models.py:2476` e preenchimento de pergunta antiga sem data em `app/chamados/services/fio.py:832-848`. Há **6 chamadas a `PerguntaDisputa.abrir`** e **4 chamadas de reapontamento com data explícita**, detalhadas abaixo.
+
+| Sítio | Motivos | Fonte da data | Cobra saída overnight? | Coerência com `_T1` |
+|---|---|---|---|---|
+| `models.py::abrir`, `app/chamados/models.py:2476` | Qualquer motivo recebido | Parâmetro; ausente vira `localdate()` em `:2424-2427` | Conforme chamador | Não normaliza pelo turno; depende do chamador (`:2414-2431`) |
+| `fio.py::reapontar_resolvedora`, `app/chamados/services/fio.py:832-848` | Mantém motivo existente | Parâmetro, **somente se pergunta não tiver data** (`:832-835`) | Conforme pergunta | Consulta `resolvedora_valida` (`:838`), mas não deriva data pelo `_T1` |
+| `gerar_perguntas_disputa`, `app/chamados/services/disputa_emissao.py:389-396` | Motivos do catálogo; inexistente é ignorado (`:294-296`; catálogo `app/chamados/catalogo/perguntas.py:34-139`) | Grade → contexto do motivo → data local de `ultima_batida`; chamado derivado quando aplicável (`:319-396`) | Sim para `orfao_14h` | **Mista**, conforme desdobramento abaixo |
+| `_criar_pergunta_se_couber`, `app/chamados/services/disputa_emissao.py:770-777` | `orfao_14h`, `saida_sem_entrada`, `intervalo_saida`, `intervalo_volta`, conforme chamadores (`:809-813`, `:985-993`, `:1038-1048`, `:1071-1080`) | Parâmetro; quatro fontes desdobradas abaixo | Sim | **Mista** |
+| `criar_disputa_ancora_de_chamado`, `app/chamados/services/disputa_emissao.py:1195-1202` | `ancora_ausente` | Sem parâmetro: relógio de `abrir` (`models.py:2424-2427`) | Não; pergunta pela primeira entrada (`disputa_emissao.py:1132-1134`) | Não aplicável: instante completo vem da resposta (`:1199`) |
+| `declarar_hora_colab`, `app/chamados/services/declaracao_texto.py:325-326` | Quatro motivos do mapa `:42-46` | `dia` do marco faltante escolhido (`:288-300`) | Sim para marco `fim` | Coerente com a célula: `_marcos_faltantes` devolve `data_dia`, inclusive véspera (`:88-123`) |
+| `aplicar_declaracao`, `app/chamados/services/declaracao_texto.py:614-615` | Quatro motivos do mapa `:42-46` | `p['dia']`, proposta casada com marco faltante (`:566-586`) | Sim para `fim` | Mesma semântica de célula da anterior |
+| `acao_reabrir_disputa_admin`, `app/chamados/services/acoes_disputa.py:259-264` | Motivo escolhido entre `MOTIVOS_CHOICES` (`:245-249`) | Sem parâmetro: relógio de `abrir` (`models.py:2424-2427`) | Não nesta pergunta; `tipo_resposta='escolha'` (`acoes_disputa.py:262`) | Não aplicável |
+| Reapontamento c2, `app/chamados/reconciliador.py:937-943` | Grupo dia: quatro motivos (`:786-800`; `models.py:3048-3049`) | `data_ctx`, derivada do argumento `dia` (`reconciliador.py:801`) | Sim | Não normaliza; preserva dia recebido |
+| Reapontamento histórico, `app/chamados/reconciliador.py:1620-1626` | Motivo da pergunta (`:1541-1542`) | Data da pergunta; ausente, contexto do motivo (`:1552-1553`) | Conforme pergunta | Mista; depende da fonte anterior |
+| Reapontamento derivado, `app/chamados/reconciliador.py:1638` | Motivo da pergunta (`:1541-1542`) | `_derivar_chamado_destino`: data da pergunta/contexto; depois dia do chamado (`disputa_emissao.py:174-179`, `:228-237`) | Conforme pergunta | Mista |
+| Reapontamento de declaração, `app/chamados/services/declaracao_texto.py:320` | Quatro motivos do mapa `:42-46` | `dia` do marco escolhido (`:299-300`) | Conforme marco | Dia da célula; mesma fonte do nascimento `:325-326` |
+
+**Desdobramento do gerador genérico (`disputa_emissao.py:389`):**
+
+- **Célula:** `fabrica_da_celula.perguntar` injeta `dia` no contexto (`app/chamados/services/fabrica_da_celula.py:129-141`); no julgamento, recebe `cel.data` (`:174-176`). Os motivos saem dos marcos faltantes da ata (`:47-64`). Pode cobrar saída overnight e usa o dia da célula, coerente com a unidade do turno (`app/chamados/services/declaracao_texto.py:42-46`, `:88-123`).
+- **Pendências:** `perguntar_entradas_pendentes` lê cada `entradas_pendentes[*].data`, classifica e injeta essa data (`app/chamados/services/disputa_emissao.py:257-274`). O produtor grava **dia local da entrada**, não dia do relógio (`app/ponto/utils_turno_orfao.py:31-40`).
+- **Detector de órfão da API:** `detector_anomalias` grava em `contexto['orfao_14h']['data']` a **data da saída esperada** (`app/chamados/detector_anomalias.py:31-50`). Usa `escala.utils.data_saida_esperada`, que encadeia marcos e pode avançar o dia (`app/escala/utils.py:936-939`, `:950-969`). Portanto pode entregar D+1; diverge da semântica de dia da célula/entrada.
+- **API sem data específica:** o contexto carrega `ultima_batida.timestamp=agora.isoformat()` (`app/api/views.py:772-779`; clone `app/api/views_core.py:772-779`), e o gerador usa a data local desse timestamp (`app/chamados/services/disputa_emissao.py:350-364`). É data do relógio da requisição; não há normalização pelo turno.
+- **PWA, entrada faltante:** `saida_sem_entrada.data=agora_local.date()` (`app/ponto/services/triagem_batida.py:649-660`), consumida como contexto (`app/chamados/services/disputa_emissao.py:343-347`). Cobra entrada, não saída.
+- **Conversa sem data:** termina no relógio `localdate()` do nascimento (`app/chamados/models.py:2424-2427`).
+- **Smoke fora da pasta de testes:** injeta data literal `"2026-05-15"` para perguntas com `{data}` e chama o gerador (`app/chamados/management/commands/smoke_chamados.py:90-102`); sem placeholder, cai nas outras fontes/fallback do gerador (`app/chamados/services/disputa_emissao.py:343-396`).
+- **Lote de competência:** delega a `fabrica_da_celula.perguntar(colab, dia, [motivo], ...)` (`app/chamados/management/commands/disparar_perguntas_competencia.py:268-280`), logo segue o ramo de dia explícito da célula (`app/chamados/services/fabrica_da_celula.py:129-141`).
+- **Retro de selfie:** fornece `batida_em`, mas não `data` nem `ultima_batida` (`app/ponto/management/commands/marcar_foto_ausente_retro.py:96-104`); o gerador não lê `batida_em` para datar (`app/chamados/services/disputa_emissao.py:343-364`), portanto pode cair no relógio do nascimento (`app/chamados/models.py:2424-2427`).
+
+**Desdobramento do helper de órfãos (`disputa_emissao.py:770`):**
+
+| Fonte | Evidência | Motivos / semântica |
+|---|---|---|
+| Complemento de marcos | `app/chamados/services/disputa_emissao.py:806-813` | Quatro motivos via mapa; `dia` da célula. Chamado já perguntado usa `_ddc(contexto)` ou data da pergunta em `:913-920`; ramo por ata usa dia do chamado em `:1006-1014`. |
+| Intervalo dedicado | `app/chamados/services/disputa_emissao.py:982-993` | `intervalo_saida`/`intervalo_volta`; data do próprio marco no contexto (`:985-987`). |
+| Grupo por batida de origem | `app/chamados/services/disputa_emissao.py:1037-1048` | Classifica dia **da entrada**, mas grava `resolver_data_evento` ou dia da entrada. Para `orfao_14h`, resolver devolve **data da saída esperada** (`app/escala/servico_jornada.py:483-491`), calculada pelo fim do turno (`:200-209`) e encadeamento com +1 (`:61-85`, `:89-93`). Este é o ramo D→D+1 explícito. |
+| Sem origem | `app/chamados/services/disputa_emissao.py:1065-1084` | Data de `_ddc(contexto_json)`; classifica esse dia, cria âncora e complementos. Hierarquia: `data_turno`, `data_batida`, `entrada_timestamp`, pendentes BR, `horario_previsto` (`app/chamados/data_evento.py:16-39`). |
+
+O predicado de preenchimento em `reapontar_resolvedora` impede que seus quatro chamadores substituam uma `data_evento` já preenchida (`app/chamados/services/fio.py:832-835`). A atribuição `models.py:2418` pertence a `_Proxy`, sem persistência (`app/chamados/models.py:2414-2419`); `fio.py:843` apenas desfaz a atribuição em memória antes do retorno de recusa (`app/chamados/services/fio.py:841-844`).
+
+Contagem consolidada: **2 escritores físicos persistentes; 6 sítios de nascimento por `abrir`; 4 delegações de reapontamento com data explícita** (`app/chamados/models.py:2476`; `app/chamados/services/fio.py:834-848`; seis e quatro sítios enumerados na tabela). A busca fora de testes/migrations não encontrou outro `create`, `get_or_create`, `defaults`, `bulk_create`, `bulk_update`, `setattr` ou `.update()` que grave `data_evento` [nao verificado por referência estática única]. O P13 lista apenas `models.py` e `services/fio.py`, mas seu detector cobre somente atribuição de atributo e `.update(...)`, portanto sozinho não prova o censo ampliado (`app/core/tests/test_contract_escritores_estado.py:60-62`, `:177-181`).
+
+## 06/11 18:44 · sessao 38685ef3f498 · - · - · origem=Ronald (tmux)
+
+_T1 é a constante `core/juizes.py:368`: `_T1 = 'a que turno (data_turno) pertence a batida?'`. O registro aponta para **`turnos_do_colab`**, em `app/core/juizes.py:195-196`, assinatura **`turnos_do_colab(colab, ini, fim, celulas=None)`**, em `app/ponto/turnos.py:1848`. Ela entrega turnos com `data_turno` na janela e passa ao corpo `_turnos_do_colab_puro`, em `app/ponto/turnos.py:1849-1857,1913-1916`; este passa ao pareador e filtra pelo `data_turno`, em `app/ponto/turnos.py:1990-1993`.
+
+O mapa para apresentação é **`dia_das_batidas(colab, ini, fim, turnos=None)`**, em `app/ponto/turnos.py:2874`. Seu contrato explicitamente remete ao _T1: batida reclamada pertence a `t.data_turno`; não reclamada pertence a `data_local(timestamp)`, em `app/ponto/turnos.py:2877-2881`. O corpo é **`_dia_das_batidas_puro(turnos, batidas_da_janela)`**, em `app/ponto/turnos.py:2908`, com a atribuição exata `out[b.pk] = t.data_turno`, em `app/ponto/turnos.py:2915-2916`, e `setdefault(..., data_local(...))`, em `app/ponto/turnos.py:2917-2918`.
+
+Chamadores diretos de `dia_das_batidas` fora de testes/migrations: espelho do app (`app/api/views.py:1446`), justificativas do app pelo alias `_ddb_j` (`app/api/views.py:2037-2038`) e espelho da tela (`app/ponto/services/espelho.py:450-451`). O lote oferece `CargaDaJanela.dia_das_batidas(self, colab)` e chama o mesmo corpo (`app/ponto/turnos.py:3007-3010`); o painel o lê em `app/core/services/painel_op.py:330`.
+
+Chamadores diretos de **`turnos_do_colab`** encontrados, incluindo aliases, fora de testes/migrations: [nao verificado]
+
+- No próprio módulo: `app/ponto/turnos.py:778,2096,2148,2179,2901,3033`.
+- Ponto: `app/ponto/nucleo.py:47`; `app/ponto/turno_leitura.py:89,95`; `app/ponto/views.py:377,1585,3177`; `app/ponto/services/espelho.py:614`; `app/ponto/services/bordas_realizado.py:66`; `app/ponto/services/teto_na_lista.py:68`; `app/ponto/services/vigia_pareador_celula.py:97`; `app/ponto/services/esmeril_espelho.py:98`; `app/ponto/services/triagem_batida.py:552`; `app/ponto/services/regularizacao.py:61`; `app/ponto/services/passivo_s84.py:82`.
+- Comandos: `app/ponto/management/commands/detectar_par_relampago.py:101`; `app/ponto/management/commands/dna_x_batida_real.py:69`; `app/ponto/management/commands/marcar_abandono_provisorio.py:46`; `app/ponto/management/commands/detectar_ausencias.py:336`; `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:88`; `app/ponto/management/commands/vigia_plantio_overnight.py:38`; `app/ponto/management/commands/verificar_nucleo.py:29`; `app/ponto/management/commands/e6_oraculo.py:151`; `app/ponto/management/commands/censo_fase_12x36.py:180`.
+- Chamados: `app/chamados/models.py:1273`; `app/chamados/juizes.py:371,1842`; `app/chamados/detector_anomalias.py:155`; `app/chamados/services/materializacao.py:123,220`; `app/chamados/services/disputa_emissao.py:644`.
+- Escala: `app/escala/utils.py:1602,1919`; `app/escala/regua_defesa.py:358`; `app/escala/servico_jornada.py:250,392`; `app/escala/services/escala_auto.py:87`; `app/escala/services/impacto_troca.py:18`.
+- Outros: `app/api/views.py:1449`; `app/relatorios/pdf_espelho.py:213,451`; `app/relatorios/management/commands/vinculo_do_dia_divergentes.py:124`; `app/colaboradores/services/drawer.py:45`.
+
+**Vigia:** o corpo vigente difere do cabeçalho antigo que descreve comparação de hora com entrada prevista: `app/ponto/management/commands/vigia_plantio_overnight.py:8-10,19-23`. O predicado executado é:
+
+1. Candidato: colaborador com batida `origem__in=('disputa_s84_retro',)`, `aprovada=True`, `timestamp >= now()-dias`, em `app/ponto/management/commands/vigia_plantio_overnight.py:16,30-32`.
+2. Carrega `turnos_do_colab(colab, hoje-dias, hoje)`, seleciona no turno batidas de mesma origem aprovadas e exige `t.data_turno is not None`, em `app/ponto/management/commands/vigia_plantio_overnight.py:26-29,38-41`.
+3. Exige vínculo e tipo; calcula `ec.eh_dia_trabalho(t.data_turno)`; **só emite quando `trab is False`**, em `app/ponto/management/commands/vigia_plantio_overnight.py:42-56`.
+4. Não consulta `PerguntaDisputa`, `data_evento`, entrada que a saída deveria fechar, distância de 24h nem exige cruzamento de meia-noite: seu corpo completo vai de `app/ponto/management/commands/vigia_plantio_overnight.py:19` a `:57`.
+
+Logo, ele **não detecta necessariamente** o deslocamento “um dia depois”: se a batida errada receber `data_turno=D+2` e esse dia for trabalho no 12x36, `trab is False` falha; o dia pretendido D não é comparado (`app/ponto/management/commands/vigia_plantio_overnight.py:38-56`). Há caminho concreto para `data_turno=D+2`: com mapa de DNA e sem marcos em D+1, `_vespera` retorna `None` (`app/ponto/turnos.py:1297-1299`); `_data_do_turno` sem véspera retorna o dia local da referência (`app/ponto/turnos.py:283-286`). O mapa só inclui DNA com `marcos` (`app/escala/utils.py:103-108`). Isso explica a cegueira estrutural; **o retorno efetivo do pareador no caso de produção continua [nao verificado]**. Não afirmar universalmente que toda S D+2 escapará: sem mapa/na configuração alternativa o pareador pode atribuí-la à véspera (`app/ponto/turnos.py:1297-1300,291-296`).
+
+**Tipo E/S do app:** não há resposta binária “sempre aceita” ou “sempre deriva”. A API recebe e valida `'E'/'S'` (`app/api/views.py:432,438-439`; clone `app/api/views_core.py:419,425-426`).
+
+- Ao vivo, `abs(agora-ts_efetivo) <= 300s`: chama `proximo_tipo_de(colab, ts_efetivo)` e substitui o tipo divergente, em `app/api/views.py:600-608`; clone `app/api/views_core.py:592-600`.
+- Fora disso: busca vínculo do dia local, obtém marcos do template no dia, chama `tipo_por_marcos(...)` e pode substituir o cliente, em `app/api/views.py:609-631`; clone `app/api/views_core.py:601-623`.
+- `tipo_por_marcos` devolve o único tipo casado em até 30 minutos; sem marcos, sem casamento ou ambiguidade conserva o cliente, em `app/ponto/turnos.py:2422-2445`.
+- A view passa o tipo **já julgado** a `registrar_batida`, em `app/api/views.py:683-684`; clone `app/api/views_core.py:680-681`.
+- `registrar_batida(colaborador, timestamp, tipo, origem, *, autoridade_humana=False, fato_de_chao=None, **campos)` não deriva E/S: dedup pode devolver existente (`app/ponto/registro_batida.py:94,113-122`), e os dois `create` gravam diretamente `tipo=tipo` (`app/ponto/registro_batida.py:152-158`).
+- `proximo_tipo_de` dá E sem turno; S aberto fora de intervalo; em intervalo desempata pela proximidade aos marcos; intermitente tem ramo de alternância, em `app/ponto/turnos.py:2448-2493`.
+
+**PERGUNTA:** “A batida materializada está no dia/instante do turno que a pergunta pretendia completar?” não é a pergunta executada pelo vigia; este pergunta se o **turno resolvido atual** está em dia que o vínculo diz folga (`app/ponto/management/commands/vigia_plantio_overnight.py:19-23,38-56`).
+
+## 06/11 18:44 · sessao c3c6441f8b27 · - · - · origem=Ronald (tmux)
+
+Leitores relevantes e premissas, somente leitura:
+
+| Leitor | O que faz com `data_evento` / premissa |
+|---|---|
+| `_ts_tipo_do_plantio` | Usa como data-base do turno: busca régua e grade do dia, combina HH:MM nela e chama ajuste overnight; admite resultado no dia seguinte. `app/chamados/services/materializacao.py:279-297`, `:344-347`, `:370-372`, `:413-420`; ajuste em `app/chamados/juizes.py:303-314`. |
+| `_slot_esperado` | Para resposta `hora`, delega ao plantio, herdando a premissa acima. Para `data_hora`, a data vem da resposta completa, sem ajuste. `app/chamados/juizes.py:331-347`. |
+| `estado_aplicacao_pergunta` | Quando ainda não materializada, deriva exatamente pelo plantio e procura batida/vizinha naquele timestamp. Se já carimbada, pode retornar “aplicada” antes de derivar. `app/chamados/services/materializacao.py:431-452`. |
+| `_turno_tem_saida` | Assume **dia do turno/entrada**: pede `turnos_do_colab(colab, dia, dia)` e exige `t.data_turno == p.data_evento`. `app/chamados/juizes.py:362-372`. |
+| `via_pelo_fato` | Mistura dois recortes declarados: para adesão, qualquer batida apurável que toque o **dia civil**; para completude, `TurnoMaterializado.data_turno == data_evento`, isto é, **dia do turno**. `app/chamados/juizes.py:1447-1462`, `:1470-1485`. |
+| `_pergunta_materializada_de_fato` / `_plantio_na_hora_do_slot` | Deriva slot; para plantadas vinculadas de resposta `hora`, aceita mesma hora em `data_evento -1/0/+1`, com ±20 minutos. Para `data_hora`, exige instante completo. Portanto esse termo deliberadamente não revalida uma data única. `app/chamados/juizes.py:242-268`, `:701-725`. |
+| `_pergunta_viva_calc` | Na ausência de prova suficiente, chama `classificar_falta(colab, p.data_evento)`; usa como **dia da célula/jornada**. `app/chamados/juizes.py:1197-1203`; classificação por turno em `app/escala/servico_jornada.py:392-393`. |
+| `_celulas_da_pergunta` | Só alimenta a classificação quando `p.celula.data == p.data_evento`, reforçando a identidade **dia da célula**; caso contrário não usa a FK como insumo. `app/chamados/juizes.py:612-629`. |
+| `data_do_fato_de` | Devolve o próprio `p.data_evento` e compara por igualdade com dia do chamado. A prosa diz “é nela que a materialização planta a batida”: premissa de **dia do evento faltante**, embora o ajuste permita outro dia. `app/chamados/services/fio.py:43-52`, `:84-88`. |
+| Tela do fio / filtros | `data_do_fato` delega à função acima; divergência mostra os dois dias. A tela explicita “Dia da pergunta … (é aqui que a batida nasce)”: premissa de **dia civil do plantio**. `app/chamados/templatetags/chamados_extras.py:15-31`, `:37-58`; `app/templates/chamados/partials/modal_fio.html:161-167`. |
+| Gate `DATA_EM_DISPUTA` / conferência | Materialização bloqueia diferença entre `data_evento` e dia do chamado até conferência; a conferência mantém `data_evento`, apenas carimba que ele vale. `app/chamados/services/materializacao.py:1166-1173`; `app/chamados/services/validacao.py:611-627`. |
+| `resolvedora_pertence_ao_turno` | Não exige uma identidade única: aceita igualdade; aceita diferença ±1 se o turno do menor dia cruza a meia-noite **ou se isso é indeterminado**. Reconhece explicitamente que perguntas/chamados podem usar entrada ou saída. `app/chamados/juizes.py:1982-1997`. |
+| `_dia_do_plantio` / `_dias_do_par` do passivo validado | Premissa explícita **dia da célula/entrada**: saída overnight do dia 20 nasce no dia 21, mas competência é a do dia 20; entrada 19:00 e saída 07:00 têm o **mesmo** `data_evento`. `app/chamados/services/passivo_validado.py:98-113`, `:460-466`. |
+| `lavrar_sem_turno_aberto` / `veredito_orfa` | Usam como **dia do turno** para verificar turno aberto e encerramento temporal. `app/chamados/reconciliador.py:369-372`, `:1071-1082`. |
+| `acordar_celulas` / semeadura | Preferem FK da célula; sem ela buscam `(colaborador, data_evento)`, assumindo **dia da célula**. `app/chamados/models.py:2671-2684`; `app/chamados/reconciliador.py:1291-1299`. |
+| Fábrica da célula / pergunta no app | Identificam perguntas do dia por igualdade `data_evento == cel.data` ou dia da ata; premissa **dia da célula**. `app/chamados/services/fabrica_da_celula.py:118-126`; `app/chamados/services/pergunta_no_app.py:92-110`. |
+| Materialização de ausência / aceite de folga | Cria ausência ou declara folga diretamente em `p.data_evento`; trata como **dia da jornada a decidir**, não timestamp da saída. `app/chamados/services/materializacao.py:472-485`, `:516-532`; `app/chamados/services/validacao.py:250-271`. |
+| Régua de validação | `_marco_esperado_da_grade` usa como dia dos marcos da escala; fallback de `motivo_implausivel_validacao`. `app/chamados/juizes.py:1517-1543`, `:1700-1709`. |
+| `classe_do_lote` | Combina **diretamente** `data_evento + HH:MM` para procurar conflito ±`CONFLITO_LOTE_MIN`; não passa pelo ajuste overnight nesse trecho. Premissa **dia civil da batida**. `app/chamados/services/validacao.py:824-829`. |
+| `vigia_carimbo` | Lê o juiz e `_slot_esperado`; herda o mesmo cálculo de data do plantio. `app/chamados/services/vigia_carimbo.py:94-116`. |
+| `vigia_fio` | Censo principal agrupa por `p.celula_id`, não por data; medição de dono/exportação usa competência de `p.data_evento`, assumindo **dia financeiro da jornada**. `app/chamados/services/vigia_fio.py:400`, `:466`, `:616`, `:815-817`. |
+| `vigia_plantio_overnight` | Não lê `PerguntaDisputa.data_evento` nem `pergunta_origem`: resolve o `data_turno` da própria batida e acusa somente `ec.eh_dia_trabalho(t.data_turno) is False`. `app/ponto/management/commands/vigia_plantio_overnight.py:30-49`. |
+| Tranca / exportação / prazo | Usam diretamente como dia da competência: `dia_da_pergunta_trancado`, seleção de perguntas da competência e `expira_em`. Premissa **dia financeiro da jornada**; não recalculam a data pelo timestamp ajustado. `app/chamados/juizes.py:931-945`; `app/chamados/services/competencia_trancada.py:106-108`; `app/chamados/veredito_lavrado.py:95-116`. |
+| Recalcular após validar | Passa `perg.data_evento` ao recalculo por evento, como dia do fato financeiro. `app/chamados/services/validacao.py:404-408`. |
+| Calendário / prévia da folha | Indexam perguntas pelo dia `data_evento`; premissa **dia da célula apresentada/apurada**. `app/colaboradores/services/calendario.py:472-477`; `app/folha/previa.py:64-67`. |
+| API / atendimento / consulta do dia | API serializa a data sem conversão; cards a exibem; `dia_do_colab` lista perguntas por igualdade à data pedida. Não aplicam ajuste overnight. `app/api/views.py:1168-1169`; `app/api/views_mensageria.py:568`; `app/templates/chamados/partials/_card_atendimento.html:87-90`; `app/ponto/services/dia_do_colab.py:64-71`. |
+| Dia/competência do próprio chamado | `_dia_da_disputa`, versão em lote e `_dias_das_perguntas_vivas` usam datas das perguntas como fallback/insumo para dia ou competência do chamado. `app/chamados/juizes.py:70-77`, `:203-211`, `:2024-2040`. |
+| Auditoria de órfãs | Procura chamado com `contexto_json.data_turno == p.data_evento` **ou** `celula.data == p.data_evento`, assumindo **dia do turno/célula**; cobertura de ausência usa o mesmo dia. `app/chamados/management/commands/auditar_invariantes_chamados.py:63-78`, `:156-163`. |
+
+**Divergência provada:** a fonte `resolver_data_evento(orfao_14h)` entrega **data da saída esperada**, enquanto materializador, completude e passivo usam essa mesma coluna como **data-base da jornada/célula**; telas e conflito do lote a tratam como **dia civil da batida**. `app/escala/servico_jornada.py:483-491`; `app/chamados/services/materializacao.py:414-420`; `app/chamados/juizes.py:371`; `app/chamados/services/passivo_validado.py:463-465`; `app/templates/chamados/partials/modal_fio.html:166`; `app/chamados/services/validacao.py:824-829`.
+
+**PERGUNTA:** o leitor de conflito do lote calcula `data_evento + hora` diretamente, enquanto o slot canônico passa pelo ajuste overnight; os dois leitores podem consultar dias distintos para a mesma resposta. `app/chamados/services/validacao.py:824-829`; `app/chamados/services/materializacao.py:413-420`.
+
+**PERGUNTA:** a prova de materialização por batida vinculada aceita ±1 dia do `data_evento`, portanto não distingue por si só a saída correta D+1 da saída tardia D+2 quando a pergunta está em D+1 e ambas têm a hora declarada. `app/chamados/juizes.py:263-268`, `:718-725`.
+
+## 06/11 18:42 · sessao b78facd1c787 · PAINEL-SITUACIONAL-UM-MONTADOR · censo · origem=Code
+
+A cópia tem **dois montadores com contratos diferentes**: o lote produz 21 chaves; a célula viva produz 18, sem `estado_app`, `em_turno` e `justif_pend`. Só o lote considera o token ao resolver `plataforma`. (`app/colaboradores/services/situacional.py:180–210`; `app/colaboradores/painel_cell.py:41–70`)
+
+Valores atuais, quantidade de colaboradores afetados, comportamento observado em produção e resultado de execução dos testes: **[nao verificado]**. [nao verificado]
+
+1) **Quem monta a linha e os contextos**
+
+Os produtores da linha são `montar_situacional(colabs_qs, corte, agora, f_plataforma='')` e `montar_linha_colab(c, maps=None)`. O primeiro devolve `(linhas, contadores, by_plat)`; o segundo devolve diretamente um dicionário. (`app/colaboradores/services/situacional.py:65,180,230–238`; `app/colaboradores/painel_cell.py:11,41`)
+
+Comparação de **todas as chaves**, agrupando apenas campos com a mesma fonte:
+
+| Campo | `montar_situacional` | `montar_linha_colab` |
+|---|---|---|
+| `colab` | O objeto `c`. (`app/colaboradores/services/situacional.py:181`) | O objeto `c`. (`app/colaboradores/painel_cell.py:42`) |
+| `empresa` | Nome fantasia, senão razão social; `None` sem empresa. (`app/colaboradores/services/situacional.py:182`) | Mesma expressão. (`app/colaboradores/painel_cell.py:43`) |
+| `last_login` | `c.usuario.last_login`, senão `None`. (`app/colaboradores/services/situacional.py:178,183`) | Mesma fonte. (`app/colaboradores/painel_cell.py:44`) |
+| `l24` | Compara login com **`agora` recebido − 1 dia**. (`app/colaboradores/services/situacional.py:184`) | Compara com **`timezone.now()` interno − 1 dia**. (`app/colaboradores/painel_cell.py:45`) |
+| `appver`, `ultimo_ip` | Do device ativo mais recente por `-ultimo_login`; `None` sem device. (`app/colaboradores/services/situacional.py:16–23,185,187`) | Mesma escolha no modo pontual; com `maps`, usa o device fornecido. (`app/colaboradores/painel_cell.py:20–21,28–29,46,48`) |
+| `plataforma` | Chama `plataforma_exibicao(dev, principal, tem_batida, token_plat)`. Token: o mais recente por usuário com plataforma não vazia. (`app/colaboradores/services/situacional.py:90–93,186`) | Chama o helper com **três argumentos**, omitindo token. (`app/colaboradores/painel_cell.py:47`) |
+| `tem_push` | Existência de assinatura ativa, carregada em conjunto. (`app/colaboradores/services/situacional.py:94,188`) | Existência pontual de assinatura ativa, ou pertencimento ao `push_set` fornecido. (`app/colaboradores/painel_cell.py:22,30,49`) |
+| `tem_foto` | `bool(c.foto)`. (`app/colaboradores/services/situacional.py:189`) | Mesma expressão. (`app/colaboradores/painel_cell.py:50`) |
+| `ultima_batida` | Última batida crua com `timestamp >= corte`; a consulta não impõe `timestamp <= agora` nem exclui retratadas. (`app/colaboradores/services/situacional.py:137–145,190`) | Última batida crua das **14 horas anteriores ao `now()` interno**, ou timestamp fornecido em `maps`. (`app/colaboradores/painel_cell.py:24,27,33–35,51`) |
+| `estado_app` | Sem device → `sem device ativo`; sem adesão viva na vida → `instalou, nunca bateu`; sem adesão viva em `[corte, agora]` → `bateu e parou`; senão `ativo`. (`app/colaboradores/services/situacional.py:115,150,191–194`; `app/ponto/services/adesao.py:48–65`) | **Ausente.** O dicionário completo está em `app/colaboradores/painel_cell.py:41–70`. |
+| `geo`, `geo_tipo` | Cor e tipo devolvidos por `_geo_do_pino`, usando coordenadas e accuracy da última batida do corte recebido. (`app/colaboradores/services/situacional.py:137–145,179,195–198`) | Mesmo helper, mas com a batida de 14 h ou coordenadas fornecidas em `maps`. (`app/colaboradores/painel_cell.py:25,27,33–40,52–53`) |
+| `b_lat`, `b_lon` | Coordenadas dessa última batida convertidas em string; ausência/valor falso vira `''`. (`app/colaboradores/services/situacional.py:199–200`) | Mesma conversão, com a janela/insumo da célula. (`app/colaboradores/painel_cell.py:39,54–55`) |
+| `p_lat`, `p_lon` | Coordenadas do posto em string, ou `''`. (`app/colaboradores/services/situacional.py:201–202`) | Mesmas expressões. (`app/colaboradores/painel_cell.py:56–57`) |
+| `p_raio` | `_raio_do_posto(c.posto)`. (`app/colaboradores/services/situacional.py:203`) | Mesmo helper. (`app/colaboradores/painel_cell.py:58`) |
+| `em_turno` | Booleano do resultado de `turnos_abertos_de(colabs, agora)`. (`app/colaboradores/services/situacional.py:169–170,208`) | **Ausente.** (`app/colaboradores/painel_cell.py:41–70`) |
+| `justif_pend` | Quantidade de justificativas pendentes daquele colaborador, ou zero. (`app/colaboradores/services/situacional.py:124–128,209`) | **Ausente.** (`app/colaboradores/painel_cell.py:41–70`) |
+| `led` | Disputa → vermelho; turno pelo carregador plural com `agora` recebido → amarelo; batida do corte → verde; senão cinza. (`app/colaboradores/services/situacional.py:56–62,169–170,210`) | Mesma precedência, mas consulta singular `turno_aberto_de(c, agora=timezone.now())`; verde/cinza depende da batida de 14 h ou de `maps`. (`app/colaboradores/painel_cell.py:68–70`) |
+
+Não há chave exclusiva da célula. **`token_plat` não é chave de saída de nenhum dos dois**: é parâmetro do helper; no lote vem de `token_plat_map`. (`app/colaboradores/services/situacional.py:90–93,180–210`; `app/colaboradores/painel_cell.py:41–70`; `app/colaboradores/views.py:3034`)
+
+O helper resolve plataforma nesta ordem: **token → device → plataforma principal → `desconhecido` se há batida → `None`**. Portanto a divergência não se limita à janela de batidas: a célula também omite a fonte de maior precedência. (`app/colaboradores/views.py:3039–3045`; `app/colaboradores/painel_cell.py:47`)
+
+`maps` exige `devices_map`, `push_set`, `disputa_set`, `batida_recente` e `batida_coord`; não fornece estado do app, token ou instante de referência e não substitui a consulta singular de turno. (`app/colaboradores/painel_cell.py:20–25,45,47,68–70`)
+
+Os demais produtores explícitos de contexto são:
+
+| Função | Contexto produzido |
+|---|---|
+| `_cell_colab_status` | `{'l': montar_linha_colab(c)}` para `_ps_linha.html`. (`app/colaboradores/painel_cell.py:75–81`) |
+| `painel_situacional` | `quadros_barra`, `linhas`, `placar`, `proximo_offset`, `qs_lotes`, `restantes`, `total_linhas`, `total_ativos`, `logaram_24h`, `fora_posto`, `com_push`, `dormindo`, `plat_app`, `plat_apk`, `plat_ios`, `plat_pwa_android`, `plat_pwa_ios`, `plat_nunca`, `op_em_turno`, `op_justif`, `empresas`, `f_periodo`, `f_plataforma`, `f_empresa`, `f_praca`, `empresa_fora_rollout`, `cortados_painel`, `pracas`, `f_q`, `gmaps_key`. (`app/colaboradores/views.py:2696–2727`) |
+| `painel_situacional_linhas` | `linhas`, `proximo_offset`, `restantes`, `qs_lotes`, para `_ps_lote.html`. (`app/colaboradores/views.py:2809–2814`) |
+| `quadros_barra_situacional` | Quadros com `titulo`/`itens`; itens com `rotulo`, `numero`, `cor`, `attrs` e opcionais `classe`, `negrito_escuro`, `title`; atalhos com `atalho`, `rotulo`, `icone`, e `botao`/`onclick` ou `href`. Alimenta `quadros_barra`. (`app/colaboradores/views.py:2490–2549,2693–2697`) |
+
+O painel e o lote percorrem `linhas`, vinculando cada dicionário a `l` antes de incluir `_ps_linha.html`. `render_cell` apenas encaminha template e contexto para `render_to_string`; não monta outra linha. (`app/templates/colaboradores/partials/painel_situacional.html:300–306`; `app/templates/colaboradores/partials/_ps_lote.html:11`; `app/core/live_cell.py:27–28`)
+
+2) **Chamadores, argumentos e imports**
+
+Chamadas diretas de `montar_linha_colab`:
+
+| Chamador | Argumentos e forma de acesso |
+|---|---|
+| `_cell_colab_status` | `montar_linha_colab(c)`, com objeto buscado por `pk=ident` e relações empresa/posto/usuário carregadas. (`app/colaboradores/painel_cell.py:75–81`) |
+| O200, `_cores` | Import local `from colaboradores import painel_cell`; chama `painel_cell.montar_linha_colab(self.c)`, com `now` interceptado para o instante `agora`. (`app/colaboradores/tests/test_o200_pino_geo_le_o_juiz.py:105–115`) |
+| O200c, `_pino` | Mesmo import local; passa `Colaborador.objects.get(pk=self.c.pk)`, com relógio interceptado. (`app/colaboradores/tests/test_o200c_raio_de_um_sitio.py:137–148`) |
+| LED, `_led(agora)` | Mesmo import local; passa `self.c`, com `painel_cell.timezone.now` interceptado para o argumento `agora`. (`app/colaboradores/tests/test_led_pelo_juiz.py:56–67`) |
+
+Essas quatro chamadas omitem `maps`; nenhuma passa corte, instante ou usuário ao montador. (`app/colaboradores/painel_cell.py:11,81`; `app/colaboradores/tests/test_o200_pino_geo_le_o_juiz.py:115`; `app/colaboradores/tests/test_o200c_raio_de_um_sitio.py:148`; `app/colaboradores/tests/test_led_pelo_juiz.py:67`)
+
+Chamadas diretas de `montar_situacional` em código de produção:
+
+| Chamador | Argumentos |
+|---|---|
+| `painel_situacional`, com placar | `list(colabs_qs[:30]), corte, agora, f_plataforma`. (`app/colaboradores/views.py:2659,2664–2665`) |
+| `painel_situacional`, sem placar | `colabs_qs, corte, agora, f_plataforma`; depois seleciona as primeiras 30 linhas. (`app/colaboradores/views.py:2679–2680`) |
+| `painel_situacional_linhas`, com plataforma | Lista dos objetos correspondentes aos IDs do recorte em `[offset:offset+100]`, seguida de `corte, agora, ''`. (`app/colaboradores/views.py:2758,2797–2802`) |
+| `painel_situacional_linhas`, sem plataforma | `list(qs[offset:offset+100]), corte, agora, ''`. (`app/colaboradores/views.py:2804–2805`) |
+| `lavrar_placar_situacional.Command.handle` | Lista de todo `colaboradores_em_operacao()` com `select_related`; `corte=agora−7 dias`; `agora=timezone.now()`; plataforma omitida. (`app/core/management/commands/lavrar_placar_situacional.py:31,48–56`) |
+| Auditor de invariantes, bloco S7 | Lista de todo `colaboradores_em_operacao()` com `select_related`; `_corte7=_agora7−7 dias`; `_agora7=_tz_s7.now()`; plataforma omitida. Só entra na chamada quando há placar global com idade ≤300 s. (`app/chamados/management/commands/auditar_invariantes_chamados.py:1202–1216`) |
+
+Nesses chamadores os imports de `montar_situacional` são **locais e sem apelido**. `_tz_l` e `_tz_s7` são apelidos de `timezone`. (`app/colaboradores/views.py:2645,2749,2752`; `app/core/management/commands/lavrar_placar_situacional.py:44`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1200,1212`)
+
+Chamadas diretas nos testes: [nao verificado]
+
+| Chamador | Argumentos / import |
+|---|---|
+| `_monta(n)` | `_qs(n)`, `corte=agora−7 dias`, `agora=timezone.now()`; queryset da fixture com `select_related`, ordenado por nome/pk. Import no topo, sem apelido. (`app/colaboradores/tests/test_situacional_pergunta_em_lote.py:29,83–92`) |
+| `_situ` | `Colaborador.objects.filter(pk=self.c.pk)`, `agora−7 dias`, `agora`; import local, sem apelido. (`app/colaboradores/tests/test_situacional_pelo_juiz.py:19–23`) |
+| O200, `_cores` | Queryset de `self.c.pk`, com `select_related`; `agora−14h`, `agora`; import local. (`app/colaboradores/tests/test_o200_pino_geo_le_o_juiz.py:112–120`) |
+| O200c, `_pino` | Queryset de `self.c.pk`, com `select_related`; `agora−14h`, `agora`; import local. (`app/colaboradores/tests/test_o200c_raio_de_um_sitio.py:145–152`) |
+| Adesão, `_estados` | Queryset de `retratado` e `vivo`; `corte=agora−14h`, `agora`; import no topo. (`app/colaboradores/tests/test_adesao_pelo_juiz.py:18,48–53`) |
+| Estado do app, `_estados` | Queryset de `retratado`, `vivo`, `misto`; `corte=_dias(30)`, `agora=timezone.now()`; import no topo. (`app/colaboradores/tests/test_estado_app_pelo_juiz.py:23,65–69`) |
+| `test_placar_global_bate_com_a_soma_das_linhas` | Lista do universo em operação com `select_related`; `corte=agora−PERIODO_PADRAO_DIAS`, `agora`; import local. (`app/core/tests/test_selo_placar_situacional.py:80–91`) |
+
+Há também execução indireta pelo comando de lavra nos testes do placar e do Haiku; ela chega ao mesmo `handle`, que prepara o universo e os tempos. (`app/core/tests/test_selo_placar_situacional.py:81,103,111,121,124,132,187,199,203,223,237,250`; `app/core/tests/test_placar_situacional_um_so_numero.py:91,126`; `app/core/tests/test_haiku_em_turno_agora.py:65,76`; `app/core/management/commands/lavrar_placar_situacional.py:48–56`)
+
+Nenhuma assinatura recebe usuário: o escopo chega pelo queryset/lista preparado pelo chamador. O universo `colaboradores_em_operacao()` exige colaborador ativo, empresa ativa, usuário com nome de 11 dígitos, empresa em rollout e vínculo que cubra hoje. (`app/colaboradores/services/situacional.py:65`; `app/colaboradores/painel_cell.py:11`; `app/colaboradores/queries.py:25–29,50–65`)
+
+3) **Carga, lote, tempos e célula viva**
+
+Na carga, `agora=timezone.now()`; `periodo='hoje'` significa **últimas 24 h**, `'30d'` significa 30 dias e qualquer outro valor resulta em 7 dias. O padrão do GET é `'7d'`. (`app/colaboradores/views.py:2566,2584–2590`)
+
+O lote calcula **outro `agora` a cada requisição**, por `_tz_l.now()`, e reaplica a mesma regra de corte. Ele não recebe o instante da carga inicial. (`app/colaboradores/views.py:2764,2771–2777,2801–2805`)
+
+Os escopos das duas views têm diferenças concretas:
+
+| Aspecto | Carga | Lote |
+|---|---|---|
+| Permissão | `login_required` e `tem_acao(user, 'ver_painel_situacional')`. (`app/colaboradores/views.py:2552,2562–2564`) | `login_required` e `is_superuser or is_staff`. (`app/colaboradores/views.py:2739,2754–2756`) |
+| Praça | GET, persistindo preferência; sem GET, preferência salva. (`app/colaboradores/views.py:2569–2573`) | GET ou preferência salva. (`app/colaboradores/views.py:2766–2767`) |
+| Busca | Nome, CPF **ou matrícula**. (`app/colaboradores/views.py:2620–2624`) | Nome ou CPF. (`app/colaboradores/views.py:2784–2786`) |
+| Ordem | Nome, pk. (`app/colaboradores/views.py:2658`) | Nome, pk. (`app/colaboradores/views.py:2787`) |
+
+As URLs da carga e do lote são `/colaboradores/painel-situacional/` e `/colaboradores/painel-situacional/linhas/`. (`app/config/urls.py:26`; `app/colaboradores/urls.py:81–83`)
+
+A cadeia da célula viva é:
+
+- O `<tr>` declara `data-cell="colab-status:<pk>"` e `data-cell-every="45"`. (`app/templates/colaboradores/partials/_ps_linha.html:1`)
+- O JS chama **`/live-cell/colab-status/<pk>/`**. A rota importa `live_cell` com o apelido `live_cell_view`; o resolvedor procura o tipo registrado e chama `fn(request, ident)`. (`app/static/js/live-cell.js:10,35–38`; `app/config/urls.py:39`; `app/core/urls.py:4,16`; `app/core/live_cell.py:18–22`)
+- `_cell_colab_status(request, ident)` é o renderizador registrado para `colab-status`; busca somente por PK, carrega empresa/posto/usuário e chama `montar_linha_colab(c)`. Não encaminha período, filtros, corte, agora ou usuário ao montador. (`app/colaboradores/painel_cell.py:74–81`)
+- A resposta contém um `<tr>` completo. O JS cria um `tbody` temporário e faz `replaceChild(novo, el)`: **substitui a linha inteira, incluindo atributos e todas as células**. Se o colaborador não existe, `None` vira HTTP 204 e o JS remove a linha. (`app/templates/colaboradores/partials/_ps_linha.html:1–21`; `app/static/js/live-cell.js:40–51`; `app/colaboradores/painel_cell.py:79–80`; `app/core/live_cell.py:23–25`)
+
+Os 45 s são cadência **base**, com jitter de 0,75–1,25, condicionada à visibilidade e ao teto de seis requisições simultâneas. (`app/static/js/live-cell.js:11,17,58–76`)
+
+O painel inicia `LiveCell.scan()`. Separadamente, a sentinela dos lotes usa HTMX com `outerHTML`, substituindo a própria sentinela pelas próximas linhas e eventual nova sentinela. (`app/templates/colaboradores/partials/painel_situacional.html:306,327`; `app/templates/colaboradores/partials/_ps_lote.html:11–12`)
+
+4) **Usar `montar_situacional` para um colaborador**
+
+**Sim, aceita queryset de um colaborador; não há dependência de agregados do lote para decidir sua linha.** A função materializa a entrada, restringe os mapas aos IDs/usuários recebidos e monta cada linha antes de calcular os contadores. (`app/colaboradores/services/situacional.py:82–94,115–150,175–238`)
+
+Não há paginação, limite ou ordenação interna de colaboradores: a ordem é a da entrada; o único corte adicional de colaboradores é `f_plataforma`, quando preenchido. O carregador plural de turnos também separa insumos e julgamento por colaborador. (`app/colaboradores/services/situacional.py:82,172–176`; `app/ponto/turnos.py:2324–2362`)
+
+O retorno para um colaborador continua sendo:
+
+- Uma lista `linhas`, com a linha de 21 campos se ele estiver na entrada e passar pelo filtro opcional. (`app/colaboradores/services/situacional.py:172–211`)
+- Contadores locais: `total_ativos`, `logaram_24h`, `fora_posto`, `com_push`, `dormindo`, `op_em_turno`, `op_justif`. (`app/colaboradores/services/situacional.py:213–237`)
+- `by_plat`, inicializado pelo catálogo de plataformas mais `nunca`, contando a plataforma exibida das linhas retornadas. (`app/colaboradores/services/situacional.py:226–238`)
+
+A extração pode seguir esta forma; com queryset unitário existente e sem filtro de plataforma, o teste O200 já usa `linhas[0]`. (`app/colaboradores/services/situacional.py:65,172–181,230`; `app/colaboradores/tests/test_o200_pino_geo_le_o_juiz.py:116–124`)
+
+```python
+linhas, _, _ = montar_situacional(qs.filter(pk=ident), corte, agora)
+linha = next((l for l in linhas if l['colab'].pk == ident), None)
+```
+
+Isso **não significa custo zero**: ainda carrega devices, tokens, push, adesão, disputas, justificativas, batidas e turnos, além de calcular os agregados. As relações empresa/posto/usuário são acessadas na montagem; os chamadores de tela usam `select_related` para elas. (`app/colaboradores/services/situacional.py:88–170,178–238`; `app/colaboradores/views.py:2593,2779`)
+
+O teste de custo exige igualdade do número de queries entre **30 e 100** colaboradores; não estabelece custo absoluto nem mede o caso de um. Os testes seguintes verificam equivalência do conjunto de turnos e do campo `em_turno`. (`app/colaboradores/tests/test_situacional_pergunta_em_lote.py:94–130`)
+
+5) **Quem lê os campos afetados**
+
+| Campo / leitor | Uso |
+|---|---|
+| `estado_app` — partial | Seleciona três rótulos explicitamente; o ramo final escreve `sem device ativo`. Como a linha da célula não fornece a chave, esse é o ramo correspondente à ausência dela. (`app/templates/colaboradores/partials/_ps_linha.html:12`; `app/colaboradores/painel_cell.py:41–70`) |
+| `estado_app` — testes | Os testes de adesão e estado do app extraem a chave das linhas do lote e distinguem batidas vivas/retratadas e uso dentro/fora da janela. (`app/colaboradores/tests/test_adesao_pelo_juiz.py:48–70`; `app/colaboradores/tests/test_estado_app_pelo_juiz.py:65–88`) |
+| `plataforma` — partial e filtro JS | Alimenta `data-plat` e a pílula; o filtro do navegador lê `data-plat`. (`app/templates/colaboradores/partials/_ps_linha.html:1,11`; `app/templates/colaboradores/partials/painel_situacional.html:56`) |
+| `plataforma` — agregação e barra | O serviço soma `by_plat` pela plataforma exibida; a view expõe os contadores e prepara a barra. (`app/colaboradores/services/situacional.py:226–229`; `app/colaboradores/views.py:2525–2532,2693–2695,2709–2714`) |
+| `token_plat` — helper compartilhado | É lido por `plataforma_exibicao` e tem precedência sobre device/principal. Os testes próprios cobrem essa precedência e os fallbacks. (`app/colaboradores/views.py:3034–3045`; `app/colaboradores/tests/test_pilula_plataforma.py:9–23`; `app/colaboradores/tests/test_plataforma_pwa.py:45–59`) |
+| Plataforma/token — ficha | A ficha busca seu próprio device/token e chama `plataforma_exibicao`; não consome o dicionário de nenhum dos dois montadores. (`app/colaboradores/services/ficha.py:140–151`) |
+
+Há uma distinção adicional: **o filtro de plataforma do servidor usa o device ativo, enquanto a plataforma exibida pode vir do token**. Nesse filtro, `nunca` significa ausência de device ativo; ele não testa ausência de plataforma exibida. (`app/colaboradores/services/situacional.py:16–31,172–186`)
+
+O **lavrador do placar não lê `estado_app`, `plataforma` ou `token_plat`**: chama o serviço 
+
+[truncado em 20000 de 23910 caracteres]
 
 ## 06/11 18:39 · sessao 9ad1417ffcd9 · - · - · origem=Ronald (tmux)
 
@@ -742,200 +1023,4 @@ Execução da suíte Django, sobrevivência à suíte integral e ocorrência dos
 
    **Desde a rodada 2:** mudaram a prova inferior, o reconhecimento AST do dicionário literal e a explicação documental. A ressalva sobre desligado sem data agora concorda com o caminho do código: ele não ganha fechamento novo pelo universo, mas fechamento antigo continua sendo lido pelo export; C5 segue a lavra. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:278`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:334`, `app/escala/services/cadastro_realidade.py:148`, `app/ponto/services/fechamento.py:430`, `app/folha/export.py:775`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:227`.
 
-## 06/11 18:14 · sessao 40b4c38a7809 · ESPELHO-DECIDIU · sonda · origem=Code
-
-O ponto central é: **o valor de falta gravado soma as ausências aprovadas que descontam, mesmo havendo abono sobreposto**; já a cobertura usada para abono/supressão escolhe uma ausência por dia. São operações diferentes. (`app/folha/export.py:140`, `app/folha/export.py:142`, `app/ponto/services/fechamento.py:674`)
-
-1) Transcrição do dado fornecido. `[nao verificado]` indica ausência de verificação independente na sombra; os números abaixo são os do texto recebido. [nao verificado]
-
-```text
-UNIVERSO dias_colab_com_ausencia_aprovada=5278 dias_com_2+=33 colabs=5 [nao verificado]
-PARES_DE_TIPO {('falta', 'folga_abonada'): 1, ('falta', 'folga'): 1, ('ferias', 'ferias'): 29, ('atestado', 'falta'): 1, ('falta', 'folga_compensatoria'): 1} [nao verificado]
-POR_MES {'2026-10': 3, '2026-09': 30} [nao verificado]
-CLASSE (tipos, fechamento) {('so_abono', 'nao_desconta'): 29, ('abono+falta', 'desconta'): 4} [nao verificado]
-ABONO+FALTA_QUE_DESCONTA 4 [nao verificado]
-ERROS {} [nao verificado]
-CONCLUSAO_LIBERADA [nao verificado]
-rc_sombra=0 [nao verificado]
-```
-
-Os oito `EX` estão abaixo; as tuplas de `aus` foram mantidas sem atribuir nomes aos seus campos. A coluna `tela` resume os campos completos visíveis no trecho fornecido. [nao verificado]
-
-| Colaborador / dia | `aus` | `horas_falta` / `falta_min` | `tela`: tipo / faixa / rótulo; suprimidos; previsto | Fonte |
-|---|---|---|---|---|
-| col127 / 2026-09-03 | `(4709, 'ferias', 0, False, None, '2026-10-05 11:55')`; `(2634, 'ferias', 0, False, None, '2026-08-13 11:44')` | `0.0 / None` | `ferias / ferias / Ferias`; `['ferias','folga']`; `False` | [nao verificado] |
-| col127 / 2026-09-04 | `(4710, 'ferias', 0, False, None, '2026-10-05 11:55')`; `(2634, 'ferias', 0, False, None, '2026-08-13 11:44')` | `0.0 / None` | `ferias / ferias / Ferias`; `['ferias','trabalho']`; `True` | [nao verificado] |
-| col127 / 2026-09-05 | `(4711, 'ferias', 0, False, None, '2026-10-05 11:55')`; `(2634, 'ferias', 0, False, None, '2026-08-13 11:44')` | `0.0 / None` | `ferias / ferias / Ferias`; `['ferias','folga']`; `False` | [nao verificado] |
-| col127 / 2026-09-06 | `(4712, 'ferias', 0, False, None, '2026-10-05 11:55')`; `(2634, 'ferias', 0, False, None, '2026-08-13 11:44')` | `0.0 / None` | `ferias / ferias / Ferias`; `['ferias','trabalho']`; `True` | [nao verificado] |
-| col824 / 2026-09-07 | `(4519, 'folga_compensatoria', 0, False, None, '2026-09-28 16:34')`; `(4421, 'falta', 660, False, None, '2026-09-24 18:04')` | `11.0 / 660.0` | `falta / atestado / Atestado`; `['folga','trabalho']`; `True` | [nao verificado] |
-| col643 / 2026-09-17 | `(4431, 'falta', 720, False, None, '2026-09-25 13:04')`; `(4434, 'atestado', 0, False, None, '2026-09-25 13:07')` | `12.0 / 720.0` | `falta / atestado / Atestado`; `['atestado','trabalho']`; `True` | [nao verificado] |
-| col736 / 2026-10-04 | `(5146, 'folga', 0, False, None, '2026-10-23 17:14')`; `(5168, 'falta', 720, False, 28450, '2026-10-23 19:05')` | `12.0 / 720.0` | `falta / atestado / Atestado`; `['atestado','trabalho']`; `True` | [nao verificado] |
-| col444 / 2026-10-10 | `(4830, 'falta', 720, False, 30118, '2026-10-12 18:33')`; `(5098, 'folga_abonada', 0, False, None, '2026-10-22 18:02')` | `12.0 / 720.0` | `falta / atestado / Atestado`; `['atestado','trabalho']`; `True` | [nao verificado] |
-
-Nos quatro exemplos de férias, `fatos.ausencias=['ferias','ferias']`; nos demais, respectivamente, `['falta','folga_compensatoria']`, `['falta','atestado']`, `['falta','folga']` e `['falta','folga_abonada']`. O feriado de col824 aparece truncado como `'Independência do Bra…'`; os demais exemplos mostram `feriado=None`. Os textos de `tela` recebidos estão truncados. [nao verificado]
-
-| C444: pk | Dia | Tipo | min | Status | pelo_proprio | chamado_origem | horas_falta / falta_min | Fonte |
-|---|---|---|---:|---|---|---:|---|---|
-| 5198 | 2026-10-24 | falta | 720 | aprovada | False | 34480 | `12.0 / 720.0` | [nao verificado] |
-| 5099 | 2026-10-16 | falta | 420 | aprovada | False | None | `7.0 / 420.0` | [nao verificado] |
-| 4830 | 2026-10-10 | falta | 720 | aprovada | False | 30118 | `12.0 / 720.0` | [nao verificado] |
-| 5098 | 2026-10-10 | folga_abonada | 0 | aprovada | False | None | `12.0 / 720.0` | [nao verificado] |
-
-2) Pelo código, há três operações que precisam ser distinguidas.
-
-- **Cobertura para abono/supressão:** o fechamento chama `cobertura_ausencia_periodo(..., para='folha')`; só entram aprovadas. A consulta ordena por `data, pk` crescentes e sobrescreve o mapa: vence **maior data inicial; empatando, maior pk**. Não usa o instante de criação ou aprovação. (`app/ponto/services/fechamento.py:674`, `app/ponto/turnos.py:2514`, `app/ponto/turnos.py:2757`, `app/ponto/turnos.py:2769`)
-- **Efeito da vencedora:** no fechamento, ABONA acrescenta o dia às justificadas; DESCONTA não o suprime; os demais efeitos entram nas suprimidas. Ausências pagas parciais são ressalvadas antes. `efeitos_da_ausencia` também consulta a **mesma função de cobertura**, com outro laço para aplicar ABONA/SUPRIME. (`app/ponto/services/fechamento.py:685`, `app/ponto/services/fechamento.py:689`, `app/ponto/services/fechamento.py:691`, `app/ponto/services/efeito_ausencia.py:53`, `app/ponto/services/efeito_ausencia.py:59`)
-- **Quantidade de falta gravada:** vem de `minutos_de_falta_por_dia`, que percorre **todas** as aprovadas dos tipos `descontam_vigentes()` e acumula os minutos por dia. Não consulta a vencedora da cobertura nem elimina a falta pela presença de abono. Cada registro é rateado pelos seus dias; `DiaPago` recebe minutos/60 em `horas_falta` e os minutos em `detalhe.falta_min`. (`app/ponto/services/fechamento.py:864`, `app/folha/export.py:88`, `app/folha/export.py:118`, `app/folha/export.py:121`, `app/folha/export.py:140`, `app/folha/export.py:142`, `app/ponto/services/dia_pago.py:272`)
-
-A expansão de dias usa intervalo fechado; sem fim, alcança o fim consultado somente para `TIPOS_EM_ABERTO`; nos demais tipos cobre apenas a data inicial, sempre recortada à janela. (`app/ponto/turnos.py:2779`, `app/ponto/turnos.py:2785`)
-
-**A saída `fatos_do_dia` da sonda usa outra escolha:** delega a `fatos_do_periodo`, inclui não rejeitadas e ordena inicialmente apenas por `data` crescente. Depois escolhe a primeira candidata pela faixa: `ferias`, `afastamento`, `atestado`, `feriado`, `folga`, `trabalho`. Na mesma faixa, a data mais antiga chega primeiro; mesma faixa e mesma data não têm desempate explícito por pk. (`app/ponto/precedencia.py:256`, `app/ponto/precedencia.py:273`, `app/ponto/precedencia.py:279`, `app/ponto/precedencia.py:46`, `app/ponto/precedencia.py:396`)
-
-`falta`, `folga` e `folga_abonada` caem na faixa padrão `atestado`; `folga_compensatoria` tem faixa explícita `folga`. O código devolve o tipo vencedor, mas monta o rótulo pela faixa: isso permite `tipo_do_dia='falta'`, `faixa='atestado'`, `rotulo='Atestado'`. (`app/ponto/precedencia.py:52`, `app/ponto/precedencia.py:79`, `app/ponto/precedencia.py:403`, `app/ponto/precedencia.py:405`)
-
-**A palavra final do espelho tem outra etapa:** o espelho carrega a cobertura de folha pela mesma `cobertura_ausencia_periodo` usada pelo fechamento e a passa a `dia_decidido.do_dia`. Quando existe cobertura, ela tem prioridade sobre os fatos A2, e o rótulo vem daquela ausência. (`app/ponto/services/espelho.py:588`, `app/ponto/services/espelho.py:340`, `app/ponto/services/dia_decidido.py:363`, `app/ponto/services/dia_decidido.py:428`)
-
-Portanto:
-
-| Comparação | Resposta pelo código |
-|---|---|
-| Cobertura do fechamento × cobertura da palavra final do espelho | **Mesma função:** `cobertura_ausencia_periodo`. (`app/ponto/services/fechamento.py:674`, `app/ponto/services/espelho.py:588`) |
-| Cobertura × `fatos_do_dia` mostrado na sonda | **Funções e critérios diferentes:** maior `(data,pk)` versus faixa de precedência e ordem por data. (`app/ponto/turnos.py:2757`, `app/ponto/turnos.py:2769`, `app/ponto/precedencia.py:279`, `app/ponto/precedencia.py:396`) |
-| Desconto gravado × essas escolhas | **Soma independente** das aprovadas que descontam. (`app/folha/export.py:140`, `app/folha/export.py:142`) |
-| `decididos_do_periodo` | Outra função: inclui rejeitadas e sobrescreve por `(data,pk)`; não substitui a cobertura quando esta existe. (`app/ponto/services/dia_decidido.py:550`, `app/ponto/services/dia_decidido.py:555`, `app/ponto/services/dia_decidido.py:561`, `app/ponto/services/dia_decidido.py:363`) |
-
-O recorte não mostra `data/data_fim` de cada registro nem a palavra final de `dia_decidido`; o pk vencedor da cobertura e essa palavra nos exemplos permanecem [nao verificado].
-
-3) Escritores operacionais de `Ausencia.minutos` encontrados na cópia:
-
-| Sítio | O que escreve ou encaminha |
-|---|---|
-| Campo do modelo | `default=0`. (`app/ponto/models.py:755`) |
-| `Ausencia.save` | Deriva **somente falta aprovada com minutos falsy**; soma `minutos_previstos_do_dia` pelo intervalo e atribui o total. Valores positivos são preservados. (`app/ponto/models.py:877`, `app/ponto/models.py:885`, `app/ponto/models.py:887`) |
-| `criar_ausencia` | Argumento com default zero → `kwargs['minutos']` → instância → save. (`app/ponto/services/ausencia.py:130`, `app/ponto/services/ausencia.py:343`, `app/ponto/services/ausencia.py:385`, `app/ponto/services/ausencia.py:418`) |
-| `editar_ausencia_registro` | Atribui `int(minutos or 0)` e salva. (`app/ponto/services/ausencia.py:508`) |
-| `mudar_estado` / `decidir` | Persiste `minutos` em `update_fields`, incluindo a derivação do modelo. (`app/ponto/services/ausencia.py:834`, `app/ponto/services/ausencia.py:911`) |
-| `rederivar_fim` / comando de cura | Faz save completo, podendo persistir a derivação. (`app/ponto/services/ausencia.py:1296`, `app/ponto/management/commands/curar_ausencia_sem_fim.py:46`) |
-| Lançamento admin | Encaminha minutos recebidos da entrada. (`app/ponto/views.py:2388`, `app/ponto/views.py:2417`) |
-| Submissão PWA | Encaminha `_min` recebido da entrada. (`app/ponto/views.py:2497`, `app/ponto/views.py:2539`) |
-| API | Converte a entrada e encaminha `_min`. (`app/api/views.py:1815`, `app/api/views.py:1824`) |
-| Edição pela tela | Lê POST, converte e passa à edição central. (`app/ponto/views.py:2784`, `app/ponto/views.py:2787`, `app/ponto/views.py:2801`) |
-| Copiloto | Omite minutos; recebe default zero. (`app/ponto/services/checar_ausencia.py:46`, `app/ponto/services/ausencia.py:130`) |
-| Veredito da célula | Omite minutos; recebe default zero. (`app/ponto/services/veredito_celula.py:315`, `app/ponto/services/ausencia.py:130`) |
-| Declaração de pergunta de disputa | Omite minutos; recebe default zero. (`app/chamados/services/materializacao.py:484`, `app/ponto/services/ausencia.py:130`) |
-| Materialização da resposta de disputa | Omite minutos; recebe default zero. (`app/chamados/services/materializacao.py:520`, `app/ponto/services/ausencia.py:130`) |
-| Sincronização de férias | Passa `minutos=0`. (`app/ponto/services/ausencia.py:1204`) |
-| `garantir_ausencia` | Encaminha os argumentos à criação central. (`app/ponto/services/ausencia.py:461`) |
-| Regularização | Passa `minutos=0` ao wrapper. (`app/ponto/services/regularizacao.py:119`) |
-| Abandono provisório | Passa `minutos=0` ao wrapper. (`app/ponto/management/commands/marcar_abandono_provisorio.py:80`) |
-| Comando H06 | Passa `minutos=alvo` à edição: aplicação rederiva; reversão restaura o valor anterior do snapshot. (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:127`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:169`) |
-
-**Nenhum desses produtores operacionais embute atualmente `720` ou outro literal positivo para minutos.** As duas materializações omitem o argumento; os comentários registram a retirada do valor fixo. Entradas explícitas e valores de reversão continuam podendo persistir números positivos, que `save` preserva. (`app/chamados/services/materializacao.py:484`, `app/chamados/services/materializacao.py:487`, `app/chamados/services/materializacao.py:520`, `app/chamados/services/materializacao.py:522`, `app/ponto/services/ausencia.py:508`, `app/ponto/models.py:877`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:170`)
-
-Há literais como `720` e atualizações diretas em fixtures de testes. (`app/ponto/tests/test_h12h06b_rederivar_minutos.py:71`, `app/ponto/tests/test_h12h06b_rederivar_minutos.py:190`) O formulário é `forms.Form`, e o admin de Ausencia herda de `SoLeitura`. (`app/ponto/forms.py:41`, `app/ponto/admin.py:38`)
-
-Quem escreveu os `720`, `660` e `420` dos registros concretos, e com qual versão do código, permanece [nao verificado].
-
-4) **Existe veto de sobreposição, com uma exceção assimétrica:** `linha_que_veta` percorre as sobrepostas não rejeitadas e retorna a primeira não absolvida. `abona_sobre_falta` absolve somente **tipo novo que abona sobre registro existente de tipo `falta`**. Falta nova sobre abono não recebe essa exceção. (`app/ponto/turnos.py:2815`, `app/ponto/precedencia.py:145`, `app/ponto/precedencia.py:127`, `app/ponto/precedencia.py:131`)
-
-| Caminho de criação | Passagem pelo veto |
-|---|---|
-| Admin, PWA, copiloto e veredito da célula | Usam o modo padrão, com `linha_que_veta` e veto final de precedência. (`app/ponto/views.py:2415`, `app/ponto/views.py:2536`, `app/ponto/services/checar_ausencia.py:46`, `app/ponto/services/veredito_celula.py:315`, `app/ponto/services/ausencia.py:323`, `app/ponto/services/ausencia.py:377`) |
-| API | Mesmo fato vivo é devolvido; para novo fato, muda para modo `veto`. (`app/api/views.py:1826`, `app/ponto/services/ausencia.py:246`, `app/ponto/services/ausencia.py:253`) |
-| Sincronização de férias | Usa criação padrão e registra as recusas. (`app/ponto/services/ausencia.py:1202`, `app/ponto/services/ausencia.py:1209`) |
-| Regularização e abandono | Usam `retornar`: havendo sobreposição, devolvem a existente sem criar outra; não executam o veto final reservado ao modo `veto`. (`app/ponto/services/regularizacao.py:118`, `app/ponto/management/commands/marcar_abandono_provisorio.py:76`, `app/ponto/services/ausencia.py:461`, `app/ponto/services/ausencia.py:312`, `app/ponto/services/ausencia.py:377`) |
-| As duas materializações de disputa | **Não passam pelo veto entre tipos diferentes:** usam `retornar_mesmo_tipo`. (`app/chamados/services/materializacao.py:490`, `app/chamados/services/materializacao.py:526`) |
-
-Nesse último modo, o produtor procura somente mesmo colaborador/tipo/data; se não encontrar, define `conflito=None` e sobrepostas vazias. Também pula o veto final, condicionado a `se_existir=='veto'`. (`app/ponto/services/ausencia.py:294`, `app/ponto/services/ausencia.py:302`, `app/ponto/services/ausencia.py:377`)
-
-Outros escritores que não passam por `linha_que_veta`:
-
-- **Aprovação posterior:** o gate verifica documento/contradição, e `decidir → mudar_estado` verifica a transição e salva; não reconsulta sobreposição nem substitui a falta anterior. (`app/ponto/services/ausencia.py:619`, `app/ponto/services/ausencia.py:628`, `app/ponto/services/ausencia.py:911`, `app/ponto/services/ausencia.py:820`, `app/ponto/services/ausencia.py:835`)
-- **Edição:** não usa essa exceção; tem veto próprio mais restrito, recusando qualquer outra sobreposta. (`app/ponto/services/ausencia.py:487`, `app/ponto/services/ausencia.py:491`)
-- **Reversão de rejeição:** chama `_reabrir`, que muda o estado sem consultar esse veto. (`app/ponto/services/ausencia.py:1102`, `app/ponto/services/ausencia.py:1141`)
-- **Rederivação e modelo:** `rederivar_fim` chama `save`; o `save` deriva carimbo, minutos e intervalo, sem veto de sobreposição. A constraint declarada limita apenas duplicidade viva de **colaborador/tipo/data inicial**, permitindo tipos diferentes e interseções de intervalos com inícios distintos. (`app/ponto/services/ausencia.py:1296`, `app/ponto/models.py:868`, `app/ponto/models.py:877`, `app/ponto/models.py:894`, `app/ponto/models.py:827`)
-
-O dado raspado não identifica qual desses caminhos produziu cada sobreposição; atribuir os casos concretos a um escritor específico permanece [nao verificado].
-
-## 06/11 18:13 · sessao 1875a7bbf072 · - · - · origem=Ronald (tmux)
-
-**MÉDIA — remanescente: vigia perde competência e datas ao decidir roteamento.** `na_lista` conserva somente IDs, e `rot` verifica somente `colab`; assim, C5 positiva na anterior pode retirar da conta de calados a linha da corrente sem nenhum dia corrente na C5. A unidade declarada é pessoa, mas o relatório apresenta o número por competência. `app/folha/vigia_retido_calado.py:12`, `app/folha/vigia_retido_calado.py:43`, `app/folha/vigia_retido_calado.py:48`, `app/folha/vigia_retido_calado.py:54`.
-
-Como provar: sonda executada em memória com o corpo real de `censo` extraído por AST, sem Django/DB: dois retratos, competências 10 e 11, mesmo `colab=7`, `dono='ninguem'`; C5 devolvendo somente `05/10`. Resultado observado: `bloqueados=2`, `calados=0`, `roteados=2`, um roteado por competência. O mecanismo responsável são as linhas 43 e 48; ocorrência em produção **[nao verificado]**. `app/folha/vigia_retido_calado.py:43`, `app/folha/vigia_retido_calado.py:48`.
-
-Cenário real plausível: anterior retida por `nunca_bateu`; corrente retida por `sem_celula`, sem porta. O retentor produz dias sem célula, cuja ausência de porta conduz a grupo D; entretanto, C5 consulta somente células `nunca_bateu`. `app/folha/export.py:1231`, `app/folha/fora_da_folha.py:67`, `app/folha/fora_da_folha.py:86`, `app/escala/services/cadastro_realidade.py:175`.
-
-**MÉDIA — remanescente: “roteado à lista” pode apontar empresa que a tela exclui.** O contador lê retratos históricos independentemente da atividade da empresa; C5 também consulta todas as empresas ou os IDs informados. A tela e o lavrador usam `empresas_visiveis`, que exige `ativa=True` e exclui CNPJ diagnóstico. `app/folha/vigia_retido_calado.py:33`, `app/folha/vigia_retido_calado.py:38`, `app/escala/services/cadastro_realidade.py:171`, `app/escala/views.py:487`, `app/folha/management/commands/lavrar_retrato_folha.py:49`, `app/colaboradores/queries.py:85`.
-
-Como provar: lavrar retrato com C5 positiva, depois tornar a empresa inativa e consultar `censo([id])`; o retrato continua no universo do contador, mas a empresa sai da tela e das próximas lavras. Sonda com o corpo real de `censo` em memória, retrato associado a `empresa.ativa=False` e C5 positiva retornou `bloqueados=1`, `calados=0`, `roteados=1`, `cego=0`. A sonda comprova a ausência de filtro no contador; ocorrência real em produção **[nao verificado]**. `app/folha/vigia_retido_calado.py:35`, `app/folha/vigia_retido_calado.py:48`, `app/escala/services/cadastro_realidade.py:185`, `app/escala/views.py:487`.
-
-**Mapa dos campos da lavra consumidos pelo diff:**
-
-| Campo/valor | Quem escreve | Quem lê |
-|---|---|---|
-| `status='fora'`, `motivo='furo_espelho'` | `classificar_export`, sobre fechamentos da empresa/competência. `app/folha/export.py:775`, `app/folha/export.py:962` | `montar_linhas` copia; `_balde` interpreta; C5 exige motivo; vigia lê balde. `app/folha/retrato_folha.py:1164`, `app/folha/retrato_folha.py:1180`, `app/folha/retrato_folha.py:89`, `app/escala/services/cadastro_realidade.py:189`, `app/folha/vigia_retido_calado.py:46` |
-| `datas` de furo | Retentor → `dias_que_seguram`, somente para itens de furo; `fora_da_folha` converte datas ISO. `app/folha/fora_da_folha.py:95`, `app/folha/fora_da_folha.py:128`, `app/folha/fora_da_folha.py:137`, `app/folha/fora_da_folha.py:192` | `montar_linhas` copia; C5 une e compara ISO. `app/folha/retrato_folha.py:1171`, `app/folha/retrato_folha.py:1183`, `app/escala/services/cadastro_realidade.py:190`, `app/escala/services/cadastro_realidade.py:192` |
-| `colab` | ID vindo do item do export, copiado no JSON. `app/folha/retrato_folha.py:1163`, `app/folha/retrato_folha.py:1178` | C5 e vigia. `app/escala/services/cadastro_realidade.py:189`, `app/folha/vigia_retido_calado.py:48` |
-| `dono` contendo fio | `_fio_cru`, chamado pelo montador. `app/folha/retrato_folha.py:364`, `app/folha/retrato_folha.py:1186` | `fio_da_linha`, usado pelo vigia para selecionar `ninguem`. `app/folha/retrato_folha.py:428`, `app/folha/retrato_folha.py:438`, `app/folha/vigia_retido_calado.py:47` |
-| `empresa`, `mes`, `ano`, `linhas`, `lavrado_em` | Command `lavrar_retrato_folha --apply`. `app/folha/management/commands/lavrar_retrato_folha.py:74` | C5 seleciona empresa/competências; vigia seleciona empresa e último dia de lavra, ordena e relata competência; porta lê `linhas`. `app/escala/services/cadastro_realidade.py:185`, `app/folha/vigia_retido_calado.py:35`, `app/folha/vigia_retido_calado.py:38`, `app/folha/vigia_retido_calado.py:45`, `app/folha/retrato_folha.py:110` |
-| Retorno C5 `{cid:[datas]}` | Função C5, apenas em memória. `app/escala/services/cadastro_realidade.py:194` | `_nunca_bateu` formata assinatura; `lista` incorpora; `acao` fornece porta; vigia reduz a IDs. `app/escala/services/cadastro_realidade.py:201`, `app/escala/services/cadastro_realidade.py:833`, `app/escala/services/cadastro_realidade.py:657`, `app/folha/vigia_retido_calado.py:43` |
-| `hoje` do vigia | Command lê `timezone.localdate()`. `app/folha/management/commands/vigiar_retido_calado.py:31` | `censo` repassa à C5, que calcula ontem e janelas. `app/folha/vigia_retido_calado.py:43`, `app/escala/services/cadastro_realidade.py:170`, `app/escala/services/cadastro_realidade.py:174` |
-| Contadores e `cego` | `censo`, em memória. `app/folha/vigia_retido_calado.py:44`, `app/folha/vigia_retido_calado.py:49`, `app/folha/vigia_retido_calado.py:56` | `linhas` imprime; command avalia alarme. `app/folha/vigia_retido_calado.py:60`, `app/folha/management/commands/vigiar_retido_calado.py:32`, `app/folha/management/commands/vigiar_retido_calado.py:36` |
-
-Nenhum defeito adicional de execução identificado nesta revisão do delta; execução da suíte Django **[nao verificado]**. [nao verificado]
-
-## 06/11 18:12 · sessao 0307bae4437f · - · - · origem=Ronald (tmux)
-
-**Sem divergência aritmética entre lavrador e leitor para o mesmo `hoje` e corte.** Ambos derivam `(mes, ano)` do fim das mesmas duas janelas; C5 usa o início da anterior como limite inferior. `app/folha/management/commands/lavrar_retrato_folha.py:60`, `app/escala/services/cadastro_realidade.py:174`, `app/escala/services/cadastro_realidade.py:176`, `app/escala/services/cadastro_realidade.py:183`.
-
-Sonda em memória, com as funções reais, conferiu 49.329 combinações: todos os dias de 2024–2028, cortes 2–28; nenhuma divergência de contenção, continuidade ou reconstrução por competência. A implementação inclui `dia >= corte`, dezembro→janeiro e anterior por dia imediatamente antes do início corrente. `app/ponto/janelas.py:15`, `app/ponto/janelas.py:27`, `app/ponto/janelas.py:30`, `app/ponto/janelas.py:71`.
-
-| Valor | Quem escreve/produz | Quem lê |
-|---|---|---|
-| `dia_inicio_competencia` | Formulário valida/clampa e chama a porta; porta persiste. `app/colaboradores/views.py:495`, `app/colaboradores/views.py:523`, `app/colaboradores/views.py:538`, `app/colaboradores/services/estrutura.py:12`, `app/colaboradores/services/estrutura.py:17`. | `corte_da_empresa`; default 21 e clamp 2–28. `app/ponto/janelas.py:50`. |
-| Janela corrente | `periodo_apuracao_atual` → `periodo_apuracao`. `app/ponto/janelas.py:24`. | `janela_atual`; C5 e lavrador. `app/ponto/janelas.py:60`, `app/escala/services/cadastro_realidade.py:174`, `app/folha/management/commands/lavrar_retrato_folha.py:60`. |
-| Janela anterior | `janela_anterior` chama corrente no dia anterior ao início. `app/ponto/janelas.py:71`. | C5 lê início; C5/lavrador leem fim para competência. `app/escala/services/cadastro_realidade.py:176`, `app/escala/services/cadastro_realidade.py:183`, `app/folha/management/commands/lavrar_retrato_folha.py:61`. |
-| Competência de `RetratoFolha` | Lavrador grava `(empresa, mes, ano)` do fim. `app/folha/management/commands/lavrar_retrato_folha.py:74`. | C5 consulta mesmo par. `app/escala/services/cadastro_realidade.py:185`. |
-| Janela do conteúdo lavrado | `montar_linhas` → `fora_da_folha` → `dias_que_seguram`, que chama `janela_fechamento` e export. `app/folha/retrato_folha.py:1157`, `app/folha/fora_da_folha.py:118`. | Export delega ao mesmo juiz; retentor recebe essas bordas. `app/folha/export.py:47`, `app/folha/export.py:807`, `app/folha/fora_da_folha.py:137`. |
-| Janela do fechamento | Juiz `janela_fechamento`. `app/ponto/janelas.py:54`. | Universo e recalculador. `app/ponto/services/fechamento.py:423`, `app/ponto/services/fechamento.py:545`, `app/ponto/services/fechamento.py:612`. |
-
-Exemplos corte 21, calculados pelas funções reais: em 20/10/2026, competências 09/10; em 21/10, 10/11; em 21/12, 12/2026 e 01/2027; em 01/01/2027, mesmo par; em 21/01, 01/02 de 2027. `app/ponto/janelas.py:24`, `app/ponto/janelas.py:66`.
-
-**Limitação — concordância de calendário não certifica contemporaneidade.** Lavrador fixa a data real, aceita competências explícitas e sobrescreve o único retrato da chave; C5 aceita `hoje` arbitrário e consulta o retrato existente sem seleção por `lavrado_em`. Portanto, `hoje` retroativo não recupera uma fotografia histórica. `app/folha/management/commands/lavrar_retrato_folha.py:48`, `app/folha/management/commands/lavrar_retrato_folha.py:55`, `app/folha/management/commands/lavrar_retrato_folha.py:74`, `app/folha/models.py:363`, `app/escala/services/cadastro_realidade.py:169`, `app/escala/services/cadastro_realidade.py:185`.
-
-O vigia seleciona retratos pela última **data de lavra**, enquanto C5 seleciona competências pelo `hoje` recebido; esses universos podem divergir, inclusive antes da nova lavra no dia do corte. A C5 então deixa o desligado sem dias da competência ainda não lavrada. `app/folha/vigia_retido_calado.py:38`, `app/folha/vigia_retido_calado.py:43`, `app/escala/services/cadastro_realidade.py:181`, `app/escala/services/cadastro_realidade.py:190`. Ocorrência em produção: **[nao verificado]**.
-
-## 06/11 18:12 · sessao 800b74a61b49 · - · - · origem=Ronald (tmux)
-
-**Q1 — cura comprovada por sonda em memória; execução Django [nao verificado].** O filtro está em `app/escala/services/cadastro_realidade.py:176`; o teste novo está em `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:278`.
-
-| Mutante simples | Teste novo isolado | Prova | [nao verificado]
-|---|---|---|
-| Remover `data__gte` | Distingue | Retorna 20/09 e 21/09, exigia só 21/09. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:279` |
-| `gte` → `gt` | Distingue | Retorna vazio. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:280` |
-| Usar início de `janela_atual` | Distingue | Retorna vazio; início atual 21/10. `app/escala/services/cadastro_realidade.py:174` |
-| Remover `data__lte` | Sobrevive | Ambas as datas do fixture são anteriores a ontem. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:279` |
-| `lte` → `lt` | Sobrevive | Fixture não contém ontem. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:279` |
-
-Os dois mutantes superiores são distinguidos pelos testes ativos já existentes: `_ativo` cria HOJE e ontem=24/10, e `ESPERADO` inclui 24/10 e exclui HOJE. Logo os testes desse arquivo, em conjunto, distinguem todos os mutantes simples listados; sobrevivência à suíte integral [nao verificado]. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:261`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:264`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:269`.
-
-**Q2 — BAIXA, lacunas remanescentes do selo; nenhum defeito funcional atual demonstrado.** Extraí e executei `_veredito` em memória, sem importar Django; ele percorre somente a função localizada por `_fn` e reconhece strings posicionais apenas para os nomes enumerados. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:304`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:296`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:328`.
-
-| Forma sondada | Resultado do detector |
-|---|---|
-| `Q(data_demissao__isnull=False)` | Detecta `data_demissao`; kwargs de qualquer chamada são examinados. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:332` |
-| `Q(**{"data_demissao__isnull": False})` | Detecta; cura do delta funciona. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:334` |
-| `Q(("data_demissao__isnull", False))` | Não detecta; não percorre strings de tuplas posicionais. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:329` |
-| `kw={"data_demissao__isnull":False}; Q(**kw)` | Não detecta; exige `ast.Dict` diretamente no kwarg. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:334` |
-| `F("data_demissao")` | Não detecta; `F` não pertence à lista. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:296` |
-| `values(d=F("data_demissao"))` | Não detecta; inspeciona o nome `d`, não o campo dentro de `F`. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:330`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:332` |
-| `values("colaborador__data_demissao")` | Não detecta; string posicional comparada inteira, sem dividir `__`. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:330` |
-| `from operator import attrgetter as ag; ag("data_demissao")(c)` | Não detecta campo; usa nome sintático `ag`, sem resolver o apelido para o detector de campos. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:315`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:328` |
-| `from folha import export as e; e.classificar_export(...)` | Não detecta proibida nem módulo proibido: registra `folha`, e chamadas por atributo não entram em `chamadas`. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:313`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:322` |
-| `import folha.export as e; e.classificar_export(...)` | Bloqueia pelo módulo, mesmo sem reconhecer chamada. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:317`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:343` |
-| `from folha.export import classificar_export as e; e(...)` | Detecta pelo mapa de apelidos. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:315`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:322` |
-| Helper externo que consulta campo/juiz | Não segue corpo externo: `_fn` entrega somente o AST de `colabs_nunca_bateu`. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:304`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:311` |
-
-**Relevância:** esses pontos cegos permitem introduzir futuramente predicado paralelo na consulta de desligados ou mover a recomposição para helper mantendo o selo verde; não provam que isso ocorre no corpo atual, que consulta somente situação e consome dias do retrato. O teste de cadastro torto combate especificamente a exclusão por demissão nula, e os testes sem retrato/divergência combatem recomposição simples; o selo continua sem provar fluxo dos dados da chamada até o retorno. `app/escala/services/cadastro_realidade.py:179`, `app/escala/services/cadastro_realidade.py:186`, `app/escala/services/cadastro_realidade.py:192`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:227`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:154`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:160`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:341`.
-
-_2403 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2407 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
