@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 00:49:29.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (38.5 MB). Acoes na janela: **1280**.
+**Medido em 06/11/2026 00:54:31.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (38.5 MB). Acoes na janela: **1281**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:53:23 | Bash | Check suite queue and latest logs | `cd /home/ronald/saas-hasner; date +%H:%M; bin/trava_teste.sh --quem; ps -eo pid,etime,args \| grep -E 'trava_teste.sh --' \| grep -v grep \| cut -c1-60; for f in logs/c20_fiomudo logs/h12h06b; do ls -t $f \| head -3; done` |
 | 00:43:32 | Bash | Identify suites and repoint ESPERANDO | `cd /home/ronald/saas-hasner; for p in 525536 535259; do echo "$p: $(tr '\0' ' ' < /proc/$p/cmdline \| grep -oE 'wt-[^ /:]+\|test [a-z_. ]{0,80}' \| head -2 \| tr '\n' ' ')"; done; sed -i '2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=535259#' app/docs/RELATO.md` |
 | 00:43:27 | Bash | Check lock queue and ESPERANDO pid | `cd /home/ronald/saas-hasner; date +%H:%M; bin/trava_teste.sh --quem; ps -eo pid,etime,args \| grep -E 'trava_teste.sh --' \| grep -v grep \| cut -c1-60; sed -n 2p app/docs/RELATO.md` |
 | 00:35:52 | Bash | Repoint ESPERANDO to queued trava | `sed -i '2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=442762#' /home/ronald/saas-hasner/app/docs/RELATO.md; kill -0 442762 && echo vivo` |

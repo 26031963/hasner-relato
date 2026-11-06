@@ -6643,3 +6643,9 @@ LEI-AKITA: origem=n/a (medida), testemunha=e6_oraculo.py::dono_da_divergencia + 
 - ESTRUTURA (censo Codex): os 4 sao o RETORNO RESIDUAL de `dono_da_divergencia` (nenhum predicado de CADASTRO/BATIDA casou), nao predicado positivo. col94 16/10 = coberto por FIO-LE-O-JUIZ (CORTES.md:297 LAUDO-[nome]-COL94-1610; BACKLOG:771). col163 10/10, col163 17/10, col873 26/09 = nenhuma obra demonstrada; padrao quebrado [nao verificado] -> linha G3G4-ESTRUTURA-RESIDUO no BACKLOG atras de H12H06-B e C20-FIO-MUDO, sem obra ate o padrao ser nomeado (L-123).
 - LISTA DO ADMIN (colNNN+dia, sem nome; nada escrito em prod): CADASTRO col174 25/10 e 26/10; BATIDA col29 15/10, col33 03/10 e 04/10, col247 24/10 (porta 34577 aberta), col39 15/10 (segura a folha). Indeterminado: 8 sem dia no relatorio; pedem o dia ao admin.
 - Limite: o Codex leu so a saida raspada; o script da sonda nao estava anexo ao censo (o envelope nao guarda a entrada).
+
+### C20-FIO-MUDO pronto para opus final (06/11 00:5x)
+- Copia wt-c20fm-203209 hash 5f3ea8c2, suite inteira Ran 13718 OK rc=0 (logs/c20_fiomudo/suite_full_5f3ea8c2.log); RED no HEAD c9bd52e0 R08/R08b/R08r FAIL + R19b ERROR; 11 mutantes mordem; pacote logs/c20_fiomudo/opus_final_5f3ea8c2/.
+- Codex 3 voltas (limite 5(d)): v1 6 e v2 4 procedentes curados; v3 "nao certificaria": 3 curados, (a) corrida do snapshot da ancora e (c) on_commit sem reparo abertos AO OPUS, (d)(e) descartados como preexistentes, anexos.
+- Universo medido 495 (aval 494, frota andou): legitimos 455, acionaveis 34 (estoque e decisao do chamador), lei: 6 vivas sob outro chamado VIVO (INCOMPLETO).
+- Opus final lancado 00:5x (verificador, codigo + triagem anexos, sem conclusao da sessao).
