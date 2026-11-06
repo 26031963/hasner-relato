@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 02:19:19.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (41.4 MB). Acoes na janela: **1269**.
+**Medido em 06/11/2026 02:24:59.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (41.5 MB). Acoes na janela: **1273**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:23:10 | Bash | Add backlog row, RELATO line, repoint ESPERANDO | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md' t=open(p).read().split('\n') i=[k for k,l in enumerate(t) if l.startswith('\| C20-FIO-MUDO-FILA-CODEX')] assert len(i)==1 nova='\| C20-FIO-MUDO-FILA-OPUS \| fila (opus final 3ee00412 06/11 02:2x, logs/c20_fiomudo/opus_final_3ee00412/veredito_opus.md itens 3-7): corrida models.py:479/485->503 sem trava (select_for_update); 2a co ...` |
+| 02:22:54 | Bash | Launch full suite on merged raia with hash in log | `cd /home/ronald/saas-hasner; L=logs/c20_fiomudo/suite_full_18d96575.log; nohup bash -c "echo 'arvore=/home/ronald/wt-c20fm-203209 hash=18d96575' > $L; bash bin/suite.sh --dir /home/ronald/wt-c20fm-203209 >> $L 2>&1; echo rc=\$? >> $L" >/dev/null 2>&1 & sleep 5; pgrep -af "^bash /home/ronald/saas-hasner/bin/trava_teste.sh --" \| head -2; head -3 $L` |
+| 02:22:51 | Bash | Merge main into the FIO-MUDO raia copy | `cd /home/ronald/wt-c20fm-203209 && git merge --no-ff main -m "$(cat <<'EOF' C20-FIO-MUDO: main na raia antes da suite do pouso (opus final 3ee00412 item 1, RAIAS 4) LEI-AKITA: origem=n/a (merge), testemunha=n/a, RED=n/a, quem-mais-le=n/a, juizes novos=0, padrao=n/a (instrumento) Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com> EOF )" 2>&1 \| tail -5; git log --oneline -1; git status --porce ...` |
+| 02:22:46 | Bash | Save opus verdict; check backlog row, trava and raia | `cd /home/ronald/saas-hasner; D=logs/c20_fiomudo/opus_final_3ee00412; cat > $D/veredito_opus.md <<'EOF' APROVA (codigo do 3ee00412) -- pouso NAO liberado: 2 pre-requisitos (gravado pela sessao a partir do relato do verificador opus, que e somente-leitura) BLOQUEIA O POUSO: 1. Suite certificou arvore errada: raia nasce de c9bd52e0, main 13 commits a frente (chamados/models.py _DECLARA_FALTA_MAPA ~:3 ...` |
 | 02:14:21 | Bash | Drop the not-yet-existing arquivo from ESPERANDO | `cd /home/ronald/saas-hasner; ps -p 2391979 >/dev/null && echo vivo; sed -i '2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh \| pid=2391979#' app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md` |
 | 02:14:17 | Bash | Read pid proof logic and hook trail | `cd /home/ronald/saas-hasner; grep -n "def _prova_pid" -A22 bin/hook_stop_fila1.py \| head -30; ls logs/ \| grep -i hook \| head; tail -3 logs/hook_stop*.log 2>/dev/null \| cut -c1-300` |
 | 02:14:12 | Bash | Read ESPERANDO proof logic | `cd /home/ronald/saas-hasner; sed -n 640,700p bin/hook_stop_fila1.py; sed -n 1200,1240p bin/hook_stop_fila1.py` |
