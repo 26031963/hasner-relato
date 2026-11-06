@@ -1,7 +1,11 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **05/11/2026 23:26** · publicado em **05/11/2026 23:27** (UTC-3)
+> Ultima resposta processada: **05/11/2026 23:28** · publicado em **05/11/2026 23:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 05/11 23:28 · sessao 919a9271433e · RE-OTIMIZA-3 · censo · origem=Code
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
 
 ## 05/11 23:26 · sessao 92c7b40e2bc4 · RE-PASSE · censo · origem=Code
 
@@ -696,45 +700,4 @@ Os receivers de pergunta agendam o julgamento de becos em `on_commit`; portanto 
 
 **O selo não prova essa composição:** ele examina `select_for_update` somente para raízes `Colaborador`/`DisputaSupervisao` e somente dentro da mesma função; não contempla os `UPDATE`s descritos, o JOIN com raiz `PerguntaDisputa` nem o encadeamento entre métodos. (`app/chamados/tests/test_selo_ordem_de_trava_disputa_colaborador.py:14`, `app/chamados/tests/test_selo_ordem_de_trava_disputa_colaborador.py:23`, `app/chamados/tests/test_selo_ordem_de_trava_disputa_colaborador.py:85`, `app/chamados/tests/test_selo_ordem_de_trava_disputa_colaborador.py:105`)
 
-## 05/11 23:08 · sessao 1219f33ddbbf · - · - · origem=Ronald (tmux)
-
-**Testes — análise estática; execução, RED, mutantes e corridas: [não verificado].** [nao verificado]
-
-| Caso | O que comprova e o que falta |
-|---|---|
-| **R08d** | Exercita órfã respondida versus local sem resposta; exige cobrança, pergunta local e vivacidade da órfã; verifica reapontamento da órfã e carimbo da local. Tem mordida para P1, mas não cobre local canônica respondida, duas respondidas, disputa local fechada ou acesso posterior. (`app/chamados/tests/test_c20_fio_mudo.py:173`, `:180`, `:186`, `:191`) |
-| **R08e** | A preparação carimba uma duplicata respondida e exige que continue viva por C6; ao final exige duplicata imóvel e canônica reapontada. Morde a seleção indevida da duplicata respondida. Não prova que todos os leitores deixam de contá-la como fio vivo: C6 continua priorizando resposta. (`app/chamados/tests/test_c20_fio_mudo.py:204`, `:208`, `:214`; `app/chamados/juizes.py:1150`, `:1171`) |
-| **R08f** | Morde a ausência do `reabrir_sistema`: exige reapontamento e `fechada_em=None`. A disputa de teste nasce **sem chamado**, logo não exercita ocorrência, chamado terminal/vivo da disputa, limpeza dos outros três campos ou acesso real do colaborador. (`app/chamados/tests/test_c20_fio_mudo.py:54`, `:220`, `:227`, `:229`) |
-| **R08g** | **O mock intercepta a função certa**: patch em `chamados.services.fio.reapontar_resolvedora`; o helper faz import local desse módulo e chama o nome importado dentro do contexto do patch. Entretanto, não usa `assert_called`, não exige vivacidade das duas candidatas nem preservação dos destinos; uma saída antecipada do helper permitiria aprovação vacuosa. No fluxo pretendido, morde retratação anterior à recusa. (`app/chamados/tests/test_c20_fio_mudo.py:238`, `:240`, `:245`; `app/chamados/models.py:474`, `:489`, `:501`) |
-| **R08i** | A primeira adoção é comprovada pelo destino; a segunda chamada exige `[]` e contagem estável. Cobre a segunda adoção sequencial simples. Não conta eventos, ocorrências, carimbos ou reaberturas, nem cobre concorrência ou ciclo fechar/reabrir. (`app/chamados/tests/test_c20_fio_mudo.py:248`, `:256`, `:259`, `:261`) |
-| **R19a** | O assert novo elimina a vacuidade apontada em P6: agora exige cobrança e verifica que a validada não mudou de destino nem ganhou irmã. Continua sendo controle de **validação**, não de tranca. (`app/chamados/tests/test_c20_fio_mudo.py:268`, `:272`, `:275`) |
-
-**Descartes da triagem**
-
-- **R19c fraco: descarte apenas como adiamento.** O teste continua rodando o vigia de hoje e apenas consultando ausência de pergunta amanhã; não semeia órfã futura nem tenta abertura futura. C5 determina o dia, mas seu primeiro degrau não impõe “dia ≤ hoje”. (`app/chamados/tests/test_c20_fio_mudo.py:301`; `app/chamados/juizes.py:80`, `:91`)
-- **Tranca: justificativa insuficiente.** R19a prepara `validada_em`; C6 retorna morto por validação antes de alcançar tranca. Um mutante que removesse somente o degrau de tranca não seria morto por esse cenário. Remover C6 inteiro e falhar em R19a não prova cobertura individual de tranca. (`app/chamados/tests/test_c20_fio_mudo.py:268`; `app/chamados/juizes.py:1136`, `:1140`)
-- **Queries: risco permanece sem medição.** O selo de corrida usa módulo `sem_previsao_escala`, que sai na primeira guarda C20; o chokepoint chama `abrir` na preparação, antes da captura de queries. Estouro efetivo: **[não verificado]**. (`app/chamados/tests/test_c2_corrida_do_abrir.py:56`; `app/chamados/models.py:459`; `app/ponto/tests/test_selo_chokepoint_escrita.py:312`, `:325`)
-- **D±1: argumento “ampliar seria juiz novo” não demonstrado.** C5 apenas entrega uma data; E4-c existente já decide a compatibilidade de jornadas entre D e D±1. Buscar candidatas adjacentes e consultar E4-c não exige necessariamente outro juiz. A busca atual mantém igualdade estrita; obrigação de ampliar perante o aval literal: **[não verificado]**. (`app/chamados/juizes.py:80`, `:1957`, `:1991`; `app/chamados/models.py:475`)
-- **L-113: descarte não resolve a divergência.** A guarda segue exigindo competência não entregue; L-113 revoga pauta DP como pré-condição e permite nascimento em competência exportada. Copiar a cerca antiga demonstra precedente técnico, não conciliação com a lei posterior. (`app/chamados/models.py:472`; `app/docs/LEIS.md:150`)
-- **Nunca-bateu: fila procede, exclusão integral não provada.** A lei/código dispensa questionário e prevê agrupamento dos furos no pai de adesão; R19d só exige cobrança, veredito e ausência de perguntas, sem pai/agrupamento. (`app/chamados/services/adesao.py:19`, `:102`, `:112`; `app/ponto/services/cartorio.py:1157`, `:1268`; `app/chamados/tests/test_c20_fio_mudo.py:118`)
-- **Universo: permanece inconsistente.** Os números escritos somam 495; retirar os três nunca-bateu dá 492, enquanto o contrato continua 494. Reconciliação individual: **[não verificado]**. (`app/chamados/tests/test_c20_fio_mudo.py:1`, `:13`)
-
-**Idempotência e reabertura**
-
-- A segunda adoção sequencial simples para no grupo composto só por perguntas locais; não repete costura ou evento nesse ramo. (`app/chamados/models.py:496`)
-- Um segundo `reabrir` após o primeiro ter deixado o chamado vivo é recusado pela transição, antes de ressuscitar/adotar. Isso difere de duas execuções concorrentes ou de fechar e reabrir novamente. (`app/chamados/models.py:1408`, `:1478`, `:1492`)
-- **Contraexemplo adicional de ciclo:** uma duplicata local sem resposta pode ser ressuscitada num fechamento/reabertura posterior: o universo inclui materializadas sem texto, descarimba a cópia para consultar C6 e depois limpa a via no banco. Se a canônica também estiver local, a adoção pula o grupo “só daqui”, preservando as duas novamente vivas quando o dia acusa. É contraexemplo estático condicionado a uma reabertura admitida; reprodução: **[não verificado]**. (`app/chamados/models.py:1525`, `:1546`, `:1549`, `:1595`, `:2754`, `:496`; `app/chamados/juizes.py:1181`)
-
-**Cinco atos de perda**
-
-| Ato | Estado da cobertura |
-|---|---|
-| **Reabrir** | Melhorou a adoção de órfã e a disputa fechada da canônica movida; o atomic novo envolve só adoção, posterior a `_gravar_estado` e ressuscitação. R08r cobre execução simples. (`app/chamados/models.py:461`, `:1483`, `:1492`; `app/chamados/tests/test_c20_fio_mudo.py:150`) |
-| **Retratar duplicata** | P2 foi curado dentro da adoção: move antes de retratar. A porta geral continua apenas carimbando identidade, sem reparar o chamado perdedor; o migrador existente ainda retrata antes de tentar costura. (`app/chamados/models.py:501`, `:516`; `app/chamados/services/fio.py:891`, `:943`, `:947`) |
-| **Validação** | Nenhum gancho C20 novo; o caminho existente mantém atomic do carimbo/desfecho e recalcula por evento. Validação mata legitimamente no primeiro degrau de C6. (`app/chamados/services/validacao.py:395`, `:405`; `app/chamados/juizes.py:1136`) |
-| **Morte por leitura** | Nenhum gancho C20 novo; C6 continua decidindo tranca, identidade, marco/célula; reconciliação consulta C6 e separa tranca antes de carimbar. (`app/chamados/juizes.py:1140`, `:1171`, `:1177`; `app/chamados/reconciliador.py:651`, `:657`) |
-| **Reapontar** | A adoção usa a porta correta e a porta protege o destino; continua ausente guarda/reparação geral para o chamado que perde a pergunta. (`app/chamados/models.py:501`; `app/chamados/services/fio.py:837`, `:845`) |
-
-A classe de testes usa `TestCase`; os novos cenários não executam explicitamente callbacks de commit, embora o save da pergunta agende fechamento de becos por `on_commit`. Efeitos posteriores desse fechamento: **[não verificado]** pelos testes novos. (`app/chamados/tests/test_c20_fio_mudo.py:22`, `:32`; `app/chamados/signals.py:191`, `:202`)
-
-_2037 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2038 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
