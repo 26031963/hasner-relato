@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 21:51:10.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (32.7 MB). Acoes na janela: **1161**.
+**Medido em 05/11/2026 21:56:15.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (32.8 MB). Acoes na janela: **1163**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:55:59 | Bash | Check main delta and B3 breaker semantics | `cd /home/ronald/saas-hasner; git diff --stat c9bd52e0 d2653810 \| tail -2; grep -n -i 'b3\\|rearma' bin/disjuntor.py \| head -40 \| cut -c1-200` |
+| 21:55:52 | Bash | Verify POUSO A copy claims | `cd /home/ronald/wt-h12h06-A-204643; git log --oneline c9bd52e0..HEAD \| cat; git status --porcelain \| wc -l; git grep -c -E 'porta_do_ato_h06\|CAMPOS_DO_ATO_H06\|identidade_do_ato_h06\|travar_entrega\|repor_minutos_de_reversao\|rederivar_falta_declarada' -- app \| grep -v '^app/docs' \| head; git diff --stat c9bd52e0 HEAD \| tail -1; for f in suite_A_v3.log; do L=/tmp/claude-1001/-home-ronald-saa ...` |
 | 21:03:22 | Bash | Check census and suite status | `date +%H:%M; kill -0 3885200 && echo censo_vivo; ls -la /home/ronald/saas-hasner/logs/trava_censo/ \| grep censo_b; bash /home/ronald/saas-hasner/bin/trava_teste.sh --quem` |
 | 21:02:24 | Bash | Read reconciliar waiter output | `cut -c1-200 /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/b2pc21mqv.output \| tail -12` |
 | 21:02:07 | Bash | Check which census pid is stable | `ps -o pid,ppid,etime,cmd -p 3885195,3885200 \| cut -c1-140` |
