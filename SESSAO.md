@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 05:32:22.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (43.3 MB). Acoes na janela: **738**.
+**Medido em 06/11/2026 05:37:16.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (43.3 MB). Acoes na janela: **731**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -741,10 +741,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:41:24 | Bash | Read CRIVO-AINDA-VALE step 3 and RELATO crivo status | `cd /home/ronald/saas-hasner; sed -n 1865p app/docs/PROMPTS.md \| cut -c600-2000; echo; tail -5 app/docs/PROMPTS.md \| cut -c1-200; /bin/grep -n 'CRIVO' app/docs/RELATO.md \| tail -8 \| cut -c1-200` |
 | 17:41:19 | Bash | Inspect crivo dir and sizes, find CRIVO-AINDA-VALE step 3 | `cd /home/ronald/saas-hasner/logs; ls crivo \| head -40; ls codex_queima \| /bin/grep -v -E '\.(id\|lock)$'; wc -c codex_queima/[0-2]*.md \| tail -1; wc -c crivo/*.r 2>/dev/null \| tail -1; /bin/grep -n -i 'passo 3\\|CRIVO-AINDA-VALE' ../app/docs/PROMPTS.md \| tail -3 \| cut -c1-600` |
 | 17:41:12 | Bash | List sources for FUNIL-28 | `cd /home/ronald/saas-hasner/logs; date +%H:%M; ls codex_queima/ \| head -60; ls codex_queima \| wc -l; ls -d *crivo* */*crivo* 2>/dev/null \| head; find . -maxdepth 2 -iname '*crivo*' \| head -20` |
-| 17:33:42 | SendMessage |  | `-` |
-| 17:33:36 | Bash | Check F3 suite progress and JUIZ-3 builder state | `cd /home/ronald/saas-hasner; ps -p 3038234 -o etime=; tail -c 300 logs/f3_beco1/suite_3b8d4a3e.log; echo; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/af25e5feeb23c90aa.output \| cut -c1-300` |
-| 17:33:34 | ToolSearch |  | `-` |
-| 17:33:30 | Bash | Read the JUIZ-3 delta Codex result | `cd /home/ronald/saas-hasner/logs/piloto_pd; cat pd_juiz3_delta.out; head -40 pd_juiz3_delta.r` |
-| 17:33:25 | Bash | Check suite verdicts and delta Codex status | `cd /home/ronald/saas-hasner/logs; date +%H:%M; for f in f3_beco1/suite_3b8d4a3e.log c20_o169/suite_6afa8aa1.log; do echo "== $f"; /bin/grep -E '^(OK\|FAILED)($\| \()' $f \| tail -1; /bin/grep '^Ran' $f \| tail -1; /bin/grep '^rc=' $f \| tail -1; done; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bwhy02qbp.output; ls -la piloto_pd/pd_juiz3_delta.* 2>/ ...` |
-| 17:32:48 | Bash | Publish G1 sonda result line in RELATO | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p).read() old='- G1/18: sonda pelo envelope bin/sonda_leitura.sh em curso; resultado na linha abaixo quando sair (erro de guarda SELECT/SAVEPOINT = nao medido)' assert s.count(old)==1 new=old+''' - G1 RESULTADO (sonda_g1.out, 232 l., rc=0, "erro"=0, nao medido=0): 13 casos colab+dia medidos; tela (calendario/espelho/API,  ...` |
-| 17:32:39 | Bash | Spot-check G1 sonda output and find RELATO G1 line | `cd /home/ronald/saas-hasner; sudo -n true 2>/dev/null; f=logs/bo_mauricio_0511/sonda_g1.out; wc -l $f; /bin/grep -c '"erro"' $f; /bin/grep -o 'furo_espelho' $f \| wc -l; /bin/grep -n 'G1 (\\|G1/18\\|G1:' app/docs/RELATO.md \| tail -3 \| cut -c1-160` |
