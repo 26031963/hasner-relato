@@ -1,7 +1,94 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 12:02** · publicado em **06/11/2026 12:03** (UTC-3)
+> Ultima resposta processada: **06/11/2026 12:07** · publicado em **06/11/2026 12:08** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 12:07 · sessao 39f679766a14 · - · - · origem=Ronald (tmux)
+
+A comparação `ultimo_tb.tb_frame is not frame` identifica propagação e preserva o contraexemplo A→B: o evento de exceção em B contém o traceback originado em A, mesmo quando B executa `except: pass`. [não verificado por execução]
+
+Evite classificar apenas no evento `return`: geradores produzem esse evento em `yield`, e um único “pendente por frame” pode confundir exceções aninhadas em `finally`. [não verificado por execução]
+
+A alternativa mais segura é:
+
+1. No primeiro evento originado em um frame app, incrementar provisoriamente `TRATADA_LOCAL` e anexar metadados escalares à própria exceção.
+2. Continuar observando eventos `exception` também em frames externos, sem eventos `line`.
+3. Quando a exceção aparecer em outro frame, retirar sua contagem local e registrar o erro agregado uma única vez.
+4. Os catches explícitos existentes cobrem escapes para frames já ativos quando `settrace` foi instalado. [não verificado por execução]
+
+Essa abordagem dispensa listas globais de exceções e independe de retorno normal, unwind e yield. O custo de acompanhar frames externos é [não verificado].
+
+O caso concreto `_hhmm` lança no desempacotamento e captura no próprio frame, retornando `None`; deve permanecer apenas em `TRATADA_LOCAL`. (`app/ponto/juiz_batida.py:75`, `app/ponto/juiz_batida.py:77`, `app/ponto/juiz_batida.py:78`)
+
+## 06/11 12:06 · sessao 760fbe2d7d94 · - · - · origem=Ronald (tmux)
+
+Análise estática; não executei testes nem escrevi arquivos. Resultados de execução são [nao verificado]. [nao verificado]
+
+- **ALTA — Prova real pode ficar verde sem executar as tentativas.** O `WRC` é apenas impresso; o positivo exige somente `INTRUSO_WT.txt`. Os arquivos de viva, `/tmp`, Git, raiz, HOME e sobrevivência não são obrigatórios: quando ausentes, apenas deixam de ser impressos. Docker/socket/TCP aceitam arquivos vazios como “negado”. Contramodelo: criar o positivo e quatro `.out` vazios (`6`, `6b`, `7`, `7b`), omitir as tentativas e não deixar processo permite `rc=0`. (`bin/tests/prova_codex_pergunta_real.sh:48-54,62-77`)
+
+- **ALTA — Ausência de conectividade não prova bloqueio do sandbox.** A prova considera qualquer resultado sem `CONECTOU`, `CONTAINER ID` ou `ApiVersion` uma negativa válida; não exige erro de permissão, ferramenta funcional, serviço existente ou controle positivo externo ao sandbox. `connection refused`, ferramenta ausente e timeout também passam. Banco não é tentado pelo bloco. (`bin/tests/prova_codex_pergunta_real.sh:30-43,62-71`)
+
+- **ALTA — Editar e restaurar um proibido escapa do inventário.** Guardar os bytes do motor, alterar/executar/restaurar sem commit mantém HEAD, diff, status e `.git` iguais: o inventário não guarda histórico de escritas. O selo testa commit seguido de revert, que deixa HEAD diferente, e não cobre alteração seguida de restauração sem commit. (`bin/codex_pergunta.sh:303-320,325`; `bin/tests/test_codex_pergunta.sh:229,233-235`)
+
+- **MÉDIA — “Mutante morto” pode significar somente mensagem diferente.** `_recusa` exige texto específico. Neutralizar a guarda de absoluto ainda provoca recusa pela guarda de nome, mas o teste a declara morta porque mudou o motivo. Zerar `inv_diff` ainda recusa o commit por HEAD, mas o teste exige também o motivo “registro de juizes”. O contador aceita qualquer `FALHA` como morte. Isso limita a interpretação do placar, embora o selo exercite caminhos reais com o falso Codex. (`bin/tests/test_codex_pergunta.sh:98-101,141-150,219,289,311-315`; `bin/codex_pergunta.sh:95-97,314-315`)
+
+- **MÉDIA — Mutantes adicionais sobreviveriam por inspeção.** Trocar o `sys.exit(1)` do `except` do inventário por `sys.exit(0)` tornaria falhas de Git permissivas, mas nenhum caso injeta falha nesse subprocesso; `c_inventario` somente altera o motor. Restringir os matchers de migrations/models a `app/folha/` também preservaria todos os casos e a morte dos mutantes cadastrados, pois os únicos exemplos são nessa aplicação. Execução desses mutantes: [nao verificado]. (`bin/codex_pergunta.sh:289-290,300-312`; `bin/tests/test_codex_pergunta.sh:77,208-209,231,233-235,279-280`)
+
+- **MÉDIA — Inventário aceita links por nome.** Um novo symlink chamado `app/atalho` apontando para fora ou para um proibido não encontra matcher: não há inspeção de tipo/destino, apenas nomes do Git e regex. A possibilidade de escrever no alvo externo pelo sandbox permanece [nao verificado]. (`bin/codex_pergunta.sh:303-319`)
+
+- **MÉDIA — A prova padrão de leitura permanece potencialmente vazia.** Não exige sucesso da preparação nem da chamada principal e não tem controle positivo de execução. Uma preparação falha pode produzir `sha=ausente` antes e depois, todos os intrusos ausentes e veredito verde. (`bin/tests/prova_codex_pergunta_real.sh:85-103`)
+
+O controle positivo do selo verifica argv, cabeçalho, `.rc`, inventário, `.id` e `chamadas.log`; portanto o selo não é inteiramente vazio. Sua cobertura não certifica os efeitos do sandbox, porque o falso Codex executa `FAKE_ACAO` diretamente e termina sempre com zero. (`bin/tests/test_codex_pergunta.sh:67-77,180-201`)
+
+## 06/11 12:06 · sessao fb923ffc4071 · - · - · origem=Ronald (tmux)
+
+Achados por análise estática; nenhuma mutação executada.
+
+- **Alta — symlink em arquivos de LOGD permite escrita externa pelo wrapper.** Só o diretório é validado; `slot.gate` e `slot.N` abrem com truncamento e sem verificar symlink. Um `logs/codex/slot.gate -> sentinela` trunca a sentinela antes do Codex. `chamadas.log`, JSONL/`.err`, `limite.log` e o temporário `.rc.$$` também seguem symlinks. Isso pertence ao wrapper no host; não depende de fuga do sandbox. (`bin/codex_pergunta.sh:82-89,111-116,130-134,163-164,220-231,252,268,343`)
+
+- **Alta — destino pode mudar durante a fila.** WT/app é validada antes da espera por slots e lock da resposta; o mesmo caminho é reutilizado depois sem revalidação nem descritor que preserve sua identidade. Trocar `WT/app` por symlink nesse intervalo contorna a validação inicial. O resultado efetivo de escrita na viva depende do sandbox e é **[nao verificado]**. (`bin/codex_pergunta.sh:98-110,219-247,268`)
+
+- **Média — `RESPOSTA=$R/logs/..` sai de logs sem corrida.** A validação confere somente `dirname`; `basename ..` permanece. `NOVA` nasce como `$R/logs/...novo.$$`, e `mv -f NOVA "$R/logs/.."` move o arquivo para `$R/...novo.$$`. Diretórios como resposta também são aceitos. (`bin/codex_pergunta.sh:84-89,261,276`)
+
+- **Alta para o teto — vaga global é escolhida pelo chamador.** Dois `CODEX_LOGD` distintos sob logs produzem duas `construtor.vaga`, permitindo dois construtores e duas chamadas sobre a mesma WT passarem pela exclusão. A comparação de estado não constitui lock da WT. (`bin/codex_pergunta.sh:71,83,114-119`)
+
+- **Média — `.git` pode apontar outra WT do mesmo repo.** Registro testa o nome e `common_dir` testa apenas o repositório; não há correspondência entre gitdir específico, backlink e WT. Reapontar `.git` antes da chamada para outra WT do mesmo repo/HEAD não viola essas comparações; o hash final só detecta mudança posterior do arquivo. O teste cobre outro repositório, não outra WT do mesmo repo. (`bin/codex_pergunta.sh:101-120,325`; `bin/tests/test_codex_pergunta.sh:165-168`)
+
+- **Média — “sem banco/docker” não descreve a via inteira.** Mesmo sem `--sonda`, o início chama `_pergunta_raspada`; sem `CODEX_NOMES_JSON`, ela chama `relato_nomes.sh`, que usa Docker e ORM do banco. É ação do wrapper/Code, não acesso demonstrado do filho. (`bin/codex_pergunta.sh:143-146,153-164`; `bin/relato_nomes.sh:7-21`)
+
+Dois candidatos adicionais exigem manter a limitação explícita:
+
+- **Inventário de repositório embutido:** ele não percorre o filesystem; confia nos nomes de `git diff/status`. Um repo embutido sob `app/x/` pode resumir arquivos internos proibidos a uma entrada permitida `app/x/`; comportamento exato não executado nesta auditoria **[nao verificado]**. (`bin/codex_pergunta.sh:300-319`)
+- **Hardlink preparado antes da chamada:** a limpeza não compara inodes da WT com a viva. Um arquivo permitido com conteúdo idêntico pode compartilhar inode com a viva; a eficácia da escrita pelo alias dentro do sandbox é **[nao verificado]**. (`bin/codex_pergunta.sh:98-120,305-319`)
+
+## 06/11 12:06 · sessao ca43a0006973 · - · - · origem=Ronald (tmux)
+
+Mapa de escritores/leitores e regressões, por análise estática:
+
+| Artefato/campo | Quem escreve | Quem lê |
+|---|---|---|
+| `<resposta>.rc`: `chamada`, `rc`, `fim` | Trap `_saida`, somente `INI=1` e papel construtor; temporário `.rc.$$` seguido de `mv` (`bin/codex_pergunta.sh:129-134`). Sinais anteriores removidos em `bin/codex_pergunta.sh:254`. | Selo verifica `rc=3` e identidade de chamada (`bin/tests/test_codex_pergunta.sh:109,195`); prova apenas copia o arquivo (`bin/tests/prova_codex_pergunta_real.sh:50`). Leitor operacional que interprete esses campos: [nao verificado]. |
+| `<resposta>.inventario`: `TOCADO`/`PROIBIDO`/`FALHA`, caminho, motivo | Python imprime o inventário (`bin/codex_pergunta.sh:310-320`); wrapper redireciona e acrescenta violação do `.git` (`bin/codex_pergunta.sh:324-325`). | Wrapper filtra para `.recusa` (`bin/codex_pergunta.sh:329`); selo verifica caminhos (`bin/tests/test_codex_pergunta.sh:196-197,204`); prova copia (`bin/tests/prova_codex_pergunta_real.sh:50`). |
+| `<resposta>.recusa` | Wrapper reúne aviso e linhas não `TOCADO` (`bin/codex_pergunta.sh:328-329`). | Wrapper publica no stderr (`bin/codex_pergunta.sh:330`); selo interpreta campos `PROIBIDO` e motivo (`bin/tests/test_codex_pergunta.sh:106-107`); prova copia (`bin/tests/prova_codex_pergunta_real.sh:50`). |
+| `<resposta>.lock` | Wrapper abre append e toma `LOCK_EX` pelo fd 7 (`bin/codex_pergunta.sh:245-247`). | Triagem abre com `O_NOFOLLOW`, tenta `LOCK_SH|LOCK_NB` e recusa enquanto tomado (`bin/disjuntor.py:779-789`). |
+| `<resposta>.id`: `obra`, `papel`, `hash`, `pid`, `fim`, `sha` | Wrapper remove identidade anterior (`bin/codex_pergunta.sh:259`), publica somente `RC=0 && DESTA=1` (`bin/codex_pergunta.sh:353-356`). | Triagem lê os seis campos e verifica papel/sha (`bin/disjuntor.py:755-760,795-801`). Construtor nunca entra na triagem atual, pois ela exige `papel=verificador` (`bin/disjuntor.py:798-799`). |
+| `$LOGD/construtor.vaga` | Wrapper abre append pelo fd 6 (`bin/codex_pergunta.sh:114-115`). | Wrapper tenta lock não bloqueante (`bin/codex_pergunta.sh:116`); selo ocupa a vaga no fd 5 (`bin/tests/test_codex_pergunta.sh:171-173`). |
+| `chamadas.log`: `hora,obra,papel,hash12,pid,ini,pergunta`; `fim,sessao,rc,duracao` | Wrapper publica `ini` (`bin/codex_pergunta.sh:163-164`) e trap publica `fim` (`bin/codex_pergunta.sh:130-131`). | Parser único (`bin/codex_limite_estado.py:49-68`); contagem por papel (`bin/codex_limite_estado.py:71-78`), últimas chamadas (`bin/codex_limite_estado.py:82-88`), procedência (`bin/codex_limite_estado.py:92-96`), tokens por papel (`bin/codex_limite_estado.py:185-194`). ESTADO chama leitor (`bin/gerar_estado.py:269-270`); CODEX-ESTADO usa procedência (`bin/gerar_codex_estado.py:176`); disjuntor usa contagem/tokens (`bin/disjuntor.py:1603,1611`). |
+| `$LOGD/<obra>_<data>_<pid>.jsonl` e `.err` | Nome montado pelo wrapper (`bin/codex_pergunta.sh:252`); stdout/stderr do CLI redirecionados pelo shell, fora do sandbox do filho (`bin/codex_pergunta.sh:264-272`). | Wrapper extrai `thread_id` (`bin/codex_pergunta.sh:336,350`), busca erros de limite (`bin/codex_pergunta.sh:339-341`) e publica `.err` (`bin/codex_pergunta.sh:333`). Selo lê existência do JSONL anunciado (`bin/tests/test_codex_pergunta.sh:192-194`). Hook pode medir mtime do caminho declarado (`bin/hook_stop_fila1.py:563-579,678-679`). |
+| JSONL em `~/.codex/sessions` | Escritor concreto do CLI nesta cópia: [nao verificado]. São arquivos distintos do stdout `$LOGD/*.jsonl`, conforme destinos declarados (`bin/codex_pergunta.sh:252,268`; `bin/codex_limite_estado.py:101-104`). | `rate_limits`/plano (`bin/codex_limite_estado.py:99-123`), leituras semanais (`bin/codex_limite_estado.py:131-161`), tokens (`bin/codex_limite_estado.py:198-212`), respostas finais para CODEX-ESTADO (`bin/gerar_codex_estado.py:77-103`). |
+| `PAPEIS` | Tupla no código; o diff acrescenta `construtor` (`bin/codex_limite_estado.py:23`). | Inicializa/classifica contagem (`bin/codex_limite_estado.py:74-78`), classifica tokens (`bin/codex_limite_estado.py:194`), filtra texto publicado (`bin/codex_limite_estado.py:216-219`). |
+| `limite.log` | Wrapper publica em falha reconhecida de limite (`bin/codex_pergunta.sh:338-346`). | Contador em `bin/codex_limite_estado.py:27-45`, consumido pelo ESTADO (`bin/gerar_estado.py:269-270`). |
+| `slot.gate`, `slot.N` | Wrapper abre com truncamento `>` (`bin/codex_pergunta.sh:220,226,231`). | Wrapper disputa gate/slots (`bin/codex_pergunta.sh:222,227,232`), mantém fd 8 até terminar (`bin/codex_pergunta.sh:235`). |
+
+Achados:
+
+- **MÉDIA — o `ESPERANDO` emitido não satisfaz o hook.** O wrapper emite produtor relativo `bin/codex_pergunta.sh` (`bin/codex_pergunta.sh:255`), enquanto `_prova_pid` rejeita produtor com `/` que não seja absoluto (`bin/hook_stop_fila1.py:527-528`). Copiada essa linha para o topo, PID vivo e JSONL crescendo ainda não tornam a espera válida; o hook exige ambas as provas declaradas (`bin/hook_stop_fila1.py:675-680`).
+
+- **MÉDIA — `.rc` não cobre “toda saída” e pode perder identidade.** Recusas de validação saem antes da instalação do trap (`bin/codex_pergunta.sh:75-119,140`); o trap publica somente após `INI=1` (`bin/codex_pergunta.sh:129`). Falha após `ini` e antes de montar `JSONL` publica `chamada=-` (`bin/codex_pergunta.sh:123,133,164,252`). O selo só confere `.rc` nas saídas positiva e de inventário, sem cobrir esse intervalo (`bin/tests/test_codex_pergunta.sh:103-109,195`).
+
+- **BAIXA — houve alteração de comportamento dos quatro papéis de leitura no lock.** Symlink agora é recusado com rc 3 e abertura passou de truncamento para append, conforme o diff fornecido e código atual (`bin/codex_pergunta.sh:245-247`). Nos critérios pedidos, preservam `read-only`, `-C "$WS"` e cabeçalho somente leitura (`bin/codex_pergunta.sh:162,204,271-272`); o teste exercita os quatro papéis com CLI falso (`bin/tests/test_codex_pergunta.sh:236-249`). A chamada de leitura com `--construtor` passa a ser recusada explicitamente (`bin/codex_pergunta.sh:74-76`).
+
+- **Informativo — ausência de `.id` não é a barreira particular do construtor na triagem atual.** Mesmo um construtor com `.id` válido é recusado pelo papel (`bin/disjuntor.py:798-799`). O comentário “sem `.id` a triagem recusa” descreve condição suficiente, mas essa triagem não implementa certificação do construtor (`bin/codex_pergunta.sh:42-43`; `bin/disjuntor.py:771-774,798-799`).
 
 ## 06/11 12:02 · sessao d715f789926a · - · - · origem=Ronald (tmux)
 
@@ -1143,723 +1230,4 @@ A captura original do comando permanece funcional: registra o primeiro `Resultad
 
 Ressalva concreta: uma chamada por colaborador também obtém um novo instante real `_agora_da_passada` por chamada (`app/ponto/services/fechamento.py:607`), enquanto a chamada por empresa obtém um por empresa. Efeito numérico durante fronteira temporal permanece [nao verificado].
 
-## 06/11 11:44 · sessao 598e3a39227a · - · - · origem=Ronald (tmux)
-
-- O anexo retém exceções em `VISTOS[id(exc)] = exc`; cada exceção pode manter traceback, frames e locais de colaboradores. A linha exata do anexo precisa ser contada pelo agente principal; arquivo local ausente [nao verificado]. Deduplicar com um atributo booleano/token na própria exceção evita uma raiz global que retenha traceback. Um conjunto de `id(exc)` sem referência é inadequado, porque IDs podem ser reutilizados [nao verificado].
-- O comando retém resultados completos em `_res_fech` (`app/ponto/management/commands/diff_calculador.py:116`, `:135`) e mantém `_certa_cache` entre colaboradores (`app/ponto/management/commands/diff_calculador.py:95`, `:418`). Uma invocação real por colaborador, com `colaborador_ids=[cid]` no fechamento, limita essas estruturas; o parâmetro restringe o universo (`app/ponto/services/fechamento.py:502`).
-- O fechamento também mantém lote de células e seu índice por colaborador (`app/ponto/services/fechamento.py:596`, `:602`), além dos objetos retornados (`app/ponto/services/fechamento.py:1119`). A chamada por colaborador limita esses lotes.
-- O cache do motor é por instância/cálculo (`app/ponto/motor_calculo_v2.py:2285`); o cache do fechamento nasce dentro da passagem do colaborador (`app/ponto/services/fechamento.py:923`). Não apagar memos durante o cálculo.
-- Há cache de módulo de catálogo, que guarda um catálogo e um instante, sem chave por colaborador (`app/ponto/catalogo/ausencias.py:257`, `:276`, `:279`). A API real de limpeza é `invalidar_cache`, que zera instante e valor (`app/ponto/catalogo/ausencias.py:261`). Não identifiquei caches de módulo por colaborador nos arquivos motor/calculador examinados [nao verificado: resultado de busca estática, sem execução].
-- Após concluir o colaborador e agregar seus números: soltar capturas, `InsumosDoDono`, retorno e contexto; depois `reset_queries()` e `gc.collect()`. `InsumosDoDono` retém colaborador, oráculo, turnos e dados de cadastro/realidade (`app/ponto/management/commands/e6_oraculo.py:131`, `:145`, `:151`, `:160`). `reset_queries`/`gc.collect` pertencem às bibliotecas, cujas linhas locais não foram verificadas.
-- Sombra herda `saas`, cujo `DEBUG=False` está em `app/config/settings/saas.py:14`; a herança está em `app/config/settings/sombra.py:27`. Acúmulo efetivo de queries nesta execução permanece [nao verificado].
-
-## 06/11 11:43 · sessao c2c817f7858b · R1-CAUSAD-V3 · sonda · origem=Code
-
-Não executei nova sonda: o `script.py` anexo não foi localizado na cópia. [nao verificado] O fluxo `--sonda` executa o envelope antes de entregar o dado raspado ao agente (`bin/codex_pergunta.sh:103`, `bin/codex_pergunta.sh:133`).
-
-Vereditos:
-- **SOMA: [nao verificado].** Não há linha `SOMA` no dado recebido; não há veredito de fechamento emitido pelo script. [nao verificado]
-- **INCOMPLETO: sim, pelo retorno informado `rc_sombra=137`; não há linha literal `INCOMPLETO`.** A causa da interrupção e o conteúdo restante são [nao verificado]. O envelope propaga o retorno da execução (`bin/sonda_leitura.sh:241`, `bin/sonda_leitura.sh:251`).
-
-Transcrição integral do dado recebido, sem acrescentar linhas à saída. [nao verificado]
-
-```text
-sonda_leitura: script.py [432e14f15d01f891] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-
-ATO|hoje=2026-11-06|agora=2026-11-06T11:17:26.613842-03:00
-FORA_DA_MEDIDA|horas_falta
-FORA_DA_MEDIDA|horas_reflexo_dsr
-FORA_DA_MEDIDA|saldo_banco_horas
-UNIVERSO|2026-10|colabs_porta=624|segundos=844.3
-RUBRICA|competencia|rubrica|v2_h|v3_h|delta_h|colabs_div|dias_colab_div
-DONO|competencia|rubrica|dono|v2_h|v3_h|delta_h|colabs|dias_colab
-DIA|2026-10|horas_trabalhadas|col204|2026-09-29|CADASTRO|7.316473056|4.773582500|-2.542890556
-DIA|2026-10|horas_trabalhadas|col502|2026-10-10|CADASTRO|7.569179979|2.843692404|-4.725487575
-DIA|2026-10|horas_trabalhadas|col512|2026-10-11|ESTRUTURA|6.478212222|11.442890556|+4.964678333
-DIA|2026-10|horas_trabalhadas|col577|2026-10-15|CADASTRO|7.290805556|4.448500278|-2.842305278
-DIA|2026-10|horas_trabalhadas|col592|2026-10-20|CADASTRO|7.314860278|5.421271667|-1.893588611
-DIA|2026-10|horas_trabalhadas|col599|2026-10-20|CADASTRO|10.100982500|5.572917222|-4.528065278
-DIA|2026-10|horas_trabalhadas|col788|2026-09-24|BATIDA|8.964272778|0.964272778|-8.000000000
-DIA|2026-10|horas_trabalhadas|col988|2026-10-17|CADASTRO|6.190200326|3.268974456|-2.921225870
-RUBRICA|2026-10|horas_trabalhadas|70627.257635674|70604.768750840|-22.488884834|8|8
-DONO|2026-10|horas_trabalhadas|BATIDA|8.964272778|0.964272778|-8.000000000|1|1
-DONO|2026-10|horas_trabalhadas|CADASTRO|45.782501694|26.328938527|-19.453563168|6|6
-DONO|2026-10|horas_trabalhadas|ESTRUTURA|6.478212222|11.442890556|+4.964678333|1|1
-RESIDUO|2026-10|horas_trabalhadas|ATE_LIMIAR|70566.032648980|70566.032648980|-0.000000000|511|7676
-RESIDUO|2026-10|horas_trabalhadas|SEM_DECISAO|343.609469184|343.609469184|+0.000000000|331|1805
-RESIDUO|2026-10|horas_trabalhadas|SEM_PAR|0.000000000|0.000000000|+0.000000000|64|1196
-INSTRUMENTO_HISTORICO|2026-10|horas_trabalhadas|v2_h=70224.761664336|v3_h=70604.768750840|delta_h=+380.007086504
-DIA|2026-10|horas_intra_indenizada|col82|2026-10-06|CADASTRO|1.166666667|0.000000000|-1.166666667
-DIA|2026-10|horas_intra_indenizada|col82|2026-10-08|CADASTRO|1.166666667|0.000000000|-1.166666667
-DIA|2026-10|horas_intra_indenizada|col82|2026-10-12|CADASTRO|1.166666667|0.000000000|-1.166666667
-DIA|2026-10|horas_intra_indenizada|col82|2026-10-14|CADASTRO|1.166666667|0.000000000|-1.166666667
-DIA|2026-10|horas_intra_indenizada|col82|2026-10-15|CADASTRO|1.166666667|0.000000000|-1.166666667
-DIA|2026-10|horas_intra_indenizada|col82|2026-10-16|CADASTRO|1.166666667|0.000000000|-1.166666667
-DIA|2026-10|horas_intra_indenizada|col82|2026-10-20|CADASTRO|1.166666667|0.000000000|-1.166666667
-DIA|2026-10|horas_intra_indenizada|col450|2026-09-27|BATIDA|1.000000000|0.000000000|-1.000000000
-DIA|2026-10|horas_intra_indenizada|col450|2026-10-11|BATIDA|1.000000000|0.000000000|-1.000000000
-DIA|2026-10|horas_intra_indenizada|col512|2026-10-11|ESTRUTURA|0.000000000|1.000000000|+1.000000000
-DIA|2026-10|horas_intra_indenizada|col599|2026-09-22|CADASTRO|1.000000000|0.000000000|-1.000000000
-DIA|2026-10|horas_intra_indenizada|col599|2026-09-24|CADASTRO|1.000000000|0.000000000|-1.000000000
-DIA|2026-10|horas_intra_indenizada|col599|2026-09-26|CADASTRO|1.000000000|0.000000000|-1.000000000
-DIA|2026-10|horas_intra_indenizada|col599|2026-09-28|CADASTRO|1.000000000|0.000000000|-1.000000000
-DIA|2026-10|horas_intra_indenizada|col599|2026-09-30|CADASTRO|1.000000000|0.000000000|-1.000000000
-DIA|2026-10|horas_intra_indenizada|col599|2026-10-02|CADASTRO|1.000000000|0.000000000|-1.000000000
-DIA|2026-10|horas_intra_indenizada|col599|2026-10-06|CADASTRO|1.000000000|0.000000000|-1.000000000
-DIA|2026-10|horas_intra_indenizada|col638|2026-10-01|CADASTRO|1.500000000|0.000000000|-1.500000000
-DIA|2026-10|horas_intra_indenizada|col638|2026-10-04|CADASTRO|0.000000000|0.497353333|+0.497353333
-DIA|2026-10|horas_intra_indenizada|col638|2026-10-11|CADASTRO|0.000000000|0.496789722|+0.496789722
-DIA|2026-10|horas_intra_indenizada|col788|2026-09-25|CADASTRO|1.000000000|0.000000000|-1.000000000
-DIA|2026-10|horas_intra_indenizada|col788|2026-10-01|CADASTRO|1.000000000|0.000000000|-1.000000000
-DIA|2026-10|horas_intra_indenizada|col788|2026-10-05|BATIDA|1.000000000|0.449190000|-0.550810000
-DIA|2026-10|horas_intra_indenizada|col824|2026-10-04|BATIDA|1.000000000|0.000000000|-1.000000000
-DIA|2026-10|horas_intra_indenizada|col824|2026-10-18|CADASTRO|1.000000000|0.000000000|-1.000000000
-DIA|2026-10|horas_intra_indenizada|col849|2026-10-09|CADASTRO|1.000000000|0.000000000|-1.000000000
-DIA|2026-10|horas_intra_indenizada|col915|2026-09-27|CADASTRO|0.000000000|0.181985833|+0.181985833
-DIA|2026-10|horas_intra_indenizada|col915|2026-10-01|CADASTRO|0.000000000|0.182740833|+0.182740833
-DIA|2026-10|horas_intra_indenizada|col941|2026-10-01|CADASTRO|1.000000000|0.000000000|-1.000000000
-RUBRICA|2026-10|horas_intra_indenizada|2194.339455993|2171.480849048|-22.858606944|10|29
-DONO|2026-10|horas_intra_indenizada|BATIDA|4.000000000|0.449190000|-3.550810000|3|4
-DONO|2026-10|horas_intra_indenizada|CADASTRO|21.666666667|1.358869722|-20.307796944|8|24
-DONO|2026-10|horas_intra_indenizada|ESTRUTURA|0.000000000|1.000000000|+1.000000000|1|1
-RESIDUO|2026-10|horas_intra_indenizada|ATE_LIMIAR|2168.672789326|2168.672789326|+0.000000000|511|7655
-RESIDUO|2026-10|horas_intra_indenizada|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|331|1805
-RESIDUO|2026-10|horas_intra_indenizada|SEM_PAR|0.000000000|0.000000000|+0.000000000|64|1196
-INSTRUMENTO_HISTORICO|2026-10|horas_intra_indenizada|v2_h=2178.394776548|v3_h=2171.480849048|delta_h=-6.913927500
-DIA|2026-10|horas_extras_50|col82|2026-10-06|CADASTRO|0.000000000|0.500647778|+0.500647778
-DIA|2026-10|horas_extras_50|col82|2026-10-08|CADASTRO|0.000000000|0.471973333|+0.471973333
-DIA|2026-10|horas_extras_50|col82|2026-10-14|CADASTRO|0.000000000|0.179223056|+0.179223056
-DIA|2026-10|horas_extras_50|col82|2026-10-15|CADASTRO|0.000000000|0.557518333|+0.557518333
-DIA|2026-10|horas_extras_50|col502|2026-10-10|CADASTRO|0.235846646|0.000000000|-0.235846646
-DIA|2026-10|horas_extras_50|col599|2026-10-16|CADASTRO|0.000000000|0.224154212|+0.224154212
-DIA|2026-10|horas_extras_50|col915|2026-09-27|CADASTRO|0.320207500|0.000000000|-0.320207500
-DIA|2026-10|horas_extras_50|col915|2026-10-01|CADASTRO|0.516049722|0.333308889|-0.182740833
-RUBRICA|2026-10|horas_extras_50|66.971818349|68.166540082|+1.194721733|4|8
-DONO|2026-10|horas_extras_50|CADASTRO|1.072103868|2.266825601|+1.194721733|4|8
-RESIDUO|2026-10|horas_extras_50|ATE_LIMIAR|65.899714481|65.899714481|+0.000000000|509|7524
-RESIDUO|2026-10|horas_extras_50|SEM_DECISAO|2.430862778|2.430862778|+0.000000000|341|1957
-RESIDUO|2026-10|horas_extras_50|SEM_PAR|0.000000000|0.000000000|+0.000000000|64|1196
-INSTRUMENTO_HISTORICO|2026-10|horas_extras_50|v2_h=69.402681127|v3_h=68.166540082|delta_h=-1.236141045
-DIA|2026-10|horas_extras_100|col727|2026-10-12|ESTRUTURA|0.000000000|10.985971389|+10.985971389
-DIA|2026-10|horas_extras_100|col830|2026-10-12|ESTRUTURA|0.000000000|12.149131944|+12.149131944
-RUBRICA|2026-10|horas_extras_100|422.982309410|446.117412743|+23.135103333|2|2
-DONO|2026-10|horas_extras_100|ESTRUTURA|0.000000000|23.135103333|+23.135103333|2|2
-RESIDUO|2026-10|horas_extras_100|ATE_LIMIAR|422.982309410|422.982309410|-0.000000000|509|7531
-RESIDUO|2026-10|horas_extras_100|SEM_DECISAO|6.572320665|6.572320665|+0.000000000|341|1956
-RESIDUO|2026-10|horas_extras_100|SEM_PAR|0.000000000|0.000000000|+0.000000000|64|1196
-INSTRUMENTO_HISTORICO|2026-10|horas_extras_100|v2_h=425.616685630|v3_h=456.966780521|delta_h=+31.350094891
-DIA|2026-10|horas_extras_100_feriado|col727|2026-10-12|ESTRUTURA|0.000000000|10.985971389|+10.985971389
-DIA|2026-10|horas_extras_100_feriado|col830|2026-10-12|ESTRUTURA|0.000000000|12.149131944|+12.149131944
-RUBRICA|2026-10|horas_extras_100_feriado|419.479367232|442.614470565|+23.135103333|2|2
-DONO|2026-10|horas_extras_100_feriado|ESTRUTURA|0.000000000|23.135103333|+23.135103333|2|2
-RESIDUO|2026-10|horas_extras_100_feriado|ATE_LIMIAR|419.479367232|419.479367232|-0.000000000|509|7531
-RESIDUO|2026-10|horas_extras_100_feriado|SEM_DECISAO|3.430878889|3.430878889|+0.000000000|341|1956
-RESIDUO|2026-10|horas_extras_100_feriado|SEM_PAR|0.000000000|0.000000000|+0.000000000|64|1196
-INSTRUMENTO_HISTORICO|2026-10|horas_extras_100_feriado|v2_h=0.000000000|v3_h=453.463838343|delta_h=+453.463838343
-RUBRICA|2026-10|horas_extras_50_noturna|0.828852396|0.828852396|+0.000000000|0|0
-RESIDUO|2026-10|horas_extras_50_noturna|ATE_LIMIAR|0.828852396|0.828852396|+0.000000000|509|7532
-RESIDUO|2026-10|horas_extras_50_noturna|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|341|1957
-RESIDUO|2026-10|horas_extras_50_noturna|SEM_PAR|0.000000000|0.000000000|+0.000000000|64|1196
-INSTRUMENTO_HISTORICO|2026-10|horas_extras_50_noturna|v2_h=0.000000000|v3_h=0.828852396|delta_h=+0.828852396
-DIA|2026-10|horas_extras_100_noturna|col191|2026-10-12|CADASTRO|0.000000000|1.000000000|+1.000000000
-DIA|2026-10|horas_extras_100_noturna|col270|2026-10-12|ESTRUTURA|0.000000000|0.959735944|+0.959735944
-DIA|2026-10|horas_extras_100_noturna|col292|2026-10-12|ESTRUTURA|0.000000000|0.909870556|+0.909870556
-DIA|2026-10|horas_extras_100_noturna|col301|2026-10-12|ESTRUTURA|0.000000000|0.856398333|+0.856398333
-DIA|2026-10|horas_extras_100_noturna|col390|2026-10-12|ESTRUTURA|0.000000000|0.553309638|+0.553309638
-DIA|2026-10|horas_extras_100_noturna|col468|2026-10-12|ESTRUTURA|0.000000000|0.550908919|+0.550908919
-DIA|2026-10|horas_extras_100_noturna|col469|2026-10-12|CADASTRO|0.000000000|1.000000000|+1.000000000
-DIA|2026-10|horas_extras_100_noturna|col825|2026-10-12|ESTRUTURA|0.000000000|0.562620556|+0.562620556
-DIA|2026-10|horas_extras_100_noturna|col849|2026-10-12|ESTRUTURA|0.000000000|0.841615783|+0.841615783
-DIA|2026-10|horas_extras_100_noturna|col865|2026-10-12|CADASTRO|0.000000000|5.164677786|+5.164677786
-RUBRICA|2026-10|horas_extras_100_noturna|60.714638630|73.127033645|+12.412395015|10|10
-DONO|2026-10|horas_extras_100_noturna|CADASTRO|0.000000000|7.164677786|+7.164677786|3|3
-DONO|2026-10|horas_extras_100_noturna|ESTRUTURA|0.000000000|5.234459729|+5.234459729|7|7
-RESIDUO|2026-10|horas_extras_100_noturna|ATE_LIMIAR|60.714638630|60.727896130|+0.013257500|509|7522
-RESIDUO|2026-10|horas_extras_100_noturna|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|341|1957
-RESIDUO|2026-10|horas_extras_100_noturna|SEM_PAR|0.000000000|0.000000000|+0.000000000|64|1196
-INSTRUMENTO_HISTORICO|2026-10|horas_extras_100_noturna|v2_h=0.000000000|v3_h=73.127033645|delta_h=+73.127033645
-RUBRICA|2026-10|horas_folga_trabalhada|0.000000000|0.000000000|+0.000000000|0|0
-RESIDUO|2026-10|horas_folga_trabalhada|ATE_LIMIAR|0.000000000|0.000000000|+0.000000000|511|7684
-RESIDUO|2026-10|horas_folga_trabalhada|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|331|1805
-RESIDUO|2026-10|horas_folga_trabalhada|SEM_PAR|0.000000000|0.000000000|+0.000000000|64|1196
-INSTRUMENTO_HISTORICO|2026-10|horas_folga_trabalhada|v2_h=742.930323022|v3_h=0.000000000|delta_h=-742.930323022
-DIA|2026-10|horas_noturnas|col245|2026-09-21|CADASTRO|1.867681376|2.134493001|+0.266811625
-DIA|2026-10|horas_noturnas|col245|2026-09-23|CADASTRO|1.869965836|2.137103813|+0.267137977
-DIA|2026-10|horas_noturnas|col245|2026-09-24|ESTRUTURA|1.851872500|2.116425714|+0.264553214
-DIA|2026-10|horas_noturnas|col245|2026-09-25|CADASTRO|1.863168056|2.129334921|+0.266166865
-DIA|2026-10|horas_noturnas|col245|2026-09-26|ESTRUTURA|1.915446667|2.189081905|+0.273635238
-DIA|2026-10|horas_noturnas|col245|2026-09-27|CADASTRO|1.885175556|2.154486349|+0.269310794
-DIA|2026-10|horas_noturnas|col245|2026-09-28|ESTRUTURA|1.942230278|2.219691746|+0.277461468
-DIA|2026-10|horas_noturnas|col245|2026-09-30|ESTRUTURA|1.956297778|2.235768889|+0.279471111
-DIA|2026-10|horas_noturnas|col373|2026-09-30|ESTRUTURA|0.572047302|0.500541389|-0.071505913
-DIA|2026-10|horas_noturnas|col373|2026-10-01|ESTRUTURA|0.646286032|0.565500278|-0.080785754
-DIA|2026-10|horas_noturnas|col489|2026-09-23|ESTRUTURA|6.000774068|6.858027506|+0.857253438
-DIA|2026-10|horas_noturnas|col489|2026-09-25|ESTRUTURA|6.000494001|6.857707430|+0.857213429
-DIA|2026-10|horas_noturnas|col489|2026-09-27|ESTRUTURA|6.000421816|6.857624933|+0.857203117
-DIA|2026-10|horas_noturnas|col727|2026-10-12|ESTRUTURA|5.987302500|6.842631429|+0.855328929
-DIA|2026-10|horas_noturnas|col727|2026-10-14|ESTRUTURA|6.003224444|6.860827937|+0.857603492
-DIA|2026-10|horas_noturnas|col727|2026-10-16|ESTRUTURA|6.068942500|6.935934286|+0.866991786
-DIA|2026-10|horas_noturnas|col859|2026-09-21|ESTRUTURA|6.857064127|5.999931111|-0.857133016
-DIA|2026-10|horas_noturnas|col859|2026-09-22|ESTRUTURA|6.858000000|6.000750000|-0.857250000
-DIA|2026-10|horas_noturnas|col859|2026-09-24|ESTRUTURA|6.844368889|5.988822778|-0.855546111
-DIA|2026-10|horas_noturnas|col859|2026-09-25|ESTRUTURA|6.856735873|5.999643889|-0.857091984
-DIA|2026-10|horas_noturnas|col859|2026-09-26|ESTRUTURA|6.867731746|6.009265278|-0.858466468
-DIA|2026-10|horas_noturnas|col859|2026-09-28|ESTRUTURA|6.854342222|5.997549444|-0.856792778
-DIA|2026-10|horas_noturnas|col964|2026-09-25|ESTRUTURA|1.000000000|1.142857143|+0.142857143
-DIA|2026-10|horas_noturnas|col964|2026-09-26|BATIDA|1.015868889|1.160993016|+0.145124127
-DIA|2026-10|horas_noturnas|col964|2026-09-27|ESTRUTURA|0.976877500|1.116431429|+0.139553929
-DIA|2026-10|horas_noturnas|col964|2026-09-28|CADASTRO|0.939963611|1.074244127|+0.134280516
-RUBRICA|2026-10|horas_noturnas|15948.373066655|15950.946552788|+2.573486133|6|26
-DONO|2026-10|horas_noturnas|BATIDA|1.015868889|1.160993016|+0.145124127|1|1
-DONO|2026-10|horas_noturnas|CADASTRO|8.425954434|9.629662210|+1.203707776|2|5
-DONO|2026-10|horas_noturnas|ESTRUTURA|88.060460243|89.295014512|+1.234554269|6|20
-RESIDUO|2026-10|horas_noturnas|ATE_LIMIAR|15850.870783089|15850.860883049|-0.009900040|510|7590
-RESIDUO|2026-10|horas_noturnas|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|342|1873
-RESIDUO|2026-10|horas_noturnas|SEM_PAR|0.000000000|0.000000000|+0.000000000|64|1196
-INSTRUMENTO_HISTORICO|2026-10|horas_noturnas|v2_h=15728.549148812|v3_h=15964.082576240|delta_h=+235.533427428
-DIA|2026-10|horas_atraso|col87|2026-09-22|CADASTRO|0.000000000|0.186000000|+0.186000000
-DIA|2026-10|horas_atraso|col205|2026-09-21|CADASTRO|0.178166667|1.178166667|+1.000000000
-DIA|2026-10|horas_atraso|col258|2026-10-19|ESTRUTURA|0.000000000|2.368500000|+2.368500000
-DIA|2026-10|horas_atraso|col259|2026-10-14|ESTRUTURA|0.000000000|1.169655833|+1.169655833
-DIA|2026-10|horas_atraso|col259|2026-10-15|ESTRUTURA|0.000000000|1.585000000|+1.585000000
-DIA|2026-10|horas_atraso|col274|2026-10-04|ESTRUTURA|0.000000000|2.330333333|+2.330333333
-DIA|2026-10|horas_atraso|col368|2026-09-21|ESTRUTURA|0.000000000|1.106833333|+1.106833333
-DIA|2026-10|horas_atraso|col655|2026-09-30|ESTRUTURA|0.000000000|0.824060000|+0.824060000
-RUBRICA|2026-10|horas_atraso|355.091333333|365.661421482|+10.570088149|7|8
-DONO|2026-10|horas_atraso|CADASTRO|0.178166667|1.364166667|+1.186000000|2|2
-DONO|2026-10|horas_atraso|ESTRUTURA|0.000000000|9.384382500|+9.384382500|5|6
-RESIDUO|2026-10|horas_atraso|ATE_LIMIAR|354.913166667|354.912872316|-0.000294351|502|7477
-RESIDUO|2026-10|horas_atraso|SEM_DECISAO|10.822000000|10.822000000|+0.000000000|347|2004
-RESIDUO|2026-10|horas_atraso|SEM_PAR|0.000000000|0.000000000|+0.000000000|64|1196
-INSTRUMENTO_HISTORICO|2026-10|horas_atraso|v2_h=356.664166667|v3_h=346.027980551|delta_h=-10.636186116
-DIA|2026-10|horas_saida_antecipada|col87|2026-09-22|CADASTRO|1.074666667|0.888500000|-0.186166667
-DIA|2026-10|horas_saida_antecipada|col512|2026-10-11|ESTRUTURA|0.557166667|0.000000000|-0.557166667
-RUBRICA|2026-10|horas_saida_antecipada|390.477500000|389.735126896|-0.742373104|2|2
-DONO|2026-10|horas_saida_antecipada|CADASTRO|1.074666667|0.888500000|-0.186166667|1|1
-DONO|2026-10|horas_saida_antecipada|ESTRUTURA|0.557166667|0.000000000|-0.557166667|1|1
-RESIDUO|2026-10|horas_saida_antecipada|ATE_LIMIAR|388.845666667|388.846626896|+0.000960230|502|7483
-RESIDUO|2026-10|horas_saida_antecipada|SEM_DECISAO|0.000000000|0.000000000|+0.000000000|347|2004
-RESIDUO|2026-10|horas_saida_antecipada|SEM_PAR|0.000000000|0.000000000|+0.000000000|64|1196
-INSTRUMENTO_HISTORICO|2026-10|horas_saida_antecipada|v2_h=354.632166667|v3_h=353.889766749|delta_h=-0.742399917
-rc_sombra=137
-```
-
-## 06/11 11:26 · sessao 5710202ccc04 · R1-CAUSAD-V3 · leitura · origem=Code
-
-```python
-import ast
-import datetime as dt
-import gc
-import io
-import logging
-import re
-import sys
-import time
-import tokenize
-from collections import Counter
-from contextlib import redirect_stderr, redirect_stdout
-from decimal import Decimal, localcontext
-from pathlib import Path
-from unittest.mock import patch
-
-PARTE = 1
-PARTES = 6
-
-sys.dont_write_bytecode = True
-
-
-def sonda_r1():
-    # Proposta sem execução; desempenho e compatibilidade: [nao verificado].
-    saida = sys.stdout
-    inicio = time.monotonic()
-    limite = inicio + 15 * 60
-    rastreador_anterior = sys.gettrace()
-    competencia = "-"
-    raiz = None
-    prefixo_app = None
-    codigo_handle = None
-    bruto = None
-    chamadas = 0
-    universo_parte_total = 0
-    erros_total = 0
-    erros_por_tipo = Counter()
-    somas = {}
-    quantidades = {}
-    selecionados = Counter()
-    arquivos = {}
-    codigos = {}
-    pendentes = {}
-    pulsos = 0
-    marca = object()
-    resetar_queries = None
-    invalidar_catalogo = None
-
-    DONOS = ("ESTRUTURA", "CADASTRO", "BATIDA")
-    CHAVES = (
-        "dias_comparados", "bate_ate_10min",
-        "esp_zero_e6_trabalho", "e6_zero_esp_trabalho",
-        "diverge_10_60", "diverge_acima_60",
-        "dia_batida_impar", "impar_que_BATE", "impar_que_DIVERGE",
-        "impar_dentro_da_faixa", "impar_FORA_da_faixa",
-        "impar_no_conjunto_do_dia", "impar_SO_POR_CORTE_do_oraculo",
-        "dia_sem_linha_no_espelho", "dia_sem_lavratura_no_espelho",
-        "dia_isento_ou_ausencia", "dia_sem_trabalho_ambos",
-        "esp_desconta_janela_declarada", "esp_lido_pelo_pago_h",
-    )
-
-    class TempoEsgotado(BaseException):
-        pass
-
-    class Descartar:
-        # Descarte imediato: não acumula stdout/stderr livres em StringIO.
-        def write(self, texto):
-            return len(texto)
-
-        def flush(self):
-            return None
-
-    def imprimir(*partes):
-        print(*partes, file=saida, flush=True)
-
-    def data_segura(valor):
-        if isinstance(valor, dt.datetime):
-            return valor.date().isoformat()
-        if isinstance(valor, dt.date):
-            return valor.isoformat()
-        if isinstance(valor, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", valor):
-            return dt.date.fromisoformat(valor).isoformat()
-        return None
-
-    def contexto(frame):
-        col, dia = None, None
-        while frame is not None:
-            loc = frame.f_locals
-            if col is None:
-                objetos = [loc.get("colaborador"), loc.get("colab"), loc.get("c")]
-                obj_self = loc.get("self")
-                if obj_self is not None:
-                    objetos.append(getattr(obj_self, "__dict__", {}).get("c"))
-                for obj in objetos:
-                    meta = getattr(type(obj), "_meta", None)
-                    if getattr(meta, "model_name", None) == "colaborador":
-                        pk = obj.pk
-                        if isinstance(pk, int) and not isinstance(pk, bool):
-                            col = "col%d" % pk
-                            break
-                if col is None:
-                    for chave in ("colaborador_id", "colab_id"):
-                        pk = loc.get(chave)
-                        if isinstance(pk, int) and not isinstance(pk, bool):
-                            col = "col%d" % pk
-                            break
-            if dia is None:
-                # k é o dia julgado; dia já foi incrementado.
-                # app/ponto/management/commands/e6_oraculo.py:321
-                # app/ponto/management/commands/e6_oraculo.py:323
-                for chave in ("k", "data", "dia", "data_turno"):
-                    valor = data_segura(loc.get(chave))
-                    if valor is not None:
-                        dia = valor
-                        break
-            frame = frame.f_back
-        return col or "-", dia or "-"
-
-    def registrar(exc, frame=None):
-        nonlocal erros_total
-
-        # Marca na própria exceção: não conserva exc nem traceback num
-        # dicionário global. Evita também deduplicação incorreta por id reusado.
-        if exc.__dict__.get("_sonda_r1_registrada") is marca:
-            return
-        exc.__dict__["_sonda_r1_registrada"] = marca
-
-        tb = exc.__traceback__
-        ultimo = None
-        while tb is not None:
-            ultimo = tb
-            tb = tb.tb_next
-
-        col, dia = contexto(frame or (ultimo.tb_frame if ultimo else None))
-        tipo = type(exc).__name__
-        if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", tipo):
-            tipo = "Excecao"
-
-        origem = "-"
-        if ultimo is not None:
-            caminho = Path(ultimo.tb_frame.f_code.co_filename)
-            if raiz is not None and caminho.is_relative_to(raiz):
-                origem = "app/%s:%d" % (
-                    caminho.relative_to(raiz).as_posix(), ultimo.tb_lineno
-                )
-            else:
-                origem = "[fora-do-app]:%d" % ultimo.tb_lineno
-
-        # Mesmo contrato de sanitização do anexo: mensagem livre suprimida.
-        ultima_linha = (tipo + ": [mensagem suprimida]")[:200]
-        erros_total += 1
-        erros_por_tipo[tipo] += 1
-
-        # Emite imediatamente; não guarda uma lista crescente de erros.
-        imprimir("ERRO", competencia, (col, dia, tipo, origem, ultima_linha))
-
-    def linhas_de_handlers(codigo):
-        nome = codigo.co_filename
-        if prefixo_app is None or not nome.startswith(prefixo_app):
-            # Não memoiza todos os códigos externos vistos pelo tracer.
-            return frozenset()
-        if codigo in codigos:
-            return codigos[codigo]
-        if nome not in arquivos:
-            with tokenize.open(nome) as fonte:
-                arvore = ast.parse(fonte.read(), filename=nome)
-            arquivos[nome] = {
-                item.body[0].lineno
-                for item in ast.walk(arvore)
-                if isinstance(item, ast.ExceptHandler) and item.body
-            }
-        linhas_codigo = {linha for _, _, linha in codigo.co_lines() if linha}
-        codigos[codigo] = frozenset(arquivos[nome] & linhas_codigo)
-        return codigos[codigo]
-
-    def copiar_acumuladores(frame):
-        nonlocal bruto
-        loc = frame.f_locals
-        necessarios = ("T", "DONO_H", "DONO_C", "div", "_div_tot")
-        if not all(chave in loc for chave in necessarios):
-            return
-
-        # Só lê o que a autoridade já acumulou; não refaz julgamento.
-        # app/ponto/management/commands/e6_oraculo.py:367
-        # app/ponto/management/commands/e6_oraculo.py:368
-        # app/ponto/management/commands/e6_oraculo.py:369
-        t, h, c = loc["T"], loc["DONO_H"], loc["DONO_C"]
-        uniao = set()
-        for dono in DONOS:
-            uniao.update(c.get(dono, ()))
-        bruto = {
-            "dias": {dono: int(t.get("dono_" + dono, 0)) for dono in DONOS},
-            # Mesma divisão da autoridade, sem a formatação %.1f.
-            # app/ponto/management/commands/e6_oraculo.py:423
-            "horas": {dono: repr(h.get(dono, 0) / 60.0) for dono in DONOS},
-            "colabs": {dono: len(c.get(dono, ())) for dono in DONOS},
-            "total_dias": int(loc["_div_tot"]),
-            # Mesma união usada na saída nativa.
-            # app/ponto/management/commands/e6_oraculo.py:429
-            "total_colabs": len({x[1] for x in loc["div"]}),
-            "uniao_colabs": len(uniao),
-        }
-
-    def rastrear(frame, evento, arg):
-        nonlocal pulsos
-        if evento == "call":
-            pulsos += 1
-            if pulsos % 256 == 0 and time.monotonic() >= limite:
-                raise TempoEsgotado()
-            if frame.f_code is codigo_handle:
-                linhas_de_handlers(frame.f_code)
-                return rastrear
-            return rastrear if linhas_de_handlers(frame.f_code) else None
-        if evento == "exception":
-            pendentes[id(frame)] = arg[1]
-        elif evento == "line":
-            if frame.f_lineno in codigos.get(frame.f_code, ()):
-                exc = sys.exc_info()[1] or pendentes.get(id(frame))
-                if exc is not None:
-                    registrar(exc, frame)
-        elif evento == "return":
-            try:
-                if frame.f_code is codigo_handle:
-                    copiar_acumuladores(frame)
-            finally:
-                pendentes.pop(id(frame), None)
-        return rastrear
-
-    def receber_log(logger, registro):
-        if registro.exc_info and registro.exc_info[1] is not None:
-            registrar(registro.exc_info[1], sys._getframe(1))
-
-    def limpar():
-        # Pendentes podem conservar exceções/tracebacks enquanto o frame vive.
-        pendentes.clear()
-        if resetar_queries is not None:
-            resetar_queries()
-        if invalidar_catalogo is not None:
-            # Cache único de catálogo; não é cache crescente por colaborador.
-            # app/ponto/catalogo/ausencias.py:257
-            # app/ponto/catalogo/ausencias.py:261
-            invalidar_catalogo()
-
-        # Não limpa memos de motores vivos nem os acumuladores do comando.
-        # Os memos pertencem à instância/cálculo:
-        # app/ponto/motor_calculo_v2.py:848
-        # app/ponto/motor_calculo_v2.py:2285
-        # O registro de fontes é fraco e morre com os motores:
-        # app/core/regua_cct.py:487
-        # app/core/regua_cct.py:494
-        gc.collect()
-
-    def ler_relatorio(texto, erros_antes):
-        linhas = texto.splitlines()
-        padrao_counter = (
-            r"\{(?:'[A-Za-z0-9_]+'\s*:\s*\d+"
-            r"(?:,\s*'[A-Za-z0-9_]+'\s*:\s*\d+)*)?\}"
-        )
-        contadores = [
-            ast.literal_eval(linha)
-            for linha in linhas if re.fullmatch(padrao_counter, linha)
-        ]
-        donos = [
-            m for linha in linhas
-            if (m := re.match(
-                r"^\s*(ESTRUTURA|CADASTRO|BATIDA)\s+"
-                r"(\d+) dia-colab\s+(\d+\.\d+) h\s+(\d+) colabs",
-                linha
-            ))
-        ]
-        soma = [
-            m for linha in linhas
-            if (m := re.match(
-                r"^\s*SOMA\s+(\d+)\s+"
-                r"<- tem de ser igual a soma das classes \((\d+)\)", linha
-            ))
-        ]
-        colabs = [
-            m for linha in linhas
-            if (m := re.fullmatch(r"colabs com divergencia: (\d+)", linha))
-        ]
-        falhas = [
-            m for linha in linhas
-            if (m := re.fullmatch(r"erros no espelho: (\d+)", linha))
-        ]
-        if not (
-            len(contadores) == len(soma) == len(colabs) == len(falhas) == 1
-            and len(donos) == 3
-            and {m[1] for m in donos} == set(DONOS)
-            and bruto is not None
-        ):
-            raise RuntimeError("FormatoDaAutoridadeIncompleto")
-
-        soma_dias = sum(bruto["dias"].values())
-        confere_dias = (
-            soma_dias == bruto["total_dias"]
-            == int(soma[0][1]) == int(soma[0][2])
-        )
-        confere_colabs = (
-            bruto["uniao_colabs"] == bruto["total_colabs"] == int(colabs[0][1])
-        )
-        for m in donos:
-            dono = m[1]
-            if (
-                int(m[2]) != bruto["dias"][dono]
-                or int(m[4]) != bruto["colabs"][dono]
-                or m[3] != format(float(bruto["horas"][dono]), ".1f")
-            ):
-                raise RuntimeError("AcumuladoresDaAutoridadeDivergentes")
-
-        if not confere_dias or not confere_colabs:
-            raise RuntimeError("SomaDaAutoridadeDivergente")
-        if selecionados[competencia] != quantidades[competencia]:
-            raise RuntimeError("UniversoDaParteDivergente")
-        if int(falhas[0][1]) and erros_total == erros_antes:
-            raise RuntimeError("ErroDoEspelhoSemDetalhamento")
-
-        imprimir("COMPETENCIA", competencia)
-        t = contadores[0]
-        imprimir("[1]", {chave: t.get(chave, 0) for chave in CHAVES})
-        for linha in linhas:
-            if re.fullmatch(
-                r"BATE \(ate 10 min\): \d+\.\d+% de \d+ dias comparados", linha
-            ):
-                imprimir("[2]", linha)
-        for m in donos:
-            imprimir("[3]", m[0].strip())
-        imprimir("[4] TOTAL divergentes", soma[0][2])
-        imprimir("[5]", colabs[0][0])
-        imprimir("erros_no_espelho", falhas[0][1])
-
-        # Decimal soma exatamente as representações decimais emitidas.
-        # Não usa as horas arredondadas da tabela nativa.
-        with localcontext() as ctx:
-            ctx.prec = 80
-            horas = {dono: Decimal(bruto["horas"][dono]) for dono in DONOS}
-            total_horas = sum(horas.values(), Decimal(0))
-            texto_total_horas = format(total_horas, "f")
-            confere_horas = (
-                sum((Decimal(bruto["horas"][d]) for d in DONOS), Decimal(0))
-                == Decimal(texto_total_horas)
-            )
-
-        for dono in DONOS:
-            imprimir(
-                "PARCIAL|%s|%s|dias=%d|horas=%s|colabs=%d" % (
-                    competencia, dono, bruto["dias"][dono],
-                    bruto["horas"][dono], bruto["colabs"][dono],
-                )
-            )
-        imprimir(
-            "PARCIAL_TOTAL|%s|dias=%d|horas=%s|colabs=%d" % (
-                competencia, bruto["total_dias"],
-                texto_total_horas, bruto["total_colabs"],
-            )
-        )
-        somas[competencia] = (
-            soma[0][0].strip(), confere_dias,
-            texto_total_horas, confere_horas,
-            bruto["total_colabs"], confere_colabs,
-        )
-
-    try:
-        with (
-            patch.object(logging.Logger, "handle", receber_log),
-            redirect_stdout(Descartar()),
-            redirect_stderr(Descartar()),
-        ):
-            from django.apps import apps
-            from django.conf import settings
-            from django.core.management import call_command
-            from django.db import connection, reset_queries, transaction
-            from ponto import janelas
-            from ponto.catalogo import ausencias
-            from ponto.management.commands import e6_oraculo
-            from ponto.services import espelho as modulo_espelho
-
-            raiz = Path(e6_oraculo.__file__).resolve().parents[3]
-            prefixo_app = str(raiz) + "/"
-            codigo_handle = e6_oraculo.Command.handle.__code__
-            resetar_queries = reset_queries
-            invalidar_catalogo = ausencias.invalidar_cache
-
-            if (
-                type(PARTE) is not int
-                or type(PARTES) is not int
-                or PARTES != 6
-                or not 1 <= PARTE <= PARTES
-                or settings.SETTINGS_MODULE != "config.settings.sombra"
-                or not settings.BANCO_DE_ENSAIO
-                or connection.settings_dict["NAME"] != "sombra"
-                or connection.schema_name != "juliani"
-                or rastreador_anterior is not None
-            ):
-                raise RuntimeError("AmbienteIncompativel")
-
-            Empresa = apps.get_model("colaboradores", "Empresa")
-            FM = apps.get_model("ponto", "FechamentoMensal")
-            Colaborador = apps.get_model("colaboradores", "Colaborador")
-            gerente = Colaborador.objects
-            filtro_real = gerente.filter
-            real_espelho = modulo_espelho.espelho_do_colab
-
-            with transaction.atomic():
-                try:
-                    with connection.cursor() as cursor:
-                        cursor.execute("SELECT current_database(), current_user")
-                        if cursor.fetchone() != ("sombra", "leitor"):
-                            raise RuntimeError("BancoOuPapelIncompativel")
-
-                    empresas = list(
-                        Empresa.objects.filter(ativa=True).order_by("pk")
-                    )
-                    imprimir("PARTE", PARTE, "PARTES", PARTES)
-                    for mes in (10, 11):
-                        competencia = "%02d/2026" % mes
-                        total = quantidade = 0
-                        ids = (
-                            FM.objects.filter(
-                                mes=mes, ano=2026,
-                                colaborador__empresa__ativa=True,
-                            )
-                            .values_list("colaborador_id", flat=True)
-                            .distinct()
-                            .iterator(chunk_size=128)
-                        )
-                        try:
-                            for pk in ids:
-                                if type(pk) is not int:
-                                    raise RuntimeError("IdentificadorIncompativel")
-                                total += 1
-                                quantidade += int(pk % PARTES == PARTE - 1)
-                        finally:
-                            ids.close()
-                        quantidades[competencia] = quantidade
-                        universo_parte_total += quantidade
-                        imprimir("[0] UNIVERSO", competencia, total)
-                        imprimir("UNIVERSO_PARTE", competencia, quantidade)
-
-                        janelas_vistas = {
-                            janelas.janela_fechamento(mes, 2026, empresa)
-                            for empresa in empresas
-                        }
-                        for ini, fim in sorted(janelas_vistas):
-                            imprimir(
-                                "JANELA", competencia,
-                                ini.isoformat(), fim.isoformat(),
-                            )
-                    del empresas
-                finally:
-                    transaction.set_rollback(True)
-            limpar()
-
-            def iterar_colaboradores(queryset):
-                it = queryset.iterator(chunk_size=1)
-                try:
-                    for c in it:
-                        if time.monotonic() >= limite:
-                            raise TempoEsgotado()
-                        if c.pk % PARTES != PARTE - 1:
-                            raise RuntimeError("ColaboradorForaDaParte")
-                        selecionados[competencia] += 1
-                        try:
-                            yield c
-                        finally:
-                            # O próximo passo do iterador acontece depois de
-                            # toda a comparação/juiz deste colaborador.
-                            # app/ponto/management/commands/e6_oraculo.py:302
-                            # app/ponto/management/commands/e6_oraculo.py:392
-                            limpar()
-                finally:
-                    it.close()
-
-            def filtrar_colaboradores(*args, **kwargs):
-                # Intercepta só a seleção de colaboradores do handle real.
-                # app/ponto/management/commands/e6_oraculo.py:302
-                if sys._getframe(1).f_code is not codigo_handle:
-                    return filtro_real(*args, **kwargs)
-                if args or set(kwargs) != {"pk__in"}:
-                    raise RuntimeError("SelecaoDaAutoridadeIncompativel")
-                ids = kwargs["pk__in"]
-                if any(type(pk) is not int for pk in ids):
-                    raise RuntimeError("IdentificadorIncompativel")
-                ids_parte = [pk for pk in ids if pk % PARTES == PARTE - 1]
-                return iterar_colaboradores(filtro_real(pk__in=ids_parte))
-
-            def observar_espelho(*args, **kwargs):
-                nonlocal chamadas
-                if time.monotonic() >= limite:
-                    raise TempoEsgotado()
-                if chamadas and chamadas % 25 == 0:
-                    decorrido = time.monotonic() - inicio
-                    estimativa = (
-                        decorrido * universo_parte_total / chamadas / 60
-                    )
-                    imprimir(
-                        "ESTIMATIVA", "processados", chamadas,
-                        "universo", universo_parte_total,
-                        "minutos_total", round(estimativa, 1),
-                        "ate_40_min", estimativa 
-
-[truncado em 20000 de 27052 caracteres]
-
-## 06/11 11:23 · sessao e60937eb81bd · - · - · origem=Ronald (tmux)
-
-Contagem manual do **primeiro anexo `script.py`**, considerando `def sonda_r1():` como linha 1:
-
-- `vistos = {}` — `script.py:19`.
-- `vistos[chave] = exc` — `script.py:86`.
-- `erros.append(...)` — `script.py:106`.
-- `pendentes[id(frame)] = arg[1]` — `script.py:136`.
-- `redirect_stdout(io.StringIO())` — `script.py:232`.
-- `redirect_stderr(io.StringIO())` — `script.py:233`.
-
-Âncoras: `def rastrear` — `script.py:128`; `def receber_log` — `script.py:146`; `def ler_relatorio` — `script.py:151`; `try:` externo — `script.py:229`.
-
-_2250 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2254 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
