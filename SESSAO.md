@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 03:08:02.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (41.8 MB). Acoes na janela: **1151**.
+**Medido em 06/11/2026 03:13:06.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (41.8 MB). Acoes na janela: **1141**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1151,13 +1151,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:14:24 | Bash | Read Codex responses | `cd /home/ronald/saas-hasner; for f in logs/h12h06/codex_v1.r logs/snc2/codex_v1.r logs/lastro2/autopsia.r logs/h12h06/c.r; do echo "== $f"; cat $f; done` |
 | 15:14:22 | Bash | Check finished Codex jobs | `cd /home/ronald/saas-hasner; cat logs/codex_queima/rcs.txt; ls -la logs/h12h06/codex_v1.r logs/snc2/codex_v1.r logs/lastro2/autopsia.r 2>&1 \| cut -c30-` |
 | 15:14:18 | Bash | Check whether App Shell pattern exists | `cd /home/ronald/saas-hasner; /bin/grep -n -i "app shell\\|app-shell\\|appshell" app/docs/GLOSSARIO.md app/docs/PLANO-PADROES.md; /bin/grep -n -i "offline\\|service worker\\|cache" app/docs/GLOSSARIO.md app/docs/PLANO-PADROES.md \| head; date +%H:%M` |
-| 15:09:40 | Bash | Record measured teto decision in RELATO | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') L.insert(6,"QUEIMA TETO 15:0x (medido): 6 simultaneos pela fila + MODO-COMUM na corrente; load1 7-8 em 8 vCPU, /health/ 200 em 0,02 s. Nao subo acima de 6: o wrapper ja trava em CODEX_TETO=6 slots e o load iguala os nucleos. Defeito do runner 1 (filho do Codex lia o stdin da lista e o laco viu EOF c ...` |
-| 15:09:29 | Bash | Check wrapper TETO and slot usage | `cd /home/ronald/saas-hasner; /bin/grep -n "TETO=" bin/codex_pergunta.sh; ls logs/codex/slot.*; tail -3 logs/codex_queima/estado/k003.log` |
-| 15:09:27 | Bash | Check wrapper slot concurrency limit | `cd /home/ronald/saas-hasner; /bin/grep -n "slot" bin/codex_pergunta.sh \| head -15` |
-| 15:08:42 | Bash | Confirm continuation queue opened jobs | `/usr/bin/sleep 40; cat /home/ronald/saas-hasner/logs/codex_queima/rcs.txt; cat /proc/loadavg` |
-| 15:08:39 | Bash | Run continuation Codex queue with fixed stdin | `cd /home/ronald/saas-hasner && JOBS=logs/codex_queima/jobs_k.txt PFX=k bash logs/codex_queima/runner2.sh > logs/codex_queima/runner2.out 2>&1` |
-| 15:08:34 | Bash | Fix stdin leak in runner2 and build continuation job list | `cd /home/ronald/saas-hasner/logs/codex_queima; sed -i 's#roda "$id" "$obra" "$papel" "$hash" "$q" "$r" "$anex" "$sonda" "$pos" &#roda "$id" "$obra" "$papel" "$hash" "$q" "$r" "$anex" "$sonda" "$pos" </dev/null \&#' runner2.sh; /bin/grep -n '</dev/null' runner2.sh { sed -n 4,17p jobs.txt; cat jobs_be.txt; sed -n '18,$p' jobs.txt; } > jobs_k.txt; cut -d'\|' -f1 jobs_k.txt \| uniq -c \| head -12; wc  ...` |
-| 15:08:29 | Bash | Inspect runner process | `cat /home/ronald/saas-hasner/logs/codex_queima/runner.out; ps -eo pid,ppid,etime,args \| /bin/grep -F 'runner.sh' \| /bin/grep -v grep \| cut -c1-120` |
-| 15:08:23 | Bash | Check why runner is not opening more jobs | `cat /proc/loadavg; curl -sk -o /dev/null -w '%{http_code} %{time_total}\n' -m 5 --resolve juliani.hasner.com.br:443:127.0.0.1 https://juliani.hasner.com.br/health/; ls /home/ronald/saas-hasner/logs/codex_queima/estado/` |
-| 15:08:20 | Bash | Slim anexos and check queue state | `cd /home/ronald/saas-hasner; sed -i 's#\|app/docs/LEIS.md;app/docs/GLOSSARIO.md\|\|#\|\|\|#' logs/codex_queima/jobs_be.txt; head -1 logs/codex_queima/jobs_be.txt; cat logs/codex_queima/rcs.txt` |
-| 15:08:17 | Bash | Write BATERIA and item E questions plus a second runner | `cd /home/ronald/saas-hasner/logs/codex_queima; sed 's#J=$Q/jobs.txt#J=${JOBS:-$Q/jobs.txt}#; s#printf .j%03d. $n#printf "${PFX:-j}%03d" $n#' runner.sh > runner2.sh; /bin/grep -n 'JOBS\\|PFX' runner2.sh mkdir -p ../bateria for i in 1 2 3 4; do case $i in 1) Q="Q1 falta e atestado (falta inteira, falta parcial, atestado de horas, atestado de dias, atestado sobre folga, atestado depois de falta lanca ...` |
