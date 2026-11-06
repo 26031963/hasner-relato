@@ -1,7 +1,121 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 00:27** · publicado em **06/11/2026 00:27** (UTC-3)
+> Ultima resposta processada: **06/11/2026 00:32** · publicado em **06/11/2026 00:32** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 00:32 · sessao 39d2bd7c3dd5 · G3G4-DONO-MEDIDO · censo · origem=Code
+
+**G3-08 tem vínculo nominal documentado com FIO-LE-O-JUIZ**: o corte identifica col94, 16/10 e chamado #31873; o escopo da obra inclui a disputa #6984 desse colaborador (`app/docs/CORTES.md:297`; `app/docs/BACKLOG.md:771`). A reprodução atual do defeito histórico é [nao verificado].
+
+Para avaliar o alcance das outras obras:
+
+- **ATA-X-TURNO** trata da ata que associa batidas pelo raio sem consultar o juiz do turno (`app/docs/BACKLOG.md:1651`).
+- **JUIZ-DO-PAR-DUAS-ENTRADAS** trata de pareamentos diferentes para as mesmas batidas e marcos (`app/docs/BACKLOG.md:753`).
+- **COBERTURA-PARCIAL-UM-JUIZ** trata da cobertura de declaração/justificativa parcial conforme tipo e período (`app/docs/BACKLOG.md:763`).
+- **FIO-LE-O-JUIZ** trata da leitura de perguntas vivas independentemente do estado da disputa e dos escritores de carimbos de validação/materialização (`app/docs/BACKLOG.md:771`).
+
+**Critério R, comum às quatro:** tomando a medição informada como premissa, `ESTRUTURA` só pode ter vindo do retorno residual: guardas de cadastro não acionadas, `batida_fora_de_turno` falso, contagem par — inclusive zero —, fase deslocada não acionada e dia fora de `dias_cadastro_x_realidade` (`app/ponto/management/commands/e6_oraculo.py:98–110`). `InsumosDoDono.dono` consulta essa lista antes de devolver `ESTRUTURA` (`app/ponto/management/commands/e6_oraculo.py:179–183`). Quantidade exata de batidas e causa concreta: [nao verificado].
+
+Os termos documentais da FIO são **“juiz unico”** e **“fonte unica”**, presentes em `app/docs/GLOSSARIO.md:12` e `app/docs/GLOSSARIO.md:11`; ambos constam do escopo da obra (`app/docs/BACKLOG.md:771`). O retorno `ESTRUTURA` não distingue qual padrão foi quebrado (`app/ponto/management/commands/e6_oraculo.py:98–110`).
+
+Colaborador, data e correspondência com cada uid abaixo são os fornecidos pelo anexo, sem confirmação independente [nao verificado].
+
+| uid | col | dia | obra/lei existente (ou nenhuma) | arquivo:linha | padrao quebrado | criterio do dono |
+|---|---:|---|---|---|---|---|
+| G3-08 [nao verificado] | 94 | 2026-10-16 | **FIO-LE-O-JUIZ**, por vínculo nominal do dia/#31873; mecanismo atual [nao verificado] | `app/docs/CORTES.md:297`; `app/docs/BACKLOG.md:771` | Escopo: **juiz unico / fonte unica** (`app/docs/GLOSSARIO.md:12`, `:11`); quebra atual [nao verificado] | **R**, retorno residual (`app/ponto/management/commands/e6_oraculo.py:110`). O chamado `turno_aberto` não substitui a verificação de órfã real exigida pelo carregador (`:196–200`). |
+| G3-10 [nao verificado] | 163 | 2026-10-10 | **Nenhuma demonstrada**: `ausencia` não informa cobertura parcial, tipo/período ou divergência de pareamento; enquadramento [nao verificado] | Escopos: `app/docs/BACKLOG.md:763`, `:1651`, `:753`, `:771` | [nao verificado] | **R**, retorno residual (`app/ponto/management/commands/e6_oraculo.py:110`); causa específica [nao verificado] |
+| G3-11 [nao verificado] | 163 | 2026-10-17 | **Nenhuma demonstrada**: `folga_trabalhada`, porta nula e chamados vazios não identificam mecanismo das quatro obras; enquadramento [nao verificado] | Escopos: `app/docs/BACKLOG.md:1651`, `:753`, `:763`, `:771` | [nao verificado] | **R**, retorno residual (`app/ponto/management/commands/e6_oraculo.py:110`); causa específica [nao verificado] |
+| G3-12 [nao verificado] | 873 | 2026-09-26 | **Nenhuma demonstrada**: `ausencia` e chamado de ausência não demonstram parcialidade ou divergência entre leitores; enquadramento [nao verificado] | Escopos: `app/docs/BACKLOG.md:763`, `:1651`, `:753`, `:771` | [nao verificado] | **R**, retorno residual (`app/ponto/management/commands/e6_oraculo.py:110`); causa específica [nao verificado] |
+
+**Soma = 4** unidades fornecidas no anexo [nao verificado].
+
+## 06/11 00:31 · sessao 0d7a10e08017 · - · - · origem=Ronald (tmux)
+
+Para as quatro unidades, o único caminho que devolve `ESTRUTURA` é o resíduo de `dono_da_divergencia`: guardas de cadastro falsas, `batida_fora_de_turno` falsa, quantidade par de horas/batidas do oráculo, fase deslocada falsa e dia fora de `dias_cadastro_x_realidade` — `app/ponto/management/commands/e6_oraculo.py:98`, `:104`, `:106`, `:108`, `:110`. `InsumosDoDono.dono` confirma a lista do motor antes de devolver `ESTRUTURA`; o atalho só devolve antecipadamente outra classificação — mesmo arquivo `:179`, `:180`, `:181`, `:183`.
+
+| Unidade do anexo | Critério dedutível, condicionando à medição real informada |
+|---|---|
+| G3-08 [não verificado] | Resíduo acima; a presença de chamado `turno_aberto` não determina o insumo `batida_fora_de_turno`: esse exige realizado aberto **e** entrada órfã real ainda apurável — `app/ponto/management/commands/e6_oraculo.py:187`, `:196`, `:198`, `:200`. Contagem exata e causa concreta [não verificado]. |
+| G3-10 [não verificado] | Mesmo resíduo; `ausencia`, chamados e porta nula não são argumentos do juiz — `app/ponto/management/commands/e6_oraculo.py:53`, `:175`, `:183`. Contagem exata e causa concreta [não verificado]. |
+| G3-11 [não verificado] | Mesmo resíduo; `folga_trabalhada` e lista vazia de chamados não são argumentos do juiz — `app/ponto/management/commands/e6_oraculo.py:53`, `:175`, `:183`. Contagem exata e causa concreta [não verificado]. |
+| G3-12 [não verificado] | Mesmo resíduo; status e chamado de ausência não são argumentos do juiz — `app/ponto/management/commands/e6_oraculo.py:53`, `:175`, `:183`. Contagem exata e causa concreta [não verificado]. |
+
+Zero é explicitamente aceito como par e também pode levar ao resíduo; não se pode distinguir zero de outro número par pelo anexo — `app/ponto/management/commands/e6_oraculo.py:72`, `:106`, `:110`; quantidade efetiva [não verificado].
+
+Os termos exatos disponíveis são `Single Source of Truth / Aggregate Root` / `celula soberana / fonte unica` em `app/docs/GLOSSARIO.md:11` e `Single Writer Principle` / `juiz unico / escritor unico` em `app/docs/GLOSSARIO.md:12`. A classificação `ESTRUTURA` não identifica automaticamente qual padrão desses foi quebrado: o retorno só lê os insumos citados — `app/ponto/management/commands/e6_oraculo.py:98`, `:110`; padrão concreto quebrado sem classe causal [não verificado].
+
+Existe vínculo documental nominal para G3-08: `col94`, dia `16/10` e chamado `#31873` aparecem em `app/docs/CORTES.md:297`; `app/docs/CORTES.md:321` encaminha `col94 -> FECHAR3/(C)`; `app/docs/BACKLOG.md:771` define FIO-LE-O-JUIZ como BO-[nome] (C), incluindo `#6984 col94`, perguntas vivas em disputas fechadas e escritores que desfazem validação/materialização sem trilha. O anexo atual não informa disputa, pergunta ou trilha; violação atual específica dessa obra [não verificado].
+
+## 06/11 00:31 · sessao 17faa885b181 · - · - · origem=Ronald (tmux)
+
+- **G3-08 → FIO-LE-O-JUIZ, vínculo nominal documental.** O escopo inclui perguntas vivas em disputa fechada e o caso `#6984 col94` (`app/docs/BACKLOG.md:771`). O corte identifica exatamente `col94`, dia `16/10`, chamado `#31873` e disputa `#6984` (`app/docs/CORTES.md:297`); depois registra `col94 #31873 / disputa #6984` como item incompleto da obra (C) (`app/docs/CORTES.md:332`). Isso sustenta o destino existente; a reprodução atual do mecanismo histórico permanece **[não verificado]**, pois o anexo não traz disputa, perguntas ou carimbos.
+- **G3-10, G3-11 e G3-12 → nenhuma das quatro demonstrada pelo anexo.** ATA-X-TURNO exige divergência entre casamento por raio e papel dado pelo juiz do turno (`app/docs/BACKLOG.md:1651`); JUIZ-DO-PAR exige pareamentos diferentes para as mesmas batidas e marcos (`app/docs/BACKLOG.md:753`); COBERTURA-PARCIAL exige declaração/justificativa parcial e interpretação do tipo/período (`app/docs/BACKLOG.md:763`); FIO exige relação entre pergunta viva, chamado/disputa ou carimbos (`app/docs/BACKLOG.md:771`). Esses insumos não constam das três linhas do anexo **[não verificado]**. `ausencia`, `folga_trabalhada`, `null` e chamados em `R` não demonstram por si esses mecanismos **[não verificado]**.
+- **Padrões documentais:** `Single Source of Truth / Aggregate Root` / `fonte unica` (`app/docs/GLOSSARIO.md:11`); `Single Writer Principle` / `juiz unico` (`app/docs/GLOSSARIO.md:12`). FIO registra ambos no próprio escopo (`app/docs/BACKLOG.md:771`). Afirmar qual padrão está atualmente quebrado em cada unidade exige mais que o dono ESTRUTURA **[não verificado]**; mantenha `n/a (medida)` para o trabalho e marque a quebra específica não demonstrada.
+- **Lei geral existente para as quatro:** L-099 define ESTRUTURA como contradição do sistema com o cadastro existente, separando CADASTRO e BATIDA (`app/docs/LEIS.md:122`). Ela cobre a classificação geral fornecida, mas não identifica automaticamente uma das quatro obras nem a causa de cada unidade **[não verificado]**.
+
+## 06/11 00:29 · sessao 8666c8b56a28 · G3G4-DONO-MEDIDO · sonda · origem=Code
+
+**Parte A — interfaces confirmadas na cópia; chamadas efetivas da sonda [nao verificado].**
+
+Não localizei o corpo de `sonda_g3g4.py` nem de `logs/hj_0511/sonda_a.py`; portanto, não pude conferir imports, argumentos efetivamente passados, identidade do script pelo digest nem eventual reconstrução de lógica. [nao verificado]
+
+| Campo | Assinatura real e conferência |
+|---|---|
+| a | `status_do_dia_lavrado(colaborador, data, *, agora=None)`. Delega ao leitor em lote e retorna o resultado do par solicitado. `app/ponto/status_dia.py:201`, `app/ponto/status_dia.py:218` |
+| b | `InsumosDoDono(colaborador, ini, fim, hoje, espelho=None, *, agora, dias_de_fase=None, cadastro=None)`, seguido de `.dono(data)`. **`agora` é obrigatório por palavra-chave**; o método chama `dono_da_divergencia`. `app/ponto/management/commands/e6_oraculo.py:128`, `app/ponto/management/commands/e6_oraculo.py:172`, `app/ponto/management/commands/e6_oraculo.py:180`, `app/ponto/management/commands/e6_oraculo.py:183` |
+| c | `classificar_export(empresa, mes, ano, fechamentos=None)`. Retorna lista por colaborador; não recebe diretamente colaborador e dia. `app/folha/export.py:757`, `app/folha/export.py:762` |
+| d | `dias_que_seguram(empresa, mes, ano)`. Chama realmente `classificar_export` e retorna o universo com mapas por colaborador, incluindo `dias`; não devolve diretamente uma chave `segura`. `app/folha/fora_da_folha.py:102`, `app/folha/fora_da_folha.py:119`, `app/folha/fora_da_folha.py:138` |
+| e | `porta_alcancavel_do_dia(celula_id, *, alimentacao=None)`. Recebe o **ID da célula**; pode retornar `None` ou o objeto da porta. `app/chamados/juizes.py:1341`, `app/chamados/juizes.py:1382`, `app/chamados/juizes.py:1386` |
+| f | `data_do_chamado(modulo_origem, contexto_json)`. Recebe **dois argumentos**, consulta a chave declarada no catálogo e pode retornar `None`. `app/chamados/catalogo/modulos.py:219`, `app/chamados/catalogo/modulos.py:222` |
+
+O campo `d.segura` exige uma seleção por unidade sobre o retorno da função; identificar essa seleção e distinguir adaptação de saída de reconstrução do julgamento depende do script ausente. `app/folha/fora_da_folha.py:106`, `app/folha/fora_da_folha.py:138`; implementação na sonda: [nao verificado].
+
+O envelope calcula e imprime os primeiros 16 caracteres do SHA-256 do script recebido; esse identificador sozinho não permite conferir suas chamadas. `bin/sonda_leitura.sh:217`, `bin/sonda_leitura.sh:219`, `bin/sonda_leitura.sh:221`.
+
+**Parte B — transcrição das 19 unidades fornecidas. [nao verificado]**
+
+As marcas `[nao verificado]` cobrem cada linha inteira: o dado está no enunciado, sem arquivo:linha disponível para confirmação independente. Nos chamados, a ordem é `(id, tipo, status_local)`; `R` representa o valor JSON `"\u0072esolvido"`. `null` e `[]` preservam valores explícitos do dado. [nao verificado]
+
+| uid | col | dia | segura a folha (d) | dono (b) | status lavrado (a, status / fonte) | porta (e) | chamado(s) do dia (f) | erro |
+|---|---:|---|---|---|---|---|---|---|
+| G3-01 [nao verificado] | 29 | 2026-10-15 | n | BATIDA | ok / lavrado | null | (31608, batida_ausente, R) | sem ERRO informado |
+| G3-02 [nao verificado] | 129 | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado; sem dia, campos ausentes |
+| G3-03 [nao verificado] | 923 | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado; sem dia, campos ausentes |
+| G3-04 [nao verificado] | 174 | 2026-10-25 | n | CADASTRO | ok / lavrado | null | (34869, batida_ausente, R) | sem ERRO informado |
+| G3-05 [nao verificado] | 174 | 2026-10-26 | n | CADASTRO | ok / lavrado | null | (35100, batida_ausente, R) | sem ERRO informado |
+| G3-06 [nao verificado] | 33 | 2026-10-03 | n | BATIDA | ok / lavrado | null | (28365, batida_ausente, R); (28426, turno_aberto, R) | sem ERRO informado |
+| G3-07 [nao verificado] | 33 | 2026-10-04 | n | BATIDA | folga / lavrado | null | [] | sem ERRO informado |
+| G3-08 [nao verificado] | 94 | 2026-10-16 | s | ESTRUTURA | irregular / lavrado | rota=porta_fila; fila=[31873]; verbos={31873: validar}; fio=admin | (31873, batida_ausente, em_analise); (32029, turno_aberto, R) | sem ERRO informado |
+| G3-09 [nao verificado] | 789 | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado; sem dia, campos ausentes |
+| G3-10 [nao verificado] | 163 | 2026-10-10 | n | ESTRUTURA | ausencia / lavrado | null | (29050, ausencia_colab, R); (30210, batida_ausente, R) | sem ERRO informado |
+| G3-11 [nao verificado] | 163 | 2026-10-17 | n | ESTRUTURA | folga_trabalhada / lavrado | null | [] | sem ERRO informado |
+| G3-12 [nao verificado] | 873 | 2026-09-26 | n | ESTRUTURA | ausencia / lavrado | null | (21508, ausencia_colab, R) | sem ERRO informado |
+| G3-13 [nao verificado] | 949 | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado; sem dia, campos ausentes |
+| G3-14 [nao verificado] | 214 | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado; sem dia, campos ausentes |
+| G3-15 [nao verificado] | 247 | 2026-10-24 | n | BATIDA | irregular / lavrado | rota=porta_fila; fila=[34577]; verbos={34577: validar}; fio=admin | (21598, regua_suspeita, cancelado); (34577, batida_ausente, em_analise) | sem ERRO informado |
+| G4-01 [nao verificado] | 39 | 2026-10-15 | s | BATIDA | irregular / lavrado | null | (31619, turno_aberto, R); (31792, ausencia_colab, R) | sem ERRO informado |
+| G4-02 [nao verificado] | 42 | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado; sem dia, campos ausentes |
+| G4-03 [nao verificado] | 250 | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado; sem dia, campos ausentes |
+| G4-04 [nao verificado] | 960 | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado; sem dia, campos ausentes |
+
+Contagem por dono, mantendo literalmente o campo b. [nao verificado]
+
+| Dono | Unidades |
+|---|---:|
+| ESTRUTURA | 4 [nao verificado] |
+| CADASTRO | 2 [nao verificado] |
+| BATIDA | 5 [nao verificado] |
+| indeterminado | 8 [nao verificado] |
+| **Soma** | **19 [nao verificado]** |
+
+Contagem por “segura”, exclusivamente pelo campo d. [nao verificado]
+
+| Segura | Unidades |
+|---|---:|
+| s | 2 [nao verificado] |
+| n | 9 [nao verificado] |
+| indeterminado | 8 [nao verificado] |
+| **Soma** | **19 [nao verificado]** |
 
 ## 06/11 00:27 · sessao fe6774a8e9e7 · - · - · origem=Ronald (tmux)
 
@@ -538,130 +652,4 @@ Leitores centrais confirmados:
 
 Não encontrei regra explícita decidindo inclusividade intradiária da remoção, retirada e religação no mesmo dia, nem desempate de eventos simultâneos; esses esperados devem ficar como “regra nao decide” [nao verificado]. Leitura literal de isenção em motor e triagem não apareceu; alcance indireto completo [nao verificado].
 
-## 05/11 23:23 · sessao 9b675ea5d114 · - · - · origem=Ronald (tmux)
-
-[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
-
-## 05/11 23:22 · sessao 299368d3907f · - · - · origem=Ronald (tmux)
-
-- **Dia D e vínculo:** `app/escala/alimentacao.py:228` define o juiz por dia; a geradora da célula é autoridade, sem escolher pelo vínculo ativo ou mais recente (`:231`). A geradora vale dentro da vigência, inclusive vínculo hoje inativo (`:272`). As comparações incluem os extremos (`:282`).
-
-- **Competência 21→20:** competência 10/2026 = 21/09/2026–20/10/2026, por contrato escrito em `app/ponto/janelas.py:10`. A competência consultada corresponde à data do fato, sem usar mês civil (`app/ponto/janelas.py:75`).
-
-- **Cross-meia-noite:** a retenção lê a célula soberana e seu dia; proíbe remontar o turno por janela de timestamps. Universo `[ini,fim]`, sem véspera (`app/folha/export.py:1168`). Isso fixa a identidade de D, mas não escreve se a retirada do passe no meio do turno fraciona a isenção ou preserva o turno inteiro: **[nao verificado]**.
-
-- **Sem trilha:** a regra manda isento sem trilha desde a admissão, com texto exato **“desde a admissao -- flag sem trilha”**, e futuras trocas abrem/fecham a janela pela porta da quarentena (`app/docs/CORTES.md:352`). Campo da admissão: `app/colaboradores/models.py:324`.
-
-- **Legado textual:** há registro explícito de trilha somente na descrição, anterior à estruturação dos JSON (`app/colaboradores/views.py:178`; `app/colaboradores/tests/test_passe_livre_trilha.py:6`). Portanto JSON vazio não prova ausência de trilha. A gramática completa de formatos antigos aceitos, ou precedência em contradição entre texto e JSON: **[nao verificado]**.
-
-- **Concorrência e intermediário:** escritor salva flag em `app/colaboradores/views.py:176`, depois chama auditoria em `:183`. A porta apenas atribui e salva em `app/colaboradores/services/colaborador.py:55`. O comentário existente admite que falha da trilha não desfaz a decisão (`app/colaboradores/views.py:188`). O corte posterior exige trilha em toda troca (`app/docs/CORTES.md:352`). Regra de visibilidade intermediária, isolamento, desempate entre mudanças simultâneas e estado vencedor: **[nao verificado]**. Não transformar o comentário best-effort em esperado normativo da nova obra.
-
-- **Horizonte/exportada:** L-124 preserva foto anterior ao horizonte até fato novo, com backfill único separado (`app/docs/LEIS.md:145`; `app/docs/CORTES.md:419`). O aval fornecido é mais específico ao proibir “tocar exportada”; não inferir dessa lei geral autorização para alterar a exportada nesta obra.
-
-Regras procuradas e não encontradas escritas:
-
-- Inclusão/exclusão do dia de ligar/desligar às 11:32; evento exatamente à meia-noite; remoção e religação no mesmo dia: **[nao verificado]**. Procurado em `app/core/constants.py:13`, `app/docs/CORTES.md:348`, `app/docs/CORTES.md:352`, `app/colaboradores/views.py:145`, `app/colaboradores/tests/test_passe_livre_trilha.py:64`.
-- Ordenação/desempate de `LogAuditoria.criado_em` iguais, trilhas contraditórias, incompletas ou fora de ordem: **[nao verificado]**. Modelo declara somente ordenação por `-criado_em` (`app/core/models.py:307`, `app/core/models.py:312`).
-- Conversão do timestamp da troca para um dia efetivo de isenção: **[nao verificado]**. Fuso configurado São Paulo e `USE_TZ=True` não definem essa política (`app/config/settings/base.py:93`, `app/config/settings/base.py:95`).
-- Sem trilha e admissão nula; não isento hoje com trilha ausente; comportamento para colaborador inexistente na pergunta histórica: **[nao verificado]**. Regra localizada restringe-se a “isento sem trilha” (`app/docs/CORTES.md:352`).
-- Contrato de erro/retorno para concorrência e leitura entre salvar flag e gravar trilha: **[nao verificado]**. Sítios examinados: `app/colaboradores/views.py:173`, `app/colaboradores/services/colaborador.py:55`, `app/colaboradores/tests/test_passe_livre_trilha.py:96`.
-
-## 05/11 23:22 · sessao fa42c7ac23d1 · - · - · origem=Ronald (tmux)
-
-Sítio e contrato da porta:
-
-- `PerguntaDisputa.carimbar`: `app/chamados/models.py:2562`. Comentário normativo em `app/chamados/models.py:2532`: `materializada_em`, `materializada_por`, `via_resolucao` são UM ato; carimbo não identidade só grava se o C6 dá a pergunta por morta; viva restaura tudo e retorna `False`. Docstring em `app/chamados/models.py:2563` determina retorno booleano e restauração em exceções do C6, lavra ou gravação.
-- A candidata escolhida aparece literalmente em `app/docs/PROMPTS.md:1882`: “O261 item 3 PEP = candidata 1 (dentro de carimbar, atomic, rele a linha travada, C6 rejulga; ordem de trava = relavra_via.py:221 medida antes do verde; conferir chave de _pv_memo; RED intercalacao decisao humana x resposta nova)”.
-- O registro anterior apresentava DUAS candidatas: releitura travada dentro da porta versus chamador trava e porta compara/recusa, `app/docs/RELATO.md:131`. Nesse registro, metade memória do item 3 já estava curada, metade trava permanecia parada.
-- Outro apontamento ao item 3: `app/docs/BACKLOG.md:1154`, O261-E-F2-FILA, “carimbar sem select_for_update, carimbo em memoria apos erro pos-C6”.
-- O antecedente concreto da concorrência está em `app/chamados/services/relavra_via.py:214`: instância lida como `sem_turno_aberto`, decisão humana `admin_decidiu` no meio; decisão deve usar a linha gravada relida travada. Trava existente em `app/chamados/services/relavra_via.py:221`.
-
-Definições de campos para a tabela:
-
-| Model | Campo | Definição |
-|---|---|---|
-| PerguntaDisputa | classe | `app/chamados/models.py:2201` |
-| PerguntaDisputa | celula | `app/chamados/models.py:2209` |
-| PerguntaDisputa | disputa | `app/chamados/models.py:2211` |
-| PerguntaDisputa | motivo | `app/chamados/models.py:2216` |
-| PerguntaDisputa | pergunta | `app/chamados/models.py:2217` |
-| PerguntaDisputa | data_evento | `app/chamados/models.py:2218` |
-| PerguntaDisputa | tipo_resposta | `app/chamados/models.py:2222` |
-| PerguntaDisputa | resposta_colab | `app/chamados/models.py:2227` |
-| PerguntaDisputa | respondida_em | `app/chamados/models.py:2228` |
-| PerguntaDisputa | validada_em | `app/chamados/models.py:2229` |
-| PerguntaDisputa | data_conferida_em | `app/chamados/models.py:2238` |
-| PerguntaDisputa | recusa_motivo | `app/chamados/models.py:2321` |
-| PerguntaDisputa | via_resolucao | `app/chamados/models.py:2322` |
-| PerguntaDisputa | veredito_lavrado | `app/chamados/models.py:2346` |
-| PerguntaDisputa | julgado_em | `app/chamados/models.py:2351` |
-| PerguntaDisputa | janela_expira_em | `app/chamados/models.py:2357` |
-| PerguntaDisputa | validada_por | `app/chamados/models.py:2775` |
-| PerguntaDisputa | chamado_destino | `app/chamados/models.py:2783` |
-| PerguntaDisputa | materializada_em | `app/chamados/models.py:2791` |
-| PerguntaDisputa | materializada_por | `app/chamados/models.py:2795` |
-| CelulaDia | classe | `app/escala/models.py:1635` |
-| CelulaDia | colaborador | `app/escala/models.py:1681` |
-| CelulaDia | data | `app/escala/models.py:1685` |
-| CelulaDia | trabalha | `app/escala/models.py:1686` |
-| CelulaDia | escala_geradora | `app/escala/models.py:1692` |
-| CelulaDia | dna | `app/escala/models.py:1697` |
-| CelulaDia | veredito | `app/escala/models.py:1770` |
-| CelulaDia | veredito_via | `app/escala/models.py:1771` |
-| CelulaDia | veredito_em | `app/escala/models.py:1772` |
-| CelulaDia | ata | `app/escala/models.py:1778` |
-| DisputaSupervisao | classe | `app/chamados/models.py:1640` |
-| DisputaSupervisao | colaborador | `app/chamados/models.py:1666` |
-| DisputaSupervisao | chamado | `app/chamados/models.py:1679` |
-| EscalaColaborador | classe | `app/escala/models.py:871` |
-| EscalaColaborador | colaborador | `app/escala/models.py:872` |
-| EscalaColaborador | posto | `app/escala/models.py:873` |
-| EscalaColaborador | tipo_escala | `app/escala/models.py:874` |
-| EscalaColaborador | data_inicio | `app/escala/models.py:875` |
-| EscalaColaborador | data_fim | `app/escala/models.py:876` |
-| EscalaColaborador | ativa | `app/escala/models.py:877` |
-| Empresa | dia_inicio_competencia | `app/colaboradores/models.py:46` |
-
-Regras escritas que sustentam casos:
-
-- Data: `app/chamados/models.py:2231`–`:2237` dizem que `data_evento` é a verdade; discordância com data no chamado bloqueia materialização até conferir.
-- Vazio: docstring `app/chamados/models.py:2565`–`:2567` determina carimbar resposta/validação somente com texto do colaborador. `app/chamados/juizes.py:1249` define texto vazio como `(t or '').strip()`.
-- Estado intermediário: `app/chamados/services/disputa_emissao.py:1435`–`:1440` registra corte PERGUNTA-EM-LIMBO: texto existente sem `respondida_em` só recebe instante testemunhado pela nota da trilha; já carimbada ou sem texto fica como está. É OUTRA porta: `carimbar_resposta_pela_trilha`, `:1434`.
-- Concorrência: `app/docs/PROMPTS.md:1882`; contrato de linha relida travada + C6 rejulga. O retorno exato do ato obsoleto não é decidido ali.
-- Prioridade humana: `app/chamados/juizes.py:1151`–`:1157` registra HX-ADMIN-DECIDE-O-DIA, corte 26/08: resposta vence tudo menos decisão explícita do admin sobre o MESMO dia na célula; resposta vira histórico com trilha, não some.
-- Resposta/marco: `app/chamados/juizes.py:1159`–`:1161` registra lei 25/10: marco aceso, resposta e luz concordantes pela régua e dia que não acusa dispensam validação; discordância ou impossibilidade de dizer segue viva.
-- Teto: L-073, `app/docs/LEIS.md:100`, data não basta no cross meia noite; comparar instante ou exigir fato encerrado. Corte PERGUNTA-VIVA-TETO e complemento CLASSE-4 em `app/chamados/juizes.py:1185`–`:1193`: veredito até teto com marco pendente não absolve; o fato do próprio marco permite absolver mesmo com restante pendente.
-- Competência: L-026 em `app/docs/LEIS.md:77`: 21→20 pelo campo da empresa, nunca mês civil nem 21 cravado. Corte K8 em `app/docs/CORTES.md:216`: tranca pergunta competência da DATA DO FATO. O próprio corte distingue `PeriodoFechado` da empresa e `FechamentoMensal` do colaborador.
-- Vínculo: corte de nascimento do juiz em `app/docs/CORTES.md:284`, pergunta “qual vínculo vale neste dia?”. Proveniência da célula em `app/escala/models.py:1692`.
-- Legado: `app/chamados/models.py:2277` registra B2-LEGADO-SEM-LASTRO: carimbo histórico de via vazia sem testemunha nem destino não absolve e não se refaz.
-- Memo: contrato auto invalidante em `app/chamados/juizes.py:781`–`:787`: chave inclui campos mutáveis lidos e percebe alteração em memória. Chave atual em `:811`–`:819`, memo em `:822`. Para esperado, usar contrato, não composição atual da chave.
-- Exceção/lavra/save: docstring da porta `app/chamados/models.py:2571`–`:2574` exige restaurar instância e veredito lavrado; exceção sobe.
-
-Lacunas documentadas:
-
-- `app/docs/RELATO.md:6492` lista divergências de desenho: ato obsoleto `False` versus exceção, identidade preexistente sobrescrita, alcance de atomic/restauração, geradora fora da vigência; e explicita ausência de lei para `ata={}`, `trabalha=True`, veredito não acusador (`_celula_furada=None` versus C6 `False`).
-- Não encontrei expansão textual de “PEP” nos cinco documentos requeridos; as ocorrências `PEP 562` em `app/docs/RELATO-ARQUIVO.md:17996` e `:28267` são outro contexto (compatibilidade de importação de módulo).
-
-## 05/11 23:22 · sessao 55764b590581 · - · - · origem=Ronald (tmux)
-
-- **Campos da entrada**: `Colaborador.isento_ponto` — `app/colaboradores/models.py:294`; `data_admissao` — `:324`. `LogAuditoria.usuario` — `app/core/models.py:295`; `acao` — `:296`; `modelo` — `:297`; `objeto_id` — `:298`; `descricao` — `:299`; `valor_antes` — `:300`; `valor_depois` — `:301`; `criado_em` — `:307`. Batidas: `colaborador`, `timestamp`, `tipo` — `app/ponto/models.py:22`, `:23`, `:24`.
-
-- **Escritor**: `passe_livre` carrega o colaborador em `app/colaboradores/views.py:156`, define `novo_valor = (acao == 'add')` em `:157` e grava a flag pela porta em `:176`. A porta salva apenas os campos informados em `app/colaboradores/services/colaborador.py:55`–`:62`. Motivo é obrigatório nas duas direções, com mínimo de 10 caracteres, em `app/colaboradores/views.py:158`–`:172`.
-
-- **Formato da trilha**: `acao='editar'`, `modelo='Colaborador'`, `objeto_id=colab.pk`; descrição `Passe livre (isencao Art.62): {antes} -> {novo_valor}. Motivo: {_motivo}`; JSON anterior `{'isento_ponto': antes}` e posterior `{'isento_ponto': novo_valor, 'motivo': _motivo}` — `app/colaboradores/views.py:183`–`:186`. `criado_em` é horário de criação do registro, `auto_now_add=True` — `app/core/models.py:307`.
-
-- **Legado textual**: a própria cópia explica que o antes/depois anteriormente existia apenas na descrição; procurar somente `valor_depois['isento_ponto']` perde essa trilha — `app/colaboradores/views.py:178`–`:182`; `app/colaboradores/tests/test_passe_livre_trilha.py:6`–`:14`. Caso adversarial pertinente: JSON nulo, descrição histórica válida, dia estritamente entre ligação e remoção; o esperado deve vir do aval “vigência lida da trilha”, sem assumir que JSON nulo significa ausência de trilha.
-
-- **Sem trilha**: regra escrita em `app/docs/CORTES.md:352`: isento sem trilha = desde a admissão; texto exigido na lista: `"desde a admissao -- flag sem trilha"`. Toda troca futura deve gravar trilha e abrir/fechar janela pela porta. A distinção entre janela aberta e fechada para item sem dia também está nessa linha. A regra de quarentena distingue cobrança de cálculo em `app/docs/CORTES.md:348`.
-
-- **Dois períodos**: a regra de reentrada é o literal do aval fornecido: `"quem re-entra no passe (col41) respeita os dois periodos"`. A cópia prova que ligar e desligar deixam duas linhas no teste `app/colaboradores/tests/test_passe_livre_trilha.py:96`–`:101`. Datas efetivas completas de col41 no dado atual: **[nao verificado]**.
-
-- **Idempotência**: mesma decisão não deve produzir nova linha; regra explicitada em `app/colaboradores/tests/test_passe_livre_trilha.py:103`–`:107`, condicionada à mudança de valor em `app/colaboradores/views.py:173`.
-
-- **Concorrência/intermediário**: gravação da flag ocorre antes da tentativa de trilha — `app/colaboradores/views.py:176`, `:183`. A função e a porta lidas não apresentam transação conjunta nem `select_for_update` — `app/colaboradores/views.py:144`–`:203`; `app/colaboradores/services/colaborador.py:55`–`:62`. `core.observ.evento` declara best effort em `app/core/observ.py:96`–`:102` e usa savepoint próprio da trilha em `:124`–`:138`. O comentário do escritor determina que falha de log não desfaz a isenção — `app/colaboradores/views.py:188`–`:194`. Para leitura entre gravação da flag e da trilha, desempate de trocas simultâneas e ordem de `criado_em` empatado: **regra não decide [nao verificado]**. L-007 exige usuário, antes/depois e motivo — `app/docs/LEIS.md:65`.
-
-- **Lacunas procuradas**: não encontrei implementação de `colab_em_quarentena`/`inicio_da_isencao` no código desta cópia **[nao verificado]**; o relato aponta implementação em outra cópia e reprovação — `app/docs/RELATO.md:1204`. Não encontrei regra para admissão nula sem trilha, fronteira inclusiva/exclusiva na data da troca, remoção e religação no mesmo dia, prioridade entre texto e JSON contraditórios, ou horário efetivo distinto do horário registrado **[nao verificado]**.
-
-- **Atenção ao censo**: o evento atual de flag ligada ainda chama o silenciador depois do commit — `app/chamados/signals.py:213`–`:224`; o silenciador consulta o flag atual — `app/chamados/services/silencio_isentos.py:24`. Isso não fornece uma regra histórica por D; a fonte de esperado permanece o aval e o corte posterior.
-
-_2048 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2052 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
