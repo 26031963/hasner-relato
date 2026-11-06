@@ -6,10 +6,20 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 23:44:17.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (36.8 MB). Acoes na janela: **1246**.
+**Medido em 05/11/2026 23:50:03.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (36.9 MB). Acoes na janela: **1254**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:46:57 | Bash | Point ESPERANDO at pre-push | `cd /home/ronald/saas-hasner/app/docs; sed -i '2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/pre-push.sh \| pid=1595425#' RELATO.md; sed -n 2p RELATO.md` |
+| 23:46:51 | Bash | Find push and trava pids | `/usr/bin/sleep 3; ps -eo pid,args \| grep -E 'bin/push.sh\|pre-push\|trava_teste.sh' \| grep -v grep \| cut -c1-140` |
+| 23:46:46 | Bash | Push the F-346 marco via push.sh | `cd /home/ronald/saas-hasner; bash bin/push.sh > logs/f346/push.log 2>&1; echo rc=$? >> logs/f346/push.log; tail -4 logs/f346/push.log` |
+| 23:46:42 | Bash | Check push.sh usage | `cd /home/ronald/saas-hasner; sed -n '1,30p' bin/push.sh \| grep -iE 'uso\|usage\|^#' \| head` |
+| 23:46:21 | Bash | Deploy F-346 without migrate | `cd /home/ronald/saas-hasner; timeout 590 bash bin/deploy.sh --sem-migrate > logs/f346/deploy.log 2>&1; echo rc=$?; tail -15 logs/f346/deploy.log` |
+| 23:46:17 | Bash | Update docs and commit F-346 merge | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') i=1760; c=L[i].split('\|'); assert 'F-346' in c[1] c[3]=' NO AR 05/11 23:4x: merge raia-f346 (2d508beb), suite arvore de pouso OK 13736 rc=0, opus APROVA; fila: corrida concorrente, acervo de orfas sem contador, 500 no veto, sem registrar_log, relogio misto, confirmacao herdada, furos do selo AST ' ...` |
+| 23:46:03 | Bash | Inspect F-346 BACKLOG state cell | `cd /home/ronald/saas-hasner; sed -n 1761p app/docs/BACKLOG.md \| awk -F'\|' '{print NF; print $4}' \| cut -c1-400` |
+| 23:45:58 | Bash | Merge raia-f346 no-commit and cmp against certified copy | `cd /home/ronald/saas-hasner; git stash list \| head -2; git merge --no-ff --no-commit raia-f346; echo rc=$?; cat .git/MERGE_HEAD; git status --porcelain \| grep -v '^??'; for f in app/ferias/services.py app/ferias/test_remarcar_limpa_janela_f346.py; do cmp $f /home/ronald/wt-f346-merge-232813/$f && echo "cmp ok $f"; done; git diff --cached --name-only \| while read f; do cmp -s "$f" "/home/ronald/ ...` |
+| 23:45:53 | Bash | Check BACKLOG F-346 row and raia commits | `cd /home/ronald/saas-hasner; grep -n 'F-346' app/docs/BACKLOG.md \| cut -c1-300 \| head -5; git diff 3a514a4e raia-f346 --stat; git log --oneline 3a514a4e..raia-f346 \| head` |
+| 23:45:47 | Bash | Read merged suite verdict and tree state | `cd /home/ronald/saas-hasner; L=logs/f346/suite_merge.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep -E '^Ran' $L\|tail -1; grep '^rc=' $L\|tail -1; git status --porcelain \| head; git log -1 --format=%h; git -C /home/ronald/wt-f346-merge-232813 status --porcelain \| head` |
 | 23:34:59 | Bash | Record F-346 opus verdict and fila items | `cd /home/ronald/saas-hasner/app/docs; cat >> RELATO.md <<'EOF' ### F-346 opus final (05/11 23:3x): APROVA d2653810..2d508beb, sem bloqueio; pouso so com OK+rc=0 de logs/f346/suite_merge.log (arvore 33c9d5b0) - Escritor unico conferido: unica reatribuicao de datas = ferias/services.py:379 (`_trocar_janela`), grep repo inteiro; 0 receiver de AgendamentoFerias; update_fields nao perde campo lido. - D ...` |
 | 23:34:47 | Bash | Check merged-tree suite verdict | `cd /home/ronald/saas-hasner; wc -l logs/f346/suite_merge.log; grep -E '^(OK\|FAILED)($\| \()' logs/f346/suite_merge.log \| tail -1; grep -E '^Ran' logs/f346/suite_merge.log\|tail -1; tail -1 logs/f346/suite_merge.log; date` |
 | 23:31:21 | Bash | Drop non-growing arquivo field from ESPERANDO | `cd /home/ronald/saas-hasner/app/docs; sed -i '2s# \| arquivo=.*##' RELATO.md; sed -n 2p RELATO.md` |
@@ -1254,5 +1264,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:27:41 | Bash | Read full CRONS-INSTALL contract line | `cd /home/ronald/saas-hasner; sed -n 19p app/docs/RELATO.md` |
 | 12:27:39 | Bash | Fetch CRONS-INSTALL-SOB-MARCA contract and marca file | `cd /home/ronald/saas-hasner; grep -n "CRONS-INSTALL-SOB-MARCA" app/docs/RELATO.md app/docs/BACKLOG.md \| cut -c1-80; grep -n "CONTRATO CRONS-INSTALL-SOB-MARCA\\|CONTRATO-DE-INSTRUMENTO CRONS-INSTALL" -A8 app/docs/RELATO.md \| cut -c1-400 \| head -20; cat app/core/tests/marca_cron15.py \| head -40` |
 | 12:27:32 | Bash | Inspect previsto_em and feriados= callers in copy | `cd /home/ronald/wt-sombra-094556/app; git log --oneline -3; sed -n 428,455p ponto/models.py; git grep -n "feriados=" -- '*.py' \| grep -v tests \| grep -iv "^ponto/motor_calculo_v2" \| head -30` |
-| 11:45:45 | Bash | Update ESPERANDO pid and identify suite tree | `cd /home/ronald/saas-hasner; sed -i '2s/pid=[0-9]*/pid=3454055/' app/docs/RELATO.md; ps -o args= -p 3454055 \| grep -o -- '-v /home/ronald/wt[^ ]*:/app'` |
-| 11:45:42 | Bash | Check suite lock | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; date +%H:%M; sed -n 2p app/docs/RELATO.md` |
