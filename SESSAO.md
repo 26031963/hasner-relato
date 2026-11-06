@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 10:53:10.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (59.4 MB). Acoes na janela: **817**.
+**Medido em 06/11/2026 10:58:31.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (59.4 MB). Acoes na janela: **822**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:54:02 | Bash | Recheck ESPERANDO proof | `cd /home/ronald/saas-hasner; /usr/bin/sleep 20; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
+| 10:53:41 | Bash | Repoint ESPERANDO to growing suite log | `cd /home/ronald/saas-hasner; ps -p 491 -o cmd= \| cut -c1-60; sed -i "0,/^ESPERANDO:.*/s##ESPERANDO: trava_teste.sh \| pid=491 \| arquivo=logs/esemvivab/suite.log#" app/docs/RELATO.md; /usr/bin/sleep 15; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
+| 10:53:34 | Bash | Read file-proof requirements | `cd /home/ronald/saas-hasner; grep -n 'def _prova_arquivo' -A15 bin/hook_stop_fila1.py \| head -18` |
+| 10:53:28 | Bash | Inspect file requirement in ESPERANDO proof | `cd /home/ronald/saas-hasner; grep -n 'def _esperando_com_prova' -A40 bin/hook_stop_fila1.py \| grep -n 'arquivo\\|return\\|exists\\|mtime' \| head -20` |
+| 10:53:23 | Bash | Inspect hook decision flow | `cd /home/ronald/saas-hasner; grep -n '_esperando_com_prova\\|def main\\|_SO_BANG\\|return' bin/hook_stop_fila1.py \| head -40` |
 | 10:53:08 | Bash | Update RELATO and repoint ESPERANDO | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() lin=("PEP-REENTRADA 11:0x: suite inteira da raia 759cb5c0 FAILED (failures=1) Ran 13815 rc=1 -- core.tests.test_contract_mypy: materializacao.py:1106 _EM_VOO sem anotacao (bug no caminho, LEI-AKITA 6) -> entra no PEP v5 da copia nova; suite de novo la.\n" "R1-CAUSAD-V3 11:0x: 3 scripts do Codex extraidos do blo ...` |
 | 10:52:56 | SendMessage |  | `-` |
 | 10:52:47 | Bash | Find the actual mypy error | `cd /home/ronald/saas-hasner; sed -n 3574,3700p logs/pep3/suite_inteira_103227.log \| grep -v 'annotation-unchecked' \| head -15` |

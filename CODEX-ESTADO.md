@@ -1,7 +1,28 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 10:53** · publicado em **06/11/2026 10:53** (UTC-3)
+> Ultima resposta processada: **06/11/2026 10:54** · publicado em **06/11/2026 10:58** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 10:54 · sessao 8d2c4dc0d074 · CODEX-CONSTRUTOR-NEGOCIO · verificador · origem=Code
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
+
+## 06/11 10:53 · sessao 0caa3c46d7af · - · - · origem=Ronald (tmux)
+
+Achados para consolidar:
+
+- **Construtor não existe neste hash.** Parser só aceita `--sonda`/`--anexo`, exige três posicionais; papel só admite leitura/censo/verificador/sonda; execução efetiva usa `--sandbox read-only -C "$WS"`. A chamada contratual seria recusada com rc 2. `bin/codex_pergunta.sh:32-48`, `bin/codex_pergunta.sh:174-175`.
+- **Regra documentada também é anterior ao contrato:** só leitura; exceção para teste RED em cópia própria; proíbe outro sandbox, produção e configuração do Code. O selo atual reprova qualquer `workspace-write`. `CLAUDE.md:341-348`, `bin/tests/test_codex_pergunta.sh:13-21`.
+- **Cópia não é autenticada ao reutilizar:** `WS` aceita `CODEX_WS_BASE`; basta `-d "$WS"` para pular criação/verificação, sem canonicalização ou atestar conteúdo/hash. Isso permite selecionar diretório/symlink preexistente, mas não demonstra escrita fora do sandbox, que continua read-only. `bin/codex_pergunta.sh:87-101`, `bin/codex_pergunta.sh:174`.
+- **Saídas do host escapam da política do sandbox do filho:** `RESPOSTA` vem diretamente do argumento e controla lock, remoção do sidecar, destino da resposta e escrita do `.id`; `LOGD` é substituível; `OBRA` só precisa não estar vazia e participa do caminho JSONL. O wrapper não valida confinamento desses destinos. `bin/codex_pergunta.sh:40-51`, `bin/codex_pergunta.sh:162-178`, `bin/codex_pergunta.sh:199-201`.
+- **Chamador/concorrência não autenticados:** obra/papel são variáveis; não há prova de sessão principal. `CODEX_TETO` é livre e locks dependem de `LOGD`, logo o seis é default, não teto imutável. `bin/codex_pergunta.sh:44-51`, `bin/codex_pergunta.sh:138-153`.
+- **Execução intocada contorna lista de arquivos modificados:** `bin/hooks.sh install` usa raiz fixa na viva e escreve nela; recusar alteração em `bin/` não impede chamar script existente. O sandbox precisa bloquear esses efeitos. `bin/hooks.sh:9-11`, `bin/hooks.sh:42-58`.
+- **`.claude/` merece proteção explícita:** configuração contém comandos para a viva no Stop, PreCompact e PreToolUse; sua execução nesta chamada é [nao verificado]. ` .claude/settings.json:9`, `.claude/settings.json:20`, `.claude/settings.json:29`, `.claude/settings.json:68`.
+- **Hook substituível fora do filho:** `CODEX_SONDA_ENVELOPE` escolhe executável rodado pelo wrapper antes do Codex; `_nomes` também chama script no host. Não são escapes demonstrados do filho, mas superfícies do chamador confiável. `bin/codex_pergunta.sh:71`, `bin/codex_pergunta.sh:108-109`.
+- **Selo insuficiente:** testa substrings; sua única adulteração troca `read-only` por `danger-full-access`. Não exercita symlinks, caminhos reais, worktrees, chamada construtor, recusa posterior ou destinos do host. `bin/tests/test_codex_pergunta.sh:11-33`.
+- **Contraexemplos propostos ainda não executados:** worktree válida com `app` symlink; caminho com `..`; worktree de outro repositório/obra; `HEAD` mudado durante execução; arquivo proibido alterado e restaurado; ignorados; metadados Git compartilhados; execução de deploy/hook existente; configuração `.claude`; mutação fora de `app` mas dentro da worktree. [nao verificado] [nao verificado]
+
+A lista contratual precisa casar caminhos relativos à raiz da worktree, incluindo prefixo `app/` e `migrations` em qualquer aplicação; a implementação desse matcher não existe neste wrapper. `bin/codex_pergunta.sh:174-204`, `app/escala/migrations/0001_initial.py:1`, `app/pautas/migrations/0001_initial.py:1`.
 
 ## 06/11 10:53 · sessao acad92a1a511 · - · - · origem=Ronald (tmux)
 
@@ -1932,47 +1953,4 @@ O limite de realismo continua relevante: o fixture mantém texto, apaga resposta
 
 A recusa por colisão no `finally` pode escrever identidade **depois da saída do voo**; ela não constitui outro escritor dentro desse bloco. Já `carimbar_identidade` e `descarimbar` continuam sem consultar o voo: ampliar os chamadores para estados como o fixture de P3 exigiria nova análise de alcançabilidade. `app/chamados/services/materializacao.py:1074`, `app/chamados/services/materializacao.py:1261`, `app/chamados/services/materializacao.py:1271`, `app/chamados/models.py:2625`, `app/chamados/models.py:2646`, `app/chamados/tests/test_pep_reentrada.py:234`.
 
-## 06/11 10:33 · sessao 083c8ea8b2b0 · - · - · origem=Ronald (tmux)
-
-No bloco atual, não encontrei escritor do trio da P além do materializador; a garantia depende dos caminhos atuais, pois as portas genéricas não consultam o voo (`app/chamados/services/materializacao.py:1194`, `app/chamados/models.py:2562`, `app/chamados/models.py:2625`, `app/chamados/models.py:2646`).
-
-**Quem escreve:**
-
-- O carimbo normal sai de `_materializar_uma → p.carimbar`, após o juiz do lastro; a porta atribui os três campos e grava (`app/chamados/services/materializacao.py:1207`, `app/chamados/services/materializacao.py:1251`, `app/chamados/models.py:2556`, `app/chamados/models.py:2609`).
-- O próprio ramo hora pode escrever identidade por paridade e retornar imediatamente, impedindo o carimbo normal; continua sendo o materializador (`app/chamados/services/materializacao.py:899`, `app/chamados/services/materializacao.py:900`, `app/chamados/services/materializacao.py:1201`).
-- A recusa `COLISAO` pode escrever identidade no `finally`, mas esse `finally` roda após a saída de `materializacao_em_voo`; portanto não é outro escritor **dentro** do voo (`app/chamados/services/materializacao.py:1074`, `app/chamados/services/materializacao.py:1261`, `app/chamados/services/materializacao.py:1271`).
-
-**Outros candidatos e por que não escrevem a P atual:**
-
-- S143 pula a P nos dois laços e bloqueia o fecho da disputa com qualquer P em voo (`app/chamados/services/disputa_emissao.py:1586`, `app/chamados/services/disputa_emissao.py:1671`, `app/chamados/services/disputa_emissao.py:1710`).
-- S144 pula antes do juiz e do carimbo (`app/chamados/services/materializacao.py:1399`, `app/chamados/services/materializacao.py:1405`).
-- A batida chama sincronamente `reconciliar_chamados_colab`; sua absolvição por célula carimba sem consultar voo, mas exige `validada_em IS NULL`. A porta normal seleciona validação não nula; a validação individual grava antes de materializar; o passivo também seleciona validação não nula (`app/ponto/signals.py:206`, `app/ponto/signals.py:215`, `app/chamados/reconciliador.py:586`, `app/chamados/reconciliador.py:620`, `app/chamados/services/materializacao.py:1343`, `app/chamados/services/validacao.py:396`, `app/chamados/services/validacao.py:424`, `app/chamados/services/vigia_carimbo.py:98`).
-- `lavrar_sem_turno_aberto` exige ausência de texto, incompatível com hora que chega ao plantio e com `data_hora` parseável (`app/chamados/reconciliador.py:364`, `app/chamados/reconciliador.py:405`, `app/chamados/services/materializacao.py:804`, `app/chamados/services/materializacao.py:970`).
-- Dedup só processa perguntas vivas; o C6 dá por morta imediatamente a P validada (`app/chamados/services/fio.py:931`, `app/chamados/services/fio.py:935`, `app/chamados/juizes.py:1136`).
-- Ressuscitação/descarimbo filtra pergunta já materializada e sem texto; a P hora em voo tem texto (`app/chamados/models.py:1434`, `app/chamados/models.py:1437`, `app/chamados/models.py:1504`, `app/chamados/services/materializacao.py:804`).
-- Re-lavra de via não está ligada ao sinal da batida; `_gravar_estado` re-lavra somente o veredito, não o trio (`app/ponto/signals.py:94`, `app/chamados/models.py:291`, `app/chamados/veredito_lavrado.py:227`).
-
-**Quem lê:**
-
-- `carimbar` fotografa o trio anterior e escreve pela porta única; C6 e juiz do lastro leem materialização/via; a lavra delega ao juiz do lastro (`app/chamados/models.py:2583`, `app/chamados/models.py:2586`, `app/chamados/juizes.py:1145`, `app/chamados/juizes.py:1171`, `app/chamados/juizes.py:1177`, `app/chamados/juizes.py:1207`, `app/chamados/juizes.py:647`, `app/chamados/juizes.py:673`, `app/chamados/veredito_lavrado.py:219`).
-- Os universos de S143, S144, irmãs sem consumo e reconciliador filtram `materializada_em`; o autor é preservado no snapshot e atribuído pela porta, sem participar desses predicados (`app/chamados/services/disputa_emissao.py:1574`, `app/chamados/services/disputa_emissao.py:1666`, `app/chamados/services/materializacao.py:1393`, `app/chamados/juizes.py:1748`, `app/chamados/reconciliador.py:619`, `app/chamados/models.py:2583`, `app/chamados/models.py:2559`).
-
-O limite estrutural merece constar: uma chamada nova de `_materializar_uma` com validação nula poderia entrar no universo do reconciliador, porque ele não consulta voo; os chamadores atuais evitam isso pelos filtros acima, e o próprio teste P3 declara esse limite (`app/chamados/reconciliador.py:620`, `app/chamados/services/materializacao.py:1132`, `app/chamados/tests/test_pep_reentrada.py:234`).
-
-## 06/11 10:33 · sessao d90ff57f7b2e · - · - · origem=Ronald (tmux)
-
-- **Item 2:** o patch de P1 entra no nome correto: o teste troca `chamados.models.resolver_perguntas_por_chamado_resolvido` em `app/chamados/tests/test_pep_reentrada.py:97`; o receiver faz import local desse mesmo nome e o chama em `app/chamados/signals.py:89` e `app/chamados/signals.py:92`; o reexport vem de `app/chamados/models.py:3281`. Não há outro ramo do próprio receiver que execute o resolver sem passar por esse alias (`app/chamados/signals.py:81`, `app/chamados/signals.py:88`).
-
-- **Limite de P1:** o espia comprova entrada no serviço durante o voo, mas não identifica qual chamador entrou nem comprova conclusão do serviço: só registra `pergunta_em_voo(p.pk)` antes de chamar o original (`app/chamados/tests/test_pep_reentrada.py:90`); o receiver engole exceções (`app/chamados/signals.py:93`). Há chamadas diretas pelo mesmo alias, também vistas pelo espia, em `app/chamados/reconciliador.py:508`, `app/chamados/reconciliador.py:536`, `app/chamados/reconciliador.py:1528`, `app/chamados/reconciliador.py:1631`, `app/chamados/services/becos.py:40` e `app/chamados/services/becos.py:49`. Quais efetivamente acontecem no fixture: `[nao verificado]`.
-
-- **Mutante sobrevivente de P1, no teste que o cura:** substituir o serviço por retorno `{'perguntas_resolvidas': 0, 'disputas_fechadas': 0}` preservaria a chamada observada em voo e deixaria o materializador produzir seu carimbo único; o método exige apenas ocorrência de `True`, destino fechado, batida presente e uma gravação com `VIA_DECLARACAO` (`app/chamados/tests/test_pep_reentrada.py:99`, `app/chamados/tests/test_pep_reentrada.py:101`, `app/chamados/tests/test_pep_reentrada.py:103`, `app/chamados/tests/test_pep_reentrada.py:105`; carimbo do materializador em `app/chamados/services/materializacao.py:1251`). Resultado executado do mutante: `[nao verificado]`.
-
-- **Item 3:** P3 continua atingindo o mesmo laço-alvo, mas **não pelo mesmo ingresso em `_cands`**: antes P apontava para `destino`; agora remove a FK em `app/chamados/tests/test_pep_reentrada.py:250`. Como a irmã também nasce sem destino (`app/chamados/tests/test_pep_reentrada.py:244`), o filtro `chamado_destino=chamado` fica sem essas perguntas (`app/chamados/services/disputa_emissao.py:1572`). A disputa entra pela busca de todas as abertas do colaborador (`app/chamados/services/disputa_emissao.py:1653`), enquanto antes também entrava pelo conjunto derivado de `perguntas` (`app/chamados/services/disputa_emissao.py:1652`). Pai resolvido e validações nulas satisfazem os filtros do laço (`app/chamados/tests/test_pep_reentrada.py:246`, `app/chamados/tests/test_pep_reentrada.py:251`; filtros em `app/chamados/services/disputa_emissao.py:1659`, `app/chamados/services/disputa_emissao.py:1665`).
-
-- **P3 mata o mutante original:** trocar a guarda por `if q.chamado_destino_id: continue` deixaria ambas passarem, inclusive P em voo, contrariando a exigência de P sem carimbo (`app/chamados/tests/test_pep_reentrada.py:250`, `app/chamados/tests/test_pep_reentrada.py:259`; ponto de mutação em `app/chamados/services/disputa_emissao.py:1671`). Execução: `[nao verificado]`.
-
-- **Mutante sobrevivente de P3:** `if pergunta_em_voo(q.pk) or q.chamado_destino_id: continue` mantém o teste verde porque ambas estão sem destino, mas passa a pular indevidamente irmãs fora de voo com destino morto; esse universo é aceito pelo laço de produção, que só exclui a disputa quando existe destino **vivo** (`app/chamados/services/disputa_emissao.py:1662`, `app/chamados/services/disputa_emissao.py:1671`; fixture em `app/chamados/tests/test_pep_reentrada.py:244`, `app/chamados/tests/test_pep_reentrada.py:250`). Execução: `[nao verificado]`.
-
-- **Realismo de P3:** o limite de C6 mockado está agora declarado explicitamente (`app/chamados/tests/test_pep_reentrada.py:238`); a modificação adicional perde cobertura do ingresso por pergunta com destino, mas não impede atingir a guarda do laço sem credor (`app/chamados/services/disputa_emissao.py:1653`, `app/chamados/services/disputa_emissao.py:1671`). O caso continua sintético: remove carimbos de resposta/validação mantendo o texto e declara voo manualmente (`app/chamados/tests/test_pep_reentrada.py:245`, `app/chamados/tests/test_pep_reentrada.py:246`, `app/chamados/tests/test_pep_reentrada.py:254`); portanto sua evidência é da guarda, não da cadeia real de materialização (`app/chamados/tests/test_pep_reentrada.py:239`).
-
-_2224 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2226 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
