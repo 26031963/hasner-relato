@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/11/2026 22:50:27.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (35.5 MB). Acoes na janela: **1224**.
+**Medido em 05/11/2026 22:55:58.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (35.5 MB). Acoes na janela: **1225**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:53:09 | Bash | Keep ESPERANDO pointing at a live producer | `cd /home/ronald/saas-hasner; ps -p 1875981 >/dev/null && echo vivo \|\| { p=$(bin/trava_teste.sh --quem \| sed -n 's/^[a-z-]*:\([0-9]*\).*/\1/p'); echo novo=$p; [ -n "$p" ] && sed -i "2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=$p#" app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md; }` |
 | 22:44:21 | Bash | Repoint ESPERANDO to current lock holder | `cd /home/ronald/saas-hasner; p=$(bin/trava_teste.sh --quem \| sed -n 's/^suite:\([0-9]*\).*/\1/p'); echo $p; sed -i "2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=$p#" app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md` |
 | 22:44:12 | Bash | Find current producers and F-346 status | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; ps -eo pid,etime,cmd \| grep -E "trava_teste.sh\|codex_pergunta" \| grep -v grep \| cut -c1-160; tail -c 3000 /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/a01734f43a70aeecc.output \| grep -o '"text":"[^"]*' \| tail -2 \| cut -c1-400` |
 | 22:44:07 | Bash | Read stop hook log reason | `cd /home/ronald/saas-hasner; tail -4 logs/hook_stop_fila1.log \| cut -c1-300; ps -p 1713186 -o pid,cmd \| cut -c1-80` |
