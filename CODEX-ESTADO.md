@@ -1,7 +1,82 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 02:07** · publicado em **06/11/2026 02:08** (UTC-3)
+> Ultima resposta processada: **06/11/2026 02:13** · publicado em **06/11/2026 02:14** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 02:13 · sessao ef5279bc9e8c · H12H06-B · censo · origem=Code
+
+Nas referências aos anexos, conto as linhas do conteúdo colado, começando em 1 e incluindo linhas vazias.
+
+1. **BLOQUEANTE 1 — (b), com ressalva: visto e adiado para medição; não houve descarte técnico documentado.** O alcance sobre exportadas foi apontado pelo Codex. A triagem deixou o problema sem tratamento nesta obra e encaminhou a medição à sessão. (`codex_v1.r:5`; `codex_v2.q:7`)
+
+   **Pergunta literal:**
+   > “O complemento move dinheiro em quem? (classes de ausencia/tipo com minutos>=480 ou range com minutos), e quais leitores de  
+   > tela/PDF mudam de numero.” (`codex_v1.q:23-24`)
+
+   **Resposta literal:**
+   > “A cerca do comando não protege esse caminho do complemento.” (`codex_v1.r:5`)
+
+   **Motivo registrado na triagem:**
+   > “#2 recalculo de exportada pelo complemento: nao curado nesta obra; vai como pergunta a sessao (medir na frota exportada).” (`codex_v2.q:7`)
+
+   A quantificação efetiva do DIFF pertence a **(c), dado de produção**. O Codex delimitou isso expressamente:
+   > “Pessoas e valores efetivamente alterados em produção: **[não verificado]**.” (`codex_v1.r:49`)
+
+   Portanto, o risco foi visto; a exigência específica de DIFF com filtro e sentido não aparece formulada na resposta. (`codex_v1.r:5`; `codex_v1.r:49`; `opus_final_4e9380e5.md:2`)
+
+2. **BLOQUEANTE 2 — (a): não apontado, com o tema presente na pergunta.** A pergunta cobrava efeitos da edição que escapassem à conferência local; a resposta enumerou efeitos externos, mas não apontou a falta de invalidação do fechamento. (`codex_v1.q:14-16`; `codex_v1.r:39-41`)
+
+   **Pergunta literal:**
+   > “Ha efeitos colaterais do editar_ausencia_registro + Ausencia.save (signals, rejulgar, cartorio,  
+   > prazo_documento, aprovada_em) que a conferencia "so minutos mudou" nao pega, ou que pegaria e desfaria indevidamente?” (`codex_v1.q:15-16`)
+
+   **Resposta literal:**
+   > “A comparação não alcança efeitos em `CelulaDia`, eventos, chamados ou perguntas.” (`codex_v1.r:41`)
+
+   A cópia permite conferir a omissão: `editar_ausencia_registro` salva e retorna sem chamar `invalidar_fechamento`; a chamada aparece em `decidir`. (`app/ponto/services/ausencia.py:508-515`; `app/ponto/services/ausencia.py:925-932`)
+
+3. **NÃO BLOQUEANTE — comentário desatualizado: (e), NÃO PERGUNTADO.** As perguntas fornecidas não cobram atualização de comentários; as respostas não registram esse comentário como achado. Não há trecho literal específico de pergunta ou resposta para reproduzir. (`codex_v1.q:10-28`; `codex_v2.q:17-24`; `codex_v3.q:14-20`; `codex_v4.q:13-19`; `codex_v1.r:1-53`; demais respostas fornecidas)
+
+   O comentário citado pelo opus existe na cópia:
+   > “somam `minutos` de `TIPOS_PAGOS` aprovados” (`app/ponto/services/ausencia.py:920`)
+
+   Atribuir à triagem um descarte desse comentário seria **[não verificado]**.
+
+4. **NÃO BLOQUEANTE — predicado composto repetido: (a), pelo tema amplo perguntado.** A pergunta cobrou duplicação de juiz e derivação paralela. A resposta verificou a chamada ao juiz existente, sem registrar como achado a repetição da combinação com `TIPOS_PAGOS`. (`codex_v1.q:25-26`; `codex_v1.r:51`; `opus_final_4e9380e5.md:7`)
+
+   **Pergunta literal:**
+   > “2o juiz que duplica juiz registrado” (`codex_v1.q:25`)
+   >
+   > “derivacao paralela de fonte unica” (`codex_v1.q:26`)
+
+   **Resposta literal:**
+   > “não encontrei juiz novo nos três leitores migrados: todos chamam `cobre_parte_do_dia`” (`codex_v1.r:51`)
+
+   A pergunta não nomeou expressamente a repetição do **predicado composto**; a classe (a) decorre da abrangência do tema cobrado. (`codex_v1.q:25-26`)
+
+5. **NÃO BLOQUEANTE — teste não afirma o resultado em FechamentoMensal: VISTO, mas sem descarte documentado.** Aqui a classificação oferecida não fecha: não cabe (a), pois o Codex descreveu precisamente a limitação; para afirmar (b), falta o registro do descarte e seu motivo. (`codex_v1.r:53`; `triagem_v4.md:2-6`) [nao verificado]
+
+   **Pergunta literal:**
+   > “selo/RED sem mordida (mock que nao morde, teste vacuo)” (`codex_v1.q:26`) [nao verificado]
+
+   **Resposta literal:**
+   > “Porém ele verifica a alimentação `datas_justificadas`, não os valores financeiros persistidos ou o PDF.” (`codex_v1.r:53`)
+
+   **Motivo de eventual descarte pela triagem: [não verificado].** Classificá-lo como “Codex não viu” ou “NENHUM viu” contrariaria esse trecho explícito. (`codex_v1.r:53`)
+
+## 06/11 02:12 · sessao 08d6671f0bc7 · - · - · origem=Ronald (tmux)
+
+1. **BLOQUEANTE 1: visto; encaminhado à medição.** Aproxima-se de **(b)**, mas “descarte” não está documentado: foi mantido aberto. `codex_v1.q`, pergunta 6: “O complemento move dinheiro em quem? [...] e quais leitores de tela/PDF mudam de numero.” `codex_v1.r`, achado 2: “o complemento pode mudar exportada por recálculo genérico.” `codex_v2.q`, triagem: “#2 recalculo de exportada pelo complemento: nao curado nesta obra; vai como pergunta a sessao (medir na frota exportada).” A medição efetiva do DIFF é **(c)**; resultado não fornecido. Linhas dos anexos: [não verificado].
+
+2. **BLOQUEANTE 2: (a).** Tema presente em `codex_v1.q`, pergunta 2: “Ha efeitos colaterais do editar_ausencia_registro + Ausencia.save [...] que a conferencia ‘so minutos mudou’ nao pega”. O próprio texto do commit anexado diz “FechamentoMensal fica stale ate recalculo”. A resposta percorre efeitos, mas não aponta ausência de invalidação: “A comparação não alcança efeitos em `CelulaDia`, eventos, chamados ou perguntas.” (`codex_v1.r`). Linhas dos anexos: [não verificado]. [nao verificado]
+
+3. **NB comentário: (e).** Nenhuma pergunta fornecida cobra comentário desatualizado ou sincronização da documentação de `ausencia.py:920-921`. Não existe trecho positivo de `.q` ou `.r` para esse achado; ausência constatada nos anexos, linhas [não verificado].
+
+4. **NB predicado composto: (a), pelo tema amplo; fronteira com (e).** `codex_v1.q`, pergunta 7: “2o juiz que duplica juiz registrado; [...] derivacao paralela de fonte unica”. `codex_v1.r`: “não encontrei juiz novo nos três leitores migrados: todos chamam `cobre_parte_do_dia`”. A resposta conferiu o componente chamado, sem registrar a repetição da combinação. A pergunta não nomeia explicitamente duplicação do predicado composto; se exigir literalidade estrita do objeto, seria (e). Linhas dos anexos: [não verificado].
+
+5. **NB teste FechamentoMensal: visto, sem destino documentado — taxonomia incompleta.** `codex_v1.q`, pergunta 7: “selo/RED sem mordida (mock que nao morde, teste vacuo)”. `codex_v1.r`: “Porém ele verifica a alimentação `datas_justificadas`, não os valores financeiros persistidos ou o PDF.” Isso impede (a), (d) e (e); a triagem fornecida não registra descarte nem motivo, portanto **(b) não está comprovada**. Linhas dos anexos e motivo do eventual descarte: [não verificado]. [nao verificado]
+
+Não classificaria nenhum dos cinco como **(d)**: há achados vistos pelo Codex e omissões de pergunta; “nenhum viu” também seria incompatível com o próprio achado do opus. [não verificado]
 
 ## 06/11 02:07 · sessao 657abac16215 · H12H06-B · sonda · origem=Code
 
@@ -582,51 +657,4 @@ Há selos de igualdade **PDF=tela, grade=tela e API=espelho**. Eles podem acompa
 
 Execução do GREEN de 367 testes, mordida dos mutantes M7–M10 e ocorrência desses caminhos em produção: **[nao verificado]**. [nao verificado]
 
-## 06/11 01:00 · sessao 6672b0f6106e · - · - · origem=Ronald (tmux)
-
-- **Alta — contesto descarte #6: transação curta não elimina corrida com exportação.** O command trava apenas `Ausencia` e consulta a cerca antes do escritor (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:134-159`). A cerca faz leitura comum de `ExportacaoDominio`, sem trava compartilhada (`app/chamados/services/vigia_fio.py:838-843`; `app/folha/export.py:580-586`). A exportação calcula primeiro e registra o TXT depois (`app/folha/views.py:207-212`, `:268`, `:297-300`; `app/folha/models.py:178-187`). Contraexemplo: cerca responde aberta → exportador registra TXT calculado antes da correção → command salva e confirma a ausência. Que 11/12/01 estejam abertas em produção é **[nao verificado]** pelo dado fornecido.
-
-- **Alta, se “PAREI” exige interrupção do lote — #1 continua sem parada no código.** Reverter falta para 720 é recusado pela porta quando o tipo não aceita parcial (`app/ponto/services/ausencia.py:480-484`). A recusa vira resultado `recusada` (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:160-161`, `:178-179`), mas o laço continua e chega ao resumo sem erro (`:234-250`). Há atestados depois das faltas na LISTA (`:67-80`). A obrigação de o operador parar fora do command é **[nao verificado]** no código.
-
-- **Alta — #5 fecha o dry; apply continua podendo emitir push de ato desfeito.** O dry retorna antes do escritor (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:152-159`). No apply, `editar_ausencia_registro` chama `save` (`app/ponto/services/ausencia.py:507-508`), cujo `post_save` julga sincronicamente (`app/ponto/signals.py:143-147`, `:92-93`). O cartório pode emitir chamado (`app/ponto/services/cartorio.py:1725-1742`, `:1777-1780`), e o emissor chama push diretamente (`app/ponto/management/commands/detectar_ausencias.py:774-783`; `app/chamados/push_utils.py:110-111`, `:40-48`). Só depois o command confere campos, minutos e trilha, podendo desfazer a linha (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:162-176`). Push efetivamente enviado nessa frota: **[nao verificado]**.
-
-- **Alta — #2 permanece global, além da LISTA/competência do one-shot.** Os leitores corrigidos percorrem quaisquer ausências do período (`app/ponto/services/efeito_ausencia.py:47-60`; `app/ponto/services/credito_parcial.py:26-28`; `app/ponto/services/fechamento.py:674-690`). Recalcular exportada só gera aviso, sem recusa (`app/ponto/services/fechamento.py:530-538`), e eventos chamam esse recalculador (`:1793-1794`). Gerar TXT também calcula em leitura e usa seus valores (`app/folha/views.py:207-212`, `:268`). Assim, a nova semântica alcança nova exportação mesmo sem executar o command; impacto quantitativo na frota exportada: **[nao verificado]**.
-
-- **#4 curado para a escrita da trilha no banco.** `evento` usa savepoint próprio, devolve o registro criado ou `None` (`app/core/observ.py:133-139`); o command transforma `None` em exceção que sai do `atomic` antes de ser capturada (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:134`, `:170-179`). Isso não resolve o efeito externo de push descrito acima, que antecede essa conferência (`app/ponto/services/ausencia.py:508`; `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:170-176`).
-
-- **Ordem de trava: não confirmei ciclo inverso.** Existe aquisição posterior de trava em `Colaborador` se o cartório entrar na emissão: command trava `Ausencia` (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:135-136`), emissor chama `ChamadoColaborador.abrir` (`app/ponto/management/commands/detectar_ausencias.py:693-713`), que trava `Colaborador` (`app/chamados/models.py:863-866`). Deadlock demonstrável com caminho inverso: **[nao verificado]**.
-
-## 06/11 00:59 · sessao a58f67d401d6 · - · - · origem=Ronald (tmux)
-
-Não encontrei contraexemplo ativo para a cura de `rotulo_de`: o ramo novo só consulta cobertura quando há `ABONADO` com minutos; preserva desconto/rejeição e remove horas do abono integral segundo o juiz existente. (`app/ponto/services/dia_decidido.py:492`, `app/ponto/turnos.py:2598`)
-
-Mapa de leitura:
-
-- `rotulo_de` é chamado por `do_dia`, com `cobertura`, e por `cartao_do_dia`, com a ausência. (`app/ponto/services/dia_decidido.py:429`, `app/ponto/services/dia_decidido.py:519`)
-- `do_dia` recebe cobertura em `espelho.aplicar_palavra_do_dia` e no calendário. (`app/ponto/services/espelho.py:340`, `app/colaboradores/services/calendario.py:715`)
-- O espelho transporta `_cobertura_folha`; o calendário carrega cobertura pela autoridade `cobertura_ausencia_periodo`. (`app/ponto/services/espelho.py:872`, `app/colaboradores/services/calendario.py:533`)
-- `cartao_do_dia` também alimenta decisões por dia e histórico completo. (`app/ponto/services/dia_decidido.py:561`, `app/ponto/services/dia_decidido.py:599`)
-
-Objetos sem `data`/`data_fim`:
-
-- `_Falsa` continua sem datas e chama `rotulo_de`/`cartao_do_dia`. Seus casos abonados usam minutos zero; os casos com minutos positivos são desconto ou rejeição, portanto não atingem a leitura nova de datas. Não constitui regressão executável nesses casos. (`app/ponto/tests/test_rotulo_do_dia_decidido.py:33`, `app/ponto/tests/test_rotulo_do_dia_decidido.py:47`, `app/ponto/tests/test_rotulo_do_dia_decidido.py:61`, `app/ponto/tests/test_rotulo_do_dia_decidido.py:73`, `app/ponto/tests/test_rotulo_do_dia_decidido.py:92`)
-- `_Aus`, usado como cobertura parcial em `do_dia`, ganhou as datas no delta. (`app/ponto/tests/test_palavra_parcial_e_pendente.py:40`, `app/ponto/tests/test_palavra_parcial_e_pendente.py:92`)
-- Um futuro stand-in abonado, parcial e com minutos positivos precisará de datas: o juiz acessa diretamente `a.data_fim`/`a.data`. Não encontrei esse chamador quebrado na cópia. (`app/ponto/services/dia_decidido.py:494`, `app/ponto/turnos.py:2599`)
-
-Universo atingido:
-
-- Calendário: palavra montada por `do_dia`, exposta no título do chip e no texto da célula. (`app/colaboradores/services/calendario.py:715`, `app/templates/colaboradores/partials/_calendario_grade.html:97`, `app/templates/colaboradores/partials/_calendario_grade.html:98`)
-- Espelho: palavra atribuída ao dicionário do dia. (`app/ponto/services/espelho.py:344`)
-- PDF do espelho: imprime `palavra_dia` na observação. (`app/relatorios/pdf_espelho.py:923`)
-- API do app: copia a palavra do espelho e a devolve nas linhas. (`app/api/views.py:1402`, `app/api/views.py:1550`, `app/api/views.py:1610`)
-- Histórico do drawer: recebe `cartao_do_dia` e imprime `h.rotulo`. (`app/ponto/services/dia_decidido.py:599`, `app/templates/ponto/partials/painel_ausencia.html:184`)
-- Relatório em lote e CSV: reaproveitam `linha_do_tempo`; CSV inclui `rotulo`. (`app/ponto/services/atestados_lote.py:57`, `app/ponto/services/atestados_lote.py:128`)
-
-Selos que copiam a palavra:
-
-- Igualdade PDF/tela, grade/tela e API/espelho: conferem a mesma palavra nos consumidores. (`app/relatorios/tests/test_palavra_do_dia.py:213`, `app/relatorios/tests/test_palavra_do_dia.py:234`, `app/api/tests/test_o21_app_diz_o_que_foi_decidido.py:170`)
-- Os novos testes exercitam diretamente `rotulo_de` nos casos 720, range com minutos e parcial verdadeira; os selos de igualdade acima usam outros casos, portanto não demonstram especificamente o percurso integral desses três novos exemplos. (`app/ponto/tests/test_h12h06b_parcial_pelo_juiz.py:157`, `app/ponto/tests/test_h12h06b_parcial_pelo_juiz.py:163`, `app/ponto/tests/test_h12h06b_parcial_pelo_juiz.py:168`, `app/relatorios/tests/test_palavra_do_dia.py:212`, `app/relatorios/tests/test_palavra_do_dia.py:233`)
-
-Nenhum achado bloqueador novo de rótulo identificado por inspeção; execução dos testes e comportamento efetivo em produção: [nao verificado]. [nao verificado]
-
-_2073 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2075 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
