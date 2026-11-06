@@ -1,7 +1,70 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 17:59** · publicado em **06/11/2026 17:59** (UTC-3)
+> Ultima resposta processada: **06/11/2026 17:59** · publicado em **06/11/2026 18:04** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 17:59 · sessao 837afbd0fb35 · E-SEM-VIVA-B · verificador · origem=Code
+
+**As curas de produção estão corretas para os alvos apontados; a certificação continua parcial.** O filtro exige `furo_espelho`, o positivo corrente cobre a competência antes ausente e o corpo da C5 continua lendo a lavra, sem consultar demissão, admissão ou retentor. `app/escala/services/cadastro_realidade.py:179`, `app/escala/services/cadastro_realidade.py:185`, `app/escala/services/cadastro_realidade.py:189`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:217`.
+
+Execução da suíte Django, sobrevivência dos mutantes à suíte integral e ocorrência dos cenários em produção: **[nao verificado]**. [nao verificado]
+
+1. **MÉDIA — falta uma prova da fronteira inferior, inclusive para “ativo nunca-bateu igual”.**
+
+   O mutante plausível que remove `data__gte=janelas[0][0]` deixa passar dias anteriores à janela. Por inspeção, os testes novos não o distinguem: suas células começam depois dessa fronteira, inclusive no corte 10. O teste do vigia com `hoje=01/09` continua excluindo 01/10 pelo limite **superior**. `app/escala/services/cadastro_realidade.py:176`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:33`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:250`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:264`, `app/folha/tests/test_vigia_retido_calado.py:133`.
+
+   **Como provar:** ativo, corte 21, `hoje=25/10`, células `nunca_bateu` em 20/09 e 21/09; exigir somente 21/09. Remover o filtro inclui ambas; trocar `gte` por `gt` exclui ambas. Esse cenário distingue duas regressões na regra dos ativos. `app/ponto/janelas.py:10`, `app/ponto/janelas.py:66`, `app/escala/services/cadastro_realidade.py:175`.
+
+2. **BAIXA — a cura do selo ORM é correta, mas não completa.**
+
+   O detector agora encontra `filter(data_demissao__isnull=False)`. Ainda ignora `filter(**{'data_demissao__isnull': False})`, porque a expansão tem `k.arg=None`, descartado pelo próprio filtro do AST. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:327`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:357`.
+
+   **Como provar:** inserir essa expansão na consulta de desligados e executar `_veredito`: o campo fica fora de `campos`, satisfazendo indevidamente o selo. A sonda AST em memória confirmou isso; não significa sobrevivência comportamental, pois o novo teste de cadastro torto combate essa alteração específica. `app/escala/services/cadastro_realidade.py:179`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:227`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:335`.
+
+   A chamada descartada à porta também continua suficiente para a exigência positiva do AST. Os testes de ausência de retrato e divergência lavra/vivo combatem a recomposição simples, mas o selo não certifica fluxo de dados. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:154`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:160`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:317`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:332`.
+
+3. **BAIXA — descarte 1 defensável como CADASTRO; documentação ainda contraditória.**
+
+   Com fechamento preexistente, retirar `data_demissao` não impede a nova lavra: `_K2` lê os fechamentos existentes, rescisão responde falso para data nula e o retentor não recorta o fim. A C5 acompanha essa resposta. O teste novo reproduz corretamente o histórico e exige igualdade com a autoridade. Isso sustenta retirar o caso da correção local da C5, sem criar predicado paralelo. `app/folha/export.py:775`, `app/folha/export.py:60`, `app/folha/export.py:1200`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:227`, `app/escala/services/cadastro_realidade.py:189`.
+
+   Entretanto, “sem `data_demissao` = fora” permanece escrito antes da ressalva sobre fechamento antigo. O primeiro enunciado precisa da condição de ausência de fechamento preexistente. `app/escala/services/cadastro_realidade.py:148`, `app/escala/services/cadastro_realidade.py:151`.
+
+   **Como provar:** `_fechar()`, apagar a demissão, `_lavrar()`, consultar C5 — exatamente o histórico agora exercitado pelo teste. Uma obrigação adicional de excluir data nula pelo aval literal fornecido é **[nao verificado]**; o código atual não faz essa exclusão. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:228`, `app/escala/services/cadastro_realidade.py:179`.
+
+4. **MÉDIA — descarte 3 sustenta a separação de escopo, mas a perda de competência permanece.**
+
+   O vigia declara unidade **pessoa** e transforma C5 em conjunto de IDs. Portanto, a triagem pode tratar isso como granularidade preexistente; não pode concluir que o roteamento respeita a competência de cada linha. `app/folha/vigia_retido_calado.py:12`, `app/folha/vigia_retido_calado.py:43`, `app/folha/vigia_retido_calado.py:48`.
+
+   **Como provar:** hoje 25/10, corte 21, desligado com demissão 25/11, fechamentos 10 e 11, `nunca_bateu` em 05/10 e vínculo cobrindo 21–24/10 sem células. A anterior pode ser retida pelo `nunca_bateu`; a corrente, por `sem_celula`, sem porta e com fio `ninguem`. C5 contém somente 05/10, mas o vigia roteia ambas as linhas pelo mesmo ID. O aval por dias/competência não fica demonstrado por esse contador. `app/folha/export.py:1231`, `app/folha/export.py:1233`, `app/folha/fora_da_folha.py:67`, `app/folha/fora_da_folha.py:86`, `app/folha/retrato_folha.py:1186`, `app/escala/services/cadastro_realidade.py:175`, `app/folha/vigia_retido_calado.py:48`.
+
+5. **MÉDIA — descarte 4 correto para empresa sem lavra na tela; insuficiente para retrato histórico no vigia.**
+
+   A tela e o lavrador usam `empresas_visiveis`, sustentando o descarte no caminho apresentado. Mas “sem lavra não tem folha” não vale para a autoridade viva: `_K2` consulta fechamentos diretamente. `app/escala/views.py:487`, `app/folha/management/commands/lavrar_retrato_folha.py:49`, `app/folha/export.py:775`.
+
+   **Como provar o caminho residual:** lavrar uma empresa visível com C5 positiva e depois alterar somente `Empresa.ativa=False`. O lavrador deixa de atualizá-la; `censo([id])` ainda lê seu retrato histórico, C5 ainda aceita empresa/retrato e o vigia pode declarar `roteados`. A tela já exclui essa empresa. Logo, pode haver “roteado para a lista” sem presença na lista acessível. `app/colaboradores/queries.py:85`, `app/folha/management/commands/lavrar_retrato_folha.py:49`, `app/folha/vigia_retido_calado.py:35`, `app/folha/vigia_retido_calado.py:38`, `app/escala/services/cadastro_realidade.py:171`, `app/escala/services/cadastro_realidade.py:185`, `app/folha/vigia_retido_calado.py:48`, `app/escala/views.py:487`.
+
+6. **SEM DEFEITO NOVO IDENTIFICADO — filtro de motivo e sua origem.**
+
+   O caminho normal atual sustenta a cura: somente IDs classificados como `furo_espelho` alimentam os dias de `dias_que_seguram`; férias terminam em outro ramo e fornecem outra lista. Não identifiquei, nesse caminho, outro motivo com datas dessa fonte nem furo com datas de férias. `app/folha/fora_da_folha.py:128`, `app/folha/fora_da_folha.py:137`, `app/folha/export.py:876`, `app/folha/retrato_folha.py:1171`, `app/folha/retrato_folha.py:1175`.
+
+   | Quem escreve/lê | Caminho |
+   |---|---|
+   | Decide `motivo='furo_espelho'` | `classificar_export`. `app/folha/export.py:962`. |
+   | Produz suas datas | Retentor → `dias_que_seguram` → conversão ISO em `fora_da_folha`. `app/folha/fora_da_folha.py:98`, `app/folha/fora_da_folha.py:137`, `app/folha/fora_da_folha.py:192`. |
+   | Monta e persiste o JSON | `montar_linhas` copia motivo/datas; command grava. `app/folha/retrato_folha.py:1181`, `app/folha/retrato_folha.py:1183`, `app/folha/management/commands/lavrar_retrato_folha.py:74`. |
+   | Compara literalmente furo no retrato | Nova C5; derivações de fio e tipo. `app/escala/services/cadastro_realidade.py:189`, `app/folha/retrato_folha.py:366`, `app/folha/retrato_folha.py:380`. |
+   | Outros leitores de motivo | Balde, saldo, ação/drawer, apresentação e recorte temporal. `app/folha/retrato_folha.py:93`, `app/folha/retrato_folha.py:501`, `app/folha/retrato_folha.py:1062`, `app/folha/views_retrato.py:285`, `app/folha/retrato_folha.py:1240`. |
+   | Vigia | Lê indiretamente pelo balde e fio. `app/folha/vigia_retido_calado.py:46`, `app/folha/vigia_retido_calado.py:47`. |
+
+   Essa garantia não certifica qualquer JSON histórico: o modelo prevê retratos sem `datas` e declara `linhas` como JSON sem esquema de conteúdo. Conteúdo divergente em produção: **[nao verificado]**. `app/folha/models.py:332`, `app/folha/models.py:348`.
+
+7. **SEM RELÓGIO SOLTO IDENTIFICADO nos testes novos/alterados; curas específicas com mordida adequada.** [nao verificado]
+
+   Os comportamentais estão congelados por classe; os testes AST analisam texto. O positivo corrente distingue `janelas[:1]`, e o negativo de férias distingue a retirada do filtro de motivo. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:90`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:243`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:256`, `app/folha/tests/test_vigia_retido_calado.py:69`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:217`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:210`.
+
+   O teste do command prova repasse de `hoje`, mas não unicidade da leitura do relógio: uma segunda chamada a `localdate()` não violaria suas asserções. O command atual contém uma leitura. `app/folha/tests/test_vigia_retido_calado.py:140`, `app/folha/tests/test_vigia_retido_calado.py:143`, `app/folha/management/commands/vigiar_retido_calado.py:31`.
+
+   Não identifiquei push novo nos trechos alterados: C5 monta retorno/link; vigia conta; command imprime/alarma. `app/escala/services/cadastro_realidade.py:201`, `app/escala/services/cadastro_realidade.py:657`, `app/folha/vigia_retido_calado.py:44`, `app/folha/management/commands/vigiar_retido_calado.py:31`.
 
 ## 06/11 17:59 · sessao a3b5c798fdcd · PAUTA-08 · verificador · origem=Code
 
@@ -891,73 +954,4 @@ A análise abaixo usa a cópia e reproduções em memória, sem criar arquivos. 
 
    `r9-prosa-nao-carrega` não é vácuo: contém loaders completos em docstring e comentário shell; remover os respectivos filtros faz suas asserções falharem. O real histórico pode ser silenciosamente pulado pelo `if git cat-file`; sua execução nesta cópia é **[não verificado]**. (`bin/tests/test_quem_chama.sh:267–273`, `bin/tests/test_quem_chama.sh:509–510`, `bin/tests/test_quem_chama.sh:561–566`, `bin/quem_chama.py:585`, `bin/quem_chama.py:856`)
 
-## 06/11 17:30 · sessao 80fbe5c760f5 · - · - · origem=Ronald (tmux)
-
-Achados e limites, somente pelo código:
-
-1. **Média — o vigia pode baixar `calados` de outras competências/dias.** `censo` descarta as datas de C5 e guarda apenas IDs (`app/folha/vigia_retido_calado.py:43`); depois marca como roteada toda linha bloqueada com fio `ninguem` desse ID (`app/folha/vigia_retido_calado.py:46`–`49`). Prova: dois retratos lavrados no mesmo dia, um da competência 10 com um dia `nunca_bateu` autorizado, outro da 09 ou 11 com outra retenção sem aquele dia; o colaborador entra em C5 pela primeira, e ambas as linhas entram em `roteados`. A seleção dos retratos inclui todos da data da última lavra (`app/folha/vigia_retido_calado.py:38`–`41`). Isso já existia para ativos, mas os novos desligados ampliam seu alcance. Existência em produção: [nao verificado].
-
-2. **Média — a promessa “nenhum campo que o juiz lê é lido aqui” é falsa.** C5 consulta `situacao='desligado'` (`app/escala/services/cadastro_realidade.py:177`–`178`), campo também lido pelo universo da autoridade (`app/ponto/services/fechamento.py:430`–`432`). O comentário promete independência do estado atual (`app/escala/services/cadastro_realidade.py:150`–`152`). Contraexemplo: reativação altera `situacao` para ativo e limpa demissão (`app/colaboradores/services/desligamento.py:203`–`214`); os mesmos dias deixam de passar pela lavra e entram integralmente, porque o filtro de datas só se aplica a IDs do conjunto `segura` (`app/escala/services/cadastro_realidade.py:187`–`190`). Isso preserva a regra antiga dos ativos; refuta a alegação de que a C5 inteira responde exclusivamente pela lavra. Ocorrência em produção: [nao verificado].
-
-3. **Baixa — relógio ainda pode ser lido no interior da função.** O command agora passa `hoje` (`app/folha/management/commands/vigiar_retido_calado.py:30`–`31`), mas `censo(empresas, hoje=None)` continua permitindo omissão (`app/folha/vigia_retido_calado.py:27`) e encaminha `None` (`app/folha/vigia_retido_calado.py:43`), acionando `timezone.localdate()` em C5 (`app/escala/services/cadastro_realidade.py:167`). O caminho do command está corrigido; não é um contrato obrigatório na assinatura.
-
-4. **Byte igual ao base: [nao verificado].** A cópia não tem repositório Git disponível. Pela expressão fornecida no diff, ativos continuam passando pelos mesmos filtros de empresa, `nunca_bateu`, intervalo e ordenação, sem filtro de lavra (`app/escala/services/cadastro_realidade.py:169`–`190`). Isso sustenta equivalência da regra em estado estável, não uma comparação integral com `24946096`.
-
-5. **Emissão do cartório:** C5 só consulta e monta dicionários (`app/escala/services/cadastro_realidade.py:173`–`190`); o vigia só consulta e conta (`app/folha/vigia_retido_calado.py:33`–`57`); o command imprime e eventualmente retorna erro (`app/folha/management/commands/vigiar_retido_calado.py:31`–`40`). Nenhum desses caminhos chama emissor. O portão de furo continua excluindo desligado (`app/ponto/services/cartorio.py:1696`–`1697`), assim como a parcial (`app/ponto/services/cartorio.py:1762`). O ramo nunca-bateu lavra pela porta (`app/ponto/services/cartorio.py:1241`–`1247`) e retorna antes do fluxo normal conforme estrutura/comentário (`app/ponto/services/cartorio.py:1248`–`1254`). Comparação integral do cartório com o base: [nao verificado].
-
-Mapa dos escritores:
-
-- `CelulaDia.veredito` é campo do modelo (`app/escala/models.py:1770`); método do modelo delega à porta (`app/escala/models.py:1819`–`1828`); gravação do valor ocorre em `app/ponto/portas/celula.py:814`, persistida em `:818`–`819`. Chamadores de produção encontrados: cartório `app/ponto/services/cartorio.py:889`, `:1242`, `:1802`; decisão administrativa `app/ponto/services/veredito_celula.py:330`. Há escrita em cópia apenas em memória na própria porta (`app/ponto/portas/celula.py:711`–`726`).
-- `Colaborador.situacao` tem default ativo (`app/colaboradores/models.py:323`); porta declara a operação (`app/colaboradores/services/colaborador.py:32`), atribui/salva (`:55`–`61`), salva objeto completo (`:73`–`76`), atualiza lote (`:80`–`88`) e cria (`:91`–`93`). Decisores encontrados: desligamento `app/colaboradores/services/desligamento.py:104`–`108`; reativação `:210`–`214`; afastamento `app/ponto/views.py:2433`–`2435`; reversão `app/ponto/management/commands/reverter_situacao_afastado.py:67`–`73`; admissão ativa `app/colaboradores/views.py:1205`, `:2610`. C5 não adiciona escrita desses campos (`app/escala/services/cadastro_realidade.py:173`–`190`).
-
-Mapa completo das chamadas encontradas do retorno C5:
-
-- `colabs_nunca_bateu` → formatador `_nunca_bateu` (`app/escala/services/cadastro_realidade.py:197`) e vigia (`app/folha/vigia_retido_calado.py:43`).
-- `_nunca_bateu` → `lista` (`app/escala/services/cadastro_realidade.py:829`).
-- `lista` → tela (`app/escala/views.py:487`), PDF (`:489`), render (`:492`); command C7 (`app/escala/management/commands/fechar_avisos_regua_na_lista.py:27`, filtro C7 em `:32`); command C8 (`app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:35`, filtro C8 em `:40`); vigia do fio (`app/chamados/services/vigia_fio.py:216`).
-- O vigia do fio guarda presença do colaborador (`app/chamados/services/vigia_fio.py:218`, `:248`–`251`), mas sua visão por dia ignora C5: exige chave `data` (`app/escala/services/cadastro_realidade.py:1002`), enquanto C5 só fornece código e detalhe (`:198`–`199`).
-- Contadores da tela que podem subir: `por_assinatura.C5` (`app/escala/services/cadastro_realidade.py:880`–`882`, `:907`–`911`), `colabs_do_cadastro` e `colabs_listados` (`:914`–`920`). Os commands C7/C8 filtram suas próprias assinaturas e não passam a fechar por C5 (`app/escala/management/commands/fechar_avisos_regua_na_lista.py:32`, `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:40`).
-
-Inventário dos leitores candidatos de produção de `CelulaDia.veredito`, após busca de atributos, keywords ORM e nomes literais; homônimos sem relação foram retirados quando identificados:
-
-- `app/chamados/juizes.py:816,1132,1148,1181,1183`
-- `app/chamados/management/commands/auditar_invariantes_chamados.py:198,377,1435,1444,1594,1601,1602,1604,1711,1799`
-- `app/chamados/models.py:1161,1165,1166,1710,2790,2791,2792`
-- `app/chamados/reconciliador.py:627,629,631,997,1016`
-- `app/chamados/services/adesao.py:34`; `disputa_emissao.py:705`; `fabrica_da_celula.py:99`; `furo_sem_canal.py:72,73,97`; `limbo_folgas.py:194`; `resposta_tardia.py:45,56`; `silencio_ausencia.py:40`; `vigia_fio.py:379`
-- `app/colaboradores/management/commands/corrigir_escala_retroativa.py:123`
-- `app/colaboradores/services/calendario.py:413,414`; `pos_vinculo.py:61`
-- `app/escala/services/cadastro_realidade.py:173,445,581`; `leitor_celula.py:407`; `propositor.py:474`
-- `app/folha/export.py:1222,1233,1254,1255`; `fora_da_folha.py:227`; `previa.py:94`; `services/vigia_pausa.py:157`
-- `app/pautas/services.py:422`
-- `app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:58,62`; `celula_veredito_velho.py:88,106,125`; `recusar_ponta_pequena.py:145`
-- `app/ponto/portas/celula.py:397,701,741,766,783,797`
-- `app/ponto/services/cartorio.py:889,891,1199,1358`; `diagnostico_escala.py:177`; `furos_sem_cobranca.py:61`; `furos_vetados.py:61`; `pautas_dos_discordantes.py:71`; `veredito_celula.py:109,127`; `vigia_ausencia_veredito.py:42,56`
-- `app/relatorios/dia_da_frota.py:51,54,55,60`
-
-Inventário de candidatos de produção de `Colaborador.situacao` — os pontos incluem leitura, metadados e escrita; resolução exaustiva de acesso dinâmico: [nao verificado]:
-
-- `app/api/login_helpers.py:141`
-- `app/api/views.py:116,355,415,420,421`; `views_core.py:173,344,402,407,408`; `views_mensageria.py:449,1058,1221,1236,1273`
-- `app/chamados/management/commands/auditar_invariantes_chamados.py:360,653,857,1473,1593,1655,1765,1777`; `disparar_perguntas_competencia.py:169`
-- `app/chamados/models.py:966`; `reconciliador.py:810`
-- `app/chamados/services/adesao.py:33,66`; `desvio_escala.py:107`; `disputa_emissao.py:1241`; `fabrica_da_celula.py:91`; `pergunta_no_app.py:127`
-- `app/colaboradores/admin.py:49,50,71`; `models.py:280`; `queries.py:26`
-- `app/colaboradores/management/commands/diagnostico_login.py:36`; `efetivar_desligamentos_agendados.py:40,45`; `fechar_vinculo_de_desligado.py:35`; `tripwire_vinculo_orfao.py:46,47,48`
-- `app/colaboradores/services/cadastro.py:105`; `colaborador.py:32`; `desligamento.py:17,53,104,199,200,210`; `ficha.py:234`; `senha_provisoria.py:17`; `situacao_exibida.py:56`; `vinculo.py:89`
-- `app/colaboradores/views.py:33,62,66,206,602,619,884,1026,1043,1045,1205,1414,1448,1540,1689,1748,1770,1831,2610,2846,2856,2896,2912`
-- `app/comunicados/services.py:57`; `views.py:125`
-- `app/core/busca.py:89,104`; `canal.py:36`; `reexibir.py:18`; `regua_cct.py:292`; `services/painel_op.py:68`; `views.py:216,352,797,1203`; `views_config.py:526`
-- `app/escala/folgas.py:75`; `models.py:929`; `proposta_pdf.py:35`; `regua_defesa.py:260`; `services/cadastro_realidade.py:178,246,445,566,570`; `services/furos_diarios.py:259`; `services/previsto_cego.py:143`; `views.py:242`
-- `app/ferias/management/commands/alertar_retornos.py:30`; `pautas_de_ferias.py:66,77`; `app/ferias/situacao.py:172`; `views.py:586,684,692`
-- `app/folha/export.py:802`
-- `app/holerite/matriz.py:88`; `motor.py:252,275`; `views.py:1129,1150`
-- `app/inteligencia/calculadores.py:38,139,324`; `management/commands/gerar_alertas.py:113`; `resumo.py:61`; `views.py:63,76,77,83,84,85,86,87,158,209,220,226,232,260,293,479,512,529,530`
-- `app/ponto/management/commands/checklist_golive.py:30`; `detectar_ausencias.py:186`; `detectar_cluster_espurio.py:37`; `detectar_par_relampago.py:337`; `emitir_furo_retroativo.py:52`; `marcar_abandono_provisorio.py:36`; `projecoes_vencidas.py:67`; `propor_reorganizacao.py:35`; `reconciliar_grade.py:106`; `reverter_situacao_afastado.py:67,73,80`; `supra_juiz.py:110`; `tripwire_celulas.py:18,58,89`; `vigiar_motor_autoridade.py:46`
-- `app/ponto/services/afastado_avisa.py:41,126,167,171`; `cartorio.py:1697,1762`; `cluster_espurio.py:117`; `dia_do_colab.py:78`; `fechamento.py:431,432`; `furos_sem_cobranca.py:62`; `furos_vetados.py:62`; `geofence.py:46`; `he_pendente_lavrado.py:92`; `pautas_dos_discordantes.py:70`; `triagem_batida.py:114,119`; `vigia_de_hora.py:117`; `vinculo_na_lista.py:70,82,151`
-- `app/ponto/utils.py:47,170,172`; `views.py:376,1119,1120,1121,2225,2373,2435`
-- `app/relatorios/dia_da_frota.py:34,64`; `furos.py:61,117`; `management/commands/diff_extrato_parcial.py:86`; `services.py:105,343`; `views.py:455,833,848,857,1337,1345,1445,1447,1500,1545`
-
-Testes e migrações não estão nesse inventário de produção; a árvore contém muitos escritores de fixture, inclusive os explícitos do diff (`app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:42`–`44`, `:147`, `:176`, `:195`, `:206`, `:214`).
-
-_2375 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2376 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
