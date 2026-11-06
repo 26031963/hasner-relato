@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 06:31:01.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (43.5 MB). Acoes na janela: **562**.
+**Medido em 06/11/2026 06:36:01.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (43.5 MB). Acoes na janela: **556**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -566,9 +566,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:36:43 | Bash | Read the two design divergences and citation section | `cd /home/ronald/saas-hasner/logs/piloto_pd/pc; sed -n 65,80p r_cmp_FIO-MUDO.md \| cut -c1-500; /bin/grep -n "CITACAO\\|FALSA" r_cmp_FIO-MUDO.md; tail -12 r_cmp_FIO-MUDO.md \| cut -c1-400` |
 | 18:36:39 | Bash | Skim the FIO-MUDO comparison | `cd /home/ronald/saas-hasner/logs/piloto_pd/pc; /bin/grep raspar out_cmp_FIO-MUDO.txt; wc -l r_cmp_FIO-MUDO.md; /bin/grep -n "DESENHO" r_cmp_FIO-MUDO.md \| cut -c1-260; sed -n '/4 CITACAO/,$p' r_cmp_FIO-MUDO.md \| cut -c1-400 \| head -20` |
 | 18:36:33 | Bash | Read which item finished and the trava holder | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bvg2xomip.output; cd /home/ronald/saas-hasner; bash bin/trava_teste.sh --quem` |
-| 18:31:46 | Bash | Wait for the FIO-MUDO comparison or suites | `cd /home/ronald/saas-hasner; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad; FILES=$(cat $S/waitfiles.txt); while :; do for f in $FILES; do m=$S/visto_$(echo $f\|tr / _); if [ ! -e $m ] && grep -q '^rc=' $f 2>/dev/null; then touch $m; echo "PRONTO $f"; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' $f \| tail -3; exit 0; fi; done; /usr/bin/sleep 20; d ...` |
-| 18:31:43 | Bash | Log the deploy, run handoff, update waiter list | `cd /home/ronald/saas-hasner && echo "- O169 NO AR: bin/deploy.sh --sem-migrate rc=0 (3 cascas HUP, 3 rotas, importerror_500=0, logs/c20_o169/deploy.log); smoke saas_core: _leitura_da_celula carregada com a cura (inspect, True). Push (SNC2+F3+O169) espera a trava da suite H12H06 -- empurro depois dele, sem commit no meio." >> app/docs/RELATO.md; bash bin/handoff_sessao.sh > /dev/null 2>&1; echo han ...` |
-| 18:31:35 | Bash | See where JANELA appears in the closer | `cd /home/ronald/saas-hasner && sed -n 53,80p app/ponto/services/cluster_espurio.py \| /bin/grep -n JANELA` |
-| 18:31:31 | Bash | Smoke check that the cured code is loaded in prod | `cd /home/ronald/saas-hasner && docker exec saas_core python -c " import django,os;os.environ.setdefault('DJANGO_SETTINGS_MODULE','config.settings');django.setup() import inspect from ponto.services import cluster_espurio as c print('O169' in inspect.getsource(c._leitura_da_celula), 'JANELA' in inspect.getsource(c._vivos_que_a_premissa_matou))" 2>&1 \| tail -2` |
-| 18:31:07 | Bash | Deploy the O169 landing | `cd /home/ronald/saas-hasner && timeout 900 bash bin/deploy.sh --sem-migrate > logs/c20_o169/deploy.log 2>&1; echo rc=$?; tail -15 logs/c20_o169/deploy.log` |
-| 18:31:04 | Bash | Write the RELATO section and commit the O169 merge | `cd /home/ronald/saas-hasner && cat >> app/docs/RELATO.md <<'EOF' ## C20-O169 POUSA (18:3x) LEI-AKITA: origem=ponto/services/cluster_espurio.py::_vivos_que_a_premissa_matou, testemunha=celula do proprio dia (_leitura_da_celula + chamados/juizes.py::dia_sem_trabalho), RED=ponto/tests/test_o169_cluster_nao_fecha_por_idade.py (3 FAIL em a_fechar), quem-mais-le=detectar_cluster_espurio/catalogo premiss ...` |
