@@ -1,7 +1,98 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 20:05** · publicado em **06/11/2026 20:06** (UTC-3)
+> Ultima resposta processada: **06/11/2026 20:07** · publicado em **06/11/2026 20:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 20:07 · sessao 631ab37d7510 · BUG-PLANTIO-NOTURNO-MAIS-1 · verificador · origem=Code
+
+**As três curas fecham os caminhos locais apontados, com ressalvas:** (a) acrescenta um caso de push sem pergunta; (b) evita a exceção, mas não garante recuperação posterior; (c) cobre inserção recente, enquanto reaproveitamento conserva a criação antiga. `app/chamados/services/disputa_emissao.py:411`, `app/chamados/services/disputa_emissao.py:640`, `app/ponto/services/triagem_batida.py:730`, `app/chamados/services/materializacao.py:922`.
+
+RED real, execução Django contra o pai e ocorrência em produção: **[nao verificado]**. A avaliação dos testes abaixo é estática, usando o delta fornecido e os caminhos citados. [nao verificado]
+
+**1. Curas e alcance de (a)**
+
+- **(a) Fecha o fallback defeituoso:** sem dia, uma pergunta `hora` agora para antes de `abrir_conversa`; perguntas de outros tipos continuam podendo nascer como conversa. `app/chamados/services/disputa_emissao.py:410`, `app/chamados/services/disputa_emissao.py:417`.
+- **(b) Fecha `None.isoformat()` na triagem:** `_T1` é consultado uma vez e a disputa só nasce quando há dia. `app/ponto/services/triagem_batida.py:726`, `app/ponto/services/triagem_batida.py:739`.
+- **(c) Fecha a exclusão da inserção retroativa recente:** troca o filtro temporal, preservando os demais critérios e a consulta ao mesmo juiz. Não achei juiz ou escritor novo nessa alteração. `app/ponto/management/commands/vigia_plantio_overnight.py:73`, `app/ponto/management/commands/vigia_plantio_overnight.py:76`, `app/ponto/management/commands/vigia_plantio_overnight.py:87`.
+
+**Caminho legítimo “nasce conversa-hora e outro escritor preenche o dia depois”: nao achei.** A conversa já recebe `localdate()` no nascimento; `reapontar_resolvedora` só escreve a data quando ela está vazia. Portanto, esse escritor posterior não corrigiria o “hoje” daquela conversa. `app/chamados/models.py:2426`, `app/chamados/services/fio.py:835`.
+
+Os quatro motivos `hora` do catálogo são `orfao_14h`, `saida_sem_entrada`, `intervalo_saida` e `intervalo_volta`. Os intervalos sem dia já eram recusados antes da guarda nova; o caso demonstrável atingido por ela é órfão/SSE com texto produzido, mas sem data válida após os fallbacks. `app/chamados/catalogo/perguntas.py:48`, `app/chamados/catalogo/perguntas.py:56`, `app/chamados/catalogo/perguntas.py:124`, `app/chamados/catalogo/perguntas.py:132`, `app/chamados/catalogo/query.py:66`, `app/chamados/services/disputa_emissao.py:387`.
+
+**A acusação não desaparece deixando somente log:** motivos e contexto são persistidos antes da geração. A recusa específica, entretanto, fica apenas no `logger.info`, sem pergunta ou pendência própria. `app/chamados/services/disputa_emissao.py:532`, `app/chamados/services/disputa_emissao.py:557`, `app/chamados/services/disputa_emissao.py:632`, `app/chamados/services/disputa_emissao.py:415`.
+
+**Efeito adicional concreto:** após recusar a única pergunta, `criar_ou_atualizar_disputa` ainda pode mandar “Toque para responder”. A decisão de enviar push ignora o resultado do gerador. Esse desacoplamento já existia; a cura acrescenta um caso que o alcança. `app/chamados/services/disputa_emissao.py:640`, `app/chamados/services/disputa_emissao.py:652`, `app/chamados/services/disputa_emissao.py:656`, `app/chamados/services/disputa_emissao.py:1577`.
+
+Chamadores diretos encontrados fora dos testes: [nao verificado]
+
+| Chamador | O que espera |
+|---|---|
+| `criar_ou_atualizar_disputa` | Geração como efeito; ignora a lista retornada e devolve a disputa. `app/chamados/services/disputa_emissao.py:640`, `app/chamados/services/disputa_emissao.py:652`, `app/chamados/services/disputa_emissao.py:658`. |
+| `perguntar_entradas_pendentes` | Injeta dia obtido da batida via `_T1`, acumula a lista e salva contexto se ela não estiver vazia. `app/chamados/services/disputa_emissao.py:282`, `app/chamados/services/disputa_emissao.py:292`, `app/chamados/services/disputa_emissao.py:294`. |
+| Fábrica `perguntar` | Fornece dia explícito; chama criação/atualização e novamente o gerador; ignora a lista. `app/chamados/services/fabrica_da_celula.py:139`, `app/chamados/services/fabrica_da_celula.py:141`. |
+| `smoke_chamados` | Fornece data quando exigida e espera uma pergunta com o tipo do catálogo. `app/chamados/management/commands/smoke_chamados.py:96`, `app/chamados/management/commands/smoke_chamados.py:102`, `app/chamados/management/commands/smoke_chamados.py:104`. |
+
+O contrato documentado é “lista das perguntas criadas”, mas a implementação também acrescenta pergunta reaproveitada, com `_criada=False`; isso antecede o delta. `app/chamados/services/disputa_emissao.py:304`, `app/chamados/services/disputa_emissao.py:449`, `app/chamados/models.py:2497`.
+
+**2. SSE sem disputa: há recuperação?**
+
+**Recuperador específico dessa tentativa/batida retratada: nao achei.** `registrar_batida` pode devolver a mesma chave retratada sem inserir nem salvar; `_T1` exclui retratadas. A guarda então pula a disputa e a triagem pode chegar à indicação de sucesso, sem registrar pendência própria nesse ramo. `app/ponto/registro_batida.py:120`, `app/ponto/turnos.py:2905`, `app/ponto/turnos.py:2925`, `app/ponto/services/triagem_batida.py:730`, `app/ponto/services/triagem_batida.py:757`.
+
+**Há recuperação condicional pelo dia:** o código declara `vigia_de_hora --apply` a cada dez minutos e cartório diário. O julgamento pode chamar a fábrica, que emite perguntas pela célula. Isso não equivale a reprocessar aquela tentativa. `app/config/crons.py:367`, `app/config/crons.py:616`, `app/ponto/services/cartorio.py:981`, `app/ponto/services/cartorio.py:997`.
+
+Não há garantia universal: o vigia seleciona células `trabalha=True`; a fábrica pode recusar por situação, veredito ou parcial, e só pergunta motivos ainda ausentes. Portanto, **pode permanecer sem pergunta; “sempre invisível” também não está demonstrado**. `app/ponto/services/vigia_de_hora.py:21`, `app/chamados/services/fabrica_da_celula.py:91`, `app/chamados/services/fabrica_da_celula.py:99`, `app/chamados/services/fabrica_da_celula.py:102`, `app/chamados/services/fabrica_da_celula.py:126`. Recuperação efetiva em produção: **[nao verificado]**.
+
+A cura é local à triagem: API e clone ainda chamam `.isoformat()` sem essa guarda. `app/api/views.py:782`, `app/api/views_core.py:782`.
+
+**3. Quem escreve `Batida.criado_em`; reabertura e reaproveitamento**
+
+O escritor normal é `auto_now_add=True`, na inserção da linha. A porta cria por `Batida.objects.create`; `timestamp` é um campo separado. `app/ponto/models.py:23`, `app/ponto/models.py:79`, `app/ponto/registro_batida.py:152`, `app/ponto/registro_batida.py:157`.
+
+**Reescritor Python específico de `Batida.criado_em`: nao achei.** A porta de anotação não aceita esse campo e salva somente os campos solicitados. `app/ponto/registro_batida.py:203`, `app/ponto/registro_batida.py:241`, `app/ponto/registro_batida.py:254`.
+
+Há restauração genérica de schema por dump: ela restaura os valores arquivados, sem passar pelo `auto_now_add` ou renovar a criação para o horário do restore. Uso efetivo em produção: **[nao verificado]**. `scripts/backup_tenant.sh:10`, `scripts/restore_tenant.sh:8`.
+
+**Batida nova tem criação do novo plantio; reaproveitada conserva a criação original.** O materializador procura existente antes de criar e, no reaproveitamento, pode trocar apenas `pergunta_origem`. A reabertura do questionário limpa resposta/validação, sem renovar a batida. `app/chamados/services/materializacao.py:835`, `app/chamados/services/materializacao.py:847`, `app/chamados/services/materializacao.py:903`, `app/chamados/services/materializacao.py:922`, `app/chamados/services/disputa_emissao.py:1434`.
+
+Assim, uma `disputa_s84_retro` antiga revinculada hoje pode ficar fora da janela; uma `app` reaproveitada permanece fora pelo filtro de origem. Esse limite impede interpretar o contador como cobertura de **toda aplicação recente**. `app/ponto/management/commands/vigia_plantio_overnight.py:16`, `app/ponto/management/commands/vigia_plantio_overnight.py:76`, `app/chamados/services/materializacao.py:924`.
+
+**4. Os testes mordem o pai?** [nao verificado]
+
+As conclusões desta tabela são previsões estáticas contra os trechos anteriores mostrados no delta; execução no pai: **[nao verificado]**.
+
+| Teste | Resultado sem a cura correspondente | [nao verificado]
+|---|---|
+| `PerguntaDeHoraSemDiaDoTurnoTest.test_MORDE_orfao...` | **FALHA.** Data malformada produz texto, mas não dia; sem a guarda, nasce conversa datada de hoje e viola `assertFalse`. `app/chamados/tests/test_plantio_noturno_mais1.py:203`, `app/chamados/tests/test_plantio_noturno_mais1.py:206`, `app/chamados/tests/test_plantio_noturno_mais1.py:207`, `app/chamados/catalogo/query.py:66`, `app/chamados/models.py:2426`. |
+| `test_contra_exemplo_escolha_sem_dia_segue_conversa` | **PASSA mesmo sem a cura.** O motivo é `escolha`; a conversa já era o resultado anterior. `app/chamados/tests/test_plantio_noturno_mais1.py:210`, `app/chamados/tests/test_plantio_noturno_mais1.py:214`, `app/chamados/catalogo/perguntas.py:84`. |
+| `VigiaContaPeloPlantioNaoPeloInstanteTest.test_MORDE...` | **FALHA.** Em 01/12, a saída com instante de 23/10 fica fora do corte de trinta dias do pai; o novo `criado_em` de 01/12 a inclui. `app/chamados/tests/test_plantio_noturno_mais1.py:30`, `app/chamados/tests/test_plantio_noturno_mais1.py:32`, `app/chamados/tests/test_plantio_noturno_mais1.py:192`, `app/chamados/tests/test_plantio_noturno_mais1.py:195`, `app/ponto/management/commands/vigia_plantio_overnight.py:76`. |
+| Caso congelado de `test_a2` | **PASSA no pai com esse congelamento.** Não é RED das curas: o motivo é `escolha` e a ausência da linha já levava à conversa. O congelamento elimina a contradição que ocorreria em 12/08/2026 entre `!=12/08` e `==localdate()`. `app/chamados/tests/test_a2_data_evento_batida.py:51`, `app/chamados/tests/test_a2_data_evento_batida.py:56`, `app/chamados/tests/test_a2_data_evento_batida.py:59`, `app/chamados/tests/test_a2_data_evento_batida.py:60`, `app/chamados/services/disputa_emissao.py:383`. |
+
+O teste de hora mata precisamente o fallback antigo, mas só proíbe nascimento **hoje**, não qualquer nascimento indevido. O teste anterior do vigia continua aceitando qualquer delta `>=1`. `app/chamados/tests/test_plantio_noturno_mais1.py:207`, `app/chamados/tests/test_plantio_noturno_mais1.py:178`.
+
+**5. Escritores, leitores e ESMERIL-SEMANTICA**
+
+| Campo | Quem escreve/fornece | Quem lê |
+|---|---|---|
+| `PerguntaDisputa.data_evento` | Gravação efetiva em `_nascer`; preenchimento de pergunta sem dia em `reapontar_resolvedora`. Gerador, agrupador e declarações fornecem o valor; conversa fornece `localdate()`. `app/chamados/models.py:2498`, `app/chamados/services/fio.py:837`, `app/chamados/services/disputa_emissao.py:430`, `app/chamados/services/disputa_emissao.py:1029`, `app/chamados/services/declaracao_texto.py:327`, `app/chamados/models.py:2426`. | Plantio/slot como dia do turno; dedup/fábrica como identidade do dia; juízes/reconciliador como dia do fato; folha/calendário como agrupamento; API como apresentação. `app/chamados/services/materializacao.py:344`, `app/chamados/juizes.py:319`, `app/chamados/models.py:2396`, `app/chamados/services/fabrica_da_celula.py:118`, `app/chamados/reconciliador.py:1080`, `app/folha/previa.py:67`, `app/colaboradores/services/calendario.py:477`, `app/api/views.py:1174`. |
+| `contexto['saida_sem_entrada']` | Triagem fornece dia de `_T1`; APIs substituem a data civil transitória por `_T1`; fábrica fornece dia da célula; agregador persiste/mescla. `app/ponto/services/triagem_batida.py:739`, `app/api/views.py:782`, `app/api/views_core.py:782`, `app/chamados/services/fabrica_da_celula.py:139`, `app/chamados/services/disputa_emissao.py:529`, `app/chamados/services/disputa_emissao.py:560`. | Texto, data da pergunta, seleção de chamado e fallback de plantio/completude. `app/chamados/catalogo/query.py:58`, `app/chamados/services/disputa_emissao.py:364`, `app/chamados/services/disputa_emissao.py:196`, `app/chamados/services/materializacao.py:343`, `app/chamados/juizes.py:365`. |
+| `Batida.criado_em` | Inserção automática; restore recupera valor arquivado. `app/ponto/models.py:79`, `scripts/restore_tenant.sh:8`. | Vigia como criação recente; detector de flush como chegada ao servidor; contador de sequência como corte de criação; cache/cartório como marco de fato novo. `app/ponto/management/commands/vigia_plantio_overnight.py:76`, `app/ponto/turnos.py:355`, `app/ponto/turnos.py:366`, `app/ponto/turnos.py:2384`, `app/chamados/veredito_lavrado.py:138`, `app/ponto/services/cartorio.py:353`. |
+
+**Divergências encontradas:**
+
+- **Permanece a conhecida conversa × turno:** nascimento civil da conversa e leitores de identidade/célula sem discriminador persistido. A cura elimina o caminho `hora` do gerador, não a colisão geral já declarada fora do escopo. `app/chamados/models.py:2426`, `app/chamados/models.py:2453`, `app/chamados/services/fabrica_da_celula.py:118`.
+- **Criação × reaplicação:** `criado_em` significa nascimento da linha; o vigia o chama de plantio recente, embora a aplicação possa reaproveitar linha antiga. `app/ponto/models.py:79`, `app/ponto/management/commands/vigia_plantio_overnight.py:67`, `app/chamados/services/materializacao.py:835`.
+- **Leitor atual de `saida_sem_entrada.data` especificamente como dia civil da saída: nao achei.** Texto pergunta entrada naquele dia, e plantio usa dia do turno. Permanece a diferença de chave nas APIs: motivo `orfao_14h`, contexto `saida_sem_entrada`. `app/chamados/catalogo/perguntas.py:57`, `app/chamados/juizes.py:319`, `app/api/views.py:654`, `app/api/views.py:655`.
+
+**6. Classes que já reprovaram obra**
+
+| Classe | Resultado nesta volta |
+|---|---|
+| Segundo juiz | **Novo no delta: nao achei.** Triagem e vigia consultam `_T1`/`dia_das_batidas`. `app/ponto/services/triagem_batida.py:729`, `app/ponto/management/commands/vigia_plantio_overnight.py:87`. |
+| Segundo escritor fora da porta | **Efetivo novo: nao achei.** Escritas encontradas continuam no nascimento e costura. `app/chamados/models.py:2498`, `app/chamados/services/fio.py:837`. |
+| Relógio fora da borda | **Permanece no helper do vigia**, sem instante recebido do chamador; a troca do filtro não o criou. `app/ponto/management/commands/vigia_plantio_overnight.py:76`. |
+| Derivação paralela | **Não acrescentada pelo delta; permanece na fila:** parser de contexto no gerador/agrupador e contexto fraco. `app/chamados/services/disputa_emissao.py:367`, `app/chamados/services/disputa_emissao.py:1107`, `app/chamados/data_evento.py:27`, `app/chamados/juizes.py:162`. |
+| Selo/RED sem mordida | **Os novos casos principais de (a) e (c) têm mordida estática.** Permanecem as lacunas do selo para `**dict` e `setattr` por variável; o caso congelado é estabilização, não RED comportamental do delta. `app/chamados/tests/test_plantio_noturno_mais1.py:195`, `app/chamados/tests/test_plantio_noturno_mais1.py:207`, `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:86`, `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:91`, `app/chamados/tests/test_a2_data_evento_batida.py:51`. |
+| Campo com dois significados | **Persistem conversa/turno e o limite criação/reaplicação descritos acima.** O delta não resolve o discriminador nem registra um instante próprio de reaproveitamento. `app/chamados/models.py:2450`, `app/chamados/models.py:2498`, `app/chamados/services/materializacao.py:924`. |
 
 ## 06/11 20:05 · sessao 8a7c282839f5 · ESMERIL-SEM-INSTANTE · verificador · origem=Code
 
@@ -740,29 +831,4 @@ A criação nessa regularização **omite `fato_de_chao`** (`regularizacao_ext.p
 
 Não localizei escrita persistente direta de cache ou geofence dentro de `registrar_batida`/núcleo. Os receivers explícitos de Batida examinados são núcleo, realtime, cartório, reconciliador e onboarding (`app/ponto/signals.py:34`, `:39`, `:131`, `:206`; `app/colaboradores/signals.py:86`). Efeitos adicionais via grafo completo da reconciliação/cartório permanecem com a auditoria dos demais agentes `[nao verificado]`.
 
-## 06/11 19:48 · sessao b8ba3deaea45 · - · - · origem=Ronald (tmux)
-
-**O ramo transitivo existe e pode alcançar competência exportada de outro mês.** O consumidor do outbox pode fechar DisputaSupervisao (`app/chamados/reconciliador.py:1364`, `:1159-1161`); seu signal agenda `retomar_regularizacoes_confirmadas` após commit (`app/chamados/signals.py:106-121`), que busca **todas** as regularizações confirmadas e não materializadas do colaborador, sem recorte de data (`app/chamados/services/regularizacao_ext.py:218-224`).
-
-O plantio chama `registrar_batida` com `autoridade_humana=False`, **omitindo `fato_de_chao=False`** (`app/chamados/services/regularizacao_ext.py:77-82`). A porta deriva `fato_de_chao=True` e pula a guarda de competência (`app/ponto/registro_batida.py:130-137`). Batida criada agenda recálculo (`:157-160`, `:175-178`) da competência do timestamp, após commit (`app/ponto/services/fechamento.py:1791-1808`). A presença dessas regularizações na frota real está `[nao verificado]`.
-
-**Escritas resultantes em FechamentoMensal:**
-
-- `get_or_create` pode criar linha com colaborador, mês, ano e status aberto (`app/ponto/services/fechamento.py:889-892`).
-- Linha aberta recebe `derivado_em` e `save()` completo (`:1121-1128`).
-- Linha aprovada/exportada recebe `update()` nos campos: `atualizado_em`, `horas_trabalhadas`, `horas_noturnas`, `horas_extras`, `horas_extras_50`, `horas_extras_50_noturna`, `horas_extras_100`, `horas_extras_100_feriado`, `horas_extras_100_noturna`, `horas_folga_trabalhada`, `horas_atraso`, `horas_saida_antecipada`, `horas_falta`, `horas_intra_indenizada`, `turnos_abertos`, `inconsistencias`, `semanas_dsr_ok`, `semanas_dsr_perdido`, `horas_reflexo_dsr`, `saldo_banco_horas`, `minutos_previstos`, `dias_previstos`, `dias_incertos`, `minutos_abonados`, `minutos_realizados`, `motivos_espelho`, `causa_espelho`, `previsto_em`, `derivado_em` (`app/ponto/services/fechamento.py:1144-1174`).
-- **Não existe guarda geral de exportada:** há warning e continuação (`:530-538`), além da guarda temporária somente **09/2026** (`:36-43`, `:551-565`). A proteção de `FechamentoMensal.save` para aprovado não cobre o `queryset.update()` desse ramo (`app/ponto/models.py:496-503`; `fechamento.py:1144`).
-
-**Escritas resultantes em DiaPago:**
-
-- O recálculo chama lavratura `versao='motor'` (`app/ponto/services/fechamento.py:1185-1221`) e também `versao='oraculo'` para competências ≥10/2026 (`:1249-1280`).
-- Cada lavratura **apaga todas as linhas do colaborador/mês/ano/versão e insere novas** (`app/ponto/services/dia_pago.py:357-358`).
-- Campos de identidade/proveniência: `colaborador`, `mes`, `ano`, `data`, `tipo`, `versao`, `versao_motor`, `versao_dna`, `evento_origem`, `detalhe`, `furo_apurado` (`:333-356`), mais PK nova e `lavrado_em` automático (`app/ponto/models.py:380`).
-- Campos monetários: `horas_trabalhadas`, `horas_noturnas`, `horas_extras_50`, `horas_extras_50_noturna`, `horas_extras_100`, `horas_extras_100_feriado`, `horas_extras_100_noturna`, `horas_folga_trabalhada`, `horas_atraso`, `horas_saida_antecipada`, `horas_falta`, `horas_intra_indenizada`, `minutos_abonados`, `minutos_previstos`, `minutos_realizados`, `horas_reflexo_dsr`, `saldo_banco_horas` (`app/ponto/services/dia_pago.py:34-44`).
-- A proteção de exportação é somente a guarda anterior do recálculo; `lavrar` não faz consulta de entrega no ato de apagar/inserir (`:333-358`; `fechamento.py:551-565`).
-
-**ExportacaoDominio:** não localizei escrita nesse ramo; a consulta serve para warning/guarda09 (`app/ponto/services/fechamento.py:530-538`, `:1491-1499`). O escritor de invalidação existe em `app/folha/models.py:143-170`, mas não é chamado pelo recálculo localizado (`app/ponto/services/fechamento.py:476-538`, `:1108-1295`).
-
-**Reversão:** o snapshot contém identidade/minutos/carimbo apenas da Ausencia (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:120-123`); não contém estados anteriores de FechamentoMensal, DiaPago ou Batida. Estes efeitos após commit não são revertidos pelo rollback da tentativa original nem pelo `--reverter` de minutos (`comando:137`, `:165-190`; `chamados/signals.py:121`; `fechamento.py:1808`).
-
-_2501 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2502 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
