@@ -1,5 +1,11 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: trava_teste.sh | pid=1020763
+ESPERANDO: trava_teste.sh | pid=2718392
+DESPACHO BO-0511-G2-TRIAGEM 09:2x: (1) censo dos 8 G2 -> Codex censo | (2) sonda segura/dono/status/porta -> Codex --sonda (funcoes da sonda logs/g3g4_0611) | (3) montagem e amostra -> agente preparador; conferencia e tabela dos 46 -> sessao. Prazo 12:00.
+DESPACHO O10-TROCA-DE-PLANTAO-ENTRA 09:2x: A1 censo (celula editada, rubricas, resolver_dia_oferecido, leitores troca) -> Codex logs/o10/a1.q | A2 RED-POR-EXEMPLO -> Codex logs/o10/a2.q | B construir -> opus na 1a vaga apos C20/H12H06-B/PEP | C lote 16 -> DRY + aval. Base 185c8783.
+CXR-NA-FILA TABELA 09:1x (medida, padrao=n/a (medida); Codex leitura rc=0, base 185c8783, logs/cxr0611/q1.r; amostra conferida 4/4: BACKLOG.md:775, vigia_fio.py:677 (d) e :685 (e/sem_pergunta_viva), e6_oraculo.py:183 -- batem; SEM reordenar a fila)
+  CXR-TELA-LE-O-MOTOR (BACKLOG:775): fila 1, estado "registrada -- depois da JUIZ-DO-PAR-DUAS-ENTRADAS" (dependencia NO AR 29/10); dono da obra nao declarado; falta: tela ler dias_cadastro_x_realidade por assinatura+lavra+cron+servico.
+  classe d (ESTRUTURA 185->200): CXR-TELA cobre a OMISSAO do dia na tela, NAO cura d/ESTRUTURA -- o juiz de dono ja le a CxR do MOTOR (e6_oraculo.py:183); ESTRUTURA nao sai por ela, no maximo migra d -> e/dia_na_lista_dono_estrutura.
+  e-sem-viva (ESTRUTURA 18->39): nenhuma obra registrada cobre -- C20-FIO-MUDO trata so pergunta viva; O261/GRUPO-D FECHADAS cobrem outros recortes. Caca aberta: E-SEM-VIVA-CACA (sonda em curso).
 FIO-MORTO-POR-DONO-0611 TABELA 08:3x (medida, padrao=n/a (medida); Codex --sonda rc=0, envelope rc_prod=0 rc_sombra=0, base 185c8783; resposta logs/fio0611/r1.md sha256 d5ce8942.., sonda_dono.py 454e4be4.., conta_prod.py d1c151d5..; jsonl logs/codex/FIO-MORTO-POR-DONO-0611_20261106_082941_102608.jsonl):
   universo: PROD vivo 08:27 = 2144 (sem_porta 319; de_hoje_pra_frente 10 FORA dos 319, vigia_fio.py:648) | SOMBRA dump 05:02 = 2127 (sem_porta 322) | SOMBRA 05/11 = 1987 (sem_porta 418). Somas das rotas conferem: 2144 / 2127 / 1987.
   hoje por dono (SOMBRA, 322): ESTRUTURA 278 | CADASTRO 31 | BATIDA 13 | INDETERMINADO 0; passado 322, hoje pra frente 0. SOMA dono = classe = tempo = 322 (True na propria saida).
