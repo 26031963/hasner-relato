@@ -1,7 +1,265 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 20:28** · publicado em **06/11/2026 20:32** (UTC-3)
+> Ultima resposta processada: **06/11/2026 20:37** · publicado em **06/11/2026 20:37** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 20:37 · sessao b86b0bc41185 · L-123-MEDIDA-EM-PY · verificador · origem=Code
+
+**Parecer: reprova a volta 2. Ainda passam mudanças de comportamento pelo juiz de `padrao`: há uma brecha de linha compartilhada e há decisões dentro dos contêineres declarados como dado.** (`bin/tests/test_lei_akita.sh:202`, `bin/tests/test_lei_akita.sh:206`, `app/core/placar_estrutural.py:651`, `app/core/placar_estrutural.py:676`)
+
+1. **Caminhos de aceite e recusa**
+
+O contraexemplo mais direto é alterar o fechamento de `RESULTADOS`, na linha 624, de `]` para `]; CADENCIA_TERMOMETRO_DIAS = 700`. O `Assign` de `RESULTADOS` torna a linha livre; a segunda atribuição torna a mesma linha presa; o retorno conserva a linha porque não subtrai `preso` de `livre`. A conferência dos hunks aceita essa linha nos dois lados. (`app/core/placar_estrutural.py:624`, `bin/tests/test_lei_akita.sh:200`, `bin/tests/test_lei_akita.sh:204`, `bin/tests/test_lei_akita.sh:206`, `bin/tests/test_lei_akita.sh:230`)
+
+**Confirmei em memória**, usando as funções reais: a linha 624 permanece livre antes/depois; com `hoje=2026-11-06` e R1 medido em `2026-10-01`, o original retorna AMARELO e o alterado retorna VERDE. O vencimento consulta precisamente essa constante. (`bin/tests/test_lei_akita.sh:194`, `app/core/placar_estrutural.py:668`, `app/core/placar_estrutural.py:686`, `app/core/placar_estrutural.py:694`)
+
+Outro caminho dispensa instrução executável: trocar o `papel` do R1 de `TERMOMETRO` para `PRINCIPAL`. Ambos são constantes-string elegíveis; a alteração mantém dado puro, retira R1 dos termômetros e permite chegar ao VERDE sem termômetro. Também confirmei AMARELO → VERDE em memória no cenário acima. (`app/core/placar_estrutural.py:61`, `app/core/placar_estrutural.py:121`, `bin/tests/test_lei_akita.sh:185`, `bin/tests/test_lei_akita.sh:203`, `app/core/placar_estrutural.py:676`, `app/core/placar_estrutural.py:694`)
+
+Na tabela, “aceita” significa concessão da exceção pelo juiz de `padrao`, satisfeitas as demais condições do arquivo. **Não significa régua inteira verde**: os testes L114 exigem R1 como único termômetro e verificam a borda de sete dias e as cores. (`bin/tests/test_lei_akita.sh:244`, `app/core/tests/test_l114_placar_papel_e_termometro.py:34`, `app/core/tests/test_l114_placar_papel_e_termometro.py:51`, `app/core/tests/test_l114_placar_papel_e_termometro.py:71`)
+
+| Caso | Resultado |
+|---|---|
+| Constante-string com outro `Assign`, `AnnAssign` ou `AugAssign`, inclusive dentro de função com `global` | **Recusa o uso desse Name como dado puro**: a contagem deixa de ser um. O percurso alcança qualquer escopo. (`bin/tests/test_lei_akita.sh:151`, `bin/tests/test_lei_akita.sh:152`, `bin/tests/test_lei_akita.sh:185`) |
+| Constante-string também ligada por `for`, `with … as`, `import … as` ou walrus; ou removida por `del` | **Aceita indevidamente o Name como constante**, quando essas instruções já existem e só o contêiner muda: `_atribuicoes` não conta esses nós. Isso também afeta a suposta unicidade de `PAPEL_DO_MODULO` e `DADO_MEDIDO`. (`bin/tests/test_lei_akita.sh:152`, `bin/tests/test_lei_akita.sh:162`, `bin/tests/test_lei_akita.sh:185`) |
+| Acrescentar essas instruções em linhas próprias no commit julgado | **Recusa**: esses nós não são docstring nem `Assign` elegível. A linha compartilhada descrita acima continua sendo exceção indevida. (`bin/tests/test_lei_akita.sh:201`, `bin/tests/test_lei_akita.sh:202`, `bin/tests/test_lei_akita.sh:206`) |
+| `R = X = [...]`, mesmo com ambos os nomes declarados | **Recusa**: exige exatamente um alvo. (`bin/tests/test_lei_akita.sh:202`) |
+| `R[...] = ...` ou `R.attr = ...` em linha própria | **Recusa**: exige alvo `Name`. (`bin/tests/test_lei_akita.sh:202`) |
+| Dict com chamada, lambda ou Name sem ser constante-string | **Recusa**: esses nós não passam em `_dado_puro`. (`bin/tests/test_lei_akita.sh:186`, `bin/tests/test_lei_akita.sh:192`) |
+| `AnnAssign` executável em linha própria | **Recusa**: somente `Assign` pode ser dado livre. (`bin/tests/test_lei_akita.sh:202`) |
+| Chamada, import ou monkeypatch depois de `;` na linha de dado | **Aceita indevidamente**, pela sobreposição entre `livre` e `preso`. (`bin/tests/test_lei_akita.sh:204`, `bin/tests/test_lei_akita.sh:206`) |
+| Alterar `papel`, `estado`, `prova`, `id` ou `fonte_do_medido` dentro de `RESULTADOS` | **Aceita**, conservada a pureza sintática. Esses campos controlam classificação, rebaixamento, contagem e obtenção da data. (`bin/tests/test_lei_akita.sh:203`, `app/core/placar_estrutural.py:647`, `app/core/placar_estrutural.py:650`, `app/core/placar_estrutural.py:700`, `bin/gerar_estado.py:47`, `bin/gerar_estado.py:56`) |
+| Alterar `estado`/`prova` em `ETAPAS` | **Aceita**; pode alterar estado efetivo, feitos e percentual. (`app/core/espelho_verdade.py:209`, `app/core/espelho_verdade.py:211`, `app/core/espelho_verdade.py:214`, `app/core/espelho_verdade.py:217`, `bin/tests/test_lei_akita.sh:203`) |
+| Mudar ou remover chave de dict | **Aceita**, se continuar puro. Não há validação de esquema; leitores acessam diretamente chaves como `id`, `estado` e `itens`, podendo mudar resultado ou levantar exceção. (`bin/tests/test_lei_akita.sh:188`, `app/core/placar_estrutural.py:650`, `app/core/espelho_verdade.py:208`, `app/core/espelho_verdade.py:209`) |
+| String contendo código | **Aceita como string**. Nas rotas rastreadas, a publicação usa templates fixos com `%`; interpretação por `eval` ou por template fornecido pelo dado: **[não verificado]**. (`bin/tests/test_lei_akita.sh:188`, `bin/gerar_estado.py:101`, `bin/gerar_estado.py:115`, `bin/gerar_estado.py:163`) |
+
+Uso desses contêineres para decidir **dinheiro em produção**: **[não verificado]**. O uso para decidir cor, vencimento e classificação do placar está demonstrado nos leitores acima. (`app/core/placar_estrutural.py:651`, `app/core/placar_estrutural.py:679`)
+
+2. **Nomes lidos no ALVO**
+
+A autorização vem do ALVO; a pureza e os intervalos vêm separadamente do pai e do commit julgado. Portanto, a retroatividade não transforma diretamente uma chamada dentro do valor em dado puro: esse valor continua sendo examinado na revisão histórica. (`bin/tests/test_lei_akita.sh:209`, `bin/tests/test_lei_akita.sh:221`, `bin/tests/test_lei_akita.sh:223`)
+
+**A garantia semântica, porém, é maior que a prova disponível.** O ALVO fornece nomes, sem comprovar que eles tinham função de medição no commit antigo. Não há restrição que impeça declarar uma constante de decisão como nome elegível; a validação exige apenas uma tupla não vazia de strings, seguida do teste sintático do `Assign`. Assim, um ALVO que liste `CADENCIA_TERMOMETRO_DIAS` pode autorizar retroativamente sua troca literal. Esse cenário decorre do predicado; sua ocorrência histórica nesta obra é **[não verificado]**. (`bin/tests/test_lei_akita.sh:169`, `bin/tests/test_lei_akita.sh:173`, `bin/tests/test_lei_akita.sh:202`, `app/core/placar_estrutural.py:668`)
+
+As falhas de contagem de vínculos também permitem que a declaração sintática encontrada pelo selo divirja do valor executado no ALVO. (`bin/tests/test_lei_akita.sh:152`, `bin/tests/test_lei_akita.sh:163`)
+
+Merge continua filtrando caminhos iguais a pais publicados; os caminhos restantes são comparados com o primeiro pai e julgados dos dois lados. Rename usa `--no-renames`; origem ausente no ALVO recusa. Restauração posterior pode habilitar uma exclusão histórica composta só de linhas livres, conforme a retroatividade estabelecida. (`bin/tests/test_lei_akita.sh:213`, `bin/tests/test_lei_akita.sh:217`, `bin/tests/test_lei_akita.sh:230`, `bin/tests/test_lei_akita.sh:296`, `bin/tests/test_lei_akita.sh:303`, `bin/tests/test_lei_akita.sh:310`)
+
+3. **O MORDE não morde cada cláusula nova**
+
+O mapeamento abaixo é **por inspeção dos casos**, não resultado de executar versões mutantes. Os casos chamam as funções reais e o shell rejeita qualquer `MORDE_FALHOU`. (`bin/tests/test_lei_akita.sh:414`, `bin/tests/test_lei_akita.sh:569`)
+
+| Caso existente | Mutante que distingue |
+|---|---|
+| `so_numero`, `estado`, `comentario`, `doc` | Desligar a concessão; proibir constante-string; retirar liberação de comentário/docstring. (`bin/tests/test_lei_akita.sh:388`, `bin/tests/test_lei_akita.sh:406`) |
+| `na_def` | Liberar corpo de função. (`bin/tests/test_lei_akita.sh:392`, `bin/tests/test_lei_akita.sh:407`) |
+| `tira_def` | Examinar somente o lado novo. (`bin/tests/test_lei_akita.sh:393`, `bin/tests/test_lei_akita.sh:407`) |
+| `com_import`, `com_lambda`, `com_chamada`, `com_nome` | Liberar, respectivamente, import, lambda, chamada ou Name não constante-string. (`bin/tests/test_lei_akita.sh:394`, `bin/tests/test_lei_akita.sh:408`) |
+| `decisao` | Liberar atribuição fora dos nomes declarados. (`bin/tests/test_lei_akita.sh:398`, `bin/tests/test_lei_akita.sh:409`) |
+| `monkey` | Liberar atribuição a atributo em linha própria. (`bin/tests/test_lei_akita.sh:399`, `bin/tests/test_lei_akita.sh:409`) |
+| `sem_decl`, `mais_fech`, rótulo instrumento | Dispensar papel `medida`, ignorar outro arquivo de negócio ou estender a exceção a instrumento. (`bin/tests/test_lei_akita.sh:401`, `bin/tests/test_lei_akita.sh:410`, `bin/tests/test_lei_akita.sh:411`) |
+| ALVO sem declaração | Ler declaração exclusivamente em `h`. (`bin/tests/test_lei_akita.sh:417`, `bin/tests/test_lei_akita.sh:418`) |
+| Retroativo número/decisão | Exigir declaração em `h`, ou liberar decisão fora do contêiner. (`bin/tests/test_lei_akita.sh:423`, `bin/tests/test_lei_akita.sh:431`) |
+
+**`redecl` não prova a unicidade no ALVO.** O caso acrescenta outra declaração em `h`, mas o preparo restaura HEAD à base antes de julgá-lo. Ele já reprova pela linha presa; retirar a checagem de unicidade no ALVO não é distinguido por esse caso. (`bin/tests/test_lei_akita.sh:163`, `bin/tests/test_lei_akita.sh:209`, `bin/tests/test_lei_akita.sh:385`, `bin/tests/test_lei_akita.sh:400`)
+
+Faltam casos para: vínculos por `for`/`with`/import/walrus/`del`; reatribuição de constante-string; duplicação de ambos os metadados no ALVO; múltiplos alvos; Subscript; AnnAssign; instrução presa na mesma linha livre; DADO inválido/aninhado; classe/decorador; comentário dentro de função; docstring posterior; diff sem hunk; e dado puro usado como decisão. A matriz atual não planta esses cenários. (`bin/tests/test_lei_akita.sh:370`, `bin/tests/test_lei_akita.sh:388`, `bin/tests/test_lei_akita.sh:412`)
+
+Os testes antigos cobrem merge/rename com `n/a (instrumento)`, mas não a elegibilidade AST de medida nesses cenários. Os casos novos de medida passam mensagem e arquivos manualmente; seus commits usam mensagem `c`, sem exercitar essa integração pelo universo. (`bin/tests/test_lei_akita.sh:383`, `bin/tests/test_lei_akita.sh:414`, `bin/tests/test_lei_akita.sh:480`, `bin/tests/test_lei_akita.sh:513`, `bin/tests/test_lei_akita.sh:525`)
+
+Há ainda divergência no limite de erro: `show`/`diff` emitem `PADRAO_ERRO`, mas qualquer erro de `cat-file` vira AST ausente e qualquer erro da sonda de pai vira `False`. Recusam a concessão, mas não cumprem literalmente “erro Git = PADRAO_ERRO”. (`bin/tests/test_lei_akita.sh:138`, `bin/tests/test_lei_akita.sh:143`, `bin/tests/test_lei_akita.sh:213`, `bin/tests/test_lei_akita.sh:219`)
+
+Execução integral do MORDE e dos dois mutantes vermelhos prometidos: **[não verificado]**. Não executei o shell, cujo preparo cria arquivos e repositórios temporários. (`bin/tests/test_lei_akita.sh:362`, `bin/tests/test_lei_akita.sh:374`, `bin/tests/test_lei_akita.sh:376`)
+
+4. **Os três R1**
+
+`36c90132`, `6ed6adbe` e `a16637ca` tocarem somente linhas dentro de `RESULTADOS`/`ETAPAS`: **[não verificado]**. O histórico Git e os diffs individuais não estão disponíveis nesta cópia **[não verificado]**.
+
+O relato cita as origens, um comparativo de três arquivos e as correções, mas não apresenta os hunks desses commits. Isso não sustenta responder “sim”. (`app/docs/RELATO.md:864`, `app/docs/RELATO.md:866`, `app/docs/RELATO.md:869`)
+
+5. **Quem escreve, quem lê e ESMERIL-SEMÂNTICA**
+
+| Símbolo | Escritores/declarações | Leitores |
+|---|---|---|
+| `PAPEL_DO_MODULO` | Dois módulos; fixture e alterações do MORDE. (`app/core/placar_estrutural.py:38`, `app/core/espelho_verdade.py:30`, `bin/tests/test_lei_akita.sh:370`, `bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:429`) | `_dado_medido`, por AST do ALVO. (`bin/tests/test_lei_akita.sh:162`, `bin/tests/test_lei_akita.sh:209`) |
+| `DADO_MEDIDO` | Dois módulos e fixture MORDE. (`app/core/placar_estrutural.py:39`, `app/core/espelho_verdade.py:31`, `bin/tests/test_lei_akita.sh:370`) | `_dado_medido` extrai nomes; `_linhas_livres` usa-os para liberar atribuições. (`bin/tests/test_lei_akita.sh:173`, `bin/tests/test_lei_akita.sh:203`) |
+| `RESULTADOS` | Definição de topo; teste L114 reatribui e restaura. Responsabilidade declarada: “quem mede”. (`app/core/placar_estrutural.py:28`, `app/core/placar_estrutural.py:71`, `app/core/tests/test_l114_placar_papel_e_termometro.py:117`, `app/core/tests/test_l114_placar_papel_e_termometro.py:123`) | `placar`; selo de afirmações fora do ar; testes L114, R1 e R6. (`app/core/placar_estrutural.py:644`, `bin/tests/test_placar_nao_afirma_fora_do_ar.sh:83`, `app/core/tests/test_l114_placar_papel_e_termometro.py:96`, `app/core/tests/test_r1_termometro_uma_medicao.py:41`, `app/core/tests/test_selo_r6_frase_do_juiz.py:17`) |
+| `ETAPAS` | Definição de topo. Responsabilidade declarada: “quem fecha a fatia”. (`app/core/espelho_verdade.py:19`, `app/core/espelho_verdade.py:35`) | `placar` e teste de costura R1. (`app/core/espelho_verdade.py:206`, `app/core/tests/test_r1_termometro_uma_medicao.py:45`) |
+
+`gerar_estado` executa os módulos, chama as funções e publica suas projeções. O handoff também lê o texto bruto de `placar_estrutural.py` por regex. (`bin/gerar_estado.py:77`, `bin/gerar_estado.py:80`, `bin/gerar_estado.py:84`, `bin/gerar_estado.py:144`, `bin/gerar_estado.py:145`, `bin/handoff_sessao.sh:179`)
+
+**“Medida/dado” não mantém o mesmo alcance.** Nos comentários, promete número medido e prova; no selo, significa expressão sintaticamente pura dentro de nome autorizado; nos leitores, inclui parâmetros de classificação, descoberta da data, rebaixamento e percentual. `fonte_do_medido`, por exemplo, é um glob operacional, não apenas texto publicado. (`app/core/placar_estrutural.py:33`, `app/core/espelho_verdade.py:25`, `bin/tests/test_lei_akita.sh:186`, `bin/tests/test_lei_akita.sh:203`, `bin/gerar_estado.py:47`, `bin/gerar_estado.py:51`, `app/core/espelho_verdade.py:211`)
+
+6. **Classes de reprovação**
+
+- **Segundo juiz:** o fluxo analisado conserva `julgar` e usa um predicado de elegibilidade no mesmo caminho; não demonstra um segundo juiz de negócio. (`bin/tests/test_lei_akita.sh:253`, `bin/tests/test_lei_akita.sh:311`)
+- **Derivação paralela:** o selo examina sintaxe e linhas; não introduz nesse fluxo outro cálculo monetário ou de vencimento. Uma duplicação fora desse escopo é **[não verificado]**. (`bin/tests/test_lei_akita.sh:186`, `bin/tests/test_lei_akita.sh:207`)
+- **Selo sem mordida:** há mordida para os casos plantados, mas falta discriminar as brechas demonstradas e a unicidade no ALVO. (`bin/tests/test_lei_akita.sh:385`, `bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:414`)
+- **Campo com dois significados / ESMERIL-SEMÂNTICA: reprova.** A autorização chamada “dado medido” alcança conteúdo que decide comportamento, e a classificação por linha ainda libera instrução executável colada ao dado. (`bin/tests/test_lei_akita.sh:203`, `bin/tests/test_lei_akita.sh:206`, `app/core/placar_estrutural.py:651`, `app/core/placar_estrutural.py:676`)
+
+## 06/11 20:37 · sessao 325c532adcd0 · BUG-PLANTIO-NOTURNO-MAIS-1 · verificador · origem=Code
+
+**A V4 corrige a reprovação estática do selo:** a avaliação em memória encontrou `novos=[]` e `curados=[]`, satisfazendo os dois testes perguntados (`app/core/tests/test_selo_teste_sem_relogio.py:67`, `:72`). A garantia de execução dos hooks congelados e dos REDs contra os pais permanece **[nao verificado]**.
+
+1. **Selo: os dois ficam verdes na avaliação estática.**
+
+   | Arquivo de teste | `le_relogio_solto` | Em `soltos()` | Em `lista()` | [nao verificado]
+   |---|---:|---|---|
+   | API original | 11 | Sim | Sim |
+   | API novo | 0 | Não | Não |
+   | A2 original | 2 | Sim | Sim |
+   | A2 novo | 0 | Não | Não |
+
+   Os valores foram calculados pelas funções reais do selo, em memória. O detector conta chamadas por AST e considera qualquer ocorrência de `freeze_time` suficiente para retornar zero (`app/core/tests/test_selo_teste_sem_relogio.py:28`, `:32`, `:58`, `:62`). Os originais continuam lendo relógio e listados; os novos têm decoração de classe (`app/api/tests/test_api_bater_ponto.py:222`; `app/chamados/tests/test_a2_data_evento_batida.py:31`, `:48`; `app/core/tests/testes_sem_relogio.txt:5`, `:26`; `app/api/tests/test_api_bater_sse_sem_dia.py:19`; `app/chamados/tests/test_a2_batida_sem_linha.py:17`).
+
+   Na cópia inteira, `soltos()` e `lista()` têm as mesmas 458 entradas. Os três métodos do selo passaram usando `unittest.TestCase` como substituto da base Django, sem executar Django ou acessar banco (`app/core/tests/test_selo_teste_sem_relogio.py:66`). Igualdade byte a byte com a lista de `8050df3f`: **[nao verificado]**.
+
+2. **Congelamento: a posição agora é adequada; cobertura efetiva dos hooks não foi comprovada aqui.**
+
+   O decorador envolve a classe que contém `setUpTestData` na API e a classe que contém `setUp` no A2, além dos respectivos corpos (`app/api/tests/test_api_bater_sse_sem_dia.py:19`, `:22`, `:33`; `app/chamados/tests/test_a2_batida_sem_linha.py:17`, `:19`, `:25`).
+
+   O comportamento esperado do freezegun para `unittest.TestCase` é cobrir `setUpClass` — incluindo `setUpTestData` —, `setUp` e corpo; essa implementação das dependências não está disponível na cópia: **[nao verificado]**. As versões estão fixadas em Django 5.2.14 e freezegun 1.5.5 (`app/requirements.txt:13`, `:43`).
+
+   Os campos automáticos relevantes chamam-se `criado_em` e usam `auto_now_add`; receberem efetivamente o instante congelado depende daquela cobertura **[nao verificado]** (`app/colaboradores/models.py:380`; `app/ponto/models.py:79`). “Arquivo inteiro congelado” também não significa importação congelada: os imports antecedem a decoração (`app/api/tests/test_api_bater_sse_sem_dia.py:9`, `:19`; `app/chamados/tests/test_a2_batida_sem_linha.py:8`, `:17`).
+
+3. **Mordida preservada dedutivamente; fixtures equivalentes, mas não literalmente iguais.**
+
+   **API:** mantém patch retornando `None`, URL `/api/ponto/bater/`, S três horas retroativa e os três asserts (`app/api/tests/test_api_bater_sse_sem_dia.py:37`, `:40`, `:41`, `:45`). O patch alcança os imports locais dos dois gêmeos; o código atual trata `None` antes de serializar (`app/api/views.py:776`, `:778`; `app/api/views_core.py:776`, `:778`). Contra o pai descrito com `None.isoformat()`, a mordida continua dedutiva; objeto e execução contra `39324b76`: **[nao verificado]**. O teste simula a resposta `None`, sem construir uma retratação real (`app/api/tests/test_api_bater_sse_sem_dia.py:23`, `:37`).
+
+   **A2:** conserva ID sem linha, timestamp de agosto e os asserts que exigem outro dia, igual ao dia corrente congelado (`app/chamados/tests/test_a2_batida_sem_linha.py:17`, `:28`, `:32`). Hoje a busca exige PK e colaborador; sem linha, o juiz retorna `None`, permitindo a conversa datada por `localdate()` (`app/chamados/services/disputa_emissao.py:379`, `:417`; `app/ponto/turnos.py:2921`; `app/chamados/models.py:2426`). Um pai que derive diretamente do timestamp falharia no primeiro assert; implementação e execução contra `8050df3f`: **[nao verificado]**. A2 chama o helper diretamente, sem patch nem URL (`app/chamados/tests/test_a2_batida_sem_linha.py:30`).
+
+   Os rótulos mudaram e o username API também mudou na cópia; os campos funcionais das fixtures foram preservados (`app/api/tests/test_api_bater_ponto.py:199`, `:206`; `app/api/tests/test_api_bater_sse_sem_dia.py:23`, `:26`; `app/chamados/tests/test_a2_data_evento_batida.py:11`; `app/chamados/tests/test_a2_batida_sem_linha.py:19`). A repetição entre classes não deve colidir sob o isolamento esperado de `TestCase`; ambas usam essa base, mas seu rollback efetivo aqui é **[nao verificado]** (`app/api/tests/test_api_bater_sse_sem_dia.py:20`; `app/chamados/tests/test_a2_batida_sem_linha.py:18`).
+
+4. **Não identifiquei contrato que quebre pelos novos arquivos ou nomes de classe.**
+
+   O runner delega a descoberta ao `DiscoverRunner`; o CRON-15 só recolhe métodos com sua marca; o smoke de portas agrega URLs dos arquivos de teste (`app/core/runner_quarentena.py:72`, `:76`; `app/core/tests/test_marca_cron15.py:37`, `:41`; `app/core/tests/test_contract_smoke_porta.py:48`). Em memória, o censo CRON-15 continuou exatamente 15/15 e o contrato de smoke passou (`app/core/tests/test_marca_cron15.py:48`; `app/core/tests/test_contract_smoke_porta.py:38`). O contrato de imports também varre testes, mas verifica nomes importados, sem exigir as classes antigas (`app/core/tests/test_contract_import_local_resolve.py:62`, `:71`, `:81`). Suíte completa: **[nao verificado]**.
+
+5. **Classes que já reprovaram a obra.**
+
+   - **Selo/RED sem mordida:** a falsa “cura” dos arquivos antigos foi eliminada; a mordida permanece dedutiva. O RED API ainda não exige que o mock tenha sido chamado (`app/core/tests/test_selo_teste_sem_relogio.py:34`, `:73`; `app/api/tests/test_api_bater_sse_sem_dia.py:37`, `:45`).
+   - **Relógio fora da borda:** as fixtures agora estão dentro das classes decoradas; os arquivos antigos continuam explicitamente soltos e listados. A cobertura efetiva dos hooks permanece **[nao verificado]** (`app/api/tests/test_api_bater_sse_sem_dia.py:19`; `app/chamados/tests/test_a2_batida_sem_linha.py:17`; `app/core/tests/testes_sem_relogio.txt:5`, `:26`).
+   - **Paridade dos gêmeos:** o contrato AST passou em memória; isso comprova igualdade estrutural, sem substituir duas execuções comportamentais (`app/api/tests/test_contract_paridade_kernels.py:26`, `:34`).
+
+## 06/11 20:35 · sessao ce334d3b3633 · - · - · origem=Ronald (tmux)
+
+- **API: mordida dedutiva preservada.** Patch, POST, tipo S retroativo três horas e asserts foram mantidos (`app/api/tests/test_api_bater_sse_sem_dia.py:37`, `:41`, `:45`). O atraso cabe na janela de 48 h (`app/api/hora_do_aparelho.py:63`, `:141`) e evita a correção ao vivo de 300 s (`app/api/views_core.py:592`). Sem vínculo na fixture, a correção retroativa não entra (`app/api/tests/test_api_bater_sse_sem_dia.py:23`; `app/api/views_core.py:611`). O fallback sem batidas dá motivo (`app/escala/servico_jornada.py:469`, `:471`, `:545`), permitindo criar SSE (`app/api/views_core.py:649`). O patch alcança os imports locais nos dois gêmeos (`app/api/views.py:776`; `app/api/views_core.py:776`). Atual trata `None`; o pai descrito, com `None.isoformat()`, seria RED (`app/api/views_core.py:778`; `app/api/tests/test_api_bater_sse_sem_dia.py:36`). Objeto Git e execução contra `39324b76`: **[nao verificado]**.
+
+- **A2: a mudança de arquivo preserva o contraexemplo.** Continua fornecendo ID sem linha, timestamp de agosto e exigindo data diferente de agosto e igual ao dia congelado de outubro (`app/chamados/tests/test_a2_batida_sem_linha.py:17`, `:28`, `:32`). Atual busca a linha por PK e colaborador; sem linha, o helper retorna `None` (`app/chamados/services/disputa_emissao.py:379`; `app/ponto/turnos.py:2921`). O motivo é de escolha (`app/chamados/catalogo/perguntas.py:82`), permitindo `abrir_conversa`, que grava `localdate()` (`app/chamados/services/disputa_emissao.py:410`, `:417`; `app/chamados/models.py:2426`). Se o pai deriva diretamente do timestamp, falha no primeiro assert; implementação do pai e execução contra `8050df3f`: **[nao verificado]**.
+
+- **Fixtures equivalentes funcionalmente, não literalmente iguais.** A API mudou rótulos e username, mantendo campos funcionais; CPF/CNPJ repetem (`app/api/tests/test_api_bater_ponto.py:199`, `:206`, `:207`; `app/api/tests/test_api_bater_sse_sem_dia.py:23`, `:26`, `:27`). A2 mudou rótulos, mantendo os demais parâmetros (`app/chamados/tests/test_a2_data_evento_batida.py:12`; `app/chamados/tests/test_a2_batida_sem_linha.py:20`). Ambos herdam `TestCase`; garantia de isolamento depende da implementação Django indisponível, portanto **[nao verificado]** além da declaração de herança (`app/api/tests/test_api_bater_sse_sem_dia.py:20`; `app/chamados/tests/test_a2_batida_sem_linha.py:18`).
+
+- **Limite do RED API:** não há `assert_called` no patch; a passagem efetiva pela guarda é deduzida do fluxo, não medida pelo teste (`app/api/tests/test_api_bater_sse_sem_dia.py:37`, `:45`). O teste simula retorno `None`, sem construir uma batida retratada real (`app/api/tests/test_api_bater_sse_sem_dia.py:23`, `:37`).
+
+## 06/11 20:35 · sessao fa77ffc8e719 · - · - · origem=Ronald (tmux)
+
+Achado principal: **o selo aceita alteração de decisão dentro de `RESULTADOS`**. Trocar somente `'papel': TERMOMETRO` por `PRINCIPAL` no R1 conserva dado puro, mas remove o único termômetro da seleção e pode trocar AMARELO por VERDE. (`app/core/placar_estrutural.py:121`, `app/core/placar_estrutural.py:61`, `bin/tests/test_lei_akita.sh:174`, `bin/tests/test_lei_akita.sh:202`, `app/core/placar_estrutural.py:672`, `app/core/placar_estrutural.py:676`, `app/core/placar_estrutural.py:686`, `app/core/placar_estrutural.py:694`)
+
+Verifiquei a mudança **somente em memória**, executando AST original e AST com esse valor trocado: com `hoje=2026-11-06`, medição R1 `2026-10-01`, original retorna AMARELO/vencido; mutado retorna VERDE/em dia. A explicação está na classificação por `papel` e nas duas listas consultadas pelo veredito. (`app/core/placar_estrutural.py:651`, `app/core/placar_estrutural.py:676`, `app/core/placar_estrutural.py:686`, `app/core/placar_estrutural.py:690`, `app/core/placar_estrutural.py:694`)
+
+**Limite:** esse contraexemplo passa pelo juiz de `padrao`; o teste existente L114 exige R1 como único termômetro e exige os dois resultados de cor, portanto não afirmar que passa pela régua inteira. (`bin/tests/test_lei_akita.sh:243`, `app/core/tests/test_l114_placar_papel_e_termometro.py:34`, `app/core/tests/test_l114_placar_papel_e_termometro.py:35`, `app/core/tests/test_l114_placar_papel_e_termometro.py:71`, `app/core/tests/test_l114_placar_papel_e_termometro.py:75`)
+
+| Símbolo | Quem escreve | Quem lê |
+|---|---|---|
+| `PAPEL_DO_MODULO` | Declarações dos módulos; fixture e alterações do MORDE. (`app/core/placar_estrutural.py:38`, `app/core/espelho_verdade.py:30`, `bin/tests/test_lei_akita.sh:370`, `bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:403`, `bin/tests/test_lei_akita.sh:429`) | `_dado_medido` via `_atribuicoes`, sintaticamente no AST do ALVO. (`bin/tests/test_lei_akita.sh:162`, `bin/tests/test_lei_akita.sh:165`, `bin/tests/test_lei_akita.sh:209`) |
+| `DADO_MEDIDO` | Declarações dos módulos e fixture MORDE. (`app/core/placar_estrutural.py:39`, `app/core/espelho_verdade.py:31`, `bin/tests/test_lei_akita.sh:370`) | `_dado_medido` extrai nomes; `_linhas_livres` confere alvo do `Assign`. (`bin/tests/test_lei_akita.sh:162`, `bin/tests/test_lei_akita.sh:168`, `bin/tests/test_lei_akita.sh:173`, `bin/tests/test_lei_akita.sh:203`) |
+| `RESULTADOS` | Definição de topo; teste reatribui e restaura. A responsabilidade declarada é “quem mede”. (`app/core/placar_estrutural.py:28`, `app/core/placar_estrutural.py:71`, `app/core/tests/test_l114_placar_papel_e_termometro.py:117`, `app/core/tests/test_l114_placar_papel_e_termometro.py:123`) | `placar`; selo de afirmação fora do ar; testes L114, R1 e R6. (`app/core/placar_estrutural.py:644`, `bin/tests/test_placar_nao_afirma_fora_do_ar.sh:83`, `app/core/tests/test_l114_placar_papel_e_termometro.py:36`, `app/core/tests/test_l114_placar_papel_e_termometro.py:96`, `app/core/tests/test_r1_termometro_uma_medicao.py:41`, `app/core/tests/test_selo_r6_frase_do_juiz.py:17`) |
+| `ETAPAS` | Definição de topo; responsabilidade declarada é “quem fecha a fatia”. (`app/core/espelho_verdade.py:19`, `app/core/espelho_verdade.py:35`) | `placar`; teste de costura da mesma medição R1. (`app/core/espelho_verdade.py:206`, `app/core/tests/test_r1_termometro_uma_medicao.py:45`) |
+
+Os consumidores indiretos executam os módulos e chamam seus leitores: `gerar_estado` usa `placar`, `linha_do_placar`, `veredito` e publica as duas projeções. O handoff também lê texto do arquivo por regex para extrair a frase `contratos_estruturais`. (`bin/gerar_estado.py:77`, `bin/gerar_estado.py:80`, `bin/gerar_estado.py:83`, `bin/gerar_estado.py:84`, `bin/gerar_estado.py:144`, `bin/gerar_estado.py:145`, `bin/handoff_sessao.sh:179`)
+
+Outros controles inseridos nos contêineres:
+
+- `papel` determina classificação e seleção de resultados; `estado` determina contagens; `numero`/`prova` determinam rebaixamento a PENDENTE. (`app/core/placar_estrutural.py:646`, `app/core/placar_estrutural.py:647`, `app/core/placar_estrutural.py:649`, `app/core/placar_estrutural.py:672`, `app/core/placar_estrutural.py:700`, `app/core/placar_estrutural.py:701`)
+- `fonte_do_medido` é padrão de glob usado para ler nomes de arquivos e derivar a data; `id` indexa o mapa de datas; essa data determina vencimento. Não é apenas prosa de prova. (`bin/gerar_estado.py:47`, `bin/gerar_estado.py:51`, `bin/gerar_estado.py:52`, `bin/gerar_estado.py:56`, `app/core/placar_estrutural.py:650`, `app/core/placar_estrutural.py:668`)
+- Em `ETAPAS`, `estado` e `prova` controlam rebaixamento e percentual; `itens`, `nome` e `porta` são chaves acessadas diretamente. Renomear chave ainda é sintaticamente puro, podendo mudar resultado ou causar exceção. (`app/core/espelho_verdade.py:208`, `app/core/espelho_verdade.py:209`, `app/core/espelho_verdade.py:211`, `app/core/espelho_verdade.py:214`, `app/core/espelho_verdade.py:215`, `app/core/espelho_verdade.py:217`)
+- `fonte_do_medido` adulterado pode mudar o universo de arquivos consultados; demonstrar uma nova data real sem acesso aos logs é **[não verificado]**. (`bin/gerar_estado.py:47`, `bin/gerar_estado.py:51`)
+- Nos leitores rastreados, strings entram em templates fixos com `%`, não como expressão Python; não achei interpretação `eval`/`exec` nessas rotas. A ausência fora das rotas rastreadas é **[não verificado]**. (`bin/gerar_estado.py:101`, `bin/gerar_estado.py:115`, `bin/gerar_estado.py:153`, `bin/gerar_estado.py:163`, `bin/tests/test_placar_nao_afirma_fora_do_ar.sh:67`)
+
+**ESMERIL:** nos comentários dos módulos, “medida” promete número medido e texto de prova; no selo significa qualquer expressão pura atribuída ao contêiner nomeado; nos leitores, esses contêineres também fornecem parâmetros de classificação, descoberta da data, rebaixamento e percentual. Portanto pureza sintática não garante ausência de decisão. (`app/core/placar_estrutural.py:33`, `app/core/espelho_verdade.py:25`, `bin/tests/test_lei_akita.sh:186`, `bin/tests/test_lei_akita.sh:202`, `app/core/placar_estrutural.py:651`, `bin/gerar_estado.py:47`, `app/core/espelho_verdade.py:211`)
+
+## 06/11 20:35 · sessao 26d44a2e25e0 · - · - · origem=Ronald (tmux)
+
+Não identifiquei contrato que quebre pela criação dos dois arquivos ou pelos novos nomes de classe; execução da suíte completa: [nao verificado]. [nao verificado]
+
+| Consumidor | Efeito do delta |
+|---|---|
+| Descoberta da suíte | Labels abrangem `api` e `chamados`; o runner delega a descoberta ao `DiscoverRunner`, sem inventário fechado dos arquivos/classes (`bin/regua.sh:23`; `bin/suite.sh:102`; `app/core/runner_quarentena.py:72`, `:76`). |
+| Selo TESTE-SEM-RELOGIO | Enumera nomes `test*.py`, portanto inclui ambos os novos arquivos; avalia seu conteúdo, não exige nomes de classe específicos (`app/core/tests/test_selo_teste_sem_relogio.py:48`, `:53`, `:59`). |
+| Lista CRON-15 | Varre arquivos e classes de `api/tests` e `chamados/tests`, mas só coleta métodos decorados com `falha_esperada_cron15`. Os novos métodos não possuem essa marca, portanto não alteram o conjunto comparado (`app/core/tests/test_marca_cron15.py:25`, `:37`, `:41`, `:50`; `app/api/tests/test_api_bater_sse_sem_dia.py:33`; `app/chamados/tests/test_a2_batida_sem_linha.py:25`). |
+| Cobertura POST das portas | Agrega URLs dos `test_*.py`; o POST `/api/ponto/bater/` continua presente no novo arquivo, preservando a contribuição do teste movido (`app/core/tests/test_contract_smoke_porta.py:48`, `:51`; `app/api/tests/test_api_bater_sse_sem_dia.py:41`). |
+| Imports locais | Varre inclusive testes e verifica os nomes importados; os novos arquivos usam modelos existentes, sem dependência dos nomes das classes antigas (`app/core/tests/test_contract_import_local_resolve.py:62`, `:71`, `:81`; `app/colaboradores/models.py:40`, `:177`, `:219`, `:283`; `app/ponto/models.py:8`; `app/chamados/models.py:2205`). |
+| Censo dos contratos | Seleciona somente `test_contract_*.py`; os dois novos nomes ficam fora desse conjunto (`app/core/tests/test_o20_contrato_julga_codigo.py:160`, `:164`; `app/api/tests/test_api_bater_sse_sem_dia.py:1`; `app/chamados/tests/test_a2_batida_sem_linha.py:1`). |
+| P13 `data_evento` | Exclui diretórios `tests`, portanto os arquivos novos não entram no censo de escritores de produção (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:114`, `:115`). |
+| Diagrama/cobertura por família | Lê `*/tests/test_*.py`, porém só associa selos que referenciam o registro `core.juizes`; os novos imports não fazem essa ligação (`app/core/management/commands/gerar_diagrama.py:450`, `:458`, `:665`, `:674`, `:708`, `:719`; `app/api/tests/test_api_bater_sse_sem_dia.py:15`; `app/chamados/tests/test_a2_batida_sem_linha.py:13`). |
+| Guarda de RELATO | Varre testes, mas ignora fontes sem o literal `RELATO.md`; os arquivos novos não contêm esse literal (`bin/tests/test_relato_guarda_pedido_de_patch.sh:144`, `:146`; `app/api/tests/test_api_bater_sse_sem_dia.py:1`; `app/chamados/tests/test_a2_batida_sem_linha.py:1`). |
+| Testes fora do Git | Compara arquivos encontrados com `git ls-files`; estado efetivamente versionado nesta cópia: [nao verificado] (`bin/testes_fora_do_git.sh:46`, `:48`, `:49`). |
+
+O integrador também deriva automaticamente labels de módulos para arquivos em `tests`, permitindo selecionar os dois novos módulos sem cadastro adicional (`app/core/integrador_lote.py:45`, `:57`, `:58`).
+
+## 06/11 20:35 · sessao 8fabf48e1494 · - · - · origem=Ronald (tmux)
+
+Auditoria por inspeção; execução do MORDE e de mutantes: **[não verificado]**.
+
+**Falha adicional crítica:** `livre` prevalece sobre `preso` quando dois nós ocupam a mesma linha. `_linhas_livres` adiciona as faixas dos nós aos dois conjuntos e retorna `livre | (soltas - preso)`, sem subtrair `preso` de `livre`. Assim, terminar o contêiner com `]; CAD = 700` ou `}; funcao()` deixa essa linha livre pelo `Assign` permitido, embora a segunda instrução seja presa; o verificador aceita a alteração por linha. (`bin/tests/test_lei_akita.sh:198`, `bin/tests/test_lei_akita.sh:202`, `bin/tests/test_lei_akita.sh:204`, `bin/tests/test_lei_akita.sh:206`, `bin/tests/test_lei_akita.sh:230`)
+
+**O MORDE não cobre cada cláusula nova.** Os casos de medida chamam as funções reais, mas recebem mensagens/arquivos montados manualmente; os commits têm mensagem `c`, portanto não exercitam a integração de medida com `falhas_do_universo`. (`bin/tests/test_lei_akita.sh:383`, `bin/tests/test_lei_akita.sh:404`, `bin/tests/test_lei_akita.sh:413`, `bin/tests/test_lei_akita.sh:414`)
+
+| Caso | Mutante que mata por inspeção |
+|---|---|
+| `so_numero`, `estado`, `comentario`, `doc` | Recusa incondicional de medida; proibição de constante-string; retirada da liberação de comentário/docstring. (`bin/tests/test_lei_akita.sh:388`, `bin/tests/test_lei_akita.sh:389`, `bin/tests/test_lei_akita.sh:390`, `bin/tests/test_lei_akita.sh:391`, `bin/tests/test_lei_akita.sh:406`) |
+| `na_def` | Liberação de corpo de função. (`bin/tests/test_lei_akita.sh:392`, `bin/tests/test_lei_akita.sh:407`) |
+| `tira_def` | Julgar somente o lado novo, ignorando linhas presas removidas. (`bin/tests/test_lei_akita.sh:393`, `bin/tests/test_lei_akita.sh:407`) |
+| `com_import`, `com_lambda`, `com_chamada`, `com_nome` | Liberar respectivamente import, lambda, chamada ou Name sem ser constante-string. (`bin/tests/test_lei_akita.sh:394`, `bin/tests/test_lei_akita.sh:395`, `bin/tests/test_lei_akita.sh:396`, `bin/tests/test_lei_akita.sh:397`, `bin/tests/test_lei_akita.sh:407`, `bin/tests/test_lei_akita.sh:408`) |
+| `decisao` | Liberar Assign fora dos nomes declarados. (`bin/tests/test_lei_akita.sh:398`, `bin/tests/test_lei_akita.sh:409`) |
+| `monkey` | Liberar atribuição a Attribute. (`bin/tests/test_lei_akita.sh:399`, `bin/tests/test_lei_akita.sh:409`) |
+| `redecl` | Liberar a linha histórica que acrescenta outra declaração; **não demonstra unicidade no ALVO**. O HEAD é restaurado à base após criar cada commit, e a declaração é lida desse HEAD. (`bin/tests/test_lei_akita.sh:74`, `bin/tests/test_lei_akita.sh:209`, `bin/tests/test_lei_akita.sh:385`, `bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:409`) |
+| `sem_decl` | Aceitar `PAPEL_DO_MODULO='juiz'` no ALVO. (`bin/tests/test_lei_akita.sh:373`, `bin/tests/test_lei_akita.sh:401`, `bin/tests/test_lei_akita.sh:410`) |
+| `mais_fech` | Ignorar outro arquivo de negócio. (`bin/tests/test_lei_akita.sh:402`, `bin/tests/test_lei_akita.sh:410`) |
+| `so_numero` com instrumento | Estender a exceção a `n/a (instrumento)`. (`bin/tests/test_lei_akita.sh:411`) |
+| ALVO sem declaração | Ler a declaração apenas de `h`, dispensando a do ALVO. (`bin/tests/test_lei_akita.sh:417`, `bin/tests/test_lei_akita.sh:418`) |
+| Retroativo número/decisão | Exigir declaração em `h`; ou liberar constante de decisão fora de DADO. (`bin/tests/test_lei_akita.sh:423`, `bin/tests/test_lei_akita.sh:429`, `bin/tests/test_lei_akita.sh:431`) |
+
+**Mutantes/lacunas que sobrevivem ou não são discriminados pelos casos existentes:**
+
+- Retirar a unicidade de `PAPEL_DO_MODULO` ou `DADO_MEDIDO` no ALVO: nenhum caso planta ALVO com duplicação; `redecl` falha por linha presa em `h`. (`bin/tests/test_lei_akita.sh:163`, `bin/tests/test_lei_akita.sh:385`, `bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:417`, `bin/tests/test_lei_akita.sh:429`)
+- Retirar a contagem de atribuições de constantes-string: a fixture contém constantes atribuídas uma vez; nenhum caso introduz reatribuição. (`bin/tests/test_lei_akita.sh:185`, `bin/tests/test_lei_akita.sh:371`, `bin/tests/test_lei_akita.sh:388`, `bin/tests/test_lei_akita.sh:403`)
+- Aceitar Assign com múltiplos alvos ou Subscript; liberar AnnAssign; liberar nós presos na mesma linha de dado; aceitar declaração aninhada ou DADO inválido; liberar classe/decorador, comentário dentro de função, docstring posterior, ou diff sem hunk: faltam casos específicos. (`bin/tests/test_lei_akita.sh:163`, `bin/tests/test_lei_akita.sh:169`, `bin/tests/test_lei_akita.sh:199`, `bin/tests/test_lei_akita.sh:201`, `bin/tests/test_lei_akita.sh:202`, `bin/tests/test_lei_akita.sh:206`, `bin/tests/test_lei_akita.sh:225`, `bin/tests/test_lei_akita.sh:388`, `bin/tests/test_lei_akita.sh:411`)
+- Não há caso de medida com rebinding por for/with/import/walrus/del, nem leitor que interprete dado como decisão/código/chave. (`bin/tests/test_lei_akita.sh:370`, `bin/tests/test_lei_akita.sh:372`, `bin/tests/test_lei_akita.sh:388`, `bin/tests/test_lei_akita.sh:411`)
+- O comentário “nem concessão retroativa” ficou contraditório ao teste seguinte, que exige concessão retroativa para número. (`bin/tests/test_lei_akita.sh:416`, `bin/tests/test_lei_akita.sh:420`, `bin/tests/test_lei_akita.sh:423`)
+
+**Merge/rename/restauração:**
+
+- Universo enumera todos os pais; começa com os caminhos diferentes do primeiro pai e remove os iguais a qualquer outro pai publicado; os restantes passam pelo predicado de medida. (`bin/tests/test_lei_akita.sh:285`, `bin/tests/test_lei_akita.sh:293`, `bin/tests/test_lei_akita.sh:296`, `bin/tests/test_lei_akita.sh:303`, `bin/tests/test_lei_akita.sh:308`, `bin/tests/test_lei_akita.sh:311`)
+- `medida_do_commit` compara linhas com o primeiro pai e `--no-renames`, inclusive ambos os lados e contagem zero. (`bin/tests/test_lei_akita.sh:213`, `bin/tests/test_lei_akita.sh:217`, `bin/tests/test_lei_akita.sh:221`, `bin/tests/test_lei_akita.sh:228`, `bin/tests/test_lei_akita.sh:230`)
+- Rename mantém origem e destino; origem ausente no ALVO recusa, mas origem restaurada/declarada posteriormente pode permitir exclusão histórica se só houver linhas livres. Criação que inclua declarações normais, função ou import recusa pelas linhas presas; ausência de arquivo num lado só é tolerada quando a contagem alterada desse lado é zero. (`bin/tests/test_lei_akita.sh:138`, `bin/tests/test_lei_akita.sh:139`, `bin/tests/test_lei_akita.sh:202`, `bin/tests/test_lei_akita.sh:209`, `bin/tests/test_lei_akita.sh:211`, `bin/tests/test_lei_akita.sh:217`, `bin/tests/test_lei_akita.sh:230`)
+- O MORDE antigo cobre primeiro pai, merge limpo/maligno e renames com `n/a (instrumento)`; não cobre elegibilidade AST de medida nesses cenários. (`bin/tests/test_lei_akita.sh:480`, `bin/tests/test_lei_akita.sh:486`, `bin/tests/test_lei_akita.sh:513`, `bin/tests/test_lei_akita.sh:520`, `bin/tests/test_lei_akita.sh:525`, `bin/tests/test_lei_akita.sh:536`, `bin/tests/test_lei_akita.sh:540`)
+
+**Erro Git:** `show` e `diff` novos emitem `PADRAO_ERRO`; `cat-file -e` com qualquer rc retorna AST ausente, e `rev-parse h^1` com qualquer rc retorna False. Estes últimos recusam a medida, mas não cumprem literalmente “erro de Git = PADRAO_ERRO”. Os erros dessas novas operações não têm injeção específica no MORDE. (`bin/tests/test_lei_akita.sh:138`, `bin/tests/test_lei_akita.sh:139`, `bin/tests/test_lei_akita.sh:142`, `bin/tests/test_lei_akita.sh:143`, `bin/tests/test_lei_akita.sh:213`, `bin/tests/test_lei_akita.sh:214`, `bin/tests/test_lei_akita.sh:218`, `bin/tests/test_lei_akita.sh:219`, `bin/tests/test_lei_akita.sh:388`, `bin/tests/test_lei_akita.sh:433`)
+
+**Integração e resultado:** o universo real fornece o callback de medida; o shell exige `PADRAO_FIM`; o MORDE precisa produzir `MORDE_OK` e nenhuma linha `MORDE_FALHOU`. A régua percorre `test_*.sh`, e o pre-push passa `PUSH_SHA` ao selo. (`bin/tests/test_lei_akita.sh:311`, `bin/tests/test_lei_akita.sh:565`, `bin/tests/test_lei_akita.sh:568`, `bin/tests/test_lei_akita.sh:569`, `bin/regua.sh:138`, `bin/pre-push.sh:38`)
+
+## 06/11 20:35 · sessao 34ca66140e6e · - · - · origem=Ronald (tmux)
+
+- Os dois decoradores agora estão nas classes; a fixture API está em `setUpTestData` e a fixture A2 em `setUp`, com os corpos dentro das respectivas classes (`app/api/tests/test_api_bater_sse_sem_dia.py:19`, `:22`, `:33`; `app/chamados/tests/test_a2_batida_sem_linha.py:17`, `:19`, `:25`).
+
+- A cópia fixa `freezegun==1.5.5` e `Django==5.2.14` (`app/requirements.txt:43`, `:13`). O comportamento esperado é o decorador de classe do freezegun envolver `setUpClass` — que inclui `setUpTestData` no Django —, `setUp` e corpo; contudo as implementações das duas dependências não estão instaladas/encontráveis neste ambiente, portanto essa semântica não pôde ser comprovada pelo código disponível: **[nao verificado]**. Nenhuma execução Django/DB foi realizada: **[nao verificado]**.
+
+- Há campos automáticos relevantes: `Colaborador.criado_em = DateTimeField(auto_now_add=True)` e `Batida.criado_em` idem (`app/colaboradores/models.py:380`; `app/ponto/models.py:79`). A afirmação de que recebem o instante congelado depende daquela semântica de biblioteca: **[nao verificado]**. O nome de campo efetivo nesses modelos é `criado_em` (`app/colaboradores/models.py:380`; `app/ponto/models.py:79`).
+
+- Evitar a formulação absoluta “o arquivo inteiro não lê relógio real”: os imports são executados antes da aplicação do decorador; o que o código mostra diretamente é decoração da classe, não congelamento do import do módulo (`app/api/tests/test_api_bater_sse_sem_dia.py:9`, `:19`; `app/chamados/tests/test_a2_batida_sem_linha.py:8`, `:17`). Cobertura de imports, `_pre_setup` do Django, rotinas do runner, bibliotecas ignoradas, threads e relógio externo: **[nao verificado]**.
+
+- As fixtures API **não são literalmente idênticas**: os nomes têm sufixo `2` e o username mudou; os campos de empresa, praça, posto, colaborador, flags e ausência de criação de escala/batida continuam correspondentes (`app/api/tests/test_api_bater_ponto.py:197`; `app/api/tests/test_api_bater_sse_sem_dia.py:21`). Não reproduzir os identificadores pessoais encontrados na cópia (`app/api/tests/test_api_bater_ponto.py:206`; `app/api/tests/test_api_bater_sse_sem_dia.py:26`).
+
+- A2 também muda os rótulos para sufixo `2`; mantém os demais parâmetros de criação e o usuário `sistema` (`app/chamados/tests/test_a2_data_evento_batida.py:11`; `app/chamados/tests/test_a2_batida_sem_linha.py:19`).
+
+- CNPJ e CPF são realmente únicos no modelo; portanto haveria colisão se as linhas fossem compartilhadas no mesmo estado persistente (`app/colaboradores/models.py:43`, `:319`). Ambas as classes novas e as antigas herdam de `django.test.TestCase`, sem substituição local dessa base (`app/api/tests/test_api_bater_sse_sem_dia.py:10`, `:20`; `app/api/tests/test_api_bater_ponto.py:194`; `app/chamados/tests/test_a2_batida_sem_linha.py:9`, `:18`; `app/chamados/tests/test_a2_data_evento_batida.py:5`, `:10`). Isolamento transacional/limpeza entre classes é o comportamento esperado do Django TestCase, mas sua implementação e execução não puderam ser verificadas nesta cópia: **[nao verificado]**.
+
+## 06/11 20:34 · sessao 5a2662cb0fd2 · - · - · origem=Ronald (tmux)
+
+Os três commits R1 tocarem somente `RESULTADOS`/`ETAPAS`: **[não verificado]**. A cópia não contém `.git`, nem os patches individuais. O relato cita as origens e as duas correções, mas não prova seus diffs. (`app/docs/RELATO.md:864`, `app/docs/RELATO.md:869`)
+
+Os contêineres atuais ocupam `app/core/placar_estrutural.py:71` até `:624` e `app/core/espelho_verdade.py:35` até `:195`. A justificativa da retroatividade cita os três R1, sem demonstrar suas linhas históricas. (`bin/tests/test_lei_akita.sh:133`)
+
+**Achado adicional: executável na mesma linha passa.** Alterar o fechamento `]` de `RESULTADOS` para `]; print(123)`, `]; f.x = 1` ou `]; import os` mantém a linha simultaneamente livre e presa; o retorno não subtrai `preso` de `livre`. Confirmei os três resultados em memória com as funções reais, sem escrever arquivos. O selo Git integral permanece **[não verificado]**. (`bin/tests/test_lei_akita.sh:202`, `bin/tests/test_lei_akita.sh:204`, `bin/tests/test_lei_akita.sh:206`)
 
 ## 06/11 20:28 · sessao a13400452ea1 · BUG-PLANTIO-NOTURNO-MAIS-1 · verificador · origem=Code
 
@@ -954,304 +1212,4 @@ Quanto ao comportamento:
 
 A recusa mecânica dos três primeiros decorre da classificação por caminho: `app/`, fora de testes e documentos, é “negócio” e recusa `n/a`. Isso não demonstra que realizem um padrão; a própria L-123 exige conferir o rótulo contra o diff. (`bin/tests/test_lei_akita.sh:122–135`; `app/docs/PLANO-PADROES.md:53,58`)
 
-## 06/11 20:07 · sessao 631ab37d7510 · BUG-PLANTIO-NOTURNO-MAIS-1 · verificador · origem=Code
-
-**As três curas fecham os caminhos locais apontados, com ressalvas:** (a) acrescenta um caso de push sem pergunta; (b) evita a exceção, mas não garante recuperação posterior; (c) cobre inserção recente, enquanto reaproveitamento conserva a criação antiga. `app/chamados/services/disputa_emissao.py:411`, `app/chamados/services/disputa_emissao.py:640`, `app/ponto/services/triagem_batida.py:730`, `app/chamados/services/materializacao.py:922`.
-
-RED real, execução Django contra o pai e ocorrência em produção: **[nao verificado]**. A avaliação dos testes abaixo é estática, usando o delta fornecido e os caminhos citados. [nao verificado]
-
-**1. Curas e alcance de (a)**
-
-- **(a) Fecha o fallback defeituoso:** sem dia, uma pergunta `hora` agora para antes de `abrir_conversa`; perguntas de outros tipos continuam podendo nascer como conversa. `app/chamados/services/disputa_emissao.py:410`, `app/chamados/services/disputa_emissao.py:417`.
-- **(b) Fecha `None.isoformat()` na triagem:** `_T1` é consultado uma vez e a disputa só nasce quando há dia. `app/ponto/services/triagem_batida.py:726`, `app/ponto/services/triagem_batida.py:739`.
-- **(c) Fecha a exclusão da inserção retroativa recente:** troca o filtro temporal, preservando os demais critérios e a consulta ao mesmo juiz. Não achei juiz ou escritor novo nessa alteração. `app/ponto/management/commands/vigia_plantio_overnight.py:73`, `app/ponto/management/commands/vigia_plantio_overnight.py:76`, `app/ponto/management/commands/vigia_plantio_overnight.py:87`.
-
-**Caminho legítimo “nasce conversa-hora e outro escritor preenche o dia depois”: nao achei.** A conversa já recebe `localdate()` no nascimento; `reapontar_resolvedora` só escreve a data quando ela está vazia. Portanto, esse escritor posterior não corrigiria o “hoje” daquela conversa. `app/chamados/models.py:2426`, `app/chamados/services/fio.py:835`.
-
-Os quatro motivos `hora` do catálogo são `orfao_14h`, `saida_sem_entrada`, `intervalo_saida` e `intervalo_volta`. Os intervalos sem dia já eram recusados antes da guarda nova; o caso demonstrável atingido por ela é órfão/SSE com texto produzido, mas sem data válida após os fallbacks. `app/chamados/catalogo/perguntas.py:48`, `app/chamados/catalogo/perguntas.py:56`, `app/chamados/catalogo/perguntas.py:124`, `app/chamados/catalogo/perguntas.py:132`, `app/chamados/catalogo/query.py:66`, `app/chamados/services/disputa_emissao.py:387`.
-
-**A acusação não desaparece deixando somente log:** motivos e contexto são persistidos antes da geração. A recusa específica, entretanto, fica apenas no `logger.info`, sem pergunta ou pendência própria. `app/chamados/services/disputa_emissao.py:532`, `app/chamados/services/disputa_emissao.py:557`, `app/chamados/services/disputa_emissao.py:632`, `app/chamados/services/disputa_emissao.py:415`.
-
-**Efeito adicional concreto:** após recusar a única pergunta, `criar_ou_atualizar_disputa` ainda pode mandar “Toque para responder”. A decisão de enviar push ignora o resultado do gerador. Esse desacoplamento já existia; a cura acrescenta um caso que o alcança. `app/chamados/services/disputa_emissao.py:640`, `app/chamados/services/disputa_emissao.py:652`, `app/chamados/services/disputa_emissao.py:656`, `app/chamados/services/disputa_emissao.py:1577`.
-
-Chamadores diretos encontrados fora dos testes: [nao verificado]
-
-| Chamador | O que espera |
-|---|---|
-| `criar_ou_atualizar_disputa` | Geração como efeito; ignora a lista retornada e devolve a disputa. `app/chamados/services/disputa_emissao.py:640`, `app/chamados/services/disputa_emissao.py:652`, `app/chamados/services/disputa_emissao.py:658`. |
-| `perguntar_entradas_pendentes` | Injeta dia obtido da batida via `_T1`, acumula a lista e salva contexto se ela não estiver vazia. `app/chamados/services/disputa_emissao.py:282`, `app/chamados/services/disputa_emissao.py:292`, `app/chamados/services/disputa_emissao.py:294`. |
-| Fábrica `perguntar` | Fornece dia explícito; chama criação/atualização e novamente o gerador; ignora a lista. `app/chamados/services/fabrica_da_celula.py:139`, `app/chamados/services/fabrica_da_celula.py:141`. |
-| `smoke_chamados` | Fornece data quando exigida e espera uma pergunta com o tipo do catálogo. `app/chamados/management/commands/smoke_chamados.py:96`, `app/chamados/management/commands/smoke_chamados.py:102`, `app/chamados/management/commands/smoke_chamados.py:104`. |
-
-O contrato documentado é “lista das perguntas criadas”, mas a implementação também acrescenta pergunta reaproveitada, com `_criada=False`; isso antecede o delta. `app/chamados/services/disputa_emissao.py:304`, `app/chamados/services/disputa_emissao.py:449`, `app/chamados/models.py:2497`.
-
-**2. SSE sem disputa: há recuperação?**
-
-**Recuperador específico dessa tentativa/batida retratada: nao achei.** `registrar_batida` pode devolver a mesma chave retratada sem inserir nem salvar; `_T1` exclui retratadas. A guarda então pula a disputa e a triagem pode chegar à indicação de sucesso, sem registrar pendência própria nesse ramo. `app/ponto/registro_batida.py:120`, `app/ponto/turnos.py:2905`, `app/ponto/turnos.py:2925`, `app/ponto/services/triagem_batida.py:730`, `app/ponto/services/triagem_batida.py:757`.
-
-**Há recuperação condicional pelo dia:** o código declara `vigia_de_hora --apply` a cada dez minutos e cartório diário. O julgamento pode chamar a fábrica, que emite perguntas pela célula. Isso não equivale a reprocessar aquela tentativa. `app/config/crons.py:367`, `app/config/crons.py:616`, `app/ponto/services/cartorio.py:981`, `app/ponto/services/cartorio.py:997`.
-
-Não há garantia universal: o vigia seleciona células `trabalha=True`; a fábrica pode recusar por situação, veredito ou parcial, e só pergunta motivos ainda ausentes. Portanto, **pode permanecer sem pergunta; “sempre invisível” também não está demonstrado**. `app/ponto/services/vigia_de_hora.py:21`, `app/chamados/services/fabrica_da_celula.py:91`, `app/chamados/services/fabrica_da_celula.py:99`, `app/chamados/services/fabrica_da_celula.py:102`, `app/chamados/services/fabrica_da_celula.py:126`. Recuperação efetiva em produção: **[nao verificado]**.
-
-A cura é local à triagem: API e clone ainda chamam `.isoformat()` sem essa guarda. `app/api/views.py:782`, `app/api/views_core.py:782`.
-
-**3. Quem escreve `Batida.criado_em`; reabertura e reaproveitamento**
-
-O escritor normal é `auto_now_add=True`, na inserção da linha. A porta cria por `Batida.objects.create`; `timestamp` é um campo separado. `app/ponto/models.py:23`, `app/ponto/models.py:79`, `app/ponto/registro_batida.py:152`, `app/ponto/registro_batida.py:157`.
-
-**Reescritor Python específico de `Batida.criado_em`: nao achei.** A porta de anotação não aceita esse campo e salva somente os campos solicitados. `app/ponto/registro_batida.py:203`, `app/ponto/registro_batida.py:241`, `app/ponto/registro_batida.py:254`.
-
-Há restauração genérica de schema por dump: ela restaura os valores arquivados, sem passar pelo `auto_now_add` ou renovar a criação para o horário do restore. Uso efetivo em produção: **[nao verificado]**. `scripts/backup_tenant.sh:10`, `scripts/restore_tenant.sh:8`.
-
-**Batida nova tem criação do novo plantio; reaproveitada conserva a criação original.** O materializador procura existente antes de criar e, no reaproveitamento, pode trocar apenas `pergunta_origem`. A reabertura do questionário limpa resposta/validação, sem renovar a batida. `app/chamados/services/materializacao.py:835`, `app/chamados/services/materializacao.py:847`, `app/chamados/services/materializacao.py:903`, `app/chamados/services/materializacao.py:922`, `app/chamados/services/disputa_emissao.py:1434`.
-
-Assim, uma `disputa_s84_retro` antiga revinculada hoje pode ficar fora da janela; uma `app` reaproveitada permanece fora pelo filtro de origem. Esse limite impede interpretar o contador como cobertura de **toda aplicação recente**. `app/ponto/management/commands/vigia_plantio_overnight.py:16`, `app/ponto/management/commands/vigia_plantio_overnight.py:76`, `app/chamados/services/materializacao.py:924`.
-
-**4. Os testes mordem o pai?** [nao verificado]
-
-As conclusões desta tabela são previsões estáticas contra os trechos anteriores mostrados no delta; execução no pai: **[nao verificado]**.
-
-| Teste | Resultado sem a cura correspondente | [nao verificado]
-|---|---|
-| `PerguntaDeHoraSemDiaDoTurnoTest.test_MORDE_orfao...` | **FALHA.** Data malformada produz texto, mas não dia; sem a guarda, nasce conversa datada de hoje e viola `assertFalse`. `app/chamados/tests/test_plantio_noturno_mais1.py:203`, `app/chamados/tests/test_plantio_noturno_mais1.py:206`, `app/chamados/tests/test_plantio_noturno_mais1.py:207`, `app/chamados/catalogo/query.py:66`, `app/chamados/models.py:2426`. |
-| `test_contra_exemplo_escolha_sem_dia_segue_conversa` | **PASSA mesmo sem a cura.** O motivo é `escolha`; a conversa já era o resultado anterior. `app/chamados/tests/test_plantio_noturno_mais1.py:210`, `app/chamados/tests/test_plantio_noturno_mais1.py:214`, `app/chamados/catalogo/perguntas.py:84`. |
-| `VigiaContaPeloPlantioNaoPeloInstanteTest.test_MORDE...` | **FALHA.** Em 01/12, a saída com instante de 23/10 fica fora do corte de trinta dias do pai; o novo `criado_em` de 01/12 a inclui. `app/chamados/tests/test_plantio_noturno_mais1.py:30`, `app/chamados/tests/test_plantio_noturno_mais1.py:32`, `app/chamados/tests/test_plantio_noturno_mais1.py:192`, `app/chamados/tests/test_plantio_noturno_mais1.py:195`, `app/ponto/management/commands/vigia_plantio_overnight.py:76`. |
-| Caso congelado de `test_a2` | **PASSA no pai com esse congelamento.** Não é RED das curas: o motivo é `escolha` e a ausência da linha já levava à conversa. O congelamento elimina a contradição que ocorreria em 12/08/2026 entre `!=12/08` e `==localdate()`. `app/chamados/tests/test_a2_data_evento_batida.py:51`, `app/chamados/tests/test_a2_data_evento_batida.py:56`, `app/chamados/tests/test_a2_data_evento_batida.py:59`, `app/chamados/tests/test_a2_data_evento_batida.py:60`, `app/chamados/services/disputa_emissao.py:383`. |
-
-O teste de hora mata precisamente o fallback antigo, mas só proíbe nascimento **hoje**, não qualquer nascimento indevido. O teste anterior do vigia continua aceitando qualquer delta `>=1`. `app/chamados/tests/test_plantio_noturno_mais1.py:207`, `app/chamados/tests/test_plantio_noturno_mais1.py:178`.
-
-**5. Escritores, leitores e ESMERIL-SEMANTICA**
-
-| Campo | Quem escreve/fornece | Quem lê |
-|---|---|---|
-| `PerguntaDisputa.data_evento` | Gravação efetiva em `_nascer`; preenchimento de pergunta sem dia em `reapontar_resolvedora`. Gerador, agrupador e declarações fornecem o valor; conversa fornece `localdate()`. `app/chamados/models.py:2498`, `app/chamados/services/fio.py:837`, `app/chamados/services/disputa_emissao.py:430`, `app/chamados/services/disputa_emissao.py:1029`, `app/chamados/services/declaracao_texto.py:327`, `app/chamados/models.py:2426`. | Plantio/slot como dia do turno; dedup/fábrica como identidade do dia; juízes/reconciliador como dia do fato; folha/calendário como agrupamento; API como apresentação. `app/chamados/services/materializacao.py:344`, `app/chamados/juizes.py:319`, `app/chamados/models.py:2396`, `app/chamados/services/fabrica_da_celula.py:118`, `app/chamados/reconciliador.py:1080`, `app/folha/previa.py:67`, `app/colaboradores/services/calendario.py:477`, `app/api/views.py:1174`. |
-| `contexto['saida_sem_entrada']` | Triagem fornece dia de `_T1`; APIs substituem a data civil transitória por `_T1`; fábrica fornece dia da célula; agregador persiste/mescla. `app/ponto/services/triagem_batida.py:739`, `app/api/views.py:782`, `app/api/views_core.py:782`, `app/chamados/services/fabrica_da_celula.py:139`, `app/chamados/services/disputa_emissao.py:529`, `app/chamados/services/disputa_emissao.py:560`. | Texto, data da pergunta, seleção de chamado e fallback de plantio/completude. `app/chamados/catalogo/query.py:58`, `app/chamados/services/disputa_emissao.py:364`, `app/chamados/services/disputa_emissao.py:196`, `app/chamados/services/materializacao.py:343`, `app/chamados/juizes.py:365`. |
-| `Batida.criado_em` | Inserção automática; restore recupera valor arquivado. `app/ponto/models.py:79`, `scripts/restore_tenant.sh:8`. | Vigia como criação recente; detector de flush como chegada ao servidor; contador de sequência como corte de criação; cache/cartório como marco de fato novo. `app/ponto/management/commands/vigia_plantio_overnight.py:76`, `app/ponto/turnos.py:355`, `app/ponto/turnos.py:366`, `app/ponto/turnos.py:2384`, `app/chamados/veredito_lavrado.py:138`, `app/ponto/services/cartorio.py:353`. |
-
-**Divergências encontradas:**
-
-- **Permanece a conhecida conversa × turno:** nascimento civil da conversa e leitores de identidade/célula sem discriminador persistido. A cura elimina o caminho `hora` do gerador, não a colisão geral já declarada fora do escopo. `app/chamados/models.py:2426`, `app/chamados/models.py:2453`, `app/chamados/services/fabrica_da_celula.py:118`.
-- **Criação × reaplicação:** `criado_em` significa nascimento da linha; o vigia o chama de plantio recente, embora a aplicação possa reaproveitar linha antiga. `app/ponto/models.py:79`, `app/ponto/management/commands/vigia_plantio_overnight.py:67`, `app/chamados/services/materializacao.py:835`.
-- **Leitor atual de `saida_sem_entrada.data` especificamente como dia civil da saída: nao achei.** Texto pergunta entrada naquele dia, e plantio usa dia do turno. Permanece a diferença de chave nas APIs: motivo `orfao_14h`, contexto `saida_sem_entrada`. `app/chamados/catalogo/perguntas.py:57`, `app/chamados/juizes.py:319`, `app/api/views.py:654`, `app/api/views.py:655`.
-
-**6. Classes que já reprovaram obra**
-
-| Classe | Resultado nesta volta |
-|---|---|
-| Segundo juiz | **Novo no delta: nao achei.** Triagem e vigia consultam `_T1`/`dia_das_batidas`. `app/ponto/services/triagem_batida.py:729`, `app/ponto/management/commands/vigia_plantio_overnight.py:87`. |
-| Segundo escritor fora da porta | **Efetivo novo: nao achei.** Escritas encontradas continuam no nascimento e costura. `app/chamados/models.py:2498`, `app/chamados/services/fio.py:837`. |
-| Relógio fora da borda | **Permanece no helper do vigia**, sem instante recebido do chamador; a troca do filtro não o criou. `app/ponto/management/commands/vigia_plantio_overnight.py:76`. |
-| Derivação paralela | **Não acrescentada pelo delta; permanece na fila:** parser de contexto no gerador/agrupador e contexto fraco. `app/chamados/services/disputa_emissao.py:367`, `app/chamados/services/disputa_emissao.py:1107`, `app/chamados/data_evento.py:27`, `app/chamados/juizes.py:162`. |
-| Selo/RED sem mordida | **Os novos casos principais de (a) e (c) têm mordida estática.** Permanecem as lacunas do selo para `**dict` e `setattr` por variável; o caso congelado é estabilização, não RED comportamental do delta. `app/chamados/tests/test_plantio_noturno_mais1.py:195`, `app/chamados/tests/test_plantio_noturno_mais1.py:207`, `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:86`, `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:91`, `app/chamados/tests/test_a2_data_evento_batida.py:51`. |
-| Campo com dois significados | **Persistem conversa/turno e o limite criação/reaplicação descritos acima.** O delta não resolve o discriminador nem registra um instante próprio de reaproveitamento. `app/chamados/models.py:2450`, `app/chamados/models.py:2498`, `app/chamados/services/materializacao.py:924`. |
-
-## 06/11 20:05 · sessao 8a7c282839f5 · ESMERIL-SEM-INSTANTE · verificador · origem=Code
-
-**Não encontrei bloqueante novo no delta fornecido; os três achados procedentes foram corrigidos.** (`app/ponto/tests/test_composicao_de_fatias_e_total.py:281`, `:333`; `app/ponto/tests/test_contract_no_batida_date.py:72`)
-
-1. **As três curas conferem.**
-
-   - **Teste 3:** agora exige exatamente `[utc[0], utc[1], utc[3]]` em A. Revertendo a conversão para `b.timestamp.date()`, A recebe `[utc[2], utc[4]]`: o novo assert falha mesmo isolado da igualdade anterior. Se o filtro entregar `[]`, também falha; se ambos os resultados forem `{}`, ocorre `KeyError` em `A.pk`, portanto não passa silenciosamente. (`app/ponto/tests/test_composicao_de_fatias_e_total.py:325`, `:330`, `:333`; `app/ponto/services/fechamento.py:204`, `:254`, `:261`)
-   - **Gravador:** deixou de ordenar e registra a sequência recebida pelo motor. Está curado o mascaramento introduzido pelo próprio capturador. (`app/ponto/tests/test_composicao_de_fatias_e_total.py:279`, `:281`)
-   - **ALLOWLIST:** a justificativa agora aponta precisamente para `_com_batida`, que ainda contém `timezone.localtime(b.timestamp).date()` e é reconhecido pelo visitante. (`app/ponto/tests/test_contract_no_batida_date.py:72`, `:208`; `app/ponto/services/fechamento.py:793`)
-
-2. **Não há relógio solto, import morto novo ou dependência indevida de ordem nas alterações fornecidas.** Os instantes são literais, o fuso fica sob `override`, e a ordem esperada vem da lista entregue explicitamente pelo teste. As compreensões da porta preservam essa sequência; não dependem da ordem de conjuntos ou de empates no banco. (`app/ponto/tests/test_composicao_de_fatias_e_total.py:245`, `:325`, `:327`, `:328`, `:333`; `app/ponto/services/fechamento.py:204`, `:253`, `:260`, `:262`)
-
-   **Limite da cobertura:** o gravador foi corrigido, mas o teste ainda não prova preservação de uma entrada arbitrariamente embaralhada: os três sobreviventes já estão em ordem cronológica. Uma ordenação indevida na porta ainda poderia passar neste caso. Isso não invalida a cura do capturador. (`app/ponto/tests/test_composicao_de_fatias_e_total.py:281`, `:325`, `:326`, `:333`)
-
-3. **Não mantenho os descartes como bloqueantes desta fatia.** A restrição para naive existe, mas os três caminhos encontrados carregam listas pelo ORM, com `DateTimeField` e `USE_TZ=True`; não há origem naive demonstrada nesses caminhos. Isso sustenta o contrato aware sem provar os valores efetivamente recebidos em produção **[nao verificado]**. (`app/ponto/services/fechamento.py:633`; `app/ponto/services/espelho.py:1022`; `app/relatorios/pdf_espelho.py:272`; `app/ponto/models.py:23`; `app/config/settings/base.py:95`; `app/ponto/turnos.py:44`)
-
-   `None` continua inválido: a conversão devolve `None`, que falha na comparação com datas; não há tratamento novo que prometa aceitá-lo. (`app/ponto/turnos.py:46`; `app/ponto/services/fechamento.py:254`)
-
-4. **Nenhum bloqueante novo identificado.** O residual de saída após meia-noite sob células alternadas permanece: o filtro ainda pode excluir a saída pelo dia civil de outro vínculo. A correção desse residual não é demonstrada por estes asserts. (`app/ponto/services/fechamento.py:255`, `:261`; `app/ponto/tests/test_composicao_de_fatias_e_total.py:333`)
-
-**Validação:** em memória, com dependências substituídas, os três testes passaram na cópia e falharam nos mutantes `.date()` e filtro vazio; o assert novo também falhou isoladamente. Os quatro testes do contrato passaram isolados. (`app/ponto/tests/test_composicao_de_fatias_e_total.py:291`, `:306`, `:316`, `:333`; `app/ponto/tests/test_contract_no_batida_date.py:236`)
-
-Suíte Django real, correspondência Git com o hash/base e integralidade do delta: **[nao verificado]**. [nao verificado]
-
-## 06/11 20:05 · sessao 2d4a03cfa6b6 · - · - · origem=Ronald (tmux)
-
-**(b) fecha a exceção na triagem, mas não garante uma pergunta posterior.** O retorno de `registrar_batida` pode ser a mesma chave já retratada, sem criação ou `save`; `_T1` não inclui retratadas e devolve `None`; a nova guarda evita `.isoformat()` nesse retorno. Referências: `app/ponto/registro_batida.py:116`, `app/ponto/registro_batida.py:120`, `app/ponto/turnos.py:2905`, `app/ponto/turnos.py:2917`, `app/ponto/turnos.py:2925`, `app/ponto/services/triagem_batida.py:726`, `app/ponto/services/triagem_batida.py:730`.
-
-**Outro emissor que retome especificamente essa tentativa/batida retratada: nao achei.** O retorno antecipado de mesma chave não dispara os sinais de criação, e a triagem segue até informar sucesso; a nova guarda não grava pendência nem emite log próprio. Referências: `app/ponto/registro_batida.py:120`, `app/ponto/services/triagem_batida.py:730`, `app/ponto/services/triagem_batida.py:757`.
-
-Há emissores independentes capazes de perguntar **pelo dia**, sob condições: vigia de hora declarado a cada dez minutos e cartório diário; o cartório chama a fábrica depois do julgamento, e a fábrica exige célula elegível, veredito acusador e motivo ainda sem pergunta. Portanto, não cabe afirmar “fica sempre invisível”, nem “o cron garante recuperação”. Referências: `app/config/crons.py:367`, `app/config/crons.py:616`, `app/ponto/services/cartorio.py:981`, `app/ponto/services/cartorio.py:997`, `app/chamados/services/fabrica_da_celula.py:91`, `app/chamados/services/fabrica_da_celula.py:99`, `app/chamados/services/fabrica_da_celula.py:118`, `app/chamados/services/fabrica_da_celula.py:164`.
-
-Limites concretos: `julgar_celula` recusa célula inexistente; vigia de hora seleciona `trabalha=True`; a fábrica também pode calar por parcial/lista; o lote `disparar_perguntas_competencia` apenas conta o caminho da célula e só emite no caminho de chamado vivo já existente com célula. Referências: `app/ponto/services/cartorio.py:1976`, `app/ponto/services/vigia_de_hora.py:21`, `app/chamados/services/fabrica_da_celula.py:102`, `app/chamados/management/commands/disparar_perguntas_competencia.py:86`, `app/chamados/management/commands/disparar_perguntas_competencia.py:141`, `app/chamados/management/commands/disparar_perguntas_competencia.py:158`. Recuperação efetiva em produção: **[nao verificado]**.
-
-**Censo `DisputaSupervisao.contexto['saida_sem_entrada']`:**
-
-| Papel | Evidência |
-|---|---|
-| PWA fornece `data` de `_T1` e hora da tentativa | `app/ponto/services/triagem_batida.py:734`, `app/ponto/services/triagem_batida.py:739` |
-| API e clone montam data civil transitória e a substituem por `_T1` antes de persistir | `app/api/views.py:655`, `app/api/views.py:780`, `app/api/views_core.py:652`, `app/api/views_core.py:780` |
-| Fábrica fornece data explícita da célula, pelo motivo | `app/chamados/services/fabrica_da_celula.py:139` |
-| Agregador persiste/mescla o contexto | `app/chamados/services/disputa_emissao.py:518`, `app/chamados/services/disputa_emissao.py:532`, `app/chamados/services/disputa_emissao.py:560` |
-| Texto lê `data` para perguntar entrada naquele dia | `app/chamados/catalogo/query.py:58`, `app/chamados/catalogo/perguntas.py:57` |
-| Gerador lê `data` como dia da pergunta datada | `app/chamados/services/disputa_emissao.py:364` |
-| Seleção de chamado compara `data` com dia do fato | `app/chamados/services/disputa_emissao.py:191`, `app/chamados/services/disputa_emissao.py:231` |
-| Materializador usa como fallback do dia do turno | `app/chamados/services/materializacao.py:343`, `app/chamados/services/materializacao.py:346` |
-| Juiz de completude usa como fallback do turno | `app/chamados/juizes.py:363`, `app/chamados/juizes.py:365`, `app/chamados/juizes.py:372` |
-
-**Leitor atual desse `data` especificamente como dia civil da saída: nao achei.** A conversão de overnight usa dia do turno e marcos; o recuo antigo por `hora_tentativa` está removido. Referências: `app/chamados/juizes.py:301`, `app/chamados/juizes.py:312`, `app/chamados/juizes.py:319`, `app/chamados/services/materializacao.py:419`.
-
-Duas ressalvas preexistentes: API/clone acrescentam motivo `orfao_14h`, mas gravam a chave de contexto `saida_sem_entrada`; ambos continuam chamando `.isoformat()` sem guarda de `None`. Não são mudanças do delta fornecido. Referências: `app/api/views.py:654`, `app/api/views.py:655`, `app/api/views.py:782`, `app/api/views_core.py:651`, `app/api/views_core.py:652`, `app/api/views_core.py:782`.
-
-## 06/11 20:04 · sessao be24a03c3f1c · - · - · origem=Ronald (tmux)
-
-**Cura (c): fecha a omissão de inserção retroativa recente; não cobre toda reaplicação recente de pergunta.** O filtro passa a usar `criado_em`, preservando os demais critérios, e consulta o mesmo juiz `dia_das_batidas`; não achei segundo juiz nem escritor novo nessa mudança. Referências: `app/ponto/management/commands/vigia_plantio_overnight.py:73`, `app/ponto/management/commands/vigia_plantio_overnight.py:76`, `app/ponto/management/commands/vigia_plantio_overnight.py:87`.
-
-**Escrita de `Batida.criado_em`:**
-
-- É `DateTimeField(auto_now_add=True)`: registra nascimento da linha, enquanto `timestamp` registra instante da marcação. A porta insere por `Batida.objects.create`. Referências: `app/ponto/models.py:23`, `app/ponto/models.py:79`, `app/ponto/registro_batida.py:152`, `app/ponto/registro_batida.py:157`.
-- Reescritor Python específico por atribuição/update/SQL/cópia/restauração de `Batida.criado_em`: **nao achei**. A porta de anotação não aceita esse campo e salva somente os campos pedidos. Referências: `app/ponto/registro_batida.py:203`, `app/ponto/registro_batida.py:241`, `app/ponto/registro_batida.py:254`.
-- Existe carga sintética em lote, restrita a banco de ensaio, construída com os dicionários recebidos. Referências: `app/ponto/registro_batida.py:316`, `app/ponto/registro_batida.py:326`, `app/ponto/registro_batida.py:331`, `app/ponto/registro_batida.py:335`.
-- Há restauração genérica de schema: backup por `pg_dump`, restauração por `pg_restore --clean --if-exists`. Esse caminho restaura o valor do dump, sem passar pelo `auto_now_add`; não carimba a hora do restore. Uso efetivo e valores restaurados em produção: **[nao verificado]**. Referências: `scripts/backup_tenant.sh:10`, `scripts/restore_tenant.sh:8`.
-
-**Reabertura/reaproveitamento:**
-
-- Materialização procura batida existente antes de criar; aceita tanto real quanto de disputa. Se reaproveita, apenas pode mudar `pergunta_origem`, mantendo `criado_em` e `origem`. Referências: `app/chamados/juizes.py:230`, `app/chamados/juizes.py:238`, `app/chamados/services/materializacao.py:835`, `app/chamados/services/materializacao.py:847`, `app/chamados/services/materializacao.py:922`, `app/ponto/registro_batida.py:254`.
-- A própria porta também pode devolver linha antiga pelo dedup ±60s ou pela mesma chave, sem inserir. Referências: `app/ponto/registro_batida.py:107`, `app/ponto/registro_batida.py:113`, `app/ponto/registro_batida.py:120`.
-- Portanto, **batida realmente criada na nova aplicação tem `criado_em` desse plantio; batida reaproveitada mantém o nascimento original**. Uma linha `disputa_s84_retro` antiga revinculada hoje pode permanecer fora da janela; uma batida `app` reaproveitada continua fora pelo filtro de origem. Isso é limitação do significado “plantio recente”, não regressão criada pela troca do filtro. Referências: `app/ponto/models.py:79`, `app/chamados/services/materializacao.py:903`, `app/chamados/services/materializacao.py:922`, `app/ponto/management/commands/vigia_plantio_overnight.py:16`, `app/ponto/management/commands/vigia_plantio_overnight.py:76`.
-- A reabertura do questionário limpa resposta/validação; não renova nascimento da batida. Referências: `app/chamados/services/acoes_disputa.py:102`, `app/chamados/services/disputa_emissao.py:1434`, `app/chamados/services/disputa_emissao.py:1454`.
-
-**Teste `VigiaContaPeloPlantioNaoPeloInstanteTest`: FALHA sem a cura, por análise estática.** Cria a saída em 01/12, com `timestamp` 23/10, e exige seu PK em janela de 30 dias. No pai, o filtro `timestamp >= 01/11` fornecido no delta a exclui e produz `[]`; no delta, `criado_em` 01/12 a inclui. Referências: `app/chamados/tests/test_plantio_noturno_mais1.py:30`, `app/chamados/tests/test_plantio_noturno_mais1.py:32`, `app/chamados/tests/test_plantio_noturno_mais1.py:192`, `app/chamados/tests/test_plantio_noturno_mais1.py:195`, `app/ponto/management/commands/vigia_plantio_overnight.py:76`; código exato do pai: **[nao verificado por Git; disponível apenas no delta fornecido]**. Execução Django/RED real: **[nao verificado]**.
-
-**Leitores de `Batida.criado_em` encontrados:**
-
-| Leitor | Significado |
-|---|---|
-| Vigia novo | Nascimento recente da linha tomado como plantio recente. `app/ponto/management/commands/vigia_plantio_overnight.py:76`. |
-| `_marca_ecos_flush` | Hora de chegada ao servidor versus instante do evento, para identificar flush offline. `app/ponto/turnos.py:355`, `app/ponto/turnos.py:362`, `app/ponto/turnos.py:366`. |
-| `sequencia_relogio_x_jornada` | Universo de linhas criadas desde corte. `app/ponto/turnos.py:2378`, `app/ponto/turnos.py:2384`. |
-| `marcos_do_lote` | Invalidação de cache por nascimento de linha; retração tem relógio separado. `app/chamados/veredito_lavrado.py:137`, `app/chamados/veredito_lavrado.py:140`. |
-| Cartório | Fato novo desde julgamento: nascimento ou retração de batida na janela. `app/ponto/services/cartorio.py:350`, `app/ponto/services/cartorio.py:352`. |
-
-**Classes regressivas pertinentes:** segundo juiz e segundo escritor novo, **nao achei**; relógio dentro do helper permanece (`timezone.now()`), e o delta apenas troca o campo filtrado. O teste novo tem mordida contra essa troca; o teste anterior continua exigindo só `delta >= 1`. Referências: `app/ponto/management/commands/vigia_plantio_overnight.py:76`, `app/ponto/management/commands/vigia_plantio_overnight.py:87`, `app/chamados/tests/test_plantio_noturno_mais1.py:178`, `app/chamados/tests/test_plantio_noturno_mais1.py:195`. A divergência semântica relevante é **nascimento da linha versus última aplicação/revinculação**, demonstrada pelo reaproveitamento sem atualização do carimbo. Referências: `app/ponto/models.py:79`, `app/chamados/services/materializacao.py:835`, `app/chamados/services/materializacao.py:922`.
-
-## 06/11 20:04 · sessao 7d8006827f3a · - · - · origem=Ronald (tmux)
-
-**Cura (a): fecha o caminho de conversa-hora; caminho legítimo de preencher o dia depois: nao achei.** Todas as perguntas de catálogo `hora` são `orfao_14h`, `saida_sem_entrada`, `intervalo_saida` e `intervalo_volta`; todas pedem `{data}`. Os dois intervalos sem dia já são recusados antes da cura; a guarda nova efetivamente alcança os motivos órfão/SSE que ainda chegam sem dia após os fallbacks. Referências: `app/chamados/catalogo/perguntas.py:48`, `:56`, `:124`, `:132`; `app/chamados/services/disputa_emissao.py:338`, `:387`, `:411`.
-
-O caminho demonstrável é data malformada: o formatador aceita o texto bruto, o parser não produz dia, falta batida válida e falta chamado datado. Antes abriria conversa; agora registra `info` e continua. Referências: `app/chamados/catalogo/query.py:62`, `:66`; `app/chamados/services/disputa_emissao.py:364`, `:379`, `:399`, `:410`, `:415`.
-
-A conversa anterior **já nascia com `localdate()`**; o redatador encontrado só escreve `data_evento` quando a pergunta não tem data. Logo o caminho “nasce conversa, depois outro escritor põe o dia correto” não se sustentava nesse código. Referências: `app/chamados/models.py:2426`; `app/chamados/services/fio.py:835`, `:837`. Outros escritores efetivos encontrados por busca: nao achei além do nascimento e dessa porta; fluxo dinâmico não coberto pela busca: **[nao verificado]**.
-
-Não some toda a acusação: a criação/agregação grava motivos e contexto **antes** de gerar perguntas, além da lavra de abertura da disputa. A recusa específica não gera registro de pergunta. Referências: `app/chamados/services/disputa_emissao.py:511`, `:532`, `:535`, `:557`, `:567`, `:640`, `:415`.
-
-**Efeito novo concreto a registrar:** o chamador ignora a lista retornada e continua enviando push “Toque para responder” mesmo se o gerador recusou a única pergunta. Isso já era possível por outras recusas, mas a cura acrescenta este caso. Referências: `app/chamados/services/disputa_emissao.py:640`, `:641`, `:652`, `:656`, `:1575`, `:1580`. Ocorrência/impacto em produção: **[nao verificado]**.
-
-**Chamadores diretos encontrados fora de testes:** [nao verificado]
-
-| Chamador | Expectativa |
-|---|---|
-| `criar_ou_atualizar_disputa` | Chama no nascimento e na agregação; ignora retorno e retorna disputa, com push separado. `app/chamados/services/disputa_emissao.py:640`, `:652`, `:658`. |
-| `perguntar_entradas_pendentes` | Calcula dia via batida/`_T1`, injeta contexto e soma lista retornada; só salva contexto se recebeu perguntas. `app/chamados/services/disputa_emissao.py:282`, `:292`, `:294`, `:295`. |
-| Fábrica `perguntar` | Fornece dia explícito, chama criar/atualizar e chama gerador novamente; ignora lista, retorna número de carimbos desfeitos. `app/chamados/services/fabrica_da_celula.py:129`, `:139`, `:141`, `:142`. |
-| Comando `smoke_chamados` | Fornece data válida quando template exige, espera exatamente uma pergunta por motivo e tipo igual ao catálogo. `app/chamados/management/commands/smoke_chamados.py:90`, `:96`, `:102`, `:104`, `:109`. |
-
-O gerador documenta “lista das perguntas criadas”, mas adiciona `p` mesmo quando `_criada=False`, comportamento anterior ao delta. Isso explica que lista não é prova estrita de criação. Referências: `app/chamados/services/disputa_emissao.py:304`, `:423`, `:449`; `app/chamados/models.py:2497`.
-
-**Mordida dos testes — inferência estática, execução Django/RED no pai: [nao verificado].** [nao verificado]
-
-- `PerguntaDeHoraSemDiaDoTurnoTest.test_MORDE...`: **falharia sem a cura (a)**. A fixture fornece motivo `orfao_14h`, data malformada, sem vínculo; o caminho anterior abriria conversa com o dia congelado e violaria `assertFalse(...data_evento=localdate()).exists()`. Referências: `app/chamados/tests/test_plantio_noturno_mais1.py:198`, `:203`, `:205`, `:206`, `:207`; `app/chamados/catalogo/query.py:66`; `app/chamados/models.py:2426`; guarda nova `app/chamados/services/disputa_emissao.py:411`.
-- `test_contra_exemplo_escolha_sem_dia_segue_conversa`: **passaria sem a cura**. O catálogo dá `escolha`, e o fallback conversa anterior é precisamente o comportamento exigido. Referências: `app/chamados/tests/test_plantio_noturno_mais1.py:210`, `:213`, `:214`; `app/chamados/catalogo/perguntas.py:82`, `:84`; `app/chamados/models.py:2426`.
-- Caso congelado `test_a2...test_MORDE_batida_sem_linha_nao_inventa_dia_pelo_timestamp`: **passaria na árvore pai em dias locais diferentes de 12/08/2026**; o delta só fixa o relógio em outubro. Não é RED das curas (a)-(c), pois motivo é `escolha` e ausência da linha já levava à conversa. Sem congelamento, no dia 12/08/2026 os asserts `!=12/08` e `==localdate()` eram incompatíveis. Referências: `app/chamados/tests/test_a2_data_evento_batida.py:51`, `:55`, `:56`, `:59`, `:60`; `app/chamados/catalogo/perguntas.py:84`; `app/chamados/services/disputa_emissao.py:379`, `:383`, `:417`.
-
-Limite do teste de hora: ele proíbe somente nascimento **na data de hoje**, não qualquer nascimento errado em outra data; é suficiente para matar precisamente o fallback antigo. Referências: `app/chamados/tests/test_plantio_noturno_mais1.py:207`, `:208`; `app/chamados/models.py:2426`.
-
-## 06/11 20:03 · sessao 65cdc82cca83 · - · - · origem=Ronald (tmux)
-
-- **Sem relógio solto/import morto novos no delta:** as alterações executáveis só capturam timestamps sem `sorted` e acrescentam o assert; todos os instantes do caso 3 são literais aware e o fuso é fixado pelo `override`. O delta não altera imports. (`app/ponto/tests/test_composicao_de_fatias_e_total.py:243`, `:280`, `:281`, `:324`, `:325`, `:327`, `:333`; diff fornecido [nao verificado] quanto à integralidade Git)
-- **A ordem exigida é sustentada pelo chamador do teste:** `_rodar` recebe explicitamente a lista `utc` nessa sequência e a porta usa compreensões que preservam a ordem recebida. O assert espera os sobreviventes `[utc[0], utc[1], utc[3]]`. Não depende da ordem de `set`/dict nem de empate do banco. (`app/ponto/tests/test_composicao_de_fatias_e_total.py:325`, `:328`, `:333`; `app/ponto/services/fechamento.py:204`, `:253`, `:260`, `:262`)
-- **Ressalva não bloqueante:** retirar `sorted` cura o mascaramento no gravador, mas este novo assert ainda não detecta uma ordenação cronológica introduzida na porta: os três sobreviventes já estão em ordem crescente. O elemento final fora de ordem é excluído pelo filtro. Portanto, “gravador não ordena” está curado; “teste prova preservação de ordem para entrada arbitrária” não está demonstrado. (`app/ponto/tests/test_composicao_de_fatias_e_total.py:281`, `:325`, `:326`, `:333`; `app/ponto/services/fechamento.py:254`)
-- **Censo de produção:** os três chamadores encontrados carregam listas por `batidas_apuraveis`, cujo retorno usa `order_by('timestamp')`. O motor deduplica sequencialmente pela batida anterior, justificando preservar a ordem. (`app/ponto/services/fechamento.py:633`, `:754`; `app/ponto/services/espelho.py:1022`, `:1164`; `app/relatorios/pdf_espelho.py:272`, `:419`; `app/ponto/turnos.py:2871`; `app/ponto/motor_calculo_v2.py:905`)
-- **Naive não sustentado como bloqueante:** a nova porta chama `data_local`, documentado para aware; a origem estática dos três caminhos é ORM, com `DateTimeField` sem `null=True` e `USE_TZ=True`. Valores realmente devolvidos em produção: **[nao verificado]**. Nada no delta reabre essa interface. (`app/ponto/services/fechamento.py:203`, `:204`; `app/ponto/turnos.py:43`, `:46`; `app/ponto/models.py:23`; `app/config/settings/base.py:95`)
-- **Comentário da ALLOWLIST agora confere:** a ofensa restante é `_com_batida = {timezone.localtime(b.timestamp).date() ...}`. (`app/ponto/tests/test_contract_no_batida_date.py:72`; `app/ponto/services/fechamento.py:793`)
-- **Novo bloqueante identificado: nenhum dentro deste delta**, limitado às três alterações fornecidas; comparação integral do commit/base permanece **[nao verificado]**. (`app/ponto/tests/test_composicao_de_fatias_e_total.py:281`, `:333`; `app/ponto/tests/test_contract_no_batida_date.py:72`)
-
-## 06/11 20:02 · sessao 99c2d369a999 · H12H06-B · sonda · origem=Code
-
-Não executei a sonda: o invólucro cria arquivos e grava log, contrariando a restrição de somente leitura (`bin/sonda_leitura.sh:216`, `bin/sonda_leitura.sh:217`, `bin/sonda_leitura.sh:250`). Segue a transcrição integral do dado fornecido, sem nova execução: [nao verificado]
-
-```text
-sonda_leitura: pre.py [f35cf407c2faf784] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
-
-HASH_FM {"05": [615, "e29ff62650eebac5"], "06": [704, "9400c1a360842d79"], "07": [629, "2edced101a39a6c3"], "08": [618, "22459b830139a009"], "09": [607, "6e69a4d396e9f407"], "10": [624, "1cc01147a16e856b"], "11": [579, "d5a3a67bf065738d"], "12": [87, "afb9cb5ee9e2741c"]}
-EXP {"pk": 2, "empresa_id": 4, "mes": 6, "ano": 2026, "hash_sha256": "80f417a64296887d8c1f58d580947e40aae78af2c21945c14485c0a96f9814c7", "invalidada_em": null, "substituida_por_id": null}
-EXP {"pk": 3, "empresa_id": 4, "mes": 6, "ano": 2026, "hash_sha256": "98edd7f6e5d72d68a427efcd40cf83e08814313ab7d10d8c858acea3711ebff2", "invalidada_em": null, "substituida_por_id": null}
-EXP {"pk": 4, "empresa_id": 4, "mes": 6, "ano": 2026, "hash_sha256": "98edd7f6e5d72d68a427efcd40cf83e08814313ab7d10d8c858acea3711ebff2", "invalidada_em": null, "substituida_por_id": null}
-EXP {"pk": 5, "empresa_id": 4, "mes": 6, "ano": 2026, "hash_sha256": "98edd7f6e5d72d68a427efcd40cf83e08814313ab7d10d8c858acea3711ebff2", "invalidada_em": null, "substituida_por_id": null}
-EXP {"pk": 6, "empresa_id": 4, "mes": 6, "ano": 2026, "hash_sha256": "98edd7f6e5d72d68a427efcd40cf83e08814313ab7d10d8c858acea3711ebff2", "invalidada_em": null, "substituida_por_id": null}
-EXP {"pk": 7, "empresa_id": 4, "mes": 6, "ano": 2026, "hash_sha256": "98edd7f6e5d72d68a427efcd40cf83e08814313ab7d10d8c858acea3711ebff2", "invalidada_em": null, "substituida_por_id": null}
-EXP {"pk": 8, "empresa_id": 4, "mes": 6, "ano": 2026, "hash_sha256": "71570435dbbe5246f59b19986230ad265eece33da6015177bf5b806b75d45e6b", "invalidada_em": null, "substituida_por_id": null}
-EXP {"pk": 9, "empresa_id": 4, "mes": 6, "ano": 2026, "hash_sha256": "1f2b81f241a8f8cd344a4cd211911f20ab4cdd4ae25d65b416072bff7df2ac02", "invalidada_em": null, "substituida_por_id": null}
-EXP {"pk": 10, "empresa_id": 4, "mes": 6, "ano": 2026, "hash_sha256": "3c51aae49a29ab84f6b2c21885f796beca6038b483394138c44715743fa95a18", "invalidada_em": null, "substituida_por_id": null}
-EXP {"pk": 11, "empresa_id": 4, "mes": 6, "ano": 2026, "hash_sha256": "3c51aae49a29ab84f6b2c21885f796beca6038b483394138c44715743fa95a18", "invalidada_em": null, "substituida_por_id": null}
-EXP {"pk": 12, "empresa_id": 4, "mes": 7, "ano": 2026, "hash_sha256": "68d299ff806aceb36e414b75fd18e6ea9043d556b351645072448cf024af010c", "invalidada_em": null, "substituida_por_id": null}
-EXP {"pk": 13, "empresa_id": 4, "mes": 7, "ano": 2026, "hash_sha256": "491f6fff352cc5102cd0d0a5f24f004edc433e792d114563a4e77b529a216c2f", "invalidada_em": null, "substituida_por_id": null}
-EXP {"pk": 14, "empresa_id": 4, "mes": 7, "ano": 2026, "hash_sha256": "491f6fff352cc5102cd0d0a5f24f004edc433e792d114563a4e77b529a216c2f", "invalidada_em": null, "substituida_por_id": null}
-EXP {"pk": 15, "empresa_id": 4, "mes": 6, "ano": 2026, "hash_sha256": "1897e08736e104ef3d9eb81917bb26c2849f60a21e6f3141bfc2b35acdc08f63", "invalidada_em": null, "substituida_por_id": null}
-EXP {"pk": 16, "empresa_id": 4, "mes": 6, "ano": 2026, "hash_sha256": "1897e08736e104ef3d9eb81917bb26c2849f60a21e6f3141bfc2b35acdc08f63", "invalidada_em": null, "substituida_por_id": null}
-EXP {"pk": 17, "empresa_id": 3, "mes": 7, "ano": 2026, "hash_sha256": "7d54b0e6602bf4ea8bf9615009cb4e470398f96a9e66b8623dfc03ec4874524e", "invalidada_em": null, "substituida_por_id": null}
-EXP {"pk": 18, "empresa_id": 2, "mes": 8, "ano": 2026, "hash_sha256": "790d8cd7ea0c631c1b76cb462bc9ebadc163787ffd7e854b1d5b9ea0b0d73f01", "invalidada_em": null, "substituida_por_id": null}
-EXP {"pk": 19, "empresa_id": 2, "mes": 8, "ano": 2026, "hash_sha256": "2b3ac743a5782a5122fc89fb917405d9e9529d141f8bb6d81e0c61610b043dd0", "invalidada_em": null, "substituida_por_id": null}
-EXP {"pk": 20, "empresa_id": 2, "mes": 9, "ano": 2026, "hash_sha256": "8a63e3baabc501af7d63aa3845c6a9221d7f18ac091b5f7038650a23aaa59dbc", "invalidada_em": "2026-09-30 20:07:06.058663+00:00", "substituida_por_id": 23}
-EXP {"pk": 21, "empresa_id": 3, "mes": 9, "ano": 2026, "hash_sha256": "6e0f1048428293078bc82c21aa8756630446c394ef2c2a5b16cbb1efbb6626d8", "invalidada_em": "2026-09-30 20:07:07.142119+00:00", "substituida_por_id": 24}
-EXP {"pk": 22, "empresa_id": 4, "mes": 9, "ano": 2026, "hash_sha256": "cb7f00fe59f84e505fce92aab2769242aec6671b688d7c514311518345c29773", "invalidada_em": "2026-09-30 20:07:07.385295+00:00", "substituida_por_id": 25}
-EXP {"pk": 23, "empresa_id": 2, "mes": 9, "ano": 2026, "hash_sha256": "0e3e008b49b1ff73a89556a24e495f0e05f566cad644d8354f224300bbc5a703", "invalidada_em": "2026-10-01 14:57:23.407593+00:00", "substituida_por_id": 26}
-EXP {"pk": 24, "empresa_id": 3, "mes": 9, "ano": 2026, "hash_sha256": "5c503b95f9f9cd35541db29a45a6447f026e272b9eedf27b346cda26b92810a6", "invalidada_em": null, "substituida_por_id": null}
-EXP {"pk": 25, "empresa_id": 4, "mes": 9, "ano": 2026, "hash_sha256": "84c78cd0871f5f5251db047a6d12054930f91c05a39ec46d6669fddc1d97a73b", "invalidada_em": null, "substituida_por_id": null}
-EXP {"pk": 26, "empresa_id": 2, "mes": 9, "ano": 2026, "hash_sha256": "0ae5da67364cabfb5dcadde9481ec75d63b702ca95956627adbbb37079664d53", "invalidada_em": "2026-10-01 22:44:56.762182+00:00", "substituida_por_id": 27}
-EXP {"pk": 27, "empresa_id": 2, "mes": 9, "ano": 2026, "hash_sha256": "361d0f9685f86d3a51d49b8f5194df469db8e4818c9cae0e9bd9f1461f9af0cc", "invalidada_em": null, "substituida_por_id": null}
-AUS5198 {"pk": 5198, "data": "2026-10-24", "minutos": 420, "tipo": "falta"}
-REG_PEND {"n": 0, "itens": []}
-REG_PEND_FROTA 2
-DISP_ABERTAS {"n": 23}
-HASH_DP 9 11501 54c6419c61520d6a
-HASH_DP 10 21418 9d68332a36ef63eb
-ERROS {}
-```
-
-REG_PEND n=0, itens=[]; DISP_ABERTAS n=23. [nao verificado]  
-HASH_FM: 09=[607,"6e69a4d396e9f407"]; 10=[624,"1cc01147a16e856b"]. [nao verificado]  
-HASH_DP: 9=11501/54c6419c61520d6a; 10=21418/9d68332a36ef63eb. [nao verificado]  
-AUS5198: 420 minutos. [nao verificado]  
-ERROS={}; nenhuma exceção aparece no dado fornecido; ocorrência fora dele: [nao verificado].
-
-## 06/11 20:01 · sessao 1988589b9388 · - · - · origem=Ronald (tmux)
-
-(a) Fecha o nascimento indevido de conversa `hora`: a guarda recusa apenas quando as duas fontes finais de dia são `None`; antes, esse caminho caía em `abrir_conversa`, que grava `localdate()`. Referências: `app/chamados/services/disputa_emissao.py:410`, `app/chamados/services/disputa_emissao.py:411`, `app/chamados/services/disputa_emissao.py:417`, `app/chamados/models.py:2426`.
-
-**Caminho legítimo “nasce conversa hora e recebe dia depois”: nao achei.** A conversa já nasce com data preenchida; o escritor posterior `reapontar_resolvedora` só atribui data quando a pergunta está sem data. Referências: `app/chamados/models.py:2426`, `app/chamados/services/fio.py:835`, `app/chamados/services/fio.py:837`.
-
-Os quatro motivos `hora` são `orfao_14h`, `saida_sem_entrada`, `intervalo_saida` e `intervalo_volta`. Os intervalos sem dia já retornam antes da nova guarda; seu fluxo não era o fallback de conversa. Referências: `app/chamados/catalogo/perguntas.py:48`, `app/chamados/catalogo/perguntas.py:56`, `app/chamados/catalogo/perguntas.py:124`, `app/chamados/catalogo/perguntas.py:132`, `app/chamados/services/disputa_emissao.py:387`.
-
-**Ressalva concreta:** o novo caminho pode deixar disputa sem pergunta e enviar push mandando responder: o chamador ignora a lista retornada e envia push após gerar; a mensagem promete “Toque para responder”. Uma disputa sem perguntas também trava o encerramento do chamado. Referências: `app/chamados/services/disputa_emissao.py:640`, `app/chamados/services/disputa_emissao.py:641`, `app/chamados/services/disputa_emissao.py:652`, `app/chamados/services/disputa_emissao.py:656`, `app/chamados/services/disputa_emissao.py:1575`, `app/chamados/juizes.py:2084`.
-
-**Não desaparece todo rastro além do log:** motivos/contexto já foram persistidos na disputa antes da tentativa de geração. O ramo novo, porém, não persiste um ato de recusa da pergunta: apenas `logger.info` e `continue`. Uma chamada posterior com contexto corrigido tenta gerar novamente, mesmo com motivo já existente. Referências: `app/chamados/services/disputa_emissao.py:557`, `app/chamados/services/disputa_emissao.py:511`, `app/chamados/services/disputa_emissao.py:529`, `app/chamados/services/disputa_emissao.py:415`, `app/chamados/services/disputa_emissao.py:652`.
-
-Chamadores diretos encontrados fora dos testes: [nao verificado]
-
-| Chamador | Expectativa observável |
-|---|---|
-| `perguntar_entradas_pendentes` | Injeta dia obtido por `_T1`, acumula a lista retornada e salva contexto somente se a lista não estiver vazia. `app/chamados/services/disputa_emissao.py:282`, `app/chamados/services/disputa_emissao.py:292`, `app/chamados/services/disputa_emissao.py:294`, `app/chamados/services/disputa_emissao.py:295`. |
-| `criar_ou_atualizar_disputa`, nascimento e atualização | Ignora lista, envia push por nascimento/motivo novo e retorna disputa. `app/chamados/services/disputa_emissao.py:640`, `app/chamados/services/disputa_emissao.py:642`, `app/chamados/services/disputa_emissao.py:652`, `app/chamados/services/disputa_emissao.py:656`, `app/chamados/services/disputa_emissao.py:658`. |
-| `fabrica_da_celula.perguntar` | Fornece dia explícito, ignora a lista e retorna quantidade de carimbos desfeitos. `app/chamados/services/fabrica_da_celula.py:139`, `app/chamados/services/fabrica_da_celula.py:141`, `app/chamados/services/fabrica_da_celula.py:142`. |
-| `smoke_chamados._bloco_a_motivos` | Fornece data válida para templates datados e exige exatamente uma pergunta por motivo. `app/chamados/management/commands/smoke_chamados.py:96`, `app/chamados/management/commands/smoke_chamados.py:102`, `app/chamados/management/commands/smoke_chamados.py:104`. |
-
-`models.py` apenas reexporta a função; a declaração de hora usa sua própria porta e documenta que não chama o gerador. Referências: `app/chamados/models.py:3350`, `app/chamados/services/disputa_emissao.py:585`.
-
-**Testes, por análise contrafactual do diff; execução no pai [nao verificado]:** [nao verificado]
-
-- `PerguntaDeHoraSemDiaDoTurnoTest.test_MORDE_orfao_sem_dia_nao_nasce_como_conversa_de_hoje` **falha no pai**: data malformada produz texto, o parser de dia falha, não há batida nem chamado para fornecer outra data, e o antigo fallback cria conversa em `localdate()`, contrariando `assertFalse`. Referências: `app/chamados/tests/test_plantio_noturno_mais1.py:203`, `app/chamados/tests/test_plantio_noturno_mais1.py:206`, `app/chamados/tests/test_plantio_noturno_mais1.py:207`, `app/chamados/catalogo/query.py:62`, `app/chamados/services/disputa_emissao.py:364`, `app/chamados/services/disputa_emissao.py:238`, `app/chamados/models.py:2426`.
-- Seu contraexemplo `escolha` **passa também no pai**: esse tipo não é atingido pela nova guarda. Referências: `app/chamados/tests/test_plantio_noturno_mais1.py:210`, `app/chamados/catalogo/perguntas.py:82`, `app/chamados/services/disputa_emissao.py:411`.
-- O caso congelado de `test_a2` **passaria no pai com o mesmo congelamento transplantado**: usa motivo `escolha`, cujo comportamento não mudou. Sem congelamento, passaria nos dias diferentes de 12/08/2026; em 12/08, os dois asserts são incompatíveis. Congelar cura instabilidade do teste, não produz RED de implementação. Referências: `app/chamados/tests/test_a2_data_evento_batida.py:51`, `app/chamados/tests/test_a2_data_evento_batida.py:57`, `app/chamados/tests/test_a2_data_evento_batida.py:59`, `app/chamados/tests/test_a2_data_evento_batida.py:60`, `app/chamados/catalogo/perguntas.py:84`.
-
-O teste novo de `hora` rejeita somente pergunta com data de hoje; não demonstra ausência de pergunta em qualquer outra data. Referência: `app/chamados/tests/test_plantio_noturno_mais1.py:207`.
-
-**Escritores encontrados de `PerguntaDisputa.data_evento`:** nascimento real em `_nascer`; atribuição posterior e desfazimento em memória em `reapontar_resolvedora`; `_Proxy.data_evento` é insumo transitório de validação. Outro escritor real: **nao achei**. Referências: `app/chamados/models.py:2498`, `app/chamados/services/fio.py:837`, `app/chamados/services/fio.py:846`, `app/chamados/models.py:2444`.
-
-**ESMERIL:** permanece a divergência já declarada fora do escopo: conversa grava dia da pergunta, enquanto `do_fato` e fábrica usam a mesma data como identidade de fato/célula, sem discriminador. A guarda nova elimina a conversa `hora` deste emissor, mas não resolve essa colisão geral. Referências: `app/chamados/models.py:2422`, `app/chamados/models.py:2396`, `app/chamados/models.py:2453`, `app/chamados/services/fabrica_da_celula.py:118`, `app/chamados/services/disputa_emissao.py:411`.
-
-_2514 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2522 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
