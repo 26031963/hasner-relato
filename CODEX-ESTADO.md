@@ -1,7 +1,165 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **05/11/2026 22:27** · publicado em **05/11/2026 22:29** (UTC-3)
+> Ultima resposta processada: **05/11/2026 22:48** · publicado em **05/11/2026 22:50** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 05/11 22:48 · sessao e720195d15d6 · F-346 · verificador · origem=Code
+
+**O delta cura estaticamente o achado (1): a troca persiste exatamente os cinco campos que altera, preservando os demais. R06/R07 têm mordida para os mutantes anunciados, mas deixam lacunas específicas.** (`app/ferias/services.py:379`, `app/ferias/services.py:380`, `app/ferias/services.py:384`, `app/ferias/services.py:392`, `app/ferias/test_remarcar_limpa_janela_f346.py:103`, `app/ferias/test_remarcar_limpa_janela_f346.py:114`)
+
+Executei somente a extração do AST em memória. Execução Django, originais/mutantes em banco, incidência em produção e conferência independente de hash/pai/base: **[nao verificado]**. [nao verificado]
+
+**1. Cura, campos e chamadores**
+
+Não ficou fora nenhum campo de AG atribuído pela troca. O ajuste de `PA.dias_concedidos/status` continua persistido separadamente. O override continua chamando guarda, persistência e sincronização; incluir as duas datas mantém habilitada a guarda de sobreposição. (`app/ferias/services.py:378`, `app/ferias/services.py:392`, `app/ferias/services.py:394`, `app/ferias/models.py:397`, `app/ferias/models.py:434`)
+
+| Campo persistido | Quem escreve | Quem lê |
+|---|---|---|
+| `data_inicio` | Criações histórico/execução/aprovação; alteração pela troca. (`app/ferias/services.py:280`, `app/ferias/services.py:322`, `app/ferias/services.py:436`, `app/ferias/services.py:379`) | Guarda de edição, coerência, colisão, materialização, consultas por janela e apresentação. (`app/ferias/models.py:324`, `app/ferias/models.py:373`, `app/ferias/models.py:428`, `app/ponto/services/ausencia.py:1168`, `app/ferias/services.py:51`, `app/templates/ferias/_secao_colab.html:117`) |
+| `data_fim` | Mesmas criações e troca. (`app/ferias/services.py:280`, `app/ferias/services.py:322`, `app/ferias/services.py:437`, `app/ferias/services.py:379`) | Coerência, colisão, materialização, consultas por janela e apresentação. (`app/ferias/models.py:370`, `app/ferias/models.py:429`, `app/ponto/services/ausencia.py:1168`, `app/ferias/services.py:51`, `app/templates/ferias/_secao_colab.html:118`) |
+| `dias` | Mesmas criações e troca. (`app/ferias/services.py:281`, `app/ferias/services.py:323`, `app/ferias/services.py:438`, `app/ferias/services.py:379`) | Saldo para remarcar, cancelamentos, ajuste do PA, coerência, fracionamento e apresentação. (`app/ferias/models.py:222`, `app/ferias/services.py:333`, `app/ferias/services.py:353`, `app/ferias/services.py:378`, `app/ferias/models.py:374`, `app/ferias/situacao.py:122`, `app/templates/ferias/_secao_colab.html:119`) |
+| `aviso_emitido` | Default; execução; aprovação; troca. (`app/ferias/models.py:305`, `app/ferias/services.py:323`, `app/ferias/services.py:439`, `app/ferias/services.py:380`) | KPI/filtro, situação, mensagem da remarcação e apresentação. (`app/ferias/views.py:26`, `app/ferias/views.py:77`, `app/ferias/situacao.py:257`, `app/ferias/views.py:671`, `app/templates/ferias/_secao_colab.html:121`) |
+| `status` | Default; histórico; cancelamentos; troca; alinhamento do cron. (`app/ferias/models.py:309`, `app/ferias/services.py:282`, `app/ferias/services.py:336`, `app/ferias/services.py:361`, `app/ferias/services.py:384`, `app/ferias/services.py:518`) | Guardas, consultas por janela, fracionamento, ativação da materialização e apresentação. (`app/ferias/views.py:452`, `app/ferias/views.py:649`, `app/ferias/services.py:51`, `app/ferias/situacao.py:119`, `app/ponto/services/ausencia.py:1164`, `app/templates/ferias/_secao_colab.html:120`) |
+
+| Campo excluído do UPDATE | Quem escreve e quem lê |
+|---|---|
+| `periodo_aquisitivo_id` | Preenchido nas criações; lido pela troca, guarda, saldo e materialização. A troca não o altera. (`app/ferias/services.py:279`, `app/ferias/services.py:322`, `app/ferias/services.py:435`, `app/ferias/services.py:375`, `app/ferias/models.py:354`, `app/ponto/services/ausencia.py:1163`) |
+| `agendado_por_id` | Preenchido nas criações; lido como autor das ausências e no filtro do lote. (`app/ferias/services.py:283`, `app/ferias/services.py:323`, `app/ferias/services.py:440`, `app/ponto/services/ausencia.py:1189`, `app/ferias/views.py:536`) |
+| `obs` | Preenchido nas criações; cancelamento admin lê, concatena e persiste o carimbo. (`app/ferias/services.py:284`, `app/ferias/services.py:323`, `app/ferias/services.py:441`, `app/ferias/services.py:360`, `app/ferias/services.py:362`) |
+| `confirmacao` | Pedido e resposta escrevem; envio, resposta, atendimento e template leem. (`app/ferias/services.py:486`, `app/ferias/services.py:496`, `app/ferias/services.py:499`, `app/ferias/views.py:838`, `app/ferias/views.py:880`, `app/chamados/views.py:628`, `app/templates/ferias/_secao_colab.html:122`) |
+| `confirmado_em` | Pedido limpa e confirmação carimba; teste lê o carimbo. Leitor específico de runtime: **[nao verificado]**. (`app/ferias/services.py:487`, `app/ferias/services.py:500`, `app/ferias/test_confirmacao_agendamento.py:76`) |
+| `criado_em` | Nasce por `auto_now_add`; leitor específico de runtime: **[nao verificado]**. (`app/ferias/models.py:319`) |
+| PK | Identifica o agendamento carregado pelas views e apresentado pela API; a troca não lhe atribui novo valor. (`app/ferias/views.py:439`, `app/ferias/views.py:638`, `app/api/views.py:2258`, `app/ferias/services.py:379`) |
+
+Nos dois chamadores de runtime localizados, **não há dependência do save completo**: nenhum altera os campos excluídos antes da chamada. A correção prepara auditoria e depois recarrega os objetos; a remarcação lê `aviso_emitido`, ainda atribuído e persistido pela troca. (`app/ferias/views.py:439`, `app/ferias/views.py:470`, `app/ferias/views.py:490`, `app/ferias/views.py:496`, `app/ferias/views.py:638`, `app/ferias/views.py:668`, `app/ferias/views.py:671`, `app/ferias/services.py:392`)
+
+**2. Mordida dos testes** [nao verificado]
+
+**R06 morde a retirada isolada do `atomic`.** O DELETE precede o veto; sem o bloco do serviço, a exceção da guarda não desfaz aquele DELETE. O `TestCase` externo não mascara isso: a comparação ocorre depois de `assertRaises`, antes do encerramento do teste. A comparação de ausências discrimina o mutante; a de saldo acrescenta pouco nesse cenário, pois os dias permanecem 10 e o save do PA viria depois do veto. Essa é uma dedução estática. (`app/ferias/tests.py:19`, `app/ferias/services.py:377`, `app/ferias/services.py:378`, `app/ferias/services.py:387`, `app/ferias/services.py:394`, `app/ferias/models.py:432`, `app/ferias/test_remarcar_limpa_janela_f346.py:100`, `app/ferias/test_remarcar_limpa_janela_f346.py:103`)
+
+**R07 morde a volta ao save completo**, ou a inclusão indevida de `confirmacao` na lista: carrega antes, altera a coluna diretamente, remarca com o objeto antigo e recarrega. Contudo, acrescentar somente `confirmado_em` ou somente `obs` ao UPDATE passaria: o caso não modifica nem confere esses campos. (`app/ferias/test_remarcar_limpa_janela_f346.py:110`, `app/ferias/test_remarcar_limpa_janela_f346.py:111`, `app/ferias/test_remarcar_limpa_janela_f346.py:114`, `app/ferias/services.py:392`)
+
+| Mutante | Resultado deduzido dos casos |
+|---|---|
+| **Save antes do DELETE**, mantendo `exceto` | **R01–R07 deixam passar.** A guarda exclui as ausências antigas; sync e limpeza posterior chegam aos mesmos resultados observados. R06 veta antes da limpeza. Os casos não certificam a ordem nem os efeitos intermediários. (`app/ferias/models.py:420`, `app/ponto/services/ausencia.py:1182`, `app/ponto/services/ausencia.py:1252`, `app/ferias/test_remarcar_limpa_janela_f346.py:55`, `app/ferias/test_remarcar_limpa_janela_f346.py:103`) |
+| **Omitir `exceto`** | R06/R07 isolados deixam passar; **R02/R03 mordem**, pois exigem preservar as PKs da interseção/borda. (`app/ferias/test_remarcar_limpa_janela_f346.py:64`, `app/ferias/test_remarcar_limpa_janela_f346.py:72`, `app/ferias/test_remarcar_limpa_janela_f346.py:103`, `app/ferias/test_remarcar_limpa_janela_f346.py:114`) |
+| **Ler janela antiga depois da atribuição** | R06/R07 isolados deixam passar; **R01 morde**, pois a janela antiga permanece materializada. (`app/ferias/services.py:379`, `app/ponto/services/ausencia.py:1250`, `app/ferias/test_remarcar_limpa_janela_f346.py:56`) |
+| Omitir **`data_inicio` ou `data_fim`** do UPDATE | **R01 morde**, recarregando e exigindo ambas as datas novas. (`app/ferias/test_remarcar_limpa_janela_f346.py:47`, `app/ferias/test_remarcar_limpa_janela_f346.py:55`) |
+| Omitir **`dias`** | **R01–R07 deixam passar**: R04 confere ausências e saldo do PA, sem conferir `AG.dias`. Há asserção discriminante nos testes anteriores de remarcação/admin. (`app/ferias/test_remarcar_limpa_janela_f346.py:74`, `app/ferias/test_remarcar_limpa_janela_f346.py:78`, `app/ferias/test_editar_agendamento.py:59`, `app/ferias/test_editar_datas_admin.py:93`) |
+| Omitir **`aviso_emitido`** | **R01–R07 deixam passar**; a mensagem usa o objeto em memória, que recebeu a atribuição mesmo sem persistência. (`app/ferias/services.py:380`, `app/ferias/views.py:671`, `app/ferias/test_remarcar_limpa_janela_f346.py:46`, `app/ferias/test_remarcar_limpa_janela_f346.py:114`) |
+| Omitir **`status`** | **R01–R07 deixam passar**: partem de `agendado` e mantêm datas futuras. O teste anterior de concluído → futuro tem asserção discriminante. (`app/ferias/test_remarcar_limpa_janela_f346.py:29`, `app/ferias/test_remarcar_limpa_janela_f346.py:32`, `app/ferias/test_remarcar_limpa_janela_f346.py:112`, `app/ferias/test_a3_situacao_de_ferias.py:578`, `app/ferias/test_a3_situacao_de_ferias.py:581`) |
+
+**3. AST ampliado**
+
+Executando o helper em memória sobre o arquivo atual, obtive **`['_trocar_janela']`**, sem falso positivo atual. O universo examinado continua restrito a `services.py`. (`app/ferias/test_remarcar_limpa_janela_f346.py:117`, `app/ferias/test_remarcar_limpa_janela_f346.py:121`, `app/ferias/services.py:379`)
+
+Há um **falso negativo bastante plausível**, confirmado em memória:
+
+```python
+def novo(pa, i):
+    AgendamentoFerias.objects.filter(periodo_aquisitivo=pa).update(data_inicio=i)
+```
+
+O detector retorna `[]`: a substring `periodo` aparece no texto da chamada por causa do filtro, e o selo descarta o escritor inteiro, embora o modelo seja AG. (`app/ferias/test_remarcar_limpa_janela_f346.py:144`)
+
+Também escapam `qs.update(**campos)` com dicionário preparado antes e `setattr(ag, campo, valor)` com nome de campo variável: o detector exige nomes/constantes presentes na própria chamada. (`app/ferias/test_remarcar_limpa_janela_f346.py:141`, `app/ferias/test_remarcar_limpa_janela_f346.py:145`)
+
+Como falso positivo sintético, `ag.data_inicio: int`, sem atribuição, é contado como escritor. O ramo `AnnAssign` não exige valor e não recebeu uma sentinela sintética correspondente no teste de mordida. (`app/ferias/test_remarcar_limpa_janela_f346.py:136`, `app/ferias/test_remarcar_limpa_janela_f346.py:172`)
+
+Portanto, o selo ampliou a cobertura sintática, mas continua verificando contagem e presença nominal de chamadas; não prova transação, ordem, argumentos da limpeza ou persistência dos cinco campos. (`app/ferias/test_remarcar_limpa_janela_f346.py:162`, `app/ferias/test_remarcar_limpa_janela_f346.py:167`)
+
+**4. Triagem do achado (2)**
+
+**Na cópia atual, o padrão é compartilhado pelas duas portas:** ambas recebem objeto carregado na view e delegam à função que captura a janela antiga antes do `atomic`, sem recarga protegida. (`app/ferias/views.py:439`, `app/ferias/views.py:638`, `app/ferias/services.py:376`, `app/ferias/services.py:377`, `app/ferias/services.py:400`, `app/ferias/services.py:407`)
+
+A docstring declara que a ordem já existia na correção anterior; o anexo v1 também sustenta essa origem. **O corpo anterior à obra, no commit base, não pôde ser conferido independentemente: [nao verificado].** O comentário atual é evidência documental, não substitui a leitura histórica. (`app/ferias/services.py:369`)
+
+Recarregar simplesmente dentro do `atomic` **não elimina a corrida**: ainda permite duas leituras da mesma janela antes das escritas. A leitura feita pela guarda tampouco atualiza `_ini_ant/_fim_ant`, usados na limpeza. (`app/ferias/services.py:376`, `app/ferias/services.py:387`, `app/ferias/models.py:400`, `app/ferias/models.py:420`)
+
+Não sustentaria a formulação absoluta “exige `select_for_update`”. Uma alternativa de desenho seria UPDATE condicionado à janela/versão esperada, com aborto de todo o `atomic` se houver conflito, preservando guarda e sync. Isso evita necessariamente acrescentar um SELECT com trava, mas continua envolvendo a trava inerente ao UPDATE e exige resolver sua integração com o chokepoint atual. **Alternativa não implementada nem validada nesta cópia: [nao verificado].** (`app/ferias/models.py:434`, `app/ferias/services.py:377`, `app/ferias/services.py:392`)
+
+Assim, **manter a concorrência em fila de desenho é defensável**, mas a exclusividade de `select_for_update` como cura não está demonstrada. Já há ordens opostas no código: troca faz Ausência → AG → PA; cancelamento admin começa PA → Ausência → AG. (`app/ferias/services.py:387`, `app/ferias/services.py:392`, `app/ferias/services.py:394`, `app/ferias/services.py:355`, `app/ferias/services.py:356`, `app/ferias/services.py:362`)
+
+**5. Classes novas no delta**
+
+| Classe | Avaliação |
+|---|---|
+| **2º juiz** | Não identificado: permanecem os juízes de status, aviso e colisão. (`app/ferias/services.py:380`, `app/ferias/services.py:384`, `app/ferias/services.py:393`, `app/ferias/models.py:428`) |
+| **2º escritor fora da porta** | Não identificado no produto; o delta restringe a escrita dentro da porta registrada. (`app/ferias/services.py:392`, `app/core/portas.py:488`) |
+| **Relógio fora da borda** | Permanece, sem leitura nova neste delta: serviço e juízes consultam o relógio separadamente. (`app/ferias/services.py:380`, `app/ferias/models.py:280`, `app/ferias/models.py:94`) |
+| **Derivação paralela** | Não identificada: continuam as mesmas derivações e autoridades. (`app/ferias/services.py:380`, `app/ferias/services.py:384`, `app/ferias/models.py:212`) |
+| **Selo sem mordida** | Os novos casos mordem seus alvos anunciados; permanecem as lacunas de campos e do AST descritas acima. (`app/ferias/test_remarcar_limpa_janela_f346.py:103`, `app/ferias/test_remarcar_limpa_janela_f346.py:114`, `app/ferias/test_remarcar_limpa_janela_f346.py:144`) |
+| **Ordem de trava** | Nenhuma nova ordem explícita introduzida neste delta: limpeza → save/sync → PA permanece. A questão concorrente continua aberta. (`app/ferias/services.py:387`, `app/ferias/services.py:392`, `app/ferias/services.py:394`, `app/ferias/models.py:434`) |
+| **Pouso antes de pré-requisito** | Não aparece nova dependência de schema: os cinco campos já existem. Migrações aplicadas, suite e condições de deploy: **[nao verificado]**. (`app/ferias/models.py:302`, `app/ferias/models.py:305`, `app/ferias/models.py:309`) |
+
+## 05/11 22:46 · sessao 49ee82a1baf3 · - · - · origem=Ronald (tmux)
+
+**R06/R07 têm mordida estática para os mutantes anunciados; execução Django/banco dos originais e mutantes: [nao verificado].** R06 chama o serviço diretamente, provoca colisão materializada e compara ausências/saldo/janela após a exceção; o veto levanta antes do `super().save()`. Sem o `atomic` do serviço, o DELETE anterior ao veto não é desfeito apenas por `assertRaises`; o `TestCase` externo permanece aberto durante a comparação. (`app/ferias/test_remarcar_limpa_janela_f346.py:87`, `app/ferias/test_remarcar_limpa_janela_f346.py:98`, `app/ferias/test_remarcar_limpa_janela_f346.py:100`, `app/ferias/test_remarcar_limpa_janela_f346.py:103`, `app/ferias/tests.py:19`, `app/ferias/services.py:377`, `app/ferias/services.py:387`, `app/ferias/models.py:428`, `app/ferias/models.py:434`)
+
+R07 carrega o objeto com confirmação antiga, faz `QuerySet.update(confirmacao='confirmado')`, remarca com o objeto antigo e recarrega a linha. Voltar ao save completo, ou recolocar `confirmacao` no `update_fields`, regrava o valor antigo e contraria a asserção. (`app/ferias/test_remarcar_limpa_janela_f346.py:107`, `app/ferias/test_remarcar_limpa_janela_f346.py:110`, `app/ferias/test_remarcar_limpa_janela_f346.py:111`, `app/ferias/test_remarcar_limpa_janela_f346.py:114`, `app/ferias/models.py:314`, `app/ferias/services.py:392`)
+
+R07 **não** verifica concorrência sobre `confirmado_em` ou `obs`: esses campos não são alterados entre carga e remarcação nem conferidos depois. Um mutante que acrescentasse somente `confirmado_em` ou somente `obs` ao `update_fields` preservaria a asserção atual. (`app/ferias/test_remarcar_limpa_janela_f346.py:110`, `app/ferias/test_remarcar_limpa_janela_f346.py:111`, `app/ferias/test_remarcar_limpa_janela_f346.py:114`, `app/ferias/services.py:392`)
+
+| Mutante | Mordida estática dos casos F-346 |
+|---|---|
+| Save antes do DELETE, mantendo `exceto` e `atomic` | **Passa pelos resultados observados.** A guarda exclui as ausências da janela antiga; o sync preserva interseção/cria dias novos; o DELETE posterior com `exceto` retira apenas antiga − nova. R06 veta antes de alterar e igualmente preserva o estado. Isso muda ordem/efeitos intermediários, mas esses casos conferem o resultado final, não a ordem. (`app/ferias/models.py:420`, `app/ferias/models.py:428`, `app/ponto/services/ausencia.py:1182`, `app/ponto/services/ausencia.py:1252`, `app/ferias/test_remarcar_limpa_janela_f346.py:55`, `app/ferias/test_remarcar_limpa_janela_f346.py:103`) |
+| Omitir `exceto` | **R02/R03 mordem:** interseção e dia de borda são apagados e recriados com outra PK. (`app/ferias/test_remarcar_limpa_janela_f346.py:61`, `app/ferias/test_remarcar_limpa_janela_f346.py:64`, `app/ferias/test_remarcar_limpa_janela_f346.py:69`, `app/ferias/test_remarcar_limpa_janela_f346.py:72`, `app/ponto/services/ausencia.py:1252`) |
+| Capturar antiga depois da atribuição | **R01 morde:** o helper passa a receber a própria janela nova, inteiramente excluída por `exceto`, deixando a antiga materializada. (`app/ferias/services.py:376`, `app/ferias/services.py:379`, `app/ferias/services.py:387`, `app/ponto/services/ausencia.py:1250`, `app/ferias/test_remarcar_limpa_janela_f346.py:56`) |
+| Omitir `data_inicio` ou `data_fim` do save | **R01 morde:** recarrega e exige ambas as datas novas. (`app/ferias/test_remarcar_limpa_janela_f346.py:47`, `app/ferias/test_remarcar_limpa_janela_f346.py:55`) |
+| Omitir `dias` | **R01–R07 deixam passar:** R04 muda 10→5, mas só confere ausências e `PA.dias_concedidos`; sync usa datas, sem ler `ag.dias`. Existe mordida fora desse arquivo: `test_editar_reajusta_saldo_do_periodo` e teste admin conferem `ag.dias` após redução. (`app/ferias/test_remarcar_limpa_janela_f346.py:74`, `app/ferias/test_remarcar_limpa_janela_f346.py:78`, `app/ponto/services/ausencia.py:1178`, `app/ferias/test_editar_agendamento.py:52`, `app/ferias/test_editar_agendamento.py:59`, `app/ferias/test_editar_datas_admin.py:88`, `app/ferias/test_editar_datas_admin.py:93`) |
+| Omitir `aviso_emitido` | **R01–R07 deixam passar:** não o conferem; a view usa o objeto em memória, já atribuído pelo serviço. (`app/ferias/test_remarcar_limpa_janela_f346.py:49`, `app/ferias/test_remarcar_limpa_janela_f346.py:114`, `app/ferias/services.py:380`, `app/ferias/views.py:671`) |
+| Omitir `status` | **R01–R07 deixam passar:** todos partem de `agendado` e movem para futuro. Há mordida fora deles na correção de concluído para futuro. (`app/ferias/test_remarcar_limpa_janela_f346.py:23`, `app/ferias/test_remarcar_limpa_janela_f346.py:29`, `app/ferias/test_remarcar_limpa_janela_f346.py:32`, `app/ferias/test_remarcar_limpa_janela_f346.py:112`, `app/ferias/test_a3_situacao_de_ferias.py:571`, `app/ferias/test_a3_situacao_de_ferias.py:581`) |
+
+**AST:** extraí `trocadores_de_janela`/`chamadas` e executei exclusivamente em memória com `python3 -B`, sem importar Django nem escrever arquivos: resultado atual `['_trocar_janela']`; portanto, não houve falso positivo sobre o `services.py` atual. O detector olha apenas esse arquivo e exclui literalmente `self`/`periodo`; a única atribuição de AG encontrada pelo detector é a de `_trocar_janela`. (`app/ferias/test_remarcar_limpa_janela_f346.py:117`, `app/ferias/test_remarcar_limpa_janela_f346.py:121`, `app/ferias/test_remarcar_limpa_janela_f346.py:134`, `app/ferias/services.py:379`)
+
+Contraexemplos sintéticos também executados em memória:
+
+```python
+def x(qs, i):
+    campos = {"data_inicio": i}
+    qs.update(**campos)            # resultado []
+
+def x(ag, i):
+    campo = "data_inicio"
+    setattr(ag, campo, i)          # resultado []
+
+def x(ag_por_periodo, i):
+    ag_por_periodo.update(data_inicio=i)  # resultado []
+```
+
+Os dois primeiros escapam porque o selo exige keyword explícita ou constante dentro da própria chamada; o terceiro escapa porque a exclusão testa a substring `periodo` em todo o nome da função chamada, sem identificar o modelo. Alias de `setattr`, atribuição a lista (`[ag.data_inicio, ag.data_fim] = ...`), alvo `self` e `AsyncFunctionDef` também escaparam nos exemplos executados. (`app/ferias/test_remarcar_limpa_janela_f346.py:126`, `app/ferias/test_remarcar_limpa_janela_f346.py:132`, `app/ferias/test_remarcar_limpa_janela_f346.py:134`, `app/ferias/test_remarcar_limpa_janela_f346.py:141`, `app/ferias/test_remarcar_limpa_janela_f346.py:144`)
+
+Há falsos positivos **plausíveis**, não presentes no arquivo atual: `ag.data_inicio: int` sem valor é contado como escritor embora não atribua; qualquer outro tipo com `.data_inicio` também é contado, pois o selo não resolve o tipo do receptor. Ambos foram confirmados nos exemplos em memória. (`app/ferias/test_remarcar_limpa_janela_f346.py:133`, `app/ferias/test_remarcar_limpa_janela_f346.py:136`)
+
+O selo estrutural tampouco prova `atomic`, ordem, parâmetros de DELETE ou persistência: exige um escritor, presença nominal da chamada de limpeza e delegação das duas portas. Sua ampliação tem mordida para as formas adicionadas, mas não constitui garantia semântica. (`app/ferias/test_remarcar_limpa_janela_f346.py:162`, `app/ferias/test_remarcar_limpa_janela_f346.py:165`, `app/ferias/test_remarcar_limpa_janela_f346.py:167`, `app/ferias/test_remarcar_limpa_janela_f346.py:177`)
+
+## 05/11 22:45 · sessao a914ed5cd748 · - · - · origem=Ronald (tmux)
+
+**O delta cura estaticamente o achado (1): os cinco campos de AG atribuídos pela troca são exatamente os cinco de `update_fields`; o PA continua salvo separadamente. A guarda e a sincronização continuam executadas pelo override.** (`app/ferias/services.py:378`, `app/ferias/services.py:379`, `app/ferias/services.py:380`, `app/ferias/services.py:384`, `app/ferias/services.py:392`, `app/ferias/services.py:394`, `app/ferias/models.py:434`)
+
+| Campo AG | Quem escreve | Quem lê |
+|---|---|---|
+| `data_inicio` | Criações histórico/execução/aprovação; alteração existente pela troca. (`app/ferias/services.py:280`, `app/ferias/services.py:322`, `app/ferias/services.py:436`, `app/ferias/services.py:379`) | Guarda de edição; coerência; colisão; materialização; API/tabela. (`app/ferias/models.py:324`, `app/ferias/models.py:373`, `app/ferias/models.py:428`, `app/ponto/services/ausencia.py:1168`, `app/api/views.py:2259`, `app/templates/ferias/_tabela_ferias.html:39`) |
+| `data_fim` | Mesmas criações e troca. (`app/ferias/services.py:280`, `app/ferias/services.py:322`, `app/ferias/services.py:437`, `app/ferias/services.py:379`) | Coerência; colisão; materialização; API/tabela. (`app/ferias/models.py:370`, `app/ferias/models.py:429`, `app/ponto/services/ausencia.py:1168`, `app/api/views.py:2260`, `app/templates/ferias/_tabela_ferias.html:40`) |
+| `dias` | Mesmas criações e troca. (`app/ferias/services.py:281`, `app/ferias/services.py:323`, `app/ferias/services.py:438`, `app/ferias/services.py:379`) | Saldo de remarcação; cancelamento; ajuste do PA; fracionamento; coerência; API. (`app/ferias/models.py:222`, `app/ferias/services.py:333`, `app/ferias/services.py:378`, `app/ferias/situacao.py:122`, `app/ferias/models.py:374`, `app/api/views.py:2261`) |
+| `aviso_emitido` | Default; execução; aprovação; troca. (`app/ferias/models.py:305`, `app/ferias/services.py:323`, `app/ferias/services.py:439`, `app/ferias/services.py:380`) | KPI/filtro; situação; resposta da remarcação; tabela. (`app/ferias/views.py:26`, `app/ferias/views.py:77`, `app/ferias/situacao.py:257`, `app/ferias/views.py:671`, `app/templates/ferias/_tabela_ferias.html:43`) |
+| `status` | Default; histórico; cancelamentos; troca; cron. (`app/ferias/models.py:309`, `app/ferias/services.py:282`, `app/ferias/services.py:336`, `app/ferias/services.py:361`, `app/ferias/services.py:384`, `app/ferias/services.py:518`) | Guardas de portas; frações; guarda de sobreposição; ativação da materialização; API. (`app/ferias/views.py:452`, `app/ferias/views.py:649`, `app/ferias/situacao.py:119`, `app/ferias/models.py:394`, `app/ponto/services/ausencia.py:1164`, `app/api/views.py:2262`) |
+
+| Campo fora do UPDATE | Quem escreve e quem lê |
+|---|---|
+| `periodo_aquisitivo_id` | Criações preenchem; troca não altera. Guarda, saldo, sync e tabela leem a relação. (`app/ferias/services.py:279`, `app/ferias/services.py:322`, `app/ferias/services.py:435`, `app/ferias/services.py:375`, `app/ferias/models.py:354`, `app/ferias/models.py:428`, `app/ponto/services/ausencia.py:1163`, `app/templates/ferias/_tabela_ferias.html:36`) |
+| `agendado_por_id` | Criações preenchem; sync usa como autor da ausência e lote filtra por ele. (`app/ferias/services.py:283`, `app/ferias/services.py:323`, `app/ferias/services.py:440`, `app/ponto/services/ausencia.py:1189`, `app/ferias/views.py:536`) |
+| `obs` | Criações preenchem; cancelamento admin lê, concatena carimbo e salva. (`app/ferias/services.py:284`, `app/ferias/services.py:323`, `app/ferias/services.py:441`, `app/ferias/services.py:360`, `app/ferias/services.py:362`) |
+| `confirmacao` | Pedido e resposta escrevem; envio, resposta, atendimento e template leem. (`app/ferias/services.py:486`, `app/ferias/services.py:496`, `app/ferias/services.py:499`, `app/ferias/views.py:838`, `app/ferias/views.py:880`, `app/chamados/views.py:628`, `app/templates/ferias/_secao_colab.html:122`) |
+| `confirmado_em` | Pedido limpa; confirmação carimba. Leitor de runtime específico não localizado: **[nao verificado]**; teste lê o carimbo. (`app/ferias/services.py:487`, `app/ferias/services.py:500`, `app/ferias/test_confirmacao_agendamento.py:76`) |
+| `criado_em` | `auto_now_add`; leitor específico de runtime para AG não localizado: **[nao verificado]**. (`app/ferias/models.py:319`) |
+| PK | Identifica os objetos usados pelas portas/views e aparece na API; necessidade de regravá-la pela troca não demonstrada. (`app/ferias/views.py:439`, `app/ferias/views.py:638`, `app/api/views.py:2258`) |
+
+**Nenhum dos dois chamadores de runtime localizados depende de persistir outros campos de AG.** A correção carrega o objeto, valida/consulta saldo, prepara auditoria e chama o serviço; depois recarrega os objetos. A remarcação carrega, valida datas/saldo e chama o serviço; depois lê `aviso_emitido`, que continua atribuído e persistido. (`app/ferias/views.py:439`, `app/ferias/views.py:465`, `app/ferias/views.py:470`, `app/ferias/views.py:490`, `app/ferias/views.py:496`, `app/ferias/views.py:638`, `app/ferias/views.py:661`, `app/ferias/views.py:668`, `app/ferias/views.py:671`)
+
+O save limitado ainda inclui ambas as datas; portanto não aciona o retorno antecipado reservado a updates sem datas. O override chama guarda, `super().save` e sync na mesma sequência. (`app/ferias/services.py:392`, `app/ferias/models.py:397`, `app/ferias/models.py:434`)
+
+Execução de testes, SQL efetivo e cobertura de caminhos dinâmicos/externos: **[nao verificado]**. [nao verificado]
 
 ## 05/11 22:27 · sessao e05481d49698 · H12H06-B-SIMPLES · sonda · origem=Code
 
@@ -855,42 +1013,4 @@ O caminho HTTP permite esse registro: dias omitidos viram 1; minutos vazios vira
 
 Em H12, os sítios inspecionados usam o mesmo predicado e a janela da empresa: classificação, resumos, contador e marcação da linha. Não identifiquei outro defeito causal nesses hunks por inspeção. (`app/folha/export.py:60`, `app/folha/export.py:807`, `app/folha/export.py:858`, `app/ponto/services/fechamento_lista.py:104`, `app/ponto/services/fechamento_lista.py:109`, `app/ponto/views.py:1215`, `app/templates/ponto/_fech_linha.html:2`)
 
-## 05/11 21:10 · sessao bbbf9f695f68 · - · - · origem=Ronald (tmux)
-
-T1 está correta sobre a idade dos leitores e a concordância com os valores novos de A: falta deriva minutos, mas não pertence a `TIPOS_PAGOS`; atestado zero não gera crédito e, sendo ABONA, justifica o dia. O juiz de cobertura também considera zero dia inteiro. (`app/ponto/models.py:683`; `app/ponto/catalogo/ausencias.py:95`; `app/ponto/services/fechamento.py:665`; `app/ponto/services/fechamento.py:685`; `app/ponto/turnos.py:2598`)
-
-**Ressalva de causalidade:** isso não significa ausência de delta financeiro em A. O diff troca **os atestados novos desses sítios de 720 para zero**; portanto muda entradas dos leitores antigos mesmo sem migrar as 18 linhas antigas. Os sítios omitem minutos, a porta usa zero e o modelo só deriva tipo `falta`. (`app/chamados/services/materializacao.py:484`; `app/chamados/services/materializacao.py:520`; `app/ponto/services/ausencia.py:130`; `app/ponto/services/ausencia.py:343`; `app/ponto/models.py:877`)
-
-Exemplo deduzido do código, sem afirmar ocorrência em produção: atestado aprovado com efeito ABONA, dia obrigatório sem trabalho, sem Justificativa e sem cobertura concorrente:
-
-- Com 720: crédito de 720 e exclusão da justificação; com zero: crédito zero e inclusão nas justificadas. (`app/ponto/services/efeito_ausencia.py:44`; `app/ponto/services/efeito_ausencia.py:51`; `app/ponto/services/efeito_ausencia.py:55`; `app/ponto/services/credito_parcial.py:24`; `app/ponto/services/fechamento.py:665`; `app/ponto/services/fechamento.py:685`)
-- No motor, esse dia sai de `faltas_injustificadas` e passa a `_abono`; mudam contagem e horas de falta/abono. Se era o único dia injustificado da semana, muda também semana DSR perdido para semana DSR OK. (`app/ponto/motor_calculo_v2.py:2600`; `app/ponto/motor_calculo_v2.py:2605`; `app/ponto/motor_calculo_v2.py:2610`; `app/ponto/motor_calculo_v2.py:2620`; `app/ponto/motor_calculo_v2.py:2629`; `app/ponto/motor_calculo_v2.py:2654`)
-- O fechamento persiste os contadores de DSR do motor; a sua `horas_falta` vem separadamente das faltas declaradas, portanto não se deve confundir a alteração de `resultado.horas_falta` com alteração automática desse campo persistido. (`app/ponto/services/fechamento.py:866`; `app/ponto/services/fechamento.py:987`; `app/ponto/services/fechamento.py:1085`)
-
-Esse delta é coerente com atestado de dia inteiro; **não constitui por si só novo defeito**, mas uma descrição de T1 que atribua toda alteração numérica apenas à migração do legado fica incompleta. (`app/ponto/turnos.py:2583`; `app/ponto/services/fechamento.py:685`; `app/ponto/motor_calculo_v2.py:2600`)
-
-T2: os fatos citados estão certos. `datas_no_periodo` usa `dias_da_ausencia`; a expansão usa calendário e limites do registro/janela, sem minutos e sem grade; TXT usa `len(datas)`. Uma mesma falta aprovada de um dia gera a mesma quantidade TXT com 720 ou zero. (`app/folha/export.py:63`; `app/ponto/turnos.py:2774`; `app/folha/export.py:87`; `app/folha/export.py:218`; `app/folha/export.py:732`)
-
-T4: a fraqueza do teste existe, mas não altera o resultado de minutos. O teste usa atestado aprovado diretamente; a tabela real usa status vazio; a porta aplica `estado_inicial`, documento anexado conduz a `aguardando_decisao`, aprovação passa por `mudar_estado`, e nenhuma dessas etapas deriva minutos de atestado. (`app/chamados/tests/test_h06_falta_pela_grade.py:101`; `app/chamados/services/materializacao.py:581`; `app/ponto/services/ausencia.py:344`; `app/ponto/services/ausencia.py:763`; `app/ponto/services/ausencia.py:857`; `app/ponto/services/ausencia.py:808`; `app/ponto/models.py:877`)
-
-A devolução de registro já existente preserva seu valor, sem `save`, de modo que repetir a resposta não converte atestado antigo 720 em zero. (`app/ponto/services/ausencia.py:294`)
-
-## 05/11 21:09 · sessao 052f591a4700 · H12H06-SEPARA-TRAVA · censo · origem=Code
-
-[resposta retida: senha_atribuida -- nao se publica credencial nem caminho de segredo]
-
-## 05/11 21:05 · sessao a77a07cefa5d · - · - · origem=Ronald (tmux)
-
-Confirmado: o ramo `adesao is None` apenas lavra/carimba `CelulaDia`, condicionado a `apply_`, e retorna antes das emissões: `app/ponto/services/cartorio.py:1162`, `:1207`, `:1242`, `:1264`, `:1268`. A linha `:1223` é comentário.
-
-Esse ramo não preenche `out['cods']`; o ramo normal preenche em `cartorio.py:1426`. Cluster e fábrica posteriores dependem dessas datas (`:986`, `:990`, `:996`). No signal, `julgar_celula` passa somente `[cel]` (`:1989`); assim, o ramo nunca-bateu puro não alcança Colaborador ou Chamado pelo cartório.
-
-FKs confirmadas:
-
-- `CelulaDia.ausencia → Ausencia`, `SET_NULL`: `app/escala/models.py:1796`, `:1797`.
-- `Ausencia.documento_referencia → self`, `SET_NULL`: `app/ponto/models.py:789`, `:790`.
-- `Ausencia.chamado_origem → ChamadoColaborador`, `SET_NULL`: `app/ponto/models.py:784`, `:785`.
-
-Essas declarações incluem atualizações referenciais no escopo das exclusões; SQL emitido, ordem do Collector, posição desses updates relativamente ao `post_delete` e primeira aquisição efetiva de travas: **[nao verificado]**.
-
-_2013 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2016 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
