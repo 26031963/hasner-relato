@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 00:06:15.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (37.0 MB). Acoes na janela: **1254**.
+**Medido em 06/11/2026 00:12:00.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (37.1 MB). Acoes na janela: **1262**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:09:34 | Bash | Inspect current trava and repoint ESPERANDO | `tr '\0' ' ' < /proc/3008183/cmdline \| grep -oE '\-v [^ ]+:/app \|manage.py test .*' \| cut -c1-200; cd /home/ronald/saas-hasner/app/docs; sed -i '2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=3008183#' RELATO.md; sed -n 2p RELATO.md` |
+| 00:09:27 | Bash | Diagnose stop hook rejection | `tail -3 /home/ronald/saas-hasner/logs/hook_stop_fila1.log \| cut -c1-200; ls -d /proc/2731191 2>&1 \| tail -1; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; ps -eo pid,args \| grep -E 'trava_teste.sh --\|pre-push' \| grep -v grep \| cut -c1-90` |
+| 00:09:20 | SendMessage |  | `-` |
+| 00:09:15 | ToolSearch |  | `-` |
+| 00:09:12 | Bash | Read FIO-MUDO v3 mutant summary | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/b745pml8e.output \| tail -25` |
+| 00:07:51 | Bash | Repoint ESPERANDO to live trava | `cd /home/ronald/saas-hasner/app/docs; sed -i '2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=2731191#' RELATO.md; sed -n 2p RELATO.md` |
+| 00:07:48 | Bash | Record push and find live trava | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; ls -d /proc/387219 2>&1\|tail -1; ps -eo pid,args \| grep -E 'trava_teste.sh --' \| grep -v grep \| cut -c1-60; echo "- PUSH F-346: a2156d95..a5a7901b main (PROVA logs/f346/push.log, pre-push OK, rc=0; pos_push a37c673d). Deploy OK logs/f346/deploy.log (3 cascas, 3 rotas, importerror_500=0)." >> app/docs/RELATO.md` |
+| 00:07:42 | Bash | Verify push landed on remote | `cd /home/ronald/saas-hasner; tail -5 logs/f346/push.log; git fetch -q origin; git log --oneline -3; git rev-parse --short origin/main; git status --porcelain \| grep -v '^??'` |
 | 23:46:57 | Bash | Point ESPERANDO at pre-push | `cd /home/ronald/saas-hasner/app/docs; sed -i '2s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/pre-push.sh \| pid=1595425#' RELATO.md; sed -n 2p RELATO.md` |
 | 23:46:51 | Bash | Find push and trava pids | `/usr/bin/sleep 3; ps -eo pid,args \| grep -E 'bin/push.sh\|pre-push\|trava_teste.sh' \| grep -v grep \| cut -c1-140` |
 | 23:46:46 | Bash | Push the F-346 marco via push.sh | `cd /home/ronald/saas-hasner; bash bin/push.sh > logs/f346/push.log 2>&1; echo rc=$? >> logs/f346/push.log; tail -4 logs/f346/push.log` |
