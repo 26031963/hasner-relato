@@ -1,7 +1,121 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 07:45** · publicado em **06/11/2026 07:46** (UTC-3)
+> Ultima resposta processada: **06/11/2026 07:49** · publicado em **06/11/2026 07:51** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 07:49 · sessao ef717d1946a3 · LASTRO-PARTE-3 · leitura · origem=Code
+
+**Os cinco atos admitem montagem em TestCase, mas nem todo ramo deve fechar o chamado.** Em particular, uma resposta discordante continua prevalecendo sobre `carimbar_identidade`; esse é um controle legítimo. (`app/chamados/models.py:2625`, `app/chamados/juizes.py:1150`, `app/chamados/juizes.py:1171`)
+
+Os vermelhos abaixo são **previstos pela leitura da cópia**; execução dos novos casos e confirmação independente do hash: **[nao verificado]**. Ocorrência ou quantidade desses estados em produção: **[nao verificado]**.
+
+**Peças de fixture já existentes**
+
+Nenhum dos helpers abaixo, isoladamente, entrega toda a combinação pedida; é necessário compor chamado, âncora e célula. O A5 de LASTRO-PARTE-2 simula a recusa com mock, portanto não demonstra retenção por C6 real. (`app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:63`, `app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:144`)
+
+| Peça | Helper existente | Teste que o usa | [nao verificado]
+|---|---|---|
+| Cadastro com colaborador, usuário e admin; chamados e disputa com pai/destino separados | `_Base.setUpTestData`, `_ch`, `_disputa`, `_pergunta`, em `app/chamados/tests/test_o261e_f1_porta_encerramento.py:49`, `:59`, `:65`, `:69` | Retenção real por destino: `app/chamados/tests/test_o261e_f1_porta_encerramento.py:82` |
+| Pergunta de hora já ancorada; aceita sobrescrever motivo, resposta, data e célula por `**kw` | `PortaValidacaoPerguntaTest._pergunta`, `app/chamados/tests/test_porta_validacao_pergunta.py:175` | Recusa pública: `app/chamados/tests/test_porta_validacao_pergunta.py:233` |
+| Pergunta discordante, DNA, lâmpada e dia coerente | `PerguntaRespondidaEMarcoAcesoTest._caso('19:06')`, `app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:36` | Confirma C6 viva aos seis minutos: `app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:59` |
+| Célula acusando outro marco; pergunta muda com materialização opcional | `_Base._celula` e `_pergunta`, `app/chamados/tests/test_bug117_marco_no_espelho.py:55`, `:64` | Marco aceso sem materialização ainda deixa pergunta viva: `app/chamados/tests/test_bug117_marco_no_espelho.py:137` |
+| Chamado cobrando marcos nomeados e ata plantada depois dos sinais | `_Base._caso`, `app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:63` | `app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:97` |
+| Vínculo válido no dia | `dar_vinculo`, `app/chamados/tests/_vinculo_do_dia.py:15` | `app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:61` |
+
+Para os casos, a composição concreta é esta:
+
+- Colaborador ativo, com vínculo, usuário e autor administrativo; competência sem entrega/tranca. Usar os cadastros F1 e o vínculo acima; o gate só considera perguntas da competência aberta. (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:49`, `app/chamados/tests/_vinculo_do_dia.py:15`, `app/chamados/models.py:347`)
+- Alvo `batida_ausente`, `status_local='em_analise'`, sem silêncio; dia do chamado igual ao da célula e da pergunta; `contexto_json.marcos_faltantes` contendo **somente S/19:00**. A receita Q6 entrega chamado e âncora; a LP2 mostra como nomear o marco cobrado. (`app/chamados/tests/test_porta_validacao_pergunta.py:179`, `app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:68`)
+- Pergunta `orfao_14h`, `tipo_resposta='hora'`, `chamado_destino=alvo`, `celula=cel`; DNA com `hf='19:00'`, lâmpada S/19:00 acesa e `luz='19:00'`. Esse motivo cobra precisamente S/`hf`. (`app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:21`, `app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:36`, `app/chamados/juizes.py:869`)
+- Plantar a ata final depois das criações que acionam o cartório, seguindo a ordem LP2; não deixar outra cobrança viva apta a receber reata do mesmo colaborador/dia. (`app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:64`, `app/chamados/models.py:373`)
+- Antes do ato, exigir **C6 viva**, `marcos_acesos(alvo, cel) is True`, alvo na fila e `alvo.reconciliaria() is False`. Assim o caso prova retenção real, não apenas a presença de uma pergunta. (`app/chamados/juizes.py:1135`, `app/ponto/services/lastro.py:153`, `app/chamados/services/painel.py:186`, `app/chamados/models.py:623`)
+
+Em cada ato com `save`, executar os callbacks com `captureOnCommitCallbacks(execute=True)`, padrão já usado na suíte; o evento da pergunta é registrado em `on_commit`. Relê-se pergunta, célula e chamado antes das asserções. (`app/chamados/tests/test_varredura_becos_evento_pergunta.py:55`, `app/chamados/signals.py:191`, `app/chamados/signals.py:202`)
+
+A ordem abaixo considera primeiro o aproveitamento direto da fixture discordante, depois os acréscimos necessários. **[nao verificado]**
+
+1. **Corrigir a resposta para a hora da luz — RED previsto**
+
+   **Fixture:** composição acima, pai da disputa igual ao alvo vivo; resposta anterior `19:06`, `respondida_em` preenchido, `validada_em=None`, `materializada_em=None`; célula `concorde`, via `cartorio`, demais lâmpadas acesas. A discordância mantém C6 viva mesmo com o marco aceso. (`app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:36`, `app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:59`)
+
+   **Ato exato:** `responder_pergunta_disputa_core(p, '19:00', colab.usuario, True)`. A função grava texto e instante da nova resposta. (`app/chamados/services/disputa_emissao.py:1247`, `app/chamados/services/disputa_emissao.py:1282`)
+
+   **Pela regra:** C6 morre pela concordância com a luz em dia coerente; o alvo passa a `reconciliaria()=True` e deve sair da fila por `reconciliar()`, cujo destino é `resolvido`, via sistema. (`app/chamados/juizes.py:1130`, `app/chamados/juizes.py:1162`, `app/chamados/models.py:623`, `app/chamados/catalogo/motor.py:95`, `app/chamados/catalogo/motor.py:111`)
+
+   **Asserção vermelha:** exigir que o `status_local` relido esteja fora de `VIVOS`, ao final do ato e dos callbacks. A leitura prevê que continue `em_analise`: o ramo HH:MM salva a resposta e acrescenta nota, sem reconciliar o destino; o resgate não atua sem silêncio, e o beco não atua com pai vivo. (`app/chamados/services/disputa_emissao.py:1301`, `app/chamados/services/disputa_emissao.py:1326`, `app/chamados/services/disputa_emissao.py:1355`, `app/chamados/services/materializacao.py:687`, `app/chamados/services/becos.py:31`)
+
+   **Controle:** trocar o veredito para `furo` faz a concordância com a luz deixar de absolver a pergunta; o chamado deve continuar vivo. (`app/chamados/juizes.py:1132`, `app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:62`)
+
+2. **Recusar a resposta / `reabrir_para_correcao` — RED previsto**
+
+   **Fixture:** a mesma do caso 1, ainda com resposta discordante `19:06` e célula coerente. A receita da recusa pública já existe na suíte. (`app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:59`, `app/chamados/tests/test_porta_validacao_pergunta.py:224`)
+
+   **Ato público exato:** `recusar_pergunta(p.pk, admin, 'hora incorreta')`. O ato interno relevante é `reabrir_para_correcao(PerguntaDisputa.objects.filter(pk=p.pk))`, com `desfazer_absorcao=False`, o padrão. (`app/chamados/services/validacao.py:545`, `app/chamados/services/validacao.py:547`, `app/chamados/services/disputa_emissao.py:1362`)
+
+   **Pela regra:** apagada a resposta discordante, C6 morre pelo veredito coerente da célula; o alvo torna-se reconciliável e deve sair da fila pelo mesmo gate. (`app/chamados/services/disputa_emissao.py:1393`, `app/chamados/juizes.py:1195`, `app/chamados/models.py:623`)
+
+   **Asserção vermelha:** novamente, `status_local` relido fora de `VIVOS`. A recusa salva primeiro o motivo, enquanto a resposta ainda retém; depois o `qs.update` remove resposta e validação, sem `post_save` dessa mudança e sem reconciliação na função. A nota posterior também não chama o gate nesse caminho. (`app/chamados/services/validacao.py:545`, `app/chamados/services/disputa_emissao.py:1413`, `app/chamados/services/validacao.py:551`)
+
+   **Controle:** com célula `furo`, pergunta muda e sem materialização continua viva pelo veredito acusador; nesse ramo, reabrir não autoriza fechar. (`app/chamados/juizes.py:1183`, `app/chamados/tests/test_bug117_marco_no_espelho.py:137`)
+
+3. **`carimbar_identidade` — um RED e um controle obrigatório**
+
+   **Fixture do RED:** pai vivo; pergunta **muda**, sem materialização ou validação; célula `furo`, via `cartorio`, porque S/12:00 está apagada; o alvo cobra exclusivamente S/19:00, que está acesa. A receita BUG117 já demonstra pergunta viva com outro marco apagado e o próprio marco aceso, desde que ainda sem materialização. (`app/chamados/tests/test_bug117_marco_no_espelho.py:77`, `app/chamados/tests/test_bug117_marco_no_espelho.py:137`)
+
+   **Ato exato:** `p.carimbar_identidade(PerguntaDisputa.VIA_ADMIN_DECIDIU, admin)`. Essa é uma via usada pelo próprio encerramento administrativo da pergunta. (`app/chamados/models.py:2522`, `app/chamados/models.py:2625`)
+
+   **Pela regra:** C6 morre pela identidade; o furo vizinho não impede regularizar a premissa do chamado que cobra somente o marco aceso. Portanto, `reconciliaria()=True` e o alvo deve sair por `reconciliar()`. (`app/chamados/juizes.py:1171`, `app/chamados/models.py:1247`, `app/chamados/models.py:623`)
+
+   **Asserção vermelha:** `status_local` relido fora de `VIVOS`. O carimbador termina salvando somente a pergunta; seu callback não encontra beco com pai vivo. (`app/chamados/models.py:2640`, `app/chamados/models.py:2644`, `app/chamados/services/becos.py:31`)
+
+   **Controle obrigatório:** aplicar o mesmo carimbo à fixture discordante do caso 1. A pergunta continua viva porque a resposta é julgada **antes** da identidade; sem reata, `reconciliaria()` continua falso e o chamado deve permanecer vivo. Exigir fechamento aqui produziria um teste contrário à regra. (`app/chamados/juizes.py:1150`, `app/chamados/juizes.py:1162`, `app/chamados/models.py:2630`, `app/chamados/models.py:405`)
+
+4. **Encerrar administrativamente a disputa com pai terminal e destino distinto — RED previsto**
+
+   **Fixture:** a pergunta muda e a célula acusadora do caso 3. Acrescentar um pai `disputa_supervisao` já `resolvido`, criado **antes das perguntas**, e manter `chamado_destino=alvo` vivo, diferente do pai. Os helpers F1 permitem essa separação; o teste administrativo existente cobre o outro ramo, com pai vivo. (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:59`, `app/chamados/tests/test_o261e_f1_porta_encerramento.py:65`, `app/chamados/tests/test_o261e_f1_porta_encerramento.py:69`, `app/chamados/tests/test_o261e_f1_porta_encerramento.py:220`)
+
+   **Ato exato:** `d.admin_encerra(admin, 'decisao no teste')`, que chama `d.fechar(admin, resolucao='decisao no teste', motivo=d.FECHOU_ADMIN_ENCERRA)`. (`app/chamados/models.py:1872`, `app/chamados/models.py:1879`)
+
+   **Pela regra:** a porta carimba a muda antes de fechar a disputa; C6 morre e o destino com marco aceso torna-se reconciliável. É o **destino** que deve sair da fila pelo gate. (`app/chamados/models.py:1852`, `app/chamados/juizes.py:1171`, `app/chamados/models.py:1249`, `app/chamados/models.py:623`)
+
+   **Asserção vermelha:** `status_local` relido do **alvo**, fora de `VIVOS`. O receiver consulta somente o pai e retorna porque ele já está encerrado; o materializador posterior exclui a pergunta recém-carimbada. O beco também retorna quando a disputa já está fechada. (`app/chamados/signals.py:32`, `app/chamados/signals.py:33`, `app/chamados/services/materializacao.py:1343`, `app/chamados/services/becos.py:27`)
+
+5. **Validar pergunta já materializada — RED previsto, montagem mais exigente**
+
+   **Fixture:** resposta discordante `19:06`, célula coerente e luz `19:00`, como no caso 1; acrescentar `materializada_em` preenchido e `validada_em=None`. O helper BUG117 já monta materialização, e seu teste demonstra a precedência da resposta sobre ela. (`app/chamados/tests/test_bug117_marco_no_espelho.py:64`, `app/chamados/tests/test_bug117_marco_no_espelho.py:145`)
+
+   Usar pai vivo **diferente do alvo**, com módulo `disputa_supervisao`; acrescentar uma irmã muda, não materializada, de outro dia, ancorada no pai e sem célula. A irmã permanece viva e impede quitar a disputa, sem reter o alvo; esse pai também não pertence aos módulos usados para procurar uma cobrança sobrevivente. (`app/chamados/juizes.py:1207`, `app/chamados/models.py:328`, `app/chamados/models.py:1794`, `app/chamados/catalogo/modulos.py:235`, `app/chamados/models.py:373`)
+
+   **Ato exato:** `validar_pergunta(p.pk, admin, confirmar_implausivel=True)`, executando também os callbacks. O argumento explícito evita que a guarda de plausibilidade impeça alcançar o ramo examinado. (`app/chamados/services/validacao.py:343`, `app/chamados/services/validacao.py:374`)
+
+   **Pela regra:** `validada_em` mata C6 imediatamente; o alvo passa a reconciliável e deve sair da fila pelo gate, mesmo que a disputa continue aberta por outra pergunta. (`app/chamados/juizes.py:1136`, `app/chamados/models.py:327`, `app/chamados/models.py:623`)
+
+   **Asserção vermelha:** `status_local` relido do alvo fora de `VIVOS`. A validação carimba, mas pula `_materializar_uma` porque a pergunta já está materializada; o lote também a exclui. A irmã impede fechar a disputa, e o pai vivo impede o beco. (`app/chamados/services/validacao.py:396`, `app/chamados/services/validacao.py:422`, `app/chamados/services/materializacao.py:1297`, `app/chamados/services/materializacao.py:1241`, `app/chamados/services/becos.py:31`)
+
+   O recálculo mensal agendado precisa ser executado no teste; sua chamada não equivale, por si, a uma chamada ao gate do chamado ou à emissão de `EventoCelula`. (`app/ponto/services/fechamento.py:1791`, `app/ponto/services/fechamento.py:1794`, `app/ponto/services/fechamento.py:1808`)
+
+**Quem escreve e quem lê os campos usados nessas verificações**
+
+A tabela delimita os escritores da fixture/atos e os leitores relevantes aos casos; não é um censo de todos os leitores do projeto. **[nao verificado]**
+
+| Campo | Quem escreve | Quem lê |
+|---|---|---|
+| `Chamado.status_local` — campo da asserção RED | Fixture `_ch`; em produção, `reconciliar()` chama `_gravar_estado`, que atribui e salva. (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:59`, `app/chamados/models.py:620`, `app/chamados/models.py:222`, `app/chamados/models.py:279`) | Asserção sobre objeto relido; motor do fechamento; fila. (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:77`, `app/chamados/models.py:639`, `app/chamados/services/painel.py:187`) |
+| `silenciado_ate` — pertinência à fila | Nasce nulo; portas de arquivo atribuem ou limpam. (`app/chamados/models.py:84`, `app/chamados/services/arquivo.py:166`, `app/chamados/services/arquivo.py:201`) | Fila e resgate por resposta. (`app/chamados/services/painel.py:188`, `app/chamados/services/materializacao.py:687`) |
+| `contexto_json.data_turno`, `marcos_faltantes`, `modulo_origem` | Helpers de chamado e fixture LP2. (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:59`, `app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:68`) | Seleção de `batida_ausente`, extração dos marcos e premissa regularizada. (`app/ponto/services/lastro.py:240`, `app/ponto/services/lastro.py:74`, `app/chamados/models.py:1247`) |
+| `Pergunta.chamado_destino`, `disputa`; `Disputa.chamado` | Helpers de âncora Q6/F1. (`app/chamados/tests/test_porta_validacao_pergunta.py:184`, `app/chamados/tests/test_porta_validacao_pergunta.py:186`, `app/chamados/tests/test_o261e_f1_porta_encerramento.py:65`) | Coletor de ancoradas e julgamento no pós-estado; receiver do pai. (`app/chamados/models.py:328`, `app/chamados/models.py:344`, `app/chamados/signals.py:32`) |
+| `motivo`, `tipo_resposta`, `data_evento`, `celula` da pergunta | Helper Q6 aceita esses dados; PRAM/BUG117 montam motivo, dia e célula. (`app/chamados/tests/test_porta_validacao_pergunta.py:186`, `app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:47`, `app/chamados/tests/test_bug117_marco_no_espelho.py:68`) | Mapeamento do marco, comparação com a luz e cerca da competência. (`app/chamados/juizes.py:886`, `app/chamados/juizes.py:1099`, `app/chamados/models.py:347`) |
+| `resposta_colab`, `respondida_em` | Core da resposta; reabertura zera ambos por `update`. (`app/chamados/services/disputa_emissao.py:1282`, `app/chamados/services/disputa_emissao.py:1393`, `app/chamados/services/disputa_emissao.py:1413`) | C6 dá precedência à resposta e compara seu texto com a luz. (`app/chamados/juizes.py:1150`, `app/chamados/juizes.py:1113`) |
+| `validada_em` | `_carimbar_validacao`; nova resposta e reabertura podem limpar. (`app/chamados/services/validacao.py:131`, `app/chamados/services/disputa_emissao.py:1295`, `app/chamados/services/disputa_emissao.py:1393`) | Primeiro degrau de C6 e filtro das ancoradas. (`app/chamados/juizes.py:1136`, `app/chamados/models.py:327`) |
+| `materializada_em`, `via_resolucao` | `_escrever_carimbo`, persistido pelo carimbador de identidade; BUG117 também os prepara como fixture. (`app/chamados/models.py:2556`, `app/chamados/models.py:2644`, `app/chamados/tests/test_bug117_marco_no_espelho.py:71`) | C6; validação e materializadores leem a presença da materialização. (`app/chamados/juizes.py:1171`, `app/chamados/services/validacao.py:422`, `app/chamados/services/materializacao.py:1297`) |
+| `Celula.colaborador`, `data`, `trabalha`, `dna.marcos` | Fixture `_celula`; porta de célula também grava DNA/trabalho. (`app/chamados/tests/test_bug117_marco_no_espelho.py:55`, `app/ponto/portas/celula.py:650`) | Localização da célula do chamado, premissa e identificação do marco da pergunta. (`app/ponto/services/lastro.py:393`, `app/chamados/models.py:1245`, `app/chamados/juizes.py:893`) |
+| `ata.lampadas.{tipo,hora,acesa,luz}` | Fixtures PRAM/LP2; cartório constrói tipo, hora, acendimento e luz. (`app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:39`, `app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:72`, `app/ponto/services/cartorio.py:677`) | `marcos_acesos`, fato do marco e concordância resposta/luz. (`app/ponto/services/lastro.py:174`, `app/chamados/juizes.py:910`, `app/chamados/juizes.py:1111`) |
+| `veredito`, `veredito_via` | Fixture `_celula`; produção pela lavra da célula. (`app/chamados/tests/test_bug117_marco_no_espelho.py:60`, `app/ponto/portas/celula.py:812`) | C6 distingue decisão administrativa, dia coerente e dia acusador. (`app/chamados/juizes.py:1147`, `app/chamados/juizes.py:1132`, `app/chamados/juizes.py:1183`) |
+| `Disputa.fechada_em` | `Disputa.fechar`. (`app/chamados/models.py:1861`, `app/chamados/models.py:1865`) | Receiver do pai, classificador de beco e cauda da materialização. (`app/chamados/signals.py:28`, `app/chamados/services/becos.py:27`, `app/chamados/services/materializacao.py:1241`) |
+
+Para reproduzir especificamente o escape do evento, a fixture deve começar sem evento pendente do colaborador; há helper de limpeza já existente. Após o ato, o diagnóstico esperado por leitura é alvo ainda vivo, agora em `com_lastro`, e contável em `com_lastro_sem_evento`. (`app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:75`, `app/ponto/services/lastro.py:318`, `app/ponto/services/lastro.py:421`)
+
+**Não chamar `reconciliar()` antes da asserção vermelha:** isso executaria justamente o fechamento cuja reação está faltando. `reconciliaria()` é a consulta adequada para demonstrar que o juiz já permitiria a saída. (`app/chamados/models.py:617`, `app/chamados/models.py:620`, `app/chamados/models.py:623`)
 
 ## 06/11 07:45 · sessao 66bbc807ce84 · - · - · origem=Ronald (tmux)
 
@@ -599,84 +713,4 @@ As ressalvas concretas são a testemunha sem prova suficiente de batida, a nota 
 
 Remover a chamada nova do consumidor é distinguido pelos positivos que exigem `lastro=1`; não são selos inteiramente vazios. Execução com cura revertida e resultados dinâmicos: **[nao verificado]**. (`app/ponto/tests/test_bug115_lampada_do_marco.py:204`; `app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:103`.)
 
-## 06/11 04:33 · sessao 9be1368b2885 · OTIMIZA-3 · verificador · origem=Code
-
-**Parecer: bloqueia pelo achado 1.** É uma falha que permanece na classificação; não a atribuo como regressão introduzida nesta volta (`bin/quem_chama.py:348`, `bin/quem_chama.py:352`). Ranges históricos e execução integral do selo: **[nao verificado]**.
-
-1. **BLOQUEIA — P1/P6: registro de um lado ainda mascara decorador opaco do outro.**
-
-   A soma conserva os dois metadados, mas `_tipo_simbolo()` retorna `filtro/tag` antes de examinar os decoradores opacos (`bin/quem_chama.py:348`, `bin/quem_chama.py:352`, `bin/quem_chama.py:707`, `bin/quem_chama.py:709`).
-
-   Contraexemplo exercitado em memória:
-
-   ```python
-   # base
-   @register.filter(name="velho")
-   def f():
-       return 1
-
-   # ponta
-   @receiver
-   def f():
-       return 2
-   ```
-
-   Com um `receiver` que guarda a função numa lista de callbacks, o despachante executa `f`, mas o instrumento conserva `registros=[('filtro','velho')]`, classifica como `filtro/tag` e imprime **`simbolo f [filtro/tag]: 0 chamador(es)`**. O decorador `receiver`, isoladamente, exigiria “nao varrido” (`bin/quem_chama.py:354`, `bin/quem_chama.py:765`). Ocorrência dessa transição na produção: **[nao verificado]**.
-
-   Portanto, unir campos não basta para tornar a classificação a mais restritiva: ela precisa considerar também o motivo desconhecido representado pelo decorador opaco (`bin/quem_chama.py:348`, `bin/quem_chama.py:352`).
-
-2. **FILA — P1/P2: os demais casos pedidos são conservadores; migração singular/plural está consistente.**
-
-   - `membro=True` em qualquer lado prevalece e impede contagem. No produtor atual, mover `f` para uma classe normalmente muda também a chave para `C.f`; não constitui conflito do mesmo `q` (`bin/quem_chama.py:290`, `bin/quem_chama.py:292`, `bin/quem_chama.py:342`, `bin/quem_chama.py:706`).
-   - Registro com nome `None` junto de registro constante continua “nome nao resolvido”, pois `all(...)` falha (`bin/quem_chama.py:349`).
-   - Decorador removido da ponta permanece na união; símbolo existente somente num lado também recebe a estrutura plural (`bin/quem_chama.py:705`, `bin/quem_chama.py:707`, `bin/quem_chama.py:709`).
-   - Outros campos conservam o primeiro valor, normalmente da base. Contudo, o produtor deriva `nome` do mesmo identificador usado em `q`; divergência de `nome` para uma mesma chave não é produzida pelos caminhos atuais (`bin/quem_chama.py:292`, `bin/quem_chama.py:300`, `bin/quem_chama.py:700`, `bin/quem_chama.py:704`).
-
-   | Campo | Quem escreve | Quem lê |
-   |---|---|---|
-   | `registro` | `_add`: `bin/quem_chama.py:282` | Soma: `bin/quem_chama.py:708`, `bin/quem_chama.py:709`; exclusão da cópia: `bin/quem_chama.py:704` |
-   | `registros` | Inicialização: `bin/quem_chama.py:705`; acréscimo: `bin/quem_chama.py:709` | Deduplicação: `bin/quem_chama.py:708`; classificação: `bin/quem_chama.py:348`, `bin/quem_chama.py:349`; template: `bin/quem_chama.py:606` |
-
-   Não sobrou leitor singular sobre o dict somado, nem leitor plural sobre dict cru no fluxo operacional: classificação e construção dos alvos acontecem depois da soma (`bin/quem_chama.py:711`, `bin/quem_chama.py:716`). Contraexemplo adicional de fluxo incorreto: **[nao verificado]**.
-
-3. **FILA — P3: há falso positivo real de EMBUTIDO próprio, mas ele não esconde chamadores.**
-
-   O valor textual iniciado em `app/core/placar_estrutural.py:443` contém `from core import contratos_estruturais` e, adiante no mesmo literal concatenado, `logs/placar_estrutural/...` (`app/core/placar_estrutural.py:461`, `app/core/placar_estrutural.py:485`).
-
-   A alternativa permissiva da regex atravessa esse texto e reconhece falsamente uma importação de **`core.placar_estrutural`** (`bin/quem_chama.py:93`). A varredura em memória do arquivo real emitiu esse autoimport na linha 443; o delta agora o aceita antes da guarda do próprio arquivo (`bin/quem_chama.py:472`, `bin/quem_chama.py:738`, `bin/quem_chama.py:741`). Nesse exemplo, o texto não contém um autoimport literal correto: é também um falso casamento da regex (`app/core/placar_estrutural.py:461`, `app/core/placar_estrutural.py:485`).
-
-   Isso pode substituir um zero verdadeiro por “nao varrido”, conservadoramente. Não elimina chamador encontrado: o código acrescenta sítios aos conjuntos existentes e imprime os achados também nas facetas rebaixadas (`bin/quem_chama.py:753`, `bin/quem_chama.py:755`, `bin/quem_chama.py:773`).
-
-4. **FILA — P4: cada grupo de asserções novas ainda admite mutante plausível.**
-
-   A tabela cobre as condições acrescentadas ou fortalecidas. A preservação dessas condições foi conferida por inspeção; sobrevivência ao **selo integral** com cada mutante: **[nao verificado]**.
-
-   | Asserções do delta | Mutante que as deixa satisfeitas e contraexemplo não coberto |
-   |---|---|
-   | `r5-init-reexporta`, `r5-import-local` — `bin/tests/test_quem_chama.sh:219`, `bin/tests/test_quem_chama.sh:220` | Duplicar linhas durante a renderização dentro da própria faceta. `tot == sob` continua verdadeiro; o helper não exige ocorrência única (`bin/quem_chama.py:773`, `bin/tests/test_quem_chama.sh:197`). |
-   | `r5-comentario-multilinha`, `r5-comment-bloco-multilinha` — `bin/tests/test_quem_chama.sh:234`, `bin/tests/test_quem_chama.sh:235` | Trocar `.*?` por `.*` na remoção de `{% comment %}`. O único bloco do fixture continua removido; dois blocos passam a apagar um include executável entre eles (`bin/quem_chama.py:572`, `bin/tests/test_quem_chama.sh:146`). |
-   | `r5-filter-tag` — `bin/tests/test_quem_chama.sh:275` | Ampliar `filter` para qualquer nome de tag na regex. O positivo permanece verde, mas argumentos de outras tags podem virar usos falsos de filtro (`bin/quem_chama.py:609`, `bin/tests/test_quem_chama.sh:137`). |
-   | `r5-embutido-arquivo-sitio-*` — `bin/tests/test_quem_chama.sh:317` | Omitir sítios e rebaixamento da faceta **arquivo somente nos autoimports**. O loop cobre importadores externos; o caso próprio exige apenas símbolo (`bin/tests/test_quem_chama.sh:309`, `bin/tests/test_quem_chama.sh:332`, `bin/tests/test_quem_chama.sh:333`). |
-   | `r5-embutido-lista-*` — `bin/tests/test_quem_chama.sh:319` | Usar cabeçalho genérico somente para `rotulo == 'arquivo'`. Motivo e sítio continuam presentes; a lista nominal é exigida apenas sob símbolo (`bin/quem_chama.py:760`, `bin/tests/test_quem_chama.sh:316`, `bin/tests/test_quem_chama.sh:319`). |
-   | `r5-decorador-so-na-ponta`, `-zero`, `r5-decorador-somado` — `bin/tests/test_quem_chama.sh:325`, `bin/tests/test_quem_chama.sh:326`, `bin/tests/test_quem_chama.sh:328` | Substituir a união por `cur['decor'] = info['decor']`. Os dois fixtures têm opaco na ponta; falta a transição inversa, com opaco removido (`bin/quem_chama.py:707`, `bin/tests/test_quem_chama.sh:171`, `bin/tests/test_quem_chama.sh:172`). |
-   | `r5-filtro-renomeado` — `bin/tests/test_quem_chama.sh:330` | Substituir o acréscimo por `cur['registros'][:] = [info['registro']]`. Fica somente o registro novo, exatamente o usado pelo fixture; um template usando `velho_f` perderia o chamador (`bin/quem_chama.py:709`, `bin/tests/test_quem_chama.sh:143`, `bin/tests/test_quem_chama.sh:144`). |
-   | `r5-embutido-proprio`, `-sitio` — `bin/tests/test_quem_chama.sh:332`, `bin/tests/test_quem_chama.sh:333` | Processar os símbolos do autoimport, omitindo somente a faceta arquivo. Ambas continuam satisfeitas (`bin/quem_chama.py:752`, `bin/quem_chama.py:755`). |
-
-5. **FILA — P4: `_so_na_fac` pode reprovar duplicação legítima entre facetas.**
-
-   Contraexemplo exercitado em memória: base registra `f` como `a` e `g` como `b`; ponta troca os nomes. Pela união correta, ambos passam a possuir o registro `b`; o template `{{ x|b }}` produz o mesmo texto de achado sob **f e g** (`bin/quem_chama.py:709`, `bin/quem_chama.py:606`, `bin/quem_chama.py:615`).
-
-   Nesse caso, `_so_na_fac` encontra `tot=2`, `sob=1` e reprova, embora a duplicação represente a política de buscar base e ponta (`bin/tests/test_quem_chama.sh:197`, `bin/tests/test_quem_chama.sh:198`). Falha espúria nos fixtures atuais: **[nao verificado]**; o fixture de renomeação tem somente um símbolo registrado (`bin/tests/test_quem_chama.sh:143`, `bin/tests/test_quem_chama.sh:173`).
-
-   Nos imports atuais, arquivo e símbolo usam textos diferentes; contabilizar ambos não viola essas exclusividades (`bin/quem_chama.py:450`, `bin/quem_chama.py:455`).
-
-6. **FILA — P5: nenhum dos antigos achados 5, 6, 8 e 9 ganhou falso zero demonstrado com o delta.**
-
-   - **Antigo 5:** a linha continua calculada pelo valor decodificado; o exemplo físico permanece nas linhas 250–252. Isso desloca o sítio, sem impedir sua emissão (`bin/quem_chama.py:472`, `app/core/tests/test_selo_diagrama_do_codigo.py:250`, `app/core/tests/test_selo_diagrama_do_codigo.py:251`).
-   - **Antigo 6:** o relativo do heredoc continua escapando, mas há import absoluto que rebaixa o mesmo alvo (`bin/regua_calendario.sh:30`, `bin/regua_relogio.sh:35`). Os pacotes dos exemplos também têm imports diretos reconhecíveis (`app/colaboradores/tests/test_s120.py:65`, `app/chamados/apps.py:10`, `bin/quem_chama.py:449`).
-   - **Antigo 8:** as alterações fortalecem o selo; os limites restantes estão nos achados 4–5, não constituem por si mudança da contagem (`bin/tests/test_quem_chama.sh:219`, `bin/tests/test_quem_chama.sh:275`).
-   - **Antigo 9:** a divergência continua conservadora no exemplo apresentado: o instrumento conta a string após `#`, enquanto o censo a corta (`app/core/management/commands/gerar_diagrama.py:873`, `bin/quem_chama.py:474`, `app/core/censo_codigo.py:60`).
-
-   Outro defeito demonstrado no delta, além dos descritos acima: **[nao verificado]**.
-
-_2122 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2123 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
