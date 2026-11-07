@@ -1,7 +1,446 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 21:10** · publicado em **06/11/2026 21:10** (UTC-3)
+> Ultima resposta processada: **06/11/2026 21:13** · publicado em **06/11/2026 21:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 21:13 · sessao b38bc38e9798 · V2-BUGS-I2 · sonda · origem=Code
+
+```python
+# Sonda não executada; resultados por colaborador: [nao verificado].
+# Caminho real, sem remontar motores:
+# app/ponto/services/fechamento.py:724,754
+# Leitura sem lavratura:
+# app/ponto/services/fechamento.py:539,876,1121,1184
+# Proteção adicional: transação PostgreSQL READ ONLY, sempre revertida.
+# Comportamento dessa proteção no envelope: [nao verificado].
+
+import sys
+sys.dont_write_bytecode = True
+
+import ast
+import inspect
+import io
+import json
+import logging
+import math
+import os
+import re
+from contextlib import redirect_stdout, redirect_stderr
+from datetime import date
+
+from django.db import connection, transaction
+from django.utils import timezone
+from ponto.services import fechamento as F
+from ponto import motor_calculo_v2 as V
+from core import regua_cct as R
+
+
+PKS = [191, 270, 292, 301, 390, 468, 469, 825, 849, 865]
+DIA = date(2026, 10, 12)
+JANELA = (date(2026, 9, 21), date(2026, 10, 20))
+
+REF_F = "app/ponto/services/fechamento.py:754"
+REF_HE = "app/ponto/motor_calculo_v2.py:1014"
+REF_M = {
+    "M1": "app/ponto/motor_calculo_v2.py:3093",
+    "M2": "app/ponto/motor_calculo_v2.py:3339",
+    "M3": (
+        "app/ponto/services/fechamento.py:955; "
+        "app/ponto/services/dia_pago.py:244"
+    ),
+    "OUTRO": REF_HE,
+}
+
+COD_AP = F.apurar_por_fatia.__code__
+COD_REC = F.recalcular_fechamento_mes.__code__
+[nome] = {
+    V.MotorTurnoPartido.calcular_mes.__code__: (3093, "M1"),
+    V.MotorComercial.calcular_mes.__code__: (3339, "M2"),
+}
+
+# Captura também fallbacks com except Exception nos módulos observados.
+# Exemplos: fechamento.py:1074,1080,1296; regua_cct.py:447.
+HANDLERS = {}
+for modulo in (F, V, R):
+    caminho = os.path.abspath(inspect.getsourcefile(modulo))
+    arvore = ast.parse(inspect.getsource(modulo))
+    linhas = set()
+    for node in ast.walk(arvore):
+        if isinstance(node, ast.ExceptHandler):
+            amplo = (
+                node.type is None
+                or isinstance(node.type, ast.Name)
+                and node.type.id in {"Exception", "BaseException"}
+            )
+            if amplo:
+                linhas.add(node.body[0].lineno)
+    HANDLERS[caminho] = linhas
+
+
+def numero(valor):
+    n = float(valor)
+    if not math.isfinite(n):
+        raise ValueError("valor numerico nao finito")
+    return n
+
+
+def local(dt):
+    return None if dt is None else timezone.localtime(dt).strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
+
+
+def registrar_erro(st, exc, fonte):
+    if not any(exc is anterior for anterior, _ in st["erros"]):
+        st["erros"].append((exc, fonte))
+
+
+def ocultar(st, texto):
+    for nome in sorted(st["nomes"], key=len, reverse=True):
+        texto = re.sub(re.escape(nome), st["colab"], texto, flags=re.I)
+    return re.sub(
+        r"(?<!\d)\d{3}\.?\d{3}\.?\d{3}-?\d{2}(?!\d)",
+        "[CPF_REMOVIDO]",
+        texto,
+    )
+
+
+def construir_trace(st):
+    def trace(frame, evento, arg):
+        caminho = os.path.abspath(frame.f_code.co_filename)
+        if caminho not in HANDLERS:
+            return None
+
+        try:
+            codigo = frame.f_code
+            L = frame.f_locals
+            linha = frame.f_lineno
+
+            if codigo is COD_REC:
+                colab = L.get("colab")
+                if colab is not None:
+                    nome = colab.__dict__.get("nome")
+                    if isinstance(nome, str) and nome:
+                        st["nomes"].add(nome)
+
+            if evento == "line":
+                if linha in HANDLERS[caminho]:
+                    exc = sys.exc_info()[1]
+                    # Ausência declarada, não erro: fechamento.py:54,1082.
+                    if exc is not None and not isinstance(exc, F._GradeSemCelula):
+                        registrar_erro(
+                            st, exc, "%s:%d" % (caminho, linha)
+                        )
+
+                # Depois do calcular_mes real, antes da composição.
+                # app/ponto/services/fechamento.py:286,294
+                if codigo is COD_AP and linha == 294:
+                    r = L["r_fatia"]
+                    if id(r) not in st["fatias_vistas"]:
+                        st["fatias_vistas"].add(id(r))
+                        st["fatias"].append((
+                            L["fatia_ini"], L["fatia_fim"], L["motor"], r
+                        ))
+
+                # Dentro do ramo verdadeiro: não reavalia feriado/dobra.
+                ramo = [nome].get(codigo)
+                if ramo is not None and linha == ramo[0]:
+                    ultimo = L["ultimo"]
+                    for p in L["periodos_dia"]:
+                        st["ramos"][id(p)] = (
+                            ramo[1], id(p) == id(ultimo)
+                        )
+
+                # Partição efetiva do fechamento, inclusive quando vazia.
+                # app/ponto/services/fechamento.py:945,958
+                if codigo is COD_REC and linha == 958:
+                    st["ft_feriado"] = {
+                        id(p) for p in L["_ft_feriado"]
+                    }
+                    st["janela"] = (L["_data_ini"], L["_data_fim"])
+
+            if evento == "return" and codigo is COD_AP and arg is not None:
+                st["apuracao"] = arg
+
+        except Exception as exc:
+            # Uma falha na instrumentação também invalida o colaborador.
+            registrar_erro(st, exc, "[nao verificado]:instrumentacao")
+
+        return trace
+
+    return trace
+
+
+def analisar(st, leitura, pk):
+    if pk not in leitura:
+        raise RuntimeError("colaborador ausente do retorno do recalculo")
+    if st["apuracao"] is None:
+        raise RuntimeError("apuracao real nao capturada")
+    if st["ft_feriado"] is None:
+        raise RuntimeError("particao ft_feriado nao capturada")
+    if st["janela"] != JANELA:
+        raise RuntimeError("janela real divergente: %r" % (st["janela"],))
+
+    donos = {}
+    linhas = []
+    for ini, fim, motor, resultado_fatia in st["fatias"]:
+        linhas.append({
+            "tipo": "motor",
+            "colab": st["colab"],
+            "fatia": [ini.isoformat(), fim.isoformat()],
+            "classe": type(motor).__name__,
+            "feriado_em_dobra": bool(motor.feriado_em_dobra),
+            "fonte": "app/ponto/services/fechamento.py:279",
+        })
+        for lista in ("periodos", "periodos_ft"):
+            for p in getattr(resultado_fatia, lista):
+                if id(p) in donos and donos[id(p)] is not motor:
+                    raise RuntimeError("periodo atribuido a motores distintos")
+                donos[id(p)] = motor
+
+    resultado = st["apuracao"].resultado
+    selecionados = {}
+    for lista in ("periodos", "periodos_ft"):
+        for p in getattr(resultado, lista):
+            if timezone.localtime(p.entrada).date() == DIA:
+                item = selecionados.setdefault(id(p), [p, []])
+                item[1].append("resultado." + lista)
+
+    parcelas = []
+    mecanismos = set()
+
+    for p, listas in sorted(
+        selecionados.values(), key=lambda item: item[0].entrada
+    ):
+        motor = donos[id(p)]
+        promovido = id(p) in st["ft_feriado"]
+        extra100 = numero(
+            p.minutos_trabalhados if promovido else p.minutos_extra_100
+        )
+
+        # Mesmas pontas, extra50, intervalos e prorrogação da casca real.
+        # app/ponto/motor_calculo_v2.py:1014
+        n50, n100 = V.he_noturna(
+            entrada=p.entrada,
+            saida=p.saida,
+            extra_50_min=p.minutos_extra_50,
+            extra_100_min=extra100,
+            prorrogacao=motor.prorrogacao_noturna_pos5h,
+            intervalos=p.intervalos_do_motor,
+        )
+        n50, n100 = numero(n50), numero(n100)
+        subset = numero(p.minutos_extra_100_noturna)
+
+        if promovido:
+            mecanismo = "M3"
+            motivo = "promocao_ft_soma_HE100_sem_somar_subset_noturno"
+        elif subset != 0:
+            mecanismo = "OUTRO"
+            motivo = "subset_do_periodo_ja_e_diferente_de_zero"
+        elif id(p) in st["ramos"]:
+            mecanismo, ultimo = st["ramos"][id(p)]
+            motivo = (
+                "dobra_no_ultimo_periodo_com_continue_sem_split"
+                if ultimo else
+                "HE100_da_jornada_concentrada_no_ultimo_periodo"
+            )
+        else:
+            mecanismo = "OUTRO"
+            if "resultado.periodos_ft" in listas:
+                motivo = "FT_nao_promovido_a_ft_feriado"
+            elif extra100 == 0:
+                motivo = "base_HE100_zero_no_periodo"
+            elif n100 == 0:
+                motivo = "he_noturna_tambem_devolve_zero"
+            else:
+                motivo = "zero_sem_M1_M2_M3_observado_[nao verificado]"
+
+        mecanismos.add(mecanismo)
+        parcelas.append((mecanismo, n50, n100))
+        linhas.append({
+            "tipo": "periodo",
+            "colab": st["colab"],
+            "classe": type(motor).__name__,
+            "feriado_em_dobra": bool(motor.feriado_em_dobra),
+            "entrada_local": local(p.entrada),
+            "saida_local": local(p.saida),
+            "listas": listas,
+            "ft_feriado": promovido,
+            "dia_da_jornada": str(
+                getattr(resultado, "dia_da_jornada", {}).get(
+                    id(p), "[nao verificado]"
+                )
+            ),
+            "minutos_trabalhados": numero(p.minutos_trabalhados),
+            "minutos_noturnos_relogio": numero(p.minutos_noturnos_relogio),
+            "minutos_noturnos_legais": numero(p.minutos_noturnos_legais),
+            "minutos_extra_100": numero(p.minutos_extra_100),
+            "minutos_extra_100_noturna": subset,
+            "extra_100_usado_na_sonda": extra100,
+            "extra_50_usado_na_sonda": numero(p.minutos_extra_50),
+            "prorrogacao": bool(motor.prorrogacao_noturna_pos5h),
+            "intervalos_locais": [
+                [local(a), local(b)] for a, b in p.intervalos_do_motor
+            ],
+            "he_noturna_retorno_min_50_100": [n50, n100],
+            "he100_noturna_h": n100 / 60,
+            "mecanismo": mecanismo,
+            "explicacao": motivo,
+            "fonte": REF_M[mecanismo] + "; " + REF_HE,
+        })
+
+    if not selecionados:
+        mecanismos.add("OUTRO")
+        linhas.append({
+            "tipo": "sem_periodo",
+            "colab": st["colab"],
+            "explicacao": "nenhuma_entrada_local_em_2026-10-12_nas_duas_listas",
+            "fonte": "app/ponto/services/fechamento.py:294",
+        })
+
+    return linhas, parcelas, mecanismos
+
+
+def emitir(item):
+    print(json.dumps(item, ensure_ascii=True, sort_keys=True))
+
+
+grupos = {
+    m: {"colabs": set(), "n50": [], "n100": []}
+    for m in ("M1", "M2", "M3", "OUTRO")
+}
+falhas = []
+sucessos = 0
+logging_anterior = logging.root.manager.disable
+
+try:
+    logging.disable(sys.maxsize)
+
+    for pk in PKS:
+        st = {
+            "colab": "col%d" % pk,
+            "nomes": set(),
+            "erros": [],
+            "fatias": [],
+            "fatias_vistas": set(),
+            "ramos": {},
+            "apuracao": None,
+            "ft_feriado": None,
+            "janela": None,
+        }
+        linhas = parcelas = mecanismos = None
+        trace_anterior = sys.gettrace()
+
+        # Não encaminha logs/prints internos, inclusive o nome no handler.
+        # app/ponto/services/fechamento.py:1299
+        with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
+            try:
+                if connection.vendor != "postgresql":
+                    raise RuntimeError("protecao READ ONLY exige PostgreSQL")
+                if connection.in_atomic_block:
+                    raise RuntimeError("sonda exige transacao propria")
+
+                with transaction.atomic():
+                    with connection.cursor() as cursor:
+                        cursor.execute("SET TRANSACTION READ ONLY")
+                    try:
+                        sys.settrace(construir_trace(st))
+                        leitura = F.recalcular_fechamento_mes(
+                            10, 2026,
+                            colaborador_ids=[pk],
+                            somente_leitura=True,
+                            lavrar_dias_pagos=False,
+                            retornar_objeto=True,
+                        )
+                    finally:
+                        sys.settrace(trace_anterior)
+                        transaction.set_rollback(True)
+
+                if not st["erros"]:
+                    linhas, parcelas, mecanismos = analisar(st, leitura, pk)
+
+            except Exception as exc:
+                registrar_erro(st, exc, "[nao verificado]:sonda")
+            finally:
+                sys.settrace(trace_anterior)
+
+        if st["erros"]:
+            exc, fonte = st["erros"][0]
+            falha = {
+                "tipo": "erro",
+                "colab": st["colab"],
+                "n_excecoes_capturadas": len(st["erros"]),
+                "primeiro_repr": ocultar(st, repr(exc)),
+                "fonte": fonte,
+            }
+            falhas.append(falha)
+            emitir(falha)
+            continue
+
+        sucessos += 1
+        for linha in linhas:
+            emitir(linha)
+        for mecanismo in mecanismos:
+            grupos[mecanismo]["colabs"].add(pk)
+        for mecanismo, n50, n100 in parcelas:
+            grupos[mecanismo]["n50"].append(n50)
+            grupos[mecanismo]["n100"].append(n100)
+
+finally:
+    logging.disable(logging_anterior)
+
+# Contagem distinta por mecanismo; um colaborador pode aparecer em mais de um.
+# Totais incluem somente colaboradores sem erro; minutos / 60:
+# app/ponto/motor_calculo_v2.py:409,451
+for mecanismo, grupo in grupos.items():
+    emitir({
+        "tipo": "total_mecanismo",
+        "mecanismo": mecanismo,
+        "n_colabs": len(grupo["colabs"]),
+        "he50_noturna_h": math.fsum(grupo["n50"]) / 60,
+        "he100_noturna_h": math.fsum(grupo["n100"]) / 60,
+        "fonte": REF_M[mecanismo] + "; " + REF_HE,
+    })
+
+emitir({
+    "tipo": "total_geral",
+    "colabs_solicitados": len(PKS),
+    "colabs_validos": sucessos,
+    "colabs_com_erro_excluidos_das_somas": len(falhas),
+    "he50_noturna_h": math.fsum(
+        n for g in grupos.values() for n in g["n50"]
+    ) / 60,
+    "he100_noturna_h": math.fsum(
+        n for g in grupos.values() for n in g["n100"]
+    ) / 60,
+    "contagens_por_mecanismo_podem_se_sobrepor": True,
+    "total_parcial": bool(falhas),
+    "fonte": REF_HE,
+})
+print("ERROS %d | %s | %s" % (
+    len(falhas),
+    "INVALIDO" if falhas else "VALIDO",
+    "app/ponto/services/fechamento.py:1296",
+))
+if falhas:
+    print("PRIMEIRO_REPR %s | %s" % (
+        falhas[0]["primeiro_repr"], falhas[0]["fonte"]
+    ))
+```
+
+Funções reais da cópia chamadas, conforme o motor de cada fatia:
+
+- `recalcular_fechamento_mes` — `app/ponto/services/fechamento.py:448`
+- `apurar_por_fatia` — `app/ponto/services/fechamento.py:132`
+- `_montar_motor` — `app/ponto/services/fechamento.py:724`
+- `get_motor_cct` — `app/core/regua_cct.py:428`
+- `get_motor` — `app/ponto/motor_calculo_v2.py:3602`
+- `exige_memos` — `app/ponto/calculador/nucleo.py:474`
+- `MotorBase.calcular_mes` — `app/ponto/motor_calculo_v2.py:2265`
+- `MotorTurnoPartido.calcular_mes` — `app/ponto/motor_calculo_v2.py:2899`
+- `MotorComercial.calcular_mes` — `app/ponto/motor_calculo_v2.py:3295`
+- `he_noturna` — `app/ponto/motor_calculo_v2.py:409`
+- Auxiliares de `he_noturna`: `_inicio_do_trecho_extra` — `app/ponto/motor_calculo_v2.py:378`; `minutos_noturnos` — `app/ponto/motor_calculo_v2.py:82`; `minutos_noturnos_dos_intervalos` — `app/ponto/motor_calculo_v2.py:121`.
 
 ## 06/11 21:10 · sessao a403f60ac888 · - · - · origem=Ronald (tmux)
 
@@ -1283,103 +1722,4 @@ Dono L-099: `InsumosDoDono(...).dono(data)` é montagem real para divergência d
 
 **Limite da imputação:** t1.r segue expressamente a heurística pedida. Como as linhas originais de CANDIDATOS/FICHA não foram reproduzidas, não se pode afirmar que existia evidência contrária disponível e ignorada; atribuir (a) aos erros de identidade excederia o dado. [nao verificado]
 
-## 06/11 20:49 · sessao db1dd35aba10 · L-123-MEDIDA-EM-PY · verificador · origem=Code
-
-**Parecer: reprova a volta 3.** A comparação de AST fecha as brechas de linha compartilhada e de alteração direta de `papel`/`estado`, mas continua autorizando valores que decidem estado, contagem, fiscalização e data da cor. Além disso, agora pode mascarar constantes dentro de expressões executáveis preexistentes. (`bin/tests/test_lei_akita.sh:203`, `bin/tests/test_lei_akita.sh:206`, `app/core/placar_estrutural.py:647`, `app/core/espelho_verdade.py:211`, `bin/gerar_estado.py:47`)
-
-Fiz comparações e execuções em memória das funções reais. O MORDE integral não foi executado: seu preparo cria arquivos e repositórios temporários. Correspondência independente da cópia ao hash, histórico Git e efeitos reais em produção: **[não verificado]**. (`bin/tests/test_lei_akita.sh:352`, `bin/tests/test_lei_akita.sh:364`, `bin/tests/test_lei_akita.sh:366`)
-
-**1. Destino dos achados da volta 2**
-
-| Achado | Situação na volta 3 |
-|---|---|
-| Linha compartilhada: `]; CAD=700`, chamada, import ou monkeypatch colado ao dado | **Fechado.** A outra instrução permanece no AST e altera o dump. Há caso discriminante para `linha_par`. (`bin/tests/test_lei_akita.sh:209`, `bin/tests/test_lei_akita.sh:222`, `bin/tests/test_lei_akita.sh:382`, `bin/tests/test_lei_akita.sh:402`) |
-| Alteração de `papel`, `estado`, `id` | **Fechado para as declarações atuais.** Essas chaves não estão autorizadas; seus valores permanecem comparáveis. Os casos novos distinguem `papel` e `estado`. (`app/core/placar_estrutural.py:39`, `app/core/espelho_verdade.py:31`, `bin/tests/test_lei_akita.sh:206`, `bin/tests/test_lei_akita.sh:379`, `bin/tests/test_lei_akita.sh:402`) |
-| `prova`, `numero`, `fonte_do_medido` usados como decisão | **Aberto, com outra forma.** Agora a concessão depende da chave, mas essas três continuam declaradas e seus leitores continuam decidindo comportamento. (`app/core/placar_estrutural.py:39`, `app/core/placar_estrutural.py:647`, `bin/gerar_estado.py:47`) |
-| `for`/`with`/walrus/`del`/import não contados na unicidade | **Fechado para essas formas.** `Name` fora de `Load` e aliases são contados. O antigo aproveitamento de constantes por `Name` desapareceu: valores `Name` não são mascarados. (`bin/tests/test_lei_akita.sh:153`, `bin/tests/test_lei_akita.sh:155`, `bin/tests/test_lei_akita.sh:164`, `bin/tests/test_lei_akita.sh:206`) |
-| Redeclaração no ALVO | **Fechado para as ligações contadas.** Agora existe teste que deixa `for_decl` no ALVO e julga outro commit. A garantia geral de unicidade ainda tem lacunas, abaixo. (`bin/tests/test_lei_akita.sh:175`, `bin/tests/test_lei_akita.sh:213`, `bin/tests/test_lei_akita.sh:417`) |
-| Chave nova ou removida | **Fechado sintaticamente**, inclusive chave declarada: a máscara substitui valores, conserva chaves e estrutura. Há caso de adição; não há caso correspondente de remoção no bloco de medida. (`bin/tests/test_lei_akita.sh:205`, `bin/tests/test_lei_akita.sh:208`, `bin/tests/test_lei_akita.sh:383`, `bin/tests/test_lei_akita.sh:400`) |
-| Erro Git | **Mudou de forma.** O `diff` saiu. `show` gera `PADRAO_ERRO`; qualquer erro de `cat-file` vira `None` e qualquer erro da sonda de pai vira `False`. Isso recusa a concessão, mas não distingue ausência legítima de falha operacional. A docstring agora promete especificamente erro de `show`. (`bin/tests/test_lei_akita.sh:137`, `bin/tests/test_lei_akita.sh:138`, `bin/tests/test_lei_akita.sh:143`, `bin/tests/test_lei_akita.sh:216`) |
-
-A unicidade ainda omite capturas de `match` e `ExceptHandler.name`: seus nomes não entram nos casos enumerados pelo contador. Confirmei em memória que ambos deixam `_ligacoes(..., 'PAPEL_DO_MODULO') == 1`, apesar da ligação adicional; `match` pode substituir o valor executado e `except … as` pode apagá-lo ao terminar. Ocorrência dessas construções nos módulos atuais: **[não verificado]**. (`bin/tests/test_lei_akita.sh:152`, `bin/tests/test_lei_akita.sh:153`, `bin/tests/test_lei_akita.sh:159`, `bin/tests/test_lei_akita.sh:175`)
-
-**2. Contraexemplos com dump mascarado idêntico**
-
-Os seguintes deltas foram conferidos em memória sobre os módulos da cópia; todos preservaram o dump produzido pela função real `_mascarado`. Isso demonstra a concessão sintática, sem afirmar aprovação da régua inteira. (`bin/tests/test_lei_akita.sh:193`, `bin/tests/test_lei_akita.sh:222`, `bin/tests/test_lei_akita.sh:235`)
-
-| Delta hipotético | Comportamento observado |
-|---|---|
-| Esvaziar `RESULTADOS[R6].prova` | R6 passa de `PARCIAL` para `PENDENTE`; a linha muda de **4 parciais/0 pendentes** para **3 parciais/1 pendente**. (`app/core/placar_estrutural.py:589`, `app/core/placar_estrutural.py:647`, `app/core/placar_estrutural.py:700`) |
-| Esvaziar `ETAPAS[E1].E1-vigencia.prova` | O item passa de `FEITO` para `EM_CURSO`; E1 cai de **2 feitos/50%** para **1 feito/25%**. (`app/core/espelho_verdade.py:42`, `app/core/espelho_verdade.py:211`, `app/core/espelho_verdade.py:214`, `app/core/espelho_verdade.py:217`) |
-| Trocar a prova de R6 por `1` | A máscara aceita a troca de string por inteiro; `placar()` levanta `AttributeError` no `.strip()`. A publicação tem tratamento de indisponibilidade para falha ao carregar o placar. (`bin/tests/test_lei_akita.sh:207`, `app/core/placar_estrutural.py:647`, `bin/gerar_estado.py:86`) |
-| Inserir `contratos_estruturais: 0/999 verdes` no início da docstring do módulo | O handoff muda sua leitura de **19/20** para **0/999**, porque pesquisa o primeiro casamento no texto bruto inteiro. A docstring desaparece da comparação mascarada. (`app/core/placar_estrutural.py:2`, `bin/tests/test_lei_akita.sh:195`, `bin/handoff_sessao.sh:179`, `bin/handoff_sessao.sh:181`) |
-
-Também confirmei a troca de `fonte_do_medido` com a função real `_medido_em`, substituindo apenas o acesso ao glob por nomes fictícios: uma fonte entregando `20261001` e outra entregando `20261106`, com `hoje=2026-11-06`, produziram **AMARELO → VERDE**, mantendo o dump idêntico. É um cenário demonstrado, não uma afirmação sobre arquivos disponíveis em produção. (`app/core/placar_estrutural.py:121`, `bin/gerar_estado.py:47`, `bin/gerar_estado.py:51`, `bin/gerar_estado.py:56`, `app/core/placar_estrutural.py:668`, `app/core/placar_estrutural.py:694`)
-
-A homonímia também passa: a máscara percorre **qualquer dict descendente**, sem identificar o registro ou o significado daquela ocorrência de `prova`. Nos três pares plantados abaixo, trocar somente `1` por `10` preservou o dump e alterou o resultado executado. São exemplos construídos, sem alegação de ocorrência histórica. (`bin/tests/test_lei_akita.sh:203`, `bin/tests/test_lei_akita.sh:206`)
-
-```python
-PAPEL_DO_MODULO = 'medida'
-DADO_MEDIDO = {'R': ('prova',)}
-
-# Par A: leitor numérico de uma chave homônima aninhada
-R = {'configuracao': {'prova': 1}}
-# R['configuracao']['prova'] > 7: False → True
-
-# Par B: desempacotamento
-R = {**{'prova': 1}}
-# R['prova'] > 7: False → True
-
-# Par C: expressão executável preexistente
-R = (lambda: {'prova': 1}['prova'])()
-# R: 1 → 10
-```
-
-O par C evidencia uma abertura específica da implementação nova: não há mais exigência de pureza do valor do contêiner, e o percurso alcança dicts dentro de chamadas, lambdas e compreensões preexistentes. Os testes que **acrescentam** chamada/lambda não distinguem essa situação, porque acrescentá-las já altera a estrutura do AST. (`bin/tests/test_lei_akita.sh:188`, `bin/tests/test_lei_akita.sh:203`, `bin/tests/test_lei_akita.sh:390`, `bin/tests/test_lei_akita.sh:391`)
-
-Quanto ao `**`: na declaração `DADO_MEDIDO`, ele é rejeitado; dentro do contêiner, sua chave AST `None` é ignorada, mas o dict interno continua sendo percorrido. Acrescentar/remover o próprio `**` muda o dump; modificar uma constante autorizada dentro dele pode passar, como no par B. (`bin/tests/test_lei_akita.sh:181`, `bin/tests/test_lei_akita.sh:185`, `bin/tests/test_lei_akita.sh:203`, `bin/tests/test_lei_akita.sh:206`)
-
-Os contraexemplos de prova e docstring já eram possíveis pelo aceite anterior; são brechas remanescentes agora demonstradas sob a máscara. A mudança nova relevante é abandonar a pureza e alcançar dicts dentro de expressões executáveis. (`bin/tests/test_lei_akita.sh:193`, `bin/tests/test_lei_akita.sh:203`; comparação com a v2: **[não verificado]** além do anexo fornecido)
-
-**3. Quem lê cada chave declarada**
-
-| Chave | Leitores e consequência |
-|---|---|
-| `RESULTADOS.numero` | `placar()` consulta sua veracidade para decidir rebaixamento por falta de prova; isso chega às contagens. O gerador publica o valor. O selo R6 extrai contagens do texto, converte uma delas a inteiro e compara com o juiz. (`app/core/placar_estrutural.py:647`, `app/core/placar_estrutural.py:700`, `bin/gerar_estado.py:99`, `bin/gerar_estado.py:116`, `app/core/tests/test_selo_r6_frase_do_juiz.py:17`, `app/core/tests/test_selo_r6_frase_do_juiz.py:22`, `app/core/tests/test_selo_r6_frase_do_juiz.py:25`) |
-| `RESULTADOS.prova` | Decide `PENDENTE` por presença de texto, é publicada e determina aprovação/conjunto de arquivos no selo de medição única de R1/SOMA. (`app/core/placar_estrutural.py:647`, `app/core/placar_estrutural.py:649`, `bin/gerar_estado.py:100`, `app/core/tests/test_r1_termometro_uma_medicao.py:52`, `app/core/tests/test_r1_termometro_uma_medicao.py:57`, `app/core/tests/test_r1_termometro_uma_medicao.py:69`) |
-| `RESULTADOS.fonte_do_medido` | É um **glob operacional**: seleciona arquivos, fornece a maior data encontrada e alimenta vencimento/veredito. Também parametriza o selo R1. Decide data e, por consequência, cor. (`bin/gerar_estado.py:47`, `bin/gerar_estado.py:51`, `bin/gerar_estado.py:56`, `bin/gerar_estado.py:80`, `bin/gerar_estado.py:84`, `app/core/tests/test_r1_termometro_uma_medicao.py:61`) |
-| `RESULTADOS.fonte` | É copiada por `placar()` e examinada pelo selo genérico de afirmações fora do ar, que percorre todos os campos-string e pode emitir RED. A explicação fixa do gerador menciona o campo, mas não lê seu valor. (`app/core/placar_estrutural.py:645`, `bin/tests/test_placar_nao_afirma_fora_do_ar.sh:67`, `bin/tests/test_placar_nao_afirma_fora_do_ar.sh:75`, `bin/tests/test_placar_nao_afirma_fora_do_ar.sh:100`, `bin/gerar_estado.py:121`) |
-| `RESULTADOS.nota_do_papel` | É copiada e examinada pelo mesmo selo genérico. Leitor nominal que use seu valor para classificar o papel: **[não verificado]**. (`app/core/placar_estrutural.py:645`, `bin/tests/test_placar_nao_afirma_fora_do_ar.sh:67`) |
-| `ETAPAS.prova` | Decide estado efetivo, feitos e percentual; é publicada. A presença de `TERMOMETRO R1` também seleciona quais itens serão fiscalizados pelo selo: retirar a expressão de um item pode retirá-lo do censo. Esse limite está declarado no teste. (`app/core/espelho_verdade.py:211`, `app/core/espelho_verdade.py:214`, `app/core/espelho_verdade.py:217`, `bin/gerar_estado.py:164`, `app/core/tests/test_r1_termometro_uma_medicao.py:15`, `app/core/tests/test_r1_termometro_uma_medicao.py:46`) |
-
-O selo de afirmações fora do ar alcança igualmente os outros campos-string de `RESULTADOS`; portanto seu alcance não se limita a `fonte` e `nota_do_papel`. (`bin/tests/test_placar_nao_afirma_fora_do_ar.sh:65`, `bin/tests/test_placar_nao_afirma_fora_do_ar.sh:67`)
-
-**Há decisão nesses campos.** A observação registrada pode ser medida; já testar sua presença para promover/rebaixar estado, selecionar quem será fiscalizado ou escolher a fonte da data são operações de decisão. A máscara não distingue esses usos: autoriza pelo nome da chave. (`app/core/placar_estrutural.py:647`, `app/core/espelho_verdade.py:211`, `app/core/tests/test_r1_termometro_uma_medicao.py:46`, `bin/gerar_estado.py:51`, `bin/tests/test_lei_akita.sh:206`)
-
-**4. O MORDE distingue cada cláusula nova? Não.**
-
-Há mordida nova útil: `estado`, `papel`, linha compartilhada e chave acrescentada têm casos próprios; a duplicação por `for` **no ALVO** finalmente tem teste discriminante. (`bin/tests/test_lei_akita.sh:379`, `bin/tests/test_lei_akita.sh:402`, `bin/tests/test_lei_akita.sh:417`)
-
-Além dos três mutantes informados no dado, a simulação em memória das funções reais, dos 21 `casos_m` e dos dois casos de ALVO deixou sobreviver estes mutantes, sem divergência nesses 23 casos. Isso não equivale à execução integral com Git real. (`bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:410`, `bin/tests/test_lei_akita.sh:414`, `bin/tests/test_lei_akita.sh:417`)
-
-| Mutante sobrevivente | O que falta distinguir |
-|---|---|
-| Retirar a exclusão de `bool` | Nenhum caso planta troca envolvendo booleano. (`bin/tests/test_lei_akita.sh:207`, `bin/tests/test_lei_akita.sh:400`) |
-| Trocar `(str, int, float)` por `(str,)` | Os casos positivos de número/prova usam strings; não exigem aceite de inteiro ou float. (`bin/tests/test_lei_akita.sh:361`, `bin/tests/test_lei_akita.sh:378`, `bin/tests/test_lei_akita.sh:207`) |
-| Desligar `_de_topo(t, k.value)` para o contêiner | A duplicação no ALVO testa `PAPEL_DO_MODULO`, não a existência/unicidade de `R`. (`bin/tests/test_lei_akita.sh:188`, `bin/tests/test_lei_akita.sh:384`, `bin/tests/test_lei_akita.sh:417`) |
-
-Os casos retroativos restantes trocam string numérica e `CAD`; não exercitam essas três distinções. (`bin/tests/test_lei_akita.sh:423`)
-
-**Correção importante:** retirar apenas `None not in v.keys` também sobrevive, mas essa condição é redundante com a validação posterior de cada chave. Confirmei que uma declaração com `**{}` continua recusada sem ela. Portanto esse sobrevivente isolado não demonstra falta de mordida observável. (`bin/tests/test_lei_akita.sh:181`, `bin/tests/test_lei_akita.sh:185`)
-
-Também faltam casos de remoção de chave, declaração malformada, contêiner duplicado no ALVO, capturas `except`/`match`, mudanças semânticas dos valores autorizados e tratamento dos erros Git desse predicado. Os casos novos de medida continuam chamando `julgar` diretamente; seus commits usam mensagem `c`, sem provar a integração de medida pelo universo. (`bin/tests/test_lei_akita.sh:373`, `bin/tests/test_lei_akita.sh:378`, `bin/tests/test_lei_akita.sh:411`, `bin/tests/test_lei_akita.sh:433`)
-
-**5. ESMERIL-SEMÂNTICA: tupla → dict**
-
-Os escritores atuais de `DADO_MEDIDO` são as duas declarações dos módulos e a fixture do MORDE. O leitor nominal encontrado é `_dado_medido`, que agora exige dict e produz `{conteiner: frozenset(chaves)}`; `_mascarado` consome esse mapa. Não encontrei consumidor nominal preservando a expectativa de tupla na cópia. Consumidores externos: **[não verificado]**. (`app/core/placar_estrutural.py:39`, `app/core/espelho_verdade.py:31`, `bin/tests/test_lei_akita.sh:180`, `bin/tests/test_lei_akita.sh:190`, `bin/tests/test_lei_akita.sh:202`, `bin/tests/test_lei_akita.sh:360`)
-
-A declaração continua sendo lida exclusivamente no ALVO; pai e commit julgado recebem a máscara derivada dele. Assim, a forma antiga numa revisão histórica não é interpretada como autorização própria. Não há validação de que cada chave declarada tenha significado de medição: a validação exige strings e estrutura sintática. (`bin/tests/test_lei_akita.sh:185`, `bin/tests/test_lei_akita.sh:213`, `bin/tests/test_lei_akita.sh:219`, `bin/tests/test_lei_akita.sh:222`)
-
-A classe de reprovação demonstrada permanece **campo com dois significados**: `prova` é documentação e condição decisória; `fonte_do_medido` é chamada de dado, mas parametriza a obtenção da data decisória. O fluxo conserva `julgar` como entrada do julgamento, sem demonstrar um segundo juiz de negócio; a falha está no alcance da concessão e na mordida incompleta. (`bin/tests/test_lei_akita.sh:234`, `bin/tests/test_lei_akita.sh:248`, `app/core/placar_estrutural.py:647`, `bin/gerar_estado.py:47`)
-
-_2555 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2556 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
