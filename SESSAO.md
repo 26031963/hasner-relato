@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 10:21:20.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (121.6 MB). Acoes na janela: **566**.
+**Medido em 07/11/2026 10:26:03.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (121.6 MB). Acoes na janela: **563**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -573,6 +573,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 22:32:38 | Bash |  | `cd /home/ronald/wt-ferias2x-212952/app; sed -n 1,80p ferias/test_cancelar_2x.py` |
 | 22:32:37 | Bash |  | `cd /home/ronald/wt-ferias2x-212952/app; grep -n "def test_\\|def _\\|^class\\|alinhar_status_por_data" ferias/test_cancelar_2x.py \| head -50` |
 | 22:32:33 | Bash |  | `cd /home/ronald/wt-ferias2x-212952/app; git status --porcelain \| head; grep -n "def alinhar_status_por_data" -A28 ferias/services.py` |
-| 22:23:29 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '2s/.*/ESPERANDO: codex_pergunta.sh \| pid=647621/' app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
-| 22:23:24 | Bash |  | `cd /home/ronald/saas-hasner; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"; ps -eo pid,etime,args \| grep -E "(codex_pergunta\|sombra\|trava_teste)\.sh" \| grep -v grep \| cut -c1-200` |
-| 22:21:21 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '2s/.*/ESPERANDO: trava_teste.sh \| pid=558801/' app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova()[0])"` |
