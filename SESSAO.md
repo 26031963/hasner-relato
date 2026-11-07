@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 12:40:30.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (124.5 MB). Acoes na janela: **498**.
+**Medido em 07/11/2026 12:45:59.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (124.5 MB). Acoes na janela: **500**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:44:31 | Bash | Point ESPERANDO at live E1 run | `cd /home/ronald/saas-hasner; sed -i '2s/.*/ESPERANDO: trava_teste.sh \| pid=3311908/' app/docs/RELATO.md; echo '{"stop_hook_active":true,"session_id":"707e509b-29e4-4438-9018-16733980c39a","transcript_path":"/home/ronald/.claude/projects/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a.jsonl"}' \| python3 bin/hook_stop_fila1.py; echo rc=$?` |
+| 12:44:25 | Bash | Check live producers for ESPERANDO | `cd /home/ronald/saas-hasner; date +%H:%M; bash bin/trava_teste.sh --quem \| tail -1; ps -p 1398871 >/dev/null && echo 1398871 vivo; ps -eo pid,etime,args \| grep -v grep \| grep -E 'trava_teste.sh\|codex_pergunta.sh' \| cut -c1-160 \| head -5` |
 | 12:08:01 | Bash | Point ESPERANDO at live E2 test run, retest hook | `cd /home/ronald/saas-hasner; sed -i '2s/.*/ESPERANDO: trava_teste.sh \| pid=1398871/' app/docs/RELATO.md; echo '{"stop_hook_active":true,"session_id":"707e509b-29e4-4438-9018-16733980c39a","transcript_path":"/home/ronald/.claude/projects/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a.jsonl"}' \| python3 bin/hook_stop_fila1.py; echo rc=$?` |
 | 12:07:56 | Bash | Find live producers | `cd /home/ronald/saas-hasner; bash bin/trava_teste.sh --quem \| tail -1; ps -eo pid,etime,args \| grep -v grep \| grep -E 'trava_teste\|suite.sh\|sombra.sh\|manage.py test' \| cut -c1-220 \| head` |
 | 12:07:48 | Bash | Update BACKLOG row, test hook | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| CODEX-CONSTRUTOR-NEGOCIO \|')][0] c=L[i].split(' \| ') c[2]='07/11 12:1x opus final REPROVA d63b837f (=1bd494cc+emenda; suite OK Ran 13962): volta do B3 17:0x (walk FS podando so .git + 2 RED) nunca construida; 1a vaga livre, emenda corrige "so LE";  ...` |
