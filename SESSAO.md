@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 12:30:06.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (124.4 MB). Acoes na janela: **507**.
+**Medido em 07/11/2026 12:35:08.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (124.5 MB). Acoes na janela: **500**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -510,10 +510,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:57:55 | Bash |  | `cd /home/ronald/saas-hasner; date '+%H:%M'; mkdir -p logs/f7g && chmod 700 logs/f7g; cat > logs/f7g/aval.txt <<'EOF' aval Ronald 07/11 (chat): F7g-PRORROGACAO-DA-JORNADA -- resposta da lei, nenhuma lei nova (CLT aplicada, LEI-AKITA 13): pausa que o pareador JA fecha como intervalo e intervalo INTRAJORNADA (Art.71) e NAO quebra a jornada -> 19:00-07:00 com pausa 04:30-05:30 e UMA jornada; o trecho  ...` |
 | 00:39:20 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '2s/.*/ESPERANDO: trava_teste.sh \| pid=530390/' app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
 | 00:39:16 | Bash |  | `cd /home/ronald/saas-hasner; ps -p 362192 >/dev/null && echo vivo; bin/trava_teste.sh --quem; ps -eo pid,args \| /bin/grep -E "[c]odex_pergunta\|[t]rava_teste" \| cut -c1-100` |
-| 00:32:54 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '2s/.*/ESPERANDO: trava_teste.sh \| pid=362192/' app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
-| 00:32:51 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') L.insert(2,'lei: F7g-PRORROGACAO-DA-JORNADA (07/11 00:3x) -- pausa que o pareador fecha (19:00E/04:30S/05:30E/07:00S, 12x36 noturno, CCT com prorrogacao pos-05h) e UMA jornada (Art.71 par.1 + 73 par.5 + Sum.60-II: 480 relogio/548,57 legais) ou DUAS (a casa hoje: 390/445,71)? Volta 4 do V2 i2 (950a37 ...` |
-| 00:32:45 | SendMessage |  | `-` |
-| 00:32:33 | Bash |  | `cd /home/ronald/saas-hasner; git grep -n "F7g" -- app/docs \| cut -c1-300 \| head; /bin/grep -rn "prorroga.*jornada\\|jornada.*prorroga" app/docs/LEIS.md \| cut -c1-250 \| head -5` |
-| 00:32:29 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n "F7g" app/docs/BACKLOG.md app/docs/RELATO.md app/docs/LEIS.md app/docs/CORTES.md 2>/dev/null \| cut -c1-300 \| head` |
-| 00:32:21 | Bash |  | `cd /home/ronald/wt-v2i2-212416; git show 19aeede1:app/ponto/tests/test_o280_bateria_da_lei.py \| sed -n 370,385p; git show 19aeede1:app/ponto/tests/test_o280_bateria_da_lei.py \| sed -n 1488,1510p; git show 19aeede1:app/ponto/tests/test_o280_bateria_da_lei.py \| sed -n 1565,1600p` |
-| 00:32:17 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n "V3-P5-PRORROGACAO-POR-INTERVALO" app/docs/BACKLOG.md \| cut -c1-900 \| head -3; cd /home/ronald/wt-v2i2-212416; git show 19aeede1:app/ponto/tests/test_o280_bateria_da_lei.py \| /bin/grep -n "F7f" \| head -5` |
