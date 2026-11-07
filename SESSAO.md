@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 20:26:21.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (133.9 MB). Acoes na janela: **554**.
+**Medido em 07/11/2026 20:31:25.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (133.9 MB). Acoes na janela: **552**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -562,5 +562,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 08:32:36 | Bash | Record census numbers in RELATO and BACKLOG | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') assert L[5].startswith('MOTOR-LE-O-TURNO 0820') L[5]=L[5].replace('DESPACHO medida de hoje -> Codex censo (pid 3847282, logs/motor_turno/censo/q1.r), criterio A/B devolvido com numero, sem escolher criterio.', 'MEDIDA 0832 (Codex censo @ffbda473, logs/motor_turno/censo/q1.r, 876 arq, 0 ilegiveis; con ...` |
 | 08:32:28 | Bash | Show current RELATO line and backlog row | `cd /home/ronald/saas-hasner/app; date '+%H:%M'; sed -n 6p docs/RELATO.md \| cut -c1-400; grep -n "MOTOR-LE-O-TURNO-INSTRUMENTO" docs/BACKLOG.md \| cut -c1-500` |
 | 08:32:23 | Bash | Confer three census citations at HEAD | `cd /home/ronald/saas-hasner/app; git show ffbda473:app/ponto/services/dia_pago.py \| sed -n 109,132p; echo ----; git show ffbda473:app/ponto/motor_calculo_v2.py \| sed -n 2115,2120p; echo ----; git show ffbda473:app/ponto/adaptador_motor.py \| sed -n 29,44p; echo; git grep -n "_dia_da_jornada_do_par" ffbda473 -- '*.py' \| head` |
-| 08:31:21 | Bash | Read criteria and output sections | `cd /home/ronald/saas-hasner; sed -n 2,60p logs/motor_turno/censo/q1.r; sed -n 390,470p logs/motor_turno/censo/q1.r` |
-| 08:31:17 | Bash | Read Codex census summary | `cd /home/ronald/saas-hasner; tail -3 logs/motor_turno/censo/q1.log; wc -c logs/motor_turno/censo/q1.r; grep -n "^\*\*\\|Total\\|total\\|TOTAL" logs/motor_turno/censo/q1.r \| head -40` |
