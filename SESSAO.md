@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 20:16:08.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (133.9 MB). Acoes na janela: **558**.
+**Medido em 07/11/2026 20:21:08.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (133.9 MB). Acoes na janela: **554**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -564,7 +564,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 08:32:23 | Bash | Confer three census citations at HEAD | `cd /home/ronald/saas-hasner/app; git show ffbda473:app/ponto/services/dia_pago.py \| sed -n 109,132p; echo ----; git show ffbda473:app/ponto/motor_calculo_v2.py \| sed -n 2115,2120p; echo ----; git show ffbda473:app/ponto/adaptador_motor.py \| sed -n 29,44p; echo; git grep -n "_dia_da_jornada_do_par" ffbda473 -- '*.py' \| head` |
 | 08:31:21 | Bash | Read criteria and output sections | `cd /home/ronald/saas-hasner; sed -n 2,60p logs/motor_turno/censo/q1.r; sed -n 390,470p logs/motor_turno/censo/q1.r` |
 | 08:31:17 | Bash | Read Codex census summary | `cd /home/ronald/saas-hasner; tail -3 logs/motor_turno/censo/q1.log; wc -c logs/motor_turno/censo/q1.r; grep -n "^\*\*\\|Total\\|total\\|TOTAL" logs/motor_turno/censo/q1.r \| head -40` |
-| 08:16:43 | Bash | Wait for Codex census to finish | `cd /home/ronald/saas-hasner; while kill -0 3847282 2>/dev/null; do /usr/bin/sleep 30; done; ls -la logs/motor_turno/censo/; tail -2 logs/motor_turno/censo/q1.log` |
-| 08:16:38 | Bash | Log instrument line and check hook | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('DESPACHO FIO-E0-V4 0812')) L.insert(i+1,'MOTOR-LE-O-TURNO 0820 (aval logs/motor_turno/aval.txt; BACKLOG substitui PERTENCA-DO-MINUTO-PELO-TURNO): obra espera E2+E3; INSTRUMENTO: CONTRATO 5 linhas logs/motor_turno/contrato.txt; DESPACHO medida de hoje ...` |
-| 08:16:27 | Bash | Check Codex launch status | `cd /home/ronald/saas-hasner; /usr/bin/sleep 5; cat logs/motor_turno/censo/q1.log; ps -o pid,ppid,etime,cmd -p 3847262,3847282 \| cut -c1-150` |
-| 08:16:21 | Bash | Write contrato and launch Codex census | `cd /home/ronald/saas-hasner; umask 077; cat > logs/motor_turno/contrato.txt <<'EOF' CONTRATO MOTOR-LE-O-TURNO-INSTRUMENTO (07/11, aval logs/motor_turno/aval.txt; molde core/medida_leitor_do_dia.py) 1 QUEM CHAMA: a suite (selo-catraca core/tests/test_medida_turno_do_par.py) e o placar no HOST sem Django (bin/*_estado.py por spec_from_file_location), o MESMO modulo puro ast/os core/medida_turno_do_p ...` |
