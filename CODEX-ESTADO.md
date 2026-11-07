@@ -1,7 +1,154 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 00:14** · publicado em **07/11/2026 00:15** (UTC-3)
+> Ultima resposta processada: **07/11/2026 00:21** · publicado em **07/11/2026 00:26** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 00:21 · sessao 10bc0fe98df9 · FIO-E0-V4-E1 · verificador · origem=Code
+
+**Veredito: bloqueia considerar o commit como E1 concluída; o patch do índice também precisa de correções nos caminhos que alteram a identidade.** Há decisões sem linha, perda da resposta legada, absorção sem atomicidade completa e inversão de travas. A ausência do índice no commit é deliberada e foi tratada como unidade separada. (app/chamados/models.py:1508; app/chamados/models.py:2658; app/chamados/services/disputa_emissao.py:1351; app/chamados/services/materializacao.py:550; app/chamados/services/disputa_emissao.py:1129; app/chamados/migrations/0051_decisao_pergunta.py:3)
+
+Resultados executados de testes, conteúdo do acervo, colisões reais, histórico de migrações em produção e igualdade dos hashes FM/TXT 09–10: **[não verificado]**. [nao verificado]
+
+1. **Campos, escritores, leitores e significados**
+
+   O escritor físico da sequência é `registrar → bulk_create`. Os produtores dos valores são os atos abaixo; portanto “uma porta de INSERT” não significa “todos os escritores da projeção registram decisões”. (app/chamados/models.py:3364; app/chamados/models.py:2658)
+
+   | Produtor | Campos de `DecisaoPergunta` fornecidos |
+   |---|---|
+   | Encerramento da disputa | `ato`, `ato_em`, `ato_por`, `ato_texto`, `ato_motivo` — app/chamados/models.py:1862 |
+   | Remoção do motivo | Os cinco anteriores — app/chamados/models.py:1982 |
+   | Resposta do colaborador | `ato`, `ato_em`, `ato_por`, `ato_texto` — app/chamados/services/disputa_emissao.py:1351 |
+   | Reabertura/recusa | Os cinco primeiros e `validada_original_por` — app/chamados/services/disputa_emissao.py:1460 |
+   | Resposta automática | `ato`, `ato_em`, `ato_texto`, `ato_motivo`; autor fica nulo — app/chamados/services/disputa_emissao.py:1493 |
+   | Recuperação pela trilha | Os mesmos da automática — app/chamados/services/disputa_emissao.py:1514 |
+   | Validação | `ato`, `ato_em`, `ato_por`, `ato_texto` — app/chamados/services/validacao.py:138 |
+   | Devolução | Os cinco primeiros — app/chamados/services/validacao.py:203 |
+   | Absorção | `ato`, `ato_em`, `ato_por`, `ato_texto`, `absorcao_escape`, `absorcao_ausencia` — app/chamados/services/materializacao.py:555 |
+
+   | Campo | Leitores da sequência fora dos testes | [nao verificado]
+   |---|---|
+   | `ato` | Seleção do histórico: app/chamados/models.py:2961,2965; ausência de decisão no DRY: app/chamados/management/commands/backfill_decisoes_pergunta.py:31; apresentação: app/templates/chamados/partials/modal_fio.html:208,211; checks: app/chamados/models.py:3344,3349 |
+   | `ato_em` | Ordenação: app/chamados/models.py:3341; apresentação: app/templates/chamados/partials/modal_fio.html:209,211 |
+   | `ato_por` | Carregamento: app/chamados/services/fio.py:232; apresentação: app/templates/chamados/partials/modal_fio.html:211 |
+   | `ato_texto` | Apresentação: app/templates/chamados/partials/modal_fio.html:209,211 |
+   | `ato_motivo` | Apresentação: app/templates/chamados/partials/modal_fio.html:211 |
+   | `validada_original_por` | Carregamento: app/chamados/services/fio.py:232; apresentação: app/templates/chamados/partials/modal_fio.html:211; check: app/chamados/models.py:3351 |
+   | `absorcao_escape`, `absorcao_ausencia` | Checks: app/chamados/models.py:3344,3346. O leitor de negócio continua reconstruindo a absorção pelos carimbos: app/chamados/services/materializacao.py:595,615,619 |
+
+   A migração também escreve esses campos: renomeia texto/instante/autor/motivo anteriores, atribui `ato='reabertura'` às linhas antigas e introduz as ligações de absorção nulas. A fotografia anterior do validador já existia na 0050. (app/chamados/migrations/0051_decisao_pergunta.py:41,49,67; app/chamados/migrations/0050_resposta_anterior.py:26)
+
+   | Campo novo de `PerguntaDisputa` | Escritores | Leitores |
+   |---|---|---|
+   | `colaborador` | Derivação na inserção: app/chamados/models.py:2923,2935; preenchimento do acervo: app/chamados/migrations/0051_decisao_pergunta.py:25; fixture direta: app/chamados/tests/test_e1_entradas.py:313 | Dedup: app/chamados/models.py:2430; conferência de nascimento: app/chamados/models.py:2934,2936,2938; DRY: app/chamados/management/commands/backfill_decisoes_pergunta.py:34,36,54; teste: app/chamados/tests/test_e1_entradas.py:174 |
+   | `instancia_marco` | Default e derivação: app/chamados/models.py:2241,2941; migração: app/chamados/migrations/0051_decisao_pergunta.py:27,96; fixture: app/chamados/tests/test_e1_entradas.py:314 | Dedup/derivação: app/chamados/models.py:2431,2939; DRY: app/chamados/management/commands/backfill_decisoes_pergunta.py:54; teste: app/chamados/tests/test_e1_entradas.py:175 |
+   | `conversa` | Default: app/chamados/models.py:2242; portas e INSERT: app/chamados/models.py:2450,2461,2546; todo o legado recebe `False`: app/chamados/migrations/0051_decisao_pergunta.py:99 | Trava/dedup/derivação: app/chamados/models.py:2474,2495,2939; DRY: app/chamados/management/commands/backfill_decisoes_pergunta.py:55; testes: app/chamados/tests/test_e1_entradas.py:176,182 |
+
+   A fotografia genérica dos testes lê todos os campos dos dois modelos. O índice anexado acrescenta leitura de `colaborador`, `data_evento`, `motivo`, `instancia_marco`, `conversa` e `via_resolucao`. (app/chamados/tests/test_e1_entradas.py:281,282; app/chamados/migrations/0052_pergunta_unica_por_fato.py:19,20 — anexo)
+
+   **Não há um significado uniforme para todas as projeções:**
+
+   - `respondida_em` pode ser o instante da resposta recebida, um instante histórico recuperado da trilha ou um carimbo automático colocado pelo encerramento; `validada_em` pode representar validação do admin ou preenchimento automático por `carimbar(resposta='validar')`. **Fila**, porque os leitores que tratam presença do carimbo como ato humano não distinguem essas origens. Contraexemplo: encerramento por fato preenche `validada_em` sem passar por `_carimbar_validacao`. (app/chamados/services/disputa_emissao.py:1325,1511,1681; app/chamados/models.py:2658,2661; app/chamados/services/validacao.py:133)
+   - `materializada_em` significa tanto efeito aplicado quanto encerramento sem efeito. **Fila:** pergunta de hora respondida e depois retratada ganha carimbo sem exigir batida, mas `estado_aplicacao_pergunta` devolve `aplicada`, excetuando apenas paridade. (app/chamados/models.py:1987; app/chamados/services/materializacao.py:434,438,442; app/chamados/services/fio.py:336)
+   - `conversa=False` significa nascimento pela porta de fato nas linhas novas e simplesmente default da migração nas antigas. **Bloqueia usar a coluna como classificação histórica comprovada.** Duas conversas antigas do mesmo motivo/dia passam a parecer duas linhas do fato. (app/chamados/models.py:2450,2461; app/chamados/migrations/0051_decisao_pergunta.py:4,99)
+   - `instancia_marco=''` reúne motivos sem marco e conversas; não identifica ocorrência de batida, pausa ou episódio. A própria derivação declara que duas pausas ainda não são separadas. (app/chamados/services/declaracao_texto.py:47,52,57; app/chamados/models.py:2939)
+   - Os carimbos são `DateTimeField`, com configuração de fuso `America/Sao_Paulo` e `USE_TZ=True`; `data_evento` é uma data. Não encontrei uma troca explícita de unidade nesses campos novos. Validade de todos os instantes históricos recebidos em execução: **[não verificado]**. (app/chamados/models.py:2230,2249,2250,3325; app/config/settings/base.py:93,95)
+   - O contexto conserva a distinção dia civil/dia do turno: conversa nasce pela sua própria porta, enquanto o rechaveamento existe justamente para retirar do acervo o segundo significado “dia da saída”. A migração 0051 não corrige esse acervo. (app/chamados/models.py:2453; app/chamados/services/fio.py:862; app/chamados/migrations/0051_decisao_pergunta.py:25)
+
+2. **Há caminhos de produção sem linha em `DecisaoPergunta`**
+
+   | Escritor persistente | Campos afetados | Registra linha? |
+   |---|---|---|
+   | Resposta normal | Texto, resposta, eventual limpeza da validação e descarimbo | **Sim**, apenas a resposta nova — app/chamados/services/disputa_emissao.py:1326,1339,1344,1348,1351 |
+   | Reabertura/recusa | Texto, resposta e validação; opcionalmente materialização/via | **Condicional:** só se houver texto ou `respondida_em` — app/chamados/services/disputa_emissao.py:1444,1460,1466,1468,1470 |
+   | Resposta automática | Texto e resposta | **Sim** — app/chamados/services/disputa_emissao.py:1489,1493 |
+   | Carimbo pela trilha | Resposta | **Sim** — app/chamados/services/disputa_emissao.py:1511,1514 |
+   | `_carimbar_validacao` | Validação | **Sim** — app/chamados/services/validacao.py:133,138 |
+   | `devolver_validacao_recusada` | Limpa validação | **Sim**, quando havia validação — app/chamados/services/validacao.py:194,197,203 |
+   | `carimbar` | Materialização/via e, opcionalmente, resposta/validação | **Não na porta** — app/chamados/models.py:2655,2658,2661,2678 |
+   | `carimbar_identidade` | Materialização/via | **Não na porta** — app/chamados/models.py:2705,2708,2713 |
+   | `descarimbar` | Limpa materialização/via | **Não** — app/chamados/models.py:2717,2721 |
+   | `descarimbar_em_lote` | Limpa materialização/via e campos adicionais | **Não** — app/chamados/models.py:2768 |
+   | `encerrar_por_fato_no_espelho` | Troca via | **Não** — app/chamados/models.py:2778 |
+   | `relavrar` | Troca via | **Não**; registra `evento`, outra trilha — app/chamados/services/relavra_via.py:123,130 |
+
+   Os chamadores de carimbo também precisam ser diferenciados:
+
+   | Caminho | Linha correspondente |
+   |---|---|
+   | Encerramento da disputa por admin/desligamento | `SILENCIO` — app/chamados/models.py:1859,1862 |
+   | Remoção de motivo | `RETRATACAO` — app/chamados/models.py:1982,1987 |
+   | Absorção | `ABSORCAO`, após carimbar — app/chamados/services/materializacao.py:550,555 |
+   | Resolver o dia | **Nenhuma** para a pergunta encerrada — app/ponto/services/veredito_celula.py:174,177 |
+   | Aceite de folga | Há `VALIDACAO`; o fechamento adicional não tem linha própria — app/chamados/services/validacao.py:279,280,306,315 |
+   | Duplicata | **Nenhuma** — app/chamados/services/fio.py:952 |
+   | Paridade/fato ocupado | **Nenhuma** — app/chamados/services/materializacao.py:909,1084 |
+   | Sem turno/célula absolveu | **Nenhuma** — app/chamados/reconciliador.py:405,586 |
+   | Materialização normal | **Nenhuma na chamada de carimbo**, inclusive validação automática — app/chamados/services/materializacao.py:1262 |
+   | Pendentes aprovadas pelo juiz | **Nenhuma** — app/chamados/services/materializacao.py:1416 |
+   | Encerramento pelo fato/sem credor | **Nenhuma**, inclusive carimbo automático de resposta/validação — app/chamados/services/disputa_emissao.py:1681,1755 |
+   | Reabertura por competência/fantasma | **Nenhuma** — app/chamados/services/competencia_trancada.py:254; app/chamados/management/commands/reabrir_orfas_enterradas.py:147 |
+   | Desfazer carimbo sem lastro | **Nenhuma** — app/chamados/services/relavra_via.py:231 |
+   | Encerrar por fato no espelho | **Nenhuma** — app/chamados/management/commands/encerrar_perguntas_com_fato.py:68 |
+
+   **Bloqueia — perda do legado no primeiro uso.** Contraexemplo: pergunta com `08:00`, `respondida_em` antigo e nenhuma decisão recebe `09:00`. O código sobrescreve a projeção e insere somente `09:00`; `respostas_anteriores` devolve lista vazia. O DRY não preserva previamente `08:00`. (app/chamados/services/disputa_emissao.py:1326,1351; app/chamados/models.py:2960; app/chamados/management/commands/backfill_decisoes_pergunta.py:33)
+
+   **Bloqueia — reabertura sem decisão.** Contraexemplo: irmã muda absorvida, com decisão `ABSORCAO`, é devolvida após rejeição da ausência. O filtro que produz decisões ignora a irmã sem texto e sem resposta, mas o `UPDATE` remove seu carimbo. O mesmo predicado deixa passar validação sem texto/resposta sem fotografá-la. (app/chamados/services/materializacao.py:668; app/chamados/services/disputa_emissao.py:1466,1468)
+
+   **Bloqueia — ressuscitação apaga decisões projetadas.** Limpa `respondida_em`, `validada_em`, materialização e via, sem inserir decisão; a trilha existente é `LogAuditoria`. (app/chamados/models.py:1508,1522,2768)
+
+   **Bloqueia — absorção pode ficar sem sua linha.** No caminho web/API, a transação da resposta termina antes da absorção. `q.carimbar` salva em seu próprio atomic e o INSERT da decisão vem depois. Contraexemplo: falha de `bulk_create` após o carimbo deixa a pergunta materializada sem `ABSORCAO`. (app/chamados/views.py:1283; app/api/views.py:2659; app/chamados/services/disputa_emissao.py:1347,1381; app/chamados/services/materializacao.py:550,555; app/chamados/models.py:2925)
+
+   **Fila — autoria disponível é descartada.** A reabertura pelo colaborador conhece `autor`, mas chama a porta sem `por`; a devolução da ausência conhece motivo, mas também não o transmite. (app/chamados/models.py:2146,2158; app/chamados/services/materializacao.py:665,668)
+
+   Não localizei chamada explícita de produção que apague diretamente `PerguntaDisputa` ou `DisputaSupervisao`. A FK disputa→pergunta é `CASCADE`; pergunta com decisão, pergunta usada como escape e ausência usada na absorção são protegidas. Assim, apagar a disputa pode apagar perguntas **sem decisões**, enquanto a existência de decisão impede o apagamento correspondente. (app/chamados/models.py:2223,3323,3333,3335)
+
+   A imutabilidade não é integral: autores usam `SET_NULL`. Exclusão de usuário pode alterar autoria histórica sem passar pelos métodos bloqueados; ocorrência desse fluxo em produção: **[não verificado]**. (app/chamados/models.py:3326,3331,3355)
+
+3. **Corrida e ordem das travas**
+
+   **Entre dois nascimentos datados que passam por `_nascer`, a trava serializa o dedup.** Ela é adquirida antes de `do_fato`; dentro desse recorte, o segundo ato consulta depois do primeiro. A conversa não adquire essa trava. (app/chamados/models.py:2473,2475,2495,2498)
+
+   **A trava sozinha não garante unicidade da árvore.** Rechaveamento, datação posterior e descarimbo não participam da mesma trava; uma criação direta também passa apenas pela derivação de identidade do `save`. O teste do próprio DRY constrói uma segunda linha diretamente. (app/chamados/services/fio.py:836,887,893; app/chamados/models.py:2768,2923; app/chamados/tests/test_e1_entradas.py:313)
+
+   **Com o patch, o banco impede a segunda identidade indexada, mas os caminhos concorrentes passam a poder levantar `IntegrityError` sem recuperação.** Conversas e vias fora do fato são excluídas; datas nulas continuam fora de uma garantia de igualdade entre chaves nulas. (app/chamados/migrations/0052_pergunta_unica_por_fato.py:19,20 — anexo; app/chamados/services/fio.py:851,904; app/chamados/models.py:2230)
+
+   **Bloqueia — ciclo de travas concreto, nos dois pacotes:**
+
+   - A declaração abre transação, trava `DisputaSupervisao` e depois pede `Colaborador`. (app/chamados/services/declaracao_texto.py:312,320,336; app/chamados/services/disputa_emissao.py:501; app/chamados/models.py:2475)
+   - O agrupador de órfãos pode ler a disputa sem trava, abrir pergunta mantendo `Colaborador` e depois atualizar a mesma disputa. (app/chamados/services/disputa_emissao.py:934,971,1088,1129)
+   - Intercalação: A segura Disputa e espera Colaborador; B segura Colaborador e espera Disputa. O comentário anterior já reconhece a ordem Disputa→Colaborador; o novo comentário “colaborador primeiro” não descreve a ordem global. (app/chamados/models.py:847,2470)
+
+   Mudança posterior de motivo, instância, conversa ou colaborador não é impedida pelo `save`: a conferência só ocorre na inserção, e instância explicitamente não vazia é aceita sem confronto com o motivo. Não localizei escritor de produção que faça essas mudanças posteriores; existência de tal caminho dinâmico: **[não verificado]**. (app/chamados/models.py:2923,2934,2939)
+
+4. **Migrações 0051 e 0052**
+
+   **0051: compatível estruturalmente com o legado descrito; segurança no acervo real [não verificado].** O rename preserva as linhas, o novo ato recebe `reabertura`, a foto antiga continua permitida e as ligações de absorção nascem nulas. O `SET CONSTRAINTS ALL IMMEDIATE` está antes do `ALTER ... NOT NULL`, tratando os eventos diferidos produzidos pelo preenchimento da FK. (app/chamados/migrations/0051_decisao_pergunta.py:41,49,67,85,101,104)
+
+   **Fila — a migração não identifica conversas antigas nem corrige o dia antigo.** Contraexemplo: duas conversas históricas iguais em colaborador/dia/motivo tornam-se colisão do índice, porque ambas recebem `conversa=False`. (app/chamados/migrations/0051_decisao_pergunta.py:4,25,99)
+
+   **O congelado bate com o vivo:** os quatro pares são `saida_sem_entrada→inicio`, `orfao_14h→fim`, `intervalo_saida→int_ida`, `intervalo_volta→int_volta`; há comparação direta em teste. (app/chamados/migrations/0051_decisao_pergunta.py:14; app/chamados/services/declaracao_texto.py:42,52; app/chamados/tests/test_e1_entradas.py:259)
+
+   **0052: bloqueia aplicar como está sem resolver os caminhos do item 8 e classificar o acervo.** Zero colisões no DRY não foi fornecido. Além disso, o DRY agrupa `data_evento=NULL`, enquanto o índice não torna essas chaves nulas iguais. Uma colisão criada entre DRY e DDL faria a instalação do índice falhar; não seria corrupção silenciosa. (app/chamados/management/commands/backfill_decisoes_pergunta.py:54,56; app/chamados/migrations/0052_pergunta_unica_por_fato.py:19,20 — anexo; **[não verificado]** quanto ao acervo)
+
+5. **`backfill_decisoes_pergunta`**
+
+   **Não escreve modelos e lê a autoridade correta.** Faz consultas e saída em `stdout`, sem opção de apply; consulta `folha.export.competencia_entregue`, autoridade `_K6`, que considera o TXT vigente não invalidado. A competência do fato vem do adaptador existente. (app/chamados/management/commands/backfill_decisoes_pergunta.py:25,51,67,71,76; app/core/juizes.py:312; app/folha/export.py:580; app/ponto/services/fechamento.py:1595)
+
+   **Fila — não suporta todo o domínio permitido pelo modelo.** Contraexemplo: pergunta legada respondida sem `data_evento` chega a `competencia_do_fato(None)` e à comparação `None < None`; duplicatas sem data e sem resposta chegam a `dia.isoformat()`. Presença real dessas linhas: **[não verificado]**. (app/chamados/models.py:2230; app/chamados/management/commands/backfill_decisoes_pergunta.py:45,90; app/ponto/services/fechamento.py:1588,1590)
+
+   O DRY mede ausência de qualquer ato daquele tipo, não se a decisão existente corresponde à projeção vigente. Portanto uma primeira resposta E1 já presente faz o DRY deixar de apontar a resposta legada sobrescrita do item 2. (app/chamados/management/commands/backfill_decisoes_pergunta.py:31,33; app/chamados/services/disputa_emissao.py:1351)
+
+6. **Classes de falha solicitadas**
+
+   | Classe | Veredito e contraexemplo |
+   |---|---|
+   | Segundo juiz registrado | **Não caracterizado nas adições.** A instância inverte o catálogo; competência chama o juiz existente. O espelho SQL é declarado como continente, não substituto exato do C6. (app/chamados/services/declaracao_texto.py:52; app/core/juizes.py:312; app/chamados/models.py:2842) |
+   | Segundo escritor fora da porta | **Bloqueia.** `carimbar` escreve validação fora do escritor indicado em `JUIZES.md` e não cria decisão. Contraexemplo: encerramento por fato com `resposta='validar'`. (app/docs/JUIZES.md:38; app/chamados/models.py:2661; app/chamados/services/disputa_emissao.py:1681) |
+   | Relógio fora da borda | **Fila.** Há leituras dentro dos atos, sem instante recebido por parâmetro, inclusive duas leituras na mesma retratação para contexto e decisão. Não apareceu novo juiz puro lendo relógio nesta mudança. (app/chamados/models.py:1965,1978; app/chamados/services/validacao.py:133,203) |
+   | Derivação paralela da fonte única | **Bloqueia.** O lote de declaração não aplica o novo domínio de `do_fato`; uma retratada validada bloqueia o formulário no lote, enquanto a consulta avulsa permite. (app/chamados/services/declaracao_texto.py:434,436,546; app/chamados/models.py:2432) |
+   | Selo/RE
+
+[truncado em 20000 de 49082 caracteres]
 
 ## 07/11 00:14 · sessao 70b6448f994a · - · - · origem=Ronald (tmux)
 
@@ -1096,128 +1243,4 @@ O registro entrega a pertença da batida ao juiz `turnos_do_colab` (`app/core/ju
 
 O diff mantém FM no serviço registrado (`app/core/portas.py:500`; `fechamento.py:969`) e DiaPago em `lavrar` (`app/ponto/services/dia_pago.py:244`, `:252`). Permanece a ordem FM persistido → tentativa de DiaPago → exceção capturada (`fechamento.py:1151`, `:1206`, `:1245`); logo falha nessa segunda etapa pode deixar FM e DP divergentes, sem que essa volta cure a atomicidade. Ocorrência real [não verificado].
 
-## 06/11 22:31 · sessao f35164bac815 · FERIAS-CANCELAR-2X · verificador · origem=Code
-
-**Não fecharia a pré-verificação como “classe totalmente curada”.** O cron e as portas de confirmação corrigem os dois caminhos apontados na v2, mas permanecem portas genéricas capazes de gravar ausência de férias, um retorno rápido que não garante o estado atual do banco e uma exigência de RED que não é atendida por cada teste contra o pai. (`app/ferias/services.py:544`, `app/ferias/services.py:560`, `app/ferias/services.py:594`, `app/ponto/services/ausencia.py:193`, `app/ferias/services.py:587`, `app/ferias/test_cancelar_2x.py:83`)
-
-Execução Django contra `f9d6f3e2`, suite verde, identidade Git da cópia, ocorrência e impacto em produção: **[nao verificado]**.
-
-1. **Quem escreve e quem lê o agendamento**
-
-O censo dos escritores de produção converge para `ferias/services.py`; o admin de férias registra somente `Afastamento`. (`app/core/portas.py:489`, `app/ferias/admin.py:4`)
-
-| Campo | Escritores persistentes |
-|---|---|
-| `status` | Histórico calcula pelo juiz: `app/ferias/services.py:282`; criação comum e aprovação usam o default `agendado`: `app/ferias/services.py:321`, `app/ferias/services.py:489`, `app/ferias/models.py:309`; cancelamento DP: `app/ferias/services.py:382`; cancelamento admin: `app/ferias/services.py:412`; remarcação/correção: `app/ferias/services.py:438`; cron: `app/ferias/services.py:596`. |
-| `data_inicio` / `data_fim` | Histórico: `app/ferias/services.py:280`; criação comum: `app/ferias/services.py:322`; aprovação: `app/ferias/services.py:491`; alteração de existente por `_trocar_janela`: `app/ferias/services.py:433`. |
-| `confirmacao` | Default: `app/ferias/models.py:314`; envio: `app/ferias/services.py:545`; recusa/confirmação: `app/ferias/services.py:562`, `app/ferias/services.py:565`. |
-| `confirmado_em` | Campo anulável: `app/ferias/models.py:318`; envio limpa: `app/ferias/services.py:546`; confirmação carimba: `app/ferias/services.py:566`; recusa preserva o carimbo anterior: `app/ferias/services.py:563`. |
-
-Os leitores encontrados, incluindo fora do diff, são:
-
-| Leitura | Sítios |
-|---|---|
-| Datas, status e consultas canônicas | `ferias_na_janela`, `em_gozo_hoje`, divergência e próximos agendamentos: `app/ferias/services.py:51`, `app/ferias/services.py:63`, `app/ferias/services.py:77`, `app/ferias/services.py:101`. |
-| Permissões, frações, sobreposição e identificação | `app/ferias/models.py:243`, `app/ferias/models.py:324`, `app/ferias/models.py:328`, `app/ferias/models.py:332`, `app/ferias/models.py:339`, `app/ferias/models.py:346`, `app/ferias/models.py:353`, `app/ferias/models.py:394`, `app/ferias/models.py:420`, `app/ferias/models.py:458`. |
-| Filtros, KPIs, validações, auditoria e mensagens das views | `app/ferias/views.py:26`, `app/ferias/views.py:72`, `app/ferias/views.py:235`, `app/ferias/views.py:366`, `app/ferias/views.py:414`, `app/ferias/views.py:465`, `app/ferias/views.py:483`, `app/ferias/views.py:544`, `app/ferias/views.py:668`, `app/ferias/views.py:836`, `app/ferias/views.py:878`, `app/ferias/views.py:885`, `app/ferias/views.py:925`. |
-| Situação, fracionamento, avisos e colisões | `app/ferias/situacao.py:117`, `app/ferias/situacao.py:164`, `app/ferias/situacao.py:246`, `app/ferias/situacao.py:270`, `app/ferias/situacao.py:343`. |
-| Telas | `app/templates/ferias/saldo.html:59`, `app/templates/ferias/_tabela_ferias.html:39`, `app/templates/ferias/_secao_colab.html:117`, `app/templates/ferias/cancelar_admin_massa.html:42`, `app/templates/ferias/_meu_atendimento_ferias.html:6`. |
-| API e mensageria | `app/api/views.py:2252`, `app/api/views_mensageria.py:840`, `app/api/views_mensageria.py:900`, `app/api/views_mensageria.py:939`, `app/api/views_mensageria.py:1045`, `app/api/views_mensageria.py:1093`. |
-| Disponibilidade, substituições e retorno | `app/colaboradores/views.py:2843`, `app/colaboradores/views.py:2895`, `app/ponto/utils.py:197`, `app/ferias/management/commands/alertar_retornos.py:20`. |
-| Gate, aviso da batida e folha | `app/ponto/utils.py:89`, `app/ponto/services/aviso_da_batida.py:74`, `app/folha/export.py:491`. |
-| Sincronização e vigia | `app/ferias/management/commands/sincronizar_status_ferias.py:33`, `app/ferias/management/commands/tripwire_status_ferias.py:29`. |
-| Confirmação | Elegibilidade e resposta: `app/ferias/views.py:860`, `app/ferias/views.py:909`; pendências: `app/chamados/views.py:627`; badges/botão: `app/templates/ferias/_secao_colab.html:122`. |
-
-A inteligência ainda procura `status='aprovado'`, que não pertence às choices do agendamento; esse problema preexistente continua presente. (`app/inteligencia/views.py:94`, `app/inteligencia/views.py:278`, `app/inteligencia/views.py:286`, `app/ferias/models.py:293`)
-
-Leitor de produção específico de `AgendamentoFerias.confirmado_em`, além de suas próprias escritas: **[nao verificado]**.
-
-2. **Os três procedentes da v2**
-
-| Procedente | Resultado da leitura |
-|---|---|
-| Cron gravar destino calculado de datas antigas | **Fechado nesse escritor:** recebe `hoje`, trava o agendamento e calcula `alvo` das datas de `vivo`; não grava mais o `novo` da foto. (`app/ferias/management/commands/sincronizar_status_ferias.py:49`, `app/ferias/services.py:593`, `app/ferias/services.py:594`) |
-| Confirmação recriar espelho de cancelado | **Fechado nas duas portas nomeadas:** releem sob trava, recusam cancelado e os saves de confirmação deixam de disparar espelho. (`app/ferias/services.py:544`, `app/ferias/services.py:560`, `app/ferias/models.py:437`, `app/ferias/models.py:443`) |
-| RED morrer antes do valor por `permitir_concluido` ausente | O TypeError desprotegido foi retirado: há chamada HTTP e, no teste direto, captura antes da asserção de estado. Isso **não transforma esses testes em RED contra v2**, cuja assinatura já existia no diff fornecido; execução contra o pai **[nao verificado]**. (`app/ferias/test_cancelar_2x.py:149`, `app/ferias/test_cancelar_2x.py:156`, `app/ferias/test_cancelar_2x.py:157`) |
-
-Nas portas atuais de alteração do **agendamento existente**, a troca de datas usa a linha travada e o cron recalcula nela; não encontrei outro escritor de produção gravando um destino calculado da foto antiga. (`app/ferias/services.py:430`, `app/ferias/services.py:433`, `app/ferias/services.py:438`, `app/ferias/services.py:594`)
-
-**A classe global “cancelado não volta a ter ausência de férias” permanece aberta.** Há cinco entradas genéricas que aceitam o tipo sem passar pelo agendamento:
-
-- Lançamento admin, inclusive aprovado: `app/ponto/views.py:2378`, `app/ponto/views.py:2415`, `app/ponto/views.py:2420`.
-- Submissão PWA: `app/ponto/views.py:2476`, `app/ponto/views.py:2509`, `app/ponto/views.py:2536`.
-- API app: `app/api/views.py:1720`, `app/api/views.py:1771`, `app/api/views.py:1820`.
-- Resolver dia, inclusive aprovado: `app/ponto/views.py:3341`, `app/ponto/services/veredito_celula.py:311`, `app/ponto/services/veredito_celula.py:315`.
-- Edição de ausência existente, inclusive troca de outro tipo para férias: `app/ponto/views.py:2761`, `app/ponto/views.py:2796`, `app/ponto/services/ausencia.py:498`, `app/ponto/services/ausencia.py:509`.
-
-A vedação existe no `AusenciaForm`, mas essas entradas chamam diretamente os serviços; `criar_ausencia` valida catálogo/colisão e grava sem exigir agendamento ativo. Assim, com tipo válido e janela livre, podem recolocar férias após o cancelamento. Isso não altera o saldo nem ressuscita o status do agendamento; cria divergência entre agendamento e ausência. (`app/ponto/forms.py:32`, `app/ponto/forms.py:65`, `app/ponto/services/ausencia.py:193`, `app/ponto/services/ausencia.py:377`, `app/ponto/services/ausencia.py:385`, `app/ponto/services/ausencia.py:418`)
-
-Existe ainda um contraexemplo da **mesma foto velha**: edição carrega a ausência; cancelamento a apaga; edição executa `save()` completo na foto apagada. A ausência de releitura/trava é visível; a reinserção pelo fallback UPDATE→INSERT do Django é **inferência, execução e fonte ORM na cópia [nao verificado]**. (`app/ponto/views.py:2761`, `app/ponto/services/ausencia.py:1188`, `app/ponto/services/ausencia.py:509`, `app/ponto/models.py:908`)
-
-3. **Mudança de `AgendamentoFerias.save` e `update_fields`**
-
-Não encontrei dependência de produção do espelho com `dias`, `obs`, `aviso_emitido` ou confirmação isolados. Os saves existentes são status; status+obs; datas+dias+aviso+status; ou confirmação. Os três primeiros continuam espelhando, e somente confirmação passa a não espelhar. (`app/ferias/services.py:383`, `app/ferias/services.py:413`, `app/ferias/services.py:446`, `app/ferias/services.py:547`, `app/ferias/services.py:563`, `app/ferias/services.py:567`, `app/ferias/services.py:597`, `app/ferias/models.py:443`)
-
-O comentário “depende SÓ” é incompleto: a criação do espelho também lê `agendado_por` para autoria. Não apareceu alteração isolada desse campo no código de produção aberto; ele é atribuído nas criações, que fazem save completo. (`app/ponto/services/ausencia.py:1205`, `app/ferias/services.py:283`, `app/ferias/services.py:323`, `app/ferias/services.py:495`)
-
-A nova seleção por `update_fields` fecha o caso de confirmação, mas não torna `save()` uma proteção universal contra foto velha: save completo e save que inclua status/datas continuam espelhando o objeto recebido. (`app/ferias/models.py:439`, `app/ferias/models.py:443`, `app/ponto/services/ausencia.py:1180`)
-
-4. **`alinhar_status_por_data`, retorno e placar**
-
-`novo` agora significa **destino pedido pela foto**; `alvo` significa **destino calculado das datas travadas**. É `alvo` que governa a escrita. (`app/ferias/services.py:581`, `app/ferias/services.py:594`, `app/ferias/services.py:596`)
-
-O caminho rápido quebra a promessa documental de devolver o status do banco: se a foto diz `agendado`, o banco já está cancelado e o pedido é `agendado`, retorna a própria foto sem consultar. Não ressuscita a linha, mas devolve status velho. O command não sofre desse ramo, pois já pula `novo == ag.status` antes de chamar o serviço. (`app/ferias/services.py:585`, `app/ferias/services.py:587`, `app/ferias/management/commands/sincronizar_status_ferias.py:39`)
-
-Após a trava, somente `ag.status` é atualizado; as datas do objeto retornado permanecem as da foto. Portanto, numa remarcação concorrente, o retorno pode conter status atual com datas antigas. (`app/ferias/services.py:594`, `app/ferias/services.py:598`)
-
-O placar conta pedidos da foto cujo status final coincide com `novo`; **não conta necessariamente escritas realizadas**. Uma remarcação pode gerar `recusado` porque o status correto passou a ser outro. Além disso, o serviço pode escrever `alvo != novo`, e o command contabilizar apenas `recusado`, sem contar esse destino escrito. A classificação é coerente como “pedido antigo não confirmado”, mas inadequada como contagem de alterações efetivamente aplicadas. (`app/ferias/services.py:595`, `app/ferias/services.py:597`, `app/ferias/management/commands/sincronizar_status_ferias.py:50`, `app/ferias/management/commands/sincronizar_status_ferias.py:54`)
-
-Os testes do cron descartam stdout; não verificam essa semântica do placar. (`app/ferias/test_cancelar_2x.py:185`)
-
-5. **Views, confirmação e campos com significados divergentes**
-
-Quando o escritor levanta `AgendamentoNaoConfirmavel`, **não há sucesso nem push posterior**: envio retorna antes de PWA/FCM; resposta retorna antes do push DP e dos retornos positivos. (`app/ferias/views.py:869`, `app/ferias/views.py:875`, `app/ferias/views.py:883`, `app/ferias/views.py:918`, `app/ferias/views.py:924`, `app/ferias/views.py:929`)
-
-A guarda da confirmação continua parcial: a elegibilidade completa está na foto da view; sob trava, o escritor recusa somente cancelado. Duas respostas carregadas como `aguardando` podem confirmar e depois recusar, deixando `confirmacao='recusado'` com `confirmado_em` preenchido. Um envio carregado antes também pode redefinir confirmação concorrente para `aguardando`. Aqui haverá sucesso/push porque o escritor **aceitou**, não porque a view ignorou uma recusa. (`app/ferias/views.py:860`, `app/ferias/views.py:909`, `app/ferias/services.py:544`, `app/ferias/services.py:546`, `app/ferias/services.py:560`, `app/ferias/services.py:563`, `app/ferias/services.py:566`)
-
-Cancelamento preserva a confirmação, enquanto a query de pendências não exclui cancelados. Logo, férias canceladas ainda podem aparecer no cartão “Férias para confirmar”; o POST subsequente será recusado. (`app/ferias/services.py:383`, `app/ferias/services.py:413`, `app/chamados/views.py:627`, `app/templates/ferias/_meu_atendimento_ferias.html:3`, `app/ferias/views.py:918`)
-
-6. **RED, checklist e quem mais sofre o efeito**
-
-Pela comparação estática com o diff do pai fornecido, há **cinco testes com mordida por valor na v3**, não 23: [nao verificado]
-
-| Distinguem v3 do pai pelo valor | Asserção |
-|---|---|
-| Cron remarcado entre foto e escrita | Espera `agendado`: `app/ferias/test_cancelar_2x.py:194`. |
-| Confirmar, recusar e enviar cancelado | Conferem ausência/status/confirmação antes de acessar a nova classe: `app/ferias/test_cancelar_2x.py:281`, `app/ferias/test_cancelar_2x.py:284`, `app/ferias/test_cancelar_2x.py:287`, `app/ferias/test_cancelar_2x.py:290`. |
-| Save parcial da foto velha | Confere ausência zero/status cancelado: `app/ferias/test_cancelar_2x.py:299`. |
-
-Os outros 18 são regressões ou controles que já encontram a proteção na v2: cinco DP; cinco admin; dois cron; três troca de janela; um HTTP de cancelamento; dois controles do espelho/confirmação. Não constituem RED contra esse pai. (`app/ferias/test_cancelar_2x.py:83`, `app/ferias/test_cancelar_2x.py:120`, `app/ferias/test_cancelar_2x.py:201`, `app/ferias/test_cancelar_2x.py:227`, `app/ferias/test_cancelar_2x.py:247`, `app/ferias/test_cancelar_2x.py:272`, `app/ferias/test_cancelar_2x.py:301`; execução contra o pai **[nao verificado]**)
-
-Outros limites dos selos:
-
-- “Sem escrita” verifica apenas saldo/status/obs, não ausência de UPDATE; as corridas são injeções sequenciais, não concorrência real de transações. (`app/ferias/test_cancelar_2x.py:59`, `app/ferias/test_cancelar_2x.py:101`, `app/ferias/test_cancelar_2x.py:178`)
-- O censo AST executado classificou os saves dos dois canceladores como `entidade=None`; o gate ignora esse balde. Esses pontos não estão protegidos pelo selo contra deslocamento futuro para fora da porta. (`app/ferias/services.py:383`, `app/ferias/services.py:413`, `app/core/censo_escritas.py:489`, `app/ponto/tests/test_chokepoint_ausencia_gate.py:33`)
-- Não há novo juiz de status: o escritor reutiliza `status_por_data`; a pergunta “está de férias hoje?” continua registrada em `em_gozo_hoje`. (`app/ferias/services.py:594`, `app/ferias/models.py:273`, `app/core/juizes.py:250`)
-- O relógio do cron foi passado pela borda, mas o módulo ainda lê relógio dentro de criação/remarcação e no juiz com argumento omitido; não cabe marcar a classe inteira como eliminada. (`app/ferias/management/commands/sincronizar_status_ferias.py:27`, `app/ferias/services.py:314`, `app/ferias/services.py:434`, `app/ferias/services.py:438`, `app/ferias/models.py:280`)
-- Cancelamento, remarcação e confirmação seguem agendamento→período→ausência; cron segue agendamento→ausência. Ciclo global de deadlock e comportamento real das travas: **[nao verificado]**. (`app/ferias/services.py:364`, `app/ferias/services.py:367`, `app/ferias/services.py:407`, `app/ferias/services.py:441`, `app/ferias/services.py:593`)
-
-**O gate atual e o cruzamento da folha não dependem de `status='em_gozo'`.** Ambos consultam datas e excluem cancelado. Já badges, botões, próximas férias, concluídas, disponibilidade e avisos de retorno ainda leem o status persistido. (`app/ponto/utils.py:89`, `app/folha/export.py:491`, `app/ferias/services.py:51`, `app/templates/ferias/_secao_colab.html:120`, `app/ferias/views.py:26`, `app/ferias/views.py:32`, `app/colaboradores/views.py:2843`, `app/ferias/management/commands/alertar_retornos.py:20`)
-
-O censo adicional de `Ausencia(tipo='ferias')`, incluindo entradas genéricas, é:
-
-| Escrita/leitura | Sítios abertos |
-|---|---|
-| Produção e remoção do espelho | `app/ferias/models.py:385`, `app/ponto/services/ausencia.py:1180`, `app/ponto/services/ausencia.py:1188`, `app/ponto/services/ausencia.py:1202`, `app/ponto/services/ausencia.py:1266`, `app/ponto/services/ausencia.py:1281`. |
-| Escritores genéricos, decisões, anexos e reabertura | `app/ponto/services/ausencia.py:418`, `app/ponto/services/ausencia.py:509`, `app/ponto/services/ausencia.py:835`, `app/ponto/services/ausencia.py:846`, `app/ponto/services/ausencia.py:927`, `app/ponto/services/ausencia.py:1071`, `app/ponto/services/ausencia.py:1130`, `app/ponto/services/ausencia.py:1141`, `app/ponto/services/ausencia.py:1296`. |
-| Autoridades de cobertura e precedência | `app/ponto/turnos.py:2529`, `app/ponto/turnos.py:2536`, `app/ponto/turnos.py:2733`, `app/ponto/precedencia.py:273`. |
-| Apuração, motor, calculador e documentos | `app/ponto/services/fechamento.py:639`, `app/ponto/services/fechamento.py:683`, `app/ponto/services/efeito_ausencia.py:53`, `app/ponto/services/credito_parcial.py:26`, `app/ponto/motor_calculo_v2.py:1092`, `app/ponto/calculador/alimentacao.py:532`, `app/ponto/calculador/regras.py:195`, `app/relatorios/pdf_espelho.py:333`, `app/ponto/services/esmeril_espelho.py:164`, `app/ponto/management/commands/diff_calculador.py:412`, `app/relatorios/management/commands/diff_extrato_parcial.py:67`. |
-| Cartório, estado do dia, espelho e calendário | `app/ponto/services/cartorio.py:355`, `app/ponto/services/cartorio.py:1179`, `app/ponto/services/cartorio.py:1306`, `app/ponto/services/espelho.py:582`, `app/ponto/services/espelho.py:588`, `app/ponto/status_dia.py:181`, `app/ponto/services/dia_do_colab.py:15`, `app/ponto/services/dia_decidido.py:550`, `app/colaboradores/services/calendario.py:485`, `app/colaboradores/services/calendario.py:533`. |
-| Telas, API, relatórios e inteligência | `app/ponto/views.py:1002`, `app/ponto/views.py:1680`, `app/ponto/views.py:2076`, `app/ponto/views.py:2179`, `app/api/views.py:1066`, `app/api/views.py:1575`, `app/api/views.py:1861`, `app/api/views.py:3092`, `app/colaboradores/services/detalhe.py:104`, `app/ponto/views_tipos_ausencia.py:24`, `app/relatorios/views.py:197`, `app/inteligencia/resumo.py:39`, `app/inteligencia/views.py:71`, `app/inteligencia/views.py:84`, `app/inteligencia/views.py:239`, `app/inteligencia/views.py:538`. |
-| Cobrança, grade e disponibilidade | `app/ponto/services/faltas_de_hoje.py:59`, `app/ponto/services/deslogados.py:163`, `app/ponto/services/abriu_nao_bateu.py:123`, `app/escala/utils.py:1209`, `app/escala/servico_jornada.py:342`, `app/escala/services/furos_diarios.py:222`, `app/escala/services/cadastro_realidade.py:589`, `app/escala/services/semana_do_posto.py:177`, `app/api/views_mensageria.py:1243`. |
-| Chamados, disputas e aliases | `app/chamados/juizes.py:448`, `app/chamados/juizes.py:1475`, `app/chamados/juizes.py:2021`, `app/chamados/services/historico.py:129`, `app/chamados/services/materializacao.py:78`, `app/chamados/services/materializacao.py:645`, `app/chamados/services/disputa_emissao.py:763`, `app/chamados/services/pergunta_no_app.py:90`, `app/chamados/reconciliador.py:784`, `app/chamados/services/adesao.py:68`, `app/chamados/services/silencio_ausencia.py:65`, `app/chamados/services/vigia_fio.py:308`, `app/chamados/services/feriado_reavaliar.py:33`. |
-| Comandos de cobertura/reconciliação | `app/ponto/management/commands/reconciliar_grade.py:401`, `app/ponto/management/commands/processar_alertas_turno.py:97`, `app/ponto/management/commands/processar_alertas_avancados.py:116`, `app/ponto/management/commands/supra_juiz.py:216`, `app/ponto/management/commands/detectar_ausencias.py:815`, `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:108`, `app/ponto/management/commands/emitir_furo_retroativo.py:99`, `app/ponto/management/commands/backfill_b5_insumos.py:72`, `app/ponto/management/commands/vigia_b5_ausencia.py:68`, `app/ponto/management/commands
-
-[truncado em 20000 de 21947 caracteres]
-
-_2637 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2638 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
