@@ -1,5 +1,5 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: impacto_exp.sh | pid=2494427
+ESPERANDO: impacto_dia.sh | pid=3094861
 DESENHO FIO-E0-V4-E2: lei=celula soberana pergunta=quem diz se o dia do turno e devido (fora_vinculo, isento_ponto) para tarefa_do_dia, o leitor unico grade_da_celula ou a ata crua lida por _tarefa_pura app/escala/services/leitor_celula.py:345
 PAREI: fio-e0-v4-e1-e2-em-desenho (E1 2 perguntas 0220 + E2 B3 0521 e 3 perguntas 0514; aval 06/11 22:1x nada novo antes de E1/E2) | espera Ronald
 IMPACTO V2-I2 EXPORTADAS 0534 (INCOMPLETO 7 do opus): bin/sombra.sh --rodar logs/sombra/v2i2_impacto_exportadas.py com SOMBRA_ARVORE a3e6f8bd (antes do pouso) x ffbda473 (pouso), comp 09 e 10 frota inteira, recalcular_fechamento_mes somente_leitura (a chamada do DEVIDO da porta pauta_pago_x_devido_exportada); a lista que o item 2 move vira o --colabs da porta (Pauta DP pago x devido, gravado intacto L-092).
