@@ -1,5 +1,5 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: codex_pergunta.sh | pid=1468623
+ESPERANDO: codex_pergunta.sh | pid=1925943
 ESPERA 0848 (GREEN recorte E1 v5 -> RED HEAD na trava, logs/fio_e0_v4/green_e1_v5_novos.log; Codex col270 pid 1468623, wt-fioe1-225336; E2 B3 construindo em wt-fioe2-025758) -- 0833: teto 2 construtores ocupado pela FIO-E0 v4 (aval), proximo da fila 1 (MOTOR-LE-O-TURNO-INSTRUMENTO, medido 0832) entra na 1a vaga que liberar
 RESPONDIDA por aval 08:38 (logs/v2bugs/i2/aval_apply_0838.txt) -- era: PAREI v2i2-apply10-e-apply11 (aval 08:09 truncado). APPLY 10 (9 colabs) e APPLY 11 (6) APLICADOS 08:42/08:43, secao 07/11 08:4x abaixo; MANHA-0511 segue sem vaga (2 vagas = FIO-E0 v4).
 DESENHO FIO-E0-V4-E2: lei=celula soberana pergunta=quem diz se o dia do turno e devido (fora_vinculo, isento_ponto) para tarefa_do_dia, o leitor unico grade_da_celula ou a ata crua lida por _tarefa_pura app/escala/services/leitor_celula.py:345
@@ -988,7 +988,7 @@ LEI-AKITA: origem=ponto/motor_calculo_v2.py (item 2, ffbda473, ja no ar), testem
 - PROVA DE FROTA 08:45 (logs/v2bugs/i2/prova_frota_pos_apply.out): 10/2026 FM=624, FM != soma(DP motor) em horas_extras_100_noturna = 0; 11/2026 FM=579, = 0; col270 intocado (0.00/10500). Desvio: leitura inline do Code (sem motor, so ORM), deveria ter ido ao envelope.
 - ESMERIL conhecido: col865 12/10 oraculo 5.16 x motor 3.10 = ESMERIL-ORACULO-NOTURNA, decidido 08:38 para MOTOR-LE-O-TURNO fatia 2 (uma entrada, pontas do juiz do par).
 - Reversao: restaurar os campos do snapshot 0836 dos 9/6 colabs (FM + DP do colab-comp).
-- INCOMPLETO: col270 (dono do previsto).
+- INCOMPLETO: col270 (dono do previsto). Volta 1 Codex (q1.r): candidato 27/09 (DP gravado 0, celula hoje 15-23 com 420), celulas do periodo regeneradas 23/10 13:04 por regenerar_celulas_vinculo (ponto/portas/celula.py:271); dono NAO fechado. Volta 2 (q2.r): so 27/09 difere (+420), DP lavrado 29/10 10:26 com 0 DEPOIS da regeneracao, celula rejulgada 02/11 07:25; grade le ata.minutos_previstos primeiro (leitor_celula.py:380). Volta 3 (ata de 27/09 + auditoria) em curso, q3.r.
 
 ## 06/11 20:0x -- H12H06-B comp 11 APLICADA (LEI-H12H06B-A, DINHEIRO 1, competencia NAO exportada)
 LEI-AKITA: origem=ponto/services/ausencia.py::editar_ausencia_registro (minutos=None, falta deriva pela grade), testemunha=Ausencia.minutos lida pelo fechamento, RED=ponto/tests/test_h12h06b_rederivar_minutos.py, quem-mais-le=Codex q_pre.r (arvore lateral inteira), juizes novos=0, padrao=escritor unico
