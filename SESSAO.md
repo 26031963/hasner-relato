@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 13:43:17.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (124.7 MB). Acoes na janela: **488**.
+**Medido em 07/11/2026 13:48:47.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (124.7 MB). Acoes na janela: **486**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -496,5 +496,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:49:06 | Bash |  | `cd /home/ronald/saas-hasner && tail -2 app/docs/PROMPTS.md \| cut -c1-200; sed -n 1821p app/docs/BACKLOG.md \| cut -c1-400; sed -n 1807p app/docs/BACKLOG.md \| wc -c` |
 | 01:48:58 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' import sys; sys.path.insert(0,'bin'); import disjuntor as d ln="DESENHO V2-BUGS-I2: RESPONDIDA por aval Ronald 07/11 0140 opcao (a), logs/v2bugs/i2/aval_b3.txt; volta 6 so item 2; N-PRORROG, B-SPLIT, partido e o caso comum saem; DIFF par_v6 com dono por colab e reversao antes do opus; HE fora de feriado = PAREI lei=juiz unico pergunta=a jornada do m ...` |
 | 01:48:50 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' import sys; sys.path.insert(0,'bin'); import disjuntor as d print(d.obras_da_linha('DESENHO V2-BUGS-I2')) for s in ['app/ponto/motor_calculo_v2.py:3012','ponto/motor_calculo_v2.py:3012']: print(s, d._sitios_validos('x '+s,'/home/ronald/saas-hasner')) print(d._sitios_validos(' aval Ronald 07/11 01:4x opcao (a), logs/v2bugs/i2/aval_b3.txt','/home/rona ...` |
-| 01:48:46 | Bash |  | `cd /home/ronald/saas-hasner && umask 077 && cat > logs/v2bugs/i2/aval_b3.txt <<'EOF' aval Ronald 07/11 ~01:4x (colado no chat): V2-BUGS-I2 B3 -- rearma, opcao (a) (substitui qualquer versao anterior desta liberacao): volta 6 SO com o item 2 do aval V2-BUGS (he100_noturna = noturnas/fator, feriado); N-PRORROG (motor :446-458), B-SPLIT-EFETIVO (:1049-1053) e o partido que dobra pelo dia do juiz x FT ...` |
-| 01:48:33 | Bash |  | `cd /home/ronald/saas-hasner && sed -n 625,660p bin/disjuntor.py; grep -n "PRORROGACAO-NOTURNA-UMA-JORNADA\\|^\| V2-I2-FILA\\|V2-BUGS" app/docs/BACKLOG.md \| cut -c1-160 \| head` |
