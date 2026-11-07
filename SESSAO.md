@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 13:01:20.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (124.7 MB). Acoes na janela: **505**.
+**Medido em 07/11/2026 13:06:22.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (124.7 MB). Acoes na janela: **504**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -514,4 +514,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:08:28 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n -i "sombra" app/docs/CRONS.md \| head -8` |
 | 01:08:21 | Bash |  | `cd /home/ronald/saas-hasner; tail -3 logs/v2bugs/i2/par_v5.log \| cut -c1-200; ps -eo pid,args \| /bin/grep -E "[s]imular_folha" \| cut -c1-100 \| head -3` |
 | 01:08:15 | Bash |  | `cd /home/ronald/saas-hasner; cd /home/ronald/wt-v2i2-212416 && git log --oneline -1 && git status --porcelain \| head -3; cd /home/ronald/saas-hasner setsid bash -c "bin/suite.sh --dir /home/ronald/wt-v2i2-212416 --espera 5400 > logs/v2bugs/i2/suite_v5.log 2>&1; echo rc=\$? >> logs/v2bugs/i2/suite_v5.log" </dev/null >/dev/null 2>&1 & B=/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-44 ...` |
-| 01:03:25 | Bash |  | `cd /home/ronald/saas-hasner; ps -p 1343804 >/dev/null && echo vivo; bin/trava_teste.sh --quem; ps -eo pid,args \| /bin/grep -E "[c]odex_pergunta\|[t]rava_teste" \| cut -c1-90; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
