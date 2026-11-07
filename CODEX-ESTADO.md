@@ -1,7 +1,49 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 12:41** · publicado em **07/11/2026 12:45** (UTC-3)
+> Ultima resposta processada: **07/11/2026 12:56** · publicado em **07/11/2026 12:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 12:56 · sessao e4e5706c2a05 · - · - · origem=Ronald (tmux)
+
+- **Paridade no presente: procede para o predicado informado de 57acffd2.** Quando `agora >= todos os atos`, `_retratada_depois` fica vazio; a seleção atual se reduz a “via fora do fato exclui; última decisão retratação exclui”. (`app/chamados/services/tarefa_do_dia.py:211`, `app/chamados/services/tarefa_do_dia.py:215`, `app/chamados/services/tarefa_do_dia.py:321`)
+
+- **Regra escrita versus ressuscitada: permanece conflito, apesar da paridade.** A lei na cópia diz explicitamente que a retratada morre por identidade e, se o fato voltar, nasce pergunta nova. A tarefa admite a mesma pergunta com via vazia e sequência `[retratacao, resposta]`, atribuindo `aguarda_validacao`. O teste novo exige justamente esse comportamento. (`app/chamados/models.py:1979`, `app/chamados/models.py:2320`, `app/chamados/services/tarefa_do_dia.py:211`, `app/chamados/services/tarefa_do_dia.py:215`, `app/chamados/services/tarefa_do_dia.py:129`, `app/chamados/tests/test_e2_tarefa_do_dia.py:766`)
+
+- **Não é só construção impossível pela API:** a ressurreição busca carimbadas sem texto, limpa via na cópia antes de consultar C6 e depois limpa via real; não remove a retratação imutável. C6 aceita célula acusando depois desse descarimbo. Esse caminho não exclui `motivo_retratado`; o cartório exclui apenas o caso em que todas são duplicatas. Uma resposta posterior pode entrar na sequência pela porta normal. Ocorrência produtiva **[nao verificado]**. (`app/chamados/models.py:1440`, `app/chamados/models.py:1461`, `app/chamados/models.py:1515`, `app/chamados/models.py:3393`, `app/chamados/juizes.py:1183`, `app/ponto/services/cartorio.py:1610`, `app/ponto/services/cartorio.py:1633`, `app/chamados/services/disputa_emissao.py:1369`)
+
+- **Há testemunha de regra oposta, já existente:** `test_RED_motivo_retratado_que_volta_nasce_pergunta_nova` exige PK nova e preservação da via retratada na antiga. Embora esse caso seja motivo sem data e não o marco da tarefa, confirma a intenção documental sobre identidade; não prova que a ressurreição de marco obedeça à regra. (`app/chamados/tests/test_e1_volta2.py:244`, `app/chamados/tests/test_e1_volta2.py:260`, `app/chamados/tests/test_e1_volta2.py:261`)
+
+| Via/sequência no horizonte | Seleção atual | Procedência |
+|---|---|---|
+| `motivo_retratado`, única retratação futura | Via cede; vive se última decisão até `agora` não for retratação | Corte temporal implementado. (`app/chamados/services/tarefa_do_dia.py:211`, `app/chamados/services/tarefa_do_dia.py:323`) |
+| `motivo_retratado`, retratação anterior, sem retratação futura | Excluída pela via, mesmo com resposta posterior | Compatível com via que vence resposta. (`app/chamados/models.py:2327`, `app/chamados/services/tarefa_do_dia.py:211`) |
+| `motivo_retratado`, nenhuma retratação | Excluída pela via | Porta genérica aceita essa combinação, sem exigir decisão. (`app/chamados/models.py:2736`, `app/chamados/models.py:2746`, `app/chamados/services/tarefa_do_dia.py:211`) |
+| Via vazia, retratação antiga + resposta anterior a `agora` | Viva, mesma PK | Paridade restaurada; conflito com “nasce pergunta nova” permanece. (`app/chamados/services/tarefa_do_dia.py:215`, `app/chamados/models.py:2321`) |
+| `motivo_retratado`, retratação antiga + resposta até `agora` + nova retratação futura | Vive: qualquer retratação futura libera a via, e a última decisão aplicável é resposta | O conjunto não identifica qual retratação originou a via atual; resta a mesma questão de reutilização de identidade. (`app/chamados/services/tarefa_do_dia.py:323`, `app/chamados/services/tarefa_do_dia.py:211`, `app/chamados/services/tarefa_do_dia.py:215`) |
+
+**Classificação sugerida:** conflito preexistente entre porta de ressurreição e regra de identidade, que o delta volta a aceitar na seleção; não classificar a equivalência com 57 como prova de conformidade à lei. (`app/chamados/models.py:1515`, `app/chamados/models.py:2321`, `app/chamados/services/tarefa_do_dia.py:215`)
+
+## 07/11 12:56 · sessao f420c0cfdb6b · - · - · origem=Ronald (tmux)
+
+**Classe: vazamento de ato futuro — não achei no `_dec` nem nos seus leitores examinados.** A retirada do filtro SQL amplia o que a query transporta, mas o append continua sob `d.ato_em <= agora`; o ramo futuro só guarda o ID quando o ato é `RETRATACAO`. A ordem continua `(pergunta_id, ato_em, pk)`. (`app/chamados/services/tarefa_do_dia.py:319`, `app/chamados/services/tarefa_do_dia.py:321`, `app/chamados/services/tarefa_do_dia.py:323`)
+
+| Objeto | Escritor | Leitor |
+|---|---|---|
+| `self._retratada_depois` | Inicialização vazia e `add(pergunta_id)` exclusivamente para retratação futura. (`app/chamados/services/tarefa_do_dia.py:314`, `app/chamados/services/tarefa_do_dia.py:323`) | `.tarefa` passa para `_tarefa_pura`; esta usa apenas pertinência do ID para a exceção da via `motivo_retratado`. (`app/chamados/services/tarefa_do_dia.py:380`, `app/chamados/services/tarefa_do_dia.py:211`) |
+| `self._dec` | Inicialização vazia e append exclusivamente no ramo `<= agora`. (`app/chamados/services/tarefa_do_dia.py:313`, `app/chamados/services/tarefa_do_dia.py:321`) | `.tarefa` passa o dict; seleção lê a última decisão e `_pela_decisao` recebe a lista dessa pergunta. (`app/chamados/services/tarefa_do_dia.py:379`, `app/chamados/services/tarefa_do_dia.py:214`, `app/chamados/services/tarefa_do_dia.py:267`) |
+
+**Classe: equivalência do corte temporal — sustentada pelo código para instantes comparáveis válidos; execução SQL/Django [nao verificado].** `ato_em` é `DateTimeField` sem `null=True`; tanto `ato_em__lte=agora` quanto `d.ato_em <= agora` incluem igualdade, e filtrar a sequência já ordenada conserva a ordem relativa retida. (`app/chamados/models.py:3358`, `app/chamados/services/tarefa_do_dia.py:320`, `app/chamados/services/tarefa_do_dia.py:321`)
+
+| Leitor | Conclusão examinada |
+|---|---|
+| `absorcao_ausencia` | O `select_related` permanece; `_pela_decisao` lê o status somente da última decisão retida. O status é **atual**, conforme limite declarado, e não fotografia histórica da ausência. Nenhum ato futuro passa por esse ramo via `_dec`. (`app/chamados/services/tarefa_do_dia.py:320`, `app/chamados/services/tarefa_do_dia.py:125`, `app/chamados/services/tarefa_do_dia.py:145`, `app/chamados/services/tarefa_do_dia.py:290`) |
+| Efeitos | Não deriva de `_dec`: vem de query própria de Batidas apuráveis com `criado_em__lte=agora`. A retratação atual da Batida continua excluindo-a, inclusive quando posterior a `agora`, limite já declarado. (`app/chamados/services/tarefa_do_dia.py:340`, `app/ponto/turnos.py:2876`, `app/chamados/services/tarefa_do_dia.py:338`) |
+| Passivo | Não deriva de `_dec`: a autoridade consulta correspondência exata `(pergunta_id, ato, ato_em)` e a carga corta as linhas devolvidas por `<= agora`. Uma decisão futura não pode satisfazer correspondência com um carimbo anterior porque o instante deve ser idêntico. (`app/chamados/models.py:3412`, `app/chamados/models.py:3416`, `app/chamados/models.py:3420`, `app/chamados/services/tarefa_do_dia.py:328`) |
+| Lavra | Não deriva de `_dec`: usa `marcos_do_lote(ate=agora)` e `esta_stale(..., agora)`. `julgado_em > agora` é recusado antes dos demais motivos. (`app/chamados/services/tarefa_do_dia.py:332`, `app/chamados/services/tarefa_do_dia.py:333`, `app/chamados/veredito_lavrado.py:196`) |
+
+**Classe: queries por N — não achei introdução de N+1 nesse delta; volume de linhas transportadas aumenta.** A decisão segue em uma query de lote com ausência relacionada; o passivo faz outra query de lote; o acesso à âncora usa IDs e a disputa já relacionada. Remover `ato_em__lte` carrega também todas as decisões futuras das perguntas selecionadas, sem acrescentar uma query por pergunta. (`app/chamados/services/tarefa_do_dia.py:309`, `app/chamados/services/tarefa_do_dia.py:319`, `app/chamados/models.py:3412`, `app/chamados/services/fio.py:116`)
+
+O teste de constância compara uma carga com dois colaboradores/três dias contra um colaborador/um dia, incluindo decisões até validação; não inclui absorções nessa montagem. Seu resultado executado e contagem efetiva: **[nao verificado]**. (`app/chamados/tests/test_e2_tarefa_do_dia.py:912`, `app/chamados/tests/test_e2_tarefa_do_dia.py:920`, `app/chamados/tests/test_e2_tarefa_do_dia.py:937`)
 
 ## 07/11 12:41 · sessao 216139486a7d · FIO-E0-V4-E2 · verificador · origem=Code
 
@@ -706,78 +748,4 @@ Resultado de execução desses testes: **[nao verificado]**. [nao verificado]
 
 [truncado em 20000 de 23734 caracteres]
 
-## 07/11 10:35 · sessao 308a91c03dbd · - · - · origem=Ronald (tmux)
-
-A/C — **PROCEDENTE: os leitores ainda não têm uma identidade única compatível com o índice.**
-
-- **`instancia_marco` tem dois alcances.** O índice aceita a instância persistida (`app/chamados/models.py:3090`); o escritor preserva instância explícita e só deriva quando vazia (`app/chamados/models.py:3054`). Já `linhas_dos_fatos` sempre impõe a posição fixa derivada do motivo, sem receber a instância da pergunta (`app/chamados/models.py:2508`; `app/chamados/services/declaracao_texto.py:42`). Portanto `fato_livre_para` e `_colisao_ao_datar` podem consultar `int_ida` ao tratar uma pergunta `I2` (`app/chamados/models.py:2525`; `app/chamados/services/fio.py:890`), e `migrar_resolvedoras_vivas` pode retratar fatos de instâncias diferentes (`app/chamados/services/fio.py:1107`; `app/chamados/services/fio.py:1122`).
-- **BATIDA ainda sofre dedup por disputa+motivo.** `gerar_perguntas_disputa` descarta qualquer motivo não datado se já existe na disputa, sem episódio nem `conversa=False` (`app/chamados/services/disputa_emissao.py:321`). O conjunto datado contém os motivos de destino e os intervalos (`app/chamados/services/disputa_emissao.py:26`). A emissão repetida reutiliza a disputa aberta e volta a chamar esse gerador (`app/chamados/services/disputa_emissao.py:515`; `app/chamados/services/disputa_emissao.py:666`), portanto uma segunda batida com `gps_ausente` na mesma disputa é calada antes da porta. O teste alterado fecha a disputa entre as batidas (`app/chamados/tests/test_a2_data_evento_batida.py:33`; `app/chamados/tests/test_a2_data_evento_batida.py:42`).
-- **Fallback BATIDA por dia permanece deliberadamente diferente do índice.** Com episódio informado, `do_fato` une o episódio às linhas antigas sem origem daquele dia; sem episódio, usa exclusivamente a chave por dia (`app/chamados/models.py:2482`; `app/chamados/models.py:2488`). Isso permite que uma linha antiga sem episódio retenha episódios distintos do mesmo dia; o teste o exige explicitamente (`app/chamados/tests/test_e1_v5_indice.py:111`).
-- **Outros gatilhos/leitores de identidade divergente:**
-  - Ramos datados de `gerar_perguntas_disputa`: disputa+motivo+dia, sem conversa/instância (`app/chamados/services/disputa_emissao.py:393`; `app/chamados/services/disputa_emissao.py:410`).
-  - `_derivar_chamado_destino`: chamado+motivo+carimbo nulo; o comentário chama isso de “MESMO FATO”, mas não confere instância/conversa (`app/chamados/services/disputa_emissao.py:214`; `app/chamados/services/disputa_emissao.py:226`).
-  - `_ja_perguntou`: disputa+motivo+dia sem excluir vias/conversa/instância antes do `fio_vivo`; chamado pelo agrupador e pelo cron (`app/chamados/services/disputa_emissao.py:1297`; `app/chamados/services/disputa_emissao.py:813`; `app/chamados/management/commands/disparar_perguntas_competencia.py:173`).
-  - `_candidata_reusavel`: disputa+motivo+dia sem vias/conversa/instância (`app/chamados/services/declaracao_texto.py:236`).
-  - `fabrica_da_celula.motivos_a_perguntar`: colab+dia e conjunto de motivos, excluindo só duplicata; retratada/conversa podem calar a volta (`app/chamados/services/fabrica_da_celula.py:118`; `app/chamados/services/fabrica_da_celula.py:123`; `app/chamados/services/fabrica_da_celula.py:126`).
-  - Cron `disparar_perguntas_competencia`: colab+motivo+dia sem exclusões; classifica como fato já existente e abandona (`app/chamados/management/commands/disparar_perguntas_competencia.py:211`).
-  - Diagnóstico `_marco_ja_perguntado`: colab+dia+motivos sem vias/conversa/instância; qualquer morta satisfaz “marco encerrado” (`app/chamados/services/pergunta_no_app.py:109`).
-  - `insumos_em_regularizacao` agrupa por motivo+dia, após restringir à instância fixa de `linhas_dos_fatos`; também não representa I1/I2 (`app/chamados/services/declaracao_texto.py:547`; `app/chamados/services/declaracao_texto.py:550`).
-
-Inventário A dos quatro campos delegados:
-
-| Campo | Escritores de produção/históricos | Leitores |
-|---|---|---|
-| `instancia_marco` | `_chave_de_identidade`, preservando explícito (`app/chamados/models.py:3054`); backfill histórico (`app/chamados/migrations/0051_decisao_pergunta.py:27`) | `linhas_dos_fatos` (`app/chamados/models.py:2508`), constraint (`app/chamados/models.py:3090`), chave/grupos (`app/chamados/services/fio.py:1016`; `app/chamados/services/fio.py:1047`), guarda/índice histórico (`app/chamados/migrations/0053_pergunta_unica_por_familia.py:33`; `app/chamados/migrations/0053_pergunta_unica_por_familia.py:53`) |
-| `batida_origem` **da PD** | `_nascer` (`app/chamados/models.py:2591`), `_chave_de_identidade` (`app/chamados/models.py:3057`), ambos pelo derivador de contexto que valida colab (`app/chamados/models.py:3069`); migração cria NULL (`app/chamados/migrations/0052_pergunta_batida_origem.py:19`) | `do_fato` (`app/chamados/models.py:2483`), `fato_livre_para` (`app/chamados/models.py:2525`), constraint (`app/chamados/models.py:3095`), `_colisao_ao_datar` (`app/chamados/services/fio.py:890`), chave/null/grupos (`app/chamados/services/fio.py:1017`; `app/chamados/services/fio.py:1021`; `app/chamados/services/fio.py:1042`), migrar (`app/chamados/services/fio.py:1108`), migração0053 (`app/chamados/migrations/0053_pergunta_unica_por_familia.py:35`) |
-| `conversa` | `abrir=False` (`app/chamados/models.py:2541`), `abrir_conversa=True` (`app/chamados/models.py:2552`), persistência `_nascer` (`app/chamados/models.py:2642`); acervo defaultFalse (`app/chamados/migrations/0051_decisao_pergunta.py:99`) | `do_fato`/lote (`app/chamados/models.py:2484`; `app/chamados/models.py:2509`), `fato_livre_para` (`app/chamados/models.py:2523`), nascimento/trava (`app/chamados/models.py:2566`; `app/chamados/models.py:2586`), derivador de identidade (`app/chamados/models.py:3054`), constraints (`app/chamados/models.py:3091`; `app/chamados/models.py:3096`), fio `_no_fato`/migrar (`app/chamados/services/fio.py:1029`; `app/chamados/services/fio.py:1104`), migração0053 (`app/chamados/migrations/0053_pergunta_unica_por_familia.py:26`) |
-| `colaborador` **denormalizado da PD** | `_chave_de_identidade` deriva/valida contra disputa só na inserção (`app/chamados/models.py:3038`; `app/chamados/models.py:3048`); migração0051 (`app/chamados/migrations/0051_decisao_pergunta.py:25`) | lote/porta (`app/chamados/models.py:2509`; `app/chamados/models.py:2521`), reapontar/colisão/rechavear/migrar (`app/chamados/services/fio.py:856`; `app/chamados/services/fio.py:889`; `app/chamados/services/fio.py:936`; `app/chamados/services/fio.py:1107`), grupos (`app/chamados/services/fio.py:1044`), backfill (`app/chamados/management/commands/backfill_decisoes_pergunta.py:62`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:100`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:124`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:139`), desfazer (`app/chamados/services/relavra_via.py:221`) |
-
-`_achar_batida_origem` é função legada que recebe chamado, não leitora da nova coluna PD (`app/chamados/services/materializacao.py:109`). Na cópia não há outros escritores de produção encontrados desses quatro campos além dos acima; exaustividade de acessos dinâmicos [nao verificado].
-
-F — **PROCEDENTE para `--ate`; `--colab` não fraciona um grupo íntegro por origem.**
-
-- A chave BATIDA é batida+motivo (`app/chamados/services/fio.py:1017`), mas o código filtra linhas por data **antes** de formar o grupo e continua usando a base recortada para os PKs (`app/chamados/services/fio.py:1045`; `app/chamados/services/fio.py:1049`). Contraexemplo estático: três irmãs do mesmo episódio, duas antes do corte e a terceira respondida depois; a canônica global respondida some do cálculo, e uma das anteriores é retratada pela canônica local (`app/chamados/management/commands/dedup_perguntas_fato.py:66`; `app/chamados/management/commands/dedup_perguntas_fato.py:68`; `app/chamados/management/commands/dedup_perguntas_fato.py:83`).
-- `--colab` é aplicado da mesma forma (`app/chamados/services/fio.py:1043`), porém uma BATIDA íntegra pertence a uma pessoa, e o derivador valida a origem contra o colaborador (`app/chamados/models.py:3076`). Há criação explícita por `**campos` preservando origem informada sem validação correspondente, portanto integridade universal dessa relação [nao verificado] (`app/chamados/models.py:2591`; `app/chamados/models.py:3057`).
-- `dedup_perguntas_fato --apply` não consulta competência exportada nem emite PAREI: decide e grava diretamente (`app/chamados/management/commands/dedup_perguntas_fato.py:48`; `app/chamados/management/commands/dedup_perguntas_fato.py:81`). Também não toma trava do colaborador antes de retratar (`app/chamados/management/commands/dedup_perguntas_fato.py:81`; `app/chamados/management/commands/dedup_perguntas_fato.py:83`).
-- O backfill usa outra proteção: verifica qualquer membro exportado (`app/chamados/management/commands/backfill_decisoes_pergunta.py:209`) e recusa antes de aplicar (`app/chamados/management/commands/backfill_decisoes_pergunta.py:234`); essa proteção não envolve o command dedup (`app/chamados/management/commands/dedup_perguntas_fato.py:35`).
-
-E — limites dos testes da chave: [nao verificado]
-
-- Os testes dedup exercitam escrita real e conferem vias persistidas; o MORDE remove o índice para montar duas irmãs (`app/chamados/tests/test_e1_v5_chave_familia.py:73`). Não são vazios para distinguir episódio e dia (`app/chamados/tests/test_e1_v5_chave_familia.py:67`).
-- O RED de migração dos episódios distintos só verifica ausência de duplicata; uma migração inteiramente recusada também satisfaz essas asserções, pois não verifica destino ou `out['migradas']` (`app/chamados/tests/test_e1_v5_chave_familia.py:82`).
-- O RED de recusa usa mock da porta e cobre apenas a reação do chamador ao retorno False (`app/chamados/tests/test_e1_v5_chave_familia.py:108`).
-- A prova I1/I2 testa inserções cruas, sem exercitar `abrir`, `fato_livre_para`, reapontar ou migrar, onde a instância é perdida (`app/chamados/tests/test_e1_v5_indice.py:121`).
-- Execução ou resultado dos testes [nao verificado]. [nao verificado]
-
-## 07/11 10:34 · sessao edabd9a5f904 · - · - · origem=Ronald (tmux)
-
-B — **NAO PROCEDE no caminho sequencial corrigido de reapontar**: `resolvedora_valida` e `_costura_nao_mata_o_fio` aceitam antes da retratação; recusa retorna sem retratar. A retratação e o save da substituta pertencem ao mesmo `atomic`. (`app/chamados/services/fio.py:844`, `:857`, `:860`, `:867`, `:871`.)
-
-B — **PROCEDENTE quanto a caminho concorrente por canônica desatualizada**, inferência estática; ocorrência em produção [nao verificado]:
-
-- `migrar_resolvedoras_vivas` captura `vivas_destino`, consulta o fato e escolhe canônica sem travar o conjunto; quando a canônica já está no destino, pula o reapontamento e retrata a fonte diretamente. (`app/chamados/services/fio.py:1095`, `:1107`, `:1112`, `:1113`, `:1122`.)
-- O chamador real `reabrir` também não abre `atomic` ao redor desse ramo. (`app/chamados/models.py:1338`, `:1387`, `:1390`.)
-- Entre a consulta de identidade e a retratação, a canônica pode sair por `remover_motivo`; essa porta retrata perguntas antes de qualquer trava de colaborador. A fonte depois pode virar duplicata de uma linha que já saiu do fato. (`app/chamados/models.py:2000`, `:2001`, `:2008`; `app/chamados/services/fio.py:1122`.)
-- O backfill também relê por PK, mas não reaplica o predicado do fato: se a canônica do censo já saiu do fato, ainda pode ser escolhida. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:127`, `:128`, `:131`.)
-- O dedup lê grupo e escolhe canônica antes do `atomic`, sem reler dentro. (`app/chamados/management/commands/dedup_perguntas_fato.py:66`, `:68`, `:81`, `:83`.)
-- `retratar_duplicata` não verifica a existência atual da canônica no fato nem igualdade das chaves. (`app/chamados/services/fio.py:989`, `:993`, `:1002`.)
-
-Chamadores runtime de `retratar_duplicata`: `reapontar_resolvedora` (`app/chamados/services/fio.py:868`); `migrar_resolvedoras_vivas` (`app/chamados/services/fio.py:1122`); `dedup_perguntas_fato.handle` (`app/chamados/management/commands/dedup_perguntas_fato.py:83`); `backfill_decisoes_pergunta.aplicar` (`app/chamados/management/commands/backfill_decisoes_pergunta.py:131`). Chamadas diretas em testes: `app/chamados/tests/test_e1_v5_portas_backfill.py:159`; `app/chamados/tests/test_porta_reapontamento_pergunta.py:390`, `:398`.
-
-E — **NAO PROCEDE acusação de vazio nos casos concretos principais**:
-
-- Dedup MORDE remove o índice, cria duplicatas e verifica `via_resolucao` recarregada do banco. (`app/chamados/tests/test_e1_v5_chave_familia.py:73`, `:75`, `:77`; leitura em `:54`.)
-- ColisaoAoDatar MORDE monta destino de outro dia real, chama a porta sem mock e exige recusa, irmã preservada e uma linha no fato. Morde a antiga retratação anterior ao E4-c. (`app/chamados/tests/test_e1_v5_portas_backfill.py:133`, `:139`, `:142`, `:146`, `:148`.)
-- FatoRetratadoVolta DATADO executa emissor, remoção e emissor reais, exigindo nova PK. Cobre o ramo de intervalo sem destino; não cobre a outra consulta de dedup dos motivos que precisam de destino. (`app/chamados/tests/test_e1_volta2.py:264`, `:271`, `:274`, `:282`, `:284`; `app/chamados/services/disputa_emissao.py:393`, `:410`.)
-
-E — **PROCEDENTE como limitação de cobertura**:
-
-- RED de migração com episódios distintos só exige ausência de duplicatas; não exige migração efetiva nem destino final. Uma implementação sem ação satisfaria essas asserções. (`app/chamados/tests/test_e1_v5_chave_familia.py:82`, `:87`, `:88`, `:89`.)
-- MORDE da migração comprova a irmã retratada, mas não confere a canônica no destino. (`app/chamados/tests/test_e1_v5_chave_familia.py:91`, `:97`, `:98`.)
-- RED de recusa mocka integralmente `reapontar_resolvedora`; prova o fluxo de retorno do migrador, não a recusa real ou sua atomicidade. O teste concreto ColisaoAoDatar fornece evidência complementar dessa classe. (`app/chamados/tests/test_e1_v5_chave_familia.py:108`, `:110`, `:111`; `app/chamados/tests/test_e1_v5_portas_backfill.py:142`.)
-
-C — leitores adicionais encontrados e encaminhados ao explorador de identidade: fábrica usa `colab+dia→motivos` e só exclui duplicata (`app/chamados/services/fabrica_da_celula.py:118`, `:119`, `:123`, `:126`); command de disparo usa `colab+motivo+dia` sem vias/conversa/instância (`app/chamados/management/commands/disparar_perguntas_competencia.py:211`); candidata reusável usa `disputa+motivo+dia` (`app/chamados/services/declaracao_texto.py:236`); dedup do emissor usa `disputa+motivo+dia` (`app/chamados/services/disputa_emissao.py:1297`).
-
-Não executei testes nem acessei banco/log; resultado de execução [nao verificado]. [nao verificado]
-
-_2717 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2719 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
