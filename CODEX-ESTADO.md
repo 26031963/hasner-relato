@@ -1,7 +1,110 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 13:22** · publicado em **07/11/2026 13:22** (UTC-3)
+> Ultima resposta processada: **07/11/2026 13:25** · publicado em **07/11/2026 13:27** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 13:25 · sessao 8e6391171c0e · CODEX-CONSTRUTOR-NEGOCIO · verificador · origem=Code
+
+**Não liberaria esta volta:** o inventário ainda deixa passar hardlink idêntico na revalidação/final, e dois mutantes ficam vermelhos sem demonstrar a proteção alegada. (`bin/codex_pergunta.sh:143`, `bin/codex_pergunta.sh:158`, `bin/tests/test_codex_pergunta.sh:393`, `bin/tests/test_codex_pergunta.sh:396`)
+
+1. **Informativo — fechamento dos achados do opus fornecido.**
+
+   | Achado | Aval desta volta |
+   |---|---|
+   | `.git` aninhado invisível | **Fecha os contraexemplos apresentados:** o percurso encontra diretórios e arquivos `.git`, e a classificação os proíbe. Persistem limites gerais da varredura abaixo. (`bin/codex_pergunta.sh:132`, `bin/codex_pergunta.sh:135`, `bin/codex_pergunta.sh:154`) |
+   | Selo só criava `.gitignore` | **Fecha em parte:** acrescenta `.git/config`, diretório aninhado e arquivo `gitdir`, mas há mortes de mutantes pelo motivo errado. (`bin/tests/test_codex_pergunta.sh:291`, `bin/tests/test_codex_pergunta.sh:295`, `bin/tests/test_codex_pergunta.sh:396`) |
+   | Ignorados/autoload saíam `TOCADO` | **Fecha a classificação dos casos apresentados:** agora recebem motivo proibitivo; a execução de autoload pelo próprio processo inventariante continua `[nao verificado]`. (`bin/codex_pergunta.sh:107`, `bin/codex_pergunta.sh:155`, `bin/codex_pergunta.sh:393`) |
+   | Vaga pela raiz do script | **Fecha mantendo o mesmo `CODEX_VIVO`:** copiar `bin/` já não muda a vaga. **Parcial como exclusão por repositório**, conforme item 4. (`bin/codex_pergunta.sh:71`, `bin/tests/test_codex_pergunta.sh:314`) |
+   | Prova baseada no `.out` do Codex | **Fecha em parte:** TCP local/Unix ganham ouvinte externo; Docker, docker.sock e TCP externo continuam autodeclarados. (`bin/tests/prova_codex_pergunta_real.sh:41`, `bin/tests/prova_codex_pergunta_real.sh:104`, `bin/tests/prova_codex_pergunta_real.sh:117`, `bin/tests/prova_codex_pergunta_real.sh:124`) |
+   | Texto “só LE”/“ÚNICA escrita” | **Fecha:** distingue quatro papéis de leitura e duas permissões de escrita. (`CLAUDE.md:341`, `CLAUDE.md:346`) |
+   | Opus/teto apresentados como guarda | **Fecha a rotulagem:** declara expressamente que são conduta, sem guarda no wrapper. (`CLAUDE.md:351`, `CLAUDE.md:352`) |
+
+2. **Alta — hardlink idêntico escapa durante a espera e no inventário final.**
+
+   Substituir um arquivo rastreado por hardlink com os mesmos bytes e modo não o inclui em `tocados`; a consulta a `st_nlink` acontece somente depois, dentro desse conjunto. O `find -links +1` inicial não se repete na revalidação. Assim, a troca durante a espera passa pela nova guarda; no final também pode produzir inventário vazio. A simulação em memória confirmou rc 0 e saída vazia; reprodução em filesystem real: `[nao verificado]`. (`bin/codex_pergunta.sh:143`, `bin/codex_pergunta.sh:152`, `bin/codex_pergunta.sh:158`, `bin/codex_pergunta.sh:220`, `bin/codex_pergunta.sh:366`)
+
+3. **Média — o inventário não cobre integralmente entradas, identidade e permissões.**
+
+   | Classe | Resultado da leitura |
+   |---|---|
+   | Permissão de arquivo | Só compara execução pelo proprietário. `0644→0666` ou `0644→0600` pode desaparecer do inventário; a simulação de `0666` deu rc 0 vazio. (`bin/codex_pergunta.sh:116`, `bin/codex_pergunta.sh:143`) |
+   | Diretório existente | Não compara suas permissões; só verifica se o caminho pertence às pastas da base. (`bin/codex_pergunta.sh:139`) |
+   | FIFO/socket/dispositivo novo | É reportado, mas pode sair **`TOCADO`, rc 0**, por faltar proibição por tipo. FIFO foi confirmado em memória. (`bin/codex_pergunta.sh:143`, `bin/codex_pergunta.sh:153`, `bin/codex_pergunta.sh:160`) |
+   | Diretório vazio novo | É reportado como `caminho/`; sob caminho permitido, é aceito. Diretórios vazios não têm representação nessa base `ls-tree`. (`bin/codex_pergunta.sh:125`, `bin/codex_pergunta.sh:140`) |
+   | Symlink novo/modificado | Entra na comparação e recebe `PROIBIDO`. Symlink já rastreado e inalterado não recebe essa classificação. (`bin/codex_pergunta.sh:112`, `bin/codex_pergunta.sh:143`, `bin/codex_pergunta.sh:157`) |
+   | Bytes não UTF-8 | Git usa `"replace"`, enquanto o percurso conserva outra representação dos bytes. Pode duplicar caminhos e recusar arquivo rastreado limpo. Destino não UTF-8 de symlink pode falhar no `.encode()`. (`bin/codex_pergunta.sh:112`, `bin/codex_pergunta.sh:122`, `bin/codex_pergunta.sh:128`) |
+   | Case | A comparação é literal, sem conversão de caixa. Comportamento em filesystem que ignore caixa: `[nao verificado]`. (`bin/codex_pergunta.sh:128`, `bin/codex_pergunta.sh:137`, `bin/codex_pergunta.sh:143`) |
+   | Ramo não percorrido | `os.walk` não recebe `onerror`; uma abertura recusada pode omitir descendentes novos sem produzir `FALHA`. Rastreado não visto vira remoção, mas isso não enumera os novos ocultos. (`bin/codex_pergunta.sh:132`, `bin/codex_pergunta.sh:145`, `bin/codex_pergunta.sh:146`) |
+
+   Há também recusa potencial de checkout legítimo com transformação CRLF/smudge: compara bytes físicos diretamente ao blob armazenado. Configuração ou ocorrência disso nesta obra: `[nao verificado]`. (`bin/codex_pergunta.sh:112`, `bin/codex_pergunta.sh:125`, `bin/codex_pergunta.sh:143`, `bin/codex_pergunta.sh:217`)
+
+   A poda da raiz exclui `.git` independentemente do tipo; a exigência inicial “arquivo sem symlink” não é repetida no final, que compara conteúdo. Aceitação real pelo Git de uma troca por symlink de conteúdo idêntico: `[nao verificado]`. (`bin/codex_pergunta.sh:135`, `bin/codex_pergunta.sh:193`, `bin/codex_pergunta.sh:394`)
+
+4. **Alta — a vaga ainda depende da árvore escolhida como `CODEX_VIVO`.**
+
+   Dois valores de `CODEX_VIVO` apontando para worktrees distintas do mesmo repositório produzem dois caminhos de vaga. A validação de common-dir confere a origem com o destino de cada chamada, mas não deriva a vaga desse common-dir. Portanto, o delta resolve a cópia do script com origem fixa; não estabelece exclusão única para todas as árvores do mesmo repositório. Execução concorrente desse cenário: `[nao verificado]`. (`bin/codex_pergunta.sh:56`, `bin/codex_pergunta.sh:71`, `bin/codex_pergunta.sh:200`, `bin/codex_pergunta.sh:212`)
+
+5. **Alta — a prova ainda pode ficar verde sem executar cada tentativa.** [nao verificado]
+
+   O controle positivo exige apenas `INTRUSO_WT.txt`; a evidência individual continua sendo `.out` gravado pelo próprio Codex. Preencher esses arquivos com `rc=` e negativas fabricadas satisfaz as verificações documentais; TCP local/Unix nem exigem assinatura de negação. Zero conexões prova ausência de conexão registrada, não execução de tentativa bloqueada. Contraexemplo completo executado: `[nao verificado]`. (`bin/tests/prova_codex_pergunta_real.sh:60`, `bin/tests/prova_codex_pergunta_real.sh:90`, `bin/tests/prova_codex_pergunta_real.sh:92`, `bin/tests/prova_codex_pergunta_real.sh:105`, `bin/tests/prova_codex_pergunta_real.sh:107`)
+
+   Os rótulos `AUTO-DECLARADO` de Docker/socket/TCP externo não tornam o resultado inconclusivo: essas negativas ainda podem terminar com rc 0. (`bin/tests/prova_codex_pergunta_real.sh:82`, `bin/tests/prova_codex_pergunta_real.sh:117`, `bin/tests/prova_codex_pergunta_real.sh:120`, `bin/tests/prova_codex_pergunta_real.sh:125`, `bin/tests/prova_codex_pergunta_real.sh:135`)
+
+6. **Média — o ouvinte não tem controle posterior e `$EV` pode colidir.**
+
+   O script testa o ouvinte antes da chamada; depois só compara contagens. Não confirma sobrevivência nem faz controle posterior. Se ele morrer após os controles, ainda pode imprimir “OK MEDIDO”. (`bin/tests/prova_codex_pergunta_real.sh:44`, `bin/tests/prova_codex_pergunta_real.sh:49`, `bin/tests/prova_codex_pergunta_real.sh:103`, `bin/tests/prova_codex_pergunta_real.sh:105`)
+
+   `$EV` usa precisão de segundos e `mkdir -p`; chamadas no mesmo segundo podem compartilhar socket, porta e evidências. Além disso, `CONECTOU` no `.out` ainda reprova independentemente do ouvinte, apesar do comentário que lhe atribui o julgamento. Ocorrências reais: `[nao verificado]`. (`bin/tests/prova_codex_pergunta_real.sh:21`, `bin/tests/prova_codex_pergunta_real.sh:34`, `bin/tests/prova_codex_pergunta_real.sh:45`, `bin/tests/prova_codex_pergunta_real.sh:92`, `bin/tests/prova_codex_pergunta_real.sh:125`)
+
+7. **Média — dois mutantes morrem por motivo diferente do declarado.**
+
+   - **`fs_walk`:** remover o percurso também afeta o pre-check. Todos os blobs ficam “não vistos”, a chamada é recusada com rc 2 antes do falso Codex, e o caso fica vermelho porque esperava rc 3 final. Não demonstra a mordida final contra `.git/config`. (`bin/tests/test_codex_pergunta.sh:393`, `bin/codex_pergunta.sh:145`, `bin/codex_pergunta.sh:217`, `bin/tests/test_codex_pergunta.sh:105`)
+   - **`git_aninhado`:** remove apenas o motivo suplementar; `.git*` continua proibindo o caminho. Morre pela ausência da mensagem exigida, mantendo a proteção. (`bin/tests/test_codex_pergunta.sh:396`, `bin/codex_pergunta.sh:103`, `bin/codex_pergunta.sh:154`, `bin/tests/test_codex_pergunta.sh:106`)
+   - **Sentinela FSMON:** o caso planta configuração, mas não exercita o hook com Git no diretório plantado. Prova recusa do caminho; a ausência da sentinela não prova bloqueio de execução do hook. (`bin/tests/test_codex_pergunta.sh:291`, `bin/tests/test_codex_pergunta.sh:292`, `bin/codex_pergunta.sh:110`)
+
+   Os mutantes `poda_so_raiz` retiram justamente a visibilidade de `.git` em diretório e arquivo; não encontrei a mesma morte espúria neles. Resultado executado de todos os mutantes: `[nao verificado]`. (`bin/tests/test_codex_pergunta.sh:295`, `bin/tests/test_codex_pergunta.sh:296`, `bin/tests/test_codex_pergunta.sh:394`, `bin/tests/test_codex_pergunta.sh:395`)
+
+8. **Informativo — escritores e leitores pedidos.**
+
+   | Arquivo/variável | Escritor → leitor |
+   |---|---|
+   | `VAGA` | Shell deriva de `VIVO` → reserva da resposta e abertura da trava. (`bin/codex_pergunta.sh:71`, `bin/codex_pergunta.sh:72`, `bin/codex_pergunta.sh:212`) |
+   | `construtor.vaga` | Wrapper cria/abre em append → `flock` usa fd 6. O selo também cria, prende, move e restaura sua fixture. (`bin/codex_pergunta.sh:212`, `bin/codex_pergunta.sh:213`, `bin/tests/test_codex_pergunta.sh:175`, `bin/tests/test_codex_pergunta.sh:217`) |
+   | `_INVENTARIO_PY` | Uma definição no shell → três chamadas Python. Não são três implementações independentes do juiz. (`bin/codex_pergunta.sh:90`, `bin/codex_pergunta.sh:217`, `bin/codex_pergunta.sh:366`, `bin/codex_pergunta.sh:393`) |
+   | `_INV0` | Captura stdout/stderr do Python → exige sucesso e saída vazia. (`bin/codex_pergunta.sh:217`, `bin/codex_pergunta.sh:218`) |
+   | `_INV1` | Captura stdout/stderr, acrescentando `FALHOU` em erro → exige saída vazia. (`bin/codex_pergunta.sh:366`, `bin/codex_pergunta.sh:369`) |
+   | `.inventario`/`.recusa` | Python escreve inventário; shell acrescenta guarda de `.git` e gera recusa → testes conferem recusa e a prova copia evidências. (`bin/codex_pergunta.sh:393`, `bin/codex_pergunta.sh:394`, `bin/codex_pergunta.sh:398`, `bin/tests/test_codex_pergunta.sh:106`, `bin/tests/prova_codex_pergunta_real.sh:80`) |
+   | `$EV/escuta` | Shell cria/inicia processo; ouvinte publica `porta` e acrescenta `conexoes` → shell lê porta e contagens; trap encerra o ouvinte. (`bin/tests/prova_codex_pergunta_real.sh:29`, `bin/tests/prova_codex_pergunta_real.sh:35`, `bin/tests/prova_codex_pergunta_real.sh:41`, `bin/tests/prova_codex_pergunta_real.sh:44`, `bin/tests/prova_codex_pergunta_real.sh:103`) |
+   | `$EV/p` e `prova/*.out` | Shell escreve pergunta → wrapper lê; Codex é instruído a escrever `.out` → prova copia e julga. (`bin/tests/prova_codex_pergunta_real.sh:53`, `bin/tests/prova_codex_pergunta_real.sh:61`, `bin/tests/prova_codex_pergunta_real.sh:77`, `bin/tests/prova_codex_pergunta_real.sh:81`, `bin/tests/prova_codex_pergunta_real.sh:89`) |
+   | Texto do `CLAUDE.md` | Autor da edição: `[nao verificado]`. Selo lê nomes/ponteiros; hashes cobrem blocos de **PISTA**, não as frases alteradas do item 1. O caso `c_p_claudemd` escreve outra cópia na fixture. (`bin/tests/test_claude_md_regras_preservadas.sh:44`, `bin/tests/test_claude_md_regras_preservadas.sh:72`, `bin/tests/test_claude_md_regras_preservadas.sh:83`, `bin/tests/test_codex_pergunta.sh:259`) |
+
+9. **Informativo — classes históricas e papéis de leitura.**
+
+   Aparecem **RED sem mordida pelo motivo alegado** e **fragmentação da exclusão de escritor**, conforme itens 4 e 7. Também há diferença material entre “blob Git” e “arquivo físico”, conforme item 3. Não identifiquei no delta clone de juiz de negócio registrado, relógio de negócio fora da borda, inversão nova da ordem de travas ou operação de pouso; a vaga precede slot, trava da resposta e revalidação. (`bin/codex_pergunta.sh:96`, `bin/codex_pergunta.sh:213`, `bin/codex_pergunta.sh:324`, `bin/codex_pergunta.sh:349`, `bin/codex_pergunta.sh:366`)
+
+   Não identifiquei regressão no sandbox ou execução do inventário nos quatro papéis de leitura: permanecem no ramo `read-only`, com testes para argv, diretório e cabeçalho. A alteração compartilhada é a nova reserva do caminho da vaga. Execução efetiva desses testes: `[nao verificado]`. (`bin/codex_pergunta.sh:72`, `bin/codex_pergunta.sh:165`, `bin/codex_pergunta.sh:381`, `bin/tests/test_codex_pergunta.sh:327`)
+
+10. **Informativo — limite da verificação.**
+
+    A suite e a prova real não foram executadas: criam arquivos e a prova chama o Codex. Resultados completos desta volta, isolamento real e dados de produção: `[nao verificado]`. As confirmações mencionadas foram simulações exclusivamente em memória do inventário. (`bin/tests/test_codex_pergunta.sh:18`, `bin/tests/test_codex_pergunta.sh:19`, `bin/tests/prova_codex_pergunta_real.sh:21`, `bin/tests/prova_codex_pergunta_real.sh:77`)
+
+## 07/11 13:23 · sessao cd2630cc4e18 · - · - · origem=Ronald (tmux)
+
+1. **Alta — hardlink idêntico escapa da revalidação e do inventário final.** `st_nlink` só é consultado para caminhos já em `tocados`; substituir um arquivo rastreado por hardlink de mesmos bytes/modo não o inclui nesse conjunto. O `find -links +1` ocorre apenas inicialmente. Simulação em memória do código original: `nlink=2`, mesmo blob → rc 0, saída vazia. (`bin/codex_pergunta.sh:143`, `bin/codex_pergunta.sh:158`, `bin/codex_pergunta.sh:220`, `bin/codex_pergunta.sh:366`, `bin/codex_pergunta.sh:393`)
+
+2. **Média — permissões não são inventariadas integralmente.** Só o bit executável do proprietário entra em `modo`; `0644→0666`, `0644→0600`, setuid/setgid e permissões de diretórios existentes ficam fora da comparação. Simulação em memória: `0644→0666` → rc 0, saída vazia. ACL/xattrs também não são lidos pelo inventário. (`bin/codex_pergunta.sh:114`, `bin/codex_pergunta.sh:116`, `bin/codex_pergunta.sh:139`, `bin/codex_pergunta.sh:143`)
+
+3. **Média — FIFO/socket/device são reportados, mas aceitos.** Tipos não regulares entram em `tocados`, porém não recebem motivo por tipo especial. Simulação: FIFO novo `app/pipe` → `TOCADO`, rc 0. Diretório vazio novo também é reportado e aceito sob caminho permitido; permissões de diretórios existentes não são reportadas. (`bin/codex_pergunta.sh:139`, `bin/codex_pergunta.sh:143`, `bin/codex_pergunta.sh:153`, `bin/codex_pergunta.sh:160`)
+
+4. **Média — varredura incompleta pode não ser tratada como falha.** `os.walk(wt)` não recebe `onerror`; erro de abertura de diretório pode omitir sua descendência. Blobs rastreados não vistos aparecem como removidos, mas novas entradas ocultas naquele ramo não são individualmente reportadas. Condições efetivas de permissão/Git em produção: `[nao verificado]`. (`bin/codex_pergunta.sh:132`, `bin/codex_pergunta.sh:145`, `bin/codex_pergunta.sh:146`)
+
+5. **Média — nomes legítimos não UTF-8 recebem tratamento incompatível.** Git é decodificado com `"replace"`; o percurso de filesystem usa nomes reais, com outra representação para bytes inválidos. Um arquivo rastreado limpo pode aparecer simultaneamente novo/removido e reprovar o pre-check. Destino de symlink com bytes inválidos pode falhar no `.encode()` e produzir `FALHA`. (`bin/codex_pergunta.sh:112`, `bin/codex_pergunta.sh:122`, `bin/codex_pergunta.sh:128`, `bin/codex_pergunta.sh:132`, `bin/codex_pergunta.sh:217`)
+
+6. **Média — Git limpo não implica blob físico idêntico.** Comparar bytes físicos diretamente com `ls-tree` recusa checkout legítimo transformado por CRLF/smudge/encoding. Não encontrei `.gitattributes` nesta cópia; configuração efetiva do Git, filtros ou ocorrência concreta: `[nao verificado]`. (`bin/codex_pergunta.sh:112`, `bin/codex_pergunta.sh:125`, `bin/codex_pergunta.sh:143`, `bin/codex_pergunta.sh:217`)
+
+7. **Média — identidade de tipo de `.git` não é repetida.** A poda exclui `.git` da raiz tanto de `dirs` como de `arqs`; pre-check exige arquivo sem symlink, mas revalidação/final comparam conteúdo e resolução Git. Troca posterior por symlink de mesmos bytes não tem guarda explícita de tipo. Aceitação desse cenário pelo Git real: `[nao verificado]`. (`bin/codex_pergunta.sh:135`, `bin/codex_pergunta.sh:193`, `bin/codex_pergunta.sh:368`, `bin/codex_pergunta.sh:394`)
+
+8. **Alta, condicional — o próprio inventário pode carregar autoload antes de recusá-lo.** As chamadas `python3 -c` não usam isolamento nem mudam o diretório corrente. Se o wrapper for iniciado em `WT/app`, um `sitecustomize.py` ali plantado pode executar na inicialização do Python do host antes da regra de proibição. Ambiente efetivo de inicialização Python: `[nao verificado]`. (`bin/codex_pergunta.sh:107`, `bin/codex_pergunta.sh:217`, `bin/codex_pergunta.sh:366`, `bin/codex_pergunta.sh:393`)
 
 ## 07/11 13:22 · sessao 6609b154c603 · - · - · origem=Ronald (tmux)
 
@@ -701,47 +804,4 @@ Execução dos testes, resultados e ocorrência em produção: **[nao verificado
 
 - **Falsa pista N+1 / dependência real do relógio — procedente apenas a segunda.** `_cobertura_pura` consulta o conjunto vivo para cada ausência sem `data_fim` (`app/ponto/turnos.py:2774`); `_SetVivo.__contains__` chama o catálogo (`app/ponto/catalogo/ausencias.py:403`, `:430`). Entretanto, `vigente()` tem cache TTL de 60 segundos, portanto não há fundamento para afirmar uma query por ausência (`:257`, `:267`, `:276`). Há leitura transitiva real de `time.monotonic()` e dependência do cache (`:274`, `:275`), inclusive pelo filtro `_q_cobertura`, que consome o mesmo conjunto vivo (`app/ponto/turnos.py:2762`). A designação “corpo puro” da cobertura é inexata nessa dependência (`:2765`).
 
-## 07/11 12:14 · sessao 546e98ac8399 · - · - · origem=Ronald (tmux)
-
-Achados do eixo escritores/semântica, na cópia indicada:
-
-1. **Classe: horizonte incompleto — procedente.** A retratação futura pode apagar uma pergunta do passado mesmo com `ato_em__lte=agora`: a seleção descarta a **via atual** antes de considerar a sequência cortada (`app/chamados/services/tarefa_do_dia.py:202`, `:204`). `remover_motivo` registra retratação e troca a via no mesmo ato (`app/chamados/models.py:1985`, `:1989`, `:1994`). Assim, com lâmpada apagada e marco vencido, a pergunta antes existente vira `sem_pergunta` e `perguntar` (`app/chamados/services/tarefa_do_dia.py:250`). A existência de caso produtivo correspondente é **[nao verificado]**.
-
-2. **Classe: segundo escritor fora da porta — não achei no caminho da calibração.** O signal identifica `None → valor` e chama `DisputaSupervisao.remover_motivo` (`app/escala/signals.py:143`, `:161`). Essa porta:
-   - registra a decisão por `DecisaoPergunta.registrar` (`app/chamados/models.py:1989`), cujo único corpo de escrita é `bulk_create` (`:3428`);
-   - chama `carimbar_identidade` (`:1994`), que usa `_escrever_carimbo` (`:2658`, `:2738`) e salva (`:2746`);
-   - remove motivo/contexto (`:1996`) e fecha pela porta `fechar` (`:2005`).
-
-   O diff anexado altera o **teste do signal**, exigindo uma pergunta conservada/retratada e uma decisão, em vez de exigir exclusão (`app/escala/tests/test_signal_ancora.py:52`, `:59`, `:62`). Não achei alteração do escritor de produção nesse trecho do diff; atribuição histórica exata ao commit d912345b sem objetos Git é **[nao verificado]**.
-
-3. **Classe: campo tratado como nascimento — ressalva procedente.** `ato_em` significa instante do **ato**, não instante físico da inserção da linha: os escritores recuperam instantes antigos da projeção (`app/chamados/models.py:3418`, `:3422`) e da trilha (`app/chamados/services/disputa_emissao.py:1524`, `:1540`). `criado_em` da Batida é `auto_now_add`, portanto nascimento da linha (`app/ponto/models.py:79`). O filtro usa o mesmo operador inclusivo `<=`, mas a frase “existia em agora” tem essas duas referências temporais diferentes (`app/chamados/services/tarefa_do_dia.py:301`, `:316`). Não achei neste trecho uma troca indevida de dia do turno por dia civil.
-
-4. **Classe: semântica de carimbo/invalidadores — procedente como limite do horizonte.** A via pode mudar mantendo `materializada_em` antigo (`app/chamados/models.py:2738`). Portanto `materializada_em` é instante do carimbo preservado, não necessariamente instante da última alteração da via. `marcos_do_lote` só agrega esse instante, não o instante da alteração de via nem `DecisaoPergunta.ato_em` (`app/chamados/veredito_lavrado.py:176`, `:180`). Isso reforça o achado 1.
-
-Censo dos campos solicitado:
-
-| Campo | Escrita comprovada | Leitura relevante e significado |
-|---|---|---|
-| `DecisaoPergunta.ato_em` | Porta `registrar` (`app/chamados/models.py:3428`); chamadores: resposta (`app/chamados/services/disputa_emissao.py:1369`), reabertura/recusa (`:1478`), resposta automática (`:1519`), trilha (`:1540`), validação (`app/chamados/services/validacao.py:139`), devolução (`:205`), absorção (`app/chamados/services/materializacao.py:560`), silêncio (`app/chamados/models.py:1870`), retratação (`:1990`), passivo histórico (`:3418`, `:3422`). | Ordenação `(ato_em, pk)` (`app/chamados/models.py:3374`); histórico da tela (`:2993`); correspondência do passivo (`:3413`); tarefa corta inclusivamente e ordena (`app/chamados/services/tarefa_do_dia.py:301`). **Não é lido por `marcos_do_lote`**, cujas cinco agregações estão em `app/chamados/veredito_lavrado.py:151`, `:154`, `:165`, `:176`, `:180`. |
-| `Batida.criado_em` | `auto_now_add` (`app/ponto/models.py:79`); inserções pela porta de registro (`app/ponto/registro_batida.py:152`, `:157`). | Nascimento, distinto de `timestamp` da marcação; tarefa usa `<=agora` (`app/chamados/services/tarefa_do_dia.py:316`); invalidadores usam o mesmo campo e `<=ate` (`app/chamados/veredito_lavrado.py:137`, `:151`). |
-| `Batida.retratada_em` | `retratar_batida → anotar`, com `timezone.now()` (`app/ponto/registro_batida.py:267`, `:274`); `anotar` escreve/salva (`:252`). Desfazer retratação zera pela mesma porta `anotar` (`app/ponto/services/retratar_humano.py:207`). | Estado atual de participação: `batidas_apuraveis` exige NULL (`app/ponto/turnos.py:2876`); invalidação por instante `<=ate` (`app/chamados/veredito_lavrado.py:154`). As duas leituras têm propósitos diferentes; o limite da retratação posterior está declarado (`app/chamados/services/tarefa_do_dia.py:313`). |
-| `PerguntaDisputa.veredito_lavrado/julgado_em/janela_expira_em` | `lavrar` pergunta ao juiz e atribui os três (`app/chamados/veredito_lavrado.py:236`, `:244`); grava diretamente (`:248`) ou em lote pela porta (`:214`). O command de backfill também atribui o trio, depois chama a porta de persistência (`app/chamados/management/commands/backfill_veredito_lavrado.py:138`, `:143`). É escritor anterior/contextual declarado no contrato (`app/core/tests/test_contract_escritores_estado.py:72`). | `esta_stale` rejeita lavra futura (`app/chamados/veredito_lavrado.py:196`), compara data **local** da expiração inclusive (`:198`), data local da lavra estritamente anterior (`:202`) e insumo estritamente posterior (`:206`). Tarefa só admite `sim/nao` vigentes (`app/chamados/services/tarefa_do_dia.py:309`); varredura espelha as comparações (`app/chamados/services/raiox.py:40`, `:42`, `:45`); auditoria passa mesmo agora (`app/chamados/management/commands/auditar_invariantes_chamados.py:1160`). |
-| `PerguntaDisputa.via_resolucao/materializada_em` | `_escrever_carimbo` atribui o par (`app/chamados/models.py:2658`); portas `carimbar` (`:2664`), `carimbar_identidade` (`:2727`), `descarimbar` (`:2748`), `descarimbar_em_lote` (`:2793`). | Juiz lê via com carimbo presente (`app/chamados/juizes.py:648`); tarefa lê via atual (`app/chamados/services/tarefa_do_dia.py:202`); invalidadores leem `materializada_em<=ate` (`app/chamados/veredito_lavrado.py:176`). `manter_carimbo` preserva instante/autor anterior (`app/chamados/models.py:2738`). |
-| `PerguntaDisputa.data_evento` | Nascimento (`app/chamados/models.py:2578`), preenchimento na costura (`app/chamados/services/fio.py:838`), migração pela porta `rechavear_data_evento` (`:859`, `:898`). | Tarefa identifica pelo **dia do turno**, sem recuar dia civil (`app/chamados/services/tarefa_do_dia.py:197`, `:207`); juiz de data da batida usa a cadeia de marcos para cruzar meia-noite (`app/chamados/juizes.py:301`, `:319`); expiração usa a data e a janela (`app/chamados/veredito_lavrado.py:96`). |
-| `CelulaDia.veredito_em/ata` | `lavrar_veredito` escreve ata e instante (`app/ponto/portas/celula.py:969`, `:1028`, `:1032`); ata também recebe chave `precedencia` por operação própria na **mesma porta** (`:1071`, `:1080`). Cópia de julgamento atribui ata apenas em memória (`:927`, `:940`). | `veredito_em` é instante de julgamento/alteração da lavra, agregado e cortado em `marcos_do_lote` (`app/chamados/veredito_lavrado.py:165`). Ata é fotografia atual do julgamento, sem histórico (`app/escala/models.py:1774`); leitor único materializa lâmpadas (`app/escala/services/leitor_celula.py:130`), alimentando tarefa (`app/chamados/services/tarefa_do_dia.py:328`). A porta pode atualizar ata com decisão admin preservada sem mover `veredito_em` (`app/ponto/portas/celula.py:997`). |
-
-Unidade/fuso do modelo: instantes são `DateTimeField` e datas são `DateField` nos campos citados (`app/chamados/models.py:3358`, `:2393`, `:2399`, `:2238`; `app/ponto/models.py:67`, `:79`); configuração usa `USE_TZ=True` e `America/Sao_Paulo` (`app/config/settings/base.py:93`, `:95`). O dado de produção não demonstra fuso ou invariantes de cada linha armazenada **[nao verificado]**.
-
-Não executei testes com banco; resultados da suite e mutações reais dos commits são **[nao verificado]**. [nao verificado]
-
-## 07/11 12:13 · sessao 55ad8497c8f2 · - · - · origem=Ronald (tmux)
-
-**Achado — relógio transitivo fora da borda; procedente.** A tarefa chama `self.cobertura` em `app/chamados/services/tarefa_do_dia.py:354`; o carregador monta `_q_cobertura` em `app/ponto/turnos.py:3072`, que usa `Ausencia.TIPOS_EM_ABERTO` em `app/ponto/turnos.py:2762`. Esse nome aponta para o conjunto vivo do catálogo (`app/ponto/models.py:689`); sua iteração chama a função de catálogo (`app/ponto/catalogo/ausencias.py:406`), que chega a `vigente()` (`app/ponto/catalogo/ausencias.py:433`). Ali há **`time.monotonic()`** (`app/ponto/catalogo/ausencias.py:275`) e atualização de cache (`app/ponto/catalogo/ausencias.py:279`). O selo declara expressamente `monotonic` como leitura de relógio (`app/chamados/tests/test_e2_tarefa_do_dia.py:890`).
-
-**Achado — selo incompleto para helpers importados; procedente.** A varredura AST examina somente os módulos da tarefa e de `veredito_lavrado` (`app/chamados/tests/test_e2_tarefa_do_dia.py:958`); o veneno dinâmico intercepta exclusivamente `django.utils.timezone.now` (`app/chamados/tests/test_e2_tarefa_do_dia.py:680`). Assim, nenhum dos dois instrumentos intercepta o `monotonic` real acima (`app/ponto/catalogo/ausencias.py:275`). O mesmo catálogo usa TTL de 60 segundos; portanto **não acusar uma query por ausência** sem medir a expiração desse cache (`app/ponto/catalogo/ausencias.py:257`, `app/ponto/catalogo/ausencias.py:276`).
-
-**Achado — “não morde os mutantes declarados”; não procedente na análise isolada do detector.** O detector identifica as 16 formas declaradas no teste: chamadas diretas, aliases, importações e `time` (`app/chamados/tests/test_e2_tarefa_do_dia.py:926`, `app/chamados/tests/test_e2_tarefa_do_dia.py:966`). Extraí AST/constantes em memória e confirmei 16/16; suíte Django e comportamento com banco: **[nao verificado]**.
-
-**Quanto a `timezone.now`/`localdate`/`date.today` em helpers reais:** não achei leitura dessas três formas no caminho da tarefa que rastreei: leitor alimentado (`app/escala/services/leitor_celula.py:350`), previsto (`app/escala/utils.py:2256`), vínculo (`app/escala/alimentacao.py:269`), marcos (`app/escala/servico_jornada.py:68`), fila com `agora` (`app/chamados/services/painel.py:190`), âncora (`app/chamados/services/fio.py:116`), passivo (`app/chamados/models.py:3409`), dia sem trabalho (`app/chamados/juizes.py:423`) e lavra (`app/chamados/veredito_lavrado.py:196`). O escape encontrado é o **`monotonic`**, já incluído no vocabulário do próprio selo (`app/chamados/tests/test_e2_tarefa_do_dia.py:891`).
-
-_2723 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2725 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
