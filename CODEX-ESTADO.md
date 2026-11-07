@@ -1,7 +1,87 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 17:02** · publicado em **07/11/2026 17:02** (UTC-3)
+> Ultima resposta processada: **07/11/2026 17:03** · publicado em **07/11/2026 17:07** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 17:03 · sessao 0601c3de7f56 · MOTOR-LE-O-TURNO-INSTRUMENTO · verificador · origem=Code
+
+**As curas 2 e 5b fecham os defeitos específicos apontados; 3 e 4 ainda deixam classes abertas.** A composição ganhou comparação integral, `CLASSIFICAR` ganhou leitor, mas encontrei mutantes sobreviventes para linhas e guarda de herança. (`app/core/tests/test_medida_turno_do_par.py:368`, `app/core/tests/test_medida_turno_do_par.py:415`, `app/core/tests/test_medida_turno_do_par.py:432`, `app/core/tests/test_medida_turno_do_par.py:456`)
+
+A comparação histórica `c2058690..133cd78a` permanece **[nao verificado]**: a cópia não disponibiliza `.git`. As conclusões abaixo confrontam a fonte disponível com a triagem fornecida. **[nao verificado quanto ao delta histórico]**
+
+Executei em memória, sem Django e com bytecode desabilitado: original **22/22 OK**; cada mutante abaixo, separadamente, **22/22 OK**. O procedimento corresponde ao runner documentado; os resultados desta sessão não têm artefato persistido com arquivo:linha: **[nao verificado documentalmente]**. (`app/core/tests/test_medida_turno_do_par.py:18`, `app/core/tests/test_medida_turno_do_par.py:24`)
+
+| Item procedente da v1 | Veredito da cura |
+|---|---|
+| **2 — composição expansível** | **Fecha a classe específica “membros mudam sem registro” na suite:** compara a lista inteira da medida real. Não prova legitimidade semântica dos corpos já excluídos. (`app/core/tests/test_medida_turno_do_par.py:368`, `app/core/tests/test_medida_turno_do_par.py:372`; `app/core/medida_turno_do_par.py:343`) |
+| **3 — linhas falsas** | **Fecha o mutante anterior, não a classe:** precisão cobrada numa fixture com duas ocorrências por função; na medida real, apenas presença de linhas. (`app/core/tests/test_medida_turno_do_par.py:437`, `app/core/tests/test_medida_turno_do_par.py:441`, `app/core/tests/test_medida_turno_do_par.py:454`, `app/core/tests/test_medida_turno_do_par.py:412`) |
+| **4 — herança desaparece por forma** | **Amplia a proteção, sem fechar a classe:** procura determinados alvos e o nome literal `_prev_dj`, sem propagar aliases nem casar posições de tuplas. (`app/core/medida_turno_do_par.py:255`, `app/core/medida_turno_do_par.py:261`) |
+| **5b — `CLASSIFICAR` sem leitor** | **Fecha o defeito “leitor zero”:** igualdade integral entre registro e publicação calculada. (`app/core/tests/test_medida_turno_do_par.py:226`, `app/core/tests/test_medida_turno_do_par.py:415`) |
+
+**Mutante sobrevivente do item 3**, na publicação lexical em `app/core/medida_turno_do_par.py:351`:
+
+```python
+# original
+'criterio': criterion, 'linhas': lines
+
+# mutante
+'criterio': criterion,
+'linhas': lines if len(lines) > 1 else [node.lineno]
+```
+
+A fixture mantém suas duas ocorrências; funções com ocorrência única passam a publicar o `def`. Isso erra **A1 real**, apontando `_alinhar_por_papel:502` em vez do `range:520`, e **B1 real**, apontando `_dia_da_batida:47` em vez de `localdate:50`. (`app/core/tests/test_medida_turno_do_par.py:449`, `app/core/tests/test_medida_turno_do_par.py:450`; `app/escala/utils.py:502`, `app/escala/utils.py:520`; `app/chamados/juizes.py:47`, `app/chamados/juizes.py:50`)
+
+**Mutante sobrevivente do item 4**, na guarda em `app/core/medida_turno_do_par.py:278`:
+
+```python
+# original
+if inherited - recognized:
+
+# mutante
+if len(inherited - recognized) == 1:
+```
+
+Os nove subcasos atuais têm exatamente **uma atribuição desconhecida** por variante, inclusive os casos que também conservam uma reconhecida. Falta cobrar duas desconhecidas. (`app/core/tests/test_medida_turno_do_par.py:458`, `app/core/tests/test_medida_turno_do_par.py:459`, `app/core/tests/test_medida_turno_do_par.py:468`, `app/core/tests/test_medida_turno_do_par.py:469`)
+
+Com esse mutante, renomear `_gap_h` e duplicar `data_jornada = _prev_dj` na fixture devolveu normalmente **2/2**, retirando a parcela gap; resultado em memória sem artefato persistido: **[nao verificado documentalmente]**. A parcela depende das linhas devolvidas por `_gap`. (`app/core/medida_turno_do_par.py:361`, `app/core/medida_turno_do_par.py:363`)
+
+**a) Guarda de `_gap`: classificação desdobrada.**
+
+- **NAO PROCEDE — falso positivo demonstrado na fonte atual:** a herança presente está sob a comparação reconhecida e corresponde à atribuição simples esperada. Execução produtiva: **[nao verificado]**. (`app/ponto/motor_calculo_v2.py:2407`, `app/ponto/motor_calculo_v2.py:2408`; `app/core/medida_turno_do_par.py:274`)
+- **NAO PROCEDE — escape das formas diretas ensaiadas:** tupla com `_prev_dj`, atributo **de destino**, walrus e `augassign` são submetidos à exigência de `LookupError`. (`app/core/tests/test_medida_turno_do_par.py:462`, `app/core/tests/test_medida_turno_do_par.py:463`, `app/core/tests/test_medida_turno_do_par.py:464`, `app/core/tests/test_medida_turno_do_par.py:465`, `app/core/tests/test_medida_turno_do_par.py:475`)
+- **PROCEDENTE — falso estrutural possível:** `data_jornada, outro = (data_entrada, _prev_dj)` acusa herança, embora `_prev_dj` alimente `outro`. A guarda cruza quaisquer alvos compatíveis com qualquer ocorrência desse nome no RHS. (`app/core/medida_turno_do_par.py:255`, `app/core/medida_turno_do_par.py:259`, `app/core/medida_turno_do_par.py:261`)
+- **PROCEDENTE — escapes restantes:** `anterior = _prev_dj; data_jornada = anterior`, `data_jornada = self._prev_dj` e `dados['data_jornada'] = _prev_dj` escapam à seleção. Respectivamente: falta propagação, origem é `Attribute`, destino é `Subscript`. (`app/core/medida_turno_do_par.py:256`, `app/core/medida_turno_do_par.py:261`)
+
+O desaparecimento isolado da parcela ainda enfrenta a catraca numérica; falha do detector não equivale automaticamente à aprovação da suite. (`app/core/tests/test_medida_turno_do_par.py:359`, `app/core/tests/test_medida_turno_do_par.py:364`)
+
+**b) NAO PROCEDE — composição congelada apenas por tamanho.** A igualdade cobra todos os membros e sua ordem; troca de identidade mantendo tamanho é rejeitada. **FILA:** conteúdo, uso compartilhado e legitimidade de cada função já composta continuam sem prova semântica; a exclusão permanece integral por função. (`app/core/tests/test_medida_turno_do_par.py:368`; `app/core/medida_turno_do_par.py:343`)
+
+**c) PROCEDENTE — cobertura exata limitada à fixture.** O teste cobre A1/B1 sintéticos, inclusive deslocamento +40. Na medida real, `REGISTRO` compara chave/critério/sítio, sem linhas, e depois exige somente listas não vazias. (`app/core/tests/test_medida_turno_do_par.py:444`, `app/core/tests/test_medida_turno_do_par.py:454`, `app/core/tests/test_medida_turno_do_par.py:407`, `app/core/tests/test_medida_turno_do_par.py:412`)
+
+**d) PROCEDENTE — existem fatos documentais que a suite não prova.** Autoria “do construtor”, data, duração `30.656s` e resultados das quatro execuções externas são afirmações históricas, não conclusões verificadas pelas asserções. Sua falsidade também está **[nao verificado]**. (`app/core/tests/test_medida_turno_do_par.py:58`, `app/core/tests/test_medida_turno_do_par.py:59`, `app/core/tests/test_medida_turno_do_par.py:60`)
+
+“MESMO commit” é exigência textual: os testes comparam a árvore corrente, sem demonstrar contemporaneidade no histórico. **NAO PROCEDE** atribuir ao docstring uma certificação Django oficial: ela está explicitamente marcada `[nao verificado]`. (`app/core/tests/test_medida_turno_do_par.py:364`, `app/core/tests/test_medida_turno_do_par.py:368`, `app/core/tests/test_medida_turno_do_par.py:415`, `app/core/tests/test_medida_turno_do_par.py:64`)
+
+**e) Classes que já reprovaram a obra.**
+
+- **NAO PROCEDE nos dois arquivos examinados:** segundo juiz de negócio, segundo escritor persistente ou relógio fora da borda. O instrumento lê fontes, analisa AST e retorna estruturas; seus imports são `ast`/`os`. (`app/core/medida_turno_do_par.py:21`, `app/core/medida_turno_do_par.py:378`, `app/core/medida_turno_do_par.py:389`)
+- **FILA — derivação paralela já existente:** as portas e a herança continuam no motor, medidas positivamente; não foram curadas por esta instrumentação. (`app/ponto/motor_calculo_v2.py:503`, `app/ponto/motor_calculo_v2.py:882`, `app/ponto/motor_calculo_v2.py:2408`; `app/core/medida_turno_do_par.py:59`)
+- **PROCEDENTE quanto à garantia incompleta do RED:** os dois mutantes acima sobrevivem à cobertura atual. **NAO PROCEDE** chamar toda a mordida de decorativa: novos pareador e derivador lexical têm incremento e rejeição exigidos. (`app/core/tests/test_medida_turno_do_par.py:432`, `app/core/tests/test_medida_turno_do_par.py:456`, `app/core/tests/test_medida_turno_do_par.py:490`, `app/core/tests/test_medida_turno_do_par.py:498`)
+- **FILA de nomenclatura:** `CLASSIFICAR` é chamado “sem teto ou catraca”, mas sua identidade pode reprovar a suite; o próprio texto esclarece que a cobrança é de registro. Divergência de unidade entre escritor e leitor: **NAO PROCEDE** na comparação mostrada. (`app/core/tests/test_medida_turno_do_par.py:12`, `app/core/tests/test_medida_turno_do_par.py:14`, `app/core/tests/test_medida_turno_do_par.py:415`)
+
+**f) QUEM ESCREVE / QUEM LÊ os valores envolvidos nas curas.**
+
+| Valor | QUEM ESCREVE | QUEM LÊ |
+|---|---|---|
+| `inherited` | Seleção de atribuições, `app/core/medida_turno_do_par.py:263` | Diferença e diagnóstico, `app/core/medida_turno_do_par.py:278` |
+| `recognized` | Reconhecimento sob `_gap_h`, `app/core/medida_turno_do_par.py:277` | Guarda e linhas retornadas, `app/core/medida_turno_do_par.py:278`, `app/core/medida_turno_do_par.py:282` |
+| Linhas/erro do gap | Retorno ou exceção, `app/core/medida_turno_do_par.py:279` | Construção do nomeado, `app/core/medida_turno_do_par.py:361`; teste de exceção, `app/core/tests/test_medida_turno_do_par.py:475` |
+| `composed` | Fechamento, `app/core/medida_turno_do_par.py:335` | Exclusão, `app/core/medida_turno_do_par.py:343`; guarda de nomeado absorvido, `app/core/medida_turno_do_par.py:358` |
+| `composicao` / `COMPOSICAO_REGISTRADA` | Publicação, `app/core/medida_turno_do_par.py:384`; registro, `app/core/tests/test_medida_turno_do_par.py:79` | Igualdade integral, `app/core/tests/test_medida_turno_do_par.py:368` |
+| `a_classificar_pela_regra` / `CLASSIFICAR` | Cálculo, `app/core/medida_turno_do_par.py:377`; registro, `app/core/tests/test_medida_turno_do_par.py:226` | Igualdade integral, `app/core/tests/test_medida_turno_do_par.py:415` |
+| Linhas A1/B1 | Ocorrências AST, `app/core/medida_turno_do_par.py:191`, `app/core/medida_turno_do_par.py:214`; publicação, `app/core/medida_turno_do_par.py:351` | Presença na medida real, `app/core/tests/test_medida_turno_do_par.py:412`; exatidão na fixture, `app/core/tests/test_medida_turno_do_par.py:454` |
+| Fonte com chamada morta / variantes | Injeção em memória, `app/core/tests/test_medida_turno_do_par.py:389`, `app/core/tests/test_medida_turno_do_par.py:458` | `censo`/`censo_fontes`, `app/core/tests/test_medida_turno_do_par.py:395`, `app/core/tests/test_medida_turno_do_par.py:476` |
+| “Registro da execução” documental | Texto estático, `app/core/tests/test_medida_turno_do_par.py:58` | Leitor automático que comprove sua proveniência: **[nao verificado]** |
 
 ## 07/11 17:02 · sessao 93157a80dbed · - · - · origem=Ronald (tmux)
 
@@ -845,117 +925,4 @@ lancado
 rc=0
 ```
 
-## 07/11 14:57 · sessao 512712426e5e · FIO-E0-V4-E1 · verificador · origem=Code
-
-**Veredito: a cura continua parcial. Permanecem PROCEDENTES as classes (1), (2) e (4); a classe (3) melhorou, mas não cumpre integralmente a conferência por item sob trava. A classe (5) foi corrigida.** (`app/chamados/management/commands/backfill_decisoes_pergunta.py:183`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:215`; `app/chamados/models.py:291`; `app/chamados/models.py:2665`; `app/chamados/services/fio.py:1120`)
-
-Confirmação independente do hash/pai, RED→GREEN histórico, suíte inteira `rc=0`, bloqueios executados no banco e ocorrência dos contraexemplos em produção: **[nao verificado]**. [nao verificado]
-
-**1. Classe (1) — PROCEDENTE: ainda há recorte anterior à canônica.**
-
-`aplicar` escolhe sobre `_no_fato(fam)`, que já filtrou o horizonte. Entretanto, a identidade BATIDA é `(batida_origem_id, motivo)`, sem dia, e `do_fato` consulta o episódio inteiro sem esse corte. Portanto as portas continuam podendo entregar canônicas diferentes. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:215`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:218`; `app/chamados/services/fio.py:1055`; `app/chamados/services/fio.py:1017`; `app/chamados/models.py:2562`)
-
-Contraexemplo de código, no acervo anterior à implantação do índice: mesmo episódio/motivo, `p1` respondida abaixo do horizonte e `p2/p3` mudas acima dele. `abrir` e a migração escolhem `p1`; backfill/dedup escolhem `p2` e retratam `p3`. A regra de preferência é a mesma; o universo entregue a ela diverge. Reprodução em banco: **[nao verificado]**. (`app/chamados/models.py:2683`; `app/chamados/models.py:2684`; `app/chamados/services/fio.py:984`; `app/chamados/services/fio.py:1196`; `app/chamados/services/fio.py:1203`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:251`)
-
-Existe ainda diferença sem atravessar o horizonte: `do_fato` incorpora, pelo OR, a pergunta legada **sem episódio** do mesmo dia; o agrupamento BATIDA usado pelo backfill restringe-se à chave do episódio. Essa linha legada também pode ser a canônica excluída. (`app/chamados/models.py:2560`; `app/chamados/models.py:2563`; `app/chamados/services/fio.py:1017`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:215`)
-
-**NAO PROCEDE a permanência do contraexemplo antigo das reutilizáveis:** agora a declaração escolhe primeiro sobre o fato inteiro e somente depois confere destino/reutilização. (`app/chamados/services/declaracao_texto.py:242`; `app/chamados/services/declaracao_texto.py:245`; `app/chamados/services/declaracao_texto.py:246`; `app/chamados/services/declaracao_texto.py:267`)
-
-**2. Classe (2) — PROCEDENTE pelas travas implícitas e pela ordem posterior.**
-
-**NAO PROCEDE aquisição explícita adicional localizada** das quatro entidades por `select_for_update`: as quatro consultas estão em `trava_na_ordem`, na ordem declarada. A busca fora de `app` encontrou detector e fixtures sintéticas, não outra aquisição de produção; construção dinâmica sem os nomes pesquisados permanece **[nao verificado]**. (`app/chamados/models.py:2508`; `app/chamados/models.py:2515`; `app/chamados/models.py:2528`; `app/chamados/models.py:2532`; `bin/atomicidade_da_porta.py:63`; `bin/tests/test_atomicidade_da_porta.sh:53`)
-
-Persistem dois caminhos concretos:
-
-- **Chamado → Disputa por S143.** `fechar → transicionar → _aplicar → _gravar_estado` pode entrar sem `_recarregar_estado_se_mudou`. O escritor trava somente Colaborador, salva Chamado e dispara S143; o resolver adquire depois as Disputas abertas. Um chamado sem impedimento próprio, mas com outra Disputa aberta da mesma pessoa, alcança essa sequência. (`app/chamados/models.py:447`; `app/chamados/models.py:199`; `app/chamados/models.py:442`; `app/chamados/models.py:286`; `app/chamados/models.py:291`; `app/chamados/signals.py:92`; `app/chamados/services/disputa_emissao.py:1683`; `app/chamados/juizes.py:2083`)
-- **Pergunta → Disputa na ausência rejeitada.** O atomic chama `reabrir_para_correcao`, que faz UPDATE de Pergunta; depois chama `reabrir_sistema`, que salva Disputa. Não há antecipação dessas travas nesse envelope. (`app/chamados/services/materializacao.py:672`; `app/chamados/services/materializacao.py:673`; `app/chamados/services/disputa_emissao.py:1516`; `app/chamados/models.py:2973`; `app/chamados/services/materializacao.py:677`; `app/chamados/models.py:2130`)
-
-O sítio antigo de `_recarregar_estado_se_mudou` foi corrigido, mas essa correção não cobre todas as entradas no escritor de estado. S88/S143/S144 continuam executando ações síncronas durante os saves. (`app/chamados/models.py:689`; `app/chamados/models.py:442`; `app/chamados/signals.py:42`; `app/chamados/signals.py:92`; `app/chamados/signals.py:140`)
-
-**3. Classe (3) — PROCEDENTE, parcial; NAO PROCEDE mistura de escrita e recusa no retorno normal.**
-
-Mérito é relido dentro do atomic, depois da trava. Exportação também é consultada nesse envelope; contudo `_ent` fica fora do laço e reaproveita a resposta entre colaboradores da mesma competência, sem nova consulta após a trava de cada um. O congelamento contra entrega concorrente não está demonstrado por essas travas. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:194`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:200`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:205`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:209`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:219`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:238`; `app/folha/export.py:581`)
-
-A divergência do horizonte por empresa é conferida **antes** do atomic. Para `sem_ato`, há veto explícito sob trava; para grupos, o horizonte funciona como filtro que pode esvaziar o universo e provocar `continue`, sem registrar `fora_do_horizonte`. Isso não implementa integralmente o veto anunciado por item. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:183`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:205`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:215`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:216`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:225`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:229`)
-
-**NAO PROCEDE o defeito anterior de escrita persistida acompanhada de recusa:** há atomic externo e a exceção é levantada dentro dele; o retorno de recusa ocorre após rollback e zera os contadores. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:205`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:264`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:266`)
-
-`handle` faz mais que chamar `aplicar`: prepara/imprime o DRY e traduz recusas em saída. **NAO PROCEDE outra escrita do acervo nele ou no dedup:** os dois encaminham o apply à mesma função; as alterações de carimbo continuam delegadas a `retratar_duplicata`. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:296`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:371`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:384`; `app/chamados/management/commands/dedup_perguntas_fato.py:87`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:251`)
-
-**4. Classe (4) — PROCEDENTE: a declaração mudou, mas leitores permanecem incompatíveis.**
-
-O significado declarado é **dia do turno com `conversa=False`**; conversa conserva o **dia civil da emissão**. O novo `q_do_horizonte` incorpora o discriminador. (`app/chamados/services/fio.py:1031`; `app/chamados/services/fio.py:1036`; `app/chamados/models.py:2637`)
-
-O próprio nascimento ainda entrega o dia civil da conversa a `resolvedora_valida`, usando proxy sem `conversa`. Esse juiz presume conversa apenas quando a data é nula e compara a data recebida com o turno do chamado. Conversa emitida hoje para chamado de dois dias antes pode ser recusada como costura cruzada. (`app/chamados/models.py:2661`; `app/chamados/models.py:2665`; `app/chamados/models.py:2666`; `app/chamados/models.py:2668`; `app/chamados/juizes.py:1966`; `app/chamados/juizes.py:1968`; `app/chamados/juizes.py:1985`; `app/chamados/juizes.py:2001`)
-
-Outros leitores sem `conversa=False`, `do_fato` ou `q_do_horizonte`:
-
-| Leitor | Uso incompatível |
-|---|---|
-| Juiz do dia do chamado | Incorpora datas de todas as perguntas ao dia inferido da Disputa. (`app/chamados/juizes.py:75`; `app/chamados/juizes.py:80`; `app/chamados/juizes.py:209`) |
-| Prévia da folha | Agrupa pela data civil e apresenta a resposta como material do dia da célula. (`app/folha/previa.py:64`; `app/folha/previa.py:67`; `app/folha/previa.py:95`) |
-| Copiloto do dia | Inclui conversas civis nas perguntas daquele dia. (`app/ponto/services/dia_do_colab.py:64`; `app/ponto/services/dia_do_colab.py:71`; `app/ponto/services/dia_do_colab.py:99`) |
-| Diagnóstico do fio | Compara `data_evento` ao dia do fato sem distinguir conversa. (`app/chamados/services/fio.py:86`; `app/chamados/services/fio.py:88`) |
-
-**5. Classe (5) — NAO PROCEDE no contador atual.**
-
-“Nova” passou a usar `data_evento` da Pergunta contra o dia local da aplicação da 0052. Registro ausente ou dia nulo alarma; o escape de pergunta posterior sobre turno anterior está declarado. O RED fixa a aplicação da migração e exige que pergunta nova em Disputa velha conte como nova. (`app/chamados/services/fio.py:1108`; `app/chamados/services/fio.py:1115`; `app/chamados/services/fio.py:1119`; `app/chamados/services/fio.py:1120`; `app/chamados/tests/test_e1_v6_horizonte.py:228`)
-
-**6. Selos — PROCEDENTE insuficiência de alcance; NAO PROCEDE ausência generalizada de mordida.**
-
-A/B varrem Python sob `app`, com exclusões; C examina somente os dois commands. Os esperados são zero, sem allowlist explícita. Isso não equivale a cobrir semanticamente toda a classe no repositório. (`app/chamados/tests/test_e1_v7_catracas.py:26`; `app/chamados/tests/test_e1_v7_catracas.py:30`; `app/chamados/tests/test_e1_v7_catracas.py:144`; `app/chamados/tests/test_e1_v7_catracas.py:176`; `app/chamados/tests/test_e1_v7_catracas.py:218`; `app/chamados/tests/test_e1_v7_catracas.py:268`)
-
-| Catraca | Formas que escapam ao detector |
-|---|---|
-| A — trava | `getattr(..., "select_for_update")`, `get_for_update`, SQL cru; importação do módulo como `from chamados import models as m`. Alias direto do modelo e queryset em variável são detectados nos casos cobertos. (`app/chamados/tests/test_e1_v7_catracas.py:65`; `app/chamados/tests/test_e1_v7_catracas.py:79`; `app/chamados/tests/test_e1_v7_catracas.py:191`) |
-| B — canônica | Alias importado da função; `.filter/.exclude` no QuerySet; `qs = do_fato(...); qs.first()`; `min`/`sorted()[0]`. (`app/chamados/tests/test_e1_v7_catracas.py:19`; `app/chamados/tests/test_e1_v7_catracas.py:100`; `app/chamados/tests/test_e1_v7_catracas.py:113`; `app/chamados/tests/test_e1_v7_catracas.py:135`) |
-| C — escrita | Alias de escritor, `getattr(p, "save")()` e helper chamado fora dos dois arquivos examinados. (`app/chamados/tests/test_e1_v7_catracas.py:144`; `app/chamados/tests/test_e1_v7_catracas.py:157`) |
-
-As dispensas também usam apenas o nome da função: outra função chamada `trava_na_ordem`, `canonica_do_grupo` ou `aplicar` pode ocultar infração, sem comprovar arquivo/classe da autoridade. Logo zero allowlist nominal não garante sítio único. (`app/chamados/tests/test_e1_v7_catracas.py:83`; `app/chamados/tests/test_e1_v7_catracas.py:121`; `app/chamados/tests/test_e1_v7_catracas.py:157`)
-
-Os mutantes mordem as formas antigas escolhidas. Os REDs também corrigem as vacuidades específicas: p1 validada/materializada vence p2 muda; D exige `count()==1`; o `TransactionTestCase` tenta NOWAIT em segunda conexão, com seis linhas bloqueadas e dois controles livres, mais variante sem flag. Execução desses casos no banco: **[nao verificado]**. (`app/chamados/tests/test_e1_v7_catracas.py:182`; `app/chamados/tests/test_e1_v7_catracas.py:235`; `app/chamados/tests/test_e1_v7_catracas.py:276`; `app/chamados/tests/test_e1_v6_horizonte.py:405`; `app/chamados/tests/test_e1_v6_horizonte.py:454`; `app/chamados/tests/test_e1_v5_ordem_trava.py:481`; `app/chamados/tests/test_e1_v5_ordem_trava.py:504`; `app/chamados/tests/test_e1_v5_ordem_trava.py:515`)
-
-Permanece uma limitação distinta: o observador de ordem registra somente a primeira aquisição de cada **tabela**, ignorando outra PK da mesma tabela adquirida posteriormente. (`app/chamados/tests/test_e1_v5_ordem_trava.py:36`; `app/chamados/tests/test_e1_v5_ordem_trava.py:46`)
-
-**7. Escritores, leitores e significados — PROCEDENTE a incompatibilidade de `data_evento`; NAO PROCEDE uniformidade total.**
-
-| Campo/valor | Quem escreve | Quem lê e significado |
-|---|---|---|
-| `via_resolucao` | Carimbo por `_escrever_carimbo`, pelas portas normal/identidade/descarimbo; lote tem UPDATE próprio. Exceções declaradas: `relavrar` e `encerrar_por_fato_no_espelho`. (`app/chamados/models.py:2810`; `app/chamados/models.py:2865`; `app/chamados/models.py:2902`; `app/chamados/models.py:2973`; `app/chamados/services/relavra_via.py:123`; `app/chamados/models.py:2983`) | C6, `q_vivas`, identidade do fato, backfill e materializador. Representa via de encerramento/identidade, não necessariamente plantio. (`app/chamados/juizes.py:1148`; `app/chamados/models.py:3058`; `app/chamados/models.py:2564`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:129`; `app/chamados/services/materializacao.py:438`) |
-| `materializada_em` | Mesmas portas do carimbo. Duplicata preserva instante/autor anteriores quando já existem. (`app/chamados/models.py:2812`; `app/chamados/models.py:2894`; `app/chamados/models.py:2974`) | Vitalidade, elegibilidade do materializador, identificação da absorção e instante do SILENCIO legado. Não significa sempre “batida criada”, nem sempre instante da retratação; o help do campo continua mais estreito. (`app/chamados/juizes.py:1210`; `app/chamados/services/materializacao.py:1363`; `app/chamados/services/materializacao.py:624`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:243`; `app/chamados/models.py:3103`) |
-| `duplicata` / motivo retratado | `retratar_duplicata` e `remover_motivo`, pela porta de identidade. (`app/chamados/services/fio.py:1002`; `app/chamados/models.py:2014`) | `VIAS_FORA_DO_FATO`, C6, índices e guardas de descarimbo: terminalidade da identidade; resposta permanece histórica. (`app/chamados/models.py:2364`; `app/chamados/models.py:2564`; `app/chamados/juizes.py:1148`; `app/chamados/models.py:2918`; `app/chamados/models.py:3193`) |
-| `admin_decidiu` | `fechar_por_admin`, pela porta de identidade. Backfill acrescenta SILENCIO à sequência; não grava novamente essa via. (`app/chamados/models.py:2777`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:242`) | C6 e backfill distinguem decisão humana; mérito perdedor é essa via com resposta. (`app/chamados/juizes.py:1173`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:129`) |
-| `data_evento` | Nascimento; preenchimento de órfã no reapontamento; rechaveamento. (`app/chamados/models.py:2731`; `app/chamados/services/fio.py:840`; `app/chamados/services/fio.py:948`) | Identidade, horizonte, competência, materialização e leitores do dia. A incompatibilidade turno/conversa permanece nos consumidores do item 4. (`app/chamados/models.py:2562`; `app/chamados/services/fio.py:1036`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:118`; `app/chamados/services/materializacao.py:345`; `app/chamados/juizes.py:1966`) |
-| `status_local` | `_gravar_estado` atribui/grava; nascimento define estado inicial. (`app/chamados/models.py:228`; `app/chamados/models.py:291`; `app/chamados/models.py:1048`) | `_recarregar_estado_se_mudou`, motor e juízes leem estado persistido do Chamado. **NAO PROCEDE mudança de significado causada pelo diff**; o problema restante é ordem de aquisição. (`app/chamados/models.py:690`; `app/chamados/models.py:692`; `app/chamados/catalogo/motor.py:24`; `app/chamados/models.py:257`) |
-
-Há ainda documentação contraditória: `carimbar_identidade` diz que duplicata respondida pode continuar viva, mas o C6 atual mata `VIAS_QUE_VENCEM_A_RESPOSTA` antes de examinar a resposta. (`app/chamados/models.py:2885`; `app/chamados/models.py:2887`; `app/chamados/juizes.py:1148`; `app/chamados/juizes.py:1153`)
-
-**8. Reincidências e sete TETOS.**
-
-**PROCEDENTES:** seleção sobre universo paralelo, ordem de trava, campo com dois domínios e relógio fora da borda nos testes. As fixtures ainda criam Disputa com `auto_now_add`, chamam fechamento que usa `now()` sem injeção e usam `localdate()/now()` no selo de desempenho. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:215`; `app/chamados/models.py:291`; `app/chamados/models.py:2637`; `app/chamados/tests/test_e1_v6_horizonte.py:74`; `app/chamados/models.py:1710`; `app/chamados/tests/test_e1_v6_horizonte.py:174`; `app/chamados/models.py:2777`; `app/ponto/tests/test_selo_chokepoint_escrita.py:229`; `app/ponto/tests/test_selo_chokepoint_escrita.py:262`)
-
-**NAO PROCEDE segundo escritor do backfill demonstrado nesta volta; NAO PROCEDE selo inteiramente sem mordida.** Persistem insuficiências de cobertura descritas acima. (`app/chamados/management/commands/dedup_perguntas_fato.py:87`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:251`; `app/chamados/tests/test_e1_v7_catracas.py:182`; `app/chamados/tests/test_e1_v7_catracas.py:235`; `app/chamados/tests/test_e1_v7_catracas.py:276`)
-
-**NAO PROCEDE subida sem frase C8:** os sete números têm justificativa ao lado. (`PLANO_PISCADA.md:10`; `app/ponto/tests/test_selo_chokepoint_escrita.py:116`; `app/ponto/tests/test_selo_chokepoint_escrita.py:187`)
-
-| Cenário | Teto / aumento | Fonte |
-|---|---:|---|
-| `_gravar_estado` sem pergunta | 25 / +2 | `app/ponto/tests/test_selo_chokepoint_escrita.py:116` |
-| Reconciliar fecha | 57 / +2 | `app/ponto/tests/test_selo_chokepoint_escrita.py:118` |
-| Reconciliar recusa | 14 / +2 | `app/ponto/tests/test_selo_chokepoint_escrita.py:119` |
-| Uma cobrança fecha | 204 / +4 | `app/ponto/tests/test_selo_chokepoint_escrita.py:161` |
-| Três cobranças fecham | 254 / +8 | `app/ponto/tests/test_selo_chokepoint_escrita.py:162` |
-| Uma cobrança fica | 142 / +2 | `app/ponto/tests/test_selo_chokepoint_escrita.py:180` |
-| Três cobranças ficam | 211 / +3 | `app/ponto/tests/test_selo_chokepoint_escrita.py:187` |
-
-A decomposição é compatível com quantidade fixa de consultas **por entrada** na trava, não com tempo/contenção constantes: cresce o universo de linhas bloqueadas. O último +3 admite decomposição não medida, apesar da justificativa geral de +2 por entrada. Medições citadas nos logs e causalidade exata desse delta: **[nao verificado]**. (`app/chamados/models.py:2513`; `app/chamados/models.py:2515`; `app/chamados/models.py:2523`; `app/chamados/models.py:2528`; `app/ponto/tests/test_selo_chokepoint_escrita.py:187`)
-
-**9. Efeito colateral — NAO PROCEDE apagamento físico; PROCEDENTE perda de efetividade sem veto de mérito.**
-
-A retratação não apaga resposta, validação ou `DecisaoPergunta`: altera via/carimbo/autor/recusa. Porém tira a linha da identidade e pode matar sua resposta pendente antes da validação. (`app/chamados/services/fio.py:1002`; `app/chamados/models.py:2894`; `app/chamados/models.py:2898`; `app/chamados/models.py:2902`; `app/chamados/models.py:2564`; `app/chamados/juizes.py:1148`)
-
-Contraexemplo abaixo do horizonte: `p1` respondida/validada fora do destino; `x=p2` respondida com `admin_decidiu`, sem validação nem célula, no destino; `p3` muda viva no chamado velho. `x` pode estar viva pela resposta. A migração escolhe `p1`, retrata `x` e `p3` e não migra nenhuma delas para o destino. A resposta de `x` perde sua pendência efetiva; a decisão fica histórica. (`app/chamados/juizes.py:1153`; `app/chamados/juizes.py:1165`; `app/chamados/services/fio.py:1181`; `
-
-[truncado em 20000 de 20638 caracteres]
-
-_2766 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2767 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
