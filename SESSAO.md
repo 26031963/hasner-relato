@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 00:15:26.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (108.6 MB). Acoes na janela: **1509**.
+**Medido em 07/11/2026 00:20:46.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (108.6 MB). Acoes na janela: **1504**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1514,8 +1514,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:40:34 | Bash | Read E-SEM-VIVA-B v2 triage and copy state | `cd /home/ronald/saas-hasner; cat logs/esemvivab/v2.triagem \| cut -c1-400; cd /home/ronald/wt-esemvivab-095139 && git log --oneline -3 && git status --porcelain \| head` |
 | 12:30:43 | Bash | Wait for R1 p6 and V3 p1 | `cd /home/ronald/saas-hasner; n0=$(wc -l < logs/r1remede/cadeia3.status); timeout 580 bash -c "until [ \$(wc -l < logs/r1remede/cadeia3.status) -ge $((n0+2)) ]; do /usr/bin/sleep 10; done"; tail -3 logs/r1remede/cadeia3.status; ls logs/r1remede/p2/; for p in 2 3 4 5; do grep -ciE "INCOMPLETO\|rc_sombra" logs/r1remede/p$p/s.r 2>/dev/null; done; date +%T` |
 | 12:22:38 | Bash | Wait for two more R1 parts | `cd /home/ronald/saas-hasner; n0=$(wc -l < logs/r1remede/cadeia3.status); timeout 580 bash -c "until [ \$(wc -l < logs/r1remede/cadeia3.status) -ge $((n0+2)) ]; do /usr/bin/sleep 10; done"; tail -3 logs/r1remede/cadeia3.status; date +%T` |
-| 12:20:13 | Bash | Wait for next R1 part | `cd /home/ronald/saas-hasner; n0=$(wc -l < logs/r1remede/cadeia3.status); timeout 570 bash -c "until [ \$(wc -l < logs/r1remede/cadeia3.status) -gt $n0 ]; do /usr/bin/sleep 10; done"; tail -2 logs/r1remede/cadeia3.status; date +%T` |
-| 12:20:08 | Bash | Record O10-B decision in RELATO and BACKLOG | `cd /home/ronald/saas-hasner/app; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys h=sys.argv[1] p='docs/RELATO.md'; L=open(p).read().split('\n') assert L[1].startswith('ESPERANDO:') ins=[f"lei: O10-B folga_trabalhada fora de STATUS_QUE_PEDEM_DECISAO (colaboradores/services/calendario.py:94) -- falta a lei: troca que cai em folga trabalhada pede decisao do admin? B segue sem isso (nao bloqueia o ...` |
-| 12:19:58 | Bash | Read RELATO top and O10 BACKLOG rows | `cd /home/ronald/saas-hasner/app; sed -n 1,12p docs/RELATO.md \| cut -c1-250; grep -n "O10-TROCA\\|O10-B" docs/BACKLOG.md \| head -5` |
-| 12:19:55 | SendMessage |  | `-` |
-| 12:19:44 | Bash | Verify cobranca_orfa reads only regenerada_em | `cd /home/ronald/wt-o10b-103324/app; grep -n "regenerada_em\\|editada_em" escala/services/regeneracao.py ponto/management/commands/gerar_celulas.py ponto/management/commands/supra_juiz.py \| head -30; sed -n 38,44p /home/ronald/saas-hasner/app/docs/JUIZES.md \| cut -c1-300` |
