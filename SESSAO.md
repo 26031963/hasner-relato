@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/11/2026 23:01:08.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (106.9 MB). Acoes na janela: **1548**.
+**Medido em 06/11/2026 23:06:17.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (106.9 MB). Acoes na janela: **1549**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:03:25 | Bash |  | `cd /home/ronald/saas-hasner; date +%H:%M; ps -p 2820655 -o etime= ; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
 | 22:58:21 | Bash |  | `cd /home/ronald/saas-hasner; until /bin/grep -q '^rc=' logs/ferias2x/suite_v5.log; do /usr/bin/sleep 20; done; echo "$(/bin/grep -E '^Ran ' logs/ferias2x/suite_v5.log\|tail -1) $(/bin/grep -E '^(OK\|FAILED)($\| \()' logs/ferias2x/suite_v5.log\|tail -1) $(tail -1 logs/ferias2x/suite_v5.log)"; /bin/grep -E '^(FAIL\|ERROR):' logs/ferias2x/suite_v5.log` |
 | 22:58:16 | ToolSearch |  | `-` |
 | 22:58:16 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') assert L[1].startswith('ESPERANDO:') L[1]='ESPERANDO: trava_teste.sh \| pid=2820655' L.insert(2,"FERIAS-CANCELAR-2X volta 5 22:58: suite v4 FAILED 2 (status literal ('cancelado',...) em ferias/services.py x contrato chamados; teste 2x exigia 0 query = atalho que a volta 4 tirou). Cura 96796e7a: RECUS ...` |
