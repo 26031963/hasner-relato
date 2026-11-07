@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 07:45:17.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (117.1 MB). Acoes na janela: **1063**.
+**Medido em 07/11/2026 07:50:47.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (117.1 MB). Acoes na janela: **1059**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1069,7 +1069,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:52:12 | Bash | Check sombra envelope and noturno function | `cd /home/ronald/saas-hasner; grep -n "SONDA_ENVELOPE\\|sombra" bin/codex_pergunta.sh \| head -20; grep -n "def minutos_noturnos" app/ponto/motor_calculo_v2.py; sed -n 939p app/docs/BACKLOG.md \| cut -c1-900` |
 | 19:52:06 | Bash | Register aval privately, in PROMPTS and BACKLOG | `cd /home/ronald/saas-hasner/app; mkdir -p ../logs/v2bugs && chmod 700 ../logs/v2bugs cat > ../logs/v2bugs/aval.txt <<'EOF' aval Ronald: V2-BUGS-DO-MOTOR (06/11 19:5x) -- curar no v2 V3-MOTOR-FERIADO-HE100-NOTURNA (caso pela regra art.73 sobre a HE, col191 12/10 = 1,00 h relogio, RED 10 colabs 12/10, cura na origem do motor_calculo_v2.py) e V3-NOTURNO-RECORTE-LONGO (ANTES: medir frota comps 09/10/1 ...` |
 | 19:51:56 | Bash | Locate backlog/prompts anchors and existing bug rows | `cd /home/ronald/saas-hasner/app; grep -n "PUSH-PRESO-14" docs/BACKLOG.md docs/PROMPTS.md \| cut -c1-300; tail -2 docs/PROMPTS.md \| cut -c1-300; grep -n "V3-MOTOR-FERIADO-HE100-NOTURNA\\|V3-NOTURNO-RECORTE-LONGO" docs/*.md \| cut -c1-250 \| head; date +%H:%M` |
-| 19:47:59 | Bash | Check Codex pid alive and hook state | `cd /home/ronald/saas-hasner/app; ps -p 3619251 -o pid,etime,cmd --no-headers; date +%H:%M; python3 -c "import sys; sys.path.insert(0,'../bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
-| 19:45:32 | Bash | Repoint ESPERANDO to real Codex pid | `cd /home/ronald/saas-hasner/app; P=$(pgrep -f '^bash bin/codex_pergunta.sh 5a3f8d0e logs/h12h06b/comp11_apply/q_pre' \| head -1); echo $P; sed -i "2s#.*#ESPERANDO: codex_pergunta.sh \| pid=$P#" docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'../bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
-| 19:45:27 | Bash | Read failed Codex launch output | `cat /home/ronald/saas-hasner/logs/h12h06b/comp11_apply/q_pre.out` |
-| 19:45:21 | Bash | Launch Codex pre-read of comp11 apply command | `cd /home/ronald/saas-hasner; ls app/*/management/commands/rederivar_minutos_h06_comp11.py; mkdir -p logs/h12h06b/comp11_apply; cat > logs/h12h06b/comp11_apply/q_pre.q <<'EOF' Papel: leitura. Obra H12H06-B comp 11 apply (competencia 11/2026, NAO exportada). Comando: rederivar_minutos_h06_comp11 (--apply --por <usuario>). Perguntas: (1) liste TODA escrita que o --apply faz (modelo.campo, arquivo:lin ...` |
