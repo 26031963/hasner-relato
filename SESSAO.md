@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 11:30:58.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (123.0 MB). Acoes na janela: **480**.
+**Medido em 07/11/2026 11:36:19.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (123.0 MB). Acoes na janela: **475**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -485,8 +485,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 23:37:36 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/v2bugs/aval.txt \| cut -c1-1500; ls logs/v2bugs/i2/ \| head -50` |
 | 23:37:28 | Bash |  | `cd /home/ronald/saas-hasner; awk '/foto v2i2v3_antes gravada/{s=1} /ERROR ponto.services.fechamento/{if(s)d++; else a++} END{print "antes",a,"depois",d}' logs/v2bugs/i2/par_v3.log; cat logs/v2bugs/i2/v3.r` |
 | 23:37:23 | Bash |  | `cd /home/ronald/saas-hasner; tail -1 logs/v2bugs/i2/v3.out; tail -1 logs/v2bugs/i2/par_v3.log; ls -la logs/v2bugs/i2/v3.r; wc -c logs/v2bugs/i2/v3.r; /bin/grep -vE 'ERROR ponto.services.fechamento' logs/v2bugs/i2/par_v3.log \| tail -30 \| cut -c1-220` |
-| 23:31:35 | Bash |  | `cd /home/ronald/saas-hasner; ps -p 623394 -o pid,args \| cut -c1-80; sed -i '2s/.*/ESPERANDO: codex_pergunta.sh \| pid=623394/' app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
-| 23:31:31 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n "_esperando_com_prova\\|def _so_bang\\|_SO_BANG" bin/hook_stop_fila1.py \| head; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h, inspect; print(inspect.getsource(h._esperando_com_prova))" \| head -60` |
-| 23:31:19 | Bash |  | `cd /home/ronald/saas-hasner; until /bin/grep -q '^rc=' logs/v2bugs/i2/v3.out && /bin/grep -q '^rc=' logs/v2bugs/i2/par_v3.log; do /usr/bin/sleep 30; done; tail -1 logs/v2bugs/i2/v3.out; tail -1 logs/v2bugs/i2/par_v3.log` |
-| 23:31:14 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') L[1]='ESPERANDO: codex_pergunta.sh \| pid=623394 \| arquivo=logs/v2bugs/i2/v3.out' open(p,'w').write('\n'.join(L)) EOF sed -n 2p app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'/home/ronald/saas-hasner/bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
-| 23:31:09 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -c . logs/v2bugs/i2/par_v3.log; /bin/grep -E '^rc=' logs/v2bugs/i2/par_v3.log; ps -eo pid,etime,args \| /bin/grep -E "[s]imular_folha\|[c]odex_pergunta\|[t]rava_teste" \| cut -c1-150; tail -3 logs/v2bugs/i2/v3.out 2>/dev/null \| cut -c1-200` |
