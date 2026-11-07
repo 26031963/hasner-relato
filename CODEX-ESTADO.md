@@ -1,7 +1,113 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 20:54** · publicado em **06/11/2026 20:59** (UTC-3)
+> Ultima resposta processada: **06/11/2026 21:04** · publicado em **06/11/2026 21:04** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 21:04 · sessao bd2417475ff3 · - · - · origem=Ronald (tmux)
+
+Q3 — Regra documentada na cópia:
+
+- O fundamento local para a HE100 de feriado na janela noturna ser HE100 noturna está expresso em `app/ponto/calculador/regras.py:793-798`: a dobra decide HE50/100; adicional noturno vale em qualquer dia (art.73); HE100 na janela é HE100 noturna (Súmula264). O caso normativo dos testes também invoca art.73, Súmula60II, Súmula146 e Súmula264 em `app/ponto/tests/test_v3_dobra_sem_noturna.py:4-17`. Validade jurídica externa desses enunciados: [não verificado].
+- Isso depende de o feriado efetivamente ter direito à dobra: o piso local do 12x36 é simples; a CCT pode habilitar dobra pelo cadastro `feriado_12x36_em_dobra` em `app/core/regua_cct.py:473-478`. Não decorre de “ser vigilante/12x36” automaticamente.
+- CCT Vigilantes Londrina, cl.38-d, registrada nos comentários: 12x36 usa hora de 60min, mantendo adicional noturno; afasta redução, não adicional — `app/core/regua_cct.py:127-149`. Aplicação operacional apenas quando `r['hora_reduzida_afastada_12x36']`, ciclo12x36 e trava desligada — `app/core/regua_cct.py:467-472`.
+- Prorrogação: piso CLT12x36 é 22–05 estrito; jornada comum aplica art.73§5/Súmula60II; CCT decide pelo cadastro — `app/core/regua_cct.py:153-168`. Logo, “após05 sempre noturno para qualquer12x36” contrariaria a regra local.
+- Unidade HE100noturna = **horas de relógio**, subconjunto da HE100. `he_noturna` mede minutos pela diferença temporal em `minutos_noturnos` (`app/ponto/motor_calculo_v2.py:112-116`), desconta intervalo e reparte por proporção sem fator (`:440-451`); `ResultadoCalculo.horas_extra_100_noturna` soma minutos e divide60 (`:342-344`); calculador faz `/60` também (`app/ponto/calculador/regras.py:832-839`).
+- Unidade `horas_noturnas` é diferente: relógio × fator; fator padrão60/52,5 (`app/ponto/motor_calculo_v2.py:46`), ou1 quando CCT afasta (`:983-992`). Assim, no caso de toda a HE100 abranger todo o trabalho noturno, HE100noturna = horas_noturnas/fator. Não generalizar essa igualdade para dia em que apenas parte do trabalho é HE100 — a proporção em `:447-450` limita a rubrica.
+
+Q6 — **Existem testes explícitos**, com distinção de escopo: [nao verificado]
+
+1. `app/ponto/tests/test_v3_dobra_sem_noturna.py:71-76`: chama `regras.do_dia`, exige HE100noturna7h e HE50noturna0. Fixture6x1, feriado, turno22–06, pausa02–03, he_pontas com toda jornada em100 em `:40-57`; exige noturnas8h em `:62-69`. O gêmeo sem dobra exige HE100noturna0 em `:78-84`; caso com excedente exige HE1009h, HE100noturna8h e noturnas reduzidas em `:86-99`.
+2. `app/ponto/tests/test_v3_dobra_split_noturno_porta.py:73-81`: teste pela porta real (`:58-69`), **também lê a saída do motor**: HE1009h, HE100noturna8h, e HE100noturna×60 igual a `periodos[0].minutos_extra_100_noturna`. Fixture é ciclo6x1 com base12x36, turno21–07 e intervalo02–03 em `:43-49`; não é ciclo12x36vigilante com CCT.
+3. Gêmeos sem pausa exigem8h e9h de HE100noturna e diferença de1h pela pausa em `app/ponto/tests/test_v3_dobra_split_noturno_porta.py:83-92`. Propriedade de noturnas/intervalo, inclusive feriado, em `:94-103`.
+4. `app/ponto/tests/test_o280_bateria_da_lei.py:1354-1373` cobre12x36noturnoferiado no **piso simples**: HE100feriado0, extra0, noturnas relógio360min/legais411,43. Não afirma HE100noturna positiva.
+5. `app/ponto/tests/test_s5b_split_noturno_tem_um_dono.py:292-321` cobre HE100noturna em **não feriado**, com duas pontas; exige retorno somado `he_noturna/60` (`:315-320`).
+6. `app/ponto/tests/test_motor_comercial_dia_do_turno.py:72-78` cobre turno cruzando meia-noite: feriado só no dia seguinte não dobra cauda; feriado no dia do turno dobra todo. Não verifica HE100noturna.
+
+Execução/passagem dos testes nesta cópia: [não verificado]; fiz apenas leitura. [nao verificado]
+
+## 06/11 21:03 · sessao 63fd0ec05f72 · PLACAR-LIVENESS · leitura · origem=Code
+
+**O 400 explícito desta rota recusa o anexo da foto antes de consultar a batida. Ele não demonstra que a marcação de ponto foi recusada.** A view busca uma batida existente pelo ID e pelo colaborador autenticado (`app/api/views_core.py:840–851`).
+
+**1. View, entrada, gravação e leitores**
+
+O caminho é: Caddy encaminha `/api/ponto/*` ao core; a URLconf inclui `api.urls_core` sob `/api/`; esta importa `views_core` e aponta `ponto/foto/` para **`api_upload_foto`** (`Caddyfile:8–9`; `app/config/urls_core.py:6`; `app/api/urls_core.py:5–8`; `app/api/views_core.py:839`).
+
+A view aceita POST autenticado, recebe `batida_id` em `request.data` e o arquivo `foto` em `request.FILES`; a batida precisa pertencer a `request.user.colaborador` (`app/api/views_core.py:837–846`).
+
+O escritor chamado é `ponto.registro_batida.anexar_foto(..., registro='atualizar')`. Ele grava:
+
+- **`Batida.foto`**, via `anotar` e `batida.save(update_fields=...)`; o campo é um `ImageField` em `batidas/fotos/` (`app/api/views_core.py:850–851`; `app/ponto/registro_batida.py:307`; `app/ponto/registro_batida.py:252–254`; `app/ponto/models.py:78`).
+- **`FotoBatida.foto`**, via `update_or_create(batida=...)`; o modelo tem relação um-para-um com `Batida` e armazena em `fotos_batidas/%Y/%m/` (`app/ponto/registro_batida.py:308–311`; `app/ponto/models.py:1026–1030`).
+
+Depois de anexar, a view chama o tratamento das disputas de `foto_ausente` associadas àquela batida e retorna `status: ok` com `disputas_fechadas` (`app/api/views_core.py:860–863`; `app/api/foto_recebida.py:61–80`).
+
+Leitores encontrados desses campos:
+
+| Leitor | Uso e prova |
+|---|---|
+| Feed do dashboard | Mostra `b.foto.url` (`app/templates/core/_d2_feed.html:6`). |
+| Detalhe do colaborador | Mostra a selfie da batida (`app/templates/colaboradores/detalhe.html:186`). |
+| Detalhe da batida | Extrai a URL (`app/core/views.py:1005`). |
+| Mapa do colaborador | Serializa a URL (`app/colaboradores/services/detalhe.py:87`). |
+| Drawer do colaborador | Calcula `tem_selfie` (`app/colaboradores/services/drawer.py:64`). |
+| Upload web de selfie | Consulta se `Batida.foto` já existe antes de anexar (`app/ponto/views.py:2901–2903`). |
+| Mídia protegida | Consulta os dois modelos para autorizar acesso (`app/core/media_protegida.py:25–33`). |
+| Passe retroativo de foto ausente | Considera tanto `FotoBatida` quanto `Batida.foto` (`app/ponto/management/commands/marcar_foto_ausente_retro.py:70–77`). |
+
+**2. Ramos 400, estado da batida/foto e trilha**
+
+Há **um único ramo 400 explícito na view do core**, com condição composta:
+
+| Condição | Retorno | Efeito desta chamada |
+|---|---|---|
+| `batida_id` ausente/falso **ou** `foto` ausente/falsa | `{'erro': 'batida_id e foto obrigatorios.'}`, HTTP 400 (`app/api/views_core.py:840–843`). | Retorna antes da consulta e do escritor: não cria, altera nem remove a batida ou sua foto nesse ramo (`app/api/views_core.py:843–851`). |
+
+O contrato exige batida preexistente para anexar a foto, mas **o ramo 400 nem consulta sua existência**. Portanto, a existência da batida de cada pedido observado não pode ser comprovada pelo status 400 (`app/api/views_core.py:842–846`); nos dois casos de produção, isso está [nao verificado].
+
+Batida inexistente para aquele colaborador produz **404**, em ramo separado (`app/api/views_core.py:845–848`). A cópia da view na casca UI tem a mesma guarda 400, em `app/api/views.py:850–853`.
+
+**Não há chamada específica de `LogAuditoria`/`observ` nesse ramo 400**: ele retorna diretamente. A trilha de anexação fica depois, no caminho de escrita, por `anotar → _trilha → registrar_log → evento` (`app/api/views_core.py:842–851`; `app/ponto/registro_batida.py:263`; `app/ponto/registro_batida.py:225–232`; `app/core/auditoria.py:22–24`).
+
+Existe configuração de **access log** com método, caminho, status e duração, inclusive persistência em `access-core.log`; isso é distinto de uma auditoria específica da recusa (`app/gunicorn.core.conf.py:34–41`; `app/gunicorn.core.conf.py:89–96`). A presença efetiva dessas trilhas para os pedidos informados está [nao verificado].
+
+Outros 400 anteriores à execução da view, gerados por bibliotecas/parser/servidor, e qual ramo originou os dois 400 de produção: [nao verificado].
+
+**3. Comportamento dos clientes**
+
+Os dois clientes web indicados enviam a foto **inline para `/api/ponto/bater/`**, não para `/api/ponto/foto/` (`app/static/pwa.js:141–157`; `app/templates/ponto/bater_ponto_v2.html:331–338`).
+
+| Cliente | Tratamento comprovado |
+|---|---|
+| `pwa.js`, sincronização offline | Para **400 de `/bater/`**, escreve `console.warn` e apaga o registro pendente, que contém também a foto; não reenvia esse registro. Nesse ramo não há aviso visual específico ao colaborador (`app/static/pwa.js:113–118`; `app/static/pwa.js:166–175`). |
+| Tela `bater_ponto_v2.html` | Para erro HTTP de **`/bater/`**, mostra toast com `erro` ou mensagem contendo o status e reabilita o botão; permite nova tentativa manual. O armazenamento offline está no tratamento de exceção de rede, depois desse retorno (`app/templates/ponto/bater_ponto_v2.html:341–356`). |
+| Service worker | Não intercepta POST (`app/static/sw.js:33–36`). |
+| App nativo | Reenvio, descarte e aviso após 400 de **`/foto/`**: [nao verificado]. O backend descreve o envio separado pelo APK, mas isso não comprova o tratamento da resposta pelo aplicativo (`app/api/views_core.py:852–854`). |
+
+Assim, **não se pode atribuir aos dois 400 de `/foto/` o descarte observado no código de `/bater/`** (`app/static/pwa.js:153–175`).
+
+**4. Tempo, validade e limites**
+
+- **Na view de foto:** não há leitura de `timestamp_dispositivo`, comparação com “agora”, validação de assinatura do aparelho, idade máxima da batida ou teste de duração. A guarda explícita de 400 verifica apenas ID/foto (`app/api/views_core.py:839–863`).
+- **Autenticação:** há JWT e sessão; o access token está configurado para 12 horas e o refresh para 30 dias. O tratamento de expiração relança a exceção de autenticação, acrescentando `token_expirado`; não contém conversão da demora em 400 (`app/config/settings/base.py:32–50`; `app/api/credencial.py:221–256`).
+- **Timestamp do aparelho:** sua comparação ocorre em `/bater/`, que chama `hora_do_aparelho`. Fora da janela, essa função devolve `agora`, o timestamp lido e o motivo; não devolve resposta HTTP 400 (`app/api/views_core.py:528–531`; `app/api/hora_do_aparelho.py:135–153`).
+- **Prazo da selfie:** APK tem prazo de 90 minutos para caracterizar foto ausente; o passe retroativo pode abrir disputa. Esse mecanismo não é uma guarda de rejeição do upload (`app/ponto/registro_batida.py:72–91`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:95–104`; `app/api/views_core.py:839–863`).
+- **Casca:** o Gunicorn do core configura `gthread`, `timeout=30` e `graceful_timeout=30`. O proxy para o core não declara limite de corpo ou timeout nesse bloco. Esses trechos não estabelecem uma regra “passou de 30 s → 400” (`app/gunicorn.core.conf.py:1–6`; `Caddyfile:8–9`).
+- **Upload:** a view não verifica tamanho explicitamente. O limite efetivo das bibliotecas/infraestrutura e eventual atuação nos dois pedidos estão [nao verificado] (`app/api/views_core.py:839–863`).
+
+**A causa das durações de 168,6 s e 200,2 s e sua relação causal com os 400 permanecem [nao verificado].**
+
+**5. PLACAR-LIVENESS e dono L-099**
+
+Aplicando o limiar informado no enunciado aos tempos fornecidos, sem confirmação independente dos eventos [nao verificado]:
+
+| Caso fornecido | (2) POST >30 s | (4) Batida recusada sem trilha ou saída | Dono L-099 |
+|---|---|---|---|
+| 168,6 s → 400 | **Sim**, pelo dado informado [nao verificado]. | **Não demonstrado**: o 400 explícito é anterior à busca da batida e recusa o anexo (`app/api/views_core.py:842–851`); ramo real e efeito no cliente [nao verificado]. | **Não sei** [nao verificado]. |
+| 200,2 s → 400 | **Sim**, pelo dado informado [nao verificado]. | **Não demonstrado**, pela mesma distinção entre anexação e marcação (`app/api/views_core.py:842–851`); ramo real e efeito no cliente [nao verificado]. | **Não sei** [nao verificado]. |
+| 36,4 s → 200 | **Sim**, pelo dado informado [nao verificado]. | **Recusa não demonstrada**; o retorno normal desta view ocorre depois da anexação e do tratamento das disputas (`app/api/views_core.py:850–863`). | **Não sei** [nao verificado]. |
+
+A L-099 exige dono por divergência; o juiz implementado recebe fatos do dia, cadastro e batidas, e **não classifica por duração/status HTTP**. Esses insumos não foram fornecidos para os três casos (`CLAUDE.md:176`; `app/ponto/management/commands/e6_oraculo.py:53–54`; `app/ponto/management/commands/e6_oraculo.py:98–110`) [nao verificado].
 
 ## 06/11 20:54 · sessao 418dcb5a30a1 · PLACAR-LIVENESS · leitura · origem=Code
 
@@ -1312,57 +1418,4 @@ A interpretação “prova/fonte apenas documentam uma medição” não vale pa
 
 - O backend trata o formato epoch esperado do APK e ISO esperado do PWA pela mesma função (`app/api/hora_do_aparelho.py:72-121`); o comentário associa APK a `device_id`, assinatura Keystore e foto em POST separado (`app/ponto/registro_batida.py:53-59`; `app/api/views_core.py:459-488`). Armazenamento local e gatilhos de reenvio do **cliente APK** não foram comprovados por código nativo nesta cópia: [nao verificado].
 
-## 06/11 20:45 · sessao e1ea6b97aab5 · - · - · origem=Ronald (tmux)
-
-- `test_sw_offline_fallback.py` lê o **sw.js real**, executando-o em Node com `self`, rede e cache simulados (`app/core/tests/test_sw_offline_fallback.py:23`, `:25`, `:35`). O harness sempre envia **GET** (`:44`), para navegação, tela de bater e ramo restante (`:62`). Os testes exigem `Response.error()` sem rede/cache (`:79`), conteúdo do cache quando existe (`:89`) e preferência pela rede disponível (`:96`). Assim, não exercitam POST, IndexedDB, clique, persistência ou reenvio de batida (`:37`, `:44`).
-
-- `test_batida_offline.py` usa **Django Client autenticado por sessão**, enviando diretamente `/api/ponto/bater/` (`app/ponto/tests/test_batida_offline.py:60`). O payload contém `timestamp_dispositivo` e não contém `device_id` (`:49`); ele representa o caminho API/PWA, não o cliente APK, cuja identificação deve ser conferida na porta (`:51`). Testa criação (`:68`), dois envios do mesmo timestamp retornando `ja_registrada` e apenas uma linha (`:78`), tipo/payload inválidos (`:91`, `:95`), timestamp antigo aceito (`:104`), colaborador sem posto (`:111`) e disputa (`:119`). Não executa `pwa.js`, não desconecta navegador e não prova recuperação real de fila (`:60`).
-
-- O teste adicional explicitamente chamado PWA também usa Django Client e payload sem `device_id` (`app/api/tests/test_api_bater_pwa.py:42`, `:47`). Exercita foto/disputa, não funcionamento offline (`:64`, `:78`, `:95`).
-
-- O SW **não intercepta POST**: retorna antes do `respondWith` quando o método não é GET (`app/static/sw.js:35`). Seu evento Background Sync apenas manda `SYNC_BATIDAS` para páginas abertas; sem página, mostra notificação pedindo abertura (`app/static/sw.js:112`, `:116`, `:119`, `:122`).
-
-- A fila existe: IndexedDB `juliani-offline`, store `batidas_pendentes` (`app/static/pwa.js:50`, `:54`), gravação transacional em `registrarBatidaOffline` (`:107`, `:112`, `:120`); há chamadas reais nos templates v2 (`app/templates/ponto/bater_ponto_v2.html:356`, `:374`) e clássico (`app/templates/ponto/bater_ponto.html:543`, `:597`). Portanto, os testes limitados não autorizam concluir perda, e a hipótese de inexistência de fila é contrariada pelo código citado (`app/static/pwa.js:107`).
-
-- A **lei local** L-030 determina “batida de chão nunca é barrada em runtime”, escrita pela porta `registro_batida.py`, sem fabricação pelo motor (`CLAUDE.md:140`, `app/docs/LEIS.md:78`). A referência explícita à Portaria 671 encontrada nesses textos trata de exibição da marcação crua (`CLAUDE.md:164`, `app/docs/LEIS.md:76`). Artigo, vigência e enquadramento jurídico externo da Portaria: **[nao verificado]**.
-
-- Caso apareça necessidade de cura, a regra local manda atuar na fonte (`CLAUDE.md:17`); para perda na captura/fila PWA, os sítios de origem são chamadas dos templates e `registrarBatidaOffline`/`sincronizarBatidas`, mantendo a gravação servidor na porta única (`app/templates/ponto/bater_ponto_v2.html:356`, `app/static/pwa.js:107`, `:126`, `app/ponto/registro_batida.py:94`). Nenhuma cura foi executada **[nao verificado por evidência de alteração; somente leitura nesta tarefa]**.
-
-## 06/11 20:44 · sessao 1209bcebfb4b · - · - · origem=Ronald (tmux)
-
-**08 — col617**
-
-- **Estado hoje:** não há atestado pendente na FICHA: #5380 rejeitado; #5399 aprovado, cobrindo 05–06/11, ambas células `trabalha=true / concorde / gerada / ausencia`; chamados #37140 e #37319 resolvidos via sistema. DiaPago não foi fornecido. [nao verificado]
-- **Pendente no espelho:** a cobertura para cobrança inclui ausências não rejeitadas; a cobertura para folha exige aprovação (`app/ponto/turnos.py:2509`). O montador separa as duas (`app/ponto/services/espelho.py:582`, `:588`) e entrega a aberta como `_pendente_do_dia` (`:878`). O juiz da palavra mantém o veredito e mostra **“Atestado aguardando decisao”**, amarelo (`app/ponto/services/dia_decidido.py:420`, `:224`, `:57`). Portanto, aparência de pendência e abono são estados distintos no código.
-- **Porta:** Ausências → drawer → Aprovar (`app/ponto/urls.py:65`; `app/ponto/views.py:2067`; `app/templates/ponto/partials/painel_ausencia.html:306`, `:309`, `:321`). Exige `editar_ausencias`, POST e ausência aberta (`app/ponto/views.py:2603`); chama `_a4_decidir` (`:2643`), que chega à decisão e escritor de estado (`app/ponto/services/ausencia.py:897`, `:911`, `:824`, `:835`). Documento anexado leva à decisão do DP (`:779`, `:791`); sem documento obrigatório, não há botão Aprovar (`painel_ausencia.html:324`).
-- **Espelho após ação:** save de Ausência julga os dias (`app/ponto/signals.py:143`, `:147`, `:93`); cartório escreve ata, veredito e status (`app/ponto/services/cartorio.py:1800`; `app/ponto/portas/celula.py:1030`). Palavra de ausência aprovada sai da cobertura de folha (`app/ponto/services/dia_decidido.py:428`).
-- **DiaPago após ação:** **não prometer recálculo imediato pela aprovação.** `decidir` invalida fechamento (`app/ponto/services/ausencia.py:946`), zerando `derivado_em` (`app/ponto/services/fechamento.py:1636`). O próprio código distingue invalidação de recálculo (`:1606`). O recálculo posterior escreve DiaPago por `fechamento.py:1184` → `dia_pago.py:357`.
-- **Dono/obra:** aprovação documental pertence ao admin; defeito de coerência de tela, se demonstrado, é ESTRUTURA pela L-099 (`CLAUDE.md:176`). A sonda atual não demonstra pendência nem divergência entre espelho/DiaPago. [nao verificado] A obra DST declara explicitamente dia com ausência lançada como “SEM porta, dia decidido” (`app/docs/BACKLOG.md:1793`), portanto não abrir Resolver dia para substituir aprovação de atestado.
-- **Fechamento:** não fechar: falta DiaPago e validação operacional do percurso. [nao verificado]
-
-**09 — col1000, 29–30/10**
-
-- **Estado hoje:** células #142904/#142905: `true / furo / gerada / irregular`, `resolver_dia=false`, `pede_decisao=true`; chamados #37325/#37326 `em_analise`, sem resolução/via; perguntas #54529/#54530 `intervalo_volta`, sem resposta, validação ou materialização, veredito `nao`. Existem três marcações em cada dia: E/S/S, faltando retorno E do intervalo. DiaPago não fornecido. [nao verificado]
-- **Porta atual:** chamado local `/chamados/local/<id>/` (`app/chamados/urls.py:14`; `app/chamados/views.py:359`). O cartão oferece Validar somente após resposta (`app/templates/chamados/partials/_pergunta_card.html:29`, `:42`, `:92`); view encaminha à autoridade (`app/chamados/views.py:483`, `:501`). Sem resposta, o serviço recusa `sem_resposta` (`app/chamados/services/validacao.py:363`).
-- **Ação operacional necessária hoje:** colaborador responde ao horário na porta de atendimento (`app/chamados/views.py:1228`, `:1283`), writer `resposta_colab/respondida_em` (`app/chamados/services/disputa_emissao.py:1282`); admin valida. Não inventar hora: ela não veio na sonda. [nao verificado]
-- **Existe Corrigir:** modal oferece HH:MM e motivo (`app/templates/chamados/partials/modal_fio.html:295`, `:307`), view local também reconhece a ação (`app/chamados/views.py:523`). Porém o formulário está dentro de `if perg.respondida_em` (`modal_fio.html:212`); sem resposta há somente “Aguardando resposta do colaborador” (`:313`). Assim, **não há nessa tela porta de Corrigir oferecida hoje para essas duas perguntas sem resposta**.
-- **O que escreve:** Corrigir preserva declaração anterior em followup, grava pela autoridade de resposta e chama validar (`app/chamados/services/acoes_disputa.py:355`, `:366`, `:375`). Materialização de intervalo fixo usa horário do marco, quando disponível, em vez de hora livre (`app/chamados/services/materializacao.py:404`); batida passa por `registrar_batida` (`:901`). Validação agenda recálculo (`app/chamados/services/validacao.py:406`), que recalcula após commit (`app/ponto/services/fechamento.py:1791`, `:1808`) e grava DiaPago (`:1184`; `app/ponto/services/dia_pago.py:357`).
-- **Dono:** falta de retorno é candidata BATIDA: juiz formal prioriza contagem ímpar (`app/ponto/management/commands/e6_oraculo.py:62`). Contudo, `folga_nao_definida` e `sem_vinculo_no_dia` precedem essa regra (`:77`, `:85`); a sonda não traz esses insumos do juiz para 29/30, portanto dono formal não medido [nao verificado]. O chamado #35214 de cadastro aberto, sozinho, não prova sua incidência nestes dois dias. [nao verificado]
-- **Obra:** complemento O261 para eventual falta de porta admin antes da resposta/resultado verificável; DST não corresponde aos dias `trabalha=true` fornecidos. Encaixe proposto [nao verificado]; DST cobre batida em folga/feriado (`app/docs/BACKLOG.md:1793`).
-- **Fechamento:** não fechar: faltam resposta, ação efetiva, DiaPago posterior e validação operacional. [nao verificado]
-
-**Escritores/leitores adicionais**
-
-| Campo utilizado | Escritor | Leitor |
-|---|---|---|
-| Ausência.status | `app/ponto/services/ausencia.py:808`, `:824` | cobertura `app/ponto/turnos.py:2514`; cabeçalho `app/templates/ponto/partials/painel_ausencia.html:24` |
-| Ausência.aprovado_por/aprovada_em | `app/ponto/services/ausencia.py:913` | auditoria `app/templates/ponto/partials/painel_ausencia.html:257` |
-| Pergunta.resposta_colab/respondida_em | `app/chamados/services/disputa_emissao.py:1282` | `app/templates/chamados/partials/_pergunta_card.html:29`; guarda `app/chamados/services/validacao.py:363` |
-| Pergunta.validada_em | autoridade `app/chamados/services/validacao.py:396` | `app/templates/chamados/partials/_pergunta_card.html:23` |
-| Chamado.status_local/resolvido_em/via | `app/chamados/models.py:195`, `:222` | `app/templates/chamados/detalhe_local.html:68`, `:88` |
-| Célula.veredito/status | `app/ponto/portas/celula.py:1030` | `app/ponto/status_dia.py:287`; calendário `app/colaboradores/services/calendario.py:606` |
-| DiaPago | `app/ponto/services/fechamento.py:1184` → `app/ponto/services/dia_pago.py:357` | `app/ponto/services/espelho.py:406` |
-
-Não executei validação operacional; análise de código somente leitura. [nao verificado] [nao verificado]
-
-_2544 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2546 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
