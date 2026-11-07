@@ -1,5 +1,6 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: codex_pergunta.sh | pid=3093065
+ESPERANDO: trava_teste.sh | pid=362192
+lei: F7g-PRORROGACAO-DA-JORNADA (07/11 00:3x) -- pausa que o pareador fecha (19:00E/04:30S/05:30E/07:00S, 12x36 noturno, CCT com prorrogacao pos-05h) e UMA jornada (Art.71 par.1 + 73 par.5 + Sum.60-II: 480 relogio/548,57 legais) ou DUAS (a casa hoje: 390/445,71)? Volta 4 do V2 i2 (950a3749) decidia por 480 e movia noturno FORA de feriado; retirada na volta 5 (PARADA 3), F7g e F10h ficam PINADOS. Item 2 segue sem isso.
 DESPACHO PUSH-ANTES-DA-E2 23:38: aval recebido (logs/akmed/aval_push_antes_e2.txt); vagas hoje = E1 + V2 i2 volta 4 (teto 2); a 1a que abrir vai ao L-123 v5 (brief logs/akmed/brief_v5.md), E2 depois do push.
 V2 i2 23:4x: Codex v3 REPROVA (logs/v2bugs/i2/v3.r); triagem_v3.txt: T3-1 fallback civil em _dia_da_jornada_do_par (LEI-AKITA 1), T3-2 cauda noturna entre pares, T3-3 texto do alerta -> volta 4 em construtor; DIFF par_v3 comp 11: emp2 mudaram=8, TXT=0; voltas Codex=3 -> proxima e opus final.
 PUSH 23:2x do marco FERIAS rc=1 (logs/push/ferias_pouso.log): MESMA causa PUSH-PRESO-14 -- lei_akita PADRAO-NA-CURA nos 3 R1-PUBLICA (36c90132 6ed6adbe a16637ca, n/a (medida)); 34 a frente, nada novo no origin. Destrava SO pelo pouso do instrumento L-123-MEDIDA-EM-PY volta 5 (wt-akmed4-205205, aval_v5), que entra na proxima vaga (instrumento depois de negocio: V2 i2 e E1 ocupam o teto 2).

@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 00:31:09.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (108.6 MB). Acoes na janela: **1502**.
+**Medido em 07/11/2026 00:36:21.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (108.7 MB). Acoes na janela: **1509**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:32:54 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '2s/.*/ESPERANDO: trava_teste.sh \| pid=362192/' app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
+| 00:32:51 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') L.insert(2,'lei: F7g-PRORROGACAO-DA-JORNADA (07/11 00:3x) -- pausa que o pareador fecha (19:00E/04:30S/05:30E/07:00S, 12x36 noturno, CCT com prorrogacao pos-05h) e UMA jornada (Art.71 par.1 + 73 par.5 + Sum.60-II: 480 relogio/548,57 legais) ou DUAS (a casa hoje: 390/445,71)? Volta 4 do V2 i2 (950a37 ...` |
+| 00:32:45 | SendMessage |  | `-` |
+| 00:32:33 | Bash |  | `cd /home/ronald/saas-hasner; git grep -n "F7g" -- app/docs \| cut -c1-300 \| head; /bin/grep -rn "prorroga.*jornada\\|jornada.*prorroga" app/docs/LEIS.md \| cut -c1-250 \| head -5` |
+| 00:32:29 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n "F7g" app/docs/BACKLOG.md app/docs/RELATO.md app/docs/LEIS.md app/docs/CORTES.md 2>/dev/null \| cut -c1-300 \| head` |
+| 00:32:21 | Bash |  | `cd /home/ronald/wt-v2i2-212416; git show 19aeede1:app/ponto/tests/test_o280_bateria_da_lei.py \| sed -n 370,385p; git show 19aeede1:app/ponto/tests/test_o280_bateria_da_lei.py \| sed -n 1488,1510p; git show 19aeede1:app/ponto/tests/test_o280_bateria_da_lei.py \| sed -n 1565,1600p` |
+| 00:32:17 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n "V3-P5-PRORROGACAO-POR-INTERVALO" app/docs/BACKLOG.md \| cut -c1-900 \| head -3; cd /home/ronald/wt-v2i2-212416; git show 19aeede1:app/ponto/tests/test_o280_bateria_da_lei.py \| /bin/grep -n "F7f" \| head -5` |
 | 00:12:51 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '2s/.*/ESPERANDO: codex_pergunta.sh \| pid=3093065/' app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
 | 00:12:47 | Bash |  | `cd /home/ronald/saas-hasner; date '+%H:%M'; bin/trava_teste.sh --quem; ps -eo pid,etime,args \| /bin/grep -E "[t]rava_teste\|[c]odex_pergunta" \| cut -c1-140` |
 | 23:45:03 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bskq8uopy.output; ps -eo pid,etime,args \| /bin/grep -E "[t]rava_teste\|[c]odex_pergunta" \| cut -c1-140` |
