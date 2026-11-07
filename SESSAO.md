@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 13:32:35.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (124.7 MB). Acoes na janela: **491**.
+**Medido em 07/11/2026 13:37:57.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (124.7 MB). Acoes na janela: **488**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -498,6 +498,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:48:50 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' import sys; sys.path.insert(0,'bin'); import disjuntor as d print(d.obras_da_linha('DESENHO V2-BUGS-I2')) for s in ['app/ponto/motor_calculo_v2.py:3012','ponto/motor_calculo_v2.py:3012']: print(s, d._sitios_validos('x '+s,'/home/ronald/saas-hasner')) print(d._sitios_validos(' aval Ronald 07/11 01:4x opcao (a), logs/v2bugs/i2/aval_b3.txt','/home/rona ...` |
 | 01:48:46 | Bash |  | `cd /home/ronald/saas-hasner && umask 077 && cat > logs/v2bugs/i2/aval_b3.txt <<'EOF' aval Ronald 07/11 ~01:4x (colado no chat): V2-BUGS-I2 B3 -- rearma, opcao (a) (substitui qualquer versao anterior desta liberacao): volta 6 SO com o item 2 do aval V2-BUGS (he100_noturna = noturnas/fator, feriado); N-PRORROG (motor :446-458), B-SPLIT-EFETIVO (:1049-1053) e o partido que dobra pelo dia do juiz x FT ...` |
 | 01:48:33 | Bash |  | `cd /home/ronald/saas-hasner && sed -n 625,660p bin/disjuntor.py; grep -n "PRORROGACAO-NOTURNA-UMA-JORNADA\\|^\| V2-I2-FILA\\|V2-BUGS" app/docs/BACKLOG.md \| cut -c1-160 \| head` |
-| 01:34:31 | Bash |  | `cd /home/ronald/saas-hasner && umask 077 && cat > logs/v2bugs/i2/opus_final.txt <<'EOF' opus final V2 i2 @2cb3a055 (verificador, 07/11 01:3x): REPROVADO 1. ESCOPO DO AVAL (LEI-AKITA 9): motor :446-458 (he_noturna N-PRORROG, corte dentro do par) e :1049-1053 (_aplicar_he_noturna B-SPLIT-EFETIVO, efetivo no lugar do cru) mudam HE50/HE100 noturna em dia NAO feriado (todo noturno com HE apos 05:00); r ...` |
-| 01:34:12 | Bash |  | `cd /home/ronald/saas-hasner && grep -n "^B3\\|B3 " app/docs/RELATO.md \| head -8; sed -n 1,6p app/docs/RELATO.md \| cut -c1-250` |
-| 01:34:08 | Bash |  | `cd /home/ronald/saas-hasner && date '+%d/%m %H:%M' && grep -n "B3" bin/disjuntor.py \| head -30 && ps -p 2636917 -o pid,cmd --no-headers` |
