@@ -1,5 +1,5 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: trava_teste.sh | pid=424985
+ESPERANDO: codex_pergunta.sh | pid=623394
 PUSH 23:2x do marco FERIAS rc=1 (logs/push/ferias_pouso.log): MESMA causa PUSH-PRESO-14 -- lei_akita PADRAO-NA-CURA nos 3 R1-PUBLICA (36c90132 6ed6adbe a16637ca, n/a (medida)); 34 a frente, nada novo no origin. Destrava SO pelo pouso do instrumento L-123-MEDIDA-EM-PY volta 5 (wt-akmed4-205205, aval_v5), que entra na proxima vaga (instrumento depois de negocio: V2 i2 e E1 ocupam o teto 2).
 FERIAS-CANCELAR-2X NO AR 23:27: bin/deploy.sh --sem-migrate rc=0 (3 cascas HUP, 3 rotas provadas, importerror_500=0; logs/ferias2x/deploy.log). Push do marco em curso: logs/push/ferias_pouso.log. Vaga 1 livre -> E2 (FIO-E0-V4) abre quando o V2 i2 pousar; E1 segue na outra vaga (teto 2 conferido).
 FERIAS-CANCELAR-2X POUSA 23:2x (marco): merge --no-ff raia/wt-ferias2x-212952 (96796e7a), cmp 6/6 contra a copia certificada; suite inteira 13954 OK (suite_v5.log); opus final APROVA, achados 1-6 e P2-P6 = fila FERIAS-2X-FILA / FERIAS-SALDO-SEM-TRAVA. MEDIDA: voltas Codex 3, opus 1, opus reprovou depois do Codex aprovar = nao. Deploy --sem-migrate (0 migration).

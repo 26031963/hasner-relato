@@ -1,7 +1,68 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 22:48** · publicado em **06/11/2026 22:50** (UTC-3)
+> Ultima resposta processada: **06/11/2026 23:32** · publicado em **06/11/2026 23:32** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 23:32 · sessao b9ba20b70125 · - · - · origem=Ronald (tmux)
+
+Achados e mapa de leitores, somente pela cópia:
+
+1. **P3 está curado no sítio:** filtro de escala certa e promoção usam `_dia_de(p, resultado.dia_da_jornada)`, antes de separar FT certa/feriado/sem escala. A mesma partição segue para `lavrar`. (`app/ponto/services/fechamento.py:941`, `app/ponto/services/fechamento.py:954`, `app/ponto/services/fechamento.py:988`, `app/ponto/services/fechamento.py:1211`)
+
+2. **A testemunha da exportação continua comparando dias diferentes.** `dias_fora_do_dia_pago` soma períodos pela data civil local da entrada; DiaPago foi agrupado por jornada. No F11h, períodos de 3h em d e 4h em d+1 produzem espelho civil 3h/4h versus DiaPago 7h/0h, acusando divergência apesar da atribuição correta ao turno. Esse contador continua fora de `falhas`. (`app/folha/porta_export.py:104`, `app/ponto/services/dia_pago.py:245`, `app/ponto/tests/test_o280_bateria_da_lei.py:1889`, `app/folha/porta_export.py:696`)
+
+3. **Outro invariante do export usa data civil crua:** `_p.entrada.date()` agrupa HE/intra/trabalhado, podendo inclusive usar dia UTC; previsto e intervalo declarado são consultados nessa data. A redistribuição da dobra de um portador para vários períodos pode mudar essa acusação. Ele integra `falhas`, portanto pode afetar a liberação do TXT; ocorrência na frota é [não verificado]. (`app/folha/porta_export.py:538`, `app/folha/porta_export.py:548`, `app/folha/porta_export.py:560`, `app/folha/porta_export.py:689`)
+
+4. **Alerta ainda mistura dia julgado e dia civil:** a escolha “folga semanal” consulta `data_jornada`, mas imprime o nome do dia pelo `weekday()` da entrada do par. Cauda de segunda pertencente à jornada de domingo pode dizer “folga semanal (Segunda)”. Isso muda texto, sem escrita direta de rubrica nesse ramo. (`app/ponto/motor_calculo_v2.py:2511`, `app/ponto/motor_calculo_v2.py:2516`, `app/ponto/motor_calculo_v2.py:2521`)
+
+5. **Janela continua civil antes da dobra:** `_janela_do_dia` consulta empresa e marcos por `entrada.date()`. A dobra agora usar o mapa não corrige esse recorte anterior do par efetivo. Trata-se da mesma inconsistência temporal, embora a pergunta ali seja janela/marcos, não identificação de feriado; pode alterar duração e HE. O próprio calculador documenta pares invertidos por essa ancoragem, mas os números comentados não foram reproduzidos nesta análise: [não verificado]. (`app/ponto/motor_calculo_v2.py:1562`, `app/ponto/motor_calculo_v2.py:1570`, `app/ponto/calculador/periodo.py:660`)
+
+**Escritores e leitores dos campos**
+
+| Campo | Escrita e leitura |
+|---|---|
+| `minutos_extra_100_feriado` | Dobras por período 12x36/comercial; FT partido; dobras diárias repartidas. ResultadoMes soma regulares; fechamento acrescenta FT promovida. DiaPago lê regulares e, para FT feriado, promove trabalhado. (`app/ponto/motor_calculo_v2.py:2852`, `app/ponto/motor_calculo_v2.py:3007`, `app/ponto/motor_calculo_v2.py:3155`, `app/ponto/motor_calculo_v2.py:3327`, `app/ponto/motor_calculo_v2.py:3414`, `app/ponto/motor_calculo_v2.py:337`, `app/ponto/services/fechamento.py:962`, `app/ponto/services/dia_pago.py:183`, `app/ponto/services/dia_pago.py:250`) |
+| `minutos_extra_100_noturna` | Casca `_aplicar_he_noturna` escreve retorno positivo de `he_noturna`; resets e bloqueio zeram. ResultadoMes soma regulares; fechamento e DiaPago acrescentam campo dos FT promovidos. (`app/ponto/motor_calculo_v2.py:1048`, `app/ponto/motor_calculo_v2.py:1053`, `app/ponto/motor_calculo_v2.py:1509`, `app/ponto/motor_calculo_v2.py:2978`, `app/ponto/motor_calculo_v2.py:349`, `app/ponto/services/fechamento.py:970`, `app/ponto/services/dia_pago.py:252`) |
+| Noturno relógio/legal | `_escrever_noturnas` lê `calcular_noturnas`; legais = relógio × fator. ResultadoMes soma regulares e FT; FM recebe o total; DiaPago soma os campos nos respectivos dias. Não há um campo genérico `minutos_noturnos` no dataclass. (`app/ponto/motor_calculo_v2.py:219`, `app/ponto/motor_calculo_v2.py:220`, `app/ponto/motor_calculo_v2.py:1013`, `app/ponto/motor_calculo_v2.py:1016`, `app/ponto/motor_calculo_v2.py:1033`, `app/ponto/motor_calculo_v2.py:326`, `app/ponto/services/fechamento.py:918`, `app/ponto/services/dia_pago.py:179`, `app/ponto/services/dia_pago.py:224`) |
+| FM / DiaPago persistidos | FM recebe totais e persiste por `save`/`update`; `lavrar` apaga/recria a versão do DiaPago. Falha posterior da lavratura é capturada após persistência do FM. Restauração atualiza somente FM. (`app/ponto/services/fechamento.py:1152`, `app/ponto/services/fechamento.py:1168`, `app/ponto/services/dia_pago.py:359`, `app/ponto/services/fechamento.py:1246`, `app/ponto/services/fechamento.py:1400`) |
+
+**Os leitores não compartilham integralmente o mesmo contrato de dia.**
+
+- Calendário lê dinheiro do DiaPago por data; suas batidas/cards vêm de `turnos_do_colab` pela `CargaDaJanela`, agrupados por `t.data_turno`, não por data civil. Assim, quando a base sobrescreve o dia do juiz pela herança de seis horas, dinheiro e geometria podem ter origens diferentes. (`app/colaboradores/services/calendario.py:221`, `app/colaboradores/services/calendario.py:224`, `app/colaboradores/services/calendario.py:610`, `app/colaboradores/services/calendario.py:655`, `app/ponto/motor_calculo_v2.py:2443`)
+- Espelho também agrupa cards pelo juiz `dia_das_batidas`, mas lê rubricas do DiaPago. Seu resumo provisório ainda recorta períodos pela data civil local; o PDF chama a mesma soma sem esse recorte. (`app/ponto/services/espelho.py:450`, `app/ponto/services/espelho.py:458`, `app/ponto/services/espelho.py:813`, `app/ponto/services/espelho.py:84`, `app/ponto/services/espelho.py:439`, `app/relatorios/pdf_espelho.py:502`)
+- Tela diária e PDF imprimem rubricas lavradas; não remontam o split. O PDF ainda consulta os períodos para decidir presença de coluna. (`app/templates/ponto/espelho.html:268`, `app/templates/ponto/espelho.html:283`, `app/relatorios/pdf_espelho.py:837`, `app/relatorios/pdf_espelho.py:854`)
+- TXT lê FM: HE100 normal/feriado e adicional noturno total. Não emite evento separado para HE100 noturna; portanto mudanças apenas no subconjunto não alteram essas linhas do TXT. Mudança de `horas_noturnas` altera a entrada do adicional. (`app/folha/export.py:420`, `app/folha/export.py:424`, `app/folha/export.py:443`, `app/folha/export.py:447`)
+
+**V3 conserva campo com dois significados, já F1 da fila.** A alimentação lê dia da jornada e pares portadores de HE; sem mapa declara contador e ignora o período. `reler`, porém, zera pais HE em todos os pares, preserva splits e recoloca a dobra inteira no último. No NPART corrigido, o primeiro pode terminar HE100=0 e HE100 noturna=120. É subconjunto maior que pai por período. Chamadas encontradas de `reler` na cópia são testes; efeito monetário produtivo decorrente é [não verificado]. (`app/ponto/calculador/alimentacao.py:78`, `app/ponto/calculador/alimentacao.py:102`, `app/ponto/calculador/periodo.py:611`, `app/ponto/calculador/periodo.py:761`, `app/ponto/calculador/periodo.py:770`, `app/ponto/calculador/periodo.py:841`, `app/ponto/tests/test_o280_bateria_da_lei.py:4678`)
+
+Banco e DSR ainda agrupam extras por data civil; DSR subtrai HE100 feriado, conservando zero para a dobra repartida. A6 ainda conta ocorrências sem deduplicar dia. Esses restos já constam da fila fornecida; impacto concreto na frota é [não verificado]. (`app/ponto/motor_calculo_v2.py:3502`, `app/ponto/motor_calculo_v2.py:3543`, `app/ponto/motor_calculo_v2.py:3545`, `app/ponto/services/esmeril_espelho.py:177`, `app/ponto/services/esmeril_espelho.py:179`)
+
+## 06/11 23:31 · sessao 9f3eff5d28e6 · - · - · origem=Ronald (tmux)
+
+Os seis REDs cobram valores explícitos; nenhum aceita qualquer resultado ou exceção: `confere` compara o subconjunto esperado por igualdade, e `cobra_a_lei` faz a mesma comparação diretamente. (`app/ponto/tests/test_o280_bateria_da_lei.py:1306`, `app/ponto/tests/test_o280_bateria_da_lei.py:1321`)
+
+| RED | Valor exigido e mordida |
+|---|---|
+| F10d | Dois pares, 660 trabalhados, HE100/feriado zero; troca a caracterização indevida de 90 pela regra. (`app/ponto/tests/test_o280_bateria_da_lei.py:1593`) |
+| F10e | HE100 feriado zero, sem `expectedFailure`; é praticamente a mesma fronteira de F10d, com uma única rubrica. (`app/ponto/tests/test_o280_bateria_da_lei.py:1596`, `app/ponto/tests/test_o280_bateria_da_lei.py:1608`) |
+| F10f | Dois pares, 660 trabalhados e 660 de HE100/feriado. **Não cobra noturno da cauda**; portanto pode passar mesmo que a prorrogação herdada continue perdida. (`app/ponto/tests/test_o280_bateria_da_lei.py:1624`) |
+| F10g | Exige exatamente uma cauda em FT e cobra 120 trabalhados/feriado/HE100 noturna nela. A fixture exercita efetivamente um par distinto após meia-noite. (`app/ponto/tests/test_o280_bateria_da_lei.py:1654`, `app/ponto/tests/test_o280_bateria_da_lei.py:1657`) |
+| F11i | A autoridade simulada responde `dia == fer`; exige FM feriado 7h, folga zero e DiaPago feriado 7h. Exercita a data passada ao filtro, mas **não cobra noturno**, nem valida os critérios reais internos de `escala_certa_no_dia`. (`app/ponto/tests/test_o280_bateria_da_lei.py:1819`, `app/ponto/tests/test_o280_bateria_da_lei.py:1918`, `app/ponto/tests/test_o280_bateria_da_lei.py:1919`) |
+| N-PRORROG | Cobra `(60,60,0)` para prorrogação ligada sem pausa, ligada com pausa e desligada. Cobre contexto interno do mesmo par 22–07; não cobre prorrogação herdada de outro par. (`app/ponto/tests/test_o280_bateria_da_lei.py:2001`, `app/ponto/tests/test_o280_bateria_da_lei.py:2006`) |
+
+Reproduzi em memória as funções puras, sem importar Django nem gravar arquivo. O corpo atual deu **`(60,60,0)`**; recolocando somente o trecho anterior de `he_noturna`, reconstruído pelo diff fornecido, deu **`(0,0,0)`**. Isso demonstra mordida numérica de N-PRORROG no corpo anterior, **não execução do pai inteiro**. (`app/ponto/motor_calculo_v2.py:445`, `app/ponto/motor_calculo_v2.py:453`, `app/ponto/tests/test_o280_bateria_da_lei.py:2006`; execução do pai inteiro: **[não verificado]**)
+
+Para F10d/e/f/g e F11i, os pontos alterados correspondem à condição exercitada pelos REDs; execução integrada no pai e na cópia atual: **[não verificado]**. (`app/ponto/motor_calculo_v2.py:2835`, `app/ponto/motor_calculo_v2.py:3319`, `app/ponto/services/fechamento.py:942`)
+
+**Censo 10 → 11:** reproduzi por AST **11 privados, 35 públicos e 19 portas**. O incremento é aritmeticamente legítimo para o contrato efetivo de ausência de nova **porta pública do DIA**; `_dia_da_jornada_do_par` é privado e recebe o par. O teste conta nomes que contêm `dia`/`jornada`, não examina a semântica de suas decisões. (`app/ponto/tests/test_contract_juiz_batida.py:132`, `app/ponto/tests/test_contract_juiz_batida.py:313`, `app/ponto/tests/test_contract_juiz_batida.py:330`)
+
+**A justificativa do incremento é falsa em seu absoluto:** “não decide dia nenhum” só vale quando a chave existe. A expressão `.get(_e, _e.date())` deriva o dia civil quando falta a chave, enquanto a pertinência da batida já tem autoridade registrada em `turnos_do_colab`. O censo não distingue leitor de mapa de derivador paralelo; passa com ambos. (`app/ponto/tests/test_contract_juiz_batida.py:329`, `app/ponto/motor_calculo_v2.py:964`, `app/core/juizes.py:196`)
+
+O laço mensal grava a chave antes da chamada normal, mas existe outra chamada produtiva no crédito de aberto sem gravação correspondente nesse ponto. O novo helper pode decidir por fallback nesse caminho; o período auxiliar depois empresta somente trabalhado/fora da janela, portanto isso isoladamente não prova dinheiro novo incorreto. (`app/ponto/motor_calculo_v2.py:2494`, `app/ponto/motor_calculo_v2.py:2590`, `app/ponto/motor_calculo_v2.py:2596`)
+
+A base também conserva o segundo julgamento preexistente: recebe o dia do juiz e pode substituí-lo pela herança de intervalo até seis horas. O mapa novo passa adiante essa resposta composta, não necessariamente apenas o veredito do juiz registrado. (`app/ponto/motor_calculo_v2.py:2439`, `app/ponto/motor_calculo_v2.py:2443`, `app/ponto/motor_calculo_v2.py:2494`)
+
+As adições do diff usam instantes recebidos e datas derivadas deles; não introduzem leitura de relógio nas funções alteradas. Isso não certifica concorrência nem ordem de travas da execução completa. (`app/ponto/motor_calculo_v2.py:452`, `app/ponto/motor_calculo_v2.py:963`, `app/ponto/services/fechamento.py:942`; execução concorrente: **[não verificado]**)
 
 ## 06/11 22:48 · sessao 7c8459a8b853 · FIO-E0-V4-E1 · censo · origem=Code
 
@@ -1098,115 +1159,4 @@ Duas ressalvas adicionais:
 
 Ressalva do selo estrutural: o censo AST executado com `python3 -B` classificou os saves dos canceladores como `entidade=None`; o gate ignora essa classe antes de verificar a porta. Portanto ele não protege esses dois pontos contra movimento futuro para fora da porta (`app/ferias/services.py:383`, `:413`; `app/core/censo_escritas.py:489-491`; `app/ponto/tests/test_chokepoint_ausencia_gate.py:33-35`).
 
-## 06/11 22:24 · sessao 1509e73a8ffd · - · - · origem=Ronald (tmux)
-
-Auditoria estática: **não procede que cada teste morda o pai f9d6f3e2**. Há 23 testes; somente cinco distinguem a volta 3 do pai pelo valor. Resultado de execução contra o pai: **[não verificado]**. A alegação geral está em `app/ferias/test_cancelar_2x.py:20`.
-
-| Testes | Contra o pai v2 fornecido | [nao verificado]
-|---|---|
-| Cinco de cancelamento DP, iniciados nas linhas 83, 90, 97, 104 e 112 | Já cobertos pela cura v2; não distinguem v3. `app/ferias/test_cancelar_2x.py:83`, `:90`, `:97`, `:104`, `:112` |
-| Cinco de admin, iniciados em 120, 128, 137, 144 e 154 | Já passam conceitualmente no pai v2, que já contém `permitir_concluido`. Os dois últimos eliminam o TypeError desprotegido contra a base, mas não produzem RED contra v2. `app/ferias/test_cancelar_2x.py:120`, `:128`, `:137`, `:144`, `:154`; assinatura atual em `app/ferias/services.py:388` |
-| Cron remarcado durante a corrida | **Morde pelo valor**: espera `agendado`; pai grava `concluido` calculado da foto. `app/ferias/test_cancelar_2x.py:187`, `:190`, `:194` |
-| Cron com cancelamento e cron normal | Não distinguem v3: terminalidade já corrigida em v2; controle normal também passa. `app/ferias/test_cancelar_2x.py:201`, `:210` |
-| Três de troca de janela | Não distinguem v3: trava, saldo vivo e recusa de cancelado já pertencem a v2. `app/ferias/test_cancelar_2x.py:227`, `:230`, `:233` |
-| POST cancelar duas vezes | Não distingue v3. `app/ferias/test_cancelar_2x.py:247` |
-| Premissa “ativo espelha/cancelar apaga” e confirmação normal | Controles que passam no pai. `app/ferias/test_cancelar_2x.py:272`, `:301` |
-| Confirmar, recusar e enviar cancelado | **Três mordidas pelo valor**: a asserção de Ausencia/status/confirmacao vem antes do acesso à nova classe da exceção. `app/ferias/test_cancelar_2x.py:277`, `:281`, `:282`, `:284`, `:287`, `:290` |
-| Save parcial da foto cancelada | **Morde pelo valor**: espera zero Ausencias e status cancelado. `app/ferias/test_cancelar_2x.py:293`, `:299` |
-
-O item procedente 3 da triagem foi corrigido quanto ao TypeError antes da primeira asserção: a porta HTTP não passa o argumento novo pelo teste; o teste direto captura a primeira exceção e confere o estado antes de `assertIsNone`. Isso não prova RED contra v2, onde a assinatura já existe. `app/ferias/test_cancelar_2x.py:144`, `:149`, `:150`, `:154`, `:156`, `:157`, `:158`.
-
-Nas views, **escritor que recusou por cancelamento não gera push nem sucesso**: envio retorna nos dois ramos de erro antes de PWA/FCM; resposta do colaborador retorna antes do push DP e das respostas positivas. `app/ferias/views.py:869`, `:874`, `:875`, `:883`, `:891`, `:918`, `:920`, `:921`, `:929`, `:932`. `resposta_acao(ok=False)` gera tipo `erro`, inclusive no toast HTMX. `app/core/respostas.py:50`, `:63`.
-
-Há um contraexemplo preexistente para **confirmação com dois significados**: duas requests carregam `aguardando`; a primeira confirma, a segunda recusa. Sob trava, o escritor confere apenas `cancelado`, não `confirmacao`; o segundo ato deixa `confirmacao='recusado'` com `confirmado_em` da primeira confirmação. A view ainda envia “Férias recusadas” e sucesso porque o escritor aceitou. `app/ferias/views.py:908`, `:909`; `app/ferias/services.py:560`, `:562`, `:563`, `:565`, `:566`, `:567`; `app/ferias/views.py:924`, `:929`. Outro envio com foto elegível pode redefinir uma confirmação concorrente para `aguardando` e zerar seu carimbo, pois a elegibilidade está na foto da view e o escritor recusa apenas cancelado. `app/ferias/views.py:860`; `app/ferias/services.py:544`, `:545`, `:546`. Isso não recria Ausencia após a cura atual, porque esses saves não acionam o espelho. `app/ferias/models.py:437`, `:443`.
-
-Limites dos selos:
-
-- O teste chamado “sem escrita” confere somente `dias_concedidos`, `status` e `obs`; não verifica ausência de UPDATE. `app/ferias/test_cancelar_2x.py:59`, `:62`, `:97`, `:101`.
-- O auxiliar cron descarta stdout; portanto esses testes não conferem `placar` ou classificação `recusado`. `app/ferias/test_cancelar_2x.py:185`; `app/ferias/management/commands/sincronizar_status_ferias.py:50`, `:54`.
-- As corridas são injeções sequenciais após o juiz da foto; concorrência real e comportamento das travas no banco permanecem **[não verificado]**. `app/ferias/test_cancelar_2x.py:178`, `:182`, `:185`.
-- Os novos testes de confirmação chamam serviços; os testes HTTP antigos cobrem fluxos normais, sem simular a recusa concorrente nem afirmar ausência de push. `app/ferias/test_cancelar_2x.py:277`, `:305`; `app/ferias/test_confirmacao_agendamento.py:56`, `:68`, `:78`.
-
-## 06/11 22:12 · sessao e277584255b7 · HOLERITE-ZIP-MATRICULA · censo · origem=Code
-
-**A v1 permanece acessível pelo roteamento e possui formulário de autoenvio. Não há base para declará-la morta apenas pela ausência de links externos.** Uso humano atual: **[nao verificado]**. (`app/config/urls.py:33`; `app/holerite/urls.py:9`; `app/templates/holerite/upload_lote.html:12`)
-
-**(1) Referências à v1 e classificação**
-
-| Arquivo:linha | Classificação e papel |
-|---|---|
-| `app/config/urls.py:33` | **PRODUÇÃO — roteamento:** monta `holerite.urls` sob `/holerite/`. |
-| `app/holerite/urls.py:9` | **PRODUÇÃO — despacho:** registra `/holerite/upload-lote/`, nome `holerite:upload_lote`, callback `views.upload_lote`. |
-| `app/holerite/views.py:1217` | Definição do sítio; exige login e ação `editar_folha` em `:1216` e `:1219`. |
-| `app/holerite/views.py:1229` | **PRODUÇÃO — autorreferência:** `reverse('holerite:upload_lote')` quando a competência é inválida. |
-| `app/holerite/views.py:1235` | **PRODUÇÃO — autorreferência:** mesmo reverse quando falta ZIP. |
-| `app/holerite/views.py:1276` | **PRODUÇÃO — autorreferência:** mesmo reverse ao terminar o processamento. |
-| `app/holerite/views.py:1279` | **PRODUÇÃO — render:** carrega `holerite/upload_lote.html`. |
-| `app/templates/holerite/upload_lote.html:12` | **PRODUÇÃO — chamador HTML:** formulário POST sem `action`, portanto envia à URL atual; campo ZIP em `:39`, botão em `:42`. |
-| `app/core/juizes.py:1095` | **Registro em código:** contém a string `def upload_lote(`; não chama a view nem sua URL. |
-| `app/docs/BACKLOG.md:2064` | **DOC:** PORT-69. |
-| `app/docs/CENSO_PORTAS.md:93` | **DOC:** linha do censo histórico. |
-| `app/docs/CENSO_PORTAS.md:233` | **DOC:** nome e URL literal da v1. |
-| `app/docs/TICKETS.md:699` | **DOC:** registra as duas telas e rotas. |
-
-Não encontrei outra referência específica à v1 em `{% url %}`, menus, JS, API ou testes por nome/URL literal. Referências construídas dinamicamente e consumidores externos: **[nao verificado]**. Os formulários encontrados para a outra porta usam explicitamente `holerite:upload_lote_v2`. (`app/templates/holerite/_lote_drawer.html:17`; `app/templates/holerite/_drawer_modo_lote.html:13`)
-
-**(2) Fecho exclusivo da remoção**
-
-| Elemento | Evidência e consequência |
-|---|---|
-| Função `upload_lote` | Corpo completo em `app/holerite/views.py:1217`; processamento ZIP começa em `:1240`. Não delega a helper próprio. |
-| Entrada de URL | `app/holerite/urls.py:9`: teria de sair junto; mantê-la apontaria para a função removida. |
-| Template `holerite/upload_lote.html` | Único carregador identificado: `app/holerite/views.py:1279`. Seu formulário fica em `app/templates/holerite/upload_lote.html:12`. |
-| Import `zipfile` em `views.py` | Declaração em `app/holerite/views.py:3`; único uso identificado nesse módulo em `:1240`. |
-| Imports locais dentro da função | Saem com o corpo: `app/holerite/views.py:1223`, `:1227`, `:1228`, `:1233`, `:1234`, `:1252`, `:1268`, `:1269`. |
-
-Não há classe Form nem outro helper exclusivo identificado: a função lê diretamente `POST`/`FILES` e executa o processamento no próprio corpo. (`app/holerite/views.py:1224`; `app/holerite/views.py:1230`; `app/holerite/views.py:1240`)
-
-Os imports locais **não tornam exclusivos seus destinos**: `mes_ou`/`ano_ou` também são usados no upload avulso; `resposta_acao` também; `reverse` já é importado no topo; `ContentFile` é usado pelo motor. (`app/holerite/views.py:1154`; `app/holerite/views.py:1204`; `app/holerite/views.py:11`; `app/holerite/motor.py:403`)
-
-Também permanecem `os`, os templates compartilhados e o pacote `holerite`, com outros consumidores. (`app/holerite/views.py:661`; `app/holerite/views.py:1698`; `app/templates/holerite/upload.html:1`; `app/templates/holerite/upload.html:4`; `app/holerite/urls.py:37`)
-
-Os `__init__.py` de `holerite`, `management`, `management/commands` e `tests` foram inspecionados como vazios, sem linha citável; reexportação exclusiva: **[nao verificado por arquivo:linha]**. A entrada do registro também precisa ser reconciliada, pois um teste exige sua impressão no fonte. (`app/core/juizes.py:1095`; `app/core/tests/test_contract_portas.py:19`)
-
-**(3) Testes que alcançam o sítio** [nao verificado]
-
-| arquivo::classe::método | Alcance |
-|---|---|
-| `app/core/tests/test_rota_pede_sessao.py::RotaPedeSessaoTest::test_MORDE_nenhuma_rota_responde_sem_sessao` — `:255` | **Executa GET anônimo** pelo resolvedor: varredura em `:235`, chamada do callback em `:223`. Inclui holerite por `app/config/urls_ci.py:14`; na v1 alcança a guarda de login em `app/holerite/views.py:1216`. |
-| `app/core/tests/test_contract_portas.py::FamiliaPortasTest::test_MORDE_cada_impressao_existe` — `:19` | Exige estaticamente a impressão registrada em `app/core/juizes.py:1095`; não executa upload. |
-| `app/core/tests/test_contract_portas.py::CensoTest::test_MORDE_o_censo_acha_as_portas_do_admin` — `:32` | Inclui a rota no inventário; não faz POST nela. |
-| `app/core/tests/test_contract_portas.py::CensoTest::test_a_metade_estatica_e_a_do_censo` — `:45` | Compara inventários de portas; não executa upload. |
-| `app/core/tests/test_todo_template_compila.py::TodoTemplateCompilaTest::test_todo_html_da_arvore_compila` — `:44` | Compila o template por `get_template` em `:50`; não renderiza o fluxo. |
-| `app/core/tests/test_contract_import_local_resolve.py::ImportLocalResolveTest::test_MORDE_todo_nome_importado_existe_no_modulo` — `:59` | Verifica os imports locais pelo fonte; inclui `holerite` em `:22`; não executa a função. |
-
-Há ainda varredura estática do template nos seguintes métodos de `app/core/tests/test_contract_template_bem_formado.py::TemplateBemFormadoTest`: `test_MORDE_nenhum_atributo_lixo` (`:162`), `test_MORDE_nenhuma_marca_de_fonte_python` (`:169`), `test_MORDE_nenhum_comentario_vaza` (`:174`), `test_MORDE_nenhum_valor_cru_vira_markup` (`:180`) e `test_o_escape_da_casa_tem_UM_dono` (`:186`).
-
-Não encontrei teste funcional específico de GET autenticado ou POST ZIP da v1. Cobertura funcional completa e resultado da execução dos testes: **[nao verificado]**. [nao verificado]
-
-**(4) Outra porta de lote e proteção da ciência**
-
-A porta canônica identificada é **`upload_lote_v2`, `/holerite/lote/`**. Há caminho de produção pelo quadrinho da matriz, passando por `drawer_modo` e pelo formulário do lote. (`app/holerite/urls.py:37`; `app/templates/holerite/matriz_dp.html:67`; `app/templates/holerite/_quadrinho_celula.html:17`; `app/holerite/views.py:357`; `app/templates/holerite/_drawer_modo_lote.html:13`)
-
-Ela salva o arquivo e o `LoteHolerite`, dispara o command, apresenta prévia e dispara publicação na confirmação. O command chama `motor.processar`. (`app/holerite/views.py:1773`; `app/holerite/views.py:1781`; `app/holerite/views.py:1750`; `app/holerite/views.py:1759`; `app/holerite/management/commands/processar_lote_holerite.py:89`)
-
-O casamento tem estas regras:
-
-- **Domínio padrão:** nome completo normalizado — sem acentos, em maiúsculas e com espaços colapsados — restringido à empresa do CNPJ quando informado. (`app/holerite/motor.py:161`; `app/holerite/motor.py:168`; `app/holerite/motor.py:203`)
-- **CPF presente na página:** prevalece se identificar exatamente um colaborador; esse retorno antecede o filtro por empresa. (`app/holerite/motor.py:199`)
-- **Ressalva do configurável:** aceita `campo_match`, com fallback `codigo_dominio`, e constrói o filtro por esse campo. Portanto, não cabe afirmar que todas as modalidades impedem casamento por código/matrícula. (`app/holerite/views.py:1736`; `app/holerite/views.py:1741`; `app/holerite/motor.py:298`; `app/holerite/motor.py:218`)
-- **V1 ZIP:** usa o nome-base do PDF para buscar `matricula_nexti`. (`app/holerite/views.py:1244`; `app/holerite/views.py:1246`)
-
-A proteção ausente na v1 tem duas camadas: o motor marca existentes como `ja_publicado` e os pula; na gravação, consulta `assinatura__isnull=False` entre candidatos `ok` e lança `ValueError` se encontrar ciência. A v1 faz `.delete()` dos holerites da competência sem essa guarda; a assinatura possui `CASCADE`. (`app/holerite/motor.py:323`; `app/holerite/motor.py:344`; `app/holerite/motor.py:415`; `app/holerite/views.py:1255`; `app/holerite/models.py:193`)
-
-Há teste de preservação da ciência em `app/holerite/tests/test_selo_comunicado.py::SeloRepublicacaoIncrementalTest::test_MORDE_republicar_nao_apaga_ciencia_e_cria_so_o_que_falta` (`:240`, verificação em `:264`). Cobertura que force especificamente o `ValueError`: **[nao verificado]**.
-
-**(5) Cron, command, signal e JS**
-
-Não encontrei chamada específica à URL v1 em cron, command, signal, API ou JS da árvore. Chamadas externas ou montagem dinâmica não identificada: **[nao verificado]**.
-
-O command de lote encontrado pertence ao pipeline v2 e chama diretamente o motor; o cadastro de crons o descreve como job disparado pela view. (`app/holerite/management/commands/processar_lote_holerite.py:89`; `app/config/crons.py:1359`)
-
-O service worker **pode repassar um GET já iniciado** para essa URL pelo transporte genérico; não origina uma chamada específica à v1 e ignora POST. (`app/static/sw.js:36`; `app/static/sw.js:45`; `app/static/sw.js:82`)
-
-_2630 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2632 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
