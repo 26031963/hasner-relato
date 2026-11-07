@@ -1,5 +1,6 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: trava_teste.sh | pid=465789 (suite recorte da E1 volta 5, wt-fioe1-225336; E2 B3 construindo em wt-fioe2-025758) -- 0833: teto 2 construtores ocupado pela FIO-E0 v4 (aval), proximo da fila 1 (MOTOR-LE-O-TURNO-INSTRUMENTO, medido 0832) entra na 1a vaga que liberar
+ESPERANDO: trava_teste.sh | pid=465789
+ESPERA 0833 (suite recorte da E1 volta 5, wt-fioe1-225336; E2 B3 construindo em wt-fioe2-025758) -- 0833: teto 2 construtores ocupado pela FIO-E0 v4 (aval), proximo da fila 1 (MOTOR-LE-O-TURNO-INSTRUMENTO, medido 0832) entra na 1a vaga que liberar
 PAREI: ! v2i2-apply10-e-apply11 (aval 08:09 chegou TRUNCADO depois de "PAUTA 09 = (B) ... com a obra de origem em"; APPLY 10 e APPLY 11 nao chegaram, nada aplicado) + MANHA-0511 sem vaga (as 2 vagas sao da FIO-E0 v4, E1/E2 rearmadas 08:09) | espera Ronald
 DESENHO FIO-E0-V4-E2: lei=celula soberana pergunta=quem diz se o dia do turno e devido (fora_vinculo, isento_ponto) para tarefa_do_dia, o leitor unico grade_da_celula ou a ata crua lida por _tarefa_pura app/escala/services/leitor_celula.py:345
 RESPONDIDA por aval 08:09 (logs/fio_e0_v4/aval_desenho_0809.txt): FIO-E0-V4-E1 (1) indice por FAMILIA (MARCO/BATIDA) + (2) ordem Colaborador->Disputa->Chamado->Pergunta; FIO-E0-V4-E2 B3 cura B1-B4 + 0514 (1)A (2) relogio injetado (3) universo L-124; data_evento DECIDIDO aceito. PAUTA 09 = (B) (as 14 com a Pauta dos 64 no pouso da BO-B 09).
