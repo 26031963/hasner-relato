@@ -1,7 +1,311 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 08:19** · publicado em **07/11/2026 08:22** (UTC-3)
+> Ultima resposta processada: **07/11/2026 08:30** · publicado em **07/11/2026 08:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 08:30 · sessao 980fb726544f · MOTOR-LE-O-TURNO-INSTRUMENTO · censo · origem=Code
+
+**Os critérios AST dão números diferentes; não escolhi um deles.** No escopo da obra, obtive **A1=1, A2=8, B1=17 e B2=18 funções**. São contagens sintáticas: A2 inclui adaptadores que recebem pares, e B2 inclui datas de competência ou prazo. Portanto, o número de **violações semânticas** continua **[não verificado]**. Exemplos dessas diferenças: `app/ponto/adaptador_motor.py:29-43`, `app/ponto/services/fechamento.py:1567-1569`.
+
+| Universo da execução | A1 | A2 | B1 | B2 |
+|---|---:|---:|---:|---:|
+| Escopo da obra | 1 | 8 | 17 | 18 |
+| Resto da árvore inventariada | 5 | 7 | 66 | 154 |
+| Árvore inteira inventariada | 6 | 15 | 83 | 172 |
+| Somente `app/` | 6 | 15 | 82 | 171 |
+| Árvore, reaproveitando a exclusão de medição concreta do molde | 5 | 14 | 83 | 171 |
+| Somente `app/`, com essa exclusão | 5 | 14 | 82 | 170 |
+
+Os totais acima são resultados da execução reproduzida ao fim; sua equivalência à definição semântica do contrato é **[não verificado]**. A exclusão de medição concreta é `e6_piso_autopsia::handle`, declarada em `app/core/medida_leitor_do_dia.py:282-283`, com pareamento em `app/ponto/management/commands/e6_piso_autopsia.py:94-95`.
+
+1. **Como o molde define universo, critério e `NAO_VE`.**
+
+O universo de STATUS é todo `.py` sob a raiz `app/`, por `os.walk`, excluindo diretórios `tests`, `migrations`, `staticfiles`, `node_modules`, `logs`, `media`, `__pycache__`, diretórios ocultos e arquivos começados por `test_`. Management não é excluído em bloco. VALOR usa outra abrangência: a lista fechada `LEITORES`. `app/core/medida_leitor_do_dia.py:32-45`, `:151-152`, `:240-251`, `:388-394`.
+
+STATUS conta **funções** que produzem pelo menos duas palavras distintas do vocabulário e têm alguma produção sob escolha. Produção significa atribuição, retorno ou ramo de expressão condicional nas formas explicitadas; função aninhada pertence a si própria. O vocabulário vem das chaves AST de `ROTULO_STATUS`, acrescidas dos paralelos. `app/core/medida_leitor_do_dia.py:160-190`, `:195-236`.
+
+VALOR conta **sítios de aritmética** sobre atributos de dinheiro: `BinOp`, `AugAssign` ou agregadores reconhecidos, incluindo algumas formas de `getattr` literal. Assim, `numero` mistura funções de STATUS com sítios de VALOR; não significa “número de funções” uniformemente. `app/core/medida_leitor_do_dia.py:70-115`, `:358`, `:390-401`.
+
+As exceções têm categorias explícitas; previsão e presença são condicionadas ao vocabulário produzido. O molde também conserva quantidade de literais dentro de cada função, para uma decisão nova numa função já contada poder alterar a catraca. `app/core/medida_leitor_do_dia.py:254-277`, `:317-321`, `:374-382`, `:406-409`.
+
+O `NAO_VE` publicado enumera: indireção sem literal; decisões booleanas ou de relógio que não viram palavra; função de uma palavra; HTML/JS; vocabulário novo; arquivo fora da lista de VALOR; `BoolOp` que o detector de VALOR não atravessa; e mudança que reutiliza a mesma quantidade de literais. `app/core/medida_leitor_do_dia.py:342-351`.
+
+Falhas de leitura ou parse entram em `ilegiveis`; o resultado as publica, em vez de tratá-las como ausência de achados. A fonte ilegível do vocabulário levanta `LookupError`. Embora a documentação diga “ast/os”, esta cópia também importa `io`. `app/core/medida_leitor_do_dia.py:22-24`, `:163-173`, `:363-368`, `:412-415`.
+
+2. **Critérios propostos e suas diferenças.**
+
+Os quatro critérios abaixo são propostas de aproximação AST, **[não verificado como critério oficial]**. Cada contador soma uma função uma vez; preserva todas as linhas que casaram. Não há isenção da função inteira por ela também consultar o juiz: isso esconderia fallbacks existentes em `app/ponto/services/dia_pago.py:128-132` e `app/ponto/motor_calculo_v2.py:2942-2955`.
+
+| Critério | Forma AST contada | Limitação principal |
+|---|---|---|
+| **A1 — seleção posicional** | `Call` de `range(início, fim, 2)` ou `zip` cujos dois primeiros argumentos são fatias com passo literal 2. | Também encontra pausas e índices de marcos; não reconhece todo pareador por estado. Exemplo: `app/escala/utils.py:496`, `:520`. |
+| **A2 — seleção ou recomposição** | A1, mais `append(Tuple/List)` com primeira posição marcada lexicalmente como entrada e segunda como saída, propagando marcas por atribuições e iterações locais. | Encontra recomposição, mas também adaptadores de pares recebidos. Exemplos: `app/ponto/motor_calculo_v2.py:688`, `app/ponto/adaptador_motor.py:43`. |
+| **B1 — extração com origem lexical** | `.date()` sem argumentos, `localdate(x)` ou `data_local(x)`, quando o operando contém ou herda nomes/atributos temporais declarados no script. | A marca lexical não prova tipo nem pertença; aliases sem essas marcas escapam. Exemplo capturado: `app/escala/detector_proposta.py:57-58`. |
+| **B2 — extração civil ampla** | As mesmas chamadas de B1, sem exigir marca lexical. | Inclui calendário de hoje, conversão de formato, competência e prazo. Exemplos: `app/colaboradores/models.py:824-825`, `app/chamados/veredito_lavrado.py:182-185`. |
+
+A cláusula literal de A, **“sem receber pares do juiz”**, não é demonstrada por esses padrões locais. A2 deliberadamente expõe esse limite: `periodos_de_turnos` recebe turnos e só lê suas pontas, mas casa com sua forma sintática. Portanto, interpretar A2=15 como quinze pareadores independentes seria **[não verificado]**; o contraexemplo está em `app/ponto/adaptador_motor.py:13-19`, `:29-44`.
+
+Para excluir o juiz e sua composição, o script parte de `turnos_do_colab` e `parear_turnos` e calcula o fechamento de chamadas estáticas resolvidas por nome/import. Não exclui `turnos.py` inteiro. A composição entre turno e juiz da batida existe na chamada `papel_por_minuto_da_ata → periodos_do_dia`. `app/core/juizes.py:196`, `app/ponto/turnos.py:1580`, `:1631`, `:1937`, `:1990`.
+
+Esse fechamento também tem limite: chamadas por parâmetros, métodos de objetos e resolução dinâmica não ficam provadas. A completude da exceção de composição é **[não verificado]**; o script publica esse limite em `NAO_VE`.
+
+O inventário principal percorre a árvore inteira, mantendo comandos de medição para não confundir localização com uso. Também fornece o recorte `app/` do molde e a variante que reaproveita sua exclusão concreta de `e6_piso_autopsia`. Não exclui todo management: o molde também não faz isso. `app/core/medida_leitor_do_dia.py:240-251`, `:282-283`.
+
+3. **Cobertura dos sítios nomeados no aval.**
+
+| Sítio | Contado? | Evidência e limite |
+|---|---|---|
+| **MOTOR-PASSA-O-TURNO-A-VOLTA / resíduo 573** | **B1 e B2** em `MotorBase._julgar_pontualidade`; A1/A2 não identificam especificamente essa pergunta. | Passa `e.date()` e as pontas do período a `cumpriu_a_volta_do_intervalo`. O defeito “período em vez de turno” não exige construir par novo: é falso negativo de A como cobertura da obra. `app/ponto/motor_calculo_v2.py:2117-2119`. O 573 está registrado na documentação, sem reprodução de produção aqui: `app/docs/BACKLOG.md:779`; número atual **[não verificado]**. |
+| **col882 turno aberto** | O comportamento do caso não é demonstrado pelos contadores. | Os calculadores retornam cedo sem saída; isso não prova quais pares as cinco batidas dadas produzirão. `app/ponto/motor_calculo_v2.py:2752-2755`, `:2879-2882`, `:3217-3220`. Execução desse caso **[não verificado]**. A2 também não reconhece isoladamente `append((entrada, None))`, forma presente em `app/ponto/calculador/alimentacao.py:88`, `:111`. |
+| **JUIZ-DO-PAR-DUAS-ENTRADAS** | **Não em A1/A2 nas duas portas.** `turnos_via_autoridade` entra em B1/B2 por outra razão. | Uma porta chama `turnos_de_batidas`; outra chama `parear_turnos` com alimentação própria. Divergência entre receitas não exige `range(...,2)` nem `append((e,s))` local: falso negativo de A. `app/ponto/motor_calculo_v2.py:867-882`, `:475-506`. O B dessa porta é apenas a extração para consulta em `:470-474`. |
+| **Partido `:3012 × :2446`** | **B1 e B2** nas funções relevantes. | Nesta cópia, o mecanismo verificável está no fallback civil e herança por gap em `app/ponto/motor_calculo_v2.py:2403-2408`, e nos fallbacks do partido em `:2942`, `:2955`. A âncora `:3012` agora é comentário. `app/ponto/motor_calculo_v2.py:3012`. |
+| **`dia_pago._dia_de`** | **B1 e B2.** | Depois de tentar o mapa, retorna a data civil da entrada. `app/ponto/services/dia_pago.py:128-132`. |
+| **`_dia_da_jornada_do_par`** | Não apareceu como função no inventário AST. | O nome está na documentação, mas sua implementação nesta cópia é **[não verificado]**. `app/docs/BACKLOG.md:1821`. |
+| **Split de `calculador/alimentacao.py:73-108`** | **A2 sim; A1/B1/B2 não.** | Lê períodos, dia do mapa e pontas efetivas; depois divide o período pelos intervalos. É falso positivo de A2 para “pareamento de batidas cruas”; a ausência em A1 não é falso negativo dessa definição. `app/ponto/calculador/alimentacao.py:73-83`, `:106-108`, `:128-158`. |
+
+B também não identifica, como regra autônoma, a herança de dia por gap: a função atual é contada por conter extrações civis, mas a decisão de `:2405-2408` não tem detector próprio. Adicionar outra decisão desse tipo numa função já contada pode preservar N. `app/ponto/motor_calculo_v2.py:2403-2408`. O molde evita parte desse problema mantendo uma medida interna de sítios, além do número de funções. `app/core/medida_leitor_do_dia.py:320-321`, `:406-409`.
+
+4. **Falsos positivos prováveis, além do split.**
+
+| Critério | Sítio | Por que provavelmente excede a pergunta |
+|---|---|---|
+| A1/A2 | `app/escala/utils.py:496` | Forma pares S→E de pausa/papel, não pares laborais E→S. |
+| A1/A2 | `app/escala/utils.py:520` | Enumera posições de pausas dos marcos. |
+| A1/A2 | `app/ponto/turnos.py:810-812` | Lê pares de pausa já marcados no turno. |
+| A1/A2 | `app/ponto/management/commands/vigiar_motor_autoridade.py:75-86` | Soma marcas internas de turnos recebidos. |
+| A2 | `app/ponto/adaptador_motor.py:29-44` | Converte pontas de turnos recebidos. |
+| A2 | `app/ponto/motor_calculo_v2.py:164-172` | Une intervalos já fornecidos. |
+| A2 | `app/ponto/motor_calculo_v2.py:1883-1888` | Recorta intervalos recebidos à janela. |
+| B1/B2 | `app/ponto/motor_calculo_v2.py:97-98` | Percorre faixas civis para cálculo noturno; pertença do turno não é demonstrada por essa extração. |
+| B1/B2 | `app/ponto/motor_calculo_v2.py:470-474` | Amplia consulta de DNA/marcos. |
+| B1/B2 | `app/ponto/janelas.py:84-85` | Responde competência fechada. |
+| B1/B2 | `app/ponto/services/fechamento.py:1567-1569` | Normaliza `date`/`datetime` de um fato. |
+| B2 | `app/folha/pdf_export.py:43-47` | Converte formato `AAAAMMDD`. |
+| B2 | `app/colaboradores/models.py:821-825` | Obtém mês atual para custo de transporte. |
+| B2 | `app/chamados/veredito_lavrado.py:182-185` | Compara prazo de expiração e lavratura. |
+| B1/B2 | `bin/disjuntor.py:1512-1539` | O homônimo `timestamp` é de mensagens do assistente, não de batidas de ponto. |
+
+5. **Script integral.**
+
+A execução foi por `python3 -B - .`, com o texto abaixo em stdin, na raiz informada; não foi criado arquivo de script. Registro persistido dessa execução: **[não verificado]**. A saída integral vem depois do código. `@NN` indica a linha do nó contado; o número após a função é a linha da definição.
+
+```python
+import ast
+import os
+
+FUN = (ast.FunctionDef, ast.AsyncFunctionDef)
+SKIP = {'tests', 'migrations', 'staticfiles', 'node_modules',
+        'logs', 'media', '__pycache__'}
+E = {'entrada', 'efetivo_entrada', 'ent', 'e', '_e', '_ent', 'e_ts'}
+S = {'saida', 'efetivo_saida', 'sai', 's', '_s', 's_', 's_ts'}
+T = {'timestamp', 'ts', 'ts_entrada', 'ts_saida', 'instante',
+     'quando', 'inicio', 'fim'}
+NAO_VE = (
+    'Sem tipos nem execucao: nomes/atributos podem ser homonimos.',
+    'Fluxo intrafuncao insensivel a ordem, ramos, sobrescritas e alcance.',
+    'Nao prova origem interprocedural dos argumentos nem pares do juiz.',
+    'Chamadas dinamicas, getattr calculado e aliases entre modulos escapam.',
+    'Composicao: so fechamento de chamadas estaticas resolvidas; self/metodos '
+    'em objetos e parametros nao sao resolvidos.',
+    'Nao ve HTML/JS, codigo gerado, codigo em strings ou corpo de modulo.',
+    'B nao ve toda regra de meia-noite sem extracao civil nem heranca por gap.',
+    'A1 ve so passo 2; A2 acrescenta tuplas E/S: nao e censo semantico exato.',
+    'Nao distingue exibicao, competencia, prazo, pausa e par laboral.',
+)
+
+def own(node):
+    yield node
+    for ch in ast.iter_child_nodes(node):
+        if not isinstance(ch, FUN + (ast.ClassDef, ast.Lambda)):
+            yield from own(ch)
+
+def dotted(node):
+    if isinstance(node, ast.Name):
+        return node.id
+    if isinstance(node, ast.Attribute):
+        head = dotted(node.value)
+        return head + '.' + node.attr if head else ''
+    return ''
+
+def targets(node):
+    return {n.id for n in ast.walk(node)
+            if isinstance(n, ast.Name) and isinstance(n.ctx, ast.Store)}
+
+def aliases(nodes, package):
+    out = {}
+    for node in nodes:
+        if isinstance(node, ast.Import):
+            for a in node.names:
+                out[a.asname or a.name.split('.')[0]] = (
+                    a.name if a.asname else a.name.split('.')[0])
+        elif isinstance(node, ast.ImportFrom):
+            base = node.module or ''
+            if node.level:
+                prefix = package.split('.')
+                base = '.'.join(prefix[:len(prefix)-node.level+1]
+                                + ([base] if base else []))
+            for a in node.names:
+                if a.name != '*':
+                    out[a.asname or a.name] = base + '.' + a.name
+    return out
+
+def units(tree):
+    def visit(node, prefix=''):
+        for ch in ast.iter_child_nodes(node):
+            if isinstance(ch, FUN + (ast.ClassDef,)):
+                name = prefix + ch.name
+                if isinstance(ch, FUN):
+                    yield name, ch
+                yield from visit(ch, name + '.')
+            else:
+                yield from visit(ch, prefix)
+    return visit(tree)
+
+def tags(node, env):
+    if node is None:
+        return set()
+    out = set()
+    for n in own(node):
+        word = None
+        if isinstance(n, ast.Name):
+            word = n.id
+            out |= env.get(word, set())
+        elif isinstance(n, ast.Attribute):
+            word = n.attr
+        elif (isinstance(n, ast.Call) and dotted(n.func) == 'getattr'
+              and len(n.args) > 1 and isinstance(n.args[1], ast.Constant)):
+            word = n.args[1].value
+        elif (isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute)
+              and n.func.attr == 'get' and n.args
+              and isinstance(n.args[0], ast.Constant)):
+            word = n.args[0].value
+        elif isinstance(n, ast.Subscript) and isinstance(n.slice, ast.Constant):
+            word = n.slice.value
+        if word in E:
+            out.add('E')
+        if word in S:
+            out.add('S')
+        if word in T:
+            out.add('T')
+    return out
+
+def environment(nodes):
+    env = {}
+    while True:
+        before = {k: frozenset(v) for k, v in env.items()}
+        for n in nodes:
+            pairs = []
+            if isinstance(n, ast.Assign):
+                pairs = [(t, n.value) for t in n.targets]
+            elif isinstance(n, ast.AnnAssign) and n.value is not None:
+                pairs = [(n.target, n.value)]
+            elif isinstance(n, (ast.For, ast.AsyncFor, ast.comprehension)):
+                pairs = [(n.target, n.iter)]
+            for dst, src in pairs:
+                if (isinstance(dst, (ast.Tuple, ast.List))
+                        and isinstance(src, (ast.Tuple, ast.List))
+                        and len(dst.elts) == len(src.elts)):
+                    bindings = zip(dst.elts, src.elts)
+                else:
+                    bindings = [(dst, src)]
+                for left, right in bindings:
+                    val = tags(right, env)
+                    for key in targets(left):
+                        env.setdefault(key, set()).update(val)
+        if before == {k: frozenset(v) for k, v in env.items()}:
+            return env
+
+def step2(n):
+    if isinstance(n, ast.Call) and dotted(n.func) == 'range':
+        return (len(n.args) == 3 and isinstance(n.args[2], ast.Constant)
+                and n.args[2].value == 2)
+    if isinstance(n, ast.Call) and dotted(n.func) == 'zip':
+        return len(n.args) >= 2 and all(
+            isinstance(a, ast.Subscript) and isinstance(a.slice, ast.Slice)
+            and isinstance(a.slice.step, ast.Constant)
+            and a.slice.step.value == 2 for a in n.args[:2])
+    return False
+
+def scan(node, imports):
+    nodes = list(own(node))
+    env = environment(nodes)
+    found = {'A1': [], 'A2': [], 'B1': [], 'B2': []}
+    for n in nodes:
+        if step2(n):
+            found['A1'].append(n.lineno)
+        if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute):
+            if n.func.attr == 'append' and n.args:
+                pair = n.args[0]
+                if (isinstance(pair, (ast.Tuple, ast.List)) and len(pair.elts) >= 2
+                        and 'E' in tags(pair.elts[0], env)
+                        and 'S' in tags(pair.elts[1], env)):
+                    found['A2'].append(n.lineno)
+        if not isinstance(n, ast.Call):
+            continue
+        call = dotted(n.func)
+        head, dot, tail = call.partition('.')
+        call = imports.get(head, head) + (dot + tail if dot else '')
+        last = call.split('.')[-1]
+        arg = None
+        if (isinstance(n.func, ast.Attribute) and n.func.attr == 'date'
+                and not n.args and not n.keywords):
+            arg = n.func.value
+        elif last in {'localdate', 'data_local'}:
+            arg = n.args[0] if n.args else next(
+                (k.value for k in n.keywords if k.arg == 'value'), None)
+        if arg is not None:
+            found['B2'].append(n.lineno)
+            if tags(arg, env):
+                found['B1'].append(n.lineno)
+    found['A2'] += found['A1']
+    return {k: sorted(set(v)) for k, v in found.items()}
+
+def census(root, extra=None, emit=True):
+    log = print if emit else lambda *args: None
+    files, errors, records, modules = [], [], {}, {}
+    for directory, dirs, names in os.walk(root):
+        dirs[:] = sorted(d for d in dirs if d not in SKIP
+                         and not d.startswith('.'))
+        for name in sorted(names):
+            if name.endswith('.py') and not name.startswith('test_'):
+                files.append(os.path.relpath(os.path.join(directory, name), root))
+    for rel in sorted(files):
+        try:
+            with open(os.path.join(root, rel), encoding='utf-8-sig') as fh:
+                tree = ast.parse(fh.read(), filename=rel)
+        except (SyntaxError, UnicodeError, OSError) as exc:
+            errors.append((rel, type(exc).__name__))
+            continue
+        path = rel[:-3].replace(os.sep, '.')
+        module = path[4:] if path.startswith('app.') else path
+        if module.endswith('.__init__'):
+            module = module[:-9]
+            package = module
+        else:
+            package = module.rpartition('.')[0]
+        imp = aliases(own(tree), package)
+        modules[module] = imp
+        for name, node in units(tree):
+            records[module + '.' + name] = (rel, name, node, imp, module, package)
+    if extra is not None:
+        tree = ast.parse(extra, filename='<mutante em memoria>')
+        for name, node in units(tree):
+            records['mutante.' + name] = (
+                '<mutante em memoria>', name, node, {}, 'mutante', '')
+    def resolve(call, rec):
+        rel, name, node, imp, module, package = rec
+        local = dict(imp)
+        local.update(aliases(own(node), package))
+        raw = dotted(call.func)
+        head, dot, tail = raw.partition('.')
+        if head in local:
+            return local[head] + (dot + tail if dot else '')
+        if dot:
+            return module + '.' + raw
+        prefix = name.split('.')
+        for i in range(len(prefix), -1,
+
+[truncado em 20000 de 46612 caracteres]
 
 ## 07/11 08:19 · sessao 48640afec29c · - · - · origem=Ronald (tmux)
 
@@ -888,33 +1192,4 @@ Mutantes que a inspeção indica deixarem as expectativas atuais intactas — ex
 
 [truncado em 20000 de 27153 caracteres]
 
-## 07/11 04:08 · sessao dd6f157c1bd2 · - · - · origem=Ronald (tmux)
-
-Achados para consolidação, todos obtidos só por leitura; executei apenas dois corpos extraídos por AST em `python3 -B`, sem Django, banco ou escrita. A comparação com o pai permanece [não verificado]. [nao verificado]
-
-1. **`dono_da_pergunta` atribui perguntas normalizadas ao turno errado.** A porta atual recebe explicitamente dia do turno, e a porta de migração corrige o legado para esse significado. Mesmo assim, a heurística desloca para a véspera quando nela existe aquela posição no dia civil indicado. Para dois noturnos consecutivos, `p.data_evento=05/11`, fim de 04/11 em 05/11 e fim de 05/11 em 06/11, o corpo executado devolveu **04/11**, embora a pergunta atual seja de 05/11. (`app/chamados/models.py:2470`, `app/chamados/models.py:2483`, `app/chamados/services/fio.py:859`, `app/chamados/services/fio.py:898`, `app/chamados/services/tarefa_do_dia.py:106`, `app/chamados/services/tarefa_do_dia.py:111`.)
-
-2. **Ainda há escritor atual de dia civil no campo.** O detector de intervalo escreve `localtime(marco).date()` em `marcos_faltantes[].data`; o emissor lê essa data e chama `_criar_pergunta_se_couber`, envolvendo-a em `dia_do_turno_da_celula`. Esse construtor declara expressamente que não converte nada. A gravação chega a `PerguntaDisputa.abrir(data_evento=...)`. (`app/ponto/management/commands/detectar_intervalo_ausente.py:78`, `app/ponto/management/commands/detectar_intervalo_ausente.py:82`, `app/chamados/services/disputa_emissao.py:1037`, `app/chamados/services/disputa_emissao.py:1043`, `app/ponto/turnos.py:2939`, `app/ponto/turnos.py:2943`, `app/chamados/services/disputa_emissao.py:814`, `app/chamados/services/disputa_emissao.py:821`.)
-
-3. **O caso 2 sanciona a heurística, sem provar identificação correta.** Aceita D21 e D22 como a mesma pergunta de D21 e testa ambiguidade contra um turno diurno em D22. Falta o contraexemplo de dois noturnos consecutivos ou acervo já rechaveado. (`app/chamados/tests/test_e2_tarefa_do_dia.py:160`, `app/chamados/tests/test_e2_tarefa_do_dia.py:174`, `app/chamados/tests/test_e2_tarefa_do_dia.py:189`.)
-
-4. **VALIDAÇÃO lê a lâmpada do juiz; não rederiva “materializou?”.** A carga aceita apenas `sim`/`nao` com `esta_stale(..., agora)==False`; o ramo usa esse valor, e a existência de batida apenas distingue `efeito_sem_lampada` dentro do SIM. Sem lâmpada confiável, retorna desconhecimento. (`app/chamados/services/tarefa_do_dia.py:146`, `app/chamados/services/tarefa_do_dia.py:152`, `app/chamados/services/tarefa_do_dia.py:281`.)
-
-5. **Esse caminho não alcança `date.today()` do juiz.** `_lavra` não chama `_pergunta_materializada_de_fato`; `esta_stale` recebe o `agora` obrigatório. O fallback `timezone.now()` existe, mas não é usado nessa chamada normal. (`app/chamados/services/tarefa_do_dia.py:281`, `app/chamados/services/tarefa_do_dia.py:284`, `app/chamados/services/tarefa_do_dia.py:322`, `app/chamados/veredito_lavrado.py:181`.) O juiz direto usa `date.today()` em `_dentro_da_janela_viva`. (`app/chamados/juizes.py:563`.)
-
-6. **`esta_stale` mistura calendários e depende da representação de fuso do mesmo instante.** Usa `agora.date()` e `julgado_em.date()` sem conversão local. Com julgado em 06/11 12Z, expiração 07/11 e agora 07/11 00:30Z, o corpo executado deu `True`; com o mesmo agora convertido para −03, deu `False`. O projeto configura São Paulo e `USE_TZ=True`; a expiração é uma `DateField` calculada a partir de `date.today()` do processo, não de `timezone.localdate()`. Fuso efetivo do processo de produção: [não verificado]. (`app/chamados/veredito_lavrado.py:112`, `app/chamados/veredito_lavrado.py:182`, `app/chamados/veredito_lavrado.py:185`, `app/config/settings/base.py:93`, `app/config/settings/base.py:95`, `app/chamados/models.py:2399`.)
-
-7. **A invalidação não cobre todos os insumos do juiz.** O marco agrega criação/retratação de batida, cinco timestamps da célula, materialização e resposta. Não agrega decisões, via, logs de retratação, estado/destino. O juiz lê via e materialização, log de retratação e estado do destino. Para destino, existe relavra por evento na porta; isso não transforma o predicado de staleness em cobertura completa de insumos. (`app/chamados/veredito_lavrado.py:137`, `app/chamados/veredito_lavrado.py:151`, `app/chamados/veredito_lavrado.py:162`, `app/chamados/juizes.py:283`, `app/chamados/juizes.py:648`, `app/chamados/juizes.py:744`, `app/chamados/services/fio.py:849`.) Uma decisão posterior a `julgado_em` não invalida diretamente a lavra; o juiz antigo tampouco lê `DecisaoPergunta`, e a tarefa não compara `ult.ato_em` à data da lavra. (`app/chamados/veredito_lavrado.py:179`, `app/chamados/services/tarefa_do_dia.py:137`, `app/chamados/services/tarefa_do_dia.py:146`, `app/chamados/juizes.py:633`.)
-
-8. **A premissa de leitura de `materializada_em` somente pelo passivo não corresponde ao código.** A autoridade E1 `linhas_da_projecao_sem_linha` lê resposta e validação, sem consultar materialização; a carga da tarefa consulta indiretamente materialização por `marcos_do_lote`. (`app/chamados/models.py:3409`, `app/chamados/models.py:3416`, `app/chamados/models.py:3420`, `app/chamados/services/tarefa_do_dia.py:279`, `app/chamados/services/tarefa_do_dia.py:282`, `app/chamados/veredito_lavrado.py:162`.)
-
-9. **Teste da validade da lâmpada não prova suas fronteiras temporais.** O helper escreve `julgado_em` dez anos no futuro e `janela_expira_em=None`. O caso de staleness usa retratação posterior à lavra; nenhum caso do arquivo exercita expiração. Portanto, o mutante que remove a verificação de `janela_expira_em` de `esta_stale` passaria esses casos E2. (`app/chamados/tests/test_e2_tarefa_do_dia.py:108`, `app/chamados/tests/test_e2_tarefa_do_dia.py:112`, `app/chamados/tests/test_e2_tarefa_do_dia.py:284`, `app/chamados/veredito_lavrado.py:182`.)
-
-Censo localizado dos três campos da lavra:
-
-- **Atribuição de valores:** `lavrar`, restauração em memória e backfill; persistência normal por `save`, e lote pela porta `gravar_lavras_em_lote`. (`app/chamados/veredito_lavrado.py:227`, `app/chamados/veredito_lavrado.py:243`, `app/chamados/management/commands/backfill_veredito_lavrado.py:138`, `app/chamados/veredito_lavrado.py:207`.)
-- **Persistidores da lavra já calculada:** modelo no reapontamento e carimbo, fio no reapontamento/rechaveamento, e relavra de via. (`app/chamados/models.py:2571`, `app/chamados/models.py:2708`, `app/chamados/services/fio.py:850`, `app/chamados/services/fio.py:903`, `app/chamados/services/relavra_via.py:124`.)
-- **Leitores dos três campos:** `esta_stale`, foto da lavra, carga nova, varredura do raio X e backfill. (`app/chamados/veredito_lavrado.py:179`, `app/chamados/veredito_lavrado.py:237`, `app/chamados/services/tarefa_do_dia.py:283`, `app/chamados/services/raiox.py:31`, `app/chamados/management/commands/backfill_veredito_lavrado.py:120`.)
-- **Leitores adicionais do veredito:** crédito/ausência de ação do raio X, auditoria de invariantes e comparação/trilha da relavra de via. (`app/chamados/services/raiox.py:133`, `app/chamados/services/raiox.py:182`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1170`, `app/chamados/services/relavra_via.py:121`.)
-
-_2669 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2670 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
