@@ -1,7 +1,19 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 10:38** · publicado em **07/11/2026 10:42** (UTC-3)
+> Ultima resposta processada: **07/11/2026 11:25** · publicado em **07/11/2026 11:25** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 11:25 · sessao b2ee29e03326 · - · - · origem=Ronald (tmux)
+
+Classificação sugerida: **1a = (a); 1b = (a); 1c = (a)**, limitada às respostas fornecidas. A resposta da v11 não está no dado; afirmar omissão nessa resposta é **[não verificado]**.
+
+- **1a — tema presente, forma omitida.** Pergunta v9 P1: **“LOADER DE STRING -- todas as formas pelas quais um modulo-alvo e ligado SEM ast.Import/ast.ImportFrom.”** Resposta v9, achado 2: **“`spec_from_file_location`, `SourceFileLoader`, `SourcelessFileLoader`, `imp.load_source` e `run_path` são reconhecidos pelo nome.”** O contraexemplo `find_spec/module_from_spec/exec_module` não aparece nas respostas fornecidas **[não verificado quanto à resposta v11 ausente]**. A cópia confirma a lista fechada sem esses nomes: `bin/quem_chama.py:104–111`; despacho limitado a essa lista: `bin/quem_chama.py:653–659`.
+
+- **1b — tema explicitamente presente.** Pergunta v9 P1(e): **“loader em texto embutido: heredoc de .sh, python3 -c "...", string de .py que e codigo, config.”** Pergunta v10 P1(d): **“subprocess com 'python3'/sys.executable (_RX_PYTHON, _cadeia)”**. Resposta v10, achado 3: **“Não examina a expressão do argumento do script nem resolve aliases de `sys`.”** Isso identifica uma lacuna próxima, mas não o `-c` cujo import recebe nome por `sys.argv[1]`. Triagem v11 item 3 declara **“forma curada”** para outros exemplos; não descarta esse contraexemplo exato. A cópia trata a lista do interpretador como caminho (`bin/quem_chama.py:777–794`) e procura nome do loader dentro de cada string, sem vincular argv (`bin/quem_chama.py:488–508`, `bin/quem_chama.py:875–881`).
+
+- **1c — tema explicitamente presente para `import_string`; universo amplo para `pkgutil`.** Pergunta v9 P1(a) cita literalmente **“django.utils.module_loading.import_string”**; o cabeçalho P1 pede **“todas as formas”** sem imports AST. Resposta v9, achado 5, discute outras APIs: **“`include('x.urls')`, settings e `apps.get_model` não ganham reconhecimento de loader”**; não registra `import_string` nem `pkgutil.get_loader().load_module()` nas respostas fornecidas **[não verificado quanto à resposta v11 ausente]**. Esses nomes estão fora da lista operacional (`bin/quem_chama.py:104–111`, `bin/quem_chama.py:653–659`).
+
+**Não há base para (b):** nenhuma triagem fornecida descarta esses três contraexemplos exatos **[não verificado quanto a documentos ausentes]**. **Não há base suficiente para (d):** os laudos completos dos Opus anteriores e a resposta v11 não foram fornecidos **[não verificado]**.
 
 ## 07/11 10:38 · sessao 58b366715336 · FIO-E0-V4-E1 · verificador · origem=Code
 
@@ -887,63 +899,4 @@ Leitores de `via_resolucao`, além dos próprios escritores:
 
 Semântica temporal: `abrir` declara dia do turno, mas conversa grava dia civil do nascimento no mesmo campo; os leitores frequentemente não consultam `conversa`. Referências: `app/chamados/models.py:2523`, `:2534`, `:2540`; leitura da janela em `app/chamados/veredito_lavrado.py:229`. A janela viva é inclusiva nas duas pontas, `app/chamados/juizes.py:589`; a expiração reproduz essa inclusão em `app/chamados/veredito_lavrado.py:116`. `via_pelo_fato` usa o dia civil inteiro para provar ausência de batidas, deliberadamente, e depois consulta o turno com a mesma data: `app/chamados/juizes.py:1451`, `:1462`, `:1463`, `:1481`; `batidas_apuraveis` inclui início e fim, `app/ponto/turnos.py:2868`, `:2870`.
 
-## 07/11 08:53 · sessao 20696c111c9b · - · - · origem=Ronald (tmux)
-
-Achados confirmados na cópia, sem execução de banco ou testes. [nao verificado]
-
-1. **O backfill não cumpre “data_evento NULL ... saem ... ANTES do índice”.** `fora_do_indice()` apenas lista MARCO sem dia e BATIDA sem origem; `aplicar()` recebe somente colisões e admin sem ato, sem reparar nem retratar esses dois baldes. A guarda da migration exclui expressamente as chaves NULL e permite subir os índices com essas linhas restantes. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:114`, `:149`, `:263`; `app/chamados/migrations/0053_pergunta_unica_por_familia.py:32`, `:35`)
-
-2. **A proteção de competência exportada pode ignorar participantes de colisão BATIDA.** A chave BATIDA não inclui dia; o teste constrói colisão com dois dias diferentes. `competencia_de()` calcula a competência de cada pergunta, mas `handle()` classifica o grupo inteiro apenas pela competência de `pks[0]`. Se a primeira estiver aberta e outra exportada, `paradas_apply` não protege esta última e `aplicar()` pode retratá-la. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:83`, `:137`, `:235`, `:243`, `:263`; `app/chamados/tests/test_e1_v5_portas_backfill.py:141`)
-
-3. **O comando faz a verificação da exportação antes das travas e não a repete no apply.** `handle()` consulta `competencia_entregue`; `aplicar()` abre seus próprios atomics por grupo e por pergunta sem consultar novamente a competência. Uma alteração concorrente entre essas etapas não é coberta pelo código mostrado; ocorrência real em produção [nao verificado]. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:243`, `:259`, `:158`, `:174`)
-
-4. **F — “a primeira fica” diverge deliberadamente do código e do selo.** `canonica_do_grupo()` ordena por PK, prefere a primeira com `resposta_colab.strip()` não vazia e somente na ausência de resposta conserva o menor PK. Portanto, uma pergunta posterior respondida retrata a primeira não respondida. Entre respondidas, vence o menor PK; espaços em branco não contam como resposta. O backfill usa essa autoridade no DRY e no apply; o teste exige justamente a substituição da primeira pela segunda respondida. (`app/chamados/services/fio.py:943`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:165`, `:233`; `app/chamados/tests/test_e1_v5_portas_backfill.py:119`)
-
-**D — mordida dos quatro arquivos novos**
-
-| Selo | O que verifica | Mutante de produção que escapa |
-|---|---|---|
-| `test_e1_v5_familia.py` | Família obrigatória e cobertura; campos dos constraints do **modelo**; listas congeladas da migration. (`:40`, `:44`, `:78`, `:91`) | Remover `instancia_marco` dos `fields` da **AddConstraint da migration**, preservando o modelo e as listas: esse selo não inspeciona os campos da operação migratória. Também não compara os conectivos e exclusões da condição: `_motivos_da_condicao()` extrai somente `motivo__in`. (`:62`, `:84`, `:91`; migration `:53`) |
-| `test_e1_v5_indice.py` | Corrida crua MARCO/BATIDA, episódios distintos, motivos distintos, conversa/duplicata, porta sobre legado sem origem. (`:62`, `:69`, `:84`, `:90`, `:96`, `:110`) | Remover `instancia_marco` da chave real do índice passa por todos esses casos: nenhuma fixture cria duas instâncias diferentes no mesmo dia/motivo. Também não há caso para exclusão por `motivo_retratado`. (`:64`, `:71`, `:96`, `:106`) |
-| `test_e1_v5_ordem_trava.py` | Ordem das tabelas vistas nos quatro caminhos isolados; dois mutantes simulados. (`:88`, `:95`, `:103`, `:112`, `:121`, `:135`) | Desligar o signal do cartório, ou retirar a fabricação no ciclo, não torna vermelho o teste de `analisar`: ele exige apenas a trava do Chamado. A fixture não informa célula ou contexto de dia; o signal só chama o cartório quando encontra dia. (`:77`, `:88`; `app/chamados/signals.py:176`) |
-| `test_e1_v5_portas_backfill.py` | Recusa de colisão nas duas portas; ato de fechamento; colisões MARCO/BATIDA, idempotência, exportada simulada, ordem. (`:56`, `:70`, `:81`, `:119`, `:137`, `:150`, `:161`, `:173`) | Remover `ato_por` das novas gravações passa: os testes conferem somente `ato`/`ato_em`. Também passam ausência de tratamento para NULL e verificação de exportação somente da primeira competência, pois faltam esses casos. (`:87`, `:156`, `:141`, `:164`) | [nao verificado]
-
-A guarda `_guarda()` poderia virar `noop` sem ser exercitada pelos novos testes: eles retiram/devolvem os índices diretamente por `schema_editor`, sem executar a migration 0053 sobre acervo sujo. (`app/chamados/tests/acervo_sem_indice.py:18`; `app/chamados/tests/test_e1_v5_portas_backfill.py:95`; `app/chamados/migrations/0053_pergunta_unica_por_familia.py:29`)
-
-O coletor de travas deduplica **por tabela**, sem identificar linha e sem reiniciar por transação. Assim, um segundo Colaborador travado depois de Pergunta, ou uma segunda Disputa depois de Chamado, pode ficar invisível se essa tabela já apareceu. Também captura somente a primeira tabela do `FROM`, não todas as tabelas potencialmente alcançadas por um SELECT com joins. (`app/chamados/tests/test_e1_v5_ordem_trava.py:29`, `:38`, `:43`, `:45`)
-
-**G — migration 0053**
-
-- A mesma classe `Migration` contém `RunPython(_guarda)` e as duas `AddConstraint`, sem `atomic=False`. Pelo padrão do Django/PostgreSQL isso corresponde a uma transação de migration; confirmação do executor instalado e da execução real [nao verificado]. (`app/chamados/migrations/0053_pergunta_unica_por_familia.py:42`)
-- A guarda faz somente consultas agregadas, sem INSERT/UPDATE/DELETE. Portanto, ela própria não produz eventos de FK pendentes que expliquem `pending trigger events`; o ambiente real e eventuais triggers externos [nao verificado]. (`app/chamados/migrations/0053_pergunta_unica_por_familia.py:29`)
-- Guarda e índices usam a **mesma função `_no_fato()`**, com as mesmas listas congeladas. A guarda acrescenta `data_evento IS NOT NULL` e `batida_origem IS NOT NULL`; isso corresponde às chaves que podem colidir num índice UNIQUE com NULLs distintos. Não há divergência local de `conversa`, motivo ou vias entre guarda e condição. (`app/chamados/migrations/0053_pergunta_unica_por_familia.py:25`, `:32`, `:35`, `:54`, `:59`)
-- O helper de teste executa `SET CONSTRAINTS ALL IMMEDIATE` antes do DDL, mas a migration não executa DML anterior que exija essa drenagem. A necessidade concreta no banco de produção [nao verificado]. (`app/chamados/tests/acervo_sem_indice.py:18`; migration `:29`)
-
-**A — censo de `DecisaoPergunta.ato/ato_em/ato_por`**
-
-Escritor físico único: `registrar()` constrói as instâncias e faz `bulk_create`. (`app/chamados/models.py:3517`)
-
-Produtores dos valores:
-
-- Fechamento da disputa: SILENCIO, carimbo da pergunta e usuário. (`app/chamados/models.py:1878`)
-- Retratação de motivo: RETRATACAO, instante do ato e ator. (`app/chamados/models.py:1998`)
-- Resposta humana: RESPOSTA, `_agora` compartilhado com `respondida_em`, usuário. (`app/chamados/services/disputa_emissao.py:1369`)
-- Reabertura/recusa: ato recebido, instante único e `por`. (`app/chamados/services/disputa_emissao.py:1478`)
-- Resposta automática e resposta carimbada pela trilha: RESPOSTA e instante recebido, sem autor informado. (`app/chamados/services/disputa_emissao.py:1519`, `:1540`)
-- Validação e devolução: VALIDACAO com `validada_em`; DEVOLUCAO com novo `timezone.now()`; autor recebido. (`app/chamados/services/validacao.py:139`, `:205`)
-- Absorção: ABSORCAO com o mesmo instante do carimbo e usuário. (`app/chamados/services/materializacao.py:558`)
-- Fechamento do fio: SILENCIO com `materializada_em` e autor. (`app/ponto/services/veredito_celula.py:182`)
-- Backfill: SILENCIO com `materializada_em` e `materializada_por_id`. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:181`)
-- Projeção legada: RESPOSTA/VALIDACAO com seus carimbos originais; validação conserva `validada_por_id`, resposta não informa autor. (`app/chamados/models.py:3505`)
-
-Leitores:
-
-- Ordenação por `ato_em`, depois PK. (`app/chamados/models.py:3463`)
-- Correspondência de legado por `(pergunta, ato, ato_em)`. (`app/chamados/models.py:3501`)
-- Histórico da tela lê somente RESPOSTA e atos com foto. (`app/chamados/models.py:3082`)
-- Fio faz prefetch de `ato_por`; template mostra ato, instante e autor. (`app/chamados/services/fio.py:231`; `app/templates/chamados/partials/modal_fio.html:208`)
-- Backfill verifica existência de qualquer SILENCIO/VALIDACAO, sem correspondência de instante. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:125`, `:179`)
-
-**Possível ESMERIL em `ato`:** SILENCIO é apresentado como “Silencio encerrado pela porta”, e o fechamento da disputa recusa respostas pendentes antes desse ato. Já `fechar_o_fio_do_dia()` percorre `q_vivas()`, cujo universo inclui resposta não vazia, e grava SILENCIO mesmo assim. O enum passa a cobrir tanto ausência de resposta quanto encerramento administrativo de pergunta respondida. (`app/chamados/models.py:3439`, `:1848`, `:2918`; `app/ponto/services/veredito_celula.py:174`)
-
-_2700 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2701 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
