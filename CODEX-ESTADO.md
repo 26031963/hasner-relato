@@ -1,7 +1,37 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 12:59** · publicado em **07/11/2026 13:01** (UTC-3)
+> Ultima resposta processada: **07/11/2026 13:22** · publicado em **07/11/2026 13:22** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 13:22 · sessao 6609b154c603 · - · - · origem=Ronald (tmux)
+
+1. **Média — mutante `fs_walk` morre antes do comportamento que pretende provar.** A substituição desliga a varredura também no pre-check; todos os blobs ficam “não vistos”, gerando inventário não vazio e recusa rc 2 antes do Codex. O caso espera rc 3 final, portanto será contado como morto por antecipação: `bin/tests/test_codex_pergunta.sh:393`, `bin/codex_pergunta.sh:145`, `bin/codex_pergunta.sh:217`, `bin/tests/test_codex_pergunta.sh:105`. Execução efetiva da suite: `[nao verificado]`.
+
+2. **Média — mutante `git_aninhado` mede mensagem, mantendo a proteção.** Remove somente o motivo suplementar `.git aninhado`; a regex `.git*` continua produzindo PROIBIDO e rc 3. O caso fica vermelho porque exige aquela substring: `bin/tests/test_codex_pergunta.sh:396`, `bin/codex_pergunta.sh:103`, `bin/codex_pergunta.sh:154`, `bin/tests/test_codex_pergunta.sh:106`, `bin/tests/test_codex_pergunta.sh:295`.
+
+3. **Baixa — sentinela FSMON sem controle positivo de execução do hook.** O caso planta `.git/config` e verifica ausência de FSMON, mas sua ação não chama Git após plantar; o inventário chama Git na raiz da WT. Prova recusa do caminho, sem provar execução potencial do hook: `bin/tests/test_codex_pergunta.sh:291`, `bin/tests/test_codex_pergunta.sh:292`, `bin/tests/test_codex_pergunta.sh:76`, `bin/codex_pergunta.sh:110`.
+
+4. **Sem defeito identificado nos mutantes `poda_so_raiz`.** `if True` poda `.git` tanto de diretórios quanto de arquivos; os dois casos perdem justamente a entrada proibida e ficam com diretórios comuns TOCADO. A expectativa rc 3 deixa de ser satisfeita pelo motivo declarado: `bin/tests/test_codex_pergunta.sh:394`, `bin/tests/test_codex_pergunta.sh:395`, `bin/tests/test_codex_pergunta.sh:295`, `bin/tests/test_codex_pergunta.sh:296`, `bin/codex_pergunta.sh:135`. Execução efetiva: `[nao verificado]`.
+
+5. **Leitor do CLAUDE: nomes e referências, sem guarda das frases alteradas.** O selo preserva nomes de regras, âncoras e hashes dos blocos **PISTA**; não compara literalmente o texto CODEX item 1 do CLAUDE. Logo, verde nesse selo não certifica “DUAS escritas” ou “CONDUTA”: `bin/tests/test_claude_md_regras_preservadas.sh:43`, `bin/tests/test_claude_md_regras_preservadas.sh:55`, `bin/tests/test_claude_md_regras_preservadas.sh:72`, `bin/tests/test_claude_md_regras_preservadas.sh:83`, `CLAUDE.md:346`, `CLAUDE.md:352`. Outros leitores examinados julgam seção 3, seção 0 e senha no argv: `bin/tests/test_suite_sh.sh:22`, `bin/tests/test_lei_akita.sh:24`, `bin/tests/test_lei_akita.sh:35`, `bin/tests/test_segredo_fora_do_argv.sh:33`.
+
+6. **Leitura: cobertura estática preservada; resultado executado não verificado.** Existem casos para os quatro papéis verificando sandbox, cwd, cabeçalho e ausência de sinais do construtor; o verificador usa B3 falso sempre livre. Os testes de sonda cobrem falha do envelope e lista vazia. `bin/tests/test_codex_pergunta.sh:327`, `bin/tests/test_codex_pergunta.sh:337`, `bin/tests/test_codex_pergunta.sh:57`, `bin/tests/test_codex_sonda.sh:71`, `bin/tests/test_codex_sonda.sh:77`. Não executei: a suite cria e remove arquivos temporários, contrariando a restrição de leitura (`bin/tests/test_codex_pergunta.sh:18`, `bin/tests/test_codex_pergunta.sh:19`).
+
+## 07/11 13:21 · sessao 5bdc20a26151 · - · - · origem=Ronald (tmux)
+
+1. **Alta — achado da prova fechado em parte.** TCP local e Unix ganharam medição fora do sandbox: o ouvinte grava conexões e o script compara as contagens antes/depois. Docker, docker.sock e TCP externo continuam julgados pelos `.out` escritos pelo Codex; o delta apenas rotula essa negativa como `AUTO-DECLARADO`, permitindo ainda rc 0. Referências: `bin/tests/prova_codex_pergunta_real.sh:30`, `:41`, `:49`, `:52`, `:101`, `:103`, `:117`, `:120`, `:124`.
+
+2. **Alta — arquivo com `rc=` não comprova execução da tentativa.** A condição aceita qualquer `.out` não vazio contendo `rc=`; TCP local/Unix dispensam inclusive assinatura de erro. Criar o controle positivo e preencher os `.out` com negativas fabricadas satisfaz essas condições sem executar as tentativas; os demais controles externos precisam estar disponíveis para o conjunto retornar 0. Referências: `bin/tests/prova_codex_pergunta_real.sh:60`, `:88`, `:90`, `:92`, `:93`, `:98`, `:106`, `:107`, `:135`. Execução desse contraexemplo: `[nao verificado]`.
+
+3. **Média — zero conexões não é prova suficiente de bloqueio durante toda a chamada.** O script confirma disponibilidade do ouvinte antes do Codex, mas depois apenas lê a contagem; não verifica que o processo continua vivo nem realiza controle posterior ou sincronização do processamento. Se o ouvinte morrer após os controles, permanece possível imprimir `OK MEDIDO ... 0 conexao`. Referências: `bin/tests/prova_codex_pergunta_real.sh:44`, `:49`, `:52`, `:77`, `:101`, `:103`, `:105`. Ocorrência real: `[nao verificado]`.
+
+4. **Média — dois julgamentos continuam ativos para TCP local/Unix.** O comentário atribui o julgamento ao ouvinte, mas `CONECTOU` no `.out` ainda impõe rc 1 independentemente da medição externa. Uma saída fabricada pode produzir “VERMELHO conexão abriu” com contagem externa zero. É duplicação de julgamento da prova; relação com autoridade registrada em `app/core/juizes.py`: `[nao verificado]`. Referências: `bin/tests/prova_codex_pergunta_real.sh:92`, `:104`, `:105`, `:124`, `:125`.
+
+5. **Média — `$EV` não identifica exclusivamente a execução.** O nome usa data até segundos e `mkdir -p` reutiliza o diretório. Duas execuções no mesmo segundo compartilham socket, `porta`, `conexoes`, prompt e evidências; não há recusa de diretório preexistente. O segundo ouvinte pode falhar no `bind` e consumir `porta` do primeiro. Referências: `bin/tests/prova_codex_pergunta_real.sh:21`, `:29`, `:30`, `:34`, `:35`, `:45`, `:46`, `:53`, `:80`, `:81`. Reprodução: `[nao verificado]`.
+
+6. **Informativo — escritores/leitores da prova.** O shell cria `$EV/escuta`, inicia e encerra o ouvinte; o Python escreve `porta.novo`, renomeia para `porta` e acrescenta `conexoes`; o shell lê `porta` e as contagens. O shell escreve `$EV/p`; o wrapper o lê. O Codex recebe instrução para escrever `<wt>/app/prova/*.out`, e o shell os copia/lê para produzir o veredito. Referências: `bin/tests/prova_codex_pergunta_real.sh:21`, `:29`, `:30`, `:35`, `:41`, `:44`, `:46`, `:52`, `:53`, `:61`, `:77`, `:81`, `:89`, `:103`, `:115`.
+
+7. **Informativo — limites desta auditoria.** O ramo de leitura da prova permanece separado após o término do ramo construtor; o ouvinte está somente no construtor. Referências: `bin/tests/prova_codex_pergunta_real.sh:18`, `:135`, `:137`. Não executei o script, que cria arquivos e chama o wrapper (`:21`, `:53`, `:77`); resultados reais e mutantes executados: `[nao verificado]`.
 
 ## 07/11 12:59 · sessao a1c39fc87f85 · FIO-E0-V4-E2 · verificador · origem=Code
 
@@ -714,39 +744,4 @@ Não executei testes com banco; resultados da suite e mutações reais dos commi
 
 **Quanto a `timezone.now`/`localdate`/`date.today` em helpers reais:** não achei leitura dessas três formas no caminho da tarefa que rastreei: leitor alimentado (`app/escala/services/leitor_celula.py:350`), previsto (`app/escala/utils.py:2256`), vínculo (`app/escala/alimentacao.py:269`), marcos (`app/escala/servico_jornada.py:68`), fila com `agora` (`app/chamados/services/painel.py:190`), âncora (`app/chamados/services/fio.py:116`), passivo (`app/chamados/models.py:3409`), dia sem trabalho (`app/chamados/juizes.py:423`) e lavra (`app/chamados/veredito_lavrado.py:196`). O escape encontrado é o **`monotonic`**, já incluído no vocabulário do próprio selo (`app/chamados/tests/test_e2_tarefa_do_dia.py:891`).
 
-## 07/11 11:28 · sessao b1dd9a2cb159 · OTIMIZA-3-LOADER · censo · origem=Code
-
-**1a, 1b e 1c cabem em (a) nas respostas fornecidas. Para 3 e 4, o tema foi perguntado, mas falta a resposta da v11 para fechar a atribuição: [não verificado].** A regra exige tanto tema presente quanto omissão do Codex (`CLAUDE.md:377–379`).
-
-Nos anexos abaixo, conto as linhas desde a primeira linha do conteúdo, excluindo o marcador `== anexo: ... ==`.
-
-| achado | classe | trecho da pergunta | trecho da resposta/triagem |
-|---|---|---|---|
-| **1a — `find_spec` → `module_from_spec` → `exec_module`** | **(a), nas respostas disponíveis.** O universo perguntado abrangia loaders fora da lista; a resposta permaneceu nas formas enumeradas. Omissão na resposta final: **[não verificado]**. | “**todas as formas pelas quais um modulo-alvo e ligado SEM ast.Import/ast.ImportFrom**” (`v9_codex_q1.txt:14`). | “**`spec_from_file_location`, `SourceFileLoader`, `SourcelessFileLoader`, `imp.load_source` e `run_path` são reconhecidos pelo nome**” (`v9_codex_r1.md:31`). A cópia mantém a lista fechada e o despacho por ela (`bin/quem_chama.py:104–111`, `bin/quem_chama.py:653–659`). |
-| **1b — `import_module` dentro de string `.py`, nome recebido por argv do `-c`** | **(a), nas respostas disponíveis.** Código dentro de string e nome vindo de parâmetro estavam expressamente cobertos; a ligação específica pelo argv não foi apontada. Omissão na resposta final: **[não verificado]**. | “**import_module(nome) com nome vindo [...] de parametro**”; “**loader em texto embutido: heredoc de .sh, python3 -c "...", string de .py que e codigo, config**” (`v9_codex_q1.txt:17–18`, `:27`). | “**string de código em `.py` e config são cobertos quando o texto contém um loader reconhecido e caminho/basename ou nome completo reconhecível**” (`v9_codex_r1.md:49`). A triagem declara curada outra forma: “**-c "exec(open(...))" em texto**”; não registra descarte do caso com `import_module(sys.argv[1])` (`v11_triagem_r2.txt:9–11`). |
-| **1c — `import_string` montado; `pkgutil.get_loader().load_module()`** | **(a), nas respostas disponíveis.** `import_string` foi nominalmente perguntado; `pkgutil` estava no universo de “todas as formas”. Omissão na resposta final: **[não verificado]**. | “**django.utils.module_loading.import_string**” (`v9_codex_q1.txt:19`); “**todas as formas**” (`v9_codex_q1.txt:14`). | A resposta aborda APIs vizinhas: “**`include('x.urls')`, settings e `apps.get_model` não ganham reconhecimento de loader**”, sem individualizar os dois escapes do achado (`v9_codex_r1.md:75`). Ambos ficam fora dos conjuntos operacionais da cópia (`bin/quem_chama.py:104–111`, `:653–659`). |
-| **3 — negativa `r11-exec-string-nao-e-opaco` sem par** | **[não verificado] para fechar (a).** Tema explicitamente presente; falta a resposta que permitiria estabelecer se o Codex viu a vacuidade. | “**alguma assercao r11-* passa por acaso de fixture ou e vacua?**” (`v11_codex_q3.txt:28`). | “**exec/compile de STRING de codigo nao e opaco (r11-exec-string-nao-e-opaco; M91)**” (`v11_triagem_r2.txt:17`). Isso registra o comportamento pretendido, sem registrar descoberta/descarte da falta de par. Na cópia, a negativa exige somente ausência do sítio (`bin/tests/test_quem_chama.sh:788`). |
-| **4 — `python` associa caminho, não argv do `-c`; `conta['opacos']` sem leitor** | **[não verificado] para fechar a classe do item inteiro.** A parte argv coincide com a omissão de 1b; a auditoria final do contador depende da resposta v11 ausente. | “**QUEM ESCREVE e QUEM LE [...] o tipo 'python' em ldr/ldr_txt [...] opacos**”; “**um campo ganhou dois significados?**” (`v11_codex_q3.txt:23–26`). | “**'python' separado de 'caminho'**” (`v11_triagem_r2.txt:26`). A cópia ainda associa `python` a citações de caminho (`bin/quem_chama.py:870–874`); grava `conta['opacos']`, enquanto o resumo usa outros campos (`bin/quem_chama.py:1232`, `:1243–1247`). |
-
-O **“PARCIAL”** da triagem trata de constante entre arquivos que fica **“OPACA e LISTADA”**; não documenta descarte desses escapes sem OPACO, nem do negativo sem par ou do contador sem leitor (`v11_triagem_r2.txt:16–20`). Portanto, esse trecho não sustenta **(b)** para os cinco achados.
-
-Atribuir **(d), MODO-COMUM**, exigiria comprovar também a omissão dos opus anteriores; essa comprovação não está no material fornecido: **[não verificado]**.
-
-## 07/11 11:25 · sessao f8d50d317e38 · - · - · origem=Ronald (tmux)
-
-| achado | avaliação | evidência literal |
-|---|---|---|
-| 3 — negativo sem par | Tema **presente**, portanto não cabe (e); omissão do Codex necessária para (a) **[não verificado]**, porque falta a resposta v11. | Pergunta v11 P5: “alguma assercao r11-* passa por acaso de fixture ou e vacua?” Triagem v11 item 6: “exec/compile de STRING de codigo nao e opaco (r11-exec-string-nao-e-opaco; M91)”. Esse trecho declara a forma curada, mas não relata descoberta nem descarte da falta de par **[não verificado]**. |
-| 4 — `python`/`-c` | Tema **presente**; não há descarte específico demonstrado **[não verificado]**. | Pergunta v11 P4: “o tipo 'python' em ldr/ldr_txt [...] Algum leitor ficou com a semantica de e65767b4 [...] ou um campo ganhou dois significados?” Resposta v10, achado 3: “Não examina a expressão do argumento do script nem resolve aliases de `sys`.” Triagem v11 item 3: “1o arg nao-flag apos o interpretador e caminho, -m = nome”. Isso cobre a alteração, sem demonstrar que o Codex viu a lacuna específica de nome vindo de argv em `-c` **[não verificado]**. |
-| 4 — `conta['opacos']` sem leitor | Tema do fluxo de `opacos` **presente**; descoberta/omissão final **[não verificado]**. | Pergunta v11 P4 inclui “QUEM ESCREVE e QUEM LE [...] opacos”. Não foi fornecida resposta v11; as respostas anteriores não podem atestar a leitura desse contador na implementação final **[não verificado]**. |
-
-Confirmação estática da cópia:
-
-- A fixture existe em `bin/tests/test_quem_chama.sh:486–488`; sua negativa apenas procura a ausência do sítio em `bin/tests/test_quem_chama.sh:788`. A asserção não exige a existência da fixture nem um resultado positivo dela (`bin/tests/test_quem_chama.sh:788`).
-- O ramo subprocesso distingue `-m`, depois remove flags e trata o primeiro elemento restante como caminho; não possui ramo específico de argv do `-c` (`bin/quem_chama.py:781–793`).
-- A associação lexical considera `'python'` junto de `'caminho'` (`bin/quem_chama.py:870–871`).
-- `conta['opacos']` é inicializado em `bin/quem_chama.py:1232`; o resumo usa `varridas`, `zeros` e `nao` (`bin/quem_chama.py:1243–1247`), e `main` usa somente `conta['nao']` (`bin/quem_chama.py:1273–1274`).
-- A regra exige “nao viu com o tema PRESENTE” para (a), e “viu e a triagem descartou” para (b) (`CLAUDE.md:377–379`). **Tema presente não basta para provar omissão quando a resposta final falta.**
-- Não há base para (d): laudos anteriores completos não foram fornecidos **[não verificado]**.
-
-_2721 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2723 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
