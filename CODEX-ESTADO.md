@@ -1,7 +1,66 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 21:51** · publicado em **06/11/2026 21:51** (UTC-3)
+> Ultima resposta processada: **06/11/2026 21:52** · publicado em **06/11/2026 21:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 21:52 · sessao 6e064515fdcd · V2-BUGS-I2 · verificador · origem=Code
+
+**Reprovaria a volta 1:** a correção deixa o partido com dois pares incompleto, mantém a promoção de FT partido sem HE100 noturna e transforma o resultado errado em expectativa obrigatória no F11d. (`app/ponto/motor_calculo_v2.py:3105`, `app/ponto/motor_calculo_v2.py:2897`, `app/ponto/tests/test_o280_bateria_da_lei.py:1705`)
+
+1. **Escritores, leitores e significados**
+
+   | Campo/função | Quem escreve | Quem lê |
+   |---|---|---|
+   | `minutos_extra_100_noturna` | `_aplicar_he_noturna`; resets mensais e bloqueio zeram. (`app/ponto/motor_calculo_v2.py:1020`, `:2938`, `:3329`, `:1475`) | `ResultadoMes`, lavratura normal, promoção no DiaPago e promoção no FM. (`app/ponto/motor_calculo_v2.py:344`; `app/ponto/services/dia_pago.py:184`, `:252`; `app/ponto/services/fechamento.py:963`) |
+   | `minutos_extra_100_feriado` | Dobras por período e por dia; também a releitura do calculador. (`app/ponto/motor_calculo_v2.py:2812`, `:3095`, `:3263`, `:3346`; `app/ponto/calculador/periodo.py:844`) | `ResultadoMes`, DiaPago e contas que excluem a dobra do excedente semanal. (`app/ponto/motor_calculo_v2.py:332`, `:2637`, `:3474`; `app/ponto/services/dia_pago.py:183`) |
+   | FM.`horas_extras_100_noturna` | `recalcular_fechamento_mes`, com persistência na mesma porta; `restaurar_fechamento` também aceita restaurar o campo. (`app/ponto/services/fechamento.py:924`, `:961`, `:1168`, `:1379`, `:1392`) | Reconciliação da `porta_export`, por nome de campo. (`app/folha/porta_export.py:451`, `:452`) |
+   | DiaPago.`horas_extras_100_noturna` | `lavrar`, somando períodos normais e FT promovida; versão oráculo pode substituir pela rubrica calculada, dentro da mesma função. (`app/ponto/services/dia_pago.py:184`, `:252`, `:329`, `:345`, `:360`) | Soma da competência, reconciliação e identificação de dia com dinheiro lavrado. (`app/ponto/services/dia_pago.py:562`, `:863`; `app/folha/porta_export.py:451`) |
+   | `he_noturna` | Função decisória, retorna dois valores; não persiste campos. (`app/ponto/motor_calculo_v2.py:409`, `:451`) | Casca do motor e calculador por período. (`app/ponto/motor_calculo_v2.py:1014`; `app/ponto/calculador/regras.py:832`) |
+
+   **Unidade:** o split devolve minutos de relógio; `ResultadoMes`, FM e DiaPago convertem para horas dividindo por 60. A redução fica em `minutos_noturnos_legais = relogio × fator`; o fator vale 1 quando afastada a hora reduzida. Portanto HE100 noturna e adicional noturno legal **não são numericamente a mesma medida**. (`app/ponto/motor_calculo_v2.py:441`, `:448`, `:344`, `:986`, `:992`; `app/ponto/services/dia_pago.py:252`; `app/ponto/services/fechamento.py:963`)
+
+   **Não há significado uniforme de dia nem de trecho:** o DiaPago recebe o mapa da jornada, mas a promoção identifica feriado pela data civil da entrada; o split lê pontas cruas, enquanto duração e noturnas usam pontas efetivas. (`app/ponto/services/fechamento.py:947`, `:949`, `:1216`; `app/ponto/services/dia_pago.py:128`; `app/ponto/motor_calculo_v2.py:1015`, `:3216`, `:3252`)
+
+2. **Duplicação e FM versus soma dos dias**
+
+   Não encontrei duplicação pelo caminho normal `periodos + ft_feriado`: o motor coloca cada período em um dos dois conjuntos; `ResultadoMes` soma somente os regulares; a promoção atribui essa base mais FT feriada, sem acumular novamente o FM anterior. O DiaPago recebe as mesmas partições. (`app/ponto/motor_calculo_v2.py:2492`, `:2494`, `:344`; `app/ponto/services/fechamento.py:961`, `:979`, `:1202`)
+
+   **Existe duplicação dentro da própria função noturna:** com prorrogação habilitada, o segmento 00–05 é estendido até a saída e depois o segmento 22–24 é somado novamente. Exemplo reproduzido com as funções extraídas em memória: **03–23, HE100=1.200 minutos → HE100 noturna=1.260**, contando 22–23 duas vezes. A dívida já está documentada no código; a chamada nova do comercial passa a expô-la no mensal. (`app/ponto/motor_calculo_v2.py:110`, `:112`, `:116`, `:153`, `:3361`)
+
+   **FM diferente da soma dos dias continua possível por caminhos preexistentes:** o FM é persistido antes da lavratura, cuja exceção é capturada; uma falha Python nessa etapa pode deixar DP antigo ou ausente. A restauração também permite alterar somente o FM. Ocorrência real: **[não verificado]**. (`app/ponto/services/fechamento.py:1143`, `:1159`, `:1198`, `:1237`, `:1392`)
+
+3. **Efeito da chamada antes do `continue`**
+
+   A hipótese de mudar `minutos_noturnos` ou `extra_50` **não se sustenta**: a casca só escreve os dois subconjuntos noturnos; nos ramos da dobra, HE50 e HE50 noturna já foram zeradas. Assim, nesse caminho, somente HE100 noturna muda. (`app/ponto/motor_calculo_v2.py:1019`, `:1022`, `:2934`, `:2937`, `:3325`, `:3328`)
+
+   O contraexemplo concreto é outro: **cru 13–23, efetivo 13–22, HE100=540, noturnas=0**. A chamada escreve **60 de HE100 noturna**, porque lê a saída crua. Na reprodução em memória, esse foi o único campo alterado. O recorte da saída ao marco existe, mas o carimbo guarda os efetivos em campos separados. (`app/ponto/motor_calculo_v2.py:1015`, `:1742`, `:1750`, `:1840`, `:1841`)
+
+4. **Dois pares: início errado para a dobra do dia**
+
+   **O split não alcança todo o trecho extra do dia:** os 420 minutos da dobra ficam em `ultimo`; o início calculado é limitado à entrada desse período. Para **21–00 / 03–07**, ele alcança somente 03–07: **240 minutos**, deixando os 120 noturnos do primeiro par de fora. (`app/ponto/motor_calculo_v2.py:3087`, `:3094`, `:406`; `app/ponto/tests/test_o280_bateria_da_lei.py:1697`, `:1705`)
+
+   Pelo diff fornecido, isso é **lacuna preexistente parcialmente corrigida**, não regressão numérica: o pai pulava o split e deixava zero; agora entrega 240, ainda abaixo dos 360 exigidos pelo próprio F11e. Execução no pai: **[não verificado]**. (`app/ponto/motor_calculo_v2.py:3102`, `:3105`; `app/ponto/tests/test_o280_bateria_da_lei.py:1717`)
+
+5. **Mordida dos REDs**
+
+   - F11/F11b/F11c cobram valores numéricos — 120 minutos, 60 minutos e 1 hora — por `assertEqual`; não aceitam qualquer exceção. Pelo diff, a falha esperada no pai é valor zero, sem depender de símbolo introduzido pela correção. Execução efetiva no pai: **[não verificado]**. (`app/ponto/tests/test_o280_bateria_da_lei.py:1266`, `:1594`, `:1632`, `:1674`)
+   - **F11c mata o mutante “somente FM”**, pois verifica separadamente `dp_he100_not=1.0`. Entretanto cobre somente COM/comercial, deixando FT partido sem essa prova. (`app/ponto/tests/test_o280_bateria_da_lei.py:1659`, `:1674`, `:1679`)
+   - **F11d morde pelo critério errado:** exige 240, o defeito conhecido. Uma correção completa quebraria esse teste. (`app/ponto/tests/test_o280_bateria_da_lei.py:1704`, `:1705`)
+   - **F11e aceita falha anterior ao valor legal:** `expectedFailure` envolve também a montagem do caso e a chamada ao motor, sem restringir tipo ou mensagem. Seu resultado esperado não prova que a falha ocorreu na comparação 240 versus 360. (`app/ponto/tests/test_o280_bateria_da_lei.py:1688`, `:1689`, `:1708`, `:1716`)
+
+6. **Classes estruturais e outro buraco da correção**
+
+   Não identifiquei novo juiz da janela nem escritor fora da porta no diff: as chamadas reutilizam `he_noturna`, FM permanece no serviço registrado e DiaPago permanece em `lavrar`. Fechamento e lavratura apenas somam minutos; o oráculo chama a mesma função decisória. (`app/ponto/motor_calculo_v2.py:1014`; `app/core/portas.py:500`; `app/ponto/services/dia_pago.py:360`; `app/ponto/calculador/regras.py:832`)
+
+   **A alegação “o motor JÁ escreveu” é falsa para FT partido:** seu `calcular_periodo` retorna sem HE/split, e o mensal recalcula apenas períodos regulares. Logo, um FT partido **21–00**, promovido com escala certa, pode receber **180 minutos de HE100 e zero HE100 noturna**, apesar dos 120 minutos noturnos. As novas linhas apenas leem esse zero. (`app/ponto/motor_calculo_v2.py:225`, `:2893`, `:2896`, `:2897`, `:2928`, `:3083`; `app/ponto/services/fechamento.py:954`, `:963`; `app/ponto/services/dia_pago.py:252`)
+
+   As classes problemáticas são **selo que protege o erro**, **pontas cruas versus efetivas** e **dia civil versus jornada**. Na promoção, o segundo par pós-meia-noite pode receber classificação diferente do primeiro mesmo pertencendo à mesma jornada feriada. Ocorrência em produção: **[não verificado]**. (`app/ponto/tests/test_o280_bateria_da_lei.py:1705`; `app/ponto/motor_calculo_v2.py:1015`; `app/ponto/services/fechamento.py:947`, `:949`; `app/ponto/services/dia_pago.py:245`)
+
+7. **TXT/Domínio**
+
+   **O subconjunto alterado não muda diretamente os eventos do TXT:** `eventos_do_fechamento` emite HE50, HE100 normal/feriado e adicional noturno, sem emitir `horas_extras_100_noturna`; os totais usados nesses eventos não são alterados pela nova casca. Igualdade byte a byte de arquivos gerados: **[não verificado]**. (`app/folha/export.py:420`, `:439`, `:447`; `app/ponto/motor_calculo_v2.py:1019`)
+
+   A `porta_export` lê o campo indiretamente pela soma do DiaPago e compara ao FM, mas **essa divergência fica fora de `falhas`**. Portanto a reconciliação observa o problema sem, por si só, impedir o TXT. (`app/ponto/services/dia_pago.py:562`; `app/folha/porta_export.py:451`, `:455`, `:687`, `:697`)
 
 ## 06/11 21:51 · sessao eb474d436086 · - · - · origem=Ronald (tmux)
 
@@ -1243,26 +1302,4 @@ A página `/holerite/lote/`, `upload_lote_v2`, template `app/templates/holerite/
 
 [truncado em 20000 de 26787 caracteres]
 
-## 06/11 21:28 · sessao 3ef57447b4ee · - · - · origem=Ronald (tmux)
-
-E — achados de leitura; testes encontrados, não executados. [nao verificado]
-
-| Caso | Comportamento demonstrado hoje | Testes/limite | [nao verificado]
-|---|---|---|
-| **1. Dois marcos no dia** | Há perguntas distintas para motivos distintos; o dedup datado usa `(disputa,motivo,data_evento)`, portanto `intervalo_saida` e outro motivo não necessariamente se fundem. Isso ainda não é identidade explícita por MARCO/instância: `app/chamados/services/disputa_emissao.py:368`, `app/chamados/services/disputa_emissao.py:387`, `app/chamados/services/disputa_emissao.py:389`. | Dois marcos de intervalo no mesmo chamado geram duas perguntas: `app/chamados/tests/test_fio_intervalo.py:62`. **Não achei teste exato “falta saída intervalo + falta saída final”** nas buscas por marcos/motivos em `app/chamados/tests` e `app/ponto/tests` [nao verificado]. |
-| **2. Noturno 21→22 sem 23** | O plantio parte de `p.data_evento`, combina esse dia com a hora e depois ajusta overnight: `app/chamados/services/materializacao.py:344`, `app/chamados/services/materializacao.py:414`, `app/chamados/services/materializacao.py:420`. O ajuste consulta a escala desse dia e tenta somente D e D+1 dentro do envelope dos marcos: `app/chamados/juizes.py:302`, `app/chamados/juizes.py:310`. **Não há garantia demonstrada contra revirada quando `data_evento` já contém o dia civil do marco**: o teste legado grava D+1 nas perguntas de intervalo (`app/chamados/tests/test_fio_intervalo.py:77`), enquanto o ajuste toma esse dia como base (`app/chamados/juizes.py:303`). | Próximos: volta 00:00 vai a D+1, entrada 19:00 não desloca: `app/chamados/tests/test_plantio_intervalo_overnight.py:27`, `app/chamados/tests/test_plantio_intervalo_overnight.py:35`; saída existente D+1 é reutilizada: `app/chamados/tests/test_materializar_overnight.py:33`. **Não achei teste exato 21→22 sem 23** nesses arquivos e na busca de datas/noturno em `app/chamados/tests` [nao verificado]. |
-| **4. Atestado pendente/aprovado/rejeitado** | Escape ATESTADO cria ausência com estado decidido por `estado_inicial`; sem documento, `aguardando_documento`. A absorção tenta carimbar perguntas-hora do mesmo dia, mas o C6 pode recusar e deixá-las vivas; ausência aberta mantém chamado vivo e o silencia: `app/chamados/services/materializacao.py:495`, `app/chamados/services/materializacao.py:531`, `app/chamados/services/materializacao.py:549`, `app/chamados/services/materializacao.py:562`. Rejeição devolve perguntas absorvidas antes de levantar silêncio: `app/ponto/signals.py:254`. | Rejeitada: perguntas pendentes/vivas e disputa aberta, `app/chamados/tests/test_o261_e1_ausencia_rejeitada_devolve.py:88`. Aprovada não devolve, `:129`. Outra ausência viva segura absorção, `:119`; pergunta com batida não volta, `:141`; nova resposta reabre a MESMA ausência, `:154`; reabertura só pelo DP não reabsorve, `:172`. |
-| **5. Troca de plantão nos dois colabs** | Exige par de ausências/cartas, pessoas distintas e documentos nos dois lados. Trava cartas, edita os dois dias no mesmo atomic; cedente vira folga, substituto dia normal pelo template próprio; recusa do segundo lado desfaz primeiro: `app/ponto/portas/celula.py:632`, `:652`, `:657`, `:662`, `:673`. A mudança marca cobranças órfãs para rejulgamento e agenda juiz antes do recalculo, por competência dos dias: `app/ponto/portas/celula.py:622`, `:627`, `:422`, `:445`. Falta em folga tocada é reavaliada no pós-commit: `app/ponto/portas/celula.py:490`. | Cedente sem desconto `app/ponto/tests/test_o10b_editar_dia_troca.py:159`; substituto sem HE100/folga trabalhada e mantendo noturno `:169`; competências distintas `:260`; falha entre lados rollback `:325`; idempotência `:238`; sem par/documentos/vínculo recusa `:213`, `:222`, `:350`. O teste de concorrência existente verifica AST/locks, não duas transações reais: `:314`. |
-| **8. Passivo sem inventar** | O plantio recusa texto vazio e grava recusa com dono; não toma validação/admin ou carimbo de resposta como anuência: `app/chamados/services/materializacao.py:804`. Lote de passivo usa mesma unidade oficial, classificação do vigia; exclui slot não derivável e plantio já fora do slot: `app/chamados/services/passivo_validado.py:39`, `:60`. O dry não chama unidade: `:360`; aplica por `(colab,competência)` atomic e fecha por disputa uma vez ao final: `:371`, `:403`. | Recusa sem resposta: `app/chamados/tests/test_a27_recusa_com_dono.py:33`; lote encontra carimbo falso invisível à fila admin `app/chamados/tests/test_o317_passivo_pela_porta.py:188`; dry `:256`; fora do slot `:383`; slot não derivável `:406`; outra pendência da disputa impede fechamento `:502`. |
-| **9. Desligamento com histórico pendente** | Bloqueia login e fecha vínculos: `app/colaboradores/services/desligamento.py:109`, `:122`. **Resposta sem veredito preserva disputa e chamado vivo para admin julgar**; mudas podem morrer por `admin_decidiu`: `:139`, `:142`, `:155`. Cria chamado auditoria `dp_rh`: `:159`. Cartório continua julgando histórico, mas emissão exclui desligado: `app/ponto/services/cartorio.py:1696`. | Preservação resposta sem veredito e fechamento muda: `app/colaboradores/tests/test_desligar_guards.py:93`; desligado julgado sem cobrança `app/ponto/tests/test_hx_cartorio_universo.py:34`. |
-| **10. DiaPago/export** | Dinheiro é atualizado pelo recalculo da competência do fato em `on_commit`: `app/ponto/services/fechamento.py:1791`, `:1800`; recalculo lavra DiaPago: `:1184`, `:1194`. Alterar só ata/veredito não equivale necessariamente a atualizar snapshot/TXT: teste exige rejulgar competência exportada deixando fechamento e TXT intactos, `app/ponto/tests/test_grade_v5_cartorio_rejulga_a_exportada.py:15`. Export retém por veredito/protestos da célula, com exceção preadoção e pausa exclusiva: `app/folha/export.py:1233`, `:1245`, `:1253`. **Comparações DiaPago×fechamento/espelho são publicadas, mas ficam FORA de `falhas`; não travam sozinhas o TXT**: `app/folha/porta_export.py:687`, `:696`. | `app/folha/tests/test_porta_do_export.py:135` sela contadores sem reprovação; `:216` acusa DiaPago incorreto; `:495` não lavrado distinto de zero; `app/folha/tests/test_borda_celula.py:49` sela furo retentor e `:90` preadoção sem retenção. |
-
-Detalhes para consolidação:
-
-- **No noturno, distinguir jornada de data civil é requisito concreto**, porque `data_evento` tanto recebe D+1 no teste do emissor de intervalo (`app/chamados/tests/test_fio_intervalo.py:77`) quanto serve de entrada para buscar os marcos e possivelmente acrescentar outro dia (`app/chamados/juizes.py:303`, `:310`). Não afirme que o fluxo atual garante “nunca 23”; a prova exata não foi encontrada [nao verificado].
-- **Atestado aberto não deve ser descrito como chamado fechado**: o código explicitamente pula `reconciliar()` enquanto a ausência está em ABERTAS (`app/chamados/services/materializacao.py:562`). A absorção de cada irmã também pode ser recusada pelo C6, com trilha própria e retorno da lista de recusadas (`:549`, `:553`, `:569`).
-- **Desligamento não apaga a obrigação histórica respondida**: a exceção preserva resposta sem veredito e a deixa ao admin, apesar de remover o acesso do colaborador (`app/colaboradores/services/desligamento.py:111`, `:139`, `:155`). Não substitua isso pela regra antiga “cascade fecha tudo”.
-- **Export de desligado**: data de demissão até o fim da janela direciona para rescisão; demissão depois do fim não exclui aquela competência mensal (`app/folha/export.py:854`, `:858`); retenção de célula recorta universo por admissão/demissão (`app/folha/export.py:1198`).
-- **Passivo validado exportado**: plantio, regeneração pela porta declarada e pauta DP são um par transacional; recusa da regeneração desfaz plantio/carimbos (`app/chamados/services/passivo_validado.py:371`, `:374`, `:419`, `:438`); pauta só quando o gravado mudou (`:442`), com tratamento próprio quando não mudou (`:445`).
-
-_2598 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2599 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
