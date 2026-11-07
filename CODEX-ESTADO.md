@@ -1,7 +1,323 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 17:10** · publicado em **07/11/2026 17:13** (UTC-3)
+> Ultima resposta processada: **07/11/2026 17:19** · publicado em **07/11/2026 17:19** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 17:19 · sessao 6f9c34fbaa6e · MOTOR-LE-O-TURNO-INSTRUMENTO · verificador · origem=Code
+
+**As curas corrigem os contraexemplos da triagem, mas a proteção varia: P1 congela integralmente a árvore atual; P2/P3 têm regras gerais no código com cobertura ainda parcial; P4 mantém escapes; P5 remove o relato histórico, sem garantir documentação futura.** (`app/core/tests/test_medida_turno_do_par.py:546`, `app/core/medida_turno_do_par.py:259`, `app/core/medida_turno_do_par.py:286`, `app/core/medida_turno_do_par.py:316`, `app/core/tests/test_medida_turno_do_par.py:55`)
+
+O histórico `133cd78a..35969e9d` não pôde ser conferido: a cópia não contém `.git`. O confronto abaixo usa a fonte atual e a triagem fornecida. **[nao verificado]**
+
+Executei o original e cada mutante isoladamente, em memória: **original 28/28; P1–P5 28/28**. Conferi também as asserções HOST sobre cada fonte mutante. São os testes deste instrumento, pelo runner adaptado de `SimpleTestCase` para `unittest`, sem execução Django/produtiva; resultados sem artefato persistido: **[nao verificado]**. O procedimento está documentado em `app/core/tests/test_medida_turno_do_par.py:20`.
+
+**P1 — fecha as linhas da árvore atual; não fecha a generalização para outras cardinalidades.** Agora há igualdade integral entre registro e publicação, incluindo A1, B1 e nomeados. O mutante anterior “usar `def` quando houver uma ocorrência” enfrenta essa igualdade. (`app/core/tests/test_medida_turno_do_par.py:227`, `app/core/tests/test_medida_turno_do_par.py:546`)
+
+Mutante sobrevivente: substituir exatamente este fragmento em `app/core/medida_turno_do_par.py:389`:
+
+```python
+'criterio': criterion, 'linhas': lines
+```
+
+por:
+
+```python
+'criterio': criterion, 'linhas': lines[:10]
+```
+
+O maior registro atual tem dez ocorrências; a fixture específica cobra duas. Assim, o mutante preserva a árvore registrada e trunca uma função futura com onze ocorrências. (`app/core/tests/test_medida_turno_do_par.py:325`, `app/core/tests/test_medida_turno_do_par.py:587`)
+
+Teste que deveria pegá-lo, ampliando `test_MORDE_linhas_a1_b1_publicam_ocorrencia_e_nao_def`, em `app/core/tests/test_medida_turno_do_par.py:570`:
+
+```python
+sources = _mini()
+sources['novo.py'] = 'def novo(entrada):\n' + '    entrada.date()\n' * 11
+result = m.censo_fontes(sources)
+item = next(i for i in result['derivacoes_de_dia']['itens']
+            if i['chave'] == 'novo.py::novo')
+self.assertEqual(list(range(2, 13)), item['linhas'])
+```
+
+**P2 — o código fecha a classe “qualquer quantidade de desconhecidas”; a suíte acrescentou somente o caso de duas.** A diferença de conjuntos continua correta, mas ainda pode regredir para uma guarda limitada sem os testes perceberem. (`app/core/medida_turno_do_par.py:316`, `app/core/tests/test_medida_turno_do_par.py:616`)
+
+Mutante sobrevivente: substituir a guarda em `app/core/medida_turno_do_par.py:316` por:
+
+```python
+if 0 < len(inherited - recognized) <= 2:
+```
+
+Teste que deveria pegá-lo, estendendo `app/core/tests/test_medida_turno_do_par.py:616`:
+
+```python
+sources = _mini()
+sources[m._MOTOR] += '        data_jornada = _prev_dj\n' * 3
+with self.assertRaisesRegex(LookupError, r'linhas \[12, 13, 14\]'):
+    m.censo_fontes(sources)
+```
+
+O original aponta as três linhas; o mutante deixa passar e mantém somente a ocorrência reconhecida da fixture. Resultado observado em memória: **[nao verificado]**.
+
+**P3 — fecha o casamento recursivo de Tuple/List sem `starred` na implementação; a suíte não protege todas essas formas.** O falso cruzamento original foi corrigido por associação posicional recursiva. A recursão ensaiada usa lista interna; falta a variante com tupla interna. (`app/core/medida_turno_do_par.py:259`, `app/core/tests/test_medida_turno_do_par.py:626`)
+
+Mutante sobrevivente: substituir a linha de `app/core/medida_turno_do_par.py:265` por:
+
+```python
+yield from ([(left, right)] if isinstance(left, ast.Tuple) else bindings(left, right))
+```
+
+Teste que deveria pegá-lo, ampliando `app/core/tests/test_medida_turno_do_par.py:626`:
+
+```python
+sources = _mini()
+sources[m._MOTOR] += (
+    '        outro, (data_jornada, ultimo) = (_prev_dj, (x, _prev_dj))\n'
+)
+result = m.censo_fontes(sources)
+self.assertEqual([11], result['sitios_nomeados'][-1]['linhas'])
+```
+
+Aqui `data_jornada` recebe `x`. O original aceita; o mutante mistura as posições da tupla interna e lança `LookupError`. Resultado observado em memória: **[nao verificado]**.
+
+**P4 — amplia a detecção, mas não fecha a classe de fontes, destinos e bindings.** Alias transitivo, atributo de origem e subscrito literal de destino ganharam implementação e testes; outros bindings continuam ausentes. (`app/core/medida_turno_do_par.py:269`, `app/core/medida_turno_do_par.py:279`, `app/core/medida_turno_do_par.py:286`, `app/core/tests/test_medida_turno_do_par.py:654`)
+
+Mutante sobrevivente: substituir o ramo de `Attribute` em `app/core/medida_turno_do_par.py:281` por:
+
+```python
+or (isinstance(n, ast.Attribute) and n.attr == '_prev_dj' and isinstance(n.value, ast.Name) and n.value.id == 'self')
+```
+
+A cobertura de origem por atributo usa `self._prev_dj`. Falta outro receptor. (`app/core/tests/test_medida_turno_do_par.py:657`, `app/core/tests/test_medida_turno_do_par.py:659`, `app/core/tests/test_medida_turno_do_par.py:662`)
+
+Teste que deveria pegá-lo: [nao verificado]
+
+```python
+sources = _mini()
+sources[m._MOTOR] += '        data_jornada = estado._prev_dj\n'
+with self.assertRaisesRegex(LookupError, r'linhas \[12\]'):
+    m.censo_fontes(sources)
+```
+
+**P5 — fecha o texto histórico apontado, não uma classe executável.** O docstring atual prescreve execuções que “devem” falhar; não conserva o antigo relato de autoria, duração e execuções concluídas. (`app/core/tests/test_medida_turno_do_par.py:55`, `app/core/tests/test_medida_turno_do_par.py:64`)
+
+Para cumprir literalmente o pedido de mutante **do instrumento**, acrescente após a frase de `app/core/medida_turno_do_par.py:19` esta linha, ainda dentro do docstring:
+
+```text
+Registro da execucao: suite Django oficial aprovada em producao. [nao verificado]
+```
+
+Isso sobrevive porque as verificações HOST conferem execução/imports, sem autenticar essa alegação documental. A aprovação produtiva escrita pelo mutante é **[nao verificado]**. (`app/core/tests/test_medida_turno_do_par.py:826`)
+
+Um teste documental como o seguinte pegaria **esse texto**, sem provar a veracidade geral da documentação: [nao verificado]
+
+```python
+self.assertNotIn('Registro da execucao:', m.__doc__)
+```
+
+A limitação é precisamente essa: P5 exige revisão de alegações e proveniência; um teste literal fecha apenas a frase escolhida. Autenticação geral dessas alegações pela suíte: **[nao verificado]**. [nao verificado]
+
+**a) PROCEDENTE como possibilidade de contaminação; NAO PROCEDE como falha demonstrada no motor da cópia.** `aliases` só cresce, inclui `data_jornada` após a herança reconhecida e não elimina marcas após sobrescritas. Ordem, ramos e alcance são limitações expressamente declaradas. (`app/core/medida_turno_do_par.py:34`, `app/core/medida_turno_do_par.py:277`, `app/core/medida_turno_do_par.py:290`)
+
+Estes exemplos, acrescentados após a herança reconhecida, podem acusar herança na última atribuição sem que ela carregue `_prev_dj`; isso decorre de `source` consultar o conjunto acumulado. (`app/core/medida_turno_do_par.py:279`, `app/core/medida_turno_do_par.py:300`)
+
+```python
+data_jornada = x
+data_jornada = data_jornada
+```
+
+```python
+anterior = _prev_dj
+anterior = x
+data_jornada = anterior
+```
+
+```python
+if cond:
+    anterior = _prev_dj
+else:
+    anterior = x
+    data_jornada = anterior
+```
+
+**Sim: `[2408]` é a única atribuição reconhecida no motor da cópia.** A origem inicial é `data_entrada`; a atribuição direta sob `_gap_h` está em `:2408`; depois ocorre `_prev_dj = data_jornada`. `recognized` exige literalmente `data_jornada = _prev_dj`, sem consultar os aliases. (`app/ponto/motor_calculo_v2.py:2403`, `app/ponto/motor_calculo_v2.py:2408`, `app/ponto/motor_calculo_v2.py:2409`, `app/core/medida_turno_do_par.py:312`)
+
+A contaminação pode causar `LookupError` no **censo**; `_gap` recebe AST e é chamado pela instrumentação. Não há demonstração de parcela errada ou exceção no cálculo produtivo. (`app/core/medida_turno_do_par.py:329`, `app/core/medida_turno_do_par.py:399`; produção: **[nao verificado]**)
+
+**b) PROCEDENTE — permanecem escapes, e nem todos estão declarados especificamente.**
+
+| Forma | Veredito e comportamento | Evidência |
+|---|---|---|
+| `data_jornada, *outro = (x, _prev_dj)` | **NAO PROCEDE como escape:** acusa conservadoramente, embora o valor herdado vá para `outro`. | `app/core/medida_turno_do_par.py:259`; `app/core/tests/test_medida_turno_do_par.py:645` |
+| `for data_jornada in [_prev_dj]: pass` | **PROCEDENTE:** `For` não entra em `assignments`. | `app/core/medida_turno_do_par.py:286` |
+| `with cm(_prev_dj) as data_jornada: pass` | **PROCEDENTE:** `With` não entra em `assignments`. | `app/core/medida_turno_do_par.py:286` |
+| `data_jornada = copiar(_prev_dj)` | **NAO PROCEDE como escape:** encontra a fonte dentro da chamada; já ensaiado. | `app/core/medida_turno_do_par.py:279`; `app/core/tests/test_medida_turno_do_par.py:599` |
+| `setattr(self, 'data_jornada', _prev_dj)` | **PROCEDENTE:** chamada isolada não é atribuição selecionada. | `app/core/medida_turno_do_par.py:286` |
+| `global`/`nonlocal` com atribuição direta no corpo examinado | **NAO PROCEDE como escape automático:** a declaração não esconde o `Assign`; alcance é ignorado. | `app/core/medida_turno_do_par.py:34`; `app/core/medida_turno_do_par.py:286` |
+| Escritor em função aninhada usando `global`/`nonlocal` | **PROCEDENTE:** `_own` não percorre seu corpo; a chamada não propaga efeitos para `_gap`. | `app/core/medida_turno_do_par.py:70`; `app/core/medida_turno_do_par.py:284` |
+| `dados = {'data_jornada': _prev_dj}` | **PROCEDENTE como destino omitido:** chave de `Dict` não é destino reconhecido. Pode marcar `dados` para usos posteriores. | `app/core/medida_turno_do_par.py:269`; `app/core/medida_turno_do_par.py:295` |
+| `dados[chave] = _prev_dj` | **PROCEDENTE:** somente chave literal `'data_jornada'` é reconhecida. | `app/core/medida_turno_do_par.py:274` |
+
+`NAO_VE` declara fluxo/alcance, origem interprocedural, chamadas dinâmicas e conservadorismo no desempacotamento. **Não enumera especificamente `for-target`, `with-as` e chaves de `dict` como buracos do gap.** (`app/core/medida_turno_do_par.py:34`, `app/core/medida_turno_do_par.py:35`, `app/core/medida_turno_do_par.py:36`, `app/core/medida_turno_do_par.py:52`)
+
+**c) NAO PROCEDE cobertura parcial de `LINHAS_REGISTRADAS`.** A igualdade percorre todos os itens dos dois contadores: A1, B1 e os três nomeados, com identidade completa e listas inteiras. (`app/core/tests/test_medida_turno_do_par.py:227`, `app/core/tests/test_medida_turno_do_par.py:355`, `app/core/tests/test_medida_turno_do_par.py:546`)
+
+**PROCEDENTE o custo de deslocamento:** uma edição sem relação com o negócio reprova se deslocar ocorrências registradas. A mensagem é **“linhas mudaram: registrar no MESMO commit”**: informa a ação, embora não nomeie `LINHAS_REGISTRADAS`. Não é toda edição alheia que reprova; precisa alterar o retrato comparado. (`app/core/tests/test_medida_turno_do_par.py:17`, `app/core/tests/test_medida_turno_do_par.py:550`)
+
+**d) NAO PROCEDE a permanência do antigo relato histórico; PROCEDENTE uma promessa comportamental excessiva.** “Alias dentro do if exige LookupError” não cobre, por exemplo, alias introduzido por `for`; a seleção não inclui esse binding. (`app/core/medida_turno_do_par.py:255`, `app/core/medida_turno_do_par.py:286`)
+
+A reescrita abaixo pode retirar a parcela gap sem lançar a exceção prometida; a catraca numérica ainda cobra a queda quando aplicada. (`app/core/medida_turno_do_par.py:286`, `app/core/medida_turno_do_par.py:401`, `app/core/tests/test_medida_turno_do_par.py:497`)
+
+```python
+if 0 <= _gap_h <= 6:
+    for anterior in [_prev_dj]:
+        data_jornada = anterior
+```
+
+**FILA:** as referências históricas continuam qualificadas como informadas/anexadas. Sua proveniência e a contemporaneidade exigida por “MESMO commit” não são comprovadas pela suíte; o próprio texto explicita “sem consultar git”. (`app/core/tests/test_medida_turno_do_par.py:2`, `app/core/tests/test_medida_turno_do_par.py:5`, `app/core/tests/test_medida_turno_do_par.py:18`)
+
+**e) Classes que já reprovaram a obra.**
+
+| Classe | Veredito nesta revisão | Evidência |
+|---|---|---|
+| Segundo juiz de negócio | **NAO PROCEDE no instrumento:** identifica estruturas AST e publica medidas; não decide a jornada. | `app/core/medida_turno_do_par.py:329`, `app/core/medida_turno_do_par.py:416` |
+| Segundo escritor fora da porta | **NAO PROCEDE no instrumento:** lê fontes e retorna estruturas. | `app/core/medida_turno_do_par.py:427` |
+| Relógio fora da borda | **NAO PROCEDE no instrumento:** imports limitados a `ast`/`os`, conferidos pelo teste HOST. | `app/core/medida_turno_do_par.py:21`, `app/core/tests/test_medida_turno_do_par.py:834` |
+| Derivação paralela de fonte única | **FILA:** portas e herança permanecem no motor; são objeto da medição. | `app/ponto/motor_calculo_v2.py:503`, `app/ponto/motor_calculo_v2.py:882`, `app/ponto/motor_calculo_v2.py:2408` |
+| Selo/RED sem mordida | **PROCEDENTE quanto à cobertura incompleta**, pelos mutantes; **NAO PROCEDE como ausência total de mordida:** incrementos novos são cobrados. | `app/core/tests/test_medida_turno_do_par.py:690`, `app/core/tests/test_medida_turno_do_par.py:700`; sobrevivência: **[nao verificado]** |
+| Campo com dois significados | **NAO PROCEDE como divergência de unidade demonstrada:** linhas representam ocorrências, contadores representam funções mais sítios. **FILA** para o rótulo “sem teto ou catraca” de `CLASSIFICAR`, cuja identidade pode reprovar por falta de registro. | `app/core/medida_turno_do_par.py:10`, `app/core/tests/test_medida_turno_do_par.py:12`, `app/core/tests/test_medida_turno_do_par.py:552` |
+
+**f) QUEM ESCREVE / QUEM LÊ.** Inventário dos mecanismos relacionados às curas; exaustividade perante o delta histórico: **[nao verificado]**.
+
+| Valor | Quem escreve | Quem lê |
+|---|---|---|
+| Pares posicionais de `bindings` | `app/core/medida_turno_do_par.py:264`, `:267` | Construção de atribuições em `app/core/medida_turno_do_par.py:289` |
+| Resultado de `destination` | `app/core/medida_turno_do_par.py:270` | Seleção de herança em `app/core/medida_turno_do_par.py:300` |
+| `aliases` | Semente em `app/core/medida_turno_do_par.py:277`; expansão em `:295` | `source` em `app/core/medida_turno_do_par.py:280`; convergência em `:296` |
+| `assignments` | `app/core/medida_turno_do_par.py:289` | Propagação em `app/core/medida_turno_do_par.py:292`; seleção em `:299` |
+| `inherited` | `app/core/medida_turno_do_par.py:301` | Guarda/diagnóstico em `app/core/medida_turno_do_par.py:316`, `:319` |
+| `recognized` | `app/core/medida_turno_do_par.py:315` | Guarda e retorno em `app/core/medida_turno_do_par.py:316`, `:320` |
+| Linhas lexicais A1/B1 | `app/core/medida_turno_do_par.py:194`, `:217`, `:389` | Contadores em `app/core/medida_turno_do_par.py:406`; igualdade em `app/core/tests/test_medida_turno_do_par.py:547` |
+| Linhas nomeadas | `app/core/medida_turno_do_par.py:399`, `:403` | Contadores em `app/core/medida_turno_do_par.py:406`; igualdade em `app/core/tests/test_medida_turno_do_par.py:549` |
+| `LINHAS_REGISTRADAS` | `app/core/tests/test_medida_turno_do_par.py:227` | `app/core/tests/test_medida_turno_do_par.py:547` |
+| `NAO_VE` | `app/core/medida_turno_do_par.py:31` | Publicação em `app/core/medida_turno_do_par.py:408`, `:423`; igualdade em `app/core/tests/test_medida_turno_do_par.py:543` |
+| Fontes/expectativas dos novos ensaios | `app/core/tests/test_medida_turno_do_par.py:618`, `:627`, `:643`, `:655`, `:677` | Chamadas e asserções em `app/core/tests/test_medida_turno_do_par.py:621`, `:637`, `:651`, `:670`, `:679` |
+| Instruções de execução documental | `app/core/tests/test_medida_turno_do_par.py:55` | Autenticador automático de execução histórica: **[nao verificado]** |
+
+## 07/11 17:14 · sessao a57c29d65425 · - · - · origem=Ronald (tmux)
+
+**P1: fecha as linhas da árvore atual, não toda cardinalidade futura.** A igualdade compara todos os itens de ambos contadores, incluindo A1, B1 e os três nomeados; não verifica somente presença. (`app/core/tests/test_medida_turno_do_par.py:227`, `app/core/tests/test_medida_turno_do_par.py:355`, `app/core/tests/test_medida_turno_do_par.py:546`)
+
+Mutante exato em `app/core/medida_turno_do_par.py:389`:
+
+```python
+# antes
+'criterio': criterion, 'linhas': lines
+
+# depois
+'criterio': criterion, 'linhas': lines[:10]
+```
+
+Executado em memória: **28/28 passam**; contraprova com onze chamadas publica dez linhas. Resultado sem artefato persistido: **[nao verificado documentalmente]**. O maior registro atual tem dez ocorrências e a fixture específica cobra duas. (`app/core/tests/test_medida_turno_do_par.py:325`, `app/core/tests/test_medida_turno_do_par.py:587`)
+
+Teste que deveria matá-lo, ampliando `test_MORDE_linhas_a1_b1_publicam_ocorrencia_e_nao_def` em `app/core/tests/test_medida_turno_do_par.py:570`:
+
+```python
+sources = _mini()
+sources['novo.py'] = 'def novo(entrada):\n' + '    entrada.date()\n' * 11
+result = m.censo_fontes(sources)
+item = next(i for i in result['derivacoes_de_dia']['itens']
+            if i['chave'] == 'novo.py::novo')
+self.assertEqual(list(range(2, 13)), item['linhas'])
+```
+
+**c) NAO PROCEDE cobertura parcial.** A1 consta em `:227-232`, B1 em `:236-354`, os nomeados nos dois contadores em `:233-235` e `:355-357`; a compreensão não filtra critérios e compara o registro inteiro. (`app/core/tests/test_medida_turno_do_par.py:227`, `app/core/tests/test_medida_turno_do_par.py:355`, `app/core/tests/test_medida_turno_do_par.py:546`)
+
+**c) PROCEDENTE custo de deslocamento.** Uma edição alheia ao negócio que acrescente linhas antes dos sítios registrados muda a igualdade e reprova; o próprio contrato anuncia essa cobrança. A mensagem diz **“linhas mudaram: registrar no MESMO commit”**: informa a ação, embora não nomeie `LINHAS_REGISTRADAS`. (`app/core/tests/test_medida_turno_do_par.py:17`, `app/core/tests/test_medida_turno_do_par.py:550`)
+
+**P5: fecha a ocorrência documental apontada.** O antigo relato de autoria/data/duração/resultados externos foi removido; agora o texto prescreve seis execuções e afirma que **devem** falhar. Não declara que foram executadas. (`app/core/tests/test_medida_turno_do_par.py:55`, `app/core/tests/test_medida_turno_do_par.py:64`)
+
+**d) NAO PROCEDE permanência daquele “Registro da execução”. FILA quanto à história externa.** Permanecem base informada e referência histórica anexada, cuja proveniência a suíte não certifica; são referências qualificadas, não resultados apresentados como medidos pela sessão atual. (`app/core/tests/test_medida_turno_do_par.py:2`, `app/core/tests/test_medida_turno_do_par.py:5`; proveniência: **[nao verificado]**)
+
+Não existe mutante lógico do instrumento que seja contraexemplo pertinente à retirada de um relato do docstring dos testes; isso seria outra propriedade. Reintroduzir história no docstring sobreviveria porque não há leitor que autentique documentação, mas não demonstraria falha da correção executável de P1–P4. (`app/core/tests/test_medida_turno_do_par.py:2`, `app/core/tests/test_medida_turno_do_par.py:826`; autenticação documental: **[nao verificado]**)
+
+**f), parcela sob minha revisão:**
+
+| Valor | Quem escreve | Quem lê |
+|---|---|---|
+| `LINHAS_REGISTRADAS` | Constante registrada no teste | Igualdade de todos os itens | [nao verificado]
+| | `app/core/tests/test_medida_turno_do_par.py:227` | `app/core/tests/test_medida_turno_do_par.py:547` |
+| Linhas lexicais A1/B1 | `_scan`, depois publicação de `criteria` | Contadores e igualdade real |
+| | `app/core/medida_turno_do_par.py:194`, `app/core/medida_turno_do_par.py:217`, `app/core/medida_turno_do_par.py:389` | `app/core/medida_turno_do_par.py:406`, `app/core/tests/test_medida_turno_do_par.py:549` |
+| Linhas nomeadas | `_gap` ou chamadas resolvidas, depois `named` | Contadores e igualdade real |
+| | `app/core/medida_turno_do_par.py:399`, `app/core/medida_turno_do_par.py:403` | `app/core/medida_turno_do_par.py:406`, `app/core/tests/test_medida_turno_do_par.py:549` |
+| Fixture de linhas deslocadas | Fonte `novo.py`, prefixo de 0/40 linhas | Comparação exata dos sítios |
+| | `app/core/tests/test_medida_turno_do_par.py:572`, `app/core/tests/test_medida_turno_do_par.py:584` | `app/core/tests/test_medida_turno_do_par.py:592` |
+| Instruções RED externo | Texto do docstring | Execução humana; autenticador automático não identificado |
+| | `app/core/tests/test_medida_turno_do_par.py:57` | **[nao verificado]** |
+
+## 07/11 17:14 · sessao f6a7f5a9c8d2 · - · - · origem=Ronald (tmux)
+
+**a) PROCEDENTE como limitação declarada; NAO PROCEDE como falha demonstrada no motor corrente.** O ponto fixo inclui `data_jornada` após a atribuição reconhecida e nunca remove aliases; ignora ordem, sobrescritas e ramos. Assim, exemplos abaixo levantam falso positivo, embora a última atribuição não herde `_prev_dj`. (`app/core/medida_turno_do_par.py:277`, `app/core/medida_turno_do_par.py:290`, `app/core/medida_turno_do_par.py:300`; declaração em `app/core/medida_turno_do_par.py:34`, `app/core/medida_turno_do_par.py:55`)
+
+```python
+# Acrescentados após a forma reconhecida:
+data_jornada = x
+data_jornada = data_jornada
+```
+
+```python
+anterior = _prev_dj
+anterior = x
+data_jornada = anterior
+```
+
+```python
+if cond:
+    anterior = _prev_dj
+else:
+    anterior = x
+    data_jornada = anterior
+```
+
+Executei `_gap` sobre a AST viva de `MotorBase.calcular_mes` e obtive `[2408]`; resultado sem artefato persistido: **[nao verificado documentalmente]**. A fonte possui exatamente uma atribuição direta `data_jornada = _prev_dj`, sob comparação de `_gap_h`; `recognized` exige essa forma literal e não consulta aliases. A contaminação não cria outra parcela reconhecida no motor disponível. (`app/ponto/motor_calculo_v2.py:2404`, `app/ponto/motor_calculo_v2.py:2407`, `app/ponto/motor_calculo_v2.py:2408`, `app/ponto/motor_calculo_v2.py:2409`; `app/core/medida_turno_do_par.py:312`)
+
+**b) PROCEDENTE quanto a escapes restantes.**
+
+| Forma | Resultado estrutural | Evidência |
+|---|---|---|
+| `data_jornada, *outro = (x, _prev_dj)` | Capturada conservadoramente, mesmo sem herança para `data_jornada` | `app/core/medida_turno_do_par.py:259`, `app/core/tests/test_medida_turno_do_par.py:645` |
+| `for data_jornada in [_prev_dj]: pass` | Some: `For` não entra em `assignments` | `app/core/medida_turno_do_par.py:286` |
+| `with cm(_prev_dj) as data_jornada: pass` | Some: `With` não entra em `assignments` | `app/core/medida_turno_do_par.py:286` |
+| `data_jornada = copiar(_prev_dj)` | Capturada; já cobrada | `app/core/medida_turno_do_par.py:279`, `app/core/tests/test_medida_turno_do_par.py:599` |
+| `setattr(self, 'data_jornada', _prev_dj)` | Some: chamada não constitui atribuição selecionada | `app/core/medida_turno_do_par.py:286` |
+| `global`/`nonlocal` + atribuição direta | Declaração não altera seleção da atribuição; alcance não é resolvido | `app/core/medida_turno_do_par.py:34`, `app/core/medida_turno_do_par.py:286` |
+| `dados = {'data_jornada': _prev_dj}` | Some como destino nomeado; chave de `Dict` não é destino reconhecido | `app/core/medida_turno_do_par.py:269` |
+| `dados[chave] = _prev_dj` | Some se `chave` é variável, ainda que valha `'data_jornada'` | `app/core/medida_turno_do_par.py:274` |
+
+`NAO_VE` declara fluxo/alcance, origem interprocedural, chamadas dinâmicas e conservadorismo sem casamento posicional. Não enumera expressamente os buracos `for`/`with`/chave de dicionário do gap. A promessa “outras reescritas” do docstring excede o detector mostrado. (`app/core/medida_turno_do_par.py:34`, `app/core/medida_turno_do_par.py:35`, `app/core/medida_turno_do_par.py:36`, `app/core/medida_turno_do_par.py:55`, `app/core/medida_turno_do_par.py:255`)
+
+Mutantes candidatos enviados para validação integral pelo pai:
+
+```python
+# P2: substitui a guarda em :316
+if 0 < len(inherited - recognized) <= 2:
+```
+
+Deveria reprovar com **três** heranças desconhecidas; o teste atual usa duas. (`app/core/tests/test_medida_turno_do_par.py:616`)
+
+```python
+# P3: acrescenta ao if de bindings em :260
+and len(target.elts) <= 2
+```
+
+Deveria reprovar com casamento correto de três posições, por exemplo `data_jornada, outro, ultimo = (x, _prev_dj, y)`. A fixture atual cobre apenas pares. (`app/core/tests/test_medida_turno_do_par.py:626`)
+
+```python
+# P4: substitui o ramo Attribute de source em :281
+or (isinstance(n, ast.Attribute) and n.attr == '_prev_dj'
+    and isinstance(n.value, ast.Name) and n.value.id == 'self')
+```
+
+Deveria reprovar exigindo `LookupError` para `data_jornada = estado._prev_dj`; a cobertura existente usa `self._prev_dj`. (`app/core/tests/test_medida_turno_do_par.py:657`, `app/core/tests/test_medida_turno_do_par.py:659`, `app/core/tests/test_medida_turno_do_par.py:662`)
 
 ## 07/11 17:10 · sessao 7114a41c4856 · MOTOR-LE-O-TURNO-INSTRUMENTO · construtor · origem=Code
 
@@ -785,95 +1101,4 @@ O selo de horizonte continua mordendo decisões, efeitos, retratação e passivo
 
 Não encontrei sítio tocado que tenha ficado sem chamador de produção: `_empresa_ja_carregada`, os dois helpers de toque, `dias_trancados`, `_tarefa_pura` e a fábrica da carga possuem chamadas. O avulso conserva C6, models, reconciliador e emissor. (`app/chamados/juizes.py:977`, `app/chamados/juizes.py:1003`, `app/chamados/juizes.py:1113`, `app/chamados/juizes.py:932`, `app/chamados/services/tarefa_do_dia.py:367`, `app/chamados/services/tarefa_do_dia.py:399`, `app/chamados/services/tarefa_do_dia.py:409`, `app/chamados/juizes.py:1261`, `app/chamados/models.py:1798`, `app/chamados/reconciliador.py:657`, `app/chamados/reconciliador.py:737`, `app/chamados/services/disputa_emissao.py:1691`)
 
-## 07/11 15:44 · sessao 2159758aa197 · - · - · origem=Ronald (tmux)
-
-Q2 — **equivalência universal não demonstrada e falsa para alguns objetos aceitos antes**:
-
-- O avulso novo é literalmente `dias_trancados([(colab, data_evento)])[0]`; não há segunda implementação entre as formas novas. `app/chamados/juizes.py:932`.
-- Repetições preservam índices; empresas e competências separam as chaves; o produto cartesiano da consulta de células é filtrado novamente pelo par exato; chamados são reconduzidos ao colaborador e célula exatos. `app/chamados/juizes.py:962`, `app/chamados/juizes.py:992`, `app/chamados/juizes.py:1162`, `app/chamados/juizes.py:1167`, `app/chamados/juizes.py:1192`.
-- Cortes `desde` diferentes estão corretamente tratados para datetimes comparáveis: buscar `> min(desde)` traz um superconjunto e cada etapa verifica novamente `> desde` do item; igualdade não toca. `app/chamados/juizes.py:1141`, `app/chamados/juizes.py:1156`, `app/chamados/juizes.py:1180`, `app/chamados/juizes.py:1203`.
-- **Contraexemplo de compatibilidade antiga:** `SimpleNamespace(pk=1, empresa_id=E, empresa=None)`, empresa E real com corte 10, dia 15/11. Antes, conforme diff fornecido, `memo[empresa]=colab.empresa=None` e janela default 21 ⇒ competência 11. Agora `None` vira “empresa faltante”, `in_bulk` carrega E ⇒ competência 12. Havendo tranca somente em 11, resultados divergem. Caminho novo: `app/chamados/juizes.py:941`, `app/chamados/juizes.py:984`, `app/chamados/juizes.py:990`, `app/chamados/juizes.py:991`; default e competências: `app/ponto/janelas.py:24`, `app/ponto/janelas.py:36`, `app/ponto/janelas.py:50`. Reprodução em PROD [nao verificado].
-- Dois colaboradores/NS com mesmo `empresa_id`, memos separados, objetos `empresa` com cortes distintos: o primeiro objeto entra em `da_vez`, o segundo é ignorado e recebe o primeiro; avulsos isolados usariam seus objetos próprios. `app/chamados/juizes.py:975`, `app/chamados/juizes.py:979`, `app/chamados/juizes.py:990`.
-- Empresa inexistente: agora `in_bulk` não fornece objeto, grava `None`, usa default 21 e consulta período; o antigo acesso direto à FK poderia lançar `DoesNotExist`. NS sem atributo `empresa` antes poderia lançar `AttributeError`; agora pode carregar Empresa. `app/chamados/juizes.py:941`, `app/chamados/juizes.py:984`, `app/chamados/juizes.py:990`; comportamento ORM executado [nao verificado].
-- Os testes de equivalência novos usam uma empresa, três dias consecutivos da mesma competência e cortes iguais; NS envolve a pergunta/disputa, **o colaborador continua modelo real**. Não cobrem os contraexemplos acima, empresas/competências múltiplas ou `desde` diferentes. `app/chamados/tests/test_e2_tarefa_do_dia.py:1147`, `app/chamados/tests/test_e2_tarefa_do_dia.py:1186`, `app/chamados/tests/test_e2_tarefa_do_dia.py:1198`.
-
-Q3 — **contagem/ordem de etapas nominal preservada para um modelo válido e sistema existente; SQL não é idêntico**:
-
-| Etapa | Queries por singleton quando necessária |
-|---|---:|
-| Empresa ausente do memo e FK não carregada | 1 |
-| Período ausente do memo | 1 |
-| Sistema ausente do memo | 1 SELECT se usuário existe |
-| Cobrar | 1 |
-| Células, se Cobrar não tocou | 1 |
-| Resolver, se há célula | 1 |
-| Chamados, se Resolver não tocou | 1 |
-| Desarquivar, se há chamado elegível | 1 |
-
-Fontes: `app/chamados/juizes.py:984`, `app/chamados/juizes.py:995`, `app/chamados/juizes.py:1110`, `app/core/utils.py:18`, `app/chamados/juizes.py:1149`, `app/chamados/juizes.py:1164`, `app/chamados/juizes.py:1175`, `app/chamados/juizes.py:1188`, `app/chamados/juizes.py:1198`.
-
-- Sem tranca, sem `desde` ou com SIM de toque memorizado, respectivos estágios cessam antes. `app/chamados/juizes.py:998`, `app/chamados/juizes.py:1097`, `app/chamados/juizes.py:1101`.
-- Há mudança de SQL: antigo `descricao__contains + exists` passa a carregar descrição/instante e conferir em Python. `app/chamados/juizes.py:1149`, `app/chamados/juizes.py:1156`; comparação com base somente pelo diff fornecido [nao verificado].
-- `test_snc2` conta **somente `core_logauditoria` e `auth_user`**, cobra `lg5-lg1=4`, igualdade de auth entre 1 e 5 e vantagem sobre avulso. Não confere total nem ordem de todas as queries. `app/chamados/tests/test_snc2_toque_em_lote.py:99`, `app/chamados/tests/test_snc2_toque_em_lote.py:107`, `app/chamados/tests/test_snc2_toque_em_lote.py:109`, `app/chamados/tests/test_snc2_toque_em_lote.py:111`.
-- Exceção concreta a “mesmas queries”: NS com `empresa=None` antes não consultava Empresa, agora consulta. `app/chamados/juizes.py:941`, `app/chamados/juizes.py:984`.
-- FK não carregada: novo `in_bulk` alimenta memo, mas não atribui `colab.empresa`; acesso posterior a essa FK pode fazer query que o antigo descriptor já teria aquecido. `app/chamados/juizes.py:940`, `app/chamados/juizes.py:984`, `app/chamados/juizes.py:990`. Execução [nao verificado].
-- Avaliação do wrapper mudou de ordem: novo obtém disputa/colaborador antes de `data_evento`; antigo diff obtinha data primeiro. Se esses campos estiverem deferred/lazy, a ordem pode mudar. `app/chamados/juizes.py:932`; base executada [nao verificado].
-
-Q4 — **`da_vez` local, sem NAO de toque no memo; existe novo snapshot da carga**:
-
-- Empresa/tranca usam `lote=False`; request ou colaborador continuam donos. Toque/sistema podem usar `LOTE_DA_TRANCA`; reset é em `finally`. `app/chamados/juizes.py:971`, `app/chamados/juizes.py:1024`, `app/chamados/juizes.py:1028`, `app/chamados/juizes.py:1031`, `app/chamados/juizes.py:1055`.
-- `da_vez` nasce local; valores são copiados aos memos existentes. O dicionário não vaza, mas referências Empresa/PeriodoFechado passam a ser compartilhadas entre memos de colaboradores distintos dentro da chamada. `app/chamados/juizes.py:970`, `app/chamados/juizes.py:990`, `app/chamados/juizes.py:996`.
-- Somente `memo[k]=True` é escrito para toque; negativos ficam apenas no resultado transitório. `app/chamados/juizes.py:1094`, `app/chamados/juizes.py:1115`, `app/chamados/juizes.py:1116`.
-- A tarefa agora conserva `self._trancado` durante a vida da carga, incluindo o resultado derivado “não houve toque”; chamadas subsequentes de `carga.tarefa` não consultam novamente o juiz. Reutilizar essa carga depois de toque/reabertura preserva o snapshot anterior. Isso não é NAO no `_tranca_memo`, mas é estado novo na instância da carga. `app/chamados/services/tarefa_do_dia.py:367`, `app/chamados/services/tarefa_do_dia.py:402`.
-- O usuário de sistema pode ser criado pelo helper, apesar do docstring dizer que ausência lança erro; pré-existência em deploy é pressuposto, não prova fornecida. `app/core/utils.py:12`, `app/core/utils.py:15`, `app/core/utils.py:18`. O selo aquece esse usuário explicitamente. `app/chamados/tests/test_e2_tarefa_do_dia.py:1157`.
-
-Q8 — **nenhum helper novo ficou sem chamador**:
-
-- `_empresa_ja_carregada` → lote; `_admin_tocou_os_dias_depois` → lote; `_toque_humano_nos_dias` → admin; lote → avulso e carga. `app/chamados/juizes.py:977`, `app/chamados/juizes.py:1003`, `app/chamados/juizes.py:1113`, `app/chamados/juizes.py:932`, `app/chamados/services/tarefa_do_dia.py:367`.
-- Avulso mantém C6, models, reconciliador e emissor. `app/chamados/juizes.py:1261`, `app/chamados/models.py:1798`, `app/chamados/reconciliador.py:657`, `app/chamados/reconciliador.py:737`, `app/chamados/services/disputa_emissao.py:1691`.
-- Nomes privados antigos desapareceram da implementação; a única ocorrência antiga encontrada foi a prosa histórica já dispensada pelo usuário. `app/chamados/tests/test_snc2_toque_em_lote.py:4`.
-
-A cópia não possui `.git`; confirmação independente do hash/base e resultados de execução dos testes [nao verificado]. [nao verificado]
-
-## 07/11 15:44 · sessao c5568a330d88 · - · - · origem=Ronald (tmux)
-
-Q5–Q7, leitura estática:
-
-- A tarefa consulta a tranca somente por `dias_trancados`, forma o conjunto `(colab.pk, dia)` e entrega seu pertencimento como `trancado` ao corpo puro. Não há leitura direta dos modelos/carimbos da tranca nesse módulo. `app/chamados/services/tarefa_do_dia.py:364`, `app/chamados/services/tarefa_do_dia.py:367`, `app/chamados/services/tarefa_do_dia.py:402`.
-- A prioridade efetiva é `fora_vinculo` → isento → trancado → sem célula. Assim, tranca preserva as duas primeiras respostas, mas transforma `sem_celula/nao_sei=True` em `competencia_trancada/nao_sei=False`; também antecede ata sem lâmpadas, teto, ausência e decisão. Isso corresponde ao novo degrau proposto, com efeito inclusive em dia sem célula. `app/chamados/services/tarefa_do_dia.py:177`, `app/chamados/services/tarefa_do_dia.py:180`, `app/chamados/services/tarefa_do_dia.py:187`, `app/chamados/services/tarefa_do_dia.py:196`, `app/chamados/services/tarefa_do_dia.py:200`.
-- A carga declara expressamente tranca e toque como estado atual, sem corte por `agora`; a chamada não passa `agora` e o juiz usa somente `fechado_em` e `criado_em > desde`. `app/chamados/services/tarefa_do_dia.py:298`, `app/chamados/services/tarefa_do_dia.py:306`, `app/chamados/juizes.py:999`, `app/chamados/juizes.py:1141`.
-- O selo de horizonte continua exercitando decisão, efeito, retratação e passivo posteriores; portanto não fica vazio. Porém não cobre interação dessas situações com a nova tranca, e sua lista nominal de limites não menciona tranca, embora remeta ao docstring completo da carga. `app/chamados/tests/test_e2_tarefa_do_dia.py:709`, `app/chamados/tests/test_e2_tarefa_do_dia.py:714`, `app/chamados/tests/test_e2_tarefa_do_dia.py:732`, `app/chamados/tests/test_e2_tarefa_do_dia.py:750`, `app/chamados/tests/test_e2_tarefa_do_dia.py:785`.
-- Não há segundo corpo para o predicado: avulso delega ao lote; C6 usa o avulso e tarefa usa o lote. Registro `_C20` existe e a frase exigida pela trava também. `app/chamados/juizes.py:932`, `app/chamados/juizes.py:1261`, `app/chamados/services/tarefa_do_dia.py:364`, `app/core/juizes.py:292`, `app/docs/CORTES.md:425`. Conformidade com a condição histórica de autoridade anteriormente única exige a comparação fornecida e censo dos demais leitores; somente o registro não prova isso. `CLAUDE.md:273`.
-- Há caminho condicional de escrita herdada agora alcançado pela tarefa: tranca com toque pendente chama `get_user_sistema()`, que usa `get_or_create`, apesar de seu docstring dizer que levantaria `DoesNotExist`. Se faltar o usuário, o leitor cria-o. Migration e command semeiam o usuário; existência real em produção [nao verificado]. `app/chamados/juizes.py:1107`, `app/chamados/juizes.py:1110`, `app/core/utils.py:15`, `app/core/utils.py:18`, `app/core/migrations/0003_user_sistema.py:6`, `app/core/management/commands/garantir_user_sistema.py:12`.
-- O selo de zero escritas não monta tranca; o Selo14 garante o usuário antes da captura. Logo esses selos não mordem a falta dessa precondição. `app/chamados/tests/test_e2_tarefa_do_dia.py:878`, `app/chamados/tests/test_e2_tarefa_do_dia.py:889`, `app/chamados/tests/test_e2_tarefa_do_dia.py:1156`.
-- Caso14 possui respostas fixas para trancado, O44, cobrar/resolver, sistema/nulo/antes/outro e reabertura; não é mera comparação entre duas implementações. `app/chamados/tests/test_e2_tarefa_do_dia.py:1086`, `app/chamados/tests/test_e2_tarefa_do_dia.py:1092`, `app/chamados/tests/test_e2_tarefa_do_dia.py:1098`, `app/chamados/tests/test_e2_tarefa_do_dia.py:1111`, `app/chamados/tests/test_e2_tarefa_do_dia.py:1122`.
-- Selo14 verifica resultado fixo e delegação mediante mock, além de igualdade de contagens 1×1/2×3. Seu universo usa uma empresa e uma competência: não certifica empresas, competências ou cortes heterogêneos. `app/chamados/tests/test_e2_tarefa_do_dia.py:1146`, `app/chamados/tests/test_e2_tarefa_do_dia.py:1178`, `app/chamados/tests/test_e2_tarefa_do_dia.py:1201`, `app/chamados/tests/test_e2_tarefa_do_dia.py:1203`.
-- Caso10PelaForma morde seus sete mutantes explícitos, mas é parcial: reconhece `Name/Attribute/import/keyword`; não reconhece `getattr(c,'via_encerramento')` nem `qs.filter(**{'via_encerramento': ...})`, e exige apenas presença do import do juiz. Confirmei esses escapes executando somente o helper AST extraído em memória (`python3 -B`), sem importar a aplicação ou acessar banco. Nenhum desses caminhos foi encontrado na tarefa real. `app/chamados/tests/test_e2_tarefa_do_dia.py:1225`, `app/chamados/tests/test_e2_tarefa_do_dia.py:1235`, `app/chamados/tests/test_e2_tarefa_do_dia.py:1250`, `app/chamados/tests/test_e2_tarefa_do_dia.py:1255`.
-- Não há aquisição de trava nova nos blocos alterados do juiz/tarefa; ordem operacional de pouso, RED anterior e suíte verde não são demonstrados pelo material inspecionado. `app/chamados/juizes.py:961`, `app/chamados/juizes.py:1094`, `app/chamados/services/tarefa_do_dia.py:362`; execução/pouso [nao verificado].
-
-## 07/11 15:43 · sessao 1a1b36c36a82 · - · - · origem=Ronald (tmux)
-
-Evidências para Q1:
-
-- **PeriodoFechado**: `fechado_em` e `reaberto_em` são instantes (`DateTimeField`), não dias; o primeiro nasce por `auto_now_add`, o segundo aceita NULL (`app/ponto/models.py:926`, `app/ponto/models.py:931`). `trancar_periodo` cria a linha e, ao retrancar uma reaberta, grava `timezone.now()` em `fechado_em` e limpa `reaberto_em`; `reabrir_periodo` grava `timezone.now()` em `reaberto_em` (`app/ponto/services/fechamento.py:1401`, `app/ponto/services/fechamento.py:1408`, `app/ponto/services/fechamento.py:1410`, `app/ponto/services/fechamento.py:1432`). O leitor `periodo_trancado` considera viva a linha com `reaberto_em IS NULL`, sem comparar instante de reabertura nem `ativo`; `competencia_trancada` usa o mesmo filtro (`app/ponto/services/fechamento.py:1457`, `app/ponto/services/fechamento.py:1463`, `app/ponto/services/fechamento.py:1473`). `dias_trancados` lê `fechado_em` como corte inferior exclusivo do toque (`app/chamados/juizes.py:999`, `app/chamados/juizes.py:1141`, `app/chamados/juizes.py:1156`, `app/chamados/juizes.py:1180`, `app/chamados/juizes.py:1203`). Outro leitor usa o mesmo `>` para `resgatado_em` (`app/chamados/services/competencia_trancada.py:104`).
-
-- **Fuso/unidades**: configuração da cópia é `America/Sao_Paulo`, `USE_TZ=True` (`app/config/settings/base.py:93`, `app/config/settings/base.py:95`). A janela recebe `date`, faz competência pelo corte empresarial e inclui os dias do início e do fim; corte default 21, limitado a 2–28 (`app/ponto/janelas.py:10`, `app/ponto/janelas.py:24`, `app/ponto/janelas.py:36`, `app/ponto/janelas.py:60`). Nenhuma conversão de fuso ocorre dentro de `dias_trancados`; ele recebe o dia já escolhido (`app/chamados/juizes.py:963`, `app/chamados/juizes.py:991`). A configuração efetivamente usada em produção é [nao verificado].
-
-- **LogAuditoria**: `acao`/`modelo` são strings; `objeto_id` inteiro sem FK; `descricao` texto; `usuario` FK anulável; `criado_em` instante automático (`app/core/models.py:295`, `app/core/models.py:298`, `app/core/models.py:299`, `app/core/models.py:307`). A porta `registrar_log` encaminha para `evento`; este resolve o ator e cria a linha, copiando os argumentos (`app/core/auditoria.py:8`, `app/core/auditoria.py:22`, `app/core/observ.py:108`, `app/core/observ.py:118`, `app/core/observ.py:134`). A escolha `acao` não restringe os verbos gravados por `create`, reconhecido no comentário do modelo (`app/core/models.py:296`).
-
-- **Os três escritores da trilha**: cobrar grava `cobrar_dia_manual`, `Colaborador`, PK do colaborador e `dia=%s` com o `data` recebido, antes do cartório (`app/chamados/services/cobrar_dia.py:37`). Resolver grava `veredito_celula`, `CelulaDia`, PK da célula ou 0 sem célula; a data textual não é usada pelo leitor desse ato (`app/ponto/services/veredito_celula.py:334`). Desarquivar chama `arquivo.levantar`, que grava a trilha somente quando houve mudança; `_trilha` usa `ChamadoColaborador`, PK do chamado e ator passado (`app/chamados/views_arquivar.py:77`, `app/chamados/services/arquivo.py:193`, `app/chamados/services/arquivo.py:209`, `app/chamados/services/arquivo.py:137`).
-
-- **O leitor da trilha** reconhece exatamente esses três pares ação/modelo; cobrar compara substring `dia=` + `data.isoformat()`, resolver associa o ID à célula atual do par, desarquivar associa o ID ao chamado atual do mesmo colaborador e célula (`app/chamados/juizes.py:1150`, `app/chamados/juizes.py:1155`, `app/chamados/juizes.py:1164`, `app/chamados/juizes.py:1175`, `app/chamados/juizes.py:1188`, `app/chamados/juizes.py:1199`). Humano significa somente usuário não NULL e diferente do usuário sistema; não há checagem de papel ADMIN nesse leitor (`app/chamados/juizes.py:1141`). `get_user_sistema` usa `get_or_create`, podendo escrever se o usuário não existir; isso já integra o caminho antigo informado no diff (`app/core/utils.py:18`).
-
-- **ChamadoColaborador.celula** é FK anulável para a célula que originou o chamado (`app/chamados/models.py:46`). No nascimento, `_celula_de` deriva o dia via `dia_do_fato` e busca por colaborador/data; `abrir`/`criar` passam essa célula à criação (`app/chamados/models.py:1191`, `app/chamados/models.py:1201`, `app/chamados/models.py:1207`, `app/chamados/models.py:1090`, `app/chamados/models.py:1119`). Para chamado existente, a porta `apontar_celula` escreve somente se o ponteiro ainda é NULL (`app/chamados/services/vinculos.py:92`). O novo leitor verifica também `ChamadoColaborador.colaborador_id`; uma célula apontada por chamado de outro colaborador não basta (`app/chamados/juizes.py:1188`, `app/chamados/juizes.py:1192`).
-
-- **CelulaDia.colaborador/data** são FK e `DateField`, unidade pessoa/dia (`app/escala/models.py:1681`, `app/escala/models.py:1685`). Os escritores de geração/regeneração e edição humana criam com o colaborador do vínculo e o dia recebido/percorrrido (`app/ponto/portas/celula.py:259`, `app/ponto/portas/celula.py:600`, `app/ponto/portas/celula.py:849`). O leitor em lote consulta produto de IDs/datas, mas filtra novamente o par exato em Python (`app/chamados/juizes.py:1164`, `app/chamados/juizes.py:1167`).
-
-- **Atenção ao contrato de `data_evento`**: pergunta datada exige `DiaDoTurno`; conversa grava o dia civil da criação por `localdate()` (`app/chamados/models.py:2470`, `app/chamados/models.py:2477`, `app/chamados/models.py:2487`, `app/chamados/models.py:2494`). `DiaDoTurno` é `NewType` de `date`, sem distinção em runtime (`app/core/dia_do_turno.py:13`). C6 e wrapper da tranca não filtram `conversa`, portanto a afirmação “todo data_evento é dia do turno” não vale universalmente; essa dualidade antecede o diff (`app/chamados/juizes.py:932`, `app/chamados/juizes.py:1256`).
-
-Contraexemplos para equivalência universal com o corpo antigo anexado:
-
-- `SimpleNamespace(empresa_id=id_real, empresa=None)` antes passava None à janela, usando corte 21; agora busca a Empresa e pode usar outro corte. NS sem `empresa` antes levantava AttributeError, agora busca (`app/chamados/juizes.py:936`, `app/chamados/juizes.py:982`, `app/ponto/janelas.py:50`; corpo antigo: anexo `e2_juiz.diff` [nao verificado para linha local]).
-- FK com empresa inexistente antes acessava `colab.empresa`; agora `in_bulk` pode omitir o ID, grava None e segue com corte default, devolvendo False se não houver período (`app/chamados/juizes.py:984`, `app/chamados/juizes.py:990`, `app/ponto/janelas.py:50`, `app/ponto/services/fechamento.py:1463`). A ocorrência desses objetos em produção é [nao verificado].
-
-_2768 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2771 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
