@@ -1,7 +1,198 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 14:52** · publicado em **07/11/2026 14:52** (UTC-3)
+> Ultima resposta processada: **07/11/2026 14:57** · publicado em **07/11/2026 14:58** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 14:57 · sessao 512712426e5e · FIO-E0-V4-E1 · verificador · origem=Code
+
+**Veredito: a cura continua parcial. Permanecem PROCEDENTES as classes (1), (2) e (4); a classe (3) melhorou, mas não cumpre integralmente a conferência por item sob trava. A classe (5) foi corrigida.** (`app/chamados/management/commands/backfill_decisoes_pergunta.py:183`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:215`; `app/chamados/models.py:291`; `app/chamados/models.py:2665`; `app/chamados/services/fio.py:1120`)
+
+Confirmação independente do hash/pai, RED→GREEN histórico, suíte inteira `rc=0`, bloqueios executados no banco e ocorrência dos contraexemplos em produção: **[nao verificado]**. [nao verificado]
+
+**1. Classe (1) — PROCEDENTE: ainda há recorte anterior à canônica.**
+
+`aplicar` escolhe sobre `_no_fato(fam)`, que já filtrou o horizonte. Entretanto, a identidade BATIDA é `(batida_origem_id, motivo)`, sem dia, e `do_fato` consulta o episódio inteiro sem esse corte. Portanto as portas continuam podendo entregar canônicas diferentes. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:215`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:218`; `app/chamados/services/fio.py:1055`; `app/chamados/services/fio.py:1017`; `app/chamados/models.py:2562`)
+
+Contraexemplo de código, no acervo anterior à implantação do índice: mesmo episódio/motivo, `p1` respondida abaixo do horizonte e `p2/p3` mudas acima dele. `abrir` e a migração escolhem `p1`; backfill/dedup escolhem `p2` e retratam `p3`. A regra de preferência é a mesma; o universo entregue a ela diverge. Reprodução em banco: **[nao verificado]**. (`app/chamados/models.py:2683`; `app/chamados/models.py:2684`; `app/chamados/services/fio.py:984`; `app/chamados/services/fio.py:1196`; `app/chamados/services/fio.py:1203`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:251`)
+
+Existe ainda diferença sem atravessar o horizonte: `do_fato` incorpora, pelo OR, a pergunta legada **sem episódio** do mesmo dia; o agrupamento BATIDA usado pelo backfill restringe-se à chave do episódio. Essa linha legada também pode ser a canônica excluída. (`app/chamados/models.py:2560`; `app/chamados/models.py:2563`; `app/chamados/services/fio.py:1017`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:215`)
+
+**NAO PROCEDE a permanência do contraexemplo antigo das reutilizáveis:** agora a declaração escolhe primeiro sobre o fato inteiro e somente depois confere destino/reutilização. (`app/chamados/services/declaracao_texto.py:242`; `app/chamados/services/declaracao_texto.py:245`; `app/chamados/services/declaracao_texto.py:246`; `app/chamados/services/declaracao_texto.py:267`)
+
+**2. Classe (2) — PROCEDENTE pelas travas implícitas e pela ordem posterior.**
+
+**NAO PROCEDE aquisição explícita adicional localizada** das quatro entidades por `select_for_update`: as quatro consultas estão em `trava_na_ordem`, na ordem declarada. A busca fora de `app` encontrou detector e fixtures sintéticas, não outra aquisição de produção; construção dinâmica sem os nomes pesquisados permanece **[nao verificado]**. (`app/chamados/models.py:2508`; `app/chamados/models.py:2515`; `app/chamados/models.py:2528`; `app/chamados/models.py:2532`; `bin/atomicidade_da_porta.py:63`; `bin/tests/test_atomicidade_da_porta.sh:53`)
+
+Persistem dois caminhos concretos:
+
+- **Chamado → Disputa por S143.** `fechar → transicionar → _aplicar → _gravar_estado` pode entrar sem `_recarregar_estado_se_mudou`. O escritor trava somente Colaborador, salva Chamado e dispara S143; o resolver adquire depois as Disputas abertas. Um chamado sem impedimento próprio, mas com outra Disputa aberta da mesma pessoa, alcança essa sequência. (`app/chamados/models.py:447`; `app/chamados/models.py:199`; `app/chamados/models.py:442`; `app/chamados/models.py:286`; `app/chamados/models.py:291`; `app/chamados/signals.py:92`; `app/chamados/services/disputa_emissao.py:1683`; `app/chamados/juizes.py:2083`)
+- **Pergunta → Disputa na ausência rejeitada.** O atomic chama `reabrir_para_correcao`, que faz UPDATE de Pergunta; depois chama `reabrir_sistema`, que salva Disputa. Não há antecipação dessas travas nesse envelope. (`app/chamados/services/materializacao.py:672`; `app/chamados/services/materializacao.py:673`; `app/chamados/services/disputa_emissao.py:1516`; `app/chamados/models.py:2973`; `app/chamados/services/materializacao.py:677`; `app/chamados/models.py:2130`)
+
+O sítio antigo de `_recarregar_estado_se_mudou` foi corrigido, mas essa correção não cobre todas as entradas no escritor de estado. S88/S143/S144 continuam executando ações síncronas durante os saves. (`app/chamados/models.py:689`; `app/chamados/models.py:442`; `app/chamados/signals.py:42`; `app/chamados/signals.py:92`; `app/chamados/signals.py:140`)
+
+**3. Classe (3) — PROCEDENTE, parcial; NAO PROCEDE mistura de escrita e recusa no retorno normal.**
+
+Mérito é relido dentro do atomic, depois da trava. Exportação também é consultada nesse envelope; contudo `_ent` fica fora do laço e reaproveita a resposta entre colaboradores da mesma competência, sem nova consulta após a trava de cada um. O congelamento contra entrega concorrente não está demonstrado por essas travas. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:194`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:200`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:205`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:209`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:219`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:238`; `app/folha/export.py:581`)
+
+A divergência do horizonte por empresa é conferida **antes** do atomic. Para `sem_ato`, há veto explícito sob trava; para grupos, o horizonte funciona como filtro que pode esvaziar o universo e provocar `continue`, sem registrar `fora_do_horizonte`. Isso não implementa integralmente o veto anunciado por item. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:183`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:205`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:215`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:216`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:225`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:229`)
+
+**NAO PROCEDE o defeito anterior de escrita persistida acompanhada de recusa:** há atomic externo e a exceção é levantada dentro dele; o retorno de recusa ocorre após rollback e zera os contadores. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:205`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:264`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:266`)
+
+`handle` faz mais que chamar `aplicar`: prepara/imprime o DRY e traduz recusas em saída. **NAO PROCEDE outra escrita do acervo nele ou no dedup:** os dois encaminham o apply à mesma função; as alterações de carimbo continuam delegadas a `retratar_duplicata`. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:296`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:371`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:384`; `app/chamados/management/commands/dedup_perguntas_fato.py:87`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:251`)
+
+**4. Classe (4) — PROCEDENTE: a declaração mudou, mas leitores permanecem incompatíveis.**
+
+O significado declarado é **dia do turno com `conversa=False`**; conversa conserva o **dia civil da emissão**. O novo `q_do_horizonte` incorpora o discriminador. (`app/chamados/services/fio.py:1031`; `app/chamados/services/fio.py:1036`; `app/chamados/models.py:2637`)
+
+O próprio nascimento ainda entrega o dia civil da conversa a `resolvedora_valida`, usando proxy sem `conversa`. Esse juiz presume conversa apenas quando a data é nula e compara a data recebida com o turno do chamado. Conversa emitida hoje para chamado de dois dias antes pode ser recusada como costura cruzada. (`app/chamados/models.py:2661`; `app/chamados/models.py:2665`; `app/chamados/models.py:2666`; `app/chamados/models.py:2668`; `app/chamados/juizes.py:1966`; `app/chamados/juizes.py:1968`; `app/chamados/juizes.py:1985`; `app/chamados/juizes.py:2001`)
+
+Outros leitores sem `conversa=False`, `do_fato` ou `q_do_horizonte`:
+
+| Leitor | Uso incompatível |
+|---|---|
+| Juiz do dia do chamado | Incorpora datas de todas as perguntas ao dia inferido da Disputa. (`app/chamados/juizes.py:75`; `app/chamados/juizes.py:80`; `app/chamados/juizes.py:209`) |
+| Prévia da folha | Agrupa pela data civil e apresenta a resposta como material do dia da célula. (`app/folha/previa.py:64`; `app/folha/previa.py:67`; `app/folha/previa.py:95`) |
+| Copiloto do dia | Inclui conversas civis nas perguntas daquele dia. (`app/ponto/services/dia_do_colab.py:64`; `app/ponto/services/dia_do_colab.py:71`; `app/ponto/services/dia_do_colab.py:99`) |
+| Diagnóstico do fio | Compara `data_evento` ao dia do fato sem distinguir conversa. (`app/chamados/services/fio.py:86`; `app/chamados/services/fio.py:88`) |
+
+**5. Classe (5) — NAO PROCEDE no contador atual.**
+
+“Nova” passou a usar `data_evento` da Pergunta contra o dia local da aplicação da 0052. Registro ausente ou dia nulo alarma; o escape de pergunta posterior sobre turno anterior está declarado. O RED fixa a aplicação da migração e exige que pergunta nova em Disputa velha conte como nova. (`app/chamados/services/fio.py:1108`; `app/chamados/services/fio.py:1115`; `app/chamados/services/fio.py:1119`; `app/chamados/services/fio.py:1120`; `app/chamados/tests/test_e1_v6_horizonte.py:228`)
+
+**6. Selos — PROCEDENTE insuficiência de alcance; NAO PROCEDE ausência generalizada de mordida.**
+
+A/B varrem Python sob `app`, com exclusões; C examina somente os dois commands. Os esperados são zero, sem allowlist explícita. Isso não equivale a cobrir semanticamente toda a classe no repositório. (`app/chamados/tests/test_e1_v7_catracas.py:26`; `app/chamados/tests/test_e1_v7_catracas.py:30`; `app/chamados/tests/test_e1_v7_catracas.py:144`; `app/chamados/tests/test_e1_v7_catracas.py:176`; `app/chamados/tests/test_e1_v7_catracas.py:218`; `app/chamados/tests/test_e1_v7_catracas.py:268`)
+
+| Catraca | Formas que escapam ao detector |
+|---|---|
+| A — trava | `getattr(..., "select_for_update")`, `get_for_update`, SQL cru; importação do módulo como `from chamados import models as m`. Alias direto do modelo e queryset em variável são detectados nos casos cobertos. (`app/chamados/tests/test_e1_v7_catracas.py:65`; `app/chamados/tests/test_e1_v7_catracas.py:79`; `app/chamados/tests/test_e1_v7_catracas.py:191`) |
+| B — canônica | Alias importado da função; `.filter/.exclude` no QuerySet; `qs = do_fato(...); qs.first()`; `min`/`sorted()[0]`. (`app/chamados/tests/test_e1_v7_catracas.py:19`; `app/chamados/tests/test_e1_v7_catracas.py:100`; `app/chamados/tests/test_e1_v7_catracas.py:113`; `app/chamados/tests/test_e1_v7_catracas.py:135`) |
+| C — escrita | Alias de escritor, `getattr(p, "save")()` e helper chamado fora dos dois arquivos examinados. (`app/chamados/tests/test_e1_v7_catracas.py:144`; `app/chamados/tests/test_e1_v7_catracas.py:157`) |
+
+As dispensas também usam apenas o nome da função: outra função chamada `trava_na_ordem`, `canonica_do_grupo` ou `aplicar` pode ocultar infração, sem comprovar arquivo/classe da autoridade. Logo zero allowlist nominal não garante sítio único. (`app/chamados/tests/test_e1_v7_catracas.py:83`; `app/chamados/tests/test_e1_v7_catracas.py:121`; `app/chamados/tests/test_e1_v7_catracas.py:157`)
+
+Os mutantes mordem as formas antigas escolhidas. Os REDs também corrigem as vacuidades específicas: p1 validada/materializada vence p2 muda; D exige `count()==1`; o `TransactionTestCase` tenta NOWAIT em segunda conexão, com seis linhas bloqueadas e dois controles livres, mais variante sem flag. Execução desses casos no banco: **[nao verificado]**. (`app/chamados/tests/test_e1_v7_catracas.py:182`; `app/chamados/tests/test_e1_v7_catracas.py:235`; `app/chamados/tests/test_e1_v7_catracas.py:276`; `app/chamados/tests/test_e1_v6_horizonte.py:405`; `app/chamados/tests/test_e1_v6_horizonte.py:454`; `app/chamados/tests/test_e1_v5_ordem_trava.py:481`; `app/chamados/tests/test_e1_v5_ordem_trava.py:504`; `app/chamados/tests/test_e1_v5_ordem_trava.py:515`)
+
+Permanece uma limitação distinta: o observador de ordem registra somente a primeira aquisição de cada **tabela**, ignorando outra PK da mesma tabela adquirida posteriormente. (`app/chamados/tests/test_e1_v5_ordem_trava.py:36`; `app/chamados/tests/test_e1_v5_ordem_trava.py:46`)
+
+**7. Escritores, leitores e significados — PROCEDENTE a incompatibilidade de `data_evento`; NAO PROCEDE uniformidade total.**
+
+| Campo/valor | Quem escreve | Quem lê e significado |
+|---|---|---|
+| `via_resolucao` | Carimbo por `_escrever_carimbo`, pelas portas normal/identidade/descarimbo; lote tem UPDATE próprio. Exceções declaradas: `relavrar` e `encerrar_por_fato_no_espelho`. (`app/chamados/models.py:2810`; `app/chamados/models.py:2865`; `app/chamados/models.py:2902`; `app/chamados/models.py:2973`; `app/chamados/services/relavra_via.py:123`; `app/chamados/models.py:2983`) | C6, `q_vivas`, identidade do fato, backfill e materializador. Representa via de encerramento/identidade, não necessariamente plantio. (`app/chamados/juizes.py:1148`; `app/chamados/models.py:3058`; `app/chamados/models.py:2564`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:129`; `app/chamados/services/materializacao.py:438`) |
+| `materializada_em` | Mesmas portas do carimbo. Duplicata preserva instante/autor anteriores quando já existem. (`app/chamados/models.py:2812`; `app/chamados/models.py:2894`; `app/chamados/models.py:2974`) | Vitalidade, elegibilidade do materializador, identificação da absorção e instante do SILENCIO legado. Não significa sempre “batida criada”, nem sempre instante da retratação; o help do campo continua mais estreito. (`app/chamados/juizes.py:1210`; `app/chamados/services/materializacao.py:1363`; `app/chamados/services/materializacao.py:624`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:243`; `app/chamados/models.py:3103`) |
+| `duplicata` / motivo retratado | `retratar_duplicata` e `remover_motivo`, pela porta de identidade. (`app/chamados/services/fio.py:1002`; `app/chamados/models.py:2014`) | `VIAS_FORA_DO_FATO`, C6, índices e guardas de descarimbo: terminalidade da identidade; resposta permanece histórica. (`app/chamados/models.py:2364`; `app/chamados/models.py:2564`; `app/chamados/juizes.py:1148`; `app/chamados/models.py:2918`; `app/chamados/models.py:3193`) |
+| `admin_decidiu` | `fechar_por_admin`, pela porta de identidade. Backfill acrescenta SILENCIO à sequência; não grava novamente essa via. (`app/chamados/models.py:2777`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:242`) | C6 e backfill distinguem decisão humana; mérito perdedor é essa via com resposta. (`app/chamados/juizes.py:1173`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:129`) |
+| `data_evento` | Nascimento; preenchimento de órfã no reapontamento; rechaveamento. (`app/chamados/models.py:2731`; `app/chamados/services/fio.py:840`; `app/chamados/services/fio.py:948`) | Identidade, horizonte, competência, materialização e leitores do dia. A incompatibilidade turno/conversa permanece nos consumidores do item 4. (`app/chamados/models.py:2562`; `app/chamados/services/fio.py:1036`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:118`; `app/chamados/services/materializacao.py:345`; `app/chamados/juizes.py:1966`) |
+| `status_local` | `_gravar_estado` atribui/grava; nascimento define estado inicial. (`app/chamados/models.py:228`; `app/chamados/models.py:291`; `app/chamados/models.py:1048`) | `_recarregar_estado_se_mudou`, motor e juízes leem estado persistido do Chamado. **NAO PROCEDE mudança de significado causada pelo diff**; o problema restante é ordem de aquisição. (`app/chamados/models.py:690`; `app/chamados/models.py:692`; `app/chamados/catalogo/motor.py:24`; `app/chamados/models.py:257`) |
+
+Há ainda documentação contraditória: `carimbar_identidade` diz que duplicata respondida pode continuar viva, mas o C6 atual mata `VIAS_QUE_VENCEM_A_RESPOSTA` antes de examinar a resposta. (`app/chamados/models.py:2885`; `app/chamados/models.py:2887`; `app/chamados/juizes.py:1148`; `app/chamados/juizes.py:1153`)
+
+**8. Reincidências e sete TETOS.**
+
+**PROCEDENTES:** seleção sobre universo paralelo, ordem de trava, campo com dois domínios e relógio fora da borda nos testes. As fixtures ainda criam Disputa com `auto_now_add`, chamam fechamento que usa `now()` sem injeção e usam `localdate()/now()` no selo de desempenho. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:215`; `app/chamados/models.py:291`; `app/chamados/models.py:2637`; `app/chamados/tests/test_e1_v6_horizonte.py:74`; `app/chamados/models.py:1710`; `app/chamados/tests/test_e1_v6_horizonte.py:174`; `app/chamados/models.py:2777`; `app/ponto/tests/test_selo_chokepoint_escrita.py:229`; `app/ponto/tests/test_selo_chokepoint_escrita.py:262`)
+
+**NAO PROCEDE segundo escritor do backfill demonstrado nesta volta; NAO PROCEDE selo inteiramente sem mordida.** Persistem insuficiências de cobertura descritas acima. (`app/chamados/management/commands/dedup_perguntas_fato.py:87`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:251`; `app/chamados/tests/test_e1_v7_catracas.py:182`; `app/chamados/tests/test_e1_v7_catracas.py:235`; `app/chamados/tests/test_e1_v7_catracas.py:276`)
+
+**NAO PROCEDE subida sem frase C8:** os sete números têm justificativa ao lado. (`PLANO_PISCADA.md:10`; `app/ponto/tests/test_selo_chokepoint_escrita.py:116`; `app/ponto/tests/test_selo_chokepoint_escrita.py:187`)
+
+| Cenário | Teto / aumento | Fonte |
+|---|---:|---|
+| `_gravar_estado` sem pergunta | 25 / +2 | `app/ponto/tests/test_selo_chokepoint_escrita.py:116` |
+| Reconciliar fecha | 57 / +2 | `app/ponto/tests/test_selo_chokepoint_escrita.py:118` |
+| Reconciliar recusa | 14 / +2 | `app/ponto/tests/test_selo_chokepoint_escrita.py:119` |
+| Uma cobrança fecha | 204 / +4 | `app/ponto/tests/test_selo_chokepoint_escrita.py:161` |
+| Três cobranças fecham | 254 / +8 | `app/ponto/tests/test_selo_chokepoint_escrita.py:162` |
+| Uma cobrança fica | 142 / +2 | `app/ponto/tests/test_selo_chokepoint_escrita.py:180` |
+| Três cobranças ficam | 211 / +3 | `app/ponto/tests/test_selo_chokepoint_escrita.py:187` |
+
+A decomposição é compatível com quantidade fixa de consultas **por entrada** na trava, não com tempo/contenção constantes: cresce o universo de linhas bloqueadas. O último +3 admite decomposição não medida, apesar da justificativa geral de +2 por entrada. Medições citadas nos logs e causalidade exata desse delta: **[nao verificado]**. (`app/chamados/models.py:2513`; `app/chamados/models.py:2515`; `app/chamados/models.py:2523`; `app/chamados/models.py:2528`; `app/ponto/tests/test_selo_chokepoint_escrita.py:187`)
+
+**9. Efeito colateral — NAO PROCEDE apagamento físico; PROCEDENTE perda de efetividade sem veto de mérito.**
+
+A retratação não apaga resposta, validação ou `DecisaoPergunta`: altera via/carimbo/autor/recusa. Porém tira a linha da identidade e pode matar sua resposta pendente antes da validação. (`app/chamados/services/fio.py:1002`; `app/chamados/models.py:2894`; `app/chamados/models.py:2898`; `app/chamados/models.py:2902`; `app/chamados/models.py:2564`; `app/chamados/juizes.py:1148`)
+
+Contraexemplo abaixo do horizonte: `p1` respondida/validada fora do destino; `x=p2` respondida com `admin_decidiu`, sem validação nem célula, no destino; `p3` muda viva no chamado velho. `x` pode estar viva pela resposta. A migração escolhe `p1`, retrata `x` e `p3` e não migra nenhuma delas para o destino. A resposta de `x` perde sua pendência efetiva; a decisão fica histórica. (`app/chamados/juizes.py:1153`; `app/chamados/juizes.py:1165`; `app/chamados/services/fio.py:1181`; `
+
+[truncado em 20000 de 20638 caracteres]
+
+## 07/11 14:55 · sessao c4396d29c20e · - · - · origem=Ronald (tmux)
+
+Busca complementada fora de `app`, incluindo raiz, `bin` e scripts: **NAO PROCEDE aquisição explícita adicional localizada**; o resultado de produção encontrado é um detector AST, não uma trava. (`bin/atomicidade_da_porta.py:63`)
+
+Os `select_for_update` restantes fora de `app` aparecem em fontes sintéticas de teste sobre `Linha`. (`bin/tests/test_atomicidade_da_porta.sh:53`; `bin/tests/test_atomicidade_da_porta.sh:70`; `bin/tests/test_atomicidade_da_porta.sh:75`; `bin/tests/test_atomicidade_da_porta.sh:80`)
+
+Não surgiram candidatos adicionais por `get_for_update`, `getattr`, SQL `FOR UPDATE`/`FOR SHARE` ou `LOCK TABLE`; ausência por construção dinâmica que não contenha esses nomes: **[nao verificado]**.
+
+## 07/11 14:54 · sessao 675064e115a1 · - · - · origem=Ronald (tmux)
+
+Itens 6/8, somente leitura:
+
+- **PROCEDENTE — catracas incompletas.** A/B varrem somente Python sob `app`, excluindo diretórios e arquivos; C limita-se aos dois commands. Não cobrem literalmente todo o repositório. (`app/chamados/tests/test_e1_v7_catracas.py:26`; `app/chamados/tests/test_e1_v7_catracas.py:30`; `app/chamados/tests/test_e1_v7_catracas.py:144`)
+- **NAO PROCEDE — ausência de mordida nas formas antigas.** Executei os 16 métodos dessas três classes em memória, substituindo somente `SimpleTestCase` por `unittest.TestCase`: 16 passaram; os detectores retornaram A/B/C vazios para 749 fontes. Essa execução não constitui suite Django, banco nem RED→GREEN histórico. (`app/chamados/tests/test_e1_v7_catracas.py:165`; `app/chamados/tests/test_e1_v7_catracas.py:209`; `app/chamados/tests/test_e1_v7_catracas.py:261`)
+- **PROCEDENTE — burlas demonstradas em memória:** A deixa passar `getattr(...,"select_for_update")`, `get_for_update`, SQL cru e `from chamados import models as m; m.PerguntaDisputa.objects.select_for_update()`. B deixa passar alias importado da canônica, `canonica_do_grupo(do_fato(...).filter(...))` e `qs=do_fato(...); qs.first()`. C deixa passar alias de `retratar_duplicata`, `getattr(p,"save")()` e helper externo. (`app/chamados/tests/test_e1_v7_catracas.py:79`; `app/chamados/tests/test_e1_v7_catracas.py:100`; `app/chamados/tests/test_e1_v7_catracas.py:113`; `app/chamados/tests/test_e1_v7_catracas.py:135`; `app/chamados/tests/test_e1_v7_catracas.py:157`)
+- **PROCEDENTE — exceções apenas por nome.** Qualquer função homônima `trava_na_ordem`, `canonica_do_grupo` ou `aplicar` recebe a dispensa, sem provar arquivo/classe da autoridade. Não há allowlist explícita, mas isso não certifica sítio único. (`app/chamados/tests/test_e1_v7_catracas.py:83`; `app/chamados/tests/test_e1_v7_catracas.py:121`; `app/chamados/tests/test_e1_v7_catracas.py:157`)
+
+Os três REDs solicitados têm asserções concretas: p1 validada/materializada versus p2 muda e ordem reversa; D exige exatamente uma linha; teste real usa segunda thread/conexão, NOWAIT, seis linhas bloqueadas e dois controles livres, com variante sem flag. Resultado no banco: **[nao verificado]**. (`app/chamados/tests/test_e1_v6_horizonte.py:405`; `app/chamados/tests/test_e1_v6_horizonte.py:445`; `app/chamados/tests/test_e1_v5_ordem_trava.py:448`; `app/chamados/tests/test_e1_v5_ordem_trava.py:481`; `app/chamados/tests/test_e1_v5_ordem_trava.py:504`; `app/chamados/tests/test_e1_v5_ordem_trava.py:515`)
+
+**PROCEDENTE — ordem ainda observada por tabela:** o rastreador ignora aquisições posteriores de outras PKs da mesma tabela; o novo teste de bloqueio não elimina essa limitação geral. (`app/chamados/tests/test_e1_v5_ordem_trava.py:36`; `app/chamados/tests/test_e1_v5_ordem_trava.py:46`)
+
+**PROCEDENTE — relógio fora da borda permanece.** Fixtures criam Disputa com `auto_now_add`; casos chamam `fechar_por_admin`, que usa `now()` sem injeção. A fixture dos tetos também usa `localdate()` e `now()`. (`app/chamados/tests/test_e1_v6_horizonte.py:74`; `app/chamados/models.py:1710`; `app/chamados/tests/test_e1_v6_horizonte.py:174`; `app/chamados/models.py:2777`; `app/ponto/tests/test_selo_chokepoint_escrita.py:229`; `app/ponto/tests/test_selo_chokepoint_escrita.py:262`)
+
+**NAO PROCEDE — subida calada dos sete tetos:** todos têm justificativa ao lado, como exige C8. Valores/deltas: 25/+2, 57/+2, 14/+2, 204/+4, 254/+8, 142/+2, 211/+3. (`PLANO_PISCADA.md:10`; `app/ponto/tests/test_selo_chokepoint_escrita.py:116`; `app/ponto/tests/test_selo_chokepoint_escrita.py:118`; `app/ponto/tests/test_selo_chokepoint_escrita.py:119`; `app/ponto/tests/test_selo_chokepoint_escrita.py:161`; `app/ponto/tests/test_selo_chokepoint_escrita.py:162`; `app/ponto/tests/test_selo_chokepoint_escrita.py:180`; `app/ponto/tests/test_selo_chokepoint_escrita.py:187`)
+
+A implementação sustenta quantidade fixa de consultas por entrada, não tempo/contenção constantes: o universo de linhas bloqueadas cresce. O último +3 admite decomposição não medida, apesar da justificativa geral +2/entrada; causalidade exata desse delta e medições dos logs: **[nao verificado]**. (`app/chamados/models.py:2508`; `app/chamados/models.py:2513`; `app/chamados/models.py:2523`; `app/chamados/models.py:2528`; `app/ponto/tests/test_selo_chokepoint_escrita.py:187`)
+
+## 07/11 14:54 · sessao ec76314e5c3c · - · - · origem=Ronald (tmux)
+
+**1. PROCEDENTE — universo recortado antes da canônica permanece no backfill.** `aplicar` lê `_no_fato(fam)` e só então chama `canonica_do_grupo`; `_no_fato` já excluiu o passado pelo horizonte. A identidade BATIDA não inclui data, enquanto `do_fato` busca o episódio inteiro sem horizonte. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:215`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:218`; `app/chamados/services/fio.py:1055`; `app/chamados/services/fio.py:1017`; `app/chamados/models.py:2562`)
+
+Contraexemplo deduzido do código: mesmo episódio/motivo BATIDA, `p1` respondida abaixo H, `p2/p3` mudas acima H; `abrir` e migração escolhem `p1`, mas backfill/dedup escolhem `p2` e retratam `p3`. O índice parcial não impede a linha abaixo H; a colisão acima H é justamente o acervo tratado antes do índice. Ocorrência e reprodução no banco: **[nao verificado]**. (`app/chamados/models.py:2683`; `app/chamados/models.py:2684`; `app/chamados/services/fio.py:1196`; `app/chamados/services/fio.py:1203`; `app/chamados/services/fio.py:984`; `app/chamados/models.py:3200`)
+
+Outro universo diferente: `do_fato` inclui a linha antiga **sem episódio** do mesmo dia pelo OR; agrupamento/backfill BATIDA usa exclusivamente `(batida_origem_id,motivo)`, podendo excluir essa canônica mesmo sem atravessar H. (`app/chamados/models.py:2560`; `app/chamados/models.py:2563`; `app/chamados/services/fio.py:1017`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:215`)
+
+**NAO PROCEDE o contraexemplo antigo das reutilizáveis:** seleção passou a consultar o fato inteiro, escolher e depois conferir reutilização/destino. (`app/chamados/services/declaracao_texto.py:242`; `app/chamados/services/declaracao_texto.py:245`; `app/chamados/services/declaracao_texto.py:246`; `app/chamados/services/declaracao_texto.py:267`)
+
+**NAO PROCEDE novo juiz em `reapontar_resolvedora`:** as irmãs retratadas vêm de `_colisao_ao_datar`, que recompõe `[p]+outras`, chama a canônica e recusa quando `p` perde ou existe outra encerrada. (`app/chamados/services/fio.py:849`; `app/chamados/services/fio.py:850`; `app/chamados/services/fio.py:889`; `app/chamados/services/fio.py:891`; `app/chamados/services/fio.py:892`; `app/chamados/services/fio.py:895`)
+
+**4. PROCEDENTE — leitores ainda tratam conversa civil como turno.** A declaração atual limita dia do turno a `conversa=False`, mantendo dia civil em `abrir_conversa`. (`app/chamados/services/fio.py:1031`; `app/chamados/models.py:2632`; `app/chamados/models.py:2637`)
+
+O caso mais forte é o próprio nascimento: `_nascer` passa também o dia civil da conversa a `resolvedora_valida`, num proxy sem discriminador; o juiz presume conversa apenas quando a data é nula e compara ao turno do chamado. Conversa criada hoje para chamado D−2 pode levantar `ResolvedoraCruzada`. (`app/chamados/models.py:2661`; `app/chamados/models.py:2665`; `app/chamados/models.py:2666`; `app/chamados/models.py:2668`; `app/chamados/juizes.py:1966`; `app/chamados/juizes.py:1968`; `app/chamados/juizes.py:1985`; `app/chamados/juizes.py:2001`)
+
+Outros leitores sem discriminação:
+
+- Fio marca divergência comparando dia civil ao turno. (`app/chamados/services/fio.py:86`; `app/chamados/services/fio.py:88`)
+- Juiz do dia do chamado incorpora datas de todas as perguntas, inclusive conversas, tanto singular quanto lote. (`app/chamados/juizes.py:75`; `app/chamados/juizes.py:80`; `app/chamados/juizes.py:209`; `app/chamados/juizes.py:214`)
+- Prévia da folha agrupa perguntas por `data_evento` e apresenta resposta de conversa como material do dia da célula. (`app/folha/previa.py:64`; `app/folha/previa.py:67`; `app/folha/previa.py:95`; `app/folha/previa.py:142`)
+- Copiloto do dia reúne conversas civis em `perguntas_deste_dia`. (`app/ponto/services/dia_do_colab.py:64`; `app/ponto/services/dia_do_colab.py:71`; `app/ponto/services/dia_do_colab.py:99`)
+
+**5. NAO PROCEDE no contador atual:** usa `data_evento` da Pergunta e dia local de aplicação da 0052; ausência da migração ou dia nulo alarma. O escape de turno antigo contado como acervo está declarado. (`app/chamados/services/fio.py:1108`; `app/chamados/services/fio.py:1115`; `app/chamados/services/fio.py:1119`; `app/chamados/services/fio.py:1120`)
+
+**9. NAO PROCEDE apagamento físico; PROCEDENTE retirada de efetividade sem veto de mérito.** A retratação preserva texto da resposta, validação e decisões: só salva via/carimbo/autor/recusa. Porém `duplicata` sai da identidade e mata a pergunta antes da resposta. (`app/chamados/services/fio.py:1002`; `app/chamados/models.py:2894`; `app/chamados/models.py:2898`; `app/chamados/models.py:2902`; `app/chamados/models.py:2564`; `app/chamados/juizes.py:1148`)
+
+O próprio backfill define `admin_decidiu` com resposta como mérito e explica que torná-la duplicata retira a decisão do fato; `_migrar_sob_trava` faz essa troca sem chamar o veto. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:124`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:126`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:129`; `app/chamados/services/fio.py:1212`; `app/chamados/services/fio.py:1213`)
+
+Contraexemplo abaixo H: canônica `p1` respondida/validada fora do destino; `x=p2` respondida, `admin_decidiu`, sem validação nem célula no destino; `p3` muda viva no velho. `x` pode continuar viva antes da migração, pois resposta sem concordância comprovada com luz mantém vitalidade; migração escolhe `p1`, retrata `x` e `p3`, e nada migra para o destino. A decisão de `x` fica histórica, sem a proteção exigida no backfill. Reprodução executada e ocorrência em produção: **[nao verificado]**. (`app/chamados/juizes.py:1100`; `app/chamados/juizes.py:1150`; `app/chamados/juizes.py:1153`; `app/chamados/juizes.py:1165`; `app/chamados/services/fio.py:1181`; `app/chamados/services/fio.py:1203`; `app/chamados/services/fio.py:1204`; `app/chamados/services/fio.py:1212`)
+
+## 07/11 14:54 · sessao c4396d29c20e · - · - · origem=Ronald (tmux)
+
+**Classe (2): PROCEDENTE.** A centralização de `select_for_update` não eliminou aquisições posteriores por `save`/`UPDATE`; há dois caminhos concretos restantes. (`app/chamados/models.py:291`; `app/chamados/services/materializacao.py:672`)
+
+1. **Chamado → Disputa via S143.** `Chamado.fechar()` chama `transicionar()` e `_aplicar()`, sem passar por `_recarregar_estado_se_mudou`. `_gravar_estado` trava somente o Colaborador e salva o Chamado; seu `post_save` chama S143, cujo resolver só então trava todas as Disputas abertas do colaborador. (`app/chamados/models.py:447`; `app/chamados/models.py:128`; `app/chamados/models.py:442`; `app/chamados/models.py:286`; `app/chamados/models.py:291`; `app/chamados/signals.py:91`; `app/chamados/services/disputa_emissao.py:1683`)
+
+   Contraexemplo de código: chamado administrativo sem perguntas próprias, sem justificativa pendente e sem Disputa própria impeditiva, com **outra** Disputa aberta da mesma pessoa. A guarda S127 consulta somente `chamado=chamado`; essa outra Disputa não impede a transição, mas será travada pelo resolver depois do UPDATE do Chamado. Reprodução em banco: **[nao verificado]**. (`app/chamados/juizes.py:2083`; `app/chamados/models.py:136`; `app/chamados/models.py:148`; `app/chamados/services/disputa_emissao.py:1683`)
+
+2. **Pergunta → Disputa na devolução por ausência rejeitada.** `devolver_absorvidas_da_ausencia_rejeitada` abre atomic e chama `reabrir_para_correcao(..., desfazer_absorcao=True)`; este chega ao UPDATE de Pergunta em `descarimbar_em_lote`. Depois, no mesmo atomic externo, chama `d.reabrir_sistema`, que salva a Disputa. Esses envelopes não antecipam a trava do Colaborador/Disputa. (`app/chamados/services/materializacao.py:672`; `app/chamados/services/materializacao.py:673`; `app/chamados/services/disputa_emissao.py:1516`; `app/chamados/models.py:2973`; `app/chamados/services/materializacao.py:676`; `app/chamados/models.py:2130`)
+
+**NAO PROCEDE a permanência dos quatro `select_for_update` explícitos fora do sítio único nos arquivos de produção examinados:** as quatro aquisições localizadas estão em `trava_na_ordem`, na sequência Colaborador, Disputa, Chamado, Pergunta. Isso não certifica a ordem das escritas acima. (`app/chamados/models.py:2508`; `app/chamados/models.py:2515`; `app/chamados/models.py:2528`; `app/chamados/models.py:2532`)
+
+**O sítio citado na v7 foi corrigido:** `_recarregar_estado_se_mudou` agora antecipa Disputas abertas e Chamados vivos antes de ler `status_local`; a insuficiência é a existência de outras entradas no escritor de estado. (`app/chamados/models.py:689`; `app/chamados/models.py:690`; `app/chamados/models.py:442`)
+
+**Parte do item 7 — `status_local`: NAO PROCEDE divergência de significado demonstrada.** O campo armazena o estado do Chamado; `_gravar_estado` atribui o destino, a leitura recarrega a instância quando o estado persistido difere e os conjuntos oficiais distinguem vivo, encerrado e terminal. A migração da trava mantém esse significado. (`app/chamados/models.py:52`; `app/chamados/models.py:228`; `app/chamados/models.py:690`; `app/chamados/catalogo/motor.py:24`; `app/chamados/catalogo/motor.py:30`)
+
+**Limite do selo de ordem:** o observador registra apenas a primeira aquisição de cada **tabela**, portanto não demonstra que uma segunda Disputa/Chamado da mesma pessoa, ainda não travada, não foi adquirida depois da Pergunta. (`app/chamados/tests/test_e1_v5_ordem_trava.py:36`; `app/chamados/tests/test_e1_v5_ordem_trava.py:45`)
+
+**Sinais continuam síncronos:** S88 reconcilia o pai, S143 resolve perguntas e S144 chama o materializador durante `post_save`; a correção da entrada por `_recarregar` não transforma esses sinais em garantia global de ordem. (`app/chamados/signals.py:41`; `app/chamados/signals.py:92`; `app/chamados/signals.py:140`)
 
 ## 07/11 14:52 · sessao cc914c55e5a6 · CODEX-CONSTRUTOR-NEGOCIO · verificador · origem=Code
 
@@ -533,168 +724,4 @@ A cópia não disponibiliza repositório Git: `git rev-parse HEAD` retornou “n
 
 8. **Média — teste de ilegibilidade depende de privilégio efetivo.** A fixture usa exclusivamente `chmod 000`; não verifica se o executor ainda consegue ler o diretório. Sob usuário com privilégio de leitura irrestrita, o original pode terminar rc 0 e o caso falhar antes de avaliar o mutante. Execução desse cenário: `[nao verificado]`. (`bin/tests/test_codex_pergunta.sh:322`, `bin/tests/test_codex_pergunta.sh:325`, `bin/tests/test_codex_pergunta.sh:386`)
 
-## 07/11 13:33 · sessao c3c3934d6603 · - · - · origem=Ronald (tmux)
-
-1. **Média — item 5 permanece parcialmente aberto.** O controle positivo só exige `INTRUSO_WT.txt`; cada tentativa depende de `.out` produzido pelo próprio Codex com uma linha `rc=`. Arquivos fabricados com negativas satisfazem essas verificações; TCP local/Unix sequer precisam de assinatura de negação. Os rótulos novos explicitam a limitação, mas não mudam o resultado `rc=0` possível. A triagem sustenta o fechamento documental, não a execução comprovada de cada tentativa. (`bin/tests/prova_codex_pergunta_real.sh:60`, `bin/tests/prova_codex_pergunta_real.sh:82`, `bin/tests/prova_codex_pergunta_real.sh:90`, `bin/tests/prova_codex_pergunta_real.sh:92`, `bin/tests/prova_codex_pergunta_real.sh:117`, `bin/tests/prova_codex_pergunta_real.sh:144`)
-
-2. **Informativo — item 6 fecha os contraexemplos de colisão e ouvinte morto.** `$EV` ganha PID e criação exclusiva: destino preexistente recusa a prova. O controle posterior verifica PID e exige mais duas conexões registradas; falha deixa resultado inconclusivo. A observação sobre `CONECTOU` agora concorda com a implementação. Execução real: `[nao verificado]`. (`bin/tests/prova_codex_pergunta_real.sh:21`, `bin/tests/prova_codex_pergunta_real.sh:85`, `bin/tests/prova_codex_pergunta_real.sh:106`, `bin/tests/prova_codex_pergunta_real.sh:111`, `bin/tests/prova_codex_pergunta_real.sh:134`, `bin/tests/prova_codex_pergunta_real.sh:135`)
-
-3. **Baixa — o delta contamina a atribuição das conexões no diagnóstico vermelho.** `N_DEPOIS` é capturado antes dos controles posteriores; estes acrescentam registros ao mesmo arquivo. Depois, `tail` imprime até EOF e atribui todas essas linhas a conexões “de dentro do sandbox”, incluindo os próprios `controle_pos`. A quantidade impressa usa o snapshot correto, mas a lista de evidências mistura origens. (`bin/tests/prova_codex_pergunta_real.sh:103`, `bin/tests/prova_codex_pergunta_real.sh:107`, `bin/tests/prova_codex_pergunta_real.sh:108`, `bin/tests/prova_codex_pergunta_real.sh:114`)
-
-4. **Média — permanece janela entre conexão aceita e registro contado.** O ouvinte aceita, espera `recv` por até dois segundos e só então acrescenta a linha. Uma conexão pendente pode ser registrada depois de `N_DEPOIS`, ficar fora da diferença julgada e ainda contribuir para o mínimo exigido no controle posterior. Não há validação individual dos tokens `controle_pos` ou de uma conexão por transporte. O controle posterior fecha a morte permanente do ouvinte, mas não essa janela de contagem; reprodução do escalonamento: `[nao verificado]`. (`bin/tests/prova_codex_pergunta_real.sh:38`, `bin/tests/prova_codex_pergunta_real.sh:39`, `bin/tests/prova_codex_pergunta_real.sh:41`, `bin/tests/prova_codex_pergunta_real.sh:103`, `bin/tests/prova_codex_pergunta_real.sh:109`, `bin/tests/prova_codex_pergunta_real.sh:111`, `bin/tests/prova_codex_pergunta_real.sh:114`)
-
-5. **Informativo — escritores e leitores de `$EV/escuta`.**
-
-   | Campo | Escritor → leitor |
-   |---|---|
-   | `$EV` | Shell define e cria exclusivamente → redirecionamentos, cópias e mensagem final. (`bin/tests/prova_codex_pergunta_real.sh:21`, `bin/tests/prova_codex_pergunta_real.sh:78`, `bin/tests/prova_codex_pergunta_real.sh:80`, `bin/tests/prova_codex_pergunta_real.sh:146`) |
-   | `escuta/u.sock` | Python faz `bind` → controles externos e tentativa incluída na pergunta. (`bin/tests/prova_codex_pergunta_real.sh:34`, `bin/tests/prova_codex_pergunta_real.sh:50`, `bin/tests/prova_codex_pergunta_real.sh:71`, `bin/tests/prova_codex_pergunta_real.sh:108`) |
-   | `escuta/porta` | Python escreve arquivo temporário e renomeia → shell lê e injeta nos comandos TCP. (`bin/tests/prova_codex_pergunta_real.sh:35`, `bin/tests/prova_codex_pergunta_real.sh:46`, `bin/tests/prova_codex_pergunta_real.sh:49`, `bin/tests/prova_codex_pergunta_real.sh:70`) |
-   | `escuta/conexoes` | Ouvinte acrescenta aceites → shell conta e imprime. Controles e candidatos a intrusão compartilham o arquivo. (`bin/tests/prova_codex_pergunta_real.sh:41`, `bin/tests/prova_codex_pergunta_real.sh:52`, `bin/tests/prova_codex_pergunta_real.sh:103`, `bin/tests/prova_codex_pergunta_real.sh:114`) |
-   | `escuta/ouvinte.log` | Redirecionamento de stdout/stderr do Python → indicação de diagnóstico quando o ouvinte não sobe. (`bin/tests/prova_codex_pergunta_real.sh:30`, `bin/tests/prova_codex_pergunta_real.sh:47`) |
-   | `$EV/p` | Shell escreve pergunta → wrapper recebe seu caminho. (`bin/tests/prova_codex_pergunta_real.sh:53`, `bin/tests/prova_codex_pergunta_real.sh:77`) |
-   | `$EV/prova` | Shell copia a evidência → julgamento continua lendo os originais em `$WT/app/prova`, não essa cópia. (`bin/tests/prova_codex_pergunta_real.sh:81`, `bin/tests/prova_codex_pergunta_real.sh:89`, `bin/tests/prova_codex_pergunta_real.sh:125`) |
-   | `prova/*.out` | Codex é instruído a escrever → shell verifica e julga. (`bin/tests/prova_codex_pergunta_real.sh:61`, `bin/tests/prova_codex_pergunta_real.sh:73`, `bin/tests/prova_codex_pergunta_real.sh:90`, `bin/tests/prova_codex_pergunta_real.sh:135`) |
-   | PID do ouvinte | Shell captura `$!` → `kill -0` posterior e `trap` de encerramento. (`bin/tests/prova_codex_pergunta_real.sh:44`, `bin/tests/prova_codex_pergunta_real.sh:106`) |
-
-   `$EV` é específico da chamada, mas o destino da resposta continua fixo em `$R/logs/codex/r/provaefeito`; a cópia em `$EV` é feita depois da chamada. Interferência real entre chamadas: `[nao verificado]`. (`bin/tests/prova_codex_pergunta_real.sh:21`, `bin/tests/prova_codex_pergunta_real.sh:77`, `bin/tests/prova_codex_pergunta_real.sh:80`)
-
-6. **Informativo — verificações realizadas.** Revisão estática dos scripts; prova real, acesso a serviços e simulação do ouvinte: `[nao verificado]`.
-
-## 07/11 13:32 · sessao 606d39a09479 · - · - · origem=Ronald (tmux)
-
-1. **Informativo — os dois mutantes de v4.r foram corrigidos por leitura.** `fs_walk` agora conserva os blobs rastreados no percurso substituto; deixa de fabricar remoções no pre-check. `p_git` remove a regra proibitiva efetiva, em vez de apenas um motivo redundante. Execução dos mutantes: **[nao verificado]**. (`bin/tests/test_codex_pergunta.sh:422`, `bin/tests/test_codex_pergunta.sh:423`, `bin/tests/test_codex_pergunta.sh:426`, `bin/tests/test_codex_pergunta.sh:427`, `bin/codex_pergunta.sh:105`, `bin/codex_pergunta.sh:150`)
-
-2. **Informativo — os novos casos têm mordida coerente no código.**
-
-   | Caso/mutante | Aval por leitura |
-   |---|---|
-   | Hardlink idêntico inicial/final/revalidação | A neutralização de `inv_nlink` elimina justamente a descoberta do arquivo que conserva bytes/modo. As três fixtures exercitam momentos distintos. (`bin/tests/test_codex_pergunta.sh:207`, `bin/tests/test_codex_pergunta.sh:315`, `bin/tests/test_codex_pergunta.sh:318`, `bin/tests/test_codex_pergunta.sh:383`, `bin/codex_pergunta.sh:149`) |
-   | Ramo ilegível | Sem `onerror`, a fixture deixa de produzir `FALHA`; o caso exige rc 3 e a linha `FALHA`. Não exige que o arquivo oculto seja classificado individualmente. (`bin/tests/test_codex_pergunta.sh:322`, `bin/tests/test_codex_pergunta.sh:325`, `bin/tests/test_codex_pergunta.sh:326`, `bin/tests/test_codex_pergunta.sh:386`) |
-   | Tipo especial | A fixture cria FIFO; retirar o motivo permite `TOCADO`, contrariando `_inv_recusa`. Socket/dispositivo não são exercitados. (`bin/tests/test_codex_pergunta.sh:104`, `bin/tests/test_codex_pergunta.sh:329`, `bin/tests/test_codex_pergunta.sh:387`, `bin/codex_pergunta.sh:161`) |
-   | Vaga por outra worktree | A fixture prende a vaga principal e usa outra worktree como `VIVO`; o mutante volta a derivar a vaga dessa árvore. A recusa exige ocupação e ausência de chamada ao Codex. (`bin/tests/test_codex_pergunta.sh:98`, `bin/tests/test_codex_pergunta.sh:332`, `bin/tests/test_codex_pergunta.sh:433`) |
-
-   Resultados completos desses casos: **[nao verificado]**. (`bin/tests/test_codex_pergunta.sh:366`, `bin/tests/test_codex_pergunta.sh:451`)
-
-3. **Baixa — a alegação causal da sentinela FSMON continua sem demonstração.** O teste cria somente `.git/config`, verifica a recusa e a ausência da sentinela; não executa Git no diretório plantado nem monta explicitamente um repositório interno completo. Sustenta a leitura estreita da triagem — inventário não produziu efeito nessa fixture e caminho foi recusado —, mas “o primeiro Git em `app` executaria o hook” continua **[nao verificado]**. (`bin/tests/test_codex_pergunta.sh:289`, `bin/tests/test_codex_pergunta.sh:291`, `bin/tests/test_codex_pergunta.sh:292`, `bin/codex_pergunta.sh:112`)
-
-4. **Informativo — falta cobertura negativa nova nos outros dois momentos do inventário.** O caso ilegível e o FIFO são plantados durante o Codex falso, cobrindo o fim; não há casos correspondentes novos de ilegibilidade/tipo especial inicial ou durante a espera. A reutilização da mesma implementação fornece proteção por leitura, mas execução específica desses caminhos permanece **[nao verificado]**. (`bin/tests/test_codex_pergunta.sh:76`, `bin/tests/test_codex_pergunta.sh:323`, `bin/tests/test_codex_pergunta.sh:330`, `bin/codex_pergunta.sh:223`, `bin/codex_pergunta.sh:371`, `bin/codex_pergunta.sh:398`)
-
-## 07/11 13:25 · sessao 8e6391171c0e · CODEX-CONSTRUTOR-NEGOCIO · verificador · origem=Code
-
-**Não liberaria esta volta:** o inventário ainda deixa passar hardlink idêntico na revalidação/final, e dois mutantes ficam vermelhos sem demonstrar a proteção alegada. (`bin/codex_pergunta.sh:143`, `bin/codex_pergunta.sh:158`, `bin/tests/test_codex_pergunta.sh:393`, `bin/tests/test_codex_pergunta.sh:396`)
-
-1. **Informativo — fechamento dos achados do opus fornecido.**
-
-   | Achado | Aval desta volta |
-   |---|---|
-   | `.git` aninhado invisível | **Fecha os contraexemplos apresentados:** o percurso encontra diretórios e arquivos `.git`, e a classificação os proíbe. Persistem limites gerais da varredura abaixo. (`bin/codex_pergunta.sh:132`, `bin/codex_pergunta.sh:135`, `bin/codex_pergunta.sh:154`) |
-   | Selo só criava `.gitignore` | **Fecha em parte:** acrescenta `.git/config`, diretório aninhado e arquivo `gitdir`, mas há mortes de mutantes pelo motivo errado. (`bin/tests/test_codex_pergunta.sh:291`, `bin/tests/test_codex_pergunta.sh:295`, `bin/tests/test_codex_pergunta.sh:396`) |
-   | Ignorados/autoload saíam `TOCADO` | **Fecha a classificação dos casos apresentados:** agora recebem motivo proibitivo; a execução de autoload pelo próprio processo inventariante continua `[nao verificado]`. (`bin/codex_pergunta.sh:107`, `bin/codex_pergunta.sh:155`, `bin/codex_pergunta.sh:393`) |
-   | Vaga pela raiz do script | **Fecha mantendo o mesmo `CODEX_VIVO`:** copiar `bin/` já não muda a vaga. **Parcial como exclusão por repositório**, conforme item 4. (`bin/codex_pergunta.sh:71`, `bin/tests/test_codex_pergunta.sh:314`) |
-   | Prova baseada no `.out` do Codex | **Fecha em parte:** TCP local/Unix ganham ouvinte externo; Docker, docker.sock e TCP externo continuam autodeclarados. (`bin/tests/prova_codex_pergunta_real.sh:41`, `bin/tests/prova_codex_pergunta_real.sh:104`, `bin/tests/prova_codex_pergunta_real.sh:117`, `bin/tests/prova_codex_pergunta_real.sh:124`) |
-   | Texto “só LE”/“ÚNICA escrita” | **Fecha:** distingue quatro papéis de leitura e duas permissões de escrita. (`CLAUDE.md:341`, `CLAUDE.md:346`) |
-   | Opus/teto apresentados como guarda | **Fecha a rotulagem:** declara expressamente que são conduta, sem guarda no wrapper. (`CLAUDE.md:351`, `CLAUDE.md:352`) |
-
-2. **Alta — hardlink idêntico escapa durante a espera e no inventário final.**
-
-   Substituir um arquivo rastreado por hardlink com os mesmos bytes e modo não o inclui em `tocados`; a consulta a `st_nlink` acontece somente depois, dentro desse conjunto. O `find -links +1` inicial não se repete na revalidação. Assim, a troca durante a espera passa pela nova guarda; no final também pode produzir inventário vazio. A simulação em memória confirmou rc 0 e saída vazia; reprodução em filesystem real: `[nao verificado]`. (`bin/codex_pergunta.sh:143`, `bin/codex_pergunta.sh:152`, `bin/codex_pergunta.sh:158`, `bin/codex_pergunta.sh:220`, `bin/codex_pergunta.sh:366`)
-
-3. **Média — o inventário não cobre integralmente entradas, identidade e permissões.**
-
-   | Classe | Resultado da leitura |
-   |---|---|
-   | Permissão de arquivo | Só compara execução pelo proprietário. `0644→0666` ou `0644→0600` pode desaparecer do inventário; a simulação de `0666` deu rc 0 vazio. (`bin/codex_pergunta.sh:116`, `bin/codex_pergunta.sh:143`) |
-   | Diretório existente | Não compara suas permissões; só verifica se o caminho pertence às pastas da base. (`bin/codex_pergunta.sh:139`) |
-   | FIFO/socket/dispositivo novo | É reportado, mas pode sair **`TOCADO`, rc 0**, por faltar proibição por tipo. FIFO foi confirmado em memória. (`bin/codex_pergunta.sh:143`, `bin/codex_pergunta.sh:153`, `bin/codex_pergunta.sh:160`) |
-   | Diretório vazio novo | É reportado como `caminho/`; sob caminho permitido, é aceito. Diretórios vazios não têm representação nessa base `ls-tree`. (`bin/codex_pergunta.sh:125`, `bin/codex_pergunta.sh:140`) |
-   | Symlink novo/modificado | Entra na comparação e recebe `PROIBIDO`. Symlink já rastreado e inalterado não recebe essa classificação. (`bin/codex_pergunta.sh:112`, `bin/codex_pergunta.sh:143`, `bin/codex_pergunta.sh:157`) |
-   | Bytes não UTF-8 | Git usa `"replace"`, enquanto o percurso conserva outra representação dos bytes. Pode duplicar caminhos e recusar arquivo rastreado limpo. Destino não UTF-8 de symlink pode falhar no `.encode()`. (`bin/codex_pergunta.sh:112`, `bin/codex_pergunta.sh:122`, `bin/codex_pergunta.sh:128`) |
-   | Case | A comparação é literal, sem conversão de caixa. Comportamento em filesystem que ignore caixa: `[nao verificado]`. (`bin/codex_pergunta.sh:128`, `bin/codex_pergunta.sh:137`, `bin/codex_pergunta.sh:143`) |
-   | Ramo não percorrido | `os.walk` não recebe `onerror`; uma abertura recusada pode omitir descendentes novos sem produzir `FALHA`. Rastreado não visto vira remoção, mas isso não enumera os novos ocultos. (`bin/codex_pergunta.sh:132`, `bin/codex_pergunta.sh:145`, `bin/codex_pergunta.sh:146`) |
-
-   Há também recusa potencial de checkout legítimo com transformação CRLF/smudge: compara bytes físicos diretamente ao blob armazenado. Configuração ou ocorrência disso nesta obra: `[nao verificado]`. (`bin/codex_pergunta.sh:112`, `bin/codex_pergunta.sh:125`, `bin/codex_pergunta.sh:143`, `bin/codex_pergunta.sh:217`)
-
-   A poda da raiz exclui `.git` independentemente do tipo; a exigência inicial “arquivo sem symlink” não é repetida no final, que compara conteúdo. Aceitação real pelo Git de uma troca por symlink de conteúdo idêntico: `[nao verificado]`. (`bin/codex_pergunta.sh:135`, `bin/codex_pergunta.sh:193`, `bin/codex_pergunta.sh:394`)
-
-4. **Alta — a vaga ainda depende da árvore escolhida como `CODEX_VIVO`.**
-
-   Dois valores de `CODEX_VIVO` apontando para worktrees distintas do mesmo repositório produzem dois caminhos de vaga. A validação de common-dir confere a origem com o destino de cada chamada, mas não deriva a vaga desse common-dir. Portanto, o delta resolve a cópia do script com origem fixa; não estabelece exclusão única para todas as árvores do mesmo repositório. Execução concorrente desse cenário: `[nao verificado]`. (`bin/codex_pergunta.sh:56`, `bin/codex_pergunta.sh:71`, `bin/codex_pergunta.sh:200`, `bin/codex_pergunta.sh:212`)
-
-5. **Alta — a prova ainda pode ficar verde sem executar cada tentativa.** [nao verificado]
-
-   O controle positivo exige apenas `INTRUSO_WT.txt`; a evidência individual continua sendo `.out` gravado pelo próprio Codex. Preencher esses arquivos com `rc=` e negativas fabricadas satisfaz as verificações documentais; TCP local/Unix nem exigem assinatura de negação. Zero conexões prova ausência de conexão registrada, não execução de tentativa bloqueada. Contraexemplo completo executado: `[nao verificado]`. (`bin/tests/prova_codex_pergunta_real.sh:60`, `bin/tests/prova_codex_pergunta_real.sh:90`, `bin/tests/prova_codex_pergunta_real.sh:92`, `bin/tests/prova_codex_pergunta_real.sh:105`, `bin/tests/prova_codex_pergunta_real.sh:107`)
-
-   Os rótulos `AUTO-DECLARADO` de Docker/socket/TCP externo não tornam o resultado inconclusivo: essas negativas ainda podem terminar com rc 0. (`bin/tests/prova_codex_pergunta_real.sh:82`, `bin/tests/prova_codex_pergunta_real.sh:117`, `bin/tests/prova_codex_pergunta_real.sh:120`, `bin/tests/prova_codex_pergunta_real.sh:125`, `bin/tests/prova_codex_pergunta_real.sh:135`)
-
-6. **Média — o ouvinte não tem controle posterior e `$EV` pode colidir.**
-
-   O script testa o ouvinte antes da chamada; depois só compara contagens. Não confirma sobrevivência nem faz controle posterior. Se ele morrer após os controles, ainda pode imprimir “OK MEDIDO”. (`bin/tests/prova_codex_pergunta_real.sh:44`, `bin/tests/prova_codex_pergunta_real.sh:49`, `bin/tests/prova_codex_pergunta_real.sh:103`, `bin/tests/prova_codex_pergunta_real.sh:105`)
-
-   `$EV` usa precisão de segundos e `mkdir -p`; chamadas no mesmo segundo podem compartilhar socket, porta e evidências. Além disso, `CONECTOU` no `.out` ainda reprova independentemente do ouvinte, apesar do comentário que lhe atribui o julgamento. Ocorrências reais: `[nao verificado]`. (`bin/tests/prova_codex_pergunta_real.sh:21`, `bin/tests/prova_codex_pergunta_real.sh:34`, `bin/tests/prova_codex_pergunta_real.sh:45`, `bin/tests/prova_codex_pergunta_real.sh:92`, `bin/tests/prova_codex_pergunta_real.sh:125`)
-
-7. **Média — dois mutantes morrem por motivo diferente do declarado.**
-
-   - **`fs_walk`:** remover o percurso também afeta o pre-check. Todos os blobs ficam “não vistos”, a chamada é recusada com rc 2 antes do falso Codex, e o caso fica vermelho porque esperava rc 3 final. Não demonstra a mordida final contra `.git/config`. (`bin/tests/test_codex_pergunta.sh:393`, `bin/codex_pergunta.sh:145`, `bin/codex_pergunta.sh:217`, `bin/tests/test_codex_pergunta.sh:105`)
-   - **`git_aninhado`:** remove apenas o motivo suplementar; `.git*` continua proibindo o caminho. Morre pela ausência da mensagem exigida, mantendo a proteção. (`bin/tests/test_codex_pergunta.sh:396`, `bin/codex_pergunta.sh:103`, `bin/codex_pergunta.sh:154`, `bin/tests/test_codex_pergunta.sh:106`)
-   - **Sentinela FSMON:** o caso planta configuração, mas não exercita o hook com Git no diretório plantado. Prova recusa do caminho; a ausência da sentinela não prova bloqueio de execução do hook. (`bin/tests/test_codex_pergunta.sh:291`, `bin/tests/test_codex_pergunta.sh:292`, `bin/codex_pergunta.sh:110`)
-
-   Os mutantes `poda_so_raiz` retiram justamente a visibilidade de `.git` em diretório e arquivo; não encontrei a mesma morte espúria neles. Resultado executado de todos os mutantes: `[nao verificado]`. (`bin/tests/test_codex_pergunta.sh:295`, `bin/tests/test_codex_pergunta.sh:296`, `bin/tests/test_codex_pergunta.sh:394`, `bin/tests/test_codex_pergunta.sh:395`)
-
-8. **Informativo — escritores e leitores pedidos.**
-
-   | Arquivo/variável | Escritor → leitor |
-   |---|---|
-   | `VAGA` | Shell deriva de `VIVO` → reserva da resposta e abertura da trava. (`bin/codex_pergunta.sh:71`, `bin/codex_pergunta.sh:72`, `bin/codex_pergunta.sh:212`) |
-   | `construtor.vaga` | Wrapper cria/abre em append → `flock` usa fd 6. O selo também cria, prende, move e restaura sua fixture. (`bin/codex_pergunta.sh:212`, `bin/codex_pergunta.sh:213`, `bin/tests/test_codex_pergunta.sh:175`, `bin/tests/test_codex_pergunta.sh:217`) |
-   | `_INVENTARIO_PY` | Uma definição no shell → três chamadas Python. Não são três implementações independentes do juiz. (`bin/codex_pergunta.sh:90`, `bin/codex_pergunta.sh:217`, `bin/codex_pergunta.sh:366`, `bin/codex_pergunta.sh:393`) |
-   | `_INV0` | Captura stdout/stderr do Python → exige sucesso e saída vazia. (`bin/codex_pergunta.sh:217`, `bin/codex_pergunta.sh:218`) |
-   | `_INV1` | Captura stdout/stderr, acrescentando `FALHOU` em erro → exige saída vazia. (`bin/codex_pergunta.sh:366`, `bin/codex_pergunta.sh:369`) |
-   | `.inventario`/`.recusa` | Python escreve inventário; shell acrescenta guarda de `.git` e gera recusa → testes conferem recusa e a prova copia evidências. (`bin/codex_pergunta.sh:393`, `bin/codex_pergunta.sh:394`, `bin/codex_pergunta.sh:398`, `bin/tests/test_codex_pergunta.sh:106`, `bin/tests/prova_codex_pergunta_real.sh:80`) |
-   | `$EV/escuta` | Shell cria/inicia processo; ouvinte publica `porta` e acrescenta `conexoes` → shell lê porta e contagens; trap encerra o ouvinte. (`bin/tests/prova_codex_pergunta_real.sh:29`, `bin/tests/prova_codex_pergunta_real.sh:35`, `bin/tests/prova_codex_pergunta_real.sh:41`, `bin/tests/prova_codex_pergunta_real.sh:44`, `bin/tests/prova_codex_pergunta_real.sh:103`) |
-   | `$EV/p` e `prova/*.out` | Shell escreve pergunta → wrapper lê; Codex é instruído a escrever `.out` → prova copia e julga. (`bin/tests/prova_codex_pergunta_real.sh:53`, `bin/tests/prova_codex_pergunta_real.sh:61`, `bin/tests/prova_codex_pergunta_real.sh:77`, `bin/tests/prova_codex_pergunta_real.sh:81`, `bin/tests/prova_codex_pergunta_real.sh:89`) |
-   | Texto do `CLAUDE.md` | Autor da edição: `[nao verificado]`. Selo lê nomes/ponteiros; hashes cobrem blocos de **PISTA**, não as frases alteradas do item 1. O caso `c_p_claudemd` escreve outra cópia na fixture. (`bin/tests/test_claude_md_regras_preservadas.sh:44`, `bin/tests/test_claude_md_regras_preservadas.sh:72`, `bin/tests/test_claude_md_regras_preservadas.sh:83`, `bin/tests/test_codex_pergunta.sh:259`) |
-
-9. **Informativo — classes históricas e papéis de leitura.**
-
-   Aparecem **RED sem mordida pelo motivo alegado** e **fragmentação da exclusão de escritor**, conforme itens 4 e 7. Também há diferença material entre “blob Git” e “arquivo físico”, conforme item 3. Não identifiquei no delta clone de juiz de negócio registrado, relógio de negócio fora da borda, inversão nova da ordem de travas ou operação de pouso; a vaga precede slot, trava da resposta e revalidação. (`bin/codex_pergunta.sh:96`, `bin/codex_pergunta.sh:213`, `bin/codex_pergunta.sh:324`, `bin/codex_pergunta.sh:349`, `bin/codex_pergunta.sh:366`)
-
-   Não identifiquei regressão no sandbox ou execução do inventário nos quatro papéis de leitura: permanecem no ramo `read-only`, com testes para argv, diretório e cabeçalho. A alteração compartilhada é a nova reserva do caminho da vaga. Execução efetiva desses testes: `[nao verificado]`. (`bin/codex_pergunta.sh:72`, `bin/codex_pergunta.sh:165`, `bin/codex_pergunta.sh:381`, `bin/tests/test_codex_pergunta.sh:327`)
-
-10. **Informativo — limite da verificação.**
-
-    A suite e a prova real não foram executadas: criam arquivos e a prova chama o Codex. Resultados completos desta volta, isolamento real e dados de produção: `[nao verificado]`. As confirmações mencionadas foram simulações exclusivamente em memória do inventário. (`bin/tests/test_codex_pergunta.sh:18`, `bin/tests/test_codex_pergunta.sh:19`, `bin/tests/prova_codex_pergunta_real.sh:21`, `bin/tests/prova_codex_pergunta_real.sh:77`)
-
-## 07/11 13:23 · sessao cd2630cc4e18 · - · - · origem=Ronald (tmux)
-
-1. **Alta — hardlink idêntico escapa da revalidação e do inventário final.** `st_nlink` só é consultado para caminhos já em `tocados`; substituir um arquivo rastreado por hardlink de mesmos bytes/modo não o inclui nesse conjunto. O `find -links +1` ocorre apenas inicialmente. Simulação em memória do código original: `nlink=2`, mesmo blob → rc 0, saída vazia. (`bin/codex_pergunta.sh:143`, `bin/codex_pergunta.sh:158`, `bin/codex_pergunta.sh:220`, `bin/codex_pergunta.sh:366`, `bin/codex_pergunta.sh:393`)
-
-2. **Média — permissões não são inventariadas integralmente.** Só o bit executável do proprietário entra em `modo`; `0644→0666`, `0644→0600`, setuid/setgid e permissões de diretórios existentes ficam fora da comparação. Simulação em memória: `0644→0666` → rc 0, saída vazia. ACL/xattrs também não são lidos pelo inventário. (`bin/codex_pergunta.sh:114`, `bin/codex_pergunta.sh:116`, `bin/codex_pergunta.sh:139`, `bin/codex_pergunta.sh:143`)
-
-3. **Média — FIFO/socket/device são reportados, mas aceitos.** Tipos não regulares entram em `tocados`, porém não recebem motivo por tipo especial. Simulação: FIFO novo `app/pipe` → `TOCADO`, rc 0. Diretório vazio novo também é reportado e aceito sob caminho permitido; permissões de diretórios existentes não são reportadas. (`bin/codex_pergunta.sh:139`, `bin/codex_pergunta.sh:143`, `bin/codex_pergunta.sh:153`, `bin/codex_pergunta.sh:160`)
-
-4. **Média — varredura incompleta pode não ser tratada como falha.** `os.walk(wt)` não recebe `onerror`; erro de abertura de diretório pode omitir sua descendência. Blobs rastreados não vistos aparecem como removidos, mas novas entradas ocultas naquele ramo não são individualmente reportadas. Condições efetivas de permissão/Git em produção: `[nao verificado]`. (`bin/codex_pergunta.sh:132`, `bin/codex_pergunta.sh:145`, `bin/codex_pergunta.sh:146`)
-
-5. **Média — nomes legítimos não UTF-8 recebem tratamento incompatível.** Git é decodificado com `"replace"`; o percurso de filesystem usa nomes reais, com outra representação para bytes inválidos. Um arquivo rastreado limpo pode aparecer simultaneamente novo/removido e reprovar o pre-check. Destino de symlink com bytes inválidos pode falhar no `.encode()` e produzir `FALHA`. (`bin/codex_pergunta.sh:112`, `bin/codex_pergunta.sh:122`, `bin/codex_pergunta.sh:128`, `bin/codex_pergunta.sh:132`, `bin/codex_pergunta.sh:217`)
-
-6. **Média — Git limpo não implica blob físico idêntico.** Comparar bytes físicos diretamente com `ls-tree` recusa checkout legítimo transformado por CRLF/smudge/encoding. Não encontrei `.gitattributes` nesta cópia; configuração efetiva do Git, filtros ou ocorrência concreta: `[nao verificado]`. (`bin/codex_pergunta.sh:112`, `bin/codex_pergunta.sh:125`, `bin/codex_pergunta.sh:143`, `bin/codex_pergunta.sh:217`)
-
-7. **Média — identidade de tipo de `.git` não é repetida.** A poda exclui `.git` da raiz tanto de `dirs` como de `arqs`; pre-check exige arquivo sem symlink, mas revalidação/final comparam conteúdo e resolução Git. Troca posterior por symlink de mesmos bytes não tem guarda explícita de tipo. Aceitação desse cenário pelo Git real: `[nao verificado]`. (`bin/codex_pergunta.sh:135`, `bin/codex_pergunta.sh:193`, `bin/codex_pergunta.sh:368`, `bin/codex_pergunta.sh:394`)
-
-8. **Alta, condicional — o próprio inventário pode carregar autoload antes de recusá-lo.** As chamadas `python3 -c` não usam isolamento nem mudam o diretório corrente. Se o wrapper for iniciado em `WT/app`, um `sitecustomize.py` ali plantado pode executar na inicialização do Python do host antes da regra de proibição. Ambiente efetivo de inicialização Python: `[nao verificado]`. (`bin/codex_pergunta.sh:107`, `bin/codex_pergunta.sh:217`, `bin/codex_pergunta.sh:366`, `bin/codex_pergunta.sh:393`)
-
-## 07/11 13:22 · sessao 6609b154c603 · - · - · origem=Ronald (tmux)
-
-1. **Média — mutante `fs_walk` morre antes do comportamento que pretende provar.** A substituição desliga a varredura também no pre-check; todos os blobs ficam “não vistos”, gerando inventário não vazio e recusa rc 2 antes do Codex. O caso espera rc 3 final, portanto será contado como morto por antecipação: `bin/tests/test_codex_pergunta.sh:393`, `bin/codex_pergunta.sh:145`, `bin/codex_pergunta.sh:217`, `bin/tests/test_codex_pergunta.sh:105`. Execução efetiva da suite: `[nao verificado]`.
-
-2. **Média — mutante `git_aninhado` mede mensagem, mantendo a proteção.** Remove somente o motivo suplementar `.git aninhado`; a regex `.git*` continua produzindo PROIBIDO e rc 3. O caso fica vermelho porque exige aquela substring: `bin/tests/test_codex_pergunta.sh:396`, `bin/codex_pergunta.sh:103`, `bin/codex_pergunta.sh:154`, `bin/tests/test_codex_pergunta.sh:106`, `bin/tests/test_codex_pergunta.sh:295`.
-
-3. **Baixa — sentinela FSMON sem controle positivo de execução do hook.** O caso planta `.git/config` e verifica ausência de FSMON, mas sua ação não chama Git após plantar; o inventário chama Git na raiz da WT. Prova recusa do caminho, sem provar execução potencial do hook: `bin/tests/test_codex_pergunta.sh:291`, `bin/tests/test_codex_pergunta.sh:292`, `bin/tests/test_codex_pergunta.sh:76`, `bin/codex_pergunta.sh:110`.
-
-4. **Sem defeito identificado nos mutantes `poda_so_raiz`.** `if True` poda `.git` tanto de diretórios quanto de arquivos; os dois casos perdem justamente a entrada proibida e ficam com diretórios comuns TOCADO. A expectativa rc 3 deixa de ser satisfeita pelo motivo declarado: `bin/tests/test_codex_pergunta.sh:394`, `bin/tests/test_codex_pergunta.sh:395`, `bin/tests/test_codex_pergunta.sh:295`, `bin/tests/test_codex_pergunta.sh:296`, `bin/codex_pergunta.sh:135`. Execução efetiva: `[nao verificado]`.
-
-5. **Leitor do CLAUDE: nomes e referências, sem guarda das frases alteradas.** O selo preserva nomes de regras, âncoras e hashes dos blocos **PISTA**; não compara literalmente o texto CODEX item 1 do CLAUDE. Logo, verde nesse selo não certifica “DUAS escritas” ou “CONDUTA”: `bin/tests/test_claude_md_regras_preservadas.sh:43`, `bin/tests/test_claude_md_regras_preservadas.sh:55`, `bin/tests/test_claude_md_regras_preservadas.sh:72`, `bin/tests/test_claude_md_regras_preservadas.sh:83`, `CLAUDE.md:346`, `CLAUDE.md:352`. Outros leitores examinados julgam seção 3, seção 0 e senha no argv: `bin/tests/test_suite_sh.sh:22`, `bin/tests/test_lei_akita.sh:24`, `bin/tests/test_lei_akita.sh:35`, `bin/tests/test_segredo_fora_do_argv.sh:33`.
-
-6. **Leitura: cobertura estática preservada; resultado executado não verificado.** Existem casos para os quatro papéis verificando sandbox, cwd, cabeçalho e ausência de sinais do construtor; o verificador usa B3 falso sempre livre. Os testes de sonda cobrem falha do envelope e lista vazia. `bin/tests/test_codex_pergunta.sh:327`, `bin/tests/test_codex_pergunta.sh:337`, `bin/tests/test_codex_pergunta.sh:57`, `bin/tests/test_codex_sonda.sh:71`, `bin/tests/test_codex_sonda.sh:77`. Não executei: a suite cria e remove arquivos temporários, contrariando a restrição de leitura (`bin/tests/test_codex_pergunta.sh:18`, `bin/tests/test_codex_pergunta.sh:19`).
-
-_2742 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2747 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
