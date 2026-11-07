@@ -1,5 +1,6 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: trava_teste.sh | pid=2610105
+ESPERANDO: par_v5_agendado.sh | pid=2636917
+V2 i2 01:2x: suite INTEIRA 2cb3a055 Ran 13956 OK (skipped=42, expected failures=40) rc=0 (logs/v2bugs/i2/suite_v5.log) -> opus final aberto (verificador, logs/v2bugs/i2/opus_final.txt); DIFF par_v5 apos 04:40.
 VAGA 01:0x (PUSH-ANTES-DA-E2): construtor do V2 i2 entregou e liberou a vaga -> L-123-MEDIDA-EM-PY v5 aberto na raia wt-akmed4-205205 (brief logs/akmed/brief_v5.md); vagas = E1 + L-123 v5; E2 depois do push.
 V2 i2 01:0x: volta 5 2cb3a055 (T3-2 retirado, F10h PINADO+gemeo; green5 --only ponto folha core Ran 6923 OK). Suite INTEIRA na raia -> logs/v2bugs/i2/suite_v5.log; DIFF par_v5 bloqueado por sombra sem ensaio de 07/11 (cron 04:11) -> par_v5_agendado.sh roda apos 04:40; opus final depois da suite.
 DESPACHO PUSH-ANTES-DA-E2 23:38: aval recebido (logs/akmed/aval_push_antes_e2.txt); vagas hoje = E1 + V2 i2 volta 4 (teto 2); a 1a que abrir vai ao L-123 v5 (brief logs/akmed/brief_v5.md), E2 depois do push.
