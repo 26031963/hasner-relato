@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 18:50:26.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (133.5 MB). Acoes na janela: **560**.
+**Medido em 07/11/2026 18:56:09.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (133.6 MB). Acoes na janela: **564**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:51:25 | Bash | Write ERRO-BOBO release line and recheck hook | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('PAREI: B3 MOTOR') old=L[2] L[2]='ERRO-BOBO MOTOR-LE-O-TURNO-INSTRUMENTO: reprova 1 do opus final nao era desenho (nenhuma pergunta sem juiz): O1 = escopo do detector de portas curto (so 3 funcoes do motor; classe (a) falha Codex), O2 = leitor de host no ESTADO nao construido  ...` |
+| 18:51:15 | Bash | Read B3 release recognizer and ESPERANDO parsing | `cd /home/ronald/saas-hasner; grep -n 'def linhas_libera_b3' -A30 bin/disjuntor.py \| head -45; grep -n 'ESPERANDO' bin/hook_stop_fila1.py \| head` |
+| 18:50:41 | Bash | Publish PAREI on B3 and recheck hook | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') assert L[1].startswith('ESPERANDO:') L.insert(2,'PAREI: B3 MOTOR-LE-O-TURNO-INSTRUMENTO disparou 18:49:54 (logs/sessao/disjuntor.log:69), DEPOIS do pouso 79972739 + deploy 18:49 (instrumento, opus final 2 APROVA); o disjuntor nao barrou o opus final 2 apos a reprova 1 (17:xx: O1 classe (a) falha Cod ...` |
+| 18:50:31 | Bash | Find when B3 fired for the obra | `cd /home/ronald/saas-hasner; grep -n 'MOTOR-LE-O-TURNO' logs/sessao/disjuntor.log \| tail -5; ls -la --time-style=+%H:%M:%S logs/sessao/disjuntor.log` |
 | 18:50:26 | Bash | Inspect disjuntor B3 state for the obra | `cd /home/ronald/saas-hasner; python3 bin/disjuntor.py --help 2>&1 \| head -20; grep -rn 'MOTOR-LE-O-TURNO-INSTRUMENTO' logs/disjuntor* 2>/dev/null \| tail -5; ls logs \| grep -i disj` |
 | 18:49:53 | Bash | Check stop hook allows the turn | `cd /home/ronald/saas-hasner; H='{"session_id":"707e509b-29e4-4438-9018-16733980c39a","transcript_path":"/home/ronald/.claude/projects/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a.jsonl"}'; echo "$H" \| python3 bin/hook_stop_fila1.py; echo rc=$?; /usr/bin/sleep 20; echo "$H" \| python3 bin/hook_stop_fila1.py; echo rc=$?` |
 | 18:49:47 | Bash | Handoff and check E1 builder progress | `cd /home/ronald/saas-hasner && bin/handoff_sessao.sh 2>&1 \| tail -5; git -C /home/ronald/saas-hasner log --oneline origin/main..main \| head; tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/a04d6311b77ff69ac.output \| cut -c1-300` |
