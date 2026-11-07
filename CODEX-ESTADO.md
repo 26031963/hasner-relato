@@ -1,7 +1,204 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 16:34** · publicado em **07/11/2026 16:36** (UTC-3)
+> Ultima resposta processada: **07/11/2026 16:49** · publicado em **07/11/2026 16:51** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 16:49 · sessao bc9f57e9f38b · MOTOR-LE-O-TURNO-INSTRUMENTO · verificador · origem=Code
+
+**Há achados PROCEDENTES na exclusão por composição e na cobertura dos testes.** A medição atual reproduz 9/85, mas isso não prova que toda derivação exigida continuará contada após mudanças de forma. (`app/core/medida_turno_do_par.py:324`, `app/core/medida_turno_do_par.py:350`; `app/core/tests/test_medida_turno_do_par.py:31`)
+
+A comparação histórica `ebe80893..c2058690` está **[nao verificado]**: esta cópia não disponibiliza o histórico Git.
+
+1. **Critério literal — contagem atual correta; garantia incompleta.**
+
+   **NAO PROCEDE** a acusação de promover A2/B2 ao contador: a composição dos contadores é exatamente A1 + nomeados e B1 + nomeados; as diferenças amplas são publicadas separadamente. Reproduzi A1=6, A2=15, B1=82, B2=171; nomeados=3; contadores=9/85; diferenças=9/89. (`app/core/medida_turno_do_par.py:348`, `app/core/medida_turno_do_par.py:358`, `app/core/medida_turno_do_par.py:360`)
+
+   Os três nomeados correspondem às chamadas em `app/ponto/motor_calculo_v2.py:503` e `app/ponto/motor_calculo_v2.py:882`, e à herança em `app/ponto/motor_calculo_v2.py:2408`; entram positivamente nos dois contadores. (`app/core/medida_turno_do_par.py:57`, `app/core/medida_turno_do_par.py:345`, `app/core/medida_turno_do_par.py:349`)
+
+   **PROCEDENTE:** existem maneiras de deixar de contar sem remover a derivação: composição expansível, descrita no item 2, e reconhecimento frágil do gap, descrito no item 4. (`app/core/medida_turno_do_par.py:253`, `app/core/medida_turno_do_par.py:324`)
+
+2. **Allowlist e composição — distinguir duas coisas.**
+
+   **NAO PROCEDE** chamar `REGISTRO` ou `SITIOS_NOMEADOS` de allowlist de funções: o primeiro é esperado da suite; o segundo acrescenta parcelas. Nenhum deles dispensa nominalmente uma função produtiva da varredura. (`app/core/tests/test_medida_turno_do_par.py:296`; `app/core/medida_turno_do_par.py:335`, `app/core/medida_turno_do_par.py:349`)
+
+   Existem exclusões nominais de **universo**: diretórios em `_FORA`, diretórios ocultos e arquivos `test_*.py`; elas correspondem ao molde. (`app/core/medida_turno_do_par.py:26`, `app/core/medida_turno_do_par.py:225`, `app/core/medida_turno_do_par.py:227`; `app/core/medida_leitor_do_dia.py:247`, `app/core/medida_leitor_do_dia.py:249`)
+
+   **PROCEDENTE — a composição funciona como isenção estrutural expansível.** Qualquer chamada AST alcançada pelo fechamento inclui sua função em `composed`; depois essa função inteira fica fora dos quatro critérios. Não há verificação de execução, exclusividade de uso ou responsabilidade pela pergunta do juiz. (`app/core/medida_turno_do_par.py:311`, `app/core/medida_turno_do_par.py:318`, `app/core/medida_turno_do_par.py:324`)
+
+   Prova em memória: uma função externa contendo `entrada.date()` conta B1=1; acrescentar ao juiz apenas `if False: leitor(None)` faz B1=0, sem retirar a derivação externa. O algoritmo percorre essa chamada morta e aplica a exclusão integral. (`app/core/medida_turno_do_par.py:65`, `app/core/medida_turno_do_par.py:318`, `app/core/medida_turno_do_par.py:324`)
+
+   Excluir a implementação do próprio juiz é compatível com “fora do juiz”; equiparar **todo chamado transitivo**, inclusive morto e compartilhado, à implementação autorizada é uma extensão do critério. Autorização explícita dessa extensão no aval fornecido: **[nao verificado]**. A suite consagra a exclusão transitiva, mas não demonstra sua legitimidade semântica. (`app/core/tests/test_medida_turno_do_par.py:416`, `app/core/tests/test_medida_turno_do_par.py:429`)
+
+3. **MORDE — há mordida local, mas existe mutante sobrevivente.**
+
+   **NAO PROCEDE** dizer que todos são decorativos: os testes de pareador e dia novos verificam incremento e rejeição por `SUBIU`. (`app/core/tests/test_medida_turno_do_par.py:322`, `app/core/tests/test_medida_turno_do_par.py:325`, `app/core/tests/test_medida_turno_do_par.py:330`, `app/core/tests/test_medida_turno_do_par.py:333`)
+
+   A cobertura efetiva dos 13 `test_MORDE` é esta:
+
+   | Teste | O que efetivamente cobra | [nao verificado]
+   |---|---|
+   | Candidato amplo | Publicação de novos A2/B2 sem subir os contadores. `app/core/tests/test_medida_turno_do_par.py:310` |
+   | Pareador novo | Um `range(..., 2)` novo sobe contador e dispara RED. `app/core/tests/test_medida_turno_do_par.py:318` |
+   | Dia novo | Alias de `entrada` seguido de `.date()` sobe contador e dispara RED. `app/core/tests/test_medida_turno_do_par.py:328` |
+   | Número curado | Diminui diretamente o resultado; testa `_catraca`, sem curar fonte nem exercitar detector. `app/core/tests/test_medida_turno_do_par.py:336` |
+   | Âncora renomeada | Renomear cada função nomeada provoca exceção. `app/core/tests/test_medida_turno_do_par.py:344` |
+   | Sintaxe inválida | Exige `SyntaxError` e identificação do arquivo. `app/core/tests/test_medida_turno_do_par.py:353` |
+   | Leitura/travessia | Testa erro de `open` e raiz inexistente; não injeta falha intermediária de travessia ou encoding. `app/core/tests/test_medida_turno_do_par.py:358` |
+   | Linhas/alias | Desloca fonte e verifica linhas **dos nomeados**; usa os aliases já presentes na fixture. `app/core/tests/test_medida_turno_do_par.py:374` |
+   | Cura dos nomeados | Remove corpos, conserva âncoras e exige zero. `app/core/tests/test_medida_turno_do_par.py:383` |
+   | Critérios lexicais | Exemplos de `zip`, `append`, `localdate` e `.date()` civil. `app/core/tests/test_medida_turno_do_par.py:394` |
+   | Composição | Exige excluir auxiliar chamado e contar função independente do mesmo arquivo. `app/core/tests/test_medida_turno_do_par.py:416` |
+   | Aninhamento | Exige atribuir B1 à função interna. `app/core/tests/test_medida_turno_do_par.py:433` |
+   | Autoridade ausente | Remove arquivos inteiros e exige exceção. `app/core/tests/test_medida_turno_do_par.py:441` |
+
+   **PROCEDENTE — mutante do instrumento que passa todos:** em `app/core/medida_turno_do_par.py:332`, substituir `'linhas': lines` por `'linhas': [node.lineno]`. Ele publica a linha do `def` em lugar da ocorrência: por exemplo, aponta `app/escala/utils.py:502`, embora o `range` esteja em `app/escala/utils.py:520`. A suite exige apenas linhas não vazias para A1/B1; a comparação precisa de deslocamento cobre os nomeados. (`app/core/tests/test_medida_turno_do_par.py:301`, `app/core/tests/test_medida_turno_do_par.py:380`)
+
+   Esse mutante passou nos **18 métodos**, executados em memória com `SimpleTestCase` substituído por `unittest.TestCase`. A execução pela infraestrutura Django oficial está **[nao verificado]**. (`app/core/tests/test_medida_turno_do_par.py:26`, `app/core/tests/test_medida_turno_do_par.py:257`)
+
+4. **Falha silenciosa — erros de arquivo propagam; detecção incompleta pode retornar normalmente.**
+
+   **NAO PROCEDE** para erros reportados por `os.walk`, leitura/encoding, `SyntaxError`, autoridade ausente, raízes ausentes e funções âncora ausentes: os caminhos propagam exceção ou lançam `LookupError`. (`app/core/medida_turno_do_par.py:221`, `app/core/medida_turno_do_par.py:272`, `app/core/medida_turno_do_par.py:273`, `app/core/medida_turno_do_par.py:290`, `app/core/medida_turno_do_par.py:337`, `app/core/medida_turno_do_par.py:374`)
+
+   **PROCEDENTE para contagem parcial por forma:** renomeei somente `_gap_h` para `_intervalo_h` na fixture, mantendo a mesma herança. O censo retornou normalmente e ambos os contadores caíram de 3 para 2. O detector exige aquele identificador e, sem correspondência, simplesmente não acrescenta o nomeado. (`app/core/medida_turno_do_par.py:253`, `app/core/medida_turno_do_par.py:344`; fixture em `app/core/tests/test_medida_turno_do_par.py:249`)
+
+   A catraca de números atuais acusaria essa queda; portanto o resultado parcial do **instrumento** não equivale a passagem silenciosa pela **suite**. (`app/core/tests/test_medida_turno_do_par.py:269`)
+
+   **FILA:** destinos transitivos sem registro são ignorados, sem distinguir dependência local ausente de chamada externa não resolvida; somente as raízes têm presença exigida. (`app/core/medida_turno_do_par.py:290`, `app/core/medida_turno_do_par.py:314`)
+
+5. **ESMERIL-SEMANTICA — nome ambíguo, sem leitor mostrado usando outra unidade.**
+
+   **NAO PROCEDE** uma divergência demonstrada entre escritor e leitor: `numero` mede parcelas; `itens` contém essas parcelas; `funcoes` projeta suas chaves **com repetição**; `linhas` contém ocorrências AST dentro da parcela. A suite compara essas mesmas relações. (`app/core/medida_turno_do_par.py:348`, `app/core/medida_turno_do_par.py:351`; `app/core/tests/test_medida_turno_do_par.py:294`, `app/core/tests/test_medida_turno_do_par.py:295`)
+
+   **FILA de nomenclatura:** `funcoes` não é conjunto de funções únicas. Uma função B1 que também contém um nomeado aparece duas vezes, multiplicidade declarada pelo instrumento. Nenhum consumidor mostrado interpreta essa lista como conjunto único. (`app/core/medida_turno_do_par.py:10`, `app/core/medida_turno_do_par.py:351`; `app/core/tests/test_medida_turno_do_par.py:295`)
+
+6. **Universo — nenhum outro desvio encontrado frente a `producao`.**
+
+   **NAO PROCEDE:** reproduzi listas idênticas, com 755 arquivos, entre os dois `producao`. As regras de seleção correspondem e a suite compara as listas completas. (`app/core/medida_turno_do_par.py:224`; `app/core/medida_leitor_do_dia.py:246`; `app/core/tests/test_medida_turno_do_par.py:449`)
+
+   `e6_piso_autopsia` não é excluído por `producao` do molde: sua exclusão pertence ao estágio `NAO_E_LEITOR` daquele outro detector. Portanto sua inclusão aqui não constitui desvio de `producao`. (`app/core/medida_leitor_do_dia.py:240`, `app/core/medida_leitor_do_dia.py:282`; `app/core/tests/test_medida_turno_do_par.py:452`)
+
+   A atribuição histórica da diferença 83→82 exclusivamente a `bin/` consta da documentação da obra; recomposição independente do censo antigo: **[nao verificado]**. (`app/core/medida_turno_do_par.py:5`, `app/core/tests/test_medida_turno_do_par.py:4`)
+
+7. **Juiz novo / segundo escritor / relógio / derivação paralela.**
+
+   **NAO PROCEDE nos dois arquivos examinados:** o instrumento importa `ast`/`os`, lê fontes e devolve estruturas em memória; não escreve dados de negócio nem consulta relógio. (`app/core/medida_turno_do_par.py:21`, `app/core/medida_turno_do_par.py:348`, `app/core/medida_turno_do_par.py:374`)
+
+   **FILA de negócio:** as portas do motor e a herança continuam presentes, agora medidas como RED nomeado. A receita `turnos_de_batidas` copia batidas, prepara parâmetros e chama o pareador; o gap continua escrevendo `data_jornada`. (`app/ponto/turnos.py:1515`, `app/ponto/turnos.py:1533`; `app/ponto/motor_calculo_v2.py:2408`; `app/core/medida_turno_do_par.py:57`)
+
+8. **QUEM ESCREVE / QUEM LÊ os valores públicos e insumos.**
+
+   A autoridade de negócio vem do registro vivo; `JUIZES.md` se declara lookup. O instrumento lê esse registro, não o Markdown. (`app/docs/JUIZES.md:7`, `app/docs/JUIZES.md:14`; `app/core/juizes.py:196`; `app/core/medida_turno_do_par.py:232`)
+
+   | Valor | Quem escreve/fornece | Quem lê |
+   |---|---|---|
+   | Fontes e árvores AST | Leitura em `app/core/medida_turno_do_par.py:374`; parse em `app/core/medida_turno_do_par.py:272` | Indexação em `app/core/medida_turno_do_par.py:277` |
+   | Autoridade | `JUIZES`, `app/core/juizes.py:196` | `_autoridade`, `app/core/medida_turno_do_par.py:232`; raízes em `app/core/medida_turno_do_par.py:275` |
+   | Composição | Fechamento em `app/core/medida_turno_do_par.py:311`; publicação em `app/core/medida_turno_do_par.py:365` | Exclusão em `app/core/medida_turno_do_par.py:324`; teste em `app/core/tests/test_medida_turno_do_par.py:429` |
+   | `chave`, `criterio`, `linhas` lexicais | `app/core/medida_turno_do_par.py:331` | Montagem em `app/core/medida_turno_do_par.py:349`; validação em `app/core/tests/test_medida_turno_do_par.py:296` |
+   | `sitio`, nomeados e suas `linhas` | `app/core/medida_turno_do_par.py:342` | Ambos os contadores em `app/core/medida_turno_do_par.py:349`; testes em `app/core/tests/test_medida_turno_do_par.py:365` |
+   | `numero` | `len(items)`, `app/core/medida_turno_do_par.py:350` | `_catraca`, `app/core/tests/test_medida_turno_do_par.py:266` |
+   | `itens` | Lexicais + nomeados, `app/core/medida_turno_do_par.py:349` | Consistência/identidade em `app/core/tests/test_medida_turno_do_par.py:294` |
+   | `funcoes` | Projeção com multiplicidade, `app/core/medida_turno_do_par.py:351` | Comparação em `app/core/tests/test_medida_turno_do_par.py:295` |
+   | `a_classificar_pela_regra` | Diferença de chaves em `app/core/medida_turno_do_par.py:354` | Testes em `app/core/tests/test_medida_turno_do_par.py:303` |
+   | `criterios` | Tamanhos das listas, `app/core/medida_turno_do_par.py:363` | Testes em `app/core/tests/test_medida_turno_do_par.py:288` |
+   | `universo_arquivos`, `ilegiveis` | `len(trees)` e constante `[]`, `app/core/medida_turno_do_par.py:366` | Testes em `app/core/tests/test_medida_turno_do_par.py:290` |
+   | `nao_ve` | Constante em `app/core/medida_turno_do_par.py:31` | Comparação em `app/core/tests/test_medida_turno_do_par.py:299` |
+   | `esperado_no_fim` | Constante zero em `app/core/medida_turno_do_par.py:352` | Teste em `app/core/tests/test_medida_turno_do_par.py:300`; a catraca atual lê outro teto em `app/core/tests/test_medida_turno_do_par.py:265` |
+   | Rótulo `contador` | `app/core/medida_turno_do_par.py:350`, `app/core/medida_turno_do_par.py:360` | Consumidor externo **[nao verificado]** |
+   | Esperados numéricos e `REGISTRO` | `app/core/tests/test_medida_turno_do_par.py:31` | Cat­raca e identidade em `app/core/tests/test_medida_turno_do_par.py:265`, `app/core/tests/test_medida_turno_do_par.py:296` |
+   | `CLASSIFICAR` estático | `app/core/tests/test_medida_turno_do_par.py:131` | Nenhum leitor localizado; os testes leem a classificação calculada em `app/core/tests/test_medida_turno_do_par.py:305` |
+
+   Publicação efetiva desses valores em placar/HOST fora da suite: **[nao verificado]**. [nao verificado]
+
+## 07/11 16:47 · sessao 2bf3f03528c4 · - · - · origem=Ronald (tmux)
+
+Achados consolidados, somente leitura:
+
+- **PROCEDENTE — exclusão estrutural por composição pode baixar contador sem curar derivação.** O fechamento percorre toda chamada AST, inclusive sob `if False`, e exclui inteiramente a função alcançada da medição: `app/core/medida_turno_do_par.py:311`, `:318`, `:324`. Prova em memória: `externo.py::leitor(entrada): return entrada.date()` contou B1=1; acrescentar somente `if False: leitor(None)` ao juiz produziu B1=0, mantendo a derivação. A insensibilidade a ramos está declarada em `:34`. O teste explicitamente consagra a exclusão transitiva de um auxiliar: `app/core/tests/test_medida_turno_do_par.py:416`, `:429`, `:430`. Autorização literal do aval para fechamento transitivo irrestrito: **[não verificado]**.
+
+- **NÃO PROCEDE — outra allowlist nominal encontrada.** Os nomes positivos dos três sítios adicionam parcelas, não dispensam funções: `app/core/medida_turno_do_par.py:57`, `:335`, `:345`, `:349`. A exclusão de funções ocorre por composição em `:324`. As exclusões de diretórios e prefixo `test_` pertencem ao universo: `:26`, `:225`, `:227`.
+
+- **NÃO PROCEDE — desvio adicional frente a `producao` do molde nesta cópia.** Execução em memória encontrou listas idênticas, com 755 arquivos. As regras correspondem: novo em `app/core/medida_turno_do_par.py:224`, `:225`, `:227`; molde em `app/core/medida_leitor_do_dia.py:246`, `:247`, `:249`. O teste compara as listas completas: `app/core/tests/test_medida_turno_do_par.py:449`. A exclusão de `e6_piso_autopsia` do molde pertence a outro estágio (`NAO_E_LEITOR`), não à sua `producao`: `app/core/medida_leitor_do_dia.py:278`, `:282`, `:377`.
+
+- **NÃO PROCEDE — leitura, encoding, SyntaxError ou raízes ausentes virarem zero silencioso.** `os.walk` recebe callback que relança erro (`app/core/medida_turno_do_par.py:221`, `:224`); leitura UTF-8-SIG não captura exceção (`:374`); `ast.parse` também não captura (`:272`); autoridade, raízes e âncoras faltantes geram `LookupError` (`:273`, `:290`, `:337`). Os testes cobrem leitura, raiz inexistente, SyntaxError e autoridade/composição ausente: `app/core/tests/test_medida_turno_do_par.py:353`, `:358`, `:441`.
+
+- **FILA — composição incompleta pode ser apresentada normalmente.** Destino de chamada sem registro é descartado silenciosamente: `app/core/medida_turno_do_par.py:314`. Prova em memória: `parear_turnos(): return sumida()` manteve resultado normal. Portanto exige as duas raízes, não todas as dependências transitivas: `:290`. Chamadas não resolvidas constam entre limitações declaradas em `:39`; integridade completa do grafo não é comprovada.
+
+- Medição reproduzida: A1=6, A2=15, B1=82, B2=171; contadores 9/85, pelos produtores em `app/core/medida_turno_do_par.py:349`, `:350`, `:363`. Parcelas nomeadas apontam para `app/ponto/motor_calculo_v2.py:503`, `:882`, `:2408`. Os únicos consumidores localizados do novo instrumento são os testes, incluindo leitura dos campos em `app/core/tests/test_medida_turno_do_par.py:286`, `:303`, `:365`; integração externa/HOST publicada: **[não verificado]**.
+
+## 07/11 16:47 · sessao 75130e94b46d · - · - · origem=Ronald (tmux)
+
+Achados para consolidação, somente pela cópia:
+
+- **PROCEDENTE: composição pode isentar código que não executa no juiz.** O fechamento percorre qualquer `ast.Call`, sem avaliar alcance, e exclui integralmente toda função alcançada (`app/core/medida_turno_do_par.py:311-325`). Confirmei em memória com `_mini` (`app/core/tests/test_medida_turno_do_par.py:235`): uma função `novo(entrada,xs)` com `range(0,len(xs),2)` e `entrada.date()` produz A1/A2/B1/B2=1/1/1/1; adicionar `from novo import novo; if False: novo()` a `turnos_do_colab` faz tudo virar zero. A suite exige a exclusão transitiva de helper, mas não testa alcance/semântica (`app/core/tests/test_medida_turno_do_par.py:416-431`). O aval colado não explicita autorização desse fechamento irrestrito [não verificado].
+
+- **NÃO PROCEDE, para os dois arquivos novos: juiz de negócio, segundo escritor persistente ou relógio novo.** Instrumento importa apenas `ast`/`os` (`app/core/medida_turno_do_par.py:21-22`), lê arquivos (`:374-375`) e devolve dicionários em memória (`:348-367`). O teste restringe imports a esses dois módulos (`app/core/tests/test_medida_turno_do_par.py:454-464`). A comparação histórica do diff continua [não verificado], sem `.git`.
+
+- **FILA: derivações paralelas já existentes são os RED nomeados.** `turnos_via_autoridade` chama `parear_turnos` com parâmetros próprios (`app/ponto/motor_calculo_v2.py:503-506`); `_turnos_do_juiz` chama `turnos_de_batidas` (`:882`), cuja receita independente copia batidas, marca ecos e chama o pareador (`app/ponto/turnos.py:1515-1533`). O gap escreve `data_jornada = _prev_dj` (`app/ponto/motor_calculo_v2.py:2405-2409`); essa data governa inclusão na competência (`:2429-2432`). São os três itens positivos declarados pelo instrumento (`app/core/medida_turno_do_par.py:57-60`).
+
+- **Autoridade:** o registro vivo atribui a pergunta do turno da batida a `ponto/turnos.py::turnos_do_colab` (`app/core/juizes.py:195-196`). `JUIZES.md` se declara lookup e remete ao vivo (`app/docs/JUIZES.md:7-15`); lista geometria em `turnos.py` (`:20-25`) e cálculo no motor (`:29`). O escritor de `Turno.data_turno` usa `_data_do_turno` e constrói `Turno` (`app/ponto/turnos.py:310-322`).
+
+Inventário de saída/consumo:
+
+| Valor | Quem escreve | Quem lê |
+|---|---|---|
+| fontes / árvores | `censo` lê fonte, instrumento `:373-375`; parse `:272` | `censo_fontes`, instrumento `:277-289` |
+| autoridade | `JUIZES`, `app/core/juizes.py:195-196` | `_autoridade`, instrumento `:232-244`, raiz `:275` |
+| `criterio`, `chave`, `linhas` lexicais | instrumento `:329-332` | montagem `:349-351`; testes `:296-301`, `:307-308` | [nao verificado]
+| `sitio`, itens nomeados, `linhas` | instrumento `:335-346` | ambos contadores `:349`; testes `:365-381` | [nao verificado]
+| `numero` | `len(itens)`, instrumento `:350` | catraca testes `:264-270`; consistência `:294` | [nao verificado]
+| `itens` | lexical + nomeados, instrumento `:349-350` | testes `:294-308` | [nao verificado]
+| `funcoes` | lista de chaves com multiplicidade, instrumento `:351` | testes `:295`, `:324`, `:332`, `:379`, `:430-431` | [nao verificado]
+| classificação | diferença por chave, instrumento `:354-358`, `:362` | testes `:303-316`, `:411-412` | [nao verificado]
+| `criterios` | tamanho das listas, instrumento `:363` | testes `:288-289`, `:305`, `:410` | [nao verificado]
+| `composicao` | instrumento `:365` | teste `:429`; exclusão interna usa conjunto `:324-325` | [nao verificado]
+| `universo_arquivos` | `len(trees)`, instrumento `:366` | teste só exige `>100`, `:291` | [nao verificado]
+| `ilegiveis` | constante `[]`, instrumento `:366` | teste `:290` | [nao verificado]
+| `nao_ve` | constante instrumento `:31-53`, saída `:351`, `:366` | teste compara saída interna `:299`; leitor externo [não verificado] | [nao verificado]
+| `esperado_no_fim` | constante 0, instrumento `:352` | teste `:300`; não é teto executado pela catraca `:264-270` | [nao verificado]
+| `contador` | rótulos instrumento `:350`, `:360-361` | leitor externo [não verificado] |
+| registro esperado | testes `:31-129` | testes `:264-270`, `:288-298` | [nao verificado]
+| `CLASSIFICAR` | testes `:131-228` | nenhuma referência adicional localizada na cópia [não verificado] | [nao verificado]
+
+`funcoes` tem significado de parcelas, não conjunto de funções únicas: a documentação declara multiplicidade (`app/core/medida_turno_do_par.py:10-13`) e o leitor compara essa mesma lista (`app/core/tests/test_medida_turno_do_par.py:295`). `linhas` mede sítios internos, enquanto `numero` mede funções por critério mais sítios nomeados (`app/core/medida_turno_do_par.py:48-49`, `:349-351`); não há consumidor mostrado confundindo essas unidades.
+
+## 07/11 16:47 · sessao 321d2aab3083 · - · - · origem=Ronald (tmux)
+
+**PROCEDENTE — há mutante sobrevivente na proveniência.** Em `app/core/medida_turno_do_par.py:332`, trocar:
+
+```python
+'criterio': criterion, 'linhas': lines
+```
+
+por:
+
+```python
+'criterio': criterion, 'linhas': [node.lineno]
+```
+
+mantém os totais e identidades, mas publica a linha da definição em lugar das ocorrências A1/B1. Exemplo: `_alinhar_por_papel` passa a apontar `app/escala/utils.py:502`, embora o `range(..., 2)` esteja em `app/escala/utils.py:520`. O teste exige somente lista não vazia (`app/core/tests/test_medida_turno_do_par.py:301`); a verificação de deslocamento das linhas cobre apenas os nomeados (`app/core/tests/test_medida_turno_do_par.py:380`).
+
+Executei todos os **18 métodos** com esse mutante em memória: **18 passaram, zero falhas/erros**. Como Django está ausente, substituí somente `django.test.SimpleTestCase` por `unittest.TestCase`; execução pela infraestrutura Django oficial **[nao verificado]**. [nao verificado]
+
+Os 13 `test_MORDE` têm estas mordidas delimitadas, sem provar completude do instrumento:
+
+| Teste, linha no arquivo de testes | O que efetivamente cobra | [nao verificado]
+|---|---|
+| `:310` candidato amplo | Novos A2/B2 publicados e totais preservados (`:314–316`). | [nao verificado]
+| `:318` pareador novo | Um `range` novo aumenta contador e provoca `SUBIU` (`:322–326`). |
+| `:328` dia novo | `copia = entrada; copia.date()` aumenta contador e provoca `SUBIU` (`:330–334`). |
+| `:336` número curado | **Altera diretamente o resultado**, diminuindo `numero`; cobra `_catraca`, sem curar fonte nem exercitar detector (`:339–342`). |
+| `:344` renomear âncora | Renomeia cada função nomeada e exige `LookupError` (`:349–351`). |
+| `:353` sintaxe inválida | Cobra `SyntaxError` e nome do arquivo (`:354–356`). |
+| `:358` leitura/travessia | Cobra erro de `open` e raiz inexistente; não injeta `UnicodeDecodeError` nem erro no meio de `os.walk` (`:359–363`). |
+| `:374` linhas/alias | Usa aliases já presentes no `_mini`; desloca fonte e verifica linhas **nomeadas** (`:375–381`; aliases em `:243`, `:247`). |
+| `:383` cura dos nomeados | Preserva âncoras, remove seus corpos e exige zero (`:385–392`). |
+| `:394` critérios lexicais | Cobre um `zip`, um `append`, um `localdate` e um `.date()` civil (`:397–414`). |
+| `:416` composição | Cobra helper importado excluído e função independente do mesmo arquivo contada (`:419–431`). |
+| `:433` aninhamento | Cobra que a função interna responda pelo B1 (`:435–439`). |
+| `:441` autoridade ausente | Remove dois arquivos inteiros e exige erro (`:442–447`). |
+
+**NÃO PROCEDE** dizer que os selos são inteiramente decorativos: há incremento e rejeição explícita em `app/core/tests/test_medida_turno_do_par.py:322` e `:325`, assim como em `:330` e `:333`. **PROCEDENTE** dizer que não asseguram a fidelidade das linhas publicadas, pelo sobrevivente acima (`app/core/medida_turno_do_par.py:332`; testes `:301`, `:380`).
 
 ## 07/11 16:34 · sessao 076a0a8f57fe · FIO-E0-V4-E2 · verificador · origem=Code
 
@@ -763,122 +960,4 @@ Contraexemplo abaixo H: canônica `p1` respondida/validada fora do destino; `x=p
 
 **Sinais continuam síncronos:** S88 reconcilia o pai, S143 resolve perguntas e S144 chama o materializador durante `post_save`; a correção da entrada por `_recarregar` não transforma esses sinais em garantia global de ordem. (`app/chamados/signals.py:41`; `app/chamados/signals.py:92`; `app/chamados/signals.py:140`)
 
-## 07/11 14:52 · sessao cc914c55e5a6 · CODEX-CONSTRUTOR-NEGOCIO · verificador · origem=Code
-
-1. **Baixa — v5.r #5: FECHA os dois escapes apontados.** O detector agora reconhece `/usr/bin/python3`; o laço remove `-I` da ocorrência `k`, individualmente. Na reprodução em memória, o wrapper atual ficou limpo, as sete retiradas foram detectadas e ambas as ocorrências de uma linha sintética foram mordidas. O MORDE absoluto detectou `/python3 -c`, pelo motivo declarado. Não identifiquei regressão nesse trecho; isso continua sendo reconhecimento textual, sem cobrir comandos montados por variável (`bin/tests/test_codex_pergunta.sh:56-70`).
-
-2. **Informativo — selo vizinho marcado CURADO: FECHA a quebra de âncora.** As duas âncoras do mutante existem exatamente uma vez; a substituição em memória produz shell sintaticamente válido, desativa a porta posterior e insere a consulta antes do slot (`bin/tests/test_disjuntor.sh:1495-1502`, `:1780-1783`; `bin/codex_pergunta.sh:342`, `:370-371`). O cenário cobra a consequência correta: três triagens durante a espera devem impedir a chamada; consultar somente antes permite perder essa mudança (`bin/tests/test_disjuntor.sh:1419-1432`). A chamada antecipada usa `python3` sem `-I`, mas o caso executa o wrapper mutado diretamente, sem aplicar FORMA-PY-ISOLADO: não há morte incidental por esse selo (`bin/tests/test_disjuntor.sh:1504`, `:1782`). Mordida efetiva do cenário completo: **[nao verificado]**.
-
-3. **Informativo — v5.r #6: FECHA as correções documentais marcadas CURADO.**
-
-   - **Retornos:** L-126 agora distingue pré-check/revalidação com rc 2 do inventário final proibido ou falho com rc 3, conforme o código (`app/docs/LEIS.md:147`; `bin/codex_pergunta.sh:183`, `:237-239`, `:386-392`, `:413-426`).
-   - **Vaga por repositório:** corresponde à derivação pelo `git-common-dir` de `CODEX_VIVO` e ao `flock`; clones distintos continuam com vagas distintas (`app/docs/LEIS.md:147`; `CLAUDE.md:352`; `bin/codex_pergunta.sh:56`, `:71-76`, `:232-233`).
-   - **“Não remove a wt”:** descreve corretamente o wrapper, que imprime a remoção recomendada; continua removendo temporários e sidecars (`CLAUDE.md:352`; `bin/codex_pergunta.sh:259`, `:376-383`, `:417`).
-   - **Proibições:** a exceção do gitfile raiz e a classificação de autoload/symlink no conjunto tocado correspondem ao inventário. Hardlinks são acrescentados explicitamente a esse conjunto (`app/docs/LEIS.md:147`; `bin/codex_pergunta.sh:152`, `:160-177`). O hash do gitfile é uma fotografia tomada no pré-check e comparada depois (`bin/codex_pergunta.sh:242`, `:388`, `:414`).
-   - **Opus:** a distinção entre guarda mecânica e conduta permanece correta: o fluxo executa Codex, inventaria e termina sem consultar aprovação opus (`CLAUDE.md:351-353`; `bin/codex_pergunta.sh:394-448`).
-
-4. **Baixa, condicional — DESCARTADO #3: o motivo sustenta apenas um descarte limitado.** A ausência declarada de `PYTHONDONTWRITEBYTECODE` naquela sessão não refuta a diferença ambiental apontada: o wrapper usa `-I`, sem `-B`, e os auxiliares importam módulos locais (`bin/codex_pergunta.sh:96-102`, `:278`, `:371`; `bin/raspar_publico.py:15-16`; `bin/disjuntor.py:123-124`, `:671-672`). Estar no `.gitignore` não impede a escrita de bytecode (`.gitignore:2-3`). Portanto, sustenta “nenhum efeito concreto demonstrado”, mas não “efeitos ambientais equivalentes”; geração efetiva no host e ambiente de produção: **[nao verificado]**.
-
-5. **Informativo — DESCARTADOS #2c e #7 se sustentam como ausência de defeito demonstrado.** Pergunta, anexo e sonda relativos são entradas deliberadamente resolvidas pelo cwd, conforme o próprio contrato do wrapper (`bin/codex_pergunta.sh:68`, `:86-87`, `:98`, `:275`, `:306-308`). `_IRC` torna-se agregado após conferir o gitfile, mas seu consumidor pergunta apenas se houve falha; `_INV1` e `.inventario` também são consumidos como vazio/status/diagnóstico, sem exigir TSV puro nesses caminhos (`bin/codex_pergunta.sh:386-392`, `:413-418`).
-
-6. **Média condicional / baixa de cobertura — as FILAS continuam procedentes; o delta não as fecha.**
-
-   - **PATH — média condicional:** executáveis continuam resolvidos por nome. “Sem `.`” sozinho não exclui componentes relativos ou vazios; PATH efetivo de produção: **[nao verificado]** (`bin/codex_pergunta.sh:125`, `:268`, `:394`).
-   - **HOOK_STOP_RAIZ — média condicional:** continua aceitando raiz relativa e usando-a para caminhos de estado. Ser variável do chamador delimita o vetor, sem eliminá-lo (`bin/disjuntor.py:60`, `:119`, `:247-249`; `bin/hook_stop_fila1.py:30-35`).
-   - **`py_iso_nomes` — baixa de cobertura:** a triagem caracteriza corretamente a limitação. A fixture instala wrapper e B3 falso; o caso exige a mensagem específica da guarda. Sem ela, a ausência do raspador oferece outra saída rc 4. Isso distingue a guarda, mas não demonstra vazamento nem envio cru ao Codex (`bin/tests/test_codex_pergunta.sh:74-76`, `:117-120`, `:404-407`; `bin/codex_pergunta.sh:302`, `:311`).
-   - **Duas listas — média preexistente:** `_nomes` roda no subshell da pergunta e novamente no pai para anexos/sonda; sem override, pode extrair duas fotografias. O cleanup do pai também não conhece o primeiro temporário (`bin/codex_pergunta.sh:259`, `:265-268`, `:285-286`, `:302`).
-   - **Relógio B3 — preexistente:** a chamada continua sem fornecer `agora`, chegando ao fallback `time.time()` (`bin/disjuntor.py:1710`, `:1042`, `:989`, `:980`, `:877`).
-
-7. **Informativo — limite da verificação.** Executei somente verificações em memória e análise sintática; as suítes integrais criam/removem arquivos e não foram executadas sob a regra de leitura (`bin/tests/test_codex_pergunta.sh:18-19`, `:74-81`; `bin/tests/test_disjuntor.sh:39-41`, `:1492-1502`). Resultado integral dos selos, prova real e efeitos em produção: **[nao verificado]**.
-
-## 07/11 14:45 · sessao dc04abcadd48 · CODEX-CONSTRUTOR-NEGOCIO · verificador · origem=Code
-
-1. **Informativo — 1b fechado para o vetor declarado.** As sete chamadas diretas usam `python3 -I`: inventário inicial, nomes, duas raspagens, B3, revalidação e inventário final. Não há outro lançamento Python direto escondido por variável ou continuação no wrapper atual (`bin/codex_pergunta.sh:237`, `:270`, `:278`, `:311`, `:371`, `:386`, `:413`). Isso fecha a importação de `app/hashlib.py`, `app/subprocess.py` ou `app/json.py` pelo cwd nessas chamadas; não demonstra isolamento geral dos processos do host (`bin/codex_pergunta.sh:96`).
-
-2. **Média, condicional e preexistente — ainda existem dependências do ambiente/cwd.**
-
-   - O inventário executa `git` pelo `PATH` herdado; o shell também resolve executáveis como `bash`, `timeout` e `codex` pelo nome. Com componente relativo ou `.` no `PATH`, arquivo executável plantado em `<wt>/app` pode rodar no host. O `PATH` de produção é **[nao verificado]** (`bin/codex_pergunta.sh:125`, `:268`, `:394`).
-   - O B3 aceita `HOOK_STOP_RAIZ`, inclusive relativo, e usa essa raiz para ler/gravar estado; o fornecedor do topo também aceita a variável. Portanto, esse caminho pode depender do cwd mesmo sob `-I` (`bin/disjuntor.py:60`, `:119`, `:247`, `:274`; `bin/hook_stop_fila1.py:30`).
-   - Pergunta, anexos e sonda relativos dependem deliberadamente do cwd do chamador (`bin/codex_pergunta.sh:68`, `:86`, `:87`, `:275`, `:306`, `:308`). Comportamento interno do executável externo `codex`, além dos argumentos fornecidos: **[nao verificado]** (`bin/codex_pergunta.sh:394`).
-
-3. **Baixa — “rodam iguais sob `-I`” precisa de qualificação.** Os imports locais necessários continuam disponíveis: o raspador insere seu próprio `bin` antes de importar `nome_no_texto`; o B3 faz isso antes de importar `orcamento_contexto` e `hook_stop_fila1`. Não aparece import de `<wt>/app` nesses caminhos (`bin/raspar_publico.py:15`; `bin/disjuntor.py:123`, `:671`; `bin/nome_no_texto.py:26`).
-
-   Entretanto, `-I` muda o tratamento das variáveis de inicialização, inclusive `PYTHONDONTWRITEBYTECODE`; sem `-B`, os imports locais podem passar a gerar bytecode. Criação efetiva no host é **[nao verificado]**. A equivalência funcional dos imports está sustentada pelo código; igualdade de todos os efeitos ambientais, não (`bin/codex_pergunta.sh:96`, `:102`, `:278`, `:371`). O Python dos auxiliares citados realmente roda em containers (`bin/relato_nomes.sh:18`; `bin/sonda_leitura.sh:235`, `:239`).
-
-4. **Média — os testes têm mordida, mas `py_iso_nomes` tem uma causa incidental.** [nao verificado]
-
-   - **`pre`:** o mutante deixa passar a primeira varredura; a revalidação ainda isolada recusa depois. Morre por deixar de apresentar o motivo exigido para o pré-check, o que distingue corretamente as fases (`bin/tests/test_codex_pergunta.sh:379`, `:382`, `:113`; `bin/codex_pergunta.sh:386`).
-   - **`reval`:** planta durante a espera da trava e exige recusa antes do Codex; retirar `-I` dessa fase permite ultrapassá-la (`bin/tests/test_codex_pergunta.sh:197`, `:204`, `:206`, `:385`; `bin/codex_pergunta.sh:386`, `:394`).
-   - **`fim`:** cobra rc 3, motivo “motor v2”, ausência de sidecar e presença do módulo plantado no inventário. A expectativa corresponde ao defeito declarado (`bin/tests/test_codex_pergunta.sh:117`, `:389`, `:394`).
-   - **`nomes`:** a fixture copia somente o wrapper e cria um B3 falso; não instala o raspador. Sem `-I`, `json.py` permite passar `_nomes`, mas a chamada seguinte continua terminando rc 4 porque falta `raspar_publico.py`. O mutante morre pela mensagem “sem a lista de nomes” ausente, sem demonstrar envio de dado cru ou chamada ao Codex (`bin/tests/test_codex_pergunta.sh:69`, `:70`, `:378`, `:398`, `:401`, `:499`; `bin/codex_pergunta.sh:311`). Execução integral desses casos: **[nao verificado]**.
-
-5. **Baixa — FORMA cobre a escrita atual, não toda grafia possível.** O detector reconhece as sete chamadas atuais e acusa a retirada individual de `-I`; porém exclui `/` como delimitador anterior, deixando escapar `/usr/bin/python3`, e não interpreta comandos montados por variável (`bin/tests/test_codex_pergunta.sh:56`, `:59`, `:63`). Também promete mordida por ocorrência, mas percorre linhas e remove apenas a primeira ocorrência de cada linha (`bin/tests/test_codex_pergunta.sh:54`, `:61`, `:62`). Essas formas escapáveis não estão nos sete lançamentos atuais (`bin/codex_pergunta.sh:237`, `:270`, `:278`, `:311`, `:371`, `:386`, `:413`).
-
-6. **Média — documentação corrigida em parte, com novas generalizações excessivas.**
-
-   - **L-126:** junta pré-check, revalidação e fim sob “proibido ou falha = rc 3”; os dois primeiros recusam com **rc 2**, e somente o fim converte para **rc 3** (`app/docs/LEIS.md:147`; `bin/codex_pergunta.sh:183`, `:239`, `:392`, `:426`).
-   - **CLAUDE:** limita rc 3 ao inventário final e atribui corretamente o descarte ao Code; o comando de remoção é apenas impresso (`CLAUDE.md:351`; `bin/codex_pergunta.sh:417`).
-   - **Teto:** “1 Codex construtor por vez” precisa dizer **por repositório selecionado**. A vaga deriva do `git-common-dir` de `CODEX_VIVO`; clones distintos têm vagas distintas (`CLAUDE.md:352`; `app/docs/LEIS.md:147`; `bin/codex_pergunta.sh:56`, `:72`, `:76`, `:233`).
-   - **“Não apaga nada”:** correto se significar “não remove a wt”; literalmente, o wrapper apaga temporários e sidecars (`CLAUDE.md:352`; `bin/codex_pergunta.sh:259`, `:376`, `:381`).
-   - **Proibições:** o gitfile raiz é exceção explícita; symlink/autoload são classificados no conjunto de alterações, não incondicionalmente em toda entrada da base (`app/docs/LEIS.md:147`; `bin/codex_pergunta.sh:152`, `:160`, `:170`, `:176`, `:414`).
-   - A ausência de guarda de opus e do “1 opus” está descrita corretamente como conduta (`CLAUDE.md:353`; `bin/codex_pergunta.sh:393`, `:442`, `:448`).
-
-7. **Informativo — escritores, leitores e significados.**
-
-   | Campo/arquivo | Quem escreve → quem lê |
-   |---|---|
-   | `_INV0` | stdout **e stderr** do inventário → teste de vazio e diagnóstico da recusa (`bin/codex_pergunta.sh:237`, `:238`, `:239`). |
-   | `_IRC0` | status da atribuição anterior → teste explícito de sucesso; separado do conteúdo (`bin/codex_pergunta.sh:237`, `:238`). |
-   | `_INV1` | stdout/stderr do inventário, acrescido de `FALHOU` se necessário → teste de vazio (`bin/codex_pergunta.sh:386`, `:389`). |
-   | `.inventario` | inventário final; wrapper acrescenta alteração do gitfile → filtro da `.recusa` e asserções dos testes (`bin/codex_pergunta.sh:413`, `:414`, `:418`; `bin/tests/test_codex_pergunta.sh:255`, `:394`). |
-   | `_IRC` | inicialmente status do Python; depois status **agregado**, podendo virar 3 pelo gitfile → decisão de recusa e diagnóstico (`bin/codex_pergunta.sh:413`, `:414`, `:415`, `:417`). |
-   | Lista de nomes | extração/escrita pelo auxiliar, ou caminho fornecido por `CODEX_NOMES_JSON` → validação de tamanho e leitura pelo raspador (`bin/relato_nomes.sh:11`, `:13`, `:21`; `bin/codex_pergunta.sh:266`, `:270`; `bin/raspar_publico.py:20`). |
-
-   `_INV1` e `.inventario` carregam registros **e diagnósticos**, portanto não são listas TSV puras; os consumidores mostrados usam vazio/status ou marcadores explícitos (`bin/codex_pergunta.sh:386`, `:389`, `:413`, `:418`). `_IRC` tem a transição de significado indicada acima; não deve ser tratado como status bruto do Python após a conferência do gitfile (`bin/codex_pergunta.sh:414`).
-
-8. **Média, preexistente — “lista UMA vez” não descreve o fluxo default.** A primeira `_nomes` roda dentro de `$(_pergunta_raspada)`; suas atribuições não retornam ao pai. Com anexo/sonda, o pai chama `_nomes` novamente e, sem override, pode extrair outra lista: duas fotografias temporais, embora ambas passem pela mesma porta (`bin/codex_pergunta.sh:245`, `:263`, `:265`, `:268`, `:285`, `:302`). O primeiro temporário também não fica identificado em `DADOS` para o cleanup do pai (`bin/codex_pergunta.sh:259`).
-
-9. **Checklist das classes — sem aprovação ampla implícita.**
-
-   | Classe | Resultado |
-   |---|---|
-   | Segundo juiz | Não identifiquei duplicação: inventário único com três consumidores; raspagem usa `nome_no_texto`; B3 consulta a decisão existente (`bin/codex_pergunta.sh:105`, `:237`, `:386`, `:413`; `bin/raspar_publico.py:16`, `:31`, `:36`; `bin/disjuntor.py:1042`). |
-   | Segundo escritor fora da porta | Não identifiquei novo escritor desses artefatos na v5; produção mais ampla **[nao verificado]** (`bin/codex_pergunta.sh:237`, `:413`, `:414`; `bin/relato_nomes.sh:21`). |
-   | Relógio fora da borda | Permanece no B3: `--b3-parada` não fornece `agora`, e a decisão lê `time.time()` como fallback. Preexistente; v5 não altera isso (`bin/disjuntor.py:1710`, `:1042`, `:989`, `:980`, `:877`). |
-   | Derivação paralela | Inventário e predicado de nomes permanecem únicos; as duas capturas de nomes são a ressalva do item 8 (`bin/codex_pergunta.sh:105`, `:268`, `:302`; `bin/raspar_publico.py:16`). |
-   | Selo/RED sem mordida | Ressalvas dos itens 4–5; execução completa **[nao verificado]** (`bin/tests/test_codex_pergunta.sh:56`, `:69`, `:401`). |
-   | Ordem de trava | Vaga → gate/slot → resposta → estado B3; triagem também toma resposta antes de estado. Não identifiquei inversão nova nesses caminhos (`bin/codex_pergunta.sh:232`, `:342`, `:348`, `:368`, `:371`; `bin/disjuntor.py:786`, `:818`). |
-   | Pouso antes do pré-requisito | Suite no hash, prova real, primeiro uso de negócio e pouso **[nao verificado]**; a exigência de suite antes do opus permanece documental (`CLAUDE.md:375`). | [nao verificado]
-   | Campo com dois significados | Ressalvas do item 7; continua também a separação entre raiz de pausa/LOGD e raiz da vaga (`bin/codex_pergunta.sh:76`, `:88`, `:191`). |
-
-## 07/11 14:42 · sessao 27743e1766f0 · - · - · origem=Ronald (tmux)
-
-1. **Média — L-126 amplia indevidamente o `rc 3`.** O texto novo junta “pre-check, revalidação e fim” e depois afirma “proibido ou falha = rc 3” (`app/docs/LEIS.md:147`). No pre-check, qualquer saída não vazia ou código não zero termina por `_recusa2`, portanto **rc 2** (`bin/codex_pergunta.sh:183`, `:237`, `:238`, `:239`); revalidação também termina **rc 2** (`:386`, `:389`, `:392`). Só a recusa final converte em **rc 3** (`:413`, `:415`, `:426`). CLAUDE limita essa promessa ao inventário **no fim** e está correto (`CLAUDE.md:351`).
-
-2. **Média — “1 Codex construtor por vez” precisa dizer “por repositório”.** A vaga deriva de `git-common-dir` do `CODEX_VIVO` selecionado (`bin/codex_pergunta.sh:56`, `:72`, `:76`), e o `flock` prende esse arquivo (`:232`, `:233`). Assim, as frases de `CLAUDE.md:352` e `app/docs/LEIS.md:147` descrevem corretamente worktrees do mesmo repo, mas não um teto global entre clones distintos. É a **fila antiga 3a** do anexo, não defeito introduzido pela v5. A pausa/LOGD continuam na raiz do script, enquanto a vaga vem do repositório vivo: duas fronteiras diferentes (`bin/codex_pergunta.sh:88`, `:191`, `:193`, `:76`), correspondentes à fila antiga 3b.
-
-3. **Baixa — proibição documental é mais ampla que a implementação.** A classificação de symlink/autoload/`.git*` percorre apenas `tocados` (`bin/codex_pergunta.sh:170`, `:171`, `:176`); symlink idêntico ao blob/modo da base não entra por esse motivo (`:160`). O arquivo `.git` da raiz é podado da varredura (`:151`, `:152`) e conferido separadamente (`:242`, `:414`). A formulação irrestrita “.git em qualquer nível [...] symlink [...] = PROIBIDO” merece explicitar o universo de alterações e a exceção do gitfile raiz (`app/docs/LEIS.md:147`). Existência de symlink rastreado nessa base: **[nao verificado]**.
-
-4. **Média, preexistente — lista de nomes não é obtida “UMA vez”.** Essa promessa está em `bin/codex_pergunta.sh:263`, mas a primeira `_nomes` roda dentro de `$(_pergunta_raspada)` (`:276`, `:285`, `:286`); suas atribuições `DADOS`/`NOMES` ficam no subshell (`:265`, `:266`). Com anexo/sonda, `_nomes` roda novamente no pai (`:302`), que inicialmente tinha `DADOS=""` (`:245`). Sem `CODEX_NOMES_JSON`, isso produz duas extrações por `relato_nomes.sh` (`:267`, `:268`), podendo haver duas fotografias temporais. O temporário inicial também não fica disponível ao cleanup do pai (`:259`). Não é um novo escritor: ambas passam pela mesma porta, cuja extração/escrita está em `bin/relato_nomes.sh:8`, `:11`, `:13`, `:18`, `:21`.
-
-5. **Informativo — correções documentais centrais procedem.** A remoção da wt é apenas instruída no texto da recusa; o comando não é executado (`bin/codex_pergunta.sh:417`). “Descartar a wt é conduta do Code” está correto (`CLAUDE.md:351`, `:352`). O fluxo não exige certificado opus nem controla construtor opus antes/depois da chamada (`bin/codex_pergunta.sh:393`, `:404`, `:442`, `:448`), coerente com `CLAUDE.md:353`. A frase “o wrapper não apaga nada” deve ser entendida como **a wt**: há remoção de temporários e sidecars (`bin/codex_pergunta.sh:259`, `:376`, `:381`).
-
-6. **Classes restantes, por inspeção:** inventário permanece em uma única definição com três consumidores (`bin/codex_pergunta.sh:105`, `:237`, `:386`, `:413`); raspagem continua perguntando ao mesmo `nome_no_texto` para mascarar/conferir (`bin/raspar_publico.py:16`, `:31`, `:36`); B3 continua perguntando à decisão existente (`bin/disjuntor.py:1039`, `:1042`). Não identifiquei juiz de negócio duplicado nem novo escritor fora dessas portas nos trechos auditados; o registro de autoridades permanece em `app/core/juizes.py:170`, com papel documental explicado em `app/docs/JUIZES.md:10`. Ordem: vaga → gate/slot → resposta → estado B3 (`bin/codex_pergunta.sh:232`, `:342`, `:348`, `:368`, `:371`); triagem também toma resposta antes de estado (`bin/disjuntor.py:779`, `:786`, `:789`, `:804`, `:818`). Não encontrei inversão nova nesses caminhos. Execução da prova real, suite no hash, pouso e atendimento dos pré-requisitos: **[nao verificado]**.
-
-## 07/11 14:42 · sessao 0e16194bbd08 · - · - · origem=Ronald (tmux)
-
-1. **1b: fechado para o vetor declarado de import Python; isolamento geral do host não demonstrado.** Os sete lançamentos diretos usam `python3 -I`: inventários em `bin/codex_pergunta.sh:237`, `:386`, `:413`; validação de nomes em `:270`; raspagem em `:278`, `:311`; B3 em `:371`. O inventário ainda resolve `git` pelo `PATH` herdado (`bin/codex_pergunta.sh:124-125`); outros executáveis também são chamados pelo nome, inclusive `bash` (`:268`) e `timeout`/`codex` (`:394`, `:401`). Se o `PATH` contiver componente relativo/`.` e o cwd for `<wt>/app`, executável plantado ali permanece vetor possível; o `PATH` efetivo de produção é **[nao verificado]**.
-
-2. **Dependências de cwd deliberadas e restantes.** Pergunta, anexos e sonda podem ser argumentos relativos, usados sem mudança global de cwd (`bin/codex_pergunta.sh:67-68`, `:86-87`, `:275`, `:306`, `:308`). Além disso, `HOOK_STOP_RAIZ` continua sendo lido pelo B3, inclusive se relativo (`bin/disjuntor.py:60`, `:118-119`), e pelo módulo que fornece o topo (`bin/hook_stop_fila1.py:30-34`). O ramo pode então ler/gravar estado relativo ao cwd (`bin/disjuntor.py:247-274`). `-I` não elimina leituras explícitas de `os.environ`; isso não é variável `PYTHON*` (`bin/disjuntor.py:60`).
-
-3. **`raspar_publico.py`: imports locais continuam disponíveis sob `-I`.** Importa `json`, `os`, `sys` antes de inserir explicitamente a própria pasta; importa depois o juiz `nome_no_texto` (`bin/raspar_publico.py:11-16`). O juiz importa somente `re` (`bin/nome_no_texto.py:26`). Os nomes e textos entram por argumentos/arquivos com UTF-8 explícito (`bin/raspar_publico.py:19-28`), e a saída raspada também (`:40`). Nenhuma leitura explícita de `PYTHON*` nesse caminho foi encontrada nesses módulos; a equivalência executada com/sem `-I` é **[nao verificado]**.
-
-4. **B3: a decisão segue o juiz existente, com imports locais explicitamente restaurados.** `main` encaminha `--b3-parada` para `b3_parada` (`bin/disjuntor.py:1709-1710`), que passa por `estado_b3` → `julga_b3` → `decide_b3` (`:1042`, `:989`, `:980`). `_abre` insere a própria pasta antes de importar `orcamento_contexto` (`:122-125`); `_topo_consistente` faz o mesmo para `hook_stop_fila1` (`:671-672`). Ambos têm somente imports de biblioteca padrão no topo (`bin/orcamento_contexto.py:26-31`; `bin/hook_stop_fila1.py:20-34`). Não foi localizado import de código em `<wt>/app` nesse ramo; `_no_relato`, que carregaria `app/core/esteira_vigia.py`, pertence a outro caminho (`bin/disjuntor.py:179-188`, `:227`).
-
-5. **Python dos auxiliares fica no container, conforme o comentário novo.** `relato_nomes.sh` executa Python por `docker exec saas_core` (`bin/relato_nomes.sh:17-19`); `sonda_leitura.sh` por `docker run ... python manage.py` (`bin/sonda_leitura.sh:235-240`). A árvore escolhida por `SONDA_ARVORE` influencia o Python do container, não um interpretador Python do host (`bin/sonda_leitura.sh:232-239`). A ausência de efeitos específicos do executável externo `codex` antes do sandbox é **[nao verificado]**: o wrapper só fornece sua chamada/configuração (`bin/codex_pergunta.sh:394-402`).
-
-6. **Caveat de precisão do comentário “rodam iguais”.** `-I` pretende mudar a resolução inicial de imports e o tratamento das variáveis de inicialização Python (`bin/codex_pergunta.sh:96-102`); portanto “iguais” deve significar o funcionamento esperado com os imports locais restaurados, não igualdade de todo efeito ambiental. Em particular, ignorar `PYTHONDONTWRITEBYTECODE` pode permitir criação de bytecode dos módulos locais importados — inferência, efeito executado **[nao verificado]** (`bin/raspar_publico.py:15-16`; `bin/disjuntor.py:123-124`, `:671-672`).
-
-7. **Lista de nomes: comentário “UMA vez” já não descreve o fluxo default.** `_pergunta_raspada` roda em substituição de comando (`bin/codex_pergunta.sh:285-286`); sua `_nomes` cria `DADOS`/`NOMES` nesse subshell (`:265-268`). As atribuições não atualizam o `DADOS` externo, inicializado vazio (`:245`). Havendo anexo/sonda, `_nomes` é chamado novamente no processo externo (`:301-302`), podendo extrair uma segunda lista do banco. A promessa “UMA vez” (`:263`) não vale nesse cenário sem `CODEX_NOMES_JSON`; não é novidade introduzida pelo diff v5.
-
-_2758 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2762 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
