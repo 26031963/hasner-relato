@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 14:42:26.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (126.3 MB). Acoes na janela: **495**.
+**Medido em 07/11/2026 14:47:35.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (126.3 MB). Acoes na janela: **494**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -504,4 +504,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 02:57:58 | Bash | Create E2 worktree and read E2 census and complements | `cd /home/ronald/saas-hasner && T=$(date +%H%M%S) && git worktree add -q -b raia/wt-fioe2-$T /home/ronald/wt-fioe2-$T a3e6f8bd && git -C /home/ronald/wt-fioe2-$T log -1 --format='%h %s' && echo /home/ronald/wt-fioe2-$T; head -c 1500 logs/fio_e0_v4/e2.r; cat logs/fio_e0_v4/aval_complemento.txt logs/fio_e0_v4/aval_complemento2.txt` |
 | 02:57:51 | Bash | Check E2 prerequisites and worktrees | `cd /home/ronald/saas-hasner && grep -n "juiz tarefa_do_dia nasce" app/docs/CORTES.md \| head; git show HEAD:app/docs/CORTES.md \| grep -c "juiz tarefa_do_dia nasce"; ls -la logs/fio_e0_v4/ \| grep -E "e2\|aval" ; git worktree list \| head -20` |
 | 02:57:42 | Bash | Read push result and verify remote | `cd /home/ronald/saas-hasner && tail -6 logs/akmed/push_0230.log; git fetch -q origin && git rev-list --count origin/main..HEAD; git log -1 --format=%h origin/main; date` |
-| 02:47:21 | Bash | Record E1 delivery and design questions in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') new=["PERGUNTA DE DESENHO FIO-E0-V4-E1 (obra PARADA, as outras seguem): qual a UNIDADE do indice parcial unico de identidade (colab, dia do turno, motivo, instancia de marco)? volta 1 com o indice = 105 UniqueViolation em ~45 modulos e 2 caminhos de prod; 12 motivos tem instancia VAZIA; multiplas l ...` |

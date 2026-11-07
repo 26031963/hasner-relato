@@ -1,7 +1,67 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 14:42** · publicado em **07/11/2026 14:42** (UTC-3)
+> Ultima resposta processada: **07/11/2026 14:45** · publicado em **07/11/2026 14:47** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 14:45 · sessao dc04abcadd48 · CODEX-CONSTRUTOR-NEGOCIO · verificador · origem=Code
+
+1. **Informativo — 1b fechado para o vetor declarado.** As sete chamadas diretas usam `python3 -I`: inventário inicial, nomes, duas raspagens, B3, revalidação e inventário final. Não há outro lançamento Python direto escondido por variável ou continuação no wrapper atual (`bin/codex_pergunta.sh:237`, `:270`, `:278`, `:311`, `:371`, `:386`, `:413`). Isso fecha a importação de `app/hashlib.py`, `app/subprocess.py` ou `app/json.py` pelo cwd nessas chamadas; não demonstra isolamento geral dos processos do host (`bin/codex_pergunta.sh:96`).
+
+2. **Média, condicional e preexistente — ainda existem dependências do ambiente/cwd.**
+
+   - O inventário executa `git` pelo `PATH` herdado; o shell também resolve executáveis como `bash`, `timeout` e `codex` pelo nome. Com componente relativo ou `.` no `PATH`, arquivo executável plantado em `<wt>/app` pode rodar no host. O `PATH` de produção é **[nao verificado]** (`bin/codex_pergunta.sh:125`, `:268`, `:394`).
+   - O B3 aceita `HOOK_STOP_RAIZ`, inclusive relativo, e usa essa raiz para ler/gravar estado; o fornecedor do topo também aceita a variável. Portanto, esse caminho pode depender do cwd mesmo sob `-I` (`bin/disjuntor.py:60`, `:119`, `:247`, `:274`; `bin/hook_stop_fila1.py:30`).
+   - Pergunta, anexos e sonda relativos dependem deliberadamente do cwd do chamador (`bin/codex_pergunta.sh:68`, `:86`, `:87`, `:275`, `:306`, `:308`). Comportamento interno do executável externo `codex`, além dos argumentos fornecidos: **[nao verificado]** (`bin/codex_pergunta.sh:394`).
+
+3. **Baixa — “rodam iguais sob `-I`” precisa de qualificação.** Os imports locais necessários continuam disponíveis: o raspador insere seu próprio `bin` antes de importar `nome_no_texto`; o B3 faz isso antes de importar `orcamento_contexto` e `hook_stop_fila1`. Não aparece import de `<wt>/app` nesses caminhos (`bin/raspar_publico.py:15`; `bin/disjuntor.py:123`, `:671`; `bin/nome_no_texto.py:26`).
+
+   Entretanto, `-I` muda o tratamento das variáveis de inicialização, inclusive `PYTHONDONTWRITEBYTECODE`; sem `-B`, os imports locais podem passar a gerar bytecode. Criação efetiva no host é **[nao verificado]**. A equivalência funcional dos imports está sustentada pelo código; igualdade de todos os efeitos ambientais, não (`bin/codex_pergunta.sh:96`, `:102`, `:278`, `:371`). O Python dos auxiliares citados realmente roda em containers (`bin/relato_nomes.sh:18`; `bin/sonda_leitura.sh:235`, `:239`).
+
+4. **Média — os testes têm mordida, mas `py_iso_nomes` tem uma causa incidental.** [nao verificado]
+
+   - **`pre`:** o mutante deixa passar a primeira varredura; a revalidação ainda isolada recusa depois. Morre por deixar de apresentar o motivo exigido para o pré-check, o que distingue corretamente as fases (`bin/tests/test_codex_pergunta.sh:379`, `:382`, `:113`; `bin/codex_pergunta.sh:386`).
+   - **`reval`:** planta durante a espera da trava e exige recusa antes do Codex; retirar `-I` dessa fase permite ultrapassá-la (`bin/tests/test_codex_pergunta.sh:197`, `:204`, `:206`, `:385`; `bin/codex_pergunta.sh:386`, `:394`).
+   - **`fim`:** cobra rc 3, motivo “motor v2”, ausência de sidecar e presença do módulo plantado no inventário. A expectativa corresponde ao defeito declarado (`bin/tests/test_codex_pergunta.sh:117`, `:389`, `:394`).
+   - **`nomes`:** a fixture copia somente o wrapper e cria um B3 falso; não instala o raspador. Sem `-I`, `json.py` permite passar `_nomes`, mas a chamada seguinte continua terminando rc 4 porque falta `raspar_publico.py`. O mutante morre pela mensagem “sem a lista de nomes” ausente, sem demonstrar envio de dado cru ou chamada ao Codex (`bin/tests/test_codex_pergunta.sh:69`, `:70`, `:378`, `:398`, `:401`, `:499`; `bin/codex_pergunta.sh:311`). Execução integral desses casos: **[nao verificado]**.
+
+5. **Baixa — FORMA cobre a escrita atual, não toda grafia possível.** O detector reconhece as sete chamadas atuais e acusa a retirada individual de `-I`; porém exclui `/` como delimitador anterior, deixando escapar `/usr/bin/python3`, e não interpreta comandos montados por variável (`bin/tests/test_codex_pergunta.sh:56`, `:59`, `:63`). Também promete mordida por ocorrência, mas percorre linhas e remove apenas a primeira ocorrência de cada linha (`bin/tests/test_codex_pergunta.sh:54`, `:61`, `:62`). Essas formas escapáveis não estão nos sete lançamentos atuais (`bin/codex_pergunta.sh:237`, `:270`, `:278`, `:311`, `:371`, `:386`, `:413`).
+
+6. **Média — documentação corrigida em parte, com novas generalizações excessivas.**
+
+   - **L-126:** junta pré-check, revalidação e fim sob “proibido ou falha = rc 3”; os dois primeiros recusam com **rc 2**, e somente o fim converte para **rc 3** (`app/docs/LEIS.md:147`; `bin/codex_pergunta.sh:183`, `:239`, `:392`, `:426`).
+   - **CLAUDE:** limita rc 3 ao inventário final e atribui corretamente o descarte ao Code; o comando de remoção é apenas impresso (`CLAUDE.md:351`; `bin/codex_pergunta.sh:417`).
+   - **Teto:** “1 Codex construtor por vez” precisa dizer **por repositório selecionado**. A vaga deriva do `git-common-dir` de `CODEX_VIVO`; clones distintos têm vagas distintas (`CLAUDE.md:352`; `app/docs/LEIS.md:147`; `bin/codex_pergunta.sh:56`, `:72`, `:76`, `:233`).
+   - **“Não apaga nada”:** correto se significar “não remove a wt”; literalmente, o wrapper apaga temporários e sidecars (`CLAUDE.md:352`; `bin/codex_pergunta.sh:259`, `:376`, `:381`).
+   - **Proibições:** o gitfile raiz é exceção explícita; symlink/autoload são classificados no conjunto de alterações, não incondicionalmente em toda entrada da base (`app/docs/LEIS.md:147`; `bin/codex_pergunta.sh:152`, `:160`, `:170`, `:176`, `:414`).
+   - A ausência de guarda de opus e do “1 opus” está descrita corretamente como conduta (`CLAUDE.md:353`; `bin/codex_pergunta.sh:393`, `:442`, `:448`).
+
+7. **Informativo — escritores, leitores e significados.**
+
+   | Campo/arquivo | Quem escreve → quem lê |
+   |---|---|
+   | `_INV0` | stdout **e stderr** do inventário → teste de vazio e diagnóstico da recusa (`bin/codex_pergunta.sh:237`, `:238`, `:239`). |
+   | `_IRC0` | status da atribuição anterior → teste explícito de sucesso; separado do conteúdo (`bin/codex_pergunta.sh:237`, `:238`). |
+   | `_INV1` | stdout/stderr do inventário, acrescido de `FALHOU` se necessário → teste de vazio (`bin/codex_pergunta.sh:386`, `:389`). |
+   | `.inventario` | inventário final; wrapper acrescenta alteração do gitfile → filtro da `.recusa` e asserções dos testes (`bin/codex_pergunta.sh:413`, `:414`, `:418`; `bin/tests/test_codex_pergunta.sh:255`, `:394`). |
+   | `_IRC` | inicialmente status do Python; depois status **agregado**, podendo virar 3 pelo gitfile → decisão de recusa e diagnóstico (`bin/codex_pergunta.sh:413`, `:414`, `:415`, `:417`). |
+   | Lista de nomes | extração/escrita pelo auxiliar, ou caminho fornecido por `CODEX_NOMES_JSON` → validação de tamanho e leitura pelo raspador (`bin/relato_nomes.sh:11`, `:13`, `:21`; `bin/codex_pergunta.sh:266`, `:270`; `bin/raspar_publico.py:20`). |
+
+   `_INV1` e `.inventario` carregam registros **e diagnósticos**, portanto não são listas TSV puras; os consumidores mostrados usam vazio/status ou marcadores explícitos (`bin/codex_pergunta.sh:386`, `:389`, `:413`, `:418`). `_IRC` tem a transição de significado indicada acima; não deve ser tratado como status bruto do Python após a conferência do gitfile (`bin/codex_pergunta.sh:414`).
+
+8. **Média, preexistente — “lista UMA vez” não descreve o fluxo default.** A primeira `_nomes` roda dentro de `$(_pergunta_raspada)`; suas atribuições não retornam ao pai. Com anexo/sonda, o pai chama `_nomes` novamente e, sem override, pode extrair outra lista: duas fotografias temporais, embora ambas passem pela mesma porta (`bin/codex_pergunta.sh:245`, `:263`, `:265`, `:268`, `:285`, `:302`). O primeiro temporário também não fica identificado em `DADOS` para o cleanup do pai (`bin/codex_pergunta.sh:259`).
+
+9. **Checklist das classes — sem aprovação ampla implícita.**
+
+   | Classe | Resultado |
+   |---|---|
+   | Segundo juiz | Não identifiquei duplicação: inventário único com três consumidores; raspagem usa `nome_no_texto`; B3 consulta a decisão existente (`bin/codex_pergunta.sh:105`, `:237`, `:386`, `:413`; `bin/raspar_publico.py:16`, `:31`, `:36`; `bin/disjuntor.py:1042`). |
+   | Segundo escritor fora da porta | Não identifiquei novo escritor desses artefatos na v5; produção mais ampla **[nao verificado]** (`bin/codex_pergunta.sh:237`, `:413`, `:414`; `bin/relato_nomes.sh:21`). |
+   | Relógio fora da borda | Permanece no B3: `--b3-parada` não fornece `agora`, e a decisão lê `time.time()` como fallback. Preexistente; v5 não altera isso (`bin/disjuntor.py:1710`, `:1042`, `:989`, `:980`, `:877`). |
+   | Derivação paralela | Inventário e predicado de nomes permanecem únicos; as duas capturas de nomes são a ressalva do item 8 (`bin/codex_pergunta.sh:105`, `:268`, `:302`; `bin/raspar_publico.py:16`). |
+   | Selo/RED sem mordida | Ressalvas dos itens 4–5; execução completa **[nao verificado]** (`bin/tests/test_codex_pergunta.sh:56`, `:69`, `:401`). |
+   | Ordem de trava | Vaga → gate/slot → resposta → estado B3; triagem também toma resposta antes de estado. Não identifiquei inversão nova nesses caminhos (`bin/codex_pergunta.sh:232`, `:342`, `:348`, `:368`, `:371`; `bin/disjuntor.py:786`, `:818`). |
+   | Pouso antes do pré-requisito | Suite no hash, prova real, primeiro uso de negócio e pouso **[nao verificado]**; a exigência de suite antes do opus permanece documental (`CLAUDE.md:375`). | [nao verificado]
+   | Campo com dois significados | Ressalvas do item 7; continua também a separação entre raiz de pausa/LOGD e raiz da vaga (`bin/codex_pergunta.sh:76`, `:88`, `:191`). |
 
 ## 07/11 14:42 · sessao 27743e1766f0 · - · - · origem=Ronald (tmux)
 
@@ -625,77 +685,4 @@ A cópia não disponibiliza repositório Git: `git rev-parse HEAD` retornou “n
 
 7. **Informativo — limites desta auditoria.** O ramo de leitura da prova permanece separado após o término do ramo construtor; o ouvinte está somente no construtor. Referências: `bin/tests/prova_codex_pergunta_real.sh:18`, `:135`, `:137`. Não executei o script, que cria arquivos e chama o wrapper (`:21`, `:53`, `:77`); resultados reais e mutantes executados: `[nao verificado]`.
 
-## 07/11 12:59 · sessao a1c39fc87f85 · FIO-E0-V4-E2 · verificador · origem=Code
-
-**A paridade no presente foi restaurada para o predicado de 57acffd2 informado no pedido. Permanece um conflito com a regra escrita: a mesma pergunta retratada pode voltar viva após ressurreição e resposta posterior.** ([seleção atual](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:211), [regra de identidade](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/models.py:2321))
-
-Identidade Git da cópia, comparação direta com a árvore de 57acffd2, execução integrada Django, SQL medido e ocorrência produtiva dos estados abaixo: **[nao verificado]**.
-
-1. **Classe: equivalência da seleção no presente — procedente quanto ao predicado fornecido.**
-
-   Se `agora >= todos os atos`, nenhuma retratação alimenta `_retratada_depois`. Portanto, a seleção reduz-se exatamente a: excluir via em `VIAS_FORA_DO_FATO`; depois excluir última decisão `retratacao`. ([carga](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:321), [seleção](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:211))
-
-   Na tabela, cada célula vale **57 conforme descrito / atual**; “entra” significa passar pela seleção, antes das demais guardas da tarefa. As classes de sequência são exaustivas porque o predicado consulta somente sua existência e seu último ato. ([tarefa_do_dia.py:214](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:214))
-
-   | Via atual | Sem decisões | Última = retratação | Sem retratação; última diferente | Retratação antiga; última diferente |
-   |---|---|---|---|---|
-   | `duplicata` | exclui / exclui | exclui / exclui | exclui / exclui | exclui / exclui |
-   | `motivo_retratado` | exclui / exclui | exclui / exclui | exclui / exclui | exclui / exclui |
-   | Vazia ou qualquer outra via | entra / entra | exclui / exclui | entra / entra | entra / entra |
-
-   As duas vias excluídas são exatamente as declaradas pelo modelo; os resultados atuais da tabela seguem dos dois `continue`. ([models.py:2323](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/models.py:2323), [tarefa_do_dia.py:211](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:211), [tarefa_do_dia.py:215](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:215))
-
-2. **Classe: horizonte temporal versus identidade retratada — corte implementado; conflito normativo da ressuscitada permanece.**
-
-   | Estado em relação a `agora` | Resultado atual | Procedência |
-   |---|---|---|
-   | `motivo_retratado`; resposta anterior; única retratação futura | Entra; `aguarda_validacao` | A retratação futura libera a via; a resposta é a última decisão retida. ([seleção:212](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:212), [teste:761](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/tests/test_e2_tarefa_do_dia.py:761)) |
-   | `motivo_retratado`; retratação anterior ou igual; nenhuma futura | Excluída, mesmo havendo resposta posterior | A via vence a resposta. ([models.py:2327](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/models.py:2327), [seleção:211](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:211)) |
-   | `motivo_retratado`; nenhuma retratação | Excluída | A porta genérica aceita a via sem exigir linha correspondente; a seleção conserva a exclusão. ([porta:2736](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/models.py:2736), [teste:777](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/tests/test_e2_tarefa_do_dia.py:777)) |
-   | Via vazia; retratação antiga; resposta posterior, ambas até `agora` | Entra com a mesma PK; `aguarda_validacao` | É o comportamento exigido pelo teste novo. ([teste:778](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/tests/test_e2_tarefa_do_dia.py:778), [teste:783](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/tests/test_e2_tarefa_do_dia.py:783)) |
-   | Há retratação futura, mas a última decisão **até agora** também é retratação | Excluída | Liberar a via não elimina a segunda guarda. ([seleção:212](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:212), [seleção:215](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:215)) |
-
-   **O contraexemplo à regra escrita é a ressuscitada.** `remover_motivo` e `VIAS_FORA_DO_FATO` dizem expressamente que o fato que volta ganha pergunta nova. A tarefa e o teste novo aceitam reutilizar a antiga após `[retratacao, resposta]`. Paridade com o comportamento anterior não resolve essa divergência. ([models.py:1979](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/models.py:1979), [models.py:2321](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/models.py:2321), [teste:783](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/tests/test_e2_tarefa_do_dia.py:783))
-
-   **Origem: conflito preexistente na ressurreição, novamente aceito pela seleção neste delta.** O universo busca carimbadas sem texto, descarimba a cópia antes do C6 e a porta descarimba o registro; a decisão antiga continua imutável. ([universo:1440](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/models.py:1440), [simulação:1461](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/models.py:1461), [escrita:1515](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/models.py:1515), [imutabilidade:3393](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/models.py:3393))
-
-   Há ainda uma limitação precisa: `_retratada_depois` identifica **alguma** retratação futura, sem ligar a via atual ao ato específico que a escreveu. Com retratação antiga, resposta aplicável e nova retratação futura, a pergunta entra. A garantia de correspondência entre essa via e essa retratação específica: **[nao verificado]**. ([carga:323](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:323), [seleção:212](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:212))
-
-3. **Classe: vazamento de ato futuro e queries por N — não achei vazamento pelo `_dec` nem N+1 introduzido nesse delta.**
-
-   | Objeto | Quem escreve | Quem lê |
-   |---|---|---|
-   | `_retratada_depois` | `CargaDaTarefa.__init__`: inicializa e acrescenta apenas `pergunta_id` de retratação futura. ([314](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:314), [324](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:324)) | `.tarefa` encaminha; `_tarefa_pura` consulta pertinência para liberar a via. ([380](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:380), [212](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:212)) |
-   | `_dec` | A carga acrescenta objetos somente sob `d.ato_em <= agora`. ([321](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:321)) | Seleção consulta a última; `_pela_decisao` recebe a lista da pergunta. ([214](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:214), [267](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:267)) |
-
-   Para instantes válidos e comparáveis, o corte Python conserva o significado inclusivo de `ato_em__lte=agora`, incluindo a igualdade e preservando a ordem `(ato_em, pk)` dentro de cada pergunta. `ato_em` não admite nulo no modelo e `USE_TZ=True`. Execução comparativa contra SQL: **[nao verificado]**. ([modelo:3358](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/models.py:3358), [ordenação/corte:320](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:320), [configuração:95](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/config/settings/base.py:95))
-
-   | Caminho examinado | Conclusão |
-   |---|---|
-   | `absorcao_ausencia` | Lê somente a última decisão retida; o `select_related` continua presente. O **status atual** da ausência permanece um limite declarado, não um ato futuro entrando em `_dec`. ([carga:320](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:320), [leitor:145](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:145), [limite:290](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:290)) |
-   | Efeitos | Carga independente de `_dec`, com `criado_em__lte=agora`; conserva o universo atual de Batidas apuráveis. ([340](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:340)) |
-   | Passivo | Carga independente; correspondência exata de pergunta, ato e instante, seguida de corte `<= agora`. Uma linha futura não corresponde a um carimbo anterior. ([models.py:3412](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/models.py:3412), [carga:328](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:328)) |
-   | Lavra | Carga independente, com `marcos_do_lote(ate=agora)`; `esta_stale` rejeita julgamento futuro. ([332](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:332), [veredito_lavrado.py:196](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/veredito_lavrado.py:196)) |
-
-   Remover o filtro SQL aumenta as **linhas transportadas**, incluindo decisões futuras e suas ausências relacionadas; não acrescenta consulta por pergunta nesse caminho. O selo de constância inclui validações, mas não monta absorções; sua execução e contagem efetiva permanecem **[nao verificado]**. ([query:319](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:319), [teste:920](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/tests/test_e2_tarefa_do_dia.py:920), [comparação:937](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/tests/test_e2_tarefa_do_dia.py:937))
-
-4. **Classes de reprovação — consolidação.**
-
-   | Classe | Procedência e alcance |
-   |---|---|
-   | Segundo juiz | **Não achei introdução no delta.** A tarefa possui corte explícito e a coexistência até E3 está declarada. Isso não sana o conflito de identidade do item 2. ([CORTES.md:424](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/docs/CORTES.md:424)) |
-   | Segundo escritor | **Não achei escritor persistente novo.** As coleções novas são memória; `remover_motivo` continua registrando decisão e carimbando identidade no mesmo `atomic`. ([carga:313](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:313), [models.py:1986](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/models.py:1986)) |
-   | Relógio fora da borda | **Procedente, preexistente; já encaminhado como fila.** Cobertura consulta tipos em aberto, cujo conjunto vivo chega a `vigente → monotonic`, com mutação do cache. ([turnos.py:2762](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/ponto/turnos.py:2762), [ausencias.py:433](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/ponto/catalogo/ausencias.py:433), [ausencias.py:275](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/ponto/catalogo/ausencias.py:275)) |
-   | Derivação paralela | **Não achei nova nos caminhos alterados:** lista de identidade do modelo, autoridade E1 do passivo, porta das Batidas e regra compartilhada de posição continuam sendo lidas. ([211](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:211), [328](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:328), [340](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:340), [55](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:55)) |
-   | Campo com dois significados | **Não achei significado novo no delta.** O conjunto guarda existência de retratação futura; não guarda seu instante nem comprova qual ato escreveu a via. `manter_carimbo` já preservava instante anterior ao trocar via. ([324](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:324), [models.py:2738](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/models.py:2738)) |
-
-   **RED sem mordida: não procede para o teste novo, na comparação dos corpos executados em memória com autoridades alimentadas.** O predicado sem delta foi reconstruído do anexo; histórico Git e Django integrado: **[nao verificado]**. ([corpo atual:157](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/services/tarefa_do_dia.py:157))
-
-   | Cenário | Sem delta | Atual / exigido pelo teste | [nao verificado]
-   |---|---|---|
-   | `motivo_retratado`, somente resposta | `aguarda_validacao`, mesma PK | `sem_pergunta`, sem PK. ([asserção:777](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/tests/test_e2_tarefa_do_dia.py:777)) |
-   | Via vazia, retratação antiga e resposta posterior | `sem_pergunta`, sem PK | `aguarda_validacao`, mesma PK. ([asserção:783](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/tests/test_e2_tarefa_do_dia.py:783)) |
-
-   Sem delta, o teste para na primeira asserção; o segundo cenário também discrimina quando isolado. **A mordida existe, mas a segunda expectativa certifica a paridade restaurada, permanecendo contrária à regra escrita de pergunta nova.** ([teste:777](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/tests/test_e2_tarefa_do_dia.py:777), [teste:783](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/tests/test_e2_tarefa_do_dia.py:783), [models.py:2321](/home/ronald/codex_ws/e2dc08e221c00f3c2e5d1f589bf37c1126363ddc/app/chamados/models.py:2321))
-
-_2740 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2741 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
