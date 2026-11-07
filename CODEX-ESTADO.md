@@ -1,7 +1,35 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 14:45** · publicado em **07/11/2026 14:47** (UTC-3)
+> Ultima resposta processada: **07/11/2026 14:52** · publicado em **07/11/2026 14:52** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 14:52 · sessao cc914c55e5a6 · CODEX-CONSTRUTOR-NEGOCIO · verificador · origem=Code
+
+1. **Baixa — v5.r #5: FECHA os dois escapes apontados.** O detector agora reconhece `/usr/bin/python3`; o laço remove `-I` da ocorrência `k`, individualmente. Na reprodução em memória, o wrapper atual ficou limpo, as sete retiradas foram detectadas e ambas as ocorrências de uma linha sintética foram mordidas. O MORDE absoluto detectou `/python3 -c`, pelo motivo declarado. Não identifiquei regressão nesse trecho; isso continua sendo reconhecimento textual, sem cobrir comandos montados por variável (`bin/tests/test_codex_pergunta.sh:56-70`).
+
+2. **Informativo — selo vizinho marcado CURADO: FECHA a quebra de âncora.** As duas âncoras do mutante existem exatamente uma vez; a substituição em memória produz shell sintaticamente válido, desativa a porta posterior e insere a consulta antes do slot (`bin/tests/test_disjuntor.sh:1495-1502`, `:1780-1783`; `bin/codex_pergunta.sh:342`, `:370-371`). O cenário cobra a consequência correta: três triagens durante a espera devem impedir a chamada; consultar somente antes permite perder essa mudança (`bin/tests/test_disjuntor.sh:1419-1432`). A chamada antecipada usa `python3` sem `-I`, mas o caso executa o wrapper mutado diretamente, sem aplicar FORMA-PY-ISOLADO: não há morte incidental por esse selo (`bin/tests/test_disjuntor.sh:1504`, `:1782`). Mordida efetiva do cenário completo: **[nao verificado]**.
+
+3. **Informativo — v5.r #6: FECHA as correções documentais marcadas CURADO.**
+
+   - **Retornos:** L-126 agora distingue pré-check/revalidação com rc 2 do inventário final proibido ou falho com rc 3, conforme o código (`app/docs/LEIS.md:147`; `bin/codex_pergunta.sh:183`, `:237-239`, `:386-392`, `:413-426`).
+   - **Vaga por repositório:** corresponde à derivação pelo `git-common-dir` de `CODEX_VIVO` e ao `flock`; clones distintos continuam com vagas distintas (`app/docs/LEIS.md:147`; `CLAUDE.md:352`; `bin/codex_pergunta.sh:56`, `:71-76`, `:232-233`).
+   - **“Não remove a wt”:** descreve corretamente o wrapper, que imprime a remoção recomendada; continua removendo temporários e sidecars (`CLAUDE.md:352`; `bin/codex_pergunta.sh:259`, `:376-383`, `:417`).
+   - **Proibições:** a exceção do gitfile raiz e a classificação de autoload/symlink no conjunto tocado correspondem ao inventário. Hardlinks são acrescentados explicitamente a esse conjunto (`app/docs/LEIS.md:147`; `bin/codex_pergunta.sh:152`, `:160-177`). O hash do gitfile é uma fotografia tomada no pré-check e comparada depois (`bin/codex_pergunta.sh:242`, `:388`, `:414`).
+   - **Opus:** a distinção entre guarda mecânica e conduta permanece correta: o fluxo executa Codex, inventaria e termina sem consultar aprovação opus (`CLAUDE.md:351-353`; `bin/codex_pergunta.sh:394-448`).
+
+4. **Baixa, condicional — DESCARTADO #3: o motivo sustenta apenas um descarte limitado.** A ausência declarada de `PYTHONDONTWRITEBYTECODE` naquela sessão não refuta a diferença ambiental apontada: o wrapper usa `-I`, sem `-B`, e os auxiliares importam módulos locais (`bin/codex_pergunta.sh:96-102`, `:278`, `:371`; `bin/raspar_publico.py:15-16`; `bin/disjuntor.py:123-124`, `:671-672`). Estar no `.gitignore` não impede a escrita de bytecode (`.gitignore:2-3`). Portanto, sustenta “nenhum efeito concreto demonstrado”, mas não “efeitos ambientais equivalentes”; geração efetiva no host e ambiente de produção: **[nao verificado]**.
+
+5. **Informativo — DESCARTADOS #2c e #7 se sustentam como ausência de defeito demonstrado.** Pergunta, anexo e sonda relativos são entradas deliberadamente resolvidas pelo cwd, conforme o próprio contrato do wrapper (`bin/codex_pergunta.sh:68`, `:86-87`, `:98`, `:275`, `:306-308`). `_IRC` torna-se agregado após conferir o gitfile, mas seu consumidor pergunta apenas se houve falha; `_INV1` e `.inventario` também são consumidos como vazio/status/diagnóstico, sem exigir TSV puro nesses caminhos (`bin/codex_pergunta.sh:386-392`, `:413-418`).
+
+6. **Média condicional / baixa de cobertura — as FILAS continuam procedentes; o delta não as fecha.**
+
+   - **PATH — média condicional:** executáveis continuam resolvidos por nome. “Sem `.`” sozinho não exclui componentes relativos ou vazios; PATH efetivo de produção: **[nao verificado]** (`bin/codex_pergunta.sh:125`, `:268`, `:394`).
+   - **HOOK_STOP_RAIZ — média condicional:** continua aceitando raiz relativa e usando-a para caminhos de estado. Ser variável do chamador delimita o vetor, sem eliminá-lo (`bin/disjuntor.py:60`, `:119`, `:247-249`; `bin/hook_stop_fila1.py:30-35`).
+   - **`py_iso_nomes` — baixa de cobertura:** a triagem caracteriza corretamente a limitação. A fixture instala wrapper e B3 falso; o caso exige a mensagem específica da guarda. Sem ela, a ausência do raspador oferece outra saída rc 4. Isso distingue a guarda, mas não demonstra vazamento nem envio cru ao Codex (`bin/tests/test_codex_pergunta.sh:74-76`, `:117-120`, `:404-407`; `bin/codex_pergunta.sh:302`, `:311`).
+   - **Duas listas — média preexistente:** `_nomes` roda no subshell da pergunta e novamente no pai para anexos/sonda; sem override, pode extrair duas fotografias. O cleanup do pai também não conhece o primeiro temporário (`bin/codex_pergunta.sh:259`, `:265-268`, `:285-286`, `:302`).
+   - **Relógio B3 — preexistente:** a chamada continua sem fornecer `agora`, chegando ao fallback `time.time()` (`bin/disjuntor.py:1710`, `:1042`, `:989`, `:980`, `:877`).
+
+7. **Informativo — limite da verificação.** Executei somente verificações em memória e análise sintática; as suítes integrais criam/removem arquivos e não foram executadas sob a regra de leitura (`bin/tests/test_codex_pergunta.sh:18-19`, `:74-81`; `bin/tests/test_disjuntor.sh:39-41`, `:1492-1502`). Resultado integral dos selos, prova real e efeitos em produção: **[nao verificado]**.
 
 ## 07/11 14:45 · sessao dc04abcadd48 · CODEX-CONSTRUTOR-NEGOCIO · verificador · origem=Code
 
@@ -669,20 +697,4 @@ A cópia não disponibiliza repositório Git: `git rev-parse HEAD` retornou “n
 
 6. **Leitura: cobertura estática preservada; resultado executado não verificado.** Existem casos para os quatro papéis verificando sandbox, cwd, cabeçalho e ausência de sinais do construtor; o verificador usa B3 falso sempre livre. Os testes de sonda cobrem falha do envelope e lista vazia. `bin/tests/test_codex_pergunta.sh:327`, `bin/tests/test_codex_pergunta.sh:337`, `bin/tests/test_codex_pergunta.sh:57`, `bin/tests/test_codex_sonda.sh:71`, `bin/tests/test_codex_sonda.sh:77`. Não executei: a suite cria e remove arquivos temporários, contrariando a restrição de leitura (`bin/tests/test_codex_pergunta.sh:18`, `bin/tests/test_codex_pergunta.sh:19`).
 
-## 07/11 13:21 · sessao 5bdc20a26151 · - · - · origem=Ronald (tmux)
-
-1. **Alta — achado da prova fechado em parte.** TCP local e Unix ganharam medição fora do sandbox: o ouvinte grava conexões e o script compara as contagens antes/depois. Docker, docker.sock e TCP externo continuam julgados pelos `.out` escritos pelo Codex; o delta apenas rotula essa negativa como `AUTO-DECLARADO`, permitindo ainda rc 0. Referências: `bin/tests/prova_codex_pergunta_real.sh:30`, `:41`, `:49`, `:52`, `:101`, `:103`, `:117`, `:120`, `:124`.
-
-2. **Alta — arquivo com `rc=` não comprova execução da tentativa.** A condição aceita qualquer `.out` não vazio contendo `rc=`; TCP local/Unix dispensam inclusive assinatura de erro. Criar o controle positivo e preencher os `.out` com negativas fabricadas satisfaz essas condições sem executar as tentativas; os demais controles externos precisam estar disponíveis para o conjunto retornar 0. Referências: `bin/tests/prova_codex_pergunta_real.sh:60`, `:88`, `:90`, `:92`, `:93`, `:98`, `:106`, `:107`, `:135`. Execução desse contraexemplo: `[nao verificado]`.
-
-3. **Média — zero conexões não é prova suficiente de bloqueio durante toda a chamada.** O script confirma disponibilidade do ouvinte antes do Codex, mas depois apenas lê a contagem; não verifica que o processo continua vivo nem realiza controle posterior ou sincronização do processamento. Se o ouvinte morrer após os controles, permanece possível imprimir `OK MEDIDO ... 0 conexao`. Referências: `bin/tests/prova_codex_pergunta_real.sh:44`, `:49`, `:52`, `:77`, `:101`, `:103`, `:105`. Ocorrência real: `[nao verificado]`.
-
-4. **Média — dois julgamentos continuam ativos para TCP local/Unix.** O comentário atribui o julgamento ao ouvinte, mas `CONECTOU` no `.out` ainda impõe rc 1 independentemente da medição externa. Uma saída fabricada pode produzir “VERMELHO conexão abriu” com contagem externa zero. É duplicação de julgamento da prova; relação com autoridade registrada em `app/core/juizes.py`: `[nao verificado]`. Referências: `bin/tests/prova_codex_pergunta_real.sh:92`, `:104`, `:105`, `:124`, `:125`.
-
-5. **Média — `$EV` não identifica exclusivamente a execução.** O nome usa data até segundos e `mkdir -p` reutiliza o diretório. Duas execuções no mesmo segundo compartilham socket, `porta`, `conexoes`, prompt e evidências; não há recusa de diretório preexistente. O segundo ouvinte pode falhar no `bind` e consumir `porta` do primeiro. Referências: `bin/tests/prova_codex_pergunta_real.sh:21`, `:29`, `:30`, `:34`, `:35`, `:45`, `:46`, `:53`, `:80`, `:81`. Reprodução: `[nao verificado]`.
-
-6. **Informativo — escritores/leitores da prova.** O shell cria `$EV/escuta`, inicia e encerra o ouvinte; o Python escreve `porta.novo`, renomeia para `porta` e acrescenta `conexoes`; o shell lê `porta` e as contagens. O shell escreve `$EV/p`; o wrapper o lê. O Codex recebe instrução para escrever `<wt>/app/prova/*.out`, e o shell os copia/lê para produzir o veredito. Referências: `bin/tests/prova_codex_pergunta_real.sh:21`, `:29`, `:30`, `:35`, `:41`, `:44`, `:46`, `:52`, `:53`, `:61`, `:77`, `:81`, `:89`, `:103`, `:115`.
-
-7. **Informativo — limites desta auditoria.** O ramo de leitura da prova permanece separado após o término do ramo construtor; o ouvinte está somente no construtor. Referências: `bin/tests/prova_codex_pergunta_real.sh:18`, `:135`, `:137`. Não executei o script, que cria arquivos e chama o wrapper (`:21`, `:53`, `:77`); resultados reais e mutantes executados: `[nao verificado]`.
-
-_2741 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2742 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
