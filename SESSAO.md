@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 18:23:18.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (132.6 MB). Acoes na janela: **546**.
+**Medido em 07/11/2026 18:29:05.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (132.7 MB). Acoes na janela: **549**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:23:29 | Bash | Wait for pilot suite v5 | `cd /home/ronald/saas-hasner/logs/motor_turno/piloto; until [ -f suite_v5.log.fim ]; do /usr/bin/sleep 20; done; cat suite_v5.log.fim; grep -E '^(OK\|FAILED)($\| \()' suite_v5.log \| tail -1; grep '^Ran ' suite_v5.log \| tail -1` |
+| 18:23:24 | Bash | Kill stray loop | `pkill -f 'until \[ -f suite_v5.log.fim \]' ; echo ok` |
+| 18:23:20 | Bash | Update RELATO and test hook | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'PY' F='RELATO.md'; L=open(F).read().split('\n') L[1]='ESPERANDO: trava_teste.sh \| pid=12540' i=[k for k,l in enumerate(L) if l.startswith('MOTOR-LE-O-TURNO-INSTRUMENTO 07/11 16:22')]; assert len(i)==1 L[i[0]]+=' \| 18:2x volta 5 commitada na wt: f25b4e79 (O1, c5b rc 0; sessao reroda runner 35 OK + 14/14 mutantes rc=1 por assercao) + bc9db924 (O2, ...` |
 | 18:23:13 | Bash | Find trava pid | `pgrep -f trava_teste.sh \| while read p; do ps -o pid=,args= -p $p \| cut -c1-150; done; bash /home/ronald/saas-hasner/bin/trava_teste.sh --quem` |
 | 18:23:00 | Bash | Launch full suite on pilot wt | `bash /home/ronald/saas-hasner/bin/trava_teste.sh --quem; N=$(cat /home/ronald/saas-hasner/logs/motor_turno/piloto/wt_atual.txt); cd /home/ronald/saas-hasner/logs/motor_turno/piloto; rm -f suite_v5.log.fim; setsid nohup bash -c "bash /home/ronald/saas-hasner/bin/suite.sh --dir $N > suite_v5.log 2>&1; echo \$? > suite_v5.log.fim" >/dev/null 2>&1 & /usr/bin/sleep 8; head -5 suite_v5.log; pgrep -f "su ...` |
 | 18:22:54 | Bash | Commit O2 in the wt | `N=$(cat /home/ronald/saas-hasner/logs/motor_turno/piloto/wt_atual.txt); cd $N; git add bin/gerar_estado.py bin/turno_do_par_estado.py bin/tests/test_turno_do_par_estado.sh; git commit -q -F - <<'EOF' MOTOR-LE-O-TURNO-INSTRUMENTO volta 5 (opus final 1 REPROVA, item O2): os dois contadores publicados no ESTADO por leitor de host, com selo O2 da triagem_opus1: o contrato (logs/motor_turno/piloto/cont ...` |
