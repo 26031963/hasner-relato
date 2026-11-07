@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 07:17:47.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (117.1 MB). Acoes na janela: **1170**.
+**Medido em 07/11/2026 07:23:17.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (117.1 MB). Acoes na janela: **1163**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1173,10 +1173,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:23:34 | Bash | Find reusable exported-hash sonda | `cd /home/ronald/saas-hasner/logs; ls v3p5/b/dinheiro/ 2>/dev/null \| head; grep -l "ExportacaoDominio" o261/*.py v3p5/b/dinheiro/*.py 2>/dev/null \| head` |
 | 19:23:30 | Bash | Find precedent for exported hash proof | `cd /home/ronald/saas-hasner/app; grep -n "hash antes\\|hash_exportada\\|exportada INTACTA\\|hash FM" docs/RELATO.md docs/RELATO-ARQUIVO.md 2>/dev/null \| head -8 \| cut -c1-400; ls ../logs/h12h06b/ \| head -40` |
 | 19:23:25 | Bash | Check suite and codex status | `cd /home/ronald/saas-hasner; date +%H:%M; tail -n 3 logs/h12h06b/pauta08/v7/suite_merge.log \| cut -c1-200; grep -H '^rc=' logs/esmeril_sem/e2A?.out; bin/trava_teste.sh --quem` |
-| 19:18:27 | Bash | Wait for first group A part | `cd /home/ronald/saas-hasner; until [ -f logs/esmeril_sem/e2A1.r -o -n "$(grep -l '^rc=' logs/esmeril_sem/e2A?.out 2>/dev/null)" ]; do /usr/bin/sleep 30; done; grep -H '^rc=' logs/esmeril_sem/e2A?.out; date +%H:%M` |
-| 19:18:23 | Bash | Repoint ESPERANDO, check suite | `cd /home/ronald/saas-hasner/app; P=$(pgrep -f "^bash bin/codex_pergunta.sh.*e2A3" \| head -1); echo $P; sed -i "2s/.*/ESPERANDO: codex_pergunta.sh \| pid=$P/" docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'../bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"; tail -n 2 ../logs/h12h06b/pauta08/v7/suite_merge.log \| cut -c1-200` |
-| 19:18:15 | Bash | Split group A in three and relaunch Codex | `cd /home/ronald/saas-hasner/logs/esmeril_sem; umask 077 awk -F'\t' '$1=="CAMPO"\|\|$1=="NOTA"' run/inv_A.txt > /tmp/_h; { cat /tmp/_h; awk -F'\t' '$1!="CAMPO"&&$1!="NOTA" && $3 ~ /^app\/chamados\//' run/inv_A.txt; } > run/inv_A1.txt { cat /tmp/_h; awk -F'\t' '$1!="CAMPO"&&$1!="NOTA" && $3 ~ /^app\/ponto\/services\//' run/inv_A.txt; } > run/inv_A2.txt { cat /tmp/_h; awk -F'\t' '$1!="CAMPO"&&$1!="NO ...` |
-| 19:18:03 | Bash | Inspect empty-app lines and ponto subdirs | `cd /home/ronald/saas-hasner/logs/esmeril_sem; awk -F'\t' '$1!="CAMPO"{split($3,a,"/"); if(a[2]=="") print}' run/inv_A.txt \| head -3; awk -F'\t' '$1!="CAMPO" && $3 ~ /^app\/ponto\//{split($3,a,"/"); print a[3]}' run/inv_A.txt \| sort \| uniq -c \| sort -rn \| head` |
-| 19:17:59 | Bash | Count group A lines per app | `cd /home/ronald/saas-hasner/logs/esmeril_sem; awk -F'\t' '$1!="CAMPO"{split($3,a,"/"); print a[2]}' run/inv_A.txt \| sort \| uniq -c; grep -c '^CAMPO' run/inv_A.txt` |
-| 19:17:54 | Bash | Inspect group A inventory to split | `cd /home/ronald/saas-hasner/logs/esmeril_sem; wc -l run/inv_A.txt run/inv_B.txt run/inv_C.txt; head -3 e2A.q \| cut -c1-400; cut -d' ' -f1 run/inv_A.txt \| sort \| uniq -c \| head; awk '{print $2}' run/inv_A.txt \| cut -d: -f1 \| sort \| uniq -c \| sort -rn \| head -30` |
-| 19:17:50 | Bash | Check group A result | `cd /home/ronald/saas-hasner/logs/esmeril_sem; tail -n 2 e2A.out; wc -c e2A.r; grep -n "divergentes\\|Divergentes" e2A.r \| head;` |
