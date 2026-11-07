@@ -343,14 +343,19 @@ CODEX (regra de PISTA consolidada 31/10; funde, sem mudar o vigente, GPT6-CODEX-
   antigos seguem validos como apelido nos scripts e no CORTES.md; historia em LAPIDES).
   (PISTA.md#gpt6-codex-so-leitura)(PISTA.md#code-chama-codex)(PISTA.md#codex-padrao-pro)(PISTA.md#codex-pre-verificador)
   (PISTA.md#codex-triagem-independente)(PISTA.md#codex-escreve-red)(PISTA.md#despacho-por-papel)(PISTA.md#mais-codex)(PISTA.md#acelerar-pela-lei)(PISTA.md#agente-no-modelo-certo)
-  1. AMBIENTE. Codex CLI (plano Pro, so limite semanal; tmux `codex-hasner`) so LE: `~/codex_ws/<hash>` por `git archive`
+  1. AMBIENTE. Codex CLI (plano Pro, so limite semanal; tmux `codex-hasner`) LE nos 4 papeis de leitura: `~/codex_ws/<hash>` por `git archive`
      do HEAD, `--sandbox read-only --ask-for-approval never`, SEMPRE pelo wrapper
      `bin/codex_pergunta.sh [--sonda <script.py>] [--anexo <arq>]... <hash> <pergunta> <resposta>` com CODEX_OBRA e
-     CODEX_PAPEL (leitura|censo|verificador|sonda) obrigatorios. Dado de prod so por `--sonda` (envelope unico
+     CODEX_PAPEL (leitura|censo|verificador|sonda|construtor) obrigatorios. Dado de prod so por `--sonda` (envelope unico
      `bin/sonda_leitura.sh`, saida raspada antes do Codex; CODEX-SONDA-LEITURA no CORTES.md). A via pelo chat (Ronald) le a
-     resposta por `bin/gerar_codex_estado.py`. UNICA escrita permitida: teste RED de lote em copia PROPRIA, sob
-     CONTRATO-DE-INSTRUMENTO, revisado pelo Code antes do uso. PROIBIDO: outro sandbox, `-C` na arvore viva, chamada sem
-     wrapper, `--dangerously*`, Codex escrevendo codigo de producao, mexer em config do Code, cron novo.
+     resposta por `bin/gerar_codex_estado.py`. DUAS escritas permitidas, e so elas: (i) teste RED de lote em copia
+     PROPRIA, sob CONTRATO-DE-INSTRUMENTO, revisado pelo Code antes do uso; (ii) o papel construtor abaixo. PROIBIDO: outro sandbox, `-C` na arvore viva, chamada sem
+     wrapper, `--dangerously*`, Codex escrevendo codigo de producao FORA do papel construtor, mexer em config do Code,
+     cron novo.
+     CONSTRUTOR (L-126, CODEX-CONSTRUTOR-NEGOCIO): copia propria `--construtor ~/wt-codex-<obra>-NNNNNN`, escrita so em
+     `<wt>/app`, inventario no fim (varredura de FS) proibido ou falho = rc 3 (guarda no wrapper); descartar a wt e CONDUTA do
+     Code (o wrapper nao remove a wt). O wrapper guarda 1 Codex construtor por vez por repositorio (vaga `logs/construtor.vaga`, flock); "opus
+     final sempre" e o "1 opus" do teto MODO-PADRAO-POS-RESET sao CONDUTA: o wrapper nao os guarda.
   2. DESPACHO. Todo aval, laudo ou BO e DECOMPOSTO antes de qualquer trabalho, 1 linha no RELATO:
      `DESPACHO <id>: a,b -> Codex | c -> sonnet | d -> opus`. CODEX (primeiro, sempre) = leitura de codigo, rastrear classe,
      censo pela regra, quem-mais-le, autopsia de escritor/leitor, contra-exemplo, sonda de prod (contagem, censo de frota,

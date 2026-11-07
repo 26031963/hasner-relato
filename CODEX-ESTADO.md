@@ -1,7 +1,90 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 14:57** · publicado em **07/11/2026 14:58** (UTC-3)
+> Ultima resposta processada: **07/11/2026 15:24** · publicado em **07/11/2026 15:25** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 15:24 · sessao c9a5bc337859 · - · - · origem=Ronald (tmux)
+
+[prova/1_viva.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/1_viva.out:1)
+```text
+/bin/bash: line 3: /home/ronald/saas-hasner/INTRUSO_VIVA_C.txt: Read-only file system
+rc=1
+```
+
+[prova/2_tmp.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/2_tmp.out:1)
+```text
+/bin/bash: line 4: /tmp/INTRUSO_TMP_C.txt: Read-only file system
+rc=1
+```
+
+[prova/2b_tmpdir.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/2b_tmpdir.out:1)
+```text
+/bin/bash: line 5: /tmp/INTRUSO_TMPDIR_C.txt: Read-only file system
+rc=1 TMPDIR=
+```
+
+[prova/3_git.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/3_git.out:1)
+```text
+/bin/bash: line 6: /home/ronald/saas-hasner/.git/INTRUSO_GIT_C.txt: Read-only file system
+rc=1
+```
+
+[prova/3b_commit.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/3b_commit.out:1)
+```text
+fatal: Unable to create '/home/ronald/saas-hasner/.git/worktrees/wt-codex-provaefeito-152358/index.lock': Read-only file system
+rc=128
+```
+
+[prova/4_raiz.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/4_raiz.out:1)
+```text
+/bin/bash: line 8: /home/ronald/wt-codex-provaefeito-152358/INTRUSO_RAIZ_WT.txt: Read-only file system
+rc=1
+```
+
+[prova/5_home.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/5_home.out:1)
+```text
+/bin/bash: line 9: /home/ronald/INTRUSO_HOME_C.txt: Read-only file system
+rc=1
+```
+
+[prova/6_docker.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/6_docker.out:1)
+```text
+permission denied while trying to connect to the docker API at unix:///var/run/docker.sock
+rc=1
+```
+
+[prova/6b_sock.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/6b_sock.out:1)
+```text
+rc=7
+```
+
+[prova/7_tcp_local.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/7_tcp_local.out:1)
+```text
+bash: socket: Operation not permitted
+bash: line 1: /dev/tcp/127.0.0.1/46597: Operation not permitted
+rc=1
+```
+
+[prova/7c_unix.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/7c_unix.out:1)
+```text
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+PermissionError: [Errno 1] Operation not permitted
+rc=1
+```
+
+[prova/7b_tcp_ext.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/7b_tcp_ext.out:1)
+```text
+bash: socket: Operation not permitted
+bash: line 1: /dev/tcp/1.1.1.1/443: Operation not permitted
+rc=1
+```
+
+[prova/8_sobrevive.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/8_sobrevive.out:1)
+```text
+lancado
+rc=0
+```
 
 ## 07/11 14:57 · sessao 512712426e5e · FIO-E0-V4-E1 · verificador · origem=Code
 
@@ -706,22 +789,4 @@ Há novo selo fraco em D: `assertLessEqual(ps.count(), 1)` aceita zero perguntas
 
 A cópia não disponibiliza repositório Git: `git rev-parse HEAD` retornou “not a git repository”; confirmação independente do hash/pai: **[nao verificado]**.
 
-## 07/11 13:33 · sessao 1e81ef6de4a4 · - · - · origem=Ronald (tmux)
-
-1. **Alta — hardlink idêntico: fechado nas três fases.** `st_nlink>1` agora inclui qualquer arquivo regular em `tocados`; a classificação acrescenta `hardlink`. Pre-check, revalidação e fim executam essa implementação. (`bin/codex_pergunta.sh:149`, `bin/codex_pergunta.sh:164`, `bin/codex_pergunta.sh:223`, `bin/codex_pergunta.sh:371`, `bin/codex_pergunta.sh:398`)
-
-2. **Média — FIFO e ramo ilegível: fechados por leitura do código.** O curto circuito evita abrir FIFO como arquivo; a classificação passa a proibi-lo. `os.walk` propaga erro de acesso para `FALHA`, rc 1 do inventário e rc 3 no fim. Execução real: `[nao verificado]`. (`bin/codex_pergunta.sh:116`, `bin/codex_pergunta.sh:136`, `bin/codex_pergunta.sh:147`, `bin/codex_pergunta.sh:151`, `bin/codex_pergunta.sh:161`, `bin/codex_pergunta.sh:400`)
-
-3. **Média — descarte de bytes não UTF-8 só se sustenta parcialmente.** Simulação exclusivamente em memória do código exato, com arquivo rastreado limpo `b'app/folha/a\xff.py'`, produziu rc 0 e dois `TOCADO`: nome com surrogate e nome com `�`. O pre-check/revalidação recusam legitimamente pelo critério estrito de saída vazia, mas recusam uma árvore fisicamente igual à base; o fim aceita rc 0. Portanto, “falha fechado” descreve a admissão, não uma comparação correta dos caminhos. Problema preexistente ao v4b. (`bin/codex_pergunta.sh:126`, `bin/codex_pergunta.sh:132`, `bin/codex_pergunta.sh:141`, `bin/codex_pergunta.sh:165`, `bin/codex_pergunta.sh:223`, `bin/codex_pergunta.sh:374`, `bin/codex_pergunta.sh:400`)
-
-4. **Informativo — permissões e diretórios vazios continuam fora da identidade Git usada.** Só o bit de execução do proprietário entra no modo; diretórios existentes não têm permissões comparadas; diretório vazio novo recebe `TOCADO`, podendo terminar com rc 0. O descarte é coerente com avaliar apenas o conteúdo que Git transporta; não equivale a provar integridade completa da árvore física. (`bin/codex_pergunta.sh:118`, `bin/codex_pergunta.sh:129`, `bin/codex_pergunta.sh:143`, `bin/codex_pergunta.sh:165`, `bin/codex_pergunta.sh:167`)
-
-5. **Informativo — symlink rastreado inalterado continua aceito.** Só caminhos de `tocados` recebem a proibição de symlink; igualdade de modo/blob deixa o symlink existente fora desse conjunto. Não foi corrigido nem explicitamente descartado na triagem. (`bin/codex_pergunta.sh:114`, `bin/codex_pergunta.sh:119`, `bin/codex_pergunta.sh:147`, `bin/codex_pergunta.sh:157`, `bin/codex_pergunta.sh:163`)
-
-6. **Informativo — `onerror` não demonstra autoria da falha.** Permissão ou erro de I/O produzido por agente externo também resulta em `FALHA` e descarte. Não encontrei regressão adicional de admissão para árvore limpa normal: um ramo com arquivos rastreados omitidos já gerava “não vistos”; um ramo extra já gerava diretório tocado. Uma worktree real desta obra ilegível sem ação do Codex: `[nao verificado]`. (`bin/codex_pergunta.sh:144`, `bin/codex_pergunta.sh:150`, `bin/codex_pergunta.sh:152`, `bin/codex_pergunta.sh:402`)
-
-7. **Informativo — CRLF/smudge e case: descarte ambiental não demonstrado pela cópia.** O código continua comparando bytes físicos com SHA-1 bruto e nomes literalmente. A alegação de ext4 e a medição de ausência de filtro na configuração ativa permanecem `[nao verificado]`; a cópia não fornece a configuração Git efetiva. (`bin/codex_pergunta.sh:114`, `bin/codex_pergunta.sh:120`, `bin/codex_pergunta.sh:132`, `bin/codex_pergunta.sh:147`)
-
-8. **Média — teste de ilegibilidade depende de privilégio efetivo.** A fixture usa exclusivamente `chmod 000`; não verifica se o executor ainda consegue ler o diretório. Sob usuário com privilégio de leitura irrestrita, o original pode terminar rc 0 e o caso falhar antes de avaliar o mutante. Execução desse cenário: `[nao verificado]`. (`bin/tests/test_codex_pergunta.sh:322`, `bin/tests/test_codex_pergunta.sh:325`, `bin/tests/test_codex_pergunta.sh:386`)
-
-_2747 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2748 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
