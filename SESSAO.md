@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 10:16:06.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (121.6 MB). Acoes na janela: **571**.
+**Medido em 07/11/2026 10:21:20.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (121.6 MB). Acoes na janela: **566**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -576,8 +576,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 22:23:29 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '2s/.*/ESPERANDO: codex_pergunta.sh \| pid=647621/' app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
 | 22:23:24 | Bash |  | `cd /home/ronald/saas-hasner; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"; ps -eo pid,etime,args \| grep -E "(codex_pergunta\|sombra\|trava_teste)\.sh" \| grep -v grep \| cut -c1-200` |
 | 22:21:21 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '2s/.*/ESPERANDO: trava_teste.sh \| pid=558801/' app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova()[0])"` |
-| 22:21:13 | Bash |  | `cd /home/ronald/saas-hasner; /usr/bin/sleep 5; ps -o pid,args -p 558801 \| cut -c1-400; docker ps --format '{{.ID}} {{.RunningFor}}' \| head -3` |
-| 22:21:09 | Bash |  | `cd /home/ronald/saas-hasner; H=$(date +%H:%M); sed -i "/^PLANTIO (i) [0-9:]* ENTREGUE/s/suite --only chamados ponto pid 62972 (suite_mig.log) correndo;/suite_mig.log VERMELHA $H (FAILED failures=3, Ran 8053, rc=1: command sem casa B6.1; classificar:129 le materializada_em cru; fio.py:903 rechavear fora dos atos declarados) -- vai a lista da E1;/" app/docs/RELATO.md; grep -c "VERMELHA $H" app/docs/ ...` |
-| 22:17:28 | Bash |  | `cd /home/ronald/saas-hasner; chmod 600 logs/sombra/plantio_dry.py; H=$(date +%H:%M); sed -i "4i PLANTIO (i) $H ENTREGUE e PARADO (insumo E1 (b)): raia wt-plantio-185958 @18f1988b: chamados/services/fio.py::rechavear_data_evento (porta unica, trilha) + command migrar_data_evento_dia_do_turno (dry default, PAREI exportada/universo, reversao 600) + 9 testes; GREEN alvo 25 OK (mig_alvo4.log). INCOMPLE ...` |
-| 22:16:32 | Bash |  | `cd /home/ronald/saas-hasner; ps -p 62972 -o pid=; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova()[0])"` |
-| 22:16:29 | Bash |  | `cd /home/ronald/saas-hasner/app; H=$(date +%H:%M); sed -i "/^\| HOLERITE-ZIP-MATRICULA \|/s/\| provado por leitura 21:4x,/\| USO MEDIDO $H (log saas_ui desde 15\/09): v1 \/holerite\/upload-lote\/ 3 GET 0 POST (07\/10), v2 \/holerite\/lote\/ 6 POST; censo Codex logs\/holzip\/q1.r: zero link de UI -> L-111 (apagar view+url+template+import zipfile, reconciliar core\/juizes.py:1095), atras de E1\/E2;  ...` |
