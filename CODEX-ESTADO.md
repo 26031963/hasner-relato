@@ -1,7 +1,57 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 01:07** · publicado em **07/11/2026 01:09** (UTC-3)
+> Ultima resposta processada: **07/11/2026 02:22** · publicado em **07/11/2026 02:23** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 02:22 · sessao 8827481b08b7 · - · - · origem=Ronald (tmux)
+
+Achados concretos:
+
+1. **Há novo valor em dia lavrado que não é feriado em dobra.** Caso: COM, d0=06/10 folga e não feriado; batidas d0 13–23, d1 03–05; d1=07/10 feriado, vínculo folga no feriado e escala certa. O intervalo de 4h produz cauda que herda d0 pela regra ≤6h; ela é FT de d0 (`app/ponto/motor_calculo_v2.py:2403`, `:2407`, `:2448`, `:2468`). Entretanto `MotorComercial.calcular_periodo` julga a cauda pelo dia civil d1 e escreve HE100 noturna=120 (`:3264`, `:3268`, `:3294`). O fechamento seleciona `ft_feriado` pelo mesmo civil d1 (`app/ponto/services/fechamento.py:935`, `:947`, `:949`), e as linhas novas passam a acrescentar **2h** no mensal e no DiaPago de d0 (`:962`; `app/ponto/services/dia_pago.py:245`, `:252`). Baseline: a seleção errada já existia, mas o acréscimo de HE100 noturna era zero; volta6: 2h. Medido em memória com AST do `calcular_periodo`, helpers e prefixo da lavra; não foi execução integral ORM. (`app/ponto/motor_calculo_v2.py:3268`; `app/ponto/services/dia_pago.py:252`.)
+
+2. **Promoção FT do partido continua sem HE100 noturna.** `MotorTurnoPartido.calcular_periodo` escreve trabalho e noturno, devolvendo sem split (`app/ponto/motor_calculo_v2.py:2893`, `:2896`, `:2897`). O cálculo diário percorre apenas `resultado.periodos`; FT recebe somente mapa de dia (`:2928`, `:2944`, `:2951`, `:2955`, `:3083`). Caso NPART 21–00 em feriado no qual o vínculo folga: 180 trabalhados, 120 noturnos; a promoção paga 3h HE100 feriado e lê **0h** HE100 noturna, onde a regra exige **2h** (`app/ponto/services/fechamento.py:954`, `:964`; `app/ponto/services/dia_pago.py:250`, `:252`). A retirada do escritor do partido explica a lacuna; o leitor novo não a resolve (`app/ponto/motor_calculo_v2.py:2897`, `:2955`).
+
+3. **O split novo usa par bruto e pode pagar noturno inexistente no trabalhado efetivo.** Caso COM feriado 08–12/13–23, janela corta saída às22, HE extra declarada de300 conforme fixture B-SPLIT retirada: efetivo08–22, trabalho780, noturno0; a dobra grava HE100780 e chama split sobre bruto08–23, produzindo **HE100 noturna60**, violando `noturnas/fator=0` (`app/ponto/motor_calculo_v2.py:3224`, `:3238`, `:3260`, `:3357`, `:3361`, `:1015`). Medido por AST das funções reais: `he_noturna(08–23, HE100780, intervalo12–13)=60`; `minutos_noturnos(08–22)=0` (`:440`, `:441`).
+
+4. **Recorte longo continua contando noturno duas vezes e agora a dobra diária escreve esse resultado.** `minutos_noturnos` estende o primeiro segmento até `fim` e soma também22–24 (`app/ponto/motor_calculo_v2.py:111`, `:112`, `:116`). Medido: feriado04–23, toda duração HE1001140 → split **1200**, regra1140; feriado04–01(+1), HE1001260 → split **1440**, regra1260 (`:440`, `:441`, `:448`). Os loops novos chamam esse split (`:3104`, `:3361`). O noturno principal também permanece duplicado; igualdade contra o próprio campo não certifica o minuto contado uma vez (`:983`, `:986`).
+
+5. **Os totais HE100/HE100 feriado são conservados nos caminhos modificados por dia**, pois o novo loop distribui `minutos_trabalhados` de cada período e o mensal soma os campos; não há cálculo novo de duração (`app/ponto/motor_calculo_v2.py:3100`, `:3102`, `:3357`, `:3359`, `:329`, `:332`). A promoção mantém as atribuições anteriores de total e adiciona apenas noturna (`app/ponto/services/fechamento.py:955`, `:956`, `:962`; `app/ponto/services/dia_pago.py:249`, `:252`). O 12x36 permanece com dobra por período seguida de split (`app/ponto/motor_calculo_v2.py:2809`, `:2855`).
+
+Nenhuma execução integral de banco/fechamento, produção, DIFF de frota ou validação do hash foi feita. [não verificado]
+
+## 07/11 02:21 · sessao 4c69df77b36c · - · - · origem=Ronald (tmux)
+
+Achado concreto no leitor de alertas: A6 diz “HE idêntica em 3+ dias”, mas conta períodos, sem agrupar nem deduplicar datas. Redistribuir a dobra cria falso positivo: três períodos do mesmo feriado com 180 min cada produzem `A6=[d,d,d]`; antes `[0,0,540]` não produzia A6. Executei em memória o trecho real extraído por AST: resultados `{}` antes e três datas iguais depois. Exemplo completo pelo pareador [não verificado]. Fontes: `app/ponto/services/esmeril_espelho.py:20`, `:174-180`; contador mostrado como ocorrências em `:199`; novos escritores `app/ponto/motor_calculo_v2.py:3097-3104` e `:3354-3361`.
+
+Mapa dos campos:
+
+| Campo | Escritores | Leitores |
+|---|---|---|
+| `minutos_extra`, `_100`, `_100_feriado` | 12x36 `motor_calculo_v2.py:2810`; partido reset `:2933`, dobra `:3100`, excedente `:3153`; comercial período `:3269`, reset `:3332`, dobra `:3357`, excedente `:3416` | Soma mensal `:325-344`; DiaPago `dia_pago.py:180-184`; calculador `alimentacao.py:102-106`; espelho `espelho.py:112-114`; invariante export `porta_export.py:542`; alerta A6 `esmeril_espelho.py:176` |
+| `_50_noturna`, `_100_noturna` | Casca canônica `motor_calculo_v2.py:1014-1022`; resets partido `:2937-2938`, comercial `:3336-3337` | Soma mensal `:340-344`; DiaPago `dia_pago.py:181`, `:184`, `:252` |
+| `FechamentoMensal.horas_extras_100_noturna` | `fechamento.py:924`, promoção `:962-964`; persistência `:1169` | Comparação com DiaPago pela porta `porta_export.py:388`; TXT não emite esse subconjunto separadamente `folha/export.py:424-447` |
+| `DiaPago.horas_extras_100_noturna` | `dia_pago.py:184`, promoção `:252`; eventual substituição pelo calculador `:322-330` | Campo incluído no universo lavrado `:36`; presença de dinheiro `:863` |
+
+Os leitores de soma aceitam múltiplos períodos: `ResultadoMes` soma todos em `motor_calculo_v2.py:325-344`; a alimentação entrega todas as pontas em `calculador/alimentacao.py:102-106`; `calculador/regras.py:827-835` chama `he_noturna` por ponta e soma. Não há exigência de último período nesses trechos. O produtor alternativo v3 ainda grava a dobra inteira no último em `calculador/periodo.py:841-844`; isso é um escritor próprio preexistente, não uma suposição desses leitores.
+
+Mensal e DiaPago recebem a mesma partição `ft_feriado`, disjunta dos outros grupos em `fechamento.py:975-981`, e ambos somam o mesmo campo do período: `fechamento.py:962-964` e `dia_pago.py:244-253`. A igualdade numérica em produção [não verificado].
+
+Há outra divergência de contrato já existente: motor mede o split no par **cru**, `motor_calculo_v2.py:1015`; calculador recebe o par **efetivo**, `calculador/alimentacao.py:83`, `:106`, e o mede em `regras.py:832`. As novas chamadas passam a expor esse descompasso nos feriados curados. Contraprova com janela real depende do restante da auditoria [não verificado].
+
+Tela, calendário e PDF leem totais lavrados e não somam os subconjuntos novamente: `templates/ponto/espelho.html:279-283`; `colaboradores/services/calendario.py:651-656`; `relatorios/pdf_espelho.py:837-859`; `dia_pago.py:914-928`. TXT mantém HE100 total/feriado e adicional noturno, sem nova linha para HE noturna: `folha/export.py:420-447`.
+
+O invariante da porta ainda agrupa períodos pela data civil da entrada, `porta_export.py:538-544`, enquanto a lavratura usa o mapa da jornada em `dia_pago.py:174`. Redistribuir HE entre pares que cruzam a meia-noite muda os agrupamentos desse contador; falso positivo concreto dele [não verificado].
+
+## 07/11 02:21 · sessao 2195e8a35400 · - · - · origem=Ronald (tmux)
+
+- Referência órfã: `_dia_do_F10h` diz “batidas do F10f”, mas esse teste foi retirado; corrigir o comentário em `app/ponto/tests/test_o280_bateria_da_lei.py:1580`. Ausência do símbolo confirmada por busca; demais órfãos [não verificado].
+- Censo coerente: contrato restaurado para **10** ajudantes em `app/ponto/tests/test_contract_juiz_batida.py:326`; AST contou exatamente 10 em `MotorBase`. MATRIZ preserva apenas F11/F11b/F11c/F11d/F11r e F10h/F10i, todos exercidos por comparações de valores (`app/ponto/tests/test_o280_bateria_da_lei.py:210`, `:212`, `:1272`, `:1287`).
+- RED estático da base: F11 **0→120 min**, F11b **0→60 min**, F11c mensal/DiaPago **0→1 h**, F11d **0→360 min**; o diff fornecido mostra os ramos anteriores sem split, e as expectativas estão em `app/ponto/tests/test_o280_bateria_da_lei.py:1670`, `:1708`, `:1748`, `:1779`. Execução na base [não verificado].
+- F11d “Era 240” descreve a primeira cura, que chamou split só no último período; **19aeede1 tinha zero**, pois dava `continue` sem split. Convém explicitar a versão em `app/ponto/tests/test_o280_bateria_da_lei.py:1776`.
+- F11r é referência preexistente **300 min**, não RED do item (`app/ponto/tests/test_o280_bateria_da_lei.py:1676`, `:1692`).
+- F10h gêmeo fixa **570 HE100 feriado / 390 noturna**, incluindo cauda zero (`app/ponto/tests/test_o280_bateria_da_lei.py:1602`, `:1606`). O pino compara valores, mas `expectedFailure` aceita outras falhas; também exige **660 HE100 feriado**, mudança de pertença retirada do escopo (`:1611`, `:1624`). O gêmeo exercita a mesma fixture, portanto o conjunto não é vazio (`:1601`, `:1623`).
+- F10i exige **90/102,86**, comportamento preservado e guarda de outro escopo; não é RED do item (`app/ponto/tests/test_o280_bateria_da_lei.py:1643`).
+- Os testes de mutantes longos recuperaram a mordida anterior, coerente com a retirada do teto em `minutos_noturnos`: `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:365`, `:368`, `:376`; regra ainda sem teto em `app/ponto/motor_calculo_v2.py:110`. Suite/banco não executados [não verificado].
 
 ## 07/11 01:07 · sessao 9e4c27bca95a · FIO-E0-V4-E1 · verificador · origem=Code
 
@@ -1084,192 +1134,4 @@ O help_text diz “batida criada + chamado fechado” (`app/chamados/models.py:2
 
 Mistura temporal adicional: o decodificador de contexto prioriza `data_turno`, mas também aceita `data_batida`, data textual de timestamp de entrada e horário previsto (`app/chamados/data_evento.py:27`); `date.fromisoformat(v[:10])` extrai a data escrita sem conversão de timezone (`:11`). O relógio de expiração usa `datetime.date.today()` (`app/chamados/veredito_lavrado.py:112`), conversa usa `timezone.localdate()` (`app/chamados/models.py:2427`), e batida materializada combina `data_evento` com HH:MM e depois ajusta overnight (`app/chamados/services/materializacao.py:414`, `:420`). Equivalência universal de dia civil/dia de turno não está comprovada e o código mostra domínios distintos nesses pontos.
 
-## 06/11 22:43 · sessao ae89694c2775 · - · - · origem=Ronald (tmux)
-
-Censo somente estático; os pontos abaixo descrevem esta cópia, sem afirmar ocorrência em produção. Fontes nas respectivas linhas.
-
-**1. `cobranca_viva_do_dia(colaborador, modulo_origem, dia, *, excluir=None)`**
-
-Responde `ChamadoColaborador | None`: chamado mais novo do colaborador e módulos pedidos, com `status_local ∈ VIVOS`, dia forte igual ao solicitado, excluindo opcionalmente o chamado indicado. Ordena por `-criado_em,-pk`; não confere exigibilidade de marco, batida, ausência, decisão nem silêncio/arquivo. `app/chamados/juizes.py:1886-1902`.
-
-Lê `ChamadoColaborador.colaborador`, `modulo_origem`, `status_local`, `contexto_json.data_turno`, `celula.data`, `criado_em`, `pk`; no `dia_do_fato(..., fortes=True)`, a célula vence, depois a chave de data declarada pelo catálogo e `data_turno`. `app/chamados/juizes.py:1897-1902`, `app/chamados/juizes.py:80-121`.
-
-Relógio: recebe `dia`; não lê o instante atual nesse percurso. O `criado_em` serve à ordenação. `app/chamados/juizes.py:1886-1902`.
-
-Todos os chamadores diretos encontrados no código de produção, incluindo alias:
-
-- `ChamadoColaborador._plano_pergunta_viva`: `app/chamados/models.py:373`.
-- `ChamadoColaborador._gate_premissa_do_fechamento`: `app/chamados/models.py:711`.
-- `_julgar_colab_corpo` via `_cobr_c8`: `app/ponto/services/cartorio.py:1604`.
-- `resolver_cobranca_da_entrada`: `app/ponto/services/entrada_sincronizada.py:28`.
-- `_autoresolve_f2_f4`: `app/ponto/services/triagem_batida.py:589`.
-
-**2. `pergunta_viva(p)`**
-
-Responde bool, com memo na instância (`_pv_memo`); delega ao cálculo, não é função pura de argumentos explícitos: lê ORM, relógio interno, contexto/memos e escreve o memo no objeto. `app/chamados/juizes.py:822-848`, `app/chamados/juizes.py:1197-1218`.
-
-Precedência efetiva:
-
-1. `validada_em` preenchida → morta. `app/chamados/juizes.py:1136`.
-2. Competência trancada, salvo toque humano posterior, ou via legada `competencia_trancada` materializada → morta. `app/chamados/juizes.py:1140-1146`, `app/chamados/juizes.py:919-954`.
-3. Resposta com texto e carimbo → viva, exceto admin decidiu o dia ou resposta concorda com a luz e o dia não acusa. `app/chamados/juizes.py:1148-1162`, `app/chamados/juizes.py:1087-1132`.
-4. Via de identidade com materialização → morta. `app/chamados/juizes.py:1170-1172`.
-5. Materializada com luz do marco acesa → morta. `app/chamados/juizes.py:1177-1179`.
-6. Célula acusadora → viva; célula não acusadora absolve quando não há marcos pendentes ou a luz da pergunta acendeu. `app/chamados/juizes.py:1181-1196`.
-7. Na janela viva, `classificar_falta` acusando → viva. `app/chamados/juizes.py:1197-1203`.
-8. Sem materialização → viva; com materialização, exige testemunha externa, ou morre se esse último juiz falhar. `app/chamados/juizes.py:1207-1218`.
-
-Entradas diretas: `PerguntaDisputa.validada_em`, `respondida_em`, `resposta_colab`, `via_resolucao`, `materializada_em`, `data_evento`, `tipo_resposta`, `motivo`, `celula`, `disputa.colaborador`, `chamado_destino`; célula: `veredito`, `veredito_via`, `dna.marcos`, `ata.lampadas` (`hora,tipo,acesa,luz`), marcos pendentes. `app/chamados/juizes.py:1135-1218`, `app/chamados/juizes.py:886-916`, `app/chamados/juizes.py:1099-1132`.
-
-Entradas transitivas relevantes:
-
-- Empresa/corte da janela, `PeriodoFechamento.fechado_em`, toque humano posterior em `LogAuditoria`; atos `cobrar_dia_manual`, `veredito_celula`, `desarquivar_chamado`, com usuário diferente do sistema. `app/chamados/juizes.py:935-954`, `app/chamados/juizes.py:961-963`, `app/chamados/juizes.py:1065-1084`.
-- `Batida` ligada à pergunta e não retratada, batida no slot (`timestamp,tipo,retratada_em`), slot derivado pelo materializador, completude via `turnos_do_colab`, trilha `retratar_pergunta_obsoleta`; fallback lê `chamado_destino.status_local ∈ ENCERRADOS`. `app/chamados/juizes.py:326-347`, `app/chamados/juizes.py:350-372`, `app/chamados/juizes.py:271-282`, `app/chamados/juizes.py:718-778`.
-- `classificar_falta` lê célula (`trabalha,dna`), ausências de cobrança (`tipo,minutos,data,data_fim`), vínculo/tipo do dia, marcos congelados e turnos com batidas apuráveis. `app/escala/servico_jornada.py:302-304`, `app/escala/servico_jornada.py:340-355`, `app/escala/servico_jornada.py:391-435`.
-
-Relógios ocultos: `_dentro_da_janela_viva` lê `date.today()` e monta janela anterior+corrente sem empresa explícita; `classificar_falta` lê `_tz.now()` contra o fim previsto. Não recebe `agora`. `app/chamados/juizes.py:556-588`, `app/escala/servico_jornada.py:375-378`.
-
-Dependência de estado gravado: `validada_em` mata antes de conferir efeito; `via_resolucao`+`materializada_em` encerram por identidade; `celula.veredito/veredito_via/ata` e `destino.status_local` também entram como projeções/estado. Não lê um campo persistido `estado` da pergunta: a property `estado` é derivada dela. `app/chamados/juizes.py:1136`, `app/chamados/juizes.py:1170-1196`, `app/chamados/juizes.py:743-759`, `app/chamados/models.py:2492-2506`.
-
-Todos os chamadores diretos de produção identificados por AST, com aliases resolvidos:
-
-- Juízes auxiliares: `pergunta_sem_lastro_ou_viva:1225`, `perguntas_vivas_de:1230`, `fio_vivo:1242`, `alimentar_portas:1302`, `perguntas_respondidas_a_validar:1403`, `_dias_das_perguntas_vivas:2031`, todos em `app/chamados/juizes.py`.
-- Modelos: `_vivas_entre:351`, `_universo_da_ressuscitacao:1458`, `pendentes_do_colaborador:1739`, `DisputaSupervisao.fechar:1837`, `PerguntaDisputa.estado:2502`, `carimbar:2596`, `viva:2809`, todos em `app/chamados/models.py`.
-- Views: `responder_pergunta_disputa:1242,1257`, `reabrir_disputa_supervisao:1417`, em `app/chamados/views.py`; `api_disputa_responder` em `app/api/views.py:2631`.
-- Relatório `classificar`: `app/chamados/relatorios_disputa.py:18`.
-- Reconciliador: `lavrar_sem_turno_aberto:398`, `perguntas_absolvidas_pela_celula:651`, `_viva_em_competencia_aberta:748`, `veredito_orfa:1075`, `reatar_pergunta_orfa:1579`, em `app/chamados/reconciliador.py`.
-- Calendário `contexto_calendario`: `app/colaboradores/services/calendario.py:476`; `dia_do_colab`: `app/ponto/services/dia_do_colab.py:71`.
-- Fio: `montar_chamados_fio:234`, `processar_post_fio:602`, `_costura_nao_mata_o_fio:775`, `migrar_resolvedoras_vivas:932,935`, em `app/chamados/services/fio.py`.
-- App: `perguntas_do_app:53`, `_marco_ja_perguntado:111`, em `app/chamados/services/pergunta_no_app.py`.
-- `montar_contexto_detalhe`: `app/chamados/services/acoes_chamado.py:348`.
-- `resolver_perguntas_por_chamado_resolvido`: `app/chamados/services/disputa_emissao.py:1597` e `:1679`.
-- `medir`: `app/chamados/services/competencia_trancada.py:122`, `:132`, `:142`.
-- `desfazer_carimbo_sem_lastro`: `app/chamados/services/relavra_via.py:227`.
-- `perguntas_pendentes_do_colab`: `app/chamados/services/aviso_pendencia.py:13`.
-- Vigia: `viva_em_disputa_fechada:755`, `carimbos_sem_lastro_por_dono:813`, em `app/chamados/services/vigia_fio.py`.
-- Comandos operacionais: `disparar_perguntas_competencia.handle`, `app/chamados/management/commands/disparar_perguntas_competencia.py:148`; `reabrir_orfas_enterradas.handle`, `app/chamados/management/commands/reabrir_orfas_enterradas.py:83`; auditor `_contraprova_f1t:202`, `_i6_pares:540`, `handle:858,894,1650,1707,1766,1779`, em `app/chamados/management/commands/auditar_invariantes_chamados.py`.
-
-A property `.viva` é outra entrada transitiva que delega integralmente ao juiz; o inventário acima é de chamadas diretas da função, não de todos os acessos às properties. `app/chamados/models.py:2800-2809`.
-
-**3. `motivos_a_perguntar(cel, hoje, agora=None, *, carimbadas=None, julgada_antes=_JULGADA_DA_CELULA)`**
-
-Responde lista de motivos novos da célula; opcionalmente acrescenta IDs a `carimbadas`. Isso significa “o que ainda falta emitir”, não “todas as ações atualmente exigíveis”. `app/chamados/services/fabrica_da_celula.py:74-85`, `:118-126`.
-
-Lê célula/colaborador (`data,trabalha,ata,veredito,julgada_em,colaborador.situacao`), `dia_sem_trabalho`, teto por instante e marcos do vínculo; corta futuro, inativo, dia sem trabalho, veredito não acusador e `parcial_so_lista`. `app/chamados/services/fabrica_da_celula.py:88-104`, `app/ponto/services/cartorio.py:831-848`.
-
-Dedup: lê **qualquer** `PerguntaDisputa` do colab-dia, exclui apenas `VIA_DUPLICATA`, junta por `motivo`; não aplica `pergunta_viva` ao conjunto `ja` e não discrimina instância do marco. `app/chamados/services/fabrica_da_celula.py:118-126`.
-
-`carimbadas`: usa `materializada_em`, `via_resolucao` fora das identidades e `disputa.fechada_em is None`; são elegibilidade de desfazer, não vitalidade. `app/chamados/services/relavra_via.py:169-182`.
-
-Faltantes saem de `_ata_do_dia`→`_marcos_faltantes`→`grade_da_celula`, olhando dia e véspera e lampadas apagadas; sem escala e sem ata, pode recorrer a `classificar_falta`. Os motivos são comprimidos, sem duplicar motivo para duas pausas. `app/chamados/services/fabrica_da_celula.py:34-65`, `app/chamados/services/disputa_emissao.py:818-844`, `app/chamados/services/declaracao_texto.py:65-127`.
-
-`parcial_so_lista` depende de `cobertura_parcial`, `periodo_parcial`, julgamento anterior e fato novo; este lê Batida criado/retratada, Ausencia criado/atualizado/aprovada, Justificativa criado/atualizado/aprovada, célula regenerada/editada e marco que venceu. `app/ponto/services/cartorio.py:329-400`.
-
-Relógio: `hoje` e `agora` vêm por parâmetro; se `agora=None`, lê `timezone.localtime()`. O ramo fallback `classificar_falta` continua lendo `_tz.now()` mesmo com `agora` passado. `app/chamados/services/fabrica_da_celula.py:93-98`, `:55-57`, `app/escala/servico_jornada.py:375-378`.
-
-Únicos chamadores diretos em produção: `perguntar_pela_celula` (`app/chamados/services/fabrica_da_celula.py:164`) e `motivos_que_o_evento_deixou` (`:199`).
-
-**Contradições/casos estáticos úteis à consolidação**
-
-- `registrado` é `VIVOS`, portanto `cobranca_viva_do_dia` o devolve; `registrado` não é `COBRANCA` e não pede ação. Diferença de universo já no nome “cobrança viva”. `app/chamados/juizes.py:1894-1902`, `app/chamados/catalogo/motor.py:24-29`.
-- Chamado `VIVOS` de dia já coberto/folga/marco aceso continua retornável pelo C8; fábrica pode dar `[]` por dia sem trabalho ou veredito não acusador, pergunta pode estar morta. É construção permitida pelos predicados, ocorrência no dado raspado [nao verificado]. `app/chamados/juizes.py:1897-1902`, `app/chamados/services/fabrica_da_celula.py:91-100`, `app/chamados/juizes.py:1177-1196`.
-- Dia acusa, pergunta validada sem plantio: `pergunta_viva=False` imediatamente; fábrica não emite porque já tem o motivo; falta continua na ata. `app/chamados/juizes.py:1136-1137`, `app/chamados/services/fabrica_da_celula.py:118-126`, `app/chamados/services/declaracao_texto.py:109-123`.
-- Pergunta sem carimbo de materialização, próprio marco aceso e outro marco faltante: C6 pode retornar viva por `cel.veredito ∈ VEREDITOS_ACUSAM`; o teste da luz exige `materializada_em` naquele ramo. Fábrica não reemite o motivo já existente. `app/chamados/juizes.py:1177-1184`, `app/chamados/services/fabrica_da_celula.py:118-126`.
-- Competência trancada sem toque: C6 dá morta; fábrica não consulta tranca na seleção e pode listar um motivo novo. `app/chamados/juizes.py:1140-1141`, `app/chamados/services/fabrica_da_celula.py:88-126`.
-- Duas pausas: C6 da pergunta de intervalo exige luz de **todas** as pausas; fábrica converte várias instâncias faltantes no mesmo motivo e colapsa em uma saída. Nenhum dos dois entrega a identidade de cada instância exigida pelo v4. `app/chamados/juizes.py:894-916`, `app/chamados/services/fabrica_da_celula.py:59-65`, `:123-126`.
-
-## 06/11 22:43 · sessao f2d92a16f8d6 · - · - · origem=Ronald (tmux)
-
-Somente leitura; censo estático da cópia.
-
-**`porta_alcancavel_do_dia(celula_id, *, alimentacao=None)`**
-
-- Retorna `None` ou `{rota, fila, verbos, fio}`; soma chamados da célula na fila e perguntas vivas no app, com âncora na fila e resposta não vazia quando respondidas. O fio prioriza `cobrar→colab`, depois `validar→admin`, senão `chamado`. `app/chamados/juizes.py:1327-1338,1341-1387`.
-- Lê, via `alimentar_portas`, a partição **global** dos chamados vivos, pertença à fila global, perguntas das células julgadas pelo C6 e célula→colaborador; o app é carregado sob demanda, uma vez por colaborador no mapa do lote. `app/chamados/juizes.py:1282-1320`.
-- Campos explícitos: chamado `id/modulo_origem/silenciado_ate/criado_em/urgencia`, perguntas `respondida_em/resposta_colab/chamado_destino_id/disputa.chamado_id`, além das entradas transitivas de C6 e do app. `app/chamados/services/verbos.py:44-57`; `app/chamados/juizes.py:1254-1257`; `app/chamados/services/fio.py:116-117`.
-- Não recebe relógio: a partição lê `timezone.now()` e `qs_na_fila` lê outro `timezone.now()`. Portanto uma alimentação pode cruzar fronteira de silêncio entre as duas leituras. `app/chamados/services/verbos.py:35,48-51`; `app/chamados/services/painel.py:186-188`.
-- Chamadores diretos de produção: `vigia_fio.censo_alcance`, `cadastro_realidade.beco_em_lote`, `fora_da_folha._porta`; esta última alimenta `_fio_do_dia`, usado por `fora_da_folha` e `o_que_segura`, e é chamada novamente para listar os chamados de `o_que_segura`. `app/chamados/services/vigia_fio.py:635`; `app/escala/services/cadastro_realidade.py:460`; `app/folha/fora_da_folha.py:65-78,178,221-225`.
-
-**`dono_fora_do_fio(colab, data, perguntas, lista, com_papel=False, *, oferecido)`**
-
-- Retorna, nesta ordem: `decisao_do_dia_pendente`, `aguarda_decisao_de_ausencia`, `escala_nao_descreve_o_dia`, `fio_do_admin`, ou `None`; com `com_papel=True`, retorna `(balde,papel)`. `app/chamados/services/vigia_fio.py:274-315`.
-- Lê `oferecido` já calculado; ausência cobrindo a data para cobrança e seu status em `ABERTAS`; todas as perguntas da célula, buscando `estado==VALIDADA` e código `FOLGA_CONTESTA`; presença e dono lavrado na lista do admin. `app/chamados/services/vigia_fio.py:306-314`; `app/chamados/services/validacao.py:216-218`.
-- Ausência usa `colaborador/data/data_fim/tipo/status`, selecionando maior `(data,pk)`; cobrança aceita toda não rejeitada. `app/ponto/turnos.py:2509-2517,2536-2557`.
-- `p.estado` **é property**, não coluna de estado: validação sem materialização→`VALIDADA`; validação com materialização→`RESOLVIDA`; os demais ramos consultam C6 e carimbos. `app/chamados/models.py:2492-2506`.
-- Não recebe nem lê relógio diretamente. O `oferecido` vem do calendário, que lê seu próprio `timezone.now()` e deriva `hoje`; a lista recebe `hoje/agora` no construtor e passa ambos a `cadastro_realidade.lista`. `app/chamados/services/vigia_fio.py:199-216,258-271`; `app/colaboradores/services/calendario.py:117-138,159-164`.
-- Todos os chamadores de produção encontrados: `censo` e `censo_alcance`. `app/chamados/services/vigia_fio.py:431,654-656`.
-
-**Carga e custo estático**
-
-- Existe `CargaDaJanela(colaboradores, ini, fim)`, carregador dos mesmos corpos de `turnos_do_colab`, `dias_encerrados` e `dia_das_batidas`. Usa janela com pad, células/geradoras, candidatos a vínculo, todos os vínculos com tipo, atas; batidas apuráveis e última batida são carregadas sob demanda em lote, turnos memorizados por colaborador. `app/ponto/turnos.py:2922-2964,2974-3010`.
-- Não carrega atualmente perguntas/decisões, chamados/partição global, ausências/cobertura ou precedência: o construtor e os métodos existentes terminam nas entradas e respostas acima. `app/ponto/turnos.py:2936-3010`.
-- Os nomes literais `precedencia_cobertura_teto` e `portas_com_universo_global` não foram encontrados por busca em todo o repositório: existência dessas funções nesta cópia **[nao verificado]**.
-- Composição existente para portas: `alimentar_portas` chama `particionar_verbos(qs_vivos())` **global**, depois `qs_na_fila()` **global**, filtra perguntas pelas células pedidas e reutiliza o lote. Chamá-la por célula repetiria o universo global; os leitores existentes passam alimentação em lote. `app/chamados/juizes.py:1285-1306,1375`; `app/chamados/services/vigia_fio.py:604,635`; `app/escala/services/cadastro_realidade.py:456,460`; `app/folha/fora_da_folha.py:166,218`.
-- Ainda há consultas por pergunta/colaborador no C6 e app; o próprio carregador declara essa limitação. `_no_app` memoiza por colaborador, não por dia. `app/chamados/juizes.py:1260-1262,1309-1320`.
-- Precedência de um dia delega a `fatos_do_periodo(colab,data,data)`; período aceita feriados/vínculos/foto/células previamente carregados, mas ainda consulta ausências e folgas por colaborador. `app/ponto/precedencia.py:242-282`.
-- Cobertura pontual faz `.first()` por colab-dia; `cobertura_ausencia_periodo` já fornece uma consulta por colaborador para toda a janela com o mesmo desempate. `app/ponto/turnos.py:2536-2557,2733-2770`.
-- O teto da pergunta passa por `vencidos_no_instante→cartorio.marcos_vencidos(colab,cel,cel.data,agora)`; não equivale simplesmente a “dia encerrado”, pois mantém ramo de passado sem marcos. `app/chamados/services/fabrica_da_celula.py:15-31`.
-- Para janela: ampliar a alimentação com resultados de precedência/cobertura/teto, decisões e perguntas por instância, e partição global única; eliminar consultas internas dos corpos puros e passar o mesmo `agora` às leituras temporais. Isto é necessidade inferida dos pontos de consulta atuais, não implementação existente. `app/ponto/turnos.py:2936-3010`; `app/ponto/precedencia.py:273-282`; `app/chamados/juizes.py:1282-1320`; `app/chamados/services/verbos.py:35`; `app/chamados/services/painel.py:188`.
-
-**Divergências concretas pelo código**
-
-1. Um único chamado `registrado` ou silenciado pode ser retornado pelo C8 porque ele filtra `VIVOS`, mas dar porta `None`, pois a fila exige `COBRANCA` e silêncio vencido, supondo nenhuma outra porta. `app/chamados/juizes.py:1894-1902`; `app/chamados/services/painel.py:186-188`; `app/chamados/juizes.py:1382-1383`.
-2. Pergunta respondida com texto, não validada/trancada, sem decisão admin nem concordância com a luz, pode viver mesmo sob âncora terminal; a porta exige âncora na fila e pode retornar `None`. `app/chamados/juizes.py:1135-1162,1378-1383`.
-3. Pergunta com `respondida_em` e texto vazio pode viver se a célula acusa; a porta rejeita explicitamente `respondida_sem_texto`. `app/chamados/juizes.py:1150,1181-1184,1254-1257,1380`.
-4. Porta exclui explicitamente “Resolver dia”; `dono_fora_do_fio` responde decisão pendente quando `oferecido=True`, mesmo sem porta. Também pode responder ausência aberta. São respostas de escopos distintos. `app/chamados/juizes.py:1367-1369`; `app/chamados/services/vigia_fio.py:306-310`.
-5. Existência da porta lê C6, mas verbo lê crédito SQL com `q_vivas` e exclui materialização cujo `veredito_lavrado=sim`; o campo pode ficar velho até o cron. Assim pergunta viva e verbo atribuído à âncora podem divergir. `app/chamados/juizes.py:1361-1366`; `app/chamados/services/raiox.py:72,110-118,133-149`.
-6. Folga aceita com `validada_em` **e** `materializada_em` vira `RESOLVIDA`; o ramo de dono exige literalmente `VALIDADA`, logo não reconhece essa linha como `escala_nao_descreve_o_dia` — dependendo dos demais ramos, pode cair na lista ou em `None`. `app/chamados/models.py:2499-2501`; `app/chamados/services/vigia_fio.py:311-315`.
-7. O que a fábrica considera “ainda perguntar” exclui todo motivo já presente, salvo duplicatas, independentemente de sua vitalidade; uma pergunta existente viva pode significar C6=True e `motivos_a_perguntar=[]`. `app/chamados/services/fabrica_da_celula.py:118-126`.
-
-Ocorrência dessas classes em produção, quantidade de consultas e custo de frota nesta execução: **[nao verificado]**.
-
-## 06/11 22:43 · sessao e59c7c967e20 · - · - · origem=Ronald (tmux)
-
-Censo dos itens 1–2, somente código; existência/conteúdo das trilhas em produção [nao verificado].
-
-**1. Escritores de decisões na mesma linha**
-
-| Ato/escritor | Campos e perda do anterior | Preservação encontrada |
-|---|---|---|
-| `responder_pergunta_disputa_core` | Substitui `resposta_colab` e `respondida_em`; se já validada, zera `validada_em/por`; pode descarimbar absorção sem lastro. `app/chamados/services/disputa_emissao.py:1282`, `:1295`, `:1300`. | Não cria `RespostaAnterior`. Evento conserva a validação anterior, mas não a resposta anterior (`:1309`); log da nova resposta é truncado em 24 caracteres (`:1318`–`:1321`); nota conserva a nova resposta/display, com deduplicação e execução best-effort (`:1346`–`:1358`). Não garante sequência completa de correções. |
-| Escape `FOLGA_CONTESTA/OUTRO_MOTIVO`, no mesmo core | Substitui `recusa_motivo` por texto “Colaborador respondeu…”, truncado a 240. `app/chamados/services/disputa_emissao.py:1331`, `:1340`. | Sem snapshot do motivo anterior e sem RA nesse ato; nota da resposta vem depois (`:1343`–`:1358`). |
-| `reabrir_para_correcao` | Zera `respondida_em`, `validada_em/por`, `resposta_colab`; com `desfazer_absorcao=True`, também `materializada_em/por` e `via_resolucao`. `app/chamados/services/disputa_emissao.py:1393`, `:1413`–`:1416`; `app/chamados/models.py:2699`. | Cria RA antes do update, no mesmo atomic, apenas se havia texto ou `respondida_em`; copia resposta e validação, mas não recusa/materialização/via (`disputa_emissao.py:1401`–`:1412`). |
-| `responder_automaticamente` | Escreve texto e `respondida_em` quando texto vazio; pode substituir carimbo existente com texto vazio. `app/chamados/services/disputa_emissao.py:1431`–`:1435`. | Não cria RA, nem evento próprio nessa função (`:1422`–`:1436`). |
-| `carimbar_resposta_pela_trilha` | Preenche somente `respondida_em` nulo, com instante passado; não substitui carimbo preenchido. `app/chamados/services/disputa_emissao.py:1448`–`:1451`. | Evento com novo instante/motivo, sem estado anterior necessário porque guarda exige nulo (`:1452`–`:1454`). |
-| `_carimbar_validacao`, chamado pelo validar e pelo aceite de folga | Atribui `validada_em=now`, `validada_por=autor`. `app/chamados/services/validacao.py:127`–`:133`, `:263`, `:290`, `:396`. | `validar_pergunta` recusa carimbo já preenchido (`:366`–`:368`); registra log de validação (`:440`–`:443`). Não cria linha RA a cada aceite. |
-| `devolver_validacao_recusada` | Zera `validada_em/por` quando materialização de hora foi recusada e há motivo; resposta fica. `app/chamados/services/validacao.py:180`–`:190`. | Evento `validacao_devolvida` contém antes/depois de assinatura, motivo e fechamento da disputa (`:205`–`:212`); sem RA. A foto anterior fornecida pelo fluxo de validar é anterior ao carimbo recém-tentado (`:384`–`:396`, `:425`). |
-| `recusar_pergunta` | Substitui `recusa_motivo`; chama reabertura que limpa resposta/carimbos. `app/chamados/services/validacao.py:541`–`:547`. | RA pela reabertura; nota guarda resposta anterior e motivo; evento guarda resposta, horário e recusa anteriores (`:551`–`:560`). **Não passa `por/motivo` à RA** (`:547`). |
-| `_materializar_batida_retroativa` — pendência de tipo | Substitui `pendencia_admin/recusa_motivo` pelo primeiro resultado de `_ts_tipo_do_plantio`. `app/chamados/services/materializacao.py:820`–`:826`. | Sem RA e sem snapshot anterior nesse bloco (`:820`–`:828`). |
-| `_carimbar_recusa` | Substitui `recusa_motivo` somente se diferente; colisão também carimba identidade `fato_ocupado`. `app/chamados/services/materializacao.py:1064`–`:1078`. | Nota no chamado-destino quando muda; contém recusa traduzida atual, não motivo anterior (`:1079`–`:1082`). Sem destino, não escreve essa nota (`:1080`). |
-| `carimbar` | Substitui `materializada_em/por/via`; pode preencher resposta/validação nulas. `app/chamados/models.py:2583`–`:2594`. | Foto anterior serve para desfazer **em memória** em caso de recusa/exceção; não é fato persistido de histórico (`:2595`–`:2613`). RA não é chamada. |
-| `carimbar_identidade` | Substitui carimbo/via e, quando fornecida, recusa; `manter_carimbo=True` preserva instante/autor anterior, mas troca via. `app/chamados/models.py:2636`–`:2644`. | Não contém histórico próprio; trilha depende de quem chama (`:2625`–`:2644`). |
-| `fechar_por_admin` | Encaminha para identidade `admin_decidiu`; carimbo de outra via pode ser sobrescrito. `app/chamados/models.py:2513`–`:2522`. | A guarda só impede repetir o próprio `admin_decidiu` já materializado (`:2513`–`:2521`). Sem RA. |
-| `retratar_duplicata` | Via `duplicata`; substitui recusa pelo apontamento da canônica; preserva carimbo anterior quando existe. `app/chamados/services/fio.py:882`–`:894`. | Conserva ambas perguntas; não conserva antiga via/recusa nesse ato (`:878`–`:895`). |
-| `descarimbar` / `descarimbar_em_lote` | Zera `materializada_em/por/via`; lote aceita outros campos para zerar junto. `app/chamados/models.py:2646`–`:2652`, `:2691`–`:2700`. | Sem trilha própria. A preservação depende dos chamadores. |
-| `ressuscitar_perguntas` | Descarimba e zera `validada_em/por/respondida_em`; universo sem resposta textual. `app/chamados/models.py:1434`–`:1438`, `:1504`. | Log agrega IDs e rótulos de estado, não horários/assinaturas anteriores por pergunta; best-effort (`:1517`–`:1530`). |
-| `encerrar_por_fato_no_espelho` | Substitui só `via_resolucao` por `fato_materializado`. `app/chamados/models.py:2707`–`:2710`. | Sem RA ou snapshot anterior na função (`:2702`–`:2711`). |
-| `encerrar_fantasma` / `reabrir_fantasma` / `reabrir_por_resposta` / `reabrir_por_competencia` | Respectivamente carimba ou desfaz materialização/via. `app/chamados/models.py:2718`–`:2721`, `:2730`–`:2732`, `:2747`–`:2749`, `:2754`–`:2756`. | Funções delegam a `carimbar/descarimbar`; nenhuma cria RA. |
-| `relavrar` | Substitui via derivada e lavra cache de veredito/relógio. `app/chamados/services/relavra_via.py:121`–`:126`. | Evento conserva antes/depois da via e veredito, sem RA (`:130`–`:136`). |
-| `desfazer_carimbo_sem_lastro` | Descarimba sem tocar resposta/validação; relê pergunta/disputa com `select_for_update`. `app/chamados/services/relavra_via.py:217`–`:231`. | Evento conserva materialização/via anteriores, mas não autor anterior do carimbo (`:229`–`:236`). |
-| `DisputaSupervisao.remover_motivo` | **É `app/chamados/models.py:1976`**. Apaga todas perguntas daquele motivo, respondidas inclusive; substitui `motivos/contexto`. | `contexto.revalidacoes` guarda evento, instante e motivo removido, não conteúdo das perguntas (`:1955`–`:1959`). **RA também cai em cascata**, pois FK usa CASCADE (`:3179`). Chamadores: posto reativado `app/colaboradores/signals.py:77`; âncora calibrada `app/escala/signals.py:161`. |
-| `Disputa.fechar` — silêncio decidido | Fecha disputa e grava `resolucao/motivo_fechamento`; portas desligamento/admin_encerra carimbam perguntas vivas como admin_decidiu. `app/chamados/models.py:1852`–`:1865`. | Eventos por pergunta guardam via anterior e motivo; evento da disputa guarda motivo/resolução e IDs vivos (`:1856`–`:1869`). Sem RA por decisão de silêncio. |
-| `Disputa.reabrir_admin/reabrir_sistema` | Zera `fechada_em/por`, `resolucao`, `motivo_fechamento`; admin incrementa contador. `app/chamados/models.py:2063`–`:2075`, `:2087`–`:2091`. | Sistema anexa nota da reabertura (`:2092`–`:2094`). Resolução anterior pode ter sido copiada no fechamento, mas receiver só faz a nota se o chamado-pai reconciliar (`app/chamados/signals.py:42`–`:45`); preservação integral não garantida. |
-| `limpar_resolucao_residual` | Limpa resolução de disputa aberta. `app/chamados/models.py:2170`–`:2174`. | Copia texto anterior para nota, se há chamado (`:2175`–`:2181`). |
-| `aparar_motivo_respondido` | Remove motivo/contexto quando resolvido por outro caminho, mantendo perguntas. `app/chamados/models.py:1890`–`:1897`. | Sem snapshot próprio do contexto/motivo anteriores; é distinto de `remover_motivo` (`:1881`–`:1888`). |
-
-**Expiração automática por silêncio não é porta ativa encontrada:** o comando declara removidos `SILENCIO_DO_COLAB_DIAS`, `_disputas_expiradas`, `_encerrar_expiradas`, `_parada_desde`; conversa parada vai ao admin. `app/chamados/management/commands/arquivar_competencia_encerrada.py:61`–`:64`.
-
-**Trilha não equivale a garantia de preservação:** `core.observ.evento` grava LogAuditoria em best-effort, falha não derruba o ato. `app/core/observ.py:94`–`:105`; os campos incluem `valor_antes`, `valor_depois`, ator, usuário e relógio `criado_em`. `app/core/models.py:295`–`:307`.
-
-**2. RespostaAnterior**
-
-- Modelo em `app/chamados/models.py:3165`; migração de criação `app/chamados/migrations/0050_resposta_anterior.py:16`.
-- Campos: `pergunta` FK CASCADE; `resposta_anterior`; `respondida_original_em`; `validada_original_em/por`; `versao_reaberta_em/por`; `motivo_reabertura` até 200. Ordena por reabertura descendente e PK descendente. `app/chamados/models.py:3179`–`:3191`.
-- Único escritor de produção encontrado: `reabrir_para_correcao`, com `bulk_create`, antes do update e no mesmo atomic; só gera versão se há texto ou carimbo de resposta. `app/chamados/services/disputa_emissao.py:1401`–`:1416`.
-- Leitores diretos encontrados: helper `respostas_anteriores` em `app/chamados/services/disputa_emissao.py:1723`–`:1727`; prefetch do fio em `app/chamados/services/fio.py:216`–`:228`; apresentação em `app/templates/chamados/partials/modal_fio.html:204`–`:208`.
-- **Os seis chamadores não passam autor/motivo da reabertura**, embora a função aceite esses parâmetros: `app/chamados/models.py:2146`; `app/chamados/views.py:1436`; `app/chamados/services/acoes_disputa.py:103`; `app/chamados/services/validacao.py:547`; `app/chamados/services/materializacao.py:658`; `app/chamados/management/commands/curar_perguntas_em_limbo.py:69`. A versão recebe, portanto, defaults `por=None`, `motivo=''`. `app/chamados/services/disputa_emissao.py:1362`, `:1409`.
-- Não há proteção de imutabilidade declarada no modelo/migração; a classe define campos e ordenação, sem `save/delete` próprios ou constraint de append-only. `app/chamados/models.py:3165`–`:3191`; `app/chamados/migrations/0050_resposta_anterior.py:15`–`:32`.
-- Para representar a sequência pedida, faltam tipos de decisão/fato e gravação a cada resposta, validação, recusa, silêncio/reabertura/retratação; autor e relógio de cada decisão; vínculo com resposta/decisão aplicável e instância do marco; absorção e seus carimbos; preservação contra cascata. A lacuna é deduzida comparando o esquema restrito de RA (`models.py:3179`–`:3191`) com os escritores acima (`disputa_emissao.py:1282`, `validacao.py:131`, `:545`, `models.py:1852`, `:1976`).
-- O “histórico” atual do colaborador reconstitui eventos pelos **carimbos atuais** da pergunta e pelo texto atual truncado, sem ler RA: `app/chamados/services/historico.py:96`–`:114`. Assim, não representa sozinho uma sequência imutável de decisões.
-
-_2643 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2646 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
