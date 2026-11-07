@@ -1,5 +1,5 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: trava_teste.sh | pid=362192
+ESPERANDO: trava_teste.sh | pid=530390
 lei: F7g-PRORROGACAO-DA-JORNADA (07/11 00:3x) -- pausa que o pareador fecha (19:00E/04:30S/05:30E/07:00S, 12x36 noturno, CCT com prorrogacao pos-05h) e UMA jornada (Art.71 par.1 + 73 par.5 + Sum.60-II: 480 relogio/548,57 legais) ou DUAS (a casa hoje: 390/445,71)? Volta 4 do V2 i2 (950a3749) decidia por 480 e movia noturno FORA de feriado; retirada na volta 5 (PARADA 3), F7g e F10h ficam PINADOS. Item 2 segue sem isso.
 DESPACHO PUSH-ANTES-DA-E2 23:38: aval recebido (logs/akmed/aval_push_antes_e2.txt); vagas hoje = E1 + V2 i2 volta 4 (teto 2); a 1a que abrir vai ao L-123 v5 (brief logs/akmed/brief_v5.md), E2 depois do push.
 V2 i2 23:4x: Codex v3 REPROVA (logs/v2bugs/i2/v3.r); triagem_v3.txt: T3-1 fallback civil em _dia_da_jornada_do_par (LEI-AKITA 1), T3-2 cauda noturna entre pares, T3-3 texto do alerta -> volta 4 em construtor; DIFF par_v3 comp 11: emp2 mudaram=8, TXT=0; voltas Codex=3 -> proxima e opus final.
