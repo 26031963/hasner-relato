@@ -1,7 +1,32 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 09:09** · publicado em **07/11/2026 09:10** (UTC-3)
+> Ultima resposta processada: **07/11/2026 09:14** · publicado em **07/11/2026 09:15** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 09:14 · sessao 7c456cbb062c · FIO-E0-V4-E2 · verificador · origem=Code
+
+1. **Bloqueia — apelido do módulo `time` escapa.** `_do_time` exige literalmente `f.value.id == 'time'`; `import time as _clock` não passa pelo tratamento de `ImportFrom`. (app/chamados/tests/test_e2_tarefa_do_dia.py:768; app/chamados/tests/test_e2_tarefa_do_dia.py:783)
+
+   Mutante inserido **em memória** no início de `tarefa_do_dia` e, separadamente, de `esta_stale`:
+
+   ```python
+   import time as _clock
+   import datetime
+   agora = datetime.datetime.fromtimestamp(
+       _clock.time(), datetime.timezone.utc)
+   ```
+
+   Nos dois módulos completos, o detector retornou `[]`, embora o mutante substitua o instante recebido pelo relógio corrente. Isso viola o contrato de relógio pela borda. (app/chamados/tests/test_e2_tarefa_do_dia.py:778; app/chamados/services/tarefa_do_dia.py:345; app/chamados/veredito_lavrado.py:187; app/core/juizes.py:152)
+
+2. **Bloqueia — `None` indireto também escapa.** `_sem_instante` reconhece ausência de argumento e `ast.Constant(None)`; uma variável contendo `None` é aceita como instante. (app/chamados/tests/test_e2_tarefa_do_dia.py:762)
+
+   Mutante executado em memória no módulo real: atribuir `instante = None` em `esta_stale` e substituir `timezone.localdate(agora)` por `timezone.localdate(instante)`. O detector retornou `[]`; nesse ramo, a conversão recebe `None` e lê o relógio, comportamento explicitamente reconhecido pelo próprio selo. (app/chamados/veredito_lavrado.py:198; app/chamados/tests/test_e2_tarefa_do_dia.py:741; app/chamados/tests/test_e2_tarefa_do_dia.py:766)
+
+**Falsos positivos atuais: nenhum na execução pedida.** Extraí o detector por AST e executei sobre os arquivos completos: tarefa → `[]`; veredito excluindo `lavrar` → `[]`; veredito sem exclusão → `[('lavrar', 245)]`. O autoteste `test_MORDE_mutantes` também passou nessa execução isolada. (app/chamados/tests/test_e2_tarefa_do_dia.py:755; app/chamados/tests/test_e2_tarefa_do_dia.py:803; app/chamados/tests/test_e2_tarefa_do_dia.py:811; app/chamados/veredito_lavrado.py:245)
+
+**Triagem:** as duas grafias anteriores — `now(tz)` e importação de `now` com apelido — estão cobertas, mas encerrar a cobertura do selo deixa passar os bloqueios 1 e 2. (app/chamados/tests/test_e2_tarefa_do_dia.py:778; app/chamados/tests/test_e2_tarefa_do_dia.py:785)
+
+Não identifiquei fundamento adicional para promover os demais itens a bloqueio: a ausência de validação de `agora` naive e os dois relógios continuam presentes; a permanência dos leitores antigos está declarada no escopo da E2. (app/chamados/services/tarefa_do_dia.py:349; app/chamados/tests/test_selo_concordancia_varredura_stale.py:56; app/chamados/tests/test_selo_concordancia_varredura_stale.py:58; app/core/juizes.py:154) Ocorrência em produção e execução integrada Django: [nao verificado].
 
 ## 07/11 09:09 · sessao 9c3f52998fa8 · FIO-E0-V4-E2 · verificador · origem=Code
 
@@ -764,22 +789,4 @@ Para concluir faltam:
 - **Trilha dos atos**, para identificar autor, motivo e versões intermediárias. (`app/escala/models.py:1714`; `app/ponto/portas/celula.py:334`)
 - **Insumos do juiz de dono e histórico Git**, para fechar respectivamente L-099 e a relação com alguma cura commitada. (`app/ponto/management/commands/e6_oraculo.py:113`) [nao verificado]
 
-## 07/11 08:47 · sessao 5a0fbffa6c33 · - · - · origem=Ronald (tmux)
-
-| Operação | Escrita e prova |
-|---|---|
-| `gerar_celulas` | O command reexporta as funções da porta em `app/ponto/management/commands/gerar_celulas.py:10-13` e chama `gerar_celulas_periodo` em `:309-311`. |
-| Nascimento da célula | `gerar_celulas_periodo` grava `origem='gerada'`, `trabalha`, geradora e DNA em `app/ponto/portas/celula.py:848-852`; `gerada_em` é `auto_now_add`, em `app/escala/models.py:1702`. A regeneração também pode criar célula ausente em `app/ponto/portas/celula.py:258-260`. |
-| Reescrita registrada da sonda | `regenerar_celulas_vinculo` restringe a célula existente a `origem='gerada'` e exige alteração de trabalha/geradora/DNA em `app/ponto/portas/celula.py:263`; guarda o DNA anterior, troca o DNA, registra horário e incrementa contador em `:271-277`. Não altera `origem`, `gerada_em` ou `editada_em` nesse ramo, conforme os campos salvos em `:276-277`. |
-| Regeneração por dia | `regenerar_celulas_dia` usa exatamente o escritor acima, com horizonte desabilitado, em `app/ponto/portas/celula.py:734-737`. Portanto os marcadores da célula não distinguem esse chamador do ato por vínculo. |
-| Edição humana | `editar_dia` exige autor e motivo em `app/ponto/portas/celula.py:559-562`; grava `origem='editada'`, `editada_em`, `editada_por`, trabalha/geradora/DNA em `:599-609`, e trilha antes/depois em `:610-618`. A regeneração comum não alcança essa origem, pela condição em `:263`. |
-| Reversão | `reverter_regeneracao_dia` restaura DNA anterior, **limpa** `dna_anterior`, incrementa contador e muda horário em `app/ponto/portas/celula.py:783-795`. A trilha recebe ambos os DNAs e autor em `:797-803`. |
-| Outra escrita sem esses marcadores | No gerador, passado só recebe DNA se estiver nulo (`app/ponto/portas/celula.py:856-861`); hoje/futuro pode mudar trabalha/geradora/DNA **sem** guardar anterior ou atualizar regeneração (`:865-871`). O ramo fora de vigência da própria regeneração também muda trabalha/DNA sem esses marcadores (`:237-245`). |
-
-`dna_anterior` é apenas a versão imediatamente anterior, e o histórico completo pertence ao `LogAuditoria`, conforme `app/escala/models.py:1714-1717`. Assim, `regeneracoes=2/4` não permite reconstruir as duas/quatro versões intermediárias.
-
-A trilha da regeneração recebe `autor` opcional e registra ação `regenerar_celulas_vinculo`, vínculo, intervalo, motivo e quantidade em `app/ponto/portas/celula.py:331-349`. A célula não contém um campo `regenerada_por`: contém horário/contador/DNA anterior em `app/escala/models.py:1718-1729`, enquanto o campo de pessoa disponível é `editada_por` em `:1732-1735`. Quem executou os atos apresentados na sonda permanece `[nao verificado]`.
-
-Há vários disparadores possíveis: alteração de vigência (`app/escala/signals.py:71-73`), alteração de âncora (`:117-119`) e edição de template (`app/escala/services/cadastro_tipo.py:307-320`, `:348-350`). Os dois signals e a propagação de template mostrados chamam a regeneração sem fornecer `autor`, conforme esses mesmos trechos; portanto até a trilha pode ter usuário nulo. A sonda não identifica qual desses disparadores produziu cada ato `[nao verificado]`.
-
-_2691 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2692 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
