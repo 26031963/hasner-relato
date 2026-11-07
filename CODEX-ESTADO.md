@@ -1,7 +1,88 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 06:01** · publicado em **07/11/2026 06:02** (UTC-3)
+> Ultima resposta processada: **07/11/2026 08:19** · publicado em **07/11/2026 08:22** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 08:19 · sessao 48640afec29c · - · - · origem=Ronald (tmux)
+
+Fora do escopo da obra, os candidatos A encontrados exigem distinguir par laboral de pausa/papel:
+
+- `app/escala/utils.py::_papeis_por_alternancia:477`: `zip(_ks[1:-1:2], _ks[2:-1:2])` forma pares S→E de pausa e produz papéis, não períodos E→S (`app/escala/utils.py:496-498`). Recebe `locs, consumed`; `_match_marcos` o chama quando `turno is None` (`app/escala/utils.py:585-598`). Um critério genérico “zip de fatias passo 2” o contará; um critério restrito a pares laborais E→S não o contará.
+- `app/escala/services/cadastro_tipo.py::_hpd_pares:43`: monta tuplas de minutos (`app/escala/services/cadastro_tipo.py:57`), mas recebe campos `hi`/`hf` previamente nomeados, não infere quais horários se correspondem (`app/escala/services/cadastro_tipo.py:49`). Falso positivo provável de “append tupla de horários”.
+- `app/ponto/services/flip_auto.py::pares_mesmo_tipo:31`: monta tuplas de duas batidas (`app/ponto/services/flip_auto.py:45`), porém exige tipos iguais (`app/ponto/services/flip_auto.py:43`): detector E/E ou S/S, fora de A.
+- `app/ponto/adaptador_motor.py::periodos_de_turnos:13`: monta `(e_ts, s_ts)` (`app/ponto/adaptador_motor.py:43`), lendo `t.entrada` e `t.saida` dos turnos recebidos (`app/ponto/adaptador_motor.py:29-38`): excluir por proveniência.
+
+B inequívocos fora da obra:
+
+| Função | Evidência e motivo |
+|---|---|
+| `app/ponto/services/credito_parcial.py::dia_do_periodo:32` | A própria docstring declara dia de pertença; retorna `localtime(p.entrada).date()` (`:33-36`). |
+| `app/ponto/services/espelho.py::somar_periodos:51` | Deriva dia da entrada e recorta somas pela competência (`:84-86`). |
+| `app/ponto/services/espelho.py::montar_dias:365` | Deriva dia da entrada para contar turnos na competência (`:426-434`). |
+| `app/ponto/services/esmeril_espelho.py::assinaturas_do_colab:79` | Atribui datas a períodos com grandes descontos/HE por `localtime(p.entrada).date()` (`:170-177`). |
+| `app/escala/detector_proposta.py::medir_padrao:49` | `lt = localtime(b.timestamp)`; agrupa em `por_dia[lt.date()]` (`:56-58`). |
+| `app/escala/regua_defesa.py::diagnostico_regua:118` | `localdate(b.timestamp)` e recuo de um dia por corte horário; agrupa o dia-turno próprio (`:154-160`). |
+| `app/escala/regua_defesa.py::entradas_fora_do_inicio:503` | Agrupa batidas por `localdate(b.timestamp)` (`:519-521`). |
+| `app/ponto/services/regularizacao.py::regularizar_turno_orfao:19` | Atribui literalmente `data_turno = localtime(batida_e.timestamp).date()` e calcula dias ausentes (`:73-75`). |
+| `app/chamados/services/disputa_emissao.py::_data_furo_da_grade:42` | Extrai timestamp de evento, deriva `ref` por data local e o oferece à grade como dia do turno-furo (`:44-68`). |
+| `app/chamados/services/disputa_emissao.py::criar_disputa_a_partir_de_chamados_orfaos:876` | Deriva data da batida-origem, classifica falta e usa como fallback de `data_evento` (`:1037-1041`). |
+
+Outros sítios B relevantes à revisão:
+
+- `app/escala/utils.py::montar_grade_prevista:668` atribui órfãs à data civil de suas batidas (`app/escala/utils.py:790-799`).
+- `app/escala/utils.py::montar_grade_prevista_periodo_por_turno:1298` ancora sweep intermitente e seleciona batidas por `.date()` (`app/escala/utils.py:1501`, `:1521`, `:1531`, `:1544-1555`); atribui sobras à data civil (`:1835-1855`).
+- `app/folha/porta_export.py::dias_fora_do_dia_pago:26` usa data local da entrada (`app/folha/porta_export.py:104`); `medir:313` usa `_p.entrada.date()` (`app/folha/porta_export.py:538`). A função é medição: eventual exclusão precisa ser explícita.
+- `app/chamados/services/disputa_emissao.py::_orfao_resolvido_cross_meianoite:627` recebe turnos do juiz (`:643-646`), mas compara datas civis das duas pontas e aceita `dref` em qualquer delas (`:651-654`). Excluir por presença de chamada ao juiz pode ocultar esse comportamento.
+
+Composição comprovada do juiz:
+
+`_turnos_do_colab_puro` chama `papel_por_minuto_da_ata` (`app/ponto/turnos.py:1937`), que importa e chama `ponto.juiz_batida.periodos_do_dia` (`app/ponto/turnos.py:1580`, `:1631`). Este usa `_instante_da_luz` (`app/ponto/juiz_batida.py:241-242`), cuja decisão de meia-noite ocorre por `replace` e `± timedelta(days=1)`, sem `.date()` (`app/ponto/juiz_batida.py:97-102`). É uma exceção de composição sustentada pelo código.
+
+Para B lexical, usar sementes AST `.timestamp`, `.entrada`, `.saida`, além de parâmetros com nomes explícitos `timestamp`, `ts_entrada`, `ts_saida`, `entrada`, `saida`, e propagar por atribuição intrafunção; isso captura o alias `lt` (`app/escala/detector_proposta.py:57-58`). Não excluir função porque contém apenas um `Name data_turno`: ele pode ser justamente o alvo da derivação (`app/ponto/services/regularizacao.py:73`).
+
+Falsos positivos prováveis:
+
+- Competência: `app/ponto/janelas.py::competencia_fechada:75`, data local seguida de `janela_atual` (`:84-85`).
+- Data da última batida para diagnóstico/classificação, sem declarar turno: `app/ponto/services/dias_em_aberto.py::passivo_da_competencia:77` (`:123-132`).
+- Datas civis usadas para detectar cruzamento de meia-noite, já recebendo pares do juiz: `app/chamados/services/disputa_emissao.py::_orfao_resolvido_cross_meianoite:627` (`:643-654`).
+- Busca de candidatos do dia local e véspera, sem escolher um dia único: `app/ponto/registro_batida.py::_casa_marco_proprio:35` (`:42-49`).
+
+## 07/11 08:18 · sessao b219e9ce20f7 · - · - · origem=Ronald (tmux)
+
+Auditoria do escopo, somente leitura:
+
+| Sítio | Classe candidata | Evidência |
+|---|---|---|
+| `app/ponto/calculador/nucleo.py::minutos_do_oraculo:42` | A e B | O ramo sem `pares` agrupa instantes em turnos e forma pares por índices consecutivos, `range(0, len(_pares), 2)`, em `:157-228` e `:245-247`; atribui o dia por `_e.date()` em `:141` e `tu[0].date()` em `:237`. Receber `pares` opcionalmente não elimina o ramo que pareia sozinho. |
+| `app/ponto/calculador/nucleo.py::minutos_do_oraculo._dentro_do_envelope:159` | B | Escolhe envelopes pelas datas civis de `a` e `b`, em `:180`. |
+| `app/ponto/motor_calculo_v2.py::_periodos_pelo_marco:534` | A discutível; B claro | Recebe `trio` já pareado em `:558`, substitui períodos usando `periodos_do_dia` em `:616`, `:636-640`, `:685-688`; usa fallback civil do mapa em `:686-687`. Critério A que exclua todo recebimento de pares deixará passar essa substituição; critério A que conte qualquer construção de tupla entrada/saída contará também adaptadores legítimos. |
+| `app/ponto/motor_calculo_v2.py::MotorBase._janela_do_dia:1490` | B | `dia = entrada.date()` determina o dia de consulta de empresa e marcos em `:1528-1536`. |
+| `app/ponto/motor_calculo_v2.py::MotorBase._julgar_pontualidade:2012` | B | Consulta marcos por `e.date()` em `:2053`; constrói a referência por entrada e comparação de horário em `:2194-2201`; fallback por `localizar(entrada).date()` em `:2210`. |
+| `app/ponto/motor_calculo_v2.py::MotorBase.calcular_mes:2265` | B | Lê o mapa com fallback civil em `:2403` e altera `data_jornada` por herança de período anterior quando gap está entre 0 e 6 horas, em `:2405-2408`. |
+| `app/ponto/motor_calculo_v2.py::Motor12x36.calcular_periodo:2750` | B | Decide feriado e dobra pelo calendário de `e`, em `:2796` e `:2809`. |
+| `app/ponto/motor_calculo_v2.py::MotorTurnoPartido.calcular_mes:2899` | B | Mantém fallbacks civis `_ent.date()` em `:2942` e `_eft.date()` em `:2955`, embora consulte o juiz em `:2921-2923`. |
+| `app/ponto/motor_calculo_v2.py::MotorComercial.calcular_periodo:3215` | B | Decide feriado e dobra por `e.date()`, em `:3264` e `:3268`. |
+| `app/ponto/motor_calculo_v2.py::MotorComercial.calcular_mes:3308` | B | Mapa de dia tem fallback `localizar(p.entrada).date()` em `:3326`; há outras classificações civis em `:3447`, `:3465`, `:3490-3495`. |
+| `app/ponto/services/dia_pago.py::_dia_de:109` | B | Após tentar o mapa em `:128-131`, retorna `timezone.localtime(p.entrada).date()` em `:132`. |
+| `app/ponto/services/fechamento.py::recalcular_fechamento_mes:448` | B | Agrupa períodos órfãos pelo calendário da entrada em `:838-842`; classifica folga/feriado pelo calendário da entrada em `:934-947`. |
+| `app/ponto/calculador/alimentacao.py::segmentos_do_motor:35` | Excluir de A e B semântico | Recebe períodos em `:76`, lê dia do mapa em `:73-82`, recebe pontas em `:83`, divide par já existente pelos intervalos em `:128-158`; não casa batidas cruas nem deriva dia civil. Detector de `append(tuple)` produzirá falso positivo. |
+
+Para os nomes do aval:
+
+- **MOTOR-PASSA-O-TURNO-A-VOLTA / resíduo 573:** a chamada verificável é `MotorBase._julgar_pontualidade`, passando `e.date()` e as duas pontas do período a `cumpriu_a_volta_do_intervalo`, em `app/ponto/motor_calculo_v2.py:2117-2119`. B por `.date()` captura a função; A por pareamento cru não captura o problema de perguntar por período em vez de turno. O número de produção 573 não foi verificado.
+- **JUIZ-DO-PAR-DUAS-ENTRADAS:** existem duas receitas: `_turnos_do_juiz` chama `turnos_de_batidas` em `app/ponto/motor_calculo_v2.py:867-882`, enquanto `turnos_via_autoridade` chama `parear_turnos` com parâmetros `AUT_*`, papel e marcos próprios em `:453-506`. Critério que apenas procura chamada de juiz não captura divergência de alimentação entre receitas. Divergência concreta em produção não foi verificada.
+- **col882 turno aberto:** os três calculadores de período retornam cedo quando `saida is None`, em `app/ponto/motor_calculo_v2.py:2752-2755`, `:2879-2882`, `:3217-3220`. Isso não comprova como as cinco batidas do aval chegam pareadas; execução desse caso não foi verificada.
+- **Partido `:3012 × :2446`:** essas âncoras estão deslocadas: nesta cópia `:3012` é comentário sobre DNA e `:2446` inicializa `folga_pelo_dia`. Os mecanismos relevantes verificáveis estão em `app/ponto/motor_calculo_v2.py:2403-2408` e `:2942-2955`.
+- **`_dia_da_jornada_do_par`:** não localizado em arquivos Python. O nome aparece apenas em documentação, por exemplo `app/docs/BACKLOG.md:1821` e `app/docs/RELATO.md:35`; implementação e enquadramento AST [não verificado].
+- **Split `alimentacao.py:73-108`:** recebe dia e pontas do motor; a divisão efetiva está hoje em `app/ponto/calculador/alimentacao.py:128-158`. Excluí-lo de A semântico é coerente com receber um par já existente; não é falso negativo de pareamento cru.
+
+Prováveis falsos positivos de B amplo:
+
+- Iteração de faixas noturnas por dias civis: `app/ponto/motor_calculo_v2.py:97-98`.
+- Datas usadas para ampliar a consulta de marcos/DNA, sem atribuir o dia de um período: `app/ponto/motor_calculo_v2.py:470-474`.
+- Datas dos limites de competência: `app/ponto/services/fechamento.py:655-664`.
+- Conversor de data usado para competência do fato: `app/ponto/services/fechamento.py::_so_a_data:1558`, operação em `:1569`, consumidor em `:1573`.
+- Contagem declarada de batidas por dia de calendário: `app/ponto/calculador/nucleo.py:35`, implementação em `:117` e `:235`; a mesma função também contém derivações de pertença reais em `:141` e `:237`.
 
 ## 07/11 06:01 · sessao 761aee8c9215 · ESMERIL-ORACULO-NOTURNA · leitura · origem=Code
 
@@ -836,59 +917,4 @@ Censo localizado dos três campos da lavra:
 - **Leitores dos três campos:** `esta_stale`, foto da lavra, carga nova, varredura do raio X e backfill. (`app/chamados/veredito_lavrado.py:179`, `app/chamados/veredito_lavrado.py:237`, `app/chamados/services/tarefa_do_dia.py:283`, `app/chamados/services/raiox.py:31`, `app/chamados/management/commands/backfill_veredito_lavrado.py:120`.)
 - **Leitores adicionais do veredito:** crédito/ausência de ação do raio X, auditoria de invariantes e comparação/trilha da relavra de via. (`app/chamados/services/raiox.py:133`, `app/chamados/services/raiox.py:182`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1170`, `app/chamados/services/relavra_via.py:121`.)
 
-## 07/11 04:08 · sessao c6c0a6f64a84 · - · - · origem=Ronald (tmux)
-
-Achados para itens 4–6, somente por leitura, sem executar a bateria Django:
-
-- **O selo de pureza não cobre ramo com pergunta.** O teste de zero escritas cria apenas célula e chama dois instantes; nenhuma pergunta/decisão existe nesse teste (`app/chamados/tests/test_e2_tarefa_do_dia.py:363–374`). Uma escrita condicionada à entrada em `_pela_decisao` não seria observada por esse selo (`app/chamados/services/tarefa_do_dia.py:121`). Mutante passar na bateria inteira: [não verificado].
-- **A fila e suas portas ficam sem mordida na bateria.** `pergunta()` cria disputa com `contexto={}`, sem chamado (`app/chamados/tests/test_e2_tarefa_do_dia.py:95–99`); `acoes()` descarta `porta` antes das comparações (`:124–126`). Por inspeção, substituir `_fila` por `set()` deixaria as expectativas da bateria inalteradas; execução do mutante [não verificado]. O código cuja integração fica desprotegida é `app/chamados/services/tarefa_do_dia.py:290–293`.
-- **“Concorrência” não prova corrida.** O caso 6 registra validações e silêncios sequencialmente e compara saídas; não abre transações concorrentes (`app/chamados/tests/test_e2_tarefa_do_dia.py:253–265`).
-- **“Competência exportada” não monta uma competência exportada.** O caso apenas avança `agora` quarenta dias, verifica ação e ausência de SQL da folha (`app/chamados/tests/test_e2_tarefa_do_dia.py:349–357`). A independência diante de um registro real de exportação fica [não verificado].
-- **A ordem das decisões é exercitada somente com relógio e PK concordantes.** O helper aumenta `ato_em` junto da quantidade de linhas existentes (`app/chamados/tests/test_e2_tarefa_do_dia.py:103–106`). Não há caso retrodatado nem empate; portanto, trocar a carga de `order_by('pergunta_id','ato_em','pk')` por PK provavelmente passaria, por inspeção; mutante executado [não verificado]. A ordem do modelo é `ato_em,pk` (`app/chamados/models.py:3374`) e a carga a respeita (`app/chamados/services/tarefa_do_dia.py:275–277`).
-- **A lavra “fresca” dos testes é artificialmente futura.** O helper fixa `julgado_em` em D+3650 e apaga `janela_expira_em` (`app/chamados/tests/test_e2_tarefa_do_dia.py:108–113`), deixando sem teste a expiração civil e enfraquecendo a integração real de staleness.
-- **O custo medido no teste é constância, não a meta ≤1.** A única asserção compara 2 colaboradores × 3 dias com 1 × 1; não impõe teto por colab-dia, nem mede frota (`app/chamados/tests/test_e2_tarefa_do_dia.py:397–415`). Resultado 6 do aval: [não verificado].
-- **Falta caso de célula existente sem lâmpadas.** Nesse cenário `instancias_do_turno` devolve `[]`, e `_tarefa_pura` termina com `nao_sei=False` (`app/chamados/services/tarefa_do_dia.py:79–90`, `:173–177`, `:193–248`). O leitor antigo distingue ata sem lâmpadas como `ESTADO_SEM_CELULA` (`app/chamados/services/declaracao_texto.py:82–83`, `:110–116`), e o registro do novo juiz promete “Não sabe -> nao_sei” (`app/docs/JUIZES.md:77`).
-
-A bateria tem mordida para soberania das lâmpadas por instância (caso 1: `app/chamados/tests/test_e2_tarefa_do_dia.py:129–147`), teto por instante/noturno (`:167–172`) e fronteira 14:00/14:01 (`:363–370`), cobertura não rejeitada (`:215–240`), devolução ao admin (`:198–206`) e passivo sem inventar decisão (`:325–333`). Não encontrei caso de ausência parcial, `trabalha=None`, ata de folga com `trabalha=True`, duas pausas, empate/retrodatação de decisões, nem status/silêncio reais de chamado no arquivo completo (`app/chamados/tests/test_e2_tarefa_do_dia.py:1–415`). Aprovação 10/10, RED e cronologia “teste antes do código”: [não verificado].
-
-Contratos:
-
-| Contrato | Alcança o arquivo novo? | O que efetivamente garante |
-|---|---|---|
-| leitores_vitalidade | Sim: varre os `.py` de produção de toda a árvore (`app/chamados/tests/test_contract_leitores_vitalidade.py:282–307`). | Só compara `materializada_em/validada_em` com None ou `__isnull` (`:14`, `:298–305`). O novo arquivo não faz isso; lê passivo pela E1 (`app/chamados/services/tarefa_do_dia.py:279`). Não prova pureza, relógio ou validade de `_lavra`. |
-| censo_escritas | Sim (`app/core/censo_escritas.py:469–491`). | Rodei apenas o analisador estático com `python3 -B`: ele devolve `(176,None,'update','out.update()')`, falso positivo do dict de retorno (`app/chamados/services/tarefa_do_dia.py:173–176`). O varredor documenta que `update` só kwargs desconhecido vai ao balde (`app/core/censo_escritas.py:49–50`); entidade None é ignorada na agregação de famílias (`:505–509`). Nenhuma escrita de modelo detectada nesse arquivo por esse analisador. |
-| escritores_estado | Sim: app `chamados`, descida por diretórios (`app/core/tests/test_contract_escritores_estado.py:12–13`, `:184–197`). | Regex de atribuição/`update` para campos enumerados (`:177–181`, `:201–208`); não há atribuição desses campos no novo módulo. Execução do contrato: [não verificado]. |
-| B5j universo de apuração | Não seleciona esse módulo: `_producao` exige texto `parear_turnos` ou `_turnos_do_colab_puro` (`app/ponto/tests/test_tripwire_b5j_universo_de_apuracao.py:63`, `:135–148`). | O novo módulo usa a porta correta `batidas_apuraveis` (`app/chamados/services/tarefa_do_dia.py:287–289`), mas esse tripwire não protege seu universo. |
-| bocais_apuracao | Não: lista fechada de seis arquivos, sem tarefa (`app/ponto/tests/test_tripwire_bocais_apuracao.py:13–24`, `:27–33`). | Nenhuma garantia sobre o arquivo novo. |
-| registro de juízes | Sim: `_C19` declarado (`app/core/juizes.py:150–155`, `:285`), lookup atualizado (`app/docs/JUIZES.md:73–78`), corte escrito (`app/docs/CORTES.md:424`). | O teste de existência percorre toda família (`app/chamados/tests/test_contract_juiz_chamado.py:24–27`), mas a procura de juiz duplicado só casa regex de SLA e data crua (`app/core/juizes.py:1397–1404`; algoritmo em `app/ponto/tests/test_contract_juiz_celula.py:48–60`). Não detectaria duplicação semântica de `_C19`. |
-
-Não achei duplicação dos juízes registrados de dia sem trabalho, cobertura, teto ou fila no corpo principal: ele chama `dia_sem_trabalho`/`ausencia_parcial_cobra_o_resto` (`app/chamados/services/tarefa_do_dia.py:170–179`), usa carga de cobertura/teto (`:299`, `:307`) e fila (`:292`). `_posicoes` repete a regra de primeiro/último/meio de `_marcos_faltantes` (`app/chamados/services/tarefa_do_dia.py:49–62`; `app/chamados/services/declaracao_texto.py:118–128`), mas não encontrei essa classificação registrada como juiz próprio; violação de autoridade registrada por essa repetição: [não verificado].
-
-## 07/11 04:07 · sessao 867869b107c9 · - · - · origem=Ronald (tmux)
-
-Itens 2/3/custo, somente leitura; nenhum teste executado. [não verificado] [nao verificado]
-
-**Pureza e relógio**
-
-- Não encontrei escrita no banco nem leitura do relógio corrente no caminho executado por `tarefa_do_dia`: o wrapper exige `agora`, a carga o repassa a `qs_na_fila` e `esta_stale`, e o corpo recebe os fatos carregados. `app/chamados/services/tarefa_do_dia.py:259`, `app/chamados/services/tarefa_do_dia.py:281`, `app/chamados/services/tarefa_do_dia.py:292`, `app/chamados/services/tarefa_do_dia.py:318`.
-- `qs_na_fila` só executa `timezone.now()` quando `agora is None`; a tarefa fornece valor obrigatório. `app/chamados/services/painel.py:188`, `app/chamados/services/painel.py:190`, `app/chamados/services/tarefa_do_dia.py:292`, `app/chamados/services/tarefa_do_dia.py:322`.
-- `esta_stale` possui fallback `timezone.now()`, mas recebe o `agora` obrigatório da carga; não chama `lavrar`, `expira_em` nem `_pergunta_materializada_de_fato`. Portanto o `date.today()` de `expira_em` e do juiz não é alcançado por este caminho. `app/chamados/veredito_lavrado.py:112`, `app/chamados/veredito_lavrado.py:173`, `app/chamados/veredito_lavrado.py:181`, `app/chamados/services/tarefa_do_dia.py:281`.
-- `vinculo_do_dia` escolhe entre fatos carregados; `marcos_turno` encadeia datas recebidas; `_pelo_efeito` e `batidas_apuraveis` constroem queryset; `chamado_que_lista`, `dia_sem_trabalho`, `ausencia_parcial_cobra_o_resto`, `texto_vazio` e `instancia_do_motivo` não leem relógio nesses corpos. `app/escala/alimentacao.py:269`, `app/escala/servico_jornada.py:68`, `app/ponto/turnos.py:2516`, `app/ponto/turnos.py:2875`, `app/chamados/services/fio.py:116`, `app/chamados/juizes.py:411`, `app/chamados/juizes.py:423`, `app/chamados/juizes.py:1253`, `app/chamados/services/declaracao_texto.py:57`.
-- Há memorização **na instância da carga**, em `_inst` e `_cob`; não encontrei mutação global no caminho. A descrição literal “nenhum cache” precisa distinguir essas memórias por carga. `app/chamados/services/tarefa_do_dia.py:8`, `app/chamados/services/tarefa_do_dia.py:296`, `app/ponto/turnos.py:3068`.
-- A função pública consulta banco; somente `_tarefa_pura` recebe todos os fatos. A pureza matemática de apenas `(colab,dia,agora)` não existe: há banco e fuso ativo implícitos. `localtime` e `make_aware` não recebem fuso explícito. `app/chamados/services/tarefa_do_dia.py:72`, `app/chamados/services/tarefa_do_dia.py:90`, `app/chamados/services/tarefa_do_dia.py:267`, `app/escala/servico_jornada.py:81`.
-
-**Equivalência**
-
-- Cobertura: dentro da janela declarada, ambas usam exatamente `_pelo_efeito`, `_q_cobertura` e `_cobertura_pura`. A ordem extra `colaborador_id` só agrupa; dentro de cada pessoa preserva `(data,pk)`, e o último sobrescreve. O intervalo expandido é inclusivo. `app/ponto/turnos.py:2753`, `app/ponto/turnos.py:2761`, `app/ponto/turnos.py:2771`, `app/ponto/turnos.py:2780`, `app/ponto/turnos.py:3072`.
-- Teto: ambas usam `cartorio.marcos_com_teto`, cujo limite é inclusivo `marco + teto <= agora`, na ordem de `marcos_turno`. `app/ponto/services/cartorio.py:843`, `app/ponto/services/cartorio.py:858`, `app/ponto/turnos.py:3061`, `app/escala/servico_jornada.py:74`.
-- **Não são exatamente a mesma alimentação:** `marcos_vencidos` usa a `cel` recebida para escolher vínculo, mas não a passa ao corpo; `marcos_do_dia` então busca DNA no banco. A carga passa suas células já carregadas. Contraexemplo: carga/célula em memória com DNA A, banco depois alterado para DNA B; a carga calcula A e a casca calcula B, mesmo colab-dia/agora. É um contraexemplo de código, não ocorrência de produção. `app/ponto/services/cartorio.py:841`, `app/ponto/services/cartorio.py:843`, `app/ponto/turnos.py:3062`, `app/escala/models.py:1119`, `app/escala/models.py:1122`.
-- O pad é `[ini−2,fim+1]`, mas cobertura só cobre `[ini,fim]`; não existe guarda contra consulta fora da janela. Exemplo: carga `[21,21]`, consulta dia22 com célula no pad e ausência no dia22: a tarefa não vê cobertura, ao contrário da casca aberta para22. Isso é uso fora do contrato documentado, permitido silenciosamente pela API atual. `app/ponto/turnos.py:1847`, `app/ponto/turnos.py:2977`, `app/ponto/turnos.py:3073`, `app/chamados/services/tarefa_do_dia.py:302`, `app/chamados/services/tarefa_do_dia.py:318`.
-
-**Custo e testes** [nao verificado]
-
-- A carga faz um número de queries independente do número de colaboradores nos corpos examinados; sua construção inclui carga de vínculos/ata não utilizados diretamente pela tarefa. Não há prova fornecida de `<=1 query/colab-dia` na frota. O teste só exige igualdade entre dois colaboradores×três dias e um colaborador×um dia, sem limite absoluto. `app/ponto/turnos.py:2986`, `app/ponto/turnos.py:2989`, `app/ponto/turnos.py:2992`, `app/chamados/tests/test_e2_tarefa_do_dia.py:397`, `app/chamados/tests/test_e2_tarefa_do_dia.py:415`.
-- A tarefa percorre todas as perguntas daquele colaborador em cada dia consultado, após filtrar em memória; queries constantes não demonstram complexidade linear no tamanho variável da janela. `app/chamados/services/tarefa_do_dia.py:306`.
-- Mutante que remove o tratamento `dia_sem_trabalho` pode passar a bateria: os casos de folga têm lâmpadas vazias, logo nenhuma instância cuja cobrança precise ser suprimida. Falta `trabalha=False` com lâmpadas antigas apagadas, e também ausência parcial. `app/chamados/tests/test_e2_tarefa_do_dia.py:165`, `app/chamados/tests/test_e2_tarefa_do_dia.py:245`, `app/chamados/services/tarefa_do_dia.py:199`.
-- Mutantes de cobertura por intervalo aberto/fechado e desempate `(data,pk)` também não são atingidos pela ausência do caso4, que cria apenas ausência de um dia. `app/chamados/tests/test_e2_tarefa_do_dia.py:210`, `app/chamados/tests/test_e2_tarefa_do_dia.py:233`.
-
-_2667 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2669 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
