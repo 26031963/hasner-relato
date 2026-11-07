@@ -1,7 +1,170 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 20:44** · publicado em **07/11/2026 20:47** (UTC-3)
+> Ultima resposta processada: **07/11/2026 20:48** · publicado em **07/11/2026 20:52** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 20:48 · sessao b2a3c085a19a · FIO-E0-V4-E1 · verificador · origem=Code
+
+**O item (e) continua PROCEDENTE:** existe caminho agendado que grava o Chamado e depois pede Colaborador na mesma transação, independentemente do S143. A guarda corrige os saves de campo testados, mas não fecha a classe de inversão. (`app/chamados/services/limbo_folgas.py:269`, `app/chamados/services/contexto.py:102`, `app/chamados/services/fio.py:855`, `app/chamados/models.py:290`)
+
+**1. PROCEDENTE — inversão residual e censo dos escritores.**
+
+O contraexemplo é `apurar_furos_diarios → agrupar_furos_sob_limbo → agrupar_furo`. O comando está encadeado; a seleção dos furos não adquire previamente as travas do colaborador. (`app/config/crons.py:1504`, `app/escala/management/commands/apurar_furos_diarios.py:19`, `app/chamados/services/limbo_folgas.py:308`, `app/chamados/services/limbo_folgas.py:326`)
+
+Dentro de `agrupar_furo`, a sequência permitida é:
+
+| Passo | Evidência |
+|---|---|
+| Abre `atomic` | `app/chamados/services/limbo_folgas.py:269` |
+| Grava contexto do Chamado | `app/chamados/services/limbo_folgas.py:270` → `app/chamados/services/contexto.py:102` |
+| Havendo pergunta viva, pede Colaborador ao reapontar | `app/chamados/services/limbo_folgas.py:277` → `app/chamados/services/fio.py:855` |
+| Ao reconciliar, também pode pedir Colaborador → Disputa → Chamado | `app/chamados/services/limbo_folgas.py:278` → `app/chamados/models.py:637` → `app/chamados/models.py:290` |
+
+Logo, T1 pode segurar o Chamado escrito e esperar Colaborador; T2, em `_gravar_estado`, pode segurar Colaborador e esperar o mesmo Chamado. Isso demonstra o caminho de inversão pelo código; candidatos existentes e deadlock ocorrido na frota são **[nao verificado]**. (`app/chamados/models.py:2525`, `app/chamados/models.py:2545`, `app/chamados/services/limbo_folgas.py:269`)
+
+Censo dos sítios de escrita da aplicação fora de `_gravar_estado`:
+
+| Escritor | Operação/local |
+|---|---|
+| `rebaixar` | `save`, `app/chamados/models.py:484` |
+| `escalar_urgencia` | `save`, `app/chamados/models.py:538` |
+| `definir_prazo_sla` | `save`, `app/chamados/models.py:575` |
+| `marcar_escalonado_dp` | `save`, `app/chamados/models.py:593` |
+| `_rebaixar_sem_post_save` | `QuerySet.update`, `app/chamados/models.py:619` |
+| `abrir` | `get_or_create`, `app/chamados/models.py:954` |
+| `criar` | `create`, `app/chamados/models.py:1078` |
+| `reescrever_texto` | `save`, `app/chamados/services/texto.py:35` |
+| `anotar_contexto` | `save`, `app/chamados/services/contexto.py:77` |
+| `renovar_contexto` | `save`, `app/chamados/services/contexto.py:102` |
+| `retirar_contexto` | `save`, `app/chamados/services/contexto.py:124` |
+| `fundir_contexto` | `save`, `app/chamados/services/contexto.py:159` |
+| `apontar_justificativa` | `save`, `app/chamados/services/vinculos.py:88` |
+| `apontar_celula` | `save`, `app/chamados/services/vinculos.py:99` |
+| `apontar_ticket_glpi` | `save`, `app/chamados/services/vinculos.py:114` |
+| `assumir_responsavel` | `save`, `app/chamados/services/vinculos.py:131` |
+| `liberar_responsavel` | `save`, `app/chamados/services/vinculos.py:142` |
+| `silenciar` | `save`, `app/chamados/services/arquivo.py:170` |
+| `levantar` | `save`, `app/chamados/services/arquivo.py:208` |
+
+Para **cada save/inserção dessa tabela**, o conjunto registrado é o mesmo: um `pre_save` e cinco `post_save`; as condições abaixo determinam quais corpos prosseguem. (`app/chamados/apps.py:8`, `app/chamados/signals.py:53`, `app/chamados/signals.py:86`, `app/chamados/signals.py:174`, `app/chamados/signals.py:183`, `app/chamados/signals.py:265`, `app/chamados/signals.py:332`)
+
+| Receiver | Comportamento e travas |
+|---|---|
+| `_cartorio_pre_save_chamado` | SELECT comum de status; escreve `_b5_status_antes`; não pede trava explícita. `app/chamados/signals.py:175`, `app/chamados/signals.py:180` |
+| `rebaixa_urgencia_ao_resolver` | Em encerrado, fora de raw, faz UPDATE de urgência no próprio Chamado; nenhum `select_for_update`. `app/chamados/signals.py:68`, `app/chamados/signals.py:72`, `app/chamados/models.py:619` |
+| S143 | Se passar pelas guardas, pede Colaborador → Disputas → Chamados; o corpo pode carimbar Perguntas. `app/chamados/signals.py:100`, `app/chamados/signals.py:111`, `app/chamados/services/disputa_emissao.py:1683`, `app/chamados/services/disputa_emissao.py:1749` |
+| `_cartorio_post_save_chamado` | Usa nascimento/comparação de status, sem consultar `update_fields`; chama cartório sincronamente. A fábrica pode chegar a `trava_na_ordem` do universo do colaborador. `app/chamados/signals.py:188`, `app/chamados/signals.py:199`, `app/ponto/services/cartorio.py:997`, `app/chamados/services/fabrica_da_celula.py:149`, `app/chamados/services/disputa_emissao.py:530` |
+| `_isentos_post_save_chamado` | Trabalho registrado por `on_commit`. `app/chamados/signals.py:276`, `app/chamados/signals.py:289` |
+| `_filho_morto_acorda_o_pai` | Trabalho registrado por `on_commit`. `app/chamados/signals.py:337`, `app/chamados/signals.py:352` |
+
+O UPDATE direto de `_rebaixar_sem_post_save` não emite esses receivers. `get_or_create`, quando encontra a linha, também não representa nova escrita. (`app/chamados/models.py:602`, `app/chamados/models.py:619`, `app/chamados/models.py:954`)
+
+Há outro residual **condicional**: uma porta de campo recebe instância com status desatualizado; o pre_save lê o status atual do banco, mas o post_save do cartório compara essa leitura ao status antigo da instância. Pode então rejulgar e pedir travas depois do UPDATE, embora `update_fields` não contenha status. A guarda nova protege somente S143. (`app/chamados/services/texto.py:35`, `app/chamados/signals.py:100`, `app/chamados/signals.py:180`, `app/chamados/signals.py:188`, `app/chamados/signals.py:199`)
+
+Também existem escritas fora da rotina da aplicação:
+
+- Migrações: saves de urgência em `app/chamados/migrations/0023_rebaixar_urgencia_resolvidos.py:10`, `app/chamados/migrations/0023_rebaixar_urgencia_resolvidos.py:17`, `app/chamados/migrations/0024_rebaixar_urgencia_resolvidos_regressao.py:11`, `app/chamados/migrations/0024_rebaixar_urgencia_resolvidos_regressao.py:19`; updates em `app/chamados/migrations/0038_a3_registrado_backfill.py:10`, `app/chamados/migrations/0038_a3_registrado_backfill.py:15`, `app/chamados/migrations/0039_a3_via_backfill.py:24`, `app/chamados/migrations/0039_a3_via_backfill.py:25`, `app/chamados/migrations/0039_a3_via_backfill.py:27`, `app/chamados/migrations/0039_a3_via_backfill.py:28`, `app/chamados/migrations/0039_a3_via_backfill.py:33`, `app/chamados/migrations/0039_a3_via_backfill.py:34`.
+- Máscara da sombra: `bulk_update` de texto/contexto do Chamado pelo gerente genérico; sem receivers. O script exige banco chamado `sombra`. (`bin/sombra_regras_pessoais.py:82`, `bin/sombra_regras_pessoais.py:142`, `bin/sombra_mascara_pessoal.py:10`, `bin/sombra_mascara_pessoal.py:62`, `bin/sombra_mascara_pessoal.py:64`)
+
+A solicitação de trava depois do save também permanece no S143 acionado por `_gravar_estado`, mas ali a ordem já foi adquirida antes: é solicitação reentrante, distinta da aquisição tardia demonstrada no LIMBO. (`app/chamados/models.py:290`, `app/chamados/models.py:296`, `app/chamados/services/disputa_emissao.py:1683`)
+
+**2. NAO PROCEDE perda demonstrada no fechamento canônico; PROCEDENTE a diferença semântica e a janela concorrente do save inteiro.**
+
+“Roda” na tabela significa **chega à chamada do resolver**; o receiver pode ser invocado e retornar antes. Em todos os casos, `raw=True` ou status da instância fora de `ENCERRADOS` retorna imediatamente. (`app/chamados/signals.py:87`, `app/chamados/signals.py:92`, `app/chamados/signals.py:111`)
+
+| Forma | S143 chega ao resolver? |
+|---|---|
+| `created=True`, status encerrado | Sim. `app/chamados/signals.py:79` |
+| `update_fields` contém `status_local`, valor mudou | Sim. `app/chamados/signals.py:81` |
+| `update_fields` contém `status_local`, valor igual | Sim. `app/chamados/signals.py:82` |
+| `update_fields` não contém status | Não, mesmo se o status em memória divergir do banco. `app/chamados/signals.py:82` |
+| Save inteiro; status diferente da leitura do pre_save | Sim. `app/chamados/signals.py:83` |
+| Save inteiro; status igual à leitura do pre_save | Não. `app/chamados/signals.py:83` |
+| Instância carregada antes de outro processo mudar o status | No save inteiro, decide pela leitura nova do pre_save, não pela fotografia do carregamento. `app/chamados/signals.py:180` |
+| Raw/loaddata | Não; essa exclusão antecede a guarda nova. `app/chamados/signals.py:92` |
+
+O escritor único de `_b5_status_antes` é `_cartorio_pre_save_chamado`: atribui `None` para raw/instância sem PK; nos demais casos sobrescreve com SELECT do banco. Seus leitores são a guarda nova, o post_save do cartório, o receiver dos isentos e o do filho morto. (`app/chamados/signals.py:177`, `app/chamados/signals.py:180`, `app/chamados/signals.py:83`, `app/chamados/signals.py:187`, `app/chamados/signals.py:276`, `app/chamados/signals.py:337`)
+
+O pre_save é registrado no mesmo módulo carregado pelo `ready`; sua definição aparecer depois do S143 no arquivo não transforma o pre_save em post_save. Não há outro escritor desse atributo no código encontrado. (`app/chamados/apps.py:8`, `app/chamados/signals.py:174`, `app/chamados/signals.py:177`, `app/chamados/signals.py:180`)
+
+Ausência do atributo faz a guarda comparar `None` ao status e liberar o resolver; não provoca supressão. Já a leitura pode envelhecer entre o SELECT e o UPDATE, pois não adquire trava. (`app/chamados/signals.py:83`, `app/chamados/signals.py:180`)
+
+**Contraexemplo concorrente do save inteiro, por leitura estática:** A lê `resolvido` no pre_save; B reabre e confirma; A grava seu save inteiro com `resolvido`. A efetivamente encerra novamente, mas compara `resolvido == resolvido` e pula o resolver. A guarda anterior resolveria. Execução desse entrelaçamento e chamador produtivo usando esse save inteiro: **[nao verificado]**. (`app/chamados/signals.py:180`, `app/chamados/signals.py:83`, `app/chamados/signals.py:100`)
+
+Esse contraexemplo não suprime o fechamento por `_gravar_estado`: a porta trava antes e sempre inclui `status_local` em `update_fields`. (`app/chamados/models.py:229`, `app/chamados/models.py:290`, `app/chamados/models.py:296`)
+
+Também mudou o comportamento de recuperação: saves inteiros sem mudança e saves de campo em encerrados deixaram de tentar novamente um resolver anteriormente falho. A falha pode ser engolida pelo próprio S143; ocorrência concreta desse passivo é **[nao verificado]**. (`app/chamados/signals.py:100`, `app/chamados/signals.py:112`)
+
+**3. PROCEDENTE — a catraca morde exemplos reais, mas não garante o enunciado amplo.**
+
+A catraca detecta os exemplos “sem guarda” e “guarda depois da trava”. Entretanto, lê somente `chamados/signals.py`, reconhece três nomes de chamada e aceita qualquer chamada à guarda em linha anterior. (`app/chamados/tests/test_e1_v12.py:97`, `app/chamados/tests/test_e1_v12.py:124`, `app/chamados/tests/test_e1_v12.py:131`, `app/chamados/tests/test_e1_v12.py:135`, `app/chamados/tests/test_e1_v12.py:144`)
+
+Além da cadeia indireta declarada no LIMITE, ela não vê:
+
+| Forma | Motivo |
+|---|---|
+| Receiver em outro módulo, `pre_save`, `.connect()`, receiver assíncrono | Arquivo único, filtro por `FunctionDef` e decorator específico. `app/chamados/tests/test_e1_v12.py:101`, `app/chamados/tests/test_e1_v12.py:118`, `app/chamados/tests/test_e1_v12.py:131` |
+| `sender=ChamadoColaborador` como classe; decorator/sinal qualificado ou com alias | Exige os identificadores literais e sender constante textual. `app/chamados/tests/test_e1_v12.py:103` |
+| `select_for_update` direto, SQL cru, outros nomes ou aliases das travas | `_TRAVAM` contém apenas três nomes. `app/chamados/tests/test_e1_v12.py:97`, `app/chamados/tests/test_e1_v12.py:121` |
+| Guarda invertida, resultado descartado, ramo não executado, guarda dentro de função interna | Não examina fluxo, polaridade nem se a guarda controla a trava; compara números de linha. `app/chamados/tests/test_e1_v12.py:120` |
+
+A extração AST executada somente em memória confirmou: remoção da guarda é denunciada; inversão e chamada descartada passam. O resultado decorre do critério implementado em `app/chamados/tests/test_e1_v12.py:122`.
+
+**Os testes `S143NaoInverteAOrdemTest` dariam vermelho por análise estática se a guarda fosse removida ou invertida:** o teste exige zero chamadas ao resolver na porta de texto e uma no save de status; os testes de ordem também observam o UPDATE antes da solicitação de Colaborador. Execução com banco nesta revisão: **[nao verificado]**. (`app/chamados/tests/test_e1_v12.py:53`, `app/chamados/tests/test_e1_v12.py:85`, `app/chamados/tests/test_e1_v12.py:89`, `app/chamados/services/disputa_emissao.py:1683`)
+
+Há três ressalvas adicionais:
+
+- A mensagem “com o mesmo status” não corresponde ao caso exercitado: antes salva `fechado`, depois chama `_gravar_estado('resolvido')`. (`app/chamados/tests/test_e1_v12.py:87`, `app/chamados/tests/test_e1_v12.py:91`, `app/chamados/tests/test_e1_v12.py:92`)
+- O rastreador vê UPDATE e FOR UPDATE; não vê INSERT nem `executemany`, além dos limites declarados de FK e ordem intratabela. (`app/chamados/tests/test_e1_v9.py:47`, `app/chamados/tests/test_e1_v9.py:67`)
+- `_inversoes` cobra apenas queda de rank; não exige Colaborador anterior nem rejeita PK desconhecida como `violacoes_linhas` faz. (`app/chamados/tests/test_e1_v12.py:30`, `app/chamados/tests/test_e1_v9.py:94`)
+
+**4. NAO PROCEDE o rótulo falso anterior; o novo resumo corresponde ao command, com limites de precisão.**
+
+Sem flag, mede e retorna sem aplicar; `--aplicar` retrata duplicatas e registra SILENCIO faltante de `admin_decidiu`. As projeções históricas de resposta/validação são medidas, mas não são gravadas por esse apply. O índice citado nasce na 0053. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:3`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:276`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:284`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:310`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:423`, `app/chamados/migrations/0053_pergunta_unica_por_familia.py:62`)
+
+As recusas incluem horizonte divergente, mérito perdedor, candidatas escritas exportadas/sem dia e `sem_ato` fora do horizonte; qualquer recusa desfaz o apply inteiro. O rótulo não enumera todas elas. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:193`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:219`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:251`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:260`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:273`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:297`, `app/config/crons.py:776`)
+
+“Recusa competência exportada” significa recusar **escrever candidatas exportadas**. Um PAREI referente apenas às projeções medidas não impede por si só a chamada ao apply. “Com aval” é conduta, sem validação de aval pelo parser. “Ato de uma vez” e “antes do índice” descrevem finalidade; não há bloqueio automático de segunda execução ou execução pós-0053. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:310`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:350`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:429`)
+
+Censo dos leitores do rótulo:
+
+| Leitor | Efeito da alteração |
+|---|---|
+| `RotuloDoBackfillTest` | Lê esta string; confere migração e tokens, sem verificar toda a semântica operacional. `app/chamados/tests/test_e1_v12.py:174` |
+| B6 dos crons | Usa as chaves do dicionário, sem consumir esta descrição. `app/chamados/tests/test_contract_crons.py:220` |
+| Testes de outras chaves | Não consomem o valor alterado. `app/ponto/tests/test_aus_sem_fim.py:123`, `app/ponto/tests/test_o320_pauta_dos_discordantes.py:266` |
+| Render do crontab | Percorre `CRONS`; não usa esta string. `app/config/crons.py:1846`, `app/config/crons.py:1926` |
+| ARQUITETURA/MAPA | Usam entradas, estágios, papéis e contadores; não esse rótulo. `app/core/management/commands/gerar_diagrama.py:161`, `app/core/management/commands/gerar_diagrama.py:233`, `app/core/management/commands/gerar_diagrama.py:393`, `app/core/management/commands/gerar_diagrama.py:861` |
+| Selos gerais de cron/tabuleiro | Cobram cadastro/papel; esta troca de descrição não altera esses insumos. `app/chamados/tests/test_contract_crons.py:221`, `app/core/tests/test_contract_tabuleiro.py:15` |
+
+**5. PROCEDENTE a divergência de universos; NAO PROCEDE usar a sonda como prova de reprodução nesta cópia ou na frota.**
+
+O dado anexado mostra, naquela execução, L0 de **10/09** recebendo a célula de **18/10** e o teste falhando. A correspondência daquela execução ao código exato deste commit é **[nao verificado]**: nesta cópia, `_nascer` ainda escolhe pelo `do_fato` imediato, e não pelo fecho. (`app/chamados/models.py:2703`)
+
+A divergência estática permanece: `_nascer` consulta com episódio; `_candidata_reusavel` consulta sem episódio; os planos consultam o fecho. Assim, no universo sintético L/A/B do anexo, a abertura alfa pode ver L/A, enquanto o fecho encontra B. (`app/chamados/models.py:2577`, `app/chamados/models.py:2579`, `app/chamados/models.py:2703`, `app/chamados/services/declaracao_texto.py:242`, `app/chamados/services/fio.py:1051`, `app/chamados/services/fio.py:1204`)
+
+**O índice permite B0 abaixo do horizonte e B1 acima**, pois sua condição só alcança datas desde 21/09/2026. Isso não demonstra formação desse par pela frota atual: a 0052 deixa o acervo sem origem; a porta atual trava o colaborador e reutiliza uma linha do mesmo episódio em qualquer dia. Existência real de B0 antigo com origem preenchida: **[nao verificado]**. (`app/chamados/migrations/0053_pergunta_unica_por_familia.py:28`, `app/chamados/migrations/0053_pergunta_unica_por_familia.py:32`, `app/chamados/migrations/0053_pergunta_unica_por_familia.py:65`, `app/chamados/migrations/0052_pergunta_batida_origem.py:17`, `app/chamados/models.py:2669`, `app/chamados/models.py:2579`, `app/chamados/models.py:2748`)
+
+Há uma fragilidade condicional mais simples no código atual: pedir o mesmo episódio com outro dia pode encontrar uma pergunta anterior, buscar a célula pelo dia pedido e salvar essa célula sem alterar o `data_evento` da pergunta encontrada. Chamador produtivo efetivamente fornecendo esses dias diferentes: **[nao verificado]**. (`app/chamados/models.py:2579`, `app/chamados/models.py:2693`, `app/chamados/models.py:2708`, `app/chamados/models.py:2747`)
+
+Censo dos acessos à célula da Pergunta:
+
+| Papel | Locais |
+|---|---|
+| Escrita persistente no nascimento/reuso | `app/chamados/models.py:2708`, `app/chamados/models.py:2747`, `app/chamados/models.py:2751` |
+| Escrita persistente no rechaveamento, junto com o dia | `app/chamados/services/fio.py:960`, `app/chamados/services/fio.py:965` |
+| Alteração somente em cópia na memória | `app/chamados/models.py:1467`, `app/chamados/models.py:1474` |
+| SET_NULL por exclusão da célula | `app/chamados/models.py:2283`; exclusão produtiva efetiva **[nao verificado]** |
+| Dia da disputa | `app/chamados/juizes.py:82`, `app/chamados/juizes.py:215` |
+| Células da pergunta, com conferência de dia/colaborador | `app/chamados/juizes.py:634`, `app/chamados/juizes.py:638` |
+| Memo de vitalidade | `app/chamados/juizes.py:816`, `app/chamados/juizes.py:830` |
+| Marco no espelho, concordância da resposta e decisão administrativa | `app/chamados/juizes.py:904`, `app/chamados/juizes.py:1121`, `app/chamados/juizes.py:1166` |
+| Portas alcançadas pela célula | `app/chamados/juizes.py:1320` |
+| Outbox/célula a acordar | `app/chamados/models.py:2961`, `app/chamados/models.py:2974`, `app/chamados/signals.py:240` |
+| Reconciliação, trilha e semeadura | `app/chamados/reconciliador.py:621`, `app/chamados/reconciliador.py:1145`, `app/chamados/reconciliador.py:1296` |
+| A
+
+[truncado em 20000 de 26013 caracteres]
 
 ## 07/11 20:44 · sessao 9e2390694b62 · - · - · origem=Ronald (tmux)
 
@@ -882,16 +1045,4 @@ As referências aos anexos contam linhas desde o início de cada bloco fornecido
 
    **Classes individuais — M2: [nao verificado]; M4: [nao verificado]; M5: [nao verificado].** Sem os enunciados dos três mutantes, não há base para escolher entre descarte de achado já visto, classe (b), e limitação fora do alcance, classe (c), nem para associá-los aos exemplos de v3(b). (`triagem_opus1.txt:4`; `v3.r:152`)
 
-## 07/11 18:11 · sessao 3de4b0f69961 · - · - · origem=Ronald (tmux)
-
-Minha consolidação mais defensável:
-
-- **O1 — (a).** O tema estava em v1.q: “Algum item conta algo fora de A1/B1/nomeados, ou deixa de contar?” e “Cite algum mutante do instrumento que passaria em todos os testes.” A resposta avaliou “Pareador novo” como “Um `range(..., 2)` novo”, sem diagnosticar nova chamada ao pareador fora das funções fixas. Não há descarte desse achado específico na triagem; ela não o recebeu. `[nao verificado]` [nao verificado]
-- **O2 — (d), com distinção expressa.** A entrega contratual do leitor host não foi perguntada explicitamente nem diagnosticada como faltante. A resposta “Publicação efetiva desses valores em placar/HOST fora da suite: **[nao verificado]**” registra uma incerteza, não o achado O2; portanto não basta para atribuir (b). “bin/ fora do alcance do construtor” também não demonstra impossibilidade do verificador. `[nao verificado]` [nao verificado]
-- **E2, quatro identidades B1 no rebase — (c) para o evento concreto.** As quatro identidades e as árvores comparadas não constam do dado. v2.q(b) pergunta identidade da composição; v3.r(c) já reconhece “identidade completa” nos registros dos contadores. Não afirmar que ninguém viu a classe geral; não afirmar que o rebase ocorreu depois das verificações. `[nao verificado]`
-- **LINHAS_REGISTRADAS absolutas — (b).** v3.q(c): “Linha mudada por edicao NAO relacionada do motor reprova (custo esperado) e a mensagem diz o que fazer?” v3.r(c): “PROCEDENTE o custo de deslocamento”. Triagem: “custo de deslocamento e o esperado e a mensagem diz o que fazer.” Foi visto e aceito como custo esperado, não falha bloqueadora. `[nao verificado]`
-- **M2/M4/M5 — correspondência individual indeterminada.** O dado só informa “M2/M4/M5 declarados no NAO_VE”; não fornece suas definições. **(c) apenas conforme esse enquadramento do opus**, sem confirmar que sejam os escapes de v3(b). Mapear M2/M4/M5 a `for`, `with`, `setattr` etc. inventaria informação. `[nao verificado]`
-
-Para O2, se usar (d), explique que o modo comum é **a ausência da entrega host como diagnóstico contratual**, apesar da menção à publicação não verificada. `[nao verificado]`
-
-_2793 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2794 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
