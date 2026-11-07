@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 03:16:01.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (111.7 MB). Acoes na janela: **1500**.
+**Medido em 07/11/2026 03:21:18.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (111.7 MB). Acoes na janela: **1503**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:17:23 | Bash | Wait for par_v6 DIFF result | `until grep -q '^rc=' /home/ronald/saas-hasner/logs/v2bugs/i2/par_v6.log 2>/dev/null; do /usr/bin/sleep 60; done; tail -12 /home/ronald/saas-hasner/logs/v2bugs/i2/par_v6.log \| cut -c1-250` |
+| 03:17:19 | Bash | Log suite result and wait on par_v6 | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') L.insert(2,"V2-I2 V6 SUITE INTEIRA 0317: copia a23831c3 OK (skipped=42, expected failures=41) Ran 13938 rc=0 (logs/v2bugs/i2/suite6_inteira.log). Falta par_v6 (>=0440) com dono por colab antes do opus final.") open(p,'w').write('\n'.join(L)) EOF sed -i "2s/.*/ESPERANDO: par_v6_agendado.sh \| pid=12 ...` |
+| 03:17:12 | Bash | Read full suite verdict | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bn00v530m.output; grep -E '^(FAIL\|ERROR):' /home/ronald/saas-hasner/logs/v2bugs/i2/suite6_inteira.log \| head -20; date` |
 | 03:00:08 | Bash | Wait for full v6 suite verdict | `until grep -q '^rc=' /home/ronald/saas-hasner/logs/v2bugs/i2/suite6_inteira.log; do /usr/bin/sleep 30; done; grep -E '^(OK\|FAILED)($\| \()' /home/ronald/saas-hasner/logs/v2bugs/i2/suite6_inteira.log \| tail -1; grep '^Ran' /home/ronald/saas-hasner/logs/v2bugs/i2/suite6_inteira.log \| tail -1; tail -1 /home/ronald/saas-hasner/logs/v2bugs/i2/suite6_inteira.log` |
 | 03:00:01 | Bash | Fix ESPERANDO producer name | `cd /home/ronald/saas-hasner && sed -i "2s/.*/ESPERANDO: trava_teste.sh \| pid=1243604/" app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'/home/ronald/saas-hasner/bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
 | 02:59:57 | Bash | Point ESPERANDO at the real suite pid | `cd /home/ronald/saas-hasner && ps -p 1243604 -o args= \| cut -c1-100; sed -i "2s/.*/ESPERANDO: suite.sh \| pid=1243604/" app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'/home/ronald/saas-hasner/bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
