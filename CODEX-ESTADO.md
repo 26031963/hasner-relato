@@ -1,7 +1,143 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 08:59** · publicado em **07/11/2026 08:59** (UTC-3)
+> Ultima resposta processada: **07/11/2026 09:09** · publicado em **07/11/2026 09:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 09:09 · sessao 9c3f52998fa8 · FIO-E0-V4-E2 · verificador · origem=Code
+
+1. **Bloqueia — #3 cura os escapes anteriores, mas o selo ainda aceita leitura do relógio.** `_sem_instante` considera qualquer primeiro argumento diferente de `None` como instante; isso confunde **fuso** com **instante** (`app/chamados/tests/test_e2_tarefa_do_dia.py:756`; `app/chamados/tests/test_e2_tarefa_do_dia.py:759`).
+
+   **Caso executado em memória contra o detector real:**
+   ```python
+   def f():
+       return datetime.datetime.now(datetime.timezone.utc)
+   ```
+   O detector devolve `[]`, embora a expressão leia o relógio. Também passa `from django.utils.timezone import now as clock; clock()`: o import usa `ast.alias`, enquanto a busca cobre `Name`/`Attribute`, e `clock` não pertence à lista reconhecida (`app/chamados/tests/test_e2_tarefa_do_dia.py:745`; `app/chamados/tests/test_e2_tarefa_do_dia.py:754`; `app/chamados/tests/test_e2_tarefa_do_dia.py:767`; `app/chamados/tests/test_e2_tarefa_do_dia.py:770`).
+
+   Portanto, **não considero #3 encerrado**. Os mutantes novos mordem suas grafias declaradas, mas não sustentam a garantia do selo (`app/chamados/tests/test_e2_tarefa_do_dia.py:739`; `app/chamados/tests/test_e2_tarefa_do_dia.py:795`).
+
+2. **Fila — #1 e #2 estão curados nos dois predicados; igualdade e `None` não escapam.** Para os mesmos objetos, marcos e instante aware, as comparações coincidem (`app/chamados/veredito_lavrado.py:196`; `app/chamados/veredito_lavrado.py:198`; `app/chamados/veredito_lavrado.py:202`; `app/chamados/veredito_lavrado.py:206`; `app/chamados/services/raiox.py:40`; `app/chamados/services/raiox.py:42`; `app/chamados/services/raiox.py:45`).
+
+   | Caso, sem outro motivo de invalidação | Resultado dos dois |
+   |---|---|
+   | `julgado_em == agora` | Fresca: a existência é inclusiva. |
+   | `julgado_em > agora`, expiração `None` | Stale: o futuro é rejeitado antes da expiração. |
+   | Expiração em D+1; julgamento D 22:30 local, armazenado em UTC; consulta D+1 09h | Stale: usa a data local do julgamento. |
+   | Julgamento no próprio dia da expiração | Não cai novamente pelo relógio: a comparação é `<`. |
+   | Marco igual ao julgamento | Não invalida: exige `>`. |
+
+   Esses resultados foram reproduzidos com os corpos extraídos em memória, substituindo consultas e conversão de fuso; execução integrada Django: **[nao verificado]** (`app/chamados/veredito_lavrado.py:196`; `app/chamados/veredito_lavrado.py:202`; `app/chamados/services/raiox.py:40`).
+
+3. **Fila — `agora` naive continua sem validação na borda.** `tarefa_do_dia` rejeita somente `None`; com julgamento aware e `agora` naive, a nova comparação levanta `TypeError`. Reproduzi esse caso no corpo isolado; não há retorno conservador de stale (`app/chamados/services/tarefa_do_dia.py:349`; `app/chamados/veredito_lavrado.py:196`).
+
+   A cópia configura `USE_TZ=True`; chamador real passando naive: **[nao verificado]**. Isso é uma lacuna de contrato/validação, sem evidência para promovê-la a regressão de produção (`app/config/settings/base.py:95`).
+
+4. **Fila — o teste de concordância ainda compara instantes diferentes.** O delta alinha os marcos e o juízo do segundo caminho, mas `_confere` executa a varredura antes de capturar seu próprio `agora`; a varredura captura outro relógio internamente (`app/chamados/tests/test_selo_concordancia_varredura_stale.py:56`; `app/chamados/tests/test_selo_concordancia_varredura_stale.py:58`; `app/chamados/services/raiox.py:35`).
+
+   **Caso:** julgamento em `t`, expiração `None`, sem marcos; relógio da varredura em `t−1µs`, relógio do juízo em `t+1µs`. A primeira responde stale; o segundo, fresca. Não demonstra divergência da lei: demonstra que o selo não fixa a mesma entrada temporal (`app/chamados/services/raiox.py:40`; `app/chamados/veredito_lavrado.py:196`).
+
+5. **Fila — os testes funcionais novos mordem os mutantes pretendidos, com lacunas específicas.** [nao verificado]
+
+   - **Noite:** trocar somente `localdate(p.julgado_em)` por `.date()` muda o caso isolado de stale para fresca, contrariando a expectativa do teste. Ele cobre o caminho da tarefa; não exercita a varredura (`app/chamados/tests/test_e2_tarefa_do_dia.py:650`; `app/chamados/tests/test_e2_tarefa_do_dia.py:652`; `app/chamados/services/tarefa_do_dia.py:298`; `app/chamados/veredito_lavrado.py:202`).
+   - **Futuro na tarefa:** retirar `> agora` aceita a lavra das 22h às 21h; o contracaso das 23h impede invalidar indiscriminadamente toda lavra (`app/chamados/tests/test_e2_tarefa_do_dia.py:658`; `app/chamados/tests/test_e2_tarefa_do_dia.py:660`; `app/chamados/tests/test_e2_tarefa_do_dia.py:662`).
+   - **Futuro na concordância:** retirar a guarda de uma implementação quebra a igualdade; retirar das duas deixa ambas vazias, mas quebra a exigência de exatamente um stale (`app/chamados/tests/test_selo_concordancia_varredura_stale.py:61`; `app/chamados/tests/test_selo_concordancia_varredura_stale.py:97`; `app/chamados/tests/test_selo_concordancia_varredura_stale.py:99`).
+
+   Falta caso específico de igualdade com `agora` e de julgamento noturno na varredura; os casos novos usam horários estritamente anteriores/posteriores (`app/chamados/tests/test_e2_tarefa_do_dia.py:659`; `app/chamados/tests/test_e2_tarefa_do_dia.py:661`; `app/chamados/tests/test_selo_concordancia_varredura_stale.py:97`).
+
+6. **Fila — escritores e leitores dos dois campos: concordância decisória, dívida de significado preservada.**
+
+   | Papel | Sítio |
+   |---|---|
+   | Produz valores novos | `lavrar`: instante corrente e expiração calculada pela data local desse instante (`app/chamados/veredito_lavrado.py:245`; `app/chamados/veredito_lavrado.py:246`). |
+   | Exceção de backfill | Captura dia/instante no início e atribui os campos às linhas selecionadas (`app/chamados/management/commands/backfill_veredito_lavrado.py:94`; `app/chamados/management/commands/backfill_veredito_lavrado.py:139`; `app/chamados/management/commands/backfill_veredito_lavrado.py:140`). |
+   | Persiste/restaura | Porta de lote e restauração da foto (`app/chamados/veredito_lavrado.py:224`; `app/chamados/veredito_lavrado.py:261`; `app/chamados/veredito_lavrado.py:262`). |
+   | Decide vigência | `esta_stale` e varredura, com as mesmas desigualdades (`app/chamados/veredito_lavrado.py:196`; `app/chamados/services/raiox.py:40`). |
+   | Transporta/compara | Foto da lavra, comparação do backfill e foto de reversão (`app/chamados/veredito_lavrado.py:254`; `app/chamados/management/commands/backfill_veredito_lavrado.py:121`; `app/chamados/services/passivo_validado.py:83`). |
+
+   Os saves de abertura/carimbo, troca de via e costura persistem o resultado de `lavrar`; não calculam outra expiração (`app/chamados/models.py:2572`; `app/chamados/models.py:2709`; `app/chamados/services/relavra_via.py:124`; `app/chamados/services/fio.py:850`; `app/chamados/services/fio.py:903`).
+
+   **Caso da dívida #9:** evento remoto recebe `hoje`, porque o cálculo começa em `max(hoje, data_evento)`. Isso contradiz “determinístico por data_evento”, mas não cria laço: após lavrar, data local do julgamento iguala a expiração e não satisfaz `<`. Também torna incorreto o comentário “data futura de novo” (`app/chamados/models.py:2402`; `app/chamados/veredito_lavrado.py:115`; `app/chamados/veredito_lavrado.py:120`; `app/chamados/veredito_lavrado.py:200`; `app/chamados/veredito_lavrado.py:202`).
+
+7. **Fila — futuro stale não cria relavra em laço pelo mesmo motivo; leitores antigos continuam diferentes da tarefa.** O cron seleciona os stale uma vez e chama `lavrar` uma vez por alvo. A lavratura substitui o timestamp futuro pelo instante corrente; a rodada seguinte captura novo `agora` (`app/chamados/management/commands/lavrar_perguntas_stale.py:58`; `app/chamados/management/commands/lavrar_perguntas_stale.py:85`; `app/chamados/management/commands/lavrar_perguntas_stale.py:87`; `app/chamados/veredito_lavrado.py:245`; `app/chamados/services/raiox.py:35`).
+
+   **Caso com relógio normal:** borda da tarefa em `t0`, lavratura concorrente em `t1>t0`, SELECT depois. A tarefa passa a responder `veredito_sem_lavra_vigente`, sem relavrar; ela não conserva a lavra anterior para reconstruir aquele instante (`app/chamados/services/tarefa_do_dia.py:280`; `app/chamados/services/tarefa_do_dia.py:298`; `app/chamados/services/tarefa_do_dia.py:137`).
+
+   Raiox/fio antigos leem diretamente o veredito preenchido, sem validar os dois campos. Portanto uma lavra futura `sim` ainda pode esconder pergunta materializada nesses caminhos até a manutenção; a auditoria apenas pula o stale (`app/chamados/services/raiox.py:134`; `app/chamados/services/raiox.py:183`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1165`). Ocorrência e volume em produção: **[nao verificado]**.
+
+8. **Fila — não encontrei fundamento para promover #9 ou #13 a bloqueio de produção; #3 permanece bloqueador.** #13 continua incompleto: o juiz lê `date.today()`, enquanto a expiração recebe a data local do carimbo. O efeito depende da execução e do fuso efetivo, que o dado fornecido não demonstra (`app/chamados/juizes.py:563`; `app/chamados/juizes.py:661`; `app/chamados/veredito_lavrado.py:246`). Fuso efetivo, execução da suíte Django e impacto real em produção: **[nao verificado]**.
+
+## 07/11 09:08 · sessao 23fa3c758f64 · - · - · origem=Ronald (tmux)
+
+1. **Bloqueia — #3 permanece incompleto: argumento de fuso é confundido com instante.** `_sem_instante` só marca chamada vazia ou primeiro argumento/keyword `value` literalmente `None`; a função chamada também é excluída da busca por nomes (`app/chamados/tests/test_e2_tarefa_do_dia.py:756`; `:759`; `:760`; `:765`; `:770`).
+
+   **Caso executado contra o helper real, extraído por AST em memória:**
+   ```python
+   def f():
+       return datetime.datetime.now(datetime.timezone.utc)
+   ```
+   Resultado do detector: `[]`. Executei também a expressão: retorna instante aware, lendo efetivamente o relógio. O argumento é fuso, não instante. Portanto o selo continua aceitando leitura banal do relógio (`app/chamados/tests/test_e2_tarefa_do_dia.py:759`; `:767`).
+
+   Os casos `timezone.localdate(timezone=datetime.timezone.utc)` e `timezone.localtime(timezone=datetime.timezone.utc)` também retornam `[]` no detector, pela mesma omissão do `value`; execução real dessas APIs Django aqui é **[nao verificado]**, pois Django não está instalado (`app/requirements.txt:13`; detector em `app/chamados/tests/test_e2_tarefa_do_dia.py:759`).
+
+2. **Fila — os três escapes da volta 1 foram efetivamente curados, e seus mutantes mordem.** Executei em memória o `test_MORDE_mutantes` extraído por AST, usando `unittest.TestCase`; todas as assertions passaram, incluindo `localdate(None)`, `localtime(value=None)`, alias por atribuição, helper `_hoje` e chamada no módulo. Isso confirma as grafias concretamente listadas, sem corrigir o escape do item 1 (`app/chamados/tests/test_e2_tarefa_do_dia.py:795`; `:799`; `:800`; `:801`; `:802`; `:803`; `:805`).
+
+   **Outro escape executado:** `from django.utils.timezone import now as clock; def f(): return clock()` produz `[]`: o import usa `ast.alias`, enquanto o detector só pesquisa `ast.Name`/`ast.Attribute`, e `clock` não consta de `_RELOGIO` (`app/chamados/tests/test_e2_tarefa_do_dia.py:745`; `:754`; `:770`).
+
+3. **Fila — `test_julgado_a_noite_e_a_data_local_da_lavra` morde o mutante `.date()` no caminho da tarefa.** O teste grava julgamento local D 22:30, expiração D+1 e consulta D+1 09:00; exige ausência de lavra vigente. A carga aplica `esta_stale`, e validação sem entrada em `_lavra` produz exatamente essa razão (`app/chamados/tests/test_e2_tarefa_do_dia.py:650`; `:651`; `:652`; `app/chamados/services/tarefa_do_dia.py:298`; `:135`; `:137`).
+
+   **Caso reproduzido em memória com a função real extraída por AST**, `julgado_em` convertido para UTC e um adaptador de `localdate` com `ZoneInfo('America/Sao_Paulo')`: atual retorna `True`; substituindo somente `timezone.localdate(p.julgado_em)` por `p.julgado_em.date()`, retorna `False`. A configuração da cópia usa São Paulo e `USE_TZ=True` (`app/chamados/veredito_lavrado.py:202`; `app/config/settings/base.py:93`; `:95`). O teste não exercita a varredura (`app/chamados/tests/test_e2_tarefa_do_dia.py:651`).
+
+4. **Fila — os dois testes de futuro mordem a remoção da guarda `> agora`.** No teste da tarefa, expiração permanece `None` pela fixture, julgamento passa a D 22h, consulta D 21h exige ignorância e D 23h exige validade; isso impede atribuir a primeira queda à expiração e impede um mutante que invalide toda lavra (`app/chamados/tests/test_e2_tarefa_do_dia.py:623`; `:658`; `:659`; `:660`; `:661`; `:662`).
+
+   **Caso reproduzido em memória com a função real:** às 21h, atual `True`, remoção apenas de `or p.julgado_em > agora` dá `False`; às 23h, atual `False` (`app/chamados/veredito_lavrado.py:196`).
+
+   O teste de concordância usa julgamento uma hora futuro e expiração 30 dias futura; exige exatamente um stale. Remover a guarda de só uma implementação quebra a igualdade; remover das duas mantém igualdade vazia, mas quebra a cardinalidade exigida (`app/chamados/tests/test_selo_concordancia_varredura_stale.py:97`; `:98`; `:99`; `:61`; `app/chamados/services/raiox.py:40`; `app/chamados/veredito_lavrado.py:196`).
+
+5. **Fila — igualdade com `agora` está correta no código, mas sem mordida específica nos testes novos.** Com expiração `None`, marcos `{}` e julgamento exatamente igual a `agora`, reproduzi `esta_stale=False`; alterando `>` para `>=`, reproduzi `True`. Os casos novos usam 22h contra 21h/23h e futuro de uma hora, sem igualdade (`app/chamados/veredito_lavrado.py:196`; `:198`; `:204`; `app/chamados/tests/test_e2_tarefa_do_dia.py:658`; `:659`; `:661`; `app/chamados/tests/test_selo_concordancia_varredura_stale.py:97`).
+
+Execução efetiva da suíte Django e passagem desses testes no banco: **[nao verificado]**. [nao verificado]
+
+## 07/11 09:07 · sessao 9cfeaba4b92d · - · - · origem=Ronald (tmux)
+
+1. **Fila — os leitores decisórios concordam para os mesmos insumos e instante aware.** `esta_stale` e a varredura usam as mesmas quatro comparações: julgamento futuro `> agora`; expiração `<= data local de agora`; julgamento local `< expiração`; marco `> julgamento`. Igualdade de julgamento com `agora` é aceita; marco igual não invalida; `janela_expira_em=None` desliga somente o motivo relógio, não a rejeição de julgamento futuro (`app/chamados/veredito_lavrado.py:196`; `app/chamados/veredito_lavrado.py:198`; `app/chamados/veredito_lavrado.py:202`; `app/chamados/veredito_lavrado.py:206`; `app/chamados/services/raiox.py:40`; `app/chamados/services/raiox.py:42`; `app/chamados/services/raiox.py:45`).
+
+2. **Fila — censo de quem escreve e lê os dois campos.** Escrita de valores novos: `lavrar` carimba um instante e calcula a expiração pela data local desse mesmo instante; backfill carimba o instante inicial do comando e calcula pela data local capturada no início. Restauração de foto recoloca os valores anteriores; a porta de lote persiste o trio já calculado (`app/chamados/veredito_lavrado.py:245`; `app/chamados/veredito_lavrado.py:246`; `app/chamados/management/commands/backfill_veredito_lavrado.py:94`; `app/chamados/management/commands/backfill_veredito_lavrado.py:95`; `app/chamados/management/commands/backfill_veredito_lavrado.py:111`; `app/chamados/management/commands/backfill_veredito_lavrado.py:139`; `app/chamados/management/commands/backfill_veredito_lavrado.py:140`; `app/chamados/veredito_lavrado.py:224`; `app/chamados/veredito_lavrado.py:261`; `app/chamados/veredito_lavrado.py:262`).
+
+   Os demais escritores encontrados persistem o resultado de `lavrar`: reapontamento em `abrir`, carimbo, troca de via, costura de resolvedora e rechaveamento do dia (`app/chamados/models.py:2572`; `app/chamados/models.py:2574`; `app/chamados/models.py:2709`; `app/chamados/models.py:2711`; `app/chamados/services/relavra_via.py:124`; `app/chamados/services/relavra_via.py:125`; `app/chamados/services/fio.py:850`; `app/chamados/services/fio.py:851`; `app/chamados/services/fio.py:903`; `app/chamados/services/fio.py:904`).
+
+   Leitores decisórios diretos são `esta_stale` e a varredura; leitores adicionais transportam/comparam valores: foto da lavra, contadores do backfill e foto para reversão do passivo (`app/chamados/veredito_lavrado.py:196`; `app/chamados/services/raiox.py:31`; `app/chamados/veredito_lavrado.py:254`; `app/chamados/management/commands/backfill_veredito_lavrado.py:121`; `app/chamados/management/commands/backfill_veredito_lavrado.py:135`; `app/chamados/services/passivo_validado.py:65`; `app/chamados/services/passivo_validado.py:83`).
+
+3. **Fila — dívida #9 permanece, sem laço demonstrado.** O modelo promete expiração determinística por evento, mas `expira_em` parte de `max(hoje,data_evento)`: evento já fora da janela recebe a data de hoje. Após lavrar, `data_local(julgado_em)==janela_expira_em`; portanto a comparação estrita `<` impede repetir a invalidação só pelo relógio. O comentário que promete “data futura de novo” está errado nesse caso, mas a guarda continua funcional (`app/chamados/models.py:2402`; `app/chamados/veredito_lavrado.py:115`; `app/chamados/veredito_lavrado.py:119`; `app/chamados/veredito_lavrado.py:120`; `app/chamados/veredito_lavrado.py:200`; `app/chamados/veredito_lavrado.py:202`).
+
+4. **Fila — `agora` naive continua sem contrato validado na borda.** A API pública rejeita apenas `None`; um julgamento aware comparado a `agora` naive falha em `p.julgado_em > agora`. A configuração usa `USE_TZ=True`; aceitação intencional de naive não está documentada nesses contratos (`app/chamados/services/tarefa_do_dia.py:349`; `app/chamados/veredito_lavrado.py:196`; `app/config/settings/base.py:95`). Chamador de produção fornecendo naive: **[nao verificado]**.
+
+5. **Fila — #13 não está curado, mas dano de produção não é demonstrado pelo dado.** O juiz usado por `lavrar` continua consultando `date.today()`, enquanto a expiração usa a data local do instante carimbado; configurações diferentes de fuso entre relógio do SO e Django podem produzir julgamentos e expirações baseados em dias distintos (`app/chamados/juizes.py:563`; `app/chamados/juizes.py:661`; `app/chamados/veredito_lavrado.py:237`; `app/chamados/veredito_lavrado.py:246`). A cópia configura `America/Sao_Paulo`; fuso efetivo do SO em produção: **[nao verificado]** (`app/config/settings/base.py:93`).
+
+6. **Fila — rejeitar julgamento futuro não cria repetição no cron pelo mesmo instante antigo.** O cron seleciona uma vez os stale e chama `lavrar` uma vez por alvo; `lavrar` substitui o julgamento pelo relógio corrente. A seleção da varredura lê as linhas antes de capturar `agora`, portanto, com relógio normal e valores escritos por `lavrar`, o julgamento já lido precede a borda da varredura (`app/chamados/management/commands/lavrar_perguntas_stale.py:58`; `app/chamados/management/commands/lavrar_perguntas_stale.py:85`; `app/chamados/management/commands/lavrar_perguntas_stale.py:87`; `app/chamados/veredito_lavrado.py:245`; `app/chamados/services/raiox.py:31`; `app/chamados/services/raiox.py:35`). Quantidade efetiva de julgamentos futuros no acervo: **[nao verificado]**.
+
+## 07/11 09:07 · sessao 7af3b96e1193 · - · - · origem=Ronald (tmux)
+
+1. **Fila — o teste de concordância ainda usa dois instantes.** `_confere` executa a varredura antes de capturar seu próprio `agora`; a varredura lê o relógio internamente. Portanto, o comentário “MESMA borda” vale para marcos/juízo do segundo caminho, não entre varredura e juízo (`app/chamados/tests/test_selo_concordancia_varredura_stale.py:56`; `app/chamados/tests/test_selo_concordancia_varredura_stale.py:58`; `app/chamados/services/raiox.py:35`).
+
+   **Caso:** sem marcos e expiração `None`, fixe `julgado_em=t`; devolva `t−1µs` para o relógio da varredura e `t+1µs` para o relógio de `_confere`. A varredura devolve stale e a lei devolve fresca, embora ambos os predicados estejam corretos para seus próprios instantes (`app/chamados/services/raiox.py:40`; `app/chamados/veredito_lavrado.py:196`). O teste novo com futuro de uma hora não exercita essa fronteira (`app/chamados/tests/test_selo_concordancia_varredura_stale.py:97`).
+
+2. **Fila — a mudança não demonstra relavra em laço com relógio normal.** O cron calcula uma lista de stale, aplica teto e chama `lavrar` uma vez para cada alvo; não reavalia a mesma lista durante a rodada. `lavrar` substitui o timestamp futuro pelo `timezone.now()` corrente, e a próxima varredura captura novo `agora` (`app/chamados/management/commands/lavrar_perguntas_stale.py:58`; `app/chamados/management/commands/lavrar_perguntas_stale.py:60`; `app/chamados/management/commands/lavrar_perguntas_stale.py:85`; `app/chamados/management/commands/lavrar_perguntas_stale.py:87`; `app/chamados/veredito_lavrado.py:245`; `app/chamados/services/raiox.py:35`).
+
+   **Caso:** uma linha com julgamento amanhã passa a entrar na rodada de hoje; depois da gravação, sem outro insumo posterior, deixa de ser futura e não volta por esse motivo. Comportamento efetivo de linhas futuras em produção: **[nao verificado]** (`app/chamados/services/raiox.py:40`; `app/chamados/services/raiox.py:45`; `app/chamados/veredito_lavrado.py:245`).
+
+3. **Fila — telas antigas continuam lendo o campo mesmo stale; não acionam a nova regra nem relavram.** `creditos_perguntas` usa diretamente `veredito_lavrado='sim'` no filtro SQL, e `pergunta_sem_acao_possivel` retorna o campo preenchido sem chamar `esta_stale`. A decisão de aceitar o campo até a próxima rodada está declarada nesse módulo (`app/chamados/services/raiox.py:134`; `app/chamados/services/raiox.py:183`; `app/chamados/services/raiox.py:115`; `app/chamados/services/raiox.py:117`).
+
+   **Caso:** uma lavra futura `sim` ainda pode esconder uma pergunta materializada nessas leituras até o cron corrigir o campo. Já a tarefa exclui essa lavra e retorna `veredito_sem_lavra_vigente`; a mudança não torna todos os leitores observadores do mesmo instante (`app/chamados/services/raiox.py:134`; `app/chamados/services/raiox.py:184`; `app/chamados/services/tarefa_do_dia.py:298`; `app/chamados/services/tarefa_do_dia.py:135`; `app/chamados/services/tarefa_do_dia.py:137`).
+
+4. **Fila — concorrência normal pode produzir ignorância transitória na tarefa, sem escrever.** A tarefa recebe um `agora` fixo, mas consulta as versões atuais das perguntas; se uma lavra for gravada depois desse `agora` e antes do SELECT, a nova guarda a exclui (`app/chamados/services/tarefa_do_dia.py:267`; `app/chamados/services/tarefa_do_dia.py:280`; `app/chamados/services/tarefa_do_dia.py:298`; `app/chamados/veredito_lavrado.py:245`).
+
+   **Caso:** borda `t0`, cron grava `julgado_em=t1>t0`, SELECT da tarefa encontra esse campo. A tarefa responde `veredito_sem_lavra_vigente`, `nao_sei=True`, e não relavra. Isso segue a regra declarada de não aceitar lavra posterior; o código não conserva a lavra anterior para reconstruí-la nesse instante (`app/chamados/services/tarefa_do_dia.py:137`; `app/chamados/services/tarefa_do_dia.py:252`; `app/chamados/services/tarefa_do_dia.py:298`; `app/chamados/veredito_lavrado.py:245`).
+
+5. **Fila — auditoria reconhece futuro como stale, mas apenas pula essa amostra.** Não há relavra nesse ramo: o auditor usa um `agora` para marcos e juízo e executa `continue` quando `esta_stale` retorna verdadeiro (`app/chamados/management/commands/auditar_invariantes_chamados.py:1160`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1162`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1165`).
+
+   **Caso:** lavra futura deixa de ser confrontada com o juiz real nessa execução, sendo classificada como stale conhecido. O cron só trata perguntas cujo `chamado_destino` pertence ao universo vivo; não se deve interpretar o comentário “o leitor re-lavra” como garantia para toda pergunta pulada pelo auditor (`app/chamados/management/commands/auditar_invariantes_chamados.py:1154`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1166`; `app/chamados/management/commands/lavrar_perguntas_stale.py:56`; `app/chamados/management/commands/lavrar_perguntas_stale.py:57`).
+
+6. **Fila — a divergência de fuso do juiz antigo permanece condicional.** `_dentro_da_janela_viva` lê `date.today()`, enquanto o carimbo de expiração recebe `timezone.localdate(julgado_em)`; a cópia declara `TIME_ZONE='America/Sao_Paulo'` e `USE_TZ=True`. O fuso efetivo do processo/SO e uma divergência em produção não estão demonstrados pelo dado (`app/chamados/juizes.py:563`; `app/chamados/veredito_lavrado.py:246`; `app/config/settings/base.py:93`; `app/config/settings/base.py:95`). **[nao verificado]**
 
 ## 07/11 08:59 · sessao 9681a0007b55 · FIO-E0-V4-E1 · verificador · origem=Code
 
@@ -646,408 +782,4 @@ A trilha da regeneração recebe `autor` opcional e registra ação `regenerar_c
 
 Há vários disparadores possíveis: alteração de vigência (`app/escala/signals.py:71-73`), alteração de âncora (`:117-119`) e edição de template (`app/escala/services/cadastro_tipo.py:307-320`, `:348-350`). Os dois signals e a propagação de template mostrados chamam a regeneração sem fornecer `autor`, conforme esses mesmos trechos; portanto até a trilha pode ter usuário nulo. A sonda não identifica qual desses disparadores produziu cada ato `[nao verificado]`.
 
-## 07/11 08:47 · sessao e5b1b97e3c3d · - · - · origem=Ronald (tmux)
-
-**Histórico Git: não verificável nesta cópia.** A raiz não contém `.git`; não consultei outro checkout. Logo, hash/autoria/data/ancestralidade de commits no HEAD e “cura commitada em 27/09” ficam **[nao verificado]**. [nao verificado]
-
-O código/documentação local permitem distinguir:
-
-- **R4 de 27/09** corrigiu a leitura da **pausa do realizado**, quando uma célula existente tem `dna.marcos=null`: o template fornecia pausa inexistente. A implementação criou leitor próprio; preservou o fallback de `marcos_do_dia`, pois os testes exigiam esse comportamento para folga. Prova: `app/escala/models.py:1138-1158`, fallback atual em `app/escala/models.py:1124-1133`. A documentação registra R4 fechada em 28/09, com +75,12 h em 27 colaboradores: `app/docs/BACKLOG.md:1077`. Isso não demonstra relação com os +420 de col270.
-- **O previsto não recebeu integralmente essa guarda R4.** A fonte declara que era o leitor faltante; hoje lê todas as pausas, mas, quando elas retornam vazio, continua descontando `hii/hfi` devolvidos por `marcos_do_dia`. A colisão entre R4 e F1 é explicitamente registrada: `app/escala/utils.py:2307-2340`.
-- A cura documentada de **PREVISTO** é de **02/10**, para descontar **duas pausas**, com identificadores `fecb9a67` e `07d89f21`; o próprio registro diz que a guarda R4 ficou fora: `app/docs/TICKETS.md:246`. Esses identificadores são evidência documental; sua presença no git log do HEAD continua **[nao verificado]**.
-- O comentário registra que a alimentação `celulas/folgas` entrou em **26/09**, para custo e DNA alimentado invisível: `app/escala/utils.py:2257-2266`. Não prova por si só data/commit no histórico.
-
-**L-099 e limite de atribuição:**
-
-- Lei: coerência, determinismo e idempotência **com o cadastro que tem**; donos ESTRUTURA/CADASTRO/BATIDA, somente ESTRUTURA vira cura de código: `app/docs/LEIS.md:122`.
-- O juiz pede dados não fornecidos na sonda: folga não definida, vínculo válido, batida fora de turno, paridade, fase deslocada e presença em `dias_cadastro_x_realidade`. Executável em `app/ponto/management/commands/e6_oraculo.py:98-110`; montagem dos insumos descrita em `:113-125`.
-- Portanto, não é válido chamar o delta de CADASTRO apenas porque há regeneração, nem ESTRUTURA por resíduo sem carregar os insumos. Com ausência de DP novo por dia e sem `trabalha`/DNA integral/vigências/batidas/CxR, dono conclusivo dos +420 = **[nao verificado]**.
-
-Uma distinção útil para o laudo: leitor da célula pode priorizar `ata.minutos_previstos` e só consultar a autoridade quando ausente (`app/escala/services/leitor_celula.py:382-395`), enquanto `minutos_previstos_do_dia` verifica vínculo, `trabalha` e marcos (`app/escala/utils.py:2277-2295`). A sonda não trouxe ata nem execução nova por dia.
-
-## 07/11 08:30 · sessao 980fb726544f · MOTOR-LE-O-TURNO-INSTRUMENTO · censo · origem=Code
-
-**Os critérios AST dão números diferentes; não escolhi um deles.** No escopo da obra, obtive **A1=1, A2=8, B1=17 e B2=18 funções**. São contagens sintáticas: A2 inclui adaptadores que recebem pares, e B2 inclui datas de competência ou prazo. Portanto, o número de **violações semânticas** continua **[não verificado]**. Exemplos dessas diferenças: `app/ponto/adaptador_motor.py:29-43`, `app/ponto/services/fechamento.py:1567-1569`.
-
-| Universo da execução | A1 | A2 | B1 | B2 |
-|---|---:|---:|---:|---:|
-| Escopo da obra | 1 | 8 | 17 | 18 |
-| Resto da árvore inventariada | 5 | 7 | 66 | 154 |
-| Árvore inteira inventariada | 6 | 15 | 83 | 172 |
-| Somente `app/` | 6 | 15 | 82 | 171 |
-| Árvore, reaproveitando a exclusão de medição concreta do molde | 5 | 14 | 83 | 171 |
-| Somente `app/`, com essa exclusão | 5 | 14 | 82 | 170 |
-
-Os totais acima são resultados da execução reproduzida ao fim; sua equivalência à definição semântica do contrato é **[não verificado]**. A exclusão de medição concreta é `e6_piso_autopsia::handle`, declarada em `app/core/medida_leitor_do_dia.py:282-283`, com pareamento em `app/ponto/management/commands/e6_piso_autopsia.py:94-95`.
-
-1. **Como o molde define universo, critério e `NAO_VE`.**
-
-O universo de STATUS é todo `.py` sob a raiz `app/`, por `os.walk`, excluindo diretórios `tests`, `migrations`, `staticfiles`, `node_modules`, `logs`, `media`, `__pycache__`, diretórios ocultos e arquivos começados por `test_`. Management não é excluído em bloco. VALOR usa outra abrangência: a lista fechada `LEITORES`. `app/core/medida_leitor_do_dia.py:32-45`, `:151-152`, `:240-251`, `:388-394`.
-
-STATUS conta **funções** que produzem pelo menos duas palavras distintas do vocabulário e têm alguma produção sob escolha. Produção significa atribuição, retorno ou ramo de expressão condicional nas formas explicitadas; função aninhada pertence a si própria. O vocabulário vem das chaves AST de `ROTULO_STATUS`, acrescidas dos paralelos. `app/core/medida_leitor_do_dia.py:160-190`, `:195-236`.
-
-VALOR conta **sítios de aritmética** sobre atributos de dinheiro: `BinOp`, `AugAssign` ou agregadores reconhecidos, incluindo algumas formas de `getattr` literal. Assim, `numero` mistura funções de STATUS com sítios de VALOR; não significa “número de funções” uniformemente. `app/core/medida_leitor_do_dia.py:70-115`, `:358`, `:390-401`.
-
-As exceções têm categorias explícitas; previsão e presença são condicionadas ao vocabulário produzido. O molde também conserva quantidade de literais dentro de cada função, para uma decisão nova numa função já contada poder alterar a catraca. `app/core/medida_leitor_do_dia.py:254-277`, `:317-321`, `:374-382`, `:406-409`.
-
-O `NAO_VE` publicado enumera: indireção sem literal; decisões booleanas ou de relógio que não viram palavra; função de uma palavra; HTML/JS; vocabulário novo; arquivo fora da lista de VALOR; `BoolOp` que o detector de VALOR não atravessa; e mudança que reutiliza a mesma quantidade de literais. `app/core/medida_leitor_do_dia.py:342-351`.
-
-Falhas de leitura ou parse entram em `ilegiveis`; o resultado as publica, em vez de tratá-las como ausência de achados. A fonte ilegível do vocabulário levanta `LookupError`. Embora a documentação diga “ast/os”, esta cópia também importa `io`. `app/core/medida_leitor_do_dia.py:22-24`, `:163-173`, `:363-368`, `:412-415`.
-
-2. **Critérios propostos e suas diferenças.**
-
-Os quatro critérios abaixo são propostas de aproximação AST, **[não verificado como critério oficial]**. Cada contador soma uma função uma vez; preserva todas as linhas que casaram. Não há isenção da função inteira por ela também consultar o juiz: isso esconderia fallbacks existentes em `app/ponto/services/dia_pago.py:128-132` e `app/ponto/motor_calculo_v2.py:2942-2955`.
-
-| Critério | Forma AST contada | Limitação principal |
-|---|---|---|
-| **A1 — seleção posicional** | `Call` de `range(início, fim, 2)` ou `zip` cujos dois primeiros argumentos são fatias com passo literal 2. | Também encontra pausas e índices de marcos; não reconhece todo pareador por estado. Exemplo: `app/escala/utils.py:496`, `:520`. |
-| **A2 — seleção ou recomposição** | A1, mais `append(Tuple/List)` com primeira posição marcada lexicalmente como entrada e segunda como saída, propagando marcas por atribuições e iterações locais. | Encontra recomposição, mas também adaptadores de pares recebidos. Exemplos: `app/ponto/motor_calculo_v2.py:688`, `app/ponto/adaptador_motor.py:43`. |
-| **B1 — extração com origem lexical** | `.date()` sem argumentos, `localdate(x)` ou `data_local(x)`, quando o operando contém ou herda nomes/atributos temporais declarados no script. | A marca lexical não prova tipo nem pertença; aliases sem essas marcas escapam. Exemplo capturado: `app/escala/detector_proposta.py:57-58`. |
-| **B2 — extração civil ampla** | As mesmas chamadas de B1, sem exigir marca lexical. | Inclui calendário de hoje, conversão de formato, competência e prazo. Exemplos: `app/colaboradores/models.py:824-825`, `app/chamados/veredito_lavrado.py:182-185`. |
-
-A cláusula literal de A, **“sem receber pares do juiz”**, não é demonstrada por esses padrões locais. A2 deliberadamente expõe esse limite: `periodos_de_turnos` recebe turnos e só lê suas pontas, mas casa com sua forma sintática. Portanto, interpretar A2=15 como quinze pareadores independentes seria **[não verificado]**; o contraexemplo está em `app/ponto/adaptador_motor.py:13-19`, `:29-44`.
-
-Para excluir o juiz e sua composição, o script parte de `turnos_do_colab` e `parear_turnos` e calcula o fechamento de chamadas estáticas resolvidas por nome/import. Não exclui `turnos.py` inteiro. A composição entre turno e juiz da batida existe na chamada `papel_por_minuto_da_ata → periodos_do_dia`. `app/core/juizes.py:196`, `app/ponto/turnos.py:1580`, `:1631`, `:1937`, `:1990`.
-
-Esse fechamento também tem limite: chamadas por parâmetros, métodos de objetos e resolução dinâmica não ficam provadas. A completude da exceção de composição é **[não verificado]**; o script publica esse limite em `NAO_VE`.
-
-O inventário principal percorre a árvore inteira, mantendo comandos de medição para não confundir localização com uso. Também fornece o recorte `app/` do molde e a variante que reaproveita sua exclusão concreta de `e6_piso_autopsia`. Não exclui todo management: o molde também não faz isso. `app/core/medida_leitor_do_dia.py:240-251`, `:282-283`.
-
-3. **Cobertura dos sítios nomeados no aval.**
-
-| Sítio | Contado? | Evidência e limite |
-|---|---|---|
-| **MOTOR-PASSA-O-TURNO-A-VOLTA / resíduo 573** | **B1 e B2** em `MotorBase._julgar_pontualidade`; A1/A2 não identificam especificamente essa pergunta. | Passa `e.date()` e as pontas do período a `cumpriu_a_volta_do_intervalo`. O defeito “período em vez de turno” não exige construir par novo: é falso negativo de A como cobertura da obra. `app/ponto/motor_calculo_v2.py:2117-2119`. O 573 está registrado na documentação, sem reprodução de produção aqui: `app/docs/BACKLOG.md:779`; número atual **[não verificado]**. |
-| **col882 turno aberto** | O comportamento do caso não é demonstrado pelos contadores. | Os calculadores retornam cedo sem saída; isso não prova quais pares as cinco batidas dadas produzirão. `app/ponto/motor_calculo_v2.py:2752-2755`, `:2879-2882`, `:3217-3220`. Execução desse caso **[não verificado]**. A2 também não reconhece isoladamente `append((entrada, None))`, forma presente em `app/ponto/calculador/alimentacao.py:88`, `:111`. |
-| **JUIZ-DO-PAR-DUAS-ENTRADAS** | **Não em A1/A2 nas duas portas.** `turnos_via_autoridade` entra em B1/B2 por outra razão. | Uma porta chama `turnos_de_batidas`; outra chama `parear_turnos` com alimentação própria. Divergência entre receitas não exige `range(...,2)` nem `append((e,s))` local: falso negativo de A. `app/ponto/motor_calculo_v2.py:867-882`, `:475-506`. O B dessa porta é apenas a extração para consulta em `:470-474`. |
-| **Partido `:3012 × :2446`** | **B1 e B2** nas funções relevantes. | Nesta cópia, o mecanismo verificável está no fallback civil e herança por gap em `app/ponto/motor_calculo_v2.py:2403-2408`, e nos fallbacks do partido em `:2942`, `:2955`. A âncora `:3012` agora é comentário. `app/ponto/motor_calculo_v2.py:3012`. |
-| **`dia_pago._dia_de`** | **B1 e B2.** | Depois de tentar o mapa, retorna a data civil da entrada. `app/ponto/services/dia_pago.py:128-132`. |
-| **`_dia_da_jornada_do_par`** | Não apareceu como função no inventário AST. | O nome está na documentação, mas sua implementação nesta cópia é **[não verificado]**. `app/docs/BACKLOG.md:1821`. |
-| **Split de `calculador/alimentacao.py:73-108`** | **A2 sim; A1/B1/B2 não.** | Lê períodos, dia do mapa e pontas efetivas; depois divide o período pelos intervalos. É falso positivo de A2 para “pareamento de batidas cruas”; a ausência em A1 não é falso negativo dessa definição. `app/ponto/calculador/alimentacao.py:73-83`, `:106-108`, `:128-158`. |
-
-B também não identifica, como regra autônoma, a herança de dia por gap: a função atual é contada por conter extrações civis, mas a decisão de `:2405-2408` não tem detector próprio. Adicionar outra decisão desse tipo numa função já contada pode preservar N. `app/ponto/motor_calculo_v2.py:2403-2408`. O molde evita parte desse problema mantendo uma medida interna de sítios, além do número de funções. `app/core/medida_leitor_do_dia.py:320-321`, `:406-409`.
-
-4. **Falsos positivos prováveis, além do split.**
-
-| Critério | Sítio | Por que provavelmente excede a pergunta |
-|---|---|---|
-| A1/A2 | `app/escala/utils.py:496` | Forma pares S→E de pausa/papel, não pares laborais E→S. |
-| A1/A2 | `app/escala/utils.py:520` | Enumera posições de pausas dos marcos. |
-| A1/A2 | `app/ponto/turnos.py:810-812` | Lê pares de pausa já marcados no turno. |
-| A1/A2 | `app/ponto/management/commands/vigiar_motor_autoridade.py:75-86` | Soma marcas internas de turnos recebidos. |
-| A2 | `app/ponto/adaptador_motor.py:29-44` | Converte pontas de turnos recebidos. |
-| A2 | `app/ponto/motor_calculo_v2.py:164-172` | Une intervalos já fornecidos. |
-| A2 | `app/ponto/motor_calculo_v2.py:1883-1888` | Recorta intervalos recebidos à janela. |
-| B1/B2 | `app/ponto/motor_calculo_v2.py:97-98` | Percorre faixas civis para cálculo noturno; pertença do turno não é demonstrada por essa extração. |
-| B1/B2 | `app/ponto/motor_calculo_v2.py:470-474` | Amplia consulta de DNA/marcos. |
-| B1/B2 | `app/ponto/janelas.py:84-85` | Responde competência fechada. |
-| B1/B2 | `app/ponto/services/fechamento.py:1567-1569` | Normaliza `date`/`datetime` de um fato. |
-| B2 | `app/folha/pdf_export.py:43-47` | Converte formato `AAAAMMDD`. |
-| B2 | `app/colaboradores/models.py:821-825` | Obtém mês atual para custo de transporte. |
-| B2 | `app/chamados/veredito_lavrado.py:182-185` | Compara prazo de expiração e lavratura. |
-| B1/B2 | `bin/disjuntor.py:1512-1539` | O homônimo `timestamp` é de mensagens do assistente, não de batidas de ponto. |
-
-5. **Script integral.**
-
-A execução foi por `python3 -B - .`, com o texto abaixo em stdin, na raiz informada; não foi criado arquivo de script. Registro persistido dessa execução: **[não verificado]**. A saída integral vem depois do código. `@NN` indica a linha do nó contado; o número após a função é a linha da definição.
-
-```python
-import ast
-import os
-
-FUN = (ast.FunctionDef, ast.AsyncFunctionDef)
-SKIP = {'tests', 'migrations', 'staticfiles', 'node_modules',
-        'logs', 'media', '__pycache__'}
-E = {'entrada', 'efetivo_entrada', 'ent', 'e', '_e', '_ent', 'e_ts'}
-S = {'saida', 'efetivo_saida', 'sai', 's', '_s', 's_', 's_ts'}
-T = {'timestamp', 'ts', 'ts_entrada', 'ts_saida', 'instante',
-     'quando', 'inicio', 'fim'}
-NAO_VE = (
-    'Sem tipos nem execucao: nomes/atributos podem ser homonimos.',
-    'Fluxo intrafuncao insensivel a ordem, ramos, sobrescritas e alcance.',
-    'Nao prova origem interprocedural dos argumentos nem pares do juiz.',
-    'Chamadas dinamicas, getattr calculado e aliases entre modulos escapam.',
-    'Composicao: so fechamento de chamadas estaticas resolvidas; self/metodos '
-    'em objetos e parametros nao sao resolvidos.',
-    'Nao ve HTML/JS, codigo gerado, codigo em strings ou corpo de modulo.',
-    'B nao ve toda regra de meia-noite sem extracao civil nem heranca por gap.',
-    'A1 ve so passo 2; A2 acrescenta tuplas E/S: nao e censo semantico exato.',
-    'Nao distingue exibicao, competencia, prazo, pausa e par laboral.',
-)
-
-def own(node):
-    yield node
-    for ch in ast.iter_child_nodes(node):
-        if not isinstance(ch, FUN + (ast.ClassDef, ast.Lambda)):
-            yield from own(ch)
-
-def dotted(node):
-    if isinstance(node, ast.Name):
-        return node.id
-    if isinstance(node, ast.Attribute):
-        head = dotted(node.value)
-        return head + '.' + node.attr if head else ''
-    return ''
-
-def targets(node):
-    return {n.id for n in ast.walk(node)
-            if isinstance(n, ast.Name) and isinstance(n.ctx, ast.Store)}
-
-def aliases(nodes, package):
-    out = {}
-    for node in nodes:
-        if isinstance(node, ast.Import):
-            for a in node.names:
-                out[a.asname or a.name.split('.')[0]] = (
-                    a.name if a.asname else a.name.split('.')[0])
-        elif isinstance(node, ast.ImportFrom):
-            base = node.module or ''
-            if node.level:
-                prefix = package.split('.')
-                base = '.'.join(prefix[:len(prefix)-node.level+1]
-                                + ([base] if base else []))
-            for a in node.names:
-                if a.name != '*':
-                    out[a.asname or a.name] = base + '.' + a.name
-    return out
-
-def units(tree):
-    def visit(node, prefix=''):
-        for ch in ast.iter_child_nodes(node):
-            if isinstance(ch, FUN + (ast.ClassDef,)):
-                name = prefix + ch.name
-                if isinstance(ch, FUN):
-                    yield name, ch
-                yield from visit(ch, name + '.')
-            else:
-                yield from visit(ch, prefix)
-    return visit(tree)
-
-def tags(node, env):
-    if node is None:
-        return set()
-    out = set()
-    for n in own(node):
-        word = None
-        if isinstance(n, ast.Name):
-            word = n.id
-            out |= env.get(word, set())
-        elif isinstance(n, ast.Attribute):
-            word = n.attr
-        elif (isinstance(n, ast.Call) and dotted(n.func) == 'getattr'
-              and len(n.args) > 1 and isinstance(n.args[1], ast.Constant)):
-            word = n.args[1].value
-        elif (isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute)
-              and n.func.attr == 'get' and n.args
-              and isinstance(n.args[0], ast.Constant)):
-            word = n.args[0].value
-        elif isinstance(n, ast.Subscript) and isinstance(n.slice, ast.Constant):
-            word = n.slice.value
-        if word in E:
-            out.add('E')
-        if word in S:
-            out.add('S')
-        if word in T:
-            out.add('T')
-    return out
-
-def environment(nodes):
-    env = {}
-    while True:
-        before = {k: frozenset(v) for k, v in env.items()}
-        for n in nodes:
-            pairs = []
-            if isinstance(n, ast.Assign):
-                pairs = [(t, n.value) for t in n.targets]
-            elif isinstance(n, ast.AnnAssign) and n.value is not None:
-                pairs = [(n.target, n.value)]
-            elif isinstance(n, (ast.For, ast.AsyncFor, ast.comprehension)):
-                pairs = [(n.target, n.iter)]
-            for dst, src in pairs:
-                if (isinstance(dst, (ast.Tuple, ast.List))
-                        and isinstance(src, (ast.Tuple, ast.List))
-                        and len(dst.elts) == len(src.elts)):
-                    bindings = zip(dst.elts, src.elts)
-                else:
-                    bindings = [(dst, src)]
-                for left, right in bindings:
-                    val = tags(right, env)
-                    for key in targets(left):
-                        env.setdefault(key, set()).update(val)
-        if before == {k: frozenset(v) for k, v in env.items()}:
-            return env
-
-def step2(n):
-    if isinstance(n, ast.Call) and dotted(n.func) == 'range':
-        return (len(n.args) == 3 and isinstance(n.args[2], ast.Constant)
-                and n.args[2].value == 2)
-    if isinstance(n, ast.Call) and dotted(n.func) == 'zip':
-        return len(n.args) >= 2 and all(
-            isinstance(a, ast.Subscript) and isinstance(a.slice, ast.Slice)
-            and isinstance(a.slice.step, ast.Constant)
-            and a.slice.step.value == 2 for a in n.args[:2])
-    return False
-
-def scan(node, imports):
-    nodes = list(own(node))
-    env = environment(nodes)
-    found = {'A1': [], 'A2': [], 'B1': [], 'B2': []}
-    for n in nodes:
-        if step2(n):
-            found['A1'].append(n.lineno)
-        if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute):
-            if n.func.attr == 'append' and n.args:
-                pair = n.args[0]
-                if (isinstance(pair, (ast.Tuple, ast.List)) and len(pair.elts) >= 2
-                        and 'E' in tags(pair.elts[0], env)
-                        and 'S' in tags(pair.elts[1], env)):
-                    found['A2'].append(n.lineno)
-        if not isinstance(n, ast.Call):
-            continue
-        call = dotted(n.func)
-        head, dot, tail = call.partition('.')
-        call = imports.get(head, head) + (dot + tail if dot else '')
-        last = call.split('.')[-1]
-        arg = None
-        if (isinstance(n.func, ast.Attribute) and n.func.attr == 'date'
-                and not n.args and not n.keywords):
-            arg = n.func.value
-        elif last in {'localdate', 'data_local'}:
-            arg = n.args[0] if n.args else next(
-                (k.value for k in n.keywords if k.arg == 'value'), None)
-        if arg is not None:
-            found['B2'].append(n.lineno)
-            if tags(arg, env):
-                found['B1'].append(n.lineno)
-    found['A2'] += found['A1']
-    return {k: sorted(set(v)) for k, v in found.items()}
-
-def census(root, extra=None, emit=True):
-    log = print if emit else lambda *args: None
-    files, errors, records, modules = [], [], {}, {}
-    for directory, dirs, names in os.walk(root):
-        dirs[:] = sorted(d for d in dirs if d not in SKIP
-                         and not d.startswith('.'))
-        for name in sorted(names):
-            if name.endswith('.py') and not name.startswith('test_'):
-                files.append(os.path.relpath(os.path.join(directory, name), root))
-    for rel in sorted(files):
-        try:
-            with open(os.path.join(root, rel), encoding='utf-8-sig') as fh:
-                tree = ast.parse(fh.read(), filename=rel)
-        except (SyntaxError, UnicodeError, OSError) as exc:
-            errors.append((rel, type(exc).__name__))
-            continue
-        path = rel[:-3].replace(os.sep, '.')
-        module = path[4:] if path.startswith('app.') else path
-        if module.endswith('.__init__'):
-            module = module[:-9]
-            package = module
-        else:
-            package = module.rpartition('.')[0]
-        imp = aliases(own(tree), package)
-        modules[module] = imp
-        for name, node in units(tree):
-            records[module + '.' + name] = (rel, name, node, imp, module, package)
-    if extra is not None:
-        tree = ast.parse(extra, filename='<mutante em memoria>')
-        for name, node in units(tree):
-            records['mutante.' + name] = (
-                '<mutante em memoria>', name, node, {}, 'mutante', '')
-    def resolve(call, rec):
-        rel, name, node, imp, module, package = rec
-        local = dict(imp)
-        local.update(aliases(own(node), package))
-        raw = dotted(call.func)
-        head, dot, tail = raw.partition('.')
-        if head in local:
-            return local[head] + (dot + tail if dot else '')
-        if dot:
-            return module + '.' + raw
-        prefix = name.split('.')
-        for i in range(len(prefix), -1,
-
-[truncado em 20000 de 46612 caracteres]
-
-## 07/11 08:19 · sessao 48640afec29c · - · - · origem=Ronald (tmux)
-
-Fora do escopo da obra, os candidatos A encontrados exigem distinguir par laboral de pausa/papel:
-
-- `app/escala/utils.py::_papeis_por_alternancia:477`: `zip(_ks[1:-1:2], _ks[2:-1:2])` forma pares S→E de pausa e produz papéis, não períodos E→S (`app/escala/utils.py:496-498`). Recebe `locs, consumed`; `_match_marcos` o chama quando `turno is None` (`app/escala/utils.py:585-598`). Um critério genérico “zip de fatias passo 2” o contará; um critério restrito a pares laborais E→S não o contará.
-- `app/escala/services/cadastro_tipo.py::_hpd_pares:43`: monta tuplas de minutos (`app/escala/services/cadastro_tipo.py:57`), mas recebe campos `hi`/`hf` previamente nomeados, não infere quais horários se correspondem (`app/escala/services/cadastro_tipo.py:49`). Falso positivo provável de “append tupla de horários”.
-- `app/ponto/services/flip_auto.py::pares_mesmo_tipo:31`: monta tuplas de duas batidas (`app/ponto/services/flip_auto.py:45`), porém exige tipos iguais (`app/ponto/services/flip_auto.py:43`): detector E/E ou S/S, fora de A.
-- `app/ponto/adaptador_motor.py::periodos_de_turnos:13`: monta `(e_ts, s_ts)` (`app/ponto/adaptador_motor.py:43`), lendo `t.entrada` e `t.saida` dos turnos recebidos (`app/ponto/adaptador_motor.py:29-38`): excluir por proveniência.
-
-B inequívocos fora da obra:
-
-| Função | Evidência e motivo |
-|---|---|
-| `app/ponto/services/credito_parcial.py::dia_do_periodo:32` | A própria docstring declara dia de pertença; retorna `localtime(p.entrada).date()` (`:33-36`). |
-| `app/ponto/services/espelho.py::somar_periodos:51` | Deriva dia da entrada e recorta somas pela competência (`:84-86`). |
-| `app/ponto/services/espelho.py::montar_dias:365` | Deriva dia da entrada para contar turnos na competência (`:426-434`). |
-| `app/ponto/services/esmeril_espelho.py::assinaturas_do_colab:79` | Atribui datas a períodos com grandes descontos/HE por `localtime(p.entrada).date()` (`:170-177`). |
-| `app/escala/detector_proposta.py::medir_padrao:49` | `lt = localtime(b.timestamp)`; agrupa em `por_dia[lt.date()]` (`:56-58`). |
-| `app/escala/regua_defesa.py::diagnostico_regua:118` | `localdate(b.timestamp)` e recuo de um dia por corte horário; agrupa o dia-turno próprio (`:154-160`). |
-| `app/escala/regua_defesa.py::entradas_fora_do_inicio:503` | Agrupa batidas por `localdate(b.timestamp)` (`:519-521`). |
-| `app/ponto/services/regularizacao.py::regularizar_turno_orfao:19` | Atribui literalmente `data_turno = localtime(batida_e.timestamp).date()` e calcula dias ausentes (`:73-75`). |
-| `app/chamados/services/disputa_emissao.py::_data_furo_da_grade:42` | Extrai timestamp de evento, deriva `ref` por data local e o oferece à grade como dia do turno-furo (`:44-68`). |
-| `app/chamados/services/disputa_emissao.py::criar_disputa_a_partir_de_chamados_orfaos:876` | Deriva data da batida-origem, classifica falta e usa como fallback de `data_evento` (`:1037-1041`). |
-
-Outros sítios B relevantes à revisão:
-
-- `app/escala/utils.py::montar_grade_prevista:668` atribui órfãs à data civil de suas batidas (`app/escala/utils.py:790-799`).
-- `app/escala/utils.py::montar_grade_prevista_periodo_por_turno:1298` ancora sweep intermitente e seleciona batidas por `.date()` (`app/escala/utils.py:1501`, `:1521`, `:1531`, `:1544-1555`); atribui sobras à data civil (`:1835-1855`).
-- `app/folha/porta_export.py::dias_fora_do_dia_pago:26` usa data local da entrada (`app/folha/porta_export.py:104`); `medir:313` usa `_p.entrada.date()` (`app/folha/porta_export.py:538`). A função é medição: eventual exclusão precisa ser explícita.
-- `app/chamados/services/disputa_emissao.py::_orfao_resolvido_cross_meianoite:627` recebe turnos do juiz (`:643-646`), mas compara datas civis das duas pontas e aceita `dref` em qualquer delas (`:651-654`). Excluir por presença de chamada ao juiz pode ocultar esse comportamento.
-
-Composição comprovada do juiz:
-
-`_turnos_do_colab_puro` chama `papel_por_minuto_da_ata` (`app/ponto/turnos.py:1937`), que importa e chama `ponto.juiz_batida.periodos_do_dia` (`app/ponto/turnos.py:1580`, `:1631`). Este usa `_instante_da_luz` (`app/ponto/juiz_batida.py:241-242`), cuja decisão de meia-noite ocorre por `replace` e `± timedelta(days=1)`, sem `.date()` (`app/ponto/juiz_batida.py:97-102`). É uma exceção de composição sustentada pelo código.
-
-Para B lexical, usar sementes AST `.timestamp`, `.entrada`, `.saida`, além de parâmetros com nomes explícitos `timestamp`, `ts_entrada`, `ts_saida`, `entrada`, `saida`, e propagar por atribuição intrafunção; isso captura o alias `lt` (`app/escala/detector_proposta.py:57-58`). Não excluir função porque contém apenas um `Name data_turno`: ele pode ser justamente o alvo da derivação (`app/ponto/services/regularizacao.py:73`).
-
-Falsos positivos prováveis:
-
-- Competência: `app/ponto/janelas.py::competencia_fechada:75`, data local seguida de `janela_atual` (`:84-85`).
-- Data da última batida para diagnóstico/classificação, sem declarar turno: `app/ponto/services/dias_em_aberto.py::passivo_da_competencia:77` (`:123-132`).
-- Datas civis usadas para detectar cruzamento de meia-noite, já recebendo pares do juiz: `app/chamados/services/disputa_emissao.py::_orfao_resolvido_cross_meianoite:627` (`:643-654`).
-- Busca de candidatos do dia local e véspera, sem escolher um dia único: `app/ponto/registro_batida.py::_casa_marco_proprio:35` (`:42-49`).
-
-## 07/11 08:18 · sessao b219e9ce20f7 · - · - · origem=Ronald (tmux)
-
-Auditoria do escopo, somente leitura:
-
-| Sítio | Classe candidata | Evidência |
-|---|---|---|
-| `app/ponto/calculador/nucleo.py::minutos_do_oraculo:42` | A e B | O ramo sem `pares` agrupa instantes em turnos e forma pares por índices consecutivos, `range(0, len(_pares), 2)`, em `:157-228` e `:245-247`; atribui o dia por `_e.date()` em `:141` e `tu[0].date()` em `:237`. Receber `pares` opcionalmente não elimina o ramo que pareia sozinho. |
-| `app/ponto/calculador/nucleo.py::minutos_do_oraculo._dentro_do_envelope:159` | B | Escolhe envelopes pelas datas civis de `a` e `b`, em `:180`. |
-| `app/ponto/motor_calculo_v2.py::_periodos_pelo_marco:534` | A discutível; B claro | Recebe `trio` já pareado em `:558`, substitui períodos usando `periodos_do_dia` em `:616`, `:636-640`, `:685-688`; usa fallback civil do mapa em `:686-687`. Critério A que exclua todo recebimento de pares deixará passar essa substituição; critério A que conte qualquer construção de tupla entrada/saída contará também adaptadores legítimos. |
-| `app/ponto/motor_calculo_v2.py::MotorBase._janela_do_dia:1490` | B | `dia = entrada.date()` determina o dia de consulta de empresa e marcos em `:1528-1536`. |
-| `app/ponto/motor_calculo_v2.py::MotorBase._julgar_pontualidade:2012` | B | Consulta marcos por `e.date()` em `:2053`; constrói a referência por entrada e comparação de horário em `:2194-2201`; fallback por `localizar(entrada).date()` em `:2210`. |
-| `app/ponto/motor_calculo_v2.py::MotorBase.calcular_mes:2265` | B | Lê o mapa com fallback civil em `:2403` e altera `data_jornada` por herança de período anterior quando gap está entre 0 e 6 horas, em `:2405-2408`. |
-| `app/ponto/motor_calculo_v2.py::Motor12x36.calcular_periodo:2750` | B | Decide feriado e dobra pelo calendário de `e`, em `:2796` e `:2809`. |
-| `app/ponto/motor_calculo_v2.py::MotorTurnoPartido.calcular_mes:2899` | B | Mantém fallbacks civis `_ent.date()` em `:2942` e `_eft.date()` em `:2955`, embora consulte o juiz em `:2921-2923`. |
-| `app/ponto/motor_calculo_v2.py::MotorComercial.calcular_periodo:3215` | B | Decide feriado e dobra por `e.date()`, em `:3264` e `:3268`. |
-| `app/ponto/motor_calculo_v2.py::MotorComercial.calcular_mes:3308` | B | Mapa de dia tem fallback `localizar(p.entrada).date()` em `:3326`; há outras classificações civis em `:3447`, `:3465`, `:3490-3495`. |
-| `app/ponto/services/dia_pago.py::_dia_de:109` | B | Após tentar o mapa em `:128-131`, retorna `timezone.localtime(p.entrada).date()` em `:132`. |
-| `app/ponto/services/fechamento.py::recalcular_fechamento_mes:448` | B | Agrupa períodos órfãos pelo calendário da entrada em `:838-842`; classifica folga/feriado pelo calendário da entrada em `:934-947`. |
-| `app/ponto/calculador/alimentacao.py::segmentos_do_motor:35` | Excluir de A e B semântico | Recebe períodos em `:76`, lê dia do mapa em `:73-82`, recebe pontas em `:83`, divide par já existente pelos intervalos em `:128-158`; não casa batidas cruas nem deriva dia civil. Detector de `append(tuple)` produzirá falso positivo. |
-
-Para os nomes do aval:
-
-- **MOTOR-PASSA-O-TURNO-A-VOLTA / resíduo 573:** a chamada verificável é `MotorBase._julgar_pontualidade`, passando `e.date()` e as duas pontas do período a `cumpriu_a_volta_do_intervalo`, em `app/ponto/motor_calculo_v2.py:2117-2119`. B por `.date()` captura a função; A por pareamento cru não captura o problema de perguntar por período em vez de turno. O número de produção 573 não foi verificado.
-- **JUIZ-DO-PAR-DUAS-ENTRADAS:** existem duas receitas: `_turnos_do_juiz` chama `turnos_de_batidas` em `app/ponto/motor_calculo_v2.py:867-882`, enquanto `turnos_via_autoridade` chama `parear_turnos` com parâmetros `AUT_*`, papel e marcos próprios em `:453-506`. Critério que apenas procura chamada de juiz não captura divergência de alimentação entre receitas. Divergência concreta em produção não foi verificada.
-- **col882 turno aberto:** os três calculadores de período retornam cedo quando `saida is None`, em `app/ponto/motor_calculo_v2.py:2752-2755`, `:2879-2882`, `:3217-3220`. Isso não comprova como as cinco batidas do aval chegam pareadas; execução desse caso não foi verificada.
-- **Partido `:3012 × :2446`:** essas âncoras estão deslocadas: nesta cópia `:3012` é comentário sobre DNA e `:2446` inicializa `folga_pelo_dia`. Os mecanismos relevantes verificáveis estão em `app/ponto/motor_calculo_v2.py:2403-2408` e `:2942-2955`.
-- **`_dia_da_jornada_do_par`:** não localizado em arquivos Python. O nome aparece apenas em documentação, por exemplo `app/docs/BACKLOG.md:1821` e `app/docs/RELATO.md:35`; implementação e enquadramento AST [não verificado].
-- **Split `alimentacao.py:73-108`:** recebe dia e pontas do motor; a divisão efetiva está hoje em `app/ponto/calculador/alimentacao.py:128-158`. Excluí-lo de A semântico é coerente com receber um par já existente; não é falso negativo de pareamento cru.
-
-Prováveis falsos positivos de B amplo:
-
-- Iteração de faixas noturnas por dias civis: `app/ponto/motor_calculo_v2.py:97-98`.
-- Datas usadas para ampliar a consulta de marcos/DNA, sem atribuir o dia de um período: `app/ponto/motor_calculo_v2.py:470-474`.
-- Datas dos limites de competência: `app/ponto/services/fechamento.py:655-664`.
-- Conversor de data usado para competência do fato: `app/ponto/services/fechamento.py::_so_a_data:1558`, operação em `:1569`, consumidor em `:1573`.
-- Contagem declarada de batidas por dia de calendário: `app/ponto/calculador/nucleo.py:35`, implementação em `:117` e `:235`; a mesma função também contém derivações de pertença reais em `:141` e `:237`.
-
-_2687 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2691 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
