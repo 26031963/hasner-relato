@@ -1,7 +1,133 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 21:30** · publicado em **06/11/2026 21:31** (UTC-3)
+> Ultima resposta processada: **06/11/2026 21:31** · publicado em **06/11/2026 21:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 21:31 · sessao af15cd47f7f8 · FIO-COM-ASSENTO-E0-V3 · leitura · origem=Code
+
+| Letra | Resultado da conferência |
+|---|---|
+| **A** | A impressão mistura FATO, AVALIAÇÃO e TAREFA. **Não é canônica nem independente da ordem recebida.** `app/ponto/services/cartorio.py:452`, `app/ponto/services/cartorio.py:522`. |
+| **B** | O teto já participa da avaliação e da impressão: vencimento por instante, corte das lâmpadas pendentes e indicador de turno em curso. Precisa sobreviver na **versão da avaliação**. `app/ponto/services/cartorio.py:831`, `app/ponto/services/cartorio.py:1348`, `app/ponto/services/cartorio.py:1378`. |
+| **C** | Intervalo e saída final distinguem-se por **motivos diferentes**; a identidade geral não contém MARCO nem instância. Não achei unicidade parcial de tarefa aberta; **há locks**, mas a proteção é incompleta. `app/chamados/services/declaracao_texto.py:42`, `app/chamados/models.py:2392`, `app/chamados/models.py:863`. |
+| **D** | Hoje, `validada_em` já mata a pergunta para o juiz. O caminho de HORA acrescenta verificação do efeito e devolução da recusa ao admin. `materializada_em` também identifica absorções e encerramentos sem batida; não pode virar simplesmente “tarefa concluída”. `app/chamados/juizes.py:1135`, `app/chamados/services/validacao.py:422`, `app/chamados/services/materializacao.py:585`. |
+| **E** | Há cobertura parcial dos dez casos; faltam provas específicas para a sequência noturna completa e duas transições simultâneas de pergunta/disputa. Os testes próximos estão discriminados abaixo. `app/chamados/tests/test_fio_intervalo.py:62`, `app/chamados/tests/test_plantio_intervalo_overnight.py:27`, `app/chamados/tests/test_c2_corrida_do_abrir.py:94`; cobertura exata faltante `[nao verificado]`. |
+
+Vínculo Git da cópia ao hash informado, resultados de execução dos testes e estado operacional de produção: **[nao verificado]**. A cobertura abaixo significa teste encontrado e lido. [nao verificado]
+
+**A — Insumos, mistura e consumidores.** A classificação abaixo aplica as três naturezas propostas aos argumentos efetivamente serializados; a função atual produz uma única impressão para todos eles. `app/ponto/services/cartorio.py:443`, `app/ponto/services/cartorio.py:522`.
+
+| Campo serializado | Natureza no desenho proposto | O que entra hoje |
+|---|---|---|
+| `bs_janela[].pk` | FATO: identidade do registro | PK da batida. `app/ponto/services/cartorio.py:453`. |
+| `bs_janela[].tipo` | FATO | Tipo gravado. `app/ponto/services/cartorio.py:453`. |
+| `bs_janela[].timestamp` | FATO | `isoformat()` do instante recebido. `app/ponto/services/cartorio.py:453`. |
+| `cob_status` | **AVALIAÇÃO da cobertura escolhida**; o status da ausência de origem é um dado dessa fonte | Apenas o status retornado por `ausencia_cobre(..., para='cobranca')`, sem identidade da ausência nesse componente. `app/ponto/services/cartorio.py:1306`, `app/ponto/services/cartorio.py:1348`, `app/ponto/services/cartorio.py:454`. |
+| `chamados[].pk` | TAREFA/identidade do chamado | PK de cada chamado selecionado. `app/ponto/services/cartorio.py:455`. |
+| `chamados[].status_local` | TAREFA | Estado do chamado. `app/ponto/services/cartorio.py:455`. |
+| `dna.dna_versao` | FATO de cadastro/revisão do DNA | Não é a versão da regra do cartório. `app/ponto/services/cartorio.py:456`, `app/ponto/services/cartorio.py:471`. |
+| `dna.marcos` | FATO de cadastro usado no julgamento | Representação textual do objeto; não é o DNA inteiro. `app/ponto/services/cartorio.py:456`. |
+| `veto` | AVALIAÇÃO | Motivo do veto, quando verdadeiro. `app/ponto/services/cartorio.py:458`. |
+| `teto` | AVALIAÇÃO temporal | Quantidade de marcos vencidos passada pelo chamador; não o instante completo. `app/ponto/services/cartorio.py:463`, `app/ponto/services/cartorio.py:1350`. |
+| `regra` | AVALIAÇÃO | Versão aplicável à competência. `app/ponto/services/cartorio.py:263`, `app/ponto/services/cartorio.py:471`. |
+| `fio` | TAREFA, agregado pelo juiz do fio | Quantidade de chamados vivos com fio vivo; `None` quando não há chamados vivos. `app/ponto/services/cartorio.py:1334`, `app/ponto/services/cartorio.py:1352`. |
+| `cob_parcial` | AVALIAÇÃO | Estado do período parcial e índices dos marcos dispensados, derivados da grade. `app/ponto/services/cartorio.py:435`, `app/ponto/services/cartorio.py:508`. |
+| `enc` | AVALIAÇÃO temporal | `enc:0` para dia passado ainda em curso; nos demais casos esse componente fica ausente. `app/ponto/services/cartorio.py:481`, `app/ponto/services/cartorio.py:1347`. |
+| `isento` | AVALIAÇÃO | `isento:1` somente com isenção e `regra >= 4`. `app/ponto/services/cartorio.py:520`. |
+
+A mistura ocorre literalmente na concatenação: batidas/DNA, cobertura/veto/regra/relógio e chamado/fio produzem o mesmo hash. O próprio `houve_fato_novo` já distingue isso: exclui estado de chamados e fio da definição de fato do dia, porque mudam pelo próprio fechamento. `app/ponto/services/cartorio.py:452`, `app/ponto/services/cartorio.py:329`.
+
+Os consumidores encontrados são:
+
+- **Cartório:** compara impressão atual com `CelulaDia.impressao`, junto de carimbo/veredito, para pular ou rejulgar; `forcar` atravessa o pulo. Há um ramo para nunca-bateu e outro normal. `app/ponto/services/cartorio.py:1199`, `app/ponto/services/cartorio.py:1203`, `app/ponto/services/cartorio.py:1358`, `app/ponto/services/cartorio.py:1362`.
+- **Porta `carimbar`:** compara impressão e demais insumos para evitar novo save; depois persiste impressão e carimbos junto da lavra. `app/ponto/portas/celula.py:1047`, `app/ponto/portas/celula.py:1056`, `app/ponto/portas/celula.py:1060`.
+- **Releitura após emissão:** usa novamente a impressão para rejulgar células cujo chamado/fio acabou de mudar. Portanto, mudança de tarefa pode disparar novo julgamento sem mudar batida ou DNA. `app/ponto/services/cartorio.py:1015`, `app/ponto/services/cartorio.py:1038`.
+- **Comando:** reexporta a função importada; não contém outra implementação. O instrumento `celula_veredito_velho` também lê a impressão para fotografar o estado anterior. `app/ponto/management/commands/processar_cartorio.py:20`, `app/ponto/management/commands/celula_veredito_velho.py:110`.
+
+**Canonicidade: não.** A função não ordena batidas/chamados e usa `str(dna.marcos)`. A carga normal ordena batidas somente por timestamp, sem desempate por PK; chamados usam `-criado_em`, também sem desempate. Inverter as listas ou a inserção das chaves de um `marcos` equivalente altera os bytes serializados — confirmado também por avaliação isolada da função em memória. `app/ponto/services/cartorio.py:453`, `app/ponto/services/cartorio.py:455`, `app/ponto/services/cartorio.py:456`, `app/ponto/turnos.py:2871`, `app/chamados/models.py:100`.
+
+O teste chamado determinístico repete a mesma entrada na mesma ordem. Não achei nele teste de permutação ou de dicionários equivalentes com chaves reordenadas. `app/ponto/tests/test_cartorio.py:14`.
+
+**B — Onde mora o teto e o que depende dele.**
+
+A regra declarada exige **comparar instante ou exigir fato encerrado**; data civil não basta. O selo procura mecanismos no código, mas é uma verificação estrutural por vocabulário, não uma prova completa de todas as combinações temporais. `CLAUDE.md:185`, `app/ponto/tests/test_contract_teto_temporal.py:82`, `app/ponto/tests/test_contract_teto_temporal.py:108`.
+
+Hoje ele aparece em quatro pontos:
+
+1. **Entrada do julgamento:** recusa data futura/célula inexistente; para hoje, sem `teto_de_hoje`, espera o fim do turno. Essa guarda usa `_tz.now()`, enquanto o corpo recebe `agora`. `app/ponto/services/cartorio.py:1974`, `app/ponto/services/cartorio.py:1982`, `app/ponto/services/cartorio.py:1989`.
+2. **Vencimento por marco:** `marcos_turno` encadeia os instantes e aplica `TETO_MARCO_MIN = 30`. `app/ponto/services/cartorio.py:828`, `app/ponto/services/cartorio.py:840`.
+3. **Conteúdo julgado/lavrado:** marco ainda não vencido sai da grade julgada e sua lâmpada passa a `acesa=None, pendente=True`; não vira falta. `app/ponto/services/cartorio.py:851`, `app/ponto/services/cartorio.py:862`, `app/ponto/services/cartorio.py:1378`.
+4. **Atualidade e emissão de perguntas:** `teto`/`enc` alteram a impressão; a fábrica consulta os vencidos para selecionar motivos. `app/ponto/services/cartorio.py:1347`, `app/chamados/services/fabrica_da_celula.py:15`, `app/chamados/services/fabrica_da_celula.py:59`.
+
+O encerramento do turno também considera aberta ainda viva, fim previsto e ausência de previsão; não equivale a “virou o dia”. O teste encontrado mantém a pergunta da saída ausente enquanto o noturno está aberto vivo e a faz nascer após sua expiração. `app/ponto/turnos.py:2114`, `app/ponto/turnos.py:2119`, `app/chamados/tests/test_pergunta_do_dia_em_curso.py:351`.
+
+**Consequência para o desenho:** por inferência dessas dependências, o instante de referência, os marcos vencidos/pendentes, a condição de turno encerrado e a política temporal precisam compor a **versão da avaliação**. Se restar apenas a versão dos fatos, o relógio avança sem necessariamente mudar batidas/DNA, e o pulo pode preservar avaliação vencida. O teste cartório 06:27 → vigia 06:40 cobre justamente a mudança temporal que precisa provocar nova pergunta. `app/ponto/services/cartorio.py:1358`, `app/chamados/tests/test_pergunta_do_dia_em_curso.py:361`.
+
+Não confundir esse teto com **horizonte de regra** ou **piso de emissão**: a versão é escolhida por competência; o piso limita emissão automática e deliberadamente fica fora da impressão. `app/ponto/services/cartorio.py:263`, `app/ponto/services/cartorio.py:270`, `app/ponto/services/cartorio.py:285`, `app/ponto/services/cartorio.py:1676`.
+
+**C — Identidade real e concorrência.**
+
+| Objeto | Chave/agrupamento efetivo |
+|---|---|
+| **Pergunta** | `(colaborador da disputa, motivo, data_evento)`, entre todas as disputas/estados; reutiliza a última encontrada. Sem data na chamada, trata como conversa e nasce sempre. `app/chamados/models.py:2392`, `app/chamados/models.py:2398`, `app/chamados/models.py:2424`, `app/chamados/models.py:2431`. |
+| **Disputa** | Procura aberta por colaborador, agrega motivos e contexto. Não representa uma tarefa individual por marco. `app/chamados/services/disputa_emissao.py:467`, `app/chamados/services/disputa_emissao.py:472`, `app/chamados/services/disputa_emissao.py:498`. |
+| **Chamado** | `abrir` deduplica pelos filtros recebidos. No emissor de ausência: colaborador + módulo + `contexto_json.data_turno`. O pai de disputa usa colaborador + categoria + módulo + estados vivos. `app/chamados/models.py:867`, `app/ponto/management/commands/detectar_ausencias.py:693`, `app/chamados/services/disputa_emissao.py:504`. |
+
+**O exemplo intervalo versus saída final não se funde necessariamente:** `intervalo_saida` e `orfao_14h` são motivos distintos. Entretanto, dois marcos com o mesmo motivo e data atingem a mesma chave; hora, posição e instância da tarefa não a integram. `app/chamados/services/declaracao_texto.py:42`, `app/chamados/models.py:2392`.
+
+A data também não é uniformemente jornada: o emissor de intervalo pode usar o dia civil do marco, e seu teste noturno espera D+1 nas perguntas. `app/chamados/services/disputa_emissao.py:982`, `app/chamados/services/disputa_emissao.py:991`, `app/chamados/tests/test_fio_intervalo.py:77`.
+
+**Banco:** não achei índice único parcial de tarefa aberta nos três modelos nem nas migrations de chamados consultadas. Chamado tem `unique_together=[]`; disputa tem índice comum `(colaborador, fechada_em)`; pergunta tem apenas ordenação no `Meta`. O unique parcial encontrado é de **Followup.evento_chave**, não da identidade da obrigação. `app/chamados/models.py:97`, `app/chamados/models.py:1742`, `app/chamados/models.py:2857`, `app/chamados/migrations/0047_evento_chave_do_fio.py:20`.
+
+**Há `select_for_update`:**
+
+- Abertura de chamado trava o colaborador antes do dedup; transição protegida recarrega/trava o chamado; costura trava o destino quando está em transação. `app/chamados/models.py:863`, `app/chamados/models.py:668`, `app/chamados/services/fio.py:758`.
+- Emissão de disputa trava a disputa aberta **existente**. A consulta vazia não oferece linha para travar. `app/chamados/services/disputa_emissao.py:466`.
+
+**Corridas possíveis por inspeção, sem ocorrência de produção demonstrada:**
+
+- Pergunta: consulta `.last()` → `create`, sem lock no próprio gate. `app/chamados/models.py:2431`, `app/chamados/models.py:2476`.
+- Disputa nova: consulta vazia → abre/reusa pai → cria disputa, sem repetir a consulta após a trava do colaborador. `app/chamados/services/disputa_emissao.py:467`, `app/chamados/services/disputa_emissao.py:504`, `app/chamados/services/disputa_emissao.py:523`.
+- Validação: lê/testa `validada_em` antes do `atomic`, sem travar a pergunta nesse fluxo. `app/chamados/services/validacao.py:359`, `app/chamados/services/validacao.py:366`, `app/chamados/services/validacao.py:395`.
+- Fechamento de disputa: confere estado/perguntas antes do `atomic` e depois grava, sem releitura travada nesse método. `app/chamados/models.py:1820`, `app/chamados/models.py:1827`, `app/chamados/models.py:1846`, `app/chamados/models.py:1861`.
+
+**D — O que fecha, recusa e preservação da absorção.**
+
+Para a **pergunta**, o primeiro ramo do juiz considera `validada_em` suficiente para deixá-la morta; `estado` distingue `validada` de `resolvida` pela presença adicional de `materializada_em`. Portanto, não existe hoje uma exigência universal de “efeito efetivado + rejulgamento consistente”. `app/chamados/juizes.py:1135`, `app/chamados/models.py:2499`.
+
+O plantio normal de HORA/data-hora tem defesa adicional: executa em transação, exige sucesso e `_pergunta_materializada_de_fato`, desfaz a batida se reprovada e só então carimba. Contudo, consultar C6 após `carimbar(resposta='validar')` não é prova independente: esse carimbo pode preencher validação antes da consulta ao juiz que mata pela validação. `app/chamados/services/materializacao.py:1195`, `app/chamados/services/materializacao.py:1207`, `app/chamados/services/materializacao.py:1252`, `app/chamados/models.py:2591`, `app/chamados/models.py:2596`.
+
+Para a **disputa**, o fechamento normal exige ausência de respostas sem veredito e de fio vivo. O materializador chama esse juiz; não fecha simplesmente pelo número de batidas criadas. Há portas excepcionais, inclusive encerramento pelo admin/desligamento. `app/chamados/models.py:1783`, `app/chamados/models.py:1789`, `app/chamados/models.py:1852`, `app/chamados/services/materializacao.py:1288`.
+
+Para o **chamado**, o materializador passa pela retenção de irmãs e por `reconciliar()`; fechar a disputa também aciona o tratamento do pai. Não são o mesmo estado nem uma única condição de fechamento. `app/chamados/services/materializacao.py:736`, `app/chamados/services/materializacao.py:746`, `app/chamados/models.py:1812`.
+
+**Validada com materialização recusada tem respostas diferentes:**
+
+- **HORA declarada, sem materialização e com recusa registrada:** desfaz `validada_em/por`, preserva resposta, reabre a disputa por padrão e retorna `nao_gravou/devolvida`. Fica respondida e viva para o **admin**. O teste exige exatamente isso. `app/chamados/services/validacao.py:180`, `app/chamados/services/validacao.py:187`, `app/chamados/services/validacao.py:199`, `app/chamados/services/validacao.py:460`, `app/chamados/tests/test_o261_recusa_fala.py:95`.
+- **Escape, outro tipo ou encerramento já carimbado por identidade:** essa devolução não se aplica; a validação pode permanecer e C6 a considera morta. Os testes preservam explicitamente os casos de escape e colisão já carimbada. `app/chamados/services/validacao.py:143`, `app/chamados/services/validacao.py:182`, `app/chamados/tests/test_o261_recusa_fala.py:190`, `app/chamados/tests/test_o261_recusa_fala.py:203`.
+- **Alcançabilidade:** resposta não validada atribui ação ao admin, mas o crédito depende do destino/pai vivo e a lista padrão exclui arquivado/histórico. Logo, “viva” sozinha não prova porta alcançável. `app/chamados/catalogo/natureza.py:48`, `app/chamados/services/raiox.py:54`, `app/chamados/services/raiox.py:60`, `app/chamados/services/verbos.py:18`.
+
+Há uma divergência relevante entre comentário e código: o comentário da devolução de ausência diz que o app só lista disputa aberta; o seletor atual de perguntas do app consulta `q_vivas()` e depois o juiz, sem aquele filtro explícito. Não usaria o comentário como prova da seleção atual. `app/chamados/services/materializacao.py:632`, `app/chamados/services/pergunta_no_app.py:42`, `app/chamados/models.py:2793`.
+
+**Compatibilidade com pós-condição:** separar conclusão da tarefa do registro do efeito é compatível como direção, mas não basta mudar o predicado de fechamento. Hoje `materializada_em` identifica também o **ato de absorção** e encerramentos sem batida, inclusive paridade recusada. `app/chamados/services/materializacao.py:433`, `app/chamados/services/materializacao.py:585`.
+
+A recuperação de absorvidas depende de:
+
+- `(disputa_id, data_evento, materializada_em)` compartilhado pelas irmãs;
+- escape correspondente ao tipo da ausência dentro desse grupo;
+- exclusão das perguntas que já possuem batida viva originada nelas. `app/chamados/services/materializacao.py:605`, `app/chamados/services/materializacao.py:609`, `app/chamados/services/materializacao.py:614`, `app/chamados/services/materializacao.py:616`.
+
+**Quebraria essa recuperação**, por consequência direta dos filtros: deixar `materializada_em` nulo até a aprovação final do atestado, dar timestamps distintos às irmãs ou mover apenas parte delas para outra disputa. Hoje a absorção usa o mesmo instante mesmo com ausência aberta; nessa fase o chamado permanece vivo/silenciado. Seria necessário preservar esse identificador de ato ou substituí-lo com ligação equivalente antes de retirar a autoridade desses campos. `app/chamados/services/materializacao.py:529`, `app/chamados/services/materializacao.py:549`, `app/chamados/services/materializacao.py:560`, `app/chamados/services/materializacao.py:607`.
+
+**E — Dez casos de laboratório, condicionados aos respectivos insumos.**
+
+| Caso | Comportamento hoje / quem age | Cobertura encontrada |
+|---|---|---|
+| **1. Dois marcos no dia** | Motivos diferentes podem gerar perguntas distintas sob a mesma disputa/chamado; silêncio pede resposta do colaborador, resposta não validada pede admin. Resolver uma pergunta não basta para fechar disputa com outra viva. `app/chamados/services/declaracao_texto.py:42`, `app/chamados/catalogo/natureza.py:48`, `app/chamados/models.py:1789`. | Dois marcos de intervalo: `app/chamados/tests/test_fio_intervalo.py:62`. **Não achei o caso exato intervalo-saída + saída-final**, nas buscas em `app/chamados/tests` e `app/ponto/tests`; cobertura específica `[nao verificado]`. |
+| **2. Noturno 21→22, sem 23** | O plantio toma `data_evento`, combina a hora e ajusta usando os marcos dessa data, tentando D e D+1. Como uma fábrica já pode gravar D+1, **não está demonstrada a garantia contra deslocar novamente**. Recusa de HORA volta ao admin pelo fluxo descrito em D. `app/chamados/services/materializacao.py:344`, `app/chamados/services/materializacao.py:414`, `app/chamados/services/materializacao.py:420`, `app/chamados/juizes.py:303`, `app/chamados/juizes.py:310`. | Ajuste isolado para D+1 e entrada sem deslocamento: `app/chamados/tests/test_plantio_intervalo_overnight.py:27`, `app/chamados/tests/test_plantio_intervalo_overnight.py:35`; reuso em D+1: `app/chamados/tests/test_materializar_overnight.py:33`. **Não achei teste integrado 21→22 sem 23** nesses testes e nas buscas de noturno; `[nao verificado]`. |
+| **3. Validada/materialização recusada** | HORA sem carimbo e com motivo: validação desfeita, resposta preservada, admin recebe novamente; não exige nova resposta do colaborador. Fora desse escopo, pode permanecer validada/morta. `app/chamados/services/validacao.py:182`, `app/chamados/services/validacao.py:187`, `app/chamados/services/validacao.py:460`, `app/chamados/juizes.py:1135`. | Devolução, irmãs preservadas e exceções: `app/chamados/tests/test_o261_
+
+[truncado em 20000 de 26519 caracteres]
 
 ## 06/11 21:30 · sessao 62c88a377430 · DUAS-TELAS-E-PWA-OFFLINE · censo · origem=Code
 
@@ -1095,60 +1221,4 @@ Censo `holerite`: **6 views POST administrativas escritoras**, distribuídas em 
 
 Exportação CSV é GET com escrita apenas de trilha (`app/holerite/views.py:1071`, `:1097`), assim como maço PDF (`:917`, `:943`); não achei outro caminho da mesma ação entre rotas/templates de holerite (`app/holerite/urls.py:18`, `:26`; segundo disparador [não verificado]).
 
-## 06/11 21:22 · sessao f30767be6376 · - · - · origem=Ronald (tmux)
-
-Censo `ferias`: **14 views POST administrativas**, excluindo resposta do colaborador (`app/ferias/views.py:868`). Prefixo `/ferias/` em `app/config/urls.py:32`; rotas abaixo em `app/ferias/urls.py:9`.
-
-| View POST administrativa | Rota relativa `/ferias/` | Tela/template disparador → escritor |
-|---|---|---|
-| `criar_periodo_aquisitivo`, `app/ferias/views.py:123` | `<cid>/novo-periodo/`, urls:15 | `ferias/criar_periodo.html:9` e `ferias/_secao_colab.html:6` → `garantir_periodo_aquisitivo`, `app/ferias/services.py:254`; ramo histórico → `registrar_gozo_historico`, services:270, chamada views:210 |
-| `agendar_ferias`, views:269 | `periodo/<periodo_id>/agendar/`, urls:16 | `ferias/agendar.html:13` e `_secao_colab.html:60` → `_executar_agendamento`, views:259 → `executar_agendamento`, services:306 |
-| `agendar_lote`, views:569 | `agendar-lote/`, urls:10 | `ferias/agendar_lote.html:24` → `_executar_agendamento`, views:617 → services:306 |
-| `cancelar_agendamento`, views:321 | `agendamento/<ag_id>/cancelar/`, urls:18 | `ferias/saldo.html:71` e `_secao_colab.html:160` → `cancelar_agendamento_dp`, services:330, chamada views:332 |
-| `cancelar_agendamento_admin`, views:341 | `agendamento/<ag_id>/cancelar-admin/`, urls:19 | `_secao_colab.html:162` → wrapper views:512 → `executar_cancelamento_admin`, services:341 |
-| `cancelar_admin_massa`, views:519 | `cancelar-admin-massa/`, urls:9 | `ferias/cancelar_admin_massa.html:27` → wrapper views:559 → services:341 |
-| `corrigir_concluida_admin`, views:378 | `agendamento/<ag_id>/corrigir-concluida/`, urls:20 | `_secao_colab.html:166` → wrapper views:407 → services:341; **view distinta**, sem flag em cancelar-admin |
-| `editar_agendamento`, views:633 | `agendamento/<ag_id>/editar/`, urls:22 | `_secao_colab.html:130` → `remarcar_agendamento`, services:403 → `_trocar_janela`, services:366 |
-| `editar_datas_admin`, views:421 | `agendamento/<ag_id>/editar-datas-admin/`, urls:21 | `_secao_colab.html:146` → `corrigir_datas_agendamento`, services:398 → `_trocar_janela`, services:366 |
-| `avaliar_solicitacao`, views:711 | `solicitacoes/<sid>/avaliar/`, urls:12 | `ferias/solicitacoes.html:26` → aprovar: services:410; rejeitar: services:453; chamadas views:731 e :738 |
-| `editar_periodo`, views:777 | `periodo/<periodo_id>/editar/`, urls:23 | → `editar_periodo_aquisitivo`, services:464, chamada views:795; template disparador **[não verificado]** |
-| `excluir_periodo`, views:808 | `periodo/<periodo_id>/excluir/`, urls:24 | `_secao_colab.html:101` → `excluir_periodo_aquisitivo`, services:476, chamada views:819 |
-| `agendamento_enviar`, views:830 | `agendamento/<ag_id>/enviar/`, urls:25 | `_secao_colab.html:125` → `pedir_confirmacao`, services:484, chamada views:845 |
-| `vender_dias`, views:906 | `periodo/<periodo_id>/vender/`, urls:17 | `_secao_colab.html:84` → `vender_dias_do_periodo`, services:507, chamada views:926 |
-
-Os caminhos das linhas da tabela abreviadas como `views`, `services`, `urls` são respectivamente `app/ferias/views.py`, `app/ferias/services.py`, `app/ferias/urls.py`; templates são de `app/templates/`. O drawer é carregado por `/ferias/<cid>/secao/`, view `secao_ferias_colab`, `app/ferias/views.py:756`, que renderiza `_secao_colab.html` em :765; a lista o abre em `app/templates/ferias/lista.html:81`.
-
-**Grupos com diferenças efetivas**
-
-1. **Cancelar férias: normal × admin × lote × concluída.** Telas/views/escritores estão na tabela; não são escritores únicos: normal usa `cancelar_agendamento_dp`, services:330; demais usam `executar_cancelamento_admin`, services:341.
-
-   - Normal bloqueia somente `concluido`, views:325; portanto aceita `cancelado` e decrementa novamente `dias_concedidos`, services:333. Admin exige `pode_cancelar_admin`, views:360, propriedade restrita a `agendado/em_gozo`, models:335; lote exclui cancelado/concluído, views:529; concluída exige exclusivamente `concluido`, views:396, e justificativa ≥5, views:399. **Impacto dia/saldo: sim**, repetição do POST normal pode devolver dias repetidamente; saldo é `direito − concedidos − vendidos`, `app/ferias/models.py:216`. Ocorrência real em produção **[não verificado]**.
-   - Normal grava período e agendamento separadamente, services:332; admin envolve os mesmos efeitos em `atomic`, services:352, rejeita Ausencias antes da remoção, services:356, e acrescenta carimbo a `obs`, services:358.
-   - **Ambos removem as Ausencias no resultado final**: `AgendamentoFerias.save`, `app/ferias/models.py:434` chama `_sync_ausencia`, models:379, que chama `espelhar_ferias`; cancelado apaga as linhas em `app/ponto/services/ausencia.py:1188`. Não há fundamento para dizer que cancelamento normal deixa ausência órfã.
-   - Admin individual registra `LogAuditoria`, views:367; concluída também, views:409. Lote somente executa escritor e mensagem, views:551; normal somente executa escritor e resposta, views:331. **Diferença de trilha sem diferença necessária de dia no primeiro cancelamento**, sustentada pelos escritores acima.
-   - **Leitores**: saldo na tela, `app/templates/ferias/saldo.html:41`; `_secao_colab.html:50`. Espelho lê cobertura de ausência, `app/ponto/services/espelho.py:582`, e cobertura aprovada, :588. Folha exclui cancelado de férias, `app/ferias/services.py:51`, e usa essas férias para retenção por férias com batida, `app/folha/export.py:491`; retenção é aplicada em export:868.
-
-2. **Corrigir datas × editar agendamento.** **Converge em `_trocar_janela`, `app/ferias/services.py:366`**, pelas cascas services:398 e :403; deve constar no grupo divergente por validação/trilha.
-   - Normal aceita só status `agendado`, views:649; admin aceita qualquer não cancelado, views:452, exige justificativa ≥5, views:454, e registra log, views:497. Normal chama escritor e responde, views:667, sem essa trilha.
-   - Ambos validam saldo pelo mesmo juiz `saldo_para_remarcar`, views:465 e :661 → `app/ferias/models.py:219`.
-   - Mesmo efeito final: altera datas/dias/aviso/status, limpa Ausencias da janela antiga e atualiza concedidos em `atomic`, services:377. **Muda dia: sim**, porque a porta admin permite mover férias já iniciadas/concluídas que a normal recusa; mesmos leitores de cobertura/folha descritos acima. Nenhuma divergência do escritor das datas: está unificado.
-
-3. **Materializar férias: agendamento individual/lote × aprovação de solicitação × registro histórico.**
-   - Individual/lote usam `executar_agendamento`, services:306. Aprovação usa escritor próprio `aprovar_solicitacao`, services:410, instanciando/salvando Agendamento diretamente, services:434; histórico usa `registrar_gozo_historico`, services:270, também salvando diretamente, services:298.
-   - Individual/lote passam `_validar_agendamento`, views:226, incluindo saldo, fracionamento, duplicata e veto, views:232, :239, :241, :253. Aprovação seleciona apenas PA adquirido, services:424, testa saldo, :430, e faz `full_clean`, :443; primeiro marca solicitação aprovada, :416, e pode terminar **sem agendamento**, retornando aviso sem PA/saldo ou capturando exceção, :428 e :448.
-   - Histórico valida coerência e teto de vendidos, services:289; não chama `clean` do agendamento e limita `dias_concedidos` por `min(direito, concedidos + dias)`, services:299. Individual/lote incrementam sem esse teto, services:324.
-   - **Muda dia/saldo: sim**: o mesmo intervalo pode ser recusado no agendamento padrão, gravado como histórico, ou ter solicitação aprovada sem materialização; são inferências dos caminhos citados, ocorrência concreta **[não verificado]**.
-   - Convergência inferior: todos salvam `AgendamentoFerias`, cujo save executa veto e espelho de Ausencia, `app/ferias/models.py:434`. Espelho materializa Ausencia aprovada por dia, `app/ponto/services/ausencia.py:1202`. Portanto não afirmar ausência de veto no histórico.
-   - Leitores: cobertura do espelho, `app/ponto/services/espelho.py:588`; folha lê datas dos agendamentos, `app/folha/export.py:491`; ausência de agendamento muda retenção `ferias_com_batida`, export:868. Valores pagos em produção **[não verificado]**.
-
-**Pares convergentes para o fim do censo**
-
-- **Agendar individual × lote**: mesmo juiz `_validar_agendamento`, views:288/:605; mesmo escritor `executar_agendamento`, services:306, por views:298/:617. Lote revalida na execução, views:616, e grava observação `[agendado em lote ...]`, views:618; individual usa `obs` informado, views:286. Resultado de dias igual para os mesmos dados aceitos; diferença de seleção/carimbo, não escritor.
-- **Cancelar admin individual × lote × concluída**: converge em `executar_cancelamento_admin`, services:341; mantenha referências também no grupo divergente pelas guardas e auditoria distintas, não conte duas vezes.
-- **Criar/sincronizar PA na tela completa × drawer**: `ferias/criar_periodo.html:9` e `_secao_colab.html:6` → mesma view `criar_periodo_aquisitivo`, views:123 → `garantir_periodo_aquisitivo`, services:254. Drawer oferece gozo histórico, `_secao_colab.html:22`; template completo não tem esses campos, `criar_periodo.html:9` até :30. **Mesmo endpoint, capacidade de tela diferente**, sem escritor duplicado.
-- **Agendar na tela completa × drawer**: `agendar.html:13` e `_secao_colab.html:60` → mesma view views:269 → services:306. Template completo permite `obs`, `agendar.html:27`; formulário drawer tem início/dias, `_secao_colab.html:60` até :78.
-- **Cancelar normal em saldo × drawer**: `saldo.html:71` e `_secao_colab.html:160` → mesma view views:321 → services:330. Saldo mostra botão por status `agendado`, saldo:70; drawer exige `pode_cancelar`, `_secao_colab.html:159`, que também exige ainda não ter iniciado, models:330. Assim há diferença de disponibilidade da tela mesmo com endpoint comum.
-
-Ações com só um fluxo de tela identificado neste app: rejeitar solicitação, excluir PA, enviar confirmação, vender dias; chamadas e templates constam na tabela. Editar PA tem view escritora comprovada, mas disparador de tela **[não verificado]**. O abono pecuniário vendido grava `dias_vendidos`, services:507; não confundir com abono de falta. Não incluir venda histórica como segunda ação de tela: a view aceita `dias_vendidos`, views:194, mas os formulários examinados não apresentam esse campo; disparo visual **[não verificado]**.
-
-_2580 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2581 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
