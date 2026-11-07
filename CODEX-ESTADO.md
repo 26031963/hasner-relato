@@ -1,7 +1,162 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 12:18** · publicado em **07/11/2026 12:18** (UTC-3)
+> Ultima resposta processada: **07/11/2026 12:22** · publicado em **07/11/2026 12:24** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 12:22 · sessao 17aa803bf615 · FIO-E0-V4-E1 · verificador · origem=Code
+
+**Há falhas procedentes em identidade, horizonte, travas, backfill e cobertura dos testes.** As principais são a seleção anterior à canônica, o tratamento diferente de `NULL` e as travas adquiridas por caminhos indiretos depois da Pergunta. (`app/chamados/services/declaracao_texto.py:256`; `app/chamados/services/fio.py:1030`; `app/chamados/services/validacao.py:284`)
+
+Execução dos testes, migrações efetivamente aplicadas e ocorrência ou quantidade desses casos em produção: **[nao verificado]**. [nao verificado]
+
+**A. PROCEDENTE — os campos não são interpretados uniformemente por todos os caminhos.**
+
+O mapa confirmado de escritores e leitores é este; exaustividade nominal de cada ocorrência indireta no repositório: **[nao verificado]**.
+
+| Campo/valor | Quem escreve | Quem lê / significado |
+|---|---|---|
+| `data_evento` | Nascimento em `_nascer`; datação e rechaveamento no fio. (`app/chamados/models.py:2687`; `app/chamados/services/fio.py:841`; `app/chamados/services/fio.py:948`) | Identidade, horizonte, plantio, C6 e apresentação. (`app/chamados/models.py:2549`; `app/chamados/services/fio.py:1030`; `app/chamados/services/materializacao.py:344`; `app/chamados/juizes.py:1200`; `app/api/views_mensageria.py:568`) |
+| `instancia_marco` | `_chave_de_identidade`, derivada do motivo e conferida na inserção; acervo preenchido pela 0051. (`app/chamados/models.py:3084`; `app/chamados/models.py:3100`; `app/chamados/migrations/0051_decisao_pergunta.py:27`) | Dedup deriva a instância; índice e agrupamento leem a coluna persistida. (`app/chamados/models.py:2549`; `app/chamados/models.py:3147`; `app/chamados/services/fio.py:1016`) |
+| `batida_origem` | Nascimento, derivando `ultima_batida.id` e conferindo o colaborador. (`app/chamados/models.py:3112`; `app/chamados/models.py:3127`; `app/chamados/models.py:3131`) | Emissor, dedup por episódio, índice, agrupamento e contador. (`app/chamados/services/disputa_emissao.py:326`; `app/chamados/models.py:2518`; `app/chamados/models.py:3153`; `app/chamados/services/fio.py:1017`; `app/chamados/services/fio.py:1099`) |
+| `VIA_DUPLICATA` | `retratar_duplicata` → `carimbar_identidade` → escritor do carimbo. (`app/chamados/services/fio.py:1002`; `app/chamados/models.py:2770`) | Exclusão do fato, C6, `q_vivas` e índice. (`app/chamados/models.py:2551`; `app/chamados/juizes.py:1148`; `app/chamados/models.py:3016`; `app/chamados/models.py:3149`) |
+| `VIA_MOTIVO_RETRATADO` | `remover_motivo`, pela porta do carimbo. (`app/chamados/models.py:2012`) | As mesmas tuplas de exclusão e terminalidade. (`app/chamados/models.py:2363`; `app/chamados/models.py:2373`; `app/chamados/models.py:2551`) |
+| `SILENCIO` | É ato de `DecisaoPergunta`, escrito por `registrar`, nos fechamentos e no backfill. (`app/chamados/models.py:3522`; `app/chamados/models.py:3607`; `app/chamados/models.py:1888`; `app/ponto/services/veredito_celula.py:192`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:148`) | O backfill o consulta para idempotência; o leitor de respostas anteriores não o transforma em resposta vigente. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:90`; `app/chamados/models.py:3172`) |
+| `conversa` | As portas passam explicitamente `False` ou `True` à inserção comum; a 0051 não distingue as conversas antigas. (`app/chamados/models.py:2582`; `app/chamados/models.py:2593`; `app/chamados/models.py:2688`; `app/chamados/migrations/0051_decisao_pergunta.py:5`) | Dedup e índice excluem conversa; os filtros remanescentes examinados em E não fazem isso. (`app/chamados/models.py:2550`; `app/chamados/models.py:3148`; `app/chamados/services/declaracao_texto.py:236`; `app/chamados/services/disputa_emissao.py:1302`) |
+| `chamado_destino` | Nascimento, reapontamento do dedup e porta de costura. (`app/chamados/models.py:2688`; `app/chamados/models.py:2659`; `app/chamados/services/fio.py:869`) | Juiz da costura, C6, materializador, resolver e API. (`app/chamados/juizes.py:1966`; `app/chamados/juizes.py:744`; `app/chamados/services/materializacao.py:339`; `app/chamados/services/disputa_emissao.py:1693`; `app/api/views.py:2590`) |
+| `DisputaSupervisao.aberta_em` | `auto_now_add`: nascimento da disputa. (`app/chamados/models.py:1709`) | Ordenação das disputas e substituto do nascimento da pergunta no contador novo. (`app/chamados/models.py:1783`; `app/chamados/services/fio.py:1100`) |
+| `HORIZONTE_DO_FATO` | Literal no modelo e cópia congelada na 0053. (`app/chamados/models.py:2253`; `app/chamados/migrations/0053_pergunta_unica_por_familia.py:28`) | Índices, agrupamento, backfill, contador e diagnóstico por empresa. (`app/chamados/models.py:3150`; `app/chamados/services/fio.py:1030`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:54`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:195`) |
+| Registro aplicado da 0052 | O arquivo declara a criação da coluna; escritor efetivo do registro nesta instalação: **[nao verificado]**. (`app/chamados/migrations/0052_pergunta_batida_origem.py:18`) | O contador lê `django_migrations.applied` e compara com a abertura da disputa. (`app/chamados/services/fio.py:1097`; `app/chamados/services/fio.py:1101`) |
+
+`SILENCIO` não é valor de `via_resolucao`: pertence a outra entidade e outro vocabulário. (`app/chamados/models.py:2410`; `app/chamados/models.py:3522`)
+
+`data_evento` tem dois domínios declarados: dia do turno para fato e dia civil da emissão para conversa. O discriminador é `conversa`; o defeito aparece quando leitores ignoram esse discriminador, como em E. (`app/chamados/models.py:2576`; `app/chamados/models.py:2588`; `app/chamados/services/declaracao_texto.py:236`)
+
+A configuração usa `America/Sao_Paulo` e `USE_TZ=True`; não há troca explícita entre segundos e dias na comparação de instantes do contador. A divergência demonstrada é usar o nascimento da **disputa** como nascimento da **pergunta**. (`app/config/settings/base.py:93`; `app/config/settings/base.py:95`; `app/chamados/services/fio.py:1100`)
+
+**B. PROCEDENTE — o recorte não é o mesmo em todos os casos.**
+
+- **Datas preenchidas: NAO PROCEDE a divergência de operador.** Modelo, migration e fio usam `>= 2026-09-21`. (`app/chamados/models.py:3150`; `app/chamados/migrations/0053_pergunta_unica_por_familia.py:33`; `app/chamados/services/fio.py:1030`)
+- **`NULL`: PROCEDENTE.** O índice exclui a data nula pelo `>=`; `q_do_horizonte` a inclui expressamente. Para BATIDA com origem e sem dia, `grupos_de_colisao` pode inclusive formar grupo e encaminhá-lo à retratação, embora o índice não alcance essas linhas. (`app/chamados/migrations/0053_pergunta_unica_por_familia.py:33`; `app/chamados/services/fio.py:1030`; `app/chamados/services/fio.py:1060`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:166`)
+- **O desvio chega à escrita.** `admin_decidiu_sem_ato` inclui pergunta sem dia; competência desconhecida é tratada como não exportada; `aplicar` grava seu SILENCIO. Não fica apenas contada fora do horizonte. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:94`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:105`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:239`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:147`)
+- **Corte por empresa: PROCEDENTE.** A autoridade aceita corte por empresa, mas o índice fixa 21/09 para todas. `_horizonte_por_empresa` imprime `DIVERGE` e o comando continua, apesar de sua docstring anunciar PAREI. Existência de empresa divergente em produção: **[nao verificado]**. (`app/ponto/janelas.py:36`; `app/ponto/janelas.py:60`; `app/chamados/models.py:2253`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:189`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:200`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:204`)
+- **Porta: NAO PROCEDE recorte indevido.** `abrir`, `do_fato` e `q_dos_fatos` continuam vendo o fato antigo sem aplicar esse horizonte. (`app/chamados/models.py:2513`; `app/chamados/models.py:2549`; `app/chamados/models.py:2639`)
+
+**C. PROCEDENTE — a trava antecipada não cobre todos os caminhos nem todas as linhas.**
+
+| Sítio | Violação demonstrada |
+|---|---|
+| `DisputaSupervisao.fechar` | Antecipa somente a própria disputa, pai e destinos. Depois de atualizar Pergunta, salva Disputa; S88 reconcilia o pai, S143 chama o resolver, que trava todas as outras disputas abertas. Outra disputa pode entrar depois de Pergunta/Chamado. (`app/chamados/models.py:1874`; `app/chamados/models.py:1884`; `app/chamados/models.py:1899`; `app/chamados/signals.py:42`; `app/chamados/signals.py:92`; `app/chamados/services/disputa_emissao.py:1663`) |
+| `fechar_o_fio_do_dia` | A lista promete pais, mas acrescenta apenas chamados vivos do dia e destinos. Após carimbar perguntas, o reconciliar pode alcançar S143 e adquirir pais ou outras disputas ausentes da lista. (`app/ponto/services/veredito_celula.py:179`; `app/ponto/services/veredito_celula.py:184`; `app/ponto/services/veredito_celula.py:186`; `app/ponto/services/veredito_celula.py:199`; `app/chamados/services/disputa_emissao.py:1663`) |
+| Validação | O aceite de folga desvia antes da trava nova e carimba Pergunta antes do fechamento do fio. No ramo normal, clones de `chamados_relacionados_ids` ficam fora da lista pai+destino e são reconciliados depois do carimbo. (`app/chamados/services/validacao.py:404`; `app/chamados/services/validacao.py:284`; `app/chamados/services/validacao.py:292`; `app/chamados/services/validacao.py:423`; `app/chamados/services/validacao.py:425`; `app/chamados/services/materializacao.py:766`) |
+| `fechar_beco` | Trava somente `d` antes dos chamados; em seguida chama resolver, que trava todas as disputas abertas. Uma segunda disputa entra depois de Chamado. (`app/chamados/services/becos.py:51`; `app/chamados/services/becos.py:53`; `app/chamados/services/disputa_emissao.py:1663`) |
+| Resolver | Via S143, o Chamado já foi travado e salvo quando o wrapper pede Disputa. Além disso, coleta `_disp` antes de travar Colaborador e depois o corpo consulta novamente todas as abertas. (`app/chamados/models.py:688`; `app/chamados/models.py:291`; `app/chamados/signals.py:92`; `app/chamados/services/disputa_emissao.py:1663`; `app/chamados/services/disputa_emissao.py:1773`) |
+
+A validação ainda chama o materializador geral fora de seu atomic local; esse materializador percorre irmãs cujos destinos não constam da lista antecipada da pergunta original. (`app/chamados/services/validacao.py:459`; `app/chamados/services/materializacao.py:1360`)
+
+**BUG 120/S143: NAO PROCEDE como regressão de commit parcial demonstrada.** S143 já envolve o resolver inteiro em savepoint e captura a exceção fora dele; o novo atomic não remove essa proteção. Dependência de sucesso parcial nos outros chamadores: **[nao verificado]**. (`app/chamados/signals.py:83`; `app/chamados/signals.py:91`; `app/ponto/management/commands/reconciliar_fantasmas.py:280`)
+
+**D. PROCEDENTE — há nascimento repetido fora do caminho nominal de episódio.**
+
+Com `ultima_batida.id` apontando para batida retratada, o derivador de origem ainda devolve seu ID, então o filtro novo pula o dedup `(disputa,motivo)`. Entretanto, o juiz do dia exclui essa batida e devolve `None`. Para uma escolha como `gps_ausente`, sem outra data no contexto, o gerador cai em `abrir_conversa`, que nasce sempre e não persiste origem. Repetir a emissão pode criar duas conversas referentes ao mesmo episódio. (`app/chamados/models.py:3131`; `app/chamados/services/disputa_emissao.py:326`; `app/ponto/turnos.py:2905`; `app/ponto/turnos.py:2917`; `app/chamados/catalogo/perguntas.py:88`; `app/chamados/services/disputa_emissao.py:429`; `app/chamados/models.py:2586`; `app/chamados/models.py:3112`)
+
+**Sem episódio conhecido, NAO PROCEDE a perda do dedup sequencial:** o filtro `(disputa,motivo)` permanece. Ele não serializa duas emissões concorrentes de conversa: a conversa não toma a trava do colaborador nem passa pelo índice de fato. Reprodução concorrente executada: **[nao verificado]**. (`app/chamados/services/disputa_emissao.py:325`; `app/chamados/models.py:2607`; `app/chamados/models.py:3148`)
+
+O teste novo cobre o caminho nominal: dois episódios distintos, mesma disputa e repetição do segundo sem terceira pergunta. Não cobre batida retratada ou conversa sem origem. (`app/chamados/tests/test_e1_v6_horizonte.py:245`)
+
+**E. PROCEDENTE — os remanescentes ainda divergem da identidade e da canônica.**
+
+1. **A primeira reutilizável ainda vence a canônica.** Abaixo do horizonte, considere `p1` muda sem carimbo e `p2` respondida sem carimbo. Ambas são reutilizáveis; `_segura_da_lista` escolhe `p1`, enquanto `abrir` escolhe `p2` pela resposta. A troca para canônica só acontece no fallback. (`app/chamados/juizes.py:1228`; `app/chamados/services/declaracao_texto.py:256`; `app/chamados/models.py:2639`; `app/chamados/services/fio.py:985`)
+
+2. **Conversa administrativa pode ser reutilizada como pergunta de marco.** A reabertura aceita motivo MARCO e cria conversa com esse motivo. `_candidata_reusavel` filtra somente disputa/motivo/dia e aceita a conversa sem carimbo; a declaração então a reutiliza e não chama `abrir`. O domínio do índice exclui essa mesma conversa. (`app/chamados/services/acoes_disputa.py:247`; `app/chamados/services/acoes_disputa.py:260`; `app/chamados/services/declaracao_texto.py:236`; `app/chamados/services/declaracao_texto.py:326`; `app/chamados/services/declaracao_texto.py:336`; `app/chamados/models.py:2550`)
+
+3. **`_ja_perguntou` também inclui conversa.** `fio_vivo` julga a coleção recebida; não corrige o domínio escolhido pelo chamador. Já a tela em lote usa `linhas_dos_fatos` e exclui conversa. (`app/chamados/services/disputa_emissao.py:1302`; `app/chamados/juizes.py:1242`; `app/chamados/services/declaracao_texto.py:550`)
+
+4. **Há outros filtros próprios:** o gerador conserva dedups por `(disputa,motivo,data)`, sem excluir conversa nem conferir instância, e `do_fato` conserva uma união deliberada com legado sem origem do mesmo dia, além da chave do episódio. (`app/chamados/services/disputa_emissao.py:399`; `app/chamados/services/disputa_emissao.py:416`; `app/chamados/models.py:2516`)
+
+**NAO PROCEDE a objeção específica sobre retratadas válidas nesses remanescentes:** ambas as retratações recebem carimbo e morrem pelo juiz; `_derivar_chamado_destino` exclui as materializadas. Essa justificativa não resolve a inclusão de conversa nos demais filtros. (`app/chamados/models.py:2012`; `app/chamados/services/fio.py:1002`; `app/chamados/juizes.py:1148`; `app/chamados/services/disputa_emissao.py:228`)
+
+**F. PROCEDENTE para a garantia “em todo caminho”; NAO PROCEDE no CLI sem alteração concorrente.**
+
+No CLI, mérito e competência exportada são recusados antes de chamar `aplicar`; dentro da aplicação, SILENCIO precede as retratações. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:283`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:287`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:139`)
+
+A função `aplicar` diretamente, porém, grava SILENCIO em atomics separados **antes** de examinar mérito; quando encontra mérito, apenas acrescenta `merito_recusado` e continua. Ela também não verifica exportada. O teste chama essa função diretamente, mas com `sem_ato=[]`, deixando a escrita anterior à recusa sem cobertura. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:139`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:160`; `app/chamados/tests/test_e1_v6_horizonte.py:196`)
+
+Portanto, o helper pode tocar pergunta de competência exportada quando chamado diretamente; uso desse caminho em produção: **[nao verificado]**. O CLI também não relê a condição de exportada sob a trava da aplicação. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:125`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:238`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:291`)
+
+**G. PROCEDENTE — a partição fecha, mas “nova” não mede nascimento de pergunta.**
+
+A função particiona as linhas em `novas` e `acervo`; assim, `n + len(acervo) == universo`. Entretanto, o universo inclui data nula, e `n` depende da abertura da disputa. (`app/chamados/services/fio.py:1030`; `app/chamados/services/fio.py:1099`; `app/chamados/services/fio.py:1101`; `app/chamados/services/fio.py:1104`)
+
+**Pergunta nova em disputa velha é caminho existente:** a emissão reutiliza disputa aberta e gera perguntas depois. Essa pergunta entra em `acervo`, podendo aumentar a suposta linha de base que “só desce”. (`app/chamados/services/disputa_emissao.py:524`; `app/chamados/services/disputa_emissao.py:659`; `app/chamados/services/fio.py:1093`)
+
+Pergunta antiga transferida para disputa nova: **[nao verificado]**. As portas examinadas de reapontamento alteram destino/célula, preservando a disputa. (`app/chamados/services/fio.py:869`; `app/chamados/models.py:2687`)
+
+Se o registro da 0052 não existir, nenhuma linha será classificada como nova: tudo cai em acervo e `n=0`. O código não distingue essa ausência de uma medição válida sem novas. (`app/chamados/services/fio.py:1097`; `app/chamados/services/fio.py:1101`)
+
+O placar lê a função real, mas imprime somente as primeiras dez novas e apenas a quantidade do acervo; a função conserva as listas completas. (`bin/placar_code.sh:198`; `app/chamados/services/fio.py:1105`)
+
+**H. PROCEDENTE — há selos com alcance menor que o anunciado e relógios soltos.**
+
+- **Travas:** o rastreador elimina toda segunda aquisição da mesma tabela. Não detecta outro Chamado ou outra Disputa adquiridos depois da Pergunta quando a tabela já apareceu. (`app/chamados/tests/test_e1_v5_ordem_trava.py:38`; `app/chamados/tests/test_e1_v5_ordem_trava.py:45`)
+- **Resolver:** o teste fecha por `.update()` fora da observação, chama diretamente e exige apenas Disputa/Chamado. Pode passar sem carimbar Pergunta e não exercita S143. (`app/chamados/tests/test_e1_v5_ordem_trava.py:331`; `app/chamados/tests/test_e1_v5_ordem_trava.py:335`)
+- **Canônica da tela:** o novo teste materializa e valida ambas as perguntas, forçando o fallback. Não alcança o contraexemplo da primeira reutilizável de E. (`app/chamados/tests/test_e1_v6_horizonte.py:156`; `app/chamados/services/declaracao_texto.py:256`)
+- **Relógio:** a declaração “todo instante é literal” não se sustenta. A fixture usa `aberta_em=auto_now_add`, os casos chamam `fechar_por_admin` que lê `now()`, e o contador compara abertura e `applied` sem fixar essa fronteira. (`app/chamados/tests/test_e1_v6_horizonte.py:14`; `app/chamados/tests/test_e1_v6_horizonte.py:74`; `app/chamados/models.py:1709`; `app/chamados/models.py:2733`; `app/chamados/tests/test_e1_v6_horizonte.py:210`)
+- **Fronteira do índice:** o arquivo testa banco abaixo/no horizonte para MARCO; a inspeção das condições verifica folhas do `Q`, sem provar sua composição inteira nem a fronteira BATIDA equivalente. (`app/chamados/tests/test_e1_v6_horizonte.py:47`; `app/chamados/tests/test_e1_v6_horizonte.py:94`)
+
+**NAO PROCEDE vacuidade generalizada:** porta antiga, canônica de `abrir`, SILENCIO, mérito, emissor e fábrica verificam resultados concretos; o RED do fio mudo exige uma pergunta antes e duas depois, com relógio congelado. (`app/chamados/tests/test_e1_v6_horizonte.py:113`; `app/chamados/tests/test_e1_v6_horizonte.py:146`; `app/chamados/tests/test_e1_v6_horizonte.py:171`; `app/chamados/tests/test_e1_v6_horizonte.py:245`; `app/chamados/tests/test_e1_v6_horizonte.py:272`; `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:44`; `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:169`)
+
+A API continua verificando a irmã materializada e agora cria motivos distintos; não prova o índice do horizonte, pois usa maio de 2026. (`app/api/tests/test_falta_na_resposta.py:10`; `app/api/tests/test_falta_na_resposta.py:29`; `app/api/tests/test_falta_na_resposta.py:62`)
+
+**I. PROCEDENTE — classes ante
+
+[truncado em 20000 de 21495 caracteres]
+
+## 07/11 12:20 · sessao bef057c991f3 · - · - · origem=Ronald (tmux)
+
+**Sim, confirmado.** Com `p1` muda sem carimbo e `p2` respondida sem carimbo, ambas passam `_reusavel` porque `materializada_em is None` (`app/chamados/juizes.py:1228`). `_segura_da_lista` devolve imediatamente `p1`, a primeira da lista (`app/chamados/services/declaracao_texto.py:256`); `abrir` consulta a mesma lista e escolhe `p2` por `canonica_do_grupo` (`app/chamados/models.py:2639`; `app/chamados/services/fio.py:985`).
+
+O teste novo carimba **e valida ambas**, fazendo `_reusavel=False` e exercitando apenas o fallback canônico (`app/chamados/tests/test_e1_v6_horizonte.py:156`; `app/chamados/services/declaracao_texto.py:259`). Ele não detecta o contraexemplo (`app/chamados/tests/test_e1_v6_horizonte.py:161`).
+
+Precisão: `declarar_hora_colab` também prefere a primeira reutilizável, por `_candidata_reusavel`; portanto a divergência demonstrada é entre a seleção reutilizável da declaração/tela e a seleção de `PerguntaDisputa.abrir` (`app/chamados/services/declaracao_texto.py:236`; `app/chamados/services/declaracao_texto.py:326`).
+
+## 07/11 12:19 · sessao bef057c991f3 · - · - · origem=Ronald (tmux)
+
+**D — PROCEDENTE, caminho de duplicação com episódio conhecido mas retratado.**
+
+`batida_origem_do_nascimento` aceita a batida pelo ID e colaborador, sem excluir `retratada_em` (`app/chamados/models.py:3131`). O novo filtro pula o dedup `(disputa,motivo)` quando essa origem existe (`app/chamados/services/disputa_emissao.py:325`). Já a derivação do dia usa `_T1`, que exclui batidas retratadas e devolve `None` (`app/chamados/services/disputa_emissao.py:388`; `app/ponto/turnos.py:2905`; `app/ponto/turnos.py:2917`). Para `gps_ausente`, pergunta de escolha sem `{data}`, a execução então entra em `abrir_conversa` (`app/chamados/catalogo/perguntas.py:88`; `app/chamados/services/disputa_emissao.py:429`). Essa porta nasce sempre, sem dedup, e não grava origem para conversa (`app/chamados/models.py:2586`; `app/chamados/models.py:3112`). Repetir o gerador com esse contexto pode criar duas conversas referentes ao mesmo episódio; ocorrência em produção [nao verificado].
+
+Sem episódio conhecido, o dedup sequencial `(disputa,motivo)` continua presente e exclui as duas vias retratadas (`app/chamados/services/disputa_emissao.py:325`). Sua proteção contra concorrência não está no filtro: o gerador é chamado depois de `_abrir_ou_agregar_disputa` retornar, fora do `atomic` interno dessa função, e conversa não trava colaborador (`app/chamados/services/disputa_emissao.py:512`; `app/chamados/services/disputa_emissao.py:651`; `app/chamados/services/disputa_emissao.py:659`; `app/chamados/models.py:2607`). Dois emissores simultâneos sem data/origem podem ambos passar no `.exists()` e nascer como conversa; reprodução executada [nao verificado].
+
+A porta também junta deliberadamente o episódio conhecido com qualquer linha legada sem origem do mesmo motivo/dia: `_dia_sem_episodio` entra no `OR` de `do_fato` (`app/chamados/models.py:2516`). Assim, dois episódios distintos podem ser ambos retidos pela mesma linha legada sem origem; é coalescência expressamente documentada, não equivalência estrita com a chave `(batida_origem,motivo)` do índice (`app/chamados/models.py:2511`; `app/chamados/models.py:3153`).
+
+**E — PROCEDENTE, conversa administrativa continua atravessando os dedups antigos.**
+
+Há caminho normal, sem dados corrompidos: `acao_reabrir_disputa_admin` aceita um motivo MARCO e cria conversa com esse mesmo motivo, `tipo_resposta='escolha'` (`app/chamados/services/acoes_disputa.py:247`; `app/chamados/services/acoes_disputa.py:260`). No mesmo dia, `_candidata_reusavel` filtra só disputa/motivo/data e aceita a conversa não carimbada (`app/chamados/services/declaracao_texto.py:236`; `app/chamados/juizes.py:1228`). `declarar_hora_colab` a reutiliza e só chama `abrir` se não houver candidata (`app/chamados/services/declaracao_texto.py:326`; `app/chamados/services/declaracao_texto.py:336`). A conversa passa a receber declaração destinada ao marco, embora `q_dos_fatos` e índice a excluam (`app/chamados/models.py:2550`; `app/chamados/models.py:3148`).
+
+A mesma conversa viva faz `_ja_perguntou` calar o fato: sua consulta inclui conversa, e `fio_vivo` reduz o universo recebido pelo C6, sem excluir conversa (`app/chamados/services/disputa_emissao.py:1302`; `app/chamados/juizes.py:1236`). Já a tela em lote consulta `linhas_dos_fatos`, portanto exclui essa conversa (`app/chamados/services/declaracao_texto.py:550`). É divergência concreta de domínio entre leitor e escritor (`app/chamados/models.py:2550`).
+
+A justificativa específica sobre **retratadas válidas** se sustenta: remoção grava carimbo junto com a via; duplicata também passa pela porta de carimbo, e ambas morrem antes da resposta no C6 (`app/chamados/models.py:2012`; `app/chamados/services/fio.py:1002`; `app/chamados/models.py:2850`; `app/chamados/juizes.py:1148`). `_derivar_chamado_destino` exclui as materializadas; isso exclui essas retratadas, mas não resolve o domínio de conversa dos outros dois leitores (`app/chamados/services/disputa_emissao.py:227`).
+
+Outros filtros próprios ainda existem em `gerar_perguntas_disputa`: `(disputa,motivo,data)` em `app/chamados/services/disputa_emissao.py:399` e `app/chamados/services/disputa_emissao.py:416`; faltam `conversa=False` e a coluna de instância, diferentemente de `app/chamados/models.py:2549`. O problema de conversa acima também alcança esses filtros quando as datas coincidem; ocorrência em produção [nao verificado].
+
+**A — mapa dos escritores/leitores e significados.**
+
+| Campo/valor | Escritores | Leitores relevantes |
+|---|---|---|
+| `data_evento` | Nascimento de fato em `app/chamados/models.py:2569`, conversa com `localdate()` em `app/chamados/models.py:2593`, inserção comum em `app/chamados/models.py:2687`; datação/rechaveamento em `app/chamados/services/fio.py:841` e `app/chamados/services/fio.py:948`. | Identidade em `app/chamados/models.py:2549`; horizonte/agrupamento em `app/chamados/services/fio.py:1024`; plantio em `app/chamados/services/materializacao.py:344`; C6 em `app/chamados/juizes.py:1200`; apresentação/API em `app/api/views_mensageria.py:568` e `app/api/views.py:1184`; calendário em `app/colaboradores/services/calendario.py:473`. |
+| `instancia_marco` | Derivada e conferida só na inserção em `app/chamados/models.py:3084` e `app/chamados/models.py:3100`; migração de acervo em `app/chamados/migrations/0051_decisao_pergunta.py:27`. | Derivador em `app/chamados/services/declaracao_texto.py:55`; dedup em `app/chamados/models.py:2549`; chave persistida do índice em `app/chamados/models.py:3147`; agrupamento em `app/chamados/services/fio.py:1016`. |
+| `batida_origem` | Na inserção, pelo contexto `ultima_batida.id`, em `app/chamados/models.py:3112` e `app/chamados/models.py:3127`; contexto alimentado pelas duas APIs em `app/api/views.py:788` e `app/api/views_core.py:788`. | Dedup de episódio em `app/chamados/models.py:2518`; filtro novo do emissor em `app/chamados/services/disputa_emissao.py:326`; índice em `app/chamados/models.py:3153`; agrupamento/contador em `app/chamados/services/fio.py:1017` e `app/chamados/services/fio.py:1099`. |
+| `conversa` | As duas portas passam `False`/`True` à inserção comum (`app/chamados/models.py:2582`; `app/chamados/models.py:2593`; `app/chamados/models.py:2688`); legado inteiro recebe default `False`, sem distinguir conversas antigas (`app/chamados/migrations/0051_decisao_pergunta.py:5`). | Domínio de fato em `app/chamados/models.py:2550`; índices em `app/chamados/models.py:3148`; migração de resolvedoras em `app/chamados/services/fio.py:1171`; falta nos filtros defeituosos citados em E. |
+| `chamado_destino` | Nascimento em `app/chamados/models.py:2688`, reapontamento da identidade em `app/chamados/models.py:2659`, porta de costura em `app/chamados/services/fio.py:869`. | Juiz da costura em `app/chamados/juizes.py:1966`; âncora do fio em `app/chamados/services/fio.py:97`; C6 em `app/chamados/juizes.py:744`; API em `app/api/views.py:2590`; filtros próprios em `app/chamados/services/disputa_emissao.py:227` e `app/chamados/services/disputa_emissao.py:968`. |
+| `VIA_DUPLICATA` | `retratar_duplicata` → `carimbar_identidade` → `_escrever_carimbo` (`app/chamados/services/fio.py:1002`; `app/chamados/models.py:2851`; `app/chamados/models.py:2770`). | Domínio de fato em `app/chamados/models.py:2551`; C6 em `app/chamados/juizes.py:1148`; SQL `q_vivas` em `app/chamados/models.py:3016`; índice em `app/chamados/models.py:3149`; tratamento externo no cartório em `app/ponto/services/cartorio.py:1599`. |
+| `VIA_MOTIVO_RETRATADO` | `remover_motivo` → porta do carimbo (`app/chamados/models.py:2012`). | Mesmas tuplas de exclusão e terminalidade acima (`app/chamados/models.py:2360`; `app/chamados/models.py:2373`; `app/chamados/models.py:2551`). |
+| `SILENCIO` | É **ato de `DecisaoPergunta`**, não valor de `via_resolucao`: declarado em `app/chamados/models.py:3522`; escrito por `registrar` em `app/chamados/models.py:3607`, chamado no fechamento da disputa (`app/chamados/models.py:1888`), fechamento do dia (`app/ponto/services/veredito_celula.py:192`) e backfill (`app/chamados/management/commands/backfill_decisoes_pergunta.py:148`). | Idempotência do backfill em `app/chamados/management/commands/backfill_decisoes_pergunta.py:90` e `app/chamados/management/commands/backfill_decisoes_pergunta.py:145`; `respostas_anteriores` só trata RESPOSTA e ATOS_COM_FOTO, sem transformar SILENCIO em resposta vigente (`app/chamados/models.py:3172`). |
+
+`data_evento` possui dois significados declarados e discriminados por `conversa`: dia do turno para fato, dia civil da emissão para conversa (`app/chamados/models.py:2576`; `app/chamados/models.py:2588`). A falha demonstrada em E é justamente um leitor/escritor que ignora esse discriminador (`app/chamados/services/declaracao_texto.py:236`). Datas são `DateField`; instantes usam configuração `America/Sao_Paulo`, `USE_TZ=True` (`app/chamados/models.py:2273`; `app/config/settings/base.py:93`). O backfill aplica `q_do_horizonte` também às conversas, sem filtro próprio, portanto o mesmo corte lê o domínio civil delas (`app/chamados/management/commands/backfill_decisoes_pergunta.py:52`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:92`).
+
+Não encontrei reparent de pergunta entre disputas nos caminhos examinados; não afirmo censo negativo fechado [nao verificado]. O nascimento fixa a disputa e o reapontamento muda destino/célula, sem mudar disputa (`app/chamados/models.py:2687`; `app/chamados/services/fio.py:869`). Portanto o contraexemplo de G sustentado pelo código é pergunta **nova em disputa velha**, explicitamente admitido no contador; pergunta antiga transferida para disputa nova [nao verificado].
+
+`abrir(..., batida_origem=b)` aceita o objeto via `**campos`, mas o dedup só consulta `campos.get('batida_origem_id')`; esse formato não alimenta `_bo` (`app/chamados/models.py:2569`; `app/chamados/models.py:2632`). Não encontrei chamador de produção usando essa forma; alcance prático [nao verificado].
 
 ## 07/11 12:18 · sessao 5184053a97bf · - · - · origem=Ronald (tmux)
 
@@ -669,123 +824,4 @@ D/E/F — leitura estática, sem banco nem execução da suíte `[nao verificado
 
 As leis pertinentes declaram origem única, testemunha pela autoridade, medição real e escritor único: `app/docs/LEIS.md:59`, `:60`, `:61`, `:65`; o dossiê exige censo por campo e portas com prova: `app/docs/DOSSIES.md:46`, `:57`, `:61`.
 
-## 07/11 09:14 · sessao 7c456cbb062c · FIO-E0-V4-E2 · verificador · origem=Code
-
-1. **Bloqueia — apelido do módulo `time` escapa.** `_do_time` exige literalmente `f.value.id == 'time'`; `import time as _clock` não passa pelo tratamento de `ImportFrom`. (app/chamados/tests/test_e2_tarefa_do_dia.py:768; app/chamados/tests/test_e2_tarefa_do_dia.py:783)
-
-   Mutante inserido **em memória** no início de `tarefa_do_dia` e, separadamente, de `esta_stale`:
-
-   ```python
-   import time as _clock
-   import datetime
-   agora = datetime.datetime.fromtimestamp(
-       _clock.time(), datetime.timezone.utc)
-   ```
-
-   Nos dois módulos completos, o detector retornou `[]`, embora o mutante substitua o instante recebido pelo relógio corrente. Isso viola o contrato de relógio pela borda. (app/chamados/tests/test_e2_tarefa_do_dia.py:778; app/chamados/services/tarefa_do_dia.py:345; app/chamados/veredito_lavrado.py:187; app/core/juizes.py:152)
-
-2. **Bloqueia — `None` indireto também escapa.** `_sem_instante` reconhece ausência de argumento e `ast.Constant(None)`; uma variável contendo `None` é aceita como instante. (app/chamados/tests/test_e2_tarefa_do_dia.py:762)
-
-   Mutante executado em memória no módulo real: atribuir `instante = None` em `esta_stale` e substituir `timezone.localdate(agora)` por `timezone.localdate(instante)`. O detector retornou `[]`; nesse ramo, a conversão recebe `None` e lê o relógio, comportamento explicitamente reconhecido pelo próprio selo. (app/chamados/veredito_lavrado.py:198; app/chamados/tests/test_e2_tarefa_do_dia.py:741; app/chamados/tests/test_e2_tarefa_do_dia.py:766)
-
-**Falsos positivos atuais: nenhum na execução pedida.** Extraí o detector por AST e executei sobre os arquivos completos: tarefa → `[]`; veredito excluindo `lavrar` → `[]`; veredito sem exclusão → `[('lavrar', 245)]`. O autoteste `test_MORDE_mutantes` também passou nessa execução isolada. (app/chamados/tests/test_e2_tarefa_do_dia.py:755; app/chamados/tests/test_e2_tarefa_do_dia.py:803; app/chamados/tests/test_e2_tarefa_do_dia.py:811; app/chamados/veredito_lavrado.py:245)
-
-**Triagem:** as duas grafias anteriores — `now(tz)` e importação de `now` com apelido — estão cobertas, mas encerrar a cobertura do selo deixa passar os bloqueios 1 e 2. (app/chamados/tests/test_e2_tarefa_do_dia.py:778; app/chamados/tests/test_e2_tarefa_do_dia.py:785)
-
-Não identifiquei fundamento adicional para promover os demais itens a bloqueio: a ausência de validação de `agora` naive e os dois relógios continuam presentes; a permanência dos leitores antigos está declarada no escopo da E2. (app/chamados/services/tarefa_do_dia.py:349; app/chamados/tests/test_selo_concordancia_varredura_stale.py:56; app/chamados/tests/test_selo_concordancia_varredura_stale.py:58; app/core/juizes.py:154) Ocorrência em produção e execução integrada Django: [nao verificado].
-
-## 07/11 09:09 · sessao 9c3f52998fa8 · FIO-E0-V4-E2 · verificador · origem=Code
-
-1. **Bloqueia — #3 cura os escapes anteriores, mas o selo ainda aceita leitura do relógio.** `_sem_instante` considera qualquer primeiro argumento diferente de `None` como instante; isso confunde **fuso** com **instante** (`app/chamados/tests/test_e2_tarefa_do_dia.py:756`; `app/chamados/tests/test_e2_tarefa_do_dia.py:759`).
-
-   **Caso executado em memória contra o detector real:**
-   ```python
-   def f():
-       return datetime.datetime.now(datetime.timezone.utc)
-   ```
-   O detector devolve `[]`, embora a expressão leia o relógio. Também passa `from django.utils.timezone import now as clock; clock()`: o import usa `ast.alias`, enquanto a busca cobre `Name`/`Attribute`, e `clock` não pertence à lista reconhecida (`app/chamados/tests/test_e2_tarefa_do_dia.py:745`; `app/chamados/tests/test_e2_tarefa_do_dia.py:754`; `app/chamados/tests/test_e2_tarefa_do_dia.py:767`; `app/chamados/tests/test_e2_tarefa_do_dia.py:770`).
-
-   Portanto, **não considero #3 encerrado**. Os mutantes novos mordem suas grafias declaradas, mas não sustentam a garantia do selo (`app/chamados/tests/test_e2_tarefa_do_dia.py:739`; `app/chamados/tests/test_e2_tarefa_do_dia.py:795`).
-
-2. **Fila — #1 e #2 estão curados nos dois predicados; igualdade e `None` não escapam.** Para os mesmos objetos, marcos e instante aware, as comparações coincidem (`app/chamados/veredito_lavrado.py:196`; `app/chamados/veredito_lavrado.py:198`; `app/chamados/veredito_lavrado.py:202`; `app/chamados/veredito_lavrado.py:206`; `app/chamados/services/raiox.py:40`; `app/chamados/services/raiox.py:42`; `app/chamados/services/raiox.py:45`).
-
-   | Caso, sem outro motivo de invalidação | Resultado dos dois |
-   |---|---|
-   | `julgado_em == agora` | Fresca: a existência é inclusiva. |
-   | `julgado_em > agora`, expiração `None` | Stale: o futuro é rejeitado antes da expiração. |
-   | Expiração em D+1; julgamento D 22:30 local, armazenado em UTC; consulta D+1 09h | Stale: usa a data local do julgamento. |
-   | Julgamento no próprio dia da expiração | Não cai novamente pelo relógio: a comparação é `<`. |
-   | Marco igual ao julgamento | Não invalida: exige `>`. |
-
-   Esses resultados foram reproduzidos com os corpos extraídos em memória, substituindo consultas e conversão de fuso; execução integrada Django: **[nao verificado]** (`app/chamados/veredito_lavrado.py:196`; `app/chamados/veredito_lavrado.py:202`; `app/chamados/services/raiox.py:40`).
-
-3. **Fila — `agora` naive continua sem validação na borda.** `tarefa_do_dia` rejeita somente `None`; com julgamento aware e `agora` naive, a nova comparação levanta `TypeError`. Reproduzi esse caso no corpo isolado; não há retorno conservador de stale (`app/chamados/services/tarefa_do_dia.py:349`; `app/chamados/veredito_lavrado.py:196`).
-
-   A cópia configura `USE_TZ=True`; chamador real passando naive: **[nao verificado]**. Isso é uma lacuna de contrato/validação, sem evidência para promovê-la a regressão de produção (`app/config/settings/base.py:95`).
-
-4. **Fila — o teste de concordância ainda compara instantes diferentes.** O delta alinha os marcos e o juízo do segundo caminho, mas `_confere` executa a varredura antes de capturar seu próprio `agora`; a varredura captura outro relógio internamente (`app/chamados/tests/test_selo_concordancia_varredura_stale.py:56`; `app/chamados/tests/test_selo_concordancia_varredura_stale.py:58`; `app/chamados/services/raiox.py:35`).
-
-   **Caso:** julgamento em `t`, expiração `None`, sem marcos; relógio da varredura em `t−1µs`, relógio do juízo em `t+1µs`. A primeira responde stale; o segundo, fresca. Não demonstra divergência da lei: demonstra que o selo não fixa a mesma entrada temporal (`app/chamados/services/raiox.py:40`; `app/chamados/veredito_lavrado.py:196`).
-
-5. **Fila — os testes funcionais novos mordem os mutantes pretendidos, com lacunas específicas.** [nao verificado]
-
-   - **Noite:** trocar somente `localdate(p.julgado_em)` por `.date()` muda o caso isolado de stale para fresca, contrariando a expectativa do teste. Ele cobre o caminho da tarefa; não exercita a varredura (`app/chamados/tests/test_e2_tarefa_do_dia.py:650`; `app/chamados/tests/test_e2_tarefa_do_dia.py:652`; `app/chamados/services/tarefa_do_dia.py:298`; `app/chamados/veredito_lavrado.py:202`).
-   - **Futuro na tarefa:** retirar `> agora` aceita a lavra das 22h às 21h; o contracaso das 23h impede invalidar indiscriminadamente toda lavra (`app/chamados/tests/test_e2_tarefa_do_dia.py:658`; `app/chamados/tests/test_e2_tarefa_do_dia.py:660`; `app/chamados/tests/test_e2_tarefa_do_dia.py:662`).
-   - **Futuro na concordância:** retirar a guarda de uma implementação quebra a igualdade; retirar das duas deixa ambas vazias, mas quebra a exigência de exatamente um stale (`app/chamados/tests/test_selo_concordancia_varredura_stale.py:61`; `app/chamados/tests/test_selo_concordancia_varredura_stale.py:97`; `app/chamados/tests/test_selo_concordancia_varredura_stale.py:99`).
-
-   Falta caso específico de igualdade com `agora` e de julgamento noturno na varredura; os casos novos usam horários estritamente anteriores/posteriores (`app/chamados/tests/test_e2_tarefa_do_dia.py:659`; `app/chamados/tests/test_e2_tarefa_do_dia.py:661`; `app/chamados/tests/test_selo_concordancia_varredura_stale.py:97`).
-
-6. **Fila — escritores e leitores dos dois campos: concordância decisória, dívida de significado preservada.**
-
-   | Papel | Sítio |
-   |---|---|
-   | Produz valores novos | `lavrar`: instante corrente e expiração calculada pela data local desse instante (`app/chamados/veredito_lavrado.py:245`; `app/chamados/veredito_lavrado.py:246`). |
-   | Exceção de backfill | Captura dia/instante no início e atribui os campos às linhas selecionadas (`app/chamados/management/commands/backfill_veredito_lavrado.py:94`; `app/chamados/management/commands/backfill_veredito_lavrado.py:139`; `app/chamados/management/commands/backfill_veredito_lavrado.py:140`). |
-   | Persiste/restaura | Porta de lote e restauração da foto (`app/chamados/veredito_lavrado.py:224`; `app/chamados/veredito_lavrado.py:261`; `app/chamados/veredito_lavrado.py:262`). |
-   | Decide vigência | `esta_stale` e varredura, com as mesmas desigualdades (`app/chamados/veredito_lavrado.py:196`; `app/chamados/services/raiox.py:40`). |
-   | Transporta/compara | Foto da lavra, comparação do backfill e foto de reversão (`app/chamados/veredito_lavrado.py:254`; `app/chamados/management/commands/backfill_veredito_lavrado.py:121`; `app/chamados/services/passivo_validado.py:83`). |
-
-   Os saves de abertura/carimbo, troca de via e costura persistem o resultado de `lavrar`; não calculam outra expiração (`app/chamados/models.py:2572`; `app/chamados/models.py:2709`; `app/chamados/services/relavra_via.py:124`; `app/chamados/services/fio.py:850`; `app/chamados/services/fio.py:903`).
-
-   **Caso da dívida #9:** evento remoto recebe `hoje`, porque o cálculo começa em `max(hoje, data_evento)`. Isso contradiz “determinístico por data_evento”, mas não cria laço: após lavrar, data local do julgamento iguala a expiração e não satisfaz `<`. Também torna incorreto o comentário “data futura de novo” (`app/chamados/models.py:2402`; `app/chamados/veredito_lavrado.py:115`; `app/chamados/veredito_lavrado.py:120`; `app/chamados/veredito_lavrado.py:200`; `app/chamados/veredito_lavrado.py:202`).
-
-7. **Fila — futuro stale não cria relavra em laço pelo mesmo motivo; leitores antigos continuam diferentes da tarefa.** O cron seleciona os stale uma vez e chama `lavrar` uma vez por alvo. A lavratura substitui o timestamp futuro pelo instante corrente; a rodada seguinte captura novo `agora` (`app/chamados/management/commands/lavrar_perguntas_stale.py:58`; `app/chamados/management/commands/lavrar_perguntas_stale.py:85`; `app/chamados/management/commands/lavrar_perguntas_stale.py:87`; `app/chamados/veredito_lavrado.py:245`; `app/chamados/services/raiox.py:35`).
-
-   **Caso com relógio normal:** borda da tarefa em `t0`, lavratura concorrente em `t1>t0`, SELECT depois. A tarefa passa a responder `veredito_sem_lavra_vigente`, sem relavrar; ela não conserva a lavra anterior para reconstruir aquele instante (`app/chamados/services/tarefa_do_dia.py:280`; `app/chamados/services/tarefa_do_dia.py:298`; `app/chamados/services/tarefa_do_dia.py:137`).
-
-   Raiox/fio antigos leem diretamente o veredito preenchido, sem validar os dois campos. Portanto uma lavra futura `sim` ainda pode esconder pergunta materializada nesses caminhos até a manutenção; a auditoria apenas pula o stale (`app/chamados/services/raiox.py:134`; `app/chamados/services/raiox.py:183`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1165`). Ocorrência e volume em produção: **[nao verificado]**.
-
-8. **Fila — não encontrei fundamento para promover #9 ou #13 a bloqueio de produção; #3 permanece bloqueador.** #13 continua incompleto: o juiz lê `date.today()`, enquanto a expiração recebe a data local do carimbo. O efeito depende da execução e do fuso efetivo, que o dado fornecido não demonstra (`app/chamados/juizes.py:563`; `app/chamados/juizes.py:661`; `app/chamados/veredito_lavrado.py:246`). Fuso efetivo, execução da suíte Django e impacto real em produção: **[nao verificado]**.
-
-## 07/11 09:08 · sessao 23fa3c758f64 · - · - · origem=Ronald (tmux)
-
-1. **Bloqueia — #3 permanece incompleto: argumento de fuso é confundido com instante.** `_sem_instante` só marca chamada vazia ou primeiro argumento/keyword `value` literalmente `None`; a função chamada também é excluída da busca por nomes (`app/chamados/tests/test_e2_tarefa_do_dia.py:756`; `:759`; `:760`; `:765`; `:770`).
-
-   **Caso executado contra o helper real, extraído por AST em memória:**
-   ```python
-   def f():
-       return datetime.datetime.now(datetime.timezone.utc)
-   ```
-   Resultado do detector: `[]`. Executei também a expressão: retorna instante aware, lendo efetivamente o relógio. O argumento é fuso, não instante. Portanto o selo continua aceitando leitura banal do relógio (`app/chamados/tests/test_e2_tarefa_do_dia.py:759`; `:767`).
-
-   Os casos `timezone.localdate(timezone=datetime.timezone.utc)` e `timezone.localtime(timezone=datetime.timezone.utc)` também retornam `[]` no detector, pela mesma omissão do `value`; execução real dessas APIs Django aqui é **[nao verificado]**, pois Django não está instalado (`app/requirements.txt:13`; detector em `app/chamados/tests/test_e2_tarefa_do_dia.py:759`).
-
-2. **Fila — os três escapes da volta 1 foram efetivamente curados, e seus mutantes mordem.** Executei em memória o `test_MORDE_mutantes` extraído por AST, usando `unittest.TestCase`; todas as assertions passaram, incluindo `localdate(None)`, `localtime(value=None)`, alias por atribuição, helper `_hoje` e chamada no módulo. Isso confirma as grafias concretamente listadas, sem corrigir o escape do item 1 (`app/chamados/tests/test_e2_tarefa_do_dia.py:795`; `:799`; `:800`; `:801`; `:802`; `:803`; `:805`).
-
-   **Outro escape executado:** `from django.utils.timezone import now as clock; def f(): return clock()` produz `[]`: o import usa `ast.alias`, enquanto o detector só pesquisa `ast.Name`/`ast.Attribute`, e `clock` não consta de `_RELOGIO` (`app/chamados/tests/test_e2_tarefa_do_dia.py:745`; `:754`; `:770`).
-
-3. **Fila — `test_julgado_a_noite_e_a_data_local_da_lavra` morde o mutante `.date()` no caminho da tarefa.** O teste grava julgamento local D 22:30, expiração D+1 e consulta D+1 09:00; exige ausência de lavra vigente. A carga aplica `esta_stale`, e validação sem entrada em `_lavra` produz exatamente essa razão (`app/chamados/tests/test_e2_tarefa_do_dia.py:650`; `:651`; `:652`; `app/chamados/services/tarefa_do_dia.py:298`; `:135`; `:137`).
-
-   **Caso reproduzido em memória com a função real extraída por AST**, `julgado_em` convertido para UTC e um adaptador de `localdate` com `ZoneInfo('America/Sao_Paulo')`: atual retorna `True`; substituindo somente `timezone.localdate(p.julgado_em)` por `p.julgado_em.date()`, retorna `False`. A configuração da cópia usa São Paulo e `USE_TZ=True` (`app/chamados/veredito_lavrado.py:202`; `app/config/settings/base.py:93`; `:95`). O teste não exercita a varredura (`app/chamados/tests/test_e2_tarefa_do_dia.py:651`).
-
-4. **Fila — os dois testes de futuro mordem a remoção da guarda `> agora`.** No teste da tarefa, expiração permanece `None` pela fixture, julgamento passa a D 22h, consulta D 21h exige ignorância e D 23h exige validade; isso impede atribuir a primeira queda à expiração e impede um mutante que invalide toda lavra (`app/chamados/tests/test_e2_tarefa_do_dia.py:623`; `:658`; `:659`; `:660`; `:661`; `:662`).
-
-   **Caso reproduzido em memória com a função real:** às 21h, atual `True`, remoção apenas de `or p.julgado_em > agora` dá `False`; às 23h, atual `False` (`app/chamados/veredito_lavrado.py:196`).
-
-   O teste de concordância usa julgamento uma hora futuro e expiração 30 dias futura; exige exatamente um stale. Remover a guarda de só uma implementação quebra a igualdade; remover das duas mantém igualdade vazia, mas quebra a cardinalidade exigida (`app/chamados/tests/test_selo_concordancia_varredura_stale.py:97`; `:98`; `:99`; `:61`; `app/chamados/services/raiox.py:40`; `app/chamados/veredito_lavrado.py:196`).
-
-5. **Fila — igualdade com `agora` está correta no código, mas sem mordida específica nos testes novos.** Com expiração `None`, marcos `{}` e julgamento exatamente igual a `agora`, reproduzi `esta_stale=False`; alterando `>` para `>=`, reproduzi `True`. Os casos novos usam 22h contra 21h/23h e futuro de uma hora, sem igualdade (`app/chamados/veredito_lavrado.py:196`; `:198`; `:204`; `app/chamados/tests/test_e2_tarefa_do_dia.py:658`; `:659`; `:661`; `app/chamados/tests/test_selo_concordancia_varredura_stale.py:97`).
-
-Execução efetiva da suíte Django e passagem desses testes no banco: **[nao verificado]**. [nao verificado]
-
-_2709 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2712 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
