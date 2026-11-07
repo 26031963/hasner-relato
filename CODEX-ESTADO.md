@@ -1,7 +1,41 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 17:03** · publicado em **07/11/2026 17:07** (UTC-3)
+> Ultima resposta processada: **07/11/2026 17:10** · publicado em **07/11/2026 17:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 17:10 · sessao 7114a41c4856 · MOTOR-LE-O-TURNO-INSTRUMENTO · construtor · origem=Code
+
+Curas implementadas:
+
+- **P1:** linhas reais A1/B1 e nomeadas congeladas por igualdade, com mensagem “registrar no MESMO commit” (`core/tests/test_medida_turno_do_par.py:227`, `:546`).
+- **P2:** duas heranças desconhecidas exigem `LookupError` listando `[12, 13]` (`core/tests/test_medida_turno_do_par.py:616`).
+- **P3/P4:** casamento posicional recursivo, fallback conservador, fontes Name/Attribute, aliases transitivos e destino Subscript (`core/medida_turno_do_par.py:259`). Alias **dentro** do `if _gap_h` exige `LookupError`, conforme declaração (`:255`) e teste (`core/tests/test_medida_turno_do_par.py:675`).
+- **P5:** retirado o bloco histórico; mantidos runner e seis comandos de mutação (`core/tests/test_medida_turno_do_par.py:20`).
+
+Os registros mantêm **9/85** e a parcela atual do gap em **[2408]** (`core/tests/test_medida_turno_do_par.py:77`, `:235`).
+
+Resultados observados em memória nesta sessão; comprovação persistida das execuções: **[nao verificado]**. Cada link aponta o comando, usando o mesmo heredoc do runner:
+
+| Execução | Resultado | Comando |
+|---|---|---|
+| Original | **28/28 OK, rc=0** | [runner](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:21) |
+| composição | **RED, rc=1** | [comando](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:58) |
+| linhas | **RED, rc=1** | [comando](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:59) |
+| gap | **RED, rc=1** | [comando](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:60) |
+| classificar | **RED, rc=1** | [comando](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:61) |
+| P1-linha-unica | **RED, rc=1** | [comando](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:62) |
+| P2-len1 | **RED, rc=1** | [comando](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:63) |
+
+Quem escreve e quem lê os novos registros e intermediários:
+
+| Campo | QUEM ESCREVE | QUEM LÊ |
+|---|---|---|
+| `LINHAS_REGISTRADAS` | Registro literal, `core/tests/test_medida_turno_do_par.py:227` | Igualdade real, mesmo arquivo `:547` |
+| `aliases` | Inicialização e propagação, `core/medida_turno_do_par.py:277`, `:295` | Detector de fonte e ponto fixo, mesmo arquivo `:280`, `:296` |
+| `assignments` / pares posicionais | Coleta e `bindings`, `core/medida_turno_do_par.py:259`, `:289` | Propagação e seleção de heranças, mesmo arquivo `:292`, `:299` |
+| `inherited` ampliado | Seleção, `core/medida_turno_do_par.py:301` | Guarda e diagnóstico, mesmo arquivo `:316`, `:319` |
+
+Certificação pelo Code/opus final: **[nao verificado]**.
 
 ## 07/11 17:03 · sessao 0601c3de7f56 · MOTOR-LE-O-TURNO-INSTRUMENTO · verificador · origem=Code
 
@@ -842,87 +876,4 @@ Contraexemplos para equivalência universal com o corpo antigo anexado:
 - `SimpleNamespace(empresa_id=id_real, empresa=None)` antes passava None à janela, usando corte 21; agora busca a Empresa e pode usar outro corte. NS sem `empresa` antes levantava AttributeError, agora busca (`app/chamados/juizes.py:936`, `app/chamados/juizes.py:982`, `app/ponto/janelas.py:50`; corpo antigo: anexo `e2_juiz.diff` [nao verificado para linha local]).
 - FK com empresa inexistente antes acessava `colab.empresa`; agora `in_bulk` pode omitir o ID, grava None e segue com corte default, devolvendo False se não houver período (`app/chamados/juizes.py:984`, `app/chamados/juizes.py:990`, `app/ponto/janelas.py:50`, `app/ponto/services/fechamento.py:1463`). A ocorrência desses objetos em produção é [nao verificado].
 
-## 07/11 15:24 · sessao c9a5bc337859 · - · - · origem=Ronald (tmux)
-
-[prova/1_viva.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/1_viva.out:1)
-```text
-/bin/bash: line 3: /home/ronald/saas-hasner/INTRUSO_VIVA_C.txt: Read-only file system
-rc=1
-```
-
-[prova/2_tmp.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/2_tmp.out:1)
-```text
-/bin/bash: line 4: /tmp/INTRUSO_TMP_C.txt: Read-only file system
-rc=1
-```
-
-[prova/2b_tmpdir.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/2b_tmpdir.out:1)
-```text
-/bin/bash: line 5: /tmp/INTRUSO_TMPDIR_C.txt: Read-only file system
-rc=1 TMPDIR=
-```
-
-[prova/3_git.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/3_git.out:1)
-```text
-/bin/bash: line 6: /home/ronald/saas-hasner/.git/INTRUSO_GIT_C.txt: Read-only file system
-rc=1
-```
-
-[prova/3b_commit.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/3b_commit.out:1)
-```text
-fatal: Unable to create '/home/ronald/saas-hasner/.git/worktrees/wt-codex-provaefeito-152358/index.lock': Read-only file system
-rc=128
-```
-
-[prova/4_raiz.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/4_raiz.out:1)
-```text
-/bin/bash: line 8: /home/ronald/wt-codex-provaefeito-152358/INTRUSO_RAIZ_WT.txt: Read-only file system
-rc=1
-```
-
-[prova/5_home.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/5_home.out:1)
-```text
-/bin/bash: line 9: /home/ronald/INTRUSO_HOME_C.txt: Read-only file system
-rc=1
-```
-
-[prova/6_docker.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/6_docker.out:1)
-```text
-permission denied while trying to connect to the docker API at unix:///var/run/docker.sock
-rc=1
-```
-
-[prova/6b_sock.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/6b_sock.out:1)
-```text
-rc=7
-```
-
-[prova/7_tcp_local.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/7_tcp_local.out:1)
-```text
-bash: socket: Operation not permitted
-bash: line 1: /dev/tcp/127.0.0.1/46597: Operation not permitted
-rc=1
-```
-
-[prova/7c_unix.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/7c_unix.out:1)
-```text
-Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-PermissionError: [Errno 1] Operation not permitted
-rc=1
-```
-
-[prova/7b_tcp_ext.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/7b_tcp_ext.out:1)
-```text
-bash: socket: Operation not permitted
-bash: line 1: /dev/tcp/1.1.1.1/443: Operation not permitted
-rc=1
-```
-
-[prova/8_sobrevive.out:1](/home/ronald/wt-codex-provaefeito-152358/app/prova/8_sobrevive.out:1)
-```text
-lancado
-rc=0
-```
-
-_2767 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2768 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
