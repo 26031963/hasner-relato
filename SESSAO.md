@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 12:08:24.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (124.4 MB). Acoes na janela: **509**.
+**Medido em 07/11/2026 12:13:40.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (124.4 MB). Acoes na janela: **507**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -517,5 +517,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:32:29 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n "F7g" app/docs/BACKLOG.md app/docs/RELATO.md app/docs/LEIS.md app/docs/CORTES.md 2>/dev/null \| cut -c1-300 \| head` |
 | 00:32:21 | Bash |  | `cd /home/ronald/wt-v2i2-212416; git show 19aeede1:app/ponto/tests/test_o280_bateria_da_lei.py \| sed -n 370,385p; git show 19aeede1:app/ponto/tests/test_o280_bateria_da_lei.py \| sed -n 1488,1510p; git show 19aeede1:app/ponto/tests/test_o280_bateria_da_lei.py \| sed -n 1565,1600p` |
 | 00:32:17 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n "V3-P5-PRORROGACAO-POR-INTERVALO" app/docs/BACKLOG.md \| cut -c1-900 \| head -3; cd /home/ronald/wt-v2i2-212416; git show 19aeede1:app/ponto/tests/test_o280_bateria_da_lei.py \| /bin/grep -n "F7f" \| head -5` |
-| 00:12:51 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '2s/.*/ESPERANDO: codex_pergunta.sh \| pid=3093065/' app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
-| 00:12:47 | Bash |  | `cd /home/ronald/saas-hasner; date '+%H:%M'; bin/trava_teste.sh --quem; ps -eo pid,etime,args \| /bin/grep -E "[t]rava_teste\|[c]odex_pergunta" \| cut -c1-140` |
