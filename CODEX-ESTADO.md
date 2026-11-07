@@ -1,7 +1,186 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 22:28** · publicado em **06/11/2026 22:28** (UTC-3)
+> Ultima resposta processada: **06/11/2026 22:31** · publicado em **06/11/2026 22:34** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 22:31 · sessao f35164bac815 · FERIAS-CANCELAR-2X · verificador · origem=Code
+
+**Não fecharia a pré-verificação como “classe totalmente curada”.** O cron e as portas de confirmação corrigem os dois caminhos apontados na v2, mas permanecem portas genéricas capazes de gravar ausência de férias, um retorno rápido que não garante o estado atual do banco e uma exigência de RED que não é atendida por cada teste contra o pai. (`app/ferias/services.py:544`, `app/ferias/services.py:560`, `app/ferias/services.py:594`, `app/ponto/services/ausencia.py:193`, `app/ferias/services.py:587`, `app/ferias/test_cancelar_2x.py:83`)
+
+Execução Django contra `f9d6f3e2`, suite verde, identidade Git da cópia, ocorrência e impacto em produção: **[nao verificado]**.
+
+1. **Quem escreve e quem lê o agendamento**
+
+O censo dos escritores de produção converge para `ferias/services.py`; o admin de férias registra somente `Afastamento`. (`app/core/portas.py:489`, `app/ferias/admin.py:4`)
+
+| Campo | Escritores persistentes |
+|---|---|
+| `status` | Histórico calcula pelo juiz: `app/ferias/services.py:282`; criação comum e aprovação usam o default `agendado`: `app/ferias/services.py:321`, `app/ferias/services.py:489`, `app/ferias/models.py:309`; cancelamento DP: `app/ferias/services.py:382`; cancelamento admin: `app/ferias/services.py:412`; remarcação/correção: `app/ferias/services.py:438`; cron: `app/ferias/services.py:596`. |
+| `data_inicio` / `data_fim` | Histórico: `app/ferias/services.py:280`; criação comum: `app/ferias/services.py:322`; aprovação: `app/ferias/services.py:491`; alteração de existente por `_trocar_janela`: `app/ferias/services.py:433`. |
+| `confirmacao` | Default: `app/ferias/models.py:314`; envio: `app/ferias/services.py:545`; recusa/confirmação: `app/ferias/services.py:562`, `app/ferias/services.py:565`. |
+| `confirmado_em` | Campo anulável: `app/ferias/models.py:318`; envio limpa: `app/ferias/services.py:546`; confirmação carimba: `app/ferias/services.py:566`; recusa preserva o carimbo anterior: `app/ferias/services.py:563`. |
+
+Os leitores encontrados, incluindo fora do diff, são:
+
+| Leitura | Sítios |
+|---|---|
+| Datas, status e consultas canônicas | `ferias_na_janela`, `em_gozo_hoje`, divergência e próximos agendamentos: `app/ferias/services.py:51`, `app/ferias/services.py:63`, `app/ferias/services.py:77`, `app/ferias/services.py:101`. |
+| Permissões, frações, sobreposição e identificação | `app/ferias/models.py:243`, `app/ferias/models.py:324`, `app/ferias/models.py:328`, `app/ferias/models.py:332`, `app/ferias/models.py:339`, `app/ferias/models.py:346`, `app/ferias/models.py:353`, `app/ferias/models.py:394`, `app/ferias/models.py:420`, `app/ferias/models.py:458`. |
+| Filtros, KPIs, validações, auditoria e mensagens das views | `app/ferias/views.py:26`, `app/ferias/views.py:72`, `app/ferias/views.py:235`, `app/ferias/views.py:366`, `app/ferias/views.py:414`, `app/ferias/views.py:465`, `app/ferias/views.py:483`, `app/ferias/views.py:544`, `app/ferias/views.py:668`, `app/ferias/views.py:836`, `app/ferias/views.py:878`, `app/ferias/views.py:885`, `app/ferias/views.py:925`. |
+| Situação, fracionamento, avisos e colisões | `app/ferias/situacao.py:117`, `app/ferias/situacao.py:164`, `app/ferias/situacao.py:246`, `app/ferias/situacao.py:270`, `app/ferias/situacao.py:343`. |
+| Telas | `app/templates/ferias/saldo.html:59`, `app/templates/ferias/_tabela_ferias.html:39`, `app/templates/ferias/_secao_colab.html:117`, `app/templates/ferias/cancelar_admin_massa.html:42`, `app/templates/ferias/_meu_atendimento_ferias.html:6`. |
+| API e mensageria | `app/api/views.py:2252`, `app/api/views_mensageria.py:840`, `app/api/views_mensageria.py:900`, `app/api/views_mensageria.py:939`, `app/api/views_mensageria.py:1045`, `app/api/views_mensageria.py:1093`. |
+| Disponibilidade, substituições e retorno | `app/colaboradores/views.py:2843`, `app/colaboradores/views.py:2895`, `app/ponto/utils.py:197`, `app/ferias/management/commands/alertar_retornos.py:20`. |
+| Gate, aviso da batida e folha | `app/ponto/utils.py:89`, `app/ponto/services/aviso_da_batida.py:74`, `app/folha/export.py:491`. |
+| Sincronização e vigia | `app/ferias/management/commands/sincronizar_status_ferias.py:33`, `app/ferias/management/commands/tripwire_status_ferias.py:29`. |
+| Confirmação | Elegibilidade e resposta: `app/ferias/views.py:860`, `app/ferias/views.py:909`; pendências: `app/chamados/views.py:627`; badges/botão: `app/templates/ferias/_secao_colab.html:122`. |
+
+A inteligência ainda procura `status='aprovado'`, que não pertence às choices do agendamento; esse problema preexistente continua presente. (`app/inteligencia/views.py:94`, `app/inteligencia/views.py:278`, `app/inteligencia/views.py:286`, `app/ferias/models.py:293`)
+
+Leitor de produção específico de `AgendamentoFerias.confirmado_em`, além de suas próprias escritas: **[nao verificado]**.
+
+2. **Os três procedentes da v2**
+
+| Procedente | Resultado da leitura |
+|---|---|
+| Cron gravar destino calculado de datas antigas | **Fechado nesse escritor:** recebe `hoje`, trava o agendamento e calcula `alvo` das datas de `vivo`; não grava mais o `novo` da foto. (`app/ferias/management/commands/sincronizar_status_ferias.py:49`, `app/ferias/services.py:593`, `app/ferias/services.py:594`) |
+| Confirmação recriar espelho de cancelado | **Fechado nas duas portas nomeadas:** releem sob trava, recusam cancelado e os saves de confirmação deixam de disparar espelho. (`app/ferias/services.py:544`, `app/ferias/services.py:560`, `app/ferias/models.py:437`, `app/ferias/models.py:443`) |
+| RED morrer antes do valor por `permitir_concluido` ausente | O TypeError desprotegido foi retirado: há chamada HTTP e, no teste direto, captura antes da asserção de estado. Isso **não transforma esses testes em RED contra v2**, cuja assinatura já existia no diff fornecido; execução contra o pai **[nao verificado]**. (`app/ferias/test_cancelar_2x.py:149`, `app/ferias/test_cancelar_2x.py:156`, `app/ferias/test_cancelar_2x.py:157`) |
+
+Nas portas atuais de alteração do **agendamento existente**, a troca de datas usa a linha travada e o cron recalcula nela; não encontrei outro escritor de produção gravando um destino calculado da foto antiga. (`app/ferias/services.py:430`, `app/ferias/services.py:433`, `app/ferias/services.py:438`, `app/ferias/services.py:594`)
+
+**A classe global “cancelado não volta a ter ausência de férias” permanece aberta.** Há cinco entradas genéricas que aceitam o tipo sem passar pelo agendamento:
+
+- Lançamento admin, inclusive aprovado: `app/ponto/views.py:2378`, `app/ponto/views.py:2415`, `app/ponto/views.py:2420`.
+- Submissão PWA: `app/ponto/views.py:2476`, `app/ponto/views.py:2509`, `app/ponto/views.py:2536`.
+- API app: `app/api/views.py:1720`, `app/api/views.py:1771`, `app/api/views.py:1820`.
+- Resolver dia, inclusive aprovado: `app/ponto/views.py:3341`, `app/ponto/services/veredito_celula.py:311`, `app/ponto/services/veredito_celula.py:315`.
+- Edição de ausência existente, inclusive troca de outro tipo para férias: `app/ponto/views.py:2761`, `app/ponto/views.py:2796`, `app/ponto/services/ausencia.py:498`, `app/ponto/services/ausencia.py:509`.
+
+A vedação existe no `AusenciaForm`, mas essas entradas chamam diretamente os serviços; `criar_ausencia` valida catálogo/colisão e grava sem exigir agendamento ativo. Assim, com tipo válido e janela livre, podem recolocar férias após o cancelamento. Isso não altera o saldo nem ressuscita o status do agendamento; cria divergência entre agendamento e ausência. (`app/ponto/forms.py:32`, `app/ponto/forms.py:65`, `app/ponto/services/ausencia.py:193`, `app/ponto/services/ausencia.py:377`, `app/ponto/services/ausencia.py:385`, `app/ponto/services/ausencia.py:418`)
+
+Existe ainda um contraexemplo da **mesma foto velha**: edição carrega a ausência; cancelamento a apaga; edição executa `save()` completo na foto apagada. A ausência de releitura/trava é visível; a reinserção pelo fallback UPDATE→INSERT do Django é **inferência, execução e fonte ORM na cópia [nao verificado]**. (`app/ponto/views.py:2761`, `app/ponto/services/ausencia.py:1188`, `app/ponto/services/ausencia.py:509`, `app/ponto/models.py:908`)
+
+3. **Mudança de `AgendamentoFerias.save` e `update_fields`**
+
+Não encontrei dependência de produção do espelho com `dias`, `obs`, `aviso_emitido` ou confirmação isolados. Os saves existentes são status; status+obs; datas+dias+aviso+status; ou confirmação. Os três primeiros continuam espelhando, e somente confirmação passa a não espelhar. (`app/ferias/services.py:383`, `app/ferias/services.py:413`, `app/ferias/services.py:446`, `app/ferias/services.py:547`, `app/ferias/services.py:563`, `app/ferias/services.py:567`, `app/ferias/services.py:597`, `app/ferias/models.py:443`)
+
+O comentário “depende SÓ” é incompleto: a criação do espelho também lê `agendado_por` para autoria. Não apareceu alteração isolada desse campo no código de produção aberto; ele é atribuído nas criações, que fazem save completo. (`app/ponto/services/ausencia.py:1205`, `app/ferias/services.py:283`, `app/ferias/services.py:323`, `app/ferias/services.py:495`)
+
+A nova seleção por `update_fields` fecha o caso de confirmação, mas não torna `save()` uma proteção universal contra foto velha: save completo e save que inclua status/datas continuam espelhando o objeto recebido. (`app/ferias/models.py:439`, `app/ferias/models.py:443`, `app/ponto/services/ausencia.py:1180`)
+
+4. **`alinhar_status_por_data`, retorno e placar**
+
+`novo` agora significa **destino pedido pela foto**; `alvo` significa **destino calculado das datas travadas**. É `alvo` que governa a escrita. (`app/ferias/services.py:581`, `app/ferias/services.py:594`, `app/ferias/services.py:596`)
+
+O caminho rápido quebra a promessa documental de devolver o status do banco: se a foto diz `agendado`, o banco já está cancelado e o pedido é `agendado`, retorna a própria foto sem consultar. Não ressuscita a linha, mas devolve status velho. O command não sofre desse ramo, pois já pula `novo == ag.status` antes de chamar o serviço. (`app/ferias/services.py:585`, `app/ferias/services.py:587`, `app/ferias/management/commands/sincronizar_status_ferias.py:39`)
+
+Após a trava, somente `ag.status` é atualizado; as datas do objeto retornado permanecem as da foto. Portanto, numa remarcação concorrente, o retorno pode conter status atual com datas antigas. (`app/ferias/services.py:594`, `app/ferias/services.py:598`)
+
+O placar conta pedidos da foto cujo status final coincide com `novo`; **não conta necessariamente escritas realizadas**. Uma remarcação pode gerar `recusado` porque o status correto passou a ser outro. Além disso, o serviço pode escrever `alvo != novo`, e o command contabilizar apenas `recusado`, sem contar esse destino escrito. A classificação é coerente como “pedido antigo não confirmado”, mas inadequada como contagem de alterações efetivamente aplicadas. (`app/ferias/services.py:595`, `app/ferias/services.py:597`, `app/ferias/management/commands/sincronizar_status_ferias.py:50`, `app/ferias/management/commands/sincronizar_status_ferias.py:54`)
+
+Os testes do cron descartam stdout; não verificam essa semântica do placar. (`app/ferias/test_cancelar_2x.py:185`)
+
+5. **Views, confirmação e campos com significados divergentes**
+
+Quando o escritor levanta `AgendamentoNaoConfirmavel`, **não há sucesso nem push posterior**: envio retorna antes de PWA/FCM; resposta retorna antes do push DP e dos retornos positivos. (`app/ferias/views.py:869`, `app/ferias/views.py:875`, `app/ferias/views.py:883`, `app/ferias/views.py:918`, `app/ferias/views.py:924`, `app/ferias/views.py:929`)
+
+A guarda da confirmação continua parcial: a elegibilidade completa está na foto da view; sob trava, o escritor recusa somente cancelado. Duas respostas carregadas como `aguardando` podem confirmar e depois recusar, deixando `confirmacao='recusado'` com `confirmado_em` preenchido. Um envio carregado antes também pode redefinir confirmação concorrente para `aguardando`. Aqui haverá sucesso/push porque o escritor **aceitou**, não porque a view ignorou uma recusa. (`app/ferias/views.py:860`, `app/ferias/views.py:909`, `app/ferias/services.py:544`, `app/ferias/services.py:546`, `app/ferias/services.py:560`, `app/ferias/services.py:563`, `app/ferias/services.py:566`)
+
+Cancelamento preserva a confirmação, enquanto a query de pendências não exclui cancelados. Logo, férias canceladas ainda podem aparecer no cartão “Férias para confirmar”; o POST subsequente será recusado. (`app/ferias/services.py:383`, `app/ferias/services.py:413`, `app/chamados/views.py:627`, `app/templates/ferias/_meu_atendimento_ferias.html:3`, `app/ferias/views.py:918`)
+
+6. **RED, checklist e quem mais sofre o efeito**
+
+Pela comparação estática com o diff do pai fornecido, há **cinco testes com mordida por valor na v3**, não 23: [nao verificado]
+
+| Distinguem v3 do pai pelo valor | Asserção |
+|---|---|
+| Cron remarcado entre foto e escrita | Espera `agendado`: `app/ferias/test_cancelar_2x.py:194`. |
+| Confirmar, recusar e enviar cancelado | Conferem ausência/status/confirmação antes de acessar a nova classe: `app/ferias/test_cancelar_2x.py:281`, `app/ferias/test_cancelar_2x.py:284`, `app/ferias/test_cancelar_2x.py:287`, `app/ferias/test_cancelar_2x.py:290`. |
+| Save parcial da foto velha | Confere ausência zero/status cancelado: `app/ferias/test_cancelar_2x.py:299`. |
+
+Os outros 18 são regressões ou controles que já encontram a proteção na v2: cinco DP; cinco admin; dois cron; três troca de janela; um HTTP de cancelamento; dois controles do espelho/confirmação. Não constituem RED contra esse pai. (`app/ferias/test_cancelar_2x.py:83`, `app/ferias/test_cancelar_2x.py:120`, `app/ferias/test_cancelar_2x.py:201`, `app/ferias/test_cancelar_2x.py:227`, `app/ferias/test_cancelar_2x.py:247`, `app/ferias/test_cancelar_2x.py:272`, `app/ferias/test_cancelar_2x.py:301`; execução contra o pai **[nao verificado]**)
+
+Outros limites dos selos:
+
+- “Sem escrita” verifica apenas saldo/status/obs, não ausência de UPDATE; as corridas são injeções sequenciais, não concorrência real de transações. (`app/ferias/test_cancelar_2x.py:59`, `app/ferias/test_cancelar_2x.py:101`, `app/ferias/test_cancelar_2x.py:178`)
+- O censo AST executado classificou os saves dos dois canceladores como `entidade=None`; o gate ignora esse balde. Esses pontos não estão protegidos pelo selo contra deslocamento futuro para fora da porta. (`app/ferias/services.py:383`, `app/ferias/services.py:413`, `app/core/censo_escritas.py:489`, `app/ponto/tests/test_chokepoint_ausencia_gate.py:33`)
+- Não há novo juiz de status: o escritor reutiliza `status_por_data`; a pergunta “está de férias hoje?” continua registrada em `em_gozo_hoje`. (`app/ferias/services.py:594`, `app/ferias/models.py:273`, `app/core/juizes.py:250`)
+- O relógio do cron foi passado pela borda, mas o módulo ainda lê relógio dentro de criação/remarcação e no juiz com argumento omitido; não cabe marcar a classe inteira como eliminada. (`app/ferias/management/commands/sincronizar_status_ferias.py:27`, `app/ferias/services.py:314`, `app/ferias/services.py:434`, `app/ferias/services.py:438`, `app/ferias/models.py:280`)
+- Cancelamento, remarcação e confirmação seguem agendamento→período→ausência; cron segue agendamento→ausência. Ciclo global de deadlock e comportamento real das travas: **[nao verificado]**. (`app/ferias/services.py:364`, `app/ferias/services.py:367`, `app/ferias/services.py:407`, `app/ferias/services.py:441`, `app/ferias/services.py:593`)
+
+**O gate atual e o cruzamento da folha não dependem de `status='em_gozo'`.** Ambos consultam datas e excluem cancelado. Já badges, botões, próximas férias, concluídas, disponibilidade e avisos de retorno ainda leem o status persistido. (`app/ponto/utils.py:89`, `app/folha/export.py:491`, `app/ferias/services.py:51`, `app/templates/ferias/_secao_colab.html:120`, `app/ferias/views.py:26`, `app/ferias/views.py:32`, `app/colaboradores/views.py:2843`, `app/ferias/management/commands/alertar_retornos.py:20`)
+
+O censo adicional de `Ausencia(tipo='ferias')`, incluindo entradas genéricas, é:
+
+| Escrita/leitura | Sítios abertos |
+|---|---|
+| Produção e remoção do espelho | `app/ferias/models.py:385`, `app/ponto/services/ausencia.py:1180`, `app/ponto/services/ausencia.py:1188`, `app/ponto/services/ausencia.py:1202`, `app/ponto/services/ausencia.py:1266`, `app/ponto/services/ausencia.py:1281`. |
+| Escritores genéricos, decisões, anexos e reabertura | `app/ponto/services/ausencia.py:418`, `app/ponto/services/ausencia.py:509`, `app/ponto/services/ausencia.py:835`, `app/ponto/services/ausencia.py:846`, `app/ponto/services/ausencia.py:927`, `app/ponto/services/ausencia.py:1071`, `app/ponto/services/ausencia.py:1130`, `app/ponto/services/ausencia.py:1141`, `app/ponto/services/ausencia.py:1296`. |
+| Autoridades de cobertura e precedência | `app/ponto/turnos.py:2529`, `app/ponto/turnos.py:2536`, `app/ponto/turnos.py:2733`, `app/ponto/precedencia.py:273`. |
+| Apuração, motor, calculador e documentos | `app/ponto/services/fechamento.py:639`, `app/ponto/services/fechamento.py:683`, `app/ponto/services/efeito_ausencia.py:53`, `app/ponto/services/credito_parcial.py:26`, `app/ponto/motor_calculo_v2.py:1092`, `app/ponto/calculador/alimentacao.py:532`, `app/ponto/calculador/regras.py:195`, `app/relatorios/pdf_espelho.py:333`, `app/ponto/services/esmeril_espelho.py:164`, `app/ponto/management/commands/diff_calculador.py:412`, `app/relatorios/management/commands/diff_extrato_parcial.py:67`. |
+| Cartório, estado do dia, espelho e calendário | `app/ponto/services/cartorio.py:355`, `app/ponto/services/cartorio.py:1179`, `app/ponto/services/cartorio.py:1306`, `app/ponto/services/espelho.py:582`, `app/ponto/services/espelho.py:588`, `app/ponto/status_dia.py:181`, `app/ponto/services/dia_do_colab.py:15`, `app/ponto/services/dia_decidido.py:550`, `app/colaboradores/services/calendario.py:485`, `app/colaboradores/services/calendario.py:533`. |
+| Telas, API, relatórios e inteligência | `app/ponto/views.py:1002`, `app/ponto/views.py:1680`, `app/ponto/views.py:2076`, `app/ponto/views.py:2179`, `app/api/views.py:1066`, `app/api/views.py:1575`, `app/api/views.py:1861`, `app/api/views.py:3092`, `app/colaboradores/services/detalhe.py:104`, `app/ponto/views_tipos_ausencia.py:24`, `app/relatorios/views.py:197`, `app/inteligencia/resumo.py:39`, `app/inteligencia/views.py:71`, `app/inteligencia/views.py:84`, `app/inteligencia/views.py:239`, `app/inteligencia/views.py:538`. |
+| Cobrança, grade e disponibilidade | `app/ponto/services/faltas_de_hoje.py:59`, `app/ponto/services/deslogados.py:163`, `app/ponto/services/abriu_nao_bateu.py:123`, `app/escala/utils.py:1209`, `app/escala/servico_jornada.py:342`, `app/escala/services/furos_diarios.py:222`, `app/escala/services/cadastro_realidade.py:589`, `app/escala/services/semana_do_posto.py:177`, `app/api/views_mensageria.py:1243`. |
+| Chamados, disputas e aliases | `app/chamados/juizes.py:448`, `app/chamados/juizes.py:1475`, `app/chamados/juizes.py:2021`, `app/chamados/services/historico.py:129`, `app/chamados/services/materializacao.py:78`, `app/chamados/services/materializacao.py:645`, `app/chamados/services/disputa_emissao.py:763`, `app/chamados/services/pergunta_no_app.py:90`, `app/chamados/reconciliador.py:784`, `app/chamados/services/adesao.py:68`, `app/chamados/services/silencio_ausencia.py:65`, `app/chamados/services/vigia_fio.py:308`, `app/chamados/services/feriado_reavaliar.py:33`. |
+| Comandos de cobertura/reconciliação | `app/ponto/management/commands/reconciliar_grade.py:401`, `app/ponto/management/commands/processar_alertas_turno.py:97`, `app/ponto/management/commands/processar_alertas_avancados.py:116`, `app/ponto/management/commands/supra_juiz.py:216`, `app/ponto/management/commands/detectar_ausencias.py:815`, `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:108`, `app/ponto/management/commands/emitir_furo_retroativo.py:99`, `app/ponto/management/commands/backfill_b5_insumos.py:72`, `app/ponto/management/commands/vigia_b5_ausencia.py:68`, `app/ponto/management/commands
+
+[truncado em 20000 de 21947 caracteres]
+
+## 06/11 22:29 · sessao cb8a8a969eb0 · - · - · origem=Ronald (tmux)
+
+Complemento do censo, com os sítios genéricos abertos. A leitura desses caminhos admite `Ausencia.tipo='ferias'` porque as autoridades gerais não a excluem (`app/ponto/turnos.py:2529`, `:2552`, `:2753`, `:2815`, `:3087`).
+
+- **Apuração, grade e documentos:** `ausencias_do_periodo`/cobertura em fechamento (`app/ponto/services/fechamento.py:639`, `:683`, `:687`), efeitos de ausência (`app/ponto/services/efeito_ausencia.py:47`, `:53`), crédito parcial (`app/ponto/services/credito_parcial.py:26`), grade (`app/escala/utils.py:1209`), PDF (`app/relatorios/pdf_espelho.py:333`, `:406`), esmeril (`app/ponto/services/esmeril_espelho.py:164`), diff do calculador (`app/ponto/management/commands/diff_calculador.py:412`) e diff do extrato (`app/relatorios/management/commands/diff_extrato_parcial.py:67`).
+- **Motor/calculador recebem a ausência por alimentação:** motor lê `dias_com_ausencia_inteira` e zera pontualidade (`app/ponto/motor_calculo_v2.py:1085`, `:1092`, `:1095`); calculador passa a ausência do dia (`app/ponto/calculador/alimentacao.py:532`) ao contexto que empresta o teto do motor (`app/ponto/calculador/regras.py:120`, `:195`). O tipo férias abona no catálogo (`app/ponto/catalogo/ausencias.py:101`).
+- **Cartório, estado do dia, espelho e calendário:** cartório detecta fato novo por qualquer ausência (`app/ponto/services/cartorio.py:355`), consulta cobertura (`:1179`, `:1306`) e precedência (`:1948`); espelho lê cobrança e folha (`app/ponto/services/espelho.py:582`, `:588`); calendário idem (`app/colaboradores/services/calendario.py:485`, `:533`) e precedência (`:507`); estado do dia recebe fatos (`app/ponto/status_dia.py:181`, `:298`, `:304`); serviço do dia (`app/ponto/services/dia_do_colab.py:15`); cartões e história (`app/ponto/services/dia_decidido.py:332`, `:550`, `:587`).
+- **Telas/API/documentos genéricos:** painel de fechamento (`app/ponto/views.py:1002`), painel de justificativa (`:1680`), painel da ausência/irmãs (`:2076`), lista com vigência ou PK direto (`:2179`, `:2181`), API espelho (`app/api/views.py:1575`), API de ausências (`:1861`), API de documento (`:3092`), detalhe 360 (`app/colaboradores/services/detalhe.py:104`), histórico de chamados do colaborador (`app/chamados/services/historico.py:129`), usos do catálogo (`app/ponto/views_tipos_ausencia.py:24`), absenteísmo/CSV (`app/relatorios/views.py:197`, `:205`), resumo de inteligência (`app/inteligencia/resumo.py:39`, `:44`, `:45`), painel de inteligência (`app/inteligencia/views.py:71`, `:84`), detalhe “top faltosos” (`:239`, `:242`), PDF de inteligência (`:516`, `:538`).
+- **Cobrança e disponibilidade:** faltas de hoje (`app/ponto/services/faltas_de_hoje.py:59`, `:61`), deslogados (`app/ponto/services/deslogados.py:163`, `:166`), janela de abriu/não bateu via fatos (`app/ponto/services/abriu_nao_bateu.py:123`), jornada (`app/escala/servico_jornada.py:342`), ranking (`app/escala/services/furos_diarios.py:222`), cadastro versus realidade (`app/escala/services/cadastro_realidade.py:589`), semana do posto (`app/escala/services/semana_do_posto.py:177`), pendências cadastrais da API mensageria (`app/api/views_mensageria.py:1243`), adesão (`app/chamados/services/adesao.py:68`).
+- **Chamados/disputas:** célula furada e via da resposta (`app/chamados/juizes.py:448`, `:1475`), data da ausência (`:2021`), cobertura para materialização (`app/chamados/services/materializacao.py:78`), devolução das perguntas absorvidas (`:645`), suspensão por ausência (`app/chamados/services/silencio_ausencia.py:65`), dono do fio (`app/chamados/services/vigia_fio.py:308`), reavaliação de feriado via fatos (`app/chamados/services/feriado_reavaliar.py:33`).
+- **Comandos que consultam cobertura geral:** reconciliar grade (`app/ponto/management/commands/reconciliar_grade.py:401`), alertas de turno (`app/ponto/management/commands/processar_alertas_turno.py:97`), alertas avançados (`app/ponto/management/commands/processar_alertas_avancados.py:116`), suprajuiz (`app/ponto/management/commands/supra_juiz.py:216`), detectar ausências (`app/ponto/management/commands/detectar_ausencias.py:815`), emitir turno aberto retroativo (`app/ponto/management/commands/emitir_turno_aberto_retroativo.py:108`), emitir furo retroativo (`app/ponto/management/commands/emitir_furo_retroativo.py:99`), backfill de insumos (`app/ponto/management/commands/backfill_b5_insumos.py:72`), vigia B5 (`app/ponto/management/commands/vigia_b5_ausencia.py:68`), ausência sem efeito (`app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:41`, `:44`), rejulgar ausência em folga (`app/ponto/management/commands/rejulgar_ausencia_em_folga.py:33`, `:56`), auditar invariantes de chamados (`app/chamados/management/commands/auditar_invariantes_chamados.py:162`, `:642`, `:659`, `:1466`).
+- **Vigias/fila de decisão e eventos:** vigia de ausência/veredito (`app/ponto/services/vigia_ausencia_veredito.py:46`, `:53`), vigia da família (`app/ponto/services/vigia_ausencia.py:59`, `:108`), contadores DP (`app/ponto/services/ausencia.py:963`), escalada por documento (`:992`), universo de chamados de ausência decidida (`:715`), comando correspondente (`app/ponto/management/commands/fechar_chamados_ausencia.py:25`), reabrir chamados (`app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:33`), rejulgar status pelo tipo (`app/ponto/management/commands/rejulgar_status_por_tipo.py:23`, `:32`), duração incoerente (`app/ponto/management/commands/curar_ausencia_sem_fim.py:29`), bloqueante sem fim conforme catálogo (`app/ponto/management/commands/ausencia_bloqueante_sem_fim.py:24`, `:27`), contagem/limpeza de ensaio (`app/ponto/management/commands/zerar_dados_operacionais.py:49`, `:90`), sinais de inclusão/exclusão (`app/ponto/signals.py:124`, `:143`, `:150`).
+- **Leitura por referência recebida em outra operação:** troca de plantão relê e trava as duas ausências por PK (`app/ponto/portas/celula.py:657`); nenhuma restrição por tipo nessa carga (`:658`).
+
+Exclusões conferidas:
+
+- Mensageria de ausências DP **exclui férias** na autoridade (`app/ponto/turnos.py:3067`, `:3068`), usada nas duas leituras da mensageria (`app/api/views_mensageria.py:701`, `:1000`).
+- Rubrica 8932 **exclui férias**, embora cobertura e motor continuem recebendo o espelho (`app/folha/export.py:197`, `:198`, `:205`; `app/ponto/catalogo/ausencias.py:290`).
+- Score de assiduidade/geração de alertas **excluem tipos que abonam**, portanto férias conforme catálogo (`app/inteligencia/management/commands/calcular_scores.py:12`; `app/inteligencia/management/commands/gerar_alertas.py:55`; `app/ponto/catalogo/ausencias.py:101`).
+- Ausências médicas históricas/alertas filtram tipos médicos, portanto não são leitores de férias (`app/ponto/views.py:2837`; `app/relatorios/views.py:277`; `app/ponto/services/alertas_ausencia.py:49`).
+- O ramo genérico do aviso de batida restringe a tipos com frase cadastrada; hoje suas frases são maternidade/INSS, e férias é tratada antes por `em_gozo_hoje` (`app/ponto/services/aviso_da_batida.py:43`, `:73`, `:79`, `:88`).
+- Os contadores de falta de documento/aprovador excluem férias por autoridades/declaração, mas mantêm números específicos de férias no payload (`app/ponto/services/vigia_ausencia.py:43`, `:113`, `:120`, `:215`).
+
+Não afirmar que uma ausência reaparecida afeta apenas a exibição: cobertura aprovada de férias pode abonar o dia e entrar no teto de pontualidade, enquanto `em_gozo_hoje` exclui o agendamento cancelado (`app/ponto/services/efeito_ausencia.py:53`, `:59`, `:65`; `app/ponto/motor_calculo_v2.py:1092`; `app/ferias/services.py:51`). Impacto concreto em produção **[não verificado]**.
+
+## 06/11 22:29 · sessao be4f014968c2 · - · - · origem=Ronald (tmux)
+
+Inventário complementar aberto, incluindo aliases; as consultas genéricas abaixo não excluem `ferias` por tipo.
+
+| App | Função e ponto de leitura |
+|---|---|
+| chamados | `_celula_furada`: cobertura e explicação integral, `app/chamados/juizes.py:448`; `via_pelo_fato`: cobertura aprovada, `:1475`; `_dia_da_ausencia`: lookup por PK sem filtro de tipo, `:2021`. |
+| chamados | `historico_do_colab`: qualquer ausência criada na janela, `app/chamados/services/historico.py:129`. |
+| chamados | `_coberto_por_ausencia`: cobertura genérica, `app/chamados/services/materializacao.py:78`. Consumidores abertos: `_criar_pergunta_se_couber`, `app/chamados/services/disputa_emissao.py:763`; `retencao`, `app/chamados/services/pergunta_no_app.py:90`; `reemitir_chamado_do_dia`, alias `_aus_c2`, `app/chamados/reconciliador.py:784`, `:845`. |
+| chamados | `sincronizar_adesao`: exclui somente falta da suspensão, `app/chamados/services/adesao.py:68`. |
+| chamados | `reconciliar_por_ausencia`: cobertura, status aberto/aprovado, `app/chamados/services/silencio_ausencia.py:65`, `:77`, `:93`; chamado por `reconciliar_colab`, `:127`. |
+| chamados | `dono_fora_do_fio`: cobertura e status aberto, `app/chamados/services/vigia_fio.py:308`. |
+| chamados | Auditor `_cobre_ausencia_i21`, `app/chamados/management/commands/auditar_invariantes_chamados.py:162`; `Command.handle`, `:642`, `:659`, `:1466`; `contraprova_piso` lê somente o ID da ausência lavrada na célula, `:430`. |
+| chamados | `devolver_absorvidas_da_ausencia_rejeitada` verifica outra cobertura genérica, `app/chamados/services/materializacao.py:645`; a seleção de perguntas absorvidas restringe a tipos de escape, `:602-604`. |
+| escala | `_marcar_ausencias`: cobertura para folha, campos tipo/label/PK/parcial, `app/escala/utils.py:1209`; aplica férias como ausência, `:1231`, `:1241-1244`. |
+| escala | `classificar_falta`: todas as ausências da janela por alias `_aus_periodo`, `app/escala/servico_jornada.py:342`. |
+| escala | `ranking_colabs`: cobertura genérica e rótulo, exclui apenas falta, `app/escala/services/furos_diarios.py:222-224`. |
+| escala | `_afastado_sem_registro`: universo inicial de afastados, mas cobertura de qualquer tipo nos dias da janela, `app/escala/services/cadastro_realidade.py:573`, `:589`. |
+| colaboradores | `contexto_detalhe`: dez ausências recentes, sem filtro de tipo/status, `app/colaboradores/services/detalhe.py:104-107`. |
+| colaboradores | `contexto_calendario`: aliases `_cap`/`_cap_folha`, decisões do período e consumo pelo rótulo do dia, `app/colaboradores/services/calendario.py:485`, `:533`, `:534`, `:715-717`. |
+| core | `_aplicar_ausencia` lê o retorno da criação para auditoria e resposta, `app/core/views_ia.py:985-994`; não é consulta genérica do acervo. Outras consultas diretas de registros `Ausencia` em core: [não verificado]. |
+
+Exclusões confirmadas:
+
+- `afastados_hoje` e `palavra`, em `app/colaboradores/services/situacao_exibida.py:46`, `:63`, e a disponibilidade em `app/colaboradores/views.py:2911` chamam autoridades restritas a `afastamento_inss`; portanto essas consultas não leem férias (`app/ponto/turnos.py:2702`, `:2713`).
+- `core/admin.py` é infraestrutura que enumera os campos do modelo para readonly, não consulta de registros (`app/core/admin.py:46-50`, `:68-75`).
+- `_d4_em_lote` carrega `CargaDaJanela` para turnos e D4, sem consumir explicitamente `Ausencia` no corpo aberto (`app/core/services/painel_op.py:327-338`).
+
+A cobertura genérica admite férias; suas restrições por efeito são status aprovado para folha e exclusão de rejeitada para cobrança (`app/ponto/turnos.py:2514-2517`, `:2529-2533`).
 
 ## 06/11 22:28 · sessao 1509e73a8ffd · - · - · origem=Ronald (tmux)
 
@@ -1157,46 +1336,4 @@ Há um detalhe material: **antes do Python da sonda**, `--rodar` chama `lavra_de
 
    A `porta_export` lê o campo indiretamente pela soma do DiaPago e compara ao FM, mas **essa divergência fica fora de `falhas`**. Portanto a reconciliação observa o problema sem, por si só, impedir o TXT. (`app/ponto/services/dia_pago.py:562`; `app/folha/porta_export.py:451`, `:455`, `:687`, `:697`)
 
-## 06/11 21:51 · sessao eb474d436086 · - · - · origem=Ronald (tmux)
-
-Achados para consolidar:
-
-- **M3 continua incompleto para turno partido:** `calcular_periodo` desse motor retorna com trabalhados/noturnos, sem calcular HE nem split (`app/ponto/motor_calculo_v2.py:2877`, `:2893`, `:2896`, `:2897`). O mensal recalcula somente `resultado.periodos`, deixando FT fora (`:2927`, `:3083`). Portanto FT partido promovido pode levar 180 min de HE100 e 120 min noturnos, mas **zero HE100 noturna**, pois o default é zero (`:225`) e as novas linhas apenas o somam (`app/ponto/services/fechamento.py:963`; `app/ponto/services/dia_pago.py:252`). Caso real em produção: [não verificado].
-
-- **Item 3: nenhum outro campo muda pela nova chamada.** A casca só atribui HE100 noturna e HE50 noturna (`motor_calculo_v2.py:1019`, `:1021`); nos ramos da dobra, HE50 e HE50 noturna já foram zerados (`:2934`, `:2937`, `:3325`, `:3328`). Logo não há contraexemplo de alteração de `minutos_noturnos` ou `extra_50` por essa chamada (`:1014`–`:1022`).
-
-- **Mas o subconjunto pode incluir minuto bloqueado:** a casca lê `entrada/saida` crus (`motor_calculo_v2.py:1015`), enquanto o recorte só grava `efetivo_entrada/saida` (`:1840`, `:1841`), usados no cálculo de duração/noturnas (`:3216`, `:3218`, `:3252`). Contraexemplo reproduzido com AST em memória: cru 13–23, efetivo 13–22, HE100=540, noturno=0 ⇒ nova chamada altera somente HE100 noturna, **0→60**. O corte da saída ao marco é permitido em `:1733`–`:1750`. O calculador usa os efetivos (`app/ponto/calculador/alimentacao.py:83`, `:106`), portanto também pode divergir do motor nesse cenário (`app/ponto/calculador/regras.py:832`).
-
-- **Item 4: split não alcança o primeiro par.** A dobra inteira vai em `ultimo` (`motor_calculo_v2.py:3087`, `:3094`); `_inicio_do_trecho_extra` limita o início à entrada desse período (`:406`). AST exata confirmou 03–07 com extra100=420 ⇒ HE100 noturna=240. F11d exige 240 (`app/ponto/tests/test_o280_bateria_da_lei.py:1705`); F11e exige 360, mas está `expectedFailure` (`:1708`, `:1717`). Pelo diff fornecido, o pai pulava a chamada e deixava zero: **lacuna preexistente parcialmente corrigida**, não regressão numérica nova; execução do pai [não verificado].
-
-- **Outra duplicidade possível dentro do próprio split:** `minutos_noturnos` estende o segmento 00–05 até `fim` (`motor_calculo_v2.py:110`, `:111`) e soma também 22–24 (`:112`–`:116`). AST exata: 03–23, HE100=1200, prorrogação=True ⇒ **HE100 noturna=1260**, contando 22–23 duas vezes. A dívida consta no próprio comentário (`:151`–`:160`); a chamada nova do comercial passa a expô-la no mensal (`:3361`). Ocorrência em produção [não verificado].
-
-- **Não há soma aditiva por chamadas repetidas da casca:** ela sobrescreve o campo (`motor_calculo_v2.py:1020`). A classificação normal coloca o período em FT **ou** em períodos regulares (`:2492`, `:2493`, `:2494`); as properties de HE somam apenas os regulares (`:344`). Assim, não identifiquei duplicação M1/M2+M3 por esse caminho (`app/ponto/services/fechamento.py:933`, `:962`, `:963`).
-
-## 06/11 21:50 · sessao f5b13d011799 · - · - · origem=Ronald (tmux)
-
-- **Não há dupla soma por `periodos + ft_feriado` no caminho normal.** O motor põe cada período em um lado do `if/else` (`app/ponto/motor_calculo_v2.py:2468`, `:2492`, `:2494`); `ResultadoMes.horas_extra_100_noturna` soma somente `periodos` (`:344`). A promoção substitui o FM por essa base mais `_ft_feriado`, sem `+=` (`app/ponto/services/fechamento.py:961`). A partição remove feriados de `_ft_certa` e exclui ambos de `_ft_sem_escala` (`:952`, `:953`, `:979`, `:980`). O DiaPago recebe essas mesmas listas (`:1202`) e soma o subconjunto uma vez em cada ramo (`app/ponto/services/dia_pago.py:184`, `:252`).
-
-- **Há divergência preexistente de significado do dia na promoção.** O motor decide folga pelo `data_jornada` e registra esse dia no mapa (`app/ponto/motor_calculo_v2.py:2448`, `:2460`); a promoção decide feriado pela **data civil da entrada** (`app/ponto/services/fechamento.py:947`, `:949`). A lavratura, por sua vez, usa o mapa (`app/ponto/services/dia_pago.py:245`, `:128`, `:132`; mapa passado em `app/ponto/services/fechamento.py:1216`). Contraexemplo deduzido: dois pares de uma jornada feriada, `21–00 / 03–07`; o segundo pode continuar em folga trabalhada por começar civilmente no dia seguinte, em vez de ser promovido com o primeiro. Ocorrência em produção [não verificado].
-
-- **FM ≠ soma DP continua possível por caminho preexistente.** O FM é persistido antes da lavratura (`app/ponto/services/fechamento.py:1143`, `:1159`); falha em `lavrar` é capturada e apenas registrada (`:1237`, `:1240`), permitindo FM novo com DP antigo/ausente. A porta de restauração também aceita somente campos de FM (`:1357`, `:1379`, `:1391`). Ocorrência real [não verificado]. Diferença de armazenamento float/decimal não prova falha de reconciliação: a soma DP arredonda ao final (`app/ponto/services/dia_pago.py:562`, `:563`).
-
-- **Unidades e escritores do mensal/dia:** DP declara rubricas em horas e usa `FloatField` (`app/ponto/models.py:325`, `:332`); FM usa decimal de duas casas (`:419`). Ambos leem minutos do período e dividem por 60, sem recalcular janela (`app/ponto/services/dia_pago.py:184`, `:252`; `app/ponto/services/fechamento.py:961`). Persistência DP fica na mesma `lavrar`, por `bulk_create` (`app/ponto/services/dia_pago.py:345`, `:359`, `:360`); FM escreve na porta de fechamento (`app/ponto/services/fechamento.py:1143`, `:1168`), também restaurável pela porta (`:1391`).
-
-- **TXT não lê diretamente os splits alterados.** `eventos_do_fechamento` emite HE50, HE100 normal/feriado, folga e adicional noturno, sem evento para `_100_noturna` (`app/folha/export.py:439`, `:447`); comentários identificam os splits como subconjuntos (`:424`, `:433`). Porém mudança colateral em HE50 ou `minutos_noturnos_legais` pode alterar o TXT via `horas_extras_50` e `horas_noturnas` (`:441`, `:447`).
-
-- **`porta_export` lê o campo, mas a reconciliação não bloqueia por si.** A soma inclui o campo via `CAMPOS_DIA` (`app/ponto/services/dia_pago.py:36`, `:562`), e compara cada campo ao FM com tolerância de 0,015h (`app/folha/porta_export.py:239`, `:451`, `:455`). As divergências são publicadas em `fechamento_x_soma_dias_pagos`, fora de `_falhas_proprias` (`:687`, `:697`). Portanto é testemunha, sem mordida impeditiva para essa classe (`:687`, `:697`).
-
-- **O oráculo possui outra derivação, mas usa a mesma função decisória:** `regras.do_dia` chama `he_noturna` por período e soma (`app/ponto/calculador/regras.py:825`, `:832`, `:835`, `:839`); a mesma `lavrar` grava a versão separada `oraculo` (`app/ponto/services/fechamento.py:1276`, `:1287`, `:1293`). O fechamento e a lavratura do motor não fazem essa conta; leem o campo do período (`app/ponto/services/fechamento.py:963`; `app/ponto/services/dia_pago.py:252`).
-
-## 06/11 21:50 · sessao abee3abff962 · - · - · origem=Ronald (tmux)
-
-- **F11d cobra o defeito, não a lei:** exige `he100_not=240`; F11e afirma `360`, mas fica sob `expectedFailure`. Uma implementação correta dos dois pares reprovaria F11d e produziria sucesso inesperado em F11e. (`app/ponto/tests/test_o280_bateria_da_lei.py:1704`, `:1708`, `:1717`)
-- **F11/F11b/F11c/F11d cobram números**, por `assertEqual`, sem aceitar exceção genérica. F11 e F11b exigem respectivamente 120 e 60 minutos; F11c exige 1 hora no FM **e** no DiaPago, portanto mata o mutante “somar somente no FM”. (`app/ponto/tests/test_o280_bateria_da_lei.py:1263`, `:1594`, `:1632`, `:1672`, `:1679`)
-- **F11e tem mordida fraca:** `expectedFailure` cobre também o fixture e a execução do motor, antes da comparação; não restringe tipo ou mensagem da falha. Assim, uma falha anterior à divergência legal também pode satisfazer o selo. (`app/ponto/tests/test_o280_bateria_da_lei.py:1688`, `:1689`, `:1708`, `:1716`)
-- **RED no pai:** execução efetiva não verificada; a cópia não possui repositório Git acessível. A análise estática mostra campos existentes e expectativa numérica: `leitura` usa `getattr(..., 0)`, e os modelos já declaram os campos noturnos. (`app/ponto/tests/test_o280_bateria_da_lei.py:167`, `app/ponto/models.py:332`, `:419`; execução no pai [não verificado])
-- **Não identifiquei novo juiz da janela:** motor chama `he_noturna`; os acréscimos FM/DP apenas somam o campo já preenchido. O calculador existente chama essa mesma função por período. (`app/ponto/motor_calculo_v2.py:1014`, `app/ponto/services/fechamento.py:961`, `app/ponto/services/dia_pago.py:252`, `app/ponto/calculador/regras.py:824`)
-- **Não identifiquei novo escritor fora da porta no diff:** FM continua na função autorizada pelo registro e persiste por `save`/`update` no mesmo serviço; os campos novos do DiaPago continuam em `lavrar`. (`app/core/portas.py:500`, `app/ponto/services/fechamento.py:1143`, `:1159`, `:1168`, `app/ponto/services/dia_pago.py:252`)
-- **Não há relógio novo no diff fornecido:** a leitura do instante da passada já fica no serviço de fechamento, e as somas acrescentadas não consultam o relógio. (`app/ponto/services/fechamento.py:616`, `:961`; `app/ponto/services/dia_pago.py:252`)
-
-_2615 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2618 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
