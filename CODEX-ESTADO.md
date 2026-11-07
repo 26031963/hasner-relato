@@ -1,7 +1,61 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 18:11** · publicado em **07/11/2026 18:12** (UTC-3)
+> Ultima resposta processada: **07/11/2026 18:13** · publicado em **07/11/2026 18:17** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 18:13 · sessao 6364bb5ec91d · MOTOR-LE-O-TURNO-INSTRUMENTO · censo · origem=Code
+
+As referências aos anexos contam linhas desde o início de cada bloco fornecido. A confirmação dos commits posteriores nesta cópia-base é [nao verificado]. [nao verificado]
+
+1. **O1 — portas novas fora das funções fixas**
+
+   **Pergunta:** “O instrumento cumpre o criterio LITERAL? Algum item conta algo fora de A1/B1/nomeados, ou deixa de contar?”; “Cite algum mutante do instrumento que passaria em todos os testes.” (`v1.q:7`, `v1.q:10`) [nao verificado]
+
+   **Resposta:** diagnóstico das novas chamadas M1/M6: **ausente**. O trecho correlato trata outra forma de pareador novo: “Um `range(..., 2)` novo sobe contador e dispara RED.” (`v1.r:34`; `triagem_opus1.txt:2`)
+
+   **Triagem:** descarte específico de M1/M6: **ausente**. A avaliação geral foi: “1 NAO PROCEDE no criterio (9/85, 9/89 reproduzidos); a garantia incompleta e os itens 2 e 4.” (`triagem_v1.txt:2`)
+
+   **Classe (a):** omissão de contagem e mordida estavam perguntadas; o Codex examinou o incremento por `range` novo e deixou passar o incremento por chamada nova à autoridade. (`v1.q:7`, `v1.q:10`; `v1.r:34`; `triagem_opus1.txt:2`)
+
+2. **O2 — leitor host e publicação no ESTADO ausentes**
+
+   **Pergunta:** cobrança explícita dos itens contratuais “leitor `bin/*_estado.py` + linha no ESTADO”: **ausente**. Houve a pergunta correlata: “QUEM ESCREVE e QUEM LE cada valor que o diff grava ou le”. (`v1.q:15`; `triagem_opus1.txt:3`)
+
+   **Resposta:** diagnóstico da entrega contratual faltante: **ausente**. O Codex registrou apenas: “Publicação efetiva desses valores em placar/HOST fora da suite: **[nao verificado]**.” (`v1.r:104`) [nao verificado]
+
+   **Triagem:** descarte explícito da obrigação contratual: **ausente**. Sobre o inventário de leitores: “8 tabela recebida, sem achado.” (`triagem_v1.txt:9`)
+
+   **Classe (d):** a obrigação específica de entregar a publicação host não foi perguntada nem diagnosticada; “publicação não verificada” não constitui esse achado. A restrição do construtor a `app/` não impedia a leitura pelo verificador. (`v1.q:15`; `v1.r:104`; `triagem_opus1.txt:3`; `CLAUDE.md:341`, `CLAUDE.md:351`)
+
+3. **FILA — E2 troca quatro identidades B1 no rebase, conservando o total**
+
+   **Pergunta:** sobre essa troca concreta: **ausente**. A pergunta semelhante era sobre outro registro: “COMPOSICAO_REGISTRADA congela a lista inteira? Uma troca de identidade com o mesmo tamanho e cobrada?” (`v2.q:6`)
+
+   **Resposta:** identificação dos quatro B1 trocados: **ausente**. A proteção geral de identidade foi reconhecida: “A igualdade percorre todos os itens dos dois contadores: A1, B1 e os três nomeados, com identidade completa e listas inteiras.” (`v3.r:154`)
+
+   **Triagem:** descarte anterior desse evento: **ausente**. O enquadramento final diz: “ao rebasear, 4 itens B1 trocam de identidade com total igual -- a E2 classifica, nao copia”. (`triagem_opus1.txt:4`)
+
+   **Classe (c), quanto ao evento concreto:** faltam as quatro identidades e as árvores comparadas; a classe geral de troca de identidade já estava reconhecida, portanto não cabe afirmar modo-comum sobre ela. (`v3.r:154`; `triagem_opus1.txt:4`; identidades concretas: [nao verificado])
+
+4. **FILA — LINHAS_REGISTRADAS absolutas**
+
+   **Pergunta:** “Linha mudada por edicao NAO relacionada do motor reprova (custo esperado) e a mensagem diz o que fazer?” (`v3.q:7`)
+
+   **Resposta:** “**PROCEDENTE o custo de deslocamento:** uma edição sem relação com o negócio reprova se deslocar ocorrências registradas.” (`v3.r:156`)
+
+   **Triagem:** “custo de deslocamento e o esperado e a mensagem diz o que fazer.” O opus manteve: “LINHAS_REGISTRADAS absolutas (custo de vermelho falso, nunca verde falso)”. (`triagem_v3.txt:7`; `triagem_opus1.txt:4`) [nao verificado]
+
+   **Classe (b):** o Codex viu o custo e a triagem o aceitou expressamente como esperado, sem tratá-lo como bloqueador. (`v3.r:156`; `triagem_v3.txt:7`)
+
+5. **FILA — M2, M4 e M5 declarados no NAO_VE**
+
+   **Pergunta:** referência individual a M2, M4 ou M5: **ausente**. O tema correlato estava presente: “Distinga o que o NAO_VE declara do que some calado.” (`v3.q:6`)
+
+   **Resposta:** identificação individual desses mutantes: **ausente**. Sobre os limites examinados, o Codex escreveu: “**Não enumera especificamente `for-target`, `with-as` e chaves de `dict` como buracos do gap.**” (`v3.r:152`)
+
+   **Triagem:** “Q5 PROCEDENTE (b)+(d) TEXTO”; a mesma linha registra que a perda da parcela continua cobrada pela catraca numérica e por `LINHAS_REGISTRADAS`. A vinculação disso aos nomes M2/M4/M5 não aparece; o opus fornece somente “M2/M4/M5 declarados no NAO_VE”. (`triagem_v3.txt:6`; `triagem_opus1.txt:4`)
+
+   **Classes individuais — M2: [nao verificado]; M4: [nao verificado]; M5: [nao verificado].** Sem os enunciados dos três mutantes, não há base para escolher entre descarte de achado já visto, classe (b), e limitação fora do alcance, classe (c), nem para associá-los aos exemplos de v3(b). (`triagem_opus1.txt:4`; `v3.r:152`)
 
 ## 07/11 18:11 · sessao 3de4b0f69961 · - · - · origem=Ronald (tmux)
 
@@ -1023,43 +1077,4 @@ O contraexemplo do **I22 não exige flag corrompida**: Chamado vivo com pergunta
 
 O **I8b continua examinando cada pergunta viva individualmente**: a conversa irmã não impede que uma pergunta factual cruzada seja rejeitada pelo juiz. Os REDs novos cobrem a recusa individual, mas não a composição que mascara o I22. (`app/chamados/management/commands/auditar_invariantes_chamados.py:891`; `app/chamados/management/commands/auditar_invariantes_chamados.py:896`; `app/chamados/tests/test_e1_v8.py:148`)
 
-## 07/11 16:17 · sessao f802bf7d346e · - · - · origem=Ronald (tmux)
-
-**2 — PROCEDENTE ordem implícita residual; NAO PROCEDE outro `select_for_update` explícito de produção localizado.**
-
-As quatro aquisições explícitas estão no dono: `app/chamados/models.py:2513`, `:2520`, `:2533`, `:2537`. Os dois caminhos antigos foram antecipados: `_gravar_estado` em `app/chamados/models.py:290` e ausência rejeitada em `app/chamados/services/materializacao.py:676`.
-
-Permanecem dois contraexemplos de código:
-
-1. **Pergunta → Disputa sem trava prévia:** `DisputaSupervisao.remover_motivo` abre atomic em `app/chamados/models.py:2011`, carimba a Pergunta em `:2019`, cujo save ocorre em `:2911`, e depois salva a Disputa em `:2023`. Não chama `trava_na_ordem`. Entradas reais: reativação de Posto em `app/colaboradores/signals.py:77` e calibração de âncora em `app/escala/signals.py:161`. Os receivers consultam as disputas e chamam diretamente, sem antecipar essas travas (`app/colaboradores/signals.py:71`; `app/escala/signals.py:155`).
-
-2. **Chamado → Disputa por chamadas sucessivas ao próprio dono:** aprovação de justificativa chama `travar_origem_antes` dentro do atomic (`app/ponto/services/justificativa.py:134`, `:135`). O helper trava Colaborador e Chamados **sem** `abertas_do_colaborador=True` (`:123`). Depois `encerrar_chamado_de_origem` (`:211`) trava novamente somente Colaborador/origem (`:39`) e chama `retratar` (`:44`). Este alcança `reconciliar` (`app/chamados/reconciliador.py:523`), que chama `_decisao_do_fechamento` (`app/chamados/models.py:634`), `_recarregar_estado_se_mudou` (`:655`) e finalmente adquire as Disputas abertas em `:694`, depois dos Chamados já adquiridos. Premissa suficiente: origem viva sem retenção e outra Disputa aberta da mesma pessoa. Há variante no bloqueio de entrada (`app/ponto/services/justificativa.py:76`, `:83`). Reprodução/concorrência real: **[nao verificado]**.
-
-**6 — PROCEDENTE alcance insuficiente; NAO PROCEDE ausência geral de mordida.**
-
-Burla importante **não declarada**: A reconhece SQL literal com tabela e `FOR UPDATE` (`app/chamados/tests/test_e1_v7_catracas.py:120`), mas o pipeline só chama o detector se o arquivo contiver o texto `select_for_update` (`:238`). Um arquivo contendo apenas `cursor.execute('SELECT ... FROM "chamados_perguntadisputa" FOR UPDATE')` passa a catraca. O mutante chama diretamente `travas_fora`, sem passar pelo filtro que o excluiria (`:277`).
-
-Outras burlas:
-
-- A: método ligado, `lock = qs.select_for_update; lock()`, não é chamada de atributo nem `getattr` reconhecido (`app/chamados/tests/test_e1_v7_catracas.py:100`, `:116`).
-- B: recorte passado por argumento nomeado não é examinado; só `n.args[0]` é lido (`:185`). `min`, `sorted()[0]` e QuerySet filtrado seguem no limite declarado (`:26`).
-- C: método ligado, `gravar = p.save; gravar()`, não tem resolução transitiva da atribuição, só nome/alias de import/getattr (`:208`, `:217`). Helper externo também segue no limite declarado (`:28`).
-- A/B só percorrem `app` e excluem diretórios/nome de testes; C só dois commands (`:35`, `:38`, `:364`). [nao verificado]
-
-Executei em memória os 22 testes das três classes com `python3 -B`, substituindo apenas `django.test.SimpleTestCase` por `unittest.TestCase`, sem Django, banco ou arquivos escritos: 22 passaram, incluindo os três zeros e mutantes existentes. Essa execução não é a suíte Django nem prova PostgreSQL; por exigência de referência para afirmações, resultado sem arquivo persistido: **[nao verificado]**. Os próprios testes e suas expectativas estão em `app/chamados/tests/test_e1_v7_catracas.py:232`, `:297`, `:362`.
-
-REDs v8 têm mordida direcionada por leitura do código:
-
-- Canônica verifica p1, duas retratações, p1 intocada, restauração do índice e idempotência (`app/chamados/tests/test_e1_v8.py:63`, `:72`, `:75`, `:77`, `:78`). Porém chama `do_fato + canonica_do_grupo`, sem invocar efetivamente `abrir` nem migração (`:65`, `:66`).
-- Ordem exige tabelas e ausência de violações (`:108`, `:109`, `:110`, `:121`, `:122`), mas herda observador que registra só a primeira operação por **tabela**, inclusive consulta sem provar linhas retornadas (`app/chamados/tests/test_e1_v5_ordem_trava.py:36`, `:46`). Não é prova de ordem por PK nem bloqueio real de todas as linhas.
-- Conversa comprova nascimento com dia civil e destino antigo (`app/chamados/tests/test_e1_v8.py:138`, `:142`), com controle factual recusado (`:148`). Não testa todos os defeitos estruturais de I8b/I22.
-
-**8 — TETOS: NAO PROCEDE subida sem C8; PROCEDENTE ressalva sobre “custo constante”.**
-
-Cinco aumentos têm frase escrita ao lado: 27/+2 (`app/ponto/tests/test_selo_chokepoint_escrita.py:116`), 59/+2 (`:118`), 208/+4 (`:161`), 262/+8 (`:162`), 10/+2 (`:193`). C8 exige precisamente justificativa ao lado (`PLANO_PISCADA.md:10`).
-
-A decomposição de +2 por entrada é compatível com uma consulta das Disputas e outra dos Chamados (`app/chamados/models.py:2519`, `:2532`). É número fixo de consultas por entrada; o número de linhas examinadas/travadas depende das Disputas abertas e Chamados vivos (`:2518`, `:2528`). Tempo/contenção e medições citadas nos comentários: **[nao verificado]**.
-
-**Relógio residual também existe no arquivo novo**, não apenas nas linhas antigas descartadas pela triagem: `test_e1_v8.py:12` declara todos os instantes literais/injetados, mas o novo teste chama `ch.fechar` sem congelamento (`app/chamados/tests/test_e1_v8.py:106`), que alcança `_gravar_estado` (`app/chamados/models.py:454`, `:450`) e `timezone.now()` (`:244`). Fixtures novas criam Disputa (`app/chamados/tests/test_e1_v8.py:49`, `:104`, `:136`, `:147`) cujo `aberta_em` usa `auto_now_add=True` (`app/chamados/models.py:1715`). Efeito no resultado: **[nao verificado]**.
-
-_2774 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2775 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
