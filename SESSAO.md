@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 20:11:08.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (133.9 MB). Acoes na janela: **563**.
+**Medido em 07/11/2026 20:16:08.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (133.9 MB). Acoes na janela: **558**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -568,8 +568,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 08:16:38 | Bash | Log instrument line and check hook | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('DESPACHO FIO-E0-V4 0812')) L.insert(i+1,'MOTOR-LE-O-TURNO 0820 (aval logs/motor_turno/aval.txt; BACKLOG substitui PERTENCA-DO-MINUTO-PELO-TURNO): obra espera E2+E3; INSTRUMENTO: CONTRATO 5 linhas logs/motor_turno/contrato.txt; DESPACHO medida de hoje ...` |
 | 08:16:27 | Bash | Check Codex launch status | `cd /home/ronald/saas-hasner; /usr/bin/sleep 5; cat logs/motor_turno/censo/q1.log; ps -o pid,ppid,etime,cmd -p 3847262,3847282 \| cut -c1-150` |
 | 08:16:21 | Bash | Write contrato and launch Codex census | `cd /home/ronald/saas-hasner; umask 077; cat > logs/motor_turno/contrato.txt <<'EOF' CONTRATO MOTOR-LE-O-TURNO-INSTRUMENTO (07/11, aval logs/motor_turno/aval.txt; molde core/medida_leitor_do_dia.py) 1 QUEM CHAMA: a suite (selo-catraca core/tests/test_medida_turno_do_par.py) e o placar no HOST sem Django (bin/*_estado.py por spec_from_file_location), o MESMO modulo puro ast/os core/medida_turno_do_p ...` |
-| 08:15:57 | Bash | Locate turnos_do_colab judge | `cd /home/ronald/saas-hasner; grep -n "turnos_do_colab" app/core/juizes.py \| head; grep -rn "def turnos_do_colab" app --include=*.py \| head` |
-| 08:15:54 | Bash | Read molde structure and turnos_do_colab | `cd /home/ronald/saas-hasner; sed -n 80,200p app/core/medida_leitor_do_dia.py \| grep -n "def \\|NAO_VE\\|UNIVERSO\\|RAIZES\\|walk" \| head -30; grep -n "def turnos_do_colab" -A12 app/core/juizes.py \| head -30; sed -n 320,335p app/core/juizes.py` |
-| 08:15:44 | Bash | Save aval, update BACKLOG and PROMPTS, read molde | `cd /home/ronald/saas-hasner; umask 077; t=$(date +%H:%M); cat > logs/motor_turno/aval.txt <<EOF colado no chat 07/11 $t (lido por date): aval Ronald: MOTOR-LE-O-TURNO (obra unica em duas fatias; substitui o nome PERTENCA-DO-MINUTO-PELO-TURNO do aval de 01:4x e o absorve inteiro; nenhuma lei nova, nenhum juiz novo -- LEI-AKITA 4): o motor e o DiaPago param de derivar PAR e DIA; a unica entrada de e ...` |
-| 08:15:25 | Bash | Read PERTENCA row | `cd /home/ronald/saas-hasner; sed -n 1821p app/docs/BACKLOG.md \| cut -c1-700; echo; sed -n 1821p app/docs/BACKLOG.md \| awk -F'\|' '{print NF}'` |
-| 08:15:21 | Bash | Orient BACKLOG and HEAD for new aval | `cd /home/ronald/saas-hasner; git log --oneline -1; umask 077; mkdir -p logs/motor_turno; t=$(date +%m%d_%H%M); echo "$t"; grep -n "PERTENCA-DO-MINUTO" app/docs/BACKLOG.md \| cut -c1-200; grep -n "^## \\|OBRAS" app/docs/BACKLOG.md \| head -20; ls app/core/medida_leitor_do_dia.py` |
