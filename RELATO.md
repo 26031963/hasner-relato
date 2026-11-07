@@ -1,5 +1,5 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: trava_teste.sh | pid=638301
+ESPERANDO: codex_pergunta.sh | pid=3093065
 DESPACHO PUSH-ANTES-DA-E2 23:38: aval recebido (logs/akmed/aval_push_antes_e2.txt); vagas hoje = E1 + V2 i2 volta 4 (teto 2); a 1a que abrir vai ao L-123 v5 (brief logs/akmed/brief_v5.md), E2 depois do push.
 V2 i2 23:4x: Codex v3 REPROVA (logs/v2bugs/i2/v3.r); triagem_v3.txt: T3-1 fallback civil em _dia_da_jornada_do_par (LEI-AKITA 1), T3-2 cauda noturna entre pares, T3-3 texto do alerta -> volta 4 em construtor; DIFF par_v3 comp 11: emp2 mudaram=8, TXT=0; voltas Codex=3 -> proxima e opus final.
 PUSH 23:2x do marco FERIAS rc=1 (logs/push/ferias_pouso.log): MESMA causa PUSH-PRESO-14 -- lei_akita PADRAO-NA-CURA nos 3 R1-PUBLICA (36c90132 6ed6adbe a16637ca, n/a (medida)); 34 a frente, nada novo no origin. Destrava SO pelo pouso do instrumento L-123-MEDIDA-EM-PY volta 5 (wt-akmed4-205205, aval_v5), que entra na proxima vaga (instrumento depois de negocio: V2 i2 e E1 ocupam o teto 2).

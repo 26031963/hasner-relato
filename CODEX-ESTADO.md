@@ -1,7 +1,90 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 23:35** · publicado em **06/11/2026 23:37** (UTC-3)
+> Ultima resposta processada: **07/11/2026 00:14** · publicado em **07/11/2026 00:15** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 00:14 · sessao 70b6448f994a · - · - · origem=Ronald (tmux)
+
+Achados confirmados e referências já enviados ao agente principal:
+
+- **Bloqueia:** resposta nova de pergunta legada sem decisões guarda apenas o texto novo; a antiga desaparece da fonte histórica. `app/chamados/services/disputa_emissao.py:1326`, `app/chamados/services/disputa_emissao.py:1351`, `app/chamados/models.py:2960`.
+- **Bloqueia:** `carimbar` escreve resposta/validação sem linhas correspondentes; existem chamadores de produção. `app/chamados/models.py:2658`, `app/chamados/models.py:2661`, `app/chamados/services/disputa_emissao.py:1681`, `app/chamados/services/materializacao.py:1262`.
+- **Bloqueia:** ressurreição limpa carimbos e validação sem decisão; reabertura da irmã muda absorvida também não registra o ato. `app/chamados/models.py:1508`, `app/chamados/models.py:2768`, `app/chamados/services/disputa_emissao.py:1466`, `app/chamados/services/materializacao.py:668`.
+- **Bloqueia:** absorção pelo núcleo da resposta salva o carimbo antes de registrar a ligação, sem transação envolvendo ambos. Falha no registro deixa carimbo persistido sem `ABSORCAO`. `app/chamados/services/disputa_emissao.py:1381`, `app/chamados/services/materializacao.py:550`, `app/chamados/services/materializacao.py:555`.
+- **Bloqueia:** Resolver dia encerra perguntas sem registrar `SILENCIO`. `app/ponto/services/veredito_celula.py:174`, `app/ponto/services/veredito_celula.py:177`, `app/chamados/models.py:2591`.
+- **Fila:** `materializada_em` significa tanto efeito aplicado quanto encerramento sem efeito. Uma pergunta de hora retratada pode aparecer como aplicada. `app/chamados/services/materializacao.py:434`, `app/chamados/services/materializacao.py:442`, `app/chamados/services/fio.py:336`.
+- **Fila:** reabertura pelo colaborador e devolução por ausência rejeitada conhecem autor/motivo, mas não os passam à decisão. `app/chamados/models.py:2158`, `app/chamados/services/materializacao.py:665`, `app/chamados/services/materializacao.py:668`.
+- **Limite da imutabilidade:** autoria usa `SET_NULL`; exclusão do usuário pode modificar uma decisão histórica. Existência de tal exclusão em produção não foi verificada. `app/chamados/models.py:3326`, `app/chamados/models.py:3331`.
+- Não encontrei chamada explícita de produção a `PerguntaDisputa.delete()` ou `DisputaSupervisao.delete()`. A relação disputa→pergunta usa `CASCADE`, mas pergunta com decisão recebe proteção por `PROTECT`; colaborador também é protegido pela coluna nova. `app/chamados/models.py:2223`, `app/chamados/models.py:2240`, `app/chamados/models.py:3323`.
+
+Enviei inventário de referências de produção, incluindo comandos e templates, para os cinco campos de projeção e todos os campos de `DecisaoPergunta`. Os campos `absorcao_escape` e `absorcao_ausencia` ainda não têm leitor de negócio; o leitor da absorção continua reconstruindo o grupo pelo carimbo. `app/chamados/services/materializacao.py:555`, `app/chamados/services/materializacao.py:595`, `app/chamados/services/materializacao.py:619`.
+
+## 07/11 00:13 · sessao 01b79c614c78 · - · - · origem=Ronald (tmux)
+
+Achados para consolidar, todos por inspeção estática; ocorrência em produção e cardinalidades do acervo permanecem [não verificado].
+
+1. **Bloqueia — ordem de trava invertida, com ciclo concreto.** `declarar_hora_colab` abre transação, trava a disputa por `_abrir_ou_agregar_disputa` e depois pede a trava do colaborador ao abrir pergunta (`app/chamados/services/declaracao_texto.py:312`, `app/chamados/services/declaracao_texto.py:320`, `app/chamados/services/declaracao_texto.py:336`, `app/chamados/services/disputa_emissao.py:501`, `app/chamados/models.py:2475`). O agrupador de órfãos abre uma transação maior, lê disputa existente sem trava, abre pergunta — mantendo a trava do colaborador — e depois salva os motivos da disputa (`app/chamados/services/disputa_emissao.py:934`, `app/chamados/services/disputa_emissao.py:971`, `app/chamados/services/disputa_emissao.py:1088`, `app/chamados/services/disputa_emissao.py:1129`). Contraexemplo: A segura Disputa e espera Colaborador; B segura Colaborador e espera o UPDATE da mesma Disputa. O comentário anterior já declara Disputa→Colaborador, enquanto `_nascer` agora anuncia Colaborador primeiro (`app/chamados/models.py:847`, `app/chamados/models.py:2470`). O índice não corrige isso.
+
+2. **Bloqueia — segunda derivação da identidade divergiu da fonte.** O leitor avulso da projeção usa `do_fato`, que agora exclui duplicata/retratada e exige instância; o lote do fio/API continua agrupando por colaborador da disputa, motivo e data, incluindo as linhas retiradas do fato (`app/chamados/models.py:2430`, `app/chamados/services/declaracao_texto.py:433`, `app/chamados/services/declaracao_texto.py:546`). A escolha final aceita a última linha não reutilizável e consulta sua validação (`app/chamados/services/declaracao_texto.py:251`, `app/chamados/services/declaracao_texto.py:266`). Contraexemplo: única pergunta antiga, validada e depois retratada, para um marco atualmente faltante. Consulta avulsa recebe lista vazia e permite declarar; o lote inclui a retratada validada e recusa/esconde o formulário (`app/chamados/services/declaracao_texto.py:434`, `app/chamados/services/declaracao_texto.py:436`, `app/chamados/services/declaracao_texto.py:438`). O índice não cura.
+
+3. **Bloqueia para o patch — `datou` contorna a consulta de colisão.** `reapontar_resolvedora` data uma pergunta sem data e salva sem consultar `do_fato` nem travar Colaborador (`app/chamados/services/fio.py:834`, `app/chamados/services/fio.py:850`). Seus gatilhos existentes incluem reemissão, histórico e derivação de destino (`app/chamados/reconciliador.py:944`, `app/chamados/reconciliador.py:1628`, `app/chamados/reconciliador.py:1641`). Contraexemplo: p1 sem data e p2 já no destino `(colab,D,motivo,instância)`; datar p1 em D cria segunda linha sem índice, ou levanta `IntegrityError` sem tratamento com o patch. O acervo atual contendo p1 é [não verificado].
+
+4. **Bloqueia para o patch — reentrada de retratada/duplicata pelo descarimbo.** `_universo_da_ressuscitacao` seleciona materializadas sem texto, sem excluir vias de identidade; limpa a via na cópia ANTES de perguntar ao C6 (`app/chamados/models.py:1438`, `app/chamados/models.py:1459`). A porta depois limpa os campos reais em lote (`app/chamados/models.py:1508`, `app/chamados/models.py:2770`). Contraexemplo: p1 muda retratada; o fato volta e p2 nasce; cartório/reabertura ressuscita p1 porque seu marco está apagado. Sem índice, p1 e p2 voltam ao mesmo fato; com índice, o UPDATE falha. Gatilhos de produção: cartório, reabertura e desarquivamento (`app/ponto/services/cartorio.py:1622`, `app/chamados/models.py:1406`, `app/chamados/views_arquivar.py:86`).
+
+5. **Fila/bloqueia conforme promessa — `rechavear` ainda tem corrida fora da trava comum.** Trava apenas a própria pergunta e consulta o destino antes de salvar; não participa da trava Colaborador de `_nascer` (`app/chamados/services/fio.py:886`, `app/chamados/services/fio.py:893`, `app/chamados/services/fio.py:905`). Contraexemplo: rechaveamento verifica destino vazio; nascimento simultâneo cria ali; rechaveamento salva depois. Sem índice duplica; com índice impede duplicação por erro sem recuperação. Dois rechaveamentos de perguntas distintas para o mesmo destino têm o mesmo problema (`app/chamados/services/fio.py:887`, `app/chamados/services/fio.py:893`).
+
+6. **Bloqueia — conversa e fato ainda se misturam em `do_fato`.** O índice e o DRY excluem `conversa=True`, mas `do_fato` não filtra conversa (`app/chamados/models.py:2430`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:55`; patch fornecido `e1_indice_0052.patch:19`). Contraexemplo: conversa administrativa de `posto_desativado`, instância `''`, no dia D; emissão datada posterior do mesmo motivo/D devolve a conversa como pergunta existente (`app/chamados/services/acoes_disputa.py:247`, `app/chamados/services/acoes_disputa.py:260`, `app/chamados/models.py:2498`). O problema independe do índice.
+
+7. **Fila para o modelo; bloqueia aplicar índice sem classificar acervo — instância vazia não significa necessariamente “dia inteiro”.** Somente quatro motivos têm instância: entrada, saída e os dois lados do intervalo (`app/chamados/services/declaracao_texto.py:42`, `app/chamados/services/declaracao_texto.py:57`). Fora deles, catálogo inclui `sem_posto`, `em_ferias`, `posto_desativado`, `colisao_escala`, `ordem_substituicao_invalida`, `batida_fora_escala_grave`, `gps_ausente`, `foto_ausente`, `gps_mock`, `device_comprometido`, `liveness_indisponivel`, `ancora_ausente` (`app/chamados/catalogo/perguntas.py:36`, `app/chamados/catalogo/perguntas.py:118`). Foto, mock, device e liveness são anomalias de BATIDA: duas batidas do mesmo turno podem apresentar duas ocorrências legítimas do mesmo motivo (`app/api/views.py:479`, `app/api/views.py:488`, `app/api/views.py:504`, `app/api/views.py:519`). O contexto carrega o ID da batida e a data do emissor vem dessa batida, mas essa ocorrência não entra na identidade (`app/api/views.py:788`, `app/chamados/services/disputa_emissao.py:379`). O dedup atual já colapsa esses fatos; o índice cristaliza a limitação (`app/chamados/models.py:2498`). Conversas legítimas antigas também recebem `conversa=False` na migração, embora reabertura administrativa permita qualquer motivo e crie conversa nova (`app/chamados/migrations/0051_decisao_pergunta.py:99`, `app/chamados/services/acoes_disputa.py:247`, `app/chamados/services/acoes_disputa.py:260`).
+
+8. **Mudança de continência: correta isoladamente.** C6 e SQL passam a consultar a mesma tupla, com materialização presente e antes da resposta; portanto a exclusão nova não esconde pergunta considerada viva por esse degrau do C6 (`app/chamados/juizes.py:1147`, `app/chamados/models.py:2855`, `app/chamados/models.py:2862`). Isso não constitui prova executada de toda a continência da árvore [não verificado].
+
+9. **Outros leitores alterados por retratada/identidade.**
+   - Materialização de fato passa a aceitar retratada sem testemunha de batida, por identidade (`app/chamados/juizes.py:648`, `app/chamados/juizes.py:658`).
+   - `carimbar` passa a recusá-la e `carimbar_identidade` passa a aceitá-la (`app/chamados/models.py:2646`, `app/chamados/models.py:2703`).
+   - `q_carimbo_desfazivel` deixa de oferecê-la à porta de desfazer; a porta relê esse filtro travado (`app/chamados/services/relavra_via.py:179`, `app/chamados/services/relavra_via.py:221`).
+   - Auditor reconhece a via e a classifica como identidade (`app/chamados/management/commands/auditar_invariantes_chamados.py:47`, `app/chamados/management/commands/auditar_invariantes_chamados.py:195`, `app/chamados/management/commands/auditar_invariantes_chamados.py:206`).
+   - Filas de correção/validação mudam indiretamente por consultarem C6 (`app/chamados/juizes.py:1394`, `app/chamados/juizes.py:1401`).
+
+Inventário dos três campos novos, com ocorrências qualificadas:
+
+| Campo | Escritores/defaults | Leitores |
+|---|---|---|
+| `colaborador` | declaração FK `app/chamados/models.py:2240`; inserção deriva em `:2935`, acionada em `:2923`; migração deriva DS `app/chamados/migrations/0051_decisao_pergunta.py:25`, coluna nullable `:92`, ALTER obrigatório `:105`; fixture explícita `app/chamados/tests/test_e1_entradas.py:313` | `do_fato` `app/chamados/models.py:2430`; consistência de inserção `:2934`, `:2936`, `:2938`; DRY `app/chamados/management/commands/backfill_decisoes_pergunta.py:34`, `:36`, `:54`; teste `app/chamados/tests/test_e1_entradas.py:174` |
+| `instancia_marco` | default `app/chamados/models.py:2241`; derivação `:2941`; default migração `app/chamados/migrations/0051_decisao_pergunta.py:96`; backfill `:27`; fixture `app/chamados/tests/test_e1_entradas.py:314` | `app/chamados/models.py:2431`, `:2939`; DRY `app/chamados/management/commands/backfill_decisoes_pergunta.py:54`; teste `app/chamados/tests/test_e1_entradas.py:175` |
+| `conversa` | default `app/chamados/models.py:2242`; portas passam False/True `:2450`, `:2461`; INSERT `:2546`; default de TODO acervo `app/chamados/migrations/0051_decisao_pergunta.py:99` | `_nascer` `app/chamados/models.py:2474`, `:2495`; derivação `:2939`; DRY `app/chamados/management/commands/backfill_decisoes_pergunta.py:55`; testes `app/chamados/tests/test_e1_entradas.py:176`, `:182` |
+
+A fotografia genérica `.values()` dos testes lê também os três campos (`app/chamados/tests/test_e1_entradas.py:282`). O patch acrescenta leitores das três colunas na constraint; os testes anexos novos escrevem colaborador/instância e consultam a constraint (`e1_indice_0052.patch`, referências de linhas exatas do arquivo completo [não verificado]).
+
+Não encontrei `PerguntaDisputa.objects.create` de produção fora do `cls.objects.create` de `_nascer`; o exemplo fora da porta está no teste e é aceito sem índice (`app/chamados/models.py:2545`, `app/chamados/tests/test_e1_entradas.py:313`). A derivação no `save` protege inserções normais, mas não torna a chave imutável: só roda quando `_state.adding`; instância não vazia fornecida nem é validada contra o motivo (`app/chamados/models.py:2923`, `app/chamados/models.py:2939`). Escritor de produção que mude motivo/instância/conversa depois de nascer: [não verificado].
+
+## 07/11 00:11 · sessao 793560f8174a · - · - · origem=Ronald (tmux)
+
+4. **0051: estruturalmente compatível com o legado descrito; segurança do acervo real [não verificado].** Renomeia tabela/campos, atribui `reabertura` às decisões antigas e cria ligações de absorção nulas, compatíveis com os checks; preenche o colaborador pela disputa e a instância pelo motivo. O `SET CONSTRAINTS ALL IMMEDIATE` antecede o `ALTER ... NOT NULL`, evitando os eventos de FK pendentes que o comentário identifica. Referências: `app/chamados/migrations/0051_decisao_pergunta.py:25`, `:41`, `:49`, `:67`, `:76`, `:101`, `:104`, `:105`.
+
+   **Fila — conversa antiga vira fato na coluna.** Todas recebem `conversa=False`, sem classificação histórica. Contraexemplo: duas conversas antigas do mesmo motivo/dia entram no grupo de colisão e impedem a 0052, embora conversas novas sejam excluídas. A própria migração declara essa limitação. Referências: `app/chamados/migrations/0051_decisao_pergunta.py:4`, `:98`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:55`.
+
+   O congelado bate com o vivo: os quatro pares são exatamente `saida_sem_entrada→inicio`, `orfao_14h→fim`, `intervalo_saida→int_ida`, `intervalo_volta→int_volta`; há teste direto de igualdade. Referências: `app/chamados/migrations/0051_decisao_pergunta.py:14`; `app/chamados/services/declaracao_texto.py:42`, `:52`; `app/chamados/tests/test_e1_entradas.py:259`.
+
+   **0052: aplicação segura no acervo [não verificado].** Não há resultados do DRY no dado fornecido. O patch exige zero colisões, enquanto a 0051 preserva conversas antigas como `False`. Referências: anexo `e1_indice_0052.patch`, migração adicionada, linhas 3–5 e 19–21; `app/chamados/migrations/0051_decisao_pergunta.py:98`.
+
+5. **O command não escreve e consulta a autoridade correta.** Apenas consulta modelos e escreve em `stdout`; não possui flag de apply. Chama `competencia_entregue`, autoridade registrada como `_K6`, cujo código considera a exportação vigente não invalidada. Referências: `app/chamados/management/commands/backfill_decisoes_pergunta.py:25`, `:51`, `:67`, `:71`, `:76`; `app/core/juizes.py:312`; `app/folha/export.py:556`, `:580`.
+
+   **Fila — o DRY não suporta data nula.** Contraexemplo: pergunta legada respondida, sem decisão e com `data_evento=None`; `linhas_a_criar` chama `competencia_do_fato(None)`, chegando a `None < None`. Duas perguntas nulas sem resposta também chegam a `dia.isoformat()` ao listar colisões. O campo permite nulo; ocorrência real [não verificado]. Referências: `app/chamados/models.py:2230`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:33`, `:45`, `:90`; `app/ponto/services/fechamento.py:1588`, `:1590`, `:1595`.
+
+   O agrupamento por competência usa o adaptador existente e o corte da empresa, sem derivação própria. Referências: `app/chamados/management/commands/backfill_decisoes_pergunta.py:45`; `app/ponto/services/fechamento.py:1595`; `app/ponto/services/dia_pago.py:700`, `:714`.
+
+9. A alteração de dependência corrige instalações novas: o `RunPython` pede `LogAuditoria`, criada em `core.0002`. A única mudança da 0057 está na dependência; suas operações permanecem no mesmo `RunPython`. Referências: `app/ponto/migrations/0057_a4_backfill_pendente.py:23`, `:70`, `:78`; `app/core/migrations/0002_log_auditoria.py:16`.
+
+   Dada a premissa de migração já aplicada, a expectativa é que o executor não repita seu `RunPython` apenas pela nova dependência; comportamento do executor não está demonstrado pelo código da cópia [não verificado]. Estado real do histórico de migrações em produção [não verificado]. [nao verificado]
+
+10. **Fila — a justificativa descreve a mudança, mas erra a unidade do custo.** O `+6` corresponde estruturalmente a duas chamadas contendo `atomic` + `SELECT ... FOR UPDATE`; os números medidos apresentados no comentário não foram verificados. O comentário diz custo por “[nome]”, mas a trava é adquirida antes do dedup e também custa quando retorna uma pergunta existente. Contraexemplo: emitir duas vezes o mesmo fato; a segunda chamada bloqueia/consulta e retorna `criada=False`, sem nascimento. Referências: `app/ponto/tests/test_selo_chokepoint_escrita.py:167`, `:172`, `:174`, `:181`; `app/chamados/models.py:2473`, `:2475`, `:2498`, `:2542`.
+
+   “Conversa não trava” descreve corretamente a ausência do `SELECT FOR UPDATE`; o `atomic` envolve também a conversa. Referências: `app/chamados/models.py:2473`, `:2474`.
+
+6. Dentro deste recorte, não apareceu segundo juiz: competência exportada chama `_K6`, competência do fato reaproveita o adaptador existente e instância é inversão do catálogo. Referências: `app/chamados/management/commands/backfill_decisoes_pergunta.py:28`, `:45`, `:71`; `app/core/juizes.py:312`; `app/chamados/services/declaracao_texto.py:52`.
+
+   O teste de corrida comprova somente o caminho comum por `abrir`, com duas threads e a mesma identidade; seu título promete unicidade “NO BANCO”, mas o commit sem patch não possui essa constraint. Contraexemplo externo ao domínio do teste: inserção direta repetida, que o próprio teste do DRY constrói com sucesso esperado. Referências: `app/chamados/tests/test_e1_identidade_corrida.py:1`, `:49`, `:74`, `:81`; `app/chamados/tests/test_e1_entradas.py:309`, `:313`; `app/chamados/models.py:2942`.
 
 ## 06/11 23:35 · sessao 0c388599c44e · V2-BUGS-i2 · verificador · origem=Code
 
@@ -1137,95 +1220,4 @@ O censo adicional de `Ausencia(tipo='ferias')`, incluindo entradas genéricas, �
 
 [truncado em 20000 de 21947 caracteres]
 
-## 06/11 22:29 · sessao cb8a8a969eb0 · - · - · origem=Ronald (tmux)
-
-Complemento do censo, com os sítios genéricos abertos. A leitura desses caminhos admite `Ausencia.tipo='ferias'` porque as autoridades gerais não a excluem (`app/ponto/turnos.py:2529`, `:2552`, `:2753`, `:2815`, `:3087`).
-
-- **Apuração, grade e documentos:** `ausencias_do_periodo`/cobertura em fechamento (`app/ponto/services/fechamento.py:639`, `:683`, `:687`), efeitos de ausência (`app/ponto/services/efeito_ausencia.py:47`, `:53`), crédito parcial (`app/ponto/services/credito_parcial.py:26`), grade (`app/escala/utils.py:1209`), PDF (`app/relatorios/pdf_espelho.py:333`, `:406`), esmeril (`app/ponto/services/esmeril_espelho.py:164`), diff do calculador (`app/ponto/management/commands/diff_calculador.py:412`) e diff do extrato (`app/relatorios/management/commands/diff_extrato_parcial.py:67`).
-- **Motor/calculador recebem a ausência por alimentação:** motor lê `dias_com_ausencia_inteira` e zera pontualidade (`app/ponto/motor_calculo_v2.py:1085`, `:1092`, `:1095`); calculador passa a ausência do dia (`app/ponto/calculador/alimentacao.py:532`) ao contexto que empresta o teto do motor (`app/ponto/calculador/regras.py:120`, `:195`). O tipo férias abona no catálogo (`app/ponto/catalogo/ausencias.py:101`).
-- **Cartório, estado do dia, espelho e calendário:** cartório detecta fato novo por qualquer ausência (`app/ponto/services/cartorio.py:355`), consulta cobertura (`:1179`, `:1306`) e precedência (`:1948`); espelho lê cobrança e folha (`app/ponto/services/espelho.py:582`, `:588`); calendário idem (`app/colaboradores/services/calendario.py:485`, `:533`) e precedência (`:507`); estado do dia recebe fatos (`app/ponto/status_dia.py:181`, `:298`, `:304`); serviço do dia (`app/ponto/services/dia_do_colab.py:15`); cartões e história (`app/ponto/services/dia_decidido.py:332`, `:550`, `:587`).
-- **Telas/API/documentos genéricos:** painel de fechamento (`app/ponto/views.py:1002`), painel de justificativa (`:1680`), painel da ausência/irmãs (`:2076`), lista com vigência ou PK direto (`:2179`, `:2181`), API espelho (`app/api/views.py:1575`), API de ausências (`:1861`), API de documento (`:3092`), detalhe 360 (`app/colaboradores/services/detalhe.py:104`), histórico de chamados do colaborador (`app/chamados/services/historico.py:129`), usos do catálogo (`app/ponto/views_tipos_ausencia.py:24`), absenteísmo/CSV (`app/relatorios/views.py:197`, `:205`), resumo de inteligência (`app/inteligencia/resumo.py:39`, `:44`, `:45`), painel de inteligência (`app/inteligencia/views.py:71`, `:84`), detalhe “top faltosos” (`:239`, `:242`), PDF de inteligência (`:516`, `:538`).
-- **Cobrança e disponibilidade:** faltas de hoje (`app/ponto/services/faltas_de_hoje.py:59`, `:61`), deslogados (`app/ponto/services/deslogados.py:163`, `:166`), janela de abriu/não bateu via fatos (`app/ponto/services/abriu_nao_bateu.py:123`), jornada (`app/escala/servico_jornada.py:342`), ranking (`app/escala/services/furos_diarios.py:222`), cadastro versus realidade (`app/escala/services/cadastro_realidade.py:589`), semana do posto (`app/escala/services/semana_do_posto.py:177`), pendências cadastrais da API mensageria (`app/api/views_mensageria.py:1243`), adesão (`app/chamados/services/adesao.py:68`).
-- **Chamados/disputas:** célula furada e via da resposta (`app/chamados/juizes.py:448`, `:1475`), data da ausência (`:2021`), cobertura para materialização (`app/chamados/services/materializacao.py:78`), devolução das perguntas absorvidas (`:645`), suspensão por ausência (`app/chamados/services/silencio_ausencia.py:65`), dono do fio (`app/chamados/services/vigia_fio.py:308`), reavaliação de feriado via fatos (`app/chamados/services/feriado_reavaliar.py:33`).
-- **Comandos que consultam cobertura geral:** reconciliar grade (`app/ponto/management/commands/reconciliar_grade.py:401`), alertas de turno (`app/ponto/management/commands/processar_alertas_turno.py:97`), alertas avançados (`app/ponto/management/commands/processar_alertas_avancados.py:116`), suprajuiz (`app/ponto/management/commands/supra_juiz.py:216`), detectar ausências (`app/ponto/management/commands/detectar_ausencias.py:815`), emitir turno aberto retroativo (`app/ponto/management/commands/emitir_turno_aberto_retroativo.py:108`), emitir furo retroativo (`app/ponto/management/commands/emitir_furo_retroativo.py:99`), backfill de insumos (`app/ponto/management/commands/backfill_b5_insumos.py:72`), vigia B5 (`app/ponto/management/commands/vigia_b5_ausencia.py:68`), ausência sem efeito (`app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:41`, `:44`), rejulgar ausência em folga (`app/ponto/management/commands/rejulgar_ausencia_em_folga.py:33`, `:56`), auditar invariantes de chamados (`app/chamados/management/commands/auditar_invariantes_chamados.py:162`, `:642`, `:659`, `:1466`).
-- **Vigias/fila de decisão e eventos:** vigia de ausência/veredito (`app/ponto/services/vigia_ausencia_veredito.py:46`, `:53`), vigia da família (`app/ponto/services/vigia_ausencia.py:59`, `:108`), contadores DP (`app/ponto/services/ausencia.py:963`), escalada por documento (`:992`), universo de chamados de ausência decidida (`:715`), comando correspondente (`app/ponto/management/commands/fechar_chamados_ausencia.py:25`), reabrir chamados (`app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:33`), rejulgar status pelo tipo (`app/ponto/management/commands/rejulgar_status_por_tipo.py:23`, `:32`), duração incoerente (`app/ponto/management/commands/curar_ausencia_sem_fim.py:29`), bloqueante sem fim conforme catálogo (`app/ponto/management/commands/ausencia_bloqueante_sem_fim.py:24`, `:27`), contagem/limpeza de ensaio (`app/ponto/management/commands/zerar_dados_operacionais.py:49`, `:90`), sinais de inclusão/exclusão (`app/ponto/signals.py:124`, `:143`, `:150`).
-- **Leitura por referência recebida em outra operação:** troca de plantão relê e trava as duas ausências por PK (`app/ponto/portas/celula.py:657`); nenhuma restrição por tipo nessa carga (`:658`).
-
-Exclusões conferidas:
-
-- Mensageria de ausências DP **exclui férias** na autoridade (`app/ponto/turnos.py:3067`, `:3068`), usada nas duas leituras da mensageria (`app/api/views_mensageria.py:701`, `:1000`).
-- Rubrica 8932 **exclui férias**, embora cobertura e motor continuem recebendo o espelho (`app/folha/export.py:197`, `:198`, `:205`; `app/ponto/catalogo/ausencias.py:290`).
-- Score de assiduidade/geração de alertas **excluem tipos que abonam**, portanto férias conforme catálogo (`app/inteligencia/management/commands/calcular_scores.py:12`; `app/inteligencia/management/commands/gerar_alertas.py:55`; `app/ponto/catalogo/ausencias.py:101`).
-- Ausências médicas históricas/alertas filtram tipos médicos, portanto não são leitores de férias (`app/ponto/views.py:2837`; `app/relatorios/views.py:277`; `app/ponto/services/alertas_ausencia.py:49`).
-- O ramo genérico do aviso de batida restringe a tipos com frase cadastrada; hoje suas frases são maternidade/INSS, e férias é tratada antes por `em_gozo_hoje` (`app/ponto/services/aviso_da_batida.py:43`, `:73`, `:79`, `:88`).
-- Os contadores de falta de documento/aprovador excluem férias por autoridades/declaração, mas mantêm números específicos de férias no payload (`app/ponto/services/vigia_ausencia.py:43`, `:113`, `:120`, `:215`).
-
-Não afirmar que uma ausência reaparecida afeta apenas a exibição: cobertura aprovada de férias pode abonar o dia e entrar no teto de pontualidade, enquanto `em_gozo_hoje` exclui o agendamento cancelado (`app/ponto/services/efeito_ausencia.py:53`, `:59`, `:65`; `app/ponto/motor_calculo_v2.py:1092`; `app/ferias/services.py:51`). Impacto concreto em produção **[não verificado]**.
-
-## 06/11 22:29 · sessao be4f014968c2 · - · - · origem=Ronald (tmux)
-
-Inventário complementar aberto, incluindo aliases; as consultas genéricas abaixo não excluem `ferias` por tipo.
-
-| App | Função e ponto de leitura |
-|---|---|
-| chamados | `_celula_furada`: cobertura e explicação integral, `app/chamados/juizes.py:448`; `via_pelo_fato`: cobertura aprovada, `:1475`; `_dia_da_ausencia`: lookup por PK sem filtro de tipo, `:2021`. |
-| chamados | `historico_do_colab`: qualquer ausência criada na janela, `app/chamados/services/historico.py:129`. |
-| chamados | `_coberto_por_ausencia`: cobertura genérica, `app/chamados/services/materializacao.py:78`. Consumidores abertos: `_criar_pergunta_se_couber`, `app/chamados/services/disputa_emissao.py:763`; `retencao`, `app/chamados/services/pergunta_no_app.py:90`; `reemitir_chamado_do_dia`, alias `_aus_c2`, `app/chamados/reconciliador.py:784`, `:845`. |
-| chamados | `sincronizar_adesao`: exclui somente falta da suspensão, `app/chamados/services/adesao.py:68`. |
-| chamados | `reconciliar_por_ausencia`: cobertura, status aberto/aprovado, `app/chamados/services/silencio_ausencia.py:65`, `:77`, `:93`; chamado por `reconciliar_colab`, `:127`. |
-| chamados | `dono_fora_do_fio`: cobertura e status aberto, `app/chamados/services/vigia_fio.py:308`. |
-| chamados | Auditor `_cobre_ausencia_i21`, `app/chamados/management/commands/auditar_invariantes_chamados.py:162`; `Command.handle`, `:642`, `:659`, `:1466`; `contraprova_piso` lê somente o ID da ausência lavrada na célula, `:430`. |
-| chamados | `devolver_absorvidas_da_ausencia_rejeitada` verifica outra cobertura genérica, `app/chamados/services/materializacao.py:645`; a seleção de perguntas absorvidas restringe a tipos de escape, `:602-604`. |
-| escala | `_marcar_ausencias`: cobertura para folha, campos tipo/label/PK/parcial, `app/escala/utils.py:1209`; aplica férias como ausência, `:1231`, `:1241-1244`. |
-| escala | `classificar_falta`: todas as ausências da janela por alias `_aus_periodo`, `app/escala/servico_jornada.py:342`. |
-| escala | `ranking_colabs`: cobertura genérica e rótulo, exclui apenas falta, `app/escala/services/furos_diarios.py:222-224`. |
-| escala | `_afastado_sem_registro`: universo inicial de afastados, mas cobertura de qualquer tipo nos dias da janela, `app/escala/services/cadastro_realidade.py:573`, `:589`. |
-| colaboradores | `contexto_detalhe`: dez ausências recentes, sem filtro de tipo/status, `app/colaboradores/services/detalhe.py:104-107`. |
-| colaboradores | `contexto_calendario`: aliases `_cap`/`_cap_folha`, decisões do período e consumo pelo rótulo do dia, `app/colaboradores/services/calendario.py:485`, `:533`, `:534`, `:715-717`. |
-| core | `_aplicar_ausencia` lê o retorno da criação para auditoria e resposta, `app/core/views_ia.py:985-994`; não é consulta genérica do acervo. Outras consultas diretas de registros `Ausencia` em core: [não verificado]. |
-
-Exclusões confirmadas:
-
-- `afastados_hoje` e `palavra`, em `app/colaboradores/services/situacao_exibida.py:46`, `:63`, e a disponibilidade em `app/colaboradores/views.py:2911` chamam autoridades restritas a `afastamento_inss`; portanto essas consultas não leem férias (`app/ponto/turnos.py:2702`, `:2713`).
-- `core/admin.py` é infraestrutura que enumera os campos do modelo para readonly, não consulta de registros (`app/core/admin.py:46-50`, `:68-75`).
-- `_d4_em_lote` carrega `CargaDaJanela` para turnos e D4, sem consumir explicitamente `Ausencia` no corpo aberto (`app/core/services/painel_op.py:327-338`).
-
-A cobertura genérica admite férias; suas restrições por efeito são status aprovado para folha e exclusão de rejeitada para cobrança (`app/ponto/turnos.py:2514-2517`, `:2529-2533`).
-
-## 06/11 22:28 · sessao 1509e73a8ffd · - · - · origem=Ronald (tmux)
-
-Complemento dos leitores genéricos aberto no código:
-
-| Sítio/função | Leitura e tratamento de férias |
-|---|---|
-| `api.views.api_ausencias` GET | Lista as últimas 30 Ausencias do colaborador **sem excluir tipo/status**; serializa tipo, data, status, descrição, minutos e criação. Inclui `ferias`. `app/api/views.py:1861`, `:1870`, `:1873`, `:1875`, `:1877`, `:1878` |
-| `api.views.api_chamados_v2` | Busca Ausencia pelo ID do contexto e colaborador, sem filtro de tipo; lê documento/status para oferecer anexo. O ramo exige status literal `pendente`. `app/api/views.py:1059`, `:1066`, `:1071` |
-| `api.views.api_espelho_v2` | Carrega cobertura `para='cobranca'`, sem exclusão local de férias; lê o status para acrescentar `ausencia_pendente`. `app/api/views.py:1574`, `:1575`, `:1584`, `:1586` |
-| `api.views.api_ausencia_documento` | Busca qualquer tipo pelo ID e colaborador; só aceita estados de `ABERTAS`. Assim a Ausencia de férias aprovada pode ser lida, mas o anexo é recusado pela condição de estado. `app/api/views.py:3092`, `:3101`, `:3102`, `:3103` |
-| `api_mensageria_ausencias` | Agrega tipo/status por `ausencias_do_dp`; **exclui férias** por delegação. `app/api/views_mensageria.py:736`, `:741`, `:742`, `:743`; exclusão efetiva em `app/ponto/turnos.py:3067`, `:3068` |
-| `api_mensageria_pessoa` | Lista ausências pela mesma porta que exclui férias; lê datas/tipo/status. O bloco de férias usa os serviços de Agendamento separadamente. `app/api/views_mensageria.py:1030`, `:1031`, `:1032`, `:1044`, `:1045` |
-| `folha.export.ausencias_na_janela` | Leitor genérico de Ausencias aprovadas que intersectam a janela; aceita qualquer tipo recebido, inclusive férias. `app/folha/export.py:71`, `:87`, `:88`, `:90` |
-| `folha.export.datas_no_periodo`, `_datas_ausencia_tipo_janela`, `_datas_ausencia_tipo` | Leem tipo/data/data_fim e expandem pela autoridade `dias_da_ausencia`; não excluem férias localmente. `app/folha/export.py:63`, `:69`, `:70`, `:146`, `:160`, `:161`, `:165` |
-| `folha.export.minutos_de_falta_por_dia`, `datas_falta_janela` | Filtram pelos tipos de `descontam_vigentes`, não por férias literal. `app/folha/export.py:138`, `:140`, `:179`, `:181` |
-| `folha.export.tipos_abonados_8932`, `datas_abonadas` | **Excluem férias expressamente** de 8932, independentemente do efeito cadastrado. `app/folha/export.py:193`, `:198`, `:201`, `:204`, `:205`; `app/ponto/catalogo/ausencias.py:290` |
-| `relatorios.views.absenteismo` | Inclui qualquer tipo aprovado, portanto férias; lê tipo/datas, agrupa ocorrências e dias pelo juiz. Entrega tela e CSV. `app/relatorios/views.py:197`, `:204`, `:205`, `:209`, `:214`, `:215`, `:218`, `:234` |
-| `relatorios.views.atestados_acumulados` | Filtra pelos tipos do catálogo vivo `TIPOS_MEDICOS`; não há exclusão literal de férias. Na semente, férias têm `medico=False`; classificação de produção **[não verificado]**. `app/relatorios/views.py:277`, `:282`, `:283`; `app/ponto/catalogo/ausencias.py:101`, `:385`, `:387` |
-| `relatorios.pdf_espelho._coletar_dados_espelho` | Lê efeitos da ausência por delegação para obter justificadas, suprimidas, minutos parciais e dias inteiros, abrangendo férias conforme a cobertura. `app/relatorios/pdf_espelho.py:332`, `:333`, `:334`, `:335`, `:336`, `:406` |
-| `inteligencia.views.index` | Conta ausências por tipo sem excluir férias nem status; “sem ausência” também consulta todas as Ausencias. `app/inteligencia/views.py:71`, `:84`, `:127` |
-| `inteligencia.views.api_kpi` | “Sem ausência” considera qualquer tipo; “Top faltosos” conta qualquer ausência no período, incluindo férias. `app/inteligencia/views.py:231`, `:232`, `:238`, `:239`, `:242`, `:243`, `:244` |
-| `inteligencia.views.exportar_pdf` | O ranking “Top Faltosos” também conta qualquer Ausencia do período, sem excluir férias/status. `app/inteligencia/views.py:516`, `:538`, `:539`, `:611`, `:613`, `:614` |
-| `inteligencia.resumo.resumo_colaborador` | Lista todas as ausências recentes; totais de faltas/justificadas usam as aprovadas e o efeito vivo do catálogo. `app/inteligencia/resumo.py:39`, `:42`, `:43`, `:44`, `:45` |
-| `_score_assiduidade` e `gerar_alertas.Command.handle` | Excluem rejeitadas e tipos de `abonam_vigentes`; férias ficam fora **se** continuarem abonadas no catálogo vivo. A semente diz ABONA, mas cadastro de produção **[não verificado]**. `app/inteligencia/management/commands/calcular_scores.py:12`, `:14`; `app/inteligencia/management/commands/gerar_alertas.py:55`, `:58`; `app/ponto/catalogo/ausencias.py:101`, `:249`, `:250`, `:278` |
-
-Templates abertos que apresentam essas leituras:
-
-- Absenteísmo apresenta tipo, ocorrências e dias, incluindo o grupo férias recebido da view. `app/templates/relatorios/absenteismo.html:36`, `:41`, `:42`, `:43`.
-- Inteligência apresenta a pizza de tipos; “Top faltosos” e “Sem ausência” abrem os endpoints acima. `app/templates/inteligencia/index.html:91`, `:99`, `:141`, `:381`, `:382`.
-- Fio do colaborador apresenta justificadas e as cinco Ausencias recentes, sem excluir férias. `app/templates/chamados/fio_colaborador.html:59`, `:60`, `:62`.
-- Perfil do colaborador apresenta `ausencias_360` com data/tipo; a origem desse contexto não foi aberta nesta complementação **[não verificado]**. `app/templates/colaboradores/detalhe.html:63`, `:72`, `:74`, `:75`.
-- Espelho apresenta o tipo e status da ausência recebida no dia, sem exclusão de férias no template. `app/templates/ponto/espelho.html:191`.
-- Lista de Ausencias percorre os registros recebidos e apresenta seu tipo. `app/templates/ponto/ausencias.html:142`, `:157`.
-
-`pautas.semanal.escrever_semanal` recebe contadores prontos em `linhas`, sem consultar Ausencia nesse caminho; a decisão sobre quais contadores estão acesos pertence ao chamador. `app/pautas/semanal.py:202`, `:206`, `:207`, `:214`. Os rótulos de problemas de ausência são apresentados nesse módulo, mas não constituem leitura da tabela Ausencia. `app/pautas/semanal.py:56`, `:58`, `:62`. Outros caminhos indiretos de pautas: **[não verificado]**.
-
-_2634 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2637 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
