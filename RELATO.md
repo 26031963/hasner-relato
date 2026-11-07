@@ -1,5 +1,7 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: codex_pergunta.sh | pid=647621
+ESPERANDO: trava_teste.sh | pid=1515944 | arquivo=logs/ferias2x/suite_v4.log
+V2-BUGS i2 22:38: volta 2 entregue cc628e9d (raia wt-v2i2-212416): (b) dobra+split em todo periodo do feriado, (c) FT do partido pelo dia da jornada, (d) split pelo par EFETIVO, (e) minutos_noturnos s1_fim_efetivo=min(fim,s2_ini), (f) promocao ft_feriado pelo dia do turno (dia_pago._dia_de); RED por valor logs/v2bugs/i2/red2_*.log, GREEN --only ponto Ran 4643 OK. INCOMPLETO declarado: _ft_certa e MotorComercial.calcular_periodo por data civil; (e) fora de feriado nao medido. DESPACHO: verificador v2 -> Codex (v2.r); DIFF de folha comp corrente 19aeede1 x cc628e9d -> sombra simular_folha par v2i2v2 (par_v2.log), prova do (e) fora de feriado
+FERIAS-CANCELAR-2X 22:36: volta 4 b05123bf (P1 Codex v3: alinhar_status_por_data sempre rele sob trava, sem atalho pela foto); RED red_p1.log, GREEN green_p1.log Ran 227 OK, ruff limpo; suite inteira na raia -> logs/ferias2x/suite_v4.log; P2-P6 anexo do opus
 ERRO-BOBO L-123-MEDIDA-EM-PY: o opus final reprovou 7a2e3bc5 por 3 defeitos de IMPLEMENTACAO, sem pergunta de lei (aval Ronald 21:4x logs/akmed/aval_v5.txt: os 3 PROCEDEM, nenhuma lei nova, rearma B3): PAPEL_DO_MODULO solto no arquivo em vez de registro central fechado; selo julgava pelo DADO_MEDIDO do HEAD do push e nao do commit; handoff lia N/20 por regex no arquivo cru (comentario falsificava). Volta 5 cura os tres.
 PLANTIO (i) 22:17 ENTREGUE e PARADO (insumo E1 (b)): raia wt-plantio-185958 @18f1988b: chamados/services/fio.py::rechavear_data_evento (porta unica, trilha) + command migrar_data_evento_dia_do_turno (dry default, PAREI exportada/universo, reversao 600) + 9 testes; GREEN alvo 25 OK (mig_alvo4.log). INCOMPLETO: RED so estrutural (ImportError/AttributeError, nao morde o defeito -- LEI-AKITA 5 deve na E1); suite_mig.log VERMELHA 22:21 (FAILED failures=3, Ran 8053, rc=1: command sem casa B6.1; classificar:129 le materializada_em cru; fio.py:903 rechavear fora dos atos declarados) -- vai a lista da E1; sem Codex verificador nem opus; sombra plantio_dry.py nao rodado (faltam descarimbo real, pergunta_viva antes/depois, 81/13 do aval ao lado); migracao tem de ir no MESMO ato do deploy (emissor curado vira as vivas em colisao).
 HOLERITE-ZIP 22:16: uso da v1 medido (haiku, log saas_ui desde 15/09): 3 GET e 0 POST em /holerite/upload-lote/ (todos 07/10); a v2 /holerite/lote/ teve 6 POST. Destino L-111, atras de E1/E2 (COMPLEMENTO).
@@ -5366,6 +5368,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 
 ## ALARMES DA ESTEIRA
+
+**06/11 22:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 00:00.
 
 **06/11 03:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 04:45.
 
