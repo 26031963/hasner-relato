@@ -1,5 +1,7 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: trava_teste.sh | pid=1343804
+ESPERANDO: trava_teste.sh | pid=2610105
+VAGA 01:0x (PUSH-ANTES-DA-E2): construtor do V2 i2 entregou e liberou a vaga -> L-123-MEDIDA-EM-PY v5 aberto na raia wt-akmed4-205205 (brief logs/akmed/brief_v5.md); vagas = E1 + L-123 v5; E2 depois do push.
+V2 i2 01:0x: volta 5 2cb3a055 (T3-2 retirado, F10h PINADO+gemeo; green5 --only ponto folha core Ran 6923 OK). Suite INTEIRA na raia -> logs/v2bugs/i2/suite_v5.log; DIFF par_v5 bloqueado por sombra sem ensaio de 07/11 (cron 04:11) -> par_v5_agendado.sh roda apos 04:40; opus final depois da suite.
 DESPACHO PUSH-ANTES-DA-E2 23:38: aval recebido (logs/akmed/aval_push_antes_e2.txt); vagas hoje = E1 + V2 i2 volta 4 (teto 2); a 1a que abrir vai ao L-123 v5 (brief logs/akmed/brief_v5.md), E2 depois do push.
 V2 i2 23:4x: Codex v3 REPROVA (logs/v2bugs/i2/v3.r); triagem_v3.txt: T3-1 fallback civil em _dia_da_jornada_do_par (LEI-AKITA 1), T3-2 cauda noturna entre pares, T3-3 texto do alerta -> volta 4 em construtor; DIFF par_v3 comp 11: emp2 mudaram=8, TXT=0; voltas Codex=3 -> proxima e opus final.
 RESPONDIDA por aval Ronald 07/11 00:57 (logs/f7g/aval.txt; obra PRORROGACAO-NOTURNA-UMA-JORNADA na fila): F7g-PRORROGACAO-DA-JORNADA (07/11 00:3x) -- pausa que o pareador fecha (19:00E/04:30S/05:30E/07:00S, 12x36 noturno, CCT com prorrogacao pos-05h) e UMA jornada (Art.71 par.1 + 73 par.5 + Sum.60-II: 480 relogio/548,57 legais) ou DUAS (a casa hoje: 390/445,71)? Volta 4 do V2 i2 (950a3749) decidia por 480 e movia noturno FORA de feriado; retirada na volta 5 (PARADA 3), F7g e F10h ficam PINADOS. Item 2 segue sem isso.
