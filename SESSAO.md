@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 10:31:05.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (121.6 MB). Acoes na janela: **563**.
+**Medido em 07/11/2026 10:36:38.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (121.6 MB). Acoes na janela: **549**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -559,17 +559,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 22:37:13 | Bash |  | `cd /home/ronald/saas-hasner; ls -la logs/v2bugs/i2/ \| tail -25; cd /home/ronald/wt-v2i2-212416 && git log --oneline -3 && git diff --stat e962c45b..cc628e9d` |
 | 22:37:06 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 2p app/docs/RELATO.md; sed -i '2s/.*/ESPERANDO: trava_teste.sh \| pid=1515944 \| arquivo=logs\/ferias2x\/suite_v4.log/' app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'/home/ronald/saas-hasner/bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
 | 22:36:41 | Bash |  | `cd /home/ronald/saas-hasner; L=logs/ferias2x/suite_v4.log; : > $L; chmod 600 $L; setsid bash -c "bin/suite.sh --dir /home/ronald/wt-ferias2x-212952 --espera 5400 > $L 2>&1; echo rc=\$? >> $L" </dev/null >/dev/null 2>&1 & /usr/bin/sleep 20; bin/trava_teste.sh --quem; head -5 $L` |
-| 22:36:37 | Bash |  | `cd /home/ronald/saas-hasner/app/docs; /bin/grep -ic "escritor unico" GLOSSARIO.md PLANO-PADROES.md` |
-| 22:36:34 | Bash |  | `cd /home/ronald/wt-ferias2x-212952 && git add app/ferias/services.py app/ferias/test_cancelar_2x.py && git commit -q -F - <<'EOF' FERIAS-CANCELAR-2X volta 4 (P1 do Codex v3): alinhar_status_por_data sempre rele a linha sob a trava O atalho `ag.status == novo` julgava pela FOTO: a linha podia ter sido cancelada/remarcada depois, e o escritor devolvia a foto velha ao chamador. Agora relê sempre sob  ...` |
-| 22:36:27 | Bash |  | `cd /home/ronald/saas-hasner; source bin/recursos.sh; W=/home/ronald/wt-ferias2x-212952/app; ls $W/ruff.toml && docker run --rm $TESTE_DOCKER --tmpfs /app/.ruff_cache -v "$W:/app:ro" -w /app saas-hasner-core:latest ruff check ferias/services.py ferias/test_cancelar_2x.py --output-format concise --no-cache; echo rc=$?; cd /home/ronald/wt-ferias2x-212952 && git status --porcelain \| head` |
-| 22:35:17 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 10,30p bin/esmeril_da_copia.sh` |
-| 22:35:15 | Bash |  | `cd /home/ronald/saas-hasner; grep -rn "ruff check" bin/*.sh \| head -3` |
-| 22:35:12 | Bash |  | `cd /home/ronald/wt-ferias2x-212952/app; (command -v ruff && ruff check --config ruff.toml ferias/services.py ferias/test_cancelar_2x.py) 2>&1 \| tail -3; ls ruff.toml ../ruff.toml 2>/dev/null` |
-| 22:34:36 | Bash |  | `cd /home/ronald/wt-ferias2x-212952/app; python3 - <<'EOF' p='ferias/services.py'; s=open(p).read() a=""" pedido. -> ag\"\"\" if ag.status == novo: return ag from django.db import transaction as _tx """ assert s.count(a)==1 s=s.replace(a,""" pedido. Sem atalho pela foto: `ag.status == novo` na foto nao diz nada da linha (pode ter sido cancelada ou remarcada depois), entao a linha e sempre relida so ...` |
-| 22:32:59 | Bash |  | `cd /home/ronald/saas-hasner; (bin/suite.sh --dir /home/ronald/wt-ferias2x-212952 --only "ferias.test_cancelar_2x" --espera 3600 > logs/ferias2x/red_p1.log 2>&1; echo rc=$? >> logs/ferias2x/red_p1.log) ; chmod 600 logs/ferias2x/red_p1.log; grep -E "^(FAIL\|ERROR):\|AssertionError\|^Ran\|^(OK\|FAILED)\|rc=" logs/ferias2x/red_p1.log \| tail -8` |
-| 22:32:55 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 1,40p bin/suite.sh \| grep -E "^#" \| head -30` |
-| 22:32:51 | Bash |  | `cd /home/ronald/wt-ferias2x-212952/app; python3 - <<'EOF' p='ferias/test_cancelar_2x.py'; s=open(p).read() anc=""" def test_cron_sem_cancelamento_segue_alinhando(self): self._janela_de_hoje() self._cron_com_corrida(lambda: None) self.assertEqual(self._estado()[:2], (30, 'em_gozo')) """ assert s.count(anc)==1 novo=anc+""" def test_escritor_devolve_a_linha_do_banco_mesmo_quando_a_foto_ja_bate(self): ...` |
-| 22:32:44 | Bash |  | `cd /home/ronald/wt-ferias2x-212952/app; sed -n 165,216p ferias/test_cancelar_2x.py` |
-| 22:32:38 | Bash |  | `cd /home/ronald/wt-ferias2x-212952/app; sed -n 1,80p ferias/test_cancelar_2x.py` |
-| 22:32:37 | Bash |  | `cd /home/ronald/wt-ferias2x-212952/app; grep -n "def test_\\|def _\\|^class\\|alinhar_status_por_data" ferias/test_cancelar_2x.py \| head -50` |
-| 22:32:33 | Bash |  | `cd /home/ronald/wt-ferias2x-212952/app; git status --porcelain \| head; grep -n "def alinhar_status_por_data" -A28 ferias/services.py` |
