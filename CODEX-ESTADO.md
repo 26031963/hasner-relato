@@ -1,7 +1,105 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 16:20** · publicado em **07/11/2026 16:20** (UTC-3)
+> Ultima resposta processada: **07/11/2026 16:34** · publicado em **07/11/2026 16:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 16:34 · sessao 076a0a8f57fe · FIO-E0-V4-E2 · verificador · origem=Code
+
+**Há dois bloqueios para a equivalência universal:** o delta passa a compartilhar uma Empresa mutável entre FKs e antecipa leituras que N chamadas unitárias podem dispensar. São consequências do código; incidência em produção e resultado da suíte completa: [nao verificado]. Referências: [juizes.py:977](app/chamados/juizes.py:977), [juizes.py:997](app/chamados/juizes.py:997).
+
+1. **Empresa compartilhada no cache das FKs — bloqueante, introduzido no delta.**
+
+   `in_bulk` fornece um objeto por PK, e `set_cached_value` instala **esse mesmo objeto** em cada colaborador frio daquela empresa, fora do request compartilhado. Portanto, depois do lote, dois colaboradores distintos podem ter `a.empresa is b.empresa`. Alterar somente `a.empresa.dia_inicio_competencia` também altera o que `b.empresa` responde. N chamadas unitárias com instâncias frias independentes não compartilham esse objeto entre chamadas. O próprio teste novo considera legítima a alteração do corte somente em memória. [juizes.py:987](app/chamados/juizes.py:987), [juizes.py:997](app/chamados/juizes.py:997), [test_e2_tarefa_do_dia.py:1224](app/chamados/tests/test_e2_tarefa_do_dia.py:1224).
+
+   **Quem escreve:** o juiz escreve o cache da FK em `997` e o memo em `995`, `998` e `1000`. **Quem lê depois:** o teste lê diretamente `c.empresa`; existe também leitor de produção após `pergunta_viva`, em `vigia_fio`. Esse leitor de produção já usa `select_related`, portanto sua existência não prova incidência desse defeito ali. [juizes.py:995](app/chamados/juizes.py:995), [test_e2_tarefa_do_dia.py:1252](app/chamados/tests/test_e2_tarefa_do_dia.py:1252), [vigia_fio.py:807](app/chamados/services/vigia_fio.py:807), [vigia_fio.py:813](app/chamados/services/vigia_fio.py:813).
+
+2. **Leitura antecipada quebra lote = N unitárias — bloqueante para a promessa “toda combinação”.**
+
+   Contraexemplo com request inicialmente vazio: primeiro par com objeto não-modelo que possui `empresa`; segundo par com outro objeto não-modelo, mesmo `empresa_id`, mas sem atributo `empresa`. O lote lê ambos antes de preencher o memo e lança `AttributeError` no segundo. Nas unitárias, a primeira preenche o memo do request; a segunda encontra a chave e dispensa a leitura do atributo, podendo responder normalmente. Isso foi reproduzido em memória com as funções extraídas e dependências simuladas; execução com ORM real: [nao verificado]. O caminho está em [juizes.py:943](app/chamados/juizes.py:943), [juizes.py:977](app/chamados/juizes.py:977), [juizes.py:993](app/chamados/juizes.py:993), [juizes.py:1038](app/chamados/juizes.py:1038).
+
+   Para objetos ordinários, atributos completos e estado estável, o delta resolve os casos apresentados de FK quente, FK fria e `empresa=None`; isso não estabelece equivalência universal de exceções nem dos objetos deixados nos caches. [juizes.py:942](app/chamados/juizes.py:942), [juizes.py:994](app/chamados/juizes.py:994).
+
+3. **A Empresa efetiva tem precedência de memo — limite residual, não regressão nova de v2.**
+
+   A seleção efetiva por par é esta. [juizes.py:978](app/chamados/juizes.py:978), [juizes.py:993](app/chamados/juizes.py:993):
+
+   | Situação | Empresa que decide a janela |
+   |---|---|
+   | Chave já no memo | A Empresa do memo, mesmo que a FK carregue outra |
+   | Sem memo, FK quente | A Empresa daquela FK |
+   | Sem memo, não-modelo | Seu atributo `empresa`, inclusive `None` |
+   | Sem memo, FK fria encontrada | O objeto retornado pelo `in_bulk` |
+   | PK ausente do `in_bulk` | A leitura direta `c.empresa`, inclusive sua exceção |
+
+   Referências dos ramos: [juizes.py:942](app/chamados/juizes.py:942), [juizes.py:943](app/chamados/juizes.py:943), [juizes.py:995](app/chamados/juizes.py:995), [juizes.py:997](app/chamados/juizes.py:997), [juizes.py:1000](app/chamados/juizes.py:1000).
+
+   No request, o memo pertence ao request e a chave de Empresa contém somente `empresa_id`. Assim, dois colaboradores com cortes em memória 21/22 podem ser julgados pelo primeiro corte. **As unitárias no mesmo request também fazem isso**: não seria correto apresentar esse caso, sozinho, como divergência lote/unitárias. Empresas com IDs diferentes têm chaves distintas. [juizes.py:992](app/chamados/juizes.py:992), [juizes.py:1038](app/chamados/juizes.py:1038).
+
+   Em `CargaDaTarefa`, os pares usam os colaboradores recarregados em `_cadastro`; a Empresa quente do objeto entregue pelo chamador não é necessariamente a usada pelo juiz, e o aquecimento ocorre nessa instância interna. [tarefa_do_dia.py:317](app/chamados/services/tarefa_do_dia.py:317), [tarefa_do_dia.py:366](app/chamados/services/tarefa_do_dia.py:366).
+
+4. **Queries: constância condicionada — não é bloqueio novo por si só.**
+
+   O desenho faz uma chamada `in_bulk`, uma consulta por chave nova **empresa × competência**, mais as etapas em lote do toque. Portanto, não é constante para qualquer crescimento de colaboradores/dias: novas empresas ou competências aumentam as consultas de tranca. Os testes comparam uma empresa e dias da mesma competência. [juizes.py:987](app/chamados/juizes.py:987), [juizes.py:1002](app/chamados/juizes.py:1002), [fechamento.py:1463](app/ponto/services/fechamento.py:1463), [test_e2_tarefa_do_dia.py:1146](app/chamados/tests/test_e2_tarefa_do_dia.py:1146).
+
+   **Há caminhos de acesso individual:** se o `in_bulk` omitir a Empresa e a leitura direta conseguir resolvê-la, `1000` pode consultar por colaborador; se a FK estiver realmente quebrada, a chamada falha no primeiro acesso correspondente. Além disso, no request compartilhado, depois que o primeiro colaborador preenche o memo, os demais pulam `set_cached_value`: leituras posteriores dessas FKs podem custar uma consulta por colaborador ainda frio. Não atribuo esse N+1 à execução de `.tarefa()` sem demonstrar tal leitura nela. [juizes.py:993](app/chamados/juizes.py:993), [juizes.py:997](app/chamados/juizes.py:997), [juizes.py:1000](app/chamados/juizes.py:1000).
+
+5. **Testes novos: não identifiquei vácuo — não bloqueante; cobertura incompleta.** [nao verificado]
+
+   O teste dos cortes exige explicitamente `[True, False]`; o não-modelo exige ausência de SQL de Empresa; o aquecimento usa colaborador recém-buscado e exige zero consultas no acesso seguinte. Eles verificam efeitos relevantes, mas não cobrem compartilhamento entre duas FKs frias nem o memo compartilhado de request. [test_e2_tarefa_do_dia.py:1230](app/chamados/tests/test_e2_tarefa_do_dia.py:1230), [test_e2_tarefa_do_dia.py:1239](app/chamados/tests/test_e2_tarefa_do_dia.py:1239), [test_e2_tarefa_do_dia.py:1249](app/chamados/tests/test_e2_tarefa_do_dia.py:1249).
+
+   Nos mutantes novos do Caso10, o detector encontra a infração no próprio mutante: `getattr` pela regra de chamada e `**dict` pela chave constante. A verificação AST isolada encontrou a fonte-base limpa e ambos os mutantes detectados; portanto, eles não passam apoiados numa infração prévia. [test_e2_tarefa_do_dia.py:1278](app/chamados/tests/test_e2_tarefa_do_dia.py:1278), [test_e2_tarefa_do_dia.py:1282](app/chamados/tests/test_e2_tarefa_do_dia.py:1282), [test_e2_tarefa_do_dia.py:1311](app/chamados/tests/test_e2_tarefa_do_dia.py:1311).
+
+6. **Os três descartados — nenhum demonstra bloqueio novo do delta, mas duas justificativas precisam de ressalva.**
+
+   - **Linhas de “Cobrar” versus `exists()`:** mesma contagem de consultas não significa mesmo volume. Não há `LIMIT`; o SQL usa o menor `desde` do lote e pode trazer outros dias e linhas anteriores à tranca específica de um item. A comparação individual preserva o resultado, mas a justificativa de volume estritamente limitado é excessiva. Impacto real de volume: [nao verificado]. [juizes.py:1151](app/chamados/juizes.py:1151), [juizes.py:1159](app/chamados/juizes.py:1159), [juizes.py:1166](app/chamados/juizes.py:1166).
+   - **`self._trancado` como retrato da carga:** o descarte é coerente com a materialização na construção. Porém, “nunca entre requests” não é imposto pelo código: a reutilização verifica igualdade de `agora`, sem vínculo com request ou atualização da tranca. [tarefa_do_dia.py:367](app/chamados/services/tarefa_do_dia.py:367), [tarefa_do_dia.py:402](app/chamados/services/tarefa_do_dia.py:402), [tarefa_do_dia.py:420](app/chamados/services/tarefa_do_dia.py:420).
+   - **Trancado sem célula:** descarte sustentado pelo código. A tranca retorna sem ações antes do ramo `sem_celula`, conforme a regra registrada no próprio teste. [tarefa_do_dia.py:187](app/chamados/services/tarefa_do_dia.py:187), [tarefa_do_dia.py:196](app/chamados/services/tarefa_do_dia.py:196), [test_e2_tarefa_do_dia.py:1048](app/chamados/tests/test_e2_tarefa_do_dia.py:1048).
+
+## 07/11 16:32 · sessao bffeb73bbc60 · MOTOR-LE-O-TURNO-INSTRUMENTO · construtor · origem=Code
+
+(a) Escritos:
+
+- [Instrumento puro AST](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/medida_turno_do_par.py:1).
+- [Selo SimpleTestCase e inventários](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:1).
+
+(b) Medição registrada nesta cópia:
+
+| Contador | Número | Lista integral `arquivo::funcao` |
+|---|---:|---|
+| Pareadores | **9 = A1(6) + 3 nomeados** | [REGISTRO](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:33) |
+| Derivações de dia | **85 = B1(82) + 3 nomeados** | [REGISTRO](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:42) |
+
+“A classificar pela regra”: **A2−A1=9; B2−B1=89**, com [listas integrais publicadas](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:131). Candidatos novos dessas listas não travam a catraca ([caso explícito](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:310)). [nao verificado]
+
+Referência fornecida `ffbda473`: **6/15/83/172**; cópia medida no universo `app/`: **6/15/82/171**. A diferença corresponde ao recorte que exclui `bin/`; a base informada está registrada no [instrumento](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/medida_turno_do_par.py:4). HEAD independente: [nao verificado].
+
+(c) [`NAO_VE` integral](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/medida_turno_do_par.py:31), publicado junto de cada número: homônimos e ausência de tipos; fluxo e origem interprocedural; chamadas dinâmicas, `getattr` e aliases; limites da composição estática; código fora do universo; formas sintáticas não reconhecidas; novos sítios dentro de função já contada; reescritas dos sítios nomeados. [nao verificado]
+
+(d) Localização por função AST:
+
+- `turnos_via_autoridade`: chamada resolvida para `ponto.turnos.parear_turnos`.
+- `MotorBase._turnos_do_juiz`: chamada resolvida para `ponto.turnos.turnos_de_batidas`.
+- `MotorBase.calcular_mes`: atribuição `data_jornada = _prev_dj` sob comparação de `_gap_h`.
+
+As [âncoras](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/medida_turno_do_par.py:57) não dependem de linhas. Renomear uma função âncora provoca [erro explícito](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/medida_turno_do_par.py:334).
+
+(e) Executei **18 casos no HOST**, substituindo `SimpleTestCase` por `unittest.TestCase` somente em memória, sem falhas. Desativar A1, B1, proteção das âncoras ou erro de parse produziu RED esperado. Certificação pela suite Django: **[nao verificado]**; a tentativa parou por ausência de `django`. [nao verificado]
+
+(f) Comando da suite e comandos individuais dos quatro mutantes exigidos ([casos](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:318)): [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test core.tests.test_medida_turno_do_par
+
+turno_selo=core.tests.test_medida_turno_do_par.CatracaTurnoDoParTest
+
+PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test "$turno_selo.test_MORDE_pareador_novo_sobe_contador_1_e_catraca_fica_RED"
+
+PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test "$turno_selo.test_MORDE_dia_novo_sobe_contador_2_e_catraca_fica_RED"
+
+PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test "$turno_selo.test_MORDE_renomear_cada_funcao_nomeada_falha_explicitamente"
+
+PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test "$turno_selo.test_MORDE_arquivo_invalido_e_RED_mesmo_fora_do_escopo_do_motor"
+```
 
 ## 07/11 16:20 · sessao 504cc4b15e21 · FIO-E0-V4-E1 · verificador · origem=Code
 
@@ -783,24 +881,4 @@ Contraexemplo abaixo H: canônica `p1` respondida/validada fora do destino; `x=p
 
 7. **Lista de nomes: comentário “UMA vez” já não descreve o fluxo default.** `_pergunta_raspada` roda em substituição de comando (`bin/codex_pergunta.sh:285-286`); sua `_nomes` cria `DADOS`/`NOMES` nesse subshell (`:265-268`). As atribuições não atualizam o `DADOS` externo, inicializado vazio (`:245`). Havendo anexo/sonda, `_nomes` é chamado novamente no processo externo (`:301-302`), podendo extrair uma segunda lista do banco. A promessa “UMA vez” (`:263`) não vale nesse cenário sem `CODEX_NOMES_JSON`; não é novidade introduzida pelo diff v5.
 
-## 07/11 14:41 · sessao c0b04a894150 · - · - · origem=Ronald (tmux)
-
-1. **Média — mutante `py_iso_nomes` morre com causa incidental.** O cenário monta somente o wrapper e um B3 falso; não instala `raspar_publico.py` nem `nome_no_texto.py` (`bin/tests/test_codex_pergunta.sh:68-70`). Retirado `-I` pelo mutante (`bin/tests/test_codex_pergunta.sh:499`), `app/json.py` encerra o Python com sucesso (`bin/tests/test_codex_pergunta.sh:378`, `:399`), permitindo passar `_nomes` (`bin/codex_pergunta.sh:270`). A execução então termina **rc 4 porque falta o raspador** (`bin/codex_pergunta.sh:311`); o caso morre pela mensagem “sem a lista de nomes” ausente, verificada em `bin/tests/test_codex_pergunta.sh:113`, `:401`. Não comprova vazamento nem chamada ao Codex; a execução completa do teste permanece [nao verificado].
-
-2. **Informativa — os outros três casos correspondem à classe declarada.** `pre` planta antes da primeira varredura; sem isolamento, o pre-check passa silenciosamente, mas a revalidação isolada ainda rejeita, mudando o motivo exigido (`bin/tests/test_codex_pergunta.sh:379-382`; `bin/codex_pergunta.sh:237-239`, `:386-392`). `reval` planta durante a espera e, sem isolamento nesse sítio, permite chamar o Codex (`bin/tests/test_codex_pergunta.sh:197-206`, `:385-388`; `bin/codex_pergunta.sh:386-398`). `fim` planta o módulo junto com alteração do motor e cobra rc 3, motivo e presença do módulo no inventário (`bin/tests/test_codex_pergunta.sh:389-395`, `:117-122`; `bin/codex_pergunta.sh:413-426`). Resultado integral da suíte [nao verificado].
-
-3. **Informativa — FORMA cobre as sete chamadas atuais.** Sonda somente em memória confirmou sete ocorrências e detecção ao remover isoladamente `-I` de cada uma: `bin/codex_pergunta.sh:237`, `:270`, `:278`, `:311`, `:371`, `:386`, `:413`; implementação do detector em `bin/tests/test_codex_pergunta.sh:56-63`. Não há Python host adicional direto, variável ou continuação escondida nesses lançamentos (`bin/codex_pergunta.sh:237`, `:270`, `:278`, `:311`, `:371`, `:386`, `:413`).
-
-4. **Baixa — promessa genérica da FORMA excede sua implementação.** A regex não detecta `/usr/bin/python3` nem comando montado por variável; ela exclui `/` como delimitador anterior (`bin/tests/test_codex_pergunta.sh:56`). Além disso, promete mordida por ocorrência (`:54-55`), mas o laço percorre linhas e o `sed` troca somente a primeira ocorrência por linha (`:61-63`). Essas grafias não estão entre os sete lançamentos atuais, mas o selo não assegura a promessa para futuras formas de escrita (`bin/codex_pergunta.sh:237`, `:270`, `:278`, `:311`, `:371`, `:386`, `:413`).
-
-## 07/11 14:28 · sessao 1cbdb9d63fe3 · FIO-E0-V4-E2 · leitura · origem=Code
-
-1. **TRANCA-DE-VERDADE / `competencia_trancada`:** arquivo por chamado, mediante `status_local` + `via_encerramento`; não grava célula: app/ponto/services/fechamento.py:1415. Disparador: app/ponto/services/fechamento.py:1421. Escritores: app/chamados/services/competencia_trancada.py:184 → app/chamados/models.py:1580 → app/chamados/models.py:226, app/chamados/models.py:243, app/chamados/models.py:283. Pergunta sem novo carimbo: app/chamados/services/competencia_trancada.py:178. **O44 desarquivar:** app/chamados/views_arquivar.py:70 → app/chamados/models.py:1399 → app/chamados/models.py:247; levantamento do véu e trilha: app/chamados/views_arquivar.py:77 → app/chamados/services/arquivo.py:201, app/chamados/services/arquivo.py:208, app/chamados/services/arquivo.py:209. Toque por colab+dia: app/chamados/services/cobrar_dia.py:37; leitura: app/chamados/juizes.py:955.
-
-2. **NOT READABLE** pelo `leitor_celula`: app/escala/services/leitor_celula.py:418, app/escala/services/leitor_celula.py:428, app/escala/services/leitor_celula.py:445. Leitor mais próximo do arquivo: app/chamados/views_arquivar.py:165. Leitor mais próximo da condição colab+dia: app/chamados/juizes.py:920, app/chamados/juizes.py:948, app/chamados/juizes.py:955.
-
-3. **Nenhuma leitura direta ou transitiva encontrada:** app/chamados/services/tarefa_do_dia.py:294, app/chamados/services/tarefa_do_dia.py:332, app/chamados/services/tarefa_do_dia.py:345, app/chamados/services/tarefa_do_dia.py:355, app/chamados/services/tarefa_do_dia.py:378, app/chamados/services/tarefa_do_dia.py:400. Leitores da tranca fora desse caminho: app/chamados/juizes.py:948; app/chamados/models.py:1011.
-
-4. **Leitores de `via_encerramento='competencia_trancada'`:** app/chamados/views_arquivar.py:64, app/chamados/views_arquivar.py:165; app/chamados/services/disputa_emissao.py:1662; app/chamados/services/competencia_trancada.py:259. **Outras leituras de `via_encerramento`:** app/chamados/models.py:681, app/chamados/models.py:974, app/chamados/models.py:1309, app/chamados/models.py:1342; app/chamados/services/adesao.py:90; app/ponto/services/furos_sem_cobranca.py:69, app/ponto/services/furos_sem_cobranca.py:70; app/chamados/management/commands/reabrir_orfas_enterradas.py:135; app/chamados/management/commands/auditar_invariantes_chamados.py:1068.
-
-_2756 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2758 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
