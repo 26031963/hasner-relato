@@ -1,7 +1,199 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 05:18** · publicado em **07/11/2026 05:20** (UTC-3)
+> Ultima resposta processada: **07/11/2026 06:01** · publicado em **07/11/2026 06:02** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 06:01 · sessao 761aee8c9215 · ESMERIL-ORACULO-NOTURNA · leitura · origem=Code
+
+**O achado principal é: nesta cópia, calculador e motor usam o mesmo juiz `he_noturna`, mas entregam pontas diferentes: efetivas no calculador, cruas no motor.** Portanto, a diferença demonstrável não é “conta diária versus conta por período”. (`app/ponto/calculador/alimentacao.py:83`, `app/ponto/calculador/alimentacao.py:106`, `app/ponto/calculador/regras.py:827`, `app/ponto/motor_calculo_v2.py:1015`)
+
+Os valores da sonda são o dado fornecido; sua reprodução com os insumos e a versão executada em produção permanece **[nao verificado]**.
+
+**1. Quem decide o campo gravado no oráculo**
+
+O fechamento monta `_rub_o = rubricas_por_dia(...)` e chama a mesma `lavrar`, passando `rubricas=_rub_o` e `versao='oraculo'`. Essa chamada **não passa `do_motor`**, cujo padrão é `()`. (`app/ponto/services/fechamento.py:1271`, `app/ponto/services/fechamento.py:1288`, `app/ponto/services/fechamento.py:1294`, `app/ponto/services/dia_pago.py:140`)
+
+A sequência executada é:
+
+- Primeiro, `lavrar` acumula o valor do motor: `p.minutos_extra_100_noturna / 60`. (`app/ponto/services/dia_pago.py:184`; também no ramo `ft_feriado`, `app/ponto/services/dia_pago.py:252`)
+- `_DONOS_DECLARADOS` reúne campos presentes em `valores`, em `nao_decide`, nos mapas entregues e em `do_motor`. Isso verifica **cobertura de responsabilidade**; não escolhe precedência entre valores. (`app/ponto/services/dia_pago.py:60`, `app/ponto/services/dia_pago.py:64`, `app/ponto/services/dia_pago.py:75`)
+- Com `rubricas`, campo sem dono provoca `ValueError`, antes da gravação. (`app/ponto/services/dia_pago.py:312`, `app/ponto/services/dia_pago.py:316`)
+- O laço percorre `Rubricas.valores`: se o campo pertence a `CAMPOS_DIA` e não está em `do_motor`, executa **`_L[_campo] = float(_valor or 0)` — substitui, não soma**. (`app/ponto/services/dia_pago.py:324`, `app/ponto/services/dia_pago.py:329`)
+- `nao_decide` apenas registra o motivo no detalhe; não substitui o valor previamente acumulado. (`app/ponto/services/dia_pago.py:331`)
+- As linhas resultantes são gravadas na versão recebida. (`app/ponto/services/dia_pago.py:335`, `app/ponto/services/dia_pago.py:345`, `app/ponto/services/dia_pago.py:359`)
+
+**Logo, quando `valores` contém `horas_extras_100_noturna`, quem decide o número final do oráculo é `regras.do_dia`, por essa substituição.** Se vier somente em `nao_decide`, permanece o acumulado anterior; `do_motor` protegeria explicitamente esse acumulado, mas não é passado nessa chamada. (`app/ponto/calculador/regras.py:838`, `app/ponto/services/dia_pago.py:329`, `app/ponto/services/dia_pago.py:331`, `app/ponto/services/fechamento.py:1277`)
+
+**2. Onde e como o calculador calcula HE100 noturna diária**
+
+`segmentos_do_motor` agrupa os períodos por `resultado.dia_da_jornada[id(p)]`; sem esse mapa, exclui o período e conta `sem_dia_da_jornada`. Não reparte automaticamente o turno entre os dias civis atravessados. (`app/ponto/calculador/alimentacao.py:73`, `app/ponto/calculador/alimentacao.py:78`, `app/ponto/calculador/alimentacao.py:80`)
+
+Para cada período, monta `he_pontas_por_dia` com:
+
+- `efetivo_entrada` e `efetivo_saida`;
+- `minutos_extra_50` e `minutos_extra_100` **já calculados pelo motor**;
+- os intervalos do motor, reunidos por dia. (`app/ponto/calculador/alimentacao.py:83`, `app/ponto/calculador/alimentacao.py:102`, `app/ponto/calculador/alimentacao.py:106`, `app/ponto/calculador/alimentacao.py:107`)
+
+`rubricas_por_dia` passa esses insumos a `regras.do_dia`; esta chama `he_noturna` **uma vez por período**, soma os retornos de 100% e escreve `_s100 / 60` em `horas_extras_100_noturna`. A quantidade diária de HE100 que o calculador calcula separadamente não alimenta esse split. (`app/ponto/calculador/alimentacao.py:526`, `app/ponto/calculador/regras.py:784`, `app/ponto/calculador/regras.py:827`, `app/ponto/calculador/regras.py:832`, `app/ponto/calculador/regras.py:839`)
+
+As regras do juiz compartilhado são:
+
+| Aspecto | Regra executada |
+|---|---|
+| Ancoragem do trecho extra | Parte da saída de **cada período** e recua `HE50 + HE100` minutos trabalhados, saltando intervalos e limitado pela entrada. (`app/ponto/motor_calculo_v2.py:392`, `app/ponto/motor_calculo_v2.py:395`, `app/ponto/motor_calculo_v2.py:406`, `app/ponto/motor_calculo_v2.py:440`) |
+| Janela | Horário local; interseções com **22–24 e 00–05** nas datas civis atravessadas pelo recorte. (`app/ponto/motor_calculo_v2.py:89`, `app/ponto/motor_calculo_v2.py:97`, `app/ponto/motor_calculo_v2.py:100`, `app/ponto/motor_calculo_v2.py:103`) |
+| Após 05h | Com prorrogação ligada, estende 00–05 até o fim recebido se **o próprio recorte extra** tocar 00–05 e continuar após 05h. O início noturno do turno completo, sozinho, não basta. (`app/ponto/motor_calculo_v2.py:109`, `app/ponto/motor_calculo_v2.py:110`, `app/ponto/motor_calculo_v2.py:441`) |
+| Intervalos | Desconta o noturno consumido pelos intervalos dentro do recorte. (`app/ponto/motor_calculo_v2.py:442`) |
+| Parcela de 100% | Multiplica o noturno encontrado por `extra_100_min / total_extra`. (`app/ponto/motor_calculo_v2.py:447`, `app/ponto/motor_calculo_v2.py:448`) |
+| Hora reduzida | **O split não aplica `60/52,5`**: retorna minutos de relógio. A redução pertence à rubrica distinta `horas_noturnas`. (`app/ponto/motor_calculo_v2.py:409`, `app/ponto/motor_calculo_v2.py:440`, `app/ponto/motor_calculo_v2.py:451`, `app/ponto/calculador/regras.py:88`, `app/ponto/calculador/regras.py:849`) |
+
+O calculador obtém o flag de prorrogação uma vez, por `get_motor_cct(c, ini, tipo_escala=te)`, e o passa aos dias. A resolução posterior do vínculo diário não recalcula esse flag. (`app/ponto/calculador/alimentacao.py:390`, `app/ponto/calculador/alimentacao.py:404`, `app/ponto/calculador/alimentacao.py:492`, `app/ponto/calculador/alimentacao.py:528`)
+
+**3. Onde e como o motor calcula no feriado em dobra**
+
+O juiz da dobra é `_feriado_dobra_no_dia`: `feriado_em_dobra and eh_feriado(dia)`. Seu contrato atribui o plantão ao dia de início, incluindo a cauda após meia-noite. (`app/ponto/motor_calculo_v2.py:928`, `app/ponto/motor_calculo_v2.py:934`)
+
+No ramo geométrico `Motor12x36`, o teste usa `e.date()` e coloca a duração líquida inteira em HE100/feriado; depois chama `_aplicar_he_noturna`. Isso depende do flag de dobra, não apenas do nome da classe. (`app/ponto/motor_calculo_v2.py:2785`, `app/ponto/motor_calculo_v2.py:2803`, `app/ponto/motor_calculo_v2.py:2809`, `app/ponto/motor_calculo_v2.py:2855`)
+
+Nos recálculos mensais comercial e partido, a dobra é distribuída **em cada período**, com os minutos trabalhados daquele período, seguida de `_aplicar_he_noturna`. No comercial, o agrupamento usa `data_turno` do juiz, com fallback à data local da entrada. (`app/ponto/motor_calculo_v2.py:3097`, `app/ponto/motor_calculo_v2.py:3104`, `app/ponto/motor_calculo_v2.py:3325`, `app/ponto/motor_calculo_v2.py:3354`, `app/ponto/motor_calculo_v2.py:3361`)
+
+`_aplicar_he_noturna` entrega ao juiz **`periodo.entrada/saida`**, as quotas HE50/100, o flag do motor e `intervalos_do_motor`; grava o retorno de 100% em `minutos_extra_100_noturna`. Portanto, janela, recuo, prorrogação e ausência de fator reduzido são os mesmos descritos em (2), mas aplicados às pontas cruas. (`app/ponto/motor_calculo_v2.py:1014`, `app/ponto/motor_calculo_v2.py:1020`)
+
+As pontas efetivas ficam em campos separados: a janela calcula `e/s`, e `_carimbar_segmento` grava `efetivo_entrada/efetivo_saida` sem substituir as pontas originais. (`app/ponto/motor_calculo_v2.py:2751`, `app/ponto/motor_calculo_v2.py:2759`, `app/ponto/motor_calculo_v2.py:1840`)
+
+**4. Diferenças candidatas para os dois turnos**
+
+**Turno 22:50 → 07:04:** a diferença concreta é ancorar a mesma quota extra na saída efetiva ou na saída crua; isso desloca a interseção com 05h. Também pode haver diferença de flag: o motor é construído por fatia, enquanto o calculador consulta a CCT uma vez para sua chamada. A ocorrência dessas condições nos colaboradores é **[nao verificado]**. (`app/ponto/calculador/alimentacao.py:106`, `app/ponto/motor_calculo_v2.py:1015`, `app/ponto/services/fechamento.py:279`, `app/ponto/calculador/alimentacao.py:390`)
+
+Exemplo **condicional**: se a saída efetiva fosse 05:00, a crua 07:04 e a prorrogação estivesse desligada, o motor gastaria aproximadamente 124 minutos da quota extra depois de 05h, fora da janela estrita; o oráculo ancoraria antes. Essa ordem de grandeza é compatível com a diferença fornecida de aproximadamente 2,06 h, mas **marco 05:00, flag, pausas e reprodução exata são [nao verificado]**. A mecânica está no recuo e na interseção. (`app/ponto/motor_calculo_v2.py:395`, `app/ponto/motor_calculo_v2.py:405`, `app/ponto/motor_calculo_v2.py:110`, `app/ponto/motor_calculo_v2.py:440`)
+
+**Turno da tarde → cerca de 23h:** uma saída efetiva às 23:00 e crua às 23:06 permitiria 60 versus 66 minutos após 22h, compatíveis com 1,00 versus 1,10 h. Esses horários exatos são apenas exemplo: **[nao verificado]**. Prorrogação após 05h não explica isoladamente esse exemplo, pois a interseção relevante seria 22–24. (`app/ponto/calculador/alimentacao.py:83`, `app/ponto/motor_calculo_v2.py:1015`, `app/ponto/motor_calculo_v2.py:103`, `app/ponto/motor_calculo_v2.py:115`)
+
+**Hora reduzida e “diário versus período” não são diferenças entre os dois splits nesta cópia:** ambos chamam a mesma função por período, sem multiplicador reduzido. O comentário de `dia_pago.py` que ainda descreve ancoragens distintas não corresponde às chamadas executáveis atuais. (`app/ponto/calculador/regras.py:827`, `app/ponto/motor_calculo_v2.py:1014`, `app/ponto/motor_calculo_v2.py:451`, `app/ponto/services/dia_pago.py:307`)
+
+Não há elementos para escolher qual regra deveria prevalecer nem para fechar a causa dos dois números observados: **[nao verificado]**.
+
+**5. Leitores e registro de juiz**
+
+Nas rotas identificadas abaixo, os leitores usam **`motor`**, pelos defaults das APIs de leitura. A execução efetiva dessas rotas em produção é **[nao verificado]**. (`app/ponto/services/dia_pago.py:550`, `app/ponto/services/dia_pago.py:752`, `app/ponto/services/dia_pago.py:833`)
+
+| Canal | Chamada encontrada |
+|---|---|
+| Espelho | `app/ponto/services/espelho.py:410` |
+| Calendário | `app/colaboradores/services/calendario.py:290` |
+| App/API | `app/api/views.py:1457` |
+| Cartão | `app/relatorios/cartao_pela_celula.py:143` |
+| Extrato parcial | `app/relatorios/views.py:487` |
+| Gestão de HE | `app/ponto/services/gestao_he.py:256` |
+| Autorização de HE | `app/ponto/services/autorizacao_he_periodo.py:174` |
+
+O selo/porta de exportação usa soma com default `motor` e consultas explicitamente filtradas por `motor`. O TXT lê `FechamentoMensal`. (`app/folha/porta_export.py:388`, `app/folha/porta_export.py:284`, `app/folha/porta_export.py:589`, `app/folha/porta_export.py:651`, `app/folha/export.py:711`, `app/folha/export.py:777`)
+
+Há, porém, leitores operacionais que **podem alcançar `oraculo`**; portanto, “ninguém lê” seria amplo demais:
+
+| Comando/script | Leitura |
+|---|---|
+| `lavrar_dias_pagos` | Aceita `--versao`; conta linhas da versão pedida. (`app/ponto/management/commands/lavrar_dias_pagos.py:52`, `app/ponto/management/commands/lavrar_dias_pagos.py:140`) |
+| `apurar_furo_da_exportada` | Consulta todas as versões e lê versão/colaborador/furo; sem seleção explícita, processa versões com NULL. (`app/ponto/management/commands/apurar_furo_da_exportada.py:59`, `app/ponto/management/commands/apurar_furo_da_exportada.py:61`, `app/ponto/management/commands/apurar_furo_da_exportada.py:99`) |
+| Selo de idempotência | Lê todas as versões, incluindo a versão na chave. (`bin/r5_idempotencia_frota.py:65`, `bin/r5_idempotencia_frota.py:67`) |
+| Snapshot de reversão | Fotografa todas as versões e campos selecionados. (`bin/snapshot_badge_linha_09_10.py:50`, `bin/snapshot_badge_linha_09_10.py:60`) |
+| Relavraturas específicas | Capturam todas as versões para reversão. (`bin/relavrar_o118_col221.py:39`, `bin/relavrar_o119_col221.py:38`, `bin/relavrar_o120_col221_09.py:68`) |
+
+A execução desses comandos/scripts em produção é **[nao verificado]**. `diff_calculador` compara cálculos vivos e, com `--contra-gravado`, `FechamentoMensal`; não é leitor do `DiaPago` oráculo gravado. (`app/ponto/management/commands/diff_calculador.py:45`, `app/ponto/management/commands/diff_calculador.py:62`, `app/ponto/management/commands/diff_calculador.py:245`)
+
+**O `JUIZES.md` não registra um juiz específico para HE noturna por dia.** Registra cálculo genericamente em `motor_calculo_v2.py` e dobra de feriado em `CICLOS_FERIADO_SIMPLES`; declara-se lookup e aponta ao registro vivo. Isso é distinto da existência da função compartilhada `he_noturna` no código. (`app/docs/JUIZES.md:7`, `app/docs/JUIZES.md:29`, `app/docs/JUIZES.md:73`, `app/ponto/motor_calculo_v2.py:409`)
+
+## 07/11 05:59 · sessao 939e50b04f0b · - · - · origem=Ronald (tmux)
+
+Motor, com referências para consolidação:
+
+- `_aplicar_he_noturna` passa **`periodo.entrada/saida` crus**, os totais HE50/100, o flag de prorrogação e `intervalos_do_motor` ao juiz compartilhado; atribui `minutos_extra_100_noturna` se o retorno for não zero. `app/ponto/motor_calculo_v2.py:1012-1022`.
+- As pontas cruas nascem no `PeriodoCalculo`; a janela produz `e/s` e o carimbo guarda esses valores em **outros campos**, `efetivo_entrada/efetivo_saida`, sem substituir `entrada/saida`. `app/ponto/motor_calculo_v2.py:2751`, `:2759-2765`, `:1760-1763`, `:1840-1842`. Comercial segue o mesmo desenho em `:3216`, `:3224-3238`.
+
+Regra efetiva do split:
+
+1. Soma HE50+HE100; reconstrói a ponta extra **a partir da saída**, recuando por minutos trabalhados e pulando intervalos. `app/ponto/motor_calculo_v2.py:432-440`, `:392-406`.
+2. Mede noturno nessa ponta e subtrai seus intervalos; reparte pela proporção HE50/HE100. `app/ponto/motor_calculo_v2.py:441-451`.
+3. Janela local: 22–24 + 00–05, percorrendo os dias civis atravessados; não corta o cálculo ao dia civil do feriado. `app/ponto/motor_calculo_v2.py:89-117`.
+4. Prorrogação: se o flag estiver ligado e **o recorte passado ao juiz** tocar 00–05 e continuar após05, estende até o fim. Como o recorte é `inicio_extra → fim`, a condição é da ponta extra, não automaticamente da jornada inteira. `app/ponto/motor_calculo_v2.py:109-111`, `:440-441`.
+5. HE noturna retorna **minutos de relógio**, sem multiplicação por60/52,5. A redução aparece no adicional noturno (`calcular_noturnas`) e no fator1 quando afastada, em outro cálculo. `app/ponto/motor_calculo_v2.py:432-451`, `:983-992`. A soma mensal HE100noturna divide os minutos por60. `:342-344`.
+
+Feriado em dobra:
+
+- O juiz devolve `feriado_em_dobra and eh_feriado(dia)`; o contrato documenta pertencimento ao dia de início do plantão. `app/ponto/motor_calculo_v2.py:928-934`.
+- No 12x36 geométrico, testa `e.date()`, atribui a duração líquida inteira a HE100/feriado e depois chama `_aplicar_he_noturna`. `app/ponto/motor_calculo_v2.py:2761-2785`, `:2809-2813`, `:2855`.
+- No comercial e partido, o recálculo mensal usa `data_turno` do juiz, com fallback à data local da entrada; distribui a dobra em **cada período**, pelos minutos trabalhados daquele período, e faz split individual. `app/ponto/motor_calculo_v2.py:884-895`, `:2941-2945`, `:3092-3114`, `:3325-3330`, `:3350-3376`.
+- A regra padrão da fábrica exclui `tipo_ciclo='12x36'` da dobra; CCT pode reativá-la por cláusula cadastrada. `app/ponto/motor_calculo_v2.py:3623`, `:3693-3694`; `app/core/regua_cct.py:477-478`.
+- Prorrogação e afastamento da redução chegam da régua/cadastro; valores aplicados aos colaboradores concretos são `[nao verificado]`. Fluxo: `app/core/regua_cct.py:449-472`; default legal por ciclo em `:153-182`.
+
+Diferença verificável frente ao calculador: este chama o mesmo juiz com `he_pontas`; o agente do calculador identificou que essas pontas vêm dos campos efetivos, enquanto o motor usa os crus. A chamada compartilhada e soma por período estão em `app/ponto/calculador/regras.py:824-839`; lado motor cru em `app/ponto/motor_calculo_v2.py:1015`.
+
+Exemplos **condicionais**, sem afirmar os insumos reais:
+
+- Se a saída efetiva fosse05:00, a crua07:04 e a prorrogação estivesse desligada, o motor gastaria124min da quota extra na cauda após05; esses minutos deslocariam o início do recorte e não entrariam na janela estrita. O oráculo ancorado05:00 teria outra interseção. Isso é compatível com uma diferença próxima de2,06h, pelo recuo e janela citados; saída efetiva05:00 e flag concretos são `[nao verificado]`. `app/ponto/motor_calculo_v2.py:392-406`, `:109-116`, `:440-448`.
+- Se a saída efetiva fosse23:00 e a crua23:06, haveria60 contra66min após22, compatível com1,00 contra1,10h; esses dois horários exatos e os demais insumos são `[nao verificado]`. `app/ponto/motor_calculo_v2.py:103-116`, `:435-448`.
+
+Não usar os comentários sobre correções anteriores como prova de qual árvore gerou a sonda; a versão executada e os insumos completos da medição são `[nao verificado]`.
+
+## 07/11 05:59 · sessao e6f623b28100 · - · - · origem=Ronald (tmux)
+
+Leitores encontrados na cópia; a execução efetiva em produção é `[nao verificado]`.
+
+| Canal | O que lê |
+|---|---|
+| Espelho | `linhas_do_periodo` sem versão explícita: `app/ponto/services/espelho.py:410`. |
+| Calendário | Mesma API sem versão explícita: `app/colaboradores/services/calendario.py:290`. |
+| App/API | Mesma API sem versão explícita: `app/api/views.py:1457`. |
+| Cartão | `soma_da_competencia` sem versão explícita: `app/relatorios/cartao_pela_celula.py:143`. |
+| Extrato parcial | `soma_do_periodo` sem versão explícita: `app/relatorios/views.py:487`. |
+| Gestão de HE | `soma_do_periodo` sem versão explícita: `app/ponto/services/gestao_he.py:256`. |
+| Autorização de HE | `soma_do_periodo` sem versão explícita: `app/ponto/services/autorizacao_he_periodo.py:174`. |
+
+Esses leitores selecionam **motor**, porque os defaults são `versao='motor'`: `app/ponto/services/dia_pago.py:550`, `app/ponto/services/dia_pago.py:752`, `app/ponto/services/dia_pago.py:833`; os filtros efetivos ficam em `app/ponto/services/dia_pago.py:559`, `app/ponto/services/dia_pago.py:784`, `app/ponto/services/dia_pago.py:856`.
+
+O selo/porta de exportação também usa motor: soma default em `app/folha/porta_export.py:388`; filtros explícitos em `app/folha/porta_export.py:284`, `app/folha/porta_export.py:589`, `app/folha/porta_export.py:651`. `dias_fora_do_dia_pago` aceita versão, mas seu default é motor, e a chamada da porta recebe o mapa motor já carregado: `app/folha/porta_export.py:26`, `app/folha/porta_export.py:597`.
+
+O TXT lê **FechamentoMensal**, em `app/folha/export.py:711` e `app/folha/export.py:777`. A função de eventos recebe um fechamento: `app/folha/export.py:402`.
+
+Há, entretanto, comandos/scripts capazes de ler **oraculo**, portanto “ninguém lê” seria absoluto demais:
+
+- `lavrar_dias_pagos`: aceita `--versao`, default motor, e conta linhas da versão pedida: `app/ponto/management/commands/lavrar_dias_pagos.py:52`, `app/ponto/management/commands/lavrar_dias_pagos.py:140`. É ferramenta por ato, conforme registro em `app/config/crons.py:1015`.
+- `apurar_furo_da_exportada`: `_universo` consulta **todas** as versões e lê `versao`, colaborador e `furo_apurado`: `app/ponto/management/commands/apurar_furo_da_exportada.py:59`, `app/ponto/management/commands/apurar_furo_da_exportada.py:61`. Sem `--versao`, seleciona todas as versões com NULL: `app/ponto/management/commands/apurar_furo_da_exportada.py:78`, `app/ponto/management/commands/apurar_furo_da_exportada.py:99`; passa cada versão à porta em `app/ponto/management/commands/apurar_furo_da_exportada.py:131`.
+- Selo operacional de idempotência lê todas as versões: `bin/r5_idempotencia_frota.py:65`; usa versão na chave e lê trabalhadas/realizados: `bin/r5_idempotencia_frota.py:67`.
+- Snapshot de reversão fotografa todas as versões e campos: `bin/snapshot_badge_linha_09_10.py:50`, `bin/snapshot_badge_linha_09_10.py:60`.
+- Snapshots incorporados às relavraturas capturam todas as versões: `bin/relavrar_o118_col221.py:39`, `bin/relavrar_o119_col221.py:38`, `bin/relavrar_o120_col221_09.py:68`.
+
+`diff_calculador` compara cálculos vivos, e `--contra-gravado` usa **FechamentoMensal**; isso não constitui leitura da versão oraculo de DiaPago: `app/ponto/management/commands/diff_calculador.py:45`, `app/ponto/management/commands/diff_calculador.py:62`, `app/ponto/management/commands/diff_calculador.py:245`.
+
+O **JUIZES.md não registra juiz específico para “HE noturna por dia”**: contém o endereço genérico de cálculo em `app/docs/JUIZES.md:29` e o de dobra de feriado em `app/docs/JUIZES.md:73`. A tabela declara ser lookup e aponta ao registro vivo: `app/docs/JUIZES.md:7`. No registro vivo, feriado/dobra aponta a `CICLOS_FERIADO_SIMPLES` (`app/core/juizes.py:280`), e a pergunta de totais de competência aponta a `folha/export.py::eventos_do_fechamento` (`app/core/juizes.py:698`, `app/core/juizes.py:711`); essas entradas não nomeiam um juiz de HE noturna diária.
+
+## 07/11 05:59 · sessao a5699bf2ca46 · - · - · origem=Ronald (tmux)
+
+Achado central: o calculador usa **a mesma função `he_noturna` do motor**, porém com pontas efetivas, enquanto `_aplicar_he_noturna` entrega pontas cruas. Não há base para atribuir os valores observados a regras independentes de janela ou hora reduzida. (`app/ponto/calculador/regras.py:824`; `app/ponto/calculador/alimentacao.py:83`; `app/ponto/calculador/alimentacao.py:106`; `app/ponto/motor_calculo_v2.py:1014`)
+
+1. **Fluxo do calculador:** `rubricas_por_dia` recebe `insumos`; estes são montados por `insumos_do_calculador`, que chama `segmentos_do_motor`. O fechamento usa essa porta para construir `_rub_o`. (`app/ponto/calculador/alimentacao.py:305`; `app/ponto/calculador/alimentacao.py:314`; `app/ponto/services/fechamento.py:1269`; `app/ponto/services/fechamento.py:1271`)
+
+2. **Dia de atribuição:** `segmentos_do_motor` obtém o dia por `resultado.dia_da_jornada[id(p)]`; sem esse mapa o período é excluído e contado como `sem_dia_da_jornada`. Portanto a agregação é por dia da jornada, não repartição automática no dia civil. (`app/ponto/calculador/alimentacao.py:73`; `app/ponto/calculador/alimentacao.py:78`; `app/ponto/calculador/alimentacao.py:80`)
+
+3. **Pontas e quantidade de HE:** usa `p.efetivo_entrada/efetivo_saida` e copia `p.minutos_extra_50/minutos_extra_100` do motor. Não usa a quantidade diária de HE recalculada por `do_dia` para decidir o split. Copia também os intervalos do motor para o mapa diário. (`app/ponto/calculador/alimentacao.py:83`; `app/ponto/calculador/alimentacao.py:101`; `app/ponto/calculador/alimentacao.py:102`; `app/ponto/calculador/alimentacao.py:106`; `app/ponto/calculador/alimentacao.py:107`)
+
+4. **Conta diária:** `rubricas_por_dia` passa as pontas, intervalos e flag de prorrogação a `regras.do_dia`. Esta chama `motor_calculo_v2.he_noturna` uma vez por período, soma `_b`, e escreve `val['horas_extras_100_noturna'] = _s100 / 60`. (`app/ponto/calculador/alimentacao.py:514`; `app/ponto/calculador/alimentacao.py:526`; `app/ponto/calculador/alimentacao.py:528`; `app/ponto/calculador/regras.py:824`; `app/ponto/calculador/regras.py:827`; `app/ponto/calculador/regras.py:832`; `app/ponto/calculador/regras.py:839`)
+
+5. **Ancoragem temporal:** `he_noturna` toma `saida` como fim, recua `extra50 + extra100` minutos trabalhados, saltando intervalos e limitado pela entrada, e mede o trecho resultante. Portanto o trecho extra fica no fim de cada período; a janela de prorrogação é julgada a partir desse **trecho extra**, não necessariamente do turno completo. (`app/ponto/motor_calculo_v2.py:392`; `app/ponto/motor_calculo_v2.py:395`; `app/ponto/motor_calculo_v2.py:406`; `app/ponto/motor_calculo_v2.py:432`; `app/ponto/motor_calculo_v2.py:435`; `app/ponto/motor_calculo_v2.py:440`; `app/ponto/motor_calculo_v2.py:441`)
+
+6. **Janela/prorrogação:** converte para horário local; percorre as datas civis do recorte e intersecta 00–05 e 22–24. Com prorrogação habilitada, se `max(inicio, 00h) < 05h` e o fim é posterior às 05h, estende a janela 00–05 até o fim recebido. Assim, um trecho extra que só começa depois das 05h não ganha prorrogação por o turno original ter começado às 22h. (`app/ponto/motor_calculo_v2.py:89`; `app/ponto/motor_calculo_v2.py:97`; `app/ponto/motor_calculo_v2.py:100`; `app/ponto/motor_calculo_v2.py:103`; `app/ponto/motor_calculo_v2.py:109`; `app/ponto/motor_calculo_v2.py:110`; `app/ponto/motor_calculo_v2.py:112`)
+
+7. **Intervalos e repartição:** desconta o noturno consumido por intervalos e reparte o resultado na proporção `extra100 / total_extra`. Se a dobra deixou toda a HE em 100%, todo o noturno medido nesse trecho é HE100 noturna. (`app/ponto/motor_calculo_v2.py:442`; `app/ponto/motor_calculo_v2.py:447`; `app/ponto/motor_calculo_v2.py:448`)
+
+8. **Hora reduzida:** `he_noturna` não recebe nem aplica `hora_reduzida_afastada`, tampouco multiplica por `60/52,5`; o resultado do split é em minutos de relógio. O fator aparece na rubrica distinta `horas_noturnas`: `noturnas_do_dia` multiplica o relógio por 1 ou `FATOR_HORA_NOTURNA`. (`app/ponto/motor_calculo_v2.py:409`; `app/ponto/motor_calculo_v2.py:440`; `app/ponto/motor_calculo_v2.py:448`; `app/ponto/motor_calculo_v2.py:451`; `app/ponto/calculador/regras.py:88`; `app/ponto/calculador/regras.py:89`; `app/ponto/calculador/regras.py:849`)
+
+9. **Origem do flag no calculador:** chama `get_motor_cct(c, ini, tipo_escala=te)` uma vez e obtém `_cct_pro` por `cct_do_motor`; é esse flag que passa a todos os dias. A resolução do vínculo por dia muda tipo, intermitência, intervalo cadastrado e folgas, sem recalcular `_cct_pro`. O fechamento entrega como referência o vínculo do último dia coberto na janela. Portanto uma divergência de flag entre o motor que calculou uma fatia e o calculador é hipótese verificável no código, mas ocorrência nestes colaboradores é `[nao verificado]`. (`app/ponto/calculador/alimentacao.py:390`; `app/ponto/calculador/alimentacao.py:403`; `app/ponto/calculador/alimentacao.py:404`; `app/ponto/calculador/alimentacao.py:492`; `app/ponto/calculador/alimentacao.py:496`; `app/ponto/calculador/alimentacao.py:499`; `app/ponto/calculador/alimentacao.py:528`; `app/ponto/services/fechamento.py:851`; `app/ponto/services/fechamento.py:852`)
+
+10. **Diferenças candidatas para os dois casos:** motor ancora o recuo em `periodo.saida` e limita por `periodo.entrada`; calculador usa `efetivo_saida/efetivo_entrada`. Uma saída efetiva diferente muda a quantidade de HE que cruza 22h, podendo explicar qualitativamente 1,10 versus 1,00; pode também deslocar o início do trecho em relação às 05h e mudar a prorrogação. Flag diferente pode afetar o turno que atravessa 05h, mas não explica isoladamente um turno que termina por volta de 23h. Pontas efetivas, pausas, flags e subdivisão em períodos destes casos não constam do dado: reconstruir exatamente 5,16/3,10 ou 1,00/1,10 é `[nao verificado]`. (`app/ponto/motor_calculo_v2.py:1015`; `app/ponto/calculador/alimentacao.py:83`; `app/ponto/calculador/alimentacao.py:106`; `app/ponto/motor_calculo_v2.py:440`; `app/ponto/motor_calculo_v2.py:110`)
+
+11. **Dobra do calculador:** classifica pelo dia da jornada recebido, devolvendo todo o trabalhado quando `_feriado_dobra_no_dia(dia)` é verdadeiro. Porém esse total diário não alimenta o split: este continua usando as HE dos períodos do motor. (`app/ponto/calculador/regras.py:348`; `app/ponto/calculador/regras.py:351`; `app/ponto/calculador/regras.py:780`; `app/ponto/calculador/regras.py:784`; `app/ponto/calculador/regras.py:827`; `app/ponto/calculador/regras.py:832`)
+
+Atenção à leitura dos comentários: afirmam que os dois caminhos têm as mesmas pontas e “a troca não muda número”, mas os argumentos executados diferem entre efetivos e crus; citar o código executável nesse ponto. (`app/ponto/calculador/alimentacao.py:52`; `app/ponto/calculador/alimentacao.py:54`; `app/ponto/calculador/alimentacao.py:83`; `app/ponto/motor_calculo_v2.py:1015`)
 
 ## 07/11 05:18 · sessao 2ab7f98e2983 · PERTENCA-DO-MINUTO-PELO-TURNO · censo · origem=Code
 
@@ -699,116 +891,4 @@ Itens 2/3/custo, somente leitura; nenhum teste executado. [não verificado] [nao
 - Mutante que remove o tratamento `dia_sem_trabalho` pode passar a bateria: os casos de folga têm lâmpadas vazias, logo nenhuma instância cuja cobrança precise ser suprimida. Falta `trabalha=False` com lâmpadas antigas apagadas, e também ausência parcial. `app/chamados/tests/test_e2_tarefa_do_dia.py:165`, `app/chamados/tests/test_e2_tarefa_do_dia.py:245`, `app/chamados/services/tarefa_do_dia.py:199`.
 - Mutantes de cobertura por intervalo aberto/fechado e desempate `(data,pk)` também não são atingidos pela ausência do caso4, que cria apenas ausência de um dia. `app/chamados/tests/test_e2_tarefa_do_dia.py:210`, `app/chamados/tests/test_e2_tarefa_do_dia.py:233`.
 
-## 07/11 02:23 · sessao 939c1ffb8eb7 · V2-BUGS-I2 · verificador · origem=Code
-
-**REPROVADO na pré-verificação.** Há acréscimo novo de HE100 noturna em dia lavrado não feriado, promoção do partido que continua lendo zero e casos em que o split escrito viola a regra do subconjunto. (`app/ponto/services/dia_pago.py:252`; `app/ponto/services/fechamento.py:964`; `app/ponto/motor_calculo_v2.py:1015`)
-
-1. **O diff pode mudar valor fora de feriado em dobra.**
-
-   Contraexemplo: COM; **06/10 é folga, não feriado**; **07/10 é feriado cadastrado**; vínculo não trabalha no feriado; escala certa; batidas **06/10 13–23 / 07/10 03–05**. A cauda herda 06/10 pelo intervalo de quatro horas e é classificada como FT dessa jornada. (`app/ponto/motor_calculo_v2.py:2403`; `app/ponto/motor_calculo_v2.py:2407`; `app/ponto/motor_calculo_v2.py:2448`; `app/ponto/motor_calculo_v2.py:2468`)
-
-   Entretanto, o comercial calcula a dobra da cauda pelo **dia civil 07/10**, escrevendo 120 minutos de HE100 noturna; o fechamento também seleciona a promoção pela data civil. A linha nova da lavra acrescenta esses **2,00 h ao DiaPago de 06/10**, que não é feriado. Antes, esse acréscimo era zero. O erro de seleção já existia; **o novo valor fora do escopo nasce neste diff**. (`app/ponto/motor_calculo_v2.py:3264`; `app/ponto/motor_calculo_v2.py:3268`; `app/ponto/motor_calculo_v2.py:3294`; `app/ponto/services/fechamento.py:947`; `app/ponto/services/fechamento.py:962`; `app/ponto/services/dia_pago.py:245`; `app/ponto/services/dia_pago.py:252`)
-
-   Esse percurso foi exercido com métodos reais extraídos por AST, em memória, com insumos controlados; execução integral pelo ORM e ocorrência em produção: **[não verificado]**.
-
-2. **Os totais anteriores são conservados; a HE100 noturna não está correta em todos os caminhos.**
-
-   Nos ramos diários modificados, substituir `ultimo = total` por parcelas de cada período conserva HE100 e HE100 feriado: o fechamento soma todos os períodos. A promoção mantém os totais anteriores e acrescenta somente o subconjunto noturno. O 12x36 mantém sua dobra seguida de split. (`app/ponto/motor_calculo_v2.py:3100`; `app/ponto/motor_calculo_v2.py:3357`; `app/ponto/motor_calculo_v2.py:329`; `app/ponto/motor_calculo_v2.py:332`; `app/ponto/services/fechamento.py:955`; `app/ponto/services/dia_pago.py:249`; `app/ponto/motor_calculo_v2.py:2855`)
-
-   Permanecem três falhas:
-
-   - **FT do partido continua zerado.** NPART, feriado em que o vínculo folga, batidas **21–00**: 180 trabalhados, 120 noturnos; promoção de **3 h HE100 feriado**, mas **0 h HE100 noturna**, quando deveria carregar **2 h**. `calcular_periodo` não escreve HE; o laço novo percorre apenas `resultado.periodos`; FT recebe somente o mapa do dia. Mensal e DiaPago leem o mesmo zero. (`app/ponto/motor_calculo_v2.py:2893`; `app/ponto/motor_calculo_v2.py:2897`; `app/ponto/motor_calculo_v2.py:2951`; `app/ponto/motor_calculo_v2.py:3083`; `app/ponto/services/fechamento.py:964`; `app/ponto/services/dia_pago.py:252`)
-   - **Janela efetiva e split discordam.** COM no feriado, **08–12/13–23**, janela recortando a saída às **22**, limite deslocado por extra declarada de 300 minutos: trabalhado efetivo **780**, noturno **zero**; a dobra chama o split no par bruto até 23 e escreve **60 minutos HE100 noturna**. A parte fica maior que o noturno do dia. (`app/ponto/motor_calculo_v2.py:3224`; `app/ponto/motor_calculo_v2.py:3238`; `app/ponto/motor_calculo_v2.py:3260`; `app/ponto/motor_calculo_v2.py:3357`; `app/ponto/motor_calculo_v2.py:3361`; `app/ponto/motor_calculo_v2.py:1015`)
-   - **Recorte longo continua duplicando minutos.** Com prorrogação e todo o par em dobra, **04–23**, HE100=1140, produz split **1200**; **04–01(+1)**, HE100=1260, produz **1440**. O segmento prorrogado alcança `fim` e os segmentos seguintes são somados novamente. As novas chamadas propagam isso para HE100 noturna. O noturno principal também contém a duplicação; comparar somente `noturnas/fator` não detecta esse defeito. (`app/ponto/motor_calculo_v2.py:111`; `app/ponto/motor_calculo_v2.py:112`; `app/ponto/motor_calculo_v2.py:116`; `app/ponto/motor_calculo_v2.py:441`; `app/ponto/motor_calculo_v2.py:448`; `app/ponto/motor_calculo_v2.py:3104`; `app/ponto/motor_calculo_v2.py:3361`)
-
-3. **Escritores e leitores: há um consumidor incompatível com a redistribuição.**
-
-   | Campos | Quem escreve | Quem lê |
-   |---|---|---|
-   | `minutos_extra`, `_100`, `_100_feriado` | Dobras por período do 12x36/comercial e laços diários do partido/comercial. (`app/ponto/motor_calculo_v2.py:2810`; `app/ponto/motor_calculo_v2.py:3269`; `app/ponto/motor_calculo_v2.py:3100`; `app/ponto/motor_calculo_v2.py:3357`) | Somatórios, lavra, alimentação, espelho e contadores. (`app/ponto/motor_calculo_v2.py:329`; `app/ponto/services/dia_pago.py:182`; `app/ponto/calculador/alimentacao.py:102`; `app/ponto/services/espelho.py:112`; `app/folha/porta_export.py:542`) |
-   | `_50_noturna`, `_100_noturna` | Casca canônica, além dos resets diários. (`app/ponto/motor_calculo_v2.py:1020`; `app/ponto/motor_calculo_v2.py:1022`; `app/ponto/motor_calculo_v2.py:2937`; `app/ponto/motor_calculo_v2.py:3336`) | Somatórios e lavra; o calculador chama a mesma função por ponta e soma. (`app/ponto/motor_calculo_v2.py:340`; `app/ponto/motor_calculo_v2.py:344`; `app/ponto/services/dia_pago.py:181`; `app/ponto/services/dia_pago.py:252`; `app/ponto/calculador/regras.py:827`) |
-   | `horas_extras_100_noturna` mensal/DiaPago | Fechamento e porta `lavrar`. (`app/ponto/services/fechamento.py:924`; `app/ponto/services/fechamento.py:962`; `app/ponto/services/dia_pago.py:184`; `app/ponto/services/dia_pago.py:252`) | Comparação mensal versus soma dos dias. (`app/folha/porta_export.py:388`) |
-
-   **A6 quebra o contrato:** anuncia “HE idêntica em 3+ dias”, mas conta períodos. No trecho real do leitor, `[0,0,540]` em um feriado não gera A6; após redistribuir para `[180,180,180]`, gera **A6=[d,d,d]**, exibindo três ocorrências de um único dia. O contador foi exercido em memória; a fixture completa pelo pareador: **[não verificado]**. (`app/ponto/services/esmeril_espelho.py:20`; `app/ponto/services/esmeril_espelho.py:174`; `app/ponto/services/esmeril_espelho.py:199`)
-
-   Os somatórios e `regras.py` aceitam vários períodos; **não exigem a dobra no último**. Entretanto, o calculador recebe pontas efetivas, enquanto a casca do motor recebe pontas brutas: mesma função, insumos diferentes. (`app/ponto/motor_calculo_v2.py:329`; `app/ponto/calculador/alimentacao.py:83`; `app/ponto/calculador/alimentacao.py:106`; `app/ponto/calculador/regras.py:832`; `app/ponto/motor_calculo_v2.py:1015`)
-
-   Tela, calendário e PDF usam totais; TXT trata HE noturna como subconjunto e não emite uma segunda linha dessas horas. Não há soma adicional do subconjunto nesses trechos. (`app/templates/ponto/espelho.html:279`; `app/colaboradores/services/calendario.py:651`; `app/relatorios/pdf_espelho.py:844`; `app/folha/export.py:424`)
-
-   Mensal e DiaPago recebem a mesma partição e somam o mesmo campo, portanto **podem concordar no número errado**. A concordância não resolve o zero do partido nem o dia incorreto do item 1. (`app/ponto/services/fechamento.py:980`; `app/ponto/services/fechamento.py:1203`; `app/ponto/services/fechamento.py:964`; `app/ponto/services/dia_pago.py:252`)
-
-4. **A retirada deixou uma referência órfã; o censo foi restaurado coerentemente.**
-
-   O helper F10h ainda diz **“batidas do F10f”**, embora F10f tenha sido retirado. O comentário deve deixar de apontar para um caso inexistente. (`app/ponto/tests/test_o280_bateria_da_lei.py:1580`)
-
-   O contrato voltou a cobrar **10** ajudantes privados, compatível com a contagem AST da cópia. MATRIZ/CASOS dos casos sobreviventes têm testes assertivos correspondentes; não encontrei caso declarado sem exercício nesse conjunto. (`app/ponto/tests/test_contract_juiz_batida.py:326`; `app/ponto/tests/test_o280_bateria_da_lei.py:210`; `app/ponto/tests/test_o280_bateria_da_lei.py:212`; `app/ponto/tests/test_o280_bateria_da_lei.py:1272`)
-
-   “**Era 240**” em F11d descreve uma cura intermediária, não 19aeede1: a base fornecida dava `continue` sem split, portanto era **zero**. A versão da medida precisa ficar explícita. (`app/ponto/tests/test_o280_bateria_da_lei.py:1776`; `app/ponto/motor_calculo_v2.py:3114`; anexo `diff_total_v6.patch`, hunk `@@ -3090,14 +3090,27 @@`)
-
-5. **Os testes principais mordem por valor; o pino não isola a causa da falha.** [nao verificado]
-
-   F11, F11b, F11c e F11d cobram respectivamente **120 min, 60 min, 1 h mensal/DiaPago e 360 min**. Pela base do diff, os quatro teriam zero no subconjunto; F11r é referência preexistente de **300 min**, não RED da cura. Execução dos testes contra 19aeede1: **[não verificado]**. (`app/ponto/tests/test_o280_bateria_da_lei.py:1670`; `app/ponto/tests/test_o280_bateria_da_lei.py:1708`; `app/ponto/tests/test_o280_bateria_da_lei.py:1748`; `app/ponto/tests/test_o280_bateria_da_lei.py:1779`; `app/ponto/tests/test_o280_bateria_da_lei.py:1692`)
-
-   O gêmeo F10h fixa **570 HE100 feriado / 390 noturna**, incluindo cauda zero. O pino compara valores, mas `expectedFailure` aceita falha em outro campo ou erro; também exige **660 HE100 feriado**, mudança de pertença fora desta cura. Assim, ele pode continuar esperado-vermelho mesmo após acertar o subconjunto noturno. O gêmeo protege a fixture compartilhada; o conjunto não é vazio. (`app/ponto/tests/test_o280_bateria_da_lei.py:1602`; `app/ponto/tests/test_o280_bateria_da_lei.py:1606`; `app/ponto/tests/test_o280_bateria_da_lei.py:1611`; `app/ponto/tests/test_o280_bateria_da_lei.py:1624`)
-
-   F10i cobra **90/102,86**, comportamento preservado; é guarda, não RED do item 2. F11c cobre promoção comercial com escala certa forçada, deixando descoberta a promoção do partido. (`app/ponto/tests/test_o280_bateria_da_lei.py:1643`; `app/ponto/tests/test_o280_bateria_da_lei.py:1717`; `app/ponto/tests/test_o280_bateria_da_lei.py:1744`)
-
-6. **Classes de reprovação presentes e limites do veredito.**
-
-   Há **derivação concorrente do dia** exposta pelo novo valor: classificação FT pela jornada, promoção pelo civil e lavra pelo mapa. Há também **ESMERIL-SEMÂNTICA**: `minutos_extra` passa a carregar parcelas por período, mas A6 continua interpretando cada parcela como ocorrência diária. (`app/ponto/motor_calculo_v2.py:2407`; `app/ponto/services/fechamento.py:947`; `app/ponto/services/dia_pago.py:245`; `app/ponto/services/esmeril_espelho.py:177`)
-
-   Nos acréscimos examinados não nasce porta de escrita, juiz ou leitura de relógio: são chamadas à casca existente e somas nas portas existentes. Isso não elimina os erros de insumo e significado acima. (`app/ponto/motor_calculo_v2.py:3104`; `app/ponto/motor_calculo_v2.py:3361`; `app/ponto/services/fechamento.py:962`; `app/ponto/services/dia_pago.py:252`)
-
-   **DIFF `par_v6` por dono, col922, reversão anterior ao veredito, ordem operacional de travas, pouso e suíte completa: [não verificado].** Esses resultados não foram fornecidos no dado raspado; não atribuo à volta 6 as medições históricas da volta reprovada. **[não verificado]** [nao verificado]
-
-## 07/11 02:22 · sessao 8827481b08b7 · - · - · origem=Ronald (tmux)
-
-Achados concretos:
-
-1. **Há novo valor em dia lavrado que não é feriado em dobra.** Caso: COM, d0=06/10 folga e não feriado; batidas d0 13–23, d1 03–05; d1=07/10 feriado, vínculo folga no feriado e escala certa. O intervalo de 4h produz cauda que herda d0 pela regra ≤6h; ela é FT de d0 (`app/ponto/motor_calculo_v2.py:2403`, `:2407`, `:2448`, `:2468`). Entretanto `MotorComercial.calcular_periodo` julga a cauda pelo dia civil d1 e escreve HE100 noturna=120 (`:3264`, `:3268`, `:3294`). O fechamento seleciona `ft_feriado` pelo mesmo civil d1 (`app/ponto/services/fechamento.py:935`, `:947`, `:949`), e as linhas novas passam a acrescentar **2h** no mensal e no DiaPago de d0 (`:962`; `app/ponto/services/dia_pago.py:245`, `:252`). Baseline: a seleção errada já existia, mas o acréscimo de HE100 noturna era zero; volta6: 2h. Medido em memória com AST do `calcular_periodo`, helpers e prefixo da lavra; não foi execução integral ORM. (`app/ponto/motor_calculo_v2.py:3268`; `app/ponto/services/dia_pago.py:252`.)
-
-2. **Promoção FT do partido continua sem HE100 noturna.** `MotorTurnoPartido.calcular_periodo` escreve trabalho e noturno, devolvendo sem split (`app/ponto/motor_calculo_v2.py:2893`, `:2896`, `:2897`). O cálculo diário percorre apenas `resultado.periodos`; FT recebe somente mapa de dia (`:2928`, `:2944`, `:2951`, `:2955`, `:3083`). Caso NPART 21–00 em feriado no qual o vínculo folga: 180 trabalhados, 120 noturnos; a promoção paga 3h HE100 feriado e lê **0h** HE100 noturna, onde a regra exige **2h** (`app/ponto/services/fechamento.py:954`, `:964`; `app/ponto/services/dia_pago.py:250`, `:252`). A retirada do escritor do partido explica a lacuna; o leitor novo não a resolve (`app/ponto/motor_calculo_v2.py:2897`, `:2955`).
-
-3. **O split novo usa par bruto e pode pagar noturno inexistente no trabalhado efetivo.** Caso COM feriado 08–12/13–23, janela corta saída às22, HE extra declarada de300 conforme fixture B-SPLIT retirada: efetivo08–22, trabalho780, noturno0; a dobra grava HE100780 e chama split sobre bruto08–23, produzindo **HE100 noturna60**, violando `noturnas/fator=0` (`app/ponto/motor_calculo_v2.py:3224`, `:3238`, `:3260`, `:3357`, `:3361`, `:1015`). Medido por AST das funções reais: `he_noturna(08–23, HE100780, intervalo12–13)=60`; `minutos_noturnos(08–22)=0` (`:440`, `:441`).
-
-4. **Recorte longo continua contando noturno duas vezes e agora a dobra diária escreve esse resultado.** `minutos_noturnos` estende o primeiro segmento até `fim` e soma também22–24 (`app/ponto/motor_calculo_v2.py:111`, `:112`, `:116`). Medido: feriado04–23, toda duração HE1001140 → split **1200**, regra1140; feriado04–01(+1), HE1001260 → split **1440**, regra1260 (`:440`, `:441`, `:448`). Os loops novos chamam esse split (`:3104`, `:3361`). O noturno principal também permanece duplicado; igualdade contra o próprio campo não certifica o minuto contado uma vez (`:983`, `:986`).
-
-5. **Os totais HE100/HE100 feriado são conservados nos caminhos modificados por dia**, pois o novo loop distribui `minutos_trabalhados` de cada período e o mensal soma os campos; não há cálculo novo de duração (`app/ponto/motor_calculo_v2.py:3100`, `:3102`, `:3357`, `:3359`, `:329`, `:332`). A promoção mantém as atribuições anteriores de total e adiciona apenas noturna (`app/ponto/services/fechamento.py:955`, `:956`, `:962`; `app/ponto/services/dia_pago.py:249`, `:252`). O 12x36 permanece com dobra por período seguida de split (`app/ponto/motor_calculo_v2.py:2809`, `:2855`).
-
-Nenhuma execução integral de banco/fechamento, produção, DIFF de frota ou validação do hash foi feita. [não verificado]
-
-## 07/11 02:21 · sessao 4c69df77b36c · - · - · origem=Ronald (tmux)
-
-Achado concreto no leitor de alertas: A6 diz “HE idêntica em 3+ dias”, mas conta períodos, sem agrupar nem deduplicar datas. Redistribuir a dobra cria falso positivo: três períodos do mesmo feriado com 180 min cada produzem `A6=[d,d,d]`; antes `[0,0,540]` não produzia A6. Executei em memória o trecho real extraído por AST: resultados `{}` antes e três datas iguais depois. Exemplo completo pelo pareador [não verificado]. Fontes: `app/ponto/services/esmeril_espelho.py:20`, `:174-180`; contador mostrado como ocorrências em `:199`; novos escritores `app/ponto/motor_calculo_v2.py:3097-3104` e `:3354-3361`.
-
-Mapa dos campos:
-
-| Campo | Escritores | Leitores |
-|---|---|---|
-| `minutos_extra`, `_100`, `_100_feriado` | 12x36 `motor_calculo_v2.py:2810`; partido reset `:2933`, dobra `:3100`, excedente `:3153`; comercial período `:3269`, reset `:3332`, dobra `:3357`, excedente `:3416` | Soma mensal `:325-344`; DiaPago `dia_pago.py:180-184`; calculador `alimentacao.py:102-106`; espelho `espelho.py:112-114`; invariante export `porta_export.py:542`; alerta A6 `esmeril_espelho.py:176` |
-| `_50_noturna`, `_100_noturna` | Casca canônica `motor_calculo_v2.py:1014-1022`; resets partido `:2937-2938`, comercial `:3336-3337` | Soma mensal `:340-344`; DiaPago `dia_pago.py:181`, `:184`, `:252` |
-| `FechamentoMensal.horas_extras_100_noturna` | `fechamento.py:924`, promoção `:962-964`; persistência `:1169` | Comparação com DiaPago pela porta `porta_export.py:388`; TXT não emite esse subconjunto separadamente `folha/export.py:424-447` |
-| `DiaPago.horas_extras_100_noturna` | `dia_pago.py:184`, promoção `:252`; eventual substituição pelo calculador `:322-330` | Campo incluído no universo lavrado `:36`; presença de dinheiro `:863` |
-
-Os leitores de soma aceitam múltiplos períodos: `ResultadoMes` soma todos em `motor_calculo_v2.py:325-344`; a alimentação entrega todas as pontas em `calculador/alimentacao.py:102-106`; `calculador/regras.py:827-835` chama `he_noturna` por ponta e soma. Não há exigência de último período nesses trechos. O produtor alternativo v3 ainda grava a dobra inteira no último em `calculador/periodo.py:841-844`; isso é um escritor próprio preexistente, não uma suposição desses leitores.
-
-Mensal e DiaPago recebem a mesma partição `ft_feriado`, disjunta dos outros grupos em `fechamento.py:975-981`, e ambos somam o mesmo campo do período: `fechamento.py:962-964` e `dia_pago.py:244-253`. A igualdade numérica em produção [não verificado].
-
-Há outra divergência de contrato já existente: motor mede o split no par **cru**, `motor_calculo_v2.py:1015`; calculador recebe o par **efetivo**, `calculador/alimentacao.py:83`, `:106`, e o mede em `regras.py:832`. As novas chamadas passam a expor esse descompasso nos feriados curados. Contraprova com janela real depende do restante da auditoria [não verificado].
-
-Tela, calendário e PDF leem totais lavrados e não somam os subconjuntos novamente: `templates/ponto/espelho.html:279-283`; `colaboradores/services/calendario.py:651-656`; `relatorios/pdf_espelho.py:837-859`; `dia_pago.py:914-928`. TXT mantém HE100 total/feriado e adicional noturno, sem nova linha para HE noturna: `folha/export.py:420-447`.
-
-O invariante da porta ainda agrupa períodos pela data civil da entrada, `porta_export.py:538-544`, enquanto a lavratura usa o mapa da jornada em `dia_pago.py:174`. Redistribuir HE entre pares que cruzam a meia-noite muda os agrupamentos desse contador; falso positivo concreto dele [não verificado].
-
-## 07/11 02:21 · sessao 2195e8a35400 · - · - · origem=Ronald (tmux)
-
-- Referência órfã: `_dia_do_F10h` diz “batidas do F10f”, mas esse teste foi retirado; corrigir o comentário em `app/ponto/tests/test_o280_bateria_da_lei.py:1580`. Ausência do símbolo confirmada por busca; demais órfãos [não verificado].
-- Censo coerente: contrato restaurado para **10** ajudantes em `app/ponto/tests/test_contract_juiz_batida.py:326`; AST contou exatamente 10 em `MotorBase`. MATRIZ preserva apenas F11/F11b/F11c/F11d/F11r e F10h/F10i, todos exercidos por comparações de valores (`app/ponto/tests/test_o280_bateria_da_lei.py:210`, `:212`, `:1272`, `:1287`).
-- RED estático da base: F11 **0→120 min**, F11b **0→60 min**, F11c mensal/DiaPago **0→1 h**, F11d **0→360 min**; o diff fornecido mostra os ramos anteriores sem split, e as expectativas estão em `app/ponto/tests/test_o280_bateria_da_lei.py:1670`, `:1708`, `:1748`, `:1779`. Execução na base [não verificado].
-- F11d “Era 240” descreve a primeira cura, que chamou split só no último período; **19aeede1 tinha zero**, pois dava `continue` sem split. Convém explicitar a versão em `app/ponto/tests/test_o280_bateria_da_lei.py:1776`.
-- F11r é referência preexistente **300 min**, não RED do item (`app/ponto/tests/test_o280_bateria_da_lei.py:1676`, `:1692`).
-- F10h gêmeo fixa **570 HE100 feriado / 390 noturna**, incluindo cauda zero (`app/ponto/tests/test_o280_bateria_da_lei.py:1602`, `:1606`). O pino compara valores, mas `expectedFailure` aceita outras falhas; também exige **660 HE100 feriado**, mudança de pertença retirada do escopo (`:1611`, `:1624`). O gêmeo exercita a mesma fixture, portanto o conjunto não é vazio (`:1601`, `:1623`).
-- F10i exige **90/102,86**, comportamento preservado e guarda de outro escopo; não é RED do item (`app/ponto/tests/test_o280_bateria_da_lei.py:1643`).
-- Os testes de mutantes longos recuperaram a mordida anterior, coerente com a retirada do teto em `minutos_noturnos`: `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py:365`, `:368`, `:376`; regra ainda sem teto em `app/ponto/motor_calculo_v2.py:110`. Suite/banco não executados [não verificado].
-
-_2663 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2667 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
