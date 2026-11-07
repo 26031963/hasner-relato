@@ -1,7 +1,128 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 04:24** · publicado em **07/11/2026 04:25** (UTC-3)
+> Ultima resposta processada: **07/11/2026 04:28** · publicado em **07/11/2026 04:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 04:28 · sessao efc6cfc6aeb8 · FIO-E0-V4-E2 · verificador · origem=Code
+
+**Não aprovo a volta 2 nesta cópia.** O principal problema é a nova ambiguidade aplicada a perguntas cujo nascimento já recebeu explicitamente o **dia do turno**. O teste novo exige essa ambiguidade e consolida o erro (`app/chamados/models.py:2477`; `app/chamados/tests/test_e2_tarefa_do_dia.py:351`; `app/chamados/tests/test_e2_tarefa_do_dia.py:355`).
+
+A cópia não contém `.git`; comparação efetiva com `9bd00eca`, exclusividade dos três arquivos e execução da bateria/mutantes: **[nao verificado]**. Abaixo julgo o código disponível; não infiro ocorrências em produção.
+
+**1. Procedentes a–g: cura no sítio e contraexemplo**
+
+| Item | Julgamento |
+|---|---|
+| **a — conversa** | **Curado para `conversa=True`**: a query agora exclui essas perguntas; o teste verifica que o marco continua sem pergunta (`app/chamados/services/tarefa_do_dia.py:278`; `app/chamados/tests/test_e2_tarefa_do_dia.py:338`). **Residual:** conversa antiga recebe `False` na migração e pode continuar ocupando o marco; a própria migração declara essa indistinguibilidade (`app/chamados/migrations/0051_decisao_pergunta.py:5`; `app/chamados/migrations/0051_decisao_pergunta.py:100`). |
+| **b — noturnos seguidos** | **A restrição proposta está implementada**, mas não constitui cura semântica completa: havendo posição nos dois dias, devolve `None` (`app/chamados/services/tarefa_do_dia.py:113`). **Contraexemplo:** dois noturnos 22–06, saídas apagadas, pergunta **nova** aberta para o turno d, sem atos: seu dono é conhecido pela porta de nascimento, mas a tarefa devolve `pergunta_de_turno_ambiguo`. O próprio teste fabrica esse caso e exige a resposta errada (`app/chamados/models.py:2477`; `app/chamados/tests/test_e2_tarefa_do_dia.py:346`; `app/chamados/services/tarefa_do_dia.py:232`). |
+| **c — documento** | **Curado nos dois sítios:** cobertura e absorção entregam `entregar_documento` ao colaborador (`app/chamados/services/tarefa_do_dia.py:164`; `app/chamados/services/tarefa_do_dia.py:225`). Não achei contraexemplo nessa troca de dono; examinei estado inicial, transições, reabertura e os dois testes correspondentes (`app/ponto/services/ausencia.py:779`; `app/ponto/services/ausencia.py:767`; `app/ponto/services/ausencia.py:1119`; `app/chamados/tests/test_e2_tarefa_do_dia.py:357`; `app/chamados/tests/test_e2_tarefa_do_dia.py:366`). |
+| **d — ata sem lâmpadas** | **Curado o “vazio conhecido”**: retorna `nao_sei=True` (`app/chamados/services/tarefa_do_dia.py:182`). Não achei contraexemplo ao resultado conservador; achei erro na explicação “ata não lavrada”: existe forma antiga **já lavrada**, agregada, sem lâmpadas (`app/escala/services/leitor_celula.py:146`; `app/chamados/services/tarefa_do_dia.py:183`). |
+| **e — quatro mutantes** | Os testes têm asserções que distinguem fila vazia, expiração ignorada, decisões ordenadas por PK e supressão de folga removida (`app/chamados/tests/test_e2_tarefa_do_dia.py:392`; `app/chamados/tests/test_e2_tarefa_do_dia.py:409`; `app/chamados/tests/test_e2_tarefa_do_dia.py:415`; `app/chamados/tests/test_e2_tarefa_do_dia.py:424`). O relato de sete failures não foi reproduzido **[nao verificado]**. Há outros sobreviventes, no item 6. |
+| **f — índice e janela** | **Implementados:** agrupamento por `(colaborador_id,data_evento)` e rejeição de dia fora dos dois limites (`app/chamados/services/tarefa_do_dia.py:282`; `app/chamados/services/tarefa_do_dia.py:315`). Não achei contraexemplo à guarda atual; o teste cobre somente o limite superior (`app/chamados/tests/test_e2_tarefa_do_dia.py:431`). |
+| **g — caso 10** | **Curado o exagero textual:** a docstring admite que não fabrica competência exportada; o teste verifica ação exigível e ausência de consulta à folha (`app/chamados/tests/test_e2_tarefa_do_dia.py:27`; `app/chamados/tests/test_e2_tarefa_do_dia.py:459`). Exportação efetiva continua **[nao verificado]**. |
+
+**2. Dono da pergunta: tabela completa da decisão**
+
+Para `d = p.data_evento`, a função reduz todas as combinações a dois predicados:
+
+- **V:** existe, na véspera, a posição pedida com `data_civil == d`.
+- **D:** existe essa posição no turno d, em qualquer dia civil.
+
+Essa é a decisão efetiva; não consulta batidas, atos, `trabalha`, tipo do dia nem a FK da célula da pergunta (`app/chamados/services/tarefa_do_dia.py:109`; `app/chamados/services/tarefa_do_dia.py:111`; `app/chamados/services/tarefa_do_dia.py:113`).
+
+| Posição | V | D | Dono devolvido |
+|---|---:|---:|---|
+| início | qualquer | qualquer | d |
+| pausa/retorno/fim | falso | qualquer | d |
+| pausa/retorno/fim | verdadeiro | falso | d−1 |
+| pausa/retorno/fim | verdadeiro | verdadeiro | `None` |
+
+A tabela é exaustiva para essas posições, conforme os únicos retornos da função (`app/chamados/services/tarefa_do_dia.py:111`; `app/chamados/services/tarefa_do_dia.py:115`).
+
+O cruzamento dos cadastros pedidos entra assim nessa tabela:
+
+| Situação em cada dia | Como participa |
+|---|---|
+| **Diurno** | As posições ficam no próprio dia civil; portanto o diurno da véspera normalmente não satisfaz V (`app/escala/servico_jornada.py:80`). |
+| **Noturno** | Fim e pausas satisfazem V somente quando seu instante encadeado caiu em d. Pausa anterior à meia-noite não satisfaz V (`app/escala/servico_jornada.py:75`; `app/escala/servico_jornada.py:82`). |
+| **Folga** | Não possui tratamento especial no dono. Sem lâmpadas, não oferece posição; conservando lâmpadas antigas, participa como qualquer turno (`app/chamados/services/tarefa_do_dia.py:86`; `app/chamados/services/tarefa_do_dia.py:111`). O cadastro de folga com lâmpadas antigas existe na própria bateria (`app/chamados/tests/test_e2_tarefa_do_dia.py:421`). |
+| **Sem célula** | Produz lista vazia de instâncias: V ou D fica falso, conforme o lado (`app/chamados/services/tarefa_do_dia.py:84`). |
+| **Ata sem lâmpadas E/S** | Também produz lista vazia; isso é indistinguível de “posição inexistente” para o dono (`app/chamados/services/tarefa_do_dia.py:54`; `app/chamados/services/tarefa_do_dia.py:86`). |
+| **Duas pausas** | As duas ocorrências têm a mesma `pos`, embora `instancia` receba sufixo `:2`; o dono compara `pos`, sem identificar qual pausa (`app/chamados/services/tarefa_do_dia.py:62`; `app/chamados/services/tarefa_do_dia.py:64`; `app/chamados/services/tarefa_do_dia.py:112`). |
+
+Portanto, **noturno→diurno** e **noturno→noturno** ficam igualmente ambíguos para uma posição pós-meia-noite existente nos dois turnos; **noturno→folga sem lâmpadas**, **sem célula** ou **ata vazia** entrega à véspera. Os demais cruzamentos seguem diretamente V/D, inclusive folgas com lâmpadas residuais (`app/chamados/services/tarefa_do_dia.py:111`; `app/chamados/services/tarefa_do_dia.py:115`).
+
+**A premissa das “duas leituras vivas” está desatualizada para o nascimento atual.** O emissor chama `resolver_data_evento`, que agora devolve o dia do turno pela autoridade da batida; complementos da célula também passam seu dia do turno (`app/chamados/services/disputa_emissao.py:1094`; `app/escala/servico_jornada.py:474`; `app/escala/servico_jornada.py:487`; `app/chamados/services/disputa_emissao.py:858`). Há código específico para migrar o significado antigo; sua aplicação no acervo é **[nao verificado]** (`app/chamados/services/fio.py:859`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:8`).
+
+Assim:
+
+- **Decidível tornado ambíguo:** a pergunta nova dos dois noturnos, já citada; `abrir` recebe dia do turno e vincula a célula desse dia, mas o dono ignora essa informação (`app/chamados/models.py:2477`; `app/chamados/models.py:2530`; `app/chamados/services/tarefa_do_dia.py:101`).
+- **Atribuição errada pelo contrato atual:** véspera noturna, célula d trabalhando mas com ata vazia, pergunta nova de fim para d: o dono entrega a d−1. Uma decisão de silêncio dessa pergunta pode então encerrar a exigência da véspera (`app/chamados/services/tarefa_do_dia.py:115`; `app/chamados/services/tarefa_do_dia.py:156`; `app/chamados/services/tarefa_do_dia.py:198`).
+- **Terceiro turno, fora de ambas as datas candidatas:** não achei; os únicos retornos são d, d−1 e `None`. Isso não prova pertencimento quando nenhuma posição foi identificada (`app/chamados/services/tarefa_do_dia.py:115`).
+- **Segunda pausa:** continua incompleta antes mesmo do dono, pois `marcos_turno` monta somente o primeiro intervalo; a segunda pode ficar sem teto e sair como `marco_fora_do_turno` (`app/escala/servico_jornada.py:75`; `app/chamados/services/tarefa_do_dia.py:215`). Se a pergunta trouxer explicitamente `int_ida:2`, a comparação com `i['pos']` também não casa (`app/chamados/services/tarefa_do_dia.py:98`; `app/chamados/services/tarefa_do_dia.py:112`).
+
+**3. Escritores e leitores dos dois campos**
+
+**`PerguntaDisputa.conversa`:**
+
+- **Escritores atuais:** `abrir` passa `False`; `abrir_conversa` passa `True`; `_nascer` persiste o valor (`app/chamados/models.py:2483`; `app/chamados/models.py:2494`; `app/chamados/models.py:2578`).
+- **Portas de conversa encontradas:** reabertura administrativa, emissão sem dia resolvido e âncora ausente. Todas expressam conversa sem identidade de marco (`app/chamados/services/acoes_disputa.py:259`; `app/chamados/services/disputa_emissao.py:420`; `app/chamados/services/disputa_emissao.py:1251`).
+- **Leitores explícitos encontrados:** identidade dos fatos, trava/deduplicação no nascimento, derivação da instância, censo de colisões e carga E2 (`app/chamados/models.py:2466`; `app/chamados/models.py:2508`; `app/chamados/models.py:2528`; `app/chamados/models.py:2972`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:74`; `app/chamados/services/tarefa_do_dia.py:278`).
+
+**`True = sem fato` está coerente nesses escritores. O inverso `False = fato` não é garantido para o legado:** a migração atribui `False` às conversas antigas e deriva a instância somente pelo motivo (`app/chamados/migrations/0051_decisao_pergunta.py:5`; `app/chamados/migrations/0051_decisao_pergunta.py:26`). O novo teste só força `True` numa pergunta moderna; não cobre esse residual (`app/chamados/tests/test_e2_tarefa_do_dia.py:341`).
+
+**`Ausencia.status='aguardando_documento'`:**
+
+- **Decisão e escrita:** `estado_inicial` determina o estado; criação grava esse resultado; alteração de tipo e reabertura voltam ao mesmo juiz; `mudar_estado` efetiva as transições (`app/ponto/services/ausencia.py:795`; `app/ponto/services/ausencia.py:333`; `app/ponto/services/ausencia.py:344`; `app/ponto/services/ausencia.py:543`; `app/ponto/services/ausencia.py:1119`; `app/ponto/services/ausencia.py:824`). O backfill histórico também classifica pelo documento/tipo (`app/ponto/migrations/0057_a4_backfill_pendente.py:35`).
+- **Leitores coerentes:** modelo, contadores, escalonador, cobrança ao colaborador, mensagens de tela, endpoint de anexo e os dois ramos E2 (`app/ponto/models.py:701`; `app/ponto/services/ausencia.py:965`; `app/ponto/services/ausencia.py:993`; `app/ponto/services/ausencia.py:1019`; `app/ponto/views.py:2591`; `app/api/views.py:3117`; `app/chamados/services/tarefa_do_dia.py:164`; `app/chamados/services/tarefa_do_dia.py:225`).
+
+**Não estão todos os leitores alinhados:** o payload dos chamados do app oferece “Anexar comprovante” somente para `status == 'pendente'`, ausente do vocabulário atual. Uma ausência `aguardando_documento` não recebe esse bloco (`app/api/views.py:1087`; `app/api/views.py:1091`; `app/ponto/models.py:701`).
+
+**Não achei outro status válido não final cuja obrigação seja do colaborador:** os únicos abertos são documento e decisão; este último pertence ao DP. Permitir anexar durante a decisão não cria outra obrigação de documento (`app/ponto/services/ausencia.py:765`; `app/ponto/models.py:702`; `app/api/views.py:3117`).
+
+**4. Ata lavrada com zero lâmpada E/S**
+
+**Sim, o formato antigo agregado é reconhecido explicitamente.** Ele sabe quantidades, mas não identifica os marcos; logo `nao_sei` é defensável, enquanto “não foi lavrada” é falso como explicação geral (`app/escala/services/leitor_celula.py:146`; `app/escala/services/leitor_celula.py:216`; `app/chamados/tests/test_e2_tarefa_do_dia.py:38`).
+
+**Ausência total:** o caminho examinado transforma o dia em `ausencia` e limpa suas colunas; `dia_sem_trabalho` reconhece esse tipo antes da nova guarda. Não achei falso positivo causado somente por esse caminho (`app/escala/utils.py:1220`; `app/escala/utils.py:1251`; `app/chamados/juizes.py:429`; `app/chamados/services/tarefa_do_dia.py:181`).
+
+**Somente lâmpadas de outro tipo:** o ramo alternativo aceita tipos vindos dos marcos/colunas e existem colunas `I`; não achei trajetória comprovada de trabalho legítimo com somente `I`, sem E/S. Ocorrência em produção: **[nao verificado]** (`app/ponto/services/cartorio.py:688`; `app/escala/utils.py:1383`).
+
+A cadeia de escrita encontrada é:
+
+- **Produção:** `lampadas_do_dia`, pelo DNA ou pelas colunas; `ata_do_dia` incorpora a lista. A forma individual contém `tipo`, `hora`, `acesa`, `luz` e `tipo_real`; `acesa` pode ser indeterminada (`app/ponto/services/cartorio.py:565`; `app/ponto/services/cartorio.py:638`; `app/ponto/services/cartorio.py:677`; `app/ponto/services/cartorio.py:688`; `app/ponto/services/cartorio.py:704`).
+- **Modificadores:** dispensa por ausência/justificativa acrescenta a dispensa; teto converte apagadas ainda não exigíveis em indeterminadas (`app/ponto/services/cartorio.py:773`; `app/ponto/services/cartorio.py:873`).
+- **Persistência:** a porta da célula recebe/copia a ata e a salva (`app/ponto/portas/celula.py:986`; `app/ponto/portas/celula.py:1027`). A montagem da grade também chama o mesmo produtor numa cópia em memória (`app/escala/utils.py:1886`).
+
+**5. Índice, ordem e janela**
+
+**A ordem atual é global por PK**, mesmo juntando perguntas de d e d+1: a query ordena, os buckets preservam seus elementos, a junção é novamente ordenada e a seleção usa `ps[-1]`. Não achei inversão introduzida pelo agrupamento (`app/chamados/services/tarefa_do_dia.py:280`; `app/chamados/services/tarefa_do_dia.py:282`; `app/chamados/services/tarefa_do_dia.py:319`; `app/chamados/services/tarefa_do_dia.py:249`). Igualdade textual/comportamental contra o pai: **[nao verificado]**.
+
+Os consumidores de lote encontrados são os testes, com datas internas, além do caso deliberadamente inválido. A casca abre janela exatamente no dia solicitado (`app/chamados/tests/test_e2_tarefa_do_dia.py:427`; `app/chamados/tests/test_e2_tarefa_do_dia.py:503`; `app/chamados/tests/test_e2_tarefa_do_dia.py:520`; `app/chamados/services/tarefa_do_dia.py:338`). A alimentação adjacente interna chama **`instancias`**, não `tarefa`, portanto não é bloqueada pelo `ValueError` (`app/chamados/services/tarefa_do_dia.py:318`).
+
+Chamadas legítimas da sonda externa ou de futuros leitores fora da janela: **[nao verificado]**.
+
+**6. Os testes mordem? Mutante sobrevivente** [nao verificado]
+
+**Mordem os resultados locais declarados**, com a ressalva de que o caso dos dois noturnos exige uma ambiguidade indevida para pergunta recém-criada (`app/chamados/tests/test_e2_tarefa_do_dia.py:338`; `app/chamados/tests/test_e2_tarefa_do_dia.py:355`; `app/chamados/models.py:2477`).
+
+Dois sobreviventes por **análise estática da bateria deste arquivo**:
+
+- Trocar a guarda por `if dia > self.fim`. Retira a proteção de `d < ini`, preservando o único teste externo à janela, que solicita D+1 (`app/chamados/services/tarefa_do_dia.py:315`; `app/chamados/tests/test_e2_tarefa_do_dia.py:431`).
+- Trocar `pos != 'inicio'` por `pos == 'fim'`. Perde o tratamento de pausas noturnas; os cadastros noturnos da bateria têm somente entrada e saída (`app/chamados/services/tarefa_do_dia.py:111`; `app/chamados/tests/test_e2_tarefa_do_dia.py:169`; `app/chamados/tests/test_e2_tarefa_do_dia.py:347`).
+
+Passagem efetiva da bateria inteira com esses mutantes: **[nao verificado]**.
+
+**7. Checklist**
+
+| Verificação | Resultado |
+|---|---|
+| **Segundo juiz** | O juiz agregado está autorizado/registrado. Entretanto, `dono_da_pergunta` volta a inferir o dia já entregue pela autoridade de turno, produzindo a divergência demonstrada (`app/core/juizes.py:285`; `app/chamados/services/tarefa_do_dia.py:101`; `app/escala/servico_jornada.py:487`). |
+| **Segundo escritor** | Não achei escritor persistente na E2: a carga consulta e monta estruturas em memória (`app/chamados/services/tarefa_do_dia.py:277`; `app/chamados/services/tarefa_do_dia.py:307`; `app/chamados/services/tarefa_do_dia.py:320`). |
+| **Relógio fora da borda** | A E2 passa `agora` explicitamente. Permanece a pendência conhecida: expiração produzida com `date.today()` e lida com `agora.date()`, sem conversão local nesses pontos (`app/chamados/services/tarefa_do_dia.py:295`; `app/chamados/services/tarefa_do_dia.py:303`; `app/chamados/veredito_lavrado.py:112`; `app/chamados/veredito_lavrado.py:182`). |
+| **Derivação paralela** | A classificação primeiro/último/meio está repetida em `_posicoes` e `_marcos_faltantes`; sua introdução neste delta é **[nao verificado]** (`app/chamados/services/tarefa_do_dia.py:57`; `app/chamados/services/declaracao_texto.py:123`). |
+| **Selo/RED sem mordida** | Limite inferior da janela e pausas noturnas ficam descobertos pelos mutantes acima; o selo dos noturnos também cristaliza a premissa antiga (`app/chamados/tests/test_e2_tarefa_do_dia.py:431`; `app/chamados/tests/test_e2_tarefa_do_dia.py:347`; `app/chamados/tests/test_e2_tarefa_do_dia.py:355`). |
+| **ESMERIL-SEMÂNTICA** | `conversa=False` mistura fato moderno e conversa legada; `data_evento` tem contrato atual único, mas a E2 o trata como duplo; `aguardando_documento` tem dono definido, com leitor do app ainda preso ao status morto (`app/chamados/migrations/0051_decisao_pergunta.py:5`; `app/chamados/models.py:2477`; `app/chamados/services/tarefa_do_dia.py:104`; `app/ponto/models.py:701`; `app/api/views.py:1087`). |
 
 ## 07/11 04:24 · sessao 85f50560761b · - · - · origem=Ronald (tmux)
 
@@ -787,32 +908,4 @@ A fotografia genérica `.values()` dos testes lê também os três campos (`app/
 
 Não encontrei `PerguntaDisputa.objects.create` de produção fora do `cls.objects.create` de `_nascer`; o exemplo fora da porta está no teste e é aceito sem índice (`app/chamados/models.py:2545`, `app/chamados/tests/test_e1_entradas.py:313`). A derivação no `save` protege inserções normais, mas não torna a chave imutável: só roda quando `_state.adding`; instância não vazia fornecida nem é validada contra o motivo (`app/chamados/models.py:2923`, `app/chamados/models.py:2939`). Escritor de produção que mude motivo/instância/conversa depois de nascer: [não verificado].
 
-## 07/11 00:11 · sessao 793560f8174a · - · - · origem=Ronald (tmux)
-
-4. **0051: estruturalmente compatível com o legado descrito; segurança do acervo real [não verificado].** Renomeia tabela/campos, atribui `reabertura` às decisões antigas e cria ligações de absorção nulas, compatíveis com os checks; preenche o colaborador pela disputa e a instância pelo motivo. O `SET CONSTRAINTS ALL IMMEDIATE` antecede o `ALTER ... NOT NULL`, evitando os eventos de FK pendentes que o comentário identifica. Referências: `app/chamados/migrations/0051_decisao_pergunta.py:25`, `:41`, `:49`, `:67`, `:76`, `:101`, `:104`, `:105`.
-
-   **Fila — conversa antiga vira fato na coluna.** Todas recebem `conversa=False`, sem classificação histórica. Contraexemplo: duas conversas antigas do mesmo motivo/dia entram no grupo de colisão e impedem a 0052, embora conversas novas sejam excluídas. A própria migração declara essa limitação. Referências: `app/chamados/migrations/0051_decisao_pergunta.py:4`, `:98`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:55`.
-
-   O congelado bate com o vivo: os quatro pares são exatamente `saida_sem_entrada→inicio`, `orfao_14h→fim`, `intervalo_saida→int_ida`, `intervalo_volta→int_volta`; há teste direto de igualdade. Referências: `app/chamados/migrations/0051_decisao_pergunta.py:14`; `app/chamados/services/declaracao_texto.py:42`, `:52`; `app/chamados/tests/test_e1_entradas.py:259`.
-
-   **0052: aplicação segura no acervo [não verificado].** Não há resultados do DRY no dado fornecido. O patch exige zero colisões, enquanto a 0051 preserva conversas antigas como `False`. Referências: anexo `e1_indice_0052.patch`, migração adicionada, linhas 3–5 e 19–21; `app/chamados/migrations/0051_decisao_pergunta.py:98`.
-
-5. **O command não escreve e consulta a autoridade correta.** Apenas consulta modelos e escreve em `stdout`; não possui flag de apply. Chama `competencia_entregue`, autoridade registrada como `_K6`, cujo código considera a exportação vigente não invalidada. Referências: `app/chamados/management/commands/backfill_decisoes_pergunta.py:25`, `:51`, `:67`, `:71`, `:76`; `app/core/juizes.py:312`; `app/folha/export.py:556`, `:580`.
-
-   **Fila — o DRY não suporta data nula.** Contraexemplo: pergunta legada respondida, sem decisão e com `data_evento=None`; `linhas_a_criar` chama `competencia_do_fato(None)`, chegando a `None < None`. Duas perguntas nulas sem resposta também chegam a `dia.isoformat()` ao listar colisões. O campo permite nulo; ocorrência real [não verificado]. Referências: `app/chamados/models.py:2230`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:33`, `:45`, `:90`; `app/ponto/services/fechamento.py:1588`, `:1590`, `:1595`.
-
-   O agrupamento por competência usa o adaptador existente e o corte da empresa, sem derivação própria. Referências: `app/chamados/management/commands/backfill_decisoes_pergunta.py:45`; `app/ponto/services/fechamento.py:1595`; `app/ponto/services/dia_pago.py:700`, `:714`.
-
-9. A alteração de dependência corrige instalações novas: o `RunPython` pede `LogAuditoria`, criada em `core.0002`. A única mudança da 0057 está na dependência; suas operações permanecem no mesmo `RunPython`. Referências: `app/ponto/migrations/0057_a4_backfill_pendente.py:23`, `:70`, `:78`; `app/core/migrations/0002_log_auditoria.py:16`.
-
-   Dada a premissa de migração já aplicada, a expectativa é que o executor não repita seu `RunPython` apenas pela nova dependência; comportamento do executor não está demonstrado pelo código da cópia [não verificado]. Estado real do histórico de migrações em produção [não verificado]. [nao verificado]
-
-10. **Fila — a justificativa descreve a mudança, mas erra a unidade do custo.** O `+6` corresponde estruturalmente a duas chamadas contendo `atomic` + `SELECT ... FOR UPDATE`; os números medidos apresentados no comentário não foram verificados. O comentário diz custo por “[nome]”, mas a trava é adquirida antes do dedup e também custa quando retorna uma pergunta existente. Contraexemplo: emitir duas vezes o mesmo fato; a segunda chamada bloqueia/consulta e retorna `criada=False`, sem nascimento. Referências: `app/ponto/tests/test_selo_chokepoint_escrita.py:167`, `:172`, `:174`, `:181`; `app/chamados/models.py:2473`, `:2475`, `:2498`, `:2542`.
-
-   “Conversa não trava” descreve corretamente a ausência do `SELECT FOR UPDATE`; o `atomic` envolve também a conversa. Referências: `app/chamados/models.py:2473`, `:2474`.
-
-6. Dentro deste recorte, não apareceu segundo juiz: competência exportada chama `_K6`, competência do fato reaproveita o adaptador existente e instância é inversão do catálogo. Referências: `app/chamados/management/commands/backfill_decisoes_pergunta.py:28`, `:45`, `:71`; `app/core/juizes.py:312`; `app/chamados/services/declaracao_texto.py:52`.
-
-   O teste de corrida comprova somente o caminho comum por `abrir`, com duas threads e a mesma identidade; seu título promete unicidade “NO BANCO”, mas o commit sem patch não possui essa constraint. Contraexemplo externo ao domínio do teste: inserção direta repetida, que o próprio teste do DRY constrói com sucesso esperado. Referências: `app/chamados/tests/test_e1_identidade_corrida.py:1`, `:49`, `:74`, `:81`; `app/chamados/tests/test_e1_entradas.py:309`, `:313`; `app/chamados/models.py:2942`.
-
-_2654 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2655 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
