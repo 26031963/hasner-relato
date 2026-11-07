@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 02:44:59.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (111.3 MB). Acoes na janela: **1479**.
+**Medido em 07/11/2026 02:50:21.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (111.4 MB). Acoes na janela: **1480**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:47:21 | Bash | Record E1 delivery and design questions in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') new=["PERGUNTA DE DESENHO FIO-E0-V4-E1 (obra PARADA, as outras seguem): qual a UNIDADE do indice parcial unico de identidade (colab, dia do turno, motivo, instancia de marco)? volta 1 com o indice = 105 UniqueViolation em ~45 modulos e 2 caminhos de prod; 12 motivos tem instancia VAZIA; multiplas l ...` |
 | 02:23:26 | Bash | Check push progress | `tail -3 /home/ronald/saas-hasner/logs/akmed/push_0230.log; ps -p 2219430 -o pid=,etime=; date` |
 | 02:23:00 | Bash | Check push progress | `tail -3 /home/ronald/saas-hasner/logs/akmed/push_0230.log; ps -p 2219430 -o pid=,etime=; date` |
 | 02:20:39 | Bash | Log E1 rebase in RELATO and check hook | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') L.insert(2,"REBASE-E1 0220: wt-fioe1 --onto 487b4961 c62f51ee = c2833d85 (9 a frente, sem conflito); 742f6e3b reescrito -> 51ea1e37 padrao=Backfill (GLOSSARIO), arvore app/ igual a e55c6a37; lei_akita OK 50/52; suite chamados ponto core sobre c2833d85 em curso (pela trava, atras do push)") open(p,' ...` |
