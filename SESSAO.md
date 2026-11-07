@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 01:20:20.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (109.0 MB). Acoes na janela: **1497**.
+**Medido em 07/11/2026 01:25:18.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (109.0 MB). Acoes na janela: **1494**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:23:25 | Bash |  | `cd /home/ronald/saas-hasner; date +%H:%M; ps -p 2610105 >/dev/null && echo vivo; bin/trava_teste.sh --quem; tail -c 300 logs/v2bugs/i2/suite_v5.log; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
 | 01:13:24 | Bash |  | `cd /home/ronald/saas-hasner; ps -p 2610105 >/dev/null && echo vivo; bin/trava_teste.sh --quem; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
 | 01:08:58 | Bash |  | `cd /home/ronald/saas-hasner; until /bin/grep -q '^rc=' logs/v2bugs/i2/suite_v5.log; do /usr/bin/sleep 30; done; /bin/grep -E '^(OK\|FAILED)($\| \()' logs/v2bugs/i2/suite_v5.log \| tail -1; /bin/grep -E '^Ran ' logs/v2bugs/i2/suite_v5.log \| tail -1; tail -1 logs/v2bugs/i2/suite_v5.log` |
 | 01:08:54 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') L.insert(2,'VAGA 01:0x (PUSH-ANTES-DA-E2): construtor do V2 i2 entregou e liberou a vaga -> L-123-MEDIDA-EM-PY v5 aberto na raia wt-akmed4-205205 (brief logs/akmed/brief_v5.md); vagas = E1 + L-123 v5; E2 depois do push.') open(p,'w').write('\n'.join(L)) EOF until /bin/grep -q '^rc=' logs/v2bugs/i2/s ...` |
@@ -1503,7 +1504,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:31:24 | Bash | Check aggregation launch output | `cd /home/ronald/saas-hasner; for o in r1remede v3impacto; do tail -n 2 logs/$o/agrega.out; done` |
 | 13:31:07 | Bash | Launch Codex aggregation for R1 and V3 | `cd /home/ronald/saas-hasner; cat > logs/r1remede/agrega.q <<'EOF' Leitura (CODEX_PAPEL=leitura, obra R1-CAUSAD-V3 item 1 R1-REMEDE). Anexos: as 6 saidas da sonda R1 (partes 1..6, universos disjuntos por colaborador, mesma janela por competencia), cada uma com o bloco por competencia 10/2026 e 11/2026. Para cada competencia: (1) some, entre as 6 partes, cada chave do dicionario [1] (dias_comparados ...` |
 | 13:30:54 | Bash | Inspect part outputs sizes | `cd /home/ronald/saas-hasner; for o in r1remede v3impacto; do for p in 1 2 3 4 5 6; do printf "%s p%s %s bytes rc:%s\n" $o $p "$(wc -c < logs/$o/p$p/s.r)" "$(grep -o 'rc_sombra[^,]*' logs/$o/p$p/s.r \| head -1)"; done; done; head -c 1500 logs/r1remede/p2/s.r` |
-| 13:20:57 | Bash | Wait for push and R1 p1 rerun | `cd /home/ronald/saas-hasner; timeout 590 bash -c 'until grep -q "^rc=" logs/o10b/push.log && [ -f logs/r1remede/partes3.p1.fim ]; do /usr/bin/sleep 10; done'; tail -3 logs/o10b/push.log; ls logs/r1remede/partes3.p1.fim; tail -3 logs/r1remede/p1/s.out 2>/dev/null; date +%T` |
-| 13:20:50 | Bash | Launch push detached | `cd /home/ronald/saas-hasner && setsid bash -c 'bin/push.sh > logs/o10b/push.log 2>&1; echo rc=$? >> logs/o10b/push.log' </dev/null >/dev/null 2>&1 & sleep 1; echo lancado` |
-| 13:20:27 | Bash | Deploy O10-B | `cd /home/ronald/saas-hasner && mkdir -p logs/o10b && bin/deploy.sh --sem-migrate > logs/o10b/deploy.log 2>&1; echo rc=$?; tail -8 logs/o10b/deploy.log` |
-| 13:20:24 | Bash | Update docs and commit O10-B merge | `cd /home/ronald/saas-hasner/app; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys h=sys.argv[1] p='docs/JUIZES.md'; s=open(p).read() old=""" emissor contra o DNA novo. Golden col439)""" new=""" emissor contra o DNA novo. Golden col439. Reescrita = o par (regenerada_em, editada_em) que carimbos_de_reescrita entrega ao juiz; o mais novo depois da cobranca decide; so a regeneracao cala a janela hi ...` |
