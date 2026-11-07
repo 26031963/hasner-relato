@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 12:35:08.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (124.5 MB). Acoes na janela: **500**.
+**Medido em 07/11/2026 12:40:30.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (124.5 MB). Acoes na janela: **498**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -508,5 +508,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:58:02 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '2s/.*/ESPERANDO: trava_teste.sh \| pid=1343804/' app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
 | 00:57:58 | Bash |  | `cd /home/ronald/saas-hasner; cp -p logs/v2bugs/i2/diff_v4.patch logs/f7g/mecanismo_950a3749.patch; ps -p 530390 >/dev/null && echo vivo \|\| ps -eo pid,args \| /bin/grep -E "[c]odex_pergunta\|[t]rava_teste" \| cut -c1-90` |
 | 00:57:55 | Bash |  | `cd /home/ronald/saas-hasner; date '+%H:%M'; mkdir -p logs/f7g && chmod 700 logs/f7g; cat > logs/f7g/aval.txt <<'EOF' aval Ronald 07/11 (chat): F7g-PRORROGACAO-DA-JORNADA -- resposta da lei, nenhuma lei nova (CLT aplicada, LEI-AKITA 13): pausa que o pareador JA fecha como intervalo e intervalo INTRAJORNADA (Art.71) e NAO quebra a jornada -> 19:00-07:00 com pausa 04:30-05:30 e UMA jornada; o trecho  ...` |
-| 00:39:20 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '2s/.*/ESPERANDO: trava_teste.sh \| pid=530390/' app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
-| 00:39:16 | Bash |  | `cd /home/ronald/saas-hasner; ps -p 362192 >/dev/null && echo vivo; bin/trava_teste.sh --quem; ps -eo pid,args \| /bin/grep -E "[c]odex_pergunta\|[t]rava_teste" \| cut -c1-100` |
