@@ -1,7 +1,29 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 17:19** · publicado em **07/11/2026 17:19** (UTC-3)
+> Ultima resposta processada: **07/11/2026 17:34** · publicado em **07/11/2026 17:35** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 17:34 · sessao 9e854daaf1c8 · MOTOR-LE-O-TURNO-INSTRUMENTO · construtor · origem=Code
+
+Q1–Q4 acrescentados: [11 ocorrências](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:606), [três desconhecidas](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:635), [Tuple interna](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:654) e [outro receptor](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:685). Q5 corrigido no [NAO_VE](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/medida_turno_do_par.py:52) e no [docstring de `_gap`](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/medida_turno_do_par.py:257).
+
+A comparação AST antes/depois confirmou detector, catraca e registros intactos; execução e comparação ficaram somente em memória: [nao verificado].
+
+Os resultados abaixo foram observados localmente, sem artefato histórico persistido nem certificação: [nao verificado]. Cada link aponta o comando exato; todos usam o heredoc do [runner](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:21).
+
+| Execução / comando | Resultado |
+|---|---|
+| [Original](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:21) | rc=0; 28 testes OK | [nao verificado]
+| [`MUTANTE=composicao`](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:66) | rc=1; 1 falha por asserção |
+| [`MUTANTE=linhas`](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:67) | rc=1; 3 falhas por asserção |
+| [`MUTANTE=gap`](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:68) | rc=1; 9 falhas por asserção |
+| [`MUTANTE=classificar`](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:69) | rc=1; 1 falha por asserção |
+| [`MUTANTE=P1-linha-unica`](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:70) | rc=1; 1 falha por asserção |
+| [`MUTANTE=P2-len1`](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:71) | rc=1; 2 falhas por asserção |
+| [`MUTANTE=Q1-lines10`](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:72) | rc=1; falta a linha 12 |
+| [`MUTANTE=Q2-len2`](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:73) | rc=1; `LookupError not raised` |
+| [`MUTANTE=Q3-tuple`](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:74) | rc=1; asserção contra falsa herança |
+| [`MUTANTE=Q4-self`](/home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app/core/tests/test_medida_turno_do_par.py:75) | rc=1; `LookupError not raised` |
 
 ## 07/11 17:19 · sessao 6f9c34fbaa6e · MOTOR-LE-O-TURNO-INSTRUMENTO · verificador · origem=Code
 
@@ -1010,95 +1032,4 @@ Os REDs novos verificam conversa aceita e fato cruzado recusado isoladamente; n�
 
 Ocorrência desses estados em produção, reprodução no banco e execução dos testes: **[nao verificado]**. [nao verificado]
 
-## 07/11 15:47 · sessao d55aaa0b4dac · FIO-E0-V4-E2 · verificador · origem=Code
-
-**Não atesto equivalência irrestrita.** O predicado ficou centralizado, mas há contraexemplos entre lote e chamadas separadas com Empresas divergentes em cache; também existe um caminho condicional de escrita pela tarefa. (`app/chamados/juizes.py:932`, `app/chamados/juizes.py:975`, `app/chamados/juizes.py:990`, `app/core/utils.py:18`)
-
-Suíte, deltas efetivamente executados, RED anterior, estado de produção e sequência de pouso: **[nao verificado]**. [nao verificado]
-
-**1) Quem escreve, quem lê e significado**
-
-| Dado | Escritor → leitor; significado |
-|---|---|
-| `PeriodoFechado.fechado_em` | Nasce com `auto_now_add`; `trancar_periodo` renova ao retrancar uma competência reaberta. O juiz usa como **instante inferior exclusivo** do toque. Também é comparado com `resgatado_em` pelo encerrador de chamados. (`app/ponto/models.py:926`, `app/ponto/services/fechamento.py:1401`, `app/ponto/services/fechamento.py:1408`, `app/chamados/juizes.py:999`, `app/chamados/services/competencia_trancada.py:104`) |
-| `PeriodoFechado.reaberto_em` | `reabrir_periodo` grava o instante; retrancar limpa. `periodo_trancado` e `competencia_trancada` leem **NULL versus não NULL**, não um horizonte temporal; `ativo` não decide. Outros leitores diretos usam o mesmo filtro. (`app/ponto/services/fechamento.py:1410`, `app/ponto/services/fechamento.py:1432`, `app/ponto/services/fechamento.py:1463`, `app/ponto/services/fechamento.py:1473`, `app/chamados/juizes.py:1894`, `app/chamados/services/competencia_trancada.py:311`) |
-| `LogAuditoria.acao`, `modelo`, `objeto_id`, `descricao` | A porta `registrar_log` encaminha para `evento`, que cria a linha. São verbo/modelo textuais, ID inteiro sem FK e texto livre. Para cobrar: `cobrar_dia_manual/Colaborador/colab.pk`, com `dia=<data>`; resolver: `veredito_celula/CelulaDia/cel.pk`; desarquivar: `desarquivar_chamado/ChamadoColaborador/ch.pk`. O leitor reconhece exatamente essas combinações. (`app/core/auditoria.py:22`, `app/core/observ.py:134`, `app/core/models.py:296`, `app/chamados/services/cobrar_dia.py:37`, `app/ponto/services/veredito_celula.py:334`, `app/chamados/views_arquivar.py:77`, `app/chamados/services/arquivo.py:137`, `app/chamados/juizes.py:1150`, `app/chamados/juizes.py:1175`, `app/chamados/juizes.py:1199`) |
-| `LogAuditoria.criado_em`, `usuario` | Instante automático e FK anulável; `evento` resolve o usuário pelo ator explícito/request. O juiz exige `criado_em > fechado_em`, usuário não NULL e diferente de sistema. **Não verifica papel ADMIN**: “humano” nesse predicado significa esses dois filtros. (`app/core/models.py:295`, `app/core/models.py:307`, `app/core/observ.py:108`, `app/core/observ.py:118`, `app/chamados/juizes.py:1141`) |
-| `ChamadoColaborador.celula` | FK anulável da célula de origem. O nascimento obtém a célula pelo colaborador/dia do fato; `apontar_celula` preenche somente ponteiro ainda NULL. O juiz lê o vínculo **atual**, exigindo também que o chamado pertença ao colaborador consultado. (`app/chamados/models.py:48`, `app/chamados/models.py:1090`, `app/chamados/models.py:1119`, `app/chamados/models.py:1191`, `app/chamados/services/vinculos.py:92`, `app/chamados/juizes.py:1188`, `app/chamados/juizes.py:1192`) |
-| `CelulaDia.colaborador`, `data` | FK da pessoa e `DateField`. Geração, regeneração e edição humana criam pela pessoa e pelo dia percorrido/recebido. O juiz consulta IDs/datas em lote e depois confere o **par exato**, eliminando os cruzamentos extras do `__in`. (`app/escala/models.py:1681`, `app/escala/models.py:1685`, `app/ponto/portas/celula.py:259`, `app/ponto/portas/celula.py:600`, `app/ponto/portas/celula.py:849`, `app/chamados/juizes.py:1164`, `app/chamados/juizes.py:1167`) |
-
-Os instantes seguem a configuração `USE_TZ=True`, `America/Sao_Paulo`; o juiz não converte fuso nem escolhe o dia: recebe uma data pronta. A janela usa o corte empresarial, inclui início/fim e adota 21 quando falta Empresa, limitado a 2–28. Configuração efetiva de produção: [nao verificado]. (`app/config/settings/base.py:93`, `app/config/settings/base.py:95`, `app/chamados/juizes.py:991`, `app/ponto/janelas.py:10`, `app/ponto/janelas.py:24`, `app/ponto/janelas.py:36`)
-
-| Chave/parâmetro | Escritor → leitor; significado |
-|---|---|
-| `('empresa', id)` | `dias_trancados` grava/lê a Empresa, inclusive `None`; alimenta o corte da janela. (`app/chamados/juizes.py:974`, `app/chamados/juizes.py:990`, `app/chamados/juizes.py:991`) |
-| `('tranca', emp, mes, ano)` | O mesmo corpo grava/lê `PeriodoFechado` ou `None`; mês/ano vêm do **fim da competência**, não do mês civil do dia. (`app/chamados/juizes.py:992`, `app/chamados/juizes.py:995`, `app/chamados/juizes.py:997`) |
-| `('toque', colab, dia, desde)` | `_admin_tocou_os_dias_depois` lê a chave e grava somente `True`; distingue pessoa, data e instante de tranca. (`app/chamados/juizes.py:1100`, `app/chamados/juizes.py:1101`, `app/chamados/juizes.py:1116`) |
-| `('sistema',)` | O helper obtém o PK de sistema e o distribui pelos memos pendentes; a consulta da trilha o exclui. (`app/chamados/juizes.py:1107`, `app/chamados/juizes.py:1112`, `app/chamados/juizes.py:1142`) |
-| `_tarefa_pura(trancado=)` | A carga fornece pertencimento a `self._trancado`; significa **competência trancada e ausência de toque humano posterior**, não apenas existência de `PeriodoFechado`. O corpo puro somente consome esse booleano. (`app/chamados/services/tarefa_do_dia.py:168`, `app/chamados/services/tarefa_do_dia.py:187`, `app/chamados/services/tarefa_do_dia.py:367`, `app/chamados/services/tarefa_do_dia.py:402`) |
-
-**Não é correto afirmar que todo `data_evento` significa dia do turno.** Perguntas do fato exigem `DiaDoTurno`; conversas gravam o dia civil da criação. A tarefa seleciona `conversa=False`, enquanto C6/wrapper da tranca não fazem essa distinção. É uma dualidade anterior ao diff, mas o novo docstring generaliza demais ao chamar todo `data_evento` de dia do turno. (`app/chamados/models.py:2477`, `app/chamados/models.py:2494`, `app/chamados/services/tarefa_do_dia.py:321`, `app/chamados/juizes.py:930`, `app/chamados/juizes.py:932`, `app/chamados/juizes.py:1261`)
-
-**2) Lote versus avulso**
-
-O avulso novo é literalmente lote de um. Repetições preservam posições; empresas/competências possuem chaves distintas; células e chamados são reconduzidos ao par correto. Com entradas coerentes e estado estável durante a leitura, essas estruturas preservam o predicado. (`app/chamados/juizes.py:932`, `app/chamados/juizes.py:962`, `app/chamados/juizes.py:992`, `app/chamados/juizes.py:1167`, `app/chamados/juizes.py:1192`)
-
-O menor `desde` está correto: a consulta traz um superconjunto, e **cada etapa** reaplica `> desde` do item. Um registro exatamente no instante da tranca não conta. (`app/chamados/juizes.py:1141`, `app/chamados/juizes.py:1156`, `app/chamados/juizes.py:1180`, `app/chamados/juizes.py:1203`)
-
-A equivalência **para todo objeto aceito** falha nestas bordas:
-
-- Dois colaboradores com mesmo `empresa_id`, memos separados e objetos Empresa com cortes 10/21: o lote reaproveita a primeira Empresa para ambos; chamadas separadas usam suas respectivas Empresas. Com dia 15/11 e tranca somente em novembro, reproduzi em memória **lote `[False, False]`; separados `[False, True]`**. Ocorrência em produção: [nao verificado]. (`app/chamados/juizes.py:975`, `app/chamados/juizes.py:979`, `app/chamados/juizes.py:990`, `app/ponto/janelas.py:24`)
-- `SimpleNamespace(empresa_id=E, empresa=None)`: o corpo antigo anexado usava `None`, portanto corte default 21; o novo interpreta como Empresa faltante e busca E, podendo mudar competência e resultado. A comparação histórica depende do diff fornecido; execução de `e2dc08e2`: [nao verificado]. (`app/chamados/juizes.py:941`, `app/chamados/juizes.py:984`, `app/chamados/juizes.py:991`, `app/ponto/janelas.py:50`)
-- NS sem atributo `empresa` agora pode ser atendido pela busca; Empresa inexistente é omitida por `in_bulk`, vira `None` e segue pela janela default. Isso substitui o acesso direto anterior ao atributo/FK, inclusive seus possíveis erros. Execução ORM dessas bordas: [nao verificado]. (`app/chamados/juizes.py:941`, `app/chamados/juizes.py:984`, `app/chamados/juizes.py:990`)
-
-Os selos novos não cobrem essas bordas: usam uma Empresa, uma competência e colaboradores reais; o NS envolve pergunta/disputa. (`app/chamados/tests/test_e2_tarefa_do_dia.py:1146`, `app/chamados/tests/test_e2_tarefa_do_dia.py:1186`, `app/chamados/tests/test_e2_tarefa_do_dia.py:1198`)
-
-**3) Quantidade e ordem de queries**
-
-Para um colaborador válido, sistema existente e caches equivalentes, a sequência nominal permanece: Empresa → período → sistema → cobrar → células → resolver → chamados → desarquivar, interrompendo quando possível. Cada etapa necessária corresponde a uma consulta; o caminho frio completo chega a oito. A comparação com a base é estática pelo diff; deltas executados: [nao verificado]. (`app/chamados/juizes.py:984`, `app/chamados/juizes.py:995`, `app/chamados/juizes.py:1110`, `app/chamados/juizes.py:1149`, `app/chamados/juizes.py:1164`, `app/chamados/juizes.py:1175`, `app/chamados/juizes.py:1188`, `app/chamados/juizes.py:1198`)
-
-**Não são as mesmas queries SQL:** saíram `contains/exists` do cobrar; agora são carregadas descrição/data e a seleção ocorre em Python. O custo de linhas/memória não é certificado pela contagem de queries. (`app/chamados/juizes.py:1149`, `app/chamados/juizes.py:1156`)
-
-Há diferenças possíveis: NS com `empresa=None` ganha consulta de Empresa; o carregamento por `in_bulk` alimenta o memo, mas não aquece a FK `colab.empresa`, podendo deslocar uma consulta para um acesso posterior. (`app/chamados/juizes.py:940`, `app/chamados/juizes.py:984`, `app/chamados/juizes.py:990`)
-
-`test_snc2` conta somente queries em `core_logauditoria` e `auth_user`; exige o delta de quatro consultas de trilha e igualdade do custo de sistema. **Não verifica total nem ordem de todas as queries.** (`app/chamados/tests/test_snc2_toque_em_lote.py:99`, `app/chamados/tests/test_snc2_toque_em_lote.py:107`, `app/chamados/tests/test_snc2_toque_em_lote.py:109`)
-
-**4) Estado entre chamadas**
-
-Empresa/tranca continuam com `lote=False`, no request ou colaborador; toque/sistema podem usar `LOTE_DA_TRANCA`. Os contextos são restaurados em `finally`. `da_vez` é local, mas seus objetos são copiados para os memos existentes, agora compartilhando referências entre colaboradores. (`app/chamados/juizes.py:970`, `app/chamados/juizes.py:971`, `app/chamados/juizes.py:990`, `app/chamados/juizes.py:996`, `app/chamados/juizes.py:1024`, `app/chamados/juizes.py:1055`, `app/core/middleware.py:78`, `app/core/middleware.py:82`)
-
-**Não há NAO de toque gravado no `_tranca_memo`.** Só `True` entra nessa chave. (`app/chamados/juizes.py:1101`, `app/chamados/juizes.py:1115`, `app/chamados/juizes.py:1116`)
-
-Há, porém, **estado novo na carga**: `self._trancado` conserva o resultado durante sua vida. Reutilizar a mesma carga após toque/reabertura mantém o resultado anterior; `.tarefa()` não consulta novamente o juiz. Isso é uma fotografia da carga, distinta do memo de toque. (`app/chamados/services/tarefa_do_dia.py:367`, `app/chamados/services/tarefa_do_dia.py:402`)
-
-**5) Caminho da tarefa e posição do degrau**
-
-No módulo inspecionado, a tranca entra por `dias_trancados`, vira `self._trancado` e chega ao corpo puro por booleano; não encontrei outro caminho direto de leitura da tranca. (`app/chamados/services/tarefa_do_dia.py:364`, `app/chamados/services/tarefa_do_dia.py:367`, `app/chamados/services/tarefa_do_dia.py:402`)
-
-A ordem é `fora_vinculo → isento → trancado → sem_celula`. Portanto preserva as duas primeiras prioridades, mas muda casos existentes: **trancado sem célula passa de `sem_celula/nao_sei=True` para `competencia_trancada/nao_sei=False`**. Também antecede ata sem lâmpadas, teto, ausência e decisões. (`app/chamados/services/tarefa_do_dia.py:177`, `app/chamados/services/tarefa_do_dia.py:180`, `app/chamados/services/tarefa_do_dia.py:187`, `app/chamados/services/tarefa_do_dia.py:196`, `app/chamados/services/tarefa_do_dia.py:200`, `app/chamados/services/tarefa_do_dia.py:255`)
-
-**6) Estado atual e horizonte**
-
-Sim: o docstring declara expressamente tranca/toque como estado atual, sem corte por `agora`; a consulta compara a trilha somente com `fechado_em`. (`app/chamados/services/tarefa_do_dia.py:298`, `app/chamados/services/tarefa_do_dia.py:306`, `app/chamados/juizes.py:999`, `app/chamados/juizes.py:1141`)
-
-O selo de horizonte continua mordendo decisões, efeitos, retratação e passivo posteriores; não ficou vazio. Sua lista textual não acrescentou nominalmente a tranca, embora remeta ao docstring completo da carga; também não cobre a interação entre horizonte e tranca. Logo ele não certifica uma reconstrução histórica integral da tarefa. (`app/chamados/tests/test_e2_tarefa_do_dia.py:709`, `app/chamados/tests/test_e2_tarefa_do_dia.py:714`, `app/chamados/tests/test_e2_tarefa_do_dia.py:732`, `app/chamados/tests/test_e2_tarefa_do_dia.py:750`, `app/chamados/tests/test_e2_tarefa_do_dia.py:785`)
-
-**7) Classes de reprovação**
-
-| Classe | Resultado |
-|---|---|
-| Segundo juiz/derivação paralela | Não apareceu um segundo corpo: C6 → avulso → lote; tarefa → lote. `_C20` está registrado e a frase da TRAVA existe. A equivalência universal exigida na declaração, contudo, tem as ressalvas do item 2. (`app/chamados/juizes.py:932`, `app/chamados/juizes.py:1261`, `app/chamados/services/tarefa_do_dia.py:364`, `app/core/juizes.py:292`, `app/docs/CORTES.md:425`, `CLAUDE.md:276`) |
-| Escrita pelo leitor | **Caminho condicional encontrado:** toque pendente chama `get_user_sistema`, cujo `get_or_create` cria usuário se faltar. O helper é anterior, mas a tarefa agora o alcança. Migration semeia sistema; existência em produção: [nao verificado]. (`app/chamados/juizes.py:1107`, `app/chamados/juizes.py:1110`, `app/core/utils.py:18`, `app/core/migrations/0003_user_sistema.py:6`) |
-| Relógio fora da borda | Os blocos novos recebem datas/instantes; não acrescentam leitura do relógio. A tarefa exige `agora` e confere compatibilidade da carga. (`app/chamados/juizes.py:999`, `app/chamados/juizes.py:1141`, `app/chamados/services/tarefa_do_dia.py:416`, `app/chamados/services/tarefa_do_dia.py:420`) |
-| Caso14 sem mordida | Tem respostas fixas para trancado, O44, cobrar/resolver, sistema/nulo/antes/outro e reabertura. Não é apenas comparação entre implementações. (`app/chamados/tests/test_e2_tarefa_do_dia.py:1086`, `app/chamados/tests/test_e2_tarefa_do_dia.py:1092`, `app/chamados/tests/test_e2_tarefa_do_dia.py:1098`, `app/chamados/tests/test_e2_tarefa_do_dia.py:1111`, `app/chamados/tests/test_e2_tarefa_do_dia.py:1122`) |
-| Selo14 sem mordida | Verifica resultado fixo e delegação por mock; cobre um universo homogêneo. Pré-cria sistema, portanto não morde a escrita condicional acima. (`app/chamados/tests/test_e2_tarefa_do_dia.py:1156`, `app/chamados/tests/test_e2_tarefa_do_dia.py:1201`, `app/chamados/tests/test_e2_tarefa_do_dia.py:1203`) |
-| Caso10PelaForma sem mordida | Detecta seus mutantes explícitos, mas é parcial: `getattr(c, 'via_encerramento')` e `filter(**{'via_encerramento': ...})` escapam; presença do import basta para sua exigência de “perguntar ao juiz”. Esses escapes não foram encontrados na tarefa real. (`app/chamados/tests/test_e2_tarefa_do_dia.py:1225`, `app/chamados/tests/test_e2_tarefa_do_dia.py:1235`, `app/chamados/tests/test_e2_tarefa_do_dia.py:1250`, `app/chamados/tests/test_e2_tarefa_do_dia.py:1255`, `app/chamados/services/tarefa_do_dia.py:364`) |
-| Ordem de trava | Os blocos alterados não acrescentam aquisição explícita de trava; permanece a ressalva do possível `get_or_create`. (`app/chamados/juizes.py:961`, `app/chamados/juizes.py:1094`, `app/chamados/services/tarefa_do_dia.py:362`, `app/core/utils.py:18`) |
-| Pouso antes do pré-requisito/RED anterior | **[nao verificado]**. | [nao verificado]
-| Campo com dois significados | `data_evento` distingue fato/turno e conversa/dia civil; o diff não cria essa dualidade, mas seu docstring não a ressalva. (`app/chamados/models.py:2477`, `app/chamados/models.py:2494`, `app/chamados/juizes.py:930`) |
-
-**8) Zero chamador — L-111**
-
-Não encontrei sítio tocado que tenha ficado sem chamador de produção: `_empresa_ja_carregada`, os dois helpers de toque, `dias_trancados`, `_tarefa_pura` e a fábrica da carga possuem chamadas. O avulso conserva C6, models, reconciliador e emissor. (`app/chamados/juizes.py:977`, `app/chamados/juizes.py:1003`, `app/chamados/juizes.py:1113`, `app/chamados/juizes.py:932`, `app/chamados/services/tarefa_do_dia.py:367`, `app/chamados/services/tarefa_do_dia.py:399`, `app/chamados/services/tarefa_do_dia.py:409`, `app/chamados/juizes.py:1261`, `app/chamados/models.py:1798`, `app/chamados/reconciliador.py:657`, `app/chamados/reconciliador.py:737`, `app/chamados/services/disputa_emissao.py:1691`)
-
-_2771 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2772 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
