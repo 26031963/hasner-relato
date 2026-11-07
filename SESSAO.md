@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 01:15:02.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (109.0 MB). Acoes na janela: **1501**.
+**Medido em 07/11/2026 01:20:20.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (109.0 MB). Acoes na janela: **1497**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1507,7 +1507,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:20:50 | Bash | Launch push detached | `cd /home/ronald/saas-hasner && setsid bash -c 'bin/push.sh > logs/o10b/push.log 2>&1; echo rc=$? >> logs/o10b/push.log' </dev/null >/dev/null 2>&1 & sleep 1; echo lancado` |
 | 13:20:27 | Bash | Deploy O10-B | `cd /home/ronald/saas-hasner && mkdir -p logs/o10b && bin/deploy.sh --sem-migrate > logs/o10b/deploy.log 2>&1; echo rc=$?; tail -8 logs/o10b/deploy.log` |
 | 13:20:24 | Bash | Update docs and commit O10-B merge | `cd /home/ronald/saas-hasner/app; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys h=sys.argv[1] p='docs/JUIZES.md'; s=open(p).read() old=""" emissor contra o DNA novo. Golden col439)""" new=""" emissor contra o DNA novo. Golden col439. Reescrita = o par (regenerada_em, editada_em) que carimbos_de_reescrita entrega ao juiz; o mais novo depois da cobranca decide; so a regeneracao cala a janela hi ...` |
-| 13:20:02 | Bash | Merge O10-B lane no-commit and cmp files | `cd /home/ronald/saas-hasner && git merge --no-ff --no-commit raia/wt-o10b-103324 2>&1 \| tail -2; git rev-parse -q --verify MERGE_HEAD; for f in $(git diff --name-only b6d69541..c3ba27d7); do cmp -s "$f" "/home/ronald/wt-o10b-103324/$f" && echo "cmp ok $f" \|\| echo "CMP DIFF $f"; done \| sort \| uniq -c \| awk '{print $2,$3}' \| sort \| uniq -c` |
-| 13:19:58 | Bash | Check JUIZES.md header and selos reading it | `cd /home/ronald/saas-hasner; head -5 app/docs/JUIZES.md; grep -rln "JUIZES.md" bin/tests/*.sh app/core/tests/*.py 2>/dev/null \| head` |
-| 13:19:54 | Bash | Read JUIZES COBRANCA ORFA entry | `cd /home/ronald/saas-hasner/app; sed -n 41,44p docs/JUIZES.md` |
-| 13:19:48 | Bash | Check overlap between main and O10-B lane | `cd /home/ronald/saas-hasner; git log --oneline -1; git diff --name-only b6d69541..HEAD \| sort > /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/m.txt; git diff --name-only b6d69541..c3ba27d7 \| sort > /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/r.txt; comm -12 /tmp/claude-1001/-home-ronald-saas-hasner- ...` |
