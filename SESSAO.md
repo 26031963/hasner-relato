@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 11:52:14.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (124.2 MB). Acoes na janela: **493**.
+**Medido em 07/11/2026 11:57:45.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (124.2 MB). Acoes na janela: **498**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:53:47 | Bash | Wait for CODEX-CONSTRUTOR suite verdict | `cd /home/ronald/saas-hasner; L=logs/codexneg/suite_pouso_d63b837f.log; until [ -f $L.fim ]; do /usr/bin/sleep 30; done; echo rc=$(cat $L.fim); grep "^Ran" $L \| tail -1; grep -E "^(OK\|FAILED)($\| \()" $L \| tail -1; grep -E "^(ERROR\|FAIL):" $L \| head` |
+| 11:53:45 | Bash | Kill the waiter I just spawned without notification | `pkill -u $(id -u) -f 'until \[ -f logs/codexneg/suite_pouso_d63b837f.log.fim' ; echo done` |
+| 11:53:41 | Bash | Save pouso diff; prepare waiter | `cd /home/ronald/wt-codexneg-pouso-114427 && git diff ffbda473 d63b837f > /home/ronald/saas-hasner/logs/codexneg/diff_pouso_d63b837f.patch; chmod 600 /home/ronald/saas-hasner/logs/codexneg/diff_pouso_d63b837f.patch; cd /home/ronald/saas-hasner && nohup bash -c 'L=logs/codexneg/suite_pouso_d63b837f.log; until [ -f $L.fim ]; do /usr/bin/sleep 30; done; echo rc=$(cat $L.fim); grep "^Ran" $L \| tail -1 ...` |
+| 11:53:35 | Bash | List codexneg logs and pouso diff stat | `cd /home/ronald/saas-hasner; ls logs/codexneg/ \| head -40; cd /home/ronald/wt-codexneg-pouso-114427 && git diff ffbda473 d63b837f --stat` |
+| 11:53:28 | Bash | Log repeat prompt, check suite and builders | `cd /home/ronald/saas-hasner; date '+%H:%M'; echo "\| 07/11 $(date +%H:%M) \| segue a fila; PAREI so em lei ou ! \| repetido: ja recebido 08:52, estado CODEX-CONSTRUTOR suite inteira rodando (trava 227379), E1 fixture devolvida, E2 construindo, onde RELATO topo \|" >> app/docs/PROMPTS.md; tail -2 logs/codexneg/suite_pouso_d63b837f.log; ls logs/codexneg/suite_pouso_d63b837f.log.fim 2>/dev/null; tail ...` |
 | 11:47:42 | Bash | Log aval, update ESPERANDO, test stop hook | `echo '\| 07/11 11:45 \| aval Ronald: CODEX-CONSTRUTOR POUSA AGORA + PILOTO MOTOR-LE-O-TURNO-INSTRUMENTO \| recebido: copia wt-codexneg-pouso-114427 d63b837f (merge raia @1bd494cc + emenda CLAUDE.md 7b CODEX 1 + .ref); selos codex 4/4 rc 0; suite inteira rodando (logs/codexneg/suite_pouso_d63b837f.log); depois opus final, aval NA TELA da emenda, pouso proprio; piloto depois \|' >> PROMPTS.md && sed ...` |
 | 11:47:33 | Bash | Read hour and doc tops | `cd /home/ronald/saas-hasner/app/docs; date '+%d/%m %H:%M'; tail -3 PROMPTS.md \| cut -c1-200; sed -n 1,3p RELATO.md \| cut -c1-200` |
 | 11:47:29 | Bash | Check who holds the trava and suite pids | `cd /home/ronald/saas-hasner; bash bin/trava_teste.sh --quem 2>&1 \| tail -3; ps -eo pid,args \| grep -v grep \| grep 'wt-codexneg-pouso' \| head` |
