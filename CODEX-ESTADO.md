@@ -1,7 +1,285 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **06/11/2026 20:52** · publicado em **06/11/2026 20:54** (UTC-3)
+> Ultima resposta processada: **06/11/2026 20:54** · publicado em **06/11/2026 20:59** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 06/11 20:54 · sessao 418dcb5a30a1 · PLACAR-LIVENESS · leitura · origem=Code
+
+**Não há dados de produção suficientes para publicar nenhum dos cinco números. Todos permanecem [nao verificado].** Há autoridades aproveitáveis para medir (1); para (4) e (5), o enunciado integral excede o que as fontes existentes conseguem demonstrar. Os limites concretos estão abaixo. (`app/folha/fora_da_folha.py:203`; `app/api/views_core.py:402`; `app/chamados/services/vigia_fio.py:334`, `:577`)
+
+**1. Dia que segura a folha sem porta**
+
+**Autoridade real:** `folha.fora_da_folha.o_que_segura`. Ela pede os dias retentores a `motivos_retencao_celula` e consulta `porta_alcancavel_do_dia`; `fio == FIO_SEM_PORTA` é a resposta existente para “retém sem porta”. Não é necessário reproduzir a regra. (`app/folha/fora_da_folha.py:95`, `:203`, `:217`, `:221`; `app/chamados/juizes.py:1329`)
+
+**Universo:** enumerar `universo_da_competencia`, por empresa, e chamar `o_que_segura` para cada colaborador. Usar somente `fora_da_folha`, `dias_que_seguram` ou `censo_alcance` reduz indevidamente a frota: a classificação padrão começa nos `FechamentoMensal` existentes e o segundo filtro aceita somente `furo_espelho`. (`app/ponto/services/fechamento.py:382`, `:439`; `app/folha/export.py:777`; `app/folha/fora_da_folha.py:119`, `:128`)
+
+A composição existente de competências abertas é `competencias_a_lavrar`: corrente incondicionalmente, mais anterior enquanto não entregue. **Ela não enumera todas as competências históricas abertas.** A sonda abaixo declara esse escopo. (`app/ponto/services/he_pendente_lavrado.py:209`, `:220–225`)
+
+**Exclusões da autoridade:** isentos; datas fora de admissão/demissão; dia sem célula e sem vínculo; protestos integralmente não cobráveis; pausa isolada absolvida pelo juiz correspondente. Cegueira passada com vínculo pode reter; não deve ser eliminada pela sonda. (`app/folha/export.py:1192–1214`, `:1227–1256`)
+
+**Porta** significa chamado da célula na fila, ou pergunta viva no app com âncora na fila e resposta não vazia. Acesso manual por URL e “Resolver dia” ficam expressamente fora dessa definição; ela também não recebe um usuário admin concreto para testar sua permissão. (`app/chamados/juizes.py:1341–1370`, `:1372–1387`)
+
+**2. POST de tela acima de 30 segundos, últimas 24 horas**
+
+**Não existe medidor pronto identificado para esse contrato.** Existe a fonte: Gunicorn escreve método, rota, status e duração em segundos, em `/app/logs/access-ui.log*` e `/app/logs/access-core.log*`, além do console. O `timeout=30` é configuração, não contagem de requisições lentas. (`app/gunicorn.conf.py:21`, `:42–49`, `:83–104`; `app/gunicorn.core.conf.py:34–41`, `:75–96`)
+
+Quem escreve os campos é o access logger; `colab` e `cli` vêm dos cabeçalhos produzidos por `LogContextoMiddleware`. `colab=u123` identifica **User**, não `Colaborador` 123: precisa resolver a relação antes de emitir `colNNN`. O leitor existente `_uso_no_log` conta uso de portas, mas não aplica duração nem janela de 24 horas. (`app/core/middleware.py:114–119`, `:139–162`; `app/core/portas_da_tela.py:82–100`)
+
+Padrão proposto, sobre a mensagem original do access log:
+
+```python
+ACCESS = re.compile(
+    r"^(?P<ts>\d{4}-\d\d-\d\d \d\d:\d\d:\d\d) "
+    r"\S+ ip=(?P<ip>.*?) colab=(?P<ator>-|u?\d+) "
+    r"cli=(?P<cli>.*?) (?P<metodo>[A-Z]+) (?P<rota>/\S*) -> "
+    r"(?P<status>\d{3}) (?P<segundos>\d+(?:\.\d+)?)s ua=.*$"
+)
+```
+
+O padrão exige a linha completa emitida pelo escritor; uma frase mencionando “POST”, “30s” ou “timeout” não basta. Depois do casamento: janela fixa `[agora−24h, agora)`, método `POST`, duração **estritamente maior que 30**, uma ocorrência por requisição. A forma dos campos vem do escritor; a disponibilidade de 24 horas completas e o fuso efetivo dos arquivos são [nao verificado]. (`app/gunicorn.conf.py:48–49`, `:83–84`)
+
+“De tela” ainda precisa de um universo explícito de rotas/canais: a V2 envia ao endpoint API no core; excluir `/api/` perderia essa tela. O censo estático de portas exclui API e, portanto, sozinho não resolve essa seleção. (`app/templates/ponto/bater_ponto_v2.html:335–338`; `app/core/portas_da_tela.py:20`, `:112–117`)
+
+**3. HTTP 500 com Traceback para admin ou colaborador, 24 horas**
+
+**Existe um medidor próximo, mas insuficiente:** `selo_paginas_500.sh` procura `50[0-9]`, usa cinco minutos por padrão, não exige Traceback e permite falha do pipeline produzir zero. Não atende ao contrato. (`bin/selo_paginas_500.sh:13–19`)
+
+**Fontes:** access logs para status, rota e ator; logger `django.request` para a exceção, escrito em `/app/logs/errors.log*` e console. O arquivo de erros não contém casca, usuário ou request ID no formato configurado. Para preservar a casca, ler separadamente o console de `saas_ui` e `saas_core`, com limites explícitos de tempo; não somar arquivo e console do mesmo erro. (`app/config/settings/saas.py:122`, `:131–142`, `:173`; `app/gunicorn.conf.py:48–49`; `bin/selo_paginas_500.sh:15–16`)
+
+Padrões propostos para o registro de erro:
+
+```python
+ERROR500 = re.compile(
+    r"^(?P<ts>\d{4}-\d\d-\d\d \d\d:\d\d:\d\d,\d{3}) "
+    r"ERROR django\.request Internal Server Error: (?P<rota>/\S*)$"
+)
+TRACEBACK = re.compile(r"^Traceback \(most recent call last\):$")
+```
+
+Exigir o cabeçalho e o Traceback **no mesmo registro multilinha**, antes do próximo cabeçalho; casar também um access record com `status == 500`. Isso exclui prosa solta e tracebacks de boot ou de outro logger. O formatter é verificável; uma ocorrência concreta desse cabeçalho Django não foi fornecida, portanto o padrão precisa ser confrontado com a linha real antes de valer como instrumento. (`app/config/settings/saas.py:122`, `:173–174`; `app/gunicorn.conf.py:89–106`; [nao verificado])
+
+**Limite decisivo:** correlação por horário e rota não identifica inequivocamente uma requisição sob concorrência. Sem vínculo seguro entre erro, access record e ator admin/colaborador, esse caso é `NAO SEI`; não cabe eliminá-lo. Os formatos existentes não incluem request ID compartilhado. (`app/config/settings/saas.py:122`; `app/gunicorn.conf.py:48–49`; `app/core/middleware.py:150–162`)
+
+**4. Batida recusada sem trilha ou sem saída para o colaborador**
+
+**Não existe fonte completa nem função de medida equivalente.** A ausência da própria tentativa no banco impede encontrar todas as recusas sem trilha; também falta comprovação persistida de apresentação/entrega da saída. Os contraexemplos são concretos:
+
+| Caminho | O que a cópia demonstra |
+|---|---|
+| API | Recusas por situação e tipo inválido retornam antes da auditoria GPS. (`app/api/views_core.py:402–426`) |
+| V2 antes do POST | Câmera/GPS podem interromper o envio apenas com aviso e `return false`. (`app/templates/ponto/bater_ponto_v2.html:285–301`, `:325`) |
+| Colisão | `registrar_batida` pode devolver `None, conflito`; a API responde HTTP 200, `sucesso=True`, `ignorada_intervalo`. (`app/ponto/registro_batida.py:138–151`; `app/api/views_core.py:695–718`) |
+| V2 depois do POST | O ramo `r.ok` não verifica esse status antes de apresentar sucesso. (`app/templates/ponto/bater_ponto_v2.html:340`) |
+| Tela antiga | Há retorno `ignorada_intervalo` sem registro da tentativa nesse ramo. (`app/ponto/services/triagem_batida.py:707–732`) |
+| Fila offline | A tentativa reside no IndexedDB; respostas 400 podem removê-la com `console.warn`. (`app/static/pwa.js:107–175`) |
+
+A parte consultável é `LogAuditoria.acao == "batida_recusada_sem_gps"`, escrita pela API. Isso conta recusas GPS **com trilha**, não as recusas sem trilha. Até essa escrita é best effort. O middleware de mensagem melhora o JSON devolvido, mas não comprova recebimento pelo colaborador. (`app/api/views_core.py:440–458`; `app/core/observ.py:105`, `:133–139`; `app/core/middleware.py:19–46`)
+
+Logo, a sonda devolve **`C4 NAO SEI`**, acompanhada do inventário GPS disponível. Transformar esse inventário em contador integral seria afirmar o que a fonte não mostra. (`app/api/views_core.py:402–458`)
+
+**5. Pergunta ou chamado vivo que o admin não alcança**
+
+**Não existe uma autoridade única para o enunciado global.** Existem três recortes distintos:
+
+| Instrumento real | Universo e limite |
+|---|---|
+| `vigia_fio.censo` | Chamado vivo com célula, módulo do vocabulário de furo e célula acusando. Mede ausência de fio vivo, não permissão de acesso do admin. (`app/chamados/services/vigia_fio.py:334–379`, `:417`) |
+| `vigia_fio.censo_alcance` | Dias retidos pela folha nas competências de `competencias_a_lavrar`; usa a porta real. Exclui hoje/futuro e quatro baldes de encaminhamento. (`app/chamados/services/vigia_fio.py:542`, `:577–589`, `:642–660`) |
+| Fio mudo | Está dentro do emissor, com filtros próprios; não há função pública pura equivalente ao contador global. Não executar o comando como sonda de leitura. (`app/chamados/management/commands/disparar_perguntas_competencia.py:141–159`, `:251`, `:304`) |
+
+Os quatro baldes são decisão do dia pendente, ausência em decisão, escala que não descreve o dia e fio do admin. Este último exige presença **do dia** na lista e dono lavrado BATIDA/CADASTRO. Não equivalem a provar que um admin concreto consegue alcançar todo objeto vivo. (`app/chamados/services/vigia_fio.py:274–315`; `app/chamados/juizes.py:1341`)
+
+A sonda publica os dois censos como diagnósticos completos, mas mantém **`C5 NAO SEI`** para o enunciado literal. Falta definir e implementar o universo global, a identidade/permissões do admin e a composição sem duplicação entre pergunta, chamado e dia. (`app/chamados/services/vigia_fio.py:334`, `:577`; `app/chamados/juizes.py:1341`)
+
+**Fontes de banco, escritores e leitores usados**
+
+Os campos abaixo são fontes das autoridades e dos diagnósticos; valores derivados em memória, como `fio` e `dono`, não são uma nova tabela de fatos. (`app/folha/fora_da_folha.py:221–231`; `app/ponto/management/commands/e6_oraculo.py:172–183`)
+
+| Modelo/campos | Quem escreve | Quem lê |
+|---|---|---|
+| `Empresa.dia_inicio_competencia` | Formulário → porta de estrutura. (`app/colaboradores/views.py:523`, `:538`; `app/colaboradores/services/estrutura.py:17`) | Janelas. (`app/ponto/janelas.py:36–57`) |
+| `Colaborador.empresa`, `situacao`, admissão/demissão, `isento_ponto` | Cadastro/desligamento → portas de colaborador. (`app/colaboradores/views.py:176`, `:1313–1342`; `app/colaboradores/services/desligamento.py:103–108`; `app/colaboradores/services/colaborador.py:55–76`) | Universo e retenção. (`app/ponto/services/fechamento.py:439–445`; `app/folha/export.py:1192–1201`) |
+| `CelulaDia.colaborador`, `data`, `trabalha` | Geração/edição pela porta de célula. (`app/ponto/portas/celula.py:600`, `:849–868`) | Retenção/censos. (`app/folha/export.py:1206`, `:1255`; `app/chamados/services/vigia_fio.py:378`) |
+| `CelulaDia.veredito`, `protestos`, `ata` | `lavrar_veredito`. (`app/ponto/portas/celula.py:969–1035`) | Retenção e juiz da pausa. (`app/folha/export.py:1142`, `:1233–1254`) |
+| `FechamentoMensal.colaborador`, mês/ano, horas, turnos abertos | Recalcular fechamento. (`app/ponto/services/fechamento.py:1121–1155`) | `classificar_export`. (`app/folha/export.py:777–780`, `:823–828`) |
+| `ChamadoColaborador.colaborador`, `celula`, `modulo_origem`, `status_local` | `abrir`/`criar`; mudanças pelo núcleo de estado. (`app/chamados/models.py:222`, `:796`, `:1015`) | Painel e censos. (`app/chamados/services/painel.py:155`, `:187`; `app/chamados/services/vigia_fio.py:338`, `:607`) |
+| `ChamadoColaborador.silenciado_ate` | Silenciar/levantar. (`app/chamados/services/arquivo.py:166`, `:201`) | Fila. (`app/chamados/services/painel.py:188`) |
+| `PerguntaDisputa.celula`, `data_evento`, `chamado_destino` | Porta de abertura. (`app/chamados/models.py:2436–2476`) | Alimentação e porta. (`app/chamados/juizes.py:1300`, `:1378–1381`) |
+| `resposta_colab`, `respondida_em`, `validada_em` | Resposta, validação e portas de carimbo. (`app/chamados/services/disputa_emissao.py:1282–1295`, `:1433–1450`; `app/chamados/services/validacao.py:131`; `app/chamados/models.py:2589–2592`) | Vitalidade e resposta vazia. (`app/chamados/juizes.py:1136`, `:1150`, `:1257`) |
+| `materializada_em`, `via_resolucao` | `_escrever_carimbo`, pelas portas de carimbo. (`app/chamados/models.py:2556–2562`, `:2625`) | Vitalidade. (`app/chamados/juizes.py:1171`, `:1207`) |
+| `LogAuditoria.pk`, `acao`, `modelo`, `objeto_id`, `criado_em`, payload GPS | Campos do modelo; `evento` persiste; API monta a recusa GPS. (`app/core/models.py:285–307`; `app/core/observ.py:134–137`; `app/api/views_core.py:440–451`) | Tela genérica de auditoria e inventário da sonda. (`app/core/views.py:686–738`) |
+| `Batida.timestamp`, `retratada_em` | Registro e retratação. (`app/ponto/registro_batida.py:157–160`, `:267–281`) | `batidas_apuraveis` e insumos do dono. (`app/ponto/turnos.py:2844–2864`; `app/ponto/management/commands/e6_oraculo.py:144`) |
+| Resultado `dias_cadastro_x_realidade` | Motor, em memória. (`app/ponto/motor_calculo_v2.py:2719`) | Insumos do dono. (`app/ponto/management/commands/e6_oraculo.py:154–161`) |
+| `MetricaSnapshot` da fase: chave, escopo, `data_ref`, `calculado_em`, `detalhe.janelas/itens/itens_reabertos` | Lavra do censo de fase. (`app/escala/services/fase_12x36.py:85–93`) | Cobertura e fase as-of. (`app/escala/services/fase_12x36.py:97–148`) |
+
+**Dono L-099 por caso**
+
+Para divergência de **dia**, chamar `InsumosDoDono(...).dono(data)`, que monta os insumos e chama o juiz real. A ordem é: folga indefinida/sem vínculo → CADASTRO; batida solta ou paridade ímpar → BATIDA; fase deslocada → CADASTRO; Cadastro x Realidade → CADASTRO; restante → ESTRUTURA. Não inferir dono pela classe do vigia. (`app/ponto/management/commands/e6_oraculo.py:98–110`, `:113–183`; `app/chamados/services/vigia_fio.py:99–101`)
+
+Para timeout, 500 ou falta de instrumentação, esse juiz diário não é autoridade de causa. Os defeitos demonstrados de código são estruturais; atribuir um evento de produção específico a CADASTRO/BATIDA/ESTRUTURA sem evidência é [nao verificado]. (`app/ponto/management/commands/e6_oraculo.py:113–125`)
+
+Há um furo adicional: fase nunca medida volta como conjunto vazio. A sonda conserva `dono_e6`, mas marca `dono=NAO SEI` quando o residual ESTRUTURA depende dessa ausência de cobertura; usa o próprio predicado de cobertura existente. (`app/escala/services/fase_12x36.py:113–148`)
+
+**Sonda devolvida como texto; execução e resultados [nao verificado].** Ela usa as funções citadas, impede escrita por transação PostgreSQL `READ ONLY`, não chama comandos lavradores e só publica campos selecionados. Qualquer exceção ou incremento de engolidos produz `NAO SEI`. Essa proteção é necessária porque a vitalidade engole falhas e pode alcançar `get_or_create` do usuário de sistema. (`app/chamados/juizes.py:1204–1218`, `:1069–1070`; `app/core/observ.py:60–81`; `app/core/utils.py:18`)
+
+```python
+# Colar no Django shell já inicializado.
+# Não grava script, carimbo, auditoria ou arquivo de saída.
+import contextlib
+import datetime as dt
+import io
+import json
+import logging
+import sys
+from unittest.mock import patch
+
+from django.db import connection, transaction
+from django.utils import timezone
+from django_tenants.utils import schema_context
+
+agora = timezone.now()
+hoje = timezone.localdate(agora)
+
+
+def medir(rotulo, funcao):
+    anterior = logging.root.manager.disable
+    try:
+        logging.disable(logging.CRITICAL)
+        with contextlib.redirect_stdout(io.StringIO()), \
+                contextlib.redirect_stderr(io.StringIO()):
+            from core.observ import engolidos
+            with schema_context("juliani"), transaction.atomic():
+                if connection.vendor != "postgresql":
+                    raise RuntimeError()
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        "SET TRANSACTION ISOLATION LEVEL "
+                        "REPEATABLE READ READ ONLY"
+                    )
+                antes = engolidos()["total"]
+                with patch("django.utils.timezone.now", return_value=agora):
+                    resultado = funcao()
+                if engolidos()["total"] != antes:
+                    raise RuntimeError()
+                transaction.set_rollback(True)
+    except Exception:
+        resultado = [(rotulo, "NAO SEI")]
+    finally:
+        logging.disable(anterior)
+
+    for etiqueta, valor in resultado:
+        print(etiqueta, json.dumps(valor, ensure_ascii=True))
+
+
+def anotador():
+    from ponto.janelas import janela_atual
+    from ponto.management.commands.e6_oraculo import InsumosDoDono
+    from escala.services.fase_12x36 import _indice_de_cobertura, _cobre
+
+    insumos = {}
+    indice = None
+
+    def anotar(colab, dia, rota):
+        nonlocal indice
+        ini, fim = janela_atual(dia, colab.empresa)
+        chave = (colab.pk, ini, fim)
+        if chave not in insumos:
+            insumos[chave] = InsumosDoDono(
+                colab, ini, fim, hoje, agora=agora
+            )
+        dono_e6 = insumos[chave].dono(dia)
+        dono = dono_e6
+
+        if dono_e6 == "ESTRUTURA":
+            if indice is None:
+                indice = list(_indice_de_cobertura(hoje))
+            coberto = any(
+                _cobre(janelas, colab.empresa_id, dia.isoformat())
+                for _pk, janelas, _instante in indice
+            )
+            if not coberto:
+                dono = "NAO SEI"
+
+        return {
+            "chave": "col%03d/%s" % (colab.pk, dia.isoformat()),
+            "rota": rota,
+            "dono": dono,
+            "dono_e6": dono_e6,
+        }
+    return anotar
+
+
+def separar(casos):
+    estrutura = [x for x in casos if x["dono"] == "ESTRUTURA"]
+    admin = [x for x in casos if x["dono"] in ("CADASTRO", "BATIDA")]
+    incertos = [x for x in casos if x["dono"] == "NAO SEI"]
+    if len(estrutura) + len(admin) + len(incertos) != len(casos):
+        raise RuntimeError()
+    return {
+        "contagem_estrutura": "NAO SEI" if incertos else len(estrutura),
+        "total_casos": len(casos),
+        "casos_estrutura": estrutura,
+        "lista_admin": admin,
+        "dono_nao_sei": incertos,
+    }
+
+
+def sonda1():
+    from colaboradores.models import Empresa
+    from chamados.juizes import FIO_SEM_PORTA, tranca_em_lote
+    from folha.fora_da_folha import o_que_segura
+    from ponto.services.fechamento import universo_da_competencia
+    from ponto.services.he_pendente_lavrado import competencias_a_lavrar
+
+    empresas = list(Empresa.objects.all().order_by("pk"))
+    if not empresas:
+        raise RuntimeError()
+    anotar = anotador()
+    casos, vistos, escopo = {}, 0, []
+    dias_retentores = 0
+
+    with tranca_em_lote():
+        for empresa in empresas:
+            for mes, ano in competencias_a_lavrar(empresa, hoje):
+                escopo.append([empresa.pk, mes, ano])
+                frota = universo_da_competencia(
+                    mes, ano, empresa.pk
+                ).select_related("empresa").order_by("pk")
+                for colab in frota:
+                    vistos += 1
+                    resposta = o_que_segura(colab, mes, ano)
+                    # Nunca imprimir o dict: ele contém nome.
+                    for dia in resposta["dias"]:
+                        dias_retentores += 1
+                        if dia["fio"] != FIO_SEM_PORTA:
+                            continue
+                        data = dt.date.fromisoformat(dia["data"])
+                        casos[(colab.pk, data)] = anotar(
+                            colab, data, "sem_porta"
+                        )
+    if not vistos:
+        raise RuntimeError()
+
+    resultado = separar([casos[k] for k in sorted(casos)])
+    resultado.update({
+        "fonte": "o_que_segura",
+        "escopo": "competencias_a_lavrar",
+        "empresa_mes_ano": escopo,
+        "colaborador_competencias_examinados": vistos,
+        "dias_retentores": dias_retentores,
+        "medido_em": agora.isoformat(),
+    })
+    return [("C1", resultado)]
+
+
+def sonda4():
+    from core.models import LogAuditoria
+
+    casos = []
+    registros = LogAuditoria.objects.filter(
+        acao="batida
+
+[truncado em 20000 de 24804 caracteres]
 
 ## 06/11 20:52 · sessao 1cb72ae84c20 · BO-[nome]-0611-V2 · censo · origem=Code
 
@@ -1087,41 +1365,4 @@ A interpretação “prova/fonte apenas documentam uma medição” não vale pa
 
 Não executei validação operacional; análise de código somente leitura. [nao verificado] [nao verificado]
 
-## 06/11 20:43 · sessao f1e9774faab9 · - · - · origem=Ronald (tmux)
-
-**10 — col399, 31/10**
-
-- **Estado da sonda:** célula 138663 `trabalha=false / fato_sem_previsao / gerada / folga_trabalhada`, `resolver_dia=false`, sem retenções; batidas #142321 E 06:20:43 e #142798 S 18:22:41 aprovadas e não retratadas. Só consta Ausência #5373 `troca_de_plantao`, aprovada, **data 24/10**, criada **04/11 16:13:01**; não consta par nem documento. “Registrada só em 24/10” deve ser corrigido para “registrada **para** 24/10”; DiaPago não aparece no dado. [nao verificado]
-- **Dono:** **ESTRUTURA da porta faltante**, comprovada pelo código e pelo despacho O10-C; dono formal do dado segundo `dono_da_divergencia` não foi medido pela sonda. O juiz exige também vínculo, fase e cadastro×realidade; paridade par sozinha não decide o dono. (`app/docs/RELATO.md:64`; `app/ponto/management/commands/e6_oraculo.py:98`.)
-- **PORTA DA TELA NÃO EXISTE para confirmar a troca.** Na cópia, `trocar_plantao` só aparece na própria definição e na chamada interna de `editar_dia`; nenhuma view chama a operação. O despacho registra expressamente “ZERO chamador de UI” e manda construir view+form com substituto, duas cartas e motivo. (`app/ponto/portas/celula.py:632`; `app/ponto/portas/celula.py:675`; `app/docs/RELATO.md:64`.)
-- **O que existe:** backend O10-B: cedente recebe `editar_dia(..., False)` e substituto `editar_dia(..., True)`, no mesmo atomic; recusa lado ausente, mesmo colaborador e falta de carta. A edição escreve `trabalha`, DNA, geradora, `origem='editada'`, autor/data e trilha. (`app/ponto/portas/celula.py:603`; `app/ponto/portas/celula.py:653`; `app/ponto/portas/celula.py:662`; `app/ponto/portas/celula.py:673`.)
-- **Resultado previsto, não observado:** reavalia os dias tocados antes de solicitar recálculo por competência; o recálculo chama `dia_pago.lavrar`, que substitui as linhas da versão da competência. Falhas do julgamento/recálculo são capturadas e logadas, portanto a existência desse fio não prova execução bem-sucedida no caso. (`app/ponto/portas/celula.py:422`; `app/ponto/portas/celula.py:445`; `app/ponto/services/fechamento.py:1184`; `app/ponto/services/dia_pago.py:357`.)
-- **Resolver dia não substitui a troca:** formulário oferece apenas trabalhou/faltou/justificado/cobrar; “trabalhou” recusa dia cujo `tipo_dia != trabalho`. `folga_trabalhada` está fora dos status que oferecem o botão. (`app/templates/ponto/partials/_veredito_dia.html:21`; `app/ponto/services/veredito_celula.py:221`; `app/colaboradores/services/calendario.py:94`.)
-- **Obra:** complementar **O10-C**, especificamente SOLO → lista do admin com porta de troca aberta, sem escrita antecipada; nenhuma obra nova. **DIA-SEM-TRABALHO-PORTA** é relacionada à decisão sobre batidas em folga, mas não substitui a confirmação do par de troca. (`app/docs/BACKLOG.md:1811`; `app/docs/BACKLOG.md:1793`.)
-- **Fechamento:** não resolvido; faltam porta UI e validação operacional do espelho/DiaPago após a confirmação. (`app/docs/RELATO.md:64`; resultado operacional [nao verificado].)
-
-**11/12 — col921, competência 11**
-
-- **Estado da sonda:** `batidas=[]`; de 21–23 e 25–29/10: `true / furo / gerada / irregular`; 30/10 e 01–05/11: `true / cobrado / gerada / irregular`; 06/11 `true / cobrado / gerada / previsto`; folgas 24 e 31/10 `false / concorde / gerada / folga`. Nenhum desses dias oferece Resolver dia; DiaPago não foi fornecido. Há chamado de cadastro #37165 `sem_previsao_escala / folga_nao_definida / aberto`, chamados de batida abertos e perguntas sem resposta/materialização. [nao verificado]
-- **Não é o grupo DST “folga_trabalhada sem Resolver dia”.** O quadro DST documenta 161 dias com batidas e status `folga_trabalhada`; col921 não tem esse status no dado fornecido. O seu bloqueio do Resolver dia decorre da competência corrente, mesmo nos dias `irregular`, porque `pode_ultimo_recurso` exige data anterior ao início da competência atual. (`app/docs/RELATO.md:38`; `app/colaboradores/services/calendario.py:455`; `app/colaboradores/services/calendario.py:738`; dados col921 [nao verificado].)
-- **Dono:** há pendência operacional de **CADASTRO** expressa pelo chamado #37165; confirmar que isso é o insumo `folga_nao_definida=True` do juiz e o dono formal de cada dia permanece [nao verificado]. O juiz dá CADASTRO quando falta definição de folga/vínculo; ausência total de batidas, sozinha, não aciona seu ramo BATIDA por paridade ímpar. (`app/ponto/management/commands/e6_oraculo.py:98`; `app/ponto/management/commands/e6_oraculo.py:106`; chamado [nao verificado].)
-- **Porta factual existente para admin confirmar falta/ausência:** `/ponto/ausencias/lancar/`, view `lancar_ausencia`, formulário de colaborador/tipo/data/duração. Cria Ausência já aprovada, registrador/aprovador = admin. Isso é diferente de fingir disponibilidade do botão Resolver dia. (`app/ponto/urls.py:57`; `app/ponto/views.py:2368`; `app/ponto/views.py:2415`; `app/templates/ponto/lancar_ausencia.html:12`; `app/templates/ponto/lancar_ausencia.html:26`; `app/templates/ponto/lancar_ausencia.html:88`.)
-- **Limite:** só lançar falta depois de confirmar que era dia de trabalho; a autoridade veta falta quando a escala do dia responde False. A falta decidida vira status `falta`; ausência aprovada sem batida vira `ausencia`; isso não prova o resultado operacional de col921. (`app/ponto/precedencia.py:536`; `app/ponto/status_dia.py:139`; `app/ponto/status_dia.py:141`.)
-- **Obra:** não cabe atribuir col921 ao complemento DST apenas pela ausência do botão. Para dado de escala/falta, execução administrativa das portas existentes; eventual defeito do fio/porta precisa do diagnóstico de cada pergunta, não do rótulo genérico “já OK”. O escopo DST é batida em folga/feriado sem trabalho; ausência lançada é dia decidido. (`app/docs/BACKLOG.md:1793`; `app/docs/RELATO.md:51`.)
-- **Fechamento:** não resolvidos; a sonda não demonstra ação na tela nem DiaPago posterior nem validação operacional. [nao verificado]
-
-**Escritores/leitores dos campos usados**
-
-| Campo | Quem escreve | Quem lê |
-|---|---|---|
-| `CelulaDia.trabalha`, `origem`, DNA e edição humana | porta `editar_dia`, `app/ponto/portas/celula.py:603`; gerar/regenerar são operações do mesmo módulo, `:74` | estado da edição/trilha `:528`; juiz de status e grade, `app/ponto/status_dia.py:272`; “dia de trabalho” é autoridade `EscalaColaborador.eh_dia_trabalho` conforme `CLAUDE.md:152` |
-| `veredito`, `veredito_via`, `veredito_em`, `ata` | `lavrar_veredito`, `app/ponto/portas/celula.py:969`, grava `:1028` | regra do status `app/ponto/status_dia.py:113`; resolução humana chama a porta `app/ponto/services/veredito_celula.py:330` |
-| `status_dia`, `status_rotulo` | `_aplicar_status` dentro da lavra `app/ponto/portas/celula.py:961`; decisão pura `app/ponto/status_dia.py:113` | D4 lê coluna `app/ponto/status_dia.py:287`; calendário lê D4 `app/colaboradores/services/calendario.py:662`; template desenha `app/templates/colaboradores/partials/_calendario_grade.html:101` |
-| `resolver_dia_oferecido` | derivado, não persistido: `app/colaboradores/services/calendario.py:97`; insumo `pode_ultimo_recurso` `:738` | template `app/templates/colaboradores/partials/_calendario_grade.html:125`; vigia lê a mesma resposta pela plural `app/colaboradores/services/calendario.py:117` |
-| rubricas `DiaPago` | `dia_pago.lavrar` chamado pelo fechamento `app/ponto/services/fechamento.py:1184`, escrita `app/ponto/services/dia_pago.py:357` | `rubricas_do_dia` `app/ponto/services/dia_pago.py:899`; calendário `app/colaboradores/services/calendario.py:655` |
-| `Ausencia.status='aprovada'` por lançamento do admin | view passa a criação ao serviço `app/ponto/views.py:2415` | natureza/status do dia lê efeito/cobertura pela A2 `app/ponto/status_dia.py:298` e `:310` |
-| chamado vivo/status exibido no calendário | escritor específico deve vir do outro levantamento [nao verificado] | indexador lê `status_local` `app/colaboradores/services/calendario.py:437` e `:444` |
-
-A validação de dono formal não é possível só com os campos da FICHA: os insumos adicionais do juiz são carregados por `InsumosDoDono`, incluindo cadastro×realidade e fase por dia. (`app/ponto/management/commands/e6_oraculo.py:113`; `app/ponto/management/commands/e6_oraculo.py:154`; `app/ponto/management/commands/e6_oraculo.py:164`.)
-
-_2543 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2544 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
