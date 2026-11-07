@@ -1,5 +1,6 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: trava_teste.sh | pid=2820655
+ESPERANDO: trava_teste.sh | pid=2837972
+FERIAS-CANCELAR-2X 23:16: suite inteira 96796e7a VERDE (logs/ferias2x/suite_v5.log Ran 13954 OK rc=0) -> opus final (verificador) com diff_final.patch 19aeede1..96796e7a + triagens v1-v3 + anexo P2-P6. Voltas Codex 3 (teto), opus 1.
 FERIAS-CANCELAR-2X volta 5 22:58: suite v4 FAILED 2 (status literal ('cancelado',...) em ferias/services.py x contrato chamados; teste 2x exigia 0 query = atalho que a volta 4 tirou). Cura 96796e7a: RECUSA_ESCRITA/RECUSA_CANCELAMENTO no catalogo AgendamentoFerias; teste exige 0 escrita. Suite inteira de novo: logs/ferias2x/suite_v5.log.
 DESPACHO FIO-E0-V4-E1 22:55: construcao (a)(b)(c) + absorcao PLANTIO (i) -> opus (agente construtor, copia wt-fioe1-225336) | verificador -> Codex (pelo construtor, ate 2 voltas) | prova dos resultados 3/4 (DRY sombra, hash FM/TXT 09-10) -> sessao depois do commit, nunca para decidir desenho (COMPLEMENTO-2).
 DECISAO TECNICA 22:53 FIO-E0-V4-E1: vaga livre (construtor 2 de 2 = V2 i2 volta 3; FERIAS so em suite) -> E1 abre JA em copia wt-fioe1-225336 @19aeede1, brief logs/fio_e0_v4/e1_brief.md + censos e1.r/e2.r; sem arquivo em comum com FERIAS (ferias/) e V2 (ponto motor); pousa DEPOIS dos dois (rebase). E2 abre na vaga do V2 i2 quando ele pousar | contestavel
