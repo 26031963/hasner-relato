@@ -1,7 +1,109 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 08:30** · publicado em **07/11/2026 08:33** (UTC-3)
+> Ultima resposta processada: **07/11/2026 08:49** · publicado em **07/11/2026 08:49** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 08:49 · sessao f13e743f1403 · V2-I2 · sonda · origem=Code
+
+**27/09 é o candidato visível aos +420 minutos, mas a sonda não fecha a atribuição por dia nem o dono L-099.** Ela informa FM=10500 e soma dos DP motor=10500; os 10920 aparecem no enunciado, sem resultado novo por dia: todos os `DP_atual` estão `None`. [nao verificado]
+
+**1) Dias e mudanças observáveis**
+
+Na tabela, “anterior” significa exclusivamente `dna_anterior`, não o DNA usado para calcular o DP gravado. O modelo guarda apenas uma versão anterior, não toda a sequência de regenerações. (`app/escala/models.py:1714`)
+
+| Dias | DNA anterior → atual, no trecho fornecido | DP gravado |
+|---|---|---|
+| **27/09** | 15–23, pausa **19–20 → 20–21** | **0**. [nao verificado] |
+| 21, 22, 25, 26, 28 e 29/09; 02, 04, 05, 06, 09, 11, 12, 13, 16, 18, 19 e 20/10 | Mesma mudança de pausa; entrada e saída permanecem 15–23 | 420 em cada dia. [nao verificado] |
+| 23 e 30/09; 07 e 14/10 | `marcos=null`, tipo **313** → 15–23, pausa 20–21 | 420 em cada dia. [nao verificado] |
+| 24/09; 01, 08 e 15/10 | 15–23, pausa 19–20 → `marcos=null`, tipo **397** | 0, exceto **01/10=None**. [nao verificado] |
+| 03, 10 e 17/10 | `marcos=null`, tipo **397** → 15–23, pausa 20–21 | 420 em cada dia. [nao verificado] |
+
+**A mudança de pausa, isoladamente, acrescenta zero minutos:** tanto 19–20 como 20–21 descontam 60 de uma jornada de 480, resultando em 420. Essa é a aritmética implementada pelo previsto. (`app/escala/utils.py:2293`; `app/escala/utils.py:2326`)
+
+Em **27/09**, portanto, o contraste relevante é **DP gravado=0 versus DNA atual com geometria de 420**; não é aumento da duração entre os dois DNAs. [nao verificado] Para afirmar que o previsto atual desse dia é 420, faltam `trabalha=True` e vínculo válido: a função verifica essas condições antes de calcular os marcos, e `eh_dia_trabalho` lê `cel.trabalha`. (`app/escala/utils.py:2281`; `app/escala/models.py:1094`)
+
+Os horários de regeneração apresentados são:
+
+| Células | Última regeneração registrada, UTC | Contador |
+|---|---|---|
+| **27/09** | **23/10/2026 13:04:42.382279** | 2. [nao verificado] |
+| Demais dias, exceto os três abaixo | 23/10/2026, entre 13:04:42.372643 e 13:04:42.414014 | 2. [nao verificado] |
+| 03/10 | 23/10/2026 16:49:42.903745 | 4. [nao verificado] |
+| 10/10 | 23/10/2026 16:49:42.910592 | 4. [nao verificado] |
+| 17/10 | 23/10/2026 16:49:42.917070 | 4. [nao verificado] |
+
+Todas aparecem com `origem='gerada'` e `editada_em=None`; a sonda não identifica a pessoa responsável. [nao verificado] Isso é compatível com regeneração: esse escritor preserva esses campos e registra separadamente DNA anterior, horário e contador. (`app/ponto/portas/celula.py:263`; `app/ponto/portas/celula.py:271`)
+
+**2) Escritores e histórico**
+
+| Operação | Escritor efetivo e consequência |
+|---|---|
+| `gerar_celulas` | O comando reexporta a porta; `gerar_celulas_periodo` cria trabalha/geradora/DNA. (`app/ponto/management/commands/gerar_celulas.py:13`; `app/ponto/portas/celula.py:848`) |
+| **Regeneração registrada nas células** | `regenerar_celulas_vinculo` copia DNA para `dna_anterior`, grava o novo, atualiza horário e incrementa contador. É o escritor correspondente aos marcadores apresentados. (`app/ponto/portas/celula.py:271`) |
+| Regeneração de um dia | Delega ao mesmo escritor; os marcadores não distinguem esse chamador da regeneração por vínculo. (`app/ponto/portas/celula.py:734`) |
+| Edição humana | `editar_dia` grava `origem='editada'`, `editada_em` e `editada_por`. Essa assinatura não aparece na sonda. (`app/ponto/portas/celula.py:599`) [nao verificado] |
+| Outros caminhos | O gerador pode atualizar hoje/futuro sem atualizar os marcadores de regeneração; o ramo fora da vigência também altera trabalha/DNA sem esses marcadores. Logo, eles não certificam toda escrita posterior. (`app/ponto/portas/celula.py:865`; `app/ponto/portas/celula.py:237`) |
+| Reversão | Restaura DNA anterior, mas **limpa** `dna_anterior` e avança contador/horário. (`app/ponto/portas/celula.py:783`) |
+
+**Quem disparou cada alteração permanece desconhecido.** A regeneração recebe autor opcional e tenta registrá-lo na auditoria; a célula não tem campo `regenerada_por`. (`app/ponto/portas/celula.py:334`; `app/escala/models.py:1718`) A auditoria desses atos não foi fornecida. [nao verificado]
+
+**Não foi possível conferir o `git log` do HEAD:** esta cópia não contém `.git`; presença, datas e ancestralidade dos commits no hash informado ficam [nao verificado]. A evidência documental local permite apenas estas distinções: [nao verificado]
+
+- A **R4 de 27/09** corrigiu a leitura da **pausa do realizado** para célula com marcos nulos; preservou o fallback de `marcos_do_dia`. (`app/escala/models.py:1138`; `app/escala/models.py:1151`)
+- O previsto atual ainda conserva esse fallback quando não encontra pausas; o código registra explicitamente a colisão R4 × F1. (`app/escala/utils.py:2307`; `app/escala/utils.py:2317`; `app/escala/utils.py:2335`)
+- Há registro de alimentação `celulas/folgas` em **26/09**, incluindo correção de DNA alimentado que ficava invisível. (`app/escala/utils.py:2257`)
+- A cura documentada especificamente como **PREVISTO** é de **02/10**, para descontar todas as pausas, com identificadores `fecb9a67` e `07d89f21`; sua inclusão no histórico do HEAD não pôde ser conferida. (`app/docs/TICKETS.md:246`) [nao verificado]
+
+**3) Dono L-099**
+
+**Dono conclusivo dos +420: [nao verificado].** A L-099 exige coerência com o cadastro existente; regeneração, sozinha, não prova cadastro errado nem defeito estrutural. (`app/docs/LEIS.md:122`)
+
+O juiz existente usa folga indefinida, ausência de vínculo, batida fora de turno, paridade, fase deslocada e presença em Cadastro × Realidade; esses insumos não acompanham a sonda. (`app/ponto/management/commands/e6_oraculo.py:98`; `app/ponto/management/commands/e6_oraculo.py:113`) [nao verificado]
+
+Para concluir faltam:
+
+- **Previsto novo por dia**, com identificação da execução que produziu 10920, esclarecendo também `DP_prev=None` em 01/10. [nao verificado]
+- **`trabalha`, geradora, vigências e DNAs completos**, para aplicar as guardas do previsto. (`app/escala/utils.py:2281`)
+- **Trilha dos atos**, para identificar autor, motivo e versões intermediárias. (`app/escala/models.py:1714`; `app/ponto/portas/celula.py:334`)
+- **Insumos do juiz de dono e histórico Git**, para fechar respectivamente L-099 e a relação com alguma cura commitada. (`app/ponto/management/commands/e6_oraculo.py:113`) [nao verificado]
+
+## 07/11 08:47 · sessao 5a0fbffa6c33 · - · - · origem=Ronald (tmux)
+
+| Operação | Escrita e prova |
+|---|---|
+| `gerar_celulas` | O command reexporta as funções da porta em `app/ponto/management/commands/gerar_celulas.py:10-13` e chama `gerar_celulas_periodo` em `:309-311`. |
+| Nascimento da célula | `gerar_celulas_periodo` grava `origem='gerada'`, `trabalha`, geradora e DNA em `app/ponto/portas/celula.py:848-852`; `gerada_em` é `auto_now_add`, em `app/escala/models.py:1702`. A regeneração também pode criar célula ausente em `app/ponto/portas/celula.py:258-260`. |
+| Reescrita registrada da sonda | `regenerar_celulas_vinculo` restringe a célula existente a `origem='gerada'` e exige alteração de trabalha/geradora/DNA em `app/ponto/portas/celula.py:263`; guarda o DNA anterior, troca o DNA, registra horário e incrementa contador em `:271-277`. Não altera `origem`, `gerada_em` ou `editada_em` nesse ramo, conforme os campos salvos em `:276-277`. |
+| Regeneração por dia | `regenerar_celulas_dia` usa exatamente o escritor acima, com horizonte desabilitado, em `app/ponto/portas/celula.py:734-737`. Portanto os marcadores da célula não distinguem esse chamador do ato por vínculo. |
+| Edição humana | `editar_dia` exige autor e motivo em `app/ponto/portas/celula.py:559-562`; grava `origem='editada'`, `editada_em`, `editada_por`, trabalha/geradora/DNA em `:599-609`, e trilha antes/depois em `:610-618`. A regeneração comum não alcança essa origem, pela condição em `:263`. |
+| Reversão | `reverter_regeneracao_dia` restaura DNA anterior, **limpa** `dna_anterior`, incrementa contador e muda horário em `app/ponto/portas/celula.py:783-795`. A trilha recebe ambos os DNAs e autor em `:797-803`. |
+| Outra escrita sem esses marcadores | No gerador, passado só recebe DNA se estiver nulo (`app/ponto/portas/celula.py:856-861`); hoje/futuro pode mudar trabalha/geradora/DNA **sem** guardar anterior ou atualizar regeneração (`:865-871`). O ramo fora de vigência da própria regeneração também muda trabalha/DNA sem esses marcadores (`:237-245`). |
+
+`dna_anterior` é apenas a versão imediatamente anterior, e o histórico completo pertence ao `LogAuditoria`, conforme `app/escala/models.py:1714-1717`. Assim, `regeneracoes=2/4` não permite reconstruir as duas/quatro versões intermediárias.
+
+A trilha da regeneração recebe `autor` opcional e registra ação `regenerar_celulas_vinculo`, vínculo, intervalo, motivo e quantidade em `app/ponto/portas/celula.py:331-349`. A célula não contém um campo `regenerada_por`: contém horário/contador/DNA anterior em `app/escala/models.py:1718-1729`, enquanto o campo de pessoa disponível é `editada_por` em `:1732-1735`. Quem executou os atos apresentados na sonda permanece `[nao verificado]`.
+
+Há vários disparadores possíveis: alteração de vigência (`app/escala/signals.py:71-73`), alteração de âncora (`:117-119`) e edição de template (`app/escala/services/cadastro_tipo.py:307-320`, `:348-350`). Os dois signals e a propagação de template mostrados chamam a regeneração sem fornecer `autor`, conforme esses mesmos trechos; portanto até a trilha pode ter usuário nulo. A sonda não identifica qual desses disparadores produziu cada ato `[nao verificado]`.
+
+## 07/11 08:47 · sessao e5b1b97e3c3d · - · - · origem=Ronald (tmux)
+
+**Histórico Git: não verificável nesta cópia.** A raiz não contém `.git`; não consultei outro checkout. Logo, hash/autoria/data/ancestralidade de commits no HEAD e “cura commitada em 27/09” ficam **[nao verificado]**. [nao verificado]
+
+O código/documentação local permitem distinguir:
+
+- **R4 de 27/09** corrigiu a leitura da **pausa do realizado**, quando uma célula existente tem `dna.marcos=null`: o template fornecia pausa inexistente. A implementação criou leitor próprio; preservou o fallback de `marcos_do_dia`, pois os testes exigiam esse comportamento para folga. Prova: `app/escala/models.py:1138-1158`, fallback atual em `app/escala/models.py:1124-1133`. A documentação registra R4 fechada em 28/09, com +75,12 h em 27 colaboradores: `app/docs/BACKLOG.md:1077`. Isso não demonstra relação com os +420 de col270.
+- **O previsto não recebeu integralmente essa guarda R4.** A fonte declara que era o leitor faltante; hoje lê todas as pausas, mas, quando elas retornam vazio, continua descontando `hii/hfi` devolvidos por `marcos_do_dia`. A colisão entre R4 e F1 é explicitamente registrada: `app/escala/utils.py:2307-2340`.
+- A cura documentada de **PREVISTO** é de **02/10**, para descontar **duas pausas**, com identificadores `fecb9a67` e `07d89f21`; o próprio registro diz que a guarda R4 ficou fora: `app/docs/TICKETS.md:246`. Esses identificadores são evidência documental; sua presença no git log do HEAD continua **[nao verificado]**.
+- O comentário registra que a alimentação `celulas/folgas` entrou em **26/09**, para custo e DNA alimentado invisível: `app/escala/utils.py:2257-2266`. Não prova por si só data/commit no histórico.
+
+**L-099 e limite de atribuição:**
+
+- Lei: coerência, determinismo e idempotência **com o cadastro que tem**; donos ESTRUTURA/CADASTRO/BATIDA, somente ESTRUTURA vira cura de código: `app/docs/LEIS.md:122`.
+- O juiz pede dados não fornecidos na sonda: folga não definida, vínculo válido, batida fora de turno, paridade, fase deslocada e presença em `dias_cadastro_x_realidade`. Executável em `app/ponto/management/commands/e6_oraculo.py:98-110`; montagem dos insumos descrita em `:113-125`.
+- Portanto, não é válido chamar o delta de CADASTRO apenas porque há regeneração, nem ESTRUTURA por resíduo sem carregar os insumos. Com ausência de DP novo por dia e sem `trabalha`/DNA integral/vigências/batidas/CxR, dono conclusivo dos +420 = **[nao verificado]**.
+
+Uma distinção útil para o laudo: leitor da célula pode priorizar `ata.minutos_previstos` e só consultar a autoridade quando ausente (`app/escala/services/leitor_celula.py:382-395`), enquanto `minutos_previstos_do_dia` verifica vínculo, `trabalha` e marcos (`app/escala/utils.py:2277-2295`). A sonda não trouxe ata nem execução nova por dia.
 
 ## 07/11 08:30 · sessao 980fb726544f · MOTOR-LE-O-TURNO-INSTRUMENTO · censo · origem=Code
 
@@ -1058,138 +1160,4 @@ Checklist:
 - O relógio é passado explicitamente aos leitores usados pela carga; permanece a diferença entre `agora.date()` no consumidor e `date.today()` na produção da expiração, já deixada em fila pela triagem. (`app/chamados/services/tarefa_do_dia.py:295,303,310`; `app/chamados/veredito_lavrado.py:112,181-185`.)
 - A documentação do teste ainda equipara ata sem lâmpadas a ata nunca lavrada; o leitor antigo reconhece expressamente ata agregada sem lâmpadas. (`app/chamados/tests/test_e2_tarefa_do_dia.py:38`; `app/chamados/services/declaracao_texto.py:112-115`.)
 
-## 07/11 04:24 · sessao dca9a40ed118 · - · - · origem=Ronald (tmux)
-
-Q4 — A frase “ata sem lâmpadas = ata não lavrada” é excessiva: o leitor reconhece explicitamente **ata antiga agregada**, já lavrada, sem identidade individual dos marcos. `nao_sei` continua coerente; a explicação causal é que está errada (`app/escala/services/leitor_celula.py:146-172`; `app/chamados/services/tarefa_do_dia.py:182-184`; `app/chamados/tests/test_e2_tarefa_do_dia.py:38`).
-
-- Produtor das lâmpadas: `lampadas_do_dia`, ramo DNA e ramo alternativo; `ata_do_dia` incorpora a lista na ata (`app/ponto/services/cartorio.py:565`, `app/ponto/services/cartorio.py:622-704`). O vocabulário do DNA é E/S e contempla duas pausas (`app/escala/models.py:1652-1669`).
-- O ramo alternativo aceita o tipo/hora do marco ou da coluna, portanto pode produzir outros tipos (`app/ponto/services/cartorio.py:682-692`). Existem colunas I para intervalo livre; não achei trajeto comprovado de trabalho com **somente** I e nenhuma E/S (`app/escala/utils.py:1383-1390`, `app/escala/utils.py:1823-1829`); ocorrência real `[nao verificado]`.
-- Intermitente usa tipos E/S e horas posicionais `·I1`, `·I2`; não confundir esses rótulos com tipo I (`app/escala/utils.py:1392-1401`).
-- Ausência total aprovada altera o dia para `ausencia` e limpa suas colunas; esse tipo satisfaz `dia_sem_trabalho`, então não cai no novo retorno antecipado (`app/escala/utils.py:1220`, `app/escala/utils.py:1251-1253`; `app/chamados/juizes.py:429`; `app/chamados/services/tarefa_do_dia.py:181-185`).
-- Há modificadores da lista: dispensa por ausência/justificativa altera `acesa`, `luz`, `dispensada`; teto altera apagadas para `acesa=None, pendente=True` (`app/ponto/services/cartorio.py:766-779`, `app/ponto/services/cartorio.py:873-883`).
-- Persistência passa por `lavrar_veredito`, que recebe e copia a ata (`app/ponto/portas/celula.py:986-1003`, `app/ponto/portas/celula.py:1027-1032`). A montagem na grade usa cópia em memória e o mesmo produtor, sem persistência (`app/escala/utils.py:1886-1897`). `carimbar_precedencia` preserva a lista e altera apenas `precedencia` (`app/ponto/portas/celula.py:1071-1082`).
-
-Q5 — A implementação atual preserva ordem global por PK mesmo ao juntar perguntas de d e d+1: consulta ordenada, agrupamento por `(colaborador_id,data_evento)`, concatenação seguida de `sorted(key=pk)`; a escolha continua sendo `ps[-1]` (`app/chamados/services/tarefa_do_dia.py:277-282`, `app/chamados/services/tarefa_do_dia.py:319`, `app/chamados/services/tarefa_do_dia.py:249`). Igualdade com o pai `[nao verificado]`.
-
-Os consumidores de lote encontrados estão nos testes: o caso explícito fora da janela e os dois selos com datas internas; a casca abre janela exatamente no dia solicitado (`app/chamados/tests/test_e2_tarefa_do_dia.py:427-432`, `app/chamados/tests/test_e2_tarefa_do_dia.py:491-505`, `app/chamados/tests/test_e2_tarefa_do_dia.py:507-525`; `app/chamados/services/tarefa_do_dia.py:337-341`). Sonda externa e futuros consumidores `[nao verificado]`.
-
-A alimentação interna adjacente usa `instancias(d-1/d/d+1)`, não `tarefa(d-1/d+1)`, portanto não é barrada pelo novo `ValueError` (`app/chamados/services/tarefa_do_dia.py:307-318`).
-
-Q6 — Mutante sobrevivente por inspeção: trocar a condição da janela para `if dia > self.fim`, deixando d<ini passar. O único teste dessa guarda solicita D+1; os demais lotes encontrados usam datas internas (`app/chamados/services/tarefa_do_dia.py:315-316`; `app/chamados/tests/test_e2_tarefa_do_dia.py:427-432`, `app/chamados/tests/test_e2_tarefa_do_dia.py:503-505`, `app/chamados/tests/test_e2_tarefa_do_dia.py:520-523`). Execução da bateria com esse mutante `[nao verificado]`.
-
-## 07/11 04:24 · sessao 8cd90ff2efca · - · - · origem=Ronald (tmux)
-
-Q3 — censo e conclusões, somente leitura:
-
-- **Escritores atuais de `conversa` são coerentes com `True = sem identidade de fato`**: `abrir` passa `False`, `abrir_conversa` passa `True` e data civil de emissão; `_nascer` grava a coluna (`app/chamados/models.py:2483`, `app/chamados/models.py:2494`, `app/chamados/models.py:2578`). Chamadores de conversa: reabertura administrativa, até com motivo escolhido no catálogo (`app/chamados/services/acoes_disputa.py:247`, `app/chamados/services/acoes_disputa.py:260`); emissão sem dia resolvido (`app/chamados/services/disputa_emissao.py:420`); `ancora_ausente` (`app/chamados/services/disputa_emissao.py:1251`).
-- **O inverso `False = pergunta do fato` não vale para o acervo**. A migration introduz a coluna com `default=False` para perguntas antigas (`app/chamados/migrations/0051_decisao_pergunta.py:99`), preenche instância apenas por motivo (`app/chamados/migrations/0051_decisao_pergunta.py:26`) e confessa que conversa antiga é indistinguível (`app/chamados/migrations/0051_decisao_pergunta.py:5`). Assim, conversa histórica com motivo `orfao_14h` e data coincidente ainda entra no filtro novo (`app/chamados/services/tarefa_do_dia.py:278`); pode ocupar a posição de pergunta do marco e gerar responder/validar segundo seus atos (`app/chamados/services/tarefa_do_dia.py:198`, `app/chamados/services/tarefa_do_dia.py:249`). A existência desse caso no dado de produção fornecido é `[nao verificado]`.
-- **O teste novo não cobre esse legado**: cria pergunta pela porta moderna e força `conversa=True` (`app/chamados/tests/test_e2_tarefa_do_dia.py:341`, `app/chamados/tests/test_e2_tarefa_do_dia.py:342`). O backfill de decisões apenas lista colisões, igualmente filtrando `conversa=False`; não classifica conversas antigas (`app/chamados/management/commands/backfill_decisoes_pergunta.py:74`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:84`).
-- **Leitores explícitos da coluna**: identidade `linhas_dos_fatos` (`app/chamados/models.py:2466`); trava/dedup no nascimento (`app/chamados/models.py:2508`, `app/chamados/models.py:2528`); derivação de instância na inserção (`app/chamados/models.py:2972`); censo de colisões (`app/chamados/management/commands/backfill_decisoes_pergunta.py:74`); carga E2 (`app/chamados/services/tarefa_do_dia.py:278`). O modelo documenta que a coluna identifica a porta que fez nascer a pergunta (`app/chamados/models.py:2247`).
-
-`Ausencia`:
-
-- **`aguardando_documento` corresponde à obrigação de documento do colaborador**, como a E2 agora supõe: choices nomeiam explicitamente os donos (`app/ponto/models.py:701`), `estado_inicial` retorna documento quando o tipo exige e não há anexo (`app/ponto/services/ausencia.py:779`, `app/ponto/services/ausencia.py:795`). Criação chama esse juiz e grava o estado (`app/ponto/services/ausencia.py:333`, `app/ponto/services/ausencia.py:344`); reabertura chama o mesmo juiz (`app/ponto/services/ausencia.py:1119`); alteração de tipo rejulga abertos (`app/ponto/services/ausencia.py:541`, `app/ponto/services/ausencia.py:543`).
-- **Transição do status**: `mudar_estado` escreve em `ausencia.status` e salva (`app/ponto/services/ausencia.py:824`, `app/ponto/services/ausencia.py:835`). Anexo move documento→decisão (`app/ponto/services/ausencia.py:873`); escalonador vencido move documento→decisão do DP (`app/ponto/services/ausencia.py:1002`); `_reabrir` grava o estado calculado (`app/ponto/services/ausencia.py:1141`). Migration histórica classifica pendentes pelo anexo e tipo (`app/ponto/migrations/0057_a4_backfill_pendente.py:35`, `app/ponto/migrations/0057_a4_backfill_pendente.py:43`). Materialização ATESTADO deixa status vazio para o juiz, enquanto FALTA_DIA é aprovada (`app/chamados/services/materializacao.py:594`).
-- **Leitores coerentes**: `pode_aprovar` aceita só `aguardando_decisao` (`app/ponto/models.py:741`); `esta_aberta` usa `ABERTAS` (`app/ponto/models.py:719`); contadores discriminam estados e vencimento (`app/ponto/services/ausencia.py:963`); cobrança faz push ao colaborador pedindo documento (`app/ponto/services/ausencia.py:1019`); view informa falta de documento (`app/ponto/views.py:2555`); reversão comunica explicitamente colaborador versus DP (`app/ponto/views.py:2591`); endpoint de anexo aceita ambos os estados abertos (`app/api/views.py:3117`). A E2 trata documento nos dois lugares: absorção (`app/chamados/services/tarefa_do_dia.py:164`) e cobertura (`app/chamados/services/tarefa_do_dia.py:225`).
-- **Há leitor incoerente anterior ao delta**: o payload dos chamados do app só oferece “Anexar comprovante” quando `Ausencia.status == 'pendente'` (`app/api/views.py:1087`, `app/api/views.py:1091`), embora `pendente` não esteja nos choices atuais (`app/ponto/models.py:701`) nem em `ABERTAS` (`app/ponto/services/ausencia.py:765`). Uma ausência válida `aguardando_documento` não recebe esse bloco do payload; a própria intenção do bloco está descrita no comentário (`app/api/views.py:1071`). Isso não muda o dono semântico, mas impede afirmar alinhamento de todos os leitores.
-- **Não achei outro status válido não final cuja bola seja do colaborador**: vocabulário tem documento, decisão, aprovada e rejeitada (`app/ponto/models.py:701`); `ABERTAS` contém somente documento e decisão (`app/ponto/services/ausencia.py:765`). Anexo também é permitido durante `aguardando_decisao`, mas possibilidade de anexar não equivale a obrigação pendente (`app/api/views.py:3117`).
-- **Cuidado no “escritor único” absoluto**: além de nascimento e migrations, existe baixa de férias por `QuerySet.update(status='rejeitada')` (`app/ponto/services/ausencia.py:1283`); esse bypass não escreve `aguardando_documento`, nem demonstra um segundo escritor introduzido pela E2 (`app/ponto/services/ausencia.py:1283`).
-
-## 07/11 04:12 · sessao 47a2809364aa · FIO-E0-V4-E2 · verificador · origem=Code
-
-**Reprovo a E2 como concluída:** há atribuição de pergunta ao turno errado, desconhecimento devolvido como ausência de pendência e perda da distinção entre pendência de documento e decisão do DP. (`app/chamados/services/tarefa_do_dia.py:111`, `app/chamados/services/tarefa_do_dia.py:173`, `app/chamados/services/tarefa_do_dia.py:216`; `app/ponto/services/ausencia.py:779`)
-
-A cópia não contém metadados Git acessíveis; identidade do HEAD e comparação com o pai: **[não verificado]**. Não executei a bateria Django nem consultei banco/logs; execução integral, RED anterior ao código, medida de frota e divergências de produção: **[não verificado]**. Executei somente corpos extraídos por AST, em memória, para conferir contraexemplos; nenhum arquivo foi criado, alterado ou apagado. **[não verificado por registro em arquivo]** [nao verificado]
-
-**1. Procedência dos campos e compatibilidade de significado.**
-
-O quadro registra escritores e leitores localizados e conferidos. A enumeração exaustiva de **todos** os leitores indiretos da árvore não ficou certificada: **[não verificado]**.
-
-| Campo/valor | Quem escreve | Quem lê e significado encontrado |
-|---|---|---|
-| `CelulaDia.ata['lampadas']`: `acesa`, `tipo`, `hora` | `lampadas_do_dia` produz a lista; `ata_do_dia` a incorpora; a porta da célula persiste a ata. O teto pode transformar lâmpadas pendentes em `acesa=None`. (`app/ponto/services/cartorio.py:565`, `:704`, `:873`; `app/ponto/portas/celula.py:1027`) | E2 lê a ordem, tipo E/S, hora local e valor de `acesa`; lastro e leitor da célula também consomem a lista. **`acesa=True` não significa necessariamente batida ocorrida:** ausência/justificativa pode dispensar o marco, com `luz=None`. O docstring novo simplifica indevidamente isso para “aconteceu”; o comportamento de não cobrar o marco dispensado é compatível. (`app/chamados/services/tarefa_do_dia.py:10`, `:52`, `:89`, `:202`; `app/ponto/services/lastro.py:89`; `app/escala/services/leitor_celula.py:115`; `app/ponto/services/cartorio.py:752`, `:774`) |
-| `ata['tipo_dia']` | A ata copia o tipo produzido pela grade; a porta da célula a grava. (`app/ponto/services/cartorio.py:704`; `app/ponto/portas/celula.py:1028`) | E2 chama `dia_sem_trabalho` e `ausencia_parcial_cobra_o_resto`; o leitor da célula transporta o tipo. Tipo preenchido diferente de `trabalho` cala, exceto ausência parcial; não é uma data nem um instante. (`app/chamados/services/tarefa_do_dia.py:178`; `app/chamados/juizes.py:411`, `:423`; `app/escala/services/leitor_celula.py:380`) |
-| `CelulaDia.trabalha` | Geração, regeneração, edição humana e reversão passam pela porta da célula. (`app/ponto/portas/celula.py:259`, `:272`, `:603`, `:788`, `:851`, `:868`) | O juiz de dia sem trabalho distingue `False` de `None`: `False` é folga; `None` é indeterminado e cobra. E2 delega corretamente esse predicado. (`app/escala/models.py:1686`; `app/chamados/juizes.py:419`, `:429`; `app/chamados/services/tarefa_do_dia.py:178`) |
-| `dna['marcos']` | `montar_dna` produz horários `HH:MM`; as operações da porta persistem o blob. (`app/ponto/management/commands/gerar_celulas.py:79`, `:83`, `:100`; `app/ponto/portas/celula.py:272`, `:604`, `:870`) | `EscalaColaborador.marcos_do_dia`, `marcos_turno`, cartório e E2 pelo teto. São horas de parede ancoradas no **dia do turno**; `marcos_turno` constrói instantes e avança a data quando necessário. Há incompatibilidade de cardinalidade: o DNA admite duas pausas, mas `marcos_turno` monta somente a primeira. (`app/escala/models.py:1652`, `:1124`; `app/escala/servico_jornada.py:69`, `:74`; `app/chamados/services/tarefa_do_dia.py:299`) |
-| `PerguntaDisputa.data_evento` | Nascimento em `_nascer`; preenchimento no reapontamento; correção em `rechavear_data_evento`. A porta atual declara **dia do turno**; conversa grava o dia local em que foi aberta. (`app/chamados/models.py:2477`, `:2494`, `:2578`; `app/chamados/services/fio.py:838`, `:898`) | E2 usa em `dono_da_pergunta`; materialização e fio também o tratam como data do fato. **Não existe significado único efetivo:** o caminho de intervalo ainda entrega dia civil do marco, descrito abaixo. (`app/chamados/services/tarefa_do_dia.py:106`; `app/chamados/services/fio.py:45`; `app/chamados/services/materializacao.py:345`; `app/ponto/management/commands/detectar_intervalo_ausente.py:82`) |
-| `.instancia_marco` e `.motivo` | O nascimento grava motivo e deriva a instância pelo catálogo quando vazia; a migração E1 também preenche instância. (`app/chamados/models.py:2578`, `:2972`; `app/chamados/migrations/0051_decisao_pergunta.py:27`) | E2 usa instância ou posição derivada do motivo. **Posição e ocorrência não coincidem:** o escritor usual produz `int_ida`, enquanto E2 cria `int_ida:2`; a associação posterior continua indexada pela posição. (`app/chamados/services/declaracao_texto.py:52`, `:55`; `app/chamados/services/tarefa_do_dia.py:62`, `:96`, `:192`, `:227`) |
-| `.via_resolucao` | Porta do carimbo, descarimbo em lote, `encerrar_por_fato_no_espelho` e relavra de via. (`app/chamados/models.py:2662`, `:2801`, `:2811`; `app/chamados/services/relavra_via.py:123`) | E2 exclui vias fora do fato; o juiz de materialização interpreta vias com/sem testemunha. É vocabulário de resolução, não prova isolada de efeito físico. (`app/chamados/services/tarefa_do_dia.py:183`; `app/chamados/juizes.py:648`) |
-| `.respondida_em` | Resposta normal, automática, recuperação pela trilha, reabertura/ressuscitação e carimbo automático; há restauração em memória. (`app/chamados/services/disputa_emissao.py:1346`, `:1462`, `:1516`, `:1537`; `app/chamados/models.py:1515`, `:2691`, `:2722`) | E1 verifica correspondência entre projeção e linha; `marcos_do_lote` agrega o instante; leitores antigos continuam usando a projeção. É instante de resposta, podendo ser retirado na projeção sem apagar a decisão histórica. (`app/chamados/models.py:2983`, `:3416`; `app/chamados/veredito_lavrado.py:166`; `app/chamados/services/disputa_emissao.py:1463`) |
-| `.validada_em` | Validação, devolução, resposta nova que desfaz validação, reabertura/ressuscitação e carimbo automático. (`app/chamados/services/validacao.py:134`, `:199`; `app/chamados/services/disputa_emissao.py:1358`, `:1462`; `app/chamados/models.py:1515`, `:2694`) | E1 confere correspondência com o ato; leitores antigos filtram validação nula. E2 não toma esse carimbo como decisão vigente: usa a sequência. (`app/chamados/models.py:3420`, `:2895`; `app/chamados/services/tarefa_do_dia.py:137`, `:279`) |
-| `.materializada_em` | `_escrever_carimbo` e descarimbo em lote, pelas portas do modelo. (`app/chamados/models.py:2660`, `:2801`) | **A premissa do pedido está errada:** a função de passivo E1 não lê esse campo; E2 o alcança por `marcos_do_lote`. Juiz e agrupamento legado de absorção também o leem. O carimbo registra processamento/resolução e pode existir sem batida. (`app/chamados/models.py:3409`, `:3424`; `app/chamados/services/tarefa_do_dia.py:282`; `app/chamados/veredito_lavrado.py:162`; `app/chamados/juizes.py:648`; `app/chamados/services/materializacao.py:624`) |
-| `.chamado_destino_id` | Nascimento/dedup e reapontamento; há simulações temporárias em memória para julgar a costura. (`app/chamados/models.py:2550`, `:2578`, `:354`; `app/chamados/services/fio.py:777`, `:849`) | E2 chama `chamado_que_lista`, que usa destino ou chamado da disputa. É identidade da âncora de apresentação, sem unidade temporal. (`app/chamados/services/tarefa_do_dia.py:131`, `:290`; `app/chamados/services/fio.py:116`) |
-| `DecisaoPergunta.ato/ato_em/ato_texto/absorcao_ausencia` | Porta física `registrar`; produtores: resposta, validação/devolução, reabertura/recusa, silêncio, retratação e absorção. (`app/chamados/models.py:3428`, `:1869`, `:1989`; `app/chamados/services/disputa_emissao.py:1369`, `:1478`, `:1519`, `:1540`; `app/chamados/services/validacao.py:139`, `:205`; `app/chamados/services/materializacao.py:560`) | E2 ordena por `(ato_em,pk)`, escolhe a última e lê o status atual da ausência vinculada. A tela lê respostas anteriores pela mesma sequência. `ato_em` é instante; `ato_texto` é o texto tocado pelo ato; absorção é ligação persistida, não agrupamento por coincidência de horário. (`app/chamados/services/tarefa_do_dia.py:137`, `:158`, `:275`; `app/chamados/models.py:2985`, `:3338`, `:3374`) |
-| `Ausencia.status/data/data_fim/tipo` | Criação/edição/mudança de estado na porta de ausência; `Ausencia.save` também deriva `data_fim`. (`app/ponto/services/ausencia.py:341`, `:498`, `:824`; `app/ponto/models.py:907`) | Cobertura lê tipo, estado e intervalo **inclusivo**, com aberto somente para tipos próprios; E2 lê status para definir ação. **Há divergência de dono:** `aguardando_documento` pertence ao colaborador, mas E2 o transforma em `decidir_ausencia/admin`. (`app/ponto/turnos.py:2511`, `:2771`, `:2780`; `app/ponto/services/ausencia.py:779`; `app/chamados/services/tarefa_do_dia.py:158`, `:216`) |
-| `Batida.pergunta_origem/retratada_em` | Registro/anotação pela porta; materialização vincula a pergunta; retratação carimba e desfazer limpa o instante. (`app/ponto/registro_batida.py:94`, `:235`, `:274`; `app/chamados/services/materializacao.py:937`; `app/ponto/services/retratar_humano.py:207`) | E2 lê origem dentro de `batidas_apuraveis`; juiz lê batidas plantadas; staleness agrega retratação. `retratada_em=NULL` inclui a batida na apuração; origem liga a pergunta, mas não prova sozinha o slot correto. (`app/chamados/services/tarefa_do_dia.py:287`; `app/ponto/turnos.py:2876`; `app/chamados/juizes.py:719`; `app/chamados/veredito_lavrado.py:140`) |
-| `ChamadoColaborador.status_local/silenciado_ate` | Estado pela porta `_gravar_estado`; silêncio e levantamento por `arquivo`. (`app/chamados/models.py:199`, `:226`; `app/chamados/services/arquivo.py:166`, `:201`) | E2 delega à fila: estado de cobrança e exclusão quando silêncio é **estritamente posterior** a `agora`; igualdade já permite retorno. Silêncio é véu de apresentação, distinto do estado. (`app/chamados/services/tarefa_do_dia.py:292`; `app/chamados/services/painel.py:188`; `app/chamados/services/arquivo.py:154`) |
-
-Os três campos da lavra estão discriminados no item 7. (`app/chamados/veredito_lavrado.py:194`)
-
-**O erro concreto de `data_evento`:**
-
-- O escritor atual `abrir` exige dia do turno, e `rechavear_data_evento` existe para normalizar o legado para esse significado. (`app/chamados/models.py:2477`; `app/chamados/services/fio.py:859`)
-- Continua havendo alimentação civil: detector de intervalo grava `localtime(marco).date()`; emissão lê essa data e apenas a envolve em `dia_do_turno_da_celula`, que expressamente não converte. (`app/ponto/management/commands/detectar_intervalo_ausente.py:78`; `app/chamados/services/disputa_emissao.py:1037`; `app/ponto/turnos.py:2939`)
-- Contraexemplo: turnos noturnos consecutivos de 21 e 22/10, ambos 22h–06h; pergunta de fim gravada corretamente com `data_evento=22/10`. Como o fim de 21 cai civilmente em 22 e o fim de 22 cai em 23, `dono_da_pergunta` devolve **21/10**. A heurística não consulta a célula/proveniência da pergunta; portanto **não cobre os dois significados sem atribuição errada**. (`app/chamados/services/tarefa_do_dia.py:106`, `:109`, `:114`)
-
-Há ainda derivação paralela da identidade: E1 exclui `conversa=True` em `linhas_dos_fatos`; E2 recompõe o filtro sem essa exclusão e recupera posição pelo motivo. Uma conversa com motivo de marco pode ser tratada como pergunta factual. (`app/chamados/models.py:2465`, `:2487`; `app/chamados/services/tarefa_do_dia.py:94`, `:182`)
-
-**2. Pureza, escrita e relógio.**
-
-O **núcleo** `_tarefa_pura` recebe fatos carregados e não contém escrita de modelo. A função pública consulta banco; logo “pura” é defensável como decisão sem efeitos sobre fatos carregados, mas não como função matemática exclusivamente de `(colab,dia,agora)`. Banco e fuso ativo são entradas implícitas. (`app/chamados/services/tarefa_do_dia.py:167`, `:267`, `:318`, `:72`; `app/escala/servico_jornada.py:81`)
-
-Não encontrei relógio corrente nem escrita persistente nos corpos alcançados de `vinculo_do_dia`, `marcos_turno`, `_pelo_efeito`, `batidas_apuraveis`, `chamado_que_lista`, `dia_sem_trabalho`, `ausencia_parcial_cobra_o_resto`, `texto_vazio` e `instancia_do_motivo`. (`app/escala/alimentacao.py:269`; `app/escala/servico_jornada.py:61`; `app/ponto/turnos.py:2511`, `:2856`; `app/chamados/services/fio.py:116`; `app/chamados/juizes.py:401`, `:414`, `:1251`; `app/chamados/services/declaracao_texto.py:55`)
-
-`qs_na_fila` possui fallback de relógio, mas E2 fornece `agora`; `esta_stale` também possui fallback, igualmente evitado nesse caminho. (`app/chamados/services/painel.py:190`; `app/chamados/veredito_lavrado.py:181`; `app/chamados/services/tarefa_do_dia.py:284`, `:292`, `:322`)
-
-Há memorização **por instância da carga**, em `_inst` e `_cob`; não localizei memorização global nesse caminho. Assim, a descrição literal “nenhum cache” omite essas memórias locais. (`app/chamados/services/tarefa_do_dia.py:8`, `:296`; `app/ponto/turnos.py:3068`)
-
-**3. Equivalência da carga com cobertura e teto.**
-
-**Cobertura:** dentro da mesma janela e sobre os mesmos fatos, os dois caminhos usam exatamente `_pelo_efeito`, `_q_cobertura` e `_cobertura_pura`. Preservam filtro, intervalo inclusivo e desempate pelo maior `(data,pk)`; a ordenação adicional por colaborador somente agrupa o lote. (`app/ponto/turnos.py:2753`, `:2761`, `:2780`, `:3072`)
-
-**Teto:** compartilham o corpo, a ordem de `marcos_turno` e o limite inclusivo `marco + teto <= agora`. Entretanto, **a alimentação não é exatamente igual**: `marcos_vencidos` passa a célula recebida à escolha do vínculo, mas não a passa a `marcos_com_teto`; a carga passa seu snapshot de células. (`app/ponto/services/cartorio.py:841`, `:843`, `:858`; `app/ponto/turnos.py:3061`)
-
-Contraexemplo construído: célula/carga em memória com DNA A; banco alterado para DNA B. A carga usa A; a casca pode escolher o vínculo com a célula A e buscar os marcos B no banco. Isso refuta equivalência incondicional da alimentação, sem demonstrar ocorrência em produção. (`app/escala/models.py:1119`, `:1122`, `:1124`; `app/ponto/services/cartorio.py:843`; `app/ponto/turnos.py:3062`)
-
-O pad é `[ini−2,fim+1]`, mas a cobertura é expandida apenas em `[ini,fim]`. A API não impede consulta fora da janela: carga `[21,21]`, tarefa de 22 com célula no pad e ausência em 22 pode cobrar sem enxergar essa ausência. É uso fora do contrato documentado, aceito silenciosamente pela implementação. (`app/ponto/turnos.py:1847`, `:2977`, `:3073`; `app/chamados/services/tarefa_do_dia.py:302`, `:318`)
-
-Queries constantes também não provam tempo linear no tamanho variável da janela: cada tarefa diária volta a percorrer todas as perguntas carregadas daquele colaborador. A meta de frota `≤1 query/colab-dia` não é assegurada pelo teste existente. (`app/chamados/services/tarefa_do_dia.py:306`; `app/chamados/tests/test_e2_tarefa_do_dia.py:397`)
-
-**4. Checklist das classes de reprovação.**
-
-| Classe | Resultado |
-|---|---|
-| Segundo juiz de autoridade registrada | Não achei duplicação do predicado de dia sem trabalho, cobertura, teto ou fila: E2 chama essas autoridades. O predicado de posição primeiro/último/meio é repetido; registro dele como juiz próprio: **[não verificado]**. (`app/chamados/services/tarefa_do_dia.py:49`, `:170`, `:292`, `:299`, `:307`; `app/chamados/services/declaracao_texto.py:118`) |
-| Segundo escritor fora da porta | Não localizado no arquivo novo; o `out.update` é mutação do dict de saída. (`app/chamados/services/tarefa_do_dia.py:173`, `:176`) |
-| Relógio fora da borda | Não localizado no caminho normal E2; existem fallbacks evitados pelo argumento obrigatório. (`app/chamados/services/tarefa_do_dia.py:322`; `app/chamados/services/painel.py:190`; `app/chamados/veredito_lavrado.py:181`) |
-| Derivação paralela | Identidade factual é recomposta sem o filtro de conversa; dono do turno é inferido por heurística incompatível com dado normalizado. (`app/chamados/models.py:2466`; `app/chamados/services/tarefa_do_dia.py:99`, `:182`) |
-| Campo com dois significados | `data_evento`: turno na porta atual; civil ainda vindo da emissão de intervalo. (`app/chamados/models.py:2477`; `app/chamados/services/disputa_emissao.py:1037`; `app/ponto/management/commands/detectar_intervalo_ausente.py:82`) |
-| Desconhecimento tratado como resposta definitiva | Célula existente de trabalho com ata vazia/lâmpadas vazias retorna `instancias=[]`, `nao_sei=False`, razão vazia. O leitor anterior distingue ausência de lâmpadas como desconhecimento. (`app/chamados/services/tarefa_do_dia.py:84`, `:173`, `:193`; `app/chamados/services/declaracao_texto.py:82`, `:112`) |
-| “Cada instância” incompleto | A segunda pausa recebe sufixo na saída, mas associação continua por posição; a geometria usada pelo teto também não inclui a segunda pausa do DNA. (`app/chamados/services/tarefa_do_dia.py:62`, `:192`, `:227`; `app/escala/models.py:1652`; `app/escala/servico_jornada.py:74`) |
-
-**5. Bateria: o que responde pela regra e o que apenas acompanha a implementação.**
-
-| Caso | Avaliação |
-|---|---|
-| 1 — dois marcos | Exercita independência entre marcos e ações distintas após resposta de um deles. (`app/chamados/tests/test_e2_tarefa_do_dia.py:129`) |
-| 2 — noturno | Exercita teto por instante, mas aceita os dois significados de `data_evento` como equivalentes e sanciona a heurística. Não enfrenta dois noturnos consecutivos nem pergunta já normalizada. (`app/chamados/tests/test_e2_tarefa_do_dia.py:167`, `:174`, `:189`) |
-| 3 — devolução | Exige retorno ao admin após ato de devolução. (`app/chamados/tests/test_e2_tarefa_do_dia.py:198`) |
-| 4 — ausência | Exercita não rejeitada/aprovada/rejeitada, mas somente ausência de um dia e sem `aguardando_documento`. Não prova intervalos, desempate ou parcial. (`app/chamados/tests/test_e2_tarefa_do_dia.py:210`, `:215`, `:233`) |
-| 5 — troca | A folga possui lâmpadas vazias; portanto não testa o juiz calando lâmpadas antigas apagadas. (`app/chamados/tests/test_e2_tarefa_do_dia.py:243`) |
-| 6 — concorrência | Testa idempotência de atos duplicados inseridos sequencialmente; corrida real: **[não verificado]**. (`app/chamados/tests/test_e2_tarefa_do_dia.py:253`) |
-| 7 — efeito | Distingue veredito NÃO, SIM com batida e lavra vencida por alteração de insumo; a lavra fresca é artificialmente futura. (`app/chamados/tests/test_e2_tarefa_do_dia.py:269`, `:108`) |
-| 8 — passivo | Verifica projeção respondida sem linha, exigindo desconhecimento. (`app/chamados/tests/test_e2_tarefa_do_dia.py:325`) |
-| 9 — desligamento | Verifica pendência histórica do admin até silêncio. (`app/chamados/tests/test_e2_tarefa_do_dia.py:336`) |
-| 10 — exportada | Não cria competência exportada: avança quarenta dias e verifica ausência de SQL da folha. O título excede a evidência do caso. (`app/chamados/tests/test_e2_tarefa_do_dia.py:349`) |
-| 11 — via sem testemunha | Protege contra rederivar materialização somente pela existência de batida. Não testa expiração civil da lavra. (`app/chamados/tests/test_e2_tarefa_do_dia.py:299`, `:108`) |
-
-O erro de regra mais direto é o dono da ausência: o texto da bateria universaliza “DP decide” para ausência não rejeitada, enquanto o juiz de estado distingue documento devido pelo colaborador. E2 reproduz essa universalização nos dois ramos, cobertura e absorção. (`app/chamados/tests/test_e2_tarefa_do_dia.py:5`; `app/ponto/services/ausencia.py:779`; `app/chamados/services/tarefa_do_dia.py:158`, `:216`)
-
-Mutantes que a inspeção indica deixarem as expectativas atuais intactas — execução desses mutantes: **[não verificado]**:
-
-- `_fila = set()` sempre: fixtures não criam âncoras e o helper de comparação descarta `porta`. (`app/chamados/tests/test_e2_tarefa_do_dia.py:95`, `:124`; `app/chamados/services/tarefa_do_dia.py:292`)
-- Remover verificação de `janela_expira_em`: o helper sempre a grava como `None`. (`app/chamados/tests/test_e2_tarefa_do_dia.py:108`; `app/chamados/veredito_l
-
-[truncado em 20000 de 27153 caracteres]
-
-_2670 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2673 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
