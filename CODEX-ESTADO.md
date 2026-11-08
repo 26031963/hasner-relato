@@ -1,7 +1,72 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 10:58** · publicado em **08/11/2026 10:58** (UTC-3)
+> Ultima resposta processada: **08/11/2026 10:58** · publicado em **08/11/2026 11:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 08/11 10:58 · sessao ce0c1ff64080 · - · - · origem=Ronald (tmux)
+
+Censo AST de `app/**/management/commands/*.py`: **47 sítios** — **a=10, b=6, c=0, d=10, e=3, f=18**. Unidade: chamada à porta ou raiz de consulta; encadeamentos contam uma vez. Foram resolvidos aliases importados (`_B`, `_bap`); `FotoBatida` excluída. As linhas abaixo constituem o inventário e sua evidência.
+
+Prefixos usados na tabela:
+
+- `P/` = `app/ponto/management/commands/`
+- `C/` = `app/chamados/management/commands/`
+
+| Classe | Arquivo:linha | Função | Motivo/contexto |
+|---|---|---|---|
+| a | `P/aplicar_09_corte_b.py:126` | `_tem_saida_real_em_turno_aberto` | `batidas_apuraveis` alimenta guarda de proteção de horas. |
+| a | `P/censo_col900.py:128` | `handle` | Primeira batida pela porta. |
+| a | `P/diff_espelho_alimentacao.py:92` | `handle` | Alimentação do motor pela porta. |
+| a | `P/e6_oraculo.py:152` | `__init__` | Timestamps do oráculo pela porta. |
+| a | `P/e6_oraculo.py:212` | `batida_fora_de_turno` | Existência de órfã confirmada na porta. |
+| a | `P/mapa_divergencia.py:96` | `handle` | Batidas comparadas nas grades pela porta. |
+| a | `P/reconciliar_fantasmas.py:96` | `_completude` | Universo carregado pela porta. |
+| a | `P/tripwire_celulas.py:283` | `medir_sobra_com_tipo_trocado` | Evidência em torno do marco pela porta. |
+| a | `P/vigiar_motor_autoridade.py:54` | `handle` | Alimentação pela porta. |
+| a | `app/relatorios/management/commands/diff_extrato_parcial.py:37` | `_antes` | Alias `_bap` da porta. |
+| b | `C/carimbar_por_batida_coincidente.py:70` | `handle` | `retratada_em__isnull=True`, aplicado na linha 73. |
+| b | `app/colaboradores/management/commands/corrigir_escala_retroativa.py:94` | `_rodar` | Filtro explícito no universo de dias batidos. |
+| b | `P/diff_calculador.py:270` | `handle` | Filtro explícito. |
+| b | `P/diff_janela_he.py:93` | `handle` | Filtro explícito. |
+| b | `P/e6_piso_autopsia.py:71` | `handle` | Filtro explícito. |
+| b | `P/marcar_foto_ausente_retro.py:66` | `handle` | Filtro explícito na linha 68. |
+| d | `C/auditar_disputas.py:103` | `handle` | Universo cru usado para qualificar tipo invertido; decisão de inversão nas linhas 119–123. É relatório, sem abrir/fechar chamado (comentário linha 107). |
+| d | `P/detectar_par_relampago.py:205` | `_alvo_retratavel` | Filtra `aprovada=True`, não retratação; lista decide guardas e escolha de retratação nas linhas 208–214. |
+| d | `P/detectar_par_relampago.py:290` | `varrer_pares_embutidos` | Filtra `aprovada=True`, não retratação; adjacência e pares nas linhas 294–310. |
+| d | `P/emitir_furo_retroativo.py:53` | `handle` | Lista crua gera `n_bat` na linha 100 e entra em `classificar_dia` nas linhas 101–106. |
+| d | `P/emitir_furo_retroativo.py:74` | `handle` | Primeira crua decide `adesao`, enviada ao julgamento na linha 105. |
+| d | `P/reconciliar_grade.py:84` | `handle` | Universo cru de colaboradores, utilizado na seleção da linha 106. |
+| d | `P/reconciliar_grade.py:88` | `handle` | `Min(timestamp)` cru define piso de adesão; piso suprime dia nas linhas 136–138. |
+| d | `P/reconciliar_grade.py:118` | `handle` | Related `c.batidas.all()` cru alimenta montagem da grade e detecção de missing nas linhas 151–155. |
+| d | `P/supra_juiz.py:113` | `handle` | Lista crua contada na linha 222 e enviada a `classificar_dia` nas linhas 223–229. |
+| d | `P/supra_juiz.py:132` | `handle` | Primeira crua decide adesão na linha 135 e julgamento na linha 227. |
+| e | `P/diff_passivo_s84.py:79` | `handle._mutacao` | Lookup por `pk`, depois guarda de retratação na linha 80. |
+| e | `P/flip_automatico.py:44` | `handle` | Alias `_B`, busca por `pk__in` de flips já propostos. |
+| e | `P/passivo_disputa_retro.py:158` | `handle` | Lookup por `pk` do passivo já selecionado. |
+| f | `app/escala/management/commands/hub_smoke.py:98` | `handle.win_map` | Mapa cru de antes/depois para detectar mutação e excluir instabilidade do smoke, linhas 112–131; não é exibição nem apuração. |
+| f | `P/censo_col900.py:133` | `handle` | Contador diagnóstico “retratadas mudariam”, somente quando a porta não achou batida; motivo explícito nas linhas 129–135. |
+| f | `P/checklist_golive.py:100` | `handle` | Contagem física global exibida na linha 103; não é marcação nem apuração. |
+| f | `P/checklist_golive.py:101` | `handle` | Contagem de colaboradores de teste para alerta de limpeza, linhas 104–105. |
+| f | `P/gerar_batidas_smoke_motor.py:61` | `_limpar` | Seleção por marcador para limpeza em banco de ensaio; não decide apuração. |
+| f | `P/mapa_divergencia.py:62` | `handle` | Alias `_B`: seleção ampla de colaboradores para auditoria; batidas efetivamente comparadas vêm da porta na linha 96. |
+| f | `P/processar_alertas_turno.py:59` | `handle` | Seleção ampla de colaboradores para disparar `recompute_turnos` nas linhas 65–67; não alimenta pareamento cru. Caso se adote “seleciona materialização” como suficiente para (d), mover este sítio a d. |
+| f | `P/testar_pwa.py:169` | `t05_batida_entrada` | Limpeza preparatória de ensaio. |
+| f | `P/testar_pwa.py:178` | `t05_batida_entrada` | Confirma persistência de POST no smoke. |
+| f | `P/testar_pwa.py:194` | `t05_batida_entrada` | Confirma persistência após repetir POST. |
+| f | `P/testar_pwa.py:199` | `t05_batida_entrada` | Verifica resultado de smoke. |
+| f | `P/testar_pwa.py:213` | `t06_batida_saida` | Verifica persistência de saída no smoke. |
+| f | `P/testar_pwa.py:226` | `t07_batida_duplicada` | Limpeza preparatória do teste de idempotência. |
+| f | `P/testar_pwa.py:232` | `t07_batida_duplicada` | Limpeza final do ensaio. |
+| f | `P/vigia_plantio_overnight.py:30` | `batidas_plantadas_no_dia_errado` | Seleciona colaboradores por cru aprovado; evidência julgada vem de `turnos_do_colab` e `t.batidas`, linhas 38–39. |
+| f | `P/zerar_dados_operacionais.py:43` | `handle` | Contagem de objetos antes de limpeza. |
+| f | `P/zerar_dados_operacionais.py:96` | `handle` | Seleção de todos os objetos para limpeza de ensaio. |
+| f | `app/tenants/management/commands/cron_healthcheck.py:17` | `handle.check` | Contagem física para healthcheck. |
+
+Para eliminar ambiguidade na consolidação: **f aqui significa “uso operacional/diagnóstico fora das outras cinco classes”, com motivo verificado, não desconhecimento do fluxo**. Se o critério do usuário “resultado decide materialização” incluir disparo amplo de recompute, `processar_alertas_turno.py:59` deve ser **d**, dando **d=11, f=17**, demais totais iguais.
+
+O caminho de `reconciliar_grade.py:118` tem bifurcação pela configuração: `app/escala/utils.py:2107` decide builder por turno ou legacy; o wrapper repassa a lista crua nas linhas 2108–2111. Portanto não foi classificado como porta, ainda que um builder possa voltar a buscar outra fonte (`app/escala/utils.py:2105`).
+
+Interseção com E1, limitada a este inventário: **`app/escala/management/commands/hub_smoke.py:98`** e **`app/ponto/management/commands/vigia_plantio_overnight.py:30`**; pertença à lista E1 vem do anexo do usuário [não verificado por arquivo local].
 
 ## 08/11 10:58 · sessao 87740fa7e361 · - · - · origem=Ronald (tmux)
 
@@ -1092,35 +1157,4 @@ Cobertura:
 - Há selo antigo do produtor para noite com dois pares, mas não é teste do novo helper. `app/escala/tests/test_celula_segundo_intervalo.py:159-170`.
 - Não executei testes; aprovação/RED efetivo desta cópia é [nao verificado]. [nao verificado]
 
-## 08/11 09:46 · sessao d2f0642fdd2e · - · - · origem=Ronald (tmux)
-
-D: há consulta nova. Com `cid`, células alimentadas e ao menos uma célula desse colaborador, `_turnos_do_juiz` chama `papel_por_minuto_da_ata` sem `escalas=`; esta chama `_escalas_da_ata`, que executa **um SELECT** com `select_related('tipo_escala')`. O comentário “ALIMENTACAO, NUNCA CONSULTA” não corresponde ao caminho executado. `app/ponto/motor_calculo_v2.py:884`, `app/ponto/motor_calculo_v2.py:888`, `app/ponto/motor_calculo_v2.py:893`, `app/ponto/turnos.py:1596`, `app/ponto/turnos.py:1561`.
-
-A consulta acontece mesmo sem batidas ou com ata ilegível, porque a escala é carregada antes da análise das células. Sem satisfazer as guardas do novo sítio, ele acrescenta zero consultas. `app/ponto/turnos.py:1596`, `app/ponto/turnos.py:1616`, `app/ponto/turnos.py:1634`, `app/ponto/motor_calculo_v2.py:888`.
-
-| Caminho elegível | SELECTs novos por `calcular_mes` | Evidência |
-|---|---:|---|
-| Base/12x36/Plantão | +1 | `app/ponto/motor_calculo_v2.py:2428` |
-| TurnoPartido | +2 | `app/ponto/motor_calculo_v2.py:2995`, `app/ponto/motor_calculo_v2.py:3008` |
-| Comercial | +2 | `app/ponto/motor_calculo_v2.py:3401`, `app/ponto/motor_calculo_v2.py:3412`, `app/ponto/motor_calculo_v2.py:899` |
-
-O sítio antigo também omite `escalas=` e já pagava um SELECT. O nome real da função nesta cópia é `turnos_via_autoridade`; `_parear_motor` aparece somente no comentário. Num cálculo normal elegível, contando apenas essas consultas de escala da ata, passa de 1 para 2 no Base e de 1 para 3 nos dois overrides acima. `app/ponto/motor_calculo_v2.py:453`, `app/ponto/motor_calculo_v2.py:494`, `app/ponto/motor_calculo_v2.py:502`, `app/ponto/motor_calculo_v2.py:885`.
-
-Os caminhos atingidos são:
-
-- Fechamento por fatia: alimenta células em `app/ponto/services/fechamento.py:750`, chama a apuração em `app/ponto/services/fechamento.py:754` e calcula cada fatia em `app/ponto/services/fechamento.py:286`.
-- Passada órfã: alimenta em `app/ponto/services/fechamento.py:825`, calcula com `escala_colaborador=None` e `colaborador_id` em `app/ponto/services/fechamento.py:827`. Nesse ramo, o novo sítio pode consultar; o antigo depende de `_ec.colaborador_id` e fica desabilitado. `app/ponto/motor_calculo_v2.py:469`, `app/ponto/motor_calculo_v2.py:496`.
-- Espelho: alimenta em `app/ponto/services/espelho.py:1131`, chama fatias em `app/ponto/services/espelho.py:1164` ou cálculo direto em `app/ponto/services/espelho.py:1179`; a tela pede essa autoridade em `app/ponto/services/espelho.py:1227`.
-- PDF: chama o espelho em `app/relatorios/pdf_espelho.py:596`, `app/relatorios/pdf_espelho.py:598`.
-
-`papel_por_minuto_da_ata` diretamente pode executar três consultas sem alimentação: células, escalas e batidas. Com células e batidas fornecidas, sem `escalas=`, executa uma; fornecendo também `escalas={}` ou mapa carregado, essas três consultas desaparecem. `app/ponto/turnos.py:1588`, `app/ponto/turnos.py:1596`, `app/ponto/turnos.py:1602`.
-
-E: **sim, o sítio antigo recebe batidas deduplicadas** no fluxo normal de `calcular_mes`: limpa em `app/ponto/motor_calculo_v2.py:2433`, chama `montar_periodos(batidas_limpas)` em `app/ponto/motor_calculo_v2.py:2436`, as implementações delegam a `_periodos_via_autoridade`, que chama `turnos_via_autoridade`. `app/ponto/motor_calculo_v2.py:2835`, `app/ponto/motor_calculo_v2.py:2962`, `app/ponto/motor_calculo_v2.py:3300`, `app/ponto/motor_calculo_v2.py:530`.
-
-`turnos_do_colab` carrega batidas vivas cruas e passa a lista ao papel sem essa deduplicação. O papel conta batidas por minuto e rejeita luzes com contagem diferente de um; também rejeita minuto ambíguo dentro do vão. `app/ponto/turnos.py:1866`, `app/ponto/turnos.py:1918`, `app/ponto/turnos.py:1942`, `app/ponto/turnos.py:1615`, `app/ponto/turnos.py:1659`, `app/ponto/turnos.py:1741`.
-
-Contraexemplo estático: duas entradas consecutivas `08:00:01 E` e `08:00:20 E`, no minuto de uma luz, viram uma entrada no motor, porque o dedupe elimina o mesmo tipo com diferença menor que três minutos; no universo cru, a luz tem duas batidas e impede emissão do papel daquele dia. Ocorrência desse caso em produção: [nao verificado]. `app/ponto/motor_calculo_v2.py:70`, `app/ponto/motor_calculo_v2.py:736`, `app/ponto/motor_calculo_v2.py:914`, `app/ponto/motor_calculo_v2.py:921`, `app/ponto/turnos.py:1659`.
-
-Pelo diff integral fornecido, essa diferença de universo entre o pareamento monetário do motor e `turnos_do_colab` é anterior à obra; a obra a estende ao novo consumo de papel em `_turnos_do_juiz`. Comparação independente com checkout do main e contagem real de consultas/latência: [nao verificado]. `app/ponto/motor_calculo_v2.py:502`, `app/ponto/motor_calculo_v2.py:882`, `app/ponto/motor_calculo_v2.py:893`, `app/ponto/turnos.py:1942`.
-
-_2860 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2861 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
