@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/11/2026 16:14:44.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (150.6 MB). Acoes na janela: **444**.
+**Medido em 08/11/2026 16:20:23.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (150.6 MB). Acoes na janela: **443**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -453,4 +453,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 04:21:35 | Bash | Show backlog row columns | `cd /home/ronald/saas-hasner && sed -n 775p app/docs/BACKLOG.md \| awk -F'\|' '{for(i=2;i<NF;i++) print i": "substr($i,1,150)}'` |
 | 04:21:33 | Bash | Write CXR lei/desenho lines; inspect backlog row | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p).read().split('\n') assert s[1].startswith('ESPERANDO: sombra.sh \| pid=3224688') novas=[ "lei: CXR-TELA PRONTO (1) 08/11 04:2x -- col841 0 itens do motor nas comps 10/11 na sombra porque `l084_pausa` NAO existe no HEAD f49aca02 (git grep app: 0 em codigo, so docs); mora so na raia nao pousada ata-pausa-2710 (ATA-X-TU ...` |
 | 04:21:23 | Bash | Read RELATO top and CXR backlog row | `cd /home/ronald/saas-hasner && sed -n 1,12p app/docs/RELATO.md \| cut -c1-260; grep -n 'CXR-TELA' app/docs/BACKLOG.md \| head -3 \| cut -c1-200; ps -p 3224688 -o cmd= \| cut -c1-80` |
-| 04:20:20 | Bash | Verify CXR suite and l084_pausa absence at HEAD | `cd /home/ronald/saas-hasner && grep -E '^Ran \|^(OK\|FAILED)' logs/cxr_tela/suite2.log \| tail -2; cat logs/cxr_tela/suite2.log.fim 2>/dev/null; git grep -c l084_pausa f49aca02 -- app \| head -3; echo "n=$(git grep l084_pausa f49aca02 -- app \| wc -l)"; git -C /home/ronald/wt-cxrtela-025236 log --oneline -1; git -C /home/ronald/wt-cxrtela-025236 status --porcelain \| wc -l; date +%H:%M` |
