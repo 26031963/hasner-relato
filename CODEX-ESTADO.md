@@ -1,7 +1,74 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 03:19** · publicado em **08/11/2026 03:21** (UTC-3)
+> Ultima resposta processada: **08/11/2026 03:36** · publicado em **08/11/2026 03:37** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 08/11 03:36 · sessao 5b1d37290c70 · CXR-TELA-LE-O-MOTOR · verificador · origem=Code
+
+**O delta cura (a)–(d) por inspeção. Não encontrei novo defeito bloqueante nos trechos alterados e nos leitores dos campos. O aval completo de produção permanece [não verificado].** Evidências abaixo.
+
+**1) Curas e mapa de leitura/escrita**
+
+- **(a) Chave corrigida:** os dois chamadores passam `ini`; C11 conserva esse início e corta somente `fim`. Isso elimina a escolha equivocada pelo mês do fim cortado. [cadastro_realidade.py:526](app/escala/services/cadastro_realidade.py:526), [cadastro_realidade.py:568](app/escala/services/cadastro_realidade.py:568), [cadastro_realidade.py:1025](app/escala/services/cadastro_realidade.py:1025).
+- **(b) Selo fortalecido:** o teste agora exige contagem `(0, 0)` das chamadas ao espelho e ao motor; capturar o `AssertionError` dentro da lista não basta para deixá-lo passar. [test_cxr_tela_le_o_motor.py:132](app/ponto/tests/test_cxr_tela_le_o_motor.py:132), [test_cxr_tela_le_o_motor.py:138](app/ponto/tests/test_cxr_tela_le_o_motor.py:138).
+- **(c) Testes passam pela lavra:** “responde como o espelho” chama efetivamente `cxr_lavrado`; o conflito C9/C12 exige `CADASTRO` em `dono_do_dia`, com juiz sensível ao insumo CXR. [test_cxr_tela_le_o_motor.py:252](app/ponto/tests/test_cxr_tela_le_o_motor.py:252), [test_cxr_tela_le_o_motor.py:311](app/ponto/tests/test_cxr_tela_le_o_motor.py:311).
+- **(d) Texto corrigido:** a docstring declara filtro, deduplicação e exclusão por erro; o rótulo conta itens. [cxr_na_lista.py:11](app/ponto/services/cxr_na_lista.py:11), [cxr_na_lista.py:131](app/ponto/services/cxr_na_lista.py:131).
+
+| Papel | Escritor/leitor |
+|---|---|
+| Produz competência e cobertura | `medir`: competência pelo fim integral; cobertura `[pk, comp, início ISO]`. [cxr_na_lista.py:61](app/ponto/services/cxr_na_lista.py:61), [cxr_na_lista.py:115](app/ponto/services/cxr_na_lista.py:115) |
+| Persiste e recupera | `lavrar` grava o dicionário em `detalhe`; `ultimo_lavrado` recupera-o. [cxr_na_lista.py:142](app/ponto/services/cxr_na_lista.py:142), [cxr_na_lista.py:156](app/ponto/services/cxr_na_lista.py:156) |
+| Interpreta `cobertos` | `cxr_lavrado`: `(colab, início) → competência → conjunto de datas`. [cxr_na_lista.py:173](app/ponto/services/cxr_na_lista.py:173), [cxr_na_lista.py:180](app/ponto/services/cxr_na_lista.py:180) |
+| Consome a chave nova | `beco_em_lote` e `um_dono_por_dia`. [cadastro_realidade.py:526](app/escala/services/cadastro_realidade.py:526), [cadastro_realidade.py:1025](app/escala/services/cadastro_realidade.py:1025) |
+| Mostra C12 | `_cxr_do_motor` lê `itens`, sem interpretar `cobertos`. [cadastro_realidade.py:393](app/escala/services/cadastro_realidade.py:393) |
+
+**Nenhum leitor produtivo encontrado ainda exige o par `[colab, comp]**`: o leitor estrutural exige três elementos. O par antigo aparece no teste negativo e resulta em `None`; portanto, snapshots antigos perdem cobertura até nova lavra, explicitamente. [cxr_na_lista.py:173](app/ponto/services/cxr_na_lista.py:173), [test_cxr_tela_le_o_motor.py:305](app/ponto/tests/test_cxr_tela_le_o_motor.py:305).
+
+**2) Descartes versus aval**
+
+Não promoveria os descartes funcionais a bloqueadores deste delta. Em particular, erro parcial fica contado, exclui cobertura e o comando publica antes de sair 2; sem cobertura, o ramo dependente de CXR retorna `None`, sem motor. [cxr_na_lista.py:108](app/ponto/services/cxr_na_lista.py:108), [lavrar_cxr_do_motor.py:37](app/ponto/management/commands/lavrar_cxr_do_motor.py:37), [e6_oraculo.py:189](app/ponto/management/commands/e6_oraculo.py:189).
+
+**A pendência `l084_pausa` impede declarar comprovado o PRONTO (1).** O leitor copia a publicação; não consegue trazer uma acusação que o produtor não entregou. Isso não demonstra defeito novo no leitor nem autoriza recalcular na tela. Os sete dias efetivamente publicados e exibidos: [não verificado]. [cxr_na_lista.py:75](app/ponto/services/cxr_na_lista.py:75), [motor_calculo_v2.py:2719](app/ponto/motor_calculo_v2.py:2719).
+
+**3) Outro ponto relevante ao aceite**
+
+O PRONTO (5) exige cuidado: **nem toda saída de `d` vai para `e/dia_na_lista_dono_*`**. Dias reconhecidos como mesa do admin podem entrar antes em `fio_do_admin`; os demais dias presentes na lista chegam ao detalhamento de `e`. Portanto, afirmar fechamento somente em `e` sem comparar os destinos seria incorreto. [vigia_fio.py:654](app/chamados/services/vigia_fio.py:654), [vigia_fio.py:677](app/chamados/services/vigia_fio.py:677), [vigia_fio.py:684](app/chamados/services/vigia_fio.py:684). A comparação nominal antes/depois e sua soma: [não verificado].
+
+Executei sete verificações puras da função de leitura, incluindo competências distintas, cobertura vazia, ausência e formato antigo: passaram. [cxr_na_lista.py:162](app/ponto/services/cxr_na_lista.py:162). Suite Django e selos da frota: [não verificado].
+
+## 08/11 03:35 · sessao aab5013a25cc · - · - · origem=Ronald (tmux)
+
+Não encontrei descarte que deva virar **defeito bloqueante novo** no delta; os pontos abaixo limitam a conclusão de aceite:
+
+- **Erro parcial:** CXR exclui a competência com falha de `cobertos`, registra erro e publica as demais; o command grava e termina com código 2. É a mesma política do C9. Sem cobertura, `sem_motor=True` devolve `None` quando a lista do motor seria necessária, sem chamá-lo. `app/ponto/services/cxr_na_lista.py:108`, `app/ponto/services/cxr_na_lista.py:115`, `app/ponto/management/commands/lavrar_cxr_do_motor.py:37`, `app/ponto/management/commands/lavrar_teto_do_dia.py:34`, `app/ponto/management/commands/e6_oraculo.py:189`.
+
+- **Zero/não medido:** `ultimo_lavrado()` distingue ausência de medição, mas C12 só consome `itens`, perdendo essa distinção na apresentação. Isso permanece no molde já escolhido; não encontrei requisito específico novo que transforme o descarte em bloqueio do delta. `app/ponto/services/cxr_na_lista.py:154`, `app/escala/services/cadastro_realidade.py:393`.
+
+- **Item sem dia:** nasce sem dono na lavra, e a ação continuará “a próxima lavra o traz”; próxima lavra não necessariamente resolverá enquanto o motor continuar sem dia. É limitação real já descartada, compartilhada pela apresentação por dono. A afirmação “sem_dia=0 na frota” não pode ser validada pelos anexos fornecidos. `app/ponto/services/cxr_na_lista.py:81`, `app/ponto/services/cxr_na_lista.py:84`, `app/escala/services/cadastro_realidade.py:759`; número de produção [não verificado].
+
+- **Cron:** a lavra está declarada como elo após `vigia_pareador_celula`, com dependência de `processar_cartorio`; a leitura da manhã usa a lavra anterior por decisão documentada no código. Não há evidência nova para promover a enumeração incompleta do placar a bloqueio funcional deste delta. `app/config/crons.py:1757`, `app/config/crons.py:1765`.
+
+- **`l084_pausa`/PRONTO (1):** os escritores examinados publicam `l084_do_dia`, as causas de janela ou item sem `causa`; C12 copia a publicação, portanto não pode produzir por si os sete exemplos ausentes. O atendimento nominal dos sete dias permanece [não verificado], sem caso fornecido que demonstre falha deste leitor. `app/ponto/motor_calculo_v2.py:1623`, `app/ponto/motor_calculo_v2.py:1670`, `app/ponto/motor_calculo_v2.py:1992`, `app/ponto/motor_calculo_v2.py:2719`, `app/ponto/services/cxr_na_lista.py:75`.
+
+**Cuidado com o PRONTO (5):** não declarar genericamente que cada saída de `d` aparecerá em `e/dia_na_lista_dono_*`. O vigia encaminha previamente dias na lista com BATIDA/CADASTRO para `fio_do_admin`; somente os que permanecem sem outro balde podem entrar em `e/dia_na_lista_dono_*`. A nova C12 calcula o dono com o próprio espelho e pode devolver CADASTRO. A soma exigida precisa de comparação nominal antes/depois; ela não está nos anexos. `app/chamados/services/vigia_fio.py:313`, `app/chamados/services/vigia_fio.py:654`, `app/chamados/services/vigia_fio.py:677`, `app/chamados/services/vigia_fio.py:684`, `app/ponto/services/cxr_na_lista.py:96`, `app/ponto/management/commands/e6_oraculo.py:110`; fechamento da soma [não verificado].
+
+## 08/11 03:35 · sessao 8fade55f0993 · - · - · origem=Ronald (tmux)
+
+Não achei regressão concreta na chave nova nem leitor produtivo que ainda desempacote `cobertos` como par; o único leitor estrutural exige três elementos. `app/ponto/services/cxr_na_lista.py:173`.
+
+Mapa dos campos:
+
+- `medir()` produz `comp` pelo fim integral e grava `[pk, comp, ini.isoformat()]`; devolve `cobertos` no resultado. `app/ponto/services/cxr_na_lista.py:61`, `app/ponto/services/cxr_na_lista.py:115`, `app/ponto/services/cxr_na_lista.py:130`.
+- `lavrar()` persiste o resultado inteiro em `detalhe`; `ultimo_lavrado()` recupera esse detalhe. `app/ponto/services/cxr_na_lista.py:142`, `app/ponto/services/cxr_na_lista.py:156`.
+- `cxr_lavrado()` converte os triplos em `(colab, início) → competência` e busca os dias por `(colab, competência)`. Formatos antigos ficam sem cobertura, retornando `None`. `app/ponto/services/cxr_na_lista.py:173`, `app/ponto/services/cxr_na_lista.py:177`, `app/ponto/services/cxr_na_lista.py:180`.
+- Os dois consumidores produtivos passam `ini`: C11 em `beco_em_lote()` e reconciliação em `um_dono_por_dia()`. `app/escala/services/cadastro_realidade.py:526`, `app/escala/services/cadastro_realidade.py:1025`.
+- C11 preserva o início da janela e corta somente o fim; a reconciliação deriva a janela da data do item pela autoridade `janela_atual`. `app/escala/services/cadastro_realidade.py:568`, `app/escala/services/cadastro_realidade.py:569`, `app/escala/services/cadastro_realidade.py:1017`.
+- `InsumosDoDono` recebe o conjunto ou `None`; sem cobertura e sem motor, o ramo que precisaria do CXR devolve `None`, sem fallback. `app/ponto/management/commands/e6_oraculo.py:147`, `app/ponto/management/commands/e6_oraculo.py:189`.
+- C12 lê apenas `itens`, sem interpretar `cobertos`. `app/escala/services/cadastro_realidade.py:393`.
+- O único par antigo explícito é a fixture negativa que exige `None`; os testes novos também distinguem os inícios das competências 10 e 11. `app/ponto/tests/test_cxr_tela_le_o_motor.py:302`, `app/ponto/tests/test_cxr_tela_le_o_motor.py:305`.
+- O homônimo `cobertos` de `core/views.py` é um contador de postos, independente do snapshot CXR. `app/core/views.py:882`, `app/core/views.py:891`.
+
+Execução dos testes e estado efetivo dos snapshots de produção: [não verificado]. [nao verificado]
 
 ## 08/11 03:19 · sessao d8ec781d1406 · CXR-TELA-LE-O-MOTOR · verificador · origem=Code
 
@@ -1058,116 +1125,4 @@ O exemplo `cobranca.py:176-178` é laço de vários pais, com perguntas recortad
 
 Outros laços com atomic por unidade, não abrangendo todos os colaboradores: `relavra_via.py:215/219`, `passivo_validado.py:353/371` (por colaborador/competência), `passivo_validado.py:403/404` (por disputa), `limbo_folgas.py:316` → `agrupar_furo` com atomic em `:270`.
 
-## 07/11 23:32 · sessao 2783e9e9098d · - · - · origem=Ronald (tmux)
-
-Inventário completo dos sítios explícitos em `app/chamados/models.py`; não encontrei escrita SQL direta em `app/chamados/signals.py`, mas os receivers delegam aos escritores indicados abaixo (`signals.py:42,72,115,163,203,224,265,292,321,355`).
-
-Abreviações: CH = ChamadoColaborador; D = DisputaSupervisao; P = PerguntaDisputa. Classificações mistas exigem desdobramento por caminho; não inventei uma garantia universal.
-
-| Sítio (`app/chamados/models.py`) | Função | Entidade/operação | Classificação/evidência |
-|---|---|---|---|
-| 296 | `_gravar_estado` | CH.save | TRAVA-ANTES, `290`, dentro do atomic `280` |
-| 498 | `rebaixar` | CH.save | INDETERMINADO: chama porta `497`, que só trava com atomic preexistente (`484–486`); busca por chamadas de produção não encontrou chamador |
-| 553 | `escalar_urgencia` | CH.save | Misto: TRAVA-ANTES `552→486` quando atomic externo, como command `escalonar_chamados_supervisao.py:131–138`; SEM-ATOMIC no command `processar_alertas_avancados.py:173` |
-| 571 | `apagar_em_ensaio` | CH.delete | Não alcança banco de produção segundo guarda chamada `569–570`; caller `zerar_dados_operacionais.py:80–84`, atomic externo sem trava C. Guarda concreta `registro_batida.py:316` precisa leitura complementar |
-| 591 | `definir_prazo_sla` | CH.save | Misto: TRAVA-ANTES `590→486`, cobrança com atomic `cobranca.py:176–178`; `disputa_emissao.py:1604` não abre atomic nessa função, chamadores externos ainda necessários |
-| 610 | `marcar_escalonado_dp` | CH.save | SEM-ATOMIC no único caller encontrado, `escalonar_chamados_supervisao.py:103`; porta `609→484` retorna sem travar em autocommit |
-| 636 | `_rebaixar_sem_post_save` | CH.QuerySet.update | INDETERMINADO por caminho originador do save; receiver `signals.py:54–72` não abre atomic nem trava; herda a transação do save |
-| 971 | `abrir` | CH.get_or_create | TRAVA-ANTES `905`, atomic `902` |
-| 1095 | `criar` | CH.create | SEM-TRAVA no caminho API `api/views.py:2201`; atomic próprio `1094`, nenhum C antes do create na função |
-| 1928 | `DisputaSupervisao.fechar` | D.save | TRAVA-ANTES `1902`, atomic `1897` |
-| 1960 | `aparar_motivo_respondido` | D.save | SEM-ATOMIC no caminho `api/views.py:887→api/foto_recebida.py:72` e gêmeo `api/views_core.py:877`; aparo precede resposta/validação `foto_recebida.py:73` |
-| 2057 | `remover_motivo` | D.save | TRAVA-ANTES `2018/2020`, atomic `2017` |
-| 2097 | `anotar_contexto` | D.save | SEM-ATOMIC nos callers `chamados/views.py:1343` e `escalonar_chamados_supervisao.py:159` |
-| 2115 | `renovar_contexto` | D.save | SEM-ATOMIC no único caller encontrado `alertar_disputas_pendentes.py:48`, loop `42`, handle `30` |
-| 2153 | `reabrir_admin` | D.save | SEM-ATOMIC: `acoes_disputa.py:256`, vindo `fio.py:583`; factory conversa `260` e reabertura CH `267` vêm depois |
-| 2169 | `reabrir_sistema` | D.save | Misto. TRAVA-ANTES em `relavra_via.py:230→261`, `reabrir_orfas_enterradas.py:153→165`, `materializacao.py:676→683`. Via `models.py:1583` ocorre depois da saída do atomic próprio `1547–1555`; depende de atomic externo do caller |
-| 2227 | `reabrir_por_colab` | D.save | SEM-ATOMIC nas views `chamados/views.py:1334` / `api/views.py:2718`: `_reabrir` termina seu atomic antes de voltar (`disputa_emissao.py:1496–1520`) |
-| 2253 | `limpar_resolucao_residual` | D.save | INDETERMINADO: método sem atomic/trava, nenhum caller de produção encontrado |
-| 2769 | `_nascer` | P.save existente | TRAVA-ANTES `2691`; ramo só existe sob `if not conversa` (`2713`) |
-| 2773 | `_nascer` | P.create | Misto: datada TRAVA-ANTES `2691`; conversa SEM-TRAVA no caminho `acoes_disputa.py:260`, atomic da factory `2689` e guarda da trava `2690` |
-| 2907 | `carimbar` | P.save | SEM-TRAVA comprovado pelo consumidor: `reconciliador.py:1355→582/586`; não há atomic externo nessa etapa, save abre atomic `3173`. Outro caminho `1365→1136/1137→encerrar_fantasma→carimbar` também sem C |
-| 2945 | `carimbar_identidade` | P.save | Misto/depende do caller: coberto por D.fechar `1902→1913→2819`; remover motivo `2018→2053`; restante em fio/materialização precisa consolidação do outro explorer |
-| 2967 | `descarimbar` | P.save | Misto: TRAVA-ANTES em `relavra_via.py:230→246`, `reabrir_orfas_enterradas.py:153→157`; SEM-TRAVA em `competencia_trancada.py:253–254→models.py:3073`, salvo trava de outer caller ainda não lido |
-| 3015–3017 | `descarimbar_em_lote` | P.QuerySet.update | Misto: TRAVA-ANTES via `models.py:1552→1555`; sem C próprio via `disputa_emissao.py:1496→1516` |
-| 3027 | `encerrar_por_fato_no_espelho` | P.save | SEM-TRAVA: único caller encontrado command `encerrar_perguntas_com_fato.py:67–68`, atomic por pergunta, antes de fechamento D em outro atomic `87–88` |
-| 3174 | `save` override | P.super.save | INDETERMINADO por caller; sempre abre atomic `3173`, portanto não classificar esse sítio como SEM-ATOMIC |
-
-Precisões para consolidação:
-
-- A porta de campo retorna sem travar em autocommit (`models.py:483–486`). Não se pode transformar todo `trava_a_ordem_para_escrever()` em TRAVA-ANTES sem subir ao caller.
-- `ressuscitar_perguntas` trava C em `1552`, atualiza P em `1555`, sai do próprio atomic e depois reabre D em `1582–1583`. Callers encontrados: `models.py:1441`, `views_arquivar.py:86`, `cartorio.py:1622`. O `reabrir()` de CH também não mantém um atomic próprio entre `_gravar_estado` (`1432`) e ressuscitação (`1441`).
-- `cobranca.py:176–178` percorre `pais` obtidos pelos FKs `p.disputa.chamado` (`51–67`), partindo de pendências de um colaborador (`163–164`). Dado fornecido não prova se existem pais de dono diferente; multiplicidade de donos nesse laço é [nao verificado].
-- O consumidor chama os carimbos de P sem atomic externo: `reconciliador.py:1345–1373`; só a marcação de EventoCelula abre atomic em `1378`. Travas obtidas e já commitadas pela etapa anterior não cobrem esses saves. [nao verificado]
-
-Signals que disparam escrita D/CH/P, ainda que por delegação:
-
-| Receiver | Passo de escrita |
-|---|---|
-| `signals.py:19` disputa fechada | atomic `41`, CH.reconciliar `42` → CH._gravar_estado e trava `models.py:290` |
-| `signals.py:54` urgência ao resolver | chama CH._rebaixar_sem_post_save `72` → update `models.py:636`; sem atomic/trava próprios |
-| `signals.py:91` resolver perguntas | atomic `114`, resolver `115` → serviço de disputa |
-| `signals.py:121` retomar regularizações | callback `132–144`, chama `retomar_regularizacoes_confirmadas` `137` |
-| `signals.py:148` materializar pendentes | serviço `163`, na transação originadora |
-| `signals.py:188` cartório CH | `203`, na transação originadora |
-| `signals.py:215` becos P | callback `220–225`, serviço `224` |
-| `signals.py:256` isento Colaborador | callback `261–266`, silenciar `265` |
-| `signals.py:270` isento CH | callback `288–293`, silenciar `292` |
-| `signals.py:312` feriado | callback `317–322`, reavaliar `321` |
-| `signals.py:337` filho morto | callback `350–356`, reconciliador `355` |
-
-`_cartorio_pre_save_chamado` apenas lê (`signals.py:179–184`); `_outbox_post_save_pergunta` grava EventoCelula, não uma das três entidades (`signals.py:238–244`).
-
-Configurações lidas: `config/settings/saas.py:83–92` e `prod.py:9–18` não ativam ATOMIC_REQUESTS; busca em `app/config` não achou ATOMIC_REQUESTS/AUTOCOMMIT. Perfil/config efetivamente carregado em produção: [nao verificado].
-
-## 07/11 21:33 · sessao 348e377151bc · FIO-E0-V4-E1 · verificador · origem=Code
-
-**1. C8 — PROCEDENTE o +2 por save; NÃO PROCEDE tratá-lo como explicação completa do caminho.** O helper de campo pede C e aquele Chamado; isso executa dois SELECTs, mesmo quando as travas são reentrantes. `renovar_contexto` chama o helper antes do save e pode retornar antes dele por igualdade. (`app/chamados/models.py:484`, `app/chamados/models.py:486`, `app/chamados/models.py:2547`, `app/chamados/models.py:2567`, `app/chamados/services/contexto.py:98`, `app/chamados/services/contexto.py:103`)
-
-Há outro custo que essa justificativa não discrimina: na emissão, `trava_na_ordem(...abertas_do_colaborador=True)` consulta **C, Disputas abertas e Chamados vivos/pais**; depois ocorre uma leitura simples separada da Disputa. São quatro SELECTs nesse trecho, inclusive quando os conjuntos de Disputas/Chamados estão vazios. A fábrica do cartório alcança esse núcleo. (`app/chamados/services/disputa_emissao.py:530`, `app/chamados/services/disputa_emissao.py:531`, `app/chamados/models.py:2547`, `app/chamados/models.py:2553`, `app/chamados/models.py:2566`, `app/chamados/services/fabrica_da_celula.py:149`, `app/chamados/services/disputa_emissao.py:662`)
-
-Portanto, **a busca dos Chamados vivos e a separação entre travar e reler a Disputa ficam fora da decomposição escrita dos tetos**. O comentário histórico descreve apenas +1 de C nesse portão; os comentários novos atribuem +2/+6 às portas de campo. (`app/ponto/tests/test_selo_chokepoint_escrita.py:174`, `app/ponto/tests/test_selo_chokepoint_escrita.py:180`, `app/ponto/tests/test_selo_chokepoint_escrita.py:187`)
-
-**Que essas consultas adicionais tenham sido introduzidas exatamente em 12b/12c, ou expliquem determinado delta contra versões anteriores: [nao verificado].** O delta fornecido só muda tetos/comentários; não fornece aquela implementação anterior. Assim, o +2/+6 está explicado localmente, mas a exclusividade desse acréscimo não está provada. **[nao verificado]**
-
-**2. Triagem v14, itens 1 a 7.**
-
-| Item | Veredito da conferência |
-|---|---|
-| **1 — Ordem global** | **PROCEDENTE o residual.** O comando envolve várias células em um atomic; o cartório percorre células/chamados e ressuscita; cada ressuscitação antecipa apenas suas Disputas, seu Chamado e suas Perguntas. Com duas candidatas distintas, D2/CH2 podem ser aquisições novas após P1. Chamá-lo “pergunta de desenho” não fecha a violação da ordem. (`app/ponto/management/commands/celula_veredito_velho.py:133`, `app/ponto/management/commands/celula_veredito_velho.py:141`, `app/ponto/services/cartorio.py:1303`, `app/ponto/services/cartorio.py:1622`, `app/chamados/models.py:1552`) |
-| **2 — Porta fora de transação** | **NÃO PROCEDE como inversão sob autocommit.** A porta de arquivo não abre atomic; o helper retorna fora de atomic. A triagem preserva a ressalva que v14 já fazia. Configuração efetiva de autocommit em produção: **[nao verificado]**. (`app/chamados/services/arquivo.py:141`, `app/chamados/services/arquivo.py:170`, `app/chamados/services/arquivo.py:171`, `app/chamados/models.py:484`) |
-| **3 — Ressuscitação** | **PROCEDENTES a janela e a seleção anterior à trava.** O atomic interno termina após descarimbar, e a reabertura vem depois; o universo é escolhido antes da aquisição de C. Classificar como preexistente não corrige esses fatos, mas também não contradiz a ressalva de v14. Comparação histórica independente: **[nao verificado]**. (`app/chamados/models.py:1533`, `app/chamados/models.py:1547`, `app/chamados/models.py:1552`, `app/chamados/models.py:1555`, `app/chamados/models.py:1582`) |
-| **4 — Campos/comportamento** | **NÃO PROCEDE alteração explícita de valores no delta dos tetos. PROCEDENTE a diferença de disparo do S143 na volta inteira:** saves de campo retornam pela guarda. Declarar essa mudança não a torna apenas ordem de travas. (`app/ponto/tests/test_selo_chokepoint_escrita.py:180`, `app/ponto/tests/test_selo_chokepoint_escrita.py:187`, `app/chamados/signals.py:98`, `app/chamados/signals.py:104`) |
-| **5 — Catraca** | **PROCEDENTE-LIMITE.** Ela procura `.save`, aceita chamada de ordem por posição textual e não verifica receptor, ramo ou fluxo; seu universo é limitado. Conferência somente em memória reproduziu **0 acusações atuais e 16 sem o helper**. Isso confirma mordida local, sem cobrir o lote residual. (`app/chamados/tests/test_e1_v12.py:212`, `app/chamados/tests/test_e1_v12.py:228`, `app/chamados/tests/test_e1_v12.py:234`, `app/chamados/tests/test_e1_v12.py:242`, `app/chamados/tests/test_e1_v12.py:137`) |
-| **6 — Custo/selo** | **PROCEDENTE a multiplicação por save.** A justificativa é incompleta como censo do caminho, conforme item 1. Atribuir a diferença entre execuções a “memo/relógio” como causa estabelecida é **[nao verificado]**. (`app/chamados/models.py:486`, `app/chamados/models.py:2547`, `app/chamados/models.py:2567`, `app/chamados/services/disputa_emissao.py:530`) |
-| **7 — Classes anteriores** | **Ordem permanece PROCEDENTE**, pelo item 1. **Dois significados permanecem PROCEDENTES:** coluna nomeada com `update_fields`, valor diferente no save inteiro; “declarado” reconhece, não elimina a diferença. “Pré-requisito fechado pela sombra no hash final”: **[nao verificado]**, sem prova dessa execução no material. (`app/chamados/models.py:1552`, `app/chamados/signals.py:79`, `app/chamados/signals.py:85`, `app/chamados/signals.py:87`) |
-
-As duas afirmações sobre as curas candidatas conferem:
-
-- **“Topo com abertas não alcança a FECHADA” — PROCEDENTE.** A flag filtra `fechada_em__isnull=True`; a ressuscitação procura expressamente Disputas fechadas para reabri-las. A aquisição local da segunda ressuscitação não antecipa D2 antes de P1. (`app/chamados/models.py:2552`, `app/chamados/models.py:1582`, `app/chamados/models.py:1552`)
-- **“C primeiro basta exige censo” — PROCEDENTE.** Existem escritores sem aquisição local prévia de C: `descarimbar_em_lote` faz UPDATE direto; `reabrir_para_correcao` o chama ou usa `qs.update`; a resposta HTML chega ao save da Pergunta sem essa aquisição na cadeia examinada. O override de `Pergunta.save` acrescenta atomic, sem adquirir C. (`app/chamados/models.py:3015`, `app/chamados/services/disputa_emissao.py:1496`, `app/chamados/services/disputa_emissao.py:1516`, `app/chamados/services/disputa_emissao.py:1518`, `app/chamados/views.py:1283`, `app/chamados/services/disputa_emissao.py:1388`, `app/chamados/models.py:3173`)
-
-**A triagem não refutou os achados que reconheceu como desenho, preexistência ou limite. Se esses rótulos forem usados como baixa, o motivo é insuficiente; especialmente nos itens 1 e 7.** A ordem residual e os dois predicados continuam presentes. Deadlock efetivo e ocorrência das duas candidatas em produção: **[nao verificado]**. (`app/chamados/models.py:1552`, `app/chamados/signals.py:85`, `app/chamados/signals.py:87`)
-
-**3. Estado que explica 211 versus 217 — [nao verificado].** Passar sob teto 211 demonstra **≤211**, sem revelar a contagem exata: o selo usa `assertLessEqual`. (`app/ponto/tests/test_selo_chokepoint_escrita.py:240`, `app/ponto/tests/test_selo_chokepoint_escrita.py:241`)
-
-O código oferece fontes de variação, mas não identifica qual ocorreu nas duas rodadas:
-
-- **Relógio:** `setUpTestData` calcula `dia = localdate()-2`; o cartório consulta novamente data/hora; o runner permite congelamento por `CONGELAR_EM`. Valores efetivos nas duas execuções: **[nao verificado]**. (`app/ponto/tests/test_selo_chokepoint_escrita.py:229`, `app/ponto/services/cartorio.py:1965`, `app/ponto/services/cartorio.py:1989`, `app/core/runner_quarentena.py:94`)
-- **Memo:** empresa e tranca são memorizadas no request ou na instância do colaborador. Os FICAM não fazem limpeza explícita; a limpeza existente pertence à comparação com rollback em outro teste. Isso não prova aquecimento pelo `setUpTestData` nem transmissão entre métodos. Estado efetivo do memo: **[nao verificado]**. (`app/chamados/juizes.py:957`, `app/chamados/juizes.py:963`, `app/chamados/juizes.py:993`, `app/ponto/tests/test_selo_chokepoint_escrita.py:393`, `app/ponto/tests/test_selo_chokepoint_escrita.py:440`)
-- **Percurso:** o espelho pode retornar sem save; o 3-FICAM exige somente **pelo menos um** chamado vivo, não três. Portanto, o passe não certifica três saves de espelho. (`app/ponto/management/commands/detectar_ausencias.py:556`, `app/ponto/management/commands/detectar_ausencias.py:558`, `app/ponto/tests/test_selo_chokepoint_escrita.py:425`)
-
-**Não há no dado fotografia de memo, relógio e consultas das duas execuções que permita atribuir as consultas ausentes a um desses estados. A explicação causal afirmada pela triagem permanece [nao verificado].**
-
-## 07/11 21:31 · sessao 1e8be6e76dc3 · - · - · origem=Ronald (tmux)
-
-Aprofundamento: **não há prova de que o memo foi aquecido por `setUpTestData`**, nem de que o memo passou de um método do selo ao seguinte; a limpeza dentro de uma comparação com rollback não demonstra essa herança (`app/ponto/tests/test_selo_chokepoint_escrita.py:435-447`).
-
-- Colaborador nasce antes de `cls.dia`; seu `save` normaliza campos e gera matrícula, sem chamar o memo do C6 (`app/ponto/tests/test_selo_chokepoint_escrita.py:226-229`; `app/colaboradores/models.py:415-439`).
-- Escala nasce depois de `cls.dia`; seu receiver recompõe turnos numa janela calculada pelo relógio, enquanto os receivers de regeneração retornam quando `created=True` (`app/ponto/tests/test_selo_chokepoint_escrita.py:230-233`; `app/ponto/signals.py:53-74`; `app/escala/signals.py:54-55`; `app/escala/signals.py:104-105`). Aquecimento indireto do memo por esse percurso: **[nao verificado]**.
-- `get_user_sistema` não possui cache próprio: executa `get_or_create` (`app/core/utils.py:6-18`).
-- O runner permite congelamento pelo ambiente `CONGELAR_EM`; a utilização e o instante nas rodadas citadas são **[nao verificado]** (`app/core/runner_quarentena.py:93-100`).
-
-**Conclusão mantida:** a causa das consultas ausentes continua **[nao verificado]**. O dado fornece um passe sob teto 211, não contagem exata nem fotografia de memo, relógio ou consultas (`app/ponto/tests/test_selo_chokepoint_escrita.py:240-246`).
-
-_2827 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2830 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
