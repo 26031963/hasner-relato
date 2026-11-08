@@ -1,7 +1,133 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 17:55** · publicado em **08/11/2026 17:55** (UTC-3)
+> Ultima resposta processada: **08/11/2026 17:58** · publicado em **08/11/2026 18:01** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 08/11 17:58 · sessao 3691d7efd094 · FIO-E0-V4-E1 · verificador · origem=Code
+
+**NÃO PROCEDENTE a conformidade integral da 15f.** A inversão antiga do reuso isolado foi corrigida, mas permanecem composições que violam a ordem global, leitores sem discriminação da conversa e lacunas nas provas. (`app/chamados/models.py:2910`; `app/chamados/services/disputa_emissao.py:993`; `app/chamados/models.py:390`; `app/chamados/tests/test_e1_v9.py:94`.)
+
+Execução das suítes, RED/GREEN históricos, ocorrência dos contraexemplos em produção e confirmação da ancestralidade Git declarada: **[nao verificado]**.
+
+**1. Situação dos itens 3, 4, 6 e 7 da v15e**
+
+| Item | Agora | Fundamentação |
+|---|---|---|
+| **3 — Matriz** | **Parcial** | Há provas novas dos ramos antes mal citados, inclusive escrita parcial seguida de rollback. A5 percorre o `raise`, porém provoca divergência de instância no mesmo dia; continuam ramos de classificação sem prova na extensão. (`app/chamados/tests/test_e1_v15f.py:284`; `app/chamados/tests/test_e1_v15f.py:250`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:78`, `:105`, `:120`, `:123`.) |
+| **4 — Conversa** | **Curado localmente; parcial globalmente** | A ida exclui conversa e o contador inclui conversa NULL. A reversão continua selecionando por PK sem esse filtro; outros leitores continuam usando o dia civil como dia do fato. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:205`, `:474`; `app/chamados/services/fio.py:1118`; `app/chamados/models.py:390`.) |
+| **6 — Catracas/mutantes** | **Parcial** | O wrapper agora exige atomic; o espião alcança o contrato real; M6 exige motivo específico. Permanecem os escapes descritos no item 4 abaixo. (`app/chamados/tests/test_e1_v15e_contrato_de_saida.py:113`, `:551`, `:567`; `app/chamados/tests/test_e1_v15f.py:169`.) |
+| **7 — Ordem de trava** | **Parcial** | Corrigidos o reuso isolado com rechave/costura e a aquisição entre candidatos do migrar/reverter. Isso não garante ordem entre todas as chamadas da mesma transação, nem entre PKs adquiridas por chamadas diferentes. (`app/chamados/models.py:2910`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:375`, `:469`; `app/chamados/services/disputa_emissao.py:993`.) |
+
+**2. Ordem de trava — PROCEDENTE a permanência da classe**
+
+O helper ordena **cada conjunto recebido**, mas não mantém um controle da maior classe/PK já adquirida pela transação. Portanto, chamadas individualmente ordenadas podem compor uma sequência global invertida. (`app/chamados/models.py:2625`, `:2639`, `:2648`, `:2661`, `:2665`.)
+
+| Caminho | Resultado da conferência estática |
+|---|---|
+| **Criação isolada, incluindo conversa** | Adquire Colaborador e insere Pergunta; não adquire explicitamente Disputa/Chamado nesse caminho. Os locks de FK do INSERT ficam fora do rastreador utilizado. (`app/chamados/models.py:2811`, `:2974`; `app/chamados/tests/test_e1_v9.py:51`.) |
+| **Reuso sem rechave, mesmo dono, isolado** | Colaborador → Chamado, quando há costura → UPDATE Pergunta. Sem costura ou alteração, não há esse UPDATE. (`app/chamados/models.py:2811`, `:2926`, `:2938`, `:2955`, `:2964`; `app/chamados/services/fio.py:768`.) |
+| **Reuso com rechave/costura, mesmo dono, isolado** | O bloco novo antecipa Disputa, destinos e Pergunta. Corrige o P→Chamado anterior. (`app/chamados/models.py:2910`; `app/chamados/services/fio.py:969`, `:768`.) |
+| **`rechavear_no_reuso` isolado** | Consulta o veto e chama a porta que adquire C→D→P; o Colaborador consultado posteriormente por `fato_livre_para` já foi adquirido. O DRY executa essa porta e desfaz o ato. (`app/chamados/services/fio.py:1020`, `:1026`, `:1029`, `:969`; `app/chamados/models.py:2740`.) |
+| **`_migrar` e `_reverter`** | Antecipam C→D→Chamado→P dos candidatos antes dos laços. Curam a inversão anterior entre grupos/linhas desse conjunto. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:374`, `:375`, `:468`, `:469`.) |
+| **Reapontamento e chamadores com atomic aberto** | Permanecem contraexemplos entre classes e entre PKs, abaixo. (`app/chamados/services/fio.py:889`, `:892`; `app/chamados/services/disputa_emissao.py:964`, `:993`.) |
+
+**Contraexemplo estático entre classes, mesmo colaborador:** o agrupador abre atomic, adquire somente C, encontra uma pergunta ligada ao chamado e complementa os marcos da disputa dela. Se o marco irmão tem canônica em outra disputa, `_ja_perguntou` não a encontra porque consulta apenas a disputa atual; `abrir`, porém, pode reusar essa canônica e costurá-la. (`app/chamados/services/disputa_emissao.py:964`, `:968`, `:979`, `:990`, `:1316`; `app/chamados/models.py:2871`, `:2938`, `:2964`.)
+
+Depois desse reuso, `_criar_pergunta_se_couber` devolve `True` e o agrupador salva a Disputa atual, ainda sem pré-trava: **C→Chamado→Pergunta→Disputa**. A chamada seguinte a `ch.analisar()` também pode adquirir disputas abertas depois da Pergunta. (`app/chamados/services/disputa_emissao.py:834`, `:844`, `:991`, `:993`, `:994`; `app/chamados/models.py:806`, `:290`.) Execução e ocorrência em produção: **[nao verificado]**.
+
+**Contraexemplo estático entre colaboradores:** `_nascer` adquire primeiro C da disputa; o bloco novo pode depois adquirir C do destino com PK menor. E4-c aceita dias iguais sem conferir igualdade de donos. (`app/chamados/models.py:2811`, `:2911`; `app/chamados/juizes.py:2027`.) Existência desse arranjo em produção: **[nao verificado]**.
+
+**Contraexemplo estático entre perguntas:** no reapontamento que data uma canônica menor, as perdedoras retratáveis são atualizadas antes dela. Ordenar apenas as perdedoras não impede **P maior→P menor**, porque a canônica está excluída dessa ordenação. (`app/chamados/services/fio.py:889`, `:892`, `:1207`, `:1253`, `:1271`; `app/chamados/models.py:3145`.) Execução com esse acervo: **[nao verificado]**.
+
+**Outro caso de PK:** a declaração antecipa os chamados vivos; uma costura posterior pode adquirir um destino terminal, excluído daquele conjunto, com PK menor. A decisão sobre o terminal acontece depois da aquisição da linha. (`app/chamados/services/declaracao_texto.py:324`, `:332`, `:348`; `app/chamados/services/disputa_emissao.py:530`; `app/chamados/models.py:2656`; `app/chamados/services/fio.py:768`, `:770`.) Execução: **[nao verificado]**.
+
+Sobre o primeiro argumento de `trava_na_ordem`:
+
+- **Lista ordenada:** aceita lista/tupla/set/frozenset; elimina repetidos, ignora `None` e instâncias com PK `None`, ordena os PKs e também ordena a consulta. `None` escalar resulta em conjunto vazio. (`app/chamados/models.py:2625`, `:2631`, `:2636`, `:2639`.)
+- **Reentrância:** repete as consultas; para linhas já possuídas, a repetição é reentrante. Não impede aquisição posterior de uma linha nova fora da ordem. (`app/chamados/models.py:2609`, `:2639`, `:2648`, `:2661`, `:2665`.)
+- **Modo universo:** `abertas_do_colaborador` admite no máximo um colaborador. (`app/chamados/models.py:2633`.)
+- **`select_for_update` fora do helper:** não há chamada acrescentada pelo diff fornecido; nos arquivos produtivos alterados, as chamadas executáveis dessas quatro entidades estão no helper. (`app/chamados/models.py:2639`, `:2648`, `:2661`, `:2665`.) Correspondência histórica integral entre diff e commits: **[nao verificado]**.
+
+**3. Conversa — cura local PROCEDENTE; esmeril global NÃO PROCEDENTE**
+
+A conversa nasce com `localdate`; seu adaptador devolve pedido/gravado. O contador agora a inclui, mas compara o dia gravado consigo mesmo: acusa NULL, não determina independentemente se uma conversa datada conserva o dia civil original. (`app/chamados/models.py:2771`; `app/chamados/services/fio.py:1507`, `:1508`, `:1125`, `:1130`.)
+
+Permanecem estes consumidores sem discriminação suficiente:
+
+| Consumidor | Tratamento encontrado |
+|---|---|
+| **Reversão** | Desvia antes do filtro da ida, busca qualquer PK do JSON e passa o dia do arquivo à porta de rechaveamento. Conversa passa pelo dedup e pelo E4-c; a porta pode escrever esse dia e trocar a célula. Com veto favorável e célula compatível, o caminho aceita a alteração. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:199`, `:474`, `:478`, `:485`, `:489`, `:493`; `app/chamados/models.py:2741`; `app/chamados/juizes.py:1997`; `app/chamados/services/fio.py:989`, `:990`.) |
+| **Gate de Chamado** | Inclui conversa nas ancoradas, consulta competência pelo campo cru e procura cobrança sobrevivente desse dia. (`app/chamados/models.py:344`, `:364`, `:390`.) |
+| **Pauta de competência** | Seleciona perguntas pela janela de `data_evento`, sem excluir conversa. (`app/chamados/services/competencia_trancada.py:106`.) |
+| **Lavra** | Calcula expiração com `p.data_evento`; a documentação ainda associa conversa a NULL. (`app/chamados/veredito_lavrado.py:229`, `:107`.) |
+| **Comparação/recusa de data** | Compara `data_evento` com o dia do chamado sem testar conversa; a materialização pode registrar `DATA_EM_DISPUTA`. (`app/chamados/services/fio.py:85`, `:88`; `app/chamados/services/materializacao.py:1191`, `:1213`.) |
+| **Materialização de hora** | A seleção não exclui conversa. Uma conversa-hora pode alcançar código que usa `data_evento` para marcos, combinação de hora e ajuste overnight, se passar pelas demais guardas. (`app/chamados/services/materializacao.py:1369`, `:1221`, `:344`, `:371`, `:414`, `:421`.) |
+| **Folha e tela do dia** | Agrupam/selecionam pelo campo cru, admitindo conversa. (`app/folha/previa.py:65`, `:67`; `app/ponto/services/dia_do_colab.py:65`.) |
+
+Arquivo de reversão contendo conversa, conversa-hora materializada e efeitos desses caminhos em produção: **[nao verificado]**.
+
+Há uma correção necessária à narrativa da triagem: o emissor normal **já barra pergunta de hora sem dia antes de chegar à conversa**. A linha 439, isoladamente, não demonstra emissão produtiva de conversa-hora; a porta aceita esse tipo e o teste novo o constrói diretamente. (`app/chamados/services/disputa_emissao.py:425`, `:430`, `:439`; `app/chamados/models.py:2764`; `app/chamados/tests/test_e1_v15f.py:64`.)
+
+Não identifiquei no delta um novo escritor que escolha dia civil para uma linha de fato. A classificação ainda lê o antigo dia civil da saída para reconhecer o acervo a migrar; essa leitura é explícita, e o valor novo vem do juiz. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:102`, `:158`, `:160`.)
+
+**4. Catracas e mutantes — atingem produção, mas a prova continua parcial**
+
+O arnês extrai a função real, recompila uma substituição e instala o objeto no módulo/classe utilizado pelo caminho produtivo. O novo espião chama o contrato real e observa PK, dia relido e dia esperado. (`app/chamados/tests/test_e1_v15e_contrato_de_saida.py:331`, `:342`, `:349`, `:356`; `app/chamados/tests/test_e1_v15f.py:169`, `:182`, `:185`.)
+
+As correções específicas estão presentes: atomic exato no wrapper, mutantes de remoção/perda do savepoint e M6 condicionado ao motivo `pergunta_unica_por_episodio`. (`app/chamados/tests/test_e1_v15e_contrato_de_saida.py:113`, `:206`, `:551`, `:567`.)
+
+Permanecem mutantes plausíveis:
+
+| Mutante | Lacuna |
+|---|---|
+| **Inverter PK de Disputa/Chamado/Pergunta no helper** | `violacoes_linhas` verifica rank, mas não compara PKs. A exclusão é expressa; o teste antigo de SQL crescente cobre Colaborador. (`app/chamados/tests/test_e1_v9.py:51`, `:94`, `:106`; `app/chamados/tests/test_e1_v13_ordem.py:59`.) |
+| **Migrar com `if ok and ln['p'].chamado_destino_id is None:`** | A catraca AST continua encontrando o contrato. Os espiões novos usam candidatos construídos sem destino, deixando o ramo com destino sem testemunha nesses cenários. (`app/chamados/tests/test_e1_v15e_contrato_de_saida.py:147`; `app/chamados/tests/test_e1_v15f.py:182`; `app/chamados/tests/test_plantio_noturno_mais1.py:64`.) |
+| **Retirar o atomic de `_reverter`** | A prova nova fornece seu próprio atomic ao redor da chamada e percorre sucesso. A catraca inspeciona `_migrar`, não `_reverter`; a base também é `TestCase`. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:465`; `app/chamados/tests/test_e1_v15f.py:151`; `app/chamados/tests/test_e1_v15e_contrato_de_saida.py:141`; `app/chamados/tests/test_plantio_noturno_mais1.py:39`.) |
+
+O detector de ordem aceita sequência descendente dentro da classe, e o detector AST do migrar aceita a guarda condicional descrita; isso decorre dos predicados efetivamente implementados. Sobrevivência desses mutantes à **suíte inteira**: **[nao verificado]**. (`app/chamados/tests/test_e1_v9.py:98`; `app/chamados/tests/test_e1_v15e_contrato_de_saida.py:147`.)
+
+**5. Linhas da seção “Volta 15f”**
+
+A conferência abaixo é do vínculo estático teste→ramo; execução dos testes: **[nao verificado]**. [nao verificado]
+
+| Linha | O teste percorre o anunciado? | [nao verificado]
+|---|---|
+| **A5** | **Parcial:** percorre o `raise` exato, mas ambas as datas são DIA; quem causa a recusa é `instancia_marco='X'`. Não demonstra episódio realmente em outro dia. (`app/chamados/tests/test_e1_v15f.py:286`, `:287`, `:292`; `app/chamados/services/fio.py:1688`; `app/chamados/models.py:2881`.) |
+| **A6** | **Sim, nas formas declaradas:** real preserva K; injeção acrescenta retratada à eleição e alcança a recusa da canônica. (`app/chamados/tests/test_e1_v15f.py:307`, `:315`, `:316`; `app/chamados/models.py:2890`.) |
+| **A12** | **Sim, com distinção:** o real recusa na entrada; somente a injeção alcança o segundo portão, com espião identificando a canônica. (`app/chamados/tests/test_e1_v15f.py:327`, `:339`, `:343`; `app/chamados/models.py:2930`.) |
+| **G6** | **Sim:** injeta exceção na porta, exige erros/PAREI e igualdade das fotografias/trilha; não provoca escrita parcial antes da exceção. (`app/chamados/tests/test_e1_v15f.py:215`, `:217`, `:225`.) |
+| **G7** | **Sim:** remove índice, cria gêmea, confirma fato conjunto e verifica migração da primeira/recusa da segunda. (`app/chamados/tests/test_e1_v15f.py:228`, `:236`, `:240`, `:246`.) |
+| **G8** | **Sim:** observa primeira escrita real, faz a gêmea mentir sucesso e verifica retorno dos dois dias/trilhas, enquanto outro grupo migra. (`app/chamados/tests/test_e1_v15f.py:250`, `:257`, `:263`, `:266`, `:268`.) |
+| **C1** | Absorção: corresponde ao ramo. (`app/chamados/tests/test_e1_v15f.py:361`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:70`.) |
+| **C2** | Materializada sem plantada, sem via de absorção: corresponde. (`app/chamados/tests/test_e1_v15f.py:365`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:72`.) |
+| **C3** | Ambiguidade de **plantadas**: corresponde; não cobre ambiguidade de turnos vivos. (`app/chamados/tests/test_e1_v15f.py:371`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:73`.) |
+| **C4** | Cobre plantada sem turno encontrado; não cobre plantada associada a dois turnos. (`app/chamados/tests/test_e1_v15f.py:375`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:78`.) |
+| **C5** | Cobre exclusão da materializada antes do julgamento do novo dia. (`app/chamados/tests/test_e1_v15f.py:380`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:158`.) |
+| **C6** | Juiz None injetado: corresponde. (`app/chamados/tests/test_e1_v15f.py:386`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:161`.) |
+| **C7** | Divergência juiz×turno injetada: corresponde. (`app/chamados/tests/test_e1_v15f.py:392`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:165`.) |
+| **C8** | Órfã materializada fora do aval: corresponde. (`app/chamados/tests/test_e1_v15f.py:399`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:168`.) |
+| **C9** | DRY real: corresponde. “Sem escrita” significa aqui **sem persistência**: a porta roda e o atomic desfaz. (`app/chamados/tests/test_e1_v15f.py:405`; `app/chamados/services/fio.py:1029`, `:1030`, `:1032`.) |
+| **Conversa/contadores** | Corresponde à exclusão da ida e à contagem de conversa NULL. O teste do rótulo exige somente substring. (`app/chamados/tests/test_e1_v15f.py:72`, `:78`, `:96`, `:109`.) |
+| **Ordem A8/A11 + G4/G3** | **Parcial:** combina rechave+costura; o migrar usa cenário limpo, não G3 vetado. Não prova A11 isolado sem rechave nem ordem crescente de PK. (`app/chamados/tests/test_e1_v15f.py:117`, `:140`, `:147`; `app/chamados/tests/test_e1_v9.py:51`.) |
+| **Catraca abrir** | Corresponde à exigência estrutural do atomic e aos três mutantes novos. (`app/chamados/tests/test_e1_v15e_contrato_de_saida.py:113`, `:206`.) |
+| **Catraca migrar** | Corresponde aos três candidatos do cenário e aos mutantes de remoção/instância velha; não demonstra todos os ramos possíveis. (`app/chamados/tests/test_e1_v15f.py:182`, `:194`, `:199`, `:203`.) |
+| **M6** | Agora exige motivo específico; morre pelo índice. Não demonstra tratamento de acervo previamente duplicado. (`app/chamados/tests/test_e1_v15e_contrato_de_saida.py:551`, `:567`.) |
+
+**Caminhos produtivos sem prova na extensão nova:** plantada em dois turnos; dois turnos só de saída; múltiplos turnos abertos candidatos da órfã; órfã sem marcos. C3/C4 não substituem essas provas. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:78`, `:105`, `:120`, `:123`; `app/chamados/tests/test_e1_v15f.py:371`, `:375`.)
+
+**6. Quem escreve e quem lê os valores envolvidos no delta**
+
+| Campo/valor | Escritores e persistência | Leitores envolvidos |
+|---|---|---|
+| **`data_evento`** | Atribuidor: `gravar_dia_do_fato`. Persistem nascimento, costura que data e rechaveamento. O valor vem do juiz/adaptador; na reversão vem do arquivo. (`app/chamados/services/fio.py:800`, `:863`, `:892`, `:989`, `:995`; `app/chamados/models.py:2973`, `:2974`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:478`.) | Identidade/dedup, contrato, contadores, classificação, veto/reversão, materialização e lavra; leitores sem discriminador estão discriminados no item 3. (`app/chamados/models.py:2726`; `app/chamados/services/fio.py:1085`, `:1058`, `:1125`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:97`, `:391`, `:485`; `app/chamados/services/materializacao.py:344`; `app/chamados/veredito_lavrado.py:229`.) |
+| **`celula`** | Nascimento escolhe a do dia do fato; reuso troca a FK; rechaveamento escolhe a do novo dia. (`app/chamados/models.py:2860`, `:2924`, `:2964`, `:2971`; `app/chamados/services/fio.py:986`, `:990`, `:995`.) | Rechaveamento lê célula velha; reversão fotografa/compara a FK; juiz e sinal/evento leem a célula vinculada. (`app/chamados/services/fio.py:972`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:355`, `:493`; `app/chamados/juizes.py:1121`; `app/chamados/signals.py:244`.) |
+| **`chamado_destino`** | Nascimento, reuso na porta e `reapontar_resolvedora`. A guarda terminal também altera/restaura temporariamente a instância. (`app/chamados/models.py:2971`, `:2940`, `:2964`; `app/chamados/services/fio.py:890`, `:892`, `:779`, `:783`.) | Pré-travas novas, âncora do fio, E4-c, guarda terminal e materialização. (`app/chamados/models.py:2912`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:377`, `:471`; `app/chamados/services/fio.py:97`, `:991`, `:768`; `app/chamados/services/materializacao.py:339`.) |
+| **`universo`** | Contadores locais, incrementados antes dos descartes e devolvidos no dicionário; não são campo persistido. (`app/chamados/services/fio.py:1054`, `:1056`, `:1066`, `:1121`, `:1123`, `:1133`.) | Backfill imprime ambos. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:544`, `:550`.) |
+| **`universo_rotulo`** | Literais produzidos pelos próprios contadores, declarando contagem anterior aos descartes. (`app/chamados/services/fio.py:1067`, `:1134`.) | Backfill imprime literalmente; teste exige `"ANTES dos descartes"`. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:544`, `:550`; `app/chamados/tests/test_e1_v15f.py:109`.) |
+
+A exclusividade literal reivindicada para `chamado_destino` na docstri
+
+[truncado em 20000 de 22136 caracteres]
 
 ## 08/11 17:55 · sessao bdaaabc83e2f · - · - · origem=Ronald (tmux)
 
@@ -806,48 +932,4 @@ Para 8932, o ponto exporta dias aprovados dos tipos que abonam, exceto exclusõe
 
 Para mutantes do export, todos os casos “pela porta real” devem ir até o TXT: mesmo F11c mede FechamentoMensal e DiaPago, sem provar emissão do TXT. `app/ponto/tests/test_o280_bateria_da_lei.py:1732`, `app/ponto/tests/test_o280_bateria_da_lei.py:1745`.
 
-## 08/11 16:34 · sessao b38605435c83 · FIO-E0-V4-E1 · censo · origem=Code
-
-Convenção: as referências abaixo numeram cada anexo colado desde a linha 1, incluindo linhas em branco.
-
-**Não há suporte para encaixar todos os achados em a–e.** `∅` indica classificação não demonstrável: falta a resposta sobre custo; a exceção sem captura foi vista, mas não há triagem fornecida que demonstre descarte. (`codex_e1_v15r2.q:11`; `codex_e1_v15d_reuso.r:15`; ausência dos documentos correspondentes: [nao verificado])
-
-| laudo | achado | classe | trecho pergunta | trecho resposta | motivo da triagem |
-|---|---|---|---|---|---|
-| `opus_final3_e1_76644dc8.md:6` | Reuso mantém `data_evento=D0`, com célula/destino de DIA | **(b)** | “QUEM ESCREVE e QUEM LE cada campo/valor [...] algum supoe outro significado?” (`codex_e1_v15b.q:12`) | “Reuso pode atribuir célula/destino de DIA e conservar `data_evento=D0`”; descreve também os efeitos em C6 e tranca. (`codex_e1_v15b.r:132`) | “leitores intocados pelo aval E1-VOLTA-15; residual vai a E3”. (`triagem_e1_v15b.txt:7`) |
-| `opus_final3_e1_76644dc8.md:7` | Portão 15c2: FK da célula velha pode apontar data fora da medida | **(e)** | **nao ha trecho** sobre essa relação FK/data/medida. As perguntas identificam `d41caaf6` e `21e7341c`. (`codex_e1_v15w.q:1`; `codex_e1_v15r2.q:1`; `codex_e1_v15b.q:1`) | **nao ha trecho** sobre esse achado. [nao verificado] | **nao ha trecho** correspondente. [nao verificado] |
-| `opus_final3_e1_76644dc8.md:8` | Origem inexistente/de outro colaborador recusada somente nas portas | **(e)** — quanto à lacuna fora das portas | **nao ha trecho** perguntando essa lacuna. A pergunta sobre admissão no fecho especifica “linha de episodio retratado pela ponte A2”. (`codex_e1_v15b.q:9`) | Há diagnóstico próximo, mas distinto: “inclusive origem inexistente ou incompatível com o colaborador”, sobre **motivo impreciso** da recusa. **nao ha trecho** diagnosticando a lacuna fora das portas. (`codex_e1_v15b.r:141`) | Para o motivo impreciso: “PROCEDENTE -> volta 15c (B)”; isso registra correção, sem demonstrar descarte da lacuna do laudo. (`triagem_e1_v15b.txt:8`) |
-| `opus_final3_e1_76644dc8.md:9` | Ponte de dois dias recusada na costura → `reatas=None`, possíveis I8b/I22 | **(e)** | **nao ha trecho** sobre ponte de dois dias. A pergunta de fechamento especifica “pergunta viva sobre episodio retratado”. (`codex_e1_v15b.q:6`) | “O plano devolve `reatas=None`” aparece no percurso de **retratada**, não no contraexemplo da ponte de dois dias. **nao ha trecho** sobre este último. (`codex_e1_v15b.r:54`) | **nao ha trecho** correspondente. [nao verificado] |
-| `opus_final3_e1_76644dc8.md:10` | Custo do juiz por abrir/vigia | **∅** | “Custo: resolvedora_valida agora pergunta ao juiz. Liste os chamadores [...] quais estao em laco sobre muitas perguntas, e se ha memo compartilhado.” (`codex_e1_v15r2.q:11`) | **nao ha trecho**: a resposta `codex_e1_v15r2.r` não foi fornecida. Não demonstra “Codex não viu”. [nao verificado] | **nao ha trecho** correspondente. [nao verificado] |
-| `opus_final3_e1_76644dc8.md:11` | Contexto fundido herda `ultima_batida` errada | **(a)** — tema da escrita/derivação da origem presente | “QUEM ESCREVE e QUEM LE [...] batida_origem_id”. (`codex_e1_v15b.q:12`) | “Explícita ou derivada antes do helper; inserção deriva quando ausente.” **nao ha trecho** identificando a herança errada pelo contexto fundido. (`codex_e1_v15b.r:128`) | **nao ha trecho** correspondente. [nao verificado] |
-| `opus_final4_e1_b0c4297c.md:6` | Reuso com `data_evento=NULL` pula rechaveamento | **(e)** | **nao ha trecho** pedindo cobertura dos reusos que evitam a exceção. A pergunta delimita caminhos que “pode[m] receber essa excecao”; o outro pedido é censo de escritores/leitores. (`codex_e1_v15d_reuso.q:2`, `:4`) | “Reuso de `abrir`” é descrito passando por `rechavear_no_reuso`. **nao ha trecho** identificando o desvio por NULL. (`codex_e1_v15d_reuso.r:108`) | **nao ha trecho**; descarte não demonstrado. [nao verificado] |
-| `opus_final4_e1_b0c4297c.md:7` | Contador exclui a classe NULL | **(e)** | “se fica trilha/contador da recusa”; **nao ha trecho** pedindo conferir cobertura da classe NULL que evita a recusa. (`codex_e1_v15d_reuso.q:2`) | “varre linhas datadas com episódio”. **nao ha trecho** apontando a exclusão de NULL como defeito. (`codex_e1_v15d_reuso.r:88`) | **nao ha trecho**; descarte não demonstrado. [nao verificado] |
-| `opus_final4_e1_b0c4297c.md:8` | Exceção sem captura, com persistência anterior | **∅** — visto, sem descarte demonstrado | “quem a captura [...] se a transacao externa e revertida”. (`codex_e1_v15d_reuso.q:2`) | “Nenhum `except` envolve a chamada da emissão”; “Sem transação externa, permanecem gravadas.” Portanto, o diagnóstico foi registrado. (`codex_e1_v15d_reuso.r:15`) | **nao ha trecho**. Sem triagem fornecida, não cabe afirmar **(b)**. [nao verificado] |
-| `opus_final4_e1_b0c4297c.md:9` | Porta sem veto próprio de competência | **(e)** | **nao ha trecho** perguntando a localização do veto; os pedidos são propagação da exceção, comportamento anterior e censo de escrita/leitura. (`codex_e1_v15d_reuso.q:2–4`) | **nao ha trecho** sobre ausência de veto próprio. O trecho sobre recusa trata de colisão. (`codex_e1_v15d_reuso.r:98`) | **nao ha trecho**. [nao verificado] |
-| `opus_final4_e1_b0c4297c.md:10` | DRY toma travas | **(e)** | **nao ha trecho** sobre aquisição de travas pelo DRY. (`codex_e1_v15d_reuso.q:2–4`) | “chama o rechaveamento real em dry”; **nao ha trecho** diagnosticando as travas. (`codex_e1_v15d_reuso.r:88`) | **nao ha trecho**. [nao verificado] |
-| `opus_final4_e1_b0c4297c.md:11` | Ressalva `destino=None`, O261-E F1 | **(e)** | **nao ha trecho** sobre essa ressalva. (`codex_e1_v15d_reuso.q:2–4`) | **nao ha trecho** correspondente. [nao verificado] | **nao ha trecho**. [nao verificado] |
-| `opus_final4_e1_b0c4297c.md:12` | Regex de `test_contract_pergunta_fato` | **(e)** | **nao ha trecho** pedindo revisão desse teste. (`codex_e1_v15d_reuso.q:2–4`) | **nao ha trecho** correspondente. [nao verificado] | **nao ha trecho**. [nao verificado] | [nao verificado]
-| `opus_final4_e1_b0c4297c.md:13` | Cabeçalhos dos testes | **(e)** | **nao ha trecho** pedindo revisão documental dos testes. (`codex_e1_v15d_reuso.q:2–4`) | **nao ha trecho** correspondente. [nao verificado] | **nao ha trecho**. [nao verificado] | [nao verificado]
-| `opus_final4_e1_b0c4297c.md:14` | Pontos cegos da catraca: lista em variável | **(e)** | **nao ha trecho** pedindo análise dos escapes da catraca nesta janela; pede-se conferir escritores da árvore. (`codex_e1_v15d_reuso.q:4`) | “a catraca AST [...] declara limites para escrita dinâmica”; **nao ha trecho** específico sobre lista em variável. (`codex_e1_v15d_reuso.r:112`) | **nao ha trecho**. A triagem anterior declara escape semelhante fora, mas refere-se à 15b, não demonstra triagem da janela 4. (`triagem_e1_v15b.txt:6`) |
-| `opus_final4_e1_b0c4297c.md:15` | Helper recebe dia civil de conversa | **(e)** — semântica não perguntada nesta janela, embora registrada | **nao ha trecho** perguntando civil versus turno; pede-se quem escreve/lê e passagem pelo helper. (`codex_e1_v15d_reuso.q:4`) | “Portanto, conversa continua gravando **dia civil**, distinguida por `conversa=True`.” O comportamento foi registrado espontaneamente. (`codex_e1_v15d_reuso.r:107`) | **nao ha trecho** que demonstre descarte. [nao verificado] |
-
-As parcelas “não conferido nas 4 linhas da sombra”, “não medido na frota” e “frota não medida” dependem de dado de produção; não transformam automaticamente o respectivo achado estático inteiro em **(c)**. (`opus_final3_e1_76644dc8.md:7`, `:9`, `:10`)
-
-| janela | hash perguntado × hash reprovado | pré-verificação documentada |
-|---|---|---|
-| Opus 3 | `d41caaf6` nas perguntas 15w/15r2; diff `6695e972..21e7341c` na 15b × merge reprovado `76644dc8`, com 15c2 `3d8ebe87`. (`codex_e1_v15w.q:1`; `codex_e1_v15r2.q:1`; `codex_e1_v15b.q:1`; `opus_final3_e1_76644dc8.md:2`) | **Não documentada sobre o mesmo hash reprovado.** As perguntas fornecidas identificam árvores anteriores. Existência de outra consulta sobre 15c/15c2: [nao verificado]. |
-| Opus 4 | Pergunta `b0c4297c` × reprovação `b0c4297c`. (`codex_e1_v15d_reuso.q:1`; `opus_final4_e1_b0c4297c.md:2`) | **Sim, consulta Codex sobre a mesma árvore**, nos três assuntos perguntados. A pergunta declara “LEITURA” e não identifica um intervalo de diff; revisão integral do diff: [nao verificado]. (`codex_e1_v15d_reuso.q:1–4`) |
-
-Contagem das classificações acima:
-
-| classe | opus 3 | opus 4 | total |
-|---|---:|---:|---:|
-| (a) | 1 | 0 | **1** |
-| (b) | 1 | 0 | **1** |
-| (c) | 0 | 0 | **0** |
-| (d) | 0 | 0 | **0** |
-| (e) | 3 | 9 | **12** |
-| ∅ — classificação não demonstrada | 1 | 1 | **2** |
-| **Total** | **6** | **10** | **16** |
-
-_2904 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2905 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
