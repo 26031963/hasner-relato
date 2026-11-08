@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/11/2026 03:15:55.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (137.3 MB). Acoes na janela: **381**.
+**Medido em 08/11/2026 03:21:09.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (137.4 MB). Acoes na janela: **383**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:20:15 | Bash | Point ESPERANDO at the builder's sombra run | `sed -i '2s#.*#ESPERANDO: sombra.sh \| pid=3224688#' docs/RELATO.md && sed -n 2p docs/RELATO.md` |
+| 03:20:13 | Bash | Find builder's background job | `/home/ronald/saas-hasner/bin/trava_teste.sh --quem; ps -eo pid,etime,args \| grep -E "trava_teste\|codex_pergunta\|sombra.sh" \| grep -v grep \| cut -c1-200` |
 | 02:48:44 | Bash | Wait for builder transcript to advance | `F=/home/ronald/.claude/projects/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/subagents/agent-a004a79adb345cf8a.jsonl; m0=$(stat -c %Y $F); for i in $(seq 1 60); do /usr/bin/sleep 5; [ "$(stat -c %Y $F)" != "$m0" ] && { echo moved $(date +%H:%M:%S); break; }; done` |
 | 02:48:39 | Bash | Inspect hook topo-line logic and logs | `cd /home/ronald/saas-hasner && sed -n 1,5p app/docs/RELATO.md \| cut -c1-100; grep -n "def _linha_do_topo" -A30 bin/hook_stop_fila1.py \| head -50; tail -5 logs/hook_stop*.log 2>/dev/null; ls logs \| grep -i hook_stop` |
 | 02:48:18 | Bash | Update E1/E2 BACKLOG state cells | `python3 - <<'EOF' p='docs/BACKLOG.md'; s=open(p).read().split('\n') for i,l in enumerate(s): for k,t in (('\| FIO-E0-V4-E1-ENTRADAS \|','08/11 02:4x PARADA em lei 1-fato-x-2-dias (topo RELATO): 13e e6014104 suite 14295 failures=11 = selos protegidos; 3 variantes medidas; '),('\| FIO-E0-V4-E2-FUNCAO \|','08/11 02:4x catraca e93205c6 recorte 4888 OK; espera E1 (parada em lei); ')): if l.startswith(k ...` |
