@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 23:01:08.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (134.1 MB). Acoes na janela: **429**.
+**Medido em 07/11/2026 23:06:08.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (134.1 MB). Acoes na janela: **427**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -437,5 +437,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 11:13:43 | Bash | Remove RED copy, point ESPERANDO at runner, test hook | `rm -rf /home/ronald/wt-fioe1-red-v5e-110900 2>&1 \| tail -2; ls -d /home/ronald/wt-fioe1-red-v5e-110900 2>&1; cd /home/ronald/saas-hasner && sed -i '2s/.*/ESPERANDO: e1v5_runs4.sh \| pid=2196439/' app/docs/RELATO.md && sed -n 2p app/docs/RELATO.md && echo '{"stop_hook_active":true,"session_id":"707e509b-29e4-4438-9018-16733980c39a","transcript_path":"/home/ronald/.claude/projects/-home-ronald-saas ...` |
 | 11:13:35 | Bash | Sample the lock-order cure and check RED copy state | `cd /home/ronald/wt-fioe1-225336 && git show 12740227 -- app/chamados/management/commands/reabrir_orfas_enterradas.py \| tail -15; cd /home/ronald/saas-hasner && git worktree list \| grep -c red-v5e; (git -C /home/ronald/wt-fioe1-red-v5e-110900 status --porcelain 2>&1 \| head -3)` |
 | 11:13:30 | Bash | Confer E1 commit and live runner pids | `cd /home/ronald/wt-fioe1-225336 && git log --oneline -3 && git show --stat 12740227 \| tail -12; ps -p 2251398,2196439 -o pid,etime,cmd \| cut -c1-120; ls -d /home/ronald/wt-fioe1-red-v5* 2>&1; git -C /home/ronald/saas-hasner worktree list \| grep red-v5` |
-| 11:04:36 | Bash | Check RELATO top, hook, mutant progress | `cd /home/ronald/saas-hasner && sed -n 1,2p app/docs/RELATO.md \| cut -c1-120; echo '{"stop_hook_active":true,"session_id":"707e509b-29e4-4438-9018-16733980c39a","transcript_path":"/home/ronald/.claude/projects/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a.jsonl"}' \| python3 bin/hook_stop_fila1.py; echo rc=$?; tail -3 logs/otimiza3/v12/mutantes_v12.log \| cut -c1-160` |
-| 11:04:31 | Bash | Read E1 builder report and check live processes | `tail -c 6000 /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/a65bd6fc4a3ef1538.output; echo; date; ps -p 796316,36385 -o pid,etime,cmd \| cut -c1-150` |
