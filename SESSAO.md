@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/11/2026 05:56:07.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (138.6 MB). Acoes na janela: **241**.
+**Medido em 08/11/2026 06:01:08.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (138.6 MB). Acoes na janela: **238**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -248,6 +248,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:03:17 | Bash | Inspect named sites definition | `cd /home/ronald/wt-codex-motor-le-o-turno-instrumento-162203/app; git status --porcelain; sed -n 62,80p core/medida_turno_do_par.py; grep -n 'SITIOS_NOMEADOS\\|dia_pago' core/medida_turno_do_par.py \| head` |
 | 18:03:09 | Bash | Read the ESTADO reader molde | `cd /home/ronald/saas-hasner; wc -l bin/leitor_dia_estado.py; cat bin/leitor_dia_estado.py \| head -80; git grep -n 'leitor_dia_estado' -- bin \| grep -v '^bin/leitor_dia_estado.py' \| head` |
 | 18:02:57 | Bash | Read aval criterion and contract text | `cd /home/ronald/saas-hasner/logs/motor_turno; cat aval_criterio_catraca.txt; echo ----; cat piloto/contrato.txt 2>/dev/null \| head -20` |
-| 17:56:24 | Bash | Re-test hook after agent file grows | `/usr/bin/sleep 20; echo '{"session_id":"707e509b-29e4-4438-9018-16733980c39a","transcript_path":"/home/ronald/.claude/projects/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a.jsonl"}' \| python3 /home/ronald/saas-hasner/bin/hook_stop_fila1.py; echo rc=$?; tail -3 /home/ronald/saas-hasner/logs/hook*pisos* 2>/dev/null \| cut -c1-200` |
-| 17:56:16 | Bash | Set ESPERANDO on opus agent file; test hook | `cd /home/ronald/saas-hasner/app/docs; F=/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/a036b10920ede5377.output; sed -i "2s#.*#ESPERANDO: agente \| arquivo=$F#" RELATO.md; sed -i '5s/$/ \| 17:55 suite_v4 rc=0 Ran 13990 OK; opus final lancado 17:56 (verificador, anexos v1-v3 + triagens)/' RELATO.md; echo '{"session_id":"707e509b-29e4-4438-9018-16733980c39a" ...` |
-| 17:56:09 | Bash | Read ESPERANDO proof logic | `cd /home/ronald/saas-hasner; sed -n 656,700p bin/hook_stop_fila1.py` |
