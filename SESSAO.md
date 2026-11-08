@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/11/2026 19:11:16.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (154.3 MB). Acoes na janela: **520**.
+**Medido em 08/11/2026 19:16:23.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (154.4 MB). Acoes na janela: **524**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:12:46 | Bash | Check sombra invariant progress | `/usr/bin/sleep 60; tail -3 /home/ronald/saas-hasner/logs/fio_e0_v4/sombra_e1_merge6_inv.out` |
+| 19:12:44 | Bash | Generate diffs for opus final | `cd /home/ronald/wt-e1merge6-190639; D=/home/ronald/saas-hasner/logs/fio_e0_v4; git diff 89d195af..eabbfc5a > $D/opus5_e1_merge_eabbfc5a.diff; git diff 4ecedc95..5c875ee3 > $D/opus5_e1_delta_15g.diff; chmod 600 $D/opus5_e1_*.diff; wc -l $D/opus5_e1_merge_eabbfc5a.diff $D/opus5_e1_delta_15g.diff; git diff --stat 89d195af..eabbfc5a \| tail -1; ls $D/triagem_e1_v15* $D/codex_e1_v15e.r $D/codex_e1_v15f ...` |
+| 19:12:35 | Bash | Run sombra invariant on merge6 tree | `cd /home/ronald/saas-hasner; O=logs/fio_e0_v4/sombra_e1_merge6_inv.out; setsid bash -c "SOMBRA_ARVORE=/home/ronald/wt-e1merge6-190639/app bash bin/sombra.sh --rodar logs/sombra/e1_v15e_pouso_inv.py > $O 2>&1; echo fim >> $O; chmod 600 $O" </dev/null >/dev/null 2>&1 & disown; /usr/bin/sleep 3; head -3 $O` |
+| 19:12:30 | Bash | Check merge6 suite status | `date +%H:%M; ps -p 3344070 -o pid= ; L=/home/ronald/saas-hasner/logs/fio_e0_v4/suite_e1_merge6_eabbfc5a.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran ' $L \| tail -1; tail -1 $L` |
 | 19:07:23 | Bash | Update RELATO top and body | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') L[1]='ESPERANDO: suitemerge6.sh \| pid=3344070' L.insert(2,'lei: PARE-P4 FIO-E0-V4-E1 -- `fio.reapontar_resolvedora` com chamado destino de OUTRO colaborador: legitimo ou recusado? juizes.resolvedora_valida (chamados/juizes.py:1997-2060) so confere o dia; a 15g curou so a ORDEM de trava (C da linha  ...` |
 | 19:07:15 | Bash | Show RELATO top | `cd /home/ronald/saas-hasner/app; sed -n 1,6p docs/RELATO.md \| cut -c1-160` |
 | 19:07:13 | Bash | Identify suite pid and clean builder leftovers | `ps -o pid,args -p 3344065,3344070; rm -rf /home/ronald/redp15g-183452 2>&1\|tail -2; rm -f /home/ronald/saas-hasner/logs/fio_e0_v4/e1_v15g_portas_dev{,2,3}.log; ls -d /home/ronald/redp15g-183452 2>&1` |
