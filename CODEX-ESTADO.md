@@ -1,7 +1,100 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 09:30** · publicado em **08/11/2026 09:31** (UTC-3)
+> Ultima resposta processada: **08/11/2026 09:46** · publicado em **08/11/2026 09:47** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 08/11 09:46 · sessao 64acf49b617b · - · - · origem=Ronald (tmux)
+
+A/B — conclusão sustentada pelo código:
+
+- O delta cura o falso positivo da segunda pausa: cada pausa real agora precisa divergir de **todas** as declaradas; uma declarada que descreva ambas as pontas impede a acusação. A linha escolhe menor soma das distâncias absolutas. `app/ponto/motor_calculo_v2.py:1705-1710`.
+- Dia obrigatório elimina fallback pelo instante da saída; grava diretamente o dia do turno recebido. `app/ponto/motor_calculo_v2.py:1688`, `:1720`, `:1754`.
+- EC, tipo_escala e self.escala são as três opções do seletor; a prioridade é EC, depois tipo_escala ou self.escala. `app/ponto/motor_calculo_v2.py:2768-2772`.
+- Ambas classes reais têm os dois métodos. No template, a primeira pausa vem literalmente de `marcos_do_dia`; override impede soma da segunda pausa e modo duração impede pausa fixa. `app/escala/models.py:281-308`, `:326-345`.
+- **A afirmação de mesma autoridade em todo estado é falsa:** EC.marcos cai no template se célula existe com DNA/marcos nulo/vazio; EC.pausas retorna `()` nessa célula. Trata-se de diferença intencional anterior, documentada em `intervalo_do_dia`, e o delta passa a silenciar a acusação nesse estado. `app/escala/models.py:1124-1133`, `:1189-1208`, `:1138-1158`; `app/ponto/motor_calculo_v2.py:1742-1747`.
+- Outra diferença possível: DNA com primeiro par ausente/incompleto e segundo completo faz EC.marcos devolver `(None,None)` ou meio par no primeiro, mas EC.pausas comprime completos e devolve a segunda como `pausas[0]`. `app/escala/models.py:1131-1132`, `:1196-1201`. A ocorrência em produção é [nao verificado].
+- O produtor normal não cria sozinho essa segunda sem primeira: segundo par é escrito a partir de `pausas[1:]`, e TipoEscala só estende pares extras se o primeiro existir. `app/ponto/management/commands/gerar_celulas.py:81-93`; `app/escala/models.py:304-307`.
+- **Dono sem irmã existe na interface exercitada pelos testes:** `_TE` tem só marcos e é passado ao motor/calcular_mes, e `_Vinculo` também tem só marcos e é passado como escala_colaborador. Com o delta esses donos ficam silenciosos; a volta1 ainda compararia hii/hfi. `app/ponto/tests/test_atraso_cross_midnight.py:8-26`, `:38-48`; `app/ponto/tests/test_motor_pareia_pelo_dna.py:48-60`, `:74-76`; guarda nova `app/ponto/motor_calculo_v2.py:1733-1735`. Dono real de produção sem irmã é [nao verificado].
+- Noturno com duas pausas 19–07 / 22–23 e 02–03 recebe corretamente D e D+1 pelo `< hi`, mesma construção existente do produtor de lâmpadas. Não achei contraprova para esse caso bem formado. `app/ponto/motor_calculo_v2.py:1749-1752`; `app/ponto/management/commands/gerar_celulas.py:55-69`.
+- Ordem cadastral é preservada, não ordenada por relógio; isso mantém identidade do primeiro par. No acusador, ordem só interfere em empate da soma de distâncias, porque `min` conserva primeiro candidato; existência da acusação independe da ordem. `app/escala/models.py:259-260`, `:290-307`; `app/ponto/motor_calculo_v2.py:1708-1710`.
+- Dedupe é por dia e guarda apenas a primeira pausa divergente desse dia; duas divergências distintas não viram duas linhas. Reinicia em cada cálculo. `app/ponto/motor_calculo_v2.py:1711-1723`, `:2364-2365`. É redução explícita, não prova de cobertura de todas as pausas divergentes. `app/ponto/motor_calculo_v2.py:1695`.
+
+Custo adicional da autoridade:
+
+- Dentro de `celulas_do_ato`, tanto marcos como pausas leem o mapa, zero queries de célula; contexto cobre os cálculos das fatias. `app/escala/alimentacao.py:24-51`; `app/ponto/services/fechamento.py:277-291`; `app/escala/models.py:1117-1123`, `:1182-1188`.
+- Fora do contexto ou fora da janela alimentada, o helper faz duas consultas de célula por turno: uma marcos já existente na v1 e **uma adicional pausas** no delta. Não há memoização por dia. `app/escala/models.py:1048-1067`, `:1122-1123`, `:1187-1188`; `app/ponto/motor_calculo_v2.py:1738-1744`.
+- Turnos do pad podem cair fora da janela: helper varre todos sem filtrar data_turno e identidade só cobre ini..fim. `app/ponto/motor_calculo_v2.py:1738-1754`; `app/escala/models.py:1066-1067`.
+
+DNA — escritores/leitores:
+
+| Valor | Quem escreve | Quem lê |
+|---|---|---|
+| hii/hfi | `montar_dna`, via te.marcos: `app/ponto/management/commands/gerar_celulas.py:81-84` | EC.marcos `app/escala/models.py:1131-1132`; EC.pausas `:1196-1201`; mapas 4-tupla `app/escala/utils.py:103-107` |
+| hii2/hfi2 | `montar_dna`, via pausas[1:]: `app/ponto/management/commands/gerar_celulas.py:92-93` | EC.pausas `app/escala/models.py:1196-1201`; mapas de pausas `app/escala/utils.py:57-61`, `:141-145` |
+| Todos pares | Vocabulário central: `app/escala/models.py:1652-1668`; lâmpadas derivadas `app/ponto/management/commands/gerar_celulas.py:60-69` | juiz `app/ponto/juiz_batida.py:166-176`; cartório `app/ponto/services/cartorio.py:581-586`; veredito `app/ponto/services/veredito_celula.py:31-38`; papel `app/ponto/turnos.py:1586-1587`, `:1711-1712` |
+| Persistência do DNA | Porta gera/regenera `app/ponto/portas/celula.py:244-276`; edição `:591-609`; reversão restaura blob anterior `:783-794`; geração `:852-870` | Métodos/fontes acima |
+
+Cobertura:
+
+- O novo teste de duas pausas morde a volta do comparador contra a primeira, mas usa dono fake e pausa do juiz mockada; não exercita EC/DNA, template real, noturno duplo, dono sem irmã ou célula sem marcos. `app/ponto/tests/test_ata_pausa_l084_cxr.py:56-88`.
+- Há selo antigo do produtor para noite com dois pares, mas não é teste do novo helper. `app/escala/tests/test_celula_segundo_intervalo.py:159-170`.
+- Não executei testes; aprovação/RED efetivo desta cópia é [nao verificado]. [nao verificado]
+
+## 08/11 09:46 · sessao d2f0642fdd2e · - · - · origem=Ronald (tmux)
+
+D: há consulta nova. Com `cid`, células alimentadas e ao menos uma célula desse colaborador, `_turnos_do_juiz` chama `papel_por_minuto_da_ata` sem `escalas=`; esta chama `_escalas_da_ata`, que executa **um SELECT** com `select_related('tipo_escala')`. O comentário “ALIMENTACAO, NUNCA CONSULTA” não corresponde ao caminho executado. `app/ponto/motor_calculo_v2.py:884`, `app/ponto/motor_calculo_v2.py:888`, `app/ponto/motor_calculo_v2.py:893`, `app/ponto/turnos.py:1596`, `app/ponto/turnos.py:1561`.
+
+A consulta acontece mesmo sem batidas ou com ata ilegível, porque a escala é carregada antes da análise das células. Sem satisfazer as guardas do novo sítio, ele acrescenta zero consultas. `app/ponto/turnos.py:1596`, `app/ponto/turnos.py:1616`, `app/ponto/turnos.py:1634`, `app/ponto/motor_calculo_v2.py:888`.
+
+| Caminho elegível | SELECTs novos por `calcular_mes` | Evidência |
+|---|---:|---|
+| Base/12x36/Plantão | +1 | `app/ponto/motor_calculo_v2.py:2428` |
+| TurnoPartido | +2 | `app/ponto/motor_calculo_v2.py:2995`, `app/ponto/motor_calculo_v2.py:3008` |
+| Comercial | +2 | `app/ponto/motor_calculo_v2.py:3401`, `app/ponto/motor_calculo_v2.py:3412`, `app/ponto/motor_calculo_v2.py:899` |
+
+O sítio antigo também omite `escalas=` e já pagava um SELECT. O nome real da função nesta cópia é `turnos_via_autoridade`; `_parear_motor` aparece somente no comentário. Num cálculo normal elegível, contando apenas essas consultas de escala da ata, passa de 1 para 2 no Base e de 1 para 3 nos dois overrides acima. `app/ponto/motor_calculo_v2.py:453`, `app/ponto/motor_calculo_v2.py:494`, `app/ponto/motor_calculo_v2.py:502`, `app/ponto/motor_calculo_v2.py:885`.
+
+Os caminhos atingidos são:
+
+- Fechamento por fatia: alimenta células em `app/ponto/services/fechamento.py:750`, chama a apuração em `app/ponto/services/fechamento.py:754` e calcula cada fatia em `app/ponto/services/fechamento.py:286`.
+- Passada órfã: alimenta em `app/ponto/services/fechamento.py:825`, calcula com `escala_colaborador=None` e `colaborador_id` em `app/ponto/services/fechamento.py:827`. Nesse ramo, o novo sítio pode consultar; o antigo depende de `_ec.colaborador_id` e fica desabilitado. `app/ponto/motor_calculo_v2.py:469`, `app/ponto/motor_calculo_v2.py:496`.
+- Espelho: alimenta em `app/ponto/services/espelho.py:1131`, chama fatias em `app/ponto/services/espelho.py:1164` ou cálculo direto em `app/ponto/services/espelho.py:1179`; a tela pede essa autoridade em `app/ponto/services/espelho.py:1227`.
+- PDF: chama o espelho em `app/relatorios/pdf_espelho.py:596`, `app/relatorios/pdf_espelho.py:598`.
+
+`papel_por_minuto_da_ata` diretamente pode executar três consultas sem alimentação: células, escalas e batidas. Com células e batidas fornecidas, sem `escalas=`, executa uma; fornecendo também `escalas={}` ou mapa carregado, essas três consultas desaparecem. `app/ponto/turnos.py:1588`, `app/ponto/turnos.py:1596`, `app/ponto/turnos.py:1602`.
+
+E: **sim, o sítio antigo recebe batidas deduplicadas** no fluxo normal de `calcular_mes`: limpa em `app/ponto/motor_calculo_v2.py:2433`, chama `montar_periodos(batidas_limpas)` em `app/ponto/motor_calculo_v2.py:2436`, as implementações delegam a `_periodos_via_autoridade`, que chama `turnos_via_autoridade`. `app/ponto/motor_calculo_v2.py:2835`, `app/ponto/motor_calculo_v2.py:2962`, `app/ponto/motor_calculo_v2.py:3300`, `app/ponto/motor_calculo_v2.py:530`.
+
+`turnos_do_colab` carrega batidas vivas cruas e passa a lista ao papel sem essa deduplicação. O papel conta batidas por minuto e rejeita luzes com contagem diferente de um; também rejeita minuto ambíguo dentro do vão. `app/ponto/turnos.py:1866`, `app/ponto/turnos.py:1918`, `app/ponto/turnos.py:1942`, `app/ponto/turnos.py:1615`, `app/ponto/turnos.py:1659`, `app/ponto/turnos.py:1741`.
+
+Contraexemplo estático: duas entradas consecutivas `08:00:01 E` e `08:00:20 E`, no minuto de uma luz, viram uma entrada no motor, porque o dedupe elimina o mesmo tipo com diferença menor que três minutos; no universo cru, a luz tem duas batidas e impede emissão do papel daquele dia. Ocorrência desse caso em produção: [nao verificado]. `app/ponto/motor_calculo_v2.py:70`, `app/ponto/motor_calculo_v2.py:736`, `app/ponto/motor_calculo_v2.py:914`, `app/ponto/motor_calculo_v2.py:921`, `app/ponto/turnos.py:1659`.
+
+Pelo diff integral fornecido, essa diferença de universo entre o pareamento monetário do motor e `turnos_do_colab` é anterior à obra; a obra a estende ao novo consumo de papel em `_turnos_do_juiz`. Comparação independente com checkout do main e contagem real de consultas/latência: [nao verificado]. `app/ponto/motor_calculo_v2.py:502`, `app/ponto/motor_calculo_v2.py:882`, `app/ponto/motor_calculo_v2.py:893`, `app/ponto/turnos.py:1942`.
+
+## 08/11 09:46 · sessao 1364412be57e · - · - · origem=Ronald (tmux)
+
+C e F, apenas por leitura do código; execução dos testes e estado de produção [nao verificado]. [nao verificado]
+
+| Campo | Quem escreve | Quem lê |
+|---|---|---|
+| `pausa_real` | `_acusar_pausa_l084`: lista de dois ISO com fuso (`app/ponto/motor_calculo_v2.py:1721`) | allowlist/`medir` e `_txt` (`app/ponto/services/cxr_na_lista.py:33`, `:91`); igualdade do item (`:112`); C12 (`app/escala/services/cadastro_realidade.py:397`, `:399`) |
+| `pausa_cadastrada` | Mesmo produtor, par declarado escolhido por distância mínima (`app/ponto/motor_calculo_v2.py:1710`, `:1722`) | Mesmos leitores (`app/ponto/services/cxr_na_lista.py:33`, `:91`, `:112`; `app/escala/services/cadastro_realidade.py:397`, `:399`) |
+| `delta_ida_min` | `(real-prevista)/60`, arredondado a uma casa (`app/ponto/motor_calculo_v2.py:1705`, `:1723`) | allowlist, transformação, igualdade e texto C12 (`app/ponto/services/cxr_na_lista.py:34`, `:91`, `:112`; `app/escala/services/cadastro_realidade.py:399`) |
+| `delta_volta_min` | Mesmo sentido `real-prevista`, arredondado (`app/ponto/motor_calculo_v2.py:1706`, `:1723`) | Mesmos leitores (`app/ponto/services/cxr_na_lista.py:34`, `:91`, `:112`; `app/escala/services/cadastro_realidade.py:400`) |
+
+A lavra persiste o dicionário inteiro em `MetricaSnapshot.detalhe`, JSONField; `ultimo_lavrado` devolve esse detalhe sem reconstruir campos. Portanto snapshot anterior que perdeu os campos precisa de nova lavra; a leitura sozinha não o corrige (`app/ponto/services/cxr_na_lista.py:147`, `:150`, `:153`, `:157`, `:164`; `app/inteligencia/models.py:95`). Nova lavra em produção [nao verificado].
+
+`_txt` aplica-se aos **14 campos** da allowlist, antes da deduplicação. `list/tuple` agora vira `' -> '.join(str(x)...)`; antes virava `str(v)`. `None` permanece `None`; `int/float` permanecem números, inclusive `bool` por herança de `int`; os demais valores viram texto. Os produtores atuais escrevem os campos antigos como strings/números e os pares novos como listas ISO, de modo que o efeito concreto novo aparece nos dois pares da pausa (`app/ponto/services/cxr_na_lista.py:32`, `:46`, `:91`; produtores antigos em `app/ponto/motor_calculo_v2.py:1634`, `:1682`, `:2073`; pares em `:1721`).
+
+`it in _do_colab` compara o item **já convertido e enriquecido**. Os quatro campos passam a distinguir itens que antes seriam iguais por terem os dados da pausa descartados. A igualdade é do item completo; não é dedupe apenas por dia/causa. O dedupe por dia do motor continua anterior e elimina outras pausas acusáveis daquele dia; a lavra não recupera o que o produtor suprimiu (`app/ponto/services/cxr_na_lista.py:89`, `:91`, `:107`, `:112`; `app/ponto/motor_calculo_v2.py:1714`, `:1720`).
+
+O texto atravessa C12 → `lista` → HTML/PDF: `_cxr_do_motor` formata os quatro valores em `detalhe`; `lista` incorpora a assinatura; HTML imprime `a.detalhe`; PDF também lê esse campo (`app/escala/services/cadastro_realidade.py:397`, `:405`, `:875`, `:930`, `:1110`; `app/templates/escala/cadastro_x_realidade.html:28`; `app/escala/views.py:487`, `:489`, `:492`).
+
+Outros leitores do envelope não interpretam esses quatro valores: fechamento concatena a lista; oráculo usa apenas `dia`; `cxr_lavrado` usa `data/colab/competencia`; resumo do espelho filtra causa de chegada; `pontas_do_relato` exige “janela de HE”; instrumento `diff_janela_he` exclui `l084_pausa` expressamente (`app/ponto/services/fechamento.py:96`; `app/ponto/management/commands/e6_oraculo.py:170`; `app/ponto/services/cxr_na_lista.py:183`; `app/ponto/services/espelho.py:1259`; `app/ponto/janela_he.py:277`, `:281`; `app/ponto/management/commands/diff_janela_he.py:72`).
+
+Os novos testes mordem a retirada da allowlist e do ramo C12: usam a saída real do produtor, conferem campos e exigem os horários no texto. Contudo **não mordem retirar o novo ramo list/tuple de `_txt`**: `str(lista_de_ISO)` ainda contém todos os horários exigidos. Também não verificam valores/sinais dos deltas, nem atravessam `medir → lavrar → snapshot`; montam `it` manualmente e mockam `ultimo_lavrado` (`app/ponto/tests/test_ata_pausa_l084_cxr.py:96`, `:102`, `:110`, `:112`, `:113`, `:115`, `:116`).
+
+No trecho da lavra, o delta altera transporte/apresentação; o escritor persistente continua `lavrar`, chamado pelo command com um instante lido na borda. Não introduz relógio nesse serviço nem segundo escritor de snapshot (`app/ponto/services/cxr_na_lista.py:52`, `:65`, `:147`; `app/ponto/management/commands/lavrar_cxr_do_motor.py:30`, `:32`, `:40`).
 
 ## 08/11 09:30 · sessao 1eb7712af56e · ATA-X-TURNO-PAUSA · verificador · origem=Code
 
@@ -833,118 +926,4 @@ O perfil saas declara somente `default`; configuração efetivamente implantada,
 
 [truncado em 20000 de 29916 caracteres]
 
-## 08/11 01:28 · sessao ddc6f16190eb · - · - · origem=Ronald (tmux)
-
-Achados para itens 2–5, por leitura estática:
-
-1. **PROCEDENTE — veto do migrar ocorre antes da trava.** `_migrar` chama o veto dentro de `atomic`, mas só depois chama `rechavear_data_evento`; a trava Colaborador→Disputa→Pergunta acontece dentro dessa porta. Portanto existe intervalo entre consulta e aquisição da trava, e a porta relê `p`, mas não repete o veto para essa leitura. `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:291`, `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:294`, `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:298`, `app/chamados/services/fio.py:947`, `app/chamados/services/fio.py:949`.
-
-2. **PROCEDENTE — backfill não consulta entrega novamente para cada item.** Os alvos são relidos sob a trava, mas `_memo` é criado antes do atomic e compartilhado por todos os colaboradores/planos; o compositor devolve resposta guardada por empresa/mês/ano. O juiz de entrega faz consulta comum, sem trava de `ExportacaoDominio`. `app/chamados/management/commands/backfill_decisoes_pergunta.py:203`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:215`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:281`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:294`, `app/chamados/services/vigia_fio.py:839`, `app/chamados/services/vigia_fio.py:842`, `app/folha/export.py:581`.
-
-3. **PROCEDENTE — há caminho indireto para carimbar outra pergunta exportada.** Retratar salva a perdedora; o signal agenda fechamento de beco após commit; esse fechamento chama o resolvedor, que alcança outras perguntas/disputas do colaborador e carimba elegíveis sem consultar entrega. Fechar disputa também dispara materialização de pendentes aprovadas, novamente sem esse veto. Trata-se de caminho demonstrável; existência de alvo real elegível em produção é **[nao verificado]**. `app/chamados/services/fio.py:1107`, `app/chamados/models.py:2993`, `app/chamados/signals.py:214`, `app/chamados/signals.py:225`, `app/chamados/services/becos.py:41`, `app/chamados/services/becos.py:54`, `app/chamados/services/disputa_emissao.py:1764`, `app/chamados/services/disputa_emissao.py:1805`, `app/chamados/services/disputa_emissao.py:1838`, `app/chamados/services/disputa_emissao.py:1865`, `app/chamados/signals.py:163`, `app/chamados/services/materializacao.py:1418`, `app/chamados/services/materializacao.py:1431`.
-
-4. **Granularidade direta da canônica:**
-
-| Situação | Resultado direto |
-|---|---|
-| Canônica aberta, retratada exportada | Plano fica FORA; retratada não recebe carimbo; canônica não é escrita pela retratação; não nasce Decisão por retratar. `app/chamados/management/commands/backfill_decisoes_pergunta.py:281`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:285`, `app/chamados/services/fio.py:1107` |
-| Canônica exportada, retratada aberta | Canônica não participa do veto; retratada pode ser carimbada duplicata; canônica só fornece pk/texto; não nasce Decisão por essa retratação. `app/chamados/management/commands/backfill_decisoes_pergunta.py:281`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:314`, `app/chamados/services/fio.py:1107`, `app/chamados/services/fio.py:1110`, `app/chamados/models.py:2985`, `app/chamados/models.py:2993` |
-| Canônica também candidata a SILENCIO | É item independente: veto por pk; aberta pode receber SILENCIO mesmo com retratada exportada fora; exportada fica fora. `app/chamados/management/commands/backfill_decisoes_pergunta.py:293`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:307` |
-| Várias retratadas, uma exportada | Todas as retratadas do plano ficam FORA, inclusive abertas; isso é exclusão por plano, não rollback do apply inteiro. `app/chamados/management/commands/backfill_decisoes_pergunta.py:281`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:285` |
-
-Não é necessário incluir a canônica no veto para proteger uma escrita **direta** dela, pois a retratação não a salva; é necessário proteger todos os alvos indiretos das cascatas. Incluir só a canônica não cobre outras irmãs. `app/chamados/services/fio.py:1107`, `app/chamados/models.py:2993`, `app/chamados/services/disputa_emissao.py:1805`, `app/chamados/services/disputa_emissao.py:1838`.
-
-5. **DRY: rollback cobre as escritas ORM observadas no caminho normal, mas “desfaz tudo que toca” é falso em sentido absoluto.** O atomic externo é explicitamente desfeito; SILENCIO usa `bulk_create`, retratação salva Pergunta, outbox cria `EventoCelula` sincronamente e auditoria cria `LogAuditoria` em savepoint aninhado. O callback de beco fica agendado, portanto não executa com esse rollback. `app/chamados/management/commands/backfill_decisoes_pergunta.py:484`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:486`, `app/chamados/models.py:3748`, `app/chamados/models.py:3225`, `app/chamados/signals.py:237`, `app/ponto/portas/celula.py:890`, `app/core/observ.py:133`, `app/chamados/signals.py:225`.
-
-   Se auditoria falha, `engolir` altera contador Python e emite ERROR imediatamente; esse efeito não pertence à transação. O perfil saas encaminha o ERROR ao arquivo `errors.log`. A ocorrência concreta durante DRY é **[nao verificado]**. `app/core/observ.py:75`, `app/core/observ.py:79`, `app/core/observ.py:90`, `app/config/settings/saas.py:136`, `app/config/settings/saas.py:139`, `app/config/settings/saas.py:183`.
-
-   `get_user_sistema` faz `get_or_create` comum, sem cache ou alias de outro banco; o perfil saas declara somente `default`. Configuração efetivamente implantada é **[nao verificado]**. `app/core/utils.py:18`, `app/config/settings/saas.py:83`, `app/config/settings/saas.py:93`.
-
-6. **PROCEDENTE — ordem da transação com vários colaboradores.** `aplicar` mantém atomic único, trava C1→Disputa/Pergunta e só depois adquire C2. Ordena colaboradores por pk, mas não trava todos os colaboradores antes das tabelas seguintes, como exige a própria documentação da trava. Deadlock ocorrido é **[nao verificado]**. `app/chamados/management/commands/backfill_decisoes_pergunta.py:209`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:210`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:215`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:220`, `app/chamados/models.py:2564`.
-
-7. **Testes deixam as cascatas após commit sem cobertura.** Os casos do backfill herdam `_Base(TestCase)` e verificam estado direto; não executam explicitamente os callbacks. A prova “a exportada não foi escrita” nesses casos não cobre a carimbagem indireta posterior ao commit. `app/chamados/tests/test_e1_v6_horizonte.py:63`, `app/chamados/tests/test_e1_v13d_exportada_fora.py:31`, `app/chamados/tests/test_e1_v13d_exportada_fora.py:58`, `app/chamados/tests/test_e1_v13d_exportada_fora.py:70`, `app/chamados/signals.py:225`.
-
-Não executei testes; resultado executado e mutantes reais são **[nao verificado]**. [nao verificado]
-
-## 08/11 01:28 · sessao 594aeb1122f1 · - · - · origem=Ronald (tmux)
-
-**1(b) — tabela de escritores/leitores dos contadores**
-
-| Campo/contrato | Quem escreve | Quem lê |
-|---|---|---|
-| `CONTADORES_DO_APPLY` | Tupla declarada em `app/chamados/management/commands/backfill_decisoes_pergunta.py:129` | Dedup distingue contador de recusa por essa tupla (`app/chamados/management/commands/dedup_perguntas_fato.py:104` e `:107`); resumo do backfill a percorre, excluindo `_diff` da contagem textual (`app/chamados/management/commands/backfill_decisoes_pergunta.py:514`). |
-| `exportada_fora` | `aplicar` acumula todos os membros de um plano vetado em `app/chamados/management/commands/backfill_decisoes_pergunta.py:285`; acumula pk de silêncio em `:298`; `_fora` ordena e deduplica em `:338`–`:345`; integra retorno de sucesso e recusa em `:329`–`:335`. | Renderizador do backfill, `:370`–`:378`, chamado no DRY `:487` e apply `:499`; resumo `:514`; dedup `app/chamados/management/commands/dedup_perguntas_fato.py:121`; testes novos `app/chamados/tests/test_e1_v13d_exportada_fora.py:65`, `:80`, `:93`, `:103`, `:111`; testes anteriores adaptados `app/chamados/tests/test_e1_v6_horizonte.py:347` e `:355`. |
-| `exportada_fora_diff` | Dicionários de retratação em `app/chamados/management/commands/backfill_decisoes_pergunta.py:286`, de silêncio em `:299`; `_fora` mantém a primeira entrada por pk em `:340`–`:345`; ambos os retornos carregam em `:332` e `:335`. | Renderizador `app/chamados/management/commands/backfill_decisoes_pergunta.py:372`; dedup `app/chamados/management/commands/dedup_perguntas_fato.py:116`; testes novos `app/chamados/tests/test_e1_v13d_exportada_fora.py:67`, `:68`, `:81`, `:82`; tupla impede classificá-lo como recusa (`backfill_decisoes_pergunta.py:131`, `dedup_perguntas_fato.py:107`). |
-| `sem_competencia_recusada` | Lista inicial `app/chamados/management/commands/backfill_decisoes_pergunta.py:140`; retratação `:283`; silêncio `:296`; retorno `:332` ou lista vazia por `_recusas()` em `:335`. | `any(rec.values())` impede escrita/força rollback em `:304` e `:327`; CLI sai com 3 em `:500`–`:503`; dedup sai com 3 em `app/chamados/management/commands/dedup_perguntas_fato.py:110`; teste `app/chamados/tests/test_e1_v13d_exportada_fora.py:103`. |
-| Antigo `exportada_recusada` | Na cópia atual, resta referência histórica na docstring do teste, não escritor do retorno (`app/chamados/tests/test_e1_v13d_exportada_fora.py:6`); ausência absoluta de referência dinâmica fora do censo textual [nao verificado]. | Teste exige ausência da chave em `app/chamados/tests/test_e1_v13d_exportada_fora.py:66`; leitores de produção atuais usam a substituta em `backfill_decisoes_pergunta.py:500` e `dedup_perguntas_fato.py:110`. |
-
-**PROCEDENTE — o retorno preserva o FORA numa recusa, mas nem todo leitor o publica:** dedup levanta `SystemExit` antes do laço do DIFF (`app/chamados/management/commands/dedup_perguntas_fato.py:107`–`:116`); backfill faz o mesmo quando `horizonte_diverge` (`app/chamados/management/commands/backfill_decisoes_pergunta.py:494`–`:499`).
-
-**Migrações e `_migrar_sob_trava`:**
-
-- **NÃO PROCEDE como leitores desses contadores:** 0052 apenas adiciona `batida_origem` anulável (`app/chamados/migrations/0052_pergunta_batida_origem.py:17`–`:21`); 0053 mede colisões diretamente no acervo e recusa sua própria execução (`app/chamados/migrations/0053_pergunta_unica_por_familia.py:36`–`:46`). `_migrar_sob_trava` lê as categorias de `plano_de_retratacao`/`NAO_RETRATA` e escreve seu próprio `out`, sem consumir o retorno de `aplicar` (`app/chamados/services/fio.py:1568`–`:1590`).
-- **FILA — pré-requisito de 0053 continua aberto quando houver colisão exportada:** a migração não exclui exportada do índice nem de `_guarda` (`app/chamados/migrations/0053_pergunta_unica_por_familia.py:31`–`:46`, `:55`–`:66`); o teste novo preserva duas linhas desse grupo (`app/chamados/tests/test_e1_v13d_exportada_fora.py:73`–`:80`). Existência dessa colisão na produção e qualquer pouso efetivo [nao verificado].
-- **ESTADO não recebe esses novos contadores pelo caminho demonstrado:** seu fio lê `bin/fio_estado.py` (`bin/gerar_estado.py:253`–`:261`), cujo dado é o carimbo de `vigiar_fio_morto` (`bin/fio_estado.py:62`–`:65`); o contrato de esperados desse escritor não inclui os contadores do apply (`app/chamados/management/commands/vigiar_fio_morto.py:88`–`:99`). Outra integração fora desse caminho [nao verificado].
-
-**7 — selos/RED: leitura estática de cada teste novo; execução e mutantes mortos [nao verificado].** [nao verificado]
-
-| Teste, em `app/chamados/tests/test_e1_v13d_exportada_fora.py` | Julgamento da mordida demonstrada |
-|---|---|
-| `:58` aberta aplica/exportada fora | **NÃO PROCEDE** selo vazio: exige decisão na aberta, nenhuma decisão na exportada, pk e ato no DIFF (`:62`–`:68`). Não compara todos os campos das perguntas (`:62`–`:68`). |
-| `:70` colisão exportada + silêncio aberto | **NÃO PROCEDE** selo vazio: exige silêncio aberto e ambas as vias exportadas preservadas, além da canônica no DIFF (`:77`–`:82`). Não cobre plano com perdedoras em competências distintas (`:73`–`:74`). |
-| `:84` mérito | **NÃO PROCEDE** selo vazio: exige recusa com zero silêncio e ausência de decisão na aberta (`:91`–`:94`). O teste declara todas as competências não exportadas pelo mock (`:91`). | [nao verificado]
-| `:96` sem dia | **PROCEDENTE** alcance menor que o nome: usa pergunta com data `ABERTA` e força `veto=None`; testa a tradução de `None`, não o trajeto real de pergunta sem dia (`:99`–`:104`). |
-| `:106` idempotência | **NÃO PROCEDE** para duplicação de decisão: verifica segunda escrita zero e uma decisão total (`:109`–`:112`); igualdade do estado completo [nao verificado]. |
-| `:117` CLI apply | **NÃO PROCEDE** para comportamento principal: exige aberta escrita, exportada sem decisão, contador/DIFF e ausência de recusa (`:121`–`:127`). |
-| `:129` CLI DRY | **PROCEDENTE** para pretensão “não escreve tudo”: observa somente `DecisaoPergunta`, não auditoria, outbox, usuário de sistema, arquivos ou logs (`:133`–`:138`). |
-| `:140` dedup | **NÃO PROCEDE** para tudo-ou-nada antigo: exige retratação aberta, duas vias exportadas preservadas e contador (`:145`–`:148`). |
-| `:164` migrar mista | **NÃO PROCEDE** para tudo-ou-nada antigo: compara datas de duas abertas e da exportada e exige DIFF/contador (`:167`–`:174`). Imutabilidade completa da exportada não é testada (`:170`). |
-| `:176` materializada exportada | **NÃO PROCEDE** para trava global pelo descarimbo: exige `descarimbaria=0`, medida separada 1, aberta migrada e datas exportadas intactas (`:183`–`:191`). Não compara campos de carimbo (`:190`–`:191`). |
-| `:193` migrar DRY | **PROCEDENTE** para a abrangência anunciada: confere somente a data de `p_mat` e saída (`:196`–`:198`). O teste anterior é mais amplo: compara fotografias de todas as perguntas, totais de batidas/auditoria e ausência de arquivo (`app/chamados/tests/test_migrar_data_evento_dia_do_turno.py:136`–`:147`). |
-| `:200` veto único | **PROCEDENTE** selo insuficiente para unicidade e trava: exige apenas cinco chamadas (`:203`–`:207`); deslocar chamadas para fora da trava ou acrescentar decisão paralela pode preservar esse número [nao verificado por mutante]. |
-| `:209` virou exportada | **NÃO PROCEDE** selo vazio para classificação→linha: altera a resposta após terminar `_competencias`, exige recusa e datas preservadas (`:216`–`:224`). Não exercita mudança depois do veto e antes da trava/escrita, pois a bandeira já está alterada antes de `_migrar` (`:218`–`:221`). |
-
-**Relógio — PROCEDENTE no trajeto exercitado pelos testes novos de backfill:** `_Caso` herda `_Base` sem congelamento declarado nessas classes (`app/chamados/tests/test_e1_v13d_exportada_fora.py:32`; `app/chamados/tests/test_e1_v6_horizonte.py:63`–`:80`); `_sem_ato` chama `fechar_por_admin` sem instante (`app/chamados/tests/test_e1_v13d_exportada_fora.py:38`–`:40`), e essa porta lê `_tz.now()` (`app/chamados/models.py:2867`). Os testes chamam `aplicar` sem `agora` (`app/chamados/tests/test_e1_v13d_exportada_fora.py:61`, `:76`, `:145`); a retratação recebe `None` (`app/chamados/management/commands/backfill_decisoes_pergunta.py:314`) e lê `timezone.now()` no service (`app/chamados/services/fio.py:1100`–`:1101`). A classe de migração está congelada explicitamente (`app/chamados/tests/test_e1_v13d_exportada_fora.py:151`). Esses relógios de produção são anteriores ao diff fornecido; serem introduzidos por este commit [nao verificado].
-
-**Segundo escritor — NÃO PROCEDE no ato específico “retratar duplicata”:** `retratar_para_canonica` reaplica o plano e é quem chama `retratar_duplicata` (`app/chamados/services/fio.py:1083`–`:1090`); backfill e `_migrar_sob_trava` passam por ela (`app/chamados/management/commands/backfill_decisoes_pergunta.py:314`; `app/chamados/services/fio.py:1590`). A catraca declara e testa essa exclusividade, com limites explícitos de formas indiretas/SQL (`app/chamados/tests/test_e1_v7_catracas.py:16`–`:18`, `:39`–`:44`, `:309`–`:347`).
-
-**Juiz registrado — NÃO PROCEDE para nascimento de outro juiz de “entregue”:** K6 aponta a `folha/export.py::competencia_entregue` (`app/core/juizes.py:303`–`:312`); o helper novo chama `competencia_do_dia_entregue`, sem consultar exportação diretamente (`app/chamados/services/fio.py:1077`–`:1080`). Censo de todos os caminhos alternativos fica com o agente principal [nao verificado por este subagente].
-
-## 08/11 01:28 · sessao 93b692bdbfb0 · - · - · origem=Ronald (tmux)
-
-Achados principais — somente leitura; ocorrência real em produção [nao verificado].
-
-| Tema | Veredito | Evidência |
-|---|---|---|
-| Veto novamente dentro do atomic | **NAO PROCEDE** dizer que não repete: classificação chama em `migrar_data_evento_dia_do_turno.py:257`; `_migrar` repete com memo novo em `:291-298`. |
-| Veto sob a trava | **PROCEDENTE**: o veto ocorre em `:294`; a trava só vem dentro de `rechavear_data_evento`, em `fio.py:947-949`. Atomic não equivale a trava. |
-| Janela exportar → escrever | **PROCEDENTE**: a consulta entregue é SELECT sem trava em `folha/export.py:581-586`; entre o veto `migrar...py:294` e o save `fio.py:965` não há nova consulta. Também se verifica `ln['velho']`/empresa da classificação, enquanto a porta relê a pergunta depois, em `fio.py:949-950`. |
-| Reversão escreve exportada | **PROCEDENTE**: `--reverter` desvia antes da classificação em `migrar...py:183-184`, lê JSON em `:340-341`, chama diretamente a porta em `:350-351`; `rechavear_data_evento` não consulta veto no corpo `fio.py:941-970`. |
-| Escrita indireta após commit | **PROCEDENTE**, como caminho construtível: save `fio.py:965` agenda `becos` por `on_commit` em `signals.py:214-225`; `becos.py:45-54` varre destinos das irmãs e chama o resolver; este carimba sem veto de exportação em `disputa_emissao.py:1724-1765`, e varre outras disputas abertas do colaborador em `:1805-1838`. | [nao verificado]
-| `descarimbaria_exportada_fora` é DIFF da migração | **PROCEDENTE** a objeção: não é diferença antes/depois da migração. A exportada não migra (`migrar...py:196`); a medida relê estado atual e conta carimbo elegível que o juiz diz vivo (`:309-333`). Mede um eventual **ato de descarimbo** separado. |
-| Cobertura completa por `desc` | **PROCEDENTE** a insuficiência: mede antes do commit (`:219-238`), portanto antes dos callbacks `signals.py:225`; mede só dias velho/novo dos registros recebidos (`:317-324`), enquanto o resolver pode carimbar outras perguntas/disputas (`disputa_emissao.py:1805-1838`). | [nao verificado]
-| Exclusão automática de candidato compartilhado | **NAO PROCEDE**: a partição é de linhas de entrada, mas a query mede perguntas por `(colaborador,dia)`, não por PK (`:317-324`). Se uma pergunta cai no recorte aberto e no exportado, pode aparecer em ambos os números; não se garante disjunção. |
-| Ordem de trava por transação inteira | **PROCEDENTE**: atomic externo em `:219`, loop em `:289`, cada porta trava um colaborador em `fio.py:947`; entrada ordenada por PK de pergunta (`:189`), não PK de colaborador. Não há trava inicial do conjunto, embora `models.py:2564-2576` preveja esse caso. Reversão repete o padrão (`:344-350`). |
-
-Contraexemplo indireto construtível: pergunta aberta migra numa disputa cujo pai e destinos são terminais, sem perguntas visíveis ao colaborador, e cuja irmã exportada está morta para C6, sem materialização e sem tranca. O save agenda `fechar_beco_da_disputa`; após commit, a classificação de beco passa (`becos.py:25-33`), `fechar_beco` chama resolver para os destinos (`:45-54`), e a irmã exportada pode receber carimbo (`disputa_emissao.py:1724-1765`). Não há filtro de competência exportada nesse caminho; existência desse arranjo em produção [nao verificado]. [nao verificado]
-
-Tabela completa local dos campos:
-
-| Dado | Escritores | Leitores |
-|---|---|---|
-| `ln['fora']` | Inicial `None`: `migrar...py:132-133`; motivos de fonte/ambiguidade/colisão/aval: `:151-158`; sem competência/exportada: `:257-262`. | Seleção migra/fora: `:196-197`; saída: `:201-204`; partição `desc`: `:224-226`; evita reclassificação: `:255-256`. |
-| `ln['comp']` | String `MM/AAAA[,MM/AAAA]`, derivada só para rótulo: `:250-254`. | Saída MIGRA `:199-200`, FORA `:202-203`, EXPORTADA_FORA `:264-266`. |
-| `exportada_fora` do migrar | Não é retorno de `aplicar`: é texto calculado de `len(fora)` local em `_competencias`, `:247`, `:262`, `:267-268`. | Testes: `test_e1_v13d_exportada_fora.py:173`, `:187`, `:197`; `test_migrar_data_evento_dia_do_turno.py:204`. | [nao verificado]
-| `desc` / `descarimbaria` | `_descarimbaria` incrementa por pergunta viva elegível: `:324-329`; resultado atribuído em `:225`. | Saída `:231`; bloqueio e rollback `:234-238`. |
-| `desc_exp` / `descarimbaria_exportada_fora` | Resultado separado em `:226`, mesma função `:309-333`. | Apenas saída em `:232`; testes `test_e1_v13d_exportada_fora.py:184-186`, `test_migrar_data_evento_dia_do_turno.py:206-207`; não bloqueia o apply (`migrar...py:234`). | [nao verificado]
-| Arquivo de reversão | Só apply autorizado localmente e havendo migra: `:215-218`; pasta/nome/JSON/permissão: `:270-282`. | `--reverter`: `:183-184`, `:335-363`; teste conteúdo/permissão e restauração: `test_migrar_data_evento_dia_do_turno.py:162-174`. | [nao verificado]
-
-Detalhes do arquivo: é escrito **antes** do atomic de migração (`:216-219`), por isso não é desfeito pelo rollback. Inclui todas as linhas classificadas em `migra`, mesmo as depois recusadas pelo segundo veto (`:276-280`, `:294-297`). Guarda apenas PK, colaborador rotulado, data antiga, célula antiga e novo dia (`:276-277`); não guarda efeitos posteriores em irmãs, disputas, chamados, carimbos ou novas auditorias. A reversão devolve data pela porta e confere célula (`:350-356`), com rollback geral se falhar (`:359-360`).
-
-A exportação que surgir entre classificação e segundo veto vira `RECUSA`, mas não atualiza `ln['fora']` (`:294-297`): o `exportada_fora` publicado anteriormente (`:267-268`) e o agrupamento `desc_exp` (`:224-226`) continuam refletindo a classificação inicial. [nao verificado]
-
-O caminho direto da porta altera data, célula e lavra (`fio.py:959-965`), emite evento para célula velha (`:966-967`) e auditoria (`:968-970`); não altera diretamente o carimbo nessa gravação. Contudo, o save dispara os callbacks e o outbox (`signals.py:214-225`, `:237-244`); o outbox inclui dia/célula escritos (`models.py:3023-3025`) e é síncrono (`signals.py:232-244`).
-
-Sobre semântica: `comp` local do migrar é string declarada e usada só como rótulo (`:244`, `:254`, `:264-266`); o fato de outro dict de outro fluxo usar tupla não prova colisão semântica por si só. `fora` é um discriminador de motivos, incluindo texto detalhado e sentinela exata `competencia_exportada` (`:158`, `:259-261`); a igualdade textual controla a partição da proteção em `:224-226`, portanto mudança de motivo sem migração desse leitor seria relevante.
-
-_2839 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2842 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
