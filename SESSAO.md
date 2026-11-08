@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/11/2026 13:06:50.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (147.5 MB). Acoes na janela: **401**.
+**Medido em 08/11/2026 13:12:17.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (147.5 MB). Acoes na janela: **391**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -401,13 +401,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:53:30 | SendMessage |  | `-` |
 | 01:53:12 | Bash | See the change to the protected v5 seal | `cd /home/ronald/wt-fioe1-225336; git diff 7950f827 a9d261dc -- app/chamados/tests/test_e1_v5_portas_backfill.py \| head -70` |
 | 01:53:09 | Bash | Save aval; check whether 13d touched protected seals | `cd /home/ronald/saas-hasner; S=logs/fio_e0_v4; cat > $S/aval_e1_acervo_exportada_fora_por_grupo.txt <<'EOF' aval Ronald E1-ACERVO-EXPORTADA-FORA-POR-GRUPO 08/11 01:5x (substitui qualquer versao anterior: 00:2x e COMPLEMENTO 01:1x): unidade do "fora" e o GRUPO DE COLISAO, nunca o item -- grupo com QUALQUER membro em competencia exportada fica INTEIRO fora (backfill, dedup e migrar), contado e lista ...` |
-| 01:10:02 | Bash | Confirm ESPERANDO still proven | `cd /home/ronald/saas-hasner; ps -p 3242286 -o pid=; echo '{"session_id":"707e509b-29e4-4438-9018-16733980c39a","transcript_path":"/home/ronald/.claude/projects/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a.jsonl"}' \| python3 bin/hook_stop_fila1.py \| head -c 200; echo rc=$?` |
-| 01:09:59 | SendMessage |  | `-` |
-| 01:09:53 | Bash | Save complement aval; update RELATO and PROMPTS | `cd /home/ronald/saas-hasner; S=logs/fio_e0_v4; cat > $S/aval_e1_acervo_exportada_fora_complemento.txt <<'EOF' aval Ronald E1-ACERVO-EXPORTADA-FORA-COMPLEMENTO 08/11 01:1x (complementa, nao substitui, o aval 00:2x): a mesma regra vale para migrar_data_evento_dia_do_turno -- aplica nas competencias NAO exportadas, exportadas FORA com contador e DIFF publicado para meu ! de manha; e a lei E1-V9-VETO- ...` |
-| 01:08:24 | Bash | Confirm ESPERANDO still proven | `cd /home/ronald/saas-hasner; sed -n 2p app/docs/RELATO.md; ps -p 3242286 -o pid=; echo '{"session_id":"707e509b-29e4-4438-9018-16733980c39a","transcript_path":"/home/ronald/.claude/projects/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a.jsonl"}' \| python3 bin/hook_stop_fila1.py \| head -c 200; echo rc=$?` |
-| 01:08:21 | SendMessage |  | `-` |
-| 01:08:11 | ToolSearch |  | `-` |
-| 01:08:11 | Bash | Mark PAREI answered; log prompt | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('PAREI ! E1 acervo:')]; assert len(i)==1 L[i[0]]='RESPONDIDA por aval E1-ACERVO-EXPORTADA-FORA 08/11 00:2x (logs/fio_e0_v4/aval_e1_acervo_exportada_fora.txt) -- era PAREI ! E1 acervo (apply em exportada); agora: backfill aplica so em NAO exportada, export ...` |
-| 01:08:01 | Bash | Check exported handling in E1 backfill commands | `cd /home/ronald/wt-fioe1-225336/app; for f in backfill_decisoes_pergunta dedup_perguntas_fato migrar_data_evento_dia_do_turno; do echo "== $f"; /bin/grep -n "exportad\\|--apply\\|L-092\\|fora\b\\|contador" chamados/management/commands/$f.py \| head -12 \| cut -c1-200; done` |
-| 01:07:58 | Bash | Save aval; locate E1 backfill and exported filter | `cd /home/ronald/saas-hasner; S=logs/fio_e0_v4; cat > $S/aval_e1_acervo_exportada_fora.txt <<'EOF' aval Ronald E1-ACERVO-EXPORTADA-FORA 08/11 00:2x (substitui o PAREI ! E1 acervo do topo): o backfill da E1 aplica so em competencia NAO exportada (L-092); competencia exportada fica FORA, com contador declarado no RELATO e o DIFF publicado em logs/fio_e0_v4/ para meu ! de manha; nenhuma lei nova. Segu ...` |
-| 01:07:52 | Bash | Find the E1 acervo PAREI line | `cd /home/ronald/saas-hasner; /bin/grep -n "acervo" app/docs/RELATO.md \| head -8 \| cut -c1-300; sed -n 1,6p app/docs/RELATO.md \| cut -c1-200` |
