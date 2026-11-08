@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/11/2026 05:18:53.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (138.6 MB). Acoes na janela: **257**.
+**Medido em 08/11/2026 05:24:23.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (138.6 MB). Acoes na janela: **258**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:20:32 | Bash | Record approval, write ! decision line, check hook | `cd /home/ronald/saas-hasner && cat > logs/cxr_tela/opus_final_6a5e5ad8.md <<'EOF' # CXR-TELA opus final 2 sobre 6a5e5ad8 (08/11 05:2x): APROVA \| item \| arquivo:linha \| gravidade \| \|---\|---\|---\| \| 1 selo C11 \| cadastro_realidade.py:519-531, test_cxr_tela_le_o_motor.py:322-412; mutante 525 FAILED 3 pelo motivo certo \| ok \| \| 2 relogio na borda \| lavrar_cxr_do_motor.py:31-32, cxr_na_lis ...` |
 | 05:18:09 | Bash | Record volta 4 in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p).read().split('\n') s[1]="ESPERANDO: opus final 2 CXR-TELA (agente) + aval lei E1/CXR" s.insert(2,"CXR-TELA volta 4 6a5e5ad8 08/11 05:1x: suite3.log Ran 14018 OK rc 0 (conferido); mutantes 8/8 mordem no hash (motor_no_request_525 FAILED 3, cobertura_vazia/dono_local novos FAILED 1); relogio: um instante na borda do co ...` |
 | 05:18:05 | Agent | CXR-TELA opus final 2 | `Obra CXR-TELA-LE-O-MOTOR, opus FINAL volta 2 (somente leitura: nao escreva arquivo, nao rode suite, nao importe/execute Python da raia). Raia /home/ronald/wt-cxrtela-025236, hash 6a5e5ad8, base f49aca02. Diff inteiro: `git -C /home/ronald/wt-cxrtela-025236 diff f49aca02..6a5e5ad8`; delta desta volta: `git -C ... diff 71c91c97..6a5e5ad8`. Aval literal: /home/ronald/saas-hasner/logs/cxr_tela/aval.tx ...` |
 | 05:17:53 | Bash | Verify suite and mutants for 6a5e5ad8 | `cd /home/ronald/saas-hasner && grep -E '^(OK\|FAILED)($\| \()' logs/cxr_tela/suite3.log \| tail -1; grep '^Ran' logs/cxr_tela/suite3.log \| tail -1; tail -1 logs/cxr_tela/suite3.log; cat logs/cxr_tela/mutantes*_6a5e5ad8.out \| cut -c1-90; git -C /home/ronald/wt-cxrtela-025236 log --oneline -1; git -C /home/ronald/wt-cxrtela-025236 status --porcelain \| wc -l; ls -d /home/ronald/mut-cxrtela-* 2>/de ...` |
