@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/11/2026 11:09:16.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (144.4 MB). Acoes na janela: **350**.
+**Medido em 08/11/2026 11:14:30.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (144.6 MB). Acoes na janela: **355**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:14:25 | ToolSearch |  | `-` |
+| 11:11:24 | Bash | Register aval in BACKLOG, PROMPTS, RELATO; test hook | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md' L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| CXR-PRONTO1-COL841 \|')][0] L[i+1:i+1]=[ "\| E1-ACERVO-5-GRUPOS-09 \| os 5 grupos do acervo E1 com pe em competencia exportada (emp2 09/2026: col820 #24947, col883 #25288, col923 #26298, col206 #27088, col200 #33281; DRY logs/fio_e0_v4/dry_e1_pouso_f4 ...` |
+| 11:11:04 | Bash | Inspect BACKLOG row columns | `cd /home/ronald/saas-hasner; sed -n 772p app/docs/BACKLOG.md \| awk -F'\|' '{print NF; for(i=4;i<NF;i++) print i": "substr($i,1,200)}'; sed -n 1692p app/docs/BACKLOG.md \| awk -F'\|' '{print NF; for(i=4;i<NF;i++) print i": "substr($i,1,200)}'; sed -n 750,752p app/docs/BACKLOG.md \| cut -c1-200` |
+| 11:11:02 | Bash | Read PROMPTS and BACKLOG formats | `cd /home/ronald/saas-hasner/app/docs; tail -3 PROMPTS.md \| cut -c1-250; grep -n "COBPARC-AUSENCIA-CALA\\|ATA-X-TURNO-PAUSA\\|FIO-E0-V4" BACKLOG.md \| head -8 \| cut -c1-300` |
+| 11:10:54 | Bash | Check file overlap with E1 raia | `cd /home/ronald/saas-hasner; date; grep -E "escala/utils.py\|materializacao.py\|cartorio.py\|core/juizes.py\|turnos.py" logs/pergunta_sem_selo/c7/arquivos_e1.txt; echo ---; git -C ~/wt-cobaus-102212 status --porcelain \| head; echo ---; git -C ~/wt-atapausa-092038 diff --stat 80df6a5d..78c95248 \| tail -15` |
 | 11:07:22 | Bash | Fix gate line refs in RELATO | `cd /home/ronald/saas-hasner; sed -i 's/(portoes G1 :2083, G2 :2101, G3 [nome] :2105, G4 :2120, ACENDE :2122)/(portoes G1 :2087, G2 :2107, G3 [nome] :2111, G4 :2125, ACENDE :2127)/' app/docs/RELATO.md; grep -c "G3 [nome] :2111" app/docs/RELATO.md; tail -3 logs/push_60f48a10.log` |
 | 11:07:19 | Bash | Locate exact gate lines | `cd /home/ronald/wt-atapausa-092038/app; grep -n "len(_par_ps) != 1\\|_b_ida is None or\\|if any(_orfa_ps\\|len(_pernas_ps) != 2\\|for _perna in _pernas_ps" escala/utils.py` |
 | 11:07:16 | Bash | Rewrite ATA-PAUSA question with numbers; verify line refs; hook | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('PERGUNTA DE DESENHO ATA-X-TURNO-PAUSA')][0] L[i]=("PERGUNTA DE DESENHO ATA-X-TURNO-PAUSA (MEDIDO 11:1x na sombra, copia instrumentada de 78c95248 so com contadores, montar_grade_prevista_periodo REAL, logs/ata_pausa_0811/medida_portoes.out 600, 0 erros):  ...` |
