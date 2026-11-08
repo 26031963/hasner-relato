@@ -1,7 +1,93 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 03:36** · publicado em **08/11/2026 03:37** (UTC-3)
+> Ultima resposta processada: **08/11/2026 04:49** · publicado em **08/11/2026 04:51** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 08/11 04:49 · sessao 7108433fc78b · CXR-TELA-LE-O-MOTOR · verificador · origem=Code
+
+**A v3 corrige a vacuidade anterior do C11 e unifica o instante usado pelo command e pelo serviço. A prova continua parcial: falta o estado “coberto, com lista vazia”, e o teste de relógio substitui justamente o espelho que precisaria verificar em profundidade.** (`app/ponto/tests/test_cxr_tela_le_o_motor.py:391`, `:417`; `app/ponto/management/commands/lavrar_cxr_do_motor.py:30`; `app/ponto/services/cxr_na_lista.py:183`)
+
+Suite Django completa e execução dos mutantes nessa suite: **[nao verificado]**. As contraprovas abaixo distinguem leitura estática de ensaio isolado em memória. [nao verificado]
+
+**1) C11 chega ao dono; o mutante anterior agora é atingido.**
+
+O caminho está conectado: `lista()` chama `_folga_nao_definida_sem_porta()`, esta chama `beco_em_lote()`, que constrói `InsumosDoDono` com `sem_motor=True, cxr=...` e chama `.dono(d)`. (`app/escala/services/cadastro_realidade.py:864`, `:573`, `:525`, `:531`)
+
+A fixture verifica pergunta viva e ausência de porta; o teste exige exatamente o C11 daquele dia com dono `CADASTRO`, além de zero chamadas ao espelho e a `MotorBase.calcular_mes`. Uma exceção engolida por `lista()` retiraria o C11 esperado e falharia na asserção; o selo deixou de passar com o beco vazio. (`app/ponto/tests/test_cxr_tela_le_o_motor.py:367`, `:371`, `:391`, `:393`; `app/escala/services/cadastro_realidade.py:866`)
+
+Há uma distinção entre os dois casos:
+
+- **Com lavra:** `_cxr` já contém o dia; `dono()` chega a `cxr()`, que devolve o conjunto carregado. (`app/ponto/management/commands/e6_oraculo.py:147`, `:163`, `:195`)
+- **Sem lavra:** o juiz substituto devolve `ESTRUTURA`; `dono()` encontra `sem_motor=True` e devolve `None` antes de chamar `cxr()`. (`app/ponto/tests/test_cxr_tela_le_o_motor.py:374`, `:395`; `app/ponto/management/commands/e6_oraculo.py:189`)
+
+Portanto, remover os dois argumentos de `beco_em_lote:526` agora leva ao espelho sob o juiz forçado, contrariando as asserções de conteúdo e chamadas. É conclusão pelo fluxo; execução desse mutante no runner completo: **[nao verificado]**. (`app/escala/services/cadastro_realidade.py:526`; `app/ponto/management/commands/e6_oraculo.py:168`, `:190`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:391`)
+
+**Existe mutação plausível sobrevivente aos dois cenários novos.** Antes da lógica atual de `InsumosDoDono.dono()`, introduzir:
+
+```python
+if self._sem_motor and self._cxr == set():
+    self._cxr = None
+    self._sem_motor = False
+```
+
+Isso introduz um fallback para uma lavra válida que respondeu “nenhum dia”. Os testes novos fornecem conjunto não vazio ou `None`; nenhum fornece conjunto vazio. Esse terceiro estado é produzido legitimamente por `cxr_lavrado()`. (`app/ponto/tests/test_cxr_tela_le_o_motor.py:386`, `:397`; `app/ponto/services/cxr_na_lista.py:183`)
+
+No ensaio isolado em memória dos métodos atuais e dessa alteração, os dois cenários novos mantiveram `CADASTRO/0 chamadas` e `None/0 chamadas`; o cenário coberto vazio, com juiz real respondendo `ESTRUTURA`, passou de zero para **uma chamada ao espelho**. Isso demonstra a lacuna dos cenários; aprovação do mutante pela classe Django completa: **[nao verificado]**. (`app/ponto/management/commands/e6_oraculo.py:162`, `:182`)
+
+Também falta uma asserção direta de passagem pela autoridade: substituir a expressão `ins[...].dono(d)` por uma decisão local baseada na presença do dia na lavra reproduziria as duas respostas esperadas. Seria um segundo juiz; os dois resultados finais, sozinhos, não distinguem essa implementação. (`app/escala/services/cadastro_realidade.py:531`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:391`, `:398`)
+
+**2) A fixture serve ao contrato do leitor, mas não representa uma lavra produzida integralmente naquele estado.**
+
+O colaborador do beco é criado separadamente; as batidas da fixture base pertencem aos outros dois colaboradores. O teste injeta cobertura e item para o beco chamando `lavrar()` diretamente. Já `medir()` só percorre colaboradores encontrados em `Batida` dentro da competência. Assim, **esse snapshot não sairia de `medir()` com esse estado da fixture**. (`app/ponto/tests/test_cxr_tela_le_o_motor.py:70`, `:77`, `:342`, `:386`; `app/ponto/services/cxr_na_lista.py:68`, `:71`)
+
+A estrutura necessária ao leitor está correta: `cobertos` contém colaborador, competência e início; os itens contêm colaborador, competência e data. `cxr_lavrado()` usa precisamente esses campos. A escrita passa pela função canônica, embora o conteúdo seja montado pelo teste. (`app/ponto/tests/test_cxr_tela_le_o_motor.py:386`; `app/ponto/services/cxr_na_lista.py:142`, `:176`, `:180`)
+
+Há ainda uma artificialidade deliberada no juiz: o C11 exige `folga_nao_definida`, e o juiz real já responde `CADASTRO` por esse insumo, independentemente da lista do motor. O mock ignora isso para forçar a situação que exigiria consultar CXR. Logo, o teste sem lavra **não demonstra que um beco real dessa fixture receberia `None`**; demonstra o comportamento quando a lista seria necessária à decisão. (`app/escala/services/cadastro_realidade.py:518`; `app/ponto/management/commands/e6_oraculo.py:98`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:374`)
+
+Isso dá mordida ao teste de proteção contra motor, mas limita seu alcance como prova de integração produtor → lavra → leitor. A correspondência com algum estado real de produção permanece **[nao verificado]**. (`app/ponto/tests/test_cxr_tela_le_o_motor.py:384`)
+
+**3) Relógio: datas de referência alinhadas; carimbo de persistência separado.**
+
+| Trecho | Comportamento |
+|---|---|
+| Command | Lê `timezone.now()`, deriva `hoje` desse instante, passa `agora` a `medir` e `hoje` a `lavrar`. (`app/ponto/management/commands/lavrar_cxr_do_motor.py:30`, `:40`) |
+| `medir` | Deriva `hoje` de `agora`; usa esse dia nas competências e passa os mesmos valores ao espelho e a `InsumosDoDono`. (`app/ponto/services/cxr_na_lista.py:60`, `:63`, `:78`, `:99`) |
+| Janelas | `janela_atual/anterior` calculam a partir da data recebida e do corte da empresa; não consultam relógio. (`app/ponto/janelas.py:60`, `:66`) |
+| Espelho | Recebe `agora`, passa-o a `montar_dias`; a autoridade do cálculo recebe datas. A chamada a `calcular_mes` não recebe parâmetro `agora`. (`app/ponto/services/espelho.py:1227`, `:1262`; `app/ponto/services/fechamento.py:286`) |
+| `InsumosDoDono` | Guarda o instante recebido; uma eventual consulta ao espelho o reutiliza. Na lavra, recebe também o espelho já calculado. (`app/ponto/management/commands/e6_oraculo.py:132`, `:169`; `app/ponto/services/cxr_na_lista.py:99`) |
+| Snapshot | `calculado_em` tem `auto_now=True`; `lavrar` não o preenche com o instante da borda. (`app/inteligencia/models.py:96`; `app/ponto/services/cxr_na_lista.py:145`) |
+
+**Sim:** no command atual, `data_ref`, o dia usado nas competências e o `agora` entregue ao espelho derivam do mesmo instante. **A expressão “agora do motor” é imprecisa:** o cálculo recebe datas; o instante explícito segue pelo espelho para a montagem da grade. (`app/ponto/management/commands/lavrar_cxr_do_motor.py:30`; `app/ponto/services/cxr_na_lista.py:60`; `app/ponto/services/espelho.py:1266`; `app/escala/utils.py:2358`)
+
+**Não há garantia de uma única leitura literal durante toda a persistência:** `calculado_em` é um carimbo automático de salvamento. Além disso, `ultimo_lavrado()` o publica como `medido_em`; esse campo não preserva o instante inicial passado ao espelho. (`app/inteligencia/models.py:96`; `app/ponto/services/cxr_na_lista.py:160`)
+
+O teste de meia-noite tem mordida contra o defeito anterior: exige que todos os argumentos `agora` observados sejam exatamente `t1`, e compara seus dias com `data_ref`. Uma leitura extra depois da primeira não apaga essa exigência. (`app/ponto/tests/test_cxr_tela_le_o_motor.py:412`, `:425`, `:427`)
+
+Mas sua cobertura termina na entrada do espelho: ele substitui a função inteira e devolve lista vazia, impedindo também a criação de `InsumosDoDono` pelo serviço. Uma regressão dentro do espelho ficaria oculta desse teste; a catraca AST examina apenas o command e `cxr_na_lista`. Também não há asserção sobre `ini/fim`, e a virada escolhida é 05→06, sem mudança de competência. (`app/ponto/tests/test_cxr_tela_le_o_motor.py:417`, `:421`, `:447`; `app/ponto/services/cxr_na_lista.py:81`, `:98`)
+
+**4) Quem escreve e quem lê.**
+
+| Elemento | Escritor/origem | Leitores/destino |
+|---|---|---|
+| `medir(agora=)` | O command captura e fornece o instante. (`app/ponto/management/commands/lavrar_cxr_do_motor.py:30`) | O serviço deriva `hoje` e alimenta espelho e insumos. (`app/ponto/services/cxr_na_lista.py:60`, `:78`, `:99`) |
+| `lavrar(d, hoje)` | Recebe a medida e escreve `data_ini`, `data_ref`, contadores e `detalhe` via `update_or_create`. (`app/ponto/services/cxr_na_lista.py:142`) | `ultimo_lavrado()` recupera o snapshot; C12 formata seus itens; `cxr_lavrado()` fornece dias aos leitores do dono. (`app/ponto/services/cxr_na_lista.py:152`, `:174`; `app/escala/services/cadastro_realidade.py:393`, `:523`, `:1021`) |
+| `cobertos` | `medir()` acrescenta a chave somente depois de concluir a leitura do colaborador/competência; falhas saem antes. (`app/ponto/services/cxr_na_lista.py:111`, `:118`) | `cxr_lavrado()` distingue ausência de cobertura (`None`) de cobertura sem dias (`set()`). (`app/ponto/services/cxr_na_lista.py:176`, `:183`) |
+| `CLASSIFICAR` | Registro estático no teste; a entrada nova pertence a **`B2_menos_B1`**. (`app/core/tests/test_medida_turno_do_par.py:391`, `:452`) | O teste compara esse registro ao censo calculado pelo instrumento. Não é allowlist de execução. (`app/core/tests/test_medida_turno_do_par.py:577`; `app/core/medida_turno_do_par.py:436`) |
+
+No censo textual da cópia, o chamador encontrado de `cxr_na_lista.medir` é o command já atualizado; não encontrei chamada desse serviço com `hoje=`. O `medir(hoje=...)` de `lavrar_teto_do_dia` pertence a outro serviço. Chamadas externas à cópia: **[nao verificado]**. (`app/ponto/management/commands/lavrar_cxr_do_motor.py:17`, `:32`; `app/ponto/management/commands/lavrar_teto_do_dia.py:28`)
+
+**5) Classes de reprovação.**
+
+| Classe | Parecer sobre a cópia |
+|---|---|
+| Segundo juiz | O código atual continua chamando a autoridade existente. O mock limita a capacidade dos novos testes de detectar sua substituição por decisão local. (`app/escala/services/cadastro_realidade.py:531`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:374`) |
+| Segundo escritor fora da porta | O command e o teste novo usam `cxr_na_lista.lavrar`. A escrita direta da célula é preparação de fixture. (`app/ponto/management/commands/lavrar_cxr_do_motor.py:40`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:366`, `:386`) |
+| Relógio fora da borda | A dupla leitura command/serviço foi removida. O carimbo automático permanece; os testes não auditam dependências transitivas. (`app/ponto/management/commands/lavrar_cxr_do_motor.py:30`; `app/inteligencia/models.py:96`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:447`) |
+| Derivação paralela | A conversão de instante em data usa a mesma entrada; a inclusão em `CLASSIFICAR` é informativa, não cria autoridade. (`app/ponto/services/cxr_na_lista.py:60`; `app/core/tests/test_medida_turno_do_par.py:12`) |
+| Selo sem mordida | A vacuidade anterior foi fechada. Continua faltando o cenário de cobertura vazia no request e a verificação do espelho real pelo selo temporal. (`app/ponto/tests/test_cxr_tela_le_o_motor.py:391`, `:417`; `app/ponto/services/cxr_na_lista.py:184`) |
+| Campo com dois significados | `None` e conjunto vazio estão separados corretamente no código. `medido_em` representa `calculado_em`, não o instante inicial da medição. (`app/ponto/services/cxr_na_lista.py:160`, `:184`) |
+
+A documentação de L-040 ainda afirma ausência de leitor, embora C12 leia a lavra na implementação. O desenho `escopo_id=None` com a constraint anterior também permanece. Fechamento dos requisitos de produção — col841, divergência zero na frota, idempotência concorrente e conservação das classes do vigia — **[nao verificado]**. (`app/docs/LEIS.md:166`; `app/escala/services/cadastro_realidade.py:871`; `app/ponto/services/cxr_na_lista.py:146`; `app/inteligencia/models.py:103`)
 
 ## 08/11 03:36 · sessao 5b1d37290c70 · CXR-TELA-LE-O-MOTOR · verificador · origem=Code
 
@@ -1071,58 +1157,4 @@ Nenhum novo laço multicolaborador escritor de D/CH/P confirmado nos candidatos 
 
 A relavra de folgas pode chegar às portas de chamado, mas mantém um único vínculo no ato: `folgas.py:272–276` chama `regenerar_celulas_vinculo(ec, ...)`. Um chamador externo que envolva vários vínculos em atomic precisa ser contado no próprio chamador; esses chamadores adicionais não foram auditados nesta rodada. [nao verificado]
 
-## 07/11 23:32 · sessao 2e5bb51989dd · - · - · origem=Ronald (tmux)
-
-Censo de `app/chamados/services`: **36 sítios diretos** de escrita nas três entidades, conforme os endereços da tabela. P = `PerguntaDisputa`, D = `DisputaSupervisao`, CH = `ChamadoColaborador`.
-
-| Arquivo:linha | Função | Entidade/operação | Classificação e fundamento |
-|---|---|---|---|
-| `services/vinculos.py:89` | `apontar_justificativa` | CH/save | TRAVA-ANTES `:88`, atomic `:86` |
-| `services/vinculos.py:101` | `apontar_celula` | CH/save | TRAVA-ANTES `:100`, atomic `:98` |
-| `services/vinculos.py:117` | `apontar_ticket_glpi` | CH/save | TRAVA-ANTES `:116`, atomic `:114` |
-| `services/vinculos.py:135` | `assumir_responsavel` | CH/save | TRAVA-ANTES `:134`, atomic `:131` |
-| `services/vinculos.py:147` | `liberar_responsavel` | CH/save | TRAVA-ANTES `:146`, atomic `:143` |
-| `services/contexto.py:78` | `anotar_contexto` | CH/save | TRAVA-ANTES `:77`, atomic `:75` |
-| `services/contexto.py:104` | `renovar_contexto` | CH/save | TRAVA-ANTES `:103`, atomic `:101` |
-| `services/contexto.py:127` | `retirar_contexto` | CH/save | TRAVA-ANTES `:126`, atomic `:124` |
-| `services/contexto.py:163` | `fundir_contexto` | CH/save | TRAVA-ANTES `:162`, atomic `:160` |
-| `services/texto.py:36` | `reescrever_texto` | CH/save | TRAVA-ANTES `:35`, atomic `:31` |
-| `services/arquivo.py:171` | `silenciar` | CH/save | TRAVA-ANTES `:170` **se** atomic externo; helper não trava fora de atomic (`models.py:484`). Nos chamadores sem atomic, SEM-ATOMIC, sujeito à leitura do override CH feita pelo agente models. |
-| `services/arquivo.py:210` | `levantar` | CH/save | TRAVA-ANTES `:209` **se** atomic externo; mesma guarda `models.py:484` |
-| `services/disputa_emissao.py:296` | `perguntar_entradas_pendentes` | D/save | TRAVA-ANTES `:968` pelo chamador `:1179`; pelo chamador `:685`, atomic de `_abrir_ou_agregar` já terminou (`:521`, retorno `:604`), portanto classificação depende do atomic externo de `criar_ou_atualizar_disputa` |
-| `services/disputa_emissao.py:565` | `_abrir_ou_agregar_disputa` | D/save | TRAVA-ANTES `:530`, atomic `:521` |
-| `services/disputa_emissao.py:587` | `_abrir_ou_agregar_disputa` | D/create | TRAVA-ANTES `:530`, atomic `:521` |
-| `services/disputa_emissao.py:993` | `criar_disputa_a_partir_de_chamados_orfaos` | D/save | TRAVA-ANTES `:968`, atomic `:964` |
-| `services/disputa_emissao.py:1032` | mesma | D/create | TRAVA-ANTES `:968` |
-| `services/disputa_emissao.py:1041` | mesma | D/save | TRAVA-ANTES `:968` |
-| `services/disputa_emissao.py:1070` | mesma | D/save | TRAVA-ANTES `:968` |
-| `services/disputa_emissao.py:1165` | mesma | D/save | TRAVA-ANTES `:968` |
-| `services/disputa_emissao.py:1259` | `criar_disputa_ancora_de_chamado` | D/create | TRAVA-ANTES `:1232`, atomic `:1223` |
-| `services/disputa_emissao.py:1268` | mesma | D/save | TRAVA-ANTES `:1232` |
-| `services/relavra_via.py:127` | `relavrar` | P/save | SEM-TRAVA; command `relavrar_via_i6.py:101-102` abre atomic sem C; fallback de P.save também tem atomic `models.py:3173` |
-| `services/validacao.py:137` | `_carimbar_validacao` | P/save | TRAVA-ANTES pelos chamadores `validacao.py:285`, `:317`, `:431`; chamadas `:288`, `:320`, `:435` |
-| `services/validacao.py:202` | `devolver_validacao_recusada` | P/save | TRAVA-ANTES `validacao.py:431` pelo chamador único da app `:464`, ainda no atomic `:425` |
-| `services/validacao.py:585` | `recusar_pergunta` | P/save | SEM-TRAVA no caminho `acoes_disputa.py:80`; P.save abre atomic `models.py:3173` |
-| `services/validacao.py:661` | `conferir_data_do_fato` | P/save | SEM-TRAVA no caminho `views.py:1312`; P.save abre atomic `models.py:3173` |
-| `services/materializacao.py:848` | `_materializar_resposta_hora` | P/save | TRAVA-ANTES quando via `validacao.py:431/463`; SEM-TRAVA via `acoes_disputa.py:139`, `fio.py:670`, ou `validacao.py:469` (fora do atomic `:425`). Atomic local `materializacao.py:1217`, chamada `:1219`. |
-| `services/materializacao.py:1100` | `_carimbar_recusa` | P/save | TRAVA-ANTES via `validacao.py:431/463`; SEM-TRAVA no gate anterior ao atomic (`materializacao.py:1210`) e no finally depois dele (`:1294`) quando os chamadores HTTP não têm atomic; P.save garante atomic `models.py:3173`. Também alcançado sob atomic do passivo (`passivo_validado.py:371`, `:511`, `:545`) sem trava C prévia garantida. |
-| `services/disputa_emissao.py:1389` | `responder_pergunta_disputa_core` | P/save | SEM-TRAVA via `views.py:1283`, `api/views.py:2659`, `acoes_disputa.py:368`; atomic local `:1388`. TRAVA-ANTES via `declaracao_texto.py:322/330/389` ou `:624/627/661`, que mantêm vivo o lock de `_abrir_ou_agregar_disputa:530`. |
-| `services/disputa_emissao.py:1434` | mesma | P/save | Mesmos caminhos acima: SEM-TRAVA nos HTTP diretos, TRAVA-ANTES nos de declaração; atomic próprio P.save `models.py:3173`. |
-| `services/disputa_emissao.py:1518` | `reabrir_para_correcao` | P/QuerySet.update | SEM-TRAVA via `acoes_disputa.py:103`, `validacao.py:588`, `curar_perguntas_em_limbo.py:69`; atomic próprio `:1496`. TRAVA-ANTES via `materializacao.py:672/676/679` (devolução da ausência rejeitada). |
-| `services/disputa_emissao.py:1541` | `responder_automaticamente` | P/save | SEM-TRAVA local; atomic `:1540`; chamada `api/foto_recebida.py:48`, antes de validar (`:51`). Atomic/lock ancestral dessa entrada precisa ser consolidado pelo agente responsável por API. |
-| `services/disputa_emissao.py:1562` | `carimbar_resposta_pela_trilha` | P/save | SEM-TRAVA; atomic `:1561`, command chamador `curar_perguntas_em_limbo.py:67` sem lock |
-| `services/fio.py:870` | `reapontar_resolvedora` | P/save | TRAVA-ANTES `:855` no ramo sem datar; ramo datando usa `fato_livre_para` em `:849`, que trava C em `models.py:2646`; atomic `fio.py:843` |
-| `services/fio.py:965` | `rechavear_data_evento` | P/save | TRAVA-ANTES `:947`, atomic `:943` |
-
-Todos os caminhos P sem trava continuam sendo **SEM-TRAVA**, e não SEM-ATOMIC: o override abre atomic em `app/chamados/models.py:3173` e escreve em `:3174`.
-
-Laços multicolaborador confirmados nesta área:
-
-- `app/chamados/services/silencio_isentos.py:41-43`, atomic envolvendo queryset inteiro; `alvos(None)` pega vários colaboradores (`:24-28`).
-- `app/chamados/services/relavra_via.py:117-127`, sob atomic único em `app/chamados/management/commands/relavrar_via_i6.py:101-102`; seleção sem restrição por colaborador em `:55`.
-
-O exemplo `cobranca.py:176-178` é laço de vários pais, com perguntas recortadas pelo colaborador de entrada (`cobranca.py:140`, `:163`; `aviso_pendencia.py:10`). O pai é obtido por `p.disputa.chamado` (`cobranca.py:60-66`); o código não confirma aqui que o dono CH seja o mesmo da disputa. Mais de um dono efetivo nesse laço: [nao verificado].
-
-Outros laços com atomic por unidade, não abrangendo todos os colaboradores: `relavra_via.py:215/219`, `passivo_validado.py:353/371` (por colaborador/competência), `passivo_validado.py:403/404` (por disputa), `limbo_folgas.py:316` → `agrupar_furo` com atomic em `:270`.
-
-_2830 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2831 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
