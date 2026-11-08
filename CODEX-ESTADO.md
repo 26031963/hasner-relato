@@ -1,7 +1,98 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 16:30** · publicado em **08/11/2026 16:31** (UTC-3)
+> Ultima resposta processada: **08/11/2026 16:34** · publicado em **08/11/2026 16:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 08/11 16:34 · sessao b38605435c83 · FIO-E0-V4-E1 · censo · origem=Code
+
+Convenção: as referências abaixo numeram cada anexo colado desde a linha 1, incluindo linhas em branco.
+
+**Não há suporte para encaixar todos os achados em a–e.** `∅` indica classificação não demonstrável: falta a resposta sobre custo; a exceção sem captura foi vista, mas não há triagem fornecida que demonstre descarte. (`codex_e1_v15r2.q:11`; `codex_e1_v15d_reuso.r:15`; ausência dos documentos correspondentes: [nao verificado])
+
+| laudo | achado | classe | trecho pergunta | trecho resposta | motivo da triagem |
+|---|---|---|---|---|---|
+| `opus_final3_e1_76644dc8.md:6` | Reuso mantém `data_evento=D0`, com célula/destino de DIA | **(b)** | “QUEM ESCREVE e QUEM LE cada campo/valor [...] algum supoe outro significado?” (`codex_e1_v15b.q:12`) | “Reuso pode atribuir célula/destino de DIA e conservar `data_evento=D0`”; descreve também os efeitos em C6 e tranca. (`codex_e1_v15b.r:132`) | “leitores intocados pelo aval E1-VOLTA-15; residual vai a E3”. (`triagem_e1_v15b.txt:7`) |
+| `opus_final3_e1_76644dc8.md:7` | Portão 15c2: FK da célula velha pode apontar data fora da medida | **(e)** | **nao ha trecho** sobre essa relação FK/data/medida. As perguntas identificam `d41caaf6` e `21e7341c`. (`codex_e1_v15w.q:1`; `codex_e1_v15r2.q:1`; `codex_e1_v15b.q:1`) | **nao ha trecho** sobre esse achado. [nao verificado] | **nao ha trecho** correspondente. [nao verificado] |
+| `opus_final3_e1_76644dc8.md:8` | Origem inexistente/de outro colaborador recusada somente nas portas | **(e)** — quanto à lacuna fora das portas | **nao ha trecho** perguntando essa lacuna. A pergunta sobre admissão no fecho especifica “linha de episodio retratado pela ponte A2”. (`codex_e1_v15b.q:9`) | Há diagnóstico próximo, mas distinto: “inclusive origem inexistente ou incompatível com o colaborador”, sobre **motivo impreciso** da recusa. **nao ha trecho** diagnosticando a lacuna fora das portas. (`codex_e1_v15b.r:141`) | Para o motivo impreciso: “PROCEDENTE -> volta 15c (B)”; isso registra correção, sem demonstrar descarte da lacuna do laudo. (`triagem_e1_v15b.txt:8`) |
+| `opus_final3_e1_76644dc8.md:9` | Ponte de dois dias recusada na costura → `reatas=None`, possíveis I8b/I22 | **(e)** | **nao ha trecho** sobre ponte de dois dias. A pergunta de fechamento especifica “pergunta viva sobre episodio retratado”. (`codex_e1_v15b.q:6`) | “O plano devolve `reatas=None`” aparece no percurso de **retratada**, não no contraexemplo da ponte de dois dias. **nao ha trecho** sobre este último. (`codex_e1_v15b.r:54`) | **nao ha trecho** correspondente. [nao verificado] |
+| `opus_final3_e1_76644dc8.md:10` | Custo do juiz por abrir/vigia | **∅** | “Custo: resolvedora_valida agora pergunta ao juiz. Liste os chamadores [...] quais estao em laco sobre muitas perguntas, e se ha memo compartilhado.” (`codex_e1_v15r2.q:11`) | **nao ha trecho**: a resposta `codex_e1_v15r2.r` não foi fornecida. Não demonstra “Codex não viu”. [nao verificado] | **nao ha trecho** correspondente. [nao verificado] |
+| `opus_final3_e1_76644dc8.md:11` | Contexto fundido herda `ultima_batida` errada | **(a)** — tema da escrita/derivação da origem presente | “QUEM ESCREVE e QUEM LE [...] batida_origem_id”. (`codex_e1_v15b.q:12`) | “Explícita ou derivada antes do helper; inserção deriva quando ausente.” **nao ha trecho** identificando a herança errada pelo contexto fundido. (`codex_e1_v15b.r:128`) | **nao ha trecho** correspondente. [nao verificado] |
+| `opus_final4_e1_b0c4297c.md:6` | Reuso com `data_evento=NULL` pula rechaveamento | **(e)** | **nao ha trecho** pedindo cobertura dos reusos que evitam a exceção. A pergunta delimita caminhos que “pode[m] receber essa excecao”; o outro pedido é censo de escritores/leitores. (`codex_e1_v15d_reuso.q:2`, `:4`) | “Reuso de `abrir`” é descrito passando por `rechavear_no_reuso`. **nao ha trecho** identificando o desvio por NULL. (`codex_e1_v15d_reuso.r:108`) | **nao ha trecho**; descarte não demonstrado. [nao verificado] |
+| `opus_final4_e1_b0c4297c.md:7` | Contador exclui a classe NULL | **(e)** | “se fica trilha/contador da recusa”; **nao ha trecho** pedindo conferir cobertura da classe NULL que evita a recusa. (`codex_e1_v15d_reuso.q:2`) | “varre linhas datadas com episódio”. **nao ha trecho** apontando a exclusão de NULL como defeito. (`codex_e1_v15d_reuso.r:88`) | **nao ha trecho**; descarte não demonstrado. [nao verificado] |
+| `opus_final4_e1_b0c4297c.md:8` | Exceção sem captura, com persistência anterior | **∅** — visto, sem descarte demonstrado | “quem a captura [...] se a transacao externa e revertida”. (`codex_e1_v15d_reuso.q:2`) | “Nenhum `except` envolve a chamada da emissão”; “Sem transação externa, permanecem gravadas.” Portanto, o diagnóstico foi registrado. (`codex_e1_v15d_reuso.r:15`) | **nao ha trecho**. Sem triagem fornecida, não cabe afirmar **(b)**. [nao verificado] |
+| `opus_final4_e1_b0c4297c.md:9` | Porta sem veto próprio de competência | **(e)** | **nao ha trecho** perguntando a localização do veto; os pedidos são propagação da exceção, comportamento anterior e censo de escrita/leitura. (`codex_e1_v15d_reuso.q:2–4`) | **nao ha trecho** sobre ausência de veto próprio. O trecho sobre recusa trata de colisão. (`codex_e1_v15d_reuso.r:98`) | **nao ha trecho**. [nao verificado] |
+| `opus_final4_e1_b0c4297c.md:10` | DRY toma travas | **(e)** | **nao ha trecho** sobre aquisição de travas pelo DRY. (`codex_e1_v15d_reuso.q:2–4`) | “chama o rechaveamento real em dry”; **nao ha trecho** diagnosticando as travas. (`codex_e1_v15d_reuso.r:88`) | **nao ha trecho**. [nao verificado] |
+| `opus_final4_e1_b0c4297c.md:11` | Ressalva `destino=None`, O261-E F1 | **(e)** | **nao ha trecho** sobre essa ressalva. (`codex_e1_v15d_reuso.q:2–4`) | **nao ha trecho** correspondente. [nao verificado] | **nao ha trecho**. [nao verificado] |
+| `opus_final4_e1_b0c4297c.md:12` | Regex de `test_contract_pergunta_fato` | **(e)** | **nao ha trecho** pedindo revisão desse teste. (`codex_e1_v15d_reuso.q:2–4`) | **nao ha trecho** correspondente. [nao verificado] | **nao ha trecho**. [nao verificado] | [nao verificado]
+| `opus_final4_e1_b0c4297c.md:13` | Cabeçalhos dos testes | **(e)** | **nao ha trecho** pedindo revisão documental dos testes. (`codex_e1_v15d_reuso.q:2–4`) | **nao ha trecho** correspondente. [nao verificado] | **nao ha trecho**. [nao verificado] | [nao verificado]
+| `opus_final4_e1_b0c4297c.md:14` | Pontos cegos da catraca: lista em variável | **(e)** | **nao ha trecho** pedindo análise dos escapes da catraca nesta janela; pede-se conferir escritores da árvore. (`codex_e1_v15d_reuso.q:4`) | “a catraca AST [...] declara limites para escrita dinâmica”; **nao ha trecho** específico sobre lista em variável. (`codex_e1_v15d_reuso.r:112`) | **nao ha trecho**. A triagem anterior declara escape semelhante fora, mas refere-se à 15b, não demonstra triagem da janela 4. (`triagem_e1_v15b.txt:6`) |
+| `opus_final4_e1_b0c4297c.md:15` | Helper recebe dia civil de conversa | **(e)** — semântica não perguntada nesta janela, embora registrada | **nao ha trecho** perguntando civil versus turno; pede-se quem escreve/lê e passagem pelo helper. (`codex_e1_v15d_reuso.q:4`) | “Portanto, conversa continua gravando **dia civil**, distinguida por `conversa=True`.” O comportamento foi registrado espontaneamente. (`codex_e1_v15d_reuso.r:107`) | **nao ha trecho** que demonstre descarte. [nao verificado] |
+
+As parcelas “não conferido nas 4 linhas da sombra”, “não medido na frota” e “frota não medida” dependem de dado de produção; não transformam automaticamente o respectivo achado estático inteiro em **(c)**. (`opus_final3_e1_76644dc8.md:7`, `:9`, `:10`)
+
+| janela | hash perguntado × hash reprovado | pré-verificação documentada |
+|---|---|---|
+| Opus 3 | `d41caaf6` nas perguntas 15w/15r2; diff `6695e972..21e7341c` na 15b × merge reprovado `76644dc8`, com 15c2 `3d8ebe87`. (`codex_e1_v15w.q:1`; `codex_e1_v15r2.q:1`; `codex_e1_v15b.q:1`; `opus_final3_e1_76644dc8.md:2`) | **Não documentada sobre o mesmo hash reprovado.** As perguntas fornecidas identificam árvores anteriores. Existência de outra consulta sobre 15c/15c2: [nao verificado]. |
+| Opus 4 | Pergunta `b0c4297c` × reprovação `b0c4297c`. (`codex_e1_v15d_reuso.q:1`; `opus_final4_e1_b0c4297c.md:2`) | **Sim, consulta Codex sobre a mesma árvore**, nos três assuntos perguntados. A pergunta declara “LEITURA” e não identifica um intervalo de diff; revisão integral do diff: [nao verificado]. (`codex_e1_v15d_reuso.q:1–4`) |
+
+Contagem das classificações acima:
+
+| classe | opus 3 | opus 4 | total |
+|---|---:|---:|---:|
+| (a) | 1 | 0 | **1** |
+| (b) | 1 | 0 | **1** |
+| (c) | 0 | 0 | **0** |
+| (d) | 0 | 0 | **0** |
+| (e) | 3 | 9 | **12** |
+| ∅ — classificação não demonstrada | 1 | 1 | **2** |
+| **Total** | **6** | **10** | **16** |
+
+## 08/11 16:33 · sessao 5928cfc3000d · - · - · origem=Ronald (tmux)
+
+Cruzamento da janela 4; linhas dos anexos colados, contando linhas em branco desde 1.
+
+| Achado (`opus_final4_e1_b0c4297c.md`) | Resultado estrito | Pergunta | Resposta |
+|---|---|---|---|
+| Reuso NULL pula rechaveamento (:6) | **e**, com leitura restrita do escopo | Não há trecho pedindo cobertura de todos os reusos. Q:2 limita-se a caminhos que “pode[m] receber essa excecao”; Q:4 pede censo de escritores/leitores e passagem pelo helper. | R:3 descreve a exceção; R:108 descreve o reuso pelo rechaveamento. Não há trecho identificando o bypass NULL. |
+| Contador cego ao NULL (:7) | **a**, se “tema contador” for a unidade de classificação | Q:2: “se fica trilha/contador da recusa.” | R:88: “varre linhas datadas com episódio”; “Não cobre linhas sem episódio.” Não há trecho apontando a exclusão de NULL como defeito. |
+| Item 1: exceção sem captura (:8) | **Nenhuma das cinco classes serve** | Q:2: “quem a captura”; “se a transacao externa e revertida”. | R:15: “Nenhum `except` envolve a chamada da emissão.”; “Sem transação externa, permanecem gravadas.” R:21: “não captura a exceção de `:444`”. Foi visto e perguntado; não existe triagem fornecida para classificá-lo como b. |
+| Item 2: porta sem veto próprio (:9) | **e** | Não há trecho. | R:98 fala da recusa por colisão; não há trecho sobre ausência de veto próprio de competência. |
+| Item 3: dry toma travas (:10) | **e** | Não há trecho sobre travas do dry. | R:88: “chama o rechaveamento real em dry”; não há trecho sobre aquisição de travas. |
+| Item 4: destino=None (:11) | **e** | Não há trecho. | Não há trecho sobre a ressalva O261-E F1. |
+| Item 5: regex contratual (:12) | **e** | Não há trecho. | Não há trecho. |
+| Item 6: cabeçalhos dos testes (:13) | **e** | Não há trecho. | Não há trecho. | [nao verificado]
+| Item 7: catraca/lista em variável (:14) | **e**, com escopo literal | Não há trecho pedindo revisão da catraca ou seus escapes. Q:4 pede conferir escritores da árvore. | R:112: “a catraca AST [...] declara limites para escrita dinâmica”; não há trecho específico sobre lista em variável. |
+| Dois significados/conversa (:15) | **e**, se distinguir censo de semântica; caso contrário, impasse como item 1 | Não há trecho perguntando sobre significados civil/turno; Q:4 pede escritores/leitores e helper. | R:107: “Portanto, conversa continua gravando **dia civil**, distinguida por `conversa=True`.” O comportamento foi visto. Se considerar o tema presente em Q:4, nenhuma classe serve sem triagem. |
+
+Referências acima: Q = `codex_e1_v15d_reuso.q`; R = `codex_e1_v15d_reuso.r`.
+
+A classificação b para o item 1 seria inventada: o anexo prova que o Codex viu, mas nenhum trecho fornecido prova descarte por triagem. (`codex_e1_v15d_reuso.q:2`; `codex_e1_v15d_reuso.r:15`, `:21`)
+
+## 08/11 16:32 · sessao 95d49bbd9f9d · - · - · origem=Ronald (tmux)
+
+Parecer para os seis achados do opus 3:
+
+| Achado | Classe sustentada | Evidência |
+|---|---|---|
+| Reuso DIA/D0 | **b** | `codex_e1_v15b.q:12` pergunta escritores/leitores e significado; `codex_e1_v15b.r:132` descreve literalmente a divergência. `triagem_e1_v15b.txt:7`: “leitores intocados pelo aval E1-VOLTA-15; residual vai a E3”. |
+| Portão 15c2/FK fora da medida | **e**, pelo mecanismo específico | Não há trecho de pergunta ou resposta sobre data da FK distinta do dia velho. A ausência de medição na sombra é aspecto de produção separado. |
+| Origem inválida recusada somente nas portas | **e**, pelo mecanismo específico | `codex_e1_v15b.r:141` trata **motivo impreciso**, não a lacuna fora das portas; `:81` registra recusa na porta. A triagem não descarta literalmente a lacuna atual. |
+| Ponte de dois dias → `reatas=None` | **e**, pelo mecanismo específico | `codex_e1_v15b.q:6` pergunta fechamento por **retratada**; `codex_e1_v15b.r:54` responde `reatas=None` por **retratada**. Não há trecho sobre ponte de dois dias. |
+| Custo por abrir/vigia | **Indeterminável na taxonomia** | `codex_e1_v15r2.q:11` pergunta explicitamente custo, laços e memo; não existe resposta fornecida. Isso impede concluir “Codex não viu”. “Frota não medida” isoladamente pertence a **c**. |
+| Contexto fundido herda `ultima_batida` errada | **e**, pelo mecanismo específico | Não há trecho sobre fusão/herança. `codex_e1_v15b.q:12` faz censo amplo de campos; `codex_e1_v15b.r:128` descreve derivação de origem, sem identificar esse defeito. |
+
+Numeração conferida em memória: `codex_e1_v15b.r` possui **147 linhas**, contando brancas e linhas de código; nenhum arquivo criado.
+
+## 08/11 16:32 · sessao 9a6e53947e78 · - · - · origem=Ronald (tmux)
+
+A taxonomia não é exaustiva: “Codex viu, mas não há triagem demonstrada” não cabe em nenhuma classe. O exemplo inequívoco é a exceção sem captura do opus 4: pergunta 1 e resposta 1 a registram; ausência de triagem impede (b), presença na resposta impede (a)/(d), e presença na pergunta impede (e). Classificação: **[nao verificado]**, explicando a lacuna.
+
+- **Opus 4, reuso NULL:** prefiro **(e)**. A pergunta 1 limita-se aos caminhos que recebem `ReusoSemRechave`; esse caminho a evita. A pergunta 2 fixa cenário D0/DIA. A pergunta 3 pede censo e passagem das escritas pelo helper, não exige provar que todo reuso efetivamente escreve o dia. Classificar (a) exige ampliar o tema além do texto.
+- **Opus 4, contador NULL:** **(e)** é defensável. “se fica trilha/contador da recusa” pede existência/propagação, não prova de cobertura do universo NULL. A resposta registra que o contador varre “linhas datadas”, mas não apresenta a cegueira para NULL como defeito.
+- **Opus 3, custo:** o tema foi expressamente perguntado em `codex_e1_v15r2.q:11`, mas falta a resposta. Isso impede provar (a), “Codex não viu”. **(c)** cabe somente à medição de frota, expressamente ausente no laudo; não prova classificação do aspecto estático do custo.
+- **Opus 3, ponte de dois dias:** resposta sobre retratada causando `reatas=None` não comprova que Codex viu a causa distinta “ponte de dois dias”. Não transferir esse diagnóstico automaticamente para (b). A medição da frota é (c); a falha estática precisa de correspondência textual própria.
+- **Opus 3, origem inexistente/outro colaborador:** a resposta 15b viu a origem inconsistente e a recusa pelas portas. Entretanto, a triagem separa o ramo antigo (“coberto na porta ... fica”) da precisão do motivo (“PROCEDENTE -> volta 15c (B)”). Não tratar a aceitação da correção do motivo como descarte do achado distinto de admissão pelo fecho.
+- **(d)** exige prova de “nenhum viu”, além de ausência nas perguntas. Ausência de registro nos anexos demonstra apenas ausência de registro; não autoriza essa afirmação universal.
 
 ## 08/11 16:30 · sessao 0f267e96ba3e · - · - · origem=Ronald (tmux)
 
@@ -704,380 +795,4 @@ Censo literal de `data_evento`:
 - Dentro de porta permitida, V15 ignora `setattr`, atribuição anotada/aumentada e bulk por campo posicional: inspeciona somente `ast.Assign` e keywords diretos (`app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:74`–`:88`); P13 aceita a localização (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:117`). Contra-mutante concreto, validado somente em memória: substituir fio:843 por `setattr(p, 'data_evento', data_evento)` mantém `violacoes_do_escritor=[]`; nenhum arquivo foi alterado [nao verificado: registro persistido da execução].
 - Os cinco mutantes oficiais mordem nos analisadores AST (`app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:138`–`:154`); extraí e executei as funções puras via `python3 -B`, sem importar Django nem acessar banco. Resultado da execução sem artefato persistido: [nao verificado]. A limitação do mutante alternativo decorre diretamente de `:74`–`:88`.
 
-## 08/11 11:28 · sessao d5d52281b203 · - · - · origem=Ronald (tmux)
-
-**Item 6 — PROCEDENTE: os leitores continuam atribuindo significado de turno ao valor gravado, embora o reuso deixe o acervo com outra data.** A própria prova da volta espera `data_evento=D0` depois de costurar a linha no chamado de `DIA`; o reuso atualiza célula/destino, sem atualizar `data_evento`. `app/chamados/tests/test_e1_v15.py:90-99`; `app/chamados/models.py:2797-2813`; `app/chamados/models.py:2836`.
-
-| Campo/valor | Quem escreve nos caminhos examinados | Quem lê e para quê |
-|---|---|---|
-| `data_evento` | `_nascer`: `_dia_fato` obtido em `dia_do_turno_da_linha`, depois `create`; `reapontar_resolvedora`: data pergunta sem dia pelo mesmo wrapper; `rechavear_data_evento`: grava parâmetro `novo_dia`. `app/chamados/models.py:2749-2751`; `app/chamados/models.py:2840`; `app/chamados/services/fio.py:842-844`; `app/chamados/services/fio.py:962-968`. | Costura: wrapper/juiz; fecho: `_dia_do_fato`; identidade de busca: valor gravado; C6/tranca/plantio: valor gravado. `app/chamados/juizes.py:1993-1994`; `app/chamados/services/fio.py:1217-1243`; `app/chamados/services/fio.py:1196`; `app/chamados/juizes.py:332-336`; `app/chamados/services/materializacao.py:344-345`. |
-| `celula` | `_nascer` busca por `_dia_fato`, atribui ao existente ou cria com ela; rechaveamento busca célula de `novo_dia`. `app/chamados/models.py:2768`; `app/chamados/models.py:2797-2799`; `app/chamados/models.py:2841`; `app/chamados/services/fio.py:959-963`. | C6 lê veredito da célula; alimentação de falta exige que `celula.data == data_evento`, descartando a FK divergente; chamado deriva seu dia pela célula antes dos outros degraus. `app/chamados/juizes.py:1166-1168`; `app/chamados/juizes.py:1199-1214`; `app/chamados/juizes.py:634-642`; `app/chamados/juizes.py:98-99`. |
-| `batida_origem_id` | `_nascer` recebe campo explícito ou deriva pelo mesmo `batida_origem_do_nascimento` utilizado no `save` de inserção; deriva de `disputa.contexto.ultima_batida.id`, validando dono quando a derivação ocorre. `app/chamados/models.py:2745-2747`; `app/chamados/models.py:3270-3271`; `app/chamados/models.py:3282-3289`. | Wrapper decide se consulta juiz; `_dia_do_fato` carrega Batida e consulta `_T1`; busca/dedup usa episódio. `app/chamados/services/fio.py:1259-1262`; `app/chamados/services/fio.py:1232-1239`; `app/chamados/models.py:2781`; `app/chamados/models.py:2680`. |
-| `chamado_destino` | Nascimento cria com destino; reuso atribui após guardas; reapontamento atribui e salva com lavra. `app/chamados/models.py:2841`; `app/chamados/models.py:2800-2813`; `app/chamados/services/fio.py:859-874`. | Costura compara dia; `chamado_que_lista` escolhe destino antes do pai; plantio usa destino para marcos; guarda terminal julga C6 no pós estado. `app/chamados/juizes.py:1994-2029`; `app/chamados/services/fio.py:116-117`; `app/chamados/services/materializacao.py:339`; `app/chamados/services/materializacao.py:409`; `app/chamados/services/fio.py:778-783`. |
-
-Contraexemplo de leitura mantido pelo código: linha com episódio cujo juiz diz `DIA`, gravada em `D0`; `abrir(..., DIA)` elege a linha, associa célula de `DIA`, aceita costura pelo juiz e preserva `D0`. Então:
-
-- A costura compara `DIA`, enquanto `_dia_de_turno_da_pergunta` devolve `D0`. `app/chamados/models.py:2749-2751`; `app/chamados/models.py:2768`; `app/chamados/models.py:2802`; `app/chamados/juizes.py:1994`; `app/chamados/juizes.py:336`.
-- A tranca calcula competência por `D0`. `app/chamados/juizes.py:948-961`.
-- C6, quando alcança falta do dia, consulta `D0`; a célula de `DIA` não serve para alimentar essa consulta porque a igualdade falha. `app/chamados/juizes.py:1216-1222`; `app/chamados/juizes.py:638`.
-- Plantio tipo hora combina resposta com `D0`, depois faz ajuste overnight a partir de `D0`. Não consulta o novo wrapper nesse caminho. `app/chamados/services/materializacao.py:344-345`; `app/chamados/services/materializacao.py:414-421`.
-- A guarda de costura em chamado terminal decide competência entregue por `p.data_evento`, portanto também pelo gravado. `app/chamados/services/fio.py:776`.
-
-Isso demonstra discrepância sem exigir migração de leitores, cuja preservação está expressamente no escopo dado; comprovar que a migração já eliminou o estado em produção é **[nao verificado]**. `app/chamados/tests/test_e1_v15.py:98-99`.
-
-**Item 7 — classes verificadas.**
-
-- **Campo com dois significados: PROCEDENTE.** O código declara expressamente data gravada como chave e `_dia_do_fato` como identidade distinta; o reuso conserva divergência observável entre leitores acima. `app/chamados/services/fio.py:1220-1227`; `app/chamados/tests/test_e1_v15.py:98-99`.
-- **Segundo juiz geométrico duplicando `_T1`: não demonstrado.** O registro aponta `turnos_do_colab`; o wrapper chama `_dia_do_fato` → `dia_do_turno_da_batida` → `dia_das_batidas` → `turnos_do_colab`. Não há outro pareador nesse trajeto. `app/core/juizes.py:196`; `app/chamados/services/fio.py:1236-1238`; `app/ponto/turnos.py:2923-2926`; `app/ponto/turnos.py:2902-2903`.
-- **Derivação paralela de fonte: PROCEDENTE no fallback sem resposta, não na geometria.** O juiz documenta `None` como “sem resposta do juiz não há dia a gravar”, mas `dia_do_turno_da_linha` devolve pedido/gravado nessa situação. `app/ponto/turnos.py:2919-2920`; `app/chamados/services/fio.py:1258-1262`.
-- **Derivação duplicada de episódio: não demonstrada.** Porta e inserção chamam a mesma função. `app/chamados/models.py:2745`; `app/chamados/models.py:3271`.
-- **Relógio fora da borda: não demonstrado nas linhas alteradas.** O relógio identificado é a porta própria de conversa, que captura `localdate()`; conversa é explicitamente civil e excluída de confronto de turno. `app/chamados/models.py:2700-2707`; `app/chamados/juizes.py:1991-1992`. Auditoria transitiva integral de relógios: **[nao verificado]**.
-- **Ordem de trava nova incorreta: não demonstrada nas linhas alteradas.** `_nascer` toma Colaborador antes das novas consultas e da costura; reapontamento toma Colaborador por `fato_livre_para` ou diretamente antes da guarda que trava Chamado. `app/chamados/models.py:2720-2724`; `app/chamados/services/fio.py:852-861`; `app/chamados/services/fio.py:768`. Auditoria de todos os chamadores/transações externos: **[nao verificado]**.
-- Segundo escritor fora da porta e alcance/mordida do selo pertencem ao censo do outro explorer: **[nao verificado]**.
-
-## 08/11 11:23 · sessao c343206cd790 · FIO-E0-V4-E1 · censo · origem=Code
-
-**As classes propostas não cobrem três dos cinco achados:** o Codex viu, e a triagem confirmou sem curar. Chamá-los de **(b)** falsearia o registro, porque a triagem manteve 3a/3b como bloqueadores. — `triagem_e1_v14b.txt:3,5-6`
-
-Numeração abaixo: primeira linha após cada marcador `== anexo: ... ==` = linha 1, contando linhas vazias.
-
-1. **3a — segunda chamada idêntica → `FatoEmOutroDia`: sem classe aplicável entre (a–e).** Foi visto e mantido como bloqueador. — `codex_e1_v14b.r:39`; `triagem_e1_v14b.txt:5`
-
-   **Pergunta:** “o comportamento novo (FatoEmOutroDia ou reaproveitar a linha de outra data gravada e lhe dar a celula de data_evento) esta certo pela lei do aval?” — `codex_e1_v14b.q:8`
-
-   **Resposta:** “Portanto `abrir(D0, batida cujo juiz diz DIA)` pode criar em D0; uma chamada direta posterior igual pode recusar a própria linha pelo juiz.” — `codex_e1_v14b.r:39`
-
-   **Triagem:** “NAO curado: PERGUNTA DE DESENHO (duas curas, ver relato). Bloqueia pouso.” **Motivo escrito de descarte: nao ha trecho.** — `triagem_e1_v14b.txt:5` [nao verificado]
-
-2. **3b — `_resolvedora_valida` compara a data gravada: sem classe aplicável entre (a–e).** Foi visto e mantido como bloqueador. — `codex_e1_v14b.r:43`; `triagem_e1_v14b.txt:6`
-
-   **Pergunta:** “Todos os escritores e leitores supoem o MESMO significado (dia civil gravado x dia do turno x instante)?” — `codex_e1_v14b.q:6`
-
-   **Resposta:** “A segunda validação lê essa data antiga e lança `ResolvedoraCruzada`, pois a diferença supera um dia.” O mesmo parágrafo cita `app/chamados/models.py:2786` e `app/chamados/juizes.py:1988`. — `codex_e1_v14b.r:43`
-
-   **Triagem:** “PROCEDENTE, provado. NAO curado: mesma PERGUNTA DE DESENHO. Bloqueia pouso.” **Motivo escrito de descarte: nao ha trecho.** — `triagem_e1_v14b.txt:6` [nao verificado]
-
-3. **`data_evento` com dois significados: sem classe aplicável entre (a–e).** Foi visto e confirmado como causa raiz, sem cura naquela volta. — `codex_e1_v14b.r:15,91`; `triagem_e1_v14b.txt:3`
-
-   **Pergunta:** “campo com dois significados (data_evento: chave de busca x identidade -- esta declarado e respeitado em todo leitor?)” — `codex_e1_v14b.q:12`
-
-   **Resposta:** “**Campo com dois significados não reconciliados — procedente, gravidade alta:** a identidade nova usa o juiz, enquanto destino, C6 e plantio continuam usando a data gravada como dia do fato.” — `codex_e1_v14b.r:91`
-
-   **Triagem:** “PROCEDENTE como causa raiz de 3a/3b; vai junto da PERGUNTA DE DESENHO (nao curado nesta volta).” **Motivo escrito de descarte: nao ha trecho.** — `triagem_e1_v14b.txt:3`
-
-4. **Outro componente fica fora sem recusa: (c), fora do alcance da árvore perguntada.** A pergunta identifica `5e55c211`; a eleição de um único componente aparece na triagem como cura da volta 14b. O laudo posterior aponta o residual dessa cura. — `codex_e1_v14b.q:1`; `triagem_e1_v14b.txt:4`; `opus_final2_e1_6695e972.md:8`
-
-   **Pergunta relacionada:** “e o universo que a porta (universo_do_fato) elege e exatamente o universo_da_linha de seus membros?” — `codex_e1_v14b.q:7`
-
-   **Resposta sobre a implementação anterior:** “o fecho preserva todas as sementes, sem exigir conectividade entre elas.” — `codex_e1_v14b.r:29`
-
-   **Registro da mudança:** “CURADO na volta 14b: fio.py::universo_do_fato elege UM componente (o da canonica_do_grupo das sementes)”. — `triagem_e1_v14b.txt:4`
-
-   **Pergunta ou resposta sobre o residual específico da nova escolha — componente omitido sem recusa: nao ha trecho.** Esse residual consta do laudo posterior: “o outro nao entra em recusadas nem fecho_cruza_dias, nenhum contador o ve”. — `opus_final2_e1_6695e972.md:8`
-
-5. **Custo dos juízes: (b), visto e descartado como bloqueio, mantido em fila.** — `codex_e1_v14b.r:59,66,72`; `triagem_e1_v14b.txt:9`
-
-   **Pergunta:** “quantas chamadas ao juiz por abrir, por fecho, por fecho_cruza_dias? Memo por batida basta?” — `codex_e1_v14b.q:10`
-
-   **Resposta:** “Zero com busca vazia; caso contrário, B no universo/ponte/fecho compartilhado.” Também: “**Memo por batida não basta para compartilhar trabalho por turno/janela**”. — `codex_e1_v14b.r:66,72`
-
-   **Motivo escrito na triagem:** “descartado como bloqueio -- nenhum selo de teto vermelho na suite de 14300; fila (medir na frota).” A medição na frota permanece **[nao verificado]**. — `triagem_e1_v14b.txt:9` [nao verificado]
-
-## 08/11 11:04 · sessao b5a11839aaae · PERGUNTA-SEM-SELO · censo · origem=Code
-
-**A medida antiga precisa de correção:** S1 recebe hoje a contagem como parâmetro; S3 mantém consulta crua para idempotência, mas o julgamento já verifica a retratação no retorno. Permanecem consultas cruas em S2, S4, S5 e S6. (`app/ponto/supra_juiz.py:207`; `app/chamados/juizes.py:235`; `app/chamados/juizes.py:775`; `app/ponto/services/veredito_celula.py:215`; `app/chamados/services/materializacao.py:94`; `app/ponto/services/flip_auto.py:35`; `app/ponto/utils.py:244`.)
-
-**1. S1–S6 nesta cópia**
-
-| Sítio | Universo atual e consequência |
-|---|---|
-| **S1 — `classificar_dia`** | Não monta universo: recebe `batidas_no_dia` e usa essa contagem no fallback. O comando `supra_juiz` carrega cru, conta e entrega esse insumo; `emitir_furo_retroativo` faz o mesmo. O cartório usa células da grade e órfãs. (`app/ponto/supra_juiz.py:207`; `app/ponto/supra_juiz.py:513`; `app/ponto/management/commands/supra_juiz.py:113`; `app/ponto/management/commands/supra_juiz.py:222`; `app/ponto/management/commands/supra_juiz.py:229`; `app/ponto/management/commands/emitir_furo_retroativo.py:53`; `app/ponto/management/commands/emitir_furo_retroativo.py:100`; `app/ponto/services/cartorio.py:1373`; `app/ponto/services/cartorio.py:1419`.) |
-| **S2 — `veredito_celula`** | **Cru-JULGAMENTO.** `reais` entra em `grade_dia` e decide se o dia já está completo. `grade_dia` encaminha a lista recebida à grade. (`app/ponto/services/veredito_celula.py:215`; `app/ponto/services/veredito_celula.py:220`; `app/ponto/services/veredito_celula.py:223`; `app/ponto/services/simular_dia.py:5`.) |
-| **S3 — `_batida_existente_na_janela`** | **Consulta crua de idempotência.** O julgamento `_pergunta_materializada_de_fato` já exige `retratada_em is None` no retorno. A justificativa para preservar o cru no plantio está escrita: impedir replantio da batida retratada. A cura é local ao julgamento, não ao helper inteiro. (`app/chamados/juizes.py:227`; `app/chamados/juizes.py:235`; `app/chamados/juizes.py:768`; `app/chamados/juizes.py:774`; `app/chamados/juizes.py:775`.) |
-| **S4 — `_vizinha_mesmo_tipo`** | O código correspondente está em **`chamados/services/materializacao.py`**: duas consultas cruas decidem bloqueio de materialização por paridade. (`app/chamados/services/materializacao.py:85`; `app/chamados/services/materializacao.py:94`; `app/chamados/services/materializacao.py:100`; `app/chamados/services/materializacao.py:451`; `app/chamados/services/materializacao.py:850`.) |
-| **S5 — `pares_mesmo_tipo`** | **Cru-JULGAMENTO.** A consulta crua define adjacência e pares que alimentam a fila de flip. A consulta posterior a `batidas_do_dia_turno` não altera esse universo inicial. (`app/ponto/services/flip_auto.py:35`; `app/ponto/services/flip_auto.py:41`; `app/ponto/services/flip_auto.py:104`; `app/ponto/services/flip_auto.py:146`.) |
-| **S6 — `proxima_batida_de`** | **Cru-JULGAMENTO na função:** última marca crua determina o próximo tipo. A autoridade registrada para próximo tipo é `turnos.proximo_tipo_de`. Chamadores dinâmicos de `proxima_batida_de`: **[não verificado]**. (`app/ponto/utils.py:240`; `app/ponto/utils.py:244`; `app/ponto/utils.py:246`; `app/core/juizes.py:197`.) |
-
-Commit de cura: **[não verificado]**, pois esta cópia não oferece histórico Git consultável. A prova atual de cura do julgamento de S3 é `app/chamados/juizes.py:775`.
-
-Há outro uso de S3 que merece separação: a apresentação declara `ja_satisfeita` verificando somente `aprovada`; o plantio reutiliza qualquer existente. Isso não equivale à verificação explícita de retratação feita pelo juiz. (`app/chamados/services/materializacao.py:446`; `app/chamados/services/materializacao.py:447`; `app/chamados/services/materializacao.py:834`; `app/chamados/services/materializacao.py:840`; `app/chamados/juizes.py:775`.)
-
-**2. Censo AST**
-
-Unidade do inventário: uma raiz de consulta persistente ou uma chamada à porta; encadeamentos contam uma vez. São **154 raízes de consulta + 47 chamadas à porta = 201 sítios**, discriminados abaixo. A implementação da própria porta entra em **(a)**. Os três acessos por manager relacionado estão em `app/chamados/juizes.py:720`, `app/chamados/services/vigia_carimbo.py:113` e `app/ponto/management/commands/reconciliar_grade.py:118`.
-
-| Classe | Total do inventário abaixo |
-|---|---:|
-| **a — porta**, incluindo sua implementação | **48** |
-| **b — `retratada_em` explícito**, inclusive verificação em memória | **51** |
-| **c — cru-exibição** de marcação, histórico ou indicadores da marcação | **22** |
-| **d — cru-JULGAMENTO** | **28** |
-| **e — cru-lookup**, identidade ou idempotência de escrita | **27** |
-| **f — indeterminado na taxonomia**, com motivo indicado | **25** |
-| **Total** | **201** |
-
-Ocorrências executáveis de `.raw()` ou SQL direto de `ponto_batida` nesse recorte: **nenhuma encontrada pela varredura**; SQL construído dinamicamente e acessos externos à cópia: **[não verificado]**.
-
-**(a) Porta — 48 sítios**
-
-```text
-app/api/views.py:2026 api_justificativas
-app/chamados/juizes.py:1462 via_pelo_fato
-app/chamados/services/validacao.py:828 classe_do_lote
-app/colaboradores/services/detalhe.py:49 contexto_detalhe
-app/core/services/painel_op.py:83 montar_painel_operacional
-app/core/services/painel_op.py:269 montar_painel_operacional
-app/core/views.py:114 _batidas_hoje
-app/escala/detector_proposta.py:56 medir_padrao
-app/escala/regua_defesa.py:153 diagnostico_regua
-app/escala/regua_defesa.py:520 entradas_fora_do_inicio
-app/escala/services/fase_na_tela.py:47 _trabalhados
-app/escala/services/previsto_cego.py:159 medir
-app/escala/services/semana_do_posto.py:117 _bateram
-app/escala/utils.py:1505 montar_grade_prevista_periodo_por_turno
-app/folha/export.py:499 dias_ferias_com_batida
-app/folha/export.py:906 classificar_export
-app/folha/previa.py:58 montar_previa
-app/pautas/services.py:420 contexto_do_dia_texto
-app/ponto/management/commands/aplicar_09_corte_b.py:126 _tem_saida_real_em_turno_aberto
-app/ponto/management/commands/censo_col900.py:128 handle
-app/ponto/management/commands/diff_espelho_alimentacao.py:92 handle
-app/ponto/management/commands/e6_oraculo.py:152 __init__
-app/ponto/management/commands/e6_oraculo.py:212 batida_fora_de_turno
-app/ponto/management/commands/mapa_divergencia.py:96 handle
-app/ponto/management/commands/reconciliar_fantasmas.py:96 _completude
-app/ponto/management/commands/tripwire_celulas.py:283 medir_sobra_com_tipo_trocado
-app/ponto/management/commands/vigiar_motor_autoridade.py:54 handle
-app/ponto/services/abriu_nao_bateu.py:174 _bateu_no_dia
-app/ponto/services/cartorio.py:1123 _julgar_colab_corpo
-app/ponto/services/cobertura.py:299 declarar_cobertura_passada
-app/ponto/services/deslogados.py:172 apurar
-app/ponto/services/dia_do_colab.py:60 dia_do_colab
-app/ponto/services/diagnostico_escala.py:142 diagnostico_escala
-app/ponto/services/dias_em_aberto.py:122 passivo_da_competencia
-app/ponto/services/esmeril_espelho.py:156 assinaturas_do_colab
-app/ponto/services/espelho.py:1022 autoridade_do_periodo
-app/ponto/services/faltas_de_hoje.py:57 faltas_de_hoje_sem_cobranca
-app/ponto/services/fechamento.py:633 recalcular_fechamento_mes
-app/ponto/services/fechamento.py:811 recalcular_fechamento_mes
-app/ponto/services/triagem_batida.py:175 triagem_bater_ponto
-app/ponto/services/vigia_de_hora.py:76 _acesas_de_sobra
-app/ponto/turnos.py:2864 batidas_apuraveis — implementação
-app/ponto/turnos.py:2962 _ultima_de
-app/ponto/turnos.py:2982 turnos
-app/ponto/utils_turno_orfao.py:28 detectar_bloqueio_turno_orfao
-app/relatorios/management/commands/diff_extrato_parcial.py:37 _antes
-app/relatorios/pdf_espelho.py:272 _coletar_dados_espelho
-app/relatorios/views.py:502 extrato_parcial
-```
-
-**(b) Retratação explícita — 51 sítios**
-
-```text
-app/api/views.py:703 api_bater_ponto
-app/api/views_core.py:700 api_bater_ponto
-app/chamados/juizes.py:720 _pergunta_materializada_de_fato
-app/chamados/management/commands/carimbar_por_batida_coincidente.py:70 handle
-app/chamados/reconciliador.py:206 _par_integro — rejeição em memória na linha 216
-app/chamados/services/adesao.py:60 sincronizar_adesao
-app/chamados/services/adesao.py:144 sincronizar_adesao
-app/chamados/services/desvio_escala.py:60 medir_desvio
-app/chamados/services/fila_por_causa.py:190 particionar
-app/chamados/services/limbo_folgas.py:35 sugerir_folga
-app/chamados/services/limbo_folgas.py:155 semana_muda
-app/chamados/services/materializacao.py:616 perguntas_absorvidas_por
-app/chamados/services/vigia_carimbo.py:113 classificar
-app/chamados/veredito_lavrado.py:140 marcos_do_lote
-app/colaboradores/management/commands/corrigir_escala_retroativa.py:94 _rodar
-app/colaboradores/services/calendario.py:239 contexto_calendario
-app/colaboradores/services/ficha.py:145 ficha_do_colab
-app/colaboradores/services/pos_vinculo.py:38 fechar_adesao_com_batida
-app/colaboradores/services/senha_provisoria.py:24 senhas_provisorias
-app/core/services/painel_op.py:92 montar_painel_operacional
-app/core/views.py:173 dashboard
-app/core/views.py:371 dashboard_supervisor
-app/core/views.py:775 painel_tv
-app/core/views.py:1177 dashboard_dados
-app/escala/services/meio_periodo.py:158 observado_meio_periodo
-app/escala/services/propositor.py:477 propostas
-app/ferias/situacao.py:277 situacao_de_ferias
-app/ponto/management/commands/diff_calculador.py:270 handle
-app/ponto/management/commands/diff_janela_he.py:93 handle
-app/ponto/management/commands/e6_piso_autopsia.py:71 handle
-app/ponto/management/commands/marcar_foto_ausente_retro.py:66 handle
-app/ponto/registro_batida.py:107 registrar_batida
-app/ponto/registro_batida.py:139 registrar_batida
-app/ponto/services/adesao.py:34 primeira_batida
-app/ponto/services/adesao.py:58 ids_com_adesao
-app/ponto/services/cartorio.py:1154 _julgar_colab_corpo
-app/ponto/services/deslogados.py:161 apurar
-app/ponto/services/deslogados.py:174 apurar
-app/ponto/services/faltas_de_hoje.py:55 faltas_de_hoje_sem_cobranca
-app/ponto/services/flip_auto.py:226 etiquetas_pela_celula — exclusão em memória na linha 229
-app/ponto/services/lastro.py:261 julgar
-app/ponto/services/passivo_s84.py:53 vivas
-app/ponto/services/piso_intervalo.py:39 pares_abaixo_do_piso
-app/ponto/turnos.py:1599 papel_por_minuto_da_ata
-app/ponto/turnos.py:1861 turnos_do_colab
-app/ponto/turnos.py:1899 _ultima_bat
-app/ponto/turnos.py:2217 _turno_aberto_calc
-app/ponto/turnos.py:2350 turnos_abertos_de
-app/ponto/turnos.py:2382 sequencia_relogio_x_jornada
-app/ponto/turnos.py:2466 proximo_tipo_de
-app/ponto/turnos.py:2903 dia_das_batidas
-```
-
-**Duas ressalvas sobre (b):** calendário seleciona explicitamente as **retratadas para exibição**; `marcos_do_lote` seleciona o instante de retratação para invalidar lavra. Portanto, “tem `retratada_em` explícito” não significa automaticamente “consulta de apuráveis”. (`app/colaboradores/services/calendario.py:239`; `app/colaboradores/services/calendario.py:619`; `app/chamados/veredito_lavrado.py:140`.)
-
-**(c) Cru-exibição — 22 sítios**
-
-```text
-app/api/views.py:297 api_me
-app/api/views_core.py:286 api_me
-app/chamados/services/acoes_chamado.py:377 montar_contexto_detalhe
-app/chamados/views.py:692 fio_colaborador
-app/colaboradores/painel_cell.py:33 montar_linha_colab
-app/colaboradores/services/detalhe.py:20 contexto_detalhe
-app/colaboradores/services/drawer.py:34 contexto_drawer
-app/colaboradores/services/situacional.py:137 montar_situacional
-app/colaboradores/views.py:53 vincular_colaboradores — indicador de marcação com GPS
-app/colaboradores/views.py:337 vincular_posto — indicador tem_geo
-app/colaboradores/views.py:356 vincular_posto — indicador tem_geo
-app/colaboradores/views.py:395 _render_row — indicador tem_geo
-app/colaboradores/views.py:928 painel_colaborador — total de registros
-app/colaboradores/views.py:931 painel_colaborador — registros do mês
-app/core/cell.py:10 cell_ultimas_batidas
-app/core/views.py:194 dashboard — últimas marcações
-app/core/views.py:219 dashboard — total de registros
-app/core/views.py:991 batida_detalhe_json — histórico
-app/core/views.py:1163 dashboard_dados — feed de marcações
-app/ponto/views.py:191 espelho_ponto — últimas seis
-app/ponto/views.py:441 batidas_offline_pendentes — fila de marcações
-app/relatorios/services.py:230 gerar_pdf_espelho_lote_bytes — informação de movimento
-```
-
-O drawer calcula presença usando turnos, separadamente da lista crua exibida; o situacional também separa a última marca exibida do julgamento de uso/adesão. (`app/colaboradores/services/drawer.py:34`; `app/colaboradores/services/drawer.py:45`; `app/colaboradores/services/drawer.py:58`; `app/colaboradores/services/situacional.py:146`; `app/colaboradores/services/situacional.py:150`.)
-
-**(d) Cru-JULGAMENTO — 28 sítios**
-
-| Arquivo:linha | Função | O que o resultado decide |
-|---|---|---|
-| `app/chamados/management/commands/auditar_disputas.py:103` | `handle` | Qualificação de tipo invertido no relatório. |
-| `app/chamados/services/explicador.py:40` | `_explicar_validada` | Existência/tipo da prova de materialização. |
-| `app/chamados/services/explicador.py:53` | `_explicar_validada` | Diagnóstico e encaminhamento para cadastro. |
-| `app/chamados/services/explicador.py:132` | `por_que_nao_fecha` | Alimentação desses diagnósticos em lote. |
-| `app/chamados/services/materializacao.py:94` | `_vizinha_mesmo_tipo` | Vizinha anterior que barra plantio. |
-| `app/chamados/services/materializacao.py:100` | `_vizinha_mesmo_tipo` | Vizinha posterior que barra plantio. |
-| `app/core/views.py:360` | `dashboard_supervisor` | Entrada usada para excluir alguém dos ausentes. |
-| `app/core/views.py:793` | `painel_tv` | Atividade que entra na classificação de cobertura. |
-| `app/escala/services/furos_diarios.py:261` | `universo_empresa` | Nunca bateu/sumiu e última atividade. |
-| `app/escala/services/furos_diarios.py:267` | `universo_empresa` | Escala versus realidade no período. |
-| `app/ponto/management/commands/detectar_par_relampago.py:205` | `_alvo_retratavel` | Guardas e escolha da retratação. |
-| `app/ponto/management/commands/detectar_par_relampago.py:290` | `varrer_pares_embutidos` | Adjacência e pares candidatos. |
-| `app/ponto/management/commands/emitir_furo_retroativo.py:53` | `handle` | Universo contado para classificar dia. |
-| `app/ponto/management/commands/emitir_furo_retroativo.py:74` | `handle` | Piso de adesão usado no julgamento. |
-| `app/ponto/management/commands/reconciliar_grade.py:84` | `handle` | Seleção do universo de colaboradores. |
-| `app/ponto/management/commands/reconciliar_grade.py:88` | `handle` | Piso de adesão que suprime dias. |
-| `app/ponto/management/commands/reconciliar_grade.py:118` | `handle` | `c.batidas.all()` alimenta grade/missing. |
-| `app/ponto/management/commands/supra_juiz.py:113` | `handle` | Universo contado para classificar dia. |
-| `app/ponto/management/commands/supra_juiz.py:132` | `handle` | Adesão entregue ao classificador. |
-| `app/ponto/propositor.py:346` | `dia_posicional_completo` | Completude posicional do dia. |
-| `app/ponto/services/flip_auto.py:35` | `pares_mesmo_tipo` | Pares que alimentam fila de flip. |
-| `app/ponto/services/flip_auto.py:291` | `avaliar_fila` | Dia perfeito antes/depois do flip. |
-| `app/ponto/services/geofence.py:51` | `vinculo_contagem` | Evidência que julga divergência de vínculo. |
-| `app/ponto/services/veredito_celula.py:215` | `veredito_celula` | Completude, flips e materialização. |
-| `app/ponto/services/vinculo_na_lista.py:49` | `achar` | Classificação de evidência de vínculo/posto. |
-| `app/ponto/utils.py:186` | `colabs_disponiveis_para_cobertura` | Exclusão de candidatos por suposto turno aberto. |
-| `app/ponto/utils.py:244` | `proxima_batida_de` | Próximo tipo de batida. |
-| `app/ponto/views.py:1598` | `_abrir_justificativa_fluxo` | Entrada vinculada à justificativa. |
-
-Em `avaliar_fila`, excluir retratadas somente da lista de flips **não protege o julgamento**: `reais` continua inteira em `grade_dia`. (`app/ponto/services/flip_auto.py:291`; `app/ponto/services/flip_auto.py:298`; `app/ponto/services/flip_auto.py:303`.)
-
-Os detectores de par filtram `aprovada=True`, mas isso não é o filtro legal de retratação: o modelo define `aprovada` como crivo do DP. Efeito concreto disso nos registros de produção: **[não verificado]**. (`app/ponto/management/commands/detectar_par_relampago.py:205`; `app/ponto/management/commands/detectar_par_relampago.py:290`; `app/ponto/models.py:66`.)
-
-**(e) Cru-lookup/identidade/idempotência — 27 sítios**
-
-```text
-app/api/views.py:559 api_bater_ponto — idempotência
-app/api/views.py:856 api_upload_foto — pk
-app/api/views_core.py:551 api_bater_ponto — idempotência
-app/api/views_core.py:846 api_upload_foto — pk
-app/chamados/detector_anomalias.py:43 detectar_anomalias — pk
-app/chamados/juizes.py:49 _dia_da_batida — pk
-app/chamados/juizes.py:194 dias_do_fato — pk__in
-app/chamados/juizes.py:235 _batida_existente_na_janela — idempotência compartilhada
-app/chamados/services/acoes_chamado.py:262 acao_recusar_geofence — pk
-app/chamados/services/passivo_validado.py:513 _plantar_o_dia — marcador de pk anterior à escrita
-app/chamados/services/passivo_validado.py:527 _plantar_o_dia — identificação do que a escrita criou
-app/chamados/services/regularizacao_ext.py:73 _cria_batida — chave colaborador/instante
-app/chamados/views_regularizacao.py:109 regularizacao_add_item — pk
-app/core/views.py:978 batida_detalhe_json — pk
-app/ponto/management/commands/diff_passivo_s84.py:79 _mutacao — pk
-app/ponto/management/commands/flip_automatico.py:44 handle — pk__in
-app/ponto/management/commands/passivo_disputa_retro.py:158 handle — pk
-app/ponto/registro_batida.py:120 registrar_batida — chave colaborador/instante
-app/ponto/services/flip_auto.py:135 fila_flip_recusas — pk
-app/ponto/services/flip_auto.py:272 avaliar_fila — pk
-app/ponto/services/geofence.py:406 reavaliar_chamados_geofence — pk__in
-app/ponto/services/regularizacao.py:52 regularizar_turno_orfao — pk
-app/ponto/services/triagem_batida.py:257 ramo_regularizar_saida — pk
-app/ponto/services/triagem_batida.py:670 ramo_registrar_es — idempotência
-app/ponto/services/triagem_batida.py:722 ramo_registrar_es — identificação da oposta na resposta
-app/ponto/views.py:456 batidas_offline_pendentes — pk
-app/ponto/views.py:2899 salvar_foto_batida — id
-```
-
-O cru por chave exata em `registrar_batida` é deliberado: reenviar a mesma chave deve recuperar inclusive a marca retratada, evitando colisão com a constraint. (`app/ponto/registro_batida.py:116`; `app/ponto/registro_batida.py:120`.)
-
-**(f) Indeterminado na taxonomia — 25 sítios, com motivo**
-
-Aqui “indeterminado” significa que a leitura não cabe integralmente em exibição de marcação, julgamento, porta ou lookup de escrita; o uso observado está declarado em cada linha.
-
-| Arquivo:linha | Função | Motivo |
-|---|---|---|
-| `app/api/hora_do_aparelho.py:173` | `descartadas` | Auditoria da diferença entre relógio do aparelho e timestamp gravado. |
-| `app/chamados/veredito_lavrado.py:137` | `marcos_do_lote` | Carimbo de criação para invalidar lavra; não conta trabalho. |
-| `app/core/media_protegida.py:31` | `servir_media_protegida` | Autorização de acesso à foto. |
-| `app/core/views_config.py:528` | `saude_sistema` | Contagem física de saúde do sistema. |
-| `app/escala/management/commands/hub_smoke.py:98` | `win_map` | Foto antes/depois para detectar mutação durante smoke. |
-| `app/ponto/management/commands/censo_col900.py:133` | `handle` | Diagnóstico de existência crua quando a porta não encontrou marca. |
-| `app/ponto/management/commands/checklist_golive.py:100` | `handle` | Contagem física global. |
-| `app/ponto/management/commands/checklist_golive.py:101` | `handle` | Contagem para alerta sobre dados de teste. |
-| `app/ponto/management/commands/gerar_batidas_smoke_motor.py:61` | `_limpar` | Seleção para limpeza de ensaio. |
-| `app/ponto/management/commands/mapa_divergencia.py:62` | `handle` | Seleção ampla de candidatos; comparação carrega pela porta. |
-| `app/ponto/management/commands/processar_alertas_turno.py:59` | `handle` | Seleção para disparar `recompute_turnos`; não entreg
-
-[truncado em 20000 de 32584 caracteres]
-
-## 08/11 11:04 · sessao 92c5caf6b911 · COBPARC-AUSENCIA-CALA-DOIS-JUIZES · sonda · origem=Code
-
-1. Contagens por classe, competência e empresa:
-
-| Classe | Competência | Empresa | Contagem | Entregue K6 | Trancada K4 | Referência |
-|---|---|---:|---:|---|---|---|
-| carimbo_sem_periodo | 10/2026 | 2 | 14 | False | False | [nao verificado] |
-| carimbo_sem_periodo | 11/2026 | 2 | 4 | False | False | [nao verificado] |
-| carimbo_sem_periodo | 10/2026 | 4 | 2 | False | False | [nao verificado] |
-| carimbo_sem_periodo | 11/2026 | 4 | 1 | False | False | [nao verificado] |
-| sem_carimbo | 08/2026 | 2 | 18 | True | True | [nao verificado] |
-| sem_carimbo | 09/2026 | 2 | 27 | True | False | [nao verificado] |
-| sem_carimbo | 08/2026 | 3 | 1 | False | True | [nao verificado] |
-| sem_carimbo | 09/2026 | 3 | 5 | True | False | [nao verificado] |
-| sem_carimbo | 08/2026 | 4 | 5 | False | True | [nao verificado] |
-| sem_carimbo | 09/2026 | 4 | 5 | True | False | [nao verificado] |
-| sem_celula | 07/2026 | 2 | 1 | False | False | [nao verificado] |
-
-2. Colab-dias por classe, considerando “aberta” como `entregue=False` em K6. [nao verificado]
-
-| Classe | Entregue/exportada | Aberta | Total | Referência |
-|---|---:|---:|---:|---|
-| carimbo_sem_periodo | 0 | 21 | 21 | [nao verificado] |
-| sem_carimbo | 55 | 6 | 61 | [nao verificado] |
-| sem_celula | 0 | 1 | 1 | [nao verificado] |
-| **Total** | **55** | **28** | **83** | [nao verificado] |
-
-3. Nenhuma linha indicando erro ou traceback no trecho fornecido. [nao verificado]
-
-As referências estão marcadas assim porque o dado foi fornecido no texto, sem arquivo:linha. [nao verificado]
-
-_2881 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2885 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
