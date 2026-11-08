@@ -1,7 +1,65 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 12:12** · publicado em **08/11/2026 12:12** (UTC-3)
+> Ultima resposta processada: **08/11/2026 15:11** · publicado em **08/11/2026 15:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 08/11 15:11 · sessao 90837d85b73f · - · - · origem=Ronald (tmux)
+
+Caminhos conferidos, todos relativos a `app/`.
+
+1. **Sinal do chamado que pode iniciar emissão**
+
+`ChamadoColaborador.save()` → receiver `chamados/signals.py:188` → `cartorio.julgar_celula` em `chamados/signals.py:203` → `julgar_colab` em `ponto/services/cartorio.py:1989` → laço das células em `ponto/services/cartorio.py:995` → `perguntar_pela_celula` em `ponto/services/cartorio.py:997` → `perguntar` em `chamados/services/fabrica_da_celula.py:186` → `criar_ou_atualizar_disputa` em `chamados/services/fabrica_da_celula.py:149` → geração em `chamados/services/disputa_emissao.py:670` ou `:682` → `PerguntaDisputa.abrir` em `chamados/services/disputa_emissao.py:444`.
+
+A captura é o `engolir` que envolve **todo julgamento** em `chamados/signals.py:195`: `except Exception as exc` em `core/observ.py:90`. Esse contexto não abre `atomic`; registra o engolido em `core/observ.py:91`. O registro incrementa contador total e por operação, em memória do processo, e escreve log ERROR com causa/traceback: `core/observ.py:75`, `:77`, `:79`.
+
+O `atomic` da abertura está em `chamados/models.py:2770`; a recusa levantada em `chamados/models.py:2867` sai dele antes da captura do sinal. Interrompe o restante da geração/julgamento atual — laços em `chamados/services/disputa_emissao.py:312`, `chamados/services/fabrica_da_celula.py:145` e `ponto/services/cartorio.py:995` — e retorna ao escritor que disparou o sinal. O sinal não propaga essa recusa para desfazer a transação externa; o `save` original pode terminar e seu chamador continuar, pois o `except` está em `core/observ.py:90`. Não há rollback global do julgamento no receiver: `chamados/signals.py:194`.
+
+2. **Reconciliador: a recusa pode nascer na emissão indireta, mas é capturada no sinal anterior**
+
+Entrada por batida: `ponto/signals.py:207` → `reconciliar_chamados_colab` em `ponto/signals.py:215`. Entrada por filho que morre: `chamados/signals.py:337` → callback em `chamados/signals.py:350` → `reconciliar_chamados_colab` em `chamados/signals.py:355`, registrado por `on_commit` em `chamados/signals.py:356`.
+
+O reconciliador passa por perguntas absolvidas (`chamados/reconciliador.py:1428`), órfãs (`:1429`) e premissas mortas (`:1437`).
+
+* Órfã: laço `chamados/reconciliador.py:1520` → `reatar_pergunta_orfa` em `:1522` → reemissão em `:1617` → `ChamadoColaborador.abrir` em `:910` → sinal `chamados/signals.py:188` → cadeia do item 1.
+* Premissa morta: laço `chamados/reconciliador.py:1452` → `_retratar` em `:1460` → `atomic` em `:522` → `ch.reconciliar` em `:523` → `_gravar_estado`, cujo `atomic` está em `chamados/models.py:280` e `save` em `:296` → mesmo sinal e cadeia do item 1.
+
+**Os `except Exception` externos do reconciliador em `chamados/reconciliador.py:1524` e `:1462` não recebem `ReusoSemRechave` por essas cadeias: ela já foi engolida pelo sinal em `core/observ.py:90`.** Assim, por essa recusa, continuam o laço de outras órfãs (`chamados/reconciliador.py:1520`) e o de outros chamados (`:1452`); os `atomic` externos `_retratar`/estado não são desfeitos por ela (`chamados/reconciliador.py:522`; `chamados/models.py:280`).
+
+Na geração há outro `except Exception`, em `chamados/services/disputa_emissao.py:466`, que protege apenas o **reatamento posterior ao nascimento** (`atomic` em `:463`, chamada em `:464`). Ele não envolve o `abrir` em `:444`; portanto, não captura a recusa levantada nessa abertura. O laço só adicionaria o resultado depois, em `:470`.
+
+O command atual `reconciliar_chamados` é vigia: importa consultas em `chamados/management/commands/reconciliar_chamados.py:49`, percorre consultas em `:71`/`:91`/`:97` e imprime contagens em `:102`; não chama o escritor `reconciliar_chamados_colab` nem `PerguntaDisputa.abrir` nesses caminhos.
+
+3. **Outros sinais do cartório**
+
+`ponto/signals.py:132`/`:139` (save/delete Batida), `:144`/`:151` (save/delete Ausencia), `:162` (save Justificativa) → `_julgar_dias`, em `ponto/signals.py:85` → laço de dias em `:92` → `cartorio.julgar_celula` em `:93` → cadeia do item 1.
+
+Aqui `engolir` envolve **todo laço de dias** (`ponto/signals.py:88`): a primeira recusa encerra os demais dias desse receiver; é capturada como `Exception` em `core/observ.py:90`, com log/contador em `:75`/`:79`. A escrita original não é desfeita por propagação dessa recusa. Os outros receivers seguem; por exemplo, o reconciliador da batida é outro receiver em `ponto/signals.py:207`.
+
+4. **Bordas humanas: censo dos dois outros callsites diretos**
+
+* URL `chamados/urls.py:42` → view `chamados/views.py:1041` → `declarar_hora_colab` em `chamados/views.py:1090` → `atomic` em `chamados/services/declaracao_texto.py:324` → `PerguntaDisputa.abrir` em `:348`.
+* URL `chamados/urls.py:14` → view `chamados/views.py:359`, ação em `:478` → `aplicar_declaracao` em `:480` → `atomic` em `chamados/services/declaracao_texto.py:626` → `PerguntaDisputa.abrir` em `:636`.
+
+Não há `except` envolvendo essas chamadas nos corpos apresentados; uma exceção levantada atravessa e desfaz esses `atomic`. O trabalho posterior não executa: resposta em `chamados/services/declaracao_texto.py:657`/`:663`, validação em `:666`, ou push/auditoria da declaração em `chamados/views.py:1094`/`:1098`.
+
+**Ressalva de alcançabilidade:** esses dois callsites humanos escolhem exclusivamente os quatro motivos MARCO (`chamados/services/declaracao_texto.py:42`, `:322`, `:601`), e não fornecem `batida_origem` (`:348`, `:636`); a derivação de episódio retorna `None` para MARCO (`chamados/models.py:3364`). O código procura MARCO pelo dia (`chamados/models.py:2686`, `:2713`), e seu dia do fato vem da própria data gravada (`chamados/services/fio.py:1334`). Portanto, são callsites de `abrir`, mas ocorrência neles do cenário **BATIDA D0/DIA** descrito pelo usuário não foi demonstrada: [não verificado].
+
+5. **Capturas dos demais receivers de chamados**
+
+Os `except Exception` em `chamados/signals.py:46`, `:116`, `:141` e `:164` protegem respectivamente fechamento do pai (`:42`), resolução (`:115`), retomada de regularizações (`:137`) e materialização (`:163`). Não são capturas diretas de `PerguntaDisputa.abrir`; eventual emissão pelo save de chamado/batida volta aos sinais do cartório já descritos. Seus próprios logs estão em `chamados/signals.py:47`, `:117`, `:142`, `:165`.
+
+A ocorrência real de qualquer desses caminhos em produção e o conteúdo efetivo de seus logs/contadores não estão no anexo fornecido: [não verificado].
+
+## 08/11 15:10 · sessao 50d338b99a3b · - · - · origem=Ronald (tmux)
+
+Censo estático concluído sem banco, logs ou alteração de arquivos.
+
+- A única atribuição encontrada em produção é `chamados/services/fio.py:800`, dentro de `gravar_dia_do_fato`; os caminhos rastreados são nascimento (`chamados/models.py:2922`), costura de linha sem dia (`chamados/services/fio.py:863`) e rechaveamento (`chamados/services/fio.py:989`).
+- O reuso passa por esse rechaveamento (`chamados/models.py:2864`, `chamados/services/fio.py:1026`); migração e reversão também (`chamados/management/commands/migrar_data_evento_dia_do_turno.py:384`, `chamados/management/commands/migrar_data_evento_dia_do_turno.py:457`).
+- A conversa nasce pelo mesmo escritor, recebendo o dia civil (`chamados/models.py:2757`, `chamados/models.py:2922`).
+- A catraca exclui testes e migrações e declara limitações para formas dinâmicas; portanto não equivale a uma garantia contra qualquer escrita arbitrária (`chamados/tests/test_selo_p13_data_evento_porta_unica.py:147`, `chamados/tests/test_e1_v15d_um_ponto_de_escrita.py:15`).
+- O censo completo de leitores, comandos, templates e migrações foi enviado ao agente principal. Fora de `app/`, há leitura do payload em `mensageria/nucleo/ferramentas.py:127`; escrita dinâmica por nome indireto permanece [não verificado].
 
 ## 08/11 12:12 · sessao b0a85d04359f · FIO-E0-V4-E1 · verificador · origem=Code
 
@@ -1112,51 +1170,4 @@ A memória tem fundamento concreto: o varredor de atomicidade documenta grep con
 
 **Allowlist/classificação.** O anexo I-2 isenta gestão/instrumento/UI, mas autoridade executável que decide essa classe, tratamento de aval misto e caminho único obrigatório de despacho permanecem **[não verificado]**. Não há evidência para chamar essas seis palavras de marcador formal existente **[não verificado]**.
 
-## 08/11 10:49 · sessao fa5c2257202c · - · - · origem=Ronald (tmux)
-
-I-3 — pontos comprovados na cópia:
-
-- O verificador recebe **id da obra, diff e log do RED**; lê `CLAUDE.md`/`LEIS.md`, verifica nove itens e responde com primeira linha `APROVADO` ou `REPROVADO`. O arquivo não determina leitura de brief nem do RELATO do pouso. `.claude/agents/verificador.md:3`, `.claude/agents/verificador.md:8`, `.claude/agents/verificador.md:18`.
-- O B3 lê os **transcripts dos verificadores**: identifica obra/leitura final no primeiro prompt e extrai o veredito da primeira linha de `SubagentHandback`; filtra `agentType=verificador`. Não extrai etapas ou resultados dessas respostas. `bin/disjuntor.py:546`, `bin/disjuntor.py:551`, `bin/disjuntor.py:561`, `bin/disjuntor.py:736`.
-- O B3 lê o **RELATO**, mas o uso atual é fotografar duas linhas úteis do topo e reconhecer `DESENHO`/`ERRO-BOBO` para liberar a obra. Não é leitura do marco do pouso para conferir execução integral. `bin/disjuntor.py:626`, `bin/disjuntor.py:662`, `bin/disjuntor.py:686`, `bin/disjuntor.py:930`.
-- O disparo atual conta reprovações do opus final e voltas Codex triadas procedentes; limiares são 1 e 3, respectivamente. `bin/disjuntor.py:76`, `bin/disjuntor.py:77`, `bin/disjuntor.py:896`, `bin/disjuntor.py:910`.
-- O opus final ocorre **antes do pouso**, depois da suite verde; a linha de medida é exigida no RELATO **do pouso**. Portanto o I-3 deixa sem endereço/instante definido o relato que o opus precisaria conferir antes de autorizar esse pouso. `CLAUDE.md:374`, `CLAUDE.md:379`; definição desse endereço/instante no anexo: [não verificado]. [nao verificado]
-- Contador existente de “etapa K citada com resultado”, frase `pela metade, faltam N`, parser `RESULTADO OBSERVAVEL` ou selo `test_etapas_no_brief.sh`: [não verificado]. O anexo não fixa vínculo entre obra/versão do brief e marco do RELATO, nem critério para distinguir resultado medido de resultado esperado, citado ou antigo. [não verificado]
-- O checador de prova já existente só procura `PROVA:` nas seis linhas próximas de certos atos em título/negrito; sua implementação não compara comando, número, etapas ou medição. `bin/relato_afirma_com_prova.py:30`, `bin/relato_afirma_com_prova.py:36`, `bin/relato_afirma_com_prova.py:47`.
-- Furo de rebrief: o ramo atual de abertura recebe `prompt` do `Agent` e faz B3/B4; não lê nem fotografa brief. Nenhum vínculo imutável abertura→brief→etapas fica estabelecido nesse ramo. `bin/disjuntor.py:1451`, `bin/disjuntor.py:1454`, `bin/disjuntor.py:1460`. Existência de outra proteção específica: [não verificado].
-- Furo de identificação: B3 só captura como final prompts que correspondam ao reconhecedor `_eh_final` e verificadores com o tipo esperado; a existência de outros agentes/verificadores efetivamente lançados fora disso não pode ser inferida. `bin/disjuntor.py:499`, `bin/disjuntor.py:555`, `bin/disjuntor.py:742`; uso real fora desses filtros: [não verificado].
-
-MEDIDA — gerador e moldes existentes:
-
-- `ESTADO.md` é produzido por `gerar(raiz,dst)` e gravado em `dst`; `relato.sh` chama o gerador para `$TMP/ESTADO.md` e publica esse arquivo como `ESTADO.md`. `bin/gerar_estado.py:178`, `bin/gerar_estado.py:390`, `bin/relato.sh:38`, `bin/relato.sh:105`.
-- O gerador **consome** medidores: importa `disjuntor.ler/linha` dentro de `try`; não reimplementa a contagem. `bin/gerar_estado.py:277`.
-- Molde mais direto: `disjuntor.ler` usa `corte=agora-86400`, lê trilhas com carimbo, conta disparos/negações/liberações e acumula `espera=Ns` de eventos `ATENDIDO`. Trilhas ilegíveis tornam contadores `None`; a ausência de arquivo é tratada separadamente. `bin/disjuntor.py:1546`, `bin/disjuntor.py:1554`, `bin/disjuntor.py:1568`, `bin/disjuntor.py:1580`, `bin/disjuntor.py:1584`, `bin/disjuntor.py:1590`.
-- Outro molde: `codex_limite_estado` conta recusas em 24 h e chamadas por papel, contando apenas eventos `ini`; o escritor declarado é `codex_pergunta.sh`. `bin/codex_limite_estado.py:4`, `bin/codex_limite_estado.py:24`, `bin/codex_limite_estado.py:27`, `bin/codex_limite_estado.py:71`.
-- Esses moldes demonstram janela e integração ao painel; dados atuais para “construtor sem censo”, “horas de vaga esperando censo”, “aval recusado por UNIDADE” e “pouso N/N etapas” não aparecem nesses contadores. `bin/disjuntor.py:1615`, `bin/disjuntor.py:1691`, `bin/codex_limite_estado.py:45`; existência das novas trilhas e suas medidas em produção: [não verificado].
-
-## 08/11 10:49 · sessao 2c9c1db42771 · - · - · origem=Ronald (tmux)
-
-**I-1 / colisão e leitores**
-
-- A linha proposta `PAREI: censo-<obra> | espera Codex` **não libera hoje por nenhum dos dois caminhos**: `_parei_do_em_curso` exige `PAREI:` e `!`; `_esperando_com_prova` exige prefixo literal `ESPERANDO:` e ao menos `pid=` ou `arquivo=`. (`bin/hook_stop_fila1.py:1104`, `bin/hook_stop_fila1.py:1119`, `bin/hook_stop_fila1.py:656`, `bin/hook_stop_fila1.py:673`.)
-- O PAREI genérico ainda exige que a linha nomeie o item em curso e que não haja outros andáveis; acrescentar apenas `!` tampouco equivale ao contrato do censo. (`bin/hook_stop_fila1.py:1087`, `bin/hook_stop_fila1.py:1142`, `bin/hook_stop_fila1.py:1155`.)
-- Os sítios dependentes da espera são o reconhecedor, a memoização por Stop, o orçamento que fica pendente durante espera provada e a decisão principal do Stop; mudar só o ramo final deixa o orçamento tratar a espera de censo diferentemente. (`bin/hook_stop_fila1.py:645`, `bin/hook_stop_fila1.py:688`, `bin/hook_stop_fila1.py:984`, `bin/hook_stop_fila1.py:1231`.)
-- Antes desses caminhos, a checagem de afirmações do RELATO e o B4 têm precedência; a exceção do censo não pode ser presumida como passagem por eles. (`bin/hook_stop_fila1.py:1194`, `bin/hook_stop_fila1.py:1204`, `bin/hook_stop_fila1.py:1215`.)
-- O handoff já **exibiria** a linha censo, pois coleta `PAREI` até a primeira seção, mas continuaria imprimindo “item em curso ANDA” / “não devolve turno”, por consultar exclusivamente os predicados de PAREI genérico. (`bin/handoff_sessao.sh:99`, `bin/handoff_sessao.sh:108`, `bin/handoff_sessao.sh:120`.)
-- O alarme já aceita qualquer substring `PAREI:` nas primeiras 40 linhas e desarma, sem consultar prova ou `_SO_BANG`: com censo inexistente/morto ele já pode ficar silencioso enquanto o Stop manda seguir. (`bin/alarme_sessao_ociosa.py:119`, `bin/alarme_sessao_ociosa.py:127`, `bin/alarme_sessao_ociosa.py:42`.)
-
-**Selos que precisam ser confrontados, sem execução**
-
-- `test_hook_parei_so_lei.sh` preserva o filtro `_SO_BANG`, rejeita decisão técnica e pergunta de lei como passagem e aceita `!`; liberar todo PAREI violaria esses casos. Não contém caso censo. (`bin/tests/test_hook_parei_so_lei.sh:25`, `bin/tests/test_hook_parei_so_lei.sh:41`, `bin/tests/test_hook_parei_so_lei.sh:52`, `bin/tests/test_hook_parei_so_lei.sh:60`.)
-- `test_hook_esperando_com_prova.sh` distingue vivo/morto/outro produtor/sem prova e exige trilha `ALLOW ESPERANDO com prova` ou `NOPROVA`; censo precisaria entrar com essa mesma distinção, sem transformar o literal em prova. (`bin/tests/test_hook_esperando_com_prova.sh:67`, `bin/tests/test_hook_esperando_com_prova.sh:79`, `bin/tests/test_hook_esperando_com_prova.sh:93`.)
-- `test_disjuntor.sh` protege PAREI CLEAR com handoff, validade temporal, DIFF e agente sem entrega; B4 COTA também exige handoff; protege ainda contra `pisos.log` como prova escrita pelo próprio hook. São interações a preservar, não regras hoje alteradas pelo literal censo. (`bin/tests/test_disjuntor.sh:104`, `bin/tests/test_disjuntor.sh:192`, `bin/tests/test_disjuntor.sh:200`, `bin/tests/test_disjuntor.sh:215`, `bin/tests/test_disjuntor.sh:477`, `bin/tests/test_disjuntor.sh:578`.)
-
-**Prova de vida e furo**
-
-- A prova PID atual lê `/proc/<pid>/stat`, executable e cmdline, rejeita ancestrais, zumbi, troca de processo e produtor divergente; ela **não lê `CODEX_OBRA`**. (`bin/hook_stop_fila1.py:523`, `bin/hook_stop_fila1.py:535`, `bin/hook_stop_fila1.py:544`, `bin/hook_stop_fila1.py:548`.)
-- A prova por arquivo exige arquivo regular e avanço de mtime desde avaliação anterior, sob trava; primeira observação não prova e arquivos do próprio painel/hook são excluídos. (`bin/hook_stop_fila1.py:563`, `bin/hook_stop_fila1.py:583`, `bin/hook_stop_fila1.py:604`, `bin/hook_stop_fila1.py:640`.)
-- O wrapper exige `CODEX_OBRA` e `CODEX_PAPEL`, e o ramo construtor emite uma linha ESPERANDO com PID do wrapper e JSONL da chamada. Isso oferece identidade declarada da chamada, mas não há vínculo dela com o novo literal censo no Stop. (`bin/codex_pergunta.sh:81`, `bin/codex_pergunta.sh:85`, `bin/codex_pergunta.sh:374`.)
-- Uma prova específica precisaria vincular processo vivo/chamada ao **mesmo censo e obra**, por exemplo identidade `CODEX_OBRA` conferível no produtor ou sinal próprio com progresso. A existência desse mecanismo é **[não verificado]**; aceitar somente “espera Codex” abre espera sem produtor, e aceitar qualquer processo Codex permite que outra obra justifique a parada. A insuficiência do código atual se apoia em `bin/hook_stop_fila1.py:656`, `bin/hook_stop_fila1.py:673`, `bin/hook_stop_fila1.py:535`.
-- Processo Codex real ativo, acesso a `/proc` em produção e resultado dos selos nesta auditoria: **[não verificado]**.
-
-_2874 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2876 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
