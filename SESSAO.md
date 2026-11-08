@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/11/2026 10:08:57.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (140.0 MB). Acoes na janela: **209**.
+**Medido em 08/11/2026 10:14:41.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (140.1 MB). Acoes na janela: **210**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:11:55 | Bash | Confer E1 finding 3a/3b evidence | `cd /home/ronald/saas-hasner && /bin/grep -nE 'FatoEmOutroDia\|ResolvedoraCruzada\|^(OK\|FAILED)\|^Ran' logs/fio_e0_v4/e1_v14_sonda.log \| head -12 \| cut -c1-250; /bin/grep -rn 'except.*\(FatoEmOutroDia\\|ResolvedoraCruzada\)' /home/ronald/wt-fioe1-225336/app --include=*.py \| /bin/grep -v /tests/ \| wc -l; sed -n 340,390p /home/ronald/wt-fioe1-225336/app/chamados/services/disputa_emissao.py \| /b ...` |
 | 09:52:34 | Bash | Point ESPERANDO at live suite and recheck | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md' L=open(p).read().split('\n') L=[l for l in L if not l.startswith('ESPERANDO:')] L.insert(1,"ESPERANDO: trava_teste.sh \| pid=2065224") open(p,'w').write('\n'.join(L)) PY sed -n 1,3p app/docs/RELATO.md \| cut -c1-120; echo '{"session_id":"707e509b-29e4-4438-9018-16733980c39a","transcript_path":"/home/ronald/.claude/projects/-hom ...` |
 | 09:52:29 | Bash | Write ERRO-BOBO line and recheck hook | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md' L=open(p).read().split('\n') L.insert(1,"ERRO-BOBO CXR-TELA-LE-O-MOTOR: o bloqueio unico do opus final 1 (71c91c97) foi fixture do selo C3 sem celula indefinida -- mutante motor_no_request_525 passava porque beco_em_lote devolvia [] antes do InsumosDoDono (cadastro_realidade.py:525); nenhuma lei nem juiz em pergunta; curado na  ...` |
 | 09:52:22 | Bash | Read the opus reprova to classify | `cd /home/ronald/saas-hasner && head -30 logs/cxr_tela/opus_final_71c91c97.md \| cut -c1-400; grep -n 'ERRO-BOBO\\|DESENHO ' app/docs/RELATO.md \| head -5 \| cut -c1-200` |
