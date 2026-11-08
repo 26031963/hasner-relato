@@ -1,7 +1,147 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 01:28** · publicado em **08/11/2026 01:33** (UTC-3)
+> Ultima resposta processada: **08/11/2026 01:34** · publicado em **08/11/2026 01:38** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 08/11 01:34 · sessao 58c2a164fdf2 · FIO-E0-V4-E1 · verificador · origem=Code
+
+**PROCEDENTE: a garantia “exportada fica FORA e não é escrita” está incompleta.** Há caminho de carimbagem indireta após o commit, veto anterior à trava no migrador e exclusão de perdedoras abertas quando compartilham plano com uma exportada. (`app/chamados/signals.py:225`; `app/chamados/services/disputa_emissao.py:1838`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:294`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:285`)
+
+A análise abaixo é estática. Execução dos testes, morte efetiva dos mutantes, publicação do DIFF/RELATO, estado das migrações e ocorrência desses caminhos em produção: **[nao verificado]**. [nao verificado]
+
+**1(a). Quem define e quem chama os vetos — NAO PROCEDE haver outro juiz novo no helper acrescentado.**
+
+O registro vivo aponta K6 para `competencia_entregue`; `JUIZES.md` declara que é consulta e remete ao registro vivo. O helper novo compõe autoridades existentes. (`app/core/juizes.py:312`; `app/docs/JUIZES.md:10`; `app/chamados/services/fio.py:1077`)
+
+| Função definida | Chamadores diretos de produção |
+|---|---|
+| `fio.veto_de_competencia`, definição em `app/chamados/services/fio.py:1070` | `aplicar`, por plano e por silêncio: `app/chamados/management/commands/backfill_decisoes_pergunta.py:281`, `:294`; classificação e migração: `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:257`, `:294`. |
+| `vigia_fio.competencia_do_dia_entregue`, definição em `app/chamados/services/vigia_fio.py:822` | `_vivas_entre`: `app/chamados/models.py:364`; `_costura_nao_mata_o_fio`: `app/chamados/services/fio.py:776`; `veto_de_competencia`: `app/chamados/services/fio.py:1080`; `_dia_fora_do_alcance_c`: `app/chamados/reconciliador.py:744`; `limbo_vai_a_pauta`: `app/chamados/services/fabrica_da_celula.py:198`; `carimbos_sem_lastro_por_dono`: `app/chamados/services/vigia_fio.py:816`; `_cerca`: `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:115`. |
+| `folha.export.competencia_entregue`, definição em `app/folha/export.py:556` | Chamadores discriminados na tabela seguinte. |
+
+| Chamador direto de `competencia_entregue` | Local |
+|---|---|
+| `competencia_do_dia_entregue`, consulta sem memo e alimentação do memo | `app/chamados/services/vigia_fio.py:841`, `:843` |
+| Backfill: relatório das projeções sem linha | `app/chamados/management/commands/backfill_decisoes_pergunta.py:399` |
+| Backfill: `_exportada`, para agrupar/rotular o acervo | `app/chamados/management/commands/backfill_decisoes_pergunta.py:426` |
+| `competencia_fechada_para_celula` | `app/folha/export.py:610` |
+| `txt_vigente_x_gravado` | `app/folha/export.py:647` |
+| `preview_exportacao` | `app/folha/views.py:354` |
+| Ranking HE, `_carimbo` | `app/folha/services/ranking_he.py:89` |
+| `marcos_da_competencia` | `app/ponto/services/fechamento.py:1530` |
+| `competencias_a_lavrar` | `app/ponto/services/he_pendente_lavrado.py:223` |
+| Espelho, `janela` | `app/ponto/services/esmeril_espelho.py:58` |
+| `lavrar_status_competencia.handle` | `app/ponto/management/commands/lavrar_status_competencia.py:43` |
+| Pauta folga não definida, `_rodar` | `app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:93` |
+| Pauta pago × devido, `_medir` | `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:124` |
+
+As três funções consultadas não gravam o estado de entrega: K6 lê `ExportacaoDominio`, aplica vigência e rejeita o vigente invalidado. Os escritores desse estado são `registrar` e `invalidar`. (`app/folha/export.py:580`; `app/folha/export.py:583`; `app/folha/models.py:158`; `app/folha/models.py:182`)
+
+**Há outros caminhos que usam entrega para decidir atos sobre perguntas/chamados:**
+
+| Caminho | Consequência |
+|---|---|
+| `_costura_nao_mata_o_fio` | A competência aberta participa da recusa de costurar pergunta viva em destino terminal; exportada passa por essa guarda. (`app/chamados/services/fio.py:776`; `app/chamados/services/fio.py:784`) |
+| `_vivas_entre` | Exportadas são retiradas das perguntas que seguram o encerramento do chamado. (`app/chamados/models.py:364`; `app/chamados/models.py:383`) |
+| `_dia_fora_do_alcance_c` | Entrega deixa a pergunta fora do alcance novo da reemissão/costura do reconciliador. (`app/chamados/reconciliador.py:744`; `app/chamados/reconciliador.py:755`) |
+| `limbo_vai_a_pauta` | No limbo exportado, emite pauta e retorna antes de perguntar ao colaborador. (`app/chamados/services/fabrica_da_celula.py:181`; `app/chamados/services/fabrica_da_celula.py:198`) |
+
+Esses caminhos leem o compositor existente; não são novas cópias do predicado K6. O backfill também mantém uma composição para **relatório**, mas a classificação autoritativa do apply vem da porta. (`app/chamados/services/vigia_fio.py:836`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:422`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:463`)
+
+**1(b). Contadores e retorno de `aplicar`.**
+
+| Dado | Quem escreve | Quem lê |
+|---|---|---|
+| `CONTADORES_DO_APPLY` | Declaração inclui os dois novos contadores. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:129`) | Dedup separa contadores de recusas; resumo do backfill percorre a tupla. (`app/chamados/management/commands/dedup_perguntas_fato.py:107`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:514`) |
+| `exportada_fora` | Plano vetado acrescenta **todas as retratadas**; silêncio acrescenta seu PK; `_fora` ordena/deduplica. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:285`; `:298`; `:345`) | Renderizador do backfill, resumo, dedup e testes. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:378`; `:514`; `app/chamados/management/commands/dedup_perguntas_fato.py:121`; `app/chamados/tests/test_e1_v13d_exportada_fora.py:65`; `:80`; `:93`; `:103`; `:111`; `app/chamados/tests/test_e1_v6_horizonte.py:347`; `:355`) |
+| `exportada_fora_diff` | Dicionários de retratação/silêncio; `_fora` conserva a primeira entrada por PK. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:286`; `:299`; `:340`) | Renderizadores do backfill/dedup e testes do conteúdo. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:372`; `app/chamados/management/commands/dedup_perguntas_fato.py:116`; `app/chamados/tests/test_e1_v13d_exportada_fora.py:67`; `:68`; `:81`; `:82`) |
+| `sem_competencia_recusada` | `_recusas`; ramo `None` dos planos e dos silêncios. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:140`; `:283`; `:296`) | Impede escrita e provoca rollback geral; CLI/dedup traduzem para saída 3; teste força esse retorno. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:304`; `:327`; `:500`; `app/chamados/management/commands/dedup_perguntas_fato.py:110`; `app/chamados/tests/test_e1_v13d_exportada_fora.py:103`) |
+| Antigo `exportada_recusada` | Não integra o contrato atual de retorno, que usa `_fora` e `_recusas`. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:331`; `:333`) | Resta a referência histórica e a asserção de ausência da chave no teste novo. (`app/chamados/tests/test_e1_v13d_exportada_fora.py:6`; `:66`) |
+
+O retorno preserva `exportada_fora` e seu DIFF mesmo quando outra recusa desfaz as escritas; os contadores de escrita voltam a zero. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:329`)
+
+**PROCEDENTE — preservar no retorno não garante publicar:** dedup sai por recusa antes de renderizar o DIFF; o backfill também trata `horizonte_diverge` antes de chamar seu renderizador. (`app/chamados/management/commands/dedup_perguntas_fato.py:107`; `:116`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:494`; `:499`)
+
+| Consumidor solicitado | Resultado |
+|---|---|
+| Backfill `handle` | DRY chama a porta em rollback e publica os FORA; apply chama a porta e traduz recusas. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:484`; `:487`; `:493`; `:500`) |
+| Dedup | Apply consome o retorno; seu DRY apenas conta o plano e não passa por `aplicar` nem publica essa classificação de exportadas. (`app/chamados/management/commands/dedup_perguntas_fato.py:91`; `:99`; `:105`; `:116`) |
+| Migração 0052 | **NAO PROCEDE** como leitora desses contadores: apenas adiciona `batida_origem` anulável. (`app/chamados/migrations/0052_pergunta_batida_origem.py:17`) |
+| Migração 0053 | **NAO PROCEDE** como leitora do retorno: conta colisões diretamente e recusa sua própria execução. (`app/chamados/migrations/0053_pergunta_unica_por_familia.py:36`) |
+| `_migrar_sob_trava` | **NAO PROCEDE** como leitor de `aplicar`: consome `plano_de_retratacao`/`NAO_RETRATA`, preenche seu próprio `out` e chama a porta de retratação. (`app/chamados/services/fio.py:1568`; `:1574`; `:1590`) |
+| ESTADO | O caminho demonstrado lê o carimbo de `vigiar_fio_morto`, com outro conjunto de contadores; não consome o retorno do apply. (`bin/gerar_estado.py:253`; `bin/fio_estado.py:65`; `app/chamados/management/commands/vigiar_fio_morto.py:88`; `:96`) Outra integração: **[nao verificado]**. |
+
+**1(c). Campos e artefatos do migrador.**
+
+| Dado | Quem escreve | Quem lê |
+|---|---|---|
+| `ln['fora']` | Inicialização; motivos de classificação; desconhecida/exportada. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:132`; `:158`; `:259`; `:261`) | Seleção migra/FORA, saída, partição da medida e guarda de classificação. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:196`; `:202`; `:224`; `:255`) |
+| `ln['comp']` | String de competências formatadas, ordenadas por ano/mês. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:250`; `:254`) | Saídas MIGRA, FORA e EXPORTADA_FORA. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:199`; `:202`; `:264`) |
+| `exportada_fora` | Texto calculado por `len(fora)` na classificação; não é o retorno do backfill. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:247`; `:262`; `:267`) | Testes de saída. (`app/chamados/tests/test_e1_v13d_exportada_fora.py:173`; `:187`; `:197`; `app/chamados/tests/test_migrar_data_evento_dia_do_turno.py:204`) |
+| `descarimbaria` / `desc` | `_descarimbaria` conta perguntas elegíveis que o juiz considera vivas; atribuição da medida comum. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:225`; `:324`; `:327`) | Impressão e bloqueio do apply. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:231`; `:234`) |
+| `descarimbaria_exportada_fora` / `desc_exp` | Mesma função, alimentada pelas linhas classificadas como exportadas. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:224`; `:226`) | Impressão e testes; não participa do bloqueio. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:232`; `:234`; `app/chamados/tests/test_e1_v13d_exportada_fora.py:185`; `app/chamados/tests/test_migrar_data_evento_dia_do_turno.py:207`) |
+| Arquivo de reversão | Apply, antes do atomic; JSON exclusivo, permissão 600. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:216`; `:219`; `:276`; `:278`; `:281`) | `--reverter`, que lê o JSON, chama a porta, confere célula e desfaz tudo se houver falha. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:183`; `:340`; `:350`; `:355`; `:359`) |
+
+**PROCEDENTE — classificação e resultado final podem divergir:** uma entrega detectada apenas no segundo veto entra em `recusas`, mas não atualiza `ln['fora']`. Portanto não entra no `exportada_fora` já publicado nem na partição `desc_exp`. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:267`; `:294`; `:296`; `:224`)
+
+A reversão contém datas/células das candidatas iniciais, inclusive das depois recusadas; não contém fotografias dos efeitos sobre irmãs, disputas ou chamados. O arquivo também sobrevive ao rollback do banco, porque nasce antes do atomic. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:216`; `:219`; `:276`; `:294`)
+
+**2. Exportada escrita ou aberta bloqueada por exportada — PROCEDENTE, com estes recortes.**
+
+- **Escrita direta de retratação/silêncio:** quando o veto classifica o item como exportado, ele é retirado das listas que serão escritas. A exportação, sozinha, deixou de ser recusa global do apply. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:284`; `:291`; `:297`; `:303`; `:306`; `:312`)
+- **Aberta bloqueada dentro de plano misto:** basta uma retratada exportada para `v=True`; todas as retratadas daquele plano ficam FORA, inclusive as abertas. É tudo-ou-nada **do plano**, embora não seja rollback do apply inteiro. (`app/chamados/services/fio.py:1080`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:281`; `:285`)
+- **Exportada carimbada indiretamente:** retratar uma aberta salva a pergunta; o signal agenda fechamento de beco; depois do commit, o beco chama o resolvedor, que alcança outras perguntas e outras disputas abertas do colaborador sem veto de entrega nesses ramos. (`app/chamados/services/fio.py:1107`; `app/chamados/models.py:2993`; `app/chamados/signals.py:225`; `app/chamados/services/becos.py:54`; `app/chamados/services/disputa_emissao.py:1764`; `:1805`; `:1838`)
+- **Continuação da cascata:** fechar a disputa também aciona a materialização de pendentes, que pode carimbar outras perguntas aprovadas. (`app/chamados/services/disputa_emissao.py:1865`; `app/chamados/signals.py:163`; `app/chamados/services/materializacao.py:1418`; `:1431`)
+- **`data_evento` pela reversão:** `--reverter` desvia antes da classificação e chama `rechavear_data_evento` diretamente; essa porta trava e escreve sem consultar o veto de competência. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:183`; `:350`; `app/chamados/services/fio.py:947`; `:965`)
+
+Um contraexemplo construtível para a cascata é: aberta escrita numa disputa com pai/destinos terminais, sem pergunta visível e fechável; irmã exportada morta para C6, ainda sem materialização e elegível ao resolvedor. A classificação de beco e a carimbagem permitem esse percurso. (`app/chamados/services/becos.py:25`; `:33`; `:45`; `:54`; `app/chamados/services/disputa_emissao.py:1724`; `:1744`; `:1764`) Existência desse arranjo em produção: **[nao verificado]**.
+
+O laço de migração não descarimba diretamente: sua gravação altera data, célula e lavra. O descarimbo real continua na porta de julgamento, que pode ser acionada por cascatas e não contém separação por exportada nesse trecho. (`app/chamados/services/fio.py:959`; `:965`; `app/chamados/signals.py:203`; `app/chamados/services/fabrica_da_celula.py:175`; `app/chamados/services/relavra_via.py:238`; `:246`) Um descarimbo exportado efetivamente provocado por esta execução: **[nao verificado]**.
+
+**3. Canônica e retratada em competências diferentes.**
+
+| Situação | Resultado direto da porta |
+|---|---|
+| Canônica aberta; retratada exportada | Retratação fica FORA. A canônica não é salva por esse ato; a retratada permanece sem a nova marca de duplicata. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:281`; `:285`; `app/chamados/services/fio.py:1107`) |
+| Canônica exportada; retratada aberta | A canônica não participa do veto. A aberta pode receber o carimbo de duplicata; o PK da canônica entra no motivo. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:281`; `:314`; `app/chamados/services/fio.py:1107`; `:1110`) |
+| Canônica também candidata a silêncio | É um item independente. Se aberta, pode receber SILENCIO mesmo com a retratação exportada FORA; se exportada, seu silêncio fica FORA. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:293`; `:297`; `:307`) |
+
+**NAO PROCEDE exigir a canônica no veto para impedir uma escrita direta dela pela retratação:** esse caminho só salva a perdedora. Também não registra uma `DecisaoPergunta` de retratação; o registro de SILENCIO é outro caminho. (`app/chamados/services/fio.py:1107`; `app/chamados/models.py:2985`; `:2993`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:307`)
+
+**PROCEDENTE exigir proteção dos alvos indiretos:** incluir somente a canônica no veto ainda deixaria irmãs e outras disputas expostas à cascata. (`app/chamados/services/disputa_emissao.py:1805`; `:1813`; `:1838`)
+
+**4. Veto novamente dentro do atomic e sob a trava.**
+
+| Caminho | Veredito |
+|---|---|
+| Backfill | **PROCEDENTE a insuficiência da releitura:** o veto roda sob as travas de colaborador/disputas/perguntas, mas `_memo` é único para todo o apply. A segunda pergunta da mesma competência pode receber o resultado antigo sem nova consulta a K6. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:203`; `:215`; `:220`; `:281`; `:294`; `app/chamados/services/vigia_fio.py:842`) |
+| Migrador | **NAO PROCEDE dizer que não repete:** repete com memo novo dentro do atomic da linha. **PROCEDENTE dizer que não é sob a trava:** o veto vem antes de chamar a porta que adquire a trava. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:257`; `:291`; `:294`; `:298`; `app/chamados/services/fio.py:947`) |
+| Estado de entrega | **PROCEDENTE a janela:** K6 faz leitura comum; `registrar` insere a entrega sem compartilhar a trava do colaborador usada nesses caminhos. Não há nova consulta entre o veto e o save da migração. (`app/folha/export.py:581`; `app/folha/models.py:182`; `app/chamados/services/fio.py:965`) |
+
+Além disso, o migrador pergunta sobre `ln['velho']` e a empresa capturados na classificação; a porta depois relê a pergunta e obtém seu dia efetivamente gravado, sem refazer o veto para essa releitura. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:294`; `app/chamados/services/fio.py:949`; `:950`)
+
+**5. DRY do backfill e alcance do rollback.**
+
+**NAO PROCEDE haver escrita durável no caminho ORM normal demonstrado:** o DRY envolve `aplicar` em atomic explicitamente desfeito; isso abrange decisão, pergunta, outbox síncrono e auditoria no banco padrão. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:484`; `:486`; `app/chamados/models.py:3748`; `:3225`; `app/chamados/signals.py:237`; `app/core/observ.py:133`)
+
+| Efeito | Tratamento |
+|---|---|
+| `DecisaoPergunta` | `bulk_create` dentro da transação. (`app/chamados/models.py:3746`) |
+| Carimbo da perdedora | Save transacional da pergunta. (`app/chamados/models.py:2993`; `:3225`) |
+| `EventoCelula` | Signal síncrono chama a porta do evento; participa da transação. (`app/chamados/signals.py:244`; `app/chamados/models.py:3051`; `app/ponto/portas/celula.py:890`) |
+| `LogAuditoria` | INSERT em atomic aninhado, sem commit independente no código mostrado. (`app/core/observ.py:133`) |
+| Usuário sistema, se criado | `get_or_create` comum, sem alias explícito de outro banco. (`app/core/utils.py:18`) |
+| Beco em `on_commit` | É agendado pelo save; não chega ao commit no DRY desfeito. (`app/chamados/signals.py:225`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:486`) |
+
+**PROCEDENTE contra a frase absoluta “rollback desfaz tudo”:** falha da auditoria pode incrementar `_ENGOLIDOS` em memória e emitir ERROR imediatamente. O perfil saas encaminha esse ERROR a `errors.log`; transação de banco não desfaz esses efeitos. (`app/core/observ.py:75`; `:79`; `:105`; `app/config/settings/saas.py:139`; `:183`)
+
+O perfil saas declara somente `default`; configuração efetivamente implantada, outro banco ou extensão externa não presente na cópia: **[nao verificado]**. (`app/config/settings/saas.py:83`; `:93`)
+
+**6. O que mede `descarimbaria_exportada_fora`.**
+
+**PROCEDENTE: não é DIFF causal da migração da exportada.** Ela não migrou; a função conta, no estado atual, carimbos elegíveis que C6 considera vivos. Mede o que **um ato posterior de descarimbo** derrubaria, não quanto esta migração alterou nessa linha. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:196`; `:226`; `:324`; `:327`; `app/c
+
+[truncado em 20000 de 29916 caracteres]
 
 ## 08/11 01:28 · sessao ddc6f16190eb · - · - · origem=Ronald (tmux)
 
@@ -1004,30 +1144,4 @@ Os testes contêm asserts de **7 consultas na escalada** e **6 no vínculo**. Ex
 
 [truncado em 20000 de 20886 caracteres]
 
-## 07/11 21:08 · sessao 50a9c5887032 · - · - · origem=Ronald (tmux)
-
-**Q2 — PROCEDENTE o caminho; NÃO PROCEDE chamá-lo inversão de trava retida pelo UPDATE anterior.** `arquivar_chamado → arquivo.silenciar` não abre `atomic`; o helper retorna quando `in_atomic_block=False`. Se a instância traz status velho, o cartório compara status banco/instância, ignora `update_fields` e pode julgar depois do save. Em autocommit, a transação desse UPDATE já acabou; execução concreta e configuração efetiva de produção são **[nao verificado]**. (`app/chamados/views_arquivar.py:37`, `app/chamados/services/arquivo.py:170`, `app/chamados/models.py:484`, `app/chamados/signals.py:184`, `app/chamados/signals.py:191`, `app/chamados/signals.py:203`)
-
-Texto/contexto/vínculos abrem `atomic` antes de chamar o helper; portanto “chamada externa à transação” não significa que seu save ocorra fora de transação. Os quatro métodos de campo do modelo e as duas portas de arquivo não abrem atomic próprio. (`app/chamados/services/texto.py:31`, `app/chamados/services/contexto.py:101`, `app/chamados/services/vinculos.py:86`, `app/chamados/models.py:488`, `app/chamados/models.py:513`, `app/chamados/models.py:573`, `app/chamados/models.py:594`, `app/chamados/services/arquivo.py:141`, `app/chamados/services/arquivo.py:177`)
-
-**Q4 — mapa de escritores e leitores concretos:**
-
-| Campo | Escritor | Leitor |
-|---|---|---|
-| `status_local` | `_gravar_estado` atribui e salva; rebaixa/restaura urgência junto. `app/chamados/models.py:228`, `app/chamados/models.py:246`, `app/chamados/models.py:250`, `app/chamados/models.py:296` | S143, cartório e C6. `app/chamados/signals.py:96`, `app/chamados/signals.py:191`, `app/chamados/juizes.py:758` |
-| `contexto_json` do Chamado | Quatro portas de contexto. `app/chamados/services/contexto.py:76`, `app/chamados/services/contexto.py:102`, `app/chamados/services/contexto.py:125`, `app/chamados/services/contexto.py:161` | Juiz de dia/marcos/agrupamento e reconciliador de filhos. `app/chamados/juizes.py:100`, `app/chamados/juizes.py:534`, `app/chamados/juizes.py:1462`, `app/chamados/reconciliador.py:242` |
-| `contexto` da Disputa | Remover motivo, anotar e renovar. `app/chamados/models.py:2032`, `app/chamados/models.py:2057`, `app/chamados/models.py:2097`, `app/chamados/models.py:2115` | Guardas das próprias portas. `app/chamados/models.py:2093`, `app/chamados/models.py:2111` |
-| Justificativa, célula, ticket, responsável | Cinco portas de vínculos. `app/chamados/services/vinculos.py:87`, `app/chamados/services/vinculos.py:99`, `app/chamados/services/vinculos.py:115`, `app/chamados/services/vinculos.py:132`, `app/chamados/services/vinculos.py:144` | Reconciliação, juiz do dia, view GLPI e fila. `app/chamados/reconciliador.py:451`, `app/chamados/reconciliador.py:529`, `app/chamados/juizes.py:100`, `app/chamados/views.py:220`, `app/chamados/services/fila.py:154` |
-| Arquivo/véu | `silenciado_ate/por/motivo` e `resgatado_em`, pelas portas de arquivo; arquivo não é choice de status. `app/chamados/services/arquivo.py:166`, `app/chamados/services/arquivo.py:202`, `app/chamados/models.py:28`, `app/chamados/models.py:87` | Predicado temporal, dono do silêncio, receiver de isentos. `app/chamados/models.py:507`, `app/chamados/services/silencio_ausencia.py:66`, `app/chamados/services/silencio_ausencia.py:80`, `app/chamados/signals.py:278` |
-| Urgência/original | Ritual de rebaixamento, escalar, transição e UPDATE do receiver. `app/chamados/models.py:468`, `app/chamados/models.py:498`, `app/chamados/models.py:553`, `app/chamados/models.py:246`, `app/chamados/models.py:636` | Guarda por `sla_limite_horas`. `app/chamados/models.py:546` |
-| SLA | Porta e nascimento dos chamados de disputa. `app/chamados/models.py:588`, `app/chamados/services/disputa_emissao.py:581`, `app/chamados/services/disputa_emissao.py:1026`, `app/chamados/services/disputa_emissao.py:1253` | Juiz do prazo e cobrança. `app/chamados/catalogo/motor.py:54`, `app/chamados/catalogo/motor.py:68`, `app/chamados/services/cobranca.py:246` |
-| Escalonado DP/em | Porta carimba após push. `app/chamados/models.py:606`, `app/chamados/models.py:610` | Comando lê flag; gestão lê instante. `app/ponto/management/commands/escalonar_chamados_supervisao.py:96`, `app/chamados/services/fila.py:181` |
-| Materialização/autor/via da Pergunta | Atribuição central; portas carimbar, identidade, descarimbar e lote. `app/chamados/models.py:2852`, `app/chamados/models.py:2907`, `app/chamados/models.py:2937`, `app/chamados/models.py:2963`, `app/chamados/models.py:3015` | Estado, memo C6 e seleção da materialização/S143. `app/chamados/models.py:2796`, `app/chamados/juizes.py:827`, `app/chamados/services/materializacao.py:434`, `app/chamados/services/disputa_emissao.py:1711` |
-| Resposta/respondida/validação/autor | Resposta, validação, devolução e ressuscitação. `app/chamados/services/disputa_emissao.py:1368`, `app/chamados/services/disputa_emissao.py:1381`, `app/chamados/services/validacao.py:134`, `app/chamados/services/validacao.py:199`, `app/chamados/models.py:1555` | Estado e memo do C6; ressuscitação registra projeção antes de apagar. `app/chamados/models.py:2796`, `app/chamados/juizes.py:827`, `app/chamados/models.py:1553` |
-| `fechada_em` da Disputa | Fechar, reabrir admin, reabrir sistema. `app/chamados/models.py:1924`, `app/chamados/models.py:2141`, `app/chamados/models.py:2165` | S88, retomada, S144, ressuscitação e universo de travas. `app/chamados/signals.py:28`, `app/chamados/signals.py:129`, `app/chamados/signals.py:153`, `app/chamados/models.py:1582`, `app/chamados/models.py:2552` |
-
-**NÃO PROCEDE alteração explícita dos valores no delta 12b/12c:** as chamadas novas precedem as atribuições persistidas pelos mesmos `update_fields`; helper só adquire travas. Porém a volta inteira inclui mudança de disparo do S143; afirmar “só ordem” para `afb..HEAD` seria falso. (`app/chamados/models.py:475`, `app/chamados/models.py:497`, `app/chamados/models.py:1552`, `app/chamados/services/contexto.py:103`, `app/chamados/signals.py:104`)
-
-**Limite concorrente preservado:** contexto/vínculos continuam lendo a instância e decidindo antes da trava, sem releitura; a adição da trava não demonstra cura de sobrescrita por fotografia velha. (`app/chamados/services/contexto.py:97`, `app/chamados/services/contexto.py:103`, `app/chamados/services/vinculos.py:84`, `app/chamados/services/vinculos.py:88`)
-
-_2822 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2823 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
