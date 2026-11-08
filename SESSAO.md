@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/11/2026 12:12:51.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (146.2 MB). Acoes na janela: **358**.
+**Medido em 08/11/2026 12:18:17.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (146.9 MB). Acoes na janela: **362**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:14:50 | Bash |  | `python3 - <<'EOF' p='BACKLOG.md'; s=open(p).read() anc='\| REJULGAR-61-COBPARC \|' assert s.count(anc)==1 i=s.index(anc); j=s.index('\n',i)+1 novas=("\| RETRATADA-CONVERSA-E-REABRIR \| caminho de prod que abre ou reabre pergunta sobre batida RETRATADA fora dos arquivos da E1: abrir_conversa (disputa_emissao.py:425-440) e reabrir_para_correcao / perguntas_corrigiveis (disputa_emissao.py:1494/1533,  ...` |
+| 12:14:34 | Bash |  | `cd /home/ronald/saas-hasner/app/docs; /bin/grep -n 'E1-ACERVO-5-GRUPOS-09\\|REJULGAR-61-COBPARC' BACKLOG.md \| head; sed -n 1,6p RELATO.md \| cut -c1-200` |
+| 12:14:32 | SendMessage |  | `-` |
+| 12:13:06 | SendMessage |  | `-` |
 | 12:12:32 | Bash | Read Codex v15b answer | `cat /home/ronald/saas-hasner/logs/fio_e0_v4/codex_e1_v15b.r` |
 | 12:06:54 | Bash | Confirm RELATO edit and test hook | `cd /home/ronald/saas-hasner; /usr/bin/sleep 3; /bin/grep -c "n=0 esperado 0" app/docs/RELATO.md; echo '{"session_id":"707e509b-29e4-4438-9018-16733980c39a","transcript_path":"/home/ronald/.claude/projects/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a.jsonl"}' \| python3 bin/hook_stop_fila1.py; echo rc=$?` |
 | 12:06:50 | Bash | Record n=0 and wait for Codex | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() old='medindo n na sombra ANTES (logs/fio_e0_v4/sombra_e1_v15b_retratada.out)' assert s.count(old)==1 s=s.replace(old,'MEDIDO na sombra pela funcao real perguntas_sobre_batida_retratada (migracoes da E1 em atomic+rollback): n=0 esperado 0 (logs/fio_e0_v4/sombra_e1_v15b_retratada.out) -- 0 chamado fica sem fechar ...` |
