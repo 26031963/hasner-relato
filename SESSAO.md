@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/11/2026 00:43:54.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (135.5 MB). Acoes na janela: **401**.
+**Medido em 08/11/2026 00:49:23.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (135.5 MB). Acoes na janela: **399**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -409,5 +409,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:00:27 | Bash | Create new copy for CODEX-CONSTRUTOR cure volta | `cd /home/ronald/saas-hasner; N=$(date +%H%M%S); W=/home/ronald/wt-codexneg-v4-$N; git worktree add -b raia/codexneg-v4-$N $W pouso/codexneg-114427 2>&1 \| tail -1; git -C $W log --oneline -1; mkdir -p $W/app/logs $W/app/media; echo $W` |
 | 13:00:25 | SendMessage |  | `-` |
 | 13:00:14 | Bash | Spot-check E2 report claims | `cd /home/ronald/wt-fioe2-025758/app; sed -n '163p;250p' colaboradores/services/calendario.py; grep -n 'def ressuscitar_perguntas' chamados/models.py; sed -n 1436,1445p chamados/models.py; sed -n 1976,1982p chamados/models.py; git log --oneline -1` |
-| 12:44:31 | Bash | Point ESPERANDO at live E1 run | `cd /home/ronald/saas-hasner; sed -i '2s/.*/ESPERANDO: trava_teste.sh \| pid=3311908/' app/docs/RELATO.md; echo '{"stop_hook_active":true,"session_id":"707e509b-29e4-4438-9018-16733980c39a","transcript_path":"/home/ronald/.claude/projects/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a.jsonl"}' \| python3 bin/hook_stop_fila1.py; echo rc=$?` |
-| 12:44:25 | Bash | Check live producers for ESPERANDO | `cd /home/ronald/saas-hasner; date +%H:%M; bash bin/trava_teste.sh --quem \| tail -1; ps -p 1398871 >/dev/null && echo 1398871 vivo; ps -eo pid,etime,args \| grep -v grep \| grep -E 'trava_teste.sh\|codex_pergunta.sh' \| cut -c1-160 \| head -5` |
