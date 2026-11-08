@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/11/2026 21:30:35.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (133.9 MB). Acoes na janela: **457**.
+**Medido em 07/11/2026 21:36:06.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (133.9 MB). Acoes na janela: **456**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -466,4 +466,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:38:28 | Bash | Check E2 base vs main for signal_ancora failures | `cd /home/ronald/saas-hasner; git merge-base --is-ancestor 3b853907 HEAD && echo ancestor; git log --oneline 3b853907..HEAD \| wc -l; git log --oneline -3 -- app/escala/tests/test_signal_ancora.py app/escala/signals.py \| cat; ls -t logs/*suite*.log logs/regua*.log 2>/dev/null \| head -3` |
 | 09:38:23 | Bash | List failing tests in E2 suite and E1 run | `cd /home/ronald/saas-hasner; grep -E '^(FAIL\|ERROR):' logs/fio_e0_v4/green_e2_b3_suite.log; echo ---; grep -E '^(FAIL\|ERROR):' logs/fio_e0_v4/base_e2_signal_ancora.log 2>/dev/null; echo --- E1alvo; grep -E '^(FAIL\|ERROR):' logs/fio_e0_v4/green_e1_v5_alvo.log; grep -E '^Ran' logs/fio_e0_v4/green_e1_v5_alvo.log \| tail -1` |
 | 09:38:17 | Bash | Read E2 suite verdict and current trava holder | `cd /home/ronald/saas-hasner; date +%H:%M; L=logs/fio_e0_v4/green_e2_b3_suite.log; grep -E '^Ran [0-9]+ tests' $L\|tail -1; grep -E '^(OK\|FAILED)($\| \()' $L\|tail -1; tail -3 $L \| cut -c1-200; bin/trava_teste.sh --quem; for f in logs/fio_e0_v4/green_e1_v5_alvo.log; do grep -E '^(OK\|FAILED)($\| \()' $f\|tail -1; done; cd /home/ronald/wt-otim3-035531 && git log --oneline -1 && git status --porcel ...` |
-| 09:33:23 | Bash | Fix log perms, record E1 desenho questions, test hook | `cd /home/ronald/saas-hasner; chmod 600 logs/fio_e0_v4/green_e1_v5_alvo.log; ps -p 3527833 -o pid,etime,cmd \| cut -c1-120; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') L.insert(3,'DESENHO E1 v5 (09:3x, a obra segue no resto): (1) duplicata respondida viva na fila de validacao nao carimba mais (fora-do-fato terminal) -- o que a validacao faz com ela? (2) canonica != primei ...` |
