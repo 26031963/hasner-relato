@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/11/2026 15:26:32.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (150.3 MB). Acoes na janela: **426**.
+**Medido em 08/11/2026 15:31:35.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (150.3 MB). Acoes na janela: **428**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:31:17 | Bash | Generate diffs for opus final 4 | `cd ~/wt-e1merge3-150529; D=/home/ronald/saas-hasner/logs/fio_e0_v4; git diff 89d195af b0c4297c > $D/opus4_e1_merge_b0c4297c.diff; git diff 3d8ebe87 f16d4737 > $D/opus4_e1_delta_15d.diff; chmod 600 $D/opus4_*.diff; wc -l $D/opus4_*.diff; head -c 1500 $D/opus_final3_e1_76644dc8.md` |
+| 15:31:08 | Bash | Read apply output lines | `cd /home/ronald/saas-hasner; sed -n '/--aplicar/,/INVARIANTE ===/p' logs/fio_e0_v4/sombra_e1_inv_b0c4297c.out \| cut -c1-220 \| tail -15` |
 | 15:26:06 | Bash | Run sombra apply + invariant + reuso count | `cd /home/ronald/saas-hasner; SOMBRA_ARVORE=/home/ronald/wt-e1merge3-150529/app bash bin/sombra.sh --rodar logs/sombra/e1_v15d2_pouso_inv.py > logs/fio_e0_v4/sombra_e1_inv_b0c4297c.out 2>&1; chmod 600 logs/fio_e0_v4/sombra_e1_inv_b0c4297c.out; grep -E 'ANTES\|DENTRO\|aplic\|INVARIANTE\|M1\|M0\|^E \|PERGUNTA_SOBRE\|REUSO_SEM\|ROLLBACK\|DEPOIS\|Error\|esperado' logs/fio_e0_v4/sombra_e1_inv_b0c4297c.o ...` |
 | 15:26:02 | Bash | Make sombra script with reuso count | `cd /home/ronald/saas-hasner; sed -n 76,83p logs/sombra/e1_v15c_pouso_inv.py; python3 - <<'EOF' s=open('logs/sombra/e1_v15c_pouso_inv.py').read() a=" raise Rb()\n" assert s.count(a)==1 s=s.replace(a," from chamados.services.fio import reuso_sem_rechave\n _q = reuso_sem_rechave(); print('REUSO_SEM_RECHAVE n=%s esperado=%s universo=%s motivo=%s pks=%s' % (_q.get('n'), _q.get('esperado'), _q.get('univ ...` |
 | 15:25:58 | Bash | Inspect sombra invariant script | `cd /home/ronald/saas-hasner; wc -l logs/sombra/e1_v15c_pouso_inv.py; grep -n -E 'raise\|print\|call_command\|def ' logs/sombra/e1_v15c_pouso_inv.py \| head -40` |
