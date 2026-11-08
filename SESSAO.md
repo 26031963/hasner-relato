@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/11/2026 13:33:23.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (148.7 MB). Acoes na janela: **428**.
+**Medido em 08/11/2026 13:38:46.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (148.7 MB). Acoes na janela: **433**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:33:42 | Bash | Run sombra apply+invariant on merge copy | `cd /home/ronald/saas-hasner && SOMBRA_ARVORE=/home/ronald/wt-e1merge2-133028/app timeout 1500 bash bin/sombra.sh --rodar logs/sombra/e1_v15c_pouso_inv.py > logs/fio_e0_v4/sombra_e1_inv_76644dc8.out 2>&1; echo rc=$?; chmod 600 logs/fio_e0_v4/sombra_e1_inv_76644dc8.out; grep -E '^(ANTES\|DENTRO\|DEPOIS\|migradas\|descarimbaria\|erros\|PAREI\|M \|M1\|M0\|E \|INVARIANTE\|PERGUNTA_SOBRE\|ROLLBACK\|univ ...` |
+| 13:33:38 | Bash | Inspect sombra apply/invariant script | `cd /home/ronald/saas-hasner && wc -l logs/sombra/e1_v15c_pouso_inv.py logs/sombra/e1_v15c_pouso_dry.py && grep -n 'call_command\\|esperado\\|Rb\\|print' logs/sombra/e1_v15c_pouso_inv.py \| head -30` |
+| 13:33:32 | Bash | Add RELATO line and test hook | `python3 - <<'PY' p='docs/RELATO.md'; L=open(p).read().split('\n') L.insert(4, "E1 15c2 3d8ebe87 (builder a90d5e6, wt-fioe1v15c2-131536): portao do apply mede o EFEITO -- descarimbaria = linhas que MIGRARAM (dias velho/novo, lido depois), descarimbaria_delta_universo = pk novos antes x depois no mesmo atomic (bloqueia), foto_universo impressa sem bloquear. RED 746179d7 FAILED 3 Ran 4; GREEN alvo Ra ...` |
+| 13:33:26 | Bash | Locate this session's RELATO lines | `grep -n 'E1-FECHO-ORIGEM\\|15c suite OK\\|merge suite\\|b74da998' docs/RELATO.md \| head` |
+| 13:33:22 | Bash | Point RELATO line 2 to suite runner | `sed -i '2s#.*#ESPERANDO: suitemerge2.sh \| pid=3760353#' docs/RELATO.md && sed -n 2p docs/RELATO.md && grep -n 'RESPONDIDA E1-FECHO-ORIGEM-SEM-DIA' docs/RELATO.md \| head -2` |
 | 13:33:17 | Bash | Find suite runner pid and RELATO top | `/usr/bin/sleep 3; for p in $(pgrep -x bash); do a=$(tr '\0' ' ' < /proc/$p/cmdline 2>/dev/null); case "$a" in *suitemerge2.sh*) echo $p "$a";; esac; done; sed -n 1,3p /home/ronald/saas-hasner/app/docs/RELATO.md \| cut -c1-200` |
 | 13:33:13 | Bash | Run full suite on merge copy | `bash /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/suitemerge2.sh` |
 | 13:33:10 | Bash | Write suite runner script | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad; cat > $S/suitemerge2.sh <<'EOF' #!/bin/bash L=/home/ronald/saas-hasner/logs/fio_e0_v4/suite_e1_merge2_76644dc8.log bash /home/ronald/saas-hasner/bin/suite.sh --dir /home/ronald/wt-e1merge2-133028 > $L 2>&1 echo "rc=$?" >> $L chmod 600 $L EOF chmod +x $S/suitemerge2.sh; echo ok` |
