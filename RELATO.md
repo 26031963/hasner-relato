@@ -1,5 +1,5 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: agente | arquivo=/home/ronald/.claude/projects/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/subagents/agent-a04d6311b77ff69ac.jsonl
+ESPERANDO: trava_teste.sh | pid=3788150
 RECEBIDO aval GLOSSARIO-GRUPO-DE-COLISAO 08/11 01:5x: entrada do GLOSSARIO pronta (logs/fio_e0_v4/glossario_grupo_de_colisao.patch.md) entra no commit do pouso da E1; publicar GLOSSARIO.md + PLANO-PADROES.md no hasner-relato = par novo em bin/relato.sh, instrumento, pouso proprio logo depois; 13d nao interrompida
 E1 volta 13 suite 7950f827 VERMELHA 08/11 01:5x: Ran 14272 FAILED (failures=13) -- 11 selos protegidos pelo aval POR-GRUPO (test_e1_v5_chave_familia 3, v5_portas_backfill 2, v8 2, v10 1, v11 3) + 2 PortaRespostaPerguntaGate; devolvido ao construtor a04d6311: cura no CODIGO, selos intocados, conflito real volta como DESENHO (logs/fio_e0_v4/suite_e1_v13_7950f827.log)
 RESPONDIDA por aval E1-ORDEM-POR-TRANSACAO 07/11 22:2x (logs/fio_e0_v4/aval_e1_ordem_por_transacao.txt) -- era PERGUNTA DE DESENHO E1 ordem por ato x transacao: C travado antes de toda escrita de D/CH/P, selo em runtime; volta 13 no construtor
