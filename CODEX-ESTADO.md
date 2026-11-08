@@ -1,7 +1,126 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 20:48** · publicado em **07/11/2026 20:52** (UTC-3)
+> Ultima resposta processada: **07/11/2026 20:56** · publicado em **07/11/2026 20:57** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 20:56 · sessao 00393fa21d8e · - · - · origem=Ronald (tmux)
+
+Concordo: **(e)=sim condicional** é a leitura estrita de “pode travar”, desde que se explicite a condição e não se afirme ocorrência em produção. O `pre_save` lê o status atual do banco, mas o `post_save` compara esse valor com o status da instância; saves de campo não renovam esse status em memória. (`app/chamados/signals.py:180`, `app/chamados/signals.py:188`; `app/chamados/services/contexto.py:102`)
+
+Se houver divergência e as demais guardas permitirem julgamento/emissão, o receiver chega à fábrica e à trava de Colaborador/Disputa; sob atomic interno ou externo, isso ocorre com a escrita de CC ainda na mesma transação. (`app/chamados/signals.py:199`; `app/ponto/services/cartorio.py:997`; `app/chamados/services/disputa_emissao.py:530`; `app/chamados/services/texto.py:31`; `app/chamados/services/contexto.py:100`; `app/chamados/services/vinculos.py:86`)
+
+Correção do meu recorte:
+
+- **e=sim condicional:** `app/api/views.py:2033`, `:3159`, `:3160`; `app/ponto/views.py:288`, `:1648`; `app/chamados/views.py:1025`, `:1029`; `app/ponto/services/triagem_batida.py:369`, `:371`; `app/chamados/views_arquivar.py:140`. A condição é o caminho do receiver acima; os dois últimos blocos têm atomic externo em `app/ponto/services/triagem_batida.py:368` e `app/chamados/views_arquivar.py:134`.
+- **e=não na mesma transação:** `app/chamados/views_arquivar.py:37`, `:77` e `app/ponto/services/triagem_batida.py:292`, porque estes caminhos não têm atomic externo nem atomic interno nessas portas. (`app/chamados/services/arquivo.py:170`, `:208`; `app/chamados/models.py:538`)
+- **Propagação anterior:** em `app/ponto/services/triagem_batida.py:371`, se o save de `:369` percorreu esse caminho, (c) e (d) passam a sim; ambos estão sob `:368`. No lote `app/chamados/views_arquivar.py:140`, iteração anterior pode igualmente fornecer (c)=sim, e (d)=sim quando for o mesmo colaborador, sob `:134`.
+
+Há inclusive mecanismo local para instância desatualizada nas duas views de justificativa: CC é carregado antes do save de J, cujo receiver julga o dia antes da porta de vínculo; a instância original não é recarregada nesse intervalo. Isso demonstra possibilidade pelo código, sem demonstrar ocorrência. (`app/api/views.py:1986`, `:2021`, `:2033`; `app/ponto/views.py:1615`, `:1633`, `:1648`; `app/ponto/signals.py:165`)
+
+## 07/11 20:55 · sessao 130dcd99d6c6 · - · - · origem=Ronald (tmux)
+
+Confirmada a classificação proposta para os três contextos de `nota._fundir_contexto`. app/chamados/services/nota.py:123.
+
+- Via `disputa_emissao.py:586`: b=sim; c=não localmente, salvo atos anteriores herdados; d=sim; e=não sem atomic externo, podendo ser sim nas declarações externas. app/chamados/services/disputa_emissao.py:521; app/chamados/services/disputa_emissao.py:530; app/chamados/signals.py:28; app/chamados/services/declaracao_texto.py:346; app/chamados/services/declaracao_texto.py:634.
+- Via `disputa_emissao.py:1031`: b=sim; c=pode ser sim pelo complemento anterior e pelo save da disputa; d=sim; e=sim pelas posteriores aberturas de perguntas ou chamadas a `analisar`. app/chamados/services/disputa_emissao.py:964; app/chamados/services/disputa_emissao.py:968; app/chamados/services/disputa_emissao.py:990; app/chamados/services/disputa_emissao.py:993; app/chamados/services/disputa_emissao.py:1062; app/chamados/services/disputa_emissao.py:1068.
+- Via `disputa_emissao.py:1258`: b=sim; c=não localmente; d=sim; e=sim por `chamado_limbo.analisar`. app/chamados/services/disputa_emissao.py:1223; app/chamados/services/disputa_emissao.py:1232; app/chamados/services/disputa_emissao.py:1280; app/chamados/models.py:290.
+
+A conversa criada em `:1272` não serve como evidência da trava posterior de Colaborador: `_nascer` só o trava quando `not conversa`; a evidência posterior adequada é `analisar` em `:1280`. app/chamados/services/disputa_emissao.py:1272; app/chamados/models.py:2668; app/chamados/services/disputa_emissao.py:1280.
+
+## 07/11 20:55 · sessao cc06e3cd7ec5 · - · - · origem=Ronald (tmux)
+
+| Chamada / função | b | c | d | e |
+|---|---|---|---|---|
+| `app/chamados/management/commands/arquivar_sem_dia_irrecuperavel.py:94` — `Command.handle`, `arquivo.silenciar` | não; fluxo sem atomic em `:43/:90` | não | não | não |
+| `app/chamados/management/commands/arquivar_competencia_encerrada.py:288` — `Command._aplicar`, `arquivo.silenciar` | sim, `:285` | não | não | não; depois somente nota em `:296` |
+| `app/chamados/management/commands/arquivar_prescritos.py:94` — `Command.handle`, `arquivo.silenciar` | sim, `:91` | não | não | não |
+| `app/chamados/management/commands/nomear_marco_por_lampada.py:109` — `Command.handle`, `renovar_contexto` | sim, `:107` | não | não | não |
+| `app/chamados/management/commands/carimbar_por_batida_coincidente.py:98` — `Command.handle`, `renovar_contexto` | sim, `:97` | não | não | não |
+| `app/chamados/management/commands/carimbar_por_batida_coincidente.py:100` — `Command.handle`, `apontar_celula` | sim, `:97` | não; anterior `:98` grava contexto | não | não |
+| `app/ponto/management/commands/reconciliar_grade.py:454` — `Command._relavrar_orfa`, `retirar_contexto` | não; chamada anterior ao atomic de `:472` | não | não | não |
+| `app/ponto/management/commands/reconciliar_grade.py:473` — `Command._relavrar_orfa`, `renovar_contexto` | sim, `:472` | não | não | não |
+| `app/ponto/management/commands/reconciliar_grade.py:474` — `Command._relavrar_orfa`, `retirar_contexto` | sim, `:472` | não; anterior `:473` grava contexto | não | não |
+| `app/ponto/management/commands/curar_residuo_bug115.py:121` — `Command._ambiguo`, `renovar_contexto` | sim, `:120` | não | não | não |
+| `app/ponto/management/commands/processar_alertas_avancados.py:173` — `Command.handle`, `escalar_urgencia` | não; ramo `:165` | não | não | não |
+| `app/ponto/management/commands/processar_alertas_turno.py:423` — `Command._abrir_justificativa_automatica`, `apontar_justificativa` | não; `get_or_create` de `:391` já retornou | não | não | não |
+| `app/ponto/management/commands/escalonar_chamados_supervisao.py:64` — `Command.handle`, `anotar_contexto` | não | não | não | não |
+| `app/ponto/management/commands/escalonar_chamados_supervisao.py:103` — `Command.handle`, `marcar_escalonado_dp` | não | não | não | não |
+| `app/ponto/management/commands/escalonar_chamados_supervisao.py:132` — `Command.handle`, `escalar_urgencia` | sim, `:131` | não | não | não |
+| `app/ponto/management/commands/escalonar_chamados_supervisao.py:138` — `Command.handle`, `anotar_contexto` | sim, `:131` | não; anterior `:132` grava urgência | não | não |
+| `app/ponto/management/commands/escalonar_chamados_supervisao.py:163` — `Command.handle`, `anotar_contexto` | não; método da disputa em `:159` retornou antes | não na mesma transação | não | não |
+| `app/ponto/management/commands/escalonar_chamados_supervisao.py:179` — `Command.handle`, `anotar_contexto` | não | não | não | não |
+| `app/ponto/management/commands/escalonar_chamados_supervisao.py:195` — `Command.handle`, `anotar_contexto` | não | não | não | não |
+
+Os três sítios restantes exigem desdobrar caminhos, pois são funções importadas por outros módulos; seguem as evidências completas. `app/ponto/management/commands/gerar_celulas.py:223`; `app/ponto/management/commands/detectar_ausencias.py:543`; `app/ponto/management/commands/detectar_ausencias.py:570`.
+
+| Chamada / caminho | b | c | d | e |
+|---|---|---|---|---|
+| `app/ponto/management/commands/gerar_celulas.py:255` — `_marcar_cobrancas_orfas`, regeneração/edição sem atomic exterior | sim: `app/ponto/portas/celula.py:218/:289` ou `:592/:626` | não no primeiro ato isolado | não | não: julgamento posterior fica após atomic próprio, `app/ponto/portas/celula.py:354/:627` |
+| Mesmo sítio, receiver de âncora durante `executar_vinculo`, antes de qualquer outro julgamento/trava no caminho mínimo | sim: `app/colaboradores/services/vinculo.py:187/:274` → `app/escala/signals.py:117` | não nesse caminho mínimo | não | sim: receiver posterior `app/escala/signals.py:161` → trava C `app/chamados/models.py:1996` e DS `:1998` |
+| Mesmo sítio, foto de folga copiada após receiver de âncora/remover motivo | sim: `app/colaboradores/services/vinculo.py:187/:275/:163` → `app/escala/folgas.py:162/:203/:272` | sim: DS salva antes em `app/chamados/models.py:2035`, PD em `:2031` | sim: `app/chamados/models.py:1996/:1998` | pode: rabo chama cartório em `app/ponto/portas/celula.py:354/:434`, fábrica posterior em `app/ponto/services/cartorio.py:997` |
+| `app/ponto/management/commands/detectar_ausencias.py:558` — `_espelhar_marcos`, comando avulso | não: `app/ponto/management/commands/detectar_ausencias.py:61/:744` | não na mesma transação | não na mesma transação | não na mesma transação |
+| Mesmo sítio via `_abrir_chamado` sob atomic exterior | sim, por exemplo `app/ponto/services/veredito_celula.py:223` → batida `:322` → receiver `app/ponto/signals.py:135/:93` → cartório `app/ponto/services/cartorio.py:1740/:1778` | sim se houve ressuscitação/reconciliação anterior: `app/ponto/services/cartorio.py:1622/:1488/:1501/:1522`; UPDATE PD em `app/chamados/models.py:2994`, trava DS em `:694` | sim: `Chamado.abrir` anterior, `app/ponto/management/commands/detectar_ausencias.py:693` → `app/chamados/models.py:888` | sim/pode: `app/ponto/management/commands/detectar_ausencias.py:801` → `app/chamados/services/disputa_emissao.py:968`; fábrica `app/ponto/services/cartorio.py:997` → `app/chamados/services/disputa_emissao.py:530` |
+| Mesmo sítio via chamadas diretas do cartório `app/ponto/services/cartorio.py:1789/:1798`, sob atomic de `app/ponto/management/commands/celula_veredito_velho.py:133/:144` | sim | sim se ressuscitou antes: `app/ponto/services/cartorio.py:1622` → `app/chamados/models.py:1533/:2994`; DS reaberta salva em `:2147` | não se não houve reconciliação/trava anterior; ressuscitação acima só faz UPDATE PD e save DS | sim/pode: fábrica posterior `app/ponto/services/cartorio.py:997` → `app/chamados/services/fabrica_da_celula.py:149` → `app/chamados/services/disputa_emissao.py:627/:530` |
+| `app/ponto/management/commands/detectar_ausencias.py:765` — `_abrir_chamado`, comando avulso | não: método `:570`, nascimento `:693` já retornou | não na mesma transação | não na mesma transação | não na mesma transação |
+| Mesmo sítio sob atomic exterior do cartório | sim, caminhos acima: `app/ponto/services/veredito_celula.py:223`; `app/ponto/management/commands/celula_veredito_velho.py:133/:144` | sim se ressuscitação/reconciliação ocorreu antes: `app/ponto/services/cartorio.py:1622/:1488/:1501/:1522` → PD UPDATE `app/chamados/models.py:2994`, DS lock `:694` | sim sempre nessa variante: `app/ponto/management/commands/detectar_ausencias.py:693` → `app/chamados/models.py:888` | sim/pode: `app/ponto/management/commands/detectar_ausencias.py:801` → `app/chamados/services/disputa_emissao.py:968`; fábrica posterior `app/ponto/services/cartorio.py:997` → `app/chamados/services/disputa_emissao.py:530` |
+
+Para `(c)=sim`: sítios `gerar_celulas.py:255`, `detectar_ausencias.py:558` e `detectar_ausencias.py:765`, exclusivamente nas variantes transacionais acima; não significa ocorrência demonstrada em produção. `app/chamados/models.py:2035/:2994/:694`; [nao verificado].
+
+Para `(e)=sim,(d)=não`: sítios `gerar_celulas.py:255` no primeiro receiver de regeneração antes de remover motivo; `detectar_ausencias.py:558` via cartório direto sem trava C anterior, com fábrica posterior. `app/escala/signals.py:117/:161`; `app/chamados/models.py:1996/:1998`; `app/ponto/services/cartorio.py:1789/:1798/:997`; `app/chamados/services/disputa_emissao.py:530`.
+
+## 07/11 20:54 · sessao 130dcd99d6c6 · - · - · origem=Ronald (tmux)
+
+Censo dos serviços; `não` em b considera o ponto da chamada, sem contar o atomic interno da porta. Evidência dos atomics internos: app/chamados/services/contexto.py:100, app/chamados/services/contexto.py:157.
+
+| Chamada / função | b | c | d | e |
+|---|---|---|---|---|
+| app/chamados/services/abertura.py:115 `abrir_chamado_local` → `apontar_ticket_glpi` | não; entrada app/chamados/views.py:197 | não | não | não; retorno app/chamados/services/abertura.py:119 |
+| app/chamados/services/abertura.py:116 `abrir_chamado_local` → `renovar_contexto` | não; entrada app/chamados/views.py:197 | não | não | não; retorno app/chamados/services/abertura.py:119 |
+| app/chamados/services/adesao.py:112 `sincronizar_adesao` → `renovar_contexto` | não; entrada app/escala/management/commands/apurar_furos_diarios.py:17 | não | não; atomic anterior de `abrir` não envolve esta chamada app/chamados/services/adesao.py:74 | não na mesma transação; reconciliação seguinte app/chamados/services/adesao.py:115 abre a própria |
+| app/chamados/services/celula_carimbada.py:109 `backfill` → `apontar_celula` | não no corpo app/chamados/services/celula_carimbada.py:74; entrada de produção [nao verificado] | não no corpo app/chamados/services/celula_carimbada.py:87 | não no corpo app/chamados/services/celula_carimbada.py:87 | não; sequência app/chamados/services/celula_carimbada.py:110 |
+| app/chamados/services/declaracao_texto.py:202 `declarar_nao_trabalhou` → `renovar_contexto` | não; entrada app/chamados/views.py:1066 | não | não | não; só nota e retorno app/chamados/services/declaracao_texto.py:205 |
+| app/chamados/services/cobranca.py:178 `cobrar_colaborador` → `definir_prazo_sla` | sim app/chamados/services/cobranca.py:176 | não; antes apenas leitura app/chamados/services/cobranca.py:155 | não | não; só nota até saída do atomic app/chamados/services/cobranca.py:181 |
+| app/chamados/services/disputa_emissao.py:1604 `recobrar_questionario` → `definir_prazo_sla` | não; entrada app/chamados/views.py:1425 | não | não | não; sequência app/chamados/services/disputa_emissao.py:1607 |
+| app/chamados/services/silencio_isentos.py:43 `silenciar` → `arquivo.silenciar` | sim app/chamados/services/silencio_isentos.py:41 | não | não | não; loop somente arquivo e contador app/chamados/services/silencio_isentos.py:43 |
+| app/chamados/services/silencio_ausencia.py:86 `reconciliar_por_ausencia` → `arquivo.silenciar` | não; comando app/ponto/management/commands/reavaliar_ausencias_lancadas.py:54 ou callback app/ponto/signals.py:269 registrado em app/ponto/signals.py:272 | não | não | não; retorno app/chamados/services/silencio_ausencia.py:92 |
+| app/chamados/services/silencio_ausencia.py:72 `_levantar`, interna de `reconciliar_por_ausencia` → `arquivo.levantar` | não; mesmas entradas acima app/ponto/signals.py:272, app/ponto/management/commands/reavaliar_ausencias_lancadas.py:54 | não; `ch.reconciliar` anterior no ramo app/chamados/services/silencio_ausencia.py:101 encerra atomic próprio antes do levantamento app/chamados/services/silencio_ausencia.py:107 | não na mesma transação | não; sequência app/chamados/services/silencio_ausencia.py:108 |
+| app/chamados/services/limbo_folgas.py:67 `aplicar_sugestao` → `renovar_contexto` | não; caller comando app/ponto/management/commands/detectar_ausencias.py:236 | não | não | não; chamada seguinte texto app/chamados/services/limbo_folgas.py:69 não trava |
+| app/chamados/services/limbo_folgas.py:69 `aplicar_sugestao` → `reescrever_texto` | não; caller comando app/ponto/management/commands/detectar_ausencias.py:236 | não | não | não; retorno app/chamados/services/limbo_folgas.py:70 |
+| app/chamados/services/limbo_folgas.py:270 `agrupar_furo` → `renovar_contexto`, caminho comando puro | sim app/chamados/services/limbo_folgas.py:269 | não; primeiro ato do atomic app/chamados/services/limbo_folgas.py:270 | não; primeiro ato do atomic app/chamados/services/limbo_folgas.py:270 | sim: reapontamento app/chamados/services/limbo_folgas.py:277 → trava Colaborador app/chamados/services/fio.py:855; reconciliação app/chamados/services/limbo_folgas.py:278 → app/chamados/models.py:290 |
+| app/chamados/services/limbo_folgas.py:270 `agrupar_furo`, herdando atomic do cartório por `detectar_ausencias._abrir_chamado` | sim app/chamados/services/limbo_folgas.py:269; entrada cartório app/ponto/services/cartorio.py:1740 ou app/ponto/services/cartorio.py:1778 | depende de atos anteriores do cartório/signal; agente commands aprofundando [nao verificado] | sim quando houver atomic externo, pois `Chamado.abrir` anterior no mesmo `_abrir_chamado` mantém a trava; localização exata dessa chamada [nao verificado] | sim app/chamados/services/limbo_folgas.py:277, app/chamados/services/limbo_folgas.py:278 |
+| app/chamados/rejuncao.py:107 `rejuntar_celula_dos_vivos` → `apontar_celula` | não; consumidor app/chamados/reconciliador.py:1354 sem atomic envolvente, atomic posterior começa app/chamados/reconciliador.py:1378; regeneração via callback app/ponto/portas/celula.py:498 registrado app/ponto/portas/celula.py:502 | não | não | não na mesma transação; rotina retorna app/chamados/rejuncao.py:111 |
+| app/chamados/services/materializacao.py:715 `_ressuscitar_por_resposta` → `arquivo.levantar`, via views de resposta direta | não; core fecha atomic app/chamados/services/disputa_emissao.py:1393 antes de chamar ressuscitação app/chamados/services/disputa_emissao.py:1418; entradas app/chamados/views.py:1283, app/api/views.py:2659 | não na mesma transação | não na mesma transação | não na mesma transação app/chamados/services/disputa_emissao.py:1418 |
+| app/chamados/services/materializacao.py:715 `_ressuscitar_por_resposta`, via `declarar_hora_colab` ou `aplicar_declaracao` | sim app/chamados/services/declaracao_texto.py:322 ou app/chamados/services/declaracao_texto.py:624 | sim: save Pergunta app/chamados/services/disputa_emissao.py:1389 antes de app/chamados/services/disputa_emissao.py:1418 | sim: núcleo trava app/chamados/services/disputa_emissao.py:530, chamado antes em app/chamados/services/declaracao_texto.py:330 ou app/chamados/services/declaracao_texto.py:627 | não: resposta transmitida é hora app/chamados/services/declaracao_texto.py:389 ou app/chamados/services/declaracao_texto.py:661; validação posterior está fora do atomic app/chamados/services/declaracao_texto.py:664 |
+
+Para a lista **c=sim**, incluir `materializacao.py:715` nos dois caminhos de declaração com atomic externo e, conforme a análise do agente commands, os caminhos transacionais do cartório para `limbo_folgas.py:270`; a classificação definitiva deste último depende dos atos anteriores identificados. app/chamados/services/disputa_emissao.py:1389; app/ponto/services/cartorio.py:1740.
+
+Para a lista **e=sim e d=não**, incluir `limbo_folgas.py:270` no comando puro/varredura, pelos callers `agrupar_furos_sob_limbo` e `detectar_ausencias` executado como comando. app/chamados/services/limbo_folgas.py:326; app/ponto/management/commands/detectar_ausencias.py:761.
+
+`nota.py:123`/`fundir_contexto` ficou com o root, por coordenação. app/chamados/services/nota.py:123.
+
+## 07/11 20:53 · sessao 00393fa21d8e · - · - · origem=Ronald (tmux)
+
+| Chamada / função chamadora | (b) atomic externo | (c) PD/DS anterior | (d) Colaborador anterior | (e) trava posterior C/DS |
+|---|---|---|---|---|
+| `app/api/views.py:2033` — `api_justificativas` → `apontar_justificativa` | Não; função sem atomic (`app/api/views.py:1960`) | Não na mesma transação; `Justificativa.save/create` em `app/api/views.py:2021`/`:2023` dispara receiver `app/ponto/signals.py:161`, porém sem atomic externo | Não (`app/api/views.py:1960`) | Não; receiver de campo retorna (`app/chamados/signals.py:100`, `:188`) |
+| `app/api/views.py:3159` — `api_ausencia_documento` → `renovar_contexto` | Não (`app/api/views.py:3091`) | Não na mesma transação; `_anexar` anterior em `app/api/views.py:3147` não está embrulhado com esta chamada | Não (`app/api/views.py:3091`) | Não (`app/chamados/signals.py:100`, `:188`) |
+| `app/api/views.py:3160` — `api_ausencia_documento` → `reescrever_texto` | Não (`app/api/views.py:3091`) | Não (`app/api/views.py:3159`) | Não (`app/api/views.py:3091`) | Não (`app/chamados/signals.py:100`, `:188`) |
+| `app/ponto/views.py:288` — `bater_ponto` → `renovar_contexto` | Não (`app/ponto/views.py:242`) | Não (`app/ponto/views.py:275`) | Não (`app/ponto/views.py:281`) | Não; registro de batida posterior pertence a outra transação (`app/ponto/views.py:350`) |
+| `app/ponto/views.py:1648` — `_abrir_justificativa_fluxo` → `apontar_justificativa` | Não; wrapper apenas delega (`app/ponto/views.py:1565`, `:1568`) | Não na mesma transação; J salva/cria antes (`app/ponto/views.py:1633`, `:1635`) e dispara cartório (`app/ponto/signals.py:165`) | Não (`app/ponto/views.py:1568`) | Não (`app/chamados/signals.py:100`, `:188`) |
+| `app/chamados/views.py:1025` — `atribuir_chamado` → `liberar_responsavel` | Não (`app/chamados/views.py:1008`) | Não (`app/chamados/views.py:1012`) | Não (`app/chamados/views.py:1012`) | Não (`app/chamados/signals.py:100`, `:188`) |
+| `app/chamados/views.py:1029` — `atribuir_chamado` → `assumir_responsavel` | Não (`app/chamados/views.py:1008`) | Não (`app/chamados/views.py:1012`) | Não (`app/chamados/views.py:1012`) | Não (`app/chamados/signals.py:100`, `:188`) |
+| `app/chamados/views_arquivar.py:37` — `arquivar_chamado` → `silenciar` | Não (`app/chamados/views_arquivar.py:24`) | Não (`app/chamados/views_arquivar.py:30`) | Não (`app/chamados/views_arquivar.py:30`) | Não (`app/chamados/signals.py:100`, `:188`) |
+| `app/chamados/views_arquivar.py:77` — `desarquivar_chamado` → `levantar` | Não (`app/chamados/views_arquivar.py:52`) | Não na mesma transação; eventual `reabrir` anterior já retornou (`app/chamados/views_arquivar.py:70`) | Não na mesma transação (`app/chamados/views_arquivar.py:70`) | Não na mesma transação; eventual ressuscitação é posterior, fora da transação da porta (`app/chamados/views_arquivar.py:86`) |
+| `app/chamados/views_arquivar.py:140` — `arquivar_lote` → `silenciar` | Sim (`app/chamados/views_arquivar.py:134`) | Não; laço apenas seleciona/verifica permissão/silencia (`app/chamados/views_arquivar.py:135`, `:137`, `:140`) | Não (`app/chamados/views_arquivar.py:134`) | Não; nenhuma trava no restante do bloco (`app/chamados/views_arquivar.py:147`) |
+| `app/ponto/services/triagem_batida.py:292` — `ramo_regularizar_saida` → `escalar_urgencia` | Não; chamador direto sem atomic (`app/ponto/views.py:336`) | Não na mesma transação; `Justificativa.update_or_create` ocorreu antes (`app/ponto/services/triagem_batida.py:258`) | Não (`app/ponto/services/triagem_batida.py:227`) | Não (`app/chamados/signals.py:100`, `:188`) |
+| `app/ponto/services/triagem_batida.py:369` — `ramo_solicitar_anuencia` → `escalar_urgencia` | Sim (`app/ponto/services/triagem_batida.py:368`) | Não; primeiro ato do bloco (`app/ponto/services/triagem_batida.py:369`) | Não; primeiro ato do bloco (`app/ponto/services/triagem_batida.py:369`) | Não; só renova contexto antes de sair (`app/ponto/services/triagem_batida.py:371`) |
+| `app/ponto/services/triagem_batida.py:371` — `ramo_solicitar_anuencia` → `renovar_contexto` pelo alias `_renovar_contexto` | Sim; import alias e atomic (`app/ponto/services/triagem_batida.py:367`, `:368`) | Não; anterior foi só urgência de CC (`app/ponto/services/triagem_batida.py:369`) | Não (`app/ponto/services/triagem_batida.py:369`) | Não; fim do bloco (`app/ponto/services/triagem_batida.py:371`) |
+
+Os perfis locais SaaS e prod não declaram `ATOMIC_REQUESTS`; WSGI/manage usam SaaS como padrão, mas configuração efetivamente executada em produção é [nao verificado]. (`app/config/settings/saas.py:83`, `app/config/settings/prod.py:9`, `app/config/wsgi.py:14`, `app/manage.py:9`)
+
+O receiver de `Justificativa` chama o cartório sincronicamente; isso foi considerado, mas os três sítios envolvidos não mantêm uma transação externa aberta até a chamada da porta. (`app/ponto/signals.py:161`, `:165`, `:85`, `:93`; `app/api/views.py:2033`; `app/ponto/views.py:1648`; `app/ponto/services/triagem_batida.py:292`)
+
+Recorte sem linhas com (c)=sim e sem linhas com (e)=sim/(d)=não, conforme os blocos e guards acima. (`app/chamados/views_arquivar.py:134`; `app/ponto/services/triagem_batida.py:368`; `app/chamados/signals.py:100`, `:188`)
 
 ## 07/11 20:48 · sessao b2a3c085a19a · FIO-E0-V4-E1 · verificador · origem=Code
 
@@ -841,208 +960,4 @@ O processamento posterior continua percorrendo **todos** os grupos. Com Aα resp
 
 Reprodução em banco: **[nao verificado]**.
 
-## 07/11 18:19 · sessao 348184f1c6dc · - · - · origem=Ronald (tmux)
-
-**3 — PROCEDENTE residual de ordem; NAO PROCEDE permanência da inversão no corpo de `remover_motivo`.** Ele trava Colaborador, depois Disputas explícita/abertas, Chamados pais/vivos/destinos e todas as Perguntas antes de qualquer carimbo; relê as precondições sob trava. (`app/chamados/models.py:1995`; `app/chamados/models.py:1998`; `app/chamados/models.py:2001`; `app/chamados/models.py:2031`). A implementação da porta adquire cada tabela nessa ordem. (`app/chamados/models.py:2525`; `app/chamados/models.py:2532`; `app/chamados/models.py:2545`; `app/chamados/models.py:2549`).
-
-Posto e âncora somente consultam e delegam a essa porta; seus UPDATE anteriores são de Posto/Escala, fora das quatro tabelas. Produção tem esses dois chamadores; chamadas diretas estão nos testes. (`app/colaboradores/signals.py:71`; `app/colaboradores/signals.py:77`; `app/escala/signals.py:155`; `app/escala/signals.py:161`; `app/chamados/tests/test_porta_remocao_motivo.py:255`).
-
-**Ressalva concreta:** o atomic de `remover_motivo` termina antes de `self.fechar`; sem atomic externo, remoção e fechamento ficam em transações diferentes. O teste do sinal adiciona atomic externo e não cobre essa separação. (`app/chamados/models.py:2035`; `app/chamados/models.py:2042`; `app/chamados/tests/test_e1_v9.py:276`).
-
-**Justificativa — NAO PROCEDE a permanência da omissão apontada:** os três pontos incluem `abertas_do_colaborador=True`; aprovação chama a antecipação antes da trava da justificativa. (`app/ponto/services/justificativa.py:41`; `app/ponto/services/justificativa.py:80`; `app/ponto/services/justificativa.py:129`; `app/ponto/services/justificativa.py:140`).
-
-**Outro caminho realmente invertido:** `reescrever_texto(ch)` em Chamado terminal, via diferente de `competencia_trancada`, texto alterado e sem trava externa: atomic → UPDATE Chamado → S143 → porta que adquire Colaborador/Disputas. O receiver não exige mudança de status nem examina `update_fields`. **Chamado → Colaborador/Disputa continua possível.** (`app/chamados/services/texto.py:31`; `app/chamados/services/texto.py:35`; `app/chamados/signals.py:81`; `app/chamados/signals.py:91`; `app/chamados/services/disputa_emissao.py:1677`; `app/chamados/services/disputa_emissao.py:1683`). Contexto e vínculos também salvam Chamado sob atomic sem antecipação. (`app/chamados/services/contexto.py:75`; `app/chamados/services/contexto.py:100`; `app/chamados/services/vinculos.py:86`).
-
-Outras escritas sob atomic sem trava local: INSERT de `Chamado.criar`, `PerguntaDisputa.save` e descarimbo em lote de `ressuscitar_perguntas`; este último depois pode reabrir Disputa. Isso demonstra escritores implícitos fora do alcance de A/A2, sem afirmar que todos os chamadores chegam destravados. (`app/chamados/models.py:1077`; `app/chamados/models.py:1530`; `app/chamados/models.py:1560`; `app/chamados/models.py:2147`; `app/chamados/models.py:3151`).
-
-**7 — PROCEDENTE insuficiência dos selos fora dos limites declarados; NAO PROCEDE ausência geral de mordida.**
-
-| Selo | Burla confirmada em execução pura do detector |
-|---|---|
-| A | SQL literal com tabela protegida e `FOR  UPDATE` — dois espaços — retorna `[]`: busca substring exata. (`app/chamados/tests/test_e1_v7_catracas.py:129`) |
-| A2 | `gravar=self.save; gravar()` sob atomic retorna `[]`; só examina nomes de chamadas. Decorador `@transaction.atomic` também fica fora da procura por `ast.With`. (`app/chamados/tests/test_e1_v7_catracas.py:319`; `app/chamados/tests/test_e1_v7_catracas.py:323`) |
-| B | `rec: list=[p for p in ps if p.ok]; canonica_do_grupo(rec)` retorna `[]`; só propaga `ast.Assign`. `juiz=canonica_do_grupo; juiz(recorte)` também escapa. (`app/chamados/tests/test_e1_v7_catracas.py:181`; `app/chamados/tests/test_e1_v7_catracas.py:194`; `app/chamados/tests/test_e1_v7_catracas.py:202`) |
-| C | SQL UPDATE direto pelo cursor não pertence à lista de escritores; o único limite declarado de C é helper externo. (`app/chamados/tests/test_e1_v7_catracas.py:34`; `app/chamados/tests/test_e1_v7_catracas.py:214`; `app/chamados/tests/test_e1_v7_catracas.py:238`) |
-| D | `p.carimbar_identidade("duplicata",u)` retorna `[]`; também `carimba=p.carimbar_identidade; carimba(P.VIA_DUPLICATA,u)`. A constante vale literalmente `"duplicata"`, mas o detector exige chamada com nome `carimbar_identidade` e argumento AST chamado `VIA_DUPLICATA`. (`app/chamados/models.py:2364`; `app/chamados/tests/test_e1_v7_catracas.py:280`) |
-
-A2 aceita parar na primeira trava, mesmo que ela trave somente Colaborador e depois haja Pergunta → Disputa. O próprio mutante “curado” só insere `trava_na_ordem(self.colaborador_id)`, insuficiente para provar a ordem inteira. (`app/chamados/tests/test_e1_v7_catracas.py:327`; `app/chamados/tests/test_e1_v9.py:544`). Fluxo/helper estão declarados como limites, mas alias de método, decorador atomic e suficiência do conjunto travado não estão. (`app/chamados/tests/test_e1_v7_catracas.py:38`).
-
-**Tracker — NAO PROCEDE que ainda registre só primeira tabela.** Agora deduplica por `(tabela,pk)`; para as consultas da porta, a primeira coluna é efetivamente PK. O UPDATE usual sonda o WHERE e remove os parâmetros do SET. (`app/chamados/tests/test_e1_v9.py:60`; `app/chamados/tests/test_e1_v9.py:80`; `app/chamados/tests/test_e1_v9.py:85`; `app/chamados/models.py:2533`). Os mutantes exigem detectar segunda Disputa e UPDATE sem Colaborador. (`app/chamados/tests/test_e1_v9.py:318`; `app/chamados/tests/test_e1_v9.py:328`).
-
-**PROCEDENTE excesso de alcance se apresentado como todas as aquisições:** ele não intercepta INSERT, DELETE ou FOR NO KEY UPDATE; `vistas` não reseta quando uma transação/savepoint libera trava. Seu limite cita apenas executemany, FK do INSERT e ordem PK, e os testes usam atomic externo. (`app/chamados/tests/test_e1_v9.py:47`; `app/chamados/tests/test_e1_v9.py:51`; `app/chamados/tests/test_e1_v9.py:70`; `app/chamados/tests/test_e1_v9.py:85`; `app/chamados/tests/test_e1_v9.py:277`). Correspondência da sonda prévia com locks efetivamente obtidos depois de espera concorrente: **[nao verificado]**.
-
-Executei os 30 testes puros dos detectores v7 + `CatracaAlcanceTest` v9 em memória, substituindo `SimpleTestCase` por `unittest.TestCase` e retirando somente imports entre testes: **30 OK**; as varreduras atuais A/B/C/D/A2 resultaram vazias. Resultado dessa execução: **[nao verificado por arquivo persistido]**. Ela verifica mordida sintética atual; RED→GREEN histórico e testes Django: **[nao verificado]**. [nao verificado]
-
-**Relógio — NAO PROCEDE permanência do defeito novo localizado:** classes de banco v8/v9 estão congeladas; os testes puros usam datas literais e mocks. (`app/chamados/tests/test_e1_v8.py:46`; `app/chamados/tests/test_e1_v8.py:100`; `app/chamados/tests/test_e1_v8.py:130`; `app/chamados/tests/test_e1_v9.py:149`; `app/chamados/tests/test_e1_v9.py:221`; `app/chamados/tests/test_e1_v9.py:266`; `app/chamados/tests/test_e1_v9.py:337`; `app/chamados/tests/test_e1_v9.py:443`).
-
-## 07/11 18:19 · sessao 1c46dadb09e8 · - · - · origem=Ronald (tmux)
-
-**Itens 1/2/4/6 — consolidação só por código.**
-
-1. **NAO PROCEDE segundo escritor produtivo de `VIA_DUPLICATA` localizado.** A escrita está em `fio.retratar_duplicata`, que chama `carimbar_identidade`; seu único chamador produtivo é `retratar_para_canonica`. Os consumidores são reapontamento, migração e apply do backfill. (`app/chamados/services/fio.py:1068`; `app/chamados/services/fio.py:1050`; `app/chamados/services/fio.py:867`; `app/chamados/services/fio.py:1361`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:274`)
-
-   `retratada_em` pertence a **Batida**, não representa a retratação da Pergunta para uma canônica; a retratação da Batida passa por `retratar_batida`, e seu desfazimento por `anotar`. (`app/ponto/models.py:67`; `app/ponto/registro_batida.py:274`; `app/ponto/services/retratar_humano.py:207`)
-
-   **Contraexemplo nominal do aval:** migração mantém p1 canônica, preserva p2 com mérito e declara p2 recusada, retrata p3. O apply identifica o mesmo mérito, mas desfaz o ato inteiro: p1/p2/p3 permanecem como estavam, contadores zerados. Essa diferença decorre do envelope de tudo ou nada, não de cópia do veto. (`app/chamados/services/fio.py:1336`; `app/chamados/services/fio.py:1340`; `app/chamados/services/fio.py:1360`; `app/chamados/services/fio.py:1361`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:243`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:287`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:290`)
-
-2. **PROCEDENTE persistência de resultados sem eliminar as duas linhas, e declaração incompleta pelos comandos.**
-
-   - Datar p com colisão e mérito/sem episódio recusa falando; restaura `p.data_evento=None` e não retrata as outras. Se p não é canônica ou alguma outra já está encerrada, também recusa antes de escrever. (`app/chamados/services/fio.py:849`; `app/chamados/services/fio.py:852`; `app/chamados/services/fio.py:892`; `app/chamados/services/fio.py:895`; `app/chamados/services/fio.py:903`)
-   - Na migração, p canônica com outra linha intocável no destino permanece no velho e sai recusada. Se a canônica é externa, p pode virar duplicata sem mover a canônica para o novo; o retorno registra duplicata/recusa, mas não garante uma resolvedora ancorada no novo. (`app/chamados/services/fio.py:1328`; `app/chamados/services/fio.py:1346`; `app/chamados/services/fio.py:1350`; `app/chamados/services/fio.py:1361`)
-   - **Contraexemplo residual:** L sem episódio no velho, A de episódio E no destino, mesmo motivo/dia. A identidade consultada por E inclui L, porém `universo_da_linha(L)` devolve somente L; a migração não vê A como conflito, migra L e retorna sucesso, deixando L e A no destino. O reapontamento de pergunta já datada também não examina colisões: apenas trava colaborador, valida o destino e salva. (`app/chamados/models.py:2577`; `app/chamados/models.py:2579`; `app/chamados/services/fio.py:1162`; `app/chamados/services/fio.py:1332`; `app/chamados/services/fio.py:1334`; `app/chamados/services/fio.py:1355`; `app/chamados/services/fio.py:854`; `app/chamados/services/fio.py:868`)
-   - O chamador `reabrir` mantém o velho fechado e apenas anexa nota/evento com o resultado da migração; não trata individualmente recusas nem procura outra resolvedora. (`app/chamados/models.py:1397`; `app/chamados/models.py:1400`; `app/chamados/models.py:1408`; `app/chamados/models.py:1409`)
-   - No apply, linha sem episódio pode impedir retratação sem constituir recusa; duas linhas permanecem e o retorno é de sucesso com contador informativo. Os comandos descartam esse diagnóstico ao apresentar o resultado. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:242`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:246`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:293`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:429`; `app/chamados/management/commands/dedup_perguntas_fato.py:92`; `app/chamados/management/commands/dedup_perguntas_fato.py:97`)
-
-3. **Item 4 — cura do contraexemplo L+A(α)+B(β), mas PROCEDENTE divergência residual dos universos.**
-
-   - L BATIDA sem episódio: `universo_da_linha` retorna `[L]`. Episódio E: retorna todas as linhas daquele episódio/motivo, independentemente do dia, mais legadas sem episódio do dia da linha consultada. MARCO: usa dia/motivo e a instância derivada do motivo, acrescentando a própria linha caso ausente. (`app/chamados/services/fio.py:1162`; `app/chamados/services/fio.py:1165`; `app/chamados/services/fio.py:1166`; `app/chamados/models.py:2577`; `app/chamados/models.py:2579`; `app/chamados/models.py:2610`)
-   - `universo_do_grupo` exclui conversas e linhas fora do fato, expande cada linha inicial, une por PK e ordena. A legada encontrada durante a expansão não é expandida novamente; portanto o contraexemplo específico que unia α e β pela legada foi eliminado. (`app/chamados/services/fio.py:1146`; `app/chamados/services/fio.py:1149`; `app/chamados/services/fio.py:1152`; `app/chamados/services/fio.py:1162`)
-   - **Divergência estática:** mesmo episódio E com A(d1), A2(d2), e legada L2(d2) respondida. `universo_da_linha(A)` encontra A/A2, mas não L2; `universo_do_grupo([A,A2])` expande também A2 e inclui L2. Migração iniciada por A pode escolher canônica diferente de backfill/DRY/abrir para d2. A chave BATIDA permite a diferença de dias; não é necessário inventar outro episódio. (`app/chamados/models.py:2577`; `app/chamados/models.py:2579`; `app/chamados/services/fio.py:1149`; `app/chamados/services/fio.py:1165`; `app/chamados/services/fio.py:1332`; `app/chamados/services/fio.py:1336`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:228`)
-   - Conversa passada diretamente a `universo_da_linha` não recebe tratamento geral próprio: salvo BATIDA sem origem, busca linhas factuais por `do_fato` e depois acrescenta a conversa. `universo_do_grupo` a exclui; a migração evita esse caso por ramo explícito `[p]`. **Não localizado consumidor produtivo que entregue conversa ao helper nessa forma.** (`app/chamados/services/fio.py:1162`; `app/chamados/services/fio.py:1165`; `app/chamados/services/fio.py:1167`; `app/chamados/services/fio.py:1146`; `app/chamados/services/fio.py:1329`)
-   - **NAO PROCEDE defeito MARCO multi-instância demonstrado:** o nascimento rejeita instância diferente daquela derivada do motivo; o leitor usa a mesma derivação. Duas pausas distintas continuam explicitamente reservadas à E2. (`app/chamados/models.py:3168`; `app/chamados/models.py:3175`; `app/chamados/models.py:2610`; `app/chamados/services/declaracao_texto.py:48`)
-
-4. **Item 6 — PROCEDENTE diferença entre contadores, DRY e apresentação do apply.**
-
-   | Valor | Escritor | Leitor produtivo |
-   |---|---|---|
-   | `retratadas` | Soma escritas efetivas. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:281`) | Backfill e dedup. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:430`; `app/chamados/management/commands/dedup_perguntas_fato.py:96`) |
-   | `abaixo_do_horizonte` | Perdedoras datadas fora do horizonte; saída deduplica PKs. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:235`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:293`) | Backfill imprime quantidade; dedup apenas exclui das recusas. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:430`; `app/chamados/management/commands/dedup_perguntas_fato.py:92`) |
-   | `perdedora_sem_dia` | Perdedoras NULL. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:234`) | Dedup apenas exclui das recusas; CLI backfill não imprime. (`app/chamados/management/commands/dedup_perguntas_fato.py:92`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:429`) |
-   | `canonica_sem_episodio` | Plano devolve **PK da canônica**, não das perdedoras bloqueadas. (`app/chamados/services/fio.py:1030`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:244`) | Apenas classificação de não recusa no dedup. (`app/chamados/management/commands/dedup_perguntas_fato.py:92`) |
-   | `sem_episodio_intocada` | PKs das perdedoras legadas. (`app/chamados/services/fio.py:1037`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:245`) | Apenas classificação de não recusa no dedup. (`app/chamados/management/commands/dedup_perguntas_fato.py:92`) |
-   | `merito_recusado` | Plano/porta; apply acumula. (`app/chamados/services/fio.py:1033`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:243`) | Migração, colisão, DRY backfill e ambos CLIs apply. (`app/chamados/services/fio.py:1340`; `app/chamados/services/fio.py:903`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:373`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:421`; `app/chamados/management/commands/dedup_perguntas_fato.py:95`) |
-
-   A perdedora NULL deixou de ser contada como abaixo: **NAO PROCEDE a permanência desse defeito específico**. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:234`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:235`)
-
-   **Contador não particiona as linhas:** com L canônica sem episódio e A1/A2 perdedoras datadas no horizonte, o plano devolve somente `canonica_sem_episodio=[L]`; A1/A2 não aparecem como retratadas, sem dia, abaixo ou sem episódio intocadas. A PK L pode aparecer nos dois contadores sem episódio em grupos diferentes, como canônica de um e perdedora de outro. (`app/chamados/services/fio.py:1030`; `app/chamados/services/fio.py:1032`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:231`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:244`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:293`)
-
-   O DRY do dedup conta toda perdedora no horizonte, sem consultar o plano: L canônica legada + A(E) produz DRY excedentes=1 e apply excedentes=0; o motivo desaparece da apresentação. O DRY backfill consulta o plano somente para `merito_recusado`, omitindo os resultados sem episódio. (`app/chamados/management/commands/dedup_perguntas_fato.py:72`; `app/chamados/management/commands/dedup_perguntas_fato.py:78`; `app/chamados/management/commands/dedup_perguntas_fato.py:96`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:373`)
-
-   Se a canônica é legada, o plano retorna antes de examinar mérito: uma perdedora `admin_decidiu` com resposta fica protegida, porém o mérito não é declarado como tal. (`app/chamados/services/fio.py:1030`; `app/chamados/services/fio.py:1033`)
-
-Execução em banco e ocorrência produtiva destes contraexemplos: **[nao verificado]**.
-
-## 07/11 18:18 · sessao 770621486b10 · - · - · origem=Ronald (tmux)
-
-**Itens 5 e 9: PROCEDENTE a permanência de leitores que confundem dia civil de conversa com dia de turno; o censo continua incompleto.** As migrações enumeradas no diff existem, mas não cobrem os leitores abaixo. (`app/chamados/services/fio.py:1100`; `app/chamados/services/fio.py:1106`)
-
-Contraexemplos fortes:
-
-- **Escrita que silencia conversa por coincidência de dia civil:** `fechar_o_fio_do_dia` seleciona perguntas por `data_evento=data`, usando `q_vivas`, sem `conversa=False`; chama `fechar_por_admin` e registra SILENCIO. `q_vivas` tampouco exclui conversa. Assim, decidir um turno em D alcança uma conversa emitida em D sobre outro fato, deixando `admin_decidiu` e trilha de decisão daquele dia. (`app/ponto/services/veredito_celula.py:177`; `app/ponto/services/veredito_celula.py:187`; `app/ponto/services/veredito_celula.py:192`; `app/chamados/models.py:3074`; `app/chamados/models.py:3088`; `app/chamados/models.py:2797`)
-- **O próprio C6 ainda julga conversa pela falta de seu dia civil:** `_pergunta_viva_calc` chega a `_dentro_da_janela_viva(p.data_evento)` e `classificar_falta(colab,p.data_evento)` sem discriminar conversa. Com carimbo derivado e sem resposta, pode ressuscitar pela falta de um turno que não é o assunto da conversa. O juiz de materialização também lê esse dia como turno. (`app/chamados/juizes.py:1207`; `app/chamados/juizes.py:1211`; `app/chamados/juizes.py:664`; `app/chamados/juizes.py:671`)
-- **Invariante F1:** lê todas as resolvedoras, escolhe a primeira `data_evento`, antes de consultar a célula do chamado, e decide a absolvição pela lei daquela data. Uma conversa morta e muda pode determinar o dia civil escolhido e ocultar o furo do chamado. (`app/chamados/management/commands/auditar_invariantes_chamados.py:1651`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1664`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1665`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1682`)
-- **I21/I21a:** a consulta inclui conversa; a cobertura de ausência usa seu `data_evento` civil. Uma ausência aprovada naquele dia pode mandar uma resposta invisível de conversa para o piso, sem resolver o assunto da conversa. (`app/chamados/management/commands/auditar_invariantes_chamados.py:1571`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1578`; `app/chamados/management/commands/auditar_invariantes_chamados.py:160`; `app/chamados/management/commands/auditar_invariantes_chamados.py:162`)
-- **F3:** universo por motivo e data, sem conversa, seguido de `classificar_falta` pelo dia civil. (`app/chamados/management/commands/auditar_invariantes_chamados.py:1777`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1803`)
-- **Recusa/retém outro fato:** `limbo_folgas.filhos_no_defeito` consulta todas as perguntas do dia e usa `fio_vivo` para segurar o filho; uma conversa daquele dia civil basta. O calendário também marca `_perg_viva[data_evento]`, influenciando a oferta de “Resolver dia”, sem excluir conversa. (`app/chamados/services/limbo_folgas.py:201`; `app/chamados/services/limbo_folgas.py:204`; `app/colaboradores/services/calendario.py:455`; `app/colaboradores/services/calendario.py:473`; `app/colaboradores/services/calendario.py:477`)
-
-Não depende de corrupção da flag: existem conversas legítimas para motivos genéricos quando não há dia do fato; a porta é chamada com o motivo original. A âncora também nasce explicitamente como conversa. (`app/chamados/services/disputa_emissao.py:431`; `app/chamados/services/disputa_emissao.py:439`; `app/chamados/services/disputa_emissao.py:1272`)
-
-Mapa de campos/valores:
-
-| Campo | Escritores | Leitores e significado |
-|---|---|---|
-| `data_evento` | Fato: `abrir` exige dia e fixa `conversa=False`; conversa: `abrir_conversa` usa `localdate()` e fixa `True`; `_nascer` cria; reapontamento preenche NULL; rechaveamento altera dia existente. (`app/chamados/models.py:2641`; `app/chamados/models.py:2643`; `app/chamados/models.py:2654`; `app/chamados/models.py:2751`; `app/chamados/services/fio.py:840`; `app/chamados/services/fio.py:957`) | Identidade/horizonte distinguem conversa; resolvedora também. O diagnóstico `data_do_fato_de` compara os dois dias e materialização pode recusar e gravar DATA_EM_DISPUTA: esse leitor está declarado no censo. Os leitores acima não estão e ainda tratam civil como turno. (`app/chamados/models.py:2611`; `app/chamados/services/fio.py:1113`; `app/chamados/juizes.py:1976`; `app/chamados/services/fio.py:87`; `app/chamados/services/materializacao.py:1189`; `app/chamados/services/materializacao.py:1210`) |
-| `conversa` | Duas portas fixam o valor; `_nascer` persiste e transmite ao proxy do juiz. (`app/chamados/models.py:2643`; `app/chamados/models.py:2654`; `app/chamados/models.py:2685`; `app/chamados/models.py:2752`) | Sem identidade de fato: filtros/índices e derivador de chave respeitam; resolvedora não compara seu civil ao turno. Não é respeitado pelos leitores acima. (`app/chamados/models.py:2611`; `app/chamados/models.py:3165`; `app/chamados/models.py:3213`; `app/chamados/juizes.py:1976`) |
-| `via_resolucao` | `_escrever_carimbo`; descarimbo em lote; exceção `encerrar_por_fato_no_espelho`; relavra. (`app/chamados/models.py:2834`; `app/chamados/models.py:2995`; `app/chamados/models.py:3004`; `app/chamados/services/relavra_via.py:125`) | C6 lê identidade/terminalidade, modelo exclui vias fora do fato, mérito lê `admin_decidiu` mais resposta, retratador lê idempotência. `admin_decidiu` sozinho não elimina resposta pendente; duplicata carimbada elimina antes da resposta. (`app/chamados/juizes.py:1155`; `app/chamados/juizes.py:1160`; `app/chamados/juizes.py:1180`; `app/chamados/models.py:2611`; `app/chamados/services/fio.py:1005`; `app/chamados/services/fio.py:1059`) |
-| `retratada_em` | **Campo de Batida**, escrito por `retratar_batida` via `anotar`, e limpo pelo desfazer humano também via `anotar`. Não é campo de Pergunta. (`app/ponto/models.py:67`; `app/ponto/registro_batida.py:274`; `app/ponto/services/retratar_humano.py:207`) | Batida fora da apuração; juiz exige testemunha viva; timestamp alimenta frescor da lavra. A retratação da Pergunta é sua via terminal, não esse timestamp. (`app/ponto/turnos.py:2849`; `app/chamados/juizes.py:726`; `app/chamados/juizes.py:781`; `app/chamados/veredito_lavrado.py:140`; `app/chamados/models.py:2926`) |
-| `recusa_motivo` | Duplicata via `carimbar_identidade`; recusa humana; justificativa da resposta; pendência; recusa de materialização. (`app/chamados/services/fio.py:1069`; `app/chamados/models.py:2921`; `app/chamados/services/validacao.py:584`; `app/chamados/services/disputa_emissao.py:1432`; `app/chamados/services/materializacao.py:847`; `app/chamados/services/materializacao.py:1097`; `app/chamados/services/materializacao.py:1099`) | É texto de proveniências diferentes, dívida já declarada; explicador mostra; I18/I19 usam presença como dono; devolução de validação copia para ato; flip automático extrai batida vizinha por regex. Portanto não tem significado único de “recusa por mérito da retratação”. (`app/chamados/services/validacao.py:42`; `app/chamados/services/explicador.py:90`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1075`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1112`; `app/chamados/services/validacao.py:208`; `app/ponto/services/flip_auto.py:132`) |
-| `batida_origem` | Derivada no nascimento a partir de `contexto.ultima_batida.id`, com família e colaborador conferidos; `_nascer` aceita/propaga a origem e inserção preenche quando ausente. (`app/chamados/models.py:2696`; `app/chamados/models.py:2698`; `app/chamados/models.py:3177`; `app/chamados/models.py:3190`; `app/chamados/models.py:3192`; `app/chamados/models.py:3196`) | Chave do episódio em `do_fato`, índice e agrupamento; `_sem_episodio` distingue acervo. Contexto é mutável e a coluna preserva o episódio de nascimento. (`app/chamados/models.py:2574`; `app/chamados/models.py:2579`; `app/chamados/models.py:3218`; `app/chamados/services/fio.py:1083`; `app/chamados/services/fio.py:1012`; `app/chamados/models.py:3185`) |
-| `Disputa.motivos/contexto` | Kernel abre/agrega motivos e funde contexto; métodos removem/respondem motivos, anotam/renovam contexto, reabrem; emissores manuais complementam motivos. (`app/chamados/services/disputa_emissao.py:541`; `app/chamados/services/disputa_emissao.py:548`; `app/chamados/services/disputa_emissao.py:562`; `app/chamados/services/disputa_emissao.py:589`; `app/chamados/models.py:1936`; `app/chamados/models.py:2033`; `app/chamados/models.py:2074`; `app/chamados/models.py:2092`; `app/chamados/models.py:2129`; `app/chamados/services/disputa_emissao.py:1267`) | Emissão usa motivo/data/contexto e última batida; materialização e juiz usam contexto como fallback de data; derivador de episódio lê última batida só no nascimento; auditor verifica coerência e catálogo. `motivos` é escopo agregado, não lista de perguntas vivas. (`app/chamados/services/disputa_emissao.py:345`; `app/chamados/services/disputa_emissao.py:372`; `app/chamados/services/disputa_emissao.py:387`; `app/chamados/services/materializacao.py:343`; `app/chamados/services/materializacao.py:472`; `app/chamados/juizes.py:370`; `app/chamados/models.py:3185`; `app/chamados/management/commands/auditar_disputas.py:88`; `app/colaboradores/services/drawer.py:75`) |
-
-**Relógio fora da borda ainda existe no código atingido:** embora testes novos congelem, portas ainda leem `now` internamente e `abrir_conversa` usa `localdate`; lavrar lê `timezone.now` e `expira_em` usa `date.today`. A afirmação de inexistência global dessa reincidência não se sustenta; se o recorte for somente fixtures novas, o agente de selos verifica os decoradores. (`app/chamados/models.py:2654`; `app/chamados/models.py:2797`; `app/chamados/veredito_lavrado.py:228`; `app/chamados/veredito_lavrado.py:112`)
-
-Não demonstrei segundo juiz **registrado** duplicado por esta volta; afirmar inexistência semântica geral permanece **[nao verificado]**.
-
-## 07/11 18:18 · sessao 4c6d1511766f · MOTOR-LE-O-TURNO-INSTRUMENTO · construtor · origem=Code
-
-Cura aplicada: toda chamada estática aos dois pareadores, em qualquer função do motor/modelo/serviço DiaPago, passa a contar fora da composição do juiz. Cada chamada publica `arquivo::funcao`, sítio e linha; o gap permanece separado ([instrumento](/home/ronald/wt-codex-motor-le-o-turno-instrumento-181155/app/core/medida_turno_do_par.py:405)). [nao verificado]
-
-Medição anterior à edição: exatamente estas duas portas:
-
-| Arquivo:linha | Função | Destino |
-|---|---|---|
-| `ponto/motor_calculo_v2.py:503` | `turnos_via_autoridade` | `parear_turnos` |
-| `ponto/motor_calculo_v2.py:882` | `MotorBase._turnos_do_juiz` | `turnos_de_batidas` |
-
-DiaPago está definido em `ponto/models.py:281`. A lavratura importa o modelo em `ponto/services/dia_pago.py:163` e monta o dia por `_dia_de` em `:174`; a grade é importada em `:443` e usada em `:464`.
-
-Resultados executados em memória:
-
-- Original: **35 testes, rc=0**; contadores **9/85**, registros e linhas preservados (`core/tests/test_medida_turno_do_par.py:553`, `:569`).
-- Antes da cura: M1/M6 produziram falhas de asserção. Após a cura, sobre fontes reais: **M1 e M6 → 10/86; M7 → 9/85** (`core/tests/test_medida_turno_do_par.py:739`, `:748`, `:760`).
-- Os **14 mutantes saíram rc=1 por asserção**. Corpo do runner: `core/tests/test_medida_turno_do_par.py:19`; comando individual de cada execução:
-
-| Mutante | rc | Comando em arquivo:linha |
-|---|---:|---|
-| composicao | 1 | `core/tests/test_medida_turno_do_par.py:73` |
-| linhas | 1 | `core/tests/test_medida_turno_do_par.py:74` |
-| gap | 1 | `core/tests/test_medida_turno_do_par.py:75` |
-| classificar | 1 | `core/tests/test_medida_turno_do_par.py:76` |
-| P1-linha-unica | 1 | `core/tests/test_medida_turno_do_par.py:77` |
-| P2-len1 | 1 | `core/tests/test_medida_turno_do_par.py:78` |
-| Q1-lines10 | 1 | `core/tests/test_medida_turno_do_par.py:79` |
-| Q2-len2 | 1 | `core/tests/test_medida_turno_do_par.py:80` |
-| Q3-tuple | 1 | `core/tests/test_medida_turno_do_par.py:81` |
-| Q4-self | 1 | `core/tests/test_medida_turno_do_par.py:82` |
-| R1-tres-funcoes | 1 | `core/tests/test_medida_turno_do_par.py:83` |
-| R2-portas-fixas | 1 | `core/tests/test_medida_turno_do_par.py:84` |
-| R3-so-motor | 1 | `core/tests/test_medida_turno_do_par.py:85` |
-| R4-conta-composicao | 1 | `core/tests/test_medida_turno_do_par.py:86` |
-
-**Campos novos: nenhum.** `censo_fontes` escreve `chave`, `criterio`, `sitio` e `linhas` em `core/medida_turno_do_par.py:412`. A catraca lê identidade/sítio/critério em `core/tests/test_medida_turno_do_par.py:563`, linhas em `:571`, e os testes MORDE conferem a publicação em `:781`.
-
-## 07/11 18:13 · sessao 6364bb5ec91d · MOTOR-LE-O-TURNO-INSTRUMENTO · censo · origem=Code
-
-As referências aos anexos contam linhas desde o início de cada bloco fornecido. A confirmação dos commits posteriores nesta cópia-base é [nao verificado]. [nao verificado]
-
-1. **O1 — portas novas fora das funções fixas**
-
-   **Pergunta:** “O instrumento cumpre o criterio LITERAL? Algum item conta algo fora de A1/B1/nomeados, ou deixa de contar?”; “Cite algum mutante do instrumento que passaria em todos os testes.” (`v1.q:7`, `v1.q:10`) [nao verificado]
-
-   **Resposta:** diagnóstico das novas chamadas M1/M6: **ausente**. O trecho correlato trata outra forma de pareador novo: “Um `range(..., 2)` novo sobe contador e dispara RED.” (`v1.r:34`; `triagem_opus1.txt:2`)
-
-   **Triagem:** descarte específico de M1/M6: **ausente**. A avaliação geral foi: “1 NAO PROCEDE no criterio (9/85, 9/89 reproduzidos); a garantia incompleta e os itens 2 e 4.” (`triagem_v1.txt:2`)
-
-   **Classe (a):** omissão de contagem e mordida estavam perguntadas; o Codex examinou o incremento por `range` novo e deixou passar o incremento por chamada nova à autoridade. (`v1.q:7`, `v1.q:10`; `v1.r:34`; `triagem_opus1.txt:2`)
-
-2. **O2 — leitor host e publicação no ESTADO ausentes**
-
-   **Pergunta:** cobrança explícita dos itens contratuais “leitor `bin/*_estado.py` + linha no ESTADO”: **ausente**. Houve a pergunta correlata: “QUEM ESCREVE e QUEM LE cada valor que o diff grava ou le”. (`v1.q:15`; `triagem_opus1.txt:3`)
-
-   **Resposta:** diagnóstico da entrega contratual faltante: **ausente**. O Codex registrou apenas: “Publicação efetiva desses valores em placar/HOST fora da suite: **[nao verificado]**.” (`v1.r:104`) [nao verificado]
-
-   **Triagem:** descarte explícito da obrigação contratual: **ausente**. Sobre o inventário de leitores: “8 tabela recebida, sem achado.” (`triagem_v1.txt:9`)
-
-   **Classe (d):** a obrigação específica de entregar a publicação host não foi perguntada nem diagnosticada; “publicação não verificada” não constitui esse achado. A restrição do construtor a `app/` não impedia a leitura pelo verificador. (`v1.q:15`; `v1.r:104`; `triagem_opus1.txt:3`; `CLAUDE.md:341`, `CLAUDE.md:351`)
-
-3. **FILA — E2 troca quatro identidades B1 no rebase, conservando o total**
-
-   **Pergunta:** sobre essa troca concreta: **ausente**. A pergunta semelhante era sobre outro registro: “COMPOSICAO_REGISTRADA congela a lista inteira? Uma troca de identidade com o mesmo tamanho e cobrada?” (`v2.q:6`)
-
-   **Resposta:** identificação dos quatro B1 trocados: **ausente**. A proteção geral de identidade foi reconhecida: “A igualdade percorre todos os itens dos dois contadores: A1, B1 e os três nomeados, com identidade completa e listas inteiras.” (`v3.r:154`)
-
-   **Triagem:** descarte anterior desse evento: **ausente**. O enquadramento final diz: “ao rebasear, 4 itens B1 trocam de identidade com total igual -- a E2 classifica, nao copia”. (`triagem_opus1.txt:4`)
-
-   **Classe (c), quanto ao evento concreto:** faltam as quatro identidades e as árvores comparadas; a classe geral de troca de identidade já estava reconhecida, portanto não cabe afirmar modo-comum sobre ela. (`v3.r:154`; `triagem_opus1.txt:4`; identidades concretas: [nao verificado])
-
-4. **FILA — LINHAS_REGISTRADAS absolutas**
-
-   **Pergunta:** “Linha mudada por edicao NAO relacionada do motor reprova (custo esperado) e a mensagem diz o que fazer?” (`v3.q:7`)
-
-   **Resposta:** “**PROCEDENTE o custo de deslocamento:** uma edição sem relação com o negócio reprova se deslocar ocorrências registradas.” (`v3.r:156`)
-
-   **Triagem:** “custo de deslocamento e o esperado e a mensagem diz o que fazer.” O opus manteve: “LINHAS_REGISTRADAS absolutas (custo de vermelho falso, nunca verde falso)”. (`triagem_v3.txt:7`; `triagem_opus1.txt:4`) [nao verificado]
-
-   **Classe (b):** o Codex viu o custo e a triagem o aceitou expressamente como esperado, sem tratá-lo como bloqueador. (`v3.r:156`; `triagem_v3.txt:7`)
-
-5. **FILA — M2, M4 e M5 declarados no NAO_VE**
-
-   **Pergunta:** referência individual a M2, M4 ou M5: **ausente**. O tema correlato estava presente: “Distinga o que o NAO_VE declara do que some calado.” (`v3.q:6`)
-
-   **Resposta:** identificação individual desses mutantes: **ausente**. Sobre os limites examinados, o Codex escreveu: “**Não enumera especificamente `for-target`, `with-as` e chaves de `dict` como buracos do gap.**” (`v3.r:152`)
-
-   **Triagem:** “Q5 PROCEDENTE (b)+(d) TEXTO”; a mesma linha registra que a perda da parcela continua cobrada pela catraca numérica e por `LINHAS_REGISTRADAS`. A vinculação disso aos nomes M2/M4/M5 não aparece; o opus fornece somente “M2/M4/M5 declarados no NAO_VE”. (`triagem_v3.txt:6`; `triagem_opus1.txt:4`)
-
-   **Classes individuais — M2: [nao verificado]; M4: [nao verificado]; M5: [nao verificado].** Sem os enunciados dos três mutantes, não há base para escolher entre descarte de achado já visto, classe (b), e limitação fora do alcance, classe (c), nem para associá-los aos exemplos de v3(b). (`triagem_opus1.txt:4`; `v3.r:152`)
-
-_2794 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2799 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
