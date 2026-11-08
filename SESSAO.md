@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/11/2026 09:52:51.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (140.0 MB). Acoes na janela: **212**.
+**Medido em 08/11/2026 09:58:04.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (140.0 MB). Acoes na janela: **209**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -219,6 +219,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 23:19:58 | SendMessage |  | `-` |
 | 23:19:47 | Bash | Record second aval, update RELATO and PROMPTS | `cd /home/ronald/saas-hasner; cat > logs/fio_e0_v4/aval_e1_ordem_por_transacao.txt <<'EOF' aval Ronald: E1-ORDEM-POR-TRANSACAO (07/11 22:2x, responde PERGUNTA DE DESENHO E1 Codex v14/v15). Corte: a ordem vale por TRANSACAO (trava segura ate o commit; e isso que evita deadlock). A invariante que a casa garante e a do topo: toda transacao que escreve Disputa, Chamado ou Pergunta trava ANTES o Colabor ...` |
 | 23:19:39 | Bash | Record aval, update RELATO top | `cd /home/ronald/saas-hasner; cat > logs/fio_e0_v4/aval_e1_fecho_na_identidade.txt <<'EOF' aval Ronald: E1-FECHO-NA-IDENTIDADE (07/11 22:2x, responde DESENHO FIO-E0-V4-E1 models.py:2703). Corte: a canonica se elege sobre o fecho, e o fecho NUNCA atravessa a identidade do fato. A identidade por familia do DESENHO E1 ja contem o dia do turno do marco (pergunta_unica_por_marco), entao linha de OUTRO d ...` |
-| 21:53:21 | Bash | Turn E1 lei line into DESENHO question line | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') assert L[1].startswith('lei: FIO-E0-V4-E1') L[1]='DESENHO FIO-E0-V4-E1: lei=juiz unico pergunta=a canonica do fato se elege sobre o fecho mesmo quando a ponte por linha do acervo sem episodio alcanca linha de OUTRO dia, ou limita por data_evento (regra nova)? app/chamados/models.py:2703 -- frota hoj ...` |
-| 21:53:16 | Bash | Check cited files exist in main | `cd /home/ronald/saas-hasner; wc -l app/chamados/models.py app/chamados/services/fio.py 2>&1 \| head` |
-| 21:52:59 | Bash | Publish E1 lei and design question at RELATO top | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') assert L[1].startswith('ESPERANDO:') L[1]='lei: FIO-E0-V4-E1 (a) eleger a canonica sobre o fecho alcanca linha de OUTRO dia (ponte por linha do acervo sem episodio): limitar por data_evento seria regra nova -- frota hoje 0 (sombra dcc5525e CENSO-A linhas_com_episodio=0, fecho_cruza_dias=0), sintetic ...` |
