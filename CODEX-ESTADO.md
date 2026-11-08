@@ -1,7 +1,55 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 11:04** · publicado em **08/11/2026 11:09** (UTC-3)
+> Ultima resposta processada: **08/11/2026 11:23** · publicado em **08/11/2026 11:25** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 08/11 11:23 · sessao c343206cd790 · FIO-E0-V4-E1 · censo · origem=Code
+
+**As classes propostas não cobrem três dos cinco achados:** o Codex viu, e a triagem confirmou sem curar. Chamá-los de **(b)** falsearia o registro, porque a triagem manteve 3a/3b como bloqueadores. — `triagem_e1_v14b.txt:3,5-6`
+
+Numeração abaixo: primeira linha após cada marcador `== anexo: ... ==` = linha 1, contando linhas vazias.
+
+1. **3a — segunda chamada idêntica → `FatoEmOutroDia`: sem classe aplicável entre (a–e).** Foi visto e mantido como bloqueador. — `codex_e1_v14b.r:39`; `triagem_e1_v14b.txt:5`
+
+   **Pergunta:** “o comportamento novo (FatoEmOutroDia ou reaproveitar a linha de outra data gravada e lhe dar a celula de data_evento) esta certo pela lei do aval?” — `codex_e1_v14b.q:8`
+
+   **Resposta:** “Portanto `abrir(D0, batida cujo juiz diz DIA)` pode criar em D0; uma chamada direta posterior igual pode recusar a própria linha pelo juiz.” — `codex_e1_v14b.r:39`
+
+   **Triagem:** “NAO curado: PERGUNTA DE DESENHO (duas curas, ver relato). Bloqueia pouso.” **Motivo escrito de descarte: nao ha trecho.** — `triagem_e1_v14b.txt:5` [nao verificado]
+
+2. **3b — `_resolvedora_valida` compara a data gravada: sem classe aplicável entre (a–e).** Foi visto e mantido como bloqueador. — `codex_e1_v14b.r:43`; `triagem_e1_v14b.txt:6`
+
+   **Pergunta:** “Todos os escritores e leitores supoem o MESMO significado (dia civil gravado x dia do turno x instante)?” — `codex_e1_v14b.q:6`
+
+   **Resposta:** “A segunda validação lê essa data antiga e lança `ResolvedoraCruzada`, pois a diferença supera um dia.” O mesmo parágrafo cita `app/chamados/models.py:2786` e `app/chamados/juizes.py:1988`. — `codex_e1_v14b.r:43`
+
+   **Triagem:** “PROCEDENTE, provado. NAO curado: mesma PERGUNTA DE DESENHO. Bloqueia pouso.” **Motivo escrito de descarte: nao ha trecho.** — `triagem_e1_v14b.txt:6` [nao verificado]
+
+3. **`data_evento` com dois significados: sem classe aplicável entre (a–e).** Foi visto e confirmado como causa raiz, sem cura naquela volta. — `codex_e1_v14b.r:15,91`; `triagem_e1_v14b.txt:3`
+
+   **Pergunta:** “campo com dois significados (data_evento: chave de busca x identidade -- esta declarado e respeitado em todo leitor?)” — `codex_e1_v14b.q:12`
+
+   **Resposta:** “**Campo com dois significados não reconciliados — procedente, gravidade alta:** a identidade nova usa o juiz, enquanto destino, C6 e plantio continuam usando a data gravada como dia do fato.” — `codex_e1_v14b.r:91`
+
+   **Triagem:** “PROCEDENTE como causa raiz de 3a/3b; vai junto da PERGUNTA DE DESENHO (nao curado nesta volta).” **Motivo escrito de descarte: nao ha trecho.** — `triagem_e1_v14b.txt:3`
+
+4. **Outro componente fica fora sem recusa: (c), fora do alcance da árvore perguntada.** A pergunta identifica `5e55c211`; a eleição de um único componente aparece na triagem como cura da volta 14b. O laudo posterior aponta o residual dessa cura. — `codex_e1_v14b.q:1`; `triagem_e1_v14b.txt:4`; `opus_final2_e1_6695e972.md:8`
+
+   **Pergunta relacionada:** “e o universo que a porta (universo_do_fato) elege e exatamente o universo_da_linha de seus membros?” — `codex_e1_v14b.q:7`
+
+   **Resposta sobre a implementação anterior:** “o fecho preserva todas as sementes, sem exigir conectividade entre elas.” — `codex_e1_v14b.r:29`
+
+   **Registro da mudança:** “CURADO na volta 14b: fio.py::universo_do_fato elege UM componente (o da canonica_do_grupo das sementes)”. — `triagem_e1_v14b.txt:4`
+
+   **Pergunta ou resposta sobre o residual específico da nova escolha — componente omitido sem recusa: nao ha trecho.** Esse residual consta do laudo posterior: “o outro nao entra em recusadas nem fecho_cruza_dias, nenhum contador o ve”. — `opus_final2_e1_6695e972.md:8`
+
+5. **Custo dos juízes: (b), visto e descartado como bloqueio, mantido em fila.** — `codex_e1_v14b.r:59,66,72`; `triagem_e1_v14b.txt:9`
+
+   **Pergunta:** “quantas chamadas ao juiz por abrir, por fecho, por fecho_cruza_dias? Memo por batida basta?” — `codex_e1_v14b.q:10`
+
+   **Resposta:** “Zero com busca vazia; caso contrário, B no universo/ponte/fecho compartilhado.” Também: “**Memo por batida não basta para compartilhar trabalho por turno/janela**”. — `codex_e1_v14b.r:66,72`
+
+   **Motivo escrito na triagem:** “descartado como bloqueio -- nenhum selo de teto vermelho na suite de 14300; fila (medir na frota).” A medição na frota permanece **[nao verificado]**. — `triagem_e1_v14b.txt:9` [nao verificado]
 
 ## 08/11 11:04 · sessao b5a11839aaae · PERGUNTA-SEM-SELO · censo · origem=Code
 
@@ -1244,55 +1292,4 @@ Registro de juízes:
 
 Exemplo adicional relevante: para efeito de folha, ausência inteira não `ABONA` é excluída da dispensa de pontualidade por `app/ponto/turnos.py:2690`, embora `ausencia_explica_o_dia_inteiro` não teste efeito (`:2675`). Isso é diferença entre domínios/composições, não prova isolada de divergência A/B.
 
-## 08/11 10:20 · sessao 4d73f0df7961 · - · - · origem=Ronald (tmux)
-
-Grade e ata:
-
-- `app/escala/utils.py:1209` consulta cobertura `para='folha'`; `:1210-1212` calcula a parcialidade por `cobre_parte_do_dia`. Para não-falta marca `tipo_dia='ausencia'` (`:1241`) e `cobertura_parcial=True` (`:1251`); chama `periodo_da_parcial_no_dia` (`:1255`). Se `sem_periodo`, não entra no ramo de dispensa (`:1265`): os missing permanecem. A limpeza de todas as células só ocorre em `not _parcial` (`:1272-1274`).
-- `app/ponto/services/cartorio.py:647` faz `_acesa = isinstance(x, dict) and not x.get('missing')`; grava em `:677-679`. Sem DNA correspondente, o fallback também grava `acesa = not missing` (`:687-690`). Portanto os marcos missing conhecidos permanecem `acesa=False`; não significa que todas as lâmpadas do dia ficam falsas, pois batidas presentes acendem as respectivas lâmpadas (`:618-620`, `:647`).
-- Há exceção de lâmpada sem coluna atribuível com fato cego: `acesa=None` (`app/ponto/services/cartorio.py:641-644`). Não transformar a afirmação sobre missing conhecidos numa garantia universal sobre todas as lâmpadas.
-- `ata_do_dia` transporta tipo do dia e lâmpadas (`app/ponto/services/cartorio.py:701-705`), conta false em `n_missing` (`:712-713`), escreve `cobertura_parcial=True` (`:732-733`) e `periodo_parcial='sem_periodo'` (`:736-737`).
-- `dispensar_por_ausencia` só aceita ausência aprovada SEM `dia['cobertura_parcial']` (`app/ponto/services/cartorio.py:766-769`); parcial sem período sai intacta. Se também houver `dia['justificado']`, existe outra fonte de dispensa (`:768`), que acende e marca `dispensada` (`:770-776`).
-- Uso da montagem/dispensa de ata em produção: `app/ponto/services/cartorio.py:1210`, `:1386`, `:1800-1802`; o último lavra via `cel.lavrar_veredito`.
-- `app/escala/services/leitor_celula.py:416-419` só transporta os dois carimbos da ata para o dia; não altera sem_periodo nem julga novamente.
-
-Portão comum de emissão:
-
-- `app/ponto/services/cartorio.py:370` define `parcial_so_lista`; sem `cobertura_parcial`, False (`:396-397`); com `periodo_parcial == 'sem_periodo'`, True incondicional (`:398-399`). Para parcial com período, True depende de julgamento anterior e ausência de fato novo (`:400`).
-- Cartório calcula uma vez em `app/ponto/services/cartorio.py:1706-1707`; furo sem batida só chama emissor quando `apply_ and not _parcial_so_lista` (`:1725`, chamada `:1740-1742`); furo parcial só emite quando `apply_ and not vivos and not _parcial_so_lista` (`:1777-1780`). Logo não cria chamado de furo para sem_período que tenha os carimbos.
-- `app/ponto/services/cartorio.py:1723-1724` e `:1775-1776` chamam `_contar_na_lista`. Este apenas incrementa contador em memória `parcial_na_lista_sem_push` e guarda chave em conjunto (`:1827-1832`): não escreve linha de lista.
-- Chamado vivo pode continuar e ter marcos espelhados: `app/ponto/services/cartorio.py:1781-1789`, `:1790-1798`. O bloqueio de nascimento não é um fecho universal dos vivos.
-
-Todos chamadores executáveis de `parcial_so_lista`, fora tests:
-
-| Sítio | Efeito para parcial sem período |
-|---|---|
-| `app/ponto/services/cartorio.py:1706` | Cala os dois portões de novo chamado, `:1725`, `:1777`. |
-| `app/chamados/services/fabrica_da_celula.py:102-104` | `motivos_a_perguntar` retorna `[]`: sem pergunta/pai/push; há guardas anteriores por dia/estado em `:91-100`. |
-| `app/chamados/services/disputa_emissao.py:871-873` | `dia_na_lista_do_admin` retorna o predicado; sem dia/célula retorna False (`:864-870`). |
-| `app/chamados/management/commands/disparar_perguntas_competencia.py:154-156` | Conta `parcial_lista`, pula nova pergunta do chamado mudo. |
-| `app/ponto/management/commands/emitir_furo_retroativo.py:121-123` | Conta `na_lista`, pula emissão retroativa. |
-| `app/ponto/services/cluster_espurio.py:102-107` | Exclui dias da lista de `a_abrir`; `reconciliar_colab` pula `abrir` em `:127-130`; `a_fechar` é calculado separadamente (`:108`), não pelo predicado. |
-
-Leitores de `dia_na_lista_do_admin`:
-
-- `app/chamados/services/disputa_emissao.py:894-896`: filtra chamados órfãos antes de criar disputa/pergunta; chamado existente não é fechado pela filtragem.
-- `app/chamados/services/pergunta_no_app.py:88-91`: retorna causa `parcial_na_lista_do_admin` ANTES da causa `coberto_por_ausencia`. O rótulo e dono `'admin'` ficam em `:26-27`. `medir` transforma retenções de chamados existentes em itens (`:126-144`) e contagens (`:145-149`). O command `app/chamados/management/commands/chamados_vivos_sem_pergunta_no_app.py:14-21` imprime as contagens.
-
-Supra:
-
-- `app/ponto/supra_juiz.py:381-389`: com fato no dia encerrado + aprovado + sem_periodo, adiciona `PARCIAL_SEM_PERIODO`, texto “cobrar o CADASTRO”.
-- Segundo ramo de batida sem par usa o mesmo código em `app/ponto/supra_juiz.py:437-442`.
-- O dia sem fato pode seguir sendo FURO: a parcial sem período não é dia inteiro (`app/ponto/supra_juiz.py:268-269`), não ganha dispensa que satisfaça `_parcial_sem_resto` (`:311-312`), e o ramo de furo o alcança em `:313-316`. O cartório posteriormente cala a emissão por `parcial_so_lista`.
-- `app/ponto/supra_juiz.py:530-534`: `_resto_cobrado` exige período diferente de sem_periodo; aprovado + chamado vivo sem esse resto produz `COBRANCA_EM_DIA_COBERTO`.
-- `app/escala/models.py:1615` mapeia `PARCIAL_SEM_PERIODO` para `indefinida`; a ordem do mapa dá precedência a furo, cobrança indevida e coberta (`:1612-1615`).
-
-Destino “lista do admin”, distinção comprovada:
-
-- Existe promessa literal nos comentários de `app/ponto/services/cartorio.py:379-382` e texto da tela `app/templates/ponto/partials/painel_ausencia.html:296-299`: se parcial aprovada e sem `hora_ini`, mostra “sem periodo: o dia esta na lista do DP”.
-- A lista real é `app/escala/views.py:484-492`, chamando `cadastro_realidade.lista`.
-- Ela agrega explicitamente fontes de C1–C12 (`app/escala/services/cadastro_realidade.py:800-879`) e as A lavradas (`:886-887`, apresentação `:936-945`). C11 seleciona `veredito='indefinida'` mas **exige** protesto `PREVISTO_COM_DIA_INDEFINIDO` (`:477-478`), não `PARCIAL_SEM_PERIODO`.
-- Não localizei publicador específico que coloque o código/dia `PARCIAL_SEM_PERIODO` nessa lista real. Presença efetiva por essa condição: **[não verificado]**. Bloqueio da emissão e contagem `parcial_na_lista_sem_push` estão comprovados, mas não são publicação de linha. [nao verificado]
-- Existe caminho genérico A9 para ausência + pelo menos 2 batidas (`app/ponto/services/esmeril_espelho.py:133-134`), sem distinguir sem_período; é rotulado “juiz” (`:23`). Não garante que cada parcial sem período apareça na lista.
-
-_2863 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2864 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
