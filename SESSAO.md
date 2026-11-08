@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/11/2026 15:21:32.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (150.1 MB). Acoes na janela: **417**.
+**Medido em 08/11/2026 15:26:32.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (150.3 MB). Acoes na janela: **426**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:26:06 | Bash | Run sombra apply + invariant + reuso count | `cd /home/ronald/saas-hasner; SOMBRA_ARVORE=/home/ronald/wt-e1merge3-150529/app bash bin/sombra.sh --rodar logs/sombra/e1_v15d2_pouso_inv.py > logs/fio_e0_v4/sombra_e1_inv_b0c4297c.out 2>&1; chmod 600 logs/fio_e0_v4/sombra_e1_inv_b0c4297c.out; grep -E 'ANTES\|DENTRO\|aplic\|INVARIANTE\|M1\|M0\|^E \|PERGUNTA_SOBRE\|REUSO_SEM\|ROLLBACK\|DEPOIS\|Error\|esperado' logs/fio_e0_v4/sombra_e1_inv_b0c4297c.o ...` |
+| 15:26:02 | Bash | Make sombra script with reuso count | `cd /home/ronald/saas-hasner; sed -n 76,83p logs/sombra/e1_v15c_pouso_inv.py; python3 - <<'EOF' s=open('logs/sombra/e1_v15c_pouso_inv.py').read() a=" raise Rb()\n" assert s.count(a)==1 s=s.replace(a," from chamados.services.fio import reuso_sem_rechave\n _q = reuso_sem_rechave(); print('REUSO_SEM_RECHAVE n=%s esperado=%s universo=%s motivo=%s pks=%s' % (_q.get('n'), _q.get('esperado'), _q.get('univ ...` |
+| 15:25:58 | Bash | Inspect sombra invariant script | `cd /home/ronald/saas-hasner; wc -l logs/sombra/e1_v15c_pouso_inv.py; grep -n -E 'raise\|print\|call_command\|def ' logs/sombra/e1_v15c_pouso_inv.py \| head -40` |
+| 15:25:52 | Bash | Check ATOMIC_REQUESTS and raise site | `cd ~/wt-e1merge3-150529/app; grep -rn ATOMIC_REQUESTS --include=*.py . \| grep -v tests \| head; sed -n 2855,2880p chamados/models.py` |
+| 15:25:44 | Bash | Check batida view emission and ATOMIC_REQUESTS | `cd ~/wt-e1merge3-150529/app; sed -n 770,800p api/views.py; grep -rn ATOMIC_REQUESTS config/ \| head` |
+| 15:25:37 | Bash | Read trilha/contador section | `tail -c +14000 /home/ronald/saas-hasner/logs/fio_e0_v4/codex_e1_v15d_reuso.r \| sed -n 34,49p` |
+| 15:25:35 | Bash | Skim Codex answer parts 2-3 | `tail -c +14000 /home/ronald/saas-hasner/logs/fio_e0_v4/codex_e1_v15d_reuso.r \| grep -n -E '^\*\*\|^#\|2\)\|3\)\|gravar_dia_do_fato\|antes\|3d8ebe87' \| head -40` |
+| 15:25:31 | Bash | Read Codex answer part 1 | `chmod 600 /home/ronald/saas-hasner/logs/fio_e0_v4/codex_e1_v15d_reuso.r; head -c 14000 /home/ronald/saas-hasner/logs/fio_e0_v4/codex_e1_v15d_reuso.r` |
+| 15:25:28 | Bash | Read suite verdict and Codex status | `L=/home/ronald/saas-hasner/logs/fio_e0_v4/suite_e1_merge3_b0c4297c.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran ' $L \| tail -1; tail -1 $L; grep -E '^(ERROR\|FAIL):' $L \| head; ls -l /home/ronald/saas-hasner/logs/fio_e0_v4/codex_e1_v15d_reuso.r 2>&1` |
 | 15:07:20 | Bash | Relaunch Codex with question file | `cd /home/ronald/saas-hasner; CODEX_OBRA=FIO-E0-V4-E1 CODEX_PAPEL=leitura nohup bash bin/codex_pergunta.sh --anexo app/docs/JUIZES.md b0c4297c logs/fio_e0_v4/codex_e1_v15d_reuso.q logs/fio_e0_v4/codex_e1_v15d_reuso.r > logs/fio_e0_v4/codex_e1_v15d_reuso.out 2>&1 & echo $!; /usr/bin/sleep 15; tail -3 logs/fio_e0_v4/codex_e1_v15d_reuso.out` |
 | 15:07:17 | Bash | See wrapper's question argument rule | `cd /home/ronald/saas-hasner; grep -n -B2 -A6 'pergunta ilegivel' bin/codex_pergunta.sh \| head -30` |
 | 15:06:54 | Bash | Check Codex wrapper started cleanly | `/usr/bin/sleep 20; cat /home/ronald/saas-hasner/logs/fio_e0_v4/codex_e1_v15d_reuso.out \| tail -5` |
