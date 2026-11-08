@@ -1,7 +1,116 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **07/11/2026 23:35** · publicado em **07/11/2026 23:39** (UTC-3)
+> Ultima resposta processada: **07/11/2026 23:40** · publicado em **07/11/2026 23:44** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 07/11 23:40 · sessao 9e8813eff9c8 · FIO-E0-V4-E1 · censo · origem=Code
+
+Censo estático da raiz `app/`. Uso **CH** = `ChamadoColaborador`, **D** = `DisputaSupervisao` e **P** = `PerguntaDisputa`. (`chamados/models.py:27`; `chamados/models.py:1691`; `chamados/models.py:2297`)
+
+A classificação precisa distinguir caminhos: `trava_a_ordem_para_escrever()` retorna sem travar quando não existe `atomic`; `P.save()`, por sua vez, abre seu próprio `atomic`, sem adquirir C. (`chamados/models.py:484`; `chamados/models.py:486`; `chamados/models.py:3173`)
+
+Execuções, quantidades efetivas de donos e locks observados em produção: **[nao verificado]**. Cascatas implícitas e transações internas do ORM não presentes na cópia: **[nao verificado]**.
+
+**1. Sítios de escrita**
+
+Cada linha corresponde a um sítio; quando há caminhos com classes diferentes, ambos aparecem na mesma célula.
+
+| Arquivo:linha | Função | Entidade / operação | Classificação da transação |
+|---|---|---|---|
+| `chamados/models.py:296` | `_gravar_estado` | CH / save | **TRAVA-ANTES**: `chamados/models.py:290`, no atomic `chamados/models.py:280`. |
+| `chamados/models.py:498` | `rebaixar` | CH / save | **INDETERMINADO**: chama a porta em `chamados/models.py:497`, condicionada ao atomic em `chamados/models.py:484`. Chamador de produção não localizado **[nao verificado]**. |
+| `chamados/models.py:553` | `escalar_urgencia` | CH / save | **SEM-ATOMIC** pelo command `ponto/management/commands/processar_alertas_avancados.py:173`; **TRAVA-ANTES**, via `chamados/models.py:552` → `chamados/models.py:486`, quando chamado no atomic de `ponto/management/commands/escalonar_chamados_supervisao.py:131`. |
+| `chamados/models.py:571` | `apagar_em_ensaio` | CH / delete | **SEM-TRAVA** no atomic de `ponto/management/commands/zerar_dados_operacionais.py:80`, chamada em `ponto/management/commands/zerar_dados_operacionais.py:84`. Tem guarda de ensaio antes do delete: `chamados/models.py:570` → `ponto/registro_batida.py:326`. |
+| `chamados/models.py:591` | `definir_prazo_sla` | CH / save | **TRAVA-ANTES**, via `chamados/models.py:590` → `chamados/models.py:486`, no atomic de `chamados/services/cobranca.py:176`; **SEM-ATOMIC** pela recobrança `chamados/views.py:1425` → `chamados/services/disputa_emissao.py:1604`. |
+| `chamados/models.py:610` | `marcar_escalonado_dp` | CH / save | **SEM-ATOMIC** pelo chamador `ponto/management/commands/escalonar_chamados_supervisao.py:103`; a porta de `chamados/models.py:609` retorna pela condição de `chamados/models.py:484`. |
+| `chamados/models.py:636` | `_rebaixar_sem_post_save` | CH / update | **INDETERMINADO** como execução isolada: herda o save que disparou o receiver `chamados/signals.py:72`. Pelo `_gravar_estado`, **TRAVA-ANTES** em `chamados/models.py:290`; a identificação do disparo concreto falta **[nao verificado]**. |
+| `chamados/models.py:971` | `abrir` | CH / get_or_create | **TRAVA-ANTES**: `chamados/models.py:905`, atomic `chamados/models.py:902`. |
+| `chamados/models.py:1095` | `criar` | CH / create | **SEM-TRAVA** pela API `api/views.py:2201`, com atomic próprio em `chamados/models.py:1094`. **TRAVA-ANTES** pela abertura de formulário, que trava em `chamados/services/abertura.py:164` antes da chamada em `chamados/services/abertura.py:172`. |
+| `chamados/models.py:1928` | `DisputaSupervisao.fechar` | D / save | **TRAVA-ANTES**: `chamados/models.py:1902`, atomic `chamados/models.py:1897`. |
+| `chamados/models.py:1960` | `aparar_motivo_respondido` | D / save | **SEM-ATOMIC**: `api/views.py:887` ou `api/views_core.py:877` → `api/foto_recebida.py:72`; o aparo precede a validação em `api/foto_recebida.py:73`. |
+| `chamados/models.py:2057` | `remover_motivo` | D / save | **TRAVA-ANTES**: `chamados/models.py:2018` e `chamados/models.py:2020`, no atomic `chamados/models.py:2017`. |
+| `chamados/models.py:2097` | `anotar_contexto` | D / save | **SEM-ATOMIC** pelos chamadores `chamados/views.py:1343` e `ponto/management/commands/escalonar_chamados_supervisao.py:159`. |
+| `chamados/models.py:2115` | `renovar_contexto` | D / save | **SEM-ATOMIC** pelo command `ponto/management/commands/alertar_disputas_pendentes.py:48`, no laço de `ponto/management/commands/alertar_disputas_pendentes.py:42`. |
+| `chamados/models.py:2153` | `reabrir_admin` | D / save | **SEM-ATOMIC** pelo caminho `chamados/services/fio.py:583` → `chamados/services/acoes_disputa.py:256`. A conversa é aberta depois, em `chamados/services/acoes_disputa.py:260`. |
+| `chamados/models.py:2169` | `reabrir_sistema` | D / save | **TRAVA-ANTES** pelos caminhos `chamados/services/relavra_via.py:230` → `chamados/services/relavra_via.py:261`, `chamados/services/materializacao.py:676` → `chamados/services/materializacao.py:683` e `chamados/management/commands/reabrir_orfas_enterradas.py:153` → `chamados/management/commands/reabrir_orfas_enterradas.py:165`. **SEM-ATOMIC** pela ressuscitação avulsa de `chamados/views_arquivar.py:86`: a reabertura em `chamados/models.py:1583` fica depois do atomic de `chamados/models.py:1547`. |
+| `chamados/models.py:2227` | `reabrir_por_colab` | D / save | **SEM-ATOMIC** por `chamados/views.py:1334` e `api/views.py:2718`; o atomic da correção já terminou antes do retorno em `chamados/services/disputa_emissao.py:1520`. |
+| `chamados/models.py:2253` | `limpar_resolucao_residual` | D / save | **INDETERMINADO**: método sem trava/atomic próprio; chamador de produção não localizado **[nao verificado]**. |
+| `chamados/models.py:2769` | `_nascer` | P / save da existente | **TRAVA-ANTES**: `chamados/models.py:2691`, no atomic `chamados/models.py:2689`. |
+| `chamados/models.py:2773` | `_nascer` | P / create | Fato: **TRAVA-ANTES** em `chamados/models.py:2691`. Conversa: **SEM-TRAVA**, porque a condição de `chamados/models.py:2690` pula C; entrada em `chamados/services/acoes_disputa.py:260`. |
+| `chamados/models.py:2907` | `carimbar` | P / save | **SEM-TRAVA** pelo consumidor `chamados/reconciliador.py:1355` → `chamados/reconciliador.py:586`; o atomic é o de `chamados/models.py:3173`. **TRAVA-ANTES** pelo resolvedor que trava em `chamados/services/disputa_emissao.py:1683` e carimba em `chamados/services/disputa_emissao.py:1749`. |
+| `chamados/models.py:2945` | `carimbar_identidade` | P / save | **TRAVA-ANTES** por `Disputa.fechar`, trava `chamados/models.py:1902`, chamada `chamados/models.py:1913`. **SEM-TRAVA** nos caminhos de recusa de materialização sem C ancestral: `chamados/services/materializacao.py:921` e `chamados/services/materializacao.py:1096`; atomic do save em `chamados/models.py:3173`. |
+| `chamados/models.py:2967` | `descarimbar` | P / save | **TRAVA-ANTES** por `chamados/services/relavra_via.py:230` → `chamados/services/relavra_via.py:246` e `chamados/management/commands/reabrir_orfas_enterradas.py:153` → `chamados/management/commands/reabrir_orfas_enterradas.py:157`. **SEM-TRAVA** pela reabertura de competência em `chamados/services/competencia_trancada.py:253` → `chamados/services/competencia_trancada.py:254` → `chamados/models.py:3073`. |
+| `chamados/models.py:3015` | `descarimbar_em_lote` | P / update | **TRAVA-ANTES** por `chamados/models.py:1552` → `chamados/models.py:1555`. **SEM-TRAVA** pela correção que abre atomic em `chamados/services/disputa_emissao.py:1496` e chama o lote em `chamados/services/disputa_emissao.py:1516`. O `.update` está em `chamados/models.py:3016`. |
+| `chamados/models.py:3027` | `encerrar_por_fato_no_espelho` | P / save | **SEM-TRAVA**: atomic por pergunta em `chamados/management/commands/encerrar_perguntas_com_fato.py:67`, chamada em `chamados/management/commands/encerrar_perguntas_com_fato.py:68`. |
+| `chamados/models.py:3174` | `PerguntaDisputa.save` | P / super.save | Herda a classificação do chamador: **SEM-TRAVA**, por exemplo, via `chamados/services/disputa_emissao.py:1389`; **TRAVA-ANTES** via `chamados/models.py:2691` → `chamados/models.py:2769`. Sempre tem atomic próprio em `chamados/models.py:3173`. |
+
+| Arquivo:linha | Função | Entidade / operação | Classificação da transação |
+|---|---|---|---|
+| `chamados/services/vinculos.py:89` | `apontar_justificativa` | CH / save | **TRAVA-ANTES**: `chamados/services/vinculos.py:88`; atomic `chamados/services/vinculos.py:86`. |
+| `chamados/services/vinculos.py:101` | `apontar_celula` | CH / save | **TRAVA-ANTES**: `chamados/services/vinculos.py:100`; atomic `chamados/services/vinculos.py:98`. |
+| `chamados/services/vinculos.py:117` | `apontar_ticket_glpi` | CH / save | **TRAVA-ANTES**: `chamados/services/vinculos.py:116`; atomic `chamados/services/vinculos.py:114`. |
+| `chamados/services/vinculos.py:135` | `assumir_responsavel` | CH / save | **TRAVA-ANTES**: `chamados/services/vinculos.py:134`; atomic `chamados/services/vinculos.py:131`. |
+| `chamados/services/vinculos.py:147` | `liberar_responsavel` | CH / save | **TRAVA-ANTES**: `chamados/services/vinculos.py:146`; atomic `chamados/services/vinculos.py:143`. |
+| `chamados/services/contexto.py:78` | `anotar_contexto` | CH / save | **TRAVA-ANTES**: `chamados/services/contexto.py:77`; atomic `chamados/services/contexto.py:75`. |
+| `chamados/services/contexto.py:104` | `renovar_contexto` | CH / save | **TRAVA-ANTES**: `chamados/services/contexto.py:103`; atomic `chamados/services/contexto.py:101`. |
+| `chamados/services/contexto.py:127` | `retirar_contexto` | CH / save | **TRAVA-ANTES**: `chamados/services/contexto.py:126`; atomic `chamados/services/contexto.py:124`. |
+| `chamados/services/contexto.py:163` | `fundir_contexto` | CH / save | **TRAVA-ANTES**: `chamados/services/contexto.py:162`; atomic `chamados/services/contexto.py:160`. |
+| `chamados/services/texto.py:36` | `reescrever_texto` | CH / save | **TRAVA-ANTES**: `chamados/services/texto.py:35`; atomic `chamados/services/texto.py:31`. |
+| `chamados/services/arquivo.py:171` | `silenciar` | CH / save | **SEM-ATOMIC** pela view `chamados/views_arquivar.py:37`. **TRAVA-ANTES** em `chamados/services/arquivo.py:170` → `chamados/models.py:486` no lote sob atomic `chamados/views_arquivar.py:134`. |
+| `chamados/services/arquivo.py:210` | `levantar` | CH / save | **SEM-ATOMIC** pela view `chamados/views_arquivar.py:77`. Sob atomic externo, **TRAVA-ANTES** pela porta `chamados/services/arquivo.py:209` → `chamados/models.py:486`. |
+| `chamados/services/disputa_emissao.py:296` | `perguntar_entradas_pendentes` | D / save | **TRAVA-ANTES** por `chamados/services/disputa_emissao.py:968` → `chamados/services/disputa_emissao.py:1179`. **SEM-ATOMIC** por `api/views.py:794` → `chamados/services/disputa_emissao.py:685`: o atomic da abertura em `chamados/services/disputa_emissao.py:521` já terminou. |
+| `chamados/services/disputa_emissao.py:565` | `_abrir_ou_agregar_disputa` | D / save | **TRAVA-ANTES**: `chamados/services/disputa_emissao.py:530`; atomic `chamados/services/disputa_emissao.py:521`. |
+| `chamados/services/disputa_emissao.py:587` | `_abrir_ou_agregar_disputa` | D / create | **TRAVA-ANTES**: `chamados/services/disputa_emissao.py:530`; atomic `chamados/services/disputa_emissao.py:521`. |
+| `chamados/services/disputa_emissao.py:993` | `criar_disputa_a_partir_de_chamados_orfaos` | D / save | **TRAVA-ANTES**: `chamados/services/disputa_emissao.py:968`; atomic `chamados/services/disputa_emissao.py:964`. |
+| `chamados/services/disputa_emissao.py:1032` | `criar_disputa_a_partir_de_chamados_orfaos` | D / create | **TRAVA-ANTES**: `chamados/services/disputa_emissao.py:968`. |
+| `chamados/services/disputa_emissao.py:1041` | `criar_disputa_a_partir_de_chamados_orfaos` | D / save | **TRAVA-ANTES**: `chamados/services/disputa_emissao.py:968`. |
+| `chamados/services/disputa_emissao.py:1070` | `criar_disputa_a_partir_de_chamados_orfaos` | D / save | **TRAVA-ANTES**: `chamados/services/disputa_emissao.py:968`. |
+| `chamados/services/disputa_emissao.py:1165` | `criar_disputa_a_partir_de_chamados_orfaos` | D / save | **TRAVA-ANTES**: `chamados/services/disputa_emissao.py:968`. |
+| `chamados/services/disputa_emissao.py:1259` | `criar_disputa_ancora_de_chamado` | D / create | **TRAVA-ANTES**: `chamados/services/disputa_emissao.py:1232`; atomic `chamados/services/disputa_emissao.py:1223`. |
+| `chamados/services/disputa_emissao.py:1268` | `criar_disputa_ancora_de_chamado` | D / save | **TRAVA-ANTES**: `chamados/services/disputa_emissao.py:1232`. |
+| `chamados/services/relavra_via.py:127` | `relavrar` | P / save | **SEM-TRAVA**: command abre atomic em `chamados/management/commands/relavrar_via_i6.py:101` e chama em `chamados/management/commands/relavrar_via_i6.py:102`. |
+| `chamados/services/validacao.py:137` | `_carimbar_validacao` | P / save | **TRAVA-ANTES** pelos chamadores que travam em `chamados/services/validacao.py:285`, `chamados/services/validacao.py:317` ou `chamados/services/validacao.py:431`. |
+| `chamados/services/validacao.py:202` | `devolver_validacao_recusada` | P / save | **TRAVA-ANTES**: `chamados/services/validacao.py:431`, chamada em `chamados/services/validacao.py:464`, dentro do atomic `chamados/services/validacao.py:425`. |
+| `chamados/services/validacao.py:585` | `recusar_pergunta` | P / save | **SEM-TRAVA** pelo caminho `chamados/services/acoes_disputa.py:80`; atomic do save em `chamados/models.py:3173`. |
+| `chamados/services/validacao.py:661` | `conferir_data_do_fato` | P / save | **SEM-TRAVA** pelo caminho `chamados/views.py:1312`; atomic do save em `chamados/models.py:3173`. |
+| `chamados/services/materializacao.py:848` | `_materializar_resposta_hora` | P / save | **TRAVA-ANTES** pela validação em `chamados/services/validacao.py:431` → `chamados/services/validacao.py:463`. **SEM-TRAVA** pelos caminhos `chamados/services/acoes_disputa.py:139`, `chamados/services/fio.py:670` e `chamados/services/validacao.py:469`; atomic local em `chamados/services/materializacao.py:1217`. |
+| `chamados/services/materializacao.py:1100` | `_carimbar_recusa` | P / save | **SEM-TRAVA** nos caminhos que chegam ao gate em `chamados/services/materializacao.py:1210` ou ao finally em `chamados/services/materializacao.py:1294`, sem C ancestral; atomic do save em `chamados/models.py:3173`. **TRAVA-ANTES** quando ainda sob `chamados/services/validacao.py:431`. |
+| `chamados/services/disputa_emissao.py:1389` | `responder_pergunta_disputa_core` | P / save | **SEM-TRAVA** por `chamados/views.py:1283`, `api/views.py:2659` e `chamados/services/acoes_disputa.py:368`; atomic local `chamados/services/disputa_emissao.py:1388`. **TRAVA-ANTES** pela declaração sob `chamados/services/declaracao_texto.py:322`, que mantém a trava de `chamados/services/disputa_emissao.py:530`. |
+| `chamados/services/disputa_emissao.py:1434` | `responder_pergunta_disputa_core` | P / save | Mesmas entradas: **SEM-TRAVA** pelos HTTP acima; **TRAVA-ANTES** pela declaração sob `chamados/services/declaracao_texto.py:322` ou `chamados/services/declaracao_texto.py:624`, com trava em `chamados/services/disputa_emissao.py:530`. Atomic próprio do save em `chamados/models.py:3173`. |
+| `chamados/services/disputa_emissao.py:1518` | `reabrir_para_correcao` | P / update | **SEM-TRAVA** por `chamados/services/acoes_disputa.py:103`, `chamados/services/validacao.py:588` e `chamados/management/commands/curar_perguntas_em_limbo.py:69`; atomic `chamados/services/disputa_emissao.py:1496`. **TRAVA-ANTES** na devolução de ausência rejeitada: `chamados/services/materializacao.py:676` → `chamados/services/materializacao.py:679`. |
+| `chamados/services/disputa_emissao.py:1541` | `responder_automaticamente` | P / save | **SEM-TRAVA** por `api/foto_recebida.py:48`, antes da validação em `api/foto_recebida.py:51`; atomic local `chamados/services/disputa_emissao.py:1540`. |
+| `chamados/services/disputa_emissao.py:1562` | `carimbar_resposta_pela_trilha` | P / save | **SEM-TRAVA**: atomic `chamados/services/disputa_emissao.py:1561`; chamador `chamados/management/commands/curar_perguntas_em_limbo.py:67`. |
+| `chamados/services/fio.py:870` | `reapontar_resolvedora` | P / save | **TRAVA-ANTES**: `chamados/services/fio.py:855`; ramo que data passa por `chamados/services/fio.py:849` e trava em `chamados/models.py:2646`. Atomic `chamados/services/fio.py:843`. |
+| `chamados/services/fio.py:965` | `rechavear_data_evento` | P / save | **TRAVA-ANTES**: `chamados/services/fio.py:947`; atomic `chamados/services/fio.py:943`. |
+| `chamados/veredito_lavrado.py:207` | `gravar_lavras_em_lote` | P / bulk_update | **INDETERMINADO quanto à fronteira transacional do ORM**: porta e command não adquirem C nem abrem atomic; chamadas em `chamados/management/commands/backfill_veredito_lavrado.py:143` e `chamados/management/commands/backfill_veredito_lavrado.py:146`. Atomic interno de `bulk_update`: **[nao verificado]**. |
+| `chamados/veredito_lavrado.py:231` | `lavrar` | P / save | **TRAVA-ANTES** por `chamados/models.py:312`, sob trava `chamados/models.py:290`. **SEM-TRAVA** pelo command `chamados/management/commands/lavrar_perguntas_stale.py:87`; atomic do save em `chamados/models.py:3173`. |
+
+Os signals abaixo chegam aos sítios da tabela por delegação; não são uma segunda ocorrência do mesmo `.save`:
+
+| Gatilho | Encadeamento de escrita |
+|---|---|
+| `chamados/signals.py:19` — disputa fechada | Atomic `chamados/signals.py:41` → `chamados/signals.py:42` → CH; **TRAVA-ANTES** em `chamados/models.py:290`. |
+| `chamados/signals.py:54` — urgência ao resolver | `chamados/signals.py:72` → update CH em `chamados/models.py:636`; herda a transação originadora. |
+| `chamados/signals.py:91` — resolver perguntas | Atomic `chamados/signals.py:114` → `chamados/signals.py:115`; **TRAVA-ANTES** no resolvedor `chamados/services/disputa_emissao.py:1683`. |
+| `chamados/signals.py:121` — retomar regularizações | Callback registrado em `chamados/signals.py:144`, executa a retomada em `chamados/signals.py:137`; a materialização pode criar batida e atingir os receivers de `ponto/signals.py:132` e `ponto/signals.py:207`. |
+| `chamados/signals.py:148` — materializar pendentes | Delega em `chamados/signals.py:163`, na transação originadora; carimbos passam por `chamados/models.py:2907`. |
+| `chamados/signals.py:188` — cartório do CH | Julga em `chamados/signals.py:203`, na transação originadora; portas alcançadas no corpo em `ponto/services/cartorio.py:1488`, `ponto/services/cartorio.py:1622` e `ponto/services/cartorio.py:1789`. |
+| `chamados/signals.py:215` — becos da P | Callback `chamados/signals.py:225` → `chamados/signals.py:224`; trava no serviço em `chamados/services/becos.py:51`. |
+| `chamados/signals.py:256` e `chamados/signals.py:270` — isentos | Callbacks em `chamados/signals.py:266` e `chamados/signals.py:293` → silêncio sob atomic `chamados/services/silencio_isentos.py:41` → CH em `chamados/services/arquivo.py:171`. |
+| `chamados/signals.py:312` — feriado | Callback `chamados/signals.py:322` → reavaliação em `chamados/signals.py:321`; fechos passam pelo escritor CH `chamados/models.py:296`. |
+| `chamados/signals.py:337` — filho morto | Callback `chamados/signals.py:356` → reconciliador em `chamados/signals.py:355`; inclui carimbo P em `chamados/reconciliador.py:586` e retração em `chamados/reconciliador.py:1427`. |
+| `ponto/signals.py:132` e `ponto/signals.py:144` — batida/ausência | Julgamento síncrono em `ponto/signals.py:135` ou `ponto/signals.py:147` → `ponto/signals.py:93` → portas do cartório. |
+| `ponto/signals.py:207` — reconciliador da batida | `ponto/signals.py:215` → carimbos/reconciliação em `chamados/reconciliador.py:1418`, `chamados/reconciliador.py:1419` e `chamados/reconciliador.py:1427`. |
+| `ponto/signals.py:276` — consumidor da ausência | Callback registrado em `ponto/signals.py:272`; devolução/reconciliação em `ponto/signals.py:262`, `ponto/signals.py:269` e `ponto/signals.py:271`. |
+| `ponto/signals.py:292` — geofence do posto | Callback `ponto/signals.py:307` → reavaliação em `ponto/signals.py:306`. |
+
+O `pre_save` de CH apenas lê o estado anterior; o outbox de P escreve `EventoCelula`. (`chamados/signals.py:184`; `chamados/signals.py:244`)
+
+**2. Laços cujo universo pode abranger vários colaboradores sob um mesmo atomic da aplicação**
+
+| Atomic externo / l
+
+[truncado em 20000 de 30185 caracteres]
 
 ## 07/11 23:35 · sessao 5f4f8b5530e6 · - · - · origem=Ronald (tmux)
 
@@ -662,28 +771,4 @@ Para a lista **e=sim e d=não**, incluir `limbo_folgas.py:270` no comando puro/v
 
 `nota.py:123`/`fundir_contexto` ficou com o root, por coordenação. app/chamados/services/nota.py:123.
 
-## 07/11 20:53 · sessao 00393fa21d8e · - · - · origem=Ronald (tmux)
-
-| Chamada / função chamadora | (b) atomic externo | (c) PD/DS anterior | (d) Colaborador anterior | (e) trava posterior C/DS |
-|---|---|---|---|---|
-| `app/api/views.py:2033` — `api_justificativas` → `apontar_justificativa` | Não; função sem atomic (`app/api/views.py:1960`) | Não na mesma transação; `Justificativa.save/create` em `app/api/views.py:2021`/`:2023` dispara receiver `app/ponto/signals.py:161`, porém sem atomic externo | Não (`app/api/views.py:1960`) | Não; receiver de campo retorna (`app/chamados/signals.py:100`, `:188`) |
-| `app/api/views.py:3159` — `api_ausencia_documento` → `renovar_contexto` | Não (`app/api/views.py:3091`) | Não na mesma transação; `_anexar` anterior em `app/api/views.py:3147` não está embrulhado com esta chamada | Não (`app/api/views.py:3091`) | Não (`app/chamados/signals.py:100`, `:188`) |
-| `app/api/views.py:3160` — `api_ausencia_documento` → `reescrever_texto` | Não (`app/api/views.py:3091`) | Não (`app/api/views.py:3159`) | Não (`app/api/views.py:3091`) | Não (`app/chamados/signals.py:100`, `:188`) |
-| `app/ponto/views.py:288` — `bater_ponto` → `renovar_contexto` | Não (`app/ponto/views.py:242`) | Não (`app/ponto/views.py:275`) | Não (`app/ponto/views.py:281`) | Não; registro de batida posterior pertence a outra transação (`app/ponto/views.py:350`) |
-| `app/ponto/views.py:1648` — `_abrir_justificativa_fluxo` → `apontar_justificativa` | Não; wrapper apenas delega (`app/ponto/views.py:1565`, `:1568`) | Não na mesma transação; J salva/cria antes (`app/ponto/views.py:1633`, `:1635`) e dispara cartório (`app/ponto/signals.py:165`) | Não (`app/ponto/views.py:1568`) | Não (`app/chamados/signals.py:100`, `:188`) |
-| `app/chamados/views.py:1025` — `atribuir_chamado` → `liberar_responsavel` | Não (`app/chamados/views.py:1008`) | Não (`app/chamados/views.py:1012`) | Não (`app/chamados/views.py:1012`) | Não (`app/chamados/signals.py:100`, `:188`) |
-| `app/chamados/views.py:1029` — `atribuir_chamado` → `assumir_responsavel` | Não (`app/chamados/views.py:1008`) | Não (`app/chamados/views.py:1012`) | Não (`app/chamados/views.py:1012`) | Não (`app/chamados/signals.py:100`, `:188`) |
-| `app/chamados/views_arquivar.py:37` — `arquivar_chamado` → `silenciar` | Não (`app/chamados/views_arquivar.py:24`) | Não (`app/chamados/views_arquivar.py:30`) | Não (`app/chamados/views_arquivar.py:30`) | Não (`app/chamados/signals.py:100`, `:188`) |
-| `app/chamados/views_arquivar.py:77` — `desarquivar_chamado` → `levantar` | Não (`app/chamados/views_arquivar.py:52`) | Não na mesma transação; eventual `reabrir` anterior já retornou (`app/chamados/views_arquivar.py:70`) | Não na mesma transação (`app/chamados/views_arquivar.py:70`) | Não na mesma transação; eventual ressuscitação é posterior, fora da transação da porta (`app/chamados/views_arquivar.py:86`) |
-| `app/chamados/views_arquivar.py:140` — `arquivar_lote` → `silenciar` | Sim (`app/chamados/views_arquivar.py:134`) | Não; laço apenas seleciona/verifica permissão/silencia (`app/chamados/views_arquivar.py:135`, `:137`, `:140`) | Não (`app/chamados/views_arquivar.py:134`) | Não; nenhuma trava no restante do bloco (`app/chamados/views_arquivar.py:147`) |
-| `app/ponto/services/triagem_batida.py:292` — `ramo_regularizar_saida` → `escalar_urgencia` | Não; chamador direto sem atomic (`app/ponto/views.py:336`) | Não na mesma transação; `Justificativa.update_or_create` ocorreu antes (`app/ponto/services/triagem_batida.py:258`) | Não (`app/ponto/services/triagem_batida.py:227`) | Não (`app/chamados/signals.py:100`, `:188`) |
-| `app/ponto/services/triagem_batida.py:369` — `ramo_solicitar_anuencia` → `escalar_urgencia` | Sim (`app/ponto/services/triagem_batida.py:368`) | Não; primeiro ato do bloco (`app/ponto/services/triagem_batida.py:369`) | Não; primeiro ato do bloco (`app/ponto/services/triagem_batida.py:369`) | Não; só renova contexto antes de sair (`app/ponto/services/triagem_batida.py:371`) |
-| `app/ponto/services/triagem_batida.py:371` — `ramo_solicitar_anuencia` → `renovar_contexto` pelo alias `_renovar_contexto` | Sim; import alias e atomic (`app/ponto/services/triagem_batida.py:367`, `:368`) | Não; anterior foi só urgência de CC (`app/ponto/services/triagem_batida.py:369`) | Não (`app/ponto/services/triagem_batida.py:369`) | Não; fim do bloco (`app/ponto/services/triagem_batida.py:371`) |
-
-Os perfis locais SaaS e prod não declaram `ATOMIC_REQUESTS`; WSGI/manage usam SaaS como padrão, mas configuração efetivamente executada em produção é [nao verificado]. (`app/config/settings/saas.py:83`, `app/config/settings/prod.py:9`, `app/config/wsgi.py:14`, `app/manage.py:9`)
-
-O receiver de `Justificativa` chama o cartório sincronicamente; isso foi considerado, mas os três sítios envolvidos não mantêm uma transação externa aberta até a chamada da porta. (`app/ponto/signals.py:161`, `:165`, `:85`, `:93`; `app/api/views.py:2033`; `app/ponto/views.py:1648`; `app/ponto/services/triagem_batida.py:292`)
-
-Recorte sem linhas com (c)=sim e sem linhas com (e)=sim/(d)=não, conforme os blocos e guards acima. (`app/chamados/views_arquivar.py:134`; `app/ponto/services/triagem_batida.py:368`; `app/chamados/signals.py:100`, `:188`)
-
-_2814 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2815 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
