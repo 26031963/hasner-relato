@@ -1,7 +1,193 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 00:27** · publicado em **08/11/2026 00:27** (UTC-3)
+> Ultima resposta processada: **08/11/2026 00:31** · publicado em **08/11/2026 00:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 08/11 00:31 · sessao d24aa19353cc · FIO-E0-V4-E1 · verificador · origem=Code
+
+**NAO PROCEDE considerar os dois avais integralmente atendidos.** Há escritas alcançadas antes/depois da região que trava C, divergência entre universos multissemente e unitário, contador sem integração no DRY e incompatibilidade entre o agrupamento novo e a guarda 0053. (`app/chamados/services/validacao.py:585`; `app/chamados/services/disputa_emissao.py:1439`; `app/chamados/services/fio.py:1312`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:414`; `app/chamados/migrations/0053_pergunta_unica_por_familia.py:42`.)
+
+A cópia não contém `.git`: sua correspondência exata com `ec06aa21` é `[nao verificado]`. Não executei testes com banco; resultados efetivos da suíte, números de produção e medições dos logs citados são `[nao verificado]`. As referências abaixo apontam para as linhas da cópia fornecida.
+
+**1(a) — Fila `on_commit` e sentinela: PROCEDE o mecanismo local; NAO VERIFICADO o contrato completo de ciclo de vida.**
+
+| Escritor/leitor | Local | Efeito sobre o registro |
+|---|---|---|
+| Construção do sentinela | `app/chamados/models.py:2290` | Guarda `cid`. |
+| Execução do sentinela | `app/chamados/models.py:2293` | Retorna `None`; não remove a própria entrada. |
+| `_registrar_travados` | `app/chamados/models.py:2318` | Registra pelo método `conn.on_commit`, depois de consultar os C já registrados em `:2313`. |
+| `trava_na_ordem` | `app/chamados/models.py:2622`, `:2623` | Executa o SELECT de C e depois registra os IDs pedidos. |
+| `colaboradores_travados` | `app/chamados/models.py:2303`, `:2305` | Fora de `atomic`, devolve vazio; dentro, lê sentinelas da fila. |
+| `exigir_colaboradores_travados` | `app/chamados/models.py:2331`, `:2333` | Compara donos pedidos ao registro e levanta a exceção pelos ausentes. |
+| Contador do chokepoint | `app/ponto/tests/test_selo_chokepoint_escrita.py:215` | Lê a fila excluindo sentinelas. |
+| Mutante | `app/chamados/tests/test_e1_v13_ordem.py:33` | Impede a escrita do registro; não produz outro estado. |
+
+Os demais registros de callbacks encontrados em produção são estes; acrescentam trabalho à fila, sem escrever o registro de C travado. (`app/chamados/models.py:2305`.)
+
+| Escritor da fila | Callback registrado |
+|---|---|
+| `app/chamados/signals.py:144` | `_retomar` |
+| `app/chamados/signals.py:225` | `_fechar` |
+| `app/chamados/signals.py:266`, `:293` | `_silenciar` |
+| `app/chamados/signals.py:322` | `_reavaliar` |
+| `app/chamados/signals.py:356` | `_reconciliar` |
+| `app/ponto/signals.py:272` | `_depois` |
+| `app/ponto/signals.py:307` | `_reavaliar` |
+| `app/ponto/portas/celula.py:502` | `_reavaliar_o_dia` |
+| `app/ponto/services/fechamento.py:1817` | `_rodar` |
+
+Os patches abaixo substituem a função `transaction.on_commit`; a escrita do sentinela usa outro ponto, `conn.on_commit`, e portanto não passa por esses patches. (`app/chamados/models.py:2318`.)
+
+| Patch “roda agora” | Referência |
+|---|---|
+| Teste novo do registro | `app/chamados/tests/test_e1_v13_ordem.py:124` |
+| Abono de feriado | `app/ponto/tests/test_bob_b2_abono_feriado_guarda.py:185` |
+| Ordem regeneração/julgamento | `app/ponto/tests/test_ordem_regen_julga_antes_do_dinheiro.py:84` |
+| Edição do dia | `app/ponto/tests/test_o10b_editar_dia_troca.py:115`, `:121`, `:192`, `:367`, `:370` |
+
+O inventário de `captureOnCommitCallbacks` é o seguinte. Todos pedem `execute=True`, salvo as duas exceções indicadas; executar o sentinela só realiza o no-op de `__call__`. A implementação do Django que determina retenção/esvaziamento da fila não está na cópia: esse efeito é `[nao verificado]`. (`app/chamados/models.py:2293`; `app/requirements.txt:13`.)
+
+| Arquivo | Linhas |
+|---|---|
+| `app/api/tests/test_atestado_na_resposta.py` | 51 |
+| `app/chamados/tests/test_jv1_volta4_posto_do_dia.py` | 46, 119, 135 |
+| `app/chamados/tests/test_jv3_reconciliar_vira_vigia.py` | 71, 118, 144 |
+| `app/chamados/tests/test_varredura_becos_evento_pergunta.py` | 55, 65, 76, 86, 88 |
+| `app/chamados/tests/test_e2_celula_regenerada_reavalia.py` | 70, 146, 202, 204; **226 com `execute=False`** |
+| `app/chamados/tests/test_jv1_volta3_municipio_e_quem_chegou.py` | 33, 39, 66 |
+| `app/chamados/tests/test_jv1_feriado_vira_vigia.py` | 87, 163 |
+| `app/chamados/tests/test_laco_ausencia_aberta_nao_vai_e_volta.py` | 66 |
+| `app/chamados/tests/test_s4_pendente_suspende_cobranca.py` | 86 |
+| `app/chamados/tests/test_pep_reentrada.py` | 101 |
+| `app/chamados/tests/test_c20_juiz3_outbox.py` | 242 |
+| `app/chamados/tests/test_o261_e1_ausencia_rejeitada_devolve.py` | 57, 68, 110, 134, 176 |
+| `app/chamados/tests/test_reg_externa_disputa_beco.py` | 156 |
+| `app/chamados/tests/test_jv1_volta2_lugar_e_ciclo.py` | 87, 131, 182, 188, 242, 260, 265; **328 com `execute=False`** |
+| `app/chamados/tests/test_varredura_isentos_evento.py` | 38, 52, 65, 71, 82 |
+| `app/chamados/tests/test_varredura_feriado_evento.py` | 58, 83 |
+| `app/ponto/tests/test_reconciliar_geofence.py` | 102 |
+| `app/ponto/tests/test_evento_justificativa_rejulga_o_dia.py` | 31, 42 |
+| `app/ponto/tests/test_lastro_parte3_fecho_na_pergunta.py` | 115, 122, 136, 155, 174 |
+| `app/ponto/tests/test_varredura_classe_b_ausencia.py` | 103, 114, 124 |
+| `app/ponto/tests/test_d3_impressao_cobre_insumos.py` | 274 |
+
+Há contagem filtrada pelo nome do callback em `app/chamados/tests/test_e2_celula_regenerada_reavalia.py:149`, `:228`, `:229`. Já `app/chamados/tests/test_jv1_volta2_lugar_e_ciclo.py:331` conta todos e executa o primeiro em `:333`, sem excluir sentinelas; interferência efetiva nesse cenário é `[nao verificado]`.
+
+| Operação de término/rollback | Evidência e limite |
+|---|---|
+| Rollback de `atomic` interno | O teste exige desaparecimento do registro em `app/chamados/tests/test_e1_v13_ordem.py:107`, `:113`. Resultado executado: `[nao verificado]`. |
+| Saída normal de `atomic` interno | O teste exige sobrevivência até a transação externa em `app/chamados/tests/test_e1_v13_ordem.py:114`, `:116`. Resultado executado: `[nao verificado]`. |
+| Savepoint manual em produção | C é travado **antes** do savepoint: `app/chamados/services/limbo_folgas.py:274`, `:277`; rollback em `:285`. |
+| Outros rollbacks manuais | `app/chamados/tests/test_e1_v9.py:62`; `app/chamados/tests/test_matriz_guarda_clt.py:100`; `app/ponto/tests/test_d3_impressao_cobre_insumos.py:132`, `:294`. |
+| Registro adquirido dentro de savepoint manual | O teste novo usa `atomic`, não cobre esse caso: `app/chamados/tests/test_e1_v13_ordem.py:107`. Equivalência alegada: `[nao verificado]`. |
+| Commit, rollback completo e `run_and_clear_commit_hooks` | A docstring afirma limpeza, mas a implementação do Django não está na cópia; funcionamento interno e ausência de chamadas indiretas: `[nao verificado]`. (`app/chamados/models.py:2284`.) |
+
+**1(b) — Escritores/leitores do selo: PROCEDE localmente; NAO PROCEDE como selo geral D/CH/P.**
+
+| Elemento | Escritor/chamador | Leitor/efeito |
+|---|---|---|
+| `colaboradores_travados` | Não mantém armazenamento próprio; lê a fila. `app/chamados/models.py:2305` | `_registrar_travados` em `:2313`; `exigir_colaboradores_travados` em `:2331`. |
+| `_registrar_travados` | Chamado por `trava_na_ordem`, após o SELECT. `app/chamados/models.py:2623` | Acrescenta sentinelas em `:2318`. |
+| `exigir_colaboradores_travados` | Lote em `app/chamados/models.py:3104`; resposta em `app/chamados/services/disputa_emissao.py:1393`; correção em `:1510`; segunda instância em `app/chamados/reconciliador.py:593` | Recusa por diferença de conjuntos, sem inspecionar nome de chamador. `app/chamados/models.py:2331`. |
+| `ColaboradorNaoTravado` | Levantada em `app/chamados/models.py:2333` | Esperada nos testes em `app/chamados/tests/test_e1_v13_ordem.py:80`, `:88`, `:96`; engolida pelo `except Exception` da segunda instância em `app/chamados/reconciliador.py:600`. |
+| `descarimbar_em_lote` | Chamado pela ressuscitação em `app/chamados/models.py:1555` e pela correção em `app/chamados/services/disputa_emissao.py:1526` | Exige registro antes do UPDATE em `app/chamados/models.py:3104`, `:3109`. |
+
+Os testes também leem o registro nas premissas e nas verificações de aquisição, rollback e patch. (`app/chamados/tests/test_e1_v13_ordem.py:56`, `:66`, `:109`, `:113`, `:116`, `:126`, `:144`, `:151`.)
+
+Não há segundo armazenamento no mecanismo apresentado: o estado vem da fila. Entretanto, o registro atesta os **IDs pedidos**, pois o resultado do SELECT é descartado e `_cids` é registrado integralmente; não atesta quais linhas foram efetivamente retornadas. (`app/chamados/models.py:2305`, `:2622`, `:2623`.)
+
+**1(c) — Mapa do fecho: PROCEDE a centralização parcial; NAO PROCEDE que todos os leitores usem o mesmo universo.**
+
+| Função | Quem chama/lê |
+|---|---|
+| `chave_do_dia` | Vizinhos, base, chave do cache, pré-carga e sementes: `app/chamados/services/fio.py:1180`, `:1197`, `:1203`, `:1308`, `:1312`. |
+| `_base_da_chave` | Caminhada sem dia, limite do fecho e sementes: `app/chamados/services/fio.py:1224`, `:1277`, `:1281`, `:1312`. |
+| `_chave_do_passo` | Consulta e pré-carga do cache: `app/chamados/services/fio.py:1208`, `:1307`. |
+| `_vizinhos_em_cache` | Caminhada sem dia e fecho: `app/chamados/services/fio.py:1223`, `:1278`. |
+| `_dias_alcancados_sem_dia` | Inferência do dia, veto da ponte e pré-seleção de sementes: `app/chamados/services/fio.py:1273`, `:1283`, `:1313`. |
+| `fecho_do_fato` | Plano, universo da porta, contador, universo do grupo e da linha: `app/chamados/services/fio.py:1051`, `:1317`, `:1344`, `:1357`, `:1365`. |
+| `recusadas` | Escrito pelo fecho em `app/chamados/services/fio.py:1288`; agregado pelo universo em `:1316`, `:1320`; lido pelo contador em `:1345` e por `_nascer` em `app/chamados/models.py:2809`. |
+| `dia` | Passado pela porta em `app/chamados/services/fio.py:1317`; combinado com os dias das sementes em `:1269`. |
+| `_viz` | Criado/reutilizado em `app/chamados/services/fio.py:1261`; pré-carregado em `:1307`; compartilhado com caminhada e fecho em `:1313`, `:1317`; preenchido por consulta real em `:1210`. |
+| `universo_do_fato` | `_nascer` em `app/chamados/models.py:2807`; `_candidata_reusavel` em `app/chamados/services/declaracao_texto.py:244`. |
+| `_candidata_reusavel` | Declaração do colaborador e aplicação de texto: `app/chamados/services/declaracao_texto.py:335`, `:632`. |
+| `universo_do_grupo` | Partição em `app/chamados/services/fio.py:1421`; backfill antes das travas e antes da eleição em `app/chamados/management/commands/backfill_decisoes_pergunta.py:213`, `:226`. |
+| `universo_da_linha` | `_colisao_ao_datar` e migração de resolvedoras: `app/chamados/services/fio.py:891`, `:1548`. |
+| `grupos_de_colisao` | Backfill DRY em `app/chamados/management/commands/backfill_decisoes_pergunta.py:360`; dedup em `app/chamados/management/commands/dedup_perguntas_fato.py:58`. |
+| `fecho_cruza_dias` | Chamadas explícitas nos testes: `app/chamados/tests/test_e1_v13.py:114`, `:116`, `:195`, `:208`, `:216`; o resumo DRY prometido não o inclui em `app/chamados/management/commands/backfill_decisoes_pergunta.py:414`. |
+| Migração 0052 | Adiciona FK nula; não calcula fecho. `app/chamados/migrations/0052_pergunta_batida_origem.py:18`. |
+| Migração 0053 | Conta colisões diretamente pelas chaves dos índices. `app/chamados/migrations/0053_pergunta_unica_por_familia.py:39`, `:42`. |
+
+Há caminhos que continuam lendo um passo/domínio, sem calcular o fecho:
+
+| Caminho | Referência |
+|---|---|
+| `fato_livre_para` lê `do_fato` do episódio, inclusive outro dia | `app/chamados/models.py:2725`; diferença explicitada em `app/chamados/tests/test_e1_v13.py:148`, `:153`. |
+| Projeção e propostas da tela leem `do_fato` | `app/chamados/services/declaracao_texto.py:446`, `:606`. |
+| Lote da tela lê `linhas_dos_fatos` | `app/chamados/services/declaracao_texto.py:559`. |
+| Gatilho de migração de data consulta `do_fato` sem episódio | `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:152`. |
+| Outros leitores de domínio por marco | `app/chamados/management/commands/disparar_perguntas_competencia.py:215`; `app/chamados/services/pergunta_no_app.py:113`. |
+
+A seleção de sementes repete a classificação de linha nula/ponte antes de chamar o fecho; não é outro algoritmo de caminhada, mas são duas aplicações da condição. (`app/chamados/services/fio.py:1312`, `:1313`, comparadas com `:1281`, `:1283`.)
+
+A eleição continua usando `canonica_do_grupo` nos caminhos examinados; o problema está no universo entregue a ela. (`app/chamados/models.py:2817`; `app/chamados/services/declaracao_texto.py:247`; `app/chamados/services/fio.py:893`, `:1552`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:237`; `app/chamados/management/commands/dedup_perguntas_fato.py:76`.)
+
+**1(d) — `data_evento=NULL`: PROCEDE que ainda é persistível; NAO PROCEDE tratar NULL, conversa e dia conhecido como equivalentes.**
+
+| Escritor/capacidade | O que permite |
+|---|---|
+| Schema | `DateField(null=True)`: permite ausência de data. `app/chamados/models.py:2379`; introduzido assim em `app/chamados/migrations/0025_perguntadisputa_data_evento.py:16`. |
+| `PerguntaDisputa.save` | Não contém recusa de data nula antes de gravar. `app/chamados/models.py:3258`, `:3268`. |
+| `_nascer` privado | Recebe `data_evento` e o passa ao `create`, sem sua própria validação de NULL. `app/chamados/models.py:2756`, `:2864`. |
+| `abrir` público | Recusa NULL antes de `_nascer`. `app/chamados/models.py:2739`. |
+| `abrir_conversa` público | Preenche dia civil; conversa atual não significa NULL. `app/chamados/models.py:2752`. |
+| `reapontar_resolvedora` | Atribui dia conhecido à linha nula; as atribuições de volta a `None` ficam nos retornos de recusa, antes do save. `app/chamados/services/fio.py:840`, `:852`, `:861`, `:870`. |
+| `rechavear_data_evento` | Recusa novo dia nulo e grava dia conhecido. `app/chamados/services/fio.py:941`, `:959`, `:965`. |
+| Fixture usada pelos testes novos | `_p(..., dia=None)` persiste NULL pelo ORM. `app/chamados/tests/test_e1_v9.py:138`, `:139`; chamadas novas em `app/chamados/tests/test_e1_v13.py:192`, `:201`. |
+| Fixtures por UPDATE | Gravam explicitamente NULL. `app/chamados/tests/test_e1_v5_portas_backfill.py:62`, `:101`; `app/chamados/tests/test_porta_reapontamento_pergunta.py:258`. |
+
+Os leitores novos fazem três tratamentos: inferem um dia alcançável pela parte nula; aceitam a nula no fato desse dia; recusam a ponte que alcança dois dias. A coluna continua nula durante essas operações. (`app/chamados/services/fio.py:1213`, `:1273`, `:1282`, `:1312`.)
+
+Isso não equivale ao tratamento do backfill de decisão: uma linha nula continua sem competência e fora daquele apply. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:94`, `:102`.)
+
+Também não equivale ao domínio exato do dia: `linhas_dos_fatos` exige igualdade de `data_evento`, enquanto o fecho admite irmã nula. A igualdade prometida na docstring é, portanto, falsa nesse caso. (`app/chamados/models.py:2708`; `app/chamados/services/fio.py:1251`; `app/chamados/tests/test_e1_v13.py:194`.)
+
+`data_evento` é data, não instante; os instantes estão em campos como `respondida_em`. Para fato datado, o contrato é dia do turno; para conversa, dia civil, distinguido por `conversa`. (`app/chamados/models.py:2379`, `:2404`, `:2735`, `:2752`; `app/chamados/juizes.py:333`, `:336`.)
+
+Há leitores antigos ainda reconhecidos como problemáticos: `data_do_fato_de` usa a data crua e `expira_em` documenta conversa como NULL. (`app/chamados/services/fio.py:87`, `:1133`, `:1142`; `app/chamados/veredito_lavrado.py:107`, `:109`.)
+
+**1(e) — `FatoEmOutroDia`: PROCEDE o escape possível pelo caminho da batida; perda da batida é NAO VERIFICADO.**
+
+| Etapa | Referência e comportamento |
+|---|---|
+| Classe | Herda `ResolvedoraCruzada`. `app/chamados/models.py:2337`. |
+| Raise | `_nascer` levanta quando o universo está vazio e há recusada do episódio solicitado. `app/chamados/models.py:2809`, `:2813`. |
+| Porta | `abrir` retorna `_nascer`, sem captura. `app/chamados/models.py:2741`. |
+| Chamadores diretos de `abrir` | Emissão em `app/chamados/services/disputa_emissao.py:444`, `:834`; declarações em `app/chamados/services/declaracao_texto.py:348`, `:636`. |
+| Cadeia BATIDA | `gerar_perguntas_disputa` chama `abrir`; seu try de reatar começa depois. `app/chamados/services/disputa_emissao.py:444`, `:462`. |
+| Emissor superior | Chama geração no nascimento e na agregação. `app/chamados/services/disputa_emissao.py:670`, `:682`. |
+| Bordas | Os dois kernels chamam esse emissor sem captura naquele caminho. `app/api/views.py:794`; `app/api/views_core.py:794`. |
+| Teste novo | Captura diretamente a exceção e verifica P, sem exercitar a borda da batida. `app/chamados/tests/test_e1_v13.py:142`, `:146`. |
+
+Não encontrei captura nominal de `FatoEmOutroDia`/`ResolvedoraCruzada` em produção `[nao verificado]`; a cadeia acima permite propagação até a borda. O registro da batida precede essa chamada, portanto não se pode concluir que a batida seria perdida: o fluxo de sucesso e os efeitos seguintes podem ser interrompidos; HTTP final, rollback externo e ocorrência real são `[nao verificado]`. (`app/api/views.py:684`, `:794`, `:799`; `app/ponto/registro_batida.py:157`.)
+
+**2 — Aval E1-FECHO-NA-IDENTIDADE: NAO PROCEDE integralmente.**
+
+- **PROCEDE o bloqueio de vizinho datado de outro dia na expansão normal.** O teste compara também colaborador, motivo e instância pela base; não é apenas `data_evento` solto. Para NULL, porém, usa identidade contextual inferida, não igualdade literal da chave completa. (`app/chamados/services/fio.py:1195`, `:1277`, `:1281`, `:1283`.)
+
+- **NAO PROCEDE a simetria universal declarada.** Contraexemplo deduzido: apenas A1(alfa,d1) e B1(beta,d1), mesmo colaborador/motivo, sem acervo. `universo_do_fato(..., batida_origem_id=None)` semeia ambas; o fecho mantém essas sementes. Entretanto, `universo_da_linha(A1)` vê só alfa e o de B1 só beta. Assim, membros do universo multissemente `{A1,B1}` veem universos unitários diferentes. (`app/chamados/services/fio.py:1303`, `:1312`, `:1262`, `:1365`; `app/chamados/models.py:2675`, `:2677`.)
+
+- **NAO PROCEDE a validação completa das sementes.** Elas entram antes do filtro de vizinhos; a assertiva verifica dias, mas não identidade completa nem conexão entre sementes. (`app/chamados/services/fio.py:1262`, `:1269`, `:1270`.)
+
+- **PROCEDE a chave do cache para os parâmetros escalares examinados.** Ela contém PK, chave do dia e episódio; mudar o dia em memória muda a chave. A pré-carga exige os parâmetros da consulta real; a instância consultada deriva do motivo. Não encontrei contraexemplo de vizinhos incorretos nesse percurso; execução Django/DB é `[nao verificado]`. (`app/chamados/services/fio.py:1203`, `:1180`, `:1307`, `:1308`; `app/chamados/models.py:2707`, `:2708`.)
+
+- **NAO PROCEDE a compatibilidade de `universo_do_fato` com colaborador objeto.** `alvo` conserva o objeto, mas `chave_do_dia` contém o ID: a seleção rejeita as linhas e a pré-carga também não casa. Isso é falha de normalização/seleção, não devolução de vizinhos errados pelo cache. Os dois chamadores atuais passam ID. (`app/chamados/services/fio.py:1302`, `:1191`, `:1308`, `:1312`; `app/chamados/models.py:2807`; `app/chamados/services/declaracao_texto.py:244`.)
+
+- **NAO PROCEDE a recusa declarada com contador integrado.** O contador existe e chama o fecho real, mas o resumo DRY não o chama/imprime; plano e universos normalmente descartam `recusadas`. (`app/chamados/services/fio.py:1344`, `:1051`, `:1357`, `:1365`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:414`.)
+
+- **NAO PROCEDE a concordância DRY/0053.** Para o mesmo episódio em dois dias distintos, ambos no horizonte, o agrupador divide em dois fechos unitários e os descarta; a guarda 0053 continua contando duplicidade de episódio sem dia e recusa subir. Os testes novos usam D0 abaixo do horizonte, evitando esse caso. (`app/chamados/services/fio.py:1393`, `:1421`, `:1427`; `app/chamados/migrations/0053_pergunta_unica_por_fa
+
+[truncado em 20000 de 27970 caracteres]
 
 ## 08/11 00:27 · sessao 27af10e89625 · - · - · origem=Ronald (tmux)
 
@@ -864,18 +1050,4 @@ Os três sítios seguintes precisam de variantes: são funções também chamada
 
 [truncado em 20000 de 29894 caracteres]
 
-## 07/11 20:56 · sessao 00393fa21d8e · - · - · origem=Ronald (tmux)
-
-Concordo: **(e)=sim condicional** é a leitura estrita de “pode travar”, desde que se explicite a condição e não se afirme ocorrência em produção. O `pre_save` lê o status atual do banco, mas o `post_save` compara esse valor com o status da instância; saves de campo não renovam esse status em memória. (`app/chamados/signals.py:180`, `app/chamados/signals.py:188`; `app/chamados/services/contexto.py:102`)
-
-Se houver divergência e as demais guardas permitirem julgamento/emissão, o receiver chega à fábrica e à trava de Colaborador/Disputa; sob atomic interno ou externo, isso ocorre com a escrita de CC ainda na mesma transação. (`app/chamados/signals.py:199`; `app/ponto/services/cartorio.py:997`; `app/chamados/services/disputa_emissao.py:530`; `app/chamados/services/texto.py:31`; `app/chamados/services/contexto.py:100`; `app/chamados/services/vinculos.py:86`)
-
-Correção do meu recorte:
-
-- **e=sim condicional:** `app/api/views.py:2033`, `:3159`, `:3160`; `app/ponto/views.py:288`, `:1648`; `app/chamados/views.py:1025`, `:1029`; `app/ponto/services/triagem_batida.py:369`, `:371`; `app/chamados/views_arquivar.py:140`. A condição é o caminho do receiver acima; os dois últimos blocos têm atomic externo em `app/ponto/services/triagem_batida.py:368` e `app/chamados/views_arquivar.py:134`.
-- **e=não na mesma transação:** `app/chamados/views_arquivar.py:37`, `:77` e `app/ponto/services/triagem_batida.py:292`, porque estes caminhos não têm atomic externo nem atomic interno nessas portas. (`app/chamados/services/arquivo.py:170`, `:208`; `app/chamados/models.py:538`)
-- **Propagação anterior:** em `app/ponto/services/triagem_batida.py:371`, se o save de `:369` percorreu esse caminho, (c) e (d) passam a sim; ambos estão sob `:368`. No lote `app/chamados/views_arquivar.py:140`, iteração anterior pode igualmente fornecer (c)=sim, e (d)=sim quando for o mesmo colaborador, sob `:134`.
-
-Há inclusive mecanismo local para instância desatualizada nas duas views de justificativa: CC é carregado antes do save de J, cujo receiver julga o dia antes da porta de vínculo; a instância original não é recarregada nesse intervalo. Isso demonstra possibilidade pelo código, sem demonstrar ocorrência. (`app/api/views.py:1986`, `:2021`, `:2033`; `app/ponto/views.py:1615`, `:1633`, `:1648`; `app/ponto/signals.py:165`)
-
-_2818 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2819 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
