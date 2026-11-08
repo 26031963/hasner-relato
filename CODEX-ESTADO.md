@@ -1,7 +1,97 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 01:34** · publicado em **08/11/2026 01:38** (UTC-3)
+> Ultima resposta processada: **08/11/2026 03:15** · publicado em **08/11/2026 03:15** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 08/11 03:15 · sessao 326fdbbc8265 · - · - · origem=Ronald (tmux)
+
+Mapeamento e achados para consolidação:
+
+- O resultado consumido **não é recortado à competência pedida**: `espelho_do_colab` chama `autoridade_do_periodo(colaborador, vis_ini, hoje)` e devolve seu `resultado`; apenas outras partes visuais/totais recebem `apur_ini/apur_fim`. Portanto o filtro novo é uma transformação efetiva da publicação, não cópia literal. Fontes: `app/ponto/services/espelho.py:1225`, `:1227`, `:1229`, `:1294`; filtro em `app/ponto/services/cxr_na_lista.py:88`.
+
+- **O campo `dia` mistura dia civil e dia do turno**: HE usa `entrada.date()` e publica `j['dia']`; L084 publica o mapa do juiz ou `_dt_b`. A lavra interpreta todos como mesmo `data`, competência e vínculo. Fontes: `app/ponto/motor_calculo_v2.py:1528`, `:1711`, `:1749`, `:1623`, `:1997`; `app/ponto/services/cxr_na_lista.py:80`, `:88`, `:94`. Caso possível: cauda `E03:00→S11:00` em 21/10 de jornada iniciada em 20/10, cadastro 21–09, saída acima do teto; a acusação HE usa 21/10 embora o turno possa pertencer a 20/10. A herança da jornada e o mapa existem no próprio motor: `app/ponto/motor_calculo_v2.py:2403`, `:2407`, `:2455`. Execução desse cenário completo `[nao verificado]`.
+
+- **Não usar a remoção dos dias externos como contraexemplo isolado de `dono(d)`**: para mesma publicação e `d∈[ini,fim]`, o filtro preserva pertinência. `cxr()` retorna os dias de todo o espelho, enquanto a lavra guarda a interseção; a diferença fora da janela não muda a pergunta interna. Fontes: `app/ponto/management/commands/e6_oraculo.py:170`, `:195`; `app/ponto/services/cxr_na_lista.py:88`, `:170`, `:174`.
+
+- **Contraexemplo concreto da API C11**: em 25/10, a janela corrente 21/10–20/11 vira 21/10–24/10; `cxr_do(cid,fim)` procura `10/2026`, embora o dia 22/10 pertença a `11/2026`. Com lavra coberta nas duas competências e item somente 22/10 na 11, a função devolve `[]` para fim24/10 e `['2026-10-22']` para fim20/11. Executei somente a função extraída por AST com `python3 -B`, sem Django ou escrita. Fontes: `app/escala/services/cadastro_realidade.py:569`, `:525`; `app/ponto/services/cxr_na_lista.py:173`. **Impacto no dono C11 é neutralizado hoje**: o chamador exige `folga_nao_definida`, e o juiz retorna CADASTRO antes de ler CXR. Fontes: `app/escala/services/cadastro_realidade.py:518`; `app/ponto/management/commands/e6_oraculo.py:98`.
+
+- **Cobertura também usa outra geometria**: universo da lavra exige qualquer batida no intervalo civil `[ini00h, (fim+1)00h)`, enquanto Insumos e autoridade incluem bordas e atribuem dia pelo turno. Um colaborador com todas as batidas em 21/10, atribuídas ao turno20/10, pode ficar sem cobertura na competência10 apesar de existir dia20 no espelho. A ocorrência desse caso em produção `[nao verificado]`. Fontes: `app/ponto/services/cxr_na_lista.py:59`, `:61`, `:64`, `:110`; `app/ponto/management/commands/e6_oraculo.py:150`; `app/ponto/services/espelho.py:1019`; atribuição à véspera em `app/ponto/turnos.py:299`, `:306`.
+
+- **Unidades e formatos**: HE publica `real/cadastrado` como `HH:MM`, `minutos_fora` inteiro arredondado e já descontada a extra declarada; `cadastrado` continua marco cru. L084 publica timestamps ISO locais com offset e deltas em minutos com uma decimal; entrada é `real-prevista`, saída é `prevista-real`. Fontes: `app/ponto/motor_calculo_v2.py:1670`, `:1662`, `:1702`, `:1742`, `:1624`, `:1974`, `:1976`, `:1998`. Fuso do motor é fixo `settings.TIME_ZONE`, configurado São Paulo; lavra e Insumos usam o timezone corrente. Divergência efetiva de timezone em produção `[nao verificado]`. Fontes: `app/ponto/motor_calculo_v2.py:28`, `:73`; `app/config/settings/base.py:93`; `app/ponto/services/cxr_na_lista.py:59`; `app/ponto/management/commands/e6_oraculo.py:149`.
+
+- **Golden de pausa sem produtor demonstrado**: não há `l084_pausa` nem `acusar_pausa_l084` em Python de produção desta cópia, pela busca completa de `app`. Os escritores efetivos encontrados publicam `l084_do_dia`, HE e L084 sem causa; `resultado` recebe a lista no final. Fontes positivas: `app/ponto/motor_calculo_v2.py:1623`, `:1670`, `:1992`, `:2719`. O prerequisite é nomeado em `app/docs/CORTES.md:304` e o golden em `app/docs/BACKLOG.md:775`; o relato de commit anterior não prova que esse código esteja nesta cópia (`app/docs/RELATO.md:1778`). Existência dos sete dias em produção `[nao verificado]`.
+
+- **Teste real não cobre pausa**: a fixture real e a asserção exercitam HE de entrada18:56 contra21:00; os demais casos publicam dados por stub. Não comprovam o golden `l084_pausa` nem equivalência completa com `cxr_lavrado`: o teste de equivalência passa uma lista manual diretamente a `InsumosDoDono`. Fontes: `app/ponto/tests/test_cxr_tela_le_o_motor.py:42`, `:76`, `:92`, `:154`, `:284`.
+
+- **Falha parcial substitui snapshot completo antes de informar erro**: o comando grava a medida e só depois sai com código2; cada falha de colaborador remove seus itens e sua cobertura. Caso: snapshot bom tem C12 de A e B; rodada seguinte falha apenas B, grava somente A e a tela perde B. Fontes: `app/ponto/management/commands/lavrar_cxr_do_motor.py:37`, `:39`; `app/ponto/services/cxr_na_lista.py:104`, `:106`, `:110`; `ultimo_lavrado` escolhe o mais recente em `:147`.
+
+## 08/11 03:14 · sessao f8b4a879ff68 · - · - · origem=Ronald (tmux)
+
+**Cron: a declaração do elo está integrada, mas há uma lacuna de observabilidade e um problema no tratamento de falha parcial.** (`app/config/crons.py:1765`, `app/core/management/commands/pipeline_placar.py:38`, `app/ponto/management/commands/lavrar_cxr_do_motor.py:37`).
+
+- **Gatilho/estágio/papel:** `lavrar_cxr_do_motor` espera `vigia_pareador_celula`, usa `--apply`, estágio `auditoria`, teto de espera 900 e dependência declarada de `processar_cartorio`; seu papel é `lavra`. (`app/config/crons.py:1765`, `app/config/crons.py:2232`).
+- **O teto de 900 não limita a duração do próprio lavrador:** limita a espera pelos arquivos de fim do gatilho; depois o comando é executado sem timeout nesse script. (`bin/encadeado.sh:84`, `bin/encadeado.sh:92`, `bin/encadeado.sh:102`).
+- **Ordem por arquivo:** a corrente usa o campo `gatilho`, percorre os elos sequencialmente e cada elo espera o carimbo de seu predecessor; o novo elo fica depois do pareador e, transitivamente, depois do cartório. (`app/config/crons.py:1817`, `app/config/crons.py:1835`, `bin/encadeado.sh:56`, `bin/encadeado.sh:89`).
+- **Não falta pôr o command em `FORA_DE_PIPELINE`:** `todas_as_entradas()` já inclui `ENCADEADOS`, e o contrato de command com casa usa essa função; duplicá-lo em `FORA_DE_PIPELINE` seria entrada podre. (`app/config/crons.py:1783`, `app/chamados/tests/test_contract_crons.py:220`, `app/chamados/tests/test_contract_crons.py:230`).
+- **Sombra e diagrama recebem o novo elo automaticamente:** `bloco_da_manha()` inclui os encadeados e o gerador do diagrama também; a alteração em `ARQUITETURA.mmd` corresponde ao mecanismo gerador. (`app/config/crons.py:1910`, `app/core/management/commands/gerar_diagrama.py:182`, `app/docs/ARQUITETURA.mmd:61`, `app/docs/ARQUITETURA.mmd:112`).
+- **Contrato de duração/horário:** o teste exige que todo encadeado conte em qualquer horário e não tenha `sched`; isso é satisfeito pela forma declarada, e `corrida_no_horario()` devolve `True` para nomes fora de `CRONS`. (`app/core/tests/test_contract_crons_duracao_horario.py:43`, `app/config/crons.py:2303`, `app/config/crons.py:2316`).
+- **Não existe duração cadastrada para o novo lavrador nesta cópia:** a declaração não o põe em `_DUR_DECLARADA`, e o JSON passa de `lavrar_badge_navbar` para `lavrar_deslogados`; futuras amostras entram pelo medidor de nomes do placar. Isso não exige inventar duração manual para este último elo. (`app/config/crons.py:125`, `app/config/crons_duracao.json:38`, `bin/crons_duracao.py:73`).
+
+**Achado: o placar de pipeline ignora o novo ENC.** `esperados()` enumera somente `CRONS`, `DEPS` também, e o relatório só classifica esses esperados; registros de encadeados aparecem como `ORFAO no jsonl sem cron`. Caso concreto: o lavrador nunca executa e o placar não produz `NAO_RODOU lavrar_cxr_do_motor`; se executa, sua corrida fica órfã, sem classificação normal de dependência. É defeito preexistente do consumidor que atinge o novo elo, não falta de adicionar outro literal de cron. (`app/core/management/commands/pipeline_placar.py:9`, `app/core/management/commands/pipeline_placar.py:12`, `app/core/management/commands/pipeline_placar.py:38`, `app/core/management/commands/pipeline_placar.py:88`, `app/core/management/commands/pipeline_placar.py:108`, `app/core/management/commands/pipeline_placar.py:128`).
+
+**Achado: erro técnico de leitura vira lavra parcial concluída pelo cron.** O serviço retira completamente o colaborador/competência que falhou, mas continua; o command grava o resultado parcial antes de sair com código 2. O envelope entende 2 como alarme de negócio, escreve carimbo de conclusão e não abre cron quebrado; outra tentativa encadeada no mesmo dia termina imediatamente por esse carimbo. Caso concreto: ontem C12 tinha um dia do colaborador; hoje a leitura desse espelho lança exceção; a nova lavra perde esse dia e é considerada concluída para fins da corrente. (`app/ponto/services/cxr_na_lista.py:101`, `app/ponto/services/cxr_na_lista.py:103`, `app/ponto/services/cxr_na_lista.py:105`, `app/ponto/management/commands/lavrar_cxr_do_motor.py:37`, `app/ponto/management/commands/lavrar_cxr_do_motor.py:39`, `bin/cron_run.sh:19`, `bin/cron_run.sh:22`, `bin/cron_run.sh:32`, `bin/encadeado.sh:81`).
+
+**Relógio com duas leituras:** o command captura `hoje` em `timezone.localdate()` e o serviço captura outro instante com `timezone.now()`; como recebeu `hoje`, não o deriva desse instante. Caso concreto de borda: o command captura 20/11 às 23:59:59 e o serviço entra em 21/11, com janela/data_ref de ontem e instante de hoje. Ocorrência real na produção `[nao verificado]`. (`app/ponto/management/commands/lavrar_cxr_do_motor.py:28`, `app/ponto/services/cxr_na_lista.py:52`, `app/ponto/services/cxr_na_lista.py:53`, `app/ponto/services/cxr_na_lista.py:138`).
+
+**Congelamento de cron:** a marca CRON15 contém proibição literal de “cron novo ou mudança de horário” enquanto existir; o backlog a repete. Entretanto, o aval anexado de 06/11 autoriza expressamente esta obra com cron de lavra, e o backlog da própria CXR registra contador + cron + serviço. Não recomendo reprovar automaticamente por autorização ausente: há autorização específica posterior no dado fornecido; eventual precedência entre os dois cortes além disso é `[nao verificado]`. (`app/core/tests/marca_cron15.py:13`, `app/docs/BACKLOG.md:747`, `app/docs/BACKLOG.md:775`; aval.txt fornecido, sem numeração local `[nao verificado]`).
+
+**Mordida dos contratos de cron é limitada:** vários testes de existência, estágio, DAG e cobertura diária percorrem só `CRONS`; não validam diretamente estes mesmos atributos dos novos `ENCADEADOS`. O contrato de duração percorre todos os encadeados, e “command tem casa” também os alcança pela função canônica; portanto não cabe afirmar que todos os contratos de cron provaram este elo. (`app/chamados/tests/test_contract_crons.py:25`, `app/chamados/tests/test_contract_crons.py:77`, `app/chamados/tests/test_contract_crons.py:269`, `app/chamados/tests/test_contract_crons.py:386`, `app/chamados/tests/test_contract_crons.py:431`, `app/core/tests/test_contract_crons_duracao_horario.py:45`, `app/chamados/tests/test_contract_crons.py:225`).
+
+Não executei suíte nem banco. Uma importação pura com `python3 -B`, sem escrita, confirmou papel `lavra`, presença na corrente do cartório e no bloco da manhã; resultado de suíte GREEN `[nao verificado]`. [nao verificado]
+
+## 08/11 03:14 · sessao 6a0b79b484ad · - · - · origem=Ronald (tmux)
+
+Rastreio de request e donos, somente por leitura estática; execução em banco/testes `[nao verificado]`. [nao verificado]
+
+1. Não encontrei chamada a `espelho_do_colab` nem a `MotorBase.calcular_mes` nas cadeias da lista depois do diff. As duas construções de `InsumosDoDono` dentro desse módulo passam `sem_motor=True`; a única chamada interna ao espelho fica protegida por essa flag. `app/escala/services/cadastro_realidade.py:525`, `app/escala/services/cadastro_realidade.py:1024`, `app/ponto/management/commands/e6_oraculo.py:166`.
+
+   Cadeias localizadas:
+
+   - HTML/PDF: `cadastro_x_realidade → lista`; PDF recebe o resultado já montado e só o renderiza. `app/escala/views.py:487`, `app/escala/views.py:489`, `app/escala/services/cadastro_realidade.py:1067`.
+   - Vigia: `vigiar_fio_morto → ListaDoAdmin → lista → dias_na_lista`. `app/chamados/management/commands/vigiar_fio_morto.py:167`, `app/chamados/services/vigia_fio.py:216`, `app/chamados/services/vigia_fio.py:217`.
+   - Outros leitores diretos de `lista()`: comandos `fechar_avisos_regua_na_lista` e `fechar_chamados_vinculo_na_lista`. `app/escala/management/commands/fechar_avisos_regua_na_lista.py:27`, `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:35`.
+   - Leitores do beco fora da lista: pauta da competência exportada e reatador do beco; ambos chegam ao mesmo `beco_em_lote`. `app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:105`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:54`, `app/escala/services/cadastro_realidade.py:439`, `app/escala/services/cadastro_realidade.py:573`.
+
+2. **Selo C3 tem brecha de mordida.** O teste arma `AssertionError` e verifica apenas que C12 continua presente e PDF existe. A lista captura `Exception` nos ramos, inclusive C11; se uma chamada indevida ao motor for introduzida no beco, a exceção pode ser engolida, C11 desaparecer, C12 continuar e esse teste passar. Caso concreto: recolocar uma chamada ao espelho no ramo C11; a fixture não exige C11 e não há `assert_not_called`. `app/ponto/tests/test_cxr_tela_le_o_motor.py:130`, `app/ponto/tests/test_cxr_tela_le_o_motor.py:134`, `app/escala/services/cadastro_realidade.py:864`, `app/escala/services/cadastro_realidade.py:866`.
+
+   O teste de conflito C9×C12 é mais forte contra essa chamada: a reconciliação ocorre fora dos `try/except` da lista, portanto uma chamada indevida nesse caminho propagaria a exceção. `app/ponto/tests/test_cxr_tela_le_o_motor.py:247`, `app/escala/services/cadastro_realidade.py:885`, `app/escala/services/cadastro_realidade.py:1026`.
+
+3. **O teste intitulado “cxr_lavrado responde como o espelho” não chama `cxr_lavrado`.** Ele injeta manualmente `[DIA]` em um lado e um espelho artificial com o mesmo único dia no outro. Não alcança `cobertos`, partição por competência, filtro, ausência de cobertura ou conversão de `fim`. `app/ponto/tests/test_cxr_tela_le_o_motor.py:284`, `app/ponto/tests/test_cxr_tela_le_o_motor.py:286`, `app/ponto/tests/test_cxr_tela_le_o_motor.py:287`.
+
+4. **Q4 exige distinguir igualdade do conjunto completo de igualdade de pertinência dos dias perguntados.** O conjunto completo não é igual em geral: `medir` descarta datas externas a `[ini,fim]`, mas `InsumosDoDono.cxr()` guarda todos os `dia` publicados. O próprio teste com agosto/outubro comprova a diferença de construção. `app/ponto/services/cxr_na_lista.py:88`, `app/ponto/management/commands/e6_oraculo.py:170`, `app/ponto/tests/test_cxr_tela_le_o_motor.py:226`.
+
+   Entretanto, `um_dono_por_dia` escolhe `janela_atual(dia)`. Para um dia perguntado que pertence àquela janela, o filtro sozinho preserva a pertinência, supondo mesma publicação e cobertura correta; não sustenta um contraexemplo de dono apenas porque os conjuntos completos diferem. `app/escala/services/cadastro_realidade.py:1017`, `app/ponto/services/cxr_na_lista.py:88`, `app/ponto/services/cxr_na_lista.py:174`.
+
+5. **`fim` tem dois significados na ligação C11→CXR.** C11 passa o final da janela cortado em ontem; `cxr_lavrado` interpreta o mês/ano desse parâmetro como a identidade da competência. Exemplo: em 22/10, a competência corrente 21/10–20/11 é cortada em 21/10, e a consulta busca `10/2026`, embora a lavra corrente tenha `11/2026`. `app/escala/services/cadastro_realidade.py:568`, `app/escala/services/cadastro_realidade.py:569`, `app/escala/services/cadastro_realidade.py:526`, `app/ponto/services/cxr_na_lista.py:173`.
+
+   **Não atribuir mudança efetiva de dono C11 a esse defeito:** o beco só chama o juiz depois de verificar `folga_nao_definida=True`, e esse insumo já produz `CADASTRO` antes de CXR. Hoje o erro de competência fica mascarado por essa precedência. `app/escala/services/cadastro_realidade.py:518`, `app/escala/services/cadastro_realidade.py:531`, `app/ponto/management/commands/e6_oraculo.py:98`.
+
+6. Fluxo de `dono_do_dia`:
+
+   - C9: escrito pelo serviço do teto chamando `InsumosDoDono.dono`; formatador converte `dono` para `dono_do_dia`. `app/ponto/services/teto_na_lista.py:86`, `app/escala/services/cadastro_realidade.py:379`.
+   - C10: escrito pelo censo, com os dias de fase da própria corrida injetados no mesmo portador; formatador lê `dono_do_dia` diretamente. `app/ponto/management/commands/censo_fase_12x36.py:287`, `app/ponto/management/commands/censo_fase_12x36.py:300`, `app/escala/services/cadastro_realidade.py:424`.
+   - C11: escrito no request pelo beco chamando o mesmo portador; não é dono diário previamente lavrado. `app/escala/services/cadastro_realidade.py:531`.
+   - C12: escrito na lavra usando o espelho da própria medição; formatador converte `dono` para `dono_do_dia`. `app/ponto/services/cxr_na_lista.py:92`, `app/ponto/services/cxr_na_lista.py:96`, `app/escala/services/cadastro_realidade.py:403`.
+   - Em conflito, `um_dono_por_dia` pode sobrescrever todos esses valores: reaproveita C11 presente ou pergunta ao mesmo juiz com CXR lavrado. Assim, o `dono_do_dia` final significa “dono reconciliado pela lista”, não necessariamente “dono original daquele snapshot”. `app/escala/services/cadastro_realidade.py:1009`, `app/escala/services/cadastro_realidade.py:1026`, `app/escala/services/cadastro_realidade.py:1028`.
+   - A apresentação deriva `dono`, ação e contadores; `dias_na_lista` e vigia leem o `dono_do_dia` reconciliado. `app/escala/services/cadastro_realidade.py:923`, `app/escala/services/cadastro_realidade.py:930`, `app/escala/services/cadastro_realidade.py:1063`, `app/chamados/services/vigia_fio.py:228`.
+
+7. `_cxr`: inicializado como `None`; recebe conjunto ISO por injeção ou pela leitura do espelho e é lido por `dono`. `_sem_motor`: escrito no construtor e lido nas guardas de `cxr` e `dono`. `None` representa “não carregado/não coberto”; conjunto vazio representa “coberto, motor não publicou dia”; sem cobertura, somente o ramo residual `ESTRUTURA` vira `None`, enquanto outros insumos ainda podem decidir CADASTRO/BATIDA. `app/ponto/management/commands/e6_oraculo.py:133`, `app/ponto/management/commands/e6_oraculo.py:146`, `app/ponto/management/commands/e6_oraculo.py:148`, `app/ponto/management/commands/e6_oraculo.py:170`, `app/ponto/management/commands/e6_oraculo.py:189`.
+
+8. **Relógios paralelos preexistentes permanecem na cadeia:** C2 lê `date.today()` e crava corte 21; a lista lê um instante próprio; PDF chamado pela view lê outro instante porque a view não o repassa. Caso concreto: pedido atravessando meia-noite pode medir C2 com data distinta e imprimir outro carimbo. Isso não é introduzido pelas linhas do diff, mas impede afirmar “um relógio por request” para a cadeia inteira. `app/escala/services/cadastro_realidade.py:252`, `app/escala/services/cadastro_realidade.py:253`, `app/escala/services/cadastro_realidade.py:794`, `app/escala/services/cadastro_realidade.py:1076`, `app/escala/views.py:489`.
+
+9. **C12 não propaga ausência/erro/frescura da lavra para o produto.** `ultimo_lavrado` possui `sem_medida`, `medido_em`, `data_ref` e conserva `erros`, mas `_cxr_do_motor` só consome `itens`; a saída da lista publica metadados do previsto cego e esmeril, sem equivalente C12. Caso concreto: lavra inexistente e lavra válida com zero itens produzem a mesma ausência de C12; lavra parcial com erros também não ganha indicação própria. `app/ponto/services/cxr_na_lista.py:149`, `app/ponto/services/cxr_na_lista.py:151`, `app/escala/services/cadastro_realidade.py:393`, `app/escala/services/cadastro_realidade.py:970`, `app/escala/services/cadastro_realidade.py:975`.
+
+10. Não identifiquei novo predicado concorrente de dono: a decisão continua em `dono_da_divergencia`, que recebe paridade, cadastro, fase e pertinência CXR. Os novos ramos mudam carregamento e ausência de informação, não repetem a regra CADASTRO/BATIDA. `app/ponto/management/commands/e6_oraculo.py:98`, `app/ponto/management/commands/e6_oraculo.py:110`, `app/ponto/management/commands/e6_oraculo.py:195`.
 
 ## 08/11 01:34 · sessao 58c2a164fdf2 · FIO-E0-V4-E1 · verificador · origem=Code
 
@@ -993,155 +1083,4 @@ Além disso, no núcleo da emissão, `trava_na_ordem(...abertas_do_colaborador=T
 
 **7 — PROCEDENTE a duplicidade de predicados, mesmo declarada.** Com `update_fields`, `_salvou_o_status` pergunta se a coluna foi nomeada; no save inteiro pergunta se o valor difere da leitura anterior. Declarar não transforma os dois critérios num só. (`app/chamados/signals.py:79`, `app/chamados/signals.py:85`, `app/chamados/signals.py:87`) “Pouso antes do pré-requisito fecha com sombra no hash final”: **[nao verificado]**; o dado apenas afirma o fechamento, sem prova da sombra executada.
 
-## 07/11 21:30 · sessao a70fe2b95732 · - · - · origem=Ronald (tmux)
-
-- **Triagem 1: PROCEDENTE quanto ao residual; “é desenho” não o fecha.** O comando mantém várias células sob um atomic (`app/ponto/management/commands/celula_veredito_velho.py:133`, `:141`, `:144`); o cartório percorre células e chamados e ressuscita (`app/ponto/services/cartorio.py:1303`, `:1591`, `:1622`). Cada ressuscitação trava apenas suas disputas, seu chamado e seus IDs (`app/chamados/models.py:1541`, `:1552`): a segunda pode adquirir D2/CH2 novos depois de P1; o rastreador rejeita precisamente aquisição nova de rank menor (`app/chamados/tests/test_e1_v9.py:86`, `:106`). Existência das duas candidatas em produção e deadlock efetivo: **[nao verificado]**.
-
-- **Candidata “topo com abertas”: insuficiência PROCEDENTE.** A flag adiciona somente disputas `fechada_em__isnull=True` (`app/chamados/models.py:2552`), enquanto ressuscitação alcança expressamente as fechadas e as reabre (`app/chamados/models.py:1582`, `:1583`). A trava local pode pegá-las antes da própria Pergunta, mas não antecipa a fechada da segunda ressuscitação antes de P1 (`app/chamados/models.py:1552`).
-
-- **Candidata “C primeiro basta”: garantia universal NÃO demonstrada; exigência de censo PROCEDENTE.** Há escritores sem aquisição local de C: `descarimbar_em_lote` faz UPDATE direto (`app/chamados/models.py:3007`, `:3015`); `reabrir_para_correcao` entra em atomic e faz esse UPDATE ou `qs.update`, sem chamar a trava (`app/chamados/services/disputa_emissao.py:1496`, `:1516`, `:1518`). Há caminho produtivo de resposta HTML até `p.save()` sem C nessa cadeia: view seleciona e chama core (`app/chamados/views.py:1228`, `:1239`, `:1283`), core salva dentro de atomic (`app/chamados/services/disputa_emissao.py:1388`, `:1389`), e o override apenas envolve `super().save()` em atomic (`app/chamados/models.py:3173`, `:3174`). A API também chama o core diretamente (`app/api/views.py:2644`, `:2659`). Esses exemplos derrubam a premissa “todos entram por C”; não demonstram, sozinhos, um ciclo de deadlock **[nao verificado]**.
-
-- **Triagem 2: NÃO PROCEDE como inversão sob autocommit; não descartou o que v14 afirmava.** View chama `silenciar` (`app/chamados/views_arquivar.py:37`), porta não abre atomic e salva (`app/chamados/services/arquivo.py:141`, `:170`, `:171`), helper retorna fora de atomic (`app/chamados/models.py:484`). Receiver pode chamar cartório quando status da instância diverge da leitura (`app/chamados/signals.py:184`, `:192`, `:203`). Configuração e estado efetivos de autocommit na execução: **[nao verificado]**.
-
-- **Triagem 3: janela PROCEDENTE; classificá-la como preexistente não a corrige.** O bloco interno termina após descarimbar (`app/chamados/models.py:1547`, `:1555`); reabertura vem depois (`app/chamados/models.py:1559`, `:1582`). Seleção ocorre antes da trava (`app/chamados/models.py:1533`, `:1541`, `:1552`). Comparação histórica independente com pai indisponível nesta cópia sem `.git`: **[nao verificado]**.
-
-- **Triagem 7: “declarado” não elimina dois significados.** O código declara e implementa coluna nomeada quando há `update_fields` e valor divergente no save inteiro (`app/chamados/signals.py:79`, `:85`, `:87`). Ordem permanece o residual do item 1 (`app/chamados/models.py:1552`). “Fecha com prova da sombra no hash final” não pode ser confirmado pelo material fornecido: **[nao verificado]**.
-
-## 07/11 21:30 · sessao 1e8be6e76dc3 · - · - · origem=Ronald (tmux)
-
-**Causa exata da diferença: [nao verificado].** O dado relata que o 3-FICAM passou com teto 211; isso demonstra **≤211**, não medição exata de 211. O selo usa `assertLessEqual`, sem imprimir contagem quando passa (`app/ponto/tests/test_selo_chokepoint_escrita.py:240-246`).
-
-O código comprova estas fontes de variação:
-
-- **Data e relógio:** `setUpTestData` calcula `cls.dia = localdate()-2`, sem data fixa; o cartório consulta novamente `localdate()` e `now()` ao julgar (`app/ponto/tests/test_selo_chokepoint_escrita.py:229`; `app/ponto/services/cartorio.py:1965`; `app/ponto/services/cartorio.py:1989`).
-- **Memo:** o leitor guarda empresa e resultado de `periodo_trancado` por chave de empresa/mês/ano; o dono é o request ou a instância do colaborador (`app/chamados/juizes.py:957-965`; `app/chamados/juizes.py:983-996`). Os testes FICAM não limpam esse memo; a limpeza explícita existente pertence a outro teste, de comparação do gate (`app/ponto/tests/test_selo_chokepoint_escrita.py:393-426`; `app/ponto/tests/test_selo_chokepoint_escrita.py:435-440`).
-- **Caminho efetivamente executado:** `_espelhar_marcos` retorna sem save se a lista já coincide; o selo 3-FICAM exige apenas **pelo menos um** dos três chamados vivo (`app/ponto/management/commands/detectar_ausencias.py:555-559`; `app/ponto/tests/test_selo_chokepoint_escrita.py:423-426`).
-
-Portanto, “dependência de ordem por memo/relógio do setUpTestData” é uma hipótese compatível com essas portas, mas a execução anterior que aqueceu o memo, os valores do memo, as datas/horas de ambas as rodadas e as consultas ausentes não constam do dado: **[nao verificado]**. Não atribuir as seis consultas especificamente ao memo, ao relógio ou a três saves sem dump comparativo: **[nao verificado]**.
-
-## 07/11 21:11 · sessao c09619854497 · FIO-E0-V4-E1 · verificador · origem=Code
-
-**PROCEDENTE: ainda existe aquisição de Disputa/Chamado depois de Pergunta do mesmo colaborador, na mesma transação. A cura unitária não fecha a ordem global do lote.** O contraexemplo estático é o cartório ressuscitando perguntas de duas células do mesmo colaborador sob atomic externo. Ocorrência desse estado na frota e deadlock efetivo: **[nao verificado]**. (`app/ponto/management/commands/celula_veredito_velho.py:133`, `app/ponto/services/cartorio.py:1303`, `app/ponto/services/cartorio.py:1622`, `app/chamados/models.py:1552`)
-
-**1. Ordem global — PROCEDENTE o residual; NÃO PROCEDE repetir como intactas as inversões unitárias corrigidas.**
-
-A cadeia residual é:
-
-| Passo | Evidência |
-|---|---|
-| `celula_veredito_velho`, inclusive com `--aplicar`, envolve a janela em um atomic e entrega várias células do mesmo colaborador ao cartório. | `app/ponto/management/commands/celula_veredito_velho.py:44`, `app/ponto/management/commands/celula_veredito_velho.py:133`, `app/ponto/management/commands/celula_veredito_velho.py:141`, `app/ponto/management/commands/celula_veredito_velho.py:156` |
-| `julgar_colab → _julgar_colab_corpo` percorre as células; cada chamado elegível pode ressuscitar suas perguntas. | `app/ponto/services/cartorio.py:948`, `app/ponto/services/cartorio.py:1303`, `app/ponto/services/cartorio.py:1591`, `app/ponto/services/cartorio.py:1622` |
-| Primeira ressuscitação: adquire `C → D1 → CH1 → P1`. Seu universo contém apenas as disputas das perguntas escolhidas, `self.pk` e os IDs escolhidos. | `app/chamados/models.py:1541`, `app/chamados/models.py:1552` |
-| Segunda célula elegível, com D2/CH2 distintos: C é reentrante; **D2 e CH2 são aquisições novas depois de P1**, ainda no atomic externo. | `app/chamados/models.py:1552`, `app/chamados/models.py:2548`, `app/chamados/models.py:2554`, `app/chamados/models.py:2567` |
-
-Esse contraexemplo pressupõe duas ressuscitações elegíveis e nenhuma aquisição anterior cobrindo D2/CH2. Os reconciliadores anteriores são condicionais; não garantem antecipadamente esse universo. Existência concreta das candidatas: **[nao verificado]**. (`app/ponto/services/cartorio.py:1488`, `app/ponto/services/cartorio.py:1501`, `app/ponto/services/cartorio.py:1514`)
-
-**Isso demonstra quebra da ordem exigida, não um deadlock demonstrado:** C já está retido e serializa outra transação que também entre por C. Reentrância de C não torna D2/CH2 reentrantes. O próprio rastreador denuncia a aquisição nova de rank menor depois de Pergunta. (`app/chamados/models.py:2547`, `app/chamados/tests/test_e1_v9.py:86`, `app/chamados/tests/test_e1_v9.py:106`)
-
-As **16 portas** efetivamente chamam o helper antes do save:
-
-| Grupo | Portas e localização da trava |
-|---|---|
-| Texto — 1 | `reescrever_texto`: `app/chamados/services/texto.py:35` |
-| Contexto — 4 | `anotar_contexto`: `app/chamados/services/contexto.py:77`; `renovar_contexto`: `app/chamados/services/contexto.py:103`; `retirar_contexto`: `app/chamados/services/contexto.py:126`; `fundir_contexto`: `app/chamados/services/contexto.py:162` |
-| Vínculos — 5 | `apontar_justificativa`: `app/chamados/services/vinculos.py:88`; `apontar_celula`: `app/chamados/services/vinculos.py:100`; `apontar_ticket_glpi`: `app/chamados/services/vinculos.py:116`; `assumir_responsavel`: `app/chamados/services/vinculos.py:134`; `liberar_responsavel`: `app/chamados/services/vinculos.py:146` |
-| Arquivo — 2 | `silenciar`: `app/chamados/services/arquivo.py:170`; `levantar`: `app/chamados/services/arquivo.py:209` |
-| Modelo — 4 | `rebaixar`: `app/chamados/models.py:497`; `escalar_urgencia`: `app/chamados/models.py:552`; `definir_prazo_sla`: `app/chamados/models.py:590`; `marcar_escalonado_dp`: `app/chamados/models.py:609` |
-
-O helper adquire **Colaborador e aquele Chamado**, sem antecipar o universo de Disputas. Ele corrige a aquisição tardia de C nessas portas, mas não prova sozinho a ordem de toda continuação possível. (`app/chamados/models.py:486`, `app/chamados/models.py:2553`, `app/chamados/models.py:2566`)
-
-Em `agrupar_furo`, a cadeia unitária anterior foi corrigida: o topo adquire C, Disputas abertas, pais/vivos e furo/pai antes de contexto, reapontamento e reconciliação. A solicitação posterior dessas mesmas linhas é reentrante. (`app/chamados/services/limbo_folgas.py:274`, `app/chamados/services/limbo_folgas.py:275`, `app/chamados/services/limbo_folgas.py:282`, `app/chamados/services/limbo_folgas.py:283`, `app/chamados/services/fio.py:855`)
-
-Os receivers relevantes ficam assim:
-
-| Receiver | Cadeia e efeito sobre a ordem |
-|---|---|
-| Chamado: rebaixamento | Faz UPDATE de urgência no mesmo PK, pelo ritual do modelo. (`app/chamados/signals.py:72`, `app/chamados/models.py:636`) |
-| Chamado: S143 | Save de campo retorna pela guarda; save canônico de status já adquiriu o universo antes. Depois, o resolver solicita C → Disputas → Chamados e pode carimbar Perguntas. (`app/chamados/signals.py:104`, `app/chamados/models.py:290`, `app/chamados/services/disputa_emissao.py:1683`, `app/chamados/services/disputa_emissao.py:1749`) |
-| Chamado: cartório | Compara banco/instância e pode julgar sincronamente, inclusive com instância desatualizada. A fábrica pode alcançar nova aquisição de universo. (`app/chamados/signals.py:191`, `app/chamados/signals.py:203`, `app/ponto/services/cartorio.py:997`, `app/chamados/services/disputa_emissao.py:530`) |
-| Chamado: isentos e filho morto | Registram trabalho em `on_commit`; esse trabalho não permanece dentro da transação anterior. (`app/chamados/signals.py:293`, `app/chamados/signals.py:356`) |
-| Disputa: S88 | Ao salvar fechada, pode chamar `pai.reconciliar → _gravar_estado → trava_na_ordem`. O fechamento canônico antecipa o universo; na reabertura, S88 retorna. (`app/chamados/signals.py:28`, `app/chamados/signals.py:42`, `app/chamados/models.py:1902`, `app/chamados/models.py:290`) |
-| Disputa: retomada | Trabalho em `on_commit`. (`app/chamados/signals.py:144`) |
-| Disputa: S144 | Ao fechar, materializa pendentes pela porta de materialização; na reabertura retorna. (`app/chamados/signals.py:153`, `app/chamados/signals.py:163`, `app/chamados/services/materializacao.py:1428`) |
-
-**2. Porta fora de transação — PROCEDENTE o caminho; NÃO PROCEDE chamá-lo inversão pelo UPDATE já confirmado.**
-
-Existe caminho condicional: `arquivar_chamado → arquivo.silenciar`, sem atomic próprio; o helper retorna. Se o status da instância estiver desatualizado, o post_save do cartório pode prosseguir e alcançar, por exemplo, `ressuscitar_perguntas`, que abre atomic e pede C. S143 não faz isso pelo save de campo, pois `update_fields` não contém status. (`app/chamados/views_arquivar.py:37`, `app/chamados/services/arquivo.py:170`, `app/chamados/models.py:484`, `app/chamados/signals.py:86`, `app/chamados/signals.py:191`, `app/ponto/services/cartorio.py:1622`, `app/chamados/models.py:1547`)
-
-**Sob a premissa de autocommit**, a transação do UPDATE já terminou: ela não continua segurando o Chamado enquanto o receiver pede C em outra transação. Portanto, essa sequência temporal não constitui aquela inversão de travas retidas. Configuração efetiva e execução concorrente em produção: **[nao verificado]**. (`app/chamados/models.py:480`, `app/chamados/models.py:484`, `app/chamados/services/arquivo.py:171`)
-
-Texto, contexto e vínculos abrem atomic antes do helper; entrar nessas funções sem transação externa não faz seu save ocorrer em autocommit. As duas portas de arquivo e os quatro métodos de campo do modelo não abrem atomic próprio. (`app/chamados/services/texto.py:31`, `app/chamados/services/contexto.py:101`, `app/chamados/services/vinculos.py:86`, `app/chamados/services/arquivo.py:141`, `app/chamados/models.py:488`, `app/chamados/models.py:573`)
-
-**3. Ressuscitação — PROCEDENTE a janela; NÃO PROCEDE atribuí-la como novidade ao delta.**
-
-Sem atomic externo, o bloco termina depois de descarimbar as Perguntas, antes do log e de `reabrir_sistema`. Pode ficar confirmado o estado intermediário “Pergunta ressuscitada / Disputa fechada”; erro ou concorrência nessa separação continua possível. A trava nova não ampliou essa fronteira transacional. Ocorrência efetiva: **[nao verificado]**. (`app/chamados/models.py:1547`, `app/chamados/models.py:1555`, `app/chamados/models.py:1559`, `app/chamados/models.py:1582`)
-
-Com atomic externo, as travas sobrevivem à saída do atomic interno. Reabrir **as mesmas Disputas** é reentrante; S88/S144 retornam por estarem abertas, e a nota de reabertura cria Followup sem passar contexto novo. Isso não cobre outra ressuscitação do lote, como demonstrado no item 1. (`app/chamados/models.py:1541`, `app/chamados/models.py:1552`, `app/chamados/models.py:1583`, `app/chamados/models.py:2172`, `app/chamados/signals.py:28`, `app/chamados/signals.py:153`, `app/chamados/services/nota.py:110`)
-
-Também permanece uma seleção anterior à trava: IDs, julgamento e disputas são obtidos antes de adquirir C; a porta não refaz o julgamento depois de eventual espera. Portanto, a adição não prova ausência de seleção envelhecida. Dano concorrente concreto: **[nao verificado]**. (`app/chamados/models.py:1533`, `app/chamados/models.py:1541`, `app/chamados/models.py:1552`, `app/chamados/models.py:1555`)
-
-**4. Campos — NÃO PROCEDE mudança explícita de valores no delta 12b/12c; a volta inteira não é somente ordem de travas.**
-
-Os escritores canônicos e consumidores relevantes às cadeias revisadas são:
-
-| Campo | Quem escreve | Quem lê |
-|---|---|---|
-| `status_local` | Transição em `_gravar_estado`; nascimento em `abrir/criar`. (`app/chamados/models.py:228`, `app/chamados/models.py:296`, `app/chamados/models.py:971`, `app/chamados/models.py:1095`) | S143, cartório e C6. (`app/chamados/signals.py:96`, `app/chamados/signals.py:191`, `app/chamados/juizes.py:758`) |
-| `contexto_json` do Chamado | As quatro portas de contexto. (`app/chamados/services/contexto.py:76`, `app/chamados/services/contexto.py:102`, `app/chamados/services/contexto.py:125`, `app/chamados/services/contexto.py:161`) | Cartório lê dia; espelho lê marcos; reconciliador lê filhos. (`app/ponto/services/cartorio.py:126`, `app/ponto/management/commands/detectar_ausencias.py:555`, `app/chamados/reconciliador.py:242`) |
-| `contexto` da Disputa | Emissão, remoção de motivo, anotar/renovar. (`app/chamados/services/disputa_emissao.py:544`, `app/chamados/models.py:2057`, `app/chamados/models.py:2097`, `app/chamados/models.py:2115`) | Merge e guardas das próprias portas. (`app/chamados/services/disputa_emissao.py:544`, `app/chamados/models.py:2093`, `app/chamados/models.py:2111`) |
-| Justificativa relacionada | `apontar_justificativa`. (`app/chamados/services/vinculos.py:87`) | Reconciliação. (`app/chamados/reconciliador.py:451`, `app/chamados/reconciliador.py:529`) |
-| Célula | `apontar_celula`. (`app/chamados/services/vinculos.py:99`) | Juiz do dia. (`app/chamados/juizes.py:100`) |
-| Ticket GLPI | `apontar_ticket_glpi`. (`app/chamados/services/vinculos.py:115`) | Encaminhamento da view. (`app/chamados/views.py:220`) |
-| Responsável/instante | Assumir/liberar. (`app/chamados/services/vinculos.py:132`, `app/chamados/services/vinculos.py:144`) | Resposta da atribuição e fila. (`app/chamados/views.py:1036`, `app/chamados/services/fila.py:154`) |
-| Arquivo/véu | `silenciado_ate/por/motivo`, opcionalmente `resgatado_em`, pelas portas de arquivo. Não existe choice de status “arquivado”. (`app/chamados/services/arquivo.py:166`, `app/chamados/services/arquivo.py:202`, `app/chamados/models.py:28`, `app/chamados/models.py:87`) | Predicado temporal, reconciliação da ausência, isentos e prescrição. (`app/chamados/models.py:511`, `app/chamados/services/silencio_ausencia.py:66`, `app/chamados/signals.py:284`, `app/chamados/services/arquivo.py:182`) |
-| Urgência/original | Ritual de rebaixamento, escalar, transição e UPDATE do receiver. (`app/chamados/models.py:468`, `app/chamados/models.py:553`, `app/chamados/models.py:246`, `app/chamados/models.py:636`) | Guarda de escalada pelo juiz de SLA. (`app/chamados/models.py:546`) |
-| `prazo_sla` | Porta de SLA e nascimento na emissão. (`app/chamados/models.py:588`, `app/chamados/services/disputa_emissao.py:581`) | Juiz do prazo e cobrança. (`app/chamados/catalogo/motor.py:54`, `app/chamados/catalogo/motor.py:68`, `app/chamados/services/cobranca.py:246`) |
-| Escalonado DP/em | `marcar_escalonado_dp`. (`app/chamados/models.py:606`) | Comando lê flag; fila lê instante. (`app/ponto/management/commands/escalonar_chamados_supervisao.py:96`, `app/chamados/services/fila.py:181`) |
-| Texto do Chamado | `reescrever_texto`, além do nascimento. (`app/chamados/services/texto.py:18`, `app/chamados/services/texto.py:33`) | A própria porta compara o valor anterior. (`app/chamados/services/texto.py:28`) |
-| `atualizado_em` | Listado nos saves das portas. (`app/chamados/services/contexto.py:52`, `app/chamados/services/vinculos.py:65`, `app/chamados/services/texto.py:36`) | Marco de atualização do painel. (`app/chamados/services/painel.py:65`) |
-| Materialização/autor/via da Pergunta | Atribuição central e portas de carimbar/descarimbar, inclusive lote. (`app/chamados/models.py:2852`, `app/chamados/models.py:2907`, `app/chamados/models.py:2938`, `app/chamados/models.py:3015`) | Estado, C6, seleção S143; a própria porta preserva/restaura autor. (`app/chamados/models.py:2796`, `app/chamados/juizes.py:827`, `app/chamados/services/disputa_emissao.py:1711`, `app/chamados/models.py:2881`) |
-| Resposta/respondida/validação/autor | Resposta, validação/devolução e ressuscitação. (`app/chamados/services/disputa_emissao.py:1368`, `app/chamados/services/validacao.py:134`, `app/chamados/services/validacao.py:199`, `app/chamados/models.py:1555`) | Estado/C6, marco do painel e preservação da decisão histórica. (`app/chamados/models.py:2796`, `app/chamados/juizes.py:827`, `app/chamados/services/painel.py:67`, `app/chamados/models.py:3689`) |
-| Lavra/julgamento/expiração da Pergunta | `veredito_lavrado.lavrar`. (`app/chamados/veredito_lavrado.py:227`) | `esta_stale`. (`app/chamados/veredito_lavrado.py:179`) |
-| `fechada_em` da Disputa | Fechar e reabrir admin/sistema. (`app/chamados/models.py:1924`, `app/chamados/models.py:2141`, `app/chamados/models.py:2165`) | Receivers, ressuscitação e universo de travas. (`app/chamados/signals.py:28`, `app/chamados/signals.py:129`, `app/chamados/signals.py:153`, `app/chamados/models.py:1582`, `app/chamados/models.py:2552`) |
-
-No delta fornecido, permanecem as atribuições, os filtros e os `update_fields`; entram aquisições de trava. Isso não garante equivalência entre entrelaçamentos concorrentes nem igualdade de timestamps após espera. Contexto/vínculos continuam decidindo pela instância antes da trava, sem refresh. (`app/chamados/models.py:486`, `app/chamados/models.py:1552`, `app/chamados/services/contexto.py:97`, `app/chamados/services/contexto.py:103`, `app/chamados/services/vinculos.py:84`)
-
-Já a **volta inteira** altera o disparo do S143: saves de campo e saves inteiros sem diferença detectada deixam de tentar o resolver. Logo, “só mudou ordem” é falso para `afb67623..f67b36a6`. (`app/chamados/signals.py:83`, `app/chamados/signals.py:104`)
-
-**5. Catraca — PROCEDENTE o alcance limitado; NÃO localizei outro escritor produtivo por save fora desse conjunto.**
-
-A varredura de escritores da árvore e a inspeção complementar não localizaram `ChamadoColaborador.save()` produtivo adicional fora do modelo e das quatro portas. Escrita dinâmica não demonstrada: **[nao verificado]**. (`app/core/censo_escritas.py:469`, `app/chamados/models.py:296`, `app/chamados/services/texto.py:36`, `app/chamados/services/contexto.py:78`, `app/chamados/services/vinculos.py:89`, `app/chamados/services/arquivo.py:171`)
-
-A catraca não vê `QuerySet.update/bulk_update`, chamada por alias de método (`salvar = ch.save; salvar()`), nem segue helpers externos. Outro módulo fica fora. Alias do **objeto**, como `outro.save()`, continua visível. (`app/chamados/tests/test_e1_v12.py:212`, `app/chamados/tests/test_e1_v12.py:231`, `app/chamados/tests/test_e1_v12.py:234`, `app/chamados/tests/test_e1_v12.py:242`)
-
-Ela aceita uma chamada anterior à “ordem” sem conferir receptor, argumentos, ramo executado ou fluxo; `ast.walk` inclui funções internas e só trata `FunctionDef`. Portanto, uma trava em ramo morto ou sobre objeto errado pode liberar o save. (`app/chamados/tests/test_e1_v12.py:229`, `app/chamados/tests/test_e1_v12.py:231`, `app/chamados/tests/test_e1_v12.py:232`)
-
-Na extração executada somente em memória, a árvore atual deu zero acusações; retirar as chamadas ao helper produziu **16 acusações**. Há mordida para a mudança local, mas ela não mede a ordem acumulada entre duas ressuscitações. O RED novo exercita apenas uma ressuscitação seguida de contexto no mesmo Chamado. (`app/chamados/tests/test_e1_v12.py:217`, `app/chamados/tests/test_e1_v12.py:137`, `app/chamados/tests/test_e1_v12.py:140`)
-
-**6. Custo — PROCEDENTE a multiplicação; relevância operacional medida é [nao verificado].**
-
-São duas consultas adicionais por helper executado dentro de atomic: C e Chamado. Reentrância não elimina essas consultas; fora de atomic ou em no-op anterior ao helper, esse acréscimo não ocorre. (`app/chamados/models.py:484`, `app/chamados/models.py:486`, `app/chamados/models.py:2547`, `app/chamados/models.py:2567`, `app/chamados/services/contexto.py:98`)
-
-| Caminho | Multiplicação verificável |
-|---|---|
-| Escalonamento a cada cinco minutos | N2 chama escalar e anotar contexto no mesmo atomic: até **+4 por candidato alterado**. N1 chama marcar DP fora de atomic: +0 pelo helper; demais anotações acrescentam +2 quando escrevem. (`app/config/crons.py:369`, `app/ponto/management/commands/escalonar_chamados_supervisao.py:51`, `app/ponto/management/commands/escalonar_chamados_supervisao.py:103`, `app/ponto/management/commands/escalonar_chamados_supervisao.py:131`, `app/ponto/management/commands/escalonar_chamados_supervisao.py:138`) |
-| Espelho do cartório | +2 por contexto alterado no laço de chamados vivos. (`app/ponto/services/cartorio.py:1787`, `app/ponto/management/commands/detectar_ausencias.py:558`) |
-| Rejunção, no caminho da batida/outbox/vigia | +2 por vínculo efetivamente escrito. (`app/chamados/rejuncao.py:73`, `app/chamados/rejuncao.py:107`) |
-| Agrupamento de furos | Trava superior de universo, mais duas consultas do helper de contexto, repetidas por furo. (`app/chamados/services/limbo_folgas.py:274`, `app/chamados/services/limbo_folgas.py:275`, `app/chamados/services/limbo_folgas.py:331`) |
-| Cobrança | +2 por pai com SLA alterado no lote. (`app/chamados/services/cobranca.py:176`, `app/chamados/services/cobranca.py:178`) |
-
-Os testes contêm asserts de **7 consultas na escalada** e **6 no vínculo**. Execução desses testes nesta revisão, volume real, contenção e latência: **[nao verificado]**. (`app/chamados/tests/test_porta_chamado_ciclo.py:109`, `app/chamados/tests/test_porta_chamado_ciclo.py:265`, `app/chamados/tests/test_porta_vinculos.py:77`, `app/chamados/tests/test_porta_vinculos.py:339`)
-
-**7. Classes anteriores de reprovação.**
-
-| Classe | Veredito neste recorte |
-|---|---|
-| Segundo juiz | **NÃO PROCEDE como introdução do delta:** o helper usa a porta existente. (`app/chamados/models.py:486`, `app/chamados/models.py:1552`) |
-| Segundo escritor fora da porta | **NÃO PROCEDE como introdução do delta:** permanecem os saves nas portas; o helper só solicita travas. (`app/chamados/services/contexto.py:103`, `app/chamados/services/contexto.py:104`, `app/chamados/models.py:486`) |
-| Relógio fora da borda | **NÃO PROCEDE como novidade do delta:** as leituras de relógio dessas portas permanecem anteriores ao helper. (`app/chamados/models.py:551`, `app/chamados/services/texto.py:34`) |
-| Derivação paralela | **NÃO PROCEDE como novidade do delta:** a seleção da ressuscitação continua na mesma função. (`app/chamados/models.py:1533`) |
-| Selo/RED sem mordida | **PROCEDENTE quanto ao alcance insuficiente; NÃO PROCEDE dizer que é vazio.** A catraca 
-
-[truncado em 20000 de 20886 caracteres]
-
-_2823 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2826 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
