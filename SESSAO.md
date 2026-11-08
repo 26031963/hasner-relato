@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/11/2026 10:20:12.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (140.4 MB). Acoes na janela: **222**.
+**Medido em 08/11/2026 10:25:35.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (140.4 MB). Acoes na janela: **225**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:25:05 | Bash | Record aval and check Codex launch | `cd /home/ronald/saas-hasner && echo "- 08/11 10:2x aval E3-CENSO-COMPLEMENTO-CHAT -- lista de leitores do chat + 3 perguntas de lei (badge, fronteira folha, C17) ao Codex censo sem curar; aval em logs/fio_e3/aval_e3_censo_complemento_chat.txt; o E3-CENSO-ANTES-DO-CONSTRUTOR 10:2x que ele complementa NAO chegou a esta sessao" >> app/docs/PROMPTS.md python3 - <<'PY' p='app/docs/RELATO.md' L=open(p). ...` |
+| 10:24:59 | Bash | Save aval and launch Codex E3 censo | `cd /home/ronald/saas-hasner && mkdir -p logs/fio_e3 && cat > logs/fio_e3/aval_e3_censo_complemento_chat.txt <<'EOF' aval Ronald E3-CENSO-COMPLEMENTO-CHAT 08/11 10:2x (complementa o E3-CENSO-ANTES-DO-CONSTRUTOR 10:2x; anexo ao Codex, nao substitui o censo dele): o chat mediu no HEAD 94d41ea os leitores que hoje respondem "o que falta/quem segura este dia": vigia_fio.py::fio_do_dia:156 e censo_alcan ...` |
+| 10:24:37 | Bash | Look for prior E3-CENSO aval and wrapper usage | `cd /home/ronald/saas-hasner && /bin/grep -n 'E3-CENSO' app/docs/PROMPTS.md app/docs/RELATO.md logs/fio_e0_v4/*.txt 2>/dev/null \| head; ls -t logs/fio_e0_v4 \| /bin/grep -i 'e3\\|e2.r' \| head; sed -n 1,40p bin/codex_pergunta.sh \| /bin/grep -n 'uso\\|usage\\|CODEX_' \| head` |
 | 10:17:02 | Bash | Record despacho and check hook | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('PERGUNTA DE DESENHO ATA-X-TURNO-PAUSA')][0] L.insert(i+1,"DESPACHO 08/11 10:3x (FILA 1 NAO PARA, E1 e ATA-PAUSA paradas no topo): COBPARC-AUSENCIA-CALA-DOIS-JUIZES (BACKLOG:769, trava contrato 20) -> construtor opus em copia do HEAD (juiz antes do sitio; ...` |
 | 10:16:56 | Agent | COBPARC-AUSENCIA-CALA-DOIS-JUIZES builder | `You are the CONSTRUTOR for obra COBPARC-AUSENCIA-CALA-DOIS-JUIZES in /home/ronald/saas-hasner (Django ponto SaaS). Read /home/ronald/saas-hasner/CLAUDE.md fully first and obey it (LEI-AKITA: origin cure, no fallback, RED first, build in a copy from HEAD, git add by path, never commit on main, never merge/deploy/apply, sonda only via bin/sonda_leitura.sh or Codex --sonda, motor only in sombra, one  ...` |
 | 10:16:38 | Bash | Read full item text | `cd /home/ronald/saas-hasner && sed -n '769,770p' app/docs/BACKLOG.md \| cut -c1-2500` |

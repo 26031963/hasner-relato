@@ -1,7 +1,216 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 10:20** · publicado em **08/11/2026 10:20** (UTC-3)
+> Ultima resposta processada: **08/11/2026 10:22** · publicado em **08/11/2026 10:25** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 08/11 10:22 · sessao 3832ccb31504 · COBPARC-AUSENCIA-CALA-DOIS-JUIZES · censo · origem=Code
+
+**Não há um “sim” uniforme.** Para a parcial não-falta **sem período**, (A) cala a geração da pergunta; (B) continua julgando célula/ata e considera o dia furado se encontrar lâmpada `acesa=False`. O cartório bloqueia o nascimento do chamado por outro predicado, `parcial_so_lista`. Isso não fecha universalmente chamados existentes. `app/chamados/services/materializacao.py:81`; `app/chamados/juizes.py:480`; `app/ponto/services/cartorio.py:398`; `app/ponto/services/cartorio.py:1777`.
+
+“Parcial”, abaixo, significa o predicado do código: tipo que aceita horas, registro de um dia e `0 < minutos < 480`. A ausência de `hora_ini/hora_fim` não determina parcialidade. `app/ponto/turnos.py:2598`.
+
+**1. Censo dos sítios executáveis**
+
+Nas tabelas, **“não cala” significa que aquela guarda deixa o julgamento continuar**, sem afirmar que efetivamente nascerá cobrança; os próprios emissores possuem outras guardas. `app/chamados/services/disputa_emissao.py:763`; `app/chamados/services/disputa_emissao.py:765`; `app/chamados/services/fabrica_da_celula.py:91`; `app/chamados/services/fabrica_da_celula.py:102`.
+
+| Sítio | Parcial não-falta sem período | Efeito |
+|---|---|---|
+| `app/ponto/turnos.py:2598` — `cobre_parte_do_dia` | `True`; não lê as horas. | Define parcialidade. |
+| `app/ponto/turnos.py:2632` — `periodo_da_parcial_no_dia` | Retorna `'sem_periodo'`. | Classifica período. |
+| `app/ponto/turnos.py:2675` — `ausencia_explica_o_dia_inteiro` | `False`. | Não reconhece cobertura inteira. |
+| `app/chamados/services/materializacao.py:81` — (A) | **Cala** pelo segundo termo, em `:82`. | Guarda da pergunta e da reemissão. |
+| `app/chamados/juizes.py:449` — (B) | Não cala pela ausência; segue à ata. Lâmpada falsa prende em `:480`; sem célula/ata lavrada retorna `None` em `:464`/`:478`. | Premissa/S122/fechamento/reabertura. |
+| `app/chamados/juizes.py:410` — `ausencia_parcial_cobra_o_resto` | `True` para registro `tipo_dia='ausencia'` com `cobertura_parcial`. Não lê período. | Predicado compartilhado dos leitores do resto. |
+| `app/chamados/juizes.py:426` — `dia_sem_trabalho` | A parcial só responde “sem trabalho” se `trabalha is False`. | Não cala pelo mero rótulo ausência. |
+| `app/escala/utils.py:1211` e `app/escala/utils.py:1255` — `_marcar_ausencias` | Marca parcial e `'sem_periodo'`; não dispensa missing, pela guarda em `:1265`. | Grade/folha/insumo da ata. |
+| `app/ponto/services/cartorio.py:398` — `parcial_so_lista` | **Cala nascimento**, retornando `True` incondicionalmente. | Chamado/pergunta/push. |
+| `app/ponto/services/cartorio.py:436` — `_cob_parcial_da_impressao` | Conserva `'sem_periodo'` na impressão dos insumos. | Controle de rejulgamento; não decide cobrança sozinho. |
+| `app/ponto/services/cartorio.py:732` e `app/ponto/services/cartorio.py:736` — `ata_do_dia` | Transporta parcialidade e período. | Lavratura da ata. |
+| `app/ponto/services/cartorio.py:766` — `dispensar_por_ausencia` | **Não dispensa** pela ausência parcial. | Mantém lâmpadas recebidas da grade. |
+| `app/escala/services/leitor_celula.py:416` e `app/escala/services/leitor_celula.py:418` | Transporta os dois carimbos da ata. | Alimentação dos leitores; não recalcula cobertura. |
+| `app/ponto/supra_juiz.py:381` e `app/ponto/supra_juiz.py:439` | Com fato/batida nas condições dos respectivos ramos, produz `PARCIAL_SEM_PERIODO`. | Classificação para cadastro. |
+| `app/ponto/supra_juiz.py:530` | Sem período não constitui `_resto_cobrado`; aprovada + chamado vivo produz `COBRANCA_EM_DIA_COBERTO`, em `:532`. | Protesto sobre cobrança existente. |
+
+O supra **não trata todo sem-período como `PARCIAL_SEM_PERIODO`**: o ramo sem batida admite a parcial como dia de cobrança e pode produzir `FURO_SEM_COBRANCA`; a emissão é barrada posteriormente pelo cartório. `app/ponto/supra_juiz.py:304`; `app/ponto/supra_juiz.py:313`; `app/ponto/supra_juiz.py:367`; `app/ponto/services/cartorio.py:1725`.
+
+Todos os leitores executáveis de `ausencia_parcial_cobra_o_resto`, além de `dia_sem_trabalho`:
+
+| Sítio | Resposta local para sem período | Efeito |
+|---|---|---|
+| `app/chamados/services/declaracao_texto.py:98` | Mantém a parcial; enumera missing em `:110`. | Marcos faltantes/texto da cobrança. |
+| `app/escala/services/furos_diarios.py:49` | Mantém o dia e conta furos em `:54`. | `FuroDiario`/métricas. |
+| `app/relatorios/furos.py:195` | Mantém a parcial e apresenta marcos apagados em `:202`. | Raio-X/relatório. |
+| `app/inteligencia/calculadores.py:50` | Mantém a parcial e conta marcos apagados em `:64`. | `preenchimento_espelho`. |
+| `app/inteligencia/calculadores.py:149` | Mantém a parcial e conta previstos/batidos em `:160`. | `preenchimento_marcos`. |
+
+Leitores adicionais de `dia_sem_trabalho`, que recebem essa mesma exceção da parcial:
+
+| Sítio | Resposta local para sem período | Efeito |
+|---|---|---|
+| `app/chamados/models.py:1245` | Parcial não regulariza apenas pelo rótulo ausência. | Coletor da premissa. |
+| `app/chamados/services/fabrica_da_celula.py:91` | Essa guarda deixa passar; `parcial_so_lista` cala depois, em `:102`. | Pergunta/pai/push. |
+| `app/chamados/services/materializacao.py:174` | Deixa a parcial participar da avaliação do plantio. | Verificação de preenchimento do furo/paridade. |
+| `app/ponto/services/cluster_espurio.py:25` | Deixa participar da leitura das lâmpadas/órfãs. | Diagnóstico do cluster; nascimento recebe bloqueio separado. |
+| `app/ponto/management/commands/detectar_intervalo_ausente.py:51` | Deixa participar; a cobrança exige condições das lâmpadas em `:69`. | Furo de intervalo. |
+| `app/ponto/management/commands/reconciliar_grade.py:282` | Parcial com `trabalha!=False` não entra nos mortos por essa cláusula. | Retratação de cobrança. |
+| `app/ponto/supra_juiz.py:71` e `app/ponto/supra_juiz.py:496` | Consulta o juiz no ramo sem trabalho; esse ramo exige `cobertura_status is None`, em `:495`. | `COBRANCA_EM_DIA_SEM_TRABALHO`. |
+
+Demais chamadas executáveis dos predicados pedidos:
+
+| Sítio | Resposta para parcial sem período | Efeito |
+|---|---|---|
+| `app/escala/servico_jornada.py:344` | A parcial não cala essa guarda. O laço consulta **todas** as ausências, em `:342`, não só a vencedora. | `classificar_falta`. |
+| `app/ponto/turnos.py:2690` | Exclui a parcial dos dias inteiros; exige também efeito `ABONA`. | Folha/pontualidade. |
+| `app/ponto/services/fechamento.py:694` | Parcial paga não abona o dia inteiro; conta pelas batidas, em `:695`. | Folha. |
+| `app/ponto/services/efeito_ausencia.py:48` | Soma minutos da parcial paga. | Crédito financeiro. |
+| `app/ponto/services/efeito_ausencia.py:55` | Parcial paga não justifica/suprime o dia inteiro. | Folha/espelho. |
+| `app/ponto/services/credito_parcial.py:27` | Credita minutos pagos no próprio dia. | Folha/espelho. |
+| `app/ponto/services/dia_decidido.py:494` | Conserva minutos no rótulo da parcial abonada. | Tela. |
+| `app/ponto/services/ausencia.py:883` e `app/ponto/services/ausencia.py:887` | Validador rejeita hora faltante e período em não-parcial. Só é chamado quando alguma hora foi fornecida, em `:906`. | Cadastro. |
+| `app/ponto/services/vigia_ausencia_veredito.py:54` | Pula parcial no contador. | Vigia de discordância. |
+| `app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:49` | Pula parcial no contador. | Diagnóstico. |
+| `app/ponto/views.py:2084` | Entrega parcialidade ao painel. | Tela. |
+| `app/ponto/views.py:2240` | Marca `a.cobre_parte=True`. | Lista de ausências. |
+| `app/templates/ponto/ausencias.html:163` | Mostra minutos. | Tela. |
+| `app/templates/ponto/partials/painel_ausencia.html:296` e `app/templates/ponto/partials/painel_ausencia.html:311` | Mostra edição/aprovação do período e os avisos sobre lista do DP, em `:299`/`:313`. | Tela; não publica uma linha administrativa. |
+
+A exclusão da parcial no helper de dias inteiros também chega aos consumidores em `app/ponto/services/fechamento.py:687`, `app/ponto/services/efeito_ausencia.py:65`, `app/ponto/turnos.py:2695`, `app/ponto/management/commands/diff_calculador.py:412`, `app/ponto/services/esmeril_espelho.py:164` e `app/relatorios/management/commands/diff_extrato_parcial.py:67`.
+
+Há ainda o juiz registrado da cobrança viva: `reconciliar_por_ausencia` escolhe a vencedora, mas, para aprovada, exige `_premissa_morre` e sucesso de `ch.reconciliar()`. Não testa `'sem_periodo'` diretamente. `app/chamados/services/silencio_ausencia.py:65`; `app/chamados/services/silencio_ausencia.py:93`; `app/chamados/services/silencio_ausencia.py:101`.
+
+**2. Grade, lâmpadas, emissão e lista administrativa**
+
+A grade conserva os missing da parcial sem período: escreve `tipo_dia='ausencia'`, `cobertura_parcial=True` e `'sem_periodo'`; a transformação de missing em dispensada exige período diferente de `'sem_periodo'`. `app/escala/utils.py:1241`; `app/escala/utils.py:1251`; `app/escala/utils.py:1255`; `app/escala/utils.py:1265`.
+
+Na ata, **os marcos missing conhecidos ficam `acesa=False`**. Isso não significa que todas as lâmpadas do dia apaguem: as células cumpridas continuam acesas; existe também resposta `None` para fato cego sem coluna atribuível. `app/ponto/services/cartorio.py:647`; `app/ponto/services/cartorio.py:677`; `app/ponto/services/cartorio.py:689`; `app/ponto/services/cartorio.py:641`.
+
+`ata_do_dia` grava as lâmpadas, conta as falsas e transporta os carimbos da parcial. `dispensar_por_ausencia` não as acende pela ausência parcial; `dia['justificado']` constitui outra fonte explícita de dispensa. `app/ponto/services/cartorio.py:704`; `app/ponto/services/cartorio.py:712`; `app/ponto/services/cartorio.py:732`; `app/ponto/services/cartorio.py:736`; `app/ponto/services/cartorio.py:766`; `app/ponto/services/cartorio.py:768`.
+
+**O cartório não cria o chamado de furo desse dia com esses carimbos:** calcula `parcial_so_lista` e o exige falso nos dois portões de emissão. Um chamado vivo pode permanecer e receber espelhamento dos marcos. `app/ponto/services/cartorio.py:1706`; `app/ponto/services/cartorio.py:1725`; `app/ponto/services/cartorio.py:1777`; `app/ponto/services/cartorio.py:1787`.
+
+Outros consumidores do bloqueio:
+
+| Sítio | Ação para sem período |
+|---|---|
+| `app/chamados/services/fabrica_da_celula.py:102` | Retorna sem motivos/pergunta/pai. |
+| `app/chamados/services/disputa_emissao.py:871` e `app/chamados/services/disputa_emissao.py:894` | Classifica pelo predicado e remove o chamado da fábrica de disputas/perguntas. |
+| `app/chamados/services/pergunta_no_app.py:88` | Rotula retenção como `parcial_na_lista_do_admin`. |
+| `app/chamados/reconciliador.py:872` | Bloqueia nascer/renascer fora da costura em chamado já vivo. |
+| `app/ponto/services/cluster_espurio.py:103` | Remove o dia de `a_abrir`, em `:107`. |
+| `app/chamados/management/commands/disparar_perguntas_competencia.py:154` | Conta e pula nova pergunta. |
+| `app/ponto/management/commands/emitir_furo_retroativo.py:121` | Conta e pula emissão retroativa. |
+
+Quanto à **lista do admin**, há três coisas distintas no código:
+
+- Classificação `PARCIAL_SEM_PERIODO`, derivando `indefinida`: `app/ponto/supra_juiz.py:388`; `app/ponto/supra_juiz.py:441`; `app/escala/models.py:1615`.
+- Contagem `parcial_na_lista_sem_push`: `_contar_na_lista` apenas incrementa contador em memória e deduplica a chave. `app/ponto/services/cartorio.py:1829`; `app/ponto/services/cartorio.py:1832`.
+- Texto da tela dizendo que o dia está na lista do DP: `app/templates/ponto/partials/painel_ausencia.html:299`.
+
+A tela administrativa chama `cadastro_realidade.lista`; sua fonte C11 exige especificamente o protesto `PREVISTO_COM_DIA_INDEFINIDO`. Há também uma fonte genérica para ausência com pelo menos duas batidas. Essas condições não demonstram inclusão de **toda parcial sem período**. `app/escala/views.py:484`; `app/escala/services/cadastro_realidade.py:477`; `app/escala/services/cadastro_realidade.py:478`; `app/ponto/services/esmeril_espelho.py:133`.
+
+**Publicação efetiva de um dia específico numa lista administrativa por ser “parcial sem período”: [não verificado].**
+
+**3. Chamadores de (A), de (B) e ações**
+
+Os chamadores executáveis diretos de **(A)** são:
+
+| Chamador | Onde a resposta vira ação |
+|---|---|
+| `app/chamados/services/disputa_emissao.py:763` — `_criar_pergunta_se_couber` | `True` retorna antes de `PerguntaDisputa.abrir`, em `:770`. |
+| `app/chamados/reconciliador.py:845` — `reemitir_chamado_do_dia` | `True` retorna antes de abrir/reutilizar o chamado, em `:900`. |
+| `app/chamados/services/pergunta_no_app.py:90` — `retencao` | Retorna causa diagnóstica; não fecha chamado. A classificação administrativa vem antes, em `:88`. |
+
+Os chamadores executáveis diretos de **(B)** são:
+
+| Chamador | Efeito |
+|---|---|
+| `app/chamados/models.py:1260` — `premissa_regularizada` | Quando B responde, devolve `not _f`, em `:1262`. |
+| `app/chamados/juizes.py:471` | Recursão para a véspera quando o dia é sem trabalho; conserva `para`. |
+
+O coletor pode aceitar provas **antes de B**: justificativa aprovada, decisão administrativa, dia sem trabalho para chamado que não seja `turno_aberto`, marcos acesos ou inexistentes. `app/chamados/models.py:1227`; `app/chamados/models.py:1243`; `app/chamados/models.py:1245`; `app/chamados/models.py:1249`; `app/chamados/models.py:1258`.
+
+As ações posteriores são:
+
+- **S122:** usa `premissa_regularizada()` no efeito padrão cobrança; se não regularizado, recusa transição para `resolvido`. `app/chamados/models.py:175`; `app/chamados/models.py:177`; `app/chamados/models.py:185`.
+- **Fechamento do sistema:** consulta a premissa com `para='folha'`; há ainda outras guardas antes de gravar o fechamento. `app/chamados/models.py:701`; `app/chamados/models.py:648`; `app/chamados/models.py:617`.
+- **Reabertura:** premissa regularizada com `para='folha'` produz recusa; `reabrir` registra e retorna `False`. Premissa não regularizada apenas deixa essa guarda passar. `app/chamados/models.py:1309`; `app/chamados/models.py:1310`; `app/chamados/models.py:1361`; `app/chamados/models.py:1366`.
+
+**4. Juiz registrado**
+
+**Sim: C11**, pergunta **“a ausência do dia suspende, fecha ou levanta a cobrança viva?”**, aponta para `chamados/services/silencio_ausencia.py::reconciliar_por_ausencia`. `app/core/juizes.py:117`; `app/core/juizes.py:271`.
+
+Também existe **C18**, para a pergunta mais estreita sobre a cobrança calar porque a célula lavrada diz que o dia não é de trabalho, apontando para `dia_sem_trabalho`. `app/core/juizes.py:149`; `app/core/juizes.py:278`.
+
+O documento registra explicitamente a exceção parcial que cobra o resto e a regra especial de (A) para `'sem_periodo'`; portanto não descreve uma resposta única compartilhada por A e B. `app/docs/JUIZES.md:62`; `app/docs/JUIZES.md:65`; `app/docs/JUIZES.md:66`.
+
+**5. Contraexemplos e limites**
+
+Os seguintes resultados decorrem das condições do código; ocorrência produtiva concreta: **[não verificado]**.
+
+| Condição | (A) | (B) |
+|---|---|---|
+| **Parcial com período; todos os missing dispensados dentro dele; nenhuma órfã** | Retorna `False`: não cala pela ausência. Com horas declaradas, `periodo(a, ())` retorna `'fora'`. `app/chamados/services/materializacao.py:81`; `app/ponto/turnos.py:2641`. | Retorna `False`: sem furo, pois as dispensadas ficam acesas e não há órfãs. **Diferença semântica, apesar dos dois booleanos serem falsos.** `app/escala/utils.py:1265`; `app/ponto/services/cartorio.py:647`; `app/chamados/juizes.py:480`; `app/chamados/juizes.py:490`. |
+| **Falta aprovada; ata `'falta'`; véspera responde `False` ou `None`** | Não cala: ambos os termos excluem falta. `app/chamados/services/materializacao.py:82`; `app/ponto/turnos.py:2675`. | Retorna `False` pela regra do dia sem trabalho/véspera. Para chamado não-turno, o coletor já regulariza antes de B. `app/chamados/juizes.py:428`; `app/chamados/juizes.py:471`; `app/chamados/juizes.py:472`; `app/chamados/models.py:1245`. |
+
+**Tipo integral não-falta com efeito diferente de `ABONA` não é, sozinho, divergência A/B:** ambos calam sem testar efeito. A diferença está no helper financeiro, que exige `ABONA`. `app/chamados/services/materializacao.py:81`; `app/chamados/juizes.py:449`; `app/ponto/turnos.py:2690`.
+
+**`para='folha'` também não diferencia uma única vencedora aprovada comum aos dois.** A fixa cobrança; B aceita o efeito recebido. Cobrança admite não rejeitadas, folha somente aprovadas: com lançamentos concorrentes, podem selecionar vencedoras diferentes pelo desempate `-data, -pk`. `app/chamados/services/materializacao.py:78`; `app/chamados/juizes.py:448`; `app/ponto/turnos.py:2514`; `app/ponto/turnos.py:2516`; `app/ponto/turnos.py:2557`.
+
+## 08/11 10:20 · sessao 7681152d2c16 · - · - · origem=Ronald (tmux)
+
+B não dá uma resposta única apenas pela presença da ausência aprovada: retorna `False` imediatamente só quando a ausência vencedora explica o dia inteiro; a parcial segue para célula, ata e lâmpadas. Uma lâmpada `acesa is False` devolve `True`; célula inexistente ou ata sem `lampadas` devolve `None`. Para parcial `tipo_dia='ausencia'`, `cobertura_parcial=True`, `dia_sem_trabalho` só cala por `trabalha is False`. Fontes: `app/chamados/juizes.py:448`, `app/chamados/juizes.py:449`, `app/chamados/juizes.py:460`, `app/chamados/juizes.py:477`, `app/chamados/juizes.py:480`, `app/chamados/juizes.py:426`.
+
+Chamadores diretos executáveis de B:
+
+| Chamador | Efeito |
+|---|---|
+| `app/chamados/models.py:1260` | `premissa_regularizada` devolve `not _f` quando B sabe responder (`app/chamados/models.py:1261`). |
+| `app/chamados/juizes.py:471` | Recursão para véspera quando `dia_sem_trabalho(cel)`; preserva `para` e usa `False` se a véspera retorna `None` (`app/chamados/juizes.py:472`). |
+
+O import em `app/chamados/models.py:3318` reexporta B. As ações que usam o coletor são:
+
+- S122 humano: `transicionar(..., novo_status='resolvido')` chama `premissa_regularizada()` com padrão cobrança; ausência de regularização produz `ValueError`. `app/chamados/models.py:175`, `app/chamados/models.py:177`, `app/chamados/models.py:185`.
+- Fechamento pelo sistema: `_gate_premissa_do_fechamento` usa `para='folha'`; premissa regularizada libera essa guarda. O fechamento passa também pela guarda da pergunta viva. `app/chamados/models.py:701`, `app/chamados/models.py:648`, `app/chamados/models.py:651`.
+- `reconciliar` grava o estado decidido somente se `_decisao_do_fechamento` permite. `app/chamados/models.py:617`, `app/chamados/models.py:620`.
+- Reabertura: `recusa_da_reabertura` usa `para='folha'`; premissa regularizada impede `reabrir`, registrando recusa e retornando `False`. `app/chamados/models.py:1309`, `app/chamados/models.py:1310`, `app/chamados/models.py:1361`, `app/chamados/models.py:1366`.
+- Antes de chamar B, o coletor já aceita justificativa aprovada, decisão do admin, dia sem trabalho para chamados que não são `turno_aberto`, marcos acesos e marcos inexistentes. `app/chamados/models.py:1227`, `app/chamados/models.py:1243`, `app/chamados/models.py:1245`, `app/chamados/models.py:1249`, `app/chamados/models.py:1258`.
+
+Censo de leitores executáveis de `ausencia_parcial_cobra_o_resto`:
+
+| Sítio | Parcial sem período | Efeito |
+|---|---|---|
+| `app/chamados/juizes.py:426` | Cobra pela ata, salvo `trabalha=False`; não consulta período. | Juiz do dia sem trabalho; `app/chamados/juizes.py:427`. |
+| `app/chamados/services/declaracao_texto.py:98` | Mantém a parcial e enumera seus `missing`. | Marcos faltantes da declaração; `app/chamados/services/declaracao_texto.py:110`, `app/chamados/services/declaracao_texto.py:123`. |
+| `app/escala/services/furos_diarios.py:49` | Mantém o dia na apuração e conta os furos. | Alimenta FuroDiario; `app/escala/services/furos_diarios.py:54`, `app/escala/services/furos_diarios.py:57`. |
+| `app/relatorios/furos.py:195` | Mantém a parcial e apresenta marcos apagados. | Raio-X da folha; `app/relatorios/furos.py:202`, `app/relatorios/furos.py:208`. |
+| `app/inteligencia/calculadores.py:50` | Mantém parcial; conta marcos apagados. | `preenchimento_espelho`; `app/inteligencia/calculadores.py:57`, `app/inteligencia/calculadores.py:64`. |
+| `app/inteligencia/calculadores.py:149` | Mantém parcial; conta previstos e batidos. | `preenchimento_marcos`; `app/inteligencia/calculadores.py:156`, `app/inteligencia/calculadores.py:160`. |
+
+Esses leitores não testam `sem_periodo` nas condições citadas; preservam a leitura do resto da parcial, sujeita às demais guardas locais. `app/chamados/juizes.py:410`, `app/chamados/services/declaracao_texto.py:98`, `app/escala/services/furos_diarios.py:49`, `app/relatorios/furos.py:195`, `app/inteligencia/calculadores.py:50`, `app/inteligencia/calculadores.py:149`.
+
+Leitores adicionais de `dia_sem_trabalho`:
+
+| Sítio | Resposta local para parcial sem período |
+|---|---|
+| `app/chamados/services/fabrica_da_celula.py:91` | Esta guarda deixa passar se `trabalha!=False`; a guarda seguinte `parcial_so_lista` cala pergunta, pai e push. `app/chamados/services/fabrica_da_celula.py:102`, `app/chamados/services/fabrica_da_celula.py:104`. |
+| `app/chamados/services/materializacao.py:174` | Deixa a parcial participar da avaliação de plantio que preenche furo; pode absolver a guarda de paridade. `app/chamados/services/materializacao.py:178`, `app/chamados/services/materializacao.py:181`. |
+| `app/ponto/services/cluster_espurio.py:25` | Deixa a parcial participar; assinatura requer pelo menos uma lâmpada apagada e duas órfãs próximas. `app/ponto/services/cluster_espurio.py:32`, `app/ponto/services/cluster_espurio.py:33`, `app/ponto/services/cluster_espurio.py:35`. |
+| `app/ponto/management/commands/detectar_intervalo_ausente.py:51` | Deixa a parcial participar; só lista pausas apagadas quando entrada e saída estão acesas. `app/ponto/management/commands/detectar_intervalo_ausente.py:69`, `app/ponto/management/commands/detectar_intervalo_ausente.py:71`. |
+| `app/ponto/management/commands/reconciliar_grade.py:282` | Parcial com `trabalha!=False` não entra nos mortos por essa cláusula. `app/chamados/juizes.py:426`, `app/chamados/juizes.py:427`. |
+| `app/ponto/supra_juiz.py:71` e `app/ponto/supra_juiz.py:496` | Usa o mesmo juiz no ramo `COBRANCA_EM_DIA_SEM_TRABALHO`, alcançado com `cobertura_status is None`. `app/ponto/supra_juiz.py:494`, `app/ponto/supra_juiz.py:497`. |
+| `app/chamados/models.py:1245` | A parcial não regulariza pelo rótulo ausência; continuam as demais provas do coletor. `app/chamados/juizes.py:426`, `app/chamados/models.py:1247`. |
+
+Contraexemplos de código, sem afirmar ocorrência produtiva:
+
+1. **Parcial COM período, todos os marcos faltantes dispensados, sem órfãs:** A retorna `False` — não cala por ausência — porque não explica o dia inteiro e o período declarado não é `sem_periodo`. A grade pode dispensar todos os marcos missing dentro do período; estes viram lâmpadas acesas, e B retorna `False` — sem furo. `app/chamados/services/materializacao.py:81`, `app/ponto/turnos.py:2632`, `app/ponto/turnos.py:2641`, `app/escala/utils.py:1265`, `app/escala/utils.py:1269`, `app/ponto/services/cartorio.py:647`, `app/ponto/services/cartorio.py:677`, `app/chamados/juizes.py:480`, `app/chamados/juizes.py:490`.
+
+2. **Falta aprovada:** A sempre retorna `False`, porque os dois termos excluem falta. B lê a ata: `tipo_dia='falta'` aciona `dia_sem_trabalho`, consulta a véspera e retorna `False` quando a véspera responde `False` ou `None`. No coletor, chamado que não seja `turno_aberto` já fica regularizado por esse tipo de ata antes de B. `app/chamados/services/materializacao.py:81`, `app/chamados/services/materializacao.py:82`, `app/ponto/turnos.py:2675`, `app/chamados/juizes.py:428`, `app/chamados/juizes.py:471`, `app/chamados/juizes.py:472`, `app/chamados/models.py:1245`.
+
+3. **Tipo não ABONA, integral e não falta:** não distingue A de B: ambos calam sem consultar `efeito`. Distingue essa cobrança do helper de folha, que exige `a.efeito == ABONA`. `app/chamados/services/materializacao.py:81`, `app/chamados/juizes.py:449`, `app/ponto/turnos.py:2675`, `app/ponto/turnos.py:2689`.
+
+4. **`para='folha'`:** A fixa cobrança, B aceita o efeito. Cobrança inclui não rejeitadas; folha inclui apenas aprovadas. Portanto podem consultar vencedoras diferentes quando houver mais de um lançamento; desempate é `-data, -pk`. Com uma única ausência aprovada comum aos dois, o filtro de status não constitui diferença. `app/chamados/services/materializacao.py:78`, `app/chamados/juizes.py:448`, `app/ponto/turnos.py:2514`, `app/ponto/turnos.py:2516`, `app/ponto/turnos.py:2552`, `app/ponto/turnos.py:2557`.
+
+O registro tem a pergunta mais estreita `_C18`, “a cobrança do dia cala porque a célula lavrada diz que o dia não é de trabalho?”, apontando para `dia_sem_trabalho`; não é um registro literal de A/B como juiz único da composição ausência → silêncio. `app/core/juizes.py:149`, `app/core/juizes.py:278`.
 
 ## 08/11 10:20 · sessao d3bca936a7a8 · - · - · origem=Ronald (tmux)
 
@@ -838,125 +1047,4 @@ Mapa dos campos:
 
 Execução dos testes e estado efetivo dos snapshots de produção: [não verificado]. [nao verificado]
 
-## 08/11 03:19 · sessao d8ec781d1406 · CXR-TELA-LE-O-MOTOR · verificador · origem=Code
-
-**Não aprovo a v1 como pronta.** Há publicação de lavra parcial como execução concluída, lacunas nos selos e ausência de prova do caso obrigatório de pausa. O caminho principal da lista, entretanto, passou a usar `sem_motor=True`. (`app/ponto/management/commands/lavrar_cxr_do_motor.py:37`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:130`; `app/escala/services/cadastro_realidade.py:525`; `app/escala/services/cadastro_realidade.py:1024`)
-
-Verificação estática, com contraprova da seleção de competência executada somente em memória. Resultado de suíte, sete dias de col841, equivalência na frota e fechamento da soma d→e: **[nao verificado]**. [nao verificado]
-
-**1. Escritores, leitores e significado dos campos**
-
-O percurso é motor → resultado do espelho → `medir` → `lavrar` → snapshot → formatador C12/portador do dono → lista/PDF/vigia. O resultado entregue pelo espelho vem da janela **visual**, `vis_ini..hoje`, e não exclusivamente de `apur_ini..apur_fim`. (`app/ponto/motor_calculo_v2.py:2719`; `app/ponto/services/espelho.py:1225`; `app/ponto/services/espelho.py:1227`; `app/ponto/services/espelho.py:1294`; `app/ponto/services/cxr_na_lista.py:71`; `app/escala/services/cadastro_realidade.py:393`)
-
-| Campo | Quem escreve; quem lê; significado |
-|---|---|
-| Snapshot `chave`, `escopo`, `escopo_id` | `lavrar`: `cxr_do_motor`, `frota`, `None`. `ultimo_lavrado` procura chave/escopo, sem filtrar `escopo_id`. (`app/ponto/services/cxr_na_lista.py:137`; `app/ponto/services/cxr_na_lista.py:147`) |
-| `data_ini`, `data_ref` | `lavrar` grava **a data da medição** nos dois; não são os limites das competências. `ultimo_lavrado` ordena por `data_ref` e a devolve como texto ISO. (`app/ponto/services/cxr_na_lista.py:138`; `app/ponto/services/cxr_na_lista.py:148`; `app/ponto/services/cxr_na_lista.py:153`) |
-| `numerador`, `denominador`, `valor`, `detalhe` | `lavrar` grava respectivamente `total`, `universo`, `None` e o dicionário inteiro. Portanto numerador é quantidade de itens distintos; denominador é quantidade de colab–competência examinados, não dias nem colaboradores únicos. (`app/ponto/services/cxr_na_lista.py:65`; `app/ponto/services/cxr_na_lista.py:118`; `app/ponto/services/cxr_na_lista.py:139`) |
-| `calculado_em`, `medido_em` | O modelo atualiza `calculado_em` ao salvar; `ultimo_lavrado` o expõe como `medido_em`. É carimbo da gravação, posterior à captura `_agora_do_ato`. (`app/inteligencia/models.py:96`; `app/ponto/services/cxr_na_lista.py:52`; `app/ponto/services/cxr_na_lista.py:152`) |
-| `itens[].colab`, `empresa` | `medir` acrescenta os PKs do colaborador e de sua empresa na seleção. O formatador agrupa por `colab`; a filtragem final da lista usa a empresa **atual**, carregada por `_vinculos`, e não `itens[].empresa`. (`app/ponto/services/cxr_na_lista.py:61`; `app/ponto/services/cxr_na_lista.py:77`; `app/escala/services/cadastro_realidade.py:401`; `app/escala/services/cadastro_realidade.py:769`; `app/escala/services/cadastro_realidade.py:899`) |
-| `itens[].competencia` | `medir` escreve `MM/AAAA` do fim da janela canônica. Formatador usa no detalhe; `cxr_lavrado` usa na chave de consulta. O corte vem da empresa; 21→20 é o default, não constante do serviço novo. (`app/ponto/services/cxr_na_lista.py:30`; `app/ponto/services/cxr_na_lista.py:57`; `app/ponto/services/cxr_na_lista.py:170`; `app/ponto/janelas.py:36`; `app/escala/services/cadastro_realidade.py:404`) |
-| `itens[].data` | `medir` converte `dia` em ISO e exige intervalo **inclusivo** `ini <= d <= fim`; ausência de `dia` permanece `None`. Lista, reconciliação e vigia usam essa data como identidade do dia. (`app/ponto/services/cxr_na_lista.py:80`; `app/ponto/services/cxr_na_lista.py:88`; `app/ponto/services/cxr_na_lista.py:95`; `app/escala/services/cadastro_realidade.py:1003`; `app/escala/services/cadastro_realidade.py:1061`) |
-| `ec`, `template_id` | Acrescentados pela lavra consultando o vínculo **do dia**. O formatador renomeia para `ec_do_dia`/`template_do_dia`; a ação C12 usa o template histórico. O agrupamento e o template mostrado na linha continuam sendo os de hoje. (`app/ponto/services/cxr_na_lista.py:94`; `app/escala/services/cadastro_realidade.py:402`; `app/escala/services/cadastro_realidade.py:923`; `app/escala/services/cadastro_realidade.py:782`) |
-| `dono` | Acrescentado pela lavra mediante `InsumosDoDono.dono(d)`, usando o espelho já obtido. O formatador o transforma em `dono_do_dia`; a reconciliação pode posteriormente sobrescrevê-lo. (`app/ponto/services/cxr_na_lista.py:92`; `app/ponto/services/cxr_na_lista.py:96`; `app/escala/services/cadastro_realidade.py:403`; `app/escala/services/cadastro_realidade.py:1028`) |
-| `causa`, `real`, `cadastrado`, `minutos_fora` | O produtor HE escreve causa, horários locais `HH:MM` e minutos arredondados. `minutos_fora` é a **sobra após extra declarada**, enquanto `cadastrado` continua sendo o marco cru. A lavra copia; o formatador imprime. (`app/ponto/motor_calculo_v2.py:1662`; `app/ponto/motor_calculo_v2.py:1670`; `app/ponto/motor_calculo_v2.py:1702`; `app/ponto/services/cxr_na_lista.py:79`; `app/escala/services/cadastro_realidade.py:394`) |
-| `entrada_real`, `entrada_cadastrada`, `saida_real`, `saida_cadastrada` | Os produtores L-084 escrevem instantes ISO com offset, e não apenas `HH:MM`. Lavra copia como texto; formatador imprime sem conversão. (`app/ponto/motor_calculo_v2.py:1624`; `app/ponto/motor_calculo_v2.py:1998`; `app/ponto/services/cxr_na_lista.py:39`; `app/escala/services/cadastro_realidade.py:398`) |
-| `delta_entrada_min`, `delta_saida_min` | Minutos com sinal, arredondados a uma decimal: entrada = real − prevista; saída = prevista − real. Logo saída posterior produz delta negativo. Copiados pela lavra e impressos pelo formatador. (`app/ponto/motor_calculo_v2.py:1973`; `app/ponto/motor_calculo_v2.py:1975`; `app/ponto/motor_calculo_v2.py:2002`; `app/escala/services/cadastro_realidade.py:399`) |
-| `cobertos` | `medir` escreve `[colab, competencia]` somente após concluir aquela leitura, inclusive quando nenhum item sobra. `cxr_lavrado` distingue coberto vazio (`set()`) de não coberto (`None`). (`app/ponto/services/cxr_na_lista.py:104`; `app/ponto/services/cxr_na_lista.py:110`; `app/ponto/services/cxr_na_lista.py:166`; `app/ponto/services/cxr_na_lista.py:174`) |
-| `fora_da_competencia` | Conta ocorrências descartadas pelo filtro, por leitura de competência. O command imprime; o produto C12 não expõe esse contador. Não representa quantidade de dias distintos. (`app/ponto/services/cxr_na_lista.py:88`; `app/ponto/services/cxr_na_lista.py:109`; `app/ponto/management/commands/lavrar_cxr_do_motor.py:33`; `app/escala/services/cadastro_realidade.py:393`) |
-| `repetidos_do_motor` | Conta itens iguais **depois da projeção/conversão**, dentro de um colab–competência. O command imprime; a lista recebe somente o item deduplicado. (`app/ponto/services/cxr_na_lista.py:79`; `app/ponto/services/cxr_na_lista.py:100`; `app/ponto/management/commands/lavrar_cxr_do_motor.py:33`) |
-| `total`, `colabs`, `universo`, `sem_dia` | `medir` calcula itens distintos, colaboradores com itens, colab–competência selecionados e itens sem data. O command imprime. O contador C12 da tela é recontado sobre assinaturas efetivamente exibidas. (`app/ponto/services/cxr_na_lista.py:118`; `app/ponto/management/commands/lavrar_cxr_do_motor.py:30`; `app/escala/services/cadastro_realidade.py:933`; `app/escala/services/cadastro_realidade.py:960`) |
-| `por_competencia`, `por_dono`, `por_causa` | Agregações dos itens sobreviventes, escritas por `medir`; command imprime as duas primeiras. Causa ausente ganha o rótulo `l084_sem_causa` somente na agregação. (`app/ponto/services/cxr_na_lista.py:111`; `app/ponto/services/cxr_na_lista.py:115`; `app/ponto/management/commands/lavrar_cxr_do_motor.py:32`) |
-| `janelas`, `competencias`, `erros`, `erros_amostra`, `rotulo`, `onde_olha` | Escritos por `medir`, armazenados no detalhe. Command usa `erros` para retornar 2; formatador C12 lê apenas `itens`, sem levar cobertura, erro ou frescura à saída da lista. (`app/ponto/services/cxr_na_lista.py:58`; `app/ponto/services/cxr_na_lista.py:121`; `app/ponto/services/cxr_na_lista.py:126`; `app/ponto/management/commands/lavrar_cxr_do_motor.py:39`; `app/escala/services/cadastro_realidade.py:393`) |
-| `sem_medida` | Produzido por `ultimo_lavrado` quando não há snapshot; ignorado pelo formatador C12. (`app/ponto/services/cxr_na_lista.py:149`; `app/escala/services/cadastro_realidade.py:393`) |
-
-`InsumosDoDono._cxr` nasce `None`, recebe conjunto de datas por injeção ou pelo espelho e é consultado por pertinência em `dono`. `_sem_motor` é escrito pelo construtor e lido nas duas guardas. Sem cobertura, outros insumos ainda podem decidir CADASTRO/BATIDA; apenas a resposta residual que dependeria de CXR fica `None`. (`app/ponto/management/commands/e6_oraculo.py:133`; `app/ponto/management/commands/e6_oraculo.py:146`; `app/ponto/management/commands/e6_oraculo.py:170`; `app/ponto/management/commands/e6_oraculo.py:189`)
-
-| Assinatura | Escritor original de `dono_do_dia` |
-|---|---|
-| C9 | Serviço do teto escreve `dono`; formatador renomeia. (`app/ponto/services/teto_na_lista.py:86`; `app/escala/services/cadastro_realidade.py:379`) |
-| C10 | Censo pergunta ao mesmo portador com os dias de fase da própria corrida e grava `dono_do_dia`. (`app/ponto/management/commands/censo_fase_12x36.py:287`; `app/ponto/management/commands/censo_fase_12x36.py:300`) |
-| C11 | Beco pergunta ao portador durante a leitura; não é dono previamente lavrado diariamente. (`app/escala/services/cadastro_realidade.py:531`) |
-| C12 | Lavra pergunta ao portador com o espelho da própria medição; formatador renomeia. (`app/ponto/services/cxr_na_lista.py:92`; `app/ponto/services/cxr_na_lista.py:96`; `app/escala/services/cadastro_realidade.py:403`) |
-
-Todos podem ser sobrescritos por `um_dono_por_dia`: reaproveita C11 ou pergunta novamente ao juiz. Assim, na saída, `dono_do_dia` significa **dono reconciliado**, não necessariamente o dono originalmente gravado naquele snapshot. Ações, contadores e vigia leem esse resultado. (`app/escala/services/cadastro_realidade.py:1009`; `app/escala/services/cadastro_realidade.py:1026`; `app/escala/services/cadastro_realidade.py:1028`; `app/escala/services/cadastro_realidade.py:923`; `app/escala/services/cadastro_realidade.py:1063`)
-
-**Não há significado temporal inteiramente uniforme:** HE escreve `entrada.date()`, enquanto L-084 escreve o dia atribuído pelo juiz. Além disso, motor usa `settings.TIME_ZONE`; lavra/portador usam timezone corrente. O default é São Paulo; divergência efetiva de fuso em produção é **[nao verificado]**. (`app/ponto/motor_calculo_v2.py:1528`; `app/ponto/motor_calculo_v2.py:1997`; `app/ponto/motor_calculo_v2.py:73`; `app/ponto/management/commands/e6_oraculo.py:149`; `app/config/settings/base.py:93`)
-
-**2. Caminhos de request e leitores da lista**
-
-**No grafo da lista CxR, não encontrei caminho sobrevivente que execute o espelho/motor.** As duas montagens potencialmente perigosas usam `sem_motor=True`, cuja guarda antecede a chamada ao espelho. (`app/escala/services/cadastro_realidade.py:525`; `app/escala/services/cadastro_realidade.py:1024`; `app/ponto/management/commands/e6_oraculo.py:166`)
-
-Caminhos localizados:
-
-- View HTML/PDF → `lista`; PDF recebe os dados montados e renderiza. (`app/escala/views.py:487`; `app/escala/views.py:489`; `app/escala/services/cadastro_realidade.py:1067`)
-- `lista` → C11 → `beco_em_lote` → portador sem motor. (`app/escala/services/cadastro_realidade.py:864`; `app/escala/services/cadastro_realidade.py:573`; `app/escala/services/cadastro_realidade.py:525`)
-- `lista` → `um_dono_por_dia` → portador sem motor. (`app/escala/services/cadastro_realidade.py:885`; `app/escala/services/cadastro_realidade.py:1024`)
-- `vigiar_fio_morto` → `ListaDoAdmin` → `lista` → `dias_na_lista`. (`app/chamados/management/commands/vigiar_fio_morto.py:167`; `app/chamados/services/vigia_fio.py:216`; `app/chamados/services/vigia_fio.py:217`)
-- Commands `fechar_avisos_regua_na_lista` e `fechar_chamados_vinculo_na_lista` → mesma `lista`. (`app/escala/management/commands/fechar_avisos_regua_na_lista.py:27`; `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:35`)
-- Consumidores externos do beco: pauta de competência exportada e reatador chegam ao mesmo serviço alterado. (`app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:105`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:54`)
-
-Fora desse grafo, as próprias telas de espelho continuam chamando `espelho_do_colab`; portanto “zero motor em qualquer request do sistema” seria falso. (`app/ponto/views.py:158`; `app/api/views.py:1369`)
-
-**3. Classes de reprovação**
-
-- **Segundo juiz de dono:** não identifiquei duplicação da regra CADASTRO/BATIDA/ESTRUTURA; ela continua no juiz existente. Os novos ramos mudam a obtenção do insumo e a resposta desconhecida. (`app/ponto/management/commands/e6_oraculo.py:98`; `app/ponto/management/commands/e6_oraculo.py:110`; `app/ponto/management/commands/e6_oraculo.py:195`)
-- **Segundo escritor:** o escritor localizado para a nova chave é `cxr_na_lista.lavrar`, chamado pelo command. Ele não escreve a lista interna do motor. A frase do modelo “escrito só por inteligencia.metricas” ficou documentalmente incompatível com esse padrão, que já é usado por C9. (`app/ponto/services/cxr_na_lista.py:134`; `app/ponto/management/commands/lavrar_cxr_do_motor.py:37`; `app/inteligencia/models.py:82`; `app/ponto/services/teto_na_lista.py:113`)
-- **Relógio fora da borda:** o command captura `localdate()` e o serviço captura outro `now()`. Caso: atravessar 20→21 entre as chamadas mantém competência/data_ref de ontem com instante de hoje. A cadeia também conserva o relógio próprio de C2 e outro no PDF. (`app/ponto/management/commands/lavrar_cxr_do_motor.py:28`; `app/ponto/services/cxr_na_lista.py:52`; `app/escala/services/cadastro_realidade.py:252`; `app/escala/services/cadastro_realidade.py:1076`)
-- **Derivação paralela:** C12 não recalcula distância, mas filtra, projeta e deduplica a publicação. Portanto “item por item, sem filtro e sem conta” não descreve o código. O censo `CLASSIFICAR` acrescentado pelo diff é informativo, não certificado dessa equivalência. (`app/ponto/services/cxr_na_lista.py:11`; `app/ponto/services/cxr_na_lista.py:79`; `app/ponto/services/cxr_na_lista.py:88`; `app/ponto/services/cxr_na_lista.py:100`; `app/core/tests/test_medida_turno_do_par.py:12`)
-- **Ordem de trava:** o elo toma o `flock`, verifica conclusão própria e espera o predecessor antes de executar. Não identifiquei inversão nova nesse caminho; concorrência entre execuções manuais e cron não está provada pelo teste sequencial. (`bin/encadeado.sh:78`; `bin/encadeado.sh:82`; `bin/encadeado.sh:89`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:118`)
-- **Pouso antes do pré-requisito:** o corte exige acusador de pausa no motor, e o golden da obra é `l084_pausa`; os produtores localizados nesta cópia são HE, `l084_do_dia` e L-084 sem causa. Os sete dias em produção permanecem **[nao verificado]**. (`app/docs/CORTES.md:304`; `app/docs/BACKLOG.md:775`; `app/ponto/motor_calculo_v2.py:1623`; `app/ponto/motor_calculo_v2.py:1670`; `app/ponto/motor_calculo_v2.py:1992`)
-- **Campo com dois significados:** há `dia` civil versus dia do turno; `fim` completo versus fim cortado; dono original versus reconciliado. O segundo caso tem contraprova abaixo. (`app/ponto/motor_calculo_v2.py:1528`; `app/ponto/motor_calculo_v2.py:1997`; `app/escala/services/cadastro_realidade.py:569`; `app/ponto/services/cxr_na_lista.py:173`; `app/escala/services/cadastro_realidade.py:1028`)
-
-Os testes **não mordem tudo o que anunciam**: [nao verificado]
-
-- O selo sem motor arma `AssertionError`, mas a lista captura `Exception`, inclusive em C11. Uma chamada indevida nesse ramo pode ser engolida, C11 desaparecer e o teste continuar verde porque exige apenas C12 e um PDF válido. Não há `assert_not_called`. (`app/ponto/tests/test_cxr_tela_le_o_motor.py:130`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:134`; `app/escala/services/cadastro_realidade.py:866`)
-- “`cxr_lavrado` responde como o espelho” **não chama `cxr_lavrado`**: injeta manualmente o mesmo dia nas duas montagens. Não testa `cobertos`, filtro ou competência. (`app/ponto/tests/test_cxr_tela_le_o_motor.py:284`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:286`)
-- O teste real cobre HE 18:56×21:00; os demais usam publicações artificiais. Não certifica pausa nem os sete dias obrigatórios. (`app/ponto/tests/test_cxr_tela_le_o_motor.py:92`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:154`)
-- Idempotência compara quantidade de snapshots e `itens`; o selo PDF procura cada data esperada no texto, sem excluir datas extras. São verificações parciais das promessas “mesmo estado” e “mesmos dias”. (`app/ponto/tests/test_cxr_tela_le_o_motor.py:122`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:151`)
-
-**4. Filtro, cobertura e equivalência para `dono()`**
-
-**Os conjuntos completos não são iguais.** Para a mesma publicação, o espelho fornece todos os dias; a lavra conserva a interseção com a competência. Entretanto, para um dia consultado **dentro daquela competência**, o filtro sozinho preserva a pertinência. Descartar agosto não é contraexemplo suficiente para `dono(outubro)`. (`app/ponto/management/commands/e6_oraculo.py:170`; `app/ponto/services/cxr_na_lista.py:88`; `app/ponto/management/commands/e6_oraculo.py:195`)
-
-Em `um_dono_por_dia`, a janela vem de `janela_atual(dia)`. Logo há equivalência de pertinência **condicionada à mesma publicação, cobertura e identidade de competência**; o código não prova equivalência entre a lavra diária e um espelho recalculado posteriormente. (`app/escala/services/cadastro_realidade.py:1017`; `app/ponto/services/cxr_na_lista.py:147`; `app/ponto/services/cxr_na_lista.py:174`)
-
-**Contraexemplo efetivo da API:** em 25/10, C11 corta a janela corrente para 21/10–24/10 e passa esse `fim`. `cxr_lavrado` busca `10/2026`, embora a competência corrente termine em 20/11. Com itens 02/10 na competência 10 e 22/10 na 11, a consulta retorna `{02/10}` em vez de `{22/10}`. (`app/escala/services/cadastro_realidade.py:568`; `app/escala/services/cadastro_realidade.py:569`; `app/escala/services/cadastro_realidade.py:526`; `app/ponto/services/cxr_na_lista.py:173`)
-
-**Isso não muda hoje o dono de C11:** o beco exige `folga_nao_definida=True`, e esse insumo já decide CADASTRO antes de CXR. É erro de contrato mascarado pela precedência atual. (`app/escala/services/cadastro_realidade.py:518`; `app/ponto/management/commands/e6_oraculo.py:98`)
-
-Há ainda diferença de universo: cobertura exige batida no intervalo civil `[ini 00h, fim+1 00h)`, enquanto os portadores/autoridade carregam bordas e o juiz pode atribuir batidas à véspera. Assim, cobertura civil não prova cobertura de todos os dias de turno. Um caso real afetado em produção é **[nao verificado]**. (`app/ponto/services/cxr_na_lista.py:59`; `app/ponto/services/cxr_na_lista.py:61`; `app/ponto/management/commands/e6_oraculo.py:150`; `app/ponto/services/espelho.py:1020`; `app/ponto/turnos.py:306`)
-
-**5. Contratos do ENC e registros**
-
-A declaração está integrada: gatilho `vigia_pareador_celula`, dependência `processar_cartorio`, estágio `auditoria`, `--apply` e papel `lavra`. O teto 900 limita a espera pelo predecessor, não a duração do próprio lavrador. (`app/config/crons.py:1765`; `app/config/crons.py:2232`; `bin/encadeado.sh:92`; `bin/encadeado.sh:102`)
-
-Não falta registrar em `FORA_DE_PIPELINE`: `todas_as_entradas()` já inclui `ENCADEADOS`, e o contrato “command tem casa” usa essa fonte. O contrato de duração também alcança encadeados e exige ausência de `sched`. (`app/config/crons.py:1783`; `app/chamados/tests/test_contract_crons.py:220`; `app/core/tests/test_contract_crons_duracao_horario.py:43`)
-
-**Falta cobertura no consumidor `pipeline_placar`:** ele enumera somente `CRONS`. Caso concreto: o novo lavrador nun
-
-[truncado em 20000 de 23391 caracteres]
-
-## 08/11 03:15 · sessao 326fdbbc8265 · - · - · origem=Ronald (tmux)
-
-Mapeamento e achados para consolidação:
-
-- O resultado consumido **não é recortado à competência pedida**: `espelho_do_colab` chama `autoridade_do_periodo(colaborador, vis_ini, hoje)` e devolve seu `resultado`; apenas outras partes visuais/totais recebem `apur_ini/apur_fim`. Portanto o filtro novo é uma transformação efetiva da publicação, não cópia literal. Fontes: `app/ponto/services/espelho.py:1225`, `:1227`, `:1229`, `:1294`; filtro em `app/ponto/services/cxr_na_lista.py:88`.
-
-- **O campo `dia` mistura dia civil e dia do turno**: HE usa `entrada.date()` e publica `j['dia']`; L084 publica o mapa do juiz ou `_dt_b`. A lavra interpreta todos como mesmo `data`, competência e vínculo. Fontes: `app/ponto/motor_calculo_v2.py:1528`, `:1711`, `:1749`, `:1623`, `:1997`; `app/ponto/services/cxr_na_lista.py:80`, `:88`, `:94`. Caso possível: cauda `E03:00→S11:00` em 21/10 de jornada iniciada em 20/10, cadastro 21–09, saída acima do teto; a acusação HE usa 21/10 embora o turno possa pertencer a 20/10. A herança da jornada e o mapa existem no próprio motor: `app/ponto/motor_calculo_v2.py:2403`, `:2407`, `:2455`. Execução desse cenário completo `[nao verificado]`.
-
-- **Não usar a remoção dos dias externos como contraexemplo isolado de `dono(d)`**: para mesma publicação e `d∈[ini,fim]`, o filtro preserva pertinência. `cxr()` retorna os dias de todo o espelho, enquanto a lavra guarda a interseção; a diferença fora da janela não muda a pergunta interna. Fontes: `app/ponto/management/commands/e6_oraculo.py:170`, `:195`; `app/ponto/services/cxr_na_lista.py:88`, `:170`, `:174`.
-
-- **Contraexemplo concreto da API C11**: em 25/10, a janela corrente 21/10–20/11 vira 21/10–24/10; `cxr_do(cid,fim)` procura `10/2026`, embora o dia 22/10 pertença a `11/2026`. Com lavra coberta nas duas competências e item somente 22/10 na 11, a função devolve `[]` para fim24/10 e `['2026-10-22']` para fim20/11. Executei somente a função extraída por AST com `python3 -B`, sem Django ou escrita. Fontes: `app/escala/services/cadastro_realidade.py:569`, `:525`; `app/ponto/services/cxr_na_lista.py:173`. **Impacto no dono C11 é neutralizado hoje**: o chamador exige `folga_nao_definida`, e o juiz retorna CADASTRO antes de ler CXR. Fontes: `app/escala/services/cadastro_realidade.py:518`; `app/ponto/management/commands/e6_oraculo.py:98`.
-
-- **Cobertura também usa outra geometria**: universo da lavra exige qualquer batida no intervalo civil `[ini00h, (fim+1)00h)`, enquanto Insumos e autoridade incluem bordas e atribuem dia pelo turno. Um colaborador com todas as batidas em 21/10, atribuídas ao turno20/10, pode ficar sem cobertura na competência10 apesar de existir dia20 no espelho. A ocorrência desse caso em produção `[nao verificado]`. Fontes: `app/ponto/services/cxr_na_lista.py:59`, `:61`, `:64`, `:110`; `app/ponto/management/commands/e6_oraculo.py:150`; `app/ponto/services/espelho.py:1019`; atribuição à véspera em `app/ponto/turnos.py:299`, `:306`.
-
-- **Unidades e formatos**: HE publica `real/cadastrado` como `HH:MM`, `minutos_fora` inteiro arredondado e já descontada a extra declarada; `cadastrado` continua marco cru. L084 publica timestamps ISO locais com offset e deltas em minutos com uma decimal; entrada é `real-prevista`, saída é `prevista-real`. Fontes: `app/ponto/motor_calculo_v2.py:1670`, `:1662`, `:1702`, `:1742`, `:1624`, `:1974`, `:1976`, `:1998`. Fuso do motor é fixo `settings.TIME_ZONE`, configurado São Paulo; lavra e Insumos usam o timezone corrente. Divergência efetiva de timezone em produção `[nao verificado]`. Fontes: `app/ponto/motor_calculo_v2.py:28`, `:73`; `app/config/settings/base.py:93`; `app/ponto/services/cxr_na_lista.py:59`; `app/ponto/management/commands/e6_oraculo.py:149`.
-
-- **Golden de pausa sem produtor demonstrado**: não há `l084_pausa` nem `acusar_pausa_l084` em Python de produção desta cópia, pela busca completa de `app`. Os escritores efetivos encontrados publicam `l084_do_dia`, HE e L084 sem causa; `resultado` recebe a lista no final. Fontes positivas: `app/ponto/motor_calculo_v2.py:1623`, `:1670`, `:1992`, `:2719`. O prerequisite é nomeado em `app/docs/CORTES.md:304` e o golden em `app/docs/BACKLOG.md:775`; o relato de commit anterior não prova que esse código esteja nesta cópia (`app/docs/RELATO.md:1778`). Existência dos sete dias em produção `[nao verificado]`.
-
-- **Teste real não cobre pausa**: a fixture real e a asserção exercitam HE de entrada18:56 contra21:00; os demais casos publicam dados por stub. Não comprovam o golden `l084_pausa` nem equivalência completa com `cxr_lavrado`: o teste de equivalência passa uma lista manual diretamente a `InsumosDoDono`. Fontes: `app/ponto/tests/test_cxr_tela_le_o_motor.py:42`, `:76`, `:92`, `:154`, `:284`.
-
-- **Falha parcial substitui snapshot completo antes de informar erro**: o comando grava a medida e só depois sai com código2; cada falha de colaborador remove seus itens e sua cobertura. Caso: snapshot bom tem C12 de A e B; rodada seguinte falha apenas B, grava somente A e a tela perde B. Fontes: `app/ponto/management/commands/lavrar_cxr_do_motor.py:37`, `:39`; `app/ponto/services/cxr_na_lista.py:104`, `:106`, `:110`; `ultimo_lavrado` escolhe o mais recente em `:147`.
-
-_2845 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2847 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
