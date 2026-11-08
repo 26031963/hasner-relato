@@ -1,7 +1,142 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 09:19** · publicado em **08/11/2026 09:20** (UTC-3)
+> Ultima resposta processada: **08/11/2026 09:25** · publicado em **08/11/2026 09:25** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 08/11 09:25 · sessao c8d28fdc59f6 · FIO-E0-V4-E1 · verificador · origem=Code
+
+**Parecer: REPROVA.** Há contraexemplo à igualdade entre o universo eleito pela porta e o universo de seus membros; além disso, o reuso admitido pelo juiz continua sujeito a leitores que tratam a data gravada como dia do turno. (`app/chamados/services/fio.py:1391`; `app/chamados/services/declaracao_texto.py:244`; `app/chamados/juizes.py:336`; `app/chamados/juizes.py:1988`.)
+
+Os cenários abaixo são contraprovas construídas sobre o código. Sua ocorrência em produção, execução integrada dos testes e números SQL observados estão **[nao verificado]**. [nao verificado]
+
+1. **Campos e memo — procedente, gravidade alta quanto ao significado de `data_evento`.**
+
+   | Campo/valor | Quem escreve | Quem lê e qual significado usa |
+   |---|---|---|
+   | `data_evento` | `_nascer` grava o parâmetro; `abrir_conversa` fornece dia civil; `reapontar_resolvedora` data a existente; `rechavear_data_evento` troca a data. (`app/chamados/models.py:2707`; `app/chamados/models.py:2824`; `app/chamados/services/fio.py:840`; `app/chamados/services/fio.py:959`.) | Busca/índice usam a data gravada; o fecho passa a derivar a identidade pelo juiz. C6, validação de destino, plantio e expiração continuam lendo a gravada como dia relevante. (`app/chamados/models.py:2663`; `app/chamados/models.py:3298`; `app/chamados/services/fio.py:1235`; `app/chamados/juizes.py:336`; `app/chamados/juizes.py:1988`; `app/chamados/services/materializacao.py:344`; `app/chamados/veredito_lavrado.py:229`.) |
+   | `batida_origem_id` | `_nascer` aceita explícita ou deriva do contexto; o `save` de inserção deriva quando ausente. (`app/chamados/models.py:2751`; `app/chamados/models.py:3254`.) | Identifica episódio no índice, busca, plano e agrupamento; `_dia_do_fato` carrega a Batida para perguntar seu dia ao juiz. É FK do episódio, não uma data. (`app/chamados/models.py:2632`; `app/chamados/models.py:3295`; `app/chamados/services/fio.py:1020`; `app/chamados/services/fio.py:1122`; `app/chamados/services/fio.py:1234`.) |
+   | `instancia_marco` | `_chave_de_identidade` deriva do motivo e recusa explícita divergente; há backfill histórico. (`app/chamados/models.py:3243`; `app/chamados/models.py:3252`; `app/chamados/migrations/0051_decisao_pergunta.py:27`.) | Busca/índice/base do fecho usam posição do marco; `_dia_do_fato` usa seu preenchimento para reconhecer linha de marco. (`app/chamados/models.py:2663`; `app/chamados/models.py:3289`; `app/chamados/services/fio.py:1205`; `app/chamados/services/fio.py:1237`.) |
+   | `celula_id` | Nascimento e reuso escolhem célula pela **data pedida**; rechaveamento escolhe pela nova data. (`app/chamados/models.py:2748`; `app/chamados/models.py:2782`; `app/chamados/models.py:2825`; `app/chamados/services/fio.py:956`; `app/chamados/services/fio.py:960`.) | C6 só aceita essa alimentação se `celula.data == data_evento`; outbox prefere a FK. `_dia_do_fato` não lê `p.celula.data`: passa `p.data_evento` ao conversor da célula. (`app/chamados/juizes.py:638`; `app/chamados/models.py:3047`; `app/chamados/services/fio.py:1239`.) |
+   | `chamado_destino_id` | Nascimento/reuso em `_nascer`; reapontamento em `reapontar_resolvedora`. (`app/chamados/models.py:2825`; `app/chamados/models.py:2796`; `app/chamados/services/fio.py:868`.) | Âncora da listagem, validação da costura e julgamento do destino. O significado de FK de destino é consistente nesses caminhos. (`app/chamados/services/fio.py:117`; `app/chamados/models.py:2786`; `app/chamados/services/fio.py:856`; `app/chamados/services/fio.py:761`.) |
+
+   **Não existe acordo global sobre `data_evento`.** O comentário novo declara chave gravada versus identidade derivada, mas `chave_do_dia` ainda se documenta como identidade, `_dia_de_turno_da_pergunta` devolve a gravada e o plantio combina a hora com ela. A declaração local não migrou esses leitores. (`app/chamados/services/fio.py:1219`; `app/chamados/services/fio.py:1198`; `app/chamados/juizes.py:332`; `app/chamados/services/materializacao.py:414`.)
+
+   **Memo misto — não procedente a suspeita de colisão ou iteração incompatível.** Vizinhos usam chave de três elementos `(pk, chave_do_dia, bo)`; dia e colaborador usam chaves de dois elementos `('dia_do_turno', bo)` e `('colab', cid)`. Os consumidores acessam chaves específicas; não encontrei consumidor que percorra esse dicionário supondo valores exclusivamente de vizinhança. (`app/chamados/services/fio.py:1230`; `app/chamados/services/fio.py:1246`; `app/chamados/services/fio.py:1258`; `app/chamados/services/fio.py:1264`; `app/chamados/services/fio.py:1278`.)
+
+2. **Propriedade fixa entre porta e membros — procedente, gravidade alta.**
+
+   Contraexemplo: mesmo colaborador, motivo `gps_ausente`, nenhuma linha de acervo; alfa e beta são episódios distintos cujo juiz responde **18/10**. Cada episódio tem uma linha gravada em **10/09** e outra em **18/10**. Essa disposição cabe no índice: o horizonte é 21/09 e a unicidade do episódio só inclui linhas a partir dele. A premissa de duas batidas julgadas no mesmo dia está no teste novo. (`app/chamados/models.py:2313`; `app/chamados/models.py:3294`; `app/chamados/tests/test_e1_v13.py:59`.)
+
+   | Consulta | Universo resultante |
+   |---|---|
+   | `universo_da_linha(A0)` ou `A1` | `{A0, A1}` |
+   | `universo_da_linha(B0)` ou `B1` | `{B0, B1}` |
+   | `universo_do_fato(colab, gps_ausente, 18/10, bo=None)` | `{A0, A1, B0, B1}` |
+
+   A causa é concreta: sem episódio, `do_fato` traz as duas linhas gravadas em 18/10; ambas entram em `datadas`; o fecho preserva todas as sementes, sem exigir conectividade entre elas. Com episódio, a busca só liga o próprio episódio ao acervo sem episódio, inexistente neste cenário. Os resultados foram reproduzidos em memória com funções extraídas do código e ORM/juiz substituídos por stubs; integração e produção **[nao verificado]**. (`app/chamados/models.py:2630`; `app/chamados/models.py:2632`; `app/chamados/models.py:2636`; `app/chamados/services/fio.py:1320`; `app/chamados/services/fio.py:1381`; `app/chamados/services/fio.py:1391`.)
+
+   **Os consumidores realmente divergem:** `_candidata_reusavel` chama sem episódio; `grupos_de_colisao` detecta as duas chaves de episódio e expande cada uma por fecho individual, produzindo dois grupos. O dedup consome esses grupos; a migração e `_colisao_ao_datar` começam pelo universo da linha. (`app/chamados/services/declaracao_texto.py:244`; `app/chamados/services/fio.py:1479`; `app/chamados/services/fio.py:1507`; `app/chamados/management/commands/dedup_perguntas_fato.py:58`; `app/chamados/services/fio.py:1634`; `app/chamados/services/fio.py:891`.)
+
+   Há caminho de emissão sem episódio inferido: `gerar_perguntas_disputa` admite contexto sem `ultima_batida`, aplica seu dedup local e pode chegar a `abrir` com dia do contexto. Uma disputa nova não fica impedida pelas perguntas de outras disputas. A ocorrência desse cenário em produção está **[nao verificado]**. (`app/chamados/services/disputa_emissao.py:325`; `app/chamados/services/disputa_emissao.py:327`; `app/chamados/services/disputa_emissao.py:372`; `app/chamados/services/disputa_emissao.py:444`.)
+
+   **Assert de dois dias por chamador real — não demonstrado.** O agrupamento expande sementes individuais; `_colisao_ao_datar` começa por uma linha; a migração entrega ao plano membros do universo encontrado. Não obtive contraprova desse assert nesses caminhos. (`app/chamados/services/fio.py:1507`; `app/chamados/services/fio.py:891`; `app/chamados/services/fio.py:1634`; `app/chamados/services/fio.py:1641`.)
+
+3. **Porta e célula — dois achados procedentes, gravidade alta.**
+
+   **Nascimento sem linha anterior não verifica o dia da batida pedida.** Se o episódio ainda não possui perguntas, `universo_do_fato` não encontra linha para julgar. A recusa exige uma linha recusada daquele episódio; ausente essa linha, nasce pergunta com a data pedida e célula dessa data. Portanto `abrir(D0, batida cujo juiz diz DIA)` pode criar em D0; uma chamada direta posterior igual pode recusar a própria linha pelo juiz. (`app/chamados/services/fio.py:1362`; `app/chamados/services/fio.py:1376`; `app/chamados/models.py:2766`; `app/chamados/models.py:2748`; `app/chamados/models.py:2824`.)
+
+   O caller de emissão não garante igualdade: grade/contexto têm precedência, e o juiz da última batida só é consultado quando falta a data anterior. Envolver `_dia_p` em `dia_do_turno_da_celula` não confere essa igualdade: o conversor devolve o valor recebido. (`app/chamados/services/disputa_emissao.py:371`; `app/chamados/services/disputa_emissao.py:378`; `app/chamados/services/disputa_emissao.py:424`; `app/chamados/services/disputa_emissao.py:451`; `app/ponto/turnos.py:2933`.)
+
+   **Reuso correto pelo juiz pode falhar na costura.** Tome alfa gravada em 10/09, juiz em 18/10, como no teste novo; acrescente destino de escopo DIA declarado em 18/10. O proxy do pedido passa. A porta elege alfa e prepara célula de 18/10, mas conserva `ex.data_evento=10/09`. A segunda validação lê essa data antiga e lança `ResolvedoraCruzada`, pois a diferença supera um dia. O teste de reuso não fornece destino. (`app/chamados/tests/test_e1_v13.py:200`; `app/chamados/tests/test_e1_v13.py:203`; `app/chamados/models.py:2737`; `app/chamados/models.py:2782`; `app/chamados/models.py:2786`; `app/chamados/juizes.py:1988`; `app/chamados/juizes.py:2016`; `app/chamados/juizes.py:2023`.)
+
+   Sem essa recusa, o estado persistido pode ficar com célula DIA e data gravada D0; C6 descarta a célula como alimentação e continua julgando pelo dia gravado. Logo atribuir a célula certa não reconcilia os leitores. (`app/chamados/models.py:2820`; `app/chamados/juizes.py:638`; `app/chamados/juizes.py:671`; `app/chamados/juizes.py:679`.)
+
+   **Correção do inventário de callers:** os sítios de produção de `abrir` não passam `batida_origem_id` explicitamente; `_nascer` a infere. `reapontar_resolvedora` e `_colisao_ao_datar` não chamam `abrir`: usam a porta de existente. (`app/chamados/services/disputa_emissao.py:444`; `app/chamados/services/disputa_emissao.py:834`; `app/chamados/services/declaracao_texto.py:348`; `app/chamados/services/declaracao_texto.py:636`; `app/chamados/models.py:2751`; `app/chamados/services/fio.py:849`; `app/chamados/services/fio.py:868`.)
+
+   **Não procede acusar automaticamente o agrupador de passar dia civil:** seu `localtime(...).date()` alimenta a classificação; a criação recebe `resolver_data_evento(...batida_origem=...)`, que consulta o juiz. (`app/chamados/services/disputa_emissao.py:1108`; `app/chamados/services/disputa_emissao.py:1114`; `app/chamados/services/disputa_emissao.py:1123`; `app/escala/servico_jornada.py:488`.)
+
+4. **Juiz, derivação e relógio — não procedente como clonagem nova; inconsistência de leitores permanece.**
+
+   `_dia_do_fato` delega a batida ao recorte do juiz registrado: `dia_do_turno_da_batida → dia_das_batidas → turnos_do_colab`. Não reproduz pareamento nem deriva dia do timestamp por conta própria. A ponte é a implementação expressamente descrita para linhas sem dia próprio. (`app/core/juizes.py:196`; `app/chamados/services/fio.py:1235`; `app/ponto/turnos.py:2925`; `app/ponto/turnos.py:2903`; `app/chamados/services/fio.py:1227`.)
+
+   Os acréscimos de identidade/memo/contador não introduzem leitura direta de relógio. A catraca de calendário cobre `.date()` sobre timestamp e lookups `timestamp__date`; isso não detecta o conflito semântico entre o novo juiz e leitores antigos de `data_evento`. A correspondência histórica dessa catraca com `935c8d96` está **[nao verificado]**. (`app/chamados/services/fio.py:1229`; `app/chamados/services/fio.py:1268`; `app/chamados/services/fio.py:1410`; `app/ponto/tests/test_contract_no_batida_date.py:175`; `app/ponto/tests/test_contract_no_batida_date.py:203`; `app/chamados/juizes.py:336`.)
+
+   Para marco, o código declara `p.data_evento` como dia de célula sem consultar a FK. Erro concreto adicional dependeria de marco com data gravada divergente da célula soberana; presença desse caso está **[nao verificado]**. (`app/chamados/services/fio.py:1237`; `app/chamados/services/fio.py:1239`.)
+
+5. **Custo — procedente como amplificação, gravidade média; estouro de teto [nao verificado].**
+
+   Considere **B** batidas existentes distintas examinadas, incluindo as alcançadas na ponte e recusadas:
+
+   | Operação | Chamadas ao juiz pesado |
+   |---|---|
+   | Um fecho com memo novo | Uma por batida distinta examinada. |
+   | Um `abrir` | Zero com busca vazia; caso contrário, B no universo/ponte/fecho compartilhado. |
+   | Recusa `FatoEmOutroDia` | Mais uma para o episódio, pois o rótulo abre outro memo. |
+   | `fecho_cruza_dias` | Soma dos B de cada fecho executado; não compartilha memo entre componentes. |
+
+   Essas contagens decorrem das chaves por batida, do compartilhamento local e da criação de `_memo_t` separado. Batida inexistente custa a busca, mas não chama o juiz. (`app/chamados/services/fio.py:1230`; `app/chamados/services/fio.py:1234`; `app/chamados/services/fio.py:1339`; `app/chamados/services/fio.py:1392`; `app/chamados/models.py:2772`; `app/chamados/services/fio.py:1428`.)
+
+   **Memo por batida não basta para compartilhar trabalho por turno/janela:** cada batida distinta reconstrói `dia_das_batidas(d−1,d+1)`, carregando turnos e batidas novamente, mesmo com janelas sobrepostas. (`app/ponto/turnos.py:2925`; `app/ponto/turnos.py:2903`; `app/ponto/turnos.py:2905`; `app/ponto/turnos.py:1863`; `app/ponto/turnos.py:1884`.)
+
+   Os selos citados têm coberturas diferentes: chokepoint impõe tetos SQL; modal monta 330 perguntas sem episódio; `test_porta_chamado_e1` mede atos/no-ops de Chamado; cadeia/ordem verificam transação e precedência de travas, sem impor teto de consultas. Não são prova conjunta do novo custo da porta por episódio. (`app/ponto/tests/test_selo_chokepoint_escrita.py:397`; `app/chamados/tests/test_selo_teto_modal.py:68`; `app/chamados/tests/test_porta_chamado_e1.py:57`; `app/chamados/tests/test_e1_v13_cadeia.py:32`; `app/chamados/tests/test_e1_v13_ordem.py:59`.)
+
+6. **Candidatas de `fecho_cruza_dias` — não procedente a falta de cobertura, sob as invariantes de nascimento.**
+
+   Todo passo entre linhas distintas ocorre por chave gravada ou por episódio/motivo. O contador seleciona chave com múltiplas linhas e episódio com múltiplas chaves; assim cobre ambas as formas de aresta. Colaborador e instância são normalizados no nascimento. (`app/chamados/models.py:2630`; `app/chamados/models.py:2632`; `app/chamados/models.py:2636`; `app/chamados/services/fio.py:1416`; `app/chamados/services/fio.py:1421`; `app/chamados/models.py:3236`; `app/chamados/models.py:3243`.)
+
+   Dois episódios distintos na mesma data, sem acervo, são candidatas excedentes, mas seus fechos não recusam vizinhos e não entram no resultado. A confirmação usa o fecho real. (`app/chamados/models.py:2632`; `app/chamados/services/fio.py:1428`; `app/chamados/services/fio.py:1431`.)
+
+   O contador, porém, acrescenta membros quando existe **qualquer** recusa; não verifica novamente se sua causa foi outro dia, outra base ou ponte ambígua. Garantia irrestrita para acervo que viole as invariantes, ou ocorrência de falso positivo nesse acervo: **[nao verificado]**. (`app/chamados/services/fio.py:1340`; `app/chamados/services/fio.py:1431`.)
+
+7. **Classes de reprovação e selos.**
+
+   - **Segundo escritor fora da porta — não procedente no censo AST de `data_evento`.** Executei em memória o scanner existente: retornou somente `_nascer`, `reapontar_resolvedora` e `rechavear_data_evento`, sem sítio fora das portas. Isso verifica localização da escrita, não correção do significado. (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:30`; `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:122`; `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:143`.)
+   - **Ordem de trava — nenhuma inversão nova demonstrada.** `_nascer` trava Colaborador antes do universo; as leituras novas de Batida/Colaborador não pedem `FOR UPDATE`. Execução dos selos de ordem e concorrência: **[nao verificado]**. (`app/chamados/models.py:2724`; `app/chamados/models.py:2764`; `app/chamados/services/fio.py:1234`; `app/chamados/services/fio.py:1252`.)
+   - **RED v13 sem mordida — não procedente contra a variante simples por data gravada.** O teste exige B0, gravada D0, dentro do fato DIA; voltar a decidir pela gravada a exclui. Também exige reuso de A0 em outra data e recusa de beta pedido em D0. (`app/chamados/tests/test_e1_v13.py:108`; `app/chamados/tests/test_e1_v13.py:121`; `app/chamados/tests/test_e1_v13.py:157`; `app/chamados/tests/test_e1_v13.py:198`.)
+   - **Lacunas dos novos selos — procedente, gravidade média.** O cenário de união de episódios usa acervo como ponte; o teste de reuso omite destino. Não cobrem as contraprovas dos itens 2 e 3. (`app/chamados/tests/test_e1_v13.py:78`; `app/chamados/tests/test_e1_v13.py:203`.)
+   - **Preservação byte a byte dos v5/v8/v10/v11, RED executado, mutante executado e passagem dos tetos:** **[nao verificado]**.
+   - **Campo com dois significados não reconciliados — procedente, gravidade alta:** a identidade nova usa o juiz, enquanto destino, C6 e plantio continuam usando a data gravada como dia do fato. (`app/chamados/services/fio.py:1235`; `app/chamados/juizes.py:1988`; `app/chamados/juizes.py:336`; `app/chamados/services/materializacao.py:414`.)
+
+## 08/11 09:21 · sessao 7f8fd01fd110 · - · - · origem=Ronald (tmux)
+
+Procedente, alta: a porta ainda une componentes desconectados quando chamada sem episódio. Para `gps_ausente`, use A0/A1 do episódio alfa, gravadas respectivamente em 10/09 e 18/10, B0/B1 do episódio beta nas mesmas datas, ambos julgados como 18/10, sem linha de acervo. Por linha, os universos são `{A0,A1}` e `{B0,B1}`; `universo_do_fato(...,18/10,batida_origem_id=None)` retorna as quatro. A seleção sem episódio traz ambas as linhas de 18/10; `datadas` conserva ambas e `fecho_do_fato` retém todas as sementes independentemente da conectividade. `app/chamados/models.py:2636`, `app/chamados/models.py:2663`, `app/chamados/services/fio.py:1320`, `app/chamados/services/fio.py:1381`, `app/chamados/services/fio.py:1391`.
+
+O chamador real `_candidata_reusavel` omite episódio. O agrupamento real detecta duas chaves de episódio e chama o universo de cada uma separadamente, produzindo dois grupos; portanto porta e backfill/dedup não compartilham o universo anunciado. `app/chamados/services/declaracao_texto.py:244`, `app/chamados/services/fio.py:1122`, `app/chamados/services/fio.py:1479`, `app/chamados/services/fio.py:1501`, `app/chamados/services/fio.py:1507`.
+
+O cenário admite índice ativo: o horizonte é 21/09 e a unicidade de episódio só inclui linhas gravadas a partir dele; cada episódio possui uma linha dentro e outra fora. A premissa de dois episódios no mesmo dia do juiz existe no teste novo. `app/chamados/models.py:2313`, `app/chamados/models.py:3294`, `app/chamados/tests/test_e1_v13.py:59`.
+
+Confirmei os resultados executando somente em memória as funções reais extraídas por AST, com ORM e juiz substituídos por stubs explícitos; execução integrada e presença desse cenário em produção são [nao verificado].
+
+Não procedente para linhas conformes: o universo candidato do contador cobre toda aresta possível do `do_fato`: vizinhança pela chave gravada ou pelo mesmo episódio/motivo. Candidatas excedentes são confirmadas pelo fecho real, evitando contar dois episódios na mesma data sem acervo. `app/chamados/models.py:2630`, `app/chamados/models.py:2632`, `app/chamados/models.py:2636`, `app/chamados/services/fio.py:1415`, `app/chamados/services/fio.py:1421`, `app/chamados/services/fio.py:1428`.
+
+Não encontrei sementes de dois dias vindas dos consumidores internos com grupos normalmente produzidos: o agrupamento parte pelos fechos individuais; `_colisao_ao_datar` começa por uma linha; a migração entrega ao plano membros do universo dessa linha. Outros estados ou concorrência que produzam o assert são [nao verificado]. `app/chamados/services/fio.py:891`, `app/chamados/services/fio.py:1504`, `app/chamados/services/fio.py:1634`, `app/chamados/services/fio.py:1641`.
+
+## 08/11 09:20 · sessao fb39c0000d12 · - · - · origem=Ronald (tmux)
+
+Inventário por campo e achados:
+
+| Campo | Escritores | Leitores / significado |
+|---|---|---|
+| `data_evento` | Nascimento datado e conversa: `app/chamados/models.py:2696`, `:2707`, `:2824`. Datar existente: `app/chamados/services/fio.py:838`, `:840`, `:870`. Rechaveamento: `app/chamados/services/fio.py:959`, `:965`. Proxy e restauração apenas em memória: `app/chamados/models.py:2737`; `app/chamados/services/fio.py:852`, `:861`. | Chave gravada de busca/índice: `app/chamados/models.py:2630`, `:2663`, `:3289`; `app/chamados/services/fio.py:1193`, `:1205`. Identidade agora derivada pelo juiz: `app/chamados/services/fio.py:1229`, `:1235`, `:1330`, `:1375`. Outros leitores ainda a tratam como dia do turno: `app/chamados/juizes.py:332`, `:336`, `:1988`; `app/chamados/services/materializacao.py:344`, `:414`; `app/chamados/services/pergunta_no_app.py:93`; `app/chamados/services/validacao.py:269`, `:446`; janela: `app/chamados/veredito_lavrado.py:229`; apresentação/divergência: `app/chamados/services/fio.py:87`. |
+| `batida_origem_id` | `_nascer` aceita valor explícito ou deriva: `app/chamados/models.py:2751`, `:2753`. `save` de inserção deriva se ausente: `app/chamados/models.py:3226`, `:3254`. Derivador lê foto do nascimento no contexto e valida dono: `app/chamados/models.py:3269`, `:3273`. | Identifica episódio: `app/chamados/models.py:2632`, `:3295`; `app/chamados/services/fio.py:1020`, `:1122`. Alimenta juiz do dia: `app/chamados/services/fio.py:1229`, `:1234`. Forma chave do cache: `app/chamados/services/fio.py:1258`; candidatos do contador: `app/chamados/services/fio.py:1413`, `:1418`. Não representa data nem instante: é FK da batida cujo instante o juiz consulta (`app/chamados/models.py:2350`; `app/chamados/services/fio.py:1234`). |
+| `instancia_marco` | Derivação/validação no nascimento: `app/chamados/models.py:3243`, `:3246`, `:3252`. Backfill histórico: `app/chamados/migrations/0051_decisao_pergunta.py:27`. | Posição do marco, derivada do motivo: `app/chamados/models.py:3234`. Chave de busca/índice: `app/chamados/models.py:2663`, `:3289`; `app/chamados/services/fio.py:1205`. Discriminador da linha de marco em `_dia_do_fato`: `app/chamados/services/fio.py:1237`. |
+| `celula_id` | Nascimento pela data pedida: `app/chamados/models.py:2748`, `:2825`. Reuso pela data pedida: `app/chamados/models.py:2781`, `:2782`, `:2820`. Rechaveamento pela nova data: `app/chamados/services/fio.py:956`, `:960`, `:965`. | FK da célula da pergunta: `app/chamados/models.py:2323`. C6 verifica se célula corresponde ao `data_evento` antes de alimentar julgamento: `app/chamados/juizes.py:634`, `:638`. Outbox prefere FK e só usa `(colaborador,data_evento)` como fallback: `app/chamados/models.py:3034`, `:3047`, `:3050`. `_dia_do_fato` NÃO lê `p.celula.data`; passa a data gravada à conversão de célula (`app/chamados/services/fio.py:1237`, `:1239`). |
+| `chamado_destino_id` | Nascimento: `app/chamados/models.py:2825`. Reuso na porta: `app/chamados/models.py:2796`, `:2820`. Porta de reapontamento: `app/chamados/services/fio.py:868`, `:870`. Simulações sem persistência: `app/chamados/models.py:367`; `app/chamados/services/fio.py:779`, `:783`. | Âncora da listagem, com fallback ao chamado da disputa: `app/chamados/services/fio.py:117`. Gate do destino: `app/chamados/models.py:2784`, `:2786`; `app/chamados/services/fio.py:856`. C6/encerramento/outbox: `app/chamados/models.py:310`, `:361`, `:3028`. Mesmo significado de FK de destino nesses leitores (`app/chamados/models.py:3191`, `:3197`; `app/chamados/services/fio.py:100`). |
+
+**Procedente, alta: a identidade aceita pelo fecho continua podendo ser recusada pelo leitor do destino.** Cenário derivado da própria fixture: episódio alfa gravado `D0=2026-09-10`, juiz retorna `DIA=2026-10-18`; `abrir(...DIA, chamado_destino=chDIA)` encontra e elege alfa, mas conserva `ex.data_evento=D0` (`app/chamados/tests/test_e1_v13.py:200`; `app/chamados/tests/test_e1_v9.py:37`; `app/chamados/models.py:2777`, `:2782`, `:2820`). O proxy do pedido passa, depois o gate de `ex` compara a data gravada com o destino e lança `ResolvedoraCruzada` para esse intervalo superior a um dia (`app/chamados/models.py:2737`, `:2741`, `:2786`, `:2788`; `app/chamados/juizes.py:1988`, `:2007`, `:2016`, `:2023`). O teste novo de reaproveitamento não fornece destino (`app/chamados/tests/test_e1_v13.py:203`).
+
+**Procedente, alta: a porta não valida o dia do episódio no nascimento sem linha preexistente.** A recusa requer universo vazio **e** uma recusada do mesmo episódio; sem linhas, chega ao `create` com a data pedida e célula dessa data (`app/chamados/models.py:2748`, `:2766`, `:2824`). Assim, um pedido `D0` para batida cujo juiz diz `DIA` pode nascer `D0`; a emissão seguinte pode recusar a própria linha pelo juiz (`app/chamados/services/fio.py:1375`, `:1380`; `app/chamados/models.py:2766`). Ocorrência em produção: [nao verificado].
+
+**Callers concretos de `abrir`.** Há quatro sítios de produção; nenhum passa explicitamente `batida_origem_id`, que a porta infere do contexto (`app/chamados/services/disputa_emissao.py:444`, `:834`; `app/chamados/services/declaracao_texto.py:348`, `:636`; `app/chamados/models.py:2751`).
+
+- `gerar_perguntas_disputa`: grade/contexto têm precedência; só consulta juiz da última batida se o fallback estiver vazio; o destino ainda pode fornecer `_data_ev` prioritária (`app/chamados/services/disputa_emissao.py:350`, `:371`, `:378`, `:391`, `:424`, `:451`). Contraexemplo de chamada possível: contexto de `gps_ausente` com `data=D0` e `ultima_batida=b1` de `DIA`; nasce com a divergência acima. O merge preserva chaves antigas ausentes no novo valor (`app/chamados/services/disputa_emissao.py:555`, `:556`). Existência desse contexto em produção: [nao verificado].
+- Agrupador: o `localtime(...).date()` serve à classificação, mas o dia passado à criação é o retorno de `resolver_data_evento(...batida_origem=...)`; portanto, não procede afirmar que esse caller passa automaticamente dia civil (`app/chamados/services/disputa_emissao.py:1108`, `:1109`, `:1114`, `:1123`; `app/escala/servico_jornada.py:488`).
+- Declaração: ambos passam dia da célula ao conversor registrado (`app/chamados/services/declaracao_texto.py:347`, `:349`, `:635`, `:637`).
+- `reapontar_resolvedora` e `_colisao_ao_datar` **não chamam `abrir`**: usam a porta de existente, `fato_livre_para`, `universo_da_linha` e plano; a escrita ocorre no save de reapontamento (`app/chamados/services/fio.py:849`, `:850`, `:891`, `:904`, `:868`, `:870`).
+
+**Procedente, média/alta: dois significados não foram reconciliados em todos os leitores.** `_dia_de_turno_da_pergunta` continua retornando `data_evento` cru para perguntas de fato e é consumido pelo julgamento do C6 e tranca (`app/chamados/juizes.py:332`, `:336`, `:375`, `:671`, `:763`, `:948`, `:1216`). A célula nova `DIA` também deixa de servir à dieta do julgamento se a data gravada permanecer `D0` (`app/chamados/models.py:2782`; `app/chamados/juizes.py:638`). A declaração no comentário novo de `_dia_do_fato` não altera esses leitores (`app/chamados/services/fio.py:1218`; `app/chamados/juizes.py:336`, `:1988`).
+
+**Não demonstrado como erro autônomo: marco usar data gravada.** `_dia_do_fato` não lê a FK da célula; passa `p.data_evento` ao juiz da célula (`app/chamados/services/fio.py:1237`, `:1239`). Isso só produz dia errado se uma linha de marco tiver data gravada divergente do dia soberano pretendido; presença desse caso no dado dado: [nao verificado].
 
 ## 08/11 09:19 · sessao cc2c08306ed4 · - · - · origem=Ronald (tmux)
 
@@ -1000,172 +1135,4 @@ Há contagem **filtrada pelo nome** do callback de E2 (`app/chamados/tests/test_
 - **NAO PROCEDE que a filtragem esconda callback funcional atual:** só exclui objetos `_TravaDoColaborador` (`app/ponto/tests/test_selo_chokepoint_escrita.py:215`), cujo `__call__` retorna `None` (`app/chamados/models.py:2293`). Todos os demais callbacks continuam contados; o teste mantém mordida sobre lambda comum (`app/ponto/tests/test_selo_chokepoint_escrita.py:285`, `:287`, `:288`).
 - A filtragem deixa de medir alocação, varredura e execução dos próprios sentinelas; esse custo existe no código, embora não seja trabalho de negócio (`app/chamados/models.py:2318`, `:2305`, `:2293`). Não esconderia suas queries porque as queries de aquisição permanecem no CaptureQueriesContext (`app/ponto/tests/test_selo_chokepoint_escrita.py:380`, `:381`).
 
-## 07/11 23:40 · sessao 9e8813eff9c8 · FIO-E0-V4-E1 · censo · origem=Code
-
-Censo estático da raiz `app/`. Uso **CH** = `ChamadoColaborador`, **D** = `DisputaSupervisao` e **P** = `PerguntaDisputa`. (`chamados/models.py:27`; `chamados/models.py:1691`; `chamados/models.py:2297`)
-
-A classificação precisa distinguir caminhos: `trava_a_ordem_para_escrever()` retorna sem travar quando não existe `atomic`; `P.save()`, por sua vez, abre seu próprio `atomic`, sem adquirir C. (`chamados/models.py:484`; `chamados/models.py:486`; `chamados/models.py:3173`)
-
-Execuções, quantidades efetivas de donos e locks observados em produção: **[nao verificado]**. Cascatas implícitas e transações internas do ORM não presentes na cópia: **[nao verificado]**.
-
-**1. Sítios de escrita**
-
-Cada linha corresponde a um sítio; quando há caminhos com classes diferentes, ambos aparecem na mesma célula.
-
-| Arquivo:linha | Função | Entidade / operação | Classificação da transação |
-|---|---|---|---|
-| `chamados/models.py:296` | `_gravar_estado` | CH / save | **TRAVA-ANTES**: `chamados/models.py:290`, no atomic `chamados/models.py:280`. |
-| `chamados/models.py:498` | `rebaixar` | CH / save | **INDETERMINADO**: chama a porta em `chamados/models.py:497`, condicionada ao atomic em `chamados/models.py:484`. Chamador de produção não localizado **[nao verificado]**. |
-| `chamados/models.py:553` | `escalar_urgencia` | CH / save | **SEM-ATOMIC** pelo command `ponto/management/commands/processar_alertas_avancados.py:173`; **TRAVA-ANTES**, via `chamados/models.py:552` → `chamados/models.py:486`, quando chamado no atomic de `ponto/management/commands/escalonar_chamados_supervisao.py:131`. |
-| `chamados/models.py:571` | `apagar_em_ensaio` | CH / delete | **SEM-TRAVA** no atomic de `ponto/management/commands/zerar_dados_operacionais.py:80`, chamada em `ponto/management/commands/zerar_dados_operacionais.py:84`. Tem guarda de ensaio antes do delete: `chamados/models.py:570` → `ponto/registro_batida.py:326`. |
-| `chamados/models.py:591` | `definir_prazo_sla` | CH / save | **TRAVA-ANTES**, via `chamados/models.py:590` → `chamados/models.py:486`, no atomic de `chamados/services/cobranca.py:176`; **SEM-ATOMIC** pela recobrança `chamados/views.py:1425` → `chamados/services/disputa_emissao.py:1604`. |
-| `chamados/models.py:610` | `marcar_escalonado_dp` | CH / save | **SEM-ATOMIC** pelo chamador `ponto/management/commands/escalonar_chamados_supervisao.py:103`; a porta de `chamados/models.py:609` retorna pela condição de `chamados/models.py:484`. |
-| `chamados/models.py:636` | `_rebaixar_sem_post_save` | CH / update | **INDETERMINADO** como execução isolada: herda o save que disparou o receiver `chamados/signals.py:72`. Pelo `_gravar_estado`, **TRAVA-ANTES** em `chamados/models.py:290`; a identificação do disparo concreto falta **[nao verificado]**. |
-| `chamados/models.py:971` | `abrir` | CH / get_or_create | **TRAVA-ANTES**: `chamados/models.py:905`, atomic `chamados/models.py:902`. |
-| `chamados/models.py:1095` | `criar` | CH / create | **SEM-TRAVA** pela API `api/views.py:2201`, com atomic próprio em `chamados/models.py:1094`. **TRAVA-ANTES** pela abertura de formulário, que trava em `chamados/services/abertura.py:164` antes da chamada em `chamados/services/abertura.py:172`. |
-| `chamados/models.py:1928` | `DisputaSupervisao.fechar` | D / save | **TRAVA-ANTES**: `chamados/models.py:1902`, atomic `chamados/models.py:1897`. |
-| `chamados/models.py:1960` | `aparar_motivo_respondido` | D / save | **SEM-ATOMIC**: `api/views.py:887` ou `api/views_core.py:877` → `api/foto_recebida.py:72`; o aparo precede a validação em `api/foto_recebida.py:73`. |
-| `chamados/models.py:2057` | `remover_motivo` | D / save | **TRAVA-ANTES**: `chamados/models.py:2018` e `chamados/models.py:2020`, no atomic `chamados/models.py:2017`. |
-| `chamados/models.py:2097` | `anotar_contexto` | D / save | **SEM-ATOMIC** pelos chamadores `chamados/views.py:1343` e `ponto/management/commands/escalonar_chamados_supervisao.py:159`. |
-| `chamados/models.py:2115` | `renovar_contexto` | D / save | **SEM-ATOMIC** pelo command `ponto/management/commands/alertar_disputas_pendentes.py:48`, no laço de `ponto/management/commands/alertar_disputas_pendentes.py:42`. |
-| `chamados/models.py:2153` | `reabrir_admin` | D / save | **SEM-ATOMIC** pelo caminho `chamados/services/fio.py:583` → `chamados/services/acoes_disputa.py:256`. A conversa é aberta depois, em `chamados/services/acoes_disputa.py:260`. |
-| `chamados/models.py:2169` | `reabrir_sistema` | D / save | **TRAVA-ANTES** pelos caminhos `chamados/services/relavra_via.py:230` → `chamados/services/relavra_via.py:261`, `chamados/services/materializacao.py:676` → `chamados/services/materializacao.py:683` e `chamados/management/commands/reabrir_orfas_enterradas.py:153` → `chamados/management/commands/reabrir_orfas_enterradas.py:165`. **SEM-ATOMIC** pela ressuscitação avulsa de `chamados/views_arquivar.py:86`: a reabertura em `chamados/models.py:1583` fica depois do atomic de `chamados/models.py:1547`. |
-| `chamados/models.py:2227` | `reabrir_por_colab` | D / save | **SEM-ATOMIC** por `chamados/views.py:1334` e `api/views.py:2718`; o atomic da correção já terminou antes do retorno em `chamados/services/disputa_emissao.py:1520`. |
-| `chamados/models.py:2253` | `limpar_resolucao_residual` | D / save | **INDETERMINADO**: método sem trava/atomic próprio; chamador de produção não localizado **[nao verificado]**. |
-| `chamados/models.py:2769` | `_nascer` | P / save da existente | **TRAVA-ANTES**: `chamados/models.py:2691`, no atomic `chamados/models.py:2689`. |
-| `chamados/models.py:2773` | `_nascer` | P / create | Fato: **TRAVA-ANTES** em `chamados/models.py:2691`. Conversa: **SEM-TRAVA**, porque a condição de `chamados/models.py:2690` pula C; entrada em `chamados/services/acoes_disputa.py:260`. |
-| `chamados/models.py:2907` | `carimbar` | P / save | **SEM-TRAVA** pelo consumidor `chamados/reconciliador.py:1355` → `chamados/reconciliador.py:586`; o atomic é o de `chamados/models.py:3173`. **TRAVA-ANTES** pelo resolvedor que trava em `chamados/services/disputa_emissao.py:1683` e carimba em `chamados/services/disputa_emissao.py:1749`. |
-| `chamados/models.py:2945` | `carimbar_identidade` | P / save | **TRAVA-ANTES** por `Disputa.fechar`, trava `chamados/models.py:1902`, chamada `chamados/models.py:1913`. **SEM-TRAVA** nos caminhos de recusa de materialização sem C ancestral: `chamados/services/materializacao.py:921` e `chamados/services/materializacao.py:1096`; atomic do save em `chamados/models.py:3173`. |
-| `chamados/models.py:2967` | `descarimbar` | P / save | **TRAVA-ANTES** por `chamados/services/relavra_via.py:230` → `chamados/services/relavra_via.py:246` e `chamados/management/commands/reabrir_orfas_enterradas.py:153` → `chamados/management/commands/reabrir_orfas_enterradas.py:157`. **SEM-TRAVA** pela reabertura de competência em `chamados/services/competencia_trancada.py:253` → `chamados/services/competencia_trancada.py:254` → `chamados/models.py:3073`. |
-| `chamados/models.py:3015` | `descarimbar_em_lote` | P / update | **TRAVA-ANTES** por `chamados/models.py:1552` → `chamados/models.py:1555`. **SEM-TRAVA** pela correção que abre atomic em `chamados/services/disputa_emissao.py:1496` e chama o lote em `chamados/services/disputa_emissao.py:1516`. O `.update` está em `chamados/models.py:3016`. |
-| `chamados/models.py:3027` | `encerrar_por_fato_no_espelho` | P / save | **SEM-TRAVA**: atomic por pergunta em `chamados/management/commands/encerrar_perguntas_com_fato.py:67`, chamada em `chamados/management/commands/encerrar_perguntas_com_fato.py:68`. |
-| `chamados/models.py:3174` | `PerguntaDisputa.save` | P / super.save | Herda a classificação do chamador: **SEM-TRAVA**, por exemplo, via `chamados/services/disputa_emissao.py:1389`; **TRAVA-ANTES** via `chamados/models.py:2691` → `chamados/models.py:2769`. Sempre tem atomic próprio em `chamados/models.py:3173`. |
-
-| Arquivo:linha | Função | Entidade / operação | Classificação da transação |
-|---|---|---|---|
-| `chamados/services/vinculos.py:89` | `apontar_justificativa` | CH / save | **TRAVA-ANTES**: `chamados/services/vinculos.py:88`; atomic `chamados/services/vinculos.py:86`. |
-| `chamados/services/vinculos.py:101` | `apontar_celula` | CH / save | **TRAVA-ANTES**: `chamados/services/vinculos.py:100`; atomic `chamados/services/vinculos.py:98`. |
-| `chamados/services/vinculos.py:117` | `apontar_ticket_glpi` | CH / save | **TRAVA-ANTES**: `chamados/services/vinculos.py:116`; atomic `chamados/services/vinculos.py:114`. |
-| `chamados/services/vinculos.py:135` | `assumir_responsavel` | CH / save | **TRAVA-ANTES**: `chamados/services/vinculos.py:134`; atomic `chamados/services/vinculos.py:131`. |
-| `chamados/services/vinculos.py:147` | `liberar_responsavel` | CH / save | **TRAVA-ANTES**: `chamados/services/vinculos.py:146`; atomic `chamados/services/vinculos.py:143`. |
-| `chamados/services/contexto.py:78` | `anotar_contexto` | CH / save | **TRAVA-ANTES**: `chamados/services/contexto.py:77`; atomic `chamados/services/contexto.py:75`. |
-| `chamados/services/contexto.py:104` | `renovar_contexto` | CH / save | **TRAVA-ANTES**: `chamados/services/contexto.py:103`; atomic `chamados/services/contexto.py:101`. |
-| `chamados/services/contexto.py:127` | `retirar_contexto` | CH / save | **TRAVA-ANTES**: `chamados/services/contexto.py:126`; atomic `chamados/services/contexto.py:124`. |
-| `chamados/services/contexto.py:163` | `fundir_contexto` | CH / save | **TRAVA-ANTES**: `chamados/services/contexto.py:162`; atomic `chamados/services/contexto.py:160`. |
-| `chamados/services/texto.py:36` | `reescrever_texto` | CH / save | **TRAVA-ANTES**: `chamados/services/texto.py:35`; atomic `chamados/services/texto.py:31`. |
-| `chamados/services/arquivo.py:171` | `silenciar` | CH / save | **SEM-ATOMIC** pela view `chamados/views_arquivar.py:37`. **TRAVA-ANTES** em `chamados/services/arquivo.py:170` → `chamados/models.py:486` no lote sob atomic `chamados/views_arquivar.py:134`. |
-| `chamados/services/arquivo.py:210` | `levantar` | CH / save | **SEM-ATOMIC** pela view `chamados/views_arquivar.py:77`. Sob atomic externo, **TRAVA-ANTES** pela porta `chamados/services/arquivo.py:209` → `chamados/models.py:486`. |
-| `chamados/services/disputa_emissao.py:296` | `perguntar_entradas_pendentes` | D / save | **TRAVA-ANTES** por `chamados/services/disputa_emissao.py:968` → `chamados/services/disputa_emissao.py:1179`. **SEM-ATOMIC** por `api/views.py:794` → `chamados/services/disputa_emissao.py:685`: o atomic da abertura em `chamados/services/disputa_emissao.py:521` já terminou. |
-| `chamados/services/disputa_emissao.py:565` | `_abrir_ou_agregar_disputa` | D / save | **TRAVA-ANTES**: `chamados/services/disputa_emissao.py:530`; atomic `chamados/services/disputa_emissao.py:521`. |
-| `chamados/services/disputa_emissao.py:587` | `_abrir_ou_agregar_disputa` | D / create | **TRAVA-ANTES**: `chamados/services/disputa_emissao.py:530`; atomic `chamados/services/disputa_emissao.py:521`. |
-| `chamados/services/disputa_emissao.py:993` | `criar_disputa_a_partir_de_chamados_orfaos` | D / save | **TRAVA-ANTES**: `chamados/services/disputa_emissao.py:968`; atomic `chamados/services/disputa_emissao.py:964`. |
-| `chamados/services/disputa_emissao.py:1032` | `criar_disputa_a_partir_de_chamados_orfaos` | D / create | **TRAVA-ANTES**: `chamados/services/disputa_emissao.py:968`. |
-| `chamados/services/disputa_emissao.py:1041` | `criar_disputa_a_partir_de_chamados_orfaos` | D / save | **TRAVA-ANTES**: `chamados/services/disputa_emissao.py:968`. |
-| `chamados/services/disputa_emissao.py:1070` | `criar_disputa_a_partir_de_chamados_orfaos` | D / save | **TRAVA-ANTES**: `chamados/services/disputa_emissao.py:968`. |
-| `chamados/services/disputa_emissao.py:1165` | `criar_disputa_a_partir_de_chamados_orfaos` | D / save | **TRAVA-ANTES**: `chamados/services/disputa_emissao.py:968`. |
-| `chamados/services/disputa_emissao.py:1259` | `criar_disputa_ancora_de_chamado` | D / create | **TRAVA-ANTES**: `chamados/services/disputa_emissao.py:1232`; atomic `chamados/services/disputa_emissao.py:1223`. |
-| `chamados/services/disputa_emissao.py:1268` | `criar_disputa_ancora_de_chamado` | D / save | **TRAVA-ANTES**: `chamados/services/disputa_emissao.py:1232`. |
-| `chamados/services/relavra_via.py:127` | `relavrar` | P / save | **SEM-TRAVA**: command abre atomic em `chamados/management/commands/relavrar_via_i6.py:101` e chama em `chamados/management/commands/relavrar_via_i6.py:102`. |
-| `chamados/services/validacao.py:137` | `_carimbar_validacao` | P / save | **TRAVA-ANTES** pelos chamadores que travam em `chamados/services/validacao.py:285`, `chamados/services/validacao.py:317` ou `chamados/services/validacao.py:431`. |
-| `chamados/services/validacao.py:202` | `devolver_validacao_recusada` | P / save | **TRAVA-ANTES**: `chamados/services/validacao.py:431`, chamada em `chamados/services/validacao.py:464`, dentro do atomic `chamados/services/validacao.py:425`. |
-| `chamados/services/validacao.py:585` | `recusar_pergunta` | P / save | **SEM-TRAVA** pelo caminho `chamados/services/acoes_disputa.py:80`; atomic do save em `chamados/models.py:3173`. |
-| `chamados/services/validacao.py:661` | `conferir_data_do_fato` | P / save | **SEM-TRAVA** pelo caminho `chamados/views.py:1312`; atomic do save em `chamados/models.py:3173`. |
-| `chamados/services/materializacao.py:848` | `_materializar_resposta_hora` | P / save | **TRAVA-ANTES** pela validação em `chamados/services/validacao.py:431` → `chamados/services/validacao.py:463`. **SEM-TRAVA** pelos caminhos `chamados/services/acoes_disputa.py:139`, `chamados/services/fio.py:670` e `chamados/services/validacao.py:469`; atomic local em `chamados/services/materializacao.py:1217`. |
-| `chamados/services/materializacao.py:1100` | `_carimbar_recusa` | P / save | **SEM-TRAVA** nos caminhos que chegam ao gate em `chamados/services/materializacao.py:1210` ou ao finally em `chamados/services/materializacao.py:1294`, sem C ancestral; atomic do save em `chamados/models.py:3173`. **TRAVA-ANTES** quando ainda sob `chamados/services/validacao.py:431`. |
-| `chamados/services/disputa_emissao.py:1389` | `responder_pergunta_disputa_core` | P / save | **SEM-TRAVA** por `chamados/views.py:1283`, `api/views.py:2659` e `chamados/services/acoes_disputa.py:368`; atomic local `chamados/services/disputa_emissao.py:1388`. **TRAVA-ANTES** pela declaração sob `chamados/services/declaracao_texto.py:322`, que mantém a trava de `chamados/services/disputa_emissao.py:530`. |
-| `chamados/services/disputa_emissao.py:1434` | `responder_pergunta_disputa_core` | P / save | Mesmas entradas: **SEM-TRAVA** pelos HTTP acima; **TRAVA-ANTES** pela declaração sob `chamados/services/declaracao_texto.py:322` ou `chamados/services/declaracao_texto.py:624`, com trava em `chamados/services/disputa_emissao.py:530`. Atomic próprio do save em `chamados/models.py:3173`. |
-| `chamados/services/disputa_emissao.py:1518` | `reabrir_para_correcao` | P / update | **SEM-TRAVA** por `chamados/services/acoes_disputa.py:103`, `chamados/services/validacao.py:588` e `chamados/management/commands/curar_perguntas_em_limbo.py:69`; atomic `chamados/services/disputa_emissao.py:1496`. **TRAVA-ANTES** na devolução de ausência rejeitada: `chamados/services/materializacao.py:676` → `chamados/services/materializacao.py:679`. |
-| `chamados/services/disputa_emissao.py:1541` | `responder_automaticamente` | P / save | **SEM-TRAVA** por `api/foto_recebida.py:48`, antes da validação em `api/foto_recebida.py:51`; atomic local `chamados/services/disputa_emissao.py:1540`. |
-| `chamados/services/disputa_emissao.py:1562` | `carimbar_resposta_pela_trilha` | P / save | **SEM-TRAVA**: atomic `chamados/services/disputa_emissao.py:1561`; chamador `chamados/management/commands/curar_perguntas_em_limbo.py:67`. |
-| `chamados/services/fio.py:870` | `reapontar_resolvedora` | P / save | **TRAVA-ANTES**: `chamados/services/fio.py:855`; ramo que data passa por `chamados/services/fio.py:849` e trava em `chamados/models.py:2646`. Atomic `chamados/services/fio.py:843`. |
-| `chamados/services/fio.py:965` | `rechavear_data_evento` | P / save | **TRAVA-ANTES**: `chamados/services/fio.py:947`; atomic `chamados/services/fio.py:943`. |
-| `chamados/veredito_lavrado.py:207` | `gravar_lavras_em_lote` | P / bulk_update | **INDETERMINADO quanto à fronteira transacional do ORM**: porta e command não adquirem C nem abrem atomic; chamadas em `chamados/management/commands/backfill_veredito_lavrado.py:143` e `chamados/management/commands/backfill_veredito_lavrado.py:146`. Atomic interno de `bulk_update`: **[nao verificado]**. |
-| `chamados/veredito_lavrado.py:231` | `lavrar` | P / save | **TRAVA-ANTES** por `chamados/models.py:312`, sob trava `chamados/models.py:290`. **SEM-TRAVA** pelo command `chamados/management/commands/lavrar_perguntas_stale.py:87`; atomic do save em `chamados/models.py:3173`. |
-
-Os signals abaixo chegam aos sítios da tabela por delegação; não são uma segunda ocorrência do mesmo `.save`:
-
-| Gatilho | Encadeamento de escrita |
-|---|---|
-| `chamados/signals.py:19` — disputa fechada | Atomic `chamados/signals.py:41` → `chamados/signals.py:42` → CH; **TRAVA-ANTES** em `chamados/models.py:290`. |
-| `chamados/signals.py:54` — urgência ao resolver | `chamados/signals.py:72` → update CH em `chamados/models.py:636`; herda a transação originadora. |
-| `chamados/signals.py:91` — resolver perguntas | Atomic `chamados/signals.py:114` → `chamados/signals.py:115`; **TRAVA-ANTES** no resolvedor `chamados/services/disputa_emissao.py:1683`. |
-| `chamados/signals.py:121` — retomar regularizações | Callback registrado em `chamados/signals.py:144`, executa a retomada em `chamados/signals.py:137`; a materialização pode criar batida e atingir os receivers de `ponto/signals.py:132` e `ponto/signals.py:207`. |
-| `chamados/signals.py:148` — materializar pendentes | Delega em `chamados/signals.py:163`, na transação originadora; carimbos passam por `chamados/models.py:2907`. |
-| `chamados/signals.py:188` — cartório do CH | Julga em `chamados/signals.py:203`, na transação originadora; portas alcançadas no corpo em `ponto/services/cartorio.py:1488`, `ponto/services/cartorio.py:1622` e `ponto/services/cartorio.py:1789`. |
-| `chamados/signals.py:215` — becos da P | Callback `chamados/signals.py:225` → `chamados/signals.py:224`; trava no serviço em `chamados/services/becos.py:51`. |
-| `chamados/signals.py:256` e `chamados/signals.py:270` — isentos | Callbacks em `chamados/signals.py:266` e `chamados/signals.py:293` → silêncio sob atomic `chamados/services/silencio_isentos.py:41` → CH em `chamados/services/arquivo.py:171`. |
-| `chamados/signals.py:312` — feriado | Callback `chamados/signals.py:322` → reavaliação em `chamados/signals.py:321`; fechos passam pelo escritor CH `chamados/models.py:296`. |
-| `chamados/signals.py:337` — filho morto | Callback `chamados/signals.py:356` → reconciliador em `chamados/signals.py:355`; inclui carimbo P em `chamados/reconciliador.py:586` e retração em `chamados/reconciliador.py:1427`. |
-| `ponto/signals.py:132` e `ponto/signals.py:144` — batida/ausência | Julgamento síncrono em `ponto/signals.py:135` ou `ponto/signals.py:147` → `ponto/signals.py:93` → portas do cartório. |
-| `ponto/signals.py:207` — reconciliador da batida | `ponto/signals.py:215` → carimbos/reconciliação em `chamados/reconciliador.py:1418`, `chamados/reconciliador.py:1419` e `chamados/reconciliador.py:1427`. |
-| `ponto/signals.py:276` — consumidor da ausência | Callback registrado em `ponto/signals.py:272`; devolução/reconciliação em `ponto/signals.py:262`, `ponto/signals.py:269` e `ponto/signals.py:271`. |
-| `ponto/signals.py:292` — geofence do posto | Callback `ponto/signals.py:307` → reavaliação em `ponto/signals.py:306`. |
-
-O `pre_save` de CH apenas lê o estado anterior; o outbox de P escreve `EventoCelula`. (`chamados/signals.py:184`; `chamados/signals.py:244`)
-
-**2. Laços cujo universo pode abranger vários colaboradores sob um mesmo atomic da aplicação**
-
-| Atomic externo / l
-
-[truncado em 20000 de 30185 caracteres]
-
-## 07/11 23:35 · sessao 5f4f8b5530e6 · - · - · origem=Ronald (tmux)
-
-Confirmei a cadeia literal **CH antes de D**:
-
-| Passo | Evidência |
-|---|---|
-| Criação da batida | `app/ponto/registro_batida.py:152` ou `:157` |
-| Receiver síncrono do cartório | `app/ponto/signals.py:132` → `:135` → `_julgar_dias`, que chama cartório em `:93` |
-| Entrada no julgamento | `app/ponto/services/cartorio.py:1989` → corpo em `:948` |
-| Espelhamento do chamado vivo | `app/ponto/services/cartorio.py:1789` ou `:1798` |
-| Porta de contexto | `app/ponto/management/commands/detectar_ausencias.py:558` → `app/chamados/services/contexto.py:101` atomic, `:103` trava, `:104` save |
-| Aquisição C + CH | `app/chamados/models.py:486`: `trava_na_ordem(self.colaborador_id, chamados=(self.pk,))`; C em `:2547`, CH em `:2567`; essa chamada não pede universo de D |
-| Fábrica posterior ao corpo | `app/ponto/services/cartorio.py:997` → `app/chamados/services/fabrica_da_celula.py:186` → `:149` |
-| Aquisição posterior de D abertas | `app/chamados/services/disputa_emissao.py:530` pede `abertas_do_colaborador=True`; D em `app/chamados/models.py:2554` |
-
-Sem atomic externo herdado, a transação de `contexto.py:101` termina antes de o fluxo chegar à fábrica em `cartorio.py:997`; com atomic externo, os locks C/CH continuam na transação que depois pede D. A identificação desse percurso com o nome **“2a instância”** é [nao verificado].
-
-Correção do sítio `app/chamados/veredito_lavrado.py:231`: pelo command `lavrar_perguntas_stale.py:87`, é **SEM-TRAVA**, pois o próprio `PerguntaDisputa.save` abre atomic em `app/chamados/models.py:3173`. Pela chamada `app/chamados/models.py:312`, é **TRAVA-ANTES**, com trava em `:290`. Assim, o sítio tem caminhos mistos; não recebe um único rótulo universal sem registrar essa distinção.
-
-## 07/11 23:34 · sessao 5f4f8b5530e6 · - · - · origem=Ronald (tmux)
-
-Área lida: fora de `chamados/models.py`, `chamados/signals.py`, `chamados/services/` e comandos de chamados, o censo por AST aponta dois escritores diretos atribuídos às três entidades; a leitura confirmou ambos em `app/chamados/veredito_lavrado.py:207` e `:231`. A exaustividade além dos sítios atribuídos pelo varredor é [nao verificado].
-
-| Sítio | Função | Entidade/operação | Classificação por caminho lido |
-|---|---|---|---|
-| `app/chamados/veredito_lavrado.py:207` | `gravar_lavras_em_lote` | P `bulk_update` | **SEM-ATOMIC** no caminho do backfill: chamadas `app/chamados/management/commands/backfill_veredito_lavrado.py:143` e `:146`; a função não abre atomic nem trava (`app/chamados/veredito_lavrado.py:197`). |
-| `app/chamados/veredito_lavrado.py:231` | `lavrar` | P `save` | **INDETERMINADO como rótulo único: caminhos mistos.** Pela chamada `app/chamados/models.py:312`, **TRAVA-ANTES** em `app/chamados/models.py:290`, dentro do atomic `:280`. Pela chamada `app/chamados/management/commands/lavrar_perguntas_stale.py:87`, **SEM-ATOMIC** (command lido; não há atomic/lock no caminho). |
-
-As chamadas `models.py:2767`, `models.py:2905`, `services/fio.py:869`, `services/fio.py:964` e `services/relavra_via.py:126` passam `salvar=False`; não executam o save de `veredito_lavrado.py:231` nesses caminhos.
-
-Laços multicolaborador confirmados fora da sua área:
-
-| Atomic externo / laço | Escrita alcançada |
-|---|---|
-| `app/chamados/views_arquivar.py:134` / `:135` | `arquivo.silenciar` em `:140`, sobre queryset sem restrição obrigatória a um colaborador (`:115`, filtro opcional `:118`). |
-| `app/escala/views.py:407` / `:408` (`aplicar_folga_calendario`) | `trocar_calendario_de_folga` em `:409`; relavra em `:416` → `app/escala/folgas.py:272` → regeneração → marcador de CH em `app/ponto/portas/celula.py:289` e julgamento em `:434` (pode alcançar portas D/CH/P). |
-| `app/ponto/portas/celula.py:652` / `:673` (`trocar_plantao`) | Dois colaboradores obrigatoriamente distintos (`:662`), ordenados por colaborador/data (`:674`), chama `editar_dia` em `:675` → marcador de CH em `:626`; julgamento indireto pelo `_o_chao_do_dia_mudou` em `:627`, que chama cartório em `:434`. |
-| `app/ponto/management/commands/marcar_abandono_provisorio.py:22` / `:43`, interno `:70` | `garantir_ausencia` em `:76` → `app/ponto/services/ausencia.py:417-418` salva Ausência; receiver síncrono `app/ponto/signals.py:147` → `_julgar_dias`/cartório `:93` (portas D/CH/P indiretas). Callback `ponto/signals.py:272` roda depois do commit e não integra essa transação. |
-| `app/ponto/management/commands/gerar_celulas.py:309` / `app/ponto/portas/celula.py:837`, interno `:839` | O corpo escreve **CelulaDia**, com `create :849`, saves `:861`, `:871`. Não escreve D/CH/P diretamente nesse corpo (`:811-873`). Produzir D/CH/P por algum gancho não lido é [nao verificado]. |
-
-`app/ponto/portas/regen_exportada.py:171` não é multicolaborador: o plano foi construído para um único `colaborador` em `:140-143`.
-
-`app/escala/services/cadastro_tipo.py:334` é laço de frota, mas **não encontrei atomic envolvendo esse laço no caminho local**: `salvar_tipo` começa em `:140`, chama propagação em `:320`; cada regeneração abre seu atomic próprio em `app/ponto/portas/celula.py:218`. O decorador `cadastro_tipo.py:41` pertence ao helper `_hpd_pares :43`, não a `salvar_tipo`. Chamador externo que imponha atomic à frota é [nao verificado].
-
-Batida, passos literais lidos:
-
-1. `app/ponto/registro_batida.py:152` e `:157`: `Batida.objects.create`.
-2. Receiver de cartório: `app/ponto/signals.py:132`, chama `_julgar_dias :135`; este chama `cartorio.julgar_celula :93`.
-3. `app/ponto/services/cartorio.py:1989` chama `julgar_colab`; corpo inicial em `:948`.
-4. Chamados podem passar por `reconciliar()` em `cartorio.py:1488`, `:1501`, `:1600`, ou pela passada adiada `:963`.
-5. `app/chamados/models.py:650-654`: atomic de `reconciliar` → decisão → `_gravar_estado`; `_recarregar_estado_se_mudou` trava em `:711`, `_gravar_estado` trava em `:290`.
-6. Esses dois locks pedem **Disputas abertas antes de CH**. A implementação seleciona D abertas em `models.py:2552-2555`, depois CH em `:2567`.
-7. A fábrica ocorre depois do corpo em `cartorio.py:997` → `app/chamados/services/fabrica_da_celula.py:186` → `:149` criar/atualizar disputa; porta adquire universo em `app/chamados/services/disputa_emissao.py:530`.
-8. Segundo receiver da batida: `app/ponto/signals.py:207-215` → `app/chamados/reconciliador.py:1418`, `:1419`, `:1427`. Retração: `reconciliador.py:522-523` → mesmo `reconciliar` acima.
-9. Onde **CH já pode estar seguro antes de adquirir D fechada**: `models.py:1432` `_gravar_estado` → `:1441` `ressuscitar_perguntas` → trava explícita das D selecionadas em `:1552` → `:1582-1583` `reabrir_sistema`. C já foi adquirido em `:290`; a primeira aquisição do CH está em `:2567`, e o primeiro universo exclui D fechadas por `:2552`.
-10. Outro lock que pede somente C+CH: `app/chamados/services/fio.py:768` (`_costura_nao_mata_o_fio`); sua chegada pela batida e posterior D na mesma transação não foram fechadas nesta leitura [nao verificado].
-
-Não identifiquei com segurança qual desses percursos corresponde ao rótulo externo **“2a instância da batida”** [nao verificado].
-
-_2832 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2835 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
