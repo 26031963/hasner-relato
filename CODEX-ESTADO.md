@@ -1,7 +1,184 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 10:22** · publicado em **08/11/2026 10:25** (UTC-3)
+> Ultima resposta processada: **08/11/2026 10:28** · publicado em **08/11/2026 10:30** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 08/11 10:28 · sessao 02956b4fd4e0 · - · - · origem=Ronald (tmux)
+
+| Sítio confirmado fora de `tests/` | Chamadores de produção confirmados | Unidade e resposta | Deriva ou lê |
+|---|---|---|---|
+| `app/chamados/services/vigia_fio.py:156` `fio_do_dia` | `censo`, `app/chamados/services/vigia_fio.py:414`, `:417` | Booleano sobre perguntas recebidas: dia tem fio vivo. | Só lê C15 `fio_vivo`, `app/chamados/services/vigia_fio.py:165`. |
+| `app/chamados/services/vigia_fio.py:274` `dono_fora_do_fio` | `censo :431`; `censo_alcance :654`, mesmo arquivo | Por `(colab,data)`: decisão pendente, ausência aberta, escala não descreve dia, fio do admin ou `None`; opcional papel. | Compõe, nesta ordem, `oferecido`, cobertura de ausência/ABERTAS, `.estado` + aceite de folga, presença/dono na lista; `app/chamados/services/vigia_fio.py:306`. |
+| `app/chamados/services/vigia_fio.py:318` `censo` | `app/chamados/management/commands/vigiar_fio_morto.py:172`; `app/chamados/management/commands/materializar_passivo_validado.py:203` | Contadores e listas de células/dias; universo começa em chamados vivos ligados à célula e módulos de furo, `app/chamados/services/vigia_fio.py:334`; exclui hoje/futuro do alarmado, `:420`. | Lê C15 via `fio_do_dia`, `:417`; lê `dono_fora_do_fio`, `:431`; deriva contadores. |
+| `app/chamados/services/vigia_fio.py:542` `censo_alcance` | `app/chamados/management/commands/vigiar_fio_morto.py:173` | Por `(colab,data)` retido: rota, causa, detalhe e papel; `app/chamados/services/vigia_fio.py:625`, `:699`. | Lê `dias_que_seguram :585`, C17 `:635`, dono `:654`; deriva causas sem porta `:667`. |
+| `app/chamados/services/vigia_fio.py:222` `ListaDoAdmin.dia_do_admin`; `:230` `dia_na_lista`; `:238` `papel_do_dia` | `dono_fora_do_fio :312`, `:313`; `censo_alcance :661` | Booleano presença com dono BATIDA/CADASTRO; presença+dono; papel do dia. | Lê `cadastro_realidade.lista` e `dias_na_lista`, `app/chamados/services/vigia_fio.py:216`; filtra/traduz `:228`, `:246`. |
+| `app/colaboradores/services/calendario.py:97` `resolver_dia_oferecido` | `contexto_calendario`, mesmo arquivo `:769` | Booleano por dia: último recurso, passado, status em `STATUS_QUE_PEDEM_DECISAO`, `:94`, `:103`. | Deriva da projeção do calendário; não considera permissão do observador, `:101`. |
+| `app/colaboradores/services/calendario.py:117` `resolver_dia_oferecido_nas_datas` | `app/chamados/services/vigia_fio.py:271` | `{date:bool}`; dia ausente recebe falso, `app/colaboradores/services/calendario.py:135`. | Lê os campos produzidos pelo calendário; `:132`. |
+| `app/colaboradores/services/calendario.py:159` `contexto_calendario` | `app/colaboradores/views.py:1946`; `app/colaboradores/services/drawer.py:121`; `app/relatorios/furos.py:160`; plural `app/colaboradores/services/calendario.py:132` | Lista de dias, incluindo `resolver_dia_oferecido`, `:769`. | Lê C6 para perguntas respondidas vivas, `:476`; compõe status e último recurso e escreve projeção do juiz `:769`. |
+| `app/escala/services/cadastro_realidade.py:442` `beco_em_lote` | `dias_folga_nao_definida_sem_porta :439`; `_folga_nao_definida_sem_porta :573`, mesmo arquivo | Lista `(colab_id,assinatura C11)`, com data, dono, perguntas, pai limbo e detalhe; `:530`. | Compõe lâmpada indefinida/protesto `:477`, vivas/C17 `:487`, âncora terminal `:515`, cadastro `:518`, dono `:531`. |
+| `app/escala/services/cadastro_realidade.py:787` `lista`; `:1044` `dias_na_lista`; `:985` `um_dono_por_dia` | Tela `app/escala/views.py:487`; vigia `app/chamados/services/vigia_fio.py:216`, `:217`; `lista → um_dono_por_dia :885` | Lista administrativa; mapa `(colab,data) → dono`; uniformização do dono do dia. | Lista incorpora C11 `:864`; uniformização reaproveita C11 `:1009` ou lê `InsumosDoDono.dono :1026`; mapa reduz donos `:1064`. |
+| `app/chamados/services/fio.py:160` `montar_chamados_fio` | `app/chamados/views.py:569` colab, `:677` admin, `:889` modal; `contexto_parcial_fio`, `app/chamados/services/fio.py:442` | Lista de chamados, com perguntas e `tem_pergunta_viva`, `:249`, `:279`. | Colab: janela e disputas abertas `:169`, `:213`; admin inclui vivas em fechadas via C6 `:234`; flag combina `.viva` e `raiox.pergunta_sem_acao_possivel`, `:279`. |
+| `app/chamados/services/janela_colab.py:49` `chamados_visiveis_colab` | `app/api/views.py:1016`; `app/chamados/services/fio.py:171`; `app/chamados/views_arquivar.py:195` | Queryset de chamados da lista de trabalho. | Deriva recorte janela OU destinos de `q_vivas`, silêncio nulo e módulos não internos; `app/chamados/services/janela_colab.py:61`, `:67`, `:70`. Usa pré-filtro SQL, não C6 exato nesse corpo, `:63`. |
+| `app/chamados/services/explicador.py:68` `explicar_pergunta`; `:108` `por_que_nao_fecha` | `por_que_nao_fecha → explicar_pergunta :133`; montador `app/chamados/services/fio.py:308`; exibição `app/templates/chamados/partials/modal_fio.html:432` | Por pergunta: estado, dono e ação, `explicador.py:74`; por disputa: `pode_fechar`, resumo, itens, `:163`. | Lê `.estado :72`, materialização real `:93`; C15 decide `pode`, `:137`; deriva descrição e ações. **É respondedor administrativo**, comprovado pelo template `modal_fio.html:435`–`:437`. |
+| `app/chamados/services/desenlace.py:44` `desenlace` | `app/chamados/services/fio.py:399`; exibição `app/templates/chamados/partials/modal_fio.html:118` | Por chamado: `{verbo,rotulo,estado,acao}` ou `None`, `desenlace.py:47`. | Compõe `catalogo.natureza.dono_do_chamado :50`, explicação `:62`, filhos `:57`, módulos/porta própria `:78`. |
+| `app/chamados/services/acoes_chamado.py:327` `montar_contexto_detalhe` | `app/chamados/views.py:551` | Detalhe de chamado, perguntas vivas da disputa aberta e evidência, `acoes_chamado.py:335`, `:348`. | Lê C6 `:347` e filtra; não usa C17 nesse percurso. |
+| `app/colaboradores/services/drawer.py:15` `contexto_drawer` — confirmar linha de definição antes de usar; trechos verificados `:69`, `:78`, `:88` | `app/colaboradores/views.py:2943` | Banner `falha_texto`: motivos das vivas na última disputa aberta; fallback número de chamados de furo “aguardando colaborador”, `drawer.py:82`, `:92`. | Primeiro lê `perguntas_vivas_de :78`; fallback **deriva independentemente** de `VIVOS` e quatro módulos, sem C6, `:88`–`:92`. |
+| `app/chamados/relatorios_disputa.py:11` `classificar`; `:26` `coletar` | `coletar → classificar :47`; tela `app/colaboradores/views.py:2997`; command `app/chamados/management/commands/relatorio_pendencias_disputa.py:15` | Por disputa: SEM_PERGUNTA/PRONTA_FECHAR/AGUARDA_COLAB/AGUARDA_SUPERVISAO, `relatorios_disputa.py:13`; buckets de disputas, `:47`. | Lê C6 `:18`; deriva categoria pela existência de resposta `:21`. |
+| `app/chamados/services/aviso_pendencia.py:7` `perguntas_pendentes_do_colab`; `:16` `aviso_texto_livre` | `_pendentes`, `app/chamados/services/cobranca.py:48`; aviso `app/api/views.py:997`, `:2220`; `app/chamados/views.py:1120` | Lista de perguntas vivas sem resposta; aviso por conjunto de datas, `aviso_pendencia.py:13`, `:20`. | Lê `q_vivas` e C6, `:11`, `:13`; deriva texto. |
+| `app/chamados/services/cobranca.py:75` `checar_cobranca` | `cobrar`, mesmo arquivo `:155`; também referência dinâmica de intake `app/core/intake.py:68` | Pendentes em perguntas, datas distintas e disputas distintas, `cobranca.py:87`–`:94`. | Lê aviso via `_pendentes :82`; deriva prazo/canal/contagens. |
+| `app/chamados/services/cobranca.py:221` `_calados`; `:251` `linhas_para_a_pauta` | `linhas_para_a_pauta → _calados :257`; pauta `app/escala/services/fase_12x36.py:272` | Pessoas cobradas com prazo vencido e pessoas sem canal, `cobranca.py:248`; frases de pendência `:261`. | **Deriva com `q_vivas` SQL**, sem C6 exato nesse corpo, exigindo disputa aberta e pergunta sem resposta `:229`; lê juiz prazo `:246`. |
+| `app/ponto/services/dia_do_colab.py:6` `dia_do_colab`; `:112` `_veredito_do_dia` | API `app/api/views_mensageria.py:1970`; ficha `app/colaboradores/services/ficha.py:280`; corpo chama frase `dia_do_colab.py:102` | Um `(colab,data)`: marcos/batidas/perguntas e frase “Faltou…” `:144`, vivas esperando resposta/decisão `:150`. | Lê ata `:30`, C6 `:71`, pergunta_no_app `:109`; frase deriva contagens de marcos/perguntas `:139`–`:154`. |
+| `app/chamados/services/pergunta_no_app.py:65` `retencao`; `:152` `do_dia`; `:119` `medir` | `medir → retencao :142`; `do_dia → retencao :164`; `app/ponto/services/dia_do_colab.py:109`; commands `app/chamados/management/commands/chamados_vivos_sem_pergunta_no_app.py:14`, `perguntar_chamados_sem_pergunta.py:21`, `:30` | Causa/quem reteve; por dia chamados vivos, perguntas no app, dono da retenção `pergunta_no_app.py:165`; censo por chamado `:145`. | Lê perguntas_do_app `:139`, `:162`, ata `:80`, cobertura `:90`, lista admin `:88`, C6 em `_marco_ja_perguntado :111`; deriva taxonomia de retenção. |
+| `app/chamados/services/validacao.py:865` `fila_validar_classificada` | `app/chamados/views_cobrar.py:288`, `:349`, `:361` | Perguntas e chamados distintos por classe, idade, total e rótulo `validacao.py:884`–`:887`. | Lê `perguntas_respondidas_a_validar :874`; deriva classes e contadores. |
+| `app/chamados/services/becos.py:25` `classificar` | command `app/chamados/management/commands/fechar_becos_disputa.py:39`; evento `becos.py:69` | Por disputa: `None`, fechável ou barrada, `becos.py:26`. | Deriva aberta, destino e pai terminal `:27`–`:32`; lê C7 `pode_fechar :33`. |
+
+Juízes e leitores que o e2.r incluía, mas o aval não nomeou:
+
+| Função | Chamadores | Resposta e natureza |
+|---|---|---|
+| `app/chamados/juizes.py:1886` `cobranca_viva_do_dia` | `app/chamados/models.py:373`, `:711`; `app/ponto/services/cartorio.py:1604`; `entrada_sincronizada.py:28`; `triagem_batida.py:589` | Chamado mais novo ou `None`; deriva `VIVOS`, módulo, dia forte e desempate, `juizes.py:1897`–`:1902`. Estes chamadores usam o resultado para planejar/fechar/reconciliar, não são cinco telas novas. |
+| `app/chamados/juizes.py:822` `pergunta_viva`, corpo `:1135` | Censo direto extenso é igual ao colado no e2.r; as chamadas adicionais de apresentação estão nas tabelas acima, `explicador.py:72`, `fio.py:280`, `models.py:2502`, `:2809`. | Booleano por pergunta; juiz que deriva vitalidade. |
+| `app/chamados/models.py:2492` `.estado`; `:2799` `.viva` | API `app/api/views.py:2569`; explicador `app/chamados/services/explicador.py:72`; vigia `vigia_fio.py:311`; fio `fio.py:280`; também templates `app/templates/chamados/partials/_card_atendimento.html:77`, `:183` | `.viva` delega totalmente a C6, `models.py:2809`; `.estado` lê C6 mas também traduz carimbos/resposta com fallback, `:2499`–`:2506`. |
+| `app/chamados/services/fabrica_da_celula.py:74` `motivos_a_perguntar` | `perguntar_pela_celula :164`; `motivos_que_o_evento_deixou :199` | Motivos de perguntas ainda a emitir por célula; deriva deduplicação por motivo `:118`–`:126`, lendo dia_sem_trabalho `:91`, teto `:98`, parcial_so_lista `:102`. Não devolve tarefa completa do dia. |
+| `app/chamados/services/fabrica_da_celula.py:191` `motivos_que_o_evento_deixou` | `app/chamados/management/commands/disparar_perguntas_competencia.py:112` | Leitor/vigia dos motivos que evento deixou; lê fábrica `:199`. |
+| `app/chamados/models.py:1789` `DisputaSupervisao.pode_fechar` | `becos.py:33`, `:51`; reconciliador `:411`, `:601`, `:1159`; materializacao `:567`, `:1291`; competencia_trancada `:153`, `:202`; disputa_emissao `:1112`, `:1717`; entrada_sincronizada `:58` | Booleano por disputa; compõe C15 e `respostas_sem_veredito`, `models.py:1794`; regra adicional de respostas sem veredito `:1783`–`:1787`. |
+
+Comparação com aval:
+
+| Item do aval | Conferência |
+|---|---|
+| `vigia_fio.fio_do_dia:156` e `censo_alcance` | Confere; `censo_alcance` está em `app/chamados/services/vigia_fio.py:542`; faltou explicitar `censo:318`, dono `:274` e leitores da lista `:222`. |
+| `resolver_dia_oferecido:97` + STATUS `:94` | Confere; único chamador direto é `contexto_calendario:769`; plural é leitura do campo, `calendario.py:135`. |
+| C11 `beco_em_lote:442` | Confere função; chamada C17 real é `app/escala/services/cadastro_realidade.py:488`, **não `:460` como colado no e2.r**. A linha 460 é docstring. |
+| Nove consumidores C15 “não são respondedores” | Não confere para **explicador**: produz `pode_fechar`, resumo e itens `explicador.py:163`, expostos ao admin `modal_fio.html:432`–`:437`. |
+| “TODOS” os leitores na lista | Não confere: montador de fio, painel, relatório, aviso, drawer, pergunta_no_app.do_dia/retenção, dia_do_colab, desenlace, fila de validação e beco de disputa estão documentados acima com seus chamadores. |
+
+O aval acrescenta explicitamente, frente à seção “leitores E3” do e2.r, `resolver_dia_oferecido` e C11, mas ambos já apareciam noutras seções do próprio e2.r colado: juiz “dono fora do fio” e chamadores C17. A identidade da versão da cópia com o HEAD `94d41ea` mencionado no aval é **[nao verificado]** nesta subanálise.
+
+## 08/11 10:28 · sessao 9cde0294b438 · - · - · origem=Ronald (tmux)
+
+| Achado | Evidência |
+|---|---|
+| **“`o_que_segura` (6 chamadores)” não confere nesta cópia.** O AST não encontrou chamadas de produção à função. A busca textual em Python também só encontra a definição, comentários e chamadas em `tests/`. Não há seis chamadores a enumerar. | Definição: `app/folha/fora_da_folha.py:203`; chamadas de teste: `app/folha/tests/test_haiku_fora_da_folha.py:66`, `:76`, `:145`; `app/chamados/tests/test_n1_alimentacao_unica.py:134`. |
+| `_fio_do_dia` tem **três** chamadores de produção. | `fora_da_folha` em `app/folha/fora_da_folha.py:178`; `o_que_segura` em `app/folha/fora_da_folha.py:221`; `dias_sem_fio` em `app/ponto/services/pautas_dos_discordantes.py:77`. |
+| `pendentes_do_colaborador` tem três chamadores: os dois kernels **e dashboard web**, ausente da lista do aval. | `app/api/views.py:325`; `app/api/views_core.py:314`; `app/core/views.py:253`. |
+| `perguntas_do_app` tem cinco chamadores, incluindo **ficha do colaborador**, ausente da lista do aval. | `app/api/views.py:2552`; `app/chamados/juizes.py:1319`; `app/colaboradores/services/ficha.py:166`; `app/chamados/services/pergunta_no_app.py:139`, `:162`. |
+| A ficha responde pendência ao consumidor: forma ações “validar as respostas” e “colaborador responder”, com dono e quantidade. | `app/colaboradores/services/ficha.py:169`, `:171`, `:190`, `:193`. |
+
+A varredura foi feita com `ast.parse`, sem importar Django nem executar consultas, em todos os `.py` da árvore fora de diretórios `tests`, reconhecendo nomes importados e aliases; nomes de método também foram procurados por `ast.Attribute`. Ausência de chamadas obtida por essa varredura é resultado estático, não prova de uso dinâmico em produção. **Uso dinâmico externo à cópia: [nao verificado].**
+
+| Respondedor | Unidade e retorno | Deriva ou lê juiz | Chamadores |
+|---|---|---|---|
+| `DisputaSupervisao.pendentes_do_colaborador` | QuerySet de **disputas abertas**, uma por PK, com ≥1 pergunta viva sem `respondida_em`. Não agrupa por dia. | Deriva o recorte da disputa; lê `q_vivas` e **C6 `pergunta_viva`** para as perguntas. | Definição/recorte: `app/chamados/models.py:1729`, `:1736`, `:1739`; chamadas `app/api/views.py:325`, `app/api/views_core.py:314`, `app/core/views.py:253`. |
+| `perguntas_do_app` | Lista de **perguntas vivas**, ordenada por ID; sem exigir disputa aberta nem pergunta sem resposta. | Lê `q_vivas` e C6; aplica identity map. | `app/chamados/services/pergunta_no_app.py:42`, `:46`, `:53`; cinco chamadas na primeira tabela. |
+| `api_disputa_perguntas` | Dois arrays de **perguntas**: `perguntas` e `respondidas`. | Lê `perguntas_do_app`; separa por `.estado == RESPONDIDA`. | `app/api/views.py:2534`, `:2552`, `:2568`, `:2570`; rota em `app/api/urls.py:92`. |
+| `ficha_do_colab` | Chamados com verbo/dono; perguntas; ações e quantidade de perguntas a responder/validar, para um colaborador. | Lê `particionar_verbos`, `perguntas_do_app` e `respostas_sem_veredito`; deriva a seleção sem resposta por texto e a lista de ações. | `app/colaboradores/services/ficha.py:155`, `:158`, `:166`, `:169`, `:171`, `:190`, `:193`. |
+| `folha._fio_do_dia` | `admin`, `colab`, `chamado` ou `nada`, por célula. | Lê **C17**; devolve `porta['fio']` ou `FIO_SEM_PORTA`. | `app/folha/fora_da_folha.py:70`, `:77`; chamadas `:178`, `:221`, `app/ponto/services/pautas_dos_discordantes.py:77`. |
+| `folha.o_que_segura` | Um colaborador/competência, mais lista de **dias retidos**, fio, destrava e IDs de chamados por dia. | Compõe fontes: export, retenção da célula, C17; deriva grupo pelo pior fio. | `app/folha/fora_da_folha.py:203`, `:215`, `:217`, `:221`, `:225`, `:229`; zero chamadas de produção encontradas. |
+| `folha.fora_da_folha` | Colaboradores retidos, grupo por pior dia, totais de dias por fio. | Lê `dias_que_seguram` e `_fio_do_dia`; agrega. | `app/folha/fora_da_folha.py:142`, `:161`, `:178`, `:181`, `:194`. |
+| `dias_sem_fio` | Lista de **(colaborador, dia)** discordantes sem porta, com empresa/competência/célula. | Lê veredito da célula e `_fio_do_dia`/C17; filtra o universo para pauta. | `app/ponto/services/pautas_dos_discordantes.py:46`, `:69`, `:77`, `:79`. |
+
+| Badge — **mesmo comportamento nos dois kernels** | Unidade | Evidência |
+|---|---|---|
+| Primeiro calcula `questionarios_pendentes = pendentes_do_colaborador(...).count()` | **Disputas distintas abertas** contendo pergunta C6 viva sem resposta carimbada; não perguntas, não `(colab,dia)`. | `app/api/views.py:325`; `app/api/views_core.py:314`; `app/chamados/models.py:1736`. |
+| Se `questionarios_pendentes > 0`: `{count: questionarios_pendentes, cor: '#f59e0b', rotulo: 'Responder DP'}` | Disputas | `app/api/views.py:326`, `:327`; `app/api/views_core.py:315`, `:316`. |
+| Senão, se há `chamados_nao_lidos`: `{count: chamados_nao_lidos, cor: '#ef4444', rotulo: 'Chamados'}` | **Chamados vivos** que têm followup `autor_tipo='dp_rh'` não lido pelo colaborador; não número de followups. | `app/api/views.py:318`, `:321`, `:328`, `:329`; `app/api/views_core.py:307`, `:310`, `:317`, `:318`. |
+| Sem os dois: `None` | Nenhum objeto badge | `app/api/views.py:331`; `app/api/views_core.py:320`. |
+| JSON expõe também os escalares `chamados_nao_lidos`, `questionarios_pendentes` | Chamados / disputas, respectivamente | `app/api/views.py:370`, `:371`, `:372`; gêmeo `app/api/views_core.py:359`, `:360`, `:361`. |
+
+| Divergência concreta **permitida pelo código**, não ocorrência medida | Badge / listas | Evidência |
+|---|---|---|
+| Uma disputa aberta possui duas perguntas de motivos diferentes, ambas C6 vivas e sem resposta. | Badge **1**; `perguntas_do_app` **2**; array API `perguntas` **2**. Elas podem pertencer ao mesmo dia: a identidade do fato inclui motivo. | Distinct por disputa: `app/chamados/models.py:1736`; identidade por colab/motivo/data: `app/chamados/models.py:2392`; lista sem dedup por disputa/dia: `app/chamados/services/pergunta_no_app.py:46`, `:53`; array: `app/api/views.py:2570`. |
+| Uma pergunta C6 viva está numa disputa fechada, sem outras pendências ou não lidos. | Lista **1**; contagem de questionários **0**; `chamados_badge=None`. | Badge exige `disputa__fechada_em IS NULL`: `app/chamados/models.py:1737`; lista não exige: `app/chamados/services/pergunta_no_app.py:46`; badge vazio: `app/api/views.py:331`, `app/api/views_core.py:320`. |
+| Uma pergunta tem resposta com texto, continua C6 viva e não foi validada. | `perguntas_do_app` inclui; API coloca em `respondidas`; badge de disputas exclui essa pergunta pelo carimbo de resposta. | Vitalidade com resposta: `app/chamados/juizes.py:1150`, `:1162`; estado: `app/chamados/models.py:2502`; separação: `app/api/views.py:2570`; exclusão: `app/chamados/models.py:1738`. |
+| Qual número o colaborador verá **depois de uma E3 futura** | **[nao verificado]**; esta cópia define os números acima. | **[nao verificado]**. |
+
+| `o_que_segura`: origem | O que determina | Direção |
+|---|---|---|
+| `classificar_export(empresa,mes,ano)` | Item do colaborador; resposta externa `entra = item.status`, `motivo = item.motivo`. Não calcula valor de rubrica nesse corpo. | Chamado antes do fio em `app/folha/fora_da_folha.py:215`; lido no retorno em `:230`; responsabilidade expressa/corpo do export em `app/folha/export.py:757`, `:766`, `:829`. |
+| `motivos_retencao_celula(..., com_dias=True)` | Motivos e lista de dias/células com data, veredito e motivo. | `_dias_que_retem`: `app/folha/fora_da_folha.py:95`, `:98`; chamada `:217`; retenção em `app/folha/export.py:1206`, `:1218`, `:1233`, `:1253`. |
+| C17 via `_fio_do_dia` | Campo `fio`; `DESTRAVA[fio]`; grupo pelo pior fio. | `app/folha/fora_da_folha.py:77`, `:78`, `:221`, `:226`, `:231`; escada da porta em `app/chamados/juizes.py:1327`, `:1332`. |
+| C17 via `_porta` | Campo `chamado`: lista da chave `fila`, não todas as âncoras. | `app/folha/fora_da_folha.py:67`, `:225`; saída C17 em `app/chamados/juizes.py:1385`, `:1386`. |
+| Fio → `classificar_export` | **Não há dependência no percurso auditado**: o export decide seus gates e termina retornando `out`; não recebe fio/porta, e `o_que_segura` não escreve seu resultado de volta. | `app/folha/export.py:757`, `:858`, `:864`, `:868`, `:960`, `:966`, `:973`; composição local em `app/folha/fora_da_folha.py:215`, `:229`. |
+| `classificar_export` → fio | Em `o_que_segura`, **não altera** a classificação do fio: `_dias_que_retem` é chamado independentemente do status/motivo export, e C17 recebe IDs das células desses dias. Em `dias_que_seguram`/`fora_da_folha`, export **seleciona o universo** de colaboradores `furo_espelho` cujos fios serão lidos; não muda a regra C17. | Independência local: `app/folha/fora_da_folha.py:215`, `:217`, `:218`, `:221`; seleção do universo: `:119`, `:123`, `:128`, `:137`, `:161`, `:178`. |
+| Fontes compartilhadas | Ambos leem estados da célula. Isso permite correlação das saídas sem uma escrever na outra. `classificar_export` chama retenção do espelho, que delega à mesma retenção da célula. | `app/folha/export.py:960`, `:1267`; C6 lê veredito em `app/chamados/juizes.py:1181`; C17 alimenta perguntas via C6 em `app/chamados/juizes.py:1302`. |
+
+| Campo por item API | Quem escreve o JSON | Fonte/autor do valor |
+|---|---|---|
+| `estado` | `api_disputa_perguntas`, `app/api/views.py:2571` | `.estado`, propriedade derivada, `app/chamados/models.py:2492`; validação/materialização primeiro, depois C6 e `respondida_em`: `:2499`, `:2502`, `:2503`. |
+| `aguarda_admin` | `app/api/views.py:2572` | Comparação local com `PerguntaDisputa.RESPONDIDA`; não coluna. |
+| `disputa_id` | `app/api/views.py:2573` | FK `p.disputa`; declarada em `app/chamados/models.py:2211`, gravada no nascimento em `:2476`. |
+| `chamado_id` | `app/api/views.py:2574` | **`p.chamado_destino_id`**, FK declarada em `app/chamados/models.py:2819`; nascimento `:2477`; reapontamento no gate `:2450`; porta de reapontamento `app/chamados/services/fio.py:845`. |
+| `id` | `app/api/views.py:2575` | PK da pergunta criada em `app/chamados/models.py:2476`. |
+| `motivo` | `app/api/views.py:2576` | Coluna `app/chamados/models.py:2216`; gate `abrir` recebe e cria em `:2398`, `:2476`. |
+| `pergunta` | `app/api/views.py:2577` | Coluna `app/chamados/models.py:2217`; emissor fornece texto em `app/chamados/services/disputa_emissao.py:392` e gate grava `**campos` em `app/chamados/models.py:2477`. |
+| `tipo_resposta` | `app/api/views.py:2578` | Coluna `app/chamados/models.py:2222`; emissor fornece em `app/chamados/services/disputa_emissao.py:393`, `:774`, `:1199`. |
+| `opcoes` | `app/api/views.py:2579` | Coluna `app/chamados/models.py:2223`; emissor fornece em `app/chamados/services/disputa_emissao.py:394`, `:775`; serializer aplica `p.opcoes or []` e remove `OUTRO_MOTIVO` quando `tipo_resposta=='hora'`: `app/api/views.py:2557`, `:2559`. |
+| `resposta_colab` | `app/api/views.py:2580` | Coluna `app/chamados/models.py:2227`; POST chama core em `app/api/views.py:2643`; core escreve texto em `app/chamados/services/disputa_emissao.py:1282` e salva em `:1301`; resposta automática também escreve em `:1433`. |
+| `resposta_display` — adicional ao recorte do aval | `app/api/views.py:2581` | Propriedade `app/chamados/models.py:2867`: nome de posto/escala, rótulo da opção ou resposta original (`:2874`, `:2882`, `:2889`, `:2891`). |
+| `respondida_em` — adicional ao recorte do aval | `app/api/views.py:2582` | ISO ou `None`. Escritores: core `app/chamados/services/disputa_emissao.py:1283`; automático `:1434`; trilha `:1450`; carimbo com texto `app/chamados/models.py:2589`; reset em memória de ressuscitação `app/chamados/models.py:1457`. |
+
+| Autores dos campos de nascimento `motivo`, `pergunta`, `tipo_resposta`, `opcoes`, `disputa`, destino | Chamada do gate |
+|---|---|
+| Emissão por catálogo: texto com data e opções estáticas/dinâmicas | `app/chamados/services/disputa_emissao.py:294`, `:302`, `:304`, `:310`, `:317`, `:389`. |
+| Agrupador de perguntas de hora | `app/chamados/services/disputa_emissao.py:770`. |
+| Pergunta de âncora ausente | `app/chamados/services/disputa_emissao.py:1195`. |
+| Declaração do colaborador / aplicação de texto pelo admin | `app/chamados/services/declaracao_texto.py:325`, `:614`. |
+| Reabertura administrativa | `app/chamados/services/acoes_disputa.py:259`. |
+| Persistência central e reaproveitamento de identidade | `app/chamados/models.py:2431`, `:2450`, `:2476`. |
+
+| Campos externos da resposta API | Escritor e conteúdo |
+|---|---|
+| Lista vazia | `em_disputa=False`, `perguntas=[]`, `respondidas=[]`, em `app/api/views.py:2562`. |
+| `em_disputa=True` | Significa lista viva não vazia neste endpoint; não exige disputa aberta, em `app/api/views.py:2561`, `:2585`, e `app/chamados/services/pergunta_no_app.py:46`. |
+| `disputa_id` externo | Disputa da **primeira** pergunta da lista, em `app/api/views.py:2563`, `:2586`. |
+| `chamado_id` externo | Primeiro destino de pergunta não respondida; fallback para chamado da primeira disputa, em `app/api/views.py:2590`, `:2592`. |
+| `perguntas` e `respondidas` | Separação por estado, em `app/api/views.py:2570`, `:2593`, `:2594`. |
+| `chamados_badge.count`, `.cor`, `.rotulo` | Objetos construídos diretamente em `api_me` dos dois kernels: `app/api/views.py:327`, `:329`; `app/api/views_core.py:316`, `:318`. Não há coluna gravada para esses campos. |
+
+| Divergência da prosa existente com o vivo | Código |
+|---|---|
+| Comentário de `pendentes_do_colaborador` afirma badge e lista “no MESMO conjunto”, mas badge adiciona disputa aberta e ausência de carimbo de resposta. | Comentário `app/chamados/models.py:1734`; filtros `:1737`, `:1738`; lista `app/chamados/services/pergunta_no_app.py:46`. |
+| Docstring de `api_disputa_perguntas` promete perguntas não respondidas de disputa aberta; corpo retorna vivas inclusive respondidas e sem filtro de abertura. | Docstring `app/api/views.py:2536`; corpo `:2552`, `:2570`; fonte `app/chamados/services/pergunta_no_app.py:46`. |
+| Comentário de `perguntas_do_app` enumera “quatro chamadores”; AST encontra também ficha, total cinco. | Comentário `app/chamados/services/pergunta_no_app.py:49`; chamada adicional `app/colaboradores/services/ficha.py:166`. |
+
+Ocorrência/quantidade atual em produção, comportamento visual do APK/PWA e resultado de uma E3 futura: **[nao verificado]**.
+
+## 08/11 10:27 · sessao 24e28cd92da8 · - · - · origem=Ronald (tmux)
+
+AST de todos os `.py` fora de diretórios `tests/`, resolvendo `ImportFrom` e aliases locais (`fio_vivo as _fio_vivo`): **13 chamadas C15, em 12 funções; 3 chamadas C17**. Os pontos abaixo são a evidência concreta do conjunto; uso dinâmico não demonstrado: [nao verificado].
+
+| Chamador direto C15 | Chamada | Papel efetivamente exercido |
+|---|---|---|
+| `vigia_fio.fio_do_dia` | `app/chamados/services/vigia_fio.py:166` | **Respondedor**: devolve booleano para perguntas recebidas; `censo` lê em `:414` e `:417` e incrementa `fio_vivo` em `:418`. |
+| `DisputaSupervisao.pode_fechar` | `app/chamados/models.py:1794` | **Juiz de outra pergunta**: autorização de fechar disputa, combinando ausência de respostas sem veredito com ausência de fio vivo (`:1789–1794`). Também alimenta respondedor de beco: `app/chamados/services/becos.py:33`. |
+| `disputa_viva_do_chamado` | `app/chamados/juizes.py:2084` | **Gate de outra ação**: retorna disputa aberta que trava encerramento do chamado; ausência de perguntas também trava (`:2080–2086`). Chamado por alias `_disp_viva(self)` em `app/chamados/models.py:148`, seguido de erro falante ao usuário em `:150–154`. |
+| `supra_juiz.Command.handle` | `app/ponto/management/commands/supra_juiz.py:215` | **Insumo de classificação/auditoria**: conta chamados com fio e passa `cobrancas_vivas=len(_com_fio)` a `classificar_dia` (`:223–225`); agrega placar e exemplos (`:235–238`). |
+| `reconciliar_grade.Command._relavrar_orfa` | `app/ponto/management/commands/reconciliar_grade.py:460` | **Gate de relavra**: pergunta respondida viva impede relavra, retornando `ORFA_FIO_PRESO` (`:460–462`); chamada em `:228` agrega resultado ao plano. |
+| `emitir_furo_retroativo.Command.handle` | `app/ponto/management/commands/emitir_furo_retroativo.py:98` | **Insumo para emitir**: alimenta `classificar_dia(cobrancas_vivas=...)` (`:101–110`) e só prossegue em `FURO_SEM_COBRANCA` (`:111–113`). |
+| `folha.previa._material` | `app/folha/previa.py:144` | **Respondedor da prévia**: devolve `resposta do colaborador`, `pergunta viva (sem resposta)` ou `nada` (`:139–146`); escreve campo `material` de cada item de dia/marco em `:95`. |
+| `limbo_folgas.filhos_no_defeito` | `app/chamados/services/limbo_folgas.py:201` | **Gate de fechamento do pai**: seleciona filhos cujo dia ainda tem defeito de cadastro e fio vivo (`:191–205`); `detectar_ausencias` lê em `app/ponto/management/commands/detectar_ausencias.py:156`. |
+| `cartorio._julgar_colab_corpo` | `app/ponto/services/cartorio.py:1339` | **Insumo da impressão/julgamento**: conta chamados com fio e escreve `fio=len(_com_fio)` em `impressao_insumos` (`:1348–1352`). |
+| `cartorio._julgar_colab_corpo` | `app/ponto/services/cartorio.py:1595` | **Gate de reconciliação**: pula chamado sem perguntas ou com fio vivo; só continua tratando fio morto (`:1591–1601`). |
+| `explicador.por_que_nao_fecha` | `app/chamados/services/explicador.py:137` | **Respondedor administrativo**: constrói `pode_fechar`, `resumo` e `itens` (`:137–163`); `montar_chamados_fio` chama em `app/chamados/services/fio.py:308` e anexa `ch.explicacao` em `:310`. |
+| `encerrar_perguntas_com_fato.Command.handle` | `app/chamados/management/commands/encerrar_perguntas_com_fato.py:83` | **Gate de fechamento**: fio vivo incrementa barrada e pula disputa; do contrário tenta `d.fechar` (`:83–90`). |
+| `disputa_emissao._ja_perguntou` | `app/chamados/services/disputa_emissao.py:1244` | **Deduplicação de emissão** por `(disputa,motivo,data_evento)`, com guarda de colaborador ativo (`:1237–1244`); chamada em `:765` e pelo comando `disparar_perguntas_competencia.py:173`. |
+
+**Fora dos nove nomes do aval existem três chamadores diretos:** `vigia_fio.fio_do_dia`, `DisputaSupervisao.pode_fechar` e `juizes.disputa_viva_do_chamado`, conforme chamadas `vigia_fio.py:166`, `models.py:1794`, `juizes.py:2084`.
+
+**A frase “os nove nomeados não são respondedores” não confere:** `explicador` responde ao admin por disputa (`app/chamados/services/explicador.py:163` → `app/chamados/services/fio.py:310`), e `folha/previa` responde com campo `material` apresentado na prévia (`app/folha/previa.py:95`, `app/folha/previa.py:144`). Os demais têm o uso específico descrito na tabela, sem inferir intenção humana.
+
+C15 é uma redução existencial: `any(pergunta_viva(p) for p in perguntas)`; o universo é entregue pelo chamador e não tem necessariamente unidade `(colab,dia)` (`app/chamados/juizes.py:1233`, `app/chamados/juizes.py:1242`).
+
+| Chamador direto C17 | O que lê hoje | Efeito de retirar o símbolo público sem adaptar chamador |
+|---|---|---|
+| `fora_da_folha._porta` | Importa C17 em `app/folha/fora_da_folha.py:66` e chama em `:67`. `_fio_do_dia` lê `porta['fio']` ou `FIO_SEM_PORTA` em `:77–78`; `o_que_segura` também lê `fila` em `:225`. | A importação deixa de resolver; ficam afetados `fio`, frase `DESTRAVA`, chamados mostrados e grupo por fio (`app/folha/fora_da_folha.py:221–231`). Não equivale automaticamente a alterar `classificar_export`, chamado separadamente em `:215`. |
+| `vigia_fio.censo_alcance` | Importa em `app/chamados/services/vigia_fio.py:556`, chama por chave `(cid,dt)` em `:635`. Lê `rota` e `verbos` em `:642–646`; só sem porta recorre a dono e causas em `:654–685`. | A importação deixa de resolver; perde-se a partição porta/sem porta usada nos contadores e nas linhas de alcance (`:635–646`). Chamado pelo comando em `app/chamados/management/commands/vigiar_fio_morto.py:173`. |
+| `cadastro_realidade.beco_em_lote` C11 | Importa em `app/escala/services/cadastro_realidade.py:464`; **chamada viva em `:488`**, não `:460`. Filtra dias com perguntas vivas e C17 `None`; depois exige âncora terminal (`:515–517`), defeito folga (`:518`) e produz assinatura C11 (`:530–540`). | A importação deixa de resolver; a seleção “sem porta” do C11 precisa continuar disponível/adaptada para o lote produzir assinaturas. Entradas são a janela individual em `:439` e o lote das competências abertas em `:573`; efeitos adicionais de uma substituição ainda não implementada: [nao verificado]. |
+
+C17 devolve `None` ou `{rota,fila,verbos,fio}`; compõe chamados da célula na fila com perguntas vivas no app, resposta não vazia e âncora na fila (`app/chamados/juizes.py:1373–1387`). “Resolver dia” fica explicitamente fora desse critério (`app/chamados/juizes.py:1367–1369`). A linha `cadastro_realidade.py:460` do anexo não é chamada no vivo: é docstring; a chamada AST está em `:488`.
+
+Outra omissão relevante ao censo amplo: **`chamados/services/becos.py::classificar`** responde `None|FECHAVEL|BARRADA` por disputa e lê C7 em `:33`; combina disputa aberta, visibilidade por `respondida_em`/destino e pai terminal (`app/chamados/services/becos.py:25–33`). Não é chamador direto C15, mas é respondedor indireto de beco.
 
 ## 08/11 10:22 · sessao 3832ccb31504 · COBPARC-AUSENCIA-CALA-DOIS-JUIZES · censo · origem=Code
 
@@ -980,71 +1157,4 @@ No censo textual da cópia, o chamador encontrado de `cxr_na_lista.medir` é o c
 
 A documentação de L-040 ainda afirma ausência de leitor, embora C12 leia a lavra na implementação. O desenho `escopo_id=None` com a constraint anterior também permanece. Fechamento dos requisitos de produção — col841, divergência zero na frota, idempotência concorrente e conservação das classes do vigia — **[nao verificado]**. (`app/docs/LEIS.md:166`; `app/escala/services/cadastro_realidade.py:871`; `app/ponto/services/cxr_na_lista.py:146`; `app/inteligencia/models.py:103`)
 
-## 08/11 03:36 · sessao 5b1d37290c70 · CXR-TELA-LE-O-MOTOR · verificador · origem=Code
-
-**O delta cura (a)–(d) por inspeção. Não encontrei novo defeito bloqueante nos trechos alterados e nos leitores dos campos. O aval completo de produção permanece [não verificado].** Evidências abaixo.
-
-**1) Curas e mapa de leitura/escrita**
-
-- **(a) Chave corrigida:** os dois chamadores passam `ini`; C11 conserva esse início e corta somente `fim`. Isso elimina a escolha equivocada pelo mês do fim cortado. [cadastro_realidade.py:526](app/escala/services/cadastro_realidade.py:526), [cadastro_realidade.py:568](app/escala/services/cadastro_realidade.py:568), [cadastro_realidade.py:1025](app/escala/services/cadastro_realidade.py:1025).
-- **(b) Selo fortalecido:** o teste agora exige contagem `(0, 0)` das chamadas ao espelho e ao motor; capturar o `AssertionError` dentro da lista não basta para deixá-lo passar. [test_cxr_tela_le_o_motor.py:132](app/ponto/tests/test_cxr_tela_le_o_motor.py:132), [test_cxr_tela_le_o_motor.py:138](app/ponto/tests/test_cxr_tela_le_o_motor.py:138).
-- **(c) Testes passam pela lavra:** “responde como o espelho” chama efetivamente `cxr_lavrado`; o conflito C9/C12 exige `CADASTRO` em `dono_do_dia`, com juiz sensível ao insumo CXR. [test_cxr_tela_le_o_motor.py:252](app/ponto/tests/test_cxr_tela_le_o_motor.py:252), [test_cxr_tela_le_o_motor.py:311](app/ponto/tests/test_cxr_tela_le_o_motor.py:311).
-- **(d) Texto corrigido:** a docstring declara filtro, deduplicação e exclusão por erro; o rótulo conta itens. [cxr_na_lista.py:11](app/ponto/services/cxr_na_lista.py:11), [cxr_na_lista.py:131](app/ponto/services/cxr_na_lista.py:131).
-
-| Papel | Escritor/leitor |
-|---|---|
-| Produz competência e cobertura | `medir`: competência pelo fim integral; cobertura `[pk, comp, início ISO]`. [cxr_na_lista.py:61](app/ponto/services/cxr_na_lista.py:61), [cxr_na_lista.py:115](app/ponto/services/cxr_na_lista.py:115) |
-| Persiste e recupera | `lavrar` grava o dicionário em `detalhe`; `ultimo_lavrado` recupera-o. [cxr_na_lista.py:142](app/ponto/services/cxr_na_lista.py:142), [cxr_na_lista.py:156](app/ponto/services/cxr_na_lista.py:156) |
-| Interpreta `cobertos` | `cxr_lavrado`: `(colab, início) → competência → conjunto de datas`. [cxr_na_lista.py:173](app/ponto/services/cxr_na_lista.py:173), [cxr_na_lista.py:180](app/ponto/services/cxr_na_lista.py:180) |
-| Consome a chave nova | `beco_em_lote` e `um_dono_por_dia`. [cadastro_realidade.py:526](app/escala/services/cadastro_realidade.py:526), [cadastro_realidade.py:1025](app/escala/services/cadastro_realidade.py:1025) |
-| Mostra C12 | `_cxr_do_motor` lê `itens`, sem interpretar `cobertos`. [cadastro_realidade.py:393](app/escala/services/cadastro_realidade.py:393) |
-
-**Nenhum leitor produtivo encontrado ainda exige o par `[colab, comp]**`: o leitor estrutural exige três elementos. O par antigo aparece no teste negativo e resulta em `None`; portanto, snapshots antigos perdem cobertura até nova lavra, explicitamente. [cxr_na_lista.py:173](app/ponto/services/cxr_na_lista.py:173), [test_cxr_tela_le_o_motor.py:305](app/ponto/tests/test_cxr_tela_le_o_motor.py:305).
-
-**2) Descartes versus aval**
-
-Não promoveria os descartes funcionais a bloqueadores deste delta. Em particular, erro parcial fica contado, exclui cobertura e o comando publica antes de sair 2; sem cobertura, o ramo dependente de CXR retorna `None`, sem motor. [cxr_na_lista.py:108](app/ponto/services/cxr_na_lista.py:108), [lavrar_cxr_do_motor.py:37](app/ponto/management/commands/lavrar_cxr_do_motor.py:37), [e6_oraculo.py:189](app/ponto/management/commands/e6_oraculo.py:189).
-
-**A pendência `l084_pausa` impede declarar comprovado o PRONTO (1).** O leitor copia a publicação; não consegue trazer uma acusação que o produtor não entregou. Isso não demonstra defeito novo no leitor nem autoriza recalcular na tela. Os sete dias efetivamente publicados e exibidos: [não verificado]. [cxr_na_lista.py:75](app/ponto/services/cxr_na_lista.py:75), [motor_calculo_v2.py:2719](app/ponto/motor_calculo_v2.py:2719).
-
-**3) Outro ponto relevante ao aceite**
-
-O PRONTO (5) exige cuidado: **nem toda saída de `d` vai para `e/dia_na_lista_dono_*`**. Dias reconhecidos como mesa do admin podem entrar antes em `fio_do_admin`; os demais dias presentes na lista chegam ao detalhamento de `e`. Portanto, afirmar fechamento somente em `e` sem comparar os destinos seria incorreto. [vigia_fio.py:654](app/chamados/services/vigia_fio.py:654), [vigia_fio.py:677](app/chamados/services/vigia_fio.py:677), [vigia_fio.py:684](app/chamados/services/vigia_fio.py:684). A comparação nominal antes/depois e sua soma: [não verificado].
-
-Executei sete verificações puras da função de leitura, incluindo competências distintas, cobertura vazia, ausência e formato antigo: passaram. [cxr_na_lista.py:162](app/ponto/services/cxr_na_lista.py:162). Suite Django e selos da frota: [não verificado].
-
-## 08/11 03:35 · sessao aab5013a25cc · - · - · origem=Ronald (tmux)
-
-Não encontrei descarte que deva virar **defeito bloqueante novo** no delta; os pontos abaixo limitam a conclusão de aceite:
-
-- **Erro parcial:** CXR exclui a competência com falha de `cobertos`, registra erro e publica as demais; o command grava e termina com código 2. É a mesma política do C9. Sem cobertura, `sem_motor=True` devolve `None` quando a lista do motor seria necessária, sem chamá-lo. `app/ponto/services/cxr_na_lista.py:108`, `app/ponto/services/cxr_na_lista.py:115`, `app/ponto/management/commands/lavrar_cxr_do_motor.py:37`, `app/ponto/management/commands/lavrar_teto_do_dia.py:34`, `app/ponto/management/commands/e6_oraculo.py:189`.
-
-- **Zero/não medido:** `ultimo_lavrado()` distingue ausência de medição, mas C12 só consome `itens`, perdendo essa distinção na apresentação. Isso permanece no molde já escolhido; não encontrei requisito específico novo que transforme o descarte em bloqueio do delta. `app/ponto/services/cxr_na_lista.py:154`, `app/escala/services/cadastro_realidade.py:393`.
-
-- **Item sem dia:** nasce sem dono na lavra, e a ação continuará “a próxima lavra o traz”; próxima lavra não necessariamente resolverá enquanto o motor continuar sem dia. É limitação real já descartada, compartilhada pela apresentação por dono. A afirmação “sem_dia=0 na frota” não pode ser validada pelos anexos fornecidos. `app/ponto/services/cxr_na_lista.py:81`, `app/ponto/services/cxr_na_lista.py:84`, `app/escala/services/cadastro_realidade.py:759`; número de produção [não verificado].
-
-- **Cron:** a lavra está declarada como elo após `vigia_pareador_celula`, com dependência de `processar_cartorio`; a leitura da manhã usa a lavra anterior por decisão documentada no código. Não há evidência nova para promover a enumeração incompleta do placar a bloqueio funcional deste delta. `app/config/crons.py:1757`, `app/config/crons.py:1765`.
-
-- **`l084_pausa`/PRONTO (1):** os escritores examinados publicam `l084_do_dia`, as causas de janela ou item sem `causa`; C12 copia a publicação, portanto não pode produzir por si os sete exemplos ausentes. O atendimento nominal dos sete dias permanece [não verificado], sem caso fornecido que demonstre falha deste leitor. `app/ponto/motor_calculo_v2.py:1623`, `app/ponto/motor_calculo_v2.py:1670`, `app/ponto/motor_calculo_v2.py:1992`, `app/ponto/motor_calculo_v2.py:2719`, `app/ponto/services/cxr_na_lista.py:75`.
-
-**Cuidado com o PRONTO (5):** não declarar genericamente que cada saída de `d` aparecerá em `e/dia_na_lista_dono_*`. O vigia encaminha previamente dias na lista com BATIDA/CADASTRO para `fio_do_admin`; somente os que permanecem sem outro balde podem entrar em `e/dia_na_lista_dono_*`. A nova C12 calcula o dono com o próprio espelho e pode devolver CADASTRO. A soma exigida precisa de comparação nominal antes/depois; ela não está nos anexos. `app/chamados/services/vigia_fio.py:313`, `app/chamados/services/vigia_fio.py:654`, `app/chamados/services/vigia_fio.py:677`, `app/chamados/services/vigia_fio.py:684`, `app/ponto/services/cxr_na_lista.py:96`, `app/ponto/management/commands/e6_oraculo.py:110`; fechamento da soma [não verificado].
-
-## 08/11 03:35 · sessao 8fade55f0993 · - · - · origem=Ronald (tmux)
-
-Não achei regressão concreta na chave nova nem leitor produtivo que ainda desempacote `cobertos` como par; o único leitor estrutural exige três elementos. `app/ponto/services/cxr_na_lista.py:173`.
-
-Mapa dos campos:
-
-- `medir()` produz `comp` pelo fim integral e grava `[pk, comp, ini.isoformat()]`; devolve `cobertos` no resultado. `app/ponto/services/cxr_na_lista.py:61`, `app/ponto/services/cxr_na_lista.py:115`, `app/ponto/services/cxr_na_lista.py:130`.
-- `lavrar()` persiste o resultado inteiro em `detalhe`; `ultimo_lavrado()` recupera esse detalhe. `app/ponto/services/cxr_na_lista.py:142`, `app/ponto/services/cxr_na_lista.py:156`.
-- `cxr_lavrado()` converte os triplos em `(colab, início) → competência` e busca os dias por `(colab, competência)`. Formatos antigos ficam sem cobertura, retornando `None`. `app/ponto/services/cxr_na_lista.py:173`, `app/ponto/services/cxr_na_lista.py:177`, `app/ponto/services/cxr_na_lista.py:180`.
-- Os dois consumidores produtivos passam `ini`: C11 em `beco_em_lote()` e reconciliação em `um_dono_por_dia()`. `app/escala/services/cadastro_realidade.py:526`, `app/escala/services/cadastro_realidade.py:1025`.
-- C11 preserva o início da janela e corta somente o fim; a reconciliação deriva a janela da data do item pela autoridade `janela_atual`. `app/escala/services/cadastro_realidade.py:568`, `app/escala/services/cadastro_realidade.py:569`, `app/escala/services/cadastro_realidade.py:1017`.
-- `InsumosDoDono` recebe o conjunto ou `None`; sem cobertura e sem motor, o ramo que precisaria do CXR devolve `None`, sem fallback. `app/ponto/management/commands/e6_oraculo.py:147`, `app/ponto/management/commands/e6_oraculo.py:189`.
-- C12 lê apenas `itens`, sem interpretar `cobertos`. `app/escala/services/cadastro_realidade.py:393`.
-- O único par antigo explícito é a fixture negativa que exige `None`; os testes novos também distinguem os inícios das competências 10 e 11. `app/ponto/tests/test_cxr_tela_le_o_motor.py:302`, `app/ponto/tests/test_cxr_tela_le_o_motor.py:305`.
-- O homônimo `cobertos` de `core/views.py` é um contador de postos, independente do snapshot CXR. `app/core/views.py:882`, `app/core/views.py:891`.
-
-Execução dos testes e estado efetivo dos snapshots de produção: [não verificado]. [nao verificado]
-
-_2847 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2850 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
