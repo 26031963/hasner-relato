@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/11/2026 12:33:56.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (147.0 MB). Acoes na janela: **371**.
+**Medido em 08/11/2026 12:39:41.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (147.1 MB). Acoes na janela: **376**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:39:00 | Bash |  | `cd /home/ronald/saas-hasner && tr '\0' ' ' </proc/323885/cmdline \| cut -c1-120; echo; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') assert L[1].startswith('ESPERANDO') and L[2].startswith('ERRO-BOBO') L[1]="ESPERANDO: trava_teste.sh \| pid=323885" L.insert(3,"lei: E1-FECHO-ORIGEM-SEM-DIA -- a 15c (746179d7) tira do fecho/universo do fato so a linha de batida RETRATADA (av ...` |
+| 12:38:33 | Bash |  | `/usr/bin/sleep 15; cd /home/ronald/saas-hasner; bash bin/trava_teste.sh --quem` |
+| 12:38:25 | ReadNotifications |  | `-` |
+| 12:38:25 | Bash |  | `cd /home/ronald/saas-hasner; L=logs/fio_e0_v4/suite_e1_v15c_746179d7.log; bash bin/suite.sh --dir /home/ronald/wt-fioe1v15c-121447 > $L 2>&1; echo "rc=$?" >> $L; /bin/grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' $L \| tail -3; /bin/grep -E '^(FAIL\|ERROR):' $L \| head -20` |
+| 12:38:21 | Bash |  | `cd /home/ronald/wt-fioe1v15c-121447 && git log -1 --format='%h %p' && git status --porcelain \| head; ls /home/ronald/saas-hasner/logs/fio_e0_v4/e1_v15c_commit.sinal; bash /home/ronald/saas-hasner/bin/trava_teste.sh --quem` |
 | 12:25:39 | Bash |  | `tr '\0' ' ' </proc/3740753/cmdline; echo; sed -n 2p /home/ronald/saas-hasner/app/docs/RELATO.md` |
 | 12:25:36 | Bash |  | `kill 3723955; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/esperador15c.sh cat > $S <<'EOF' #!/bin/bash while [ "$(git -C /home/ronald/wt-fioe1v15c-121447 rev-parse --short HEAD)" = 21e7341c ]; do /usr/bin/sleep 30; done echo commit > /home/ronald/saas-hasner/logs/fio_e0_v4/e1_v15c_commit.sinal EOF chmod +x $S; cd /home/ronald/saas-hasner; setsid  ...` |
 | 12:25:28 | Bash |  | `cd /home/ronald/saas-hasner && /bin/grep -n 'ESPERANDO\\|produtor\\|cmdline' bin/hook_stop_fila1.py \| head -40` |
