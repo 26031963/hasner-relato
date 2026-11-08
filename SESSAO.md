@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/11/2026 12:45:11.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (147.1 MB). Acoes na janela: **376**.
+**Medido em 08/11/2026 12:50:44.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (147.2 MB). Acoes na janela: **379**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:45:52 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/PROMPTS.md'; s=open(p).read() old="\n\n\| 08/11 12:4x \| aval E1-FECHO-ORIGEM-SEM-DIA \| origem sem dia sai do fecho; entra com E1-A2-VAZIO-MEDIR apos o pouso; E1 segue ao opus final 3 \| BACKLOG E1-A2-VAZIO-MEDIR \|" assert s.count(old)==1 s=s.replace(old,"\n- 08/11 12:4x aval E1-FECHO-ORIGEM-SEM-DIA -- origem inexistente ou de outro co ...` |
+| 12:45:47 | Bash |  | `cd /home/ronald/saas-hasner && tail -4 app/docs/PROMPTS.md \| cut -c1-140` |
+| 12:45:44 | Bash |  | `cd /home/ronald/saas-hasner && date '+%H:%M' && python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('lei: E1-FECHO-ORIGEM-SEM-DIA')]; assert len(i)==1 L[i[0]]="RESPONDIDA por aval E1-FECHO-ORIGEM-SEM-DIA 12:4x: origem inexistente ou de outro colaborador sai do fecho/universo como a retratada, recusa declarada com contador, nunca elegi ...` |
 | 12:39:00 | Bash |  | `cd /home/ronald/saas-hasner && tr '\0' ' ' </proc/323885/cmdline \| cut -c1-120; echo; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') assert L[1].startswith('ESPERANDO') and L[2].startswith('ERRO-BOBO') L[1]="ESPERANDO: trava_teste.sh \| pid=323885" L.insert(3,"lei: E1-FECHO-ORIGEM-SEM-DIA -- a 15c (746179d7) tira do fecho/universo do fato so a linha de batida RETRATADA (av ...` |
 | 12:38:33 | Bash |  | `/usr/bin/sleep 15; cd /home/ronald/saas-hasner; bash bin/trava_teste.sh --quem` |
 | 12:38:25 | ReadNotifications |  | `-` |
