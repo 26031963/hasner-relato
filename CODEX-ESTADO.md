@@ -1,7 +1,34 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 04:49** · publicado em **08/11/2026 04:51** (UTC-3)
+> Ultima resposta processada: **08/11/2026 09:19** · publicado em **08/11/2026 09:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 08/11 09:19 · sessao cc2c08306ed4 · - · - · origem=Ronald (tmux)
+
+Achados de custo/selos, somente por inspeção:
+
+1. **Procedente, média: memo por batida evita repetição dentro de um fecho, mas não evita recomputar a janela inteira para cada batida.** Cada `bo` novo faz `SELECT Batida` e chama o juiz; este executa `dia_das_batidas(d-1,d+1)`, que carrega turnos e batidas da janela. Duas batidas do mesmo turno pagam duas reconstruções sobre janelas sobrepostas. (`app/chamados/services/fio.py:1229-1236`; `app/ponto/turnos.py:2917-2926`; `app/ponto/turnos.py:2901-2907`; `app/ponto/turnos.py:1861-1888`.)
+
+2. **Contagem de chamadas ao juiz:**
+   - Por `fecho_do_fato`: uma por `batida_origem_id` distinta examinada nas sementes, vizinhos e explorações da ponte; inclui vizinhos recusados, pois `_dia_do_fato(q)` precede o filtro de base. (`app/chamados/services/fio.py:1326`; `app/chamados/services/fio.py:1339-1342`; `app/chamados/services/fio.py:1278-1286`.)
+   - Por `abrir`: zero se `do_fato` vier vazio; caso contrário, uma por batida distinta examinada pelo universo/ponte/fecho, com o mesmo memo. A batida **pedida**, quando ainda não tem linha, não é julgada por esse caminho. (`app/chamados/services/fio.py:1362-1392`; `app/chamados/models.py:2751-2765`.)
+   - Na exceção `FatoEmOutroDia`: **mais uma chamada** para o episódio recusado, pois o rótulo abre `_memo_t = {}` em vez de aproveitar o memo anterior. (`app/chamados/models.py:2771-2776`.)
+   - Por `fecho_cruza_dias`: soma das batidas distintas de **cada fecho executado**, sem memo global. O contador chama `fecho_do_fato([p])` sem `_viz`; uma batida alcançada como vizinha recusada pode ser julgada de novo no componente seguinte. (`app/chamados/services/fio.py:1423-1432`; `app/chamados/services/fio.py:1317`.)
+   - Número SQL efetivamente observado, tempo e estouro dos tetos: **[nao verificado]**.
+
+3. **Não procedente: os selos citados não são todos selos de custo deste caminho.**
+   - Chokepoint efetivamente compara consultas com teto, inclusive ramos FICA de 144/217. (`app/ponto/tests/test_selo_chokepoint_escrita.py:180`; `app/ponto/tests/test_selo_chokepoint_escrita.py:187`; `app/ponto/tests/test_selo_chokepoint_escrita.py:239-250`; `app/ponto/tests/test_selo_chokepoint_escrita.py:397-430`.)
+   - Modal mede 330 perguntas, mas a fixture não fornece `batida_origem`; ela não representa o novo custo por episódio. (`app/chamados/tests/test_selo_teto_modal.py:68-79`; `app/chamados/tests/test_selo_teto_modal.py:81-97`.)
+   - `test_porta_chamado_e1` mede no-op de atos de campos de **Chamado**, não `PerguntaDisputa.abrir`. (`app/chamados/tests/test_porta_chamado_e1.py:1-5`; `app/chamados/tests/test_porta_chamado_e1.py:57-62`; `app/chamados/tests/test_porta_chamado_e1.py:117-122`.)
+   - `test_e1_v13_cadeia` captura SQL para detectar escrita sem trava na transação; `_ordem` verifica precedência de trava/escrita e mutantes do registro. Nenhum desses impõe teto de consultas. (`app/chamados/tests/test_e1_v13_cadeia.py:32-59`; `app/chamados/tests/test_e1_v13_ordem.py:59-82`.)
+
+4. **Não procedente: RED v13 sem mordida contra a comparação por data gravada.** A fixture coloca B0 com `data_evento=D0` e batida beta; o teste exige B0 dentro do fato DIA. A variante simples que volta a decidir por `p.data_evento` necessariamente exclui B0 e falha esse assert. Também há reutilização de A0 gravada em outra data e recusa de beta pedido em D0. (`app/chamados/tests/test_e1_v13.py:108-124`; `app/chamados/tests/test_e1_v13.py:157-165`; `app/chamados/tests/test_e1_v13.py:198-208`.)
+
+5. **Lacuna, média: execução explícita do mutante exigido pelo aval [nao verificado].** O arquivo possui testes semânticos que distinguem a variante, mas termina sem teste que instale o mutante `data_evento`; a execução RED/mutante não veio no dado. (`app/chamados/tests/test_e1_v13.py:116-124`; `app/chamados/tests/test_e1_v13.py:315-320`; aval anexo **[nao verificado quanto à execução]**.)
+
+6. **Ordem de trava: nenhuma nova aquisição explícita no diff inspecionado.** `_nascer` continua travando o colaborador antes de chamar o universo; os acréscimos usam leituras comuns para Batida/Colaborador. O runtime completo e eventual regressão nos selos de ordem são **[nao verificado]**. (`app/chamados/models.py:2720-2724`; `app/chamados/models.py:2762-2765`; `app/chamados/services/fio.py:1234`; `app/chamados/services/fio.py:1248-1252`.)
+
+7. **Preservação dos selos antigos:** o diff fornecido só declara mudanças em `models.py`, `fio.py` e `test_e1_v13.py`; não exibe alteração dos v5/v8/v10/v11. Identidade byte a byte com os commits e execução desses selos: **[nao verificado]**. [nao verificado]
 
 ## 08/11 04:49 · sessao 7108433fc78b · CXR-TELA-LE-O-MOTOR · verificador · origem=Code
 
@@ -1141,20 +1168,4 @@ Batida, passos literais lidos:
 
 Não identifiquei com segurança qual desses percursos corresponde ao rótulo externo **“2a instância da batida”** [nao verificado].
 
-## 07/11 23:34 · sessao 2783e9e9098d · - · - · origem=Ronald (tmux)
-
-Nenhum novo laço multicolaborador escritor de D/CH/P confirmado nos candidatos desta rodada.
-
-| Candidato | Resultado com evidência |
-|---|---|
-| `aplicar_09_corte_b.py:197–213` | Há atomic externo e loop de empresas. O serviço chamado percorre colaboradores (`fechamento.py:619`) e grava FechamentoMensal (`898,1137,1153`) e DiaPago (`1193`); não confirmei caminho D/CH/P. Demais efeitos transitivos dos cálculos: [nao verificado]. |
-| `reconciliar_grade.py:472` | Atomic por um `ch`, para renovar/retirar contexto (`473–474`). O loop de colaboradores está fora (`115`), assim como a chamada (`228`). Não é transação multicolaborador. |
-| `curar_residuo_bug115.py:120` | Atomic de `_ambiguo` por um `ch` (`121–127`). Loops externos (`95–106`) não estão dentro de atomic. |
-| `gerar_batidas_smoke_motor.py:106–107` | Chama `semear`, que faz Batida.bulk_create e trilha (`registro_batida.py:331–338`), sem signals de save. Guarda de ensaio em `333→326–328`. Não confirmei escrita D/CH/P. |
-| `lavrar_placar_situacional.py:101–111` | Loop escreve somente PlacarSituacional (`105–106`) e apaga placares (`110–111`); busca nos arquivos `*signals.py` não encontrou receiver desse modelo. |
-| `escala/folgas.py:162,309,354,382,490` | Cada ato recebe um único vínculo/colaborador. O loop de `384` percorre dias do mesmo `ec`; a relavra também recebe esse `ec` (`395–398`). `reparentar_folgas_do_colaborador` filtra um colaborador (`512–515`). |
-| `escala/folgas.py:555,585` | Atos escrevem calendário e seus tamanhos (`560–572`, `587–593`); nenhum receiver desses modelos encontrado nos arquivos `*signals.py`. Não confirmei escrita D/CH/P. |
-
-A relavra de folgas pode chegar às portas de chamado, mas mantém um único vínculo no ato: `folgas.py:272–276` chama `regenerar_celulas_vinculo(ec, ...)`. Um chamador externo que envolva vários vínculos em atomic precisa ser contado no próprio chamador; esses chamadores adicionais não foram auditados nesta rodada. [nao verificado]
-
-_2831 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2832 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
