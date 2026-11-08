@@ -1,7 +1,283 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 11:32** · publicado em **08/11/2026 11:35** (UTC-3)
+> Ultima resposta processada: **08/11/2026 12:12** · publicado em **08/11/2026 12:12** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 08/11 12:12 · sessao b0a85d04359f · FIO-E0-V4-E1 · verificador · origem=Code
+
+**REPROVADA a garantia universal da 15b; PROCEDENTE a cura dos contraexemplos nomeados nas portas alteradas.** Permanecem o retorno da chave com A2 vazio, a emissão de conversa sobre retratada e a admissão de retratada no fecho. (`app/chamados/services/fio.py:1310`, `app/chamados/services/disputa_emissao.py:431`, `app/chamados/services/fio.py:1467`)
+
+Os contraexemplos abaixo são construções pelo código. Ocorrência deles, números reais e migração integral em produção: **[nao verificado]**.
+
+**1. Itens 3 e 5 anteriores: cura PROCEDENTE nos casos específicos; universalidade NÃO PROCEDENTE.**
+
+| Contraexemplo | Trajeto na 15b |
+|---|---|
+| **3a, episódio retratado** | `_nascer` deriva a origem e consulta o helper; este chama a recusa, que transforma o dia nulo em `BatidaRetratadaNaoEFato`. Não alcança a busca nem o `create`. Repetindo sem mudança dos insumos, repete a recusa. (`app/chamados/models.py:2760`, `app/chamados/models.py:2769`; `app/chamados/services/fio.py:1301`, `app/chamados/services/fio.py:1268`; escrita em `app/chamados/models.py:2867`) |
+| **3b, K sem episódio, respondida, gravada D0, admitida em DIA por A2** | O episódio vivo do pedido fornece DIA; o universo alcança K, a eleição prefere sua resposta e a costura recebe explicitamente `_dia_fato=DIA`. Não relê D0 como identidade nessa costura. (`app/chamados/models.py:2769`, `app/chamados/models.py:2800`, `app/chamados/models.py:2814`, `app/chamados/models.py:2829`; `app/chamados/services/fio.py:1005`; `app/chamados/juizes.py:2006`) |
+| **Variante R, canônica respondida de episódio retratado** | O fecho ainda pode eleger R, mas `_nascer` chama `recusa_batida_retratada(ex)` antes de alterar célula ou destino, inclusive sem destino pedido. Agora recusa pelo motivo correto. (`app/chamados/models.py:2814`, `app/chamados/models.py:2819`, `app/chamados/models.py:2822`) |
+| **3a/3b originais, episódio vivo** | Dia, célula, busca e nascimento usam `_dia_fato`; no reuso, a costura recebe esse mesmo dia. A data gravada antiga é preservada. (`app/chamados/models.py:2769`, `app/chamados/models.py:2789`, `app/chamados/models.py:2800`, `app/chamados/models.py:2829`, `app/chamados/models.py:2867`; `app/chamados/tests/test_e1_v15.py:98`) |
+
+A resolvedora chamada diretamente também passou a consultar A2 para K e a recusar R. (`app/chamados/juizes.py:2008`; `app/chamados/services/fio.py:1301`, `app/chamados/services/fio.py:1309`)
+
+**2. Retorno do pedido/gravado: PROCEDENTE para acervo com A2 vazio.**
+
+Para linha de **fato com episódio**, não há mais esse fallback: recusa quando o juiz não responde; caso contrário, retorna `_dia_do_fato`. Conversa retorna antes desse ramo, portanto continua dispensada mesmo se receber origem explícita. (`app/chamados/services/fio.py:1298`, `app/chamados/services/fio.py:1300`)
+
+Para acervo sem episódio e sem marco, permanece literalmente:
+
+```python
+alc = _dias_alcancados_sem_dia(...)
+if not alc:
+    return d
+```
+
+`d` é pedido, quando fornecido, senão gravada. Logo, “nenhum caminho devolve pedido/gravado para acervo” é **NÃO PROCEDENTE**. (`app/chamados/services/fio.py:1297`, `app/chamados/services/fio.py:1309`)
+
+**A admissão do vazio é compartilhada; a atribuição de um dia não é a mesma operação.** Universo e fecho aceitam alcance vazio porque `set() <= {dia}`. Isso prova compatibilidade com um dia fornecido, não identifica um dia único. Sem dia fornecido e sem alcance, o fecho conserva `_dia=None`. (`app/chamados/services/fio.py:1467`, `app/chamados/services/fio.py:1425`, `app/chamados/services/fio.py:1413`)
+
+Contraexemplo: K isolada, sem episódio/marco, gravada D0. O helper retorna D0; com `pedido=DIA`, retorna DIA. O fecho de K sem dia não infere nenhum; com `dia=DIA`, conserva K. Portanto o helper escolhe a chave onde A2 não respondeu um dia. Esse percurso foi reproduzido em memória com as funções reais e vizinhança vazia; persistência Django: **[nao verificado]**. (`app/chamados/services/fio.py:1297`, `app/chamados/services/fio.py:1311`, `app/chamados/services/fio.py:1414`, `app/chamados/services/fio.py:1433`)
+
+**3. Censo de chamadores e efeito da recusa.**
+
+Censo das chamadas explícitas de produção, incluindo os apelidos encontrados; chamadas dinâmicas arbitrárias: **[nao verificado]**.
+
+| Função | Chamador e efeito |
+|---|---|
+| `resolvedora_valida` | **Plano de fechamento:** uma pergunta retratada que precise reatar deixa de ter destino admissível. (`app/chamados/models.py:392`) |
+| `resolvedora_valida` | **Nascimento, proxy inicial:** usa o dia já calculado; a origem retratada já foi recusada pelo helper. (`app/chamados/models.py:2769`, `app/chamados/models.py:2781`) |
+| `resolvedora_valida` | **Reuso:** usa o dia explícito do fato, após recusa da canônica retratada. (`app/chamados/models.py:2819`, `app/chamados/models.py:2829`) |
+| `resolvedora_valida` | **Reapontamento:** retratada com destino não nulo recusa; descostura sem datação continua permitida pelo retorno antecipado para `chamado=None`. (`app/chamados/services/fio.py:865`; `app/chamados/juizes.py:1999`) |
+| `resolvedora_valida` | **Rechaveamento:** recusa retratada com destino; sem destino, retorna antes da recusa e pode persistir o dia recebido, passando as demais guardas. (`app/chamados/services/fio.py:970`, `app/chamados/services/fio.py:974`; `app/chamados/juizes.py:1999`) |
+| `resolvedora_valida` | **Auditoria I8b:** retratada viva com destino/data passa pela classificação de resolvedora inválida. (`app/chamados/management/commands/auditar_invariantes_chamados.py:891`, `app/chamados/management/commands/auditar_invariantes_chamados.py:896`) |
+| `resolvedora_valida` | **Auditoria I22:** chamado vivo cujas resolvedoras de fato sejam todas recusadas entra na violação; conversas são excluídas. (`app/chamados/management/commands/auditar_invariantes_chamados.py:1045`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1048`) |
+| `dia_do_turno_da_linha` | **Resolvedora**, **nascimento** e **datação no reapontamento**. (`app/chamados/juizes.py:2008`; `app/chamados/models.py:2769`; `app/chamados/services/fio.py:846`) |
+| `recusa_batida_retratada` | **Resolvedora com dia explícito**, **reuso da canônica**, **ramo de episódio do helper** e **confirmação do contador**. (`app/chamados/juizes.py:2005`; `app/chamados/models.py:2819`; `app/chamados/services/fio.py:1301`, `app/chamados/services/fio.py:1544`) |
+
+**Fechamento recusado: PROCEDENTE, condicionalmente.** O caminho exato é:
+
+1. `_ancoradas` reúne não validadas pelo destino ou pelo chamado da disputa. `_vivas_entre` conserva as de competência aberta que continuam vivas pelo C6 no pós-estado. (`app/chamados/models.py:344`, `app/chamados/models.py:364`, `app/chamados/models.py:368`)
+2. O plano procura sobrevivente usando **data gravada**; havendo sobrevivente, consulta a resolvedora. (`app/chamados/models.py:390`, `app/chamados/models.py:392`)
+3. Resolvedora → helper → recusa retratada → `(False, texto)`. O plano devolve `reatas=None`. (`app/chamados/juizes.py:2008`, `app/chamados/juizes.py:2009`; `app/chamados/services/fio.py:1301`; `app/chamados/models.py:393`)
+4. O gate devolve `False`; reconciliação/cancelamento abortam antes de gravar o fechamento. (`app/chamados/models.py:422`, `app/chamados/models.py:431`, `app/chamados/models.py:685`, `app/chamados/models.py:786`)
+
+Isso pode impedir um fechamento que antes conseguiria reatar a pergunta. Não vale para toda retratada: ela precisa sobreviver aos filtros anteriores. Sem viva, o gate permite. (`app/chamados/models.py:364`, `app/chamados/models.py:368`, `app/chamados/models.py:420`)
+
+O motivo específico é perdido nesse plano: o registro usa `pergunta_viva_na_competencia_aberta` e afirma ausência de cobrança receptora, inclusive quando a cobrança existe e a pergunta foi recusada. (`app/chamados/models.py:392`, `app/chamados/models.py:425`)
+
+**4. Caminho que ainda gera conversa sobre retratada: PROCEDENTE.**
+
+Contraexemplo: `ultima_batida.id=br` retratada, motivo `gps_ausente`, sem data no contexto do motivo e sem conversa anterior. O motivo é BATIDA e sua resposta é `escolha`. (`app/chamados/catalogo/motivos.py:42`; `app/chamados/catalogo/perguntas.py:88`)
+
+O derivador aceita a origem pelo dono, sem filtrar retratação; assim, não entra no dedup inicial reservado à ausência de episódio. O juiz retorna `None`, `_dia_p` fica nulo e somente perguntas de `hora` são descartadas. (`app/chamados/models.py:3316`; `app/chamados/services/disputa_emissao.py:325`, `app/chamados/services/disputa_emissao.py:391`, `app/chamados/services/disputa_emissao.py:424`)
+
+O emissor então chama **`abrir_conversa`**. A conversa não deriva origem, o helper retorna o dia civil antes da recusa e a resolvedora também aprova conversa antecipadamente. É o bug no chamador abrangido pelo aval fornecido. (`app/chamados/services/disputa_emissao.py:431`, `app/chamados/services/disputa_emissao.py:439`; `app/chamados/models.py:2756`, `app/chamados/models.py:3297`; `app/chamados/services/fio.py:1298`; `app/chamados/juizes.py:1997`)
+
+Também há reabertura sem a recusa nova: pergunta respondida sobre retratada, sem materialização, pode entrar em `perguntas_corrigiveis`, alcançar `reabrir_por_colab` e voltar a pendente pelo `update` de `reabrir_para_correcao`. Se “reatar pergunta” abrange voltar a pedi-la, é outro escape. (`app/chamados/juizes.py:1412`, `app/chamados/juizes.py:1245`; `app/chamados/models.py:2226`, `app/chamados/models.py:2235`; `app/chamados/services/disputa_emissao.py:1494`, `app/chamados/services/disputa_emissao.py:1533`)
+
+**5. Ramo antigo `FatoEmOutroDia`: inalcançável com identidade íntegra; não há prova universal de inacessibilidade.**
+
+Com episódio vivo, o helper obtém D e o memo por episódio fornece D às linhas desse episódio. Havendo linha da mesma base, ela semeia `datadas`; o universo não fica vazio. Episódio retratado recusa antes. Portanto o comentário de que o ramo “sobra só para retratada” ficou obsoleto. (`app/chamados/services/fio.py:1243`, `app/chamados/services/fio.py:1465`, `app/chamados/services/fio.py:1481`, `app/chamados/services/fio.py:1301`; `app/chamados/models.py:2807`)
+
+Há, porém, este **contraexemplo de acervo inconsistente**:
+
+- P pertence à disputa de C2 e tem origem explícita b, batida viva de C1. O `save` confere colaborador contra disputa, mas só deriva a origem quando ausente; a checagem do dono existe no derivador. (`app/chamados/models.py:3282`, `app/chamados/models.py:3297`, `app/chamados/models.py:3316`)
+- `abrir(C1,b)` obtém D. `do_fato` encontra P pelo episódio/motivo sem filtrar colaborador. (`app/chamados/models.py:2769`, `app/chamados/models.py:2647`)
+- O universo recusa P pela **base C2**, fica vazio e entrega P nas recusadas. O ramo antigo encontra o mesmo episódio e levanta `FatoEmOutroDia`, embora a divergência seja de dono. (`app/chamados/services/fio.py:1463`, `app/chamados/services/fio.py:1481`, `app/chamados/services/fio.py:1486`; `app/chamados/models.py:2802`, `app/chamados/models.py:2810`)
+
+Esse acervo e um chamador atual de produção que o persista: **[nao verificado]**. A porta `abrir` 15b de C2 já recusaria a origem incompatível antes desse nascimento. (`app/chamados/services/fio.py:1248`, `app/chamados/services/fio.py:1301`)
+
+**6. Retratada admitida no fecho por A2: PROCEDENTE.**
+
+`_dia_do_fato` retorna nulo para a retratada; universo e fecho tratam esse nulo pelo mesmo ramo de A2, sem chamar a recusa. A premissa do teste novo confirma que R pode ser a canônica do universo de DIA. (`app/chamados/services/fio.py:1248`, `app/chamados/services/fio.py:1467`, `app/chamados/services/fio.py:1425`; `app/chamados/tests/test_e1_v15b.py:132`)
+
+Consequências concretas:
+
+- **Eleição:** R respondida vence A viva; `_nascer` recusa R depois da eleição, sem tentar outra canônica. Uma solicitação legítima sobre A pode, portanto, ser barrada por R. (`app/chamados/services/fio.py:1005`; `app/chamados/models.py:2814`, `app/chamados/models.py:2819`)
+- **Dedup/backfill:** continuam elegendo sobre esse universo. O plano conta R como episódio; A+R pode produzir `episodios_unidos`, impedindo retratação. (`app/chamados/management/commands/dedup_perguntas_fato.py:76`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:265`; `app/chamados/services/fio.py:1060`, `app/chamados/services/fio.py:1065`)
+- **Migração de resolvedoras:** também elege R; quando tenta reapontá-la, pode receber a recusa nova. A eleição em si não foi saneada. (`app/chamados/services/fio.py:1753`, `app/chamados/services/fio.py:1772`)
+- **Migração de data:** R pode integrar o universo do grupo e seu dia gravado participar do veto de competência. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:254`, `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:277`)
+
+**7. Contador: PROCEDENTE no universo declarado; não conta todas as perguntas/conversas sobre retratada.**
+
+Conta linhas persistidas com `conversa=False`, origem preenchida, fora de `VIAS_FORA_DO_FATO`, cuja origem esteja fora de `batidas_apuraveis(None)`. Não filtra viva, resposta, validação, destino ou horizonte. (`app/chamados/services/fio.py:1537`)
+
+A autoridade consultada inclui todos os colaboradores e define apuráveis por `retratada_em IS NULL`. Cada candidata é confirmada pela **função real** da recusa, acumulando somente `BatidaRetratadaNaoEFato`. (`app/ponto/turnos.py:2865`, `app/ponto/turnos.py:2871`; `app/chamados/services/fio.py:1544`)
+
+O leitor imprime número, esperado, motivo e pks no backfill, antes da distinção entre DRY e apply. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:534`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:546`)
+
+Não conta tentativas recusadas sem INSERT, conversas do escape do item 4 ou linhas já fora do fato. Portanto não serve como prova de ausência universal do bug nem como contador de tentativas recusadas. (`app/chamados/services/fio.py:1537`, `app/chamados/services/fio.py:1538`; `app/chamados/services/disputa_emissao.py:439`)
+
+**8. Catraca: PROCEDENTE a mordida oficial; garantia semântica completa NÃO PROCEDENTE.**
+
+Os 11 métodos AST de P13/V15 passaram na execução em memória, substituindo `SimpleTestCase` por `unittest.TestCase`, sem executar Django/BD. Isso inclui os 13 mutantes oficiais e o mutante adicional do parâmetro do fecho. Suíte Django/BD: **[nao verificado]**. (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:141`; `app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:235`, `app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:263`, `app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:304`)
+
+Os escapes demonstrados em memória incluem:
+
+| Escape | Por que passa |
+|---|---|
+| `alc = set()` | Fiscaliza formato dos retornos, não a procedência de `alc`; passa a devolver sempre a chave no acervo. (`app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:148`, `app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:157`) |
+| Recusa chamada com proxy `conversa=True` | Verifica nome/posição, não argumentos; esse proxy é dispensado pela recusa. (`app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:164`; `app/chamados/services/fio.py:1266`) |
+| Guarda inicial da resolvedora trocada por `if True` | A fiscalização das atribuições não prova que o fluxo chega nelas. (`app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:121`; retorno em `app/chamados/juizes.py:1997`) |
+| `_dia += timedelta(days=1)` | A ligação ao juiz só acompanha `Assign`, ignorando `AugAssign`. (`app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:71`) |
+| `p.data_evento: object = data_evento` dentro da porta | V15 ignora `AnnAssign`; P13 detecta localização e aceita a porta. (`app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:90`; `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:84`, `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:119`) |
+| `update(**kw)` / `bulk_update(ps, campos)` com variáveis | P13 não acompanha os valores dessas variáveis. (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:93`, `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:105`) |
+
+Rechaveamento continua fiscalizado pelo **arquivo chamador**, sem provar o valor recebido ou escrito. A aceitação explícita de `return d` com A2 vazio também mantém verde o problema do item 2. (`app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:217`, `app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:260`, `app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:155`)
+
+**9. Escritores, leitores e significados.**
+
+| Campo/valor | Quem escreve/fornece | Quem lê |
+|---|---|---|
+| `data_evento` | Nascimento `_dia_fato`; datação `_dia`; rechaveamento `novo_dia`. Apply obtém juiz; reversão obtém arquivo. (`app/chamados/models.py:2867`; `app/chamados/services/fio.py:849`, `app/chamados/services/fio.py:968`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:147`, `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:412`) | Busca/índice pela gravada; marco pela gravada; C6, tranca e plantio continuam lendo gravada. Costura usa helper ou parâmetro explícito. (`app/chamados/models.py:2678`, `app/chamados/models.py:3332`; `app/chamados/services/fio.py:1250`; `app/chamados/juizes.py:336`, `app/chamados/juizes.py:948`, `app/chamados/juizes.py:2006`; `app/chamados/services/materializacao.py:345`) |
+| `celula` | Nascimento/reuso escolhem por `_dia_fato`; rechaveamento por `novo_dia`. (`app/chamados/models.py:2789`, `app/chamados/models.py:2823`, `app/chamados/models.py:2868`; `app/chamados/services/fio.py:965`, `app/chamados/services/fio.py:969`) | C6 exige compatibilidade entre dia da célula e `data_evento`; guarda terminal consulta o pós-estado. (`app/chamados/juizes.py:638`; `app/chamados/services/fio.py:779`) |
+| `chamado_destino` | Nascimento, reuso após guardas, reapontamento. (`app/chamados/models.py:2868`, `app/chamados/models.py:2839`; `app/chamados/services/fio.py:877`) | Âncora do fio, fechamento, guarda terminal e plantio. (`app/chamados/services/fio.py:117`; `app/chamados/models.py:345`; `app/chamados/services/fio.py:770`; `app/chamados/services/materializacao.py:339`) |
+| `batida_origem_id` | Explícita ou derivada antes do helper; inserção deriva quando ausente. (`app/chamados/models.py:2760`, `app/chamados/models.py:3297`) | Busca do episódio, juiz, recusa, contador, chave da família e veto de episódios unidos. (`app/chamados/models.py:2647`; `app/chamados/services/fio.py:1242`, `app/chamados/services/fio.py:1266`, `app/chamados/services/fio.py:1537`, `app/chamados/services/fio.py:1131`, `app/chamados/services/fio.py:1060`) |
+| `dia_da_chave` | Helper fornece pedido/gravada. (`app/chamados/services/fio.py:1297`, `app/chamados/services/fio.py:1309`) | Modifica a consulta inicial de vizinhança e sua chave de cache; passos seguintes usam as chaves dos vizinhos. (`app/chamados/services/fio.py:1336`, `app/chamados/services/fio.py:1358`, `app/chamados/services/fio.py:1367`, `app/chamados/services/fio.py:1204`) |
+| Parâmetro `dia_do_fato` | `_nascer` fornece `_dia_fato` ao proxy e à canônica. (`app/chamados/models.py:2781`, `app/chamados/models.py:2829`) | Resolvedora faz a recusa e usa o parâmetro diretamente. (`app/chamados/juizes.py:2004`) |
+
+**Divergência de significado residual: PROCEDENTE.** Reuso pode atribuir célula/destino de DIA e conservar `data_evento=D0`; a costura aceita DIA, C6 descarta a célula divergente e tranca calcula competência por D0. O teste preserva expressamente essa divergência. (`app/chamados/models.py:2823`, `app/chamados/models.py:2839`; `app/chamados/tests/test_e1_v15.py:98`; `app/chamados/juizes.py:2006`, `app/chamados/juizes.py:638`, `app/chamados/juizes.py:948`)
+
+O uso civil da conversa tem discriminador explícito. A premissa de que todo fato já teria “gravada == juiz” não está demonstrada pela cópia. (`app/chamados/models.py:2717`, `app/chamados/models.py:2722`; `app/chamados/tests/test_e1_v15.py:99`)
+
+**10. Classes de reprova.**
+
+| Classe | Veredito |
+|---|---|
+| **S
+
+[truncado em 20000 de 22550 caracteres]
+
+## 08/11 12:09 · sessao 2c277a08ce1c · - · - · origem=Ronald (tmux)
+
+**7. Contador — PROCEDENTE no universo declarado, insuficiente como contador de recusas/tentativas.**
+
+- Conta linhas persistidas `conversa=False`, com `batida_origem`, fora de `VIAS_FORA_DO_FATO`, cujo episódio não está em `batidas_apuraveis(None)`. Não exige pergunta viva, não validada, horizonte, destino ou ausência de resposta. (`app/chamados/services/fio.py:1537`; `app/chamados/services/fio.py:1540`)
+- `VIAS_FORA_DO_FATO` contém somente `duplicata` e `motivo_retratado`. (`app/chamados/models.py:2318`)
+- `batidas_apuraveis(None)` inclui todos os colaboradores e filtra `retratada_em IS NULL`; portanto o complemento seleciona episódios retratados, sob integridade normal da FK. (`app/ponto/turnos.py:2865`; `app/ponto/turnos.py:2871`)
+- Cada candidata é confirmada pela função real `recusa_batida_retratada`; somente a exceção `BatidaRetratadaNaoEFato` acumula o pk. Retorna n, esperado=0, motivo e pks. (`app/chamados/services/fio.py:1542`; `app/chamados/services/fio.py:1548`)
+- O leitor de produção imprime `PERGUNTA_SOBRE_RETRATADA dry`, antes de distinguir `--aplicar`; logo também aparece no apply. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:534`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:546`)
+- Não conta tentativas recusadas sem INSERT, nem conversas sobre batida retratada, nem linhas já marcadas duplicata/motivo_retratado. Esse alcance resulta dos filtros, independentemente do título do contador. (`app/chamados/services/fio.py:1537`; `app/chamados/services/fio.py:1546`)
+- N real de produção: **[nao verificado]**.
+
+**8. Catraca — PROCEDENTE a mordida dos mutantes oficiais; NÃO PROCEDENTE como garantia semântica universal.**
+
+Executei exclusivamente os ASTs em memória, com `python3 -B`, substituindo `SimpleTestCase` por `unittest.TestCase` e removendo os imports Django. Os 11 métodos passaram: três P13 e oito V15, incluindo os 13 mutantes de `test_a_catraca_MORDE` e o mutante adicional de `dia_do_fato`. Isso verifica a lógica AST desses métodos, sem BD ou execução dos caminhos Django. Os métodos/mutantes estão em `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:141`, `app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:235`, `app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:263`, `app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:304`. Suíte Django/BD: **[nao verificado]**.
+
+Censo real encontrado pelos ASTs:
+
+| Local | Linha |
+|---|---|
+| `_nascer`, proxy | `app/chamados/models.py:2777` |
+| `_nascer`, INSERT | `app/chamados/models.py:2867` |
+| `reapontar_resolvedora`, valor | `app/chamados/services/fio.py:849` |
+| `reapontar_resolvedora`, desfazimentos em memória | `app/chamados/services/fio.py:861`, `app/chamados/services/fio.py:870` |
+| `rechavear_data_evento`, valor/save | `app/chamados/services/fio.py:968`, `app/chamados/services/fio.py:974` |
+
+Os novos mutantes detectam regressões literais em setattr/bulk, retirada da recusa, fallback `or d`, mudança da guarda de A2 e leitura da gravada no parâmetro do fecho. (`app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:275`; `app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:295`)
+
+Escapes demonstrados em memória, todos com detector retornando `[]`:
+
+1. Trocar a origem de `alc` por `alc = set()`. O helper passa a devolver sempre a chave no ramo acervo; a catraca verifica formas dos returns/guardas, não a origem ou conteúdo de `alc`. (`app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:148`; `app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:176`; escrita real de alc em `app/chamados/services/fio.py:1309`)
+2. Chamar `recusa_batida_retratada` com proxy `conversa=True`, em vez de p. A catraca verifica nome/posição da chamada, não argumentos; a recusa retorna imediatamente nesse proxy. (`app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:164`; `app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:169`; `app/chamados/services/fio.py:1266`)
+3. Trocar a guarda inicial de conversa da resolvedora por `if True`, preservando as atribuições abaixo. A catraca não verifica early returns/controle de fluxo completo. (`app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:121`; `app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:138`; retorno real em `app/chamados/juizes.py:1997`)
+4. Dentro da porta, `p.data_evento: object = data_evento`: V15 ignora `AnnAssign`; P13 detecta a escrita, mas aceita sua localização. (`app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:89`; `app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:95`; `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:84`; `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:119`)
+5. Após `_dia = dia_do_turno_da_linha(...)`, acrescentar `_dia += datetime.timedelta(days=1)`. A ligação ao juiz só examina `Assign`, ignorando `AugAssign`; a escrita continua aceita. (`app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:67`; `app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:81`)
+6. `kw={'data_evento':d}; qs.update(**kw)` e `campos=['data_evento']; qs.bulk_update(ps,campos)` escapam do P13; a variável não é rastreada. A primeira forma também escapa da fiscalização V15 dentro da porta. (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:93`; `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:105`; `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:108`; `app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:97`)
+7. Rechaveamento só tem fiscalização de arquivo chamador nesta V15; a procedência do argumento e o valor escrito no corpo de `rechavear_data_evento` não são examinados. (`app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:217`; `app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:232`; `app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:260`)
+
+**10. Segundo juiz — NÃO PROCEDENTE no trajeto geométrico examinado.**
+
+`recusa_batida_retratada` não replica `retratada_em` nem pareia turnos: transforma o `None` de `_dia_do_fato` em exceção. `_dia_do_fato` consulta `dia_do_turno_da_batida`; esta consulta `dia_das_batidas`, que chama `turnos_do_colab`, autoridade registrada para `_T1`. (`app/chamados/services/fio.py:1268`; `app/chamados/services/fio.py:1248`; `app/ponto/turnos.py:2925`; `app/ponto/turnos.py:2902`; `app/core/juizes.py:196`)
+
+O contador também consulta a autoridade do universo, em vez de replicar o filtro. (`app/chamados/services/fio.py:1539`; `app/ponto/turnos.py:2846`)
+
+Limite semântico: a recusa chama “retratada” qualquer episódio cujo juiz resulte `None`, incluindo batida inexistente ou incompatibilidade de colaborador; não verifica literalmente a retratação. `_dia_do_fato` retorna None quando não encontra a FK, e o juiz consulta o mapa do colaborador da linha. (`app/chamados/services/fio.py:1247`; `app/chamados/services/fio.py:1248`; `app/chamados/services/fio.py:1268`; `app/ponto/turnos.py:2925`) Ocorrência desses estados em produção: **[nao verificado]**.
+
+`JUIZES.md` declara-se lookup e aponta para o registro vivo; a classificação acima usa `core/juizes.py`, não apenas o comentário do diff. (`app/docs/JUIZES.md:7`; `app/docs/JUIZES.md:12`)
+
+## 08/11 12:09 · sessao 07c04253531a · - · - · origem=Ronald (tmux)
+
+**Item 5: inalcançável com identidade íntegra; alcançável com acervo de episódio atribuído a outro colaborador.** O código atual permite esse estado pelo `save`, embora `abrir` 15b já não o gere (`app/chamados/models.py:3279`, `:3285`, `:3297`; `app/chamados/services/fio.py:1300`, `:1301`).
+
+Prova no caso íntegro: pedido com episódio vivo produz D; o memo é indexado pelo episódio, então todas as linhas desse episódio recebem D; com mesma base, entram em `datadas`, tornam as sementes não vazias e impedem a condição `not _linhas_do_fato` (`app/chamados/services/fio.py:1243`, `:1248`, `:1249`, `:1463`, `:1465`, `:1466`, `:1481`, `:1482`; `app/chamados/models.py:2802`). Episódio retratado é recusado antes de chegar ao ramo (`app/chamados/services/fio.py:1300`, `:1301`; `app/chamados/models.py:2769`).
+
+Contraexemplo estático:
+
+1. P persistida na disputa de C2, com `colaborador=C2` e `batida_origem=b`, sendo b uma batida viva de C1. O `save` confere colaborador contra a disputa, mas não confere dono da batida explícita; essa conferência existe apenas no derivador, que não é chamado quando o episódio já está preenchido (`app/chamados/models.py:3282`, `:3297`, `:3298`, `:3316`).
+2. `abrir` para C1, episódio b, julga b para C1 e obtém D (`app/chamados/models.py:2769`, `:2772`; `app/chamados/services/fio.py:1247`, `:1248`).
+3. `do_fato` busca pelo episódio e motivo, sem filtrar colaborador, e encontra P (`app/chamados/models.py:2647`, `:2648`, `:2649`).
+4. `universo_do_fato` recusa P pela base C2, não pelo dia; sem outras linhas, devolve universo vazio e P em `recusadas` (`app/chamados/services/fio.py:1463`, `:1464`, `:1481`, `:1483`, `:1486`).
+5. O ramo antigo testa somente universo vazio + mesmo episódio nas recusadas e levanta `FatoEmOutroDia`, atribuindo causa de dia a uma recusa de dono (`app/chamados/models.py:2802`, `:2810`, `:2811`).
+
+A existência desse acervo em produção e um chamador de produção atual que persista essa inconsistência: **[nao verificado]**.
+
+## 08/11 12:08 · sessao fc923f307369 · - · - · origem=Ronald (tmux)
+
+**Censo explícito de produção** (apelidos incluídos; chamadas dinâmicas arbitrárias: [nao verificado]):
+
+| Função | Chamadas |
+|---|---|
+| `resolvedora_valida` | `app/chamados/models.py:392`, `:2781`, `:2829`; `app/chamados/services/fio.py:865`, `:970`; `app/chamados/management/commands/auditar_invariantes_chamados.py:896` (`_rv8b`), `:1048` (`_rv22`). |
+| `dia_do_turno_da_linha` | `app/chamados/juizes.py:2008`; `app/chamados/models.py:2769`; `app/chamados/services/fio.py:846`. |
+| `recusa_batida_retratada` | `app/chamados/juizes.py:2005`; `app/chamados/models.py:2819`; `app/chamados/services/fio.py:1301`, `:1544`. |
+
+**Mudanças por chamador:**
+
+- Nascimento: episódio retratado recusa no helper antes da validação inicial e da escrita; canônica retratada também recusa antes do reuso, inclusive sem destino. (`app/chamados/models.py:2769`, `:2819`)
+- Costuras iniciais/reuso: `dia_do_fato` só entra após `recusa_batida_retratada`; costuras externas usam helper e recebem `(False, motivo textual)`. (`app/chamados/juizes.py:2003-2010`; `app/chamados/models.py:2781`, `:2829`)
+- Reapontamento: datar retratada recusa em `fio.py:846-848`; já datada com destino não nulo recusa em `fio.py:865-871`. **Descostura sem datação continua permitida**, pois `resolvedora_valida(None,p)` retorna antes da recusa. (`app/chamados/juizes.py:1999-2000`)
+- Rechaveamento: com destino não nulo, retratada passa a recusar em `fio.py:970-972`; sem destino o juiz retorna verdadeiro e a porta pode persistir `novo_dia` fornecido, se demais guardas permitirem. Alcance pelo gatilho de migração depende dos filtros deste. (`app/chamados/services/fio.py:950-974`; `app/chamados/juizes.py:1999-2000`)
+- Auditor I8b passa a classificar retratada viva com destino/data como inválida, depois separa os subpisos. Rótulo continua “OUTRO TURNO”. (`app/chamados/management/commands/auditar_invariantes_chamados.py:891-918`, `:935-936`)
+- Auditor I22 passa a contar chamado vivo cujas resolvedoras de fato sejam todas recusadas por retratação; conversas ficam excluídas. (`app/chamados/management/commands/auditar_invariantes_chamados.py:1041-1049`)
+- Contador chama recusa real para confirmar cada candidata. (`app/chamados/services/fio.py:1542-1546`)
+
+**Fechamento recusado: PROCEDENTE, com as condições do gate.**
+
+1. `_ancoradas` busca não validadas pelo destino ou pelo chamado da disputa. (`app/chamados/models.py:344-347`)
+2. `_vivas_entre` exige continuar ancorada, competência aberta (`is False`) e C6 viva no pós-estado do chamado. Retratação do episódio não é filtro aqui. (`app/chamados/models.py:349-369`)
+3. `_plano_pergunta_viva` procura sobrevivente usando **data gravada**, não helper. Havendo sobrevivente, chama resolvedora. (`app/chamados/models.py:390-392`)
+4. Resolvedora → helper → recusa retratada → `(False, 'batida_retratada: ...')`. (`app/chamados/juizes.py:2008-2010`; `app/chamados/services/fio.py:1301`, `:1268-1272`)
+5. Plano devolve `reatas=None`; gate devolve `False`. O log **perde o motivo específico**: registra `pergunta_viva_na_competencia_aberta` e descreve inexistência de cobrança receptora mesmo quando ela existe, mas rejeitou a pergunta. (`app/chamados/models.py:392-393`, `:422-431`)
+6. Reconciliar aborta decisão; cancelar/encerrar/encerrar por competência abortam antes da escrita de estado. (`app/chamados/models.py:685-689`, `:786-788`, `:1604-1606`, `:1624-1626`)
+
+Logo, não é “qualquer pergunta retratada bloqueia qualquer fechamento”: a pergunta deve sobreviver ao filtro C6 e competência no pós-estado; sem viva, gate permite. (`app/chamados/models.py:364-369`, `:420-421`)
+
+**Escape de produção confirmado: conversa sobre retratada.**
+
+Contraexemplo estático: disputa com `contexto['ultima_batida']['id']=br` retratada, sem `contexto['gps_ausente']['data']`, emissão de `gps_ausente`, sem conversa anterior desse motivo. O motivo é BATIDA e sua pergunta é `escolha`. (`app/chamados/catalogo/motivos.py:42`; `app/chamados/catalogo/perguntas.py:88-91`)
+
+O derivador de origem aceita `br` por colaborador, sem filtrar `retratada_em`, portanto o dedup inicial de motivo sem episódio não barra. (`app/chamados/models.py:3310-3316`; `app/chamados/services/disputa_emissao.py:325-328`) O juiz de `ultima_batida` responde `None`; `_dia_p` fica nulo; apenas tipo `hora` é descartado. (`app/chamados/services/disputa_emissao.py:387-392`, `:424-430`) Cai em `abrir_conversa`, caminho cujo próprio comentário menciona episódio retratado. (`app/chamados/services/disputa_emissao.py:431-441`) Conversa não deriva origem no nascimento nem no save; helper retorna dia civil antes da recusa. (`app/chamados/models.py:2755-2762`, `:3297-3298`; `app/chamados/services/fio.py:1297-1301`) Se destino existir, resolvedora também aprova conversa antes da recusa. (`app/chamados/juizes.py:1997-1998`) O contador exclui conversas. (`app/chamados/services/fio.py:1536`)
+
+**Portanto PROCEDENTE o bug no chamador indicado pelo aval; ocorrência desse estado em produção: [nao verificado].** (`app/chamados/services/disputa_emissao.py:431-441`)
+
+**Outro caminho de voltar a pedir resposta, se “reatar” abranger reabertura:** pergunta respondida sobre episódio retratado, sem `materializada_em`, pode voltar a pendente por `reabrir_por_colab`: `perguntas_corrigiveis` exige respondida e sem lastro/viva; sem carimbo satisfaz independentemente do episódio; a porta chama `reabrir_para_correcao`, que zera resposta/validação por update sem consultar a recusa nova. (`app/chamados/juizes.py:1412-1414`, `:1245`; `app/chamados/models.py:2226-2235`; `app/chamados/services/disputa_emissao.py:1494`, `:1530-1534`) Ocorrência em produção: [nao verificado].
+
+## 08/11 12:08 · sessao 07c04253531a · - · - · origem=Ronald (tmux)
+
+Achados dos campos e consequências:
+
+| Campo/valor | Escritores | Leitores relevantes |
+|---|---|---|
+| `data_evento` | Nascimento usa `_dia_fato` (`app/chamados/models.py:2867`); datação usa `_dia` e salva (`app/chamados/services/fio.py:846`, `:849`, `:879`); rechaveamento usa `novo_dia` (`app/chamados/services/fio.py:968`, `:974`). Apply da migração obtém juiz (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:147`, `:154`, `:358`); reversão usa arquivo (`:412`, `:423`). | Chave do `do_fato` e busca (`app/chamados/models.py:2647`); dia próprio de marco (`app/chamados/services/fio.py:1250`); C6 lê gravada (`app/chamados/juizes.py:336`), tranca calcula competência por ela (`:948`, `:961`); plantio combina dia gravado com hora (`app/chamados/services/materializacao.py:344`, `:345`, `:414`, `:421`). |
+| `celula` | Nascimento/reuso consulta dia `_dia_fato`, atribui e salva (`app/chamados/models.py:2789`, `:2823`, `:2863`, `:2868`); rechaveamento procura `novo_dia`, atribui FK e salva (`app/chamados/services/fio.py:965`, `:969`, `:974`). | C6 usa FK somente se dia da célula e `data_evento` coincidirem (`app/chamados/juizes.py:634`, `:638`, `:642`); a costura terminal chama C6 no pós-estado (`app/chamados/services/fio.py:779`, `:781`). |
+| `chamado_destino` | Nascimento (`app/chamados/models.py:2868`); reuso após E4-c e guarda terminal (`:2829`, `:2837`, `:2839`, `:2863`); reapontamento (`app/chamados/services/fio.py:865`, `:867`, `:877`, `:879`). Atribuições `models.py:367` e `fio.py:779` são projeções em memória, a última desfeita em `:783`. | Âncora da listagem (`app/chamados/services/fio.py:117`); lookup da disputa (`:135`); status terminal (`:770`); destino do plantio (`app/chamados/services/materializacao.py:339`); E4-c compara o dia do chamado (`app/chamados/juizes.py:2018`, `:2027`). |
+| `batida_origem_id` | Explícita ou derivada antes de pedir dia (`app/chamados/models.py:2760`, `:2762`), persistida no create via `campos` (`:2868`); derivação de inserção no save quando ausente (`:3269`, `:3297`, `:3298`). Derivador usa família BATIDA, contexto da disputa e confere colaborador, sem conferir retratação (`:3310`, `:3312`, `:3316`). | Busca de episódio (`app/chamados/models.py:2647`); juiz (`app/chamados/services/fio.py:1242`, `:1247`, `:1248`); recusa (`:1266`, `:1268`); chave da família (`:1131`); contagem de episódios no plano (`:1060`). |
+| `dia_da_chave` | Helper passa `d`, que é pedido se disponível, senão gravada (`app/chamados/services/fio.py:1297`, `:1309`). | Só altera pergunta de vizinhança das sementes (`:1358`, `:1361`); vizinhos posteriores usam suas chaves (`:1367`); cache inclui override (`:1336`, `:1337`); `do_fato` recebe override (`:1204`). |
+| `dia_do_fato` parâmetro | Somente `_nascer` passa `_dia_fato` ao proxy e à canônica (`app/chamados/models.py:2781`, `:2829`), valor obtido do helper (`:2769`). | `resolvedora_valida` chama recusa e usa parâmetro diretamente (`app/chamados/juizes.py:2004`, `:2005`, `:2006`); sem parâmetro, consulta helper (`:2008`). |
+
+**Campo com significados divergentes — PROCEDENTE no acervo reusado.** A porta pode mudar célula/destino para DIA e conservar `data_evento=D0`; o teste faz essa preservação explicitamente (`app/chamados/models.py:2823`, `:2839`, `:2863`; `app/chamados/tests/test_e1_v15.py:98`, `:99`). E4-c passa pelo dia do fato enquanto C6/tranca/plantio continuam lendo gravada; C6 rejeita alimentação da célula divergente e tranca calcula competência de D0 (`app/chamados/juizes.py:2006`, `:336`, `:638`, `:948`, `:961`; `app/chamados/services/materializacao.py:345`, `:414`). Migração integral de produção e execução concreta de plantio nesse estado: **[nao verificado]**.
+
+A própria função de identidade declara dois papéis para `data_evento`: chave gravada de localização e identidade calculada pelo juiz (`app/chamados/services/fio.py:1231`, `:1232`, `:1233`). Conversa também usa campo como dia civil, com discriminador explícito (`app/chamados/models.py:2717`, `:2718`, `:2722`; `app/chamados/services/fio.py:1298`, `:1299`).
+
+**Consequências de R retratada admitida pelo fecho:** a eleição não chama recusa e considera resposta/menor id (`app/chamados/services/fio.py:1004`, `:1005`, `:1006`). `plano_de_retratacao` conta R como episódio e pode declarar `episodios_unidos` entre R e A vivo, bloqueando retratação (`:1060`, `:1065`, `:1066`).
+
+- Dedup DRY elege essa canônica e aplica plano (`app/chamados/management/commands/dedup_perguntas_fato.py:76`, `:81`); apply delega ao backfill (`:104`, `:105`).
+- Backfill elege a mesma canônica e chama o plano, sem recusa da canônica (`app/chamados/management/commands/backfill_decisoes_pergunta.py:265`, `:279`, `:284`, `:320`).
+- Migração de resolvedoras elege canônica do universo; se R é a própria pergunta no chamado antigo, tenta reapontar e recebe recusa pela E4-c (`app/chamados/services/fio.py:1753`, `:1763`, `:1772`, `:1773`, `:865`). Se R é canônica externa, a eleição por si não passa pela recusa (`:1753`, `:1763`, `:1778`).
+- Migração de data inclui R nos membros do grupo e lê seu dia gravado no veto de competência (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:254`, `:277`, `:279`, `:280`).
+
+**Travas/relógio/escritor extra:** `_nascer` trava colaborador antes da nova resolução e consultas (`app/chamados/models.py:2735`, `:2739`, `:2769`). Reapontamento resolve `_dia` antes do atomic interno, mas toma trava de colaborador antes da guarda de Chamado e do save (`app/chamados/services/fio.py:846`, `:852`, `:858`, `:864`, `:867`, `:879`); isso é leitura anterior à trava, sem nova aquisição invertida nesse trecho. Rechaveamento toma Colaborador/Disputa/Pergunta por porta (`:956`, `:957`) e resolvedora não adquire trava (`app/chamados/juizes.py:2003`, `:2008`). O novo diff não acrescenta leitura de relógio; conversa mantém `localdate()` na borda (`app/chamados/models.py:2722`). Auditoria transitiva universal de travas/relógios e formas dinâmicas de escrita: **[nao verificado]**.
 
 ## 08/11 11:32 · sessao ab592c50e326 · FIO-E0-V4-E1 · verificador · origem=Code
 
@@ -883,201 +1159,4 @@ MEDIDA — gerador e moldes existentes:
 - Uma prova específica precisaria vincular processo vivo/chamada ao **mesmo censo e obra**, por exemplo identidade `CODEX_OBRA` conferível no produtor ou sinal próprio com progresso. A existência desse mecanismo é **[não verificado]**; aceitar somente “espera Codex” abre espera sem produtor, e aceitar qualquer processo Codex permite que outra obra justifique a parada. A insuficiência do código atual se apoia em `bin/hook_stop_fila1.py:656`, `bin/hook_stop_fila1.py:673`, `bin/hook_stop_fila1.py:535`.
 - Processo Codex real ativo, acesso a `/proc` em produção e resultado dos selos nesta auditoria: **[não verificado]**.
 
-## 08/11 10:41 · sessao 16d8ac42b6cf · CENSO-ANTES-DA-VAGA-HOOK · leitura · origem=Code
-
-**O contrato ainda não está implementado nesta árvore:** `ESPERANDO: censo <OBRA> | Codex` retorna **“produtor nao declarado em 1 palavra”**; o parser atual exige produtor único e campos `pid=`/`arquivo=`. (`bin/hook_stop_fila1.py:658–674`)
-
-**(i) Identidade em `/proc`**
-
-Depois da passagem pelo shebang, já executando o corpo do wrapper:
-
-| Chamada | `/proc/<pid>/exe` | `argv[0]` | `argv[1]` |
-|---|---|---|---|
-| `bin/codex_pergunta.sh ...` | Executável do Bash | `bash` | `bin/codex_pergunta.sh` |
-| `bash bin/codex_pergunta.sh ...` | Executável do Bash | `bash` | `bin/codex_pergunta.sh` |
-
-A primeira forma usa `#!/usr/bin/env bash`; a segunda explicita esse interpretador. O caminho absoluto concreto de `exe` nesta execução é **[não verificado]**. (`bin/codex_pergunta.sh:1`)
-
-Consequência para o hook: sendo `exe` um interpretador, `_processo_casa` examina **`argv[1]`**, não exige que `exe` seja o `.sh`. Produtor declarado com caminho absoluto compara o caminho resolvido usando o `cwd` do processo; produtor sem barra compara apenas o basename. (`bin/hook_stop_fila1.py:511–520`)
-
-**(ii) `CODEX_OBRA`**
-
-**É entrada do wrapper, não um export posterior:** o script lê `CODEX_OBRA` para `OBRA` e recusa valor vazio. O selo fornece `CODEX_OBRA` pelo `env` antes de executar o wrapper; nessa chamada, portanto, a variável já entra no ambiente inicial do processo. (`bin/codex_pergunta.sh:80–85`; `bin/tests/test_codex_pergunta.sh:111–113`)
-
-O hook atual não lê esse ambiente: `_prova_pid` consulta `stat`, `exe` e `cmdline`, sem conferir `CODEX_OBRA`. (`bin/hook_stop_fila1.py:534–550`)
-
-**(iii) Furos e limites**
-
-- **Outro usuário:** a exigência de mesmo UID ainda não existe em `_prova_pid`. Falha de leitura bloqueia aquela prova, mas não há comparação explícita de UID. (`bin/hook_stop_fila1.py:523–550`)
-- **Wrapper esperando vaga/flock:** processo vivo não prova Codex iniciado. O wrapper espera no gate, nos slots e na trava da resposta antes da chamada ao Codex. Já a vaga exclusiva do construtor usa `flock -n`: ocupada, recusa imediatamente. (`bin/codex_pergunta.sh:341–369`; `bin/codex_pergunta.sh:401–402`; `bin/codex_pergunta.sh:232–233`)
-- **Wrapper de outra sessão:** excluir ancestrais não vincula o produtor à sessão principal. `_ancestrais` monta somente a cadeia de pais do hook; `_prova_pid` não compara sessão nem exige descendência do chamador. (`bin/hook_stop_fila1.py:474–491`; `bin/hook_stop_fila1.py:529–550`)
-- **Obra com prefixo comum:** a igualdade exata exigida pelo contrato elimina esse casamento por prefixo; sua implementação é **[não verificado]**. Hoje não há comparação de obra nessa prova. (`bin/hook_stop_fila1.py:534–550`)
-- **Papel e fase:** o wrapper admite cinco papéis; conferir somente wrapper e obra não distingue `censo` dos demais. Além disso, ele continua vivo fazendo pós-processamento depois que o Codex retorna. (`bin/codex_pergunta.sh:81–85`; `bin/codex_pergunta.sh:404–448`)
-- **“Terminou → volta a bloquear” tem limite:** perder a prova apenas continua o fluxo normal do Stop; fila vazia, teto, B2 e exceção ainda possuem caminhos de liberação. (`bin/hook_stop_fila1.py:1231–1246`; `bin/hook_stop_fila1.py:1284–1306`)
-
-**(iv) Outros leitores do topo do RELATO**
-
-Primeiro, **“linha 2” não é posição física para o hook**: ele pula título e brancos e usa a primeira linha útil. A segunda linha útil integra o bloco destinado ao B3. (`bin/hook_stop_fila1.py:400–408`; `bin/hook_stop_fila1.py:415–440`)
-
-| Leitor | Comportamento |
-|---|---|
-| **Disjuntor B3** | Lê fotografia consistente do documento e usa o mesmo `_bloco_do_topo`, com duas linhas úteis. (`bin/disjuntor.py:662–689`) |
-| **`handoff_sessao.sh`** | Percorre o topo até `##`, mas seleciona somente `PAREI`, `lei:` e `!:`; omite ESPERANDO e consulta apenas os vereditos PAREI. (`bin/handoff_sessao.sh:92–123`) |
-| **`relato.sh`** | Submete o documento ao checador de afirmações e ao raspador/publicador; não julga prova de ESPERANDO nessas etapas. (`bin/relato.sh:54–61`; `bin/relato.sh:103–107`) |
-| **Alarme de sessão ociosa** | Procura `PAREI:` nas primeiras 40 linhas; ESPERANDO não satisfaz esse reconhecimento. (`bin/alarme_sessao_ociosa.py:119–127`) |
-| **Selo ESPERANDO** | Monta estado na linha física **3** e verifica ALLOW/NOPROVA; cobre PID vivo, morto, outro programa e ausência de prova. (`bin/tests/test_hook_esperando_com_prova.sh:62–105`) |
-| **Selo de orçamento** | Exige que ESPERANDO provado suspenda o disparo do orçamento; morto o produtor, cobra novamente o orçamento. (`bin/tests/test_orcamento_contexto.sh:220–233`) |
-| **Selo do disjuntor** | Exercita o recorte compartilhado e inclui mutante que conserva somente a primeira linha útil. (`bin/tests/test_disjuntor.sh:845–865`; `bin/tests/test_disjuntor.sh:1658`) |
-
-## 08/11 10:40 · sessao 55f94ed382ed · - · - · origem=Ronald (tmux)
-
-Adicionais:
-
-- O selo espiona chamadas a `H._bloco_do_topo`, verificando leitura sob a trava: `bin/tests/test_disjuntor.sh:845-865`.
-- O mutante que conserva só a primeira linha útil deve reprovar: `bin/tests/test_disjuntor.sh:1658`. Há mutantes de fotografia parcial: `bin/tests/test_disjuntor.sh:1659-1663`.
-- `test_no_relato_tem_secao_pinada.py` conserva o topo inteiro por comparação `startswith(TOPO)`; não interpreta a linha 2: `app/core/tests/test_no_relato_tem_secao_pinada.py:31-35`, `app/core/tests/test_no_relato_tem_secao_pinada.py:51-60`. Sua leitura posicional verifica a última linha útil: `app/core/tests/test_no_relato_tem_secao_pinada.py:68-69`.
-
-Nenhum leitor adicional da linha física 2 identificado na varredura, incluindo `.claude`; ausência absoluta: [não verificado].
-
-## 08/11 10:39 · sessao 55f94ed382ed · - · - · origem=Ronald (tmux)
-
-Leitores e efeitos confirmados:
-
-- **O hook não lê “linha física 2”**: `_linha_do_topo()` usa a primeira linha útil; `_bloco_do_topo()` pula brancos e `# RELATO`, tira crases iniciais e retorna até duas linhas úteis. A segunda útil existe para B3. (`bin/hook_stop_fila1.py:400-408`, `bin/hook_stop_fila1.py:415-440`)
-
-- **Disjuntor B3** lê o RELATO inteiro duas vezes, confere identidade/mtime/tamanho e bytes; recorta as duas linhas úteis pelo mesmo `H._bloco_do_topo()`. Portanto continua sendo consumidor do painel, sem uma regra paralela de recorte. (`bin/disjuntor.py:662-689`)
-
-- **Handoff** lê o topo até a primeira seção `## `, mas seleciona somente `PAREI`, `lei:` e `!:`. `ESPERANDO: censo ... | Codex` fica fora da lista; os vereditos mostrados chamam `_parei_do_em_curso()` e `_relato_parou()`, não a prova ESPERANDO. (`bin/handoff_sessao.sh:92-123`)
-
-- **`relato.sh`** entrega o documento ao checador de afirmações de ato e depois ao raspador/publicador; nesse fluxo não interpreta o estado ESPERANDO. O checador percorre linhas procurando títulos/negritos com verbos de ato e prova próxima. (`bin/relato.sh:54-61`, `bin/relato.sh:103-107`, `bin/relato_afirma_com_prova.py:30-50`)
-
-- **Alarme de sessão ociosa** lê as primeiras 40 linhas e só procura a substring `PAREI:`. A linha ESPERANDO não desarma esse reconhecimento. (`bin/alarme_sessao_ociosa.py:119-127`)
-
-Selos relevantes:
-
-- `test_hook_esperando_com_prova.sh` constrói RELATO com cabeçalho na linha 1, branco na 2 e estado na 3; exige liberação pelo motivo `ALLOW ESPERANDO com prova`, ou bloqueio com `siga: ITEM-VIVO` e motivo `NOPROVA`. (`bin/tests/test_hook_esperando_com_prova.sh:62-89`)
-- O selo atual cobre produtor vivo, PID morto, outro programa e ausência de prova, usando a sintaxe `produtor | pid=`. (`bin/tests/test_hook_esperando_com_prova.sh:93-105`)
-- Também exige que prova de ato seja conferida antes de ESPERANDO e que matar o produtor revogue a liberação. (`bin/tests/test_hook_esperando_com_prova.sh:186-192`)
-- `test_orcamento_contexto.sh` exige que ESPERANDO com produtor vivo suspenda o disparo de orçamento e libere pelo motivo correto. (`bin/tests/test_orcamento_contexto.sh:220-230`)
-- `test_disjuntor.sh` testa diretamente os juízes compartilhados de leitura do topo, inclusive leitura parcial após a primeira linha útil. (`bin/tests/test_disjuntor.sh:748-765`)
-- O selo do handoff exercita perguntas de lei depois de 14 linhas RESPONDIDA, protegendo o alcance até a seção, sem testar censo. (`bin/tests/test_handoff_sessao.sh:139-148`)
-
-## 08/11 10:35 · sessao 950169722c2a · FIO-E0-V4-E3 · censo · origem=Code
-
-**O aval não confere como lista completa.** Dois pontos objetivos: não encontrei chamadas de produção de `o_que_segura`; e `explicador` e `folha/previa` são respondedores, embora estejam entre os nove nomes tratados como simples consumidores de C15. (`app/folha/fora_da_folha.py:203`, `app/chamados/services/explicador.py:163`, `app/folha/previa.py:95`)
-
-| Base da conferência | Limite |
-|---|---|
-| AST dos arquivos Python da cópia, fora de testes, com conferência dos corpos, imports e aliases; chamadas concretas discriminadas abaixo. | Uso dinâmico externo à cópia: **[nao verificado]**. | [nao verificado]
-| Aval e e2.r comparados pelo conteúdo colado no pedido. | Arquivos locais dos anexos e correspondência desta cópia com HEAD `94d41ea`: **[nao verificado]**. |
-| `JUIZES.md` é lookup; o próprio documento manda conferir o vivo e aponta `core/juizes.py` como registro. | `app/docs/JUIZES.md:7`, `app/docs/JUIZES.md:11`, `app/docs/JUIZES.md:14`. |
-| Resultados abaixo descrevem código existente. | Quantidades atuais, ocorrências individuais em produção e comportamento visual do APK: **[nao verificado]**. |
-
-**1. Conferência do aval**
-
-| Item do aval | Resultado contra o vivo | Chamadores, unidade e fonte |
-|---|---|---|
-| `vigia_fio.fio_do_dia:156` | **Confere.** | Chamado por `censo` em `app/chamados/services/vigia_fio.py:414` e `app/chamados/services/vigia_fio.py:417`. Devolve booleano sobre a coleção recebida; **lê C15**, sem derivar vitalidade própria. `app/chamados/services/vigia_fio.py:166`. |
-| `vigia_fio.censo_alcance` | **Confere.** Definição em `app/chamados/services/vigia_fio.py:542`. | Chamado pelo command em `app/chamados/management/commands/vigiar_fio_morto.py:173`. Responde por **(colab,dia)** retido, com rota, papel e causa; lê retenção, C17 e dono fora do fio, depois deriva contadores/causas. `app/chamados/services/vigia_fio.py:585`, `app/chamados/services/vigia_fio.py:635`, `app/chamados/services/vigia_fio.py:654`, `app/chamados/services/vigia_fio.py:699`. |
-| C17 `porta_alcancavel_do_dia:1341` | **Confere.** | Três chamadores diretos: `_porta`, `censo_alcance`, `beco_em_lote`. Devolve `None` ou `{rota,fila,verbos,fio}` por **célula/dia**. Compõe fila, perguntas C6 vivas presentes no app e verbos do painel. `app/folha/fora_da_folha.py:67`, `app/chamados/services/vigia_fio.py:635`, `app/escala/services/cadastro_realidade.py:488`, `app/chamados/juizes.py:1386`. |
-| `folha._fio_do_dia:70` | **Confere.** | Três chamadas: `fora_da_folha`, `o_que_segura`, `dias_sem_fio`. Devolve `admin/colab/chamado/nada` por célula; **lê `fio` de C17**. `app/folha/fora_da_folha.py:77`, `app/folha/fora_da_folha.py:178`, `app/folha/fora_da_folha.py:221`, `app/ponto/services/pautas_dos_discordantes.py:77`. |
-| `o_que_segura:203`, “6 chamadores” | **Não confere quanto aos seis.** O AST não encontrou chamada de produção da função nesta cópia. | O corpo existe e responde colaborador/competência com dias retidos, fio, destrava e chamados; compõe export, retenção e C17. Definição e retorno: `app/folha/fora_da_folha.py:203`, `app/folha/fora_da_folha.py:215`, `app/folha/fora_da_folha.py:229`. Chamador dinâmico externo: **[nao verificado]**. |
-| `resolver_dia_oferecido:97` e `STATUS_QUE_PEDEM_DECISAO:94` | **Confere.** | Única chamada direta: `contexto_calendario`, em `app/colaboradores/services/calendario.py:769`. Booleano por dia; **deriva** último recurso + passado + status em `falta/irregular/aberto/sem_certidao`. `app/colaboradores/services/calendario.py:94`, `app/colaboradores/services/calendario.py:103`. |
-| `perguntas_do_app:42 ← api/views:2552` | **Confere, mas faltam quatro chamadores.** | Também leem: `_no_app`, ficha, `medir`, `do_dia`. Unidade **pergunta**; lê `q_vivas` e C6 exato. `app/chamados/juizes.py:1319`, `app/colaboradores/services/ficha.py:166`, `app/chamados/services/pergunta_no_app.py:139`, `app/chamados/services/pergunta_no_app.py:162`, `app/chamados/services/pergunta_no_app.py:53`. |
-| `pendentes_do_colaborador:1729 ← dois kernels` | **Confere, mas falta dashboard web.** | Três chamadas: `app/api/views.py:325`, `app/api/views_core.py:314`, `app/core/views.py:253`. Retorna **disputas abertas distintas** com pergunta C6 viva sem resposta; deriva o recorte da disputa e lê C6. `app/chamados/models.py:1736`, `app/chamados/models.py:1740`. |
-| C11 `cadastro_realidade.beco_em_lote:442` | **Confere.** A chamada C17 está em **488**, não em 460. | Chamado em `app/escala/services/cadastro_realidade.py:439` e `app/escala/services/cadastro_realidade.py:573`. Devolve assinatura C11 por **(colab,dia)**; compõe célula indefinida, perguntas vivas, ausência de porta, âncora terminal, cadastro e dono. `app/escala/services/cadastro_realidade.py:477`, `app/escala/services/cadastro_realidade.py:488`, `app/escala/services/cadastro_realidade.py:515`, `app/escala/services/cadastro_realidade.py:530`. A linha 460 é docstring. |
-
-**Censo complementar: respondedores que faltaram na lista**
-
-Na coluna “natureza”, **lê** identifica delegação ao juiz; **compõe/deriva** identifica seleção, agregação ou resposta construída no próprio sítio. As fontes e chamadas estão discriminadas em cada linha.
-
-| Sítio/função | Quem chama | Unidade e resposta | Natureza |
-|---|---|---|---|
-| `vigia_fio.censo` — `app/chamados/services/vigia_fio.py:318` | `vigiar_fio_morto:172`; `materializar_passivo_validado:203`, em `app/chamados/management/commands/` | Células/dias com fio vivo, morto ou dono fora do fio. | Compõe universo de chamados/células, lê C15 e dono; agrega. `app/chamados/services/vigia_fio.py:334`, `app/chamados/services/vigia_fio.py:417`, `app/chamados/services/vigia_fio.py:431`. |
-| `dono_fora_do_fio` — `app/chamados/services/vigia_fio.py:274` | `censo:431`, `censo_alcance:654`, mesmo arquivo | **(colab,dia)** → decisão pendente, ausência aberta, escala não descreve dia, fio do admin ou `None`; opcional papel. | Deriva precedência entre oferta do calendário, ausência, estado da pergunta e lista administrativa. `app/chamados/services/vigia_fio.py:306`. |
-| `ListaDoAdmin.dia_do_admin/dia_na_lista/papel_do_dia` — `app/chamados/services/vigia_fio.py:222`, `app/chamados/services/vigia_fio.py:230`, `app/chamados/services/vigia_fio.py:238` | Dono em `app/chamados/services/vigia_fio.py:312`; alcance em `app/chamados/services/vigia_fio.py:661` | Presença e papel por **(colab,dia)**. | Lê lista Cadastro×Realidade e reduz seus donos. `app/chamados/services/vigia_fio.py:216`, `app/chamados/services/vigia_fio.py:246`. |
-| `resolver_dia_oferecido_nas_datas` — `app/colaboradores/services/calendario.py:117` | Vigia em `app/chamados/services/vigia_fio.py:271` | `{dia:bool}` para um colaborador. | Lê campo do calendário; dia ausente recebe falso. `app/colaboradores/services/calendario.py:132`, `app/colaboradores/services/calendario.py:135`. |
-| `contexto_calendario` — `app/colaboradores/services/calendario.py:159` | `app/colaboradores/views.py:1946`; `app/colaboradores/services/drawer.py:121`; `app/relatorios/furos.py:160`; plural em `app/colaboradores/services/calendario.py:132` | Dias com estado, pendência e oferta de decisão. | Compõe status/último recurso, lê C6 e escreve `resolver_dia_oferecido`. `app/colaboradores/services/calendario.py:476`, `app/colaboradores/services/calendario.py:769`. |
-| `cadastro_realidade.lista/dias_na_lista/um_dono_por_dia` — `app/escala/services/cadastro_realidade.py:787`, `app/escala/services/cadastro_realidade.py:1044`, `app/escala/services/cadastro_realidade.py:985` | Tela `app/escala/views.py:487`; vigia `app/chamados/services/vigia_fio.py:216`, `app/chamados/services/vigia_fio.py:217`; lista chama uniformização em `app/escala/services/cadastro_realidade.py:885` | Lista administrativa e dono por **(colab,dia)**. | Compõe assinaturas, incorpora C11 e lê `InsumosDoDono.dono`. `app/escala/services/cadastro_realidade.py:864`, `app/escala/services/cadastro_realidade.py:1009`, `app/escala/services/cadastro_realidade.py:1026`, `app/escala/services/cadastro_realidade.py:1064`. |
-| `montar_chamados_fio` — `app/chamados/services/fio.py:160` | Colab/admin/modal em `app/chamados/views.py:569`, `app/chamados/views.py:677`, `app/chamados/views.py:889`; parcial em `app/chamados/services/fio.py:442` | **Chamados**, com perguntas e indicador de ação pendente. | Lê janela, C6/`.viva` e prova de ação possível. **`tem_pergunta_viva` não é apenas C15:** exige `.viva` e ausência de clique morto. `app/chamados/services/fio.py:171`, `app/chamados/services/fio.py:234`, `app/chamados/services/fio.py:279`. |
-| `chamados_visiveis_colab` — `app/chamados/services/janela_colab.py:49` | API `app/api/views.py:1016`; fio `app/chamados/services/fio.py:171`; arquivamento `app/chamados/views_arquivar.py:195` | QuerySet de **chamados** da lista do colaborador. | Deriva janela/destinos/silêncio/módulos; lê **pré-filtro SQL `q_vivas`**, sem C6 exato nesse corpo. `app/chamados/services/janela_colab.py:63`, `app/chamados/services/janela_colab.py:67`. |
-| `explicar_pergunta/por_que_nao_fecha` — `app/chamados/services/explicador.py:68`, `app/chamados/services/explicador.py:108` | Explicador em `app/chamados/services/explicador.py:133`; montador em `app/chamados/services/fio.py:308`; modal mostra em `app/templates/chamados/partials/modal_fio.html:432` | **Pergunta:** estado/dono/ação; **disputa:** `pode_fechar/resumo/itens`. | Lê `.estado`, materialização de fato e C15; deriva descrição e ações. `app/chamados/services/explicador.py:72`, `app/chamados/services/explicador.py:93`, `app/chamados/services/explicador.py:137`, `app/chamados/services/explicador.py:163`. |
-| `desenlace` — `app/chamados/services/desenlace.py:44` | Fio em `app/chamados/services/fio.py:399`; modal em `app/templates/chamados/partials/modal_fio.html:118` | **Chamado** → verbo, rótulo, estado, ação ou `None`. | Compõe natureza, explicação, filhos e porta própria. `app/chamados/services/desenlace.py:50`, `app/chamados/services/desenlace.py:57`, `app/chamados/services/desenlace.py:62`. |
-| `montar_contexto_detalhe` — `app/chamados/services/acoes_chamado.py:327` | `app/chamados/views.py:551` | Detalhe do **chamado** e perguntas vivas. | Lê C6 para filtrar perguntas da disputa aberta. `app/chamados/services/acoes_chamado.py:335`, `app/chamados/services/acoes_chamado.py:348`. |
-| `contexto_drawer` — `app/colaboradores/services/drawer.py:17` | `app/colaboradores/views.py:2943` | Banner de motivos pendentes; fallback “N chamados de furo aguardando colaborador”. | Primeiro lê perguntas vivas; fallback **deriva por `VIVOS` e quatro módulos**, sem conferir C6. `app/colaboradores/services/drawer.py:78`, `app/colaboradores/services/drawer.py:88`, `app/colaboradores/services/drawer.py:92`. |
-| `relatorios_disputa.classificar/coletar` — `app/chamados/relatorios_disputa.py:11`, `app/chamados/relatorios_disputa.py:26` | Coleta em `app/chamados/relatorios_disputa.py:47`; tela `app/colaboradores/views.py:2997`; command `app/chamados/management/commands/relatorio_pendencias_disputa.py:15` | **Disputa** → sem pergunta, pronta fechar, aguarda colab ou supervisão. | Lê C6; deriva categoria pela existência de resposta. `app/chamados/relatorios_disputa.py:18`, `app/chamados/relatorios_disputa.py:21`. |
-| `perguntas_pendentes_do_colab/aviso_texto_livre` — `app/chamados/services/aviso_pendencia.py:7`, `app/chamados/services/aviso_pendencia.py:16` | Cobrança em `app/chamados/services/cobranca.py:48`; API `app/api/views.py:997`, `app/api/views.py:2220`; web `app/chamados/views.py:1120` | Lista de **perguntas** e aviso com datas que continuam aguardando resposta. | Lê `q_vivas` + C6 + ausência de `respondida_em`; deriva texto. `app/chamados/services/aviso_pendencia.py:13`, `app/chamados/services/aviso_pendencia.py:20`. |
-| `checar_cobranca` — `app/chamados/services/cobranca.py:75` | `cobrar_colaborador`, em `app/chamados/services/cobranca.py:155`; referência de intake em `app/core/intake.py:68` | Quantidade de **perguntas**, datas, disputas, prazo e canal. | Lê aviso de pendência; deriva agregados/prazo. `app/chamados/services/cobranca.py:82`, `app/chamados/services/cobranca.py:87`. |
-| `_calados/linhas_para_a_pauta` — `app/chamados/services/cobranca.py:221`, `app/chamados/services/cobranca.py:251` | Pauta em `app/escala/services/fase_12x36.py:272`; redução em `app/chamados/services/cobranca.py:257` | **Pessoas** cobradas/caladas e sem canal. | Deriva com `q_vivas`, disputa aberta e pergunta sem resposta; **não chama C6 exato** nesse corpo. `app/chamados/services/cobranca.py:229`, `app/chamados/services/cobranca.py:248`. |
-| `pergunta_no_app.retencao/do_dia/medir` — `app/chamados/services/pergunta_no_app.py:65`, `app/chamados/services/pergunta_no_app.py:152`, `app/chamados/services/pergunta_no_app.py:119` | `dia_do_colab:109`; commands `app/chamados/management/commands/chamados_vivos_sem_pergunta_no_app.py:14`, `app/chamados/management/commands/perguntar_chamados_sem_pergunta.py:21` | Por **chamado/dia**: pergunta no app, causa e dono da retenção. | Lê lista do app, fábrica, ata, cobertura e lista admin; deriva taxonomia. `app/chamados/services/pergunta_no_app.py:77`, `app/chamados/services/pergunta_no_app.py:88`, `app/chamados/services/pergunta_no_app.py:139`, `app/chamados/services/pergunta_no_app.py:165`. |
-| `dia_do_colab/_veredito_do_dia` — `app/ponto/services/dia_do_colab.py:6`, `app/ponto/services/dia_do_colab.py:112` | API `app/api/views_mensageria.py:1970`; ficha `app/colaboradores/services/ficha.py:280`; frase em `app/ponto/services/dia_do_colab.py:102` | **(colab,dia)**: marcos, perguntas e frases “Faltou…”/“esperando resposta ou decisão”. | Lê ata, C6 e pergunta no app; **deriva** frase pelos marcos apagados e perguntas vivas. `app/ponto/services/dia_do_colab.py:30`, `app/ponto/services/dia_do_colab.py:71`, `app/ponto/services/dia_do_colab.py:144`, `app/ponto/services/dia_do_colab.py:150`. |
-| `ficha_do_colab` — `app/colaboradores/services/ficha.py:99` | Ficha lazy em `app/colaboradores/services/ficha.py:269`; copiloto em `app/colaboradores/services/ficha.py:275`, servido por `app/api/views_mensageria.py:1131` | **Chamados/perguntas** por pessoa, com dono e ações quantificadas. | Lê verbos, perguntas do app e respostas sem veredito; deriva seleção por texto e ações. `app/colaboradores/services/ficha.py:155`, `app/colaboradores/services/ficha.py:166`, `app/colaboradores/services/ficha.py:171`, `app/colaboradores/services/ficha.py:190`. |
-| `fila_validar_classificada` — `app/chamados/services/validacao.py:865` | `app/chamados/views_cobrar.py:288`, `app/chamados/views_cobrar.py:349`, `app/chamados/views_cobrar.py:361` | **Perguntas** e **chamados distintos** por classe, idade e total. | Lê fila C6 de respondidas a validar; deriva classes/contagens. `app/chamados/services/validacao.py:874`, `app/chamados/services/validacao.py:882`, `app/chamados/services/validacao.py:884`. |
-| `becos.classificar` — `app/chamados/services/becos.py:25` | Command `app/chamados/management/commands/fechar_becos_disputa.py:39`; evento em `app/chamados/services/becos.py:69` | **Disputa** → `None/fechavel/barrada`. | Deriva recorte de beco por abertura, resposta/destino e pai terminal; lê C7 para fechar. `app/chamados/services/becos.py:27`, `app/chamados/services/becos.py:33`. |
-| `api_chamados_v2` — `app/api/views.py:975` | Rota `app/api/urls.py:73` | **Chamados** com perguntas da disputa, marcos e flag de regularização. | Monta perguntas a partir de **disputas abertas**, sem filtrar essa coleção por C6; lê projeção por marco separadamente. `app/api/views.py:1029`, `app/api/views.py:1043`, `app/api/views.py:1103`, `app/api/views.py:1158`. |
-| `projecao_por_marco/dia_em_regularizacao/marco_aceito_unico` — `app/chamados/services/declaracao_texto.py:376`, `app/chamados/services/declaracao_texto.py:444`, `app/chamados/services/declaracao_texto.py:431` | Fio `app/chamados/services/fio.py:371`; API `app/api/views.py:1103`; wrapper em `app/chamados/services/declaracao_texto.py:501` | **Marco** → aceita/recusa; **dia** → todos recusados; marco único oferecido. | Lê faltantes da célula e identidade/guarda da porta; deriva projeção e reduções. `app/chamados/services/declaracao_texto.py:414`, `app/chamados/services/declaracao_texto.py:423`, `app/chamados/services/declaracao_texto.py:427`, `app/chamados/services/declaracao_texto.py:454`. |
-| `montar_contexto_painel` — `app/chamados/services/painel.py:196` | `app/chamados/views.py:727`, `app/chamados/views.py:852`; lavrador `app/core/management/commands/lavrar_badge_navbar.py:39` | Lista/pílulas/contadores de **chamados**. | Lê `qs_na_fila` e partição de verbos; agrega por estado/verbo. `app/chamados/services/painel.py:210`, `app/chamados/services/painel.py:228`. |
-| `qs_na_fila/particionar_verbos/creditos_perguntas` — `app/chamados/services/painel.py:158`, `app/chamados/services/verbos.py:30`, `app/chamados/services/raiox.py:49` | Painel acima; alimentação C17 em `app/chamados/juizes.py:1287`, `app/chamados/juizes.py:1290`; consumidores abaixo | **Chamado** → pertença à fila/verbo; crédito de pergunta ao chamado. | Fila deriva `COBRANCA` e silêncio; verbo lê crédito/natureza; crédito usa `q_vivas` e `veredito_lavrado`, **não C6 exato nesse corpo**. `app/chamados/services/painel.py:187`, `app/chamados/services/verbos.py:34`, `app/chamados/services/verbos.py:47`, `app/chamados/services/raiox.py:133`. |
-| `coletar_lente` — `app/chamados/services/verbos.py:164` | `app/chamados/views.py:1480` | **Chamados** agrupados da pílula ativa. | Lê partição de verbos e agrega. `app/chamados/services/verbos.py:171`, `app/chamados/services/verbos.py:185`. |
-| Navbar `_badge_staff/_badge_registrados/_badge_colab` — `app/core/context_processors.py:59`, `app/core/context_processors.py:131`, `app/core/context_processors.py:185` | `navbar_context`, que publica as lazies em `app/core/context_processors.py:154`, `app/core/context_processors.py:189` | Staff: **chamados que exigem admin**; segundo número: **fila**; colab: **chamados na fila dele**. | Staff lê lavrado, fallback partição e fallback fila; colab lê fila. `app/core/context_processors.py:84`, `app/core/context_processors.py:90`, `app/core/context_processors.py:93`, `app/core/context_processors.py:150`, `app/core/context_processors.py:187`. |
-| Dashboard web — `app/core/views.py:253` | Render em `app/core/views.py:271`; badge em `app/templates/core/dashboard_colaborador_v2.html:79` | **Disputas** pendentes do colaborador. | Lê `pendentes_do_colaborador`. `app/core/views.py:253`. |
-| `montar_situacional/_led` e `montar_linha_colab` — `app/colaboradores/services/situacional.py:65`, `app/colaboradores/services/situacional.py:56`, `app/colaboradores/painel_cell.py:11` | Telas em `app/colaboradores/views.py:2664`, `app/colaboradores/views.py:2801`; live-cell em `app/colaboradores/painel_cell.py:81` | **Colaborador** → LED vermelho se existe disputa aberta. | **Deriva existência de disputa aberta**, sem exigir pergunta C6 viva. Lote: `app/colaboradores/services/situacional.py:117`; pontual: `app/colaboradores/painel_cell.py:31`; cor: `app/colaboradores/services/situacional.py:58`, `app/colaboradores/painel_cell.py:68`. |
-| `montar_painel_operacional` — `app/core/services/painel_op.py:38` | `app/core/views.py:607`, `app/core/views.py:632` | Número de **chamados por colaborador**. | Lê `qs_na_fila` e agrega. `app/core/services/painel_op.py:119`. |
-| `api_mensageria_pendencias/sinais` — `app/api/views_mensageria.py:390`, `app/api/views_mensageria.py:427` | Rotas `app/api/urls.py:10`, `app/api/urls.py:11` | **Chamados** com verbo; totais por verbo. | Leem partição e derivam serialização/agregados. `app/api/views_mensageria.py:395`, `app/api/views_mensageria.py:421`, `app/api/views_mensageria.py:453`, `app/api/views_mensageria.py:460`. |
-| `fila.por_verbo/idade_e_vazao/gestao` — `app/chamados/services/fila.py:53`, `app/chamados/services/fila.py:88`, `app/chamados/services/fila.py:145` | Redução em `app/chamados/services/fila.py:141`; APIs em `app/api/views_mensageria.py:668`, `app/api
-
-[truncado em 20000 de 48406 caracteres]
-
-## 08/11 10:28 · sessao 02956b4fd4e0 · - · - · origem=Ronald (tmux)
-
-| Sítio confirmado fora de `tests/` | Chamadores de produção confirmados | Unidade e resposta | Deriva ou lê |
-|---|---|---|---|
-| `app/chamados/services/vigia_fio.py:156` `fio_do_dia` | `censo`, `app/chamados/services/vigia_fio.py:414`, `:417` | Booleano sobre perguntas recebidas: dia tem fio vivo. | Só lê C15 `fio_vivo`, `app/chamados/services/vigia_fio.py:165`. |
-| `app/chamados/services/vigia_fio.py:274` `dono_fora_do_fio` | `censo :431`; `censo_alcance :654`, mesmo arquivo | Por `(colab,data)`: decisão pendente, ausência aberta, escala não descreve dia, fio do admin ou `None`; opcional papel. | Compõe, nesta ordem, `oferecido`, cobertura de ausência/ABERTAS, `.estado` + aceite de folga, presença/dono na lista; `app/chamados/services/vigia_fio.py:306`. |
-| `app/chamados/services/vigia_fio.py:318` `censo` | `app/chamados/management/commands/vigiar_fio_morto.py:172`; `app/chamados/management/commands/materializar_passivo_validado.py:203` | Contadores e listas de células/dias; universo começa em chamados vivos ligados à célula e módulos de furo, `app/chamados/services/vigia_fio.py:334`; exclui hoje/futuro do alarmado, `:420`. | Lê C15 via `fio_do_dia`, `:417`; lê `dono_fora_do_fio`, `:431`; deriva contadores. |
-| `app/chamados/services/vigia_fio.py:542` `censo_alcance` | `app/chamados/management/commands/vigiar_fio_morto.py:173` | Por `(colab,data)` retido: rota, causa, detalhe e papel; `app/chamados/services/vigia_fio.py:625`, `:699`. | Lê `dias_que_seguram :585`, C17 `:635`, dono `:654`; deriva causas sem porta `:667`. |
-| `app/chamados/services/vigia_fio.py:222` `ListaDoAdmin.dia_do_admin`; `:230` `dia_na_lista`; `:238` `papel_do_dia` | `dono_fora_do_fio :312`, `:313`; `censo_alcance :661` | Booleano presença com dono BATIDA/CADASTRO; presença+dono; papel do dia. | Lê `cadastro_realidade.lista` e `dias_na_lista`, `app/chamados/services/vigia_fio.py:216`; filtra/traduz `:228`, `:246`. |
-| `app/colaboradores/services/calendario.py:97` `resolver_dia_oferecido` | `contexto_calendario`, mesmo arquivo `:769` | Booleano por dia: último recurso, passado, status em `STATUS_QUE_PEDEM_DECISAO`, `:94`, `:103`. | Deriva da projeção do calendário; não considera permissão do observador, `:101`. |
-| `app/colaboradores/services/calendario.py:117` `resolver_dia_oferecido_nas_datas` | `app/chamados/services/vigia_fio.py:271` | `{date:bool}`; dia ausente recebe falso, `app/colaboradores/services/calendario.py:135`. | Lê os campos produzidos pelo calendário; `:132`. |
-| `app/colaboradores/services/calendario.py:159` `contexto_calendario` | `app/colaboradores/views.py:1946`; `app/colaboradores/services/drawer.py:121`; `app/relatorios/furos.py:160`; plural `app/colaboradores/services/calendario.py:132` | Lista de dias, incluindo `resolver_dia_oferecido`, `:769`. | Lê C6 para perguntas respondidas vivas, `:476`; compõe status e último recurso e escreve projeção do juiz `:769`. |
-| `app/escala/services/cadastro_realidade.py:442` `beco_em_lote` | `dias_folga_nao_definida_sem_porta :439`; `_folga_nao_definida_sem_porta :573`, mesmo arquivo | Lista `(colab_id,assinatura C11)`, com data, dono, perguntas, pai limbo e detalhe; `:530`. | Compõe lâmpada indefinida/protesto `:477`, vivas/C17 `:487`, âncora terminal `:515`, cadastro `:518`, dono `:531`. |
-| `app/escala/services/cadastro_realidade.py:787` `lista`; `:1044` `dias_na_lista`; `:985` `um_dono_por_dia` | Tela `app/escala/views.py:487`; vigia `app/chamados/services/vigia_fio.py:216`, `:217`; `lista → um_dono_por_dia :885` | Lista administrativa; mapa `(colab,data) → dono`; uniformização do dono do dia. | Lista incorpora C11 `:864`; uniformização reaproveita C11 `:1009` ou lê `InsumosDoDono.dono :1026`; mapa reduz donos `:1064`. |
-| `app/chamados/services/fio.py:160` `montar_chamados_fio` | `app/chamados/views.py:569` colab, `:677` admin, `:889` modal; `contexto_parcial_fio`, `app/chamados/services/fio.py:442` | Lista de chamados, com perguntas e `tem_pergunta_viva`, `:249`, `:279`. | Colab: janela e disputas abertas `:169`, `:213`; admin inclui vivas em fechadas via C6 `:234`; flag combina `.viva` e `raiox.pergunta_sem_acao_possivel`, `:279`. |
-| `app/chamados/services/janela_colab.py:49` `chamados_visiveis_colab` | `app/api/views.py:1016`; `app/chamados/services/fio.py:171`; `app/chamados/views_arquivar.py:195` | Queryset de chamados da lista de trabalho. | Deriva recorte janela OU destinos de `q_vivas`, silêncio nulo e módulos não internos; `app/chamados/services/janela_colab.py:61`, `:67`, `:70`. Usa pré-filtro SQL, não C6 exato nesse corpo, `:63`. |
-| `app/chamados/services/explicador.py:68` `explicar_pergunta`; `:108` `por_que_nao_fecha` | `por_que_nao_fecha → explicar_pergunta :133`; montador `app/chamados/services/fio.py:308`; exibição `app/templates/chamados/partials/modal_fio.html:432` | Por pergunta: estado, dono e ação, `explicador.py:74`; por disputa: `pode_fechar`, resumo, itens, `:163`. | Lê `.estado :72`, materialização real `:93`; C15 decide `pode`, `:137`; deriva descrição e ações. **É respondedor administrativo**, comprovado pelo template `modal_fio.html:435`–`:437`. |
-| `app/chamados/services/desenlace.py:44` `desenlace` | `app/chamados/services/fio.py:399`; exibição `app/templates/chamados/partials/modal_fio.html:118` | Por chamado: `{verbo,rotulo,estado,acao}` ou `None`, `desenlace.py:47`. | Compõe `catalogo.natureza.dono_do_chamado :50`, explicação `:62`, filhos `:57`, módulos/porta própria `:78`. |
-| `app/chamados/services/acoes_chamado.py:327` `montar_contexto_detalhe` | `app/chamados/views.py:551` | Detalhe de chamado, perguntas vivas da disputa aberta e evidência, `acoes_chamado.py:335`, `:348`. | Lê C6 `:347` e filtra; não usa C17 nesse percurso. |
-| `app/colaboradores/services/drawer.py:15` `contexto_drawer` — confirmar linha de definição antes de usar; trechos verificados `:69`, `:78`, `:88` | `app/colaboradores/views.py:2943` | Banner `falha_texto`: motivos das vivas na última disputa aberta; fallback número de chamados de furo “aguardando colaborador”, `drawer.py:82`, `:92`. | Primeiro lê `perguntas_vivas_de :78`; fallback **deriva independentemente** de `VIVOS` e quatro módulos, sem C6, `:88`–`:92`. |
-| `app/chamados/relatorios_disputa.py:11` `classificar`; `:26` `coletar` | `coletar → classificar :47`; tela `app/colaboradores/views.py:2997`; command `app/chamados/management/commands/relatorio_pendencias_disputa.py:15` | Por disputa: SEM_PERGUNTA/PRONTA_FECHAR/AGUARDA_COLAB/AGUARDA_SUPERVISAO, `relatorios_disputa.py:13`; buckets de disputas, `:47`. | Lê C6 `:18`; deriva categoria pela existência de resposta `:21`. |
-| `app/chamados/services/aviso_pendencia.py:7` `perguntas_pendentes_do_colab`; `:16` `aviso_texto_livre` | `_pendentes`, `app/chamados/services/cobranca.py:48`; aviso `app/api/views.py:997`, `:2220`; `app/chamados/views.py:1120` | Lista de perguntas vivas sem resposta; aviso por conjunto de datas, `aviso_pendencia.py:13`, `:20`. | Lê `q_vivas` e C6, `:11`, `:13`; deriva texto. |
-| `app/chamados/services/cobranca.py:75` `checar_cobranca` | `cobrar`, mesmo arquivo `:155`; também referência dinâmica de intake `app/core/intake.py:68` | Pendentes em perguntas, datas distintas e disputas distintas, `cobranca.py:87`–`:94`. | Lê aviso via `_pendentes :82`; deriva prazo/canal/contagens. |
-| `app/chamados/services/cobranca.py:221` `_calados`; `:251` `linhas_para_a_pauta` | `linhas_para_a_pauta → _calados :257`; pauta `app/escala/services/fase_12x36.py:272` | Pessoas cobradas com prazo vencido e pessoas sem canal, `cobranca.py:248`; frases de pendência `:261`. | **Deriva com `q_vivas` SQL**, sem C6 exato nesse corpo, exigindo disputa aberta e pergunta sem resposta `:229`; lê juiz prazo `:246`. |
-| `app/ponto/services/dia_do_colab.py:6` `dia_do_colab`; `:112` `_veredito_do_dia` | API `app/api/views_mensageria.py:1970`; ficha `app/colaboradores/services/ficha.py:280`; corpo chama frase `dia_do_colab.py:102` | Um `(colab,data)`: marcos/batidas/perguntas e frase “Faltou…” `:144`, vivas esperando resposta/decisão `:150`. | Lê ata `:30`, C6 `:71`, pergunta_no_app `:109`; frase deriva contagens de marcos/perguntas `:139`–`:154`. |
-| `app/chamados/services/pergunta_no_app.py:65` `retencao`; `:152` `do_dia`; `:119` `medir` | `medir → retencao :142`; `do_dia → retencao :164`; `app/ponto/services/dia_do_colab.py:109`; commands `app/chamados/management/commands/chamados_vivos_sem_pergunta_no_app.py:14`, `perguntar_chamados_sem_pergunta.py:21`, `:30` | Causa/quem reteve; por dia chamados vivos, perguntas no app, dono da retenção `pergunta_no_app.py:165`; censo por chamado `:145`. | Lê perguntas_do_app `:139`, `:162`, ata `:80`, cobertura `:90`, lista admin `:88`, C6 em `_marco_ja_perguntado :111`; deriva taxonomia de retenção. |
-| `app/chamados/services/validacao.py:865` `fila_validar_classificada` | `app/chamados/views_cobrar.py:288`, `:349`, `:361` | Perguntas e chamados distintos por classe, idade, total e rótulo `validacao.py:884`–`:887`. | Lê `perguntas_respondidas_a_validar :874`; deriva classes e contadores. |
-| `app/chamados/services/becos.py:25` `classificar` | command `app/chamados/management/commands/fechar_becos_disputa.py:39`; evento `becos.py:69` | Por disputa: `None`, fechável ou barrada, `becos.py:26`. | Deriva aberta, destino e pai terminal `:27`–`:32`; lê C7 `pode_fechar :33`. |
-
-Juízes e leitores que o e2.r incluía, mas o aval não nomeou:
-
-| Função | Chamadores | Resposta e natureza |
-|---|---|---|
-| `app/chamados/juizes.py:1886` `cobranca_viva_do_dia` | `app/chamados/models.py:373`, `:711`; `app/ponto/services/cartorio.py:1604`; `entrada_sincronizada.py:28`; `triagem_batida.py:589` | Chamado mais novo ou `None`; deriva `VIVOS`, módulo, dia forte e desempate, `juizes.py:1897`–`:1902`. Estes chamadores usam o resultado para planejar/fechar/reconciliar, não são cinco telas novas. |
-| `app/chamados/juizes.py:822` `pergunta_viva`, corpo `:1135` | Censo direto extenso é igual ao colado no e2.r; as chamadas adicionais de apresentação estão nas tabelas acima, `explicador.py:72`, `fio.py:280`, `models.py:2502`, `:2809`. | Booleano por pergunta; juiz que deriva vitalidade. |
-| `app/chamados/models.py:2492` `.estado`; `:2799` `.viva` | API `app/api/views.py:2569`; explicador `app/chamados/services/explicador.py:72`; vigia `vigia_fio.py:311`; fio `fio.py:280`; também templates `app/templates/chamados/partials/_card_atendimento.html:77`, `:183` | `.viva` delega totalmente a C6, `models.py:2809`; `.estado` lê C6 mas também traduz carimbos/resposta com fallback, `:2499`–`:2506`. |
-| `app/chamados/services/fabrica_da_celula.py:74` `motivos_a_perguntar` | `perguntar_pela_celula :164`; `motivos_que_o_evento_deixou :199` | Motivos de perguntas ainda a emitir por célula; deriva deduplicação por motivo `:118`–`:126`, lendo dia_sem_trabalho `:91`, teto `:98`, parcial_so_lista `:102`. Não devolve tarefa completa do dia. |
-| `app/chamados/services/fabrica_da_celula.py:191` `motivos_que_o_evento_deixou` | `app/chamados/management/commands/disparar_perguntas_competencia.py:112` | Leitor/vigia dos motivos que evento deixou; lê fábrica `:199`. |
-| `app/chamados/models.py:1789` `DisputaSupervisao.pode_fechar` | `becos.py:33`, `:51`; reconciliador `:411`, `:601`, `:1159`; materializacao `:567`, `:1291`; competencia_trancada `:153`, `:202`; disputa_emissao `:1112`, `:1717`; entrada_sincronizada `:58` | Booleano por disputa; compõe C15 e `respostas_sem_veredito`, `models.py:1794`; regra adicional de respostas sem veredito `:1783`–`:1787`. |
-
-Comparação com aval:
-
-| Item do aval | Conferência |
-|---|---|
-| `vigia_fio.fio_do_dia:156` e `censo_alcance` | Confere; `censo_alcance` está em `app/chamados/services/vigia_fio.py:542`; faltou explicitar `censo:318`, dono `:274` e leitores da lista `:222`. |
-| `resolver_dia_oferecido:97` + STATUS `:94` | Confere; único chamador direto é `contexto_calendario:769`; plural é leitura do campo, `calendario.py:135`. |
-| C11 `beco_em_lote:442` | Confere função; chamada C17 real é `app/escala/services/cadastro_realidade.py:488`, **não `:460` como colado no e2.r**. A linha 460 é docstring. |
-| Nove consumidores C15 “não são respondedores” | Não confere para **explicador**: produz `pode_fechar`, resumo e itens `explicador.py:163`, expostos ao admin `modal_fio.html:432`–`:437`. |
-| “TODOS” os leitores na lista | Não confere: montador de fio, painel, relatório, aviso, drawer, pergunta_no_app.do_dia/retenção, dia_do_colab, desenlace, fila de validação e beco de disputa estão documentados acima com seus chamadores. |
-
-O aval acrescenta explicitamente, frente à seção “leitores E3” do e2.r, `resolver_dia_oferecido` e C11, mas ambos já apareciam noutras seções do próprio e2.r colado: juiz “dono fora do fio” e chamadores C17. A identidade da versão da cópia com o HEAD `94d41ea` mencionado no aval é **[nao verificado]** nesta subanálise.
-
-_2869 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2874 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
