@@ -1,7 +1,100 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 11:23** · publicado em **08/11/2026 11:25** (UTC-3)
+> Ultima resposta processada: **08/11/2026 11:29** · publicado em **08/11/2026 11:30** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 08/11 11:29 · sessao d1aba136826f · - · - · origem=Ronald (tmux)
+
+Checagem adicional concluída: nenhum escritor real extra encontrado fora das portas já listadas. A busca incluiu todos os `.py` da árvore, aliases de import/atribuição e referências fora de `app/`. [nao verificado: artefato persistido do censo]
+
+Os candidatos dinâmicos existentes não escrevem `data_evento`:
+
+- `descarimbar_em_lote(**outros)` recebe campos de resposta/validação (`app/chamados/models.py:1555`; `app/chamados/services/disputa_emissao.py:1494`, `:1531`).
+- Atualização dinâmica do Chamado usa somente `urgencia` e `urgencia_original` (`app/chamados/models.py:473`, `:631`, `:636`).
+- Bulk de Pergunta grava somente os três campos da lavra (`app/chamados/veredito_lavrado.py:194`, `:207`).
+- `CC = apps.get_model(...)` em `bin/r5_idempotencia_frota.py:30` somente consulta chamados em `bin/r5_idempotencia_frota.py:60`.
+
+Os únicos INSERTs diretos de Chamado fora dos gates encontrados são testes em arquivos soltos: `app/tenants/tests.py:62` (`FastTenantTestCase`, `:5`) e `app/relatorios/tests_pdf_chamados.py:34` (`TestCase`, `:18`).
+
+Não encontrei construtor aliased de Pergunta seguido de save em produção, nem bypass real de INSERT de Chamado; permanecem `abrir` e `criar` (`app/chamados/models.py:971`, `:1095`). [nao verificado: prova negativa exaustiva contra formas dinâmicas arbitrárias]
+
+## 08/11 11:29 · sessao cc28a568237e · - · - · origem=Ronald (tmux)
+
+**3. PROCEDENTE: o fallback mantém caminhos que reproduzem 3a/3b.** Sem episódio, devolve diretamente pedido/data gravada; com episódio cujo juiz responde `None`, também devolve esse valor. A ponte A2 usada pelo universo não é consultada pelo helper (`app/chamados/services/fio.py:1258`, `app/chamados/services/fio.py:1262`, `app/chamados/services/fio.py:1406`). Batida retratada pode produzir `None`; a porta aceita `batida_origem_id` explícita sem conferir retratação (`app/ponto/turnos.py:2917`, `app/ponto/turnos.py:2925`, `app/chamados/models.py:2745`).
+
+Contraexemplo concreto de **3a**, por trace:
+
+- D0=10/09; DIA=18/10. Estado inicial: K sem episódio gravada em D0; A com episódio vivo `a`, gravada em D0, juiz=DIA; episódio `b` retratado sem pergunta. Esses estados são representáveis pelo modelo; `do_fato` conecta acervo do mesmo dia aos episódios (`app/chamados/models.py:2630`, `app/chamados/models.py:2632`).
+- Primeiro `abrir(b,D0)`: helper=D0; universo encontra K; A2(K) alcança A=DIA, logo recusa K. Não há recusada de episódio `b`, portanto nasce L(b,D0) (`app/chamados/services/fio.py:1300`, `app/chamados/services/fio.py:1304`, `app/chamados/services/fio.py:1406`, `app/chamados/models.py:2781`, `app/chamados/models.py:2840`).
+- Repetição idêntica: universo encontra K e L; A2(L) passa por K e alcança A=DIA. Ambas ficam recusadas; agora existe recusada de episódio `b`, disparando `FatoEmOutroDia` (`app/chamados/services/fio.py:1300`, `app/chamados/services/fio.py:1406`, `app/chamados/models.py:2781`, `app/chamados/models.py:2789`).
+
+Contraexemplo concreto de **3b**:
+
+- K sem episódio, menor pk ou respondida, gravada em D0; A de episódio vivo, gravada em D0, juiz=DIA. `abrir(a,DIA,destino=DIA)` semeia A, alcança K pela ponte A2={DIA} e elege K (`app/chamados/services/fio.py:1401`, `app/chamados/services/fio.py:1421`, `app/chamados/services/fio.py:1358`, `app/chamados/services/fio.py:1363`, `app/chamados/services/fio.py:998`).
+- A validação inicial do proxy passa usando DIA. No reuso, K sem episódio devolve D0; o gap de 38 dias termina em recusa e `ResolvedoraCruzada` (`app/chamados/models.py:2756`, `app/chamados/models.py:2760`, `app/chamados/models.py:2802`, `app/chamados/models.py:2804`, `app/chamados/services/fio.py:1259`, `app/chamados/juizes.py:2022`, `app/chamados/juizes.py:2029`).
+- Variante com episódio: acrescente R respondida, de episódio retratado, gravada em D0, ligada por K ao mesmo A. O fecho admite R por A2 e a elege; o helper recebe `None` do juiz e volta a D0, produzindo a mesma rejeição. Portanto ainda pode rejeitar uma linha **com episódio**, quando ele está retratado (`app/chamados/services/fio.py:1238`, `app/chamados/services/fio.py:1262`, `app/chamados/services/fio.py:1363`, `app/chamados/services/fio.py:999`, `app/chamados/models.py:2804`).
+
+A conversa tem tratamento explícito: nasce sempre, grava dia civil e não passa pela comparação de turno. Isso não reproduz o defeito contratual de dedup de pergunta datada (`app/chamados/models.py:2700`, `app/chamados/models.py:2707`, `app/chamados/models.py:2765`, `app/chamados/juizes.py:1991`).
+
+**4. NÃO PROCEDENTE: não há colisão entre as chaves dos usos descritos.** Dia usa tupla de dois elementos `('dia_do_turno', id)` e escreve em 1238; colaborador usa `('colab', id)` e escreve em 1271/1274; vizinhança usa tupla de três elementos `(pk, chave_do_dia, batida_id)`, escrita em 1287 e 1390. Tamanho ou marcador distinguem esses espaços (`app/chamados/services/fio.py:1233`, `app/chamados/services/fio.py:1238`, `app/chamados/services/fio.py:1268`, `app/chamados/services/fio.py:1271`, `app/chamados/services/fio.py:1274`, `app/chamados/services/fio.py:1280`, `app/chamados/services/fio.py:1287`, `app/chamados/services/fio.py:1390`). A resolvedora apenas repassa o memo ao helper (`app/chamados/juizes.py:1994`).
+
+**5. Cura dos casos originais com episódio vivo: PROCEDENTE; garantia universal: NÃO PROCEDENTE.** Com resposta não nula do juiz, pedidos D0/DIA viram o mesmo `_dia_fato`, usado na busca, célula e criação; a repetição retorna a canônica existente. A resolvedora lê esse mesmo juiz, independentemente da data gravada (`app/chamados/models.py:2749`, `app/chamados/models.py:2768`, `app/chamados/models.py:2779`, `app/chamados/models.py:2837`, `app/chamados/models.py:2840`, `app/chamados/services/fio.py:1261`, `app/chamados/juizes.py:1994`, `app/chamados/juizes.py:2013`). Os contraexemplos acima impedem estender a conclusão aos caminhos de fallback (`app/chamados/services/fio.py:1262`).
+
+Executei uma reprodução somente em memória dos corpos AST reais de helper/A2/fecho/universo/canônica, adaptando o ORM para listas e pré-carregando respostas do juiz: primeira chamada do cenário 3a teve universo vazio/recusada K; repetição teve universo vazio/recusadas K,L; os dois cenários 3b elegeram a linha cujo helper retornou D0. Execução Django/BD e ocorrência em produção: **[nao verificado]**. [nao verificado]
+
+## 08/11 11:28 · sessao d1aba136826f · - · - · origem=Ronald (tmux)
+
+Censo literal de `data_evento`:
+
+| Sítio persistente | Valor gravado |
+|---|---|
+| `app/chamados/models.py:2840` (`PerguntaDisputa._nascer`) | `_dia_fato`, obtido por `dia_do_turno_da_linha(..., pedido=data_evento)` em `app/chamados/models.py:2749`. |
+| `app/chamados/services/fio.py:843`, persistido em `app/chamados/services/fio.py:873` | `_dia`, obtido pelo helper em `app/chamados/services/fio.py:842`; campo acrescentado à lista em `app/chamados/services/fio.py:844`. |
+| `app/chamados/services/fio.py:962`, persistido em `app/chamados/services/fio.py:968` | Parâmetro `novo_dia`, sem consulta local ao juiz; apply passa o resultado de `dia_do_turno_da_batida` (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:147`, `:154`, `:358`); reversão passa a data lida do arquivo (`:412`, `:423`). |
+
+`_px.data_evento = _dia_fato` é proxy em memória (`app/chamados/models.py:2756`); `p.data_evento = None` desfaz em memória duas recusas que retornam antes do save (`app/chamados/services/fio.py:855`, `:864`). Nenhum escritor explícito adicional em produção foi encontrado; exaustividade além das formas pesquisadas permanece [nao verificado].
+
+**Chamado incluído:** `ChamadoColaborador` não declara campo `data_evento`; declara `contexto_json`, `celula` e timestamps (`app/chamados/models.py:38`–`:101`). Suas duas portas concretas de INSERT são `abrir` (`app/chamados/models.py:971`) e `criar` (`app/chamados/models.py:1095`). Elas gravam contexto recebido por `defaults`/`campos` (`app/chamados/models.py:939`, `:1095`) e resolvem célula em `app/chamados/models.py:958`/`:1067`; `_celula_de` pergunta a `chamados.juizes.dia_do_fato(fortes=True)` (`app/chamados/models.py:1234`), não ao helper de data da Pergunta. Portanto não se deve classificá-las como escritores de um campo inexistente.
+
+**Catraca: PROCEDENTE para os escritores explícitos atuais; NÃO PROCEDENTE como garantia geral.** P13 identifica esses sete registros sintáticos: proxy 2756, create 2840, atribuições fio 843/855/864/962 e save explícito fio 968; seus detectores estão em `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:84`–`:108`. V15 verifica os valores de duas portas (`app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:24`); rechaveamento recebe somente fiscalização dos arquivos chamadores (`:97`, `:133`).
+
+- Apelidos de import e aliases simples de `PerguntaDisputa` são cobertos pelo P13 (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:37`).
+- `update(data_evento=...)`, bulk com campo literal e `setattr(...,'data_evento',...)` são detectados fora da porta (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:94`, `:98`, `:107`).
+- Fluxo por variável escapa: `campos={'data_evento':d}; qs.update(**campos)` e `campos=['data_evento']; qs.bulk_update(ps,campos)`. Os detectores só procuram constantes nos argumentos locais da chamada (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:93`, `:105`, `:107`).
+- Construtor de outra classe não entra na lista de aliases de Pergunta (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:29`, `:96`).
+- Dentro de porta permitida, V15 ignora `setattr`, atribuição anotada/aumentada e bulk por campo posicional: inspeciona somente `ast.Assign` e keywords diretos (`app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:74`–`:88`); P13 aceita a localização (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:117`). Contra-mutante concreto, validado somente em memória: substituir fio:843 por `setattr(p, 'data_evento', data_evento)` mantém `violacoes_do_escritor=[]`; nenhum arquivo foi alterado [nao verificado: registro persistido da execução].
+- Os cinco mutantes oficiais mordem nos analisadores AST (`app/chamados/tests/test_e1_v15_escritor_pelo_juiz.py:138`–`:154`); extraí e executei as funções puras via `python3 -B`, sem importar Django nem acessar banco. Resultado da execução sem artefato persistido: [nao verificado]. A limitação do mutante alternativo decorre diretamente de `:74`–`:88`.
+
+## 08/11 11:28 · sessao d5d52281b203 · - · - · origem=Ronald (tmux)
+
+**Item 6 — PROCEDENTE: os leitores continuam atribuindo significado de turno ao valor gravado, embora o reuso deixe o acervo com outra data.** A própria prova da volta espera `data_evento=D0` depois de costurar a linha no chamado de `DIA`; o reuso atualiza célula/destino, sem atualizar `data_evento`. `app/chamados/tests/test_e1_v15.py:90-99`; `app/chamados/models.py:2797-2813`; `app/chamados/models.py:2836`.
+
+| Campo/valor | Quem escreve nos caminhos examinados | Quem lê e para quê |
+|---|---|---|
+| `data_evento` | `_nascer`: `_dia_fato` obtido em `dia_do_turno_da_linha`, depois `create`; `reapontar_resolvedora`: data pergunta sem dia pelo mesmo wrapper; `rechavear_data_evento`: grava parâmetro `novo_dia`. `app/chamados/models.py:2749-2751`; `app/chamados/models.py:2840`; `app/chamados/services/fio.py:842-844`; `app/chamados/services/fio.py:962-968`. | Costura: wrapper/juiz; fecho: `_dia_do_fato`; identidade de busca: valor gravado; C6/tranca/plantio: valor gravado. `app/chamados/juizes.py:1993-1994`; `app/chamados/services/fio.py:1217-1243`; `app/chamados/services/fio.py:1196`; `app/chamados/juizes.py:332-336`; `app/chamados/services/materializacao.py:344-345`. |
+| `celula` | `_nascer` busca por `_dia_fato`, atribui ao existente ou cria com ela; rechaveamento busca célula de `novo_dia`. `app/chamados/models.py:2768`; `app/chamados/models.py:2797-2799`; `app/chamados/models.py:2841`; `app/chamados/services/fio.py:959-963`. | C6 lê veredito da célula; alimentação de falta exige que `celula.data == data_evento`, descartando a FK divergente; chamado deriva seu dia pela célula antes dos outros degraus. `app/chamados/juizes.py:1166-1168`; `app/chamados/juizes.py:1199-1214`; `app/chamados/juizes.py:634-642`; `app/chamados/juizes.py:98-99`. |
+| `batida_origem_id` | `_nascer` recebe campo explícito ou deriva pelo mesmo `batida_origem_do_nascimento` utilizado no `save` de inserção; deriva de `disputa.contexto.ultima_batida.id`, validando dono quando a derivação ocorre. `app/chamados/models.py:2745-2747`; `app/chamados/models.py:3270-3271`; `app/chamados/models.py:3282-3289`. | Wrapper decide se consulta juiz; `_dia_do_fato` carrega Batida e consulta `_T1`; busca/dedup usa episódio. `app/chamados/services/fio.py:1259-1262`; `app/chamados/services/fio.py:1232-1239`; `app/chamados/models.py:2781`; `app/chamados/models.py:2680`. |
+| `chamado_destino` | Nascimento cria com destino; reuso atribui após guardas; reapontamento atribui e salva com lavra. `app/chamados/models.py:2841`; `app/chamados/models.py:2800-2813`; `app/chamados/services/fio.py:859-874`. | Costura compara dia; `chamado_que_lista` escolhe destino antes do pai; plantio usa destino para marcos; guarda terminal julga C6 no pós estado. `app/chamados/juizes.py:1994-2029`; `app/chamados/services/fio.py:116-117`; `app/chamados/services/materializacao.py:339`; `app/chamados/services/materializacao.py:409`; `app/chamados/services/fio.py:778-783`. |
+
+Contraexemplo de leitura mantido pelo código: linha com episódio cujo juiz diz `DIA`, gravada em `D0`; `abrir(..., DIA)` elege a linha, associa célula de `DIA`, aceita costura pelo juiz e preserva `D0`. Então:
+
+- A costura compara `DIA`, enquanto `_dia_de_turno_da_pergunta` devolve `D0`. `app/chamados/models.py:2749-2751`; `app/chamados/models.py:2768`; `app/chamados/models.py:2802`; `app/chamados/juizes.py:1994`; `app/chamados/juizes.py:336`.
+- A tranca calcula competência por `D0`. `app/chamados/juizes.py:948-961`.
+- C6, quando alcança falta do dia, consulta `D0`; a célula de `DIA` não serve para alimentar essa consulta porque a igualdade falha. `app/chamados/juizes.py:1216-1222`; `app/chamados/juizes.py:638`.
+- Plantio tipo hora combina resposta com `D0`, depois faz ajuste overnight a partir de `D0`. Não consulta o novo wrapper nesse caminho. `app/chamados/services/materializacao.py:344-345`; `app/chamados/services/materializacao.py:414-421`.
+- A guarda de costura em chamado terminal decide competência entregue por `p.data_evento`, portanto também pelo gravado. `app/chamados/services/fio.py:776`.
+
+Isso demonstra discrepância sem exigir migração de leitores, cuja preservação está expressamente no escopo dado; comprovar que a migração já eliminou o estado em produção é **[nao verificado]**. `app/chamados/tests/test_e1_v15.py:98-99`.
+
+**Item 7 — classes verificadas.**
+
+- **Campo com dois significados: PROCEDENTE.** O código declara expressamente data gravada como chave e `_dia_do_fato` como identidade distinta; o reuso conserva divergência observável entre leitores acima. `app/chamados/services/fio.py:1220-1227`; `app/chamados/tests/test_e1_v15.py:98-99`.
+- **Segundo juiz geométrico duplicando `_T1`: não demonstrado.** O registro aponta `turnos_do_colab`; o wrapper chama `_dia_do_fato` → `dia_do_turno_da_batida` → `dia_das_batidas` → `turnos_do_colab`. Não há outro pareador nesse trajeto. `app/core/juizes.py:196`; `app/chamados/services/fio.py:1236-1238`; `app/ponto/turnos.py:2923-2926`; `app/ponto/turnos.py:2902-2903`.
+- **Derivação paralela de fonte: PROCEDENTE no fallback sem resposta, não na geometria.** O juiz documenta `None` como “sem resposta do juiz não há dia a gravar”, mas `dia_do_turno_da_linha` devolve pedido/gravado nessa situação. `app/ponto/turnos.py:2919-2920`; `app/chamados/services/fio.py:1258-1262`.
+- **Derivação duplicada de episódio: não demonstrada.** Porta e inserção chamam a mesma função. `app/chamados/models.py:2745`; `app/chamados/models.py:3271`.
+- **Relógio fora da borda: não demonstrado nas linhas alteradas.** O relógio identificado é a porta própria de conversa, que captura `localdate()`; conversa é explicitamente civil e excluída de confronto de turno. `app/chamados/models.py:2700-2707`; `app/chamados/juizes.py:1991-1992`. Auditoria transitiva integral de relógios: **[nao verificado]**.
+- **Ordem de trava nova incorreta: não demonstrada nas linhas alteradas.** `_nascer` toma Colaborador antes das novas consultas e da costura; reapontamento toma Colaborador por `fato_livre_para` ou diretamente antes da guarda que trava Chamado. `app/chamados/models.py:2720-2724`; `app/chamados/services/fio.py:852-861`; `app/chamados/services/fio.py:768`. Auditoria de todos os chamadores/transações externos: **[nao verificado]**.
+- Segundo escritor fora da porta e alcance/mordida do selo pertencem ao censo do outro explorer: **[nao verificado]**.
 
 ## 08/11 11:23 · sessao c343206cd790 · FIO-E0-V4-E1 · censo · origem=Code
 
@@ -979,317 +1072,4 @@ A varredura foi feita com `ast.parse`, sem importar Django nem executar consulta
 
 Ocorrência/quantidade atual em produção, comportamento visual do APK/PWA e resultado de uma E3 futura: **[nao verificado]**.
 
-## 08/11 10:27 · sessao 24e28cd92da8 · - · - · origem=Ronald (tmux)
-
-AST de todos os `.py` fora de diretórios `tests/`, resolvendo `ImportFrom` e aliases locais (`fio_vivo as _fio_vivo`): **13 chamadas C15, em 12 funções; 3 chamadas C17**. Os pontos abaixo são a evidência concreta do conjunto; uso dinâmico não demonstrado: [nao verificado].
-
-| Chamador direto C15 | Chamada | Papel efetivamente exercido |
-|---|---|---|
-| `vigia_fio.fio_do_dia` | `app/chamados/services/vigia_fio.py:166` | **Respondedor**: devolve booleano para perguntas recebidas; `censo` lê em `:414` e `:417` e incrementa `fio_vivo` em `:418`. |
-| `DisputaSupervisao.pode_fechar` | `app/chamados/models.py:1794` | **Juiz de outra pergunta**: autorização de fechar disputa, combinando ausência de respostas sem veredito com ausência de fio vivo (`:1789–1794`). Também alimenta respondedor de beco: `app/chamados/services/becos.py:33`. |
-| `disputa_viva_do_chamado` | `app/chamados/juizes.py:2084` | **Gate de outra ação**: retorna disputa aberta que trava encerramento do chamado; ausência de perguntas também trava (`:2080–2086`). Chamado por alias `_disp_viva(self)` em `app/chamados/models.py:148`, seguido de erro falante ao usuário em `:150–154`. |
-| `supra_juiz.Command.handle` | `app/ponto/management/commands/supra_juiz.py:215` | **Insumo de classificação/auditoria**: conta chamados com fio e passa `cobrancas_vivas=len(_com_fio)` a `classificar_dia` (`:223–225`); agrega placar e exemplos (`:235–238`). |
-| `reconciliar_grade.Command._relavrar_orfa` | `app/ponto/management/commands/reconciliar_grade.py:460` | **Gate de relavra**: pergunta respondida viva impede relavra, retornando `ORFA_FIO_PRESO` (`:460–462`); chamada em `:228` agrega resultado ao plano. |
-| `emitir_furo_retroativo.Command.handle` | `app/ponto/management/commands/emitir_furo_retroativo.py:98` | **Insumo para emitir**: alimenta `classificar_dia(cobrancas_vivas=...)` (`:101–110`) e só prossegue em `FURO_SEM_COBRANCA` (`:111–113`). |
-| `folha.previa._material` | `app/folha/previa.py:144` | **Respondedor da prévia**: devolve `resposta do colaborador`, `pergunta viva (sem resposta)` ou `nada` (`:139–146`); escreve campo `material` de cada item de dia/marco em `:95`. |
-| `limbo_folgas.filhos_no_defeito` | `app/chamados/services/limbo_folgas.py:201` | **Gate de fechamento do pai**: seleciona filhos cujo dia ainda tem defeito de cadastro e fio vivo (`:191–205`); `detectar_ausencias` lê em `app/ponto/management/commands/detectar_ausencias.py:156`. |
-| `cartorio._julgar_colab_corpo` | `app/ponto/services/cartorio.py:1339` | **Insumo da impressão/julgamento**: conta chamados com fio e escreve `fio=len(_com_fio)` em `impressao_insumos` (`:1348–1352`). |
-| `cartorio._julgar_colab_corpo` | `app/ponto/services/cartorio.py:1595` | **Gate de reconciliação**: pula chamado sem perguntas ou com fio vivo; só continua tratando fio morto (`:1591–1601`). |
-| `explicador.por_que_nao_fecha` | `app/chamados/services/explicador.py:137` | **Respondedor administrativo**: constrói `pode_fechar`, `resumo` e `itens` (`:137–163`); `montar_chamados_fio` chama em `app/chamados/services/fio.py:308` e anexa `ch.explicacao` em `:310`. |
-| `encerrar_perguntas_com_fato.Command.handle` | `app/chamados/management/commands/encerrar_perguntas_com_fato.py:83` | **Gate de fechamento**: fio vivo incrementa barrada e pula disputa; do contrário tenta `d.fechar` (`:83–90`). |
-| `disputa_emissao._ja_perguntou` | `app/chamados/services/disputa_emissao.py:1244` | **Deduplicação de emissão** por `(disputa,motivo,data_evento)`, com guarda de colaborador ativo (`:1237–1244`); chamada em `:765` e pelo comando `disparar_perguntas_competencia.py:173`. |
-
-**Fora dos nove nomes do aval existem três chamadores diretos:** `vigia_fio.fio_do_dia`, `DisputaSupervisao.pode_fechar` e `juizes.disputa_viva_do_chamado`, conforme chamadas `vigia_fio.py:166`, `models.py:1794`, `juizes.py:2084`.
-
-**A frase “os nove nomeados não são respondedores” não confere:** `explicador` responde ao admin por disputa (`app/chamados/services/explicador.py:163` → `app/chamados/services/fio.py:310`), e `folha/previa` responde com campo `material` apresentado na prévia (`app/folha/previa.py:95`, `app/folha/previa.py:144`). Os demais têm o uso específico descrito na tabela, sem inferir intenção humana.
-
-C15 é uma redução existencial: `any(pergunta_viva(p) for p in perguntas)`; o universo é entregue pelo chamador e não tem necessariamente unidade `(colab,dia)` (`app/chamados/juizes.py:1233`, `app/chamados/juizes.py:1242`).
-
-| Chamador direto C17 | O que lê hoje | Efeito de retirar o símbolo público sem adaptar chamador |
-|---|---|---|
-| `fora_da_folha._porta` | Importa C17 em `app/folha/fora_da_folha.py:66` e chama em `:67`. `_fio_do_dia` lê `porta['fio']` ou `FIO_SEM_PORTA` em `:77–78`; `o_que_segura` também lê `fila` em `:225`. | A importação deixa de resolver; ficam afetados `fio`, frase `DESTRAVA`, chamados mostrados e grupo por fio (`app/folha/fora_da_folha.py:221–231`). Não equivale automaticamente a alterar `classificar_export`, chamado separadamente em `:215`. |
-| `vigia_fio.censo_alcance` | Importa em `app/chamados/services/vigia_fio.py:556`, chama por chave `(cid,dt)` em `:635`. Lê `rota` e `verbos` em `:642–646`; só sem porta recorre a dono e causas em `:654–685`. | A importação deixa de resolver; perde-se a partição porta/sem porta usada nos contadores e nas linhas de alcance (`:635–646`). Chamado pelo comando em `app/chamados/management/commands/vigiar_fio_morto.py:173`. |
-| `cadastro_realidade.beco_em_lote` C11 | Importa em `app/escala/services/cadastro_realidade.py:464`; **chamada viva em `:488`**, não `:460`. Filtra dias com perguntas vivas e C17 `None`; depois exige âncora terminal (`:515–517`), defeito folga (`:518`) e produz assinatura C11 (`:530–540`). | A importação deixa de resolver; a seleção “sem porta” do C11 precisa continuar disponível/adaptada para o lote produzir assinaturas. Entradas são a janela individual em `:439` e o lote das competências abertas em `:573`; efeitos adicionais de uma substituição ainda não implementada: [nao verificado]. |
-
-C17 devolve `None` ou `{rota,fila,verbos,fio}`; compõe chamados da célula na fila com perguntas vivas no app, resposta não vazia e âncora na fila (`app/chamados/juizes.py:1373–1387`). “Resolver dia” fica explicitamente fora desse critério (`app/chamados/juizes.py:1367–1369`). A linha `cadastro_realidade.py:460` do anexo não é chamada no vivo: é docstring; a chamada AST está em `:488`.
-
-Outra omissão relevante ao censo amplo: **`chamados/services/becos.py::classificar`** responde `None|FECHAVEL|BARRADA` por disputa e lê C7 em `:33`; combina disputa aberta, visibilidade por `respondida_em`/destino e pai terminal (`app/chamados/services/becos.py:25–33`). Não é chamador direto C15, mas é respondedor indireto de beco.
-
-## 08/11 10:22 · sessao 3832ccb31504 · COBPARC-AUSENCIA-CALA-DOIS-JUIZES · censo · origem=Code
-
-**Não há um “sim” uniforme.** Para a parcial não-falta **sem período**, (A) cala a geração da pergunta; (B) continua julgando célula/ata e considera o dia furado se encontrar lâmpada `acesa=False`. O cartório bloqueia o nascimento do chamado por outro predicado, `parcial_so_lista`. Isso não fecha universalmente chamados existentes. `app/chamados/services/materializacao.py:81`; `app/chamados/juizes.py:480`; `app/ponto/services/cartorio.py:398`; `app/ponto/services/cartorio.py:1777`.
-
-“Parcial”, abaixo, significa o predicado do código: tipo que aceita horas, registro de um dia e `0 < minutos < 480`. A ausência de `hora_ini/hora_fim` não determina parcialidade. `app/ponto/turnos.py:2598`.
-
-**1. Censo dos sítios executáveis**
-
-Nas tabelas, **“não cala” significa que aquela guarda deixa o julgamento continuar**, sem afirmar que efetivamente nascerá cobrança; os próprios emissores possuem outras guardas. `app/chamados/services/disputa_emissao.py:763`; `app/chamados/services/disputa_emissao.py:765`; `app/chamados/services/fabrica_da_celula.py:91`; `app/chamados/services/fabrica_da_celula.py:102`.
-
-| Sítio | Parcial não-falta sem período | Efeito |
-|---|---|---|
-| `app/ponto/turnos.py:2598` — `cobre_parte_do_dia` | `True`; não lê as horas. | Define parcialidade. |
-| `app/ponto/turnos.py:2632` — `periodo_da_parcial_no_dia` | Retorna `'sem_periodo'`. | Classifica período. |
-| `app/ponto/turnos.py:2675` — `ausencia_explica_o_dia_inteiro` | `False`. | Não reconhece cobertura inteira. |
-| `app/chamados/services/materializacao.py:81` — (A) | **Cala** pelo segundo termo, em `:82`. | Guarda da pergunta e da reemissão. |
-| `app/chamados/juizes.py:449` — (B) | Não cala pela ausência; segue à ata. Lâmpada falsa prende em `:480`; sem célula/ata lavrada retorna `None` em `:464`/`:478`. | Premissa/S122/fechamento/reabertura. |
-| `app/chamados/juizes.py:410` — `ausencia_parcial_cobra_o_resto` | `True` para registro `tipo_dia='ausencia'` com `cobertura_parcial`. Não lê período. | Predicado compartilhado dos leitores do resto. |
-| `app/chamados/juizes.py:426` — `dia_sem_trabalho` | A parcial só responde “sem trabalho” se `trabalha is False`. | Não cala pelo mero rótulo ausência. |
-| `app/escala/utils.py:1211` e `app/escala/utils.py:1255` — `_marcar_ausencias` | Marca parcial e `'sem_periodo'`; não dispensa missing, pela guarda em `:1265`. | Grade/folha/insumo da ata. |
-| `app/ponto/services/cartorio.py:398` — `parcial_so_lista` | **Cala nascimento**, retornando `True` incondicionalmente. | Chamado/pergunta/push. |
-| `app/ponto/services/cartorio.py:436` — `_cob_parcial_da_impressao` | Conserva `'sem_periodo'` na impressão dos insumos. | Controle de rejulgamento; não decide cobrança sozinho. |
-| `app/ponto/services/cartorio.py:732` e `app/ponto/services/cartorio.py:736` — `ata_do_dia` | Transporta parcialidade e período. | Lavratura da ata. |
-| `app/ponto/services/cartorio.py:766` — `dispensar_por_ausencia` | **Não dispensa** pela ausência parcial. | Mantém lâmpadas recebidas da grade. |
-| `app/escala/services/leitor_celula.py:416` e `app/escala/services/leitor_celula.py:418` | Transporta os dois carimbos da ata. | Alimentação dos leitores; não recalcula cobertura. |
-| `app/ponto/supra_juiz.py:381` e `app/ponto/supra_juiz.py:439` | Com fato/batida nas condições dos respectivos ramos, produz `PARCIAL_SEM_PERIODO`. | Classificação para cadastro. |
-| `app/ponto/supra_juiz.py:530` | Sem período não constitui `_resto_cobrado`; aprovada + chamado vivo produz `COBRANCA_EM_DIA_COBERTO`, em `:532`. | Protesto sobre cobrança existente. |
-
-O supra **não trata todo sem-período como `PARCIAL_SEM_PERIODO`**: o ramo sem batida admite a parcial como dia de cobrança e pode produzir `FURO_SEM_COBRANCA`; a emissão é barrada posteriormente pelo cartório. `app/ponto/supra_juiz.py:304`; `app/ponto/supra_juiz.py:313`; `app/ponto/supra_juiz.py:367`; `app/ponto/services/cartorio.py:1725`.
-
-Todos os leitores executáveis de `ausencia_parcial_cobra_o_resto`, além de `dia_sem_trabalho`:
-
-| Sítio | Resposta local para sem período | Efeito |
-|---|---|---|
-| `app/chamados/services/declaracao_texto.py:98` | Mantém a parcial; enumera missing em `:110`. | Marcos faltantes/texto da cobrança. |
-| `app/escala/services/furos_diarios.py:49` | Mantém o dia e conta furos em `:54`. | `FuroDiario`/métricas. |
-| `app/relatorios/furos.py:195` | Mantém a parcial e apresenta marcos apagados em `:202`. | Raio-X/relatório. |
-| `app/inteligencia/calculadores.py:50` | Mantém a parcial e conta marcos apagados em `:64`. | `preenchimento_espelho`. |
-| `app/inteligencia/calculadores.py:149` | Mantém a parcial e conta previstos/batidos em `:160`. | `preenchimento_marcos`. |
-
-Leitores adicionais de `dia_sem_trabalho`, que recebem essa mesma exceção da parcial:
-
-| Sítio | Resposta local para sem período | Efeito |
-|---|---|---|
-| `app/chamados/models.py:1245` | Parcial não regulariza apenas pelo rótulo ausência. | Coletor da premissa. |
-| `app/chamados/services/fabrica_da_celula.py:91` | Essa guarda deixa passar; `parcial_so_lista` cala depois, em `:102`. | Pergunta/pai/push. |
-| `app/chamados/services/materializacao.py:174` | Deixa a parcial participar da avaliação do plantio. | Verificação de preenchimento do furo/paridade. |
-| `app/ponto/services/cluster_espurio.py:25` | Deixa participar da leitura das lâmpadas/órfãs. | Diagnóstico do cluster; nascimento recebe bloqueio separado. |
-| `app/ponto/management/commands/detectar_intervalo_ausente.py:51` | Deixa participar; a cobrança exige condições das lâmpadas em `:69`. | Furo de intervalo. |
-| `app/ponto/management/commands/reconciliar_grade.py:282` | Parcial com `trabalha!=False` não entra nos mortos por essa cláusula. | Retratação de cobrança. |
-| `app/ponto/supra_juiz.py:71` e `app/ponto/supra_juiz.py:496` | Consulta o juiz no ramo sem trabalho; esse ramo exige `cobertura_status is None`, em `:495`. | `COBRANCA_EM_DIA_SEM_TRABALHO`. |
-
-Demais chamadas executáveis dos predicados pedidos:
-
-| Sítio | Resposta para parcial sem período | Efeito |
-|---|---|---|
-| `app/escala/servico_jornada.py:344` | A parcial não cala essa guarda. O laço consulta **todas** as ausências, em `:342`, não só a vencedora. | `classificar_falta`. |
-| `app/ponto/turnos.py:2690` | Exclui a parcial dos dias inteiros; exige também efeito `ABONA`. | Folha/pontualidade. |
-| `app/ponto/services/fechamento.py:694` | Parcial paga não abona o dia inteiro; conta pelas batidas, em `:695`. | Folha. |
-| `app/ponto/services/efeito_ausencia.py:48` | Soma minutos da parcial paga. | Crédito financeiro. |
-| `app/ponto/services/efeito_ausencia.py:55` | Parcial paga não justifica/suprime o dia inteiro. | Folha/espelho. |
-| `app/ponto/services/credito_parcial.py:27` | Credita minutos pagos no próprio dia. | Folha/espelho. |
-| `app/ponto/services/dia_decidido.py:494` | Conserva minutos no rótulo da parcial abonada. | Tela. |
-| `app/ponto/services/ausencia.py:883` e `app/ponto/services/ausencia.py:887` | Validador rejeita hora faltante e período em não-parcial. Só é chamado quando alguma hora foi fornecida, em `:906`. | Cadastro. |
-| `app/ponto/services/vigia_ausencia_veredito.py:54` | Pula parcial no contador. | Vigia de discordância. |
-| `app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:49` | Pula parcial no contador. | Diagnóstico. |
-| `app/ponto/views.py:2084` | Entrega parcialidade ao painel. | Tela. |
-| `app/ponto/views.py:2240` | Marca `a.cobre_parte=True`. | Lista de ausências. |
-| `app/templates/ponto/ausencias.html:163` | Mostra minutos. | Tela. |
-| `app/templates/ponto/partials/painel_ausencia.html:296` e `app/templates/ponto/partials/painel_ausencia.html:311` | Mostra edição/aprovação do período e os avisos sobre lista do DP, em `:299`/`:313`. | Tela; não publica uma linha administrativa. |
-
-A exclusão da parcial no helper de dias inteiros também chega aos consumidores em `app/ponto/services/fechamento.py:687`, `app/ponto/services/efeito_ausencia.py:65`, `app/ponto/turnos.py:2695`, `app/ponto/management/commands/diff_calculador.py:412`, `app/ponto/services/esmeril_espelho.py:164` e `app/relatorios/management/commands/diff_extrato_parcial.py:67`.
-
-Há ainda o juiz registrado da cobrança viva: `reconciliar_por_ausencia` escolhe a vencedora, mas, para aprovada, exige `_premissa_morre` e sucesso de `ch.reconciliar()`. Não testa `'sem_periodo'` diretamente. `app/chamados/services/silencio_ausencia.py:65`; `app/chamados/services/silencio_ausencia.py:93`; `app/chamados/services/silencio_ausencia.py:101`.
-
-**2. Grade, lâmpadas, emissão e lista administrativa**
-
-A grade conserva os missing da parcial sem período: escreve `tipo_dia='ausencia'`, `cobertura_parcial=True` e `'sem_periodo'`; a transformação de missing em dispensada exige período diferente de `'sem_periodo'`. `app/escala/utils.py:1241`; `app/escala/utils.py:1251`; `app/escala/utils.py:1255`; `app/escala/utils.py:1265`.
-
-Na ata, **os marcos missing conhecidos ficam `acesa=False`**. Isso não significa que todas as lâmpadas do dia apaguem: as células cumpridas continuam acesas; existe também resposta `None` para fato cego sem coluna atribuível. `app/ponto/services/cartorio.py:647`; `app/ponto/services/cartorio.py:677`; `app/ponto/services/cartorio.py:689`; `app/ponto/services/cartorio.py:641`.
-
-`ata_do_dia` grava as lâmpadas, conta as falsas e transporta os carimbos da parcial. `dispensar_por_ausencia` não as acende pela ausência parcial; `dia['justificado']` constitui outra fonte explícita de dispensa. `app/ponto/services/cartorio.py:704`; `app/ponto/services/cartorio.py:712`; `app/ponto/services/cartorio.py:732`; `app/ponto/services/cartorio.py:736`; `app/ponto/services/cartorio.py:766`; `app/ponto/services/cartorio.py:768`.
-
-**O cartório não cria o chamado de furo desse dia com esses carimbos:** calcula `parcial_so_lista` e o exige falso nos dois portões de emissão. Um chamado vivo pode permanecer e receber espelhamento dos marcos. `app/ponto/services/cartorio.py:1706`; `app/ponto/services/cartorio.py:1725`; `app/ponto/services/cartorio.py:1777`; `app/ponto/services/cartorio.py:1787`.
-
-Outros consumidores do bloqueio:
-
-| Sítio | Ação para sem período |
-|---|---|
-| `app/chamados/services/fabrica_da_celula.py:102` | Retorna sem motivos/pergunta/pai. |
-| `app/chamados/services/disputa_emissao.py:871` e `app/chamados/services/disputa_emissao.py:894` | Classifica pelo predicado e remove o chamado da fábrica de disputas/perguntas. |
-| `app/chamados/services/pergunta_no_app.py:88` | Rotula retenção como `parcial_na_lista_do_admin`. |
-| `app/chamados/reconciliador.py:872` | Bloqueia nascer/renascer fora da costura em chamado já vivo. |
-| `app/ponto/services/cluster_espurio.py:103` | Remove o dia de `a_abrir`, em `:107`. |
-| `app/chamados/management/commands/disparar_perguntas_competencia.py:154` | Conta e pula nova pergunta. |
-| `app/ponto/management/commands/emitir_furo_retroativo.py:121` | Conta e pula emissão retroativa. |
-
-Quanto à **lista do admin**, há três coisas distintas no código:
-
-- Classificação `PARCIAL_SEM_PERIODO`, derivando `indefinida`: `app/ponto/supra_juiz.py:388`; `app/ponto/supra_juiz.py:441`; `app/escala/models.py:1615`.
-- Contagem `parcial_na_lista_sem_push`: `_contar_na_lista` apenas incrementa contador em memória e deduplica a chave. `app/ponto/services/cartorio.py:1829`; `app/ponto/services/cartorio.py:1832`.
-- Texto da tela dizendo que o dia está na lista do DP: `app/templates/ponto/partials/painel_ausencia.html:299`.
-
-A tela administrativa chama `cadastro_realidade.lista`; sua fonte C11 exige especificamente o protesto `PREVISTO_COM_DIA_INDEFINIDO`. Há também uma fonte genérica para ausência com pelo menos duas batidas. Essas condições não demonstram inclusão de **toda parcial sem período**. `app/escala/views.py:484`; `app/escala/services/cadastro_realidade.py:477`; `app/escala/services/cadastro_realidade.py:478`; `app/ponto/services/esmeril_espelho.py:133`.
-
-**Publicação efetiva de um dia específico numa lista administrativa por ser “parcial sem período”: [não verificado].**
-
-**3. Chamadores de (A), de (B) e ações**
-
-Os chamadores executáveis diretos de **(A)** são:
-
-| Chamador | Onde a resposta vira ação |
-|---|---|
-| `app/chamados/services/disputa_emissao.py:763` — `_criar_pergunta_se_couber` | `True` retorna antes de `PerguntaDisputa.abrir`, em `:770`. |
-| `app/chamados/reconciliador.py:845` — `reemitir_chamado_do_dia` | `True` retorna antes de abrir/reutilizar o chamado, em `:900`. |
-| `app/chamados/services/pergunta_no_app.py:90` — `retencao` | Retorna causa diagnóstica; não fecha chamado. A classificação administrativa vem antes, em `:88`. |
-
-Os chamadores executáveis diretos de **(B)** são:
-
-| Chamador | Efeito |
-|---|---|
-| `app/chamados/models.py:1260` — `premissa_regularizada` | Quando B responde, devolve `not _f`, em `:1262`. |
-| `app/chamados/juizes.py:471` | Recursão para a véspera quando o dia é sem trabalho; conserva `para`. |
-
-O coletor pode aceitar provas **antes de B**: justificativa aprovada, decisão administrativa, dia sem trabalho para chamado que não seja `turno_aberto`, marcos acesos ou inexistentes. `app/chamados/models.py:1227`; `app/chamados/models.py:1243`; `app/chamados/models.py:1245`; `app/chamados/models.py:1249`; `app/chamados/models.py:1258`.
-
-As ações posteriores são:
-
-- **S122:** usa `premissa_regularizada()` no efeito padrão cobrança; se não regularizado, recusa transição para `resolvido`. `app/chamados/models.py:175`; `app/chamados/models.py:177`; `app/chamados/models.py:185`.
-- **Fechamento do sistema:** consulta a premissa com `para='folha'`; há ainda outras guardas antes de gravar o fechamento. `app/chamados/models.py:701`; `app/chamados/models.py:648`; `app/chamados/models.py:617`.
-- **Reabertura:** premissa regularizada com `para='folha'` produz recusa; `reabrir` registra e retorna `False`. Premissa não regularizada apenas deixa essa guarda passar. `app/chamados/models.py:1309`; `app/chamados/models.py:1310`; `app/chamados/models.py:1361`; `app/chamados/models.py:1366`.
-
-**4. Juiz registrado**
-
-**Sim: C11**, pergunta **“a ausência do dia suspende, fecha ou levanta a cobrança viva?”**, aponta para `chamados/services/silencio_ausencia.py::reconciliar_por_ausencia`. `app/core/juizes.py:117`; `app/core/juizes.py:271`.
-
-Também existe **C18**, para a pergunta mais estreita sobre a cobrança calar porque a célula lavrada diz que o dia não é de trabalho, apontando para `dia_sem_trabalho`. `app/core/juizes.py:149`; `app/core/juizes.py:278`.
-
-O documento registra explicitamente a exceção parcial que cobra o resto e a regra especial de (A) para `'sem_periodo'`; portanto não descreve uma resposta única compartilhada por A e B. `app/docs/JUIZES.md:62`; `app/docs/JUIZES.md:65`; `app/docs/JUIZES.md:66`.
-
-**5. Contraexemplos e limites**
-
-Os seguintes resultados decorrem das condições do código; ocorrência produtiva concreta: **[não verificado]**.
-
-| Condição | (A) | (B) |
-|---|---|---|
-| **Parcial com período; todos os missing dispensados dentro dele; nenhuma órfã** | Retorna `False`: não cala pela ausência. Com horas declaradas, `periodo(a, ())` retorna `'fora'`. `app/chamados/services/materializacao.py:81`; `app/ponto/turnos.py:2641`. | Retorna `False`: sem furo, pois as dispensadas ficam acesas e não há órfãs. **Diferença semântica, apesar dos dois booleanos serem falsos.** `app/escala/utils.py:1265`; `app/ponto/services/cartorio.py:647`; `app/chamados/juizes.py:480`; `app/chamados/juizes.py:490`. |
-| **Falta aprovada; ata `'falta'`; véspera responde `False` ou `None`** | Não cala: ambos os termos excluem falta. `app/chamados/services/materializacao.py:82`; `app/ponto/turnos.py:2675`. | Retorna `False` pela regra do dia sem trabalho/véspera. Para chamado não-turno, o coletor já regulariza antes de B. `app/chamados/juizes.py:428`; `app/chamados/juizes.py:471`; `app/chamados/juizes.py:472`; `app/chamados/models.py:1245`. |
-
-**Tipo integral não-falta com efeito diferente de `ABONA` não é, sozinho, divergência A/B:** ambos calam sem testar efeito. A diferença está no helper financeiro, que exige `ABONA`. `app/chamados/services/materializacao.py:81`; `app/chamados/juizes.py:449`; `app/ponto/turnos.py:2690`.
-
-**`para='folha'` também não diferencia uma única vencedora aprovada comum aos dois.** A fixa cobrança; B aceita o efeito recebido. Cobrança admite não rejeitadas, folha somente aprovadas: com lançamentos concorrentes, podem selecionar vencedoras diferentes pelo desempate `-data, -pk`. `app/chamados/services/materializacao.py:78`; `app/chamados/juizes.py:448`; `app/ponto/turnos.py:2514`; `app/ponto/turnos.py:2516`; `app/ponto/turnos.py:2557`.
-
-## 08/11 10:20 · sessao 7681152d2c16 · - · - · origem=Ronald (tmux)
-
-B não dá uma resposta única apenas pela presença da ausência aprovada: retorna `False` imediatamente só quando a ausência vencedora explica o dia inteiro; a parcial segue para célula, ata e lâmpadas. Uma lâmpada `acesa is False` devolve `True`; célula inexistente ou ata sem `lampadas` devolve `None`. Para parcial `tipo_dia='ausencia'`, `cobertura_parcial=True`, `dia_sem_trabalho` só cala por `trabalha is False`. Fontes: `app/chamados/juizes.py:448`, `app/chamados/juizes.py:449`, `app/chamados/juizes.py:460`, `app/chamados/juizes.py:477`, `app/chamados/juizes.py:480`, `app/chamados/juizes.py:426`.
-
-Chamadores diretos executáveis de B:
-
-| Chamador | Efeito |
-|---|---|
-| `app/chamados/models.py:1260` | `premissa_regularizada` devolve `not _f` quando B sabe responder (`app/chamados/models.py:1261`). |
-| `app/chamados/juizes.py:471` | Recursão para véspera quando `dia_sem_trabalho(cel)`; preserva `para` e usa `False` se a véspera retorna `None` (`app/chamados/juizes.py:472`). |
-
-O import em `app/chamados/models.py:3318` reexporta B. As ações que usam o coletor são:
-
-- S122 humano: `transicionar(..., novo_status='resolvido')` chama `premissa_regularizada()` com padrão cobrança; ausência de regularização produz `ValueError`. `app/chamados/models.py:175`, `app/chamados/models.py:177`, `app/chamados/models.py:185`.
-- Fechamento pelo sistema: `_gate_premissa_do_fechamento` usa `para='folha'`; premissa regularizada libera essa guarda. O fechamento passa também pela guarda da pergunta viva. `app/chamados/models.py:701`, `app/chamados/models.py:648`, `app/chamados/models.py:651`.
-- `reconciliar` grava o estado decidido somente se `_decisao_do_fechamento` permite. `app/chamados/models.py:617`, `app/chamados/models.py:620`.
-- Reabertura: `recusa_da_reabertura` usa `para='folha'`; premissa regularizada impede `reabrir`, registrando recusa e retornando `False`. `app/chamados/models.py:1309`, `app/chamados/models.py:1310`, `app/chamados/models.py:1361`, `app/chamados/models.py:1366`.
-- Antes de chamar B, o coletor já aceita justificativa aprovada, decisão do admin, dia sem trabalho para chamados que não são `turno_aberto`, marcos acesos e marcos inexistentes. `app/chamados/models.py:1227`, `app/chamados/models.py:1243`, `app/chamados/models.py:1245`, `app/chamados/models.py:1249`, `app/chamados/models.py:1258`.
-
-Censo de leitores executáveis de `ausencia_parcial_cobra_o_resto`:
-
-| Sítio | Parcial sem período | Efeito |
-|---|---|---|
-| `app/chamados/juizes.py:426` | Cobra pela ata, salvo `trabalha=False`; não consulta período. | Juiz do dia sem trabalho; `app/chamados/juizes.py:427`. |
-| `app/chamados/services/declaracao_texto.py:98` | Mantém a parcial e enumera seus `missing`. | Marcos faltantes da declaração; `app/chamados/services/declaracao_texto.py:110`, `app/chamados/services/declaracao_texto.py:123`. |
-| `app/escala/services/furos_diarios.py:49` | Mantém o dia na apuração e conta os furos. | Alimenta FuroDiario; `app/escala/services/furos_diarios.py:54`, `app/escala/services/furos_diarios.py:57`. |
-| `app/relatorios/furos.py:195` | Mantém a parcial e apresenta marcos apagados. | Raio-X da folha; `app/relatorios/furos.py:202`, `app/relatorios/furos.py:208`. |
-| `app/inteligencia/calculadores.py:50` | Mantém parcial; conta marcos apagados. | `preenchimento_espelho`; `app/inteligencia/calculadores.py:57`, `app/inteligencia/calculadores.py:64`. |
-| `app/inteligencia/calculadores.py:149` | Mantém parcial; conta previstos e batidos. | `preenchimento_marcos`; `app/inteligencia/calculadores.py:156`, `app/inteligencia/calculadores.py:160`. |
-
-Esses leitores não testam `sem_periodo` nas condições citadas; preservam a leitura do resto da parcial, sujeita às demais guardas locais. `app/chamados/juizes.py:410`, `app/chamados/services/declaracao_texto.py:98`, `app/escala/services/furos_diarios.py:49`, `app/relatorios/furos.py:195`, `app/inteligencia/calculadores.py:50`, `app/inteligencia/calculadores.py:149`.
-
-Leitores adicionais de `dia_sem_trabalho`:
-
-| Sítio | Resposta local para parcial sem período |
-|---|---|
-| `app/chamados/services/fabrica_da_celula.py:91` | Esta guarda deixa passar se `trabalha!=False`; a guarda seguinte `parcial_so_lista` cala pergunta, pai e push. `app/chamados/services/fabrica_da_celula.py:102`, `app/chamados/services/fabrica_da_celula.py:104`. |
-| `app/chamados/services/materializacao.py:174` | Deixa a parcial participar da avaliação de plantio que preenche furo; pode absolver a guarda de paridade. `app/chamados/services/materializacao.py:178`, `app/chamados/services/materializacao.py:181`. |
-| `app/ponto/services/cluster_espurio.py:25` | Deixa a parcial participar; assinatura requer pelo menos uma lâmpada apagada e duas órfãs próximas. `app/ponto/services/cluster_espurio.py:32`, `app/ponto/services/cluster_espurio.py:33`, `app/ponto/services/cluster_espurio.py:35`. |
-| `app/ponto/management/commands/detectar_intervalo_ausente.py:51` | Deixa a parcial participar; só lista pausas apagadas quando entrada e saída estão acesas. `app/ponto/management/commands/detectar_intervalo_ausente.py:69`, `app/ponto/management/commands/detectar_intervalo_ausente.py:71`. |
-| `app/ponto/management/commands/reconciliar_grade.py:282` | Parcial com `trabalha!=False` não entra nos mortos por essa cláusula. `app/chamados/juizes.py:426`, `app/chamados/juizes.py:427`. |
-| `app/ponto/supra_juiz.py:71` e `app/ponto/supra_juiz.py:496` | Usa o mesmo juiz no ramo `COBRANCA_EM_DIA_SEM_TRABALHO`, alcançado com `cobertura_status is None`. `app/ponto/supra_juiz.py:494`, `app/ponto/supra_juiz.py:497`. |
-| `app/chamados/models.py:1245` | A parcial não regulariza pelo rótulo ausência; continuam as demais provas do coletor. `app/chamados/juizes.py:426`, `app/chamados/models.py:1247`. |
-
-Contraexemplos de código, sem afirmar ocorrência produtiva:
-
-1. **Parcial COM período, todos os marcos faltantes dispensados, sem órfãs:** A retorna `False` — não cala por ausência — porque não explica o dia inteiro e o período declarado não é `sem_periodo`. A grade pode dispensar todos os marcos missing dentro do período; estes viram lâmpadas acesas, e B retorna `False` — sem furo. `app/chamados/services/materializacao.py:81`, `app/ponto/turnos.py:2632`, `app/ponto/turnos.py:2641`, `app/escala/utils.py:1265`, `app/escala/utils.py:1269`, `app/ponto/services/cartorio.py:647`, `app/ponto/services/cartorio.py:677`, `app/chamados/juizes.py:480`, `app/chamados/juizes.py:490`.
-
-2. **Falta aprovada:** A sempre retorna `False`, porque os dois termos excluem falta. B lê a ata: `tipo_dia='falta'` aciona `dia_sem_trabalho`, consulta a véspera e retorna `False` quando a véspera responde `False` ou `None`. No coletor, chamado que não seja `turno_aberto` já fica regularizado por esse tipo de ata antes de B. `app/chamados/services/materializacao.py:81`, `app/chamados/services/materializacao.py:82`, `app/ponto/turnos.py:2675`, `app/chamados/juizes.py:428`, `app/chamados/juizes.py:471`, `app/chamados/juizes.py:472`, `app/chamados/models.py:1245`.
-
-3. **Tipo não ABONA, integral e não falta:** não distingue A de B: ambos calam sem consultar `efeito`. Distingue essa cobrança do helper de folha, que exige `a.efeito == ABONA`. `app/chamados/services/materializacao.py:81`, `app/chamados/juizes.py:449`, `app/ponto/turnos.py:2675`, `app/ponto/turnos.py:2689`.
-
-4. **`para='folha'`:** A fixa cobrança, B aceita o efeito. Cobrança inclui não rejeitadas; folha inclui apenas aprovadas. Portanto podem consultar vencedoras diferentes quando houver mais de um lançamento; desempate é `-data, -pk`. Com uma única ausência aprovada comum aos dois, o filtro de status não constitui diferença. `app/chamados/services/materializacao.py:78`, `app/chamados/juizes.py:448`, `app/ponto/turnos.py:2514`, `app/ponto/turnos.py:2516`, `app/ponto/turnos.py:2552`, `app/ponto/turnos.py:2557`.
-
-O registro tem a pergunta mais estreita `_C18`, “a cobrança do dia cala porque a célula lavrada diz que o dia não é de trabalho?”, apontando para `dia_sem_trabalho`; não é um registro literal de A/B como juiz único da composição ausência → silêncio. `app/core/juizes.py:149`, `app/core/juizes.py:278`.
-
-## 08/11 10:20 · sessao d3bca936a7a8 · - · - · origem=Ronald (tmux)
-
-Censo auxiliar, só leitura:
-
-| Sítio executável | Resposta para parcial não-falta sem horas | Efeito |
-|---|---|---|
-| `app/ponto/turnos.py:2598` | `cobre_parte_do_dia=True` se tipo aceita horas, registro de um dia, `0<minutos<480`; horas não participam. | Predicado de parcial. |
-| `app/ponto/turnos.py:2632` | Retorna `sem_periodo`. | Período declarado. |
-| `app/ponto/turnos.py:2675` | `ausencia_explica_o_dia_inteiro=False`. | Cobertura inteira. |
-| `app/ponto/turnos.py:2690` | Excluída de dias inteiros; além disso exige efeito `ABONA`. | Folha/calculador, zera pontualidade apenas para inteiro. |
-| `app/escala/servico_jornada.py:344` | Parcial não cala esse guarda; continua classificação. Varre todas as ausências, não somente vencedora (`:342`). | `classificar_falta`, furo. |
-| `app/ponto/services/fechamento.py:694` | Parcial de `TIPOS_PAGOS` pula abono inteiro; dia conta pelas batidas (`:695`). | Folha. |
-| `app/ponto/services/efeito_ausencia.py:48` | Soma minutos pagos quando dentro do período. | Crédito financeiro. |
-| `app/ponto/services/efeito_ausencia.py:55` | Parcial paga não justifica nem suprime dia inteiro (`:56`). | Folha/espelho. |
-| `app/ponto/services/credito_parcial.py:27` | Minutos pagos viram crédito do próprio dia (`:28`). | Folha/espelho. |
-| `app/ponto/services/dia_decidido.py:494` | Parcial abonada conserva minutos no rótulo (`:496`). | Tela. |
-| `app/ponto/services/ausencia.py:887` | Permite período somente para parcial; quando este validador recebe hora faltante, rejeita (`:883-884`). | Cadastro. |
-| `app/ponto/services/vigia_ausencia_veredito.py:54` | Pula parcial no contador de discordância. | Vigia. |
-| `app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:49` | Pula parcial no contador. | Diagnóstico. |
-| `app/ponto/views.py:2084` | Entrega `True` ao drawer. | Tela. |
-| `app/templates/ponto/partials/painel_ausencia.html:296` | Mostra edição de período aprovado; sem início mostra “dia está na lista do DP” (`:299`). | Tela. |
-| `app/templates/ponto/partials/painel_ausencia.html:311` | Mostra período na aprovação, com aviso “sem hora [...] lista do DP” (`:313`). | Tela. |
-| `app/ponto/views.py:2240` | Marca `a.cobre_parte=True`. | Lista de ausências. |
-| `app/templates/ponto/ausencias.html:163` | Exibe minutos da parcial. | Tela. |
-| `app/escala/services/leitor_celula.py:416` | Transporta `cobertura_parcial`; transporta literalmente `periodo_parcial` da ata (`:418-419`). | Alimentação dos leitores de ata. |
-| `app/chamados/services/declaracao_texto.py:98` | Parcial entra mesmo com `tipo_dia='ausencia'`; conserva marcos `missing` (`:110-111`). | Texto/declarativa de cobrança. |
-| `app/escala/services/furos_diarios.py:49` | Parcial entra na conta, inclusive sem período. Conta `missing` (`:54`, `:21`). | `FuroDiario`, métricas/ranking. |
-| `app/relatorios/furos.py:195` | Parcial entra; marcos apagados vão ao resultado (`:202-209`). | Raio-X da folha/tela. |
-| `app/inteligencia/calculadores.py:50` | Parcial entra; marcos apagados classificam completo/parcial/furo (`:64-70`). | Métrica `preenchimento_espelho`. |
-| `app/inteligencia/calculadores.py:149` | Parcial entra; conta previstos e batidos (`:160-161`). | Métrica de preenchimento de marcos. |
-
-Os chamadores indiretos de `dias_com_ausencia_de_dia_inteiro` também excluem a parcial: `app/ponto/services/fechamento.py:687`, `app/ponto/services/efeito_ausencia.py:65`, `app/ponto/turnos.py:2695`, `app/ponto/management/commands/diff_calculador.py:412`, `app/ponto/services/esmeril_espelho.py:164`, `app/relatorios/management/commands/diff_extrato_parcial.py:67`.
-
-`supra_juiz` tem três respostas distintas comprovadas:
-
-- Com fato e turno encerrado, lê `periodo_parcial`, produz `PARCIAL_SEM_PERIODO`, cobra cadastro: `app/ponto/supra_juiz.py:381-389`.
-- Com batida sem par, realizado zero, lê o mesmo campo e produz a mesma acusação: `app/ponto/supra_juiz.py:437-442`.
-- Sem batida, pode produzir `FURO_SEM_COBRANCA`: a parcial é dia de cobrança (`:304`), a ausência de período não barra o portão (`:313-316`), e o furo é emitido no resultado (`:367-370`). O cartório barra depois o nascimento por `parcial_so_lista`, não pelo classificador (`app/ponto/services/cartorio.py:1706`, `:1723-1725`).
-- Com chamado vivo, parcial sem período não satisfaz `_resto_cobrado`, portanto produz `COBRANCA_EM_DIA_COBERTO`: `app/ponto/supra_juiz.py:530-534`.
-- `PARCIAL_SEM_PERIODO` deriva veredito `indefinida`: `app/escala/models.py:1615`.
-
-Guardas adicionais da lista do administrador:
-
-| Sítio | Efeito comprovado |
-|---|---|
-| `app/ponto/services/cartorio.py:398` | Sem período + cobertura parcial retorna `True` incondicionalmente (`:399`). |
-| `app/ponto/services/cartorio.py:1723` | Conta na lista e bloqueia emissão do furo do dia (`:1725`). |
-| `app/ponto/services/cartorio.py:1775` | Conta na lista e bloqueia nascimento do chamado de furo parcial (`:1777`). |
-| `app/ponto/services/cartorio.py:1832` | Incrementa `parcial_na_lista_sem_push`, deduplicado por dia-colaborador (`:1829-1831`). |
-| `app/chamados/services/fabrica_da_celula.py:102` | Retorna sem motivos/pergunta/pai/push (`:104`). |
-| `app/chamados/services/disputa_emissao.py:871` | `dia_na_lista_do_admin` delega à ata e ao predicado do cartório. |
-| `app/chamados/services/disputa_emissao.py:894` | Remove chamados desses dias antes da fábrica de disputas; lista vazia retorna `None` (`:895-896`). |
-| `app/chamados/services/pergunta_no_app.py:88` | Retenção retorna `parcial_na_lista_do_admin` (`:89`), antes de consultar A (`:90`). |
-| `app/chamados/reconciliador.py:872` | Fora de costura em chamado já vivo (`:865`), barra nascer/renascer (`:875`). |
-| `app/ponto/services/cluster_espurio.py:103` | Põe dia em `na_lista`; remove-o de `a_abrir` (`:107`); fechamento continua calculado separadamente (`:108`). |
-| `app/chamados/management/commands/disparar_perguntas_competencia.py:154` | Incrementa barra `parcial_lista`, não pergunta (`:155-156`). |
-| `app/ponto/management/commands/emitir_furo_retroativo.py:121` | Incrementa `na_lista`, não emite (`:122-123`). |
-
-Registro de juízes:
-
-- Há registro expresso para a pergunta **“a ausência do dia suspende, fecha ou levanta a cobrança viva?”**: `_C11`, `app/core/juizes.py:117`, autoridade `chamados/services/silencio_ausencia.py::reconciliar_por_ausencia`, `app/core/juizes.py:271`.
-- C11 não chama A nem B: seleciona ausência vencedora para cobrança (`app/chamados/services/silencio_ausencia.py:65`); aprovada só fecha se `_premissa_morre` (`:93-94`), que exige veredito fora de `VEREDITOS_ACUSAM` (`:40-41`), com exceção `justificativa` (`:34-35`); fechamento efetivo passa por `ch.reconciliar()` (`:101`).
-- Há C18 para **“a cobrança do dia cala porque a célula lavrada diz que o dia não é de trabalho?”**, `app/core/juizes.py:149`, autoridade `dia_sem_trabalho`, `:278`.
-- O registro de ausência contém a pergunta de cobertura de dias (`app/core/juizes.py:241`) e a pergunta de período (`:249`); não há ali registro de A ou B como composição única para toda cobrança.
-- `app/docs/JUIZES.md:59-67` documenta a autoridade `dia_sem_trabalho`, a exceção parcial que cobra resto, e a regra especial de A para `sem_periodo`.
-
-Exemplo adicional relevante: para efeito de folha, ausência inteira não `ABONA` é excluída da dispensa de pontualidade por `app/ponto/turnos.py:2690`, embora `ausencia_explica_o_dia_inteiro` não teste efeito (`:2675`). Isso é diferença entre domínios/composições, não prova isolada de divergência A/B.
-
-_2864 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2868 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
