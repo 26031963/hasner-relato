@@ -1,7 +1,86 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 10:35** · publicado em **08/11/2026 10:36** (UTC-3)
+> Ultima resposta processada: **08/11/2026 10:41** · publicado em **08/11/2026 10:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 08/11 10:41 · sessao 16d8ac42b6cf · CENSO-ANTES-DA-VAGA-HOOK · leitura · origem=Code
+
+**O contrato ainda não está implementado nesta árvore:** `ESPERANDO: censo <OBRA> | Codex` retorna **“produtor nao declarado em 1 palavra”**; o parser atual exige produtor único e campos `pid=`/`arquivo=`. (`bin/hook_stop_fila1.py:658–674`)
+
+**(i) Identidade em `/proc`**
+
+Depois da passagem pelo shebang, já executando o corpo do wrapper:
+
+| Chamada | `/proc/<pid>/exe` | `argv[0]` | `argv[1]` |
+|---|---|---|---|
+| `bin/codex_pergunta.sh ...` | Executável do Bash | `bash` | `bin/codex_pergunta.sh` |
+| `bash bin/codex_pergunta.sh ...` | Executável do Bash | `bash` | `bin/codex_pergunta.sh` |
+
+A primeira forma usa `#!/usr/bin/env bash`; a segunda explicita esse interpretador. O caminho absoluto concreto de `exe` nesta execução é **[não verificado]**. (`bin/codex_pergunta.sh:1`)
+
+Consequência para o hook: sendo `exe` um interpretador, `_processo_casa` examina **`argv[1]`**, não exige que `exe` seja o `.sh`. Produtor declarado com caminho absoluto compara o caminho resolvido usando o `cwd` do processo; produtor sem barra compara apenas o basename. (`bin/hook_stop_fila1.py:511–520`)
+
+**(ii) `CODEX_OBRA`**
+
+**É entrada do wrapper, não um export posterior:** o script lê `CODEX_OBRA` para `OBRA` e recusa valor vazio. O selo fornece `CODEX_OBRA` pelo `env` antes de executar o wrapper; nessa chamada, portanto, a variável já entra no ambiente inicial do processo. (`bin/codex_pergunta.sh:80–85`; `bin/tests/test_codex_pergunta.sh:111–113`)
+
+O hook atual não lê esse ambiente: `_prova_pid` consulta `stat`, `exe` e `cmdline`, sem conferir `CODEX_OBRA`. (`bin/hook_stop_fila1.py:534–550`)
+
+**(iii) Furos e limites**
+
+- **Outro usuário:** a exigência de mesmo UID ainda não existe em `_prova_pid`. Falha de leitura bloqueia aquela prova, mas não há comparação explícita de UID. (`bin/hook_stop_fila1.py:523–550`)
+- **Wrapper esperando vaga/flock:** processo vivo não prova Codex iniciado. O wrapper espera no gate, nos slots e na trava da resposta antes da chamada ao Codex. Já a vaga exclusiva do construtor usa `flock -n`: ocupada, recusa imediatamente. (`bin/codex_pergunta.sh:341–369`; `bin/codex_pergunta.sh:401–402`; `bin/codex_pergunta.sh:232–233`)
+- **Wrapper de outra sessão:** excluir ancestrais não vincula o produtor à sessão principal. `_ancestrais` monta somente a cadeia de pais do hook; `_prova_pid` não compara sessão nem exige descendência do chamador. (`bin/hook_stop_fila1.py:474–491`; `bin/hook_stop_fila1.py:529–550`)
+- **Obra com prefixo comum:** a igualdade exata exigida pelo contrato elimina esse casamento por prefixo; sua implementação é **[não verificado]**. Hoje não há comparação de obra nessa prova. (`bin/hook_stop_fila1.py:534–550`)
+- **Papel e fase:** o wrapper admite cinco papéis; conferir somente wrapper e obra não distingue `censo` dos demais. Além disso, ele continua vivo fazendo pós-processamento depois que o Codex retorna. (`bin/codex_pergunta.sh:81–85`; `bin/codex_pergunta.sh:404–448`)
+- **“Terminou → volta a bloquear” tem limite:** perder a prova apenas continua o fluxo normal do Stop; fila vazia, teto, B2 e exceção ainda possuem caminhos de liberação. (`bin/hook_stop_fila1.py:1231–1246`; `bin/hook_stop_fila1.py:1284–1306`)
+
+**(iv) Outros leitores do topo do RELATO**
+
+Primeiro, **“linha 2” não é posição física para o hook**: ele pula título e brancos e usa a primeira linha útil. A segunda linha útil integra o bloco destinado ao B3. (`bin/hook_stop_fila1.py:400–408`; `bin/hook_stop_fila1.py:415–440`)
+
+| Leitor | Comportamento |
+|---|---|
+| **Disjuntor B3** | Lê fotografia consistente do documento e usa o mesmo `_bloco_do_topo`, com duas linhas úteis. (`bin/disjuntor.py:662–689`) |
+| **`handoff_sessao.sh`** | Percorre o topo até `##`, mas seleciona somente `PAREI`, `lei:` e `!:`; omite ESPERANDO e consulta apenas os vereditos PAREI. (`bin/handoff_sessao.sh:92–123`) |
+| **`relato.sh`** | Submete o documento ao checador de afirmações e ao raspador/publicador; não julga prova de ESPERANDO nessas etapas. (`bin/relato.sh:54–61`; `bin/relato.sh:103–107`) |
+| **Alarme de sessão ociosa** | Procura `PAREI:` nas primeiras 40 linhas; ESPERANDO não satisfaz esse reconhecimento. (`bin/alarme_sessao_ociosa.py:119–127`) |
+| **Selo ESPERANDO** | Monta estado na linha física **3** e verifica ALLOW/NOPROVA; cobre PID vivo, morto, outro programa e ausência de prova. (`bin/tests/test_hook_esperando_com_prova.sh:62–105`) |
+| **Selo de orçamento** | Exige que ESPERANDO provado suspenda o disparo do orçamento; morto o produtor, cobra novamente o orçamento. (`bin/tests/test_orcamento_contexto.sh:220–233`) |
+| **Selo do disjuntor** | Exercita o recorte compartilhado e inclui mutante que conserva somente a primeira linha útil. (`bin/tests/test_disjuntor.sh:845–865`; `bin/tests/test_disjuntor.sh:1658`) |
+
+## 08/11 10:40 · sessao 55f94ed382ed · - · - · origem=Ronald (tmux)
+
+Adicionais:
+
+- O selo espiona chamadas a `H._bloco_do_topo`, verificando leitura sob a trava: `bin/tests/test_disjuntor.sh:845-865`.
+- O mutante que conserva só a primeira linha útil deve reprovar: `bin/tests/test_disjuntor.sh:1658`. Há mutantes de fotografia parcial: `bin/tests/test_disjuntor.sh:1659-1663`.
+- `test_no_relato_tem_secao_pinada.py` conserva o topo inteiro por comparação `startswith(TOPO)`; não interpreta a linha 2: `app/core/tests/test_no_relato_tem_secao_pinada.py:31-35`, `app/core/tests/test_no_relato_tem_secao_pinada.py:51-60`. Sua leitura posicional verifica a última linha útil: `app/core/tests/test_no_relato_tem_secao_pinada.py:68-69`.
+
+Nenhum leitor adicional da linha física 2 identificado na varredura, incluindo `.claude`; ausência absoluta: [não verificado].
+
+## 08/11 10:39 · sessao 55f94ed382ed · - · - · origem=Ronald (tmux)
+
+Leitores e efeitos confirmados:
+
+- **O hook não lê “linha física 2”**: `_linha_do_topo()` usa a primeira linha útil; `_bloco_do_topo()` pula brancos e `# RELATO`, tira crases iniciais e retorna até duas linhas úteis. A segunda útil existe para B3. (`bin/hook_stop_fila1.py:400-408`, `bin/hook_stop_fila1.py:415-440`)
+
+- **Disjuntor B3** lê o RELATO inteiro duas vezes, confere identidade/mtime/tamanho e bytes; recorta as duas linhas úteis pelo mesmo `H._bloco_do_topo()`. Portanto continua sendo consumidor do painel, sem uma regra paralela de recorte. (`bin/disjuntor.py:662-689`)
+
+- **Handoff** lê o topo até a primeira seção `## `, mas seleciona somente `PAREI`, `lei:` e `!:`. `ESPERANDO: censo ... | Codex` fica fora da lista; os vereditos mostrados chamam `_parei_do_em_curso()` e `_relato_parou()`, não a prova ESPERANDO. (`bin/handoff_sessao.sh:92-123`)
+
+- **`relato.sh`** entrega o documento ao checador de afirmações de ato e depois ao raspador/publicador; nesse fluxo não interpreta o estado ESPERANDO. O checador percorre linhas procurando títulos/negritos com verbos de ato e prova próxima. (`bin/relato.sh:54-61`, `bin/relato.sh:103-107`, `bin/relato_afirma_com_prova.py:30-50`)
+
+- **Alarme de sessão ociosa** lê as primeiras 40 linhas e só procura a substring `PAREI:`. A linha ESPERANDO não desarma esse reconhecimento. (`bin/alarme_sessao_ociosa.py:119-127`)
+
+Selos relevantes:
+
+- `test_hook_esperando_com_prova.sh` constrói RELATO com cabeçalho na linha 1, branco na 2 e estado na 3; exige liberação pelo motivo `ALLOW ESPERANDO com prova`, ou bloqueio com `siga: ITEM-VIVO` e motivo `NOPROVA`. (`bin/tests/test_hook_esperando_com_prova.sh:62-89`)
+- O selo atual cobre produtor vivo, PID morto, outro programa e ausência de prova, usando a sintaxe `produtor | pid=`. (`bin/tests/test_hook_esperando_com_prova.sh:93-105`)
+- Também exige que prova de ato seja conferida antes de ESPERANDO e que matar o produtor revogue a liberação. (`bin/tests/test_hook_esperando_com_prova.sh:186-192`)
+- `test_orcamento_contexto.sh` exige que ESPERANDO com produtor vivo suspenda o disparo de orçamento e libere pelo motivo correto. (`bin/tests/test_orcamento_contexto.sh:220-230`)
+- `test_disjuntor.sh` testa diretamente os juízes compartilhados de leitura do topo, inclusive leitura parcial após a primeira linha útil. (`bin/tests/test_disjuntor.sh:748-765`)
+- O selo do handoff exercita perguntas de lei depois de 14 linhas RESPONDIDA, protegendo o alcance até a seção, sem testar censo. (`bin/tests/test_handoff_sessao.sh:139-148`)
 
 ## 08/11 10:35 · sessao 950169722c2a · FIO-E0-V4-E3 · censo · origem=Code
 
@@ -1069,72 +1148,4 @@ Os cenários abaixo são contraprovas construídas sobre o código. Sua ocorrên
    - **Preservação byte a byte dos v5/v8/v10/v11, RED executado, mutante executado e passagem dos tetos:** **[nao verificado]**.
    - **Campo com dois significados não reconciliados — procedente, gravidade alta:** a identidade nova usa o juiz, enquanto destino, C6 e plantio continuam usando a data gravada como dia do fato. (`app/chamados/services/fio.py:1235`; `app/chamados/juizes.py:1988`; `app/chamados/juizes.py:336`; `app/chamados/services/materializacao.py:414`.)
 
-## 08/11 09:21 · sessao 7f8fd01fd110 · - · - · origem=Ronald (tmux)
-
-Procedente, alta: a porta ainda une componentes desconectados quando chamada sem episódio. Para `gps_ausente`, use A0/A1 do episódio alfa, gravadas respectivamente em 10/09 e 18/10, B0/B1 do episódio beta nas mesmas datas, ambos julgados como 18/10, sem linha de acervo. Por linha, os universos são `{A0,A1}` e `{B0,B1}`; `universo_do_fato(...,18/10,batida_origem_id=None)` retorna as quatro. A seleção sem episódio traz ambas as linhas de 18/10; `datadas` conserva ambas e `fecho_do_fato` retém todas as sementes independentemente da conectividade. `app/chamados/models.py:2636`, `app/chamados/models.py:2663`, `app/chamados/services/fio.py:1320`, `app/chamados/services/fio.py:1381`, `app/chamados/services/fio.py:1391`.
-
-O chamador real `_candidata_reusavel` omite episódio. O agrupamento real detecta duas chaves de episódio e chama o universo de cada uma separadamente, produzindo dois grupos; portanto porta e backfill/dedup não compartilham o universo anunciado. `app/chamados/services/declaracao_texto.py:244`, `app/chamados/services/fio.py:1122`, `app/chamados/services/fio.py:1479`, `app/chamados/services/fio.py:1501`, `app/chamados/services/fio.py:1507`.
-
-O cenário admite índice ativo: o horizonte é 21/09 e a unicidade de episódio só inclui linhas gravadas a partir dele; cada episódio possui uma linha dentro e outra fora. A premissa de dois episódios no mesmo dia do juiz existe no teste novo. `app/chamados/models.py:2313`, `app/chamados/models.py:3294`, `app/chamados/tests/test_e1_v13.py:59`.
-
-Confirmei os resultados executando somente em memória as funções reais extraídas por AST, com ORM e juiz substituídos por stubs explícitos; execução integrada e presença desse cenário em produção são [nao verificado].
-
-Não procedente para linhas conformes: o universo candidato do contador cobre toda aresta possível do `do_fato`: vizinhança pela chave gravada ou pelo mesmo episódio/motivo. Candidatas excedentes são confirmadas pelo fecho real, evitando contar dois episódios na mesma data sem acervo. `app/chamados/models.py:2630`, `app/chamados/models.py:2632`, `app/chamados/models.py:2636`, `app/chamados/services/fio.py:1415`, `app/chamados/services/fio.py:1421`, `app/chamados/services/fio.py:1428`.
-
-Não encontrei sementes de dois dias vindas dos consumidores internos com grupos normalmente produzidos: o agrupamento parte pelos fechos individuais; `_colisao_ao_datar` começa por uma linha; a migração entrega ao plano membros do universo dessa linha. Outros estados ou concorrência que produzam o assert são [nao verificado]. `app/chamados/services/fio.py:891`, `app/chamados/services/fio.py:1504`, `app/chamados/services/fio.py:1634`, `app/chamados/services/fio.py:1641`.
-
-## 08/11 09:20 · sessao fb39c0000d12 · - · - · origem=Ronald (tmux)
-
-Inventário por campo e achados:
-
-| Campo | Escritores | Leitores / significado |
-|---|---|---|
-| `data_evento` | Nascimento datado e conversa: `app/chamados/models.py:2696`, `:2707`, `:2824`. Datar existente: `app/chamados/services/fio.py:838`, `:840`, `:870`. Rechaveamento: `app/chamados/services/fio.py:959`, `:965`. Proxy e restauração apenas em memória: `app/chamados/models.py:2737`; `app/chamados/services/fio.py:852`, `:861`. | Chave gravada de busca/índice: `app/chamados/models.py:2630`, `:2663`, `:3289`; `app/chamados/services/fio.py:1193`, `:1205`. Identidade agora derivada pelo juiz: `app/chamados/services/fio.py:1229`, `:1235`, `:1330`, `:1375`. Outros leitores ainda a tratam como dia do turno: `app/chamados/juizes.py:332`, `:336`, `:1988`; `app/chamados/services/materializacao.py:344`, `:414`; `app/chamados/services/pergunta_no_app.py:93`; `app/chamados/services/validacao.py:269`, `:446`; janela: `app/chamados/veredito_lavrado.py:229`; apresentação/divergência: `app/chamados/services/fio.py:87`. |
-| `batida_origem_id` | `_nascer` aceita valor explícito ou deriva: `app/chamados/models.py:2751`, `:2753`. `save` de inserção deriva se ausente: `app/chamados/models.py:3226`, `:3254`. Derivador lê foto do nascimento no contexto e valida dono: `app/chamados/models.py:3269`, `:3273`. | Identifica episódio: `app/chamados/models.py:2632`, `:3295`; `app/chamados/services/fio.py:1020`, `:1122`. Alimenta juiz do dia: `app/chamados/services/fio.py:1229`, `:1234`. Forma chave do cache: `app/chamados/services/fio.py:1258`; candidatos do contador: `app/chamados/services/fio.py:1413`, `:1418`. Não representa data nem instante: é FK da batida cujo instante o juiz consulta (`app/chamados/models.py:2350`; `app/chamados/services/fio.py:1234`). |
-| `instancia_marco` | Derivação/validação no nascimento: `app/chamados/models.py:3243`, `:3246`, `:3252`. Backfill histórico: `app/chamados/migrations/0051_decisao_pergunta.py:27`. | Posição do marco, derivada do motivo: `app/chamados/models.py:3234`. Chave de busca/índice: `app/chamados/models.py:2663`, `:3289`; `app/chamados/services/fio.py:1205`. Discriminador da linha de marco em `_dia_do_fato`: `app/chamados/services/fio.py:1237`. |
-| `celula_id` | Nascimento pela data pedida: `app/chamados/models.py:2748`, `:2825`. Reuso pela data pedida: `app/chamados/models.py:2781`, `:2782`, `:2820`. Rechaveamento pela nova data: `app/chamados/services/fio.py:956`, `:960`, `:965`. | FK da célula da pergunta: `app/chamados/models.py:2323`. C6 verifica se célula corresponde ao `data_evento` antes de alimentar julgamento: `app/chamados/juizes.py:634`, `:638`. Outbox prefere FK e só usa `(colaborador,data_evento)` como fallback: `app/chamados/models.py:3034`, `:3047`, `:3050`. `_dia_do_fato` NÃO lê `p.celula.data`; passa a data gravada à conversão de célula (`app/chamados/services/fio.py:1237`, `:1239`). |
-| `chamado_destino_id` | Nascimento: `app/chamados/models.py:2825`. Reuso na porta: `app/chamados/models.py:2796`, `:2820`. Porta de reapontamento: `app/chamados/services/fio.py:868`, `:870`. Simulações sem persistência: `app/chamados/models.py:367`; `app/chamados/services/fio.py:779`, `:783`. | Âncora da listagem, com fallback ao chamado da disputa: `app/chamados/services/fio.py:117`. Gate do destino: `app/chamados/models.py:2784`, `:2786`; `app/chamados/services/fio.py:856`. C6/encerramento/outbox: `app/chamados/models.py:310`, `:361`, `:3028`. Mesmo significado de FK de destino nesses leitores (`app/chamados/models.py:3191`, `:3197`; `app/chamados/services/fio.py:100`). |
-
-**Procedente, alta: a identidade aceita pelo fecho continua podendo ser recusada pelo leitor do destino.** Cenário derivado da própria fixture: episódio alfa gravado `D0=2026-09-10`, juiz retorna `DIA=2026-10-18`; `abrir(...DIA, chamado_destino=chDIA)` encontra e elege alfa, mas conserva `ex.data_evento=D0` (`app/chamados/tests/test_e1_v13.py:200`; `app/chamados/tests/test_e1_v9.py:37`; `app/chamados/models.py:2777`, `:2782`, `:2820`). O proxy do pedido passa, depois o gate de `ex` compara a data gravada com o destino e lança `ResolvedoraCruzada` para esse intervalo superior a um dia (`app/chamados/models.py:2737`, `:2741`, `:2786`, `:2788`; `app/chamados/juizes.py:1988`, `:2007`, `:2016`, `:2023`). O teste novo de reaproveitamento não fornece destino (`app/chamados/tests/test_e1_v13.py:203`).
-
-**Procedente, alta: a porta não valida o dia do episódio no nascimento sem linha preexistente.** A recusa requer universo vazio **e** uma recusada do mesmo episódio; sem linhas, chega ao `create` com a data pedida e célula dessa data (`app/chamados/models.py:2748`, `:2766`, `:2824`). Assim, um pedido `D0` para batida cujo juiz diz `DIA` pode nascer `D0`; a emissão seguinte pode recusar a própria linha pelo juiz (`app/chamados/services/fio.py:1375`, `:1380`; `app/chamados/models.py:2766`). Ocorrência em produção: [nao verificado].
-
-**Callers concretos de `abrir`.** Há quatro sítios de produção; nenhum passa explicitamente `batida_origem_id`, que a porta infere do contexto (`app/chamados/services/disputa_emissao.py:444`, `:834`; `app/chamados/services/declaracao_texto.py:348`, `:636`; `app/chamados/models.py:2751`).
-
-- `gerar_perguntas_disputa`: grade/contexto têm precedência; só consulta juiz da última batida se o fallback estiver vazio; o destino ainda pode fornecer `_data_ev` prioritária (`app/chamados/services/disputa_emissao.py:350`, `:371`, `:378`, `:391`, `:424`, `:451`). Contraexemplo de chamada possível: contexto de `gps_ausente` com `data=D0` e `ultima_batida=b1` de `DIA`; nasce com a divergência acima. O merge preserva chaves antigas ausentes no novo valor (`app/chamados/services/disputa_emissao.py:555`, `:556`). Existência desse contexto em produção: [nao verificado].
-- Agrupador: o `localtime(...).date()` serve à classificação, mas o dia passado à criação é o retorno de `resolver_data_evento(...batida_origem=...)`; portanto, não procede afirmar que esse caller passa automaticamente dia civil (`app/chamados/services/disputa_emissao.py:1108`, `:1109`, `:1114`, `:1123`; `app/escala/servico_jornada.py:488`).
-- Declaração: ambos passam dia da célula ao conversor registrado (`app/chamados/services/declaracao_texto.py:347`, `:349`, `:635`, `:637`).
-- `reapontar_resolvedora` e `_colisao_ao_datar` **não chamam `abrir`**: usam a porta de existente, `fato_livre_para`, `universo_da_linha` e plano; a escrita ocorre no save de reapontamento (`app/chamados/services/fio.py:849`, `:850`, `:891`, `:904`, `:868`, `:870`).
-
-**Procedente, média/alta: dois significados não foram reconciliados em todos os leitores.** `_dia_de_turno_da_pergunta` continua retornando `data_evento` cru para perguntas de fato e é consumido pelo julgamento do C6 e tranca (`app/chamados/juizes.py:332`, `:336`, `:375`, `:671`, `:763`, `:948`, `:1216`). A célula nova `DIA` também deixa de servir à dieta do julgamento se a data gravada permanecer `D0` (`app/chamados/models.py:2782`; `app/chamados/juizes.py:638`). A declaração no comentário novo de `_dia_do_fato` não altera esses leitores (`app/chamados/services/fio.py:1218`; `app/chamados/juizes.py:336`, `:1988`).
-
-**Não demonstrado como erro autônomo: marco usar data gravada.** `_dia_do_fato` não lê a FK da célula; passa `p.data_evento` ao juiz da célula (`app/chamados/services/fio.py:1237`, `:1239`). Isso só produz dia errado se uma linha de marco tiver data gravada divergente do dia soberano pretendido; presença desse caso no dado dado: [nao verificado].
-
-## 08/11 09:19 · sessao cc2c08306ed4 · - · - · origem=Ronald (tmux)
-
-Achados de custo/selos, somente por inspeção:
-
-1. **Procedente, média: memo por batida evita repetição dentro de um fecho, mas não evita recomputar a janela inteira para cada batida.** Cada `bo` novo faz `SELECT Batida` e chama o juiz; este executa `dia_das_batidas(d-1,d+1)`, que carrega turnos e batidas da janela. Duas batidas do mesmo turno pagam duas reconstruções sobre janelas sobrepostas. (`app/chamados/services/fio.py:1229-1236`; `app/ponto/turnos.py:2917-2926`; `app/ponto/turnos.py:2901-2907`; `app/ponto/turnos.py:1861-1888`.)
-
-2. **Contagem de chamadas ao juiz:**
-   - Por `fecho_do_fato`: uma por `batida_origem_id` distinta examinada nas sementes, vizinhos e explorações da ponte; inclui vizinhos recusados, pois `_dia_do_fato(q)` precede o filtro de base. (`app/chamados/services/fio.py:1326`; `app/chamados/services/fio.py:1339-1342`; `app/chamados/services/fio.py:1278-1286`.)
-   - Por `abrir`: zero se `do_fato` vier vazio; caso contrário, uma por batida distinta examinada pelo universo/ponte/fecho, com o mesmo memo. A batida **pedida**, quando ainda não tem linha, não é julgada por esse caminho. (`app/chamados/services/fio.py:1362-1392`; `app/chamados/models.py:2751-2765`.)
-   - Na exceção `FatoEmOutroDia`: **mais uma chamada** para o episódio recusado, pois o rótulo abre `_memo_t = {}` em vez de aproveitar o memo anterior. (`app/chamados/models.py:2771-2776`.)
-   - Por `fecho_cruza_dias`: soma das batidas distintas de **cada fecho executado**, sem memo global. O contador chama `fecho_do_fato([p])` sem `_viz`; uma batida alcançada como vizinha recusada pode ser julgada de novo no componente seguinte. (`app/chamados/services/fio.py:1423-1432`; `app/chamados/services/fio.py:1317`.)
-   - Número SQL efetivamente observado, tempo e estouro dos tetos: **[nao verificado]**.
-
-3. **Não procedente: os selos citados não são todos selos de custo deste caminho.**
-   - Chokepoint efetivamente compara consultas com teto, inclusive ramos FICA de 144/217. (`app/ponto/tests/test_selo_chokepoint_escrita.py:180`; `app/ponto/tests/test_selo_chokepoint_escrita.py:187`; `app/ponto/tests/test_selo_chokepoint_escrita.py:239-250`; `app/ponto/tests/test_selo_chokepoint_escrita.py:397-430`.)
-   - Modal mede 330 perguntas, mas a fixture não fornece `batida_origem`; ela não representa o novo custo por episódio. (`app/chamados/tests/test_selo_teto_modal.py:68-79`; `app/chamados/tests/test_selo_teto_modal.py:81-97`.)
-   - `test_porta_chamado_e1` mede no-op de atos de campos de **Chamado**, não `PerguntaDisputa.abrir`. (`app/chamados/tests/test_porta_chamado_e1.py:1-5`; `app/chamados/tests/test_porta_chamado_e1.py:57-62`; `app/chamados/tests/test_porta_chamado_e1.py:117-122`.)
-   - `test_e1_v13_cadeia` captura SQL para detectar escrita sem trava na transação; `_ordem` verifica precedência de trava/escrita e mutantes do registro. Nenhum desses impõe teto de consultas. (`app/chamados/tests/test_e1_v13_cadeia.py:32-59`; `app/chamados/tests/test_e1_v13_ordem.py:59-82`.)
-
-4. **Não procedente: RED v13 sem mordida contra a comparação por data gravada.** A fixture coloca B0 com `data_evento=D0` e batida beta; o teste exige B0 dentro do fato DIA. A variante simples que volta a decidir por `p.data_evento` necessariamente exclui B0 e falha esse assert. Também há reutilização de A0 gravada em outra data e recusa de beta pedido em D0. (`app/chamados/tests/test_e1_v13.py:108-124`; `app/chamados/tests/test_e1_v13.py:157-165`; `app/chamados/tests/test_e1_v13.py:198-208`.)
-
-5. **Lacuna, média: execução explícita do mutante exigido pelo aval [nao verificado].** O arquivo possui testes semânticos que distinguem a variante, mas termina sem teste que instale o mutante `data_evento`; a execução RED/mutante não veio no dado. (`app/chamados/tests/test_e1_v13.py:116-124`; `app/chamados/tests/test_e1_v13.py:315-320`; aval anexo **[nao verificado quanto à execução]**.)
-
-6. **Ordem de trava: nenhuma nova aquisição explícita no diff inspecionado.** `_nascer` continua travando o colaborador antes de chamar o universo; os acréscimos usam leituras comuns para Batida/Colaborador. O runtime completo e eventual regressão nos selos de ordem são **[nao verificado]**. (`app/chamados/models.py:2720-2724`; `app/chamados/models.py:2762-2765`; `app/chamados/services/fio.py:1234`; `app/chamados/services/fio.py:1248-1252`.)
-
-7. **Preservação dos selos antigos:** o diff fornecido só declara mudanças em `models.py`, `fio.py` e `test_e1_v13.py`; não exibe alteração dos v5/v8/v10/v11. Identidade byte a byte com os commits e execução desses selos: **[nao verificado]**. [nao verificado]
-
-_2851 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2854 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
