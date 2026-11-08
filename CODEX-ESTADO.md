@@ -1,7 +1,136 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 15:11** · publicado em **08/11/2026 15:11** (UTC-3)
+> Ultima resposta processada: **08/11/2026 15:16** · publicado em **08/11/2026 15:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 08/11 15:16 · sessao 156252195190 · FIO-E0-V4-E1 · leitura · origem=Code
+
+**1) `ReusoSemRechave`: origem, propagação e limites dos lotes**
+
+A exceção nasce quando a canônica tem `data_evento != dia_do_fato` e `rechavear_no_reuso` devolve recusa; o lançamento acontece antes da atualização de célula/destino, dentro do `atomic` de `_nascer`. A hierarquia é `ReusoSemRechave → FatoEmOutroDia → ResolvedoraCruzada → ValueError`. (`app/chamados/models.py:2862`, `app/chamados/models.py:2867`, `app/chamados/models.py:2870`, `app/chamados/models.py:2770`, `app/chamados/models.py:2335`, `app/chamados/models.py:2291`, `app/chamados/models.py:2284`)
+
+Há quatro sítios de chamada direta a `PerguntaDisputa.abrir`: dois na emissão e dois na declaração humana. **Chamar `abrir` não prova que o caminho alcance esta exceção:** os chamadores de `:834` e das declarações humanas produzem motivos MARCO; o cenário D0/DIA de episódio BATIDA exige distinguir essa família. (`app/chamados/services/disputa_emissao.py:444`, `app/chamados/services/disputa_emissao.py:834`, `app/chamados/services/declaracao_texto.py:348`, `app/chamados/services/declaracao_texto.py:636`, `app/chamados/catalogo/motivos.py:34`, `app/chamados/catalogo/motivos.py:42`, `app/chamados/catalogo/motivos.py:48`)
+
+**Caminho datado que aceita motivos BATIDA — `disputa_emissao.py:444`.**
+
+A cadeia comum é:
+
+`criar_ou_atualizar_disputa` → `_abrir_ou_agregar_disputa` → `gerar_perguntas_disputa` → laço dos motivos → `PerguntaDisputa.abrir` → `_nascer` → `raise ReusoSemRechave`. (`app/chamados/services/disputa_emissao.py:662`, `app/chamados/services/disputa_emissao.py:670`, `app/chamados/services/disputa_emissao.py:682`, `app/chamados/services/disputa_emissao.py:312`, `app/chamados/services/disputa_emissao.py:444`, `app/chamados/models.py:2746`, `app/chamados/models.py:2867`)
+
+| Borda até a cadeia comum | Quem captura | Resto do lote e transação |
+|---|---|---|
+| API: rota → `api_bater_ponto` → emissão. (`app/api/urls.py:67`, `app/api/views.py:400`, `app/api/views.py:794`) | Nenhum `except` envolve a chamada da emissão. Os `except Exception` posteriores protegem foto e geofence, não essa chamada. (`app/api/views.py:794`, `app/api/views.py:803`, `app/api/views.py:812`) | Abandona os motivos restantes e o restante da view. O `atomic` de `_nascer` é desfeito; a abertura/agregação anterior e perguntas anteriores não estão num único `atomic` dessa função. Sem transação externa, permanecem gravadas. Transação acrescentada pelo ambiente da request: **[não verificado]**. (`app/chamados/services/disputa_emissao.py:312`, `app/chamados/models.py:2770`, `app/chamados/services/disputa_emissao.py:521`, `app/chamados/services/disputa_emissao.py:669`) |
+| API core: rota → `api_bater_ponto` → emissão. (`app/api/urls_core.py:14`, `app/api/views_core.py:387`, `app/api/views_core.py:794`) | Mesmo limite: nenhuma captura envolvendo a emissão; foto/geofence têm capturas posteriores. (`app/api/views_core.py:794`, `app/api/views_core.py:803`, `app/api/views_core.py:812`) | Mesmo abandono dos motivos e da view, com rollback somente dos blocos atravessados pela exceção. Transação externa da request: **[não verificado]**. (`app/chamados/services/disputa_emissao.py:312`, `app/chamados/services/disputa_emissao.py:521`, `app/chamados/models.py:2770`) |
+| Cron da selfie → command → laço de batidas → emissão. (`app/config/crons.py:686`, `app/ponto/management/commands/marcar_foto_ausente_retro.py:58`, `app/ponto/management/commands/marcar_foto_ausente_retro.py:95`, `app/ponto/management/commands/marcar_foto_ausente_retro.py:96`) | Sem captura e sem `atomic` envolvendo o lote no command. (`app/ponto/management/commands/marcar_foto_ausente_retro.py:94`) | Uma exceção propagada abandona as batidas/colaboradores seguintes; não incrementa `n` naquela iteração nem imprime o resumo final. Iterações anteriores não são revertidas por um bloco global do command. (`app/ponto/management/commands/marcar_foto_ausente_retro.py:95`, `app/ponto/management/commands/marcar_foto_ausente_retro.py:106`, `app/ponto/management/commands/marcar_foto_ausente_retro.py:107`) |
+
+**Precisão sobre a selfie:** o command passa `foto_ausente`, mas não passa `data` nem `ultima_batida`; numa disputa recém-nascida, isso conduz ao ramo `abrir_conversa`, não automaticamente a `:444`. Na disputa existente, o merge preserva outras chaves do contexto; a passagem efetiva pelo ramo datado depende desse contexto. Sua ocorrência no dado fornecido é **[não verificado]**. (`app/ponto/management/commands/marcar_foto_ausente_retro.py:98`, `app/chamados/services/disputa_emissao.py:371`, `app/chamados/services/disputa_emissao.py:387`, `app/chamados/services/disputa_emissao.py:439`, `app/chamados/services/disputa_emissao.py:548`, `app/chamados/services/disputa_emissao.py:555`)
+
+O `except Exception` em `disputa_emissao.py:466` **não captura a exceção de `:444`**: seu `try` começa depois da abertura e protege somente o reatamento da pergunta já criada, com savepoint próprio. (`app/chamados/services/disputa_emissao.py:444`, `app/chamados/services/disputa_emissao.py:462`, `app/chamados/services/disputa_emissao.py:463`, `app/chamados/services/disputa_emissao.py:466`)
+
+**Agrupador e chamada `disputa_emissao.py:834`.**
+
+As entradas do helper são os intervalos, os complementos de marcos e os resultados de `classificar_falta`; todos correspondem aos quatro motivos MARCO. Para MARCO, `do_fato` consulta o dia exato; a busca por episódio que atravessa datas gravadas é restrita à família BATIDA. Portanto, **esses caminhos não demonstram o alcance do cenário BATIDA D0/DIA**. (`app/chamados/services/disputa_emissao.py:1055`, `app/chamados/services/disputa_emissao.py:873`, `app/chamados/services/disputa_emissao.py:802`, `app/escala/servico_jornada.py:267`, `app/chamados/services/declaracao_texto.py:42`, `app/chamados/models.py:2677`, `app/chamados/models.py:2686`, `app/chamados/models.py:2713`)
+
+O limite transacional existente, para uma exceção propagada de `abrir`, é um único `atomic` envolvendo **todo o agrupamento daquele colaborador**: complemento inicial, intervalos, ata, grupos com origem, chamados sem origem e entradas pendentes. Não há captura em torno de `:834`; o `except Exception` de `:865` termina antes do laço que chama o helper em `:878`. A propagação abandona os demais laços e desfaz todo esse agrupamento. (`app/chamados/services/disputa_emissao.py:964`, `app/chamados/services/disputa_emissao.py:990`, `app/chamados/services/disputa_emissao.py:1062`, `app/chamados/services/disputa_emissao.py:1084`, `app/chamados/services/disputa_emissao.py:1122`, `app/chamados/services/disputa_emissao.py:1153`, `app/chamados/services/disputa_emissao.py:1179`, `app/chamados/services/disputa_emissao.py:834`, `app/chamados/services/disputa_emissao.py:865`, `app/chamados/services/disputa_emissao.py:878`)
+
+As bordas desse agrupador e seus tratamentos são:
+
+| Borda → agrupador | Captura, continuação e trilha |
+|---|---|
+| Cron de alertas avançados → laço de colaboradores → agrupador. (`app/config/crons.py:363`, `app/ponto/management/commands/processar_alertas_avancados.py:29`, `app/ponto/management/commands/processar_alertas_avancados.py:158`) | `except Exception` em `:159`; imprime a falha em stdout e segue outros colaboradores. O chamado aberto antes fica fora do rollback do agrupador; `processados` ainda aumenta, sem ser contador da recusa. (`app/ponto/management/commands/processar_alertas_avancados.py:159`, `app/ponto/management/commands/processar_alertas_avancados.py:160`, `app/ponto/management/commands/processar_alertas_avancados.py:121`, `app/ponto/management/commands/processar_alertas_avancados.py:164`) |
+| Cron de alertas de turno → laço → `_marco_critico` → `_abrir_chamado_critico` → agrupador. (`app/config/crons.py:362`, `app/ponto/management/commands/processar_alertas_turno.py:81`, `app/ponto/management/commands/processar_alertas_turno.py:141`, `app/ponto/management/commands/processar_alertas_turno.py:316`, `app/ponto/management/commands/processar_alertas_turno.py:384`) | `except Exception` em `:385`; imprime erro, retorna o chamado e permite continuar o processamento. O chamado nasceu antes do agrupador; não há contador específico da recusa nesse tratamento. (`app/ponto/management/commands/processar_alertas_turno.py:385`, `app/ponto/management/commands/processar_alertas_turno.py:386`, `app/ponto/management/commands/processar_alertas_turno.py:387`, `app/ponto/management/commands/processar_alertas_turno.py:335`) |
+| Cron de ausências → laços → `_abrir_chamado` → agrupador. (`app/config/crons.py:364`, `app/ponto/management/commands/detectar_ausencias.py:101`, `app/ponto/management/commands/detectar_ausencias.py:138`, `app/ponto/management/commands/detectar_ausencias.py:439`, `app/ponto/management/commands/detectar_ausencias.py:801`) | `except Exception` em `:802`; imprime em stderr e continua. O chamado anterior permanece; o contador `abertos` ainda aumenta e não conta recusas de pergunta. (`app/ponto/management/commands/detectar_ausencias.py:802`, `app/ponto/management/commands/detectar_ausencias.py:803`, `app/ponto/management/commands/detectar_ausencias.py:693`, `app/ponto/management/commands/detectar_ausencias.py:448`) |
+| Fio/modal → `processar_post_fio` → `acao_iniciar_disputa_orfaos` → agrupador. (`app/chamados/urls.py:21`, `app/chamados/urls.py:39`, `app/chamados/services/fio.py:551`, `app/chamados/services/acoes_disputa.py:221`) | Sem captura aplicável nessa cadeia; o agrupamento é revertido e o log de sucesso posterior não é alcançado. Tratamento externo à aplicação: **[não verificado]**. (`app/chamados/services/acoes_disputa.py:210`, `app/chamados/services/acoes_disputa.py:226`, `app/chamados/services/disputa_emissao.py:964`) |
+| Command de passivo → `pergunta_no_app.perguntar` → laço de colaboradores → agrupador. (`app/chamados/management/commands/perguntar_chamados_sem_pergunta.py:29`, `app/chamados/services/pergunta_no_app.py:175`, `app/chamados/services/pergunta_no_app.py:184`, `app/chamados/services/pergunta_no_app.py:186`) | Sem captura/`atomic` global do lote: abandona os colaboradores seguintes; os agrupamentos anteriores já terminaram. O contador posterior daquela iteração e o resumo não são alcançados. (`app/chamados/services/pergunta_no_app.py:184`, `app/chamados/services/pergunta_no_app.py:187`, `app/chamados/services/pergunta_no_app.py:188`) |
+| “Cobrar dia” → cartório e, depois, agrupador. (`app/chamados/urls.py:32`, `app/chamados/views_cobrar.py:325`, `app/chamados/services/cobrar_dia.py:39`, `app/chamados/services/cobrar_dia.py:47`) | Sem captura envolvendo essas chamadas. O `except ValueError` da view só cobre o parse anterior da data. A trilha `cobrar_dia_manual` é anterior e registra o toque, não a recusa. (`app/chamados/views_cobrar.py:320`, `app/chamados/views_cobrar.py:322`, `app/chamados/services/cobrar_dia.py:37`) |
+
+**Sinais e cartório.**
+
+A cadeia de emissão é `julgar_celula → julgar_colab → perguntar_pela_celula → perguntar → criar_ou_atualizar_disputa/gerar_perguntas_disputa → abrir(:444)`. Ela gera os motivos de marcos da ata/lei; não constitui demonstração do cenário de episódio BATIDA D0/DIA. (`app/ponto/services/cartorio.py:1989`, `app/ponto/services/cartorio.py:997`, `app/chamados/services/fabrica_da_celula.py:186`, `app/chamados/services/fabrica_da_celula.py:149`, `app/chamados/services/fabrica_da_celula.py:151`, `app/chamados/services/disputa_emissao.py:444`, `app/chamados/services/fabrica_da_celula.py:47`, `app/chamados/services/fabrica_da_celula.py:55`)
+
+Os limites de captura dessa cadeia são:
+
+| Entrada no julgamento | Captura e efeito sobre o lote |
+|---|---|
+| `post_save` de Chamado → cartório. (`app/chamados/signals.py:188`, `app/chamados/signals.py:203`) | `engolir` envolve o julgamento inteiro; captura `Exception` em `core/observ.py:90`. Uma exceção propagada encerra os motivos/células restantes desse julgamento e volta ao escritor original. Não atravessa o `atomic` externo desse escritor; o receiver não tem um `atomic` próprio que reverta todo o julgamento anterior. Registra ERROR e incrementa contador em memória por operação. (`app/chamados/signals.py:195`, `app/core/observ.py:90`, `app/core/observ.py:75`, `app/core/observ.py:77`, `app/core/observ.py:79`, `app/ponto/services/cartorio.py:995`) |
+| Save/delete de Batida, save/delete de Ausencia e save de Justificativa → `_julgar_dias` → cartório. (`app/ponto/signals.py:135`, `app/ponto/signals.py:140`, `app/ponto/signals.py:147`, `app/ponto/signals.py:152`, `app/ponto/signals.py:165`, `app/ponto/signals.py:93`) | O mesmo `except Exception` de `engolir`, mas envolvendo **todo o laço de dias**: a primeira exceção abandona os dias seguintes desse receiver. Não propaga para reverter a escrita original; deixa ERROR e contador em memória. (`app/ponto/signals.py:88`, `app/ponto/signals.py:92`, `app/core/observ.py:90`, `app/core/observ.py:75`, `app/core/observ.py:79`) |
+| Reescrita de célula → `_o_chao_do_dia_mudou` → cartório. (`app/ponto/portas/celula.py:354`, `app/ponto/portas/celula.py:627`, `app/ponto/portas/celula.py:434`) | `except Exception` **por dia**, em `:437`; registra `logger.exception` e segue os demais dias e o restante da operação. Não há rollback global por propagação dessa exceção. (`app/ponto/portas/celula.py:430`, `app/ponto/portas/celula.py:437`, `app/ponto/portas/celula.py:439`, `app/ponto/portas/celula.py:445`) |
+| Pós-vínculo → laço de dias → cartório. (`app/colaboradores/services/vinculo.py:330`, `app/colaboradores/management/commands/corrigir_escala_retroativa.py:237`, `app/colaboradores/services/pos_vinculo.py:63`, `app/colaboradores/services/pos_vinculo.py:72`) | `except Exception` **por dia**, em `:75`; registra a falha e continua os dias e as etapas posteriores. O placar de julgadas só aumenta depois do retorno; não existe contador específico da recusa nesse tratamento. (`app/colaboradores/services/pos_vinculo.py:73`, `app/colaboradores/services/pos_vinculo.py:75`, `app/colaboradores/services/pos_vinculo.py:76`, `app/colaboradores/services/pos_vinculo.py:77`, `app/colaboradores/services/pos_vinculo.py:80`) |
+
+**Reconciliador.**
+
+O reconciliador entra por batida ou pelo callback do filho que saiu de vivo. Ele não chama `PerguntaDisputa.abrir` diretamente: a reemissão/alteração de Chamado pode acionar o sinal do cartório acima. (`app/ponto/signals.py:215`, `app/chamados/signals.py:355`, `app/chamados/reconciliador.py:910`, `app/chamados/reconciliador.py:523`, `app/chamados/signals.py:188`)
+
+| Cadeia | Captura e continuação |
+|---|---|
+| Laço de órfãs → `reatar_pergunta_orfa` → reemissão → `ChamadoColaborador.abrir` → sinal → cartório → fábrica → `abrir(:444)`. (`app/chamados/reconciliador.py:1520`, `app/chamados/reconciliador.py:1522`, `app/chamados/reconciliador.py:1617`, `app/chamados/reconciliador.py:910`, `app/chamados/signals.py:203`) | A captura mais próxima de uma exceção da emissão é o `engolir` do sinal. Por essa cadeia, o `except Exception` do laço de órfãs não a recebe: o sinal já a consumiu. O laço pode continuar e a transação externa não é revertida pela propagação dessa exceção. (`app/chamados/signals.py:195`, `app/core/observ.py:90`, `app/chamados/reconciliador.py:1524`) |
+| Laço de premissas → `_retratar` → `atomic` → `ch.reconciliar` → save de estado → mesmo sinal. (`app/chamados/reconciliador.py:1452`, `app/chamados/reconciliador.py:1460`, `app/chamados/reconciliador.py:522`, `app/chamados/reconciliador.py:523`, `app/chamados/models.py:296`) | Mesmo consumo no sinal, antes do `except Exception` externo de `:1462`; os outros chamados continuam e os blocos externos não são desfeitos por essa propagação. (`app/chamados/signals.py:195`, `app/core/observ.py:90`, `app/chamados/reconciliador.py:1462`) |
+| Construção do contexto C2 → `julgar_celula` → fábrica → `abrir(:444)`. (`app/chamados/reconciliador.py:691`, `app/chamados/reconciliador.py:702`) | Aqui há captura própria: `except Exception` em `:709`; registra a falha e continua devolvendo contexto, sem o enriquecimento de marcos que não terminou. Não há savepoint próprio envolvendo todo esse julgamento. (`app/chamados/reconciliador.py:709`, `app/chamados/reconciliador.py:710`, `app/chamados/reconciliador.py:690`) |
+
+O cron atual `reconciliar_chamados --alarme` é vigia: consulta e conta; não executa essas cadeias escritoras. (`app/config/crons.py:395`, `app/chamados/management/commands/reconciliar_chamados.py:49`, `app/chamados/management/commands/reconciliar_chamados.py:71`, `app/chamados/management/commands/reconciliar_chamados.py:102`)
+
+**Demais crons/commands que chegam à fábrica pelo cartório.** São caminhos de emissão MARCO, com estes limites para exceções propagadas do julgamento; não provam alcance do cenário BATIDA. (`app/chamados/services/fabrica_da_celula.py:47`, `app/chamados/services/fabrica_da_celula.py:55`)
+
+| Borda → cartório | Captura / lote / rollback |
+|---|---|
+| Cron `processar_cartorio --apply` → laço de colaboradores → `julgar_colab`. (`app/config/crons.py:616`, `app/ponto/management/commands/processar_cartorio.py:59`, `app/ponto/management/commands/processar_cartorio.py:65`) | Sem captura ou `atomic` global do command: abandona colaboradores seguintes; gravações anteriores não são revertidas por um bloco global. O resumo final não é alcançado. (`app/ponto/management/commands/processar_cartorio.py:59`, `app/ponto/management/commands/processar_cartorio.py:66`) |
+| Cron `vigia_de_hora` → command → `rodar` → laço → `julgar_celula`. (`app/config/crons.py:367`, `app/ponto/management/commands/vigia_de_hora.py:28`, `app/ponto/services/vigia_de_hora.py:115`, `app/ponto/services/vigia_de_hora.py:131`) | Sem captura; abandona o restante do lote. O `finally` libera o advisory lock; não reverte os itens anteriores. Os contadores posteriores ao retorno não aumentam para o item interrompido. (`app/ponto/services/vigia_de_hora.py:132`, `app/ponto/services/vigia_de_hora.py:134`) |
+| Cron encadeado `disparar_perguntas_competencia` → `_rodar` → laço → `perguntar` → geração. (`app/config/crons.py:1516`, `app/chamados/management/commands/disparar_perguntas_competencia.py:273`, `app/chamados/management/commands/disparar_perguntas_competencia.py:282`) | Em apply, um `atomic` engloba todos os itens: uma exceção propagada aborta e reverte **todo o lote desse bloco**. No dry, `except RuntimeError` não captura `ReusoSemRechave`, que é `ValueError`. O caminho da célula é apenas vigia; quem escreve aqui é o fio mudo. (`app/chamados/management/commands/disparar_perguntas_competencia.py:290`, `app/chamados/management/commands/disparar_perguntas_competencia.py:307`, `app/chamados/management/commands/disparar_perguntas_competencia.py:316`, `app/chamados/management/commands/disparar_perguntas_competencia.py:240`, `app/chamados/models.py:2284`) |
+| `cobrar_furos_sem_cobranca --apply` → `cobrar` → laço → `julgar_celula`. (`app/ponto/management/commands/cobrar_furos_sem_cobranca.py:30`, `app/ponto/services/furos_sem_cobranca.py:124`, `app/ponto/services/furos_sem_cobranca.py:128`) | Sem captura/`atomic` global: abandona os itens seguintes; os anteriores permanecem. O contador daquela iteração fica depois da chamada interrompida. (`app/ponto/services/furos_sem_cobranca.py:124`, `app/ponto/services/furos_sem_cobranca.py:131`) |
+| `rejulgar_ausencia_em_folga --apply` → laço → `julgar_celula`. (`app/ponto/management/commands/rejulgar_ausencia_em_folga.py:77`, `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:78`) | Sem captura/`atomic` global; abandona os dias seguintes e o resumo. (`app/ponto/management/commands/rejulgar_ausencia_em_folga.py:77`, `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:80`) |
+| `curar_residuo_bug115` → laços → `_lavrar` → `julgar_celula`. (`app/ponto/management/commands/curar_residuo_bug115.py:97`, `app/ponto/management/commands/curar_residuo_bug115.py:99`, `app/ponto/management/commands/curar_residuo_bug115.py:143`) | Sem captura envolvendo essa chamada; abandona o restante dos laços, sem rollback global deles. (`app/ponto/management/c
+
+[truncado em 20000 de 33247 caracteres]
+
+## 08/11 15:11 · sessao 4cbd0bcd30a1 · - · - · origem=Ronald (tmux)
+
+Todas as referências abaixo são relativas à raiz da cópia.
+
+**Núcleo e propagação**
+
+- `ReusoSemRechave` herda `FatoEmOutroDia` → `ResolvedoraCruzada` → `ValueError`; o lançamento está em `app/chamados/models.py:2867`, dentro do `atomic` de `_nascer` em `app/chamados/models.py:2770`. A recusa ocorre antes da costura de célula/destino em `app/chamados/models.py:2870`; não há captura nesse núcleo. (`app/chamados/models.py:2335`, `app/chamados/models.py:2291`, `app/chamados/models.py:2284`)
+- `gerar_perguntas_disputa` percorre motivos em `app/chamados/services/disputa_emissao.py:312` e chama `abrir` em `app/chamados/services/disputa_emissao.py:444`, sem captura. O `except Exception` de `app/chamados/services/disputa_emissao.py:466` envolve apenas o reatamento posterior (`:463–465`): **não captura a exceção de `:444`**. A exceção interrompe os motivos restantes e não alcança `criadas.append` daquela pergunta em `app/chamados/services/disputa_emissao.py:470`.
+- `criar_ou_atualizar_disputa` abre/agrega antes, por `_abrir_ou_agregar_disputa` (`app/chamados/services/disputa_emissao.py:662`), cujo `atomic` está em `app/chamados/services/disputa_emissao.py:521`; depois chama o gerador em `:670` ou `:682` e pendentes em `:685`. Sem uma transação externa, a abertura/agregação anterior já terminou seu bloco; não há um `atomic` único envolvendo o gerador nessa função. (`app/chamados/services/disputa_emissao.py:603`, `app/chamados/services/disputa_emissao.py:669`)
+- `perguntar_entradas_pendentes` percorre dias em `app/chamados/services/disputa_emissao.py:287`, chama o gerador em `:294` sem captura e só salva contexto depois em `:296`. Uma exceção abandonaria os dias restantes e esse `save`. Contudo seus motivos vêm de `classificar_falta` (`:288`), isto é, MARCO; veja restrição de alcance abaixo.
+- A fábrica de célula percorre motivos em `app/chamados/services/fabrica_da_celula.py:145`, chama `criar_ou_atualizar_disputa` em `:149` e o gerador em `:151`, sem captura. `perguntar_pela_celula` a chama em `:186`; `cartorio.julgar_colab` chama essa porta no laço de células em `app/ponto/services/cartorio.py:995` e `:997`. O contador de perguntas só aumenta depois do retorno em `app/ponto/services/cartorio.py:999`; o `finally` começa em `:1051`, sem capturar a exceção.
+
+**Bordas diretas de `criar_ou_atualizar_disputa` → gerador `:444`**
+
+| Borda/cadeia | Captura e efeito observável |
+|---|---|
+| `app/api/urls.py:67` → `app/api/views.py:400` → `:794` → emissão `:662` → `:670/:682` → gerador `:444` | Não há `except` envolvendo `:794`; os `except Exception` de `app/api/views.py:803` e `:812` são de operações posteriores. A view não declara `atomic` em sua entrada (`app/api/views.py:398`). Tratamento final pelo framework/deployment: **[não verificado]**. |
+| `app/api/urls_core.py:14` → `app/api/views_core.py:387` → `:794` → mesma cadeia | Mesma ausência de captura no ponto de chamada; capturas posteriores em `app/api/views_core.py:803` e `:812`; entrada em `app/api/views_core.py:385`. Tratamento externo: **[não verificado]**. |
+| `app/ponto/urls.py:11` ou `:12` → `app/ponto/views.py:242` → `:350` → `ramo_registrar_es`, `app/ponto/services/triagem_batida.py:616` → `:734` → mesma cadeia | Não há captura em torno de `:734` nem da delegação em `app/ponto/views.py:350`. Esse ramo emite apenas `saida_sem_entrada` (`app/ponto/services/triagem_batida.py:736`), portanto **não alcança o cenário BATIDA D0→DIA** pelas identidades normais da árvore. |
+| Cron `app/config/crons.py:686` → `marcar_foto_ausente_retro.handle`, `app/ponto/management/commands/marcar_foto_ausente_retro.py:58` → laço `:95` → `:96` → mesma cadeia | Sem captura/`atomic` de lote no comando. Exceção abandona batidas restantes e não imprime o resumo final em `:107`; o contador `n` só aumenta em `:106` e não conta recusas. **Atenção:** o contexto passado em `:98` não tem `data`/`ultima_batida`; com disputa recém-nascida o gerador acaba em `abrir_conversa` (`emissão :439`), não em `:444`. Disputa existente conserva outras chaves no merge (`emissão :548/:555/:559`), portanto o ramo datado depende do contexto existente; sua ocorrência em produção é **[não verificado]**. |
+| `app/chamados/management/commands/disparar_perguntas_competencia.py:273` → `:282` → fábrica `:149/:151` → gerador `:444` | `--apply`: um único `atomic` para todos os itens em `:290`, sem captura aplicável; exceção abandonaria o lote e reverteria esse bloco todo; resumo de sucesso `:296` não é alcançado. Dry: `atomic :307`; `except RuntimeError :316` não captura `ReusoSemRechave`. É caminho MARCO, não cenário BATIDA. Encadeamento de cron em `app/config/crons.py:1516`. |
+| `smoke_chamados.handle`, `app/chamados/management/commands/smoke_chamados.py:39` → `_bloco_a_motivos :41` → laço `:91` → `:102` → gerador `:444` | `except Exception` em `:114`, incrementa `resumo["erro"]` em `:115` e guarda texto em `problemas :116`; segue próximo motivo. A transação externa permanece até o rollback proposital `_Rollback` em `:43`, capturado em `:44`. Command de smoke manual, registrado como tal em `app/config/crons.py:1428`; não confundir com emissor operacional. |
+
+**Agrupador de órfãos: bloco e bordas**
+
+O agrupador tem um `atomic` único em `app/chamados/services/disputa_emissao.py:964`, envolvendo complemento inicial (`:974/:990`), intervalos (`:1050/:1052/:1062`), ata (`:1077/:1084`), grupos (`:1103/:1122/:1127`), sem origem (`:1140/:1153/:1158`) e pendentes (`:1179`). `_criar_pergunta_se_couber` chama `abrir` em `:834`, sem captura; complemento percorre marcos em `:870` e chama o helper em `:878`, fora do `try` que termina no `except Exception :865`. Uma exceção propagada de `abrir` desfaz todo o agrupamento daquele colaborador e abandona seus demais laços. (`app/chamados/services/disputa_emissao.py:834`, `:865`, `:878`, `:964`)
+
+| Borda → agrupador | Captura / resto do lote / trilha |
+|---|---|
+| Cron `app/config/crons.py:363` → `processar_alertas_avancados.handle`, `app/ponto/management/commands/processar_alertas_avancados.py:19` → laço colabs `:29` → agrupador `:158` | `except Exception :159`; imprime `fio disputa falhou` em stdout `:160`; segue o laço. A criação do chamado ocorreu antes (`:121`) e permanece fora do bloco interno do agrupador. O contador `processados :164` ainda aumenta; não é contador da recusa. |
+| Cron `app/config/crons.py:362` → `processar_alertas_turno.handle`, `app/ponto/management/commands/processar_alertas_turno.py:32` → laço turnos `:81` → `_marco_critico :141` → `_abrir_chamado_critico :316` → agrupador `:384` | `except Exception :385`; imprime erro stdout `:386`; retorna chamado em `:387`; `_marco_critico` ainda pode enviar alerta e abrir justificativa (`:319/:321`), e o laço continua. Chamado foi aberto antes em `:335`, fora do agrupador. Não há contador específico de recusa. |
+| Cron `app/config/crons.py:364` → `detectar_ausencias.handle`, `app/ponto/management/commands/detectar_ausencias.py:61` → laços `:101/:138` → `_abrir_chamado :439` → agrupador `:801` | `except Exception :802`; imprime erro stderr `:803`; volta ao chamador, que ainda aumenta `abertos :448` e segue. Chamado aberto antes em `:693`, fora do agrupador. Contadores em `:455` não são contador dessa recusa. |
+| `app/chamados/urls.py:21` ou `:39` → `fio_colaborador :674` ou `modal_fio_colaborador :954`, em `app/chamados/views.py` → `processar_post_fio`, `app/chamados/services/fio.py:551` → `acao_iniciar_disputa_orfaos`, `app/chamados/services/acoes_disputa.py:221` → agrupador | Sem captura aplicável na cadeia. O log específico de sucesso em `app/chamados/services/acoes_disputa.py:226` não é alcançado em caso de exceção. Não há transação de lote declarada nessas cascas (`app/chamados/views.py:658`, `:868`; `app/chamados/services/acoes_disputa.py:210`). Tratamento externo: **[não verificado]**. |
+| `perguntar_chamados_sem_pergunta.handle`, `app/chamados/management/commands/perguntar_chamados_sem_pergunta.py:19` → `:29` → `pergunta_no_app.perguntar`, `app/chamados/services/pergunta_no_app.py:175` → laço colabs `:184` → agrupador `:186` | Sem captura/`atomic` externo de lote. Exceção abandonaria colaboradores seguintes; blocos anteriores do agrupador já terminaram. `n += len(chs)` em `:187` não ocorre para o colaborador recusado; o retorno/resumo `:188` e a impressão de `APLICADO` não são alcançados. |
+| `app/chamados/urls.py:32` → `app/chamados/views_cobrar.py:325` → `app/chamados/services/cobrar_dia.py:39` (cartório) e depois agrupador `:47` | Sem captura aplicável; `except ValueError` em `app/chamados/views_cobrar.py:322` só envolve parse anterior da data. A trilha de toque `cobrar_dia_manual` é gravada antes, em `app/chamados/services/cobrar_dia.py:37`; não é trilha da recusa. |
+
+**Restrição decisiva: chamada `:834` não recebe o cenário BATIDA descrito pelos chamadores atuais**
+
+Os motivos enviados ao helper `:834` são:
+
+- Intervalos, definidos em `app/chamados/services/disputa_emissao.py:1055`.
+- Complementos derivados de `_MOTIVO_POR_MARCO` em `app/chamados/services/disputa_emissao.py:873`, cuja tabela só contém `saida_sem_entrada`, `orfao_14h`, `intervalo_saida`, `intervalo_volta` em `app/chamados/services/declaracao_texto.py:42`.
+- Grupos/sem origem derivados de `_classificar_falta`, que delega em `app/chamados/services/disputa_emissao.py:802`; os retornos cobradores são `saida_sem_entrada`/`orfao_14h` em `app/escala/servico_jornada.py:445`, `:447`, `:458`, `:463`, `:465`, `:470`, `:471`.
+
+Esses quatro motivos são MARCO (`app/chamados/catalogo/motivos.py:34`, `:35`, `:48`, `:49`); `batida_origem_do_nascimento` retorna `None` fora da família BATIDA (`app/chamados/models.py:3365`). Para MARCO, a consulta usa a data exata (`app/chamados/models.py:2686`, `:2713`), e o dia do fato sem episódio vem da própria data do marco (`app/chamados/services/fio.py:1334`). Portanto **não se deve apresentar `:834`, fábrica de célula, declarações de MARCO ou agrupador como execução comprovada de `ReusoSemRechave` do episódio BATIDA D0→DIA**. A tabela de agrupador acima documenta limites de propagação do código, não comprova essa alcançabilidade.
+
+**Contador não é trilha de tentativas**
+
+A recusa de reuso é `raise`, em `app/chamados/models.py:2867`; o contador `fio.reuso_sem_rechave` varre estado persistido (`app/chamados/services/fio.py:1046`), confirma candidatas chamando a porta real em dry (`:1059`) e retorna `n/pks/universo` (`:1061`). Não incrementa um contador persistido a cada exceção nem cria registro de recusa nesse ponto. Seu universo exclui linhas sem episódio e conversas (`app/chamados/services/fio.py:1040`, `:1046`).
 
 ## 08/11 15:11 · sessao 90837d85b73f · - · - · origem=Ronald (tmux)
 
@@ -1047,127 +1176,4 @@ Essas referências cobrem atributos, `getattr`, filtros ORM e campo temporal din
 
 Todos os **leitores diretos identificados** reconhecem retratação como exclusão, apresentação ou instante de mudança pelos exemplos citados; o sistema inteiro não aplica uniformemente a exclusão, como demonstra `flip_auto.py:291-303`. Garantia sobre estado efetivo em produção: [não verificado].
 
-## 08/11 10:52 · sessao d2eb00cbbb9c · SELOS-DO-CANON-0811 · leitura · origem=Code
-
-As referências abaixo são da cópia fornecida. Ela não contém `.git`; não consegui revalidar sua identidade como HEAD `80df6a5dc22bd4868696699ab8bdb51ce033198d`. [nao verificado]
-
-**I-1 — CENSO-ANTES-DA-VAGA**
-
-**(a) Quem chama hoje.** Existe o ponto de interceptação: `.claude/settings.json:62` configura `PreToolUse`, chamando `disjuntor.py pretool` em `.claude/settings.json:68`. Porém, o ramo `Agent` atual lê o prompt e aplica B3/B4; não abre brief nem valida CENSO. Portanto, **o hook geral existe; a guarda de abertura do construtor seria nova**. (`bin/disjuntor.py:1451`, `bin/disjuntor.py:1454`, `bin/disjuntor.py:1460`)
-
-O protocolo também difere: o disjuntor comunica negação por JSON `permissionDecision=deny`, e seu `main_pretool` retorna zero. O contrato novo de validador com `rc 1` ainda não corresponde a esse protocolo existente. (`bin/disjuntor.py:1395`, `bin/disjuntor.py:1493`, `bin/disjuntor.py:1507`)
-
-Os briefs aparecem como artefatos preparados e despachados pela sessão: E1 “brief pronto” e depois abertura do construtor; AKMED e PLANTIO também têm caminhos registrados. **Não há nomenclatura uniforme:** `logs/fio_e0_v4/e1_brief.md` não casa com `logs/<obra>/brief*.md`; `logs/v2bugs/i2/brief_v6.md` tem um nível adicional. (`app/docs/RELATO.md:95`, `app/docs/RELATO.md:91`, `app/docs/RELATO.md:80`, `app/docs/RELATO.md:75`, `app/docs/RELATO.md:205`)
-
-No inventário desta cópia: **zero arquivos `logs/*/brief*.md`, zero obras observáveis por esse glob**; `logs/` não foi fornecido. Quantas obras os possuem em produção: **[nao verificado]**. O diretório está ignorado pelo Git, portanto sua ausência na exportação não prova ausência no vivo. (`.gitignore:53`)
-
-**(b) Colisão com PAREI.** A linha contratada **não satisfaz nenhum dos dois caminhos atuais**:
-
-- PAREI precisa conter `!`; pergunta de lei tampouco devolve turno por esse caminho. Além disso, deve travar o item em curso, sem outros itens andáveis. (`bin/hook_stop_fila1.py:1109`, `bin/hook_stop_fila1.py:1119`, `bin/hook_stop_fila1.py:1155`, `bin/hook_stop_fila1.py:1076`)
-- Espera provada precisa começar literalmente por `ESPERANDO:` e declarar `pid=` ou `arquivo=`. `PAREI: censo-<obra> | espera Codex` não declara nenhum deles. (`bin/hook_stop_fila1.py:656`, `bin/hook_stop_fila1.py:665`, `bin/hook_stop_fila1.py:673`)
-
-Os sítios envolvidos na compatibilização são o reconhecedor de espera, sua memoização por Stop, o orçamento que fica pendente durante espera provada e a liberação final. Mudar apenas a decisão final deixaria o orçamento tratando o censo por outro caminho. (`bin/hook_stop_fila1.py:645`, `bin/hook_stop_fila1.py:688`, `bin/hook_stop_fila1.py:984`, `bin/hook_stop_fila1.py:1231`)
-
-| Leitor/selo solicitado | O que faz hoje e a colisão |
-|---|---|
-| `test_hook_parei_so_lei.sh` | Exige `_SO_BANG`; rejeita decisão técnica e lei como portas; aceita `!`. Relaxar todo PAREI contrariaria esses casos. (`bin/tests/test_hook_parei_so_lei.sh:25`, `bin/tests/test_hook_parei_so_lei.sh:41`, `bin/tests/test_hook_parei_so_lei.sh:52`, `bin/tests/test_hook_parei_so_lei.sh:60`) |
-| `test_hook_esperando_com_prova.sh` | Distingue produtor vivo, morto, outro programa e declaração sem prova; verifica que a liberação ocorreu especificamente por espera provada. (`bin/tests/test_hook_esperando_com_prova.sh:67`, `bin/tests/test_hook_esperando_com_prova.sh:93`) |
-| `test_disjuntor.sh` | Exercita PAREI CLEAR, DIFF em curso, agente sem entrega e COTA com handoff; também impede usar arquivo escrito pelo próprio hook como prova. São interações a preservar, sem um caso censo demonstrado. (`bin/tests/test_disjuntor.sh:192`, `bin/tests/test_disjuntor.sh:200`, `bin/tests/test_disjuntor.sh:215`, `bin/tests/test_disjuntor.sh:477`, `bin/tests/test_disjuntor.sh:578`) |
-| `handoff_sessao.sh` | Já exibiria a linha censo, mas diria “item em curso ANDA”/“não devolve turno”: consulta somente os predicados de PAREI genérico. (`bin/handoff_sessao.sh:108`, `bin/handoff_sessao.sh:120`) |
-| `alarme_sessao_ociosa.py` | Já desarma com qualquer substring `PAREI:` nas primeiras 40 linhas, sem prova. Pode silenciar enquanto o Stop continua mandando seguir. (`bin/alarme_sessao_ociosa.py:119`, `bin/alarme_sessao_ociosa.py:127`, `bin/alarme_sessao_ociosa.py:42`) |
-
-A prova PID atual verifica processo vivo, identidade do executável/script e estabilidade do PID durante a leitura; **não consulta `CODEX_OBRA` nem `CODEX_PAPEL`**. A alternativa por arquivo exige avanço de mtime; a primeira observação não prova progresso. (`bin/hook_stop_fila1.py:523`, `bin/hook_stop_fila1.py:535`, `bin/hook_stop_fila1.py:548`, `bin/hook_stop_fila1.py:640`)
-
-O wrapper exige obra e papel, mas isso não estabelece vínculo entre o novo PAREI e um censo vivo daquela obra. Sua emissão explícita de `ESPERANDO` com PID/JSONL ocorre no ramo **construtor**, não no papel censo. (`bin/codex_pergunta.sh:81`, `bin/codex_pergunta.sh:85`, `bin/codex_pergunta.sh:375`)
-
-Assim, o lastro específico “produtor vivo do censo desta obra” permanece **[nao verificado]**. Aceitar somente o literal dispensaria o requisito de prova; aceitar qualquer Codex vivo não distinguiria obra nem papel, campos que o wrapper já separa. (`bin/hook_stop_fila1.py:673`, `bin/codex_pergunta.sh:81`)
-
-**(f) Furos.** O ramo atual não fotografa versão/conteúdo do brief; portanto não estabelece identidade abertura→brief. Também depende da passagem pelo hook configurado, e a chave `DISJUNTOR_DESLIGADO` pula suas verificações; exceções fora do ramo B3 liberam a ferramenta. (`bin/disjuntor.py:1451`, `bin/disjuntor.py:1487`, `bin/disjuntor.py:1496`)
-
-Cobertura de agente aberto por outra via, allowlist vazia efetivamente guardada e proteção contra brief alterado após abertura: **[nao verificado]**. Existe ainda outra abertura de construtor, pelo wrapper Codex, com vaga própria e execução própria; cobri-la não decorre automaticamente do ramo `Agent`. (`bin/codex_pergunta.sh:233`, `bin/codex_pergunta.sh:394`)
-
-**I-2 — UNIDADE-NO-AVAL**
-
-**(a) Quem registra hoje.** A responsabilidade declarada é do **Code/sessão**: prompt recebido vira linha em `PROMPTS.md`, e pedido de obra vira BACKLOG no mesmo turno. Ronald aparece como autor dos avais registrados. Não localizei uma porta executável única responsável por registrar e despachar esses avais. (`CLAUDE.md:433`, `app/docs/PROMPTS.md:3`, `app/docs/PROMPTS.md:1931`; registrador único: **[nao verificado]**)
-
-Os registros apontam arquivos privados como `logs/plantio_mais1/aval_i.txt`; quem efetivamente escreveu esses arquivos, e por qual ferramenta, é **[nao verificado]**. (`app/docs/PROMPTS.md:1931`, `.gitignore:53`)
-
-`gerar_avais.py` não resolve essa identidade: ele transforma `PENDENTES_RONALD.json` em `AVAIS.md`, a lista de pedidos abertos para Ronald responder. Não é o escritor de `PROMPTS.md`/`aval_*.txt`. (`bin/gerar_avais.py:3`, `bin/gerar_avais.py:30`, `bin/gerar_avais.py:105`)
-
-**(d) Marcadores detectáveis nos registros disponíveis.** Há exemplos textuais das seis classes; isso comprova vocabulário, não um classificador formal. (`app/docs/PROMPTS.md:1477`, `app/docs/PROMPTS.md:1931`, `app/docs/PROMPTS.md:1933`, `app/docs/PROMPTS.md:1966`, `app/docs/PROMPTS.md:1967`)
-
-| Classe | Exemplo no registro |
-|---|---|
-| Backfill | “backfill de data_evento”. (`app/docs/PROMPTS.md:1931`) |
-| Migração | “migracao e backfill chamam a MESMA porta”. (`app/docs/PROMPTS.md:1967`) |
-| Dedup | “oraculo E6 perde o dedup < 10 min”. (`app/docs/PROMPTS.md:1477`) |
-| Juiz | “juiz tarefa_do_dia nasce”. (`app/docs/PROMPTS.md:1933`) |
-| Veto | “MESMO veto de merito”. (`app/docs/PROMPTS.md:1967`) |
-| Catraca | Contagem de `select_for_update` sobre modelos nomeados. (`app/docs/PROMPTS.md:1966`) |
-
-**Falso positivo concreto:** `dedup` aparece em instrumento de medição de consumo do Code; `catraca`/`juizes` aparecem numa ordem de gestão da noite. Casar essas palavras classificaria também esses textos como DADO. (`app/docs/PROMPTS.md:1872`, `app/docs/PROMPTS.md:1839`)
-
-**Falso negativo no resumo disponível:** E1-FATO-E-O-TURNO muda o critério dos selos que recusam por `data_evento`, sem empregar nenhuma das seis palavras. O texto integral privado desse aval não foi fornecido. (`app/docs/PROMPTS.md:1977`; integral: **[nao verificado]**)
-
-A isenção por título também falha: TOAST-E-NOME-CALENDARIO reúne veto de criação/salvamento e apresentação de toast no mesmo registro. (`app/docs/PROMPTS.md:1828`)
-
-A memória citada tem exemplos explícitos: grep contou 13 arquivos contra nove por AST porque prosa citava a palavra; na O118, identidade por texto `HH:MM` produziu falsos positivos, corrigidos consultando o predicado de batidas apuráveis. (`bin/atomicidade_da_porta.py:41`, `app/docs/BACKLOG.md:1199`)
-
-**(f) Furos.** Autoridade para classificar DADO versus gestão/instrumento/UI, tratamento de aval misto, campos vazios e caminho obrigatório antes do despacho não estão estabelecidos por um mecanismo localizado nesta cópia. **[nao verificado]**
-
-Aval apenas no chat fica fora do alcance de um fiscal que só examina arquivo. O selo atual parte de promessas **já registradas** em PROMPTS e verifica IDs no BACKLOG; não comprova que todo aval recebido entrou no registro. (`bin/tests/test_prompt_virou_item.sh:21`, `bin/tests/test_prompt_virou_item.sh:30`)
-
-**I-3 — ETAPAS-NO-BRIEF**
-
-**(a/c) Abertura, opus final e B3.** A abertura compartilha o sítio do I-1, atualmente sem leitura do brief. O verificador recebe ID da obra, diff e log RED; seu checklist não exige brief, RELATO do pouso ou correspondência entre etapas e resultados. (`bin/disjuntor.py:1451`, `.claude/agents/verificador.md:3`, `.claude/agents/verificador.md:8`)
-
-O **B3 atual não faz essa conferência**. Ele identifica obra/leitura final pelo prompt e extrai `APROVADO`/`REPROVADO` da primeira linha do `SubagentHandback`, filtrando agentes do tipo `verificador`. (`bin/disjuntor.py:546`, `bin/disjuntor.py:561`, `bin/disjuntor.py:742`)
-
-Ele lê o RELATO para fotografar duas linhas úteis do topo e reconhecer `DESENHO`/`ERRO-BOBO` que liberam a obra. Conta reprovações e voltas Codex procedentes, não etapas entregues. (`bin/disjuntor.py:662`, `bin/disjuntor.py:626`, `bin/disjuntor.py:910`)
-
-Há uma lacuna temporal: **o opus final precede o pouso**, enquanto a linha de medida é exigida no RELATO **do pouso**. O artefato e o instante da conferência de etapas antes de autorizar esse pouso não estão definidos no código atual. (`CLAUDE.md:374`, `CLAUDE.md:379`, `.claude/agents/verificador.md:3`)
-
-**Como contaria hoje:** não há contador demonstrado. Pela letra do anexo, seria necessário comparar as etapas declaradas no brief com as etapas que têm resultado medido no RELATO; contar ocorrências de “etapa K” não comprova essa relação. Identidade de versão, resultado antigo versus atual e resultado esperado versus medido permanecem sem reconhecedor verificado. **[nao verificado]**
-
-O checador de prova existente também não supre isso: procura `PROVA:` próximo de certos atos em título/negrito, sem comparar etapa, comando ou valor medido. (`bin/relato_afirma_com_prova.py:36`, `bin/relato_afirma_com_prova.py:47`)
-
-**(f) Furos.** Brief editado depois da abertura perde uma referência estável para o denominador das etapas; o ramo atual não guarda essa referência. Além disso, B3 só reconhece os tipos/prompts finais previstos, e o verificador manda retornar apenas problemas — até 15 linhas —, sem relatório positivo N/N. (`bin/disjuntor.py:1451`, `bin/disjuntor.py:555`, `bin/disjuntor.py:742`, `.claude/agents/verificador.md:18`)
-
-Proteção específica contra reescopo, uso de brief anterior ou aval de alteração mantido apenas no chat: **[nao verificado]**.
-
-**(e) MEDIDA — comum aos três instrumentos**
-
-`ESTADO.md` é gerado por `bin/gerar_estado.py`, chamado por `relato.sh` para `$TMP/ESTADO.md`, e publicado pela raspagem. O gerador grava o destino recebido; não depende de existir `app/docs/ESTADO.md`. (`bin/relato.sh:38`, `bin/gerar_estado.py:390`, `bin/relato.sh:105`)
-
-**Já existe molde de janela móvel de 24 h:** `disjuntor.ler` usa `agora - 86400`, lê eventos datados e conta disparos, negações e liberações. O ESTADO consome esse medidor por `ler/linha`. (`bin/disjuntor.py:1546`, `bin/disjuntor.py:1568`, `bin/disjuntor.py:1570`, `bin/gerar_estado.py:277`)
-
-Há também contagem de chamadas Codex por papel em 24 h, baseada em eventos `ini`; e média de espera CLEAR baseada em `espera=Ns`. **Essa média não mede horas de vaga ociosa esperando censo.** (`bin/codex_limite_estado.py:24`, `bin/codex_limite_estado.py:71`, `bin/disjuntor.py:1580`, `bin/disjuntor.py:1688`)
-
-Os contadores atuais não demonstram as novas medidas de I-1/I-2/I-3; zero construtores sem censo, 100% de avais conformes e 100% de pousos N/N em produção permanecem **[nao verificado]**. Os campos hoje publicados são os explicitados em `bin/disjuntor.py:1615` e `bin/disjuntor.py:1691`.
-
-## 08/11 10:50 · sessao 3977fc5450fa · - · - · origem=Ronald (tmux)
-
-**I-2 — quem registra.** A obrigação atual é do Code/sessão: prompt recebido ganha linha em `PROMPTS.md` e obra ganha item no BACKLOG no mesmo turno (`CLAUDE.md:433-435`; `app/docs/PROMPTS.md:3-9`). Ronald aparece como autor do aval; os registros dizem “recebido” e “repassado ao construtor” (`app/docs/PROMPTS.md:1948-1950`). Não localizei registrador central executável, validador `UNIDADE=`, diretório `avais_recusados` ou selo I-2 na cópia **[não verificado]**. O executor físico das escritas privadas em `logs/*/aval_*.txt` é **[não verificado]**; `logs/` está ignorado (`.gitignore:53`).
-
-`gerar_cortes.py` é outro instrumento: lê `CORTES.json` e gera `CORTES.md`/tabela do RELATO; não registra o recebimento do aval (`bin/gerar_cortes.py:3-10`, `:23-25`). Handoff e placar **leem** PROMPTS (`bin/handoff_sessao.sh:128-140`; `bin/placar_code.sh:395-396`).
-
-| Classe | Marcador textual já encontrado em registro de aval |
-|---|---|
-| Backfill | “backfill de data_evento” — `app/docs/PROMPTS.md:1931` |
-| Migração | “migracao e backfill chamam a MESMA porta” — `app/docs/PROMPTS.md:1967` |
-| Dedup | “oraculo E6 perde o dedup < 10 min” — `app/docs/PROMPTS.md:1477` |
-| Juiz | “juiz tarefa_do_dia nasce” — `app/docs/PROMPTS.md:1933` |
-| Veto | “MESMO veto de merito” — `app/docs/PROMPTS.md:1967` |
-| Catraca | “conta so select_for_update sobre” quatro modelos — `app/docs/PROMPTS.md:1966` |
-
-**Palavra não comprova classe.** “Dedup” aparece em medição de consumo de agentes, instrumento isento pelo contrato fornecido; usá-la como classe DADO recusaria esse instrumento (`app/docs/PROMPTS.md:1872`). “Catraca” e “juízes” aparecem em aval de ordem/teto da noite (`app/docs/PROMPTS.md:1839`). Título UI também não determina isenção: TOAST-E-NOME-CALENDARIO contém uma parte de veto de criação/salvamento e outra de apresentação (`app/docs/PROMPTS.md:1828`).
-
-**Falso negativo lexical demonstrável:** o resumo do aval E1-FATO-E-O-TURNO-NAO-A-DATA-GRAVADA trata da recusa por `data_evento` sem nenhuma das seis palavras; classificador dessas palavras não o selecionaria (`app/docs/PROMPTS.md:1977`). O texto integral desse aval privado permanece **[não verificado]**.
-
-A memória tem fundamento concreto: o varredor de atomicidade documenta grep contando 13 arquivos contra 9 por AST porque prosa citava a palavra, e proximidade textual de decorador não provava cobertura (`bin/atomicidade_da_porta.py:8-12`, `:41-44`). A memória O118 apontada pelo pai está em `app/docs/BACKLOG.md:1199`.
-
-**Furo de chat/arquivo.** O selo atual considera somente IDs no idioma literal `BACKLOG **Oxx/Fxx**` já escritos em PROMPTS e verifica sua existência no BACKLOG; não estabelece que todo aval entrou no registro (`bin/tests/test_prompt_virou_item.sh:21-35`). A lacuna está explicitamente documentada no histórico (`app/docs/RELATO-ARQUIVO.md:30931`). Portanto, fiscalização restrita ao registro não observa aval que ficou apenas no chat; a ocorrência atual disso é **[não verificado]**.
-
-**Allowlist/classificação.** O anexo I-2 isenta gestão/instrumento/UI, mas autoridade executável que decide essa classe, tratamento de aval misto e caminho único obrigatório de despacho permanecem **[não verificado]**. Não há evidência para chamar essas seis palavras de marcador formal existente **[não verificado]**.
-
-_2876 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2878 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
