@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 20:10:35.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (224.0 MB). Acoes na janela: **1275**.
+**Medido em 09/11/2026 20:16:05.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (224.1 MB). Acoes na janela: **1280**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:12:49 | Bash |  | `python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read().split('\n') assert s[3].startswith('MODO-COMUM:') s[3]="MODO-COMUM: E4a-1 P3 pauta de CADASTRO sem contador e reabrindo em laco apos fechada (aval PASSADO-SEM-MARCOS) \| quem pegou: opus final 1 (Codex perguntou so o lado proibido q:36, CONFORME r:165) \| invariante que faltou: 'dia passado sem turno = UMA pendencia de cadastro por colab, fecha ...` |
+| 20:12:43 | Bash |  | `cd /home/ronald/saas-hasner && /bin/grep -n "MODO-COMUM\\|ESPERANDO\\|def _topo\\|linhas\[" bin/hook_stop_fila1.py \| head -30` |
+| 20:12:37 | Bash |  | `cd /home/ronald/saas-hasner && sed -n 130,150p app/docs/PISTA.md; /bin/grep -n "MODO-COMUM" app/docs/BACKLOG.md \| head` |
+| 20:12:35 | Bash |  | `cd /home/ronald/saas-hasner && /bin/grep -rln "preverif\\|PRE-VERIFICADOR\\|papel.*verificador" bin/*.sh bin/*.py 2>/dev/null \| head; /bin/grep -n "MODO-COMUM" app/docs/PISTA.md \| head` |
+| 20:12:31 | Bash |  | `date; L=/home/ronald/saas-hasner/logs/FIO-E0-V4-E4-ESCRITORES/volta4/suite_inteira_dbb941474.log; wc -l $L; tail -c 200 $L; ps -o etime -p 469471` |
 | 20:04:37 | Bash |  | `python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read().split('\n') s.insert(3,"MODO-COMUM: E4a-1 P3 (aval PASSADO-SEM-MARCOS exigia contador nome/numero/esperado/dono e a pauta fechada nao podia reabrir em laco) -- preverif Codex perguntou so o lado PROIBIDO (q:36) e deu CONFORME (r:165), a triagem nao viu, so o opus final viu. Classe: OBRIGACAO POSITIVA de aval sem pergunta no preverif. Cura do ca ...` |
 | 20:04:25 | Bash |  | `cd /home/ronald/saas-hasner && git show 6a1fc54f7:app/chamados/models.py \| sed -n 2954,2962p; echo ---BASE; git show f2962ab8d:app/chamados/models.py \| /bin/grep -n "_linhas_antes_reuso" \| head; echo ---P2; git show 6a1fc54f7:app/chamados/services/fabrica_da_celula.py \| sed -n 128,137p; git show 6a1fc54f7:app/chamados/services/fabrica_da_celula.py \| sed -n 178,183p` |
 | 20:04:21 | Bash |  | `cd /home/ronald/saas-hasner/logs/FIO-E0-V4-E4-ESCRITORES; ls -la postmortem_opus1.*; cat postmortem_opus1.out; wc -c postmortem_opus1.r; cat postmortem_opus1.r \| head -120` |
