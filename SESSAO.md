@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 07:59:23.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (184.8 MB). Acoes na janela: **967**.
+**Medido em 09/11/2026 08:04:54.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (184.9 MB). Acoes na janela: **971**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:00:05 | Bash | Skim AUDITORIA A-E reading structure | `cd /home/ronald/saas-hasner; grep -n -E '^\*\*\|^#\|^[0-9A-E]\)\|dono\|DONO\|padr' logs/auditoria_0911/leitura_ae.r \| cut -c1-260 \| head -50` |
+| 08:00:02 | Bash | Update RELATO top lines and ESPERANDO pid | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') assert L[1].startswith('ESPERANDO:') L[1]='ESPERANDO: lancar_construtor_v1.sh \| pid=939470' novas=[ "lei: C17 fachada (aval LEI-E3-UNIDADE-E-C17) -- o Codex construtor da E3 volta 1 mostrou 4 campos em que porta_alcancavel_do_dia (chamados/juizes.py:1536/1537/1545/1547) e tarefa_do_dia (tarefa_do_di ...` |
+| 07:59:42 | Bash | Read I-1 postmortem head and RELATO top | `cd /home/ronald/saas-hasner; head -c 1500 logs/selos_canon/i1_postmortem_opus2.r; echo; echo ----; sed -n 1,14p app/docs/RELATO.md \| cut -c1-300` |
+| 07:59:34 | Bash | Write and launch DEPLOY-EXCLUSAO preverif v2 | `cd /home/ronald/saas-hasner; D=logs/deploy_exclusao; git -C /home/ronald/wt-deploy-exclusao-061631 diff 89df8c52d f11329237 > $D/diff_v2.diff; git -C /home/ronald/wt-deploy-exclusao-061631 diff a85728bf7 f11329237 > $D/diff_v2_delta.diff; wc -l $D/diff_v2*.diff cat > $D/preverif_v2.q <<'EOF' OBRA DEPLOY-EXCLUSAO-ENVELOPE -- PRE-VERIFICADOR (papel verificador), volta 2 (construtor opus). Hash da co ...` |
 | 07:59:18 | Bash | Read preverif v1 template and diff stat | `cd /home/ronald/saas-hasner/logs/deploy_exclusao; cat lancar_preverif_v1.sh; cat preverif_v1.q; cd /home/ronald/wt-deploy-exclusao-061631 && git diff 89df8c52d f11329237 --stat` |
 | 07:59:15 | Agent | SONDA-SEM-GRANT opus builder | `You are the opus CONSTRUCTOR for obra SONDA-SEM-GRANT in the Hasner Ponto repo. Work ONLY in the copy /home/ronald/wt-sonda-sem-grant-075803 (detached at main 89df8c52d). Never edit /home/ronald/saas-hasner (the live tree) except writing logs under /home/ronald/saas-hasner/logs/auditoria_0911/sonda_v1_*. Never run anything against prod databases (saas_db / saas_hasner) or sombra_db: no docker exec ...` |
 | 07:58:41 | Bash | Rename BUG-PAR copy to wrapper convention and relaunch | `cd /home/ronald/saas-hasner; D=logs/bug_par_dois_atos; OLD=$(cat $D/wt.txt); git worktree remove $OLD && W=/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-$(date +%H%M%S) && git worktree add --detach $W 89df8c52d >/dev/null 2>&1 && echo $W > $D/wt.txt && sed -i "s#$OLD#$W#" $D/lancar_construtor_v1.sh && grep -o "construtor [^ ]*" $D/lancar_construtor_v1.sh; setsid nohup bash $D/lancar_cons ...` |
