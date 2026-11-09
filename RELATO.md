@@ -1,6 +1,7 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: suite.sh | pid=2615060
+ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=2723179
+E4a-1 18:2x [fio_morto_alcance=377]: volta 3 ENTREGOU (construtor 1916649 rc 0, testes leem o fonte aplicado, parque em logs/FIO-E0-V4-E4-ESCRITORES/volta3/); trazida a copia de sessao + 5 F401 e A16 (dict em CharField 14 -> p.VL_SIM) = commit 6a1fc54f7 na copia; ORM 152 testes OK (volta3/orm2.log). Preverif Codex UNICA lancada (pid 2723179, preverif_e4a1.q/.r). Voltas Codex construtor 3 de 3.
 E4a-1 18:07 [fio_morto_alcance=377]: copia de sessao 46d313581 (wt-e4a-sessao-180409) = C20 volta 1 sem disparar/H4 + H-A22, H2, H-C11-REUSO, H-C11-RESSUSCITAR, H-C11-REVERSAO aplicados (git apply limpo) + VIVOS best-effort (engolir+savepoint). Construtor volta 3 (ULTIMA, 3 de 3) lancado pid 1916649 na wt-codex-...-180711: testes contra o codigo APLICADO, E4a-2 ao parque, PASSADO-SEM-MARCOS x disparar do HEAD.
 E4a 18:1x [fio_morto_alcance=377 fio_morto=5 cobrando=5 materializada_viva=2 hoje+=3]: construtor volta 2 (wrapper 271212, 17:40-17:58) rc 0 ENTREGOU; commit na copia 5136cd6c7 (delecoes declaradas, texto em E4A_PARQUE), entregaveis em logs/FIO-E0-V4-E4-ESCRITORES/volta2/. Voltas Codex construtor 2 de 3.
 DECIDIDO PELA LEI (LEI-AKITA 9, aval E4-EXPAND-CONTRACT 'EXCECAO DECLARADA ... A05 (ramo de assinatura)'): H-A05 NAO entra na E4a; P5 (API do C6) cai com ele | contestavel

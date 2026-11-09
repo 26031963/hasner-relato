@@ -1,7 +1,45 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 18:18** · publicado em **09/11/2026 18:18** (UTC-3)
+> Ultima resposta processada: **09/11/2026 18:23** · publicado em **09/11/2026 18:24** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 18:23 · sessao c723709f6c87 · - · - · origem=Ronald (tmux)
+
+A1 — CONFORME: os três casos continuam na projeção; não foi criado fato equivalente nem migrado leitor no patch fornecido. A03 escreve `fechada_em/por`, `resolucao`, `motivo_fechamento`, `reaberturas_admin` e eventualmente `motivos` em `app/chamados/models.py:2149-2161`; a casca continua chamando essa porta em `app/chamados/services/acoes_disputa.py:255-259`, lê o contador em `:298`. A17 escreve conjuntamente `pendencia_admin` e `recusa_motivo` em `app/chamados/services/materializacao.py:850-851`; A18 escreve `recusa_motivo` em `:1102-1103`, ou pela porta de identidade em `:1099-1100` quando a colisão encerra por fato ocupado. O chamado recebe ocorrência em `:1105-1107`, mas isso não substitui a projeção como fonte dos leitores. O catálogo DP não contém atos próprios para esses três casos (`app/chamados/models.py:3853-3863`).
+
+A2/D8 — CONFORME quanto à preservação antes/depois: os leitores continuam lendo a projeção. Leituras diretas de tela encontradas:
+
+- Modal administrativo: `app/templates/chamados/partials/modal_fio.html:225`, sob `respondida_em` e `pendencia_admin` (`:216-221`); preserva advertência em `:222-225`.
+- Atendimento do colaborador: `app/templates/chamados/partials/_card_atendimento.html:186`, com preferência anterior por `via_resolucao`; incluído por `app/templates/chamados/meu_atendimento.html:127` e `:144`.
+- Explicador: `app/chamados/services/explicador.py:85-90` lê `pendencia_admin/recusa_motivo`; o fio o monta em `app/chamados/services/fio.py:302-314`. O modal renderiza seus itens em `app/templates/chamados/partials/modal_fio.html:433-442`.
+
+Não afirmar visibilidade incondicional de toda recusa: o modal exige pendência para imprimir diretamente o campo (`app/templates/chamados/partials/modal_fio.html:221-225`), e o cartão só o mostra depois de esgotar as vias (`app/templates/chamados/partials/_card_atendimento.html:186`). Essas condições não foram alteradas pelo patch fornecido [nao verificado quanto ao diff completo ausente].
+
+Outros leitores de `recusa_motivo`: `app/chamados/services/validacao.py:147`, `:188-208`; `app/chamados/services/passivo_validado.py:66`; `app/chamados/management/commands/auditar_invariantes_chamados.py:536`, `:1074-1075`, `:1111-1112`; `app/ponto/services/flip_auto.py:132` extrai identidade de batida pelo texto. Os campos de formulário em `modal_fio.html:60`, `:294` e `_pergunta_card.html:114` são entradas da recusa humana, não leituras da projeção.
+
+B/modal — CONFORME: segue lendo `data_conferida_em/por`, nome completo ou username, em `app/templates/chamados/partials/modal_fio.html:169-170`; segue sendo escrito por `app/chamados/services/validacao.py:664-666`. O patch fornecido não altera esses sítios. A leitura do dia continua comparando a data da pergunta e a antiga do chamado (`app/templates/chamados/partials/modal_fio.html:161-167`).
+
+C — sequência DP:
+
+| Ato/campo | Escritor/chamador da porta | Leitor |
+|---|---|---|
+| Porta física DP | `app/chamados/models.py:3939-3948` | — |
+| `resposta` | `app/chamados/services/disputa_emissao.py:1508-1509`, `:1653-1654`, `:1674-1675` | histórico `app/chamados/models.py:3504-3512`; tarefa `app/chamados/services/tarefa_do_dia.py:337-347` |
+| `validacao` | `app/chamados/services/validacao.py:139-141` | tarefa `app/chamados/services/tarefa_do_dia.py:337-347` |
+| `devolucao` | `app/chamados/services/validacao.py:205-208` | tarefa `app/chamados/services/tarefa_do_dia.py:337-347` |
+| `reabertura/recusa` | `app/chamados/services/disputa_emissao.py:1612-1625`; recusa humana chama em `app/chamados/services/validacao.py:593-594` | histórico `app/chamados/models.py:3509-3512`; modal `app/templates/chamados/partials/modal_fio.html:204-211` |
+| `silencio` | `app/chamados/models.py:1924-1926`; legado `app/chamados/management/commands/backfill_decisoes_pergunta.py:324-326` | tarefa `app/chamados/services/tarefa_do_dia.py:337-347`; seleção legado `app/chamados/management/commands/backfill_decisoes_pergunta.py:99-101`, `:315` |
+| `retratacao` | `app/chamados/models.py:2056-2060` | tarefa `app/chamados/services/tarefa_do_dia.py:339-342` |
+| `absorcao` | `app/chamados/services/materializacao.py:563-566` | carga com ausência `app/chamados/services/tarefa_do_dia.py:337-338` |
+| Preservação R/V sem linha | `app/chamados/models.py:3910-3936`; nascimento `:3015`; ressuscitação `:1563-1564` | mesma função lê projeção; tarefa a usa em `app/chamados/services/tarefa_do_dia.py:343-347` |
+
+O instante de resposta é o mesmo na projeção e DP (`app/chamados/services/disputa_emissao.py:1459-1465`, `:1508`); idem validação (`app/chamados/services/validacao.py:134-141`), silêncio (`app/chamados/models.py:1925`) e absorção (`app/chamados/services/materializacao.py:561-566`). A tarefa limita atos inclusivamente por `ato_em <= agora` (`app/chamados/services/tarefa_do_dia.py:339`); a ordem total DP é `ato_em, pk` (`app/chamados/models.py:3885`).
+
+R/V/materialização mantêm leitura antiga: estado em `app/chamados/models.py:3037-3044`; carimbo físico único `_escrever_carimbo` em `:3093-3097`; `carimbar` em `:3120-3148`; volta avulsa em `:3200-3208`; volta em lote em `:3260-3262`; campos que acordam mantêm R/V/C em `:3216-3218`.
+
+Observação útil sobre “campo com dois significados”: `recusa_motivo` já contém recusa técnica (`app/chamados/services/materializacao.py:1102`), advertência de tipo (`:850`), recusa humana (`app/chamados/services/validacao.py:584`), explicação de escape (`app/chamados/services/disputa_emissao.py:1494-1496`) e identidade da duplicata (`app/chamados/services/fio.py:1355`). O patch fornecido não cria nem altera esses usos; classificar como nova infração E4a seria incorreto [nao verificado quanto a exigência de sanar o legado].
+
+Procedentes encontrados nesta subverificação: nenhum comprovado.
 
 ## 09/11 18:18 · sessao 87e4233cdf18 · FIO-E0-V4-E4-ESCRITORES · construtor · origem=Code
 
@@ -870,23 +908,4 @@ escritores:
 
 [truncado em 20000 de 67950 caracteres]
 
-## 09/11 16:07 · sessao 7e56db703d9c · - · - · origem=Ronald (tmux)
-
-Fecho dos chamadores por AST, sem importar a aplicação:
-
-| Leitor | Campos/significado | Chamadores |
-|---|---|---|
-| `app/chamados/juizes.py:1084 tranca_da_consulta` | Dia do turno pelo juiz, resultado da tranca e memo restrito à consulta; memória, sem persistência. | P: `app/chamados/services/pergunta_no_app.py:56`. T indireto: `app/chamados/tests/test_e3_v4_orm.py:108`. |
-| `app/chamados/juizes.py:1450 alimentar_fila` | Fila, célula e verbos do painel; leitura indireta de status/silêncio/urgência. | P: `app/chamados/juizes.py:1495`; `app/chamados/services/tarefa_do_dia.py:409`. T: `app/chamados/tests/test_e3_portas_tarefa.py:119`. |
-| `app/chamados/services/tarefa_do_dia.py:396 CargaDaTarefa.tarefa` | Perguntas, decisões, efeitos, passivo, lavra e tranca carregados; agora alimenta painel sem chamar C6. | P: `app/chamados/services/tarefa_do_dia.py:452`. T: `app/chamados/tests/test_e3_portas_tarefa.py:121`. |
-| `app/chamados/services/tarefa_do_dia.py:418 _portas_da_tarefa` | Ações exigíveis, fila e verbos; publica rota/fila/verbos/fio. | P: `app/chamados/services/tarefa_do_dia.py:412`. T indireto: `app/chamados/tests/test_e3_portas_tarefa.py:121`. |
-| `app/chamados/management/commands/diff_e3_sombra.py:42 candidata` | Projeta rota/fila/verbos/fio da tarefa. | P operacional: mesmo arquivo `:126`. T: `app/chamados/tests/test_e3_diff_sombra.py:135`. |
-| `app/chamados/management/commands/diff_e3_sombra.py:47 projecoes` | Campos consumidos pelos três leitores C17. | P operacional: mesmo arquivo `:118`, `:127`. T: `app/chamados/tests/test_e3_diff_sombra.py:141`. |
-| `app/chamados/management/commands/diff_e3_sombra.py:61 casos_do_par` | Fila, perguntas vivas, âncoras e razão da tarefa; classifica casos do instrumento. | P operacional: mesmo arquivo `:128`. T direto: `[nao verificado]`. |
-| `app/chamados/management/commands/diff_e3_sombra.py:108 Command.comparar` | Compara C17 e tarefa por colaborador/dia; utiliza helpers anteriores. | P operacional: mesmo arquivo `:99`. T indireto: `app/chamados/tests/test_e3_diff_sombra.py:20`. |
-
-`diff_e3_sombra` é instrumento declarado fora do pipeline; declaração não demonstra execução. (`app/config/crons.py:771`) Execução produtiva de todos os chamadores acima: **[nao verificado]**.
-
-Correções indispensáveis do v1: `_estado_da_decisao` não existe no AST atual; o corpo correspondente é `_pela_decisao`, em `app/chamados/services/tarefa_do_dia.py:115`. O diff fornecido não demonstra renomeação desse corpo: **[nao verificado]** quanto à origem do erro do v1. A referência `data_conferida_por` em `app/chamados/services/validacao.py:666` é atribuição, não leitura; a guarda lê `data_conferida_em` em `:662`. `_resolv` existe em `app/chamados/services/becos.py:21`; `universo_da_linha` existe em `app/chamados/services/fio.py:1906`.
-
-_3216 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3217 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
