@@ -1,7 +1,44 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 02:24** · publicado em **09/11/2026 02:29** (UTC-3)
+> Ultima resposta processada: **09/11/2026 02:40** · publicado em **09/11/2026 02:40** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 02:40 · sessao 26af97663c42 · - · - · origem=Ronald (tmux)
+
+S2: capturar por defaults as variáveis dos laços:
+
+- `crescer(*args, original=original, lidas=lidas, classe=classe, pk=pk)` nos dois pontos ([test_e1_fila_v2_2_trava.py:254](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila_v2_2_trava.py:254), [mesmo arquivo:367](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila_v2_2_trava.py:367)).
+- `lambda c, o, m=m: _fecho_antigo(m, c, o)` ([mesmo arquivo:270](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila_v2_2_trava.py:270)).
+
+S3: atualizar o registro da linha B1 do agrupador após a cura A1; hoje `[1131]`, enquanto o censo atual calcula `[1188]` ([test_medida_turno_do_par.py:268](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/core/tests/test_medida_turno_do_par.py:268)). A regra exige registro no mesmo diff e compara sem consultar Git ([mesmo arquivo:17](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/core/tests/test_medida_turno_do_par.py:17), [mesmo arquivo:533](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/core/tests/test_medida_turno_do_par.py:533)). Preserve a identidade da função: extrair o corpo para outra função exigiria também rever `REGISTRO` ([mesmo arquivo:526](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/core/tests/test_medida_turno_do_par.py:526)).
+
+Comandos executados, sem editar:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest chamados.tests.test_e1_fila_v2_2_trava
+```
+
+Resultado baseline: 15 testes OK [nao verificado por arquivo persistido]. [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
+from core.medida_turno_do_par import censo
+c = censo('.')
+print([(i['chave'], i['linhas'])
+       for i in c['derivacoes_de_dia']['itens']
+       if 'disputa_emissao.py' in i['chave']])
+PY
+```
+
+O ambiente tem `python3`, sem Django ou Ruff; execução desses verificadores reais fica [nao verificado]. O runner da catraca sem Django está documentado em [test_medida_turno_do_par.py:20](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/core/tests/test_medida_turno_do_par.py:20).
+
+## 09/11 02:40 · sessao 75dba09147d1 · - · - · origem=Ronald (tmux)
+
+S1: a fixture ocupa `self.ch2` com P materializada ([integracao.py:118](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila_v2_2_integracao.py:118)), embora ele exista para atravessar o filtro como segundo órfão ([test_e1_fila.py:260](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila.py:260)). A regra pode excluí-lo por P materializada sem célula acusando ([disputa_emissao.py:759](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/services/disputa_emissao.py:759)); então o agrupador retorna antes da cauda ([disputa_emissao.py:1082](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/services/disputa_emissao.py:1082)). Cura sugerida: criar chamado independente como destino da P materializada e ressuscitá-lo na cauda, preservando `self.ch2` sem P; execução PostgreSQL [nao verificado].
+
+A2: acrescentar teste que execute o agrupador real com D/P estrangeiras apontando o chamado local, sem wrapper da helper e sem cauda artificial; inspecionar `linhas_travadas` e exigir C estrangeiro por `for_update` antes da primeira D. O detector distingue aquisição e atualização ([test_e1_v9.py:71](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_v9.py:71)). O fecho encontra o estrangeiro por P reversa ao destino ([disputa_emissao.py:965](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/services/disputa_emissao.py:965)). [nao verificado]
+
+MORDE sugerido: gerar função mutante usando `fila.mutante_ou_falha` ([test_e1_fila.py:48](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila.py:48)), inserir `_trava_do_repasse = lambda *a, **k: None` imediatamente antes do `with` e reutilizar o teste, exigindo falha no assert do C estrangeiro. Sem execução [nao verificado]. [nao verificado]
 
 ## 09/11 02:24 · sessao 69b9fc6d95cb · SELOS-CANON-I1 · verificador · origem=Code
 
@@ -1083,206 +1120,4 @@ Callbacks `on_commit` precisam ser separados do atomic original: sua declaraçã
 - **Cascatas da Batida retomada**: post-save/post-delete recomputam em `app/ponto/signals.py:35-36`, `:49-50` → `:26-28` → DELETE TurnoMaterializado por recorte em `app/ponto/nucleo.py:80-82`, bulk INSERT em `:59`, EventoCelula em `:66`, `:93`. Cartório em `signals.py:135`, `:140`; reconciliador em `:215`; fecho adesão em `:234` → `app/colaboradores/services/pos_vinculo.py:36-45`.
 - **Fechamento depois da Batida**: `app/ponto/registro_batida.py:160`, `:175-178` → novo `on_commit` em `app/ponto/services/fechamento.py:1824` → recalcular só colaborador em `:1810` → FechamentoMensal `get_or_create` em `:898`, save em `:1144` ou UPDATE em `:1160`; DiaPago em `:1191-1201` → DELETE e bulk INSERT em `app/ponto/services/dia_pago.py:359-360`. Outros efeitos internos da derivação financeira não foram abertos exaustivamente: **[nao verificado]**.
 
-## 09/11 01:03 · sessao abd3cf758dcc · - · - · origem=Ronald (tmux)
-
-Item 7 — testes que conferem a ordem do agrupador: [nao verificado]
-
-- `app/chamados/tests/test_e1_fila.py::F1AgrupadorTest::test_RED_o_repasse_trava_C_D_Ch_P_no_topo`: executa o agrupador com duas cobranças órfãs e pergunta reutilizável em disputa fechada; exige que o repasse avance, que a disputa apareça na sequência de travas e que `violacoes_linhas(seq)` seja vazio. `app/chamados/tests/test_e1_fila.py:240-278`.
-- `app/chamados/tests/test_e1_fila.py::F1AgrupadorTest::test_MORDE_sem_a_trava_do_repasse`: substitui `_trava_do_repasse` pela trava apenas do colaborador e exige uma violação na sequência. `app/chamados/tests/test_e1_fila.py:280-286`.
-- `app/chamados/tests/test_e1_fila.py::F1AgrupadorTest::test_RED_o_teto_do_repasse_cobre_TODA_pergunta_do_colaborador`: chama somente a helper inicial; exige a presença de uma pergunta de vinte dias antes e da disputa dela nas linhas travadas. Não executa o agrupador nesse trecho. `app/chamados/tests/test_e1_fila.py:288-301`.
-- `app/chamados/tests/test_e1_volta2.py::OrdemDeTravaTest::test_MORDE_agrupador_trava_o_colaborador_antes_de_gravar_a_disputa`: inspeção AST; exige `_trava_do_repasse` como primeira instrução do primeiro `with` e primeira chamada dessa helper igual a `PerguntaDisputa.trava_na_ordem(colaborador.pk)`, sem argumentos adicionais. `app/chamados/tests/test_e1_volta2.py:176-194`.
-
-O detector SQL registra a primeira aquisição de cada `(tabela, pk)` por `UPDATE` ou `FOR UPDATE`; cobra ordem de classe, pk crescente e ausência de linha não sondada. Não compara escritas com o conjunto calculado no topo. Portanto uma pergunta preexistente fora desse conjunto, escrita posteriormente com pk maior, pode passar; uma nova trava de C/D/Ch depois de P seria acusada se o cenário do teste alcançasse esse caminho. `app/chamados/tests/test_e1_v9.py:46-116`.
-
-`executemany`, travas de FK dos `INSERT`s e os `INSERT`s não entram nessa captura; o executor do teste também exclui linhas com pk acima do máximo anterior ao ato. `app/chamados/tests/test_e1_v9.py:51-53`, `app/chamados/tests/test_e1_fila.py:59-71`.
-
-A suíte mais antiga `test_e1_v5_ordem_trava.py` registra apenas a primeira aquisição por **tabela**, não por linha, e declara que não vê a segunda disputa adquirida depois de P; não serve como prova de cobertura do conjunto inicial. `app/chamados/tests/test_e1_v5_ordem_trava.py:35-49`, `app/chamados/tests/test_e1_v5_ordem_trava.py:362-367`.
-
-Item 5 — conjuntos das outras portas abertas:
-
-| Porta | Conjunto inicial e continuação |
-|---|---|
-| `declarar_hora_colab` / `aplicar_declaracao` | Compartilham `_trava_do_ato`: C; disputas abertas/vivos de C; perguntas do universo **do fato específico**, suas disputas/destinos; chamado da declaração. `app/chamados/services/declaracao_texto.py:282-297`. `aplicar_declaracao` chama a helper antes da emissão, abre/reutiliza P e responde; a validação acontece **fora** desse atomic. `app/chamados/services/declaracao_texto.py:648-690`. A validação abre outra transação com disputa/pai/destino/clones e universo abertas/vivos, antes de carimbar/materializar. `app/chamados/services/validacao.py:425-435`, `app/chamados/services/validacao.py:452-459`. |
-| `reabrir_orfas_enterradas::Command.handle` | C da disputa; D própria; pai; abertas/vivos; somente P própria. Depois descarimba P, reabre D e chama `pai.reabrir()`. `app/chamados/management/commands/reabrir_orfas_enterradas.py:146-172`. A reabertura do pai escreve status e ressuscita perguntas, portanto volta ao alcance de cartório/S143/ressuscitação analisado pelo agente principal. `app/chamados/models.py:1442-1451`, `app/chamados/models.py:1550-1572`. |
-| `fio.migrar_resolvedoras_vivas` | `_conjunto_da_migracao` busca todas as P costuradas no velho ou novo, **sem filtro de colaborador**, e acrescenta o universo de cada linha. `app/chamados/services/fio.py:2032-2039`. Trava donos dessas P + donos de velho/novo, D das P, os dois Ch, P; relê e recusa crescimento de C/P/D. Não inclui automaticamente todos os pais, vivos ou abertas. `app/chamados/services/fio.py:2084-2099`. |
-| `migrar_data_evento_dia_do_turno::Command._migrar` e `_reverter` | Travam C/D/destinos/P somente das linhas dos grupos ou arquivo de reversão; depois chamam `rechavear_data_evento`. `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:374-400`, `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:465-492`. O re-chaveamento escreve a P e emite evento também para a célula antiga. `app/chamados/services/fio.py:1033-1039`. |
-| `fio._costura_nao_mata_o_fio` | Dentro de atomic, trava C do destino e o destino; relê seu status. `app/chamados/services/fio.py:761-770`. |
-| `fio.reapontar_resolvedora` | Trava os C da linha/destino; somente no ramo com colisão acrescenta D/P da linha e perdedoras e Ch destino; depois costura e salva P. `app/chamados/services/fio.py:881-925`. |
-| `fio.rechavear_data_evento` | Trava C/D/P, sem Ch; salva P e acorda a célula antiga. `app/chamados/services/fio.py:997-1003`, `app/chamados/services/fio.py:1033-1039`. |
-| `fio.retratar_para_canonica` | Trava C/D/P da canônica e perdedoras; chama a porta de carimbo de identidade para cada perdedora. `app/chamados/services/fio.py:1327-1332`, `app/chamados/services/fio.py:1348-1353`. |
-
-A classe de risco deve ser demonstrada pelo alcance efetivo da continuação, e não apenas pela ausência de uma relação nesse quadro: `post_save(Pergunta)` agenda o beco por `on_commit`, enquanto o receiver síncrono de outbox apenas chama `acordar_celulas`; logo callbacks pós-commit não estão protegidos pelas travas da transação original. `app/chamados/signals.py:214-225`, `app/chamados/signals.py:237-244`, `app/chamados/models.py:3231-3248`.
-
-Cuidado para a consolidação: `DisputaSupervisao.reabrir_sistema` anexa nota ao pai, mas essa chamada **não prova UPDATE do Chamado**: sem `contexto_novo`, `anexar_ocorrencia` insere apenas `FollowupChamado`. `app/chamados/models.py:2185-2188`, `app/chamados/services/nota.py:102-111`. Além disso, o reuso de `_nascer` salva a P e retorna; esse trecho não reabre a disputa fechada. `app/chamados/models.py:3000-3010`.
-
-## 09/11 00:58 · sessao a8f8d399adf2 · - · - · origem=Ronald (tmux)
-
-Censo da pergunta (2), somente código. A distinção necessária é entre escrever `materializada_em` e matar uma pergunta pelo C6: `carimbar` só grava se o C6 a der por morta COM o carimbo; há chamadores que só chegam quando ela JÁ está morta por leitura. (`app/chamados/models.py:3128`; `app/chamados/reconciliador.py:397`; `app/chamados/services/disputa_emissao.py:1825`)
-
-**Portas de escrita da pergunta e encaixe de evento**
-
-| Porta/função | Escrita, atomicidade e trava |
-|---|---|
-| `PerguntaDisputa.carimbar` | Escreve carimbo/via, opcionalmente resposta/validação/lavra, sem escrever Chamado; pergunta ao C6 antes de salvar. Não toma trava C própria. `app/chamados/models.py:3093`, `:3118`, `:3128`, `:3142`. |
-| `carimbar_identidade` | Escreve carimbo/via/recusa sem consultar C6; sem trava C própria. `app/chamados/models.py:3158`, `:3172`, `:3180`. |
-| `fechar_por_admin` | Delega à identidade. `app/chamados/models.py:3054`. |
-| `encerrar_fantasma` | Delega a `carimbar`. `app/chamados/models.py:3269`, `:3277`. |
-| `encerrar_por_fato_no_espelho` | Só muda via de pergunta já materializada, não necessariamente transição C6 viva→morta; `save`, sem trava própria. `app/chamados/models.py:3258`, `:3265`. |
-| `_carimbar_validacao` | `validada_em` mata no degrau 0; atomic próprio e sequência DecisaoPergunta, trava herdada. `app/chamados/services/validacao.py:127`, `:134`, `:136`; `app/chamados/juizes.py:1153`. |
-| `fio.reapontar_resolvedora` | Muda destino e eventualmente data; atomic `savepoint=False`; trava C, e D/CH/P quando a colisão retrata outras linhas. Salva só Pergunta/lavra. `app/chamados/services/fio.py:873`, `:881`, `:896`, `:914`. |
-| `_nascer`, ramo de reuso | Pode atualizar célula/destino de pergunta existente; atomic e C no topo; salva Pergunta/lavra. `app/chamados/models.py:2839`, `:2843`, `:2957`, `:2973`, `:2999`. |
-| `fio.rechavear_data_evento` | Muda data/célula/lavra sem escrever Chamado; atomic, C→D→P; emite para célula velha além do signal da nova. `app/chamados/services/fio.py:989`, `:993`, `:1020`, `:1026`, `:1028`. |
-| `retratar_para_canonica`→`retratar_duplicata` | Atomic; C/D/P ordenados para canônica e perdedoras; via duplicata por identidade. `app/chamados/services/fio.py:1319`, `:1321`, `:1324`, `:1342`. |
-| `DisputaSupervisao.remover_motivo` | Atomic C/D/CH/P, DecisaoPergunta.RETRATACAO e via motivo_retratado; com motivos restantes não fecha disputa/pai. `app/chamados/models.py:2023`, `:2026`, `:2054`, `:2059`, `:2064`. |
-
-Todo `PerguntaDisputa.save` reúne save e signal no mesmo atomic; não exige nem toma genericamente trava C. Os saves relevantes acima acionam outbox síncrono e fechamento de beco `on_commit`; o outbox só acorda a célula alcançada depois da escrita, salvo a emissão explícita da célula velha em `rechavear_data_evento`. (`app/chamados/models.py:3403`; `app/chamados/signals.py:214`; `:237`; `app/chamados/models.py:3229`; `app/chamados/services/fio.py:1027`)
-
-**Chamadores semânticos dos carimbos**
-
-| Função/sítio | Trava/transação e qualificação |
-|---|---|
-| `DisputaSupervisao.fechar`→`fechar_por_admin` | Atomic, C→D→CH antes das perguntas; fecha disputa depois e o signal tenta fechar pai. Pode deixar Chamado cuja premissa ainda vive. `app/chamados/models.py:1903`, `:1908`, `:1916`, `:1934`; `app/chamados/signals.py:41`. |
-| `remover_motivo` | Ver porta acima; com outros motivos o Chamado não é escrito por essa função. `app/chamados/models.py:2059`, `:2064`. |
-| `lavrar_sem_turno_aberto` | Carimba somente pergunta que C6 JÁ dá por morta; pode fechar disputa depois. Sem atomic/trava própria nesse ramo, além do save P; não é morte C6 originada pelo carimbo. `app/chamados/reconciliador.py:397`, `:405`, `:411`. |
-| `retratar_perguntas_absolvidas_por_celula` | Atomic por pergunta, trava C e exige registro da trava, `carimbar(celula_absolveu)`; tenta fechar disputas depois. `app/chamados/reconciliador.py:584`, `:592`, `:594`, `:595`, `:604`. |
-| `encerrar_orfas_pela_lampada` | Atomic por pergunta e evento de auditoria; sem trava C própria nesse bloco; `encerrar_fantasma`. `app/chamados/reconciliador.py:1146`, `:1147`, `:1149`. |
-| `_materializar_ausencia_de_resposta` | Absorve irmãs em atomic por irmã, trava C, carimbo e DecisaoPergunta.ABSORCAO; ausência ABERTA mantém destino vivo, ausência decidida pede reconciliação. `app/chamados/services/materializacao.py:557`, `:560`, `:561`, `:563`, `:578`, `:581`. |
-| `_materializar_resposta_hora` | Recusa por paridade carimba identidade; herda atomic de `_materializar_uma`. `app/chamados/services/materializacao.py:791`, `:924`, `:1220`. |
-| `_carimbar_recusa` | Colisão grava `fato_ocupado`, depois pode anexar ocorrência ao destino; não muda seu status. Sem atomic/trava própria fora do save P; depende do caminho chamador. `app/chamados/services/materializacao.py:1093`, `:1099`, `:1105`. |
-| `_materializar_uma` | Atomic plantio/carimbo; pode tocar destino/clones pelos ramos de materialização, portanto não deve ser anunciado indiscriminadamente como “sem tocar Chamado”. `app/chamados/services/materializacao.py:1115`, `:1220`, `:1263`, `:1277`. |
-| `materializar_pendentes_aprovadas` | Carimba aprovadas pelo juiz do lastro; não toma atomic/trava C próprios além do save P; caller signal da disputa. `app/chamados/services/materializacao.py:1418`, `:1427`, `:1431`; `app/chamados/signals.py:147`. |
-| `_resolver_perguntas_por_chamado_resolvido` | Wrapper mantém atomic existente ou abre um, trava C/D/CH; carimba em dois laços; pode reabrir pai ou fechar disputa. Segundo laço só toca pergunta que C6 já dá por morta. `app/chamados/services/disputa_emissao.py:1697`, `:1698`, `:1764`, `:1789`, `:1825`, `:1838`. |
-| `validar_pergunta` | Atomic com C/D/CH antes do carimbo; pode materializar, devolver validação e reconciliar. Morte durável depende do desfecho. `app/chamados/services/validacao.py:425`, `:431`, `:435`, `:461`, `:464`. |
-| `_aceitar_a_folga` | Ambos os ramos têm atomic e C/D/CH; validam/encerram P e pedem fechamento do fio inteiro. `app/chamados/services/validacao.py:281`, `:285`, `:288`, `:296`, `:314`, `:317`, `:329`. |
-| `fechar_o_fio_do_dia` | Trava C→D→CH, fecha perguntas, depois tenta reconciliar chamados; um chamado pode sobreviver à recusa do gate. `app/ponto/services/veredito_celula.py:175`, `:184`, `:189`, `:201`. |
-| `encerrar_perguntas_com_fato.handle` | Chama porta da troca de via; não confundir com criar carimbo ou provar morte. `app/chamados/management/commands/encerrar_perguntas_com_fato.py:68`; `app/chamados/models.py:3258`. |
-
-Chamadores de reapontamento identificados por AST: `ChamadoColaborador._gate_pergunta_viva` (`app/chamados/models.py:437`); `reemitir_chamado_do_dia` (`app/chamados/reconciliador.py:954`); `reatar_pergunta_orfa`, dois ramos (`app/chamados/reconciliador.py:1638`, `:1651`); `declarar_hora_colab` (`app/chamados/services/declaracao_texto.py:342`); `_migrar_sob_trava` (`app/chamados/services/fio.py:2129`); `reatar_perguntas_ao_limbo` e `agrupar_furo` (`app/chamados/services/limbo_folgas.py:244`, `:282`); reversão administrativa (`app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:127`). A porta governa travas/eventos; cada efeito C6 concreto depende da pergunta e célula, sem dado produtivo correspondente `[nao verificado]`.
-
-Chamadores de rechaveamento: `rechavear_no_reuso` (`app/chamados/services/fio.py:1057`, `:1061`), migração e reversão (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:400`, `:492`).
-
-**Morte sem escrita na Pergunta**
-
-C6 também muda por leitura de tranca, via admin da célula, concordância resposta/luz, marco no espelho, veredito/ata, `classificar_falta`, janela viva e lastro; esses caminhos não necessitam `save()` na Pergunta nem disparam seu signal por si. (`app/chamados/juizes.py:1155`, `:1166`, `:1181`, `:1196`, `:1200`, `:1214`, `:1216`, `:1234`)
-
-- `lavrar_veredito` escreve veredito/via/ata e usa `salvar_e_emitir`: atomic e EventoCelula, sem trava C própria; `save=False` depende do salvamento posterior do chamador. (`app/ponto/portas/celula.py:969`, `:1027`, `:1033`, `:1034`, `:894`)
-- Grade: `editar_dia` tem atomic+trava Celula e rabo comum de rejulgamento; regeneração tem atomic; reversão de regeneração grava DNA/trilha e termina sem chamar esse rabo. (`app/ponto/portas/celula.py:592`, `:593`, `:627`, `:422`, `:218`, `:785`, `:808`)
-- `trancar_periodo` grava PeriodoFechado e chama fechamento da fila best-effort, sem atomic/trava C próprios nessa função; perguntas morrem pela LEITURA e não são carimbadas. (`app/ponto/services/fechamento.py:1408`, `:1419`, `:1426`; `app/chamados/services/competencia_trancada.py:177`)
-- `registrar_batida`, `anotar`, `retratar_batida` fazem save/create e despertam cartório/reconciliador pelos signals Batida; não contêm atomic/trava C próprios. (`app/ponto/registro_batida.py:152`, `:157`, `:254`, `:274`; `app/ponto/signals.py:131`, `:206`)
-- Ausência e Justificativa também fazem julgar o dia pelos respectivos signals. (`app/ponto/signals.py:143`, `:161`)
-- O instante sozinho é insumo do ramo da janela viva; efeito produtivo concreto sem sonda `[nao verificado]`. (`app/chamados/juizes.py:1217`)
-
-**Criação/reabertura de Chamado sem garantia de pergunta viva no mesmo ato**
-
-As três portas suficientes para encaixe do evento são:
-
-- `abrir`: atomic+trava C antes do dedup; nasce ou renasce; emissão de EventoCelula somente módulo turno com célula, sem criação de pergunta garantida dentro da porta. (`app/chamados/models.py:902`, `:905`, `:921`, `:971`, `:977`)
-- `criar`: atomic `savepoint=False` junta INSERT e evento condicional; não toma C própria. (`app/chamados/models.py:1093`, `:1094`, `:1095`, `:1097`)
-- `reabrir`/renascimento: `_gravar_estado` tem atomic+trava C/D/CH, depois `ressuscitar_perguntas` em outro atomic; pode reabrir com zero perguntas ressuscitáveis, não nasce pergunta nova. (`app/chamados/models.py:280`, `:290`, `:1432`, `:1441`, `:1533`, `:1547`)
-
-Reaberturas diretas encontradas:
-
-`_renascer_por_premissa_viva`→`reabrir` (`app/chamados/models.py:1019`), invocado no dedup (`:922`) e em resposta tardia (`app/chamados/services/resposta_tardia.py:45`); `reabrir_orfas_enterradas.handle` (`app/chamados/management/commands/reabrir_orfas_enterradas.py:172`); `sincronizar_adesao` (`app/chamados/services/adesao.py:92`); reabertura da tranca (`app/chamados/services/competencia_trancada.py:265`); resposta aguardando validação (`app/chamados/services/disputa_emissao.py:1789`); desarquivamento (`app/chamados/views_arquivar.py:70`); `detectar_ausencias.handle` (`app/ponto/management/commands/detectar_ausencias.py:301`); `reabrir_chamados_ausencia_aberta.handle` (`app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:49`); `reconciliar_grade._emitir_furo` (`app/ponto/management/commands/reconciliar_grade.py:530`).
-
-`acao_reabrir_disputa_admin` cria pergunta de CONVERSA antes de reabrir Chamado; não cabe afirmar “nenhuma pergunta criada”, mas ela não garante pergunta de turno. (`app/chamados/services/acoes_disputa.py:260`, `:267`)
-
-Criações de furo/turno com tentativa posterior de fio, sem garantia do mesmo ato:
-
-- `detectar_ausencias._abrir_chamado`: `abrir` em `:693`, tentativa best-effort em `:790`–`:803`. (`app/ponto/management/commands/detectar_ausencias.py:693`, `:790`, `:802`)
-- `processar_alertas_turno._abrir_chamado_critico`: `abrir` em `:335`, só tenta fio se `criado`, em bloco que engole falha; renascimento não passa nesse `if`. (`app/ponto/management/commands/processar_alertas_turno.py:335`, `:372`, `:384`, `:385`)
-- `processar_alertas_avancados.handle`: `criar` em `:121`, fio best-effort em `:147`–`:160`. (`app/ponto/management/commands/processar_alertas_avancados.py:121`, `:147`, `:158`, `:159`)
-- `emitir_turno_aberto_retroativo.handle` e `reconciliar_grade._emitir_furo` só usam nascimento/reabertura, sem invocação de fábrica/perguntas no arquivo. (`app/ponto/management/commands/emitir_turno_aberto_retroativo.py:151`; `app/ponto/management/commands/reconciliar_grade.py:507`, `:530`)
-
-Demais entradas `abrir`/`criar` encontradas por AST, cujo pertencimento ao fio mudo exige célula e estado efetivamente gravados `[nao verificado]`:
-
-| Sítio | Referência |
-|---|---|
-| API justificativa; abertura manual | `app/api/views.py:1997`, `:2201` |
-| Auditoria desvio leve API, incluindo cópia | `app/api/views.py:747`; `app/api/views_core.py:747` |
-| Abertura local/DP | `app/chamados/services/abertura.py:47`, `:172` |
-| Adesão; rápido DP | `app/chamados/services/adesao.py:74`; `app/chamados/views.py:973` |
-| Regularização externa | `app/chamados/services/regularizacao_ext.py:246` |
-| Desligamento; aceite vínculo | `app/colaboradores/services/desligamento.py:163`; `app/colaboradores/services/vinculo.py:393` |
-| Benefício; aceite agenda | `app/colaboradores/views.py:1978`, `:2363` |
-| Régua degenerada | `app/escala/regua_defesa.py:51` |
-| Limbo/âncora/dia sem grade | `app/ponto/management/commands/detectar_ausencias.py:190`, `:271`, `:510` |
-| Par relâmpago; cluster | `app/ponto/management/commands/detectar_par_relampago.py:368`; `app/ponto/services/cluster_espurio.py:130` |
-| Ausência colaborador | `app/ponto/services/ausencia.py:659` |
-| Auditoria geofence | `app/ponto/services/geofence.py:339` |
-| Justificativa rejeitada | `app/ponto/services/justificativa.py:291` |
-| Bloqueio/anuência/horário | `app/ponto/services/triagem_batida.py:107`, `:336`, `:459` |
-| Sem posto/férias | `app/ponto/utils.py:40`, `:103` |
-| Bloqueio entrada/ping | `app/ponto/views.py:291`, `:3012` |
-| Reemissão por pergunta já existente | `app/chamados/reconciliador.py:910`, `:954` |
-| Pais de disputa | `app/chamados/services/disputa_emissao.py:568`, `:1013`, `:1240` |
-| Smoke, código de comando incluído pelo censo | `app/chamados/management/commands/smoke_chamados.py:123` |
-
-Os pais de disputa são casos condicionais, pois seus fluxos emitem perguntas depois, sujeitas às guardas/dedup; a âncora emite CONVERSA. (`app/chamados/services/disputa_emissao.py:1044`, `:1052`, `:1272`)
-
-**Script final efetivamente executado**, ampliando o censo nativo com chamadas sem filtro por receptor para preservar aliases (`_Ch9`, `_ChG`, etc.). A saída é conjunto de candidatos AST; classificação semântica e efeitos transitivos foram lidos à parte. O censo nativo documenta explicitamente inferências e balde não atribuível. (`app/core/censo_escritas.py:1`)
-
-```python
-import ast, pathlib, sys
-sys.path.insert(0, 'app')
-from core.censo_escritas import varrer_arvore, _e_codigo_de_producao
-alvos = {'ChamadoColaborador', 'PerguntaDisputa'}
-for r in varrer_arvore('app'):
-    if r['entidade'] in alvos:
-        print('ESCRITA', 'app/'+r['arquivo'], r['linha'],
-              r['entidade'], r['op'], r['expr'])
-
-portas = {
-    'abrir', 'criar', 'reabrir', '_renascer_por_premissa_viva',
-    '_gravar_estado', 'carimbar', 'carimbar_identidade',
-    'fechar_por_admin', 'encerrar_fantasma',
-    'encerrar_por_fato_no_espelho', 'reapontar_resolvedora',
-    'rechavear_data_evento', 'validar_pergunta',
-    'lavrar_veredito', 'salvar_e_emitir', 'trancar_periodo',
-    'registrar_batida', 'anotar', 'retratar_batida',
-}
-campos = {
-    'status_local', 'materializada_em', 'via_resolucao', 'validada_em',
-    'chamado_destino', 'chamado_destino_id', 'data_evento',
-    'celula', 'celula_id',
-}
-
-class Censo(ast.NodeVisitor):
-    def __init__(self, p):
-        self.p, self.pilha = p, []
-
-    def visit_FunctionDef(self, n):
-        self.pilha.append(n.name)
-        self.generic_visit(n)
-        self.pilha.pop()
-
-    visit_AsyncFunctionDef = visit_FunctionDef
-
-    def visit_Call(self, n):
-        f = n.func
-        nome = f.attr if isinstance(f, ast.Attribute) else getattr(f, 'id', '')
-        if nome in portas:
-            print('PORTA', self.p, n.lineno,
-                  '.'.join(self.pilha), ast.unparse(n)[:220])
-        self.generic_visit(n)
-
-    def visit_Assign(self, n):
-        for a in n.targets:
-            if isinstance(a, ast.Attribute) and a.attr in campos:
-                print('ATRIBUICAO', self.p, n.lineno,
-                      '.'.join(self.pilha), ast.unparse(n)[:220])
-        self.generic_visit(n)
-
-for p in sorted(pathlib.Path('app').rglob('*.py')):
-    if not _e_codigo_de_producao(str(p.relative_to('app'))):
-        continue
-    try:
-        arv = ast.parse(p.read_text())
-    except (SyntaxError, UnicodeError) as e:
-        print('NAO_VERIFICADO', p, type(e).__name__)
-        continue
-    Censo(p).visit(arv)
-```
-
-Execução utilizada: `PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'` com esse corpo; nenhum arquivo criado/editado/apagado pelo script. `[nao verificado]` para a afirmação global sobre estado externo ao comando; o corpo usa só leituras, AST e impressão.
-
-_2976 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2978 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
