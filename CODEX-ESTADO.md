@@ -1,7 +1,62 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 01:10** · publicado em **09/11/2026 01:14** (UTC-3)
+> Ultima resposta processada: **09/11/2026 02:09** · publicado em **09/11/2026 02:12** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 02:09 · sessao 50eb9329224b · E1-FILA-V2-2-TRAVA · construtor · origem=Code
+
+Implementei o fecho conservador e a recusa de crescimento, preservando `PerguntaDisputa.trava_na_ordem` como autoridade de aquisição. A certificação fica com Code/suite e opus final. ([cura](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/services/disputa_emissao.py:942)) [nao verificado]
+
+Alterações:
+
+- `disputa_emissao.py::fecho_do_repasse`: fecha C/D/Ch/P, incluindo ENCERRADOS, pais de D fechadas, destinos reversos, irmãs e donos; recusa após 128 passadas sem estabilizar. ([fonte](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/services/disputa_emissao.py:942))
+- `disputa_emissao.py::_trava_do_repasse`: primeira aquisição só de C; recalcula, adquire D/Ch/P e relê antes de devolver. Crescimento gera `UniversoMudouSobATrava`. ([fonte](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/services/disputa_emissao.py:990))
+- Acrescentei testes sem banco, integração PostgreSQL e a [entrega detalhada](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/docs/E1-FILA-V2-2-TRAVA.md:1). [nao verificado]
+
+Dois desvios conservadores da matriz: expandir também os universos dos donos alcançados, porque E2 usa o dono da disputa; incluir D pelo pai alcançado, cobrindo âncoras sem destino. Os motivos e referências estão na [entrega:16](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/docs/E1-FILA-V2-2-TRAVA.md:16).
+
+Os RED a–d falharam antes da cura no ensaio em memória:
+
+- **a:** terminal independente adquirido depois de P. ([teste:221](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila_v2_2_trava.py:221)) [nao verificado]
+- **b:** pai terminal de D fechada fora do topo. ([teste:224](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila_v2_2_trava.py:224)) [nao verificado]
+- **c:** C/D/P estrangeiros adquiridos depois do topo. ([teste:227](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila_v2_2_trava.py:227)) [nao verificado]
+- **d:** crescimento sem recusa; agora verifica C antes de D e crescimento final nas quatro classes. ([teste:231](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila_v2_2_trava.py:231)) [nao verificado]
+- **e/MORDE:** substituir o fecho pelo antigo faz a–c acusarem; há também mutantes sem terminais, pais, reversos e conferência final. ([teste:265](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila_v2_2_trava.py:265)) [nao verificado]
+
+Após a cura, passaram **15 testes sem banco**, **9 da catraca existente isolada de Django** e `py_compile` nos três arquivos Python, com gravação de cache desativada. Comandos individuais dos RED/mutantes e da compilação estão na [entrega:48](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/docs/E1-FILA-V2-2-TRAVA.md:48). Comando conjunto: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e1_fila_v2_2_trava -v
+```
+
+O mapa **QUEM ESCREVE / QUEM LÊ** cobre cada campo persistente consumido pelo diff:
+
+| Campos | Escritores | Leitor no diff |
+|---|---|---|
+| C.pk | `criar_colaborador` | semente C |
+| D.pk, colaborador, chamado | emissão, agrupador, âncora; FK do pai | expansão D/donos/pais |
+| D.fechada_em | nascimento, fechar, reaberturas | seleção das abertas |
+| Ch.pk, colaborador | `abrir`/`criar` | sementes e donos |
+| Ch.status_local | nascimento e `_gravar_estado` | VIVOS + ENCERRADOS |
+| P.pk, disputa | `_nascer` | irmandade e alcance D |
+| P.colaborador | `_chave_de_identidade` | seleção direta e donos |
+| P.chamado_destino | `_nascer`, reapontamento, FK | destinos e relação reversa |
+
+Cada célula tem os endereços de escritor e leitor conferidos na [matriz arquivo:linha](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/docs/E1-FILA-V2-2-TRAVA.md:134).
+
+Outras portas devolvidas à fila, sem implementação neste diff:
+
+- Declaração/aplicação: expansão da validação posterior. ([fila:151](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/docs/E1-FILA-V2-2-TRAVA.md:151))
+- `validar_pergunta`: cascatas da materialização. ([fila:152](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/docs/E1-FILA-V2-2-TRAVA.md:152))
+- `reabrir_orfas_enterradas`: outras P ressuscitadas. ([fila:153](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/docs/E1-FILA-V2-2-TRAVA.md:153))
+- Portas de emissão/agregação/âncora: terminais descobertos pelo reatamento. ([fila:154](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/docs/E1-FILA-V2-2-TRAVA.md:154))
+- Fechar/S143/ressuscitar: conjuntos próprios e relações reversas. ([fila:155](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/docs/E1-FILA-V2-2-TRAVA.md:155))
+- `migrar_resolvedoras_vivas`: preservar recusa; mesma lacuna não demonstrada. ([fila:156](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/docs/E1-FILA-V2-2-TRAVA.md:156))
+- `reapontar_resolvedora`: atomic do chamador. ([fila:157](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/docs/E1-FILA-V2-2-TRAVA.md:157))
+- Rechaveamento/retratação: separar efeitos posteriores. ([fila:158](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/docs/E1-FILA-V2-2-TRAVA.md:158))
+- Migração/reversão de `data_evento`: mesma análise do rechaveamento. ([fila:159](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/docs/E1-FILA-V2-2-TRAVA.md:159))
+
+Integração PostgreSQL, regressões com banco, concorrência e custo: **[nao verificado]**. Callbacks `on_commit`, modelos auxiliares, FCM e linhas novas ficam fora deste teto. ([limites](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/docs/E1-FILA-V2-2-TRAVA.md:161))
 
 ## 09/11 01:10 · sessao 62a6fe9645f5 · E1-FILA-V2-2-TRAVA · censo · origem=Code
 
@@ -1044,24 +1099,4 @@ Portanto, os dois FILA sustentam **riscos latentes da interface**, mas não sust
 | Pouso antes do pré-requisito | **[nao verificado]**. A regra exige suíte verde antes do opus e opus antes do pouso; os anexos não comprovam essa sequência. (`CLAUDE.md:374`; `CLAUDE.md:378`) | [nao verificado]
 | Campo com dois significados | **Não introduzido pelo delta:** `disputa_id` continua sendo FK de Disputa; `None` é ignorado na normalização. A igualdade colaborador da Pergunta/disputa é verificada apenas no nascimento; divergência produtiva posterior **[nao verificado]**. (`app/chamados/models.py:2424`; `app/chamados/models.py:2661`; `app/chamados/models.py:3420`; `app/chamados/models.py:3433`) |
 
-## 09/11 00:17 · sessao aad97d481b14 · - · - · origem=Ronald (tmux)
-
-Não localizei escritor de produção que **mude**, após o nascimento, `ChamadoColaborador.colaborador_id`, `PerguntaDisputa.colaborador_id` ou `PerguntaDisputa.disputa_id`. O alcance concorrente dos dois itens de FILA permanece **[nao verificado]**, sem escritor concreto demonstrado.
-
-Evidências e exclusões:
-
-- **Nascimento da Pergunta:** `disputa` entra no construtor e a inserção ocorre com `force_insert=True` (`app/chamados/models.py:3016`, `app/chamados/models.py:3019`); `colaborador_id` é derivado da disputa ou validado contra ela (`app/chamados/models.py:3430`, `app/chamados/models.py:3432`, `app/chamados/models.py:3433`).
-- **Mutabilidade latente existe:** `save()` só chama a guarda da identidade quando `_state.adding` (`app/chamados/models.py:3420`); depois repassa ao `super().save()` (`app/chamados/models.py:3423`). Isso permite escrita programática futura, mas não demonstra um chamador produtivo que a faça.
-- **Escritor histórico:** a migração preenche `colaborador_id` por `Subquery` (`app/chamados/migrations/0051_decisao_pergunta.py:25`), registrada em `RunPython` (`app/chamados/migrations/0051_decisao_pergunta.py:101`). Não é escritor da execução normal de `migrar_resolvedoras_vivas`.
-- **A atribuição aparente `colaborador_id` no fluxo de abertura é proxy:** o objeto é `_Proxy`, não modelo persistido (`app/chamados/models.py:2888`, `app/chamados/models.py:2890`, `app/chamados/models.py:2894`).
-- **A atribuição aparente de dono do Chamado não troca o ID:** os chamados são agrupados pelo próprio `colaborador_id`, e a mesma instância é compartilhada no grupo, sem save (`app/chamados/services/pergunta_no_app.py:133`, `app/chamados/services/pergunta_no_app.py:139`, `app/chamados/services/pergunta_no_app.py:141`).
-- **`descarimbar_em_lote(**outros)` seria uma porta ampla:** aceita outros campos e escreve por `update` (`app/chamados/models.py:3252`, `app/chamados/models.py:3266`), mas os chamadores encontrados passam apenas resposta/validação (`app/chamados/models.py:1565`; `app/chamados/services/disputa_emissao.py:1517`, `app/chamados/services/disputa_emissao.py:1554`).
-- **Outros lotes:** `reabrir_para_correcao` escreve o dicionário fixo de resposta/validação (`app/chamados/services/disputa_emissao.py:1517`, `app/chamados/services/disputa_emissao.py:1556`); `bulk_update` escreve somente a lavra (`app/chamados/veredito_lavrado.py:217`, `app/chamados/veredito_lavrado.py:230`).
-- **Migração:** o reapontamento salva destino/lavra, eventualmente o dia (`app/chamados/services/fio.py:866`, `app/chamados/services/fio.py:879`, `app/chamados/services/fio.py:922`, `app/chamados/services/fio.py:924`); a retratação salva carimbo, resposta/validação e lavra (`app/chamados/models.py:3128`, `app/chamados/models.py:3133`, `app/chamados/models.py:3137`, `app/chamados/models.py:3151`, `app/chamados/models.py:3152`).
-- **`setattr` do texto do Chamado:** restrito a `titulo`, `assunto`, `descricao`, com recusa dos demais campos (`app/chamados/services/texto.py:18`, `app/chamados/services/texto.py:25`, `app/chamados/services/texto.py:27`, `app/chamados/services/texto.py:33`).
-- **`setattr` genérico de reexibição:** só altera memória, sem salvar (`app/core/reexibir.py:21`, `app/core/reexibir.py:45`, `app/core/reexibir.py:50`); seus chamadores são de colaboradores (`app/colaboradores/views.py:1094`, `app/colaboradores/views.py:1259`).
-- **Admin:** `app/chamados/admin.py` está vazio; a ausência também é documentada (`app/core/contratos_estruturais.py:331`). Não encontrei registro desses modelos nos outros admins nem ModelForm/ModelSerializer que os edite **[nao verificado: ausência universal]**. O `ready()` do app só importa signals (`app/chamados/apps.py:8`, `app/chamados/apps.py:10`).
-
-Rodei o censo AST puro em memória, sem Django nem gravação de arquivo. Ele confirma os sítios acima, mas não fornece prova formal de ausência: o próprio censo admite operações não atribuíveis e inferências (`app/core/censo_escritas.py:38`, `app/core/censo_escritas.py:43`, `app/core/censo_escritas.py:49`).
-
-_2962 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2963 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
