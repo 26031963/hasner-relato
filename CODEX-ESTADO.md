@@ -1,7 +1,65 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 00:19** · publicado em **09/11/2026 00:21** (UTC-3)
+> Ultima resposta processada: **09/11/2026 00:35** · publicado em **09/11/2026 00:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 00:35 · sessao 50955c5d0d17 · FIO-E0-V4-E1-FILA · sonda · origem=Code
+
+1. Transcrição dos números fornecidos; verificação independente em produção **[nao verificado]**:
+
+```text
+S143 P com destino= 38403
+S143 destino de outro colab (vs disputa.colaborador) total= 0 alcancavel_pelo_S143= 0
+S143 destino de outro colab (vs P.colaborador) total= 0 alcancavel_pelo_S143= 0
+REATAR orfas_abertas= 5525
+REATAR orfa com chamado_destino terminal= 1060
+REATAR orfa com Chamado terminal do colab no dia (alcancavel pelo HIST/renascer)= 1851
+```
+
+2. **A equivalência dos filtros da sonda com o código é [nao verificado]**: foi fornecida a saída, sem o corpo de `sonda_v22_acervo.py`; sua implementação não foi localizada na cópia **[nao verificado]**.
+
+Os filtros efetivos do código são:
+
+- **S143, seleção de perguntas:** destino igual ao chamado, `materializada_em IS NULL` e disputa aberta. Não exige igualdade entre os colaboradores do destino, da disputa e da Pergunta; também não exige `validada_em IS NULL` nem data presente. Depois, pula pergunta em voo, viva, de dia trancado ou respondida sem materialização de fato (`app/chamados/services/disputa_emissao.py:1724`, `1738`, `1744`, `1748`, `1757`). O receiver exige chamado em `ENCERRADOS` e gravação do status (`app/chamados/signals.py:96`, `104`).
+
+- **REATAR, seleção do chamador:** destino **nulo**, colaborador da disputa, disputa aberta, materialização nula e motivo entre os quatro do grupo DIA. Não exige validação nula nem data presente (`app/chamados/reconciliador.py:1496`; `app/chamados/models.py:3690`). Portanto, não se pode equiparar automaticamente esse universo às 5525 “órfãs” da saída: o mesmo dado inclui 1060 “órfãs” com destino terminal **[nao verificado]**.
+
+- **HIST:** só é tentado quando a derivação não encontra destino. Usa `p.data_evento`, com fallback para a data do contexto; busca mesmo colaborador, `ENCERRADOS`, igualdade de `contexto_json.data_turno` e categoria diferente de `disputa_supervisao`. Ainda filtra motivo, desvia a viva para c2 dentro do alcance novo e exige exatamente um candidato histórico (`app/chamados/reconciliador.py:1552`, `1563`, `1582`, `1589`, `1600`, `1603`, `1619`). **HIST não chama o renascimento:** reaponta e chama o resolvedor S128 (`app/chamados/reconciliador.py:1638`, `1644`).
+
+- **c2/reemitir:** chega após HIST vazio e recusa de c1. Aplica gates de motivo, data, colaborador ativo, horizonte, isenção, ausência, protesto, parcial só lista, célula, régua e motor; para intervalos, exige também viva em competência aberta. Abre pela chave colaborador + `batida_ausente` + `data_turno`; só costura se o resultado estiver vivo (`app/chamados/reconciliador.py:1615`, `808`, `820`, `835`, `850`, `855`, `869`, `875`, `886`, `900`, `906`, `908`, `910`, `936`).
+
+A condição isolada **“há terminal do colaborador no dia” é mais larga que a elegibilidade efetiva de HIST/c2**, pelos filtros acima. Se a sonda aplica esses filtros adicionais ou restringe indevidamente validação/data/motivos, é **[nao verificado]**. Também há diferença de vocabulário: `TERMINAIS` inclui cancelado/superado; HIST e o dedup que tenta renascer usam `ENCERRADOS`, apenas resolvido/fechado (`app/chamados/catalogo/motor.py:30`; `app/chamados/reconciliador.py:1583`; `app/chamados/models.py:921`).
+
+3. **Existe caminho de Pergunta até tentativa de renascimento fora de HIST/c2; afirmar que a sonda não o conta é [nao verificado].**
+
+Um caminho concreto é:
+
+- Materialização da Pergunta registra Batida (`app/chamados/services/materializacao.py:926`; `app/ponto/registro_batida.py:157`).
+- O signal da Batida chama o cartório (`app/ponto/signals.py:131`, `93`).
+- Persistindo furo parcial, com aplicação, sem chamado vivo e sem bloqueio de “parcial só lista”, o cartório chama o emissor (`app/ponto/services/cartorio.py:1767`, `1777`).
+- O emissor chama `abrir` por colaborador, módulo e dia, sem filtro de Pergunta nessa chave. Encontrando chamado encerrado, o dedup tenta `_renascer_por_premissa_viva`, sujeito às guardas e à aceitação de `reabrir` (`app/ponto/management/commands/detectar_ausencias.py:693`; `app/chamados/models.py:906`, `921`, `1005`, `1019`).
+
+Esse caminho existe no código; sua ocorrência, quantidade e exclusão dos **1851** informados são **[nao verificado]**.
+
+## 09/11 00:35 · sessao 7bc8cd84a86b · - · - · origem=Ronald (tmux)
+
+Há dois pontos produtivos que chamam `_renascer_por_premissa_viva`: o dedup de `ChamadoColaborador.abrir`, ao encontrar `ENCERRADOS` (`app/chamados/models.py:906`, `app/chamados/models.py:921`), e a resposta tardia no fio, se a célula acusa furo (`app/chamados/services/resposta_tardia.py:35`, `app/chamados/services/resposta_tardia.py:45`).
+
+Caminho concreto a partir de Pergunta, adicional ao HIST/c2:
+
+1. Materialização da resposta hora usa a Pergunta e registra Batida (`app/chamados/services/materializacao.py:794`, `app/chamados/services/materializacao.py:926`).
+2. A porta cria Batida (`app/ponto/registro_batida.py:157`); o `post_save` julga os dias (`app/ponto/signals.py:131`, `app/ponto/signals.py:93`).
+3. O cartório entrega o emissor a `julgar_colab` (`app/ponto/services/cartorio.py:1964`, `app/ponto/services/cartorio.py:1989`).
+4. Persistindo furo parcial, sem chamado vivo, com `apply_` e sem bloqueio `parcial_so_lista`, o cartório chama `_abrir_chamado` (`app/ponto/services/cartorio.py:1767`, `app/ponto/services/cartorio.py:1777`).
+5. O emissor chama `ChamadoColaborador.abrir` por colaborador, módulo e `data_turno`, sem filtro de Pergunta nem status nessa chave (`app/ponto/management/commands/detectar_ausencias.py:693`); o dedup pode encontrar um encerrado e tentar renascê-lo (`app/chamados/models.py:906`, `app/chamados/models.py:921`).
+
+A tentativa só efetivamente renasce passando pelas guardas: colaborador ativo, sem encerramento por cascata, competência não trancada, ausência de veto de régua e aceitação por `reabrir` (`app/chamados/models.py:1005`, `app/chamados/models.py:1019`).
+
+A resposta tardia também tenta renascer sem selecionar Pergunta ou órfã; a view busca diretamente o Chamado e chama o serviço (`app/chamados/views.py:1046`, `app/chamados/views.py:1053`). Esse caminho é resposta no fio, não resposta direta de `PerguntaDisputa` (`app/chamados/views.py:1041`).
+
+**Não é possível afirmar que o item (2) da sonda deixa esses caminhos fora da contagem sem a fonte do script** [nao verificado]. O próprio dado fornecido admite “órfã com chamado_destino terminal”; portanto, “órfã” não permite inferir `chamado_destino IS NULL` nesse script [nao verificado].
+
+`_ressuscitar_por_resposta` não é prova de renascimento do status: o corpo apenas levanta o silêncio do destino ou pai com `arquivo.levantar` (`app/chamados/services/materializacao.py:711`, `app/chamados/services/materializacao.py:718`).
 
 ## 09/11 00:19 · sessao b599f9f2e362 · FIO-E0-V4-E1-FILA · verificador · origem=Code
 
@@ -805,43 +863,4 @@ Outras observações úteis para consolidar:
 - Semântica dos campos novos do teste: `FAKE_CRON_NO_MIGRATE` é presença habilitadora, `FAKE_HERDA_APLICAR` injeta ambiente, `N_RST` conta linhas de chamadas restart. Seus escritores e leitores concordam nos usos fornecidos, mas `N_RST=1` não prova três cascas reiniciadas nem cron preservado. `bin/tests/test_deploy_portoes_antes_do_migrate.sh:68,90,101,146,150-151`.
 - A marca de cron registra PID do **envelope do host**, não identidade do processo `docker exec`; deploy usa apenas existência de `/proc/<pid>`, sem conferir identidade ou conteúdo do arquivo. Isso admite falso “vivo” por PID reutilizado e não é novidade do diff. `bin/cron_run.sh:9-11`; `bin/deploy.sh:108-109`.
 
-## 08/11 23:31 · sessao 73a57bb44d60 · - · - · origem=Ronald (tmux)
-
-- **`APLICAR_MIGRATE`:** escritores executáveis em `bin/deploy.sh:61` (`0`) e `bin/deploy.sh:223` (`1`); leitores em `bin/deploy.sh:298` e `bin/deploy.sh:325`. O comentário “UM leitor” ficou falso com o segundo leitor; há também duas atribuições, embora ambas pertençam ao mesmo script (`bin/deploy.sh:59`). Fora dele, o selo remove a variável herdada e opcionalmente injeta `APLICAR_MIGRATE=1` (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:90`); o caso 10 ativa a injeção e exige zero migrations (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:146`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:147`). O valor herdado é sobrescrito antes dos leitores (`bin/deploy.sh:61`, `bin/deploy.sh:298`, `bin/deploy.sh:325`).
-
-- **`RESTART`:** escritores em `bin/deploy.sh:70` (`0`) e `bin/deploy.sh:73` (`1`, somente pelo argumento `--restart`); leitores em `bin/deploy.sh:115`, `bin/deploy.sh:200`, `bin/deploy.sh:299`, `bin/deploy.sh:322` e `bin/deploy.sh:428`. O valor herdado é sobrescrito (`bin/deploy.sh:70`). Fora dele, `bin/contrato_deploy.sh:41` lê o **texto** do `if` para conferir a posição do restart; não consome o valor da variável.
-
-- **Marcas de produção:** `bin/cron_run.sh:9` cria o diretório e deriva `<nome>_<empresa>.<PID do envelope>`; `bin/cron_run.sh:10` escreve a marca e instala sua remoção no `EXIT`. `bin/deploy.sh:108` enumera as marcas; `bin/deploy.sh:109` lê existência/PID e também **apaga** a marca cujo PID não existe. A pergunta é consumida em `bin/deploy.sh:111` e pode recusar em `bin/deploy.sh:112`; chamadas em `bin/deploy.sh:117`, `bin/deploy.sh:299` e `bin/deploy.sh:325`.
-
-- **Marcas fora de produção:** o selo gracioso escreve uma marca com PID de processo real falso (`bin/tests/test_deploy_reload_gracioso.sh:89`, `bin/tests/test_deploy_reload_gracioso.sh:91`); o selo desta obra escreve `cron_falso.1` durante o migrate falso (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:68`). Os diretórios falsos são criados em `bin/tests/test_deploy_reload_gracioso.sh:34` e `bin/tests/test_deploy_portoes_antes_do_migrate.sh:45`. `bin/contrato_deploy.sh:81` e `bin/contrato_deploy.sh:82` procuram a presença textual de `crons_em_curso`; não leem marcas.
-
-- **Limites semânticos das marcas:** o escritor registra o PID do envelope no host e um timestamp (`bin/cron_run.sh:7`, `bin/cron_run.sh:9`, `bin/cron_run.sh:10`); o leitor ignora o conteúdo e confere somente `/proc/<PID>` (`bin/deploy.sh:109`). Isso não identifica a execução corrente dentro de uma casca nem protege contra reutilização de PID (`bin/cron_run.sh:9`, `bin/deploy.sh:109`). O escritor usa caminho absoluto (`bin/cron_run.sh:9`), o leitor usa `RAIZ` calculada da cópia (`bin/deploy.sh:53`, `bin/deploy.sh:108`); equivalência desses caminhos em produção: **[nao verificado]**.
-
-- **Corrida do restart:** não existe exclusão comum entre o nascimento da marca (`bin/cron_run.sh:9`, `bin/cron_run.sh:10`) e a sequência observar → migrar → reiniciar (`bin/deploy.sh:299`, `bin/deploy.sh:300`, `bin/deploy.sh:325`, `bin/deploy.sh:326`). Com `APLICAR_MIGRATE=1`, um cron novo deixa de recusar na seção 2 (`bin/deploy.sh:325`). Se estiver executando dentro das cascas reiniciadas, o risco de morte é o que o próprio deploy documenta (`bin/deploy.sh:312`, `bin/deploy.sh:314`); ocorrência e exit concretos em produção: **[nao verificado]**.
-
-- **“Morto e refeito” não está demonstrado:** a frase está em `bin/deploy.sh:296`; idempotência é requisito textual em `CLAUDE.md:246`. O envelope executa uma vez (`bin/cron_run.sh:11`), não carimba término em rc diferente de 0/2 (`bin/cron_run.sh:22`), tenta registrar alarme (`bin/cron_run.sh:32`, `bin/cron_run.sh:33`) e sai (`bin/cron_run.sh:38`). Não implementa retry. A corrente segue adiante registrando erro (`bin/encadeado.sh:64`, `bin/encadeado.sh:66`); seus dependentes podem esperar o carimbo até alarmar (`bin/encadeado.sh:89`, `bin/encadeado.sh:92`, `bin/encadeado.sh:94`). Reexecução efetiva e idempotência de **todos** os comandos: **[nao verificado]**.
-
-- **Outra ordenação concebível:** impedir admissões novas de cron sob uma trava também obedecida pelo envelope, drenar os existentes e manter essa exclusão durante migrate e publicação eliminaria esta corrida específica; o código atual não tem esse protocolo (`bin/cron_run.sh:9`, `bin/cron_run.sh:11`, `bin/deploy.sh:299`, `bin/deploy.sh:326`). Para garantir ausência absoluta de código velho atendendo sobre schema novo, seria preciso ainda tratar o atendimento durante o intervalo migrate → publicação; viabilidade concreta de pausa ou compatibilidade de migrations nesta aplicação: **[nao verificado]**.
-
-## 08/11 23:31 · sessao 73e022226ffe · - · - · origem=Ronald (tmux)
-
-**Q3 — escritores e leitores**
-
-- Escritores produtivos do evento: `_trilha_do_veto`, com `via='renascer'` ou `'reabrir'` e campos `veto`, `dia`, `modulo_origem`, `colaborador` (`app/chamados/models.py:1166`, `:1184`); `reabrir` recusado por admin sem fato novo (`:1396`), premissa regularizada (`:1402`) e universo alterado (`:1421`). Só o último escreve `depois['motivo']='universo_mudou_sob_trava'` (`:1424`); os outros dois usam `status_local`/`via_encerramento` (`:1398`, `:1404`).
-- Leitor específico identificado: deduplicação de `_trilha_do_veto`, que filtra ação/modelo/objeto e **também** `modulo_origem`, `dia`, `veto`, `via` (`app/chamados/models.py:1172`). O novo evento não satisfaz essa chave; portanto não impede a trilha do veto (`:1172`, `:1424`).
-- Não identifiquei leitor produtivo de `depois['motivo']` para essa ação; único leitor explícito desse valor encontrado está no teste (`app/chamados/tests/test_e1_fila.py:517`). Ausência absoluta de leitores dinâmicos: [nao verificado].
-- A auditoria genérica consulta todas as ações, aceita filtro literal `acao` e conta registros, sem classificar motivos (`app/core/views.py:705`, `:709`, `:727`). O template exibe ação/descrição, sem `valor_depois` (`app/templates/core/log_auditoria.html:55`, `:68`, `:73`). Limitação preexistente: dropdown usa `LogAuditoria.ACOES`, que contém só sete ações genéricas e não oferece `reabertura_recusada` (`app/core/views.py:738`; `app/core/models.py:286`; `app/templates/core/log_auditoria.html:23`); GET com `acao=reabertura_recusada` continua aceito (`app/core/views.py:709`).
-- `vigia_loop.escritas_por_cron` inclui a nova recusa quando o ator corresponde ao cron: conta todas as linhas por ator/modelo/objeto, sem filtro de ação ou motivo (`app/chamados/services/vigia_loop.py:86`). Seu rótulo já declara “escritas com trilha LogAuditoria”; portanto não demonstrou pressuposto incompatível de motivos (`:68`, `:96`).
-- Os vigias de trocas de estado e trilha versus banco filtram exclusivamente `estado_chamado`, excluindo recusas (`app/chamados/services/vigia_loop.py:29`, `:114`). O histórico do colaborador também só inclui essa ação de estado (`app/chamados/services/historico.py:44`, `:86`).
-- Há várias causas sob o mesmo evento, mas o sentido comum permanece “reabertura recusada”; **não há contrato homogêneo de `motivo` obrigatório** nos emissores (`app/chamados/models.py:1187`, `:1398`, `:1404`, `:1424`). Não encontrei prova de contador lendo conjunto antigo de motivos; comportamento em produção: [nao verificado].
-- A tentativa de trilha é best-effort: erro na gravação retorna `None`, com log/contador de engolidos, em vez de assegurar linha persistida (`app/core/observ.py:105`, `:133`, `:139`, `:73`). Logo “recusa falante” prova chamada do emissor; persistência real: [nao verificado].
-
-**Q5 — outra porta capaz de levantar a exceção**
-
-- Único `raise UniversoMudouSobATrava` identificado no código produtivo é a conferência de `migrar_resolvedoras_vivas` (`app/chamados/services/fio.py:2088`, `:2091`).
-- Único chamador produtivo nominal identificado de `migrar_resolvedoras_vivas` é o ramo `irmao_vivo` de `ChamadoColaborador.reabrir`, que captura essa exceção (`app/chamados/models.py:1411`, `:1415`, `:1417`).
-- Não há outra porta direta identificada fora de `reabrir`; rotas por alias dinâmico/reflexão em execução: [nao verificado]. Chamadores indiretos que usam `reabrir` pertencem ao inventário da Q1 (`app/chamados/models.py:1415`).
-
-**Observação útil à conferência de travas:** o conjunto inicial inclui `disputa_id` nas travas, mas a conferência posterior só compara colaboradores e PKs das perguntas. Mudança de `disputa_id` de uma pergunta já conhecida não aciona esse `raise`; se uma escrita concorrente produtiva pode realizar isso nas condições do ato: [nao verificado] (`app/chamados/services/fio.py:2086`, `:2089`).
-
-_2944 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2946 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
