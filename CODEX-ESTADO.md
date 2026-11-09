@@ -1,7 +1,98 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 16:22** · publicado em **09/11/2026 16:26** (UTC-3)
+> Ultima resposta processada: **09/11/2026 16:29** · publicado em **09/11/2026 16:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 16:29 · sessao f6ee62474778 · FIO-E0-V4-E4-ESCRITORES · leitura · origem=Code
+
+**O pré-desenho precisa incluir a troca dos leitores junto dos escritores.** Nesta cópia, a consulta central do app ainda depende de R/V/C/F; a tarefa ainda depende da via atual e consulta R/V para reconhecer passivo sem decisão. Cortar apenas as escritas deixaria consumidores usando projeções abandonadas. (`app/chamados/services/pergunta_no_app.py:48`, `:57`, `:70`; `app/chamados/services/tarefa_do_dia.py:227`, `:346`)
+
+**Alvo declarado: N=0 portas de escrita de estado derivado da pergunta**, conservando decisões imutáveis, efeitos canônicos e L como cache declarado. Isso é alvo do desenho, ainda não resultado certificado. A própria definição de `DecisaoPergunta` declara transitórias as projeções até a E4. (`app/chamados/models.py:3832`; resultado alcançado: **[nao verificado]**)
+
+Não cabe prometer uma única construção Codex: portas e leitores em `models.py`, migrations e eventuais ajustes em `bin/` são proibidos ao construtor. A quantidade de cópias/voltas necessária é **[nao verificado]**. (`bin/codex_pergunta.sh:108`, `:112`, `:113`, `:115`, `:330`)
+
+Para compactar os endereços abaixo:
+
+- `models.py` significa `app/chamados/models.py`.
+- Arquivos de serviços sem prefixo significam `app/chamados/services/<arquivo>`.
+- `juizes.py` significa `app/chamados/juizes.py`.
+- Os demais caminhos aparecem completos.
+
+Os números produtivos abaixo são exclusivamente os do anexo fornecido; sua reprodução por banco ou arquivo local é **[nao verificado]**. A identidade criptográfica independente da cópia também é **[nao verificado]**.
+
+**A. MATRIZ DAS PORTAS**
+
+R = resposta/texto/instante; V = validação/autor; C = materialização/autor/via; F = fechamento/autor/resolução/motivo; L = veredito/julgamento/expiração. Esses grupos não têm significado uniforme de “aconteceu”: isso está discriminado em B. (`models.py:2444`, `:3023`, `:3092`, `:3366`; `app/chamados/veredito_lavrado.py:213`)
+
+As referências **H-R, H-V, H-C, H-F, H-S, H-L** remetem aos leitores discriminados na tabela H. “DIVERGE” significa dependência produtiva existente que a transição precisa retirar; não afirma uma ocorrência produtiva nova além do anexo. (`models.py:3315`; `pergunta_no_app.py:70`; `materializacao.py:1369`)
+
+| Célula / porta em 05e6aa147 | Classificação e escrita atual | Fato substituto já existente | Leitores atuais / E3 | Resultado esperado |
+|---|---|---|---|---|
+| **A01 — `models.py:201 _gravar_estado`** | Efeito/decisão: `status_local`, `resolvido_em`, `via_encerramento`, `respondido_por`; prioridade/atualização; relavra perguntas. | **Chamado**, transição e trilha do ato. (`models.py:294`) | H-S; fila ainda lê status do chamado. (`painel.py:155`; `tarefa_do_dia.py:363`) | Conservar a porta do efeito chamado; retirar consequências que perpetuem estado derivado da pergunta. Estado canônico do chamado não entra no alvo zero da pergunta. (`models.py:201`; `models.py:3832`) |
+| **A02 — `models.py:1852 fechar`** | Efeito no fechamento normal; decisão nas exceções. Grava F e delega C. | Exceção: DP `SILENCIO`. Normal: quitação pelos efeitos; F e trilha registram o fechamento atual. (`models.py:1921`, `:1929`, `:1937`) | H-F/H-C. App ainda particiona por F. **DIVERGE**. (`pergunta_no_app.py:70`) | Fechamento derivado deixa de comandar exigibilidade. Preservar o ato excepcional e a história antes de retirar projeções. (`tarefa_do_dia.py:149`; `models.py:3832`) |
+| **A03 — `models.py:2123 reabrir_admin`** | Decisão: limpa F; incrementa contador/agrega motivos. | **Nenhum DP próprio dessa reabertura do continente**; há gesto, contador e trilha. (`models.py:2135`, `:2146`, `:2158`) | H-F. **DIVERGE**: DP `REABERTURA` da resposta não representa automaticamente esse gesto. (`disputa_emissao.py:1612`) | Preservar decisão, autor, limite e motivo; retirar F como cópia de exigibilidade somente com substituição factual do gesto. (`models.py:2123`; `app/docs/LEIS.md:65`) |
+| **A04 — `models.py:2160 reabrir_sistema`** | Efeito: limpa F. | Pergunta voltou a viver; nota de sistema existente. (`models.py:2170`, `:2177`) | H-F. **DIVERGE**. (`models.py:1820`; `pergunta_no_app.py:70`) | Exigibilidade vem da tarefa; não depender de “reabrir F” para tornar ação alcançável. (`tarefa_do_dia.py:442`) |
+| **A05 — `models.py:3092 carimbar`** | Efeito no carimbo; decisão nos ramos de assinatura. C; completa R/V; pode gravar L. | Batida/Ausência/chamado/lavra conforme ramo. Assinaturas R/V desta porta não ganham DP automaticamente. (`models.py:3119`, `:3123`, `:3140`) | H-R/H-V/H-C/H-L. **DIVERGE**. (`models.py:3023`; `juizes.py:1323`) | C deixa de ser escrito; assinaturas passam pelo fato de decisão; L permanece explicitamente cache. (`models.py:3832`; `app/chamados/veredito_lavrado.py:254`) |
+| **A06 — `models.py:3157 carimbar_identidade`** | Efeito; decisão humana depende do chamador. C e recusa opcional. | Retratação de motivo tem DP; duplicata e outras vias não possuem representação factual uniforme equivalente. (`models.py:2053`; `tarefa_do_dia.py:220`) | H-C; **a própria tarefa lê via atual**. **DIVERGE de identidade**. (`tarefa_do_dia.py:227`; `models.py:2743`) | Não abandonar via enquanto dedup, índice e tarefa dependem dela. Factualizar terminalidade antes de substituir esse discriminador. (`models.py:3474`, `:3480`; `tarefa_do_dia.py:216`) |
+| **A07 — `models.py:3192 descarimbar`** | Efeito: limpa C; também preparação em memória. | Fato/decisão que invalida carimbo, conforme chamador. A ausência de carimbo não é o fato. (`models.py:3192`; `materializacao.py:639`) | H-C. **DIVERGE**. (`models.py:3315`; `relavra_via.py:181`) | Retirar a escrita da projeção junto dos consumidores; manter a consequência factual e invalidação de L necessária. (`models.py:3832`; `app/chamados/veredito_lavrado.py:213`) |
+| **A08 — `models.py:3241 descarimbar_em_lote`** | Efeito: limpa C e grava campos recebidos em `outros`, inclusive R/V. | DP da correção/recusa quando chamada por esse fluxo. (`disputa_emissao.py:1612`) | H-R/H-V/H-C. **DIVERGE**. (`models.py:3253`; `materializacao.py:1369`) | Nenhum campo derivado pode continuar entrando por `outros`; preservar atos e execução em lote. (`models.py:3241`; `models.py:3832`) |
+| **A09 — `models.py:3257 encerrar_por_fato_no_espelho`** | Efeito: `via_resolucao=fato_materializado`. | Fato do marco no espelho/lavra. (`models.py:3258`; `juizes.py:645`) | H-C. **DIVERGE** nos consumidores de via. (`explicador.py:68`; `models.py:3182`) | Não escrever via derivada; ler confirmação do efeito pela autoridade. (`tarefa_do_dia.py:140`) |
+| **A10 — `validacao.py:127 _carimbar_validacao`** | Decisão: V + DP `VALIDACAO`. | DP no mesmo instante da validação. (`validacao.py:134`, `:139`) | H-V. **DIVERGE**; tarefa já interpreta DP, mas outros consumidores ainda usam V. (`tarefa_do_dia.py:140`; `juizes.py:1323`) | V projetado deixa de ser escrito; o ato permanece. (`models.py:3832`) |
+| **A11 — `validacao.py:163 devolver_validacao_recusada`** | Decisão: limpa V, preserva resposta; DP `DEVOLUCAO`. | DP `DEVOLUCAO`. (`validacao.py:205`) | H-V/H-R. **DIVERGE**. Tarefa já lê o ato. (`tarefa_do_dia.py:138`) | Nenhuma limpeza de V projetado; atos anteriores continuam imutáveis. (`models.py:3818`; `models.py:3832`) |
+| **A12 — `disputa_emissao.py:1422 responder_pergunta_disputa_core`** | Decisão: R, invalida V/C, pode escrever recusa explicativa. | DP `RESPOSTA`, inclusive texto/escape. (`disputa_emissao.py:1494`, `:1508`) | H-R/H-V/H-C. **DIVERGE**. (`pergunta_no_app.py:70`; `materializacao.py:1370`) | Conteúdo e instante vêm da sequência; eliminar manutenção de R/V/C projetados. (`models.py:3832`) |
+| **A13 — `disputa_emissao.py:1559 reabrir_para_correcao`** | Decisão: limpa R/V e opcionalmente C; **não escreve F**. | DP `REABERTURA` ou `RECUSA`, com foto anterior. (`disputa_emissao.py:1612`, `:1625`) | H-R/H-V/H-C. **DIVERGE**. (`models.py:3903`; `models.py:3315`) | Registrar ato seguinte sem apagar resposta anterior; consumidores deixam de depender da limpeza. (`models.py:3811`; `models.py:3832`) |
+| **A14 — `disputa_emissao.py:1635 responder_automaticamente`** | Decisão de sistema: R sem sobrescrever texto existente. | DP `RESPOSTA`. (`disputa_emissao.py:1653`) | H-R; a própria guarda usa texto projetado. **DIVERGE**. (`disputa_emissao.py:1644`) | Preservar voz existente e idempotência pela sequência, sem escrever R. (`models.py:3832`) |
+| **A15 — `disputa_emissao.py:1658 carimbar_resposta_pela_trilha`** | Decisão reconstruída: `respondida_em`. | Testemunha da resposta + DP `RESPOSTA`. (`disputa_emissao.py:1674`) | H-R; guarda ainda usa projeção. **DIVERGE**. (`disputa_emissao.py:1667`) | Conservar instante testemunhado; não substituí-lo pelo instante do reparo. (`disputa_emissao.py:1658`) |
+| **A16 — `relavra_via.py:106 relavrar`** | Efeito: via derivada + L. | Autoridade do efeito e lavra. (`relavra_via.py:95`, `:118`) | H-C/H-L. **DIVERGE** na via. (`relavra_via.py:118`; `explicador.py:68`) | Encolher para manutenção declarada de L; retirar derivação de via sem consumidores sobreviventes. (`app/chamados/veredito_lavrado.py:254`; `app/docs/LEIS.md:137`) |
+| **A17 — `materializacao.py:784 _materializar_resposta_hora`** | Efeito: `pendencia_admin`, `recusa_motivo`; plantio/carimbos delegados. | Sucesso: Batida. Pendência técnica: **nenhum DP próprio**. (`materializacao.py:850`, `:859`) | H-P/H-REC, além de R/C. Template também lê pendência. **DIVERGE**. (`explicador.py:85`; `app/templates/chamados/partials/modal_fio.html:221`) | Pendência deixa de ser estado paralelo; apresentar resultado técnico pela autoridade real, preservando trilha do insucesso. Não convertê-lo em recusa humana. (`app/docs/LEIS.md:60`, `:65`; `materializacao.py:1107`) |
+| **A18 — `materializacao.py:1083 _carimbar_recusa`** | Efeito técnico: recusa; colisão delega C de identidade. | Colisão/resultado técnico + nota `recusa_materializacao`; **nenhum DP `RECUSA` humano**. (`materializacao.py:1099`, `:1107`) | H-REC/H-C; própria idempotência lê recusa/C. **DIVERGE**. (`materializacao.py:1089`, `:1092`) | Não usar string ou C como prova de decisão; conservar motivo técnico sem criar ato humano inexistente. (`models.py:3849`; `materializacao.py:1107`) |
+| **A19 — `validacao.py:533 recusar_pergunta`** | Decisão: recusa, limpeza R/V delegada. | DP `RECUSA`. (`validacao.py:584`, `:593`; `disputa_emissao.py:1612`) | H-REC/H-R/H-V; guarda usa R. **DIVERGE**. (`validacao.py:576`) | Motivo e foto vêm do ato; nenhuma manutenção dos campos derivados. (`models.py:3840`) |
+| **A20 — `validacao.py:625 conferir_data_do_fato`** | Decisão: `data_conferida_em/por`. | **Outro fato existente:** `LogAuditoria` com os dois dias e justificativa. Não há ato DP de conferência. (`validacao.py:664`, `:667`; `models.py:3846`) | H-DATA. Materializador exige timestamp; modal exibe instante **e autor**. **DIVERGE**. (`materializacao.py:1193`; `app/templates/chamados/partials/modal_fio.html:170`) | Substituir o sinalizador por leitura inequívoca do ato de conferência; preservar o par de dias, autor e justificativa. (`validacao.py:667`; `app/docs/LEIS.md:65`) |
+| **A21 — `models.py:1968 remover_motivo`** | Decisão; motivos/contexto próprios; C delegado. | DP `RETRATACAO`. (`models.py:2053`) | Tarefa lê DP e ainda via; C6 lê via/C. **DIVERGE**. (`tarefa_do_dia.py:227`, `:230`; `juizes.py:1334`) | Entra apesar do “fica” parcial: retirar a dependência da consequência C, preservando retratação e metadados. (`models.py:2053`, `:2058`) |
+| **A22 — `models.py:2822 _nascer`** | Nascimento/reuso: identidade, defaults projetados, costura e L. | Identidade factual e decisões já existentes no reuso. (`models.py:2822`, `:2997`) | H-R/H-V/H-C; identidade continua usando via. **DIVERGE** se defaults/reuso mantiverem campos abolidos. (`models.py:2743`, `:3474`) | Entra por obrigação do diff: nascimento e reuso não podem reintroduzir projeções retiradas. Identidade e L permanecem. (`models.py:3832`) |
+| **A23 — `models.py:2179 reabrir_por_colab`** | Contador próprio; decisão delegada. | DP da correção + contador factual do pedido. (`models.py:2234`, `:2236`) | Gate lê F; idempotência atual depende de R ser limpo. **DIVERGE**. (`models.py:2201`, `:2221`) | Preservar teto/contador; migrar gate e idempotência para atos, sem repetir incremento na segunda chamada. (`models.py:2223`, `:2236`) |
+| **A24 — `models.py:2247 limpar_resolucao_residual`** | Limpeza de `resolucao` em aberta. | Trilha com texto anterior. (`models.py:2259`, `:2266`) | H-F. **DIVERGE** se F/resolução forem retirados. (`models.py:2259`) | Entra por obrigação do diff; depois da conservação histórica, perde trabalho próprio e deve sair com seus consumidores. (`app/docs/LEIS.md:137`) |
+
+As **20 portas centrais de alteração** conservam os endereços apresentados no censo; os seis nascimentos continuam em `models.py:833`, `:1054`, `:2822` e `disputa_emissao.py:474`, `:1024`, `:1299`. Isso não comprova identidade de commits sem metadados Git. (`models.py:201`, `:1852`, `:2123`, `:2160`, `:3092`, `:3157`, `:3192`, `:3241`, `:3257`; `validacao.py:127`, `:163`, `:533`, `:625`; `disputa_emissao.py:1422`, `:1559`, `:1635`, `:1658`; `relavra_via.py:106`; `materializacao.py:784`, `:1083`; identidade criptográfica: **[nao verificado]**) [nao verificado]
+
+Duas referências do censo são **ocorrências de leitura**, não início de função: `cobranca.py:229` fica dentro de `_calados`, definido em `:221`; `fabrica_da_celula.py:128` fica dentro de `motivos_a_perguntar`, definido em `:74`. Não são evidência de deslocamento entre as árvores. (`cobranca.py:221`, `:229`; `fabrica_da_celula.py:74`, `:128`)
+
+As referências antigas do aval a badge em `models.py:1729/1736` não apontam o leitor atual: há lápide em `models.py:1795`; os consumidores atuais chamam a consulta central em `app/api/views.py:325` e `app/api/views_core.py:314`. (`models.py:1729`, `:1736`, `:1795`; `app/api/views.py:325`; `app/api/views_core.py:314`)
+
+**Conta:** o “16” é o inventário inicial de alterações; o censo corrigido conta **16 + 4 alterações adicionais = 20**, e depois **20 + 6 nascimentos = 26**. Não são o mesmo universo. As quatro adicionais são A17–A20; executores `save`/`registrar` não devem ser somados novamente às portas que executam. (`materializacao.py:784`, `:1083`; `validacao.py:533`, `:625`; `models.py:3402`, `:3932`; número histórico do censo anexado: **[nao verificado]**)
+
+**RESULTADO 11, com unidade explícita: 16 → N=0 portas de escrita de estado derivado da pergunta; lista residual: vazia.** No censo corrigido, a comparação correspondente é **20 → 0**, fiscalizando também os nascimentos. Separadamente permanecem o executor factual `DecisaoPergunta.registrar`, as portas dos efeitos e os escritores declarados de L. Não seria comparável anunciar “16→4” somando três famílias de efeitos a um executor de decisões. (`models.py:3832`, `:3932`; `app/chamados/veredito_lavrado.py:240`, `:254`; realização desse alvo: **[nao verificado]**)
+
+**B. CAMPO A CAMPO — ESMERIL-SEMÂNTICA**
+
+| Célula | Significado e divergência comprovável | Onde morde A |
+|---|---|---|
+| **B01 — R: presença** | `respondida` testa instante não nulo; SQL combina instante/texto; C6 usa texto com `strip`; tarefa usa última DP e trata projeção sem linha como desconhecimento. São critérios distintos. (`models.py:3486`, `:3337`; `juizes.py:1339`; `tarefa_do_dia.py:127`, `:132`) | A05, A08, A12–A15, A22–A23. |
+| **B02 — R: conteúdo** | Resposta pode ser hora, data/hora, escolha, identificador ou escape. Intervalo pode plantar pela hora do marco. Não transformar qualquer texto em instante. (`models.py:3508`; `materializacao.py:356`, `:400`, `:978`) | A05, A12–A15, A17. |
+| **B03 — V** | V é assinatura, não confirmação de efeito. C6 encerra por V não nulo; tarefa com DP `VALIDACAO` exige L vigente e distingue materializar, rejulgar e encerrar. Ramo de carimbo também preenche V. (`juizes.py:1323`; `tarefa_do_dia.py:140`; `models.py:3123`) | A05, A10–A13. |
+| **B04 — C** | `materializada_em` não significa uniformemente “Batida criada”: identidade/colisão também carimbam; identidade pode conservar instante e autor antigos. Nulo pode resultar de limpeza posterior. (`models.py:3157`, `:3171`, `:3192`; `materializacao.py:1099`) | A05–A09, A16–A18. |
+| **B05 — via/identidade** | Via mistura resultado derivado com exclusão da identidade do fato. Retratação tem DP datada; duplicata não tem equivalente datado na tarefa atual. Índices e seleção ainda dependem da via. (`tarefa_do_dia.py:216`, `:220`, `:227`; `models.py:3474`, `:3480`) | A06–A08, A16, A21–A22. |
+| **B06 — F** | F significa fechamento do continente, não inexistência de tarefa. App manda viva em fechada ao histórico; pedido de correção mantém gate de fechada. Reabertura da resposta não é reabertura do continente. (`pergunta_no_app.py:70`; `models.py:2221`; `disputa_emissao.py:1559`) | A02–A04, A13, A23–A24. |
+| **B07 — pendência** | Pendência técnica precede o rótulo: resposta pode parecer validada/resolvida e ainda exigir admin. Explicador e templates dependem disso. (`materializacao.py:850`; `explicador.py:85`; `app/templates/chamados/partials/modal_fio.html:221`; `app/templates/chamados/partials/_card_atendimento.html:183`) | A17; saída dos leitores de A05/A10. |
+| **B08 — recusa** | Humana gera DP `RECUSA`; técnica grava campo/nota; advertência de escape acompanha DP `RESPOSTA`. Não reconstruir recusa humana de qualquer string nesse campo. (`validacao.py:593`; `materializacao.py:1103`, `:1107`; `disputa_emissao.py:1494`, `:1508`) | A06, A12–A13, A17–A19. |
+| **B09 — conferência** | `data_conferida_em/por` representa autorização humana diante de dois dias divergentes. Materializador usa apenas presença do timestamp; trilha guarda o par/justificativa; modal usa também autor. (`materializacao.py:1193`; `validacao.py:667`; `app/templates/chamados/partials/modal_fio.html:170`) | A20. Validade da conferência após alteração do par de dias: **[nao verificado]**. |
+| **B10 — dia versus instante** | `data_evento` é dia do turno no fato e dia civil na conversa. Plantio combina dia/hora e ajusta overnight pelo envelope inclusivo. O instante da Batida não é esse dia. (`models.py:2791`; `juizes.py:296`, `:332`; `materializacao.py:413`) | A17, A20, A22; identidade de A06/A21. |
+| **B11 — L e bordas** | `julgado_em` é instante; expiração é dia local. Expira por `<=`; marco posterior invalida por `>`. Ausente/indeterminado não equivale a “não materializado”. C6 ainda usa janela inclusiva e relógio que `--agora` não governa integralmente. (`app/chamados/veredito_lavrado.py:116`, `:224`, `:232`; `juizes.py:575`, `:601`; `app/chamados/management/commands/diff_e3_sombra.py:105`) | A05/A16; medidas C e leitores H-L. Divergência produtiva efetiva nessa borda: **[nao verificado]**. |
+| **B12 — chamado** | `VIVOS`, `COBRANCA`, `ENCERRADOS`, `TERMINAIS` e `NAO_FECHADOS` respondem perguntas diferentes. “Tem tarefa” não substitui globalmente esses conjuntos. (`app/chamados/catalogo/motor.py:24`, `:29`, `:30`, `:31`, `:32`) | A01 e nascimentos do chamado; classificação C. |
+| **B13 — dois silêncios** | Véu temporário vigora com `silenciado_ate > agora`, final exclusivo. DP `SILENCIO` é encerramento excepcional da pergunta. Não são o mesmo ato. (`models.py:511`, `:1921`; `arquivo.py:154`) | A02; filtros de fila usados por A01 e pela tarefa. |
+| **B14 — instante histórico** | Reconstrução usa instante da testemunha; reparação ocorre depois. Ordenação das decisões é por `ato_em, pk`; carga considera atos `<= agora`. (`disputa_emissao.py:1658`; `models.py:3878`; `tarefa_do_dia.py:338`) | A15; backfill C3. |
+
+Logo, **não**, escritores e leitores não supõem todos o mesmo significado dos campos. A retirada precisa conservar essas distinções na leitura factual, sem uma propriedade local voltar a ser segundo juiz. (`app/docs/LEIS.md:60`; evidências B01–B14)
+
+**C. O FIO MORTO E O PASSIVO**
+
+**C1 — contadores e universos**
+
+| Contador | Definição efetiva |
+|---|---|
+| `fio_morto` | Células acusadoras alcançadas por chamados vivos de `FURO_MODULES
+
+[truncado em 20000 de 59200 caracteres]
 
 ## 09/11 16:22 · sessao 1b6b5f41c939 · - · - · origem=Ronald (tmux)
 
@@ -840,89 +931,4 @@ O juiz do par permanece na ampliação de [estado_aplicacao_pergunta](/home/rona
 
 Foram conferidas sintaxe, âncoras e catracas estáticas; **Django e mutantes não foram executados**. RED/GREEN, mortes, concorrência e efeitos em produção permanecem **[nao verificado]**; não há certificação nesta entrega. ([registro das verificações](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/docs/BUG_PAR_ENTREGA.r:375))
 
-## 09/11 15:14 · sessao f5a6761ef894 · CODEX-2-RAIAS-PORTAO-CPU · verificador · origem=Code
-
-**REPROVA.** Procedentes: **P1 — escape do `--toca`; P2 — divergência entre admissão e fim; P3 — contador de runs contradiz o contrato declarado; P4 — falso vermelho condicional no selo.** Evidências abaixo. (`bin/codex_pergunta.sh:217`, `bin/codex_pergunta.sh:284`, `bin/codex_vagas_medida.py:114`, `bin/tests/test_codex_pergunta.sh:720`)
-
-1. **T1 — semântica e escapes**
-
-   **P1: nome com TAB escapa do arquivo exato.** O inventário imprime o nome sem codificação; o leitor separa por TAB e considera somente `c[1]`. Assim, o arquivo real `app/folha/views.py<TAB>fora` é interpretado como `app/folha/views.py` e passa por `--toca app/folha/views.py`. Reproduzi rc 0 executando a função real somente em memória. A validação dos caracteres do argumento não restringe os nomes encontrados no filesystem. (`bin/codex_pergunta.sh:217`, `bin/codex_pergunta.sh:278`, `bin/codex_pergunta.sh:282`, `bin/codex_pergunta.sh:323`)
-
-   **P2: arquivos novos irmãos admitem e depois recusam.** `--toca app/novo/a.py` e `app/novo/b.py` são disjuntos na admissão. Porém, criar `a.py` também inventaria `app/novo/`: o fim aceita essa pasta como pai necessário ao meu arquivo e simultaneamente a considera cruzada com o arquivo da outra raia. Reproduzi admissão rc 0 e fim rc 3 em memória. Isso contraria o critério escrito de **arquivo em comum**, sem bloquear por família/app. (`bin/codex_pergunta.sh:263`, `bin/codex_pergunta.sh:270`, `bin/codex_pergunta.sh:196`, `bin/codex_pergunta.sh:284`, `bin/codex_pergunta.sh:287`, `CLAUDE.md:306`)
-
-   A primitiva `cobre/cruza` é compartilhada: arquivo usa igualdade; pasta usa prefixo terminado em `/`. A divergência P2 surge do tratamento adicional das pastas inventariadas. (`bin/codex_pergunta.sh:263`, `bin/codex_pergunta.sh:266`, `bin/codex_pergunta.sh:284`)
-
-   `..`, `/./`, barra dupla, absoluto e raiz diferente de `app/` ou `bin/` são recusados no argumento. Symlink tocado é proibido; a varredura usa `lstat` e não segue diretórios symlink. Ausência de escape transitório durante a execução: **[não verificado]**. (`bin/codex_pergunta.sh:323`, `bin/codex_pergunta.sh:188`, `bin/codex_pergunta.sh:194`, `bin/codex_pergunta.sh:215`)
-
-   O chamador fornece `--toca`; o parser preenche `TOCA[]`; `_publica_estado` grava `toca=`; `_toca_de` lê; `_portoes` compara na admissão e o fim relê a outra vaga. (`bin/codex_pergunta.sh:71`, `bin/codex_pergunta.sh:311`, `bin/codex_pergunta.sh:291`, `bin/codex_pergunta.sh:305`, `bin/codex_pergunta.sh:567`)
-
-2. **T2 — MORTO/ERRADO/VIVO**
-
-   Não encontrei morte acidental concreta nos casos atuais. O acidente de `saida_symlink` foi corrigido: o caso exige `saida … e symlink`, enquanto a guarda seguinte escreve `codex: trava … e symlink`. (`bin/tests/test_codex_pergunta.sh:201`, `bin/codex_pergunta.sh:338`, `bin/codex_pergunta.sh:511`)
-
-   O controlador exige todos os esperados; ERRADO e VIVO aumentam as falhas. O autoteste morde: trocar a decisão por `echo MORTO` reprova outra asserção, dois esperados e esperado vazio. Isso foi exercitado em memória. (`bin/tests/test_codex_pergunta.sh:747`, `bin/tests/test_codex_pergunta.sh:751`, `bin/tests/test_codex_pergunta.sh:753`, `bin/tests/test_codex_pergunta.sh:754`, `bin/tests/test_codex_pergunta.sh:775`)
-
-   Existe uma fragilidade: a busca não ancora a linha; um diagnóstico contendo `FALHA: <esperado>` também pode contar MORTO. Os autotestes não cobrem esse eco; um mutante da lista que efetivamente o produza permanece **[não verificado]**. (`bin/tests/test_codex_pergunta.sh:747`, `bin/tests/test_codex_pergunta.sh:750`)
-
-   **P4: regressão condicional de portabilidade.** O cenário calcula `NPL=nproc-2`, mas dois esperados cravam `load5 6.00`. Com `nproc != 8`, classificam ERRADO uma morte pela asserção pretendida. É falso vermelho; ocorrência no host de produção: **[não verificado]**. (`bin/tests/test_codex_pergunta.sh:100`, `bin/tests/test_codex_pergunta.sh:520`, `bin/tests/test_codex_pergunta.sh:720`, `bin/tests/test_codex_pergunta.sh:722`)
-
-3. **T3 — histórico e trava**
-
-   A derivação paralela foi corrigida: `HIST="$TRAVA.hist"` tem um sítio; a medida pergunta `--hist`. Os eventos produtivos encontrados são escritos por `_hist`, com `ini` após aquisição e `fim` no trap. Os selos também escrevem históricos, em cenários isolados. (`bin/trava_teste.sh:31`, `bin/trava_teste.sh:32`, `bin/trava_teste.sh:53`, `bin/trava_teste.sh:54`, `bin/codex_vagas_medida.py:115`, `bin/tests/test_trava_hist_unico.sh:54`)
-
-   Portanto, **nem todo leitor literalmente pergunta**: o selo antigo usa diretamente `iso.lock.hist`, mas antes confere a resposta de `--hist`; o leitor produtivo pergunta. (`bin/tests/test_trava_teste.sh:112`, `bin/tests/test_trava_teste.sh:145`, `bin/codex_vagas_medida.py:115`)
-
-   **`--presa` pode atrasar um chamador real.** Ele adquire exclusividade brevemente com `flock -n`; o chamador real disputa o mesmo lock com espera finita. Usar `-w` não prova ausência de colisão nem impossibilidade de rc 75 no limite da espera. Ocorrência e impacto reais: **[não verificado]**. L-074 exige exclusividade e rc correto, sem garantir FIFO; trataria a interferência como decisão técnica/fila, corrigindo a alegação absoluta da entrega. (`bin/trava_teste.sh:39`, `bin/trava_teste.sh:40`, `bin/trava_teste.sh:48`, `bin/trava_teste.sh:50`, `app/docs/LEIS.md:101`)
-
-   A regra declarada pode **inflar** ocupação incluindo o intervalo ocioso entre um órfão e o próximo `ini`, ou **zerar** ocupação efetiva do último órfão quando a trava está livre. Isso é consequência da regra explicitada, não motivo novo para reprovar por preferência. (`bin/codex_vagas_medida.py:110`, `bin/codex_vagas_medida.py:142`, `bin/codex_vagas_medida.py:152`)
-
-   A prova de vida não identifica o órfão: leitura do histórico e sondagem são separadas; outro chamador pode adquirir a trava antes de publicar seu `ini`. Nesse intervalo, o órfão antigo recebe a vida da chamada nova. (`bin/codex_vagas_medida.py:130`, `bin/codex_vagas_medida.py:149`, `bin/trava_teste.sh:48`, `bin/trava_teste.sh:53`)
-
-   **Mais de 24h ainda é possível com relógio regressivo.** A sequência temporal `[ini A 00h, fim A 24h, ini B 00h, fim B 24h]` retorna 48h: o escritor usa relógio civil e o leitor soma sem validar regressão ou unir sobreposições. Com timestamps não decrescentes, a máquina de um único aberto elimina a sobreposição antiga dos órfãos. Recuo real do relógio: **[não verificado]**. (`bin/trava_teste.sh:32`, `bin/codex_vagas_medida.py:123`, `bin/codex_vagas_medida.py:139`, `bin/codex_vagas_medida.py:145`)
-
-   **P3: o contador contradiz a declaração.** A docstring promete que todo órfão entra em `n de runs`; o código só incrementa `n` com duração positiva. Um órfão solto retorna `(0 segundos, 0 runs, 1 órfão)`. O selo exige essa exclusão. (`bin/codex_vagas_medida.py:114`, `bin/codex_vagas_medida.py:126`, `bin/codex_vagas_medida.py:128`, `bin/tests/test_trava_hist_unico.sh:57`)
-
-4. **DECISÃO-ABERTA 1–7**
-
-   | Nº | Resposta pela lei ou encaminhamento |
-   |---|---|
-   | 1 | Retenção/caminho é decisão técnica do Code; não achei exigência de persistência histórica. A limpeza efetiva de `/tmp` no reboot é **[não verificado]**, embora afirmada no comentário. (`CLAUDE.md:273`, `bin/trava_teste.sh:30`) |
-   | 2 | **L-003 responde:** fonte ausente não autoriza inventar zero. A exceção vira “não sei”. (`app/docs/LEIS.md:61`, `bin/codex_vagas_medida.py:130`, `bin/codex_vagas_medida.py:193`) |
-   | 3 | A opção restritiva já cabe na regra de cura mais restritiva; não pede lei nova. O mesmo caminho com/sem `/` cruza expressamente. (`CLAUDE.md:278`, `bin/codex_pergunta.sh:266`) |
-   | 4 | Política técnica de estimativa/retenção; a implementação fecha pelo próximo `ini` sem consultar boot. Não há resposta legal específica identificada. (`CLAUDE.md:273`, `bin/codex_vagas_medida.py:108`, `bin/codex_vagas_medida.py:142`) |
-   | 5 | Questão técnica/fila; “nenhum chamador perde a vez” não está demonstrado pelo uso de espera finita. (`CLAUDE.md:273`, `bin/trava_teste.sh:40`, `bin/trava_teste.sh:48`) |
-   | 6 | Conferência de ambiente, não pergunta de lei. Ruff do container e equivalência com o resultado entregue: **[não verificado]**. |
-   | 7 | O leitor produtivo agora usa `--hist`; existência/conteúdo dos históricos antigos e necessidade real de migração: **[não verificado]**. Não sustento “nada a migrar” como fato de produção. (`bin/codex_vagas_medida.py:115`) |
-
-5. **Regressão no delta**
-
-   Vagas, portões de CPU e lista protegida de `bin/` mantêm os sítios operacionais apresentados na volta 1; as mudanças de comportamento encontradas no delta são P2, P4 e a nova contagem/sondagem do histórico. (`bin/codex_pergunta.sh:157`, `bin/codex_pergunta.sh:293`, `bin/codex_pergunta.sh:380`, `bin/codex_pergunta.sh:284`, `bin/tests/test_codex_pergunta.sh:720`, `bin/codex_vagas_medida.py:139`)
-
-   `vaga=N` continua no último campo. O leitor posicional conserva os índices anteriores: sessão em `p[6]`, rc em `p[7]`, duração em `p[8]`; não exige tamanho exato. Disjuntor e gerador de estado usam esse leitor. Não encontrei quebra posicional nesses consumidores. (`bin/codex_pergunta.sh:229`, `bin/codex_pergunta.sh:428`, `bin/codex_limite_estado.py:66`, `bin/codex_limite_estado.py:67`, `bin/disjuntor.py:2121`, `bin/gerar_codex_estado.py:176`)
-
-   A leitura semanal reutiliza `leituras_semanais`, sem novo juiz para esse insumo. O relógio da medida entra em `main` e é passado às funções; a borda de horário do wrapper permanece na admissão. (`bin/codex_vagas_medida.py:78`, `bin/codex_vagas_medida.py:226`, `bin/codex_pergunta.sh:300`)
-
-6. **Quem escreve / quem lê**
-
-   | Campo ou arquivo | Escritor → leitor |
-   |---|---|
-   | `--toca`, `TOCA[]` | Chamador → parser, validação, prompt, admissão e fim. (`bin/codex_pergunta.sh:71`, `:323`, `:465`, `:305`, `:574`) |
-   | Caminhos das vagas/meta/estados | Wrapper deriva do common-dir → reserva nomes, abre locks e consulta estados. (`bin/codex_pergunta.sh:85`, `:93`, `:97`, `:380`, `:389`) |
-   | Flock das vagas | Wrapper adquire → `_viva` testa o próprio flock. (`bin/codex_pergunta.sh:383`, `:386`, `:253`) |
-   | `.estado`: `vaga,pid,obra,wt,hash,hora,toca` | `_publica_estado` grava por rename; `_saida` remove. Decisão lê `toca=`; os demais campos não são lidos por essa decisão. (`bin/codex_pergunta.sh:310`, `:311`, `:236`, `:291`) |
-   | Load5, hora, pausas | `/proc/loadavg`, relógio e arquivos de pausa → portões; entradas falsas passam pela guarda de teste. (`bin/codex_pergunta.sh:118`, `:294`, `:297`, `:300`, `:328`, `:112`) |
-   | `chamadas.log`: hora, obra, papel, hash, pid, evento, pergunta/sessão, rc, duração, vaga | Wrapper → leitor posicional e contador de vaga 2. (`bin/codex_pergunta.sh:229`, `:428`, `bin/codex_limite_estado.py:49`, `bin/codex_vagas_medida.py:160`) |
-   | `vaga2.log`: hora, obra, motivo, load5, fonte | `_recusa_v2` → contagem diária e selo. (`bin/codex_pergunta.sh:249`, `bin/codex_vagas_medida.py:166`, `bin/tests/test_codex_pergunta.sh:521`) |
-   | Arquivos da WT, HEAD, gitfile, blobs, modos, links e ignorados | Construtor/git → mesmo inventário no pré-check, revalidação e fim. (`bin/codex_pergunta.sh:174`, `:181`, `:194`, `:397`, `:530`, `:560`) |
-   | `.inventario`: classe, caminho, motivo | Inventário e verificações finais → `_TOCA_PY`, decisão rc 3 e `.recusa`. (`bin/codex_pergunta.sh:217`, `:278`, `:560`, `:575`, `:579`) |
-   | Resposta/JSONL/stderr; `.id`, `.rc` | Codex escreve saída; wrapper publica resposta e sidecars. `.id` é lido pela triagem; `.rc` é cobrado no selo. (`bin/codex_pergunta.sh:545`, `:553`, `:232`, `:604`, `bin/disjuntor.py:854`, `bin/tests/test_codex_pergunta.sh:174`) |
-   | `TRAVA`, `HIST`, eventos `epoch,ini/fim,quem,rc` | `trava_teste.sh` define/publica e escreve eventos → medida pede caminho e lê eventos; `rc` não participa da soma. (`bin/trava_teste.sh:23`, `:31`, `:32`, `:38`, `bin/codex_vagas_medida.py:115`, `:132`, `:144`) |
-   | `TRAVA.quem` | Trava escreve → `--quem` e diagnóstico de timeout. (`bin/trava_teste.sh:52`, `:54`, `:37`, `:49`) |
-   | Sar: `ldavg-5`, Average e amostras | `sar -q` → parser, desligador e linha diária. (`bin/codex_vagas_medida.py:43`, `:57`, `:66`, `:88`, `:198`) |
-   | Sessões: timestamp, janela, used_percent, resets_at | Codex CLI é o produtor declarado; leitor canônico → desligador. Escrita efetiva do CLI: **[não verificado]**. (`bin/codex_vagas_medida.py:15`, `bin/codex_limite_estado.py:154`, `:155`, `:159`, `bin/codex_vagas_medida.py:78`) |
-   | Cota: `seven_day_pct,resets_at,hora`; foto anterior | Statusline grava cota → medida calcula diferença entre fotos. Produtor da foto anterior: **[não verificado]**. (`bin/statusline_cota.py:51`, `:54`, `bin/codex_vagas_medida.py:178`, `:180`, `:182`) |
-   | Mutantes, esperados, saídas e tabela | Selos fabricam cenários/mutantes → classificadores e resultado final. (`bin/tests/test_codex_pergunta.sh:643`, `:769`, `:775`, `bin/tests/test_trava_hist_unico.sh:80`, `:95`, `:97`) |
-
-**Veredito final: REPROVA — P1 e P2 exigem cura do controle de escopo; P3 exige alinhar contagem e contrato; P4 exige alinhar o esperado ao cenário dinâmico.** GREEN integral da volta 2 não foi reproduzido nesta verificação somente leitura. (`bin/codex_pergunta.sh:217`, `:284`, `bin/codex_vagas_medida.py:114`, `:128`, `bin/tests/test_codex_pergunta.sh:100`, `:720`; GREEN: **[não verificado]**)
-
-_3201 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3202 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
