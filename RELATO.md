@@ -1,6 +1,8 @@
 # RELATO — esteira saas-hasner
 
 ESPERANDO: lancar_green_mut_v4.sh | pid=291956
+O10-D-PERMUTA-NA-TELA 11:0x: aval recebido; DESPACHO O10-D: censo (1)-(4) -> Codex papel censo, slot 1 (load1 10,7 > 7 = 1 vaga, livre) -> logs/O10-D-PERMUTA-NA-TELA/censo_v1.r | construtor Codex + opus final depois da fila 1.
+BUG-PAR 11:07: GREEN v4 OK Ran 51 rc=0 (copia 43dc937f2); mutantes M1-M44 em curso -> mutantes_v4.log (M1 morto).
 SELOS-CANON-I3 11:1x: brief do construtor pronto logs/SELOS-CANON-I3/brief.md (CENSO do contratos.r + 4 etapas com RESULTADO; DECISAO TECNICA: conferencia de etapas no opus final contra linhas ETAPA ja no RELATO; denominador = snapshot na abertura). Abre com OPUS (disjuntor.py protegido) quando a vaga de opus liberar (hoje: SONDA v5).
 SONDA-SEM-GRANT 11:0x: preverif v4 rc 0 -> triagem logs/auditoria_0911/triagem_preverif_v4.txt: PROCEDENTE P1 selo 9c compara outro stamp, P2/P3 bloco e incremental conservam verde (classe do item 4, L-123), P4 placar com parser/predicado/relogio proprios (LEI-AKITA 2), P5 _limpa por nome; FILA F1-F3. 4 voltas Codex -> CODEX 5(d): volta 5 construtor OPUS (bin/ proibido ao wrapper) -> entrega_v5.txt.
 E3 11:0x: volta 3b ebac08b27 (sessao, so testes): view do app lida pelo AST do modulo (patch fix_view_ast_v3b) + M4 com 2 chamados de nota do colaborador (mutante vermelho_autor_errado: real 1, mutado 2). Suite inteira + mutantes -> logs/fio_e3/v3b_suite.log, v3b_mutantes.log (pid 330647, atras do BUG-PAR na trava).
