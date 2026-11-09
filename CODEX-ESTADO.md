@@ -1,7 +1,127 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 12:21** · publicado em **09/11/2026 12:21** (UTC-3)
+> Ultima resposta processada: **09/11/2026 12:24** · publicado em **09/11/2026 12:26** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 12:24 · sessao eab8c15e7201 · FIO-E0-V4-E3 · verificador · origem=Code
+
+**Há achados PROCEDENTES de unidade residual, custo e leitura indireta na sombra; os quatro consumidores principais estão unificados.** (`app/chamados/services/aviso_pendencia.py:13`; `app/chamados/juizes.py:1149`; `app/core/utils.py:18`; `app/api/views.py:325,2562`; `app/api/views_core.py:314`; `app/core/views.py:253`)
+
+1. **UNIDADE — NAO PROCEDE nos quatro consumidores; PROCEDENTE no restante do app.**
+
+   Badge dos dois kernels, dashboard e `api_disputa_perguntas` leem `consulta_do_app`. Ela aplica C6 e separa pendentes por **sem resposta + disputa aberta**. Fechada viva vai ao `historico`; só entra também em `respondidas` quando possui `respondida_em`. (`app/chamados/services/pergunta_no_app.py:54,67`; `app/api/views.py:2588,2600`)
+
+   Permanecem fontes paralelas:
+
+   - **PROCEDENTE:** aviso após mensagem recompõe C6 + sem resposta, incluindo fechada viva, e informa “AGUARDANDO sua resposta”. A cobrança reutiliza esse leitor. **Cura:** ambos consumirem `consulta_do_app()['pendentes']`. (`app/chamados/services/aviso_pendencia.py:9,13,21`; `app/api/views.py:1013,2236`; `app/chamados/services/cobranca.py:47`)
+   - **PROCEDENTE:** `api_chamados_v2` carrega todas as perguntas das disputas abertas, sem C6, e entrega outra lista em `perguntas_disputa`. Pode servir pergunta morta. **Cura:** consumir a seleção/classificação central. (`app/api/views.py:1044,1059,1174`)
+   - **FILA — universos internos distintos:** placar/copiloto e `_no_app` continuam considerando todas as C6 vivas, inclusive fechadas agora disponíveis apenas no histórico. Definir se histórico satisfaz “pergunta no app”. (`app/chamados/juizes.py:1489`; `app/chamados/services/pergunta_no_app.py:160,183`; `bin/placar_code.sh:317`)
+   - **FILA — dívida preexistente:** há contagens por carimbo cru na cobrança, ações da disputa, censo da folha e contador com cron. Não certificam pendência apresentada pelo app. (`app/chamados/services/cobranca.py:229`; `app/chamados/services/acoes_disputa.py:95`; `bin/censo_folha.py:28`; `app/chamados/services/furo_sem_canal.py:80`; `app/config/crons.py:531`)
+
+   Fechada viva também pode aparecer no fio administrativo e seus templates: esse caminho aplica C6 às fechadas; o fio do colaborador usa outro recorte. (`app/chamados/services/fio.py:216,238,253`; `app/templates/chamados/partials/modal_fio.html:156`)
+
+2. **JUIZ ÚNICO C17 — NAO PROCEDE a acusação de cópia da partição ou ligação antecipada.**
+
+   A tarefa chama `alimentar_fila`, que chama as autoridades existentes `particionar_verbos(qs_vivos(), agora=...)` e `qs_na_fila(agora=...)`. A partição chama `creditos_perguntas` e `verbo_do_chamado`; `_portas_da_tarefa` compõe portas a partir das ações já julgadas pelo C19. (`app/chamados/services/tarefa_do_dia.py:409,425`; `app/chamados/juizes.py:1429,1432`; `app/chamados/services/verbos.py:34,47`; `app/core/juizes.py:291`)
+
+   C17 **ainda não virou fachada delegante**: conserva seu julgamento. Os três chamadores permanecem folha, vigia e cadastro; seus corpos não constam como alterados no diff fornecido. Comparação histórica independente com a base: **[nao verificado]**. (`app/chamados/juizes.py:1545`; `app/folha/fora_da_folha.py:67`; `app/chamados/services/vigia_fio.py:635`; `app/escala/services/cadastro_realidade.py:488`)
+
+   Os campos antigos da tarefa são preservados; entram quatro chaves aditivas. A igualdade do dicionário inteiro muda, mas não foi localizado consumidor anterior de produção sendo migrado; o novo consumidor é o DIFF. Chamadas dinâmicas não localizáveis: **[nao verificado]**. (`app/chamados/services/tarefa_do_dia.py:177,433`; `app/chamados/management/commands/diff_e3_sombra.py:118`)
+
+3. **L-111 — NAO PROCEDE a permanência do método.**
+
+   Método removido, lápide no sítio; busca AST/textual não encontrou chamada, alias importado, `getattr` literal ou template restante. Construção dinâmica do nome: **[nao verificado]**. (`app/chamados/models.py:1795`; `app/chamados/tests/test_badge_disputa_pendente.py:8`)
+
+   Os testes migrados ainda exigem: zero sem filhos, duas perguntas → duas pendências, desaparecimento após absolvição e concordância entre endpoint, dashboard e dois kernels. (`app/chamados/tests/test_esmeril2_left_join.py:19,27`; `app/chamados/tests/test_fio_le_o_juiz.py:267,272`; `app/chamados/tests/test_e3_app_orm.py:28,39,47`)
+
+4. **SOMBRA — PROCEDENTE a objeção à cadeia estritamente só de leitura.**
+
+   O comando não contém escritor ORM direto e envolve todos os aliases na guarda SQL. Porém `dias_trancados` chega a `get_user_sistema`, que executa **`get_or_create`**. Se o usuário faltar, haverá tentativa de criação; a guarda impede que o SQL escritor alcance o cursor. **Cura:** resolver por leitura `.get`, falhar explicitamente na ausência e testar esse ramo; a fixture atual sempre cria `sistema`. (`app/chamados/management/commands/diff_e3_sombra.py:34,92,108`; `app/chamados/services/tarefa_do_dia.py:370`; `app/chamados/juizes.py:1033,1146`; `app/core/utils.py:18`; `app/chamados/tests/e3_fixtures.py:26`)
+
+   **PROCEDENTE, no caminho de erro:** C6 pode registrar exceção/traceback; a configuração SaaS inclui arquivo de log. A sanitização final do comando não desfaz essa emissão. **Cura:** tratamento sanitizado durante o instrumento e teste das dependências. Configuração efetiva e ocorrência em produção: **[nao verificado]**. (`app/chamados/juizes.py:1366,1377`; `app/core/observ.py:79`; `app/config/settings/saas.py:138,183`; `app/chamados/management/commands/diff_e3_sombra.py:98`)
+
+   **NAO PROCEDE — agendamento:** `FORA_DE_PIPELINE` apenas declara; geração do cron percorre `CRONS`, e inventário executável reúne `CRONS + ENCADEADOS`. O diagrama apenas baixa tela de 110 para 109 sítios; não liga fachada nem acrescenta execução. (`app/config/crons.py:769,1798,1865`; `app/docs/ARQUITETURA.mmd:356`; `app/docs/MAPA.md:209`)
+
+5. **REGISTRO DE TELA — NAO PROCEDE novo juiz ou alteração adicional nesse arquivo.**
+
+   No diff fornecido, `core/juizes.py` perde somente o pendente do dashboard; C17 e C19 continuam registrados. A leitura curada está no dashboard. (`app/core/juizes.py:289,291,756`; `app/core/views.py:253`)
+
+   O selo de tela sozinho verifica impressões remanescentes, portanto não prova a cura funcional. O mérito vem da matriz ORM que exige duas perguntas na mesma disputa → duas pendências nos consumidores completos. (`app/core/tests/test_contract_juiz_tela.py:34`; `app/chamados/tests/test_e3_app_orm.py:28,39,47`)
+
+6. **CLASSES DE REPROVAÇÃO.**
+
+   - **PROCEDENTE — catraca incompleta:** resolve aliases de importação, mas não `p = porta_alcancavel_do_dia` nem `getattr(j, 'porta_alcancavel_do_dia')(...)`; também exclui `models.py` e `core/juizes.py`. Esses desvios escapam da contagem. **Cura:** ampliar resolução/escopo e acrescentar mutantes dessas formas. Isso não demonstra quarto chamador atual. (`app/chamados/tests/test_e3_pendentes_app.py:49,67,98,113`)
+   - **NAO PROCEDE — quatro casos sem mordida:** há expectativas próprias para só fila, A/B, verbos do universo e isento, com mutantes correspondentes. O verbo inventado encontra ainda expectativa explícita de `validar`. Nem todo teste novo precisa falhar sem a cura: o contrato preservado de C17 é regressão. Causa individual das 30 mortes apenas por `rc=1`: **[nao verificado]**. (`app/chamados/tests/test_e3_portas_tarefa.py:32,40,49,57,75`; `app/chamados/tests/e3_mutantes.py:49,127`; `app/chamados/tests/test_e3_pendentes_app.py:126`)
+   - **NAO PROCEDE — nova inversão de travas:** a extensão escreve mapas em memória, sem introduzir aquisição de trava; a tentativa escritora indireta está no item 4. (`app/chamados/juizes.py:1428`; `app/chamados/services/tarefa_do_dia.py:425`)
+   - **FILA — relógio integral da comparação:** o comando recebe instante explícito e o propaga, mas C17 ainda chama C6, cujo fallback lê `date.today()`. Portanto `--agora` não controla toda a comparação histórica. **Cura:** explicitar esse limite ou alimentar o horizonte dessa dependência antes de alegar reprodução integral. (`app/chamados/management/commands/diff_e3_sombra.py:84,107`; `app/chamados/juizes.py:1472,1357,575`)
+   - **NAO PROCEDE — ambiguidade nova demonstrada:** tarefa exclui conversa ao agrupar `data_evento`; conversa continua gravando dia civil, fato usa dia do turno, e `data_civil` da instância deriva do instante do marco. Silêncio usa `> agora`; igualdade retorna à fila/histórico. Decisões e efeitos usam `<= agora`; janela de dias inclui as duas pontas. (`app/chamados/models.py:2786,2798`; `app/chamados/services/tarefa_do_dia.py:102,325,339,358`; `app/chamados/services/painel.py:190`; `app/chamados/services/verbos.py:51`; `app/chamados/management/commands/diff_e3_sombra.py:114`)
+
+   `rota='porta_fila'` pode coexistir com `fila=()` quando o verbo é histórico: rota usa a âncora exigível na célula; `fila` exclui verbos fora da lista padrão. O caso está explicitamente testado. (`app/chamados/services/tarefa_do_dia.py:428,429,433`; `app/chamados/tests/test_e3_portas_tarefa.py:109`)
+
+7. **CUSTO — PROCEDENTE: não há número constante universal no badge.**
+
+   A consulta inicial é uma, mas C6 consulta tranca por pergunta; competência é memoizada, toque negativo não. **Cura:** alimentar tranca/toque em lote por chamada, preservando frescor entre chamadas. (`app/chamados/services/pergunta_no_app.py:47,54`; `app/chamados/juizes.py:948,1020,1137,1151`)
+
+   Contagem estática incremental de `consulta_do_app`, não de `api_me` inteiro:
+
+   | Cenário | SELECTs |
+   |---|---:|
+   | Nenhuma pergunta candidata | **1** (`pergunta_no_app.py:47`) |
+   | Sem resposta, célula acusando, competências abertas | **1 + E + K** (`juizes.py:1003,1023,1342`) |
+   | N perguntas, uma competência trancada, nenhum toque humano, células/chamados existentes, `sistema` existente e memo frio | **3 + E + 5N** (`juizes.py:1146,1185,1200,1211,1224,1234`) |
+
+   `E=1` se Empresa precisar ser carregada; `K` é o número de competências ainda não memoizadas. Empresa fria no último cenário: **4 + 5N**. Outros ramos de C6 variam; quantidade observada em produção: **[nao verificado]**. (`app/chamados/juizes.py:1003,1020,1361,1374`)
+
+8. **QUEM ESCREVE / QUEM LÊ — rastro principal, inclusive fora do diff.**
+
+   | Campo/função | Produtor/escritor | Leitores |
+   |---|---|---|
+   | `pendentes/historico` | `pergunta_no_app.py:65` — memória | `api/views.py:325,2562`; `api/views_core.py:314`; `core/views.py:253` |
+   | `respondida_em/resposta_colab` | `disputa_emissao.py:1464,1650,1671`; reabertura `:1590,1629`; carimbo `models.py:3121` | Consulta `pergunta_no_app.py:67`; C6 `juizes.py:1309`; crédito `raiox.py:139` |
+   | `fechada_em` | Fecha `models.py:1929`; reabre `:2146,2170` | Consulta `pergunta_no_app.py:67`; fio `fio.py:216`; lista paralela `api/views.py:1046` |
+   | `validada_em/materializada_em/via_resolucao` | `validacao.py:134,199`; `models.py:3088,3179,3253` | C6 `juizes.py:1293,1304,1330`; crédito `raiox.py:135` |
+   | Âncora/data da pergunta | Nascimento `models.py:2786,2872`; portas `fio.py:804,970` | `chamado_que_lista`, `fio.py:116`; tarefa `tarefa_do_dia.py:329,362`; C17 `juizes.py:1549` |
+   | `veredito_lavrado/julgado_em/janela_expira_em` | `veredito_lavrado.py:250,270` | Crédito `raiox.py:135`; tarefa `tarefa_do_dia.py:350` |
+   | Decisões, `ato_em`, efeitos | Sequência `models.py:3934`; resposta/validação `disputa_emissao.py:1653`, `validacao.py:139` | Tarefa `tarefa_do_dia.py:337,346,358` |
+   | `verbo/fila_ids/fila_cel` | `juizes.py:1429` — memória, autoridades painel/partição | `juizes.py:1465`; `tarefa_do_dia.py:409,426` |
+   | `rota/fila/verbos/fio` | Tarefa `tarefa_do_dia.py:433`; C17 separado `juizes.py:1556` | DIFF `diff_e3_sombra.py:43,50`; atuais C17: `fora_da_folha.py:78,225`, `vigia_fio.py:643`, `cadastro_realidade.py:488` |
+   | `status_local/silenciado_ate` | `models.py:228,296,1095`; `services/arquivo.py:166,202` | `painel.py:155,189`; `verbos.py:45,51` |
+   | `modulo_origem/urgencia/criado_em` | `models.py:1095,550,67` | `verbos.py:45,47,57,60` |
+   | `dia_do_turno/agora/data_civil` | Entrada `tarefa_do_dia.py:442`; parsing `diff_e3_sombra.py:83`; saída `tarefa_do_dia.py:102,177` | Carga/horizontes `tarefa_do_dia.py:317,339,358,411`; partição `verbos.py:51` |
+
+   Caminhos dessa tabela são relativos a `app/`. Censo recursivo exaustivo de **todos** os escritores/leitores dinâmicos de cada insumo transitivo: **[nao verificado]**. DIFF medido por chamador/caso em produção e liberação da fachada: **[nao verificado]**.
+
+## 09/11 12:22 · sessao c3a90278ff0c · - · - · origem=Ronald (tmux)
+
+- **NAO PROCEDE — segundo juiz de rota/fila/verbos.** A extensão compõe ações já decididas e lê a partição existente: `tarefa_do_dia.py:403`, `:409`, `:425-434` → `juizes.py:1429`, `:1432` → `verbos.py:34`, `:47` → `catalogo/natureza.py:72`. A autoridade permanece C19 (`core/juizes.py:291`).
+
+- **NAO PROCEDE — migração prematura.** C17 continua julgando em `juizes.py:1545-1557`; seus três consumidores continuam em `folha/fora_da_folha.py:67`, `vigia_fio.py:635`, `cadastro_realidade.py:488`. O diff fornecido não altera esses corpos; comparação independente com a base, sem `.git`, **[nao verificado]**.
+
+- **NAO PROCEDE — alteração de campos antigos da tarefa.** A projeção E3 escreve somente `rota/fila/verbos/fio` (`tarefa_do_dia.py:433-434`); a saída anterior nasce em `:177-178`. Igualdade do dicionário completo muda pela adição das chaves; nenhum consumidor de produção externo anterior de `tarefa_do_dia` foi localizado; o novo consumidor é `diff_e3_sombra.py:118`. Exaustividade contra chamadas dinâmicas **[nao verificado]**.
+
+- **NAO PROCEDE — semântica temporal das comparações novas.** Silêncio vigente usa `silenciado_ate > agora` tanto na fila quanto no verbo; igualdade significa retorno à fila/histórico (`painel.py:190`, `verbos.py:51`). Teto usa `marco+teto <= agora` (`ponto/services/cartorio.py:858`); decisões, passivo e efeitos usam horizonte inclusivo (`tarefa_do_dia.py:339`, `:347`, `:358`). O intervalo de dias é inclusivo (`diff_e3_sombra.py:105-106`, `:114`).
+
+- **FILA — horizonte completo do DIFF não é controlado por `--agora`.** O comando entrega o instante à alimentação (`diff_e3_sombra.py:107`), mas esta chama C6 (`juizes.py:1472`), cujo fallback pode ler `date.today()` (`juizes.py:1357`, `:575`). É dependência existente, sem leitura direta nova do relógio no comando; medir com instante presente ou tornar explícito o horizonte do C6 antes de alegar reprodução temporal integral.
+
+Mapa dos campos e funções:
+
+| Produção/escrita | Leitura |
+|---|---|
+| `alimentar_fila`: `juizes.py:1429-1438` | `alimentar_portas`, `juizes.py:1465`; tarefa, `tarefa_do_dia.py:409`, `:426-429` |
+| `alimentar_portas`: `juizes.py:1470-1476` | `folha/fora_da_folha.py:62`; `vigia_fio.py:604`; `cadastro_realidade.py:484`; C17, `juizes.py:1545`; DIFF, `diff_e3_sombra.py:107` |
+| Projeção tarefa: `tarefa_do_dia.py:433-434`; projeção C17: `juizes.py:1556-1557` | Folha lê fio/fila em `fora_da_folha.py:78`, `:225`; vigia lê verbos/rota em `vigia_fio.py:643-646`; cadastro lê existência em `cadastro_realidade.py:488`; DIFF lê em `diff_e3_sombra.py:43`, `:50-57`, `:133-134` |
+| `agora`: entrada/parsing `diff_e3_sombra.py:83-88`, guarda `tarefa_do_dia.py:317` | `tarefa_do_dia.py:339`, `:347`, `:350`, `:358`, `:363`, `:411` |
+| `dia_do_turno`: argumento `tarefa_do_dia.py:442`, saída `:177`; pergunta agrupada por `data_evento`, `:324-329` | Instâncias e seleção, `:393`, `:400-405` |
+| `data_civil`: conversão do instante do marco, `tarefa_do_dia.py:102` | Saída por instância, `:186`, sem substituir a chave de agrupamento `:329` |
+| `status_local`: nascimento `models.py:1095`; mudança `:228-229`, persistência `:296` | `painel.py:155`, `:189` |
+| `silenciado_ate`: `arquivo.py:166-172`, `:202-210` | `painel.py:190`; `verbos.py:45`, `:48-51` |
+| `modulo_origem`: nascimento por `**campos`, `models.py:1095`, campo `:46` | `verbos.py:45`, `:47` → `catalogo/natureza.py:44-54` |
+| `urgencia`: nascimento `models.py:1095`; escala `:550-553`; rebaixa `:470-473`; restaura `:251-253` | `verbos.py:45`, `:60-61` |
+| `criado_em`: `auto_now_add`, `models.py:67` | Atraso, `verbos.py:45`, `:57-58` |
+| Dia da pergunta: `models.py:2786`, derivação `:2871-2875`; conversa civil `:2798` | Tarefa exclui conversa e agrupa por dia do fato, `tarefa_do_dia.py:325-329` |
+| Âncora: `fio.py:116-117` | `tarefa_do_dia.py:125`, `:362`; C17 `juizes.py:1549`; DIFF `diff_e3_sombra.py:63` |
+
+Outros escritores dinâmicos além dos produtores apontados não foram certificados exaustivamente **[nao verificado]**.
 
 ## 09/11 12:21 · sessao 56d01450e0e8 · - · - · origem=Ronald (tmux)
 
@@ -852,179 +972,4 @@ Correções relevantes ao aval:
 
 Inventário de escritores enviado nas mensagens anteriores: Empresa/Colaborador/EscalaColaborador; FolgaDia/calendários/agenda; Ausencia/TipoAusencia; AgendamentoFerias/PeriodoAquisitivo; ChamadoColaborador/PerguntaDisputa/DisputaSupervisao; FechamentoMensal/PeriodoFechado/RubricaDominio. O censo AST da cópia foi executado sem escrita; ele próprio declara que saves de parâmetros, forms e modelos dinâmicos podem permanecer não atribuíveis, portanto não prova completude sozinho (`app/core/censo_escritas.py:43-56`).
 
-## 09/11 11:39 · sessao 9d3a5d3f52b3 · - · - · origem=Ronald (tmux)
-
-Resultado das questões 4–6, somente leitura:
-
-**4. Frescor e invalidação**
-
-- O juiz compara `Max(FechamentoMensal.atualizado_em)` por empresa/mês/ano com `RetratoFolha.lavrado_em`; fechamento posterior significa `desatualizado`. O universo consultado contém apenas competências atual e anterior das empresas visíveis (`app/folha/retrato_folha.py:1287-1306`).
-- A view lê esse juiz e recorta avisos para a competência e empresas exibidas, sem comparar carimbos por conta própria (`app/folha/views_retrato.py:199-210`).
-- Estados do juiz: `nunca lavrado`, `desatualizado`, `atualizado`; suas frases vêm de `_rotulo_admin` (`app/folha/retrato_folha.py:1276-1277`, `app/folha/retrato_folha.py:1323-1329`).
-- A barra mostra o aviso de desatualização ou `atualizado HH:MM`; sem retrato, a lista mostra “Sem retrato lavrado”. Nesse fluxo não há estado `atualizando` ou `falhou` (`app/templates/folha/_retrato_barra.html:19-22`, `app/templates/folha/_retrato_lista.html:17-20`).
-- `FechamentoMensal.atualizado_em` é `auto_now=True` (`app/ponto/models.py:479`).
-- Escritores que movem o carimbo: criação/lavra por `recalcular_fechamento_mes` (`app/ponto/services/fechamento.py:898-900`, `app/ponto/services/fechamento.py:1143-1161`); `aprovar` com save completo (`app/ponto/services/fechamento.py:1335-1340`); `restaurar_fechamento` (`app/ponto/services/fechamento.py:1392-1393`); `reabrir_periodo` (`app/ponto/services/fechamento.py:1449-1452`); `invalidar_previsto` (`app/ponto/services/fechamento.py:1610-1613`); `invalidar_fechamento` (`app/ponto/services/fechamento.py:1652-1656`).
-- Escritores que escrevem fechamento **sem mover esse carimbo**: `aprovar_lote` faz update sem `atualizado_em`; `reabrir_lote` também; `reabrir` faz save com `update_fields` que o omite (`app/ponto/services/fechamento.py:1329-1332`, `app/ponto/services/fechamento.py:1344-1354`). Portanto, o comentário “sobe em TODO save” precisa dessa ressalva (`app/folha/retrato_folha.py:1264`).
-- A afirmação genérica do aval de que escala/veredito/ausência não invalidam não descreve todos os caminhos desta cópia: save de `EscalaColaborador` chama `invalidar_previsto` por signal (`app/escala/signals.py:124-133`); edição e decisão de ausência chamam `invalidar_fechamento` (`app/ponto/services/ausencia.py:509-524`, `app/ponto/services/ausencia.py:935-948`); regeneração de células pode recalcular por competência (`app/ponto/portas/celula.py:445-458`).
-- Essas invalidações são condicionais: `invalidar_previsto` só atualiza linhas com `previsto_em` preenchido; `invalidar_fechamento` só atualiza linhas com `derivado_em` preenchido (`app/ponto/services/fechamento.py:1611-1613`, `app/ponto/services/fechamento.py:1652-1656`).
-- `recalcular_por_evento` agenda no `on_commit` a lavra do fechamento do colaborador na competência do fato; falha gera warning, sem propagar exceção (`app/ponto/services/fechamento.py:1798-1827`).
-- Chamadores dessa rederivação incluem batida, decisão de HE, folga aceita e validação de disputa (`app/ponto/registro_batida.py:177-178`, `app/ponto/portas/he.py:201-202`, `app/chamados/services/validacao.py:360-361`, `app/chamados/services/validacao.py:445-446`).
-- A família declara `ponto/services/fechamento.py` como porta única; o teste de censo AST tem allowlist e pendentes vazios e verifica escritores externos (`app/folha/tests/test_chokepoint_folha_gate.py:6-9`, `app/folha/tests/test_chokepoint_folha_gate.py:28-31`, `app/folha/tests/test_chokepoint_folha_gate.py:58-62`, `app/folha/tests/test_chokepoint_folha_gate.py:72`).
-
-**5. Custo**
-
-- O comando aceita uma empresa e competência explícitas; sem os filtros, percorre todas as empresas visíveis e competências anterior/atual. Portanto, suporta a unidade empresa × competência, mas a execução padrão é frota × duas competências (`app/folha/management/commands/lavrar_retrato_folha.py:38-40`, `app/folha/management/commands/lavrar_retrato_folha.py:48-65`).
-- A configuração do cron usa `--apply` sem `--empresa`; o comentário confirma uma corrida após todas as empresas do gatilho (`app/config/crons.py:1606-1609`, `app/config/crons.py:1627-1629`).
-- Cada `montar_linhas(empresa, mes, ano)` chama `fora_da_folha` uma vez; esta chama `dias_que_seguram`, que chama `classificar_export` uma vez. Assim, **uma chamada a `classificar_export` por empresa × competência**, oito no exemplo de quatro empresas × duas competências (`app/folha/retrato_folha.py:1156-1160`, `app/folha/fora_da_folha.py:160-162`, `app/folha/fora_da_folha.py:118-119`).
-- Produção histórica documentada: **17,8 s para oito retratos**, quatro empresas × duas competências, em 11/10; os subtotais são por empresa com duas competências: emp1 1,31 s; emp2 11,04 s; emp3 3,77 s; emp4 1,65 s. Não constituem medição por empresa × competência (`app/config/crons.py:1591-1594`; repetido na docstring `app/folha/management/commands/lavrar_retrato_folha.py:21-22`).
-- Outra execução registrada informa **12 s para oito retratos**, atuais/anterior, às 02:52 (`app/docs/RELATO.md:5193`); outra passagem registra oito retratos em 12 s pela via homologada, carimbo de 21/10 18:49:53 (`app/docs/RELATO.md:5533-5534`).
-- Há medição **unitária de sombra**, não produção nem tempo integral do lavrador: `fora_da_folha` real de emp2 × competência 11 passou de 7,3 s para 32,0 s no ensaio F5C de 30/10 (`app/docs/RELATO.md:1132`).
-- Há ensaio de sombra que registra **10,8 s para o ATO3 `lavrar_retrato_folha`**, com aviso de ambiente de teste em quatro núcleos; não é medida unitária de produção (`app/docs/RELATO.md:4764`).
-- `crons_duracao.json` contém **39 s** para o comando (`app/config/crons_duracao.json:49`). Isso é valor de agendamento calculado por **p95 das corridas dos últimos sete dias × 1,5, piso de 30 s**, não duração medida de uma unidade (`bin/crons_duracao.py:9-13`, `bin/crons_duracao.py:69-76`). O arquivo informa fonte `app/logs/placar.jsonl`, geração em 31/10, janela sete dias (`app/config/crons_duracao.json:106-110`).
-- O teste comprova uma linha por empresa/competência e idempotência, não benchmark de produção (`app/folha/tests/test_retrato_folha_contador.py:265-280`).
-- Custo atual medido em produção por empresa × competência: **[nao verificado]**. Não dividir os totais de oito retratos e apresentar a média como medição unitária.
-
-**6. Lei escrita**
-
-- O48 está registrada como fechamento = leitura da célula soberana em qualquer período; “recalcular deixa de existir”, somente atos persistem (`app/docs/CORTES.md:174`, `app/docs/PROMPTS.md:1135`).
-- A etapa do retrato declara fonte existente, universo por empresa e competência, retrato gravado em lote e proibição de calcular ao abrir a tela; chama isso de complemento da O48, sem lei nova (`app/docs/PROMPTS.md:1156`).
-- Rodar fora do horário do cron já é permitido pela regra de cron idempotente que “pode ser adiantado na mão” (`CLAUDE.md:246`); há aval específico para relavrar imediatamente pela porta e conferir com `classificar_export` (`app/docs/PROMPTS.md:1339`).
-- O padrão de evento/outbox e projeções já inclui retrato: `PLANO-PADROES` nomeia espelho, DiaPago, fechamento, retrato e pílulas como projeções reconstruíveis, além do outbox fora da pilha da batida (`app/docs/CORTES.md:288`).
-- O contrato outbox aprovado prescreve evento na mesma transação do veredito e consumidor idempotente a cada minuto; isso é a autorização escrita do mecanismo existente, não prova de que já consome eventos para relavrar retrato (`app/docs/CORTES.md:351`).
-- O aval de 22/10 registra invalidação por evento, depois recolocada após 20/20; é registro de ordem, não proibição permanente de lavra fora do cron (`app/docs/PROMPTS.md:1339`, `app/docs/PROMPTS.md:1341`).
-- Substituir o anterior está implementado pelo escritor único com `update_or_create(empresa, mes, ano)` (`app/folha/management/commands/lavrar_retrato_folha.py:74-76`), restrição única no banco (`app/folha/models.py:362-364`) e teste de segunda lavra preservando a mesma PK e uma linha (`app/folha/tests/test_retrato_folha_contador.py:270-280`).
-- A docstring explicita “SUBSTITUI, um por empresa+competência” (`app/folha/models.py:314-317`); a lei geral exige um escritor por entidade e idempotência “2x = mesmo estado, 1 linha de trilha, 0 duplicata” (`CLAUDE.md:173-175`).
-- A L-121 manda reconstruir projeções pela porta quando pousa cura de juiz, observando competência exportada e DIFF/reversão (`app/docs/LEIS.md:142`).
-- Para as duas perguntas delimitadas — execução fora do cron e substituição por empresa/competência — não identifiquei pergunta adicional de lei: as regras acima já cobrem ambas. A exigência de não propor lei nova por iniciativa própria está expressa (`app/docs/LEIS.md:138`, `CLAUDE.md:266-270`).
-
-Sugestão de fechamento do laudo consolidado: `perguntas de lei: 0`, seguido de lista vazia ou “Nenhuma”, com as referências acima.
-
-## 09/11 11:15 · sessao 8db4566726fa · O10-D-PERMUTA-NA-TELA · censo · origem=Code
-
-1) **Há entradas genéricas pelo app/PWA; pedido próprio de permuta, com o par estruturado, não foi confirmado [nao verificado].** `Ausencia` guarda uma pessoa e um período; `ChamadoColaborador` guarda solicitação textual e contexto JSON, sem campos próprios para os dois lados da troca (`app/ponto/models.py:743`; `app/ponto/models.py:786`; `app/chamados/models.py:38`).
-
-| Entrada existente | Endpoint, view e gravação |
-|---|---|
-| Ausência pelo app | `GET/POST /api/ausencias/` → `api_ausencias`; o POST chama `criar_ausencia`, identificando o colaborador e `registrado_por=request.user` (`app/api/urls.py:82`; `app/api/views.py:1700`; `app/api/views.py:1836`). |
-| Ausência pelo PWA | `/ponto/ausencias/submeter/` → `submeter_ausencia`; chama a mesma porta e renderiza `ponto/submeter_ausencia.html` (`app/ponto/urls.py:64`; `app/ponto/views.py:2467`; `app/ponto/views.py:2536`; `app/ponto/views.py:2560`). |
-| Solicitação textual pelo app | `POST /api/chamados/abrir/` → `api_abrir_chamado`; grava assunto, descrição, classificação, urgência e `modulo_origem='app_colaborador'` (`app/api/urls.py:87`; `app/api/views.py:2153`; `app/api/views.py:2201`). |
-| Solicitação textual pelo PWA | `/chamados/abrir/` → `abrir_chamado`, serviço `abrir_chamado_local`, template `chamados/form_abertura.html` (`app/chamados/urls.py:10`; `app/chamados/views.py:147`; `app/chamados/views.py:196`). |
-
-A taxonomia dos chamados contém **“Escala / Turno” → “Troca de turno”**, permitindo um pedido textual dessa natureza; isso não constitui ligação estruturada entre duas cartas ou efetivação da troca (`app/chamados/classificador.py:38`; `app/api/views.py:2201`).
-
-`Ausencia` contém colaborador, tipo, `data/data_fim`, minutos, dias corridos, horários de cobertura parcial, descrição, documento, prazo, chamado de origem, documento de referência, status, autor e carimbos de aprovação/criação (`app/ponto/models.py:743`; `app/ponto/models.py:768`; `app/ponto/models.py:776`; `app/ponto/models.py:799`). O tipo aceito vem do catálogo vivo; a disponibilidade real de `troca_de_plantao` nesse cadastro é **[nao verificado]**, e esse código não consta das choices estáticas do modelo (`app/ponto/services/ausencia.py:193`; `app/api/views.py:1883`; `app/ponto/models.py:661`).
-
-| Estado de `Ausencia` | Quem escreve no fluxo encontrado |
-|---|---|
-| `aguardando_documento` | `criar_ausencia` usa `estado_inicial`: tipo exige documento e não há anexo (`app/ponto/services/ausencia.py:333`; `app/ponto/services/ausencia.py:790`). |
-| `aguardando_decisao` | Criação com documento ou sem exigência dele; `anexar_documento` também transfere para esse estado; o escalonador faz isso quando vence o prazo documental (`app/ponto/services/ausencia.py:790`; `app/ponto/services/ausencia.py:873`; `app/ponto/services/ausencia.py:999`). |
-| `aprovada` / `rejeitada` | `decidir`, ato do DP, chama o escritor de status `mudar_estado` (`app/ponto/services/ausencia.py:808`; `app/ponto/services/ausencia.py:897`). |
-
-App e PWA também abrem o chamado `ausencia_colab`, com `ausencia_id`, data, tipo e presença de documento; ele avisa o DP e leva ao registro, sem decidir a ausência (`app/api/views.py:1871`; `app/ponto/views.py:2546`; `app/ponto/services/ausencia.py:637`; `app/ponto/services/ausencia.py:659`).
-
-Os chamados possuem os estados genéricos `aberto`, `em_analise`, `resolvido`, `fechado`, `cancelado`, `registrado` e `superado`; nascem pela fábrica `criar`, e a escrita posterior de `status_local` converge em `_gravar_estado`, incluindo ações de gestão por `transicionar` (`app/chamados/models.py:28`; `app/chamados/models.py:1054`; `app/chamados/models.py:201`; `app/chamados/services/acoes_chamado.py:313`).
-
-| Quem lê hoje no código | Registros consumidos |
-|---|---|
-| App | GET das últimas 30 ausências do próprio colaborador, com status e descrição; API de chamados visíveis do colaborador (`app/api/views.py:1876`; `app/api/views.py:1031`). |
-| Admin/DP | Lista de ausências, com filtros de tipo/status e ações; painel de chamados (`app/ponto/views.py:2155`; `app/ponto/urls.py:53`; `app/chamados/services/painel.py:96`). |
-| PWA “Meu Atendimento” | Solicitações e pendências do colaborador; a abertura de novas solicitações depende de `app_solicitacoes`, cujo valor real é **[nao verificado]** (`app/chamados/views.py:612`; `app/chamados/services/solicitacoes_no_app.py:1`). |
-| API mensageria/DP | Ausências, contagens por tipo/status e fila aguardando decisão (`app/api/views_mensageria.py:736`). |
-| Automação documental | `escalonar_documentos_ausencia` lê ausências aguardando documento; fechamento de chamados consulta a ausência associada (`app/ponto/management/commands/escalonar_documentos_ausencia.py:25`; `app/ponto/services/ausencia.py:992`; `app/ponto/services/ausencia.py:686`). |
-| Automação de chamados | `alertar_chamados_sla` lê a fila de chamados e trata vencimentos (`app/chamados/management/commands/alertar_chamados_sla.py:20`; `app/chamados/management/commands/alertar_chamados_sla.py:44`). |
-
-A API de perguntas permite responder uma `PerguntaDisputa` já existente do colaborador; um caminho que transforme essa resposta em par de permuta é **[nao verificado]** (`app/api/views.py:2616`; `app/api/views.py:2643`). Pedidos efetivamente existentes e execução desses crons em produção são **[nao verificado]**.
-
-2) **A porta efetiva duas edições de dia; não faz uma permutação de quatro células.** Ela põe `(cedente, data da carta cedente)` como folga e `(substituto, data da carta substituto)` como trabalho; não grava automaticamente o movimento inverso nas outras duas combinações pessoa/data (`app/ponto/portas/celula.py:673`).
-
-A assinatura é (`app/ponto/portas/celula.py:632`):
-
-```python
-trocar_plantao(
-    ausencia_cedente, ausencia_substituto, *,
-    autor, motivo, barrados=None, apesar_da_lavra=''
-)
-```
-
-| Argumento | Significado demonstrado |
-|---|---|
-| `ausencia_cedente` | Instância persistida de `Ausencia`; sua pessoa/data serão editadas para `trabalha=False` (`app/ponto/portas/celula.py:656`; `app/ponto/portas/celula.py:673`). |
-| `ausencia_substituto` | Outra `Ausencia`; sua pessoa/data serão editadas para `trabalha=True` (`app/ponto/portas/celula.py:659`; `app/ponto/portas/celula.py:673`). |
-| `autor` | Objeto com `pk`, usado como autor da edição e da trilha (`app/ponto/portas/celula.py:646`; `app/ponto/portas/celula.py:668`; `app/ponto/portas/celula.py:686`). |
-| `motivo` | Texto obrigatório após `strip`, incluído nas trilhas (`app/ponto/portas/celula.py:648`; `app/ponto/portas/celula.py:668`; `app/ponto/portas/celula.py:691`). |
-| `barrados` | Lista opcional que recebe motivos de recusa, incluindo lavra e falta de vínculo (`app/ponto/portas/celula.py:571`; `app/ponto/portas/celula.py:586`; `app/ponto/portas/celula.py:694`). |
-| `apesar_da_lavra` | Valor repassado aos dois lados; quando verdadeiro, pula a guarda de lavra e fica registrado na trilha (`app/ponto/portas/celula.py:568`; `app/ponto/portas/celula.py:614`; `app/ponto/portas/celula.py:668`). |
-
-As cartas são relidas do banco com trava, usando seus `pk`; a porta exige `documento` preenchido, mas não verifica conteúdo ou existência física do arquivo (`app/ponto/portas/celula.py:656`; `app/ponto/portas/celula.py:664`). Nos chamadores de teste, vêm de `Ausencia.objects.create`, com tipo `declaracao` e status `aguardando_decisao`; a montagem do par por um chamador de produção presente nesta cópia é **[nao verificado]** (`app/ponto/tests/test_o10b_editar_dia_troca.py:106`).
-
-| Condição | Comportamento atual da porta |
-|---|---|
-| Autor ausente / motivo vazio | Levanta `ValueError`; não retorna `recusada` nesses casos (`app/ponto/portas/celula.py:646`). |
-| Um lado ausente, registro apagado, mesma pessoa ou falta de uma carta | Retorna `recusada`, com motivo em `barrados` quando fornecido (`app/ponto/portas/celula.py:653`; `app/ponto/portas/celula.py:694`). |
-| Interjornada de 11h | **Não há checagem de descanso ou consulta aos turnos vizinhos** no corpo da troca/edição (`app/ponto/portas/celula.py:559`; `app/ponto/portas/celula.py:646`). |
-| Sobreposição de turnos | **Não há checagem geométrica de sobreposição** antes das edições (`app/ponto/portas/celula.py:668`; `app/ponto/portas/celula.py:675`). |
-| Competência exportada/lavrada | Cada lado passa pela guarda de `editar_dia`; se barrar, o par retorna `recusada` e desfaz o outro lado (`app/ponto/portas/celula.py:568`; `app/ponto/portas/celula.py:675`). |
-| Alcance da lavra | Inclui TXT vigente **ou holerite publicado do próprio colaborador**; não equivale simplesmente a `FechamentoMensal.status` (`app/ponto/management/commands/gerar_celulas.py:126`; `app/folha/export.py:589`). |
-| Permissão | Exige identificação de autor, mas não verifica `is_staff`, perfil, `tem_acao` ou permissão contextual (`app/ponto/portas/celula.py:646`; `app/ponto/portas/celula.py:668`). |
-| Vínculo | Recusa se o juiz do vínculo do dia não devolver vínculo; não exige que os dois tenham o mesmo vínculo, tipo de escala ou empresa (`app/ponto/portas/celula.py:584`; `app/ponto/portas/celula.py:673`). |
-| Datas iguais/diferentes | Não compara as datas. Há testes escritos esperando sucesso tanto na mesma data quanto em datas/competências diferentes (`app/ponto/portas/celula.py:673`; `app/ponto/tests/test_o10b_editar_dia_troca.py:178`; `app/ponto/tests/test_o10b_editar_dia_troca.py:260`). |
-| Tipo/status/período das cartas | Não exige tipo específico ou aprovação; usa somente `Ausencia.data`, sem recusar `data_fim > data` (`app/ponto/portas/celula.py:656`; `app/ponto/portas/celula.py:675`; `app/docs/BACKLOG.md:1876`). |
-
-Portanto, dos quatro controles citados no aval, **interjornada, sobreposição e permissão do autor não são recusas implementadas**; há somente identificação do autor. A guarda de competência lavrada existe, com a abertura explícita por `apesar_da_lavra` (`app/ponto/portas/celula.py:646`; `app/ponto/portas/celula.py:568`; `app/ponto/portas/celula.py:675`).
-
-O substituto recebe os marcos do **próprio vínculo/template naquela data**, não os horários copiados do cedente; o produtor `montar_dna` congela esses marcos (`app/ponto/portas/celula.py:584`; `app/ponto/portas/celula.py:591`; `app/ponto/management/commands/gerar_celulas.py:73`).
-
-A transação principal do par é **um `atomic` externo**, contendo as duas chamadas de `editar_dia`; cada edição possui seu `atomic` aninhado, e cada gravação de auditoria usa outro savepoint. Não são dois commits independentes para os lados (`app/ponto/portas/celula.py:652`; `app/ponto/portas/celula.py:592`; `app/core/observ.py:133`). As cartas e células são travadas; as células seguem ordem por `(colaborador_id, data)` (`app/ponto/portas/celula.py:657`; `app/ponto/portas/celula.py:593`; `app/ponto/portas/celula.py:673`).
-
-Quando ambos mudam, grava duas edições e suas trilhas `editar_dia`, mais uma trilha `trocar_plantao`; se ambos já estiverem iguais, retorna `igual` sem essas novas gravações. Falha obrigatória de trilha levanta exceção e desfaz o ato (`app/ponto/portas/celula.py:594`; `app/ponto/portas/celula.py:611`; `app/ponto/portas/celula.py:619`; `app/ponto/portas/celula.py:679`; `app/ponto/portas/celula.py:686`).
-
-Há efeitos adicionais condicionais: marca de cobrança órfã no mesmo ato; rejulgamento de dias já alcançados pelo relógio, salvo vereditos humanos; agendamento do recálculo financeiro, rejunção e reavaliação de falta após commit. Assim, **o conjunto inteiro de efeitos não cabe numa quantidade fixa de transações**, embora o par editado tenha uma transação principal (`app/ponto/portas/celula.py:625`; `app/ponto/portas/celula.py:422`; `app/ponto/portas/celula.py:445`; `app/ponto/portas/celula.py:490`; `app/ponto/services/fechamento.py:1824`).
-
-Os chamadores concretos encontrados estão no teste O10-B: helper e chamadas diretas para confirmação, incompletude, repetição e par vazio (`app/ponto/tests/test_o10b_editar_dia_troca.py:112`; `app/ponto/tests/test_o10b_editar_dia_troca.py:193`; `app/ponto/tests/test_o10b_editar_dia_troca.py:226`; `app/ponto/tests/test_o10b_editar_dia_troca.py:246`; `app/ponto/tests/test_o10b_editar_dia_troca.py:307`). O relato menciona um lote `trocas_plantao_lote_o10c.py:160`, mas esse arquivo/chamador não foi localizado nesta cópia: **[nao verificado]**; o próprio relato registra ausência de chamador de UI (`app/docs/RELATO.md:426`).
-
-3) **Os leitores principais consultam a célula, mas há leituras diretas dos horários da base.** `EC.eh_dia_trabalho` retorna `cel.trabalha`; `EC.marcos_do_dia` lê `cel.dna.marcos` antes do fallback ao template (`app/escala/models.py:1087`; `app/escala/models.py:1117`).
-
-| Leitor | Caminho comprovado |
-|---|---|
-| Espelho admin | View → `espelho_do_colab`; previsto da competência por `grade_da_celula` (`app/ponto/views.py:157`; `app/ponto/services/espelho.py:506`). |
-| Espelho app | Usa `espelho_do_colab`; há exceção nos horários dos dias sem card, abaixo (`app/api/views.py:1379`; `app/api/views.py:1611`). |
-| PDF do espelho | Dias por `espelho_do_colab`; coluna “Previsto” usa template diretamente, abaixo (`app/relatorios/pdf_espelho.py:596`; `app/relatorios/pdf_espelho.py:903`). |
-| Calendário admin | Grade por `grade_da_celula`, status por `status_dos_dias_lavrados`, rubricas por `DiaPago` (`app/colaboradores/services/calendario.py:332`; `app/colaboradores/services/calendario.py:602`; `app/colaboradores/services/calendario.py:655`). |
-| Calendário/escala app | `eh_dia_trabalho` para trabalho/folga; template direto para horários (`app/api/views.py:950`; `app/api/views.py:955`). |
-| Escala PWA e agenda admin | Usam `EC.eh_dia_trabalho` e `EC.marcos_do_dia` (`app/escala/views.py:38`; `app/colaboradores/views.py:2223`; `app/colaboradores/views.py:2232`). |
-| Folha/motor | Fechamento consulta `eh_dia_trabalho`, fornece células e chama apuração com EC; o motor consulta os métodos do EC (`app/ponto/services/fechamento.py:729`; `app/ponto/services/fechamento.py:750`; `app/ponto/services/fechamento.py:278`; `app/ponto/motor_calculo_v2.py:2290`; `app/ponto/motor_calculo_v2.py:2447`). |
-| TXT | Verbas vêm de `FechamentoMensal`; retenção consulta células e a grade delega a `grade_da_celula`, sem recalcular os valores pelo template (`app/folha/export.py:703`; `app/folha/export.py:1206`; `app/folha/export.py:329`). |
-
-Os leitores diretos da base encontrados nesses caminhos são:
-
-| Leitura direta | Efeito sobre o dia trocado |
-|---|---|
-| `/api/escala/v2/`: `te.marcos_do_dia` | Horários não vêm do DNA; trabalho/folga vem da célula (`app/api/views.py:950`; `app/api/views.py:955`; `app/api/views.py:968`). |
-| Espelho app, dias sem card: `tipo_escala.marcos_do_dia` | Mesma separação: célula decide trabalho/folga, template fornece horários previstos (`app/api/views.py:1611`; `app/api/views.py:1613`; `app/api/views.py:1639`). |
-| Bloco escala de `/api/me/`, nas duas cascas | Horários vêm do template; não representa uma leitura dos marcos congelados do dia (`app/api/views.py:259`; `app/api/views_core.py:248`). |
-| Coluna “Previsto” do PDF | Usa `tipo_escala.hora_inicio/hora_fim` nas linhas com turnos, sem consultar o DNA daquela linha (`app/relatorios/pdf_espelho.py:903`; `app/relatorios/pdf_espelho.py:978`). |
-| Resumos/cabeçalhos de escala | Tela, PDF e “minha escala” apresentam horários da base; as linhas da escala PWA continuam usando EC (`app/ponto/services/espelho.py:201`; `app/relatorios/pdf_espelho.py:730`; `app/templates/escala/minha_escala.html:33`; `app/escala/views.py:43`). |
-| Caminho antigo `montar_grade_prevista`, sem mapa de DNA | Trabalho passa pelo EC, mas horários podem vir diretamente do template; existe chamador sem mapa (`app/escala/utils.py:760`; `app/escala/utils.py:767`; `app/escala/utils.py:1016`). |
-
-Esses caminhos podem mostrar **horários incompatíveis com a célula** quando template/escala ativa e DNA/geradora divergem; não permitem afirmar que toda troca apareceria errada, pois o trabalho/folga passa pela célula e a própria troca gera o DNA do substituto a partir do template dele. Divergência concreta de um par de produção: **[nao verificado]** (`app/api/views.py:950`; `app/api/views.py:1611`; `app/ponto/portas/celula.py:591`; `app/ponto/management/commands/gerar_celulas.py:81`).
-
-Fora desses consumidores principais, também há leitura direta da base na correção E/S retroativa, no propositor, na defesa de pergunta e no horário da cobrança “abriu e não bateu”; o efeito concreto deles sobre uma permuta é **[nao verificado]** (`app/api/views.py:619`; `app/api/views_core.py:612`; `app/ponto/propositor.py:334`; `app/chamados/juizes.py:1546`; `app/ponto/services/abriu_nao_bateu.py:193`).
-
-4) **Os seis campos explícitos da edição são escritos por `editar_dia`, dentro da porta canônica da célula.** Gerar, regenerar e reverter são outras operações do mesmo módulo, não escritores externos (`app/ponto/portas/celula.py:600`; `app/ponto/portas/celula.py:609`; `app/core/portas.py:107`).
-
-| Campo | Escrita e leitores encontrados |
-|---|---|
-| `trabalha` | Troca escreve `False/True`; outros atos da porta também o escrevem. Leitores: `EC.eh_dia_trabalho`, grade, cartório e detalhe do dia (`app/ponto/portas/celula.py:673`; `app/ponto/portas/celula.py:243`; `app/ponto/portas/celula.py:788`; `app/ponto/portas/celula.py:849`; `app/escala/models.py:1096`; `app/escala/services/leitor_celula.py:381`; `app/ponto/services/cartorio.py:1408`; `app/ponto/services/dia_do_colab.py:91`). |
-| `dna` | Produzido por `montar_dna`, gravado pela edição; gerar/regenerar/reverter também escrevem. Leitores: marcos, pausas, extra declarada, cartório e juiz de batida (`app/ponto/portas/celula.py:591`; `app/ponto/portas/celula.py:604`; `app/ponto/portas/celula.py:244`; `app/ponto/portas/celula.py:786`; `app/ponto/portas/celula.py:849`; `app/escala/models.py:1124`; `app/escala/models.py:1189`; `app/escala/models.py:1235`; `app/ponto/services/cartorio.py:1348`; `app/ponto/juiz_batida.py:158`). |
-| `escala_geradora` | Edição escreve o vínculo escolhido para aquele dia; geração/regeneração/reversão também escrevem. O juiz `vinculo_do_dia` lê a geradora e exige sua vigência (`app/ponto/portas/celula.py:584`; `app/ponto/portas/celula.py:605`; `app/ponto/portas/celula.py:259`; `app/ponto/portas/celula.py:789`; `app/ponto/portas/celula.py:849`; `app/escala/alimentacao.py:269`). |
-| `origem` | Edição escreve `'editada'`; geração automática escreve `'gerada'`. Regeneração/reversão restringem-se a gerada; geração pula editada; vigias de template também filtram gerada (`app/ponto/portas/celula.py:606`; `app/ponto/portas/celula.py:259`; `app/ponto/portas/celula.py:238`; `app/ponto/portas/celula.py:777`; `app/ponto/portas/celula.py:854`; `app/ponto/management/commands/tripwire_celulas.py:21`; `app/escala/management/commands/celulas_contra_o_template.py:29`). |
-| `editada_em` | Edição escreve o instante atual. Leitores: carimbos de reescrita/cobrança órfã, fato novo do cartório, invalidação de perguntas, fase 12x36 e detalhe do dia (`app/ponto/portas/celula.py:598`; `app/ponto/portas/celula.py:607`; `app/escala/services/regeneracao.py:72`; `app/ponto/services/cartorio.py:365`; `app/chamados/veredito_lavrado.py:176`; `app/escala/services/fase_12x36.py:188`; `app/ponto/services/dia_do_colab.py:94`). |
-| `editada_por` | Edição escreve `autor`; `_estado_da_edicao` lê para a trilha. Outro leitor de produção dessa identidade: **[nao verificado]** (`app/ponto/portas/celula.py:608`; `app/ponto/portas/celula.py:531`). |
-
-Todos esses campos também são lidos para antes/depois e idempotência; se a célula não existir, a edição cria `colaborador/data`, e `gerada_em` nasce automaticamente. As autoridades consultam a célula por essa chave, e os relógios de invalidação leem `gerada_em` (`app/ponto/portas/celula.py:524`; `app/ponto/portas/celula.py:594`; `app/ponto/portas/celula.py:600`; `app/escala/models.py:1702`; `app/escala/models.py:1092`; `app/chamados/veredito_lavrado.py:178`).
-
-A edição não escreve os campos de regeneração `regenerada_em/regeneracoes/dna_anterior`; tampou
-
-[truncado em 20000 de 25142 caracteres]
-
-_3133 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3135 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
