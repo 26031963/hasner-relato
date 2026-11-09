@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 05:35:37.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (179.6 MB). Acoes na janela: **908**.
+**Medido em 09/11/2026 05:41:05.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (179.6 MB). Acoes na janela: **913**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:38:44 | Bash | Update RELATO ESPERANDO and I-1 line | `cd /home/ronald/saas-hasner && sed -i '2s/.*/ESPERANDO: trava_teste.sh \| pid=4010880/' app/docs/RELATO.md && sed -i '2a SELOS-CANON-I1 05:3x: suite v5 (f0103bef) VERDE -- OK (skipped=42, expected failures=41), Ran 14570, rc 0 (logs/selos_canon/i1_suite_v5.log). Opus final aberto (verificador, B3 rearmado NOITE-NON-STOP-0911; laudo i1_opus_final.md). Pouso de instrumento proprio depois, fora da ja ...` |
+| 05:38:42 | Agent | Opus final SELOS-CANON-I1 | `Obra SELOS-CANON-I1 (CENSO-ANTES-DA-VAGA): verificador FINAL e dono do veredito antes do pouso. Instrumento de host, nao codigo de negocio. Voce nao viu a construcao. Somente leitura: nao edite nada, nao rode python/py_compile dentro da copia, nao rode a suite, nao mate processo nem container. Copia: /home/ronald/wt-i1-censovaga-015903 (HEAD f0103befd, base main 6adca14fe). Diff total: /home/ronal ...` |
+| 05:38:24 | Bash | Read I-1 RELATO history lines | `cd /home/ronald/saas-hasner && grep -n "SELOS-CANON-I1" app/docs/RELATO.md \| head -8 \| cut -c1-600; grep -rn "I-1\b.*contrato\\|^I-1" logs/selos_canon/contratos.r 2>/dev/null \| head -3` |
+| 05:38:21 | Bash | Build I-1 final diff and list artefacts | `cd /home/ronald/wt-i1-censovaga-015903 && D=/home/ronald/saas-hasner/logs/selos_canon && git diff 6adca14fe f0103befd > $D/i1_diff_final.diff && git diff --stat 6adca14fe f0103befd && ls $D \| grep -i "i1_" \| head -50` |
+| 05:38:14 | Bash | Read I-1 suite v5 verdict and trava holder | `cd /home/ronald/saas-hasner && L=logs/selos_canon/i1_suite_v5.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran ' $L \| tail -1; tail -1 $L; grep -E '^(FAIL\|ERROR):' $L \| head; date '+%H:%M'; bin/trava_teste.sh --quem` |
 | 05:24:39 | Bash | Log PAR preverif v4 triage in RELATO | `cd /home/ronald/saas-hasner && sed -i '2a PAR-NAO-ADJACENTE 05:2x: preverif v4 Codex (preverif_v4.r) sem achado de codigo procedente; triagem logs/par_nao_adjacente/triagem_v4.txt (achados 2/3 = rota do apply, antes do apply; mutantes <=/< equivalentes por timestamp unico ponto/models.py:106, descartado, anexo ao opus). Suite inteira v5 de d361dfee na fila atras do I-1 (suite_v5.log); depois opus  ...` |
 | 05:24:37 | Bash | Queue PAR full suite v5 on d361dfee | `bash /home/ronald/saas-hasner/logs/par_nao_adjacente/lancar_suite_v5.sh` |
 | 05:24:35 | Bash | Confirm PAR copy clean at d361dfee | `cd /home/ronald/wt-codex-par-nao-adjacente-031500 && git status --porcelain && git log --oneline -1` |

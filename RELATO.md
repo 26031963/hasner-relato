@@ -1,5 +1,6 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: trava_teste.sh | pid=3653274
+ESPERANDO: trava_teste.sh | pid=4010880
+SELOS-CANON-I1 05:3x: suite v5 (f0103bef) VERDE -- OK (skipped=42, expected failures=41), Ran 14570, rc 0 (logs/selos_canon/i1_suite_v5.log). Opus final aberto (verificador, B3 rearmado NOITE-NON-STOP-0911; laudo i1_opus_final.md). Pouso de instrumento proprio depois, fora da janela 06:00-07:30.
 PAR-NAO-ADJACENTE 05:2x: preverif v4 Codex (preverif_v4.r) sem achado de codigo procedente; triagem logs/par_nao_adjacente/triagem_v4.txt (achados 2/3 = rota do apply, antes do apply; mutantes <=/< equivalentes por timestamp unico ponto/models.py:106, descartado, anexo ao opus). Suite inteira v5 de d361dfee na fila atras do I-1 (suite_v5.log); depois opus final 2.
 SELOS-CANON-I1 05:1x: suite v4 (f2cb8705) FAILED 1 em 14570, rc 1 -- so a catraca LINHAS_REGISTRADAS esteira_vigia.py::instante_de_ontem 1040->1082 (texto identico base x copia). Commit f0103bef na copia; suite v5 na trava (logs/selos_canon/i1_suite_v5.log). Depois: opus final e pouso proprio de instrumento.
 PAR-NAO-ADJACENTE 05:2x VOLTA 4 commitada na copia d361dfee (construtor Codex rc 0): escala/utils.py::_papeis_do_turno -- pausa abaixo do piso que toca/cruza intervalo sai dos pares; dois intervalos em conflito = HEAD adjacente (lei aberta). Catraca +8 conferida por texto 9/9. Ensaio movido a logs/par_nao_adjacente/. Preverif v4 (Codex verificador) lancado; depois suite inteira e opus final 2.
