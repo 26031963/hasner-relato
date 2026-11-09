@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 05:51:19.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (179.8 MB). Acoes na janela: **912**.
+**Medido em 09/11/2026 05:56:11.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (179.8 MB). Acoes na janela: **915**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:54:32 | Bash | Log I-1 postmortem classes in RELATO | `cd /home/ronald/saas-hasner && sed -i '3a SELOS-CANON-I1 05:5x POSTMORTEM opus 1 (Codex censo, logs/selos_canon/i1_postmortem_opus1.r): achado 1 = (a) FALHA DO CODEX (v1 viu _fila1_viva -> _itens_andaveis sem ligar celula qualificada x id nu; v3 viu `O9 (C)` vs glob, triagem marcou procedente-menor); 2 = (e) nao perguntado (Code); 3 = (e) retirar PAREI + (a) papel leitura como prova; 4/5 = codigo  ...` |
+| 05:54:24 | Bash | Read rest of postmortem | `cd /home/ronald/saas-hasner && tail -c +5000 logs/selos_canon/i1_postmortem_opus1.r \| head -c 4000` |
+| 05:54:21 | Bash | Read I-1 postmortem classification | `cd /home/ronald/saas-hasner && tail -2 logs/selos_canon/i1_postmortem_opus1.out; head -c 5000 logs/selos_canon/i1_postmortem_opus1.r` |
 | 05:47:34 | Bash | Log I-1 reprova and dispatch in RELATO | `cd /home/ronald/saas-hasner && date '+%H:%M' && bin/trava_teste.sh --quem && sed -i '2a SELOS-CANON-I1 05:4x OPUS FINAL 1 REPROVA (logs/selos_canon/i1_opus_final.md): achado 1 BLOQUEIA conferido pelo Code (disjuntor.py:1647/:2213 pertenca por igualdade com a celula crua; BACKLOG.md:1826 ESMERIL-SEM-POLITICA (SILENCIADO-ATE-E-PRAZO) cai em FORA e o construtor nasce sem censo); 2-7 FILA (2 = CORTES. ...` |
 | 05:47:30 | Agent | I-1 construtor volta 5 | `Obra SELOS-CANON-I1 (CENSO-ANTES-DA-VAGA), CONSTRUTOR volta 5, apos a REPROVA do opus final 1. Instrumento de host em bin/ (por isso construtor opus, nao Codex: o Codex construtor so escreve <wt>/app). Copia: /home/ronald/wt-i1-censovaga-015903 (HEAD f0103befd; base main 6adca14fe). Escreva SO nessa copia (bin/ e bin/tests/; nada em app/ salvo se indispensavel e declarado). NUNCA edite /home/ronal ...` |
 | 05:47:04 | Bash | Run Codex postmortem of I-1 opus reprova | `bash /home/ronald/saas-hasner/logs/selos_canon/i1_lancar_postmortem1.sh` |

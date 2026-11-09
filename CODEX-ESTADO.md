@@ -1,7 +1,88 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 05:24** · publicado em **09/11/2026 05:24** (UTC-3)
+> Ultima resposta processada: **09/11/2026 05:54** · publicado em **09/11/2026 05:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 05:54 · sessao d3b19c436eee · SELOS-CANON-I1 · censo · origem=Code
+
+Numeração dos anexos: primeira linha após cada marcador `== anexo: ... ==` = linha 1.
+
+A última pergunta examina `eec4007f`; o RELATO registra a volta 4 “sem pre-verif v4”. Assim, **tema perguntado não significa código final examinado**. (`i1_preverif_v3.q:1`; `i1_relato.txt:3`.)
+
+1. **Pertencimento à fila por célula crua — (a): tema presente; escape específico não apontado.**
+
+   **Pergunta:** “Ha uma autoridade unica de ‘esta obra e fila 1’?” (`i1_preverif_v1.q:17`.)
+
+   **Resposta:** “**Nesta costura, não.** `_fila1_viva` chama diretamente `_itens_andaveis`”. A resposta examinou compartilhamento da autoridade, sem apontar a incompatibilidade entre célula qualificada e identidade extraída. (`i1_preverif_v1.r:64`; `i1_opus_final.md:2`.)
+
+   A v3 viu uma incompatibilidade próxima: “`_obra_de` admite `O9 (C)`, enquanto glob e publicação PAREI rejeitam espaço/parênteses”; a triagem a marcou **PROCEDENTE-menor**, sem registrar o escape por pertencimento. (`i1_preverif_v3.r:60`; `i1_triagem_v3.txt:4`.) Na cópia, a devolução da célula inteira e a comparação direta permanecem demonstráveis. (`bin/hook_stop_fila1.py:242`; `bin/disjuntor.py:1647`; `bin/disjuntor.py:2213`.)
+
+2. **CORTES descreve outra forma de espera — (e): NÃO PERGUNTADO especificamente.**
+
+   **Pergunta mais próxima:** “O diff realiza o aval literal anexo?” (`i1_preverif_v1.q:7`.)
+
+   **Resposta correspondente:** “Na tabela, ‘aval I-1’ refere-se ao parágrafo fornecido no anexo `aval_selos_do_canon_0811.txt`”. Isso delimita uma conferência do aval; não relata comparação entre a redação de CORTES e a forma viva. (`i1_preverif_v1.r:7`.)
+
+   As perguntas fornecidas não solicitam essa comparação documental; não há trecho específico de resposta identificando a divergência narrada pelo opus. (`i1_preverif_v1.q:7-27`; `i1_preverif_v2.q:7-22`; `i1_preverif_v3.q:7-21`; `i1_opus_final.md:3`.) A referência a `CORTES.md:428` fica como referência do laudo, sem confirmação independente dessa linha nesta cópia: **[nao verificado]**.
+
+3. **PAREI persistente, handoff e leitura usada como prova — classificação composta.**
+
+   **Retirar a linha quando o censo termina: (e).** A pergunta sobre o topo foi: “A linha inserida pode deslocar ou mascarar a linha 2 ESPERANDO/PAREI [...] ou a linha do B3?”. A resposta tratou exatamente do deslocamento: “`no_topo` acrescenta uma linha acima do painel vigente, preservando todas as anteriores”. Não houve pergunta específica sobre encerramento e retirada do PAREI. (`i1_preverif_v3.q:8-10`; `i1_preverif_v3.r:16`; perguntas completas em `i1_preverif_v1.q:7-27`, `i1_preverif_v2.q:7-22`, `i1_preverif_v3.q:7-21`.)
+
+   **Papel leitura bastar para provar censo: (a).** A pergunta solicitou examinar “o predicado de ESPERANDO provado”. A resposta descreveu que ele exige “obra exata e papel censo/leitura”, sem apontar como defeito uma leitura viva substituir censo em curso. (`i1_preverif_v1.q:19-21`; `i1_preverif_v1.r:76`.) Essa aceitação está explícita na cópia. (`bin/hook_stop_fila1.py:714`; `bin/hook_stop_fila1.py:751`.)
+
+   **Handoff após o encerramento: (a), quanto ao caso final.** O handoff estava expressamente incluído no censo dos leitores; a resposta descreveu sua prova pela primeira linha, sem identificar o caso final de PAREI remanescente. (`i1_preverif_v3.q:8-10`; `i1_preverif_v3.r:29`; `i1_opus_final.md:4`.)
+
+4. **Literal repetido e `%r` contaminando a identidade da espera — (a), quanto ao defeito semântico específico.**
+
+   **Pergunta:** “QUEM ESCREVE e QUEM LE cada linha de trilha [...] algum leitor supoe outro significado”. (`i1_preverif_v3.q:17-18`.)
+
+   **Resposta:** “Conta negativas; abre intervalo por obra somente quando reconhece `construtor de … sem CENSO`”; sobre PAREI, afirmou que os leitores “compartilham reconhecedor, porém selecionam recortes diferentes”. Não apontou a aspa capturada nem a repetição final do literal. (`i1_preverif_v3.r:89`; `i1_preverif_v3.r:91`.)
+
+   A costura final é verificável: a negativa usa `%r`, enquanto o leitor captura `(\S+)`; os dois literais citados pelo opus também existem. (`bin/disjuntor.py:1650`; `bin/disjuntor.py:2041`; `bin/hook_stop_fila1.py:420`; `bin/hook_stop_fila1.py:769`.) Essa implementação final sucedeu a última pre-verificação fornecida. (`i1_relato.txt:3`.)
+
+5. **Segundo reconhecedor cru mais largo — (a) pelo tema; implementação introduzida depois da última pergunta.**
+
+   **Pergunta:** “Fail-closed: excecao que deixa abrir? negacao espuria permanente de algo que hoje passa”. (`i1_preverif_v3.q:13-14`.)
+
+   **Resposta:** “A guarda de import e o fallback cru procuram literalmente `"Agent"` e `/wt-`”. O problema então apontado era a representação escapada do JSON; não era o reconhecedor final mais largo e sua negativa sem trava nomeada. (`i1_preverif_v3.r:56`; `i1_opus_final.md:6`.)
+
+   Na cópia, `_cru_abre_agent_copia` se declara da **volta 4** e, para texto ilegível, aceita qualquer `Agent` **ou** `wt-`; `_aberturas_construtor` exige outra combinação de condições. Portanto, há tema perguntado, mas não evidência de que o pre-verificador examinou essa implementação final. (`bin/disjuntor.py:67-84`; `bin/disjuntor.py:1683-1686`; `i1_relato.txt:3`.)
+
+6. **“Descartados” — exige classificação por subitem; o histórico não documenta um descarte uniforme.** (`i1_opus_final.md:7`; `i1_triagem_v2.txt:6-12`; `i1_triagem_v3.txt:7-9`.)
+
+   - **Escritores do RELATO fora da trava: (b).**  
+     **Pergunta:** “QUEM MAIS escreve e le o topo do RELATO”. (`i1_preverif_v3.q:8`.)  
+     **Resposta:** “`gerar_cortes` e `deploy_agendado` leem e regravam o RELATO inteiro diretamente”. (`i1_preverif_v3.r:38`.)   [nao verificado]
+     **Motivo do descarte:** “escritores anteriores a obra, fora do aval I-1”. (`i1_triagem_v3.txt:7`.)
+
+   - **`codex exec` direto: (b).**  
+     **Pergunta:** “liste TODAS as formas de abrir um construtor [...] quais escapam”. (`i1_preverif_v1.q:11-13`.)  
+     **Resposta:** “Uma chamada direta a `codex exec`, sem wrapper, não alcança essas portas de censo”. (`i1_preverif_v3.r:50`.)  
+     **Motivo do descarte:** “abertura fora do wrapper e rota proibida por conduta (CODEX 1)”. (`i1_triagem_v2.txt:9`.)
+
+   - **`SyntaxError` antes da guarda: visto e encaminhado como resíduo; corresponde a (b) com essa ressalva documental.**  
+     **Pergunta:** “excecao fora do try de main_pretool, import que falha antes”. (`i1_preverif_v2.q:11-12`.)  
+     **Resposta:** “`SyntaxError` no próprio módulo precede a instalação da guarda”. (`i1_preverif_v3.r:58`.)  
+     **Decisão registrada:** “residuo declarado, sem cura possivel no proprio modulo. Vai ao opus.” A triagem não usa aqui a palavra **DESCARTADO**. (`i1_triagem_v3.txt:9`.)
+
+   - **`COPIA_RE` não reconhecer `~/wt-*`: (a) para a grafia específica; antecedente genérico já visto.**  
+     **Pergunta:** “liste TODAS as formas de abrir um construtor”. (`i1_preverif_v1.q:11`.)  
+     **Resposta:** “Agent com cópia sem nome `wt-*`, caminho relativo ou cópia não citada [...] Não entra no ramo.” Portanto, a classe geral de caminhos já havia sido vista; `~/wt-*` não foi nomeado nessa resposta. (`i1_preverif_v1.r:40`.)  
+     **Motivo de descarte pelo Code:** **[nao verificado]**. As triagens fornecidas não registram descarte nominal desse caso. (`i1_triagem_v1.txt:2-10`; `i1_triagem_v2.txt:2-12`; `i1_triagem_v3.txt:2-9`.)
+
+   - **Agent com ID iniciado por dígito: (a) para esse caso específico; incompatibilidade de IDs já vista em termos próximos.**  
+     **Pergunta:** pede “o predicado exato de ‘obra reconhecida’”. (`i1_preverif_v2.q:8-10`.)  
+     **Resposta:** “O ID validado é `(?:[A-Z][A-Z0-9]*(?:-[A-Za-z0-9]+)+|[A-Z]+\d+[A-Z0-9]*)`”; a v3 observou que IDs como `ABC` continuam ilegíveis para o Agent. Nenhum desses trechos relata especificamente Agent com ID iniciado por dígito e censo fechado. (`i1_preverif_v2.r:38`; `i1_preverif_v3.r:60`.)  
+     **Descarte específico pelo Code:** **[nao verificado]**. O registro sobre IDs foi **PROCEDENTE**, com alegação de cura, e não descarte. (`i1_triagem_v2.txt:7`.)
+
+7. **Preservar os RED da worktree — (c): fora do alcance do material fornecido.**
+
+   **Pergunta mais próxima:** “os 4 mutantes declarados [...] mordem de verdade (leia as assercoes)?”. Trata de mordida, sem pedir preservação dos arquivos RED. (`i1_preverif_v1.q:22-23`.)
+
+   **Resposta:** “A execução integral dos selos também fica **[nao verificado]**; seus scripts criam arquivos e cópias.” (`i1_preverif_v1.r:3`.)
+
+   O anexo final fornece a localização declarada dos dois logs e a orientação de copiá-los; não fornece seu conteúdo nem prova de preservação. Conteúdo e preservação dos RED: **[nao verificado]**. (`i1_opus_final.md:8`.)
 
 ## 09/11 05:24 · sessao bbeb3f354882 · PAR-NAO-ADJACENTE · verificador · origem=Code
 
@@ -923,32 +1004,4 @@ Essa fixture, entretanto, **alcança relógio solto indiretamente**: criar a esc
 | Vão entre períodos no motor | Compara períodos consecutivos e consulta o par exato no juiz. Outra representação; não é a transcrição das batidas internas para papéis. `app/ponto/motor_calculo_v2.py:2978`; `app/ponto/motor_calculo_v2.py:2983`; `app/ponto/motor_calculo_v2.py:2987` |
 | `primeiro_furo_posicional` | Deduz candidato por duração entre marcas adjacentes para responder sobre furo posicional. Outra pergunta, sem receber o par pronto do juiz. `app/ponto/propositor.py:282`; `app/ponto/propositor.py:296` |
 
-## 09/11 03:28 · sessao 494b8856f826 · - · - · origem=Ronald (tmux)
-
-Arquivo abreviado: `T = app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py`.
-
-| Teste novo | Condição/retorno anteriores reconstruídos do diff | Cópia atual | [nao verificado]
-|---|---|---|
-| `test_RED_duas_soltas_entre_20_e_22` | Falha no papel, T:94 | Passa, T:88 |
-| `test_RED_anexo_2101_22_preserva_660_minutos` | Falha no papel, T:102 | Passa, T:98 |
-| `test_RED_uma_solta_entre_12_e_13` | Falha no papel, T:112 | Passa, T:106 |
-| `test_aninhado_mantem_exatamente_os_papeis_do_HEAD` | Passa | Passa, T:115 |
-| `test_aninhado_abaixo_do_piso_tambem_veta_o_par_externo` | Passa | Passa, T:130 |
-| `test_alinhador_le_k_e_numero_do_par_sem_depender_da_ordem_das_tuplas` | Passa | Passa, T:139 |
-| `test_RED_builder_preserva_o_par_e_os_660_minutos_do_anexo` | Execução integral [nao verificado]; a primeira asserção diretamente afetada é o papel, T:242 | Execução integral [nao verificado], T:234 |
-
-**Limite da execução:** os seis testes puros foram executados em memória por AST, com funções reais de `turnos.py`, `_papeis_do_turno`, `_alinhar_por_papel`, `encadear_marcos` e os próprios testes; `SimpleTestCase` substituído por `unittest.TestCase`, timezone substituído por implementação `zoneinfo America/Sao_Paulo`. Isso verifica os corpos dos seis testes nesse ambiente reduzido; execução Django/HEAD histórico integral [nao verificado]. O código atual está em `app/escala/utils.py:437`; reconstrução anterior corresponde ao diff fornecido, com comparação de adjacência e retorno `out` em `diff_v1.diff`, hunk `@@ -464,14 +463,15 @@`.
-
-**Selo com mordida limitada:** três testes novos passam também com condição anterior: os dois aninhados e o alinhador; portanto “cada teste novo falha no HEAD” é falso para os corpos verificados. Os números 599/660 são calculados pelo juiz sem depender da função alterada: T:89, T:96, T:99, T:104; a aritmética usa `intervalos_do_turno` em `app/ponto/turnos.py:756`. No teste de integração, premissa do par e número aparecem antes do papel, respectivamente T:238 e T:240; resultado integral no HEAD [nao verificado].
-
-**Mutante sobrevivente:** trocar apenas `_iz < len(_bats) - 1` por `_iz <= len(_bats) - 1`, em `app/escala/utils.py:466`, passou nos seis corpos executados. Ele permite classificar a última batida como fim de par e ainda emitir `'sai'`, porque a emissão final continua em `app/escala/utils.py:473`. Os arranjos novos usam fins interiores, T:84, T:108, T:118; logo não exercitam essa guarda. Sobrevivência na integração integral [nao verificado], embora seu par também termine antes da borda, T:217.
-
-**Relógio, identidade e ordem:**
-
-- `ParNaoAdjacente` usa `SimpleNamespace` sem nome/CPF, data fixa e instantes explícitos: T:42, T:58, T:84. Cada chamada constrói novas batidas e novo mapa, T:58; não há dependência explícita entre testes nessa classe, T:88. [nao verificado]
-- `ParNaoAdjacenteNaAta` herda fixture com username, CPF e nome literais, T:154–160. Origem real desses identificadores [nao verificado].
-- As entradas diretas do julgamento estão fixadas: `hoje` em T:223, builder `agora=DEPOIS_DE_TUDO` em T:184; esse instante é fixo em `app/escala/tests/instante.py:12`.
-- Ainda há relógio indireto: criar `EscalaColaborador` em T:168 aciona `app/ponto/signals.py:72`, cujo caminho usa `timezone.localdate()` em `app/ponto/signals.py:63`. Criar batidas em T:221 aciona `app/ponto/signals.py:131`, chama julgamento em `app/ponto/signals.py:93`, e `julgar_celula` consulta relógio em `app/ponto/services/cartorio.py:1965`, `:1986`, `:1989`. Os signals são importados em `app/ponto/apps.py:7`; não há freeze/desconexão nos novos testes, T:49 e T:212. Influência efetiva disso nos asserts e independência integral da ordem [nao verificado].
-- Há escrita direta de `cel.ata` na fixture, fora da porta: T:226 e T:232. É uma escrita introduzida no teste; o diff de produção continua sendo somente a função de transcrição, `app/escala/utils.py:437`.
-
-_3024 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3025 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
