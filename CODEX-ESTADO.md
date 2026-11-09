@@ -1,7 +1,100 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 06:17** · publicado em **09/11/2026 06:17** (UTC-3)
+> Ultima resposta processada: **09/11/2026 06:21** · publicado em **09/11/2026 06:23** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 06:21 · sessao 771c488d1489 · SELOS-CANON-I1 · verificador · origem=Code
+
+**Não confirmo cura integral.** A igualdade com célula crua foi retirada das duas vias, e o formato da negativa e o literal completo do PAREI foram centralizados. Porém, a negativa de obra fora da forma continua abrindo um intervalo que `_censo_24h` não consegue fechar. Há também células descartadas antes de chegar à nova pertença. (`bin/disjuntor.py:1702,2042,2096,2109,2265`; `bin/hook_stop_fila1.py:133,245,434,783`)
+
+**1. Achados 1 e 4**
+
+- **Achado 1, nos dois pontos alterados: curado.** Agent entra por `_censo_nega`; wrapper consulta `_pertence_fila1` e entrega a mesma fotografia da fila a `_censo_nega`. A segunda consulta repete a mesma autoridade, sem reler o BACKLOG. (`bin/disjuntor.py:1702,1848,2264,2265,2273`)
+- **A pertença agora distingue token, célula e ambiguidade.** `OBRA-Q (qualificação)` fornece `OBRA-Q`; `O9 (C)` conserva a identidade qualificada. Pedir `O9` diante dessa última célula resulta em NAO SEI, assim como dois candidatos ou uma ocorrência adicional incompatível. (`bin/disjuntor.py:624,1661,1663,1666,1683,1684,1687,1689`)
+- **A coleta anterior ainda limita o universo.** O reconhecedor de linha não aceita `+` nem `/` na célula. Portanto, os exemplos `ESPURIA-TELA (+ESPELHO-DECIDIU-ICONE)` e `HE-DE-14H-NUM-DIA (col945 12/09)` nem chegam à pertença. Isso não demonstra abertura indevida hoje: suas próprias linhas dizem fila 2 e registro sem construção, respectivamente. (`bin/hook_stop_fila1.py:133,245`; `app/docs/BACKLOG.md:1810,1083`)
+- **O caso vivo apontado de ESMERIL é alcançado:** sua célula passa pela coleta e fornece o token `ESMERIL-SEM-POLITICA`, exigindo censo nas duas vias. (`app/docs/BACKLOG.md:1825`; `bin/hook_stop_fila1.py:133,252`; `bin/disjuntor.py:1663,1666,1702,2265`)
+- **Achado 4, centralização: curado nos pontos lidos.** As negativas com obra usam `NEG_CENSO`; os dois consumidores usam `_obra_da_negativa`; os dois pontos do hook usam `DJ.PAREI_CENSO`. (`bin/disjuntor.py:309,1511,1515,1519,1642,1705,1723,2096`; `bin/hook_stop_fila1.py:434,783`)
+- **Achado 4, efeito na medida: permanece.** Para `O9 (C)`, o parser agora recupera o ID inteiro, mas `_CENSO_EV_RE` só reconhece uma palavra como obra do APROVADO. Aprovar `O9` também não fecha a chave `O9 (C)`. O intervalo segue até `agora` e continua em `esperando`. (`bin/disjuntor.py:1516,2042,2099,2109,2115,2139`)
+
+Existem outras negativas fora de `NEG_CENSO`: obra ilegível, obra ausente e falhas de classificação/importação. Elas não têm o cabeçalho “construtor de `<obra>` sem CENSO”; não são um `%r` remanescente nesse cabeçalho. (`bin/disjuntor.py:101,1647,1754,1905,2247`)
+
+**2. Quem produz e quem lê**
+
+| Função/constante | Definição ou produção → leitores |
+|---|---|
+| `_casa_id_inteiro` | Define comparação sem caixa, com fronteira que exclui letra/dígito/hífen → `_pertence_fila1` e os dois testes de `_parei_do_em_curso`. O comentário cita `_relato_parou`, mas as chamadas diretas estão em `_parei_do_em_curso`. (`bin/hook_stop_fila1.py:110,113,117,1301,1313`; `bin/disjuntor.py:1684`) |
+| `_fila1_viva` | Lê BACKLOG, delega a `_itens_andaveis` e devolve **lista de células cruas**, preservando duplicidades → `_censo_nega` e `main_censo`. (`bin/disjuntor.py:1626,1633,1637,1702,2264`) |
+| `_token_da_celula` | Produz ID simples ou identidade com sufixo, conforme a gramática → `_pertence_fila1`. (`bin/disjuntor.py:1651,1661,1666,1683`) |
+| `_pertence_fila1` | Produz dentro/fora ou levanta ambiguidade → `_censo_nega` e `main_censo`. (`bin/disjuntor.py:1669,1685,1687,1689,1702,2265`) |
+| `NEG_CENSO` | Cabeçalho definido uma vez → `_censo_nao_sei` e os dois ramos de negativa de `_censo_nega`. (`bin/disjuntor.py:1515,1642,1705,1723`) |
+| `_NEG_CENSO_RE` | Reconhecedor definido em um ponto → `_obra_da_negativa`. (`bin/disjuntor.py:1516,1521`) |
+| `_obra_da_negativa` | Extrai a obra → escritor do PAREI e `_censo_24h`; também é chamado pelo roundtrip do selo. (`bin/disjuntor.py:1519,309,2096`; `bin/tests/test_censo_antes_da_vaga.sh:598`) |
+| `PAREI_CENSO` | Define o literal completo → mensagens de negativa, montagem do PAREI, validação da faixa e prova da linha. (`bin/disjuntor.py:1511,312,1644,1707,1726`; `bin/hook_stop_fila1.py:434,783,784`) |
+| `_censo_24h` | Produz contagens, intervalos e `esperando` → `ler` incorpora em `censo`; `_censo_txt` apresenta o resultado. (`bin/disjuntor.py:2064,2138,2038,2147,2158`) |
+| `prova_parei_censo` | Produz `None`, prova `''` ou motivo → Stop, alarme e handoff. (`bin/hook_stop_fila1.py:773,804,809`; `bin/alarme_sessao_ociosa.py:137`; `bin/handoff_sessao.sh:130`) |
+| `_eh_faixa_censo` | Classifica a linha literal válida → `_topo` e `painel_do_topo`, usados pelo leitor e pelo escritor. (`bin/hook_stop_fila1.py:424,481,520`; `app/core/esteira_vigia.py:883`) |
+
+A escrita material do PAREI continua passando por `no_topo`, dentro da trava do escritor do RELATO. Agent e CLI acionam essa escrita por `relato_negacao`. (`bin/disjuntor.py:298,324,1900,2277`; `app/core/esteira_vigia.py:890,892`)
+
+**Divergências de significado encontradas:**
+
+- O wrapper shell aceita somente `[A-Z0-9-]+`; o CLI aceita também minúsculas. Assim, o caso `obra-q` do selo testa diretamente o CLI, não o percurso completo do wrapper. (`bin/codex_pergunta.sh:188`; `bin/disjuntor.py:162,2246`; `bin/tests/test_censo_antes_da_vaga.sh:73,550`)
+- Alarme e handoff delegam a prova ao hook. Seus prefixos não substituem a comparação do literal inteiro; no handoff, o recorte por espaço serve ao rótulo. Entretanto, o alarme procura em 40 linhas e o handoff consulta faixa e primeira linha: os universos observados diferem. (`bin/alarme_sessao_ociosa.py:124,137,138`; `bin/handoff_sessao.sh:129,130,133`; `bin/hook_stop_fila1.py:783`)
+- A negativa admite identidade qualificada, enquanto o APROVADO consumido pela medida admite apenas uma palavra: essa é a incompatibilidade restante. (`bin/disjuntor.py:1516,2042`)
+
+**3. Classes que já reprovaram**
+
+| Classe | Resultado da leitura |
+|---|---|
+| Segundo juiz duplicando juiz registrado | Não identifiquei duplicação nova: as duas vias usam a mesma pertença e o mesmo juiz de brief. Correspondência dessa família com juiz registrado: **[não verificado]**. (`bin/disjuntor.py:1702,1713,1848,2265,2273`) |
+| Segundo escritor fora da porta | **Presente, anterior:** `gerar_cortes` e `deploy_agendado` escrevem RELATO diretamente; o escritor canônico declara esses resíduos. (`bin/gerar_cortes.py:136`; `bin/deploy_agendado.sh:44`; `app/core/esteira_vigia.py:839`) |
+| Relógio fora da borda | Não apareceu relógio novo no trecho alterado: `_censo_24h` recebe `agora`, e a entrada CLI obtém o tempo. Certificação do restante do repositório: **[não verificado]**. (`bin/disjuntor.py:2064,2078,2304`) |
+| Derivação paralela | **Presente no alarme:** `_fila` conta com regra própria, excluindo apenas feito/fechado; o hook também exclui congelada/fila 2 e outras paradas. Essa conta alimenta o alarme, não a pertença do censo. (`bin/alarme_sessao_ociosa.py:89,113,148`; `bin/hook_stop_fila1.py:95,180`) |
+| Selo/RED sem mordida | Os nove vínculos novos têm contraprovas identificáveis; execução integral e RED efetivo: **[não verificado]**. Há lacunas descritas abaixo. (`bin/tests/test_censo_antes_da_vaga.sh:714,724`) |
+| Ordem de trava | O wrapper verifica censo antes de tomar a vaga; `no_topo` decide e grava sob a trava do RELATO. Não identifiquei inversão nova nesses percursos. (`bin/codex_pergunta.sh:234,239,240`; `app/core/esteira_vigia.py:883,890,892`) |
+| Campo com dois significados | **Permanece a incompatibilidade de domínio de `obra`** entre negativa qualificada e APROVADO de uma palavra. Célula crua e token agora estão separados explicitamente. (`bin/disjuntor.py:1637,1683,1516,2042`) |
+
+**4. Regressão ou estado anterior; quem é afetado**
+
+- **ID iniciado por dígito com sufixo:** a limitação do reconhecedor é anterior; `_OBRA_ID` exige letra inicial e não foi alterado pelo diff fornecido. A função nova reutiliza essa gramática. Para uma célula como `09-OBRA (C)`, o wrapper agora recebe NAO SEI em vez do antigo FORA por igualdade crua; mesmo um brief conforme não supera essa etapa. No Agent, a extração continua falhando e produz negativa sem obra. É uma restrição nova sobre uma limitação anterior, não uma nova passagem sem censo. (`bin/disjuntor.py:157,1663,1665,1689,1728,1845,1847,2265,2267`; comparação anterior: `bin/disjuntor.py:1647`, trecho removido no diff fornecido)
+- **Intervalo de obra fora da forma:** o defeito já existia; antes havia ainda a captura truncada/com aspas indicada no laudo. A volta corrige a leitura da negativa, mas não torna possível aprovar a mesma identidade fora da forma. Quem é afetado é o consumidor da medida: horas e lista de espera permanecem abertas; isso não equivale a vaga aberta. (`bin/disjuntor.py:1704,2042,2099,2109,2115,2159`)
+- Ocorrência atual desses dois casos em produção: **[não verificado]**. O dado apresentado não demonstra célula viva qualificada iniciada por dígito nem eventos reais suficientes para medir o intervalo. **[não verificado]**
+
+**5. Mordida dos mutantes novos**
+
+| Mutante | Contraprova que o distingue |
+|---|---|
+| `pertenca-celula-crua`, `pertenca-wrapper-propria` | OBRA-Q qualificada exige rc 1 e NEGOU, contrariando FORA. (`bin/tests/test_censo_antes_da_vaga.sh:535,537,714,717`) |
+| `token-e-a-celula` | O positivo com brief conforme exige rc 0 e APROVADO; impede “nega tudo”. (`bin/tests/test_censo_antes_da_vaga.sh:540,542,543,718`) |
+| `pertenca-exato-cala-a-outra` | O9 junto de O9 (C), com brief conforme, deve negar. (`bin/tests/test_censo_antes_da_vaga.sh:545,576,578,715`) |
+| `pertenca-dois-candidatos` | OBRA-Q (A)/(B) deve negar; o brief conforme ainda existe. (`bin/tests/test_censo_antes_da_vaga.sh:540,569,573,584,716`) |
+| `id-inteiro-por-substring` | OBRA deve continuar FORA diante de OBRA-E3/OBRA-Q. (`bin/tests/test_censo_antes_da_vaga.sh:553,555,721`) |
+| `negativa-com-repr`, `parser-sem-espaco` | Roundtrip da negativa real de O9 (C) exige identidade inteira e sem aspas. (`bin/tests/test_censo_antes_da_vaga.sh:595,598,599,722,723`) |
+| `literal-de-volta-no-hook` | Contagem AST exige zero literais completos no hook. É uma mordida estrutural. (`bin/tests/test_censo_antes_da_vaga.sh:601,603,605,724`) |
+
+Não identifiquei caso vazio nesses nove vínculos. O controle inclui `casos_pertenca`, e a fábrica exige âncora única antes da mutação. Isso não comprova execução verde/vermelha nesta cópia. (`bin/tests/test_censo_antes_da_vaga.sh:628,640,645,649`; execução: **[não verificado]**)
+
+**As lacunas são concretas:** o roundtrip não chama `_censo_24h`; não há célula qualificada iniciada por dígito na fixture. O caso anterior `09-TURNO-ABERTO-EXPOSTA` espera FORA e não cadastra essa obra: prova aceitação sintática do CLI, mas seria vazio como prova de pertença ou de censo obrigatório. (`bin/tests/test_censo_antes_da_vaga.sh:36,117,119,588,598`)
+
+## 09/11 06:18 · sessao 4175ac87a3e8 · - · - · origem=Ronald (tmux)
+
+Os nove mutantes novos têm âncora única e produzem Python sintaticamente válido, conferidos em memória; a execução e a mordida real continuam [não verificado]. A fábrica exige âncora única, roda `casos_pertenca` na cópia mutada e cobra retorno diferente de zero; o controle inclui a mesma função na cópia sem mutação. `bin/tests/test_censo_antes_da_vaga.sh:633`, `bin/tests/test_censo_antes_da_vaga.sh:640`, `bin/tests/test_censo_antes_da_vaga.sh:645`, `bin/tests/test_censo_antes_da_vaga.sh:649`, `bin/tests/test_censo_antes_da_vaga.sh:628`.
+
+| Mutante | Caso que estaticamente o distingue |
+|---|---|
+| `pertenca-celula-crua` | OBRA-Q qualificada passa a FORA, contrariando rc 1 e NEGOU. `bin/tests/test_censo_antes_da_vaga.sh:535`, `bin/tests/test_censo_antes_da_vaga.sh:537`, `bin/tests/test_censo_antes_da_vaga.sh:714` |
+| `pertenca-wrapper-propria` | A igualdade crua no wrapper desvia OBRA-Q qualificada para FORA. `bin/disjuntor.py:2269`, `bin/tests/test_censo_antes_da_vaga.sh:535`, `bin/tests/test_censo_antes_da_vaga.sh:717` |
+| `token-e-a-celula` | A negativa inicial pode continuar correta por NAO SEI, mas o positivo conforme precisa rc 0 e APROVADO. `bin/tests/test_censo_antes_da_vaga.sh:540`, `bin/tests/test_censo_antes_da_vaga.sh:543`, `bin/tests/test_censo_antes_da_vaga.sh:718` |
+| `pertenca-exato-cala-a-outra` | O9 junto de O9 (C) passa indevidamente com brief conforme, contrariando rc 1. `bin/tests/test_censo_antes_da_vaga.sh:545`, `bin/tests/test_censo_antes_da_vaga.sh:576`, `bin/tests/test_censo_antes_da_vaga.sh:578`, `bin/tests/test_censo_antes_da_vaga.sh:715` |
+| `pertenca-dois-candidatos` | OBRA-Q (A)/(B) passa indevidamente; o brief conforme criado antes ainda existe. `bin/tests/test_censo_antes_da_vaga.sh:540`, `bin/tests/test_censo_antes_da_vaga.sh:569`, `bin/tests/test_censo_antes_da_vaga.sh:573`, `bin/tests/test_censo_antes_da_vaga.sh:584`, `bin/tests/test_censo_antes_da_vaga.sh:716` |
+| `id-inteiro-por-substring` | OBRA passa a ser nomeada por OBRA-E3/OBRA-Q e deixa de retornar FORA rc 0. `bin/tests/test_censo_antes_da_vaga.sh:553`, `bin/tests/test_censo_antes_da_vaga.sh:555`, `bin/tests/test_censo_antes_da_vaga.sh:721` |
+| `negativa-com-repr` | O roundtrip da negativa real de O9 (C) lê aspas e difere da obra esperada. `bin/tests/test_censo_antes_da_vaga.sh:595`, `bin/tests/test_censo_antes_da_vaga.sh:599`, `bin/tests/test_censo_antes_da_vaga.sh:722` |
+| `parser-sem-espaco` | O roundtrip de O9 (C) deixa de recuperar a obra inteira. `bin/tests/test_censo_antes_da_vaga.sh:595`, `bin/tests/test_censo_antes_da_vaga.sh:599`, `bin/tests/test_censo_antes_da_vaga.sh:723` |
+| `literal-de-volta-no-hook` | A contagem AST exige zero literais no hook e encontra um. `bin/tests/test_censo_antes_da_vaga.sh:601`, `bin/tests/test_censo_antes_da_vaga.sh:605`, `bin/tests/test_censo_antes_da_vaga.sh:724` |
+
+Não identifiquei caso vazio nesses nove vínculos. Há limites relevantes: `casos_pertenca` testa o parser diretamente, sem demonstrar fechamento do intervalo por `_censo_24h`; também não cria célula qualificada começando por dígito. O teste anterior de `09-TURNO-ABERTO-EXPOSTA` espera FORA e não põe essa obra no BACKLOG da fixture. `bin/tests/test_censo_antes_da_vaga.sh:117`, `bin/tests/test_censo_antes_da_vaga.sh:119`, `bin/tests/test_censo_antes_da_vaga.sh:588`, `bin/tests/test_censo_antes_da_vaga.sh:598`, `bin/tests/test_censo_antes_da_vaga.sh:36`.
+
+Retiro minha hipótese inicial sobre caixa: `obra-q` é aceita pelo regex do CLI e chega à pertença; o wrapper shell efetivo não é chamado por esse caso, que usa diretamente `disjuntor.py --censo`. `bin/disjuntor.py:162`, `bin/disjuntor.py:2246`, `bin/disjuntor.py:2265`, `bin/tests/test_censo_antes_da_vaga.sh:73`, `bin/tests/test_censo_antes_da_vaga.sh:550`.
 
 ## 09/11 06:17 · sessao db66642c6e5d · - · - · origem=Ronald (tmux)
 
@@ -916,120 +1009,4 @@ Os 13 corpos são os oito testes de `ParNaoAdjacente` e cinco de `PapeisDoTurnoL
 
 O sobrevivente `_n = 1` permanece confirmado: nenhum corpo exige um terceiro par aceito; nesse terceiro par ele repetiria `1`, enquanto o original emitiria `2`. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:116`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:129`; `app/escala/utils.py:469`; `app/escala/utils.py:471`.
 
-## 09/11 03:48 · sessao 7ccf7d4cd575 · - · - · origem=Ronald (tmux)
-
-Sobra o mutante `_n += 1` → `_n = 1`: a classe `ParNaoAdjacente` cobre no máximo dois pares aceitos, cujos números continuam sendo `0,1`; os testes novos exigem exatamente isso. `app/escala/utils.py:471`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:125`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:132`.
-
-Ele não é equivalente: com três pares disjuntos não adjacentes, por exemplo índices `1→3`, `4→6`, `7→9`, emite números `0,1,1`, enquanto o original emite `0,1,2`. Confirmei o contraexemplo executando a função extraída por AST em memória, com consultas de pares substituídas; execução integral Django: [nao verificado]. `app/escala/utils.py:459`; `app/escala/utils.py:469`; `app/escala/utils.py:471`.
-
-Também sobra o mutante `range(_i + 1, _iz)` → `range(_i + 1, _iz - 1)`: os casos aninhados da classe conservam outra ponta intermediária antes da última posição examinada, portanto continuam vetando o externo. `app/escala/utils.py:468`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:149`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:164`.
-
-Contraexemplo desse segundo mutante: pares cruzados `1→4` e `3→5`; original veta ambos, mutante aceita ambos porque deixa de examinar as pontas imediatamente anteriores aos fechamentos. Confirmei com pares fornecidos em memória; produção desses pares pelo pareador real: [nao verificado]. `app/escala/utils.py:467`; `app/escala/utils.py:468`.
-
-## 09/11 03:46 · sessao 9b78e3bf994b · PAR-NAO-ADJACENTE · construtor · origem=Code
-
-Acrescentei os dois testes com pareador real e oráculos literais: [nao verificado]
-
-- Papéis exatos dos pares `0` e `1`: [teste:125](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:125). [nao verificado]
-- Cada ponta alinhada à sua pausa: [teste:132](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:132). [nao verificado]
-
-No ensaio reduzido abaixo, ambos passaram no original e **ambos mataram `_n += 0`**, respectivamente nas asserções das linhas 128 e 140. `py_compile` passou sem gravar bytecode. Execução integral Django: **[nao verificado]**; suíte não executada. [nao verificado]
-
-Comando executado para compilação, original e mutante, inteiramente em memória:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
-import ast
-import datetime
-import py_compile
-import sys
-import types
-import unittest
-from pathlib import Path
-from unittest.mock import patch
-from zoneinfo import ZoneInfo
-
-ROOT = Path.cwd()
-TEST = ROOT / 'escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py'
-with patch('py_compile.importlib._bootstrap_external._write_atomic') as write:
-    py_compile.compile(str(TEST), cfile='verificacao-em-memoria.pyc', doraise=True)
-    assert write.call_count == 1
-print('py_compile: OK, escrita de bytecode interceptada')
-
-
-def module(name):
-    obj = types.ModuleType(name)
-    sys.modules[name] = obj
-    return obj
-
-
-def extract(path, predicate, namespace):
-    tree = ast.parse(path.read_text(), filename=str(path))
-    tree.body = [node for node in tree.body if predicate(node)]
-    exec(compile(tree, str(path), 'exec'), namespace)
-
-
-# Somente infraestrutura substituida; pareador e leitores vem da copia.
-tz = ZoneInfo('America/Sao_Paulo')
-timezone = module('django.utils.timezone')
-timezone.make_aware = lambda dt: dt.replace(tzinfo=tz)
-timezone.localtime = lambda dt: dt.astimezone(tz)
-timezone.localdate = lambda dt: dt.astimezone(tz).date()
-module('django').utils = module('django.utils')
-sys.modules['django.utils'].timezone = timezone
-module('escala').utils = module('escala.utils')
-utils = sys.modules['escala.utils']
-utils.__dict__.update(datetime=datetime, timezone=timezone)
-module('ponto').turnos = module('ponto.turnos')
-turnos = sys.modules['ponto.turnos']
-module('escala.servico_jornada')
-extract(ROOT / 'escala/servico_jornada.py',
-        lambda n: isinstance(n, ast.FunctionDef) and n.name == 'turno_cruza_meia_noite',
-        sys.modules['escala.servico_jornada'].__dict__)
-module('ponto.management')
-module('ponto.management.commands')
-eco = module('ponto.management.commands.detectar_par_relampago')
-extract(ROOT / 'ponto/management/commands/detectar_par_relampago.py',
-        lambda n: isinstance(n, ast.Assign) and any(isinstance(t, ast.Name) and
-                  t.id == 'DURACAO_ECO_SEG' for t in n.targets), eco.__dict__)
-extract(ROOT / 'ponto/turnos.py',
-        lambda n: n.lineno < 1504 and not (isinstance(n, ast.ImportFrom) and
-                                          n.module == 'core.dia_do_turno'), turnos.__dict__)
-utils_path = ROOT / 'escala/utils.py'
-utils_source = utils_path.read_text()
-functions = {'_papeis_do_turno', '_alinhar_por_papel', 'encadear_marcos'}
-extract(utils_path, lambda n: isinstance(n, ast.FunctionDef) and n.name in functions,
-        utils.__dict__)
-ns = dict(datetime=datetime, SimpleNamespace=types.SimpleNamespace,
-          SimpleTestCase=unittest.TestCase, timezone=timezone)
-extract(TEST, lambda n: (isinstance(n, ast.Assign) and any(isinstance(t, ast.Name) and
-                         t.id == 'DIA' for t in n.targets)) or
-        (isinstance(n, (ast.FunctionDef, ast.ClassDef)) and
-         n.name in {'_aw', 'ParNaoAdjacente'}), ns)
-tests = [
-    'test_RED_dois_pares_nao_adjacentes_recebem_numeros_distintos',
-    'test_RED_alinhador_senta_dois_pares_nao_adjacentes_nas_duas_pausas',
-]
-for name in tests:
-    case = ns['ParNaoAdjacente'](name)
-    getattr(case, name)()
-    print('ORIGINAL PASS:', name)
-
-assert utils_source.count('_n += 1') == 1
-mutant = ast.parse(utils_source.replace('_n += 1', '_n += 0'), filename=str(utils_path))
-mutant.body = [n for n in mutant.body if isinstance(n, ast.FunctionDef) and
-               n.name == '_papeis_do_turno']
-exec(compile(mutant, str(utils_path), 'exec'), utils.__dict__)
-for name in tests:
-    case = ns['ParNaoAdjacente'](name)
-    try:
-        getattr(case, name)()
-    except AssertionError as error:
-        print('MUTANTE MORTO:', name)
-        print(str(error).splitlines()[0])
-    else:
-        raise AssertionError('MUTANTE SOBREVIVEU: ' + name)
-PY
-```
-
-_3030 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3032 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
