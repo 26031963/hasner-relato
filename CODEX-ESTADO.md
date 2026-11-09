@@ -1,7 +1,47 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 09:17** · publicado em **09/11/2026 09:21** (UTC-3)
+> Ultima resposta processada: **09/11/2026 09:56** · publicado em **09/11/2026 09:58** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 09:56 · sessao 8573dd838240 · - · - · origem=Ronald (tmux)
+
+Autoridade lida e critério:
+
+- **DECISÃO** = fato próprio do ato humano/sistema; sequência única imutável, com instante, autor, texto e motivo; a projeção atual será encolhida pela E4. Atos existentes: resposta, validação, devolução, recusa, reabertura, silêncio, retratação e absorção. `app/chamados/models.py:3828`, `app/chamados/models.py:3850`.
+- **EFEITO** = consequência cuja ocorrência precisa ser conferida externamente; resposta validada não equivale a materialização. E2 distingue sem lavra vigente, validada sem efeito, efeito ainda não visto pela célula e encerrada pelo juiz. `app/chamados/services/tarefa_do_dia.py:118`, `app/chamados/services/tarefa_do_dia.py:140`.
+- **FICA** = identidade/data ou cache reconstruível: identidade da pergunta em `app/chamados/models.py:2424`; dia do turno atribuído exclusivamente por `gravar_dia_do_fato`, sem persistência própria, em `app/chamados/services/fio.py:790`; cache explícito da lavra em `app/chamados/veredito_lavrado.py:58`, `app/chamados/veredito_lavrado.py:74`.
+- `DecisaoPergunta.registrar` é a porta única da sequência; update/delete/bulk_update e edição de linha existente são recusados. `app/chamados/models.py:3814`, `app/chamados/models.py:3892`, `app/chamados/models.py:3931`.
+
+Ramos que impedem classificação ingênua por função:
+
+- `DisputaSupervisao.fechar`: default é **efeito** da inexistência de pergunta viva/resposta sem veredito; exceções `desligamento`/`admin_encerra` são **decisão** e já registram `SILENCIO` E1. `app/chamados/models.py:1855`, `app/chamados/models.py:1892`, `app/chamados/models.py:1915`.
+- `DisputaSupervisao.remover_motivo`: **decisão** `RETRATACAO` já registrada; carimbo terminal da pergunta e atualização da lista de motivos são consequências do ato. `app/chamados/models.py:2043`, `app/chamados/models.py:2053`.
+- `_materializar_ausencia_de_resposta`: vínculo de absorção já é fato `ABSORCAO` E1, com escape e ausência; carimbo da pergunta vem no mesmo atomic. `app/chamados/services/materializacao.py:549`, `app/chamados/services/materializacao.py:557`.
+- `responder_automaticamente`: **decisão** `RESPOSTA` de sistema sobre fato entregue por outro caminho, não cache descartável. `app/chamados/services/disputa_emissao.py:1635`, `app/chamados/services/disputa_emissao.py:1653`.
+- `carimbar_resposta_pela_trilha`: **decisão** reconstruída com o instante original testemunhado pela nota, não instante atual da reparação. `app/chamados/services/disputa_emissao.py:1658`, `app/chamados/services/disputa_emissao.py:1674`.
+
+Divergências semânticas para DECISÕES numeradas:
+
+1. **Carimbo de processamento ≠ prova de batida/fechamento.** Help text de `materializada_em` diz “batida criada + chamado fechado”; `carimbar_identidade` também escreve esse campo para identidade sem plantio e pode manter instante/autor anteriores. A E2 exige testemunha/lavra vigente. `app/chamados/models.py:3382`, `app/chamados/models.py:3157`, `app/chamados/models.py:3171`, `app/chamados/services/tarefa_do_dia.py:118`.
+2. **Estado visual por timestamps ≠ exigibilidade do ato.** `estado` chama validada+materializada de resolvida; E2 distingue validação sem efeito ou sem lavra vigente. `app/chamados/models.py:3030`, `app/chamados/services/tarefa_do_dia.py:140`.
+3. **`data_evento` = dia do turno, não dia civil da batida.** Help text antigo fala data do evento; identidade e E2 explicitam dia do turno. `app/chamados/models.py:2420`, `app/chamados/models.py:2424`, `app/chamados/services/tarefa_do_dia.py:213`, `app/chamados/services/fio.py:790`.
+4. **Expiração = dia civil local; julgamento = instante.** `relogio_virou` usa `janela_expira_em <= hoje_local`, mas a lavra só vence pelo relógio quando `localdate(julgado_em) < janela_expira_em`. Não se compara a data UTC. `app/chamados/veredito_lavrado.py:95`, `app/chamados/veredito_lavrado.py:107`.
+5. **Janela inclusiva e expiração exclusiva.** Janela viva inclui início da anterior menos um dia e fim da corrente; primeiro dia fora é a expiração. Não corresponde a duração fixa de 30/60 dias. `app/chamados/veredito_lavrado.py:119`, `app/chamados/veredito_lavrado.py:145`.
+6. **Resposta/validação legadas sem linha ≠ decisão E1 demonstrada.** E1 preserva a projeção anterior como linhas antes de sobrescrevê-la; E2 devolve `passivo_sem_linha`, sem inventar ação. `app/chamados/models.py:3903`, `app/chamados/services/tarefa_do_dia.py:127`.
+7. **`via_resolucao` não significa sempre declaração de hora.** Escape ATESTADO/FALTA_DIA e irmã muda usam ausência; o escritor pergunta `declarou_hora`, e a sequência liga a absorção à ausência concreta. `app/chamados/services/materializacao.py:534`, `app/chamados/services/materializacao.py:549`.
+8. **Fechamento de disputa ≠ julgamento de resposta.** Default só fecha após inexistência de viva e resposta sem veredito; fechamento excepcional decide silêncio e registra E1. `app/chamados/models.py:1823`, `app/chamados/models.py:1852`, `app/chamados/models.py:1915`.
+
+Leis/cortes conferidos: L-002 (`app/docs/LEIS.md:60`), L-007 (`:65`), L-051 (`:92`), L-061 (`:95`), L-073 (`:100`), L-080 (`:107`), L-085 (`:117`), L-088 (`:120`), L-110 (`:136`), L-111 (`:137`), L-117 (`:138`), L-124 (`:145`), L-113 (`:151`); FIO-MORTO-E-ESTRUTURAL (`app/docs/CORTES.md:253`), FIO-E0-V4 (`:426`), LEI-TRANCA-E2-JUIZ (`:427`). Essas autoridades respondem os pontos examinados; **perguntas de lei: 0** neste recorte. Não concluí censo integral de escritores/leitores, responsabilidade dos outros levantamentos. [não verificado]
+
+## 09/11 09:55 · sessao 3fe3faa2e17b · FIO-E0-V4-E3 · construtor · origem=Code
+
+Entrega: [F1–F8, causas, hunks, escritores/leitores e comandos de RED/mutantes](/home/ronald/wt-codex-fio-e0-v4-e3-084151/app/docs/ENTREGA_FIO_E0_V4_E3_V3.md:5).
+
+**F2: código. F1/F3/F4/F5/F6/F7/F8: selo.**
+
+`py_compile`: **10 arquivos, rc 0**, sem bytecode; `git diff --check`: rc 0. [Verificação e comandos](/home/ronald/wt-codex-fio-e0-v4-e3-084151/app/docs/ENTREGA_FIO_E0_V4_E3_V3.md:70). Suíte não executada; mordida dos RED/mutantes **[nao verificado]**. Ruff indisponível. [nao verificado]
+
+**DECISAO-ABERTA:** DIFF/L-099 antes da fachada; crons e diagramas com a sessão. [Referência](/home/ronald/wt-codex-fio-e0-v4-e3-084151/app/docs/ENTREGA_FIO_E0_V4_E3_V3.md:90).
 
 ## 09/11 09:17 · sessao bbec4829eb42 · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · construtor · origem=Code
 
@@ -554,36 +594,4 @@ Mutantes e RED:
 
 Fontes paralelas existentes, com perguntas diferentes: mapa motivo→marco `app/chamados/juizes.py:882`; classificação marco→motivo `app/ponto/marcos.py:14`; posição→motivo/instância `app/chamados/services/declaracao_texto.py:42`; pares canônicos de DNA `app/escala/models.py:1652`; leitura de todas as luzes das pausas `app/chamados/juizes.py:917`; defesa que se abstém com duas pausas `app/chamados/juizes.py:1124`. Não são outro agrupador de perguntas equivalente a `identificar_par_intervalo`; exigirem chamar esse agrupador seria inverter dependências. A divergência concreta é o agrupador novo afirmar identidade sem usar os slots que essas autoridades distinguem. `app/chamados/services/materializacao.py:84`.
 
-## 09/11 08:31 · sessao f854c2b1485a · - · - · origem=Ronald (tmux)
-
-**ATO/TRAVAS — NAO PROCEDE para par identificado; universalidade exige ressalvas.**
-
-- Chamadores AST de `_materializar_uma`: `validar_pergunta`, import sem alias, `app/chamados/services/validacao.py:466`, chamadas `:469`/`:474`; varredura, nome local, `app/chamados/services/materializacao.py:1565`; `_plantar_o_dia`, import sem alias `app/chamados/services/passivo_validado.py:39`, chamada `:529`.
-- Chamadores AST de `_materializar_resposta_hora`: somente `_materializar_par`, nome local, `app/chamados/services/materializacao.py:1336`, e `_materializar_avulsa`, nome local, `:1447`. Existe reexport, sem chamada, em `app/chamados/models.py:4077`.
-- Par identificado: ambas entram em voo antes da primeira escrita; mesmo savepoint; ramo individual ignora guarda intermediária; guarda final, lastro, carimbos e reconciliação vêm depois das duas chamadas. `app/chamados/services/materializacao.py:1315`, `:1317`, `:1336`, `:935`, `:1338`, `:1345`, `:1348`, `:1355`.
-- Toda **nova criação** desse ramo usa `registrar_batida`, import sem alias; porém reuso consulta batida e pula a chamada à porta, portanto “ambas sempre chamam registrar” literalmente não é verdadeiro. `app/chamados/services/materializacao.py:919`, `:925`, `:931`, `:986`, `:987`; `app/chamados/juizes.py:235`.
-- Continua havendo aplicação avulsa de pergunta de intervalo quando identidade retorna `sem_par`, `par_ambiguo` ou `marcos_sem_par`; pode criar só uma metade. Isso preserva a rota individual para esse universo. `app/chamados/services/materializacao.py:77`, `:79`, `:85`, `:1400`, `:1447`. O teste de irmã já aplicada exige esse comportamento. `app/chamados/tests/test_bug_par_intervalo.py:444`.
-
-**TRAVAS — NAO PROCEDE para inversão entre esses dois validadores.**
-
-- Chamadores AST de `_travar_ato_materializacao`, todos sem alias: `validacao.py:434` (import `:433`), `materializacao.py:1379` (local), `passivo_validado.py:432` (import `:431`) e `:520` (import `:513`). Transações anteriores: `validacao.py:428`, `materializacao.py:1378`, `passivo_validado.py:371`/`:519`.
-- O helper pega Colaborador antes de enumerar o universo; depois trava Disputas, Chamados e Perguntas. A porta ordena cada grupo por PK. `app/chamados/services/materializacao.py:95`, `:97`, `:104`; `app/chamados/models.py:2674`, `:2683`, `:2696`, `:2700`.
-- Mesmo colaborador serializa os dois validadores antes da primeira Pergunta; validar saída/volta em ordem inversa não cria a inversão de travas descrita. `app/chamados/services/validacao.py:434`, `:439`; `app/chamados/services/materializacao.py:95`. R3 é sequencial; concorrência executada **[nao verificado]**. `app/chamados/tests/test_bug_par_intervalo.py:174`.
-
-**ROLLBACK — NAO PROCEDE no caso normal; PROCEDENTE na promessa universal para O330.**
-
-- Falha da segunda escrita sai do savepoint antes da recusa; releitura recupera estado anterior; recusa usa `encerrar_colisao=False`; devolução limpa validação e acrescenta decisão. Novas batidas/carimbos do par são revertidos pela estrutura transacional. `app/chamados/services/materializacao.py:1315`, `:1356`, `:1361`, `:1364`; `app/chamados/services/validacao.py:198`, `:202`, `:205`, `:208`.
-- **Contraexemplo O330:** o reparador inclui perguntas com `materializada_em` anterior sem lastro; rollback restaura esse carimbo; `devolver_validacao_recusada` retorna antes de limpar validação se `materializada_em` não é nulo. Portanto não garante “zero materializada_em e devolução das duas” nesse universo. Cura sugerida: tratamento explícito pelo dono de descarimbo para carimbo sem lastro, antes da devolução, preservando E1; ou delimitar formalmente o contrato como preservação do estado anterior. `app/chamados/services/passivo_validado.py:531`; `app/chamados/services/materializacao.py:73`, `:74`, `:1361`, `:1365`; `app/chamados/services/validacao.py:188`, `:190`; porta de descarimbo `app/chamados/models.py:3203`.
-- E1 do fluxo novo acrescenta `VALIDACAO`/`DEVOLUCAO`; não atualiza/apaga decisão anterior. A projeção legada é capturada antes da troca. `app/chamados/services/validacao.py:133`, `:139`, `:201`, `:208`. Modelo recusa edição/apagamento e porta usa `bulk_create`. `app/chamados/models.py:3903`, `:3908`, `:3943`.
-- R4 verifica falha da segunda escrita no validador normal; não cobre esse rollback de O330 com carimbo prévio. `app/chamados/tests/test_bug_par_intervalo.py:182`, `:194`; fixtures O330 com carimbos falsos só verificam sucesso/exclusão de universo. `app/chamados/tests/test_bug_par_intervalo.py:382`, `:390`, `:403`.
-
-**OUTROS CAMINHOS — FILA, por serem atos diferentes de aplicar respostas desse par.**
-
-- `veredito_celula` pode preencher marcos de intervalo pela porta e depois fechar perguntas do dia; simula o conjunto antes, mas captura erro por escrita e só dá rollback quando nenhuma ação teve sucesso. Falha posterior pode conservar a primeira batida. É decisão do dia, sem chamar `_materializar_resposta_hora`/identificador de perguntas. Cura da unidade desse outro ato fica fora da correção estreita, mas impede afirmar atomicidade universal de todo preenchimento de intervalo. `app/ponto/services/veredito_celula.py:290`, `:305`, `:320`, `:322`, `:327`, `:342`, `:346`, `:179`, `:189`.
-- Regularização externa também tem ramo próprio de par de intervalo; `_cria_batida` transforma recusa em retorno `None`, permitindo prosseguir com a irmã e materializar o lote. Não aplica `PerguntaDisputa`. `app/chamados/services/regularizacao_ext.py:77`, `:83`, `:88`, `:121`, `:167`, `:172`, `:176`, `:197`.
-
-## 09/11 08:26 · sessao 2170a5030b34 · SONDA-SEM-GRANT · verificador · origem=Code
-
-[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
-
-_3088 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3090 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

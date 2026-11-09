@@ -1,5 +1,8 @@
 # RELATO — esteira saas-hasner
+PAREI: censo-BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS | espera Codex
+
 ESPERANDO: codex_pergunta.sh | pid=3630778
+E4-ESCRITORES 09:5x: aval E4-CENSO-JA recebido (logs/aval_e4_censo_ja.txt); DESPACHO E4: censo P13 -> Codex (papel censo, hash dc0ecbdeb = copia E3), saida na forma do bloco CENSO para virar logs/FIO-E0-V4-E4-ESCRITORES/brief.md; construtor depois do pouso E2+E3.
 E3 09:4x: GREEN parcial dc0ecbdeb FAILED (failures=9, errors=3; logs/fio_e3/v2_green_falhas.txt) -> construtor Codex volta 3 (F1-F8; F1 pergunta viva em disputa fechada sumiu = possivel regressao). Sessao depois: FORA_DE_PIPELINE diff_e3_sombra (config/crons.py) + regerar diagrama.
 BUG-PAR 09:4x: RED 14/14 vermelhos (v2_red.log); GREEN FAILED 1 (contrato carimbo cru em _materializar_par :1388); mutantes 35/37 mortos, M7 e M35 VIVOS -> volta 3 Codex (construtor_v3.q) na fila da vaga (1 construtor Codex por vez; E3 primeiro, fila 1).
 CODEX-2-RAIAS 09:3x: construtor opus entregou 9201883d8 (copia wt-codex2raias-090624): RED base rc 1 (347 falhas), GREEN rc 0, mutantes 87/0, vizinhos em curso (logs/codex_2_raias/v1_vizinhos.log). Conflito com o pouso I-1 em codex_pergunta.sh -> rebase DEPOIS do pouso da SONDA (DECIDIDO tecnico item 5: SONDA destrava leitura de prod da fila 1, vem antes). 13 DECISAO-ABERTA no relato do agente vao a triagem com o preverif.
@@ -5661,6 +5664,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 
 ## ALARMES DA ESTEIRA
+
+**09/11 09:55:45 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:0c11d1c188 (59 car., na trilha privada)
 
 **09/11 03:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 04:45.
 
