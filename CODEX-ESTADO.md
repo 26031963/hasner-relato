@@ -1,7 +1,28 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 15:48** · publicado em **09/11/2026 15:50** (UTC-3)
+> Ultima resposta processada: **09/11/2026 16:05** · publicado em **09/11/2026 16:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 16:05 · sessao 6ed3e3a2c318 · - · - · origem=Ronald (tmux)
+
+D1–D15 permanecem; o diff não resolve nem elimina as distinções de estado já catalogadas. D2, D9 e D11 precisam incorporar os novos leitores e os limites explícitos abaixo. (`app/chamados/models.py:3023`; `app/chamados/models.py:3092`; `app/chamados/juizes.py:1322`; `app/chamados/services/pergunta_no_app.py:60`; `app/chamados/management/commands/diff_e3_sombra.py:105`)
+
+- **D2 ampliada:** pré-filtro SQL, julgamento C6, partição de apresentação e tarefa são operações diferentes. `consulta_do_app` particiona as C6 vivas: pendente exige `respondida_em is None` **e** disputa aberta; demais vivas vão ao histórico. A carga da tarefa agora chama `alimentar_fila`, sem executar novamente C6. (`app/chamados/models.py:3325`; `app/chamados/services/pergunta_no_app.py:69`; `app/chamados/services/tarefa_do_dia.py:407`; `app/chamados/juizes.py:1450`)
+- **D9 ampliada:** janela C6 continua inclusiva e usa `date.today()`; expiração da lavra usa dia local do `agora` recebido, com `janela_expira_em <= hoje_local`. O instrumento passou a declarar que `--agora` não controla aquele relógio C6. Divergência efetiva em produção: **[nao verificado]**. (`app/chamados/juizes.py:575`; `app/chamados/juizes.py:601`; `app/chamados/veredito_lavrado.py:104`; `app/chamados/veredito_lavrado.py:116`; `app/chamados/management/commands/diff_e3_sombra.py:105`)
+- **D11 ampliada:** disputa fechada continua sem demonstrar ausência de tarefa. A alteração põe pergunta viva de disputa fechada no histórico do app; o teste mantém a aceitação pelo POST. Atenção: `reabrir_por_colab` recusa disputa fechada antes de delegar a correção; a afirmação ampla do v1 sobre correção sem reabrir o continente deve referir-se à porta `reabrir_para_correcao`, não ao wrapper de colaborador. (`app/chamados/services/pergunta_no_app.py:70`; `app/api/tests/test_hx_api_estado.py:54`; `app/chamados/models.py:2221`; `app/chamados/models.py:2234`; `app/chamados/services/disputa_emissao.py:1559`)
+
+Duas decisões adicionais justificadas, omitidas no v1:
+
+- **D16 — “No app” e “pendente no app” têm universos diferentes.** `perguntas_do_app` devolve todas as C6 vivas; `consulta_do_app` extrai pendentes de disputa aberta e mantém as restantes no histórico. O leitor C17 `_no_app` continua usando a coleção completa de `perguntas_do_app`. Isso já tem corte de unidade; não é pergunta de lei nova. (`app/chamados/services/pergunta_no_app.py:44`; `app/chamados/services/pergunta_no_app.py:60`; `app/chamados/juizes.py:1509`; `app/chamados/juizes.py:1519`; `app/docs/PROMPTS.md:2002`)
+- **D17 — `rota/fila/verbos/fio` de C17 e tarefa não prometem a mesma coisa.** C17 parte da alcançabilidade pela fila e pelas perguntas C6; a tarefa parte das ações exigíveis e publica somente suas portas. `fio` C17 pode ser `chamado`; o da tarefa também exprime `sistema` e `nao_sei`. O corte já escolheu a resposta da tarefa e condicionou a troca dos três chamadores ao DIFF. (`app/chamados/juizes.py:1532`; `app/chamados/juizes.py:1575`; `app/chamados/services/tarefa_do_dia.py:425`; `app/chamados/services/tarefa_do_dia.py:431`; `app/docs/PROMPTS.md:2007`)
+
+Correção de inventário do v1: **`_estado_da_decisao` não existe nesta cópia**. As referências v1 de passivo e validação pertencem a `_pela_decisao`, definida na linha 115; passivo na 127 e validação na 140. O diff fornecido não renomeia essa função. (`app/chamados/services/tarefa_do_dia.py:115`; `app/chamados/services/tarefa_do_dia.py:127`; `app/chamados/services/tarefa_do_dia.py:140`)
+
+Chamadores produtivos C17 confirmados pelo scanner AST extraído sem importar a aplicação: `vigia_fio.censo_alcance`, `cadastro_realidade.beco_em_lote`, `fora_da_folha._porta`. O instrumento chama `_porta` existente; não cria quarto chamador direto. (`app/chamados/services/vigia_fio.py:635`; `app/escala/services/cadastro_realidade.py:488`; `app/folha/fora_da_folha.py:67`; `app/chamados/management/commands/diff_e3_sombra.py:124`)
+
+**Perguntas de lei: 0.** O v1 não tinha perguntas abertas; unidade do app e destino de C17 já têm respostas literais, inclusive a emenda posterior que condiciona a fachada ao DIFF. (`app/docs/PROMPTS.md:2002`; `app/docs/PROMPTS.md:2007`)
+
+Leis/cortes checados: L-002, L-007, L-051, L-061, L-073, L-080, L-085, L-088, L-110, L-111, L-113, L-117 e L-124; FIO-E0-V4; LEI-TRANCA-E2-JUIZ; LEI-E3-UNIDADE-E-C17; LEI-C17-UM-JUIZ. (`app/docs/LEIS.md:60`; `app/docs/LEIS.md:65`; `app/docs/LEIS.md:92`; `app/docs/LEIS.md:95`; `app/docs/LEIS.md:100`; `app/docs/LEIS.md:107`; `app/docs/LEIS.md:117`; `app/docs/LEIS.md:120`; `app/docs/LEIS.md:136`; `app/docs/LEIS.md:137`; `app/docs/LEIS.md:151`; `app/docs/LEIS.md:138`; `app/docs/LEIS.md:145`; `app/docs/CORTES.md:426`; `app/docs/CORTES.md:427`; `app/docs/PROMPTS.md:2002`; `app/docs/PROMPTS.md:2007`)
 
 ## 09/11 15:48 · sessao 43a71806087d · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · construtor · origem=Code
 
@@ -651,37 +672,4 @@ Para medir **disputas adicionais retidas**, falta uma leitura que associe cada p
 - Disputa já fechada: repetição idêntica devolve `False`; outra entrada gera erro, sem reabertura nessa porta. [app/chamados/models.py:1887](/home/ronald/codex_ws/3803e66235912bd9ba1a7aa5f20ee94d1dc307f3/app/chamados/models.py:1887)
 - `ESPERA_PAR_INTERVALO` não consta da lista de vias do modelo; busca textual em `app`, `bin` e extensões textuais da cópia retornou zero ocorrências. A ausência global não tem linha positiva para citar. [app/chamados/models.py:2533](/home/ronald/codex_ws/3803e66235912bd9ba1a7aa5f20ee94d1dc307f3/app/chamados/models.py:2533); busca global [não verificado].
 
-## 09/11 14:49 · sessao 4353177d1904 · - · - · origem=Ronald (tmux)
-
-Inspeção somente leitura; nenhuma execução nem edição.
-
-| Sítio | Adaptação necessária |
-|---|---|
-| `chamados/services/fio.py:225`, `:238` | Incluir intervalo no universo das disputas fechadas e consumir a obrigação da projeção canônica; `q_vivas` seguido de C6 elimina V legado. |
-| `chamados/services/fio.py:335` | Já chama `estado_aplicacao_pergunta` por reexport do modelo; pode consumir os novos campos diretamente. |
-| `chamados/services/acoes_chamado.py:348` | Manter a pergunta cuja projeção indique obrigação do par, além das demais perguntas vivas por C6. |
-| `chamados/services/explicador.py:72` | Ramificar intervalo pela projeção antes de consultar `p.estado`. |
-| `chamados/services/explicador.py:85` | A precedência da pendência sobre lastro produz W#5: anuncia ausência de plantio antes de perguntar pelo fato. |
-| `chamados/services/explicador.py:137` | Substituir recomposição por `disputa.pode_fechar()`. |
-| `chamados/services/declaracao_texto.py:221` | Guarda de declaração deve consumir capacidade canônica para intervalo; não importar bloqueio de espera da v5. |
-| `chamados/services/declaracao_texto.py:471` | Acrescentar estado/capacidades à projeção, preservando o significado de `aceita`. |
-| `chamados/services/declaracao_texto.py:687` | Aplicação textual singular precisa impedimento explícito antes de escrever resposta/validar; proposta de uma hora não autoriza ato de par. |
-| `chamados/services/vigia_carimbo.py:106` | Para intervalo, classificar pelo resultado canônico. V permanece dívida; não importar classe de espera que o retire do alarme. |
-| `chamados/services/vigia_fio.py:165` | A redução atual é só C6; consumir obrigação canônica para que V legado continue aparecendo no fio. |
-| `chamados/juizes.py:1322` | Alimentar a porta do dia com obrigação do par, além de C6. |
-| `chamados/juizes.py:1396` | Só acrescentar V em `vivas` é insuficiente: exige presença em `_no_app`, que pode excluir V. Transportar a capacidade/dono canônicos para permitir a obrigação administrativa sem inventar resposta. |
-| `chamados/services/raiox.py:68` | Crédito do painel prefiltra `q_vivas`; obrigação V pode desaparecer antes de `verbos`. Migrar esse alimentador também, mantendo uma única projeção. |
-| `chamados/services/passivo_validado.py:516` | Encaminhar seleção completa, processadas/aplicadas e operar uma vez por par. |
-| `chamados/services/passivo_validado.py:427` | Inventariar/travar disputas, inclusive fechadas, antes do primeiro dia. |
-| `chamados/services/passivo_validado.py:545` | Falha geométrica atualmente carimba recusa individual; para intervalo devolver relato conjunto sem fabricar meia decisão. |
-| `chamados/services/passivo_validado.py:363` | DRY já evita chamar a unidade; preservar esse contrato. |
-| `chamados/management/commands/auditar_invariantes_chamados.py:536`, `:1075` | I6/I18 têm filtros locais que podem esconder dívida por motivo preenchido; intervalos devem consumir classificação canônica onde a pergunta for aplicação/obrigação. |
-| `chamados/management/commands/auditar_invariantes_chamados.py:1112` | I19 permanece técnico, sem conversão em estado do par. |
-| `templates/chamados/partials/_card_atendimento.html:183` | Frase atual “conferir antes de lançar” deriva ausência de batida da pendência; exibir fato e conferência separadamente. |
-| `templates/chamados/partials/modal_fio.html:221` | Badges atuais priorizam pendência/validação individual; ramificar pela projeção do intervalo. |
-
-Atenção ao OL no O330: a irmã A é retirada do grupo em `passivo_validado.py:326`; exigir ambas no grupo de alvos inviabiliza reparação parcial. O inventário deve distinguir irmã A preservada como testemunha de irmã excluída por `FORA_DO_ESCOPO`; esta última deve impedir o conjunto (`passivo_validado.py:329`).
-
-A catraca antiga só detecta comparações com `None`, filtros `isnull` e `if` direto de atributo, portanto não satisfaz resolução de aliases/auxiliares da catraca do par (`chamados/tests/test_contract_leitores_vitalidade.py:294`). Execução, concorrência e efeitos em produção: [nao verificado].
-
-_3194 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3195 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

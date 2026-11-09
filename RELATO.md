@@ -1,6 +1,8 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: lancar_suite_v6.sh | pid=1464701
+ESPERANDO: lancar_censo_v2.sh | pid=2794424
+E4 16:1x [fio_morto_alcance=377, carimbo 09/11 06:48]: aval SERIE-E-PRONTO-E-O-FIO -- base do criterio: fio_morto=5, fio_morto_cobrando=5, materializada_viva=2, hoje pra frente=0, alarma_em_0 hoje=(fio_morto, fio_morto_cobrando, fio_morto_com_alvo). Censo P13 v2 (fechamento) no Codex sobre 7c16da320 (arvore que pousa): logs/FIO-E0-V4-E4-ESCRITORES/censo_v2.q, delta contra censo_v1 (dc0ecbdeb). Opus final E3 segue em curso.
+E3 16:0x: suite inteira v6 da copia 7c16da320 VERDE -- OK (skipped=42, expected failures=41), Ran 14764, rc=0 (logs/fio_e3/v6_suite.log). Opus final (verificador) aberto com diff total/delta, leis, preverif_v6.r e a triagem (D1 vai anexo, o opus decide fila x bloqueio). Depois: comboio E2+E3 merge --no-ff 7c16da320 -> cmp -> commit -> deploy.sh.
 SERIE-E-SO 16:0x (aval, substitui E-PRIMEIRO-NA-VAGA): so E2/E3/E4 abrem vaga ate E4 no ar; Codex 1 vaga. Lancador da matriz I-3 (pid 1865485, gated, Codex NAO chamado, matriz.out inexistente) encerrado + waiter. Congelamentos abaixo, BACKLOG intacto.
 ❄ CODEX-2-RAIAS: copia wt-codex2raias-090624 e381017bf; matriz.r rc 0 + triagem_matriz.txt prontas; falta volta 3 (opus) contra E1-E25, selos, suite, preverif, opus final, pouso.
 ❄ SELOS-CANON-I3: copia wt-selos-canon-i3-113049 4561d76e6; falta matriz (1a rodada parada por teto, 2a encerrada antes do Codex), volta 4, suite, preverif, opus final, pouso.
