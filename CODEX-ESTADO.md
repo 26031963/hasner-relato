@@ -1,7 +1,64 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 03:50** · publicado em **09/11/2026 03:54** (UTC-3)
+> Ultima resposta processada: **09/11/2026 04:04** · publicado em **09/11/2026 04:05** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 04:04 · sessao 66abcd07f52f · - · - · origem=Ronald (tmux)
+
+1. **PROCEDENTE-candidato — P3 ainda não reúne todo o texto entregue ao construtor.** `main_censo` recebe os nomes dos anexos, lê somente a pergunta e une ambos; não lê conteúdo dos anexos. O despacho efetivo concatena o conteúdo de todos eles. Um anexo geral contendo referência a `logs/outra/brief_ruim.md` chega ao construtor, mas essa referência não entra no coletor, salvo coincidência com o glob da obra. Contraprova em memória confirmou que o texto entregue ao juiz contém apenas `/raiz/logs/e3/envelope.txt\n<pergunta>`. `bin/disjuntor.py:2152`; `bin/disjuntor.py:2154`; `bin/disjuntor.py:2156`; `bin/codex_pergunta.sh:315`; `bin/codex_pergunta.sh:344`. O selo cobre anexos cujo próprio nome é brief, não referências internas: `bin/tests/test_censo_antes_da_vaga.sh:138`.
+
+2. **PROCEDENTE-candidato — P4 corrige autoridade do julgamento, mas divide as trilhas entre raízes.** O wrapper de uma cópia passa a raiz do repositório vivo ao censo; `main_censo` grava ali. Entretanto, `LOGD` continua, por padrão, sob a raiz do script, e o `ini` é gravado nesse `LOGD`. Uma cópia/worktree pode deixar aprovação e abertura em árvores distintas; `_censo_24h(raiz)` procura ambos numa só árvore. `bin/codex_pergunta.sh:55`; `bin/codex_pergunta.sh:88`; `bin/codex_pergunta.sh:234`; `bin/codex_pergunta.sh:292`; `bin/disjuntor.py:2167`; `bin/disjuntor.py:1982`; `bin/disjuntor.py:2018`. A rota de cópia é expressamente suportada: `bin/codex_pergunta.sh:237`. Ocorrência produtiva: **[nao verificado]**.
+
+3. **PROCEDENTE-candidato — fail-closed depende da representação literal do JSON.** `_censo_na_excecao` procura o trecho cru `"Agent"`; `_guarda_import` repete esse teste. JSON truncado com `"tool_name":"Ag\u0065nt"` e cópia `/wt-` não produz negativa nesse fallback. Contraprova em memória: retorno `None`; com `"Agent"` literal, retorna negativa. `bin/disjuntor.py:72`; `bin/disjuntor.py:1657`; `bin/disjuntor.py:1807`; `bin/disjuntor.py:1828`. Comportamento do consumidor real diante de payload truncado/erro Python: **[nao verificado]**. `SyntaxError` no próprio arquivo também precede a instalação da guarda: `bin/disjuntor.py:62`; `bin/disjuntor.py:82`.
+
+4. **OBSERVACAO — um julgamento de censo por via está implementado no caminho normal.** Agent passa pelo hook; Codex construtor passa pelo wrapper. O hook deixou de julgar censo da chamada Bash ao wrapper. `bin/disjuntor.py:1731`; `bin/disjuntor.py:1748`; `bin/disjuntor.py:1752`; `bin/codex_pergunta.sh:184`; `bin/codex_pergunta.sh:234`. Não encontrei, nesses caminhos normais, a mesma abertura julgada pelos dois mecanismos de censo; o ramo excepcional pode reexecutar `_censo_nega` após falha do processamento do Agent. `bin/disjuntor.py:1661`.
+
+5. **OBSERVACAO — compatibilidade de IDs continua diferente por via.** CLI agora admite `ABC` e `09-TURNO-ABERTO-EXPOSTA`; o extrator de Agent continua sem reconhecê-los, e Agent em cópia recebe negativa permanente “sem obra”, independentemente do brief. Contraprova em memória: `_obra_de` retorna `None` para ambos. `bin/disjuntor.py:132`; `bin/disjuntor.py:144`; `bin/disjuntor.py:594`; `bin/disjuntor.py:1751`; `bin/disjuntor.py:2144`; `bin/codex_pergunta.sh:188`. Isso já integrava a definição anterior do Agent; uma regressão nova desses IDs nessa via é **[nao verificado]**.
+
+6. **PROCEDENTE-candidato — identidade com cauda continua sem suporte integral.** `_obra_de("obra O9 (C)…")` retorna `O9 (C)`, mas `_briefs_da_obra` e `_parei_censo_no_relato` rejeitam espaço/parênteses pelo `OBRA_CENSO_ID`. Logo o glob literal da obra desaparece e uma negativa dessa identidade não publica o PAREI censo; citar brief diretamente pode resolver o primeiro problema, não o segundo. `bin/disjuntor.py:137`; `bin/disjuntor.py:285`; `bin/disjuntor.py:588`; `bin/disjuntor.py:602`; `bin/disjuntor.py:1563`. Existência atual de obra assim na fila: **[nao verificado]**.
+
+7. **OBSERVACAO — sessão principal e wrapper de leitura.** Ausência de `agent_id` não isenta a sessão principal ao despachar Agent ou comando contendo `codex_pergunta`. `bin/disjuntor.py:1716`. Wrapper com `CODEX_PAPEL=leitura`, sem `--construtor`, não passa pelo novo censo; com essa flag recebe a recusa anterior de incompatibilidade papel/flag. `bin/codex_pergunta.sh:184`; `bin/codex_pergunta.sh:185`; `bin/codex_pergunta.sh:407`. As chamadas concretas desta sessão e negativas produtivas não constam do dado: **[nao verificado]**.
+
+8. **PROCEDENTE-candidato — confinamento dos briefs tem duas regras.** Referências citadas são resolvidas e conferidas contra `RAIZ/logs`; briefs descobertos por glob são resolvidos por `realpath` e unidos sem a mesma conferência. Um link em `logs/<obra>/brief*.md` ou na pasta da obra pode alimentar o juiz com arquivo externo; a referência externa citada diretamente seria recusada. `bin/disjuntor.py:1549`; `bin/disjuntor.py:1554`; `bin/disjuntor.py:1566`; `bin/disjuntor.py:1574`. A presença real desses links é **[nao verificado]**.
+
+Nenhum arquivo foi criado/editado/apagado; verificações executadas somente em memória com `python3 -B`. Execução integral dos selos: **[nao verificado]**.
+
+## 09/11 04:03 · sessao 399ce1c11505 · - · - · origem=Ronald (tmux)
+
+1. **PROCEDENTE-candidato — PAREI censo mascara o painel anterior e pode esconder a liberação do B3.** `no_topo` insere acima da primeira linha útil, sem substituir/remover o painel anterior (`app/core/esteira_vigia.py:886`; `app/core/esteira_vigia.py:889`). Contraexemplo reproduzido exclusivamente em memória, usando as funções reais extraídas por AST:
+
+   ```text
+   antes:  [ESPERANDO: suite | pid=123, ERRO-BOBO OBRA-E3: defeito corrigido] [nao verificado]
+   depois: [PAREI: censo-OBRA-E3 | espera Codex, ESPERANDO: suite | pid=123] [nao verificado]
+   ```
+
+   A linha B3 permanece no arquivo, na terceira posição útil, invisível para `_bloco_do_topo`, que para em duas (`bin/hook_stop_fila1.py:425`; `bin/hook_stop_fila1.py:442`). O Stop julga exclusivamente a primeira linha para ESPERANDO/censo e não procura o ESPERANDO deslocado à segunda (`bin/hook_stop_fila1.py:746`; `bin/hook_stop_fila1.py:751`). Sem wrapper vivo para o novo censo, a espera antiga comprovável fica mascarada (`bin/hook_stop_fila1.py:732`; `bin/hook_stop_fila1.py:749`). Efeito produtivo: **[nao verificado]**.
+
+2. **OBSERVACAO — inventário dos leitores de primeira/segunda linha.**
+
+   | Leitor | Recorte e pressuposto |
+   |---|---|
+   | `_linha_do_topo` | Devolve somente `b[0]`: primeira útil é o painel vigente. `bin/hook_stop_fila1.py:410`; `bin/hook_stop_fila1.py:411`. |
+   | `_esperando_com_prova` | Primeira linha deve ser PAREI censo literal ou ESPERANDO com produtor/prova. Segunda linha não participa. `bin/hook_stop_fila1.py:746`; `bin/hook_stop_fila1.py:752`. |
+   | `_parei_do_em_curso` | Primeira linha deve começar PAREI, conter `!`, passar exclusões CLEAR/COTA/SONDA e referir fila pertinente. `bin/hook_stop_fila1.py:1198`; `bin/hook_stop_fila1.py:1201`; `bin/hook_stop_fila1.py:1213`; `bin/hook_stop_fila1.py:1218`; `bin/hook_stop_fila1.py:1223`. |
+   | `_orcamento` | Primeira linha decide o reconhecimento do PAREI CLEAR. `bin/hook_stop_fila1.py:1002`; `bin/hook_stop_fila1.py:1004`. |
+   | `_orcamento_contido`, recuperação | Primeira linha deve ser CLEAR e handoff recente para recuperação excepcional. `bin/hook_stop_fila1.py:1119`. |
+   | `_disjuntor_contido('b4')` | Entrega primeira linha para `b4_stop`; COTA deve ocupar essa posição. `bin/hook_stop_fila1.py:1138`; `bin/disjuntor.py:1290`. |
+   | B3 `_topo_consistente` → `linhas_libera_b3` | Fotografa duas primeiras úteis e busca DESENHO/ERRO-BOBO nelas. `bin/disjuntor.py:759`; `bin/disjuntor.py:1003`. |
+   | Handoff, prova censo | Consulta primeira linha pelo Stop; compartilha reconhecimento, não o inventário textual abaixo. `bin/handoff_sessao.sh:128`. |
+   | Handoff, inventário textual | Varre bloco inteiro até primeiro `## `, coleta PAREI/lei/!, exibe quatro primeiros. Pode exibir parada que Stop não considera vigente. `bin/handoff_sessao.sh:102`; `bin/handoff_sessao.sh:109`; `bin/handoff_sessao.sh:111`. |
+   | Alarme `_tem_parei` | Varre primeiras quarenta linhas físicas, aceita qualquer PAREI genérico e exige prova apenas do censo. Pode aceitar parada antiga deslocada abaixo do painel vigente. `bin/alarme_sessao_ociosa.py:124`; `bin/alarme_sessao_ociosa.py:134`; `bin/alarme_sessao_ociosa.py:137`; `bin/alarme_sessao_ociosa.py:140`. |
+   | Confirmação do escritor censo | Relê `_bloco_do_topo(...)[0]` e compara a linha recém-publicada; isso prova localização, não compatibilidade com painel/B3 deslocados. `bin/disjuntor.py:301`; `bin/disjuntor.py:302`. |
+
+3. **OBSERVACAO — escritores e travas.** Censo chama a porta nova (`bin/disjuntor.py:299`); alarmes do disjuntor usam `no_relato` (`bin/disjuntor.py:269`). Ambas delegam à mesma trava de diretório e gravação por temporário/replace (`app/core/esteira_vigia.py:842`; `app/core/esteira_vigia.py:891`; `app/core/esteira_vigia.py:853`; `app/core/esteira_vigia.py:921`; `app/core/esteira_vigia.py:926`). O vigia escreve alarmes por `no_relato`, em ALARMES, sem julgar painel linha 1/2 (`app/core/esteira_vigia.py:898`; `app/core/esteira_vigia.py:1603`). `vigia_arvore.sh` também delega à porta (`bin/vigia_arvore.sh:166`; `bin/vigia_arvore.sh:170`).
+
+   O Stop atual não escreve PAREI: seu comentário preserva a remoção desse comportamento (`bin/hook_stop_fila1.py:1379`; `bin/hook_stop_fila1.py:1387`). Escrita manual efetiva do painel nesta produção: **[nao verificado]**.
+
+4. **PROCEDENTE-candidato — segundo escritor fora da trava continua existente e pode restaurar fotografia antiga do topo.** `gerar_cortes.escrever` lê RELATO inteiro e depois regrava inteiro diretamente (`bin/gerar_cortes.py:117`; `bin/gerar_cortes.py:136`). `deploy_agendado.relato` faz o mesmo (`bin/deploy_agendado.sh:37`; `bin/deploy_agendado.sh:44`). Nenhum desses trechos toma a trava da porta; um intercalamento leitura antiga → censo publica PAREI → regravação antiga perde o PAREI novo, embora o escritor estivesse alterando outra seção (`app/core/esteira_vigia.py:850`; `app/core/esteira_vigia.py:853`). Ocorrência produtiva: **[nao verificado]**. Residual já declarado no próprio contrato de `no_relato`: `app/core/esteira_vigia.py:839`.
+
+5. **PROCEDENTE-candidato — selo de topo prova inserção, mas não o contrato compartilhado das posições.** Os cenários de `casos_topo` começam com painel neutro, exigem censo em primeiro e painel neutro em segundo (`bin/tests/test_censo_antes_da_vaga.sh:299`; `bin/tests/test_censo_antes_da_vaga.sh:307`; `bin/tests/test_censo_antes_da_vaga.sh:309`). Não há ali ESPERANDO/PAREI útil anterior combinado com linha B3; o teste, portanto, aceita precisamente o deslocamento que esconde o B3 do leitor limitado a duas linhas (`bin/tests/test_censo_antes_da_vaga.sh:297`; `bin/tests/test_censo_antes_da_vaga.sh:328`; `bin/hook_stop_fila1.py:442`). Execução integral dos selos: **[nao verificado]**.
+
+6. **OBSERVACAO — P1/P2 têm cura real local, mas não encerram o defeito de integração do topo.** A idempotência compara o painel vigente sob a trava; histórico inferior não impede republicação (`app/core/esteira_vigia.py:882`; `app/core/esteira_vigia.py:883`; `app/core/esteira_vigia.py:891`). A posição publicada é verificada pelo leitor do Stop (`bin/disjuntor.py:301`). Entretanto, recortes paralelos de Stop/B3, handoff e alarme continuam atribuindo vigência a posições diferentes (`bin/hook_stop_fila1.py:411`; `bin/hook_stop_fila1.py:442`; `bin/handoff_sessao.sh:102`; `bin/alarme_sessao_ociosa.py:124`). Classes presentes: **derivação paralela**, **segundo escritor fora da porta** e **selo sem mordida sobre a interação painel/B3**, nas referências dos achados 1, 2, 4 e 5.
 
 ## 09/11 03:50 · sessao 3bc64869901f · PAR-NAO-ADJACENTE · verificador · origem=Code
 
@@ -1002,164 +1059,4 @@ Q2/Q3 — leitura concluída, sem execução.
     - **8: restrição de formato declarada.** O juiz exige literalmente `? cortada por Ronald <token>` no fim; texto posterior deixa de contar, embora contenha a expressão de corte. `bin/disjuntor.py:1454`, `bin/disjuntor.py:1512`. A triagem fornecida pede ancoragem; autorização de todos os formatos rejeitados: **[nao verificado]**.
     - **9: ajuste coerente da âncora.** A mutação continua removendo `bash|sh` do ramo pertinente; `env` passou a ramo separado com atribuições. `bin/disjuntor.py:1288`, `bin/tests/test_disjuntor.sh:1741`. Execução verde do selo nesta auditoria: **[nao verificado]**.
 
-## 09/11 03:10 · sessao 4358b47b3955 · FIO-E0-V4-E2 · construtor · origem=Code
-
-Contrato E2 aplicado em `chamados/veredito_lavrado.py:119`, `:141`, `:213` e `chamados/management/commands/backfill_veredito_lavrado.py:111`. **Resta o ACHADO da catraca**, conforme a condição imposta: `instancias_do_turno` não monta universo pela porta (`chamados/services/tarefa_do_dia.py:88`). Suíte, testes RED e morte dos mutantes: **[nao verificado]**.
-
-Alterações por hunk:
-
-| Arquivo:linha atual | Alteração |
-|---|---|
-| [chamados/veredito_lavrado.py:95](/home/ronald/wt-codex-fio-e0-v4-e2-015740/app/chamados/veredito_lavrado.py:95) | `_hoje(agora)` obrigatório; somente converte o instante; rejeita `None`. |
-| `chamados/veredito_lavrado.py:107` | `relogio_virou` exige `agora`; conserva as duas comparações em dia local. |
-| `chamados/veredito_lavrado.py:119` | `expira_em(data_evento, hoje)` obrigatório, com `hoje` do tipo `date`; cálculo começa em `max(hoje, data_evento)` em `:141`. |
-| `chamados/veredito_lavrado.py:213` | `esta_stale(p, marcos, agora)` obrigatório; conserva rejeição de lavra futura em `:224`. |
-| `chamados/veredito_lavrado.py:273` | `lavrar` fornece o dia local do mesmo instante gravado em `julgado_em`. |
-| [backfill_veredito_lavrado.py:87](/home/ronald/wt-codex-fio-e0-v4-e2-015740/app/chamados/management/commands/backfill_veredito_lavrado.py:87) | Importa o conversor puro; lê um instante em `:94`, converte em `:95` e passa `hoje` em `:111`. |
-| [chamados/services/raiox.py:10](/home/ronald/wt-codex-fio-e0-v4-e2-015740/app/chamados/services/raiox.py:10) | Varredura exige `agora`; saiu a leitura interna do relógio. Marcos, lavra futura e comparação local usam esse horizonte em `:38`, `:41`, `:43`. |
-| [lavrar_perguntas_stale.py:59](/home/ronald/wt-codex-fio-e0-v4-e2-015740/app/chamados/management/commands/lavrar_perguntas_stale.py:59) | Command lê o relógio e entrega o horizonte à varredura em `:60`. |
-| [chamados/tests/test_e1_fila.py:352](/home/ronald/wt-codex-fio-e0-v4-e2-015740/app/chamados/tests/test_e1_fila.py:352) | Migração do chamador indireto de `expira_em`; mutantes atualizados em `:377`, `:384`; demais chamadas migradas em `:413`, `:427`. |
-| [test_selo_concordancia_varredura_stale.py:56](/home/ronald/wt-codex-fio-e0-v4-e2-015740/app/chamados/tests/test_selo_concordancia_varredura_stale.py:56) | Um horizonte compartilhado pela varredura e pelo leitor da lavra. |
-| [test_selo_get_nao_escreve.py:72](/home/ronald/wt-codex-fio-e0-v4-e2-015740/app/chamados/tests/test_selo_get_nao_escreve.py:72) | Três chamadas entregam o instante explicitamente: `:72`, `:102`, `:116`. |
-| [escala/tests/test_signal_ancora.py:107](/home/ronald/wt-codex-fio-e0-v4-e2-015740/app/escala/tests/test_signal_ancora.py:107) | Atualizada a âncora do mutante de lavra futura; varredura recebe instante com relógio envenenado em `:119`. |
-| `escala/tests/test_signal_ancora.py:281` | Acrescentados seis RED e seis métodos de mutação para contratos, conversão local e passagem dos argumentos pelos commands. |
-| [core/tests/test_medida_turno_do_par.py:313](/home/ronald/wt-codex-fio-e0-v4-e2-015740/app/core/tests/test_medida_turno_do_par.py:313) | Dois motivos individuais e registro `[1167, 1319]`. |
-
-Inventário dos chamadores alterados, antes → depois:
-
-| Função | Arquivo:linha anterior → atual | Migração |
-|---|---|---|
-| `_hoje` | `chamados/veredito_lavrado.py:114 → :116` | Já passava `agora`; mantido. |
-| `_hoje` | `chamados/veredito_lavrado.py:137 → removida` | `expira_em` usa diretamente `hoje`, agora em `:141`. |
-| `_hoje` | nova em `chamados/veredito_lavrado.py:273` | Converte `_agora` da lavra. |
-| `_hoje` | nova em `chamados/management/commands/backfill_veredito_lavrado.py:95` | Converte `agora` do command. |
-| `expira_em` | `chamados/veredito_lavrado.py:267 → :273` | `agora=_agora` → `_hoje(_agora)`. |
-| `expira_em` | `chamados/management/commands/backfill_veredito_lavrado.py:111 → :111` | `agora=agora` → `hoje`. |
-| `expira_em`, indireto por `fn` | `chamados/tests/test_e1_fila.py:352 → :352` | `fn(DIA)` → `fn(DIA, timezone.localdate(timezone.now()))`. |
-| `esta_stale` | `chamados/tests/test_e1_fila.py:412 → :413` | Acrescentado `marcos=None` explícito. |
-| `relogio_virou` | `chamados/veredito_lavrado.py:222 → :228` | Já passava `agora`; mantido. |
-| `relogio_virou` | `chamados/services/raiox.py:41 → :43` | Recebe agora o horizonte originado no command. |
-| `pks_stale_por_varredura` | `chamados/management/commands/lavrar_perguntas_stale.py:58 → :60` | Acrescentado `agora`. |
-| mesma | `chamados/tests/test_e1_fila.py:426 → :427` | Acrescentado `agora`. |
-| mesma | `chamados/tests/test_selo_concordancia_varredura_stale.py:56 → :57` | Acrescentado o instante compartilhado. |
-| mesma | `chamados/tests/test_selo_get_nao_escreve.py:72 → :72`, `:102 → :102`, `:116 → :116` | Relógio fornecido pelo teste chamador. |
-| mesma, indireto por `fn` | `escala/tests/test_signal_ancora.py:121 → :121` | Acrescentado `self.AGORA`; relógio interno envenenado. |
-
-Demais chamadas diretas, já compatíveis, antes → depois:
-
-| Função | Chamadores preservados |
-|---|---|
-| `expira_em` | `chamados/tests/test_selo_lavrado_orfaos.py:60→60`, `:61→61`, `:85→85`, `:86→86`, `:97→97`; `chamados/tests/test_e2_tarefa_do_dia.py:686→686`. |
-| `esta_stale` | `chamados/services/tarefa_do_dia.py:349→349`; `chamados/management/commands/auditar_invariantes_chamados.py:1167→1167`; `chamados/tests/test_e2_tarefa_do_dia.py:685→685`; `chamados/tests/test_porta_veredito_pergunta.py:270→270`, `:275→275`; `chamados/tests/test_selo_concordancia_varredura_stale.py:60→60`; `chamados/tests/test_selo_lavrado_orfaos.py:103→103`, `:115→115`, `:118→118`, `:128→128`, `:130→130`. |
-
-As omissões em `chamados/tests/test_e2_tarefa_do_dia.py:696` e `:698` permanecem: são precisamente os testes que exigem `TypeError`. Os novos leitores indiretos dos contratos e das funções estão em `escala/tests/test_signal_ancora.py:294`, `:303`, `:317`, `:334`, `:353`, `:375`, `:408`.
-
-Outros consumidores de `lavrar`: `chamados/models.py:312`, `:3007`, `:3150`; `chamados/services/fio.py:923`, `:1033`; `chamados/services/relavra_via.py:126`; `chamados/management/commands/lavrar_perguntas_stale.py:89`. Nos testes: `chamados/tests/test_e1_fila.py:372`; `chamados/tests/test_porta_veredito_pergunta.py:271`, `:286`, `:292`, `:318`, `:322`; `chamados/tests/test_selo_teto_placar.py:97`; `chamados/tests/test_profile_placar_rodinha.py:159`.
-
-Consumidores dos commands: backfill em `chamados/tests/test_porta_veredito_pergunta.py:502`, `:509`; lavra stale em `chamados/tests/test_selo_cron_lavrar_stale.py:45` e `chamados/tests/test_selo_get_nao_escreve.py:115`; novos exercícios diretos em `escala/tests/test_signal_ancora.py:395`, `:423`.
-
-Mantive `_dia_de_turno_da_pergunta` na tranca (`chamados/juizes.py:949`). Ele devolve `data_evento` para perguntas de fato e `None` para conversa (`chamados/juizes.py:332`). Os confrontos E2 consultados usam perguntas de fato (`chamados/tests/test_e2_tarefa_do_dia.py:1127`, `:1198`, `:1208`); passagem desses testes: **[nao verificado]**.
-
-Os registros deslocados continuam apontando para `_julgar_colab_corpo`: conversão da adesão em `ponto/services/cartorio.py:1167` e recorte das batidas em `:1319`. Os motivos individuais ficaram em `core/tests/test_medida_turno_do_par.py:313` e `:314`. Igualdade textual com o fonte histórico indisponível de `2ea1f4c3`: **[nao verificado]**.
-
-**ACHADO catraca: chamados/services/tarefa_do_dia.py:88.** A função recebe marcos prontos e converte a data civil em `:99`; não chama `parear_turnos` nem monta universo pela porta. Não acrescentei sua entrada a `CLASSIFICAR` (`core/tests/test_medida_turno_do_par.py:344`).
-
-Os sete testes do anexo ficam assim; passagem efetiva de cada um: **[nao verificado]**. [nao verificado]
-
-| Teste | Motivo tratado ou pendência | [nao verificado]
-|---|---|
-| `test_a_tarefa_e_a_lavra_lidas_sem_relogio` — `chamados/tests/test_e2_tarefa_do_dia.py:667` | `date` entra diretamente em `expira_em`; `_hoje` somente converte instante explícito (`chamados/veredito_lavrado.py:104`, `:141`). |
-| `test_a_VESPERA_e_LEI_o_ultimo_dia_da_competencia_vive_UMA_a_mais` — `chamados/tests/test_selo_lavrado_orfaos.py:69` | Corrigido o contrato de entrada; preservado o limite com `- timedelta(days=1)` (`chamados/veredito_lavrado.py:145`). |
-| `test_expira_em_devolve_FIM_DE_COMPETENCIA_nao_prazo_fixo` — `chamados/tests/test_selo_lavrado_orfaos.py:42` | Corrigido o contrato de entrada; preservado avanço pelo fim da competência (`chamados/veredito_lavrado.py:142`, `:147`). |
-| `test_esta_stale_exige_agora` — `chamados/tests/test_e2_tarefa_do_dia.py:692` | Assinaturas obrigatórias em `chamados/veredito_lavrado.py:119`, `:213`. |
-| `test_tarefa_e_leitores_da_lavra_nao_leem_o_relogio` — `chamados/tests/test_e2_tarefa_do_dia.py:1009` | Removida a leitura interna de `_hoje`; leitura da lavra permanece na borda declarada (`chamados/veredito_lavrado.py:104`, `:271`). |
-| `test_CATRACA_linhas_reais_congeladas_exigem_registro_no_mesmo_commit` — agora `core/tests/test_medida_turno_do_par.py:535` | Registro ajustado em `core/tests/test_medida_turno_do_par.py:315`. |
-| `test_a_classificar_publicado_sem_entrar_como_criterio_amplo` — agora `core/tests/test_medida_turno_do_par.py:541` | **Pendência mantida pelo ACHADO acima. Não afirmo que passa.** |
-
-Comandos individuais para o Code, não executados aqui. Os seis RED e seis métodos MORDE novos estão em `escala/tests/test_signal_ancora.py:294`, `:303`, `:324`, `:328`, `:343`, `:347`, `:363`, `:367`, `:395`, `:399`, `:423`, `:427`:
-
-```bash
-r() {
-  PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test \
-    --settings=config.settings_test "$1"
-}
-c() { r "escala.tests.test_signal_ancora.RebaseE2ContratoRelogioTest.$1"; }
-
-c test_RED_argumentos_obrigatorios
-c test_MORDE_defaults_opcionais
-c test_RED_hoje_so_converte_instante
-c test_MORDE_hoje_le_relogio
-c test_RED_expira_recebe_date_sem_relogio
-c test_MORDE_expira_rele_relogio
-c test_RED_relogio_virou_preserva_dois_dias_locais
-c test_MORDE_dia_UTC_em_cada_lado
-c test_RED_backfill_passa_date_do_mesmo_instante
-c test_MORDE_backfill_instante_ou_segundo_relogio
-c test_RED_command_stale_entrega_horizonte
-c test_MORDE_command_omite_horizonte
-```
-
-Comandos dos exercícios existentes afetados pela migração (`escala/tests/test_signal_ancora.py:101`, `:105`, `:124`, `:128`, `:134`; `chamados/tests/test_e1_fila.py:354`, `:370`, `:375`, `:382`, `:409`, `:420`):
-
-```bash
-l() { r "escala.tests.test_signal_ancora.RebaseE2LeitoresTest.$1"; }
-
-l test_RED_lavra_futura
-l test_MORDE_lavra_futura
-l test_RED_varredura_no_mesmo_horizonte
-l test_MORDE_varredura_sem_corte
-l test_MORDE_varredura_aceita_lavra_futura
-
-r chamados.tests.test_e1_fila.F5RelogioDaBordaTest.test_RED_expira_em_le_o_relogio_da_borda
-r chamados.tests.test_e1_fila.F5RelogioDaBordaTest.test_a_lavra_e_a_janela_leem_o_MESMO_instante
-r chamados.tests.test_e1_fila.F5RelogioDaBordaTest.test_MORDE_duas_leituras_do_relogio_na_lavra
-r chamados.tests.test_e1_fila.F5RelogioDaBordaTest.test_MORDE_a_volta_do_date_today
-r chamados.tests.test_e1_fila.DiaLocalEstaStaleTest.test_RED_esta_stale_le_o_dia_local
-r chamados.tests.test_e1_fila.DiaLocalVarreduraTest.test_RED_a_varredura_le_o_dia_local
-```
-
-`py_compile` concluiu com rc=0 nos nove arquivos alterados listados acima. Comando executado, com escrita de bytecode bloqueada:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
-import py_compile
-import subprocess
-from unittest.mock import patch
-
-arquivos = subprocess.check_output(
-    ['git', 'diff', '--name-only', '--relative'], text=True
-).splitlines()
-
-with patch('py_compile.os.makedirs'), \
-     patch('py_compile.importlib._bootstrap_external._write_atomic'):
-    for arquivo in arquivos:
-        if arquivo.endswith('.py'):
-            py_compile.compile(arquivo, doraise=True)
-            print('OK:', arquivo)
-PY
-```
-
-## 09/11 03:09 · sessao 0c12bed4fd26 · - · - · origem=Ronald (tmux)
-
-Q4 — cadeia e efeitos, somente leitura:
-
-- `_match_marcos` é o ponto comum de alinhamento; recebe papel de `_papeis_do_turno` quando há `turno=`, ou de `_papeis_por_alternancia` sem turno. O ramo de papéis gera células, órfãs e marca as batidas consumidas. (`app/escala/utils.py:585`, `app/escala/utils.py:596`, `app/escala/utils.py:613`, `app/escala/utils.py:620`)
-- O builder por turno passa `turno=`; o single e o dry-run chamam com `derivar=False`. Assim, corrigir apenas `_papeis_do_turno` incide diretamente no builder por turno, enquanto esses outros caminhos conservam a DP. (`app/escala/utils.py:776`, `app/escala/utils.py:1650`, `app/escala/utils.py:1701`)
-- Para apurar o realizado da montagem atual, o builder cria cópias em memória das células, entrega as lâmpadas e órfãs recém-montadas, chama `turnos_do_colab` com elas e depois `realizado_do_dia`; grava seu resultado no dict da grade. Essa é a passagem pela qual um novo alinhamento altera o intervalo reconhecido e o número da ata. (`app/escala/utils.py:1886`, `app/escala/utils.py:1892`, `app/escala/utils.py:1898`, `app/escala/utils.py:2045`, `app/escala/utils.py:2058`)
-- O cartório carrega `batidas_apuraveis`, chama o builder e serializa lâmpadas, órfãs e `minutos_realizados` em `ata_do_dia`. (`app/ponto/services/cartorio.py:1121`, `app/ponto/services/cartorio.py:1126`, `app/ponto/services/cartorio.py:696`, `app/ponto/services/cartorio.py:706`)
-- A Zona 5 do motor chama `_match_marcos` **sem** `turno=` sobre entradas/saídas dos períodos do dia, associa períodos aos marcos `hi`/`hfi` e aplica atraso/antecipada. Sua leitura direta usa `_papeis_por_alternancia`, portanto a troca da adjacência de `_papeis_do_turno` não basta, isoladamente, para afirmar mudança direta neste caminho. (`app/ponto/motor_calculo_v2.py:3060`, `app/ponto/motor_calculo_v2.py:3062`, `app/ponto/motor_calculo_v2.py:3064`, `app/ponto/motor_calculo_v2.py:3077`, `app/escala/utils.py:597`)
-- `marco_ocupado_pela_batida` transcreve `_match_marcos`, sem turno, devolvendo rótulo/delta; o casamento com a batida usa HH:MM. (`app/escala/utils.py:395`, `app/escala/utils.py:427`, `app/escala/utils.py:429`)
-- `regua_defesa.cumpriu_a_volta_do_intervalo` entrega apenas um período a esse leitor e exige `hfi` com delta dentro da tolerância; esse único período fica na DP, porque a derivação por alternância exige pelo menos quatro batidas. Motor e calculador consultam esse predicado para retirar o previsto de entrada de quem cumpriu a volta. (`app/escala/regua_defesa.py:489`, `app/escala/regua_defesa.py:491`, `app/escala/regua_defesa.py:493`, `app/escala/utils.py:485`, `app/escala/utils.py:489`, `app/ponto/motor_calculo_v2.py:2117`, `app/ponto/calculador/regras.py:251`)
-
-Dinheiro e leitores:
-
-- O realizado líquido subtrai `intervalos_do_turno`; a conversão para minutos acontece antes da subtração. (`app/ponto/turnos.py:740`, `app/ponto/turnos.py:756`, `app/ponto/turnos.py:758`, `app/ponto/turnos.py:767`)
-- O motor também lê o papel da ata quando recebe células alimentadas, chama o mesmo pareador e transporta os intervalos pelo adaptador. Portanto o alinhamento pode chegar ao cálculo financeiro **pela ata**, além dos chamadores diretos de `_match_marcos`. (`app/ponto/motor_calculo_v2.py:495`, `app/ponto/motor_calculo_v2.py:500`, `app/ponto/motor_calculo_v2.py:503`, `app/ponto/motor_calculo_v2.py:530`, `app/ponto/adaptador_motor.py:44`)
-- No 12x36, o motor recorta os intervalos na janela, calcula pausa real, subtrai da duração, calcula supressão com tolerância e grava minutos trabalhados/indenização. A tolerância de intrajornada é dez minutos na cópia. (`app/ponto/motor_calculo_v2.py:2764`, `app/ponto/motor_calculo_v2.py:2771`, `app/ponto/motor_calculo_v2.py:2774`, `app/ponto/motor_calculo_v2.py:2776`, `app/ponto/motor_calculo_v2.py:2784`, `app/ponto/motor_calculo_v2.py:2785`, `app/ponto/motor_calculo_v2.py:69`)
-- `DiaPago` recebe horas trabalhadas e intrajornada indenizada dividindo os campos do período por 60. O espelho lê `realizado_h` da autoridade do realizado e `pago_h`/rubricas da lavratura, portanto os números podem divergir. (`app/ponto/services/dia_pago.py:178`, `app/ponto/services/dia_pago.py:186`, `app/ponto/services/espelho.py:783`, `app/ponto/services/espelho.py:799`, `app/ponto/services/espelho.py:811`, `app/ponto/services/espelho.py:813`)
-- O leitor da célula transporta o realizado da ata; o PDF de validação soma e divide por 60. Causas, classificação, comparação ata/juiz e calendário também o leem. (`app/escala/services/leitor_celula.py:369`, `app/escala/services/leitor_celula.py:406`, `app/folha/validacao_pdf.py:48`, `app/folha/validacao_pdf.py:54`, `app/folha/causas.py:85`, `app/ponto/supra_juiz.py:224`, `app/ponto/services/bordas_realizado.py:87`, `app/colaboradores/services/calendario.py:359`)
-- Fechamento e percentual usam realizado limitado ao previsto de cada dia; a mesma diferença pode desaparecer no teto ou afetar cumprimento/abono. (`app/ponto/services/dia_pago.py:394`, `app/ponto/services/dia_pago.py:395`, `app/ponto/services/fechamento.py:1061`, `app/ponto/services/fechamento.py:1064`, `app/folha/export.py:1096`, `app/folha/export.py:1103`)
-
-No dado raspado, antes→rejulgado: ata **660→599 min**, pausa descontada pelo motor **58,0130167→119,6599667 min**; indenização intrajornada **0→0**; pagamento já lavrado **10,87 h→10,87 h**, com rubricas exibidas idênticas. São evidências do texto fornecido, sem arquivo local/linha: **[não verificado]**. O segundo `minutos_trabalhados` está raspado, e o dado não prova novo pagamento lavrado nem valor em reais: **[não verificado]**.
-
-_3014 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3016 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

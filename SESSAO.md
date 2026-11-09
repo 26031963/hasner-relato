@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 03:59:34.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (177.8 MB). Acoes na janela: **900**.
+**Medido em 09/11/2026 04:05:08.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (178.0 MB). Acoes na janela: **909**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:02:44 | Bash | Update ESPERANDO pid and log E2 green | `kill -0 1896030 && python3 - <<'EOF' r='docs/RELATO.md'; t=open(r).read().split('\n') assert t[1].startswith('ESPERANDO:') t[1]='ESPERANDO: trava_teste.sh \| pid=1896030' t.insert(2,"FIO-E0-V4-E2 04:02: suite inteira v3 na copia ad77299d (inclui V2-2 89df8c52) VERDE -- OK (skipped=42, expected failures=41), Ran 14731, rc=0 (logs/fio_e0_v4/e2_rebase/suite_v3.log). Nao pousa ate E3. Trava passou a s ...` |
+| 04:02:37 | Bash | Read E2 suite v3 verdict and trava holder | `cd /home/ronald/saas-hasner && L=logs/fio_e0_v4/e2_rebase/suite_v3.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran' $L \| tail -1; grep '^rc=' $L \| tail -1; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; date` |
+| 04:00:30 | Bash | Log I-1 volta 3 in RELATO | `python3 - <<'EOF' r='docs/RELATO.md'; t=open(r).read().split('\n') t.insert(2,"SELOS-CANON-I1 03:5x: construtor volta 3 = eec4007f7 (copia wt-i1-censovaga-015903): P1-P6 + achados 6/7 da triagem v2 curados segundo o construtor; selo 22 mutantes mordem, codex_pergunta 75; P7-P9 DESCARTADOS ao opus. Falso vermelho de worktree: test_handoff_sessao (settings.json aponta a raiz principal). Pre-verifica ...` |
+| 04:00:27 | Bash | Run Codex pre-verifier v3 for I-1 | `bash /home/ronald/saas-hasner/logs/selos_canon/i1_lancar_preverif_v3.sh` |
+| 04:00:24 | Bash | Prepare I-1 preverif v3 question, triage, launcher | `cd /home/ronald/saas-hasner && D=logs/selos_canon && rm -rf logs/selos_canon_i1/diff_v3.diff && rmdir logs/selos_canon_i1 2>/dev/null; ls logs/selos_canon_i1 2>/dev/null git diff 457e8afa..eec4007f7 > $D/i1_diff_v3_delta.diff; git diff 6adca14f..eec4007f7 > $D/i1_diff_v3_total.diff; wc -l $D/i1_diff_v3_*.diff cat > $D/i1_triagem_v2.txt <<'EOF' TRIAGEM DA VOLTA 2 (pre-verificador v2, i1_preverif_v2 ...` |
+| 04:00:01 | Bash | Read prior I-1 preverif v2 launcher and question | `cd /home/ronald/saas-hasner/logs/selos_canon && cat i1_lancar_preverif_v2.sh; cat i1_preverif_v2.q \| head -60; ls i1_*` |
+| 03:59:54 | Bash | Find prior I-1 Codex question/answer files | `cd /home/ronald/saas-hasner && grep -rl "SELOS-CANON-I1" logs/*/ 2>/dev/null \| grep -E '\.(q\|r\|sh)$' \| head` |
+| 03:59:51 | Bash | List prior I-1 preverif artifacts | `cd /home/ronald/saas-hasner && D=logs/selos_canon_i1; ls logs/selos_canon_i1/selos_canon_i1 \| head -30; ls logs/codex 2>/dev/null \| grep -i I1 \| tail -5` |
+| 03:59:49 | Bash | Save I-1 v3 diff and inspect logs dir | `cd /home/ronald/saas-hasner && D=logs/selos_canon_i1; mkdir -p $D; git -C /home/ronald/wt-i1-censovaga-015903 log --oneline -4; git diff 457e8afa..eec4007f7 > $D/diff_v3.diff; wc -l $D/diff_v3.diff; ls $D; ls logs \| grep -i i1 \| head` |
 | 03:51:32 | Bash | Fix time label on RELATO line | `sed -i '3s/^PAR-NAO-ADJACENTE 04:3x:/PAR-NAO-ADJACENTE 03:5x:/' docs/RELATO.md && sed -n 3p docs/RELATO.md \| cut -c1-40` |
 | 03:51:30 | Bash | Check RELATO top, trava pid, E2 suite tail | `sed -n 1,3p docs/RELATO.md \| cut -c1-160; kill -0 1541241 && echo vivo; tail -2 /home/ronald/saas-hasner/logs/fio_e0_v4/e2_rebase/suite_v3.log; date` |
 | 03:50:22 | Bash | Log PAR v3 triage; confirm _n line untouched by diff | `python3 - <<'EOF' r='docs/RELATO.md'; t=open(r).read().split('\n') t.insert(2,"PAR-NAO-ADJACENTE 04:3x: pre-verificador v3 rc 0 (preverif_v3.r): _n+=0 morto (teste:128/140); pareador real produz 10-11 e 14-15 (turnos.py:811-820 rastreado). DESCARTADO ao opus: mutante _n=1 sobrevive com 3 pares -- a linha _n += 1 e do HEAD, o diff nao a toca (escala/utils.py:471, conferido no diff_v3), lacuna de co ...` |
