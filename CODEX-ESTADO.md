@@ -1,7 +1,123 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 15:11** · publicado em **09/11/2026 15:11** (UTC-3)
+> Ultima resposta processada: **09/11/2026 15:14** · publicado em **09/11/2026 15:17** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 15:14 · sessao f5a6761ef894 · CODEX-2-RAIAS-PORTAO-CPU · verificador · origem=Code
+
+**REPROVA.** Procedentes: **P1 — escape do `--toca`; P2 — divergência entre admissão e fim; P3 — contador de runs contradiz o contrato declarado; P4 — falso vermelho condicional no selo.** Evidências abaixo. (`bin/codex_pergunta.sh:217`, `bin/codex_pergunta.sh:284`, `bin/codex_vagas_medida.py:114`, `bin/tests/test_codex_pergunta.sh:720`)
+
+1. **T1 — semântica e escapes**
+
+   **P1: nome com TAB escapa do arquivo exato.** O inventário imprime o nome sem codificação; o leitor separa por TAB e considera somente `c[1]`. Assim, o arquivo real `app/folha/views.py<TAB>fora` é interpretado como `app/folha/views.py` e passa por `--toca app/folha/views.py`. Reproduzi rc 0 executando a função real somente em memória. A validação dos caracteres do argumento não restringe os nomes encontrados no filesystem. (`bin/codex_pergunta.sh:217`, `bin/codex_pergunta.sh:278`, `bin/codex_pergunta.sh:282`, `bin/codex_pergunta.sh:323`)
+
+   **P2: arquivos novos irmãos admitem e depois recusam.** `--toca app/novo/a.py` e `app/novo/b.py` são disjuntos na admissão. Porém, criar `a.py` também inventaria `app/novo/`: o fim aceita essa pasta como pai necessário ao meu arquivo e simultaneamente a considera cruzada com o arquivo da outra raia. Reproduzi admissão rc 0 e fim rc 3 em memória. Isso contraria o critério escrito de **arquivo em comum**, sem bloquear por família/app. (`bin/codex_pergunta.sh:263`, `bin/codex_pergunta.sh:270`, `bin/codex_pergunta.sh:196`, `bin/codex_pergunta.sh:284`, `bin/codex_pergunta.sh:287`, `CLAUDE.md:306`)
+
+   A primitiva `cobre/cruza` é compartilhada: arquivo usa igualdade; pasta usa prefixo terminado em `/`. A divergência P2 surge do tratamento adicional das pastas inventariadas. (`bin/codex_pergunta.sh:263`, `bin/codex_pergunta.sh:266`, `bin/codex_pergunta.sh:284`)
+
+   `..`, `/./`, barra dupla, absoluto e raiz diferente de `app/` ou `bin/` são recusados no argumento. Symlink tocado é proibido; a varredura usa `lstat` e não segue diretórios symlink. Ausência de escape transitório durante a execução: **[não verificado]**. (`bin/codex_pergunta.sh:323`, `bin/codex_pergunta.sh:188`, `bin/codex_pergunta.sh:194`, `bin/codex_pergunta.sh:215`)
+
+   O chamador fornece `--toca`; o parser preenche `TOCA[]`; `_publica_estado` grava `toca=`; `_toca_de` lê; `_portoes` compara na admissão e o fim relê a outra vaga. (`bin/codex_pergunta.sh:71`, `bin/codex_pergunta.sh:311`, `bin/codex_pergunta.sh:291`, `bin/codex_pergunta.sh:305`, `bin/codex_pergunta.sh:567`)
+
+2. **T2 — MORTO/ERRADO/VIVO**
+
+   Não encontrei morte acidental concreta nos casos atuais. O acidente de `saida_symlink` foi corrigido: o caso exige `saida … e symlink`, enquanto a guarda seguinte escreve `codex: trava … e symlink`. (`bin/tests/test_codex_pergunta.sh:201`, `bin/codex_pergunta.sh:338`, `bin/codex_pergunta.sh:511`)
+
+   O controlador exige todos os esperados; ERRADO e VIVO aumentam as falhas. O autoteste morde: trocar a decisão por `echo MORTO` reprova outra asserção, dois esperados e esperado vazio. Isso foi exercitado em memória. (`bin/tests/test_codex_pergunta.sh:747`, `bin/tests/test_codex_pergunta.sh:751`, `bin/tests/test_codex_pergunta.sh:753`, `bin/tests/test_codex_pergunta.sh:754`, `bin/tests/test_codex_pergunta.sh:775`)
+
+   Existe uma fragilidade: a busca não ancora a linha; um diagnóstico contendo `FALHA: <esperado>` também pode contar MORTO. Os autotestes não cobrem esse eco; um mutante da lista que efetivamente o produza permanece **[não verificado]**. (`bin/tests/test_codex_pergunta.sh:747`, `bin/tests/test_codex_pergunta.sh:750`)
+
+   **P4: regressão condicional de portabilidade.** O cenário calcula `NPL=nproc-2`, mas dois esperados cravam `load5 6.00`. Com `nproc != 8`, classificam ERRADO uma morte pela asserção pretendida. É falso vermelho; ocorrência no host de produção: **[não verificado]**. (`bin/tests/test_codex_pergunta.sh:100`, `bin/tests/test_codex_pergunta.sh:520`, `bin/tests/test_codex_pergunta.sh:720`, `bin/tests/test_codex_pergunta.sh:722`)
+
+3. **T3 — histórico e trava**
+
+   A derivação paralela foi corrigida: `HIST="$TRAVA.hist"` tem um sítio; a medida pergunta `--hist`. Os eventos produtivos encontrados são escritos por `_hist`, com `ini` após aquisição e `fim` no trap. Os selos também escrevem históricos, em cenários isolados. (`bin/trava_teste.sh:31`, `bin/trava_teste.sh:32`, `bin/trava_teste.sh:53`, `bin/trava_teste.sh:54`, `bin/codex_vagas_medida.py:115`, `bin/tests/test_trava_hist_unico.sh:54`)
+
+   Portanto, **nem todo leitor literalmente pergunta**: o selo antigo usa diretamente `iso.lock.hist`, mas antes confere a resposta de `--hist`; o leitor produtivo pergunta. (`bin/tests/test_trava_teste.sh:112`, `bin/tests/test_trava_teste.sh:145`, `bin/codex_vagas_medida.py:115`)
+
+   **`--presa` pode atrasar um chamador real.** Ele adquire exclusividade brevemente com `flock -n`; o chamador real disputa o mesmo lock com espera finita. Usar `-w` não prova ausência de colisão nem impossibilidade de rc 75 no limite da espera. Ocorrência e impacto reais: **[não verificado]**. L-074 exige exclusividade e rc correto, sem garantir FIFO; trataria a interferência como decisão técnica/fila, corrigindo a alegação absoluta da entrega. (`bin/trava_teste.sh:39`, `bin/trava_teste.sh:40`, `bin/trava_teste.sh:48`, `bin/trava_teste.sh:50`, `app/docs/LEIS.md:101`)
+
+   A regra declarada pode **inflar** ocupação incluindo o intervalo ocioso entre um órfão e o próximo `ini`, ou **zerar** ocupação efetiva do último órfão quando a trava está livre. Isso é consequência da regra explicitada, não motivo novo para reprovar por preferência. (`bin/codex_vagas_medida.py:110`, `bin/codex_vagas_medida.py:142`, `bin/codex_vagas_medida.py:152`)
+
+   A prova de vida não identifica o órfão: leitura do histórico e sondagem são separadas; outro chamador pode adquirir a trava antes de publicar seu `ini`. Nesse intervalo, o órfão antigo recebe a vida da chamada nova. (`bin/codex_vagas_medida.py:130`, `bin/codex_vagas_medida.py:149`, `bin/trava_teste.sh:48`, `bin/trava_teste.sh:53`)
+
+   **Mais de 24h ainda é possível com relógio regressivo.** A sequência temporal `[ini A 00h, fim A 24h, ini B 00h, fim B 24h]` retorna 48h: o escritor usa relógio civil e o leitor soma sem validar regressão ou unir sobreposições. Com timestamps não decrescentes, a máquina de um único aberto elimina a sobreposição antiga dos órfãos. Recuo real do relógio: **[não verificado]**. (`bin/trava_teste.sh:32`, `bin/codex_vagas_medida.py:123`, `bin/codex_vagas_medida.py:139`, `bin/codex_vagas_medida.py:145`)
+
+   **P3: o contador contradiz a declaração.** A docstring promete que todo órfão entra em `n de runs`; o código só incrementa `n` com duração positiva. Um órfão solto retorna `(0 segundos, 0 runs, 1 órfão)`. O selo exige essa exclusão. (`bin/codex_vagas_medida.py:114`, `bin/codex_vagas_medida.py:126`, `bin/codex_vagas_medida.py:128`, `bin/tests/test_trava_hist_unico.sh:57`)
+
+4. **DECISÃO-ABERTA 1–7**
+
+   | Nº | Resposta pela lei ou encaminhamento |
+   |---|---|
+   | 1 | Retenção/caminho é decisão técnica do Code; não achei exigência de persistência histórica. A limpeza efetiva de `/tmp` no reboot é **[não verificado]**, embora afirmada no comentário. (`CLAUDE.md:273`, `bin/trava_teste.sh:30`) |
+   | 2 | **L-003 responde:** fonte ausente não autoriza inventar zero. A exceção vira “não sei”. (`app/docs/LEIS.md:61`, `bin/codex_vagas_medida.py:130`, `bin/codex_vagas_medida.py:193`) |
+   | 3 | A opção restritiva já cabe na regra de cura mais restritiva; não pede lei nova. O mesmo caminho com/sem `/` cruza expressamente. (`CLAUDE.md:278`, `bin/codex_pergunta.sh:266`) |
+   | 4 | Política técnica de estimativa/retenção; a implementação fecha pelo próximo `ini` sem consultar boot. Não há resposta legal específica identificada. (`CLAUDE.md:273`, `bin/codex_vagas_medida.py:108`, `bin/codex_vagas_medida.py:142`) |
+   | 5 | Questão técnica/fila; “nenhum chamador perde a vez” não está demonstrado pelo uso de espera finita. (`CLAUDE.md:273`, `bin/trava_teste.sh:40`, `bin/trava_teste.sh:48`) |
+   | 6 | Conferência de ambiente, não pergunta de lei. Ruff do container e equivalência com o resultado entregue: **[não verificado]**. |
+   | 7 | O leitor produtivo agora usa `--hist`; existência/conteúdo dos históricos antigos e necessidade real de migração: **[não verificado]**. Não sustento “nada a migrar” como fato de produção. (`bin/codex_vagas_medida.py:115`) |
+
+5. **Regressão no delta**
+
+   Vagas, portões de CPU e lista protegida de `bin/` mantêm os sítios operacionais apresentados na volta 1; as mudanças de comportamento encontradas no delta são P2, P4 e a nova contagem/sondagem do histórico. (`bin/codex_pergunta.sh:157`, `bin/codex_pergunta.sh:293`, `bin/codex_pergunta.sh:380`, `bin/codex_pergunta.sh:284`, `bin/tests/test_codex_pergunta.sh:720`, `bin/codex_vagas_medida.py:139`)
+
+   `vaga=N` continua no último campo. O leitor posicional conserva os índices anteriores: sessão em `p[6]`, rc em `p[7]`, duração em `p[8]`; não exige tamanho exato. Disjuntor e gerador de estado usam esse leitor. Não encontrei quebra posicional nesses consumidores. (`bin/codex_pergunta.sh:229`, `bin/codex_pergunta.sh:428`, `bin/codex_limite_estado.py:66`, `bin/codex_limite_estado.py:67`, `bin/disjuntor.py:2121`, `bin/gerar_codex_estado.py:176`)
+
+   A leitura semanal reutiliza `leituras_semanais`, sem novo juiz para esse insumo. O relógio da medida entra em `main` e é passado às funções; a borda de horário do wrapper permanece na admissão. (`bin/codex_vagas_medida.py:78`, `bin/codex_vagas_medida.py:226`, `bin/codex_pergunta.sh:300`)
+
+6. **Quem escreve / quem lê**
+
+   | Campo ou arquivo | Escritor → leitor |
+   |---|---|
+   | `--toca`, `TOCA[]` | Chamador → parser, validação, prompt, admissão e fim. (`bin/codex_pergunta.sh:71`, `:323`, `:465`, `:305`, `:574`) |
+   | Caminhos das vagas/meta/estados | Wrapper deriva do common-dir → reserva nomes, abre locks e consulta estados. (`bin/codex_pergunta.sh:85`, `:93`, `:97`, `:380`, `:389`) |
+   | Flock das vagas | Wrapper adquire → `_viva` testa o próprio flock. (`bin/codex_pergunta.sh:383`, `:386`, `:253`) |
+   | `.estado`: `vaga,pid,obra,wt,hash,hora,toca` | `_publica_estado` grava por rename; `_saida` remove. Decisão lê `toca=`; os demais campos não são lidos por essa decisão. (`bin/codex_pergunta.sh:310`, `:311`, `:236`, `:291`) |
+   | Load5, hora, pausas | `/proc/loadavg`, relógio e arquivos de pausa → portões; entradas falsas passam pela guarda de teste. (`bin/codex_pergunta.sh:118`, `:294`, `:297`, `:300`, `:328`, `:112`) |
+   | `chamadas.log`: hora, obra, papel, hash, pid, evento, pergunta/sessão, rc, duração, vaga | Wrapper → leitor posicional e contador de vaga 2. (`bin/codex_pergunta.sh:229`, `:428`, `bin/codex_limite_estado.py:49`, `bin/codex_vagas_medida.py:160`) |
+   | `vaga2.log`: hora, obra, motivo, load5, fonte | `_recusa_v2` → contagem diária e selo. (`bin/codex_pergunta.sh:249`, `bin/codex_vagas_medida.py:166`, `bin/tests/test_codex_pergunta.sh:521`) |
+   | Arquivos da WT, HEAD, gitfile, blobs, modos, links e ignorados | Construtor/git → mesmo inventário no pré-check, revalidação e fim. (`bin/codex_pergunta.sh:174`, `:181`, `:194`, `:397`, `:530`, `:560`) |
+   | `.inventario`: classe, caminho, motivo | Inventário e verificações finais → `_TOCA_PY`, decisão rc 3 e `.recusa`. (`bin/codex_pergunta.sh:217`, `:278`, `:560`, `:575`, `:579`) |
+   | Resposta/JSONL/stderr; `.id`, `.rc` | Codex escreve saída; wrapper publica resposta e sidecars. `.id` é lido pela triagem; `.rc` é cobrado no selo. (`bin/codex_pergunta.sh:545`, `:553`, `:232`, `:604`, `bin/disjuntor.py:854`, `bin/tests/test_codex_pergunta.sh:174`) |
+   | `TRAVA`, `HIST`, eventos `epoch,ini/fim,quem,rc` | `trava_teste.sh` define/publica e escreve eventos → medida pede caminho e lê eventos; `rc` não participa da soma. (`bin/trava_teste.sh:23`, `:31`, `:32`, `:38`, `bin/codex_vagas_medida.py:115`, `:132`, `:144`) |
+   | `TRAVA.quem` | Trava escreve → `--quem` e diagnóstico de timeout. (`bin/trava_teste.sh:52`, `:54`, `:37`, `:49`) |
+   | Sar: `ldavg-5`, Average e amostras | `sar -q` → parser, desligador e linha diária. (`bin/codex_vagas_medida.py:43`, `:57`, `:66`, `:88`, `:198`) |
+   | Sessões: timestamp, janela, used_percent, resets_at | Codex CLI é o produtor declarado; leitor canônico → desligador. Escrita efetiva do CLI: **[não verificado]**. (`bin/codex_vagas_medida.py:15`, `bin/codex_limite_estado.py:154`, `:155`, `:159`, `bin/codex_vagas_medida.py:78`) |
+   | Cota: `seven_day_pct,resets_at,hora`; foto anterior | Statusline grava cota → medida calcula diferença entre fotos. Produtor da foto anterior: **[não verificado]**. (`bin/statusline_cota.py:51`, `:54`, `bin/codex_vagas_medida.py:178`, `:180`, `:182`) |
+   | Mutantes, esperados, saídas e tabela | Selos fabricam cenários/mutantes → classificadores e resultado final. (`bin/tests/test_codex_pergunta.sh:643`, `:769`, `:775`, `bin/tests/test_trava_hist_unico.sh:80`, `:95`, `:97`) |
+
+**Veredito final: REPROVA — P1 e P2 exigem cura do controle de escopo; P3 exige alinhar contagem e contrato; P4 exige alinhar o esperado ao cenário dinâmico.** GREEN integral da volta 2 não foi reproduzido nesta verificação somente leitura. (`bin/codex_pergunta.sh:217`, `:284`, `bin/codex_vagas_medida.py:114`, `:128`, `bin/tests/test_codex_pergunta.sh:100`, `:720`; GREEN: **[não verificado]**)
+
+## 09/11 15:12 · sessao aafe6042da94 · - · - · origem=Ronald (tmux)
+
+T3 ficou com fonte única de caminho: `TRAVA` em `bin/trava_teste.sh:23`, `HIST="$TRAVA.hist"` em `:31`, publicação por `--hist` em `:38`; o leitor pergunta por `_trava('--hist')` em `bin/codex_vagas_medida.py:103-118`.
+
+- **Escritores/leitores encontrados:** produção escreve eventos exclusivamente por `_hist` (`bin/trava_teste.sh:32`), chamado com `ini` após adquirir a trava (`:47-53`) e `fim` no trap (`:54`). A medida lê os quatro campos, mas ignora `rc` (`bin/codex_vagas_medida.py:130-146`). Os testes escrevem históricos sintéticos isolados (`bin/tests/test_trava_hist_unico.sh:30-34,54`; `bin/tests/test_trava_teste.sh:105-112,145-149`). O teste antigo também conhece `iso.lock.hist` diretamente, porém confere que `--hist` devolve esse caminho (`bin/tests/test_trava_teste.sh:112,145-149`).
+- **`--presa` interfere na trava:** abre o lock e tenta adquirir exclusividade com `flock -n`, soltando depois (`bin/trava_teste.sh:39-40`); o chamador real disputa o mesmo lock com espera finita (`:47-50`). Assim, pode ocupar um intervalo livre antes do chamador real e atrasá-lo. A conclusão da entrega “nenhum chamador vira rc75 pela colisão” não decorre do código: o timeout pode vencer durante essa ocupação. Ocorrência real, duração e frequência: **[não verificado]**. L-074 exige exclusividade e rc correto, sem promessa FIFO nem proibição expressa de sondagem (`app/docs/LEIS.md:101`); classificaria a interferência como decisão técnica/fila, sem inventar violação de lei.
+- **Regra dos órfãos:** próximo `ini` fecha o anterior (`bin/codex_vagas_medida.py:139-143`); último órfão solto soma zero, preso soma até `agora` (`:147-153`). Pode incluir lacuna ociosa ou zerar ocupação efetiva, mas isso foi explicitamente permitido pela triagem v1 e declarado (`:110-114`); não é motivo novo de reprovação por preferência.
+- **Identidade não é provada:** leitura do histórico e `--presa` são operações distintas (`bin/codex_vagas_medida.py:130-153`). Se após EOF um novo chamador prende o lock antes de publicar seu `ini`, o `--presa` pode atribuir vida a um órfão antigo; essa janela existe entre adquirir lock e `_hist ini` (`bin/trava_teste.sh:48-53`). O teste “presa” segura apenas o flock, sem identidade nem evento novo (`bin/tests/test_trava_hist_unico.sh:60-68`), portanto não distingue esse caso.
+- **Mais de 24h ainda possível com relógio regressivo:** executei somente em memória a função real extraída por AST, substituindo `open` por `StringIO` e `_trava` por retorno sintético. Eventos `[ini A 00h, fim A 24h, ini B 00h, fim B 24h]` retornam `(172800.0, 2, 0)`, ou 48h. O escritor usa wallclock (`bin/trava_teste.sh:32`); o leitor soma intervalos sem validar sequência temporal nem unir sobreposições (`bin/codex_vagas_medida.py:123-145`). Com eventos temporalmente não decrescentes, a máquina de um único aberto elimina a inflação antiga por sobreposição de órfãos (`:139-146`). Recuo real do relógio: **[não verificado]**.
+- **Inconsistência documental concreta:** a docstring promete que todo órfão entra em `n de runs` (`bin/codex_vagas_medida.py:113-114`), mas `n` só aumenta com duração positiva (`:123-128`). Em memória, um único órfão solto retorna `(0.0, 0, 1)`. O selo cristaliza essa exclusão do último órfão solto (`bin/tests/test_trava_hist_unico.sh:54-58`).
+
+Decisões abertas:
+
+1. Retenção em `/tmp`: caminho/encaixe técnico do Code, não pergunta de lei (`CLAUDE.md:273-278`); limpeza efetiva no reboot do host **[não verificado]**, apenas afirmada no comentário (`bin/trava_teste.sh:30`).
+2. Ausência → “não sei”: L-003 responde contra inventar número sem fonte (`app/docs/LEIS.md:61`); implementação por exceção de `open` convertida em “não sei” (`bin/codex_vagas_medida.py:130,189-193`).
+4. Órfãos anteriores ao boot: mesma regra declarada, sem consulta ao uptime (`bin/codex_vagas_medida.py:108-153`); política de retenção/estimativa é técnica (`CLAUDE.md:273-278`).
+5. Probe concorrente: decisão técnica; corrigir a alegação absoluta de inocuidade da entrega (`bin/trava_teste.sh:39-40,47-50`).
+7. Migração: não há leitor produtivo remanescente do antigo caminho encontrado no código; único leitor produtivo agora pede `--hist` (`bin/codex_vagas_medida.py:115-130`). Existência/conteúdo real dos históricos antigos: **[não verificado]**; não afirmar “nada a migrar” como fato de produção.
+
+## 09/11 15:12 · sessao 8b64751089c9 · - · - · origem=Ronald (tmux)
+
+T2: **não encontrei morte acidental concreta entre os mutantes declarados**; o classificador agora exige todos os fragmentos esperados, e ERRADO/VIVO reprovam o selo. `bin/tests/test_codex_pergunta.sh:742`, `bin/tests/test_codex_pergunta.sh:775`.
+
+- O acidente anterior de `saida_symlink` foi corrigido: o caso exige a mensagem específica `saida <...>.lock e symlink`; a guarda seguinte escreve `codex: trava <...>.lock e symlink`. `bin/tests/test_codex_pergunta.sh:201`, `bin/codex_pergunta.sh:338`, `bin/codex_pergunta.sh:511`.
+- `_recusa` cobra motivo, rc e ausência de chamada; `_inv_recusa` procura PROIBIDO e motivo no terceiro campo. Assim, os esperados “motivo ausente” e “sem PROIBIDO” identificam asserções determinadas, mesmo quando outra guarda ainda recusa a chamada. `bin/tests/test_codex_pergunta.sh:163`, `bin/tests/test_codex_pergunta.sh:169`, `bin/tests/test_codex_pergunta.sh:644`.
+- O autoteste morde o controlador convertido em `echo MORTO`: os testes de outra asserção, dois esperados e esperado vazio falham. Reproduzi a função em memória, com leitura simulada pelo `grep`, sem escrever arquivos: original `ERRADO|MORTO|ERRADO|ERRADO|VIVO`; mutado `MORTO|MORTO|MORTO|MORTO|VIVO`. `bin/tests/test_codex_pergunta.sh:750`.
+- Limite: o classificador usa substring sem ancoragem; uma linha `diagnostico: FALHA: <esperado>` também conta MORTO. Os autotestes não exercitam esse eco. Não localizei um caso atual que produza essa situação; sua ocorrência na lista permanece **[não verificado]**. `bin/tests/test_codex_pergunta.sh:747`, `bin/tests/test_codex_pergunta.sh:750`.
+- **Regressão objetiva de portabilidade do selo:** `NPL=nproc-2` e o motivo do caso são dinâmicos, mas dois esperados cravam `load5 6.00`. Com `nproc!=8`, esses mutantes dão ERRADO mesmo morrendo pela asserção pretendida. É falso vermelho, não falso verde; a VM da autorização tem 8 CPUs segundo o dado recebido **[não verificado na cópia]**. `bin/tests/test_codex_pergunta.sh:100`, `bin/tests/test_codex_pergunta.sh:520`, `bin/tests/test_codex_pergunta.sh:720`, `bin/tests/test_codex_pergunta.sh:722`.
+
+Não executei os selos completos, pois criam e removem arquivos; os resultados GREEN da entrega não foram reproduzidos. `bin/tests/test_codex_pergunta.sh:22`, `bin/tests/test_codex_pergunta.sh:23`, `bin/tests/test_codex_pergunta.sh:769`.
 
 ## 09/11 15:11 · sessao 22223ccca92c · - · - · origem=Ronald (tmux)
 
@@ -746,91 +862,4 @@ Há ainda efeito real de escrita da **disputa**: `Disputa.fechar` consulta C7 so
 
 Os testes existentes cobrem separadamente preservação técnica (`app/chamados/tests/test_bug_par_intervalo.py:508`) e irmã retratada com ESPERA (`:459`–`:465`); não combinam as condições. Seu GREEN não demonstra que esse cruzamento esteja fechado.
 
-## 09/11 14:10 · sessao f88b05a1eeb9 · - · - · origem=Ronald (tmux)
-
-Itens 2/3/5 — provas consolidadas:
-
-| Ponto | Veredito/classe | Prova e contraexemplo |
-|---|---|---|
-| Recusa técnica deve sobreviver à aplicação | NÃO PROCEDE apagar indiscriminadamente, F | `_ts_tipo_do_plantio` sem marco acrescenta `tipo_nao_conferido` e texto dizendo **“batida plantada ... pelo MOTIVO”** (`app/chamados/services/materializacao.py:476`); ramo hora grava ambos (`:937`), pode plantar (`:1014`) e o par limpa exclusivamente ESPERA (`:1376`). Limpar motivo técnico deixaria `pendencia_admin` sem motivo, precisamente consulta I19 (`app/chamados/management/commands/auditar_invariantes_chamados.py:549`). |
-| Recusa não técnica pode sobrar num par aplicado | PROCEDENTE, F | Falha escreve recusa nas duas e devolve validação (`materializacao.py:1392`). Após corrigir a causa, primeiro reaceite grava ESPERA só na primeira (`:1434`); segundo reaceite aplica ambas e limpa apenas ESPERA (`:1376`). A segunda conserva “intervalo recusado em conjunto”, embora aplicada. Ocorrência no dado prod: [nao verificado]. | [nao verificado]
-| Leitores provocam escrita errada por essa recusa residual | NÃO PROCEDE demonstrado, F | Devolução retorna antes de ler motivo quando materializada (`app/chamados/services/validacao.py:190`); validação usa erros do ato (`:491`, `:511`) e retorna sucesso (`:538`). Vigia dá `com_registro` pelo lastro (`app/chamados/services/vigia_carimbo.py:112`); reparador pula essa classe (`app/chamados/services/passivo_validado.py:329`). Flip exige `via_resolucao=VIA_PARIDADE_RECUSADA` (`app/ponto/services/flip_auto.py:128`), enquanto aplicação usa a via pelo fato/declarou (`materializacao.py:1276`, `:1285`). I18 exige não materializada (`auditar_invariantes_chamados.py:1081`), I19 exige pendência (`:549`). |
-| Pendência anterior tira metade da apresentação de espera | PROCEDENTE, F; há desdobramento W abaixo | Espera não é gravada quando há pendência (`materializacao.py:1434`) e juiz rejeita motivo técnico (`:112`). Detalhe inclui somente C6 viva ou espera (`app/chamados/services/acoes_chamado.py:349`), enquanto C6 mata validada (`app/chamados/juizes.py:1153`): a metade validada com pendência fica fora dessa lista. Fio aberto carrega todas as perguntas (`app/chamados/services/fio.py:221`, `:225`), portanto nela permanece visível com badge “Pendencia do admin” e motivo (`app/templates/chamados/partials/modal_fio.html:222`). |
-| Pendência pode ser limpa depois sem regravar espera | NÃO PROCEDE na cópia, F | Único escritor runtime literal encontrado grava valor não vazio em `materializacao.py:937`; não há limpeza runtime localizada. Limpeza por SQL externo/dinâmico ou dado prod: [nao verificado]. |
-| Semântica “não plantou” versus “plantada sem tipo confirmado” | PROCEDENTE, F | Escritor planta pelo motivo e acende pendência (`materializacao.py:476`, `:937`, `:1014`); display do modelo diz “plantada pelo motivo” (`app/chamados/models.py:2571`). Explicador prioriza pendência e afirma “sistema NAO plantou” antes de consultar lastro (`app/chamados/services/explicador.py:93`, `:101`); cartão diz conferir “antes de lançar” (`app/templates/chamados/partials/_card_atendimento.html:183`). Isso pode ocorrer inclusive após sucesso do par (`materializacao.py:1376`). |
-| Pendência + irmã retratada libera fechamento com metade não aplicada | **PROCEDENTE condicional pelo código, W** | Há rota runtime abaixo; não foi executada e ocorrência em prod é [nao verificado]. | [nao verificado]
-
-Contraexemplo W, sem depender de fixture:
-
-1. Pergunta `intervalo_saida` está avulsa, sem irmã (`materializacao.py:79`); sem tipo identificável, ramo gera pendência (`:467`, `:476`) e grava `pendencia_admin`+motivo (`:937`).
-2. Vizinha S posterior aciona paridade (`:962`); marco não aceso leva a `_carimbar_recusa` e `return None` (`:987`, `:1000`). `_materializar_avulsa` retorna normalmente do atomic (`:1482`), preservando pendência; validação devolve `validada_em` a nulo (`validacao.py:470`, `:202`).
-3. Irmã passa a existir pela porta de emissão (`app/chamados/services/disputa_emissao.py:829`, `:834`, `:878`). Reaceitar a saída com irmã sem aceite chega a `materializacao.py:1434`, conserva pendência/recusa e deixa saída validada sem materialização.
-4. Remoção do motivo da irmã retrata-a pela porta (`app/chamados/models.py:2071`, `:2078`); sobrando o motivo da saída, retorna sem fechar (`:2083`).
-5. A saída morre no C6 por estar validada (`juizes.py:1153`); irmã retratada morre por identidade (`:1164`). Saída não entra em respostas sem veredito (`models.py:1851`), nem em espera por ter motivo técnico (`materializacao.py:112`). Logo C7 libera (`models.py:1863`).
-6. S127 libera (`juizes.py:2137`); `transicionar('fechado')` supera guarda C6 ancorada (`models.py:165`), evita guarda de FURO que só vale para `resolvido` (`:181`) e chama `_aplicar` (`:199`). A guarda final também só retém C6 viva (`:224`), antes de gravar estado (`:228`). **Fecha chamado com metade aceita e não aplicada**. Na versão anterior do envelope, o primeiro reaceite sobrescreveria o motivo por ESPERA; após retratar irmã, fallback `materializacao.py:116` reteria C7. [nao verificado]
-
-Escritores de `recusa_motivo` e valores alcançáveis:
-
-- Motivo técnico: `materializacao.py:937`, derivado em `:479`.
-- Espera, recusas de paridade/data/competência e falha conjunta: `_carimbar_recusa` em `:1190`; produtores em `:1000`, `:1312`, `:1392`, `:1417`, `:1435`, `:1515`.
-- Recusa humana “Recusada por ...”: `validacao.py:605`; reabertura não limpa motivo (`disputa_emissao.py:1590`, `:1629`), resposta normal também não o limpa (`:1483`, `:1505`).
-- Escapes “Colaborador respondeu ... exige decisao”: `disputa_emissao.py:1494`; resposta normal posterior pode preservar esse texto (`:1483`).
-- Duplicata escreve descrição apontando canônica (`fio.py:1350`), mas linha fica fora do fato e é excluída da identidade do par (`materializacao.py:72`).
-- Porta do modelo grava motivo fornecido (`models.py:3196`); limpeza do par está em `materializacao.py:1377`.
-
-`o_que_segura` não lê diretamente esses campos: usa exportação e dias retidos (`app/folha/fora_da_folha.py:215`), lê `porta_alcancavel_do_dia` (`:65`, `:221`) e traduz fio por DESTRAVA (`:226`). Alimentação da porta considera C6 (`app/chamados/juizes.py:1322`), não espera do par; metade validada não participa desse conjunto (`:1153`). Resultado concreto do dado prod nessa ferramenta: [nao verificado].
-
-## 09/11 14:08 · sessao d1463be4513a · - · - · origem=Ronald (tmux)
-
-**Item 1 — NÃO PROCEDE que S127 ainda duplique C7; PROCEDENTE custo/leitura indireta de relógio e efeito colateral condicional, classe F.** S127 consulta C7 e preserva exceção vazia em `app/chamados/juizes.py:2134` e `:2137`; C7 incorpora `respostas_sem_veredito`, `fio_vivo` e espera em `app/chamados/models.py:1862`.
-
-Censo AST de todos os `.py`, com importações `as` e propagação de atribuição simples de função:
-
-| Sítio executável | Consumo do retorno |
-|---|---|
-| `app/chamados/models.py:153`, chamada `:154`, alias `_disp_viva` | `transicionar` levanta `ValueError` se recebeu disputa (`:155`); sem bloqueio chega a `_aplicar` em `:199`, que chama `_gravar_estado` em `:450`; escreve estado em `:228` e salva no corpo seguinte. |
-| `app/chamados/tests/test_disputa_s127.py:45` | Guarda resultado e o devolve após cobrar consulta C7 em `:47`. |
-| `app/chamados/tests/test_bug_par_intervalo.py:482` | Cobra disputa sem perguntas retornada. |
-| `app/chamados/tests/test_bug_par_intervalo.py:496` | Cobra `None` quando todas morreram sem resposta pendente; depois transiciona realmente em `:497`. |
-
-Referências não executáveis à função: `inspect.getsource` em `app/chamados/tests/test_pergunta_viva_no_guarda.py:37`; nomes dos alvos mutantes em `app/chamados/tests/mutantes_bug_par_intervalo.py:157` e `:167`; referência histórica em docstring de `app/chamados/tests/test_o261_fio_tem_uma_porta.py:25`. Acessos construídos dinamicamente por strings e reflexão arbitrária: **[nao verificado]**.
-
-**Comparação de liberação:** em um mesmo snapshot, o novo bloqueio é mais restritivo: C7 só é verdadeiro com `not fio_vivo(perguntas)`, além das demais condições (`app/chamados/models.py:1863`). Portanto não há caso lógico estável em que C7 libere com o S127 antigo travando; concorrência entre consultas distintas: **[nao verificado]**. O contrário existe: saída validada em espera e volta retratada fazem ambas morrerem pelo C6, mas C7 retém a espera; cenário e asserções em `app/chamados/tests/test_bug_par_intervalo.py:459`, `:463`, `:465`. Isso alcança escrita por `transicionar('fechado'/'resolvido')`, bloqueada pela mensagem específica de S127 em `:468`; os wrappers estão em `:472` e `:475`.
-
-**Disputa vazia continua bloqueando:** curto-circuito `not disputa.perguntas.exists()` em `app/chamados/juizes.py:2137`; teste chama a transição real e verifica estado/trilha intactos em `app/chamados/tests/test_bug_par_intervalo.py:480`, `:484`, `:486`. Este contracaso passaria também com a regra antiga; protege preservação, não demonstra a cura.
-
-**Custo:** há consulta adicional `exists()` em `app/chamados/juizes.py:2137`, e C7 lê perguntas duas vezes, uma por `list(self.perguntas.all())` e outra em `respostas_sem_veredito()` (`app/chamados/models.py:1862`, `:1850`). Além disso, para cada pergunta elegível, a espera chama identificador (`app/chamados/services/materializacao.py:114`), que consulta irmãs em `:70` e escala em `:87`; o carregador consulta célula em `app/escala/servico_jornada.py:46`, e `pausas_do_dia` pode buscar novamente em `app/escala/models.py:1187`. Existe padrão N+1; quantidade real de queries/latência em produção: **[nao verificado]**.
-
-**Efeitos colaterais:** C7 não contém `save/update`, mas sua cadeia não é inteiramente pura: C6 grava memo na instância em `app/chamados/juizes.py:862`; tranca grava memo em `:996` e `:1066`. `respostas_sem_veredito` pode alcançar `dia_da_pergunta_trancado` (`app/chamados/models.py:1854`), `_admin_tocou_o_dia_depois` (`app/chamados/juizes.py:971`), `_toque_humano_no_dia` (`:1064`) e `get_user_sistema` (`:1087`), cujo código é `User.objects.get_or_create` em `app/core/utils.py:18`. Pode criar usuário ausente; ausência desse usuário em produção e escrita errada: **[nao verificado]**. Em falhas engolidas, há contador em memória e log em `app/core/observ.py:75` e `:79`.
-
-**Relógio:** C7 pode alcançar o C6 e `_dentro_da_janela_viva` (`app/chamados/juizes.py:1217`), que chama `date.today()` em `:575`. A cadeia já existia no S127 antigo por `fio_vivo`; não é leitura nova demonstrada da volta 5 (`app/chamados/juizes.py:1262`). Não afirmar “zero relógio”.
-
-**Cron:** não apareceu chamada direta de cron à função no censo AST; os sítios automáticos relevantes consultam C7 diretamente em `app/chamados/reconciliador.py:411`, `:611`, `:1170` e `app/chamados/services/materializacao.py:672`, `:1534`. O único chamador de produção de S127 é `transicionar`; `Chamado.fechar` delega a ele em `app/chamados/models.py:454`. Escrita automática que passa por `_gravar_estado` sem `transicionar` não ganha automaticamente esse bloqueio S127, pois o gate mostrado é local a `transicionar` (`app/chamados/models.py:148`).
-
-**Item 5 — juiz duplicado:** a recomposição antiga foi eliminada de S127 em favor de C7 (`app/chamados/juizes.py:2137`); fio continua reduzindo exclusivamente por C6 em `:1262`. Não há novo escritor de status nesta cura: o gate lança erro e a escrita continua em `_aplicar`/`_gravar_estado` (`app/chamados/models.py:155`, `:199`, `:450`). O risco de custo e relógio acima é **F**; ocorrência concreta de estado errado ou efeito exportada/dinheiro por essa troca: **[nao verificado]**.
-
-## 09/11 14:08 · sessao 724a79eb995d · - · - · origem=Ronald (tmux)
-
-| Item | Veredito | Classe | Evidência e contracaso |
-|---|---|---|---|
-| 0 / triagem 4 | **NAO PROCEDE que continue aberto.** | W corrigido | S127 consulta `not disputa.pode_fechar()` e preserva vazio em `app/chamados/juizes.py:2137`; `transicionar` aborta antes de `_aplicar` em `app/chamados/models.py:154` e `:199`. Contracaso discriminante: metade validada + irmã retratada, C6 sem vivas e C7 falso, em `app/chamados/tests/test_bug_par_intervalo.py:459`. |
-| 0 / triagem 7a | **NAO PROCEDE que continue aberto.** | W corrigido | Limpa somente espera em `app/chamados/services/materializacao.py:1376`; não sobrescreve motivo com pendência em `:1434`. Motivo técnico nasce conjuntamente com pendência em `:937`. |
-| 0 / triagem 7b | **NAO PROCEDE que falte o rótulo.** | F | O próprio teste rotula M38 estrutural em `app/chamados/tests/test_bug_par_intervalo.py:815`; a limitação é confirmada pelas operações executáveis, abaixo. |
-| 4 | **NAO PROCEDE derivação paralela de I19 encontrada.** | F | Consulta única `app/chamados/management/commands/auditar_invariantes_chamados.py:549`, consumida pelo comando em `:1118` e contraprova em `app/chamados/tests/test_bug_par_intervalo.py:503`. Censo AST de palavras-chave `pendencia_admin` em chamadas Python encontrou apenas essa consulta e a fixture `:513`; acessos dinâmicos [nao verificado]. |
-| 6 | **PROCEDENTE: M38 segue estrutural e o rótulo é verdadeiro.** | F | Fixture exige três campos vazios em `app/chamados/tests/test_bug_par_intervalo.py:827`; nessa condição `descarimbar` retorna antes de alterar campos, cache ou salvar, em `app/chamados/models.py:3218`. M38 acrescenta o curto-circuito pelo carimbo em `app/chamados/tests/mutantes_bug_par_intervalo.py:134`. A diferença cobrada é a lista de chamadas em `app/chamados/tests/test_bug_par_intervalo.py:842`, repetida em `:859`; asserções de estado/trilha não distinguem as implementações nesse cenário. |
-
-Discriminação dos sete testes V5, inferida do código; mortes executadas dos mutantes **[nao verificado]**: [nao verificado]
-
-| Teste em `app/chamados/tests/test_bug_par_intervalo.py` | Passaria sem a cura correspondente? | Asserção discriminante |
-|---|---|---|
-| `:472`, fechado retido | **Não.** | `assertRaisesRegex` em `:468`: S127 antigo libera o caminho sem vivas; novo aborta com mensagem de disputa. Guarda real em `app/chamados/models.py:155`. M45 em `app/chamados/tests/mutantes_bug_par_intervalo.py:157`. |
-| `:475`, resolvido retido | **Não.** | Mesma asserção `:468`; eventual recusa posterior por FURO (`app/chamados/models.py:181`, `:192`) não satisfaz o texto exigido. M48 em `app/chamados/tests/mutantes_bug_par_intervalo.py:167`. |
-| `:478`, disputa vazia | **Sim**, relativamente à troca S127. É controle de preservação. | C7 verdadeiro em `:481`, S127 retorna disputa em `:482`, transição bloqueada em `:484`. |
-| `:488`, todas mortas | **Sim**, relativamente à troca S127. É controle positivo de liberação. | Retorno `None` em `:496` e status persistido fechado em `:499`. |
-| `:506`, pendência anterior | **Não.** | A sobrescrita antiga falha imediatamente na comparação do motivo em `:517`; portanto não depende apenas de I19. Preservação após aplicação também cobrada em `:523`. M47 em `app/chamados/tests/mutantes_bug_par_intervalo.py:164`. |
-| `:527`, pendência nascida no plantio | **Não.** | Captura os dois campos reais produzidos durante o plantio em `:542`, comprova origem em `:549`/`:550`, compara após aplicação em `:552`. Limpeza ampla apaga o motivo e falha nessa comparação. M46 em `app/chamados/tests/mutantes_bug_par_intervalo.py:161`. |
-| `:556`, limpeza exclusiva | **Não** com limpeza ampla antiga; também não com limpeza desativada. | Limpeza ampla falha em `:565` (outro motivo preservado); nunca limpar falha em `:566` (espera vazia). M49 cobre a segunda mutação em `app/chamados/tests/mutantes_bug_par_intervalo.py:171`. |
-
-O selo estrutural S127 exige chamada a `pode_fechar`, proíbe recomposição nominal de C6/espera e confere a cadeia C7→C6 em `app/chamados/tests/test_pergunta_viva_no_guarda.py:39`. O teste com dublê cobra efetivamente uma chamada C7 em `app/chamados/tests/test_disputa_s127.py:47`; os casos funcionais V5 acima sustentam o comportamento real em `app/chamados/tests/test_bug_par_intervalo.py:469`.
-
-_3179 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3182 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
