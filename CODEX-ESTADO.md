@@ -1,7 +1,26 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 23:57** · publicado em **09/11/2026 00:00** (UTC-3)
+> Ultima resposta processada: **09/11/2026 00:16** · publicado em **09/11/2026 00:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 00:16 · sessao 13dc7743181f · - · - · origem=Ronald (tmux)
+
+Para a pergunta 5, convém separar “violação demonstrada” de “ausência universal”: o escopo inclui escritores e leitores dos campos, mesmo fora do diff, conforme CLAUDE.md:376-377.
+
+| Classe | Resultado estático no caminho auditado |
+|---|---|
+| 2º juiz duplicando registrado | **Não demonstrado.** A nova guarda verifica cobertura de travas, explicitamente operacional em `app/chamados/services/fio.py:2026-2029`; vitalidade vem de `pergunta_viva` (`:2113-2124`), registrado em `app/core/juizes.py:266`; identidade/canônica continuam em `universo_da_linha`/`canonica_do_grupo` (`fio.py:2142-2149`). |
+| 2º escritor fora da porta | **Não introduzido pelas linhas produtivas do v5.** A mudança está em diferença de conjuntos/mensagem (`fio.py:2092-2098`); escrita continua via `reapontar_resolvedora` e `retratar_para_canonica` (`:2165-2171`). A primeira grava destino e lavra em `:922-925`; a segunda delega à retratação em `:1327-1332`, que usa `carimbar_identidade` em `:1350-1353`. Ausência em toda a árvore depende do censo do agente escritores [nao verificado]. |
+| Relógio fora da borda | **Não nas linhas v5** (`fio.py:2092-2098`). No escopo histórico FILA, `_hoje` usa `timezone.localdate(agora or timezone.now())` em `app/chamados/veredito_lavrado.py:95-102`; `expira_em` usa `_hoje(agora)` em `:137`; testes distinguem relógio da borda/date.today e duas leituras em `app/chamados/tests/test_e1_fila.py:349-385`. Execução [nao verificado]. |
+| Derivação paralela de fonte única | **Não demonstrada na conferência.** Leituras pré/sob trava usam a mesma `_conjunto_da_migracao`, que chama `universo_da_linha` (`fio.py:2032-2039`, `:2084-2088`); o laço chama a mesma função (`:2142`). `universo_da_linha` e `universo_do_grupo` usam `fecho_do_fato` (`:1896-1911`). |
+| Selo/RED sem mordida | **Há limite residual demonstrável.** `test_RED_a_porta_recusa_e_nada_migra` conserva `_cenario` cruzado e só observa destino velho (`test_e1_fila.py:563-571`); `_cenario` põe Pergunta do primeiro colaborador em chamados do segundo (`:147-155`), e `reapontar_resolvedora` já recusaria a costura cruzada (`fio.py:862-865`). Portanto esse teste não demonstra rollback de uma migração que ocorreria. O novo sucesso real exige destino novo e saída exata (`test_e1_fila.py:539-553`), curando o antigo “algum resultado”, mas não transformando aquele teste de rollback em cenário migrável. | [nao verificado]
+| Ordem de trava | **Não há inversão nova demonstrada.** Uma chamada passa todos C/D/Ch/P (`fio.py:2084-2087`); implementação adquire C, D, Ch, P com ordenação por PK (`app/chamados/models.py:2673-2701`); conferência recusa antes do laço (`fio.py:2092-2099`). Travas internas ficam cobertas se os conjuntos conferidos correspondem às linhas que efetivamente serão usadas; mutabilidade/callers exigem resultado do agente escritores [nao verificado]. |
+| Pouso antes do pré-requisito | **[nao verificado].** Regra exige suite verde antes do opus e proíbe Codex aprovar pouso sozinho (`CLAUDE.md:374-378`). Cabeçalho declara aval e marco histórico (`test_e1_fila.py:1-10`), mas isso não prova execução nem sequência de pouso [nao verificado]. | [nao verificado]
+| Campo com dois significados | **Não introduzido na mudança v5.** `disputa_id` permanece identificador de Disputa; `None` representa ausência de linha travável, normalizada na guarda (`fio.py:2090-2093`) e em `_pks` (`models.py:2660-2661`). O risco de divergência entre dono direto e dono da Disputa é pré-existente: igualdade só é aplicada no nascimento (`models.py:3420-3435`); alcance por escritor produtivo depende do agente escritores [nao verificado]. | [nao verificado]
+
+Triagem: a retirada de `None` da parcela de Disputa está alinhada à trava, pois `_pks` ignora `None` (`models.py:2660-2661`) e a conferência agora também (`fio.py:2093`). A dispensa de `key=str` é consistente com os IDs inteiros presentes no modelo/caminho, mas valores reais de produção não constam da sonda [nao verificado]. A triagem não traz item denominado `DESCARTE`; traz dois itens `FILA` [nao verificado: texto do anexo sem arquivo:linha].
+
+Observação para consolidar: não classificar genericamente como “fora desta obra” apenas por não estar no diff, pois `CLAUDE.md:376-377` inclui explicitamente escritores e leitores. A relevância concreta dos dois FILA depende de escritor produtivo alcançável, que esta subtarefa não censou [nao verificado].
 
 ## 08/11 23:57 · sessao 667030d3457f · FIO-E0-V4-E1-FILA · verificador · origem=Code
 
@@ -759,18 +778,4 @@ Variáveis relevantes da alteração nos selos:
 | `X` | `printf` + `seq`. (`bin/tests/test_grep_q_sem_sigpipe.sh:37`) | Pipeline e here-string. (`bin/tests/test_grep_q_sem_sigpipe.sh:39`, `bin/tests/test_grep_q_sem_sigpipe.sh:40`) |
 | `r_pipe`, `r_here` | Ramos dos respectivos testes. (`bin/tests/test_grep_q_sem_sigpipe.sh:39`, `bin/tests/test_grep_q_sem_sigpipe.sh:40`) | Veredito e diagnóstico. (`bin/tests/test_grep_q_sem_sigpipe.sh:44`, `bin/tests/test_grep_q_sem_sigpipe.sh:45`) |
 
-## 08/11 23:14 · sessao eca57893509f · - · - · origem=Ronald (tmux)
-
-**Q2.** `APLICAR_MIGRATE` tem um escritor interno, `APLICAR_MIGRATE=1`, no ramo core pendente e elegível, e um leitor, no bloco 1c; não é zerada junto com os demais flags do parser. Portanto, `export APLICAR_MIGRATE=1` chega ao apply quando `PEND=0`, inclusive em `--sem-migrate`, `--reload-agendado` e `--reload-copia`. Antes, sem pendência, esses caminhos não executavam o apply da seção 1. (`bin/deploy.sh:56`, `bin/deploy.sh:67`, `bin/deploy.sh:78`, `bin/deploy.sh:201`, `bin/deploy.sh:220`, `bin/deploy.sh:292`, `bin/deploy.sh:294`)
-
-Isso **não contorna as recusas existentes com `PEND>0`**: cópia, agendado e sem-migrate continuam encerrando antes do bloco 1c, mesmo com a variável herdada. `--conferir` também encerra antes dele. Não há, por esse vazamento, modo que passe com a mesma pendência que antes provocava recusa; há apply indevido em caminhos antes aceitos **sem apply**. (`bin/deploy.sh:205`, `bin/deploy.sh:208`, `bin/deploy.sh:212`, `bin/deploy.sh:224`, `bin/deploy.sh:226`, `bin/deploy.sh:292`)
-
-Com ambiente limpo e portões verdes, a elegibilidade permanece normal/sem-sombra/restart. Nesses modos, casca vermelha agora impede o apply que antes a antecedia, conforme o diff fornecido; no restart, a nova verificação de cron também pode impedir o apply. (`bin/deploy.sh:220`, `bin/deploy.sh:283`, `bin/deploy.sh:293`; anexo `codex_deployportao2.diff`, localização original removida **[nao verificado]**)
-
-**Q4.** São **três** chamadas se o restart aplicar core: primeira em `114`, nova em `293`, e a preservada em `318`. Sem apply são duas. A chamada em `318` ainda pode recusar depois do apply em `294`, se um cron começar nesse intervalo. (`bin/deploy.sh:114`, `bin/deploy.sh:292`, `bin/deploy.sh:293`, `bin/deploy.sh:294`, `bin/deploy.sh:318`)
-
-A rotina lista marcas com PID presente em `/proc` e remove marcas cujo PID não existe; `vivos` é local. Repetir a remoção de uma marca já ausente é inócuo por `rm -f`; não há contador nem append duplicado. Mas cada chamada observa novamente o estado e pode encontrar novos crons: o envelope cria a marca antes do comando e a remove por trap. Não existe trava que reserve a janela entre a verificação e o restart. Ocorrência dessa corrida em produção: **[nao verificado]**. (`bin/deploy.sh:105`, `bin/deploy.sh:106`, `bin/deploy.sh:108`, `bin/deploy.sh:109`, `bin/cron_run.sh:9`, `bin/cron_run.sh:10`, `bin/cron_run.sh:11`)
-
-Mapa completo enviado nas mensagens anteriores, incluindo variáveis de ambos os selos e campos dos logs/fixtures.
-
-_2940 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2941 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
