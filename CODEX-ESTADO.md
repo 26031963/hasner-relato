@@ -1,7 +1,93 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 23:36** · publicado em **08/11/2026 23:38** (UTC-3)
+> Ultima resposta processada: **08/11/2026 23:54** · publicado em **08/11/2026 23:54** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 08/11 23:54 · sessao d3cf7e7093bb · - · - · origem=Ronald (tmux)
+
+- **b1 e c curados no alvo dos testes**: casos isolados de pk, colaborador e disputa exigem recusa, e o mutante `or → and` é construído explicitamente; isso distingue a ausência de cada parcela da guarda. (`app/chamados/tests/test_e1_fila.py:489`, `app/chamados/tests/test_e1_fila.py:504`)
+
+- **b2 parcialmente curado**: retirar literalmente `_migrar_sob_trava` é distinguido pelo novo par RED/MORDE, mas o RED aceita apenas `recusadas` preenchida. Seu cenário usa Pergunta do colaborador base e chamados de outro colaborador, que o juiz recusa por cruzamento; portanto esse RED não exige migração efetiva nem escrita no banco. (`app/chamados/tests/test_e1_fila.py:147`, `app/chamados/tests/test_e1_fila.py:511`, `app/chamados/tests/test_e1_fila.py:517`, `app/chamados/juizes.py:1999`) Teste antigo exige migração efetiva de conversa, inclusive refresh e destino persistido. (`app/chamados/tests/test_e1_v15g_portas.py:364`)
+
+- **b3 e b4 curados diretamente**: RuntimeError genérica deve subir; modelo e pk do evento agora são conferidos. A captura produtiva permanece específica de `UniversoMudouSobATrava`. (`app/chamados/tests/test_e1_fila.py:566`, `app/chamados/tests/test_e1_fila.py:564`, `app/chamados/models.py:1417`)
+
+- **b5 DESCARTE defensável para a promessa de trava**: RED exige canônica e destino travados, além da ordem. A porta seleciona proposta antes de chamar `_trava_do_ato`; resposta e validação posteriores determinam seu retorno, uma exigência diferente. (`app/chamados/tests/test_e1_fila.py:442`, `app/chamados/services/declaracao_texto.py:643`, `app/chamados/services/declaracao_texto.py:681`)
+
+- **b6 DESCARTE por construção atual**: `_trava_do_ato` recebe motivo/dia, usa `universo_do_fato` e não restringe motivo. Ambas as portas chamam o helper incondicionalmente após selecionar o fato. Os testes próprios exercitam somente `saida_sem_entrada`, portanto uma futura guarda que limitasse a trava a esse motivo escaparia desses casos. (`app/chamados/services/declaracao_texto.py:282`, `app/chamados/services/declaracao_texto.py:339`, `app/chamados/services/declaracao_texto.py:646`, `app/chamados/tests/test_e1_fila.py:180`, `app/chamados/tests/test_e1_fila.py:438`)
+
+- **Mutantes plausíveis ainda não distinguidos pelos novos casos**:
+  - Trocar a diferença de disputas por diferença simétrica: recusaria também encolhimento, embora nenhuma disputa usada estivesse fora da trava. A sonda só acrescenta uma linha; falta caso de remoção/encolhimento. (`app/chamados/services/fio.py:2092`, `app/chamados/tests/test_e1_fila.py:473`)
+  - Remover `key=str` da ordenação da mensagem: falharia quando a diferença contivesse simultaneamente `None` e um inteiro; cada caso injeta somente uma linha adicional e não forma essa diferença mista. (`app/chamados/services/fio.py:2097`, `app/chamados/tests/test_e1_fila.py:469`, `app/chamados/tests/test_e1_fila.py:492`)
+  - Substituir o efeito real do laço por preenchimento artificial de `recusadas` satisfaria o novo RED que promete “o laço roda”; o teste só consulta o retorno. Outros testes antigos podem barrar isso. (`app/chamados/tests/test_e1_fila.py:511`, `app/chamados/tests/test_e1_v15g_portas.py:364`)
+
+- **Limites da prova**: a corrida é simulada por patch de `_conjunto_da_migracao` com `SimpleNamespace`, inclusive duplicando um pk com outro colaborador/disputa; prova a guarda por conjuntos, sem demonstrar concorrência real. O helper retorna imediatamente na exceção, antes da asserção das duas leituras; essa asserção só acontece quando não houve recusa. (`app/chamados/tests/test_e1_fila.py:466`, `app/chamados/tests/test_e1_fila.py:479`) Execução dos testes e sobrevivência na suíte inteira: [nao verificado].
+
+## 08/11 23:54 · sessao 3cf5076efdda · - · - · origem=Ronald (tmux)
+
+Triagem **a: FILA defensável apenas como delimitação do diff; defeitos reais permanecem**. O contador de adesão ignora o retorno e incrementa sempre (`app/chamados/services/adesao.py:89-92`); o reconciliador ignora a recusa (`app/ponto/management/commands/reconciliar_grade.py:529-531`) e o chamador conta `CREATE` (`app/ponto/management/commands/reconciliar_grade.py:254-259`); a ação administrativa reabre Disputa e cria conversa antes de chamar `reabrir`, ignora retorno e anuncia sucesso (`app/chamados/services/acoes_disputa.py:256-267`, `:294-296`); a view atribui todo `False` a irmão vivo (`app/chamados/views_arquivar.py:70-72`). Outros motivos de `False` existem atualmente (`app/chamados/models.py:1391-1407`, `:1437-1438`), mas anterioridade à obra não se prova na cópia sem histórico: **[nao verificado]**.
+
+Triagem **d: FILA técnica real, não cura concluída**. O juiz ainda lê `date.today()` (`app/chamados/juizes.py:569-575`) e tem leitores (`:674`, `:764`, `:1217`). `expira_em` diz reproduzir a regra (`app/chamados/veredito_lavrado.py:120-122`) e conserva implementação própria (`:136-143`), comparável ao juiz (`app/chamados/juizes.py:595-601`). A cura f5 faz `expira_em` usar a borda (`app/chamados/veredito_lavrado.py:95-102`, `:137`), com instante passado pela lavra (`:251-253`). Registro prévio da FILA/cronologia: **[nao verificado]**.
+
+Para a pergunta 5, separar **diff v4** de **contexto da obra**:
+
+| Classe | Resultado e prova |
+|---|---|
+| Segundo juiz que duplica juiz registrado | **Não identificado nas linhas v4**: elas conferem conjuntos antes de executar o laço (`app/chamados/services/fio.py:2091-2098`); o laço consulta `pergunta_viva` e `canonica_do_grupo` (`:2112`, `:2123`, `:2145`). A autoridade C6 registrada é `pergunta_viva` (`app/core/juizes.py:266`). Ausência absoluta na árvore: **[nao verificado]**. |
+| Segundo escritor fora da porta | **Não introduzido pelo diff v4**: ele não acrescenta gravações e mantém `_migrar_sob_trava` depois da conferência (`app/chamados/services/fio.py:2091-2098`). Censo global completo: **[nao verificado]**. |
+| Relógio fora da borda | **Sim no contexto**, em `app/chamados/juizes.py:575`; f5 cura somente o leitor da lavra (`app/chamados/veredito_lavrado.py:95-102`, `:137`). |
+| Derivação paralela da fonte única | **Sim no contexto**, regra da janela repetida por `expira_em` (`app/chamados/veredito_lavrado.py:120-143`) frente ao juiz (`app/chamados/juizes.py:569-601`). |
+| Ordem de trava | **Porta central executa C→D→Ch→P**, respectivamente `app/chamados/models.py:2674`, `:2683`, `:2696`, `:2700`. V4 preserva chamada única de topo (`app/chamados/services/fio.py:2086-2087`). Exatidão do universo depende dos achados do explorador locks. |
+| Pouso antes do pré-requisito | **Sim no contexto da ação administrativa**: disputa e conversa mudadas antes de consultar o resultado da reabertura (`app/chamados/services/acoes_disputa.py:256-267`). **Não nas linhas v4**: conferência precede laço (`app/chamados/services/fio.py:2093-2098`); destino aprovado precede retratação (`:2164-2170`). |
+| Campo com dois significados | Não encontrei exemplo adicional comprovado nesta exploração; **[nao verificado]**. |
+
+Para **b5**, o descarte é procedente no contrato específico de ordem: o RED exige canônica e destino presentes na sequência e ausência de inversões (`app/chamados/tests/test_e1_fila.py:442-447`), enquanto a porta toma a trava depois de encontrar proposta (`app/chamados/services/declaracao_texto.py:643-650`). O teste não prova sucesso funcional da aplicação; isso fica **[nao verificado]**.
+
+## 08/11 23:54 · sessao 7d1c7808290c · - · - · origem=Ronald (tmux)
+
+- `APLICAR_MIGRATE`: escritores de valor são inicialização `0` e armação `1` (`bin/deploy.sh:61`, `bin/deploy.sh:223`); único leitor operacional é a decisão do apply (`bin/deploy.sh:299`). O comentário “UM escritor” é correto somente contando a armação e excluindo a inicialização explicitamente mencionada na linha seguinte; literalmente existem duas atribuições (`bin/deploy.sh:59`, `bin/deploy.sh:60`). O selo também injeta `APLICAR_MIGRATE=1` no ambiente do subprocesso, sobreposto pela inicialização (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:98`, `bin/deploy.sh:61`).
+
+- `RESTART`: escritores `0` e `1`, este último exclusivamente para `MODO=--restart` (`bin/deploy.sh:70`, `bin/deploy.sh:72`, `bin/deploy.sh:73`). Leitores: guarda inicial de cron (`bin/deploy.sh:115`), exceção da pendência da mensageria (`bin/deploy.sh:200`), guarda imediatamente anterior ao apply (`bin/deploy.sh:300`), escolha restart/HUP (`bin/deploy.sh:323`) e mensagem final (`bin/deploy.sh:429`). Fora dele, o contrato lê o texto do ramo, não o valor em execução (`bin/contrato_deploy.sh:41`).
+
+- Marcas: o envelope cria diretório/nome `N_E.$$`, escreve timestamp e registra remoção no `EXIT` (`bin/cron_run.sh:9`, `bin/cron_run.sh:10`). O deploy enumera arquivos, lê PID do sufixo, consulta `/proc`, devolve o nome dos vivos **e apaga marcas mortas**; portanto também é escritor de limpeza (`bin/deploy.sh:108`, `bin/deploy.sh:109`). A recusa consome esses nomes (`bin/deploy.sh:111`, `bin/deploy.sh:112`), sendo chamada em três pontos (`bin/deploy.sh:117`, `bin/deploy.sh:300`, `bin/deploy.sh:326`). O conteúdo ISO não é lido pelo deploy; o protocolo efetivo depende do nome e da existência do PID (`bin/cron_run.sh:10`, `bin/deploy.sh:109`).
+
+- Escritores dos selos: marca inicial e marca durante o migrate no selo desta obra (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:97`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:75`), ambas usando PID vivo exportado pelo selo (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:96`); selo vizinho escreve marca com PID de seu processo falso (`bin/tests/test_deploy_reload_gracioso.sh:90`, `bin/tests/test_deploy_reload_gracioso.sh:91`). O contrato apenas procura os textos dos caminhos nos scripts (`bin/contrato_deploy.sh:81`, `bin/contrato_deploy.sh:82`).
+
+- O endereço do escritor é absoluto (`bin/cron_run.sh:9`); o leitor deriva a raiz da localização do script (`bin/deploy.sh:53`, `bin/deploy.sh:108`). A configuração agenda ambos sob `/home/ronald/saas-hasner`, tornando-os equivalentes **nessa localização declarada** (`app/config/crons.py:19`, `app/config/crons.py:326`, `app/config/crons.py:1475`, `app/config/crons.py:1486`). Equivalência universal ou resolução real do caminho em produção: [nao verificado].
+
+- Os elos também passam pelo mesmo escritor de marcas: `encadeado.sh` executa `cron_run.sh` depois de esperar arquivos de fim (`bin/encadeado.sh:89`, `bin/encadeado.sh:102`, `bin/encadeado.sh:104`). O envelope executa o comando uma vez, carimba fim apenas para rc `0`/`2`, e termina com o rc; não há retry nesse fluxo (`bin/cron_run.sh:11`, `bin/cron_run.sh:22`, `bin/cron_run.sh:25`, `bin/cron_run.sh:38`).
+
+- O comentário limita demais o residual ao cron que “NASCE durante o migrate” e à “duração do migrate” (`bin/deploy.sh:295`, `bin/deploy.sh:296`). Sem exclusão entre envelope e deploy, a marca pode nascer **depois da varredura prévia terminar, antes do apply começar**, ou **depois do apply retornar, antes da varredura final**; nesses caminhos o banco pode andar e a seção 2 recusar (`bin/deploy.sh:300`, `bin/deploy.sh:301`, `bin/deploy.sh:324`, `bin/deploy.sh:326`, `bin/cron_run.sh:9`). Uma marca também pode nascer depois da varredura final e antes do restart, permitindo matar seu comando (`bin/deploy.sh:326`, `bin/deploy.sh:327`, `bin/cron_run.sh:9`, `bin/cron_run.sh:11`). Ocorrência real desses interleavings: [nao verificado].
+
+## 08/11 23:54 · sessao ff715dfd3348 · - · - · origem=Ronald (tmux)
+
+Auditoria estática, sem executar o selo; resultados de execução ou RED dos mutantes continuam [nao verificado].
+
+Os casos matam estas famílias de mutante, conforme suas asserções:
+
+| Caso | Mutante detectado | Prova |
+|---|---|---|
+| 1 | Auth removida/ignorada ou consultada depois de aplicar migration. | `bin/tests/test_deploy_portoes_antes_do_migrate.sh:123-125` |
+| 2 | Sombra removida/ignorada ou consultada depois do apply. | `bin/tests/test_deploy_portoes_antes_do_migrate.sh:127-129` |
+| 3 | Apply ausente/duplicado; algum dos três portões ausente ou depois do apply; publicação antes do apply; HUP ausente/duplicado. | `bin/tests/test_deploy_portoes_antes_do_migrate.sh:103-117`, `:131-133` |
+| 4 | Agendado dispensa **chamar** auth; conta sua passagem mesmo que a pendência também recusasse. Não isola o respeito ao retorno de auth. | `bin/tests/test_deploy_portoes_antes_do_migrate.sh:135-137` |
+| 5 | `--conferir` aplica/publica, passa por auth ou sombra, ou deixa de terminar com sucesso. | `bin/tests/test_deploy_portoes_antes_do_migrate.sh:139-141` |
+| 6 | Prova de casca removida/ignorada ou depois do apply. | `bin/tests/test_deploy_portoes_antes_do_migrate.sh:143-145` |
+| 7 | `--sem-sombra` também dispensa auth ou aplica antes dela. | `bin/tests/test_deploy_portoes_antes_do_migrate.sh:147-149` |
+| 8 | Apply incondicional sem pendência; não publicar quando não precisa migrar. | `bin/tests/test_deploy_portoes_antes_do_migrate.sh:151-153` |
+| 9 | Agendado chama auth mas ignora sua recusa: aqui não existe a pendência que mascarava isso no caso 4. | `bin/tests/test_deploy_portoes_antes_do_migrate.sh:155-157` |
+| 10 | Inicialização de `APLICAR_MIGRATE=0` removida, deixando o valor herdado aplicar migration em `--sem-migrate`. | `bin/deploy.sh:61`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:98`, `:159-161` |
+| 11 | Recusa final removida ou condicionada como na volta 3, permitindo restart depois do apply com cron vivo. | `bin/deploy.sh:326`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:75`, `:163-165` |
+| 12 | Remoção de **todas** as recusas que impediriam migrar com cron inicialmente vivo. Não identifica qual das recusas anteriores respondeu. | `bin/deploy.sh:115-118`, `:299-301`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:96-98`, `:167-169` |
+| 13 | Apply ausente/duplicado, restart ausente/duplicado ou restart antes do apply. | `bin/tests/test_deploy_portoes_antes_do_migrate.sh:110-114`, `:171-173` |
+
+Achados centrais:
+
+- **Caso 12 não morde a remoção isolada da recusa imediatamente antes do apply**, `deploy.sh:300`: o cron nasce antes de iniciar o script (`test:97`) e já é recusado em `deploy.sh:117`. Remover só `117` também sobrevive porque `300` continua recusando. Falta criar cron entre 0e e 1c para provar a redução dessa janela (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:96-98`, `:167-169`; `bin/deploy.sh:115-118`, `:299-301`).
+- **Sobrevivente de linha efetivamente tocada pelo diff:** substituir `deploy.sh:326` por `[ "$APLICAR_MIGRATE" != 1 ] || recusa_restart_com_cron`. Mantém a recusa quando apply=1, passando 11/13; caso12 cai em0e. Pula a recusa final quando apply=0, permitindo matar cron nascido depois de0e num `--restart` sem migration core. Todos os casos de restart do selo usam `FAKE_PEND_CORE=1` (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:163`, `:167`, `:171`).
+- Outro sobrevivente dessa linha: condicionar `326` a `PEND_MSG=0`. O falso de mensageria retorna sempre0, impedindo distinguir a variante; em `PEND_MSG=1`, `--restart` é permitido e precisaria preservar a recusa final (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:76`; `bin/deploy.sh:194-203`, `:326`).
+- O comentário novo anuncia PUB_OK nos casos **3,8,11**, mas o código exige apenas nos **3,13**; 8 não tem apply e11 não tem publicação, portanto PUB_OK seria0 em ambos (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:36`, `:110-114`, `:132`, `:152`, `:164`, `:172`).
+- O selo não prova alvos do restart: só conta linhas `^restart`; o vizinho efetivamente compara `restart saas_core saas_ui mensageria` no caminho verde (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:109`, `:172`; `bin/tests/test_deploy_reload_gracioso.sh:134-139`).
+- A alegação de que o vizinho prova readiness/rotas/reciclagem está exagerada: ele falsifica `selo_reciclagem` como sucesso, responde `STATUS 200` incondicionalmente e não tem injeção de falha de readiness/rota; prova principalmente exec sobrevivente, HUP, troca de workers e alguns modos/recusas (`bin/tests/test_deploy_reload_gracioso.sh:40-42`, `:57-58`, `:107-112`, `:116-156`).
 
 ## 08/11 23:36 · sessao 1256d4b89cb3 · BUG-DEPLOY-PORTAO · verificador · origem=Code
 
@@ -637,216 +723,4 @@ As condições dessa tabela são `bin/deploy.sh:56-86` e `bin/deploy.sh:123-164`
 
 `--conferir` continua fora dos dois portões; agendado continua isento só de sombra; cópia continua sujeito aos dois. A cura não introduz outra isenção nem torna agendado sujeito à sombra. `bin/deploy.sh:123`; `bin/deploy.sh:148`; `bin/deploy.sh:221-223`.
 
-## 08/11 23:03 · sessao 6854c0837f27 · - · - · origem=Ronald (tmux)
-
-Q3 — Chamadores encontrados na cópia:
-
-| Origem | Chamada / tratamento |
-|---|---|
-| Cron declarado | 03:30, `--reload-agendado`, saída em `reload_diario.log` (`app/config/crons.py:326`). Instalação real do cron em produção: [nao verificado]. |
-| Integrador | Wrapper executa `integrador_lote.py rodar` (`bin/integrador.sh:52`); lote chama `--reload-copia` após copiar e gerar documentos, sem examinar seu retorno (`app/core/integrador_lote.py:627`, `app/core/integrador_lote.py:638`); deploy final `--sem-sombra` tem retorno conferido antes de marcar FIM/NO_AR (`app/core/integrador_lote.py:753`, `app/core/integrador_lote.py:754`, `app/core/integrador_lote.py:763`). |
-| Molde de fatia | `--reload-copia` ao desfazer e após copiar; final `--sem-sombra` (`bin/molde_fatia/cadeia.sh:32`, `bin/molde_fatia/cadeia.sh:48`, `bin/molde_fatia/cadeia.sh:89`). Reconhece sucesso pelo texto `^deploy: OK` (`bin/molde_fatia/cadeia.sh:90`). |
-| Molde autocura | Mesmas três chamadas (`bin/molde_autocura/cadeia.sh:31`, `bin/molde_autocura/cadeia.sh:45`, `bin/molde_autocura/cadeia.sh:86`); reconhece sucesso pelo texto `^deploy: OK` (`bin/molde_autocura/cadeia.sh:87`). |
-| Vigia de login | Depois de `git revert`, chama `--sem-migrate`, conferindo falha da cadeia `&&` (`bin/vigia_logins.sh:87`). |
-| Vigia da esteira | Auto-revert e revert do revert chamam `--sem-sombra`; retornos dos deploys são descartados (`app/core/esteira_vigia.py:1267`, `app/core/esteira_vigia.py:1275`). |
-| Fatia agendada abono | Confere sombra antes; deploy normal seguido de backfill; verifica pipeline com deploy (`fatias_agendadas/abono-no-ar/esteira.sh:30`, `fatias_agendadas/abono-no-ar/esteira.sh:37`, `fatias_agendadas/abono-no-ar/esteira.sh:45`). |
-| Fatia agendada o135 | Chama `--conferir`, confere sombra separadamente; após merge chama `--sem-migrate` e guarda retorno (`fatias_agendadas/o135-teto20/esteira.sh:80`, `fatias_agendadas/o135-teto20/esteira.sh:81`, `fatias_agendadas/o135-teto20/esteira.sh:116`, `fatias_agendadas/o135-teto20/esteira.sh:117`). |
-| Agendador genérico | Não chama deploy diretamente; chama a esteira de cada diretório (`bin/deploy_agendado.sh:73`). |
-| Fabricante | Declara que não publica e proíbe deploy; única ocorrência de `deploy.sh` no script é comentário (`bin/fabricante.sh:8`, `bin/fabricante.sh:17`); prompt também proíbe a chamada (`bin/fabricante_prompt.md:70`). Ausência de execução indireta por conteúdo fabricado: [nao verificado]. |
-
-Nos chamadores acima, não encontrei consumo de “migrate antes do carimbo” ou leitura intermediária do log para disparar outra ação; o consumo mostrado é retorno final, `deploy: OK`, ou descarte do retorno (`bin/molde_fatia/cadeia.sh:89`, `bin/molde_fatia/cadeia.sh:90`, `app/core/integrador_lote.py:753`, `app/core/integrador_lote.py:754`, `app/core/esteira_vigia.py:1267`). Dependência externa não incluída na cópia: [nao verificado].
-
-Q7 — Chave e tabela:
-
-- A chave corrente está em `ISENTOS` como `chamados_decisaopergunta.pergunta_id` (`bin/sombra_regras_pessoais.py:230`).
-- Os consumidores efetivos do conjunto `ISENTOS` são o inventário de modelos e o selo SQL da sombra, ambos comparando nomes completos tabela.coluna; nenhum acessa essa chave individualmente (`bin/inventario_pessoal_dos_modelos.py:52`, `bin/inventario_pessoal_dos_modelos.py:78`, `bin/sombra_selo_pessoal.py:25`, `bin/sombra_selo_pessoal.py:34`).
-- O mascarador importa as mesmas regras, mas percorre os dicionários de transformação; não percorre `ISENTOS` (`bin/sombra_mascara_pessoal.py:12`, `bin/sombra_mascara_pessoal.py:17`, `bin/sombra_mascara_pessoal.py:44`).
-- Busca literal da chave antiga em `bin/` e `app/`: nenhum consumidor encontrado; ausência absoluta ou nomes construídos dinamicamente: [nao verificado]. A ocorrência literal remanescente da tabela antiga no código de instrumentos é comentário sobre o incidente (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:9`).
-- O nome de modelo antigo permanece legitimamente na criação e no `RenameModel` histórico (`app/chamados/migrations/0050_resposta_anterior.py:17`, `app/chamados/migrations/0051_decisao_pergunta.py:41`); aparece ainda no tripwire AST que procura escritores dos dois nomes (`app/chamados/tests/test_reabrir_nao_destroi.py:129`) e em comentários/documentação (`app/chamados/models.py:3830`, `app/templates/chamados/partials/modal_fio.html:364`).
-- A transformação textual já usa `DecisaoPergunta.ato_texto/ato_motivo` (`bin/sombra_regras_pessoais.py:139`); a alteração de `ISENTOS` alinha o FK ao rename histórico (`bin/sombra_regras_pessoais.py:230`, `app/chamados/migrations/0051_decisao_pergunta.py:41`).
-
-Q8 — Escritores e leitores:
-
-| Estado | Escrita | Leitura |
-|---|---|---|
-| `logs/deploy.stamp` | Deploy grava `QUANDO`, `COMMIT`, `TITULO` em `.novo`, depois `mv` para destino absoluto de produção (`bin/deploy.sh:396`, `bin/deploy.sh:400`). | Janela lê primeiro `COMMIT=`; caminho pode ser substituído por `JANELA_AUTH_STAMP` (`bin/janela_auth.sh:36`, `bin/janela_auth.sh:39`). Checador de import lê `COMMIT`, salvo override `COMMIT_NO_AR` (`bin/import_tardio_contra_o_ar.py:46`, `bin/import_tardio_contra_o_ar.py:50`). Handoff lê `QUANDO` e `COMMIT` (`bin/handoff_sessao.sh:253`, `bin/handoff_sessao.sh:254`, `bin/handoff_sessao.sh:255`). Vigia da esteira lê para atribuir dono/quarentena, auto-revert e diagnóstico de relógio (`app/core/esteira_vigia.py:64`, `app/core/esteira_vigia.py:1160`, `app/core/esteira_vigia.py:1255`, `app/core/esteira_vigia.py:1313`); parser usa os três campos (`app/core/esteira_vigia.py:990`). |
-| `logs/deploy_sem_sombra.log` | Append somente pelo bloco de override, falha de gravação tolerada (`bin/deploy.sh:149`, `bin/deploy.sh:157`, `bin/deploy.sh:158`). | Nenhum leitor literal de execução encontrado em `bin/`/`app/`; leitores externos/dinâmicos: [nao verificado]. |
-| `SEM_JANELA_AUTH_MOTIVO` | Deploy não atribui; vem do ambiente, produtor real de produção: [nao verificado]. Testes forçam vazio (`bin/tests/test_deploy_reload_gracioso.sh:94`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:74`). | Deploy testa não vazio, anuncia motivo e evita chamar guarda (`bin/deploy.sh:140`, `bin/deploy.sh:141`). Esteira o135 lê e anuncia o mesmo override (`fatias_agendadas/o135-teto20/esteira.sh:68`, `fatias_agendadas/o135-teto20/esteira.sh:73`). |
-| `SEM_SOMBRA_MOTIVO` | Sobrescrita ao iniciar pelo valor de `DEPLOY_SEM_SOMBRA`; se primeiro argumento for `--sem-sombra`, recebe `$2` (`bin/deploy.sh:82`, `bin/deploy.sh:83`, `bin/deploy.sh:84`). Portanto exportar apenas `SEM_SOMBRA_MOTIVO` não estabelece o motivo (`bin/deploy.sh:82`). | Validação de motivo e bloco que anuncia/grava override em lugar de sombra (`bin/deploy.sh:85`, `bin/deploy.sh:149`, `bin/deploy.sh:156`, `bin/deploy.sh:157`). Teste novo força vazio no ambiente, mas essa atribuição é sobrescrita pela linha 82 (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:74`, `bin/deploy.sh:82`). |
-| `SO_CONFERIR` | Inicializa 0; muda a 1 apenas se `$1` for `--conferir` (`bin/deploy.sh:56`, `bin/deploy.sh:57`, `bin/deploy.sh:60`). | Envoltório auth/sombra, recusa mensageria, ramo de migration e retorno antecipado (`bin/deploy.sh:123`, `bin/deploy.sh:197`, `bin/deploy.sh:203`, `bin/deploy.sh:221`). |
-| `AGENDADO` | Inicializa 0; vira 1 para `--reload-agendado`; `--reload-copia` também o coloca em 1 (`bin/deploy.sh:59`, `bin/deploy.sh:62`, `bin/deploy.sh:79`). | Sombra, recusa de migration, rótulo do reload e elegibilidade do histórico (`bin/deploy.sh:148`, `bin/deploy.sh:208`, `bin/deploy.sh:311`, `bin/deploy.sh:404`). Teste de orçamento injeta valor ao avaliar a condição extraída (`bin/tests/test_orcamento_contexto.sh:311`); teste auth procura `AGENDADO` no texto dos `if` que cercam a chamada (`bin/tests/test_janela_auth.sh:139`). |
-| `COPIA` | Inicializa 0; vira 1 só em `--reload-copia`, junto de `AGENDADO=1` (`bin/deploy.sh:78`, `bin/deploy.sh:79`). | Sombra, recusa de migration, rótulo do reload e elegibilidade do histórico (`bin/deploy.sh:148`, `bin/deploy.sh:205`, `bin/deploy.sh:309`, `bin/deploy.sh:404`). Teste de orçamento injeta valor (`bin/tests/test_orcamento_contexto.sh:311`). |
-
-Produtores da entrada `DEPLOY_SEM_SOMBRA`: moldes e integrador na recarga de cópia (`bin/molde_fatia/cadeia.sh:32`, `bin/molde_fatia/cadeia.sh:48`, `bin/molde_autocura/cadeia.sh:31`, `bin/molde_autocura/cadeia.sh:45`, `app/core/integrador_lote.py:638`). O deploy usa só o primeiro argumento como modo, mantendo o risco já existente de flags posteriores ignoradas (`bin/deploy.sh:56`, `bin/deploy.sh:83`).
-
-## 08/11 22:47 · sessao acbe2fb35c2e · FIO-E0-V4-E1-FILA · verificador · origem=Code
-
-**O delta fecha os defeitos pontuais de dia local e dos três sítios A1, mas não fecha a garantia global do repasse:** ainda há Chamado terminal e relações com outro colaborador alcançáveis depois da trava inicial de P (`app/chamados/veredito_lavrado.py:114`; `app/chamados/services/fio.py:1022`; `app/chamados/services/disputa_emissao.py:956`; `app/chamados/reconciliador.py:1617`; `app/chamados/services/disputa_emissao.py:1747`).
-
-A execução das suites, os resultados RED→verde citados nos anexos e a ocorrência desses caminhos em produção são **[nao verificado]**. [nao verificado]
-
-**1. Achados marcados CURADO**
-
-| Achado | Conferência do delta |
-|---|---|
-| **1 — teto do repasse** | **Fecha a omissão por dia:** seleciona toda P de C, além das costuradas nos órfãos. **Não fecha o teto transitivo:** as cascatas alcançam outras P/D e Chamados terminais fora dessa seleção; caminhos detalhados abaixo (`app/chamados/services/disputa_emissao.py:956`; `app/chamados/services/disputa_emissao.py:1747`; `app/chamados/reconciliador.py:1617`). |
-| **2 — local × UTC** | **Fecha nos dois leitores apontados:** ambos chamam `relogio_virou`, que converte hoje e a lavra para dia local. Não significa que todo leitor temporal do sistema passe por ela: o backfill mantém conta própria (`app/chamados/veredito_lavrado.py:114`; `app/chamados/veredito_lavrado.py:208`; `app/chamados/services/raiox.py:41`; `app/chamados/management/commands/backfill_veredito_lavrado.py:113`). |
-| **4 — A1** | **Fecha os três sítios apontados:** backfill e contador usam diretamente o FK; rechaveamento usa `p.colaborador_id` para célula e despertar. A regressão desse terceiro sítio continua fora do selo novo (`app/chamados/management/commands/backfill_decisoes_pergunta.py:199`; `app/chamados/services/fio.py:1845`; `app/chamados/services/fio.py:1022`; `app/chamados/tests/test_e1_fila.py:87`). |
-| **6-F1** | **Fecha a saída vazia identificada:** acrescenta segundo órfão sem P e exige retorno não nulo. Isso não comprova todos os ramos das cascatas (`app/chamados/tests/test_e1_fila.py:261`; `app/chamados/tests/test_e1_fila.py:269`; `app/chamados/tests/test_e1_fila.py:275`). |
-| **6-F5** | **Fecha a fraqueza do relógio constante:** cada leitura avança um dia e o mutante retira o instante compartilhado. O juiz real continua mockado nesse teste (`app/chamados/tests/test_e1_fila.py:359`; `app/chamados/tests/test_e1_fila.py:364`; `app/chamados/tests/test_e1_fila.py:376`). |
-| **6-A3 parcial** | **Continua parcial:** agora exige a D fechada na sequência, mas pergunta e declaração permanecem no mesmo `DIA`; não exercita o reuso que entra no rechaveamento por dia divergente (`app/chamados/tests/test_e1_fila.py:185`; `app/chamados/tests/test_e1_fila.py:194`; `app/chamados/tests/test_e1_fila.py:204`; `app/chamados/models.py:2938`). |
-| **8 — escritores de destino** | **A documentação passa a mencionar SET_NULL**, correspondente à política declarada no FK. A expressão “só o banco” não comprova execução por ação SQL/trigger: isso é **[nao verificado]**. A conferência da mensagem do commit, “seis” versus “sete”, também é **[nao verificado]** (`app/chamados/services/fio.py:808`; `app/chamados/services/fio.py:814`; `app/chamados/models.py:3377`). |
-
-**2. Conjunto do repasse e caminhos que escapam**
-
-Chamando de **C** o colaborador recebido, **O** os órfãos e **P₀** as perguntas selecionadas, o conjunto inicialmente travado é este; a chamada ocorre dentro do atomic, antes do complemento e das demais escritas (`app/chamados/services/disputa_emissao.py:984`; `app/chamados/services/disputa_emissao.py:991`):
-
-| Classe | Conjunto inicial |
-|---|---|
-| **C** | Somente C; os donos das D/Ch fornecidas explicitamente não são automaticamente acrescentados (`app/chamados/services/disputa_emissao.py:954`; `app/chamados/models.py:2663`). |
-| **P₀** | `P.colaborador=C OU P.chamado_destino∈O` (`app/chamados/services/disputa_emissao.py:956`). |
-| **D₀** | Todas as D abertas de C, mais as D de P₀, abertas ou fechadas (`app/chamados/services/disputa_emissao.py:958`; `app/chamados/models.py:2669`). |
-| **Ch₀** | O, destinos de P₀, todos os Ch vivos de C e pais das D selecionadas que estejam abertas. O recolhimento desses pais não exige que a D pertença a C (`app/chamados/services/disputa_emissao.py:959`; `app/chamados/models.py:2673`; `app/chamados/models.py:2677`; `app/chamados/models.py:2680`). |
-
-O conjunto **alcançável** precisa incluir as expansões abaixo, repetidas enquanto outra cascata encontrar novas linhas; a seleção inicial não calcula esse fechamento (`app/chamados/services/disputa_emissao.py:956`; `app/chamados/services/disputa_emissao.py:1827`; `app/chamados/models.py:1908`):
-
-- **Corpo e cauda:** D da P encontrada por destino, D aberta/criada, perguntas criadas ou reusadas, órfãos analisados e perguntas dos dias extraídos do contexto da D (`app/chamados/services/disputa_emissao.py:1002`; `app/chamados/services/disputa_emissao.py:1013`; `app/chamados/services/disputa_emissao.py:1028`; `app/chamados/services/disputa_emissao.py:1202`; `app/chamados/services/disputa_emissao.py:278`; `app/chamados/services/disputa_emissao.py:294`).
-- **Cartório:** outros Ch vivos reconciliados, P absolvidas do colaborador inteiro e D que essas retratações podem fechar (`app/chamados/signals.py:203`; `app/ponto/services/cartorio.py:1488`; `app/ponto/services/cartorio.py:1522`; `app/ponto/services/cartorio.py:958`; `app/chamados/reconciliador.py:584`; `app/chamados/reconciliador.py:612`).
-- **Resolver/S143:** P encontradas pelo destino, suas D, todas as irmãs dessas D e respectivos pais; ao fechar uma D, também o C e o universo aberto do dono dela (`app/chamados/services/disputa_emissao.py:1747`; `app/chamados/services/disputa_emissao.py:1804`; `app/chamados/services/disputa_emissao.py:1827`; `app/chamados/services/disputa_emissao.py:1836`; `app/chamados/models.py:1908`).
-- **Fechamento:** reconciliação síncrona do pai e carimbo de pendentes aprovadas da D. Retomada de regularizações e fechamento de becos estão em `on_commit`, portanto ficam fora desta cascata síncrona (`app/chamados/signals.py:42`; `app/chamados/signals.py:163`; `app/chamados/services/materializacao.py:1418`; `app/chamados/signals.py:144`; `app/chamados/signals.py:225`).
-
-Há dois contraexemplos relevantes ao teto:
-
-**a) Chamado terminal existente, com todos os donos consistentes.** A cauda pode criar P sem destino; `gerar_perguntas_disputa` chama `reatar_pergunta_orfa`, que pode reemitir o Chamado do dia. A busca não restringe a vivos; `Chamado.abrir` pode renascer um terminal existente (`app/chamados/services/disputa_emissao.py:444`; `app/chamados/services/disputa_emissao.py:459`; `app/chamados/reconciliador.py:1617`; `app/chamados/reconciliador.py:838`; `app/chamados/reconciliador.py:910`; `app/chamados/models.py:906`; `app/chamados/models.py:921`).
-
-Se esse terminal não era órfão, pai de D aberta nem destino de P preexistente, ficou fora de Ch₀; o renascimento adquire sua trava posteriormente, embora o topo já tenha travado P₀ e a cauda já tenha inserido a nova P. Seus gates podem recusar casos concretos; ocorrência no dado: **[nao verificado]** (`app/chamados/models.py:2677`; `app/chamados/models.py:2680`; `app/chamados/models.py:3009`; `app/chamados/models.py:1019`; `app/chamados/models.py:1432`; `app/chamados/models.py:290`).
-
-**b) D/Ch de outro colaborador por costura preexistente.** Considere ChX vivo de C, fora de O, com P2 de C2 apontando para ele. ChX entra por “vivos de C”, mas P2/D2 não entram pelo predicado de P₀. O cartório pode reconciliar ChX; o S143 busca P2 pelo destino **sem filtro de colaborador**, pode carimbá-la e segue D2, suas irmãs e seu pai Ch2 (`app/chamados/services/disputa_emissao.py:956`; `app/chamados/models.py:2680`; `app/ponto/services/cartorio.py:1488`; `app/chamados/signals.py:115`; `app/chamados/services/disputa_emissao.py:1747`; `app/chamados/services/disputa_emissao.py:1787`; `app/chamados/services/disputa_emissao.py:1804`; `app/chamados/services/disputa_emissao.py:1836`).
-
-A reabertura de Ch2 ou o fechamento de D2 adquire C2 e seu universo depois das P já presas. O nascimento atual recusa nova costura cruzada, mas isso não elimina a leitura do acervo existente; existência dessa configuração em produção: **[nao verificado]** (`app/chamados/services/disputa_emissao.py:1812`; `app/chamados/services/disputa_emissao.py:1888`; `app/chamados/models.py:1908`; `app/chamados/models.py:2838`).
-
-Portanto, **há linhas alcançáveis fora do conjunto travado antes da primeira escrita**, inclusive D/Ch de outro colaborador; a ampliação para toda P de C não resolve essas expansões reversas e transitivas (`app/chamados/services/disputa_emissao.py:956`; `app/chamados/services/disputa_emissao.py:1747`; `app/chamados/models.py:1908`).
-
-**3. `janela_expira_em`, `julgado_em` e relógio**
-
-| Operação | Escritores/leitores |
-|---|---|
-| **Derivação normal** | `lavrar`: amostra `_agora`, atribui `julgado_em`, calcula a janela com o mesmo instante e salva ambos (`app/chamados/veredito_lavrado.py:251`). |
-| **Outro derivador/escritor** | Backfill: calcula a janela e atribui ambos; persiste pela porta de lote. É exceção nominal no contrato (`app/chamados/management/commands/backfill_veredito_lavrado.py:111`; `app/chamados/management/commands/backfill_veredito_lavrado.py:139`; `app/chamados/management/commands/backfill_veredito_lavrado.py:143`; `app/core/tests/test_contract_escritores_estado.py:74`). |
-| **Restauração** | `desfazer_lavra_em_memoria` restaura a fotografia, inclusive ambos os campos (`app/chamados/veredito_lavrado.py:261`; `app/chamados/veredito_lavrado.py:268`). |
-| **Persistência sem nova derivação** | Reuso, carimbo, reapontamento, rechaveamento e relavra recebem os valores de `lavrar` (`app/chamados/models.py:2996`; `app/chamados/models.py:3139`; `app/chamados/services/fio.py:923`; `app/chamados/services/fio.py:1033`; `app/chamados/services/relavra_via.py:126`). |
-| **Leitores temporais principais** | `esta_stale` e varredura chamam `relogio_virou`; ambos também comparam marco com `julgado_em` (`app/chamados/veredito_lavrado.py:208`; `app/chamados/veredito_lavrado.py:212`; `app/chamados/services/raiox.py:41`; `app/chamados/services/raiox.py:44`). |
-| **Outros leitores** | Fotografia de rollback, serialização de reversão do passivo e comparação persistido/recalculado no backfill (`app/chamados/veredito_lavrado.py:261`; `app/chamados/services/passivo_validado.py:64`; `app/chamados/services/passivo_validado.py:83`; `app/chamados/management/commands/backfill_veredito_lavrado.py:121`; `app/chamados/management/commands/backfill_veredito_lavrado.py:135`). |
-
-As unidades são distintas e coerentes nos dois leitores corrigidos: `julgado_em` é **instante**, `janela_expira_em` é **dia**; para o ramo do relógio, o instante é convertido para dia local. A regra é `expira <= hoje` e `dia_local(lavra) < expira`: expiração inclusiva, lavra estritamente anterior; marco usa `marco > julgado_em` (`app/chamados/models.py:2588`; `app/chamados/models.py:2594`; `app/chamados/veredito_lavrado.py:114`; `app/chamados/veredito_lavrado.py:212`).
-
-A janela viva inclui os dois extremos; `expira_em` procura o primeiro dia fora dela, compatível com invalidar quando `hoje >= expira` (`app/chamados/juizes.py:601`; `app/chamados/veredito_lavrado.py:141`; `app/chamados/veredito_lavrado.py:143`).
-
-**Não há um único relógio para todo o ato.** O juiz ainda lê `date.today()` e é chamado antes de `lavrar` amostrar `_agora`; o teste F5 o substitui por mock. A configuração é São Paulo com timezone habilitado, mas a igualdade efetiva entre dia do processo e dia local em produção é **[nao verificado]** (`app/chamados/juizes.py:575`; `app/chamados/veredito_lavrado.py:242`; `app/chamados/veredito_lavrado.py:251`; `app/chamados/tests/test_e1_fila.py:364`; `app/config/settings/base.py:93`).
-
-**Há outro leitor com conta própria:** o backfill lê `localdate()` e `now()` separadamente e calcula `e <= hoje`. Portanto pode atravessar meia-noite entre as amostras; ocorrência real: **[nao verificado]** (`app/chamados/management/commands/backfill_veredito_lavrado.py:94`; `app/chamados/management/commands/backfill_veredito_lavrado.py:95`; `app/chamados/management/commands/backfill_veredito_lavrado.py:113`).
-
-Também permanece a ambiguidade anterior do campo: a descrição promete valor determinístico por evento, mas, para evento já expirado, `expira_em` devolve o dia da consulta/lavra, porque começa em `max(hoje, data_evento)` (`app/chamados/models.py:2597`; `app/chamados/veredito_lavrado.py:137`; `app/chamados/veredito_lavrado.py:142`).
-
-**4. FILA e descartes**
-
-- **Item 5 / A2 com chamador já travado: procedente quanto à ordem global.** O filtro de irmão/irmãs ocorre antes do atomic. Um irmão pode surgir antes da aquisição de C; depois de C/D/Ch/P presos, `pai.reabrir()` consulta novamente e entra em migração. Esta tenta adquirir todos os C das perguntas, inclusive outro colaborador, antes da recusa posterior de costura. Ocorrência em produção: **[nao verificado]** (`app/chamados/management/commands/reabrir_orfas_enterradas.py:105`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:146`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:153`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:172`; `app/chamados/models.py:1411`; `app/chamados/services/fio.py:2085`; `app/chamados/services/fio.py:2086`; `app/chamados/services/fio.py:2160`).
-- **`UniversoMudouSobATrava` não fecha esse caso:** a conferência de crescimento vem depois da aquisição interna dos C; ela não desfaz preventivamente a ordem já imposta pelo chamador (`app/chamados/services/fio.py:2084`; `app/chamados/services/fio.py:2086`; `app/chamados/services/fio.py:2088`; `app/chamados/services/fio.py:2090`).
-- **Fila 3/f5 é dívida real no caminho lido pela obra:** a cura de `expira_em` não torna único o relógio do julgamento completo. Pode ser adiada como desenho, mas não sustenta a afirmação de mesmo instante entre juiz e lavra (`app/chamados/juizes.py:569`; `app/chamados/juizes.py:575`; `app/chamados/veredito_lavrado.py:242`; `app/chamados/veredito_lavrado.py:251`).
-- **A3 por dia diferente e A2 por crescimento continuam lacunas de prova:** o caso A3 permanece no mesmo dia; o cenário A2 monta dois colaboradores estáticos (`app/chamados/tests/test_e1_fila.py:146`; `app/chamados/tests/test_e1_fila.py:157`; `app/chamados/tests/test_e1_fila.py:185`; `app/chamados/tests/test_e1_fila.py:194`).
-- **Descarte P3/P6/P7 é defensável:** os mutantes introduzem explicitamente P antes de C e exigem sequência inválida; P7 exige também três migrações. Não é necessário exigir uma mensagem textual específica para demonstrar essa mutação (`app/chamados/tests/test_e1_fila.py:311`; `app/chamados/tests/test_e1_fila.py:320`; `app/chamados/tests/test_e1_fila.py:333`; `app/chamados/tests/test_e1_fila.py:337`).
-- **Rastreador:** ignorar `executemany` e trava de FK é limitação real da prova, não comprovação de outra violação concreta. Os verdes desse instrumento não demonstram todas as aquisições possíveis; um contraexemplo adicional especificamente nesses mecanismos é **[nao verificado]** (`app/chamados/tests/test_e1_v9.py:51`; `app/chamados/tests/test_e1_v9.py:69`).
-
-A ordem exigida é por transação, inclusive entre colaboradores, com todos os C antes da primeira D; por isso a ausência de ocorrência demonstrada não elimina o caminho estático do item 5 (`app/chamados/models.py:2629`; `app/chamados/models.py:2652`; `app/chamados/tests/test_e1_v15g_portas.py:8`).
-
-**5. Os testes mordem? Passam vazios?** [nao verificado]
-
-| Teste | Avaliação estática | [nao verificado]
-|---|---|
-| **A1 por `values_list`** | Morde os dois sítios antigos: o censo real acusa chamadas com ambos os campos. **Não morde** a regressão direta `colab_id = p.disputa.colaborador_id`, pois só reconhece `or` ou chamadas com ambos os nomes (`app/chamados/tests/test_e1_fila.py:87`; `app/chamados/tests/test_e1_fila.py:98`; `app/chamados/tests/test_e1_fila.py:118`; `app/chamados/services/fio.py:1022`). |
-| **Teto do repasse** | Não é vazio: cria P a vinte dias e exige sua P e D na sequência; o recorte anterior ±1 não inclui essa P. Contudo testa apenas `_trava_do_repasse`, não as cascatas nem outros colaboradores (`app/chamados/tests/test_e1_fila.py:292`; `app/chamados/tests/test_e1_fila.py:295`; `app/chamados/tests/test_e1_fila.py:297`; `app/chamados/tests/test_e1_fila.py:299`). |
-| **F1 com segundo órfão** | Retira a vacuidade conhecida pelo retorno não nulo. O mutante morde a retirada da trava ampla; não demonstra, sozinho, necessidade da ampliação para qualquer dia (`app/chamados/tests/test_e1_fila.py:261`; `app/chamados/tests/test_e1_fila.py:275`; `app/chamados/tests/test_e1_fila.py:281`; `app/chamados/tests/test_e1_fila.py:285`). |
-| **F5 relógio que anda** | Com evento já expirado, duas amostras produzem dias diferentes; a asserção de igualdade falha se `expira_em` voltar a ler sozinho. O mutante exige justamente essa diferença. Não prova o relógio do juiz real, que está mockado (`app/chamados/tests/test_e1_fila.py:359`; `app/chamados/tests/test_e1_fila.py:364`; `app/chamados/tests/test_e1_fila.py:372`; `app/chamados/tests/test_e1_fila.py:376`). |
-| **F5 `date.today`** | Borda simulada em março contra mundo congelado em novembro distingue as fontes de relógio; o mutante deve divergir do resultado esperado (`app/chamados/tests/test_e1_fila.py:342`; `app/chamados/tests/test_e1_fila.py:350`; `app/chamados/tests/test_e1_fila.py:355`; `app/chamados/tests/test_e1_fila.py:383`). |
-| **DiaLocalEstaStale** | Dois casos efetivos: antes da meia-noite local espera False; depois, com lavra na noite anterior, True. As contas UTC anteriores dão os resultados contrários (`app/chamados/tests/test_e1_fila.py:393`; `app/chamados/tests/test_e1_fila.py:401`; `app/chamados/tests/test_e1_fila.py:410`). |
-| **DiaLocalVarredura** | Cria uma P, atualiza os campos e consulta sua PK; o caso esperado True impede passar com queryset vazio (`app/chamados/tests/test_e1_fila.py:420`; `app/chamados/tests/test_e1_fila.py:422`; `app/chamados/tests/test_e1_fila.py:425`; `app/chamados/tests/test_e1_fila.py:426`). |
-| **A3 alterado** | A nova asserção prova presença da D fechada; não prova execução do rechaveamento por dia divergente (`app/chamados/tests/test_e1_fila.py:194`; `app/chamados/tests/test_e1_fila.py:204`; `app/chamados/models.py:2938`). |
-
-Os mutantes falham explicitamente quando sua âncora não existe, evitando montagem silenciosamente inoperante; execução das suites nesta auditoria: **[nao verificado]** (`app/chamados/tests/test_e1_fila.py:47`; `app/chamados/tests/test_e1_fila.py:50`).
-
-**6. Classes que já reprovaram obra**
-
-- **Ordem de trava:** permanece nos caminhos de terminal e de outro colaborador descritos acima; é a principal insuficiência do teto alterado (`app/chamados/reconciliador.py:1617`; `app/chamados/models.py:921`; `app/chamados/services/disputa_emissao.py:1747`; `app/chamados/models.py:1908`).
-- **Selo sem cobertura da cura inteira:** o novo selo morde os aliases, mas deixa passar a reversão do rechaveamento para o colaborador da D (`app/chamados/tests/test_e1_fila.py:87`; `app/chamados/tests/test_e1_fila.py:98`; `app/chamados/services/fio.py:1022`).
-- **Relógio fora da borda compartilhada:** continua no juiz alcançado por `lavrar`; o delta não introduz essa dívida, mas também não a elimina (`app/chamados/juizes.py:575`; `app/chamados/veredito_lavrado.py:242`; `app/chamados/veredito_lavrado.py:251`).
-- **Derivação paralela:** os três sítios A1 apontados foram corrigidos; permanece a reprodução preexistente da regra de janela em `expira_em` e no juiz (`app/chamados/management/commands/backfill_decisoes_pergunta.py:199`; `app/chamados/services/fio.py:1022`; `app/chamados/services/fio.py:1847`; `app/chamados/veredito_lavrado.py:120`; `app/chamados/juizes.py:601`).
-- **Segundo escritor:** o backfill continua atribuindo os campos fora de `lavrar`, com exc
-
-[truncado em 20000 de 20745 caracteres]
-
-## 08/11 22:44 · sessao 2858cbb65143 · - · - · origem=Ronald (tmux)
-
-3. **Relógio e campos**
-
-- `julgado_em` é `DateTimeField`; `janela_expira_em`, `DateField` (`app/chamados/models.py:2588`, `app/chamados/models.py:2594`). A porta `lavrar` atribui ambos a partir de `_agora=timezone.now()`, passando esse instante a `expira_em`; salva juntos (`app/chamados/veredito_lavrado.py:251-255`).
-- Há outro atribuidor: o backfill obtém `hoje=timezone.localdate()` e `agora=timezone.now()` em leituras distintas, calcula `e=expira_em(..., agora=agora)` e atribui os dois campos; persiste por `gravar_lavras_em_lote` (`app/chamados/management/commands/backfill_veredito_lavrado.py:94-95`, `:111`, `:139-146`; `app/chamados/veredito_lavrado.py:220-230`). Essa exceção está registrada no contrato (`app/core/tests/test_contract_escritores_estado.py:74-84`).
-- A reversão em memória também atribui ambos, restaurando a fotografia anterior; o chamador é o tratamento de falha de `carimbar` (`app/chamados/veredito_lavrado.py:259-269`; `app/chamados/models.py:3137-3145`).
-- Persistências que recebem valores de `lavrar`, sem nova derivação: nascimento/reuso em `models.py:2996-2999`, carimbo em `models.py:3139-3142`, reapontamento em `services/fio.py:923-925`, rechaveamento em `services/fio.py:1033-1034`, relavra em `services/relavra_via.py:126-128` (todos sob `app/chamados/`).
-- Os leitores temporais principais convergem: `esta_stale` chama `relogio_virou`; a varredura faz o mesmo, com um instante para o lote (`app/chamados/veredito_lavrado.py:204-212`; `app/chamados/services/raiox.py:31-44`). `relogio_virou` usa **dia local**, invalida com `expira <= hoje` e exige `dia_local(julgado_em) < expira`; portanto igualdade da lavra com expiração não invalida (`app/chamados/veredito_lavrado.py:112-114`). Os marcos usam comparação de instantes estrita `marco > julgado_em` (`app/chamados/veredito_lavrado.py:212`; `app/chamados/services/raiox.py:44`).
-- Outros leitores diretos: fotografia para rollback (`app/chamados/veredito_lavrado.py:261`), serialização da reversão do passivo (`app/chamados/services/passivo_validado.py:64-66`, `:81-83`, `:367`), e backfill, que compara o campo persistido ao recalculado (`app/chamados/management/commands/backfill_veredito_lavrado.py:121`, `:135`).
-- **Existe outra conta de dia no backfill:** `e <= hoje`, usando seu próprio `hoje`; não é a implementação completa de `relogio_virou`, mas impede afirmar “todo leitor temporal passa por ela” (`app/chamados/management/commands/backfill_veredito_lavrado.py:94-95`, `:111-113`). Cruzamento de meia-noite entre essas duas leituras é caminho de código; ocorrência real [nao verificado].
-- A cura não alcança o relógio do juiz: `_dentro_da_janela_viva(data_evento)` não recebe instante e usa `date.today()` (`app/chamados/juizes.py:569`, `:575`). A lavra chama o juiz **antes** de amostrar seu `_agora` (`app/chamados/veredito_lavrado.py:242-253`); há ramos do juiz que consultam essa janela (`app/chamados/juizes.py:674`, `:764`, `:1217`). Igualdade do fuso efetivo do processo em produção [nao verificado]; configuração da cópia: `America/Sao_Paulo`, `USE_TZ=True` (`app/config/settings/base.py:93-95`).
-- A janela viva mantém limites inclusivos, enquanto sua expiração é o primeiro dia fora dela (`app/chamados/juizes.py:601`; `app/chamados/veredito_lavrado.py:137-143`). `janela_expira_em` não é estritamente função fixa do evento: para evento já expirado retorna `hoje`; isso contradiz a descrição “Deterministico por data_evento”, mas precede o delta (`app/chamados/models.py:2597`; `app/chamados/veredito_lavrado.py:137-143`; `app/chamados/management/commands/backfill_veredito_lavrado.py:118`).
-
-5. **Testes: mordida e limites** [nao verificado]
-
-| Teste | Avaliação estática | [nao verificado]
-|---|---|
-| A1 por `values_list` | O detector agora acusa os dois campos na mesma chamada; o RED sobre fontes reais falha com os dois sítios antigos (`app/chamados/tests/test_e1_fila.py:97-119`). A mordida usa exemplo literal com os dois campos (`:129-138`). |
-| Limite A1 | **A reversão de `rechavear` para `colab_id=p.disputa.colaborador_id` continua invisível ao selo:** não é `or` nem chamada `values` com os dois campos (`app/chamados/tests/test_e1_fila.py:87-101`; cura em `app/chamados/services/fio.py:1022`). Executei apenas os dois helpers extraídos por AST, em Python com `-B`: essa atribuição retorna `[]`; nenhuma suite Django executada. |
-| Teto do repasse | Cria P vinte dias distante, exige P e sua D na sequência; falha com o recorte ±1 anterior (`app/chamados/tests/test_e1_fila.py:287-300`). Não é teste das cascatas nem de Ch/C de outro colaborador: chama somente `_trava_do_repasse` e verifica P/D (`:296-300`). |
-| F1 segundo órfão | Introduz órfão sem P, passa os dois à porta e exige retorno não nulo, retirando a saída prematura que esvaziava os laços (`app/chamados/tests/test_e1_fila.py:261-277`). Seu mutante remove a trava ampla e exige violação (`:279-285`); o teste específico da ampliação por todos os dias é o do teto (`:287-300`). |
-| F5 mesmo instante | Relógio avança um dia por leitura; juiz é mockado para `False`; exige expiração no dia local da lavra (`app/chamados/tests/test_e1_fila.py:357-372`). Mutante retira `agora=_agora`, e a desigualdade exigida demonstra a diferença entre duas amostragens (`:374-379`). Não exercita o relógio real do juiz, por causa do mock (`:364`). |
-| F5 borda/date.today | Congela mundo em novembro, faz `timezone.now` devolver março e exige março; mutante devolve relógio `date.today()` e deve divergir (`app/chamados/tests/test_e1_fila.py:342-355`, `:381-384`). |
-| DiaLocalEstaStale | Dois casos não vazios: antes da meia-noite local deve dar False; depois, com lavra na noite anterior, True. As comparações UTC antigas produzem os resultados opostos (`app/chamados/tests/test_e1_fila.py:393-411`). |
-| DiaLocalVarredura | Cria P real, atualiza ambos os campos para cada caso, consulta queryset contendo sua PK e exige presença/ausência exata (`app/chamados/tests/test_e1_fila.py:420-426`). Não passa com queryset vazio no caso esperado True (`:426`). |
-| A3 parcial | Exige agora D fechada na sequência, além da P e Ch (`app/chamados/tests/test_e1_fila.py:199-206`). Continua mesmo DIA: P nasce no DIA padrão e mocks devolvem DIA (`:185`, `:194-196`; padrão em `app/chamados/tests/test_e1_v9.py:145-147`); ramo de rechaveamento por dia diferente não ganhou caso (`app/chamados/services/fio.py:1012-1013`). |
-
-Resultado de execução das suites, RED anterior e verde atual: [nao verificado]. O montador de mutantes falha explicitamente se a âncora da cura não existe, evitando erro silencioso de montagem (`app/chamados/tests/test_e1_fila.py:47-55`).
-
-6. **Classes relacionadas ao delta**
-
-- `relogio_virou` centraliza o predicado já duplicado nos dois leitores; não cria segundo juiz para decidir se a janela viva contém o evento, pois seu predicado é invalidação da lavra persistida (`app/chamados/veredito_lavrado.py:105-114`; `app/chamados/juizes.py:569-601`).
-- Continuam, nos sítios lidos pelo delta, relógio independente no juiz, escritor excepcional do backfill e conta temporal própria desse backfill; todos já existiam, com referências acima (`app/chamados/juizes.py:575`; `app/chamados/management/commands/backfill_veredito_lavrado.py:94-113`, `:139-146`).
-- O selo novo tem mordida para a regressão por `values_list`, porém não protege a terceira cura A1, a atribuição direta de `rechavear`; isso é limitação concreta de cobertura, sem inferir ocorrência de dados divergentes (`app/chamados/tests/test_e1_fila.py:87-101`; `app/chamados/services/fio.py:1022`).
-
-## 08/11 22:44 · sessao 5d1428d82aec · - · - · origem=Ronald (tmux)
-
-O teto mudou de “dias ±1” para `P.colaborador=C ∪ P.destino∈órfãos`; isso fecha a omissão temporal específica, mas não demonstra cobertura transitiva de todas as cascatas (`app/chamados/services/disputa_emissao.py:954-959`).
-
-**Conjunto efetivamente travado antes da primeira escrita:**
-
-- **C:** somente o colaborador recebido (`app/chamados/services/disputa_emissao.py:954`; `app/chamados/models.py:2660-2664`).
-- **D:** todas as abertas de C, mais as disputas das P selecionadas, abertas ou fechadas (`app/chamados/services/disputa_emissao.py:956-959`; `app/chamados/models.py:2669-2674`).
-- **Ch:** órfãos recebidos, destinos das P selecionadas, todos os vivos de C e pais das D selecionadas que estejam abertas; esse último recolhimento não verifica o dono da D (`app/chamados/services/disputa_emissao.py:958-959`; `app/chamados/models.py:2673-2687`).
-- **P:** somente as selecionadas pelo OR acima; ordenar e travar seus próprios registros não expande irmãs nem destinos reversos (`app/chamados/services/disputa_emissao.py:956-959`; `app/chamados/models.py:2688-2691`).
-
-**O conjunto alcançável é maior:**
-
-- O corpo complementa D da primeira P encontrada por destino, cria ou atualiza D de C, cria/reusa P e analisa órfãos; a seleção inicial da P não exige que ela ou sua D pertençam a C (`app/chamados/services/disputa_emissao.py:1002-1017`, `1028-1064`, `1145-1155`, `1176-1188`).
-- A cauda lê batidas nomeadas pelo contexto da D, gera perguntas de outros dias, modifica o contexto e pode fechar a D (`app/chamados/services/disputa_emissao.py:278-296`, `1202-1219`).
-- `analisar` grava estado e dispara síncronamente o cartório; o cartório pode reconciliar outros chamados vivos do dia, retratar P de todo o colaborador e executar a fábrica (`app/chamados/models.py:800-806`, `289-296`; `app/chamados/signals.py:187-203`; `app/ponto/services/cartorio.py:1488`, `1501`, `1522`, `958-963`, `985-997`; `app/chamados/reconciliador.py:584-614`).
-- O resolver por chamado segue todas as P ancoradas nele, sem filtro por dono; depois segue suas D, todas as P dessas D, seus pais e o universo aberto do dono da D quando `fechar` toma suas travas (`app/chamados/services/disputa_emissao.py:1747-1751`, `1787-1791`, `1804-1812`, `1827-1845`, `1861`, `1875-1883`; `app/chamados/models.py:1908-1910`).
-- Fechar D reconcilia o pai pelo signal e materializa P aprovadas de toda a D; são chamadas síncronas. Retomar regularizações e fechar becos são `on_commit` e ficam fora desse conjunto síncrono (`app/chamados/signals.py:41-45`, `162-163`, `144`, `225`; `app/chamados/services/materializacao.py:1418-1432`).
-
-**Caminhos que continuam fora do teto:**
-
-1. **Ch terminal existente, mesmo colaborador e sem nenhuma divergência de dono.** Uma P nova da cauda pode nascer sem destino e chamar `reatar_pergunta_orfa`; este pode reemitir um chamado do dia já encerrado. `Chamado.abrir` busca todos os estados e renasce o encerrado, que não estava no teto se não era órfão, pai de D aberta nem destino de P preexistente (`app/chamados/services/disputa_emissao.py:444-464`; `app/chamados/reconciliador.py:1582-1591`, `1617`, `834-839`, `910-911`; `app/chamados/models.py:906-924`; teto: `2677-2687`). A aquisição de Ch ocorre depois da inserção da nova P; o renascimento chama `reabrir`, que grava estado e ressuscita perguntas (`app/chamados/models.py:3009`, `1019`, `1432-1441`, `289-291`). Os gates podem recusar um caso concreto; ocorrência no dado [nao verificado].
-
-2. **D/Ch de outro colaborador por costura preexistente.** Considere ChX vivo de C, fora da lista de órfãos, com P2 de C2 apontando para ele: o teto inclui ChX, mas exclui P2/D2. O cartório despertado por outro órfão pode reconciliar ChX; S143 busca P2 pelo destino, carimba-a e percorre D2 e suas irmãs. Pode reabrir seu pai Ch2 e fechar D2, adquirindo C2 e seu universo depois das P já travadas/escritas (`app/chamados/services/disputa_emissao.py:956-959`; `app/chamados/models.py:2680-2687`; `app/chamados/signals.py:114-115`; `app/ponto/services/cartorio.py:1488`, `1501`, `1522`; `app/chamados/services/disputa_emissao.py:1747-1751`, `1787`, `1804-1812`, `1827-1861`, `1875-1883`; `app/chamados/models.py:1908-1910`). O nascimento atual recusa destino de outro colaborador, mas isso não elimina o caminho de leitura/escrita sobre acervo já costurado; existência dessa configuração no dado [nao verificado] (`app/chamados/models.py:2837-2838`; `app/chamados/services/disputa_emissao.py:1747-1751`).
-
-3. **Entrada órfã de outro colaborador.** A porta não confere o dono dos chamados recebidos antes de travá-los explicitamente; um `analisar` posterior toma C e o universo do dono efetivo do chamado (`app/chamados/services/disputa_emissao.py:980-991`, `997-1017`; `app/chamados/models.py:289-291`, `800-806`). Ocorrência entre os chamadores/prod [nao verificado].
-
-A checagem de igualdade entre `P.colaborador` e o dono da D roda apenas no nascimento; portanto ela não prova consistência de todo o acervo lido pelas cascatas (`app/chamados/models.py:3410-3425`). A cobertura exata exigiria o fechamento transitivo das relações efetivamente seguidas — destinos reversos, D das P alcançadas, irmãs, pais e universos dos novos donos — além dos terminais que a reemissão pode renascer; `_trava_do_repasse` faz somente uma expansão (`app/chamados/services/disputa_emissao.py:954-959`; caminhos: `1747-1883`; `app/chamados/reconciliador.py:910-911`; `app/chamados/models.py:906-924`).
-
-_2932 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2936 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
