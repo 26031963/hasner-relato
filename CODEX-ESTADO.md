@@ -1,7 +1,17 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 18:11** · publicado em **09/11/2026 18:13** (UTC-3)
+> Ultima resposta processada: **09/11/2026 18:18** · publicado em **09/11/2026 18:18** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 18:18 · sessao 87e4233cdf18 · FIO-E0-V4-E4-ESCRITORES · construtor · origem=Code
+
+Entrega em [E4A_V3_ENTREGA.txt](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-180711/app/docs/E4A_V3_ENTREGA.txt:1), com parque integral, mapa de campos e comando ORM.
+
+29 testes puros passaram; os sete mutantes morderam. [Resultados e comandos](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-180711/app/docs/E4A_V3_TESTES.txt:1). [nao verificado]
+
+Não encontrei bypass no disparar; nenhuma cura produtiva foi necessária. [Análise](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-180711/app/docs/E4A_V3_ENTREGA.txt:90).
+
+Resultados ORM e certificação final: [nao verificado].
 
 ## 09/11 18:11 · sessao 06071fff5ff7 · - · - · origem=Ronald (tmux)
 
@@ -879,83 +889,4 @@ Fecho dos chamadores por AST, sem importar a aplicação:
 
 Correções indispensáveis do v1: `_estado_da_decisao` não existe no AST atual; o corpo correspondente é `_pela_decisao`, em `app/chamados/services/tarefa_do_dia.py:115`. O diff fornecido não demonstra renomeação desse corpo: **[nao verificado]** quanto à origem do erro do v1. A referência `data_conferida_por` em `app/chamados/services/validacao.py:666` é atribuição, não leitura; a guarda lê `data_conferida_em` em `:662`. `_resolv` existe em `app/chamados/services/becos.py:21`; `universo_da_linha` existe em `app/chamados/services/fio.py:1906`.
 
-## 09/11 16:07 · sessao 5bf5272c2c2f · - · - · origem=Ronald (tmux)
-
-A conferência AST manteve as 16 portas históricas e os seis nascimentos nas mesmas linhas do v1. Nenhum arquivo desses escritores é alterado pelo diff fornecido. A soma **22 é incompleta para a unidade declarada**: quatro gravadores adicionais de estado já constavam da lista do v1, mas ficaram fora da soma; o total de projeção é **20 alterações + 6 nascimentos = 26, diferença +4**, sem escritor criado pelo diff. (`app/chamados/services/materializacao.py:851`; `app/chamados/services/materializacao.py:1103`; `app/chamados/services/validacao.py:590`; `app/chamados/services/validacao.py:666`)
-
-As quatro portas adicionais afetam ação: pendência do admin muda a explicação antes do encerramento; recusa mantém aplicação pendente ou terminal conforme a causa; conferência de data libera plantio bloqueado por divergência. (`app/chamados/services/explicador.py:84`; `app/chamados/services/materializacao.py:1083`; `app/chamados/services/materializacao.py:1193`)
-
-Inventário das 26 portas:
-
-- `app/chamados/models.py:201` `ChamadoColaborador._gravar_estado` — status/resolução/via/autor/urgência/atualização — efeito|decisao.
-- `app/chamados/models.py:1852` `DisputaSupervisao.fechar` — F; delega carimbo excepcional — efeito|decisao.
-- `app/chamados/models.py:2123` `DisputaSupervisao.reabrir_admin` — F, contador, motivos — decisao|fica.
-- `app/chamados/models.py:2160` `DisputaSupervisao.reabrir_sistema` — F — efeito.
-- `app/chamados/models.py:3092` `PerguntaDisputa.carimbar` — C; condicionalmente R/V/L — efeito|decisao|fica.
-- `app/chamados/models.py:3157` `PerguntaDisputa.carimbar_identidade` — C, recusa opcional — efeito; decisão vem do chamador.
-- `app/chamados/models.py:3192` `PerguntaDisputa.descarimbar` — C nulo — efeito.
-- `app/chamados/models.py:3241` `PerguntaDisputa.descarimbar_em_lote` — C nulo, `outros` — efeito.
-- `app/chamados/models.py:3257` `PerguntaDisputa.encerrar_por_fato_no_espelho` — via — efeito.
-- `app/chamados/services/validacao.py:127` `_carimbar_validacao` — V — decisao.
-- `app/chamados/services/validacao.py:163` `devolver_validacao_recusada` — V nulo — decisao.
-- `app/chamados/services/disputa_emissao.py:1422` `responder_pergunta_disputa_core` — R, limpa V, recusa e C condicionais — decisao.
-- `app/chamados/services/disputa_emissao.py:1559` `reabrir_para_correcao` — limpa R/V, C opcional — decisao.
-- `app/chamados/services/disputa_emissao.py:1635` `responder_automaticamente` — R — decisao.
-- `app/chamados/services/disputa_emissao.py:1658` `carimbar_resposta_pela_trilha` — instante original da resposta — decisao.
-- `app/chamados/services/relavra_via.py:106` `relavrar` — via/L — efeito|fica.
-- `app/chamados/services/materializacao.py:784` `_materializar_resposta_hora` — pendência/recusa — efeito.
-- `app/chamados/services/materializacao.py:1083` `_carimbar_recusa` — recusa; delega C na colisão — efeito.
-- `app/chamados/services/validacao.py:533` `recusar_pergunta` — recusa; delega R/V — decisao.
-- `app/chamados/services/validacao.py:625` `conferir_data_do_fato` — data conferida/autor — decisao.
-- `app/chamados/models.py:833` `ChamadoColaborador.abrir` — identidade/contexto/status inicial — fica.
-- `app/chamados/models.py:1054` `ChamadoColaborador.criar` — identidade/contexto/status inicial — fica.
-- `app/chamados/services/disputa_emissao.py:474` `_abrir_ou_agregar_disputa` — nascimento da Disputa — fica.
-- `app/chamados/services/disputa_emissao.py:1024` `criar_disputa_a_partir_de_chamados_orfaos` — nascimento da Disputa — fica.
-- `app/chamados/services/disputa_emissao.py:1299` `criar_disputa_ancora_de_chamado` — nascimento da Disputa — fica.
-- `app/chamados/models.py:2822` `PerguntaDisputa._nascer` — identidade/defaults R/V/C; cache no reuso — fica.
-
-Demais escritores do v1 permanecem:
-
-- `app/chamados/veredito_lavrado.py:240` `gravar_lavras_em_lote` — L — fica/cache.
-- `app/chamados/veredito_lavrado.py:254` `lavrar` — L — fica/cache.
-- `app/chamados/services/arquivo.py:141` `silenciar` — silêncio/prazo/autoria/motivo/atualização — fica.
-- `app/chamados/services/arquivo.py:177` `levantar` — silêncio/resgate/atualização — fica.
-- `app/chamados/services/fio.py:804` `reapontar_resolvedora` — destino/célula/dia/L — fica.
-- `app/chamados/services/fio.py:970` `rechavear_data_evento` — dia/célula/L — fica.
-- `app/chamados/models.py:1968` `DisputaSupervisao.remover_motivo` — próprios motivos/contexto; decisão e carimbo delegados — decisao|fica.
-- `app/chamados/models.py:1949` `DisputaSupervisao.aparar_motivo_respondido` — motivos/contexto — fica.
-- `app/chamados/models.py:2179` `DisputaSupervisao.reabrir_por_colab` — contador; reabertura delegada — fica|decisao.
-- `app/chamados/models.py:2247` `DisputaSupervisao.limpar_resolucao_residual` — texto residual — fica.
-- `app/chamados/models.py:3402` `PerguntaDisputa.save` — executor genérico — fica.
-- `app/chamados/models.py:563` `ChamadoColaborador.apagar_em_ensaio` — exclusão restrita a ensaio — fica.
-- `app/chamados/models.py:349` `_vivas_entre`; `:1468` `_universo_da_ressuscitacao`; `:3086` `_escrever_carimbo`; `:3148` `_desfazer_em_memoria` — memória/simulação, sem persistência própria — fica.
-
-Omissão da lista de escritores do v1: `app/chamados/models.py:3932` `DecisaoPergunta.registrar`, `bulk_create` em `:3934`, campos do ato, autoria, instante, conteúdo, motivo, foto anterior e ligação de absorção — **decisao**. É a persistência canônica da sequência, sem ato novo independente: apresentá-la separadamente das 26 portas da projeção evita somar novamente todas as decisões que já a chamam. Seu executor `DecisaoPergunta.save` fica em `app/chamados/models.py:3892`.
-
-Chamadores produtivos da sequência:
-
-- `app/chamados/models.py:1921` `fechar`: SILENCIO.
-- `app/chamados/models.py:2053` `remover_motivo`: RETRATACAO.
-- `app/chamados/services/materializacao.py:563`: ABSORCAO.
-- `app/chamados/services/validacao.py:139`, `:205`.
-- `app/chamados/services/disputa_emissao.py:1508`, `:1612`, `:1653`, `:1674`.
-- `app/ponto/services/veredito_celula.py:194`: SILENCIO.
-- `app/chamados/management/commands/backfill_decisoes_pergunta.py:324`: reconstrução operacional.
-- Testes exemplos: `app/chamados/tests/test_e2_tarefa_do_dia.py:120`, `:757`, `:779`; `app/chamados/tests/test_e1_volta2.py:84`, `:88`.
-
-Omissões antigas de metadados/conteiner, fora do N literal de estado da pergunta:
-
-- `app/chamados/models.py:488` `rebaixar`, save `:498`: urgência/original/atualização.
-- `app/chamados/models.py:513` `escalar_urgencia`, save `:553`: urgência/atualização.
-- `app/chamados/models.py:618` `_rebaixar_sem_post_save`, update `:636`: urgência/original/atualização.
-- `app/chamados/models.py:573` `definir_prazo_sla`, save `:591`: prazo/atualização.
-- `app/chamados/models.py:594` `marcar_escalonado_dp`, save `:610`: recibo do push/atualização.
-- `app/chamados/models.py:2072` `anotar_contexto`, save `:2102`.
-- `app/chamados/models.py:2105` `renovar_contexto`, save `:2120`.
-- `app/chamados/services/disputa_emissao.py:257` `perguntar_entradas_pendentes`, save `:296`: contexto da Disputa.
-- `app/chamados/services/contexto.py:62`, `:82`, `:108`, `:131`: `anotar_contexto`, `renovar_contexto`, `retirar_contexto`, `fundir_contexto`; contexto_json/atualização.
-- `app/chamados/services/vinculos.py:81`, `:93`, `:105`, `:121`, `:139`: justificativa/célula/ticket/responsável.
-
-Chamadores das principais omissões: `_rebaixar_sem_post_save` é chamado por `app/chamados/signals.py:72`; escalada por `app/ponto/services/triagem_batida.py:292`, `:369`, `app/ponto/management/commands/escalonar_chamados_supervisao.py:132`, `app/ponto/management/commands/processar_alertas_avancados.py:176`; prazos por `app/chamados/services/cobranca.py:178` e `app/chamados/services/disputa_emissao.py:1715`; recibo DP por `app/ponto/management/commands/escalonar_chamados_supervisao.py:103`; anotar contexto da Disputa por `app/chamados/views.py:1343` e `app/ponto/management/commands/escalonar_chamados_supervisao.py:159`; renovar por `app/ponto/management/commands/alertar_disputas_pendentes.py:48`; entradas pendentes por `app/chamados/services/disputa_emissao.py:685`, `:1267`. `rebaixar` teve somente chamadores diretos de teste localizados: `app/chamados/tests/test_selo_e4_gates.py:73`, `:84`, `:89`; chamada dinâmica produtiva [nao verificado].
-
-_3215 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3216 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
