@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 16:31:23.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (210.5 MB). Acoes na janela: **1011**.
+**Medido em 09/11/2026 16:36:52.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (210.5 MB). Acoes na janela: **1006**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1016,8 +1016,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 04:53:50 | Agent | Opus final PAR-NAO-ADJACENTE | `Opus final verification of obra PAR-NAO-ADJACENTE (fixes COBPARC (a) residual: the ata papeis transcriber `escala/utils.py::_papeis_do_turno` must accept a pause pair from the juiz (`intervalos_do_turno` + `pausas_abaixo_do_piso`) even when the two batidas of the pair are not adjacent in the turno). You did not see the construction; find what is wrong. You are the sole owner of the verdict (APROVA ...` |
 | 04:53:35 | Bash | Save PAR final diff and list evidence | `cd /home/ronald/saas-hasner && git diff b57ce0a1..795cafdf5 > logs/par_nao_adjacente/diff_final.diff; wc -l logs/par_nao_adjacente/diff_final.diff; ls logs/par_nao_adjacente/; grep -n "PAR-NAO-ADJACENTE\\|COBPARC" app/docs/BACKLOG.md \| head -5 \| cut -c1-300` |
 | 04:53:30 | Bash | Read PAR suite v4 verdict | `cd /home/ronald/saas-hasner && L=logs/par_nao_adjacente/suite_v4.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran' $L \| tail -1; grep '^rc=' $L \| tail -1; bin/trava_teste.sh --quem; date +%H:%M; git -C /home/ronald/wt-codex-par-nao-adjacente-031500 status --porcelain; git -C /home/ronald/wt-codex-par-nao-adjacente-031500 log --oneline -1` |
-| 04:32:15 | Bash | Fix I-1 time label | `sed -i '3s/^SELOS-CANON-I1 04:5x:/SELOS-CANON-I1 04:3x:/' docs/RELATO.md && sed -n 3p docs/RELATO.md \| cut -c1-30` |
-| 04:32:13 | Bash | Check time and trava pid | `date +%H:%M; kill -0 320723 && echo viva` |
-| 04:32:10 | Bash | Log I-1 volta 4 in RELATO | `python3 - <<'EOF' r='docs/RELATO.md'; t=open(r).read().split('\n') assert t[1].startswith('ESPERANDO:') t.insert(2,"SELOS-CANON-I1 04:5x: construtor volta 4 = f2cb8705 (faixa do censo acima da janela de 2 linhas do Stop/B3, anexo julgado pelo conteudo, glob confinado, guarda por json, janela t<=agora); selo 34 mutantes mordem, RED contra eec4007f rc 2. 4 voltas de construtor + 3 pre-verif -> CODEX ...` |
-| 04:32:07 | Bash | Queue I-1 full suite on f2cb8705 | `bash /home/ronald/saas-hasner/logs/selos_canon/i1_lancar_suite.sh` |
-| 04:32:04 | Bash | Save I-1 v4 diffs, prep suite launcher | `cd /home/ronald/saas-hasner && git -C /home/ronald/wt-i1-censovaga-015903 log --oneline -1 && git diff eec4007f7..f2cb87051 > logs/selos_canon/i1_diff_v4_delta.diff && git diff 6adca14f..f2cb87051 > logs/selos_canon/i1_diff_v4_total.diff && wc -l logs/selos_canon/i1_diff_v4_*.diff cat logs/selos_canon/../selos_canon_i1 2>/dev/null; ls logs/selos_canon \| grep -i suite; cat > logs/selos_canon/i1_la ...` |
