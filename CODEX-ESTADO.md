@@ -1,7 +1,266 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 14:36** · publicado em **09/11/2026 14:39** (UTC-3)
+> Ultima resposta processada: **09/11/2026 14:40** · publicado em **09/11/2026 14:44** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 14:40 · sessao 685913bd30a3 · - · - · origem=Ronald (tmux)
+
+Censo realizado por AST em memória, sem importar Django: resolução de `ImportFrom.asname`, `Import.asname`, atributos e atribuições simples; 25 chamadas executáveis de validar/recusar/corrigir/materializar/reparar em runtime. Reflexão, nomes montados dinamicamente e chamadas externas à cópia: **[nao verificado]**.
+
+| Entrada MAIN | Comportamento hoje | Destino no desenho do par |
+|---|---|---|
+| Detalhe: `app/chamados/views.py:501`, `:518`, `:536` | Despacha validar, recusar e corrigir uma pergunta para as cascas. | Operar par inteiro com identidade comprovada; pedido singular recebe recusa falante antes de escrita. **FALTA**. |
+| Fio/modal: `app/chamados/services/fio.py:609`, `:638`, `:639` | Mesmas três cascas; `:609` passa `sem_reabrir` quando disputa estava fechada. | Mesma porta do par e mesmo tratamento de disputa fechada; preservar política de reabertura. **FALTA**. |
+| Cascas: `app/chamados/services/acoes_disputa.py:19`, `:80`, `:379` | Chamam `validar_pergunta`, `recusar_pergunta`; correção responde uma pergunta e depois valida. | Formulário coleta ambas as horas e motivo; serviço decide o conjunto. Correção atual não serve como atomic do par: primeiro responde em `:371`, depois valida em `:379`. |
+| Aplicar declaração de texto: `app/chamados/views.py:480` → `app/chamados/services/declaracao_texto.py:690` | Abre/acha pergunta, eventualmente grava resposta em `:687`, valida uma em `:690`. | Uma proposta de uma hora não autoriza validar meia pausa: apresentar par e exigir dados completos ou recusa falante. **FALTA**. |
+| Validar inline: `app/chamados/views_cobrar.py:208` | Laço de perguntas vivas respondidas, selecionadas em `:169`; uma chamada por item. | Agrupar por identidade; processar cada par uma vez; nunca completar seleção com irmã fora do universo autorizado. **FALTA**. |
+| Lote JSON: `app/chamados/views_cobrar.py:261` | Chama `validar_lote_classe_a`. | Mesmo agrupamento por par. **FALTA**. |
+| Lote da tela: `app/chamados/views_cobrar.py:381` | Chama o mesmo lote com refs do POST. | Contagem de pares e perguntas separada; seleção incompleta recebe motivo. **FALTA**. |
+| Lote do chat/IA: `app/core/views_ia.py:169` | Chama o mesmo lote após gate de permissão em `:165`. | Mesma porta do par; proposta precisa identificar o conjunto. **FALTA**. |
+| Escritor do lote: `app/chamados/services/validacao.py:746` | Reclassifica cada pergunta em `:735`; altera `request.POST['pergunta_id']` em `:745`; conta pela validação em `:753`. | Elegibilidade e decisão por conjunto; uma irmã fora da classe/seleção impede aplicar ambas. **FALTA**. |
+| Comando assinado: `app/chamados/management/commands/validar_classe_a.py:100` | Chama validação por pergunta; exige usuário em `:90`, DRY retorna em `:85`. | DRY lista pares/ambíguos/sem par; APPLY exige par completo e assinado. **FALTA**. |
+| Regularizar detalhe: `app/chamados/services/acoes_disputa.py:139` | Chama materialização granular da disputa. | Processar unidades par sem validar respostas novas implicitamente; legado validado segue matriz de correção. **FALTA**. |
+| Regularizar fio: `app/chamados/services/fio.py:670` | Mesmo materializador, importado por reexport de `chamados.models` em `:663`. | Mesmo destino. **FALTA**. |
+| Validação individual: `app/chamados/services/validacao.py:463`, `:469` | Primeiro materializa a pergunta atual; depois varre a disputa. | Ramificação de intervalo deve impedir ação singular antes de `_carimbar_validacao`, que hoje ocorre em `:435`; ato conjunto substitui ambos caminhos para intervalo. **FALTA**. |
+| Varredura: `app/chamados/services/materializacao.py:1376` | Seleciona respondidas+validadas+sem materialização em `:1369`, aplica individualmente. | Identificar, travar e processar par uma vez; nunca cair em aplicação avulsa por identidade ausente/ambígua. **FALTA**. |
+| O330: `app/chamados/services/passivo_validado.py:516` | Dentro do atomic do dia (`:511`), chama unidade individual; mede geometria depois em `:536`. | Par completo dentro do universo do reparador, mantendo atomic do dia/competência, lastro e geometria. Não puxar irmã excluída. **FALTA**. |
+| Comando O317/O330: `app/chamados/management/commands/materializar_passivo_validado.py:101`, `:110` | Chama `reparar`; DRY não chama unidade, conforme `app/chamados/services/passivo_validado.py:359`. | Preservar DRY sem escrita e escopo do reparador; relatório passa a contar unidades par. **FALTA**. |
+| API de foto: `app/api/foto_recebida.py:51`; chamadas de fachada em `app/api/views.py:886`, `app/api/views_core.py:876` | Universo nominal é `foto_ausente` (`foto_recebida.py:61`, `:73`); ramo `:79` usa todas as perguntas quando `d.motivos` fica sem outros motivos (`:70`). | Não é endpoint nominal de intervalo. Porta central deve recusar meia pausa caso pergunta de intervalo alcance esse universo; foto não pode fornecer horas sintéticas. Entrada efetiva de intervalo por essa inconsistência: **[nao verificado]**. |
+| Cron de validação do admin | `validar_classe_a` está fora do pipeline: `app/config/crons.py:1335`; texto diz ato assinado, nunca rotina em `:1336`. | Nenhum cron novo que valide par; rotina só observa estados derivados. |
+| Cron do reparador | `materializar_passivo_validado` também fora do pipeline: `app/config/crons.py:825`; ato sob aval em `:826`. | Mantém-se ato, sem automatizar validação. |
+| Observadores/fechamento | `auditar_invariantes_chamados`: `app/config/crons.py:542`; `fechar_becos_disputa --alarme`: `:663`; vigia fio: `:1713`; vigia carimbo: `:1751`. | Leem juiz derivado; beco já consulta C7 em `app/chamados/services/becos.py:33`, `:56`. |
+
+**Atomic e portas existentes reaproveitáveis**
+
+| Propriedade | MAIN |
+|---|---|
+| Validação e tentativa de aplicação no mesmo atomic | `app/chamados/services/validacao.py:425`; trava em `:431`; carimbo em `:435`; aplicação em `:463`. |
+| Atomic da aplicação individual e proteção de reentrada | `app/chamados/services/materializacao.py:1220`. Para o par precisa cobrir as duas perguntas antes da primeira escrita: **FALTA**. |
+| Lastro após plantio | `app/chamados/services/materializacao.py:1233`; reprovação levanta dentro do atomic em `:1239`. |
+| Carimbo pela porta C6 | `app/chamados/services/materializacao.py:1277`. |
+| Batida pela porta única | `app/chamados/services/materializacao.py:927`; flags `autoridade_humana=False` em `:929`, `fato_de_chao=False` em `:930`. |
+| Vínculo da batida à pergunta | `app/chamados/services/materializacao.py:948`, por `anotar`. |
+| Reconciliação hoje acontece após uma metade | `app/chamados/services/materializacao.py:974`; deve passar para depois das duas escritas e carimbos. **FALTA**. |
+| Dedup existente | `app/ponto/registro_batida.py:106`, `:113`: mesmo tipo ±60s inclusivos; retorna existente em `:115`. |
+| Guardas de competência e colisão continuam na porta | `app/ponto/registro_batida.py:132`, `:145`, `:150`. |
+| O330 já julga geometria do conjunto do dia | `app/chamados/services/passivo_validado.py:536`, `:537`; não resolve a recusa individual anterior de cada metade em `:516`. |
+
+**Trilha: detalhe necessário para não prometer uma linha física impossível pelo modelo existente**
+
+| Contrato | Fonte |
+|---|---|
+| Decisão existente pertence a uma pergunta, não a um par | FK obrigatória em `app/chamados/models.py:3871`; atos em `:3857`. Uma entidade/linha própria do par: **FALTA**. |
+| Validação grava uma linha E1 por pergunta | `app/chamados/services/validacao.py:139`. Validar duas metades preservando esse contrato gera duas linhas E1, uma por metade. |
+| Recusa grava uma linha por pergunta, com foto anterior | `app/chamados/services/disputa_emissao.py:1612`; comentário explícito “UMA linha por ato, recusa, nunca reabertura + outra” em `:1595`. |
+| Recusa hoje limpa resposta e validação | `app/chamados/services/disputa_emissao.py:1590`, update em `:1629`. Portanto “recusada” atual não é resposta mantida mais flag; a foto mora na decisão. |
+| Imutabilidade | `app/chamados/models.py:3903`, `:3908`; porta de append `:3943`. |
+| Preservar legado antes de substituir projeção | `app/chamados/models.py:3914`; validação chama em `app/chamados/services/validacao.py:133`. |
+| Idempotência | Prova deve exigir repetição com zero linhas E1 adicionais, uma linha de cada ato por metade; se requisito exigir “uma linha do par”, uma ocorrência consolidada contendo ambos IDs pode ser desenhada, mas vínculo/porta do ato do par são **FALTA**. Existência desse recurso: **[nao verificado]**. |
+
+A API pública de validar/recusar **intervalo** dedicada não apareceu nesse censo; `api/foto_recebida.py:51` é o único chamador direto de `validar_pergunta` sob `app/api` encontrado por AST. Portas externas, reflexão e execução real permanecem **[nao verificado]**.
+
+## 09/11 14:40 · sessao 80dc16e3dafe · - · - · origem=Ronald (tmux)
+
+| Achado | Evidência MAIN |
+|---|---|
+| **FALTA escritor de espera no MAIN.** Não há símbolo `ESPERA_PAR_INTERVALO` nem `aguarda_outra_metade_intervalo` no censo AST dos fontes Python runtime; a atribuição indicada no enunciado pertence ao diff v5 fornecido. Ausência por censo: **[nao verificado: não há arquivo:linha para símbolo inexistente]**. | MAIN tem `_materializar_uma` individual em `app/chamados/services/materializacao.py:1158`; projeção apenas `aceita` em `app/chamados/services/declaracao_texto.py:471`. |
+| **Não apagar a pendência técnica existente.** O campo significa conferência de tipo; seu próprio rótulo reconhece batida plantada pelo motivo. | `app/chamados/models.py:2561`; `app/chamados/models.py:2564`. |
+| **ESMERIL já necessário no MAIN:** explicador/cartão tratam pendência como ausência de plantio, enquanto escritor pode persistir pendência e continuar plantando. | `app/chamados/services/explicador.py:85`; `app/chamados/services/explicador.py:87`; `app/templates/chamados/partials/_card_atendimento.html:183`; `app/chamados/services/materializacao.py:850`; `app/chamados/services/materializacao.py:927`. |
+
+Censo AST executado em memória: `app/**/*.py`, excluindo `tests`, `migrations`, `__pycache__`; reconheceu `Import`/`ImportFrom` com apelidos, atribuições simples de nomes, atributos Store/Load, argumentos ORM, `getattr`/`setattr` e chamadas às portas de recusa/identidade. Reflexão, código gerado, atribuição dinâmica e módulos fora desse universo: **[nao verificado]**.
+
+| Escritor semântico MAIN | Atribuição/porta | Significado atual; destino no desenho |
+|---|---|---|
+| `_materializar_resposta_hora` | `app/chamados/services/materializacao.py:850` | Grava juntos `pendencia_admin` e `recusa_motivo` técnicos; preservar somente esse sentido. A escrita não significa espera. `app/chamados/models.py:2561`. |
+| `_carimbar_recusa` | `app/chamados/services/materializacao.py:1102` | Recusa materializadora; colisão usa identidade em `:1099`; só em mudança anexa ocorrência em `:1107`. Não receber ESPERA no novo desenho. |
+| `recusar_pergunta` | `app/chamados/services/validacao.py:584` | Recusa humana; reabre por `reabrir_para_correcao(... ato='recusa')` em `:593`. Intervalo deve migrar para ato conjunto; fora do escopo permanece. |
+| `responder_pergunta_disputa_core` | `app/chamados/services/disputa_emissao.py:1494` | Escape `FOLGA_CONTESTA`/`OUTRO_MOTIVO`, não espera; decisão humana exigida em `:1483`. |
+| `retratar_duplicata` | `app/chamados/services/fio.py:1350` | Descrição da identidade duplicada; delega gravação ao modelo. Não converter em estado do par. |
+| `carimbar_identidade` — porta física compartilhada | `app/chamados/models.py:3188` | Grava motivo opcional no mesmo save do carimbo; preservar contratos de identidade. |
+
+| Chamador runtime de `_carimbar_recusa`, inclusive apelido/import | Causa |
+|---|---|
+| `app/chamados/services/materializacao.py:836` | Sem resposta textual humana. |
+| `app/chamados/services/materializacao.py:913` | Guarda individual de paridade sem marco aceso. |
+| `app/chamados/services/materializacao.py:1213` | Data em disputa. |
+| `app/chamados/services/materializacao.py:1297` | Erro da unidade individual, no tratamento final. |
+| `app/chamados/services/passivo_validado.py:545` | Reprovação da geometria do grupo diário; import resolvido em `app/chamados/services/passivo_validado.py:506`. |
+
+| Leitor atual / limite real | Referências MAIN | O que passa a ler — **proposta, FALTA implementação** |
+|---|---|---|
+| Fio: abertas carregam todas; fechadas filtram C6. Injeta estado de aplicação por pergunta. | `app/chamados/services/fio.py:221`; `:238`; `:335`. | Juiz derivado do par para visibilidade/ação de intervalo; C6 continua autoridade individual. |
+| Detalhe filtra apenas C6 com apelido `_viva`. | `app/chamados/services/acoes_chamado.py:347`; `:348`. | Resultado do juiz do par conserva obrigações conjuntas ainda não aplicadas. |
+| Explicador: estado individual; pendência precede lastro e afirma “NAO plantou”. Fechamento recomposto por `not _fio_vivo(ps)`. | `app/chamados/services/explicador.py:72`; `:85`; `:93`; `:136`; `:137`. | Estado e dono derivados do par; existência de batida pelo juiz do lastro; fechamento por C7 inteiro. |
+| Modal lê diretamente pendência e motivo. | `app/templates/chamados/partials/modal_fio.html:221`; `:225`. | Projeção do juiz para espera/ações; motivo técnico continua detalhe, sem decidir espera. |
+| Cartão usa pendência para dizer conferir “antes de lançar” e motivo como fallback. | `app/templates/chamados/partials/_card_atendimento.html:183`; `:186`. | Projeção derivada separa espera, dívida real, aplicação comprovada e conferência técnica. |
+| Declaração: resposta validada impede nova declaração; projeção `aceita` representa capacidade de declarar aquele marco. | `app/chamados/services/declaracao_texto.py:210`; `:221`; `:279`; `:372`; `:471`; `:662`. | Capacidade de responder e capacidade de operar o par em propriedades distintas; não redefinir `aceita` como validação/aplicação. |
+| I6 | `app/chamados/management/commands/auditar_invariantes_chamados.py:535`. | Continua sua pergunta de recusa muda; juiz do par somente quando precisar reconhecer espera derivada. |
+| I18: validada humana, sem materialização, sem motivo. | `app/chamados/management/commands/auditar_invariantes_chamados.py:1074`. | Subclassificar obrigação do par pelo juiz, preservando dívida comprovada; não esconder validada sem aplicação. |
+| I19: pendência administrativa sem motivo. | `app/chamados/management/commands/auditar_invariantes_chamados.py:1111`; `:1112`. | **Permanece técnico**, sem introduzir espera ou nova cópia de sua consulta. |
+| Vigia carimbo: universo validado; primeiro lastro, depois slot e plantio. | `app/chamados/services/vigia_carimbo.py:97`; `:106`; `:110`; `:113`. | Juiz derivado classifica espera/obrigação do par sem retirar dívida aplicada falsamente do alarme. Universo de respostas não validadas ainda não entra nesse vigia. |
+| Passivo lê classificação do vigia, não rederiva lastro. Guarda foto dos campos para reversão. | `app/chamados/services/passivo_validado.py:64`; `:324`; `:329`. | Unidade inteira dentro do universo autorizado; espera só por leitura do juiz. |
+| Vigia fio consome classes da porta e C6. | `app/chamados/services/vigia_fio.py:148`; `:152`; `:165`. | Classes do juiz/porta, com partição exaustiva; nenhuma fórmula local de espera. |
+| `flip_auto` lê texto de recusa de paridade, **não espera**. | `app/ponto/services/flip_auto.py:128`; `:132`. | Conservar fila real de paridade; juiz do par deve impedir que espera entre como candidata a flip. Não transformar texto de espera em alvo de correção. |
+| `o_que_segura` não lê pendência/motivo diretamente; lê exportação, dias retidos e porta do dia. Esta é alimentada por C6. | `app/folha/fora_da_folha.py:215`; `:217`; `:221`; `:225`; `:65`; `app/chamados/juizes.py:1322`. | Alterar alimentação da autoridade da porta para incluir obrigação do par; `o_que_segura` continua consumidor dessa autoridade. |
+| Reconciliador já pergunta C7. | `app/chamados/reconciliador.py:411`; `:611`; `:1170`. | C7 ampliado consome juiz derivado do par. |
+| Becos já pergunta C7. | `app/chamados/services/becos.py:33`; `:56`. | Mesmo C7 ampliado. |
+| Crons vigias carimbo/fio, sem apply. | `app/config/crons.py:2213`; `:2226`; `app/chamados/management/commands/vigiar_carimbo_sem_registro.py:34`. | Consomem classificadores migrados; não gravam espera. |
+| Cron de becos é `--alarme`, porta eventual continua em `becos`. | `app/config/crons.py:663`; `app/chamados/management/commands/fechar_becos_disputa.py:39`; `:57`. | C7 único, sem regra de par no command. |
+| O330 não é cron: command expressamente fora da rotina. | `app/config/crons.py:825`; `:830`; `app/chamados/management/commands/materializar_passivo_validado.py:68`. | Ato explícito que opera par inteiro ou recusa universo incompleto. |
+
+Leitores adicionais de motivo: devolução lê motivo para tirar validação e registrar ato (`app/chamados/services/validacao.py:188`, `:192`, `:205`, `:225`); foto/auditoria lê em `app/chamados/services/validacao.py:147`, `:582`, `:604`. Devem receber o desfecho do ato conjunto, mantendo motivo técnico/humano como evidência; espera não pode acionar devolução. **FALTA implementação**.
+
+Catraca sugerida: resolver aliases e rastrear usos dos seis campos para impedir **dedução de espera** fora do juiz; também impedir gravação de código/texto de espera por `Assign`, `setattr`, `update`, `bulk_update`, `save`, `carimbar_identidade` e `_carimbar_recusa`. Não proibir globalmente leituras de motivo/pendência: I19, auditoria e flip têm perguntas legítimas próprias nas referências acima. **[nao verificado: selo ainda inexistente]**.
+
+## 09/11 14:39 · sessao a96c313f8c14 · SELOS-CANON-I3 · verificador · origem=Code
+
+**REPROVADO.** Permanecem carimbo duplicável sob flock, abertura Agent sem fotografia e divergência entre B3 e placar. (`bin/disjuntor.py:939`, `bin/disjuntor.py:967`, `bin/disjuntor.py:2187`, `bin/disjuntor.py:2608`)
+
+Nas tabelas, **PROCEDENTE** significa defeito remanescente; **NAO PROCEDE**, defeito indicado corrigido no recorte citado. Execução dos RED/GREEN, totais de mutantes mortos, condição dos hooks instalados e ocorrências em produção: **[nao verificado]**.
+
+**1. A1…A11**
+
+| Item | Veredito | Evidência e contraexemplo concreto |
+|---|---|---|
+| **A1 — identidade e persistência** | **PROCEDENTE: classe incompleta.** | A colisão original foi corrigida: UUID nasce uma vez, segue ao censo e ao `ini`, e o casamento exige obra/pid/hash/tent. Entretanto, `CODEX_LOGD=$R/logs/alternativo` é permitido: o `ini` vai para lá, enquanto a fotografia procura `logs/codex/chamadas.log` da raiz viva. A chamada pode executar e terminar SEM-FOTO. Além disso, falha do `printf` não impede `INI=1` nem a execução do Codex. (`bin/codex_pergunta.sh:92`, `bin/codex_pergunta.sh:200`, `bin/codex_pergunta.sh:240`, `bin/codex_pergunta.sh:300`, `bin/codex_pergunta.sh:408`, `bin/codex_limite_estado.py:53`, `bin/disjuntor.py:1026`) |
+| **A1 — retry, rc 75, sonda e vaga** | **NAO PROCEDE vaga sem UUID na variável.** | Geração e validação precedem a aquisição da vaga. Pausa retorna 75 antes dela; sonda é recusada no construtor; limite retorna 75 depois da chamada. Os dois sítios de execução não introduzem retry interno. Isso não garante a persistência do `ini`, conforme acima. (`bin/codex_pergunta.sh:92`, `bin/codex_pergunta.sh:94`, `bin/codex_pergunta.sh:193`, `bin/codex_pergunta.sh:197`, `bin/codex_pergunta.sh:246`, `bin/codex_pergunta.sh:408`, `bin/codex_pergunta.sh:415`, `bin/codex_pergunta.sh:449`) |
+| **A2 — desempate** | **NAO PROCEDE.** | Para duas fotos no mesmo segundo, N=5 seguida de N=3, a posição da linha decide; N não participa da ordenação. A consulta escolhe a última tupla. (`bin/disjuntor.py:1010`, `bin/disjuntor.py:1018`, `bin/disjuntor.py:1031`, `bin/disjuntor.py:1039`) |
+| **A3 — carimbo concorrente** | **PROCEDENTE.** | P1 captura borda 10:00:00 e atrasa; P2 captura 10:00:01, obtém a trava primeiro e grava 10:00:01. P1 obtém depois, mas a releitura descarta esse carimbo por `t > agora`; grava outro, 10:00:00. Dois carimbos nascem mesmo com exclusão correta. (`bin/disjuntor.py:939`, `bin/disjuntor.py:961`, `bin/disjuntor.py:967`, `bin/disjuntor.py:969`) |
+| **A4 — obra canônica** | **PROCEDENTE quanto à unificação; empréstimo de foto corrigido.** | B3 preserva `O9 (C)`, mas porta e consulta recusam essa identidade. `_obra_canonica` impede usar a fotografia de `O9`; não oferece uma representação comum para abrir/fotografar/consultar o final qualificado. O teste de cauda certifica a negativa, não a compatibilidade entre as pontas. (`bin/disjuntor.py:659`, `bin/disjuntor.py:923`, `bin/disjuntor.py:1127`, `bin/disjuntor.py:2100`, `bin/disjuntor.py:2801`, `bin/tests/test_etapas_no_brief.sh:381`) |
+| **A5 — evento/memo/placar** | **PROCEDENTE: nova divergência.** | A escrita estrita agora precede o memo. Porém: grava PROVADAS; o `os.replace` do estado falha; a obra reabre com N=5; a próxima chamada reconfere o mesmo `aid` e grava METADE. B3 incorpora METADE, enquanto o placar conserva o primeiro PROVADAS. Não há recuperação da decisão já publicada. (`bin/disjuntor.py:404`, `bin/disjuntor.py:1123`, `bin/disjuntor.py:1128`, `bin/disjuntor.py:1158`, `bin/disjuntor.py:1164`, `bin/disjuntor.py:1320`, `bin/disjuntor.py:2608`) |
+| **A6 — DESLIGADO preserva sujeição** | **PROCEDENTE: caminho de falha permanece aberto.** | Com chave desligada e carimbo ocupado, Agent é liberado, registra apenas FALHA e pula DESLIGADO. Retirada a obra da fila antes do B3, essa FALHA não prova sujeição; o final recebe FORA. (`bin/disjuntor.py:907`, `bin/disjuntor.py:1103`, `bin/disjuntor.py:1130`, `bin/disjuntor.py:2313`, `bin/disjuntor.py:2315`, `bin/disjuntor.py:2334`) |
+| **A7 — carimbo antes de FORA** | **NAO PROCEDE a diferença original.** | Agent e wrapper agora carimbam antes do pertencimento. Compartilham, entretanto, o defeito de unicidade de A3. (`bin/disjuntor.py:2094`, `bin/disjuntor.py:2097`, `bin/disjuntor.py:2754`, `bin/disjuntor.py:2775`) |
+| **A8 — relógio exclusivamente na borda** | **PROCEDENTE.** | Fotos recebem `agora`, mas negativas novas de ETAPAS passam por `trilha()`, que omite o instante e provoca `datetime.now()` interno. Essas negativas são depois consumidas para decidir sujeição histórica. Portanto não é apenas escrita diagnóstica sem efeito. (`bin/disjuntor.py:219`, `bin/disjuntor.py:233`, `bin/disjuntor.py:908`, `bin/disjuntor.py:1104`, `bin/disjuntor.py:2338`, `bin/disjuntor.py:2785`) |
+| **A9 — pré-vaga isentando** | **NAO PROCEDE o defeito original.** | SNAPSHOT/APROVADO do wrapper sem `ini` deixou de provar primeira abertura: a trilha aceita apenas Agent nesse reconhecedor; wrapper depende do `ini` construtor. `_primeira_abertura` não exige casamento nem `tent`, porém; o efeito legado está na decisão 1 abaixo. (`bin/disjuntor.py:904`, `bin/disjuntor.py:1086`, `bin/disjuntor.py:1087`) |
+| **A10 — cobertura da classe** | **PROCEDENTE: incompleta.** | O positivo Agent→foto→B3→consulta existe. Mas o teste de exceção só exige stdout vazio: `_censo_na_excecao` descarta `oks=[]`, e a chamada conforme é liberada sem publicar SNAPSHOT/APROVADO. O teste concorrente também aceita uma linha mesmo que outros participantes falhem: não verifica seus rc individualmente. (`bin/tests/test_etapas_no_brief.sh:470`, `bin/tests/test_etapas_no_brief.sh:476`, `bin/tests/test_etapas_no_brief.sh:532`, `bin/tests/test_etapas_no_brief.sh:535`, `bin/tests/test_etapas_no_brief.sh:546`, `bin/disjuntor.py:2187`, `bin/disjuntor.py:2365`) |
+| **A11 — reancoragem** | **NAO PROCEDE.** | O mutante está ancorado no pertencimento do wrapper, em `if dentro is False:`. A fixture contrapõe célula qualificada a pertencimento pela célula crua e inclui o positivo com brief conforme. Morte executada: **[nao verificado]**. (`bin/tests/test_censo_antes_da_vaga.sh:755`, `bin/disjuntor.py:2779`, `bin/tests/test_censo_antes_da_vaga.sh:537`, `bin/tests/test_censo_antes_da_vaga.sh:543`) |
+
+Há ainda dois contraexemplos de fotografia fora dos casos cobertos:
+
+| Item | Veredito | Contraexemplo |
+|---|---|---|
+| **Identidade cortada na trilha** | **PROCEDENTE.** | Obra `OBRA-` seguida de 205 letras `A` passa a validação, mas o detalhe SNAPSHOT ultrapassa 300 caracteres e o corte alcança o UUID. A porta retorna sucesso; o parser não reconhece a fotografia truncada. (`bin/disjuntor.py:183`, `bin/disjuntor.py:225`, `bin/disjuntor.py:896`, `bin/disjuntor.py:898`, `bin/disjuntor.py:923`, `bin/disjuntor.py:2128`, `bin/disjuntor.py:2133`) |
+| **N e hash de conteúdos diferentes** | **PROCEDENTE.** | CENSO, ETAPAS e SHA abrem o brief separadamente. Uma edição entre a leitura de N=3 e o hash do conteúdo N=5 permite persistir `sha(N5):N3`. Ocorrência real: **[nao verificado]**. (`bin/disjuntor.py:1888`, `bin/disjuntor.py:1945`, `bin/disjuntor.py:2116`, `bin/disjuntor.py:2119`, `bin/disjuntor.py:2120`, `bin/disjuntor.py:1186`, `bin/disjuntor.py:2128`) |
+
+**2. As cinco decisões abertas**
+
+| Decisão | Veredito | Efeito concreto |
+|---|---|---|
+| **1 — legado sem tent** | **PROCEDENTE: não se limita a inflação por 24 h.** | Exemplo: carimbo I3 às 12h; abertura legítima pela v2 às 13h, com fotografia e `ini` sem tent; atualização para v3 às 14h. A fotografia antiga desaparece do parser; o `ini` posterior ao carimbo impede isenção; um final completo recebe SEM-FOTO e reprovação. A janela de 24 h pertence somente ao contador, não ao B3. (`bin/disjuntor.py:896`, `bin/disjuntor.py:898`, `bin/disjuntor.py:990`, `bin/disjuntor.py:1086`, `bin/disjuntor.py:1135`, `bin/disjuntor.py:1143`, `bin/disjuntor.py:2565`) |
+| **1 — isenção herdada** | **PROCEDENTE quanto à duração ilimitada.** | Um `ini` anterior ao carimbo continua sendo o mínimo histórico e permite SEM-SNAPSHOT em finais futuros sem foto, inclusive após reabertura DESLIGADA. Não expira após 24 h. Se uma isenção vitalícia por identidade da obra foi autorizada: **[nao verificado]**. (`bin/disjuntor.py:1086`, `bin/disjuntor.py:1089`, `bin/disjuntor.py:1135`, `bin/disjuntor.py:1138`) |
+| **2 — DESLIGADO implica sujeita** | **PROCEDENTE quanto ao rótulo; não demonstra isenção indevida por si.** | A regra adota sujeição mesmo sem comprovar fila 1, mas a mensagem e o contador apresentam SEM-FOTO como “obra da fila 1”. Uma obra externa aberta DESLIGADA pode receber esse rótulo. Sujeição conservadora e pertencimento comprovado são fatos diferentes. (`bin/disjuntor.py:907`, `bin/disjuntor.py:1104`, `bin/disjuntor.py:1140`, `bin/disjuntor.py:2640`) |
+| **3 — carimbo falho com chave desligada** | **PROCEDENTE.** | Wrapper recusa; Agent passa sem DESLIGADO. Além da assimetria, perde-se a evidência histórica necessária a A6, permitindo FORA após retirada da fila. (`bin/disjuntor.py:2754`, `bin/disjuntor.py:2756`, `bin/disjuntor.py:2789`, `bin/disjuntor.py:2313`, `bin/disjuntor.py:2315`, `bin/disjuntor.py:1130`) |
+| **4 — relógios declarados antigos** | **PROCEDENTE: continuam alcançáveis pelo I3.** | `trilha()` continua lendo relógio internamente e recebe negativas novas. `--b3-parada` também alcança `decide_b3` sem instante, acionando seu fallback. Ser herdado não remove esses caminhos da classe examinada. (`bin/disjuntor.py:233`, `bin/disjuntor.py:1298`, `bin/disjuntor.py:1421`, `bin/disjuntor.py:1474`, `bin/disjuntor.py:2785`, `bin/disjuntor.py:2855`; `CLAUDE.md:371`) |
+| **5 — flock no próprio disjuntor.log** | **NAO PROCEDE bloqueio da leitura direta; há espera indireta.** | O trecho citado do hook faz `stat`/comparação de inode, sem flock nesse arquivo. Porém Stop→B3→conferência pode disputar a trava do carimbo por 20 tentativas de 50 ms e terminar NAO SEI. (`bin/hook_stop_fila1.py:666`, `bin/hook_stop_fila1.py:679`, `bin/hook_stop_fila1.py:1204`, `bin/disjuntor.py:1126`, `bin/disjuntor.py:911`, `bin/disjuntor.py:964`) |
+
+Logo, **B3 pode reprovar incorretamente na transição v2→v3**. Também pode herdar indefinidamente uma isenção antiga; qualificá-la como incorreta depende do aval sobre duração dessa isenção, que está **[nao verificado]**. (`bin/disjuntor.py:898`, `bin/disjuntor.py:1089`, `bin/disjuntor.py:1135`, `bin/disjuntor.py:1143`)
+
+**3. Classes já reprovadoras, selos e semântica**
+
+| Classe/item | Veredito | Evidência e contraexemplo |
+|---|---|---|
+| **Segundo juiz duplicando registrado** | **NAO PROCEDE no N auditado.** | B3 e consulta usam `_fotografia_efetiva`. `n_v` confirma o verificador; `n_rel` reconhece medidas no RELATO; o cruzamento pelo mínimo é explícito. Não demonstrei duplicação de autoridade registrada. (`bin/disjuntor.py:1128`, `bin/disjuntor.py:1146`, `bin/disjuntor.py:1149`, `bin/disjuntor.py:2805`) |
+| **Segundo escritor fora da porta** | **NAO PROCEDE nos sítios auditados.** | Append converge em `trilha_linhas`; estado converge em `_com_estado`; `ini/fim` convergem no wrapper. Os defeitos encontrados são de persistência, recuperação e correspondência, apesar dessa centralização. (`bin/disjuntor.py:225`, `bin/disjuntor.py:233`, `bin/disjuntor.py:404`, `bin/codex_pergunta.sh:266`, `bin/codex_pergunta.sh:299`) |
+| **Derivação paralela / testemunha divergente** | **PROCEDENTE em A5.** | Após evento persistido e estado perdido, B3 usa a reconferência, mas ESTADO usa o primeiro evento. Exemplo: B3 METADE com faltam=5; placar PROVADAS 1/1. Viola a mesma autoridade e contador correspondente ao universo. (`bin/disjuntor.py:1158`, `bin/disjuntor.py:1320`, `bin/disjuntor.py:2608`; `CLAUDE.md:20`, `CLAUDE.md:35`) |
+| **Deduplicação antes do teto temporal** | **PROCEDENTE.** | Primeira linha futura PROVADAS com `aid=x`, seguida de linha presente METADE com o mesmo aid: a futura marca `vistos`, depois é excluída; a presente também é excluída. Resultado: nenhum final contado. (`bin/disjuntor.py:2608`, `bin/disjuntor.py:2610`, `bin/disjuntor.py:2611`) |
+| **Ordem de trava** | **NAO PROCEDE inversão demonstrada.** | B3 faz estado→carimbo. O carimbo libera seu `with` antes de retornar e não adquire estado dentro dele. Há contenção e falha possíveis; não encontrei ciclo reverso nesses caminhos. (`bin/disjuntor.py:398`, `bin/disjuntor.py:1320`, `bin/disjuntor.py:958`, `bin/disjuntor.py:974`) |
+| **Mutante `abertura-sem-hash`** | **PROCEDENTE: causa diferente da anunciada.** | Troca somente o hash do lado `ini` por vazio, mantendo igualdade integral. Assim perde casamentos válidos A/K/L; não permite o casamento ilegal de J. Na fixture, “sem” passa de 7 para 9 por falsos negativos. (`bin/tests/test_censo_antes_da_vaga.sh:726`, `bin/disjuntor.py:989`, `bin/disjuntor.py:990`, `bin/tests/test_censo_antes_da_vaga.sh:474`, `bin/tests/test_censo_antes_da_vaga.sh:483`, `bin/tests/test_censo_antes_da_vaga.sh:488`) |
+| **Mutante `obra-fora-da-forma-passa`** | **PROCEDENTE: não produz a abertura anunciada.** | Remover `nc == 'forma'` deixa o `if nc` seguinte negando por ETAPAS. A fixture cai porque mudou a mensagem “fora da forma do censo”, enquanto a abertura continua negada. (`bin/tests/test_censo_antes_da_vaga.sh:747`, `bin/disjuntor.py:2104`, `bin/tests/test_censo_antes_da_vaga.sh:304`, `bin/tests/test_censo_antes_da_vaga.sh:306`) |
+| **Mutante `t2-carimbo-a-cada-final`** | **PROCEDENTE: causa contaminada.** | Faz o leitor ignorar todos os carimbos, inclusive na leitura de volta. Após append, ocorre `RuntimeError`; não isola somente repetição de carimbo em finais normalmente conferidos. (`bin/tests/test_etapas_no_brief.sh:641`, `bin/disjuntor.py:971`, `bin/disjuntor.py:973`) |
+| **Guarda exit 2 de `#G:tentativa`** | **PROCEDENTE: sem mordida própria.** | Os mutantes alteram o `ini` ou geram UUID fixo válido. Nenhum remove a recusa diante de UUID vazio/inválido. O catálogo cobra a tag, não cada guarda associada a ela. (`bin/codex_pergunta.sh:93`, `bin/codex_pergunta.sh:94`, `bin/tests/test_codex_pergunta.sh:560`, `bin/tests/test_codex_pergunta.sh:561`, `bin/tests/test_codex_pergunta.sh:563`) |
+| **Harness “mensagem específica”** | **PROCEDENTE quanto à declaração generalizada.** | ETAPAS exige rc≠0 e nome do caso; censo vizinho aceita qualquer rc≠0; wrapper procura qualquer FALHA emitida pelo caso. Nem mesmo a mensagem específica garante a causa interna correta. (`bin/tests/test_etapas_no_brief.sh:588`, `bin/tests/test_censo_antes_da_vaga.sh:687`, `bin/tests/test_codex_pergunta.sh:579`, `bin/tests/test_codex_pergunta.sh:580`) |
+| **Pouso antes do pré-requisito** | **PROCEDENTE como caminho ainda existente.** | Bash principal sem `agent_id`, sem Agent e sem `codex_pergunta` retorna antes do B3. A obra acrescenta conferência a esse B3, mas não torna universal sua execução antes de comandos de pouso. (`bin/disjuntor.py:2244`, `bin/disjuntor.py:2272`) |
+
+| Campo/conceito | Semântica efetiva e problema |
+|---|---|
+| **`tent` / “tentativa”** | UUID identifica invocação; o contador chama “tentativa” ao `ini` construtor e ainda soma Agent DESLIGADO. O `fim` continua ligado por obra/hash/pid, sem UUID: duas invocações com PID reciclado podem compartilhar o resultado exibido por `ultimas_chamadas`. (`bin/codex_pergunta.sh:92`, `bin/codex_pergunta.sh:266`, `bin/codex_limite_estado.py:64`, `bin/codex_limite_estado.py:89`, `bin/disjuntor.py:2653`) |
+| **Obra canônica** | Porta/consulta exigem ID sem cauda; B3 preserva cauda significativa. Há recusa segura de empréstimo, mas não identidade universal compatível. (`bin/disjuntor.py:659`, `bin/disjuntor.py:923`, `bin/disjuntor.py:1128`, `bin/disjuntor.py:2801`) |
+| **Instante** | Mistura instante da borda com instante interno de publicação; ambos são persistidos com precisão de segundos. A igualdade no mesmo segundo também impede provar `primeira_abertura < instalação`, mesmo que a ordem real tenha sido essa. (`bin/disjuntor.py:219`, `bin/disjuntor.py:220`, `bin/disjuntor.py:1135`) |
+| **Sujeita / DESLIGADO** | Sujeita significa fila viva, pertencimento indeterminado ou histórico de julgamento/DESLIGADO. Não significa necessariamente fila 1 comprovada, embora SEM-FOTO seja apresentado assim. (`bin/disjuntor.py:1097`, `bin/disjuntor.py:1099`, `bin/disjuntor.py:1104`, `bin/disjuntor.py:2640`) |
+| **“Pousos”** | Mede finais APROVADOS conferidos pelo B3, não merges/deploys realizados; o próprio texto explicita esse recorte. (`bin/disjuntor.py:2616`, `bin/disjuntor.py:2637`) |
+
+**4. Escritores e leitores**
+
+`disjuntor.log` e a trilha ETAPAS/CENSO são o mesmo arquivo físico; fotografia é um registro dentro dele. (`bin/disjuntor.py:142`, `bin/disjuntor.py:2128`, `bin/disjuntor.py:2133`)
+
+| Arquivo/campo | Quem escreve | Quem lê |
+|---|---|---|
+| **`chamadas.log` — hora, obra, papel, hash12, pid, ini, pergunta, tent** | Wrapper: `bin/codex_pergunta.sh:299`, `bin/codex_pergunta.sh:300` | Parser: `bin/codex_limite_estado.py:56`, `bin/codex_limite_estado.py:64`, `bin/codex_limite_estado.py:66`; fotografia: `bin/disjuntor.py:1026`; primeira abertura: `bin/disjuntor.py:1086`; censo: `bin/disjuntor.py:2561` |
+| **`chamadas.log` — fim, sessão, rc, duração** | `bin/codex_pergunta.sh:266`, `bin/codex_pergunta.sh:267` | `bin/codex_limite_estado.py:68`; últimas chamadas: `bin/codex_limite_estado.py:89`; origem Code: `bin/codex_limite_estado.py:97`, `bin/codex_limite_estado.py:98`; publicação: `bin/gerar_codex_estado.py:176` |
+| **Trilha — instante/evento/detalhe** | Append: `bin/disjuntor.py:225`; adaptador: `bin/disjuntor.py:233` | Leitores específicos abaixo; hook também compara inode para excluir prova de espera: `bin/hook_stop_fila1.py:666`, `bin/hook_stop_fila1.py:679` |
+| **INSTALADO** | `bin/disjuntor.py:969` | `bin/disjuntor.py:936`, `bin/disjuntor.py:939`; usado na isenção: `bin/disjuntor.py:1135` |
+| **SNAPSHOT — obra/N/via/pid/hash/tent** | Montagem: `bin/disjuntor.py:2128`; CLI: `bin/disjuntor.py:2133`; Agent: `bin/disjuntor.py:2137`, `bin/disjuntor.py:2232` | Parser/ingestão: `bin/disjuntor.py:898`, `bin/disjuntor.py:1011`; casamento: `bin/disjuntor.py:1026`; N efetivo: `bin/disjuntor.py:1038`; B3: `bin/disjuntor.py:1128`; consulta: `bin/disjuntor.py:2805` |
+| **SNAPSHOT — briefs, sha12 e N por brief** | SHA: `bin/disjuntor.py:1186`; associação: `bin/disjuntor.py:2124`; serialização: `bin/disjuntor.py:2129` | O leitor da fotografia consome o N agregado e a via; não reconfere a lista de hashes dos briefs: `bin/disjuntor.py:1014`, `bin/disjuntor.py:1018` |
+| **CENSO APROVADO/FORA/DESLIGADO** | `bin/disjuntor.py:2130`, `bin/disjuntor.py:2133`, `bin/disjuntor.py:2316`, `bin/disjuntor.py:2759`, `bin/disjuntor.py:2780` | Abertura Agent: `bin/disjuntor.py:904`, `bin/disjuntor.py:1079`; sujeição: `bin/disjuntor.py:1103`; medidor: `bin/disjuntor.py:2543`, `bin/disjuntor.py:2565` |
+| **NEGOU/FALHA/ALVO** | `bin/disjuntor.py:309`, `bin/disjuntor.py:2313`, `bin/disjuntor.py:2338`, `bin/disjuntor.py:2785` | Negativa para sujeição: `bin/disjuntor.py:908`; censo: `bin/disjuntor.py:2537`; ETAPAS: `bin/disjuntor.py:2580`, `bin/disjuntor.py:2597` |
+| **ETAPAS finais — obra/N/verificador/relato/faltam/aid** | Montagem: `bin/disjuntor.py:1131`, `bin/disjuntor.py:1136`, `bin/disjuntor.py:1140`, `bin/disjuntor.py:1152`; publicação: `bin/disjuntor.py:1158` | Placar: `bin/disjuntor.py:2597`; deduplicação por aid: `bin/disjuntor.py:2606`; apresentação: `bin/disjuntor.py:2630` |
+| **`disjuntor_estado.json` — memo/reprovações/metade** | Memo: `bin/disjuntor.py:1164`; incorporação B3: `bin/disjuntor.py:1326`, `bin/disjuntor.py:1328`; persistência: `bin/disjuntor.py:403`, `bin/disjuntor.py:404` | Estado: `bin/disjuntor.py:424`; memo: `bin/disjuntor.py:1123`; decisão: `bin/disjuntor.py:1337` |
+| **Brief — CENSO/ETAPAS/K** | Autor real: **[nao verificado]**; fixture: `bin/tests/test_etapas_no_brief.sh:64` | Coletor: `bin/disjuntor.py:1998`; validadores: `bin/disjuntor.py:2116`, `bin/disjuntor.py:2119`; SHA: `bin/disjuntor.py:2120` |
+| **BACKLOG — fila/
+
+[truncado em 20000 de 21190 caracteres]
+
+## 09/11 14:39 · sessao 5572ed6b010b · - · - · origem=Ronald (tmux)
+
+| Tema | Achado no MAIN | Consequência para matriz |
+|---|---|---|
+| Estados existentes | `estado` distingue pendente/respondida/validada/resolvida; não distingue recusada/retratada/aplicação real. `app/chamados/models.py:3034` | Os seis estados pedidos exigem projeção derivada; juiz desse conjunto: **FALTA**. |
+| Sem resposta | Campos `respondida_em`, `resposta_colab`. `app/chamados/models.py:2455` | Exigir ambos coerentes; reabertura limpa os dois. `app/chamados/services/disputa_emissao.py:1590` |
+| Respondida | Resposta não vazia e instante; escritor grava juntos. `app/chamados/services/disputa_emissao.py:1464` | Não inferir aceite pela resposta. `app/chamados/services/validacao.py:435` |
+| Validada | `validada_em/por`, com linha `VALIDACAO`. `app/chamados/services/validacao.py:127` | Hoje mata C6 mesmo sem aplicação. `app/chamados/juizes.py:1153` |
+| Aplicada | `materializada_em/por/via`, carimbo pela porta. `app/chamados/models.py:3103` | Carimbo isolado não prova batida; `_pergunta_materializada_de_fato` exige testemunha, mas também absolve identidade. `app/chamados/juizes.py:645`, `app/chamados/juizes.py:670` |
+| Recusada | Recusa humana escreve motivo e reabre, apagando resposta/validação. `app/chamados/services/validacao.py:584`, `app/chamados/services/validacao.py:593` | Hoje a property mostra pendente; distinguir pela sequência de atos `RECUSA` e respostas posteriores. `app/chamados/models.py:3045`, `app/chamados/models.py:3857` |
+| Retratada | Via `motivo_retratado`; `fora_do_fato` inclui também duplicata. `app/chamados/models.py:2401`, `app/chamados/models.py:3201` | Não confundir ausência do fato com aplicação do intervalo: identidade também grava `materializada_em`. `app/chamados/models.py:3185` |
+| Histórico aplicado→retratado | Remoção preserva carimbo e acrescenta `RETRATACAO`. `app/chamados/models.py:2064` | A/T são rótulos atuais exclusivos por precedência; histórico pode conter ambos. `app/chamados/models.py:2069` |
+| Terminalidade | `carimbar`, `carimbar_identidade` e `descarimbar` impedem retorno de fora do fato. `app/chamados/models.py:3120`, `app/chamados/models.py:3180`, `app/chamados/models.py:3206` | Corrigir não pode ressuscitar a pergunta retratada; se fato voltar, nasce pergunta nova. `app/chamados/models.py:2520` |
+
+| Juiz/porta | MAIN | Limite |
+|---|---|---|
+| C6 | Validação mata no primeiro degrau. `app/chamados/juizes.py:1153` | Não responde se par foi aplicado. `app/chamados/juizes.py:1153` |
+| C7 | `not respostas_sem_veredito() and not fio_vivo(...)`. `app/chamados/models.py:1861` | V/V e V/T podem liberar sem batida; ambas saem de `respostas_sem_veredito`. `app/chamados/models.py:1851`, `app/chamados/juizes.py:1164` |
+| S127 | Usa `fio_vivo`, preservando disputa vazia. `app/chamados/juizes.py:2138` | Não consome C7 inteiro no MAIN. `app/chamados/juizes.py:2138` |
+| Transição chamado | Consulta S127 para estados encerrados antes de `_aplicar`. `app/chamados/models.py:148`, `app/chamados/models.py:199` | Guarda adicional de FURO é exclusiva de `resolvido`. `app/chamados/models.py:181` |
+| `Disputa.fechar` | Confere respostas e vivas antes do atomic; trava em seguida. `app/chamados/models.py:1894`, `app/chamados/models.py:1903`, `app/chamados/models.py:1918` | Reconsulta C7 sob trava: **FALTA**. |
+| Travas | Ordem Colaborador→Disputa→Chamado→Pergunta pela porta comum. `app/chamados/models.py:2637` | Reutilizar para travar as duas metades antes da primeira escrita. **[nao verificado: desenho]** |
+| Identidade de par | Motivos mapeiam S/hii e E/hfi. `app/chamados/juizes.py:885` | Identificador de par: **FALTA**; os motivos não carregam índice da pausa. `app/chamados/services/declaracao_texto.py:48` |
+| DNA | `pausas_do_dia` lê DNA congelado e todos pares canônicos. `app/escala/models.py:1166`, `app/escala/models.py:1197` | Pode alimentar adaptador sem inventar identidade adicional. **[nao verificado: desenho]** |
+| Índice artificial | Modelo exige `instancia_marco` derivada do motivo. `app/chamados/models.py:3436` | Inventar identificador de pausa nesse campo é recusado. `app/chamados/models.py:3441` |
+
+**Não declarar combinações entre metades impossíveis no MAIN:** validação, recusa e retratação operam individualmente; não existe escritor do par que imponha igualdade dos estados. `app/chamados/services/validacao.py:435`, `app/chamados/services/validacao.py:593`, `app/chamados/models.py:2062`
+
+| Combinações reduzidas | Leitura para o desenho novo |
+|---|---|
+| NN, NR, NC, NV | Aguardar respostas/correções; nenhuma validação parcial; zero escrita de espera. **[nao verificado: desenho]** |
+| RR, RV, VV | Se identidade única e duas respostas válidas, oferecer validar/recusar/corrigir o par; VV é legado transitório, não novo repouso. **[nao verificado: desenho]** |
+| RC, VC, CC | Par em correção; não aplicar enquanto faltar declaração; decisão conjunta. **[nao verificado: desenho]** |
+| NA, RA, VA, CA | Aplicação parcial legada: reter fechamento; corrigir o conjunto preservando chão e trilha; não completar silenciosamente uma metade. **[nao verificado: desenho]** |
+| AA | Idempotência: nenhuma nova batida/validação/trilha; fechamento condicionado às demais perguntas. **[nao verificado: desenho]** |
+| NT, RT, CT | Identidade atual incompleta: nenhuma aplicação avulsa; recusa falante para recompor identidade. **[nao verificado: desenho]** |
+| VT, AT | Reter aceite/aplicação pendente, independentemente de motivo/pendência técnica; corrigir sem reviver T. **[nao verificado: desenho]** |
+| TT | Fora do fato; não confundir com intervalo aplicado; preservam-se decisões anteriores. `app/chamados/models.py:3201`, `app/chamados/models.py:3821` |
+| AMBÍGUO / SEM PAR | Abstenção explícita, nenhuma escolha por primeiro PK; porta individual não pode servir de fallback. **[nao verificado: desenho]** |
+
+A simetria acima cobre 21 classes das 36 posições; não torna saída e volta temporalmente intercambiáveis: os tipos são S/E e os marcos hii/hfi. `app/chamados/juizes.py:885`
+
+| Esmeril semântico | Evidência |
+|---|---|
+| `validada_em` = aceite e morte no C6 | `app/chamados/services/validacao.py:134`, `app/chamados/juizes.py:1153` |
+| `materializada_em` = aplicação, identidade, retratação, resolução sem declaração | `app/chamados/models.py:3103`, `app/chamados/models.py:3185` |
+| `recusa_motivo` = recusa humana, escape, motivo de identidade, recusa técnica | `app/chamados/services/validacao.py:584`, `app/chamados/services/disputa_emissao.py:1494`, `app/chamados/models.py:3188` |
+| `pendencia_admin` = descrição comenta “recusou plantar”, choice declara “plantada pelo motivo” | `app/chamados/models.py:2555`, `app/chamados/models.py:2562` |
+| Resposta anterior não deve sumir na recusa/correção | Projeção limpa, foto vai à sequência imutável. `app/chamados/services/disputa_emissao.py:1590`, `app/chamados/services/disputa_emissao.py:1612` |
+
+| Provas existentes aproveitáveis | Local |
+|---|---|
+| Estado validado não vivo | `app/chamados/tests/test_pergunta_estado.py:39` |
+| Estado materializado sem resposta | `app/chamados/tests/test_pergunta_estado.py:50` |
+| Resposta e instante escritos juntos por AST | `app/chamados/tests/test_contract_par_resposta.py:88` |
+| S127 disputa vazia / viva / resolvida | `app/chamados/tests/test_disputa_s127.py:46`, `app/chamados/tests/test_disputa_s127.py:51`, `app/chamados/tests/test_disputa_s127.py:56` |
+| C7 autoridade registrada | `app/chamados/tests/test_disputa_fim.py:22` |
+| Decisões imutáveis | `app/chamados/models.py:3826` |
+| Porta da sequência | `app/chamados/models.py:3942` |
+
+Execução de testes, ocorrência populacional e dados de produção além do anexo: **[nao verificado]**. [nao verificado]
 
 ## 09/11 14:36 · sessao 10d859872129 · - · - · origem=Ronald (tmux)
 
@@ -678,246 +937,4 @@ Mutantes e limites de mordida:
 
 Atomicidade global e idempotência de catálogo não são provadas pelos controles de env preservado: a role/CONNECT confirma em uma transação e o ACL em outra (`bin/sonda_provisionar.sh:118`, `:127`, `:168`); o selo preserva SHA do env, sem comparar o catálogo anterior (`bin/tests/test_sonda_sem_grant.sh:281`–`:300`).
 
-## 09/11 13:41 · sessao b63b62a74363 · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · verificador · origem=Code
-
-**P1–P5 da triagem v3 estão corrigidos nos sítios apontados, mas restam dois PROCEDENTES funcionais: fechamento do chamado por S127 e perda do motivo de `pendencia_admin`. M38 tem mordida estrutural, sem demonstrar diferença comportamental no cenário vazio.** Referências abaixo relativas a `app/`. (`chamados/models.py:1927`; `chamados/juizes.py:2138`; `chamados/services/materializacao.py:1375`; `chamados/tests/test_bug_par_intervalo.py:724`.)
-
-**0. P1–P5 v3 — NAO PROCEDE que continuem abertos nesses pontos.**
-
-| Item | Cura efetiva | Asserção discriminante |
-|---|---|---|
-| P1: retratadas | Vizinhança usa universo apurável. `chamados/services/materializacao.py:178`; `ponto/turnos.py:2866` | Exige aplicação e sequência canônica preservando retratada. `chamados/tests/test_bug_par_intervalo.py:176` |
-| P2: descarimbo vazio | Compara os três campos antes de salvar. `chamados/models.py:3218` | Zero saves e agendamentos, duas vezes. `chamados/tests/test_bug_par_intervalo.py:492` |
-| P3: fechamento | Conserva modalidade original e consulta C7 após trava. `chamados/models.py:1908`; `chamados/models.py:1927` | Chama `fechar`, exige consulta após trava e estado intacto. `chamados/tests/test_bug_par_intervalo.py:517`; `chamados/tests/test_bug_par_intervalo.py:523` |
-| P4: espera prematura | Exige validação própria. `chamados/services/materializacao.py:109` | Cobra predicado, declaração e validação pelo administrador. `chamados/tests/test_bug_par_intervalo.py:533`; `chamados/tests/test_bug_par_intervalo.py:550`; `chamados/tests/test_bug_par_intervalo.py:566` |
-| P5: desaparecimento | Detalhe inclui C6 viva **ou espera**. `chamados/services/acoes_chamado.py:349` | GET real cobra pergunta no contexto e aviso HTML. `chamados/tests/test_bug_par_intervalo.py:636`; `chamados/tests/test_bug_par_intervalo.py:641` |
-
-Execução independente dos testes e causa efetiva das 44 mortes informadas: **[nao verificado]**. [nao verificado]
-
-**1. Ato único — NAO PROCEDE para par identificado; a garantia não abrange todo motivo de intervalo.**
-
-Validação, varredura e O330 convergem em `_materializar_uma`. O par entra inteiro em voo e no mesmo savepoint; ambas as aplicações precedem julgamento temporal, vizinhança, lastro, carimbos e reconciliação. (`chamados/services/validacao.py:474`; `chamados/services/materializacao.py:1593`; `chamados/services/passivo_validado.py:532`; `chamados/services/materializacao.py:1341`; `chamados/services/materializacao.py:1358`; `chamados/services/materializacao.py:1361`; `chamados/services/materializacao.py:1378`.)
-
-O rastreamento AST com imports, apelidos e atribuições simples encontrou os plantadores de perguntas nos ramos hora/data-hora; hora é chamada pelo par ou pela avulsa. Chamadas dinâmicas por reflexão: **[nao verificado]**. (`chamados/services/materializacao.py:1014`; `chamados/services/materializacao.py:1095`; `chamados/services/materializacao.py:1359`; `chamados/services/materializacao.py:1475`; `chamados/models.py:4091`.)
-
-**Há plantio individual:** `sem_par`, `par_ambiguo` e `marcos_sem_par` seguem pela avulsa; o teste exige plantio da metade cuja irmã já foi aplicada. Isso preserva esse comportamento explícito, não prova equivalência irrestrita com o HEAD anterior. (`chamados/services/materializacao.py:1428`; `chamados/tests/test_bug_par_intervalo.py:940`.)
-
-**FILA:** regularização externa e veredito da célula admitem aplicação parcial em unidades próprias; não são o aceite deste par de perguntas. (`chamados/services/regularizacao_ext.py:172`; `chamados/services/regularizacao_ext.py:176`; `ponto/services/veredito_celula.py:322`; `ponto/services/veredito_celula.py:342`.)
-
-**2. Rollback — comportamento conferido, com limite de prova após commit.** [nao verificado]
-
-Após desfazer o savepoint, cada pergunta é relida. O resultado depende do lastro restaurado. (`chamados/services/materializacao.py:1384`; `chamados/services/materializacao.py:1388`.)
-
-| Condição após rollback | Estado resultante |
-|---|---|
-| Sem lastro, dentro do fato | `materializada_em=None`, autor `None`, via `''`; recusa conjunta gravada; devolução limpa validação/autor para resposta de hora elegível. `chamados/models.py:3222`; `chamados/services/materializacao.py:1392`; `chamados/services/validacao.py:190`; `chamados/services/validacao.py:202` |
-| Com lastro | Carimbo anterior preservado; recusa conjunta ainda é registrada; materialização preenchida impede devolução. `chamados/services/materializacao.py:1388`; `chamados/services/materializacao.py:1392`; `chamados/services/validacao.py:190` |
-| Fora do fato | Excluída da identificação e protegida novamente no descarimbo. `chamados/services/materializacao.py:72`; `chamados/models.py:3215` |
-
-Descarimbo vazio agora não salva. Descarimbo efetivo salva somente os três campos: agenda beco e emite evento da célula, mas não relavra veredito nem cria diretamente auditoria; a devolução acrescenta decisão e evento quando muda o estado. (`chamados/models.py:3224`; `chamados/signals.py:225`; `chamados/signals.py:244`; `ponto/portas/celula.py:891`; `chamados/services/validacao.py:208`; `chamados/services/validacao.py:224`.)
-
-O censo estático continua vendo o sítio `save`; ausência de execução desse save é outra medida. (`core/censo_escritas.py:364`; `chamados/models.py:3226`.)
-
-O teste cobra primeira tentativa com quatro saves/dois eventos e segunda com zero saves e foto idêntica. Entretanto, captura callbacks com `execute=False`: idempotência dos efeitos após commit real permanece **[nao verificado]**. (`chamados/tests/test_bug_par_intervalo.py:721`; `chamados/tests/test_bug_par_intervalo.py:726`; `chamados/tests/test_bug_par_intervalo.py:738`; `chamados/tests/test_bug_par_intervalo.py:745`.)
-
-**FILA:** descarimbo/devolução não relavram o veredito persistido; remover timestamps não garante avanço do marco de staleness. Consequência concreta neste par e perda de carimbo legítimo: **[nao verificado]**. (`chamados/models.py:3226`; `chamados/services/validacao.py:205`; `chamados/veredito_lavrado.py:187`; `chamados/veredito_lavrado.py:212`.)
-
-**3. Travas — NAO PROCEDE inversão entre os dois validadores pelo fluxo conferido.**
-
-Ambos começam pelo Colaborador; depois travam Disputas, Chamados e Perguntas em ordem de PK. O330 inclui previamente as disputas fechadas dos itens. **FILA:** demonstração concorrente com duas conexões, **[nao verificado]**. (`chamados/services/materializacao.py:125`; `chamados/services/materializacao.py:134`; `chamados/models.py:2683`; `chamados/models.py:2692`; `chamados/models.py:2705`; `chamados/models.py:2709`; `chamados/services/passivo_validado.py:435`.)
-
-**4. Leitores — PROCEDENTE: S127 libera o chamado enquanto C7 retém a disputa.**
-
-Com metade aceita em espera e irmã fora do fato, C6 considera ambas mortas; C7 retém a disputa. Porém `disputa_viva_do_chamado` só consulta vazio/C6, e `transicionar` usa essa resposta. As guardas seguintes também excluem a validada. Assim, o caminho para `fechado` pode passar; a guarda adicional de premissa vale apenas para `resolvido`. (`chamados/juizes.py:1153`; `chamados/models.py:1864`; `chamados/juizes.py:2138`; `chamados/models.py:154`; `chamados/models.py:344`; `chamados/models.py:181`; `chamados/catalogo/motor.py:100`.)
-
-**Cura:** S127 deve consumir C7, preservando sua exceção de disputa vazia; RED pela chamada real a `transicionar`, usando o cenário da irmã retratada. (`chamados/juizes.py:2138`; `chamados/tests/test_bug_par_intervalo.py:449`.)
-
-Os demais leitores conferidos:
-
-- Explicador, declaração, devolução, vigia de carimbo e O330 distinguem espera de falha. (`chamados/services/explicador.py:74`; `chamados/services/declaracao_texto.py:213`; `chamados/services/validacao.py:193`; `chamados/services/vigia_carimbo.py:109`; `chamados/services/passivo_validado.py:326`.)
-- Painel/badge não creditam a metade validada; a irmã determina Validar/Cobrar, ou sobra Decidir no chamado acionável. (`chamados/services/raiox.py:72`; `chamados/services/raiox.py:137`; `chamados/catalogo/natureza.py:48`; `chamados/catalogo/natureza.py:61`.)
-- Fio conserva perguntas da disputa aberta; beco consulta C7. (`chamados/services/fio.py:221`; `chamados/services/fio.py:253`; `chamados/services/becos.py:56`.)
-- `o_que_segura` lê a porta alcançável. Vigia de fio continua julgando vitalidade por C6 e só depois abre `porta_aguardando_par`; portanto essa classe não elimina, por si, eventual alarme de fio morto. Contracaso executado: **[nao verificado]**. (`folha/fora_da_folha.py:77`; `chamados/services/vigia_fio.py:416`; `chamados/services/vigia_fio.py:430`; `chamados/services/vigia_fio.py:448`; `chamados/services/vigia_fio.py:462`.)
-
-**5. Identidade — NAO PROCEDE derivação paralela.**
-
-O identificador concentra elegibilidade, multiplicidade e abstenção por duas pausas; lê pausas da autoridade existente. A tag apenas delega ao predicado de espera. `par_ambiguo` segue avulsa; o teste cobra irmãs intactas nesse cenário. (`chamados/services/materializacao.py:70`; `chamados/services/materializacao.py:77`; `chamados/services/materializacao.py:87`; `escala/models.py:1189`; `escala/models.py:1197`; `chamados/templatetags/chamados_tags.py:19`; `chamados/tests/test_bug_par_intervalo.py:329`.)
-
-**6. Texto/tela — NAO PROCEDE nos caminhos conferidos.**
-
-“Colada” exige testemunha viva de mesmo tipo em ±60 segundos inclusivos, pela mesma função usada na porta. Espera tem entrada própria de catálogo. Detalhe e modal incluem o mesmo partial; os testes agora cobram GET real das duas telas. Renderização executada nesta revisão: **[nao verificado]**. (`ponto/registro_batida.py:94`; `ponto/registro_batida.py:115`; `chamados/services/materializacao.py:1354`; `chamados/catalogo/recusa.py:25`; `templates/chamados/partials/_pergunta_card.html:29`; `templates/chamados/partials/modal_fio.html:160`; `chamados/tests/test_bug_par_intervalo.py:623`.)
-
-**7. Classes estruturais e semântica.**
-
-**PROCEDENTE — espera e limpeza destroem motivo de pendência técnica.** O ramo hora grava `pendencia_admin` junto de seu motivo e pode continuar aplicando. Depois, o par apaga qualquer motivo, deixando exatamente o estado acusado por I19. A primeira espera também pode sobrescrever motivo anterior. Ocorrência em produção: **[nao verificado]**. (`chamados/services/materializacao.py:477`; `chamados/services/materializacao.py:937`; `chamados/services/materializacao.py:1375`; `chamados/services/materializacao.py:1433`; `chamados/services/materializacao.py:1190`; `chamados/management/commands/auditar_invariantes_chamados.py:1112`.)
-
-**Cura:** preservar o par pendência/motivo tanto ao registrar quanto ao retirar espera; não zerar pendência automaticamente. RED deve aplicar par com pendência anterior e com pendência produzida durante plantio, cobrando motivo preservado e I19 vazio. (`chamados/services/materializacao.py:937`; `chamados/services/materializacao.py:1375`; `chamados/services/materializacao.py:1433`.)
-
-M7 agora isola multiplicidade com DNA de uma pausa; M35 cobra o HTML específico do include. **NAO PROCEDE** a vacuidade anterior desses dois. (`chamados/tests/test_bug_par_intervalo.py:307`; `chamados/tests/test_bug_par_intervalo.py:315`; `chamados/tests/test_bug_par_intervalo.py:664`.)
-
-**PROCEDENTE como limitação de prova:** M38 morre pela chamada observada a `descarimbar`. Com os três campos vazios, a guarda antiga produz o mesmo estado/trilha após P2. Para sustentar cura funcional, falta contracaso em que a guarda antiga deixe estado errado; alternativamente, rotular esse selo como estrutural. (`chamados/tests/mutantes_bug_par_intervalo.py:134`; `chamados/tests/test_bug_par_intervalo.py:724`; `chamados/models.py:3218`.)
-
-**FILA:** relógio continua lido por metade na aprovação e no carimbo; não há instante único propagado pelo ato. Também permanece a diferença entre competência pelo dia do turno no O330 e pelo dia civil na porta. (`chamados/services/materializacao.py:1020`; `chamados/services/materializacao.py:1250`; `chamados/services/passivo_validado.py:113`; `ponto/janelas.py:84`.)
-
-**8. Mapa adicional de escritores/leitores.**
-
-| Campo/valor | Escritores conferidos | Leitores conferidos |
-|---|---|---|
-| Resposta/instante | `chamados/services/disputa_emissao.py:1464`; `chamados/models.py:3141` | `chamados/services/materializacao.py:110`; `chamados/services/raiox.py:136` |
-| Validação/autor | `chamados/services/validacao.py:134`; `chamados/services/validacao.py:202`; `chamados/services/disputa_emissao.py:1477`; `chamados/models.py:3144` | `chamados/juizes.py:1153`; `chamados/models.py:1851`; `chamados/services/painel.py:67` |
-| Materialização/autor/via | `chamados/models.py:3108`; `chamados/models.py:3194`; `chamados/models.py:3222`; `chamados/models.py:3280`; `chamados/services/relavra_via.py:125` | `chamados/juizes.py:660`; `chamados/services/validacao.py:190`; `chamados/veredito_lavrado.py:187` |
-| Recusa/pendência | `chamados/services/materializacao.py:937`; `chamados/services/materializacao.py:1190`; `chamados/services/materializacao.py:1375`; `chamados/services/validacao.py:605`; `chamados/services/disputa_emissao.py:1494`; `chamados/models.py:3197` | `chamados/services/materializacao.py:112`; `chamados/services/validacao.py:195`; `chamados/services/explicador.py:98`; `chamados/management/commands/auditar_invariantes_chamados.py:1112` |
-| Dia/contexto/marcos | `chamados/services/fio.py:800`; `chamados/models.py:1123` | `chamados/services/materializacao.py:425`; `chamados/services/materializacao.py:428`; `chamados/services/materializacao.py:490`; `chamados/services/declaracao_texto.py:468` |
-| Batida: instante/tipo/origem/vínculo/retração | `ponto/registro_batida.py:159`; `chamados/services/materializacao.py:1035`; `ponto/registro_batida.py:276` | `ponto/registro_batida.py:99`; `ponto/turnos.py:2866`; `chamados/juizes.py:734` |
-| Espera/projeção | `chamados/services/materializacao.py:1433`; `chamados/services/declaracao_texto.py:485` | `chamados/models.py:1864`; `chamados/templatetags/chamados_tags.py:19`; `api/views.py:1126`; `templates/chamados/partials/_card_atendimento.html:215` |
-| Lavra/trilha/eventos | `chamados/veredito_lavrado.py:250`; `chamados/services/validacao.py:208`; `ponto/portas/celula.py:891` | `chamados/veredito_lavrado.py:204`; `chamados/services/raiox.py:133`; `chamados/signals.py:244` |
-
-Exaustividade transitiva de todos os acessos dinâmicos, suite completa, concorrência real e efeitos em produção: **[nao verificado]**. [nao verificado]
-
-## 09/11 13:39 · sessao f2e59b370272 · - · - · origem=Ronald (tmux)
-
-**PROCEDENTE — limpeza do par deixa pendência sem motivo.** O ramo hora pode gravar `pendencia_admin` e `recusa_motivo` juntos e continuar aplicando; após sucesso, o par apaga qualquer `recusa_motivo`, sem limpar nem resolver a pendência. O resultado satisfaz exatamente o filtro de violação I19. (`app/chamados/services/materializacao.py:468`; `:477`; `:503`; `:934`; `:937`; `:1359`; `:1374`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1111`.)
-
-Também alcança pendência anterior: identidade e prontidão não a excluem. Além disso, a primeira metade em espera já pode sobrescrever seu motivo com `ESPERA_PAR_INTERVALO`. (`app/chamados/services/materializacao.py:67`; `:77`; `:1412`; `:1431`; `app/chamados/services/materializacao.py:1180`; `:1190`.)
-
-**Cura sugerida:** preservar o motivo pertencente a `pendencia_admin` tanto ao registrar espera quanto ao limpar espera após aplicação; retirar apenas o marcador de espera sem apagar pendência legítima. RED: par com pendência/motivo anteriores ou produzidos durante plantio; exigir preservação do motivo e ausência de I19 após aplicar. (`app/chamados/services/materializacao.py:937`; `:1374`; `:1433`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1112`.)
-
-Ocorrência em produção: **[nao verificado]**.
-
-## 09/11 13:39 · sessao ae987bd8c0fe · SONDA-SEM-GRANT · verificador · origem=Code
-
-**Não fecharia V7 como garantia de nenhuma escrita, nem V7b como preservação integral de ordem e origem.** O selo aceita alterações persistentes feitas pelo próprio leitor; o transporte ainda separa stdout direto de stderr processado. (`bin/tests/test_sonda_sem_grant_pg.sh:365`; `bin/tests/test_sonda_sem_grant_pg.sh:376`; `bin/codex_pergunta.sh:322`)
-
-Resultados executados dos selos, RED/GREEN e mortes reais dos mutantes: **[nao verificado]**. Abaixo avalio código e asserções, sem usar entrega ou triagem como prova.
-
-1. **V7a: capacidades e mordida do selo**
-
-O selo agora constrói uma conexão TCP autenticada como `leitor`, com `ON_ERROR_STOP`, e exige leitura bem-sucedida nos dois destinos antes das negativas. Isso fecha a lacuna anterior de testar apenas como administrador. (`bin/tests/test_sonda_sem_grant_pg.sh:301`; `bin/tests/test_sonda_sem_grant_pg.sh:305`; `bin/tests/test_sonda_sem_grant_pg.sh:309`; `bin/tests/test_sonda_sem_grant_pg.sh:312`)
-
-| Via | O que o código e o selo sustentam |
-|---|---|
-| Large objects | A porta revoga todas as assinaturas das **dez famílias nomeadas**. O selo tenta apenas `lo_create`, `lo_from_bytea` e `lo_creat`; faltam tentativas das outras sete famílias. (`bin/sonda_leitor_comum.sh:19`; `bin/sonda_provisionar.sh:156`; `bin/tests/test_sonda_sem_grant_pg.sh:327`) |
-| SECURITY DEFINER | Revogação e conferência cobrem rotinas fora dos schemas de sistema. Há tentativa autenticada de função que insere. Isso não certifica funções de sistema nem qualquer função com efeito colateral. (`bin/sonda_provisionar.sh:157`; `bin/sonda_leitor_comum.sh:139`; `bin/tests/test_sonda_sem_grant_pg.sh:336`) |
-| Função volátil invoker | Há uma tentativa de INSERT por função invoker. A conferência não classifica rotinas por `provolatile`; esse caso não prova ausência de outros efeitos de funções voláteis. (`bin/tests/test_sonda_sem_grant_pg.sh:177`; `bin/tests/test_sonda_sem_grant_pg.sh:337`; `bin/sonda_leitor_comum.sh:136`; `bin/sonda_leitor_comum.sh:139`) |
-| DML, TEMP e CREATE | Existem tentativas autenticadas de INSERT/UPDATE/DELETE, TEMP e criação nos dois schemas. (`bin/tests/test_sonda_sem_grant_pg.sh:330`; `bin/tests/test_sonda_sem_grant_pg.sh:333`; `bin/tests/test_sonda_sem_grant_pg.sh:335`) |
-| COPY e arquivo do servidor | Há casos de COPY TO PROGRAM, COPY FROM arquivo e `pg_read_file`; não é cobertura de todas as formas de COPY. (`bin/tests/test_sonda_sem_grant_pg.sh:339`; `bin/tests/test_sonda_sem_grant_pg.sh:341`) |
-| `set_config` / ALTER próprio | O caso `set_config` cobra a recusa do **INSERT posterior**, não a recusa da configuração. A seção seguinte exige sucesso de ALTER próprio e só depois detecção/cura. (`bin/tests/test_sonda_sem_grant_pg.sh:338`; `bin/tests/test_sonda_sem_grant_pg.sh:365`; `bin/tests/test_sonda_sem_grant_pg.sh:368`) |
-| Outros bancos | Há teste de recusa de nova conexão em `postgres` e `template1`, nos dois clusters. O provisionamento revoga privilégios, sem encerrar sessões anteriores; existência dessas sessões: **[nao verificado]**. (`bin/tests/test_sonda_sem_grant_pg.sh:345`; `bin/tests/test_sonda_sem_grant_pg.sh:350`; `bin/sonda_provisionar.sh:117`) |
-| Sequências | A conferência rejeita privilégios diferentes de SELECT; há estrago administrativo concedendo USAGE. Não há tentativa autenticada de `nextval` ou `setval`. (`bin/sonda_leitor_comum.sh:122`; `bin/tests/test_sonda_sem_grant_pg.sh:255`; `bin/tests/test_sonda_sem_grant_pg.sh:327`) |
-| NOTIFY, LISTEN, advisory lock, prepared transaction, dblink/extensões, vacuum/analyze | Não aparecem nas tentativas autenticadas. Aceitação, recusa e configuração dessas vias nos clusters fornecidos: **[nao verificado]**. (`bin/tests/test_sonda_sem_grant_pg.sh:327`; `bin/tests/test_sonda_sem_grant_pg.sh:341`; `bin/tests/test_sonda_sem_grant_pg.sh:376`) |
-
-As negativas existentes cobram rc diferente de zero, ausência de `ESCREVEU`, mensagem `permission denied` e efeito persistente zero quando há consulta de efeito. É mordida útil para esses casos, não prova das vias omitidas. (`bin/tests/test_sonda_sem_grant_pg.sh:317`; `bin/tests/test_sonda_sem_grant_pg.sh:319`; `bin/tests/test_sonda_sem_grant_pg.sh:324`)
-
-O classificador `_sql` não fecha essas omissões: ele classifica o SQL administrativo do envelope; o Python da sonda executa separadamente, com conexão própria. (`bin/sonda_leitura.sh:158`; `bin/sonda_leitura.sh:166`; `bin/sonda_leitura.sh:233`; `bin/sonda_leitura.sh:239`)
-
-| Mutantes relatados | Asserção identificável; morte executada **[nao verificado]** |
-|---|---|
-| M1–M3: retirar REVOKE LO/definer/CONNECT | A conferência da porta já deve reprovar **antes de publicar a credencial**. No selo fresco, isso atinge primeiro as cobranças de provisionamento e arquivo. Não comprova a morte específica posterior por “ESCRITA ACEITA”; seria necessário demonstrar o arnês que permite chegar ali autenticado. (`bin/sonda_provisionar.sh:173`; `bin/sonda_provisionar.sh:196`; `bin/tests/test_sonda_sem_grant_pg.sh:223`; `bin/tests/test_sonda_sem_grant_pg.sh:225`; `bin/tests/test_sonda_sem_grant_pg.sh:303`) |
-| M4–M6: retirar chaves de `CONF_AUSENCIA` | Os estragos correspondentes cobram rc 5, chave positiva e ausência de `SONDA_RODOU`. (`bin/tests/test_sonda_sem_grant_pg.sh:242`; `bin/tests/test_sonda_sem_grant_pg.sh:244`; `bin/tests/test_sonda_sem_grant_pg.sh:266`) |
-| M7: retirar cura global do default próprio | Há caso que concede INSERT a PUBLIC e cobra sucesso do reprovisionamento. Um mutante semanticamente válido deve atingir essa cobrança. (`bin/tests/test_sonda_sem_grant_pg.sh:372`; `bin/tests/test_sonda_sem_grant_pg.sh:379`; `bin/sonda_provisionar.sh:150`) |
-| M8: stderr novamente colado no fim | A comparação da sequência e a exigência de `[stderr]` atingem essa regressão. (`bin/tests/test_codex_sonda.sh:105`; `bin/tests/test_codex_sonda.sh:107`) |
-
-2. **Conferência: escritores, leitores e significado**
-
-É preciso distinguir **quem produz a chave textual** de **quem modifica o estado consultado**. (`bin/sonda_leitor_comum.sh:79`; `bin/sonda_provisionar.sh:117`; `bin/sonda_provisionar.sh:156`)
-
-| Elemento | Quem escreve/define | Quem lê |
-|---|---|---|
-| `LO_ESCRITA` | Definição única na biblioteca. (`bin/sonda_leitor_comum.sh:19`) | Consulta e revogação. (`bin/sonda_leitor_comum.sh:77`; `bin/sonda_provisionar.sh:156`) |
-| `esc_lo` | `_q_conferencia` produz o valor; a porta revoga o ACL correspondente. (`bin/sonda_leitor_comum.sh:136`; `bin/sonda_provisionar.sh:156`) | `CONF_AUSENCIA` → `_conferencia_pronta`. (`bin/sonda_leitor_comum.sh:155`; `bin/sonda_leitor_comum.sh:161`) |
-| `esc_func` | `_q_conferencia` produz o valor; a porta revoga EXECUTE. (`bin/sonda_leitor_comum.sh:139`; `bin/sonda_provisionar.sh:157`) | Mesmo parser/predicado. (`bin/sonda_leitor_comum.sh:155`; `bin/sonda_leitor_comum.sh:168`) |
-| `outros_bancos` | `_q_conferencia` produz o valor; a porta revoga CONNECT de PUBLIC e privilégios do leitor. (`bin/sonda_leitor_comum.sh:143`; `bin/sonda_provisionar.sh:117`) | Mesmo parser/predicado. (`bin/sonda_leitor_comum.sh:155`; `bin/sonda_leitor_comum.sh:168`) |
-| `CONF_AUSENCIA` | Uma definição. (`bin/sonda_leitor_comum.sh:155`) | `_conferencia_pronta`, exigindo cada chave presente e igual a zero. (`bin/sonda_leitor_comum.sh:161`; `bin/sonda_leitor_comum.sh:164`; `bin/sonda_leitor_comum.sh:168`) |
-
-Envelope e porta importam a mesma biblioteca e usam a mesma consulta; a leitura exige prontidão antes da execução, e a porta exige prontidão depois das alterações. (`bin/sonda_leitura.sh:48`; `bin/sonda_leitura.sh:184`; `bin/sonda_leitura.sh:187`; `bin/sonda_provisionar.sh:42`; `bin/sonda_provisionar.sh:172`; `bin/sonda_provisionar.sh:173`)
-
-O parser próprio localizado é `_chave`, **instrumentação do selo**; o predicado de prontidão desse selo delega à biblioteca. Não identifiquei outro julgador operacional dessa conferência. (`bin/tests/test_sonda_sem_grant_pg.sh:216`; `bin/tests/test_sonda_sem_grant_pg.sh:217`)
-
-O significado é igual nos dois destinos: `_destino` troca cluster/banco, e as consultas usam `current_database()`. As três novas chaves contam **itens ACL**, podendo contar PUBLIC e leitor separadamente; não são números distintos de funções ou bancos. (`bin/sonda_leitor_comum.sh:28`; `bin/sonda_leitor_comum.sh:29`; `bin/sonda_leitor_comum.sh:136`; `bin/sonda_leitor_comum.sh:143`)
-
-A frase “só a porta escreve todo esse estado” seria excessiva: o próprio selo exige que o leitor altere senha, configurações e default privileges. (`bin/tests/test_sonda_sem_grant_pg.sh:365`; `bin/tests/test_sonda_sem_grant_pg.sh:376`)
-
-3. **Laço noturno e estado parcialmente aplicado** [nao verificado]
-
-Pelo censo fornecido, o laço alcança `juliani_ref_1810`, `postgres` e `template1`, excluindo `sombra`; não há outro LOGIN não-superuser informado além do leitor. Assim, **dano atual a outro login legítimo não está demonstrado**. Censo independentemente conferido nesta cópia: **[nao verificado]**. (`bin/sonda_provisionar.sh:117`)
-
-O laço não contém exclusão de `juliani_ref_*` nem preservação de CONNECT herdado de PUBLIC para outros usuários. Portanto, em outro inventário, pode retirar acesso legítimo dependente de PUBLIC; uso de roles NOLOGIN por `SET ROLE` e clientes externos: **[nao verificado]**. (`bin/sonda_provisionar.sh:117`)
-
-Há duas granularidades de atomicidade:
-
-- **Dentro do laço:** DO inteiro em BEGIN/COMMIT, com `ON_ERROR_STOP`; falha não deixa metade desses REVOKEs confirmada. (`bin/sonda_provisionar.sh:51`; `bin/sonda_provisionar.sh:105`; `bin/sonda_provisionar.sh:117`; `bin/sonda_provisionar.sh:118`)
-- **No provisionamento completo:** role/CONNECT confirmam antes da transação de ACL. Falha posterior pode conservar as primeiras alterações, sem promoção do envfile ou anúncio de pronto. (`bin/sonda_provisionar.sh:118`; `bin/sonda_provisionar.sh:127`; `bin/sonda_provisionar.sh:169`; `bin/sonda_provisionar.sh:183`; `bin/sonda_provisionar.sh:196`)
-
-O cron chama `--refazer && --bloco`. O refazer invalida o carimbo antes do drop, e erro da porta interrompe antes do carimbo final: **pode deixar a sombra vermelha e impedir o bloco, mas esse caminho não conserva o verde anterior**. (`app/config/crons.py:351`; `bin/sombra.sh:288`; `bin/sombra.sh:265`; `bin/sombra.sh:340`; `bin/sombra.sh:341`)
-
-Conferência verde também não certifica disponibilidade de outros usuários: suas contagens verificam privilégios de leitor/PUBLIC. (`bin/sonda_leitor_comum.sh:136`; `bin/sonda_leitor_comum.sh:143`)
-
-4. **V7b: ordem, origem, rc e segredo**
-
-**Ordem integral: não.** A sincronização garante que a pipeline termine antes da raspagem, mas stdout escreve diretamente enquanto stderr atravessa `tee` e `sed`. A ordem entre esses caminhos pode inverter; linhas parciais também podem se concatenar. O selo apenas intercala linhas completas com pausas de 0,3 segundo. (`bin/codex_pergunta.sh:322`; `bin/codex_pergunta.sh:333`; `bin/tests/test_codex_sonda.sh:53`; `bin/tests/test_codex_sonda.sh:54`)
-
-**Origem integral: não.** O próprio envelope já mistura stdout/stderr do processo da sonda com `2>&1`. Ambos chegam ao wrapper como stdout; `[stderr]` identifica apenas stderr recebido na fronteira do envelope. (`bin/sonda_leitura.sh:240`; `bin/codex_pergunta.sh:322`)
-
-**Rc do envelope: sim, nas execuções normais da pipeline.** A captura imediata de `PIPESTATUS[0]` preserva 0, 5 e demais retornos; o wrapper não usa `errexit`. Porém, ignora os retornos de `tee` e `sed`: envelope rc 0 pode continuar após falha desses estágios. (`bin/codex_pergunta.sh:54`; `bin/codex_pergunta.sh:322`; `bin/codex_pergunta.sh:326`)
-
-**Rc 5 continua impedindo o bruto de chegar ao Codex:** sai antes da raspagem e da inclusão do dado no prompt. A sonda real que retorna 5 é remapeada para 1 pelo envelope. (`bin/codex_pergunta.sh:325`; `bin/codex_pergunta.sh:333`; `bin/codex_pergunta.sh:359`; `bin/sonda_leitura.sh:244`)
-
-**Segredo não tem garantia geral de retenção:**
-
-- `tee` grava stderr cru em `envelope.err`; o diretório temporário recebe modo 700 e há tentativa de limpeza no EXIT. (`bin/codex_pergunta.sh:322`; `bin/codex_pergunta.sh:273`; `bin/codex_pergunta.sh:267`)
-- No rc 5, qualquer linha iniciada por `sonda_leitura:` sai **sem raspagem**. Um segredo nessa linha passaria pelo filtro; ocorrência real: **[nao verificado]**. (`bin/codex_pergunta.sh:324`)
-- No rc 0, a máscara trata nomes/CPF, não senhas arbitrárias. O selo de recusa só coloca os segredos fora das linhas prefixadas. (`bin/nome_no_texto.py:87`; `bin/nome_no_texto.py:110`; `bin/tests/test_codex_sonda.sh:42`; `bin/tests/test_codex_sonda.sh:44`)
-
-5. **As quatro decisões abertas**
-
-| Decisão | Classificação |
-|---|---|
-| **1 — aceitar ALTER próprio e detectar depois** | **PROCEDENTE; bloqueia a garantia absoluta.** Conserva escritor do estado fora da porta; detecção posterior não é impedimento. O selo exige essa escrita bem-sucedida, enquanto o envelope promete impossibilidade de acidente. (`CLAUDE.md:32`; `bin/tests/test_sonda_sem_grant_pg.sh:366`; `bin/sonda_leitura.sh:8`) |
-| **2 — SECURITY DEFINER criada depois** | **DESCARTE como falso pronto apenas por nascer entre provisionamento e próxima conferência:** há caso exigindo recusa. **Permanece lacuna de garantia contínua:** conferir antes de executar não impede mudança depois da conferência; essa concorrência não é ensaiada. (`bin/tests/test_sonda_sem_grant_pg.sh:242`; `bin/tests/test_sonda_sem_grant_pg.sh:266`; `bin/sonda_leitura.sh:187`; `bin/sonda_leitura.sh:233`) |
-| **3 — lista LO dependente da versão** | **DESCARTE como defeito futuro já demonstrado.** Função futura omitida: **[nao verificado]**. **PROCEDENTE a cobertura atual incompleta:** sete famílias já revogadas não têm tentativa autenticada. (`bin/sonda_leitor_comum.sh:19`; `bin/tests/test_sonda_sem_grant_pg.sh:327`) |
-| **4 — CONNECT amplo na sombra** | **DESCARTE do dano atual alegado a outro LOGIN**, pelo censo fornecido; dano real: **[nao verificado]**. **PROCEDENTE o efeito amplo e a aplicação global não atômica**, sem demonstração de falso verde nesse caminho. (`bin/sonda_provisionar.sh:117`; `bin/sonda_provisionar.sh:118`; `bin/sonda_provisionar.sh:127`; `bin/sombra.sh:288`) |
-
-Não identifiquei nessas quatro decisões derivação paralela ou relógio fora da borda. Os problemas demonstráveis pertencem à escrita fora da porta, cobertura insuficiente e fidelidade incompleta do instrumento; essas classes exigem tratamento, não mera aceitação como decisão aberta. (`CLAUDE.md:28`; `CLAUDE.md:32`; `CLAUDE.md:370`; `CLAUDE.md:373`)
-
-6. **Lista final**
-
-| Item | Veredito |
-|---|---|
-| “Leitor impossibilitado de qualquer escrita/efeito” | **PROCEDENTE manter aberto:** ALTER próprio é aceito pelo contrato do selo e várias vias não são medidas. (`bin/tests/test_sonda_sem_grant_pg.sh:366`; `bin/tests/test_sonda_sem_grant_pg.sh:327`) |
-| “Cada via fechada tem tentativa e mutante específico comprovado” | **DESCARTE:** cobertura LO parcial; M1–M3 falham antes da credencial; execuções **[nao verificado]**. (`bin/tests/test_sonda_sem_grant_pg.sh:223`; `bin/tests/test_sonda_sem_grant_pg.sh:303`; `bin/tests/test_sonda_sem_grant_pg.sh:327`) |
-| “Há outro juiz operacional da conferência” | **DESCARTE no código localizado:** consumidores delegam ao predicado comum; `_chave` é instrumentação. (`bin/sonda_leitura.sh:187`; `bin/sonda_provisionar.sh:173`; `bin/tests/test_sonda_sem_grant_pg.sh:217`) |
-| “Laço pode deixar metade dos bancos confirmada” | **DESCARTE dentro da mesma transação; PROCEDENTE para o provisionamento completo em duas transações.** (`bin/sonda_provisionar.sh:105`; `bin/sonda_provisionar.sh:118`; `bin/sonda_provisionar.sh:127`) |
-| “Falha da porta mantém verde anterior da sombra” | **DESCARTE nesse caminho:** invalidação precede a mudança e publicação final depende da porta. (`bin/sombra.sh:288`; `bin/sombra.sh:340`; `bin/sombra.sh:341`) |
-| “V7b preserva ordem e origem de cada linha” | **PROCEDENTE a reprovação:** caminhos concorrentes e mistura anterior no envelope. (`bin/codex_pergunta.sh:322`; `bin/sonda_leitura.sh:240`) |
-| “Rc 5 entrega bruto ao Codex” | **DESCARTE:** saída anterior à raspagem/prompt. (`bin/codex_pergunta.sh:325`; `bin/codex_pergunta.sh:333`) |
-| “Falha de transporte ou segredo sempre fecha a passagem” | **PROCEDENTE a lacuna:** rc de filtros ignorado e linhas prefixadas emitidas cruas. Vazamento ocorrido: **[nao verificado]**. (`bin/codex_pergunta.sh:322`; `bin/codex_pergunta.sh:324`) |
-
-## 09/11 13:37 · sessao 80205edd1ecf · - · - · origem=Ronald (tmux)
-
-**PROCEDENTE — S127 ainda usa C6 e permite encerrar o chamado-pai com intervalo em espera.** `ChamadoColaborador.transicionar` chama `disputa_viva_do_chamado`; esse juiz só retém disputa vazia ou com `fio_vivo`, enquanto C6 mata imediatamente a pergunta validada. Com a irmã fora do fato, C7 retém a disputa, mas S127 devolve `None` e o gate seguinte de ancoradas também só procura C6 vivas. Cura: S127 consultar a condição canônica C7, preservando o caso da disputa vazia; RED chamar `transicionar` sobre o cenário da irmã retratada. `app/chamados/models.py:148`, `app/chamados/models.py:165`, `app/chamados/models.py:344`, `app/chamados/models.py:368`, `app/chamados/juizes.py:1153`, `app/chamados/juizes.py:2134`, `app/chamados/juizes.py:2138`, `app/chamados/models.py:1863`.
-
-**NAO PROCEDE — leitores principais migram a espera antes de diagnosticar falha/devolver.** Explicador retorna `aguardando_par`; declaração retorna o mesmo estado antes da guarda de validação; devolução sai sem apagar aceite; vigia separa espera de dívida; O330 exclui espera do alvo. `app/chamados/services/explicador.py:74`, `app/chamados/services/declaracao_texto.py:213`, `app/chamados/services/declaracao_texto.py:382`, `app/chamados/services/declaracao_texto.py:678`, `app/chamados/services/validacao.py:193`, `app/chamados/services/vigia_carimbo.py:109`, `app/chamados/services/vigia_carimbo.py:133`, `app/chamados/services/passivo_validado.py:327`.
-
-**Leitores restantes, alcance preciso.**
-
-- C6 continua dizendo “morta”; propriedade `estado` diz `VALIDADA` enquanto não materializada; C7 acrescenta a retenção da espera. `app/chamados/juizes.py:1153`, `app/chamados/models.py:3050`, `app/chamados/models.py:1864`.
-- Painel/badge creditam apenas `q_vivas`, portanto a metade aceita não conta: irmã respondida gera Validar; irmã sem resposta gera Cobrar; sem outra viva, chamado acionável vira Decidir. Isso preserva uma ação no chamado vivo, mas não produz um contador específico de espera. `app/chamados/services/raiox.py:72`, `app/chamados/services/raiox.py:133`, `app/chamados/services/raiox.py:137`, `app/chamados/services/verbos.py:34`, `app/chamados/catalogo/natureza.py:48`, `app/chamados/catalogo/natureza.py:54`, `app/chamados/catalogo/natureza.py:61`.
-- Fio carrega todas as perguntas de disputas abertas, inclusive aceita; de disputa fechada carrega só C6 vivas. Não reabre nesse carregamento. `app/chamados/services/fio.py:221`, `app/chamados/services/fio.py:224`, `app/chamados/services/fio.py:238`, `app/chamados/services/fio.py:253`.
-- `o_que_segura` lê a porta alcançável e seu `fio`; não lê C7 nem espera diretamente. Vigia antigo usa C6 para fio vivo; pode classificar dia sem C6 viva como `fio_morto`, mesmo tendo `porta_aguardando_par`, se faltarem as outras saídas (resolver dia/ausência/lista admin). Não é contraprova de produção: depende desses insumos. `app/folha/fora_da_folha.py:221`, `app/folha/fora_da_folha.py:77`, `app/chamados/services/vigia_fio.py:416`, `app/chamados/services/vigia_fio.py:430`, `app/chamados/services/vigia_fio.py:448`, `app/chamados/services/vigia_fio.py:462`, `app/chamados/services/vigia_fio.py:305`.
-- Beco/evento e cron respeitam C7; vigias de fio/carimbo estão declarados como vigias. `app/chamados/services/becos.py:33`, `app/chamados/services/becos.py:56`, `app/config/crons.py:2044`, `app/config/crons.py:2213`, `app/config/crons.py:2226`.
-
-**NAO PROCEDE — duas cascas administrativas recebem o aviso.** Detalhe conserva a aceita por `C6 ou espera`; modal carrega perguntas da disputa aberta; ambos incluem o mesmo partial que chama diretamente o predicado. GETs reais estão nos testes; execução nesta revisão: [nao verificado]. `app/chamados/services/acoes_chamado.py:349`, `app/chamados/views.py:549`, `app/templates/chamados/detalhe_local.html:310`, `app/chamados/services/fio.py:253`, `app/templates/chamados/partials/modal_fio.html:160`, `app/templates/chamados/partials/_pergunta_card.html:29`, `app/templates/chamados/partials/_espera_par_intervalo.html:2`, `app/chamados/templatetags/chamados_tags.py:19`, `app/chamados/tests/test_bug_par_intervalo.py:623`.
-
-**Mapa adicional de escrita/leitura fora do diff.**
-
-| Campo | Escritores conferidos | Leitores conferidos |
-|---|---|---|
-| `resposta_colab/respondida_em` | resposta core `disputa_emissao.py:1464`; complemento de carimbo `models.py:3140`; reabertura `disputa_emissao.py:1590` | C6 `juizes.py:1169`; estado `models.py:3053`; espera `materializacao.py:110`; crédito `raiox.py:136` |
-| `validada_em/por` | aceite `validacao.py:134`; devolução `validacao.py:202`; nova resposta `disputa_emissao.py:1477`; complemento `models.py:3144`; descarimbo em lote `models.py:1565` | C6 `juizes.py:1153`; C7 `models.py:1851`; estado `models.py:3050`; espera `materializacao.py:109`; vigia `vigia_carimbo.py:100`; placar `painel.py:67` |
-| materialização/via | `models.py:3108`; identidade `models.py:3192`; descarimbo `models.py:3222`; lote `models.py:3280`; relavra via `relavra_via.py:125` | lastro `juizes.py:660`; C6 `juizes.py:1164`; estado `models.py:3052`; devolução `validacao.py:190`; apresentação `materializacao.py:515` |
-| `recusa_motivo` | `materializacao.py:1190`; limpeza do par `materializacao.py:1375`; recusa humana `validacao.py:605`; escape `disputa_emissao.py:1494`; identidade `models.py:3197` | espera `materializacao.py:112`; devolução `validacao.py:195`; explicador `explicador.py:98`; auditor I18 `auditar_invariantes_chamados.py:1075` |
-| `contexto_json/data_evento/timestamp` | contexto nascimento `models.py:1123`; batida porta `registro_batida.py:155` | data plantio `materializacao.py:425`; fallback contexto disputa `materializacao.py:428`; datetime aware `materializacao.py:495`; ajuste overnight `materializacao.py:502`; tolerância `registro_batida.py:99` |
-
-Caminhos acima são os conferidos; exaustividade transitiva de todos os escritores/leitores da árvore: **[nao verificado]**.
-
-_3167 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3171 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
