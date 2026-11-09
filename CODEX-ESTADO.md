@@ -1,7 +1,94 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 08:12** · publicado em **09/11/2026 08:15** (UTC-3)
+> Ultima resposta processada: **09/11/2026 08:20** · publicado em **09/11/2026 08:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 08:20 · sessao 7e7cab7dc194 · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · construtor · origem=Code
+
+A cura está escrita: o par identificado aplica as duas metades no mesmo `atomic`, com paridade e lastro julgados após as duas escritas. **[RED nao executado]**; GREEN e mortalidade dos mutantes permanecem **[nao verificado]**. Fonte: [materializacao.py:1302](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-075842/app/chamados/services/materializacao.py:1302).
+
+Por hunk:
+
+| Arquivo:linha | Alteração |
+|---|---|
+| `chamados/services/materializacao.py:55` | Predicado único `identificar_par_intervalo`: disputa/data, unicidade das metades e mesmo par canônico. Ambiguidade devolve `par_ambiguo`; consulta `chamados/juizes.py:882` e `escala/models.py:1652`. |
+| `chamados/services/materializacao.py:91` | Reúne disputas, pais, destinos, clones e perguntas antes da escrita; adquire travas pela porta existente de `chamados/models.py:2637`. |
+| `chamados/services/materializacao.py:844` | `par_em_ato` adia a guarda individual e a reconciliação. Escrita continua por `registrar_batida`, em `:987`. |
+| `chamados/services/materializacao.py:1220` | Extrai o carimbo compartilhado; `:1264` extrai a conferência de data. Ambos servem ao par e ao caminho avulso. |
+| `chamados/services/materializacao.py:1302` | Mantém ambas em voo; grava, julga conjunto, exige lastro, carimba e reconcilia. Falha desfaz o savepoint e devolve as duas validações pelo dono. |
+| `chamados/services/materializacao.py:1372` | Despacha par/avulsa, espera e contadores. Respeita o universo selecionado; `:1415` conserva o caminho avulso. |
+| `chamados/services/validacao.py:434` | Trava antes de validar; preserva o primeiro aceite e retorna `aguardando_par`. A devolução distingue espera de recusa em `:193`. |
+| `chamados/services/materializacao.py:1526` | Varredura processa cada unidade uma vez e conta ambas as perguntas aplicadas. |
+| `chamados/services/passivo_validado.py:432` | Pré-trava toda a competência; `:529` entrega ao ato apenas o universo selecionado pelo O330, incluindo carimbos sem lastro. |
+| `chamados/catalogo/recusa.py:25` | Espera com código próprio e tradução por igualdade. `COLADA` exige testemunha de mesmo tipo dentro de ±60s; paridade distante perde esse texto. |
+| `templates/chamados/partials/modal_fio.html:229` | Exibe a espera nos ramos validado e não validado; segundo ponto em `:243`. |
+| `chamados/tests/test_contract_leitores_vitalidade.py:124` | Atualiza o censo para o corpo avulso extraído e a elegibilidade do par. |
+
+Os escritores e leitores dos campos envolvidos ficam assim:
+
+| Campo/função | Quem escreve | Quem lê |
+|---|---|---|
+| `resposta_colab/respondida_em` | Porta existente, `chamados/services/disputa_emissao.py:1422` | Derivação `materializacao.py:384`; prontidão `:1383`. |
+| `validada_em/por` e decisões E1 | Dono existente, `validacao.py:127` e `:163`; sequência em `chamados/models.py:3943` | Dispatcher `materializacao.py:1383`; C6 `chamados/juizes.py:1153`; consulta `chamados/models.py:3359`. |
+| `recusa_motivo` | `materializacao.py:1144`; limpeza após aplicação em `:1352` | Devolução/espera `validacao.py:193`; catálogo `recusa.py:92`; apresentação `materializacao.py:479`. |
+| Batida: instante, tipo e origem | Porta existente `ponto/registro_batida.py:94` | Guarda `materializacao.py:139`; lastro existente `chamados/juizes.py:645`. |
+| `pergunta_origem` | `anotar`, chamado em `materializacao.py:1008`; porta em `ponto/registro_batida.py:235` | Lastro `chamados/juizes.py:703`. |
+| Materialização, via e lavra | `materializacao.py:1220` → `chamados/models.py:3103` → `chamados/veredito_lavrado.py:234` | Identidade `materializacao.py:55`; estado `:479`; seleção `:1557`; estado do modelo `chamados/models.py:3035`. |
+| `pendencia_admin` | Ramo existente `materializacao.py:910` | Template `templates/chamados/partials/modal_fio.html:221`. |
+| Estado de aplicação | `materializacao.py:479`, montado por `chamados/services/fio.py:336` | Template `modal_fio.html:229`; casca da validação `chamados/services/acoes_disputa.py:13`. |
+| `processadas/aplicadas/pares` | Dispatcher `materializacao.py:1372` | Varredura `:1568`; O330 `passivo_validado.py:570`; consolidação `:385`; saída JSON existente `chamados/management/commands/materializar_passivo_validado.py:135`. |
+| Fechamento | Cauda existente `materializacao.py:1490` → `chamados/models.py:1863` | Autoridade `pode_fechar`, `chamados/models.py:1856`. |
+
+O primeiro aceite permanece validado e aparece com “Falta a outra metade do intervalo”. Para C6, essa primeira pergunta continua morta pelo degrau de validação; a outra metade segura o fechamento nominal. O RED cobra isso, inclusive executando callbacks após o primeiro aceite. Fontes: `validacao.py:482`, `chamados/juizes.py:1153`, `chamados/models.py:1856`, [test_bug_par_intervalo.py:104](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-075842/app/chamados/tests/test_bug_par_intervalo.py:104) e `:164`. Resultado funcional: **[nao verificado]**.
+
+O RED cobre R1–R9, rollback da segunda escrita, lastro, reconciliação, proteção em voo, travas e limites do O330. R7 usa 20/09 porque o índice parcial impede duplicar os motivos na data nominal. Fontes: `chamados/tests/test_bug_par_intervalo.py:35`, `:151`, `:182`, `:255`, `:342`, `:390`, `:401`, `:418`; índice em `chamados/models.py:3482`.
+
+Comando reservado à sessão para RED na base e GREEN na cura: `chamados/tests/test_bug_par_intervalo.py:1`.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_bug_par_intervalo --noinput
+```
+
+Cada mutante altera o fonte real **em memória** e executa seu teste-alvo. Os comandos individuais abaixo correspondem às definições de [mutantes_bug_par_intervalo.py:17](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-075842/app/chamados/tests/mutantes_bug_par_intervalo.py:17). Não foram executados; falha de ambiente não demonstra mutante morto. Fonte: `mutantes_bug_par_intervalo.py:1`. [nao verificado]
+
+```bash
+mutar() {
+  PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.mutantes_bug_par_intervalo "$1"
+}
+mutar M1  # remove atomic do par
+mutar M2  # remove espera
+mutar M3  # restaura guarda individual
+mutar M4  # remove paridade final
+mutar M5  # remove ordem temporal
+mutar M6  # remove lastro
+mutar M7  # escolhe metades ambiguas
+mutar M8  # remove testemunha de colada
+mutar M9  # remove par canonico
+mutar M10 # remove devolucao das validacoes
+mutar M11 # reconcilia entre metades
+mutar M12 # conta apenas uma aplicacao
+mutar M13 # zera contador
+mutar M14 # remove protecao em voo
+mutar M15 # remove trava das perguntas
+mutar M16 # aplica fora do universo O330
+mutar M17 # repara carimbo pela porta normal
+mutar M18 # ignora disputas adicionais
+```
+
+DECISAO-ABERTA: nenhuma escolha adicional de identidade foi introduzida; ambiguidades seguem pelo caminho avulso, conforme `materializacao.py:55` e `:1400`. Permanecem **[nao verificado]**: execução RED/GREEN, mortalidade dos mutantes, concorrência real, renderização Django, censo populacional e commit introdutor. [nao verificado]
+
+Log final: executei o comando abaixo, que usa `py_compile` sem persistir bytecode; sete arquivos Python compilaram e os 18 mutantes tiveram âncora única, sintaxe e teste-alvo conferidos. Implementação da checagem: `chamados/tests/mutantes_bug_par_intervalo.py:87`.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.mutantes_bug_par_intervalo --sintaxe
+```
+
+```text
+py_compile: 7 arquivos, rc 0, sem persistencia
+M1–M18: ancora unica, sintaxe e teste-alvo conferidos [nao verificado]
+RED/GREEN: NAO EXECUTADOS
+Mutantes funcionais: NAO EXECUTADOS
+```
 
 ## 09/11 08:12 · sessao 79c1c84e8d87 · - · - · origem=Ronald (tmux)
 
@@ -1646,25 +1733,4 @@ Os mutantes já existentes para pertinência são célula crua, exato que cala o
 
 [resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
 
-## 09/11 07:42 · sessao 693ce8822a20 · SELOS-CANON-I1 · censo · origem=Code
-
-**A v5.q não enunciava os dois sentidos da pertença.** Explicitava o achado de igualdade com célula crua; “nas duas vias (agente e wrapper)” designava percursos de execução. Ainda assim, perguntava pela semântica de pertença, incluindo “id cru x id com sufixo”. Portanto, classifico o achado 1 como **(a), pelo tema solicitado**, sem afirmar que o espelho tivesse sido expressamente formulado. (`i1_preverif_v5.q:3–10`)
-
-As referências aos anexos abaixo contam as linhas do texto colado, incluindo linhas vazias, começando pela primeira linha de cada anexo.
-
-| achado | classe | trecho q | trecho r | linha da triagem |
-|---|---|---|---|---|
-| **1 — espelho: token da célula dentro da obra** | **(a)**: pertença e diferença entre ID cru/qualificado estavam perguntadas; o espelho passou despercebido. O código procura somente a obra dentro da célula em `nomeiam`. (`bin/disjuntor.py:1683–1689`) | “Os achados 1 e 4 do laudo estao curados em TODOS os sitios”; “nas duas vias (agente e wrapper)?”; “id cru x id com sufixo”. (`i1_preverif_v5.q:5,10`) | “**Achado 1, nos dois pontos alterados: curado.**”; “Pedir `O9` diante dessa última célula resulta em NAO SEI”. Examina obra `O9`/célula `O9 (C)`, enquanto o laudo 2 aponta obra `O9 (C)`/célula `O9`. (`i1_preverif_v5.r:5–6`; `i1_opus_final_2.md:2`) | **L2:** “CURADO nas duas vias [...] -- conferido no diff.” Foi acolhimento da conclusão de cura, **não descarte de um espelho identificado**. (`i1_triagem_v5.txt:2`) |
-| **2 — minúsculas no wrapper** | **(b)**: incompatibilidade vista e descartada. (`i1_preverif_v5.r:34`; `i1_triagem_v5.txt:6`) | “Algum leitor supoe significado diferente”. (`i1_preverif_v5.q:9`) | “O wrapper shell aceita somente `[A-Z0-9-]+`; o CLI aceita também minúsculas.” (`i1_preverif_v5.r:34`) | **L6:** “wrapper [A-Z0-9-] x CLI minusculas [...] anteriores, fora do diff. FILA.” (`i1_triagem_v5.txt:6`) |
-| **2 — O67b/O51b também rejeitados pelo Agent** | **(a), parcialmente visto**: a resposta identificou wrapper/CLI, mas não diagnosticou o impedimento nas duas vias para esses IDs. A validação do Agent exige a gramática sensível à caixa. (`i1_preverif_v5.r:34`; `bin/disjuntor.py:157,616–620`; `app/docs/BACKLOG.md:1325,1327`) | “nas duas vias (agente e wrapper)?” (`i1_preverif_v5.q:5`) | O trecho pertinente limita-se a “O wrapper shell aceita somente [...]”; não apresenta o diagnóstico específico do Agent para O67b/O51b. (`i1_preverif_v5.r:34`) | **L6** descarta wrapper/CLI; não registra descarte específico desse impacto no Agent. (`i1_triagem_v5.txt:6`) |
-| **2 — FECHADA sem negrito** | **(e)**: reconhecimento das formas de fechamento não foi perguntado especificamente. O caso e a restrição do reconhecedor constam da cópia. (`i1_preverif_v5.q:1–16`; `app/docs/BACKLOG.md:768`; `bin/hook_stop_fila1.py:59,168`) | O pedido próximo é sobre funções “que o diff cria ou muda”; não nomeia `_FECHADO` nem `FECHADA:`. (`i1_preverif_v5.q:7–10`) | Não há diagnóstico desse caso; a resposta descreve a delegação a `_itens_andaveis`. (`i1_preverif_v5.r:19`) | Sem entrada específica. (`i1_triagem_v5.txt:1–8`) |
-| **3 — célula nua com cauda nunca abre** | **(b), com ressalva**: a impossibilidade de aprovação foi vista; a triagem justificou o descarte pelo efeito na medida. (`i1_preverif_v5.r:53`; `i1_triagem_v5.txt:3`) | “negativa de obra fora da forma nunca fecha intervalo em _censo_24h”; “Quem e afetado hoje?” (`i1_preverif_v5.q:13–14`) | “não torna possível aprovar a mesma identidade fora da forma”; “isso não equivale a vaga aberta”. (`i1_preverif_v5.r:53`) | **L3:** “nao fecha intervalo de obra qualificada -> FILA (pre-existente, so medida [...]). Nao bloqueia.” Essa justificativa não trata expressamente a indisponibilidade da abertura. (`i1_triagem_v5.txt:3`; `bin/disjuntor.py:1704–1707`) |
-| **4 — PARADA excluída e tratada como FORA** | **(a)**: o universo produzido por `_fila1_viva` estava perguntado; a resposta descreveu a coleta sem apontar essa consequência. (`i1_preverif_v5.q:7`; `i1_preverif_v5.r:19`) | “QUEM ESCREVE e QUEM LE [...] (_casa_id_inteiro, _fila1_viva, _token_da_celula”. (`i1_preverif_v5.q:7`) | “Lê BACKLOG, delega a `_itens_andaveis` e devolve **lista de células cruas**, preservando duplicidades”. (`i1_preverif_v5.r:19`) | Sem descarte correspondente. A exclusão ocorre em `_itens_andaveis`; a ausência conduz a FORA. (`i1_triagem_v5.txt:1–8`; `bin/hook_stop_fila1.py:250–252`; `bin/disjuntor.py:1637,1685–1686,2269–2272`) |
-| **5 — descartes confirmados não bloqueantes** | **(b)**: o próprio achado confirma os descartes, sem apresentar nova omissão. (`i1_opus_final_2.md:6`) | “sao regressao desta volta ou estado anterior? Quem e afetado hoje?” (`i1_preverif_v5.q:14`) | “o defeito já existia”; “Quem é afetado é o consumidor da medida”. (`i1_preverif_v5.r:53`) | **L3–6:** motivos de anterioridade, efeito na medida e casos fora do diff; **L7:** lacunas encaminhadas ao opus. (`i1_triagem_v5.txt:3–7`) |
-| **6 — papel leitura aceito como prova** | **(a)**: a semântica da prova estava perguntada; a resposta mapeou consumidores sem apontar essa aceitação. O conjunto admite `censo` e `leitura`. (`i1_preverif_v5.q:8–10`; `bin/hook_stop_fila1.py:726,763`) | “prova_parei_censo, _eh_faixa_censo”; “Algum leitor supoe significado diferente”. (`i1_preverif_v5.q:8–9`) | “Produz `None`, prova `''` ou motivo → Stop, alarme e handoff.” (`i1_preverif_v5.r:27`) | Sem entrada específica. (`i1_triagem_v5.txt:1–8`) |
-| **6 — retirada do PAREI; `_cru_abre_agent_copia`; `~/wt-*`** | **(e)** para esses temas específicos: ciclo de retirada, guarda de importação e forma abreviada do caminho não foram formulados. (`i1_preverif_v5.q:1–16`) | O trecho próximo pergunta quem “escreve o literal do PAREI fora do ponto unico”; não pergunta quando retirá-lo. (`i1_preverif_v5.q:6`) | “A escrita material do PAREI continua passando por `no_topo`”; não diagnostica retirada nem os dois reconhecedores de cópia. (`i1_preverif_v5.r:30`; `bin/disjuntor.py:65–84,153`) | Sem entrada específica. O laudo os chama de “herdados opus 1”, portanto não sustentam **(d)** por si mesmos. (`i1_triagem_v5.txt:1–8`; `i1_opus_final_2.md:7`) |
-| **6 — teor de `CORTES.md:428`** | **[não verificado]**: não há conteúdo suficiente para classificar a obrigação desse corte. A cópia termina na linha 425. (`app/docs/CORTES.md:425`) | “Leis dos sitios em anexo”, mas o conteúdo desse anexo não foi fornecido. (`i1_preverif_v5.q:2`) | Não apresenta o teor desse corte. (`i1_preverif_v5.r:1–70`) | Sem entrada específica. (`i1_triagem_v5.txt:1–8`) |
-
-**(c) aplica-se à comprovação operacional que faltava**, como execução integral/RED e eventos reais de produção; não à possibilidade de examinar estaticamente o espelho. A resposta declarou essas limitações, enquanto o código permite identificar a comparação unilateral. (`i1_preverif_v5.r:46,54,68`; `bin/disjuntor.py:1684`) Atribuir **(d), modo comum**, aos casos restantes exigiria evidência adicional sobre quem os examinou: **[não verificado]**.
-
-_3062 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3063 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
