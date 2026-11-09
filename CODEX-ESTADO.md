@@ -1,7 +1,15 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 09:10** · publicado em **09/11/2026 09:15** (UTC-3)
+> Ultima resposta processada: **09/11/2026 09:17** · publicado em **09/11/2026 09:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 09:17 · sessao bbec4829eb42 · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · construtor · origem=Code
+
+5. Entrega no [relatório por hunk, escritores/leitores e comandos individuais](docs/BUG-PAR-INTERVALO-V2.txt:9).
+
+- **DECISÃO-ABERTA — P2:** ligação de C7 ao predicado reservada à sessão; import e linha exata em [entrega:205](docs/BUG-PAR-INTERVALO-V2.txt:205). Teste: [test_P2_C7_nao_fecha_se_irma_sai_do_fato](chamados/tests/test_bug_par_intervalo.py:388).
+- **Verificação:** `py_compile` sem persistência retornou rc 0; âncoras e sintaxe de M1–M37 conferidas. [entrega:301](docs/BUG-PAR-INTERVALO-V2.txt:301)
+- **Sem execução da suíte ou dos mutantes:** RED/GREEN e mortes por asserção **[nao verificado]**. F1–F4 e produção permanecem fora da cobertura. [entrega:218](docs/BUG-PAR-INTERVALO-V2.txt:218)
 
 ## 09/11 09:10 · sessao 34f994372353 · SONDA-SEM-GRANT · verificador · origem=Code
 
@@ -578,22 +586,4 @@ Fontes paralelas existentes, com perguntas diferentes: mapa motivo→marco `app/
 
 [resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
 
-## 09/11 08:26 · sessao c216c7c7d88f · - · - · origem=Ronald (tmux)
-
-Fixtures e riscos consolidados:
-
-- Dois motivos válidos no mesmo dia: `saida_sem_entrada` e `orfao_14h`; derivam instâncias `inicio`/`fim`, evitando colisão da identidade. `chamados/services/declaracao_texto.py:44`; `chamados/models.py:3425`.
-- Crie `Empresa`, `User`, `Colaborador(nome='col001', usuario=user, deve_trocar_senha=False, plataforma_principal='android')`, `CelulaDia` com DNA 08–17, disputa e perguntas por `.objects.create()`. Reafirme após montar as linhas `veredito='furo'`, `veredito_via='cartorio'`, ata com ambas as lâmpadas apagadas. C6 responde viva pelo veredito acusador. `chamados/juizes.py:1354`; exemplo existente em `chamados/tests/test_fio_le_o_juiz.py:50`.
-- Para M2/M3/morta, use `QuerySet.update()` nos carimbos `fechada_em`, `respondida_em`/`resposta_colab` ou `validada_em`. Evita efeitos dos signals de fechamento e continua sendo ORM real. `chamados/signals.py:18`; `chamados/signals.py:237`.
-- M5: para cada colaborador, repita `orfao_14h` em datas distintas; a unicidade inclui dia e motivo. `chamados/models.py:2437`.
-- Ambos os kernels: `APIRequestFactory().get()`, `force_authenticate()`, chamada à função importada de cada módulo; padrão existente em `api/tests/test_me_posto_geo.py:103`.
-- Dashboard: `Client.force_login()` e `reverse('core:dashboard')`, já empregado em `core/tests/test_dashboard_badge.py:21`. Plataforma preenchida evita escrita de classificação durante GET. `core/views.py:143`.
-- Registro a baixar: exclusivamente a expressão `_p(...)` de duas linhas em `core/juizes.py:759`.
-- Delete `test_badge_disputa_pendente.py`: sustenta explicitamente contagem por disputa. `chamados/tests/test_badge_disputa_pendente.py:8`.
-- Migre `test_esmeril2_left_join.py`: preserve defesa contra pai sem filho e altere duas perguntas para contagem **2** pela consulta única. `chamados/tests/test_esmeril2_left_join.py:14`.
-- Migre referências do fio e dashboard para `len(consulta_do_app(... )['pendentes'])`; preservam comparação com vitalidade e tela. `chamados/tests/test_fio_le_o_juiz.py:261`; `core/tests/test_dashboard_badge.py:37`.
-- Preserve M6: alimentação pronta, sem mock de ORM/C6. `chamados/tests/test_e3_pendentes_app.py:374`. Mutantes da matriz precisam recompilar funções reais em memória para alcançar os novos testes ORM; hoje só alteram `SOURCES` consumido pelos executores fake. `chamados/tests/test_e3_pendentes_app.py:414`.
-
-Não escrevi arquivos nem executei testes. [nao verificado] [nao verificado]
-
-_3087 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3088 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
