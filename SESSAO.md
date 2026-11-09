@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/11/2026 21:08:56.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (155.0 MB). Acoes na janela: **527**.
+**Medido em 08/11/2026 21:14:23.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (155.0 MB). Acoes na janela: **529**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:14:15 | Bash | Check time, main state, and file overlap | `date '+%H:%M'; cd /home/ronald/saas-hasner; git fetch -q origin; git log --oneline -1 main; git log --oneline -1 origin/main; git status --porcelain \| grep -v '^??'; echo ---; git diff --name-only 89d195af b0e948d8 \| grep -E 'docs/\|CLAUDE.md\|keepalive' ; echo ---; git diff --name-only 89d195af b0e948d8 \| grep migrations` |
+| 21:14:04 | Bash | Read backfill and dedup DRY sections | `cd /home/ronald/saas-hasner; O=logs/fio_e0_v4/dry_e1_pouso_b0e948d8.out; awk '/=== backfill_decisoes_pergunta/,/=== migrar_data_evento_dia_do_turno --aplicar/' $O \| grep -vE '^(FORA\|MIGRA) ' \| cut -c1-200 \| head -40` |
 | 21:07:22 | Bash | Run pouso DRY on merge7 tree in sombra | `cd /home/ronald/saas-hasner; grep -n 'wt-\\|call_command\\|raise\\|esperado' logs/sombra/e1_v15c_pouso_dry.py \| head; O=logs/fio_e0_v4/dry_e1_pouso_b0e948d8.out; SOMBRA_ARVORE=/home/ronald/wt-e1merge7-195447/app bash bin/sombra.sh --rodar logs/sombra/e1_v15c_pouso_dry.py > $O 2>&1; chmod 600 $O; grep -E '^(EXPORTADA_FORA\|exportada_fora\|PAREI\|MIGRA \|migradas\|recusadas\|erros\|ROLLBACK\|descar ...` |
 | 21:07:17 | Bash | Read prior E1 pouso DRY | `cd /home/ronald/saas-hasner/logs/fio_e0_v4; ls -la dry_e1_pouso_f4d69b25.out; head -40 dry_e1_pouso_f4d69b25.out \| cut -c1-200; grep -rn 'dry_e1_pouso' ../../app/docs/RELATO.md \| cut -c1-300 \| head -3; ls ../sombra/ \| grep -i 'dry\\|grupo' \| head` |
 | 21:07:15 | Bash | Find prior DRY-by-group format | `cd /home/ronald/saas-hasner/app; grep -n 'DRY' docs/RELATO.md \| grep -i 'grupo\\|E1' \| cut -c1-260 \| tail -8; ls -t ../logs/fio_e0_v4/ \| grep -i dry \| head` |
