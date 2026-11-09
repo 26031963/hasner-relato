@@ -1,7 +1,186 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 11:50** · publicado em **09/11/2026 11:50** (UTC-3)
+> Ultima resposta processada: **09/11/2026 11:55** · publicado em **09/11/2026 11:55** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 11:55 · sessao ccfc3330625e · O10-D-PERMUTA-RECIPROCA · censo · origem=Code
+
+**O ponto novo decisivo: duas chamadas cabem no mesmo `atomic`, mas o rollback integral não vem automaticamente.** A porta captura sua recusa e retorna `'recusada'`; se o compositor deixar o `atomic` externo terminar normalmente, a primeira troca pode ser confirmada (`app/ponto/portas/celula.py:652`; `app/ponto/portas/celula.py:694`).
+
+1. **Duas chamadas no mesmo `atomic`**
+
+   **(a) Travas e espera.** Cada chamada trava suas duas cartas por `pk`, exclusivamente nas linhas de `Ausencia`; depois percorre suas células por `(colaborador_id, data)`, adquirindo a trava dentro de `editar_dia` (`app/ponto/portas/celula.py:657`; `app/ponto/portas/celula.py:673`; `app/ponto/portas/celula.py:593`).
+
+   Essa ordem é **por chamada, não pelas quatro células**. Para A<B, a sequência composta pode ser `A/d1 → B/d1 → A/d2 → B/d2`. Duas composições concorrentes começando pelos pares opostos podem adquirir conjuntos distintos e depois esperar circularmente pelas cartas/células restantes — dedução estática dessas aquisições; deadlock efetivamente ocorrido: **[nao verificado]** (`app/ponto/portas/celula.py:657`; `app/ponto/portas/celula.py:673`).
+
+   Dentro da mesma transação, a segunda chamada não precisa aguardar a própria transação liberar suas travas; espera causada por outra transação continua possível. Ensaio concorrente dessa composição: **[nao verificado]**; o teste existente inspeciona AST, sem executar essa concorrência (`app/ponto/tests/test_o10b_editar_dia_troca.py:314`).
+
+   **(b) Lavra.** Cada edição alcançada consulta novamente a empresa atual e as competências lavradas, **antes inclusive de decidir `'igual'`**. Portanto, são até quatro avaliações, interrompidas na primeira recusa; `apesar_da_lavra` pula a guarda (`app/ponto/portas/celula.py:513`; `app/ponto/portas/celula.py:568`; `app/ponto/portas/celula.py:594`; `app/ponto/portas/celula.py:676`).
+
+   Isso não constitui uma pré-validação das quatro: a consulta do lado seguinte ocorre depois da escrita do anterior. Tampouco há trava dos registros de exportação nessa consulta; o TOCTOU já aparece na fila documental (`app/ponto/portas/celula.py:675`; `app/ponto/management/commands/gerar_celulas.py:161`; `app/docs/BACKLOG.md:1876`).
+
+   **(c) Carimbos e efeitos.** Cada célula alterada recebe seu próprio `timezone.now()`, autor e trilha; não nasce um carimbo comum de permuta. Com quatro alterações, o caminho grava quatro trilhas `editar_dia` e duas `trocar_plantao`, sem uma identificação comum (`app/ponto/portas/celula.py:598`; `app/ponto/portas/celula.py:611`; `app/ponto/portas/celula.py:686`).
+
+   | Efeito | Resultado da composição |
+   |---|---|
+   | Recálculo | A deduplicação por competência é local a cada execução do efeito posterior. Com quatro alterações e sem falhas nos trechos protegidos por `try/except`, são quatro agendamentos diretos; se d1/d2 pertencem à mesma competência, cada colaborador/competência pode ser recalculado duas vezes. Não há chave de cancelamento ou consolidação entre chamadas (`app/ponto/portas/celula.py:450`; `app/ponto/portas/celula.py:458`; `app/ponto/portas/celula.py:627`; `app/ponto/services/fechamento.py:1824`). |
+   | Rejunção e reavaliação | Cada alteração agenda um callback contendo ambas. A rejunção repete a busca por colaborador, mas só alcança FK nula; a reavaliação recorta os dias e chamados vivos. Repetição de execução não significa necessariamente repetição de escrita (`app/ponto/portas/celula.py:490`; `app/ponto/portas/celula.py:502`; `app/chamados/rejuncao.py:60`; `app/chamados/services/feriado_reavaliar.py:17`; `app/chamados/services/feriado_reavaliar.py:76`). |
+   | Rejulgamento | É síncrono, após cada edição; pode observar a composição ainda incompleta. Pula futuro/vereditos humanos e captura falhas. Não há um rejulgamento final agregado das quatro células nesse caminho (`app/ponto/portas/celula.py:427`; `app/ponto/portas/celula.py:434`; `app/ponto/portas/celula.py:437`; `app/ponto/portas/celula.py:627`). |
+   | Cobrança órfã | É marcada dentro da transação da edição, por pessoa/dia, consultando os carimbos recém-escritos. O marcador atualiza contexto, não cancela os outros efeitos da composição (`app/ponto/portas/celula.py:625`; `app/ponto/management/commands/gerar_celulas.py:241`; `app/ponto/management/commands/gerar_celulas.py:255`). |
+
+   Colisões concretas entre os efeitos transitivos das quatro células: **[nao verificado]**.
+
+   **(d) Visibilidade e cache.** A segunda chamada usa os argumentos apenas para obter os `pk` e relê cartas e colaboradores; cada edição relê sua célula com trava e carrega novamente o vínculo. Pelo caminho de leitura, encontra as escritas anteriores da mesma transação, sem reutilizar as instâncias da primeira chamada (`app/ponto/portas/celula.py:656`; `app/ponto/portas/celula.py:657`; `app/ponto/portas/celula.py:593`; `app/escala/alimentacao.py:355`).
+
+   O cartório também relê a célula. O identity map encontrado pertence às instâncias explicitamente incluídas em `celulas_do_ato` e é restaurado ao sair; não é um cache global das duas trocas. Objetos ou mapas que um futuro compositor mantenha por conta própria: **[nao verificado]** (`app/ponto/services/cartorio.py:1976`; `app/escala/alimentacao.py:43`; `app/escala/alimentacao.py:47`).
+
+   **(e) `'igual'`.** Um lado igual não impede a edição do outro: a porta visita ambos e só retorna `'igual'` quando ambos o são. Um lado igual preserva carimbo e não produz sua trilha individual nem seus efeitos; se o outro mudar, a trilha do par registra os dois resultados (`app/ponto/portas/celula.py:594`; `app/ponto/portas/celula.py:596`; `app/ponto/portas/celula.py:673`; `app/ponto/portas/celula.py:679`; `app/ponto/portas/celula.py:690`).
+
+   Essa igualdade compara estado da célula, não pedido/cartas/motivo/autor novos. Quatro células distintas não compartilham essa chave; reutilizar as mesmas duas células em sentido inverso pode reescrevê-las novamente (`app/ponto/portas/celula.py:594`; `app/ponto/portas/celula.py:675`).
+
+   **(f) Rollback.** Há dois resultados diferentes:
+
+   - **Segunda retorna `'recusada'`, externo termina normalmente:** o savepoint da segunda chamada é desfeito; a primeira permanece elegível ao commit, inclusive suas trilhas e callbacks (`app/ponto/portas/celula.py:652`; `app/ponto/portas/celula.py:694`).
+   - **Compositor provoca rollback externo:** desfaz as escritas transacionais de ambas, incluindo auditoria, marca órfã e gravações síncronas do rejulgamento. O savepoint de auditoria não é commit independente; os callbacks registrados por `on_commit` dependem do commit externo (`app/core/observ.py:133`; `app/ponto/portas/celula.py:625`; `app/ponto/portas/celula.py:434`; `app/ponto/portas/celula.py:502`; `app/ponto/services/fechamento.py:1802`).
+
+   **Há um limite adicional ao rollback:** o rejulgamento pode alcançar abertura de cobrança e envio imediato de push de supervisão, antes do commit. Rollback SQL não recolhe uma notificação já enviada; envio concreto nesse cenário: **[nao verificado]** (`app/ponto/services/cartorio.py:1740`; `app/ponto/management/commands/detectar_ausencias.py:778`; `app/chamados/push_utils.py:40`).
+
+2. **Validação antes da primeira escrita**
+
+   | Controle | Reutilização sem gravar |
+   |---|---|
+   | Interjornada de 11h | Validador pronto localizado: **[nao verificado]**. O helper de disponibilidade declara expressamente que não valida 11h (`app/ponto/utils.py:152`). |
+   | Sobreposição de turnos | Juiz pronto da colisão geométrica da permuta: **[nao verificado]**. `marcos_turno` fornece datetimes crescentes, incluindo meia-noite, e `fim_turno` fornece o término; são insumos, não o veredito (`app/escala/servico_jornada.py:61`; `app/escala/servico_jornada.py:89`). |
+   | Permissão | `tem_acao(user, *acoes)` responde por ação sem gravação; `pode_agir_chamado` responde pelo departamento dono do chamado. A ação específica e a autorização contextual das quatro células: **[nao verificado]** (`app/colaboradores/mixins.py:322`; `app/chamados/utils.py:68`). |
+   | Competência exportada/lavrada | `competencia_fechada_para_celula` já é juiz separado, registrado como K9, retornando bool ou fontes. `_competencias_exportadas` enumera suas janelas e `autoridade_da_lavra` fornece a frase da recusa, sem gravar (`app/folha/export.py:589`; `app/core/juizes.py:322`; `app/ponto/management/commands/gerar_celulas.py:126`; `app/ponto/management/commands/gerar_celulas.py:208`). |
+
+   Não há, entre esses quatro controles, um predicado existente exclusivamente preso à escrita que precise ser extraído: a lavra já está separada; permissão existe fora, mas não é chamada pelas portas; 11h e colisão não aparecem como guardas nelas (`app/ponto/portas/celula.py:559`; `app/ponto/portas/celula.py:568`; `app/ponto/portas/celula.py:646`; `app/ponto/portas/celula.py:675`).
+
+   `ausencias_sobrepostas` responde sobre períodos de **Ausencia**, não sobre colisão horária dos plantões; usá-la como resposta à segunda checagem mudaria a pergunta (`app/ponto/turnos.py:2795`).
+
+3. **ID próprio na trilha**
+
+   `evento` não possui argumento `correlacao`, `lote` ou `grupo`; aceita `antes/depois`, persistidos nos JSONs da auditoria. `LogAuditoria` tem um `objeto_id` inteiro e nenhuma coluna específica de correlação. Portanto, há espaço técnico no JSON para o identificador, quatro células e pedido (`app/core/observ.py:94`; `app/core/observ.py:133`; `app/core/models.py:298`; `app/core/models.py:300`).
+
+   Atenção ao adaptador: passar simplesmente `correlacao=...` a `evento_kw` não funciona, pois ele só encaminha os campos conhecidos (`app/core/observ.py:142`).
+
+   Existe precedente de metadado `lote` dentro do JSON, mas seu valor é o rótulo fixo `'arquivar_lote'`, sem identificar exclusivamente cada execução. Padrão existente que já ligue quatro células e pedido de permuta: **[nao verificado]** (`app/chamados/views_arquivar.py:146`; `app/chamados/services/arquivo.py:133`).
+
+   Hoje `trocar_plantao` não recebe esse ID: audita a carta cedente como objeto e dois lados no JSON. `Ausencia.chamado_origem` pode apontar para o pedido, mas não é copiado para essa trilha (`app/ponto/portas/celula.py:632`; `app/ponto/portas/celula.py:682`; `app/ponto/portas/celula.py:686`; `app/ponto/models.py:786`).
+
+4. **Duas cartas por lado**
+
+   Para representar literalmente quatro coordenadas distintas pela porta atual, a composição precisa destas quatro `Ausencia`; pessoa/data vêm exclusivamente das cartas relidas (`app/ponto/portas/celula.py:659`; `app/ponto/portas/celula.py:673`):
+
+   | Chamada | Cedente | Substituto |
+   |---|---|---|
+   | Primeira | A/d1 | B/d1 |
+   | Segunda | B/d2 | A/d2 |
+
+   São quatro registros, mas o código não exige quatro arquivos físicos diferentes. Cada chamada exige argumentos presentes, registros encontrados, colaboradores distintos e `documento` preenchido; não compara nomes nem abre os arquivos (`app/ponto/portas/celula.py:653`; `app/ponto/portas/celula.py:660`; `app/ponto/portas/celula.py:662`; `app/ponto/portas/celula.py:664`; `app/ponto/portas/celula.py:684`).
+
+   Não há consumo ou exclusividade global da carta entre chamadas. Reutilizar as mesmas duas invertidas volta às mesmas duas células, em vez de produzir as quatro; a porta também não exige igualdade de datas dentro de cada chamada (`app/ponto/portas/celula.py:656`; `app/ponto/portas/celula.py:673`).
+
+   Tipo, status, aprovação, período e vínculo com pedido não integram a elegibilidade documental verificada pela troca; lavra e vínculo do dia são avaliados separadamente por `editar_dia` (`app/ponto/portas/celula.py:664`; `app/ponto/portas/celula.py:675`; `app/ponto/portas/celula.py:568`; `app/ponto/portas/celula.py:584`).
+
+A referência documental diverge: nesta cópia, `BACKLOG.md:1879` trata `BO-0511-G2-TRIAGEM`; a correção mencionada no aval não está nessa linha (`app/docs/BACKLOG.md:1879`).
+
+Do censo v1, ficam marcadas como **respondidas pelo aval fornecido**: **v1.1**, quanto à exigência de validar 11h; **v1.2**, quanto à validação impeditiva de sobreposição; **v1.4**, quanto à unidade de quatro células — que exige duas datas distintas para A/B. Numeração física do aval na cópia: **[nao verificado]**.
+
+perguntas de lei: 4
+
+1. **v1.1 — residual:** quais turnos entram na checagem das 11h, inclusive no retroativo? Esse universo não foi explicitado no aval fornecido; juiz específico localizado: **[nao verificado]** (`app/ponto/utils.py:152`).
+2. **v1.3 — não respondida:** há restrição entre empresas, vínculos ou tipos de escala diferentes? **[nao verificado]**; a porta consulta vínculo individual, sem comparar esses atributos (`app/ponto/portas/celula.py:584`; `app/ponto/portas/celula.py:673`).
+3. **v1.5 — não respondida:** quais condições de tipo, status e período tornam as quatro cartas elegíveis? **[nao verificado]**; a exigência documental atual é apenas presença de `documento` (`app/ponto/portas/celula.py:664`).
+4. **v1.6 — não respondida:** eventual resultado `folga_trabalhada` deve pedir decisão do admin? Continua registrada como pergunta aberta (`app/docs/RELATO.md:449`; `app/docs/BACKLOG.md:1876`).
+
+## 09/11 11:53 · sessao 1d0e367e27e2 · - · - · origem=Ronald (tmux)
+
+Complemento:
+
+- **O cache encontrado não reaproveita automaticamente a fotografia da primeira troca.** `julgar_celula` relê a célula e cria contadores novos; seus caches de regra/veto/afastamento são locais, e o `finally` restaura ou limpa o estado da thread (`app/ponto/services/cartorio.py:1976`, `app/ponto/services/cartorio.py:1988`, `app/ponto/services/cartorio.py:1138`, `app/ponto/services/cartorio.py:1274`, `app/ponto/services/cartorio.py:1296`, `app/ponto/services/cartorio.py:1074`). O identity map de EC é atributo das instâncias explicitamente envolvidas em `celulas_do_ato`, instalado/restaurado pelo contexto; os carregadores usados pela edição e pelo cartório fazem queries novas (`app/escala/models.py:1063`, `app/escala/alimentacao.py:43`, `app/escala/alimentacao.py:47`, `app/escala/alimentacao.py:355`, `app/escala/alimentacao.py:148`, `app/escala/servico_jornada.py:46`). Cache de objetos mantidos por um futuro compositor: **[nao verificado]**.
+
+- **Há efeito externo possível antes do commit: push de supervisão.** O rejulgamento síncrono pode alcançar `_abrir_chamado`, cujo caminho chama `push_supervisao` imediatamente; este chega a `webpush`, sem `on_commit` nesse encadeamento (`app/ponto/portas/celula.py:434`, `app/ponto/services/cartorio.py:1740`, `app/ponto/management/commands/detectar_ausencias.py:774`, `app/chamados/push_utils.py:89`, `app/chamados/push_utils.py:110`, `app/chamados/push_utils.py:40`). Portanto, rollback das escritas SQL não promete recolher uma notificação eventualmente enviada; ocorrência real, destinatários e subscriptions: **[nao verificado]**.
+
+## 09/11 11:52 · sessao 1d0e367e27e2 · - · - · origem=Ronald (tmux)
+
+Novidades para consolidação, por leitura estática:
+
+- **Recusa retornada pela 2ª chamada não desfaz automaticamente a 1ª.** `trocar_plantao` abre seu `atomic`, lança `_TrocaRecusada` internamente, captura após sair dele e retorna `'recusada'`; portanto, um `atomic` externo que termine normalmente preserva a primeira troca. O compositor precisa tratar a recusa fazendo o rollback externo; exceções não capturadas, como falha obrigatória da trilha, já propagam (`app/ponto/portas/celula.py:652`, `app/ponto/portas/celula.py:676`, `app/ponto/portas/celula.py:692`, `app/ponto/portas/celula.py:694`). Ensaio específico com duas trocas externas: **[nao verificado]**.
+
+- **A ordenação atual é por par, não pelas quatro células/cartas.** Cada chamada trava cartas por `pk`, depois edita células por `(colaborador_id, data)`; o lock da célula ocorre dentro de `editar_dia` (`app/ponto/portas/celula.py:656`, `app/ponto/portas/celula.py:657`, `app/ponto/portas/celula.py:673`, `app/ponto/portas/celula.py:593`). Com A<B, a composição faz A/d1,B/d1,A/d2,B/d2: A/d2 vem depois de B/d1, contrariando uma ordenação global das quatro chaves; duas composições concorrentes que iniciem pelos pares opostos podem esperar circularmente pelos lotes de cartas/células — dedução das duas aquisições locais (`app/ponto/portas/celula.py:657`, `app/ponto/portas/celula.py:673`). Deadlock efetivamente ocorrido em produção: **[nao verificado]**. O teste de concorrência declarado consulta AST, e o teste de ordem mede apenas uma troca; não demonstram concorrência real da composição de quatro células (`app/ponto/tests/test_o10b_editar_dia_troca.py:314`, `app/ponto/tests/test_o10b_editar_dia_troca.py:442`).
+
+- **Lavra é reconsultada em cada `editar_dia`, inclusive antes de decidir `'igual'`.** A empresa vem de query própria; `_competencias_exportadas` consulta os candidatos e o juiz, sem cache compartilhado entre chamadas; `apesar_da_lavra` pula a guarda (`app/ponto/portas/celula.py:513`, `app/ponto/portas/celula.py:568`, `app/ponto/management/commands/gerar_celulas.py:154`, `app/ponto/management/commands/gerar_celulas.py:161`, `app/ponto/management/commands/gerar_celulas.py:173`, `app/ponto/portas/celula.py:594`). Não há lock de exportação nessa consulta, nem validação antecipada das quatro células no corpo atual (`app/ponto/management/commands/gerar_celulas.py:161`, `app/ponto/portas/celula.py:675`).
+
+- **A 2ª chamada relê instâncias.** Os objetos `Ausencia` recebidos servem para extrair `pk`; as cartas e seus colaboradores são recarregados, e a célula é relida com trava em cada edição (`app/ponto/portas/celula.py:656`, `app/ponto/portas/celula.py:657`, `app/ponto/portas/celula.py:593`). O vínculo também é alimentado novamente por queries de células e escalas (`app/escala/alimentacao.py:316`, `app/escala/alimentacao.py:329`, `app/escala/alimentacao.py:355`, `app/escala/alimentacao.py:357`; query de células em `app/escala/alimentacao.py:73`). Assim, não há reaproveitamento das instâncias anteriores nesse caminho; visibilidade concreta em execução: **[nao verificado]**.
+
+- **`'igual'` é por célula e não aborta o outro lado.** A igualdade exige origem editada, mesmo `trabalha`, DNA e geradora; ignora motivo/autor novos, preserva carimbo e retorna antes da trilha, marca órfã e efeitos posteriores (`app/ponto/portas/celula.py:594`, `app/ponto/portas/celula.py:596`, `app/ponto/portas/celula.py:598`, `app/ponto/portas/celula.py:611`, `app/ponto/portas/celula.py:625`, `app/ponto/portas/celula.py:627`). A troca só retorna `'igual'` após visitar ambos; com apenas um lado igual, grava a trilha do par incluindo o resultado de cada lado (`app/ponto/portas/celula.py:673`, `app/ponto/portas/celula.py:679`, `app/ponto/portas/celula.py:683`, `app/ponto/portas/celula.py:690`). As quatro células distintas não compartilham essa chave de igualdade; reaproveitar a mesma pessoa/data com sentido inverso altera novamente `trabalha`, não vira no-op (`app/ponto/portas/celula.py:594`, `app/ponto/portas/celula.py:675`).
+
+- **Carimbos são independentes por edição.** Cada célula alterada recebe seu próprio `timezone.now`; não existe carimbo comum da permuta; `gerada_em` permanece o de criação, e a edição só salva os seis campos indicados (`app/ponto/portas/celula.py:598`, `app/ponto/portas/celula.py:609`, `app/escala/models.py:1702`). Coincidência temporal concreta: **[nao verificado]**.
+
+- **Não há deduplicação entre chamadas para os efeitos.** A deduplicação financeira `_por_competencia` é uma variável local de `_o_chao_do_dia_mudou`; `editar_dia` chama esse rabo separadamente, com um dia (`app/ponto/portas/celula.py:450`, `app/ponto/portas/celula.py:456`, `app/ponto/portas/celula.py:627`). Se as quatro células mudarem, o caminho direto agenda quatro recálculos e quatro callbacks de rejunção+reavaliação; se d1/d2 caírem na mesma competência, o mesmo colaborador/competência é recalculado duas vezes. Não há cancelamento ou chave de coalescência nesse registro (`app/ponto/portas/celula.py:458`, `app/ponto/services/fechamento.py:1807`, `app/ponto/services/fechamento.py:1824`, `app/ponto/portas/celula.py:490`, `app/ponto/portas/celula.py:502`). Contagem total incluindo signals e efeitos transitivos: **[nao verificado]**.
+
+- **Rejunção repetida é limitada por FK nula; reavaliação, por chamados vivos.** A rejunção procura `celula__isnull=True`; a reavaliação usa `universo` com `status_local__in=VIVOS`, recorta os dias e encerra somente os considerados espúrios pelo juiz (`app/chamados/rejuncao.py:60`, `app/chamados/rejuncao.py:98`, `app/chamados/services/feriado_reavaliar.py:17`, `app/chamados/services/feriado_reavaliar.py:33`, `app/chamados/services/feriado_reavaliar.py:76`, `app/chamados/services/feriado_reavaliar.py:82`). Portanto, são consultas repetidas, sem equivaler necessariamente a novas escritas; colisões concretas: **[nao verificado]**.
+
+- **Rejulgamento acontece antes do commit externo e vê estados intermediários da composição.** Cada edição chama o juiz imediatamente após escrever sua célula; pula futuro e vereditos humanos, e engole falhas (`app/ponto/portas/celula.py:627`, `app/ponto/portas/celula.py:427`, `app/ponto/portas/celula.py:430`, `app/ponto/portas/celula.py:434`, `app/ponto/portas/celula.py:437`). O caminho direto não adia os quatro rejulgamentos para o estado final; eventual interferência entre seus resultados: **[nao verificado]**.
+
+- **Cobrança órfã é marcada na transação, separadamente por célula/dia.** O marcador lê os carimbos recém-escritos, filtra cobranças vivas e grava `orfa_regeneracao` com instante próprio e marcos de emissão, usando a porta de contexto (`app/ponto/portas/celula.py:625`, `app/ponto/management/commands/gerar_celulas.py:241`, `app/ponto/management/commands/gerar_celulas.py:243`, `app/ponto/management/commands/gerar_celulas.py:255`, `app/chamados/services/contexto.py:101`). Quatro células distintas não sobrescrevem diretamente o mesmo carimbo de célula; alcance concreto dos chamados associados: **[nao verificado]**.
+
+- **Rollback externo efetivo inclui trilhas e escritas dos efeitos imediatos, mas os savepoints não são commits independentes.** Auditoria usa outro `transaction.atomic` e cria o `LogAuditoria` dentro dele; falta de trilha causa `RuntimeError` na edição/troca (`app/core/observ.py:124`, `app/core/observ.py:133`, `app/ponto/portas/celula.py:619`, `app/ponto/portas/celula.py:692`). Os efeitos posteriores estão registrados em `on_commit`, não executados diretamente nessa parte do caminho (`app/ponto/services/fechamento.py:1824`, `app/ponto/portas/celula.py:502`). Se o compositor realmente desfizer o atomic externo, a intenção documentada é que callbacks só rodem com fato gravado (`app/ponto/services/fechamento.py:1802`); descarte efetivo da fila por Django em execução: **[nao verificado]**. Mensagens de log e contadores em memória não são gravações transacionais e podem permanecer após falha (`app/core/observ.py:73`, `app/ponto/portas/celula.py:439`).
+
+## 09/11 11:52 · sessao d8d8f4da4ae5 · - · - · origem=Ronald (tmux)
+
+3) **Correlação disponível por JSON; nenhuma API própria de correlação.**
+
+- `evento` aceita `acao/modelo/objeto_id`, descrição, `antes/depois`, ator e IP; não tem `correlacao/lote/grupo`. Os JSONs são gravados sem transformação em `valor_antes/valor_depois` (`app/core/observ.py:94`; `app/core/observ.py:133`). `evento_kw` encaminha somente os campos conhecidos: passar um kw adicional de correlação não o propaga (`app/core/observ.py:142`).
+- `LogAuditoria` possui um único `objeto_id` inteiro e dois JSONs; não possui coluna própria para correlação (`app/core/models.py:295`; `app/core/models.py:298`; `app/core/models.py:300`; `app/core/models.py:307`). Assim, há lugar técnico para incluir um identificador e as quatro chaves de célula + pedido dentro de `depois`; contrato/padrão específico já existente para permuta: **[nao verificado]** (`app/core/observ.py:136`).
+- Há precedente de **metadado livre de lote**: `extra={'lote': 'arquivar_lote', ...}` é acrescentado ao JSON de trilha junto a `chamado_pk/colaborador_id`; esse `lote` é rótulo fixo, não identificador exclusivo de cada execução (`app/chamados/views_arquivar.py:146`; `app/chamados/services/arquivo.py:130`; `app/chamados/services/arquivo.py:133`).
+- Há também precedente de **objeto agrupador**: eventos de holerite usam `modelo='LoteHolerite'` e `objeto_id=lote_id` (`app/holerite/management/commands/processar_lote_holerite.py:148`).
+- Hoje a troca não recebe nem propaga tal identificador: sua assinatura não o contém; registra `modelo='Ausencia'`, `objeto_id=a_c.pk` e JSON com dois lados, motivo e override, sem pedido/chamado/correlação (`app/ponto/portas/celula.py:632`; `app/ponto/portas/celula.py:682`; `app/ponto/portas/celula.py:686`). As trilhas individuais de edição também não recebem correlação (`app/ponto/portas/celula.py:611`).
+- A `Ausencia.chamado_origem` já pode ligar cada carta a um chamado, mas `trocar_plantao` não lê nem copia esse campo para sua trilha (`app/ponto/models.py:786`; `app/ponto/portas/celula.py:656`; `app/ponto/portas/celula.py:682`).
+
+4) **Quatro células distintas exigem quatro registros de carta para a composição literal atual; não necessariamente quatro documentos físicos diferentes.**
+
+| Chamada | Carta cedente | Carta substituto |
+|---|---|---|
+| Primeira | `Ausencia(A,d1)` | `Ausencia(B,d1)` |
+| Segunda | `Ausencia(B,d2)` | `Ausencia(A,d2)` |
+
+A correspondência decorre de a porta escolher pessoa/data exclusivamente de cada carta relida e editar essas duas coordenadas; não recebe pessoa/data alternativas (`app/ponto/portas/celula.py:656`; `app/ponto/portas/celula.py:673`). Uma mesma `Ausencia` tem uma pessoa e uma `data`; reutilizá-la na segunda chamada não passa a representar outra data (`app/ponto/models.py:743`; `app/ponto/models.py:750`). Reusar as mesmas duas cartas invertidas é aceito pelo corpo, mas volta a editar as mesmas duas células, não constitui quatro coordenadas distintas (`app/ponto/portas/celula.py:656`; `app/ponto/portas/celula.py:673`).
+
+Para cada chamada, a porta exige:
+
+- Argumentos não nulos, registros encontrados pelos `pk`, colaboradores distintos dentro do par e `documento` verdadeiro em ambos (`app/ponto/portas/celula.py:653`; `app/ponto/portas/celula.py:660`; `app/ponto/portas/celula.py:662`; `app/ponto/portas/celula.py:664`).
+- Não compara nomes dos documentos nem abre os arquivos; o mesmo caminho de documento pode satisfazer mais de uma carta (`app/ponto/portas/celula.py:664`; `app/ponto/portas/celula.py:684`). O helper de teste inclusive permite repetir seu default `o10b/carta.pdf` (`app/ponto/tests/test_o10b_editar_dia_troca.py:106`).
+- Não testa tipo, status, aprovação, `data_fim`, horários parciais, `documento_referencia` ou `chamado_origem`; não valida existência física ou conteúdo do anexo (`app/ponto/portas/celula.py:656`; `app/ponto/portas/celula.py:664`; `app/ponto/portas/celula.py:673`). Os campos existem no modelo (`app/ponto/models.py:749`; `app/ponto/models.py:751`; `app/ponto/models.py:768`; `app/ponto/models.py:786`; `app/ponto/models.py:791`; `app/ponto/models.py:799`).
+- Vínculo do dia e lavra são checados por `editar_dia` para cada coordenada, independentemente da carta (`app/ponto/portas/celula.py:568`; `app/ponto/portas/celula.py:584`; `app/ponto/portas/celula.py:675`).
+
+**Perguntas antigas e aval:** o aval fornecido responde que insuficiência de 11h e sobreposição devem participar da validação das quatro células antes de escrever; não detalha universo de turnos, elegibilidade entre empresas/vínculos/escalas, tipo/status/período documental, nem a pergunta `folga_trabalhada` (**anexo `aval_reciproca.txt`, conteúdo fornecido no enunciado; arquivo físico não localizado [nao verificado]**). A pergunta de `folga_trabalhada` continua registrada literalmente como aberta na cópia (`app/docs/RELATO.md:449`; `app/docs/BACKLOG.md:1876`).
+
+**Divergência documental relevante:** o aval fornecido diz “BACKLOG:1879 corrigido”, mas a linha 1879 desta cópia trata `BO-0511-G2-TRIAGEM`; não trata permuta (`app/docs/BACKLOG.md:1879`). A presença do aval novo em arquivo da cópia é **[nao verificado]**.
+
+## 09/11 11:52 · sessao 299fbae42c6c · - · - · origem=Ronald (tmux)
+
+Pré-checagens reutilizáveis encontradas:
+
+| Checagem | Código sem escrita e limite |
+|---|---|
+| Competência exportada/lavrada | `competencia_fechada_para_celula(empresa_id, mes, ano, colaborador_id=None, fontes=False)` retorna bool ou fontes, combinando TXT vigente e holerite do próprio colaborador com lote publicado; executa consultas, sem gravação (`app/folha/export.py:589`; `app/folha/export.py:609`). Está registrado como K9 (`app/core/juizes.py:315`). |
+| TXT entregue | `competencia_entregue` retorna bool ou registro vigente, excluindo o vigente invalidado; chama `anotar_vigencia`/`so_vigentes`, que consultam e anotam instâncias em memória, sem persistir (`app/folha/export.py:556`; `app/folha/export.py:580`; `app/folha/models.py:192`; `app/folha/models.py:203`). |
+| Janela lavrada do dia | `_competencias_exportadas` enumera competências candidatas, pergunta K9 e converte em janelas; pode ser reutilizada antes das quatro escritas, como já faz `editar_dia` (`app/ponto/management/commands/gerar_celulas.py:126`; `app/ponto/management/commands/gerar_celulas.py:161`; `app/ponto/management/commands/gerar_celulas.py:172`; `app/ponto/portas/celula.py:568`). |
+| Recusa falante da lavra | `autoridade_da_lavra` escolhe a competência intersectada e `fonte_da_lavra` traduz as fontes retornadas pelo mesmo K9; não gravam (`app/ponto/management/commands/gerar_celulas.py:183`; `app/ponto/management/commands/gerar_celulas.py:208`). |
+| Permissão por ação | `tem_acao(user, *acoes)` retorna bool por autenticação, superuser e permissões `colaboradores.rbac_*`; não grava (`app/colaboradores/mixins.py:322`). `editar_escalas` já é ação usada nas views de escala; sua eleição específica para confirmar permuta: **[nao verificado]** (`app/escala/views.py:140`). |
+| Permissão contextual de chamado | `pode_agir_chamado` retorna a permissão do departamento dono do chamado; é reutilizável para esse contexto, sem julgar os quatro dias nem o par (`app/chamados/utils.py:32`; `app/chamados/utils.py:52`; `app/chamados/utils.py:68`). |
+| Interjornada 11h | Validador pronto localizado: **[nao verificado]**. O helper de disponibilidade declara expressamente que **não** valida descanso interjornada de 11h (`app/ponto/utils.py:141`; `app/ponto/utils.py:152`). |
+| Sobreposição geométrica de turnos | Validador pronto do par localizado: **[nao verificado]**. Há componentes de geometria e leitura, abaixo, mas eles não retornam esse veredito (`app/escala/servico_jornada.py:61`; `app/core/juizes.py:195`). |
+
+Componentes reaproveitáveis de geometria: `EC.eh_dia_trabalho` lê célula ou fallback do vínculo; `EC.marcos_do_dia` lê DNA ou template; `marcos_turno(..., ec=..., celulas=...)` encadeia marcos em datetimes crescentes, inclusive virada da meia-noite; `fim_turno` retorna o último marco. São insumos para calcular descanso e colisão, não um juiz que valide a permuta (`app/escala/models.py:1087`; `app/escala/models.py:1098`; `app/escala/models.py:1117`; `app/escala/servico_jornada.py:61`; `app/escala/servico_jornada.py:89`).
+
+Cuidado com domínio: `ausencias_sobrepostas`, `veto_de_lancamento` e `checar_ausencia` são consultas/validações reutilizáveis de **Ausência/fato humano**, não sobreposição horária de plantões; `checar_ausencia` já é prévia explicitamente sem escrita (`app/ponto/turnos.py:2795`; `app/ponto/precedencia.py:430`; `app/ponto/services/checar_ausencia.py:15`).
+
+No caminho de escrita, a lavra já é bloqueada por `editar_dia` antes do seu `atomic`; não existe necessidade de extrair o juiz da escrita, pois K9 e a enumeração de janelas já estão separados (`app/ponto/portas/celula.py:568`; `app/ponto/portas/celula.py:592`; `app/folha/export.py:589`). Identificação do autor e motivo são guardas locais, não autorização; `trocar_plantao` apenas exige `autor.pk`/motivo e chama `editar_dia`, sem `tem_acao`/`pode_agir_chamado` (`app/ponto/portas/celula.py:646`; `app/ponto/portas/celula.py:668`). Interjornada e colisão geométrica tampouco aparecem como guardas locais nessas portas; implementação pronta dessas duas verificações: **[nao verificado]** (`app/ponto/portas/celula.py:559`; `app/ponto/portas/celula.py:584`; `app/ponto/portas/celula.py:673`).
+
+`core/permissoes` nesta cópia: **[nao verificado]**; os endereços concretos de permissão encontrados são os acima (`app/colaboradores/mixins.py:322`; `app/chamados/utils.py:68`).
 
 ## 09/11 11:50 · sessao d03007e09ff6 · RETRATO-POR-EVENTO · censo · origem=Code
 
@@ -936,145 +1115,4 @@ Mapa dos insumos SQL alterados:
 | `PGU/ROLE/SCHEMAS/PG/BANCO` | Constantes e `_destino`. (bin/sonda_leitor_comum.sh:8-15,22-25) | Geração SQL e execução psql da porta/conferência. (bin/sonda_provisionar.sh:51,125-132; bin/sonda_leitor_comum.sh:64,96,120) |
 | `.env_leitor` / senha | Porta, temporário e promoção. (bin/sonda_provisionar.sh:168-171) | Porta lê senha; leitura valida/lê e passa ao container. (bin/sonda_provisionar.sh:77; bin/sonda_leitura.sh:173-178,234) |
 
-## 09/11 10:39 · sessao c1c80cb6a02e · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · verificador · origem=Code
-
-**Há achados PROCEDENTES; GREEN, mortes M1–M38 e resultado em produção permanecem [nao verificado].**
-
-1. **ATO ÚNICO — NAO PROCEDE para par identificado; garantia delimitada.** Validação, varredura e O330 passam pelo envelope comum. As duas aplicações, julgamento posterior, carimbos e reconciliação ficam no mesmo savepoint. Sem par identificado, continua possível aplicar uma pergunta individualmente, inclusive com irmã já aplicada. `app/chamados/services/validacao.py:474`; `app/chamados/services/materializacao.py:1596`; `app/chamados/services/passivo_validado.py:532`; `app/chamados/services/materializacao.py:1344`; `app/chamados/services/materializacao.py:1361`; `app/chamados/services/materializacao.py:1431`.
-
-   **PROCEDENTE — paridade sobre universo errado.** O julgamento posterior usa vizinhas sem excluir batidas retratadas. Uma S retratada às 01:30 pode reprovar S01/E02, embora o conjunto vivo alterne. **Cura:** usar o universo canônico de apuração e testar esse contracaso. `app/chamados/services/materializacao.py:178`; `app/chamados/services/materializacao.py:184`; `app/chamados/services/materializacao.py:1367`; `app/ponto/turnos.py:2866`.
-
-   O censo AST com apelidos encontrou os plantadores de Pergunta nos ramos hora/data-hora. Regularização externa e veredito do dia têm unidades próprias e permitem resultados parciais: **FILA**, auditoria separada. `app/chamados/services/materializacao.py:1017`; `app/chamados/services/materializacao.py:1098`; `app/chamados/services/regularizacao_ext.py:166`; `app/ponto/services/veredito_celula.py:320`.
-
-2. **ROLLBACK — limpeza funciona, mas descarimbo vazio tem efeitos.** Após restaurar o banco, o código decide pelo lastro, descarimba quando reprovado, grava recusa nas duas e chama a devolução. `app/chamados/services/materializacao.py:1386`.
-
-   | Campo | Resultado após o tratamento da falha |
-   |---|---|
-   | `materializada_em/por`, `via_resolucao` | Lastro reprovado: `None/None/''`; lastro aprovado: conserva valores restaurados. `app/chamados/services/materializacao.py:1391`; `app/chamados/models.py:3211`. |
-   | `validada_em/por` | Limpos quando é hora declarada, sem materialização, com recusa; não há limpeza incondicional para qualquer tipo. `app/chamados/services/validacao.py:190`; `app/chamados/services/validacao.py:198`. |
-   | `recusa_motivo` | Recebe a recusa conjunta, truncada em 240 caracteres. `app/chamados/services/materializacao.py:1393`; `app/chamados/services/materializacao.py:1181`. |
-
-   **PROCEDENTE — `save` sem mudança não é inócuo.** Mesmo com os três campos vazios, `descarimbar` salva com `update_fields=['via_resolucao','materializada_em','materializada_por']`; isso agenda o beco e insere EventoCelula quando há célula, sem deduplicação nessa emissão. **Cura:** tornar o descarimbo vazio um no-op na porta dona, comparando os três campos. `app/chamados/models.py:3211`; `app/chamados/signals.py:225`; `app/chamados/signals.py:242`; `app/chamados/models.py:3248`; `app/ponto/portas/celula.py:891`.
-
-   Esse `save` não chama diretamente LogAuditoria nem re-lavra o veredito da pergunta. A devolução acrescenta E1 quando remove validação e audita quando sua foto muda; a nota de recusa depende de mudança do motivo. O censo estático conta sítios, não quantas vezes esse `save` executa. `app/chamados/models.py:3206`; `app/chamados/services/validacao.py:208`; `app/chamados/services/validacao.py:224`; `app/chamados/services/materializacao.py:1195`; `app/core/censo_escritas.py:451`.
-
-   **“2x = mesmo estado e mesma trilha” não está demonstrado.** Repetir diretamente o descarimbo pode acrescentar eventos; repetir o envelope depois da devolução encontra ambas sem validação e não reaplica o par. `app/chamados/models.py:3215`; `app/ponto/portas/celula.py:891`; `app/chamados/services/materializacao.py:1415`; `app/chamados/services/materializacao.py:1433`.
-
-   **NAO PROCEDE quanto a perda comprovada de carimbo legítimo fora do fato:** essas linhas são excluídas da identificação e a própria porta recusa descarimbá-las; vias de identidade carimbadas são absolvidas pelo lastro. Outro caso legítimo perdido nesta população: **[nao verificado]**. `app/chamados/services/materializacao.py:72`; `app/chamados/models.py:3209`; `app/chamados/juizes.py:670`.
-
-3. **TRAVAS — NAO PROCEDE a inversão entre os dois validadores.** Ambos começam pelo mesmo Colaborador, depois Disputas, Chamados e Perguntas, ordenados por PK; a pergunta é relida após travar. O330 antecipa o universo da competência. Prova concorrente com duas conexões: **FILA**, não executada. `app/chamados/services/materializacao.py:125`; `app/chamados/models.py:2677`; `app/chamados/models.py:2686`; `app/chamados/models.py:2699`; `app/chamados/models.py:2703`; `app/chamados/services/validacao.py:435`; `app/chamados/services/passivo_validado.py:435`.
-
-4. **ESTADO/FECHAMENTO — dois achados PROCEDENTES.**
-
-   - **C7 tem um segundo julgamento dentro de `fechar`.** `pode_fechar` retém espera, mas `fechar` verifica respostas/C6 sem consultá-lo. Com metade aceita e irmã retratada, a porta pode fechar apesar de C7 negar. **Cura:** consultar C7 sob trava; testar a chamada real a `fechar`. P2 só testa `pode_fechar`. `app/chamados/models.py:1863`; `app/chamados/models.py:1897`; `app/chamados/models.py:1907`; `app/chamados/models.py:1943`; `app/chamados/tests/test_bug_par_intervalo.py:427`.
-   - **Espera confunde resposta com aceite.** Com ambas respondidas e nenhuma validada, o predicado já retorna espera. O explicador pula “aguarda validação”; “Aplicar declaração” retorna antes de validar a própria pergunta. **Cura:** exigir validação da própria metade para esse estado. `app/chamados/services/materializacao.py:109`; `app/chamados/services/materializacao.py:117`; `app/chamados/services/explicador.py:74`; `app/chamados/services/declaracao_texto.py:678`; `app/chamados/services/declaracao_texto.py:709`.
-
-   | Leitor | O que efetivamente lê/diz |
-   |---|---|
-   | C6, painel e badge | Validação mata a pergunta; o crédito continua por perguntas vivas/verbos. `app/chamados/juizes.py:1153`; `app/chamados/services/raiox.py:72`; `app/chamados/services/verbos.py:34`. |
-   | Fio | Aberta carrega perguntas; fechada só admite C6 vivas, ocultando a espera se o fechamento escapar. `app/chamados/services/fio.py:221`; `app/chamados/services/fio.py:238`. |
-   | Explicador, declaração, API | Leem/publicam o predicado de espera. `app/chamados/services/explicador.py:74`; `app/chamados/services/declaracao_texto.py:484`; `app/api/views.py:1126`. |
-   | Vigia de carimbo/O330 | Separam espera da dívida e do alvo reparável. `app/chamados/services/vigia_carimbo.py:109`; `app/chamados/services/passivo_validado.py:324`. |
-   | `vigia_fio`, `o_que_segura` | Continuam por C6 e autoridades de alcance/dono; não tratam espera como fio vivo. `app/chamados/services/vigia_fio.py:164`; `app/folha/fora_da_folha.py:221`; `app/chamados/juizes.py:1322`. |
-   | Crons | Beco consulta C7; alerta diário continua avisando disputas abertas. Não há reabertura automática por espera nesses caminhos. `app/chamados/services/becos.py:33`; `app/ponto/management/commands/alertar_disputas_pendentes.py:33`; `app/ponto/management/commands/alertar_disputas_pendentes.py:59`. |
-
-5. **IDENTIDADE — NAO PROCEDE a derivação paralela na tag.** O identificador consulta pausas efetivas/DNA e se abstém por multiplicidade; a tag chama o mesmo predicado. `par_ambiguo` preserva o despacho avulso, não constitui prova de equivalência integral de estado/trilha com HEAD. `app/chamados/services/materializacao.py:77`; `app/chamados/services/materializacao.py:88`; `app/escala/models.py:1189`; `app/chamados/templatetags/chamados_tags.py:18`; `app/chamados/services/materializacao.py:1431`.
-
-6. **TEXTO/TELA — catálogo e proximidade corrigidos; percurso incompleto.** “Colada” exige testemunha viva nos ±60s inclusivos compartilhados com a porta; espera tem entrada própria. **NAO PROCEDE** a duplicação desses predicados. `app/chamados/services/materializacao.py:1357`; `app/ponto/registro_batida.py:94`; `app/ponto/registro_batida.py:115`; `app/chamados/catalogo/recusa.py:25`.
-
-   **PROCEDENTE — aviso some do detalhe após recarga.** Os dois includes existem, mas o contexto do detalhe exclui a metade validada por C6. P5 injeta a pergunta diretamente. **Cura:** incluir espera no filtro de apresentação e testar GET real. `app/templates/chamados/partials/_pergunta_card.html:29`; `app/templates/chamados/partials/modal_fio.html:160`; `app/chamados/services/acoes_chamado.py:348`; `app/chamados/tests/test_bug_par_intervalo.py:486`.
-
-7. **SELOS/SEMÂNTICA.** M7 e M35 agora têm asserções discriminantes estáticas; mortes executadas continuam **[nao verificado]**. **PROCEDENTE:** P6/M38 não provam a alteração específica v3: começam com carimbo preenchido, portanto passariam com a guarda anterior que só descarimbava nesse caso. **Cura:** mutante restaurando exatamente aquela guarda, cenário já vazio e contagem de saves/eventos/trilha em duas chamadas. `app/chamados/tests/test_bug_par_intervalo.py:280`; `app/chamados/tests/test_bug_par_intervalo.py:498`; `app/chamados/tests/test_bug_par_intervalo.py:508`; `app/chamados/tests/mutantes_bug_par_intervalo.py:131`.
-
-   **FILA — relógio e dia civil/turno.** Há `now()` por metade no carimbo/aprovação; passar um instante do ato eliminaria essa dispersão. As derivações continuam pelos helpers existentes; contraprova de fuso ou competência neste dado: **[nao verificado]**. `app/chamados/services/materializacao.py:1253`; `app/chamados/services/materializacao.py:1373`; `app/chamados/services/materializacao.py:1023`; `app/chamados/services/materializacao.py:1351`.
-
-8. **ESCRITORES/LEITORES adicionais dos campos centrais**, além dos consumidores acima:
-
-   | Campo | Escritores / leitores fora do diff |
-   |---|---|
-   | Resposta e `respondida_em` | Resposta humana/automática/trilha; carimbo preenche ausente. Leitura pela derivação do slot. `app/chamados/services/disputa_emissao.py:1464`; `app/chamados/services/disputa_emissao.py:1649`; `app/chamados/services/disputa_emissao.py:1671`; `app/chamados/models.py:3134`; `app/chamados/juizes.py:339`. |
-   | `validada_em/por` | Validação, devolução, nova resposta, preenchimento pelo carimbo e reabertura. `app/chamados/services/validacao.py:134`; `app/chamados/services/validacao.py:202`; `app/chamados/services/disputa_emissao.py:1477`; `app/chamados/models.py:3137`; `app/chamados/models.py:1565`. |
-   | Materialização/via | Portas de carimbo/descarimbo, lote, encerramento por fato e relavra; leitores C6/lastro/lavra persistida. `app/chamados/models.py:3100`; `app/chamados/models.py:3267`; `app/chamados/models.py:3278`; `app/chamados/services/relavra_via.py:125`; `app/chamados/juizes.py:645`; `app/chamados/veredito_lavrado.py:187`. |
-   | Recusa | Identidade, pendência, recusa canônica/humana e escape; leitores catálogo e devolução. `app/chamados/models.py:3191`; `app/chamados/services/materializacao.py:940`; `app/chamados/services/validacao.py:605`; `app/chamados/services/disputa_emissao.py:1494`; `app/chamados/catalogo/recusa.py:92`; `app/chamados/services/validacao.py:195`. |
-   | `contexto_json` | Portas anotar/renovar/retirar/fundir; marco faltante lê seu conteúdo. `app/chamados/services/contexto.py:76`; `app/chamados/services/contexto.py:102`; `app/chamados/services/contexto.py:125`; `app/chamados/services/contexto.py:161`; `app/chamados/juizes.py:508`. |
-   | Batida: instante/tipo/origem/vínculo | `registrar_batida` e `anotar`; leitores tolerância, vizinhança e lastro. `app/ponto/registro_batida.py:104`; `app/chamados/services/materializacao.py:1038`; `app/ponto/registro_batida.py:94`; `app/chamados/services/materializacao.py:169`; `app/chamados/juizes.py:732`. |
-
-   Exaustividade de **todos** os leitores transitivos de cada campo/função na árvore: **[nao verificado]**.
-
-## 09/11 10:37 · sessao 54312d58dc6d · - · - · origem=Ronald (tmux)
-
-- **PROCEDENTE — teste da alteração específica v3 insuficiente.** P6 começa com `materializada_em` preenchido; restaurar a guarda anterior `materializada_em is not None and not lastro` continuaria satisfazendo esse teste. M38 inverte o lastro, sem testar o descarimbo já vazio. Acrescentar cenário vazio, captura dos efeitos de `save` e repetição 2x com contagem de trilha. `app/chamados/tests/test_bug_par_intervalo.py:508`; `app/chamados/tests/test_bug_par_intervalo.py:669`; `app/chamados/tests/test_bug_par_intervalo.py:529`; `app/chamados/tests/mutantes_bug_par_intervalo.py:131`.
-
-- **PROCEDENTE — universo da paridade inclui retratadas.** O novo ato consulta `_vizinha_mesmo_tipo`, que busca `Batida` sem excluir retratadas, e recusa incondicionalmente a testemunha encontrada. Contraexemplo estático: sequência viva E18:32/S01:00/E02:00/S06:30 mais S retratada01:30 faz a saída encontrar S01:30 e recusar o conjunto. Cura no helper, usando `batidas_apuraveis`, com RED desse cenário. Ocorrência em produção [nao verificado]. `app/chamados/services/materializacao.py:178`; `app/chamados/services/materializacao.py:184`; `app/chamados/services/materializacao.py:1367`; `app/ponto/turnos.py:2866`.
-
-- **NAO PROCEDE — M7/M35 continuam sem discriminação estática.** M7 agora encontra DNA com uma pausa e quatro perguntas, exigindo `par_ambiguo`; M35 precisa produzir o aviso HTML exato uma vez no modal, e o runner troca também o filtro registrado. Mortes efetivamente executadas [nao verificado]. `app/chamados/tests/test_bug_par_intervalo.py:280`; `app/chamados/tests/test_bug_par_intervalo.py:288`; `app/chamados/tests/test_bug_par_intervalo.py:493`; `app/chamados/tests/test_bug_par_intervalo.py:498`; `app/chamados/tests/mutantes_bug_par_intervalo.py:230`.
-
-- **NAO PROCEDE — nova cópia literal da proximidade/identidade.** Porta e ato leem `batida_mesmo_tipo_na_tolerancia`; identidade consulta `escala_vigente → vinculo_do_dia`, `pausas_do_dia` e mapa canônico existente. A guarda pós-par reutiliza o helper antigo; isso não elimina o defeito de universo acima. `app/ponto/registro_batida.py:115`; `app/chamados/services/materializacao.py:1357`; `app/chamados/services/materializacao.py:87`; `app/escala/servico_jornada.py:57`; `app/escala/models.py:1197`; `app/chamados/juizes.py:882`.
-
-- **FILA — relógio por metade.** `_carimbar_aplicacao` lê `now()` internamente e é chamado para cada metade; aprovação também lê por escrita. A expressão foi extraída do escritor anterior segundo o diff fornecido; contraprova temporal neste dado [nao verificado]. Passar um instante do ato seria a cura estrutural. `app/chamados/services/materializacao.py:1253`; `app/chamados/services/materializacao.py:1373`; `app/chamados/services/materializacao.py:1023`.
-
-Inventário de escritores fora e dentro do diff:
-
-| Campo | Escritores |
-|---|---|
-| `materializada_em/por` | `_escrever_carimbo`, chamado pelas portas; descarimbo em lote. `app/chamados/models.py:3100`; `app/chamados/models.py:3267` |
-| `via_resolucao` | Mesmas portas, mais encerramento por fato e relavra. `app/chamados/models.py:3278`; `app/chamados/services/relavra_via.py:125` |
-| `validada_em/por` | Validar, devolver, responder novamente, preencher ausente no carimbo. `app/chamados/services/validacao.py:134`; `app/chamados/services/validacao.py:202`; `app/chamados/services/disputa_emissao.py:1477`; `app/chamados/models.py:3137` |
-| `resposta_colab/respondida_em` | Resposta humana, automática, recuperação pela trilha; carimbo preenche instante ausente. `app/chamados/services/disputa_emissao.py:1464`; `app/chamados/services/disputa_emissao.py:1649`; `app/chamados/services/disputa_emissao.py:1671`; `app/chamados/models.py:3134` |
-| `recusa_motivo` | Identidade, pendência do plantio, recusa canônica, limpeza do par, recusa humana, escape da resposta. `app/chamados/models.py:3191`; `app/chamados/services/materializacao.py:940`; `app/chamados/services/materializacao.py:1193`; `app/chamados/services/materializacao.py:1378`; `app/chamados/services/validacao.py:605`; `app/chamados/services/disputa_emissao.py:1494` |
-| `contexto_json` | Portas anotar/renovar/retirar/fundir. `app/chamados/services/contexto.py:76`; `app/chamados/services/contexto.py:102`; `app/chamados/services/contexto.py:125`; `app/chamados/services/contexto.py:161` |
-
-A existência das asserções não certifica GREEN, RED anterior ou morte dos mutantes: [nao verificado].
-
-## 09/11 10:37 · sessao 30e4a759213b · - · - · origem=Ronald (tmux)
-
-**PROCEDENTE — C7 duplicado na porta de fechamento.** `pode_fechar()` agora retém espera, mas `fechar()` continua julgando apenas respostas sem veredito e perguntas vivas; não consulta C7. Com primeira metade validada e irmã retratada, C7 recusa e `fechar(user)` pode gravar fechamento. Cura: porta consultar C7 sob trava; RED chamar `fechar`, além de `pode_fechar`. `app/chamados/models.py:1863`, `app/chamados/models.py:1897`, `app/chamados/models.py:1907`, `app/chamados/models.py:1943`. O novo P2 só verifica `pode_fechar`. `app/chamados/tests/test_bug_par_intervalo.py:427`.
-
-**PROCEDENTE — espera confunde resposta com aceite.** O predicado não exige validação da própria pergunta quando identifica par. Ambas respondidas, nenhuma validada: ambas viram `aguardando_par`, e o explicador deixa de oferecer validar a própria resposta. Cura: exigir `p.validada_em` para espera de metade aceita. `app/chamados/services/materializacao.py:109`, `app/chamados/services/materializacao.py:117`, `app/chamados/services/explicador.py:74`, `app/chamados/services/explicador.py:85`.
-
-Isso também bloqueia portas: declaração do colaborador retorna antes de permitir alterar resposta; “Aplicar declaração” retorna antes de validar a própria pergunta já respondida. `app/chamados/services/declaracao_texto.py:382`, `app/chamados/services/declaracao_texto.py:424`, `app/chamados/services/declaracao_texto.py:678`, `app/chamados/services/declaracao_texto.py:709`.
-
-**PROCEDENTE — aviso desaparece do detalhe após recarga.** O include existe, mas o contexto do detalhe seleciona apenas C6 vivas; a metade aceita é C6 morta. O retorno HTMX mostra aviso porque renderiza a pergunta diretamente, enquanto recarregar exclui aquela pergunta. Cura: filtro de apresentação incluir o predicado de espera. `app/chamados/services/acoes_chamado.py:348`, `app/chamados/juizes.py:1153`, `app/templates/chamados/detalhe_local.html:309`, `app/chamados/views.py:399`, `app/chamados/views.py:404`. P5 injeta pergunta diretamente e não testa essa montagem. `app/chamados/tests/test_bug_par_intervalo.py:487`.
-
-**NÃO PROCEDE — templatetag derivando identidade paralela.** A tag chama o mesmo predicado; cartão e modal incluem o mesmo fragmento. `app/chamados/templatetags/chamados_tags.py:18`, `app/templates/chamados/partials/_pergunta_card.html:29`, `app/templates/chamados/partials/modal_fio.html:160`. A identidade lê pausas efetivas da escala; essa autoridade lê DNA da célula antes do template. `app/chamados/services/materializacao.py:86`, `app/escala/models.py:1189`, `app/escala/models.py:1197`, `app/escala/models.py:1207`.
-
-Inventário compacto dos demais leitores:
-
-| Leitor | Efeito |
-|---|---|
-| C6 / consulta viva | Aceite mata pergunta; SQL também a exclui. `app/chamados/juizes.py:1153`, `app/chamados/models.py:3362`. |
-| Painel/badge | Crédito usa consulta viva; irmã não validada determina Cobrar/Validar. `app/chamados/services/raiox.py:72`, `app/chamados/services/raiox.py:133`, `app/chamados/services/verbos.py:34`, `app/chamados/services/verbos.py:47`. |
-| Fio | Disputa aberta carrega perguntas; fechada só admite C6 vivas, ocultando aceite pendente se fechamento escapar. `app/chamados/services/fio.py:221`, `app/chamados/services/fio.py:238`. |
-| Explicador | Espera antes de estado; fechamento por C7. `app/chamados/services/explicador.py:74`, `app/chamados/services/explicador.py:144`. |
-| Projeção/API | Publicam espera e retiram aceitação. `app/chamados/services/declaracao_texto.py:484`, `app/api/views.py:1126`. |
-| Vigia de carimbo/O330 | Espera sai da dívida e do alvo reparável. `app/chamados/services/vigia_carimbo.py:109`, `app/chamados/services/vigia_carimbo.py:133`, `app/chamados/services/passivo_validado.py:324`. |
-| Vigia do fio | Continua julgando fio por C6; só importa espera na abertura de classes da porta. `app/chamados/services/vigia_fio.py:164`, `app/chamados/services/vigia_fio.py:370`, `app/chamados/services/vigia_fio.py:462`. |
-| `o_que_segura` | Lê `porta_alcancavel_do_dia`, alimentada por C6 e verbos do painel. `app/folha/fora_da_folha.py:217`, `app/folha/fora_da_folha.py:221`, `app/chamados/juizes.py:1322`, `app/chamados/juizes.py:1396`. |
-| Alerta diário | Toda disputa aberta segue recebendo aviso; não distingue espera. `app/ponto/management/commands/alertar_disputas_pendentes.py:33`, `app/ponto/management/commands/alertar_disputas_pendentes.py:59`. |
-| Auditor I18 | Só acusa recusa vazia; espera normal possui código e não entra. `app/chamados/management/commands/auditar_invariantes_chamados.py:1075`, `app/chamados/services/materializacao.py:1436`. |
-
-Se irmã sair do fato, o vigia poderá classificar o dia como sem fio, passando pelos outros donos; alarme efetivo depende da célula e desses donos **[nao verificado]**. `app/chamados/services/vigia_fio.py:416`, `app/chamados/services/vigia_fio.py:430`.
-
-## 09/11 10:36 · sessao 463d4de49e19 · - · - · origem=Ronald (tmux)
-
-**PROCEDENTE — paridade inclui batidas retratadas.** O pós-par consulta `_vizinha_mesmo_tipo` após ambas as escritas, mas esse helper lê `Batida.objects` sem excluir `retratada_em`; uma S retratada às 01:30 reprova S01/E02 mesmo quando o conjunto vivo alterna. Cura: consumir `batidas_apuraveis`, acrescentando RED com retratada entre metades. `app/chamados/services/materializacao.py:1366`; `app/chamados/services/materializacao.py:178`; `app/chamados/services/materializacao.py:184`; autoridade efetiva: `app/ponto/turnos.py:2866`. Ocorrência em produção: [nao verificado].
-
-**NAO PROCEDE — divisão transacional para par identificado.** Validação direta e varredura chegam a `_materializar_uma`; O330 também, com inclusão explícita dos carimbos sem lastro. O envelope identifica o par, espera ambas respondidas/validadas e chama `_materializar_par`; as duas escritas, julgamento posterior, carimbos e reconciliação ficam no mesmo savepoint. `app/chamados/services/validacao.py:469`; `app/chamados/services/validacao.py:474`; `app/chamados/services/materializacao.py:1596`; `app/chamados/services/passivo_validado.py:532`; `app/chamados/services/materializacao.py:1414`; `app/chamados/services/materializacao.py:1433`; `app/chamados/services/materializacao.py:1344`; `app/chamados/services/materializacao.py:1361`; `app/chamados/services/materializacao.py:1373`; `app/chamados/services/materializacao.py:1380`.
-
-A garantia tem universo delimitado: quando identidade retorna `None`, aplica-se uma pergunta avulsa. Portanto, o código admite plantio individual para intervalo sem par elegível; isso inclui irmã já materializada e casos ambíguos, preservando o caminho avulso. `app/chamados/services/materializacao.py:73`; `app/chamados/services/materializacao.py:77`; `app/chamados/services/materializacao.py:1431`; teste explícito da irmã aplicada: `app/chamados/tests/test_bug_par_intervalo.py:725`.
-
-**NAO PROCEDE — inversão entre dois validadores dessas metades.** Ambos adquirem primeiro a mesma linha do Colaborador, depois disputas, chamados e perguntas; os grupos são ordenados por PK. A validação relê a pergunta após travar. O330 trava o conjunto da competência antes dos dias. `app/chamados/services/materializacao.py:125`; `app/chamados/services/materializacao.py:134`; `app/chamados/models.py:2677`; `app/chamados/models.py:2686`; `app/chamados/models.py:2699`; `app/chamados/models.py:2703`; `app/chamados/services/validacao.py:434`; `app/chamados/services/validacao.py:435`; `app/chamados/services/passivo_validado.py:435`.
-
-**FILA — prova concorrente.** O teste confere argumentos das travas, sem duas conexões concorrentes; ausência operacional de deadlock é [nao verificado]. `app/chamados/tests/test_bug_par_intervalo.py:605`.
-
-**Censo de plantadores:** os únicos consumidores de `registrar_batida` cujo plantio recebe `PerguntaDisputa` são os ramos hora e data/hora; ambos chegam pelo envelope comum. `app/chamados/services/materializacao.py:1017`; `app/chamados/services/materializacao.py:1098`; `app/chamados/services/materializacao.py:1477`.
-
-Demais consumidores encontrados por AST, considerando nomes importados/apelidos e chamadas por atributo: APIs de chão (`app/api/views.py:684`, `app/api/views_core.py:681`), exceção (`app/chamados/services/acoes_chamado.py:44`), regularização externa (`app/chamados/services/regularizacao_ext.py:77`), justificativas (`app/ponto/services/justificativa.py:188`, `app/ponto/services/justificativa.py:361`, `app/ponto/views.py:1815`), triagem (`app/ponto/services/triagem_batida.py:701`) e veredito do dia (`app/ponto/services/veredito_celula.py:322`). Instrumento PWA: `app/ponto/management/commands/testar_pwa.py:184`, `:198`, `:219`, `:228`, `:229`.
-
-**FILA — unidades externas parcialmente aplicáveis.** Regularização externa continua após falha de metade e pode marcar lote materializado; veredito do dia acumula erro por marco e só reverte se nenhuma ação ocorreu. Não são o aceite das duas PerguntaDisputa. `app/chamados/services/regularizacao_ext.py:166`; `app/chamados/services/regularizacao_ext.py:191`; `app/chamados/services/regularizacao_ext.py:197`; `app/ponto/services/veredito_celula.py:320`; `app/ponto/services/veredito_celula.py:342`.
-
-## 09/11 10:29 · sessao cbbbf78661b6 · SONDA-SEM-GRANT · verificador · origem=Code
-
-[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
-
-_3118 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3123 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
