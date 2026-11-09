@@ -1,7 +1,56 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 08:20** · publicado em **09/11/2026 08:21** (UTC-3)
+> Ultima resposta processada: **09/11/2026 08:25** · publicado em **09/11/2026 08:26** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 08:25 · sessao afb90b29fac5 · - · - · origem=Ronald (tmux)
+
+- Fontes que C17 já lê: `chamados/juizes.py::alimentar_portas` fornece `verbo` por `particionar_verbos(qs_vivos())` (`:1290-1293`), `fila_ids`/`fila_cel` por `qs_na_fila()` (`:1296-1301`). C17 compõe essas fontes em `:1376-1392`. Usar diretamente as autoridades dentro da carga da tarefa evita copiar C17.
+- Atenção ao relógio: `particionar_verbos` lê `timezone.now()` em `chamados/services/verbos.py:35`. Acrescentar parâmetro opcional `agora` permite à tarefa preservar seu relógio explícito; `qs_na_fila(agora=)` já existe em `painel.py:158-190`.
+- A carga da tarefa já coleta âncoras de perguntas e sua pertença à fila, mas não chamados da célula: `tarefa_do_dia.py:358-361`. O retorno atual sai por `_tarefa_pura` em `:399-402`. Ali cabe enriquecer aditivamente com `rota`, `fila`, `verbos`, `fio`, preservando campos anteriores.
+- Fixture ORM de referência: `test_e2_tarefa_do_dia.py:69-138`: Empresa, Praça, Posto, Colaborador, TipoEscala, EscalaColaborador, CelulaDia com DNA e lâmpadas. Reafirmar a ata depois de criar pergunta porque os sinais relavram (`:104-108`). Aplicar `freeze_time` na classe nova e nomes `colNNN`.
+- Caso A/B real já demonstrado em `test_o261e_f5b_juiz_porta.py:124-141`: A aberto da célula, B aberto sem célula, pergunta destinada a B. Painel responde `{A: 'decidir', B: 'cobrar'}`; C17 responde `fila=(A,)`.
+- Dia isento: fonte é `Colaborador.isento_ponto`, lida por `core/constants.py:13-18`; tarefa extingue ações em `tarefa_do_dia.py:179-187`.
+- DECISAO-ABERTA: os anexos determinam que prevalece a tarefa, mas não fixam os valores literais dos campos aditivos nos casos sem pergunta/sem ações. A interpretação precisa ficar explícita nos quatro testes escritos antes da implementação. Execução/comportamento futuro: [nao verificado]. [nao verificado]
+
+## 09/11 08:24 · sessao 2e5a8dc4c11c · - · - · origem=Ronald (tmux)
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
+
+## 09/11 08:24 · sessao ce974f8b148b · - · - · origem=Ronald (tmux)
+
+6. Os selos têm mordida parcial, sem prova integral do contrato:
+
+- **Leitura sem escrita no preparo capturado:** executam o envelope real nos dois modos, exigem consulta positiva, cluster, `sql_escrita=0`, arquivo intacto e host no argv. A detecção externa é regex sobre `sql.log`. (`bin/tests/test_sonda_sem_grant.sh:82`, `bin/tests/test_sonda_sem_grant.sh:85`, `bin/tests/test_sonda_sem_grant.sh:91`, `bin/tests/test_sonda_sem_grant.sh:93`, `bin/tests/test_sonda_sem_grant.sh:96`)
+- **Recusa nomeando falta e porta:** cobrem tabela sem grant, role ausente, catálogo vazio/falho, login falho, HOST antigo e arquivo ausente; exigem rc 5 e ausência da execução simulada. Não há casos separados para arquivo sem senha, permissões erradas, login com usuário/read-only errado, falta exclusiva de sequência/default/USAGE ou tentativa de SQL proibido pelo classificador. (`bin/tests/test_sonda_sem_grant.sh:100`, `bin/tests/test_sonda_sem_grant.sh:109`, `bin/tests/test_sonda_sem_grant.sh:123`; caminhos omitidos em `bin/sonda_leitura.sh:170`, `bin/sonda_leitura.sh:173`, `bin/sonda_leitura.sh:204`)
+- **Porta existe e escreve:** cobram algumas frases de DCL/DDL, senha sem HOST, modo 600 e trilha, nos dois destinos. Não procuram outro escritor na árvore; copiam apenas cinco scripts e substituem `sombra_db.sh` por stub. Também não exigem cluster correto para o provisionador. (`bin/tests/test_sonda_sem_grant.sh:67`, `bin/tests/test_sonda_sem_grant.sh:70`, `bin/tests/test_sonda_sem_grant.sh:129`, `bin/tests/test_sonda_sem_grant.sh:133`, `bin/tests/test_sonda_sem_grant.sh:141`)
+- **Propagação rc 5 no wrapper:** o novo caso exige rc 5, Codex não chamado, mensagem/porta visíveis e sentinelas brutas escondidas; usa envelope falso. Não cobre integração com envelope real nem payload terminando em 5. (`bin/tests/test_codex_sonda.sh:40`, `bin/tests/test_codex_sonda.sh:55`, `bin/tests/test_codex_sonda.sh:85`)
+- **Refazer chama porta antes de carimbar:** verifica somente presença textual e posição das duas linhas; não executa `refazer` nem força falha do provisionador. (`bin/tests/test_sonda_sem_grant.sh:150`)
+
+**O docker falso não cobre o payload.** Captura stdin/argv somente de `docker exec` contendo `psql`; `docker run` apenas imprime `SONDA_RODOU` e devolve zero. Não executa Django, driver ou `/sonda/sonda.py`; `sombra_db.sh` também não participa. (`bin/tests/test_sonda_sem_grant.sh:41`, `bin/tests/test_sonda_sem_grant.sh:46`, `bin/tests/test_sonda_sem_grant.sh:59`, `bin/tests/test_sonda_sem_grant.sh:70`; execução real em `bin/sonda_leitura.sh:241`)
+
+Mutantes plausíveis sobreviventes, por inspeção; execução dos mutantes **[nao verificado]**:
+
+1. Fazer `_escritas_no_texto` sempre devolver zero: nenhum caso injeta comando proibido; o preparo atual continua SELECT. (`bin/sonda_leitura.sh:147`; casos em `bin/tests/test_sonda_sem_grant.sh:85`, `bin/tests/test_sonda_sem_grant.sh:99`)
+2. Acrescentar `SELECT ... INTO ...` ou SELECT de função com efeito: o detector externo não contempla `INTO` nem identifica efeitos de funções. (`bin/tests/test_sonda_sem_grant.sh:32`)
+3. Remover o `falhou` após provisionamento, mantendo a chamada antes do carimbo: o teste de forma continua satisfeito. (`bin/sombra.sh:306`, `bin/sombra.sh:307`; `bin/tests/test_sonda_sem_grant.sh:150`)
+4. Acrescentar escritor em outro arquivo ou no bootstrap verdadeiro: não há censo/assertiva global de exclusividade. (`bin/tests/test_sonda_sem_grant.sh:67`, `bin/tests/test_sonda_sem_grant.sh:70`)
+5. Fazer o provisionador usar sempre `saas_db`: suas asserções procuram frases e `destino=` na trilha, sem conferir container/banco dos grants em cada modo. (`bin/tests/test_sonda_sem_grant.sh:129`, `bin/tests/test_sonda_sem_grant.sh:133`, `bin/tests/test_sonda_sem_grant.sh:141`)
+
+7. Classes presentes ou parcialmente resolvidas:
+
+- **Derivação paralela:** a pergunta de catálogo foi centralizada corretamente; ambos chamam as mesmas funções. Mas “pronto” operacional continua desigual: o provisionador anuncia pronto após catálogo; o leitor exige ainda arquivo válido e login TCP com `leitor|on`. (`bin/sonda_leitor_comum.sh:33`, `bin/sonda_leitor_comum.sh:69`; `bin/sonda_provisionar.sh:90`; `bin/sonda_leitura.sh:169`, `bin/sonda_leitura.sh:198`)
+- **Selo sem mordida:** o comentário remete o mutante a log externo; o próprio selo não o constrói/executa. O novo caso do wrapper demonstra as assertivas contra resposta simulada, sem provar confinamento do payload. Resultados/log citado **[nao verificado]**. (`bin/tests/test_sonda_sem_grant.sh:21`; `bin/tests/test_codex_sonda.sh:40`, `bin/tests/test_codex_sonda.sh:85`)
+- **`sql_escrita` não mede todo SQL escrito:** incrementa somente texto bloqueado pelo classificador, antes de enviar. Login usa caminho próprio, payload usa Django e bootstrap é outra chamada. Zero significa nenhuma tentativa classificada nesses pontos, não ausência integral de SQL de escrita. (`bin/sonda_leitura.sh:111`, `bin/sonda_leitura.sh:157`, `bin/sonda_leitura.sh:162`, `bin/sonda_leitura.sh:200`, `bin/sonda_leitura.sh:241`)
+- **rc 5 mistura causas:** credencial indisponível, catálogo/readiness, login e tentativa interna de SQL de escrita produzem o mesmo código; `recusa=` conserva texto normalizado, sem classe estruturada. (`bin/sonda_leitura.sh:125`, `bin/sonda_leitura.sh:127`, `bin/sonda_leitura.sh:160`, `bin/sonda_leitura.sh:169`, `bin/sonda_leitura.sh:181`, `bin/sonda_leitura.sh:202`)
+- **Recusa silenciosa ao bloquear SQL:** `_sql` chama `_recusa`, que executa `exit 5`; sua invocação na conferência redireciona stderr inteiro a `/dev/null`. Esse `exit` encerra o shell antes do `|| _recusa` externo, escondendo mensagem/porta justamente na tentativa de escrita; execução concreta **[nao verificado]**. (`bin/sonda_leitura.sh:126`, `bin/sonda_leitura.sh:131`, `bin/sonda_leitura.sh:158`, `bin/sonda_leitura.sh:179`)
+- **Ausência de trava global para credencial:** a porta usa o mesmo `$ENVFILE.novo` e reescreve o segredo antes do banco sem flock próprio; duas invocações independentes prod/sombra podem competir. A trava de `sombra.sh` protege aquele fluxo, não a invocação administrativa direta. Corrida concreta **[nao verificado]**. (`bin/sonda_provisionar.sh:61`, `bin/sonda_provisionar.sh:64`, `bin/sonda_provisionar.sh:69`; `bin/sombra_trava.sh:21`, `bin/sombra_trava.sh:28`)
+
+Os selos entram no loop da régua; sua existência não prova que executaram ou passaram. O pre-push documenta que esse loop não roda ali. Resultados **[nao verificado]**. (`bin/regua.sh:138`; `bin/pre-push.sh:13`)
+
+## 09/11 08:23 · sessao 7707844abd3f · - · - · origem=Ronald (tmux)
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
 
 ## 09/11 08:20 · sessao 7e7cab7dc194 · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · construtor · origem=Code
 
@@ -1631,106 +1680,4 @@ Há evidência documental de antiguidade: o código atribui a guarda a “fio-qu
 
 Os commits citados aparecem no relato com outro escopo: `225256c1` como fecho/trava do repasse; `e017181f` como tratamento `REPASSE_RECUSADO`; `e9bf5de2` como consumidores de recusas (`app/docs/RELATO.md:27`, `:17`, `:11`). O relato registra merge/deploy da obra em 09/11 03:3x (`app/docs/RELATO.md:3`); a identificação com o deploy 01:52 fornecido pelo usuário e o commit `89df8c52` permanece **[não verificado]**.
 
-## 09/11 07:44 · sessao 48f844357e2d · - · - · origem=Ronald (tmux)
-
-O furo real do Agent é o sentido ausente: `_pertence_fila1('O9 (C)', ['O9'])` e `_pertence_fila1('O9 NOTURNO-X', ['O9'])` devolvem `False`; `_censo_nega` retorna `None` imediatamente, sem censo. (`bin/disjuntor.py:1683-1686`, `bin/disjuntor.py:1702-1703`)
-
-O wrapper real recusa ambos antes da pertinência: `main_censo` exige `[A-Za-z0-9-]+`; caudas com espaço não chegam ao ramo compartilhado. (`bin/disjuntor.py:162`, `bin/disjuntor.py:2246-2248`, `bin/disjuntor.py:2265`)
-
-Matriz literal do predicado:
-
-| Obra literal | `O9` | `O9 (C)` | `OBRA-Q (A)` + `OBRA-Q (B)` | Outro token citando a obra inteira | `O142` |
-|---|---:|---:|---:|---:|---:|
-| `O9` | T | N | F | N | F |
-| `O9 (C)` | **F*** | T | F | N | F |
-| `O9 NOTURNO-X` | **F*** | F | F | N | F |
-| `OBRA-Q` | F | F | N | N | F |
-| `OBRA-Q (A)` | F | F | N | N | F |
-| `o9` | N | N | F | N | F |
-| `9ABC` | F | F | F | N | F |
-| `O67b` | F | F | F | N | F |
-
-T corresponde ao ramo `bin/disjuntor.py:1687-1688`; F ao ramo `bin/disjuntor.py:1685-1686`; N à exceção `bin/disjuntor.py:1689-1690`. As células são interpretadas pelo token `bin/disjuntor.py:1660-1666`, e a nomeação ignora caixa e respeita fronteiras em `bin/hook_stop_fila1.py:117`.
-
-`*`: pela relação inversa indicada no laudo, o token inteiro `O9` aparece na obra e deve impedir FORA; sem identidade exata, o resultado conservador é NAO SEI. A relação inversa hoje não é consultada. (`bin/disjuntor.py:1683-1690`)
-
-A matriz por formas alinhadas acrescenta:
-
-| Obra | Célula | Predicado hoje |
-|---|---|---|
-| `OBRA-Q (A)` literal | `OBRA-Q` | **F*** |
-| `OBRA-Q` | `OBRA-Q (A)` | T |
-| `o9` | `o9` | T |
-| `9ABC` | `9ABC` | T |
-| `9ABC` | `9ABC (C)` | N |
-| `O67b` | `O67b` | T |
-| `O67b` | `O67b (C)` | N |
-| `O1` | `O142` | F |
-
-Esses resultados decorrem do aceite integral pelo regex de censo, da validação restrita do extrator e da comparação exata de token. (`bin/disjuntor.py:157`, `bin/disjuntor.py:162`, `bin/disjuntor.py:619-627`, `bin/disjuntor.py:1661-1666`, `bin/disjuntor.py:1683-1690`)
-
-No Agent, `OBRA-Q (A)` vira `OBRA-Q`, portanto o F cru acima não representa furo dessa via. `o9`, `9ABC` e `O67b` não passam pela leitura da obra e recebem negativa sem obra. (`bin/disjuntor.py:602-621`, `bin/disjuntor.py:624-627`, `bin/disjuntor.py:1740-1741`, `bin/disjuntor.py:1758`, `bin/disjuntor.py:1847`)
-
-Um teste wrapper `--censo 'O9 (C)'` não mata o mutante da direção ausente: ele já é recusado pela validação anterior. A cobertura “nas duas vias” desse mutante é impossível pela interface atual de `main_censo`; testar diretamente `_censo_nega(..., via='wrapper')` provaria apenas a função com esse rótulo. (`bin/disjuntor.py:2246-2248`, `bin/disjuntor.py:2265`, `bin/disjuntor.py:1693`)
-
-## 09/11 07:44 · sessao 54c206c89ddb · - · - · origem=Ronald (tmux)
-
-| Símbolo | Quem escreve/define | Leitores diretos |
-|---|---|---|
-| `_pertence_fila1` | `bin/disjuntor.py:1669` | `_censo_nega`, `bin/disjuntor.py:1702`; `main_censo`, `bin/disjuntor.py:2265` |
-| `_token_da_celula` | `bin/disjuntor.py:1651` | Lista `exatas` de `_pertence_fila1`, `bin/disjuntor.py:1683` |
-| `_casa_id_inteiro` | `bin/hook_stop_fila1.py:110` | `bin/disjuntor.py:1684`; `_relato_parou`, sobre ids parados, `bin/hook_stop_fila1.py:1301`, e item em curso, `bin/hook_stop_fila1.py:1313` |
-| `_fila1_viva` | `bin/disjuntor.py:1626` | `_censo_nega`, `bin/disjuntor.py:1702`; `main_censo`, `bin/disjuntor.py:2264` |
-
-O selo lê indiretamente pelas portas `_censo`/`_pre`; o mutador altera uma cópia textual do ramo `exatas` em `bin/tests/test_censo_antes_da_vaga.sh:714`; os testes de pertinência ficam em `bin/tests/test_censo_antes_da_vaga.sh:529`. O selo antigo de fronteira chama `_relato_parou` em `bin/tests/test_hook_parei_casa_id_inteiro.sh:53`, cobrindo os leitores externos ao censo em `bin/hook_stop_fila1.py:1301` e `bin/hook_stop_fila1.py:1313`.
-
-| Achado | Classificação e evidência |
-|---|---|
-| 2: O67b/O51b/caixa/dígito | As formas entram na matriz **quando chegam como argumento da pertinência**; a recusa anterior é outro predicado: wrapper limita `[A-Z0-9-]`, `bin/codex_pergunta.sh:188`; extrator Agent usa `_OBRA_ID`, `bin/disjuntor.py:157`, e valida caixa em `bin/disjuntor.py:619`. |
-| 2: FECHADA literal | Outro predicado, seleção/estado da fila: `_FECHADO` exige negrito ou tachado, `bin/hook_stop_fila1.py:59`; `_item_fechado` aplica em `bin/hook_stop_fila1.py:168`; exclusão acontece em `bin/hook_stop_fila1.py:250`. |
-| 3: O9 (C) exata nunca abre | Outro predicado, representação aceita pelo censo: pertinência exata retorna True em `bin/disjuntor.py:1687`, mas `_censo_nega` recusa fora da forma em `bin/disjuntor.py:1704`; `main_censo` recusa antes da pertinência em `bin/disjuntor.py:2246`. O espelho O9 (C)×O9 é, separadamente, pertinência e pertence à matriz, `bin/disjuntor.py:1683`. |
-| 4: PARADA excluída | Outro predicado, universo da fila: `_fila1_viva` usa `_itens_andaveis`, `bin/disjuntor.py:1637`; este exclui `_item_parado`, `bin/hook_stop_fila1.py:250`, decidido em `bin/hook_stop_fila1.py:180`. |
-| 6: CORTES/PAREI | Outro predicado. Literal vivo em `bin/disjuntor.py:1511`; inserção via `bin/disjuntor.py:324`, somente acrescenta em `app/core/esteira_vigia.py:883`; aprovação não retira em `bin/disjuntor.py:1717`. Referência `CORTES.md:428` do anexo: [nao verificado]; a cópia termina em `app/docs/CORTES.md:425`. |
-| 6: leitura como prova | Outro predicado, processo/papel: `CODEX_PAPEL=leitura` é aceito em `bin/hook_stop_fila1.py:726`, usado na prova em `bin/hook_stop_fila1.py:763`. Handoff publica o resultado em `bin/handoff_sessao.sh:129`. |
-| 6: `_cru_abre_agent_copia` | Outro predicado, classificação de abertura: JSON truncado aceita qualquer `Agent` ou `wt-`, `bin/disjuntor.py:83`; normal exige não leitura e `COPIA_RE`, `bin/disjuntor.py:1740`. |
-| 6: COPIA_RE | Outro predicado, reconhecimento de caminho: exige caminho com `/.../wt-`, `bin/disjuntor.py:153`; usado para classificar abertura em `bin/disjuntor.py:1740`. |
-
-Os literais duplicados mencionados no opus 1 já leem `DJ.PAREI_CENSO` nesta cópia, em `bin/hook_stop_fila1.py:434` e `bin/hook_stop_fila1.py:783`. A negativa possui parser único em `bin/disjuntor.py:1515`, lido pela medida em `bin/disjuntor.py:2096`.
-
-## 09/11 07:44 · sessao bd302f54505a · - · - · origem=Ronald (tmux)
-
-O selo existente cobre o sentido obra nua → célula qualificada, mas não o espelho: entradas fake são `O9 (C)` e `OBRA-Q (SILENCIADO-ATE-X)` em `bin/tests/test_censo_antes_da_vaga.sh:45` e `:46`; os casos de obra nua estão em `:544`, `:559`, `:564`. A célula `O9` nua e única é preparada em `:576` e `:580`; é o ponto adequado para acrescentar o espelho antes da restauração em `:583`.
-
-Linhas propostas nesse ponto, para as duas formas efetivamente legíveis pelo Agent, com breve ruim já preparado em `bin/tests/test_censo_antes_da_vaga.sh:214`:
-
-```bash
-for o in 'O9 (C)' 'O9 NOTURNO-X'; do
-  s="$(_pre "$B" "$(_pl_agent general-purpose "Construa a obra $o na copia $WT. Brief: logs/e3/brief_ruim.md")")"
-  _nega_censo_de "pertenca-agent-espelho-$o" "$o" "$s" || ok=1
-  _sem_fora "pertenca-agent-espelho-$o" "$o" || ok=1
-done
-```
-
-Esses casos matam o mutante que remove o reconhecimento reverso token→obra, isto é, restaura somente o atual `nomeiam = [c ... H._casa_id_inteiro(obra, c)]` de `bin/disjuntor.py:1684`. Hoje o predicado devolve `False` em `:1686`, e `_censo_nega` libera em `:1703`; após reconhecimento conservador, a obra qualificada ainda pode ser recusada pelo ramo fora da forma em `:1704` a `:1707`.
-
-Para o wrapper, o controle pronto é:
-
-```bash
-for o in 'O9 (C)' 'O9 NOTURNO-X'; do
-  rc="$(_censo "$B" "$o")"
-  [ "$rc" = 1 ] || {
-    _falha "pertenca-wrapper-espelho-$o" "rc=$rc, esperado 1"
-    ok=1
-  }
-done
-```
-
-Esse controle **não mata o mutante da pertinência**: `main_censo` recusa as duas entradas antes de consultar a fila ou chamar `_pertence_fila1`, em `bin/disjuntor.py:2246` a `:2248`. Não seria correto chamar esse verde de cobertura do espelho pela integração wrapper. Para morder a regressão no predicado compartilhado, a asserção direta deve exigir que `_pertence_fila1(o, ['O9'])` não devolva `False`, aceitando `ValueError` como NAO SEI; o consumidor wrapper da função está em `bin/disjuntor.py:2265`.
-
-Os mutantes já existentes para pertinência são célula crua, exato que cala outra, dois candidatos, wrapper próprio, token cru e substring, em `bin/tests/test_censo_antes_da_vaga.sh:714` a `:721`; nenhum retira um reconhecimento reverso, porque esse reconhecimento não existe em `bin/disjuntor.py:1684`.
-
-## 09/11 07:43 · sessao 22308627191e · SONDA-SEM-GRANT · censo · origem=Code
-
-[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
-
-_3063 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3067 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
