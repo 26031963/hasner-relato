@@ -1,7 +1,25 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 02:40** · publicado em **09/11/2026 02:40** (UTC-3)
+> Ultima resposta processada: **09/11/2026 02:49** · publicado em **09/11/2026 02:51** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 02:49 · sessao 07ae55071934 · E1-FILA-V2-2-TRAVA · construtor · origem=Code
+
+Implementei A1 com **captura única fora do `atomic`**: o agrupador registra `repasse_recusado` e devolve `REPASSE_RECUSADO`, distinto de `None`. O savepoint permite preservar o ato externo; a verificação PostgreSQL dessa preservação está **[nao verificado]**. [disputa_emissao.py:1048](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/services/disputa_emissao.py:1048), [captura:1290](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/services/disputa_emissao.py:1290)
+
+Quem escreve o evento/retorno é o agrupador, via `core.observ.evento`. Quem lê o retorno são `acao_iniciar_disputa_orfaos` e `cobrar_dia`, com mensagens próprias; o evento é consultado pelo RED SQL. Leitura operacional da trilha: **[nao verificado]**. [ação:225](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/services/acoes_disputa.py:225), [cobrar_dia:50](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/services/cobrar_dia.py:50), [RED SQL:262](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila_v2_2_integracao.py:262)
+
+Também alterei:
+
+- **S1:** `_caso_b` usa destino independente para a P materializada, preservando `ch2` sem P e o assert da cauda. [integração:118](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila_v2_2_integracao.py:118)
+- **S2:** os três closures capturam as variáveis por defaults. [trava:254](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila_v2_2_trava.py:254)
+- **S3:** o registro acompanha a linha `1196`. [catraca:268](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/core/tests/test_medida_turno_do_par.py:268)
+
+Os REDs de A1 exercitam agrupador e telas; os mutantes retiram captura, evento, retorno distinguível e leitores. Passaram **23 testes sem banco**. A catraca passou **35 testes**; reaplicar `[1131]` em memória fez seu RED falhar. Os sete Python tocados passaram por `py_compile` em memória, sem gravar bytecode. [resultados e comandos:4](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/e1_fila_v2_2_verificacao.txt:4) [nao verificado]
+
+**A2:** acrescentei agrupador real com P estrangeira e detector exigindo C estrangeiro antes da primeira D. O mutante insere a lambda antes do `with` e exige falha nesse assert. Consegui compilá-lo; **não consegui executar o caso PostgreSQL [nao verificado]**. [integração:190](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila_v2_2_integracao.py:190)
+
+A relação completa `arquivo::funcao` e o comando de cada RED/mutante estão no [registro de entrega:137](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/e1_fila_v2_2_verificacao.txt:137). PostgreSQL A1/A2/S1, Ruff e suíte inteira permanecem **[nao verificado]**; certificação reservada ao Code e opus final. [nao verificado]
 
 ## 09/11 02:40 · sessao 26af97663c42 · - · - · origem=Ronald (tmux)
 
@@ -1079,45 +1097,4 @@ A coluna representa estado do ciclo, mas os leitores fazem perguntas diferentes:
 
 `pergunta_viva` calcula e guarda memo apenas na instância; `celula_do_dia_agora` faz SELECT e projeção da ata/veredito em memória; `fato_do_marco_no_espelho` lê a ata. Não encontrei escrita de P/célula nesses corpos. `chamados/juizes.py:850-863`, `chamados/juizes.py:388-410`, `chamados/juizes.py:904-931`. Já `veredito_lavrado.lavrar` salva Pergunta por padrão, salvo `salvar=False`; o backfill persiste por `gravar_lavras_em_lote`. `chamados/veredito_lavrado.py:234-255`, `chamados/veredito_lavrado.py:220-230`.
 
-## 09/11 01:04 · sessao d079295fe0af · - · - · origem=Ronald (tmux)
-
-O censo das cascatas encontrou caminhos fora do teto inicial: terminais sem pergunta prévia, perguntas selecionadas pelo dono da disputa em vez da coluna `PerguntaDisputa.colaborador`, pais alcançados por FK e até outros colaboradores pela limpeza do token FCM. O teto inicial está em `app/chamados/services/disputa_emissao.py:954-959`; os caminhos estão detalhados abaixo.
-
-| Caminho | Escritas/travas alcançadas e cobertura |
-|---|---|
-| **S88** | Disputa fechada → busca pai somente por `pk`, sem filtro de colaborador → `ch.reconciliar()` → nota. Cadeia: `app/chamados/signals.py:18-45`. Pai estrangeiro pode ser alcançado se a FK estiver assim; existência dessa situação em produção: **[nao verificado]**. |
-| **S143/S128** | Chamado encerrado → `resolver_perguntas_por_chamado_resolvido()` em `app/chamados/signals.py:90-115` → trava universo do colaborador do chamado em `app/chamados/services/disputa_emissao.py:1720-1722` → busca perguntas **somente por `chamado_destino`**, sem filtro de colaborador, em `:1747-1751` → carimbo em `:1787-1788`. |
-| **Cauda do resolver** | Inclui disputas das perguntas encontradas, inclusive de outro dono, em `app/chamados/services/disputa_emissao.py:1804`, `:1827-1829`; pode reabrir pai terminal em `:1807-1814`, carimbar outras perguntas dessas disputas em `:1836-1861` e fechar disputas em `:1875-1888`. |
-| **S144** | Fecho de disputa → `materializar_pendentes_aprovadas()` em `app/chamados/signals.py:147-163` → todas as P pendentes daquela disputa, sem filtro pela coluna colaborador, em `app/chamados/services/materializacao.py:1418-1431` → `PerguntaDisputa.carimbar()` → `save()` em `app/chamados/models.py:3152`. |
-| **Cartório síncrono** | Mudança de status/nascimento de Chamado → `julgar_celula(instance.colaborador, dia)` em `app/chamados/signals.py:187-203` → célula do par colaborador/data em `app/ponto/services/cartorio.py:1976-1989`. |
-| **E2 do cartório** | `app/ponto/services/cartorio.py:958-963` → perguntas por **`disputa__colaborador`**, inclusive disputa fechada, em `app/chamados/reconciliador.py:627-641`; carimba em `:595`, fecha disputas em `:612-614`. Se a coluna P.colaborador divergir do dono da disputa, a P pode faltar no teto que usa a coluna em `disputa_emissao.py:956`. |
-| **Chamados do cartório** | Reconcilia vivos em `app/ponto/services/cartorio.py:1488`, `:1501`, `:1522`, `:1600`, `:1615`; ressuscita perguntas em `:1622`; atualiza marcos/contexto dos vivos em `:1789` e `:1798` → `app/ponto/management/commands/detectar_ausencias.py:558-567` → trava/save em `app/chamados/services/contexto.py:103-104`. |
-| **Terminal pelo emissor** | Cartório → emissor em `app/ponto/services/cartorio.py:1740` ou `:1778` → `ChamadoColaborador.abrir(colaborador, modulo, data)` **sem status no lookup**, em `app/ponto/management/commands/detectar_ausencias.py:693-713` → dedup `app/chamados/models.py:906` → terminal `ENCERRADOS` renasce em `:921-923` → `_renascer_por_premissa_viva()` em `:983-1023`. Se terminal não for órfão/destino previamente coletado, não está no teto inicial. |
-| **Terminal de cluster** | Cartório → cluster em `app/ponto/services/cartorio.py:990-994` → dias da janela de 14 dias em `app/ponto/services/cluster_espurio.py:12`, `:40-49` → `abrir()` sem filtro de status em `:127-147` → mesmo renascimento acima. Também pode faltar no teto inicial. |
-| **Fábrica após lavra** | `app/ponto/services/cartorio.py:985-997` → `app/chamados/services/fabrica_da_celula.py:174-186` → desfaz carimbo: trava C pela **coluna da P**, D e P em `app/chamados/services/relavra_via.py:223-232`, descarimba em `:246`; save em `app/chamados/models.py:3212`. Julgamento passa `reabrir_fechada=False` em `fabrica_da_celula.py:176`. |
-| **Reatar órfã** | Deriva vivo em `app/chamados/reconciliador.py:1552-1553`; histórico `ENCERRADOS` do colaborador/dia em `:1582-1585`; histórico único → reaponta em `:1638` e resolver em `:1644`. Sem histórico → carimbo em `:1615` ou reemissão em `:1617` → `abrir()` em `:910-922`, sem filtro de estado; depois reaponta em `:954`. |
-| **Lavrar sem turno** | P.carimbar em `app/chamados/reconciliador.py:405`, fechamento da disputa em `:411-413` → S88/S144 acima. |
-| **Reconciliador completo** | `app/chamados/reconciliador.py:1428-1437`: E2, reatar órfãs e retratar premissa morta. Este último percorre todos os chamados vivos do colaborador em `:1449-1460`; `_retratar` grava também Justificativa relacionada pendente em `:529-535`, resolve P em `:536` e anexa nota em `:538-540`. |
-
-Auxiliares síncronos, fora das quatro tabelas da autoridade:
-
-- **CelulaDia**: cartório lavra em `app/ponto/services/cartorio.py:1802`, carimba em `:1822`; `app/ponto/portas/celula.py:1067` → save `:900`. Precedência também grava ata: `cartorio.py:1997` → `celula.py:1082`.
-- **EventoCelula**: save da célula pode emitir em `app/ponto/portas/celula.py:901-902`, INSERT em `:891`. Save de P também emite: `app/chamados/signals.py:237-244` → `app/chamados/models.py:3239-3248` → mesmo INSERT.
-- **FollowupChamado**: INSERT em `app/chamados/services/nota.py:103` ou `:107`; contexto associado pode gravar Chamado em `:110-123` → `app/chamados/services/contexto.py:162-163`.
-- **LogAuditoria**: chamadas `evento/evento_kw` convergem ao INSERT em `app/core/observ.py:134-137`.
-- **User sistema**: pode nascer por `get_or_create`, apesar da docstring dizer que já existe: `app/core/utils.py:18`.
-- **Pauta/ContadorPauta**: cartório → fábrica, limbo exportado, em `app/chamados/services/fabrica_da_celula.py:181-182`, `:245-251` → INSERT Pauta em `app/pautas/services.py:180`, contador em `:188` → `get_or_create` em `:352`, UPDATE em `:354`; auditoria em `:371`.
-- **PushSubscription**: push pode apagar subscription expirada em `app/chamados/push_utils.py:49-51`.
-- **Colaborador de outro dono pelo FCM**: `app/chamados/services/disputa_emissao.py:1221-1222`, `:1699` → `app/chamados/fcm_utils.py:101-106`, `:89-94` → `_limpar_token()` consulta **todos com mesmo token**, sem pk/dono, em `:41` → `app/colaboradores/fcm.py:60-62` → UPDATE em `app/colaboradores/services/colaborador.py:88`. Ocorrência de token compartilhado em produção: **[nao verificado]**.
-- **Limbo do emissor**: `app/ponto/management/commands/detectar_ausencias.py:760-761` → `app/chamados/services/limbo_folgas.py:274` trava C/D abertas/Ch furo+pai; contexto em `:275`, reaponta perguntas em `:281-282`, reconcilia em `:283`, nota em `:292`.
-
-Callbacks `on_commit` precisam ser separados do atomic original: sua declaração está nos pontos abaixo; a trava original não constitui proteção dessas transações posteriores. `app/chamados/signals.py:144`, `:225`, `:293`, `:356`.
-
-- **Becos**: save de P agenda em `app/chamados/signals.py:214-225` → `app/chamados/services/becos.py:72-78` → trava universo D/Ch em `:51-52`, resolver de cada destino terminal em `:53-54`, fechar D em `:56-57`.
-- **Silenciar isento**: nascimento/retorno vivo agenda em `app/chamados/signals.py:269-293` → todos os chamados vivos do colaborador isento em `app/chamados/services/silencio_isentos.py:24-31`, `:55-58` → trava/save do chamado em `app/chamados/services/arquivo.py:170-173`.
-- **Filho morto**: agenda reconciliador completo em `app/chamados/signals.py:337-356`.
-- **Retomar regularizações**: fecho D agenda em `app/chamados/signals.py:129-144` → reg confirmada do colaborador em `app/chamados/services/regularizacao_ext.py:218-224`. Grava Item em `:139`, `:163`, `:188`; RegularizacaoExterna em `:200`; cria Batida via `:77` → `app/ponto/registro_batida.py:157`; corrige Batida em `regularizacao_ext.py:155`, apaga em `:136`, encerra `reg.chamado` em `:205`. **Batida alvo é só `item.batida_alvo`, sem conferir dono**, em `:127`; FK inconsistente pode levar às cascatas de outro colaborador. Ocorrência em produção: **[nao verificado]**.
-- **Cascatas da Batida retomada**: post-save/post-delete recomputam em `app/ponto/signals.py:35-36`, `:49-50` → `:26-28` → DELETE TurnoMaterializado por recorte em `app/ponto/nucleo.py:80-82`, bulk INSERT em `:59`, EventoCelula em `:66`, `:93`. Cartório em `signals.py:135`, `:140`; reconciliador em `:215`; fecho adesão em `:234` → `app/colaboradores/services/pos_vinculo.py:36-45`.
-- **Fechamento depois da Batida**: `app/ponto/registro_batida.py:160`, `:175-178` → novo `on_commit` em `app/ponto/services/fechamento.py:1824` → recalcular só colaborador em `:1810` → FechamentoMensal `get_or_create` em `:898`, save em `:1144` ou UPDATE em `:1160`; DiaPago em `:1191-1201` → DELETE e bulk INSERT em `app/ponto/services/dia_pago.py:359-360`. Outros efeitos internos da derivação financeira não foram abertos exaustivamente: **[nao verificado]**.
-
-_2978 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2979 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
