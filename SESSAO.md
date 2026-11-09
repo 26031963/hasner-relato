@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 15:00:28.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (205.5 MB). Acoes na janela: **1007**.
+**Medido em 09/11/2026 15:05:56.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (205.5 MB). Acoes na janela: **1000**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1010,10 +1010,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 03:06:52 | Bash | Write I-1 pre-verifier v2 question and launcher | `cd /home/ronald/saas-hasner/logs/selos_canon; cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/i1_pontos.txt <<'EOF' PONTOS ABERTOS declarados pelo construtor da volta 2 (texto dele, nao e verdade estabelecida): 1. a linha PAREI censo cai na secao ALARMES do RELATO, nao no topo; sem hora (a dieta nao a envelhece). 2. idempotencia "escreve uma vez" ...` |
 | 03:06:28 | Bash | Prepare I-1 v2 diffs and inspect launcher | `cd /home/ronald/saas-hasner/logs/selos_canon; cat i1_lancar_preverif.sh; cd /home/ronald/wt-i1-censovaga-015903 && git status --porcelain \| head; git diff 1e7d50b6 457e8afa > /home/ronald/saas-hasner/logs/selos_canon/i1_diff_v2_delta.diff; git diff 6adca14f 457e8afa > /home/ronald/saas-hasner/logs/selos_canon/i1_diff_v2_total.diff; wc -l /home/ronald/saas-hasner/logs/selos_canon/i1_diff_v2_*.diff` |
 | 03:06:24 | Bash | Find I-1 pre-verifier v1 materials | `cd /home/ronald/saas-hasner/logs/selos_canon; ls; head -40 $(ls preverif*v1*.q i1_preverif*.q 2>/dev/null \| head -1) 2>/dev/null \| cut -c1-200` |
-| 03:01:13 | Bash | Update RELATO ESPERANDO and add lines | `cd /home/ronald/saas-hasner/app/docs; date +%H:%M; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') assert L[1].startswith('ESPERANDO:') L[1]='ESPERANDO: trava_teste.sh \| pid=3175040' new=[ "E1-FILA-V2-2-TRAVA 03:0x: volta 3 Codex rc 0, commit e9bf5de2 na copia (perguntar conta recusados a parte e o command imprime; 3 crons escrevem a recusa com colab pk; 6 RED + 6 MORDE em test_e1_f ...` |
-| 03:01:01 | Bash | Find suite trava pid | `/usr/bin/sleep 5; pgrep -af 'trava_teste.sh' \| head -3 \| cut -c1-120` |
-| 03:00:57 | Bash | Run COBPARC col211 Codex autopsy reading | `bash /home/ronald/saas-hasner/logs/cobparc/ata09b/lancar.sh` |
-| 03:00:55 | Bash | Repoint autopsy question to probe output annex | `cd /home/ronald/saas-hasner/logs/cobparc/ata09b; sed -i 's/^A sonda anexa (--sonda, roda na SOMBRA)/A sonda anexa sonda_col211.out (rodou na SOMBRA por sombra.sh --rodar, sombra mascarada; o codigo esta em sonda_col211.py)/' autopsia.q; grep -n 'sonda anexa' autopsia.q cat > lancar.sh <<'EOF' #!/bin/bash cd /home/ronald/saas-hasner D=logs/cobparc/ata09b CODEX_OBRA=COBPARC-ATA-DEFASADA-09 CODEX_PAP ...` |
-| 03:00:46 | Bash | Show batidas around col211 day | `cd /home/ronald/saas-hasner; sed -n '1,12p' logs/cobparc/ata09b/sonda_col211.out \| cut -c1-220` |
-| 03:00:33 | Bash | Run probe from logs/sombra via sombra.sh | `cd /home/ronald/saas-hasner; cp logs/cobparc/ata09b/sonda_col211.py logs/sombra/sonda_cobparc_col211.py && bin/sombra.sh --rodar logs/sombra/sonda_cobparc_col211.py cobparc_col211 > logs/cobparc/ata09b/sonda_col211.out 2>&1; echo rc=$?; grep -cE 'FIM-DA-SONDA\|rollback ok' logs/cobparc/ata09b/sonda_col211.out; grep -nE 'Error\|^==\|sombra --rodar' logs/cobparc/ata09b/sonda_col211.out \| cut -c1-16 ...` |
-| 03:00:29 | Bash | Show sombra run refusal message | `cd /home/ronald/saas-hasner; tail -8 logs/cobparc/ata09b/sonda_col211.out \| cut -c1-300` |
