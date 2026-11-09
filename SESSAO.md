@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 09:21:10.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (191.1 MB). Acoes na janela: **1102**.
+**Medido em 09/11/2026 09:26:08.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (191.2 MB). Acoes na janela: **1103**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:21:10 | Bash | Update RELATO ESPERANDO line | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') assert L[1].startswith('ESPERANDO:') L[1]='ESPERANDO: lancar_red_green_mut_v2.sh \| pid=1909960' L.insert(2,'BUG-PAR 09:2x: volta 2 (Codex P1,P3-P7 + P2 da sessao em models.py pode_fechar) comitada 42134a198 na copia; lancado RED (11d21d430 + teste novo) -> GREEN -> mutantes M1-M37 pela trava (logs/ ...` |
 | 09:21:02 | Bash | Create RED worktree and launch RED/GREEN/mutants | `cd /home/ronald/saas-hasner; RW=/home/ronald/wt-bugpar-red-v2-$(date +%H%M%S); git worktree add --detach $RW 11d21d430 2>&1\|tail -1; git -C $RW log --oneline -1; cp /home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-075842/app/chamados/tests/test_bug_par_intervalo.py $RW/app/chamados/tests/; cat > logs/bug_par_dois_atos/lancar_red_green_mut_v2.sh <<EOF #!/bin/bash # BUG-PAR volta 2: RED (11d ...` |
 | 09:20:50 | Bash | Read prior launchers | `cd /home/ronald/saas-hasner; cat logs/bug_par_dois_atos/lancar_mutantes_v1.sh; cat logs/bug_par_dois_atos/lancar_green_v1b.sh; grep -n "^M\\|def M\\|'M[0-9]" app/../../wt-codex-bug-par-do-intervalo-em-dois-atos-075842/app/chamados/tests/mutantes_bug_par_intervalo.py \| tail -3` |
 | 09:20:22 | Bash | Deploy I-1 pouso | `cd /home/ronald/saas-hasner && timeout 900 bash bin/deploy.sh --sem-migrate > logs/selos_canon/i1_deploy.log 2>&1; echo rc=$?; tail -8 logs/selos_canon/i1_deploy.log` |
