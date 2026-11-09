@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 15:17:14.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (206.4 MB). Acoes na janela: **970**.
+**Medido em 09/11/2026 15:22:42.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (206.4 MB). Acoes na janela: **964**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -974,9 +974,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 03:24:25 | Bash | Read autopsy section 1 on the juiz pair | `cd /home/ronald/saas-hasner/logs; sed -n '1,6p' par_nao_adjacente/autopsia_col211.r \| cut -c1-1500` |
 | 03:24:23 | Bash | Find juiz pairs in col211 autopsy | `cd /home/ronald/saas-hasner/logs; grep -n -i "intervalos_do_turno\\|pausas_abaixo\\|660\\|599\\|370\\|290\\|par " par_nao_adjacente/autopsia_col211.r \| head -40` |
 | 03:24:06 | Bash | Read PAR constructor result | `cd /home/ronald/saas-hasner/logs/par_nao_adjacente; tail -3 construtor_v1.out; cat construtor_v1.r \| head -120; cd /home/ronald/wt-codex-par-nao-adjacente-031500 && git status --porcelain` |
-| 03:21:13 | Bash | Log V2-2 suite green in RELATO | `python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') L.insert(3,"E1-FILA-V2-2-TRAVA 03:3x: suite inteira da copia e9bf5de2 VERDE (Ran 14622, OK skipped=42 expected failures=41, rc 0; logs/e1fila_v22/suite_v3.log). Opus final (verificador) lancado com anexos A3/A4 e B3/B4; pouso so com APROVA. Voltas Codex: 3 construtor + 2 pre-verificador.") open(p,'w').write('\n'.join(L)) EOF date` |
-| 03:21:09 | Agent | Opus final E1-FILA-V2-2-TRAVA | `Verificação final (opus) da obra E1-FILA-V2-2-TRAVA, antes do pouso. Você não acompanhou a construção. Procure o que está errado e devolva um veredito APROVA ou REPROVA, com cada achado em arquivo:linha. AVAL (é o escopo literal, palavras do dono): "trava do repasse = fecho transitivo do colab ANTES da 1a escrita, incluindo Chamado terminal reatavel por reatar_pergunta_orfa". A ÁRVORE - Cópia /hom ...` |
-| 03:20:55 | Bash | Write V2-2 total diff and peek triage | `cd /home/ronald/wt-codex-e1-fila-v2-2-trava-015419 && git diff 6adca14f e9bf5de2 > /home/ronald/saas-hasner/logs/e1fila_v22/diff_v3_total.diff && wc -l /home/ronald/saas-hasner/logs/e1fila_v22/diff_v3_total.diff && git diff --stat 6adca14f e9bf5de2 \| cat; head -c 1500 /home/ronald/saas-hasner/logs/e1fila_v22/triagem_v2.txt` |
-| 03:20:50 | Bash | Update ESPERANDO, inspect V2-2 copy | `cd /home/ronald/saas-hasner && sed -i '2s/.*/ESPERANDO: trava_teste.sh \| pid=3908378/' app/docs/RELATO.md && sed -n 2p app/docs/RELATO.md; cd /home/ronald/wt-codex-e1-fila-v2-2-trava-015419 && git log --oneline -4 && git status --porcelain \| head; cat /home/ronald/saas-hasner/logs/e1fila_v22/wt.txt; git diff --stat $(git merge-base HEAD 6adca14f) HEAD \| tail -3` |
-| 03:20:47 | Bash | List V2-2 logs and find new suite pid | `ls /home/ronald/saas-hasner/logs/e1fila_v22/; pgrep -f "trava_teste.sh" -a \| cut -c1-150` |
-| 03:20:44 | Bash | Read V2-2 suite verdict | `cd /home/ronald/saas-hasner/logs/e1fila_v22; grep -E '^(OK\|FAILED)($\| \()' suite_v3.log \| tail -1; grep '^Ran' suite_v3.log \| tail -1; tail -1 suite_v3.log; grep -E "^(FAIL\|ERROR):" suite_v3.log \| head` |
