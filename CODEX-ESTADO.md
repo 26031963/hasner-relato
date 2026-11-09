@@ -1,7 +1,51 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 04:08** · publicado em **09/11/2026 04:10** (UTC-3)
+> Ultima resposta processada: **09/11/2026 05:10** · publicado em **09/11/2026 05:14** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 05:10 · sessao 781c071dafd8 · PAR-NAO-ADJACENTE · censo · origem=Code
+
+Conto as linhas dos anexos a partir da primeira linha após `== anexo: ... ==`, incluindo linhas em branco. No `relato_par.txt`, uso os números já impressos.
+
+1. **(a) — O tema estava presente; o pre-verificador descreveu o mecanismo, mas não apontou a contradição ata × intervalo descontado.** (`preverif_v1.q:11-15`; `preverif_v1.r:11`; `preverif_v2.r:31`)
+
+   **Pergunta:** “QUEM ESCREVE e QUEM LE: papel 'par'/'sol' produzido aqui; `minutos_realizados` da ata; intervalos transportados ao motor. Todos supoem o mesmo significado”. (`preverif_v1.q:11-12`)
+
+   **Resposta:** “O externo continua recusado; o interno continua aceito. Os testes fixam exatamente isso.” Depois, tratou como mutação reprovável: “Retirar `pausas_abaixo_do_piso` da composição de `_pares`”. (`preverif_v1.r:11`; `preverif_v2.r:31`) [nao verificado]
+
+   A distinção também foi percebida: “o papel `par` inclui pausas abaixo do piso; o adaptador transporta somente intervalos de pelo menos 900 segundos”. Faltou relacioná-la ao veto do intervalo externo naquele teste. (`preverif_v1.r:48`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:162-169`)
+
+   O descarte de “builder não relido da persistência” não documenta descarte dessa contradição específica. (`relato_par.txt:12`; `relato_par.txt:15`)
+
+2. **(c) — Fora do alcance quanto à medição dos sete turnos de produção e ao impacto em dinheiro/ata.** O registro fornecido dizia expressamente “quantos sao aninhados: nao medido”. (`relato_par.txt:17`)
+
+   **Pergunta:** o brief forneceu “Frota desde 21/09: 7 turnos de 12.498”; a pergunta ao pre-verificador foi estrutural: “para todo arranjo de batidas e pares do juiz [...] Liste os arranjos que mudam e os que nao mudam”. (`construtor_v1.q:8`; `preverif_v1.q:5-8`)
+
+   **Resposta:** “O arranjo pode mudar: o externo permanece vetado, mas o interno passa se atravessar somente soltas.” Sobre dinheiro, delimitou: “Isso não demonstra igualdade com o resultado financeiro do motor.” Nenhum desses trechos constitui classificação ou medição financeira dos sete turnos. (`preverif_v1.r:12`; `preverif_v1.r:53`; `relato_par.txt:17`)
+
+3. **(e) — NÃO PERGUNTADO: alcance no deploy e declaração da rota do apply.** Os três questionários do pre-verificador não pedem examinar `REGRA_VERSOES`, `--forcar` ou escolher/declarar essa rota. (`preverif_v1.q:5-18`; `preverif_v2.q:3-9`; `preverif_v3.q:3-7`) [nao verificado]
+
+   **Pergunta mais próxima:** “Ha outros sitios com a MESMA exigencia de adjacencia que transcrevem o par do juiz para a ata/motor”. Isso pergunta sobre caminhos do defeito, sem perguntar sobre alcance de implantação. (`preverif_v1.q:17-18`)
+
+   **Resposta específica sobre deploy/apply:** não há trecho correspondente a transcrever nos anexos de resposta. A falta de declaração aparece no laudo: “Rota do apply nao declarada”; depois, o RELATO manda “declarar rota”. (`opus_final_1.txt:4`; `relato_par.txt:3`) [nao verificado]
+
+4. **O achado reúne duas classes: (a) para o rótulo RED falso; (c) para a execução contra o HEAD no Django.** (`preverif_v1.q:14-15`; `preverif_v2.r:19`; `preverif_v2.r:23`; `preverif_v2.r:38`)
+
+   **Pergunta sobre RED:** “selo/RED sem mordida (cada teste novo falha no HEAD? qual mutante simples sobrevive?)”; na v2: “Os testes novos mordem? Para cada um, qual mutacao do codigo o reprova.” (`preverif_v1.q:14-15`; `preverif_v2.q:6`) [nao verificado]
+
+   **Resposta sobre os três testes:** “Os três testes novos fixam as listas antigas para ausência de par, par adjacente e timestamps repetidos”. Reconheceu a preservação, mas não apontou o prefixo RED indevido, presente nos três nomes da cópia. (`preverif_v2.r:19`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:199`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:207`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:213`)
+
+   **Resposta sobre execução:** “Isso é um ensaio reduzido; execução integral Django e integração com banco: **[nao verificado]**”; para o builder: “execução desse teste: **[nao verificado]**”. Essa limitação foi declarada, não passou despercebida. (`preverif_v2.r:23`; `preverif_v2.r:38`) [nao verificado]
+
+5. **(b) quanto à objeção aos testes como caracterização; com ressalva: a descoberta da mudança do interno foi acolhida como PROCEDENTE, não descartada.** (`relato_par.txt:15`) [nao verificado]
+
+   **Pergunta:** “o diff muda algum resultado ALEM do caso [...]? Liste os arranjos [...] (adjacente, aninhado, cruzado [...] )”. (`preverif_v1.q:5-8`)
+
+   **Resposta:** “Portanto ‘aninhado não muda’ não vale sem qualificar o interior.” (`preverif_v1.r:12`)
+
+   **Triagem e motivo:** “PROCEDENTES [...] aninhado com interno nao adjacente muda (interno vira par) -> teste + docstring”; separadamente, descartou “aninhados sao caracterizacao (nao RED)”. (`relato_par.txt:15`) [nao verificado]
+
+   O encaminhamento tornou essa distinção explícita: “Isso e a cura aplicada ao par interno, nao o caso aninhado; mantenha o comportamento, mas escreva o teste que o fixa”. A resposta seguinte considerou “Contrato corrigido e caso acrescentado”. Assim, o comportamento questionado pelo opus foi visto e deliberadamente fixado após a triagem. (`construtor_v2.q:14-17`; `preverif_v2.r:11`) [nao verificado]
 
 ## 09/11 04:08 · sessao e275d0649b92 · SELOS-CANON-I1 · verificador · origem=Code
 
@@ -1115,30 +1159,4 @@ A contagem mede presença de par não adjacente; não estima mudança de ata ou 
 
 perguntas de lei: 1
 
-## 09/11 03:10 · sessao 67cbec47612d · - · - · origem=Ronald (tmux)
-
-Q2/Q3 — leitura concluída, sem execução.
-
-- **A adjacência não é garantia do juiz.** `_pares_marcados` casa primeiro as pontas declaradas, podendo haver batidas entre elas; depois examina pares adjacentes remanescentes. Os dois leitores públicos apenas repartem esse resultado pelo piso. (`app/ponto/turnos.py:811`, `app/ponto/turnos.py:818`, `app/ponto/turnos.py:545`, `app/ponto/turnos.py:565`)
-
-- **Aninhamento é estruturalmente alcançável.** Exemplo por inspeção: DNA/ata `08/12/13/17`; batidas `E08,S12,S12:10,E12:30,E13,S17`. As duas extras podem passar como `_resto` de duas batidas, virar `X`; 12/13 viram `Xi`. O pareador carimba e absorve todas as quatro internas, fechando às 17. O juiz devolve `(12,13)` e `(12:10,12:30)`: reserva apenas as pontas declaradas, deixando as duas extras disponíveis ao segundo laço. Ocorrência real desse exemplo: **[não verificado]**. (`app/ponto/turnos.py:1761`, `app/ponto/turnos.py:1787`, `app/ponto/turnos.py:1804`, `app/ponto/turnos.py:1827`, `app/ponto/turnos.py:1315`, `app/ponto/turnos.py:1371`, `app/ponto/turnos.py:1491`, `app/ponto/turnos.py:811`, `app/ponto/turnos.py:820`, `app/ponto/turnos.py:880`)
-
-- **Só `==` → `>` não basta para aquele arranjo.** Com uma pausa cadastral, os dois pares fazem `_alinhar_por_papel` devolver `None`, caindo no alinhamento antigo; com duas pausas, o par externo pode ocupar a primeira e o interno a segunda, produzindo sequência temporal inversa entre a volta externa e a ida interna. O alinhador não valida a ordem cronológica entre pares; distribui-os pela ordem numérica recebida. (`app/escala/utils.py:530`, `app/escala/utils.py:535`, `app/escala/utils.py:551`, `app/escala/utils.py:561`, `app/escala/utils.py:613`, `app/escala/utils.py:625`)
-
-- **Cruzamento não nasce dos dois laços sobre uma lista cronológica com instantes distintos:** declarados são emparelhados sucessivamente; os outros têm pontas adjacentes, sem usar pontas declaradas. Aninhamento permanece possível porque não se reserva o interior. O pareador ordena a entrada por timestamp. (`app/ponto/turnos.py:1217`, `app/ponto/turnos.py:812`, `app/ponto/turnos.py:819`, `app/ponto/turnos.py:820`)
-
-- **Volta que é saída verdadeira não é pausa do juiz:** as bordas são excluídas por identidade na passagem declarada e na gulosa. Portanto a cura deve preservar o limite interior `0 < i < iz < len(bats)-1`; a última batida continua `sai`, sentada no último marco. (`app/ponto/turnos.py:802`, `app/ponto/turnos.py:811`, `app/ponto/turnos.py:880`, `app/escala/utils.py:467`, `app/escala/utils.py:473`, `app/escala/utils.py:559`)
-
-- **Solta entre pontas:** só recebe `sol` se não pertence a nenhum par. Não se deve “pular até a volta”, pois isso apagaria os papéis de outras pontas interiores. O contrato manda transportar todos os pares e depois tratar as soltas, sem mover borda/par; cada solta tenta o marco mais próximo, livre e compatível com a ordem. O cluster guard [nome] ainda roda por último e pode retirar uma associação já feita. (`app/escala/utils.py:440`, `app/escala/utils.py:507`, `app/escala/utils.py:511`, `app/escala/utils.py:564`, `app/escala/utils.py:578`)
-
-- **Duas pausas disjuntas com solta entre elas:** transcrever ambos os pares na ordem e manter a batida intermediária como `sol`; a distribuição busca a menor distância total entre pares e pausas disponíveis. L-085 mantém o dia da jornada; L-087 impede decidir o papel pelo tipo gravado; nenhuma das duas fornece prioridade para pares sobrepostos. (`app/escala/utils.py:539`, `app/escala/utils.py:553`, `app/escala/utils.py:564`, `app/docs/LEIS.md:117`, `app/docs/LEIS.md:119`; prioridade legal para sobrepostos **[não verificado]**)
-
-- **Desenho mínimo:** em `_papeis_do_turno`, reconhecer pontas interiores não adjacentes por `_iz > _i`, conferir primeiro o conjunto completo de pontas e só então atribuir `sol` às demais. Preservar a associação S/E do juiz e o alinhador existente. A cura geral precisa tornar explícito o conflito de sobreposição, sem selecionar vencedor nem acrescentar queda para DP. O código atual não possui esse tratamento. (`app/escala/utils.py:454`, `app/escala/utils.py:467`, `app/escala/utils.py:472`, `app/escala/utils.py:613`; proposta de tratamento explícito **[não verificado]**)
-
-- **Derivação paralela:** `_papeis_por_alternancia` reconstrói pausas por S/E adjacentes na forma `E S E S …`; só é usada sem `turno`, com `derivar=True`, ao menos quatro batidas, tipos alternados e duração até 26h. É a outra derivação de papel, pertinente à Zona 5. (`app/escala/utils.py:477`, `app/escala/utils.py:489`, `app/escala/utils.py:496`, `app/escala/utils.py:596`)
-
-- **Outra adjacência, pergunta diferente:** `_pausa_fechada_carimbada` usa `zip(bats,bats[1:])`, duas pontas carimbadas e piso/teto; alimenta `_saida_pela_posicao_entre_turnos`. Sua docstring distingue figura de dinheiro e declara casos em que `_pares_marcados` corretamente não entrega pausa; substituir essa função por `intervalos_do_turno` apagaria essa diferença de contrato. (`app/ponto/turnos.py:912`, `app/ponto/turnos.py:915`, `app/ponto/turnos.py:924`, `app/ponto/turnos.py:1005`)
-
-**Decisão de lei candidata:** quando o juiz devolve pausa declarada externa e outra pausa inteiramente dentro dela, qual é a pausa válida — conservar ambas, privilegiar a declarada ou considerar o turno conflitante? O código permite a figura; a regra localizada não resolve o conflito. (`app/ponto/turnos.py:811`, `app/ponto/turnos.py:818`, `app/escala/utils.py:507`; resposta legal **[não verificado]**)
-
-_3018 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3019 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
